@@ -262,7 +262,7 @@ void do_mode_1(unsigned short blocks, const char *buf, size_t len, size_t flen)
 	unsigned long i;
 	unsigned long data_sum=0;
 	size_t calc_len;
-	char *pdata,*data,*pal;
+	char *data,*pal;
 	unsigned short colors;
 
 	if (len < blocks*4) {
@@ -297,11 +297,11 @@ void do_mode_1(unsigned short blocks, const char *buf, size_t len, size_t flen)
 
 	for (i=0; i<blocks; i++){
 		unsigned short x,y;
-		x=*(unsigned short*)(buf+4+i*4);
-		y=*(unsigned short*)(buf+4+i*4+2);
+		x=*(unsigned short*)(buf+i*4);
+		y=*(unsigned short*)(buf+i*4+2);
 
 		dump_tga(i, x, y, data, colors, pal);
-		data+=*(unsigned int*)(buf+4+i*4);
+		data+=x*y;
 	}
 }
 
@@ -358,6 +358,7 @@ void do_mode_2(unsigned short blocks, const char *buf, size_t len, size_t flen)
 		dump_tga(i, x, y, data, colors, pal);
 		pdata+=*(unsigned int*)(buf+4+i*4);
 	}
+	free(data);
 }
 
 void process_nvf(const char *buf, size_t len) {
