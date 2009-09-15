@@ -385,7 +385,7 @@ void process_nvf(const char *buf, size_t len) {
 			do_mode_2(blocks, buf+3, len-3, len);
 			break;
 		default:
-			printf("is not supported\n", mode);
+			printf("is not supported\n");
 	}
 }
 
