@@ -223,7 +223,7 @@ void do_mode_0(unsigned short blocks, const char *buf, size_t len, size_t flen)
 	unsigned short colors,x,y;
 
 	if (len < 4) {
-		printf("The buffer is to small to hold vaild values.\n");
+		printf("The buffer is to small to hold valid values.\n");
 		return;
 	}
 
@@ -266,7 +266,7 @@ void do_mode_1(unsigned short blocks, const char *buf, size_t len, size_t flen)
 	unsigned short colors;
 
 	if (len < blocks*4) {
-		printf("The buffer is to small to hold vaild values.\n");
+		printf("The buffer is to small to hold valid values.\n");
 		return;
 	}
 
@@ -314,7 +314,7 @@ void do_mode_2(unsigned short blocks, const char *buf, size_t len, size_t flen)
 	unsigned short colors,x,y;
 
 	if (len < 4+blocks*4) {
-		printf("The buffer is to small to hold vaild values.\n");
+		printf("The buffer is to small to hold valid values.\n");
 		return;
 	}
 
@@ -358,6 +358,7 @@ void do_mode_2(unsigned short blocks, const char *buf, size_t len, size_t flen)
 		dump_tga(i, x, y, data, colors, pal);
 		pdata+=*(unsigned int*)(buf+4+i*4);
 	}
+
 	free(data);
 }
 
@@ -375,13 +376,13 @@ void process_nvf(const char *buf, size_t len) {
 	blocks=*(unsigned short*)(buf+1);
 	printf("NVF-Mode: %u ", mode);
 	switch (mode) {
-		case 0: printf("same size/unpacked\n");
+		case 0: printf("(same size/unpacked)\n");
 			do_mode_0(blocks, buf+3, len-3, len);
 			break;
-		case 1: printf("different size/unpacked\n");
+		case 1: printf("(different size/unpacked)\n");
 			do_mode_1(blocks, buf+3, len-3, len);
 			break;
-		case 2: printf("same size/PP20\n");
+		case 2: printf("(same size/PP20)\n");
 			do_mode_2(blocks, buf+3, len-3, len);
 			break;
 		default:
@@ -437,5 +438,3 @@ int main(int argc, char **argv) {
 	free(buf);
 	exit(0);
 }
-
-
