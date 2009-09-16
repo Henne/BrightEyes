@@ -340,12 +340,12 @@ void do_mode_2(unsigned short blocks, const char *buf, size_t len, size_t flen)
 	}
 
 	for (i=0; i<blocks; i++){
-		unsigned long plen=*(unsigned int*)(buf+4+i*4);
+		unsigned long plen=get_uint(buf+4+i*4);
 
 		memset(data, x*y, sizeof(char));
 		ppdepack(pdata, data, plen, x*y);
 		dump_tga(i, x, y, (char*)data, colors, pal);
-		pdata+=*(unsigned int*)(buf+4+i*4);
+		pdata+=get_uint(buf+4+i*4);
 	}
 
 	free(data);
