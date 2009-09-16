@@ -136,7 +136,13 @@ static void ppdepack(const unsigned char *packed, unsigned char *depacked,
 }
 
 static inline unsigned short get_ushort(const char* buf) {
-	return (*(unsigned short*)(buf+1)<<8) | *(unsigned short*)(buf);
+	return (*(unsigned char*)(buf+1)<<8) | *(unsigned char*)(buf);
+}
+static inline unsigned int get_uint(const char* buf) {
+	return (*(unsigned char*)(buf+3)<<24) |
+		(*(unsigned char*)(buf+2)<<16) |
+		(*(unsigned char*)(buf+1)<<8) |
+		(*(unsigned char*)(buf));
 }
 
 void dump_tga(unsigned long nr, unsigned short x, unsigned short y, const char *data, unsigned short colors, const char *pal)
@@ -292,7 +298,8 @@ void do_mode_2(unsigned short blocks, const char *buf, size_t len, size_t flen)
 	unsigned long i;
 	unsigned long data_sum=0;
 	size_t calc_len;
-	char *data,*pdata,*pal;
+	char *pal;
+	unsigned char *data,*pdata;
 	unsigned short colors,x,y;
 
 	if (len < 4+blocks*4) {
@@ -324,7 +331,7 @@ void do_mode_2(unsigned short blocks, const char *buf, size_t len, size_t flen)
 	}
 
 	pal=(char*)(buf+4+data_sum+2);
-	pdata=(char*)(buf+4+4*blocks);
+	pdata=(unsigned char*)(buf+4+4*blocks);
 
 	data=malloc(x*y);
 	if (!data) {
@@ -337,7 +344,7 @@ void do_mode_2(unsigned short blocks, const char *buf, size_t len, size_t flen)
 
 		memset(data, x*y, sizeof(char));
 		ppdepack(pdata, data, plen, x*y);
-		dump_tga(i, x, y, data, colors, pal);
+		dump_tga(i, x, y, (char*)data, colors, pal);
 		pdata+=*(unsigned int*)(buf+4+i*4);
 	}
 
