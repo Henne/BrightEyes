@@ -239,23 +239,23 @@ void do_mode_0(unsigned short blocks, const char *buf, size_t len)
 
 	printf("Pictures %03ux%03u\n", x, y);
 
-	data_sum=blocks*x*y;
+	data_sum=4+blocks*x*y;
 
-	if (len < data_sum+3) {
+	if (len < data_sum) {
 		printf("The buffer is to small to hold valid values");
 		return;
 	}
 
 	colors=get_ushort(buf+4+data_sum);
-	calc_len=3+4+data_sum+2+3*colors;
+	calc_len=data_sum+2+3*colors;
 
-	if (len+3 != calc_len) {
+	if (len != calc_len) {
 		printf("The filelen %lu is not as expected %lu\n",
-				len+3, calc_len);
+				len, calc_len);
 		return;
 	}
 
-	pal=(char*)(buf+4+data_sum+2);
+	pal=(char*)(buf+data_sum+2);
 	data=(char*)(buf+4);
 
 	for (i=0; i<blocks; i++){
@@ -270,7 +270,7 @@ void do_mode_1(unsigned short blocks, const char *buf, size_t len)
 	unsigned long data_sum=0;
 	size_t calc_len;
 	char *data,*pal;
-	unsigned short colors;
+	unsigned short colors,x,y;
 
 	if (len < blocks*4) {
 		printf("The buffer is to small to hold valid values.\n");
@@ -281,20 +281,19 @@ void do_mode_1(unsigned short blocks, const char *buf, size_t len)
 		printf("Picture %03lu: %03ux%03u\n", i,	get_ushort(buf+i*4),
 							get_ushort(buf+i*4+2));
 		data_sum+=4+get_ushort(buf+4*i)*get_ushort(buf+4*i+2);
-
 	}
 
-	if (len < data_sum+3) {
+	if (len < data_sum) {
 		printf("The buffer is to small to hold valid values");
 		return;
 	}
 
 	colors=get_ushort(buf+data_sum);
-	calc_len=3+data_sum+2+3*colors;
+	calc_len=data_sum+2+3*colors;
 
 	if (len != calc_len) {
-		printf("The filelen %lu is not as expected %lu\n",
-				len+3, calc_len);
+		printf("The data %lu has not the expected size %lu\n",
+				len, calc_len);
 		return;
 	}
 
@@ -302,7 +301,6 @@ void do_mode_1(unsigned short blocks, const char *buf, size_t len)
 	data=(char*)(buf+blocks*4);
 
 	for (i=0; i<blocks; i++){
-		unsigned short x,y;
 		x=get_ushort(buf+i*4);
 		y=get_ushort(buf+i*4+2);
 
@@ -340,11 +338,11 @@ void do_mode_2(unsigned short blocks, const char *buf, size_t len, unsigned char
 	}
 
 	colors=get_ushort(buf+data_sum);
-	calc_len=3+data_sum+2+3*colors;
+	calc_len=data_sum+2+3*colors;
 
-	if (len+3 != calc_len) {
-		printf("The filelen %lu is not as expected %lu\n",
-				len+3, calc_len);
+	if (len != calc_len) {
+		printf("The data %lu has not the expected size %lu\n",
+				len, calc_len);
 		return;
 	}
 
@@ -374,7 +372,7 @@ void do_mode_2(unsigned short blocks, const char *buf, size_t len, unsigned char
 	free(data);
 }
 
-/* Packed Images with different sizes*/
+/* Packed Images with different sizes */
 void do_mode_3(unsigned short blocks, const char *buf, size_t len, unsigned char mode)
 {
 	unsigned long i;
@@ -409,11 +407,11 @@ void do_mode_3(unsigned short blocks, const char *buf, size_t len, unsigned char
 	}
 
 	colors=get_ushort(buf+data_sum);
-	calc_len=3+data_sum+2+3*colors;
+	calc_len=data_sum+2+3*colors;
 
-	if (len+3 != calc_len) {
-		printf("The filelen %lu is not as expected %lu\n",
-				len+3, calc_len);
+	if (len != calc_len) {
+		printf("The data %lu has not the expected size %lu\n",
+				len, calc_len);
 		return;
 	}
 
@@ -445,7 +443,6 @@ void do_mode_3(unsigned short blocks, const char *buf, size_t len, unsigned char
 		pdata+=plen;
 		free(data);
 	}
-
 }
 
 
