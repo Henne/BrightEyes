@@ -255,6 +255,8 @@ void do_mode_0(unsigned short blocks, const char *buf, size_t len)
 		return;
 	}
 
+	printf("NVF-Mode 0 (same size/unpacked): %03d Pics\n", blocks);
+
 	pal=(char*)(buf+data_sum+2);
 	data=(char*)(buf+4);
 
@@ -277,11 +279,8 @@ void do_mode_1(unsigned short blocks, const char *buf, size_t len)
 		return;
 	}
 
-	for (i=0; i<blocks; i++) {
-		printf("Picture %03lu: %03ux%03u\n", i,	get_ushort(buf+i*4),
-							get_ushort(buf+i*4+2));
+	for (i=0; i<blocks; i++)
 		data_sum+=4+get_ushort(buf+4*i)*get_ushort(buf+4*i+2);
-	}
 
 	if (len < data_sum) {
 		printf("The buffer is to small to hold valid values");
@@ -297,6 +296,8 @@ void do_mode_1(unsigned short blocks, const char *buf, size_t len)
 		return;
 	}
 
+	printf("NVF-Mode 1 (different size/unpacked): %03d Pics\n", blocks);
+
 	pal=(char*)(buf+data_sum+2);
 	data=(char*)(buf+blocks*4);
 
@@ -309,7 +310,7 @@ void do_mode_1(unsigned short blocks, const char *buf, size_t len)
 	}
 }
 
-void do_mode_2(unsigned short blocks, const char *buf, size_t len, unsigned char mode)
+void do_mode_same(unsigned short blocks, const char *buf, size_t len, unsigned char mode)
 {
 	unsigned long i;
 	unsigned long data_sum=0;
@@ -325,8 +326,6 @@ void do_mode_2(unsigned short blocks, const char *buf, size_t len, unsigned char
 
 	x=get_ushort(buf);
 	y=get_ushort(buf+2);
-
-	printf("Pictures %03ux%03u\n", x, y);
 
 	data_sum=4+4*blocks;
 	for (i=0; i < blocks; i++)
@@ -345,6 +344,12 @@ void do_mode_2(unsigned short blocks, const char *buf, size_t len, unsigned char
 				len, calc_len);
 		return;
 	}
+
+	if (mode == 2)
+		printf("NVF-Mode 2 (same size/PP20): %03d Pics\n", blocks);
+	else
+		printf("NVF-Mode 4 (same size/RLE): %03d Pics\n", blocks);
+
 
 	pal=(char*)(buf+data_sum+2);
 	pdata=(unsigned char*)(buf+4+4*blocks);
@@ -373,7 +378,7 @@ void do_mode_2(unsigned short blocks, const char *buf, size_t len, unsigned char
 }
 
 /* Packed Images with different sizes */
-void do_mode_3(unsigned short blocks, const char *buf, size_t len, unsigned char mode)
+void do_mode_diff(unsigned short blocks, const char *buf, size_t len, unsigned char mode)
 {
 	unsigned long i;
 	unsigned long data_sum=0;
@@ -414,6 +419,11 @@ void do_mode_3(unsigned short blocks, const char *buf, size_t len, unsigned char
 				len, calc_len);
 		return;
 	}
+
+	if (mode == 3)
+		printf("NVF-Mode 2 (different size/PP20): %03d Pics\n", blocks);
+	else
+		printf("NVF-Mode 4 (different size/RLE): %03d Pics\n", blocks);
 
 	pal=(char*)(buf+data_sum+2);
 	pdata=(unsigned char*)(buf+8*blocks);
@@ -466,17 +476,13 @@ void process_nvf(const char *buf, size_t len) {
 		case 1: printf("(different size/unpacked)\n");
 			do_mode_1(blocks, buf+3, len-3);
 			break;
-		case 2: printf("(same size/PP20)\n");
-			do_mode_2(blocks, buf+3, len-3, mode);
+		case 2: do_mode_same(blocks, buf+3, len-3, mode);
 			break;
-		case 3: printf("(different size/PP20)\n");
-			do_mode_3(blocks, buf+3, len-3, mode);
+		case 3: do_mode_diff(blocks, buf+3, len-3, mode);
 			break;
-		case 4: printf("(same size/RLE)\n");
-			do_mode_2(blocks, buf+3, len-3, mode);
+		case 4:	do_mode_same(blocks, buf+3, len-3, mode);
 			break;
-		case 5: printf("(different size/RLE)\n");
-			do_mode_3(blocks, buf+3, len-3, mode);
+		case 5:	do_mode_diff(blocks, buf+3, len-3, mode);
 			break;
 		default:
 			printf("is not supported\n");
