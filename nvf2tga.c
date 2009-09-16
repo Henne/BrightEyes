@@ -351,6 +351,78 @@ void do_mode_2(unsigned short blocks, const char *buf, size_t len, size_t flen)
 	free(data);
 }
 
+void do_mode_3(unsigned short blocks, const char *buf, size_t len, size_t flen)
+{
+	unsigned long i;
+	unsigned long data_sum=0;
+	unsigned long max_size=0;
+	size_t calc_len;
+	char *pal;
+	unsigned char *data,*pdata;
+	unsigned short colors;
+
+	if (len < blocks*8) {
+		printf("The buffer is to small to hold valid values.\n");
+		return;
+	}
+
+	data_sum=8*blocks;
+
+	for (i=0; i<blocks; i++) {
+		unsigned short x,y;
+
+		x=get_ushort(buf);
+		y=get_ushort(buf+2);
+
+		if (max_size < x*y) max_size=x*y;
+
+		printf("Picture %03lu: %03ux%03u\n", i, x, y);
+
+		data_sum+=get_uint(buf+i*8+4);
+	}
+
+
+	if (len < data_sum) {
+		printf("The buffer is to small to hold valid values");
+		return;
+	}
+
+	colors=get_ushort(buf+data_sum);
+	calc_len=3+data_sum+2+3*colors;
+
+	if (flen != calc_len) {
+		printf("The filelen %lu is not as expected %lu\n",
+				flen, calc_len);
+		return;
+	}
+
+	pal=(char*)(buf+data_sum+2);
+	pdata=(unsigned char*)(buf+8*blocks);
+
+	data=malloc(max_size);
+	if (!data) {
+		fprintf(stderr, "Not enough memory\n");
+		return;
+	}
+
+	for (i=0; i<blocks; i++){
+		unsigned long plen;
+		unsigned short x,y;
+
+		x=get_ushort(buf+i*8);
+		y=get_ushort(buf+i*8+2);
+		plen=get_uint(buf+i*8+4);
+
+		memset(data, max_size, sizeof(char));
+		ppdepack(pdata, data, plen, x*y);
+		dump_tga(i, x, y, (char*)data, colors, pal);
+		pdata+=get_uint(buf+i*8+4);
+	}
+
+	free(data);
+}
+
+
 void process_nvf(const char *buf, size_t len) {
 	unsigned char mode;
 	unsigned short blocks;
@@ -373,6 +445,9 @@ void process_nvf(const char *buf, size_t len) {
 			break;
 		case 2: printf("(same size/PP20)\n");
 			do_mode_2(blocks, buf+3, len-3, len);
+			break;
+		case 3: printf("(different size/PP20)\n");
+			do_mode_3(blocks, buf+3, len-3, len);
 			break;
 		default:
 			printf("is not supported\n");
