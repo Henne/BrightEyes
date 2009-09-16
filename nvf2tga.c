@@ -466,12 +466,10 @@ void process_nvf(const char *buf, size_t len) {
 			break;
 		case 1:	do_mode_1(blocks, buf+3, len-3);
 			break;
-		case 2: do_mode_same(blocks, buf+3, len-3, mode);
-			break;
-		case 3: do_mode_diff(blocks, buf+3, len-3, mode);
-			break;
+		case 2:
 		case 4:	do_mode_same(blocks, buf+3, len-3, mode);
 			break;
+		case 3:
 		case 5:	do_mode_diff(blocks, buf+3, len-3, mode);
 			break;
 		default:
@@ -486,7 +484,7 @@ int main(int argc, char **argv) {
 	size_t flen,readlen;
 
 	if (argc == 1) {
-		printf("More arguments expected.\n");
+		printf("Usage: %s <NVF-File>.\n", argv[0]);
 		exit(1);
 	}
 
@@ -508,7 +506,7 @@ int main(int argc, char **argv) {
 
 	buf=calloc(flen, sizeof(char));
 	if (!buf) {
-		printf("No Memory\n");
+		printf("Not enought memory\n");
 		fclose(fd);
 		exit(1);
 	}
