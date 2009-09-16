@@ -6,7 +6,7 @@
  * Some files of DSA/ROA 1 work, too, but aren't supported.
  *
  * Author: Henne_NWH <henne@nachtiwndheim.de>
- * License: GPL v3
+ * License: GPLv3
  *
  * Compilation: gcc -o nvf2tga nvf2tga.c
  * Usage:	./nvf2tga <*.TGA>
