@@ -1,12 +1,15 @@
 /*
+ * NVF to TGA Converter
  *
+ * Converts a NVF file to the TGA format.
+ * NVF files are used by DSA/ROA 2+3
+ * Some files of DSA/ROA 1 work, too, but aren't supported.
  *
+ * Author: Henne_NWH <henne@nachtiwndheim.de>
+ * License: GPL v3
  *
- *
- *
- *
- *
- *
+ * Compilation: gcc -o nvf2tga nvf2tga.c
+ * Usage:	./nvf2tga <*.TGA>
  *
  */
 
@@ -14,13 +17,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* depack.c */
-
-/* copyright (c) Marc Espie, 1995
- * see accompanying file README for distribution information
- */
-
-
+#if 0
 static inline unsigned int val(const unsigned char *p) {
 	return (p[0]<<16 | p[1] << 8 | p[2]);
 }
@@ -41,6 +38,8 @@ static unsigned long depackedlen(const unsigned char *p, unsigned long plen) {
 	/* not a powerpacker file */
 	return 0;
 }
+
+#endif
 
 static unsigned long shift_in;
 static unsigned long counter;
@@ -135,23 +134,21 @@ static void ppdepack(const unsigned char *packed, unsigned char *depacked,
 	}
 }
 
-static inline unsigned short get_ushort(const char* buf) {
-	return (*(unsigned char*)(buf+1)<<8) | *(unsigned char*)(buf);
-}
-static inline unsigned int get_uint(const char* buf) {
-	return (*(unsigned char*)(buf+3)<<24) |
-		(*(unsigned char*)(buf+2)<<16) |
-		(*(unsigned char*)(buf+1)<<8) |
-		*(unsigned char*)(buf);
+static inline unsigned short get_ushort(const unsigned char* buf) {
+	return buf[1]<<8 | buf[0];
 }
 
-void un_rle(const unsigned char *pdata, unsigned char *data, unsigned long plen, unsigned long len)
+static inline unsigned int get_uint(const unsigned char* buf) {
+	return (buf[3]<<24) | (buf[2]<<16) | (buf[1]<<8) | (buf[0]);
+}
+
+void un_rle(const unsigned char *pdata, unsigned char *data, unsigned long plen)
 {
 	unsigned long i,pos=0;
 
 	for (i=0; i<plen; i++)
 		if (pdata[i] == 0x7f) {
-			unsigned long rl,col;
+			unsigned char rl,col;
 
 			rl=pdata[i+1];
 			col=pdata[i+2];
@@ -366,7 +363,7 @@ void do_mode_same(unsigned short blocks, const char *buf, size_t len, unsigned c
 		if (mode == 2)
 			ppdepack(pdata, data, plen, x*y);
 		else
-			un_rle(pdata, data, plen, x*y);
+			un_rle(pdata, data, plen);
 
 		dump_tga(i, x, y, (char*)data, colors, pal);
 		pdata+=get_uint(buf+4+i*4);
@@ -443,7 +440,7 @@ void do_mode_diff(unsigned short blocks, const char *buf, size_t len, unsigned c
 		if (mode == 3)
 			ppdepack(pdata, data, plen, x*y);
 		else
-			un_rle(pdata, data, plen, x*y);
+			un_rle(pdata, data, plen);
 
 		dump_tga(i, x, y, (char*)data, colors, pal);
 		pdata+=plen;
