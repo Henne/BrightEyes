@@ -37,7 +37,9 @@ static unsigned long depackedlen(const unsigned char *p, unsigned long plen) {
 
 	if (p[0] == 'P' || p[1] == 'P' || p[2] == '2' || p[3] == '0')
 		return val(p+plen-4);
-	return 0; /* not a powerpacker file */
+
+	/* not a powerpacker file */
+	return 0;
 }
 
 static unsigned long shift_in;
@@ -132,29 +134,6 @@ static void ppdepack(const unsigned char *packed, unsigned char *depacked,
 			return;
 	}
 }
-/*
-	size_t plen	= luaL_checkinteger(L, 2);
-	size_t unplen;
-	const unsigned char *pdata;
-	unsigned char *unpdata;
-
-	if (plen < 4)
-		luaL_argerror(L, 2, "Length argument is below 4");
-
-	pdata=(const unsigned char*)luaL_checklstring(L, 1, &plen);
-
-	unplen=depackedlen(pdata, plen);
-
-	if (unplen == 0)
-		luaL_argerror(L, 1, strprintf("No PP20 file").c_str());
-
-	unpdata=(unsigned char*)calloc(unplen, sizeof(char));
-	if (unpdata == NULL)
-		luaL_error(L, "No mem");
-
-	ppdepack(pdata, unpdata, plen, unplen);
-*/
-
 
 void dump_tga(unsigned long nr, unsigned short x, unsigned short y, const char *data, unsigned short colors, const char *pal)
 {
