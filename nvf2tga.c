@@ -135,6 +135,10 @@ static void ppdepack(const unsigned char *packed, unsigned char *depacked,
 	}
 }
 
+static inline unsigned short get_ushort(const char* buf) {
+	return (*(unsigned short*)(buf+1)<<8) | *(unsigned short*)(buf);
+}
+
 void dump_tga(unsigned long nr, unsigned short x, unsigned short y, const char *data, unsigned short colors, const char *pal)
 {
 	FILE *fd=NULL;
@@ -206,8 +210,8 @@ void do_mode_0(unsigned short blocks, const char *buf, size_t len, size_t flen)
 		return;
 	}
 
-	x=*(unsigned short*)(buf);
-	y=*(unsigned short*)(buf+2);
+	x=get_ushort(buf);
+	y=get_ushort(buf+2);
 
 	printf("Pictures %03ux%03u\n", x, y);
 
@@ -218,7 +222,7 @@ void do_mode_0(unsigned short blocks, const char *buf, size_t len, size_t flen)
 		return;
 	}
 
-	colors=*(unsigned short*)(buf+4+data_sum);
+	colors=get_ushort(buf+4+data_sum);
 	calc_len=3+4+data_sum+2+3*colors;
 
 	if (flen != calc_len) {
@@ -250,10 +254,9 @@ void do_mode_1(unsigned short blocks, const char *buf, size_t len, size_t flen)
 	}
 
 	for (i=0; i<blocks; i++) {
-		printf("Picture %03lu: %03ux%03u\n", i,
-				*(unsigned short*)(buf+i*4),
-				*(unsigned short*)(buf+i*4+2));
-		data_sum+=4+*(unsigned short*)(buf+4*i) * *(unsigned short*)(buf+4*i+2);
+		printf("Picture %03lu: %03ux%03u\n", i,	get_ushort(buf+i*4),
+							get_ushort(buf+i*4+2));
+		data_sum+=4+get_ushort(buf+4*i)*get_ushort(buf+4*i+2);
 
 	}
 
@@ -262,7 +265,7 @@ void do_mode_1(unsigned short blocks, const char *buf, size_t len, size_t flen)
 		return;
 	}
 
-	colors=*(unsigned short*)(buf+data_sum);
+	colors=get_ushort(buf+data_sum);
 	calc_len=3+data_sum+2+3*colors;
 
 	if (flen != calc_len) {
@@ -276,8 +279,8 @@ void do_mode_1(unsigned short blocks, const char *buf, size_t len, size_t flen)
 
 	for (i=0; i<blocks; i++){
 		unsigned short x,y;
-		x=*(unsigned short*)(buf+i*4);
-		y=*(unsigned short*)(buf+i*4+2);
+		x=get_ushort(buf+i*4);
+		y=get_ushort(buf+i*4+2);
 
 		dump_tga(i, x, y, data, colors, pal);
 		data+=x*y;
@@ -297,8 +300,8 @@ void do_mode_2(unsigned short blocks, const char *buf, size_t len, size_t flen)
 		return;
 	}
 
-	x=*(unsigned short*)(buf);
-	y=*(unsigned short*)(buf+2);
+	x=get_ushort(buf);
+	y=get_ushort(buf+2);
 
 	printf("Pictures %03ux%03u\n", x, y);
 
@@ -311,7 +314,7 @@ void do_mode_2(unsigned short blocks, const char *buf, size_t len, size_t flen)
 		return;
 	}
 
-	colors=*(unsigned short*)(buf+4+data_sum);
+	colors=get_ushort(buf+4+data_sum);
 	calc_len=3+4+data_sum+2+3*colors;
 
 	if (flen != calc_len) {
@@ -352,7 +355,7 @@ void process_nvf(const char *buf, size_t len) {
 		return;
 	}
 
-	blocks=*(unsigned short*)(buf+1);
+	blocks=get_ushort(buf+1);
 	printf("NVF-Mode: %u ", mode);
 	switch (mode) {
 		case 0: printf("(same size/unpacked)\n");
