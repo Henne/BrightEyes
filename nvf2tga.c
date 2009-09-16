@@ -221,7 +221,7 @@ void dump_tga(unsigned long nr, unsigned short x, unsigned short y, const char *
 	fclose(fd);
 }
 
-void do_mode_0(unsigned short blocks, const char *buf, size_t len, size_t flen)
+void do_mode_0(unsigned short blocks, const char *buf, size_t len)
 {
 	unsigned long i;
 	unsigned long data_sum=0;
@@ -249,9 +249,9 @@ void do_mode_0(unsigned short blocks, const char *buf, size_t len, size_t flen)
 	colors=get_ushort(buf+4+data_sum);
 	calc_len=3+4+data_sum+2+3*colors;
 
-	if (flen != calc_len) {
+	if (len+3 != calc_len) {
 		printf("The filelen %lu is not as expected %lu\n",
-				flen, calc_len);
+				len+3, calc_len);
 		return;
 	}
 
@@ -264,7 +264,7 @@ void do_mode_0(unsigned short blocks, const char *buf, size_t len, size_t flen)
 	}
 }
 
-void do_mode_1(unsigned short blocks, const char *buf, size_t len, size_t flen)
+void do_mode_1(unsigned short blocks, const char *buf, size_t len)
 {
 	unsigned long i;
 	unsigned long data_sum=0;
@@ -292,9 +292,9 @@ void do_mode_1(unsigned short blocks, const char *buf, size_t len, size_t flen)
 	colors=get_ushort(buf+data_sum);
 	calc_len=3+data_sum+2+3*colors;
 
-	if (flen != calc_len) {
+	if (len != calc_len) {
 		printf("The filelen %lu is not as expected %lu\n",
-				flen, calc_len);
+				len+3, calc_len);
 		return;
 	}
 
@@ -311,7 +311,7 @@ void do_mode_1(unsigned short blocks, const char *buf, size_t len, size_t flen)
 	}
 }
 
-void do_mode_2(unsigned short blocks, const char *buf, size_t len, size_t flen, unsigned char mode)
+void do_mode_2(unsigned short blocks, const char *buf, size_t len, unsigned char mode)
 {
 	unsigned long i;
 	unsigned long data_sum=0;
@@ -342,9 +342,9 @@ void do_mode_2(unsigned short blocks, const char *buf, size_t len, size_t flen, 
 	colors=get_ushort(buf+data_sum);
 	calc_len=3+data_sum+2+3*colors;
 
-	if (flen != calc_len) {
+	if (len+3 != calc_len) {
 		printf("The filelen %lu is not as expected %lu\n",
-				flen, calc_len);
+				len+3, calc_len);
 		return;
 	}
 
@@ -374,7 +374,8 @@ void do_mode_2(unsigned short blocks, const char *buf, size_t len, size_t flen, 
 	free(data);
 }
 
-void do_mode_3(unsigned short blocks, const char *buf, size_t len, size_t flen)
+/* Packed Images with different sizes*/
+void do_mode_3(unsigned short blocks, const char *buf, size_t len, unsigned char mode)
 {
 	unsigned long i;
 	unsigned long data_sum=0;
@@ -410,9 +411,9 @@ void do_mode_3(unsigned short blocks, const char *buf, size_t len, size_t flen)
 	colors=get_ushort(buf+data_sum);
 	calc_len=3+data_sum+2+3*colors;
 
-	if (flen != calc_len) {
+	if (len+3 != calc_len) {
 		printf("The filelen %lu is not as expected %lu\n",
-				flen, calc_len);
+				len+3, calc_len);
 		return;
 	}
 
@@ -435,7 +436,11 @@ void do_mode_3(unsigned short blocks, const char *buf, size_t len, size_t flen)
 		}
 
 		memset(data, 0, x*y);
-		ppdepack(pdata, data, plen, x*y);
+		if (mode == 3)
+			ppdepack(pdata, data, plen, x*y);
+		else
+			un_rle(pdata, data, plen, x*y);
+
 		dump_tga(i, x, y, (char*)data, colors, pal);
 		pdata+=plen;
 		free(data);
@@ -459,19 +464,22 @@ void process_nvf(const char *buf, size_t len) {
 	printf("NVF-Mode: %u ", mode);
 	switch (mode) {
 		case 0: printf("(same size/unpacked)\n");
-			do_mode_0(blocks, buf+3, len-3, len);
+			do_mode_0(blocks, buf+3, len-3);
 			break;
 		case 1: printf("(different size/unpacked)\n");
-			do_mode_1(blocks, buf+3, len-3, len);
+			do_mode_1(blocks, buf+3, len-3);
 			break;
 		case 2: printf("(same size/PP20)\n");
-			do_mode_2(blocks, buf+3, len-3, len, mode);
+			do_mode_2(blocks, buf+3, len-3, mode);
 			break;
 		case 3: printf("(different size/PP20)\n");
-			do_mode_3(blocks, buf+3, len-3, len);
+			do_mode_3(blocks, buf+3, len-3, mode);
 			break;
 		case 4: printf("(same size/RLE)\n");
-			do_mode_2(blocks, buf+3, len-3, len, mode);
+			do_mode_2(blocks, buf+3, len-3, mode);
+			break;
+		case 5: printf("(different size/RLE)\n");
+			do_mode_3(blocks, buf+3, len-3, mode);
 			break;
 		default:
 			printf("is not supported\n");
