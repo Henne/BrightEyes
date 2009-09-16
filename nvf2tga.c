@@ -142,7 +142,25 @@ static inline unsigned int get_uint(const char* buf) {
 	return (*(unsigned char*)(buf+3)<<24) |
 		(*(unsigned char*)(buf+2)<<16) |
 		(*(unsigned char*)(buf+1)<<8) |
-		(*(unsigned char*)(buf));
+		*(unsigned char*)(buf);
+}
+
+void un_rle(const unsigned char *pdata, unsigned char *data, unsigned long plen, unsigned long len)
+{
+	unsigned long i,pos=0;
+
+	for (i=0; i<plen; i++)
+		if (pdata[i] == 0x7f) {
+			unsigned long rl,col;
+
+			rl=pdata[i+1];
+			col=pdata[i+2];
+
+			memset(data+pos, col, rl);
+			i+=2;
+			pos+=rl;
+		} else
+			data[pos++]=pdata[i];
 }
 
 void dump_tga(unsigned long nr, unsigned short x, unsigned short y, const char *data, unsigned short colors, const char *pal)
@@ -293,7 +311,7 @@ void do_mode_1(unsigned short blocks, const char *buf, size_t len, size_t flen)
 	}
 }
 
-void do_mode_2(unsigned short blocks, const char *buf, size_t len, size_t flen)
+void do_mode_2(unsigned short blocks, const char *buf, size_t len, size_t flen, unsigned char mode)
 {
 	unsigned long i;
 	unsigned long data_sum=0;
@@ -312,17 +330,17 @@ void do_mode_2(unsigned short blocks, const char *buf, size_t len, size_t flen)
 
 	printf("Pictures %03ux%03u\n", x, y);
 
-	data_sum=4*blocks;
+	data_sum=4+4*blocks;
 	for (i=0; i < blocks; i++)
-		data_sum+=*(unsigned int*)(buf+4+i*4);
+		data_sum+=get_uint(buf+4+i*4);
 
 	if (len < data_sum) {
 		printf("The buffer is to small to hold valid values");
 		return;
 	}
 
-	colors=get_ushort(buf+4+data_sum);
-	calc_len=3+4+data_sum+2+3*colors;
+	colors=get_ushort(buf+data_sum);
+	calc_len=3+data_sum+2+3*colors;
 
 	if (flen != calc_len) {
 		printf("The filelen %lu is not as expected %lu\n",
@@ -330,7 +348,7 @@ void do_mode_2(unsigned short blocks, const char *buf, size_t len, size_t flen)
 		return;
 	}
 
-	pal=(char*)(buf+4+data_sum+2);
+	pal=(char*)(buf+data_sum+2);
 	pdata=(unsigned char*)(buf+4+4*blocks);
 
 	data=malloc(x*y);
@@ -342,8 +360,13 @@ void do_mode_2(unsigned short blocks, const char *buf, size_t len, size_t flen)
 	for (i=0; i<blocks; i++){
 		unsigned long plen=get_uint(buf+4+i*4);
 
-		memset(data, x*y, sizeof(char));
-		ppdepack(pdata, data, plen, x*y);
+		memset(data, 0, x*y);
+
+		if (mode == 2)
+			ppdepack(pdata, data, plen, x*y);
+		else
+			un_rle(pdata, data, plen, x*y);
+
 		dump_tga(i, x, y, (char*)data, colors, pal);
 		pdata+=get_uint(buf+4+i*4);
 	}
@@ -355,7 +378,6 @@ void do_mode_3(unsigned short blocks, const char *buf, size_t len, size_t flen)
 {
 	unsigned long i;
 	unsigned long data_sum=0;
-	unsigned long max_size=0;
 	size_t calc_len;
 	char *pal;
 	unsigned char *data,*pdata;
@@ -374,11 +396,9 @@ void do_mode_3(unsigned short blocks, const char *buf, size_t len, size_t flen)
 		x=get_ushort(buf);
 		y=get_ushort(buf+2);
 
-		if (max_size < x*y) max_size=x*y;
+		data_sum+=get_uint(buf+i*8+4);
 
 		printf("Picture %03lu: %03ux%03u\n", i, x, y);
-
-		data_sum+=get_uint(buf+i*8+4);
 	}
 
 
@@ -399,11 +419,6 @@ void do_mode_3(unsigned short blocks, const char *buf, size_t len, size_t flen)
 	pal=(char*)(buf+data_sum+2);
 	pdata=(unsigned char*)(buf+8*blocks);
 
-	data=malloc(max_size);
-	if (!data) {
-		fprintf(stderr, "Not enough memory\n");
-		return;
-	}
 
 	for (i=0; i<blocks; i++){
 		unsigned long plen;
@@ -413,13 +428,19 @@ void do_mode_3(unsigned short blocks, const char *buf, size_t len, size_t flen)
 		y=get_ushort(buf+i*8+2);
 		plen=get_uint(buf+i*8+4);
 
-		memset(data, max_size, sizeof(char));
+		data=malloc(x*y);
+		if (!data) {
+			fprintf(stderr, "Not enough memory\n");
+			return;
+		}
+
+		memset(data, 0, x*y);
 		ppdepack(pdata, data, plen, x*y);
 		dump_tga(i, x, y, (char*)data, colors, pal);
-		pdata+=get_uint(buf+i*8+4);
+		pdata+=plen;
+		free(data);
 	}
 
-	free(data);
 }
 
 
@@ -444,10 +465,13 @@ void process_nvf(const char *buf, size_t len) {
 			do_mode_1(blocks, buf+3, len-3, len);
 			break;
 		case 2: printf("(same size/PP20)\n");
-			do_mode_2(blocks, buf+3, len-3, len);
+			do_mode_2(blocks, buf+3, len-3, len, mode);
 			break;
 		case 3: printf("(different size/PP20)\n");
 			do_mode_3(blocks, buf+3, len-3, len);
+			break;
+		case 4: printf("(same size/RLE)\n");
+			do_mode_2(blocks, buf+3, len-3, len, mode);
 			break;
 		default:
 			printf("is not supported\n");
