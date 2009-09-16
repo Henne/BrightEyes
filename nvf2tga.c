@@ -237,8 +237,6 @@ void do_mode_0(unsigned short blocks, const char *buf, size_t len)
 	x=get_ushort(buf);
 	y=get_ushort(buf+2);
 
-	printf("Pictures %03ux%03u\n", x, y);
-
 	data_sum=4+blocks*x*y;
 
 	if (len < data_sum) {
@@ -401,8 +399,6 @@ void do_mode_diff(unsigned short blocks, const char *buf, size_t len, unsigned c
 		y=get_ushort(buf+2);
 
 		data_sum+=get_uint(buf+i*8+4);
-
-		printf("Picture %03lu: %03ux%03u\n", i, x, y);
 	}
 
 
