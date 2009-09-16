@@ -244,11 +244,11 @@ void do_mode_0(unsigned short blocks, const char *buf, size_t len)
 		return;
 	}
 
-	colors=get_ushort(buf+4+data_sum);
+	colors=get_ushort(buf+data_sum);
 	calc_len=data_sum+2+3*colors;
 
 	if (len != calc_len) {
-		printf("The filelen %lu is not as expected %lu\n",
+		printf("The data %lu has not the expected size %lu\n",
 				len, calc_len);
 		return;
 	}
@@ -464,13 +464,10 @@ void process_nvf(const char *buf, size_t len) {
 	}
 
 	blocks=get_ushort(buf+1);
-	printf("NVF-Mode: %u ", mode);
 	switch (mode) {
-		case 0: printf("(same size/unpacked)\n");
-			do_mode_0(blocks, buf+3, len-3);
+		case 0:	do_mode_0(blocks, buf+3, len-3);
 			break;
-		case 1: printf("(different size/unpacked)\n");
-			do_mode_1(blocks, buf+3, len-3);
+		case 1:	do_mode_1(blocks, buf+3, len-3);
 			break;
 		case 2: do_mode_same(blocks, buf+3, len-3, mode);
 			break;
@@ -481,7 +478,7 @@ void process_nvf(const char *buf, size_t len) {
 		case 5:	do_mode_diff(blocks, buf+3, len-3, mode);
 			break;
 		default:
-			printf("is not supported\n");
+			printf("NVF-Mode %u is not supported\n", mode);
 	}
 }
 
