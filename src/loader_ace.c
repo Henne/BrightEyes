@@ -21,7 +21,8 @@
 #include <dump.h>
 #include <format.h>
 
-static void do_ass(struct ace_header *ace, const char *buf, size_t len) {
+static void do_ass(struct ace_header *ace, const char *buf, size_t len)
+{
 	struct ass_header ass;
 	unsigned long i, datalen;
 	char *pal;
@@ -30,34 +31,30 @@ static void do_ass(struct ace_header *ace, const char *buf, size_t len) {
 		fprintf(stderr, "Buffer to small for ASS Header\n");
 		return;
 	}
-	ass.celwidth=get_sshort(buf);
-	ass.celheight=get_sshort(buf+2);
-	ass.amount=buf[4];
-	ass.playmode=buf[5];
+	ass.celwidth = get_sshort(buf);
+	ass.celheight = get_sshort(buf + 2);
+	ass.amount = buf[4];
+	ass.playmode = buf[5];
 
 	printf("\t%03dx%03d\tAmount: %03u\tMode: %03u\n",
-			ass.celwidth,
-			ass.celheight,
-			ass.amount,
-			ass.playmode);
+	       ass.celwidth, ass.celheight, ass.amount, ass.playmode);
 
-
-	datalen=sizeof(ass);
-	for (i=0; i < ass.amount; i++) {
+	datalen = sizeof(ass);
+	for (i = 0; i < ass.amount; i++) {
 		struct cel_header cel;
 
-		cel.size=get_sint(buf+datalen);
-		cel.xoffset=get_sshort(buf+datalen+4);
-		cel.yoffset=get_sshort(buf+datalen+6);
-		cel.width=get_sshort(buf+datalen+8);
-		cel.height=get_sshort(buf+datalen+10);
-		cel.compression=buf[datalen+12];
-		cel.action=buf[datalen+13];
+		cel.size = get_sint(buf + datalen);
+		cel.xoffset = get_sshort(buf + datalen + 4);
+		cel.yoffset = get_sshort(buf + datalen + 6);
+		cel.width = get_sshort(buf + datalen + 8);
+		cel.height = get_sshort(buf + datalen + 10);
+		cel.compression = buf[datalen + 12];
+		cel.action = buf[datalen + 13];
 
 		printf("\t\tSize: %08x\tCompression: %x\n",
-				cel.size, cel.compression);
+		       cel.size, cel.compression);
 
-		datalen+=sizeof(cel)+cel.size;
+		datalen += sizeof(cel) + cel.size;
 	}
 
 	if (datalen + 2 > len) {
@@ -65,53 +62,55 @@ static void do_ass(struct ace_header *ace, const char *buf, size_t len) {
 		return;
 	}
 
-
-	if ( len != datalen+256*3) {
+	if (len != datalen + 256 * 3) {
 		fprintf(stderr, "ASS File has not the expected size\n");
 		return;
 	}
-	pal=(char*)buf+datalen;
+	pal = (char *)buf + datalen;
 
-	datalen=sizeof(ass);
-	for (i=0; i < ass.amount; i++) {
+	datalen = sizeof(ass);
+	for (i = 0; i < ass.amount; i++) {
 		struct cel_header cel;
 		char fname[100];
 		char *data;
 
-		cel.size=get_sint(buf+datalen);
-		cel.xoffset=get_sshort(buf+datalen+4);
-		cel.yoffset=get_sshort(buf+datalen+6);
-		cel.width=get_sshort(buf+datalen+8);
-		cel.height=get_sshort(buf+datalen+10);
-		cel.compression=buf[datalen+12];
-		cel.action=buf[datalen+13];
+		cel.size = get_sint(buf + datalen);
+		cel.xoffset = get_sshort(buf + datalen + 4);
+		cel.yoffset = get_sshort(buf + datalen + 6);
+		cel.width = get_sshort(buf + datalen + 8);
+		cel.height = get_sshort(buf + datalen + 10);
+		cel.compression = buf[datalen + 12];
+		cel.action = buf[datalen + 13];
 
 		sprintf(fname, "CEL%03lu.TGA", i);
-		data=malloc(cel.width*cel.height);
+		data = malloc(cel.width * cel.height);
 		switch (cel.compression) {
-			case 0x32: /* PP20 */
-				ppdepack(buf+datalen+sizeof(cel), data, cel.size, cel.width*cel.height);
-				dump_tga(fname, cel.width, cel.height, data, 256, pal);
-				break;
-			case 0x1: /* RLE */
-				un_rle(buf+datalen+sizeof(cel), data, cel.size);
-				dump_tga(fname, cel.width, cel.height, data, 256, pal);
-				break;
-			default:
-				fprintf(stdout, "Unknown ACE Compression %x\n",
-						cel.compression);
+		case 0x32:	/* PP20 */
+			ppdepack(buf + datalen + sizeof(cel), data, cel.size,
+				 cel.width * cel.height);
+			dump_tga(fname, cel.width, cel.height, data, 256, pal);
+			break;
+		case 0x1:	/* RLE */
+			un_rle(buf + datalen + sizeof(cel), data, cel.size);
+			dump_tga(fname, cel.width, cel.height, data, 256, pal);
+			break;
+		default:
+			fprintf(stdout, "Unknown ACE Compression %x\n",
+				cel.compression);
 		}
 		free(data);
 
-		datalen+=sizeof(cel)+cel.size;
+		datalen += sizeof(cel) + cel.size;
 	}
 
 }
 
-static void do_seq(struct ace_header *ace, const char *buf, size_t len) {
+static void do_seq(struct ace_header *ace, const char *buf, size_t len)
+{
 }
 
-void process_ace(const char *buf, size_t len) {
+void process_ace(const char *buf, size_t len)
+{
 	struct ace_header ace;
 
 	if (!buf) {
@@ -125,9 +124,9 @@ void process_ace(const char *buf, size_t len) {
 	}
 
 	strncpy(ace.label, buf, 4);
-	ace.version=get_sshort(buf+4);
-	ace.sequences=buf[6];
-	ace.speed=buf[7];
+	ace.version = get_sshort(buf + 4);
+	ace.sequences = buf[6];
+	ace.speed = buf[7];
 
 	if (strncmp(ace.label, "ACE\0", 4)) {
 		fprintf(stderr, "No ACE Signature\n");
@@ -141,21 +140,21 @@ void process_ace(const char *buf, size_t len) {
 
 	if (ace.sequences > 250) {
 		fprintf(stderr, "ACE sequences %u is not a valid value\n",
-				ace.sequences);
+			ace.sequences);
 		return;
 	}
 	if (ace.speed > 99) {
 		fprintf(stderr, "ACE speed %u is not a valid value\n",
-				ace.speed);
+			ace.speed);
 
 	}
 
 	printf("Sequences: %03u\tSpeed: %02u\n", ace.sequences, ace.speed);
 
 	if (ace.sequences == 1)
-		do_ass(&ace, buf+sizeof(ace), len-sizeof(ace));
+		do_ass(&ace, buf + sizeof(ace), len - sizeof(ace));
 	else
-		do_seq(&ace, buf+sizeof(ace), len-sizeof(ace));
+		do_seq(&ace, buf + sizeof(ace), len - sizeof(ace));
 
 	return;
 }

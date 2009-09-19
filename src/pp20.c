@@ -2,22 +2,25 @@
  * Power Pack 2.0 decompressor for DSA/ROA
  */
 
-static inline unsigned int val(const unsigned char *p) {
-	return (p[0]<<16 | p[1] << 8 | p[2]);
+static inline unsigned int val(const unsigned char *p)
+{
+	return (p[0] << 16 | p[1] << 8 | p[2]);
 }
 
-static inline unsigned int le32_2_cpu(const unsigned char *p) {
-	return (p[3]<<24 | p[2]<<16 | p[1]<<8 | p[0]);
+static inline unsigned int le32_2_cpu(const unsigned char *p)
+{
+	return (p[3] << 24 | p[2] << 16 | p[1] << 8 | p[0]);
 }
 
-unsigned long depackedlen(const unsigned char *p, unsigned long plen) {
+unsigned long depackedlen(const unsigned char *p, unsigned long plen)
+{
 /*	DSA1/ROA1 doesn't use the first bytes as a signature "PP20".
  *	It's used instead for the lenght of the packed data. */
 	if (le32_2_cpu(p) == plen)
-		return val(p+plen-4);
+		return val(p + plen - 4);
 
 	if (p[0] == 'P' || p[1] == 'P' || p[2] == '2' || p[3] == '0')
-		return val(p+plen-4);
+		return val(p + plen - 4);
 
 	/* not a powerpacker file */
 	return 0;
@@ -27,17 +30,18 @@ static unsigned long shift_in;
 static unsigned long counter;
 static unsigned const char *source;
 
-static unsigned long get_bits(unsigned long n) {
+static unsigned long get_bits(unsigned long n)
+{
 
 	unsigned long result = 0;
 	int i;
 
-	for (i = 0; i < n; i++)	{
+	for (i = 0; i < n; i++) {
 		if (counter == 0) {
 			counter = 8;
 			shift_in = *--source;
 		}
-		result = (result<<1) | (shift_in & 1);
+		result = (result << 1) | (shift_in & 1);
 		shift_in >>= 1;
 		counter--;
 	}
@@ -45,7 +49,8 @@ static unsigned long get_bits(unsigned long n) {
 }
 
 void ppdepack(const unsigned char *packed, unsigned char *depacked,
-				unsigned long plen, unsigned long unplen) {
+	      unsigned long plen, unsigned long unplen)
+{
 	unsigned char *dest;
 	int n_bits;
 	int idx;
@@ -61,7 +66,7 @@ void ppdepack(const unsigned char *packed, unsigned char *depacked,
 	offset_sizes[3] = packed[7];
 
 	/* reset counter */
-	counter=0;
+	counter = 0;
 
 	/* initialize source of bits */
 	source = packed + plen - 4;
@@ -91,9 +96,8 @@ void ppdepack(const unsigned char *packed, unsigned char *depacked,
 		idx = get_bits(2);
 		n_bits = offset_sizes[idx];
 		/* bytes to copy */
-		bytes = idx+1;
-		if (bytes == 4)	/* 4 means >=4 */
-		{
+		bytes = idx + 1;
+		if (bytes == 4) {	/* 4 means >=4 */
 			/* and maybe a bigger offset */
 			if (get_bits(1) == 0)
 				offset = get_bits(7);
@@ -104,7 +108,8 @@ void ppdepack(const unsigned char *packed, unsigned char *depacked,
 				to_add = get_bits(3);
 				bytes += to_add;
 			} while (to_add == 7);
-		} else offset = get_bits(n_bits);
+		} else
+			offset = get_bits(n_bits);
 
 		for (i = 0; i <= bytes; i++) {
 			dest[-1] = dest[offset];
