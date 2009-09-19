@@ -7,3 +7,4 @@
  */
 
 void process_nvf(const char *, size_t);
+void process_ace(const char *, size_t);
