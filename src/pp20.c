@@ -10,7 +10,7 @@ static inline unsigned int le32_2_cpu(const unsigned char *p) {
 	return (p[3]<<24 | p[2]<<16 | p[1]<<8 | p[0]);
 }
 
-static unsigned long depackedlen(const unsigned char *p, unsigned long plen) {
+unsigned long depackedlen(const unsigned char *p, unsigned long plen) {
 /*	DSA1/ROA1 doesn't use the first bytes as a signature "PP20".
  *	It's used instead for the lenght of the packed data. */
 	if (le32_2_cpu(p) == plen)
