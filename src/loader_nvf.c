@@ -19,17 +19,9 @@
 
 #include <packer.h>
 #include <dump.h>
+#include <format.h>
 
-static inline unsigned short get_ushort(const char* buf) {
-	return buf[1]<<8 | buf[0];
-}
-
-static inline unsigned int get_uint(const char* buf) {
-	return (buf[3]<<24) | (buf[2]<<16) | (buf[1]<<8) | (buf[0]);
-}
-
-static void do_mode_0(unsigned short blocks, const char *buf, size_t len)
-{
+static void do_mode_0(unsigned short blocks, const char *buf, size_t len) {
 	unsigned long i;
 	unsigned long data_sum=0;
 	size_t calc_len;
