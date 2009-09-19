@@ -1,3 +1,5 @@
+all: pp20 rle nvf2tga
+
 pp20:	src/pp20.c include/packer.h
 	gcc -g -c -o build/pp20.o src/pp20.c
 rle:	src/rle.c include/packer.h
