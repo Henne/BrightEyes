@@ -27,13 +27,14 @@ static inline unsigned int get_uint(const unsigned char* buf) {
 	return (buf[3]<<24) | (buf[2]<<16) | (buf[1]<<8) | (buf[0]);
 }
 
-void dump_tga(unsigned long nr, unsigned short x, unsigned short y, const char *data, unsigned short colors, const char *pal)
+void dump_tga(char *fname, unsigned short x, unsigned short y, const char *data, unsigned short colors, const char *pal)
 {
 	FILE *fd=NULL;
 	unsigned long i;
-	char fname[100];
 
-	sprintf(fname, "PIC%03lu.TGA", nr);
+	if (!fname)
+		return;
+
 	fd=fopen(fname, "wb");
 	/* name and open file */
 
@@ -123,7 +124,11 @@ void do_mode_0(unsigned short blocks, const char *buf, size_t len)
 	data=(char*)(buf+4);
 
 	for (i=0; i<blocks; i++){
-		dump_tga(i, x, y, data, colors, pal);
+		char fname[100];
+
+		sprintf(fname, "PIC%03lu.TGA", i);
+
+		dump_tga(fname, x, y, data, colors, pal);
 		data+=x*y;
 	}
 }
@@ -164,10 +169,14 @@ void do_mode_1(unsigned short blocks, const char *buf, size_t len)
 	data=(char*)(buf+blocks*4);
 
 	for (i=0; i<blocks; i++){
+		char fname[100];
+
+		sprintf(fname, "PIC%03lu.TGA", i);
+
 		x=get_ushort(buf+i*4);
 		y=get_ushort(buf+i*4+2);
 
-		dump_tga(i, x, y, data, colors, pal);
+		dump_tga(fname, x, y, data, colors, pal);
 		data+=x*y;
 	}
 }
@@ -224,6 +233,9 @@ void do_mode_same(unsigned short blocks, const char *buf, size_t len, unsigned c
 
 	for (i=0; i<blocks; i++){
 		unsigned long plen=get_uint(buf+4+i*4);
+		char fname[100];
+
+		sprintf(fname, "PIC%03lu.TGA", i);
 
 		memset(data, 0, x*y);
 
@@ -232,7 +244,7 @@ void do_mode_same(unsigned short blocks, const char *buf, size_t len, unsigned c
 		else
 			un_rle(pdata, data, plen);
 
-		dump_tga(i, x, y, (char*)data, colors, pal);
+		dump_tga(fname, x, y, (char*)data, colors, pal);
 		pdata+=get_uint(buf+4+i*4);
 	}
 
@@ -292,6 +304,9 @@ void do_mode_diff(unsigned short blocks, const char *buf, size_t len, unsigned c
 	for (i=0; i<blocks; i++){
 		unsigned long plen;
 		unsigned short x,y;
+		char fname[100];
+
+		sprintf(fname, "PIC%03lu.TGA", i);
 
 		x=get_ushort(buf+i*8);
 		y=get_ushort(buf+i*8+2);
@@ -309,7 +324,7 @@ void do_mode_diff(unsigned short blocks, const char *buf, size_t len, unsigned c
 		else
 			un_rle(pdata, data, plen);
 
-		dump_tga(i, x, y, (char*)data, colors, pal);
+		dump_tga(fname, x, y, (char*)data, colors, pal);
 		pdata+=plen;
 		free(data);
 	}
