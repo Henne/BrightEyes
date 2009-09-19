@@ -1,3 +1,4 @@
+#CC=i586-mingw32msvc-gcc
 CC=gcc
 CFLAGS=-Wall -pedantic -g -Iinclude
 
