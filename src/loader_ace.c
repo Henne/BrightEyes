@@ -35,7 +35,7 @@ void process_ace(const char *buf, size_t len) {
 	}
 
 	strncpy(ace.label, buf, 4);
-	ace.version=get_uint(buf+4);
+	ace.version=get_ushort(buf+4);
 	ace.sequences=buf[6];
 	ace.speed=buf[7];
 
