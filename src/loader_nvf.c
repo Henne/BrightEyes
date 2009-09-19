@@ -18,12 +18,13 @@
 #include <string.h>
 
 #include <packer.h>
+#include <dump.h>
 
-static inline unsigned short get_ushort(const unsigned char* buf) {
+static inline unsigned short get_ushort(const char* buf) {
 	return buf[1]<<8 | buf[0];
 }
 
-static inline unsigned int get_uint(const unsigned char* buf) {
+static inline unsigned int get_uint(const char* buf) {
 	return (buf[3]<<24) | (buf[2]<<16) | (buf[1]<<8) | (buf[0]);
 }
 
