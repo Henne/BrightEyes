@@ -1,0 +1,6 @@
+*~
+*.o
+*.TGA
+a.out
+oldstuff/
+bin/[a-z]*
