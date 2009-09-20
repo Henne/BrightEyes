@@ -6,8 +6,6 @@
  *
  */
 
-#include <string.h>
-
 unsigned long un_rle(const unsigned char *pdata, unsigned char *data,
 		     unsigned long plen)
 {
@@ -15,12 +13,15 @@ unsigned long un_rle(const unsigned char *pdata, unsigned char *data,
 
 	for (i = 0; i < plen; i++)
 		if (pdata[i] == 0x7f) {
-			unsigned char rl, col;
+			unsigned char rl, col, j;
+			unsigned char *ptr;
+
 
 			rl = pdata[i + 1];
 			col = pdata[i + 2];
-
-			memset(data + pos, col, rl);
+			ptr = data + pos;
+			for (j = 0; j < rl; j++)
+				ptr++ = col;
 			i += 2;
 			pos += rl;
 		} else
