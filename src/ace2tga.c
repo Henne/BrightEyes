@@ -1,15 +1,13 @@
 /*
- * NVF to TGA Converter
+ * ACE to TGA Converter
  *
- * Converts a NVF file to the TGA format.
- * NVF files are used by DSA/ROA 2+3
- * Some files of DSA/ROA 1 work, too, but aren't supported.
+ * Converts a ACE file to the TGA format.
+ * ACE files are used by DSA/ROA 2+3
  *
  * Author: Henne_NWH <henne@nachtiwndheim.de>
  * License: GPLv3
  *
- * Compilation: gcc -o nvf2tga nvf2tga.c
- * Usage:	./nvf2tga <*.TGA>
+ * Usage:	./ace2tga <*.ACE>
  *
  */
 
