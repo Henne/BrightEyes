@@ -21,7 +21,7 @@ unsigned long un_rle(const unsigned char *pdata, unsigned char *data,
 			col = pdata[i + 2];
 			ptr = data + pos;
 			for (j = 0; j < rl; j++)
-				ptr++ = col;
+				*ptr++ = col;
 			i += 2;
 			pos += rl;
 		} else
