@@ -17,6 +17,7 @@
 #include <stdlib.h>
 
 #include <loader.h>
+#include <version.h>
 
 int main(int argc, char **argv)
 {
@@ -26,7 +27,8 @@ int main(int argc, char **argv)
 	size_t flen, readlen;
 
 	if (argc == 1) {
-		printf("Usage: %s <NVF-File>.\n", argv[0]);
+		printf("%s %s\n", BANNER, VERSION);
+		printf("Usage: %s <ACE-File>\n", argv[0]);
 		exit(1);
 	}
 
