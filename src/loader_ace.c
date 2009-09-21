@@ -102,6 +102,56 @@ static void do_ass(struct ace_header *ace, const char *buf, size_t len)
 
 static void do_seq(struct ace_header *ace, const char *buf, size_t len)
 {
+	unsigned datalen=0,i,j;
+	struct seq_header * seqs;
+
+	if (len < ace->sequences*sizeof(struct seq_header)) {
+		fprintf(stderr, "Buffer to small for SEQ Headers\n");
+		return;
+	}
+
+	seqs=malloc(ace->sequences*sizeof(struct seq_header));
+	if (!seqs) {
+		fprintf(stderr, "Failed to allocate seqs\n");
+		return;
+	}
+
+	for (i = 0; i < ace->sequences; i++) {
+		struct seq_header *seq=&seqs[i];
+
+		seq->offset = get_sint(buf + datalen);
+		seq->label = get_sshort(buf + datalen + 4);
+		seq->celwidth = get_sshort(buf + datalen + 6);
+		seq->celheight = get_sshort(buf + datalen + 8);
+		seq->hotspotx = get_sshort(buf + datalen + 10);
+		seq->hotspoty = get_sshort(buf + datalen + 12);
+		seq->amount = buf[datalen + 14];
+		seq->playmode = buf[datalen + 15];
+
+		printf("\tSequence: %d\tOffset: %d\n", i, seq->offset);
+
+		datalen += sizeof(seq);
+	}
+
+	for (i=0; i < ace->sequences; i++)
+		for (j=0; j < seqs[i].amount; j++) {
+			struct cel_header cel;
+
+			cel.size = get_sint(buf+datalen);
+
+			datalen += sizeof(cel) + cel.size;
+	}
+
+	if (len < datalen) {
+		fprintf(stderr, "ACE-SEQ file is to small for CEL Headers\n");
+		return;
+	}
+
+	for (i=0; i < ace->sequences; i++)
+	{
+	}
+
+	free(seqs);
 }
 
 void process_ace(const char *buf, size_t len)

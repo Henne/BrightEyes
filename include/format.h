@@ -36,6 +36,17 @@ struct ass_header {
 	unsigned char  playmode;	/* Abspielmodus		*/
 };
 
+struct seq_header {
+	int offset;			/* Seek-Offset zur Sequenz	*/
+	short label;			/* Kenn-Nummer der Sequenz	*/
+	short celwidth;			/* Breite des Cels		*/
+	short celheight;		/* Höhe der Cels		*/
+	short hotspotx;			/* Koordianten des Hot Spots	*/
+	short hotspoty;
+	unsigned short amount;		/* Anzahl der Cels		*/
+	unsigned short playmode;	/* Abspielmodus			*/
+} __attribute__((__packed__));
+
 struct cel_header {
 	int size;			/* Größe der Cels		*/
 	short xoffset;			/* Offset im Cel		*/
