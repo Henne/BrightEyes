@@ -19,6 +19,9 @@ unsigned long depackedlen(const unsigned char *p, unsigned long plen)
 	if (le32_2_cpu(p) == plen)
 		return val(p + plen - 4);
 
+	if (le32_2_cpu(p) + 8 == plen)
+		return val(p + plen - 4);
+
 	if (p[0] == 'P' || p[1] == 'P' || p[2] == '2' || p[3] == '0')
 		return val(p + plen - 4);
 
