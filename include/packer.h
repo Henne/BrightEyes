@@ -8,7 +8,7 @@
 void ppdepack(const unsigned char *, unsigned char *,
 		unsigned long, unsigned long);
 
-unsigned long depackedlen(const unsigned char*, unsigned long);
+unsigned long depackedlen(const char*, unsigned long);
 
 /* RLE */
 unsigned long un_rle(const unsigned char *, unsigned char *, unsigned long);
