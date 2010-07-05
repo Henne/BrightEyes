@@ -16,7 +16,7 @@
 
 void process_aif(const char *buf, size_t len)
 {
-	unsigned short h,w,col;
+	unsigned short h,w,col,mode;
 	char *data,*pal;
 
 	if (!buf) {
@@ -34,6 +34,7 @@ void process_aif(const char *buf, size_t len)
 		return;
 	}
 
+	mode = get_ushort(buf + 4);
 	w = get_ushort(buf + 6);
 	h = get_ushort(buf + 8);
 	col = get_ushort(buf + 10);
@@ -44,7 +45,7 @@ void process_aif(const char *buf, size_t len)
 		return;
 	}
 
-	switch (get_ushort(buf+4)) {
+	switch (mode) {
 		case 0: /* Unpacked */
 			pal = buf + 0x1e + w * h;
 			if ( h && w)
