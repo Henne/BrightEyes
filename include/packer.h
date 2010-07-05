@@ -12,3 +12,5 @@ unsigned long depackedlen(const unsigned char*, unsigned long);
 
 /* RLE */
 unsigned long un_rle(const unsigned char *, unsigned char *, unsigned long);
+/* RL */
+unsigned long un_rl(const char *, char *, unsigned long);

@@ -16,6 +16,7 @@
 
 void process_aif(const char *buf, size_t len)
 {
+	unsigned long deplen,paclen;
 	unsigned short h,w,col,mode;
 	char *data,*pal;
 
@@ -48,23 +49,48 @@ void process_aif(const char *buf, size_t len)
 				dump_tga("PIC01.TGA", w, h, buf+0x1e, col, pal);
 			break;
 
-/*		case 2: ??? */
-		case 3: /* PP20 */
-			data = malloc(w*h+172);
+		case 2: /* RLE */
+			pal = buf + len - col * 3;
+			paclen = len - col * 3 - 0x1e;
+
+			data = malloc(w * h);
 			if (!data) {
 				fprintf(stderr, "Not enough Memory\n");
 				return;
 			}
-			pal = buf + 0x1e + get_uint(buf+0x1e);
-			printf("Pal = 0x%lx\n", pal - buf);
-			printf("len - Pal = 0x%lx\n", buf + len - pal);
-			printf("Deplen = %lu\n", depackedlen(buf+0x1e, get_uint(buf+0x1e)));
-			ppdepack(buf+0x1e, (unsigned char*)data, get_uint(buf+0x1e), w*h);
-			dump_tga("PIC01.TGA", w, h, data+0x172, col, pal+8);
+
+			un_rl(buf+0x1e, data, paclen);
+			dump_tga("PIC01.TGA", w, h, data, col, pal);
+
+			free(data);
+			break;
+
+		case 3: /* PP20 */
+			paclen = get_uint(buf+0x1e) + 8;
+			deplen = depackedlen(buf+0x1e, paclen);
+			pal = buf + 0x1e + paclen;
+
+			data = malloc(deplen);
+			if (!data) {
+				fprintf(stderr, "Not enough Memory\n");
+				return;
+			}
+
+			if ( col * 3 != buf + len - pal) {
+				printf("Pal = 0x%lx\n", pal - buf);
+				printf("len - Pal = 0x%lx\n", buf + len - pal);
+			}
+
+			if (deplen != w * h) {
+				printf("Deplen = %lu\n", deplen);
+				printf("H*W = %d\n", h * w);
+			}
+			ppdepack(buf+0x1e, (unsigned char*)data, paclen, deplen);
+			dump_tga("PIC01.TGA", w, h, data, col, pal);
 			free(data);
 			break;
 		default:
-			fprintf(stderr, "AIF mode %u not supported\n", get_ushort(buf+4));
+			fprintf(stderr, "AIF mode %u not supported\n", mode);
 	}
 	return;
 }
