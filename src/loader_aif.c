@@ -45,7 +45,13 @@ void process_aif(const char *buf, size_t len)
 	}
 
 	switch (get_ushort(buf+4)) {
+		case 0: /* Unpacked */
+			pal = buf + 0x1e + w * h;
+			if ( h && w)
+				dump_tga("PIC01.TGA", w, h, buf+0x1e, col, pal);
+			break;
 
+/*		case 2: ??? */
 		case 3: /* PP20 */
 			pal = buf + 0x1e + get_uint(buf+0x1e);
 			printf("Pal = 0x%lx\n", pal - buf);
