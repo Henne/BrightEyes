@@ -64,7 +64,7 @@ void dump_tga(char *fname, unsigned short x, unsigned short y, const char *data,
 	}
 
 	/* Write Data */
-	fwrite(data, x * y, sizeof(char), fd);
+	fwrite(data, sizeof(char), x * y, fd);
 
 	/* Close File */
 	fclose(fd);
