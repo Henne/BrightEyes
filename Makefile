@@ -28,7 +28,7 @@ nvf2tga:	src/nvf2tga.c packer dumper loader_nvf include/packer.h include/dump.h
 	$(CC) $(CFLAGS) -o bin/nvf2tga src/nvf2tga.c build/pp20.o build/rle.o build/dump_tga.o build/loader_nvf.o
 
 ace2tga:	src/ace2tga.c packer dumper loader_ace include/packer.h include/dump.h
-	$(CC) $(CFLAGS) -o bin/ace2tga src/ace2tga.c build/pp20.o build/rle.o build/dump_tga.o build/loader_ace.o
+	$(CC) $(CFLAGS) -o bin/ace2tga src/ace2tga.c build/pp20.o build/rle.o build/dump_tga.o build/loader_ace.o build/rl.o
 
 aif2tga:	src/aif2tga.c packer dumper loader_aif include/packer.h include/dump.h
 	$(CC) $(CFLAGS) -o bin/aif2tga src/aif2tga.c build/pp20.o build/rle.o build/rl.o build/dump_tga.o build/loader_aif.o

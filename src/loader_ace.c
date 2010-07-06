@@ -89,6 +89,11 @@ static void do_ass(struct ace_header *ace, const char *buf, size_t len)
 					(unsigned char*)data, cel.size);
 			dump_tga(fname, cel.width, cel.height, data, 256, pal);
 			break;
+		case 0x2:	/* RLE */
+			un_rl((unsigned char*)(buf + datalen + sizeof(cel)),
+					(unsigned char*)data, cel.size);
+			dump_tga(fname, cel.width, cel.height, data, 256, pal);
+			break;
 		default:
 			fprintf(stdout, "Unknown ACE Compression %x\n",
 				cel.compression);
