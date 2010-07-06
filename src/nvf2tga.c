@@ -5,7 +5,7 @@
  * NVF files are used by DSA/ROA 2+3
  * Some files of DSA/ROA 1 work, too, but aren't supported.
  *
- * Author: Henne_NWH <henne@nachtiwndheim.de>
+ * Author: Henne_NWH <henne@nachtwindheim.de>
  * License: GPLv3
  *
  * Compilation: gcc -o nvf2tga nvf2tga.c

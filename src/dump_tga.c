@@ -1,7 +1,7 @@
 /*
  * Dumps Picture to TGA
  *
- * Author: Henne_NWH <henne@nachtiwndheim.de>
+ * Author: Henne_NWH <henne@nachtwindheim.de>
  * License: GPLv3
  *
  */

@@ -1,7 +1,7 @@
 /*
  * Header file for RLE decompressor of DSA2+3/ROA2+3
  *
- * Author: Henne_NWH <henne@nachtiwndheim.de>
+ * Author: Henne_NWH <henne@nachtwindheim.de>
  * License: GPLv3
  *
  */

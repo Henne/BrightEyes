@@ -4,7 +4,7 @@
  * Converts a ACE file to the TGA format.
  * ACE files are used by DSA/ROA 2+3
  *
- * Author: Henne_NWH <henne@nachtiwndheim.de>
+ * Author: Henne_NWH <henne@nachtwindheim.de>
  * License: GPLv3
  *
  * Usage:	./ace2tga <*.ACE>
