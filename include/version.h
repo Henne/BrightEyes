@@ -7,4 +7,4 @@
  */
 
 #define BANNER "DSA/ROA Tools"
-#define VERSION "v0.1"
+#define VERSION "v0.2-rc1"
