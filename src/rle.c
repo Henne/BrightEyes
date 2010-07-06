@@ -6,15 +6,14 @@
  *
  */
 
-unsigned long un_rle(const unsigned char *pdata, unsigned char *data,
-		     unsigned long plen)
+unsigned long un_rle(const char *pdata, char *data, unsigned long plen)
 {
 	unsigned long i, pos = 0;
 
 	for (i = 0; i < plen; i++)
 		if (pdata[i] == 0x7f) {
 			unsigned char rl, col, j;
-			unsigned char *ptr;
+			char *ptr;
 
 
 			rl = pdata[i + 1];

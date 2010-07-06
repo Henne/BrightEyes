@@ -124,7 +124,7 @@ static void do_mode_same(unsigned short blocks, const char *buf, size_t len,
 	unsigned long data_sum = 0;
 	size_t calc_len;
 	char *pal;
-	unsigned char *data, *pdata;
+	char *data, *pdata;
 	unsigned short colors, x, y;
 
 	if (len < 4 + blocks * 4) {
@@ -163,7 +163,7 @@ static void do_mode_same(unsigned short blocks, const char *buf, size_t len,
 		printf("NVF-Mode 4 (same size/RLE): %03d Pics\n", blocks);
 
 	pal = (char *)(buf + data_sum + 2);
-	pdata = (unsigned char *)(buf + 4 + 4 * blocks);
+	pdata = (char *)(buf + 4 + 4 * blocks);
 
 	data = malloc(x * y);
 	if (!data) {
@@ -184,7 +184,7 @@ static void do_mode_same(unsigned short blocks, const char *buf, size_t len,
 		else
 			un_rle(pdata, data, plen);
 
-		dump_tga(fname, x, y, (char *)data, colors, pal);
+		dump_tga(fname, x, y, data, colors, pal);
 		pdata += get_uint(buf + 4 + i * 4);
 	}
 
@@ -199,7 +199,7 @@ static void do_mode_diff(unsigned short blocks, const char *buf, size_t len,
 	unsigned long data_sum = 0;
 	size_t calc_len;
 	char *pal;
-	unsigned char *data, *pdata;
+	char *data, *pdata;
 	unsigned short colors;
 
 	if (len < blocks * 8) {
@@ -238,7 +238,7 @@ static void do_mode_diff(unsigned short blocks, const char *buf, size_t len,
 		printf("NVF-Mode 4 (different size/RLE): %03d Pics\n", blocks);
 
 	pal = (char *)(buf + data_sum + 2);
-	pdata = (unsigned char *)(buf + 8 * blocks);
+	pdata = (char *)(buf + 8 * blocks);
 
 	for (i = 0; i < blocks; i++) {
 		unsigned long plen;
@@ -263,7 +263,7 @@ static void do_mode_diff(unsigned short blocks, const char *buf, size_t len,
 		else
 			un_rle(pdata, data, plen);
 
-		dump_tga(fname, x, y, (char *)data, colors, pal);
+		dump_tga(fname, x, y, data, colors, pal);
 		pdata += plen;
 		free(data);
 	}

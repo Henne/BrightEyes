@@ -79,19 +79,16 @@ static void do_ass(struct ace_header *ace, const char *buf, size_t len)
 		data = malloc(cel.width * cel.height);
 		switch (cel.compression) {
 		case 0x32:	/* PP20 */
-			ppdepack((unsigned char*)(buf + datalen + sizeof(cel)),
-				 (unsigned char*)data,
+			ppdepack(buf + datalen + sizeof(cel), data,
 				 cel.size, cel.width * cel.height);
 			dump_tga(fname, cel.width, cel.height, data, 256, pal);
 			break;
 		case 0x1:	/* RLE */
-			un_rle((unsigned char*)(buf + datalen + sizeof(cel)),
-					(unsigned char*)data, cel.size);
+			un_rle(buf + datalen + sizeof(cel), data, cel.size);
 			dump_tga(fname, cel.width, cel.height, data, 256, pal);
 			break;
 		case 0x2:	/* RLE */
-			un_rl((unsigned char*)(buf + datalen + sizeof(cel)),
-					(unsigned char*)data, cel.size);
+			un_rl(buf + datalen + sizeof(cel), data, cel.size);
 			dump_tga(fname, cel.width, cel.height, data, 256, pal);
 			break;
 		default:

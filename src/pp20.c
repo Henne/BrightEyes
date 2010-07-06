@@ -2,17 +2,17 @@
  * Power Pack 2.0 decompressor for DSA/ROA
  */
 
-static inline unsigned int val(const unsigned char *p)
+static inline unsigned int val(const char *p)
 {
 	return (p[0] << 16 | p[1] << 8 | p[2]);
 }
 
-static inline unsigned int le32_2_cpu(const unsigned char *p)
+static inline unsigned int le32_2_cpu(const char *p)
 {
 	return (p[3] << 24 | p[2] << 16 | p[1] << 8 | p[0]);
 }
 
-unsigned long depackedlen(const unsigned char *p, unsigned long plen)
+unsigned long depackedlen(const char *p, unsigned long plen)
 {
 /*	DSA1/ROA1 doesn't use the first bytes as a signature "PP20".
  *	It's used instead for the lenght of the packed data. */
@@ -31,7 +31,7 @@ unsigned long depackedlen(const unsigned char *p, unsigned long plen)
 
 static unsigned long shift_in;
 static unsigned long counter;
-static unsigned const char *source;
+static const char *source;
 
 static unsigned long get_bits(unsigned long n)
 {
@@ -51,10 +51,10 @@ static unsigned long get_bits(unsigned long n)
 	return result;
 }
 
-void ppdepack(const unsigned char *packed, unsigned char *depacked,
+void ppdepack(const char *packed, char *depacked,
 	      unsigned long plen, unsigned long unplen)
 {
-	unsigned char *dest;
+	char *dest;
 	int n_bits;
 	int idx;
 	unsigned long bytes;

@@ -44,13 +44,13 @@ void process_aif(const char *buf, size_t len)
 
 	switch (mode) {
 		case 0: /* Unpacked */
-			pal = buf + 0x1e + w * h;
+			pal = (char *)(buf + 0x1e + w * h);
 			if ( h && w)
 				dump_tga("PIC01.TGA", w, h, buf+0x1e, col, pal);
 			break;
 
 		case 2: /* RLE */
-			pal = buf + len - col * 3;
+			pal = (char *)(buf + len - col * 3);
 			paclen = len - col * 3 - 0x1e;
 
 			data = malloc(w * h);
@@ -68,7 +68,7 @@ void process_aif(const char *buf, size_t len)
 		case 3: /* PP20 */
 			paclen = get_uint(buf+0x1e) + 8;
 			deplen = depackedlen(buf+0x1e, paclen);
-			pal = buf + 0x1e + paclen;
+			pal = (char *)(buf + 0x1e + paclen);
 
 			data = malloc(deplen);
 			if (!data) {
@@ -85,7 +85,7 @@ void process_aif(const char *buf, size_t len)
 				printf("Deplen = %lu\n", deplen);
 				printf("H*W = %d\n", h * w);
 			}
-			ppdepack(buf+0x1e, (unsigned char*)data, paclen, deplen);
+			ppdepack(buf+0x1e, data, paclen, deplen);
 			dump_tga("PIC01.TGA", w, h, data, col, pal);
 			free(data);
 			break;
