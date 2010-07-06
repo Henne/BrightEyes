@@ -140,7 +140,11 @@ static void do_mode_same(unsigned short blocks, const char *buf, size_t len,
 		data_sum += get_uint(buf + 4 + i * 4);
 
 	if (len < data_sum) {
-		printf("The buffer is to small to hold valid values");
+		printf("The buffer is to small to hold valid values\n");
+		return;
+	}
+	if (len < data_sum + 2) {
+		printf("The buffer is to small to hold a palette\n");
 		return;
 	}
 
