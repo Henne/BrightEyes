@@ -132,7 +132,7 @@ static void do_seq(struct ace_header *ace, const char *buf, size_t len)
 
 		printf("\tSequence: %d\tOffset: %d\n", i, seq->offset);
 
-		datalen += sizeof(seq);
+		datalen += 16;
 	}
 
 	for (i=0; i < ace->sequences; i++)
