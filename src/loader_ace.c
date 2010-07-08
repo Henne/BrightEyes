@@ -112,6 +112,7 @@ static void do_seq(struct ace_header *ace, const char *buf, size_t len)
 {
 	unsigned datalen=0,i,j;
 	struct seq_header * seqs;
+	char *palette, *data;
 
 	if (len < ace->sequences*sizeof(struct seq_header)) {
 		fprintf(stderr, "Buffer to small for SEQ Headers\n");
@@ -124,6 +125,8 @@ static void do_seq(struct ace_header *ace, const char *buf, size_t len)
 		return;
 	}
 
+	palette = (char *)(buf + len - 768);
+
 	for (i = 0; i < ace->sequences; i++) {
 		struct seq_header *seq=&seqs[i];
 
@@ -135,30 +138,83 @@ static void do_seq(struct ace_header *ace, const char *buf, size_t len)
 		seq->hotspoty = get_sshort(buf + datalen + 12);
 		seq->amount = buf[datalen + 14];
 		seq->playmode = buf[datalen + 15];
-
-		printf("\tSequence: %d\tOffset: %d\n", i, seq->offset);
-
+/*
+		printf("\tSequence: %d\tAmount: %d\tOffset: %x\n", i,
+				seq->amount, seq->offset);
+*/
 		datalen += 16;
 	}
 
-	for (i=0; i < ace->sequences; i++)
+	for (i=0; i < ace->sequences; i++) {
+		unsigned short pos = 0;
+
 		for (j=0; j < seqs[i].amount; j++) {
 			struct cel_header cel;
+			char fname[16];
 
 			cel.size = get_sint(buf+datalen);
+			cel.xoffset = get_sshort(buf+datalen + 4);
+			cel.yoffset = get_sshort(buf+datalen + 6);
+			cel.width = get_sshort(buf+datalen + 8);
+			cel.height = get_sshort(buf+datalen + 10);
+			cel.compression = get_sshort(buf+datalen + 12);
+			cel.action = get_sshort(buf+datalen + 13);
 
-			datalen += sizeof(cel) + cel.size;
+			/*
+			printf("Sequence: %d\tCel: %d\n", i, j);
+			printf("\tSize: %d\tCompression: %02x\n", cel.size, cel.compression);
+*/
+			sprintf(fname, "PIC_%03u_%03u.TGA", i, j);
+
+			switch (cel.compression) {
+				case 0x1:
+					data = malloc(cel.width * cel.height);
+					if (!data) {
+						fprintf(stderr,
+						"Failed to allocate seqs\n");
+						return;
+					}
+					un_rle(buf+seqs[i].offset+6+pos, data, cel.size);
+					dump_tga(fname, cel.width, cel.height, data, 256, palette);
+					free(data);
+					break;
+				case 0x2:
+					data = malloc(cel.width * cel.height);
+					if (!data) {
+						fprintf(stderr,
+						"Failed to allocate seqs\n");
+						return;
+					}
+					un_rl(buf+seqs[i].offset+6+pos, data, cel.size);
+					dump_tga(fname, cel.width, cel.height, data, 256, palette);
+					free(data);
+					break;
+				case 0x32:
+					data = malloc(cel.width * cel.height);
+					if (!data) {
+						fprintf(stderr,
+						"Failed to allocate seqs\n");
+						return;
+					}
+					ppdepack(buf+seqs[i].offset+6+pos, data, cel.size, cel.width * cel.height);
+					dump_tga(fname, cel.width, cel.height, data, 256, palette);
+					free(data);
+					break;
+				default:
+					printf("Compression 0x%x is not supportet yet\n", cel.compression);
+			}
+			pos += cel.size +14;
+			datalen += cel.size + 14;
+		}
 	}
 
 	if (len < datalen) {
 		fprintf(stderr, "ACE-SEQ file is to small for CEL Headers\n");
 		return;
 	}
-
-	for (i=0; i < ace->sequences; i++)
-	{
-	}
-
+	datalen += 768;
+	if (datalen != len)
+		printf("len: %ld datalen %d\n", len, datalen);
 	free(seqs);
 }
 
