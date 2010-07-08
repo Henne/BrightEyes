@@ -76,7 +76,13 @@ static void do_ass(struct ace_header *ace, const char *buf, size_t len)
 		cel.action = buf[datalen + 13];
 
 		sprintf(fname, "CEL%03lu.TGA", i);
+
 		data = malloc(cel.width * cel.height);
+		if (data == NULL) {
+			fprintf(stderr, "Failed to allocate seqs\n");
+			return;
+		}
+
 		switch (cel.compression) {
 		case 0x32:	/* PP20 */
 			ppdepack(buf + datalen + sizeof(cel), data,
