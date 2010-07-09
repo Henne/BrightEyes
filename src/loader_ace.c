@@ -262,9 +262,9 @@ void process_ace(const char *buf, size_t len)
 	printf("Sequences: %03u\tSpeed: %02u\n", ace.sequences, ace.speed);
 
 	if (ace.sequences == 1)
-		do_ass(&ace, buf + sizeof(ace), len - sizeof(ace));
+		do_ass(&ace, buf + 8, len - 8);
 	else
-		do_seq(&ace, buf + sizeof(ace), len - sizeof(ace));
+		do_seq(&ace, buf + 8, len - 8);
 
 	return;
 }
