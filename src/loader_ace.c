@@ -20,7 +20,7 @@ static void do_ass(struct ace_header *ace, const char *buf, size_t len)
 	unsigned long i, datalen;
 	char *pal;
 
-	if (len < sizeof(ass)) {
+	if (len < 6) {
 		fprintf(stderr, "Buffer to small for ASS Header\n");
 		return;
 	}
@@ -32,7 +32,7 @@ static void do_ass(struct ace_header *ace, const char *buf, size_t len)
 	printf("\t%03dx%03d\tAmount: %03u\tMode: %03u\n",
 	       ass.celwidth, ass.celheight, ass.amount, ass.playmode);
 
-	datalen = sizeof(ass);
+	datalen = 6;
 	for (i = 0; i < ass.amount; i++) {
 		struct cel_header cel;
 
@@ -61,7 +61,7 @@ static void do_ass(struct ace_header *ace, const char *buf, size_t len)
 	}
 	pal = (char *)buf + datalen;
 
-	datalen = sizeof(ass);
+	datalen = 6;
 	for (i = 0; i < ass.amount; i++) {
 		struct cel_header cel;
 		char fname[100];
