@@ -157,8 +157,9 @@ static void do_seq(struct ace_header *ace, const char *buf, size_t len)
 			cel.yoffset = get_sshort(buf+datalen + 6);
 			cel.width = get_sshort(buf+datalen + 8);
 			cel.height = get_sshort(buf+datalen + 10);
-			cel.compression = get_sshort(buf+datalen + 12);
-			cel.action = get_sshort(buf+datalen + 13);
+			cel.compression = *(char*)(buf+datalen + 12);
+			cel.action = *(char*)(buf+datalen + 13);
+
 
 			/*
 			printf("Sequence: %d\tCel: %d\n", i, j);
