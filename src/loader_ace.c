@@ -47,7 +47,7 @@ static void do_ass(struct ace_header *ace, const char *buf, size_t len)
 /*		printf("\t\tSize: %08x\tCompression: %x\n",
 		       cel.size, cel.compression);
 */
-		datalen += sizeof(cel) + cel.size;
+		datalen += 14 + cel.size;
 	}
 
 	if (datalen + 2 > len) {
@@ -85,16 +85,16 @@ static void do_ass(struct ace_header *ace, const char *buf, size_t len)
 
 		switch (cel.compression) {
 		case 0x32:	/* PP20 */
-			ppdepack(buf + datalen + sizeof(cel), data,
+			ppdepack(buf + datalen + 14, data,
 				 cel.size, cel.width * cel.height);
 			dump_tga(fname, cel.width, cel.height, data, 256, pal);
 			break;
 		case 0x1:	/* RLE */
-			un_rle(buf + datalen + sizeof(cel), data, cel.size);
+			un_rle(buf + datalen + 14, data, cel.size);
 			dump_tga(fname, cel.width, cel.height, data, 256, pal);
 			break;
 		case 0x2:	/* RLE */
-			un_rl(buf + datalen + sizeof(cel), data, cel.size);
+			un_rl(buf + datalen + 14, data, cel.size);
 			dump_tga(fname, cel.width, cel.height, data, 256, pal);
 			break;
 		default:
@@ -103,7 +103,7 @@ static void do_ass(struct ace_header *ace, const char *buf, size_t len)
 		}
 		free(data);
 
-		datalen += sizeof(cel) + cel.size;
+		datalen += 14 + cel.size;
 	}
 
 }
@@ -204,7 +204,7 @@ static void do_seq(struct ace_header *ace, const char *buf, size_t len)
 				default:
 					printf("Compression 0x%x is not supportet yet\n", cel.compression);
 			}
-			pos += cel.size +14;
+			pos += cel.size + 14;
 			datalen += cel.size + 14;
 		}
 	}
