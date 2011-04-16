@@ -1,7 +1,7 @@
 /*
  * Header file for DSA/ROA file formats
  *
- * Author: Nenne_NWH <henne@nachtwindheim.de>
+ * Author: Henne_NWH <henne@nachtwindheim.de>
  * Licanse: GPLv3
  *
  */
