@@ -209,14 +209,8 @@ static void do_mode_diff(unsigned short blocks, const char *buf, size_t len,
 
 	data_sum = 8 * blocks;
 
-	for (i = 0; i < blocks; i++) {
-		unsigned short x, y;
-
-		x = get_ushort(buf);
-		y = get_ushort(buf + 2);
-
+	for (i = 0; i < blocks; i++)
 		data_sum += get_uint(buf + i * 8 + 4);
-	}
 
 	if (len < data_sum) {
 		printf("The buffer is to small to hold valid values");
