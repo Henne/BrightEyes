@@ -57,7 +57,7 @@ void process_raw(const char *buf, size_t len)
 	datalen += sizeof(struct raw_header);
 
 	/* Palette */
-	pal = buf+datalen;
+	pal = (char*)buf+datalen;
 	datalen += 3*raw.palette_size;
 
 	if (datalen+raw.width*raw.height != len) {
