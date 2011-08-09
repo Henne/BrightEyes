@@ -44,8 +44,8 @@ struct seq_header {
 	short celheight;		/* Höhe der Cels		*/
 	short hotspotx;			/* Koordianten des Hot Spots	*/
 	short hotspoty;
-	unsigned short amount;		/* Anzahl der Cels		*/
-	unsigned short playmode;	/* Abspielmodus			*/
+	unsigned char amount;		/* Anzahl der Cels		*/
+	unsigned char playmode;		/* Abspielmodus			*/
 } __attribute__((__packed__));
 
 struct cel_header {
