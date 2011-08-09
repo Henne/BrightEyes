@@ -1,8 +1,9 @@
 /*
  * Header file for DSA/ROA file formats
  *
- * Author: Henne_NWH <henne@nachtwindheim.de>
- * Licanse: GPLv3
+ * Authors:	Henne_NWH <henne@nachtwindheim.de>
+ *		Hendrik Radke <hermes9@gmx.net>
+ * Licanse:	GPLv3
  *
  */
 static inline signed short get_sshort(const char* buf) {
@@ -55,4 +56,13 @@ struct cel_header {
 	short height;
 	unsigned char compression;	/* Verwendeter Packer		*/
 	unsigned char action;		/* Action Button der Cel	*/
+} __attribute__((__packed__));
+
+struct raw_header {
+    char  label[26];                     /* Bildinformation (Copyright)  */
+    short version;                       /* 0x1A00 (Zweck unbekannt)     */
+    char  magic_nr[4];                   /* ID-String ROH (0x524F4800)   */
+    short width;                         /* Bildbreite-1                 */
+    short height;                        /* Bildhöhe-1                   */
+    short palette_size;                  /* Anzahl der Paletteneinträge  */
 } __attribute__((__packed__));

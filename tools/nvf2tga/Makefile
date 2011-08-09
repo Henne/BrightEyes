@@ -4,7 +4,7 @@ CFLAGS=-Wall -pedantic -g -Iinclude
 BUILDDIR=./build
 BINDIR=../../bin
 
-all: packer dumper loader nvf2tga ace2tga aif2tga
+all: packer dumper loader nvf2tga ace2tga aif2tga raw2tga
 
 packer: pp20 rle rl
 dumper: dump_tga
@@ -24,6 +24,8 @@ loader_ace:	src/loader_ace.c include/loader.h
 	$(CC) $(CFLAGS) -c -o $(BUILDDIR)/loader_ace.o src/loader_ace.c
 loader_aif:	src/loader_aif.c include/loader.h
 	$(CC) $(CFLAGS) -c -o $(BUILDDIR)/loader_aif.o src/loader_aif.c
+loader_raw:	src/loader_raw.c include/loader.h
+	$(CC) $(CFLAGS) -c -o $(BUILDDIR)/loader_raw.o src/loader_raw.c
 
 
 nvf2tga:	src/nvf2tga.c packer dumper loader_nvf include/packer.h include/dump.h
@@ -34,6 +36,9 @@ ace2tga:	src/ace2tga.c packer dumper loader_ace include/packer.h include/dump.h
 
 aif2tga:	src/aif2tga.c packer dumper loader_aif include/packer.h include/dump.h
 	$(CC) $(CFLAGS) -o $(BINDIR)/aif2tga src/aif2tga.c $(BUILDDIR)/pp20.o $(BUILDDIR)/rle.o $(BUILDDIR)/rl.o $(BUILDDIR)/dump_tga.o $(BUILDDIR)/loader_aif.o
+
+raw2tga:	src/raw2tga.c packer dumper loader_raw include/packer.h include/dump.h
+	$(CC) $(CFLAGS) -o $(BINDIR)/raw2tga src/raw2tga.c $(BUILDDIR)/pp20.o $(BUILDDIR)/rle.o $(BUILDDIR)/dump_tga.o $(BUILDDIR)/loader_raw.o
 
 clean:
 	rm -rf $(BUILDDIR)/*.o
