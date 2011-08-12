@@ -1,6 +1,7 @@
 /**
  * Project:	BrightEyes
  * Author:	HenneNWH
+ * License:	GPLv3
  * File:	genripper.c
  * Purpose:	rips hardcoded tables from GEN.EXE and saves them as c-files
  */
