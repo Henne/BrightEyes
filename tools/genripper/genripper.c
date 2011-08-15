@@ -25,6 +25,20 @@ struct struct_exe_info {
 	unsigned short o_skills;	/* offset of the skills */
 
 	unsigned short o_spells;	/* offset of the spells */
+
+	unsigned short o_le;		/* offset of initial LE values */
+
+	unsigned short o_ae;		/* offset of initial AE values */
+
+	unsigned short o_height_range;	/* offset of height_range */
+
+	unsigned short o_weight;	/* offset of weight modificators */
+
+	unsigned short o_mrmod;		/* offset of MR modificators */
+
+	unsigned short o_autoskills;	/* offset of autoskills */
+
+	unsigned short o_autospells;	/* offset of autospells */
 };
 
 #define VERSIONS (5)
@@ -43,6 +57,13 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_schooltab = 0x2e5,
 		.o_skills = 0x371,
 		.o_spells = 0x615,
+		.o_le = 0x819,
+		.o_ae = 0x833,
+		.o_height_range = 0x84d,
+		.o_weight = 0x867,
+		.o_mrmod = 0x874,
+		.o_autoskills = 0xadc,
+		.o_autospells = 0xd66,
 	},
 	/* V1.03 */
 	{
@@ -55,6 +76,13 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_schooltab = 0x2e5,
 		.o_skills = 0x371,
 		.o_spells = 0x615,
+		.o_le = 0x819,
+		.o_ae = 0x833,
+		.o_height_range = 0x84d,
+		.o_weight = 0x867,
+		.o_mrmod = 0x874,
+		.o_autoskills = 0xadc,
+		.o_autospells = 0xd66,
 	},
 	/* V1.04 */
 	{
@@ -67,6 +95,13 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_schooltab = 0x2e7,
 		.o_skills = 0x373,
 		.o_spells = 0x617,
+		.o_le = 0x81b,
+		.o_ae = 0x835,
+		.o_height_range = 0x84f,
+		.o_weight = 0x869,
+		.o_mrmod = 0x876,
+		.o_autoskills = 0xade,
+		.o_autospells = 0xd68,
 	},
 	/* V1.05 */
 	{
@@ -79,6 +114,13 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_schooltab = 0x3ab,
 		.o_skills = 0x437,
 		.o_spells = 0x6db,
+		.o_le = 0x8df,
+		.o_ae = 0x8f9,
+		.o_height_range = 0x913,
+		.o_weight = 0x92d,
+		.o_mrmod = 0x93a,
+		.o_autoskills = 0xba2,
+		.o_autospells = 0xe2c,
 	},
 	/* V3.00 */
 	{
@@ -91,6 +133,13 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_schooltab = 0x2e7,
 		.o_skills = 0x373,
 		.o_spells = 0x617,
+		.o_le = 0x81b,
+		.o_ae = 0x835,
+		.o_height_range = 0x84f,
+		.o_weight = 0x869,
+		.o_mrmod = 0x876,
+		.o_autoskills = 0xade,
+		.o_autospells = 0xd68,
 	}
 };
 
@@ -404,6 +453,69 @@ static void dump_inittab(char *fname, char *ds) {
 	fprintf(fd, "};\n\n");
 	extracted += 86 * 6;
 
+
+	fprintf(fd, "static const unsigned short init_le[13] = {\n\t");
+	for (i = 0; i < 13; i++) {
+		fprintf(fd, "%d, ", (unsigned short)ds[info->o_le + i * 2]);
+	}
+	fprintf(fd, "\n};\n\n");
+	extracted += 13 * 2;
+
+	fprintf(fd, "static const unsigned short init_ae[13] = {\n\t");
+	for (i = 0; i < 13; i++) {
+		fprintf(fd, "%d, ", (unsigned short)ds[info->o_ae + i * 2]);
+	}
+	fprintf(fd, "\n};\n\n");
+	extracted += 13 * 2;
+
+	fprintf(fd, "struct minmax {\n\tunsigned char min, max;\n};\n");
+	fprintf(fd, "static const struct minmax height_range[13] = {\n");
+	for (i = 0; i < 13; i++) {
+		fprintf(fd, "\t{%d, %d},\n",
+			(unsigned char)ds[info->o_height_range + i * 2],
+			(unsigned char)ds[info->o_height_range + i * 2 + 1]);
+	}
+	fprintf(fd, "\n};\n\n");
+	extracted += 13 * 2;
+
+	fprintf(fd, "static const unsigned short weight_mod[13] = {\n\t");
+	for (i = 0; i < 13; i++) {
+		fprintf(fd, "%d, ", (unsigned char)ds[info->o_weight + i]);
+	}
+	fprintf(fd, "\n};\n\n");
+	extracted += 13;
+
+	fprintf(fd, "static const signed char mr_mod[13] = {\n\t");
+	for (i = 0; i < 13; i++) {
+		fprintf(fd, "%d, ", (signed char)ds[info->o_mrmod + i]);
+	}
+	fprintf(fd, "\n};\n\n");
+	extracted += 13;
+
+	fprintf(fd, "static const unsigned short autoskills[13][25] = {\n");
+	for (i = 0; i < 13; i++) {
+		fprintf(fd, "\t{");
+		for (j = 0; j < 25; j++)
+			fprintf(fd, "%d, ",
+				(unsigned short)ds[info->o_autoskills + (i * 25 + j) * 2]);
+		fprintf(fd, "},\n");
+	}
+	fprintf(fd, "\n};\n");
+	extracted += 13 * 25 * 2;
+
+	fprintf(fd, "static unsigned short autospells[6][45] = {\n");
+	for (i = 0; i < 6; i++) {
+		fprintf(fd, "\t{");
+		for (j = 0; j < 45; j++) {
+			if (j > 0 && j % 8 == 0)
+				fprintf(fd, "\n\t");
+			fprintf(fd, "%d, ",
+				(unsigned short)ds[info->o_autospells + (i * 45 + j) * 2]);
+		}
+		fprintf(fd, "},\n");
+	}
+	fprintf(fd, "\n};\n");
+	extracted += 6 * 45 * 2;
 
 	fclose(fd);
 }
