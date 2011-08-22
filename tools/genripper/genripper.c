@@ -22,6 +22,8 @@ struct struct_exe_info {
 
 	unsigned short o_schooltab;	/* offset of the spelltables */
 
+	unsigned short o_reqs;		/* offset of required attributes */
+
 	unsigned short o_skills;	/* offset of the skills */
 
 	unsigned short o_spells;	/* offset of the spells */
@@ -55,6 +57,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_spelltab = 0x92,
 		.o_housetab = 0x245,
 		.o_schooltab = 0x2e5,
+		.o_reqs = 0x309,
 		.o_skills = 0x371,
 		.o_spells = 0x615,
 		.o_le = 0x819,
@@ -74,6 +77,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_spelltab = 0x92,
 		.o_housetab = 0x245,
 		.o_schooltab = 0x2e5,
+		.o_reqs = 0x309,
 		.o_skills = 0x371,
 		.o_spells = 0x615,
 		.o_le = 0x819,
@@ -93,6 +97,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_spelltab = 0x94,
 		.o_housetab = 0x247,
 		.o_schooltab = 0x2e7,
+		.o_reqs = 0x30b,
 		.o_skills = 0x373,
 		.o_spells = 0x617,
 		.o_le = 0x81b,
@@ -112,6 +117,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_spelltab = 0x158,
 		.o_housetab = 0x30b,
 		.o_schooltab = 0x3ab,
+		.o_reqs = 0x3cf,
 		.o_skills = 0x437,
 		.o_spells = 0x6db,
 		.o_le = 0x8df,
@@ -131,6 +137,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_spelltab = 0x94,
 		.o_housetab = 0x247,
 		.o_schooltab = 0x2e7,
+		.o_reqs = 0x30b,
 		.o_skills = 0x373,
 		.o_spells = 0x617,
 		.o_le = 0x81b,
@@ -362,6 +369,23 @@ static void dump_inittab(char *fname, char *ds) {
 		fprintf(stderr, "Error: Cant open for write %s\n", name);
 		return;
 	}
+
+	fprintf(fd, "struct struct_reqs {\n");
+	fprintf(fd, "\tunsigned char attrib, requirement;\n};\n");
+
+	fprintf(fd, "static const struct_reqs reqs[13][4] = {\n");
+	for (i = 0; i < 13; i++) {
+		fprintf(fd, "\t{");
+		for (j = 0; j < 4; j++) {
+			fprintf(fd, " {%u, 0x%x},",
+					ds[info->o_reqs + i * 8 + j * 2],
+					(unsigned char)ds[info->o_reqs + i * 8 + j * 2 + 1]);
+		}
+		fprintf(fd, " },\n");
+	}
+	fprintf(fd, "};\n");
+	extracted += 13 * 4 * 2;
+
 
 	fprintf(fd, "static const signed char skills[13][52] = {\n");
 	fprintf(fd, "\t{},\n");
