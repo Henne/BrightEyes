@@ -40,6 +40,10 @@ struct struct_exe_info {
 
 	unsigned short o_skill_incs;	/* offset of skill incs */
 
+	unsigned short o_spell_incs;	/* offset of spell incs */
+
+	unsigned short o_conv_incs;	/* offset of convertable incs */
+
 	unsigned short o_autoskills;	/* offset of autoskills */
 
 	unsigned short o_autospells;	/* offset of autospells */
@@ -68,6 +72,8 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_weight = 0x867,
 		.o_mrmod = 0x874,
 		.o_skill_incs = 0x9bf,
+		.o_spell_incs = 0x9cb,
+		.o_conv_incs = 0x9d1,
 		.o_autoskills = 0xadc,
 		.o_autospells = 0xd66,
 	},
@@ -89,6 +95,8 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_weight = 0x867,
 		.o_mrmod = 0x874,
 		.o_skill_incs = 0x9bf,
+		.o_spell_incs = 0x9cb,
+		.o_conv_incs = 0x9d1,
 		.o_autoskills = 0xadc,
 		.o_autospells = 0xd66,
 	},
@@ -110,6 +118,8 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_weight = 0x869,
 		.o_mrmod = 0x876,
 		.o_skill_incs = 0x9c1,
+		.o_spell_incs = 0x9cd,
+		.o_conv_incs = 0x9d3,
 		.o_autoskills = 0xade,
 		.o_autospells = 0xd68,
 	},
@@ -131,6 +141,8 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_weight = 0x92d,
 		.o_mrmod = 0x93a,
 		.o_skill_incs = 0xa85,
+		.o_spell_incs = 0xa91,
+		.o_conv_incs = 0xa97,
 		.o_autoskills = 0xba2,
 		.o_autospells = 0xe2c,
 	},
@@ -152,6 +164,8 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_weight = 0x869,
 		.o_mrmod = 0x876,
 		.o_skill_incs = 0x9c1,
+		.o_spell_incs = 0x9cd,
+		.o_conv_incs = 0x9d3,
 		.o_autoskills = 0xade,
 		.o_autospells = 0xd68,
 	}
@@ -529,6 +543,20 @@ static void dump_inittab(char *fname, char *ds) {
 	}
 	fprintf(fd, "\n};\n\n");
 	extracted += 12;
+
+	fprintf(fd, "static const signed char initial_spell_incs[6] = {\n\t");
+	for (i = 0; i < 6; i++) {
+		fprintf(fd, "%d, ", (unsigned char)ds[info->o_spell_incs + i]);
+	}
+	fprintf(fd, "\n};\n\n");
+	extracted += 6;
+
+	fprintf(fd, "static const signed char initial_conv_incs[6] = {\n\t");
+	for (i = 0; i < 6; i++) {
+		fprintf(fd, "%d, ", (unsigned char)ds[info->o_conv_incs + i]);
+	}
+	fprintf(fd, "\n};\n\n");
+	extracted += 6;
 
 	fprintf(fd, "static const unsigned short autoskills[13][25] = {\n");
 	for (i = 0; i < 13; i++) {
