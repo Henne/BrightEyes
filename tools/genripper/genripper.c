@@ -51,6 +51,8 @@ struct struct_exe_info {
 	unsigned short o_autoskills;	/* offset of autoskills */
 
 	unsigned short o_autospells;	/* offset of autospells */
+
+	unsigned short o_chr_lookup;	/* offset of character lookup tables */
 };
 
 #define VERSIONS (5)
@@ -81,6 +83,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_school_mod = 0x9d7,
 		.o_autoskills = 0xadc,
 		.o_autospells = 0xd66,
+		.o_chr_lookup = 0x1a99,
 	},
 	/* V1.03 */
 	{
@@ -105,6 +108,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_school_mod = 0x9d7,
 		.o_autoskills = 0xadc,
 		.o_autospells = 0xd66,
+		.o_chr_lookup = 0x1a99,
 	},
 	/* V1.04 */
 	{
@@ -129,6 +133,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_school_mod = 0x9d9,
 		.o_autoskills = 0xade,
 		.o_autospells = 0xd68,
+		.o_chr_lookup = 0x1a9b,
 	},
 	/* V1.05 */
 	{
@@ -153,6 +158,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_school_mod = 0xa9d,
 		.o_autoskills = 0xba2,
 		.o_autospells = 0xe2c,
+		.o_chr_lookup = 0x1b85,
 	},
 	/* V3.00 */
 	{
@@ -177,6 +183,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_school_mod = 0x9d9,
 		.o_autoskills = 0xade,
 		.o_autospells = 0xd68,
+		.o_chr_lookup = 0x1ac3,
 	}
 };
 
@@ -615,6 +622,19 @@ static void dump_inittab(char *fname, char *ds) {
 	}
 	fprintf(fd, "\n};\n");
 	extracted += 6 * 45 * 2;
+
+	fprintf(fd, "struct struct_chr_lookup {\n");
+	fprintf(fd, "\tsigned char chr, idx, width;\n};\n\n");
+
+	fprintf(fd, "static const struct struct_chr_lookup chr_lookup[74] = {\n");
+	for (i = 0; i < 74; i++) {
+		fprintf(fd, "\t{0x%x, %d, %d},\n",
+			(unsigned char)ds[info->o_chr_lookup + i * 3],
+			(signed char)ds[info->o_chr_lookup + i * 3 + 1],
+			(signed char)ds[info->o_chr_lookup + i * 3 + 2]);
+	}
+	fprintf(fd, "};\n\n");
+	extracted += 73 * 3;
 
 	fclose(fd);
 }
