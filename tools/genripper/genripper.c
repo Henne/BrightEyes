@@ -4,6 +4,8 @@
  * License:	GPLv3
  * File:	genripper.c
  * Purpose:	rips hardcoded tables from GEN.EXE and saves them as c-files
+ *
+ * Warning:	This program will only work correct on Little Endian machines.
  */
 
 #include <stdio.h>
