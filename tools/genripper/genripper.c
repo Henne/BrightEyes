@@ -44,6 +44,8 @@ struct struct_exe_info {
 
 	unsigned short o_conv_incs;	/* offset of convertable incs */
 
+	unsigned short o_school_mod;	/* offset of school modifications */
+
 	unsigned short o_autoskills;	/* offset of autoskills */
 
 	unsigned short o_autospells;	/* offset of autospells */
@@ -74,6 +76,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_skill_incs = 0x9bf,
 		.o_spell_incs = 0x9cb,
 		.o_conv_incs = 0x9d1,
+		.o_school_mod = 0x9d7,
 		.o_autoskills = 0xadc,
 		.o_autospells = 0xd66,
 	},
@@ -97,6 +100,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_skill_incs = 0x9bf,
 		.o_spell_incs = 0x9cb,
 		.o_conv_incs = 0x9d1,
+		.o_school_mod = 0x9d7,
 		.o_autoskills = 0xadc,
 		.o_autospells = 0xd66,
 	},
@@ -120,6 +124,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_skill_incs = 0x9c1,
 		.o_spell_incs = 0x9cd,
 		.o_conv_incs = 0x9d3,
+		.o_school_mod = 0x9d9,
 		.o_autoskills = 0xade,
 		.o_autospells = 0xd68,
 	},
@@ -143,6 +148,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_skill_incs = 0xa85,
 		.o_spell_incs = 0xa91,
 		.o_conv_incs = 0xa97,
+		.o_school_mod = 0xa9d,
 		.o_autoskills = 0xba2,
 		.o_autospells = 0xe2c,
 	},
@@ -166,6 +172,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_skill_incs = 0x9c1,
 		.o_spell_incs = 0x9cd,
 		.o_conv_incs = 0x9d3,
+		.o_school_mod = 0x9d9,
 		.o_autoskills = 0xade,
 		.o_autospells = 0xd68,
 	}
@@ -557,6 +564,30 @@ static void dump_inittab(char *fname, char *ds) {
 	}
 	fprintf(fd, "\n};\n\n");
 	extracted += 6;
+
+
+	fprintf(fd, "struct struct_house_mod {\n");
+	fprintf(fd, "\tsigned char nr;\n");
+	fprintf(fd, "\tsigned short spells[7], mod[7];\n};\n\n");
+
+	fprintf(fd, "static const struct struct_house_mod house_mod[9] = {\n");
+	for (i = 0; i < 9; i++) {
+		fprintf(fd, "\t{%d, {",
+			(signed char)ds[info->o_school_mod + i * 29]);
+
+		for (j = 0; j < 7; j++)
+			fprintf(fd, "0x%x, ",
+			(signed short)ds[info->o_school_mod + i * 29 + 1 + j * 2]);
+		fprintf(fd, "}, {");
+
+		for (j = 0; j < 7; j++)
+			fprintf(fd, "%d, ",
+			(signed short)ds[info->o_school_mod + i * 29 + 15 + j * 2]);
+
+		fprintf(fd, "} },\n");
+	}
+	fprintf(fd, "\n};\n\n");
+	extracted += 9 * 29;
 
 	fprintf(fd, "static const unsigned short autoskills[13][25] = {\n");
 	for (i = 0; i < 13; i++) {
