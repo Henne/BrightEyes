@@ -60,9 +60,11 @@ struct struct_exe_info {
 
 	unsigned short o_pal_dsalogo;	/* offset of the dsalogo palette */
 
-	unsigned short o_col_white;	/* offset if color white */
+	unsigned short o_col_white;	/* offset of color white */
 
-	unsigned short o_col_black;	/* offset if color black */
+	unsigned short o_col_black;	/* offset of color black */
+
+	unsigned short o_pal_heads;	/* offset of the head palette */
 };
 
 #define VERSIONS (5)
@@ -99,6 +101,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_pal_dsalogo = 0x1bf7,
 		.o_col_white = 0x1c57,
 		.o_col_black = 0x1c5a,
+		.o_pal_heads = 0x1c7e,
 	},
 	/* V1.03 */
 	{
@@ -129,6 +132,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_pal_dsalogo = 0x1bf7,
 		.o_col_white = 0x1c57,
 		.o_col_black = 0x1c5a,
+		.o_pal_heads = 0x1c7e,
 	},
 	/* V1.04 */
 	{
@@ -159,6 +163,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_pal_dsalogo = 0x1bf9,
 		.o_col_white = 0x1c59,
 		.o_col_black = 0x1c5c,
+		.o_pal_heads = 0x1c80,
 	},
 	/* V1.05 */
 	{
@@ -189,6 +194,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_pal_dsalogo = 0x1ce9,
 		.o_col_white = 0x1d49,
 		.o_col_black = 0x1d4c,
+		.o_pal_heads = 0x1d70,
 	},
 	/* V3.00 */
 	{
@@ -219,6 +225,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_pal_dsalogo = 0x1c27,
 		.o_col_white = 0x1c87,
 		.o_col_black = 0x1c8a,
+		.o_pal_heads = 0x1cae,
 	}
 };
 
@@ -717,6 +724,16 @@ static void dump_inittab(char *fname, char *ds) {
 		(signed char)ds[info->o_col_black + 1],
 		(signed char)ds[info->o_col_black + 2]);
 	extracted += 3;
+
+	fprintf(fd, "static const struct struct_color pal_heads[32] = {\n");
+	for (i = 0; i < 32; i++) {
+		fprintf(fd, "\t{0x%02x, 0x%02x, 0x%02x},\n",
+			(signed char)ds[info->o_pal_heads + i * 3],
+			(signed char)ds[info->o_pal_heads + i * 3 + 1],
+			(signed char)ds[info->o_pal_heads + i * 3 + 2]);
+	}
+	fprintf(fd, "};\n\n");
+	extracted += 32 * 3;
 
 	fclose(fd);
 }
