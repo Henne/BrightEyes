@@ -52,6 +52,8 @@ struct struct_exe_info {
 
 	unsigned short o_autospells;	/* offset of autospells */
 
+	unsigned short o_pal_genbg;	/* offset of background palette */
+
 	unsigned short o_chr_lookup;	/* offset of character lookup tables */
 
 	unsigned short o_pal_attic;	/* offset of the attic palette */
@@ -91,6 +93,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_school_mod = 0x9d7,
 		.o_autoskills = 0xadc,
 		.o_autospells = 0xd66,
+		.o_pal_genbg = 0x10d5,
 		.o_chr_lookup = 0x1a99,
 		.o_pal_attic = 0x1bc7,
 		.o_pal_dsalogo = 0x1bf7,
@@ -120,6 +123,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_school_mod = 0x9d7,
 		.o_autoskills = 0xadc,
 		.o_autospells = 0xd66,
+		.o_pal_genbg = 0x10d5,
 		.o_chr_lookup = 0x1a99,
 		.o_pal_attic = 0x1bc7,
 		.o_pal_dsalogo = 0x1bf7,
@@ -149,6 +153,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_school_mod = 0x9d9,
 		.o_autoskills = 0xade,
 		.o_autospells = 0xd68,
+		.o_pal_genbg = 0x10d7,
 		.o_chr_lookup = 0x1a9b,
 		.o_pal_attic = 0x1bc9,
 		.o_pal_dsalogo = 0x1bf9,
@@ -178,6 +183,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_school_mod = 0xa9d,
 		.o_autoskills = 0xba2,
 		.o_autospells = 0xe2c,
+		.o_pal_genbg = 0x119b,
 		.o_chr_lookup = 0x1b85,
 		.o_pal_attic = 0x1cb9,
 		.o_pal_dsalogo = 0x1ce9,
@@ -207,6 +213,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_school_mod = 0x9d9,
 		.o_autoskills = 0xade,
 		.o_autospells = 0xd68,
+		.o_pal_genbg = 0x10d7,
 		.o_chr_lookup = 0x1ac3,
 		.o_pal_attic = 0x1bf7,
 		.o_pal_dsalogo = 0x1c27,
@@ -651,6 +658,19 @@ static void dump_inittab(char *fname, char *ds) {
 	fprintf(fd, "\n};\n");
 	extracted += 6 * 45 * 2;
 
+	fprintf(fd, "struct struct_color {\n");
+	fprintf(fd, "\tsigned char r, g, b;\n};\n\n");
+
+	fprintf(fd, "static const struct struct_color pal_genbg[32] = {\n");
+	for (i = 0; i < 32; i++) {
+		fprintf(fd, "\t{0x%02x, 0x%02x, 0x%02x},\n",
+			(signed char)ds[info->o_pal_genbg + i * 3],
+			(signed char)ds[info->o_pal_genbg + i * 3 + 1],
+			(signed char)ds[info->o_pal_genbg + i * 3 + 2]);
+	}
+	fprintf(fd, "};\n\n");
+	extracted += 32 * 3;
+
 	fprintf(fd, "struct struct_chr_lookup {\n");
 	fprintf(fd, "\tsigned char chr, idx, width;\n};\n\n");
 
@@ -663,9 +683,6 @@ static void dump_inittab(char *fname, char *ds) {
 	}
 	fprintf(fd, "};\n\n");
 	extracted += 73 * 3;
-
-	fprintf(fd, "struct struct_color {\n");
-	fprintf(fd, "\tsigned char r, g, b;\n};\n\n");
 
 	fprintf(fd, "static const struct struct_color pal_attic[16] = {\n");
 	for (i = 0; i < 16; i++) {
