@@ -53,6 +53,14 @@ struct struct_exe_info {
 	unsigned short o_autospells;	/* offset of autospells */
 
 	unsigned short o_chr_lookup;	/* offset of character lookup tables */
+
+	unsigned short o_pal_attic;	/* offset of the attic palette */
+
+	unsigned short o_pal_dsalogo;	/* offset of the dsalogo palette */
+
+	unsigned short o_col_white;	/* offset if color white */
+
+	unsigned short o_col_black;	/* offset if color black */
 };
 
 #define VERSIONS (5)
@@ -84,6 +92,10 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_autoskills = 0xadc,
 		.o_autospells = 0xd66,
 		.o_chr_lookup = 0x1a99,
+		.o_pal_attic = 0x1bc7,
+		.o_pal_dsalogo = 0x1bf7,
+		.o_col_white = 0x1c57,
+		.o_col_black = 0x1c5a,
 	},
 	/* V1.03 */
 	{
@@ -109,6 +121,10 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_autoskills = 0xadc,
 		.o_autospells = 0xd66,
 		.o_chr_lookup = 0x1a99,
+		.o_pal_attic = 0x1bc7,
+		.o_pal_dsalogo = 0x1bf7,
+		.o_col_white = 0x1c57,
+		.o_col_black = 0x1c5a,
 	},
 	/* V1.04 */
 	{
@@ -134,6 +150,10 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_autoskills = 0xade,
 		.o_autospells = 0xd68,
 		.o_chr_lookup = 0x1a9b,
+		.o_pal_attic = 0x1bc9,
+		.o_pal_dsalogo = 0x1bf9,
+		.o_col_white = 0x1c59,
+		.o_col_black = 0x1c5c,
 	},
 	/* V1.05 */
 	{
@@ -159,6 +179,10 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_autoskills = 0xba2,
 		.o_autospells = 0xe2c,
 		.o_chr_lookup = 0x1b85,
+		.o_pal_attic = 0x1cb9,
+		.o_pal_dsalogo = 0x1ce9,
+		.o_col_white = 0x1d49,
+		.o_col_black = 0x1d4c,
 	},
 	/* V3.00 */
 	{
@@ -184,6 +208,10 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_autoskills = 0xade,
 		.o_autospells = 0xd68,
 		.o_chr_lookup = 0x1ac3,
+		.o_pal_attic = 0x1bf7,
+		.o_pal_dsalogo = 0x1c27,
+		.o_col_white = 0x1c87,
+		.o_col_black = 0x1c8a,
 	}
 };
 
@@ -635,6 +663,43 @@ static void dump_inittab(char *fname, char *ds) {
 	}
 	fprintf(fd, "};\n\n");
 	extracted += 73 * 3;
+
+	fprintf(fd, "struct struct_color {\n");
+	fprintf(fd, "\tsigned char r, g, b;\n};\n\n");
+
+	fprintf(fd, "static const struct struct_color pal_attic[16] = {\n");
+	for (i = 0; i < 16; i++) {
+		fprintf(fd, "\t{0x%02x, 0x%02x, 0x%02x},\n",
+			(signed char)ds[info->o_pal_attic + i * 3],
+			(signed char)ds[info->o_pal_attic + i * 3 + 1],
+			(signed char)ds[info->o_pal_attic + i * 3 + 2]);
+	}
+	fprintf(fd, "};\n\n");
+	extracted += 16 * 3;
+
+	fprintf(fd, "static const struct struct_color pal_dsalogo[32] = {\n");
+	for (i = 0; i < 32; i++) {
+		fprintf(fd, "\t{0x%02x, 0x%02x, 0x%02x},\n",
+			(signed char)ds[info->o_pal_dsalogo + i * 3],
+			(signed char)ds[info->o_pal_dsalogo + i * 3 + 1],
+			(signed char)ds[info->o_pal_dsalogo + i * 3 + 2]);
+	}
+	fprintf(fd, "};\n\n");
+	extracted += 32 * 3;
+
+	fprintf(fd, "static const struct struct_color col_white =");
+	fprintf(fd, "\t{0x%02x, 0x%02x, 0x%02x};\n\n",
+		(signed char)ds[info->o_col_white],
+		(signed char)ds[info->o_col_white + 1],
+		(signed char)ds[info->o_col_white + 2]);
+	extracted += 3;
+
+	fprintf(fd, "static const struct struct_color col_black =");
+	fprintf(fd, "\t{0x%02x, 0x%02x, 0x%02x};\n\n",
+		(signed char)ds[info->o_col_black ],
+		(signed char)ds[info->o_col_black + 1],
+		(signed char)ds[info->o_col_black + 2]);
+	extracted += 3;
 
 	fclose(fd);
 }
