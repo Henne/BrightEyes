@@ -87,15 +87,15 @@ static void do_ass(struct ace_header *ace, const char *buf, size_t len)
 		case 0x32:	/* PP20 */
 			ppdepack(buf + datalen + 14, data,
 				 cel.size, cel.width * cel.height);
-			dump_tga(fname, cel.width, cel.height, data, 256, pal);
+			dump_tga(fname, cel.width, cel.height, data, 256, 0, pal);
 			break;
 		case 0x1:	/* RLE */
 			un_rle(buf + datalen + 14, data, cel.size);
-			dump_tga(fname, cel.width, cel.height, data, 256, pal);
+			dump_tga(fname, cel.width, cel.height, data, 256, 0, pal);
 			break;
 		case 0x2:	/* RLE */
 			un_rl(buf + datalen + 14, data, cel.size);
-			dump_tga(fname, cel.width, cel.height, data, 256, pal);
+			dump_tga(fname, cel.width, cel.height, data, 256, 0, pal);
 			break;
 		default:
 			fprintf(stdout, "Unknown ACE Compression %x\n",
@@ -176,7 +176,7 @@ static void do_seq(struct ace_header *ace, const char *buf, size_t len)
 						return;
 					}
 					un_rle(buf+seqs[i].offset+6+pos, data, cel.size);
-					dump_tga(fname, cel.width, cel.height, data, 256, palette);
+					dump_tga(fname, cel.width, cel.height, data, 256, 0, palette);
 					free(data);
 					break;
 				case 0x2:
@@ -187,7 +187,7 @@ static void do_seq(struct ace_header *ace, const char *buf, size_t len)
 						return;
 					}
 					un_rl(buf+seqs[i].offset+6+pos, data, cel.size);
-					dump_tga(fname, cel.width, cel.height, data, 256, palette);
+					dump_tga(fname, cel.width, cel.height, data, 256, 0, palette);
 					free(data);
 					break;
 				case 0x32:
@@ -198,7 +198,7 @@ static void do_seq(struct ace_header *ace, const char *buf, size_t len)
 						return;
 					}
 					ppdepack(buf+seqs[i].offset+6+pos, data, cel.size, cel.width * cel.height);
-					dump_tga(fname, cel.width, cel.height, data, 256, palette);
+					dump_tga(fname, cel.width, cel.height, data, 256, 0, palette);
 					free(data);
 					break;
 				default:

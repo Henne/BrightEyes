@@ -45,8 +45,8 @@ void process_aif(const char *buf, size_t len)
 	switch (mode) {
 		case 0: /* Unpacked */
 			pal = (char *)(buf + 0x1e + w * h);
-			if ( h && w)
-				dump_tga("PIC01.TGA", w, h, buf+0x1e, col, pal);
+			if (h && w)
+				dump_tga("PIC01.TGA", w, h, buf+0x1e, col, 0, pal);
 			break;
 
 		case 2: /* RLE */
@@ -60,7 +60,7 @@ void process_aif(const char *buf, size_t len)
 			}
 
 			un_rl(buf+0x1e, data, paclen);
-			dump_tga("PIC01.TGA", w, h, data, col, pal);
+			dump_tga("PIC01.TGA", w, h, data, col, 0, pal);
 
 			free(data);
 			break;
@@ -86,7 +86,7 @@ void process_aif(const char *buf, size_t len)
 				printf("H*W = %d\n", h * w);
 			}
 			ppdepack(buf+0x1e, data, paclen, deplen);
-			dump_tga("PIC01.TGA", w, h, data, col, pal);
+			dump_tga("PIC01.TGA", w, h, data, col, 0, pal);
 			free(data);
 			break;
 		default:

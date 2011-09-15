@@ -64,15 +64,15 @@ void process_raw(const char *buf, size_t len)
 		fprintf(stderr, "Invalid file size: Should be %lu, is %lu \n", datalen+raw.width*raw.height, len);
 		return;
 	}
-	
+
 	data = malloc(raw.width * raw.height);
 	memcpy(data, buf+datalen, raw.width * raw.height);
 	datalen += raw.width * raw.height;
 	for (i=0; i<raw.width*raw.height;i++) {
 		if (data[i] > raw.palette_size) printf("Farbüberlauf: %d\n", data[i]);
 	}
-	dump_tga("raw.tga", raw.width, raw.height, data, raw.palette_size, pal);
+	dump_tga("raw.tga", raw.width, raw.height, data, raw.palette_size, 0, pal);
 	free(data);
-	
+
 	return;
 }

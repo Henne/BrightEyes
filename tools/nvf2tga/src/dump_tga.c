@@ -11,7 +11,7 @@
 #include <string.h>
 
 void dump_tga(char *fname, unsigned short x, unsigned short y, const char *data,
-	      unsigned short colors, const char *pal)
+	      unsigned short colors, unsigned short first_color, const char *pal)
 {
 	FILE *fd = NULL;
 	unsigned long i;
@@ -56,8 +56,13 @@ void dump_tga(char *fname, unsigned short x, unsigned short y, const char *data,
 	/* Attribute byte, pic starts top left */
 	fputc(32, fd);
 
+	/* Write Palette BGR until first_color */
+	for (i = 0; i < first_color * 3; i++) {
+		fputc(0, fd);
+	}
+
 	/* Write Palette BGR */
-	for (i = 0; i < colors; i++) {
+	for (i = 0; i < colors - first_color; i++) {
 		fputc(pal[i * 3 + 2] << 2, fd);
 		fputc(pal[i * 3 + 1] << 2, fd);
 		fputc(pal[i * 3] << 2, fd);

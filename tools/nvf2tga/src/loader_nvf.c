@@ -63,7 +63,7 @@ static void do_mode_0(unsigned short blocks, const char *buf, size_t len)
 
 		sprintf(fname, "PIC%03lu.TGA", i);
 
-		dump_tga(fname, x, y, data, colors, pal);
+		dump_tga(fname, x, y, data, colors, 0, pal);
 		data += x * y;
 	}
 }
@@ -112,7 +112,7 @@ static void do_mode_1(unsigned short blocks, const char *buf, size_t len)
 		x = get_ushort(buf + i * 4);
 		y = get_ushort(buf + i * 4 + 2);
 
-		dump_tga(fname, x, y, data, colors, pal);
+		dump_tga(fname, x, y, data, colors, 0, pal);
 		data += x * y;
 	}
 }
@@ -184,7 +184,7 @@ static void do_mode_same(unsigned short blocks, const char *buf, size_t len,
 		else
 			un_rle(pdata, data, plen);
 
-		dump_tga(fname, x, y, data, colors, pal);
+		dump_tga(fname, x, y, data, colors, 0, pal);
 		pdata += get_uint(buf + 4 + i * 4);
 	}
 
@@ -257,7 +257,7 @@ static void do_mode_diff(unsigned short blocks, const char *buf, size_t len,
 		else
 			un_rle(pdata, data, plen);
 
-		dump_tga(fname, x, y, data, colors, pal);
+		dump_tga(fname, x, y, data, colors, 0, pal);
 		pdata += plen;
 		free(data);
 	}
