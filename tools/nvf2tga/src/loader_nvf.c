@@ -125,7 +125,8 @@ static void do_mode_same(unsigned short blocks, const char *buf, size_t len,
 	size_t calc_len;
 	char *pal;
 	char *data, *pdata;
-	unsigned short colors, x, y;
+	unsigned short x, y;
+	unsigned short colors, first_color = 0;
 
 	if (len < 4 + blocks * 4) {
 		printf("The buffer is to small to hold valid values.\n");
@@ -184,7 +185,7 @@ static void do_mode_same(unsigned short blocks, const char *buf, size_t len,
 		else
 			un_rle(pdata, data, plen);
 
-		dump_tga(fname, x, y, data, colors, 0, pal);
+		dump_tga(fname, x, y, data, colors, first_color, pal);
 		pdata += get_uint(buf + 4 + i * 4);
 	}
 
@@ -200,7 +201,7 @@ static void do_mode_diff(unsigned short blocks, const char *buf, size_t len,
 	size_t calc_len;
 	char *pal;
 	char *data, *pdata;
-	unsigned short colors;
+	unsigned short colors, first_color = 0;
 
 	if (len < blocks * 8) {
 		printf("The buffer is to small to hold valid values.\n");
@@ -257,7 +258,7 @@ static void do_mode_diff(unsigned short blocks, const char *buf, size_t len,
 		else
 			un_rle(pdata, data, plen);
 
-		dump_tga(fname, x, y, data, colors, 0, pal);
+		dump_tga(fname, x, y, data, colors, first_color, pal);
 		pdata += plen;
 		free(data);
 	}
