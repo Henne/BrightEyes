@@ -254,7 +254,6 @@ static void do_mode_same(unsigned short blocks, const char *buf, size_t len,
 			first_color = special_nvf[i].first_color;
 			colors = special_nvf[i].colors + first_color;
 			pal = (char*)special_nvf[i].pal;
-			printf("%d %d %p %p\n", colors, first_color, pal, &pal_ggsts);
 		}
 
 		if (pal == NULL) {

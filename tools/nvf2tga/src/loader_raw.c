@@ -20,7 +20,7 @@ void process_raw(const char *buf, size_t len)
 	struct raw_header raw;
 	unsigned long datalen = 0, i;
 	char *data, *pal;
-	
+
 	if (!buf) {
 		fprintf(stderr, "%s() got NULL Ptr\n", __func__);
 		return;
