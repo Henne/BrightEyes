@@ -98,7 +98,7 @@ static const struct struct_color pal_ggsts_alt[32] = {
 
 struct struct_special_nvf {
 	const char name[16];
-	const unsigned short length;
+	const unsigned int length;
 	const unsigned short mode;
 	const unsigned short blocks;
 
@@ -107,8 +107,31 @@ struct struct_special_nvf {
 	const unsigned short first_color;
 };
 
+/* DSA1/ROA1 NVF files without palette */
 static const struct struct_special_nvf special_nvf[] = {
+	/* All versions */
 	{ "GGSTS.NVF", 16771, 0x02, 0xa5, pal_ggsts, 0x20, 0x40 },
+	/* Terminator */
+	{ "", 0, 0, 0, NULL, 0, 0}
+};
+
+/* DSA1/ROA1 NVF files with palette */
+/* We need here the first color to set the palette the correct way */
+static const struct struct_special_nvf special_nvf_pal[] = {
+	/* All versions */
+	{ "GUERTEL.NVF", 67387, 5, 0xc, NULL, 0x20, 0x80 },
+	/* All versions */
+	{ "SHIPSL.NVF", 155745, 5, 0x3a, NULL, 0x20, 0x80 },
+	/* All versions */
+	{ "STONESL.NVF", 188299, 5, 0x3d, NULL, 0x20, 0x80 },
+	/* All V1.xx versions */
+	{ "MARBLESL.NVF", 159754, 5, 0x3a, NULL, 0x20, 0x80 },
+	/* All V3.xx versions */
+	{ "MARBLESL.NVF", 159140, 5, 0x3a, NULL, 0x20, 0x80 },
+	/* All versions */
+	{ "TDIVERSE.NVF", 23249, 5, 0x09, NULL, 0x20, 0x80 },
+	/* All versions */
+	{ "LTURM.NVF", 21533, 5, 0x04, NULL, 0x20, 0x80 },
 	/* Terminator */
 	{ "", 0, 0, 0, NULL, 0, 0}
 };
@@ -218,7 +241,7 @@ static void do_mode_same(unsigned short blocks, const char *buf, size_t len,
 	char *pal;
 	char *data, *pdata;
 	unsigned short x, y;
-	unsigned short colors, first_color = 0;
+	unsigned short colors = 0, first_color = 0;
 
 	if (len < 4 + blocks * 4) {
 		printf("The buffer is to small to hold valid values.\n");
@@ -262,7 +285,23 @@ static void do_mode_same(unsigned short blocks, const char *buf, size_t len,
 		}
 	} else {
 
-		colors = get_ushort(buf + data_sum);
+		for (i = 0; special_nvf_pal[i].name[0] != '\0'; i++) {
+
+			if (special_nvf_pal[i].length != len + 3)
+				continue;
+			if (special_nvf_pal[i].mode != mode)
+				continue;
+			if (special_nvf_pal[i].blocks != blocks)
+				continue;
+
+			printf("Seems to be %s Setting first_color\n",
+				special_nvf_pal[i].name);
+
+			first_color = special_nvf_pal[i].first_color;
+			colors = special_nvf_pal[i].colors;
+		}
+
+		colors += get_ushort(buf + data_sum);
 		calc_len = data_sum + 2 + 3 * colors;
 
 		if (len != calc_len) {
@@ -316,7 +355,7 @@ static void do_mode_diff(unsigned short blocks, const char *buf, size_t len,
 	size_t calc_len;
 	char *pal;
 	char *data, *pdata;
-	unsigned short colors, first_color = 0;
+	unsigned short colors = 0, first_color = 0;
 
 	if (len < blocks * 8) {
 		printf("The buffer is to small to hold valid values.\n");
@@ -333,8 +372,57 @@ static void do_mode_diff(unsigned short blocks, const char *buf, size_t len,
 		return;
 	}
 
-	colors = get_ushort(buf + data_sum);
-	calc_len = data_sum + 2 + 3 * colors;
+	/* This is the case in DSA1/ROA1 */
+	if (len == data_sum) {
+		for (i = 0; special_nvf[i].name[0] != '\0'; i++) {
+
+			if (special_nvf[i].length != len + 3)
+				continue;
+			if (special_nvf[i].mode != mode)
+				continue;
+			if (special_nvf[i].blocks != blocks)
+				continue;
+
+			printf("Seems to be %s. Using hardcoded palette\n",
+				special_nvf[i].name);
+
+			first_color = special_nvf[i].first_color;
+			colors = special_nvf[i].colors + first_color;
+			pal = (char*)special_nvf[i].pal;
+		}
+
+		if (pal == NULL) {
+			printf("Unknown NVF-file without palette\n");
+			return;
+		}
+	} else {
+
+		for (i = 0; special_nvf_pal[i].name[0] != '\0'; i++) {
+
+			if (special_nvf_pal[i].length != len + 3)
+				continue;
+			if (special_nvf_pal[i].mode != mode)
+				continue;
+			if (special_nvf_pal[i].blocks != blocks)
+				continue;
+
+			printf("Seems to be %s Setting first_color\n",
+				special_nvf_pal[i].name);
+
+			first_color = special_nvf_pal[i].first_color;
+			colors = first_color;
+		}
+
+		colors += get_ushort(buf + data_sum);
+		calc_len = data_sum + 2 + 3 * get_ushort(buf + data_sum);
+		if (len != calc_len) {
+			printf("The data %lu has not the expected size %lu\n",
+			       len, calc_len);
+			return;
+		}
+
+		pal = (char *)(buf + data_sum + 2);
+	}
 
 	if (len != calc_len) {
 		printf("The data %lu has not the expected size %lu\n",
