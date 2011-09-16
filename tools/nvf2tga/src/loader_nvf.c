@@ -238,7 +238,7 @@ static void do_mode_same(unsigned short blocks, const char *buf, size_t len,
 	unsigned long i;
 	unsigned long data_sum = 0;
 	size_t calc_len;
-	char *pal;
+	char *pal = NULL;
 	char *data, *pdata;
 	unsigned short x, y;
 	unsigned short colors = 0, first_color = 0;
