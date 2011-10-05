@@ -54,6 +54,8 @@ struct struct_exe_info {
 
 	unsigned short o_pal_genbg;	/* offset of background palette */
 
+	unsigned short o_mouse_mask;	/* offset of the mouse mask */
+
 	unsigned short o_chr_lookup;	/* offset of character lookup tables */
 
 	unsigned short o_pal_attic;	/* offset of the attic palette */
@@ -96,6 +98,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_autoskills = 0xadc,
 		.o_autospells = 0xd66,
 		.o_pal_genbg = 0x10d5,
+		.o_mouse_mask = 0x113a,
 		.o_chr_lookup = 0x1a99,
 		.o_pal_attic = 0x1bc7,
 		.o_pal_dsalogo = 0x1bf7,
@@ -127,6 +130,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_autoskills = 0xadc,
 		.o_autospells = 0xd66,
 		.o_pal_genbg = 0x10d5,
+		.o_mouse_mask = 0x113a,
 		.o_chr_lookup = 0x1a99,
 		.o_pal_attic = 0x1bc7,
 		.o_pal_dsalogo = 0x1bf7,
@@ -158,6 +162,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_autoskills = 0xade,
 		.o_autospells = 0xd68,
 		.o_pal_genbg = 0x10d7,
+		.o_mouse_mask = 0x113c,
 		.o_chr_lookup = 0x1a9b,
 		.o_pal_attic = 0x1bc9,
 		.o_pal_dsalogo = 0x1bf9,
@@ -189,6 +194,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_autoskills = 0xba2,
 		.o_autospells = 0xe2c,
 		.o_pal_genbg = 0x119b,
+		.o_mouse_mask = 0x1200,
 		.o_chr_lookup = 0x1b85,
 		.o_pal_attic = 0x1cb9,
 		.o_pal_dsalogo = 0x1ce9,
@@ -220,6 +226,7 @@ static const struct struct_exe_info exe_info[VERSIONS] = {
 		.o_autoskills = 0xade,
 		.o_autospells = 0xd68,
 		.o_pal_genbg = 0x10d7,
+		.o_mouse_mask = 0x113c,
 		.o_chr_lookup = 0x1ac3,
 		.o_pal_attic = 0x1bf7,
 		.o_pal_dsalogo = 0x1c27,
@@ -437,6 +444,7 @@ void dump_spelltab(char *fname, char *ds) {
 static void dump_inittab(char *fname, char *ds) {
 	FILE *fd;
 	char name[25];
+	unsigned short *pu16;
 	int i, j;
 
 	strcpy(name, "inittab_");
@@ -677,6 +685,14 @@ static void dump_inittab(char *fname, char *ds) {
 	}
 	fprintf(fd, "};\n\n");
 	extracted += 32 * 3;
+
+	pu16 = (unsigned short*)(ds + info->o_mouse_mask);
+	fprintf(fd, "static const unsigned short mouse_mask[32] = {\n");
+	for (i = 0; i < 32; pu16++, i++) {
+		fprintf(fd, "\t0x%04x,\n", *pu16);
+	}
+	fprintf(fd, "};\n\n");
+	extracted += 32 * 2;
 
 	fprintf(fd, "struct struct_chr_lookup {\n");
 	fprintf(fd, "\tsigned char chr, idx, width;\n};\n\n");
