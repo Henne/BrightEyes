@@ -67,24 +67,20 @@ void process_aif(const char *buf, size_t len)
 
 		case 3: /* PP20 */
 			paclen = get_uint(buf+0x1e) + 8;
-			deplen = depackedlen(buf+0x1e, paclen);
+			deplen = w * h;
 			pal = (char *)(buf + 0x1e + paclen);
 
 			data = malloc(deplen);
-			if (!data) {
+			if (data == NULL) {
 				fprintf(stderr, "Not enough Memory\n");
 				return;
 			}
 
-			if ( col * 3 != buf + len - pal) {
+			if (col * 3 != buf + len - pal) {
 				printf("Pal = 0x%lx\n", pal - buf);
 				printf("len - Pal = 0x%lx\n", buf + len - pal);
 			}
 
-			if (deplen != w * h) {
-				printf("Deplen = %lu\n", deplen);
-				printf("H*W = %d\n", h * w);
-			}
 			ppdepack(buf+0x1e, data, paclen, deplen);
 			dump_tga("PIC01.TGA", w, h, data, col, 0, pal);
 			free(data);
