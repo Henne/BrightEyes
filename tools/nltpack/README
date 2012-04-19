@@ -1,0 +1,32 @@
+This tool packs / unpacks the game archive files of the Nordlandtrilogie /
+Realms of Arkania series. This includes:
+- Part 1: SCHICK.DAT/BLADE.DAT
+- Part 2: All .DAT files with matching .FN files
+- Part 3: All .ALF files.
+
+Usage:
+NLTpack v0.3a (C) 2008,2009 by Hendrik Radke
+usage: nltpack <Mode> <File> [-p FilePattern]\n";
+Modes:
+x: extract all files from the archive matching the pattern.
+l: list all files from the archive matching the pattern.
+c: create an archive with all matching files. [1]
+u: update/add matching files to archive (not yet working).
+m: create Master file (.FN) for the archive.
+
+[1] Special care has to be taken that all needed files are present for
+SCHICK.DAT/BLADE.DAT. Also, you *must* provide a matching .FN file
+(see below) if you want to create an archive.
+
+On .FN files:
+Since some of the archive formats, notably the archives for the second
+part of the NLT (Sternenschweif / Star Trail), may contain "dummy" files,
+a special ".FN" file is needed in addition to the .DAT file.
+To generate a .FN file for an archive, use the "m" mode:
+./nltpack m /path/to/archive.dat
+which generates a file
+/path/to/archive.fn
+Afterwards you can create the archive with
+cd /path/to/uncompressed/files
+./nltpack c /path/to/archive.dat *
+
