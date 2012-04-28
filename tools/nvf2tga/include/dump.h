@@ -5,4 +5,6 @@
  *
  */
 
-void dump_tga(const char *, unsigned short, unsigned short, const char*, unsigned short, unsigned short, const char*);
+void dump_tga(const char *,
+	const unsigned short, const unsigned short,
+	const char*, const unsigned short, const unsigned short, const char*);
