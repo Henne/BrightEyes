@@ -105,7 +105,8 @@ void DSA2::synchronize(CmdlineList& flist) {
 	assert(entry != 0);
 	const CmdlineList::iterator search = flist.find(entry->name);
 	if (search == flist.end()) {
-	    entry->no_dummy = entry->size = entry->offset = 0;
+	    entry->no_dummy = 0;
+	    entry->size = entry->offset = 0;
 	    std::cerr << "File " << entry->name << " is missing, will be looked up on CD.\n";
 	} else {
 	    entry->no_dummy = 1;

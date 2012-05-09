@@ -29,8 +29,8 @@ public:
 class Cmdline_Entry : public Header_Entry {
 public:
     bool checked;
-    bool read(istream& is) { return false; }
-    void write(ostream& os) { return; }
+    bool read(istream&) { return false; }
+    void write(ostream&) { return; }
     string type() { return "Commandline"; }
 };
 

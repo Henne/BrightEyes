@@ -60,7 +60,7 @@ bool DSA3::read(istream& strm) {
     // Den Modulen die Dateien zuordnen
     for (u32 i=0;  i < module_count;  i++) {
 	for (u32 j=0; j < modules[i]->size; j++) {
-	    u32 entry_index = modmap[ modules[i]->offset / 2 + j];
+	    u16 entry_index = modmap[ modules[i]->offset / 2 + j ];
 	    if (entry_index == 0xFFFF) continue;
 	    modules[i]->entry_indices.push_back(entry_index);
 	    DSA3_Entry* entry = dynamic_cast<DSA3_Entry*>(entries[entry_index]);
@@ -158,7 +158,9 @@ void DSA3::synchronize(CmdlineList& flist) {
 	    } else {
 		f_iter->second.checked = true;
 		entry->size = f_iter->second.size;
-		entry->unknown1 = entry->unknown2 = entry->unknown3 = 0;
+		entry->unknown1 = 0;
+		entry->unknown2 = 0;
+		entry->unknown3 = 0;
 	    }
 	}
     }
