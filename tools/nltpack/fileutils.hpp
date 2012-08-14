@@ -10,16 +10,17 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <stdint.h>
 
 using std::string;
 using std::istream;
 using std::ostream;
 
-typedef unsigned long int u32;
-typedef signed long int s32;
-typedef unsigned short int u16;
-typedef signed short int s16;
-typedef unsigned char u8;
+typedef uint32_t u32;
+typedef int32_t  s32;
+typedef uint16_t u16;
+typedef int16_t  s16;
+typedef uint8_t  u8;
 
 // === Lese- und Schreibfunktionen für Big-Endian. =========================
 u32 read32(istream& strm);

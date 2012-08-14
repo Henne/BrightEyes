@@ -19,7 +19,9 @@ bool DSA1Main::read(istream& strm) {
 	entry->read(strm);
 	if (oldentry) oldentry->size = entry->offset - oldentry->offset;
 	// Hat outro.xmi einen ungültigen Offset, geht die Datei davor zum Archivende.
-	if (i == 307 && entry->offset == 0) oldentry->size = file_size - oldentry->offset;
+	if (i == 307 && entry->offset == 0) {
+	    oldentry->size = file_size - oldentry->offset;
+	}
 	oldentry = entry;
     }
     // Hat outro.xmi (wie im Originalarchiv) einen ungültigen Offset, wird sie
