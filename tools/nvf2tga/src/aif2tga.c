@@ -24,7 +24,7 @@ int main(int argc, char **argv)
 
 	FILE *fd = NULL;
 	char *buf;
-	size_t flen, readlen;
+	int32_t flen, readlen;
 
 	if (argc == 1) {
 		printf("%s %s\n", BANNER, VERSION);
