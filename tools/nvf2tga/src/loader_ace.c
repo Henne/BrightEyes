@@ -11,29 +11,46 @@
 #include <string.h>
 
 #include <packer.h>
-#include <dump.h>
+#include <loader.h>
 #include <format.h>
 
-static void do_ass(struct ace_header *ace, const char *buf, size_t len)
+int sanitycheck_ace(const char *buf, size_t len) {
+	// TODO
+	return 1;
+}
+int dump_ace(ImageSet* img) {
+	// TODO
+	return 1;
+}
+
+static ImageSet* do_ass(ImageSet* img, struct ace_header *ace, const char *buf, size_t len)
 {
 	struct ass_header ass;
 	unsigned long i, datalen;
-	char *pal;
 
 	if (len < 6) {
 		fprintf(stderr, "Buffer to small for ASS Header\n");
-		return;
+		return NULL;
 	}
+	
 	ass.celwidth = get_sshort(buf);
 	ass.celheight = get_sshort(buf + 2);
 	ass.amount = buf[4];
 	ass.playmode = buf[5];
 
+	img->globalWidth  = get_sshort(buf);
+	img->globalHeight = get_sshort(buf + 2);
+	img->frameCount   = buf[4];
+	img->frames       = (AnimFrame**)malloc(img->frameCount * sizeof(AnimFrame*));
+	for (int i = 0; i<img->frameCount; i++) {
+		img->frames[i] = (AnimFrame*)malloc(sizeof(AnimFrame));
+	}
+
 	printf("\t%03dx%03d\tAmount: %03u\tMode: %03u\n",
 	       ass.celwidth, ass.celheight, ass.amount, ass.playmode);
 
 	datalen = 6;
-	for (i = 0; i < ass.amount; i++) {
+	for (i = 0; i < img->frameCount; i++) {
 		struct cel_header cel;
 
 		cel.size = get_sint(buf + datalen);
@@ -52,20 +69,20 @@ static void do_ass(struct ace_header *ace, const char *buf, size_t len)
 
 	if (datalen + 2 > len) {
 		fprintf(stderr, "ASS File is to small for a palette\n");
-		return;
+		return NULL;
 	}
 
 	if (len != datalen + 256 * 3) {
 		fprintf(stderr, "ASS File has not the expected size\n");
-		return;
+		return NULL;
 	}
-	pal = (char *)buf + datalen;
+	img->globalPalette = (char *)buf + datalen;
 
 	datalen = 6;
 	for (i = 0; i < ass.amount; i++) {
 		struct cel_header cel;
 		char fname[100];
-		char *data;
+		AnimFrame* frame = img->frames[i];
 
 		cel.size = get_sint(buf + datalen);
 		cel.xoffset = get_sshort(buf + datalen + 4);
@@ -74,41 +91,41 @@ static void do_ass(struct ace_header *ace, const char *buf, size_t len)
 		cel.height = get_sshort(buf + datalen + 10);
 		cel.compression = buf[datalen + 12];
 		cel.action = buf[datalen + 13];
+		frame->x0     = get_sshort(buf + datalen + 4);
+		frame->y0     = get_sshort(buf + datalen + 6);
+		frame->width  = get_sshort(buf + datalen + 8);
+		frame->height = get_sshort(buf + datalen + 10);
 
 		sprintf(fname, "CEL%03lu.TGA", i);
 
-		data = malloc(cel.width * cel.height);
-		if (data == NULL) {
+		frame->pixels = malloc(frame->width * frame->height);
+		if (frame->pixels == NULL) {
 			fprintf(stderr, "Failed to allocate seqs\n");
-			return;
+			return NULL;
 		}
 
 		switch (cel.compression) {
 		case 0x32:	/* PP20 */
-			ppdepack(buf + datalen + 14, data,
-				 cel.size, cel.width * cel.height);
-			dump_tga(fname, cel.width, cel.height, data, 256, 0, pal);
+			ppdepack(buf + datalen + 14, frame->pixels,
+				 cel.size, frame->width * frame->height);
 			break;
 		case 0x1:	/* RLE */
-			un_rle(buf + datalen + 14, data, cel.size);
-			dump_tga(fname, cel.width, cel.height, data, 256, 0, pal);
+			un_rle(buf + datalen + 14, frame->pixels, cel.size);
 			break;
 		case 0x2:	/* RLE */
-			un_rl(buf + datalen + 14, data, cel.size);
-			dump_tga(fname, cel.width, cel.height, data, 256, 0, pal);
+			un_rl(buf + datalen + 14, frame->pixels, cel.size);
 			break;
 		default:
 			fprintf(stdout, "Unknown ACE Compression %x\n",
 				cel.compression);
 		}
-		free(data);
 
 		datalen += 14 + cel.size;
 	}
-
+	return img;
 }
-
-static void do_seq(struct ace_header *ace, const char *buf, size_t len)
+#ifdef COMMENT
+static ImageSet* do_seq(ImageSet* img, struct ace_header *ace, const char *buf, size_t len)
 {
 	unsigned datalen = 0, i,j;
 	struct seq_header * seqs;
@@ -116,13 +133,13 @@ static void do_seq(struct ace_header *ace, const char *buf, size_t len)
 
 	if (len < ace->sequences*sizeof(struct seq_header)) {
 		fprintf(stderr, "Buffer to small for SEQ Headers\n");
-		return;
+		return NULL;
 	}
 
 	seqs=malloc(ace->sequences*sizeof(struct seq_header));
 	if (!seqs) {
 		fprintf(stderr, "Failed to allocate seqs\n");
-		return;
+		return NULL;
 	}
 
 	palette = (char *)(buf + len - 768);
@@ -173,7 +190,7 @@ static void do_seq(struct ace_header *ace, const char *buf, size_t len)
 					if (!data) {
 						fprintf(stderr,
 						"Failed to allocate seqs\n");
-						return;
+						return NULL;
 					}
 					un_rle(buf+seqs[i].offset+6+pos, data, cel.size);
 					dump_tga(fname, cel.width, cel.height, data, 256, 0, palette);
@@ -184,7 +201,7 @@ static void do_seq(struct ace_header *ace, const char *buf, size_t len)
 					if (!data) {
 						fprintf(stderr,
 						"Failed to allocate seqs\n");
-						return;
+						return NULL;
 					}
 					un_rl(buf+seqs[i].offset+6+pos, data, cel.size);
 					dump_tga(fname, cel.width, cel.height, data, 256, 0, palette);
@@ -195,7 +212,7 @@ static void do_seq(struct ace_header *ace, const char *buf, size_t len)
 					if (!data) {
 						fprintf(stderr,
 						"Failed to allocate seqs\n");
-						return;
+						return NULL;
 					}
 					ppdepack(buf+seqs[i].offset+6+pos, data, cel.size, cel.width * cel.height);
 					dump_tga(fname, cel.width, cel.height, data, 256, 0, palette);
@@ -211,26 +228,27 @@ static void do_seq(struct ace_header *ace, const char *buf, size_t len)
 
 	if (len < datalen) {
 		fprintf(stderr, "ACE-SEQ file is to small for CEL Headers\n");
-		return;
+		return NULL;
 	}
 	datalen += 768;
 	if (datalen != len)
 		printf("len: %ld datalen %d\n", len, datalen);
 	free(seqs);
 }
-
-void process_ace(const char *buf, size_t len)
+#endif
+ImageSet* process_ace(const char *buf, size_t len)
 {
 	struct ace_header ace;
+	ImageSet* img;
 
 	if (!buf) {
 		fprintf(stderr, "%s() got NULL Ptr\n", __func__);
-		return;
+		return NULL;
 	}
 
 	if (len < 8) {
 		fprintf(stderr, "Buffer is too small for ACE header\n");
-		return;
+		return NULL;
 	}
 
 	strncpy(ace.label, buf, 4);
@@ -240,31 +258,33 @@ void process_ace(const char *buf, size_t len)
 
 	if (strncmp(ace.label, "ACE\0", 4)) {
 		fprintf(stderr, "No ACE Signature\n");
-		return;
+		return NULL;
 	}
 
 	if (ace.version != 1) {
 		fprintf(stderr, "ACE Version is not 1\n");
-		return;
+		return NULL;
 	}
 
 	if (ace.sequences > 250) {
 		fprintf(stderr, "ACE sequences %u is not a valid value\n",
 			ace.sequences);
-		return;
+		return NULL;
 	}
 	if (ace.speed > 99) {
 		fprintf(stderr, "ACE speed %u is not a valid value\n",
 			ace.speed);
-
+		return NULL;
 	}
 
 	printf("Sequences: %03u\tSpeed: %02u\n", ace.sequences, ace.speed);
 
-	if (ace.sequences == 1)
-		do_ass(&ace, buf + 8, len - 8);
-	else
-		do_seq(&ace, buf + 8, len - 8);
+	img = (ImageSet*)malloc(sizeof(ImageSet));
 
-	return;
+	if (ace.sequences == 1)
+		do_ass(img, &ace, buf + 8, len - 8);
+	//else
+	//	do_seq(img, &ace, buf + 8, len - 8);
+
+	return img;
 }

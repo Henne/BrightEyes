@@ -1,5 +1,5 @@
 /*
- * ACE Loader
+ * AIF Loader
  *
  * Author: Henne_NWH <henne@nachtwindheim.de>
  * License: GPLv3
@@ -11,42 +11,62 @@
 #include <string.h>
 
 #include <packer.h>
-#include <dump.h>
+#include <loader.h>
 #include <format.h>
 
-void process_aif(const char *buf, size_t len)
+int sanitycheck_aif(const char *buf, size_t len) {
+	// TODO
+	return 1;
+}
+
+ImageSet* process_aif(const char *buf, size_t len)
 {
 	unsigned long deplen,paclen;
 	unsigned short h,w,col,mode;
 	char *data,*pal;
+	ImageSet* img;
 
 	if (!buf) {
 		fprintf(stderr, "%s() got NULL Ptr\n", __func__);
-		return;
+		return NULL;
 	}
 
 	if (len < 0x1d) {
 		fprintf(stderr, "Buffer is too small for AIF header\n");
-		return;
+		return NULL;
 	}
 
 	if (strncmp(buf, "AIF\01", 4)) {
 		fprintf(stderr, "AIF-Signature does not match\n");
-		return;
+		return NULL;
 	}
 
 	mode = get_ushort(buf + 4);
 	w = get_ushort(buf + 6);
 	h = get_ushort(buf + 8);
 	col = get_ushort(buf + 10);
-
 	printf("Mode: %d\tWidth: %d\tHeight: %d\tColors: %d\n", mode ,w, h, col);
 
+	img = (ImageSet*)malloc(sizeof(ImageSet));
+	img->globalWidth  = w;
+	img->globalHeight = h;
+	img->frameCount   = 1;
+	img->frames       = (AnimFrame**)malloc(img->frameCount * sizeof(AnimFrame*));
+	for (int i = 0; i<img->frameCount; i++) img->frames[i] = (AnimFrame*)malloc(sizeof(AnimFrame));
+	
+	AnimFrame* frame = img->frames[0];
 	switch (mode) {
 		case 0: /* Unpacked */
 			pal = (char *)(buf + 0x1e + w * h);
-			if (h && w)
-				dump_tga("PIC01.TGA", w, h, buf+0x1e, col, 0, pal);
+
+			if (h && w) {
+				frame->x0 = frame->y0 = 0;
+				frame->width  = img->globalWidth;
+				frame->height = img->globalHeight;
+				frame->delay  = 0;
+				frame->localPalette = 0;
+				frame->pixels = (char*)buf+0x1E;
+			}
 			break;
 
 		case 2: /* RLE */
@@ -56,13 +76,16 @@ void process_aif(const char *buf, size_t len)
 			data = malloc(w * h);
 			if (!data) {
 				fprintf(stderr, "Not enough Memory\n");
-				return;
+				return NULL;
 			}
 
 			un_rl(buf+0x1e, data, paclen);
-			dump_tga("PIC01.TGA", w, h, data, col, 0, pal);
-
-			free(data);
+			frame->x0 = frame->y0 = 0;
+			frame->width  = img->globalWidth;
+			frame->height = img->globalHeight;
+			frame->delay  = 0;
+			frame->localPalette = 0;
+			frame->pixels = data;
 			break;
 
 		case 3: /* PP20 */
@@ -73,7 +96,7 @@ void process_aif(const char *buf, size_t len)
 			data = malloc(deplen);
 			if (data == NULL) {
 				fprintf(stderr, "Not enough Memory\n");
-				return;
+				return NULL;
 			}
 
 			if (col * 3 != buf + len - pal) {
@@ -82,11 +105,21 @@ void process_aif(const char *buf, size_t len)
 			}
 
 			ppdepack(buf+0x1e, data, paclen, deplen);
-			dump_tga("PIC01.TGA", w, h, data, col, 0, pal);
-			free(data);
+			frame->x0 = frame->y0 = 0;
+			frame->width  = img->globalWidth;
+			frame->height = img->globalHeight;
+			frame->delay  = 0;
+			frame->localPalette = 0;
+			frame->pixels = data;
 			break;
 		default:
 			fprintf(stderr, "AIF mode %u not supported\n", mode);
 	}
-	return;
+	img->globalPalette = pal;
+	return img;
+}
+
+int dump_aif(ImageSet* img) {
+	// TODO
+	return 1;
 }

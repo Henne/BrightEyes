@@ -7,19 +7,43 @@
  *
  */
 static inline signed short get_sshort(const char* buf) {
-	        return (buf[1]&0xff)<<8 | (buf[0]&0xff);
+	return (buf[1]&0xff)<<8 | (buf[0]&0xff);
 }
 
 static inline unsigned short get_ushort(const char* buf) {
-	        return (buf[1]&0xff)<<8 | (buf[0]&0xff);
+	return (buf[1]&0xff)<<8 | (buf[0]&0xff);
 }
 
 static inline unsigned int get_uint(const char* buf) {
-	        return (buf[3]&0xff)<<24 | (buf[2]&0xff)<<16 | (buf[1]&0xff)<<8 | (buf[0]&0xff);
+	return (buf[3]&0xff)<<24 | (buf[2]&0xff)<<16 | (buf[1]&0xff)<<8 | (buf[0]&0xff);
 }
 
 static inline int get_sint(const char* buf) {
-	        return (buf[3]&0xff)<<24 | (buf[2]&0xff)<<16 | (buf[1]&0xff)<<8 | (buf[0]&0xff);
+	return (buf[3]&0xff)<<24 | (buf[2]&0xff)<<16 | (buf[1]&0xff)<<8 | (buf[0]&0xff);
+}
+
+static inline void set_sshort(char* buf, const signed short val) {
+	buf[0] = (val << 0) & 0xFF;
+	buf[1] = (val << 8) & 0xFF;
+}
+
+static inline void set_ushort(char* buf, const unsigned short val) {
+	buf[0] = (val << 0) & 0xFF;
+	buf[1] = (val << 8) & 0xFF;
+}
+
+static inline void set_uint(char* buf, const unsigned int val) {
+	buf[0] = (val <<  0) & 0xFF;
+	buf[1] = (val <<  8) & 0xFF;
+	buf[2] = (val << 16) & 0xFF;
+	buf[3] = (val << 24) & 0xFF;
+}
+
+static inline void set_sint(char* buf, const signed int val) {
+	buf[0] = (val <<  0) & 0xFF;
+	buf[1] = (val <<  8) & 0xFF;
+	buf[2] = (val << 16) & 0xFF;
+	buf[3] = (val << 24) & 0xFF;
 }
 
 
@@ -66,3 +90,8 @@ struct raw_header {
     short height;                        /* Bildhöhe-1                   */
     short palette_size;                  /* Anzahl der Paletteneinträge  */
 } __attribute__((__packed__));
+
+struct struct_color {
+	signed char r, g, b;
+};
+

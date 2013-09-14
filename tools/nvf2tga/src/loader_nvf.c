@@ -18,12 +18,8 @@
 #include <string.h>
 
 #include <packer.h>
-#include <dump.h>
+#include <loader.h>
 #include <format.h>
-
-struct struct_color {
-	signed char r, g, b;
-};
 
 static const struct struct_color pal_gray[32] = {
 	{0x00, 0x00, 0x00},
@@ -177,7 +173,7 @@ static const struct struct_special_nvf special_nvf_pal[] = {
 	{ "", 0, 0, 0, NULL, 0, 0}
 };
 
-static void do_mode_0(unsigned short blocks, const char *buf, size_t len)
+static ImageSet* do_mode_0(ImageSet* img, const char *buf, size_t len)
 {
 	unsigned long i;
 	unsigned long data_sum = 0;
@@ -187,17 +183,17 @@ static void do_mode_0(unsigned short blocks, const char *buf, size_t len)
 
 	if (len < 4) {
 		printf("The buffer is to small to hold valid values.\n");
-		return;
+		return NULL;
 	}
 
 	x = get_ushort(buf);
 	y = get_ushort(buf + 2);
 
-	data_sum = 4 + blocks * x * y;
+	data_sum = 4 + img->frameCount * x * y;
 
 	if (len < data_sum) {
 		printf("The buffer is to small to hold valid values");
-		return;
+		return NULL;
 	}
 
 	colors = get_ushort(buf + data_sum);
@@ -206,25 +202,28 @@ static void do_mode_0(unsigned short blocks, const char *buf, size_t len)
 	if (len != calc_len) {
 		printf("The data %lu has not the expected size %lu\n",
 		       len, calc_len);
-		return;
+		return NULL;
 	}
 
-	printf("NVF-Mode 0 (same size/unpacked): %03d Pics\n", blocks);
+	printf("NVF-Mode 0 (same size/unpacked): %03d Pics\n", img->frameCount);
 
 	pal = (char *)(buf + data_sum + 2);
 	data = (char *)(buf + 4);
 
-	for (i = 0; i < blocks; i++) {
-		char fname[100];
+	for (i = 0; i < img->frameCount; i++) {
+		img->frames[i]->x0 = img->frames[i]->y0 = 0;
+		img->frames[i]->width  = x;
+		img->frames[i]->height = y;
+		img->frames[i]->delay  = 0;
+		img->frames[i]->localPalette = 0;
+		img->frames[i]->pixels = data;
 
-		sprintf(fname, "PIC%03lu.TGA", i);
-
-		dump_tga(fname, x, y, data, colors, 0, pal);
 		data += x * y;
 	}
+	return img;
 }
 
-static void do_mode_1(unsigned short blocks, const char *buf, size_t len)
+static ImageSet* do_mode_1(ImageSet* img, const char *buf, size_t len)
 {
 	unsigned long i;
 	unsigned long data_sum = 0;
@@ -232,18 +231,18 @@ static void do_mode_1(unsigned short blocks, const char *buf, size_t len)
 	char *data, *pal;
 	unsigned short colors, x, y;
 
-	if (len < blocks * 4) {
+	if (len < img->frameCount * 4) {
 		printf("The buffer is to small to hold valid values.\n");
-		return;
+		return NULL;
 	}
 
-	for (i = 0; i < blocks; i++)
+	for (i = 0; i < img->frameCount; i++)
 		data_sum +=
 		    4 + get_ushort(buf + 4 * i) * get_ushort(buf + 4 * i + 2);
 
 	if (len < data_sum) {
 		printf("The buffer is to small to hold valid values");
-		return;
+		return NULL;
 	}
 
 	colors = get_ushort(buf + data_sum);
@@ -252,28 +251,32 @@ static void do_mode_1(unsigned short blocks, const char *buf, size_t len)
 	if (len != calc_len) {
 		printf("The data %lu has not the expected size %lu\n",
 		       len, calc_len);
-		return;
+		return NULL;
 	}
 
-	printf("NVF-Mode 1 (different size/unpacked): %03d Pics\n", blocks);
+	printf("NVF-Mode 1 (different size/unpacked): %03d Pics\n", img->frameCount);
 
 	pal = (char *)(buf + data_sum + 2);
-	data = (char *)(buf + blocks * 4);
+	img->globalPalette = pal;
+	data = (char *)(buf + img->frameCount * 4);
 
-	for (i = 0; i < blocks; i++) {
-		char fname[100];
-
-		sprintf(fname, "PIC%03lu.TGA", i);
-
+	for (i = 0; i < img->frameCount; i++) {
 		x = get_ushort(buf + i * 4);
 		y = get_ushort(buf + i * 4 + 2);
 
-		dump_tga(fname, x, y, data, colors, 0, pal);
+		img->frames[i]->x0 = img->frames[i]->y0 = 0;
+		img->frames[i]->width  = x;
+		img->frames[i]->height = y;
+		img->frames[i]->delay  = 0;
+		img->frames[i]->localPalette = 0;
+		img->frames[i]->pixels = data;
+
 		data += x * y;
 	}
+	return img;
 }
 
-static void do_mode_same(unsigned short blocks, const char *buf, size_t len,
+static ImageSet* do_mode_same(ImageSet* img, const char *buf, size_t len,
 			 unsigned char mode)
 {
 	unsigned long i;
@@ -284,21 +287,21 @@ static void do_mode_same(unsigned short blocks, const char *buf, size_t len,
 	unsigned short x, y;
 	unsigned short colors = 0, first_color = 0;
 
-	if (len < 4 + blocks * 4) {
+	if (len < 4 + img->frameCount * 4) {
 		printf("The buffer is to small to hold valid values.\n");
-		return;
+		return NULL;
 	}
 
 	x = get_ushort(buf);
 	y = get_ushort(buf + 2);
 
-	data_sum = 4 + 4 * blocks;
-	for (i = 0; i < blocks; i++)
+	data_sum = 4 + 4 * img->frameCount;
+	for (i = 0; i < img->frameCount; i++)
 		data_sum += get_uint(buf + 4 + i * 4);
 
 	if (len < data_sum) {
 		printf("The buffer is to small to hold valid values\n");
-		return;
+		return NULL;
 	}
 
 	/* This is the case in DSA1/ROA1 */
@@ -309,7 +312,7 @@ static void do_mode_same(unsigned short blocks, const char *buf, size_t len,
 				continue;
 			if (special_nvf[i].mode != mode)
 				continue;
-			if (special_nvf[i].blocks != blocks)
+			if (special_nvf[i].blocks != img->frameCount)
 				continue;
 
 			printf("Seems to be %s. Using hardcoded palette\n",
@@ -318,11 +321,12 @@ static void do_mode_same(unsigned short blocks, const char *buf, size_t len,
 			first_color = special_nvf[i].first_color;
 			colors = special_nvf[i].colors + first_color;
 			pal = (char*)special_nvf[i].pal;
+			img->globalPalette = pal;
 		}
 
 		if (pal == NULL) {
 			printf("Unknown NVF-file without palette\n");
-			return;
+			return NULL;
 		}
 	} else {
 
@@ -332,7 +336,7 @@ static void do_mode_same(unsigned short blocks, const char *buf, size_t len,
 				continue;
 			if (special_nvf_pal[i].mode != mode)
 				continue;
-			if (special_nvf_pal[i].blocks != blocks)
+			if (special_nvf_pal[i].blocks != img->frameCount)
 				continue;
 
 			printf("Seems to be %s Setting first_color\n",
@@ -348,31 +352,27 @@ static void do_mode_same(unsigned short blocks, const char *buf, size_t len,
 		if (len != calc_len) {
 			printf("The data %lu has not the expected size %lu\n",
 			       len, calc_len);
-			return;
+			return NULL;
 		}
 
 		pal = (char *)(buf + data_sum + 2);
+		img->globalPalette = pal;
 	}
 
-	pdata = (char *)(buf + 4 + 4 * blocks);
+	pdata = (char *)(buf + 4 + 4 * img->frameCount);
 
 	if (mode == 2)
-		printf("NVF-Mode 2 (same size/PP20): %03d Pics\n", blocks);
+		printf("NVF-Mode 2 (same size/PP20): %03d Pics\n", img->frameCount);
 	else
-		printf("NVF-Mode 4 (same size/RLE): %03d Pics\n", blocks);
+		printf("NVF-Mode 4 (same size/RLE): %03d Pics\n", img->frameCount);
 
-	data = malloc(x * y);
-	if (!data) {
-		fprintf(stderr, "Not enough memory\n");
-		return;
-	}
-
-	for (i = 0; i < blocks; i++) {
+	for (i = 0; i < img->frameCount; i++) {
 		unsigned long plen = get_uint(buf + 4 + i * 4);
-		char fname[100];
-
-		sprintf(fname, "PIC%03lu.TGA", i);
-
+		data = malloc(x * y);
+		if (!data) {
+		    fprintf(stderr, "Not enough memory\n");
+		    return NULL;
+		}
 		memset(data, 0, x * y);
 
 		if (mode == 2)
@@ -380,15 +380,20 @@ static void do_mode_same(unsigned short blocks, const char *buf, size_t len,
 		else
 			un_rle(pdata, data, plen);
 
-		dump_tga(fname, x, y, data, colors, first_color, pal);
+		img->frames[i]->x0 = img->frames[i]->y0 = 0;
+		img->frames[i]->width  = x;
+		img->frames[i]->height = y;
+		img->frames[i]->delay  = 0;
+		img->frames[i]->localPalette = 0;
+		img->frames[i]->pixels = data;
 		pdata += get_uint(buf + 4 + i * 4);
 	}
 
-	free(data);
+	return img;
 }
 
 /* Packed Images with different sizes */
-static void do_mode_diff(unsigned short blocks, const char *buf, size_t len,
+static ImageSet* do_mode_diff(ImageSet* img, const char *buf, size_t len,
 			 unsigned char mode)
 {
 	unsigned long i;
@@ -398,19 +403,19 @@ static void do_mode_diff(unsigned short blocks, const char *buf, size_t len,
 	char *data, *pdata;
 	unsigned short colors = 0, first_color = 0;
 
-	if (len < blocks * 8) {
+	if (len < img->frameCount * 8) {
 		printf("The buffer is to small to hold valid values.\n");
-		return;
+		return NULL;
 	}
 
-	data_sum = 8 * blocks;
+	data_sum = 8 * img->frameCount;
 
-	for (i = 0; i < blocks; i++)
+	for (i = 0; i < img->frameCount; i++)
 		data_sum += get_uint(buf + i * 8 + 4);
 
 	if (len < data_sum) {
 		printf("The buffer is to small to hold valid values");
-		return;
+		return NULL;
 	}
 
 	/* This is the case in DSA1/ROA1 */
@@ -421,7 +426,7 @@ static void do_mode_diff(unsigned short blocks, const char *buf, size_t len,
 				continue;
 			if (special_nvf[i].mode != mode)
 				continue;
-			if (special_nvf[i].blocks != blocks)
+			if (special_nvf[i].blocks != img->frameCount)
 				continue;
 
 			printf("Seems to be %s. Using hardcoded palette\n",
@@ -430,11 +435,12 @@ static void do_mode_diff(unsigned short blocks, const char *buf, size_t len,
 			first_color = special_nvf[i].first_color;
 			colors = special_nvf[i].colors + first_color;
 			pal = (char*)special_nvf[i].pal;
+			img->globalPalette = pal;
 		}
 
 		if (pal == NULL) {
 			printf("Unknown NVF-file without palette\n");
-			return;
+			return NULL;
 		}
 	} else {
 
@@ -444,7 +450,7 @@ static void do_mode_diff(unsigned short blocks, const char *buf, size_t len,
 				continue;
 			if (special_nvf_pal[i].mode != mode)
 				continue;
-			if (special_nvf_pal[i].blocks != blocks)
+			if (special_nvf_pal[i].blocks != img->frameCount)
 				continue;
 
 			printf("Seems to be %s Setting first_color\n",
@@ -459,27 +465,29 @@ static void do_mode_diff(unsigned short blocks, const char *buf, size_t len,
 		if (len != calc_len) {
 			printf("The data %lu has not the expected size %lu\n",
 			       len, calc_len);
-			return;
+			return NULL;
 		}
 
 		pal = (char *)(buf + data_sum + 2);
+		img->globalPalette = pal;
 	}
 
 	if (len != calc_len) {
 		printf("The data %lu has not the expected size %lu\n",
 		       len, calc_len);
-		return;
+		return NULL;
 	}
 
 	if (mode == 3)
-		printf("NVF-Mode 2 (different size/PP20): %03d Pics\n", blocks);
+		printf("NVF-Mode 2 (different size/PP20): %03d Pics\n", img->frameCount);
 	else
-		printf("NVF-Mode 4 (different size/RLE): %03d Pics\n", blocks);
+		printf("NVF-Mode 4 (different size/RLE): %03d Pics\n", img->frameCount);
 
 	pal = (char *)(buf + data_sum + 2);
-	pdata = (char *)(buf + 8 * blocks);
+	img->globalPalette = pal;
+	pdata = (char *)(buf + 8 * img->frameCount);
 
-	for (i = 0; i < blocks; i++) {
+	for (i = 0; i < img->frameCount; i++) {
 		unsigned long plen;
 		unsigned short x, y;
 		char fname[100];
@@ -493,7 +501,7 @@ static void do_mode_diff(unsigned short blocks, const char *buf, size_t len,
 		data = malloc(x * y);
 		if (!data) {
 			fprintf(stderr, "Not enough memory\n");
-			return;
+			return NULL;
 		}
 
 		memset(data, 0, x * y);
@@ -502,41 +510,100 @@ static void do_mode_diff(unsigned short blocks, const char *buf, size_t len,
 		else
 			un_rle(pdata, data, plen);
 
-		dump_tga(fname, x, y, data, colors, first_color, pal);
+		img->frames[i]->x0 = img->frames[i]->y0 = 0;
+		img->frames[i]->width  = x;
+		img->frames[i]->height = y;
+		img->frames[i]->delay  = 0;
+		img->frames[i]->localPalette = pdata;
+		img->frames[i]->pixels = data;
+
 		pdata += plen;
-		free(data);
 	}
 }
 
-void process_nvf(const char *buf, size_t len)
+int sanitycheck_nvf(const char* buf, size_t len) {
+	// TODO
+	return 1;
+}
+
+ImageSet* process_nvf(const char *buf, size_t len)
 {
 	unsigned char mode;
-	unsigned short blocks;
+	ImageSet* img;
 
 	mode = *(unsigned char *)(buf);
 
 	if (mode >= 6) {
 		fprintf(stderr, "No valid crunchmode %d\n", mode);
-		return;
+		return NULL;
 	}
 
-	blocks = get_ushort(buf + 1);
+	img = (ImageSet*)malloc(sizeof(ImageSet));
+	img->frameCount   = get_ushort(buf + 1);
+	img->frames       = (AnimFrame**)malloc(img->frameCount * sizeof(AnimFrame*));
+	for (int i = 0; i<img->frameCount; i++) img->frames[i] = (AnimFrame*)malloc(sizeof(AnimFrame));
+	
 	switch (mode) {
 	case 0:
-		do_mode_0(blocks, buf + 3, len - 3);
+		img = do_mode_0(img, buf + 3, len - 3);
 		break;
 	case 1:
-		do_mode_1(blocks, buf + 3, len - 3);
+		img = do_mode_1(img, buf + 3, len - 3);
 		break;
 	case 2:
 	case 4:
-		do_mode_same(blocks, buf + 3, len - 3, mode);
+		img = do_mode_same(img, buf + 3, len - 3, mode);
 		break;
 	case 3:
 	case 5:
-		do_mode_diff(blocks, buf + 3, len - 3, mode);
+		img = do_mode_diff(img, buf + 3, len - 3, mode);
 		break;
 	default:
 		printf("NVF-Mode %u is not supported\n", mode);
 	}
+	img->globalWidth  = img->frames[0]->width;
+	img->globalHeight = img->frames[0]->height;;
+	return img;
+}
+
+int dump_nvf(ImageSet* img) {
+	int buflen, i, length;
+	char *buf, *buf_start;
+	// Größe der Datei bestimmen, Speicher bereitstellen
+	buflen = 3 + img->frameCount * 4;
+	for (i=0; i<img->frameCount; i++) {
+		buflen += img->frames[i]->width * img->frames[i]->height;
+	}
+	buflen += 2 + 3 * 256; // Farbpalette
+	buf_start = buf = (char*)malloc(buflen);
+
+	// Globalen Header + Größenangaben (width/height) schreiben
+	buf[0] = 1; // Bildmodus 1: verschiedene Bildgrößen, keine Komprimierung
+	set_ushort(buf+1, img->frameCount);
+	buf+= 3;
+	// Bildgrößen schreiben
+	for (i=0; i<img->frameCount; i++) {
+		set_ushort(buf + 0, img->frames[i]->width);
+		set_ushort(buf + 2, img->frames[i]->height);
+		buf += 4;
+	}
+	// Bilddaten schreiben
+	for (i=0; i<img->frameCount; i++) {
+		length = img->frames[i]->width * img->frames[i]->height;
+		memcpy(buf, img->frames[i]->pixels, length);
+		buf += length;
+	}
+	// Farbpalette schreiben
+	set_ushort(buf, 256);
+	buf+= 2;
+	for (i=0; i<256; i++) {
+		buf[3*i+0] = img->globalPalette[3*i+0] >> 2;
+		buf[3*i+1] = img->globalPalette[3*i+1] >> 2;
+		buf[3*i+2] = img->globalPalette[3*i+2] >> 2;
+	}
+	// Schreiben der Datei
+	FILE* fd = fopen("BLA.NVF", "wb+");
+	fwrite(buf_start, sizeof(char), buflen, fd);
+	fclose(fd);
+	return 1;
 }
