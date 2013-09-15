@@ -1,8 +1,13 @@
 /*
- * AIF Loader
+ * AIF loader
  *
- * Author: Henne_NWH <henne@nachtwindheim.de>
+ * Loads/Dumps an AIF picture to/from an ImageSet structure.
+ * AIF files are used by DSA/ROA 2+3.
+ *
+ * Authors: Henne_NWH <henne@nachtwindheim.de>
+ *          Hendrik <hermes9@web.de>
  * License: GPLv3
+ *
  *
  */
 
@@ -119,7 +124,7 @@ ImageSet* process_aif(const char *buf, size_t len)
 	return img;
 }
 
-int dump_aif(ImageSet* img) {
+int dump_aif(ImageSet* img, char* prefix) {
 	// TODO
 	return 1;
 }

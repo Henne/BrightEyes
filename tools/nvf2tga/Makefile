@@ -27,7 +27,7 @@ loader_%: src/loader_%.c
 #libloaders.a: $(LOADERS)
 #	$(LD) -o $(BUILDDIR)/$@ $?
 any2any: src/any2any.c packer $(LOADERS) include/packer.h include/loader.h
-	$(CC) $(CFLAGS) -o $(BINDIR)/any2any src/any2any.c $(BUILDDIR)/pp20.o $(BUILDDIR)/rle.o $(BUILDDIR)/rl.o $(BUILDDIR)/loader_nvf.o $(BUILDDIR)/loader_ace.o $(BUILDDIR)/loader_aif.o $(BUILDDIR)/loader_raw.o $(BUILDDIR)/loader_tga.o $(BUILDDIR)/loader_gif.o $(BUILDDIR)/loader_bob.o $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $(BINDIR)/any2any src/any2any.c $(BUILDDIR)/pp20.o $(BUILDDIR)/rle.o $(BUILDDIR)/rl.o $(LOADERS:%=$(BUILDDIR)/%.o) $(LDFLAGS)
 
 clean:
 	rm -rf $(BUILDDIR)/*.o

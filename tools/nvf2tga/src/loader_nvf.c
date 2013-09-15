@@ -1,15 +1,14 @@
 /*
- * NVF to TGA Converter
+ * NVF loader
  *
- * Converts a NVF file to the TGA format.
+ * Loads/Dumps an NVF file to/from an ImageSet structure.
  * NVF files are used by DSA/ROA 2+3
  * Some files of DSA/ROA 1 work, too, but aren't supported.
  *
- * Author: Henne_NWH <henne@nachtwindheim.de>
+ * Authors: Henne_NWH <henne@nachtwindheim.de>
+ *          Hendrik <hermes9@web.de>
  * License: GPLv3
  *
- * Compilation: gcc -o nvf2tga nvf2tga.c
- * Usage:	./nvf2tga <*.TGA>
  *
  */
 
@@ -214,7 +213,7 @@ static ImageSet* do_mode_0(ImageSet* img, const char *buf, size_t len)
 		img->frames[i]->x0 = img->frames[i]->y0 = 0;
 		img->frames[i]->width  = x;
 		img->frames[i]->height = y;
-		img->frames[i]->delay  = 0;
+		img->frames[i]->delay  = 200;
 		img->frames[i]->localPalette = 0;
 		img->frames[i]->pixels = data;
 
@@ -236,9 +235,10 @@ static ImageSet* do_mode_1(ImageSet* img, const char *buf, size_t len)
 		return NULL;
 	}
 
-	for (i = 0; i < img->frameCount; i++)
-		data_sum +=
-		    4 + get_ushort(buf + 4 * i) * get_ushort(buf + 4 * i + 2);
+	for (i = 0; i < img->frameCount; i++) {
+	    data_sum += 4 + get_ushort(buf + 4*i) * get_ushort(buf + 4*i + 2);
+	    printf("datasum: %d = 4 + %d*%d\n", data_sum, get_ushort(buf + 4*i), get_ushort(buf + 4*i + 2));
+	}
 
 	if (len < data_sum) {
 		printf("The buffer is to small to hold valid values");
@@ -267,7 +267,7 @@ static ImageSet* do_mode_1(ImageSet* img, const char *buf, size_t len)
 		img->frames[i]->x0 = img->frames[i]->y0 = 0;
 		img->frames[i]->width  = x;
 		img->frames[i]->height = y;
-		img->frames[i]->delay  = 0;
+		img->frames[i]->delay  = 200;
 		img->frames[i]->localPalette = 0;
 		img->frames[i]->pixels = data;
 
@@ -383,9 +383,10 @@ static ImageSet* do_mode_same(ImageSet* img, const char *buf, size_t len,
 		img->frames[i]->x0 = img->frames[i]->y0 = 0;
 		img->frames[i]->width  = x;
 		img->frames[i]->height = y;
-		img->frames[i]->delay  = 0;
+		img->frames[i]->delay  = 200;
 		img->frames[i]->localPalette = 0;
 		img->frames[i]->pixels = data;
+
 		pdata += get_uint(buf + 4 + i * 4);
 	}
 
@@ -510,7 +511,7 @@ static ImageSet* do_mode_diff(ImageSet* img, const char *buf, size_t len,
 		img->frames[i]->x0 = img->frames[i]->y0 = 0;
 		img->frames[i]->width  = x;
 		img->frames[i]->height = y;
-		img->frames[i]->delay  = 0;
+		img->frames[i]->delay  = 200;
 		img->frames[i]->localPalette = pdata;
 		img->frames[i]->pixels = data;
 
@@ -564,9 +565,11 @@ ImageSet* process_nvf(const char *buf, size_t len)
 	return img;
 }
 
-int dump_nvf(ImageSet* img) {
+int dump_nvf(ImageSet* img, char* prefix) {
 	int buflen, i, length;
 	char *buf, *buf_start;
+	char *filename;
+
 	// Größe der Datei bestimmen, Speicher bereitstellen
 	buflen = 3 + img->frameCount * 4;
 	for (i=0; i<img->frameCount; i++) {
@@ -595,13 +598,16 @@ int dump_nvf(ImageSet* img) {
 	set_ushort(buf, 256);
 	buf+= 2;
 	for (i=0; i<256; i++) {
-		buf[3*i+0] = img->globalPalette[3*i+0] >> 2;
-		buf[3*i+1] = img->globalPalette[3*i+1] >> 2;
-		buf[3*i+2] = img->globalPalette[3*i+2] >> 2;
+		buf[3*i+0] = img->globalPalette[3*i+0];
+		buf[3*i+1] = img->globalPalette[3*i+1];
+		buf[3*i+2] = img->globalPalette[3*i+2];
 	}
 	// Schreiben der Datei
-	FILE* fd = fopen("BLA.NVF", "wb+");
+	filename = (char*)malloc((strlen(prefix)+5) * sizeof(char));
+	sprintf(filename, "%s.NVF", prefix);
+	FILE* fd = fopen(filename, "wb+");
 	fwrite(buf_start, sizeof(char), buflen, fd);
 	fclose(fd);
+	free(filename);
 	return 1;
 }

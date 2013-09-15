@@ -1,10 +1,11 @@
 /*
  * Hederfile for DSA/ROA Tools
  *
- * Author: Henne_NWH <henne@nachtwindheim.de>
+ * Authors: Henne_NWH <henne@nachtwindheim.de>
+ *          Hendrik <hermes9@web.de>
  * License: GPL v3
  *
  */
 
 #define BANNER "DSA/ROA Tools"
-#define VERSION "v0.2-rc1"
+#define VERSION "v0.3-rc1"

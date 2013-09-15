@@ -1,3 +1,16 @@
+/*
+ * BOB loader
+ *
+ * Loads/Dumps an BOB animation to/from an ImageSet structure.
+ * BOB files are used by DSA/ROA 2+3.
+ *
+ * Authors: Henne_NWH <henne@nachtwindheim.de>
+ *          Hendrik <hermes9@web.de>
+ * License: GPLv3
+ *
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -34,7 +47,8 @@ ImageSet* process_bob(const char *buf, size_t len) {
 	// TODO
 	return NULL;
 }
-int dump_bob(ImageSet* img) {
+
+int dump_bob(ImageSet* img, char* prefix) {
 	// TODO
 	return 1;
 }

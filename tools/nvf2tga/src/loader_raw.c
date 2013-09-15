@@ -1,9 +1,17 @@
 /*
- * RAW Loader
+ * RAW loader
  *
- * Author: Hendrik Radke <hermes9@gmx.net>
+ * Loads/Dumps a RAW image to/from an ImageSet structure.
+ * RAW files are used by DSA/ROA 2+3, mostly for textures.
+ *
+ * Authors: Henne_NWH <henne@nachtwindheim.de>
+ *          Hendrik <hermes9@web.de>
  * License: GPLv3
  *
+ *
+ */
+
+/* File Format:
  * | Offset | Zweck                       |
  * |   0-25 | Bildinformation (Copyright) |
  * |  26-27 | 0x1A00 (???)                |
@@ -106,10 +114,10 @@ ImageSet* process_raw(const char *buf, size_t len)
 	return img;
 }
 
-int dump_raw(ImageSet* img) {
+int dump_raw(ImageSet* img, char* prefix) {
 	// TODO
 	AnimFrame* frame;
-	char* buf, buf_start;
+	char *buf, *buf_start;
 	int i, j;
 	for (i=0; i<img->frameCount; i++) {
 		frame = img->frames[i];
@@ -130,5 +138,6 @@ int dump_raw(ImageSet* img) {
 			buf[j] = frame->pixels[j];
 		}
 	}
+	// TODO: Datei schreiben
 	return 1;
 }

@@ -1,3 +1,15 @@
+/*
+ * GIF loader
+ *
+ * Loads/Dumps a GIF file to/from an ImageSet structure.
+ *
+ * Authors: Henne_NWH <henne@nachtwindheim.de>
+ *          Hendrik <hermes9@web.de>
+ * License: GPLv3
+ *
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,7 +18,6 @@
 #include <loader.h>
 #include <format.h>
 #include <magick/api.h>
-#include <assert.h> //TODO
 
 int sanitycheck_gif(const char* buf, size_t len) {
 	// TODO
@@ -25,52 +36,23 @@ ImageSet* process_gif(const char *buf, size_t len) {
 	return NULL;
 }
 
-int dump_gif(ImageSet* img) {
+int dump_gif(ImageSet* img, char* prefix) {
 	InitializeMagick(NULL);
 
 	// Globale Bilddaten initialisieren
-	//printf("Globale Bilddaten initialisieren\n");
 	ImageInfo* info = CloneImageInfo(0);
 	ExceptionInfo exception;
 	Image* imagelist = NewImageList();
 	Image* frame;
-	/*Image* frame = AllocateImage(info);
 	
-	AppendImageToList(&imagelist, frame);
-	printf("Globale Bilddaten initialisieren\n");
-	imagelist->columns = img->globalWidth;
-	imagelist->rows    = img->globalHeight;
-	imagelist->depth   = 8;
-	imagelist->colors  = 256;
-	imagelist->storage_class = PseudoClass;
-
-	// Globale Palette setzen
-	if (img->globalPalette != NULL) {
-		printf("Setze globale Palette.\n");
-		AllocateImageColormap(imagelist, 256);
-		PixelPacket* colormap = (PixelPacket*)malloc(256 * sizeof(PixelPacket));
-		for (int j=0;   j < 256;   j++) {
-			colormap[j].red   = img->globalPalette[j*3 + 0] << 2;
-			colormap[j].green = img->globalPalette[j*3 + 1] << 2;
-			colormap[j].blue  = img->globalPalette[j*3 + 2] << 2;
-			colormap[j].opacity = 255;
-		}
-		ReplaceImageColormap(imagelist, colormap, 256);
-		}*/
-	
-	//printf("Konstruiere Frames\n");
 	// Frames konstruieren
 	for (int i=0;   i < img->frameCount;   i++) {
-		//printf("Frame parametrisieren\n");
 		ImageInfo* finfo = CloneImageInfo(0);
 		if (1 || i==0) {
 			frame = AllocateImage(finfo);
 		} else {
-			/*AllocateNextImage(finfo, frame);
-			  frame = frame->next;*/
-			Image* oldframe = frame;
-			frame = AllocateImage(finfo);
-			oldframe->next = frame;
+			AllocateNextImage(finfo, frame);
+			frame = frame->next;
 			frame->dispose = PreviousDispose;
 		}
 		frame->columns = img->globalWidth;
@@ -78,19 +60,17 @@ int dump_gif(ImageSet* img) {
 		frame->depth   = 8;
 		frame->colors  = 256;
 		frame->storage_class = PseudoClass;
-		//frame->delay   = img->frames[i]->delay * 2;
-		frame->delay   = 10;
-		//printf("made frame: %dx%d, %d colors\n", frame->columns, frame->rows, frame->colors);
+		frame->delay   = img->frames[i]->delay / 10;
 		
-		// Lokale Farbpalette
+		// Farbpalette setzen
 		if (img->globalPalette == NULL) {
 			//printf("lokale Farbpalette\n");
 			AllocateImageColormap(frame, 256);
 			PixelPacket* colormap = (PixelPacket*)malloc(256 * sizeof(PixelPacket));
 			for (int j=0;   j < 256;   j++) {
-				colormap[j].red   = img->globalPalette[j*3 + 0];
-				colormap[j].green = img->globalPalette[j*3 + 1];
-				colormap[j].blue  = img->globalPalette[j*3 + 2];
+				colormap[j].red   = img->globalPalette[j*3 + 0] << 2;
+				colormap[j].green = img->globalPalette[j*3 + 1] << 2;
+				colormap[j].blue  = img->globalPalette[j*3 + 2] << 2;
 				colormap[j].opacity = 255;
 			}
 			ReplaceImageColormap(frame, colormap, 256);
@@ -109,12 +89,11 @@ int dump_gif(ImageSet* img) {
 			free(colormap);
 		}
 		
-		printf("frame %d: %dx%d@%dx%d, data at %p -- ", i,
+		printf("frame %d: %dx%d@%dx%d\n", i,
 		       img->frames[i]->width,
 		       img->frames[i]->height,
 		       img->frames[i]->x0,
-		       img->frames[i]->y0,
-		       img->frames[i]->pixels);
+		       img->frames[i]->y0);
 		int pixelcount = 0;
 		for (int y=0; y<img->frames[i]->height; y++) {
 		    SetImagePixels(frame,
@@ -129,16 +108,14 @@ int dump_gif(ImageSet* img) {
 					 NULL, &importinfo);
 		    pixelcount += importinfo.bytes_imported;
 		}
-		printf("imported %d pixels\n", pixelcount);
 		AppendImageToList(&imagelist, frame);
 	}
-	//printf("Bild schreiben\n");
+	
+	// Datei schreiben & Aufräumen
 	info->adjoin = MagickTrue;
-	strcpy(imagelist->filename, "BLA.GIF");
+	sprintf(imagelist->filename, "%s.gif", prefix);
 	WriteImage(info, imagelist);
-	//printf("Aufräumen\n");
 	DestroyImageList(imagelist);
       	DestroyMagick();
-	//printf("magick destroyed\n");
 	return 1;
 }

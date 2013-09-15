@@ -2,7 +2,7 @@
  * Header file for DSA/ROA file formats
  *
  * Authors:	Henne_NWH <henne@nachtwindheim.de>
- *		Hendrik Radke <hermes9@gmx.net>
+ *		Hendrik <hermes9@web.de>
  * Licanse:	GPLv3
  *
  */
@@ -23,27 +23,27 @@ static inline int get_sint(const char* buf) {
 }
 
 static inline void set_sshort(char* buf, const signed short val) {
-	buf[0] = (val << 0) & 0xFF;
-	buf[1] = (val << 8) & 0xFF;
+	buf[0] = (val >> 0) & 0xFF;
+	buf[1] = (val >> 8) & 0xFF;
 }
 
 static inline void set_ushort(char* buf, const unsigned short val) {
-	buf[0] = (val << 0) & 0xFF;
-	buf[1] = (val << 8) & 0xFF;
+	buf[0] = (val >> 0) & 0xFF;
+	buf[1] = (val >> 8) & 0xFF;
 }
 
 static inline void set_uint(char* buf, const unsigned int val) {
-	buf[0] = (val <<  0) & 0xFF;
-	buf[1] = (val <<  8) & 0xFF;
-	buf[2] = (val << 16) & 0xFF;
-	buf[3] = (val << 24) & 0xFF;
+	buf[0] = (val >>  0) & 0xFF;
+	buf[1] = (val >>  8) & 0xFF;
+	buf[2] = (val >> 16) & 0xFF;
+	buf[3] = (val >> 24) & 0xFF;
 }
 
 static inline void set_sint(char* buf, const signed int val) {
-	buf[0] = (val <<  0) & 0xFF;
-	buf[1] = (val <<  8) & 0xFF;
-	buf[2] = (val << 16) & 0xFF;
-	buf[3] = (val << 24) & 0xFF;
+	buf[0] = (val >>  0) & 0xFF;
+	buf[1] = (val >>  8) & 0xFF;
+	buf[2] = (val >> 16) & 0xFF;
+	buf[3] = (val >> 24) & 0xFF;
 }
 
 

@@ -1,3 +1,15 @@
+/*
+ * ULI loader
+ *
+ * Loads/Dumps an ULI animation to/from an ImageSet structure.
+ * ULI files are used in the Schicksalsklinge/Blade of destiny 1 intro.
+ *
+ * Authors: Henne_NWH <henne@nachtwindheim.de>
+ *          Hendrik <hermes9@web.de>
+ * License: GPLv3
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -5,11 +17,6 @@
 #include <packer.h>
 #include <loader.h>
 #include <format.h>
-
-int sanitycheck_uli(const char* buf, size_t len) {
-	if (strncmp(buf, "(C) 1991 by Ulrich Walther\x1A\x00\x85", 0x1C)) return 1;
-	else return 0;
-}
 
 /*
   Offenbar ein Format für Animationen/Bilder. Codiert mit einer Art von RLE, siehe unten.
@@ -23,6 +30,11 @@ int sanitycheck_uli(const char* buf, size_t len) {
   |       | Das 1. Byte scheint mit der Anzahl/Länge dieser Optionen zusammenzuhängen. |
   Komprimierung ist eine Mischung aus RLE und Bitmap, wobei die Bitbreite für den Bitmap-Modus von Datei zu Datei unterschiedlich ist. Wo der Bitmodus und die Farbpalette gespeichert sind, ist noch unklar.
 */
+
+int sanitycheck_uli(const char* buf, size_t len) {
+	if (strncmp(buf, "(C) 1991 by Ulrich Walther\x1A\x00\x85", 0x1C)) return 1;
+	else return 0;
+}
 
 ImageSet* process_uli(const char *buf, size_t len) {
 	const char* buf_end = buf + len;
@@ -68,7 +80,7 @@ ImageSet* process_uli(const char *buf, size_t len) {
 	}
 	return img;
 }
-int dump_uli(ImageSet* img) {
+int dump_uli(ImageSet* img, char* prefix) {
 	// TODO
 	return 1;
 }

@@ -1,8 +1,13 @@
 /*
- * ACE Loader
+ * ACE loader
  *
- * Author: Henne_NWH <henne@nachtwindheim.de>
+ * Loads/Dumps an ACE animation to/from an ImageSet structure.
+ * ACE files are used by DSA/ROA 2+3
+ *
+ * Authors: Henne_NWH <henne@nachtwindheim.de>
+ *          Hendrik <hermes9@web.de>
  * License: GPLv3
+ *
  *
  */
 
@@ -18,11 +23,6 @@ int sanitycheck_ace(const char *buf, size_t len) {
 	// TODO
 	return 1;
 }
-int dump_ace(ImageSet* img) {
-	// TODO
-	return 1;
-}
-
 static ImageSet* do_ass(ImageSet* img, struct ace_header *ace, const char *buf, size_t len)
 {
 	struct ass_header ass;
@@ -95,9 +95,9 @@ static ImageSet* do_ass(ImageSet* img, struct ace_header *ace, const char *buf, 
 		frame->y0     = get_sshort(buf + datalen + 6);
 		frame->width  = get_sshort(buf + datalen + 8);
 		frame->height = get_sshort(buf + datalen + 10);
+		frame->delay  = ace->speed * 50;
 
 		frame->pixels = malloc(frame->width * frame->height);
-		printf("compression: %d\n", cel.compression);
 		if (frame->pixels == NULL) {
 			fprintf(stderr, "Failed to allocate seqs\n");
 			return NULL;
@@ -124,7 +124,7 @@ static ImageSet* do_ass(ImageSet* img, struct ace_header *ace, const char *buf, 
 	
 	return img;
 }
-#ifdef COMMENT
+#ifdef AUSKOMMENTIERT
 static ImageSet* do_seq(ImageSet* img, struct ace_header *ace, const char *buf, size_t len)
 {
 	unsigned datalen = 0, i,j;
@@ -281,10 +281,18 @@ ImageSet* process_ace(const char *buf, size_t len)
 
 	img = (ImageSet*)malloc(sizeof(ImageSet));
 
-	if (ace.sequences == 1)
+	if (ace.sequences == 1) {
 		do_ass(img, &ace, buf + 8, len - 8);
-	//else
-	//	do_seq(img, &ace, buf + 8, len - 8);
+	} else {
+	    fprintf(stderr, "ACE multi-sequence images are not yet supported.\n");
+	    exit(1);
+	    //	do_seq(img, &ace, buf + 8, len - 8);
+	}
 
 	return img;
+}
+
+int dump_ace(ImageSet* img, char* prefix) {
+	// TODO
+	return 1;
 }
