@@ -6,8 +6,8 @@ LDFLAGS=`pkg-config --libs GraphicsMagick`
 BUILDDIR=./build
 BINDIR=./bin
 
-#LOADERS=loader_nvf loader_ace loader_aif loader_raw loader_bob loader_gif loader_tga loader_uli
-LOADERS=loader_ace loader_gif
+LOADERS=loader_nvf loader_ace loader_aif loader_raw loader_bob loader_gif loader_tga loader_uli
+#LOADERS=loader_ace loader_nvf loader_gif
 
 default: any2any
 all: packer loader any2any

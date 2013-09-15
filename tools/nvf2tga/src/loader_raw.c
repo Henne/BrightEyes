@@ -113,7 +113,7 @@ int dump_raw(ImageSet* img) {
 	int i, j;
 	for (i=0; i<img->frameCount; i++) {
 		frame = img->frames[i];
-		buf_start = buf = malloc(38 + 3*256 + frame->width * frame->height);
+		buf_start = buf = (char*)malloc(38 + 3*256 + frame->width * frame->height);
 		strncpy(buf, "image made by any2any tool\n\0", 28);
 		strncpy(buf, "ROH\0", 4);
 		set_ushort(buf+32, frame->width - 1);
@@ -121,9 +121,9 @@ int dump_raw(ImageSet* img) {
 		set_ushort(buf+36, 256);
 		buf += 38;
 		for (j=0; j<256; j++) {
-			buf[3*j+0] = img->global_palette[3*j+0];
-			buf[3*j+1] = img->global_palette[3*j+1];
-			buf[3*j+2] = img->global_palette[3*j+2];
+			buf[3*j+0] = img->globalPalette[3*j+0];
+			buf[3*j+1] = img->globalPalette[3*j+1];
+			buf[3*j+2] = img->globalPalette[3*j+2];
 		}
 		buf += 3*256;
 		for (j=0; j<frame->width*frame->height; j++) {

@@ -96,9 +96,8 @@ static ImageSet* do_ass(ImageSet* img, struct ace_header *ace, const char *buf, 
 		frame->width  = get_sshort(buf + datalen + 8);
 		frame->height = get_sshort(buf + datalen + 10);
 
-		sprintf(fname, "CEL%03lu.TGA", i);
-
 		frame->pixels = malloc(frame->width * frame->height);
+		printf("compression: %d\n", cel.compression);
 		if (frame->pixels == NULL) {
 			fprintf(stderr, "Failed to allocate seqs\n");
 			return NULL;
@@ -122,6 +121,7 @@ static ImageSet* do_ass(ImageSet* img, struct ace_header *ace, const char *buf, 
 
 		datalen += 14 + cel.size;
 	}
+	
 	return img;
 }
 #ifdef COMMENT

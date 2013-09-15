@@ -479,9 +479,9 @@ static ImageSet* do_mode_diff(ImageSet* img, const char *buf, size_t len,
 	}
 
 	if (mode == 3)
-		printf("NVF-Mode 2 (different size/PP20): %03d Pics\n", img->frameCount);
+		printf("NVF-Mode 3 (different size/PP20): %03d Pics\n", img->frameCount);
 	else
-		printf("NVF-Mode 4 (different size/RLE): %03d Pics\n", img->frameCount);
+		printf("NVF-Mode 5 (different size/RLE): %03d Pics\n", img->frameCount);
 
 	pal = (char *)(buf + data_sum + 2);
 	img->globalPalette = pal;
@@ -490,9 +490,6 @@ static ImageSet* do_mode_diff(ImageSet* img, const char *buf, size_t len,
 	for (i = 0; i < img->frameCount; i++) {
 		unsigned long plen;
 		unsigned short x, y;
-		char fname[100];
-
-		sprintf(fname, "PIC%03lu.TGA", i);
 
 		x = get_ushort(buf + i * 8);
 		y = get_ushort(buf + i * 8 + 2);
@@ -519,6 +516,7 @@ static ImageSet* do_mode_diff(ImageSet* img, const char *buf, size_t len,
 
 		pdata += plen;
 	}
+	return img;
 }
 
 int sanitycheck_nvf(const char* buf, size_t len) {

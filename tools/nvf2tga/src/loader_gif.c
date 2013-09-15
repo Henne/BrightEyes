@@ -73,12 +73,13 @@ int dump_gif(ImageSet* img) {
 			oldframe->next = frame;
 			frame->dispose = PreviousDispose;
 		}
-		frame->columns = img->frames[i]->width;
-		frame->rows    = img->frames[i]->height;
+		frame->columns = img->globalWidth;
+		frame->rows    = img->globalHeight;
 		frame->depth   = 8;
 		frame->colors  = 256;
 		frame->storage_class = PseudoClass;
-		frame->delay   = img->frames[i]->delay * 5;
+		//frame->delay   = img->frames[i]->delay * 2;
+		frame->delay   = 10;
 		//printf("made frame: %dx%d, %d colors\n", frame->columns, frame->rows, frame->colors);
 		
 		// Lokale Farbpalette
@@ -93,6 +94,7 @@ int dump_gif(ImageSet* img) {
 				colormap[j].opacity = 255;
 			}
 			ReplaceImageColormap(frame, colormap, 256);
+			free(colormap);
 		} else {
 			//printf("Setze globale Palette auch lokal.\n");
 			AllocateImageColormap(frame, 256);
@@ -104,26 +106,30 @@ int dump_gif(ImageSet* img) {
 				colormap[j].opacity = 255;
 			}
 			ReplaceImageColormap(frame, colormap, 256);
+			free(colormap);
 		}
-
-		//printf("Pixel schreiben aus %p\n", img->frames[i]->pixels);
-		SetImagePixels(frame,
-			       img->frames[i]->x0,
-			       img->frames[i]->y0,
-			       img->frames[i]->width,
-			       img->frames[i]->height);
-		ImportPixelAreaInfo doof;
-		//printf("frame %d: %dx%d@%dx%d, data at %p\n", i,
-		//       img->frames[i]->width,
-		//       img->frames[i]->height,
-		//       img->frames[i]->x0,
-		//       img->frames[i]->y0,
-		//       img->frames[i]->pixels);
-		ImportImagePixelArea(frame,
-				     IndexQuantum, 8,
-				     img->frames[i]->pixels,
-				     NULL, &doof);
-		//printf("imported %d pixels\n", doof.bytes_imported);
+		
+		printf("frame %d: %dx%d@%dx%d, data at %p -- ", i,
+		       img->frames[i]->width,
+		       img->frames[i]->height,
+		       img->frames[i]->x0,
+		       img->frames[i]->y0,
+		       img->frames[i]->pixels);
+		int pixelcount = 0;
+		for (int y=0; y<img->frames[i]->height; y++) {
+		    SetImagePixels(frame,
+				   img->frames[i]->x0,
+				   y+img->frames[i]->y0,
+				   img->frames[i]->width,
+				   1);
+		    ImportPixelAreaInfo importinfo;
+		    ImportImagePixelArea(frame,
+					 IndexQuantum, 8,
+					 img->frames[i]->pixels + pixelcount,
+					 NULL, &importinfo);
+		    pixelcount += importinfo.bytes_imported;
+		}
+		printf("imported %d pixels\n", pixelcount);
 		AppendImageToList(&imagelist, frame);
 	}
 	//printf("Bild schreiben\n");
