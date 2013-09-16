@@ -24,11 +24,16 @@ rl:	src/rl.c include/packer.h
 
 loader_%: src/loader_%.c
 	$(CC) $(CFLAGS) -c -o $(BUILDDIR)/$@.o $<
-#libloaders.a: $(LOADERS)
-#	$(LD) -o $(BUILDDIR)/$@ $?
-any2any: src/any2any.c packer $(LOADERS) include/packer.h include/loader.h
+any2any: mkdir src/any2any.c packer $(LOADERS) include/packer.h include/loader.h
 	$(CC) $(CFLAGS) -o $(BINDIR)/any2any src/any2any.c $(BUILDDIR)/pp20.o $(BUILDDIR)/rle.o $(BUILDDIR)/rl.o $(LOADERS:%=$(BUILDDIR)/%.o) $(LDFLAGS)
 
 clean:
 	rm -rf $(BUILDDIR)/*.o
 	rm -rf $(BINDIR)/[a-z]*
+
+
+mkdir:	| bin build
+bin:
+	mkdir -p bin
+build:
+	mkdir -p build
