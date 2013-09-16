@@ -207,6 +207,7 @@ static ImageSet* do_mode_0(ImageSet* img, const char *buf, size_t len)
 	printf("NVF-Mode 0 (same size/unpacked): %03d Pics\n", img->frameCount);
 
 	pal = (char *)(buf + data_sum + 2);
+	img->globalPalette = pal;
 	data = (char *)(buf + 4);
 
 	for (i = 0; i < img->frameCount; i++) {
@@ -307,7 +308,7 @@ static ImageSet* do_mode_same(ImageSet* img, const char *buf, size_t len,
 	/* This is the case in DSA1/ROA1 */
 	if (len == data_sum) {
 		for (i = 0; special_nvf[i].name[0] != '\0'; i++) {
-
+		    
 			if (special_nvf[i].length != len + 3)
 				continue;
 			if (special_nvf[i].mode != mode)
@@ -321,7 +322,8 @@ static ImageSet* do_mode_same(ImageSet* img, const char *buf, size_t len,
 			first_color = special_nvf[i].first_color;
 			colors = special_nvf[i].colors + first_color;
 			pal = (char*)special_nvf[i].pal;
-			img->globalPalette = pal;
+			// TODO: dirty hack
+			img->globalPalette = pal - first_color*3;
 		}
 
 		if (pal == NULL) {
@@ -356,7 +358,8 @@ static ImageSet* do_mode_same(ImageSet* img, const char *buf, size_t len,
 		}
 
 		pal = (char *)(buf + data_sum + 2);
-		img->globalPalette = pal;
+		// TODO: dirty hack
+		img->globalPalette = pal - first_color*3;
 	}
 
 	pdata = (char *)(buf + 4 + 4 * img->frameCount);
@@ -436,7 +439,8 @@ static ImageSet* do_mode_diff(ImageSet* img, const char *buf, size_t len,
 			first_color = special_nvf[i].first_color;
 			colors = special_nvf[i].colors + first_color;
 			pal = (char*)special_nvf[i].pal;
-			img->globalPalette = pal;
+			// TODO: dirty hack
+			img->globalPalette = pal - first_color*3;
 		}
 
 		if (pal == NULL) {
@@ -470,7 +474,8 @@ static ImageSet* do_mode_diff(ImageSet* img, const char *buf, size_t len,
 		}
 
 		pal = (char *)(buf + data_sum + 2);
-		img->globalPalette = pal;
+		// TODO: dirty hack
+		img->globalPalette = pal - first_color*3;
 	}
 
 	if (len != calc_len) {
@@ -485,7 +490,8 @@ static ImageSet* do_mode_diff(ImageSet* img, const char *buf, size_t len,
 		printf("NVF-Mode 5 (different size/RLE): %03d Pics\n", img->frameCount);
 
 	pal = (char *)(buf + data_sum + 2);
-	img->globalPalette = pal;
+	// TODO: dirty hack
+	img->globalPalette = pal - first_color*3;
 	pdata = (char *)(buf + 8 * img->frameCount);
 
 	for (i = 0; i < img->frameCount; i++) {
