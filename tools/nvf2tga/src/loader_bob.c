@@ -16,7 +16,6 @@
 #include <string.h>
 
 #include <packer.h>
-#include <loader.h>
 #include <format.h>
 
 
@@ -39,16 +38,16 @@ struct BOB_Header {
 };
 
 int sanitycheck_bob(const char* buf, size_t len) {
-	// TODO
-	return 1;
+    // TODO
+    return 1;
 }
 
 ImageSet* process_bob(const char *buf, size_t len) {
-	// TODO
-	return NULL;
+    // TODO
+    return NULL;
 }
 
 int dump_bob(ImageSet* img, char* prefix) {
-	// TODO
-	return 1;
+    // TODO
+    return 1;
 }

@@ -28,7 +28,6 @@
 #include <string.h>
 
 #include <packer.h>
-#include <loader.h>
 #include <format.h>
 
 
@@ -99,7 +98,7 @@ ImageSet* process_raw(const char *buf, size_t len)
 	img->globalWidth   = raw.width;
 	img->globalHeight  = raw.height;
 	img->frameCount    = 1;
-	img->globalPalette = pal;
+	img->globalPalette = (Color*)pal;
 	img->frames       = (AnimFrame**)malloc(img->frameCount * sizeof(AnimFrame*));
 	for (int i = 0; i<img->frameCount; i++) img->frames[i] = (AnimFrame*)malloc(sizeof(AnimFrame));
 
@@ -129,9 +128,9 @@ int dump_raw(ImageSet* img, char* prefix) {
 		set_ushort(buf+36, 256);
 		buf += 38;
 		for (j=0; j<256; j++) {
-			buf[3*j+0] = img->globalPalette[3*j+0];
-			buf[3*j+1] = img->globalPalette[3*j+1];
-			buf[3*j+2] = img->globalPalette[3*j+2];
+			buf[3*j+0] = img->globalPalette[j].r;
+			buf[3*j+1] = img->globalPalette[j].g;
+			buf[3*j+2] = img->globalPalette[j].b;
 		}
 		buf += 3*256;
 		for (j=0; j<frame->width*frame->height; j++) {

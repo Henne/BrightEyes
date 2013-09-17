@@ -24,7 +24,7 @@ rl:	src/rl.c include/packer.h
 
 loader_%: src/loader_%.c
 	$(CC) $(CFLAGS) -c -o $(BUILDDIR)/$@.o $<
-any2any: mkdir src/any2any.c packer $(LOADERS) include/packer.h include/loader.h
+any2any: mkdir src/any2any.c packer $(LOADERS) include/packer.h include/format.h
 	$(CC) $(CFLAGS) -o $(BINDIR)/any2any src/any2any.c $(BUILDDIR)/pp20.o $(BUILDDIR)/rle.o $(BUILDDIR)/rl.o $(LOADERS:%=$(BUILDDIR)/%.o) $(LDFLAGS)
 
 clean:

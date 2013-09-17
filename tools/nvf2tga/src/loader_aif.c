@@ -16,7 +16,6 @@
 #include <string.h>
 
 #include <packer.h>
-#include <loader.h>
 #include <format.h>
 
 int sanitycheck_aif(const char *buf, size_t len) {
@@ -119,8 +118,9 @@ ImageSet* process_aif(const char *buf, size_t len)
 			break;
 		default:
 			fprintf(stderr, "AIF mode %u not supported\n", mode);
+			exit(1);
 	}
-	img->globalPalette = pal;
+	img->globalPalette = (Color*)pal;
 	return img;
 }
 

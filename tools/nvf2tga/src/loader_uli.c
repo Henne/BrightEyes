@@ -15,7 +15,6 @@
 #include <string.h>
 
 #include <packer.h>
-#include <loader.h>
 #include <format.h>
 
 /*
