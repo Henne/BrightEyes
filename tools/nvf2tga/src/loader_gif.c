@@ -88,9 +88,10 @@ int dump_gif(ImageSet* img, char* prefix) {
 	    free(colormap);
 	}
 		
-	printf("frame %d: %dx%d@%dx%d\n", i,
+	printf("frame %d: %dx%d@%dx%d (%s)\n", i,
 	       img->frames[i]->width, img->frames[i]->height,
-	       img->frames[i]->x0,    img->frames[i]->y0);
+	       img->frames[i]->x0,    img->frames[i]->y0,
+	       img->frames[i]->comment);
 	int pixelcount = 0;
 	for (int y=0; y<img->frames[i]->height; y++) {
 	    SetImagePixels(frame,
@@ -103,7 +104,7 @@ int dump_gif(ImageSet* img, char* prefix) {
 	    pixelcount += importinfo.bytes_imported;
 	}
 	// Kommentar setzen
-	SetImageAttribute(frame, "label", img->frames[i]->comment);
+	//SetImageAttribute(frame, "label", img->frames[i]->comment);
 	AppendImageToList(&imagelist, frame);
     }
 	

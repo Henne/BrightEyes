@@ -37,14 +37,14 @@ int sanitycheck_uli(const char* buf, size_t len) {
 
 ImageSet* process_uli(const char *buf, size_t len) {
 	const char* buf_end = buf + len;
-	const unsigned short bitbreite = 8;
+	const uint16_t bitbreite = 8;
 	char* imgptr;
 	ImageSet* img;
 	
 	
 	img = (ImageSet*)malloc(sizeof(ImageSet));
-	img->globalWidth   = get_ushort(buf + 0x1D)+1;
-	img->globalHeight  = get_ushort(buf + 0x1F)+1;
+	img->globalWidth   = get_uint16(buf + 0x1D)+1;
+	img->globalHeight  = get_uint16(buf + 0x1F)+1;
 	img->frameCount    = 1; // TODO???
 	img->globalPalette = 0; // TODO???
 	img->frames       = (AnimFrame**)malloc(img->frameCount * sizeof(AnimFrame*));
@@ -61,7 +61,7 @@ ImageSet* process_uli(const char *buf, size_t len) {
 	imgptr = frame->pixels;
 	buf += 0x20; // TODO: Wieviel genau weiß ich noch nicht!
 	while  ( (buf < buf_end)) {
-		unsigned char cur = *(buf++);
+		uint8_t cur = *(buf++);
 		if (cur < 0x80) {
 			for (int i=0; i < cur*(8/bitbreite); i++) {
 				*(imgptr++) = *buf;

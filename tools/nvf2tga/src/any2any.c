@@ -20,7 +20,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>  // toupper()
-#include <stdint.h> // int32_t
 #include <string.h>
 
 #include <format.h>
@@ -89,8 +88,6 @@ int main(int argc, char **argv)
 	    if (!sanitycheck_aif(buf, flen)) exit(1);
 	    img = process_aif(buf, flen);
 	} else if (strcmp(suffix, "BOB") == 0) {
-	    fprintf(stderr, "Input filetype '%s' not yet supported.\n", suffix);
-	    exit(1);
 	    if (!sanitycheck_bob(buf, flen)) exit(1);
 	    img = process_bob(buf, flen);
 	} else if (strcmp(suffix, "GIF") == 0) {

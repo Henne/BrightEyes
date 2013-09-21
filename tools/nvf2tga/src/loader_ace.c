@@ -25,20 +25,20 @@ int sanitycheck_ace(const char *buf, size_t len) {
 static ImageSet* do_ass(ImageSet* img, struct ace_header *ace, const char *buf, size_t len)
 {
     struct ass_header ass;
-    unsigned long i, datalen;
+    uint32_t i, datalen;
 
     if (len < 6) {
 	fprintf(stderr, "Buffer to small for ASS Header\n");
 	return NULL;
     }
 	
-    ass.celwidth = get_sshort(buf);
-    ass.celheight = get_sshort(buf + 2);
+    ass.celwidth = get_sint16(buf);
+    ass.celheight = get_sint16(buf + 2);
     ass.amount = buf[4];
     ass.playmode = buf[5];
 
-    img->globalWidth  = get_sshort(buf);
-    img->globalHeight = get_sshort(buf + 2);
+    img->globalWidth  = get_sint16(buf);
+    img->globalHeight = get_sint16(buf + 2);
     img->frameCount   = buf[4];
     img->frames       = (AnimFrame**)malloc(img->frameCount * sizeof(AnimFrame*));
     for (int i = 0; i<img->frameCount; i++) {
@@ -52,11 +52,11 @@ static ImageSet* do_ass(ImageSet* img, struct ace_header *ace, const char *buf, 
     for (i = 0; i < img->frameCount; i++) {
 	struct cel_header cel;
 
-	cel.size = get_sint(buf + datalen);
-	cel.xoffset = get_sshort(buf + datalen + 4);
-	cel.yoffset = get_sshort(buf + datalen + 6);
-	cel.width = get_sshort(buf + datalen + 8);
-	cel.height = get_sshort(buf + datalen + 10);
+	cel.size = get_sint32(buf + datalen);
+	cel.xoffset = get_sint16(buf + datalen + 4);
+	cel.yoffset = get_sint16(buf + datalen + 6);
+	cel.width = get_sint16(buf + datalen + 8);
+	cel.height = get_sint16(buf + datalen + 10);
 	cel.compression = buf[datalen + 12];
 	cel.action = buf[datalen + 13];
 
@@ -83,18 +83,19 @@ static ImageSet* do_ass(ImageSet* img, struct ace_header *ace, const char *buf, 
 	char fname[100];
 	AnimFrame* frame = img->frames[i];
 
-	cel.size = get_sint(buf + datalen);
-	cel.xoffset = get_sshort(buf + datalen + 4);
-	cel.yoffset = get_sshort(buf + datalen + 6);
-	cel.width = get_sshort(buf + datalen + 8);
-	cel.height = get_sshort(buf + datalen + 10);
+	cel.size = get_sint32(buf + datalen);
+	cel.xoffset = get_sint16(buf + datalen + 4);
+	cel.yoffset = get_sint16(buf + datalen + 6);
+	cel.width = get_sint16(buf + datalen + 8);
+	cel.height = get_sint16(buf + datalen + 10);
 	cel.compression = buf[datalen + 12];
 	cel.action = buf[datalen + 13];
-	frame->x0     = get_sshort(buf + datalen + 4);
-	frame->y0     = get_sshort(buf + datalen + 6);
-	frame->width  = get_sshort(buf + datalen + 8);
-	frame->height = get_sshort(buf + datalen + 10);
+	frame->x0     = get_sint16(buf + datalen + 4);
+	frame->y0     = get_sint16(buf + datalen + 6);
+	frame->width  = get_sint16(buf + datalen + 8);
+	frame->height = get_sint16(buf + datalen + 10);
 	frame->delay  = ace->speed * 50;
+	frame->comment= "";
 
 	frame->pixels = malloc(frame->width * frame->height);
 	if (frame->pixels == NULL) {
@@ -125,7 +126,7 @@ static ImageSet* do_ass(ImageSet* img, struct ace_header *ace, const char *buf, 
 }
 
 static ImageSet* do_seq(ImageSet* img, struct ace_header *ace, const char *buf, size_t len) {
-    unsigned datalen = 0, framecounter = 0, i, j;
+    uint32_t datalen = 0, framecounter = 0, i, j;
     struct seq_header * seqs;
     AnimFrame* frame;
     
@@ -150,12 +151,12 @@ static ImageSet* do_seq(ImageSet* img, struct ace_header *ace, const char *buf, 
     for (i = 0; i < ace->sequences; i++) {
 	struct seq_header *seq=&seqs[i];
 	
-	seq->offset = get_sint(buf + datalen);
-	seq->label = get_sshort(buf + datalen + 4);
-	seq->celwidth = get_sshort(buf + datalen + 6);
-	seq->celheight = get_sshort(buf + datalen + 8);
-	seq->hotspotx = get_sshort(buf + datalen + 10);
-	seq->hotspoty = get_sshort(buf + datalen + 12);
+	seq->offset = get_sint32(buf + datalen);
+	seq->label = get_sint16(buf + datalen + 4);
+	seq->celwidth = get_sint16(buf + datalen + 6);
+	seq->celheight = get_sint16(buf + datalen + 8);
+	seq->hotspotx = get_sint16(buf + datalen + 10);
+	seq->hotspoty = get_sint16(buf + datalen + 12);
 	seq->amount = buf[datalen + 14];
 	seq->playmode = buf[datalen + 15];
 /*
@@ -172,7 +173,7 @@ static ImageSet* do_seq(ImageSet* img, struct ace_header *ace, const char *buf, 
     }
   
     for (i=0; i < ace->sequences; i++) {
-	unsigned short pos = 0;
+	uint16_t pos = 0;
 
 	for (j=0; j < seqs[i].amount; j++) {
 	    struct cel_header cel;
@@ -180,17 +181,17 @@ static ImageSet* do_seq(ImageSet* img, struct ace_header *ace, const char *buf, 
 
 	    frame = img->frames[framecounter++];
 
-	    cel.size = get_sint(buf+datalen);
-	    cel.xoffset = get_sshort(buf+datalen + 4);
-	    cel.yoffset = get_sshort(buf+datalen + 6);
-	    cel.width = get_sshort(buf+datalen + 8);
-	    cel.height = get_sshort(buf+datalen + 10);
-	    cel.compression = *(char*)(buf+datalen + 12);
-	    cel.action = *(char*)(buf+datalen + 13);
-	    frame->x0     = get_sshort(buf + datalen + 4);
-	    frame->y0     = get_sshort(buf + datalen + 6);
-	    frame->width  = get_sshort(buf + datalen + 8);
-	    frame->height = get_sshort(buf + datalen + 10);
+	    cel.size = get_uint32(buf+datalen);
+	    cel.xoffset = get_sint16(buf+datalen + 4);
+	    cel.yoffset = get_sint16(buf+datalen + 6);
+	    cel.width = get_uint16(buf+datalen + 8);
+	    cel.height = get_uint16(buf+datalen + 10);
+	    cel.compression = *(uint8_t*)(buf+datalen + 12);
+	    cel.action = *(uint8_t*)(buf+datalen + 13);
+	    frame->x0     = get_sint16(buf + datalen + 4);
+	    frame->y0     = get_sint16(buf + datalen + 6);
+	    frame->width  = get_uint16(buf + datalen + 8);
+	    frame->height = get_uint16(buf + datalen + 10);
 	    frame->delay  = ace->speed * 50;
 	    frame->comment= (char*)malloc(7*sizeof(char));
 	    sprintf(frame->comment, "%d", seqs[i].label);
@@ -270,7 +271,7 @@ ImageSet* process_ace(const char *buf, size_t len)
     }
 
     strncpy(ace.label, buf, 4);
-    ace.version = get_sshort(buf + 4);
+    ace.version = get_sint16(buf + 4);
     ace.sequences = buf[6];
     ace.speed = buf[7];
 

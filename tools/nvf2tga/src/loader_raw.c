@@ -39,7 +39,7 @@ int sanitycheck_raw(const char* buf, size_t len) {
 ImageSet* process_raw(const char *buf, size_t len)
 {
 	struct raw_header raw;
-	unsigned long datalen = 0, i;
+	uint32_t datalen = 0, i;
 	char *data, *pal;
 	ImageSet* img;
 
@@ -54,11 +54,11 @@ ImageSet* process_raw(const char *buf, size_t len)
 	}
 
 	strncpy(raw.label, buf, 26);
-	raw.version = get_sshort(buf + 26);
+	raw.version = get_sint16(buf + 26);
 	strncpy(raw.magic_nr, buf + 28, 4);
-	raw.width  = get_sshort(buf + 32) + 1;
-	raw.height = get_sshort(buf + 34) + 1;
-	raw.palette_size = get_sshort(buf + 36);
+	raw.width  = get_sint16(buf + 32) + 1;
+	raw.height = get_sint16(buf + 34) + 1;
+	raw.palette_size = get_sint16(buf + 36);
 
 	if (strncmp(raw.label, "(c) 1991 by Ulrich Walther", 26)) {
 		fprintf(stderr, "Warning: Strange RAW Comment \"%26s\".\n", raw.label);
@@ -109,6 +109,7 @@ ImageSet* process_raw(const char *buf, size_t len)
 	frame->delay  = 0;
 	frame->localPalette = 0;
 	frame->pixels = data;
+	frame->comment= "";
 
 	return img;
 }
@@ -123,9 +124,9 @@ int dump_raw(ImageSet* img, char* prefix) {
 		buf_start = buf = (char*)malloc(38 + 3*256 + frame->width * frame->height);
 		strncpy(buf, "image made by any2any tool\n\0", 28);
 		strncpy(buf, "ROH\0", 4);
-		set_ushort(buf+32, frame->width - 1);
-		set_ushort(buf+34, frame->height - 1);
-		set_ushort(buf+36, 256);
+		set_uint16(buf+32, frame->width - 1);
+		set_uint16(buf+34, frame->height - 1);
+		set_uint16(buf+36, 256);
 		buf += 38;
 		for (j=0; j<256; j++) {
 			buf[3*j+0] = img->globalPalette[j].r;

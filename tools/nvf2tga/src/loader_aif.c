@@ -25,8 +25,8 @@ int sanitycheck_aif(const char *buf, size_t len) {
 
 ImageSet* process_aif(const char *buf, size_t len)
 {
-	unsigned long deplen,paclen;
-	unsigned short h,w,col,mode;
+	uint32_t deplen,paclen;
+	uint16_t h,w,col,mode;
 	char *data,*pal;
 	ImageSet* img;
 
@@ -45,10 +45,10 @@ ImageSet* process_aif(const char *buf, size_t len)
 		return NULL;
 	}
 
-	mode = get_ushort(buf + 4);
-	w = get_ushort(buf + 6);
-	h = get_ushort(buf + 8);
-	col = get_ushort(buf + 10);
+	mode = get_uint16(buf + 4);
+	w = get_uint16(buf + 6);
+	h = get_uint16(buf + 8);
+	col = get_uint16(buf + 10);
 	printf("Mode: %d\tWidth: %d\tHeight: %d\tColors: %d\n", mode ,w, h, col);
 
 	img = (ImageSet*)malloc(sizeof(ImageSet));
@@ -70,6 +70,7 @@ ImageSet* process_aif(const char *buf, size_t len)
 				frame->delay  = 0;
 				frame->localPalette = 0;
 				frame->pixels = (char*)buf+0x1E;
+				frame->comment= "";
 			}
 			break;
 
@@ -90,10 +91,11 @@ ImageSet* process_aif(const char *buf, size_t len)
 			frame->delay  = 0;
 			frame->localPalette = 0;
 			frame->pixels = data;
+			frame->comment= "";
 			break;
 
 		case 3: /* PP20 */
-			paclen = get_uint(buf+0x1e) + 8;
+			paclen = get_uint32(buf+0x1e) + 8;
 			deplen = w * h;
 			pal = (char *)(buf + 0x1e + paclen);
 
@@ -115,6 +117,7 @@ ImageSet* process_aif(const char *buf, size_t len)
 			frame->delay  = 0;
 			frame->localPalette = 0;
 			frame->pixels = data;
+			frame->comment= "";
 			break;
 		default:
 			fprintf(stderr, "AIF mode %u not supported\n", mode);
