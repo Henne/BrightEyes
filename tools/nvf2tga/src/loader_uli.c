@@ -31,55 +31,62 @@
 */
 
 int sanitycheck_uli(const char* buf, size_t len) {
-	if (strncmp(buf, "(C) 1991 by Ulrich Walther\x1A\x00\x85", 0x1C)) return 1;
-	else return 0;
+    if (strncmp(buf, "(C) 1991 by Ulrich Walther\x1A\x00\x85", 0x1C)) return 1;
+    else return 0;
 }
 
 ImageSet* process_uli(const char *buf, size_t len) {
-	const char* buf_end = buf + len;
-	const uint16_t bitbreite = 8;
-	char* imgptr;
-	ImageSet* img;
+    const char* buf_end = buf + len;
+    const uint16_t bitbreite = 8;
+    char* imgptr;
+    ImageSet* img;
 	
 	
-	img = (ImageSet*)malloc(sizeof(ImageSet));
-	img->globalWidth   = get_uint16(buf + 0x1D)+1;
-	img->globalHeight  = get_uint16(buf + 0x1F)+1;
-	img->frameCount    = 1; // TODO???
-	img->globalPalette = 0; // TODO???
-	img->frames       = (AnimFrame**)malloc(img->frameCount * sizeof(AnimFrame*));
-	for (int i = 0; i<img->frameCount; i++) img->frames[i] = (AnimFrame*)malloc(sizeof(AnimFrame));
-
-	AnimFrame* frame = img->frames[0];
+    img = (ImageSet*)malloc(sizeof(ImageSet));
+    img->width     = get_uint16(buf + 0x1D)+1;
+    img->height    = get_uint16(buf + 0x1F)+1;
+    img->seqCount  = 1; // TODO???
+    img->palette   = 0; // TODO???
+    img->sequences = (Sequence*)malloc(img->seqCount * sizeof(Sequence));
+	
+    for (int s=0;  s < img->seqCount;  s++) {
+	Sequence* seq = &img->sequences[s];
+	seq->frameCount   = 0;
+	seq->frames       = NULL;
+	seq->defaultDelay = 100;
+	seq->imgCount     = 1;
+	seq->img          = (MyImage*)malloc(seq->imgCount * sizeof(MyImage));
+	MyImage* frame = &seq->img[0];
+	    
 	frame->x0 = frame->y0 = 0;
-	frame->width  = img->globalWidth;
-	frame->height = img->globalHeight;
-	frame->delay  = 0;
-	frame->localPalette = 0;
+	frame->width  = img->width;
+	frame->height = img->height;
+	frame->palette = 0;
 	frame->pixels = malloc(frame->width * frame->height);
-	
+	    
 	imgptr = frame->pixels;
 	buf += 0x20; // TODO: Wieviel genau weiß ich noch nicht!
 	while  ( (buf < buf_end)) {
-		uint8_t cur = *(buf++);
-		if (cur < 0x80) {
-			for (int i=0; i < cur*(8/bitbreite); i++) {
-				*(imgptr++) = *buf;
-			}
-			buf++;
-		} else {
-			int runlength = (cur - 0x80);
-			for (int i=0; i<runlength; i++) {
-				printf("%02x", *buf);
-				for (int bit=8-bitbreite;   bit >= 0;   bit-=bitbreite) {
-					*(imgptr++) = (2^bitbreite-1) & (*buf >> bit);
-				}
-			}
+	    uint8_t cur = *(buf++);
+	    if (cur < 0x80) {
+		for (int i=0; i < cur*(8/bitbreite); i++) {
+		    *(imgptr++) = *buf;
 		}
+		buf++;
+	    } else {
+		int runlength = (cur - 0x80);
+		for (int i=0; i<runlength; i++) {
+		    printf("%02x", *buf);
+		    for (int bit=8-bitbreite;   bit >= 0;   bit-=bitbreite) {
+			*(imgptr++) = (2^bitbreite-1) & (*buf >> bit);
+		    }
+		}
+	    }
 	}
-	return img;
+    }
+    return img;
 }
 int dump_uli(ImageSet* img, char* prefix) {
-	// TODO
-	return 1;
+    // TODO
+    return 1;
 }

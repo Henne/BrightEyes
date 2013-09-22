@@ -115,12 +115,21 @@ int main(int argc, char **argv)
 	    fprintf(stderr, "Unknown input filetype '%s'\n", suffix);
 	    exit(1);
 	}
-	
+
+	// Fehlerbehandlung
 	if (img == NULL) {
 	    fprintf(stderr, "Error processing image '%s'\n", suffix);
 	    exit(1);
 	}
-	
+	if (img->mainPixels == NULL  &&  img->seqCount == 0) {
+	    fprintf(stderr, "Error: Empty input image.\n");
+	    exit(1);
+	}
+	if (img->mainPixels != NULL  &&  img->palette == NULL) {
+	    fprintf(stderr, "Error: Global image without global palette.\n");
+	    exit(1);
+	}
+
 	// Determine the output file type
 	prefix = malloc((strlen(argv[2])-3) * sizeof(char));
 	strncpy(prefix, argv[2], strlen(argv[2])-4);

@@ -16,7 +16,8 @@
 
 #include <packer.h>
 #include <format.h>
-#include <magick/api.h>
+//#include <magick/api.h>
+#include <gif_lib.h>
 
 int sanitycheck_gif(const char* buf, size_t len) {
     // TODO
@@ -24,95 +25,124 @@ int sanitycheck_gif(const char* buf, size_t len) {
 }
 
 ImageSet* process_gif(const char *buf, size_t len) {
-    InitializeMagick(NULL);
-    ImageInfo* info = CloneImageInfo(0);
-    ExceptionInfo exception;
-    Image* image = ReadImage(info, &exception);
-    DestroyImage(image);
-    DestroyImageInfo(info);
-    DestroyExceptionInfo(&exception);
-    DestroyMagick();
     return NULL;
 }
 
-int dump_gif(ImageSet* img, char* prefix) {
-    InitializeMagick(NULL);
+void gif_addLoopExtensionBlock(GifFileType* file) {
+    GifByteType extensionblock[15];
+    strcpy(extensionblock, "NETSCAPE2.0");
+    extensionblock[11] = 0x03; //
+    extensionblock[12] = 0x01; // loop
+    extensionblock[13] = 0x00;
+    extensionblock[14] = 0x00; // ... indefinitely
+    EGifPutExtension(file, APPLICATION_EXT_FUNC_CODE, 15, &extensionblock[0]);
+}
 
-    // Globale Bilddaten initialisieren
-    ImageInfo* info = CloneImageInfo(0);
-    ExceptionInfo exception;
-    Image* imagelist = NewImageList();
-    Image* frame;
+void gif_addGraphicsExtensionBlock(GifFileType* file, uint8_t disposalMode, uint16_t delay_ms) {
+    GraphicsControlBlock gcb;
+    GifByteType extensionblock[4];
+    gcb.DisposalMode = disposalMode;
+    gcb.UserInputFlag= false;
+    gcb.DelayTime    = delay_ms / 10;
+    gcb.TransparentColor = -1;
+    EGifGCBToExtension(&gcb, &extensionblock[0]);
+    EGifPutExtension(file, GRAPHICS_EXT_FUNC_CODE, 4, &extensionblock[0]);
+}
+int dump_gif(ImageSet* img, char* prefix) {
+    char fname[100];
+    GifFileType* file;
+    ColorMapObject* gif_colormap;
+    GifColorType* colormap = (GifColorType*)malloc(256 * sizeof(GifColorType));
+
+    if (img->mainPixels != NULL) {
+	// GIF öffnen
+	sprintf(fname, "%s.gif", prefix);
+	file = EGifOpenFileName(fname, false, NULL);
+	EGifSetGifVersion(file, true);
+
+	// Globale Farbpalette & Screendesc setzen
+	for (int j=0;   j < 256;   j++) {
+	    colormap[j].Red   = img->palette[j].r << 2;
+	    colormap[j].Green = img->palette[j].g << 2;
+	    colormap[j].Blue  = img->palette[j].b << 2;
+	}
+	gif_colormap = GifMakeMapObject(256, colormap);
+	EGifPutScreenDesc(file, img->width, img->height, 8, 0, gif_colormap);
 	
-    // Frames konstruieren
-    for (int i=0;   i < img->frameCount;   i++) {
-	ImageInfo* finfo = CloneImageInfo(0);
-	if (1 || i==0) {
-	    frame = AllocateImage(finfo);
-	} else {
-	    AllocateNextImage(finfo, frame);
-	    frame = frame->next;
-	    frame->dispose = PreviousDispose;
+	// ImageDesc setzen und Bild schreiben
+	EGifPutImageDesc(file, 0, 0, img->width, img->height, false, NULL);
+	for (int y=0; y<img->height; y++) {
+	    EGifPutLine(file, img->mainPixels + (y*img->width), img->width);
 	}
-	frame->columns = img->globalWidth;
-	frame->rows    = img->globalHeight;
-	frame->depth   = 8;
-	frame->colors  = 256;
-	frame->storage_class = PseudoClass;
-	frame->delay   = img->frames[i]->delay / 10;
-		
-	// Farbpalette setzen
-	if (img->globalPalette == NULL) {
-	    //printf("lokale Farbpalette\n");
-	    AllocateImageColormap(frame, 256);
-	    PixelPacket* colormap = (PixelPacket*)malloc(256 * sizeof(PixelPacket));
-	    for (int j=0;   j < 256;   j++) {
-		colormap[j].red   = img->globalPalette[j].r << 2;
-		colormap[j].green = img->globalPalette[j].g << 2;
-		colormap[j].blue  = img->globalPalette[j].b << 2;
-		colormap[j].opacity = 255;
-	    }
-	    ReplaceImageColormap(frame, colormap, 256);
-	    free(colormap);
-	} else {
-	    //printf("Setze globale Palette auch lokal.\n");
-	    AllocateImageColormap(frame, 256);
-	    PixelPacket* colormap = (PixelPacket*)malloc(256 * sizeof(PixelPacket));
-	    for (int j=0;   j < 256;   j++) {
-		colormap[j].red   = img->globalPalette[j].r << 2;
-		colormap[j].green = img->globalPalette[j].g << 2;
-		colormap[j].blue  = img->globalPalette[j].b << 2;
-		colormap[j].opacity = 255;
-	    }
-	    ReplaceImageColormap(frame, colormap, 256);
-	    free(colormap);
-	}
-		
-	printf("frame %d: %dx%d@%dx%d (%s)\n", i,
-	       img->frames[i]->width, img->frames[i]->height,
-	       img->frames[i]->x0,    img->frames[i]->y0,
-	       img->frames[i]->comment);
-	int pixelcount = 0;
-	for (int y=0; y<img->frames[i]->height; y++) {
-	    SetImagePixels(frame,
-			   img->frames[i]->x0,     y+img->frames[i]->y0,
-			   img->frames[i]->width,  1);
-	    ImportPixelAreaInfo importinfo;
-	    ImportImagePixelArea(frame, IndexQuantum, 8,
-				 img->frames[i]->pixels + pixelcount,
-				 NULL, &importinfo);
-	    pixelcount += importinfo.bytes_imported;
-	}
-	// Kommentar setzen
-	//SetImageAttribute(frame, "label", img->frames[i]->comment);
-	AppendImageToList(&imagelist, frame);
+	EGifSpew(file);
+	EGifCloseFile(file);
+	
+	printf("main image: %dx%d\n", img->width, img->height);
     }
-	
+
+    // Frames konstruieren
+    for (int s=0;  s < img->seqCount;  s++) {
+	Sequence* seq = &img->sequences[s];
+	sprintf(fname, "%s-%02d.gif", prefix, s);
+	file = EGifOpenFileName(fname, false, NULL);
+	EGifSetGifVersion(file, true);
+
+	// Globale Farbpalette & Screendesc setzen
+	colormap = (GifColorType*)malloc(256 * sizeof(GifColorType));
+	for (int j=0;   j < 256;   j++) {
+	    colormap[j].Red   = img->palette[j].r << 2;
+	    colormap[j].Green = img->palette[j].g << 2;
+	    colormap[j].Blue  = img->palette[j].b << 2;
+	}
+	gif_colormap = GifMakeMapObject(256, colormap);
+	EGifPutScreenDesc(file, img->width, img->height, 8, 0, gif_colormap);
+
+	gif_addLoopExtensionBlock(file);
+
+
+	if (img->mainPixels != NULL) {
+	    // ImageDesc setzen und Bild schreiben
+	    //gif_addGraphicsExtensionBlock(file, DISPOSE_DO_NOT, seq->defaultDelay*2);
+	    EGifPutImageDesc(file, 0, 0, img->width, img->height, false, NULL);
+	    for (int y=0; y<img->height; y++) {
+		EGifPutLine(file, img->mainPixels + (y*img->width), img->width);
+	    }
+	}
+
+	// TODO: frames berücksichtien
+	for (int i=0;   i < seq->imgCount;   i++) {
+	    MyImage* frame = &seq->img[i];
+	    /*
+	    // ggf. lokale Farbpalette setzen
+	    if (frame->palette != NULL) {
+		colormap = (GifColorType*)malloc(256 * sizeof(GifColorType));
+		for (int j=0;   j < 256;   j++) {
+		    colormap[j].Red   = img->palette[j].r << 2;
+		    colormap[j].Green = img->palette[j].g << 2;
+		    colormap[j].Blue  = img->palette[j].b << 2;
+		}
+		gif_colormap = GifMakeMapObject(256, colormap);
+		}*/
+	    
+	    printf("frame %d:%d geometry %dx%d@%dx%d\n", s, i,
+		   frame->width, frame->height,
+		   frame->x0,    frame->y0);
+
+	    // TODO: Kommentar setzen
+	    //gif_addCommentExtensionBlock(file, bla);
+	    gif_addGraphicsExtensionBlock(file, DISPOSE_BACKGROUND, seq->defaultDelay*2);
+	    
+	    // ImageDesc setzen und Bild schreiben
+	    EGifPutImageDesc(file, frame->x0, frame->y0, frame->width, frame->height, false, NULL);
+	    for (int y=0;  y < frame->height;  y++) {
+		EGifPutLine(file, frame->pixels + (y*frame->width), frame->width);
+	    }
+	}
+	EGifSpew(file);
+	EGifCloseFile(file);
+    }
+    
     // Datei schreiben & Aufräumen
-    info->adjoin = MagickTrue;
-    sprintf(imagelist->filename, "%s.gif", prefix);
-    WriteImage(info, imagelist);
-    DestroyImageList(imagelist);
-    DestroyMagick();
+    free(colormap);
     return 1;
 }

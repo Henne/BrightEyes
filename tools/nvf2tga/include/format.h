@@ -56,50 +56,6 @@ static inline void set_sint32(char* buf, const int32_t val) {
 /*
  * Header der NLT-Bildformate
  */
-struct ace_header {
-    char     label[4];			/* "ACE\0" */
-    uint16_t version;			/* 1	   */
-    uint8_t  sequences;	                /* 0..250  */
-    uint8_t  speed;	                /* 0..99   */
-};
-
-struct ass_header {
-    uint16_t celwidth;		 /* Größe der Cels  */
-    uint16_t celheight;
-    uint8_t  amount;		 /* Anzahl der Cels */
-    uint8_t  playmode;	         /* Abspielmodus    */
-};
-
-struct seq_header {
-    int      offset;		/* Seek-Offset zur Sequenz	*/
-    uint16_t label;		/* Kenn-Nummer der Sequenz	*/
-    uint16_t celwidth;		/* Breite des Cels		*/
-    uint16_t celheight;		/* Höhe der Cels		*/
-    int16_t  hotspotx;		/* Koordianten des Hot Spots	*/
-    int16_t  hotspoty;
-    uint8_t  amount;		/* Anzahl der Cels		*/
-    uint8_t  playmode;		/* Abspielmodus			*/
-} __attribute__((__packed__));
-
-struct cel_header {
-    int      size;		/* Größe der Cels		*/
-    int16_t  xoffset;		/* Offset im Cel		*/
-    int16_t  yoffset;
-    uint16_t width;		/* Größe des Frames im Cel	*/
-    uint16_t height;
-    uint8_t  compression;	/* Verwendeter Packer		*/
-    uint8_t  action;		/* Action Button der Cel	*/
-} __attribute__((__packed__));
-
-struct raw_header {
-    char     label[26];                    /* Bildinformation (Copyright)  */
-    uint16_t version;                      /* 0x1A00 (Zweck unbekannt)     */
-    char     magic_nr[4];                  /* ID-String ROH (0x524F4800)   */
-    uint16_t width;                        /* Bildbreite-1                 */
-    uint16_t height;                       /* Bildhöhe-1                   */
-    uint16_t palette_size;                 /* Anzahl der Paletteneinträge  */
-} __attribute__((__packed__));
-
 typedef struct struct_color {
     signed char r, g, b;
 } Color;
@@ -108,21 +64,37 @@ typedef struct struct_color {
 /*
  * Strukturen für die interne Datenrepräsentation von Bildern und Frames
  */
+
+// Ein einzelnes Bild
 typedef struct {
-    uint16_t x0, y0;
-    uint16_t width, height;
-    uint16_t delay; // Delay in Millisekunden
-    uint8_t* pixels;
-    Color*   localPalette;
-    char*    comment;
-} AnimFrame;
+    uint16_t  x0, y0;
+    uint16_t  width, height;
+    Color*    palette;
+    uint8_t*  pixels;
+} MyImage;
+
+// Ein einzelner Schritt der Animation
+typedef struct {
+    uint16_t index; // Index auf das Bild
+    uint16_t delay; // Wie lange soll es angezeigt werden
+} Frame;
+
+typedef struct {
+    char*    name;
+    uint16_t frameCount;   // Anzahl der Animationsschritte
+    Frame*   frames;       // Sequenz, in der die Bilder angezeigt werden
+    uint16_t defaultDelay; // Wenn frameCount==0, verwende dieses Delay.
+    uint16_t imgCount;     // Anzahl der verwendeten Bilder
+    MyImage* img;          // Bilddaten
+} Sequence;
 
 typedef struct T_ImageSet {
-    uint16_t  globalWidth;
-    uint16_t  globalHeight;
-    Color*    globalPalette;
-    uint16_t  frameCount;
-    AnimFrame **frames;
+    uint16_t  width;       // Breite des Bildes
+    uint16_t  height;      // Höhe des Bildes
+    Color*    palette;     // Globale Palette
+    uint8_t*  mainPixels;  // Pixel des Haupt-/Hintergrundbildes
+    uint16_t  seqCount;    // Anzahl der Sequenzen
+    Sequence* sequences;   // Sequenzen
 } ImageSet;
 
 ImageSet* process_ace(const char *buf, size_t len);

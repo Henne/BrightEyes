@@ -2,7 +2,7 @@
 CC=gcc
 #CFLAGS=-Wall -pedantic -g -Iinclude
 CFLAGS=-g -std=c99 -Iinclude `pkg-config --cflags GraphicsMagick`
-LDFLAGS=`pkg-config --libs GraphicsMagick`
+LDFLAGS=`pkg-config --libs GraphicsMagick` -lgif
 BUILDDIR=./build
 BINDIR=./bin
 

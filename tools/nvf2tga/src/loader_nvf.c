@@ -173,12 +173,13 @@ static const struct struct_special_nvf special_nvf_pal[] = {
 
 static ImageSet* do_mode_0(ImageSet* img, const char *buf, size_t len)
 {
-    uint32_t i;
-    uint32_t data_sum = 0;
-    size_t   calc_len;
-    char     *data;
-    uint16_t colors, x, y;
-
+    uint32_t  i;
+    uint32_t  data_sum = 0;
+    size_t    calc_len;
+    char*     data;
+    uint16_t  colors, x, y;
+    Sequence* seq = &img->sequences[0];
+    
     if (len < 4) {
 	printf("The buffer is to small to hold valid values.\n");
 	return NULL;
@@ -187,7 +188,7 @@ static ImageSet* do_mode_0(ImageSet* img, const char *buf, size_t len)
     x = get_uint16(buf);
     y = get_uint16(buf + 2);
 
-    data_sum = 4 + img->frameCount * x * y;
+    data_sum = 4 + seq->imgCount * x * y;
 
     if (len < data_sum) {
 	printf("The buffer is to small to hold valid values");
@@ -203,19 +204,17 @@ static ImageSet* do_mode_0(ImageSet* img, const char *buf, size_t len)
 	return NULL;
     }
 
-    printf("NVF-Mode 0 (same size/unpacked): %03d Pics\n", img->frameCount);
+    printf("NVF-Mode 0 (same size/unpacked): %03d Pics\n", seq->imgCount);
 
-    img->globalPalette = (Color*)(buf + data_sum + 2);
+    img->palette = (Color*)(buf + data_sum + 2);
     data = (char *)(buf + 4);
 
-    for (i = 0; i < img->frameCount; i++) {
-	img->frames[i]->x0 = img->frames[i]->y0 = 0;
-	img->frames[i]->width  = x;
-	img->frames[i]->height = y;
-	img->frames[i]->delay  = 50;
-	img->frames[i]->localPalette = 0;
-	img->frames[i]->pixels = data;
-	img->frames[i]->comment= "";
+    for (i = 0; i < seq->imgCount; i++) {
+	seq->img[i].x0 = seq->img[i].y0 = 0;
+	seq->img[i].width  = x;
+	seq->img[i].height = y;
+	seq->img[i].palette = 0;
+	seq->img[i].pixels = data;
 
 	data += x * y;
     }
@@ -228,13 +227,14 @@ static ImageSet* do_mode_1(ImageSet* img, const char *buf, size_t len) {
     size_t   calc_len;
     char     *data, *pal;
     uint16_t colors, x, y;
+    Sequence* seq = &img->sequences[0];
 
-    if (len < img->frameCount * 4) {
+    if (len < seq->imgCount * 4) {
 	printf("The buffer is to small to hold valid values.\n");
 	return NULL;
     }
 
-    for (i = 0; i < img->frameCount; i++) {
+    for (i = 0; i < seq->imgCount; i++) {
 	data_sum += 4 + get_uint16(buf + 4*i) * get_uint16(buf + 4*i + 2);
 	printf("datasum: %d = 4 + %d*%d\n", data_sum,
 	       get_uint16(buf + 4*i), get_uint16(buf + 4*i + 2));
@@ -254,22 +254,20 @@ static ImageSet* do_mode_1(ImageSet* img, const char *buf, size_t len) {
 	return NULL;
     }
 
-    printf("NVF-Mode 1 (different size/unpacked): %03d Pics\n", img->frameCount);
+    printf("NVF-Mode 1 (different size/unpacked): %03d Pics\n", seq->imgCount);
 
-    img->globalPalette = (Color*)(buf + data_sum + 2);
-    data = (char *)(buf + img->frameCount * 4);
+    img->palette = (Color*)(buf + data_sum + 2);
+    data = (char *)(buf + seq->imgCount * 4);
 
-    for (i = 0; i < img->frameCount; i++) {
+    for (i = 0; i < seq->imgCount; i++) {
 	x = get_uint16(buf + i * 4);
 	y = get_uint16(buf + i * 4 + 2);
 
-	img->frames[i]->x0 = img->frames[i]->y0 = 0;
-	img->frames[i]->width  = x;
-	img->frames[i]->height = y;
-	img->frames[i]->delay  = 50;
-	img->frames[i]->localPalette = 0;
-	img->frames[i]->pixels = data;
-	img->frames[i]->comment= "";
+	seq->img[i].x0 = seq->img[i].y0 = 0;
+	seq->img[i].width  = x;
+	seq->img[i].height = y;
+	seq->img[i].palette = 0;
+	seq->img[i].pixels = data;
 
 	data += x * y;
     }
@@ -283,8 +281,9 @@ static ImageSet* do_mode_same(ImageSet* img, const char *buf, size_t len, uint8_
     char     *data, *pdata;
     uint16_t x, y;
     uint16_t colors = 0, first_color = 0;
+    Sequence* seq = &img->sequences[0];
 
-    if (len < 4 + img->frameCount * 4) {
+    if (len < 4 + seq->imgCount * 4) {
 	printf("The buffer is to small to hold valid values.\n");
 	return NULL;
     }
@@ -292,15 +291,15 @@ static ImageSet* do_mode_same(ImageSet* img, const char *buf, size_t len, uint8_
     x = get_uint16(buf);
     y = get_uint16(buf + 2);
 
-    data_sum = 4 + 4 * img->frameCount;
-    for (i = 0; i < img->frameCount; i++)
+    data_sum = 4 + 4 * seq->imgCount;
+    for (i = 0; i < seq->imgCount; i++)
 	data_sum += get_uint32(buf + 4 + i * 4);
 
     if (len < data_sum) {
 	printf("The buffer is to small to hold valid values\n");
 	return NULL;
     }
-    img->globalPalette = NULL;
+    img->palette = NULL;
 
     /* This is the case in DSA1/ROA1 */
     if (len == data_sum) {
@@ -310,7 +309,7 @@ static ImageSet* do_mode_same(ImageSet* img, const char *buf, size_t len, uint8_
 		continue;
 	    if (special_nvf[i].mode != mode)
 		continue;
-	    if (special_nvf[i].blocks != img->frameCount)
+	    if (special_nvf[i].blocks != seq->imgCount)
 		continue;
 
 	    printf("Seems to be %s. Using hardcoded palette\n",
@@ -319,10 +318,10 @@ static ImageSet* do_mode_same(ImageSet* img, const char *buf, size_t len, uint8_
 	    first_color = special_nvf[i].first_color;
 	    colors = special_nvf[i].colors + first_color;
 	    // TODO: dirty hack
-	    img->globalPalette = (Color*)(special_nvf[i].pal - first_color*3);
+	    img->palette = (Color*)(special_nvf[i].pal - first_color*3);
 	}
 
-	if (img->globalPalette == NULL) {
+	if (img->palette == NULL) {
 	    printf("Unknown NVF-file without palette\n");
 	    return NULL;
 	}
@@ -334,7 +333,7 @@ static ImageSet* do_mode_same(ImageSet* img, const char *buf, size_t len, uint8_
 		continue;
 	    if (special_nvf_pal[i].mode != mode)
 		continue;
-	    if (special_nvf_pal[i].blocks != img->frameCount)
+	    if (special_nvf_pal[i].blocks != seq->imgCount)
 		continue;
 
 	    printf("Seems to be %s Setting first_color\n",
@@ -354,17 +353,17 @@ static ImageSet* do_mode_same(ImageSet* img, const char *buf, size_t len, uint8_
 	}
 
 	// TODO: dirty hack
-	img->globalPalette = (Color*)((buf + data_sum + 2) - (first_color*3));
+	img->palette = (Color*)((buf + data_sum + 2) - (first_color*3));
     }
 
-    pdata = (char *)(buf + 4 + 4 * img->frameCount);
+    pdata = (char *)(buf + 4 + 4 * seq->imgCount);
 
     if (mode == 2)
-	printf("NVF-Mode 2 (same size/PP20): %03d Pics\n", img->frameCount);
+	printf("NVF-Mode 2 (same size/PP20): %03d Pics\n", seq->imgCount);
     else
-	printf("NVF-Mode 4 (same size/RLE): %03d Pics\n", img->frameCount);
+	printf("NVF-Mode 4 (same size/RLE): %03d Pics\n", seq->imgCount);
 
-    for (i = 0; i < img->frameCount; i++) {
+    for (i = 0; i < seq->imgCount; i++) {
 	uint32_t plen = get_uint32(buf + 4 + i * 4);
 	data = malloc(x * y);
 	if (!data) {
@@ -378,13 +377,11 @@ static ImageSet* do_mode_same(ImageSet* img, const char *buf, size_t len, uint8_
 	else
 	    un_rle(pdata, data, plen);
 
-	img->frames[i]->x0 = img->frames[i]->y0 = 0;
-	img->frames[i]->width  = x;
-	img->frames[i]->height = y;
-	img->frames[i]->delay  = 50;
-	img->frames[i]->localPalette = 0;
-	img->frames[i]->pixels = data;
-	img->frames[i]->comment= "";
+	seq->img[i].x0 = seq->img[i].y0 = 0;
+	seq->img[i].width  = x;
+	seq->img[i].height = y;
+	seq->img[i].palette = 0;
+	seq->img[i].pixels = data;
 
 	pdata += get_uint32(buf + 4 + i * 4);
     }
@@ -400,15 +397,16 @@ static ImageSet* do_mode_diff(ImageSet* img, const char *buf, size_t len, uint8_
     char     *pal;
     char     *data, *pdata;
     uint16_t colors = 0, first_color = 0;
+    Sequence* seq = &img->sequences[0];
 
-    if (len < img->frameCount * 8) {
+    if (len < seq->imgCount * 8) {
 	printf("The buffer is to small to hold valid values.\n");
 	return NULL;
     }
 
-    data_sum = 8 * img->frameCount;
+    data_sum = 8 * seq->imgCount;
 
-    for (i = 0; i < img->frameCount; i++)
+    for (i = 0; i < seq->imgCount; i++)
 	data_sum += get_uint32(buf + i * 8 + 4);
 
     if (len < data_sum) {
@@ -424,7 +422,7 @@ static ImageSet* do_mode_diff(ImageSet* img, const char *buf, size_t len, uint8_
 		continue;
 	    if (special_nvf[i].mode != mode)
 		continue;
-	    if (special_nvf[i].blocks != img->frameCount)
+	    if (special_nvf[i].blocks != seq->imgCount)
 		continue;
 
 	    printf("Seems to be %s. Using hardcoded palette\n",
@@ -433,7 +431,7 @@ static ImageSet* do_mode_diff(ImageSet* img, const char *buf, size_t len, uint8_
 	    first_color = special_nvf[i].first_color;
 	    colors = special_nvf[i].colors + first_color;
 	    // TODO: dirty hack
-	    img->globalPalette = (Color*)(special_nvf[i].pal - first_color*3);
+	    img->palette = (Color*)(special_nvf[i].pal - first_color*3);
 	}
 
 	if (pal == NULL) {
@@ -448,7 +446,7 @@ static ImageSet* do_mode_diff(ImageSet* img, const char *buf, size_t len, uint8_
 		continue;
 	    if (special_nvf_pal[i].mode != mode)
 		continue;
-	    if (special_nvf_pal[i].blocks != img->frameCount)
+	    if (special_nvf_pal[i].blocks != seq->imgCount)
 		continue;
 
 	    printf("Seems to be %s Setting first_color\n",
@@ -467,7 +465,7 @@ static ImageSet* do_mode_diff(ImageSet* img, const char *buf, size_t len, uint8_
 	}
 
 	// TODO: dirty hack
-	img->globalPalette = (Color*)((buf + data_sum + 2) - (first_color*3));
+	img->palette = (Color*)((buf + data_sum + 2) - (first_color*3));
     }
 
     if (len != calc_len) {
@@ -477,15 +475,15 @@ static ImageSet* do_mode_diff(ImageSet* img, const char *buf, size_t len, uint8_
     }
 
     if (mode == 3)
-	printf("NVF-Mode 3 (different size/PP20): %03d Pics\n", img->frameCount);
+	printf("NVF-Mode 3 (different size/PP20): %03d Pics\n", seq->imgCount);
     else
-	printf("NVF-Mode 5 (different size/RLE): %03d Pics\n", img->frameCount);
+	printf("NVF-Mode 5 (different size/RLE): %03d Pics\n", seq->imgCount);
 
     // TODO: dirty hack
-    img->globalPalette = (Color*)((buf + data_sum + 2) - (first_color*3));
-    pdata = (char *)(buf + 8 * img->frameCount);
+    img->palette = (Color*)((buf + data_sum + 2) - (first_color*3));
+    pdata = (char *)(buf + 8 * seq->imgCount);
 
-    for (i = 0; i < img->frameCount; i++) {
+    for (i = 0; i < seq->imgCount; i++) {
 	uint32_t plen;
 	uint16_t x, y;
 
@@ -505,13 +503,11 @@ static ImageSet* do_mode_diff(ImageSet* img, const char *buf, size_t len, uint8_
 	else
 	    un_rle(pdata, data, plen);
 
-	img->frames[i]->x0 = img->frames[i]->y0 = 0;
-	img->frames[i]->width  = x;
-	img->frames[i]->height = y;
-	img->frames[i]->delay  = 50;
-	img->frames[i]->localPalette = (Color*)pdata;
-	img->frames[i]->pixels = data;
-	img->frames[i]->comment= "";
+	seq->img[i].x0 = seq->img[i].y0 = 0;
+	seq->img[i].width  = x;
+	seq->img[i].height = y;
+	seq->img[i].palette = (Color*)pdata;
+	seq->img[i].pixels = data;
 
 	pdata += plen;
     }
@@ -527,6 +523,7 @@ ImageSet* process_nvf(const char *buf, size_t len)
 {
     uint8_t mode;
     ImageSet* img;
+    Sequence* seq;
 
     mode = *(uint8_t *)(buf);
 
@@ -536,10 +533,17 @@ ImageSet* process_nvf(const char *buf, size_t len)
     }
 
     img = (ImageSet*)malloc(sizeof(ImageSet));
-    img->frameCount   = get_uint16(buf + 1);
-    img->frames       = (AnimFrame**)malloc(img->frameCount * sizeof(AnimFrame*));
-    for (int i = 0; i<img->frameCount; i++) img->frames[i] = (AnimFrame*)malloc(sizeof(AnimFrame));
-	
+    img->mainPixels = NULL;
+    img->seqCount   = 1;
+    img->sequences  = (Sequence*)malloc(sizeof(Sequence));
+    seq = &img->sequences[0];
+    seq->frameCount = 0; // Keine feste Sequenz: Spiele einfach alle Bilder nacheinander ab.
+    seq->frames = NULL;
+    seq->defaultDelay = 100;
+
+    seq->imgCount   = get_uint16(buf + 1);
+    seq->img = malloc(seq->imgCount * sizeof(MyImage));
+    
     switch (mode) {
     case 0:
 	img = do_mode_0(img, buf + 3, len - 3);
@@ -558,8 +562,7 @@ ImageSet* process_nvf(const char *buf, size_t len)
     default:
 	printf("NVF-Mode %u is not supported\n", mode);
     }
-    img->globalWidth  = img->frames[0]->width;
-    img->globalHeight = img->frames[0]->height;;
+
     return img;
 }
 
@@ -567,38 +570,39 @@ int dump_nvf(ImageSet* img, char* prefix) {
     int buflen, i, length;
     char *buf, *buf_start;
     char *filename;
-
+    Sequence* seq = &img->sequences[0];    // Nur die 1. Sequenz wird berücksichtigt
+    
     // Größe der Datei bestimmen, Speicher bereitstellen
-    buflen = 3 + img->frameCount * 4;
-    for (i=0; i<img->frameCount; i++) {
-	buflen += img->frames[i]->width * img->frames[i]->height;
+    buflen = 3 + seq->imgCount * 4;
+    for (i=0; i<seq->imgCount; i++) {
+	buflen += seq->img[i].width * seq->img[i].height;
     }
     buflen += 2 + 3 * 256; // Farbpalette
     buf_start = buf = (char*)malloc(buflen);
 
     // Globalen Header + Größenangaben (width/height) schreiben
     buf[0] = 1; // Bildmodus 1: verschiedene Bildgrößen, keine Komprimierung
-    set_uint16(buf+1, img->frameCount);
+    set_uint16(buf+1, seq->imgCount);
     buf+= 3;
     // Bildgrößen schreiben
-    for (i=0; i<img->frameCount; i++) {
-	set_uint16(buf + 0, img->frames[i]->width);
-	set_uint16(buf + 2, img->frames[i]->height);
+    for (i=0;  i < seq->imgCount;  i++) {
+	set_uint16(buf + 0, seq->img[i].width);
+	set_uint16(buf + 2, seq->img[i].height);
 	buf += 4;
     }
     // Bilddaten schreiben
-    for (i=0; i<img->frameCount; i++) {
-	length = img->frames[i]->width * img->frames[i]->height;
-	memcpy(buf, img->frames[i]->pixels, length);
+    for (i=0;  i < seq->imgCount;  i++) {
+	length = seq->img[i].width * seq->img[i].height;
+	memcpy(buf, seq->img[i].pixels, length);
 	buf += length;
     }
     // Farbpalette schreiben
     set_uint16(buf, 256);
     buf+= 2;
     for (i=0; i<256; i++) {
-	buf[3*i+0] = img->globalPalette[i].r;
-	buf[3*i+1] = img->globalPalette[i].g;
-	buf[3*i+2] = img->globalPalette[i].b;
+	buf[3*i+0] = img->palette[i].r;
+	buf[3*i+1] = img->palette[i].g;
+	buf[3*i+2] = img->palette[i].b;
     }
     // Schreiben der Datei
     filename = (char*)malloc((strlen(prefix)+5) * sizeof(char));
