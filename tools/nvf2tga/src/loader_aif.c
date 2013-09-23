@@ -19,7 +19,14 @@
 #include <format.h>
 
 int sanitycheck_aif(const char *buf, size_t len) {
-    // TODO
+    if (len < 0x1d) {
+	fprintf(stderr, "Buffer is too small for AIF header\n");
+	return 0;
+    }
+    if (strncmp(buf, "AIF\01", 4)) {
+	fprintf(stderr, "AIF-Signature does not match\n");
+	return 0;
+    }
     return 1;
 }
 

@@ -129,6 +129,11 @@ int main(int argc, char **argv)
 	    fprintf(stderr, "Error: Global image without global palette.\n");
 	    exit(1);
 	}
+	if (img->globalWidth == 0 || img->globalHeight == 0) {
+	    fprintf(stderr, "Empty image, maybe just a palette?. Exiting now.\n");
+	    exit(1);
+	}
+
 
 	// Determine the output file type
 	prefix = malloc((strlen(argv[2])-3) * sizeof(char));
