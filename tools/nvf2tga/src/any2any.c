@@ -129,7 +129,7 @@ int main(int argc, char **argv)
 	    fprintf(stderr, "Error: Global image without global palette.\n");
 	    exit(1);
 	}
-	if (img->globalWidth == 0 || img->globalHeight == 0) {
+	if (img->width == 0 || img->height == 0) {
 	    fprintf(stderr, "Empty image, maybe just a palette?. Exiting now.\n");
 	    exit(1);
 	}
