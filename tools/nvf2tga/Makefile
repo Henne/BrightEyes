@@ -1,8 +1,8 @@
 #CC=i586-mingw32msvc-gcc
 CC=gcc
 #CFLAGS=-Wall -pedantic -g -Iinclude
-CFLAGS=-g -std=c99 -Iinclude `pkg-config --cflags GraphicsMagick`
-LDFLAGS=`pkg-config --libs GraphicsMagick` -lgif
+CFLAGS=-g -std=c99 -Iinclude
+LDFLAGS=-lgif
 BUILDDIR=./build
 BINDIR=./bin
 
