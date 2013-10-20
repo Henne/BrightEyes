@@ -91,6 +91,9 @@ errcode Header::a_create(Config* config) {
     }
 
     // Dateigrößen feststellen
+    if (config->fileList.size() == 0) {
+	std::cerr << "Warning: Empty file list, do you really want to create an empty archive?" << std::endl;
+    }
     CmdlineList::iterator f = config->fileList.begin();
     while (f != config->fileList.end()) {
 	std::ifstream ifs(f->second.name.c_str(), std::ios::binary);
