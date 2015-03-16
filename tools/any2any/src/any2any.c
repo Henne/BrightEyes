@@ -102,8 +102,6 @@ int main(int argc, char **argv)
 	    if (!sanitycheck_raw(buf, flen)) exit(1);
 	    img = process_raw(buf, flen);
 	} else if (strcmp(suffix, "TGA") == 0) {
-	    fprintf(stderr, "Input filetype '%s' not yet supported.\n", suffix);
-	    exit(1);
 	    if (!sanitycheck_tga(buf, flen)) exit(1);
 	    img = process_tga(buf, flen);
 	} else if (strcmp(suffix, "ULI") == 0) {
@@ -158,6 +156,8 @@ int main(int argc, char **argv)
 	} else if (strcmp(suffix, "NVF") == 0) {
 	    dump_nvf(img, prefix);
 	} else if (strcmp(suffix, "RAW") == 0) {
+	    fprintf(stderr, "Output filetype '%s' not yet supported.\n", suffix);
+	    exit(1);
 	    dump_raw(img, prefix);
 	} else if (strcmp(suffix, "TGA") == 0) {
 	    dump_tga(img, prefix);

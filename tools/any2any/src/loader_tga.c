@@ -22,9 +22,87 @@ int sanitycheck_tga(const char* buf, size_t len) {
     return 1;
 }
 
+MyImage* read_tga(const char *buf, size_t len) {
+    MyImage* img = (MyImage*)malloc(sizeof(MyImage));
+    uint32_t offset = 0;
+
+    img->x0     = (buf[9]  << 8)  |  buf[8];
+    img->y0     = (buf[11] << 8)  |  buf[10];
+    img->width  = (buf[13] << 8)  |  buf[12];
+    img->height = (buf[15] << 8)  |  buf[14];
+    offset += 17 + buf[0]; // Header und Bild-ID gelesen
+
+    if (buf[1] == 0) { // no color palette
+	img->palette = NULL;
+    } else { // read color palette
+	// skip palette offset
+	offset += ((buf[4]<<8) | buf[3]);
+	const char* pal_start = buf + offset;
+	uint16_t pal_size = (buf[6]<<8) | buf[5];
+	printf("reading palette of %d entries from offset %d\n", pal_size, offset);
+	if (pal_size > 256) {
+	    fprintf(stderr, "%s: palette size too big (%d)\n", __func__, pal_size);
+	    return NULL;
+	}
+	img->palette = (Color*)malloc(pal_size * 3);
+	for (int i=0;  i < pal_size;  i++) {
+	    switch(buf[7]) {
+	    case 24:
+		img->palette[i].b = pal_start[i*3 + 0] >> 2;
+		img->palette[i].g = pal_start[i*3 + 1] >> 2;
+		img->palette[i].r = pal_start[i*3 + 2] >> 2;
+		break;
+	    default:
+		fprintf(stderr, "%s: TGA image has %d-bit palette; any2any only supports 24-bit palettes.\n", __func__, pal_size);
+		return NULL;
+	    }
+	}
+	offset += pal_size * (buf[7]/8);
+    }
+
+    // read pixels
+    // theoretisch erlaubt sind 1,8,15,16,24 und 32 bpp. any2any unterstützt (vorerst) nur 8 bpp.
+    if (buf[16] != 8) {
+	fprintf(stderr, "%s: TGA image has %d bits per pixel; any2any only supports 8 bpp images.\n", __func__, buf[16]);
+	return NULL;
+    }
+    uint32_t plen = img->width * img->height * sizeof(uint8_t);
+    if (offset + plen > len) {
+	fprintf(stderr, "%s: TGA image has only %d bytes, but %d bytes should be read.\n", __func__, len, offset + plen);
+	return NULL;
+    }
+
+    img->pixels = (uint8_t*)malloc(plen);
+    memcpy(img->pixels, buf + offset, plen);
+    return img;
+}
+
 ImageSet* process_tga(const char *buf, size_t len) {
-    // TODO
-    return NULL;
+    MyImage* img = read_tga(buf, len);
+    if (!img) {
+	fprintf(stderr, "%s: error reading image.\n", __func__);
+	return NULL;
+    }
+    ImageSet* set = (ImageSet*)malloc(sizeof(ImageSet));
+    set->width      = img->width;
+    set->height     = img->height;
+    set->palette    = img->palette;
+    set->mainPixels = img->pixels;
+    set->seqCount   = 0;
+    set->sequences  = NULL;
+    /*
+    set->palette    = NULL;
+    set->mainPixels = NULL;
+    set->seqCount   = 1;
+    Sequence* seq = (Sequence*)malloc(1 * sizeof(Sequence));
+    seq->name = "main";
+    seq->frameCount = 0;
+    seq->frames = NULL;
+    seq->defaultDelay = 0;
+    seq->imgCount = 1;
+    seq->img = img;
+    set->sequences  = seq;*/
+    return set;
 }
 
 int write_tga(char* fname, uint16_t width, uint16_t height, Color* palette, uint8_t* pixels) {
