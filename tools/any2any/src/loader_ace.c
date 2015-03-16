@@ -189,7 +189,6 @@ static ImageSet* do_seq(ImageSet* img, struct ace_header *ace, const char *buf, 
     // Erstmaliges Durchlaufen der Sequenzen, um Header-Gesamtgröße zu bestimmen
     for (i = 0; i < ace->sequences; i++) {
 	struct seq_header *seq=&seqs[i];
-	Sequence* iseq = &img->sequences[i];
 	
 	seq->offset = get_sint32(buf + datalen);
 	seq->label = get_sint16(buf + datalen + 4);
@@ -200,13 +199,15 @@ static ImageSet* do_seq(ImageSet* img, struct ace_header *ace, const char *buf, 
 	seq->amount = buf[datalen + 14];
 	seq->playmode = buf[datalen + 15];
 	
+	datalen += sizeof(*seq);
 /*
 	printf("\tSequence: %d\tImages: %d\tOffset: %x\n", i,
 	       seq->amount, seq->offset);
 */
-	datalen += sizeof(*seq);
-	iseq->name = (char*)malloc(7*sizeof(char));
-	sprintf(iseq->name, "%d", seq->label);
+
+	Sequence* iseq = &img->sequences[i];
+	iseq->name = (char*)malloc(5*sizeof(char));
+	sprintf(iseq->name, "%04x", seq->label);
 	iseq->frameCount = 0;
 	iseq->frames     = NULL;
 	iseq->imgCount   = seq->amount;

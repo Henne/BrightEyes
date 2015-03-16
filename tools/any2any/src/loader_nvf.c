@@ -288,8 +288,8 @@ static ImageSet* do_mode_same(ImageSet* img, const char *buf, size_t len, uint8_
 	return NULL;
     }
 
-    x = get_uint16(buf);
-    y = get_uint16(buf + 2);
+    img->width  = x = get_uint16(buf);
+    img->height = y = get_uint16(buf + 2);
 
     data_sum = 4 + 4 * seq->imgCount;
     for (i = 0; i < seq->imgCount; i++)
@@ -482,7 +482,7 @@ static ImageSet* do_mode_diff(ImageSet* img, const char *buf, size_t len, uint8_
     // TODO: dirty hack
     img->palette = (Color*)((buf + data_sum + 2) - (first_color*3));
     pdata = (char *)(buf + 8 * seq->imgCount);
-
+    img->width = img->height = 0;
     for (i = 0; i < seq->imgCount; i++) {
 	uint32_t plen;
 	uint16_t x, y;
@@ -490,6 +490,9 @@ static ImageSet* do_mode_diff(ImageSet* img, const char *buf, size_t len, uint8_
 	x = get_uint16(buf + i * 8);
 	y = get_uint16(buf + i * 8 + 2);
 	plen = get_uint32(buf + i * 8 + 4);
+
+	if (img->width  < x) img->width =  x;
+	if (img->height < y) img->height = y;
 
 	data = malloc(x * y);
 	if (!data) {
@@ -537,6 +540,7 @@ ImageSet* process_nvf(const char *buf, size_t len)
     img->seqCount   = 1;
     img->sequences  = (Sequence*)malloc(sizeof(Sequence));
     seq = &img->sequences[0];
+    seq->name = "0";
     seq->frameCount = 0; // Keine feste Sequenz: Spiele einfach alle Bilder nacheinander ab.
     seq->frames = NULL;
     seq->defaultDelay = 100;

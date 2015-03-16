@@ -25,6 +25,7 @@ int sanitycheck_gif(const char* buf, size_t len) {
 }
 
 ImageSet* process_gif(const char *buf, size_t len) {
+    //DGifSlurp();
     return NULL;
 }
 
@@ -75,15 +76,15 @@ int dump_gif(ImageSet* img, char* prefix) {
 	    EGifPutLine(file, img->mainPixels + (y*img->width), img->width);
 	}
 	EGifSpew(file);
-	EGifCloseFile(file);
+	EGifCloseFile(file, NULL);
 	
 	printf("main image: %dx%d\n", img->width, img->height);
     }
-
     // Frames konstruieren
     for (int s=0;  s < img->seqCount;  s++) {
 	Sequence* seq = &img->sequences[s];
-	sprintf(fname, "%s-%02d.gif", prefix, s);
+	//sprintf(fname, "%s-%02d.gif", prefix, s);
+	sprintf(fname, "%s-%s.gif", prefix, seq->name);
 	file = EGifOpenFileName(fname, false, NULL);
 	EGifSetGifVersion(file, true);
 
@@ -139,7 +140,7 @@ int dump_gif(ImageSet* img, char* prefix) {
 	    }
 	}
 	EGifSpew(file);
-	EGifCloseFile(file);
+	EGifCloseFile(file, NULL);
     }
     
     // Datei schreiben & Aufräumen
