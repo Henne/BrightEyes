@@ -24,8 +24,71 @@ int sanitycheck_gif(const char* buf, size_t len) {
     return 1;
 }
 
+
+int gif_readfunc(GifFileType* gif_file, GifByteType* outBuffer, int bytes) {
+    const char* inBuffer = gif_file->UserData;
+    memcpy(outBuffer, inBuffer, bytes);
+    return bytes;
+}
+
 ImageSet* process_gif(const char *buf, size_t len) {
-    //DGifSlurp();
+    int error;
+    GifFileType* gif = DGifOpen((char*)buf, &gif_readfunc, &error);
+    if (error != GIF_OK) {
+	printf("GIF reading error %d: %s\n", error, GifErrorString(error));
+	return NULL;
+    }
+    printf("gif read, now converting\n", error);
+    ImageSet* imgset = (ImageSet*)malloc(sizeof(ImageSet));
+    imgset->width  = gif->SWidth;
+    imgset->height = gif->SHeight;
+    ColorMapObject* gif_colormap = gif->SColorMap;
+    if (gif_colormap != NULL) {
+	gif_colormap->ColorCount;
+	imgset->palette = (Color*)calloc(256, sizeof(Color));
+	int shift = 8 - gif_colormap->BitsPerPixel;
+	if (shift < 1 || shift > 7) {
+	    fprintf(stderr, "Error opening gif: invalid palette BPP %d\n", gif_colormap->BitsPerPixel);
+	}
+	for (int i=0;  i < 256;  i++) {
+	    if (i <= gif_colormap->ColorCount) {
+		imgset->palette[i].r = gif_colormap->Colors[i].Red   >> shift;
+		imgset->palette[i].g = gif_colormap->Colors[i].Green >> shift;
+		imgset->palette[i].b = gif_colormap->Colors[i].Blue  >> shift;
+	    } else {
+		//gset->palette[i] = Color{0,0,0};
+	    }
+	}
+    } else {
+	imgset->palette = NULL;
+    }
+    printf("palette ready\n");
+    GifImageDesc gif_img = gif->Image;
+    if (gif_img.Interlace) fprintf(stderr, "Error reading GIF: interlaced mode not supported.\n");
+    imgset->mainPixels = NULL;
+    imgset->seqCount = 1;
+    imgset->sequences = (Sequence*)calloc(imgset->seqCount, sizeof(Sequence));
+    Sequence* seq = &(imgset->sequences[0]);
+    seq->name = "S001";
+    seq->frameCount = gif->ImageCount;
+    seq->frames     = (Frame*)calloc(seq->frameCount, sizeof(Frame));
+    seq->defaultDelay = 100;
+    seq->imgCount = gif->ImageCount;
+    seq->img = (MyImage*)calloc(seq->imgCount, sizeof(MyImage));
+    for (int i=0;  i < gif->ImageCount;  i++) {
+	GifImageDesc gif_desc = gif->SavedImages[i].ImageDesc;
+	if (gif_desc.Interlace) fprintf(stderr, "Error reading GIF: interlaced mode not supported.\n");
+	seq->frames[i].index = i;
+	// TODO: Delay aus GifExtensionBlock lesen
+	seq->frames[i].delay = 100;
+	seq->img[i].x0 = gif_desc.Left;
+	seq->img[i].y0 = gif_desc.Top;
+	seq->img[i].width = gif_desc.Width;
+	seq->img[i].height = gif_desc.Height;
+	seq->img[i].palette = NULL; // TODO: local color map
+	// TODO: Muss ich hier konvertieren???
+	seq->img[i].pixels = gif->SavedImages[i].RasterBits;
+    }
     return NULL;
 }
 

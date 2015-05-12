@@ -30,13 +30,14 @@ MyImage* read_tga(const char *buf, size_t len) {
     img->y0     = (buf[11] << 8)  |  buf[10];
     img->width  = (buf[13] << 8)  |  buf[12];
     img->height = (buf[15] << 8)  |  buf[14];
-    offset += 17 + buf[0]; // Header und Bild-ID gelesen
-
+    offset += 18 + buf[0]; // Skip over 18 bytes header and image ID
+    uint16_t pal_offset = ((buf[4]<<8) | buf[3]);
+    
     if (buf[1] == 0) { // no color palette
 	img->palette = NULL;
     } else { // read color palette
-	// skip palette offset
-	offset += ((buf[4]<<8) | buf[3]);
+	// jump to palette offset
+	offset += pal_offset;
 	const char* pal_start = buf + offset;
 	uint16_t pal_size = (buf[6]<<8) | buf[5];
 	printf("reading palette of %d entries from offset %d\n", pal_size, offset);
@@ -210,7 +211,7 @@ int dump_tga(ImageSet* img, char* prefix) {
 	for (i=0;  i < seq->imgCount;  i++) {
 	    MyImage* frame;
 	    Color* palette;
-	    sprintf(fname, "%s-S%02luI%03lu.tga", prefix, s, i);
+	    sprintf(fname, "%s-S%02lu-I%03lu.tga", prefix, s, i);
 	    frame = &seq->img[i];
 	    if (frame->palette != NULL) palette = frame->palette;
 	    else                        palette = img->palette;

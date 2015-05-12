@@ -15,8 +15,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <packer.h>
-#include <format.h>
+#include "packer.h"
+#include "format.h"
 
 
 typedef struct T_Unknown_Head {
@@ -63,7 +63,7 @@ typedef struct T_Ani_Head {
     uint8_t   frameCount;
     uint32_t  *pixelPos; //[frameCount];
     uint16_t  animSteps;
-    struct AnimStepData *animStepData; //[unkData2Count];
+    struct AnimStepData *animStepData; //[animSteps];
 } Ani_Head;
 
 const char* ani_read(Ani_Head* ani, const char* buf, size_t len) {

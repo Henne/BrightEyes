@@ -93,8 +93,6 @@ int main(int argc, char **argv)
 	    if (!sanitycheck_bob(buf, flen)) exit(1);
 	    img = process_bob(buf, flen);
 	} else if (strcmp(suffix, "GIF") == 0) {
-	    fprintf(stderr, "Input filetype '%s' not yet supported.\n", suffix);
-	    exit(1);
 	    if (!sanitycheck_gif(buf, flen)) exit(1);
 	    img = process_gif(buf, flen);
 	} else if (strcmp(suffix, "NVF") == 0) {
