@@ -63,9 +63,9 @@ int dump_gif(ImageSet* img, char* prefix) {
 
 	// Globale Farbpalette & Screendesc setzen
 	for (int j=0;   j < 256;   j++) {
-	    colormap[j].Red   = img->palette[j].r << 2;
-	    colormap[j].Green = img->palette[j].g << 2;
-	    colormap[j].Blue  = img->palette[j].b << 2;
+	    colormap[j].Red   = img->palette[j].r;
+	    colormap[j].Green = img->palette[j].g;
+	    colormap[j].Blue  = img->palette[j].b;
 	}
 	gif_colormap = GifMakeMapObject(256, colormap);
 	EGifPutScreenDesc(file, img->width, img->height, 8, 0, gif_colormap);
@@ -91,9 +91,9 @@ int dump_gif(ImageSet* img, char* prefix) {
 	// Globale Farbpalette & Screendesc setzen
 	colormap = (GifColorType*)malloc(256 * sizeof(GifColorType));
 	for (int j=0;   j < 256;   j++) {
-	    colormap[j].Red   = img->palette[j].r << 2;
-	    colormap[j].Green = img->palette[j].g << 2;
-	    colormap[j].Blue  = img->palette[j].b << 2;
+	    colormap[j].Red   = img->palette[j].r;
+	    colormap[j].Green = img->palette[j].g;
+	    colormap[j].Blue  = img->palette[j].b;
 	}
 	gif_colormap = GifMakeMapObject(256, colormap);
 	EGifPutScreenDesc(file, img->width, img->height, 8, 0, gif_colormap);

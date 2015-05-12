@@ -48,9 +48,9 @@ MyImage* read_tga(const char *buf, size_t len) {
 	for (int i=0;  i < pal_size;  i++) {
 	    switch(buf[7]) {
 	    case 24:
-		img->palette[i].b = pal_start[i*3 + 0] >> 2;
-		img->palette[i].g = pal_start[i*3 + 1] >> 2;
-		img->palette[i].r = pal_start[i*3 + 2] >> 2;
+		img->palette[i].b = pal_start[i*3 + 0];
+		img->palette[i].g = pal_start[i*3 + 1];
+		img->palette[i].r = pal_start[i*3 + 2];
 		break;
 	    default:
 		fprintf(stderr, "%s: TGA image has %d-bit palette; any2any only supports 24-bit palettes.\n", __func__, pal_size);
@@ -145,9 +145,9 @@ int write_tga(char* fname, uint16_t width, uint16_t height, Color* palette, uint
 
     /* Write Palette BGR */
     for (i=0;  i < 256;  i++) {
-	tga_palette[i * 3 + 0] = palette[i].b << 2;
-	tga_palette[i * 3 + 1] = palette[i].g << 2;
-	tga_palette[i * 3 + 2] = palette[i].r << 2;
+	tga_palette[i * 3 + 0] = palette[i].b;
+	tga_palette[i * 3 + 1] = palette[i].g;
+	tga_palette[i * 3 + 2] = palette[i].r;
     }
     
     fd = fopen(fname, "wb+");

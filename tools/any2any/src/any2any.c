@@ -81,6 +81,8 @@ int main(int argc, char **argv)
 	
 	// Determine the input file type
 	suffix = strrchr(strtoupper(argv[1]), '.') + 1;
+	// Special case: file has no suffix --> NVF
+	if (suffix == NULL || strlen(suffix) > 3) suffix = "NVF";
 	if        (strcmp(suffix, "ACE") == 0) {
 	    if (!sanitycheck_ace(buf, flen)) exit(1);
 	    img = process_ace(buf, flen);

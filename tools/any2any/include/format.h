@@ -7,6 +7,7 @@
  *
  */
 
+#include <stddef.h> // size_t
 #include <stdint.h> // Saubere int-Typen (int32_t u.s.w.)
 
 /*
@@ -60,6 +61,7 @@ typedef struct struct_color {
     signed char r, g, b;
 } Color;
 
+Color* copy_palette(const Color* src, uint16_t first_color, uint16_t num_colors, int shift);
 
 /*
  * Strukturen für die interne Datenrepräsentation von Bildern und Frames

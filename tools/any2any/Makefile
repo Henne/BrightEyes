@@ -24,15 +24,17 @@ rl:	src/rl.c include/packer.h
 
 loader_%: src/loader_%.c
 	$(CC) $(CFLAGS) -c -o $(BUILDDIR)/$@.o $<
-any2any: mkdir src/any2any.c packer $(LOADERS) include/packer.h include/format.h
-	$(CC) $(CFLAGS) -o $(BINDIR)/any2any src/any2any.c $(BUILDDIR)/pp20.o $(BUILDDIR)/rle.o $(BUILDDIR)/rl.o $(LOADERS:%=$(BUILDDIR)/%.o) $(LDFLAGS)
+format.o: src/format.c include/format.h
+	$(CC) $(CFLAGS) -c -o $(BUILDDIR)/$@ $<
+any2any: mkdirs src/any2any.c packer $(LOADERS) format.o include/packer.h 
+	$(CC) $(CFLAGS) -o $(BINDIR)/any2any src/any2any.c $(BUILDDIR)/format.o $(BUILDDIR)/pp20.o $(BUILDDIR)/rle.o $(BUILDDIR)/rl.o $(LOADERS:%=$(BUILDDIR)/%.o) $(LDFLAGS)
 
 clean:
 	rm -rf $(BUILDDIR)/*.o
 	rm -rf $(BINDIR)/[a-z]*
 
 
-mkdir:	| bin build
+mkdirs:	| bin build
 bin:
 	mkdir -p bin
 build:

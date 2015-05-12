@@ -126,6 +126,106 @@ static const struct struct_color pal_ggsts_alt[32] = {
     {0x1c, 0x1c, 0x1c},
 };
 
+// TOWNPAL.DAT (RoA1)
+static const struct struct_color pal_town[96] = {
+    {0x00, 0x00, 0x00},
+    {0x3f, 0x00, 0x3f},
+    {0x2d, 0x23, 0x1f},
+    {0x2a, 0x20, 0x1d},
+    {0x28, 0x1d, 0x1a},
+    {0x26, 0x1b, 0x18},
+    {0x23, 0x18, 0x16},
+    {0x21, 0x16, 0x14},
+    {0x1f, 0x13, 0x12},
+    {0x1c, 0x11, 0x10},
+    {0x1a, 0x0f, 0x0e},
+    {0x18, 0x0d, 0x0d},
+    {0x04, 0x20, 0x00},
+    {0x03, 0x1e, 0x00},
+    {0x02, 0x1c, 0x00},
+    {0x01, 0x1a, 0x00},
+    {0x01, 0x18, 0x00},
+    {0x01, 0x16, 0x00},
+    {0x00, 0x14, 0x00},
+    {0x00, 0x12, 0x00},
+    {0x00, 0x11, 0x00},
+    {0x00, 0x0f, 0x00},
+    {0x0a, 0x1a, 0x1d},
+    {0x08, 0x18, 0x1c},
+    {0x07, 0x15, 0x1a},
+    {0x05, 0x13, 0x19},
+    {0x04, 0x11, 0x18},
+    {0x03, 0x0e, 0x17},
+    {0x01, 0x0c, 0x16},
+    {0x01, 0x0a, 0x15},
+    {0x00, 0x08, 0x14},
+    {0x00, 0x06, 0x13},
+    {0x00, 0x00, 0x00},
+    {0x39, 0x39, 0x39},
+    {0x32, 0x32, 0x32},
+    {0x2c, 0x2c, 0x2c},
+    {0x26, 0x26, 0x26},
+    {0x20, 0x20, 0x20},
+    {0x1a, 0x1a, 0x1a},
+    {0x13, 0x13, 0x13},
+    {0x0d, 0x0d, 0x0d},
+    {0x37, 0x30, 0x2c},
+    {0x32, 0x29, 0x25},
+    {0x2d, 0x23, 0x1f},
+    {0x28, 0x1d, 0x1a},
+    {0x22, 0x17, 0x15},
+    {0x1e, 0x12, 0x11},
+    {0x18, 0x0d, 0x0d},
+    {0x17, 0x09, 0x09},
+    {0x21, 0x0d, 0x0b},
+    {0x2c, 0x11, 0x0d},
+    {0x37, 0x16, 0x0d},
+    {0x2a, 0x2c, 0x1c},
+    {0x20, 0x25, 0x14},
+    {0x17, 0x1e, 0x0e},
+    {0x0f, 0x17, 0x09},
+    {0x08, 0x10, 0x05},
+    {0x32, 0x25, 0x03},
+    {0x29, 0x1e, 0x02},
+    {0x20, 0x17, 0x02},
+    {0x04, 0x0f, 0x18},
+    {0x05, 0x14, 0x1f},
+    {0x05, 0x1a, 0x26},
+    {0x06, 0x1f, 0x2d},
+    {0x00, 0x00, 0x00},
+    {0x05, 0x0d, 0x28},
+    {0x06, 0x10, 0x32},
+    {0x3f, 0x00, 0x3f},
+    {0x3f, 0x00, 0x3f},
+    {0x2d, 0x2d, 0x38},
+    {0x29, 0x29, 0x36},
+    {0x26, 0x26, 0x34},
+    {0x23, 0x23, 0x32},
+    {0x21, 0x20, 0x31},
+    {0x1f, 0x1e, 0x2f},
+    {0x1c, 0x1b, 0x2d},
+    {0x1a, 0x19, 0x2c},
+    {0x19, 0x16, 0x2a},
+    {0x16, 0x14, 0x28},
+    {0x15, 0x12, 0x27},
+    {0x13, 0x10, 0x25},
+    {0x11, 0x0e, 0x22},
+    {0x10, 0x0c, 0x20},
+    {0x0e, 0x0b, 0x1e},
+    {0x0e, 0x09, 0x1b},
+    {0x0c, 0x08, 0x19},
+    {0x0b, 0x06, 0x16},
+    {0x3f, 0x00, 0x3f},
+    {0x3f, 0x00, 0x3f},
+    {0x3f, 0x00, 0x3f},
+    {0x3f, 0x00, 0x3f},
+    {0x3f, 0x00, 0x3f},
+    {0x34, 0x30, 0x3a},
+    {0x3c, 0x36, 0x3c},
+    {0x3f, 0x3c, 0x3c},
+    {0x3f, 0x3f, 0x3f},
+};
+
 struct struct_special_nvf {
     const char name[16];
     const uint32_t length;
@@ -133,42 +233,43 @@ struct struct_special_nvf {
     const uint16_t blocks;
 
     const struct struct_color *pal;
-    const uint16_t colors;
     const uint16_t first_color;
+    const uint16_t colors;
 };
 
 /* DSA1/ROA1 NVF files without palette */
 static const struct struct_special_nvf special_nvf[] = {
     /* All versions */
-    { "GGSTS.NVF", 16771, 0x02, 0xa5, pal_ggsts, 0x20, 0x40 },
+    { "GGSTS.NVF",  16771, 0x02, 0xa5, pal_ggsts, 0x40, 0x20 },
     /* V1.0X */
-    { "COMPASS", 2183, 0x02, 0x04, pal_gray, 0x20, 0xe0},
+    { "COMPASS",     2183, 0x02, 0x04, pal_gray,  0xe0, 0x20 },
     /* V3.0X */
-    { "COMPASS", 2167, 0x02, 0x04, pal_gray, 0x20, 0xe0},
-
+    { "COMPASS",     2167, 0x02, 0x04, pal_gray,  0xe0, 0x20 },
+    /* RoA */
+    { "HOUSE1.NVF", 57440, 0x05, 0x14, pal_town,  0x60, 0x60 },
     /* Terminator */
-    { "", 0, 0, 0, NULL, 0, 0}
+    { "", 0, 0, 0, NULL, 0, 0 }
 };
 
 /* DSA1/ROA1 NVF files with palette */
 /* We need here the first color to set the palette the correct way */
 static const struct struct_special_nvf special_nvf_pal[] = {
     /* All versions */
-    { "GUERTEL.NVF", 67387, 5, 0xc, NULL, 0x20, 0x80 },
+    { "GUERTEL.NVF",   67387, 5, 0x0c, NULL, 0x80, 0x20 },
     /* All versions */
-    { "SHIPSL.NVF", 155745, 5, 0x3a, NULL, 0x20, 0x80 },
+    { "SHIPSL.NVF",   155745, 5, 0x3a, NULL, 0x80, 0x20 },
     /* All versions */
-    { "STONESL.NVF", 188299, 5, 0x3d, NULL, 0x20, 0x80 },
+    { "STONESL.NVF",  188299, 5, 0x3d, NULL, 0x80, 0x20 },
     /* All V1.xx versions */
-    { "MARBLESL.NVF", 159754, 5, 0x3a, NULL, 0x20, 0x80 },
+    { "MARBLESL.NVF", 159754, 5, 0x3a, NULL, 0x80, 0x20 },
     /* All V3.xx versions */
-    { "MARBLESL.NVF", 159140, 5, 0x3a, NULL, 0x20, 0x80 },
+    { "MARBLESL.NVF", 159140, 5, 0x3a, NULL, 0x80, 0x20 },
     /* All versions */
-    { "TDIVERSE.NVF", 23249, 5, 0x09, NULL, 0x20, 0x80 },
+    { "TDIVERSE.NVF",  23249, 5, 0x09, NULL, 0x80, 0x20 },
     /* All versions */
-    { "LTURM.NVF", 21533, 5, 0x04, NULL, 0x20, 0x80 },
+    { "LTURM.NVF",     21533, 5, 0x04, NULL, 0x80, 0x20 },
     /* Terminator */
-    { "", 0, 0, 0, NULL, 0, 0}
+    { "", 0, 0, 0, NULL, 0, 0 }
 };
 
 static ImageSet* do_mode_0(ImageSet* img, const char *buf, size_t len)
@@ -206,7 +307,7 @@ static ImageSet* do_mode_0(ImageSet* img, const char *buf, size_t len)
 
     printf("NVF-Mode 0 (same size/unpacked): %03d Pics\n", seq->imgCount);
 
-    img->palette = (Color*)(buf + data_sum + 2);
+    img->palette = copy_palette((const Color*)(buf + data_sum + 2), 0, 256, 2);
     data = (char *)(buf + 4);
 
     for (i = 0; i < seq->imgCount; i++) {
@@ -256,22 +357,46 @@ static ImageSet* do_mode_1(ImageSet* img, const char *buf, size_t len) {
 
     printf("NVF-Mode 1 (different size/unpacked): %03d Pics\n", seq->imgCount);
 
-    img->palette = (Color*)(buf + data_sum + 2);
+    img->palette = copy_palette((const Color*)(buf + data_sum + 2), 0, 256, 2);
     data = (char *)(buf + seq->imgCount * 4);
 
     for (i = 0; i < seq->imgCount; i++) {
 	x = get_uint16(buf + i * 4);
 	y = get_uint16(buf + i * 4 + 2);
 
-	seq->img[i].x0 = seq->img[i].y0 = 0;
-	seq->img[i].width  = x;
-	seq->img[i].height = y;
-	seq->img[i].palette = 0;
-	seq->img[i].pixels = data;
+	seq->img[i].x0      = 0;
+	seq->img[i].y0      = 0;
+	seq->img[i].width   = x;
+	seq->img[i].height  = y;
+	seq->img[i].palette = NULL;
+	seq->img[i].pixels  = data;
 
 	data += x * y;
     }
     return img;
+}
+
+void get_palette(ImageSet* img, size_t len, uint8_t mode, const struct struct_special_nvf plist[], const uint8_t *buf) {
+    Sequence* seq = &img->sequences[0];
+    
+    for (uint32_t i = 0; plist[i].name[0] != '\0'; i++) {
+	if (plist[i].length != len + 3 ||
+	    plist[i].mode != mode ||
+	    plist[i].blocks != seq->imgCount)
+	    continue;
+	
+	printf("Seems to be %s. Using hardcoded palette.\n", plist[i].name);
+	if (buf != NULL) {
+	    img->palette = copy_palette((const Color*)buf, plist[i].first_color, plist[i].colors, 2);
+	} else {
+	    img->palette = copy_palette(plist[i].pal, plist[i].first_color, plist[i].colors, 2);
+	}
+    }
+
+    if (img->palette == NULL) {
+	fprintf(stderr, "Unknown NVF-file without palette\n");
+	exit(1);
+    }
 }
 
 static ImageSet* do_mode_same(ImageSet* img, const char *buf, size_t len, uint8_t mode) {
@@ -303,57 +428,9 @@ static ImageSet* do_mode_same(ImageSet* img, const char *buf, size_t len, uint8_
 
     /* This is the case in DSA1/ROA1 */
     if (len == data_sum) {
-	for (i = 0; special_nvf[i].name[0] != '\0'; i++) {
-		    
-	    if (special_nvf[i].length != len + 3)
-		continue;
-	    if (special_nvf[i].mode != mode)
-		continue;
-	    if (special_nvf[i].blocks != seq->imgCount)
-		continue;
-
-	    printf("Seems to be %s. Using hardcoded palette\n",
-		   special_nvf[i].name);
-
-	    first_color = special_nvf[i].first_color;
-	    colors = special_nvf[i].colors + first_color;
-	    // TODO: dirty hack
-	    img->palette = (Color*)(special_nvf[i].pal - first_color*3);
-	}
-
-	if (img->palette == NULL) {
-	    printf("Unknown NVF-file without palette\n");
-	    return NULL;
-	}
+	get_palette(img, len, mode, special_nvf, NULL);
     } else {
-
-	for (i = 0; special_nvf_pal[i].name[0] != '\0'; i++) {
-
-	    if (special_nvf_pal[i].length != len + 3)
-		continue;
-	    if (special_nvf_pal[i].mode != mode)
-		continue;
-	    if (special_nvf_pal[i].blocks != seq->imgCount)
-		continue;
-
-	    printf("Seems to be %s Setting first_color\n",
-		   special_nvf_pal[i].name);
-
-	    first_color = special_nvf_pal[i].first_color;
-	    colors = special_nvf_pal[i].colors;
-	}
-
-	colors += get_uint16(buf + data_sum);
-	calc_len = data_sum + 2 + 3 * colors;
-
-	if (len != calc_len) {
-	    printf("The data %lu has not the expected size %lu\n",
-		   len, calc_len);
-	    return NULL;
-	}
-
-	// TODO: dirty hack
-	img->palette = (Color*)((buf + data_sum + 2) - (first_color*3));
+	get_palette(img, len, mode, special_nvf_pal, (buf + data_sum + 2));
     }
 
     pdata = (char *)(buf + 4 + 4 * seq->imgCount);
@@ -394,7 +471,6 @@ static ImageSet* do_mode_diff(ImageSet* img, const char *buf, size_t len, uint8_
     uint32_t i;
     uint32_t data_sum = 0;
     size_t   calc_len;
-    char     *pal;
     char     *data, *pdata;
     uint16_t colors = 0, first_color = 0;
     Sequence* seq = &img->sequences[0];
@@ -414,64 +490,12 @@ static ImageSet* do_mode_diff(ImageSet* img, const char *buf, size_t len, uint8_
 	return NULL;
     }
 
+    img->palette = NULL;
     /* This is the case in DSA1/ROA1 */
     if (len == data_sum) {
-	for (i = 0; special_nvf[i].name[0] != '\0'; i++) {
-
-	    if (special_nvf[i].length != len + 3)
-		continue;
-	    if (special_nvf[i].mode != mode)
-		continue;
-	    if (special_nvf[i].blocks != seq->imgCount)
-		continue;
-
-	    printf("Seems to be %s. Using hardcoded palette\n",
-		   special_nvf[i].name);
-
-	    first_color = special_nvf[i].first_color;
-	    colors = special_nvf[i].colors + first_color;
-	    // TODO: dirty hack
-	    img->palette = (Color*)(special_nvf[i].pal - first_color*3);
-	}
-
-	if (pal == NULL) {
-	    printf("Unknown NVF-file without palette\n");
-	    return NULL;
-	}
+	get_palette(img, len, mode, special_nvf, NULL);
     } else {
-
-	for (i = 0; special_nvf_pal[i].name[0] != '\0'; i++) {
-
-	    if (special_nvf_pal[i].length != len + 3)
-		continue;
-	    if (special_nvf_pal[i].mode != mode)
-		continue;
-	    if (special_nvf_pal[i].blocks != seq->imgCount)
-		continue;
-
-	    printf("Seems to be %s Setting first_color\n",
-		   special_nvf_pal[i].name);
-
-	    first_color = special_nvf_pal[i].first_color;
-	    colors = first_color;
-	}
-
-	colors += get_uint16(buf + data_sum);
-	calc_len = data_sum + 2 + 3 * get_uint16(buf + data_sum);
-	if (len != calc_len) {
-	    printf("The data %lu has not the expected size %lu\n",
-		   len, calc_len);
-	    return NULL;
-	}
-
-	// TODO: dirty hack
-	img->palette = (Color*)((buf + data_sum + 2) - (first_color*3));
-    }
-
-    if (len != calc_len) {
-	printf("The data %lu has not the expected size %lu\n",
-	       len, calc_len);
-	return NULL;
+	get_palette(img, len, mode, special_nvf, (buf + data_sum + 2));
     }
 
     if (mode == 3)
@@ -479,8 +503,7 @@ static ImageSet* do_mode_diff(ImageSet* img, const char *buf, size_t len, uint8_
     else
 	printf("NVF-Mode 5 (different size/RLE): %03d Pics\n", seq->imgCount);
 
-    // TODO: dirty hack
-    img->palette = (Color*)((buf + data_sum + 2) - (first_color*3));
+    if (img->palette == NULL) img->palette = copy_palette((const Color*)(buf + data_sum + 2), first_color, colors, 2);
     pdata = (char *)(buf + 8 * seq->imgCount);
     img->width = img->height = 0;
     for (i = 0; i < seq->imgCount; i++) {
@@ -509,7 +532,11 @@ static ImageSet* do_mode_diff(ImageSet* img, const char *buf, size_t len, uint8_
 	seq->img[i].x0 = seq->img[i].y0 = 0;
 	seq->img[i].width  = x;
 	seq->img[i].height = y;
-	seq->img[i].palette = (Color*)pdata;
+	/*
+	if (img->palette != NULL) seq->img[i].palette = NULL;
+	else                      seq->img[i].palette = (Color*)pdata;
+	*/
+	seq->img[i].palette = NULL;
 	seq->img[i].pixels = data;
 
 	pdata += plen;
@@ -533,6 +560,8 @@ ImageSet* process_nvf(const char *buf, size_t len)
     if (mode >= 6) {
 	fprintf(stderr, "No valid crunchmode %d\n", mode);
 	return NULL;
+    } else {
+	printf("unpacking mode %d NVF\n", mode);
     }
 
     img = (ImageSet*)malloc(sizeof(ImageSet));
@@ -604,9 +633,9 @@ int dump_nvf(ImageSet* img, char* prefix) {
     set_uint16(buf, 256);
     buf+= 2;
     for (i=0; i<256; i++) {
-	buf[3*i+0] = img->palette[i].r;
-	buf[3*i+1] = img->palette[i].g;
-	buf[3*i+2] = img->palette[i].b;
+	buf[3*i+0] = img->palette[i].r >> 2;
+	buf[3*i+1] = img->palette[i].g >> 2;
+	buf[3*i+2] = img->palette[i].b >> 2;
     }
     // Schreiben der Datei
     filename = (char*)malloc((strlen(prefix)+5) * sizeof(char));
