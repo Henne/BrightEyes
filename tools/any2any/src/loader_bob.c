@@ -262,9 +262,9 @@ ImageSet* process_bob(const char *buf, size_t len) {
     // Farbpalette
     img->palette = (Color*)malloc(256 * sizeof(Color));
     for (i=0;  i < 0x100;  i++) {
-	img->palette[i].r = bob->paldata_ofs[i*3 + 2];
-	img->palette[i].g = bob->paldata_ofs[i*3 + 3];
-	img->palette[i].b = bob->paldata_ofs[i*3 + 4];
+	img->palette[i].r = (bob->paldata_ofs[i*3 + 2] & 0x3f) * 4;
+	img->palette[i].g = (bob->paldata_ofs[i*3 + 3] & 0x3f) * 4;
+	img->palette[i].b = (bob->paldata_ofs[i*3 + 4] & 0x3f) * 4;
     }
     
     return img;
