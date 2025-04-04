@@ -174,7 +174,7 @@ static const signed short house_spells[][8] = {
 	{0x01, 0x02, 0x03, 0x04, 0x05, 0x2a, -1},
 	/* Beherrschung */
 	{0x07, 0x0c, 0x0e, 0x10, 0x2c, -1},
-	/* Beschwörung */
+	/* Beschwoerung */
 	{0x12, 0x13, 0x15, 0x17, 0x18, 0x3b, -1},
 	/* Bewegung */
 	{0x1b, 0x1c, 0x1d, 0x1e, 0x1f, -1},
@@ -186,7 +186,7 @@ static const signed short house_spells[][8] = {
 	{0x31, 0x33, 0x34, 0x35, 0x36, 0x39, 0x3e, -1},
 	/* Verwandlung */
 	{0x3c, 0x3e, 0x48, 0x49, 0x4b, -1},
-	/* Veränderung */
+	/* Veraenderung */
 	{0x4c, 0x4e, 0x4f, 0x50, 0x52, 0x53, 0x54, -1}
 };
 #endif
@@ -243,7 +243,7 @@ static const signed char skills[13][52] = {
 	{
 		/* Kampf / Combat */
 		4, 1, 3, 1, 0, 1, -2, 0, 3,
-		/* Körper / Body */
+		/* Koerper / Body */
 		5, 5, 5, 3, 4, 1, 0, 5, 4, 2,
 		/* Gesellschaft / Social */
 		-4, 2, 1, 3, 4, 2, 2,
@@ -256,11 +256,11 @@ static const signed char skills[13][52] = {
 		/* Intuition */
 		1, 1
 	},
-	/* Jäger/ Hunter*/
+	/* Jaeger/ Hunter*/
 	{
 		/* Kampf / Combat */
 		3, 2, 1, 1, 1, 4, -4, 5, 3,
-		/* Körper / Body */
+		/* Koerper / Body */
 		-1, 2, 3, 1, 6, 4, 4, -1, 5, 3,
 		/* Gesellschaft / Social */
 		-3, -3, -1, -3, 0, 0, 0,
@@ -277,7 +277,7 @@ static const signed char skills[13][52] = {
 	{
 		/* Kampf / Combat */
 		4, 4, 1, 6, 2, 3, 4, 3, 3,
-		/* Körper / Body */
+		/* Koerper / Body */
 		0, 1, 3, 4, 0, 2, 4, 0, -1, 3,
 		/* Gesellschaft / Social */
 		-4, -2, -1, 0, 0, 0, 0,
@@ -294,7 +294,7 @@ static const signed char skills[13][52] = {
 	{
 		/* Kampf / Combat */
 		4, 2, 4, 1, 1, 1, -2, -2, 3,
-		/* Körper / Body */
+		/* Koerper / Body */
 		1, 3, 4, 1, 4, 0, 1, 2, 4, 3,
 		/* Gesellschaft / Social */
 		2, 4, 3, 7, 5, 3, 3,
@@ -311,7 +311,7 @@ static const signed char skills[13][52] = {
 	{
 		/* Kampf / Combat */
 		4, 3, 0, 1, 4, 2, 2, -3, 2,
-		/* Körper / Body */
+		/* Koerper / Body */
 		-1, 3, 2, -1, -1, 5, 4, 0, -2, 6,
 		/* Gesellschaft / Social */
 		-4, 0, -2, -2, -1, 0, 0,
@@ -328,7 +328,7 @@ static const signed char skills[13][52] = {
 	{
 		/* Kampf / Combat */
 		3, 3, 0, 2, 4, 3, 1, 2, 2,
-		/* Körper / Body */
+		/* Koerper / Body */
 		-2, 4, 1, -5, 0, -5, 5, -4, 3, 5,
 		/* Gesellschaft / Social */
 		-5, -2, 0, -4, -2, -3, 5,
@@ -345,7 +345,7 @@ static const signed char skills[13][52] = {
 	{
 		/* Kampf / Combat */
 		1, 0, 2, -5, -5, 2, -6, 0, 2,
-		/* Körper / Body */
+		/* Koerper / Body */
 		-2, 0, 2, -1, 2, 1, 4, 4, 2, 1,
 		/* Gesellschaft / Social */
 		-2, 4, 2, -2, 3, 2, -1,
@@ -362,7 +362,7 @@ static const signed char skills[13][52] = {
 	{
 		/* Kampf / Combat */
 		1, -3, 0, -7, -6, 2, -7, 1, 1,
-		/* Körper / Body */
+		/* Koerper / Body */
 		-2, 2, 0, -1, 3, 1, 4, -2, 0, 1,
 		/* Gesellschaft / Social */
 		-7, -3, 0, -2, 2, 1, 0,
@@ -379,7 +379,7 @@ static const signed char skills[13][52] = {
 	{
 		/* Kampf / Combat */
 		1, 0, 2, -4, -5, 3, -5, -3, 0,
-		/* Körper / Body */
+		/* Koerper / Body */
 		-3, 1, 0, 1, 0, 0, 2, -1, 0, 1,
 		/* Gesellschaft / Social */
 		-2, 0, 1, 0, 3, 2, 1,
@@ -396,7 +396,7 @@ static const signed char skills[13][52] = {
 	{
 		/* Kampf / Combat */
 		1, 2, 3, 3, -1, 2, -1, 4, 2,
-		/* Körper / Body */
+		/* Koerper / Body */
 		1, 2, 2, 2, 3, 2, 2, 4, 3, -1,
 		/* Gesellschaft / Social */
 		-1, 3, -1, -3, 3, 0, -2,
@@ -413,7 +413,7 @@ static const signed char skills[13][52] = {
 	{
 		/* Kampf / Combat */
 		3, 2, 2, 2, -2, 4, -5, 2, 4,
-		/* Körper / Body */
+		/* Koerper / Body */
 		0, 0, 2, -2, 5, 0, 3, 3, 5, 4,
 		/* Gesellschaft / Social */
 		-3, 2, -3, -7, 3, -2, -2,
@@ -430,7 +430,7 @@ static const signed char skills[13][52] = {
 	{
 		/* Kampf / Combat */
 		2, 3, 3, 3, -1, 3, -3, 4, 2,
-		/* Körper / Body */
+		/* Koerper / Body */
 		2, 5, 3, 0, 4, -2, 2, 4, 5, -2,
 		/* Gesellschaft / Social */
 		-1, 2, -2, -6, 3, -1, -2,
@@ -456,7 +456,7 @@ static const signed char spells[6][86] = {
 		-4, -10, -9, -7, -5,
 		/* Beherrschung / Domination */
 		-6, -10, -6, 1, -8, -8, -10, -15, -6, 2, -6, -12,
-		/* Dämonologie / Demonology */
+		/* Daemonologie / Demonology */
 		-12, -7, -5, -10, 2, -15,
 		/* Elemente / Elements */
 		-18, -15, -10,
@@ -470,11 +470,11 @@ static const signed char spells[6][86] = {
 		-7, -6, 2, 0,
 		/* Kampf / Fight */
 		0, -12, -8, -10, -10, -10, 2, -15, -8,
-		/* Verständigung / Communication */
+		/* Verstaendigung / Communication */
 		5, -8,
 		/* Verwandlung / Transformation */
 		-7, -3, -8, 0, 2, 0, -3, 1, -3, -1, -3, -19, -15, -12, -10, -10,
-		/* Veränderung / Transmutation */
+		/* Veraenderung / Transmutation */
 		-4, -4, -10, -8, -5, -10, 0, -10, -6, -12, },
 	/* Druide/ Druid*/
 	{
@@ -484,7 +484,7 @@ static const signed char spells[6][86] = {
 		2, -10, -8, -9, -12,
 		/* Beherrschung / Domination */
 		-6, -10, 3, -6, 2, 2, -6, -4, -4, -8, -8, 1,
-		/* Dämonologie / Demonology */
+		/* Daemonologie / Demonology */
 		-10, -3, -2, -12, -8, -12,
 		/* Elemente / Elements */
 		-15, -15, -12,
@@ -498,11 +498,11 @@ static const signed char spells[6][86] = {
 		-7, -6, -6, -10,
 		/* Kampf / Fight */
 		1, -8, -3, -8, -12, -7, -19, -10, -8,
-		/* Verständigung / Communication */
+		/* Verstaendigung / Communication */
 		-19, -6,
 		/* Verwandlung / Transformation */
 		-8, -8, -8, -5, -6, 0, -3, 0, -3, -3, -1, -18, -15, -15, -10, -12,
-		/* Veränderung / Transmutation */
+		/* Veraenderung / Transmutation */
 		-6, -4, -8, -8, -1, -8, 0, -8, -6, -15, },
 	/* Magier/ Magician*/
 	{
@@ -512,7 +512,7 @@ static const signed char spells[6][86] = {
 		-2, -6, -1, -5, -8,
 		/* Beherrschung / Domination */
 		-6, 0, -6, -9, -12, -10, -2, -10, -2, -10, -3, -15,
-		/* Dämonologie / Demonology */
+		/* Daemonologie / Demonology */
 		-5, -7, -5, -8, -12, -6,
 		/* Elemente / Elements */
 		-18, -10, -10,
@@ -526,11 +526,11 @@ static const signed char spells[6][86] = {
 		-10, 0, -6, -15,
 		/* Kampf / Fight */
 		2, -6, -2, 0, -3, -1, -19, -3, -4,
-		/* Verständigung / Communication */
+		/* Verstaendigung / Communication */
 		-19, -6,
 		/* Verwandlung / Transformation */
 		-10, -2, 0, 0, -10, 0, 0, 0, -1, 0, -1, -15, -5, -10, -15, -4,
-		/* Veränderung / Transmutation */
+		/* Veraenderung / Transmutation */
 		-2, 0, -7, 0, -3, -6, 3, -6, -6, -15, },
 	/* Auelf/ Green Elf*/
 	{
@@ -540,7 +540,7 @@ static const signed char spells[6][86] = {
 		0, -12, -10, -7, -10,
 		/* Beherrschung / Domination */
 		-4, 4, -10, -9, -10, -5, -12, -15, -6, -4, -1, -15,
-		/* Dämonologie / Demonology */
+		/* Daemonologie / Demonology */
 		-12, -8, -6, -15, -12, -19,
 		/* Elemente / Elements */
 		-19, -13, -8,
@@ -554,11 +554,11 @@ static const signed char spells[6][86] = {
 		-1, -8, -6, -15,
 		/* Kampf / Fight */
 		4, -10, -4, 4, -10, -7, -19, -8, -2,
-		/* Verständigung / Communication */
+		/* Verstaendigung / Communication */
 		-19, -10,
 		/* Verwandlung / Transformation */
 		-6, -4, 4, -1, -8, 2, 0, 1, -1, -1, 0, -19, -15, -15, -2, 2,
-		/* Veränderung / Transmutation */
+		/* Veraenderung / Transmutation */
 		-2, 1, -10, -5, -5, -10, 5, -10, 0, -6, },
 	/* Firnelf/ Ice Elf*/
 	{
@@ -568,7 +568,7 @@ static const signed char spells[6][86] = {
 		-2, -16, -11, -9, -12,
 		/* Beherrschung / Domination */
 		-2, 0, -10, -9, -10, -7, -12, -15, -6, -4, 0, -15,
-		/* Dämonologie / Demonology */
+		/* Daemonologie / Demonology */
 		-15, -10, -8, -19, -12, -19,
 		/* Elemente / Elements */
 		-19, -12, -4,
@@ -582,11 +582,11 @@ static const signed char spells[6][86] = {
 		0, -8, -8, -15,
 		/* Kampf / Fight */
 		4, -12, -6, 0, -10, -7, -19, -6, -1,
-		/* Verständigung / Communication */
+		/* Verstaendigung / Communication */
 		-19, -8,
 		/* Verwandlung / Transformation */
 		-5, -4, 2, -1, -12, 1, 0, 1, 0, -1, 1, -19, -15, -15, -4, 1,
-		/* Veränderung / Transmutation */
+		/* Veraenderung / Transmutation */
 		-4, 3, -10, -7, -7, -10, 6, -10, -4, -2, },
 	/* Waldelf/ Silvan Elf*/
 	{
@@ -596,7 +596,7 @@ static const signed char spells[6][86] = {
 		-1, -14, -10, -8, -11,
 		/* Beherrschung / Domination */
 		0, 2, -10, -9, -10, -5, -12, -15, -6, -2, 1, -15,
-		/* Dämonologie / Demonology */
+		/* Daemonologie / Demonology */
 		-15, -9, -7, -19, -12, -19,
 		/* Elemente / Elements */
 		-19, -14, -8,
@@ -610,11 +610,11 @@ static const signed char spells[6][86] = {
 		2, -8, -7, -15,
 		/* Kampf / Fight */
 		5, -11, -5, 2, -10, -7, -19, -7, 0,
-		/* Verständigung / Communication */
+		/* Verstaendigung / Communication */
 		-19, -9,
 		/* Verwandlung / Transformation */
 		-4, -4, 3, -1, -8, 1, 0, 2, -1, -1, 0, -19, -15, -15, -4, 1,
-		/* Veränderung / Transmutation */
+		/* Veraenderung / Transmutation */
 		0, 1, -10, -6, -6, -10, 5, -10, -2, -6, },
 };
 #endif

@@ -359,7 +359,7 @@ unused_func05	proc far
 		push	si
 		push	di
 
-		mov	cx, 0A0h ; ' '
+		mov	cx, 0A0h
 		mov	ax, 0A000h
 		mov	ds, ax
 		assume ds:nothing
