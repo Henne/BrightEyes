@@ -4,15 +4,12 @@
 #include <stdarg.h>
 #include <ctype.h>
 
-#include "hero.h"
-
-#if !defined(__BORLANDC__)
-#include "regs.h"
-#include "callback.h"
-#include "../../custom_hooks.h"
-#include "../schick.h"
-
+#if defined(__BORLANDC__)
+#include <DOS.H>
+#include <BIOS.H>
 #endif
+
+//#include "hero.h"
 
 #include "g105de_seg000.h"
 #include "g105de_seg001.h"
@@ -30,29 +27,25 @@ namespace G105de {
 #include "symbols.h"
 
 /** Keyboard Constants */
-static const unsigned short KEY_ESC = 0x01;
-static const unsigned short KEY_1 = 0x02;
-static const unsigned short KEY_2 = 0x03;
-static const unsigned short KEY_3 = 0x04;
-static const unsigned short KEY_4 = 0x05;
-static const unsigned short KEY_5 = 0x06;
 
-static const unsigned short KEY_RET = 0x1c;
-
-static const unsigned short KEY_J = 0x24;
-static const unsigned short KEY_Y = 0x2c;
-static const unsigned short KEY_N = 0x31;
-
-static const unsigned short KEY_UP = 0x48;
-static const unsigned short KEY_LEFT = 0x4b;
-static const unsigned short KEY_RIGHT = 0x4d;
-static const unsigned short KEY_DOWN = 0x50;
-
-static const unsigned short KEY_PGUP = 0x49;
-static const unsigned short KEY_PGDOWN = 0x51;
-
-static const unsigned short KEY_CTRL_F3 = 0x60;
-static const unsigned short KEY_CTRL_F4 = 0x61;
+#define KEY_ESC     (0x01)
+#define KEY_1       (0x02)
+#define KEY_2       (0x03)
+#define KEY_3       (0x04)
+#define KEY_4       (0x05)
+#define KEY_5       (0x06)
+#define KEY_RET     (0x1c)
+#define KEY_J       (0x24)
+#define KEY_Y       (0x2c)
+#define KEY_N       (0x31)
+#define KEY_UP      (0x48)
+#define KEY_LEFT    (0x4b)
+#define KEY_RIGHT   (0x4d)
+#define KEY_DOWN    (0x50)
+#define KEY_PGUP    (0x49)
+#define KEY_PGDOWN  (0x51)
+#define KEY_CTRL_F3 (0x60)
+#define KEY_CTRL_F4 (0x61)
 
 
 /**
@@ -1293,7 +1286,7 @@ void start_music(Bit16u track)
 }
 
 /* Borlandified and identical */
-void read_soundcfg()
+void read_soundcfg(void)
 {
 	Bit16s handle;
 	Bit16u port; // This has to be unsigned
@@ -1332,7 +1325,7 @@ void init_music(unsigned long size)
 }
 
 /* Borlandified and identical */
-void stop_music()
+void stop_music(void)
 {
 	AIL_shutdown(0);
 
@@ -1375,7 +1368,7 @@ RealPt load_snd_driver(RealPt fname)
 }
 
 /* Borlandified and identical */
-void unload_snd_driver()
+void unload_snd_driver(void)
 {
 	if (ds_readd(SND_DRIVER)) {
 		bc_free((RealPt)ds_readd(SND_DRIVER));
@@ -1574,7 +1567,7 @@ void play_midi(Bit16u index)
 }
 
 /* Borlandified and identical */
-void stop_sequence()
+void stop_sequence(void)
 {
 	if ((ds_readw(MIDI_DISABLED) == 0) &&
 		(host_readw(Real2Host((RealPt)ds_readd(SND_DRIVER_DESC)) + 2) == 3))
@@ -1585,7 +1578,7 @@ void stop_sequence()
 }
 
 /* Borlandified and identical */
-void restart_midi()
+void restart_midi(void)
 {
 	if ((ds_readw(MIDI_DISABLED) == 0) &&
 		(host_readw(Real2Host((RealPt)ds_readd(SND_DRIVER_DESC)) + 2) == 3) &&
@@ -1679,8 +1672,8 @@ void do_mouse_action(Bit8u *p1, Bit8u *p2, Bit8u *p3, Bit8u *p4, Bit8u *p5)
 
 	return;
 #else
-	REGS myregs;
-	SREGS mysregs;
+	union REGS myregs;
+	struct SREGS mysregs;
 
 	if (host_readws(p1) >= 0) {
 		myregs.x.ax = host_readw(p1);
@@ -1774,8 +1767,9 @@ void interrupt mouse_isr(void)
 }
 #endif
 
+
 /* Borlandified and identical */
-void mouse_enable()
+void mouse_enable(void)
 {
 	Bit16u p1, p2, p3, p4, p5;
 
@@ -1811,7 +1805,7 @@ void mouse_enable()
 }
 
 /* Borlandified and identical */
-void mouse_disable()
+void mouse_disable(void)
 {
 	if (ds_readw(HAVE_MOUSE) == 2) {
 		mouse_do_disable();
@@ -1828,7 +1822,7 @@ void mouse_unused1(Bit8u *p1, Bit8u *p2, Bit8u *p3, Bit8u *p4)
 }
 
 /* Borlandified and identical */
-void mouse_call_isr()
+void mouse_call_isr(void)
 {
 	//mouse_isr();
 	asm {pushf; push cs; nop; }; // BCC Sync-Point
@@ -1864,7 +1858,7 @@ void mouse_do_enable(Bit16u val, RealPt ptr)
 }
 
 /* Borlandified and identical */
-void mouse_do_disable()
+void mouse_do_disable(void)
 {
 	Bit16u v1, v2, v3, v4, v5;
 
@@ -1928,21 +1922,21 @@ void mouse_unused3(unsigned short a1)
 
 /* Borlandified and identical */
 /* static */
-void update_mouse_cursor()
+void update_mouse_cursor(void)
 {
 	update_mouse_cursor1();
 }
 
 /* Borlandified and identical */
 /* static */
-void call_mouse()
+void call_mouse(void)
 {
 	mouse();
 }
 
 /* Borlandified and identical */
 /* static */
-void update_mouse_cursor1()
+void update_mouse_cursor1(void)
 {
 	if (ds_readw(MOUSE_LOCKED) == 0) {
 
@@ -1957,7 +1951,7 @@ void update_mouse_cursor1()
 
 /* Borlandified and identical */
 /* static */
-void mouse()
+void mouse(void)
 {
 	if (ds_readw(MOUSE_LOCKED) == 0) {
 
@@ -1995,7 +1989,7 @@ void mouse()
 
 /* Borlandified and identical */
 /* static */
-void mouse_compare()
+void mouse_compare(void)
 {
 	/* these pointers never differ in gen */
 	if (ds_readw(MOUSE_MOVED) || ds_readd(MOUSE_LAST_CURSOR) != ds_readd(MOUSE_CURRENT_CURSOR)) {
@@ -2018,8 +2012,9 @@ void mouse_compare()
 	}
 }
 
+
 /* Borlandified and identical */
-void handle_input()
+void handle_input(void)
 {
 	Bit16s si, i;
 
@@ -2137,6 +2132,8 @@ void unused_func1(RealPt in_ptr, Bit16s x, Bit16s y, Bit8s c1, Bit8s c2)
 #endif
 
 
+
+
 /**
  * decomp_rle() - decompress a RLE compressed picture
  * @dst:	destination
@@ -2189,7 +2186,7 @@ void decomp_rle(Bit8u *dst, Bit8u *src, Bit16s x, Bit16s y,
 
 /* Borlandified and nearly identical, but works correct */
 /* static */
-void draw_mouse_cursor()
+void draw_mouse_cursor(void)
 {
 	Bit8s Y, X;
 	RealPt vgaptr;
@@ -2226,7 +2223,7 @@ void draw_mouse_cursor()
 
 /* Borlandified and identical */
 /* static */
-void save_mouse_bg()
+void save_mouse_bg(void)
 {
 	RealPt vgaptr;
 	Bit16s rangeX;
@@ -2255,7 +2252,7 @@ void save_mouse_bg()
 
 /* Borlandified and identical */
 /* static */
-void restore_mouse_bg()
+void restore_mouse_bg(void)
 {
 	RealPt vgaptr;
 	Bit16s rangeX;
@@ -2282,17 +2279,12 @@ void restore_mouse_bg()
 			mem_writeb(Real2Phys(vgaptr) + j, ds_readb(MOUSE_BACKBUFFER + 16 * i + j));
 }
 
+
 /* Borlandified and nearly identical */
-void load_font_and_text()
+void load_font_and_text(void)
 {
 	Bit16s handle;
 	Bit32s len;
-
-#if defined(__BORLANDC__)
-	printf("Yeah\n");
-	CD_bioskey(0);
-	return;
-#endif
 
 	/* load FONT6 */
 	handle = open_datfile(14);
@@ -2458,7 +2450,7 @@ void load_typus(Bit16u typus)
  * save_chr() - save the hero the a CHR file
  */
 /* Borlandified and nearly identical */
-void save_chr()
+void save_chr(void)
 {
 	Bit16s tmpw;
 	Bit16s tmph;
@@ -2554,7 +2546,7 @@ void save_chr()
 }
 
 /* Borlandified and nearly identical */
-void read_common_files()
+void read_common_files(void)
 {
 	Bit16s handle; //si
 	Bit16s len; //di
@@ -2779,13 +2771,13 @@ Bit32s get_filelength(Bit16s unused)
 }
 
 /* Borlandified and identical */
-Bit16u ret_zero1()
+Bit16u ret_zero1(void)
 {
 	return 0;
 }
 
 /* Borlandified and identical */
-void wait_for_keypress()
+void wait_for_keypress(void)
 {
 	while (CD_bioskey(1)) {
 		CD_bioskey(0);
@@ -2801,7 +2793,7 @@ void error_msg(Bit8u *msg)
 #if defined(__BORLANDC__)
 /* unused */
 /* Borlandified and identical */
-Bit16s get_bioskey()
+Bit16s get_bioskey(void)
 {
 	return CD_bioskey(0);
 }
@@ -2881,7 +2873,7 @@ void init_video(Bit16s unused)
 #if !defined(__BORLANDC__)
 	RealPt l_white = RealMake(datseg, STRUCT_COL_WHITE2);
 #else
-	struct struct_color l_white = *(struct_color*)Real2Host(RealMake(datseg, STRUCT_COL_WHITE2));
+	struct struct_color l_white = *(struct struct_color*)Real2Host(RealMake(datseg, STRUCT_COL_WHITE2));
 #endif
 
 	/* set the video mode to 320x200 8bit */
@@ -2895,7 +2887,7 @@ void init_video(Bit16s unused)
 }
 
 /* Borlandified and identical */
-void exit_video()
+void exit_video(void)
 {
 	/* restore old mode */
 	set_video_mode(ds_readw(DISPLAY_MODE_BAK));
@@ -3037,7 +3029,7 @@ void do_draw_pic(Bit16u mode)
 
 #if defined(__BORLANDC__)
 /* Borlandified and identical */
-void unused_func12()
+void unused_func12(void)
 {
 	Bit16s diffX;
 	Bit16s diffY;
@@ -3082,7 +3074,7 @@ void call_fill_rect_gen(RealPt ptr, Bit16u x1, Bit16u y1, Bit16u x2, Bit16u y2, 
 }
 
 /* Borlandified and identical */
-void wait_for_vsync()
+void wait_for_vsync(void)
 {
 #if !defined(__BORLANDC__)
 	CALLBACK_RunRealFar(reloc_gen + 0x3c6, 0x2024);
@@ -3293,6 +3285,7 @@ void print_str(char *str, Bit16s x, Bit16s y)
 	call_mouse();
 }
 
+
 /* Borlandified and nearly identical */
 Bit16s print_chr(unsigned char c, Bit16s x, Bit16s y)
 {
@@ -3362,7 +3355,7 @@ void call_them_all(Bit16s v1, Bit16s v2, Bit16s x, Bit16s y)
 
 /* Borlandified and identical */
 /* static */
-void fill_smth()
+void fill_smth(void)
 {
 	RealPt ptr;
 	Bit16s i, j;
@@ -4081,7 +4074,7 @@ Bit16s gui_radio(Bit8u *header, Bit8s options, ...)
  * enter_name() - enter the name of a hero
  */
 /* Borlandified and identical */
-void enter_name()
+void enter_name(void)
 {
 	RealPt dst;
 
@@ -4096,7 +4089,7 @@ void enter_name()
 }
 
 /* Borlandified and identical */
-void change_head()
+void change_head(void)
 {
 	struct nvf_desc nvf;
 	Bit16s width;
@@ -4132,7 +4125,7 @@ void change_head()
  *
  */
 /* Borlandified and identical */
-void change_sex()
+void change_sex(void)
 {
 	RealPt dst;
 	RealPt src;
@@ -4163,7 +4156,7 @@ void change_sex()
 }
 
 /* Borlandified and identical */
-void do_gen()
+void do_gen(void)
 {
 	Bit16s si;
 	Bit16s di;
@@ -4357,7 +4350,7 @@ void do_gen()
 }
 
 /* Borlandified and nearly identical */
-void refresh_screen()
+void refresh_screen(void)
 {
 	RealPt src;
 	RealPt dst;
@@ -4475,7 +4468,7 @@ void refresh_screen()
 
 /* Borlandified and identical */
 /* static */
-void clear_hero()
+void clear_hero(void)
 {
 
 	Bit16s i;
@@ -4508,7 +4501,7 @@ void clear_hero()
  *
  */
 /* Borlandified and nearly identical */
-void new_values()
+void new_values(void)
 {
 	/* Original-Bugfix:	there once was a char[11],
 				which could not hold a char[16] */
@@ -4654,13 +4647,13 @@ void new_values()
 		call_mouse();
 	}
 }
-
+#if 1
 /**
  * calc_at_pa() - calculate AT and PA values
  */
 /* Borlandified and identical */
 /* static */
-void calc_at_pa()
+void calc_at_pa(void)
 {
 	div_t res; // BCC <STDLIB.H>
 	Bit16s tmp;
@@ -4712,7 +4705,7 @@ void calc_at_pa()
  *
  */
 /* Borlandified and nearly identical */
-void fill_values()
+void fill_values(void)
 {
 	Bit16s i;
 	Bit16s v1;
@@ -5124,7 +5117,7 @@ void spell_inc_novice(Bit16s spell)
  *
  */
 /* Borlandified and identical */
-void select_typus()
+void select_typus(void)
 {
 	Bit8s old_typus;
 	Bit8s possible_types;
@@ -5281,7 +5274,7 @@ void select_typus()
  *
  */
 /* Borlandified and nearly identical */
-Bit16s can_change_attribs()
+Bit16s can_change_attribs(void)
 {
 	Bit16s na_inc;
 	volatile Bit16s na_dec;
@@ -5341,7 +5334,7 @@ Bit16s can_change_attribs()
  * change_attribs() - change attributes
  */
 /* Borlandified and nearly identical */
-void change_attribs()
+void change_attribs(void)
 {
 	Bit16s tmp1;
 	volatile Bit16s tmp2;
@@ -5593,7 +5586,7 @@ void change_attribs()
 #undef DEC
 
 /* Borlandified and nearly identical */
-void save_picbuf()
+void save_picbuf(void)
 {
 	RealPt p;
 	Bit16s x_3;
@@ -5766,7 +5759,7 @@ void restore_picbuf(RealPt ptr)
  *
  */
 /* Borlandified and nearly identical */
-void print_attribs()
+void print_attribs(void)
 {
 	Bit8u* p;
 	char buf[10];
@@ -5799,7 +5792,7 @@ void print_attribs()
  *
  */
 /* Borlandified and identical */
-void print_values()
+void print_values(void)
 {
 	char tmp[4];
 	Bit16s width;
@@ -6452,7 +6445,7 @@ void inc_skill(Bit16s skill, Bit16s max, char *msg)
 }
 
 /* Borlandified and identical */
-void select_skill()
+void select_skill(void)
 {
 	Bit16s skill;
 	Bit16s group;
@@ -6673,7 +6666,7 @@ void inc_spell(Bit16s spell)
 }
 
 /* Borlandified and identical */
-void select_spell()
+void select_spell(void)
 {
 	Bit16s group;
 	Bit16s spell;
@@ -6959,7 +6952,7 @@ void select_spell()
 }
 
 /* Borlandified and identical */
-void choose_atpa()
+void choose_atpa(void)
 {
 	Bit16s skill;
 	Bit16s increase;
@@ -7019,7 +7012,7 @@ void choose_atpa()
  *
  */
 /* Borlandified and far from identical */
-void choose_typus()
+void choose_typus(void)
 {
 	Bit16s choosen_typus;
 	Bit16s randval;
@@ -7253,7 +7246,7 @@ void pal_fade_in(Bit8u *dst, Bit8u *src, Bit16s col, Bit16s n)
 }
 
 #if !defined(__BORLANDC__)
-static void BE_cleanup()
+static void BE_cleanup(void)
 {
 	Bit32s before = DB_get_conv_mem();
 	RealPt ptr;
@@ -7441,7 +7434,7 @@ static void BE_cleanup()
  *	intro() - play the intro
  */
 /* Borlandified and nearly identical, but works correctly */
-void intro()
+void intro(void)
 {
 	Bit8s cnt1;
 	Bit8s cnt2;
@@ -7690,7 +7683,7 @@ void interrupt timer_isr(void)
 #endif
 
 /* Borlandified and identical */
-void set_timer_isr()
+void set_timer_isr(void)
 {
 	/* save adress of the old ISR */
 	ds_writed(TIMER_ISR_BAK, (Bit32u)bc__dos_getvect(0x1c));
@@ -7703,7 +7696,7 @@ void set_timer_isr()
 }
 
 /* Borlandified and identical */
-void restore_timer_isr()
+void restore_timer_isr(void)
 {
 	bc__dos_setvect(0x1c, (INTCAST)ds_readd(TIMER_ISR_BAK));
 }
@@ -7737,17 +7730,7 @@ int main_gen(int argc, char **argv)
 
 	save_display_stat(RealMake(datseg, DISPLAY_PAGE_BAK));
 
-#if !defined(__BORLANDC__)
-	Bit32s free = 0;
-	D1_INFO("%s() free mem = %d\n", __func__, free = DB_get_conv_mem());
-#endif
-
 	alloc_buffers();
-
-#if !defined(__BORLANDC__)
-	Bit32s aa = DB_get_conv_mem();
-	D1_INFO("%s() free mem = %d allocated = %d\n", __func__, DB_get_conv_mem(), free - aa);
-#endif
 
 	ds_writew(WO_VAR3, 2);
 
@@ -7799,7 +7782,7 @@ int main_gen(int argc, char **argv)
 }
 
 /* Borlandified and nearly identical, but works correctly */
-void alloc_buffers()
+void alloc_buffers(void)
 {
 	ds_writed(GFX_PTR,
 		ds_writed(VGA_MEMSTART, (Bit32u)RealMake(0xa000, 0x0)));
@@ -7847,7 +7830,7 @@ void alloc_buffers()
 }
 
 /* Borlandified and identical */
-void init_colors()
+void init_colors(void)
 {
 	set_palette(RealMake(datseg, PAL_COL_BLACK), 0x00, 1);
 	set_palette(RealMake(datseg, PAL_COL_WHITE), 0xff, 1);
@@ -7859,7 +7842,7 @@ void init_colors()
 }
 
 /* Borlandified and identical */
-void init_stuff()
+void init_stuff(void)
 {
 	init_colors();
 
@@ -7879,7 +7862,7 @@ RealPt gen_alloc(Bit32u nelem)
 {
 	return (RealPt)bc_farcalloc(nelem, 1);
 }
-
+#endif
 #if !defined(__BORLANDC__)
 }
 #endif

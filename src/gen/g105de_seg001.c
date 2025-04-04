@@ -22,15 +22,6 @@
 
 #include <stdio.h>
 
-#if !defined(__BORLANDC__)
-#include "dosbox.h"
-#include "regs.h"
-#include "callback.h"
-#include "cpu.h"
-
-#include "schick.h"
-#endif
-
 #include "symbols.h"
 
 #include "g105de_seg000.h"
@@ -46,7 +37,6 @@ namespace G105de {
 /* Borlandified and identical */
 static unsigned short CD_has_drives()
 {
-#if defined(__BORLANDC__)
 	/* al ==  0: return number of drive letters */
 	asm {
 		mov ax, 0x1500
@@ -60,22 +50,11 @@ static unsigned short CD_has_drives()
 has_cd:
 
 //	return _AX;
-#else
-	reg_ax = 0x1500;
-	reg_bx = 0x0000;
-	CALLBACK_RunRealInt(0x2f);
-
-	if (reg_bx == 0)
-		return 0;
-
-	return 1;
-#endif
 }
 
 /* Borlandified and identical */
 static unsigned short CD_count_drives()
 {
-#if defined(__BORLANDC__)
 	asm {
 		mov ax, 0x1500
 		xor bx, bx
@@ -84,20 +63,11 @@ static unsigned short CD_count_drives()
 		_AX = _BX;
 
 //	return _BX;
-#else
-
-	reg_ax = 0x1500;
-	reg_bx = 0x0000;
-	CALLBACK_RunRealInt(0x2f);
-
-	return reg_bx;
-#endif
 }
 
 /* Borlandified and identical */
 static unsigned short CD_get_first_drive()
 {
-#if defined(__BORLANDC__)
 	asm {
 		mov ax, 0x1500
 		xor bx, bx
@@ -106,14 +76,6 @@ static unsigned short CD_get_first_drive()
 
 	_AX = _CX;
 //	return _CX;
-#else
-
-	reg_ax = 0x1500;
-	reg_bx = 0x0000;
-	CALLBACK_RunRealInt(0x2f);
-
-	return reg_cx;
-#endif
 }
 
 /* Borlandified and identical */
@@ -124,34 +86,18 @@ unsigned short CD_set_drive_no()
 
 	ds_writew(CD_DRIVE_NO, CD_get_first_drive());
 
-#if !defined(__BORLANDC__)
-	return 1;
-#else
 	_AX = 1;
-#endif
 }
 
 /* Borlandified and identical */
-#if defined(__BORLANDC__)
-static void CD_driver_request(driver_request far* req)
-#else
-static void CD_driver_request(RealPt req)
-#endif
+static void CD_driver_request(struct driver_request far* req)
 {
-#if defined(__BORLANDC__)
 	asm {
 		mov ax, 0x1510
 		mov cx, [CD_DRIVE_NO]
 		les bx, req
 		int 0x2f
 	}
-#else
-	reg_ax = 0x1510;
-	reg_cx = ds_readw(CD_DRIVE_NO);
-	CPU_SetSegGeneral(es, RealSeg(req));
-	reg_bx = RealOff(req);
-	CALLBACK_RunRealInt(0x2f);
-#endif
 }
 
 /* Borlandified and far from identical, but unused (8 diffs)*/
@@ -184,23 +130,12 @@ static void CD_unused1(void)
 /* Borlandified and identical */
 Bit32s CD_get_tod(void)
 {
-#if defined(__BORLANDC__)
 	asm {
 		mov ah, 0x0
 		int 0x1a
 		mov ax, dx
 		mov dx, cx
-		//jmp near leave_tod
 	}
-leave_tod:
-#else
-	reg_ah = 0;
-	CALLBACK_RunRealInt(0x1a);
-	reg_ax = reg_dx;
-	reg_dx = reg_cx;
-
-	return (reg_dx << 16) | reg_ax;
-#endif
 }
 
 /* Seem Unborlandifiable to me */
@@ -245,7 +180,7 @@ void seg001_00bb(Bit16s track_no)
 		CD_driver_request(RealMake(reloc_gen + CDSEG, 0x8c));
 		ds_writed(CD_AUDIO_POS, ((track_start - 150) * 0x1234e) / 0x4b000);
 #else
-		CD_driver_request((driver_request*)RealMake(reloc_gen + CDSEG, 0x8c));
+		CD_driver_request((struct driver_request*)RealMake(reloc_gen + CDSEG, 0x8c));
 
 		asm { db 0x66, 0x0F, 0x1F, 0x44, 0x00, 0x00; } // BCC Sync-Point
 		asm { db 0x0F, 0x1F, 0x44, 0x00, 0x00; } // BCC Sync-Point
@@ -377,7 +312,7 @@ void seg001_03a8()
 #if !defined(__BORLANDC__)
 		CD_driver_request(RealMake(reloc_gen + CDSEG, 0x38));
 #else
-		CD_driver_request((driver_request*)RealMake(reloc_gen + CDSEG, 0x38));
+		CD_driver_request((struct driver_request*)RealMake(reloc_gen + CDSEG, 0x38));
 #endif
 
 		v = host_readb(Real2Host(RealMake(reloc_gen + CDSEG, 0x421)));
@@ -397,7 +332,7 @@ void seg001_03a8()
 #if !defined(__BORLANDC__)
 			CD_driver_request(RealMake(reloc_gen + CDSEG, 0x38));
 #else
-			CD_driver_request((driver_request*)RealMake(reloc_gen + CDSEG, 0x38));
+			CD_driver_request((struct driver_request*)RealMake(reloc_gen + CDSEG, 0x38));
 #endif
 		}
 	}

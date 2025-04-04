@@ -42,10 +42,10 @@ fi
 # all tools are available
 
 # copy all source files to DRIVE_C
-for i in g105de_*.cpp; do
+for i in g105de_*.c; do
 	#remove prefix from filenames
 	cp ${i} ${DRIVE_C}/src/${i##g105de_}
-	#remove prefix in cpp-files
+	#remove prefix in c-files
 	sed -i 's/g105de_//g' ${DRIVE_C}/src/${i##g105de_}
 done
 for i in g105de_*.h; do
@@ -75,7 +75,7 @@ dosbox -conf bcc31.conf
 popd
 
 # cleanup
-rm -rf ${DRIVE_C}/src/*.cpp
+rm -rf ${DRIVE_C}/src/*.c
 rm -rf ${DRIVE_C}/src/*.h
 rm -rf ${DRIVE_C}/src/*.asm
 rm -rf ${DRIVE_C}/src/*.bat

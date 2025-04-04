@@ -1,7 +1,7 @@
 #if !defined(__BORLANDC__)
 namespace G105de {
 #else
-extern "C" {
+//extern "C" {
 #endif
 
 void set_video_mode(Bit16u mode);
@@ -22,5 +22,5 @@ RealPt normalize_ptr(RealPt);
 #if !defined(__BORLANDC__)
 }
 #else
-}
+//}
 #endif
