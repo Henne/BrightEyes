@@ -5,19 +5,10 @@
 
 #include <stdlib.h>
 
-#if !defined(__BORLANDC__)
-#include "schick.h"
-#else
 #include "port.h"
-#endif
-
 #include "symbols.h"
 
 #include "g105de_seg003.h"
-
-#if !defined(__BORLANDC__)
-namespace G105de {
-#endif
 
 #if !defined(__BORLANDC__)
 static inline
@@ -92,7 +83,3 @@ int is_in_byte_array(const signed char val, signed char *p)
 
 	return 0;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

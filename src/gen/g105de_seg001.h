@@ -1,7 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace G105de {
-#endif
-
 #include "g105de_seg007.h"
 
 #include "port.h"
@@ -37,7 +33,3 @@ void seg001_0465(unsigned short);
 Bit16s CD_check_file(char*);
 
 signed short seg001_0600();
-
-#if !defined(__BORLANDC__)
-}
-#endif

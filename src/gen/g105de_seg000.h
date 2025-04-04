@@ -1,6 +1,4 @@
 #if !defined(__BORLANDC__)
-namespace G105de {
-
 Bit16u bc__dos_close(Bit16s);
 Bit16u bc__dos_open(char*, Bit16u, Bit8u*);
 Bit16u bc__dos_read(Bit16s, Bit8u*, Bit16u, Bit16u*);
@@ -81,7 +79,5 @@ static inline void bc_randomize() { }
 /* macros that work different on host and emu */
 #define bc_open_host open
 #define bc__create_host _creat
-
-RealPt emu_gen_alloc(Bit32u);
 
 #endif

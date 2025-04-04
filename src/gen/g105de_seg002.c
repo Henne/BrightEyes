@@ -19,10 +19,6 @@
 #include "g105de_seg005.h"
 #include "g105de_seg006.h"
 
-#if !defined(__BORLANDC__)
-namespace G105de {
-#endif
-
 #include "port.h"
 #include "symbols.h"
 
@@ -4647,7 +4643,7 @@ void new_values(void)
 		call_mouse();
 	}
 }
-#if 1
+
 /**
  * calc_at_pa() - calculate AT and PA values
  */
@@ -7862,7 +7858,3 @@ RealPt gen_alloc(Bit32u nelem)
 {
 	return (RealPt)bc_farcalloc(nelem, 1);
 }
-#endif
-#if !defined(__BORLANDC__)
-}
-#endif

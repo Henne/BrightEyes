@@ -1,9 +1,3 @@
-#if !defined(__BORLANDC__)
-namespace G105de {
-#else
-//extern "C" {
-#endif
-
 void set_video_mode(Bit16u mode);
 void set_video_page(Bit16u mode);
 void save_display_stat(RealPt);
@@ -18,9 +12,3 @@ unsigned short swap_u16(unsigned short val);
 void copy_to_screen(RealPt, RealPt, Bit16s, Bit16s, Bit16s);
 
 RealPt normalize_ptr(RealPt);
-
-#if !defined(__BORLANDC__)
-}
-#else
-//}
-#endif

@@ -11,27 +11,14 @@
 #if !defined SYMBOLS_H
 #define SYMBOLS_H
 
-#define CD_INIT_SUCCESSFUL              (0x0095)    /* unsigned short; {0,1} */
-#define CD_AUDIO_REPEAT                 (0x009b)    /* unsigned short; {0,1} */
+//#define CD_INIT_SUCCESSFUL              (0x0095)    /* unsigned short; {0,1} */
+//#define CD_AUDIO_REPEAT                 (0x009b)    /* unsigned short; {0,1} */
 
-#define CD_INSERT_COUNTER               (0x00a1)    /* Bit16s = 5 */
-#define STR_INSERT_CD                   (0x00a3)    /* char[142]; */
-#define STR_REPEAT                      (0x0131)    /* char[12]; */
-#define STR_QUIT                        (0x013d)    /* char[8]; */
-#define STR_CD_EXEPATH                  (0x0145)    /* char[19]; */
-
-#if 0
-#define CD_AUDIO_PAUSED                 (0x00a1)    /* unsigned short; {0,1} */
-#define CD_AUDIO_TRACK_BAK              (0x00a3)    /* unsigned short */
-#define CD_AUDIO_TRACKLIST              (0x00a5)    /* signed short[15] */
-#define CD_CHECK_SKIPMAGIC              (0x00c3)    /* unsigned long */
-#define CD_CHECK_ERR_COUNTDOWN          (0x00c7)    /* unsigned short */
-
-#define STR_CD_MISSING                  (0x017e)    /* char[204]; "DIESES PROGRAMM IST OHNE CD-ROM-LAUFWERK NICHT LAUFF\x8eHIG. BITTE INSTALLIEREN SIE DIE GER\x8eTETREIBER F\x9aR DAS CD-ROM-LAUFWERK GEM\x8eSS IHRER CD-ROM-DOKUMENTATION UND STARTEN SIE DIE 'SCHICKSALSKLINGE' ERNEUT." */
-#define STR_CD_INIT                     (0x024a)    /* char[37]; "INITIALISIERE CD-ROM IN LAUFWERK %c:" */
-#define CD_AUDIO_PAUSE_POS              (0xbc38)    /* unsigned long */
-#define CD_AUDIO_PAUSE_TOD              (0xbc3c)    /* unsigned long */
-#endif
+//#define CD_INSERT_COUNTER               (0x00a1)    /* Bit16s = 5 */
+//#define STR_INSERT_CD                   (0x00a3)    /* char[142]; */
+//#define STR_REPEAT                      (0x0131)    /* char[12]; */
+//#define STR_QUIT                        (0x013d)    /* char[8]; */
+//#define STR_CD_EXEPATH                  (0x0145)    /* char[19]; */
 
 #define SPELL_TAB                       (0x0158)    /* Bit8s[86][5] */
 #define HOUSE_SPELLS                    (0x0387)    /* RealPt[9] */
@@ -182,10 +169,11 @@
 
 #define _CTYPE                          (0x1ff9)    /* CLIB array for isalpha() */
 
-#define CD_AUDIO_TRACK                  (0x245a)    /* unsigned short */
-#define CD_AUDIO_TOD                    (0x2464)    /* unsigned long */
-#define CD_AUDIO_POS                    (0x2468)    /* unsigned long */
-#define CD_DRIVE_NO                     (0x246c)    /* unsigned short */
+/* BSS Section */
+//#define CD_AUDIO_TRACK                  (0x245a)    /* unsigned short */
+//#define CD_AUDIO_TOD                    (0x2464)    /* unsigned long */
+//#define CD_AUDIO_POS                    (0x2468)    /* unsigned long */
+//#define CD_DRIVE_NO                     (0x246c)    /* unsigned short */
 
 #define CURRENT_TIMBRE_LENGTH           (0x2474)    /* Bit16u */
 #define CURRENT_TIMBRE_PATCH            (0x2476)    /* Bit8s */

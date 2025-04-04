@@ -9,65 +9,30 @@
 
 #include <stdlib.h>
 
-#include "paging.h"
-#include "callback.h"
+#include "port.h"
 
-#include "schick.h"
-
-#if !defined(__BORLANDC__)
-namespace G105de {
-#endif
 
 void set_video_mode(Bit16u mode)
 {
-#if !defined(__BORLANDC__)
-	CPU_Push16(mode);
-	CALLBACK_RunRealFar(reloc_gen + 0xb6b, 0x08);
-	CPU_Pop16();
-#else
-#endif
 }
 
 void set_video_page(Bit16u mode)
 {
-#if !defined(__BORLANDC__)
-	CPU_Push16(mode);
-	CALLBACK_RunRealFar(reloc_gen + 0xb6b, 0x1e);
-	CPU_Pop16();
-#else
-#endif
 }
 
 void save_display_stat(RealPt p)
 {
-#if !defined(__BORLANDC__)
-	CPU_Push32(p);
-	CALLBACK_RunRealFar(reloc_gen + 0xb6b, 0x34);
-	CPU_Pop32();
-#else
-#endif
 }
 
 void set_color(RealPt ptr, unsigned char color)
 {
-#if !defined(__BORLANDC__)
-	CPU_Push16(color);
-	CPU_Push32(ptr);
-	CALLBACK_RunRealFar(reloc_gen + 0xb6b, 0xde);
-	CPU_Pop32();
-	CPU_Pop16();
-#else
-#endif
 }
 
 void set_palette(RealPt ptr, unsigned char first_color, unsigned short colors)
 {
-#if !defined(__BORLANDC__)
 	unsigned short i;
 	for (i = 0; i < colors; i++)
 		set_color(ptr + 3 * i, first_color + i);
-#else
-#endif
 }
 
 void draw_h_line(Bit16u offset, Bit16s count, Bit16u color)
@@ -206,8 +171,8 @@ void copy_to_screen(RealPt src, RealPt dst, Bit16s w, Bit16s h, Bit16s mode)
 
 	if (mode & 0x80) {
 		/* This does not happen */
-		D1_ERR("%s mode bit set\n", __func__);
-		exit(0);
+		//D1_ERR("%s mode bit set\n", __func__);
+		//exit(0);
 	} else {
 		for (; h; h--) {
 			for (i = 0; i < w; i++)
@@ -220,15 +185,5 @@ void copy_to_screen(RealPt src, RealPt dst, Bit16s w, Bit16s h, Bit16s mode)
 
 RealPt normalize_ptr(RealPt ptr)
 {
-#if !defined(__BORLANDC__)
-	CPU_Push32(ptr);
-	CALLBACK_RunRealFar(reloc_gen + 0xb6b, 0x445);
-	CPU_Pop32();
-	return RealMake(reg_dx, reg_ax);
-#else
-#endif
+	return ptr;
 }
-
-#if !defined(__BORLANDC__)
-}
-#endif

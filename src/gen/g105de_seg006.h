@@ -1,5 +1,4 @@
 #if !defined(__BORLANDC__)
-namespace G105de {
 
 void AIL_startup();
 
@@ -33,7 +32,6 @@ void AIL_stop_sequence(Bit16s driver, Bit16s sequence);
 
 Bit16u AIL_sequence_status(Bit16s driver, Bit16s sequence);
 
-}
 #else
 #include "AIL.H"
 #endif
