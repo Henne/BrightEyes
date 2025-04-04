@@ -1,4 +1,4 @@
-/s /Tde /ye +
+/s /Tde +
 	C0L+
 	SEG001 SEG002 SEG003 SEG004+
 	SEG005 SEG006 SEG007
