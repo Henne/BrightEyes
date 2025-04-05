@@ -1046,7 +1046,8 @@ static const struct mouse_action g_action_input[2] = {
 	{ -1, -1, -1, -1, -1}
 };
 
-//static unsigned short bool_mode;
+static signed short g_bool_mode = 0;
+
 #if 0
 static const struct mouse_action *action_page[MAX_PAGES] = {
 			(struct mouse_action*)&action_base,
@@ -3879,9 +3880,9 @@ Bit16s gui_bool(Bit8u *msg)
 {
 	Bit16s retval;
 
-	ds_writew(BOOL_MODE, 1);
+	g_bool_mode = 1;
 	retval = gui_radio(msg, 2, get_text(4), get_text(5));
-	ds_writew(BOOL_MODE, 0);
+	g_bool_mode = 0;
 
 	if (retval == 1)
 		return 1;
@@ -4087,7 +4088,7 @@ Bit16s gui_radio(Bit8u *header, Bit8s options, ...)
 #endif
 		}
 		/* is this a bool radiobox ? */
-		if (ds_readw(BOOL_MODE)) {
+		if (g_bool_mode) {
 			if (ds_readw(IN_KEY_EXT) == KEY_Y) {
 				/* has the 'j' key been pressed */
 				retval = 1;
