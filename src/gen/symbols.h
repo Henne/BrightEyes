@@ -20,7 +20,7 @@
 //#define STR_QUIT                        (0x013d)    /* char[8]; */
 //#define STR_CD_EXEPATH                  (0x0145)    /* char[19]; */
 
-#define SPELL_TAB                       (0x0158)    /* Bit8s[86][5] */
+//#define SPELL_TAB                       (0x0158)    /* Bit8s[86][5] */
 #define HOUSE_SPELLS                    (0x0387)    /* RealPt[9] */
 #define SCHOOL_TAB                      (0x03ab)    /* Bit16s[9][2] */
 #define REQ_ATTRIB                      (0x03cf)    /* Bit8u */

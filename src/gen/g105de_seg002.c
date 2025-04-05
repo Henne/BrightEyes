@@ -63,16 +63,16 @@ struct struct_color {
 #define MAX_PAGES (11);
 #define MAX_TYPES (13);
 
-#if 0
 struct struct_spelltab {
-	signed char origin;
+	signed char origin; /* {0 = Druid, 1 = Mage, 2 = Elven, 3 = Warlock } */
 	signed char att1;
 	signed char att2;
 	signed char att3;
 	signed char cost;
 };
 
-static const struct struct_spelltab spelltab[87] = {
+/* Remark: only the field origin is used from this table */
+static const struct struct_spelltab g_spell_tab[87] = {
 	{ 0, 0, 0, 0, 0},
 	{ 0, 1, 5, 2, -1},
 	{ 1, 1, 5, 3, -1},
@@ -161,7 +161,6 @@ static const struct struct_spelltab spelltab[87] = {
 	{ 2, 1, 2, 6, 5},
 	{ -1, 0, 0, 0, 0},
 };
-#endif
 
 #if 0
 /* DS:0x030b */
@@ -6602,19 +6601,18 @@ void inc_spell(Bit16s spell)
 	Bit16s max_incs = 1;
 
 	/* if typus == warlock and the origin of the spell is warlock */
-	//if ((ds_readbs(HERO_TYPUS) == 7) && (spelltab[spell].origin == 3))
-	if ((ds_readbs(HERO_TYPUS) == 7) && (ds_readbs(SPELL_TAB + 5 * spell) == 3))
+	if ((ds_readbs(HERO_TYPUS) == 7) && (g_spell_tab[spell].origin == 3))
 		max_incs = 2;
 	/* if typus == elf and the origin of the spell is elven */
-	if ((ds_readbs(HERO_TYPUS) >= 10) && (ds_readbs(SPELL_TAB + 5 * spell) == 2))
+	if ((ds_readbs(HERO_TYPUS) >= 10) && (g_spell_tab[spell].origin == 2))
 		max_incs = 2;
 	/* if typus == druid and the origin of the spell is druid */
-	if ((ds_readbs(HERO_TYPUS) == 8) && (ds_readbs(SPELL_TAB + 5 * spell) == 0))
+	if ((ds_readbs(HERO_TYPUS) == 8) && (g_spell_tab[spell].origin == 0))
 		max_incs = 2;
 	/* if typus == mage */
 	if (ds_readbs(HERO_TYPUS) == 9) {
 		/* and the origin of the spell is mage */
-		if (ds_readbs(SPELL_TAB + 5 * spell) == 1)
+		if (g_spell_tab[spell].origin == 1)
 			max_incs = 2;
 
 		/* and is a school spell */
