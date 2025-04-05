@@ -48,9 +48,8 @@
 //#define PAL_TMP                         (0x113b)    /* RGB[32] */
 //#define PAL_GENBG                       (0x119b)    /* RGB[32] */
 
-#define SCREEN_VAR                      (0x11fe)    /* Bit16s */
+//#define SCREEN_VAR                      (0x11fe)    /* Bit16s */
 
-#define CHR_LOOKUP                      (0x1b85)
 #define MOUSE_MASK                      (0x1200)
 #define MOUSE_POSY_MIN                  (0x1240)
 #define MOUSE_POSX_MIN                  (0x1242)
@@ -135,6 +134,7 @@
 #define STR_FILE_MISSING                (0x1b65)    /* char[19] */
 
 #define STRUCT_COL_WHITE2               (0x1b79)    /* RGB */
+#define CHR_LOOKUP                      (0x1b85)
 
 #define ACTION_INPUT                    (0x1c63)
 #define BOOL_MODE                       (0x1c77)    /* Bit16s */

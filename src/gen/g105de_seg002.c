@@ -840,6 +840,11 @@ static const struct struct_color g_pal_genbg[32] = {
 	{0x14, 0x00, 0x00},
 };
 
+static const signed short dummy4 = 50;
+static const signed char dummy5 = -1;
+
+static signed short g_screen_var = 0;
+
 #if 0
 
 static unsigned short mouse_mask[32] = {
@@ -4170,7 +4175,7 @@ void change_sex(void)
 			ds_writeb(HEAD_LAST,
 				g_head_first_female[ds_readbs(HEAD_TYPUS)] - 1);
 		}
-		ds_writew(SCREEN_VAR, 1);
+		g_screen_var = 1;
 		return;
 	} else {
 		dst = (RealPt)ds_readd(VGA_MEMSTART) + 7 * 320 + 305;
@@ -4189,7 +4194,7 @@ void do_gen(void)
 
 	di = 0;
 
-	ds_writew(SCREEN_VAR, 1);
+	g_screen_var = 1;
 
 	/* try to set the level from parameters */
 	ds_writew(LEVEL, ((ds_readws(PARAM_LEVEL) == 'a') ? 2 :
@@ -4204,9 +4209,9 @@ void do_gen(void)
 
 	/* main loop */
 	while (!di) {
-		if (ds_readw(SCREEN_VAR)) {
+		if (g_screen_var) {
 			refresh_screen();
-			ds_writew(SCREEN_VAR, 0);
+			g_screen_var = 0;
 		}
 
 		ds_writed(ACTION_TABLE,  (Bit32u)ds_readd(ACTION_PAGE + 4 * ds_readws(GEN_PAGE)));
@@ -4246,7 +4251,7 @@ void do_gen(void)
 								bc_memset(RealMake(datseg, HERO_NAME), 0, 0x6da);
 								clear_hero();
 								ds_writew(MOUSE2_EVENT,	1);
-								ds_writew(SCREEN_VAR, 1);
+								g_screen_var = 1;
 								break;
 							}
 							case 5: {
@@ -4332,7 +4337,7 @@ void do_gen(void)
 			if (!ds_readbs(HERO_TYPUS)) {
 				infobox(get_text(72), 0);
 			} else {
-				ds_writew(SCREEN_VAR, 1);
+				g_screen_var = 1;
 
 				if (((ds_readbs(HERO_TYPUS) < 7) ? 4 : 10) > ds_readws(GEN_PAGE)) {
 					ds_inc_ws(GEN_PAGE);
@@ -4344,7 +4349,7 @@ void do_gen(void)
 
 		if (ds_readw(IN_KEY_EXT) == KEY_LEFT) {
 			if (ds_readws(GEN_PAGE) > 0) {
-				ds_writew(SCREEN_VAR, 1);
+				g_screen_var = 1;
 				ds_dec_ws(GEN_PAGE);
 			} else {
 				if (ds_readws(LEVEL) != 1) {
@@ -4352,7 +4357,7 @@ void do_gen(void)
 					if (!ds_readbs(HERO_TYPUS)) {
 						infobox(get_text(72), 0);
 					} else {
-						ds_writew(SCREEN_VAR, 1);
+						g_screen_var = 1;
 						ds_writew(GEN_PAGE, ds_readbs(HERO_TYPUS) < 7 ? 4 : 10);
 					}
 				}
@@ -4369,7 +4374,7 @@ void do_gen(void)
 
 			if ((si != ds_readws(GEN_PAGE)) && (si < 5 || ds_readbs(HERO_TYPUS) >= 7)) {
 				ds_writews(GEN_PAGE, si);
-				ds_writew(SCREEN_VAR, 1);
+				g_screen_var = 1;
 			}
 		}
 	}
@@ -4384,7 +4389,7 @@ void refresh_screen(void)
 	Bit16s height;
 	struct nvf_desc nvf;
 
-	if (ds_readw(SCREEN_VAR)) {
+	if (g_screen_var) {
 		ds_writed(GFX_PTR, ds_readd(GEN_PTR1_DIS));
 		load_page(ds_readws(GEN_PAGE));
 		save_picbuf();
@@ -4548,7 +4553,7 @@ void new_values(void)
 
 	/* set variable if hero has a typus */
 	if (ds_readbs(HERO_TYPUS))
-		ds_writew(SCREEN_VAR, 1);
+		g_screen_var = 1;
 
 	/* save the name of the hero */
 	/* TODO strncpy() would be better here */
@@ -4572,7 +4577,7 @@ void new_values(void)
 
 	refresh_screen();
 
-	ds_writew(SCREEN_VAR, 0);
+	g_screen_var = 0;
 
 	ds_ptr = RealMake(datseg, HERO_ATT0_NORMAL);
 
@@ -5216,7 +5221,7 @@ void select_typus(void)
 #else
 			ds_writeb(HERO_TYPUS, _AL);
 #endif
-			ds_writew(SCREEN_VAR, 1);
+			g_screen_var = 1;
 
 			load_typus(ds_readbs(HERO_TYPUS));
 			update_mouse_cursor();
@@ -5380,9 +5385,9 @@ void change_attribs(void)
 					ds_readbs(HERO_ATT0_NORMAL + 3 * 2) - 1));
 			ds_writew(GOT_CH_BONUS, 0);
 		}
-		ds_writew(SCREEN_VAR, 1);
+		g_screen_var = 1;
 		refresh_screen();
-		ds_writew(SCREEN_VAR, 0);
+		g_screen_var = 0;
 #if defined(__BORLANDC__)
 		asm { db 0xeb, 0x03; db 0xe9, 0x6c, 0x03; } // BCC Sync-Point
 #endif
@@ -7161,7 +7166,7 @@ void choose_typus(void)
 				g_head_first_female[ds_readbs(HEAD_TYPUS)] - 1);
 	}
 	fill_values();
-	ds_writew(SCREEN_VAR, 1);
+	g_screen_var = 1;
 }
 
 /* Borlandified and nearly identical, but works correctly */
