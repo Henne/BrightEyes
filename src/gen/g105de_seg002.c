@@ -914,7 +914,12 @@ static signed char g_useless_variable = 0;
 static signed short g_text_x_mod = 0;
 static const signed short g_ro_zero = 0;
 
+static const signed short dummy6 = 0;
+
+static char hero[0x6da] = {0};
 //static struct struct_hero hero;
+
+static signed short g_midi_disabled = 0;
 
 #if 0
 static unsigned short use_cda;
@@ -1318,7 +1323,7 @@ void dummy()
 void start_music(Bit16u track)
 {
 	if (!ds_readw(USE_CDA)) {
-		if (ds_readw(MIDI_DISABLED) == 0) {
+		if (g_midi_disabled == 0) {
 			play_midi(track);
 		}
 	} else {
@@ -1333,7 +1338,7 @@ void read_soundcfg(void)
 	Bit16u port; // This has to be unsigned
 
 	ds_writew(USE_CDA, 0);
-	ds_writew(MIDI_DISABLED, 1);
+	g_midi_disabled = 1;
 
 	if ((handle = bc_open(RealMake(datseg, STR_SOUND_CFG), 0x8001)) != -1) {
 		bc__read(handle, (Bit8u*)&port, 2);
@@ -1349,7 +1354,7 @@ void read_soundcfg(void)
 		}
 #endif
 		/* enable audio-cd, disable midi */
-		ds_writew(USE_CDA, ds_writew(MIDI_DISABLED, 1));
+		ds_writew(USE_CDA, g_midi_disabled = 1);
 
 		/* play audio-cd */
 		seg001_0600();
@@ -1361,7 +1366,7 @@ void init_music(unsigned long size)
 {
 	if (ds_writed(FORM_XMID, (Bit32s)gen_alloc(size))) {
 		AIL_startup();
-		ds_writew(MIDI_DISABLED, 1);
+		g_midi_disabled = 1;
 	}
 }
 
@@ -1577,12 +1582,12 @@ unsigned short load_driver(RealPt fname, Bit16s type, Bit16s port)
 					}
 				}
 
-				ds_writew(MIDI_DISABLED, 0);
+				g_midi_disabled = 0;
 				return 1;
 			} else {
 #if !defined(__BORLANDC__)
 				infobox((char*)Real2Host(RealMake(datseg, STR_SOUNDHW_NOT_FOUND)), 0);
-				ds_writew(MIDI_DISABLED, 1);
+				g_midi_disabled = 1;
 #else
 				asm {nop; } // BCC Sync-point
 #endif
@@ -1591,14 +1596,14 @@ unsigned short load_driver(RealPt fname, Bit16s type, Bit16s port)
 		}
 	}
 
-	ds_writew(MIDI_DISABLED, 1);
+	g_midi_disabled = 1;
 	return 0;
 }
 
 /* Borlandified and identical */
 void play_midi(Bit16u index)
 {
-	if ((ds_readw(MIDI_DISABLED) == 0) &&
+	if ((g_midi_disabled == 0) &&
 		(host_readw(Real2Host((RealPt)ds_readd(SND_DRIVER_DESC)) + 2) == 3))
 	{
 		stop_sequence();
@@ -1610,7 +1615,7 @@ void play_midi(Bit16u index)
 /* Borlandified and identical */
 void stop_sequence(void)
 {
-	if ((ds_readw(MIDI_DISABLED) == 0) &&
+	if ((g_midi_disabled == 0) &&
 		(host_readw(Real2Host((RealPt)ds_readd(SND_DRIVER_DESC)) + 2) == 3))
 	{
 		AIL_stop_sequence(ds_readw(SND_DRIVER_HANDLE), ds_readw(SND_SEQUENCE));
@@ -1621,7 +1626,7 @@ void stop_sequence(void)
 /* Borlandified and identical */
 void restart_midi(void)
 {
-	if ((ds_readw(MIDI_DISABLED) == 0) &&
+	if ((g_midi_disabled == 0) &&
 		(host_readw(Real2Host((RealPt)ds_readd(SND_DRIVER_DESC)) + 2) == 3) &&
 		(AIL_sequence_status(ds_readw(SND_DRIVER_HANDLE), ds_readw(SND_SEQUENCE)) == 2))
 	{
@@ -7736,7 +7741,7 @@ int main_gen(int argc, char **argv)
 		ds_writew(PARAM_LEVEL, argv[2][0]);
 
 	if ((argc > 3) && (argv[3][0] == '0')) {
-		ds_writew(MIDI_DISABLED, 1);
+		g_midi_disabled = 1;
 		sound_off = 1;
 	};
 

@@ -120,7 +120,7 @@
 #define HERO_PIC                        (0x1606)    /* char[1024] */
 
 
-#define MIDI_DISABLED                   (0x1a07)    /* signed short */
+//#define MIDI_DISABLED                   (0x1a07)    /* signed short */
 #define USE_CDA	                        (0x1a09)    /* signed short */
 #define MOUSE_HANDLER_INSTALLED         (0x1a0b)    /* signed short */
 
