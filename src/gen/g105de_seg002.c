@@ -162,9 +162,7 @@ static const struct struct_spelltab g_spell_tab[87] = {
 	{ -1, 0, 0, 0, 0},
 };
 
-#if 0
-/* DS:0x030b */
-static const signed short house_spells[][8] = {
+static const signed short g_house_spells[][8] = {
 	/* Antimagie */
 	{0x01, 0x02, 0x03, 0x04, 0x05, 0x2a, -1},
 	/* Beherrschung */
@@ -184,7 +182,6 @@ static const signed short house_spells[][8] = {
 	/* Veraenderung */
 	{0x4c, 0x4e, 0x4f, 0x50, 0x52, 0x53, 0x54, -1}
 };
-#endif
 
 #if 0
 /* DS:03ab */
@@ -6616,7 +6613,7 @@ void inc_spell(Bit16s spell)
 			max_incs = 2;
 
 		/* and is a school spell */
-		if (is_in_word_array(spell, (signed short*)Real2Host(ds_readd(HOUSE_SPELLS +  4 * ds_readbs(HERO_SPELL_SCHOOL)))))
+		if (is_in_word_array(spell, g_house_spells[ds_readbs(HERO_SPELL_SCHOOL)]))
 			max_incs = 3;
 	}
 
