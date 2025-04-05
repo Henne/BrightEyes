@@ -438,8 +438,7 @@ static const signed char g_skills[13][52] = {
 	}
 };
 
-#if 0
-static const signed char spells[6][86] = {
+static const signed char g_spells[6][86] = {
 	/* Hexer/ Warlock*/
 	{
 		/* DUMMY */
@@ -609,7 +608,6 @@ static const signed char spells[6][86] = {
 		/* Veraenderung / Transmutation */
 		0, 1, -10, -6, -6, -10, 5, -10, -2, -6, },
 };
-#endif
 
 #if 0
 static const Bit16s init_le[MAX_TYPES + 1] = {	0,
@@ -4730,8 +4728,7 @@ void fill_values(void)
 #else
 		for (i = 0; i < 86; ) { // BCC Sync-Point
 #endif
-			//ds_writebs(HERO_SPELLS + i, spells[ds_readbs(HERO_TYPUS) - 7][i]);
-			ds_writebs(HERO_SPELLS + i, ds_readbs(SPELLS + 86 * (ds_readbs(HERO_TYPUS) - 7) + i));
+			ds_writebs(HERO_SPELLS + i, g_spells[ds_readbs(HERO_TYPUS) - 7][i]);
 
 			/* set spell_incs and spell_tries to zero */
 			// tries, incs

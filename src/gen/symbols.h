@@ -26,7 +26,7 @@
 //#define REQ_ATTRIB                      (0x03cf)    /* Bit8u */
 //#define REQ_REQUIREMENT                 (0x03d0)    /* Bit8u */
 //#define SKILLS                          (0x0437)    /* Bit8s[13][52] */
-#define SPELLS                          (0x06db)    /* Bit8s[6][86] */
+//#define SPELLS                          (0x06db)    /* Bit8s[6][86] */
 
 #define INIT_LE                         (0x08df)    /* Bit16s[13] */
 #define INIT_AE                         (0x08f9)    /* Bit16s[13] */
