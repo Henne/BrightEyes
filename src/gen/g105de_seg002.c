@@ -1062,7 +1062,7 @@ static const struct mouse_action* g_action_page[] = {
 	(struct mouse_action*)&g_action_spells
 };
 
-//static unsigned short need_refresh = 1;
+static char g_need_refresh = 1;
 
 struct type_bitmap {
 	char t[13];
@@ -4467,7 +4467,7 @@ void refresh_screen(void)
 #endif
 			if (ds_readbs(HERO_TYPUS) != 0) {
 
-				ds_writeb(NEED_REFRESH, 1);
+				g_need_refresh = 1;
 				copy_to_screen((RealPt)ds_readd(GEN_PTR5), dst, 128, 184, 0);
 
 				if (ds_readbs(HERO_SEX) != 0) {
@@ -4481,10 +4481,10 @@ void refresh_screen(void)
 				}
 
 			} else {
-				if (ds_readb(NEED_REFRESH)) {
+				if (g_need_refresh) {
 					call_fill_rect_gen((RealPt)ds_readd(VGA_MEMSTART), 16, 8, 143, 191, 0);
 #if !defined(__BORLANDC__)
-					ds_writeb(NEED_REFRESH, 0);
+					g_need_refresh = 0;
 #else
 				asm { nop; } // BCC Sync-Point
 #endif
