@@ -920,9 +920,9 @@ static char hero[0x6da] = {0};
 //static struct struct_hero hero;
 
 static signed short g_midi_disabled = 0;
+static signed short g_use_cda = 0;
 
 #if 0
-static unsigned short use_cda;
 static unsigned short eh_installed;
 static Bit8u *bg_buffer[MAX_PAGES] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 static Bit32s bg_len[MAX_PAGES] =  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -1322,7 +1322,7 @@ void dummy()
 /* Borlandified and identical */
 void start_music(Bit16u track)
 {
-	if (!ds_readw(USE_CDA)) {
+	if (!g_use_cda) {
 		if (g_midi_disabled == 0) {
 			play_midi(track);
 		}
@@ -1337,7 +1337,7 @@ void read_soundcfg(void)
 	Bit16s handle;
 	Bit16u port; // This has to be unsigned
 
-	ds_writew(USE_CDA, 0);
+	g_use_cda = 0;
 	g_midi_disabled = 1;
 
 	if ((handle = bc_open(RealMake(datseg, STR_SOUND_CFG), 0x8001)) != -1) {
@@ -1349,12 +1349,12 @@ void read_soundcfg(void)
 		D1_INFO("MIDI port 0x%x\n", port);
 		if ((port != 0) && (load_driver(RealMake(datseg, STR_SOUND_ADV), 3, port))) {
 			/* disable audio-cd */
-			ds_writew(USE_CDA, 0);
+			g_use_cda = 0;
 			return;
 		}
 #endif
 		/* enable audio-cd, disable midi */
-		ds_writew(USE_CDA, g_midi_disabled = 1);
+		g_use_cda = g_midi_disabled = 1;
 
 		/* play audio-cd */
 		seg001_0600();

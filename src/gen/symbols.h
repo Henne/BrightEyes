@@ -121,7 +121,7 @@
 
 
 //#define MIDI_DISABLED                   (0x1a07)    /* signed short */
-#define USE_CDA	                        (0x1a09)    /* signed short */
+//#define USE_CDA	                        (0x1a09)    /* signed short */
 #define MOUSE_HANDLER_INSTALLED         (0x1a0b)    /* signed short */
 
 #define BG_BUFFER                       (0x1a11)    /* RealPt[11] */
