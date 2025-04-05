@@ -921,9 +921,9 @@ static char hero[0x6da] = {0};
 
 static signed short g_midi_disabled = 0;
 static signed short g_use_cda = 0;
+static signed short g_mouse_handler_installed = 0;
 
 #if 0
-static unsigned short eh_installed;
 static Bit8u *bg_buffer[MAX_PAGES] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 static Bit32s bg_len[MAX_PAGES] =  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 static Bit8u *typus_buffer[MAX_TYPES] =  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -1900,7 +1900,7 @@ void mouse_do_enable(Bit16u val, RealPt ptr)
 	/* set the new mouse event handler */
 	do_mouse_action((Bit8u*)&p1, (Bit8u*)&p2, (Bit8u*)&p3, (Bit8u*)&p4, (Bit8u*)&p5);
 
-	ds_writew(MOUSE_HANDLER_INSTALLED, 1);
+	g_mouse_handler_installed = 1;
 }
 
 /* Borlandified and identical */
@@ -1919,7 +1919,7 @@ void mouse_do_disable(void)
 
 	do_mouse_action((Bit8u*)&v1, (Bit8u*)&v2, (Bit8u*)&v3, (Bit8u*)&v4, (Bit8u*)&v5);
 
-	ds_writew(MOUSE_HANDLER_INSTALLED, 0);
+	g_mouse_handler_installed = 0;
 }
 
 /**
