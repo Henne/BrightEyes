@@ -1067,7 +1067,8 @@ static char g_need_refresh = 1;
 struct type_bitmap {
 	char t[13];
 };
-//struct type_bitmap empty_bitmap;
+
+static const struct type_bitmap g_type_bitmap = { {0} };
 
 //static char version[] = "V1.05";
 #if 0
@@ -5179,7 +5180,7 @@ void select_typus(void)
 
 	old_typus = -1;
 	
-	t = *(struct type_bitmap*)(Real2Host(RealMake(datseg, TYPE_BITMAP)));
+	t = *(struct type_bitmap*)&g_type_bitmap;
 
 	/* check if attribs have been set */
 	if (ds_readbs(HERO_ATT0_NORMAL + 3 * 0) != 0) {
