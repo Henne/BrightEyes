@@ -67,8 +67,8 @@
 //#define MOUSE_POINTER_OFFSETX_BAK       (0x125a)
 //#define MOUSE_POINTER_OFFSETY_BAK       (0x125c)
 
-#define DEFAULT_ACTION                  (0x1272)    /* RealPt */
-#define ACTION_TABLE                    (0x1276)    /* RealPt */
+//#define DEFAULT_ACTION                  (0x1272)    /* RealPt */
+//#define ACTION_TABLE                    (0x1276)    /* RealPt */
 
 #define GEN_PAGE                        (0x1324)    /* signed short */
 

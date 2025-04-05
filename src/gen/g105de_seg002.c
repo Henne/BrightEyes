@@ -874,14 +874,14 @@ static signed short g_mouse_pointer_offsety = 0;
 static signed short g_mouse_pointer_offsetx_bak = 0;
 static signed short g_mouse_pointer_offsety_bak = 0;
 
-/* DS:0x135e */
-static const struct mouse_action action_default[2] = {
-			{ 0, 0, 319, 199, 0xfe},
-			{ -1, -1, -1, -1, -1} };
+static const struct mouse_action g_action_default[2] = {
+	{ 0, 0, 319, 199, 0xfe},
+	{ -1, -1, -1, -1, -1}
+};
 
-//static Bit8u* DEFAULT_ACTION = (Bit8u*)&action_default;
+static struct mouse_action* g_default_action = &g_action_default;
 
-//static Bit8u *ACTION_TABLE;
+static struct mouse_action* g_action_table = NULL;
 
 /* DS:0x127a */
 static const struct mouse_action action_base[9] = {
@@ -2087,15 +2087,13 @@ void handle_input(void)
 		ds_writew(MOUSE1_EVENT2, 0);
 		si = 0;
 
-		if ((RealPt)ds_readd(ACTION_TABLE))
-			si = get_mouse_action(g_mouse_posx,
-				g_mouse_posy,
-				(struct mouse_action*)Real2Host(ds_readd(ACTION_TABLE)));
+		if (g_action_table)
+			si = get_mouse_action(g_mouse_posx, g_mouse_posy,
+				(struct mouse_action*)g_action_table);
 				
-		if ((si == 0) && ((RealPt)ds_readd(DEFAULT_ACTION)))
-			si = get_mouse_action(g_mouse_posx,
-				g_mouse_posy,
-				(struct mouse_action*)Real2Host(ds_readd(DEFAULT_ACTION)));
+		if ((si == 0) && (g_default_action))
+			si = get_mouse_action(g_mouse_posx, g_mouse_posy,
+				(struct mouse_action*)g_default_action);
 
 		if (ds_readw(HAVE_MOUSE) == 2) {
 			for (i = 0; i < 15; i++)
@@ -3809,9 +3807,9 @@ Bit16s infobox(char *msg, Bit16s digits)
 
 		retval = (Bit16u)atol((char*)Real2Host((RealPt)ds_readd(GEN_PTR3)));
 	} else {
-		ds_writed(ACTION_TABLE,  (Bit32u)RealMake(datseg, ACTION_INPUT));
+		g_action_table = (struct mouse_action*)RealMake(datseg, ACTION_INPUT);
 		vsync_or_key(150 * lines);
-		ds_writed(ACTION_TABLE, (Bit32u)((RealPt)0));
+		g_action_table = (struct mouse_action*)NULL;
 	}
 
 	set_textcolor(fg, bg);
@@ -4014,9 +4012,9 @@ Bit16s gui_radio(Bit8u *header, Bit8s options, ...)
 #endif
 
 	while (r5 == 0) {
-		ds_writed(ACTION_TABLE,  (Bit32u)RealMake(datseg, ACTION_INPUT));
+		g_action_table = (struct mouse_action*)RealMake(datseg, ACTION_INPUT);
 		handle_input();
-		ds_writed(ACTION_TABLE, (Bit32u)((RealPt)0));
+		g_action_table = (struct mouse_action*)NULL;
 
 		if (r6 != di) {
 			fill_radio_button(r6, di, lines_header);
@@ -4228,9 +4226,10 @@ void do_gen(void)
 			g_screen_var = 0;
 		}
 
-		ds_writed(ACTION_TABLE,  (Bit32u)ds_readd(ACTION_PAGE + 4 * ds_readws(GEN_PAGE)));
+		g_action_table =
+			(struct mouse_action*)Real2Host(ds_readd(ACTION_PAGE + 4 * ds_readws(GEN_PAGE)));
 		handle_input();
-		ds_writed(ACTION_TABLE, (Bit32u)(RealPt)0);
+		g_action_table = (struct mouse_action*)NULL;
 
 		if (ds_readw(MOUSE2_EVENT) || ds_readw(IN_KEY_EXT) == KEY_PGUP) {
 			/* print the menu for each page */
