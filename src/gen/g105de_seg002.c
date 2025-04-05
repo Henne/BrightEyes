@@ -1182,6 +1182,12 @@ static const struct struct_color g_pal_heads[32] = {
 	{0x3c, 0x3c, 0x3c},
 };
 
+static const char g_str_sound_cfg[] = "SOUND.CFG";
+static const char g_str_sound_adv[] = "SOUND.ADV";
+static const char g_str_soundhw_not_found[] = "SOUND HARDWARE NOT FOUND!";
+static const char g_str_chr[] = ".CHR";
+static const char g_str_temp_dir[] = "TEMP\\";
+static const char g_str_save_error[] = "@SPEICHER FEHLER!@EVENTUELL DISKETTE GESCH\x9aTZT?";
 
 /* Remark: these are stored at DS:0x1e39 */
 static const char g_fname00[] = "GEN1.NVF";
@@ -1372,14 +1378,14 @@ void read_soundcfg(void)
 	g_use_cda = 0;
 	g_midi_disabled = 1;
 
-	if ((handle = bc_open(RealMake(datseg, STR_SOUND_CFG), 0x8001)) != -1) {
+	if ((handle = bc_open(g_str_sound_cfg, 0x8001)) != -1) {
 		bc__read(handle, (Bit8u*)&port, 2);
 		bc__close(handle);
 
 #if !defined(__BORLANDC__)
 		/* Small hack: enable MIDI instead of CD-Audio */
 		D1_INFO("MIDI port 0x%x\n", port);
-		if ((port != 0) && (load_driver(RealMake(datseg, STR_SOUND_ADV), 3, port))) {
+		if ((port != 0) && (load_driver((RealPt)g_str_sound_adv, 3, port))) {
 			/* disable audio-cd */
 			g_use_cda = 0;
 			return;
@@ -1618,7 +1624,7 @@ unsigned short load_driver(RealPt fname, Bit16s type, Bit16s port)
 				return 1;
 			} else {
 #if !defined(__BORLANDC__)
-				infobox((char*)Real2Host(RealMake(datseg, STR_SOUNDHW_NOT_FOUND)), 0);
+				infobox((char*)g_str_soundhw_not_found, 0);
 				g_midi_disabled = 1;
 #else
 				asm {nop; } // BCC Sync-point
@@ -2584,7 +2590,7 @@ void save_chr(void)
 
 	strncpy(filename, (char*)Real2Host(ds_readd(GEN_PTR2)), 8);
 	filename[8] = 0;
-	strcat(filename, (char*)Real2Host(RealMake(datseg, STR_CHR)));
+	strcat(filename, (char*)g_str_chr);
 
 	/* remark: bc_open() and bc__creat() have filename on the stack of the host */
 	if (((handle = bc_open_host(filename, 0x8001)) == -1) || gui_bool((Bit8u*)get_text(261))) {
@@ -2601,7 +2607,7 @@ void save_chr(void)
 
 			if (ds_readw(CALLED_WITH_ARGS) == 0) return;
 
-			strcpy(path, (char*)Real2Host(RealMake(datseg, STR_TEMP_DIR)));
+			strcpy(path, (char*)g_str_temp_dir);
 			strcat(path, filename);
 
 			if ((handle = bc__create_host(path, 0)) != -1) {
@@ -2610,7 +2616,7 @@ void save_chr(void)
 			}
 		} else {
 			/* should be replaced with infobox() */
-			error_msg(Real2Host(RealMake(datseg, STR_SAVE_ERROR)));
+			error_msg((RealPt)g_str_save_error);
 		}
 	}
 }

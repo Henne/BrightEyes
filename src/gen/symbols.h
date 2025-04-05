@@ -146,16 +146,15 @@
 //#define PAL_POPUP                       (0x1d4f)    /* RGB[8] */
 //#define PAL_MISC                        (0x1d67)    /* RGB[3] */
 //#define PAL_HEADS                       (0x1d70)    /* RGB[32] */
-#define STR_SOUND_CFG                   (0x1dd0)    /* char[9]; "SOUND.CFG" */
-#define STR_SOUND_ADV                   (0x1dda)    /* char[]; "SOUND.ADV */
-#define STR_SOUNDHW_NOT_FOUND           (0x1de4)    /* char[]; "SOUND HARDWARE NOT FOUND" */
-#define STR_CHR                         (0x1dfe)    /* char[5]; ".CHR" */
-#define STR_TEMP_DIR                    (0x1e03)    /* char[] */
-#define STR_SAVE_ERROR                  (0x1e09)    /* char[] */
+//#define STR_SOUND_CFG                   (0x1dd0)    /* char[9]; "SOUND.CFG" */
+//#define STR_SOUND_ADV                   (0x1dda)    /* char[]; "SOUND.ADV */
+//#define STR_SOUNDHW_NOT_FOUND           (0x1de4)    /* char[]; "SOUND HARDWARE NOT FOUND" */
+//#define STR_CHR                         (0x1dfe)    /* char[5]; ".CHR" */
+//#define STR_TEMP_DIR                    (0x1e03)    /* char[] */
+//#define STR_SAVE_ERROR                  (0x1e09)    /* char[] */
 
 #define STR_DSAGEN_DAT                  (0x1fb0)    /* char[] */
 #define STR_MALLOC_ERROR                (0x1fbb)    /* char[] */
-
 #define RANDOM_GEN_SEED                 (0x1fd6)    /* Bit16u */
 
 #define _CTYPE                          (0x1ff9)    /* CLIB array for isalpha() */
