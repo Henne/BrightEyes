@@ -37,7 +37,7 @@
 //#define INITIAL_CONV_INCS               (0x0a97)    /* Bit8s[6] */
 //#define HOUSE_MOD                       (0x0a9d)    /* struct house_mode[9] */
 //#define AUTOSKILLS                      (0x0ba2)    /* Bit16s[13][90] */
-#define AUTOSPELLS                      (0x0ee0)    /* */
+//#define AUTOSPELLS                      (0x0ee0)    /* */
 
 #define HEAD_FIRST_MALE                 (0x1048)    /* Bit8u[12] : start indices in HEADS.DAT for each typus */
 #define HEAD_FIRST_FEMALE               (0x1054)    /* Bit8u[12] : start indices in HEADS.DAT for each typus */

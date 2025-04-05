@@ -754,47 +754,31 @@ static const signed short g_autoskills[][25] = {
 		13, 10, 14, 28, 46, 15, 17, 7, 27, 11, 13, 28, 41}
 };
 
-#if 0
-static unsigned short autospells[6][45] = {
-	{5, 9, 15, 22, 34, 37, 47, 48,
-	55, 58, 64, 42, 49, 5, 9, 15,
-	22, 34, 37, 47, 48, 55, 58, 64,
-	5, 9, 15, 22, 34, 37, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, },
-	{1, 8, 10, 11, 13, 17, 19, 20,
-	80, 24, 42, 5, 41, 1, 8, 10,
-	11, 13, 17, 19, 20, 80, 24, 1,
-	8, 10, 11, 13, 17, 19, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, },
-	{1, 2, 3, 4, 5, 6, 7, 8,
-	9, 10, 11, 12, 13, 14, 15, 16,
-	17, 18, 19, 20, 21, 22, 23, 24,
-	25, 26, 27, 28, 29, 30, 31, 32,
-	33, 34, 35, 36, 37, 38, 39, 40,
-	41, 42, 43, 44, 45, },
-	{7, 33, 38, 40, 42, 44, 52, 84,
-	62, 74, 75, 82, 49, 27, 7, 33,
-	38, 40, 42, 44, 52, 84, 62, 74,
-	75, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, },
-	{32, 77, 82, 26, 85, 70, 68, 67,
-	65, 45, 49, 38, 32, 77, 82, 26,
-	85, 70, 68, 67, 65, 32, 77, 82,
-	26, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, },
-	{6, 16, 27, 30, 41, 45, 49, 57,
-	76, 60, 62, 52, 38, 6, 16, 27,
-	30, 41, 45, 49, 57, 76, 60, 6,
-	16, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, },
+static signed short g_autospells[][45] = {
+	{5, 9, 15, 22, 34, 37, 47, 48, 55, 58, 64, 42, 49, 5, 9, 15,
+	22, 34, 37, 47, 48, 55, 58, 64,	5, 9, 15, 22, 34, 37, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, },
 
+	{1, 8, 10, 11, 13, 17, 19, 20, 80, 24, 42, 5, 41, 1, 8, 10,
+	11, 13, 17, 19, 20, 80, 24, 1, 8, 10, 11, 13, 17, 19, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, },
+
+	{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+	17, 18, 19, 20, 21, 22, 23, 24,	25, 26, 27, 28, 29, 30, 31, 32,
+	33, 34, 35, 36, 37, 38, 39, 40,	41, 42, 43, 44, 45, },
+
+	{7, 33, 38, 40, 42, 44, 52, 84,	62, 74, 75, 82, 49, 27, 7, 33,
+	38, 40, 42, 44, 52, 84, 62, 74,	75, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, },
+
+	{32, 77, 82, 26, 85, 70, 68, 67, 65, 45, 49, 38, 32, 77, 82, 26,
+	85, 70, 68, 67, 65, 32, 77, 82,	26, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+
+	{6, 16, 27, 30, 41, 45, 49, 57,	76, 60, 62, 52, 38, 6, 16, 27,
+	30, 41, 45, 49, 57, 76, 60, 6,	16, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, }
 };
-#endif
 
 #if 0
 static const signed char head_first_male[12] = {	0, 0, 6, 12,
@@ -4961,59 +4945,48 @@ void fill_values(void)
 		si = 0;
 		/* prepare mage automatic spell list */
 		if (ds_readbs(HERO_TYPUS) == 9) {
+			/* Remark: HERO_TYPUS is equal to 9, g_autospells starts with typus = 7,
+			 * so g_autospells[2] is that of the Mage */
+
 			/* 1. house spells */
 			for (i = 0; g_house_mod[ds_readbs(HERO_SPELL_SCHOOL)].no > i; si++, i++) {
-//				autospells[ds_readbs(HERO_TYPUS) - 7][si] =
-				ds_writew(AUTOSPELLS + 2 * si,
-						g_house_mod[ds_readbs(HERO_SPELL_SCHOOL)].spells[i]);
+				g_autospells[2][si] =
+						g_house_mod[ds_readbs(HERO_SPELL_SCHOOL)].spells[i];
 			}
 			/* 2. all schools spells */
 			for (i = 0; g_school_tab[ds_readbs(HERO_SPELL_SCHOOL)].spells > i; si++, i++) {
-				//autospells[ds_readbs(HERO_TYPUS) - 7][si] =
-					//school_tab[ds_readbs(HERO_SPELL_SCHOOL)].first_spell + i);
-
-				ds_writew(AUTOSPELLS + 2 * si,
-					g_school_tab[ds_readbs(HERO_SPELL_SCHOOL)].first_spell + i);
+				g_autospells[2][si] =
+					g_school_tab[ds_readbs(HERO_SPELL_SCHOOL)].first_spell + i;
 			}
 			/* 3. five domination spells */
 				/* Herr der Tiere */
-			////autospells[ds_readbs(HERO_TYPUS) - 7][si++] = 0x52;
-			ds_writew(AUTOSPELLS + 2 * si++, 0x52);
+			g_autospells[2][si++] = 0x52;
 				/* Horriphobus */
-			//autospells[ds_readbs(HERO_TYPUS) - 7][si++] = 0x31;
-			ds_writew(AUTOSPELLS + 2 * si++, 0x31);
+			g_autospells[2][si++] = 0x31;
 				/* Mag. Raub */
-			//autospells[ds_readbs(HERO_TYPUS) - 7][si++] = 0x35;
-			ds_writew(AUTOSPELLS + 2 * si++, 0x35);
+			g_autospells[2][si++] = 0x35;
 				/* Respondami */
-			//autospells[ds_readbs(HERO_TYPUS) - 7][si++] = 0x21;
-			ds_writew(AUTOSPELLS + 2 * si++, 0x21);
+			g_autospells[2][si++] = 0x21;
 				/* Sanftmut */
-			//autospells[ds_readbs(HERO_TYPUS) - 7][si++] = 0x4f;
-			ds_writew(AUTOSPELLS + 2 * si++, 0x4f);
+			g_autospells[2][si++] = 0x4f;
 
 			/* 4. all house spells */
 			for (i = 0; g_house_mod[ds_readbs(HERO_SPELL_SCHOOL)].no > i; si++, i++) {
-//				autospells[ds_readbs(HERO_TYPUS) - 7][si] =
-				ds_writew(AUTOSPELLS + 2 * si,
-					g_house_mod[ds_readbs(HERO_SPELL_SCHOOL)].spells[i]);
+				g_autospells[2][si] = g_house_mod[ds_readbs(HERO_SPELL_SCHOOL)].spells[i];
 			}
 			/* 5. all house spells */
 			for (i = 0; g_house_mod[ds_readbs(HERO_SPELL_SCHOOL)].no > i; si++, i++) {
-//				autospells[ds_readbs(HERO_TYPUS) - 7][si] =
-				ds_writew(AUTOSPELLS + 2 * si,
-					g_house_mod[ds_readbs(HERO_SPELL_SCHOOL)].spells[i]);
+				g_autospells[2][si] = g_house_mod[ds_readbs(HERO_SPELL_SCHOOL)].spells[i];
 			}
 			/* 6. random spells */
 			while (si < 45) {
-				//autospells[ds_readbs(HERO_TYPUS) - 7][si++] = random_gen(85);
-				ds_writew(AUTOSPELLS + 2 * si++, random_gen(85));
+				g_autospells[2][si++] = random_gen(85);
 			}
 		}
+
 		/* automatic increase spells */
 		for (i = 0; ds_readbs(HERO_SPELL_INCS) > 0; i++) {
-//			spell_inc_novice((v2 = autospells[ds_readbs(HERO_TYPUS) - 9][i]));
-			spell_inc_novice((v2 = ds_readw(AUTOSPELLS + 90 * (ds_readbs(HERO_TYPUS) - 9) + 2 * i )));
+			spell_inc_novice((v2 = g_autospells[ds_readbs(HERO_TYPUS) - 7][i]));
 		}
 	}
 }
