@@ -2338,7 +2338,7 @@ void split_textbuffer(Bit8u *dst, RealPt src, Bit32u len)
 #if !defined(__BORLANDC__)
 			dst += 4;
 #else
-			dst += 4;
+			//dst += 4;
 			asm {nop} // Sync-point
 #endif
 		}
