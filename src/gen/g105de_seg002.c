@@ -952,7 +952,7 @@ static const char* g_fnames_g105de[] = {
 	g_fname35, g_fname36
 };
 
-//static const char* str_file_missing[] = { "FILE %s IS MISSING!" };
+static const char g_str_file_missing[] = { "FILE %s IS MISSING!" };
 
 struct struct_chr_lookup {
 	unsigned char chr, idx, width;
@@ -2766,7 +2766,7 @@ Bit16s open_datfile(Bit16u index)
 	while ((handle = bc_open(RealMake(datseg, STR_DSAGEN_DAT), 0x8001)) == -1)
 	{
 		sprintf((char*)Real2Host(ds_readd(GEN_PTR2)),
-			(const char*)Real2Host(RealMake(datseg, STR_FILE_MISSING)),
+			(const char*)g_str_file_missing,
 			(const char*)g_fnames_g105de[index]);
 
 		g_useless_variable = 1;
