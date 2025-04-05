@@ -1126,11 +1126,11 @@ static const struct struct_color g_pal_dsalogo[32] = {
 	{0x3c, 0x3c, 0x3c},
 };
 
-static const struct struct_color col_white = { 0x3f, 0x3f, 0x3f };
+static const struct struct_color g_pal_col_white = { 0x3f, 0x3f, 0x3f };
 
-static const struct struct_color col_black = { 0x00, 0x00, 0x00 };
+static const struct struct_color g_pal_col_black = { 0x00, 0x00, 0x00 };
 
-static const struct struct_color col_popup[8] = {
+static const struct struct_color g_pal_popup[8] = {
 	{0x00, 0x00, 0x00 },
 	{0x38, 0x30, 0x28 },
 	{0x38, 0x30, 0x10 },
@@ -1140,14 +1140,14 @@ static const struct struct_color col_popup[8] = {
 	{0x18, 0x14, 0x00 },
 	{0x0b, 0x19, 0x0c }
 };
-/* DS:PAL_MISC */
-static const struct struct_color col_misc[3] = {
+
+static const struct struct_color g_pal_misc[3] = {
 	{0x28, 0x00, 0x00 },
 	{0x28, 0x28, 0x00 },
 	{0x00, 0x00, 0x28 }
 };
-/* DS:PAL_HEADS */
-static const struct struct_color pal_heads[32] = {
+
+static const struct struct_color g_pal_heads[32] = {
 	{0x00, 0x00, 0x00},
 	{0x00, 0x00, 0x3f},
 	{0x00, 0x00, 0x24},
@@ -7883,12 +7883,12 @@ void alloc_buffers(void)
 /* Borlandified and identical */
 void init_colors(void)
 {
-	set_palette(RealMake(datseg, PAL_COL_BLACK), 0x00, 1);
-	set_palette(RealMake(datseg, PAL_COL_WHITE), 0xff, 1);
-	set_palette(RealMake(datseg, PAL_POPUP), 0xd8, 8);
-	set_palette(RealMake(datseg, PAL_MISC), 0xc8, 3);
-	set_palette((RealPt)g_pal_genbg, 0x40, 0x20);
-	set_palette(RealMake(datseg, PAL_HEADS), 0x20, 0x20);
+	set_palette((RealPt)&g_pal_col_black, 0x00, 1);
+	set_palette((RealPt)&g_pal_col_white, 0xff, 1);
+	set_palette((RealPt)&g_pal_popup, 0xd8, 8);
+	set_palette((RealPt)&g_pal_misc, 0xc8, 3);
+	set_palette((RealPt)&g_pal_genbg, 0x40, 0x20);
+	set_palette((RealPt)&g_pal_heads, 0x20, 0x20);
 	set_textcolor(0xff, 0x0); // WHITE ON BLACK
 }
 
