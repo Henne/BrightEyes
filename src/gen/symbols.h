@@ -135,7 +135,7 @@
 //#define CHR_LOOKUP                      (0x1b85)
 //#define ACTION_INPUT                    (0x1c63)
 //#define BOOL_MODE                       (0x1c77)    /* Bit16s */
-#define ACTION_PAGE                     (0x1c79)    /* RealPt[11] */
+//#define ACTION_PAGE                     (0x1c79)    /* RealPt[11] */
 
 #define NEED_REFRESH                    (0x1ca5)    /* Bit8s {0,1} */
 #define TYPE_BITMAP                     (0x1ca6)    /* Bit8[13] */

@@ -1048,20 +1048,20 @@ static const struct mouse_action g_action_input[2] = {
 
 static signed short g_bool_mode = 0;
 
-#if 0
-static const struct mouse_action *action_page[MAX_PAGES] = {
-			(struct mouse_action*)&action_base,
-			(struct mouse_action*)&action_skills,
-			(struct mouse_action*)&action_skills,
-			(struct mouse_action*)&action_skills,
-			(struct mouse_action*)&action_skills,
-			(struct mouse_action*)&action_spells,
-			(struct mouse_action*)&action_spells,
-			(struct mouse_action*)&action_spells,
-			(struct mouse_action*)&action_spells,
-			(struct mouse_action*)&action_spells,
-			(struct mouse_action*)&action_spells };
-#endif
+static const struct mouse_action* g_action_page[] = {
+	(struct mouse_action*)&g_action_base,
+	(struct mouse_action*)&g_action_skills,
+	(struct mouse_action*)&g_action_skills,
+	(struct mouse_action*)&g_action_skills,
+	(struct mouse_action*)&g_action_skills,
+	(struct mouse_action*)&g_action_spells,
+	(struct mouse_action*)&g_action_spells,
+	(struct mouse_action*)&g_action_spells,
+	(struct mouse_action*)&g_action_spells,
+	(struct mouse_action*)&g_action_spells,
+	(struct mouse_action*)&g_action_spells
+};
+
 //static unsigned short need_refresh = 1;
 
 struct type_bitmap {
@@ -4258,8 +4258,7 @@ void do_gen(void)
 			g_screen_var = 0;
 		}
 
-		g_action_table =
-			(struct mouse_action*)Real2Host(ds_readd(ACTION_PAGE + 4 * g_gen_page));
+		g_action_table = (struct mouse_action*)g_action_page[g_gen_page];
 		handle_input();
 		g_action_table = (struct mouse_action*)NULL;
 
