@@ -926,48 +926,31 @@ static signed short g_mouse_handler_installed = 0;
 static signed short dummy7 = -1;
 static signed short dummy8 = 0;
 
-static char* g_bg_buffer[11]       = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-static signed long g_bg_len[11]    = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-static char *g_typus_buffer[13]    = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+static const char* g_bg_buffer[]       = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+static signed long g_bg_len[]    = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+static char *g_typus_buffer[]    = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 static signed long g_typus_len[13] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-static const char fnames_g105de[][13] = { "GEN1.NVF",
-					"GEN2.NVF",
-					"GEN3.NVF",
-					"GEN4.NVF",
-					"GEN5.NVF",
-					"GEN6.NVF",
-					"GEN7.NVF",
-					"GEN8.NVF",
-					"GEN9.NVF",	/* 0x08 */
-					"GEN10.NVF",
-					"GEN11.NVF",
-					"HEADS.DAT",
-					"SEX.DAT",
-					"TYPPIC.DAT",
-					"FONT6",
-					"GENTEXT",
-					"DSALOGO.DAT",	/* 0x10 */
-					"GENTIT.DAT",
-					"ATTIC",
-					"POPUP.DAT",
-					"DGAUKLER.DAT",
-					"DJAEGER.DAT",
-					"DKRIEGER.DAT",
-					"DSTREUNE.DAT",
-					"DTHORWAL.DAT",	/* 0x18 */
-					"DZWERG.DAT",
-					"DHEXE.DAT",
-					"DDRUIDE.DAT",
-					"DMAGIER.DAT",
-					"DAELF.DAT",
-					"DFELF.DAT",
-					"DWELF.DAT",
-					"DMENGE.DAT",	/* 0x20 */
-					"GEN.XMI",
-					"FANPRO.NVF",
-					"SAMPLE.AD",
-					"MT32EMUL.XMI" };
+/* declare the filenames here, to use them in g_fnames */
+static const char g_fname00[], g_fname01[], g_fname02[], g_fname03[], g_fname04[];
+static const char g_fname05[], g_fname06[], g_fname07[], g_fname08[], g_fname09[];
+static const char g_fname10[], g_fname11[], g_fname12[], g_fname13[], g_fname14[];
+static const char g_fname15[], g_fname16[], g_fname17[], g_fname18[], g_fname19[];
+static const char g_fname20[], g_fname21[], g_fname22[], g_fname23[], g_fname24[];
+static const char g_fname25[], g_fname26[], g_fname27[], g_fname28[], g_fname29[];
+static const char g_fname30[], g_fname31[], g_fname32[], g_fname33[], g_fname34[];
+static const char g_fname35[], g_fname36[];
+
+static const char* g_fnames_g105de[] = {
+	g_fname00, g_fname01, g_fname02, g_fname03, g_fname04,
+	g_fname05, g_fname06, g_fname07, g_fname08, g_fname09,
+	g_fname10, g_fname11, g_fname12, g_fname13, g_fname14,
+	g_fname15, g_fname16, g_fname17, g_fname18, g_fname19,
+	g_fname20, g_fname21, g_fname22, g_fname23, g_fname24,
+	g_fname25, g_fname26, g_fname27, g_fname28, g_fname29,
+	g_fname30, g_fname31, g_fname32, g_fname33, g_fname34,
+	g_fname35, g_fname36
+};
 
 //static const char* str_file_missing[] = { "FILE %s IS MISSING!" };
 
@@ -1190,6 +1173,46 @@ static const struct struct_color pal_heads[32] = {
 	{0x10, 0x08, 0x04},
 	{0x3c, 0x3c, 0x3c},
 };
+
+
+/* Remark: these are stored at DS:0x1e39 */
+static const char g_fname00[] = "GEN1.NVF";
+static const char g_fname01[] = "GEN2.NVF";
+static const char g_fname02[] = "GEN3.NVF";
+static const char g_fname03[] = "GEN4.NVF";
+static const char g_fname04[] = "GEN5.NVF";
+static const char g_fname05[] = "GEN6.NVF";
+static const char g_fname06[] = "GEN7.NVF";
+static const char g_fname07[] = "GEN8.NVF";
+static const char g_fname08[] = "GEN9.NVF";
+static const char g_fname09[] = "GEN10.NVF";
+static const char g_fname10[] = "GEN11.NVF";
+static const char g_fname11[] = "HEADS.DAT";
+static const char g_fname12[] = "SEX.DAT";
+static const char g_fname13[] = "TYPPIC.DAT";
+static const char g_fname14[] = "FONT6";
+static const char g_fname15[] = "GENTEXT";
+static const char g_fname16[] = "DSALOGO.DAT";
+static const char g_fname17[] = "GENTIT.DAT";
+static const char g_fname18[] = "ATTIC";
+static const char g_fname19[] = "POPUP.DAT";
+static const char g_fname20[] = "DGAUKLER.DAT";
+static const char g_fname21[] = "DJAEGER.DAT";
+static const char g_fname22[] = "DKRIEGER.DAT";
+static const char g_fname23[] = "DSTREUNE.DAT";
+static const char g_fname24[] = "DTHORWAL.DAT";
+static const char g_fname25[] = "DZWERG.DAT";
+static const char g_fname26[] = "DHEXE.DAT";
+static const char g_fname27[] = "DDRUIDE.DAT";
+static const char g_fname28[] = "DMAGIER.DAT";
+static const char g_fname29[] = "DAELF.DAT";
+static const char g_fname30[] = "DFELF.DAT";
+static const char g_fname31[] = "DWELF.DAT";
+static const char g_fname32[] = "DMENGE.DAT";
+static const char g_fname33[] = "GEN.XMI";
+static const char g_fname34[] = "FANPRO.NVF";
+static const char g_fname35[] = "SAMPLE.AD";
+static const char g_fname36[] = "MT32EMUL.XMI";
 
 //static unsigned short got_ch_bonus;
 //static unsigned short got_mu_bonus;
@@ -2744,7 +2767,7 @@ Bit16s open_datfile(Bit16u index)
 	{
 		sprintf((char*)Real2Host(ds_readd(GEN_PTR2)),
 			(const char*)Real2Host(RealMake(datseg, STR_FILE_MISSING)),
-			(const char*)Real2Host((RealPt)ds_readd(FNAMES_G105de + 4 * index)));
+			(const char*)g_fnames_g105de[index]);
 
 		g_useless_variable = 1;
 		infobox((char*)Real2Host(ds_readd(GEN_PTR2)), 0);
@@ -2753,7 +2776,7 @@ Bit16s open_datfile(Bit16u index)
 
 	bc__read(handle, buf, 800);
 
-	if ((Bit32s)(ds_writed(GENDAT_OFFSET, get_archive_offset((char*)Real2Host(ds_readd(FNAMES_G105de + 4 * index)), buf))) != -1) {
+	if ((Bit32s)(ds_writed(GENDAT_OFFSET, get_archive_offset((char*)g_fnames_g105de[index], buf))) != -1) {
 		bc_lseek(handle, ds_readd(GENDAT_OFFSET), 0);
 		return handle;
 	} else {
