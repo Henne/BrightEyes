@@ -726,8 +726,7 @@ static const struct struct_house_mod g_house_mod[9] = {
 	{7, {0x4c, 0x4e, 0x4f, 0x50, 0x52, 0x53, 0x54}, {2, 1, 2, 2, 2, 1, 2}}
 };
 
-#if 0
-static const unsigned short autoskills[13][25] = {
+static const signed short g_autoskills[][25] = {
 	{0 },
 	{9, 11, 2, 47, 0, 8, 16, 9, 10, 11, 43, 34, 40,
 		13, 20, 24, 22, 46, 50, 15, 47, 12, 27, 23, 49},
@@ -753,9 +752,7 @@ static const unsigned short autoskills[13][25] = {
 		13, 15, 11, 10, 14, 30, 29, 46, 11, 10, 13, 20, 17},
 	{1, 26, 31, 8, 2, 31, 0, 30, 26, 15, 11, 47,
 		13, 10, 14, 28, 46, 15, 17, 7, 27, 11, 13, 28, 41}
-
 };
-#endif
 
 #if 0
 static unsigned short autospells[6][45] = {
@@ -4956,7 +4953,7 @@ void fill_values(void)
 	if (ds_readws(LEVEL) == 1) {
 		/* increase skills automatically */
 		for (i = 0; ds_readbs(HERO_SKILL_INCS) > 0; i++) {
-			skill_inc_novice(v1 = ds_readws(AUTOSKILLS + 50 * ds_readbs(HERO_TYPUS) + 2 * i));
+			skill_inc_novice(v1 = g_autoskills[ds_readbs(HERO_TYPUS)][i]);
 		}
 
 		// Okay, till here !
