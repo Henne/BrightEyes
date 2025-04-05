@@ -855,7 +855,24 @@ static unsigned short g_mouse_mask[32] = {
         0x001c, 0x0008, 0x0000, 0x0000,
 };
 
-//static Bit16s MOUSE_REFRESH_FLAG = -1;
+static signed short g_mouse_posy_min = 0;
+static signed short g_mouse_posx_min = 0;
+static signed short g_mouse_posy_max = 0xc7;
+static signed short g_mouse_posx_max = 0x136;
+static signed short g_mouse_locked = 0;
+static signed short g_mouse_refresh_flag = -1;
+
+static signed short g_mouse_posx = 0xa0;
+static signed short g_mouse_posy = 0x64;
+static signed short g_mouse_posx_bak = 0xa0;
+static signed short g_mouse_posy_bak = 0x64;
+
+static signed short g_mouse_moved = 0;
+
+static signed short g_mouse_pointer_offsetx = 0;
+static signed short g_mouse_pointer_offsety = 0;
+static signed short g_mouse_pointer_offsetx_bak = 0;
+static signed short g_mouse_pointer_offsety_bak = 0;
 
 /* DS:0x135e */
 static const struct mouse_action action_default[2] = {
@@ -1745,7 +1762,7 @@ void interrupt mouse_isr(void)
 	signed short p4;
 	signed short p5;
 	
-	if (ds_readws(MOUSE_LOCKED) == 0) {
+	if (g_mouse_locked == 0) {
 		if (l_si & 0x2) {
 			ds_writew(MOUSE1_EVENT2, 1);
 			ds_writew(MOUSE1_EVENT1, 1);
@@ -1755,34 +1772,34 @@ void interrupt mouse_isr(void)
 		}
 		if (l_si & 0x1) {
 			p1 = 3;
-			p3 = ds_readws(MOUSE_POSX);
-			p4 = ds_readws(MOUSE_POSY);
+			p3 = g_mouse_posx;
+			p4 = g_mouse_posy;
 			
 			do_mouse_action((Bit8u*)&p1, (Bit8u*)&p2, (Bit8u*)&p3, (Bit8u*)&p4, (Bit8u*)&p5);
 
-			ds_writew(MOUSE_POSX, p3);
-			ds_writew(MOUSE_POSY, p4);
+			g_mouse_posx = p3;
+			g_mouse_posy = p4;
 			
-			if (ds_readws(MOUSE_POSX) > ds_readws(MOUSE_POSX_MAX)) {
-				ds_writew(MOUSE_POSX, ds_readws(MOUSE_POSX_MAX));
+			if (g_mouse_posx > g_mouse_posx_max) {
+				g_mouse_posx = g_mouse_posx_max;
 			}
-			if (ds_readws(MOUSE_POSX) < ds_readws(MOUSE_POSX_MIN)) {
-				ds_writew(MOUSE_POSX, ds_readws(MOUSE_POSX_MIN));
+			if (g_mouse_posx < g_mouse_posx_min) {
+				g_mouse_posx = g_mouse_posx_min;
 			}
-			if (ds_readws(MOUSE_POSY) < ds_readws(MOUSE_POSY_MIN)) {
-				ds_writew(MOUSE_POSY, ds_readws(MOUSE_POSY_MIN));
+			if (g_mouse_posy < g_mouse_posy_min) {
+				g_mouse_posy = g_mouse_posy_min;
 			}
-			if (ds_readws(MOUSE_POSY) > ds_readws(MOUSE_POSY_MAX)) {
-				ds_writew(MOUSE_POSY, ds_readws(MOUSE_POSY_MAX));
+			if (g_mouse_posy > g_mouse_posy_max) {
+				g_mouse_posy = g_mouse_posy_max;
 			}
 			
 			p1 = 4;
-			p3 = ds_readws(MOUSE_POSX);
-			p4 = ds_readws(MOUSE_POSY);
+			p3 = g_mouse_posx;
+			p4 = g_mouse_posy;
 			
 			do_mouse_action((Bit8u*)&p1, (Bit8u*)&p2, (Bit8u*)&p3, (Bit8u*)&p4, (Bit8u*)&p5);
 			
-			ds_writew(MOUSE_MOVED, 1);
+			g_mouse_moved = 1;
 		}
 	}
 }
@@ -1812,8 +1829,8 @@ void mouse_enable(void)
 
 			/* move cursor  to initial position */
 			p1 = 4;
-			p3 = ds_readw(MOUSE_POSX);
-			p4 = ds_readw(MOUSE_POSY);
+			p3 = g_mouse_posx;
+			p4 = g_mouse_posy;
 
 			do_mouse_action((Bit8u*)&p1, (Bit8u*)&p2, (Bit8u*)&p3, (Bit8u*)&p4, (Bit8u*)&p5);
 #if defined(__BORLANDC__)
@@ -1959,14 +1976,14 @@ void call_mouse(void)
 /* static */
 void update_mouse_cursor1(void)
 {
-	if (ds_readw(MOUSE_LOCKED) == 0) {
+	if (g_mouse_locked == 0) {
 
-		if (ds_readws(MOUSE_REFRESH_FLAG) == 0) {
-			ds_writew(MOUSE_LOCKED, 1);
+		if (g_mouse_refresh_flag == 0) {
+			g_mouse_locked = 1;
 			restore_mouse_bg();
-			ds_writew(MOUSE_LOCKED, 0);
+			g_mouse_locked = 0;
 		}
-		ds_dec_ws(MOUSE_REFRESH_FLAG);
+		g_mouse_refresh_flag--;
 	}
 }
 
@@ -1974,36 +1991,36 @@ void update_mouse_cursor1(void)
 /* static */
 void mouse(void)
 {
-	if (ds_readw(MOUSE_LOCKED) == 0) {
+	if (g_mouse_locked == 0) {
 
-		ds_inc_ws(MOUSE_REFRESH_FLAG);
+		g_mouse_refresh_flag++;
 
-		if (ds_readws(MOUSE_REFRESH_FLAG) == 0) {
+		if (g_mouse_refresh_flag == 0) {
 
-			ds_writew(MOUSE_LOCKED, 1);
+			g_mouse_locked = 1;
 
-			if (ds_readws(MOUSE_POSX) < ds_readws(MOUSE_POINTER_OFFSETX))
-				ds_writew(MOUSE_POSX, ds_readws(MOUSE_POINTER_OFFSETX));
+			if (g_mouse_posx < g_mouse_pointer_offsetx)
+				g_mouse_posx = g_mouse_pointer_offsetx;
 
-			if (ds_readws(MOUSE_POSX) > 315)
-				ds_writew(MOUSE_POSX, 315);
+			if (g_mouse_posx > 315)
+				g_mouse_posx = 315;
 
-			if (ds_readws(MOUSE_POSY) < ds_readws(MOUSE_POINTER_OFFSETY))
-				ds_writew(MOUSE_POSY, ds_readws(MOUSE_POINTER_OFFSETY));
+			if (g_mouse_posy < g_mouse_pointer_offsety)
+				g_mouse_posy = g_mouse_pointer_offsety;
 
-			if (ds_readws(MOUSE_POSY) > 195)
-				ds_writew(MOUSE_POSY, 195);
+			if (g_mouse_posy > 195)
+				g_mouse_posy = 195;
 
 			save_mouse_bg();
 
-			ds_writew(MOUSE_POSX_BAK, ds_readws(MOUSE_POSX));
-			ds_writew(MOUSE_POSY_BAK, ds_readws(MOUSE_POSY));
-			ds_writew(MOUSE_POINTER_OFFSETX_BAK, ds_readws(MOUSE_POINTER_OFFSETX));
-			ds_writew(MOUSE_POINTER_OFFSETY_BAK, ds_readws(MOUSE_POINTER_OFFSETY));
+			g_mouse_posx_bak = g_mouse_posx;
+			g_mouse_posy_bak = g_mouse_posy;
+			g_mouse_pointer_offsetx_bak = g_mouse_pointer_offsetx;
+			g_mouse_pointer_offsety_bak = g_mouse_pointer_offsety;
 
 			draw_mouse_cursor();
 
-			ds_writew(MOUSE_LOCKED, 0);
+			g_mouse_locked = 0;
 		}
 	}
 }
@@ -2013,7 +2030,7 @@ void mouse(void)
 void mouse_compare(void)
 {
 	/* these pointers never differ in gen */
-	if (ds_readw(MOUSE_MOVED) || ds_readd(MOUSE_LAST_CURSOR) != ds_readd(MOUSE_CURRENT_CURSOR)) {
+	if (g_mouse_moved || ds_readd(MOUSE_LAST_CURSOR) != ds_readd(MOUSE_CURRENT_CURSOR)) {
 
 		/* copy a pointer */
 		ds_writed(MOUSE_LAST_CURSOR, ds_readd(MOUSE_CURRENT_CURSOR));
@@ -2023,11 +2040,13 @@ void mouse_compare(void)
 		if (g_mouse_mask == (RealPt)ds_readd(MOUSE_CURRENT_CURSOR))
 #endif
 		{
-			ds_writew(MOUSE_POINTER_OFFSETX, ds_writew(MOUSE_POINTER_OFFSETY, 0));
+			g_mouse_pointer_offsetx =
+				g_mouse_pointer_offsety = 0;
 		} else {
-			ds_writew(MOUSE_POINTER_OFFSETX, ds_writew(MOUSE_POINTER_OFFSETY, 8));
+			g_mouse_pointer_offsetx =
+				g_mouse_pointer_offsety = 8;
 		}
-		ds_writew(MOUSE_MOVED, 0);
+		g_mouse_moved = 0;
 		update_mouse_cursor1();
 		mouse();
 	}
@@ -2069,13 +2088,13 @@ void handle_input(void)
 		si = 0;
 
 		if ((RealPt)ds_readd(ACTION_TABLE))
-			si = get_mouse_action(ds_readw(MOUSE_POSX),
-				ds_readw(MOUSE_POSY),
+			si = get_mouse_action(g_mouse_posx,
+				g_mouse_posy,
 				(struct mouse_action*)Real2Host(ds_readd(ACTION_TABLE)));
 				
 		if ((si == 0) && ((RealPt)ds_readd(DEFAULT_ACTION)))
-			si = get_mouse_action(ds_readw(MOUSE_POSX),
-				ds_readw(MOUSE_POSY),
+			si = get_mouse_action(g_mouse_posx,
+				g_mouse_posy,
 				(struct mouse_action*)Real2Host(ds_readd(DEFAULT_ACTION)));
 
 		if (ds_readw(HAVE_MOUSE) == 2) {
@@ -2223,8 +2242,8 @@ void draw_mouse_cursor(void)
 	vgaptr = (RealPt)ds_readd(VGA_MEMSTART);
 	mouse_cursor = (signed short*)Real2Host(ds_readd(MOUSE_CURRENT_CURSOR)) + (32 / 2);
 
-	rangeX = ds_readw(MOUSE_POSX) - ds_readw(MOUSE_POINTER_OFFSETX);
-	rangeY = ds_readw(MOUSE_POSY) - ds_readw(MOUSE_POINTER_OFFSETY);
+	rangeX = g_mouse_posx - g_mouse_pointer_offsetx;
+	rangeY = g_mouse_posy - g_mouse_pointer_offsety;
 
 	diffX = diffY = 16;
 
@@ -2256,8 +2275,8 @@ void save_mouse_bg(void)
 
 	vgaptr = (RealPt)(ds_readd(VGA_MEMSTART));
 
-	rangeX = ds_readw(MOUSE_POSX) - ds_readw(MOUSE_POINTER_OFFSETX);
-	rangeY = ds_readw(MOUSE_POSY) - ds_readw(MOUSE_POINTER_OFFSETY);
+	rangeX = g_mouse_posx - g_mouse_pointer_offsetx;
+	rangeY = g_mouse_posy - g_mouse_pointer_offsety;
 
 	diffX = diffY = 16;
 
@@ -2284,8 +2303,8 @@ void restore_mouse_bg(void)
 
 	vgaptr = (RealPt)ds_readd(VGA_MEMSTART);
 
-	rangeX = ds_readw(MOUSE_POSX_BAK) - ds_readw(MOUSE_POINTER_OFFSETX_BAK);
-	rangeY = ds_readw(MOUSE_POSY_BAK) - ds_readw(MOUSE_POINTER_OFFSETY_BAK);
+	rangeX = g_mouse_posx_bak - g_mouse_pointer_offsetx_bak;
+	rangeY = g_mouse_posy_bak - g_mouse_pointer_offsety_bak;
 	diffX = diffY = 16;
 
 	if (rangeX > 304)
@@ -3972,21 +3991,21 @@ Bit16s gui_radio(Bit8u *header, Bit8s options, ...)
 	va_end(arguments);
 
 	/* save and set mouse position */
-	mx_bak = ds_readw(MOUSE_POSX);
-	my_bak = ds_readw(MOUSE_POSY);
-	ds_writew(MOUSE_POSX_BAK, ds_writew(MOUSE_POSX, ds_readws(LEFT_BORDER) + 90));
-	ds_writew(MOUSE_POSY_BAK, ds_writew(MOUSE_POSY, r8 = r7 = ds_readws(UPPER_BORDER) + 8 * (lines_header + 1)));
+	mx_bak = g_mouse_posx;
+	my_bak = g_mouse_posy;
+	g_mouse_posx_bak = g_mouse_posx = ds_readws(LEFT_BORDER) + 90;
+	g_mouse_posy_bak = g_mouse_posy = r8 = r7 = ds_readws(UPPER_BORDER) + 8 * (lines_header + 1);
 #if !defined(__BORLANDC__)
-	mouse_move_cursor(ds_readw(MOUSE_POSX), r8);
+	mouse_move_cursor(g_mouse_posx, r8);
 #else
 	// _AX contains the value of r8
-	mouse_move_cursor(ds_readw(MOUSE_POSX), _AX);
+	mouse_move_cursor(g_mouse_posx, _AX);
 #endif
 
-	ds_writew(MOUSE_POSX_MAX, ds_readws(LEFT_BORDER) + r9 - 16);
-	ds_writew(MOUSE_POSX_MIN, ds_readws(LEFT_BORDER));
-	ds_writew(MOUSE_POSY_MIN, ds_readws(UPPER_BORDER) + 8 * (lines_header + 1));
-	ds_writew(MOUSE_POSY_MAX, (ds_readws(UPPER_BORDER) + (8 * options + (lines_header + 1) * 8)) - 1);
+	g_mouse_posx = ds_readws(LEFT_BORDER) + r9 - 16;
+	g_mouse_posx_min = ds_readws(LEFT_BORDER);
+	g_mouse_posy_min = ds_readws(UPPER_BORDER) + 8 * (lines_header + 1);
+	g_mouse_posy_max = (ds_readws(UPPER_BORDER) + (8 * options + (lines_header + 1) * 8)) - 1;
 	call_mouse();
 	ds_writew(MOUSE2_EVENT, 0);
 
@@ -4030,10 +4049,10 @@ Bit16s gui_radio(Bit8u *header, Bit8s options, ...)
 			else
 				di++;
 		}
-		if (ds_readw(MOUSE_POSY) != r8) {
+		if (g_mouse_posy != r8) {
 			/* has the mouse been moved */
 #if !defined(__BORLANDC__)
-			di = ((r8 = ds_readw(MOUSE_POSY)) - r7) / 8 + 1;
+			di = ((r8 = g_mouse_posy) - r7) / 8 + 1;
 #else
 			di = ((r8 = _AX) - r7) / 8 + 1; // BCC Sync-Point
 #endif
@@ -4054,20 +4073,19 @@ Bit16s gui_radio(Bit8u *header, Bit8s options, ...)
 
 	update_mouse_cursor();
 
-	ds_writew(MOUSE_POSX_BAK, ds_writew(MOUSE_POSX, mx_bak));
+	g_mouse_posx_bak = g_mouse_posx = mx_bak;
+	g_mouse_posy_bak = g_mouse_posy = my_bak;
 
-	ds_writew(MOUSE_POSY_BAK, ds_writew(MOUSE_POSY, my_bak));
-
-	ds_writew(MOUSE_POSX_MAX, 319);
-	ds_writew(MOUSE_POSX_MIN, 0);
-	ds_writew(MOUSE_POSY_MIN, 0);
-	ds_writew(MOUSE_POSY_MAX, 199);
+	g_mouse_posx_max = 319;
+	g_mouse_posx_min = 0;
+	g_mouse_posy_min = 0;
+	g_mouse_posy_max = 199;
 
 #if !defined(__BORLANDC__)
-	mouse_move_cursor(ds_readws(MOUSE_POSX), ds_readws(MOUSE_POSY_BAK));
+	mouse_move_cursor(g_mouse_posx, g_mouse_posy_bak);
 #else
 	// _AX contains the value of MOUSE_POSY_BAK
-	mouse_move_cursor(ds_readws(MOUSE_POSX), _AX);
+	mouse_move_cursor(g_mouse_posx, _AX);
 #endif
 
 	dst = (RealPt)ds_readd(VGA_MEMSTART);
@@ -7744,7 +7762,7 @@ int main_gen(int argc, char **argv)
 	mouse_enable();
 
 	if (ds_readws(HAVE_MOUSE) == 0)
-		ds_writews(MOUSE_REFRESH_FLAG, -2);
+		g_mouse_refresh_flag = -2;
 
 	init_stuff();
 

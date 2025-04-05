@@ -51,22 +51,21 @@
 //#define SCREEN_VAR                      (0x11fe)    /* Bit16s */
 
 //#define MOUSE_MASK                      (0x1200)
-#define MOUSE_POSY_MIN                  (0x1240)
-#define MOUSE_POSX_MIN                  (0x1242)
-#define MOUSE_POSY_MAX                  (0x1244)
-#define MOUSE_POSX_MAX                  (0x1246)
-#define MOUSE_LOCKED                    (0x1248)
-#define MOUSE_REFRESH_FLAG              (0x124a)    /* signed short */
-#define MOUSE_POSX                      (0x124c)
-#define MOUSE_POSY                      (0x124e)
-#define MOUSE_POSX_BAK                  (0x1250)    /* Bit16s */
-#define MOUSE_POSY_BAK                  (0x1252)    /* Bit16s */
-#define MOUSE_MOVED                     (0x1254)
-#define MOUSE_POINTER_OFFSETX           (0x1256)
-#define MOUSE_POINTER_OFFSETY           (0x1258)
-#define MOUSE_POINTER_OFFSETX_BAK       (0x125a)
-#define MOUSE_POINTER_OFFSETY_BAK       (0x125c)
-
+//#define MOUSE_POSY_MIN                  (0x1240)
+//#define MOUSE_POSX_MIN                  (0x1242)
+//#define MOUSE_POSY_MAX                  (0x1244)
+//#define MOUSE_POSX_MAX                  (0x1246)
+//#define MOUSE_LOCKED                    (0x1248)
+//#define MOUSE_REFRESH_FLAG              (0x124a)    /* signed short */
+//#define MOUSE_POSX                      (0x124c)
+//#define MOUSE_POSY                      (0x124e)
+//#define MOUSE_POSX_BAK                  (0x1250)    /* Bit16s */
+//#define MOUSE_POSY_BAK                  (0x1252)    /* Bit16s */
+//#define MOUSE_MOVED                     (0x1254)
+//#define MOUSE_POINTER_OFFSETX           (0x1256)
+//#define MOUSE_POINTER_OFFSETY           (0x1258)
+//#define MOUSE_POINTER_OFFSETX_BAK       (0x125a)
+//#define MOUSE_POINTER_OFFSETY_BAK       (0x125c)
 
 #define DEFAULT_ACTION                  (0x1272)    /* RealPt */
 #define ACTION_TABLE                    (0x1276)    /* RealPt */
