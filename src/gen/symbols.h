@@ -124,10 +124,10 @@
 //#define USE_CDA	                        (0x1a09)    /* signed short */
 //#define MOUSE_HANDLER_INSTALLED         (0x1a0b)    /* signed short */
 
-#define BG_BUFFER                       (0x1a11)    /* RealPt[11] */
-#define BG_LEN                          (0x1a3d)    /* Bit32u[11] */
-#define TYPUS_BUFFER                    (0x1a69)    /* RealPt[13] */
-#define TYPUS_LEN                       (0x1a9d)    /* Bit32u[13] */
+//#define BG_BUFFER                       (0x1a11)    /* RealPt[11] */
+//#define BG_LEN                          (0x1a3d)    /* Bit32u[11] */
+//#define TYPUS_BUFFER                    (0x1a69)    /* RealPt[13] */
+//#define TYPUS_LEN                       (0x1a9d)    /* Bit32u[13] */
 #define FNAMES_G105de                   (0x1ad1)    /* RealPt[37] */
 #define STR_FILE_MISSING                (0x1b65)    /* char[19] */
 

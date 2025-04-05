@@ -923,12 +923,13 @@ static signed short g_midi_disabled = 0;
 static signed short g_use_cda = 0;
 static signed short g_mouse_handler_installed = 0;
 
-#if 0
-static Bit8u *bg_buffer[MAX_PAGES] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-static Bit32s bg_len[MAX_PAGES] =  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-static Bit8u *typus_buffer[MAX_TYPES] =  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-static Bit32s typus_len[MAX_TYPES] =  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-#endif
+static signed short dummy7 = -1;
+static signed short dummy8 = 0;
+
+static char* g_bg_buffer[11]       = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+static signed long g_bg_len[11]    = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+static char *g_typus_buffer[13]    = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+static signed long g_typus_len[13] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 static const char fnames_g105de[][13] = { "GEN1.NVF",
 					"GEN2.NVF",
@@ -2404,23 +2405,19 @@ void load_page(Bit16s page)
 
 	if (page <= 10) {
 		/* check if this image is in the buffer */
-		//D1_INFO("%s(BG_BUFFER %d = 0x%08x)\n", __func__, page, ds_readd(BG_BUFFER + 4 * page));
-		if ((RealPt)ds_readd(BG_BUFFER + 4 * page)) {
+		if (g_bg_buffer[page]) {
 			decomp_rle(Real2Host(ds_readd(GEN_PTR1_DIS)),
-					Real2Host(ds_readd(BG_BUFFER + 4 * page)),
-					0, 0, 320, 200, 0);
+					g_bg_buffer[page], 0, 0, 320, 200, 0);
 			return;
 		}
 
 		if ((ptr = gen_alloc(get_filelength(handle = open_datfile(page))))) {
-			ds_writed(BG_BUFFER + 4 * page, (Bit32u)ptr);
-			ds_writed(BG_LEN + 4 * page, get_filelength(handle));
-			read_datfile(handle,
-				Real2Host(ds_readd(BG_BUFFER + 4 * page)),
-				ds_readd(BG_LEN + 4 * page));
+			g_bg_buffer[page] = Real2Host(ptr);
+			g_bg_len[page] = get_filelength(handle);
+
+			read_datfile(handle, g_bg_buffer[page], g_bg_len[page]);
 			decomp_rle(Real2Host(ds_readd(GEN_PTR1_DIS)),
-					Real2Host(ds_readd(BG_BUFFER + 4 * page)),
-					0, 0, 320, 200, 0);
+					(Bit8u*)g_bg_len[page],	0, 0, 320, 200, 0);
 		} else {
 			read_datfile(handle, Real2Host(ds_readd(PAGE_BUFFER)), 64000);
 			decomp_rle(Real2Host(ds_readd(GEN_PTR1_DIS)),
@@ -2463,25 +2460,21 @@ void load_typus(Bit16u typus)
 	index = typus + 19;
 
 	/* check if this image is in the buffer */
-	//D1_INFO("%s(TYPUS_BUFFER %d = 0x%08x)\n", __func__, typus, ds_readd(TYPUS_BUFFER + 4 * typus));
-	if ((RealPt)ds_readd(TYPUS_BUFFER + 4 * typus)) {
+	if (g_typus_buffer[typus]) {
 		decomp_pp20((RealPt)ds_readd(GEN_PTR5),
-			Real2Host(ds_readd(TYPUS_BUFFER + 4 * typus)),
-			ds_readd(TYPUS_LEN + 4 * typus));
+				g_typus_buffer[typus], g_typus_len[typus]);
 		return;
 	}
 
 	if ((ptr = gen_alloc(get_filelength(handle = open_datfile(index))))) {
 		/* load the file into the typus buffer */
-		ds_writed(TYPUS_BUFFER + 4 * typus, (Bit32u)ptr);
-		//D1_INFO("%s(ptr = 0x%08x TYPUS_BUFFER = 0x%08x)\n", ptr, ds_readd(TYPUS_BUFFER));
-		ds_writed(TYPUS_LEN + 4 * typus, get_filelength(handle));
-		read_datfile(handle,
-			Real2Host(ds_readd(TYPUS_BUFFER + 4 * typus)),
-			ds_readd(TYPUS_LEN + 4 * typus));
+		g_typus_buffer[typus] = Real2Host(ptr);
+		g_typus_len[typus] = get_filelength(handle);
+
+		read_datfile(handle, g_typus_buffer[typus], g_typus_len[typus]);
+
 		decomp_pp20((RealPt)ds_readd(GEN_PTR5),
-			Real2Host(ds_readd(TYPUS_BUFFER + 4 * typus)),
-			ds_readd(TYPUS_LEN + 4 * typus));
+			g_typus_buffer[typus], g_typus_len[typus]);
 	} else {
 		/* load the file direct */
 		read_datfile(handle, Real2Host(ds_readd(GEN_PTR1_DIS)), 25000);
@@ -7435,18 +7428,18 @@ static void BE_cleanup(void)
 	D1_INFO("%s() free mem = %d\n", __func__, DB_get_conv_mem());
 
 	for (int i = 0; i < MAX_PAGES; i++) {
-		if ((ptr = ds_readd(BG_BUFFER + 4 * i)) != 0) {
+		if ((ptr = g_bg_buffer[i]) != 0) {
 			D1_INFO("Free BG_BUFFER[%02d]\t\t 0x%08x\n", i, ptr);
 			bc_free(ptr);
-			ds_writed(BG_BUFFER + 4 * i, 0);
+			g_bg_buffer[i] = NULL;
 		}
 	}
 
 	for (int i = 0; i < MAX_TYPES; i++) {
-		if ((ptr = ds_readd(TYPUS_BUFFER + 4 * i)) != 0) {
+		if ((ptr = g_typus_buffer[i]) != 0) {
 			D1_INFO("Free TYPUS_BUFFER[%02d]\t\t 0x%08x\n", i, ptr);
 			bc_free(ptr);
-			ds_writed(TYPUS_BUFFER + 4 * i, 0);
+			g_typus_buffer[i] = 0;
 		}
 	}
 
