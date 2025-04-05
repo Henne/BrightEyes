@@ -183,14 +183,12 @@ static const signed short g_house_spells[][8] = {
 	{0x4c, 0x4e, 0x4f, 0x50, 0x52, 0x53, 0x54, -1}
 };
 
-#if 0
-/* DS:03ab */
 struct struct_school_tab {
-	unsigned short first_spell;
-	unsigned short spells;
+	signed short first_spell;
+	signed short spells;
 };
 
-static const struct struct_school_tab school_tab[] = {
+static const struct struct_school_tab g_school_tab[] = {
 	{0x01, 0x05},
 	{0x06, 0x0c},
 	{0x12, 0x09},
@@ -201,7 +199,6 @@ static const struct struct_school_tab school_tab[] = {
 	{0x3c, 0x10},
 	{0x4c, 0x0a},
 };
-#endif
 
 #if 0
 struct struct_reqs {
@@ -4949,13 +4946,12 @@ void fill_values(void)
 					ds_readws(HOUSE_MOD + 29 * ds_readbs(HERO_SPELL_SCHOOL) + 1 + 2 * i));
 			}
 			/* 2. all schools spells */
-			//for (i = 0; school_tab[ds_readbs(HERO_SPELL_SCHOOL)].spells > i; si++, i++) {
-			for (i = 0; ds_readws(SCHOOL_TAB + 2 + 4 * ds_readbs(HERO_SPELL_SCHOOL)) > i; si++, i++) {
+			for (i = 0; g_school_tab[ds_readbs(HERO_SPELL_SCHOOL)].spells > i; si++, i++) {
 				//autospells[ds_readbs(HERO_TYPUS) - 7][si] =
 					//school_tab[ds_readbs(HERO_SPELL_SCHOOL)].first_spell + i);
 
 				ds_writew(AUTOSPELLS + 2 * si,
-					ds_readw(SCHOOL_TAB + 0 + 4 * ds_readbs(HERO_SPELL_SCHOOL)) + i);
+					g_school_tab[ds_readbs(HERO_SPELL_SCHOOL)].first_spell + i);
 			}
 			/* 3. five domination spells */
 				/* Herr der Tiere */
