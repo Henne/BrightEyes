@@ -50,7 +50,7 @@
 
 //#define SCREEN_VAR                      (0x11fe)    /* Bit16s */
 
-#define MOUSE_MASK                      (0x1200)
+//#define MOUSE_MASK                      (0x1200)
 #define MOUSE_POSY_MIN                  (0x1240)
 #define MOUSE_POSX_MIN                  (0x1242)
 #define MOUSE_POSY_MAX                  (0x1244)

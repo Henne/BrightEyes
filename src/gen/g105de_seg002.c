@@ -628,7 +628,7 @@ static const struct minmax g_height_range[] = {
 	{170, 210}
 };
 
-static const unsigned short g_weight_mod[] = {
+static const unsigned char g_weight_mod[] = {
 	0,
 	120, 110, 100, 110, 100, 90,
 	120, 110, 110, 120, 120, 120
@@ -667,12 +667,11 @@ static const struct struct_money money_druid[] = {
 static const struct struct_money money_mage[] = {
 	{3, 1, 6},  {13, 10, 0x3c}, {16, 10, 0xc8}, {19, 20, 0x190}, {20, 5, 0x3e8} };
 static const struct struct_money money_greenelf[] = {
-	{4, 1, 6},  {6, 1, 20}, {14, 10, 0x3c}, {19, 10, 0xc8}, {20, 20, 0x190} };
-
+	{4, 1, 6},  {6, 1, 20}, {13, 10, 0x3c}, {19, 10, 0xc8}, {20, 20, 0x190} };
 static const struct struct_money money_iceelf[] = {
 	{1, 1, 6},  {20, 1, 20} };
 static const struct struct_money money_silvanelf[] = {
-	{14, 1, 6}, {13, 1, 20}, {20, 10, 0x3c} };
+	{14, 1, 6}, {19, 1, 20}, {20, 10, 0x3c} };
 
 static const struct struct_money* g_money_tab[] = {
 	money_jester,
@@ -690,7 +689,6 @@ static const struct struct_money* g_money_tab[] = {
 };
 
 static const unsigned char g_initial_skill_incs[] = {
-	0,
 	20, 20, 20, 20, 20, 20, 20, 20, 15, 20, 20, 20
 };
 
@@ -843,11 +841,10 @@ static const struct struct_color g_pal_genbg[32] = {
 static const signed short dummy4 = 50;
 static const signed char dummy5 = -1;
 
+
 static signed short g_screen_var = 0;
 
-#if 0
-
-static unsigned short mouse_mask[32] = {
+static unsigned short g_mouse_mask[32] = {
         0x7fff, 0x9fff, 0x87ff, 0xc1ff,
         0xc07f, 0xe01f, 0xe007, 0xf00f,
         0xf01f, 0xf80f, 0xf887, 0xfdc3,
@@ -857,7 +854,6 @@ static unsigned short mouse_mask[32] = {
         0x0fe0, 0x07f0, 0x0778, 0x023c,
         0x001c, 0x0008, 0x0000, 0x0000,
 };
-#endif
 
 //static Bit16s MOUSE_REFRESH_FLAG = -1;
 
@@ -1809,8 +1805,8 @@ void mouse_enable(void)
 			ds_writew(HAVE_MOUSE, 0);
 		}
 
-		ds_writed(MOUSE_CURRENT_CURSOR, (Bit32u)RealMake(datseg, MOUSE_MASK));
-		ds_writed(MOUSE_LAST_CURSOR, (Bit32u)RealMake(datseg, MOUSE_MASK));
+		ds_writed(MOUSE_CURRENT_CURSOR, (Bit32u)g_mouse_mask);
+		ds_writed(MOUSE_LAST_CURSOR, (Bit32u)g_mouse_mask);
 
 		if (ds_readws(HAVE_MOUSE) == 2) {
 
@@ -2022,9 +2018,9 @@ void mouse_compare(void)
 		/* copy a pointer */
 		ds_writed(MOUSE_LAST_CURSOR, ds_readd(MOUSE_CURRENT_CURSOR));
 #if !defined(__BORLANDC__)
-		if (RealMake(datseg, MOUSE_MASK) == (RealPt)ds_readd(MOUSE_CURRENT_CURSOR))
+		if (g_mouse_mask == (RealPt)ds_readd(MOUSE_CURRENT_CURSOR))
 #else
-		if ((RealPt)(&ds[MOUSE_MASK]) == (RealPt)ds_readd(MOUSE_CURRENT_CURSOR))
+		if (g_mouse_mask == (RealPt)ds_readd(MOUSE_CURRENT_CURSOR))
 #endif
 		{
 			ds_writew(MOUSE_POINTER_OFFSETX, ds_writew(MOUSE_POINTER_OFFSETY, 0));
