@@ -25,7 +25,7 @@
 //#define SCHOOL_TAB                      (0x03ab)    /* Bit16s[9][2] */
 //#define REQ_ATTRIB                      (0x03cf)    /* Bit8u */
 //#define REQ_REQUIREMENT                 (0x03d0)    /* Bit8u */
-#define SKILLS                          (0x0437)    /* Bit8s[13][52] */
+//#define SKILLS                          (0x0437)    /* Bit8s[13][52] */
 #define SPELLS                          (0x06db)    /* Bit8s[6][86] */
 
 #define INIT_LE                         (0x08df)    /* Bit16s[13] */

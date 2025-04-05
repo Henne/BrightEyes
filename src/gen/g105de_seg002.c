@@ -229,8 +229,7 @@ static const struct struct_reqs g_reqs[13][4] = {
 	{ {5, 13}, {4, 13}, {10, 0x80 | 4}, {2, 1}, },
 };
 
-#if 0
-static const signed char skills[13][52] = {
+static const signed char g_skills[13][52] = {
 	/* DUMMY */
 	{ 0},
 	/* Gaukler/ Jester*/
@@ -438,7 +437,6 @@ static const signed char skills[13][52] = {
 		2, 5
 	}
 };
-#endif
 
 #if 0
 static const signed char spells[6][86] = {
@@ -4714,8 +4712,7 @@ void fill_values(void)
 #else
 	for (i = 0; i < 52; ) { // BCC Sync-Point
 #endif
-		//ds_writebs(HERO_SKILLS + i, skills[ds_readbs(HERO_TYPUS)][i]);
-		ds_writebs(HERO_SKILLS + i, ds_readbs(SKILLS + 52 * ds_readbs(HERO_TYPUS) + i));
+		ds_writebs(HERO_SKILLS + i, g_skills[ds_readbs(HERO_TYPUS)][i]);
 
 		/* set skill_incs and skill_tries to zero */
 		ds_writeb(SKILL_INCS + 0 + 2 * i, ds_writebs((SKILL_INCS + 1) + (2 * i), 0));
