@@ -45,8 +45,8 @@
 
 //#define MASK_SWITCH                     (0x109a)    /* Bit8s */
 
-#define PAL_TMP                         (0x113b)    /* RGB[32] */
-#define PAL_GENBG                       (0x119b)    /* RGB[32] */
+//#define PAL_TMP                         (0x113b)    /* RGB[32] */
+//#define PAL_GENBG                       (0x119b)    /* RGB[32] */
 
 #define SCREEN_VAR                      (0x11fe)    /* Bit16s */
 

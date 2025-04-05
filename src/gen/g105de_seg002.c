@@ -803,10 +803,9 @@ struct struct_color {
 	signed char b;
 };
 
-//static struct struct_color pal_tmp[32];
+static struct struct_color g_pal_tmp[32] = {0};
 
-#if 0
-static const struct struct_color pal_genbg[32] = {
+static const struct struct_color g_pal_genbg[32] = {
 	{0x00, 0x00, 0x00},
 	{0x38, 0x38, 0x38},
 	{0x34, 0x34, 0x34},
@@ -840,7 +839,6 @@ static const struct struct_color pal_genbg[32] = {
 	{0x1c, 0x00, 0x00},
 	{0x14, 0x00, 0x00},
 };
-#endif
 
 #if 0
 
@@ -7594,7 +7592,7 @@ void intro(void)
 	wait_for_vsync();
 
 
-	set_palette((RealPt)RealMake(datseg, PAL_TMP), 0, 32);
+	set_palette((RealPt)g_pal_tmp, 0, 32);
 
 	/* draw DSALOGO.DAT */
 	ds_writew(DST_X1, 0);
@@ -7840,7 +7838,7 @@ void init_colors(void)
 	set_palette(RealMake(datseg, PAL_COL_WHITE), 0xff, 1);
 	set_palette(RealMake(datseg, PAL_POPUP), 0xd8, 8);
 	set_palette(RealMake(datseg, PAL_MISC), 0xc8, 3);
-	set_palette(RealMake(datseg, PAL_GENBG), 0x40, 0x20);
+	set_palette((RealPt)g_pal_genbg, 0x40, 0x20);
 	set_palette(RealMake(datseg, PAL_HEADS), 0x20, 0x20);
 	set_textcolor(0xff, 0x0); // WHITE ON BLACK
 }
