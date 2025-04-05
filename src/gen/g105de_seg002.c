@@ -206,18 +206,18 @@ static const struct struct_school_tab g_school_tab[] = {
 	{0x4c, 0x0a},
 };
 
-#if 0
 struct struct_reqs {
-	unsigned char attrib, requirement;
+	unsigned char attrib;
+	unsigned char value;
 };
 
-static const struct_reqs reqs[13][4] = {
-	{ 0 },
+static const struct struct_reqs g_reqs[13][4] = {
+	{ {0, 0 }, {0,  0}, {0,  0}, {0, 0} },	//DUMMY
 	{ {0, 12}, {4, 12}, {3, 12}, {7, 7}, },
-	{ {5, 12}, {4, 12}, {9, 7}, {2, 1}, },
+	{ {5, 12}, {4, 12}, {9,  7}, {2, 1}, },
 	{ {0, 13}, {6, 12}, {13, 0x80 | 4}, {2, 1}, },
 	{ {0, 12}, {4, 13}, {3, 13}, {2, 1}, },
-	{ {0, 12}, {6, 13}, {7, 7}, {2, 1}, },
+	{ {0, 12}, {6, 13}, {7,  7}, {2, 1}, },
 	{ {6, 13}, {3, 12}, {10, 7}, {9, 0x80 | 4}, },
 
 	{ {5, 12}, {2, 13}, {8, 0x80 | 4}, {6, 1}, },
@@ -228,7 +228,6 @@ static const struct_reqs reqs[13][4] = {
 	{ {5, 12}, {4, 13}, {10, 0x80 | 4}, {2, 1}, },
 	{ {5, 13}, {4, 13}, {10, 0x80 | 4}, {2, 1}, },
 };
-#endif
 
 #if 0
 static const signed char skills[13][52] = {
@@ -5155,15 +5154,15 @@ void select_typus(void)
 			for (si = 0; si < 4; si++) {
 
 				//ltmp2 = ds_readbs(HERO_ATT0_NORMAL + 3 * reqs[i][si].attrib);
-				ptr = RealMake(datseg, HERO_ATT0_NORMAL + 3 * ds_readb(REQ_ATTRIB + 8 * i + 2 * si));
+				ptr = RealMake(datseg, HERO_ATT0_NORMAL + 3 * g_reqs[i][si].attrib);
 
 				ltmp2 = host_readbs(Real2Host(ptr));
 
-				if ((ds_readbs(REQ_ATTRIB + 1 + 8 * i + 2 * si) & 0x80) != 0) {
-					if (ltmp2 > (ds_readb(REQ_ATTRIB + 1 + 8 * i + 2 * si) & 0x7f))
+				if ((g_reqs[i][si].value & 0x80) != 0) {
+					if (ltmp2 > (g_reqs[i][si].value & 0x7f))
 						impossible = 1;
 				} else {
-					if (ds_readb(REQ_ATTRIB + 1 + 8 * i + 2 * si) > ltmp2)
+					if (g_reqs[i][si].value > ltmp2)
 						impossible = 1;
 				}
 			}
@@ -7093,14 +7092,11 @@ void choose_typus(void)
 
 	/* adjust typus attribute requirements */
 	for (i = 0; i < 4; i++) {
-		//Bit8u ta;
-		/* calc pointer to attribute */
-		//ta = reqs[choosen_typus][i].attrib;
-		ptr = RealMake(datseg, HERO_ATT0_NORMAL + 3 * ds_readb(8 * choosen_typus + 2 * i + REQ_ATTRIB));
 
+		/* calc pointer to attribute */
+		ptr = RealMake(datseg, HERO_ATT0_NORMAL + 3 * g_reqs[choosen_typus][i].attrib);
 		/* get the required value */
-		//randval = reqs[choosen_typus][i].requirement;
-		randval = ds_readb(8 * choosen_typus + 2 * i + REQ_REQUIREMENT);
+		randval = g_reqs[choosen_typus][i].value;
 
 		if (randval != 1) {
 
