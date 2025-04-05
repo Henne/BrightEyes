@@ -13,7 +13,6 @@
 
 //#define CD_INIT_SUCCESSFUL              (0x0095)    /* unsigned short; {0,1} */
 //#define CD_AUDIO_REPEAT                 (0x009b)    /* unsigned short; {0,1} */
-
 //#define CD_INSERT_COUNTER               (0x00a1)    /* Bit16s = 5 */
 //#define STR_INSERT_CD                   (0x00a3)    /* char[142]; */
 //#define STR_REPEAT                      (0x0131)    /* char[12]; */
@@ -27,9 +26,8 @@
 //#define REQ_REQUIREMENT                 (0x03d0)    /* Bit8u */
 //#define SKILLS                          (0x0437)    /* Bit8s[13][52] */
 //#define SPELLS                          (0x06db)    /* Bit8s[6][86] */
-
-#define INIT_LE                         (0x08df)    /* Bit16s[13] */
-#define INIT_AE                         (0x08f9)    /* Bit16s[13] */
+//#define INIT_LE                         (0x08df)    /* Bit16s[13] */
+//#define INIT_AE                         (0x08f9)    /* Bit16s[13] */
 
 #define HEIGHT_RANGE                    (0x0913)    /* Bit8u[13]. */
 #define WEIGHT_MOD                      (0x092d)    /* Bit8u[13] */

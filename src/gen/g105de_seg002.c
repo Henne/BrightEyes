@@ -609,14 +609,9 @@ static const signed char g_spells[6][86] = {
 		0, 1, -10, -6, -6, -10, 5, -10, -2, -6, },
 };
 
-#if 0
-static const Bit16s init_le[MAX_TYPES + 1] = {	0,
-						30, 30, 30, 30, 30, 40,
-						25, 30, 25, 25, 30, 25};
-static const Bit16s init_ae[MAX_TYPES + 1] = {	0,
-						0, 0, 0, 0, 0, 0,
-						25, 25, 30, 25, 25, 25};
-#endif
+static const signed short g_init_le[] = {0, 30, 30, 30, 30, 30, 40, 25, 30, 25, 25, 30, 25};
+
+static const signed short g_init_ae[] = {0, 0, 0, 0, 0, 0, 0, 25, 25, 30, 25, 25, 25};
 
 #if 0
 struct minmax {
@@ -4807,10 +4802,10 @@ void fill_values(void)
 	}
 
 	/* set LE */
-	ds_writew(HERO_LE, ds_writews(HERO_LE_MAX, ds_readws(INIT_LE + 2 * ds_readbs(HERO_TYPUS))));
+	ds_writew(HERO_LE, ds_writews(HERO_LE_MAX, g_init_le[ds_readbs(HERO_TYPUS)]));
 
 	/* set AE */
-	ds_writew(HERO_AE, ds_writews(HERO_AE_MAX, ds_readws(INIT_AE + 2 * ds_readbs(HERO_TYPUS))));
+	ds_writew(HERO_AE, ds_writews(HERO_AE_MAX, g_init_ae[ds_readbs(HERO_TYPUS)]));
 
 
 	/* wanna change 10 spell_attempts against 1W6+2 AE ? */
