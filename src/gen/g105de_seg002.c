@@ -695,24 +695,18 @@ static const struct struct_money* g_money_tab[] = {
 	money_silvanelf
 };
 
-#if 0
-static const unsigned char initial_skill_incs[13] = {
+static const unsigned char g_initial_skill_incs[] = {
 	0,
 	20, 20, 20, 20, 20, 20, 20, 20, 15, 20, 20, 20
 };
-#endif
 
-#if 0
-static const signed char initial_spell_incs[6] = {
+static const signed char g_initial_spell_incs[] = {
 	25, 25, 40, 20, 20, 20
 };
-#endif
 
-#if 0
-static const signed char initial_conv_incs[6] = {
+static const signed char g_initial_conv_incs[] = {
 	5, 5, 5, 0, 0, 0
 };
-#endif
 
 #if 0
 struct struct_house_mod {
@@ -4762,8 +4756,7 @@ void fill_values(void)
 	}
 
 	/* set skill_attempts */
-	//ds_writeb(HERO_SKILL_INCS, initial_skill_incs[ds_readbs(HERO_TYPUS) - 1]);
-	ds_writeb(HERO_SKILL_INCS, ds_readbs(INITIAL_SKILL_INCS + ds_readbs(HERO_TYPUS)));
+	ds_writeb(HERO_SKILL_INCS, g_initial_skill_incs[ds_readbs(HERO_TYPUS)]);
 
 	/* do magic user init */
 	if (ds_readbs(HERO_TYPUS) >= 7) {
@@ -4813,12 +4806,10 @@ void fill_values(void)
 		}
 
 		/* set spell attempts */
-		ds_writeb(HERO_SPELL_INCS, ds_readbs(INITIAL_SPELL_INCS + ds_readbs(HERO_TYPUS) - 7));
+		ds_writeb(HERO_SPELL_INCS, g_initial_spell_incs[ds_readbs(HERO_TYPUS) - 7]);
 
 		/* get convertable increase attempts */
-		//di = ds_readbs(INITIAL_CONV_INCS + ds_readbs(HERO_TYPUS) - 7);
-
-		if ((di = ds_readbs(INITIAL_CONV_INCS + ds_readbs(HERO_TYPUS) - 7)) && (ds_readws(LEVEL) == 2) && gui_bool((Bit8u*)get_text(269))) {
+		if ((di = g_initial_conv_incs[ds_readbs(HERO_TYPUS) - 7]) && (ds_readws(LEVEL) == 2) && gui_bool((Bit8u*)get_text(269))) {
 			/* create string */
 			sprintf((char*)Real2Host(ds_readd(GEN_PTR2)), get_text(270), di);
 
