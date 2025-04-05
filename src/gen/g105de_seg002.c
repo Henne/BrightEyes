@@ -54,12 +54,6 @@
 	@p_width:       pointer where the width of the picture must be stored
 */
 
-struct struct_color {
-	signed char r;
-	signed char g;
-	signed char b;
-};
-
 #define MAX_PAGES (11);
 #define MAX_TYPES (13);
 
@@ -785,6 +779,30 @@ static const signed char g_head_first_male[] = { 0,
 static const signed char g_head_first_female[] = { 0,
 	3, 9, 15, 21, 27, 34, 37, 46, 51, 58 };
 
+struct struct_attrib_coords {
+	signed short x;
+	signed short y;
+};
+
+static const struct struct_attrib_coords g_attrib_coords[] = {
+	{205, 73}, {205, 85}, {205, 97}, {205, 109}, {205, 121}, {205, 133}, {205, 145},
+	{273, 73}, {273, 85}, {273, 97}, {273, 109}, {273, 121}, {273, 133}, {273, 145}
+};
+
+static const signed short dummy1 = 0;
+static const signed char dummy2 = 15;
+
+// Remark: g_mask_switch is read only
+static const signed char g_mask_switch = 0;
+
+static const signed char dummy3[160] = {0};
+
+struct struct_color {
+	signed char r;
+	signed char g;
+	signed char b;
+};
+
 //static struct struct_color pal_tmp[32];
 
 #if 0
@@ -825,7 +843,6 @@ static const struct struct_color pal_genbg[32] = {
 #endif
 
 #if 0
-static const unsigned char MASK_SWITCH = 0;
 
 static unsigned short mouse_mask[32] = {
         0x7fff, 0x9fff, 0x87ff, 0xc1ff,
@@ -3365,7 +3382,7 @@ void fill_smth(void)
 	RealPt ptr;
 	Bit16s i, j;
 
-	if (ds_readb(MASK_SWITCH) != 0)
+	if (g_mask_switch != 0)
 		ptr = RealMake(datseg, ARRAY_1);
 	else
 		ptr = RealMake(datseg, ARRAY_2);
@@ -3383,7 +3400,7 @@ void fill_smth2(Bit8u* sptr) {
 	Bit16s i, j;
 	Bit8u mask;
 
-	if (ds_readb(MASK_SWITCH) != 0)
+	if (g_mask_switch != 0)
 		ptr = RealMake(datseg, ARRAY_1);
 	else
 		ptr = RealMake(datseg, ARRAY_2);
@@ -5761,12 +5778,12 @@ void print_attribs(void)
 			/* convert value to string with itoa() */
 			sprintf(buf, "%d", host_readbs(p));
 			/* print it */
-			print_str(buf, ds_readws(ATTRIB_COORDS_X + i * 4), ds_readws(ATTRIB_COORDS_Y + i * 4));
+			print_str(buf, g_attrib_coors[i].x, g_attrib_coords[i].y);
 #else
 			/* print it */
 			print_str(itoa(host_readbs(p), buf, 10),
-				ds_readws(ATTRIB_COORDS_X + i * 4),
-				ds_readws(ATTRIB_COORDS_Y + i * 4));
+				g_attrib_coords[i].x,
+				g_attrib_coords[i].y);
 #endif
 		}
 	}
