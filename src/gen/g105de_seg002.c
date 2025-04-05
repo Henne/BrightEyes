@@ -1070,7 +1070,7 @@ struct type_bitmap {
 
 static const struct type_bitmap g_type_bitmap = { {0} };
 
-//static char version[] = "V1.05";
+static const char g_str_version[] = "V1.05";
 #if 0
 static const struct struct_color pal_attic[16] = {
 	{0x00, 0x00, 0x00},
@@ -7693,7 +7693,7 @@ void intro(void)
 	}
 
 	set_textcolor(0xff, 0x00); // WHITE ON BLACK
-	print_str((char*)Real2Host(RealMake(datseg, STR_VERSION)), 290, 190);
+	print_str((char*)g_str_version, 290, 190);
 	vsync_or_key(400);
 
 	bc_memcpy((RealPt)ds_readd(GEN_PTR1_DIS), RealMake(datseg, PAL_DSALOGO), 96);
