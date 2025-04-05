@@ -954,6 +954,10 @@ static const char* g_fnames_g105de[] = {
 
 static const char g_str_file_missing[] = { "FILE %s IS MISSING!" };
 
+static const struct struct_color g_col_white2 = { 0x3f, 0x3f, 0x3f };
+
+static const char dummy9[] = { 0x00, 0x80, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc, 0xfe, 0xff };
+
 struct struct_chr_lookup {
 	unsigned char chr, idx, width;
 };
@@ -1117,11 +1121,11 @@ static const struct struct_color pal_dsalogo[32] = {
 	{0x3c, 0x3c, 0x3c},
 };
 #endif
-/* DS:PAL_COL_WHITE */
+
 static const struct struct_color col_white = { 0x3f, 0x3f, 0x3f };
-/* DS:PAL_COL_BLACK */
+
 static const struct struct_color col_black = { 0x00, 0x00, 0x00 };
-/* DS:PAL_POPUP */
+
 static const struct struct_color col_popup[8] = {
 	{0x00, 0x00, 0x00 },
 	{0x38, 0x30, 0x28 },
@@ -2933,9 +2937,9 @@ Bit32u unused_func10(Bit32u v)
 void init_video(Bit16s unused)
 {
 #if !defined(__BORLANDC__)
-	RealPt l_white = RealMake(datseg, STRUCT_COL_WHITE2);
+	RealPt l_white = g_col_white2;
 #else
-	struct struct_color l_white = *(struct struct_color*)Real2Host(RealMake(datseg, STRUCT_COL_WHITE2));
+	struct struct_color l_white = *(struct struct_color*)&g_col_white2;
 #endif
 
 	/* set the video mode to 320x200 8bit */
