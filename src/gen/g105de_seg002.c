@@ -910,7 +910,7 @@ static const struct mouse_action g_action_spells[4] = {
 };
 
 static signed short g_gen_page = 0;
-
+static signed char g_useless_variable = 0;
 //static const Bit16u ro_zero = 0;
 
 //static struct struct_hero hero;
@@ -2747,9 +2747,9 @@ Bit16s open_datfile(Bit16u index)
 			(const char*)Real2Host(RealMake(datseg, STR_FILE_MISSING)),
 			(const char*)Real2Host((RealPt)ds_readd(FNAMES_G105de + 4 * index)));
 
-		ds_writeb(USELESS_VARIABLE, 1);
+		g_useless_variable = 1;
 		infobox((char*)Real2Host(ds_readd(GEN_PTR2)), 0);
-		ds_writeb(USELESS_VARIABLE, 0);
+		g_useless_variable = 0;
 	}
 
 	bc__read(handle, buf, 800);
