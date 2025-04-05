@@ -60,8 +60,8 @@ struct struct_color {
 	signed char b;
 };
 
-static const Bit16u MAX_PAGES = 11;
-static const Bit16u MAX_TYPES = 13;
+#define MAX_PAGES (11);
+#define MAX_TYPES (13);
 
 #if 0
 struct struct_spelltab {

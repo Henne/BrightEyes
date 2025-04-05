@@ -30,6 +30,7 @@
 #include "g105de_seg001.h"
 #include "g105de_seg002.h"
 
+static signed char cd_dummy0 = 0;
 static signed short CD_INIT_SUCCESSFUL = 0;
 static long cd_dummy1 = 0;
 static signed short CD_AUDIO_REPEAT = 0;
