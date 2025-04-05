@@ -31,8 +31,8 @@
 //#define HEIGHT_RANGE                    (0x0913)    /* Bit8u[13]. */
 //#define WEIGHT_MOD                      (0x092d)    /* Bit8u[13] */
 //#define MR_MOD                          (0x093a)    /* Bit8s[13] */
+//#define MONEY_TAB                       (0x0a51)    /* RealPt[13] */
 
-#define MONEY_TAB                       (0x0a51)    /* RealPt[13] */
 #define INITIAL_SKILL_INCS              (0x0a84)    /* Bit8s[13] */
 #define INITIAL_SPELL_INCS              (0x0a91)    /* Bit8s[6] */
 #define INITIAL_CONV_INCS               (0x0a97)    /* Bit8s[6] */

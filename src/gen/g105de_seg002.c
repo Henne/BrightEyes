@@ -646,6 +646,55 @@ static const signed char g_mr_mod[] = {
 	2, 2, 2, 3, 4, 3
 };
 
+
+struct struct_money {
+	signed short value;
+	signed short min;
+	signed short max;
+};
+
+static const struct struct_money money_jester[] = {
+	{14, 5, 5}, {19, 0x64, 0x64}, {20, 0x12c, 0x12c} };
+static const struct struct_money money_hunter[] = {
+	{1, 1, 1},  {20, 0, 0} };
+static const struct struct_money money_warrior[] = {
+	{2, 1, 1},  {4, 20, 20}, {7, 50, 50}, {10, 30, 30}, {18, 0xc8, 0xc8}, {20, 0x3e8, 0x3e8} };
+static const struct struct_money money_rouge[] = {
+	{10, 0, 0},  {17, 2, 2}, {18, 5, 5}, {20, 10, 10} };
+static const struct struct_money money_thorwal[] = {
+	{9, 10, 10},  {13, 0x64, 0x64}, {19, 0xc8, 0xc8}, {20, 0x1f4, 0x1f4} };
+static const struct struct_money money_dwarf[] = {
+	{7, 0x64, 0x64},  {16, 0xc8, 0xc8}, {19, 0x12c, 0x12c}, {20, 0x4b0, 0x4b0} };
+
+static const struct struct_money money_warlock[] = {
+	{20, 1, 20} };
+static const struct struct_money money_druid[] = {
+	{14, 0, 1},  {15, 1, 6}, {16, 2, 12}, {18, 1, 20}, {19, 10, 0x3c}, {20, 10, 0xc8} };
+static const struct struct_money money_mage[] = {
+	{3, 1, 6},  {13, 10, 0x3c}, {16, 10, 0xc8}, {19, 20, 0x190}, {20, 5, 0x3e8} };
+static const struct struct_money money_greenelf[] = {
+	{4, 1, 6},  {6, 1, 20}, {14, 10, 0x3c}, {19, 10, 0xc8}, {20, 20, 0x190} };
+
+static const struct struct_money money_iceelf[] = {
+	{1, 1, 6},  {20, 1, 20} };
+static const struct struct_money money_silvanelf[] = {
+	{14, 1, 6}, {13, 1, 20}, {20, 10, 0x3c} };
+
+static const struct struct_money* g_money_tab[] = {
+	money_jester,
+	money_hunter,
+	money_warrior,
+	money_rouge,
+	money_thorwal,
+	money_dwarf,
+	money_warlock,
+	money_druid,
+	money_mage,
+	money_greenelf,
+	money_iceelf,
+	money_silvanelf
+};
+
 #if 0
 static const unsigned char initial_skill_incs[13] = {
 	0,
@@ -4696,7 +4745,7 @@ void fill_values(void)
 	Bit16s i;
 	Bit16s v1;
 	Bit16s v2;
-	Bit8u *ptr;
+	struct struct_money *money_ptr;
 
 	Bit16s si, di;
 
@@ -4829,11 +4878,10 @@ void fill_values(void)
 
 	/* roll out the money */
 	i = random_gen(20);
-	ptr = Real2Host(ds_readd(MONEY_TAB + ds_readbs(HERO_TYPUS) * 4));
-	for (si = 0; host_readws(ptr + si * 6) < i; si++);
+	money_ptr = g_money_tab[ds_readbs(HERO_TYPUS)];
+	for (si = 0; money_ptr[si].value < i; si++);
 
-	ds_writed(HERO_MONEY, (Bit32s)(10 * (Bit16s)random_interval_gen(host_readw(ptr + si * 6 + 2),
-				host_readw(ptr + si * 6 + 4))));
+	ds_writed(HERO_MONEY, (Bit32s)(10 * (Bit16s)random_interval_gen(money_ptr[si].min, money_ptr[si].max)));
 
 	/* calculate MR  = (KL + SI + Level) / 3 - 2 * AG */
 	ds_writeb(HERO_MR,
