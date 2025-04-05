@@ -959,10 +959,12 @@ static const struct struct_color g_col_white2 = { 0x3f, 0x3f, 0x3f };
 static const char dummy9[] = { 0x00, 0x80, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc, 0xfe, 0xff };
 
 struct struct_chr_lookup {
-	unsigned char chr, idx, width;
+	unsigned char chr;
+	signed char index;
+	signed char width;
 };
 
-static const struct struct_chr_lookup chr_lookup[74] = {
+static const struct struct_chr_lookup g_chr_lookup[74] = {
 	{0x20, 0, 6},
 	{0x41, 1, 6},
 	{0x42, 2, 6},
@@ -3383,10 +3385,10 @@ Bit16s get_chr_info(unsigned char c, Bit16s *width)
 
 	for (i = 0; i != 222; i += 3) {
 		/* search for the character */
-		if (ds_readb(CHR_LOOKUP + i + 0) == c) {
+		if (*(&g_chr_lookup[0].chr + i) == c) {
 
-			*width = ds_readbs(CHR_LOOKUP + i + 2) & 0xff;
-			return ds_readbs(CHR_LOOKUP + i + 1) & 0xff;
+			*width = *(&g_chr_lookup[0].width + i) & 0xff;
+			return *(&g_chr_lookup[0].index + i) & 0xff;
 		}
 	}
 

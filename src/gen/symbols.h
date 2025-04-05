@@ -132,7 +132,7 @@
 //#define STR_FILE_MISSING                (0x1b65)    /* char[19] */
 
 //#define STRUCT_COL_WHITE2               (0x1b79)    /* RGB */
-#define CHR_LOOKUP                      (0x1b85)
+//#define CHR_LOOKUP                      (0x1b85)
 
 #define ACTION_INPUT                    (0x1c63)
 #define BOOL_MODE                       (0x1c77)    /* Bit16s */
