@@ -1041,9 +1041,10 @@ static const struct struct_chr_lookup g_chr_lookup[74] = {
 	{0xd9, 73, 5},
 };
 
-//static const struct mouse_action ACTION_INPUT[2] = {
-//			{ 0, 0, 319, 199, 0x1c},
-//			{ 0xffff, 0xffff, 0xffff, 0xffff, 0xffff} };
+static const struct mouse_action g_action_input[2] = {
+	{ 0, 0, 319, 199, KEY_RET},
+	{ -1, -1, -1, -1, -1}
+};
 
 //static unsigned short bool_mode;
 #if 0
@@ -3837,7 +3838,7 @@ Bit16s infobox(char *msg, Bit16s digits)
 
 		retval = (Bit16u)atol((char*)Real2Host((RealPt)ds_readd(GEN_PTR3)));
 	} else {
-		g_action_table = (struct mouse_action*)RealMake(datseg, ACTION_INPUT);
+		g_action_table = (struct mouse_action*)g_action_input;
 		vsync_or_key(150 * lines);
 		g_action_table = (struct mouse_action*)NULL;
 	}
@@ -4042,7 +4043,7 @@ Bit16s gui_radio(Bit8u *header, Bit8s options, ...)
 #endif
 
 	while (r5 == 0) {
-		g_action_table = (struct mouse_action*)RealMake(datseg, ACTION_INPUT);
+		g_action_table = (struct mouse_action*)g_action_input;
 		handle_input();
 		g_action_table = (struct mouse_action*)NULL;
 
