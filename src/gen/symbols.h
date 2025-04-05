@@ -35,8 +35,8 @@
 //#define INITIAL_SKILL_INCS              (0x0a84)    /* Bit8s[13] */
 //#define INITIAL_SPELL_INCS              (0x0a91)    /* Bit8s[6] */
 //#define INITIAL_CONV_INCS               (0x0a97)    /* Bit8s[6] */
+//#define HOUSE_MOD                       (0x0a9d)    /* struct house_mode[9] */
 
-#define HOUSE_MOD                       (0x0a9d)    /* struct house_mode[9] */
 #define AUTOSKILLS                      (0x0ba2)    /* Bit16s[13][90] */
 #define AUTOSPELLS                      (0x0ee0)    /* */
 

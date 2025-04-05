@@ -708,13 +708,13 @@ static const signed char g_initial_conv_incs[] = {
 	5, 5, 5, 0, 0, 0
 };
 
-#if 0
 struct struct_house_mod {
 	signed char no;
-	signed short spells[7], mod[7];
+	signed short spells[7];
+	signed short mod[7];
 };
 
-static const struct struct_house_mod house_mod[9] = {
+static const struct struct_house_mod g_house_mod[9] = {
 	{6, {0x1, 0x2, 0x3, 0x4, 0x5, 0x2a, 0x0}, {3, 1, 2, 2, 3, 1, 0}},
 	{5, {0x7, 0xc, 0xe, 0x10, 0x2c, 0x0, 0x0}, {3, 4, 2, 2, 1, 0, 0}},
 	{6, {0x12, 0x13, 0x15, 0x17, 0x18, 0x3b, 0x0}, {3, 2, 2, 2, 2, 1, 0}},
@@ -725,7 +725,6 @@ static const struct struct_house_mod house_mod[9] = {
 	{5, {0x3c, 0x3e, 0x48, 0x49, 0x4b, 0x0, 0x0}, {3, 2, 2, 3, 2, 0, 0}},
 	{7, {0x4c, 0x4e, 0x4f, 0x50, 0x52, 0x53, 0x54}, {2, 1, 2, 2, 2, 1, 2}}
 };
-#endif
 
 #if 0
 static const unsigned short autoskills[13][25] = {
@@ -4790,18 +4789,10 @@ void fill_values(void)
 
 
 			/* add magic school modifications */
-			//for (i = 0; house_mod[ds_readbs(HERO_SPELL_SCHOOL)].no > i; i++) {
-			for (i = 0; ds_readbs(HOUSE_MOD + 29 * ds_readbs(HERO_SPELL_SCHOOL)) > i; i++) {
-				// Some docu
-				//Bit16s spell, mod;
-				//spell = house_mod[ds_readbs(HERO_SPELL_SCHOOL)].spells[i];
-				//spell = ds_readws(HOUSE_MOD + 29 * ds_readbs(HERO_SPELL_SCHOOL) + 1 + 2 * i);
-				//mod = house_mod[ds_readbs(HERO_SPELL_SCHOOL)].mod[i];
-				//mod = ds_readws(HOUSE_MOD + 29 * ds_readbs(HERO_SPELL_SCHOOL) + 15 + 2 * i);
-				//ds_add_bs(HERO_SPELLS + spell, mod);
+			for (i = 0; g_house_mod[ds_readbs(HERO_SPELL_SCHOOL)].no > i; i++) {
 
-				ds_add_bs(HERO_SPELLS + ds_readws(HOUSE_MOD + 29 * ds_readbs(HERO_SPELL_SCHOOL) + 1 + 2 * i),
-					ds_readws(HOUSE_MOD + 29 * ds_readbs(HERO_SPELL_SCHOOL) + 15 + 2 * i));
+				ds_add_bs(HERO_SPELLS + g_house_mod[ds_readbs(HERO_SPELL_SCHOOL)].spells[i],
+					g_house_mod[ds_readbs(HERO_SPELL_SCHOOL)].mod[i]);
 			}
 		}
 
@@ -4974,10 +4965,10 @@ void fill_values(void)
 		/* prepare mage automatic spell list */
 		if (ds_readbs(HERO_TYPUS) == 9) {
 			/* 1. house spells */
-			for (i = 0; ds_readbs(HOUSE_MOD + 29 * ds_readbs(HERO_SPELL_SCHOOL)) > i; si++, i++) {
+			for (i = 0; g_house_mod[ds_readbs(HERO_SPELL_SCHOOL)].no > i; si++, i++) {
 //				autospells[ds_readbs(HERO_TYPUS) - 7][si] =
 				ds_writew(AUTOSPELLS + 2 * si,
-					ds_readws(HOUSE_MOD + 29 * ds_readbs(HERO_SPELL_SCHOOL) + 1 + 2 * i));
+						g_house_mod[ds_readbs(HERO_SPELL_SCHOOL)].spells[i]);
 			}
 			/* 2. all schools spells */
 			for (i = 0; g_school_tab[ds_readbs(HERO_SPELL_SCHOOL)].spells > i; si++, i++) {
@@ -5005,20 +4996,16 @@ void fill_values(void)
 			ds_writew(AUTOSPELLS + 2 * si++, 0x4f);
 
 			/* 4. all house spells */
-//			for (i = 0; ds_readbs(HOUSE_MOD + 29 * ds_readbs(HERO_SPELL_SCHOOL)) > i; si++, i++) {
+			for (i = 0; g_house_mod[ds_readbs(HERO_SPELL_SCHOOL)].no > i; si++, i++) {
 //				autospells[ds_readbs(HERO_TYPUS) - 7][si] =
-//					ds_readbs(HOUSE_MOD + 29 * ds_readbs(HERO_SPELL_SCHOOL) + 1 * 2 * i);
-			for (i = 0; ds_readbs(HOUSE_MOD + 29 * ds_readbs(HERO_SPELL_SCHOOL)) > i; si++, i++) {
 				ds_writew(AUTOSPELLS + 2 * si,
-					ds_readw(HOUSE_MOD + 29 * ds_readbs(HERO_SPELL_SCHOOL) + 1 + 2 * i));
+					g_house_mod[ds_readbs(HERO_SPELL_SCHOOL)].spells[i]);
 			}
 			/* 5. all house spells */
-//			for (i = 0; ds_readbs(HOUSE_MOD + 29 * ds_readbs(HERO_SPELL_SCHOOL)) > i; si++, i++) {
+			for (i = 0; g_house_mod[ds_readbs(HERO_SPELL_SCHOOL)].no > i; si++, i++) {
 //				autospells[ds_readbs(HERO_TYPUS) - 7][si] =
-//					ds_readbs(HOUSE_MOD + 29 * ds_readbs(HERO_SPELL_SCHOOL) + 1 * 2 * i);
-			for (i = 0; ds_readbs(HOUSE_MOD + 29 * ds_readbs(HERO_SPELL_SCHOOL)) > i; si++, i++) {
 				ds_writew(AUTOSPELLS + 2 * si,
-					ds_readw(HOUSE_MOD + 29 * ds_readbs(HERO_SPELL_SCHOOL) + 1 + 2 * i));
+					g_house_mod[ds_readbs(HERO_SPELL_SCHOOL)].spells[i]);
 			}
 			/* 6. random spells */
 			while (si < 45) {
