@@ -613,37 +613,38 @@ static const signed short g_init_le[] = {0, 30, 30, 30, 30, 30, 40, 25, 30, 25, 
 
 static const signed short g_init_ae[] = {0, 0, 0, 0, 0, 0, 0, 25, 25, 30, 25, 25, 25};
 
-#if 0
 struct minmax {
 	unsigned char min;
 	unsigned char max;
 };
 
-static const struct minmax height_range[13] = {	{0, 0},
-						{150, 188},	{155, 170},
-						{165, 205},	{156, 194},
-						{167, 210},	{130, 140},
-						{154, 188},	{154, 188},
-						{164, 197},	{170, 204},
-						{160, 194},	{170, 210}
+static const struct minmax g_height_range[] = {
+	{0, 0},
+	{150, 188},
+	{155, 170},
+	{165, 205},
+	{156, 194},
+	{167, 210},
+	{130, 140},
+	{154, 188},
+	{154, 188},
+	{164, 197},
+	{170, 204},
+	{160, 194},
+	{170, 210}
 };
-#endif
 
-#if 0
-static const unsigned short weight_mod[13] = {
+static const unsigned short g_weight_mod[] = {
 	0,
 	120, 110, 100, 110, 100, 90,
 	120, 110, 110, 120, 120, 120
 };
-#endif
 
-#if 0
-static const signed char mr_mod[13] = {
+static const signed char g_mr_mod[] = {
 	0,
 	2, 0, 0, 2, -2, 2,
 	2, 2, 2, 3, 4, 3
 };
-#endif
 
 #if 0
 static const unsigned char initial_skill_incs[13] = {
@@ -4820,11 +4821,11 @@ void fill_values(void)
 
 	/* roll out size */
 	ds_writeb(HERO_HEIGHT,
-		(unsigned char)random_interval_gen(ds_readb(HEIGHT_RANGE + 2 * ds_readbs(HERO_TYPUS)),
-		ds_readb(HEIGHT_RANGE + 1 + 2 * ds_readbs(HERO_TYPUS))));
+		(unsigned char)random_interval_gen(g_height_range[ds_readbs(HERO_TYPUS)].min,
+						   g_height_range[ds_readbs(HERO_TYPUS)].max));
 
 	/* calculate weight i = (height - weight_mod) * 40 */
-	ds_writew(HERO_WEIGHT, (ds_readb(HERO_HEIGHT) - ds_readb(WEIGHT_MOD + ds_readbs(HERO_TYPUS))) * 40);
+	ds_writew(HERO_WEIGHT, (ds_readb(HERO_HEIGHT) - 40 * g_weight_mod[ds_readbs(HERO_TYPUS)]));
 
 	/* roll out the money */
 	i = random_gen(20);
@@ -4839,7 +4840,7 @@ void fill_values(void)
 		(ds_readbs(HERO_ATT0_NORMAL + 3 * 1) + ds_readbs(HERO_ATT0_NORMAL + 3 * 0) + ds_readbs(HERO_LEVEL)) / 3
 		 - 2 * ds_readbs(HERO_ATT0_NORMAL + 3 * 7));
 	/* add typus MR Modificator */
-	ds_add_bs(HERO_MR, ds_readbs(MR_MOD + ds_readbs(HERO_TYPUS)));
+	ds_add_bs(HERO_MR, g_mr_mod[ds_readbs(HERO_TYPUS)]);
 
 	/* roll out god */
 	ds_writeb(HERO_GOD, random_gen(12));
