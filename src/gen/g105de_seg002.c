@@ -1071,8 +1071,8 @@ struct type_bitmap {
 static const struct type_bitmap g_type_bitmap = { {0} };
 
 static const char g_str_version[] = "V1.05";
-#if 0
-static const struct struct_color pal_attic[16] = {
+
+static const struct struct_color g_pal_attic[16] = {
 	{0x00, 0x00, 0x00},
 	{0x24, 0x24, 0x3c},
 	{0x1c, 0x1c, 0x38},
@@ -1091,7 +1091,7 @@ static const struct struct_color pal_attic[16] = {
 	{0x20, 0x26, 0x3c},
 };
 
-static const struct struct_color pal_dsalogo[32] = {
+static const struct struct_color g_pal_dsalogo[32] = {
 	{0x00, 0x00, 0x00},
 	{0x38, 0x38, 0x38},
 	{0x34, 0x34, 0x34},
@@ -1125,7 +1125,6 @@ static const struct struct_color pal_dsalogo[32] = {
 	{0x14, 0x00, 0x00},
 	{0x3c, 0x3c, 0x3c},
 };
-#endif
 
 static const struct struct_color col_white = { 0x3f, 0x3f, 0x3f };
 
@@ -7526,7 +7525,7 @@ void intro(void)
 
 	wait_for_vsync();
 
-	set_palette((RealPt)RealMake(datseg, PAL_ATTIC), 0, 16);
+	set_palette((RealPt)&g_pal_attic, 0, 16);
 
 	cnt1 = 1;
 	cnt2 = 99;
@@ -7674,7 +7673,7 @@ void intro(void)
 	ds_writed(DST_SRC, ds_readd(GEN_PTR1_DIS));
 	do_draw_pic(0);
 
-	bc_memcpy((RealPt)ds_readd(GEN_PTR1_DIS) + 500, RealMake(datseg, PAL_DSALOGO), 96);
+	bc_memcpy((RealPt)ds_readd(GEN_PTR1_DIS) + 500, &g_pal_dsalogo, 96);
 
 #if !defined(__BORLANDC__)
 	pal_src = (RealPt)ds_readd(GEN_PTR1_DIS) + 500;
@@ -7696,7 +7695,7 @@ void intro(void)
 	print_str((char*)g_str_version, 290, 190);
 	vsync_or_key(400);
 
-	bc_memcpy((RealPt)ds_readd(GEN_PTR1_DIS), RealMake(datseg, PAL_DSALOGO), 96);
+	bc_memcpy((RealPt)ds_readd(GEN_PTR1_DIS), &g_pal_dsalogo, 96);
 
 #if !defined(__BORLANDC__)
 	pal_src = (RealPt)ds_readd(GEN_PTR1_DIS) + 500;

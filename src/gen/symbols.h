@@ -139,8 +139,8 @@
 //#define NEED_REFRESH                    (0x1ca5)    /* Bit8s {0,1} */
 //#define TYPE_BITMAP                     (0x1ca6)    /* Bit8[13] */
 //#define STR_VERSION                     (0x1cb3)    /* char[6] */
-#define PAL_ATTIC                       (0x1cb9)    /* RGB[16] */
-#define PAL_DSALOGO                     (0x1ce9)    /* RGB[32] */
+//#define PAL_ATTIC                       (0x1cb9)    /* RGB[16] */
+//#define PAL_DSALOGO                     (0x1ce9)    /* RGB[32] */
 #define PAL_COL_WHITE                   (0x1d49)    /* RGB[1] */
 #define PAL_COL_BLACK                   (0x1d4c)    /* RGB[1] */
 #define PAL_POPUP                       (0x1d4f)    /* RGB[8] */
