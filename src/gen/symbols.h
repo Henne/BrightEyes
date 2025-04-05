@@ -153,8 +153,8 @@
 //#define STR_TEMP_DIR                    (0x1e03)    /* char[] */
 //#define STR_SAVE_ERROR                  (0x1e09)    /* char[] */
 
-#define STR_DSAGEN_DAT                  (0x1fb0)    /* char[] */
-#define STR_MALLOC_ERROR                (0x1fbb)    /* char[] */
+//#define STR_DSAGEN_DAT                  (0x1fb0)    /* char[] */
+//#define STR_MALLOC_ERROR                (0x1fbb)    /* char[] */
 #define RANDOM_GEN_SEED                 (0x1fd6)    /* Bit16u */
 
 #define _CTYPE                          (0x1ff9)    /* CLIB array for isalpha() */

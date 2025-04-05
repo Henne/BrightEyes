@@ -1228,6 +1228,11 @@ static const char g_fname34[] = "FANPRO.NVF";
 static const char g_fname35[] = "SAMPLE.AD";
 static const char g_fname36[] = "MT32EMUL.XMI";
 
+static const char g_str_dsagen_dat[] = "DSAGEN.DAT";
+static const char g_str_malloc_error[] = "\xaMEMORY MALLOCATION ERROR!";
+
+signed short g_random_gen_seed = 0x327b;
+
 //static unsigned short got_ch_bonus;
 //static unsigned short got_mu_bonus;
 
@@ -2777,7 +2782,7 @@ Bit16s open_datfile(Bit16u index)
 
 	bc_flushall();
 
-	while ((handle = bc_open(RealMake(datseg, STR_DSAGEN_DAT), 0x8001)) == -1)
+	while ((handle = bc_open(g_str_dsagen_dat, 0x8001)) == -1)
 	{
 		sprintf((char*)Real2Host(ds_readd(GEN_PTR2)),
 			(const char*)g_str_file_missing,
@@ -7882,7 +7887,7 @@ void alloc_buffers(void)
 #if defined(__BORLANDC__)
 		asm { db 0x66, 0x90;};
 #endif
-		printf((char*)Real2Host(RealMake(datseg, STR_MALLOC_ERROR)));
+		printf((char*)g_str_malloc_error);
 	}
 }
 
