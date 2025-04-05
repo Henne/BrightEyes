@@ -883,31 +883,33 @@ static struct mouse_action* g_default_action = &g_action_default;
 
 static struct mouse_action* g_action_table = NULL;
 
-/* DS:0x127a */
-static const struct mouse_action action_base[9] = {
-			{ 272, 8, 304, 41, 0xfd},	/* credits */
-			{ 305, 7, 319, 21, KEY_CTRL_F3},	/* change sex */
-			{ 145, 13, 175, 21, KEY_CTRL_F4},	/* enter name */
-			{ 271, 42, 286, 56, KEY_UP},	/* previous head */
-			{ 288, 42, 303, 56, KEY_DOWN},	/* next head */
-			{ 145, 178, 164, 192, KEY_LEFT},	/* previous page */
-			{ 284, 178, 303, 192, KEY_RIGHT},	/* next page */
-			{ 0, 0, 319, 199, 0xfe},
-			{ -1, -1, -1, -1, -1} };
-/* DS:0x12d4 */
-static const struct mouse_action action_skills[4] = {
-			{ 145, 178, 164, 192, KEY_LEFT},	/* previous page */
-			{ 284, 178, 303, 192, KEY_RIGHT},	/* next page */
-			{ 0, 0, 319, 199, 0xfe},
-			{ -1, -1, -1, -1, -1} };
-/* DS:0x12fc */
-static const struct mouse_action action_spells[4] = {
-			{ 16, 178, 35, 192, KEY_LEFT},	/* previous page */
-			{ 284, 178, 303, 192, KEY_RIGHT},	/* next page */
-			{ 0, 0, 319, 199, 0xfe},
-			{ -1, -1, -1, -1, -1} };
+static const struct mouse_action g_action_base[9] = {
+	{ 272, 8, 304, 41, 0xfd},	/* credits */
+	{ 305, 7, 319, 21, KEY_CTRL_F3},	/* change sex */
+	{ 145, 13, 175, 21, KEY_CTRL_F4},	/* enter name */
+	{ 271, 42, 286, 56, KEY_UP},	/* previous head */
+	{ 288, 42, 303, 56, KEY_DOWN},	/* next head */
+	{ 145, 178, 164, 192, KEY_LEFT},	/* previous page */
+	{ 284, 178, 303, 192, KEY_RIGHT},	/* next page */
+	{ 0, 0, 319, 199, 0xfe},
+	{ -1, -1, -1, -1, -1}
+};
 
-//static Bit16s GEN_PAGE;
+static const struct mouse_action g_action_skills[4] = {
+	{ 145, 178, 164, 192, KEY_LEFT},	/* previous page */
+	{ 284, 178, 303, 192, KEY_RIGHT},	/* next page */
+	{ 0, 0, 319, 199, 0xfe},
+	{ -1, -1, -1, -1, -1}
+};
+
+static const struct mouse_action g_action_spells[4] = {
+	{ 16, 178, 35, 192, KEY_LEFT},		/* previous page */
+	{ 284, 178, 303, 192, KEY_RIGHT},	/* next page */
+	{ 0, 0, 319, 199, 0xfe},
+	{ -1, -1, -1, -1, -1}
+};
+
+static signed short g_gen_page = 0;
 
 //static const Bit16u ro_zero = 0;
 
@@ -4146,11 +4148,11 @@ void change_head(void)
 	ds_writew(DST_X1, 272);
 	ds_writew(DST_X2, 303);
 
-	if (ds_readws(GEN_PAGE) == 0) {
+	if (g_gen_page == 0) {
 		ds_writew(DST_Y1, 8);
 		ds_writew(DST_Y2, 39);
 		do_draw_pic(0);
-	} else if (ds_readws(GEN_PAGE) > 4) {
+	} else if (g_gen_page > 4) {
 		ds_writew(DST_Y1, 4);
 		ds_writew(DST_Y2, 35);
 		do_draw_pic(0);
@@ -4227,13 +4229,13 @@ void do_gen(void)
 		}
 
 		g_action_table =
-			(struct mouse_action*)Real2Host(ds_readd(ACTION_PAGE + 4 * ds_readws(GEN_PAGE)));
+			(struct mouse_action*)Real2Host(ds_readd(ACTION_PAGE + 4 * g_gen_page));
 		handle_input();
 		g_action_table = (struct mouse_action*)NULL;
 
 		if (ds_readw(MOUSE2_EVENT) || ds_readw(IN_KEY_EXT) == KEY_PGUP) {
 			/* print the menu for each page */
-			switch (ds_readws(GEN_PAGE)) {
+			switch (g_gen_page) {
 				case 0: {
 					si = gui_radio((Bit8u*)get_text(7), 9,
 						get_text(10), get_text(11), get_text(15),
@@ -4320,7 +4322,7 @@ void do_gen(void)
 		if (ds_readw(IN_KEY_EXT) == KEY_CTRL_F4)
 			enter_name();
 
-		if ((ds_readw(IN_KEY_EXT) == KEY_UP) && (ds_readws(GEN_PAGE) == 0)) {
+		if ((ds_readw(IN_KEY_EXT) == KEY_UP) && (g_gen_page == 0)) {
 			if (!ds_readbs(HERO_TYPUS)) {
 				infobox(get_text(17), 0);
 			} else {
@@ -4333,7 +4335,7 @@ void do_gen(void)
 			}
 		}
 
-		if ((ds_readw(IN_KEY_EXT) == KEY_DOWN) && (ds_readws(GEN_PAGE) == 0)) {
+		if ((ds_readw(IN_KEY_EXT) == KEY_DOWN) && (g_gen_page == 0)) {
 			if (!ds_readbs(HERO_TYPUS)) {
 				infobox(get_text(17), 0);
 			} else {
@@ -4352,18 +4354,18 @@ void do_gen(void)
 			} else {
 				g_screen_var = 1;
 
-				if (((ds_readbs(HERO_TYPUS) < 7) ? 4 : 10) > ds_readws(GEN_PAGE)) {
-					ds_inc_ws(GEN_PAGE);
+				if (((ds_readbs(HERO_TYPUS) < 7) ? 4 : 10) > g_gen_page) {
+					g_gen_page++;
 				} else {
-					ds_writew(GEN_PAGE, 0);
+					g_gen_page = 0;
 				}
 			}
 		}
 
 		if (ds_readw(IN_KEY_EXT) == KEY_LEFT) {
-			if (ds_readws(GEN_PAGE) > 0) {
+			if (g_gen_page > 0) {
 				g_screen_var = 1;
-				ds_dec_ws(GEN_PAGE);
+				g_gen_page--;
 			} else {
 				if (ds_readws(LEVEL) != 1) {
 
@@ -4371,7 +4373,7 @@ void do_gen(void)
 						infobox(get_text(72), 0);
 					} else {
 						g_screen_var = 1;
-						ds_writew(GEN_PAGE, ds_readbs(HERO_TYPUS) < 7 ? 4 : 10);
+						g_gen_page = (ds_readbs(HERO_TYPUS) < 7 ? 4 : 10);
 					}
 				}
 			}
@@ -4385,8 +4387,8 @@ void do_gen(void)
 				(ds_readws(IN_KEY_EXT) == KEY_3) ? 4 : (
 				(ds_readws(IN_KEY_EXT) == KEY_4) ? 5 : 10))));
 
-			if ((si != ds_readws(GEN_PAGE)) && (si < 5 || ds_readbs(HERO_TYPUS) >= 7)) {
-				ds_writews(GEN_PAGE, si);
+			if ((si != g_gen_page) && (si < 5 || ds_readbs(HERO_TYPUS) >= 7)) {
+				g_gen_page = si;
 				g_screen_var = 1;
 			}
 		}
@@ -4404,11 +4406,11 @@ void refresh_screen(void)
 
 	if (g_screen_var) {
 		ds_writed(GFX_PTR, ds_readd(GEN_PTR1_DIS));
-		load_page(ds_readws(GEN_PAGE));
+		load_page(g_gen_page);
 		save_picbuf();
 
 		/* page with base values and hero is not male */
-		if ((ds_readws(GEN_PAGE) == 0) && (ds_readbs(HERO_SEX) != 0)) {
+		if ((g_gen_page == 0) && (ds_readbs(HERO_SEX) != 0)) {
 
 			dst = (RealPt)ds_readd(GEN_PTR1_DIS) + 7 * 320 + 305;
 			src = (RealPt)ds_readd(BUFFER_SEX_DAT) + 256 * ds_readbs(HERO_SEX);
@@ -4416,7 +4418,7 @@ void refresh_screen(void)
 		}
 
 		/* page with base values and level is advanced */
-		if ((ds_readws(GEN_PAGE) == 0) && (ds_readws(LEVEL) == 1)) {
+		if ((g_gen_page == 0) && (ds_readws(LEVEL) == 1)) {
 			dst = (RealPt)ds_readd(GEN_PTR1_DIS) + 178 * 320 + 284;
 #if !defined(__BORLANDC__)
 			src = (RealPt)ds_readd(BUFFER_SEX_DAT) + 512;
@@ -4427,7 +4429,7 @@ void refresh_screen(void)
 			copy_to_screen(src, dst, 20, 15, 0);
 		}
 		/* if the page is lower than 5 */
-		if (ds_readws(GEN_PAGE) < 5) {
+		if (g_gen_page < 5) {
 			/* draw DMENGE.DAT or the typus name */
 #if !defined(__BORLANDC__)
 			dst = (RealPt)ds_readd(GEN_PTR1_DIS) + 8 * 320 + 16;
@@ -4483,12 +4485,12 @@ void refresh_screen(void)
 			ds_writed(DST_DST, ds_readd(GEN_PTR1_DIS));
 
 			/* draw the head */
-			if (ds_readws(GEN_PAGE) == 0) {
+			if (g_gen_page == 0) {
 				/* on the base page */
 				ds_writew(DST_Y1, 8);
 				ds_writew(DST_Y2, 39);
 				do_draw_pic(0);
-			} else if (ds_readws(GEN_PAGE) > 4) {
+			} else if (g_gen_page > 4) {
 				/* on the spell pages */
 				ds_writew(DST_Y1, 4);
 				ds_writew(DST_Y2, 35);
@@ -5625,7 +5627,7 @@ void save_picbuf(void)
 	x_1 = 0;
 
 	/* check on which page we are */
-	switch (ds_readws(GEN_PAGE)) {
+	switch (g_gen_page) {
 		/* main page */
 		case 0: {
 			/* name field */
@@ -5705,7 +5707,7 @@ void restore_picbuf(RealPt ptr)
 	x_1 = 0;
 
 	/* check on which page we are */
-	switch (ds_readws(GEN_PAGE)) {
+	switch (g_gen_page) {
 		/* main page */
 		case 0: {
 			/* name field */
@@ -5822,7 +5824,7 @@ void print_values(void)
 	register Bit16s pos;
 
 
-	switch (ds_readws(GEN_PAGE)) {
+	switch (g_gen_page) {
 
 		case 0: {
 			restore_picbuf((RealPt)ds_readd(GFX_PTR));
@@ -6480,7 +6482,7 @@ void select_skill(void)
 
 		ds_writew(TEXT_X_MOD, 0xffb0);
 
-		switch (ds_readws(GEN_PAGE)) {
+		switch (g_gen_page) {
 		case 1: {
 			group = gui_radio((Bit8u*)get_text(93), 2, get_text(86), get_text(87));
 			if (group != -1) {
@@ -6700,7 +6702,7 @@ void select_spell(void)
 
 		ds_writew(TEXT_X_MOD, 0xffa6);
 
-		switch (ds_readws(GEN_PAGE)) {
+		switch (g_gen_page) {
 			case 5: {
 				group = gui_radio((Bit8u*)get_text(155),
 						3,

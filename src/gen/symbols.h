@@ -70,7 +70,7 @@
 //#define DEFAULT_ACTION                  (0x1272)    /* RealPt */
 //#define ACTION_TABLE                    (0x1276)    /* RealPt */
 
-#define GEN_PAGE                        (0x1324)    /* signed short */
+//#define GEN_PAGE                        (0x1324)    /* signed short */
 
 #define USELESS_VARIABLE                (0x1326)    /* Bit8s */
 #define TEXT_X_MOD                      (0x1327)    /* Bit16s */
