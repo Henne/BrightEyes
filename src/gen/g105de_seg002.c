@@ -911,7 +911,8 @@ static const struct mouse_action g_action_spells[4] = {
 
 static signed short g_gen_page = 0;
 static signed char g_useless_variable = 0;
-//static const Bit16u ro_zero = 0;
+static signed short g_text_x_mod = 0;
+static const signed short g_ro_zero = 0;
 
 //static struct struct_hero hero;
 
@@ -3762,7 +3763,7 @@ Bit16s infobox(char *msg, Bit16s digits)
 	v4 = ds_readws(TEXT_X_END);
 
 	di = 32 * ds_readws(MENU_TILES) + 32;
-	ds_writew(TEXT_X, ds_writew(LEFT_BORDER, (320 - di) / 2 + ds_readw(TEXT_X_MOD)) + 5);
+	ds_writew(TEXT_X, ds_writew(LEFT_BORDER, (320 - di) / 2 + g_text_x_mod) + 5);
 	ds_writews(TEXT_X_END, di - 10);
 	lines = str_splitter(msg);
 
@@ -3770,7 +3771,7 @@ Bit16s infobox(char *msg, Bit16s digits)
 		lines += 2;
 
 	ds_writew(UPPER_BORDER, (200 - (lines + 2) * 8) / 2);
-	ds_add_ws(UPPER_BORDER, ds_readws(RO_ZERO));
+	ds_add_ws(UPPER_BORDER, g_ro_zero);
 	ds_writew(TEXT_Y, ds_readws(UPPER_BORDER) + 7);
 
 	update_mouse_cursor();
@@ -3940,7 +3941,7 @@ Bit16s gui_radio(Bit8u *header, Bit8s options, ...)
 	bak2 = ds_readw(TEXT_Y);
 	bak3 = ds_readws(TEXT_X_END);
 	r9 = 32 * ds_readws(MENU_TILES) + 32;
-	ds_writew(TEXT_X, ds_writew(LEFT_BORDER, ((320 - r9) / 2) + ds_readw(TEXT_X_MOD)) + 5);
+	ds_writew(TEXT_X, ds_writew(LEFT_BORDER, ((320 - r9) / 2) + g_text_x_mod) + 5);
 	ds_writew(TEXT_X_END, 32 * ds_readws(MENU_TILES) + 22);
 	lines_header = str_splitter((char*)header);
 	lines_sum = lines_header + options;
@@ -4613,7 +4614,7 @@ void new_values(void)
 		sprintf((char*)Real2Host(ds_readd(GEN_PTR2)), get_text(46), randval);
 
 		do {
-			ds_writew(TEXT_X_MOD, 0xffb0);
+			g_text_x_mod = -80;
 
 			di = gui_radio((Bit8u*)Real2Host(ds_readd(GEN_PTR2)),
 				unset_attribs,
@@ -4625,7 +4626,7 @@ void new_values(void)
 				(char*)Real2Host((RealPt)ds_readd(TYPE_NAMES + 4 * 5)),
 				(char*)Real2Host((RealPt)ds_readd(TYPE_NAMES + 4 * 6)));
 
-			ds_writew(TEXT_X_MOD, 0);
+			g_text_x_mod = 0;
 
 		} while (di == -1);
 
@@ -4661,7 +4662,7 @@ void new_values(void)
 		sprintf((char*)Real2Host(ds_readd(GEN_PTR2)), get_text(46), randval);
 
 		do {
-			ds_writew(TEXT_X_MOD, 0xffb0);
+			g_text_x_mod = -80;
 
 			di = gui_radio((Bit8u*)Real2Host(ds_readd(GEN_PTR2)),
 				unset_attribs,
@@ -4673,7 +4674,7 @@ void new_values(void)
 				(char*)Real2Host((RealPt)ds_readd(TYPE_NAMES + 4 * 5)),
 				(char*)Real2Host((RealPt)ds_readd(TYPE_NAMES + 4 * 6)));
 
-			ds_writew(TEXT_X_MOD, 0);
+			g_text_x_mod = 0;
 
 		} while (di == -1);
 
@@ -5414,11 +5415,11 @@ void change_attribs(void)
 		return;
 	}
 	/* select a positive attribute to change */
-	ds_writew(TEXT_X_MOD, 0xffb0);
+	g_text_x_mod = -80;
 	tmp2 = gui_radio((Bit8u*)get_text(78), 7,
 			get_text(32), get_text(33), get_text(34), get_text(35),
 			get_text(36), get_text(37), get_text(38));
-	ds_writew(TEXT_X_MOD, 0);
+	g_text_x_mod = 0;
 
 	if (tmp2 == -1)
 		return;
@@ -5426,9 +5427,9 @@ void change_attribs(void)
 	/* get the modification type */
 	if (!ds_readbs(ATTRIB_CHANGED + tmp2)) {
 		/* ask user if inc or dec */
-		ds_writew(TEXT_X_MOD, 0xffb0);
+		g_text_x_mod = -80;
 		tmp3 = gui_radio((Bit8u*)NULL, 2, get_text(75), get_text(76));
-		ds_writew(TEXT_X_MOD, 0);
+		g_text_x_mod = 0;
 
 		if (tmp3 == -1)
 			return;
@@ -5477,12 +5478,12 @@ void change_attribs(void)
 		
 			do {
 				/* ask which negative attribute to increment */
-				ds_writew(TEXT_X_MOD, 0xffb0);
+				g_text_x_mod = -80;
 				si = gui_radio((Bit8u*)get_text(80), 7,
 						get_text(39), get_text(40), get_text(41),
 						get_text(42), get_text(43), get_text(44),
 						get_text(45));
-				ds_writew(TEXT_X_MOD, 0);
+				g_text_x_mod = 0;
 
 			} while (si == -1);
 
@@ -5559,12 +5560,12 @@ void change_attribs(void)
 
 			do {
 				/* ask which negative attribute to increment */
-				ds_writew(TEXT_X_MOD, 0xffb0);
+				g_text_x_mod = -80;
 				si = gui_radio((Bit8u*)get_text(79), 7,
 						get_text(39), get_text(40), get_text(41),
 						get_text(42), get_text(43), get_text(44),
 						get_text(45));
-				ds_writew(TEXT_X_MOD, 0);
+				g_text_x_mod = 0;
 			} while (si == -1);
 
 
@@ -6476,11 +6477,11 @@ void select_skill(void)
 		/* check skill attempts */
 		if (!ds_readbs(HERO_SKILL_INCS)) {
 			infobox(get_text(94), 0);
-			ds_writew(TEXT_X_MOD, 0x0);
+			g_text_x_mod = 0;
 			return;
 		}
 
-		ds_writew(TEXT_X_MOD, 0xffb0);
+		g_text_x_mod = -80;
 
 		switch (g_gen_page) {
 		case 1: {
@@ -6616,7 +6617,7 @@ void select_skill(void)
 			}
 		}
 
-		ds_writew(TEXT_X_MOD, 0);
+		g_text_x_mod = 0;
 
 	} while (group != -1);
 }
@@ -6696,11 +6697,11 @@ void select_spell(void)
 		/* check if we have spell attempts */
 		if (!ds_readbs(HERO_SPELL_INCS)) {
 			infobox(get_text(94), 0);
-			ds_writew(TEXT_X_MOD, 0);
+			g_text_x_mod = 0;
 			return;
 		}
 
-		ds_writew(TEXT_X_MOD, 0xffa6);
+		g_text_x_mod = -90;
 
 		switch (g_gen_page) {
 			case 5: {
@@ -6966,7 +6967,7 @@ void select_spell(void)
 			}
 		}
 
-		ds_writew(TEXT_X_MOD, 0);
+		g_text_x_mod = 0;
 
 	} while (group != -1);
 }
@@ -6977,7 +6978,7 @@ void choose_atpa(void)
 	Bit16s skill;
 	Bit16s increase;
 
-	ds_writew(TEXT_X_MOD, 0xffb0);
+	g_text_x_mod = -80;
 
 	do {
 		/* print menu with all melee weapons skills */
@@ -7024,7 +7025,7 @@ void choose_atpa(void)
 
 	} while (skill != -2);
 
-	ds_writew(TEXT_X_MOD, 0);
+	g_text_x_mod = 0;
 }
 
 /**
