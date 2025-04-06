@@ -42,11 +42,22 @@ static char STR_QUIT[] = "BEENDEN";
 static char STR_CD_EXEPATH[] = "X:\\DSA\\SCHICKM.EXE";
 
 static signed short CD_AUDIO_TRACK;
-static long cd_dummy3;
+static signed short cd_dummy3_1;
+#if !defined(__BORLANDC__)
+/* For some reason CD_AUDIO_TRACK
+ * is at DS:0x245c instead of DS:0x245a.
+ * The two bytes at DS:0x243c and DS:0x243d from CLIB
+ * code are responsible for that.
+ */
+static signed short cd_dummy3_2;
+#endif
 static long cd_dummy4;
 static signed long CD_AUDIO_TOD;
 static signed long CD_AUDIO_POS;
 static signed short CD_DRIVE_NO;
+
+static signed long cd_dummy5;
+static signed short cd_dummy6;
 
 #define CDSEG (0xc83)
 

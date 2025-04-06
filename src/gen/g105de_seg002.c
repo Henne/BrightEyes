@@ -1232,7 +1232,9 @@ static const char g_str_dsagen_dat[] = "DSAGEN.DAT";
 static const char g_str_malloc_error[] = "\xaMEMORY MALLOCATION ERROR!";
 
 signed short g_random_gen_seed = 0x327b;
+/* END OF INITIALIZED GLOBAL VARIABLES _DATA */
 
+/* START OF UNINITIALIZE GLOBAL VARIABLE _BSS */
 //static unsigned short got_ch_bonus;
 //static unsigned short got_mu_bonus;
 
