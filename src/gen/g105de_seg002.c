@@ -1234,9 +1234,23 @@ static const char g_str_malloc_error[] = "\xaMEMORY MALLOCATION ERROR!";
 signed short g_random_gen_seed = 0x327b;
 /* END OF INITIALIZED GLOBAL VARIABLES _DATA */
 
-/* START OF UNINITIALIZE GLOBAL VARIABLE _BSS */
-//static unsigned short got_ch_bonus;
-//static unsigned short got_mu_bonus;
+/* START OF UNINITIALIZE GLOBAL VARIABLE _BSS DS:0x2474*/
+static unsigned short g_current_timbre_length;
+/* These 6 bytes are written at once from a file */
+static signed char g_current_timbre_patch;
+static signed char g_current_timbre_bank;
+static unsigned long g_current_timbre_offset;
+
+#if defined(__BORLANDC__)
+void far *g_timer_isr_bak;
+
+static char dummy10[768];
+#endif
+
+static signed short g_got_ch_bonus;
+static signed short g_got_mu_bonus;
+
+static char dummy11[0x26f];
 
 //static Bit32s FLEN;
 //static Bit32s FLEN_LEFT;
@@ -1528,29 +1542,29 @@ RealPt get_timbre(Bit16s bank, Bit16s patch)
 	bc_lseek(ds_readw(HANDLE_TIMBRE), ds_readd(GENDAT_OFFSET), SEEK_SET);
 
 	do {
-		read_datfile(ds_readw(HANDLE_TIMBRE), Real2Host(RealMake(datseg, CURRENT_TIMBRE_PATCH)), 6);
+		read_datfile(ds_readw(HANDLE_TIMBRE), &g_current_timbre_patch, 6);
 
-		if (ds_readbs(CURRENT_TIMBRE_BANK) == -1)
+		if (g_current_timbre_bank == -1)
 			return 0;
 
-	} while ((ds_readbs(CURRENT_TIMBRE_BANK) != bank) || (ds_readbs(CURRENT_TIMBRE_PATCH) != patch));
+	} while ((g_current_timbre_bank != bank) || (g_current_timbre_patch != patch));
 //	Remark: Try out the next line instead and get a different sound:
-//	} while ((ds_readbs(CURRENT_TIMBRE_BANK) != bank) && (ds_readbs(CURRENT_TIMBRE_PATCH) != patch));
+//	} while ((g_current_timbre_bank != bank) && (g_current_timbre_patch != patch));
 
-	bc_lseek(ds_readw(HANDLE_TIMBRE), ds_readd(GENDAT_OFFSET) + ds_readd(CURRENT_TIMBRE_OFFSET), SEEK_SET);
-	read_datfile(ds_readw(HANDLE_TIMBRE), Real2Host(RealMake(datseg, CURRENT_TIMBRE_LENGTH)), 2);
+	bc_lseek(ds_readw(HANDLE_TIMBRE), ds_readd(GENDAT_OFFSET) + g_current_timbre_offset, SEEK_SET);
+	read_datfile(ds_readw(HANDLE_TIMBRE), &g_current_timbre_length, 2);
 
-	timbre_ptr = gen_alloc(ds_readw(CURRENT_TIMBRE_LENGTH));
+	timbre_ptr = gen_alloc(g_current_timbre_length);
 
 #if !defined(__BORLANDC__)
 	read_datfile(ds_readw(HANDLE_TIMBRE),
 		Real2Host(timbre_ptr) + 2,
-		host_writews(Real2Host(timbre_ptr), ds_readw(CURRENT_TIMBRE_LENGTH)) - 2);
+		host_writews(Real2Host(timbre_ptr), g_current_timbre_length) - 2);
 #else
 	asm { db 0x66, 0x90; db 0x66, 0x90;}
 	read_datfile(ds_readw(HANDLE_TIMBRE),
 		0L, // BCC Sync-Point
-		host_writew(Real2Host(timbre_ptr), ds_readw(CURRENT_TIMBRE_LENGTH)) - 2);
+		host_writew(Real2Host(timbre_ptr), g_current_timbre_length) - 2);
 #endif
 
 	return timbre_ptr;
@@ -4561,7 +4575,7 @@ void clear_hero(void)
 
 	Bit16s i;
 
-	ds_writew(GOT_MU_BONUS, ds_writew(GOT_CH_BONUS, 0));
+	g_got_mu_bonus = g_got_ch_bonus = 0;
 
 	ds_writeb(HEAD_TYPUS,
 		ds_writeb(HEAD_FIRST,
@@ -4942,7 +4956,7 @@ void fill_values(void)
 			ds_writebs(HERO_ATT0_CURRENT + 3 * 0,
 				ds_writebs(HERO_ATT0_NORMAL + 3 * 0,
 					ds_readbs(HERO_ATT0_NORMAL + 3 * 0) + 1));
-			ds_writew(GOT_MU_BONUS, 1);
+			g_got_mu_bonus = 1;
 			break;
 		}
 		case 2 : {
@@ -4981,7 +4995,7 @@ void fill_values(void)
 			ds_writebs(HERO_ATT0_CURRENT + 3 * 2,
 				ds_writebs(HERO_ATT0_NORMAL + 3 * 2,
 					ds_readbs(HERO_ATT0_NORMAL + 3 * 2) + 1));
-			ds_writew(GOT_CH_BONUS, 1);
+			g_got_ch_bonus = 1;
 			break;
 		}
 		case 9 : {
@@ -5201,13 +5215,13 @@ void select_typus(void)
 		old_typus = ds_readbs(HERO_TYPUS);
 		
 		/* disable MU bonus */
-		if (ds_readw(GOT_MU_BONUS)) {
+		if (g_got_mu_bonus) {
 			ds_writebs(HERO_ATT0_CURRENT + 3 * 0,
 				ds_writebs(HERO_ATT0_NORMAL + 3 * 0,
 					ds_readbs(HERO_ATT0_NORMAL + 3 * 0) - 1));
 		}
 		/* disable CH bonus */
-		if (ds_readw(GOT_CH_BONUS)) {
+		if (g_got_ch_bonus) {
 			ds_writebs(HERO_ATT0_CURRENT + 3 * 2,
 				ds_writebs(HERO_ATT0_NORMAL + 3 * 2,
 					ds_readbs(HERO_ATT0_NORMAL + 3 * 2) - 1));
@@ -5310,15 +5324,15 @@ void select_typus(void)
 			}
 
 			/* reset boni flags */
-			ds_writew(GOT_MU_BONUS, ds_writew(GOT_CH_BONUS, 0));
+			g_got_mu_bonus = g_got_ch_bonus = 0;
 			fill_values();
 		} else {
-			if (ds_readw(GOT_MU_BONUS)) {
+			if (g_got_mu_bonus) {
 				ds_writebs(HERO_ATT0_CURRENT + 3 * 0,
 					ds_writebs(HERO_ATT0_NORMAL + 3 * 0,
 						ds_readbs(HERO_ATT0_NORMAL + 3 * 0) + 1));
 			}
-			if (ds_readw(GOT_CH_BONUS)) {
+			if (g_got_ch_bonus) {
 				ds_writebs(HERO_ATT0_CURRENT + 3 * 2,
 					ds_writebs(HERO_ATT0_NORMAL + 3 * 2,
 						ds_readbs(HERO_ATT0_NORMAL + 3 * 2) + 1));
@@ -5429,18 +5443,18 @@ void change_attribs(void)
 		ds_writeb(HERO_TYPUS, 0);
 
 		/* remove MU boni */
-		if (ds_readw(GOT_MU_BONUS)) {
+		if (g_got_mu_bonus) {
 			ds_writeb(HERO_ATT0_CURRENT + 3 * 0,
 				ds_writebs(HERO_ATT0_NORMAL + 3 * 0,
 					ds_readbs(HERO_ATT0_NORMAL + 3 * 0) - 1));
-			ds_writew(GOT_MU_BONUS, 0);
+			g_got_mu_bonus = 0;
 		}
 		/* remove CH boni */
-		if (ds_readw(GOT_CH_BONUS)) {
+		if (g_got_ch_bonus) {
 			ds_writeb(HERO_ATT0_CURRENT + 3 * 2,
 				ds_writebs(HERO_ATT0_NORMAL + 3 * 2,
 					ds_readbs(HERO_ATT0_NORMAL + 3 * 2) - 1));
-			ds_writew(GOT_CH_BONUS, 0);
+			g_got_ch_bonus = 0;
 		}
 		g_screen_var = 1;
 		refresh_screen();
@@ -7742,7 +7756,7 @@ void interrupt timer_isr(void)
 		ds_writews(RANDOM_GEN_SEED2, 0);
 	restart_midi();
 	asm {pushf };
-	((void far (*)(void))ds_readd(TIMER_ISR_BAK))();
+	((void far (*)(void))g_timer_isr_bak)();
 }
 #endif
 
@@ -7750,7 +7764,7 @@ void interrupt timer_isr(void)
 void set_timer_isr(void)
 {
 	/* save adress of the old ISR */
-	ds_writed(TIMER_ISR_BAK, (Bit32u)bc__dos_getvect(0x1c));
+	g_timer_isr_bak = ((void interrupt far (*)(void))bc__dos_getvect(0x1c));
 #if !defined(__BORLANDC__)
 	/* set a the new one */
 	bc__dos_setvect(0x1c, RealMake(reloc_gen + 0x3c6, 0x72b3));
@@ -7762,7 +7776,7 @@ void set_timer_isr(void)
 /* Borlandified and identical */
 void restore_timer_isr(void)
 {
-	bc__dos_setvect(0x1c, (INTCAST)ds_readd(TIMER_ISR_BAK));
+	bc__dos_setvect(0x1c, (INTCAST)g_timer_isr_bak);
 }
 
 /* Borlandified and nearly identical */

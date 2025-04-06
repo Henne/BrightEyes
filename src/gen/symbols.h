@@ -165,14 +165,14 @@
 //#define CD_AUDIO_POS                    (0x2468)    /* unsigned long */
 //#define CD_DRIVE_NO                     (0x246c)    /* unsigned short */
 
-#define CURRENT_TIMBRE_LENGTH           (0x2474)    /* Bit16u */
-#define CURRENT_TIMBRE_PATCH            (0x2476)    /* Bit8s */
-#define CURRENT_TIMBRE_BANK             (0x2477)    /* Bit8s */
-#define CURRENT_TIMBRE_OFFSET           (0x2478)    /* Bit32u */
-#define TIMER_ISR_BAK                   (0x247c)    /* RealPt */
+//#define CURRENT_TIMBRE_LENGTH           (0x2474)    /* Bit16u */
+//#define CURRENT_TIMBRE_PATCH            (0x2476)    /* Bit8s */
+//#define CURRENT_TIMBRE_BANK             (0x2477)    /* Bit8s */
+//#define CURRENT_TIMBRE_OFFSET           (0x2478)    /* Bit32u */
+//#define TIMER_ISR_BAK                   (0x247c)    /* RealPt */
 
-#define GOT_CH_BONUS                    (0x2780)    /* Bit16s */
-#define GOT_MU_BONUS                    (0x2782)    /* Bit16s */
+//#define GOT_CH_BONUS                    (0x2780)    /* Bit16s */
+//#define GOT_MU_BONUS                    (0x2782)    /* Bit16s */
 
 #define FLEN                            (0x3f2a)    /* Bit32s */
 #define FLEN_LEFT                       (0x3f2e)    /* Bit32s */
