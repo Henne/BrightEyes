@@ -1325,9 +1325,11 @@ static inline char* get_text(Bit16s no) {
 #define get_text(no) (g_texts[no])
 #endif
 
-//static unsigned short HAVE_MOUSE;
+//static unsigned short RANDOM_GEN_SEED2
 
-//static unsigned short WO_VAR;
+static signed short g_have_mouse;
+static signed short dummy13;
+static signed short g_wo_var1;
 //static unsigned short IN_KEY_ASCII;
 //static unsigned short IN_KEY_EXT;
 
@@ -1878,7 +1880,7 @@ void mouse_enable(void)
 {
 	Bit16u p1, p2, p3, p4, p5;
 
-	if (ds_readw(HAVE_MOUSE) == 2) {
+	if (g_have_mouse == 2) {
 
 		/* initialize mouse */
 		p1 = 0;
@@ -1886,13 +1888,13 @@ void mouse_enable(void)
 		do_mouse_action((Bit8u*)&p1, (Bit8u*)&p2, (Bit8u*)&p3, (Bit8u*)&p4, (Bit8u*)&p5);
 
 		if (p1 == 0) {
-			ds_writew(HAVE_MOUSE, 0);
+			g_have_mouse = 0;
 		}
 
 		ds_writed(MOUSE_CURRENT_CURSOR, (Bit32u)g_mouse_mask);
 		ds_writed(MOUSE_LAST_CURSOR, (Bit32u)g_mouse_mask);
 
-		if (ds_readws(HAVE_MOUSE) == 2) {
+		if (g_have_mouse == 2) {
 
 			/* move cursor  to initial position */
 			p1 = 4;
@@ -1912,7 +1914,7 @@ void mouse_enable(void)
 /* Borlandified and identical */
 void mouse_disable(void)
 {
-	if (ds_readw(HAVE_MOUSE) == 2) {
+	if (g_have_mouse == 2) {
 		mouse_do_disable();
 	}
 }
@@ -2149,7 +2151,7 @@ void handle_input(void)
 
 	if (ds_readw(MOUSE1_EVENT2) == 0) {
 		// Hm, ...
-		if (ds_readw(HAVE_MOUSE) == 0);
+		if (g_have_mouse == 0);
 	} else {
 		ds_writew(MOUSE1_EVENT2, 0);
 		si = 0;
@@ -2162,12 +2164,12 @@ void handle_input(void)
 			si = get_mouse_action(g_mouse_posx, g_mouse_posy,
 				(struct mouse_action*)g_default_action);
 
-		if (ds_readw(HAVE_MOUSE) == 2) {
+		if (g_have_mouse == 2) {
 			for (i = 0; i < 15; i++)
 				wait_for_vsync();
 
 			if (ds_readw(MOUSE1_EVENT2) != 0) {
-				ds_writew(WO_VAR, 1);
+				g_wo_var1 = 1;
 				ds_writew(MOUSE1_EVENT2, 0);
 			}
 
@@ -7759,11 +7761,11 @@ int main_gen(int argc, char **argv)
 
 	init_video(2);
 
-	ds_writew(HAVE_MOUSE, 2);
+	g_have_mouse = 2;
 
 	mouse_enable();
 
-	if (ds_readws(HAVE_MOUSE) == 0)
+	if (g_have_mouse == 0)
 		g_mouse_refresh_flag = -2;
 
 	init_stuff();

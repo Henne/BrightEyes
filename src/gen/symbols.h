@@ -217,17 +217,14 @@
 //#define TEXTS                           (0x40d9)    /* RealPt[301] array */
 
 #define RANDOM_GEN_SEED2                (0x458f)    /* Bit16u */
+//#define HAVE_MOUSE                      (0x4591)    /* Bit16s */
 
-#define WO_VAR                          (0x4595)    /* Bit16u */
-
-#define IN_KEY_ASCII                    (0x459d)    /* Bit16s */
-#define IN_KEY_EXT                      (0x459f)    /* Bit16s */
-
-#define HAVE_MOUSE                      (0x4591)    /* Bit16s */
-
+//#define WO_VAR1                         (0x4595)    /* Bit16u */
 #define MOUSE1_EVENT1                   (0x4597)    /* Bit16s */
 #define MOUSE2_EVENT                    (0x4599)    /* Bit16s */
 #define MOUSE1_EVENT2                   (0x459b)    /* Bit16s */
+#define IN_KEY_ASCII                    (0x459d)    /* Bit16s */
+#define IN_KEY_EXT                      (0x459f)    /* Bit16s */
 
 #define ARRAY_1                         (0x45a1)    /* char[64] */
 #define ARRAY_2                         (0x45e1)    /* char[64] */
