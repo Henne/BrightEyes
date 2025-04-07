@@ -2179,9 +2179,9 @@ void handle_input(void)
 			if (si == 0xfd) {
 				si = 0;
 				g_menu_tiles = 4;
-				ds_writew(FG_COLOR + 8, 1);
+				g_fg_color[4] = 1;
 				infobox(get_text(267), 0);
-				ds_writew(FG_COLOR + 8, 0);
+				g_fg_color[4] = 0;
 				g_menu_tiles = 3;
 			}
 		}
@@ -3271,7 +3271,7 @@ Bit16u str_splitter(char *s)
 		get_chr_info(tp[i], &c_width);
 		l_width += c_width;
 
-		if (l_width >= ds_readws(TEXT_X_END)) {
+		if (l_width >= g_text_x_end) {
 			if (last_space != unknown_var1) {
 				tp[last_space] = 0x0d;
 				tp = tp + last_space;
@@ -3295,7 +3295,7 @@ Bit16u str_splitter(char *s)
 		}
 	}
 
-	if (l_width >= ds_readws(TEXT_X_END)) {
+	if (l_width >= g_text_x_end) {
 		if (unknown_var1 == last_space) {
 			tp[i-1] = 0;
 		} else {
@@ -3336,7 +3336,7 @@ void print_str(char *str, Bit16s x, Bit16s y)
 
 	update_mouse_cursor();
 
-	if (ds_readw(FG_COLOR + 8) == 1) x = get_line_start_c(str, x, ds_readws(TEXT_X_END));
+	if (g_fg_color[4] == 1) x = get_line_start_c(str, x, g_text_x_end);
 	x_bak = x;
 
 	while ((c = str[i++])) {
@@ -3344,7 +3344,7 @@ void print_str(char *str, Bit16s x, Bit16s y)
 			/* newline */
 			y += 7;
 
-			x = (ds_readw(FG_COLOR + 8) == 1) ? get_line_start_c(str + i, ds_readws(TEXT_X), ds_readws(TEXT_X_END)) : x_bak;
+			x = (g_fg_color[4] == 1) ? get_line_start_c(str + i, ds_readws(TEXT_X), g_text_x_end) : x_bak;
 
 		} else if (c == 0x7e) {
 			/* CRUFT */
@@ -3490,8 +3490,7 @@ void fill_smth2(Bit8u* sptr) {
 		mask = *sptr++;
 		for (j = 0; j < 8; j++) {
 			if ((0x80 >> j) & mask) {
-				host_writeb(Real2Host(ptr) + j,
-					(unsigned char)ds_readws(FG_COLOR + 2 * g_col_index));
+				host_writeb(Real2Host(ptr) + j,	(unsigned char)g_fg_color[g_col_index]);
 			}
 		}
 	}
@@ -3523,7 +3522,7 @@ void call_blit_smth3(RealPt dst, Bit16s v1, Bit16s v2, Bit16s v3, Bit16s v4)
 /* static */
 void set_textcolor(Bit16s fg, Bit16s bg)
 {
-	ds_writew(FG_COLOR + 0, fg);
+	g_fg_color[0] = fg;
 	g_bg_color = bg;
 }
 
@@ -3531,7 +3530,7 @@ void set_textcolor(Bit16s fg, Bit16s bg)
 /* static */
 void get_textcolor(Bit16s *p_fg, Bit16s *p_bg)
 {
-	host_writew((Bit8u*)p_fg, ds_readw(FG_COLOR + 0));
+	host_writew((Bit8u*)p_fg, g_fg_color[0]);
 	host_writew((Bit8u*)p_bg, g_bg_color);
 }
 
@@ -3819,14 +3818,14 @@ Bit16s infobox(char *msg, Bit16s digits)
 	Bit16s di;    // di
 
 	retval = 0;
-	ds_writew(FG_COLOR + 8, 1);
+	g_fg_color[4] = 1;
 	v2 = ds_readws(TEXT_X);
 	v3 = ds_readws(TEXT_Y);
-	v4 = ds_readws(TEXT_X_END);
+	v4 = g_text_x_end;
 
 	di = 32 * g_menu_tiles + 32;
 	ds_writew(TEXT_X, g_left_border = ((320 - di) / 2 + g_text_x_mod) + 5);
-	ds_writews(TEXT_X_END, di - 10);
+	g_text_x_end = di - 10;
 	lines = str_splitter(msg);
 
 	if (digits != 0)
@@ -3894,9 +3893,9 @@ Bit16s infobox(char *msg, Bit16s digits)
 #endif
 	ds_writew(TEXT_X, v2);
 	ds_writew(TEXT_Y, v3);
-	ds_writew(TEXT_X_END, v4);
+	g_text_x_end = v4;
 
-	ds_writew(FG_COLOR + 8, 0);
+	g_fg_color[4] = 0;
 	g_in_key_ext = 0;
 
 	return retval;
@@ -4001,10 +4000,10 @@ Bit16s gui_radio(Bit8u *header, Bit8s options, ...)
 
 	bak1 = ds_readws(TEXT_X);
 	bak2 = ds_readw(TEXT_Y);
-	bak3 = ds_readws(TEXT_X_END);
+	bak3 = g_text_x_end;
 	r9 = 32 * g_menu_tiles + 32;
 	ds_writew(TEXT_X, g_left_border = (((320 - r9) / 2) + g_text_x_mod) + 5);
-	ds_writew(TEXT_X_END, 32 * g_menu_tiles + 22);
+	g_text_x_end = 32 * g_menu_tiles + 22;
 	lines_header = str_splitter((char*)header);
 	lines_sum = lines_header + options;
 	ds_writew(TEXT_Y, g_upper_border = ((200 - (lines_sum + 2) * 8) / 2) + 7);
@@ -4164,7 +4163,7 @@ Bit16s gui_radio(Bit8u *header, Bit8s options, ...)
 
 	ds_writew(TEXT_X, bak1);
 	ds_writew(TEXT_Y, bak2);
-	ds_writew(TEXT_X_END, bak3);
+	g_text_x_end = bak3;
 	g_in_key_ext = 0;
 
 	return retval;
@@ -7831,9 +7830,9 @@ void init_stuff(void)
 	init_colors();
 
 	/* these 3 variables are different text colors */
-	ds_writew(FG_COLOR + 2, 0x0c8); // RED
-	ds_writew(FG_COLOR + 4, 0x0c9); // YELLOW
-	ds_writew(FG_COLOR + 6, 0x0ca); // BLUE
+	g_fg_color[1] = 0xc8; //RED
+	g_fg_color[2] = 0xc9; //YELLOW
+	g_fg_color[3] = 0xca; //BLUE
 
 	/* number of menu tiles width */
 	g_menu_tiles = 3;
