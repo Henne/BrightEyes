@@ -76,8 +76,4 @@ static inline void bc_randomize() { }
 #define bc_write write
 #define bc_randomize randomize
 
-/* macros that work different on host and emu */
-#define bc_open_host open
-#define bc__create_host _creat
-
 #endif

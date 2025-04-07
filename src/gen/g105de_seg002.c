@@ -1526,19 +1526,19 @@ unsigned short load_seq(Bit16s sequence_num)
 				if ((ptr = get_timbre(di, patch = (si & 0xff))) != 0) {
 					/* ptr is passed differently */
 					AIL_install_timbre(g_snd_driver_handle, di, patch, ptr);
-					bc_free(ptr);
+					free(ptr);
 				}
 			}
-			/* Remark: set g_handle_timbre to 0 after bc_close() */
+			/* Remark: set g_handle_timbre to 0 after close() */
 
-			bc_close(g_handle_timbre);
+			close(g_handle_timbre);
 
 			return 1;
 		} else {
 #if !defined(__BORLANDC__)
-			bc_close(g_handle_timbre);
+			close(g_handle_timbre);
 #else
-			//bc_close(g_handle_timbre);
+			//close(g_handle_timbre);
 			asm { db 0x0f, 0x1d, 0x40, 0x00; db 0x0f, 0x1d, 0x04, 0x00}; // BCC Sync-Point
 #endif
 		}
@@ -1563,7 +1563,7 @@ RealPt get_timbre(Bit16s bank, Bit16s patch)
 {
 	RealPt timbre_ptr;
 
-	bc_lseek(g_handle_timbre, g_gendat_offset, SEEK_SET);
+	lseek(g_handle_timbre, g_gendat_offset, SEEK_SET);
 
 	do {
 		read_datfile(g_handle_timbre, &g_current_timbre_patch, 6);
@@ -1575,7 +1575,7 @@ RealPt get_timbre(Bit16s bank, Bit16s patch)
 //	Remark: Try out the next line instead and get a different sound:
 //	} while ((g_current_timbre_bank != bank) && (g_current_timbre_patch != patch));
 
-	bc_lseek(g_handle_timbre, g_gendat_offset + g_current_timbre_offset, SEEK_SET);
+	lseek(g_handle_timbre, g_gendat_offset + g_current_timbre_offset, SEEK_SET);
 	read_datfile(g_handle_timbre, &g_current_timbre_length, 2);
 
 	timbre_ptr = gen_alloc(g_current_timbre_length);
@@ -1607,7 +1607,7 @@ unsigned short load_file(Bit16s index)
 
 	if ((handle = open_datfile(index)) != -1) {
 		read_datfile(handle, g_form_xmid, 32767);
-		bc_close(handle);
+		close(handle);
 		return 1;
 	}
 
@@ -1919,8 +1919,6 @@ void mouse_enable(void)
 			do_mouse_action((Bit8u*)&p1, (Bit8u*)&p2, (Bit8u*)&p3, (Bit8u*)&p4, (Bit8u*)&p5);
 #if defined(__BORLANDC__)
 			mouse_do_enable(0x1f, (RealPt)&mouse_isr);
-#else
-			mouse_do_enable(0x1f, RealMake(reloc_gen + 0x3c6, 0x68c));
 #endif
 		}
 	}
@@ -1954,18 +1952,13 @@ void mouse_call_isr(void)
 /* Borlandified and identical */
 void mouse_do_enable(Bit16u val, RealPt ptr)
 {
+#if defined(__BORLANDC__)
 	Bit16u p1, p2, p3, p4, p5;
 
 	p1 = 0x0c;
 	p3 = val;
-
-#if !defined(__BORLANDC__)
-	p4 = 0x86a;
-	p5 = reloc_gen + 0x3c6;
-#else
 	p4 = (Bit16u)FP_OFF(mouse_isr);
 	p5 = (Bit16u)FP_SEG(mouse_isr);
-#endif
 
 	/* save adress of old IRQ 0x78 */
 	g_irq78_bak = ((void interrupt far (*)(void))bc__dos_getvect(0x78));
@@ -1977,11 +1970,13 @@ void mouse_do_enable(Bit16u val, RealPt ptr)
 	do_mouse_action((Bit8u*)&p1, (Bit8u*)&p2, (Bit8u*)&p3, (Bit8u*)&p4, (Bit8u*)&p5);
 
 	g_mouse_handler_installed = 1;
+#endif
 }
 
 /* Borlandified and identical */
 void mouse_do_disable(void)
 {
+#if defined(__BORLANDC__)
 	Bit16u v1, v2, v3, v4, v5;
 
 	/* restore the old int 0x78 handler */
@@ -1996,6 +1991,7 @@ void mouse_do_disable(void)
 	do_mouse_action((Bit8u*)&v1, (Bit8u*)&v2, (Bit8u*)&v3, (Bit8u*)&v4, (Bit8u*)&v5);
 
 	g_mouse_handler_installed = 0;
+#endif
 }
 
 /**
@@ -2405,12 +2401,12 @@ void load_font_and_text(void)
 	/* load FONT6 */
 	handle = open_datfile(14);
 	read_datfile(handle, g_buffer_font6, 1000);
-	bc_close(handle);
+	close(handle);
 
 	/* load GENTEXT */
 	handle = open_datfile(15);
 	len = read_datfile(handle, g_buffer_text, 64000);
-	bc_close(handle);
+	close(handle);
 
 	split_textbuffer(g_texts, g_buffer_text, len);
 #if !defined(__BORLANDC__)
@@ -2489,7 +2485,7 @@ void load_page(Bit16s page)
 			read_datfile(handle, g_page_buffer, 64000);
 			decomp_rle(g_gen_ptr1_dis, g_page_buffer, 0, 0, 320, 200, 0);
 		}
-		bc_close(handle);
+		close(handle);
 #if defined(__BORLANDC__)
 		asm {db 0xeb, 0x4d} // BCC Sync-point
 #endif
@@ -2497,7 +2493,7 @@ void load_page(Bit16s page)
 		/* this should not happen */
 		handle = open_datfile(page);
 		read_datfile(handle, g_gen_ptr1_dis - 8, 64000);
-		bc_close(handle);
+		close(handle);
 		decomp_pp20(g_gen_ptr1_dis, g_gen_ptr1_dis - 8, get_filelength(handle));
 	}
 }
@@ -2509,7 +2505,7 @@ void read_datfile_to_buffer(Bit16s index, RealPt dst)
 	Bit16s handle;
 	handle = open_datfile(index);
 	read_datfile(handle, Real2Host(dst), 64000);
-	bc_close(handle);
+	close(handle);
 }
 #endif
 
@@ -2541,7 +2537,7 @@ void load_typus(Bit16u typus)
 		read_datfile(handle, g_gen_ptr1_dis, 25000);
 		decomp_pp20(g_gen_ptr5, g_gen_ptr1_dis, get_filelength(handle));
 	}
-	bc_close(handle);
+	close(handle);
 }
 
 /**
@@ -2582,7 +2578,7 @@ void save_chr(void)
 	process_nvf(&nvf);
 
 	/* copy picture to the character struct */
-	bc_memcpy(RealMake(datseg, HERO_PIC), g_gen_ptr1_dis, 1024);
+	memcpy(RealMake(datseg, HERO_PIC), g_gen_ptr1_dis, 1024);
 
 	/* put the hero in the first group */
 	ds_writeb(HERO_GROUP, 1);
@@ -2593,11 +2589,11 @@ void save_chr(void)
 
 	/* copy name to alias */
 	/* TODO: should use strncpy() here */
-	bc_strcpy(RealMake(datseg, HERO_ALIAS), RealMake(datseg, HERO_NAME));
+	strcpy(RealMake(datseg, HERO_ALIAS), RealMake(datseg, HERO_NAME));
 
 	/* copy name to buffer */
 	/* TODO: should use strncpy() here */
-	bc_strcpy(g_gen_ptr2, RealMake(datseg, HERO_NAME));
+	strcpy(g_gen_ptr2, RealMake(datseg, HERO_NAME));
 
 	/* prepare filename */
 	for (i = 0; i < 8; i++) {
@@ -2615,26 +2611,26 @@ void save_chr(void)
 	strcat(filename, (char*)g_str_chr);
 
 	/* remark: bc_open() and bc__creat() have filename on the stack of the host */
-	if (((handle = bc_open_host(filename, 0x8001)) == -1) || gui_bool((Bit8u*)get_text(261))) {
+	if (((handle = bc_open(filename, 0x8001)) == -1) || gui_bool((Bit8u*)get_text(261))) {
 
 #if !defined(__BORLANDC__)
 		/* close an existing file before overwriting it */
-		if (handle != -1) bc_close(handle);
+		if (handle != -1) close(handle);
 #endif
-		handle = bc__create_host(filename, 0);
+		handle = _creat(filename, 0);
 
 		if (handle != -1) {
 			bc_write(handle, RealMake(datseg, HERO_NAME), 1754);
-			bc_close(handle);
+			close(handle);
 
 			if (g_called_with_args == 0) return;
 
-			strcpy(path, (char*)g_str_temp_dir);
+			strcpy(path, g_str_temp_dir);
 			strcat(path, filename);
 
-			if ((handle = bc__create_host(path, 0)) != -1) {
+			if ((handle = bc__creat(path, 0)) != -1) {
 				bc_write(handle, RealMake(datseg, HERO_NAME), 1754);
-				bc_close(handle);
+				close(handle);
 			}
 		} else {
 			/* should be replaced with infobox() */
@@ -2652,24 +2648,24 @@ void read_common_files(void)
 	/* load HEADS.DAT */
 	handle = open_datfile(11);
 	len = read_datfile(handle, g_buffer_heads_dat, 64000);
-	bc_close(handle);
+	close(handle);
 
 	/* load POPUP.NVF */
 	handle = open_datfile(19);
 	len = read_datfile(handle, g_buffer_popup_nvf - 8, 500);
-	bc_close(handle);
+	close(handle);
 
 	decomp_pp20(g_buffer_popup_nvf, g_buffer_popup_nvf - 8, len);
 
 	/* load SEX.DAT */
 	handle = open_datfile(12);
 	read_datfile(handle, g_buffer_sex_dat, 900);
-	bc_close(handle);
+	close(handle);
 
 	/* load DMENGE.DAT */
 	handle = open_datfile(32);
 	len = read_datfile(handle, g_buffer_dmenge_dat - 8, 25000);
-	bc_close(handle);
+	close(handle);
 
 	decomp_pp20(g_buffer_dmenge_dat, g_buffer_dmenge_dat - 8, len);
 }
@@ -2711,7 +2707,7 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 	case 0x00:
 		width = host_readws(Real2Host(bc_F_PADD(nvf->src, 3L)));
 		height = host_readws(Real2Host(bc_F_PADD(nvf->src, 5L)));
-		bc_memcpy(bc_F_PADD(nvf->dst, -8L), bc_F_PADD(bc_F_PADD(nvf->src, p_size * nvf->no), 7), p_size = height * width);
+		memcpy(bc_F_PADD(nvf->dst, -8L), bc_F_PADD(bc_F_PADD(nvf->src, p_size * nvf->no), 7), p_size = height * width);
 		break;
 	case 0x01:
 		offs = pics * 4 + 3L;
@@ -2724,7 +2720,7 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 		width = host_readws(Real2Host(bc_F_PADD(bc_F_PADD(nvf->src, nvf->no * 4), 3L)));
 		height = host_readws(Real2Host(bc_F_PADD(bc_F_PADD(nvf->src, nvf->no * 4), 5L)));
 		p_size = width * height;
-		bc_memcpy(bc_F_PADD(nvf->dst, -8L), bc_F_PADD(nvf->src, offs), p_size);
+		memcpy(bc_F_PADD(nvf->dst, -8L), bc_F_PADD(nvf->src, offs), p_size);
 		break;
 
 	case 0x02:
@@ -2737,7 +2733,7 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 		}
 
 		p_size = host_readd(Real2Host(bc_F_PADD(bc_F_PADD(nvf->src, nvf->no * 4), 7L)));
-		bc_memcpy(bc_F_PADD(nvf->dst, -8L), bc_F_PADD(nvf->src, offs), p_size);
+		memcpy(bc_F_PADD(nvf->dst, -8L), bc_F_PADD(nvf->src, offs), p_size);
 		break;
 
 	case 0x03:
@@ -2760,7 +2756,7 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 		width = host_readws(Real2Host(bc_F_PADD(bc_F_PADD(nvf->src, nvf->no * 8), 3L)));
 		height = host_readws(Real2Host(bc_F_PADD(bc_F_PADD(nvf->src, nvf->no * 8), 5L)));
 		p_size = host_readd(Real2Host(bc_F_PADD(bc_F_PADD(nvf->src, i * 8), 7L)));
-		bc_memcpy(bc_F_PADD(nvf->dst, -8L), bc_F_PADD(nvf->src, offs), p_size);
+		memcpy(bc_F_PADD(nvf->dst, -8L), bc_F_PADD(nvf->src, offs), p_size);
 		break;
 	}
 
@@ -2815,7 +2811,7 @@ Bit16s open_datfile(Bit16u index)
 	bc__read(handle, buf, 800);
 
 	if ((Bit32s)(g_gendat_offset = get_archive_offset((char*)g_fnames_g105de[index], buf)) != -1) {
-		bc_lseek(handle, g_gendat_offset, 0);
+		lseek(handle, g_gendat_offset, SEEK_SET);
 		return handle;
 	} else {
 		return 0;
@@ -3176,9 +3172,7 @@ void call_fill_rect_gen(RealPt ptr, Bit16u x1, Bit16u y1, Bit16u x2, Bit16u y2, 
 /* Borlandified and identical */
 void wait_for_vsync(void)
 {
-#if !defined(__BORLANDC__)
-	CALLBACK_RunRealFar(reloc_gen + 0x3c6, 0x2024);
-#else
+#if defined(__BORLANDC__)
 	outportb(0x3d4, 0x11);
 	_AL = inportb(0x3d5);
 	_AH = 0;
@@ -4312,7 +4306,7 @@ void do_gen(void)
 								break;
 							}
 							case 4: {
-								bc_memset(RealMake(datseg, HERO_NAME), 0, 0x6da);
+								memset(RealMake(datseg, HERO_NAME), 0, 0x6da);
 								clear_hero();
 								g_mouse2_event = 1;
 								g_screen_var = 1;
@@ -4620,7 +4614,7 @@ void new_values(void)
 	sex_bak = ds_readbs(HERO_SEX);
 
 	/* clear the hero */
-	bc_memset(RealMake(datseg, HERO_NAME), 0, 0x6da);
+	memset(RealMake(datseg, HERO_NAME), 0, 0x6da);
 
 	clear_hero();
 
@@ -7071,7 +7065,7 @@ void choose_typus(void)
 	strcpy(name_bak, (char*)Real2Host(RealMake(datseg, HERO_NAME)));
 	sex_bak = ds_readbs(HERO_SEX);
 
-	bc_memset(RealMake(datseg, HERO_NAME), 0, 0x6da);
+	memset(RealMake(datseg, HERO_NAME), 0, 0x6da);
 
 	clear_hero();
 	ds_writeb(HERO_SEX, sex_bak);
@@ -7430,7 +7424,7 @@ void intro(void)
 	/* load ATTIC */
 	handle = open_datfile(18);
 	read_datfile(handle, g_buffer_heads_dat, 20000);
-	bc_close(handle);
+	close(handle);
 
 	nvf.src = g_buffer_heads_dat;
 	nvf.type = 0;
@@ -7521,7 +7515,7 @@ void intro(void)
 	/* load FANPRO.NVF */
 	handle = open_datfile(34);
 	flen = read_datfile(handle, g_buffer_heads_dat, 20000);
-	bc_close(handle);
+	close(handle);
 
 	nvf.src = g_buffer_heads_dat;
 	nvf.type = 0;
@@ -7551,7 +7545,7 @@ void intro(void)
 	/* load DSALOGO.DAT */
 	handle = open_datfile(16);
 	read_datfile(handle, g_buffer_heads_dat, 20000);
-	bc_close(handle);
+	close(handle);
 
 	nvf.src = g_buffer_heads_dat;
 	nvf.type = 0;
@@ -7580,7 +7574,7 @@ void intro(void)
 	/* load GENTIT.DAT */
 	handle = open_datfile(17);
 	read_datfile(handle, g_buffer_heads_dat, 20000);
-	bc_close(handle);
+	close(handle);
 
 	nvf.src = g_buffer_heads_dat;
 	nvf.type = 0;
@@ -7599,7 +7593,7 @@ void intro(void)
 	g_dst_src = g_gen_ptr1_dis;
 	do_draw_pic(0);
 
-	bc_memcpy(g_gen_ptr1_dis + 500, &g_pal_dsalogo, 96);
+	memcpy(g_gen_ptr1_dis + 500, &g_pal_dsalogo, 96);
 
 #if !defined(__BORLANDC__)
 	pal_src = g_gen_ptr1_dis + 500;
@@ -7609,7 +7603,7 @@ void intro(void)
 	pal_src = (pal_dst = g_gen_ptr1_dis) + 500;
 	//asm { db 0x66, 0x90; db 0x66, 0x90; };
 #endif
-	bc_memset(pal_dst, 0, 96);
+	memset(pal_dst, 0, 96);
 
 	for (i = 0; i < 64; i++) {
 		pal_fade_in(Real2Host(pal_dst), Real2Host(pal_src), i, 32);
@@ -7621,7 +7615,7 @@ void intro(void)
 	print_str((char*)g_str_version, 290, 190);
 	vsync_or_key(400);
 
-	bc_memcpy(g_gen_ptr1_dis, &g_pal_dsalogo, 96);
+	memcpy(g_gen_ptr1_dis, &g_pal_dsalogo, 96);
 
 #if !defined(__BORLANDC__)
 	pal_src = g_gen_ptr1_dis + 500;
@@ -7631,7 +7625,7 @@ void intro(void)
 	pal_src = (pal_dst = g_gen_ptr1_dis) + 500;
 	asm { db 0x66, 0x90; db 0x66, 0x90; };
 #endif
-	bc_memset(g_gen_ptr1_dis + 500, 0, 96);
+	memset(g_gen_ptr1_dis + 500, 0, 96);
 
 	for (i = 0; i < 64; i++) {
 		pal_fade_out(Real2Host(pal_dst), Real2Host(pal_src), 32);
@@ -7662,12 +7656,10 @@ void interrupt timer_isr(void)
 /* Borlandified and identical */
 void set_timer_isr(void)
 {
+#if defined(__BORLANDC__)
 	/* save adress of the old ISR */
 	g_timer_isr_bak = ((void interrupt far (*)(void))bc__dos_getvect(0x1c));
-#if !defined(__BORLANDC__)
 	/* set a the new one */
-	bc__dos_setvect(0x1c, RealMake(reloc_gen + 0x3c6, 0x72b3));
-#else
 	bc__dos_setvect(0x1c, (INTCAST)timer_isr);
 #endif
 }
@@ -7675,7 +7667,9 @@ void set_timer_isr(void)
 /* Borlandified and identical */
 void restore_timer_isr(void)
 {
+#if defined(__BORLANDC__)
 	bc__dos_setvect(0x1c, (INTCAST)g_timer_isr_bak);
+#endif
 }
 
 /* Borlandified and nearly identical */
