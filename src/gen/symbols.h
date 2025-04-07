@@ -195,11 +195,10 @@
 //#define SKILL_INCS                      (0x400e)    /* 2 * Bit8s */
 //#define ATTRIB_CHANGED                  (0x4076)    /* Bit8s */
 //#define TYPE_NAMES                      (0x4084)    /* RealPt[13] */
-
-#define HEAD_LAST                       (0x40b4)    /* Bit8s */
-#define HEAD_FIRST                      (0x40b5)    /* Bit8s */
-#define HEAD_CURRENT                    (0x40b6)    /* Bit8s */
-#define HEAD_TYPUS                      (0x40b7)    /* Bit8s */
+//#define HEAD_LAST                       (0x40b4)    /* Bit8s */
+//#define HEAD_FIRST                      (0x40b5)    /* Bit8s */
+//#define HEAD_CURRENT                    (0x40b6)    /* Bit8s */
+//#define HEAD_TYPUS                      (0x40b7)    /* Bit8s */
 #define IN_INTRO                        (0x40b8)    /* Bit8s */
 #define MENU_TILES                      (0x40b9)    /* Bit16s */
 #define LEFT_BORDER                     (0x40bb)    /* Bit16s */
