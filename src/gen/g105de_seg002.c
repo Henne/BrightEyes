@@ -2674,9 +2674,10 @@ void read_common_files(void)
 
 	/* load DMENGE.DAT */
 	handle = open_datfile(32);
-	len = read_datfile(handle, Real2Host(ds_readd(BUFFER_DMENGE_DAT)) - 8, 25000);
+	len = read_datfile(handle, g_buffer_dmenge_dat - 8, 25000);
 	bc_close(handle);
-	decomp_pp20((RealPt)ds_readd(BUFFER_DMENGE_DAT), Real2Host(ds_readd(BUFFER_DMENGE_DAT)) - 8, len);
+
+	decomp_pp20(g_buffer_dmenge_dat, g_buffer_dmenge_dat - 8, len);
 }
 
 /* Borlandified and far from identical, but works */
@@ -4196,7 +4197,7 @@ void change_head(void)
 	Bit16s width;
 	Bit16s height;
 
-	nvf.dst = (RealPt)ds_readd(GEN_PTR6);
+	nvf.dst = g_gen_ptr6;
 	nvf.src = g_buffer_heads_dat;
 	nvf.no = g_head_current;
 	nvf.type = 0;
@@ -4205,7 +4206,7 @@ void change_head(void)
 
 	process_nvf(&nvf);
 
-	g_dst_src = (RealPt)ds_readd(GEN_PTR6);
+	g_dst_src = g_gen_ptr6;
 
 	g_dst_x1 = 272;
 	g_dst_x2 = 303;
@@ -4516,15 +4517,15 @@ void refresh_screen(void)
 				}
 
 				wait_for_vsync();
-				set_palette((RealPt)ds_readd(BUFFER_DMENGE_DAT) + 128 * 184 + 2, 0 , 32);
-				copy_to_screen((RealPt)ds_readd(BUFFER_DMENGE_DAT), dst, 128, 184, 0);
+				set_palette(g_buffer_dmenge_dat + 128 * 184 + 2, 0 , 32);
+				copy_to_screen(g_buffer_dmenge_dat, dst, 128, 184, 0);
 			}
 		}
 		/* if hero has a typus */
 		if (ds_readbs(HERO_TYPUS) != 0) {
 			/* draw the head */
 
-			nvf.dst = (RealPt)ds_readd(GEN_PTR6);
+			nvf.dst = g_gen_ptr6;
 			nvf.src = g_buffer_heads_dat;
 			nvf.no = g_head_current;
 			nvf.type = 0;
@@ -4532,7 +4533,7 @@ void refresh_screen(void)
 			nvf.height = &height;
 			process_nvf(&nvf);
 
-			g_dst_src = (RealPt)ds_readd(GEN_PTR6);
+			g_dst_src = g_gen_ptr6;
 			g_dst_x1 = 272;
 			g_dst_x2 = 303;
 			g_dst_dst = ds_readd(GEN_PTR1_DIS);
@@ -7326,16 +7327,16 @@ static void BE_cleanup(void)
 		g_picbuf1 = NULL;
 	}
 
-	if ((ptr = (RealPt)ds_readd(GEN_PTR6) - 8) != 0) {
-		D1_INFO("Free GEN_PTR6\t\t 0x%08x\n", ptr);
-		bc_free(ptr);
-		ds_writed(GEN_PTR6, 0);
+	if ((host_ptr = g_gen_ptr6 - 8) != 0) {
+		D1_INFO("Free GEN_PTR6\t\t 0x%08x\n", host_ptr);
+		free(host_ptr);
+		g_gen_ptr6 = NULL;
 	}
 
-	if ((ptr = (RealPt)ds_readd(BUFFER_DMENGE_DAT) - 8) != 0) {
-		D1_INFO("Free BUFFER_DMENGE_DAT\t 0x%08x\n", ptr);
-		bc_free(ptr);
-		ds_writed(BUFFER_DMENGE_DAT, 0);
+	if ((host_ptr = g_buffer_dmenge_dat - 8) != 0) {
+		D1_INFO("Free BUFFER_DMENGE_DAT\t 0x%08x\n", host_ptr);
+		free(ptr);
+		g_buffer_dmenge_dat = NULL;
 	}
 
 	if ((ptr = (RealPt)ds_readd(GEN_PTR5) - 8) != 0) {
@@ -7795,7 +7796,7 @@ void alloc_buffers(void)
 
 	ds_writed(GEN_PTR5, (Bit32u)(gen_alloc(23660) + 8));
 
-	ds_writed(BUFFER_DMENGE_DAT, (Bit32u)(gen_alloc(23660) + 8));
+	g_buffer_dmenge_dat = (gen_alloc(23660) + 8);
 
 	g_picbuf1 = gen_alloc(800);
 
@@ -7803,9 +7804,7 @@ void alloc_buffers(void)
 
 	g_picbuf3 = gen_alloc(2800);
 
-	//ds_writed(GEN_PTR6, (Bit32u)(gen_alloc(1100) + 8));
-
-	if (!(RealPt)(ds_writed(GEN_PTR6, (Bit32u)(gen_alloc(1100) + 8)))) {
+	if (!(g_gen_ptr6 = (gen_alloc(1100) + 8))) {
 #if defined(__BORLANDC__)
 		asm { db 0x66, 0x90;};
 #endif

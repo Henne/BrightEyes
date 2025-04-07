@@ -246,8 +246,8 @@
 //#define PICBUF3                         (0x4797)     /* RealPt */
 //#define PICBUF2                         (0x479b)     /* RealPt */
 //#define PICBUF1                         (0x479f)     /* RealPt */
-#define GEN_PTR6                        (0x47a3)
-#define BUFFER_DMENGE_DAT               (0x47a7)     /* RealPt DMENGE.DAT */
+//#define GEN_PTR6                        (0x47a3)
+//#define BUFFER_DMENGE_DAT               (0x47a7)     /* RealPt DMENGE.DAT */
 
 #define GEN_PTR5                        (0x47b3)     /* RealPt */
 #define GEN_PTR4                        (0x47b7)     /* RealPt */
