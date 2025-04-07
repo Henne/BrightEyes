@@ -1272,8 +1272,8 @@ static Bit8u* g_snd_driver_desc;
 static signed short g_snd_sequence;
 static signed short g_snd_driver_handle;
 
-
-//static Bit16s param_level;
+static signed short g_param_level;
+static signed short g_called_with_args;
 
 struct inc_states {
 	char tries;
@@ -2631,7 +2631,7 @@ void save_chr(void)
 			bc_write(handle, RealMake(datseg, HERO_NAME), 1754);
 			bc_close(handle);
 
-			if (ds_readw(CALLED_WITH_ARGS) == 0) return;
+			if (g_called_with_args == 0) return;
 
 			strcpy(path, (char*)g_str_temp_dir);
 			strcat(path, filename);
@@ -4273,8 +4273,8 @@ void do_gen(void)
 	g_screen_var = 1;
 
 	/* try to set the level from parameters */
-	ds_writew(LEVEL, ((ds_readws(PARAM_LEVEL) == 'a') ? 2 :
-			  ((ds_readws(PARAM_LEVEL) == 'n') ? 1 : -1)));
+	ds_writew(LEVEL, ((g_param_level == 'a') ? 2 :
+			  ((g_param_level == 'n') ? 1 : -1)));
 
 	/* ask for level */
 	while (ds_readws(LEVEL) == -1) {
@@ -7791,10 +7791,10 @@ int main_gen(int argc, char **argv)
 	Bit16s sound_off = 0;
 
 	if (argc > 1)
-		ds_writew(CALLED_WITH_ARGS, 1);
+		g_called_with_args = 1;
 
 	if (argc > 2)
-		ds_writew(PARAM_LEVEL, argv[2][0]);
+		g_param_level = argv[2][0];
 
 	if ((argc > 3) && (argv[3][0] == '0')) {
 		g_midi_disabled = 1;
@@ -7836,7 +7836,7 @@ int main_gen(int argc, char **argv)
 
 	start_music(33);
 
-	if (ds_readw(CALLED_WITH_ARGS) == 0) {
+	if (g_called_with_args == 0) {
 		intro();
 		read_common_files();
 	}
@@ -7850,9 +7850,11 @@ int main_gen(int argc, char **argv)
 	mouse_disable();
 	restore_timer_isr();
 
-	if (ds_readw(CALLED_WITH_ARGS) != 0) {
+	if (g_called_with_args != 0) {
+		/* Clear the screen and return to SCHICKM.EXE/BLADEM.EXE */
 		call_fill_rect_gen((RealPt)ds_readd(VGA_MEMSTART), 0, 0, 319, 199, 0);
 	} else {
+		/* Clear the screen and return to DOS */
 		exit_video();
 		bc_clrscr();
 	}

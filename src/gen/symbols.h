@@ -189,8 +189,7 @@
 //#define SND_DRIVER_DESC                 (0x3f56)    /* RealPt */
 //#define SND_SEQUENCE                    (0x3f5a)    /* Bit16s */
 //#define SND_DRIVER_HANDLE               (0x3f5c)    /* Bit16s */
-#define PARAM_LEVEL                     (0x3f5e)    /* Bit16s DE: {0, 'a', 'n'} */
-
+//#define PARAM_LEVEL                     (0x3f5e)    /* Bit16s DE: {0, 'a', 'n'} */
 #define CALLED_WITH_ARGS                (0x3f60)    /* Bit16s */
 #define SPELL_INCS                      (0x3f62)    /* 2 * Bit8s */
 #define SKILL_INCS                      (0x400e)    /* 2 * Bit8s */
