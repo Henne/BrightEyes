@@ -1344,12 +1344,13 @@ static signed short *g_mouse_current_cursor;
 static char dummy14[0x40];
 
 static char g_mouse_backbuffer[256];
-//static Bit8u *buffer_sex_dat;
-//static Bit8u *buffer_popup_nvf;
 
-//static Bit8u *buffer_heads_dat;
-//static Bit8u *buffer_text;
-//static Bit8u *buffer_font6;
+static Bit8u *g_buffer_sex_dat;
+static Bit8u *g_buffer_popup_nvf;
+static Bit8u *g_buffer_heads_dat;
+static Bit8u *g_buffer_text;
+static Bit8u *g_buffer_font6;
+
 //static Bit16u col_index;
 //static Bit16u bg_color;
 //static Bit16u fg_color[6];
@@ -2396,17 +2397,17 @@ void load_font_and_text(void)
 
 	/* load FONT6 */
 	handle = open_datfile(14);
-	read_datfile(handle, (Bit8u*)Real2Host(ds_readd(BUFFER_FONT6)), 1000);
+	read_datfile(handle, g_buffer_font6, 1000);
 	bc_close(handle);
 
 	/* load GENTEXT */
 	handle = open_datfile(15);
-	len = read_datfile(handle, (Bit8u*)Real2Host(ds_readd(BUFFER_TEXT)), 64000);
+	len = read_datfile(handle, g_buffer_text, 64000);
 	bc_close(handle);
 
-	split_textbuffer(g_texts, (RealPt)ds_readd(BUFFER_TEXT), len);
+	split_textbuffer(g_texts, g_buffer_text, len);
 #if !defined(__BORLANDC__)
-//	split_textbuffer_host(g_texts, (char*)Real2Host(ds_readd(BUFFER_TEXT)), len);
+//	split_textbuffer_host(g_texts, g_buffer_text, len);
 #endif
 }
 
@@ -2575,7 +2576,7 @@ void save_chr(void)
 	/* Load picture from nvf */
 	/* TODO: why not just copy? */
 	nvf.dst = (RealPt)ds_readd(GEN_PTR1_DIS);
-	nvf.src = (RealPt)ds_readd(BUFFER_HEADS_DAT);
+	nvf.src = g_buffer_heads_dat;
 	nvf.no = g_head_current;
 	nvf.type = 0;
 	nvf.width = &tmpw;
@@ -2653,18 +2654,19 @@ void read_common_files(void)
 
 	/* load HEADS.DAT */
 	handle = open_datfile(11);
-	len = read_datfile(handle, Real2Host(ds_readd(BUFFER_HEADS_DAT)), 64000);
+	len = read_datfile(handle, g_buffer_heads_dat, 64000);
 	bc_close(handle);
 
 	/* load POPUP.NVF */
 	handle = open_datfile(19);
-	len = read_datfile(handle, Real2Host(ds_readd(BUFFER_POPUP)) - 8, 500);
+	len = read_datfile(handle, g_buffer_popup_nvf - 8, 500);
 	bc_close(handle);
-	decomp_pp20((RealPt)ds_readd(BUFFER_POPUP), Real2Host(ds_readd(BUFFER_POPUP)) - 8, len);
+
+	decomp_pp20(g_buffer_popup_nvf, g_buffer_popup_nvf - 8, len);
 
 	/* load SEX.DAT */
 	handle = open_datfile(12);
-	read_datfile(handle, Real2Host(ds_readd(BUFFER_SEX_DAT)), 900);
+	read_datfile(handle, g_buffer_sex_dat, 900);
 	bc_close(handle);
 
 	/* load DMENGE.DAT */
@@ -3441,7 +3443,7 @@ void call_them_all(Bit16s v1, Bit16s v2, Bit16s x, Bit16s y)
 	Bit32s bogus;
 
 	fill_smth();
-	fill_smth2(v1 * 8 + (Bit8u*)Real2Host(ds_readd(BUFFER_FONT6)));
+	fill_smth2(v1 * 8 + g_buffer_font6);
 
 	gfx_ptr = get_gfx_ptr(x, y, &l2);
 	bogus = (Bit32s)ret_zero(v2, l2);
@@ -3773,21 +3775,21 @@ void draw_popup_line(Bit16s line, Bit16s type)
 	}
 #if defined(__BORLANDC__)
 	// BCC Sync-Point
-	copy_to_screen((src = ((RealPt)ds_readd(BUFFER_POPUP)) + popup_left), dst, 16, 8, 0);
+	copy_to_screen((src = (g_buffer_popup_nvf + popup_left)), dst, 16, 8, 0);
 #else
-	src = ((RealPt)ds_readd(BUFFER_POPUP)) + popup_left;
+	src = g_buffer_popup_nvf + popup_left;
 	copy_to_screen(src, dst, 16, 8, 0);
 #endif
 
-	src = ((RealPt)ds_readd(BUFFER_POPUP)) + popup_middle;
+	src = g_buffer_popup_nvf + popup_middle;
 	dst += 16;
 	for (i = 0; i < g_menu_tiles; dst += 32, i++)
 		copy_to_screen(src, dst, 32, 8, 0);
 #if defined(__BORLANDC__)
 	// BCC Sync-Point
-	copy_to_screen((src = ((RealPt)ds_readd(BUFFER_POPUP)) + popup_right), dst, 16, 8, 0);
+	copy_to_screen((src = (g_buffer_popup_nvf + popup_right)), dst, 16, 8, 0);
 #else
-	src = ((RealPt)ds_readd(BUFFER_POPUP)) + popup_right;
+	src = g_buffer_popup_nvf + popup_right;
 	copy_to_screen(src, dst, 16, 8, 0);
 #endif
 }
@@ -4193,7 +4195,7 @@ void change_head(void)
 	Bit16s height;
 
 	nvf.dst = (RealPt)ds_readd(GEN_PTR6);
-	nvf.src = (RealPt)ds_readd(BUFFER_HEADS_DAT);
+	nvf.src = g_buffer_heads_dat;
 	nvf.no = g_head_current;
 	nvf.type = 0;
 	nvf.width = &width;
@@ -4225,7 +4227,7 @@ void change_head(void)
 void change_sex(void)
 {
 	RealPt dst;
-	RealPt src;
+	Bit8u* src;
 
 	/* change sex of the hero */
 	ds_xor_bs(HERO_SEX, 1);
@@ -4245,7 +4247,7 @@ void change_sex(void)
 		return;
 	} else {
 		dst = (RealPt)ds_readd(VGA_MEMSTART) + 7 * 320 + 305;
-		src = (RealPt)ds_readd(BUFFER_SEX_DAT) + 256 * ds_readbs(HERO_SEX);
+		src = g_buffer_sex_dat + 256 * ds_readbs(HERO_SEX);
 		update_mouse_cursor();
 		copy_to_screen(src, dst, 16, 16, 0);
 		call_mouse();
@@ -4463,7 +4465,7 @@ void refresh_screen(void)
 		if ((g_gen_page == 0) && (ds_readbs(HERO_SEX) != 0)) {
 
 			dst = (RealPt)ds_readd(GEN_PTR1_DIS) + 7 * 320 + 305;
-			src = (RealPt)ds_readd(BUFFER_SEX_DAT) + 256 * ds_readbs(HERO_SEX);
+			src = g_buffer_sex_dat + 256 * ds_readbs(HERO_SEX);
 			copy_to_screen(src, dst, 16, 16, 0);
 		}
 
@@ -4471,9 +4473,9 @@ void refresh_screen(void)
 		if ((g_gen_page == 0) && (g_level == 1)) {
 			dst = (RealPt)ds_readd(GEN_PTR1_DIS) + 178 * 320 + 284;
 #if !defined(__BORLANDC__)
-			src = (RealPt)ds_readd(BUFFER_SEX_DAT) + 512;
+			src = g_buffer_sex_dat + 512;
 #else
-			src = (RealPt)ds_readd(BUFFER_SEX_DAT); // BCC Sync-Point
+			src = g_buffer_sex_dat; // BCC Sync-Point
 #endif
 
 			copy_to_screen(src, dst, 20, 15, 0);
@@ -4521,7 +4523,7 @@ void refresh_screen(void)
 			/* draw the head */
 
 			nvf.dst = (RealPt)ds_readd(GEN_PTR6);
-			nvf.src = (RealPt)ds_readd(BUFFER_HEADS_DAT);
+			nvf.src = g_buffer_heads_dat;
 			nvf.no = g_head_current;
 			nvf.type = 0;
 			nvf.width = &width;
@@ -7275,47 +7277,35 @@ static void BE_cleanup(void)
 	RealPt ptr;
 	Bit8u *host_ptr;
 
-	D1_INFO("%s() free mem = %d\n", __func__, DB_get_conv_mem());
-
-	if ((ptr = (RealPt)ds_readd(BUFFER_SEX_DAT)) != 0) {
-		D1_INFO("Free BUFFER_SEX_DAT\t 0x%08x\n", ptr);
-		bc_free(ptr);
-		ds_writed(BUFFER_SEX_DAT, 0);
+	if ((host_ptr = g_buffer_sex_dat) != 0) {
+		D1_INFO("Free BUFFER_SEX_DAT\t 0x%08x\n", host_ptr);
+		free(host_ptr);
+		g_buffer_sex_dat = NULL;
 	}
 
-	D1_INFO("%s() free mem = %d\n", __func__, DB_get_conv_mem());
-
-	if ((ptr = (RealPt)ds_readd(BUFFER_POPUP) - 8) != 0) {
-		D1_INFO("Free BUFFER_POPUP\t 0x%08x\n", ptr);
-		bc_free(ptr);
-		ds_writed(BUFFER_POPUP, 0);
+	if ((host_ptr = g_buffer_popup_nvf - 8) != 0) {
+		D1_INFO("Free BUFFER_POPUP\t 0x%08x\n", host_ptr);
+		free(host_ptr);
+		g_buffer_popup_nvf = NULL;
 	}
 
-	D1_INFO("%s() free mem = %d\n", __func__, DB_get_conv_mem());
-
-	if ((ptr = (RealPt)ds_readd(BUFFER_HEADS_DAT)) != 0) {
-		D1_INFO("Free BUFFER_HEADS_DAT\t 0x%08x\n", ptr);
-		bc_free(ptr);
-		ds_writed(BUFFER_HEADS_DAT, 0);
+	if ((host_ptr = g_buffer_heads_dat) != 0) {
+		D1_INFO("Free BUFFER_HEADS_DAT\t 0x%08x\n", host_ptr);
+		free(host_ptr);
+		g_buffer_heads_dat = NULL;
 	}
 
-	D1_INFO("%s() free mem = %d\n", __func__, DB_get_conv_mem());
-
-	if ((ptr = (RealPt)ds_readd(BUFFER_TEXT)) != 0) {
-		D1_INFO("Free BUFFER_TEXT\t 0x%08x\n", ptr);
-		bc_free(ptr);
-		ds_writed(BUFFER_TEXT, 0);
+	if ((host_ptr = g_buffer_text) != 0) {
+		D1_INFO("Free BUFFER_TEXT\t 0x%08x\n", host_ptr);
+		free(host_ptr);
+		g_buffer_text = NULL;
 	}
 
-	D1_INFO("%s() free mem = %d\n", __func__, DB_get_conv_mem());
-
-	if ((ptr = (RealPt)ds_readd(BUFFER_FONT6)) != 0) {
-		D1_INFO("Free BUFFER_FONT6\t 0x%08x\n", ptr);
-		bc_free(ptr);
-		ds_writed(BUFFER_FONT6, 0);
+	if ((host_ptr = g_buffer_font6) != 0) {
+		D1_INFO("Free BUFFER_FONT6\t 0x%08x\n", host_ptr);
+		free(host_ptr);
+		g_buffer_font6 = NULL;
 	}
-
-	D1_INFO("%s() free mem = %d\n", __func__, DB_get_conv_mem());
 
 	if ((ptr = (RealPt)ds_readd(PICBUF3)) != 0) {
 		D1_INFO("Free PICBUF3\t\t 0x%08x\n", ptr);
@@ -7323,23 +7313,17 @@ static void BE_cleanup(void)
 		ds_writed(PICBUF3, 0);
 	}
 
-	D1_INFO("%s() free mem = %d\n", __func__, DB_get_conv_mem());
-
 	if ((ptr = (RealPt)ds_readd(PICBUF2)) != 0) {
 		D1_INFO("Free PICBUF2\t\t 0x%08x\n", ptr);
 		bc_free(ptr);
 		ds_writed(PICBUF2, 0);
 	}
 
-	D1_INFO("%s() free mem = %d\n", __func__, DB_get_conv_mem());
-	
 	if ((ptr = (RealPt)ds_readd(PICBUF1)) != 0) {
 		D1_INFO("Free PICBUF1\t\t 0x%08x\n", ptr);
 		bc_free(ptr);
 		ds_writed(PICBUF1, 0);
 	}
-
-	D1_INFO("%s() free mem = %d\n", __func__, DB_get_conv_mem());
 
 	if ((ptr = (RealPt)ds_readd(GEN_PTR6) - 8) != 0) {
 		D1_INFO("Free GEN_PTR6\t\t 0x%08x\n", ptr);
@@ -7347,15 +7331,11 @@ static void BE_cleanup(void)
 		ds_writed(GEN_PTR6, 0);
 	}
 
-	D1_INFO("%s() free mem = %d\n", __func__, DB_get_conv_mem());
-
 	if ((ptr = (RealPt)ds_readd(BUFFER_DMENGE_DAT) - 8) != 0) {
 		D1_INFO("Free BUFFER_DMENGE_DAT\t 0x%08x\n", ptr);
 		bc_free(ptr);
 		ds_writed(BUFFER_DMENGE_DAT, 0);
 	}
-
-	D1_INFO("%s() free mem = %d\n", __func__, DB_get_conv_mem());
 
 	if ((ptr = (RealPt)ds_readd(GEN_PTR5) - 8) != 0) {
 		D1_INFO("Free GEN_PTR5\t\t 0x%08x\n", ptr);
@@ -7363,15 +7343,11 @@ static void BE_cleanup(void)
 		ds_writed(GEN_PTR5, 0);
 	}
 
-	D1_INFO("%s() free mem = %d\n", __func__, DB_get_conv_mem());
-
 	if ((ptr = (RealPt)ds_readd(GEN_PTR4)) != 0) {
 		D1_INFO("Free GEN_PTR4\t\t 0x%08x\n", ptr);
 		bc_free(ptr);
 		ds_writed(GEN_PTR4, 0);
 	}
-
-	D1_INFO("%s() free mem = %d\n", __func__, DB_get_conv_mem());
 
 	if ((ptr = (RealPt)ds_readd(GEN_PTR2)) != 0) {
 		D1_INFO("Free GEN_PTR2\t\t 0x%08x\n", ptr);
@@ -7379,23 +7355,17 @@ static void BE_cleanup(void)
 		ds_writed(GEN_PTR2, 0);
 	}
 
-	D1_INFO("%s() free mem = %d\n", __func__, DB_get_conv_mem());
-
 	if ((ptr = (RealPt)ds_readd(PAGE_BUFFER)) != 0) {
 		D1_INFO("Free PAGE_BUFFER\t 0x%08x\n", ptr);
 		bc_free(ptr);
 		ds_writed(PAGE_BUFFER, 0);
 	}
 
-	D1_INFO("%s() free mem = %d\n", __func__, DB_get_conv_mem());
-
 	if ((ptr = (RealPt)ds_readd(GEN_PTR1_DIS) - 8) != 0) {
 		D1_INFO("Free GEN_PTR1_DIS\t 0x%08x\n", ptr);
 		bc_free(ptr);
 		ds_writed(GEN_PTR1_DIS, 0);
 	}
-
-	D1_INFO("%s() free mem = %d\n", __func__, DB_get_conv_mem());
 
 	// missed ones
 	if ((host_ptr = g_snd_timbre_cache) != 0) {
@@ -7404,15 +7374,11 @@ static void BE_cleanup(void)
 		g_snd_timbre_cache = NULL;
 	}
 
-	D1_INFO("%s() free mem = %d\n", __func__, DB_get_conv_mem());
-
 	if ((host_ptr = g_state_table) != 0) {
 		D1_INFO("Free STATE_TABLE\t 0x%08x\n", host_ptr);
 		free(host_ptr);
 		g_state_table = NULL;
 	}
-
-	D1_INFO("%s() free mem = %d\n", __func__, DB_get_conv_mem());
 
 	if ((host_ptr = g_snd_driver) != 0) {
 		D1_INFO("Free SND_DRIVER\t\t 0x%08x\n", host_ptr);
@@ -7420,15 +7386,11 @@ static void BE_cleanup(void)
 		g_snd_driver = NULL;
 	}
 
-	D1_INFO("%s() free mem = %d\n", __func__, DB_get_conv_mem());
-
 	if ((host_ptr = g_form_xmid) != 0) {
 		D1_INFO("Free FORM_XMID\t\t 0x%08x\n", host_ptr);
 		free(host_ptr);
 		g_form_xmid = NULL;
 	}
-
-	D1_INFO("%s() free mem = %d\n", __func__, DB_get_conv_mem());
 
 	for (int i = 0; i < MAX_PAGES; i++) {
 		if ((ptr = g_bg_buffer[i]) != 0) {
@@ -7445,11 +7407,6 @@ static void BE_cleanup(void)
 			g_typus_buffer[i] = 0;
 		}
 	}
-
-	Bit32s after = DB_get_conv_mem();
-
-	D1_INFO("%s() free mem = %d freed = %d\n", __func__, DB_get_conv_mem(), after - before);
-
 }
 #endif
 
@@ -7476,10 +7433,10 @@ void intro(void)
 
 	/* load ATTIC */
 	handle = open_datfile(18);
-	read_datfile(handle, Real2Host(ds_readd(BUFFER_HEADS_DAT)), 20000);
+	read_datfile(handle, g_buffer_heads_dat, 20000);
 	bc_close(handle);
 
-	nvf.src = (RealPt)ds_readd(BUFFER_HEADS_DAT);
+	nvf.src = g_buffer_heads_dat;
 	nvf.type = 0;
 	nvf.width = &width;
 	nvf.height = &height;
@@ -7567,10 +7524,10 @@ void intro(void)
 
 	/* load FANPRO.NVF */
 	handle = open_datfile(34);
-	flen = read_datfile(handle, Real2Host(ds_readd(BUFFER_HEADS_DAT)), 20000);
+	flen = read_datfile(handle, g_buffer_heads_dat, 20000);
 	bc_close(handle);
 
-	nvf.src = (RealPt)ds_readd(BUFFER_HEADS_DAT);
+	nvf.src = g_buffer_heads_dat;
 	nvf.type = 0;
 	nvf.width = &width;
 	nvf.height = &height;
@@ -7584,7 +7541,7 @@ void intro(void)
 	wait_for_vsync();
 
 	/* set palette of FANPRO.NVF */
-	set_palette((RealPt)ds_readd(BUFFER_HEADS_DAT) + flen - 32 * 3, 0, 32);
+	set_palette(g_buffer_heads_dat + flen - 32 * 3, 0, 32);
 
 	/* draw the picture */
 	g_dst_x1 = 60;
@@ -7597,10 +7554,10 @@ void intro(void)
 
 	/* load DSALOGO.DAT */
 	handle = open_datfile(16);
-	read_datfile(handle, Real2Host(ds_readd(BUFFER_HEADS_DAT)), 20000);
+	read_datfile(handle, g_buffer_heads_dat, 20000);
 	bc_close(handle);
 
-	nvf.src = (RealPt)ds_readd(BUFFER_HEADS_DAT);
+	nvf.src = g_buffer_heads_dat;
 	nvf.type = 0;
 	nvf.width = &width;
 	nvf.height = &height;
@@ -7626,10 +7583,10 @@ void intro(void)
 
 	/* load GENTIT.DAT */
 	handle = open_datfile(17);
-	read_datfile(handle, Real2Host(ds_readd(BUFFER_HEADS_DAT)), 20000);
+	read_datfile(handle, g_buffer_heads_dat, 20000);
 	bc_close(handle);
 
-	nvf.src = (RealPt)ds_readd(BUFFER_HEADS_DAT);
+	nvf.src = g_buffer_heads_dat;
 	nvf.type = 0;
 	nvf.width = &width;
 	nvf.height = &height;
@@ -7823,17 +7780,17 @@ void alloc_buffers(void)
 	// unused
 	ds_writed(GEN_PTR4, (Bit32u)gen_alloc(200));
 
-	ds_writed(BUFFER_TEXT, (Bit32u)gen_alloc(6000));
+	g_buffer_text = gen_alloc(6000);
 
-	ds_writed(BUFFER_FONT6, (Bit32u)gen_alloc(592));
+	g_buffer_font6 = gen_alloc(592);
 
 	load_font_and_text();
 
-	ds_writed(BUFFER_HEADS_DAT, (Bit32u)gen_alloc(39000));
+	g_buffer_heads_dat = gen_alloc(39000);
 
-	ds_writed(BUFFER_POPUP, (Bit32u)(gen_alloc(1673) + 8));
+	g_buffer_popup_nvf = (gen_alloc(1673) + 8);
 
-	ds_writed(BUFFER_SEX_DAT, (Bit32u)gen_alloc(812));
+	g_buffer_sex_dat = gen_alloc(812);
 
 	ds_writed(GEN_PTR5, (Bit32u)(gen_alloc(23660) + 8));
 
