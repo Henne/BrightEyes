@@ -256,8 +256,8 @@
 
 //#define GFX_PTR                         (0x47c7)     /* RealPt */
 #define VGA_MEMSTART                    (0x47cb)     /* RealPt */
-#define PAGE_BUFFER                     (0x47cf)     /* RealPt */
-#define GEN_PTR1_DIS                    (0x47d3)     /* RealPt */
+//#define PAGE_BUFFER                     (0x47cf)     /* RealPt */
+//#define GEN_PTR1_DIS                    (0x47d3)     /* RealPt */
 #define WO_VAR2                         (0x47d7)     /* Bit16s */
 #define WO_VAR3                         (0x47d9)     /* Bit16s */
 #define DISPLAY_PAGE_BAK                (0x47db)     /* Bit16s */
