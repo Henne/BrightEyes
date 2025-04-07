@@ -2131,17 +2131,17 @@ void handle_input(void)
 {
 	Bit16s si, i;
 
-	ds_writew(IN_KEY_ASCII, ds_writew(IN_KEY_EXT, si = 0));
+	g_in_key_ascii = g_in_key_ext = si = 0;
 
 	if (CD_bioskey(1)) {
 
-		si = ((Bit16s)(ds_writew(IN_KEY_ASCII, CD_bioskey(0))) >> 8);
-		ds_and_ws(IN_KEY_ASCII, 0xff);
+		si = (g_in_key_ascii = CD_bioskey(0)) >> 8;
+		g_in_key_ascii &= 0xff;
 
 		if (si == KEY_J)
 			si = KEY_Y;
 
-		if ((ds_readw(IN_KEY_ASCII) == 0x11) && !g_in_intro) {
+		if ((g_in_key_ascii == 0x11) && !g_in_intro) {
 
 			update_mouse_cursor();
 			mouse_disable();
@@ -2188,7 +2188,7 @@ void handle_input(void)
 		}
 	}
 	mouse_compare();
-	ds_writew(IN_KEY_EXT, si);
+	g_in_key_ext = si;
 }
 
 /* Borlandified and nearly identical */
@@ -2909,9 +2909,9 @@ void vsync_or_key(Bit16s val)
 
 	for (i = 0; i < val; i++) {
 		handle_input();
-		if (ds_readw(IN_KEY_EXT) || g_mouse2_event) {
+		if (g_in_key_ext || g_mouse2_event) {
 			g_mouse2_event = 0;
-			ds_writew(IN_KEY_EXT, KEY_RET);
+			g_in_key_ext = KEY_RET;
 			return;
 		}
 		wait_for_vsync();
@@ -3629,23 +3629,23 @@ Bit16s enter_string(char *dst, Bit16s x, Bit16s y, Bit16s num, Bit16s zero)
 			do {} while (!CD_bioskey(1) && (g_mouse1_event1 == 0));
 
 			if (g_mouse1_event1) {
-				ds_writew(IN_KEY_ASCII, 0x0d);
+				g_in_key_ascii = 0x0d;
 				g_mouse1_event1 = g_mouse1_event2 = 0;
 			} else {
-				ds_writew(IN_KEY_EXT, (ds_writews(IN_KEY_ASCII, CD_bioskey(0))) >> 8);
-				ds_and_ws(IN_KEY_ASCII, 0xff);
+				g_in_key_ext = (g_in_key_ascii = CD_bioskey(0)) >> 8;
+				g_in_key_ascii &= 0xff;
 			}
-		} while ((ds_readw(IN_KEY_EXT) == 0) && (ds_readw(IN_KEY_ASCII) == 0));
+		} while ((g_in_key_ext == 0) && (g_in_key_ascii == 0));
 
-		c = ds_readw(IN_KEY_ASCII);
+		c = g_in_key_ascii;
 
 		if (c == 0xd)
 			continue;
 
-		if (ds_readw(IN_KEY_EXT) == KEY_ESC) {
+		if (g_in_key_ext == KEY_ESC) {
 			*dst = 0;
 			call_mouse();
-			ds_writew(IN_KEY_EXT, 0);
+			g_in_key_ext = 0;
 			return 1;
 		}
 
@@ -3897,7 +3897,7 @@ Bit16s infobox(char *msg, Bit16s digits)
 	ds_writew(TEXT_X_END, v4);
 
 	ds_writew(FG_COLOR + 8, 0);
-	ds_writew(IN_KEY_EXT, 0);
+	g_in_key_ext = 0;
 
 	return retval;
 }
@@ -4085,27 +4085,25 @@ Bit16s gui_radio(Bit8u *header, Bit8s options, ...)
 			fill_radio_button(r6, di, lines_header);
 			r6 = di;
 		}
-		if ((g_mouse2_event != 0) ||
-			ds_readw(IN_KEY_EXT) == KEY_ESC ||
-			ds_readw(IN_KEY_EXT) == KEY_PGDOWN) {
+		if ((g_mouse2_event != 0) || (g_in_key_ext == KEY_ESC) || (g_in_key_ext == KEY_PGDOWN)) {
 			/* has the selection been canceled */
 			retval = -1;
 			r5 = 1;
 			g_mouse2_event = 0;
 		}
-		if (ds_readw(IN_KEY_EXT) == KEY_RET) {
+		if (g_in_key_ext == KEY_RET) {
 			/* has the return key been pressed */
 			retval = di;
 			r5 = 1;
 		}
-		if (ds_readw(IN_KEY_EXT) == KEY_UP) {
+		if (g_in_key_ext == KEY_UP) {
 			/* has the up key been pressed */
 			if (di == 1)
 				di = options;
 			else
 				di--;
 		}
-		if (ds_readw(IN_KEY_EXT) == KEY_DOWN) {
+		if (g_in_key_ext == KEY_DOWN) {
 			/* has the down key been pressed */
 			if (di == options)
 				di = 1;
@@ -4122,11 +4120,11 @@ Bit16s gui_radio(Bit8u *header, Bit8s options, ...)
 		}
 		/* is this a bool radiobox ? */
 		if (g_bool_mode) {
-			if (ds_readw(IN_KEY_EXT) == KEY_Y) {
+			if (g_in_key_ext == KEY_Y) {
 				/* has the 'j' key been pressed */
 				retval = 1;
 				r5 = 1;
-			} else if (ds_readw(IN_KEY_EXT) == KEY_N) {
+			} else if (g_in_key_ext == KEY_N) {
 				/* has the 'n' key been pressed */
 				retval = 2;
 				r5 = 1;
@@ -4167,7 +4165,7 @@ Bit16s gui_radio(Bit8u *header, Bit8s options, ...)
 	ds_writew(TEXT_X, bak1);
 	ds_writew(TEXT_Y, bak2);
 	ds_writew(TEXT_X_END, bak3);
-	ds_writew(IN_KEY_EXT, 0);
+	g_in_key_ext = 0;
 
 	return retval;
 }
@@ -4288,7 +4286,7 @@ void do_gen(void)
 		handle_input();
 		g_action_table = (struct mouse_action*)NULL;
 
-		if (g_mouse2_event || ds_readw(IN_KEY_EXT) == KEY_PGUP) {
+		if (g_mouse2_event || g_in_key_ext == KEY_PGUP) {
 			/* print the menu for each page */
 			switch (g_gen_page) {
 				case 0: {
@@ -4303,7 +4301,7 @@ void do_gen(void)
 							!gui_bool((Bit8u*)get_text(13))) {
 							si = 0;
 						}
-						ds_writew(IN_KEY_EXT, 0);
+						g_in_key_ext = 0;
 						switch (si) {
 							case 1: {
 								enter_name();
@@ -4371,13 +4369,13 @@ void do_gen(void)
 			}
 		}
 
-		if (ds_readw(IN_KEY_EXT) == KEY_CTRL_F3)
+		if (g_in_key_ext == KEY_CTRL_F3)
 			change_sex();
 
-		if (ds_readw(IN_KEY_EXT) == KEY_CTRL_F4)
+		if (g_in_key_ext == KEY_CTRL_F4)
 			enter_name();
 
-		if ((ds_readw(IN_KEY_EXT) == KEY_UP) && (g_gen_page == 0)) {
+		if ((g_in_key_ext == KEY_UP) && (g_gen_page == 0)) {
 			if (!ds_readbs(HERO_TYPUS)) {
 				infobox(get_text(17), 0);
 			} else {
@@ -4390,7 +4388,7 @@ void do_gen(void)
 			}
 		}
 
-		if ((ds_readw(IN_KEY_EXT) == KEY_DOWN) && (g_gen_page == 0)) {
+		if ((g_in_key_ext == KEY_DOWN) && (g_gen_page == 0)) {
 			if (!ds_readbs(HERO_TYPUS)) {
 				infobox(get_text(17), 0);
 			} else {
@@ -4403,7 +4401,7 @@ void do_gen(void)
 			}
 		}
 
-		if ((ds_readw(IN_KEY_EXT) == KEY_RIGHT) && (g_level != 1)) {
+		if ((g_in_key_ext == KEY_RIGHT) && (g_level != 1)) {
 			if (!ds_readbs(HERO_TYPUS)) {
 				infobox(get_text(72), 0);
 			} else {
@@ -4417,7 +4415,7 @@ void do_gen(void)
 			}
 		}
 
-		if (ds_readw(IN_KEY_EXT) == KEY_LEFT) {
+		if (g_in_key_ext == KEY_LEFT) {
 			if (g_gen_page > 0) {
 				g_screen_var = 1;
 				g_gen_page--;
@@ -4434,13 +4432,13 @@ void do_gen(void)
 			}
 		}
 
-		if ((ds_readws(IN_KEY_EXT) >= KEY_1) && (ds_readws(IN_KEY_EXT) <= KEY_5) &&
+		if ((g_in_key_ext >= KEY_1) && (g_in_key_ext <= KEY_5) &&
 			(g_level == 2) && ds_readbs(HERO_TYPUS)) {
 
-			si = ((ds_readws(IN_KEY_EXT) == KEY_1) ? 0 : (
-				(ds_readws(IN_KEY_EXT) == KEY_2) ? 1 : (
-				(ds_readws(IN_KEY_EXT) == KEY_3) ? 4 : (
-				(ds_readws(IN_KEY_EXT) == KEY_4) ? 5 : 10))));
+			si = ((g_in_key_ext == KEY_1) ? 0 : (
+				(g_in_key_ext == KEY_2) ? 1 : (
+				(g_in_key_ext == KEY_3) ? 4 : (
+				(g_in_key_ext == KEY_4) ? 5 : 10))));
 
 			if ((si != g_gen_page) && (si < 5 || ds_readbs(HERO_TYPUS) >= 7)) {
 				g_gen_page = si;
@@ -7521,8 +7519,8 @@ void intro(void)
 
 	/* elevate the attic logo */
 	i = 4;
-	ds_writew(IN_KEY_EXT, 0);
-	while ((cnt1 <= 100) && (ds_readw(IN_KEY_EXT) == 0)) {
+	g_in_key_ext = 0;
+	while ((cnt1 <= 100) && (g_in_key_ext == 0)) {
 		g_dst_x1 = 0;
 		g_dst_y1 = cnt2 + 60;
 		g_dst_x2 = 95;
@@ -7567,7 +7565,7 @@ void intro(void)
 			vsync_or_key(1);
 	}
 
-	if (ds_readw(IN_KEY_EXT) == 0)
+	if (g_in_key_ext == 0)
 		vsync_or_key(200);
 
 	/* load FANPRO.NVF */
