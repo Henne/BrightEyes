@@ -1359,15 +1359,17 @@ static signed short g_text_y;
 static signed short g_text_x;
 static signed long dummy15;
 
-//static Bit8u *picbuf3;
-//static Bit8u *picbuf2;
-//static Bit8u *picbuf1;
-//static Bit8u *gen_ptr6;
-//static Bit8u *buffer_dmenge_dat;
-//static Bit8u *gen_ptr5;
-//static Bit8u *gen_ptr4;
-//static char *gen_ptr3;
-//static char *gen_ptr2;
+static Bit8u *g_picbuf3;
+static Bit8u *g_picbuf2;
+static Bit8u *g_picbuf1;
+static Bit8u *g_gen_ptr6;
+static Bit8u *g_buffer_dmenge_dat;
+static Bit8u* dummy16;
+static Bit8u* dummy17;
+static Bit8u *g_gen_ptr5;
+static Bit8u *g_gen_ptr4;
+static char *g_gen_ptr3;
+static char *g_gen_ptr2;
 
 //Bit8u *page_buffer;
 
@@ -4180,11 +4182,11 @@ void enter_name(void)
 	dst = (RealPt)ds_readd(VGA_MEMSTART) + 12 * 320 + 176;
 
 	update_mouse_cursor();
-	copy_to_screen((RealPt)ds_readd(PICBUF1), dst, 94, 8, 0);
+	copy_to_screen(g_picbuf1, dst, 94, 8, 0);
 	enter_string((char*)Real2Host(RealMake(datseg, HERO_NAME)), 180, 12, 15, 1);
-	copy_to_screen((RealPt)ds_readd(PICBUF1), dst, 94, 8, 0);
+	copy_to_screen(g_picbuf1, dst, 94, 8, 0);
 	call_mouse();
-	print_str((char*)Real2Host(RealMake(datseg,HERO_NAME)), 180, 12);
+	print_str((char*)Real2Host(RealMake(datseg, HERO_NAME)), 180, 12);
 }
 
 /* Borlandified and identical */
@@ -5689,19 +5691,19 @@ void save_picbuf(void)
 
 	if (x_1) {
 		p = (RealPt)ds_readd(GEN_PTR1_DIS) + y_1 * 320 + x_1;
-		copy_to_screen(p, (RealPt)ds_readd(PICBUF1), w_1, h_1, 2);
+		copy_to_screen(p, g_picbuf1, w_1, h_1, 2);
 	}
 
 	p = (RealPt)ds_readd(GEN_PTR1_DIS) + y_2 * 320 + x_2;
-	copy_to_screen(p, (RealPt)ds_readd(PICBUF2), w_2, h_2, 2);
+	copy_to_screen(p, g_picbuf2, w_2, h_2, 2);
 #if !defined(__BORLANDC__)
 	p = (RealPt)ds_readd(GEN_PTR1_DIS) + y_3 * 320 + x_3;
-	copy_to_screen(p, (RealPt)ds_readd(PICBUF3), w_3, h_3, 2);
+	copy_to_screen(p, g_picbuf3, w_3, h_3, 2);
 #else
 	// BCC Sync-Point
 	//p -= y_2 * 320 + x_2; // revert to GEN_PTR1_DIS
 	p += y_3 ; // add offset
-	copy_to_screen(p, (RealPt)ds_readd(PICBUF3), w_3, h_3, 2);
+	copy_to_screen(p, g_picbuf3, w_3, h_3, 2);
 	asm { nop; nop; nop; nop; db 0x6a, 0x02; db 0x6a, 0x02;};
 #endif
 }
@@ -5769,19 +5771,19 @@ void restore_picbuf(RealPt ptr)
 
 	if (x_1) {
 		p = ptr + y_1 * 320 + x_1;
-		copy_to_screen((RealPt)ds_readd(PICBUF1), p, w_1, h_1, 0);
+		copy_to_screen(g_picbuf1, p, w_1, h_1, 0);
 	}
 
 	p = ptr + y_2 * 320 + x_2;
-	copy_to_screen((RealPt)ds_readd(PICBUF2), p, w_2, h_2, 0);
+	copy_to_screen(g_picbuf2, p, w_2, h_2, 0);
 
 #if !defined(__BORLANDC__)
 	p = ptr + y_3 * 320 + x_3;
-	copy_to_screen((RealPt)ds_readd(PICBUF3), p, w_3, h_3, 0);
+	copy_to_screen(g_picbuf3, p, w_3, h_3, 0);
 #else
 	// BCC Sync-Point
 	p += y_3 ; // add offset
-	copy_to_screen((RealPt)ds_readd(PICBUF3), p, w_3, h_3, 0);
+	copy_to_screen(g_picbuf3, p, w_3, h_3, 0);
 	asm { nop; nop; nop; nop; nop; nop;};
 #endif
 }
@@ -7273,7 +7275,6 @@ void pal_fade_in(Bit8u *dst, Bit8u *src, Bit16s col, Bit16s n)
 #if !defined(__BORLANDC__)
 static void BE_cleanup(void)
 {
-	Bit32s before = DB_get_conv_mem();
 	RealPt ptr;
 	Bit8u *host_ptr;
 
@@ -7307,22 +7308,22 @@ static void BE_cleanup(void)
 		g_buffer_font6 = NULL;
 	}
 
-	if ((ptr = (RealPt)ds_readd(PICBUF3)) != 0) {
-		D1_INFO("Free PICBUF3\t\t 0x%08x\n", ptr);
-		bc_free(ptr);
-		ds_writed(PICBUF3, 0);
+	if ((host_ptr = g_picbuf3) != 0) {
+		D1_INFO("Free PICBUF3\t\t 0x%08x\n", host_ptr);
+		free(ptr);
+		g_picbuf3 = NULL;
 	}
 
-	if ((ptr = (RealPt)ds_readd(PICBUF2)) != 0) {
-		D1_INFO("Free PICBUF2\t\t 0x%08x\n", ptr);
-		bc_free(ptr);
-		ds_writed(PICBUF2, 0);
+	if ((host_ptr = g_picbuf2) != 0) {
+		D1_INFO("Free PICBUF2\t\t 0x%08x\n", host_ptr);
+		free(ptr);
+		g_picbuf2 = NULL;
 	}
 
-	if ((ptr = (RealPt)ds_readd(PICBUF1)) != 0) {
-		D1_INFO("Free PICBUF1\t\t 0x%08x\n", ptr);
-		bc_free(ptr);
-		ds_writed(PICBUF1, 0);
+	if ((host_ptr = g_picbuf1) != 0) {
+		D1_INFO("Free PICBUF1\t\t 0x%08x\n", host_ptr);
+		free(host_ptr);
+		g_picbuf1 = NULL;
 	}
 
 	if ((ptr = (RealPt)ds_readd(GEN_PTR6) - 8) != 0) {
@@ -7796,11 +7797,11 @@ void alloc_buffers(void)
 
 	ds_writed(BUFFER_DMENGE_DAT, (Bit32u)(gen_alloc(23660) + 8));
 
-	ds_writed(PICBUF1, (Bit32u)gen_alloc(800));
+	g_picbuf1 = gen_alloc(800);
 
-	ds_writed(PICBUF2, (Bit32u)gen_alloc(2800));
+	g_picbuf2 = gen_alloc(2800);
 
-	ds_writed(PICBUF3, (Bit32u)gen_alloc(2800));
+	g_picbuf3 = gen_alloc(2800);
 
 	//ds_writed(GEN_PTR6, (Bit32u)(gen_alloc(1100) + 8));
 
