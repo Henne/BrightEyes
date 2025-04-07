@@ -1276,12 +1276,12 @@ static signed short g_param_level;
 static signed short g_called_with_args;
 
 struct inc_states {
-	char tries;
-	char incs;
+	signed char tries;
+	signed char incs;
 };
 
-//static struct inc_states spell_incs[86];
-//static struct inc_states skill_incs[52];
+static struct inc_states g_spell_incs[86];
+static struct inc_states g_skill_incs[52];
 //static char attrib_changed[14];
 //static RealPt type_names[MAX_TYPES];
 
@@ -4591,13 +4591,10 @@ void clear_hero(void)
 		ds_writeb(ATTRIB_CHANGED + i, 0);
 
 	for (i = 0; i < 86; i++) {
-		ds_writeb(SPELL_INCS + 2 * i + 0,
-			ds_writeb(SPELL_INCS + 2 * i + 1, 0) );
+		g_spell_incs[i].tries = g_spell_incs[i].incs = 0;
 	}
 	for (i = 0; i < 52; i++) {
-		// tries + incs
-		ds_writeb(SKILL_INCS + 2 * i + 0,
-			ds_writeb(SKILL_INCS + 2 * i + 1, 0));
+		g_skill_incs[i].tries = g_skill_incs[i].incs = 0;
 	}
 
 	ds_writeb(HERO_LEVEL, 1);
@@ -4830,7 +4827,7 @@ void fill_values(void)
 		ds_writebs(HERO_SKILLS + i, g_skills[ds_readbs(HERO_TYPUS)][i]);
 
 		/* set skill_incs and skill_tries to zero */
-		ds_writeb(SKILL_INCS + 0 + 2 * i, ds_writebs((SKILL_INCS + 1) + (2 * i), 0));
+		g_skill_incs[i].tries = g_skill_incs[i].incs = 0;
 	}
 
 	/* set skill_attempts */
@@ -4847,8 +4844,7 @@ void fill_values(void)
 			ds_writebs(HERO_SPELLS + i, g_spells[ds_readbs(HERO_TYPUS) - 7][i]);
 
 			/* set spell_incs and spell_tries to zero */
-			// tries, incs
-			ds_writeb(SPELL_INCS + 2 * i + 0, ds_writeb(SPELL_INCS + 2 * i + 1, 0));
+			g_spell_incs[i].tries = g_spell_incs[i].incs = 0;
 		}
 
 		/* special mage values */
@@ -5102,7 +5098,7 @@ void skill_inc_novice(Bit16s skill)
 
 	while (!done) {
 		/* leave the loop if 3 tries have been done */
-		if (ds_readbs(SKILL_INCS + 2 * skill + 0) == 3) {
+		if (g_skill_incs[skill].tries == 3) {
 			/* set the flag to leave this loop */
 			done = 1;
 #if !defined(__BORLANDC__)
@@ -5122,7 +5118,7 @@ void skill_inc_novice(Bit16s skill)
 				ds_inc_bs_post(HERO_SKILLS + skill);
 
 				/* set inc tries for this skill to zero */
-				ds_writeb(SKILL_INCS + 2 * skill + 0, 0);
+				g_skill_incs[skill].tries = 0;
 
 				/* set the flag to leave this loop */
 				done = 1;
@@ -5137,7 +5133,7 @@ void skill_inc_novice(Bit16s skill)
 				}
 			} else {
 				/* inc tries for that skill */
-				ds_inc_bs_post(SKILL_INCS + 2 * skill + 0);
+				g_skill_incs[skill].tries++;
 			}
 		}
 	}
@@ -5157,7 +5153,7 @@ void spell_inc_novice(Bit16s spell)
 
 	while (!done) {
 		/* leave the loop if 3 tries have been done */
-		if (ds_readbs(SPELL_INCS + 2 * spell + 0) == 3) {
+		if (g_spell_incs[spell].tries == 3) {
 			done = 1;
 			continue;
 		}
@@ -5179,12 +5175,12 @@ void spell_inc_novice(Bit16s spell)
 			ds_inc_bs_post(HERO_SPELLS + spell);
 
 			/* set inc tries for this spell to zero */
-			ds_writeb(SPELL_INCS + 2 * spell + 0, 0);
+			g_spell_incs[spell].tries = 0;
 
 			/* set the flag to leave this loop */
 			done = 1;
 		} else {
-			ds_inc_bs_post(SPELL_INCS + 2 * spell + 0);
+			g_spell_incs[spell].tries++;
 		}
 	}
 }
@@ -6483,12 +6479,12 @@ void make_valuta_str(char *dst, Bit32s money)
 void inc_skill(Bit16s skill, Bit16s max, char *msg)
 {
 	/* no more increments than the maximum */
-	if (ds_readbs(SKILL_INCS + 2 * skill + 1) >= max) {
+	if (g_skill_incs[skill].incs >= max) {
 		infobox((char*)msg, 0);
 		return;
 	}
 	/* we just have 3 tries to increment */
-	if (ds_readbs(SKILL_INCS + 2 * skill + 0) == 3) {
+	if (g_skill_incs[skill].tries == 3) {
 		infobox(get_text(151), 0);
 		return;
 	}
@@ -6501,9 +6497,9 @@ void inc_skill(Bit16s skill, Bit16s max, char *msg)
 		/* increment skill */
 		ds_inc_bs_post(HERO_SKILLS + skill);
 		/* reset tries */
-		ds_writeb(SKILL_INCS + 2 * skill + 0, 0);
+		g_skill_incs[skill].tries = 0;
 		/* increment skill increments */
-		ds_inc_bs_post(SKILL_INCS + 2 * skill + 1);
+		g_skill_incs[skill].incs++;
 
 		/* check if we have a melee attack skill */
 		if (skill <= 6) {
@@ -6520,7 +6516,7 @@ void inc_skill(Bit16s skill, Bit16s max, char *msg)
 		/* print failure message */
 		infobox(get_text(153), 0);
 		/* increment try */
-		ds_inc_bs_post(SKILL_INCS + 2 * skill + 0);
+		g_skill_incs[skill].tries++;
 	}
 
 	refresh_screen();
@@ -6708,13 +6704,13 @@ void inc_spell(Bit16s spell)
 	}
 
 	/* all spell increments used for that spell */
-	if (ds_readbs(SPELL_INCS + 2 * spell + 1) >= max_incs) {
+	if (g_spell_incs[spell].incs >= max_incs) {
 		infobox(get_text(257), 0);
 		return;
 
 	}
 	/* all tries used for that spell */
-	if (ds_readbs(SPELL_INCS + 2 * spell + 0) == 3) {
+	if (g_spell_incs[spell].tries == 3) {
 		infobox(get_text(151), 0);
 #if !defined(__BORLANDC__)
 		return;
@@ -6733,14 +6729,14 @@ void inc_spell(Bit16s spell)
 		/* increment spell value */
 		ds_inc_bs_post(HERO_SPELLS + spell);
 		/* reset tries */
-		ds_writebs(SPELL_INCS + 2 * spell + 0, 0);
+		g_spell_incs[spell].tries = 0;
 		/* increment incs */
-		ds_inc_bs_post(SPELL_INCS + 2 * spell + 1);
+		g_spell_incs[spell].incs++;
 	} else {
 		/* show failure */
 		infobox(get_text(153), 0);
 		/* increment tries */
-		ds_inc_bs_post(SPELL_INCS + 2 * spell + 0);
+		g_spell_incs[spell].tries++;
 	}
 
 	refresh_screen();
