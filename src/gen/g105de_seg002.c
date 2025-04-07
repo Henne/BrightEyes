@@ -1370,6 +1370,10 @@ static Bit8u *g_gen_ptr5;
 static Bit8u *g_gen_ptr4;
 static char *g_gen_ptr3;
 static char *g_gen_ptr2;
+static char *dummy18;
+
+static unsigned char* g_gfx_ptr;
+static unsigned char* g_vga_memstart;
 
 //Bit8u *page_buffer;
 
@@ -2225,7 +2229,7 @@ void unused_func1(RealPt in_ptr, Bit16s x, Bit16s y, Bit8s c1, Bit8s c2)
 
 	update_mouse_cursor();
 
-	ptr = (RealPt)ds_readd(VGA_MEMSTART);
+	ptr = g_vga_memstart;
 	ptr += 320 * y + x;
 
 	for (i = 0; i < c2; ptr+=320 , i++) {
@@ -2311,7 +2315,7 @@ void draw_mouse_cursor(void)
 	register Bit16s rangeX; //di
 
 
-	vgaptr = (RealPt)ds_readd(VGA_MEMSTART);
+	vgaptr = g_vga_memstart;
 	mouse_cursor = (signed short*)g_mouse_current_cursor + (32 / 2);
 
 	rangeX = g_mouse_posx - g_mouse_pointer_offsetx;
@@ -2345,7 +2349,7 @@ void save_mouse_bg(void)
 	Bit16s Y;
 	Bit16s X;
 
-	vgaptr = (RealPt)(ds_readd(VGA_MEMSTART));
+	vgaptr = g_vga_memstart;
 
 	rangeX = g_mouse_posx - g_mouse_pointer_offsetx;
 	rangeY = g_mouse_posy - g_mouse_pointer_offsety;
@@ -2373,7 +2377,7 @@ void restore_mouse_bg(void)
 	Bit16s diffY;
 	Bit16s i, j;
 
-	vgaptr = (RealPt)ds_readd(VGA_MEMSTART);
+	vgaptr = g_vga_memstart;
 
 	rangeX = g_mouse_posx_bak - g_mouse_pointer_offsetx_bak;
 	rangeY = g_mouse_posy_bak - g_mouse_pointer_offsety_bak;
@@ -3500,7 +3504,7 @@ void fill_smth2(Bit8u* sptr) {
 RealPt get_gfx_ptr(Bit16s x, Bit16s y, Bit16s* unused)
 {
 	RealPt start;
-	return start = (RealPt)ds_readd(GFX_PTR) + (y * 320 + x);
+	return start = g_gfx_ptr + (y * 320 + x);
 }
 
 /* Borlandified and identical */
@@ -3741,10 +3745,10 @@ void draw_popup_line(Bit16s line, Bit16s type)
 	register Bit16s popup_middle; // di
 
 	/* This is a bit bogus */
-	dst = (RealPt)ds_readd(VGA_MEMSTART);
+	dst = g_vga_memstart;
 
 	/* (line * 8 + y) * 320  + x */
-	dst = ((RealPt)ds_readd(VGA_MEMSTART)) + 320 * (g_upper_border + 8 * line) + g_left_border;
+	dst = (g_vga_memstart) + 320 * (g_upper_border + 8 * line) + g_left_border;
 
 	switch (type) {
 		case 0: {
@@ -3836,7 +3840,7 @@ Bit16s infobox(char *msg, Bit16s digits)
 
 	update_mouse_cursor();
 
-	src = (RealPt)ds_readd(VGA_MEMSTART);
+	src = g_vga_memstart;
 	src += g_upper_border * 320 + g_left_border;
 	dst = (RealPt)ds_readd(GEN_PTR1_DIS);
 
@@ -3878,7 +3882,7 @@ Bit16s infobox(char *msg, Bit16s digits)
 	set_textcolor(fg, bg);
 	update_mouse_cursor();
 
-	dst = (RealPt)ds_readd(VGA_MEMSTART);
+	dst = g_vga_memstart;
 	dst += g_upper_border * 320 + g_left_border;
 	src = (RealPt)ds_readd(GEN_PTR1_DIS);
 
@@ -4009,7 +4013,7 @@ Bit16s gui_radio(Bit8u *header, Bit8s options, ...)
 	update_mouse_cursor();
 
 	/* save old background */
-	src = (RealPt)ds_readd(VGA_MEMSTART);
+	src = g_vga_memstart;
 	src += g_upper_border * 320 + g_left_border;
 	dst = (RealPt)ds_readd(GEN_PTR1_DIS);
 
@@ -4147,7 +4151,7 @@ Bit16s gui_radio(Bit8u *header, Bit8s options, ...)
 	mouse_move_cursor(g_mouse_posx, _AX);
 #endif
 
-	dst = (RealPt)ds_readd(VGA_MEMSTART);
+	dst = g_vga_memstart;
 	dst += g_upper_border * 320 + g_left_border;
 	src = (RealPt)ds_readd(GEN_PTR1_DIS);
 	copy_to_screen(src, dst, r9, (lines_sum + 2) * 8, 0);
@@ -4176,7 +4180,7 @@ void enter_name(void)
 {
 	RealPt dst;
 
-	dst = (RealPt)ds_readd(VGA_MEMSTART) + 12 * 320 + 176;
+	dst = g_vga_memstart + 12 * 320 + 176;
 
 	update_mouse_cursor();
 	copy_to_screen(g_picbuf1, dst, 94, 8, 0);
@@ -4245,7 +4249,7 @@ void change_sex(void)
 		g_screen_var = 1;
 		return;
 	} else {
-		dst = (RealPt)ds_readd(VGA_MEMSTART) + 7 * 320 + 305;
+		dst = g_vga_memstart + 7 * 320 + 305;
 		src = g_buffer_sex_dat + 256 * ds_readbs(HERO_SEX);
 		update_mouse_cursor();
 		copy_to_screen(src, dst, 16, 16, 0);
@@ -4456,7 +4460,7 @@ void refresh_screen(void)
 	struct nvf_desc nvf;
 
 	if (g_screen_var) {
-		ds_writed(GFX_PTR, ds_readd(GEN_PTR1_DIS));
+		g_gfx_ptr = ds_readd(GEN_PTR1_DIS);
 		load_page(g_gen_page);
 		save_picbuf();
 
@@ -4504,7 +4508,7 @@ void refresh_screen(void)
 
 			} else {
 				if (g_need_refresh) {
-					call_fill_rect_gen((RealPt)ds_readd(VGA_MEMSTART), 16, 8, 143, 191, 0);
+					call_fill_rect_gen((RealPt)g_vga_memstart, 16, 8, 143, 191, 0);
 #if !defined(__BORLANDC__)
 					g_need_refresh = 0;
 #else
@@ -4547,12 +4551,12 @@ void refresh_screen(void)
 				do_draw_pic(0);
 			}
 
-			g_dst_dst = ds_readd(VGA_MEMSTART);
+			g_dst_dst = g_vga_memstart;
 
 		}
 
 		print_values();
-		dst = (RealPt)(ds_writed(GFX_PTR, ds_readd(VGA_MEMSTART)));
+		dst = g_gfx_ptr = g_vga_memstart;
 		src = (RealPt)ds_readd(GEN_PTR1_DIS);
 		update_mouse_cursor();
 		copy_to_screen(src, dst, 320, 200, 0);
@@ -5265,7 +5269,7 @@ void select_typus(void)
 
 			load_typus(ds_readbs(HERO_TYPUS));
 			update_mouse_cursor();
-			call_fill_rect_gen((RealPt)ds_readd(VGA_MEMSTART), 16, 8, 143, 191, 0);
+			call_fill_rect_gen((RealPt)g_vga_memstart, 16, 8, 143, 191, 0);
 			wait_for_vsync();
 			set_palette(g_gen_ptr5 + 0x5c02, 0, 32);
 			call_mouse();
@@ -5837,7 +5841,7 @@ void print_values(void)
 	switch (g_gen_page) {
 
 		case 0: {
-			restore_picbuf((RealPt)ds_readd(GFX_PTR));
+			restore_picbuf((RealPt)g_gfx_ptr);
 
 			/* print name */
 			print_str((char*)Real2Host(RealMake(datseg, HERO_NAME)), 180, 12);
@@ -5904,7 +5908,7 @@ void print_values(void)
 			// a 7-Byte Multi Byte NOP :-)
 			//asm { db 0x0f, 0x1f, 0x80, 0x00, 0x00, 0x00, 0x00; }; // BCC Sync-Point
 #endif
-			restore_picbuf((RealPt)ds_readd(GFX_PTR));
+			restore_picbuf((RealPt)g_gfx_ptr);
 
 
 			/* print fight skills */
@@ -5949,7 +5953,7 @@ void print_values(void)
 		}
 		case 2: {
 			/* SKILLS Page 2/3 */
-			restore_picbuf((RealPt)ds_readd(GFX_PTR));
+			restore_picbuf((RealPt)g_gfx_ptr);
 
 			/* print social skills */
 			for (i = 19; i < 26; i++) {
@@ -5993,7 +5997,7 @@ void print_values(void)
 		}
 		case 3: {
 			/* SKILLS Page 3/3 */
-			restore_picbuf((RealPt)ds_readd(GFX_PTR));
+			restore_picbuf((RealPt)g_gfx_ptr);
 
 			/* print craftmansship skills */
 			for (i = 41; i < 50; i++) {
@@ -6054,7 +6058,7 @@ void print_values(void)
 		}
 		case 4: {
 			/* ATPA Page */
-			restore_picbuf((RealPt)ds_readd(GFX_PTR));
+			restore_picbuf((RealPt)g_gfx_ptr);
 
 			/* Print base value  2x the same */
 #if !defined(__BORLANDC__)
@@ -6114,7 +6118,7 @@ void print_values(void)
 
 		case 5: {
 			/* Spells Page 1/6 */
-			restore_picbuf((RealPt)ds_readd(GFX_PTR));
+			restore_picbuf((RealPt)g_gfx_ptr);
 
 			for (i = 1; i < 6; i++) {
 				pos = i - 1;
@@ -6168,7 +6172,7 @@ void print_values(void)
 		}
 		case 6: {
 			/* Spells Page 2/6 */
-			restore_picbuf((RealPt)ds_readd(GFX_PTR));
+			restore_picbuf((RealPt)g_gfx_ptr);
 
 			for (i = 12; i <= 17; i++) {
 				pos = i - 12;
@@ -6223,7 +6227,7 @@ void print_values(void)
 		}
 		case 7: {
 			/* Spells Page 3/6 */
-			restore_picbuf((RealPt)ds_readd(GFX_PTR));
+			restore_picbuf((RealPt)g_gfx_ptr);
 
 			for (i = 27; i < 33; i++) {
 				pos = i - 27;
@@ -6278,7 +6282,7 @@ void print_values(void)
 		}
 		case 8: {
 			/* Spells Page 4/6 */
-			restore_picbuf((RealPt)ds_readd(GFX_PTR));
+			restore_picbuf((RealPt)g_gfx_ptr);
 
 			for (i = 47; i <= 48; i++) {
 				pos = i - 47;
@@ -6333,7 +6337,7 @@ void print_values(void)
 		}
 		case 9: {
 			/* Spells Page 5/6 */
-			restore_picbuf((RealPt)ds_readd(GFX_PTR));
+			restore_picbuf((RealPt)g_gfx_ptr);
 
 			for (i = 60; i < 76; i++) {
 				pos = i - 60;
@@ -6360,7 +6364,7 @@ void print_values(void)
 		}
 		case 10: {
 			/* Spells Page 6/6 */
-			restore_picbuf((RealPt)ds_readd(GFX_PTR));
+			restore_picbuf((RealPt)g_gfx_ptr);
 
 			for (i = 76; i < 86; i++) {
 				pos = i - 76;
@@ -7162,7 +7166,7 @@ void choose_typus(void)
 
 	load_typus(ds_readbs(HERO_TYPUS));
 	update_mouse_cursor();
-	call_fill_rect_gen((RealPt)ds_readd(VGA_MEMSTART), 16, 8, 143, 191, 0);
+	call_fill_rect_gen((RealPt)g_vga_memstart, 16, 8, 143, 191, 0);
 	wait_for_vsync();
 	set_palette(g_gen_ptr5 + 0x5c02, 0, 32);
 	call_mouse();
@@ -7507,7 +7511,7 @@ void intro(void)
 		g_unkn2 = 60;
 		g_unkn3 = 95;
 		g_unkn4 = 159;
-		g_dst_dst = ds_readd(VGA_MEMSTART);
+		g_dst_dst = g_vga_memstart;
 		do_draw_pic(3);
 		cnt1++;
 		cnt2--;
@@ -7535,7 +7539,7 @@ void intro(void)
 	process_nvf(&nvf);
 
 	/* clear screen */
-	call_fill_rect_gen((RealPt)ds_readd(VGA_MEMSTART), 0, 0, 319, 199, 0);
+	call_fill_rect_gen((RealPt)g_vga_memstart, 0, 0, 319, 199, 0);
 	wait_for_vsync();
 
 	/* set palette of FANPRO.NVF */
@@ -7565,7 +7569,7 @@ void intro(void)
 	process_nvf(&nvf);
 
 	/* clear screen */
-	call_fill_rect_gen((RealPt)ds_readd(VGA_MEMSTART), 0, 0, 319, 199, 0);
+	call_fill_rect_gen((RealPt)g_vga_memstart, 0, 0, 319, 199, 0);
 	wait_for_vsync();
 
 
@@ -7642,7 +7646,7 @@ void intro(void)
 	}
 
 	/* clear screen */
-	call_fill_rect_gen((RealPt)ds_readd(VGA_MEMSTART), 0, 0, 319, 199, 0);
+	call_fill_rect_gen((RealPt)g_vga_memstart, 0, 0, 319, 199, 0);
 
 	g_in_intro = 0;
 	return;
@@ -7747,7 +7751,7 @@ int main_gen(int argc, char **argv)
 
 	if (g_called_with_args != 0) {
 		/* Clear the screen and return to SCHICKM.EXE/BLADEM.EXE */
-		call_fill_rect_gen((RealPt)ds_readd(VGA_MEMSTART), 0, 0, 319, 199, 0);
+		call_fill_rect_gen((RealPt)g_vga_memstart, 0, 0, 319, 199, 0);
 	} else {
 		/* Clear the screen and return to DOS */
 		exit_video();
@@ -7765,8 +7769,7 @@ int main_gen(int argc, char **argv)
 /* Borlandified and nearly identical, but works correctly */
 void alloc_buffers(void)
 {
-	ds_writed(GFX_PTR,
-		ds_writed(VGA_MEMSTART, (Bit32u)RealMake(0xa000, 0x0)));
+	g_gfx_ptr = g_vga_memstart = (unsigned char*)RealMake(0xa000, 0x0);
 
 	ds_writed(GEN_PTR1_DIS, (Bit32u)(gen_alloc(64108) + 8));
 
@@ -7833,7 +7836,7 @@ void init_stuff(void)
 	/* number of menu tiles width */
 	g_menu_tiles = 3;
 
-	g_dst_dst = (RealPt)ds_readd(VGA_MEMSTART);
+	g_dst_dst = g_vga_memstart;
 }
 
 /* Borlandified and identical */
