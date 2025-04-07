@@ -1296,11 +1296,11 @@ static signed char g_head_typus;
 
 static signed char g_in_intro;
 
-//static unsigned short MENU_TILES;
-//static unsigned short left_border;
-//static unsigned short upper_border;
+static signed short g_menu_tiles;
+static signed short g_left_border;
+static signed short g_upper_border;
 
-//static signed short level;
+static signed short g_level; /* {-1, 0, 1 (= Novice), 2 (= Advanced) } */
 
 
 //static RealPt dst_dst;
@@ -2180,11 +2180,11 @@ void handle_input(void)
 
 			if (si == 0xfd) {
 				si = 0;
-				ds_writew(MENU_TILES, 4);
+				g_menu_tiles = 4;
 				ds_writew(FG_COLOR + 8, 1);
 				infobox(get_text(267), 0);
 				ds_writew(FG_COLOR + 8, 0);
-				ds_writew(MENU_TILES, 3);
+				g_menu_tiles = 3;
 			}
 		}
 	}
@@ -3747,7 +3747,7 @@ void draw_popup_line(Bit16s line, Bit16s type)
 	dst = (RealPt)ds_readd(VGA_MEMSTART);
 
 	/* (line * 8 + y) * 320  + x */
-	dst = ((RealPt)ds_readd(VGA_MEMSTART)) + 320 * (ds_readws(UPPER_BORDER) + 8 * line) +  ds_readw(LEFT_BORDER);
+	dst = ((RealPt)ds_readd(VGA_MEMSTART)) + 320 * (g_upper_border + 8 * line) + g_left_border;
 
 	switch (type) {
 		case 0: {
@@ -3785,7 +3785,7 @@ void draw_popup_line(Bit16s line, Bit16s type)
 
 	src = ((RealPt)ds_readd(BUFFER_POPUP)) + popup_middle;
 	dst += 16;
-	for (i = 0; i < ds_readws(MENU_TILES); dst += 32, i++)
+	for (i = 0; i < g_menu_tiles; dst += 32, i++)
 		copy_to_screen(src, dst, 32, 8, 0);
 #if defined(__BORLANDC__)
 	// BCC Sync-Point
@@ -3825,22 +3825,22 @@ Bit16s infobox(char *msg, Bit16s digits)
 	v3 = ds_readws(TEXT_Y);
 	v4 = ds_readws(TEXT_X_END);
 
-	di = 32 * ds_readws(MENU_TILES) + 32;
-	ds_writew(TEXT_X, ds_writew(LEFT_BORDER, (320 - di) / 2 + g_text_x_mod) + 5);
+	di = 32 * g_menu_tiles + 32;
+	ds_writew(TEXT_X, g_left_border = ((320 - di) / 2 + g_text_x_mod) + 5);
 	ds_writews(TEXT_X_END, di - 10);
 	lines = str_splitter(msg);
 
 	if (digits != 0)
 		lines += 2;
 
-	ds_writew(UPPER_BORDER, (200 - (lines + 2) * 8) / 2);
-	ds_add_ws(UPPER_BORDER, g_ro_zero);
-	ds_writew(TEXT_Y, ds_readws(UPPER_BORDER) + 7);
+	g_upper_border = (200 - (lines + 2) * 8) / 2;
+	g_upper_border += g_ro_zero;
+	ds_writew(TEXT_Y, g_upper_border + 7);
 
 	update_mouse_cursor();
 
 	src = (RealPt)ds_readd(VGA_MEMSTART);
-	src += ds_readws(UPPER_BORDER) * 320 + ds_readws(LEFT_BORDER);
+	src += g_upper_border * 320 + g_left_border;
 	dst = (RealPt)ds_readd(GEN_PTR1_DIS);
 
 #if !defined(__BORLANDC__)
@@ -3868,8 +3868,8 @@ Bit16s infobox(char *msg, Bit16s digits)
 
 	if (digits) {
 		enter_string((char*)Real2Host((RealPt)ds_readd(GEN_PTR3)),
-			ds_readws(LEFT_BORDER) + (di - digits * 6) / 2,
-			ds_readws(UPPER_BORDER) + 8 * lines - 2, digits, 0);
+			g_left_border + (di - digits * 6) / 2,
+			g_upper_border + 8 * lines - 2, digits, 0);
 
 		retval = (Bit16u)atol((char*)Real2Host((RealPt)ds_readd(GEN_PTR3)));
 	} else {
@@ -3882,7 +3882,7 @@ Bit16s infobox(char *msg, Bit16s digits)
 	update_mouse_cursor();
 
 	dst = (RealPt)ds_readd(VGA_MEMSTART);
-	dst += ds_readws(UPPER_BORDER) * 320 + ds_readws(LEFT_BORDER);
+	dst += g_upper_border * 320 + g_left_border;
 	src = (RealPt)ds_readd(GEN_PTR1_DIS);
 
 	copy_to_screen(src, dst, di, (lines + 2) * 8, 0);
@@ -3943,18 +3943,18 @@ void fill_radio_button(Bit16s old_pos, Bit16s new_pos, Bit16s offset)
 
 	/* unmark the old radio button, if any */
 	if (old_pos != -1) {
-		y = ds_readws(LEFT_BORDER) + 6;
+		y = g_left_border + 6;
 
-		x = ds_readws(UPPER_BORDER) + (offset + old_pos) * 8 + 2;
+		x = g_upper_border + (offset + old_pos) * 8 + 2;
 
 		for (i = 0; i < 4; i++)
 			draw_v_line(y + i, x, x + 3, 0xd8);
 	}
 
 	/* mark the new radio button */
-	y = ds_readws(LEFT_BORDER) + 6;
+	y = g_left_border + 6;
 
-	x = ds_readws(UPPER_BORDER) + (offset + new_pos) * 8 + 2;
+	x = g_upper_border + (offset + new_pos) * 8 + 2;
 
 	for (i = 0; i < 4; i++)
 		draw_v_line(y + i, x, x + 3, 0xd9);
@@ -4003,17 +4003,17 @@ Bit16s gui_radio(Bit8u *header, Bit8s options, ...)
 	bak1 = ds_readws(TEXT_X);
 	bak2 = ds_readw(TEXT_Y);
 	bak3 = ds_readws(TEXT_X_END);
-	r9 = 32 * ds_readws(MENU_TILES) + 32;
-	ds_writew(TEXT_X, ds_writew(LEFT_BORDER, ((320 - r9) / 2) + g_text_x_mod) + 5);
-	ds_writew(TEXT_X_END, 32 * ds_readws(MENU_TILES) + 22);
+	r9 = 32 * g_menu_tiles + 32;
+	ds_writew(TEXT_X, g_left_border = (((320 - r9) / 2) + g_text_x_mod) + 5);
+	ds_writew(TEXT_X_END, 32 * g_menu_tiles + 22);
 	lines_header = str_splitter((char*)header);
 	lines_sum = lines_header + options;
-	ds_writew(TEXT_Y, ds_writew(UPPER_BORDER, (200 - (lines_sum + 2) * 8) / 2) + 7);
+	ds_writew(TEXT_Y, g_upper_border = ((200 - (lines_sum + 2) * 8) / 2) + 7);
 	update_mouse_cursor();
 
 	/* save old background */
 	src = (RealPt)ds_readd(VGA_MEMSTART);
-	src += ds_readws(UPPER_BORDER) * 320 + ds_readws(LEFT_BORDER);
+	src += g_upper_border * 320 + g_left_border;
 	dst = (RealPt)ds_readd(GEN_PTR1_DIS);
 
 #if !defined(__BORLANDC__)
@@ -4040,7 +4040,7 @@ Bit16s gui_radio(Bit8u *header, Bit8s options, ...)
 		print_line((char*)header);
 
 	r3 = ds_readw(TEXT_X) + 8;
-	r4 = ds_readws(UPPER_BORDER) + 8 * (lines_header + 1);
+	r4 = g_upper_border + 8 * (lines_header + 1);
 
 	/* print radio options */
 	va_start(arguments, options);
@@ -4057,8 +4057,8 @@ Bit16s gui_radio(Bit8u *header, Bit8s options, ...)
 	/* save and set mouse position */
 	mx_bak = g_mouse_posx;
 	my_bak = g_mouse_posy;
-	g_mouse_posx_bak = g_mouse_posx = ds_readws(LEFT_BORDER) + 90;
-	g_mouse_posy_bak = g_mouse_posy = r8 = r7 = ds_readws(UPPER_BORDER) + 8 * (lines_header + 1);
+	g_mouse_posx_bak = g_mouse_posx = g_left_border + 90;
+	g_mouse_posy_bak = g_mouse_posy = r8 = r7 = g_upper_border + 8 * (lines_header + 1);
 #if !defined(__BORLANDC__)
 	mouse_move_cursor(g_mouse_posx, r8);
 #else
@@ -4066,10 +4066,10 @@ Bit16s gui_radio(Bit8u *header, Bit8s options, ...)
 	mouse_move_cursor(g_mouse_posx, _AX);
 #endif
 
-	g_mouse_posx = ds_readws(LEFT_BORDER) + r9 - 16;
-	g_mouse_posx_min = ds_readws(LEFT_BORDER);
-	g_mouse_posy_min = ds_readws(UPPER_BORDER) + 8 * (lines_header + 1);
-	g_mouse_posy_max = (ds_readws(UPPER_BORDER) + (8 * options + (lines_header + 1) * 8)) - 1;
+	g_mouse_posx = g_left_border + r9 - 16;
+	g_mouse_posx_min = g_left_border;
+	g_mouse_posy_min = g_upper_border + 8 * (lines_header + 1);
+	g_mouse_posy_max = (g_upper_border + (8 * options + (lines_header + 1) * 8)) - 1;
 	call_mouse();
 	ds_writew(MOUSE2_EVENT, 0);
 
@@ -4153,7 +4153,7 @@ Bit16s gui_radio(Bit8u *header, Bit8s options, ...)
 #endif
 
 	dst = (RealPt)ds_readd(VGA_MEMSTART);
-	dst += ds_readws(UPPER_BORDER) * 320 + ds_readws(LEFT_BORDER);
+	dst += g_upper_border * 320 + g_left_border;
 	src = (RealPt)ds_readd(GEN_PTR1_DIS);
 	copy_to_screen(src, dst, r9, (lines_sum + 2) * 8, 0);
 
@@ -4269,12 +4269,11 @@ void do_gen(void)
 	g_screen_var = 1;
 
 	/* try to set the level from parameters */
-	ds_writew(LEVEL, ((g_param_level == 'a') ? 2 :
-			  ((g_param_level == 'n') ? 1 : -1)));
+	g_level = ((g_param_level == 'a') ? 2 : ((g_param_level == 'n') ? 1 : -1));
 
 	/* ask for level */
-	while (ds_readws(LEVEL) == -1) {
-		ds_writew(LEVEL, gui_radio((Bit8u*)get_text(0), 2, get_text(1), get_text(2)));
+	while (g_level == -1) {
+		g_level = gui_radio((Bit8u*)get_text(0), 2, get_text(1), get_text(2));
 	}
 
 	ds_writew(MOUSE2_EVENT, 1);
@@ -4405,7 +4404,7 @@ void do_gen(void)
 			}
 		}
 
-		if ((ds_readw(IN_KEY_EXT) == KEY_RIGHT) && (ds_readw(LEVEL) != 1)) {
+		if ((ds_readw(IN_KEY_EXT) == KEY_RIGHT) && (g_level != 1)) {
 			if (!ds_readbs(HERO_TYPUS)) {
 				infobox(get_text(72), 0);
 			} else {
@@ -4424,7 +4423,7 @@ void do_gen(void)
 				g_screen_var = 1;
 				g_gen_page--;
 			} else {
-				if (ds_readws(LEVEL) != 1) {
+				if (g_level != 1) {
 
 					if (!ds_readbs(HERO_TYPUS)) {
 						infobox(get_text(72), 0);
@@ -4437,7 +4436,7 @@ void do_gen(void)
 		}
 
 		if ((ds_readws(IN_KEY_EXT) >= KEY_1) && (ds_readws(IN_KEY_EXT) <= KEY_5) &&
-			(ds_readws(LEVEL) == 2) && ds_readbs(HERO_TYPUS)) {
+			(g_level == 2) && ds_readbs(HERO_TYPUS)) {
 
 			si = ((ds_readws(IN_KEY_EXT) == KEY_1) ? 0 : (
 				(ds_readws(IN_KEY_EXT) == KEY_2) ? 1 : (
@@ -4475,7 +4474,7 @@ void refresh_screen(void)
 		}
 
 		/* page with base values and level is advanced */
-		if ((g_gen_page == 0) && (ds_readws(LEVEL) == 1)) {
+		if ((g_gen_page == 0) && (g_level == 1)) {
 			dst = (RealPt)ds_readd(GEN_PTR1_DIS) + 178 * 320 + 284;
 #if !defined(__BORLANDC__)
 			src = (RealPt)ds_readd(BUFFER_SEX_DAT) + 512;
@@ -4858,7 +4857,7 @@ void fill_values(void)
 		ds_writeb(HERO_SPELL_INCS, g_initial_spell_incs[ds_readbs(HERO_TYPUS) - 7]);
 
 		/* get convertable increase attempts */
-		if ((di = g_initial_conv_incs[ds_readbs(HERO_TYPUS) - 7]) && (ds_readws(LEVEL) == 2) && gui_bool((Bit8u*)get_text(269))) {
+		if ((di = g_initial_conv_incs[ds_readbs(HERO_TYPUS) - 7]) && (g_level == 2) && gui_bool((Bit8u*)get_text(269))) {
 			/* create string */
 			sprintf((char*)Real2Host(ds_readd(GEN_PTR2)), get_text(270), di);
 
@@ -4899,7 +4898,7 @@ void fill_values(void)
 
 
 	/* wanna change 10 spell_attempts against 1W6+2 AE ? */
-	if ((ds_readbs(HERO_TYPUS) == 9) && (ds_readws(LEVEL) == 2) && gui_bool((Bit8u*)get_text(268))) {
+	if ((ds_readbs(HERO_TYPUS) == 9) && (g_level == 2) && gui_bool((Bit8u*)get_text(268))) {
 		/* change spell_attempts */
 		ds_sub_bs(HERO_SPELL_INCS, 10);
 		ds_add_ws(HERO_AE_MAX, random_interval_gen(3, 8));
@@ -5011,7 +5010,7 @@ void fill_values(void)
 	calc_at_pa();
 
 	/* if mode == novice */
-	if (ds_readws(LEVEL) == 1) {
+	if (g_level == 1) {
 		/* increase skills automatically */
 		for (i = 0; ds_readbs(HERO_SKILL_INCS) > 0; i++) {
 			skill_inc_novice(v1 = g_autoskills[ds_readbs(HERO_TYPUS)][i]);
@@ -7885,7 +7884,7 @@ void init_stuff(void)
 	ds_writew(FG_COLOR + 6, 0x0ca); // BLUE
 
 	/* number of menu tiles width */
-	ds_writew(MENU_TILES, 3);
+	g_menu_tiles = 3;
 
 	ds_writed(DST_DST, ds_readd(VGA_MEMSTART));
 }

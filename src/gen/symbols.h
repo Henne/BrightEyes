@@ -200,10 +200,10 @@
 //#define HEAD_CURRENT                    (0x40b6)    /* Bit8s */
 //#define HEAD_TYPUS                      (0x40b7)    /* Bit8s */
 //#define IN_INTRO                        (0x40b8)    /* Bit8s */
-#define MENU_TILES                      (0x40b9)    /* Bit16s */
-#define LEFT_BORDER                     (0x40bb)    /* Bit16s */
-#define UPPER_BORDER                    (0x40bd)    /* Bit16s */
-#define LEVEL                           (0x40bf)    /* Bit16s {-1, 0, 1 (= Novice), 2 (= ADVANCED)}*/
+//#define MENU_TILES                      (0x40b9)    /* Bit16s */
+//#define LEFT_BORDER                     (0x40bb)    /* Bit16s */
+//#define UPPER_BORDER                    (0x40bd)    /* Bit16s */
+//#define LEVEL                           (0x40bf)    /* Bit16s {-1, 0, 1 (= Novice), 2 (= ADVANCED)}*/
 #define DST_DST                         (0x40c1)    /* RealPt => PhysPt*/
 #define DST_X1                          (0x40c5)    /* Bit16s */
 #define DST_Y1                          (0x40c7)    /* Bit16s */
