@@ -1313,21 +1313,16 @@ static signed short g_unkn2;
 static signed short g_unkn3;
 static signed short g_unkn4;
 
-//static char *texts[300];
+static char* g_texts[301];
+static signed short dummy12;
 
 #if !defined(__BORLANDC__)
 /* usage: output */
 static inline char* get_text(Bit16s no) {
-	return (char*)Real2Host(ds_readd(TEXTS + 4 * no));
+	return g_texts[no];
 }
-/* usage: save pointers somewhere */
-static inline RealPt get_text_real(Bit16s no) {
-	return (RealPt)ds_readd(TEXTS + 4 * no);
-}
-
 #else
-#define get_text(no) ((char*)Real2Host(ds_readd(TEXTS + 4 * (no))))
-#define get_text_real(no) get_text(no)
+#define get_text(no) (g_texts[no])
 #endif
 
 //static unsigned short HAVE_MOUSE;
@@ -2406,9 +2401,9 @@ void load_font_and_text(void)
 	len = read_datfile(handle, (Bit8u*)Real2Host(ds_readd(BUFFER_TEXT)), 64000);
 	bc_close(handle);
 
-	split_textbuffer((Bit8u*)Real2Host(RealMake(datseg, TEXTS)), (RealPt)ds_readd(BUFFER_TEXT), len);
+	split_textbuffer(g_texts, (RealPt)ds_readd(BUFFER_TEXT), len);
 #if !defined(__BORLANDC__)
-//	split_textbuffer_host(texts, (char*)Real2Host(ds_readd(BUFFER_TEXT)), len);
+//	split_textbuffer_host(g_texts, (char*)Real2Host(ds_readd(BUFFER_TEXT)), len);
 #endif
 }
 
@@ -4651,7 +4646,7 @@ void new_values(void)
 			if (!host_readbs(Real2Host(ds_ptr) + 3 * i)) {
                                 // not initialized attribute
 				values[unset_attribs] = (signed char)i;
-				g_type_names[unset_attribs] = (char*)get_text_real(32 + i);
+				g_type_names[unset_attribs] = get_text(32 + i);
 				unset_attribs++;
 			}
 		}
@@ -4695,7 +4690,7 @@ void new_values(void)
 			// NORMAL
 			if (!host_readbs(Real2Host(ds_ptr) + 3 * i)) {
 				values[unset_attribs] = (signed char)i;
-				g_type_names[unset_attribs] = (char*)get_text_real(39 + i);
+				g_type_names[unset_attribs] = get_text(39 + i);
 				unset_attribs++;
 			}
 		}
@@ -5229,7 +5224,7 @@ void select_typus(void)
 
 			if (!impossible) {
 
-				g_type_names[possible_types] = 	(char*)get_text_real( (ds_readbs(HERO_SEX) ? 271 : 17 ) + i);
+				g_type_names[possible_types] = 	get_text( (ds_readbs(HERO_SEX) ? 271 : 17 ) + i);
 				t.t[possible_types] = (char)i;
 				possible_types++;
 			}
