@@ -3317,7 +3317,7 @@ Bit16u print_line(char *str)
 
 	lines = str_splitter(str);
 
-	print_str(str, ds_readws(TEXT_X), ds_readws(TEXT_Y));
+	print_str(str, g_text_x, g_text_y);
 
 	call_mouse();
 
@@ -3344,7 +3344,7 @@ void print_str(char *str, Bit16s x, Bit16s y)
 			/* newline */
 			y += 7;
 
-			x = (g_fg_color[4] == 1) ? get_line_start_c(str + i, ds_readws(TEXT_X), g_text_x_end) : x_bak;
+			x = (g_fg_color[4] == 1) ? get_line_start_c(str + i, g_text_x, g_text_x_end) : x_bak;
 
 		} else if (c == 0x7e) {
 			/* CRUFT */
@@ -3819,12 +3819,12 @@ Bit16s infobox(char *msg, Bit16s digits)
 
 	retval = 0;
 	g_fg_color[4] = 1;
-	v2 = ds_readws(TEXT_X);
-	v3 = ds_readws(TEXT_Y);
+	v2 = g_text_x;
+	v3 = g_text_y;
 	v4 = g_text_x_end;
 
 	di = 32 * g_menu_tiles + 32;
-	ds_writew(TEXT_X, g_left_border = ((320 - di) / 2 + g_text_x_mod) + 5);
+	g_text_x = g_left_border = ((320 - di) / 2 + g_text_x_mod) + 5;
 	g_text_x_end = di - 10;
 	lines = str_splitter(msg);
 
@@ -3833,7 +3833,7 @@ Bit16s infobox(char *msg, Bit16s digits)
 
 	g_upper_border = (200 - (lines + 2) * 8) / 2;
 	g_upper_border += g_ro_zero;
-	ds_writew(TEXT_Y, g_upper_border + 7);
+	g_text_y = g_upper_border + 7;
 
 	update_mouse_cursor();
 
@@ -3891,8 +3891,8 @@ Bit16s infobox(char *msg, Bit16s digits)
 	asm { nop; nop;}
 	// BCC Sync-Point
 #endif
-	ds_writew(TEXT_X, v2);
-	ds_writew(TEXT_Y, v3);
+	g_text_x = v2;
+	g_text_y = v3;
 	g_text_x_end = v4;
 
 	g_fg_color[4] = 0;
@@ -3998,15 +3998,15 @@ Bit16s gui_radio(Bit8u *header, Bit8s options, ...)
 	r6 = -1;
 	di = 1;
 
-	bak1 = ds_readws(TEXT_X);
-	bak2 = ds_readw(TEXT_Y);
+	bak1 = g_text_x;
+	bak2 = g_text_y;
 	bak3 = g_text_x_end;
 	r9 = 32 * g_menu_tiles + 32;
-	ds_writew(TEXT_X, g_left_border = (((320 - r9) / 2) + g_text_x_mod) + 5);
+	g_text_x = g_left_border = (((320 - r9) / 2) + g_text_x_mod) + 5;
 	g_text_x_end = 32 * g_menu_tiles + 22;
 	lines_header = str_splitter((char*)header);
 	lines_sum = lines_header + options;
-	ds_writew(TEXT_Y, g_upper_border = ((200 - (lines_sum + 2) * 8) / 2) + 7);
+	g_text_y = g_upper_border = ((200 - (lines_sum + 2) * 8) / 2) + 7;
 	update_mouse_cursor();
 
 	/* save old background */
@@ -4037,7 +4037,7 @@ Bit16s gui_radio(Bit8u *header, Bit8s options, ...)
 	if (lines_header)
 		print_line((char*)header);
 
-	r3 = ds_readw(TEXT_X) + 8;
+	r3 = g_text_x + 8;
 	r4 = g_upper_border + 8 * (lines_header + 1);
 
 	/* print radio options */
@@ -4161,8 +4161,8 @@ Bit16s gui_radio(Bit8u *header, Bit8s options, ...)
 
 	set_textcolor(fg_bak, bg_bak);
 
-	ds_writew(TEXT_X, bak1);
-	ds_writew(TEXT_Y, bak2);
+	g_text_x = bak1;
+	g_text_y = bak2;
 	g_text_x_end = bak3;
 	g_in_key_ext = 0;
 

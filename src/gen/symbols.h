@@ -240,8 +240,8 @@
 //#define BG_COLOR                        (0x477f)     /* Bit16s */
 //#define FG_COLOR                        (0x4781)     /* Bit16s[6] */
 //#define TEXT_X_END                      (0x478d)     /* Bit16s */
-#define TEXT_Y                          (0x478f)     /* Bit16s */
-#define TEXT_X                          (0x4791)     /* Bit16s */
+//#define TEXT_Y                          (0x478f)     /* Bit16s */
+//#define TEXT_X                          (0x4791)     /* Bit16s */
 
 #define PICBUF3                         (0x4797)     /* RealPt */
 #define PICBUF2                         (0x479b)     /* RealPt */
