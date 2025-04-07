@@ -1343,7 +1343,7 @@ static signed short *g_mouse_last_cursor;
 static signed short *g_mouse_current_cursor;
 static char dummy14[0x40];
 
-//static char MOUSE_BACKBUFFER[256];
+static char g_mouse_backbuffer[256];
 //static Bit8u *buffer_sex_dat;
 //static Bit8u *buffer_popup_nvf;
 
@@ -2355,7 +2355,7 @@ void save_mouse_bg(void)
 
 	for (Y = 0; Y < diffY; vgaptr += 320, Y++)
 		for (X = 0; X < diffX; X++)
-			ds_writeb(MOUSE_BACKBUFFER + 16 * Y + X, mem_readb(Real2Phys(vgaptr) + X));
+			g_mouse_backbuffer[16 * Y + X] = mem_readb(Real2Phys(vgaptr) + X);
 }
 
 /* Borlandified and identical */
@@ -2384,7 +2384,7 @@ void restore_mouse_bg(void)
 
 	for (i = 0; i < diffY; vgaptr += 320, i++)
 		for (j = 0; j < diffX; j++)
-			mem_writeb(Real2Phys(vgaptr) + j, ds_readb(MOUSE_BACKBUFFER + 16 * i + j));
+			mem_writeb(Real2Phys(vgaptr) + j, g_mouse_backbuffer[16 * i + j]);
 }
 
 
