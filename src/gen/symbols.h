@@ -262,5 +262,5 @@
 //#define WO_VAR3                         (0x47d9)     /* Bit16s */
 //#define DISPLAY_PAGE_BAK                (0x47db)     /* Bit16s */
 //#define DISPLAY_MODE_BAK                (0x47dd)     /* Bit16s */
-#define RO_VAR                          (0x47e3)     /* RealPt */
+//#define RO_VAR                          (0x47e3)     /* RealPt */
 #endif

@@ -1382,7 +1382,7 @@ static signed short g_wo_var3;
 static signed short g_display_page_bak;
 static signed short g_display_mode_bak;
 
-//static const Bit16u ro_var[7] = {0, 0, 0, 0, 0, 0, 0};
+static signed short g_ro_var[7];
 
 
 #if defined(__BORLANDC__)
@@ -3345,32 +3345,32 @@ void print_str(char *str, Bit16s x, Bit16s y)
 
 		} else if (c == 0x7e) {
 			/* CRUFT */
-			if (x < ds_readws(RO_VAR + 0)) {
-				x = ds_readw(RO_VAR + 0);
+			if (x < g_ro_var[0]) {
+				x = g_ro_var[0];
 				continue;
 			}
-			if (x < ds_readws(RO_VAR + 2)) {
-				x = ds_readw(RO_VAR + 2);
+			if (x < g_ro_var[1]) {
+				x = g_ro_var[1];
 				continue;
 			}
-			if (x < ds_readws(RO_VAR + 4)) {
-				x = ds_readw(RO_VAR + 4);
+			if (x < g_ro_var[2]) {
+				x = g_ro_var[2];
 				continue;
 			}
-			if (x < ds_readws(RO_VAR + 6)) {
-				x = ds_readw(RO_VAR + 6);
+			if (x < g_ro_var[3]) {
+				x = g_ro_var[3];
 				continue;
 			}
-			if (x < ds_readws(RO_VAR + 8)) {
-				x = ds_readw(RO_VAR + 8);
+			if (x < g_ro_var[4]) {
+				x = g_ro_var[4];
 				continue;
 			}
-			if (x < ds_readws(RO_VAR + 10)) {
-				x = ds_readw(RO_VAR + 10);
+			if (x < g_ro_var[5]) {
+				x = g_ro_var[5];
 				continue;
 			}
-			if (x < ds_readws(RO_VAR + 12)) {
-				x = ds_readw(RO_VAR + 12);
+			if (x < g_ro_var[6]) {
+				x = g_ro_var[6];
 				continue;
 			}
 		} else if ((c == 0xf0) || (c == 0xf1) || (c == 0xf2) || (c == 0xf3)) {
