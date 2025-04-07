@@ -1330,8 +1330,12 @@ static inline char* get_text(Bit16s no) {
 static signed short g_have_mouse;
 static signed short dummy13;
 static signed short g_wo_var1;
-//static unsigned short IN_KEY_ASCII;
-//static unsigned short IN_KEY_EXT;
+
+static signed short g_mouse1_event1;
+static signed short g_mouse2_event;
+static signed short g_mouse1_event2;
+static signed short g_in_key_ascii;
+static signed short g_in_key_ext;
 
 //static unsigned short *mouse_p1;
 //static unsigned short *mouse_p2;
@@ -1833,11 +1837,11 @@ void interrupt mouse_isr(void)
 	
 	if (g_mouse_locked == 0) {
 		if (l_si & 0x2) {
-			ds_writew(MOUSE1_EVENT2, 1);
-			ds_writew(MOUSE1_EVENT1, 1);
+			g_mouse1_event2 = 1;
+			g_mouse1_event1 = 1;
 		}
 		if (l_si & 0x8) {
-			ds_writew(MOUSE2_EVENT, 1);
+			g_mouse2_event = 1;
 		}
 		if (l_si & 0x1) {
 			p1 = 3;
@@ -2149,11 +2153,11 @@ void handle_input(void)
 		}
 	}
 
-	if (ds_readw(MOUSE1_EVENT2) == 0) {
+	if (g_mouse1_event2 == 0) {
 		// Hm, ...
 		if (g_have_mouse == 0);
 	} else {
-		ds_writew(MOUSE1_EVENT2, 0);
+		g_mouse1_event2 = 0;
 		si = 0;
 
 		if (g_action_table)
@@ -2168,9 +2172,9 @@ void handle_input(void)
 			for (i = 0; i < 15; i++)
 				wait_for_vsync();
 
-			if (ds_readw(MOUSE1_EVENT2) != 0) {
+			if (g_mouse1_event2 != 0) {
 				g_wo_var1 = 1;
-				ds_writew(MOUSE1_EVENT2, 0);
+				g_mouse1_event2 = 0;
 			}
 
 			if (si == 0xfd) {
@@ -2905,8 +2909,8 @@ void vsync_or_key(Bit16s val)
 
 	for (i = 0; i < val; i++) {
 		handle_input();
-		if (ds_readw(IN_KEY_EXT) || ds_readw(MOUSE2_EVENT)) {
-			ds_writew(MOUSE2_EVENT, 0);
+		if (ds_readw(IN_KEY_EXT) || g_mouse2_event) {
+			g_mouse2_event = 0;
 			ds_writew(IN_KEY_EXT, KEY_RET);
 			return;
 		}
@@ -3617,16 +3621,16 @@ Bit16s enter_string(char *dst, Bit16s x, Bit16s y, Bit16s num, Bit16s zero)
 		print_chr(0x5f, di, y);
 	}
 	wait_for_keypress();
-	ds_writew(MOUSE1_EVENT1, 0);
+	g_mouse1_event1 = 0;
 
 	c = 0;
 	while ((c != 0xd) || (pos == 0)) {
 		do {
-			do {} while (!CD_bioskey(1) && ds_readw(MOUSE1_EVENT1) == 0);
+			do {} while (!CD_bioskey(1) && (g_mouse1_event1 == 0));
 
-			if (ds_readw(MOUSE1_EVENT1)) {
+			if (g_mouse1_event1) {
 				ds_writew(IN_KEY_ASCII, 0x0d);
-				ds_writew(MOUSE1_EVENT1, ds_writew(MOUSE1_EVENT2, 0));
+				g_mouse1_event1 = g_mouse1_event2 = 0;
 			} else {
 				ds_writew(IN_KEY_EXT, (ds_writews(IN_KEY_ASCII, CD_bioskey(0))) >> 8);
 				ds_and_ws(IN_KEY_ASCII, 0xff);
@@ -3858,7 +3862,7 @@ Bit16s infobox(char *msg, Bit16s digits)
 
 	print_line(msg);
 
-	ds_writew(MOUSE2_EVENT, 0);
+	g_mouse2_event = 0;
 	call_mouse();
 
 	if (digits) {
@@ -4066,7 +4070,7 @@ Bit16s gui_radio(Bit8u *header, Bit8s options, ...)
 	g_mouse_posy_min = g_upper_border + 8 * (lines_header + 1);
 	g_mouse_posy_max = (g_upper_border + (8 * options + (lines_header + 1) * 8)) - 1;
 	call_mouse();
-	ds_writew(MOUSE2_EVENT, 0);
+	g_mouse2_event = 0;
 
 #if defined(__BORLANDC__)
 	asm { db 0x0f, 0x1f, 0x00} // BCC Sync-Point
@@ -4081,13 +4085,13 @@ Bit16s gui_radio(Bit8u *header, Bit8s options, ...)
 			fill_radio_button(r6, di, lines_header);
 			r6 = di;
 		}
-		if (ds_readw(MOUSE2_EVENT) != 0 ||
+		if ((g_mouse2_event != 0) ||
 			ds_readw(IN_KEY_EXT) == KEY_ESC ||
 			ds_readw(IN_KEY_EXT) == KEY_PGDOWN) {
 			/* has the selection been canceled */
 			retval = -1;
 			r5 = 1;
-			ds_writew(MOUSE2_EVENT, 0);
+			g_mouse2_event = 0;
 		}
 		if (ds_readw(IN_KEY_EXT) == KEY_RET) {
 			/* has the return key been pressed */
@@ -4271,7 +4275,7 @@ void do_gen(void)
 		g_level = gui_radio((Bit8u*)get_text(0), 2, get_text(1), get_text(2));
 	}
 
-	ds_writew(MOUSE2_EVENT, 1);
+	g_mouse2_event = 1;
 
 	/* main loop */
 	while (!di) {
@@ -4284,7 +4288,7 @@ void do_gen(void)
 		handle_input();
 		g_action_table = (struct mouse_action*)NULL;
 
-		if (ds_readw(MOUSE2_EVENT) || ds_readw(IN_KEY_EXT) == KEY_PGUP) {
+		if (g_mouse2_event || ds_readw(IN_KEY_EXT) == KEY_PGUP) {
 			/* print the menu for each page */
 			switch (g_gen_page) {
 				case 0: {
@@ -4316,7 +4320,7 @@ void do_gen(void)
 							case 4: {
 								bc_memset(RealMake(datseg, HERO_NAME), 0, 0x6da);
 								clear_hero();
-								ds_writew(MOUSE2_EVENT,	1);
+								g_mouse2_event = 1;
 								g_screen_var = 1;
 								break;
 							}
