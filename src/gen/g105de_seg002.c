@@ -1260,7 +1260,9 @@ void far *g_irq78_bak;
 #endif
 static signed long g_gendat_offset;
 
-//signed short HANDLE_TIMBRE;
+static signed short g_handle_timbre;
+static signed short g_timbre_cache_size;
+static signed long g_state_table_size;
 //void *snd_driver;
 //void *form_xmid;
 //void *SND_TIMBRE_CACHE;
@@ -1493,8 +1495,8 @@ unsigned short load_seq(Bit16s sequence_num)
 	Bit16s si;
 	Bit16s di; // di = bank, si = patch
 
-	/* open MT32EMUL.XMI */
-	if ((ds_writews(HANDLE_TIMBRE, open_datfile(35))) != -1) {
+	/* open SAMPLE.AD */
+	if ((g_handle_timbre = open_datfile(35)) != -1) {
 
 		if ((ds_writews(SND_SEQUENCE, AIL_register_sequence(ds_readws(SND_DRIVER_HANDLE),
 			(RealPt)ds_readd(FORM_XMID), sequence_num,
@@ -1510,15 +1512,16 @@ unsigned short load_seq(Bit16s sequence_num)
 					bc_free(ptr);
 				}
 			}
+			/* Remark: set g_handle_timbre to 0 after bc_close() */
 
-			bc_close(ds_readw(HANDLE_TIMBRE));
+			bc_close(g_handle_timbre);
 
 			return 1;
 		} else {
 #if !defined(__BORLANDC__)
-			bc_close(ds_readw(HANDLE_TIMBRE));
+			bc_close(g_handle_timbre);
 #else
-			//bc_close(ds_readw(HANDLE_TIMBRE));
+			//bc_close(g_handle_timbre);
 			asm { db 0x0f, 0x1d, 0x40, 0x00; db 0x0f, 0x1d, 0x04, 0x00}; // BCC Sync-Point
 #endif
 		}
@@ -1543,10 +1546,10 @@ RealPt get_timbre(Bit16s bank, Bit16s patch)
 {
 	RealPt timbre_ptr;
 
-	bc_lseek(ds_readw(HANDLE_TIMBRE), g_gendat_offset, SEEK_SET);
+	bc_lseek(g_handle_timbre, g_gendat_offset, SEEK_SET);
 
 	do {
-		read_datfile(ds_readw(HANDLE_TIMBRE), &g_current_timbre_patch, 6);
+		read_datfile(g_handle_timbre, &g_current_timbre_patch, 6);
 
 		if (g_current_timbre_bank == -1)
 			return 0;
@@ -1555,18 +1558,18 @@ RealPt get_timbre(Bit16s bank, Bit16s patch)
 //	Remark: Try out the next line instead and get a different sound:
 //	} while ((g_current_timbre_bank != bank) && (g_current_timbre_patch != patch));
 
-	bc_lseek(ds_readw(HANDLE_TIMBRE), g_gendat_offset + g_current_timbre_offset, SEEK_SET);
-	read_datfile(ds_readw(HANDLE_TIMBRE), &g_current_timbre_length, 2);
+	bc_lseek(g_handle_timbre, g_gendat_offset + g_current_timbre_offset, SEEK_SET);
+	read_datfile(g_handle_timbre, &g_current_timbre_length, 2);
 
 	timbre_ptr = gen_alloc(g_current_timbre_length);
 
 #if !defined(__BORLANDC__)
-	read_datfile(ds_readw(HANDLE_TIMBRE),
+	read_datfile(g_handle_timbre,
 		Real2Host(timbre_ptr) + 2,
 		host_writews(Real2Host(timbre_ptr), g_current_timbre_length) - 2);
 #else
 	asm { db 0x66, 0x90; db 0x66, 0x90;}
-	read_datfile(ds_readw(HANDLE_TIMBRE),
+	read_datfile(g_handle_timbre,
 		0L, // BCC Sync-Point
 		host_writew(Real2Host(timbre_ptr), g_current_timbre_length) - 2);
 #endif
@@ -1623,22 +1626,21 @@ unsigned short load_driver(RealPt fname, Bit16s type, Bit16s port)
 					host_readw(Real2Host((RealPt)ds_readd(SND_DRIVER_DESC)) + 0x10),
 					host_readw(Real2Host((RealPt)ds_readd(SND_DRIVER_DESC)) + 0x12));
 				if (type == 3) {
-					ds_writed(STATE_TABLE_SIZE,
-						AIL_state_table_size(ds_readw(SND_DRIVER_HANDLE)));
+					g_state_table_size =
+						AIL_state_table_size(ds_readw(SND_DRIVER_HANDLE));
 
 					ds_writed(STATE_TABLE,
-						(Bit32u)gen_alloc(ds_readd(STATE_TABLE_SIZE)));
+						(Bit32u)gen_alloc(g_state_table_size));
 
-					ds_writew(TIMBRE_CACHE_SIZE,
-						AIL_default_timbre_cache_size(ds_readw(SND_DRIVER_HANDLE)));
+					g_timbre_cache_size =
+						AIL_default_timbre_cache_size(ds_readw(SND_DRIVER_HANDLE));
 
-					if (ds_readw(TIMBRE_CACHE_SIZE) != 0) {
-						ds_writed(SND_TIMBRE_CACHE,
-							(Bit32u)gen_alloc(ds_readw(TIMBRE_CACHE_SIZE)));
+					if (g_timbre_cache_size != 0) {
+						ds_writed(SND_TIMBRE_CACHE, (Bit32u)gen_alloc(g_timbre_cache_size));
 #if !defined(__BORLANDC__)
 						AIL_define_timbre_cache(ds_readw(SND_DRIVER_HANDLE),
 							(RealPt)ds_readd(SND_TIMBRE_CACHE),
-							ds_readw(TIMBRE_CACHE_SIZE));
+							g_timbre_cache_size);
 #else
 
 #endif

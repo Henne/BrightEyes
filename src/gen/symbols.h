@@ -178,9 +178,9 @@
 //#define FLEN_LEFT                       (0x3f2e)    /* Bit32s */
 //#define IRQ78_BAK                       (0x3f32)    /* RealPt */
 //#define GENDAT_OFFSET                   (0x3f36)    /* Bit32s */
-#define HANDLE_TIMBRE                   (0x3f3a)    /* Bit16s */
-#define TIMBRE_CACHE_SIZE               (0x3f3c)    /* Bit16s */
-#define STATE_TABLE_SIZE                (0x3f3e)    /* Bit32u */
+//#define HANDLE_TIMBRE                   (0x3f3a)    /* Bit16s */
+//#define TIMBRE_CACHE_SIZE               (0x3f3c)    /* Bit16s */
+//#define STATE_TABLE_SIZE                (0x3f3e)    /* Bit32u */
 #define SND_DRIVER                      (0x3f42)    /* RealPt */
 #define FORM_XMID                       (0x3f46)    /* RealPt */
 #define SND_TIMBRE_CACHE                (0x3f4a)    /* RealPt */
