@@ -2526,8 +2526,7 @@ void load_typus(Bit16u typus)
 
 	/* check if this image is in the buffer */
 	if (g_typus_buffer[typus]) {
-		decomp_pp20((RealPt)ds_readd(GEN_PTR5),
-				g_typus_buffer[typus], g_typus_len[typus]);
+		decomp_pp20(g_gen_ptr5,	g_typus_buffer[typus], g_typus_len[typus]);
 		return;
 	}
 
@@ -2538,14 +2537,11 @@ void load_typus(Bit16u typus)
 
 		read_datfile(handle, g_typus_buffer[typus], g_typus_len[typus]);
 
-		decomp_pp20((RealPt)ds_readd(GEN_PTR5),
-			g_typus_buffer[typus], g_typus_len[typus]);
+		decomp_pp20(g_gen_ptr5, g_typus_buffer[typus], g_typus_len[typus]);
 	} else {
 		/* load the file direct */
 		read_datfile(handle, Real2Host(ds_readd(GEN_PTR1_DIS)), 25000);
-		decomp_pp20((RealPt)ds_readd(GEN_PTR5),
-			Real2Host(ds_readd(GEN_PTR1_DIS)),
-			get_filelength(handle));
+		decomp_pp20(g_gen_ptr5, Real2Host(ds_readd(GEN_PTR1_DIS)), get_filelength(handle));
 	}
 	bc_close(handle);
 }
@@ -2603,20 +2599,20 @@ void save_chr(void)
 
 	/* copy name to buffer */
 	/* TODO: should use strncpy() here */
-	bc_strcpy((RealPt)ds_readd(GEN_PTR2), RealMake(datseg, HERO_NAME));
+	bc_strcpy(g_gen_ptr2, RealMake(datseg, HERO_NAME));
 
 	/* prepare filename */
 	for (i = 0; i < 8; i++) {
 		/* leave the loop if the string ends */
-		if (!host_readbs(Real2Host((RealPt)ds_readd(GEN_PTR2) + i)))
+		if (!host_readbs(g_gen_ptr2 + i))
 			break;
-		if (!isalnum(host_readbs(Real2Host((RealPt)ds_readd(GEN_PTR2) + i)))) {
+		if (!isalnum(host_readbs(g_gen_ptr2 + i))) {
 			/* replace non alphanumerical characters with underscore */
-			host_writeb(Real2Host((RealPt)ds_readd(GEN_PTR2)) + i, '_');
+			host_writeb(g_gen_ptr2 + i, '_');
 		}
 	}
 
-	strncpy(filename, (char*)Real2Host(ds_readd(GEN_PTR2)), 8);
+	strncpy(filename, g_gen_ptr2, 8);
 	filename[8] = 0;
 	strcat(filename, (char*)g_str_chr);
 
@@ -2809,12 +2805,12 @@ Bit16s open_datfile(Bit16u index)
 
 	while ((handle = bc_open(g_str_dsagen_dat, 0x8001)) == -1)
 	{
-		sprintf((char*)Real2Host(ds_readd(GEN_PTR2)),
+		sprintf(g_gen_ptr2,
 			(const char*)g_str_file_missing,
 			(const char*)g_fnames_g105de[index]);
 
 		g_useless_variable = 1;
-		infobox((char*)Real2Host(ds_readd(GEN_PTR2)), 0);
+		infobox(g_gen_ptr2, 0);
 		g_useless_variable = 0;
 	}
 
@@ -3868,11 +3864,11 @@ Bit16s infobox(char *msg, Bit16s digits)
 	call_mouse();
 
 	if (digits) {
-		enter_string((char*)Real2Host((RealPt)ds_readd(GEN_PTR3)),
+		enter_string((char*)g_gen_ptr3,
 			g_left_border + (di - digits * 6) / 2,
 			g_upper_border + 8 * lines - 2, digits, 0);
 
-		retval = (Bit16u)atol((char*)Real2Host((RealPt)ds_readd(GEN_PTR3)));
+		retval = (Bit16u)atol((char*)g_gen_ptr3);
 	} else {
 		g_action_table = (struct mouse_action*)g_action_input;
 		vsync_or_key(150 * lines);
@@ -4494,7 +4490,7 @@ void refresh_screen(void)
 			if (ds_readbs(HERO_TYPUS) != 0) {
 
 				g_need_refresh = 1;
-				copy_to_screen((RealPt)ds_readd(GEN_PTR5), dst, 128, 184, 0);
+				copy_to_screen(g_gen_ptr5, dst, 128, 184, 0);
 
 				if (ds_readbs(HERO_SEX) != 0) {
 					print_str(get_text(271 + ds_readbs(HERO_TYPUS)),
@@ -4657,12 +4653,12 @@ void new_values(void)
 			}
 		}
 
-		sprintf((char*)Real2Host(ds_readd(GEN_PTR2)), get_text(46), randval);
+		sprintf(g_gen_ptr2, get_text(46), randval);
 
 		do {
 			g_text_x_mod = -80;
 
-			di = gui_radio((Bit8u*)Real2Host(ds_readd(GEN_PTR2)),
+			di = gui_radio((Bit8u*)g_gen_ptr2,
 				unset_attribs,
 				g_type_names[0], g_type_names[1], g_type_names[2],
 				g_type_names[3], g_type_names[4], g_type_names[5],
@@ -4701,12 +4697,12 @@ void new_values(void)
 			}
 		}
 
-		sprintf((char*)Real2Host(ds_readd(GEN_PTR2)), get_text(46), randval);
+		sprintf(g_gen_ptr2, get_text(46), randval);
 
 		do {
 			g_text_x_mod = -80;
 
-			di = gui_radio((Bit8u*)Real2Host(ds_readd(GEN_PTR2)),
+			di = gui_radio((Bit8u*)g_gen_ptr2,
 				unset_attribs,
 				g_type_names[0], g_type_names[1], g_type_names[2],
 				g_type_names[3], g_type_names[4], g_type_names[5],
@@ -4858,9 +4854,9 @@ void fill_values(void)
 		/* get convertable increase attempts */
 		if ((di = g_initial_conv_incs[ds_readbs(HERO_TYPUS) - 7]) && (g_level == 2) && gui_bool((Bit8u*)get_text(269))) {
 			/* create string */
-			sprintf((char*)Real2Host(ds_readd(GEN_PTR2)), get_text(270), di);
+			sprintf(g_gen_ptr2, get_text(270), di);
 
-			i = infobox((char*)Real2Host(ds_readd(GEN_PTR2)), 1);
+			i = infobox(g_gen_ptr2, 1);
 
 			if (i > 0) {
 				/* spell attempts to skill attempts */
@@ -4874,9 +4870,9 @@ void fill_values(void)
 			} else {
 
 				/* create string */
-				sprintf((char*)Real2Host(ds_readd(GEN_PTR2)), get_text(271), di);
+				sprintf(g_gen_ptr2, get_text(271), di);
 
-				i = infobox((char*)Real2Host(ds_readd(GEN_PTR2)), 1);
+				i = infobox(g_gen_ptr2, 1);
 				if (i > 0) {
 					if (i > di)
 						i = di;
@@ -5271,7 +5267,7 @@ void select_typus(void)
 			update_mouse_cursor();
 			call_fill_rect_gen((RealPt)ds_readd(VGA_MEMSTART), 16, 8, 143, 191, 0);
 			wait_for_vsync();
-			set_palette((RealPt)ds_readd(GEN_PTR5) + 0x5c02, 0, 32);
+			set_palette(g_gen_ptr5 + 0x5c02, 0, 32);
 			call_mouse();
 
 			g_head_typus = (ds_readbs(HERO_TYPUS) > 10 ? 10 : ds_readbs(HERO_TYPUS));
@@ -5853,20 +5849,20 @@ void print_values(void)
 			if (ds_readbs(HERO_TYPUS) == 0)	return;
 
 			/* print height */
-			sprintf((char*)Real2Host(ds_readd(GEN_PTR2)), get_text(70), ds_readb(HERO_HEIGHT));
-			print_str((char*)Real2Host(ds_readd(GEN_PTR2)), 205, 25);
+			sprintf(g_gen_ptr2, get_text(70), ds_readb(HERO_HEIGHT));
+			print_str(g_gen_ptr2, 205, 25);
 
 			/* print weight */
-			sprintf((char*)Real2Host(ds_readd(GEN_PTR2)), get_text(71), ds_readws(HERO_WEIGHT));
+			sprintf(g_gen_ptr2, get_text(71), ds_readws(HERO_WEIGHT));
 
-			print_str((char*)Real2Host(ds_readd(GEN_PTR2)), 205, 37);
+			print_str(g_gen_ptr2, 205, 37);
 
 			/* print god name */
 			print_str(get_text(56 + ds_readbs(HERO_GOD)), 205, 49);
 
 			/* print money */
-			make_valuta_str((char*)Real2Host(ds_readd(GEN_PTR2)), ds_readds(HERO_MONEY));
-			print_str((char*)Real2Host(ds_readd(GEN_PTR2)), 205, 61);
+			make_valuta_str(g_gen_ptr2, ds_readds(HERO_MONEY));
+			print_str(g_gen_ptr2, 205, 61);
 
 #if !defined(__BORLANDC__)
 			/* print LE */
@@ -7168,7 +7164,7 @@ void choose_typus(void)
 	update_mouse_cursor();
 	call_fill_rect_gen((RealPt)ds_readd(VGA_MEMSTART), 16, 8, 143, 191, 0);
 	wait_for_vsync();
-	set_palette((RealPt)ds_readd(GEN_PTR5) + 0x5c02, 0, 32);
+	set_palette(g_gen_ptr5 + 0x5c02, 0, 32);
 	call_mouse();
 
 
@@ -7339,22 +7335,22 @@ static void BE_cleanup(void)
 		g_buffer_dmenge_dat = NULL;
 	}
 
-	if ((ptr = (RealPt)ds_readd(GEN_PTR5) - 8) != 0) {
-		D1_INFO("Free GEN_PTR5\t\t 0x%08x\n", ptr);
-		bc_free(ptr);
-		ds_writed(GEN_PTR5, 0);
+	if ((host_ptr = g_gen_ptr5 - 8) != 0) {
+		D1_INFO("Free GEN_PTR5\t\t 0x%08x\n", host_ptr);
+		free(ptr);
+		g_gen_ptr5 = NULL;
 	}
 
-	if ((ptr = (RealPt)ds_readd(GEN_PTR4)) != 0) {
-		D1_INFO("Free GEN_PTR4\t\t 0x%08x\n", ptr);
-		bc_free(ptr);
-		ds_writed(GEN_PTR4, 0);
+	if ((host_ptr = g_gen_ptr4) != 0) {
+		D1_INFO("Free GEN_PTR4\t\t 0x%08x\n", host_ptr);
+		free(host_ptr);
+		g_gen_ptr4 = NULL;
 	}
 
-	if ((ptr = (RealPt)ds_readd(GEN_PTR2)) != 0) {
-		D1_INFO("Free GEN_PTR2\t\t 0x%08x\n", ptr);
-		bc_free(ptr);
-		ds_writed(GEN_PTR2, 0);
+	if ((host_ptr = g_gen_ptr2) != 0) {
+		D1_INFO("Free GEN_PTR2\t\t 0x%08x\n", host_ptr);
+		free(host_ptr);
+		g_gen_ptr2 = NULL;
 	}
 
 	if ((ptr = (RealPt)ds_readd(PAGE_BUFFER)) != 0) {
@@ -7776,11 +7772,11 @@ void alloc_buffers(void)
 
 	ds_writed(PAGE_BUFFER, (Bit32u)gen_alloc(50000));
 
-	ds_writed(GEN_PTR2, (Bit32u)gen_alloc(1524));
-	ds_writed(GEN_PTR3, (Bit32u)((RealPt)ds_readd(GEN_PTR2) + 1500));
+	g_gen_ptr2 = gen_alloc(1524);
+	g_gen_ptr3 = g_gen_ptr2 + 1500;
 
 	// unused
-	ds_writed(GEN_PTR4, (Bit32u)gen_alloc(200));
+	g_gen_ptr4 = gen_alloc(200);
 
 	g_buffer_text = gen_alloc(6000);
 
@@ -7794,7 +7790,7 @@ void alloc_buffers(void)
 
 	g_buffer_sex_dat = gen_alloc(812);
 
-	ds_writed(GEN_PTR5, (Bit32u)(gen_alloc(23660) + 8));
+	g_gen_ptr5 = (gen_alloc(23660) + 8);
 
 	g_buffer_dmenge_dat = (gen_alloc(23660) + 8);
 

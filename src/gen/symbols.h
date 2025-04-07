@@ -249,10 +249,10 @@
 //#define GEN_PTR6                        (0x47a3)
 //#define BUFFER_DMENGE_DAT               (0x47a7)     /* RealPt DMENGE.DAT */
 
-#define GEN_PTR5                        (0x47b3)     /* RealPt */
-#define GEN_PTR4                        (0x47b7)     /* RealPt */
-#define GEN_PTR3                        (0x47bb)     /* RealPt */
-#define GEN_PTR2                        (0x47bf)     /* RealPt */
+//#define GEN_PTR5                        (0x47b3)     /* RealPt */
+//#define GEN_PTR4                        (0x47b7)     /* RealPt */
+//#define GEN_PTR3                        (0x47bb)     /* RealPt */
+//#define GEN_PTR2                        (0x47bf)     /* RealPt */
 
 #define GFX_PTR                         (0x47c7)     /* RealPt */
 #define VGA_MEMSTART                    (0x47cb)     /* RealPt */
