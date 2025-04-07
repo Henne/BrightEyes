@@ -236,8 +236,8 @@
 //#define BUFFER_HEADS_DAT                (0x4771)    /* RealPt (HEADS.DAT, Intro: ATTIC, FANPRO.NVF, DSALOGO.DAT, GENTIT.DAT) */
 //#define BUFFER_TEXT                     (0x4775)
 //#define BUFFER_FONT6                    (0x4779)
-#define COL_INDEX                       (0x477d)     /* Bit16s */
-#define BG_COLOR                        (0x477f)     /* Bit16s */
+//#define COL_INDEX                       (0x477d)     /* Bit16s */
+//#define BG_COLOR                        (0x477f)     /* Bit16s */
 #define FG_COLOR                        (0x4781)     /* Bit16s[6] */
 #define TEXT_X_END                      (0x478d)     /* Bit16s */
 #define TEXT_Y                          (0x478f)     /* Bit16s */

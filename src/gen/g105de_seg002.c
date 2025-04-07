@@ -1351,12 +1351,13 @@ static Bit8u *g_buffer_heads_dat;
 static Bit8u *g_buffer_text;
 static Bit8u *g_buffer_font6;
 
-//static Bit16u col_index;
-//static Bit16u bg_color;
-//static Bit16u fg_color[6];
-//static Bit16u text_x_end;
-//static Bit16u text_y;
-//static Bit16u text_x;
+static signed short g_col_index;
+static signed short g_bg_color;
+static signed short g_fg_color[6];
+static signed short g_text_x_end;
+static signed short g_text_y;
+static signed short g_text_x;
+static signed long dummy15;
 
 //static Bit8u *picbuf3;
 //static Bit8u *picbuf2;
@@ -3377,7 +3378,7 @@ void print_str(char *str, Bit16s x, Bit16s y)
 			}
 		} else if ((c == 0xf0) || (c == 0xf1) || (c == 0xf2) || (c == 0xf3)) {
 			/* change text color */
-			ds_writew(COL_INDEX, c - 0xf0);
+			g_col_index = c - 0xf0;
 		} else {
 			/* print normal */
 			x += print_chr(c, x, y);
@@ -3469,7 +3470,7 @@ void fill_smth(void)
 
 	for (i = 0; i < 8; ptr += 8, i++)
 		for (j = 0; j < 8; j++)
-			host_writeb(Real2Host(ptr) + j, (unsigned char)ds_readws(BG_COLOR));
+			host_writeb(Real2Host(ptr) + j, (unsigned char)g_bg_color);
 }
 
 /* Borlandified and identical */
@@ -3490,7 +3491,7 @@ void fill_smth2(Bit8u* sptr) {
 		for (j = 0; j < 8; j++) {
 			if ((0x80 >> j) & mask) {
 				host_writeb(Real2Host(ptr) + j,
-					(unsigned char)ds_readws(FG_COLOR + 2 * ds_readw(COL_INDEX)));
+					(unsigned char)ds_readws(FG_COLOR + 2 * g_col_index));
 			}
 		}
 	}
@@ -3523,7 +3524,7 @@ void call_blit_smth3(RealPt dst, Bit16s v1, Bit16s v2, Bit16s v3, Bit16s v4)
 void set_textcolor(Bit16s fg, Bit16s bg)
 {
 	ds_writew(FG_COLOR + 0, fg);
-	ds_writew(BG_COLOR, bg);
+	g_bg_color = bg;
 }
 
 /* Borlandified and identical */
@@ -3531,7 +3532,7 @@ void set_textcolor(Bit16s fg, Bit16s bg)
 void get_textcolor(Bit16s *p_fg, Bit16s *p_bg)
 {
 	host_writew((Bit8u*)p_fg, ds_readw(FG_COLOR + 0));
-	host_writew((Bit8u*)p_bg, ds_readw(BG_COLOR));
+	host_writew((Bit8u*)p_bg, g_bg_color);
 }
 
 #if defined(__BORLANDC__)
