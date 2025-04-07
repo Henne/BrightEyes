@@ -1252,9 +1252,12 @@ static signed short g_got_mu_bonus;
 
 static char dummy11[0x26f];
 
-//static Bit32s FLEN;
-//static Bit32s FLEN_LEFT;
+static signed long g_flen;
+static signed long g_flen_left;
 
+#if defined(__BORLANDC__)
+void far *g_irq78_bak;
+#endif
 //signed short HANDLE_TIMBRE;
 
 //void *snd_driver;
@@ -1951,7 +1954,7 @@ void mouse_do_enable(Bit16u val, RealPt ptr)
 #endif
 
 	/* save adress of old IRQ 0x78 */
-	ds_writed(IRQ78_BAK, (Bit32u)bc__dos_getvect(0x78));
+	g_irq78_bak = ((void interrupt far (*)(void))bc__dos_getvect(0x78));
 
 	/* set new IRQ 0x78 */
 	bc__dos_setvect(0x78, (INTCAST)ptr);
@@ -1968,7 +1971,7 @@ void mouse_do_disable(void)
 	Bit16u v1, v2, v3, v4, v5;
 
 	/* restore the old int 0x78 handler */
-	bc__dos_setvect(0x78, (INTCAST)ds_readd(IRQ78_BAK));
+	bc__dos_setvect(0x78, (INTCAST)g_irq78_bak);
 
 	/* uninstall mouse event handler */
 	v1 = 0x0c;
@@ -2832,8 +2835,8 @@ Bit32s get_archive_offset(const char *name, Bit8u *table)
 		if (!strncmp((char*)name, (char*)table + i * 16, 12)) {
 
 			/* calculate offset and length */
-			ds_writed(FLEN_LEFT, ds_writed(FLEN,
-				host_readd(table + (i + 1) * 16 + 0x0c) - host_readd(table + i * 16 + 0x0c)));
+			g_flen_left = g_flen =
+				host_readd(table + (i + 1) * 16 + 0x0c) - host_readd(table + i * 16 + 0x0c);
 
 			/* save length in 2 variables */
 
@@ -2847,13 +2850,13 @@ Bit32s get_archive_offset(const char *name, Bit8u *table)
 /* Borlandified and identical */
 Bit16s read_datfile(Bit16u handle, Bit8u *buf, Bit16u len)
 {
-	if (len > ds_readd(FLEN_LEFT))
-		len = (unsigned short)ds_readd(FLEN_LEFT);
+	if (len > g_flen_left)
+		len = (unsigned short)g_flen_left;
 
 	len = bc__read(handle, buf, len);
 
 
-	ds_sub_ds(FLEN_LEFT, len);
+	g_flen_left -= len;
 #if defined(__BORLANDC__)
 	// return len is implicit here
 #else
@@ -2864,7 +2867,7 @@ Bit16s read_datfile(Bit16u handle, Bit8u *buf, Bit16u len)
 /* Borlandified and identical */
 Bit32s get_filelength(Bit16s unused)
 {
-	return ds_readd(FLEN);
+	return g_flen;
 }
 
 /* Borlandified and identical */
