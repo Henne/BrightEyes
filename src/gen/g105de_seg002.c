@@ -1339,8 +1339,9 @@ static signed short g_in_key_ext;
 static unsigned char g_array_1[64];
 static unsigned char g_array_2[64];
 
-//static unsigned short *mouse_p1;
-//static unsigned short *mouse_p2;
+static signed short *g_mouse_last_cursor;
+static signed short *g_mouse_current_cursor;
+static char dummy14[0x40];
 
 //static char MOUSE_BACKBUFFER[256];
 //static Bit8u *buffer_sex_dat;
@@ -1897,8 +1898,8 @@ void mouse_enable(void)
 			g_have_mouse = 0;
 		}
 
-		ds_writed(MOUSE_CURRENT_CURSOR, (Bit32u)g_mouse_mask);
-		ds_writed(MOUSE_LAST_CURSOR, (Bit32u)g_mouse_mask);
+		g_mouse_current_cursor = g_mouse_mask;
+		g_mouse_last_cursor = g_mouse_mask;
 
 		if (g_have_mouse == 2) {
 
@@ -2105,21 +2106,15 @@ void mouse(void)
 void mouse_compare(void)
 {
 	/* these pointers never differ in gen */
-	if (g_mouse_moved || ds_readd(MOUSE_LAST_CURSOR) != ds_readd(MOUSE_CURRENT_CURSOR)) {
+	if (g_mouse_moved || g_mouse_last_cursor != g_mouse_current_cursor) {
 
 		/* copy a pointer */
-		ds_writed(MOUSE_LAST_CURSOR, ds_readd(MOUSE_CURRENT_CURSOR));
-#if !defined(__BORLANDC__)
-		if (g_mouse_mask == (RealPt)ds_readd(MOUSE_CURRENT_CURSOR))
-#else
-		if (g_mouse_mask == (RealPt)ds_readd(MOUSE_CURRENT_CURSOR))
-#endif
-		{
-			g_mouse_pointer_offsetx =
-				g_mouse_pointer_offsety = 0;
+		g_mouse_last_cursor = g_mouse_current_cursor;
+
+		if (g_mouse_mask == g_mouse_current_cursor) {
+			g_mouse_pointer_offsetx = g_mouse_pointer_offsety = 0;
 		} else {
-			g_mouse_pointer_offsetx =
-				g_mouse_pointer_offsety = 8;
+			g_mouse_pointer_offsetx = g_mouse_pointer_offsety = 8;
 		}
 		g_mouse_moved = 0;
 		update_mouse_cursor1();
@@ -2313,7 +2308,7 @@ void draw_mouse_cursor(void)
 
 
 	vgaptr = (RealPt)ds_readd(VGA_MEMSTART);
-	mouse_cursor = (signed short*)Real2Host(ds_readd(MOUSE_CURRENT_CURSOR)) + (32 / 2);
+	mouse_cursor = (signed short*)g_mouse_current_cursor + (32 / 2);
 
 	rangeX = g_mouse_posx - g_mouse_pointer_offsetx;
 	rangeY = g_mouse_posy - g_mouse_pointer_offsety;

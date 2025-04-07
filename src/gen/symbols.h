@@ -227,8 +227,8 @@
 //#define IN_KEY_EXT                      (0x459f)    /* Bit16s */
 //#define ARRAY_1                         (0x45a1)    /* char[64] */
 //#define ARRAY_2                         (0x45e1)    /* char[64] */
-#define MOUSE_LAST_CURSOR               (0x4621)
-#define MOUSE_CURRENT_CURSOR            (0x4625)
+//#define MOUSE_LAST_CURSOR               (0x4621)
+//#define MOUSE_CURRENT_CURSOR            (0x4625)
 
 #define MOUSE_BACKBUFFER                (0x4669)
 #define BUFFER_SEX_DAT                  (0x4769)    /* RealPt SEX.DAT */
