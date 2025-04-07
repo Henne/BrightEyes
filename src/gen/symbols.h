@@ -181,14 +181,14 @@
 //#define HANDLE_TIMBRE                   (0x3f3a)    /* Bit16s */
 //#define TIMBRE_CACHE_SIZE               (0x3f3c)    /* Bit16s */
 //#define STATE_TABLE_SIZE                (0x3f3e)    /* Bit32u */
-#define SND_DRIVER                      (0x3f42)    /* RealPt */
-#define FORM_XMID                       (0x3f46)    /* RealPt */
-#define SND_TIMBRE_CACHE                (0x3f4a)    /* RealPt */
-#define STATE_TABLE                     (0x3f4e)    /* RealPt */
-#define SND_DRIVER_BASE_ADDR            (0x3f52)    /* RealPt */
-#define SND_DRIVER_DESC                 (0x3f56)    /* RealPt */
-#define SND_SEQUENCE                    (0x3f5a)    /* Bit16s */
-#define SND_DRIVER_HANDLE               (0x3f5c)    /* Bit16s */
+//#define SND_DRIVER                      (0x3f42)    /* RealPt */
+//#define FORM_XMID                       (0x3f46)    /* RealPt */
+//#define SND_TIMBRE_CACHE                (0x3f4a)    /* RealPt */
+//#define STATE_TABLE                     (0x3f4e)    /* RealPt */
+//#define SND_DRIVER_BASE_ADDR            (0x3f52)    /* RealPt */
+//#define SND_DRIVER_DESC                 (0x3f56)    /* RealPt */
+//#define SND_SEQUENCE                    (0x3f5a)    /* Bit16s */
+//#define SND_DRIVER_HANDLE               (0x3f5c)    /* Bit16s */
 #define PARAM_LEVEL                     (0x3f5e)    /* Bit16s DE: {0, 'a', 'n'} */
 
 #define CALLED_WITH_ARGS                (0x3f60)    /* Bit16s */

@@ -1263,10 +1263,14 @@ static signed long g_gendat_offset;
 static signed short g_handle_timbre;
 static signed short g_timbre_cache_size;
 static signed long g_state_table_size;
-//void *snd_driver;
-//void *form_xmid;
-//void *SND_TIMBRE_CACHE;
-//void *state_table;
+static Bit8u* g_snd_driver;
+static Bit8u* g_form_xmid;
+static Bit8u* g_snd_timbre_cache;
+static Bit8u* g_state_table;
+static Bit8u* g_snd_driver_base_addr;
+static Bit8u* g_snd_driver_desc;
+static signed short g_snd_sequence;
+static signed short g_snd_driver_handle;
 
 
 //static Bit16s param_level;
@@ -1429,7 +1433,7 @@ void read_soundcfg(void)
 /* Borlandified and identical */
 void init_music(unsigned long size)
 {
-	if (ds_writed(FORM_XMID, (Bit32s)gen_alloc(size))) {
+	if ((g_form_xmid = (Bit8u*)gen_alloc(size))) {
 		AIL_startup();
 		g_midi_disabled = 1;
 	}
@@ -1440,17 +1444,18 @@ void stop_music(void)
 {
 	AIL_shutdown(0);
 
-	if (ds_readd(SND_TIMBRE_CACHE))
-		bc_free((RealPt)ds_readd(SND_TIMBRE_CACHE));
+	/* Remark: set pointer to NULL */
+	if (g_snd_timbre_cache)
+		free(g_snd_timbre_cache);
 
-	if (ds_readd(STATE_TABLE))
-		bc_free((RealPt)ds_readd(STATE_TABLE));
+	if (g_state_table)
+		free(g_state_table);
 
-	if (ds_readd(FORM_XMID))
-		bc_free((RealPt)ds_readd(FORM_XMID));
+	if (g_form_xmid)
+		free(g_form_xmid);
 
-	if (ds_readd(SND_DRIVER))
-		bc_free((RealPt)ds_readd(SND_DRIVER));
+	if (g_snd_driver)
+		free(g_snd_driver);
 
 	seg001_033b();
 }
@@ -1465,8 +1470,8 @@ RealPt load_snd_driver(RealPt fname)
 
 	if ((handle = bc_open(fname, 0x8001)) != -1) {
 		size = 16500;
-		ds_writed(SND_DRIVER, (Bit32s)gen_alloc(size + 0x10));
-		in_ptr = ds_readd(SND_DRIVER) + 0x0f;
+		g_snd_driver = (Bit8u*)gen_alloc(size + 0x10);
+		in_ptr = ((Bit32u)g_snd_driver) + 0x0f;
 		in_ptr &= 0xfffffff0;
 
 		/* The arguments of read are working, but not identical */
@@ -1481,9 +1486,9 @@ RealPt load_snd_driver(RealPt fname)
 /* Borlandified and identical */
 void unload_snd_driver(void)
 {
-	if (ds_readd(SND_DRIVER)) {
-		bc_free((RealPt)ds_readd(SND_DRIVER));
-		ds_writed(SND_DRIVER, 0);
+	if (g_snd_driver) {
+		free(g_snd_driver);
+		g_snd_driver = NULL;
 	}
 }
 
@@ -1492,23 +1497,23 @@ unsigned short load_seq(Bit16s sequence_num)
 {
 	Bit16s patch;
 	RealPt ptr;
-	Bit16s si;
-	Bit16s di; // di = bank, si = patch
+	Bit16s si; // si = patch
+	Bit16s di; // di = bank
 
 	/* open SAMPLE.AD */
 	if ((g_handle_timbre = open_datfile(35)) != -1) {
 
-		if ((ds_writews(SND_SEQUENCE, AIL_register_sequence(ds_readws(SND_DRIVER_HANDLE),
-			(RealPt)ds_readd(FORM_XMID), sequence_num,
-			(RealPt)ds_readd(STATE_TABLE), (RealPt)(0L)))) != -1) {
+		if ((g_snd_sequence = AIL_register_sequence(g_snd_driver_handle,
+			(Bit8u*)g_form_xmid, sequence_num,
+			(Bit8u*)g_state_table, (RealPt)(0L))) != -1) {
 
-			while ((si = AIL_timbre_request(ds_readws(SND_DRIVER_HANDLE), ds_readws(SND_SEQUENCE))) != -1)
+			while ((si = AIL_timbre_request(g_snd_driver_handle, g_snd_sequence)) != -1)
 			{
 				di = ((Bit16u)si) >> 8;
 
 				if ((ptr = get_timbre(di, patch = (si & 0xff))) != 0) {
 					/* ptr is passed differently */
-					AIL_install_timbre(ds_readws(SND_DRIVER_HANDLE), di, patch, ptr);
+					AIL_install_timbre(g_snd_driver_handle, di, patch, ptr);
 					bc_free(ptr);
 				}
 			}
@@ -1534,7 +1539,7 @@ unsigned short load_seq(Bit16s sequence_num)
 unsigned short play_sequence(Bit16s sequence_num)
 {
 	if (load_seq(sequence_num) != 0) {
-		AIL_start_sequence(ds_readw(SND_DRIVER_HANDLE), sequence_num);
+		AIL_start_sequence(g_snd_driver_handle, sequence_num);
 		return 1;
 	}
 
@@ -1589,7 +1594,7 @@ unsigned short load_file(Bit16s index)
 	Bit16s handle;
 
 	if ((handle = open_datfile(index)) != -1) {
-		read_datfile(handle, Real2Host((RealPt)ds_readd(FORM_XMID)), 32767);
+		read_datfile(handle, g_form_xmid, 32767);
 		bc_close(handle);
 		return 1;
 	}
@@ -1600,46 +1605,43 @@ unsigned short load_file(Bit16s index)
 /* Borlandified and nearly identical */
 unsigned short load_driver(RealPt fname, Bit16s type, Bit16s port)
 {
-	if (port != 0 &&
-		((RealPt)ds_writed(SND_DRIVER_BASE_ADDR, (RealPt)load_snd_driver(fname))) &&
-		((ds_writews(SND_DRIVER_HANDLE, AIL_register_driver((RealPt)ds_readd(SND_DRIVER_BASE_ADDR)))) != -1))
+	if ((port != 0) &&
+		(g_snd_driver_base_addr = (Bit8u*)load_snd_driver(fname)) &&
+		((g_snd_driver_handle = AIL_register_driver((Bit8u*)g_snd_driver_base_addr)) != -1))
 	{
 
 #if !defined(__BORLANDC__)
-		ds_writed(SND_DRIVER_DESC, (Bit32s)AIL_describe_driver(ds_readw(SND_DRIVER_HANDLE)));
+		g_snd_driver_desc = (Bit8u*)AIL_describe_driver(g_snd_driver_handle);
 #else
 		// _AX contains the value of SND_DRIVER_HANDLE
-		ds_writed(SND_DRIVER_DESC, (Bit32s)AIL_describe_driver(_AX));
+		g_snd_driver_desc = (Bit8u*)AIL_describe_driver(_AX);
 #endif
-		if (host_readws(Real2Host((RealPt)ds_readd(SND_DRIVER_DESC)) + 2) == type)
+		if (host_readws(g_snd_driver_desc + 0x02) == type)
 		{
 			if (port == -1) {
-				port = host_readws(Real2Host((RealPt)ds_readd(SND_DRIVER_DESC)) + 0x0c);
+				port = host_readws(g_snd_driver_desc + 0x0c);
 			}
-			if (AIL_detect_device(ds_readw(SND_DRIVER_HANDLE), port,
-					host_readw(Real2Host((RealPt)ds_readd(SND_DRIVER_DESC)) + 0x0e),
-					host_readw(Real2Host((RealPt)ds_readd(SND_DRIVER_DESC)) + 0x10),
-					host_readw(Real2Host((RealPt)ds_readd(SND_DRIVER_DESC)) + 0x12)) != 0)
+			if (AIL_detect_device(g_snd_driver_handle, port,
+					host_readw(g_snd_driver_desc + 0x0e),
+					host_readw(g_snd_driver_desc + 0x10),
+					host_readw(g_snd_driver_desc + 0x12)) != 0)
 			{
-				AIL_init_driver(ds_readw(SND_DRIVER_HANDLE), port,
-					host_readw(Real2Host((RealPt)ds_readd(SND_DRIVER_DESC)) + 0x0e),
-					host_readw(Real2Host((RealPt)ds_readd(SND_DRIVER_DESC)) + 0x10),
-					host_readw(Real2Host((RealPt)ds_readd(SND_DRIVER_DESC)) + 0x12));
+				AIL_init_driver(g_snd_driver_handle, port,
+					host_readw(g_snd_driver_desc + 0x0e),
+					host_readw(g_snd_driver_desc + 0x10),
+					host_readw(g_snd_driver_desc + 0x12));
 				if (type == 3) {
-					g_state_table_size =
-						AIL_state_table_size(ds_readw(SND_DRIVER_HANDLE));
+					g_state_table_size = AIL_state_table_size(g_snd_driver_handle);
 
-					ds_writed(STATE_TABLE,
-						(Bit32u)gen_alloc(g_state_table_size));
+					g_state_table = (Bit8u*)gen_alloc(g_state_table_size);
 
-					g_timbre_cache_size =
-						AIL_default_timbre_cache_size(ds_readw(SND_DRIVER_HANDLE));
+					g_timbre_cache_size = AIL_default_timbre_cache_size(g_snd_driver_handle);
 
 					if (g_timbre_cache_size != 0) {
-						ds_writed(SND_TIMBRE_CACHE, (Bit32u)gen_alloc(g_timbre_cache_size));
+						g_snd_timbre_cache = (Bit8u*)gen_alloc(g_timbre_cache_size);
 #if !defined(__BORLANDC__)
-						AIL_define_timbre_cache(ds_readw(SND_DRIVER_HANDLE),
-							(RealPt)ds_readd(SND_TIMBRE_CACHE),
+						AIL_define_timbre_cache(g_snd_driver_handle,
+							g_snd_timbre_cache,
 							g_timbre_cache_size);
 #else
 
@@ -1668,8 +1670,7 @@ unsigned short load_driver(RealPt fname, Bit16s type, Bit16s port)
 /* Borlandified and identical */
 void play_midi(Bit16u index)
 {
-	if ((g_midi_disabled == 0) &&
-		(host_readw(Real2Host((RealPt)ds_readd(SND_DRIVER_DESC)) + 2) == 3))
+	if ((g_midi_disabled == 0) && (host_readw(g_snd_driver_desc + 0x02) == 3))
 	{
 		stop_sequence();
 		call_load_file(index);
@@ -1680,22 +1681,20 @@ void play_midi(Bit16u index)
 /* Borlandified and identical */
 void stop_sequence(void)
 {
-	if ((g_midi_disabled == 0) &&
-		(host_readw(Real2Host((RealPt)ds_readd(SND_DRIVER_DESC)) + 2) == 3))
+	if ((g_midi_disabled == 0) && (host_readw(g_snd_driver_desc + 0x02) == 3))
 	{
-		AIL_stop_sequence(ds_readw(SND_DRIVER_HANDLE), ds_readw(SND_SEQUENCE));
-		AIL_release_sequence_handle(ds_readw(SND_DRIVER_HANDLE), ds_readw(SND_SEQUENCE));
+		AIL_stop_sequence(g_snd_driver_handle, g_snd_sequence);
+		AIL_release_sequence_handle(g_snd_driver_handle, g_snd_sequence);
 	}
 }
 
 /* Borlandified and identical */
 void restart_midi(void)
 {
-	if ((g_midi_disabled == 0) &&
-		(host_readw(Real2Host((RealPt)ds_readd(SND_DRIVER_DESC)) + 2) == 3) &&
-		(AIL_sequence_status(ds_readw(SND_DRIVER_HANDLE), ds_readw(SND_SEQUENCE)) == 2))
+	if ((g_midi_disabled == 0) && (host_readw(g_snd_driver_desc + 0x02) == 3) &&
+		(AIL_sequence_status(g_snd_driver_handle, g_snd_sequence) == 2))
 	{
-		AIL_start_sequence(ds_readw(SND_DRIVER_HANDLE), ds_readw(SND_SEQUENCE));
+		AIL_start_sequence(g_snd_driver_handle, g_snd_sequence);
 	}
 }
 
@@ -7334,6 +7333,7 @@ static void BE_cleanup(void)
 {
 	Bit32s before = DB_get_conv_mem();
 	RealPt ptr;
+	Bit8u *host_ptr;
 
 	D1_INFO("%s() free mem = %d\n", __func__, DB_get_conv_mem());
 
@@ -7458,34 +7458,34 @@ static void BE_cleanup(void)
 	D1_INFO("%s() free mem = %d\n", __func__, DB_get_conv_mem());
 
 	// missed ones
-	if ((ptr = (RealPt)ds_readd(SND_TIMBRE_CACHE)) != 0) {
-		D1_INFO("Free SND_TIMBRE_CACHE\t 0x%08x\n", ptr);
-		bc_free(ptr);
-		ds_writed(SND_TIMBRE_CACHE, 0);
+	if ((host_ptr = g_snd_timbre_cache) != 0) {
+		D1_INFO("Free SND_TIMBRE_CACHE\t 0x%08x\n", host_ptr);
+		free(host_ptr);
+		g_snd_timbre_cache = NULL;
 	}
 
 	D1_INFO("%s() free mem = %d\n", __func__, DB_get_conv_mem());
 
-	if ((ptr = (RealPt)ds_readd(STATE_TABLE)) != 0) {
-		D1_INFO("Free STATE_TABLE\t 0x%08x\n", ptr);
-		bc_free(ptr);
-		ds_writed(STATE_TABLE, 0);
+	if ((host_ptr = g_state_table) != 0) {
+		D1_INFO("Free STATE_TABLE\t 0x%08x\n", host_ptr);
+		free(host_ptr);
+		g_state_table = NULL;
 	}
 
 	D1_INFO("%s() free mem = %d\n", __func__, DB_get_conv_mem());
 
-	if ((ptr = (RealPt)ds_readd(SND_DRIVER)) != 0) {
-		D1_INFO("Free SND_DRIVER\t\t 0x%08x\n", ptr);
-		bc_free(ptr);
-		ds_writed(SND_DRIVER, 0);
+	if ((host_ptr = g_snd_driver) != 0) {
+		D1_INFO("Free SND_DRIVER\t\t 0x%08x\n", host_ptr);
+		free(host_ptr);
+		g_snd_driver = NULL;
 	}
 
 	D1_INFO("%s() free mem = %d\n", __func__, DB_get_conv_mem());
 
-	if ((ptr = (RealPt)ds_readd(FORM_XMID)) != 0) {
-		D1_INFO("Free FORM_XMID\t\t 0x%08x\n", ptr);
-		bc_free(ptr);
-		ds_writed(FORM_XMID, 0);
+	if ((host_ptr = g_form_xmid) != 0) {
+		D1_INFO("Free FORM_XMID\t\t 0x%08x\n", host_ptr);
+		free(host_ptr);
+		g_form_xmid = NULL;
 	}
 
 	D1_INFO("%s() free mem = %d\n", __func__, DB_get_conv_mem());
