@@ -1336,6 +1336,8 @@ static signed short g_mouse2_event;
 static signed short g_mouse1_event2;
 static signed short g_in_key_ascii;
 static signed short g_in_key_ext;
+static unsigned char g_array_1[64];
+static unsigned char g_array_2[64];
 
 //static unsigned short *mouse_p1;
 //static unsigned short *mouse_p2;
@@ -3212,7 +3214,7 @@ void blit_smth3(RealPt ptr, Bit16s v1, Bit16s v2)
 	Bit8u *src;
 	Bit16s i, j;
 
-	src = Real2Host(RealMake(datseg, ARRAY_2));
+	src = g_array_2;
 
 	for (i = 0; i < v1; src += 8 - v2, ptr += 320, i++)
 		for (j = 0; j < v2; src++, j++)
@@ -3460,13 +3462,13 @@ void call_them_all(Bit16s v1, Bit16s v2, Bit16s x, Bit16s y)
 /* static */
 void fill_smth(void)
 {
-	RealPt ptr;
+	Bit8u* ptr;
 	Bit16s i, j;
 
 	if (g_mask_switch != 0)
-		ptr = RealMake(datseg, ARRAY_1);
+		ptr = g_array_1;
 	else
-		ptr = RealMake(datseg, ARRAY_2);
+		ptr = g_array_2;
 
 	for (i = 0; i < 8; ptr += 8, i++)
 		for (j = 0; j < 8; j++)
@@ -3482,9 +3484,9 @@ void fill_smth2(Bit8u* sptr) {
 	Bit8u mask;
 
 	if (g_mask_switch != 0)
-		ptr = RealMake(datseg, ARRAY_1);
+		ptr = g_array_1;
 	else
-		ptr = RealMake(datseg, ARRAY_2);
+		ptr = g_array_2;
 
 	for (i = 0; i < 8; ptr += 8, i++) {
 		mask = *sptr++;
