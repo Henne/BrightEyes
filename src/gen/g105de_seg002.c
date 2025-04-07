@@ -1258,8 +1258,9 @@ static signed long g_flen_left;
 #if defined(__BORLANDC__)
 void far *g_irq78_bak;
 #endif
-//signed short HANDLE_TIMBRE;
+static signed long g_gendat_offset;
 
+//signed short HANDLE_TIMBRE;
 //void *snd_driver;
 //void *form_xmid;
 //void *SND_TIMBRE_CACHE;
@@ -1542,7 +1543,7 @@ RealPt get_timbre(Bit16s bank, Bit16s patch)
 {
 	RealPt timbre_ptr;
 
-	bc_lseek(ds_readw(HANDLE_TIMBRE), ds_readd(GENDAT_OFFSET), SEEK_SET);
+	bc_lseek(ds_readw(HANDLE_TIMBRE), g_gendat_offset, SEEK_SET);
 
 	do {
 		read_datfile(ds_readw(HANDLE_TIMBRE), &g_current_timbre_patch, 6);
@@ -1554,7 +1555,7 @@ RealPt get_timbre(Bit16s bank, Bit16s patch)
 //	Remark: Try out the next line instead and get a different sound:
 //	} while ((g_current_timbre_bank != bank) && (g_current_timbre_patch != patch));
 
-	bc_lseek(ds_readw(HANDLE_TIMBRE), ds_readd(GENDAT_OFFSET) + g_current_timbre_offset, SEEK_SET);
+	bc_lseek(ds_readw(HANDLE_TIMBRE), g_gendat_offset + g_current_timbre_offset, SEEK_SET);
 	read_datfile(ds_readw(HANDLE_TIMBRE), &g_current_timbre_length, 2);
 
 	timbre_ptr = gen_alloc(g_current_timbre_length);
@@ -2814,8 +2815,8 @@ Bit16s open_datfile(Bit16u index)
 
 	bc__read(handle, buf, 800);
 
-	if ((Bit32s)(ds_writed(GENDAT_OFFSET, get_archive_offset((char*)g_fnames_g105de[index], buf))) != -1) {
-		bc_lseek(handle, ds_readd(GENDAT_OFFSET), 0);
+	if ((Bit32s)(g_gendat_offset = get_archive_offset((char*)g_fnames_g105de[index], buf)) != -1) {
+		bc_lseek(handle, g_gendat_offset, 0);
 		return handle;
 	} else {
 		return 0;
