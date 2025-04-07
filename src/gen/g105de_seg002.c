@@ -1282,7 +1282,7 @@ struct inc_states {
 
 static struct inc_states g_spell_incs[86];
 static struct inc_states g_skill_incs[52];
-//static char attrib_changed[14];
+static signed char g_attrib_changed[14];
 //static RealPt type_names[MAX_TYPES];
 
 /* the index of the last head */
@@ -4577,7 +4577,6 @@ void refresh_screen(void)
 /* static */
 void clear_hero(void)
 {
-
 	Bit16s i;
 
 	g_got_mu_bonus = g_got_ch_bonus = 0;
@@ -4588,7 +4587,7 @@ void clear_hero(void)
 		ds_writeb(HEAD_CURRENT, 0))));
 
 	for (i = 0; i < 14; i++)
-		ds_writeb(ATTRIB_CHANGED + i, 0);
+		g_attrib_changed[i] = 0;
 
 	for (i = 0; i < 86; i++) {
 		g_spell_incs[i].tries = g_spell_incs[i].incs = 0;
@@ -5366,28 +5365,21 @@ Bit16s can_change_attribs(void)
 	na_inc = 0;
 	na_dec = 0;
 
-#if !defined(__BORLANDC__)
-	for (i = 0; i < 14; i++)
-		D1_LOG("%d ", ds_readb(ATTRIB_CHANGED + i));
-	D1_LOG("\n");
-#endif
-
-
 	for (i = 0; i < 7; i++) {
 		p = Real2Host(RealMake(datseg, 3 * i + HERO_ATT0_NORMAL));
 
-		if ((ds_readb(ATTRIB_CHANGED + i) != INC) && (host_readbs(p) > 8))
+		if ((g_attrib_changed[i] != INC) && (host_readbs(p) > 8))
 			pa_dec += 8 - host_readbs(p);
-		if ((ds_readb(ATTRIB_CHANGED + i) != DEC) && (host_readbs(p) < 13))
+		if ((g_attrib_changed[i] != DEC) && (host_readbs(p) < 13))
 			pa_inc += 13 - host_readbs(p);
 	}
 
 	for (i = 7; i < 14; i++) {
 		p = Real2Host(RealMake(datseg, 3 * i + HERO_ATT0_NORMAL));
 
-		if ((ds_readb(ATTRIB_CHANGED + i) != INC) && (host_readbs(p) > 2))
+		if ((g_attrib_changed[i] != INC) && (host_readbs(p) > 2))
 			na_dec += 2 - host_readbs(p);
-		if ((ds_readb(ATTRIB_CHANGED + i) != DEC) && (host_readbs(p) < 8))
+		if ((g_attrib_changed[i] != DEC) && (host_readbs(p) < 8))
 #if !defined(__BORLANDC__)
 			na_inc += 8 - host_readbs(p);
 #else
@@ -5481,7 +5473,7 @@ void change_attribs(void)
 		return;
 	tmp2--;
 	/* get the modification type */
-	if (!ds_readbs(ATTRIB_CHANGED + tmp2)) {
+	if (!g_attrib_changed[tmp2]) {
 		/* ask user if inc or dec */
 		g_text_x_mod = -80;
 		tmp3 = gui_radio((Bit8u*)NULL, 2, get_text(75), get_text(76));
@@ -5490,7 +5482,7 @@ void change_attribs(void)
 		if (tmp3 == -1)
 			return;
 	} else {
-		tmp3 = ds_readbs(ATTRIB_CHANGED + tmp2);
+		tmp3 = g_attrib_changed[tmp2];
 	}
 
 	ptr1 = Real2Host(RealMake(datseg, 3 * tmp2 + HERO_ATT0_NORMAL));
@@ -5503,7 +5495,7 @@ void change_attribs(void)
 		}
 		c = 0;
 		for (di = 7; di < 14; di++) {
-			if (ds_readb(ATTRIB_CHANGED + di) != DEC) {
+			if (g_attrib_changed[di] != DEC) {
 				ptr2 = Real2Host(RealMake(datseg, 3 * di + HERO_ATT0_NORMAL));
 				if (host_readbs(ptr2) < 8) {
 					c += 8 - host_readbs(ptr2);
@@ -5525,7 +5517,7 @@ void change_attribs(void)
 		asm { db 0x8b, 0x5e, 0xfc; }; // BCC Sync-Point
 #endif
 
-		ds_writeb(ATTRIB_CHANGED + tmp2,  INC);
+		g_attrib_changed[tmp1] = INC;
 
 		refresh_screen();
 
@@ -5545,7 +5537,7 @@ void change_attribs(void)
 
 			si--;
 			/* check if this attribute has been decremented */
-			if (ds_readb(ATTRIB_CHANGED + si + 7) == DEC) {
+			if (g_attrib_changed[si + 7] == DEC) {
 				infobox(get_text(83), 0);
 				continue;
 			}
@@ -5556,7 +5548,7 @@ void change_attribs(void)
 			} else {
 				/* increment the negative attribute */
 				tmp1++;
-				ds_writeb(ATTRIB_CHANGED + si + 7, INC);
+				g_attrib_changed[si + 7] = INC;
 
 #if !defined(__BORLANDC__)
 				host_writeb(ptr1,
@@ -5580,7 +5572,7 @@ void change_attribs(void)
 		}
 		c = 0;
 		for (di = 7; di < 14; di++) {
-			if (ds_readb(ATTRIB_CHANGED + di) != INC) {
+			if (g_attrib_changed[di] != INC) {
 				ptr2 = Real2Host(RealMake(datseg, 3 * di + HERO_ATT0_NORMAL));
 				if (host_readbs(ptr2) > 2) {
 #if !defined(__BORLANDC__)
@@ -5607,7 +5599,7 @@ void change_attribs(void)
 #endif
 
 		/* mark this attribute as decremented */
-		ds_writeb(ATTRIB_CHANGED + tmp2, DEC);
+		g_attrib_changed[tmp2] = DEC;
 
 		refresh_screen();
 
@@ -5627,7 +5619,7 @@ void change_attribs(void)
 
 			si--;
 			/* check if this attribute has been incremented */
-			if (ds_readb(ATTRIB_CHANGED + si + 7) == INC) {
+			if (g_attrib_changed[si + 7] == INC) {
 				infobox(get_text(82), 0);
 				continue;
 			}
@@ -5653,7 +5645,7 @@ void change_attribs(void)
 			host_writebs(ptr1 + 1, host_readbs(ptr1 + 1) - 1); // BCC Sync-Point
 #endif
 
-			ds_writeb(ATTRIB_CHANGED + si + 7, DEC);
+			g_attrib_changed[si + 7] = DEC;
 
 			refresh_screen();
 		}

@@ -193,8 +193,7 @@
 #define CALLED_WITH_ARGS                (0x3f60)    /* Bit16s */
 //#define SPELL_INCS                      (0x3f62)    /* 2 * Bit8s */
 //#define SKILL_INCS                      (0x400e)    /* 2 * Bit8s */
-
-#define ATTRIB_CHANGED                  (0x4076)    /* Bit8s */
+//#define ATTRIB_CHANGED                  (0x4076)    /* Bit8s */
 #define TYPE_NAMES                      (0x4084)    /* RealPt[13] */
 
 #define HEAD_LAST                       (0x40b4)    /* Bit8s */
