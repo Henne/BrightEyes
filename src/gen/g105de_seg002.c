@@ -1294,6 +1294,8 @@ static signed char g_head_current;
 /* the typus for the heads e.G. all elves are 10 */
 static signed char g_head_typus;
 
+static signed char g_in_intro;
+
 //static unsigned short MENU_TILES;
 //static unsigned short left_border;
 //static unsigned short upper_border;
@@ -2140,7 +2142,7 @@ void handle_input(void)
 		if (si == KEY_J)
 			si = KEY_Y;
 
-		if ((ds_readw(IN_KEY_ASCII) == 0x11) && !ds_readbs(IN_INTRO)) {
+		if ((ds_readw(IN_KEY_ASCII) == 0x11) && !g_in_intro) {
 
 			update_mouse_cursor();
 			mouse_disable();
@@ -7477,7 +7479,7 @@ void intro(void)
 	Bit16s i;
 	Bit16s handle;
 
-	ds_writeb(IN_INTRO, 1);
+	g_in_intro = 1;
 
 	/* load ATTIC */
 	handle = open_datfile(18);
@@ -7694,7 +7696,7 @@ void intro(void)
 	/* clear screen */
 	call_fill_rect_gen((RealPt)ds_readd(VGA_MEMSTART), 0, 0, 319, 199, 0);
 
-	ds_writeb(IN_INTRO, 0);
+	g_in_intro = 0;
 	return;
 }
 
@@ -7746,7 +7748,7 @@ int main_gen(int argc, char **argv)
 		sound_off = 1;
 	};
 
-	ds_writeb(IN_INTRO, 1);
+	g_in_intro = 1;
 
 	if (sound_off == 0)
 		init_music(13000);
