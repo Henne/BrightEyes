@@ -1377,8 +1377,10 @@ static unsigned char* g_vga_memstart;
 
 static unsigned char* g_page_buffer;
 static unsigned char* g_gen_ptr1_dis;
-static signed short wo_var2;
-static signed short wo_var3;
+static signed short g_wo_var2;
+static signed short g_wo_var3;
+static signed short g_display_page_bak;
+static signed short g_display_mode_bak;
 
 //static const Bit16u ro_var[7] = {0, 0, 0, 0, 0, 0, 0};
 
@@ -2988,9 +2990,9 @@ void init_video(Bit16s unused)
 void exit_video(void)
 {
 	/* restore old mode */
-	set_video_mode(ds_readw(DISPLAY_MODE_BAK));
+	set_video_mode(g_display_mode_bak);
 	/* restore old page */
-	set_video_page(ds_readw(DISPLAY_PAGE_BAK));
+	set_video_page(g_display_page_bak);
 }
 
 #if defined(__BORLANDC__)
@@ -7697,17 +7699,17 @@ int main_gen(int argc, char **argv)
 	if (sound_off == 0)
 		init_music(13000);
 
-	ds_writew(WO_VAR2, ret_zero1());
+	g_wo_var2 = ret_zero1();
 
 	set_timer_isr();
 
 	bc_randomize();
 
-	save_display_stat(RealMake(datseg, DISPLAY_PAGE_BAK));
+	save_display_stat(&g_display_page_bak);
 
 	alloc_buffers();
 
-	ds_writew(WO_VAR3, 2);
+	g_wo_var3 = 2;
 
 	init_video(2);
 
