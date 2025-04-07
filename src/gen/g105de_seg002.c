@@ -1302,18 +1302,16 @@ static signed short g_upper_border;
 
 static signed short g_level; /* {-1, 0, 1 (= Novice), 2 (= Advanced) } */
 
-
-//static RealPt dst_dst;
-
-//static unsigned short dst_x1;
-//static unsigned short dst_y1;
-//static unsigned short dst_x2;
-//static unsigned short dst_y2;
-//static RealPt dst_src;
-//static unsigned short unkn1;
-//static unsigned short unkn2;
-//static unsigned short unkn3;
-//static unsigned short unkn4;
+static RealPt g_dst_dst;
+static signed short g_dst_x1;
+static signed short g_dst_y1;
+static signed short g_dst_x2;
+static signed short g_dst_y2;
+static RealPt g_dst_src;
+static signed short g_unkn1;
+static signed short g_unkn2;
+static signed short g_unkn3;
+static signed short g_unkn4;
 
 //static char *texts[300];
 
@@ -3108,21 +3106,21 @@ void do_draw_pic(Bit16u mode)
 	register Bit16s x;
 	register Bit16s y;
 
-	x = ds_readws(DST_X1);
-	y = ds_readws(DST_Y1);
+	x = g_dst_x1;
+	y = g_dst_y1;
 
-	d1 = ds_readws(DST_X2);
-	d2 = ds_readws(DST_Y2);
-	v1 = ds_readws(UNKN1);
-	v2 = ds_readws(UNKN2);
-	d3 = ds_readws(UNKN3);
-	d4 = ds_readws(UNKN4);
+	d1 = g_dst_x2;
+	d2 = g_dst_y2;
+	v1 = g_unkn1;
+	v2 = g_unkn2;
+	d3 = g_unkn3;
+	d4 = g_unkn4;
 
 	w = d1 - x + 1;
 	h = d2 - y + 1;
 
-	src = (RealPt)ds_readd(DST_SRC);
-	dst = (RealPt)ds_readd(DST_DST);
+	src = g_dst_src;
+	dst = g_dst_dst;
 
 	update_mouse_cursor();
 
@@ -3142,13 +3140,13 @@ void unused_func12(void)
 	RealPt src;
 	RealPt dst;
 
-	Bit16s x1 = ds_readws(DST_X1); // si
-	Bit16s y1 = ds_readws(DST_Y1); // di
+	Bit16s x1 = g_dst_x1; // si
+	Bit16s y1 = g_dst_y1; // di
 
-	dx2 = ds_readws(DST_X2);
-	dy2 = ds_readws(DST_Y2);
-	src = (RealPt)ds_readd(DST_SRC);
-	dst = (RealPt)ds_readd(DST_DST);
+	dx2 = g_dst_x2;
+	dy2 = g_dst_y2;
+	src = g_dst_src;
+	dst = g_dst_dst;
 
 	bc_F_PADA(dst, (Bit32s)(y1 * 320 + x1));
 
@@ -4207,18 +4205,18 @@ void change_head(void)
 
 	process_nvf(&nvf);
 
-	ds_writed(DST_SRC, ds_readd(GEN_PTR6));
+	g_dst_src = (RealPt)ds_readd(GEN_PTR6);
 
-	ds_writew(DST_X1, 272);
-	ds_writew(DST_X2, 303);
+	g_dst_x1 = 272;
+	g_dst_x2 = 303;
 
 	if (g_gen_page == 0) {
-		ds_writew(DST_Y1, 8);
-		ds_writew(DST_Y2, 39);
+		g_dst_y1 = 8;
+		g_dst_y2 = 39;
 		do_draw_pic(0);
 	} else if (g_gen_page > 4) {
-		ds_writew(DST_Y1, 4);
-		ds_writew(DST_Y2, 35);
+		g_dst_y1 = 4;
+		g_dst_y2 = 35;
 		do_draw_pic(0);
 	}
 }
@@ -4534,25 +4532,25 @@ void refresh_screen(void)
 			nvf.height = &height;
 			process_nvf(&nvf);
 
-			ds_writed(DST_SRC, ds_readd(GEN_PTR6));
-			ds_writew(DST_X1, 272);
-			ds_writew(DST_X2, 303);
-			ds_writed(DST_DST, ds_readd(GEN_PTR1_DIS));
+			g_dst_src = (RealPt)ds_readd(GEN_PTR6);
+			g_dst_x1 = 272;
+			g_dst_x2 = 303;
+			g_dst_dst = ds_readd(GEN_PTR1_DIS);
 
 			/* draw the head */
 			if (g_gen_page == 0) {
 				/* on the base page */
-				ds_writew(DST_Y1, 8);
-				ds_writew(DST_Y2, 39);
+				g_dst_y1 = 8;
+				g_dst_y2 = 39;
 				do_draw_pic(0);
 			} else if (g_gen_page > 4) {
 				/* on the spell pages */
-				ds_writew(DST_Y1, 4);
-				ds_writew(DST_Y2, 35);
+				g_dst_y1 = 4;
+				g_dst_y2 = 35;
 				do_draw_pic(0);
 			}
 
-			ds_writed(DST_DST, ds_readd(VGA_MEMSTART));
+			g_dst_dst = ds_readd(VGA_MEMSTART);
 
 		}
 
@@ -7511,11 +7509,11 @@ void intro(void)
 
 	/* glowing at the bottom */
 	for (i = 0; i < 4; i++) {
-		ds_writew(DST_X1, 112);
-		ds_writew(DST_Y1, 140);
-		ds_writew(DST_X2, 207);
-		ds_writew(DST_Y2, 149);
-		ds_writed(DST_SRC, (Bit32u)(i* 960 + (RealPt)ds_readd(GEN_PTR1_DIS) +  9600));
+		g_dst_x1 = 112;
+		g_dst_x2 = 140;
+		g_dst_y1 = 207;
+		g_dst_y2 = 149;
+		g_dst_src = (RealPt)(i * 960 + (RealPt)ds_readd(GEN_PTR1_DIS) + 9600);
 		do_draw_pic(0);
 		vsync_or_key(20);
 	}
@@ -7524,41 +7522,41 @@ void intro(void)
 	i = 4;
 	ds_writew(IN_KEY_EXT, 0);
 	while ((cnt1 <= 100) && (ds_readw(IN_KEY_EXT) == 0)) {
-		ds_writew(DST_X1, 0);
-		ds_writew(DST_Y1, cnt2 + 60);
-		ds_writew(DST_X2, 95);
-		ds_writew(DST_Y2, cnt2 + cnt1 + 59);
-		ds_writed(DST_SRC, ds_writed(DST_DST, ds_readd(GEN_PTR1_DIS)));
+		g_dst_x1 = 0;
+		g_dst_y1 = cnt2 + 60;
+		g_dst_x2 = 95;
+		g_dst_y2 = cnt2 + cnt1 + 59;
+		g_dst_src = g_dst_dst = (RealPt)ds_readd(GEN_PTR1_DIS);
 		do_draw_pic(0);
 
 		if (cnt1 != 100) {
 
-			ds_writed(DST_SRC, (Bit32u)((RealPt)ds_readd(GEN_PTR1_DIS) + i * 960 + 9600));
+			g_dst_src = (RealPt)ds_readd(GEN_PTR1_DIS) + i * 960 + 9600;
 			if (cnt1 % 4 == 1)
 				i++;
 
 			if (i == 8)
 				i = 4;
 
-			ds_writew(DST_X1, 0);
-			ds_writew(DST_Y1, 150);
-			ds_writew(DST_X2, 95);
-			ds_writew(DST_Y2, 159);
-			ds_writed(DST_DST, ds_readd(GEN_PTR1_DIS));
+			g_dst_x1 = 0;
+			g_dst_y1 = 150;
+			g_dst_x2 = 95;
+			g_dst_y2 = 159;
+			g_dst_dst = (RealPt)ds_readd(GEN_PTR1_DIS);
 			do_draw_pic(2);
 		}
 
-		ds_writew(DST_X1, 112);
-		ds_writew(DST_Y1, 50);
-		ds_writew(DST_X2, 207);
-		ds_writew(DST_Y2, 149);
-		ds_writed(DST_SRC, ds_readd(GEN_PTR1_DIS));
+		g_dst_x1 = 112;
+		g_dst_y1 = 50;
+		g_dst_x2 = 207;
+		g_dst_y2 = 149;
+		g_dst_src = (RealPt)ds_readd(GEN_PTR1_DIS);
 
-		ds_writew(UNKN1, 0);
-		ds_writew(UNKN2, 60);
-		ds_writew(UNKN3, 95);
-		ds_writew(UNKN4, 159);
-		ds_writed(DST_DST, ds_readd(VGA_MEMSTART));
+		g_unkn1 = 0;
+		g_unkn2 = 60;
+		g_unkn3 = 95;
+		g_unkn4 = 159;
+		g_dst_dst = ds_readd(VGA_MEMSTART);
 		do_draw_pic(3);
 		cnt1++;
 		cnt2--;
@@ -7593,11 +7591,11 @@ void intro(void)
 	set_palette((RealPt)ds_readd(BUFFER_HEADS_DAT) + flen - 32 * 3, 0, 32);
 
 	/* draw the picture */
-	ds_writew(DST_X1, 60);
-	ds_writew(DST_Y1, 50);
-	ds_writew(DST_X2, 259);
-	ds_writew(DST_Y2, 149);
-	ds_writed(DST_SRC, ds_readd(GEN_PTR1_DIS));
+	g_dst_x1 = 60;
+	g_dst_y1 = 50;
+	g_dst_x2 = 259;
+	g_dst_y2 = 149;
+	g_dst_src = (RealPt)ds_readd(GEN_PTR1_DIS);
 	do_draw_pic(0);
 	vsync_or_key(200);
 
@@ -7623,11 +7621,11 @@ void intro(void)
 	set_palette((RealPt)g_pal_tmp, 0, 32);
 
 	/* draw DSALOGO.DAT */
-	ds_writew(DST_X1, 0);
-	ds_writew(DST_Y1, 0);
-	ds_writew(DST_X2, 319);
-	ds_writew(DST_Y2, 99);
-	ds_writed(DST_SRC, ds_readd(GEN_PTR1_DIS));
+	g_dst_x1 = 0;
+	g_dst_y1 = 0;
+	g_dst_x2 = 319;
+	g_dst_y2 = 99;
+	g_dst_src = (RealPt)ds_readd(GEN_PTR1_DIS);
 	do_draw_pic(0);
 
 	/* load GENTIT.DAT */
@@ -7645,11 +7643,11 @@ void intro(void)
 	process_nvf(&nvf);
 
 	/* draw DSALOGO.DAT */
-	ds_writew(DST_X1, 10);
-	ds_writew(DST_Y1, 110);
-	ds_writew(DST_X2, 329);
-	ds_writew(DST_Y2, 159);
-	ds_writed(DST_SRC, ds_readd(GEN_PTR1_DIS));
+	g_dst_x1 = 10;
+	g_dst_y1 = 110;
+	g_dst_x2 = 329;
+	g_dst_y2 = 159;
+	g_dst_src = (RealPt)ds_readd(GEN_PTR1_DIS);
 	do_draw_pic(0);
 
 	bc_memcpy((RealPt)ds_readd(GEN_PTR1_DIS) + 500, &g_pal_dsalogo, 96);
@@ -7886,7 +7884,7 @@ void init_stuff(void)
 	/* number of menu tiles width */
 	g_menu_tiles = 3;
 
-	ds_writed(DST_DST, ds_readd(VGA_MEMSTART));
+	g_dst_dst = (RealPt)ds_readd(VGA_MEMSTART);
 }
 
 /* Borlandified and identical */
