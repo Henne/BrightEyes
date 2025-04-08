@@ -1427,7 +1427,7 @@ void start_music(Bit16u track)
 void read_soundcfg(void)
 {
 	Bit16s handle;
-	Bit16u port; // This has to be unsigned
+	Bit16s port; // This has to be unsigned
 
 	g_use_cda = 0;
 	g_midi_disabled = 1;
@@ -1438,7 +1438,7 @@ void read_soundcfg(void)
 
 #if !defined(__BORLANDC__)
 		/* Small hack: enable MIDI instead of CD-Audio */
-		D1_INFO("MIDI port 0x%x\n", port);
+		//D1_INFO("MIDI port 0x%x\n", port);
 		if ((port != 0) && (load_driver(g_str_sound_adv, 3, port))) {
 			/* disable audio-cd */
 			g_use_cda = 0;
@@ -1625,7 +1625,7 @@ unsigned short load_file(Bit16s index)
 }
 
 /* Borlandified and nearly identical */
-unsigned short load_driver(const char* fname, signed short type, signed short port)
+signed short load_driver(const char* fname, signed short type, signed short port)
 {
 	if ((port != 0) &&
 		(g_snd_driver_base_addr = (Bit8u*)load_snd_driver(fname)) &&
