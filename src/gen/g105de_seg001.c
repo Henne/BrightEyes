@@ -514,3 +514,7 @@ signed short seg001_0600()
 	asm { db 0x0f, 0x1f, 0x00; } // BCC Sync-Point
 #endif
 }
+
+void dummy()
+{
+}

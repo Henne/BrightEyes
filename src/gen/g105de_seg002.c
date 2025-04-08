@@ -1392,6 +1392,7 @@ static signed short g_ro_var[7];
  * To get the correct code we start at offset 0x0000 with some alignement code
  * to obtain correct alignment and the correct adresses from the switch jump-tables.
  */
+#if 1
 void dummy0()
 {
 	asm {nop; };
@@ -1399,6 +1400,7 @@ void dummy0()
 void dummy()
 {
 }
+#endif
 #endif
 
 /* Borlandified and identical */
