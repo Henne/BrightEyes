@@ -917,7 +917,7 @@ static const signed short g_ro_zero = 0;
 
 static const signed char dummy6 = 0;
 
-static struct struct_hero hero = {0};
+static struct struct_hero g_hero = {0};
 
 static const signed char dummy_6_1 = 0;
 
@@ -2499,12 +2499,12 @@ void save_chr(void)
 	Bit16s i;      //di
 
 	/* check for typus */
-	if (!ds_readbs(HERO_TYPUS)) {
+	if (!g_hero.typus) {
 		infobox(get_text(72), 0);
 		return;
 	}
 	/* check for name */
-	if (!ds_readbs(HERO_NAME + 0)) {
+	if (!g_hero.name[0]) {
 		infobox(get_text(154), 0);
 		return;
 	}
@@ -2532,11 +2532,11 @@ void save_chr(void)
 
 	/* copy name to alias */
 	/* TODO: should use strncpy() here */
-	strcpy(RealMake(datseg, HERO_ALIAS), RealMake(datseg, HERO_NAME));
+	strcpy(g_hero.alias, g_hero.name);
 
 	/* copy name to buffer */
 	/* TODO: should use strncpy() here */
-	strcpy(g_gen_ptr2, RealMake(datseg, HERO_NAME));
+	strcpy(g_gen_ptr2, g_hero.name);
 
 	/* prepare filename */
 	for (i = 0; i < 8; i++) {
@@ -2563,7 +2563,7 @@ void save_chr(void)
 		handle = _creat(filename, 0);
 
 		if (handle != -1) {
-			bc_write(handle, RealMake(datseg, HERO_NAME), 1754);
+			bc_write(handle, g_hero.name, 0x6da);
 			close(handle);
 
 			if (g_called_with_args == 0) return;
@@ -2572,7 +2572,7 @@ void save_chr(void)
 			strcat(path, filename);
 
 			if ((handle = bc__creat(path, 0)) != -1) {
-				bc_write(handle, RealMake(datseg, HERO_NAME), 1754);
+				bc_write(handle, g_hero.name, 0x6da);
 				close(handle);
 			}
 		} else {
@@ -4103,10 +4103,10 @@ void enter_name(void)
 
 	update_mouse_cursor();
 	copy_to_screen(g_picbuf1, dst, 94, 8, 0);
-	enter_string((char*)Real2Host(RealMake(datseg, HERO_NAME)), 180, 12, 15, 1);
+	enter_string(g_hero.name, 180, 12, 15, 1);
 	copy_to_screen(g_picbuf1, dst, 94, 8, 0);
 	call_mouse();
-	print_str((char*)Real2Host(RealMake(datseg, HERO_NAME)), 180, 12);
+	print_str(g_hero.name, 180, 12);
 }
 
 /* Borlandified and identical */
@@ -4152,11 +4152,11 @@ void change_sex(void)
 	Bit8u* src;
 
 	/* change sex of the hero */
-	ds_xor_bs(HERO_SEX, 1);
+	g_hero.sex ^= 1;
 
 	/* hero has a typus */
-	if (ds_readb(HERO_TYPUS)) {
-		if (ds_readbs(HERO_SEX) != 0) {
+	if (g_hero.typus) {
+		if (g_hero.sex != 0) {
 			/* To female */
 			g_head_first = g_head_current = g_head_first_female[g_head_typus];
 			g_head_last = g_head_first_male[g_head_typus + 1] - 1;
@@ -4169,7 +4169,7 @@ void change_sex(void)
 		return;
 	} else {
 		dst = g_vga_memstart + 7 * 320 + 305;
-		src = g_buffer_sex_dat + 256 * ds_readbs(HERO_SEX);
+		src = g_buffer_sex_dat + 256 * g_hero.sex;
 		update_mouse_cursor();
 		copy_to_screen(src, dst, 16, 16, 0);
 		call_mouse();
@@ -4217,7 +4217,7 @@ void do_gen(void)
 						get_text(262),get_text(9),  get_text(258));
 
 					if (si != -1) {
-						if ((si >= 4) && (si < 6) && (ds_readbs(HERO_ATT0_NORMAL)) && !gui_bool(get_text(13))) {
+						if ((si >= 4) && (si < 6) && (g_hero.attrib[0].normal) && !gui_bool(get_text(13))) {
 							si = 0;
 						}
 						g_in_key_ext = 0;
@@ -4235,7 +4235,7 @@ void do_gen(void)
 								break;
 							}
 							case 4: {
-								memset(RealMake(datseg, HERO_NAME), 0, 0x6da);
+								memset(g_hero.name, 0, 0x6da);
 								clear_hero();
 								g_mouse2_event = 1;
 								g_screen_var = 1;
@@ -4295,7 +4295,7 @@ void do_gen(void)
 			enter_name();
 
 		if ((g_in_key_ext == KEY_UP) && (g_gen_page == 0)) {
-			if (!ds_readbs(HERO_TYPUS)) {
+			if (!g_hero.typus) {
 				infobox(get_text(17), 0);
 			} else {
 				if (g_head_current < g_head_last) {
@@ -4308,7 +4308,7 @@ void do_gen(void)
 		}
 
 		if ((g_in_key_ext == KEY_DOWN) && (g_gen_page == 0)) {
-			if (!ds_readbs(HERO_TYPUS)) {
+			if (!g_hero.typus) {
 				infobox(get_text(17), 0);
 			} else {
 				if (g_head_current > g_head_first) {
@@ -4321,12 +4321,12 @@ void do_gen(void)
 		}
 
 		if ((g_in_key_ext == KEY_RIGHT) && (g_level != 1)) {
-			if (!ds_readbs(HERO_TYPUS)) {
+			if (!g_hero.typus) {
 				infobox(get_text(72), 0);
 			} else {
 				g_screen_var = 1;
 
-				if (((ds_readbs(HERO_TYPUS) < 7) ? 4 : 10) > g_gen_page) {
+				if (((g_hero.typus < 7) ? 4 : 10) > g_gen_page) {
 					g_gen_page++;
 				} else {
 					g_gen_page = 0;
@@ -4341,25 +4341,25 @@ void do_gen(void)
 			} else {
 				if (g_level != 1) {
 
-					if (!ds_readbs(HERO_TYPUS)) {
+					if (!g_hero.typus) {
 						infobox(get_text(72), 0);
 					} else {
 						g_screen_var = 1;
-						g_gen_page = (ds_readbs(HERO_TYPUS) < 7 ? 4 : 10);
+						g_gen_page = (g_hero.typus < 7 ? 4 : 10);
 					}
 				}
 			}
 		}
 
 		if ((g_in_key_ext >= KEY_1) && (g_in_key_ext <= KEY_5) &&
-			(g_level == 2) && ds_readbs(HERO_TYPUS)) {
+			(g_level == 2) && g_hero.typus) {
 
 			si = ((g_in_key_ext == KEY_1) ? 0 : (
 				(g_in_key_ext == KEY_2) ? 1 : (
 				(g_in_key_ext == KEY_3) ? 4 : (
 				(g_in_key_ext == KEY_4) ? 5 : 10))));
 
-			if ((si != g_gen_page) && (si < 5 || ds_readbs(HERO_TYPUS) >= 7)) {
+			if ((si != g_gen_page) && (si < 5 || g_hero.typus >= 7)) {
 				g_gen_page = si;
 				g_screen_var = 1;
 			}
@@ -4382,10 +4382,10 @@ void refresh_screen(void)
 		save_picbuf();
 
 		/* page with base values and hero is not male */
-		if ((g_gen_page == 0) && (ds_readbs(HERO_SEX) != 0)) {
+		if ((g_gen_page == 0) && (g_hero.sex != 0)) {
 
 			dst = g_gen_ptr1_dis + 7 * 320 + 305;
-			src = g_buffer_sex_dat + 256 * ds_readbs(HERO_SEX);
+			src = g_buffer_sex_dat + 256 * g_hero.sex;
 			copy_to_screen(src, dst, 16, 16, 0);
 		}
 
@@ -4408,18 +4408,18 @@ void refresh_screen(void)
 #else
 			dst = g_gen_ptr1_dis; // BCC Sync-Point
 #endif
-			if (ds_readbs(HERO_TYPUS) != 0) {
+			if (g_hero.typus != 0) {
 
 				g_need_refresh = 1;
 				copy_to_screen(g_gen_ptr5, dst, 128, 184, 0);
 
-				if (ds_readbs(HERO_SEX) != 0) {
-					print_str(get_text(271 + ds_readbs(HERO_TYPUS)),
-						get_line_start_c(get_text(271 + ds_readbs(HERO_TYPUS)), 16, 128),
+				if (g_hero.sex != 0) {
+					print_str(get_text(271 + g_hero.typus),
+						get_line_start_c(get_text(271 + g_hero.typus), 16, 128),
 						184);
 				} else {
-					print_str(get_text(17 + ds_readbs(HERO_TYPUS)),
-						get_line_start_c(get_text(17 + ds_readbs(HERO_TYPUS)), 16, 128),
+					print_str(get_text(17 + g_hero.typus),
+						get_line_start_c(get_text(17 + g_hero.typus), 16, 128),
 						184);
 				}
 
@@ -4439,7 +4439,7 @@ void refresh_screen(void)
 			}
 		}
 		/* if hero has a typus */
-		if (ds_readbs(HERO_TYPUS) != 0) {
+		if (g_hero.typus != 0) {
 			/* draw the head */
 
 			nvf.dst = g_gen_ptr6;
@@ -4503,7 +4503,7 @@ void clear_hero(void)
 		g_skill_incs[i].tries = g_skill_incs[i].incs = 0;
 	}
 
-	ds_writeb(HERO_LEVEL, 1);
+	g_hero.level = 1;
 }
 
 /**
@@ -4531,34 +4531,34 @@ void new_values(void)
 	Bit16s di;
 
 	/* set variable if hero has a typus */
-	if (ds_readbs(HERO_TYPUS))
+	if (g_hero.typus)
 		g_screen_var = 1;
 
 	/* save the name of the hero */
 	/* TODO strncpy() would be better here */
 
-	strcpy(name_bak, (char*)Real2Host(RealMake(datseg, HERO_NAME)));
+	strcpy(name_bak, g_hero.name);
 
 	/* save the sex of the hero */
-	sex_bak = ds_readbs(HERO_SEX);
+	sex_bak = g_hero.sex;
 
 	/* clear the hero */
-	memset(RealMake(datseg, HERO_NAME), 0, 0x6da);
+	memset(g_hero.name, 0, 0x6da);
 
 	clear_hero();
 
-	ds_writeb(HERO_SEX, sex_bak);
+	g_hero.sex = sex_bak;
 
 	/* restore the name of the hero */
 	/* TODO strncpy() would be better here */
 
-	strcpy((char*)Real2Host(RealMake(datseg, HERO_NAME)), name_bak);
+	strcpy(g_hero.name, name_bak);
 
 	refresh_screen();
 
 	g_screen_var = 0;
 
-	ds_ptr = RealMake(datseg, HERO_ATT0_NORMAL);
+	ds_ptr = &g_hero.attrib[0].normal;
 
 	for (j = 0; j < 7; j++) {
 		randval = (Bit8s)random_interval_gen(8, 13);
@@ -4603,7 +4603,7 @@ void new_values(void)
 		call_mouse();
 	}
 
-	ds_ptr = RealMake(datseg, HERO_ATT0_NORMAL + 3 * 7);
+	ds_ptr = &g_hero.attrib[7].normal;
 
 	for (j = 0; j < 7; j++) {
 		randval = (Bit8s)random_interval_gen(2, 7);
@@ -4661,7 +4661,7 @@ void calc_at_pa(void)
 	Bit16s tmp;
 	Bit16s i;
 
-	res = div(ds_readbs(HERO_ATT_IN_NORMAL) + ds_readbs(HERO_ATT_KK_NORMAL) + ds_readbs(HERO_ATT_GE_NORMAL), 5);
+	res = div(g_hero.attrib[5].normal + g_hero.attrib[6].normal + g_hero.attrib[4].normal, 5);
 	/* round up if neccessary */
 	if (res.rem >= 3) {
 		res.quot++;
@@ -4722,31 +4722,31 @@ void fill_values(void)
 #else
 	for (i = 0; i < 52; ) { // BCC Sync-Point
 #endif
-		ds_writebs(HERO_SKILLS + i, g_skills[ds_readbs(HERO_TYPUS)][i]);
+		ds_writebs(HERO_SKILLS + i, g_skills[g_hero.typus][i]);
 
 		/* set skill_incs and skill_tries to zero */
 		g_skill_incs[i].tries = g_skill_incs[i].incs = 0;
 	}
 
 	/* set skill_attempts */
-	ds_writeb(HERO_SKILL_INCS, g_initial_skill_incs[ds_readbs(HERO_TYPUS)]);
+	ds_writeb(HERO_SKILL_INCS, g_initial_skill_incs[g_hero.typus]);
 
 	/* do magic user init */
-	if (ds_readbs(HERO_TYPUS) >= 7) {
+	if (g_hero.typus >= 7) {
 		/* fill initial spell values */
 #if !defined(__BORLANDC__)
 		for (i = 0; i < 86; i++) {
 #else
 		for (i = 0; i < 86; ) { // BCC Sync-Point
 #endif
-			ds_writebs(HERO_SPELLS + i, g_spells[ds_readbs(HERO_TYPUS) - 7][i]);
+			ds_writebs(HERO_SPELLS + i, g_spells[g_hero.typus - 7][i]);
 
 			/* set spell_incs and spell_tries to zero */
 			g_spell_incs[i].tries = g_spell_incs[i].incs = 0;
 		}
 
 		/* special mage values */
-		if (ds_readbs(HERO_TYPUS) == 9) {
+		if (g_hero.typus == 9) {
 			/* set staff spell to level 1 */
 			ds_writeb(HERO_STAFF_LEVEL, 1);
 			/* select mage school */
@@ -4770,10 +4770,10 @@ void fill_values(void)
 		}
 
 		/* set spell attempts */
-		ds_writeb(HERO_SPELL_INCS, g_initial_spell_incs[ds_readbs(HERO_TYPUS) - 7]);
+		ds_writeb(HERO_SPELL_INCS, g_initial_spell_incs[g_hero.typus - 7]);
 
 		/* get convertable increase attempts */
-		if ((di = g_initial_conv_incs[ds_readbs(HERO_TYPUS) - 7]) && (g_level == 2) && gui_bool(get_text(269))) {
+		if ((di = g_initial_conv_incs[g_hero.typus - 7]) && (g_level == 2) && gui_bool(get_text(269))) {
 			/* create string */
 			sprintf(g_gen_ptr2, get_text(270), di);
 
@@ -4807,14 +4807,14 @@ void fill_values(void)
 	}
 
 	/* set LE */
-	ds_writew(HERO_LE, ds_writews(HERO_LE_MAX, g_init_le[ds_readbs(HERO_TYPUS)]));
+	ds_writew(HERO_LE, ds_writews(HERO_LE_MAX, g_init_le[g_hero.typus]));
 
 	/* set AE */
-	ds_writew(HERO_AE, ds_writews(HERO_AE_MAX, g_init_ae[ds_readbs(HERO_TYPUS)]));
+	ds_writew(HERO_AE, ds_writews(HERO_AE_MAX, g_init_ae[g_hero.typus]));
 
 
 	/* wanna change 10 spell_attempts against 1W6+2 AE ? */
-	if ((ds_readbs(HERO_TYPUS) == 9) && (g_level == 2) && gui_bool(get_text(268))) {
+	if ((g_hero.typus == 9) && (g_level == 2) && gui_bool(get_text(268))) {
 		/* change spell_attempts */
 		ds_sub_bs(HERO_SPELL_INCS, 10);
 		ds_add_ws(HERO_AE_MAX, random_interval_gen(3, 8));
@@ -4824,37 +4824,35 @@ void fill_values(void)
 	}
 
 	/* roll out size */
-	ds_writeb(HERO_HEIGHT,
-		(unsigned char)random_interval_gen(g_height_range[ds_readbs(HERO_TYPUS)].min,
-						   g_height_range[ds_readbs(HERO_TYPUS)].max));
+	g_hero.height =
+		(unsigned char)random_interval_gen(g_height_range[g_hero.typus].min,
+						   g_height_range[g_hero.typus].max);
 
 	/* calculate weight i = (height - weight_mod) * 40 */
-	ds_writew(HERO_WEIGHT, (ds_readb(HERO_HEIGHT) - 40 * g_weight_mod[ds_readbs(HERO_TYPUS)]));
+	g_hero.weight = (g_hero.height - 40 * g_weight_mod[g_hero.typus]);
 
 	/* roll out the money */
 	i = random_gen(20);
-	money_ptr = g_money_tab[ds_readbs(HERO_TYPUS)];
+	money_ptr = g_money_tab[g_hero.typus];
 	for (si = 0; money_ptr[si].value < i; si++);
 
-	ds_writed(HERO_MONEY, (Bit32s)(10 * (Bit16s)random_interval_gen(money_ptr[si].min, money_ptr[si].max)));
+	g_hero.money = (signed long)(10 * (signed short)random_interval_gen(money_ptr[si].min, money_ptr[si].max));
 
-	/* calculate MR  = (KL + SI + Level) / 3 - 2 * AG */
+	/* calculate MR  = (KL + MU + Stufe) / 3 - 2 * AG
+	 * 		 = (WD + CO + Level) / 3 - 2 * SN */
 	ds_writeb(HERO_MR,
-		(ds_readbs(HERO_ATT0_NORMAL + 3 * 1) + ds_readbs(HERO_ATT0_NORMAL + 3 * 0) + ds_readbs(HERO_LEVEL)) / 3
-		 - 2 * ds_readbs(HERO_ATT0_NORMAL + 3 * 7));
+		(g_hero.attrib[1].normal + g_hero.attrib[0].normal + g_hero.level) / 3 - 2 * g_hero.attrib[7].normal);
 	/* add typus MR Modificator */
-	ds_add_bs(HERO_MR, g_mr_mod[ds_readbs(HERO_TYPUS)]);
+	ds_add_bs(HERO_MR, g_mr_mod[g_hero.typus]);
 
 	/* roll out god */
-	ds_writeb(HERO_GOD, random_gen(12));
+	g_hero.god = random_gen(12);
 
 	/* add gods boni */
-	switch (ds_readbs(HERO_GOD)) {
+	switch (g_hero.god) {
 		case 1 : {
 			/* Praios: MU + 1 */
-			ds_writebs(HERO_ATT0_CURRENT + 3 * 0,
-				ds_writebs(HERO_ATT0_NORMAL + 3 * 0,
-					ds_readbs(HERO_ATT0_NORMAL + 3 * 0) + 1));
+			g_hero.attrib[0].current = ++g_hero.attrib[0].normal;
 			g_got_mu_bonus = 1;
 			break;
 		}
@@ -4891,9 +4889,7 @@ void fill_values(void)
 		}
 		case 8 : {
 			/* Tsa: CH + 1 */
-			ds_writebs(HERO_ATT0_CURRENT + 3 * 2,
-				ds_writebs(HERO_ATT0_NORMAL + 3 * 2,
-					ds_readbs(HERO_ATT0_NORMAL + 3 * 2) + 1));
+			g_hero.attrib[2].current = ++g_hero.attrib[2].normal;
 			g_got_ch_bonus = 1;
 			break;
 		}
@@ -4929,14 +4925,14 @@ void fill_values(void)
 	if (g_level == 1) {
 		/* increase skills automatically */
 		for (i = 0; ds_readbs(HERO_SKILL_INCS) > 0; i++) {
-			skill_inc_novice(v1 = g_autoskills[ds_readbs(HERO_TYPUS)][i]);
+			skill_inc_novice(v1 = g_autoskills[g_hero.typus][i]);
 		}
 
 		// Okay, till here !
 
 		si = 0;
 		/* prepare mage automatic spell list */
-		if (ds_readbs(HERO_TYPUS) == 9) {
+		if (g_hero.typus == 9) {
 			/* Remark: HERO_TYPUS is equal to 9, g_autospells starts with typus = 7,
 			 * so g_autospells[2] is that of the Mage */
 
@@ -4978,7 +4974,7 @@ void fill_values(void)
 
 		/* automatic increase spells */
 		for (i = 0; ds_readbs(HERO_SPELL_INCS) > 0; i++) {
-			spell_inc_novice((v2 = g_autospells[ds_readbs(HERO_TYPUS) - 7][i]));
+			spell_inc_novice((v2 = g_autospells[g_hero.typus - 7][i]));
 		}
 	}
 }
@@ -5093,7 +5089,7 @@ void select_typus(void)
 	Bit8s old_typus;
 	Bit8s possible_types;
 	Bit8s ltmp2;
-	RealPt ptr;
+	signed char *ptr;
 	Bit16s i;
 	Bit16s impossible;
 
@@ -5108,22 +5104,18 @@ void select_typus(void)
 	t = *(struct type_bitmap*)&g_type_bitmap;
 
 	/* check if attribs have been set */
-	if (ds_readbs(HERO_ATT0_NORMAL + 3 * 0) != 0) {
+	if (g_hero.attrib[0].normal != 0) {
 
 		/* save the old typus */
-		old_typus = ds_readbs(HERO_TYPUS);
+		old_typus = g_hero.typus;
 		
 		/* disable MU bonus */
 		if (g_got_mu_bonus) {
-			ds_writebs(HERO_ATT0_CURRENT + 3 * 0,
-				ds_writebs(HERO_ATT0_NORMAL + 3 * 0,
-					ds_readbs(HERO_ATT0_NORMAL + 3 * 0) - 1));
+			g_hero.attrib[0].current = --g_hero.attrib[0].normal;
 		}
 		/* disable CH bonus */
 		if (g_got_ch_bonus) {
-			ds_writebs(HERO_ATT0_CURRENT + 3 * 2,
-				ds_writebs(HERO_ATT0_NORMAL + 3 * 2,
-					ds_readbs(HERO_ATT0_NORMAL + 3 * 2) - 1));
+			g_hero.attrib[2].current = --g_hero.attrib[2].normal;
 		}
 		possible_types = 0;
 
@@ -5131,10 +5123,9 @@ void select_typus(void)
 			impossible = 0;
 			for (si = 0; si < 4; si++) {
 
-				//ltmp2 = ds_readbs(HERO_ATT0_NORMAL + 3 * reqs[i][si].attrib);
-				ptr = RealMake(datseg, HERO_ATT0_NORMAL + 3 * g_reqs[i][si].attrib);
+				ptr = &g_hero.attrib[g_reqs[i][si].attrib].normal;
 
-				ltmp2 = host_readbs(Real2Host(ptr));
+				ltmp2 = *(ptr);
 
 				if ((g_reqs[i][si].value & 0x80) != 0) {
 					if (ltmp2 > (g_reqs[i][si].value & 0x7f))
@@ -5147,7 +5138,7 @@ void select_typus(void)
 
 			if (!impossible) {
 
-				g_type_names[possible_types] = 	get_text( (ds_readbs(HERO_SEX) ? 271 : 17 ) + i);
+				g_type_names[possible_types] = 	get_text( (g_hero.sex ? 271 : 17 ) + i);
 				t.t[possible_types] = (char)i;
 				possible_types++;
 			}
@@ -5178,22 +5169,22 @@ void select_typus(void)
 
 			/* set new typus */
 #if !defined(__BORLANDC__)
-			ds_writeb(HERO_TYPUS, t.t[di - 1]);
+			g_hero.typus = t.t[di - 1];
 #else
-			ds_writeb(HERO_TYPUS, _AL);
+			g_hero.typus = _AL;
 #endif
 			g_screen_var = 1;
 
-			load_typus(ds_readbs(HERO_TYPUS));
+			load_typus(g_hero.typus);
 			update_mouse_cursor();
 			call_fill_rect_gen((RealPt)g_vga_memstart, 16, 8, 143, 191, 0);
 			wait_for_vsync();
 			set_palette(g_gen_ptr5 + 0x5c02, 0, 32);
 			call_mouse();
 
-			g_head_typus = (ds_readbs(HERO_TYPUS) > 10 ? 10 : ds_readbs(HERO_TYPUS));
+			g_head_typus = (g_hero.typus > 10 ? 10 : g_hero.typus);
 
-			if (ds_readbs(HERO_SEX)) {
+			if (g_hero.sex) {
 #if !defined(__BORLANDC__)
 				g_head_first = g_head_current = g_head_first_female[g_head_typus];
 #else
@@ -5210,14 +5201,10 @@ void select_typus(void)
 			fill_values();
 		} else {
 			if (g_got_mu_bonus) {
-				ds_writebs(HERO_ATT0_CURRENT + 3 * 0,
-					ds_writebs(HERO_ATT0_NORMAL + 3 * 0,
-						ds_readbs(HERO_ATT0_NORMAL + 3 * 0) + 1));
+				g_hero.attrib[0].current = ++g_hero.attrib[0].normal;
 			}
 			if (g_got_ch_bonus) {
-				ds_writebs(HERO_ATT0_CURRENT + 3 * 2,
-					ds_writebs(HERO_ATT0_NORMAL + 3 * 2,
-						ds_readbs(HERO_ATT0_NORMAL + 3 * 2) + 1));
+				g_hero.attrib[2].current = ++g_hero.attrib[2].normal;
 			}
 		}
 	} else {
@@ -5237,7 +5224,7 @@ Bit16s can_change_attribs(void)
 {
 	Bit16s na_inc;
 	volatile Bit16s na_dec;
-	Bit8u* p;
+	signed char *p;
 	Bit16s i;
 	Bit16s pa_inc;
 	Bit16s pa_dec;
@@ -5248,22 +5235,22 @@ Bit16s can_change_attribs(void)
 	na_dec = 0;
 
 	for (i = 0; i < 7; i++) {
-		p = Real2Host(RealMake(datseg, 3 * i + HERO_ATT0_NORMAL));
+		p = &g_hero.attrib[i].normal;
 
-		if ((g_attrib_changed[i] != INC) && (host_readbs(p) > 8))
-			pa_dec += 8 - host_readbs(p);
-		if ((g_attrib_changed[i] != DEC) && (host_readbs(p) < 13))
-			pa_inc += 13 - host_readbs(p);
+		if ((g_attrib_changed[i] != INC) && (p[0] > 8))
+			pa_dec += 8 - p[0];
+		if ((g_attrib_changed[i] != DEC) && (p[0] < 13))
+			pa_inc += 13 - p[0];
 	}
 
 	for (i = 7; i < 14; i++) {
-		p = Real2Host(RealMake(datseg, 3 * i + HERO_ATT0_NORMAL));
+		p = &g_hero.attrib[i].normal;
 
-		if ((g_attrib_changed[i] != INC) && (host_readbs(p) > 2))
-			na_dec += 2 - host_readbs(p);
-		if ((g_attrib_changed[i] != DEC) && (host_readbs(p) < 8))
+		if ((g_attrib_changed[i] != INC) && (p[0] > 2))
+			na_dec += 2 - p[0];
+		if ((g_attrib_changed[i] != DEC) && (p[0] < 8))
 #if !defined(__BORLANDC__)
-			na_inc += 8 - host_readbs(p);
+			na_inc += 8 - p[0];
 #else
 			asm { db 0x0b, 0xc9; nop; } // BCC Sync-Point
 #endif
@@ -5291,15 +5278,15 @@ void change_attribs(void)
 	Bit16s tmp1;
 	volatile Bit16s tmp2;
 	volatile Bit16s tmp3;
-	Bit8u* ptr1;
-	Bit8u* ptr2;
+	signed char *ptr1;
+	signed char *ptr2;
 	Bit8s c;
 
 	Bit16s si;
 	Bit16s di;
 
 	/* check if attributes have been set */
-	if (!ds_readbs(HERO_ATT0_NORMAL + 3 * 0)) {
+	if (!g_hero.attrib[0].normal) {
 		infobox(get_text(16), 0);
 		return;
 	}
@@ -5309,26 +5296,22 @@ void change_attribs(void)
 		return;
 	}
 	/* if typus != 0 */
-	if (ds_readbs(HERO_TYPUS)) {
+	if (g_hero.typus) {
 
 		if (!gui_bool(get_text(73)))
 			return;
 
 		/* set typus to 0 */
-		ds_writeb(HERO_TYPUS, 0);
+		g_hero.typus = 0;
 
 		/* remove MU boni */
 		if (g_got_mu_bonus) {
-			ds_writeb(HERO_ATT0_CURRENT + 3 * 0,
-				ds_writebs(HERO_ATT0_NORMAL + 3 * 0,
-					ds_readbs(HERO_ATT0_NORMAL + 3 * 0) - 1));
+			g_hero.attrib[0].current = --g_hero.attrib[0].normal;
 			g_got_mu_bonus = 0;
 		}
 		/* remove CH boni */
 		if (g_got_ch_bonus) {
-			ds_writeb(HERO_ATT0_CURRENT + 3 * 2,
-				ds_writebs(HERO_ATT0_NORMAL + 3 * 2,
-					ds_readbs(HERO_ATT0_NORMAL + 3 * 2) - 1));
+			g_hero.attrib[2].current = --g_hero.attrib[2].normal;
 			g_got_ch_bonus = 0;
 		}
 		g_screen_var = 1;
@@ -5367,20 +5350,20 @@ void change_attribs(void)
 		tmp3 = g_attrib_changed[tmp2];
 	}
 
-	ptr1 = Real2Host(RealMake(datseg, 3 * tmp2 + HERO_ATT0_NORMAL));
+	ptr1 = &g_hero.attrib[tmp2].normal;
 
 	if (tmp3 == INC) {
 		/* increment */
-		if (host_readbs(ptr1) == 13) {
+		if (ptr1[0] == 13) {
 			infobox(get_text(77), 0);
 			return;
 		}
 		c = 0;
 		for (di = 7; di < 14; di++) {
 			if (g_attrib_changed[di] != DEC) {
-				ptr2 = Real2Host(RealMake(datseg, 3 * di + HERO_ATT0_NORMAL));
-				if (host_readbs(ptr2) < 8) {
-					c += 8 - host_readbs(ptr2);
+				ptr2 = &g_hero.attrib[di].normal;
+				if (ptr2[0] < 8) {
+					c += 8 - ptr2[0];
 				}
 			}
 		}
@@ -5392,10 +5375,12 @@ void change_attribs(void)
 		//ds_inc_bs_post(HERO_ATT0_CURRENT + 3 * tmp2);
 		//ds_inc_bs_post(HERO_ATT0_NORMAL + 3 * tmp2);
 #if !defined(__BORLANDC__)
+		// p[0] = ++p[1];
 		host_writebs(ptr1, host_writebs(ptr1 + 1, host_readbs(ptr1 + 1) + 1));
 #else
 		//ds_inc_bs_post(HERO_ATT0_CURRENT + 3 * tmp2);
-		ds_inc_bs_post(HERO_ATT0_NORMAL + 3 * tmp2);
+		//ds_inc_bs_post(HERO_ATT0_NORMAL + 3 * tmp2);
+		g_hero.attrib[tmp2].normal++;
 		asm { db 0x8b, 0x5e, 0xfc; }; // BCC Sync-Point
 #endif
 
@@ -5423,9 +5408,9 @@ void change_attribs(void)
 				infobox(get_text(83), 0);
 				continue;
 			}
-			ptr1 = Real2Host(RealMake(datseg, 3 * si + HERO_ATT_AG_NORMAL));
+			ptr1 = &g_hero.attrib[si].normal;
 			/* check if attribute can be incremented */
-			if (host_readbs(ptr1) == 8) {
+			if (ptr1[0] == 8) {
 				infobox(get_text(77), 0);
 			} else {
 				/* increment the negative attribute */
@@ -5433,13 +5418,12 @@ void change_attribs(void)
 				g_attrib_changed[si + 7] = INC;
 
 #if !defined(__BORLANDC__)
-				host_writeb(ptr1,
-					host_writebs(ptr1 + 1,
-						host_readbs(ptr1 + 1) + 1));
+				ptr1[0] = ++ptr1[1];
 #else
-				ds_inc_bs_post(HERO_ATT0_NORMAL + 3 * (si + 7));
+				++ptr1[1];
+				//ds_inc_bs_post(HERO_ATT0_NORMAL + 3 * (si + 7));
 				//ds_inc_bs_post(HERO_ATT0_CURRENT + 3 * (si + 7)); // BCC Sync-Point
-				asm { db 0xe8, 0xad, 0xde; db 0x83, 0x7e, 0x80, 0x80;}
+				//asm { db 0xe8, 0xad, 0xde; db 0x83, 0x7e, 0x80, 0x80;}
 #endif
 
 				refresh_screen();
@@ -5455,12 +5439,12 @@ void change_attribs(void)
 		c = 0;
 		for (di = 7; di < 14; di++) {
 			if (g_attrib_changed[di] != INC) {
-				ptr2 = Real2Host(RealMake(datseg, 3 * di + HERO_ATT0_NORMAL));
-				if (host_readbs(ptr2) > 2) {
+				ptr2 = &g_hero.attrib[di].normal;
+				if (ptr2[0] > 2) {
 #if !defined(__BORLANDC__)
-					c += host_readbs(ptr2) - 2;
+					c += ptr2[0] - 2;
 #else
-					c = host_readbs(ptr2) - 2; // BCC Sync-Point
+					c = ptr2[0] - 2; // BCC Sync-Point
 #endif
 				}
 			}
@@ -5473,9 +5457,7 @@ void change_attribs(void)
 		//ds_dec_bs_post(HERO_ATT0_NORMAL + 3 * tmp2);
 		//ds_dec_bs_post(HERO_ATT0_CURRENT + 3 * tmp2);
 #if !defined(__BORLANDC__)
-		host_writeb(ptr1,
-			host_writebs(ptr1 + 1,
-				host_readbs(ptr1 + 1) - 1));
+		ptr1[0] = --ptr1[1];
 #else
 		host_writebs(ptr1 + 1, host_readbs(ptr1 + 1) - 1); // BCC Sync-point
 #endif
@@ -5506,7 +5488,7 @@ void change_attribs(void)
 				continue;
 			}
 				
-			ptr1 = Real2Host(RealMake(datseg, 3 * si + HERO_ATT_AG_NORMAL));
+			ptr1 = &g_hero.attrib[si + 7].normal;
 			
 			/* check if attribute can be decremented */
 			if (host_readbs(ptr1) == 2) {
@@ -5520,9 +5502,7 @@ void change_attribs(void)
 			//ds_dec_bs_post(HERO_ATT0_CURRENT + 3 * (si + 7));
 
 #if !defined(__BORLANDC__)
-			host_writebs(ptr1,
-				host_writebs(ptr1 + 1,
-					host_readbs(ptr1 + 1) - 1));
+			ptr1[0] = --ptr1[1];
 #else
 			host_writebs(ptr1 + 1, host_readbs(ptr1 + 1) - 1); // BCC Sync-Point
 #endif
@@ -5718,7 +5698,7 @@ void print_attribs(void)
 
 	signed short i;
 
-	p = Real2Host(RealMake(datseg, HERO_ATT0_NORMAL));
+	p = &g_hero.attrib[0].normal;
 
 	for (i = 0; i < 14; p += 3, i++) {
 		/* don't print 0s */
@@ -5752,28 +5732,28 @@ void print_values(void)
 			restore_picbuf((RealPt)g_gfx_ptr);
 
 			/* print name */
-			print_str((char*)Real2Host(RealMake(datseg, HERO_NAME)), 180, 12);
+			print_str(g_hero.name, 180, 12);
 
 			/* print attributes */
 			print_attribs();
 
 			/* return if no typus */
-			if (ds_readbs(HERO_TYPUS) == 0)	return;
+			if (g_hero.typus == 0) return;
 
 			/* print height */
-			sprintf(g_gen_ptr2, get_text(70), ds_readb(HERO_HEIGHT));
+			sprintf(g_gen_ptr2, get_text(70), g_hero.height);
 			print_str(g_gen_ptr2, 205, 25);
 
 			/* print weight */
-			sprintf(g_gen_ptr2, get_text(71), ds_readws(HERO_WEIGHT));
+			sprintf(g_gen_ptr2, get_text(71), g_hero.weight);
 
 			print_str(g_gen_ptr2, 205, 37);
 
 			/* print god name */
-			print_str(get_text(56 + ds_readbs(HERO_GOD)), 205, 49);
+			print_str(get_text(56 + g_hero.god), 205, 49);
 
 			/* print money */
-			make_valuta_str(g_gen_ptr2, ds_readds(HERO_MONEY));
+			make_valuta_str(g_gen_ptr2, g_hero.money);
 			print_str(g_gen_ptr2, 205, 61);
 
 			/* print LE */
@@ -5781,7 +5761,7 @@ void print_values(void)
 			/* print AE */
 			print_str(itoa(ds_readws(HERO_AE_MAX), tmp, 10), 221, 164);
 			/* print Endurance */
-			print_str(itoa(ds_readws(HERO_LE_MAX) + ds_readbs(HERO_ATT0_CURRENT + 3 * 6), tmp, 10), 296, 164);
+			print_str(itoa(ds_readws(HERO_LE_MAX) + g_hero.attrib[6].current, tmp, 10), 296, 164);
 			/* print MR */
 			print_str(itoa(ds_readbs(HERO_MR), tmp, 10), 232, 184);
 			break;
@@ -5931,10 +5911,10 @@ void print_values(void)
 				print_str(tmp, 315 - get_str_width(tmp), i * 12 + 48);
 			}
 
-			/* calc range base value (KL+GE+KK)/4 */
-			pos = (ds_readbs(HERO_ATT0_NORMAL + 3 * 1)
-				 + ds_readbs(HERO_ATT0_NORMAL + 3 * 4)
-				 + ds_readbs(HERO_ATT0_NORMAL + 3 * 6)) / 4;
+			/* calc range base value (KL+GE+KK) /4 */
+			pos = (g_hero.attrib[1].normal
+					+ g_hero.attrib[4].normal
+					+ g_hero.attrib[6].normal) / 4;
 
 			/* print missle and thrown weapon values */
 			print_str(itoa(pos + ds_readbs(HERO_SKILLS + 7), tmp, 10), 231, 144);
@@ -6416,16 +6396,16 @@ static void inc_spell(Bit16s spell)
 	Bit16s max_incs = 1;
 
 	/* if typus == warlock and the origin of the spell is warlock */
-	if ((ds_readbs(HERO_TYPUS) == 7) && (g_spell_tab[spell].origin == 3))
+	if ((g_hero.typus == 7) && (g_spell_tab[spell].origin == 3))
 		max_incs = 2;
 	/* if typus == elf and the origin of the spell is elven */
-	if ((ds_readbs(HERO_TYPUS) >= 10) && (g_spell_tab[spell].origin == 2))
+	if ((g_hero.typus >= 10) && (g_spell_tab[spell].origin == 2))
 		max_incs = 2;
 	/* if typus == druid and the origin of the spell is druid */
-	if ((ds_readbs(HERO_TYPUS) == 8) && (g_spell_tab[spell].origin == 0))
+	if ((g_hero.typus == 8) && (g_spell_tab[spell].origin == 0))
 		max_incs = 2;
 	/* if typus == mage */
-	if (ds_readbs(HERO_TYPUS) == 9) {
+	if (g_hero.typus == 9) {
 		/* and the origin of the spell is mage */
 		if (g_spell_tab[spell].origin == 1)
 			max_incs = 2;
@@ -6832,7 +6812,7 @@ void choose_typus(void)
 	if (!gui_bool(get_text(264)))
 		return;
 	/* female or male typus names */
-	typus_names = (ds_readbs(HERO_SEX) ? 271 : 17);
+	typus_names = (g_hero.sex ? 271 : 17);
 
 	choosen_typus = gui_radio(get_text(30), 12,
 				get_text(typus_names + 1), get_text(typus_names + 2),
@@ -6846,20 +6826,20 @@ void choose_typus(void)
 		return;
 
 	/* clear the hero area with saved name and sex */
-	strcpy(name_bak, (char*)Real2Host(RealMake(datseg, HERO_NAME)));
-	sex_bak = ds_readbs(HERO_SEX);
+	strcpy(name_bak, g_hero.name);
+	sex_bak = g_hero.sex;
 
-	memset(RealMake(datseg, HERO_NAME), 0, 0x6da);
+	memset(g_hero.name, 0, 0x6da);
 
 	clear_hero();
-	ds_writeb(HERO_SEX, sex_bak);
+	g_hero.sex = sex_bak;
 
-	strcpy((char*)Real2Host(RealMake(datseg, HERO_NAME)), name_bak);
+	strcpy(g_hero.name, name_bak);
 
 	/* set typus */
-	ds_writeb(HERO_TYPUS, (unsigned char)choosen_typus);
+	g_hero.typus = (signed char)choosen_typus;
 
-	ptr = Real2Host(RealMake(datseg, HERO_ATT0_NORMAL));
+	ptr = &g_hero.attrib[0].normal;
 
 	/* roll out positive attribute values */
 	for (i = 0; i < 7; i ++) {
@@ -6872,7 +6852,7 @@ void choose_typus(void)
 		ptr[3 * i] = ptr[3 * i + 1] = (signed char)randval;
 	}
 
-	ptr = RealMake(datseg, HERO_ATT0_NORMAL + 3 * 7);
+	ptr = &g_hero.attrib[7].normal;
 
 	/* roll out negative attribute values */
 	for (i = 0; i < 7; i ++) {
@@ -6889,7 +6869,7 @@ void choose_typus(void)
 	for (i = 0; i < 4; i++) {
 
 		/* calc pointer to attribute */
-		ptr = Real2Host(RealMake(datseg, HERO_ATT0_NORMAL + 3 * g_reqs[choosen_typus][i].attrib));
+		ptr = &g_hero.attrib[g_reqs[choosen_typus][i].attrib].normal;
 		/* get the required value */
 		randval = g_reqs[choosen_typus][i].value;
 
@@ -6920,7 +6900,7 @@ void choose_typus(void)
 		}
 	}
 
-	load_typus(ds_readbs(HERO_TYPUS));
+	load_typus(g_hero.typus);
 	update_mouse_cursor();
 	call_fill_rect_gen((RealPt)g_vga_memstart, 16, 8, 143, 191, 0);
 	wait_for_vsync();
@@ -6928,9 +6908,9 @@ void choose_typus(void)
 	call_mouse();
 
 
-	g_head_typus = (ds_readbs(HERO_TYPUS) > 10 ? 10 : ds_readbs(HERO_TYPUS));
+	g_head_typus = (g_hero.typus > 10 ? 10 : g_hero.typus);
 
-	if (ds_readbs(HERO_SEX)) {
+	if (g_hero.sex) {
 #if !defined(__BORLANDC__)
 		g_head_first = g_head_current = g_head_first_female[g_head_typus];
 #else
@@ -7619,15 +7599,15 @@ RealPt gen_alloc(Bit32u nelem)
 #if defined(__BORLANDC__)
 void print_addr(void)
 {
-	printf("Sizeof(hero) =           0x%04x (0x06da)\n\n", sizeof(hero));
+	printf("Sizeof(hero) =           0x%04x (0x06da)\n\n", sizeof(g_hero));
 	printf("&g_spell_tab =           0x%04x (0x0158)\n", &g_spell_tab);
 	printf("&g_screen_var =          0x%04x (0x11fe)\n", &g_screen_var);
 	printf("&g_mouse_mask =          0x%04x (0x1200)\n", &g_mouse_mask);
-	printf("&hero =                  0x%04x (0x132c)\n", &hero);
-	printf("&hero.money =            0x%04x (0x1358)\n", &(hero.money));
-	printf("&hero.mr =               0x%04x (0x1392)\n", &(hero.mr));
-	printf("&hero.staff_level =      0x%04x (0x14c1)\n", &(hero.staff_level));
-	printf("&hero.pic =              0x%04x (0x1606)\n", &(hero.pic));
+	printf("&hero =                  0x%04x (0x132c)\n", &g_hero);
+	printf("&hero.money =            0x%04x (0x1358)\n", &(g_hero.money));
+	printf("&hero.mr =               0x%04x (0x1392)\n", &(g_hero.mr));
+	printf("&hero.staff_level =      0x%04x (0x14c1)\n", &(g_hero.staff_level));
+	printf("&hero.pic =              0x%04x (0x1606)\n", &(g_hero.pic));
 	printf("&midi_disabled =         0x%04x (0x1a07)\n\n", &g_midi_disabled);
 	printf("&random_gen_seed =       0x%04x (0x1fd6)\n\n", &g_random_gen_seed);
 	printf("&_ctype =                0x%04x (0x1ff9)\n\n", &_ctype);

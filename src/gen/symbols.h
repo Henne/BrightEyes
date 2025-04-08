@@ -76,29 +76,29 @@
 //#define RO_ZERO                         (0x1329)    /* Bit16s */
 
 /* struct hero */
-#define HERO_NAME                       (0x132c)    /* char[16] */
-#define HERO_ALIAS                      (0x133c)    /* char[16] */
-#define HERO_TYPUS                      (0x134d)    /* Bit8s */
-#define HERO_SEX                        (0x134e)    /* Bit8s */
-#define HERO_HEIGHT                     (0x134f)    /* Bit8u */
-#define HERO_WEIGHT                     (0x1350)    /* Bit16s */
-#define HERO_GOD                        (0x1352)    /* Bit8s */
-#define HERO_LEVEL                      (0x1353)    /* Bit8s */
-#define HERO_MONEY                      (0x1358)    /* Bit32s */
+//#define HERO_NAME                       (0x132c)    /* char[16] */
+//#define HERO_ALIAS                      (0x133c)    /* char[16] */
+//#define HERO_TYPUS                      (0x134d)    /* Bit8s */
+//#define HERO_SEX                        (0x134e)    /* Bit8s */
+//#define HERO_HEIGHT                     (0x134f)    /* Bit8u */
+//#define HERO_WEIGHT                     (0x1350)    /* Bit16s */
+//#define HERO_GOD                        (0x1352)    /* Bit8s */
+//#define HERO_LEVEL                      (0x1353)    /* Bit8s */
+//#define HERO_MONEY                      (0x1358)    /* Bit32s */
 
-#define HERO_ATT0_NORMAL                (0x1360)    /* Bit8s */
-#define HERO_ATT0_CURRENT               (0x1361)    /* Bit8s */
-#define HERO_ATT0_MOD                   (0x1362)    /* Bit8s */
+//#define HERO_ATT0_NORMAL                (0x1360)    /* Bit8s */
+//#define HERO_ATT0_CURRENT               (0x1361)    /* Bit8s */
+//#define HERO_ATT0_MOD                   (0x1362)    /* Bit8s */
 
 /* Single values used in GEN */
-#define HERO_ATT_KL_NORMAL              (0x1363)    /* Bit8s */
-#define HERO_ATT_CH_NORMAL              (0x1366)    /* Bit8s */
-#define HERO_ATT_CH_CURRENT             (0x1367)    /* Bit8s */
-#define HERO_ATT_GE_NORMAL              (0x136c)    /* Bit8s */
-#define HERO_ATT_IN_NORMAL              (0x136f)    /* Bit8s */
-#define HERO_ATT_KK_NORMAL              (0x1372)    /* Bit8s */
-#define HERO_ATT_KK_CURRENT             (0x1373)    /* Bit8s */
-#define HERO_ATT_AG_NORMAL              (0x1375)    /* Bit8s */
+//#define HERO_ATT_KL_NORMAL              (0x1363)    /* Bit8s */
+//#define HERO_ATT_CH_NORMAL              (0x1366)    /* Bit8s */
+//#define HERO_ATT_CH_CURRENT             (0x1367)    /* Bit8s */
+//#define HERO_ATT_GE_NORMAL              (0x136c)    /* Bit8s */
+//#define HERO_ATT_IN_NORMAL              (0x136f)    /* Bit8s */
+//#define HERO_ATT_KK_NORMAL              (0x1372)    /* Bit8s */
+//#define HERO_ATT_KK_CURRENT             (0x1373)    /* Bit8s */
+//#define HERO_ATT_AG_NORMAL              (0x1375)    /* Bit8s */
 
 #define HERO_LE                         (0x138a)    /* Bit16s */
 #define HERO_LE_MAX                     (0x138c)    /* Bit16s */

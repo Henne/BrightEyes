@@ -38,7 +38,7 @@ struct struct_hero {
 	signed char rs2;
 	signed char unkn1;
 	unsigned char bp_left;
-	struct struct_attribs attribs[14];
+	struct struct_attribs attrib[14];
 	/* Offset 0x5e */
 	signed short le;
 	/* Offset 0x60 */
