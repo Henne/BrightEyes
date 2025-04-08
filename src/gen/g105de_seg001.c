@@ -23,6 +23,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#if defined(__BORLANDC__)
+#include <DOS.H> // _dos_open(), harderr()
+#endif
+
 #include "symbols.h"
 #include "port.h"
 
@@ -396,26 +400,17 @@ Bit16s CD_check_file(char *pathP)
 	Bit16s buf;
 	unsigned int nread;
 	
-#if !defined(__BORLANDC__)
-	if (bc__dos_open((char*)pathP, 1, (Bit8u*)&handle)) return -1;
+#if defined(__BORLANDC__)
+	if (_dos_open((char*)pathP, 1, &handle)) return -1;
 
-	if (bc__dos_read(handle, (Bit8u*)&buf, 1, (Bit16u*)&nread)) return -1;
+	if (_dos_read(handle, (Bit8u*)&buf, 1, &nread)) return -1;
 
-	bc_lseek(handle, 2000L, 0);
+	lseek(handle, 2000L, 0);
 
-	if (bc__dos_read(handle, (Bit8u*)&buf, 1, (Bit16u*)&nread)) return -1;
-
-#else
-	if (bc__dos_open((char*)pathP, 1, &handle)) return -1;
-
-	if (bc__dos_read(handle, (Bit8u*)&buf, 1, &nread)) return -1;
-
-	bc_lseek(handle, 2000L, 0);
-
-	if (bc__dos_read(handle, (Bit8u*)&buf, 1, &nread)) return -1;
+	if (_dos_read(handle, (Bit8u*)&buf, 1, &nread)) return -1;
 #endif
 
-	bc__dos_close(handle);
+	_dos_close(handle);
 
 #if !defined(__BORLANDC__)	
 	return nread;
