@@ -13,7 +13,7 @@
 #include <fcntl.h>  // open(), creat()
 #endif
 
-//#include "hero.h"
+#include "hero.h"
 
 #include "g105de_seg000.h"
 #include "g105de_seg001.h"
@@ -915,10 +915,11 @@ static signed char g_useless_variable = 0;
 static signed short g_text_x_mod = 0;
 static const signed short g_ro_zero = 0;
 
-static const signed short dummy6 = 0;
+static const signed char dummy6 = 0;
 
-static char hero[0x6da] = {0};
-//static struct struct_hero hero;
+static struct struct_hero hero = {0};
+
+static const signed char dummy_6_1 = 0;
 
 static signed short g_midi_disabled = 0;
 static signed short g_use_cda = 0;

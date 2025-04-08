@@ -12,21 +12,27 @@ __attribute__ ((packed))
 #endif
 ;
 
+#pragma pack ( 1 )
 struct struct_hero {
 	/* Offset 0x00 */
 	char name[16];
 	/* Offset 0x10 */
 	char alias[16];
 	/* Offset 0x20 */
-	unsigned char items;
+	signed char items;
 	signed char typus;
-	unsigned char sex;
+	signed char sex;
 	unsigned char height;
-	unsigned short weight;
-	unsigned char god;
-	unsigned char level;
+	signed short weight;
+	signed char god;
+	signed char level;
+#if defined(__BORLANDC__)
+	signed long ap;
+	signed long money;
+#else
 	signed int ap;
 	signed int money;
+#endif
 	/* Offset 0x30 */
 	signed char rs1;
 	signed char rs2;
@@ -62,8 +68,13 @@ struct struct_hero {
 	signed char unkn5[2];
 	signed char position;
 	/* Offset 0x8b */
+#if defined(__BORLANDC__)
+	signed long unkn6;
+	signed long unkn7;
+#else
 	signed int unkn6;
 	signed int unkn7;
+#endif
 	signed char unkn8[3];
 	signed char rounds_blinded;
 	signed char rounds_eclipt;
@@ -82,7 +93,7 @@ struct struct_hero {
 	/* Offset 0x108 */
 	signed char skills[52];
 	signed char skill_incs;
-	/* Offset 9x13d */
+	/* Offset 0x13d */
 	signed char spells[86];
 	signed char spell_incs;
 	signed char school;
