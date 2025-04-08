@@ -6956,7 +6956,7 @@ void choose_typus(void)
 	Bit16s choosen_typus;
 	Bit16s randval;
 	Bit8s sex_bak;
-	RealPt ptr;
+	unsigned char *ptr;
 	char name_bak[20];
 
 	Bit16s i;
@@ -6992,26 +6992,17 @@ void choose_typus(void)
 	/* set typus */
 	ds_writeb(HERO_TYPUS, (unsigned char)choosen_typus);
 
-	ptr = RealMake(datseg, HERO_ATT0_NORMAL);
+	ptr = Real2Host(RealMake(datseg, HERO_ATT0_NORMAL));
 
 	/* roll out positive attribute values */
 	for (i = 0; i < 7; i ++) {
 
 		randval = (Bit16s)random_interval_gen(8, 13);
 
-#if !defined(__BORLANDC__)
 		if (randval > 8)
 			randval--;
-
-		host_writeb(((3 * i) + (Real2Host(ptr) + 0)),
-			host_writebs(((3 * i) + (Real2Host(ptr) + 1)), randval));
-#else
-		if (randval > 8);
-		asm { db 0x66, 0x90; }
-		asm { db 0x0f, 0x1f, 0x40, 0x00; }
-		host_writeb(((Real2Host(ptr) + 0) + (i * 3)),
-			host_writebs(((i * 3) + (Real2Host(ptr) + 1)), randval));
-#endif
+		/* set attrib.current ant attrib.normal */
+		ptr[3 * i] = ptr[3 * i + 1] = (signed char)randval;
 	}
 
 	ptr = RealMake(datseg, HERO_ATT0_NORMAL + 3 * 7);
@@ -7021,27 +7012,17 @@ void choose_typus(void)
 
 		randval = (Bit16s)random_interval_gen(2, 7);
 
-#if !defined(__BORLANDC__)
 		if (randval < 7)
 			randval++;
 
-		host_writeb(((3 * i) + (Real2Host(ptr) + 0)),
-			host_writebs(((3 * i) + (Real2Host(ptr) + 1)), randval));
-#else
-		if (randval < 7);
-		asm { db 0x66, 0x90; }
-		asm { db 0x0f, 0x1f, 0x40, 0x00; } // BCC Sync-Point
-		host_writeb(((3 * i) + (Real2Host(ptr) + 0)),
-			host_writebs(((3 * i) + (Real2Host(ptr) + 1)), randval));
-
-#endif
+		ptr[3 * i] = ptr[3 * i + 1] = (signed char)randval;
 	}
 
 	/* adjust typus attribute requirements */
 	for (i = 0; i < 4; i++) {
 
 		/* calc pointer to attribute */
-		ptr = RealMake(datseg, HERO_ATT0_NORMAL + 3 * g_reqs[choosen_typus][i].attrib);
+		ptr = Real2Host(RealMake(datseg, HERO_ATT0_NORMAL + 3 * g_reqs[choosen_typus][i].attrib));
 		/* get the required value */
 		randval = g_reqs[choosen_typus][i].value;
 
@@ -7049,8 +7030,10 @@ void choose_typus(void)
 
 			if (randval & 0x80) {
 				/* attribute upper bound */
-				if (host_readbs(Real2Host(ptr)) > (randval & 0x7f)) {
+				if ((signed char)ptr[0] > (randval & 0x7f)) {
+
 #if !defined(__BORLANDC__)
+					//ptr[0] = ptr[1] = (signed char)(randval & 0x7f);
 					host_writeb(Real2Host(ptr),
 						host_writebs(Real2Host(ptr) + 1, randval & 0x7f));
 #else
@@ -7061,7 +7044,8 @@ void choose_typus(void)
 				}
 			} else {
 				/* attribute lower bound */
-				if (host_readbs(Real2Host(ptr)) < randval) {
+				if ((signed char)ptr[0] < randval) {
+					//ptr[0] = ptr[1] = (signed char)randval;
 					host_writeb(Real2Host(ptr),
 						host_writebs(Real2Host(ptr) + 1, randval));
 				}
