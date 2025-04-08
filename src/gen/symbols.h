@@ -155,7 +155,7 @@
 
 //#define STR_DSAGEN_DAT                  (0x1fb0)    /* char[] */
 //#define STR_MALLOC_ERROR                (0x1fbb)    /* char[] */
-#define RANDOM_GEN_SEED                 (0x1fd6)    /* Bit16u */
+//#define RANDOM_GEN_SEED                 (0x1fd6)    /* Bit16u */
 
 #define _CTYPE                          (0x1ff9)    /* CLIB array for isalpha() */
 
@@ -216,7 +216,7 @@
 //#define UNKN4                           (0x40d7)    /* Bit16s */
 //#define TEXTS                           (0x40d9)    /* RealPt[301] array */
 
-#define RANDOM_GEN_SEED2                (0x458f)    /* Bit16u */
+//#define RANDOM_GEN_SEED2                (0x458f)    /* Bit16s */
 //#define HAVE_MOUSE                      (0x4591)    /* Bit16s */
 
 //#define WO_VAR1                         (0x4595)    /* Bit16u */

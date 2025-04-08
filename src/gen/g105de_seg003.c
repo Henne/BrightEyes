@@ -10,6 +10,9 @@
 
 #include "g105de_seg003.h"
 
+extern signed short g_random_gen_seed;
+extern signed short g_random_gen_seed2;
+
 #if !defined(__BORLANDC__)
 static inline
 unsigned short _rotl(unsigned short op, unsigned short count) {
@@ -38,10 +41,10 @@ int random_gen(const int val)
 		return 0;
 	}
 
-	retval = ds_readw(RANDOM_GEN_SEED) ^ ds_readw(RANDOM_GEN_SEED2);
+	retval = g_random_gen_seed ^ g_random_gen_seed2;
 	retval = _rotl(retval, 2);
-	retval = (retval + ds_readw(RANDOM_GEN_SEED2)) ^ ds_readw(RANDOM_GEN_SEED);
-	ds_writew(RANDOM_GEN_SEED, retval = _rotl(retval, 3));
+	retval = (retval + g_random_gen_seed2) ^ g_random_gen_seed;
+	g_random_gen_seed = retval = _rotl(retval, 3);
 
 	/* update rand_seed */
 

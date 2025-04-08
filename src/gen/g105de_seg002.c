@@ -1326,7 +1326,7 @@ static inline char* get_text(Bit16s no) {
 #define get_text(no) (g_texts[no])
 #endif
 
-//static unsigned short RANDOM_GEN_SEED2
+static signed short g_random_gen_seed2;
 
 static signed short g_have_mouse;
 static signed short dummy13;
@@ -7566,9 +7566,9 @@ void intro(void)
 /* Borlandified and identical */
 void interrupt timer_isr(void)
 {
-	ds_inc_ws(RANDOM_GEN_SEED2);
-	if (ds_readws(RANDOM_GEN_SEED2) < 0)
-		ds_writews(RANDOM_GEN_SEED2, 0);
+	g_random_gen_seed2++;
+	if (g_random_gen_seed2 < 0)
+		g_random_gen_seed2 = 0;
 	restart_midi();
 	asm {pushf };
 	((void far (*)(void))g_timer_isr_bak)();
