@@ -1439,7 +1439,7 @@ void read_soundcfg(void)
 #if !defined(__BORLANDC__)
 		/* Small hack: enable MIDI instead of CD-Audio */
 		D1_INFO("MIDI port 0x%x\n", port);
-		if ((port != 0) && (load_driver((RealPt)g_str_sound_adv, 3, port))) {
+		if ((port != 0) && (load_driver(g_str_sound_adv, 3, port))) {
 			/* disable audio-cd */
 			g_use_cda = 0;
 			return;
