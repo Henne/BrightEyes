@@ -1,13 +1,12 @@
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
+#include <stdlib.h> // randomize()
 #include <stdarg.h>
 #include <ctype.h>
 
 #if defined(__BORLANDC__)
 #include <DOS.H>
 #include <BIOS.H>
-#include <CTYPE.H>
 #include <CONIO.H>	// clrsrc()
 #else
 #include <unistd.h> // lseek(), close(), read(), write()
@@ -7620,7 +7619,7 @@ int main_gen(int argc, char **argv)
 
 	set_timer_isr();
 
-	bc_randomize();
+	randomize();
 
 	save_display_stat(&g_display_page_bak);
 

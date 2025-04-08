@@ -13,7 +13,7 @@ Bit16s bc_flushall();
 Bit16s bc_write(Bit16s, RealPt, Bit16u);
 
 /* this will set an unused variable, so we put a dummy here */
-static inline void bc_randomize() { }
+static inline void randomize() { }
 
 #else
 // __BORLANDC__
@@ -41,6 +41,5 @@ static inline void bc_randomize() { }
 #define bc__creat _creat
 #define bc_flushall flushall
 #define bc_write write
-#define bc_randomize randomize
 
 #endif
