@@ -927,7 +927,7 @@ static signed short g_mouse_handler_installed = 0;
 static signed short dummy7 = -1;
 static signed short dummy8 = 0;
 
-static const char* g_bg_buffer[]       = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+static char* g_bg_buffer[]       = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 static signed long g_bg_len[]    = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 static char *g_typus_buffer[]    = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 static signed long g_typus_len[13] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -1617,7 +1617,7 @@ unsigned short load_file(Bit16s index)
 }
 
 /* Borlandified and nearly identical */
-unsigned short load_driver(RealPt fname, Bit16s type, Bit16s port)
+unsigned short load_driver(const char* fname, signed short type, signed short port)
 {
 	if ((port != 0) &&
 		(g_snd_driver_base_addr = (Bit8u*)load_snd_driver(fname)) &&
@@ -2397,10 +2397,10 @@ void split_textbuffer(Bit8u *dst, RealPt src, Bit32u len)
 }
 
 /* Borlandified and identical */
-void load_page(Bit16s page)
+void load_page(signed short page)
 {
-	RealPt ptr;
-	Bit16s handle;
+	unsigned char* ptr;
+	signed short handle;
 
 	if (page <= 10) {
 		/* check if this image is in the buffer */
@@ -2410,7 +2410,7 @@ void load_page(Bit16s page)
 		}
 
 		if ((ptr = gen_alloc(get_filelength(handle = open_datfile(page))))) {
-			g_bg_buffer[page] = Real2Host(ptr);
+			g_bg_buffer[page] = ptr;
 			g_bg_len[page] = get_filelength(handle);
 
 			read_datfile(handle, g_bg_buffer[page], g_bg_len[page]);
@@ -2444,11 +2444,11 @@ void read_datfile_to_buffer(Bit16s index, RealPt dst)
 #endif
 
 /* Borlandified and identical */
-void load_typus(Bit16u typus)
+void load_typus(signed short typus)
 {
-	Bit16u index;
-	RealPt ptr;
-	Bit16s handle;
+	signed short index;
+	unsigned char *ptr;
+	signed short handle;
 
 	index = typus + 19;
 
@@ -2460,7 +2460,7 @@ void load_typus(Bit16u typus)
 
 	if ((ptr = gen_alloc(get_filelength(handle = open_datfile(index))))) {
 		/* load the file into the typus buffer */
-		g_typus_buffer[typus] = Real2Host(ptr);
+		g_typus_buffer[typus] = ptr;
 		g_typus_len[typus] = get_filelength(handle);
 
 		read_datfile(handle, g_typus_buffer[typus], g_typus_len[typus]);
@@ -6309,7 +6309,7 @@ void print_values(void)
  *	This funcion is buggy.
  */
 /* Borlandified and identical */
-static void make_valuta_str(char *dst, Bit32s money)
+void make_valuta_str(char *dst, Bit32s money)
 {
 	/* Orig-BUG: d can overflow  on D > 65536*/
 	unsigned short d = 0;
@@ -6388,7 +6388,7 @@ static void inc_skill(Bit16s skill, Bit16s max, char *msg)
 }
 
 /* Borlandified and identical */
-static void select_skill(void)
+void select_skill(void)
 {
 	Bit16s skill;
 	Bit16s group;
@@ -6608,7 +6608,7 @@ static void inc_spell(Bit16s spell)
 }
 
 /* Borlandified and identical */
-static void select_spell(void)
+void select_spell(void)
 {
 	Bit16s group;
 	Bit16s spell;
@@ -6891,7 +6891,7 @@ static void select_spell(void)
 }
 
 /* Borlandified and identical */
-static void choose_atpa(void)
+void choose_atpa(void)
 {
 	Bit16s skill;
 	Bit16s increase;
@@ -6951,7 +6951,7 @@ static void choose_atpa(void)
  *
  */
 /* Borlandified and far from identical */
-static void choose_typus(void)
+void choose_typus(void)
 {
 	Bit16s choosen_typus;
 	Bit16s randval;
@@ -7263,7 +7263,7 @@ static void BE_cleanup(void)
 
 	if ((host_ptr = g_page_buffer) != 0) {
 		D1_INFO("Free PAGE_BUFFER\t 0x%08x\n", host_ptr);
-		free(ptr);
+		free(host_ptr);
 		g_page_buffer = NULL;
 	}
 
