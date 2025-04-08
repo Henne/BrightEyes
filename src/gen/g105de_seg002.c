@@ -1427,8 +1427,8 @@ void start_music(Bit16u track)
 /* Borlandified and identical */
 void read_soundcfg(void)
 {
-	Bit16s handle;
-	Bit16s port; // This has to be unsigned
+	signed short handle;
+	signed short port;
 
 	g_use_cda = 0;
 	g_midi_disabled = 1;
