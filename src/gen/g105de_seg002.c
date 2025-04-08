@@ -7,6 +7,9 @@
 #if defined(__BORLANDC__)
 #include <DOS.H>
 #include <BIOS.H>
+#include <CTYPE.H>
+#else
+#include <unistd.h> //lseek()
 #endif
 
 //#include "hero.h"
@@ -53,9 +56,6 @@
 	@p_height:      pointer where the height of the picture must be stored
 	@p_width:       pointer where the width of the picture must be stored
 */
-
-#define MAX_PAGES (11);
-#define MAX_TYPES (13);
 
 struct struct_spelltab {
 	signed char origin; /* {0 = Druid, 1 = Mage, 2 = Elven, 3 = Warlock } */
@@ -1725,75 +1725,7 @@ void restart_midi(void)
 /* Borlandified and nearly identical */
 void do_mouse_action(Bit8u *p1, Bit8u *p2, Bit8u *p3, Bit8u *p4, Bit8u *p5)
 {
-#if !defined(__BORLANDC__)
-	if ((signed short)host_readw(p1) < 0)
-		return;
-
-	unsigned short ba, bb, bc, bd, be, bsi, bdi;
-
-	/* save register content */
-	ba = reg_ax;
-	bb = reg_bx;
-	bc = reg_cx;
-	bd = reg_dx;
-	be = SegValue(es);
-	bsi = reg_si;
-	bdi = reg_di;
-
-	/* write paramters to registers */
-	reg_ax = host_readw(p1);
-	reg_bx = host_readw(p2);
-	reg_cx = host_readw(p3);
-
-	/* respect special functions */
-	switch (reg_ax) {
-		case 0x9:	/* define Cursor in graphic mode */
-		case 0xc:	/* install event handler */
-		case 0x14:	/* swap event handler */
-		case 0x16:	/* save mouse state */
-		case 0x17:	/* load mouse state */
-			reg_dx = host_readw(p4);
-			SegSet16(es, host_readw(p5));
-			break;
-		case 0x10:	/* define screen region for update */
-			reg_cx = host_readw(p2);
-			reg_dx = host_readw(p3);
-			reg_si = host_readw(p4);
-			reg_di = host_readw(p5);
-			break;
-		default:
-			reg_dx = host_readw(p4);
-
-			D1_LOG("%x %x %x %x %x\n", host_readw(p1),
-				host_readw(p2), host_readw(p3),
-				host_readw(p4),	host_readw(p5));
-
-	}
-
-	/* Call the interrupt */
-	CALLBACK_RunRealInt(0x33);
-
-	/* write the return values */
-	if (reg_ax == 0x14)
-		host_writew(p2, SegValue(es));
-	else
-		host_writew(p2, reg_bx);
-
-	host_writew(p1, reg_ax);
-	host_writew(p3, reg_cx);
-	host_writew(p4, reg_dx);
-
-	/* restore register values */
-	reg_ax = ba;
-	reg_bx = bb;
-	reg_cx = bc;
-	reg_dx = bd;
-	SegSet16(es, be);
-	reg_si = bsi;
-	reg_di = bdi;
-
-	return;
-#else
+#if defined(__BORLANDC__)
 	union REGS myregs;
 	struct SREGS mysregs;
 
@@ -3230,14 +3162,10 @@ Bit16u str_splitter(char *s)
 	Bit16s i; //si
 
 	lines = 1;
-#if defined(__BORLANDC__)
+
 	if (!s) {
 		return 0;
 	}
-#else
-	if (s == NULL || s == (char*)MemBase)
-		return 0;
-#endif
 
 	/* replace all CR and LF with spaces */
 	for (tp = s; *tp; tp++) {
@@ -3655,7 +3583,7 @@ Bit16s enter_string(char *dst, Bit16s x, Bit16s y, Bit16s num, Bit16s zero)
 			print_chr(0x5f, di, y);
 		} else {
 			/* isalnum(c) */
-			if (!(ds_readbs(_CTYPE + c) & 0x0e) &&
+			if (!(isalnum(c)) &&
 				(((Bit8u)c) != 0x84) && (((Bit8u)c) != 0x94) &&
 				(((Bit8u)c) != 0x81) && (((Bit8u)c) != 0x8e) &&
 				(((Bit8u)c) != 0x99) && (((Bit8u)c) != 0x9a) &&
@@ -3663,7 +3591,7 @@ Bit16s enter_string(char *dst, Bit16s x, Bit16s y, Bit16s num, Bit16s zero)
 					continue;
 
 			/* isalpha(c) */
-			if (ds_readb(_CTYPE + c) & 0xc)
+			if (isalpha(c))
 				c = toupper(c);
 
 			/* ae */
@@ -5798,7 +5726,7 @@ void print_attribs(void)
 			/* convert value to string with itoa() */
 			sprintf(buf, "%d", host_readbs(p));
 			/* print it */
-			print_str(buf, g_attrib_coors[i].x, g_attrib_coords[i].y);
+			print_str(buf, g_attrib_coords[i].x, g_attrib_coords[i].y);
 #else
 			/* print it */
 			print_str(itoa(host_readbs(p), buf, 10),
@@ -7382,7 +7310,7 @@ static void BE_cleanup(void)
 		g_form_xmid = NULL;
 	}
 
-	for (int i = 0; i < MAX_PAGES; i++) {
+	for (int i = 0; i < 11; i++) {
 		if ((host_ptr = g_bg_buffer[i]) != 0) {
 			D1_INFO("Free BG_BUFFER[%02d]\t\t 0x%08x\n", i, host_ptr);
 			free(host_ptr);
@@ -7390,7 +7318,7 @@ static void BE_cleanup(void)
 		}
 	}
 
-	for (int i = 0; i < MAX_TYPES; i++) {
+	for (int i = 0; i < 13; i++) {
 		if ((host_ptr = g_typus_buffer[i]) != 0) {
 			D1_INFO("Free TYPUS_BUFFER[%02d]\t\t 0x%08x\n", i, host_ptr);
 			free(host_ptr);

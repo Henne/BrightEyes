@@ -1,14 +1,6 @@
 #ifndef PORT_H
 #define PORT_H
 
-#if defined(__BORLANDC__)
-
-#ifdef __cplusplus
-#define INTCAST void interrupt (*)(...)
-#else
-#define INTCAST void interrupt (*)()
-#endif
-
 typedef unsigned char Bit8u;
 typedef signed char Bit8s;
 typedef unsigned short Bit16u;
@@ -20,10 +12,18 @@ typedef Bit8u* RealPt;
 typedef Bit8u* PhysPt;
 typedef Bit8u huge * HugePt;
 
+#if defined(__BORLANDC__)
+
+#ifdef __cplusplus
+#define INTCAST void interrupt (*)(...)
+#else
+#define INTCAST void interrupt (*)()
+#endif
+
+
 #define RealMake(seg, off) ((RealPt)(MK_FP(seg, off)))
 #define Real2Phys(p) (p)
 #define Real2Host(p) ((Bit8u*)(p))
-
 
 #define F_PADA(p, o) (*((HugePt*)p) += o)
 #define F_PADD(p, o) ((HugePt)(p) + o)
@@ -31,7 +31,7 @@ typedef Bit8u huge * HugePt;
 
 #define H_PADD(p, o) F_PADD(p, o)
 
-extern char ds[0x488f];
+//extern char ds[0x488f];
 //#define p_datseg ((Bit8u*)(&ds[0x0000]))
 #define datseg (_DS)
 //#define ds (RealMake(datseg, 0x0000))
