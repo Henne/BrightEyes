@@ -8,6 +8,7 @@
 #include <DOS.H>
 #include <BIOS.H>
 #include <CTYPE.H>
+#include <CONIO.H>	// clrsrc()
 #else
 #include <unistd.h> // lseek(), close(), read(), write()
 #include <fcntl.h>  // open(), creat()
@@ -2083,7 +2084,7 @@ void handle_input(void)
 			stop_music();
 			restore_timer_isr();
 			exit_video();
-			bc_clrscr();
+			clrscr();
 			exit(0);
 		}
 	}
@@ -7665,7 +7666,7 @@ int main_gen(int argc, char **argv)
 	} else {
 		/* Clear the screen and return to DOS */
 		exit_video();
-		bc_clrscr();
+		clrscr();
 	}
 
 #if !defined(__BORLANDC__)

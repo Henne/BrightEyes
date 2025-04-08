@@ -24,7 +24,10 @@
 #include <string.h>
 
 #if defined(__BORLANDC__)
-#include <DOS.H> // _dos_open(), harderr()
+#include <DOS.H>	// _dos_open(), harderr()
+#include <IO.H>		// lseek()
+#include <BIOS.H>	// bioskey()
+#include <CONIO.H>	// clrsrc()
 #endif
 
 #include "symbols.h"
@@ -264,10 +267,10 @@ signed short CD_bioskey(signed short cmd)
 	seg001_02ba();
 
 #if !defined(__BORLANDC__)
-	return bc_bioskey(cmd);
+	return bioskey(cmd);
 #else
 	// return
-	bc_bioskey(cmd); // implicit return
+	bioskey(cmd); // implicit return
 #endif
 }
 
@@ -448,7 +451,7 @@ void CD_radio_insert_cd()
 			call_fill_rect_gen((RealPt)ds_readd(VGA_MEMSTART), 0, 0, 319, 199, 0);
 		} else {
 			exit_video();
-			bc_clrscr();
+			clrscr();
 		}
 		bc_exit(0);
 	}

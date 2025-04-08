@@ -4,8 +4,8 @@ RealPt bc__dos_getvect(Bit16s);
 void bc__dos_setvect(Bit16s, RealPt);
 RealPt bc_F_PADD(RealPt, Bit32s);
 Bit16s bc__read(Bit16u, Bit8u*, Bit16u);
-signed short bc_bioskey(signed short);
-void bc_clrscr();
+static inline signed short bioskey(signed short) { return 0; };
+static inline void clrscr() { };
 RealPt bc_farcalloc(Bit32s, Bit32s);
 Bit16s bc__close(Bit16u);
 Bit16s bc__create(RealPt, Bit16u);
@@ -33,8 +33,6 @@ static inline void bc_randomize() { }
 #define bc__dos_setvect _dos_setvect
 #define bc_F_PADA(p, v) ((HugePt)(p) += (v))
 #define bc_F_PADD(p, v) ((HugePt)(p) + v)
-#define bc_bioskey bioskey
-#define bc_clrscr clrscr
 #define bc__read _read
 #define bc_farcalloc farcalloc
 #define bc_int86x int86x
