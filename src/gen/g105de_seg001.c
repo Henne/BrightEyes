@@ -30,12 +30,14 @@
 #include <CONIO.H>	// clrsrc()
 #endif
 
-#include "symbols.h"
 #include "port.h"
 
-#include "g105de_seg000.h"
 #include "g105de_seg001.h"
 #include "g105de_seg002.h"
+
+/* extern variables from seg002 */
+extern signed short g_called_with_args;
+extern unsigned char *g_vga_memstart;
 
 static signed char cd_dummy0 = 0;
 static signed short CD_INIT_SUCCESSFUL = 0;
@@ -447,8 +449,8 @@ void CD_radio_insert_cd()
 		mouse_disable();
 		restore_timer_isr();
 		
-		if (ds_readw(CALLED_WITH_ARGS) != 0) {
-			call_fill_rect_gen((RealPt)ds_readd(VGA_MEMSTART), 0, 0, 319, 199, 0);
+		if (g_called_with_args != 0) {
+			call_fill_rect_gen((RealPt)g_vga_memstart, 0, 0, 319, 199, 0);
 		} else {
 			exit_video();
 			clrscr();

@@ -157,7 +157,7 @@
 //#define STR_MALLOC_ERROR                (0x1fbb)    /* char[] */
 //#define RANDOM_GEN_SEED                 (0x1fd6)    /* Bit16u */
 
-#define _CTYPE                          (0x1ff9)    /* CLIB array for isalpha() */
+//#define _CTYPE                          (0x1ff9)    /* CLIB array for isalpha() */
 
 /* BSS Section */
 //#define CD_AUDIO_TRACK                  (0x245a)    /* unsigned short */
@@ -190,7 +190,7 @@
 //#define SND_SEQUENCE                    (0x3f5a)    /* Bit16s */
 //#define SND_DRIVER_HANDLE               (0x3f5c)    /* Bit16s */
 //#define PARAM_LEVEL                     (0x3f5e)    /* Bit16s DE: {0, 'a', 'n'} */
-#define CALLED_WITH_ARGS                (0x3f60)    /* Bit16s */
+//#define CALLED_WITH_ARGS                (0x3f60)    /* Bit16s */
 //#define SPELL_INCS                      (0x3f62)    /* 2 * Bit8s */
 //#define SKILL_INCS                      (0x400e)    /* 2 * Bit8s */
 //#define ATTRIB_CHANGED                  (0x4076)    /* Bit8s */
@@ -255,7 +255,7 @@
 //#define GEN_PTR2                        (0x47bf)     /* RealPt */
 
 //#define GFX_PTR                         (0x47c7)     /* RealPt */
-#define VGA_MEMSTART                    (0x47cb)     /* RealPt */
+//#define VGA_MEMSTART                    (0x47cb)     /* RealPt */
 //#define PAGE_BUFFER                     (0x47cf)     /* RealPt */
 //#define GEN_PTR1_DIS                    (0x47d3)     /* RealPt */
 //#define WO_VAR2                         (0x47d7)     /* Bit16s */

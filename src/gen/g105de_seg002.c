@@ -1274,7 +1274,7 @@ static signed short g_snd_sequence;
 static signed short g_snd_driver_handle;
 
 static signed short g_param_level;
-static signed short g_called_with_args;
+signed short g_called_with_args;
 
 struct inc_states {
 	signed char tries;
@@ -1374,7 +1374,7 @@ static char *g_gen_ptr2;
 static char *dummy18;
 
 static unsigned char* g_gfx_ptr;
-static unsigned char* g_vga_memstart;
+unsigned char* g_vga_memstart;
 
 static unsigned char* g_page_buffer;
 static unsigned char* g_gen_ptr1_dis;
