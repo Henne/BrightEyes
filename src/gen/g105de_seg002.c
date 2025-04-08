@@ -7442,6 +7442,10 @@ void restore_timer_isr(void)
 #endif
 }
 
+#if defined(__BORLANDC__)
+void print_addr(void);
+#endif
+
 /* Borlandified and nearly identical */
 #define main_gen main
 int main_gen(int argc, char **argv)
@@ -7458,6 +7462,10 @@ int main_gen(int argc, char **argv)
 		g_midi_disabled = 1;
 		sound_off = 1;
 	};
+
+#if 0
+	print_addr();
+#endif
 
 	g_in_intro = 1;
 
@@ -7607,3 +7615,26 @@ RealPt gen_alloc(Bit32u nelem)
 {
 	return (RealPt)bc_farcalloc(nelem, 1);
 }
+
+#if defined(__BORLANDC__)
+void print_addr(void)
+{
+	printf("Sizeof(hero) =           0x%04x (0x06da)\n\n", sizeof(hero));
+	printf("&g_spell_tab =           0x%04x (0x0158)\n", &g_spell_tab);
+	printf("&g_screen_var =          0x%04x (0x11fe)\n", &g_screen_var);
+	printf("&g_mouse_mask =          0x%04x (0x1200)\n", &g_mouse_mask);
+	printf("&hero =                  0x%04x (0x132c)\n", &hero);
+	printf("&hero.money =            0x%04x (0x1358)\n", &(hero.money));
+	printf("&hero.mr =               0x%04x (0x1392)\n", &(hero.mr));
+	printf("&hero.staff_level =      0x%04x (0x14c1)\n", &(hero.staff_level));
+	printf("&hero.pic =              0x%04x (0x1606)\n", &(hero.pic));
+	printf("&midi_disabled =         0x%04x (0x1a07)\n\n", &g_midi_disabled);
+	printf("&random_gen_seed =       0x%04x (0x1fd6)\n\n", &g_random_gen_seed);
+	printf("&_ctype =                0x%04x (0x1ff9)\n\n", &_ctype);
+	printf("&current_timbre_length = 0x%04x (0x2474)\n", &g_current_timbre_length);
+	printf("&flen =                  0x%04x (0x3f2a)\n", &g_flen);
+	printf("&texts =                 0x%04x (0x40d9)\n", &g_texts);
+	printf("&ro_var =                0x%04x (0x47e3)\n", &g_ro_var);
+	exit(0);
+}
+#endif
