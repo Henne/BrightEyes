@@ -6999,7 +6999,7 @@ static void pal_fade_out(unsigned char *dst, unsigned char *src, signed short n)
 }
 
 /* Borlandified and nearly identical, but works correctly */
-static void pal_fade_in(unsigned char *dst, unsigned char *src, signed short col, signed short n)
+static void pal_fade_in(signed char *dst, signed char *src, signed short col, signed short n)
 {
 	signed short i;
 	signed short si;
@@ -7007,23 +7007,25 @@ static void pal_fade_in(unsigned char *dst, unsigned char *src, signed short col
 	si = 0x40 - col;
 
 	for (i = 0; i < n; i++) {
-
+		//Remark: using this version produces different code
+		//if ((src[3 * i] >= si) && (src[3 * i] > dst[3 * i])) dst[3 * i]++;
+		//
 		/* RED */
-		if (host_readbs(src + 3 * i + 0) >= si) {
-			if (host_readbs(src + i * 3 + 0) > host_readbs(dst + i * 3 + 0))
-				host_inc_bs(dst + 3 * i + 0);
+		if (*(src + 3 * i + 0) >= si) {
+			if (*(src + i * 3 + 0) > *(dst + i * 3 + 0))
+				(*(signed char*)(dst + 3 * i + 0))++;
 		}
 
 		/* GREEN */
-		if (host_readbs(src + 3 * i + 1) >= si) {
-			if (host_readbs(src + i * 3 + 1) > host_readbs(dst + i * 3 + 1))
-				host_inc_bs(dst + 3 * i + 1);
+		if (*(src + 3 * i + 1) >= si) {
+			if (*(src + i * 3 + 1) > *(dst + i * 3 + 1))
+				(*(signed char*)(dst + 3 * i + 1))++;
 		}
 
 		/* BLUE */
-		if (host_readbs(src + 3 * i + 2) >= si) {
-			if (host_readbs(src + i * 3 + 2) > host_readbs(dst + i * 3 + 2))
-				host_inc_bs(dst + 3 * i + 2);
+		if (*(src + 3 * i + 2) >= si) {
+			if (*(src + i * 3 + 2) > *(dst + i * 3 + 2))
+				(*(signed char*)(dst + 3 * i + 2))++;
 		}
 	}
 }
