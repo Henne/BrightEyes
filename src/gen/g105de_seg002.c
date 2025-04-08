@@ -1265,9 +1265,9 @@ static signed short g_handle_timbre;
 static signed short g_timbre_cache_size;
 static signed long g_state_table_size;
 static Bit8u* g_snd_driver;
-static Bit8u* g_form_xmid;
+static void* g_form_xmid;
 static Bit8u* g_snd_timbre_cache;
-static Bit8u* g_state_table;
+static void* g_state_table;
 static Bit8u* g_snd_driver_base_addr;
 static Bit8u* g_snd_driver_desc;
 static signed short g_snd_sequence;
@@ -1448,7 +1448,7 @@ void read_soundcfg(void)
 /* Borlandified and identical */
 void init_music(unsigned long size)
 {
-	if ((g_form_xmid = (Bit8u*)gen_alloc(size))) {
+	if ((g_form_xmid = gen_alloc(size))) {
 		AIL_startup();
 		g_midi_disabled = 1;
 	}
@@ -1510,25 +1510,24 @@ void unload_snd_driver(void)
 /* Borlandified and nearly identical, but works SYNC */
 unsigned short load_seq(Bit16s sequence_num)
 {
-	Bit16s patch;
+	signed short patch;
 	RealPt ptr;
-	Bit16s si; // si = patch
-	Bit16s di; // di = bank
+	unsigned short answer; // si = {bank, patch}
+	signed short bank; // di = bank
 
 	/* open SAMPLE.AD */
 	if ((g_handle_timbre = open_datfile(35)) != -1) {
 
 		if ((g_snd_sequence = AIL_register_sequence(g_snd_driver_handle,
-			(Bit8u*)g_form_xmid, sequence_num,
-			(Bit8u*)g_state_table, (RealPt)(0L))) != -1) {
+			g_form_xmid, sequence_num, g_state_table, (void*)NULL)) != -1) {
 
-			while ((si = AIL_timbre_request(g_snd_driver_handle, g_snd_sequence)) != -1)
+			while ((answer = AIL_timbre_request(g_snd_driver_handle, g_snd_sequence)) != -1)
 			{
-				di = ((Bit16u)si) >> 8;
+				bank = answer >> 8;
 
-				if ((ptr = get_timbre(di, patch = (si & 0xff))) != 0) {
+				if ((ptr = get_timbre(bank, patch = (answer & 0xff))) != 0) {
 					/* ptr is passed differently */
-					AIL_install_timbre(g_snd_driver_handle, di, patch, ptr);
+					AIL_install_timbre(g_snd_driver_handle, bank, patch, ptr);
 					free(ptr);
 				}
 			}
@@ -1648,7 +1647,7 @@ unsigned short load_driver(RealPt fname, Bit16s type, Bit16s port)
 				if (type == 3) {
 					g_state_table_size = AIL_state_table_size(g_snd_driver_handle);
 
-					g_state_table = (Bit8u*)gen_alloc(g_state_table_size);
+					g_state_table = (void*)gen_alloc(g_state_table_size);
 
 					g_timbre_cache_size = AIL_default_timbre_cache_size(g_snd_driver_handle);
 
