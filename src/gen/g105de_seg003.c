@@ -5,9 +5,6 @@
 
 #include <stdlib.h>
 
-#include "port.h"
-#include "symbols.h"
-
 #include "g105de_seg003.h"
 
 extern signed short g_random_gen_seed;
@@ -35,7 +32,7 @@ unsigned short random_interval_gen(unsigned short lo, unsigned short hi)
 /* Borlandified and nearly identical */
 int random_gen(const int val)
 {
-	register Bit16s retval;
+	register signed short retval;
 
 	if (val == 0) {
 		return 0;
@@ -48,7 +45,7 @@ int random_gen(const int val)
 
 	/* update rand_seed */
 
-	retval = (Bit32s)abs(retval) % val;
+	retval = (signed long)abs(retval) % val;
 #if defined(__BORLANDC__)
 	asm { db 0x90 }
 #endif
