@@ -6946,32 +6946,33 @@ void choose_typus(void)
 }
 
 /* Borlandified and nearly identical, but works correctly */
-static void pal_fade_out(unsigned char *dst, unsigned char *src, signed short n)
+static void pal_fade_out(signed char *dst, signed char *src, signed short n)
 {
 //	struct struct_color *d = (struct struct_color*)dst;
 //	struct struct_color *s = (struct struct_color*)src;
-	Bit16s i;
+	signed short i;
 
 	for (i = 0; i < n; i++) {
+
 		/* RED */
-		if (host_readbs(src + 3 * i + 0) < host_readbs(dst + 3 * i + 0)) {
-			host_dec_bs(dst + 3 * i + 0);
-		} else if (host_readbs(src + 3 * i + 0) > host_readbs(dst + 3 * i + 0)) {
-			host_inc_bs(dst + 3 * i + 0);
+		if (*(src + 3 * i + 0) < *(dst + 3 * i + 0)) {
+			(*(signed char*)(dst + 3 * i + 0))--;
+		} else if (*(src + 3 * i + 0) > *(dst + 3 * i + 0)) {
+			(*(signed char*)(dst + 3 * i + 0))++;
 		}
 
 		/* GREEN */
-		if (host_readbs(src + 3 * i + 1) < host_readbs(dst + 3 * i + 1)) {
-			host_dec_bs(dst + 3 * i + 1);
-		} else if (host_readbs(src + 3 * i + 1) > host_readbs(dst + 3 * i + 1)) {
-			host_inc_bs(dst + 3 * i + 1);
+		if (*(src + 3 * i + 1) < *(dst + 3 * i + 1)) {
+			(*(signed char*)(dst + 3 * i + 1))--;
+		} else if (*(src + 3 * i + 1) > *(dst + 3 * i + 1)) {
+			(*(signed char*)(dst + 3 * i + 1))++;
 		}
 		
 		/* BLUE */
-		if (host_readbs(src + 3 * i + 2) < host_readbs(dst + 3 * i + 2)) {
-			host_dec_bs(dst + 3 * i + 2);
-		} else if (host_readbs(src + 3 * i + 2) > host_readbs(dst + 3 * i + 2)) {
-			host_inc_bs(dst + 3 * i + 2);
+		if (*(src + 3 * i + 2) < *(dst + 3 * i + 2)) {
+			(*(signed char*)(dst + 3 * i + 2))--;
+		} else if (*(src + 3 * i + 2) > *(dst + 3 * i + 2)) {
+			(*(signed char*)(dst + 3 * i + 2))++;
 		}
 #if 0
 		if (s[i].r < d[i].r) {
@@ -7009,7 +7010,7 @@ static void pal_fade_in(signed char *dst, signed char *src, signed short col, si
 	for (i = 0; i < n; i++) {
 		//Remark: using this version produces different code
 		//if ((src[3 * i] >= si) && (src[3 * i] > dst[3 * i])) dst[3 * i]++;
-		//
+
 		/* RED */
 		if (*(src + 3 * i + 0) >= si) {
 			if (*(src + i * 3 + 0) > *(dst + i * 3 + 0))
