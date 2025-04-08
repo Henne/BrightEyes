@@ -10,7 +10,6 @@ typedef signed long Bit32s;
 
 typedef Bit8u* RealPt;
 typedef Bit8u* PhysPt;
-typedef Bit8u huge * HugePt;
 
 #if defined(__BORLANDC__)
 
@@ -20,6 +19,7 @@ typedef Bit8u huge * HugePt;
 #define INTCAST void interrupt (*)()
 #endif
 
+typedef Bit8u huge * HugePt;
 
 #define RealMake(seg, off) ((RealPt)(MK_FP(seg, off)))
 #define Real2Phys(p) (p)
@@ -114,6 +114,9 @@ extern char ds[0x488f];
 #define host_dec_bs(p)		((*(Bit8s*)(p))--)
 
 #else
+
+typedef Bit8u* HugePt;
+
 #define INTCAST RealPt
 
 #define __abs__(v) abs(v)

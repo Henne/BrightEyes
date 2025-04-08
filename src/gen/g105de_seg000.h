@@ -1,3 +1,5 @@
+#include "port.h"
+
 #if !defined(__BORLANDC__)
 void bc_exit(Bit16u);
 RealPt bc__dos_getvect(Bit16s);
@@ -25,8 +27,6 @@ static inline void randomize() { }
 #include <CONIO.H> // clrscr
 #include <STRING.H> // memcpy, memset
 #include <MALLOC.H>  // farcalloc
-
-#include "port.h"
 
 #define bc_exit exit
 #define bc__dos_getvect _dos_getvect

@@ -880,7 +880,7 @@ static const struct mouse_action g_action_default[2] = {
 	{ -1, -1, -1, -1, -1}
 };
 
-static struct mouse_action* g_default_action = &g_action_default;
+static const struct mouse_action* g_default_action = &g_action_default[0];
 
 static struct mouse_action* g_action_table = NULL;
 
