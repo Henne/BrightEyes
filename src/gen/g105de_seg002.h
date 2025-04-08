@@ -69,7 +69,7 @@ struct nvf_desc {
 	Bit32s get_filelength(Bit16s);
 	Bit16u ret_zero1(void);
 	void wait_for_keypress(void);
-	void error_msg(Bit8u*);
+	void error_msg(char*);
 	void vsync_or_key(Bit16s);
 	Bit32u swap_u32(Bit32u);
 	void init_video(Bit16s);

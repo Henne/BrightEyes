@@ -9,7 +9,8 @@
 #include <BIOS.H>
 #include <CTYPE.H>
 #else
-#include <unistd.h> //lseek()
+#include <unistd.h> // lseek(), close(), read(), write()
+#include <fcntl.h>  // open(), creat()
 #endif
 
 //#include "hero.h"
@@ -1421,7 +1422,7 @@ void read_soundcfg(void)
 	g_use_cda = 0;
 	g_midi_disabled = 1;
 
-	if ((handle = bc_open(g_str_sound_cfg, 0x8001)) != -1) {
+	if ((handle = open(g_str_sound_cfg, 0x8001)) != -1) {
 		bc__read(handle, (Bit8u*)&port, 2);
 		bc__close(handle);
 
@@ -1480,7 +1481,7 @@ RealPt load_snd_driver(RealPt fname)
 	Bit32u in_ptr;
 	Bit16s handle;
 
-	if ((handle = bc_open(fname, 0x8001)) != -1) {
+	if ((handle = open(fname, 0x8001)) != -1) {
 		size = 16500;
 		g_snd_driver = (Bit8u*)gen_alloc(size + 0x10);
 		in_ptr = ((Bit32u)g_snd_driver) + 0x0f;
@@ -2543,7 +2544,7 @@ void save_chr(void)
 	strcat(filename, (char*)g_str_chr);
 
 	/* remark: bc_open() and bc__creat() have filename on the stack of the host */
-	if (((handle = bc_open(filename, 0x8001)) == -1) || gui_bool((Bit8u*)get_text(261))) {
+	if (((handle = open(filename, 0x8001)) == -1) || gui_bool((Bit8u*)get_text(261))) {
 
 #if !defined(__BORLANDC__)
 		/* close an existing file before overwriting it */
@@ -2566,7 +2567,7 @@ void save_chr(void)
 			}
 		} else {
 			/* should be replaced with infobox() */
-			error_msg((RealPt)g_str_save_error);
+			error_msg(g_str_save_error);
 		}
 	}
 }
@@ -2729,7 +2730,7 @@ Bit16s open_datfile(Bit16u index)
 
 	bc_flushall();
 
-	while ((handle = bc_open(g_str_dsagen_dat, 0x8001)) == -1)
+	while ((handle = open(g_str_dsagen_dat, 0x8001)) == -1)
 	{
 		sprintf(g_gen_ptr2,
 			(const char*)g_str_file_missing,
@@ -2813,9 +2814,9 @@ void wait_for_keypress(void)
 }
 
 /* Borlandified and identical */
-void error_msg(Bit8u *msg)
+void error_msg(char *msg)
 {
-	vsync_or_key(print_line((char*)msg) * 150);
+	vsync_or_key(print_line(msg) * 150);
 }
 
 #if defined(__BORLANDC__)
@@ -2898,20 +2899,12 @@ Bit32u unused_func10(Bit32u v)
 /* Borlandified and identical */
 void init_video(Bit16s unused)
 {
-#if !defined(__BORLANDC__)
-	RealPt l_white = g_col_white2;
-#else
 	struct struct_color l_white = *(struct struct_color*)&g_col_white2;
-#endif
 
 	/* set the video mode to 320x200 8bit */
 	set_video_mode(0x13);
 
-#if !defined(__BORLANDC__)
-	set_color(l_white, 0xff);
-#else
 	set_color((Bit8u*)&l_white, 0xff);
-#endif
 }
 
 /* Borlandified and identical */
