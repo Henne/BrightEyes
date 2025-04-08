@@ -1667,7 +1667,7 @@ unsigned short load_driver(RealPt fname, Bit16s type, Bit16s port)
 				return 1;
 			} else {
 #if !defined(__BORLANDC__)
-				infobox((char*)g_str_soundhw_not_found, 0);
+				infobox(g_str_soundhw_not_found, 0);
 				g_midi_disabled = 1;
 #else
 				asm {nop; } // BCC Sync-point
@@ -2049,7 +2049,7 @@ void mouse_compare(void)
 		/* copy a pointer */
 		g_mouse_last_cursor = g_mouse_current_cursor;
 
-		if (g_mouse_mask == g_mouse_current_cursor) {
+		if (g_mouse_mask == (unsigned short*)g_mouse_current_cursor) {
 			g_mouse_pointer_offsetx = g_mouse_pointer_offsety = 0;
 		} else {
 			g_mouse_pointer_offsetx = g_mouse_pointer_offsety = 8;
@@ -2518,7 +2518,7 @@ void save_chr(void)
 	ds_writeb(HERO_GROUP, 1);
 
 	/* wanna save ? */
-	if (!gui_bool((Bit8u*)get_text(3)))
+	if (!gui_bool(get_text(3)))
 		return;
 
 	/* copy name to alias */
@@ -2545,7 +2545,7 @@ void save_chr(void)
 	strcat(filename, (char*)g_str_chr);
 
 	/* remark: bc_open() and bc__creat() have filename on the stack of the host */
-	if (((handle = open(filename, 0x8001)) == -1) || gui_bool((Bit8u*)get_text(261))) {
+	if (((handle = open(filename, 0x8001)) == -1) || gui_bool(get_text(261))) {
 
 #if !defined(__BORLANDC__)
 		/* close an existing file before overwriting it */
@@ -3710,12 +3710,12 @@ void draw_popup_line(Bit16s line, Bit16s type)
 /**
  *	infobox() - draws and info- or enter_numberbox
  *	@msg:		the message for the box
- *	@enter_num:	number of digits to enter
+ *	@digits:	number of digits to enter
  *
  *	if @digits is zero the function just delays.
  */
 /* Borlandified and nearly identical */
-Bit16s infobox(char *msg, Bit16s digits)
+signed short infobox(char *msg, signed short digits)
 {
 	RealPt src;
 	RealPt dst;
@@ -3821,7 +3821,7 @@ Bit16s infobox(char *msg, Bit16s digits)
  *
  */
 /* Borlandified and identical */
-Bit16s gui_bool(Bit8u *msg)
+signed short gui_bool(char *msg)
 {
 	Bit16s retval;
 
@@ -3880,7 +3880,7 @@ void fill_radio_button(Bit16s old_pos, Bit16s new_pos, Bit16s offset)
  *
  */
 /* Borlandified and nearly identical */
-Bit16s gui_radio(Bit8u *header, Bit8s options, ...)
+signed short gui_radio(char *header, signed char options, ...)
 {
 	va_list arguments;
 	char *str;
@@ -4182,7 +4182,7 @@ void do_gen(void)
 
 	/* ask for level */
 	while (g_level == -1) {
-		g_level = gui_radio((Bit8u*)get_text(0), 2, get_text(1), get_text(2));
+		g_level = gui_radio(get_text(0), 2, get_text(1), get_text(2));
 	}
 
 	g_mouse2_event = 1;
@@ -4202,15 +4202,13 @@ void do_gen(void)
 			/* print the menu for each page */
 			switch (g_gen_page) {
 				case 0: {
-					si = gui_radio((Bit8u*)get_text(7), 9,
+					si = gui_radio(get_text(7), 9,
 						get_text(10), get_text(11), get_text(15),
 						get_text(8),  get_text(14), get_text(12),
 						get_text(262),get_text(9),  get_text(258));
 
 					if (si != -1) {
-						if ((si >= 4) && (si < 6) &&
-							(ds_readbs(HERO_ATT0_NORMAL)) &&
-							!gui_bool((Bit8u*)get_text(13))) {
+						if ((si >= 4) && (si < 6) && (ds_readbs(HERO_ATT0_NORMAL)) && !gui_bool(get_text(13))) {
 							si = 0;
 						}
 						g_in_key_ext = 0;
@@ -4251,7 +4249,7 @@ void do_gen(void)
 								break;
 							}
 							case 9: {
-								if (gui_bool((Bit8u*)get_text(259)))
+								if (gui_bool(get_text(259)))
 									di = 1;
 								break;
 							}
@@ -4572,7 +4570,7 @@ void new_values(void)
 		do {
 			g_text_x_mod = -80;
 
-			di = gui_radio((Bit8u*)g_gen_ptr2,
+			di = gui_radio(g_gen_ptr2,
 				unset_attribs,
 				g_type_names[0], g_type_names[1], g_type_names[2],
 				g_type_names[3], g_type_names[4], g_type_names[5],
@@ -4616,7 +4614,7 @@ void new_values(void)
 		do {
 			g_text_x_mod = -80;
 
-			di = gui_radio((Bit8u*)g_gen_ptr2,
+			di = gui_radio(g_gen_ptr2,
 				unset_attribs,
 				g_type_names[0], g_type_names[1], g_type_names[2],
 				g_type_names[3], g_type_names[4], g_type_names[5],
@@ -4745,7 +4743,7 @@ void fill_values(void)
 			/* select mage school */
 			do {
 				 ds_writebs(HERO_SPELL_SCHOOL,
-						gui_radio((Bit8u*)get_text(47), 9,
+						gui_radio(get_text(47), 9,
 							get_text(48), get_text(49),
 							get_text(50), get_text(51),
 							get_text(52), get_text(53),
@@ -4766,7 +4764,7 @@ void fill_values(void)
 		ds_writeb(HERO_SPELL_INCS, g_initial_spell_incs[ds_readbs(HERO_TYPUS) - 7]);
 
 		/* get convertable increase attempts */
-		if ((di = g_initial_conv_incs[ds_readbs(HERO_TYPUS) - 7]) && (g_level == 2) && gui_bool((Bit8u*)get_text(269))) {
+		if ((di = g_initial_conv_incs[ds_readbs(HERO_TYPUS) - 7]) && (g_level == 2) && gui_bool(get_text(269))) {
 			/* create string */
 			sprintf(g_gen_ptr2, get_text(270), di);
 
@@ -4807,7 +4805,7 @@ void fill_values(void)
 
 
 	/* wanna change 10 spell_attempts against 1W6+2 AE ? */
-	if ((ds_readbs(HERO_TYPUS) == 9) && (g_level == 2) && gui_bool((Bit8u*)get_text(268))) {
+	if ((ds_readbs(HERO_TYPUS) == 9) && (g_level == 2) && gui_bool(get_text(268))) {
 		/* change spell_attempts */
 		ds_sub_bs(HERO_SPELL_INCS, 10);
 		ds_add_ws(HERO_AE_MAX, random_interval_gen(3, 8));
@@ -5158,7 +5156,7 @@ void select_typus(void)
 			return;
 		}
 
-		di = gui_radio((Bit8u*)get_text(30), possible_types,
+		di = gui_radio(get_text(30), possible_types,
 				g_type_names[0], g_type_names[1], g_type_names[2],
 				g_type_names[3], g_type_names[4], g_type_names[5],
 				g_type_names[6], g_type_names[7], g_type_names[8],
@@ -5214,7 +5212,7 @@ void select_typus(void)
 			}
 		}
 	} else {
-		infobox((char*)get_text(265), 0);
+		infobox(get_text(265), 0);
 	}
 }
 
@@ -5304,7 +5302,7 @@ void change_attribs(void)
 	/* if typus != 0 */
 	if (ds_readbs(HERO_TYPUS)) {
 
-		if (!gui_bool((Bit8u*)get_text(73)))
+		if (!gui_bool(get_text(73)))
 			return;
 
 		/* set typus to 0 */
@@ -5339,7 +5337,7 @@ void change_attribs(void)
 	}
 	/* select a positive attribute to change */
 	g_text_x_mod = -80;
-	tmp2 = gui_radio((Bit8u*)get_text(78), 7,
+	tmp2 = gui_radio(get_text(78), 7,
 			get_text(32), get_text(33), get_text(34), get_text(35),
 			get_text(36), get_text(37), get_text(38));
 	g_text_x_mod = 0;
@@ -5351,7 +5349,7 @@ void change_attribs(void)
 	if (!g_attrib_changed[tmp2]) {
 		/* ask user if inc or dec */
 		g_text_x_mod = -80;
-		tmp3 = gui_radio((Bit8u*)NULL, 2, get_text(75), get_text(76));
+		tmp3 = gui_radio((char*)NULL, 2, get_text(75), get_text(76));
 		g_text_x_mod = 0;
 
 		if (tmp3 == -1)
@@ -5402,7 +5400,7 @@ void change_attribs(void)
 			do {
 				/* ask which negative attribute to increment */
 				g_text_x_mod = -80;
-				si = gui_radio((Bit8u*)get_text(80), 7,
+				si = gui_radio(get_text(80), 7,
 						get_text(39), get_text(40), get_text(41),
 						get_text(42), get_text(43), get_text(44),
 						get_text(45));
@@ -5484,7 +5482,7 @@ void change_attribs(void)
 			do {
 				/* ask which negative attribute to increment */
 				g_text_x_mod = -80;
-				si = gui_radio((Bit8u*)get_text(79), 7,
+				si = gui_radio(get_text(79), 7,
 						get_text(39), get_text(40), get_text(41),
 						get_text(42), get_text(43), get_text(44),
 						get_text(45));
@@ -6311,7 +6309,7 @@ void print_values(void)
  *	This funcion is buggy.
  */
 /* Borlandified and identical */
-void make_valuta_str(char *dst, Bit32s money)
+static void make_valuta_str(char *dst, Bit32s money)
 {
 	/* Orig-BUG: d can overflow  on D > 65536*/
 	unsigned short d = 0;
@@ -6343,11 +6341,11 @@ void make_valuta_str(char *dst, Bit32s money)
 }
 
 /* Borlandified and nearly identical */
-void inc_skill(Bit16s skill, Bit16s max, char *msg)
+static void inc_skill(Bit16s skill, Bit16s max, char *msg)
 {
 	/* no more increments than the maximum */
 	if (g_skill_incs[skill].incs >= max) {
-		infobox((char*)msg, 0);
+		infobox(msg, 0);
 		return;
 	}
 	/* we just have 3 tries to increment */
@@ -6390,7 +6388,7 @@ void inc_skill(Bit16s skill, Bit16s max, char *msg)
 }
 
 /* Borlandified and identical */
-void select_skill(void)
+static void select_skill(void)
 {
 	Bit16s skill;
 	Bit16s group;
@@ -6408,7 +6406,7 @@ void select_skill(void)
 
 		switch (g_gen_page) {
 		case 1: {
-			group = gui_radio((Bit8u*)get_text(93), 2, get_text(86), get_text(87));
+			group = gui_radio(get_text(93), 2, get_text(86), get_text(87));
 			if (group != -1) {
 #if !defined(__BORLANDC__)
 				switch (group)
@@ -6418,7 +6416,7 @@ void select_skill(void)
 				{
 				case 1: {
 					/* Fight */
-					skill = gui_radio((Bit8u*)get_text(147),
+					skill = gui_radio(get_text(147),
 						9,
 						get_text(95), get_text(96), get_text(97),
 						get_text(98), get_text(99), get_text(100),
@@ -6431,7 +6429,7 @@ void select_skill(void)
 				}
 				case 2: {
 					/* Body */
-					skill = gui_radio((Bit8u*)get_text(147),
+					skill = gui_radio(get_text(147),
 						10,
 						get_text(104), get_text(105),
 						get_text(106), get_text(107),
@@ -6450,7 +6448,7 @@ void select_skill(void)
 			break;
 		}
 		case 2: {
-			group = gui_radio((Bit8u*)get_text(93), 2, get_text(88), get_text(89));
+			group = gui_radio(get_text(93), 2, get_text(88), get_text(89));
 			if (group != -1) {
 #if !defined(__BORLANDC__)
 				switch (group)
@@ -6459,7 +6457,7 @@ void select_skill(void)
 #endif
 				{
 				case 1: {
-					skill = gui_radio((Bit8u*)get_text(147),
+					skill = gui_radio(get_text(147),
 							7,
 							get_text(114), get_text(115), get_text(116),
 							get_text(117), get_text(118), get_text(119),
@@ -6472,7 +6470,7 @@ void select_skill(void)
 					break;
 				}
 				case 2: {
-					skill = gui_radio((Bit8u*)get_text(147),
+					skill = gui_radio(get_text(147),
 							9,
 							get_text(127), get_text(128), get_text(129),
 							get_text(130), get_text(131), get_text(132),
@@ -6489,7 +6487,7 @@ void select_skill(void)
 			break;
 		}
 		case 3: {
-			group = gui_radio((Bit8u*)get_text(93), 3, get_text(90), get_text(91), get_text(92));
+			group = gui_radio(get_text(93), 3, get_text(90), get_text(91), get_text(92));
 			if (group != -1) {
 #if !defined(__BORLANDC__)
 				switch (group)
@@ -6498,7 +6496,7 @@ void select_skill(void)
 #endif
 				{
 					case 1: {
-						skill = gui_radio((Bit8u*)get_text(147),
+						skill = gui_radio(get_text(147),
 							9,
 							get_text(136), get_text(137), get_text(138),
 							get_text(139), get_text(140), get_text(141),
@@ -6511,7 +6509,7 @@ void select_skill(void)
 						break;
 					}
 					case 2: {
-						skill = gui_radio((Bit8u*)get_text(147),
+						skill = gui_radio(get_text(147),
 							6,
 							get_text(121), get_text(122), get_text(123),
 							get_text(124), get_text(125), get_text(126)) - 1;
@@ -6523,7 +6521,7 @@ void select_skill(void)
 						break;
 					}
 					case 3: {
-						skill = gui_radio((Bit8u*)get_text(147),
+						skill = gui_radio(get_text(147),
 							2,
 							get_text(145),
 							get_text(146)) - 1;
@@ -6546,7 +6544,7 @@ void select_skill(void)
 }
 
 /* Borlandified and identical */
-void inc_spell(Bit16s spell)
+static void inc_spell(Bit16s spell)
 {
 	Bit16s max_incs = 1;
 
@@ -6610,7 +6608,7 @@ void inc_spell(Bit16s spell)
 }
 
 /* Borlandified and identical */
-void select_spell(void)
+static void select_spell(void)
 {
 	Bit16s group;
 	Bit16s spell;
@@ -6628,7 +6626,7 @@ void select_spell(void)
 
 		switch (g_gen_page) {
 			case 5: {
-				group = gui_radio((Bit8u*)get_text(155),
+				group = gui_radio(get_text(155),
 						3,
 						get_text(157), get_text(162),
 						get_text(158));
@@ -6640,12 +6638,10 @@ void select_spell(void)
 #endif
 				{
 					case 1: {
-						spell = gui_radio((Bit8u*)get_text(156),
+						spell = gui_radio(get_text(156),
 								5,
-								get_text(169),
-								get_text(170),
-								get_text(171),
-								get_text(172),
+								get_text(169), get_text(170),
+								get_text(171), get_text(172),
 								get_text(173)) - 1;
 
 						if (spell != -2) {
@@ -6655,7 +6651,7 @@ void select_spell(void)
 						break;
 					}
 					case 2: {
-						spell = gui_radio((Bit8u*)get_text(156), 5,
+						spell = gui_radio(get_text(156), 5,
 								get_text(201),
 								get_text(202),
 								get_text(203),
@@ -6669,7 +6665,7 @@ void select_spell(void)
 						break;
 					}
 					case 3: {
-						spell = gui_radio((Bit8u*)get_text(156), 6,
+						spell = gui_radio(get_text(156), 6,
 								get_text(174),
 								get_text(175),
 								get_text(176),
@@ -6687,7 +6683,7 @@ void select_spell(void)
 				break;
 			}
 			case 6: {
-				group = gui_radio((Bit8u*)get_text(155), 3,
+				group = gui_radio(get_text(155), 3,
 						get_text(158), get_text(159),
 						get_text(160));
 				if (group != -1) {
@@ -6699,7 +6695,7 @@ void select_spell(void)
 #endif
 				{
 					case 1: {
-						spell = gui_radio((Bit8u*)get_text(156), 6,
+						spell = gui_radio(get_text(156), 6,
 								get_text(180),
 								get_text(181),
 								get_text(182),
@@ -6714,7 +6710,7 @@ void select_spell(void)
 						break;
 					}
 					case 2: {
-						spell = gui_radio((Bit8u*)get_text(156), 6,
+						spell = gui_radio(get_text(156), 6,
 								get_text(186),
 								get_text(187),
 								get_text(188),
@@ -6729,9 +6725,8 @@ void select_spell(void)
 						break;
 					}
 					case 3: {
-						spell = gui_radio((Bit8u*)get_text(156), 3,
-								get_text(192),
-								get_text(193),
+						spell = gui_radio(get_text(156), 3,
+								get_text(192), get_text(193),
 								get_text(194)) - 1;
 
 						if (spell != -2) {
@@ -6745,7 +6740,7 @@ void select_spell(void)
 				break;
 			}
 			case 7: {
-				group = gui_radio((Bit8u*)get_text(155), 3,
+				group = gui_radio(get_text(155), 3,
 						get_text(161), get_text(163),
 						get_text(164));
 				if (group != -1) {
@@ -6757,7 +6752,7 @@ void select_spell(void)
 #endif
 				{
 					case 1: {
-						spell = gui_radio((Bit8u*)get_text(156), 6,
+						spell = gui_radio(get_text(156), 6,
 								get_text(195),
 								get_text(196),
 								get_text(197),
@@ -6772,7 +6767,7 @@ void select_spell(void)
 						break;
 					}
 					case 2: {
-						spell = gui_radio((Bit8u*)get_text(156), 7,
+						spell = gui_radio(get_text(156), 7,
 								get_text(206),
 								get_text(207),
 								get_text(208),
@@ -6788,7 +6783,7 @@ void select_spell(void)
 						break;
 					}
 					case 3: {
-						spell = gui_radio((Bit8u*)get_text(156), 2,
+						spell = gui_radio(get_text(156), 2,
 								get_text(213),
 								get_text(214)) - 1;
 
@@ -6803,7 +6798,7 @@ void select_spell(void)
 				break;
 			}
 			case 8: {
-				group = gui_radio((Bit8u*)get_text(155), 3,
+				group = gui_radio(get_text(155), 3,
 						get_text(164), get_text(86),
 						get_text(166));
 				if (group != -1) {
@@ -6815,7 +6810,7 @@ void select_spell(void)
 #endif
 				{
 					case 1: {
-						spell = gui_radio((Bit8u*)get_text(156), 2,
+						spell = gui_radio(get_text(156), 2,
 								get_text(215),
 								get_text(216)) - 1;
 
@@ -6826,7 +6821,7 @@ void select_spell(void)
 						break;
 					}
 					case 2: {
-						spell = gui_radio((Bit8u*)get_text(156), 9,
+						spell = gui_radio(get_text(156), 9,
 								get_text(217), get_text(218), get_text(219),
 								get_text(220), get_text(221), get_text(222),
 								get_text(223), get_text(224), get_text(225)) - 1;
@@ -6838,7 +6833,7 @@ void select_spell(void)
 						break;
 					}
 					case 3: {
-						spell = gui_radio((Bit8u*)get_text(156), 2,
+						spell = gui_radio(get_text(156), 2,
 								get_text(226),
 								get_text(227)) - 1;
 
@@ -6854,7 +6849,7 @@ void select_spell(void)
 				break;
 			}
 			case 9: {
-				spell = gui_radio((Bit8u*)get_text(156), 16,
+				spell = gui_radio(get_text(156), 16,
 						get_text(228), get_text(229),
 						get_text(230), get_text(231),
 						get_text(232), get_text(233),
@@ -6873,7 +6868,7 @@ void select_spell(void)
 				break;
 			}
 			case 10: {
-				spell = gui_radio((Bit8u*)get_text(156), 10,
+				spell = gui_radio(get_text(156), 10,
 						get_text(244), get_text(245),
 						get_text(246), get_text(247),
 						get_text(248), get_text(249),
@@ -6896,7 +6891,7 @@ void select_spell(void)
 }
 
 /* Borlandified and identical */
-void choose_atpa(void)
+static void choose_atpa(void)
 {
 	Bit16s skill;
 	Bit16s increase;
@@ -6905,7 +6900,7 @@ void choose_atpa(void)
 
 	do {
 		/* print menu with all melee weapons skills */
-		skill = gui_radio((Bit8u*)get_text(78), 7,
+		skill = gui_radio(get_text(78), 7,
 			get_text(95), get_text(96), get_text(97), get_text(98),
 			get_text(99), get_text(100), get_text(101)) - 1;
 
@@ -6914,7 +6909,7 @@ void choose_atpa(void)
 				infobox(get_text(260), 0);
 			} else {
 
-				increase = gui_radio((Bit8u*)get_text(254), 2,
+				increase = gui_radio(get_text(254), 2,
 					get_text(75), get_text(76));
 
 				if (increase != -1) {
@@ -6956,7 +6951,7 @@ void choose_atpa(void)
  *
  */
 /* Borlandified and far from identical */
-void choose_typus(void)
+static void choose_typus(void)
 {
 	Bit16s choosen_typus;
 	Bit16s randval;
@@ -6967,12 +6962,12 @@ void choose_typus(void)
 	Bit16s i;
 	Bit16s typus_names;
 
-	if (!gui_bool((Bit8u*)get_text(264)))
+	if (!gui_bool(get_text(264)))
 		return;
 	/* female or male typus names */
 	typus_names = (ds_readbs(HERO_SEX) ? 271 : 17);
 
-	choosen_typus = gui_radio((Bit8u*)get_text(30), 12,
+	choosen_typus = gui_radio(get_text(30), 12,
 				get_text(typus_names + 1), get_text(typus_names + 2),
 				get_text(typus_names + 3), get_text(typus_names + 4),
 				get_text(typus_names + 5), get_text(typus_names + 6),
@@ -7101,7 +7096,7 @@ void choose_typus(void)
 }
 
 /* Borlandified and nearly identical, but works correctly */
-void pal_fade_out(Bit8u *dst, Bit8u *src, Bit16s n)
+static void pal_fade_out(unsigned char *dst, unsigned char *src, signed short n)
 {
 //	struct struct_color *d = (struct struct_color*)dst;
 //	struct struct_color *s = (struct struct_color*)src;
@@ -7154,10 +7149,10 @@ void pal_fade_out(Bit8u *dst, Bit8u *src, Bit16s n)
 }
 
 /* Borlandified and nearly identical, but works correctly */
-void pal_fade_in(Bit8u *dst, Bit8u *src, Bit16s col, Bit16s n)
+static void pal_fade_in(unsigned char *dst, unsigned char *src, signed short col, signed short n)
 {
-	Bit16s i;
-	Bit16s si;
+	signed short i;
+	signed short si;
 
 	si = 0x40 - col;
 
@@ -7186,7 +7181,6 @@ void pal_fade_in(Bit8u *dst, Bit8u *src, Bit16s col, Bit16s n)
 #if !defined(__BORLANDC__)
 static void BE_cleanup(void)
 {
-	RealPt ptr;
 	Bit8u *host_ptr;
 
 	if ((host_ptr = g_buffer_sex_dat) != 0) {
@@ -7221,13 +7215,13 @@ static void BE_cleanup(void)
 
 	if ((host_ptr = g_picbuf3) != 0) {
 		D1_INFO("Free PICBUF3\t\t 0x%08x\n", host_ptr);
-		free(ptr);
+		free(host_ptr);
 		g_picbuf3 = NULL;
 	}
 
 	if ((host_ptr = g_picbuf2) != 0) {
 		D1_INFO("Free PICBUF2\t\t 0x%08x\n", host_ptr);
-		free(ptr);
+		free(host_ptr);
 		g_picbuf2 = NULL;
 	}
 
@@ -7245,13 +7239,13 @@ static void BE_cleanup(void)
 
 	if ((host_ptr = g_buffer_dmenge_dat - 8) != 0) {
 		D1_INFO("Free BUFFER_DMENGE_DAT\t 0x%08x\n", host_ptr);
-		free(ptr);
+		free(host_ptr);
 		g_buffer_dmenge_dat = NULL;
 	}
 
 	if ((host_ptr = g_gen_ptr5 - 8) != 0) {
 		D1_INFO("Free GEN_PTR5\t\t 0x%08x\n", host_ptr);
-		free(ptr);
+		free(host_ptr);
 		g_gen_ptr5 = NULL;
 	}
 
@@ -7327,15 +7321,15 @@ static void BE_cleanup(void)
  *	intro() - play the intro
  */
 /* Borlandified and nearly identical, but works correctly */
-void intro(void)
+static void intro(void)
 {
 	Bit8s cnt1;
 	Bit8s cnt2;
 	Bit16s width;
 	Bit16s height;
 	Bit16s flen;
-	RealPt pal_src;
-	RealPt pal_dst;
+	unsigned char *pal_src;
+	unsigned char *pal_dst;
 	struct nvf_desc nvf;
 
 	Bit16s i;
@@ -7528,7 +7522,7 @@ void intro(void)
 	memset(pal_dst, 0, 96);
 
 	for (i = 0; i < 64; i++) {
-		pal_fade_in(Real2Host(pal_dst), Real2Host(pal_src), i, 32);
+		pal_fade_in(pal_dst, pal_src, i, 32);
 		wait_for_vsync();
 		set_palette(pal_dst, 0, 32);
 	}
@@ -7550,7 +7544,7 @@ void intro(void)
 	memset(g_gen_ptr1_dis + 500, 0, 96);
 
 	for (i = 0; i < 64; i++) {
-		pal_fade_out(Real2Host(pal_dst), Real2Host(pal_src), 32);
+		pal_fade_out(pal_dst, pal_src, 32);
 		wait_for_vsync();
 		set_palette(pal_dst, 0, 32);
 	}
@@ -7564,7 +7558,7 @@ void intro(void)
 
 #if defined(__BORLANDC__)
 /* Borlandified and identical */
-void interrupt timer_isr(void)
+static void interrupt timer_isr(void)
 {
 	g_random_gen_seed2++;
 	if (g_random_gen_seed2 < 0)
@@ -7576,7 +7570,7 @@ void interrupt timer_isr(void)
 #endif
 
 /* Borlandified and identical */
-void set_timer_isr(void)
+static void set_timer_isr(void)
 {
 #if defined(__BORLANDC__)
 	/* save adress of the old ISR */
@@ -7595,6 +7589,7 @@ void restore_timer_isr(void)
 }
 
 /* Borlandified and nearly identical */
+#define main_gen main
 int main_gen(int argc, char **argv)
 {
 	Bit16s sound_off = 0;
@@ -7679,7 +7674,11 @@ int main_gen(int argc, char **argv)
 /* Borlandified and nearly identical, but works correctly */
 void alloc_buffers(void)
 {
+#if defined(__BORLANDC__)
 	g_gfx_ptr = g_vga_memstart = (unsigned char*)RealMake(0xa000, 0x0);
+#else
+	g_gfx_ptr = g_vga_memstart = (unsigned char*)NULL;
+#endif
 
 	g_gen_ptr1_dis = (gen_alloc(64108) + 8);
 

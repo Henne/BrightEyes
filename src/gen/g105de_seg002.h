@@ -20,66 +20,33 @@ struct nvf_desc {
 	signed short *height;
 };
 
-	void start_music(Bit16u);
-	void read_soundcfg(void);
-	void init_music(unsigned long);
-	void stop_music(void);
-	RealPt load_snd_driver(RealPt);
-	void unload_snd_driver(void);
-	unsigned short load_seq(Bit16s);
-	unsigned short play_sequence(Bit16s);
 	RealPt get_timbre(Bit16s, Bit16s);
-	unsigned short call_load_file(Bit16s);
 	unsigned short load_file(Bit16s);
-	unsigned short load_driver(RealPt, Bit16s, Bit16s);
 	void play_midi(Bit16u);
 	void stop_sequence(void);
-	void restart_midi(void);
 
-	void do_mouse_action(Bit8u*, Bit8u*, Bit8u*, Bit8u*, Bit8u*);
-#if defined(__BORLANDC__)
-	void interrupt mouse_isr(void);
-#endif
-	void mouse_enable(void);
-	void mouse_disable(void);
 	void mouse_do_enable(Bit16u, RealPt);
 	void mouse_do_disable(void);
-	void update_mouse_cursor(void);
-	void call_mouse(void);
 	void update_mouse_cursor1(void);
 	void mouse(void);
-	void mouse_compare(void);
 	void handle_input(void);
 	Bit16u get_mouse_action(Bit16s, Bit16s, struct mouse_action*);
-	void decomp_rle(Bit8u*, Bit8u*, Bit16s, Bit16s, Bit16s, Bit16s, Bit16u);
 	void draw_mouse_cursor(void);
 	void save_mouse_bg(void);
 	void restore_mouse_bg(void);
-	void load_font_and_text(void);
 	void split_textbuffer(Bit8u*, RealPt, Bit32u);
-	void load_font_and_text_host(void);
-	void load_page(Bit16s);
-	void load_typus(Bit16u);
-	void save_chr(void);
-	void read_common_files(void);
 	Bit32s process_nvf(struct nvf_desc*);
 	Bit16s open_datfile(Bit16u);
 	Bit32s get_archive_offset(const char*, Bit8u*);
 	Bit16s read_datfile(Bit16u, Bit8u*, Bit16u);
 	Bit32s get_filelength(Bit16s);
-	Bit16u ret_zero1(void);
 	void wait_for_keypress(void);
 	void error_msg(char*);
 	void vsync_or_key(Bit16s);
 	Bit32u swap_u32(Bit32u);
-	void init_video(Bit16s);
+
 	void exit_video(void);
-	void draw_v_line(Bit16s, Bit16s, Bit16s, Bit16u);
-	void do_draw_pic(Bit16u);
-	void call_fill_rect_gen(PhysPt, Bit16u, Bit16u, Bit16u, Bit16u, Bit16u);
 	void wait_for_vsync(void);
-	void blit_smth3(RealPt, Bit16s, Bit16s);
-	Bit16u str_splitter(char *);
 	Bit16u print_line(char*);
 	void print_str(char *, Bit16s, Bit16s);
 	Bit16s print_chr(unsigned char, Bit16s, Bit16s);
@@ -90,22 +57,11 @@ struct nvf_desc {
 	RealPt get_gfx_ptr(Bit16s, Bit16s, Bit16s*);
 	Bit16s ret_zero(Bit16s, Bit16s);
 	void call_blit_smth3(RealPt, Bit16s, Bit16s, Bit16s, Bit16s);
-	void set_textcolor(Bit16s, Bit16s);
-	void get_textcolor(Bit16s*, Bit16s*);
-	Bit16s get_str_width(char*);
 	Bit16s get_line_start_c(char*, Bit16s, Bit16s);
-	Bit16s enter_string(char*, Bit16s, Bit16s, Bit16s, Bit16s);
-	void draw_popup_line(Bit16s, Bit16s);
-	Bit16s infobox(char*, Bit16s);
-	Bit16s gui_bool(Bit8u*);
-	void fill_radio_button(Bit16s, Bit16s, Bit16s);
-	Bit16s gui_radio(Bit8u *header, Bit8s pos, ...);
-	void enter_name(void);
-	void change_head(void);
-	void change_sex(void);
-	void do_gen(void);
-	void calc_at_pa(void);
-	void fill_values(void);
+	signed short infobox(char*, signed short);
+	signed short gui_bool(char*);
+	signed short gui_radio(char*, signed char, ...);
+
 	void refresh_screen(void);
 	void clear_hero(void);
 	void new_values(void);
@@ -114,27 +70,15 @@ struct nvf_desc {
 	void select_typus(void);
 	Bit16s can_change_attribs(void);
 	void change_attribs(void);
+
 	void save_picbuf(void);
-	void restore_picbuf(RealPt);
-	void print_attribs(void);
 	void print_values(void);
 	void make_valuta_str(char *, Bit32s);
-	void inc_skill(Bit16s, Bit16s, char*);
 	void select_skill(void);
-	void inc_spell(Bit16s);
 	void select_spell(void);
 	void choose_atpa(void);
 	void choose_typus(void);
-	void pal_fade_out(Bit8u*, Bit8u*, Bit16s);
-	void pal_fade_in(Bit8u*, Bit8u*, Bit16s, Bit16s);
-	void intro();
-#if defined(__BORLANDC__)
-	void interrupt timer_isr(void);
-#endif
-	void set_timer_isr(void);
 	void restore_timer_isr(void);
-	int main_gen(int argc, char **argv);
-	void alloc_buffers_emu(void);
 	void alloc_buffers(void);
 	void init_colors(void);
 	void init_stuff(void);

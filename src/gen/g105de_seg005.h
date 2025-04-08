@@ -1,6 +1,6 @@
 void set_video_mode(Bit16u mode);
 void set_video_page(Bit16u mode);
-void save_display_stat(RealPt);
+void save_display_stat(signed short*);
 void set_color(RealPt ptr, unsigned char color);
 void set_palette(RealPt ptr, unsigned char first_color, unsigned short colors);
 void draw_h_line(Bit16u, Bit16s, Bit16u);

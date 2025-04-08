@@ -20,7 +20,7 @@ void set_video_page(Bit16u mode)
 {
 }
 
-void save_display_stat(RealPt p)
+void save_display_stat(signed short *p)
 {
 }
 

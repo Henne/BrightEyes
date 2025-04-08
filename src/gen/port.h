@@ -36,9 +36,7 @@ extern char ds[0x488f];
 #define datseg (_DS)
 //#define ds (RealMake(datseg, 0x0000))
 
-#define main_gen main
 #define reloc_gen (0)
-
 
 #define ds_readb(p) *(unsigned char*)((ds) + p)
 #define ds_readw(p) *(unsigned short*)((ds) + p)
