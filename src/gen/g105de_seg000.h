@@ -10,7 +10,6 @@ Bit16s bc__read(Bit16u, Bit8u*, Bit16u);
 signed short bc_bioskey(signed short);
 void bc_clrscr();
 RealPt bc_farcalloc(Bit32s, Bit32s);
-void bc_harderr(RealPt);
 Bit16s bc__close(Bit16u);
 Bit16s bc__create(RealPt, Bit16u);
 Bit16s bc_flushall();
@@ -45,7 +44,6 @@ static inline void bc_randomize() { }
 #define bc__read _read
 #define bc_farcalloc farcalloc
 #define bc_int86x int86x
-#define bc_harderr harderr
 #define bc__exit _exit
 #define bc__close _close
 #define bc__creat _creat

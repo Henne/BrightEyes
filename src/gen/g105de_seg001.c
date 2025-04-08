@@ -483,10 +483,8 @@ void CD_check_cd()
 {
 	char fname[80];
 
-#if !defined(__BORLANDC__)
-	//bc_harderr(RealMake(reloc_gen + 0x364, 0x598));
-#else
-	bc_harderr((int(*)(int, int, int, int))CD_insert_loop);
+#if defined(__BORLANDC__)
+	harderr((int(*)(int, int, int, int))CD_insert_loop);
 #endif
 
 	strcpy(fname, (char*)STR_CD_EXEPATH);
