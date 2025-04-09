@@ -1516,7 +1516,7 @@ void unload_snd_driver(void)
 	}
 }
 
-/* Borlandified and nearly identical, but works SYNC */
+/* Borlandified and identical */
 unsigned short load_seq(Bit16s sequence_num)
 {
 	signed short patch;
@@ -1564,7 +1564,7 @@ unsigned short play_sequence(Bit16s sequence_num)
 	return 0;
 }
 
-/* Borlandified and nearly identical, but works SYNC */
+/* Borlandified and identical */
 signed short *get_timbre(signed short bank, signed short patch)
 {
 	signed short *timbre_ptr;
@@ -1704,7 +1704,7 @@ void restart_midi(void)
  * to call interrupts. We use the one of DOSBox, which means, that we
  * put the values in the emulated registers, instead in a structure.
  */
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 void do_mouse_action(Bit8u *p1, Bit8u *p2, Bit8u *p3, Bit8u *p4, Bit8u *p5)
 {
 #if defined(__BORLANDC__)
@@ -1714,11 +1714,7 @@ void do_mouse_action(Bit8u *p1, Bit8u *p2, Bit8u *p3, Bit8u *p4, Bit8u *p5)
 	if (host_readws(p1) >= 0) {
 		myregs.x.ax = host_readw(p1);
 		myregs.x.bx = host_readw(p2);
-#if !defined(__BORLANDC__)
 		myregs.x.cx = host_readw(p3);
-#else
-		myregs.x.cx = 0xdead; asm {nop}; // BCC Sync-Point
-#endif
 
 		switch (host_readws(p1)) {
 			case 0x9:	/* define Cursor in graphic mode */
@@ -1741,7 +1737,12 @@ void do_mouse_action(Bit8u *p1, Bit8u *p2, Bit8u *p3, Bit8u *p4, Bit8u *p5)
 
 		int86x(0x33, &myregs, &myregs, &mysregs);
 
-		host_writew(p2, ((host_readw(p1) == 0x14) ? mysregs.es : myregs.x.bx));
+		if (host_readw(p1) == 0x14) {
+			host_writew(p2, mysregs.es);
+		} else {
+			host_writew(p2, myregs.x.bx);
+		}
+
 		host_writew(p1, myregs.x.ax);
 		host_writew(p3, myregs.x.cx);
 		host_writew(p4, myregs.x.dx);
@@ -1847,7 +1848,7 @@ void mouse_disable(void)
 }
 
 #if defined(__BORLANDC__)
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 void mouse_unused1(Bit8u *p1, Bit8u *p2, Bit8u *p3, Bit8u *p4)
 {
 	unsigned short l_var;
@@ -1858,8 +1859,7 @@ void mouse_unused1(Bit8u *p1, Bit8u *p2, Bit8u *p3, Bit8u *p4)
 /* Borlandified and identical */
 void mouse_call_isr(void)
 {
-	//mouse_isr();
-	asm {pushf; push cs; nop; }; // BCC Sync-Point
+	mouse_isr();
 }
 #endif
 
@@ -2106,7 +2106,7 @@ void handle_input(void)
 	g_in_key_ext = si;
 }
 
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 /* static */
 Bit16u get_mouse_action(Bit16s x, Bit16s y, struct mouse_action *act)
 {
@@ -2328,7 +2328,7 @@ void load_font_and_text(void)
 	split_textbuffer(g_texts, g_buffer_text, len);
 }
 
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 void split_textbuffer(char **dst, char *src, unsigned long len)
 {
 	unsigned long i;
@@ -2341,12 +2341,7 @@ void split_textbuffer(char **dst, char *src, unsigned long len)
 
 			/* write the adress of the next string */
 			*dst = src + 1;
-#if !defined(__BORLANDC__)
 			dst++;
-#else
-			//dst++;
-			asm {nop} // Sync-point
-#endif
 		}
 	}
 }
@@ -2627,13 +2622,23 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 		offs = pics * 8 + 3L;
 		for (i = 0; i < (Bit16s)nvf->no; i++) {
 			/* First two lines are not neccessary */
-#if !defined(__BORLANDC__)
 			width = host_readws(Real2Host(bc_F_PADD(bc_F_PADD(nvf->src, i * 8), 3L)));
+#if !defined(__BORLANDC__)
 			height = host_readws(Real2Host(bc_F_PADD(bc_F_PADD(nvf->src, i * 8), 5L)));
 #else
 			// Sync-Point
-			height = host_readws(Real2Host(bc_F_PADD(nvf->src, i * 8)));
+			asm {db 0x0f, 0x1f, 0x00};
 			asm {nop; nop}
+			asm {nop; nop}
+			asm {nop; nop}
+			asm {nop; nop}
+			asm {nop; nop}
+			asm {nop; nop}
+			asm {nop; nop}
+			asm {nop; nop}
+			asm {nop; nop}
+			asm {nop; nop}
+			asm {db 0x66, 0x90}
 #endif
 			/* BCC adds here in offs = offs + value */
 			offs += host_readd(Real2Host(bc_F_PADD(bc_F_PADD(nvf->src, i * 8), 7L)));
@@ -2733,18 +2738,15 @@ Bit32s get_archive_offset(const char *name, Bit8u *table)
 /* Borlandified and identical */
 Bit16s read_datfile(Bit16u handle, Bit8u *buf, Bit16u len)
 {
-	if (len > g_flen_left)
+	if (len > (unsigned long)g_flen_left)
 		len = (unsigned short)g_flen_left;
 
 	len = bc__read(handle, buf, len);
 
 
 	g_flen_left -= len;
-#if defined(__BORLANDC__)
-	// return len is implicit here
-#else
+
 	return len;
-#endif
 }
 
 /* Borlandified and identical */
@@ -2840,11 +2842,7 @@ Bit32u unused_func10(Bit32u v)
 
 	l_si = host_writed(p, v); // write v to stack and access subvalues with l1 and l2
 	l2 = l1;
-#if 0
 	l1 = l_si;
-#else
-	asm {db 0x8b, 0xc2, 0x90} // Sync-point: 5 bytes, 2 instructions
-#endif
 
 	return host_readd(p);
 }
@@ -2917,7 +2915,7 @@ void ega_unused6(Bit8u val)
 #endif
 
 #if defined(__BORLANDC__)
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 void unused_func11(Bit16s x1, Bit16s x2, Bit16s y, Bit16s color)
 {
 	Bit16s tmp;
@@ -2937,8 +2935,8 @@ void unused_func11(Bit16s x1, Bit16s x2, Bit16s y, Bit16s color)
 	
 	count = l_di - l_si + 1;
 	/* not very readable, but here the length of the function fits */
-	//offset = y * width + l_si;
-	draw_h_line((offset = y * width + l_si), count, color);
+	offset = y * width + l_si;
+	draw_h_line(offset, count, color);
 }
 #endif
 
@@ -2958,8 +2956,8 @@ void draw_v_line(Bit16s x, Bit16s y1, Bit16s y2, Bit16u color)
 
 	diffY = y2 - y1 + 1;
 	/* not very readable, but here the length of the function fits */
-	//offset = y1 * width + x;
-	draw_h_spaced_dots((offset = y1 * width + x), diffY, color, width);
+	offset = y1 * width + x;
+	draw_h_spaced_dots(offset, diffY, color, width);
 }
 
 /* Borlandified and identical */
@@ -3096,7 +3094,7 @@ void blit_smth3(unsigned char *ptr, signed short v1, signed short v2)
  *
  * Returns the number of lines the string needs.
  */
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 /* static */
 Bit16u str_splitter(char *s)
 {
@@ -3123,13 +3121,7 @@ Bit16u str_splitter(char *s)
 		}
 	}
 
-#if !defined(__BORLANDC__)
 	tp = s;
-#else
-	asm {db 0x0f, 0x1f, 0x00;} // BCC Sync-Point
-	asm {db 0x0f, 0x1f, 0x00;}
-	asm {db 0x0f, 0x1f, 0x00;}
-#endif
 
 	i = last_space = unknown_var1 = 0;
 
@@ -3256,7 +3248,7 @@ void print_str(char *str, Bit16s x, Bit16s y)
 }
 
 
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 Bit16s print_chr(unsigned char c, Bit16s x, Bit16s y)
 {
 	Bit16s width;
@@ -3265,12 +3257,8 @@ Bit16s print_chr(unsigned char c, Bit16s x, Bit16s y)
 	idx = get_chr_info(c, &width);
 
 	call_them_all(idx, width, x, y);
-#if !defined(__BORLANDC__)
+
 	return width;
-#else
-	// Sync-Point
-	asm { nop; }
-#endif
 }
 
 /**
@@ -3316,11 +3304,7 @@ void call_them_all(Bit16s v1, Bit16s v2, Bit16s x, Bit16s y)
 	gfx_ptr = get_gfx_ptr(x, y, &l2);
 	bogus = (Bit32s)ret_zero(v2, l2);
 
-#if !defined(__BORLANDC__)
 	call_blit_smth3(gfx_ptr, 7, (Bit16s)bogus, l2, v2);
-#else
-	call_blit_smth3(gfx_ptr, 7, (Bit16s)_AX, l2, v2); // BCC Sync-Point
-#endif
 }
 
 /* Borlandified and identical */
@@ -3556,11 +3540,8 @@ Bit16s enter_string(char *dst, Bit16s x, Bit16s y, Bit16s num, Bit16s zero)
 
 			/* are we at the end of the input field */
 			if (pos == num) {
-#if !defined(__BORLANDC__)
 				dst--;
-#else
-				asm {nop;} // BCC Sync-point
-#endif
+
 				get_chr_info(*dst, &width);
 
 				di -= (zero != 0) ? width : 6;
