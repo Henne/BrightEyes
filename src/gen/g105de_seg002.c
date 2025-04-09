@@ -2415,11 +2415,11 @@ void load_page(signed short page)
 
 #if defined (__BORLANDC__)
 /* Borlandified and nearly identical */
-void read_datfile_to_buffer(Bit16s index, RealPt dst)
+void read_datfile_to_buffer(signed short index, unsigned char *dst)
 {
-	Bit16s handle;
+	signed short handle;
 	handle = open_datfile(index);
-	read_datfile(handle, Real2Host(dst), 64000);
+	read_datfile(handle, dst, 64000);
 	close(handle);
 }
 #endif
