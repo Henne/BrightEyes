@@ -4701,7 +4701,7 @@ void fill_values(void)
 						   g_height_range[g_hero.typus].max);
 
 	/* calculate weight i = (height - weight_mod) * 40 */
-	g_hero.weight = (g_hero.height - 40 * g_weight_mod[g_hero.typus]);
+	g_hero.weight = 40 * ((unsigned short)g_hero.height - g_weight_mod[g_hero.typus]);
 
 	/* roll out the money */
 	i = random_gen(20);
