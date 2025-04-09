@@ -4882,7 +4882,7 @@ void skill_inc_novice(Bit16s skill)
 			/* check if the test is passed */
 			if ((Bit16s)random_interval_gen(2, 12) > g_hero.skills[skill]) {
 				/* increment skill */
-				g_hero.skills[skill];
+				g_hero.skills[skill]++;
 
 				/* set inc tries for this skill to zero */
 				g_skill_incs[skill].tries = 0;
