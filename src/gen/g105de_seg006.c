@@ -4,7 +4,7 @@ void AIL_startup()
 {
 }
 
-void AIL_shutdown(RealPt signoff_msg)
+void AIL_shutdown(char *signoff_msg)
 {
 }
 

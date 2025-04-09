@@ -1465,7 +1465,7 @@ void init_music(unsigned long size)
 /* Borlandified and identical */
 void stop_music(void)
 {
-	AIL_shutdown(0);
+	AIL_shutdown(NULL);
 
 	/* Remark: set pointer to NULL */
 	if (g_snd_timbre_cache)
@@ -1484,7 +1484,7 @@ void stop_music(void)
 }
 
 /* Borlandified and nearly identical, but works identically */
-RealPt load_snd_driver(RealPt fname)
+RealPt load_snd_driver(char *fname)
 {
 	Bit32s size;
 	RealPt norm_ptr;

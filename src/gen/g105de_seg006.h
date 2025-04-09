@@ -2,7 +2,7 @@
 
 void AIL_startup();
 
-void AIL_shutdown(RealPt signoff_msg);
+void AIL_shutdown(char *signoff_msg);
 
 Bit16s AIL_register_driver(RealPt driver_base_addr);
 
