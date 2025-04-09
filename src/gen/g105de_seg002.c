@@ -2227,11 +2227,11 @@ void decomp_rle(Bit8u *dst, Bit8u *src, Bit16s x, Bit16s y,
 
 				if ((pix != 0) || (mode != 2))
 					for (k = 0; k < n; k++)
-						host_writeb(dst_loc + j + k, pix);
+						*(dst_loc + j + k) = pix;
 				j += n;
 			} else {
 				if ((val != 0) || (mode != 2))
-					host_writeb(dst_loc + j, val);
+					*(dst_loc + j) = val;
 				j++;
 			}
 		}
