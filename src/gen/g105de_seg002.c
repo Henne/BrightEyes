@@ -1546,12 +1546,7 @@ unsigned short load_seq(Bit16s sequence_num)
 
 			return 1;
 		} else {
-#if !defined(__BORLANDC__)
 			close(g_handle_timbre);
-#else
-			//close(g_handle_timbre);
-			asm { db 0x0f, 0x1d, 0x40, 0x00; db 0x0f, 0x1d, 0x04, 0x00}; // BCC Sync-Point
-#endif
 		}
 	}
 	return 0;
@@ -1591,16 +1586,7 @@ signed short *get_timbre(signed short bank, signed short patch)
 
 	timbre_ptr = (signed short*)gen_alloc(g_current_timbre_length);
 
-#if !defined(__BORLANDC__)
-	read_datfile(g_handle_timbre,
-		&timbre_ptr[1],
-		(timbre_ptr[0] = g_current_timbre_length) - 2);
-#else
-	asm { db 0x66, 0x90; db 0x66, 0x90;}
-	read_datfile(g_handle_timbre,
-		0L, // BCC Sync-Point
-		(timbre_ptr[0] = g_current_timbre_length) - 2);
-#endif
+	read_datfile(g_handle_timbre, &timbre_ptr[1], (timbre_ptr[0] = g_current_timbre_length) - 2);
 
 	return timbre_ptr;
 }
@@ -1611,7 +1597,7 @@ unsigned short call_load_file(Bit16s index)
 	return load_file(index);
 }
 
-/* Borlandified and nearly identical, but works */
+/* Borlandified and identical */
 unsigned short load_file(Bit16s index)
 {
 	Bit16s handle;
@@ -1625,20 +1611,15 @@ unsigned short load_file(Bit16s index)
 	return 0;
 }
 
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 signed short load_driver(const char* fname, signed short type, signed short port)
 {
 	if ((port != 0) &&
 		(g_snd_driver_base_addr = (Bit8u*)load_snd_driver(fname)) &&
 		((g_snd_driver_handle = AIL_register_driver((Bit8u*)g_snd_driver_base_addr)) != -1))
 	{
-
-#if !defined(__BORLANDC__)
 		g_snd_driver_desc = (Bit8u*)AIL_describe_driver(g_snd_driver_handle);
-#else
-		// _AX contains the value of SND_DRIVER_HANDLE
-		g_snd_driver_desc = (Bit8u*)AIL_describe_driver(_AX);
-#endif
+
 		if (host_readws(g_snd_driver_desc + 0x02) == type)
 		{
 			if (port == -1) {
@@ -1661,27 +1642,17 @@ signed short load_driver(const char* fname, signed short type, signed short port
 					g_timbre_cache_size = AIL_default_timbre_cache_size(g_snd_driver_handle);
 
 					if (g_timbre_cache_size != 0) {
-						g_snd_timbre_cache = (Bit8u*)gen_alloc(g_timbre_cache_size);
-#if !defined(__BORLANDC__)
+						g_snd_timbre_cache = (Bit8u*)gen_alloc((unsigned short)g_timbre_cache_size);
 						AIL_define_timbre_cache(g_snd_driver_handle,
 							g_snd_timbre_cache,
 							g_timbre_cache_size);
-#else
-
-#endif
 					}
 				}
 
 				g_midi_disabled = 0;
 				return 1;
 			} else {
-#if !defined(__BORLANDC__)
 				infobox(g_str_soundhw_not_found, 0);
-				g_midi_disabled = 1;
-#else
-				asm {nop; } // BCC Sync-point
-#endif
-				return 0;
 			}
 		}
 	}
