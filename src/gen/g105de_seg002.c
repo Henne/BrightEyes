@@ -4234,7 +4234,7 @@ void do_gen(void)
 								break;
 							}
 							case 4: {
-								memset(g_hero.name, 0, 0x6da);
+								memset(&g_hero, 0, sizeof(g_hero));
 								clear_hero();
 								g_mouse2_event = 1;
 								g_screen_var = 1;
@@ -4542,7 +4542,7 @@ void new_values(void)
 	sex_bak = g_hero.sex;
 
 	/* clear the hero */
-	memset(g_hero.name, 0, 0x6da);
+	memset(&g_hero, 0, sizeof(g_hero));
 
 	clear_hero();
 
@@ -6828,7 +6828,7 @@ void choose_typus(void)
 	strcpy(name_bak, g_hero.name);
 	sex_bak = g_hero.sex;
 
-	memset(g_hero.name, 0, 0x6da);
+	memset(&g_hero, 0, sizeof(g_hero));
 
 	clear_hero();
 	g_hero.sex = sex_bak;
