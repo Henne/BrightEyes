@@ -648,30 +648,30 @@ struct struct_money {
 };
 
 static const struct struct_money money_jester[] = {
-	{14, 5, 5}, {19, 0x64, 0x64}, {20, 0x12c, 0x12c} };
+	{14, 5, 5}, {19, 100, 100}, {20, 300, 300} };
 static const struct struct_money money_hunter[] = {
 	{1, 1, 1},  {20, 0, 0} };
 static const struct struct_money money_warrior[] = {
-	{2, 1, 1},  {4, 20, 20}, {7, 50, 50}, {10, 30, 30}, {18, 0xc8, 0xc8}, {20, 0x3e8, 0x3e8} };
+	{2, 1, 1},  {4, 20, 20}, {7, 50, 50}, {10, 30, 30}, {18, 200, 200}, {20, 1000, 1000} };
 static const struct struct_money money_rouge[] = {
 	{10, 0, 0},  {17, 2, 2}, {18, 5, 5}, {20, 10, 10} };
 static const struct struct_money money_thorwal[] = {
-	{9, 10, 10},  {13, 0x64, 0x64}, {19, 0xc8, 0xc8}, {20, 0x1f4, 0x1f4} };
+	{9, 10, 10},  {13, 0x64, 0x64}, {19, 300, 300}, {20, 508, 508} };
 static const struct struct_money money_dwarf[] = {
-	{7, 0x64, 0x64},  {16, 0xc8, 0xc8}, {19, 0x12c, 0x12c}, {20, 0x4b0, 0x4b0} };
+	{7, 100, 100},  {16, 200, 200}, {19, 300, 300}, {20, 1200, 1200} };
 
 static const struct struct_money money_warlock[] = {
 	{20, 1, 20} };
 static const struct struct_money money_druid[] = {
-	{14, 0, 1},  {15, 1, 6}, {16, 2, 12}, {18, 1, 20}, {19, 10, 0x3c}, {20, 10, 0xc8} };
+	{14, 0, 1},  {15, 1, 6}, {16, 2, 12}, {18, 1, 20}, {19, 10, 60}, {20, 10, 200} };
 static const struct struct_money money_mage[] = {
-	{3, 1, 6},  {13, 10, 0x3c}, {16, 10, 0xc8}, {19, 20, 0x190}, {20, 5, 0x3e8} };
+	{3, 1, 6},  {13, 10, 60}, {16, 10, 200}, {19, 20, 400}, {20, 5, 1000} };
 static const struct struct_money money_greenelf[] = {
-	{4, 1, 6},  {6, 1, 20}, {13, 10, 0x3c}, {19, 10, 0xc8}, {20, 20, 0x190} };
+	{4, 1, 6},  {6, 1, 20}, {13, 10, 60}, {19, 10, 200}, {20, 20, 400} };
 static const struct struct_money money_iceelf[] = {
 	{1, 1, 6},  {20, 1, 20} };
 static const struct struct_money money_silvanelf[] = {
-	{14, 1, 6}, {19, 1, 20}, {20, 10, 0x3c} };
+	{14, 1, 6}, {19, 1, 20}, {20, 10, 60} };
 
 static const struct struct_money* g_money_tab[] = {
 	money_jester,
