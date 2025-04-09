@@ -47,9 +47,9 @@ struct struct_hero {
 	signed short ae_max;
 	signed char mr;
 
-	signed char atpa;
-	signed char at[7];
-	signed char pa[7];
+	signed char atpa_base;
+	signed char at_weapon[7];
+	signed char pa_weapon[7];
 	signed char w_at_mod;
 	signed char w_pa_mod;
 	signed char w_type;
@@ -96,7 +96,7 @@ struct struct_hero {
 	/* Offset 0x13d */
 	signed char spells[86];
 	signed char spell_incs;
-	signed char school;
+	signed char spell_school;
 	signed char staff_level;
 
 	/* Offset 0x196 */

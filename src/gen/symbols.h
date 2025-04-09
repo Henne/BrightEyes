@@ -100,24 +100,24 @@
 //#define HERO_ATT_KK_CURRENT             (0x1373)    /* Bit8s */
 //#define HERO_ATT_AG_NORMAL              (0x1375)    /* Bit8s */
 
-#define HERO_LE                         (0x138a)    /* Bit16s */
-#define HERO_LE_MAX                     (0x138c)    /* Bit16s */
-#define HERO_AE                         (0x138e)    /* Bit16s */
-#define HERO_AE_MAX                     (0x1390)    /* Bit16s */
-#define HERO_MR                         (0x1392)    /* Bit8s */
-#define HERO_ATPA_BASE                  (0x1393)    /* Bit8s */
-#define HERO_AT_WEAPON                  (0x1394)    /* Bit8s[7] */
-#define HERO_PA_WEAPON                  (0x139b)    /* Bit8s[7] */
-#define HERO_GROUP                      (0x13b4)    /* Bit8s */
+//#define HERO_LE                         (0x138a)    /* Bit16s */
+//#define HERO_LE_MAX                     (0x138c)    /* Bit16s */
+//#define HERO_AE                         (0x138e)    /* Bit16s */
+//#define HERO_AE_MAX                     (0x1390)    /* Bit16s */
+//#define HERO_MR                         (0x1392)    /* Bit8s */
+//#define HERO_ATPA_BASE                  (0x1393)    /* Bit8s */
+//#define HERO_AT_WEAPON                  (0x1394)    /* Bit8s[7] */
+//#define HERO_PA_WEAPON                  (0x139b)    /* Bit8s[7] */
+//#define HERO_GROUP                      (0x13b4)    /* Bit8s */
 
 #define HERO_SKILLS                     (0x1434)    /* Bit8s[52] */
-#define HERO_SKILL_INCS                 (0x1468)    /* Bit8s */
+//#define HERO_SKILL_INCS                 (0x1468)    /* Bit8s */
 #define HERO_SPELLS                     (0x1469)    /* Bit8s[86] */
-#define HERO_SPELL_INCS                 (0x14bf)    /* Bit8s */
-#define HERO_SPELL_SCHOOL               (0x14c0)    /* Bit8s */
-#define HERO_STAFF_LEVEL                (0x14c1)    /* Bit8s */
+//#define HERO_SPELL_INCS                 (0x14bf)    /* Bit8s */
+//#define HERO_SPELL_SCHOOL               (0x14c0)    /* Bit8s */
+//#define HERO_STAFF_LEVEL                (0x14c1)    /* Bit8s */
 
-#define HERO_PIC                        (0x1606)    /* char[1024] */
+//#define HERO_PIC                        (0x1606)    /* char[1024] */
 
 
 //#define MIDI_DISABLED                   (0x1a07)    /* signed short */

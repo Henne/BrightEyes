@@ -2521,10 +2521,10 @@ void save_chr(void)
 	process_nvf(&nvf);
 
 	/* copy picture to the character struct */
-	memcpy(RealMake(datseg, HERO_PIC), g_gen_ptr1_dis, 1024);
+	memcpy(g_hero.pic, g_gen_ptr1_dis, 1024);
 
 	/* put the hero in the first group */
-	ds_writeb(HERO_GROUP, 1);
+	g_hero.group = 1;
 
 	/* wanna save ? */
 	if (!gui_bool(get_text(3)))
@@ -4667,36 +4667,36 @@ void calc_at_pa(void)
 		res.quot++;
 	}
 
-	ds_writeb(HERO_ATPA_BASE, res.quot);
+	g_hero.atpa_base = res.quot;
 
 	for (i = 0; i < 7; i++) {
 		/* Set base AT/PA value for each weapon */
-		ds_writeb(HERO_AT_WEAPON + i, ds_writeb(HERO_PA_WEAPON + i, ds_readbs(HERO_ATPA_BASE)));
+		g_hero.at_weapon[i] = g_hero.pa_weapon[i] = g_hero.atpa_base;
 
 		if (ds_readbs(HERO_SKILLS + i) < 0) {
 			tmp = __abs__(ds_readbs(HERO_SKILLS + i)) / 2;
 
 			/* Calculate weapon AT value */
-			ds_writeb(HERO_AT_WEAPON + i, ds_readbs(HERO_AT_WEAPON + i) - tmp);
+			g_hero.at_weapon[i] -= tmp;
 
 			/* Calculate weapon PA value */
-			ds_writeb(HERO_PA_WEAPON + i, ds_readbs(HERO_PA_WEAPON + i) - tmp);
+			g_hero.pa_weapon[i] -= tmp;
 
 			if (__abs__(ds_readbs(HERO_SKILLS + i)) != 2 * tmp) {
-				ds_dec_bs_post(HERO_PA_WEAPON + i);
+				g_hero.pa_weapon[i]--;
 			}
 		} else {
 			/* calculate ATPA for positive weapon skill */
 			tmp = ds_readbs(HERO_SKILLS + i) / 2;
 
 			/* Calculate weapon AT value */
-			ds_writeb(HERO_AT_WEAPON + i, ds_readbs(HERO_AT_WEAPON + i) + tmp);
+			g_hero.at_weapon[i] += tmp;
 
 			/* Calculate weapon PA value */
-			ds_writeb(HERO_PA_WEAPON + i, ds_readbs(HERO_PA_WEAPON + i) + tmp);
+			g_hero.pa_weapon[i] += tmp;
 
 			if (ds_readbs(HERO_SKILLS + i) != 2 * tmp) {
-				ds_inc_bs_post(HERO_AT_WEAPON + i);
+				g_hero.at_weapon[i]++;
 			}
 		}
 	}
@@ -4729,7 +4729,7 @@ void fill_values(void)
 	}
 
 	/* set skill_attempts */
-	ds_writeb(HERO_SKILL_INCS, g_initial_skill_incs[g_hero.typus]);
+	g_hero.skill_incs = g_initial_skill_incs[g_hero.typus];
 
 	/* do magic user init */
 	if (g_hero.typus >= 7) {
@@ -4748,29 +4748,30 @@ void fill_values(void)
 		/* special mage values */
 		if (g_hero.typus == 9) {
 			/* set staff spell to level 1 */
-			ds_writeb(HERO_STAFF_LEVEL, 1);
+			g_hero.staff_level = 1;
 			/* select mage school */
 			do {
-				 ds_writebs(HERO_SPELL_SCHOOL,
-						gui_radio(get_text(47), 9,
+				g_hero.spell_school = gui_radio(get_text(47),
+							9,
 							get_text(48), get_text(49),
 							get_text(50), get_text(51),
 							get_text(52), get_text(53),
 							get_text(54), get_text(55),
-							get_text(56)) - 1);
-			} while (ds_readbs(HERO_SPELL_SCHOOL) == -2);
+							get_text(56)) - 1;
+
+			} while (g_hero.spell_school == -2);
 
 
 			/* add magic school modifications */
-			for (i = 0; g_house_mod[ds_readbs(HERO_SPELL_SCHOOL)].no > i; i++) {
+			for (i = 0; g_house_mod[g_hero.spell_school].no > i; i++) {
 
-				ds_add_bs(HERO_SPELLS + g_house_mod[ds_readbs(HERO_SPELL_SCHOOL)].spells[i],
-					g_house_mod[ds_readbs(HERO_SPELL_SCHOOL)].mod[i]);
+				ds_add_bs(HERO_SPELLS + g_house_mod[g_hero.spell_school].spells[i],
+					g_house_mod[g_hero.spell_school].mod[i]);
 			}
 		}
 
 		/* set spell attempts */
-		ds_writeb(HERO_SPELL_INCS, g_initial_spell_incs[g_hero.typus - 7]);
+		g_hero.spell_incs = g_initial_spell_incs[g_hero.typus - 7];
 
 		/* get convertable increase attempts */
 		if ((di = g_initial_conv_incs[g_hero.typus - 7]) && (g_level == 2) && gui_bool(get_text(269))) {
@@ -4785,9 +4786,9 @@ void fill_values(void)
 					i = di;
 				di -= i;
 				/* change spell attempts */
-				ds_sub_bs(HERO_SPELL_INCS, i);
+				g_hero.spell_incs -= i;
 				/* change skill attempts */
-				ds_add_bs(HERO_SKILL_INCS, i);
+				g_hero.skill_incs += i;
 			} else {
 
 				/* create string */
@@ -4798,28 +4799,29 @@ void fill_values(void)
 					if (i > di)
 						i = di;
 					/* change spell attempts */
-					ds_add_bs(HERO_SPELL_INCS, i);
+					g_hero.spell_incs += i;
 					/* change skill attempts */
-					ds_sub_bs(HERO_SKILL_INCS, i);
+					g_hero.skill_incs -= i;
 				}
 			}
 		}
 	}
 
 	/* set LE */
-	ds_writew(HERO_LE, ds_writews(HERO_LE_MAX, g_init_le[g_hero.typus]));
+	g_hero.le = g_hero.le_max = g_init_le[g_hero.typus];
 
 	/* set AE */
-	ds_writew(HERO_AE, ds_writews(HERO_AE_MAX, g_init_ae[g_hero.typus]));
-
+	g_hero.ae = g_hero.ae_max = g_init_ae[g_hero.typus];
 
 	/* wanna change 10 spell_attempts against 1W6+2 AE ? */
 	if ((g_hero.typus == 9) && (g_level == 2) && gui_bool(get_text(268))) {
 		/* change spell_attempts */
-		ds_sub_bs(HERO_SPELL_INCS, 10);
-		ds_add_ws(HERO_AE_MAX, random_interval_gen(3, 8));
+		g_hero.spell_incs -= 10;
+		g_hero.ae_max += random_interval_gen(3, 8);
 #if !defined(__BORLANDC__)
-		ds_writew(HERO_AE, ds_readws(HERO_AE_MAX)); // BCC Sync-Point
+		g_hero.ae = g_hero.ae_max;
+#else
+		//g_hero.ae = g_hero.ae_max; // BCC Sync-Point
 #endif
 	}
 
@@ -4840,10 +4842,11 @@ void fill_values(void)
 
 	/* calculate MR  = (KL + MU + Stufe) / 3 - 2 * AG
 	 * 		 = (WD + CO + Level) / 3 - 2 * SN */
-	ds_writeb(HERO_MR,
-		(g_hero.attrib[1].normal + g_hero.attrib[0].normal + g_hero.level) / 3 - 2 * g_hero.attrib[7].normal);
+	g_hero.mr =
+		(g_hero.attrib[1].normal + g_hero.attrib[0].normal + g_hero.level) / 3
+			- 2 * g_hero.attrib[7].normal;
 	/* add typus MR Modificator */
-	ds_add_bs(HERO_MR, g_mr_mod[g_hero.typus]);
+	g_hero.mr += g_mr_mod[g_hero.typus];
 
 	/* roll out god */
 	g_hero.god = random_gen(12);
@@ -4924,7 +4927,7 @@ void fill_values(void)
 	/* if mode == novice */
 	if (g_level == 1) {
 		/* increase skills automatically */
-		for (i = 0; ds_readbs(HERO_SKILL_INCS) > 0; i++) {
+		for (i = 0; g_hero.skill_incs > 0; i++) {
 			skill_inc_novice(v1 = g_autoskills[g_hero.typus][i]);
 		}
 
@@ -4937,14 +4940,14 @@ void fill_values(void)
 			 * so g_autospells[2] is that of the Mage */
 
 			/* 1. house spells */
-			for (i = 0; g_house_mod[ds_readbs(HERO_SPELL_SCHOOL)].no > i; si++, i++) {
+			for (i = 0; g_house_mod[g_hero.spell_school].no > i; si++, i++) {
 				g_autospells[2][si] =
-						g_house_mod[ds_readbs(HERO_SPELL_SCHOOL)].spells[i];
+						g_house_mod[g_hero.spell_school].spells[i];
 			}
 			/* 2. all schools spells */
-			for (i = 0; g_school_tab[ds_readbs(HERO_SPELL_SCHOOL)].spells > i; si++, i++) {
+			for (i = 0; g_school_tab[g_hero.spell_school].spells > i; si++, i++) {
 				g_autospells[2][si] =
-					g_school_tab[ds_readbs(HERO_SPELL_SCHOOL)].first_spell + i;
+					g_school_tab[g_hero.spell_school].first_spell + i;
 			}
 			/* 3. five domination spells */
 				/* Herr der Tiere */
@@ -4959,12 +4962,12 @@ void fill_values(void)
 			g_autospells[2][si++] = 0x4f;
 
 			/* 4. all house spells */
-			for (i = 0; g_house_mod[ds_readbs(HERO_SPELL_SCHOOL)].no > i; si++, i++) {
-				g_autospells[2][si] = g_house_mod[ds_readbs(HERO_SPELL_SCHOOL)].spells[i];
+			for (i = 0; g_house_mod[g_hero.spell_school].no > i; si++, i++) {
+				g_autospells[2][si] = g_house_mod[g_hero.spell_school].spells[i];
 			}
 			/* 5. all house spells */
-			for (i = 0; g_house_mod[ds_readbs(HERO_SPELL_SCHOOL)].no > i; si++, i++) {
-				g_autospells[2][si] = g_house_mod[ds_readbs(HERO_SPELL_SCHOOL)].spells[i];
+			for (i = 0; g_house_mod[g_hero.spell_school].no > i; si++, i++) {
+				g_autospells[2][si] = g_house_mod[g_hero.spell_school].spells[i];
 			}
 			/* 6. random spells */
 			while (si < 45) {
@@ -4973,7 +4976,7 @@ void fill_values(void)
 		}
 
 		/* automatic increase spells */
-		for (i = 0; ds_readbs(HERO_SPELL_INCS) > 0; i++) {
+		for (i = 0; g_hero.spell_incs > 0; i++) {
 			spell_inc_novice((v2 = g_autospells[g_hero.typus - 7][i]));
 		}
 	}
@@ -4999,12 +5002,12 @@ void skill_inc_novice(Bit16s skill)
 		} else
 
 		/* Original-Bugfix: add check if skill_attempts are left */
-		if (ds_readbs(HERO_SKILL_INCS) == 0) {
+		if (g_hero.skill_incs == 0) {
 			done++;
 #endif
 		} else {
 			/* decrement counter for skill increments */
-			ds_dec_bs_post(HERO_SKILL_INCS);
+			g_hero.skill_incs--;
 
 			/* check if the test is passed */
 			if ((Bit16s)random_interval_gen(2, 12) > ds_readbs(HERO_SKILLS + skill)) {
@@ -5020,10 +5023,10 @@ void skill_inc_novice(Bit16s skill)
 				if (skill <= 6) {
 
 					/* set increment the lower AT/PA value */
-					if (ds_readbs(HERO_AT_WEAPON + skill) > ds_readbs(HERO_PA_WEAPON + skill))
-						ds_inc_bs_post(HERO_PA_WEAPON + skill);
+					if (g_hero.at_weapon[skill] > g_hero.pa_weapon[skill])
+						g_hero.pa_weapon[skill]++;
 					else
-						ds_inc_bs_post(HERO_AT_WEAPON + skill);
+						g_hero.at_weapon[skill]++;
 				}
 			} else {
 				/* inc tries for that skill */
@@ -5054,13 +5057,13 @@ void spell_inc_novice(Bit16s spell)
 
 #if !defined(__BORLANDC__)
 			/* Original-Bugfix: add check if skill_attempts are left */
-			if (ds_readbs(HERO_SPELL_INCS) == 0) {
+			if (g_hero.spell_incs == 0) {
 				done = 1;
 				continue;
 			}
 #endif
 		/* decrement counter for spell increments */
-		ds_dec_bs_post(HERO_SPELL_INCS);
+		g_hero.spell_incs--;
 
 		/* check if the test is passed */
 		if ((Bit16s)random_interval_gen(2, 12) > ds_readbs(HERO_SPELLS + spell)) {
@@ -5757,13 +5760,13 @@ void print_values(void)
 			print_str(g_gen_ptr2, 205, 61);
 
 			/* print LE */
-			print_str(itoa(ds_readws(HERO_LE_MAX), tmp, 10), 172, 164);
+			print_str(itoa(g_hero.le_max, tmp, 10), 172, 164);
 			/* print AE */
-			print_str(itoa(ds_readws(HERO_AE_MAX), tmp, 10), 221, 164);
+			print_str(itoa(g_hero.ae_max, tmp, 10), 221, 164);
 			/* print Endurance */
-			print_str(itoa(ds_readws(HERO_LE_MAX) + g_hero.attrib[6].current, tmp, 10), 296, 164);
+			print_str(itoa(g_hero.le_max + g_hero.attrib[6].current, tmp, 10), 296, 164);
 			/* print MR */
-			print_str(itoa(ds_readbs(HERO_MR), tmp, 10), 232, 184);
+			print_str(itoa(g_hero.mr, tmp, 10), 232, 184);
 			break;
 		}
 		case 1: {
@@ -5799,7 +5802,7 @@ void print_values(void)
 			}
 
 			/* remaining attempts for skills */
-			print_str(itoa(ds_readbs(HERO_SKILL_INCS), tmp, 10), 271, 184);
+			print_str(itoa(g_hero.skill_incs, tmp, 10), 271, 184);
 
 			break;
 		}
@@ -5833,7 +5836,7 @@ void print_values(void)
 
 			/* remaining attempts for skills */
 
-			print_str(itoa(ds_readbs(HERO_SKILL_INCS), tmp, 10), 271, 184);
+			print_str(itoa(g_hero.skill_incs, tmp, 10), 271, 184);
 
 			break;
 		}
@@ -5884,7 +5887,7 @@ void print_values(void)
 
 			/* remaining attempts for skills */
 
-			print_str(itoa(ds_readbs(HERO_SKILL_INCS), tmp, 10), 271, 184);
+			print_str(itoa(g_hero.skill_incs, tmp, 10), 271, 184);
 
 			break;
 		}
@@ -5893,17 +5896,17 @@ void print_values(void)
 			restore_picbuf((RealPt)g_gfx_ptr);
 
 			/* Print base value  2x the same */
-			print_str(itoa(ds_readbs(HERO_ATPA_BASE), tmp, 10), 231, 30);
-			print_str(itoa(ds_readbs(HERO_ATPA_BASE), tmp, 10), 268, 30);
+			print_str(itoa(g_hero.atpa_base, tmp, 10), 231, 30);
+			print_str(itoa(g_hero.atpa_base, tmp, 10), 268, 30);
 
 			for (i = 0; i < 7; i++) {
 
 				/* print AT value */
-				itoa(ds_readbs(HERO_AT_WEAPON + i), tmp, 10);
+				itoa(g_hero.at_weapon[i], tmp, 10);
 				print_str(tmp, 237 - get_str_width(tmp), i * 12 + 48);
 
 				/* print PA value */
-				itoa(ds_readbs(HERO_PA_WEAPON + i), tmp, 10);
+				itoa(g_hero.pa_weapon[i], tmp, 10);
 				print_str(tmp, 274 - get_str_width(tmp), i * 12 + 48);
 
 				/* print skill value */
@@ -5963,7 +5966,7 @@ void print_values(void)
 			}
 
 			/* print spell attempts */
-			print_str(itoa(ds_readbs(HERO_SPELL_INCS), tmp, 10), 217, 184);
+			print_str(itoa(g_hero.spell_incs, tmp, 10), 217, 184);
 
 			break;
 		}
@@ -6008,7 +6011,7 @@ void print_values(void)
 			}
 
 			/* print spell attempts */
-			print_str(itoa(ds_readbs(HERO_SPELL_INCS), tmp, 10), 217, 184);
+			print_str(itoa(g_hero.spell_incs, tmp, 10), 217, 184);
 
 			break;
 		}
@@ -6053,7 +6056,7 @@ void print_values(void)
 			}
 
 			/* print spell attempts */
-			print_str(itoa(ds_readbs(HERO_SPELL_INCS), tmp, 10), 217, 184);
+			print_str(itoa(g_hero.spell_incs, tmp, 10), 217, 184);
 
 			break;
 		}
@@ -6098,7 +6101,7 @@ void print_values(void)
 			}
 
 			/* print spell attempts */
-			print_str(itoa(ds_readbs(HERO_SPELL_INCS), tmp, 10), 217, 184);
+			print_str(itoa(g_hero.spell_incs, tmp, 10), 217, 184);
 
 			break;
 		}
@@ -6119,7 +6122,7 @@ void print_values(void)
 			}
 
 			/* print spell attempts */
-			print_str(itoa(ds_readbs(HERO_SPELL_INCS), tmp, 10), 217, 184);
+			print_str(itoa(g_hero.spell_incs, tmp, 10), 217, 184);
 
 			break;
 		}
@@ -6141,7 +6144,7 @@ void print_values(void)
 			}
 
 			/* print spell attempts */
-			print_str(itoa(ds_readbs(HERO_SPELL_INCS), tmp, 10), 217, 184);
+			print_str(itoa(g_hero.spell_incs, tmp, 10), 217, 184);
 
 			break;
 		}
@@ -6202,7 +6205,7 @@ static void inc_skill(Bit16s skill, Bit16s max, char *msg)
 	}
 
 	/* decrement total number of skill inc tries */
-	ds_dec_bs_post(HERO_SKILL_INCS);
+	g_hero.skill_incs--;
 	if ((Bit16s)random_interval_gen(2, 12) > ds_readbs(HERO_SKILLS + skill)) {
 		/* print sucess message */
 		infobox(get_text(152), 0);
@@ -6216,12 +6219,12 @@ static void inc_skill(Bit16s skill, Bit16s max, char *msg)
 		/* check if we have a melee attack skill */
 		if (skill <= 6) {
 			/* check if AT > PA */
-			if (ds_readbs(HERO_AT_WEAPON + skill) > ds_readbs(HERO_PA_WEAPON + skill)) {
+			if (g_hero.at_weapon[skill] > g_hero.pa_weapon[skill]) {
 				/* inc PA */
-				ds_inc_bs_post(HERO_PA_WEAPON + skill);
+				g_hero.pa_weapon[skill]++;
 			} else {
 				/* inc AT */
-				ds_inc_bs_post(HERO_AT_WEAPON + skill);
+				g_hero.at_weapon[skill]++;
 			}
 		}
 	} else {
@@ -6243,7 +6246,7 @@ void select_skill(void)
 	do {
 
 		/* check skill attempts */
-		if (!ds_readbs(HERO_SKILL_INCS)) {
+		if (!g_hero.skill_incs) {
 			infobox(get_text(94), 0);
 			g_text_x_mod = 0;
 			return;
@@ -6411,7 +6414,7 @@ static void inc_spell(Bit16s spell)
 			max_incs = 2;
 
 		/* and is a school spell */
-		if (is_in_word_array(spell, g_house_spells[ds_readbs(HERO_SPELL_SCHOOL)]))
+		if (is_in_word_array(spell, g_house_spells[g_hero.spell_school]))
 			max_incs = 3;
 	}
 
@@ -6433,7 +6436,7 @@ static void inc_spell(Bit16s spell)
 	}
 
 	/* decrement spell attempts */
-	ds_dec_bs_post(HERO_SPELL_INCS);
+	g_hero.spell_incs--;
 
 	if ((Bit16s)random_interval_gen(2, 12) > ds_readbs(HERO_SPELLS + spell)) {
 		/* show success */
@@ -6463,7 +6466,7 @@ void select_spell(void)
 	do {
 
 		/* check if we have spell attempts */
-		if (!ds_readbs(HERO_SPELL_INCS)) {
+		if (!g_hero.spell_incs) {
 			infobox(get_text(94), 0);
 			g_text_x_mod = 0;
 			return;
@@ -6763,22 +6766,22 @@ void choose_atpa(void)
 					if (increase == 1) {
 						/* increase attack */
 						if (ds_readbs(HERO_SKILLS + skill) >= 0 &&
-							ds_readbs(HERO_PA_WEAPON + skill) > ds_readbs(HERO_ATPA_BASE)) {
+							(g_hero.pa_weapon[skill] > g_hero.atpa_base)) {
 							/* inc AT */
-							ds_inc_bs_post(HERO_AT_WEAPON + skill);
+							g_hero.at_weapon[skill]++;
 							/* dec PA */
-							ds_dec_bs_post(HERO_PA_WEAPON + skill);
+							g_hero.pa_weapon[skill]--;
 							refresh_screen();
 						} else {
 							infobox(get_text(255), 0);
 						}
 					} else {
 						if (ds_readbs(HERO_SKILLS + skill) >= 0 &&
-							ds_readbs(HERO_AT_WEAPON + skill) > ds_readbs(HERO_ATPA_BASE)) {
+							(g_hero.at_weapon[skill] > g_hero.atpa_base)) {
 							/* dec AT */
-							ds_dec_bs_post(HERO_AT_WEAPON + skill);
+							g_hero.at_weapon[skill]--;
 							/* inc PA */
-							ds_inc_bs_post(HERO_PA_WEAPON + skill);
+							g_hero.pa_weapon[skill]++;
 							refresh_screen();
 						} else {
 							infobox(get_text(256), 0);
