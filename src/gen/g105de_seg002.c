@@ -2158,30 +2158,32 @@ Bit16u get_mouse_action(Bit16s x, Bit16s y, struct mouse_action *act)
 }
 
 #if defined(__BORLANDC__)
-/* Borlandified and nearly identical */
-void unused_func1(RealPt in_ptr, Bit16s x, Bit16s y, Bit8s c1, Bit8s c2)
+/* Borlandified and identical */
+void unused_func1(signed char *in_ptr, signed short x, signed short y, signed char c1, signed char c2)
 {
-	Bit8s val;
-	RealPt ptr;
-	Bit16s i, j;
+	signed char val;
+	signed char *ptr;
+	signed short i;
+	signed short j;
 
 	update_mouse_cursor();
 
 	ptr = g_vga_memstart;
 	ptr += 320 * y + x;
 
-	for (i = 0; i < c2; ptr+=320 , i++) {
+	for (i = 0; i < c2; ptr += 320 , i++) {
 		for (j = 0; j < c1; j++) {
-			if ((val = *((Bit16s*)(in_ptr++))) != 0) {
-				host_writeb(Real2Host(ptr + j), val);
+			if ((val = *in_ptr++) != 0) {
+#if !defined(__BORLANDC__)
+				ptr[j] = val;
+#else
+				ptr[j] = _AL;
+#endif
 			}
 		}
 	}
-#if !defined(__BORLANDC__)	
+
 	call_mouse();
-#else
-	asm {nop;} // BCC Sync-point
-#endif
 }
 #endif
 
