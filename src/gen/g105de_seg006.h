@@ -24,7 +24,7 @@ void AIL_define_timbre_cache(Bit16s driver, RealPt cache_addr, Bit16u cache_size
 
 Bit16u AIL_timbre_request(Bit16s driver, Bit16s sequence);
 
-void AIL_install_timbre(Bit16s driver, Bit16s bank, Bit16s patch, RealPt src_addr);
+void AIL_install_timbre(Bit16s driver, Bit16s bank, Bit16s patch, void* src_addr);
 
 void AIL_start_sequence(Bit16s driver, Bit16s sequence);
 

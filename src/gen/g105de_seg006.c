@@ -55,7 +55,7 @@ Bit16u AIL_timbre_request(Bit16s driver, Bit16s sequence)
 	return 0;
 }
 
-void AIL_install_timbre(Bit16s driver, Bit16s bank, Bit16s patch, RealPt src_addr)
+void AIL_install_timbre(Bit16s driver, Bit16s bank, Bit16s patch, void *src_addr)
 {
 }
 

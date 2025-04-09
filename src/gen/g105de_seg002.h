@@ -20,7 +20,7 @@ struct nvf_desc {
 	signed short *height;
 };
 
-	RealPt get_timbre(Bit16s, Bit16s);
+	signed short *get_timbre(signed short, signed short);
 	unsigned short load_file(Bit16s);
 	signed short load_driver(const char*, signed short, signed short);
 	void play_midi(Bit16u);

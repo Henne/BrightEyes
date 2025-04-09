@@ -1519,7 +1519,7 @@ void unload_snd_driver(void)
 unsigned short load_seq(Bit16s sequence_num)
 {
 	signed short patch;
-	RealPt ptr;
+	signed short *src_ptr;
 	unsigned short answer; // si = {bank, patch}
 	signed short bank; // di = bank
 
@@ -1533,10 +1533,10 @@ unsigned short load_seq(Bit16s sequence_num)
 			{
 				bank = answer >> 8;
 
-				if ((ptr = get_timbre(bank, patch = (answer & 0xff))) != 0) {
+				if ((src_ptr = get_timbre(bank, patch = (answer & 0xff))) != 0) {
 					/* ptr is passed differently */
-					AIL_install_timbre(g_snd_driver_handle, bank, patch, ptr);
-					free(ptr);
+					AIL_install_timbre(g_snd_driver_handle, bank, patch, src_ptr);
+					free(src_ptr);
 				}
 			}
 			/* Remark: set g_handle_timbre to 0 after close() */
@@ -1569,9 +1569,9 @@ unsigned short play_sequence(Bit16s sequence_num)
 }
 
 /* Borlandified and nearly identical, but works SYNC */
-RealPt get_timbre(Bit16s bank, Bit16s patch)
+signed short *get_timbre(signed short bank, signed short patch)
 {
-	RealPt timbre_ptr;
+	signed short *timbre_ptr;
 
 	lseek(g_handle_timbre, g_gendat_offset, SEEK_SET);
 
@@ -1588,17 +1588,17 @@ RealPt get_timbre(Bit16s bank, Bit16s patch)
 	lseek(g_handle_timbre, g_gendat_offset + g_current_timbre_offset, SEEK_SET);
 	read_datfile(g_handle_timbre, &g_current_timbre_length, 2);
 
-	timbre_ptr = gen_alloc(g_current_timbre_length);
+	timbre_ptr = (signed short*)gen_alloc(g_current_timbre_length);
 
 #if !defined(__BORLANDC__)
 	read_datfile(g_handle_timbre,
-		Real2Host(timbre_ptr) + 2,
-		host_writews(Real2Host(timbre_ptr), g_current_timbre_length) - 2);
+		&timbre_ptr[1],
+		(timbre_ptr[0] = g_current_timbre_length) - 2);
 #else
 	asm { db 0x66, 0x90; db 0x66, 0x90;}
 	read_datfile(g_handle_timbre,
 		0L, // BCC Sync-Point
-		host_writew(Real2Host(timbre_ptr), g_current_timbre_length) - 2);
+		(timbre_ptr[0] = g_current_timbre_length) - 2);
 #endif
 
 	return timbre_ptr;
