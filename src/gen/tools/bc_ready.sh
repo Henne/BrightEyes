@@ -137,19 +137,21 @@ for i in ${OBJDIR}/*.OBJ; do
 			;;
 		"SEG002")
 			# exact 26 differing lines are allowed
-			#DIFFLINES=$(diff -y -a ${DISORIG}/${PREFIX}.dis ${DISDIR}/${PREFIX}.dis | grep '|' |wc -l)
+			DIFFLINES=$(diff -y -a ${DISORIG}/${PREFIX}.dis ${DISDIR}/${PREFIX}.dis | grep '|' |wc -l)
 			#if [ $DIFFLINES -ne 26 ]; then RETVAL=1; fi
+			echo "SEG002" $DIFFLINES
 			;;
 		"SEG003")
 			# exact 1 differing lines are allowed
-			#DIFFLINES=$(diff -y -a ${DISORIG}/${PREFIX}.dis ${DISDIR}/${PREFIX}.dis | grep '|' |wc -l)
+			DIFFLINES=$(diff -y -a ${DISORIG}/${PREFIX}.dis ${DISDIR}/${PREFIX}.dis | grep '|' |wc -l)
 			#if [ $DIFFLINES -ne 1 ]; then RETVAL=1; fi
+			echo "SEG003" $DIFFLINES
 			;;
 		"SEG004")
 			# exact 94 differing lines are allowed
 			# adresses in unalinged codesegment
 			DIFFLINES=$(diff -y -a ${DISORIG}/${PREFIX}.dis ${DISDIR}/${PREFIX}.dis | grep '|' |wc -l)
-			echo $DIFFLINES
+			echo "SEG004" $DIFFLINES
 			if [ $DIFFLINES -ne 94 ]; then RETVAL=1; fi
 			 ;;
 		"SEG005")
@@ -163,7 +165,7 @@ for i in ${OBJDIR}/*.OBJ; do
 			# exact 129 differing lines are allowed
 			# adresses in unalinged codesegment
 			DIFFLINES=$(diff -y -a ${DISORIG}/${PREFIX}.dis ${DISDIR}/${PREFIX}.dis | grep '|' |wc -l)
-			echo $DIFFLINES
+			#echo "SEG006" $DIFFLINES
 			if [ $DIFFLINES -ne 129 ]; then RETVAL=1; fi
 			;;
 		"SEG013")

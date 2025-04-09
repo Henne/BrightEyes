@@ -4,7 +4,7 @@
 @REM
 @REM -- here start the complete
 BCC.EXE -mlarge -O- -c -2 SEG001.C
-BCC.EXE -mlarge -O -c -2 -IAIL SEG002.C
+BCC.EXE -mlarge -O  -c -2 -IAIL -Z SEG002.C
 BCC.EXE -mlarge -O2 -c -1 SEG003.C
 TASM.EXE /os /z SEG004.asm SEG004.OBJ
 TASM.EXE /os /z SEG005.asm SEG005.OBJ
