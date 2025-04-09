@@ -24,7 +24,6 @@
 #include "g105de_seg006.h"
 
 #include "port.h"
-#include "symbols.h"
 
 /** Keyboard Constants */
 
