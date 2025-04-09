@@ -2310,12 +2310,13 @@ void save_mouse_bg(void)
 /* static */
 void restore_mouse_bg(void)
 {
-	RealPt vgaptr;
-	Bit16s rangeX;
-	Bit16s rangeY;
-	Bit16s diffX;
-	Bit16s diffY;
-	Bit16s i, j;
+	unsigned char *vgaptr;
+	signed short rangeX;
+	signed short rangeY;
+	signed short diffX;
+	signed short diffY;
+	signed short i;
+	signed short j;
 
 	vgaptr = g_vga_memstart;
 
@@ -2332,7 +2333,7 @@ void restore_mouse_bg(void)
 
 	for (i = 0; i < diffY; vgaptr += 320, i++)
 		for (j = 0; j < diffX; j++)
-			mem_writeb(Real2Phys(vgaptr) + j, g_mouse_backbuffer[16 * i + j]);
+			vgaptr[j] = g_mouse_backbuffer[16 * i + j];
 }
 
 
