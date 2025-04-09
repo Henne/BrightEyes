@@ -4587,11 +4587,8 @@ void fill_values(void)
 	Bit16s si, di;
 
 	/* fill skill values */
-#if !defined(__BORLANDC__)
 	for (i = 0; i < 52; i++) {
-#else
-	for (i = 0; i < 52; ) { // BCC Sync-Point
-#endif
+
 		g_hero.skills[i] = g_skills[g_hero.typus][i];
 
 		/* set skill_incs and skill_tries to zero */
@@ -4604,11 +4601,7 @@ void fill_values(void)
 	/* do magic user init */
 	if (g_hero.typus >= 7) {
 		/* fill initial spell values */
-#if !defined(__BORLANDC__)
 		for (i = 0; i < 86; i++) {
-#else
-		for (i = 0; i < 86; ) { // BCC Sync-Point
-#endif
 			g_hero.spells[i] = g_spells[g_hero.typus - 7][i];
 
 			/* set spell_incs and spell_tries to zero */
@@ -4687,12 +4680,8 @@ void fill_values(void)
 	if ((g_hero.typus == 9) && (g_level == 2) && gui_bool(get_text(268))) {
 		/* change spell_attempts */
 		g_hero.spell_incs -= 10;
-		g_hero.ae_max += random_interval_gen(3, 8);
-#if !defined(__BORLANDC__)
+		g_hero.ae_max += (signed short)random_interval_gen(3, 8);
 		g_hero.ae = g_hero.ae_max;
-#else
-		//g_hero.ae = g_hero.ae_max; // BCC Sync-Point
-#endif
 	}
 
 	/* roll out size */
@@ -4850,6 +4839,10 @@ void fill_values(void)
 			spell_inc_novice((v2 = g_autospells[g_hero.typus - 7][i]));
 		}
 	}
+#if defined(__BORLANDC__)
+	asm {db 0x0f, 0x1f, 0x00 } // BCC Sync-Point
+	asm {db 0x0f, 0x1f, 0x00 }
+#endif
 }
 
 /**
