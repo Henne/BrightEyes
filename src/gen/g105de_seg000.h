@@ -2,8 +2,6 @@
 
 #if !defined(__BORLANDC__)
 void bc_exit(Bit16u);
-RealPt bc__dos_getvect(Bit16s);
-void bc__dos_setvect(Bit16s, RealPt);
 RealPt bc_F_PADD(RealPt, Bit32s);
 Bit16s bc__read(Bit16u, Bit8u*, Bit16u);
 static inline signed short bioskey(signed short) { return 0; };
@@ -35,7 +33,6 @@ static inline void randomize() { }
 #define bc_F_PADD(p, v) ((HugePt)(p) + v)
 #define bc__read _read
 #define bc_farcalloc farcalloc
-#define bc_int86x int86x
 #define bc__exit _exit
 #define bc__close _close
 #define bc__creat _creat

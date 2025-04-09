@@ -6,7 +6,7 @@
 
 #if defined(__BORLANDC__)
 #include <DOS.H>
-#include <BIOS.H>
+#include <BIOS.H>	// bioskey, int86x()
 #include <CONIO.H>	// clrsrc()
 #else
 #include <unistd.h> // lseek(), close(), read(), write()
@@ -1767,7 +1767,7 @@ void do_mouse_action(Bit8u *p1, Bit8u *p2, Bit8u *p3, Bit8u *p4, Bit8u *p5)
 				myregs.x.dx = host_readw(p4);
 		}
 
-		bc_int86x(0x33, &myregs, &myregs, &mysregs);
+		int86x(0x33, &myregs, &myregs, &mysregs);
 
 		host_writew(p2, ((host_readw(p1) == 0x14) ? mysregs.es : myregs.x.bx));
 		host_writew(p1, myregs.x.ax);
@@ -1903,10 +1903,10 @@ void mouse_do_enable(Bit16u val, RealPt ptr)
 	p5 = (Bit16u)FP_SEG(mouse_isr);
 
 	/* save adress of old IRQ 0x78 */
-	g_irq78_bak = ((void interrupt far (*)(void))bc__dos_getvect(0x78));
+	g_irq78_bak = ((void interrupt far (*)(void))_dos_getvect(0x78));
 
 	/* set new IRQ 0x78 */
-	bc__dos_setvect(0x78, (INTCAST)ptr);
+	_dos_setvect(0x78, (INTCAST)ptr);
 
 	/* set the new mouse event handler */
 	do_mouse_action((Bit8u*)&p1, (Bit8u*)&p2, (Bit8u*)&p3, (Bit8u*)&p4, (Bit8u*)&p5);
@@ -1922,7 +1922,7 @@ void mouse_do_disable(void)
 	Bit16u v1, v2, v3, v4, v5;
 
 	/* restore the old int 0x78 handler */
-	bc__dos_setvect(0x78, (INTCAST)g_irq78_bak);
+	_dos_setvect(0x78, (INTCAST)g_irq78_bak);
 
 	/* uninstall mouse event handler */
 	v1 = 0x0c;
@@ -7386,9 +7386,9 @@ static void set_timer_isr(void)
 {
 #if defined(__BORLANDC__)
 	/* save adress of the old ISR */
-	g_timer_isr_bak = ((void interrupt far (*)(void))bc__dos_getvect(0x1c));
+	g_timer_isr_bak = ((void interrupt far (*)(void))_dos_getvect(0x1c));
 	/* set a the new one */
-	bc__dos_setvect(0x1c, (INTCAST)timer_isr);
+	_dos_setvect(0x1c, (INTCAST)timer_isr);
 #endif
 }
 
@@ -7396,7 +7396,7 @@ static void set_timer_isr(void)
 void restore_timer_isr(void)
 {
 #if defined(__BORLANDC__)
-	bc__dos_setvect(0x1c, (INTCAST)g_timer_isr_bak);
+	_dos_setvect(0x1c, (INTCAST)g_timer_isr_bak);
 #endif
 }
 
