@@ -5259,10 +5259,6 @@ Bit16s can_change_attribs(void)
 #endif
 	}
 
-#if !defined(__BORLANDC__)
-	D1_LOG("%d %d %d %d\n", pa_inc, pa_dec, na_inc, na_dec);
-#endif
-
 	/* no values from positive attributes left */
 	if (((pa_inc == 0) && (pa_dec == 0)) ||
 	    ((pa_inc == 0) && (na_dec < 2))  ||
@@ -7021,123 +7017,103 @@ static void BE_cleanup(void)
 	Bit8u *host_ptr;
 
 	if ((host_ptr = g_buffer_sex_dat) != 0) {
-		D1_INFO("Free BUFFER_SEX_DAT\t 0x%08x\n", host_ptr);
 		free(host_ptr);
 		g_buffer_sex_dat = NULL;
 	}
 
 	if ((host_ptr = g_buffer_popup_nvf - 8) != 0) {
-		D1_INFO("Free BUFFER_POPUP\t 0x%08x\n", host_ptr);
 		free(host_ptr);
 		g_buffer_popup_nvf = NULL;
 	}
 
 	if ((host_ptr = g_buffer_heads_dat) != 0) {
-		D1_INFO("Free BUFFER_HEADS_DAT\t 0x%08x\n", host_ptr);
 		free(host_ptr);
 		g_buffer_heads_dat = NULL;
 	}
 
 	if ((host_ptr = g_buffer_text) != 0) {
-		D1_INFO("Free BUFFER_TEXT\t 0x%08x\n", host_ptr);
 		free(host_ptr);
 		g_buffer_text = NULL;
 	}
 
 	if ((host_ptr = g_buffer_font6) != 0) {
-		D1_INFO("Free BUFFER_FONT6\t 0x%08x\n", host_ptr);
 		free(host_ptr);
 		g_buffer_font6 = NULL;
 	}
 
 	if ((host_ptr = g_picbuf3) != 0) {
-		D1_INFO("Free PICBUF3\t\t 0x%08x\n", host_ptr);
 		free(host_ptr);
 		g_picbuf3 = NULL;
 	}
 
 	if ((host_ptr = g_picbuf2) != 0) {
-		D1_INFO("Free PICBUF2\t\t 0x%08x\n", host_ptr);
 		free(host_ptr);
 		g_picbuf2 = NULL;
 	}
 
 	if ((host_ptr = g_picbuf1) != 0) {
-		D1_INFO("Free PICBUF1\t\t 0x%08x\n", host_ptr);
 		free(host_ptr);
 		g_picbuf1 = NULL;
 	}
 
 	if ((host_ptr = g_gen_ptr6 - 8) != 0) {
-		D1_INFO("Free GEN_PTR6\t\t 0x%08x\n", host_ptr);
 		free(host_ptr);
 		g_gen_ptr6 = NULL;
 	}
 
 	if ((host_ptr = g_buffer_dmenge_dat - 8) != 0) {
-		D1_INFO("Free BUFFER_DMENGE_DAT\t 0x%08x\n", host_ptr);
 		free(host_ptr);
 		g_buffer_dmenge_dat = NULL;
 	}
 
 	if ((host_ptr = g_gen_ptr5 - 8) != 0) {
-		D1_INFO("Free GEN_PTR5\t\t 0x%08x\n", host_ptr);
 		free(host_ptr);
 		g_gen_ptr5 = NULL;
 	}
 
 	if ((host_ptr = g_gen_ptr4) != 0) {
-		D1_INFO("Free GEN_PTR4\t\t 0x%08x\n", host_ptr);
 		free(host_ptr);
 		g_gen_ptr4 = NULL;
 	}
 
 	if ((host_ptr = g_gen_ptr2) != 0) {
-		D1_INFO("Free GEN_PTR2\t\t 0x%08x\n", host_ptr);
 		free(host_ptr);
 		g_gen_ptr2 = NULL;
 	}
 
 	if ((host_ptr = g_page_buffer) != 0) {
-		D1_INFO("Free PAGE_BUFFER\t 0x%08x\n", host_ptr);
 		free(host_ptr);
 		g_page_buffer = NULL;
 	}
 
 	if ((host_ptr = g_gen_ptr1_dis - 8) != 0) {
-		D1_INFO("Free GEN_PTR1_DIS\t 0x%08x\n", host_ptr);
 		free(host_ptr);
 		g_gen_ptr1_dis = NULL;
 	}
 
 	// missed ones
 	if ((host_ptr = g_snd_timbre_cache) != 0) {
-		D1_INFO("Free SND_TIMBRE_CACHE\t 0x%08x\n", host_ptr);
 		free(host_ptr);
 		g_snd_timbre_cache = NULL;
 	}
 
 	if ((host_ptr = g_state_table) != 0) {
-		D1_INFO("Free STATE_TABLE\t 0x%08x\n", host_ptr);
 		free(host_ptr);
 		g_state_table = NULL;
 	}
 
 	if ((host_ptr = g_snd_driver) != 0) {
-		D1_INFO("Free SND_DRIVER\t\t 0x%08x\n", host_ptr);
 		free(host_ptr);
 		g_snd_driver = NULL;
 	}
 
 	if ((host_ptr = g_form_xmid) != 0) {
-		D1_INFO("Free FORM_XMID\t\t 0x%08x\n", host_ptr);
 		free(host_ptr);
 		g_form_xmid = NULL;
 	}
 
 	for (int i = 0; i < 11; i++) {
 		if ((host_ptr = g_bg_buffer[i]) != 0) {
-			D1_INFO("Free BG_BUFFER[%02d]\t\t 0x%08x\n", i, host_ptr);
 			free(host_ptr);
 			g_bg_buffer[i] = NULL;
 		}
@@ -7145,7 +7121,6 @@ static void BE_cleanup(void)
 
 	for (int i = 0; i < 13; i++) {
 		if ((host_ptr = g_typus_buffer[i]) != 0) {
-			D1_INFO("Free TYPUS_BUFFER[%02d]\t\t 0x%08x\n", i, host_ptr);
 			free(host_ptr);
 			g_typus_buffer[i] = NULL;
 		}
