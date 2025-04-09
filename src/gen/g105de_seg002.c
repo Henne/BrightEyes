@@ -8,6 +8,7 @@
 #include <DOS.H>
 #include <BIOS.H>	// bioskey, int86x()
 #include <CONIO.H>	// clrsrc()
+#include <TIME.H>	// by randomize()
 #else
 #include <unistd.h> // lseek(), close(), read(), write()
 #include <fcntl.h>  // open(), creat()
@@ -2513,17 +2514,17 @@ void save_chr(void)
 	/* prepare filename */
 	for (i = 0; i < 8; i++) {
 		/* leave the loop if the string ends */
-		if (!host_readbs(g_gen_ptr2 + i))
+		if (!g_gen_ptr2[i])
 			break;
-		if (!isalnum(host_readbs(g_gen_ptr2 + i))) {
+		if (!isalnum(g_gen_ptr2[i])) {
 			/* replace non alphanumerical characters with underscore */
-			host_writeb(g_gen_ptr2 + i, '_');
+			g_gen_ptr2[i] = '_';
 		}
 	}
 
 	strncpy(filename, g_gen_ptr2, 8);
 	filename[8] = 0;
-	strcat(filename, (char*)g_str_chr);
+	strcat(filename, g_str_chr);
 
 	/* remark: bc_open() and bc__creat() have filename on the stack of the host */
 	if (((handle = open(filename, 0x8001)) == -1) || gui_bool(get_text(261))) {
@@ -2535,7 +2536,7 @@ void save_chr(void)
 		handle = _creat(filename, 0);
 
 		if (handle != -1) {
-			bc_write(handle, g_hero.name, 0x6da);
+			bc_write(handle, &g_hero, sizeof(g_hero));
 			close(handle);
 
 			if (g_called_with_args == 0) return;
@@ -2544,7 +2545,7 @@ void save_chr(void)
 			strcat(path, filename);
 
 			if ((handle = bc__creat(path, 0)) != -1) {
-				bc_write(handle, g_hero.name, 0x6da);
+				bc_write(handle, &g_hero, sizeof(g_hero));
 				close(handle);
 			}
 		} else {
@@ -2557,8 +2558,8 @@ void save_chr(void)
 /* Borlandified and nearly identical */
 void read_common_files(void)
 {
-	Bit16s handle; //si
-	Bit16s len; //di
+	signed short handle; //si
+	signed short len; //di
 
 	/* load HEADS.DAT */
 	handle = open_datfile(11);
@@ -2588,18 +2589,18 @@ void read_common_files(void)
 /* Borlandified and far from identical, but works */
 Bit32s process_nvf(struct nvf_desc *nvf)
 {
-	Bit32s offs;
-	Bit16s pics;
-	Bit16s height;
-	Bit16s va;
+	signed long offs;
+	signed short pics;
+	signed short height;
+	signed short va;
 	Bit32s p_size;
 	Bit32s retval;
-	Bit8s nvf_type;
+	signed char nvf_type;
 
 	RealPt src;
 
-	Bit16s i;     // si
-	Bit16s width; // di
+	signed short i;     // si
+	signed short width; // di
 #if 0
 	/* Fix: GCC warns about uninitialized values */
 	width = height = 0;
@@ -3105,16 +3106,17 @@ void wait_for_vsync(void)
 
 /* Borlandified and identical */
 /* static */
-void blit_smth3(RealPt ptr, Bit16s v1, Bit16s v2)
+void blit_smth3(unsigned char *ptr, signed short v1, signed short v2)
 {
-	Bit8u *src;
-	Bit16s i, j;
+	unsigned char *src;
+	signed short i;
+	signed short j;
 
 	src = g_array_2;
 
 	for (i = 0; i < v1; src += 8 - v2, ptr += 320, i++)
 		for (j = 0; j < v2; src++, j++)
-			mem_writeb(Real2Phys(ptr) + j, *src);
+			ptr[j] = *src;
 }
 
 /**
@@ -3146,7 +3148,7 @@ Bit16u str_splitter(char *s)
 	for (tp = s; *tp; tp++) {
 		if ((*tp == 0x0d) || (*tp == 0x0a))
 		{
-			*tp = 0x20;
+			*tp = ' '; //0x20;
 		}
 	}
 
@@ -3354,8 +3356,9 @@ void call_them_all(Bit16s v1, Bit16s v2, Bit16s x, Bit16s y)
 /* static */
 void fill_smth(void)
 {
-	Bit8u* ptr;
-	Bit16s i, j;
+	unsigned char *ptr;
+	signed short i;
+	signed short j;
 
 	if (g_mask_switch != 0)
 		ptr = g_array_1;
@@ -3364,16 +3367,17 @@ void fill_smth(void)
 
 	for (i = 0; i < 8; ptr += 8, i++)
 		for (j = 0; j < 8; j++)
-			host_writeb(Real2Host(ptr) + j, (unsigned char)g_bg_color);
+			ptr[j] = (unsigned char)g_bg_color;
 }
 
 /* Borlandified and identical */
 /* static */
-void fill_smth2(Bit8u* sptr) {
-
-	RealPt ptr;
-	Bit16s i, j;
-	Bit8u mask;
+void fill_smth2(Bit8u* sptr)
+{
+	unsigned char *ptr;
+	signed short i;
+	signed short j;
+	unsigned char mask;
 
 	if (g_mask_switch != 0)
 		ptr = g_array_1;
@@ -3384,7 +3388,7 @@ void fill_smth2(Bit8u* sptr) {
 		mask = *sptr++;
 		for (j = 0; j < 8; j++) {
 			if ((0x80 >> j) & mask) {
-				host_writeb(Real2Host(ptr) + j,	(unsigned char)g_fg_color[g_col_index]);
+				ptr[j] = (unsigned char)g_fg_color[g_col_index];
 			}
 		}
 	}
