@@ -2354,53 +2354,25 @@ void load_font_and_text(void)
 	close(handle);
 
 	split_textbuffer(g_texts, g_buffer_text, len);
-#if !defined(__BORLANDC__)
-//	split_textbuffer_host(g_texts, g_buffer_text, len);
-#endif
 }
 
-#if !defined(__BORLANDC__)
-static void split_textbuffer_host(char **dst, char *src, Bit32u len)
+/* Borlandified and nearly identical */
+void split_textbuffer(char **dst, char *src, unsigned long len)
 {
-	Bit32u i = 0;
+	unsigned long i;
 
 	for (i = 0, *dst++ = src; i != len; src++, i++) {
 		/* continue if not the end of the string */
 		if (!*src) {
-
 			/* return if "\0\0" (never happens) */
-			if (!*(src + 1))
-				return;
+			if (!*(src + 1)) return;
 
 			/* write the adress of the next string */
-			*dst++ = src + 1;
-		}
-	}
-}
-#endif
-
-/* Borlandified and nearly identical */
-void split_textbuffer(Bit8u *dst, RealPt src, Bit32u len)
-{
-	Bit32u i = 0;
-
-	host_writed(dst, (Bit32u)src);
-	dst += 4;
-
-	for (; i != len; src++, i++) {
-		/* continue if not the end of the string */
-		if (!host_readbs(Real2Host(src))) {
-
-			/* return if "\0\0" (never happens) */
-			if (!host_readbs(Real2Host(src) + 1))
-				return;
-
-			/* write the adress of the next string */
-			host_writed(dst, (Bit32u)(src + 1));
+			*dst = src + 1;
 #if !defined(__BORLANDC__)
-			dst += 4;
+			dst++;
 #else
-			//dst += 4;
+			//dst++;
 			asm {nop} // Sync-point
 #endif
 		}

@@ -35,7 +35,7 @@ struct nvf_desc {
 	void draw_mouse_cursor(void);
 	void save_mouse_bg(void);
 	void restore_mouse_bg(void);
-	void split_textbuffer(Bit8u*, RealPt, Bit32u);
+	void split_textbuffer(char**, char*, unsigned long);
 	Bit32s process_nvf(struct nvf_desc*);
 	Bit16s open_datfile(Bit16u);
 	Bit32s get_archive_offset(const char*, Bit8u*);
