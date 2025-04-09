@@ -13,12 +13,8 @@
  */
 
 #if !defined(__BORLANDC__)
-#include <cstdlib>	// free()
+#include <stdlib.h>	// free()
 #endif
-
-#include "schick.h"
-
-namespace G105de {
 
 static inline unsigned int val(const unsigned char *p) {
 	return (p[0]<<16 | p[1] << 8 | p[2]);
@@ -139,6 +135,4 @@ void decomp_pp20(RealPt dst, Bit8u *src, Bit32s plen)
 #endif
 
 	return;
-}
-
 }
