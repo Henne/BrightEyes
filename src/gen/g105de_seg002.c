@@ -2397,15 +2397,13 @@ void load_page(signed short page)
 			g_bg_len[page] = get_filelength(handle);
 
 			read_datfile(handle, g_bg_buffer[page], g_bg_len[page]);
-			decomp_rle(g_gen_ptr1_dis, (Bit8u*)g_bg_len[page], 0, 0, 320, 200, 0);
+			decomp_rle(g_gen_ptr1_dis, g_bg_buffer[page], 0, 0, 320, 200, 0);
+			close(handle);
 		} else {
 			read_datfile(handle, g_page_buffer, 64000);
 			decomp_rle(g_gen_ptr1_dis, g_page_buffer, 0, 0, 320, 200, 0);
+			close(handle);
 		}
-		close(handle);
-#if defined(__BORLANDC__)
-		asm {db 0xeb, 0x4d} // BCC Sync-point
-#endif
 	} else {
 		/* this should not happen */
 		handle = open_datfile(page);
