@@ -2913,7 +2913,7 @@ void init_video(Bit16s unused)
 	/* set the video mode to 320x200 8bit */
 	set_video_mode(0x13);
 
-	set_color((Bit8u*)&l_white, 0xff);
+	set_color((signed char*)&l_white, 0xff);
 }
 
 /* Borlandified and identical */
@@ -4433,7 +4433,7 @@ void refresh_screen(void)
 				}
 
 				wait_for_vsync();
-				set_palette(g_buffer_dmenge_dat + 128 * 184 + 2, 0 , 32);
+				set_palette((signed char*)g_buffer_dmenge_dat + 128 * 184 + 2, 0 , 32);
 				copy_to_screen(g_buffer_dmenge_dat, dst, 128, 184, 0);
 			}
 		}
@@ -5181,7 +5181,7 @@ void select_typus(void)
 			update_mouse_cursor();
 			call_fill_rect_gen((RealPt)g_vga_memstart, 16, 8, 143, 191, 0);
 			wait_for_vsync();
-			set_palette(g_gen_ptr5 + 0x5c02, 0, 32);
+			set_palette((signed char*)g_gen_ptr5 + 0x5c02, 0, 32);
 			call_mouse();
 
 			g_head_typus = (g_hero.typus > 10 ? 10 : g_hero.typus);
@@ -6903,7 +6903,7 @@ void choose_typus(void)
 	update_mouse_cursor();
 	call_fill_rect_gen((RealPt)g_vga_memstart, 16, 8, 143, 191, 0);
 	wait_for_vsync();
-	set_palette(g_gen_ptr5 + 0x5c02, 0, 32);
+	set_palette((signed char*)g_gen_ptr5 + 0x5c02, 0, 32);
 	call_mouse();
 
 
@@ -7140,8 +7140,8 @@ static void intro(void)
 	Bit16s width;
 	Bit16s height;
 	Bit16s flen;
-	unsigned char *pal_src;
-	unsigned char *pal_dst;
+	signed char *pal_src;
+	signed char *pal_dst;
 	struct nvf_desc nvf;
 
 	Bit16s i;
@@ -7173,7 +7173,7 @@ static void intro(void)
 
 	wait_for_vsync();
 
-	set_palette((RealPt)&g_pal_attic, 0, 16);
+	set_palette((signed char*)&g_pal_attic, 0, 16);
 
 	cnt1 = 1;
 	cnt2 = 99;
@@ -7289,7 +7289,7 @@ static void intro(void)
 	wait_for_vsync();
 
 
-	set_palette((RealPt)g_pal_tmp, 0, 32);
+	set_palette((signed char*)&g_pal_tmp, 0, 32);
 
 	/* draw DSALOGO.DAT */
 	g_dst_x1 = 0;
@@ -7324,8 +7324,8 @@ static void intro(void)
 	memcpy(g_gen_ptr1_dis + 500, &g_pal_dsalogo, 96);
 
 #if !defined(__BORLANDC__)
-	pal_src = g_gen_ptr1_dis + 500;
-	pal_dst = g_gen_ptr1_dis;
+	pal_src = (signed char*)g_gen_ptr1_dis + 500;
+	pal_dst = (signed char*)g_gen_ptr1_dis;
 #else
 	
 	pal_src = (pal_dst = g_gen_ptr1_dis) + 500;
@@ -7346,8 +7346,8 @@ static void intro(void)
 	memcpy(g_gen_ptr1_dis, &g_pal_dsalogo, 96);
 
 #if !defined(__BORLANDC__)
-	pal_src = g_gen_ptr1_dis + 500;
-	pal_dst = g_gen_ptr1_dis;
+	pal_src = (signed char*)g_gen_ptr1_dis + 500;
+	pal_dst = (signed char*)g_gen_ptr1_dis;
 #else
 	
 	pal_src = (pal_dst = g_gen_ptr1_dis) + 500;
@@ -7543,12 +7543,12 @@ void alloc_buffers(void)
 /* Borlandified and identical */
 void init_colors(void)
 {
-	set_palette((RealPt)&g_pal_col_black, 0x00, 1);
-	set_palette((RealPt)&g_pal_col_white, 0xff, 1);
-	set_palette((RealPt)&g_pal_popup, 0xd8, 8);
-	set_palette((RealPt)&g_pal_misc, 0xc8, 3);
-	set_palette((RealPt)&g_pal_genbg, 0x40, 0x20);
-	set_palette((RealPt)&g_pal_heads, 0x20, 0x20);
+	set_palette((signed char*)&g_pal_col_black, 0x00, 1);
+	set_palette((signed char*)&g_pal_col_white, 0xff, 1);
+	set_palette((signed char*)&g_pal_popup, 0xd8, 8);
+	set_palette((signed char*)&g_pal_misc, 0xc8, 3);
+	set_palette((signed char*)&g_pal_genbg, 0x40, 0x20);
+	set_palette((signed char*)&g_pal_heads, 0x20, 0x20);
 	set_textcolor(0xff, 0x0); // WHITE ON BLACK
 }
 

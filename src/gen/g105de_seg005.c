@@ -24,11 +24,11 @@ void save_display_stat(signed short *p)
 {
 }
 
-void set_color(RealPt ptr, unsigned char color)
+void set_color(signed char *ptr, unsigned char color)
 {
 }
 
-void set_palette(RealPt ptr, unsigned char first_color, unsigned short colors)
+void set_palette(signed char *ptr, unsigned char first_color, unsigned short colors)
 {
 	unsigned short i;
 	for (i = 0; i < colors; i++)
