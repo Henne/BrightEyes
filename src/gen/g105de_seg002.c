@@ -2244,16 +2244,16 @@ void decomp_rle(Bit8u *dst, Bit8u *src, Bit16s x, Bit16s y,
 /* static */
 void draw_mouse_cursor(void)
 {
-	Bit8s Y, X;
-	RealPt vgaptr;
+	signed char Y;
+	signed char X;
+	signed char *vgaptr;
 	signed short *mouse_cursor;
-	Bit16s rangeY;
-	Bit16s diffX;
-	Bit16s diffY;
+	signed short rangeY;
+	signed short diffX;
+	signed short diffY;
 
-	register Bit16s mask; //si
-	register Bit16s rangeX; //di
-
+	register signed short rangeX; //di
+	register signed short mask; //si
 
 	vgaptr = g_vga_memstart;
 	mouse_cursor = (signed short*)g_mouse_current_cursor + (32 / 2);
@@ -2269,10 +2269,10 @@ void draw_mouse_cursor(void)
 	vgaptr += rangeY * 320 + rangeX;
 
 	for (Y = 0; Y < diffY; Y++) {
-		mask = host_readw((Bit8u*)mouse_cursor++);
+		mask = *mouse_cursor++;
 		for (X = 0; X < diffX; X++)
 			if ((0x8000 >> X) & mask)
-				mem_writeb(Real2Phys(vgaptr) + X, 0xff);
+				vgaptr[X] = 0xff;
 		vgaptr += 320;
 	}
 }
