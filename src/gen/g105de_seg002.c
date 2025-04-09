@@ -3580,7 +3580,7 @@ Bit16s enter_string(char *dst, Bit16s x, Bit16s y, Bit16s num, Bit16s zero)
 	return 0;
 }
 
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 void draw_popup_line(Bit16s line, Bit16s type)
 {
 	RealPt dst;
@@ -3623,25 +3623,17 @@ void draw_popup_line(Bit16s line, Bit16s type)
 			break;
 		}
 	}
-#if defined(__BORLANDC__)
-	// BCC Sync-Point
-	copy_to_screen((src = (g_buffer_popup_nvf + popup_left)), dst, 16, 8, 0);
-#else
+
 	src = g_buffer_popup_nvf + popup_left;
 	copy_to_screen(src, dst, 16, 8, 0);
-#endif
 
 	src = g_buffer_popup_nvf + popup_middle;
 	dst += 16;
 	for (i = 0; i < g_menu_tiles; dst += 32, i++)
 		copy_to_screen(src, dst, 32, 8, 0);
-#if defined(__BORLANDC__)
-	// BCC Sync-Point
-	copy_to_screen((src = (g_buffer_popup_nvf + popup_right)), dst, 16, 8, 0);
-#else
+
 	src = g_buffer_popup_nvf + popup_right;
 	copy_to_screen(src, dst, 16, 8, 0);
-#endif
 }
 
 /**
@@ -3651,7 +3643,7 @@ void draw_popup_line(Bit16s line, Bit16s type)
  *
  *	if @digits is zero the function just delays.
  */
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 signed short infobox(char *msg, signed short digits)
 {
 	RealPt src;
@@ -3691,12 +3683,7 @@ signed short infobox(char *msg, signed short digits)
 	src += g_upper_border * 320 + g_left_border;
 	dst = g_gen_ptr1_dis;
 
-#if !defined(__BORLANDC__)
 	copy_to_screen(src, dst, di, (lines + 2) * 8, 2);
-#else
-	asm { nop; } // BCC Sync-Point
-	copy_to_screen(src, dst, di, (lines /*+ 2 */) * 8, 2);
-#endif
 
 	/* draw the popup box */
 	draw_popup_line(0, 0);
@@ -3735,12 +3722,8 @@ signed short infobox(char *msg, signed short digits)
 
 	copy_to_screen(src, dst, di, (lines + 2) * 8, 0);
 
-#if !defined(__BORLANDC__)
 	call_mouse();
-#else
-	asm { nop; nop;}
-	// BCC Sync-Point
-#endif
+
 	g_text_x = v2;
 	g_text_y = v3;
 	g_text_x_end = v4;
@@ -3864,12 +3847,7 @@ signed short gui_radio(char *header, signed char options, ...)
 	src += g_upper_border * 320 + g_left_border;
 	dst = g_gen_ptr1_dis;
 
-#if !defined(__BORLANDC__)
 	copy_to_screen(src, dst, r9, (lines_sum + 2) * 8, 2);
-#else
-	asm { nop; }
-	copy_to_screen(src, dst, r9, (lines_sum /*+ 2*/ ) * 8, 2);
-#endif
 
 	/* draw popup */
 	draw_popup_line(0, 0);
@@ -3892,11 +3870,7 @@ signed short gui_radio(char *header, signed char options, ...)
 
 	/* print radio options */
 	va_start(arguments, options);
-#if !defined(__BORLANDC__)
 	for (i = 1; i <= options; r4 += 8, i++) {
-#else
-	for (i = 1; i <= options; /* r4 += 8, */ i++) { // BCC Sync-Point
-#endif
 		str = va_arg(arguments, char*);
 		print_str(str, r3, r4);
 	}
@@ -3907,17 +3881,15 @@ signed short gui_radio(char *header, signed char options, ...)
 	my_bak = g_mouse_posy;
 	g_mouse_posx_bak = g_mouse_posx = g_left_border + 90;
 	g_mouse_posy_bak = g_mouse_posy = r8 = r7 = g_upper_border + 8 * (lines_header + 1);
-#if !defined(__BORLANDC__)
-	mouse_move_cursor(g_mouse_posx, r8);
-#else
-	// _AX contains the value of r8
-	mouse_move_cursor(g_mouse_posx, _AX);
-#endif
+
+	mouse_move_cursor(g_mouse_posx, g_mouse_posy);
 
 	g_mouse_posx = g_left_border + r9 - 16;
 	g_mouse_posx_min = g_left_border;
 	g_mouse_posy_min = g_upper_border + 8 * (lines_header + 1);
-	g_mouse_posy_max = (g_upper_border + (8 * options + (lines_header + 1) * 8)) - 1;
+	// TODO: permutate formula
+	g_mouse_posy_max = (8 * options + 8 * (lines_header + 1) + g_upper_border) - 1;
+	//g_mouse_posy_max = (g_upper_border + (8 * options + (lines_header + 1) * 8)) - 1;
 	call_mouse();
 	g_mouse2_event = 0;
 
@@ -3961,11 +3933,7 @@ signed short gui_radio(char *header, signed char options, ...)
 		}
 		if (g_mouse_posy != r8) {
 			/* has the mouse been moved */
-#if !defined(__BORLANDC__)
 			di = ((r8 = g_mouse_posy) - r7) / 8 + 1;
-#else
-			di = ((r8 = _AX) - r7) / 8 + 1; // BCC Sync-Point
-#endif
 		}
 		/* is this a bool radiobox ? */
 		if (g_bool_mode) {
@@ -3991,23 +3959,14 @@ signed short gui_radio(char *header, signed char options, ...)
 	g_mouse_posy_min = 0;
 	g_mouse_posy_max = 199;
 
-#if !defined(__BORLANDC__)
 	mouse_move_cursor(g_mouse_posx, g_mouse_posy_bak);
-#else
-	// _AX contains the value of MOUSE_POSY_BAK
-	mouse_move_cursor(g_mouse_posx, _AX);
-#endif
 
 	dst = g_vga_memstart;
 	dst += g_upper_border * 320 + g_left_border;
 	src = g_gen_ptr1_dis;
 	copy_to_screen(src, dst, r9, (lines_sum + 2) * 8, 0);
 
-#if !defined(__BORLANDC__)
 	call_mouse();
-#else
-	asm { db 0x90, 0x90;} // BCC Sync-Point
-#endif
 
 	set_textcolor(fg_bak, bg_bak);
 
@@ -4295,7 +4254,7 @@ void do_gen(void)
 	}
 }
 
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 void refresh_screen(void)
 {
 	RealPt src;
@@ -4320,22 +4279,16 @@ void refresh_screen(void)
 		/* page with base values and level is advanced */
 		if ((g_gen_page == 0) && (g_level == 1)) {
 			dst = g_gen_ptr1_dis + 178 * 320 + 284;
-#if !defined(__BORLANDC__)
+
 			src = g_buffer_sex_dat + 512;
-#else
-			src = g_buffer_sex_dat; // BCC Sync-Point
-#endif
 
 			copy_to_screen(src, dst, 20, 15, 0);
 		}
 		/* if the page is lower than 5 */
 		if (g_gen_page < 5) {
 			/* draw DMENGE.DAT or the typus name */
-#if !defined(__BORLANDC__)
 			dst = g_gen_ptr1_dis + 8 * 320 + 16;
-#else
-			dst = g_gen_ptr1_dis; // BCC Sync-Point
-#endif
+
 			if (g_hero.typus != 0) {
 
 				g_need_refresh = 1;
@@ -4354,11 +4307,7 @@ void refresh_screen(void)
 			} else {
 				if (g_need_refresh) {
 					call_fill_rect_gen((RealPt)g_vga_memstart, 16, 8, 143, 191, 0);
-#if !defined(__BORLANDC__)
 					g_need_refresh = 0;
-#else
-				asm { nop; } // BCC Sync-Point
-#endif
 				}
 
 				wait_for_vsync();
@@ -4519,14 +4468,11 @@ void new_values(void)
 
 		di = values[di - 1];
 		/* write randval to the selected positive attribute */
+		/* TODO: take a look at the next two lines */
 		host_writeb(3 * di + (Real2Host(ds_ptr) + 1), randval); // CURRENT
 		host_writeb(3 * di + (Real2Host(ds_ptr) + 0), randval); // NORMAL
 
-#if !defined(__BORLANDC__)
 		update_mouse_cursor();
-#else
-		asm {db 0x03, 0xd8; } // BCC Sync-Point
-#endif
 		refresh_screen();
 		call_mouse();
 	}
@@ -4564,15 +4510,11 @@ void new_values(void)
 		di = values[di - 1];
 
 		/* write randval to the selected negative attribute */
+		/* TODO: next two lines */
 		host_writeb(3 * di + (Real2Host(ds_ptr) + 1), randval); // CURRENT
 		host_writeb(3 * di + (Real2Host(ds_ptr) + 0), randval); // NORMAL
 
-#if !defined(__BORLANDC__)
 		update_mouse_cursor();
-#else
-		asm {db 0x03, 0xd8; } // BCC Sync-Point
-#endif
-
 		refresh_screen();
 		call_mouse();
 	}
