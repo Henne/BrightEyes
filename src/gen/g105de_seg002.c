@@ -5011,7 +5011,7 @@ void select_typus(void)
 		}
 
 		if (!possible_types) {
-			if (can_change_attribs() == 0) {
+			if (!can_change_attribs()) {
 				/* totally messed up values */
 				infobox(get_text(284), 0);
 				return;
@@ -5034,14 +5034,13 @@ void select_typus(void)
 		if ((di != -1) && (t.t[di - 1] != old_typus)) {
 
 			/* set new typus */
-#if !defined(__BORLANDC__)
 			g_hero.typus = t.t[di - 1];
-#else
-			g_hero.typus = _AL;
-#endif
 			g_screen_var = 1;
 
-			load_typus(g_hero.typus);
+			load_typus((signed short)g_hero.typus);
+#if defined(__BORLANDC__)
+			asm { db 0x0f, 0x1f, 0x00 }
+#endif
 			update_mouse_cursor();
 			call_fill_rect_gen((RealPt)g_vga_memstart, 16, 8, 143, 191, 0);
 			wait_for_vsync();
@@ -5051,11 +5050,7 @@ void select_typus(void)
 			g_head_typus = (g_hero.typus > 10 ? 10 : g_hero.typus);
 
 			if (g_hero.sex) {
-#if !defined(__BORLANDC__)
 				g_head_first = g_head_current = g_head_first_female[g_head_typus];
-#else
-				g_head_first = g_head_current = g_head_first_female[(Bit8s)_AL];
-#endif
 				g_head_last = g_head_first_male[g_head_typus + 1] - 1;
 			} else {
 				g_head_first = g_head_current = g_head_first_male[g_head_typus];
@@ -5075,6 +5070,7 @@ void select_typus(void)
 		}
 	} else {
 		infobox(get_text(265), 0);
+		return;
 	}
 }
 
@@ -5092,8 +5088,8 @@ Bit16s can_change_attribs(void)
 	volatile Bit16s na_dec;
 	signed char *p;
 	Bit16s i;
-	Bit16s pa_inc;
-	Bit16s pa_dec;
+	register Bit16s pa_inc;
+	register Bit16s pa_dec;
 
 	pa_inc = 0;
 	pa_dec = 0;
@@ -5270,7 +5266,7 @@ void change_attribs(void)
 				infobox(get_text(83), 0);
 				continue;
 			}
-			ptr1 = &g_hero.attrib[si].normal;
+			ptr1 = &g_hero.attrib[si + 7].normal;
 			/* check if attribute can be incremented */
 			if (ptr1[0] == 8) {
 				infobox(get_text(77), 0);
@@ -5279,14 +5275,8 @@ void change_attribs(void)
 				tmp1++;
 				g_attrib_changed[si + 7] = INC;
 
-#if !defined(__BORLANDC__)
+				//g_hero.attrib[si + 7].normal = ++g_ghero.attrib[si + 7].current;
 				ptr1[0] = ++ptr1[1];
-#else
-				++ptr1[1];
-				//ds_inc_bs_post(HERO_ATT0_NORMAL + 3 * (si + 7));
-				//ds_inc_bs_post(HERO_ATT0_CURRENT + 3 * (si + 7)); // BCC Sync-Point
-				//asm { db 0xe8, 0xad, 0xde; db 0x83, 0x7e, 0x80, 0x80;}
-#endif
 
 				refresh_screen();
 			}
@@ -5303,11 +5293,7 @@ void change_attribs(void)
 			if (g_attrib_changed[di] != INC) {
 				ptr2 = &g_hero.attrib[di].normal;
 				if (ptr2[0] > 2) {
-#if !defined(__BORLANDC__)
 					c += ptr2[0] - 2;
-#else
-					c = ptr2[0] - 2; // BCC Sync-Point
-#endif
 				}
 			}
 		}
@@ -5316,13 +5302,8 @@ void change_attribs(void)
 			return;
 		}
 		/* decrement positive attribute */
-		//ds_dec_bs_post(HERO_ATT0_NORMAL + 3 * tmp2);
-		//ds_dec_bs_post(HERO_ATT0_CURRENT + 3 * tmp2);
-#if !defined(__BORLANDC__)
+		// g_hero.attrib[tmp3].normal = --g_hero.attrib[tmp3].current;
 		ptr1[0] = --ptr1[1];
-#else
-		host_writebs(ptr1 + 1, host_readbs(ptr1 + 1) - 1); // BCC Sync-point
-#endif
 
 		/* mark this attribute as decremented */
 		g_attrib_changed[tmp2] = DEC;
@@ -5360,14 +5341,8 @@ void change_attribs(void)
 			/* decrement the negative attribute */
 			tmp1++;
 
-			//ds_dec_bs_post(HERO_ATT0_NORMAL + 3 * (si + 7));
-			//ds_dec_bs_post(HERO_ATT0_CURRENT + 3 * (si + 7));
-
-#if !defined(__BORLANDC__)
+			// g_hero.attrib[si + 7].normal = --g_hero.attrib[si + 7].current;
 			ptr1[0] = --ptr1[1];
-#else
-			host_writebs(ptr1 + 1, host_readbs(ptr1 + 1) - 1); // BCC Sync-Point
-#endif
 
 			g_attrib_changed[si + 7] = DEC;
 
@@ -5379,7 +5354,7 @@ void change_attribs(void)
 #undef INC
 #undef DEC
 
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 void save_picbuf(void)
 {
 	RealPt p;
@@ -5456,19 +5431,12 @@ void save_picbuf(void)
 
 	p = g_gen_ptr1_dis + y_2 * 320 + x_2;
 	copy_to_screen(p, g_picbuf2, w_2, h_2, 2);
-#if !defined(__BORLANDC__)
+
 	p = g_gen_ptr1_dis + y_3 * 320 + x_3;
 	copy_to_screen(p, g_picbuf3, w_3, h_3, 2);
-#else
-	// BCC Sync-Point
-	//p -= y_2 * 320 + x_2; // revert to GEN_PTR1_DIS
-	p += y_3 ; // add offset
-	copy_to_screen(p, g_picbuf3, w_3, h_3, 2);
-	asm { nop; nop; nop; nop; db 0x6a, 0x02; db 0x6a, 0x02;};
-#endif
 }
 
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 void restore_picbuf(RealPt ptr)
 {
 	RealPt p;
@@ -5537,16 +5505,8 @@ void restore_picbuf(RealPt ptr)
 	p = ptr + y_2 * 320 + x_2;
 	copy_to_screen(g_picbuf2, p, w_2, h_2, 0);
 
-#if !defined(__BORLANDC__)
 	p = ptr + y_3 * 320 + x_3;
 	copy_to_screen(g_picbuf3, p, w_3, h_3, 0);
-#else
-	// BCC Sync-Point
-	p += y_3 ; // add offset
-	copy_to_screen(g_picbuf3, p, w_3, h_3, 0);
-	asm { db 0x0f, 0x1f, 0x44, 0x00, 0x00;}
-	asm { nop; nop; nop; nop; nop; }
-#endif
 }
 
 /**
