@@ -3888,15 +3888,9 @@ signed short gui_radio(char *header, signed char options, ...)
 	g_mouse_posx = g_left_border + r9 - 16;
 	g_mouse_posx_min = g_left_border;
 	g_mouse_posy_min = g_upper_border + 8 * (lines_header + 1);
-	// TODO: permutate formula
-	g_mouse_posy_max = (8 * options + 8 * (lines_header + 1) + g_upper_border) - 1;
-	//g_mouse_posy_max = (g_upper_border + (8 * options + (lines_header + 1) * 8)) - 1;
+	g_mouse_posy_max = (g_upper_border + 8 * (lines_header + 1) + 8 * options) - 1;
 	call_mouse();
 	g_mouse2_event = 0;
-
-#if defined(__BORLANDC__)
-	asm { db 0x0f, 0x1f, 0x00} // BCC Sync-Point
-#endif
 
 	while (r5 == 0) {
 		g_action_table = (struct mouse_action*)g_action_input;
@@ -5040,6 +5034,7 @@ void select_typus(void)
 
 			load_typus((signed short)g_hero.typus);
 #if defined(__BORLANDC__)
+			/* Sync-Point-Reason: Load supression optimizes g_hero.typus to well */
 			asm { db 0x0f, 0x1f, 0x00 }
 #endif
 			update_mouse_cursor();
@@ -7285,7 +7280,8 @@ void alloc_buffers(void)
 
 	if (!(g_gen_ptr6 = (gen_alloc(1100) + 8))) {
 #if defined(__BORLANDC__)
-		asm { db 0x66, 0x90;};
+		/* Sync-Point-Reason: code for if statement is different */
+		asm { db 0x66, 0x90;}; // 2 Byte-Nop
 #endif
 		printf((char*)g_str_malloc_error);
 	}
