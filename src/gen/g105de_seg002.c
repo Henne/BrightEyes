@@ -5167,10 +5167,14 @@ void change_attribs(void)
 		g_screen_var = 1;
 		refresh_screen();
 		g_screen_var = 0;
+
 #if defined(__BORLANDC__)
-		asm { db 0xeb, 0x03; db 0xe9, 0x6c, 0x03; } // BCC Sync-Point
+		/* Sync-Point-Reason: jump out of the if-statement and an
+		 *                    unused return */
+		asm { db 0x66, 0x90; db 0x0f, 0x1f, 0x00; } // BCC Sync-Point
 #endif
 	}
+
 
 	/* check again if changing is possible */
 	if (can_change_attribs() == 0) {
@@ -5572,13 +5576,12 @@ void print_values(void)
 			print_str(itoa(g_hero.mr, tmp, 10), 232, 184);
 			break;
 		}
+#if defined(__BORLANDC__)
+		/* Sync-Point-Reason: an unused return call */
+		asm { db 0xe9, 0x85, 0x0a}; // BCC Sync-Point
+#endif
 		case 1: {
 			/* SKILLS Page 1/3 */
-#if defined(__BORLANDC__)
-			asm { db 0xe9, 0x85, 0x0a}; // BCC Sync-Point
-			// a 7-Byte Multi Byte NOP :-)
-			//asm { db 0x0f, 0x1f, 0x80, 0x00, 0x00, 0x00, 0x00; }; // BCC Sync-Point
-#endif
 			restore_picbuf((RealPt)g_gfx_ptr);
 
 
@@ -6217,6 +6220,7 @@ static void inc_spell(Bit16s spell)
 	if (g_spell_incs[spell].tries == 3) {
 		infobox(get_text(151), 0);
 #if !defined(__BORLANDC__)
+		/* Sync-Point-Reason: this return would result in different code */
 		return;
 #else
 		// Fool the BCC a bit with a handcoded return
