@@ -5111,11 +5111,7 @@ Bit16s can_change_attribs(void)
 		if ((g_attrib_changed[i] != INC) && (p[0] > 2))
 			na_dec += 2 - p[0];
 		if ((g_attrib_changed[i] != DEC) && (p[0] < 8))
-#if !defined(__BORLANDC__)
 			na_inc += 8 - p[0];
-#else
-			asm { db 0x0b, 0xc9; nop; } // BCC Sync-Point
-#endif
 	}
 
 	/* no values from positive attributes left */
@@ -5230,17 +5226,8 @@ void change_attribs(void)
 			return;
 		}
 		/* increment positive attribute */
-		//ds_inc_bs_post(HERO_ATT0_CURRENT + 3 * tmp2);
-		//ds_inc_bs_post(HERO_ATT0_NORMAL + 3 * tmp2);
-#if !defined(__BORLANDC__)
-		// p[0] = ++p[1];
-		host_writebs(ptr1, host_writebs(ptr1 + 1, host_readbs(ptr1 + 1) + 1));
-#else
-		//ds_inc_bs_post(HERO_ATT0_CURRENT + 3 * tmp2);
-		//ds_inc_bs_post(HERO_ATT0_NORMAL + 3 * tmp2);
-		g_hero.attrib[tmp2].normal++;
-		asm { db 0x8b, 0x5e, 0xfc; }; // BCC Sync-Point
-#endif
+		//g_hero.attrib[tmp2].normal = ++g_ghero.attrib[tmp2].current;
+		ptr1[0] = ++ptr1[1];
 
 		g_attrib_changed[tmp1] = INC;
 
