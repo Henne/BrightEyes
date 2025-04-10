@@ -5513,7 +5513,7 @@ void restore_picbuf(RealPt ptr)
  * print_attribs() -	print the attribute values
  *
  */
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 void print_attribs(void)
 {
 	signed char *p;
@@ -6701,23 +6701,12 @@ void choose_typus(void)
 			if (randval & 0x80) {
 				/* attribute upper bound */
 				if ((signed char)ptr[0] > (randval & 0x7f)) {
-
-#if !defined(__BORLANDC__)
-					//ptr[0] = ptr[1] = (signed char)(randval & 0x7f);
-					host_writeb(Real2Host(ptr),
-						host_writebs(Real2Host(ptr) + 1, randval & 0x7f));
-#else
-			//		host_writeb(Real2Host(ptr),
-			//			host_writeb(Real2Host(ptr) + 1, randval);
-					asm {nop; db 0x0f,0x1f,0x00; } // BCC Sync-Point
-#endif
+					ptr[0] = ptr[1] = (signed char)(randval & 0x7f);
 				}
 			} else {
 				/* attribute lower bound */
 				if ((signed char)ptr[0] < randval) {
-					//ptr[0] = ptr[1] = (signed char)randval;
-					host_writeb(Real2Host(ptr),
-						host_writebs(Real2Host(ptr) + 1, randval));
+					ptr[0] = ptr[1] = (signed char)randval;
 				}
 			}
 		}
@@ -6734,12 +6723,7 @@ void choose_typus(void)
 	g_head_typus = (g_hero.typus > 10 ? 10 : g_hero.typus);
 
 	if (g_hero.sex) {
-#if !defined(__BORLANDC__)
 		g_head_first = g_head_current = g_head_first_female[g_head_typus];
-#else
-		g_head_first = g_head_current = g_head_first_female[(Bit8s)_AL];
-#endif
-
 		g_head_last = g_head_first_male[g_head_typus + 1] - 1;
 	} else {
 		g_head_first = g_head_current = g_head_first_male[g_head_typus];
@@ -7147,14 +7131,9 @@ static void intro(void)
 
 	memcpy(g_gen_ptr1_dis + 500, &g_pal_dsalogo, 96);
 
-#if !defined(__BORLANDC__)
 	pal_src = (signed char*)g_gen_ptr1_dis + 500;
 	pal_dst = (signed char*)g_gen_ptr1_dis;
-#else
-	
-	pal_src = (pal_dst = g_gen_ptr1_dis) + 500;
-	//asm { db 0x66, 0x90; db 0x66, 0x90; };
-#endif
+
 	memset(pal_dst, 0, 96);
 
 	for (i = 0; i < 64; i++) {
@@ -7169,14 +7148,9 @@ static void intro(void)
 
 	memcpy(g_gen_ptr1_dis, &g_pal_dsalogo, 96);
 
-#if !defined(__BORLANDC__)
 	pal_src = (signed char*)g_gen_ptr1_dis + 500;
 	pal_dst = (signed char*)g_gen_ptr1_dis;
-#else
-	
-	pal_src = (pal_dst = g_gen_ptr1_dis) + 500;
-	asm { db 0x66, 0x90; db 0x66, 0x90; };
-#endif
+
 	memset(g_gen_ptr1_dis + 500, 0, 96);
 
 	for (i = 0; i < 64; i++) {
@@ -7200,8 +7174,7 @@ static void interrupt timer_isr(void)
 	if (g_random_gen_seed2 < 0)
 		g_random_gen_seed2 = 0;
 	restart_midi();
-	asm {pushf };
-	((void far (*)(void))g_timer_isr_bak)();
+	((void interrupt far (*)(void))g_timer_isr_bak)();
 }
 #endif
 
