@@ -1327,7 +1327,8 @@ static inline char* get_text(Bit16s no) {
 #define get_text(no) (g_texts[no])
 #endif
 
-static signed short g_random_gen_seed2;
+/* used by external module */
+signed short g_random_gen_seed2;
 
 static signed short g_have_mouse;
 static signed short dummy13;
