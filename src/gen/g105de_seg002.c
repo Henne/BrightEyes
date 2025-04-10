@@ -6066,12 +6066,7 @@ void select_skill(void)
 		case 1: {
 			group = gui_radio(get_text(93), 2, get_text(86), get_text(87));
 			if (group != -1) {
-#if !defined(__BORLANDC__)
-				switch (group)
-#else
-				switch (_AX)
-#endif
-				{
+				switch (group) {
 				case 1: {
 					/* Fight */
 					skill = gui_radio(get_text(147),
@@ -6108,12 +6103,7 @@ void select_skill(void)
 		case 2: {
 			group = gui_radio(get_text(93), 2, get_text(88), get_text(89));
 			if (group != -1) {
-#if !defined(__BORLANDC__)
-				switch (group)
-#else
-				switch (_AX)
-#endif
-				{
+				switch (group) {
 				case 1: {
 					skill = gui_radio(get_text(147),
 							7,
@@ -6147,11 +6137,7 @@ void select_skill(void)
 		case 3: {
 			group = gui_radio(get_text(93), 3, get_text(90), get_text(91), get_text(92));
 			if (group != -1) {
-#if !defined(__BORLANDC__)
 				switch (group)
-#else
-				switch (_AX)
-#endif
 				{
 					case 1: {
 						skill = gui_radio(get_text(147),
@@ -6268,8 +6254,8 @@ static void inc_spell(Bit16s spell)
 /* Borlandified and identical */
 void select_spell(void)
 {
-	Bit16s group;
-	Bit16s spell;
+	signed short group;
+	signed short spell;
 
 	do {
 
@@ -6289,11 +6275,7 @@ void select_spell(void)
 						get_text(157), get_text(162),
 						get_text(158));
 				if (group != -1) {
-#if !defined(__BORLANDC__)
 				switch (group)
-#else
-				switch (_AX)
-#endif
 				{
 					case 1: {
 						spell = gui_radio(get_text(156),
@@ -6346,12 +6328,7 @@ void select_spell(void)
 						get_text(160));
 				if (group != -1) {
 
-#if !defined(__BORLANDC__)
-				switch (group)
-#else
-				switch (_AX)
-#endif
-				{
+				switch (group) {
 					case 1: {
 						spell = gui_radio(get_text(156), 6,
 								get_text(180),
@@ -6403,12 +6380,7 @@ void select_spell(void)
 						get_text(164));
 				if (group != -1) {
 
-#if !defined(__BORLANDC__)
-				switch (group)
-#else
-				switch (_AX)
-#endif
-				{
+				switch (group) {
 					case 1: {
 						spell = gui_radio(get_text(156), 6,
 								get_text(195),
@@ -6460,13 +6432,7 @@ void select_spell(void)
 						get_text(164), get_text(86),
 						get_text(166));
 				if (group != -1) {
-
-#if !defined(__BORLANDC__)
-				switch (group)
-#else
-				switch (_AX)
-#endif
-				{
+				switch (group) {
 					case 1: {
 						spell = gui_radio(get_text(156), 2,
 								get_text(215),
