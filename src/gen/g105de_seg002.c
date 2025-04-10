@@ -7320,9 +7320,13 @@ void init_stuff(void)
 }
 
 /* Borlandified and identical */
-RealPt gen_alloc(Bit32u nelem)
+unsigned char *gen_alloc(unsigned long nelem)
 {
-	return (RealPt)bc_farcalloc(nelem, 1);
+#if defined(__BORLANDC__)
+	return (unsigned char*)farcalloc(nelem, 1);
+#else
+	return (unsigned char*)calloc(nelem, 1);
+#endif
 }
 
 #if defined(__BORLANDC__)

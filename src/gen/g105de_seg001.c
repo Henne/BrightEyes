@@ -22,6 +22,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #if defined(__BORLANDC__)
 #include <DOS.H>	// _dos_open(), harderr()
@@ -455,7 +456,7 @@ void CD_radio_insert_cd()
 			exit_video();
 			clrscr();
 		}
-		bc_exit(0);
+		exit(0);
 	}
 }
 
@@ -468,7 +469,7 @@ Bit16s CD_insert_loop()
 	}
 	CD_INSERT_COUNTER--;
 #if defined(__BORLANDC__)
-	bc__exit(0);
+	_exit(0);
 #endif
 
 #if !defined(__BORLANDC__)
