@@ -35,6 +35,7 @@
 
 #include "g105de_seg001.h"
 #include "g105de_seg002.h"
+#include "g105de_seg007.h"
 
 /* extern variables from seg002 */
 extern signed short g_called_with_args;
@@ -87,6 +88,8 @@ static unsigned short CD_has_drives()
 	}
 has_cd:
 //	return _AX;
+#else
+	return 0;
 #endif
 }
 
@@ -102,6 +105,8 @@ static unsigned short CD_count_drives()
 		_AX = _BX;
 
 //	return _BX;
+#else
+	return 0;
 #endif
 }
 
@@ -117,11 +122,13 @@ static unsigned short CD_get_first_drive()
 
 	_AX = _CX;
 //	return _CX;
+#else
+	return 0;
 #endif
 }
 
 /* Borlandified and identical */
-unsigned short CD_set_drive_no()
+static signed short CD_set_drive_no(void)
 {
 #if defined(__BORLANDC__)
 	if (CD_has_drives() == 0) return 0;
@@ -130,6 +137,8 @@ unsigned short CD_set_drive_no()
 	CD_DRIVE_NO = CD_get_first_drive();
 
 	_AX = 1;
+#else
+	return 0;
 #endif
 }
 
@@ -150,19 +159,15 @@ static void CD_driver_request(struct driver_request far* req)
 /* TODO: check adresses of seg013 */
 static void CD_unused1(void)
 {
+#if defined(__BORLANDC__)
 	if (CD_INIT_SUCCESSFUL != 0) {
 
-#if defined(__BORLANDC__)
-	req[3].status = 0;
-	req[3].ptr = cd_buf1;
-	//cd_buf1[252] = 0x0c;
-	asm { db 0x0f, 0x1f, 0x40, 0x00; } 	// BCC Sync-Point
-	asm { db 0x0f, 0x1f, 0x40, 0x00; } 	// BCC Sync-Point
-	CD_driver_request(&req[3]);
-#else
-	//DUMMY
-#endif
+		req[3].status = 0;
+		req[3].ptr = cd_buf1;
+		cd_buf1[252] = 0x0c;
+		CD_driver_request(&req[3]);
 	}
+#endif
 }
 
 
@@ -174,7 +179,7 @@ static void CD_unused1(void)
  * \todo    produces a compiler warning and is a bit hacky
  */
 /* Borlandified and identical */
-Bit32s CD_get_tod(void)
+static signed long CD_get_tod(void)
 {
 #if defined(__BORLANDC__)
 	asm {
@@ -183,11 +188,13 @@ Bit32s CD_get_tod(void)
 		mov ax, dx
 		mov dx, cx
 	}
+#else
+	return 0;
 #endif
 }
 
 /* Seem Unborlandifiable to me */
-void seg001_00bb(Bit16s track_no)
+static void seg001_00bb(signed short track_no)
 {
 #if defined(__BORLANDC__)
 	Bit32s track_start;
@@ -231,16 +238,15 @@ void seg001_00bb(Bit16s track_no)
 #else
 		CD_driver_request((struct driver_request*)RealMake(reloc_gen + CDSEG, 0x8c));
 
-		asm { db 0x66, 0x0F, 0x1F, 0x44, 0x00, 0x00; } // BCC Sync-Point
-		asm { db 0x0F, 0x1F, 0x44, 0x00, 0x00; } // BCC Sync-Point
+		asm { db 0x66, 0x66, 0x0f, 0x1f, 0x84, 0x00, 0x00 }
+		asm { db 0x66, 0x66, 0x0f, 0x1f, 0x84, 0x00, 0x00 }
+		asm { db 0x0f, 0x1f, 0x80, 0x00, 0x00 };
+		asm { db 0x0f, 0x1f, 0x80, 0x00, 0x00 };
+		asm { db 0x0f, 0x1f, 0x80, 0x00, 0x00 };
+		asm { db 0x0f, 0x1f, 0x80, 0x00, 0x00 };
 		asm { db 0x0F, 0x1F, 0x40, 0x00; } // BCC Sync-Point
 		asm { db 0x0F, 0x1F, 0x40, 0x00; } // BCC Sync-Point
-		asm { db 0x0F, 0x1F, 0x40, 0x00; } // BCC Sync-Point
-
-		asm { db 0x0F, 0x1F, 0x40, 0x00; } // BCC Sync-Point
-		asm { db 0x0F, 0x1F, 0x40, 0x00; } // BCC Sync-Point
-		asm { db 0x0F, 0x1F, 0x40, 0x00; } // BCC Sync-Point
-		asm { db 0x0F, 0x1F, 0x40, 0x00; } // BCC Sync-Point
+		asm { nop; nop; }
 #endif
 		CD_AUDIO_TOD = CD_get_tod();
 	}
@@ -250,6 +256,7 @@ void seg001_00bb(Bit16s track_no)
 /* Borlandified and nearly identical, but works */
 static void seg001_02ba()
 {
+#if defined(__BORLANDC__)
 	if (CD_INIT_SUCCESSFUL != 0) {
 
 		if ((CD_get_tod() - (Bit32s)CD_AUDIO_TOD) >= (Bit32s)CD_AUDIO_POS) {
@@ -262,6 +269,7 @@ static void seg001_02ba()
 			}
 		}
 	}
+#endif
 }
 
 /* Borlandified and identical */
@@ -278,41 +286,41 @@ signed short CD_bioskey(signed short cmd)
 }
 
 /* Borlandified and nearly identical */
-void seg001_0312()
+void seg001_0312(void)
 {
+#if defined(__BORLANDC__)
 	if (CD_INIT_SUCCESSFUL != 0) {
 
-		host_writew(Real2Host(RealMake(reloc_gen + CDSEG, 3)), 0);
-#if !defined(__BORLANDC__)
-		CD_driver_request(RealMake(reloc_gen + CDSEG, 0));
-#else
+		//host_writew(Real2Host(RealMake(reloc_gen + CDSEG, 3)), 0);
+		*(unsigned short*)(&req[3]) = 0;
+		//CD_driver_request(RealMake(reloc_gen + CDSEG, 0));
 		asm { db 0x0f, 0x1f, 0x00; } // BCC Sync-Point
 		asm { db 0x0f, 0x1f, 0x00; }
 		asm { db 0x0f, 0x1f, 0x00; }
 		asm { nop; }
 		asm { nop; }
-#endif
 		CD_AUDIO_REPEAT = 0;
 	}
+#endif
 }
 
 /* Borlandified and nearly identical */
 void seg001_033b()
 {
+#if defined(__BORLANDC__)
 	if (CD_INIT_SUCCESSFUL != 0) {
 
 		seg001_0312();
 		host_writew(Real2Host(RealMake(reloc_gen + CDSEG, 0x1f)), 0);
-#if !defined(__BORLANDC__)
-		CD_driver_request(RealMake(reloc_gen + CDSEG, 0x1c));
-#else
+
+		//CD_driver_request(RealMake(reloc_gen + CDSEG, 0x1c));
 		asm { db 0x0f, 0x1f, 0x00; } // BCC Sync-Point
 		asm { db 0x0f, 0x1f, 0x00; }
 		asm { db 0x0f, 0x1f, 0x00; }
 		asm { nop; }
 		asm { nop; }
-#endif
 	}
+#endif
 }
 
 #if defined (__BORLANDC__)
@@ -391,22 +399,24 @@ void seg001_03a8()
 /* Borlandified and identical */
 void seg001_0465(unsigned short track)
 {
+#if defined(__BORLANDC__)
 	seg001_0312();
 	seg001_0312();
 	CD_AUDIO_TRACK = 4;
 	seg001_00bb(CD_AUDIO_TRACK);
 	CD_AUDIO_REPEAT = 1;
+#endif
 }
 
 /* Borlandified and nearly identical, but works correctly */
 //static
 Bit16s CD_check_file(char *pathP)
 {
+#if defined(__BORLANDC__)
 	int handle;
 	Bit16s buf;
 	unsigned int nread;
 	
-#if defined(__BORLANDC__)
 	if (_dos_open((char*)pathP, 1, &handle)) return -1;
 
 	if (_dos_read(handle, (Bit8u*)&buf, 1, &nread)) return -1;
@@ -414,13 +424,10 @@ Bit16s CD_check_file(char *pathP)
 	lseek(handle, 2000L, 0);
 
 	if (_dos_read(handle, (Bit8u*)&buf, 1, &nread)) return -1;
-#endif
 
 	_dos_close(handle);
 
-#if !defined(__BORLANDC__)	
-	return nread;
-#else
+	//return nread;
 	asm { db 0x0f, 0x1f, 0x00; } // BCC Sync-Point
 #endif
 }
@@ -428,6 +435,7 @@ Bit16s CD_check_file(char *pathP)
 /* Borlandified and identical */
 void CD_radio_insert_cd()
 {
+#if defined(__BORLANDC__)
 	char text_buffer[160];
 
 	Bit16s si;
@@ -458,17 +466,18 @@ void CD_radio_insert_cd()
 		}
 		exit(0);
 	}
+#endif
 }
 
 /* Borlandified and identical */
 Bit16s CD_insert_loop()
 {
+#if defined(__BORLANDC__)
 	if (CD_INSERT_COUNTER == 0) {
 		CD_radio_insert_cd();
 		CD_INSERT_COUNTER = 5;
 	}
 	CD_INSERT_COUNTER--;
-#if defined(__BORLANDC__)
 	_exit(0);
 #endif
 
@@ -482,11 +491,10 @@ Bit16s CD_insert_loop()
 /* Borlandified and nearly identical */
 void CD_check_cd()
 {
+#if defined(__BORLANDC__)
 	char fname[80];
 
-#if defined(__BORLANDC__)
 	harderr((int(*)(int, int, int, int))CD_insert_loop);
-#endif
 
 	strcpy(fname, (char*)STR_CD_EXEPATH);
 	fname[0] = CD_DRIVE_NO + 'A';
@@ -494,11 +502,13 @@ void CD_check_cd()
 	while (CD_check_file(fname) <= 0) {
 		CD_radio_insert_cd();
 	}
+#endif
 }
 
 /* Borlandified and identical */
-signed short seg001_0600()
+signed short seg001_0600(void)
 {
+#if defined(__BORLANDC__)
 	if (CD_set_drive_no() == 0)
 		return 0;
 
@@ -506,6 +516,7 @@ signed short seg001_0600()
 	CD_check_cd();
 	seg001_033b();
 	seg001_03a8();
+#endif
 
 #if !defined(__BORLANDC__)
 	return 1;
@@ -514,6 +525,6 @@ signed short seg001_0600()
 #endif
 }
 
-void dummy()
+void dummy(void)
 {
 }
