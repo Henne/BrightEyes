@@ -57,14 +57,15 @@ void draw_h_spaced_dots(unsigned short offset, unsigned short width, signed shor
 	}
 }
 
-void pic_copy(RealPt dst, Bit16u x, Bit16u y, Bit16u d1, Bit16u d2,
+void pic_copy(unsigned char *dst, Bit16u x, Bit16u y, Bit16u d1, Bit16u d2,
 		Bit16u v1, Bit16u v2, Bit16u d3, Bit16u d4,
-		Bit16u w, Bit16u h, RealPt src, Bit16u mode)
+		Bit16u w, Bit16u h, unsigned char *src, Bit16u mode)
 {
-	PhysPt d, s;
+	unsigned char *d;
+	unsigned char *s;
 
-	d = Real2Phys(dst) + y * 320 + x;
-	s = Real2Phys(src);
+	d = dst + y * 320 + x;
+	s = src;
 
 	switch (mode) {
 		/* this is not used in GEN */
@@ -74,8 +75,8 @@ void pic_copy(RealPt dst, Bit16u x, Bit16u y, Bit16u d1, Bit16u d2,
 			diff = 320 - w;
 			do {
 				for (i = w; i; i--) {
-					if (mem_readb(d) < 0xc8)
-						mem_writeb(d, mem_readb(s));
+					if (d[0] < 0xc8)
+						d[0] = s[0];
 					s++;
 					d++;
 				}
@@ -91,8 +92,8 @@ void pic_copy(RealPt dst, Bit16u x, Bit16u y, Bit16u d1, Bit16u d2,
 
 			do {
 				for (i = w; i != 0; i--) {
-					if ((al = mem_readb(s++)))
-						mem_writeb(d, al);
+					if ((al = *s++))
+						d[0] = al;
 					d++;
 				}
 				d += diff;
@@ -107,8 +108,11 @@ void pic_copy(RealPt dst, Bit16u x, Bit16u y, Bit16u d1, Bit16u d2,
 			diff = 320 - w;
 
 			do {
-				for (i = w; i > 0; i--)
-					mem_writeb(d++, mem_readb(s++));
+				for (i = w; i > 0; i--) {
+					d[0] = s[0];
+					d++;
+					s++;
+				}
 				d += diff;
 				s += diff;
 			} while (--h > 0);
@@ -120,8 +124,11 @@ void pic_copy(RealPt dst, Bit16u x, Bit16u y, Bit16u d1, Bit16u d2,
 			diff = 320 - w;
 
 			do {
-				for (i = w; i; i--)
-					mem_writeb(d++,	mem_readb(s++));
+				for (i = w; i; i--) {
+					d[0] = s[0];
+					d++;
+					s++;
+				}
 				d += diff;
 			} while (--h > 0);
 
