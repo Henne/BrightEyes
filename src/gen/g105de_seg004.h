@@ -1,1 +1,1 @@
-void decomp_pp20(RealPt, Bit8u*, Bit32s);
+void decomp_pp20(unsigned char*, unsigned char*, signed long);

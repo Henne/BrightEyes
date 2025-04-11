@@ -12,10 +12,14 @@
  *   - further detection based on code by Georg Hoermann
  */
 
-#if !defined(__BORLANDC__)
-#include <stdlib.h>	// free()
-#endif
+#include <stdio.h> // fprintf, NULL
 
+// 4 Byte in Little Endian Order
+static inline unsigned int readd(const unsigned char* p) {
+	return (p[0] | p[1] << 8 | p[2] << 16 | p[3] << 24);
+}
+
+// 3 Byte in Big Endian Order
 static inline unsigned int val(const unsigned char *p) {
 	return (p[0]<<16 | p[1] << 8 | p[2]);
 }
@@ -27,10 +31,10 @@ static unsigned long depackedlen(const unsigned char *p, unsigned long plen) {
 	if (p[0] == 'P' && p[1] == 'P' && p[2] == '2' && p[3] == '0')
 		return val(p+plen-4);
 
-	if (host_readd((Bit8u*)p) == plen)
+	if (readd(p) == plen)
 		return val(p+plen-4);
 
-	if (host_readd((Bit8u*)p) + 8 == plen)
+	if (readd(p) + 8 == plen)
 		return val(p+plen-4);
 
 	return 0; /* not a powerpacker file */
@@ -67,7 +71,6 @@ int ppDecrunch(uint8 *src, uint8 *dest, uint8 *offset_lens,
   uint32 bit_buffer = 0, x, todo, offbits, offset, written=0;
 
   if (src == NULL || dest == NULL || offset_lens == NULL) return 0;
-  if (src == MemBase || dest == MemBase) return 0;
 
   /* set up input and output pointers */
   buf_src = src + src_len;
@@ -110,28 +113,22 @@ int ppDecrunch(uint8 *src, uint8 *dest, uint8 *offset_lens,
   /* return (src == buf_src) ? 1 : 0; */
 }
 
-void decomp_pp20(RealPt dst, Bit8u *src, Bit32s plen)
+void decomp_pp20(unsigned char *dst, unsigned char *src, signed long plen)
 {
-	size_t unplen;
+	unsigned long unplen;
 
 	if (plen < 4)
-		D1_ERR("PP20: Length argument is below 4\n");
+		fprintf(stderr, "PP20: Length argument is below 4\n");
 
 	unplen = depackedlen(src, plen);
 
 	if (unplen == 0) {
-		D1_ERR("PP20: No PP20 file\n");
+		fprintf(stderr, "PP20: No PP20 file\n");
 	}
 #if defined(__BORLANDC__)
-	ppDecrunch(&src[8],  Real2Host(dst), &src[4], plen - 12, unplen, src[plen -1]);
+//	ppDecrunch(&src[8],  dst, &src[4], plen - 12, unplen, src[plen -1]);
 #else
-	// decompress into imediate buffer, since pointer dst can be emulated hardware
-	Bit8u* p_imm = (Bit8u*)calloc(unplen, 1);
-	Bit8u* p = p_imm;
-	PhysPt d_imm = Real2Phys(dst);
-	ppDecrunch(&src[8],  p_imm, &src[4], plen - 12, unplen, src[plen -1]);
-	for (size_t i = 0; i < unplen; i++) mem_writeb(d_imm++, *p++);
-	free(p_imm);
+	ppDecrunch(&src[8],  dst, &src[4], plen - 12, unplen, src[plen -1]);
 #endif
 
 	return;
