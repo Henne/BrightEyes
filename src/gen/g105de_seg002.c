@@ -7169,12 +7169,11 @@ int main_gen(int argc, char **argv)
 	if ((argc > 3) && (argv[3][0] == '0')) {
 		g_midi_disabled = 1;
 		sound_off = 1;
-	};
+	}
 
 #if 0
 	print_addr();
 #endif
-
 	g_in_intro = 1;
 
 	if (sound_off == 0)
