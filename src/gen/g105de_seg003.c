@@ -15,6 +15,10 @@ static inline
 unsigned short _rotl(unsigned short op, unsigned short count) {
 	return (op << count) | (op >> (16 - count));
 }
+#else
+#undef __cplusplus
+#undef __rotl__
+#undef __abs__
 #endif
 
 /**
@@ -32,7 +36,7 @@ unsigned short random_interval_gen(unsigned short lo, unsigned short hi)
 /* Borlandified and nearly identical */
 int random_gen(const int val)
 {
-	register signed short retval;
+	signed short retval;
 
 	if (val == 0) {
 		return 0;
@@ -41,14 +45,12 @@ int random_gen(const int val)
 	retval = g_random_gen_seed ^ g_random_gen_seed2;
 	retval = _rotl(retval, 2);
 	retval = (retval + g_random_gen_seed2) ^ g_random_gen_seed;
-	g_random_gen_seed = retval = _rotl(retval, 3);
+	retval = _rotl(retval, 3);
+	g_random_gen_seed = retval;
 
 	/* update rand_seed */
 
-	retval = (signed long)abs(retval) % val;
-#if defined(__BORLANDC__)
-	asm { db 0x90 }
-#endif
+	retval = ((signed long)abs(retval)) % val;
 
 	return ++retval;
 }
