@@ -195,8 +195,11 @@ void copy_to_screen(RealPt src, RealPt dst, Bit16s w, Bit16s h, Bit16s mode)
 		//exit(0);
 	} else {
 		for (; h; h--) {
-			for (i = 0; i < w; i++)
-				mem_writeb(Real2Phys(dst++), mem_readb(Real2Phys(src++)));
+			for (i = 0; i < w; i++) {
+				dst[0] = src[0];
+				dst++;
+				src++;
+			}
 			dst += v1;
 			src += v2;
 		}

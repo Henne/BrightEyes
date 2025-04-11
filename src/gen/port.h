@@ -21,7 +21,6 @@ typedef Bit8u* PhysPt;
 
 typedef Bit8u huge * HugePt;
 
-#define Real2Phys(p) (p)
 #define Real2Host(p) ((Bit8u*)(p))
 
 #define F_PADA(p, o) (*((HugePt*)p) += o)
