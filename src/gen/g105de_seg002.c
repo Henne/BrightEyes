@@ -5,6 +5,7 @@
 #include <ctype.h>
 
 #if defined(__BORLANDC__)
+#include <IO.H>		// lseek, _read, _close, _creat, open, write
 #include <DOS.H>
 #include <BIOS.H>	// bioskey, int86x()
 #include <CONIO.H>	// clrsrc()
