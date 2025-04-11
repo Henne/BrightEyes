@@ -14,6 +14,16 @@
 #include <fcntl.h>  // open(), creat()
 #endif
 
+#if !defined(__BORLANDC__)
+// DUMMY for BCC CLib func
+static inline void clrscr(void) { }
+static inline void randomize(void) { }
+static inline signed short bc_flushall(void) { return 0; }
+#else
+// <STDIO.H>
+#define bc_flushall flushall
+#endif
+
 #include "hero.h"
 
 #include "g105de_seg000.h"

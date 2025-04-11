@@ -3,15 +3,9 @@
 #if !defined(__BORLANDC__)
 RealPt bc_F_PADD(RealPt, Bit32s);
 Bit16s bc__read(Bit16u, Bit8u*, Bit16u);
-static inline signed short bioskey(signed short) { return 0; };
-static inline void clrscr() { };
 Bit16s bc__close(Bit16u);
 Bit16s bc__create(RealPt, Bit16u);
-Bit16s bc_flushall();
 Bit16s bc_write(Bit16s, RealPt, Bit16u);
-
-/* this will set an unused variable, so we put a dummy here */
-static inline void randomize() { }
 
 #else
 // __BORLANDC__
@@ -29,7 +23,6 @@ static inline void randomize() { }
 #define bc__read _read
 #define bc__close _close
 #define bc__creat _creat
-#define bc_flushall flushall
 #define bc_write write
 
 #endif
