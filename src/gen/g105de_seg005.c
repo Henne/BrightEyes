@@ -130,19 +130,32 @@ void pic_copy(RealPt dst, Bit16u x, Bit16u y, Bit16u d1, Bit16u d2,
 	}
 }
 
-void save_rect(Bit16u dst1, Bit16u dst2, RealPt src, Bit16s diffX, Bit16s diffY)
+#if defined(__BORLANDC__)
+void save_rect(unsigned short p_seg, unsigned short p_off, unsigned char *src, signed short diffX, signed short diffY)
+#else
+void save_rect(unsigned char *p_in, unsigned char *src, signed short diffX, signed short diffY)
+#endif
 {
 
 }
 
-void fill_rect(Bit16u p_seg, Bit16u p_off, Bit16s color, Bit16s width, Bit16s height)
+#if defined(__BORLANDC__)
+void fill_rect(unsigned short p_seg, unsigned short p_off, signed short color, signed short width, signed short height)
+#else
+void fill_rect(unsigned char *p_in, signed short color, signed short width, signed short height)
+#endif
 {
-	PhysPt p = Real2Phys(RealMake(p_seg, p_off));
-	Bit16s x;
+#if defined(__BORLANDC__)
+	unsigned char *p = MK_FP(p_seg, p_off);
+#else
+	unsigned char *p = p_in;
+#endif
+	signed short x;
 
 	for (; height; height--) {
 		for (x = 0; x < width; x++) {
-			mem_writeb(p++ , color);
+			p[0] = color;
+			p++;
 		}
 		p += 320 - width;
 	}

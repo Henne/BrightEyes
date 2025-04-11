@@ -3047,7 +3047,7 @@ void unused_func12(void)
 #endif
 
 /* Borlandified and identical */
-void call_fill_rect_gen(RealPt ptr, Bit16u x1, Bit16u y1, Bit16u x2, Bit16u y2, Bit16u color)
+void call_fill_rect_gen(unsigned char *ptr, Bit16u x1, Bit16u y1, Bit16u x2, Bit16u y2, Bit16u color)
 {
 	Bit16s width;
 	Bit16s height;
@@ -3059,7 +3059,7 @@ void call_fill_rect_gen(RealPt ptr, Bit16u x1, Bit16u y1, Bit16u x2, Bit16u y2, 
 #if defined(__BORLANDC__)
 	fill_rect(FP_SEG(ptr), FP_OFF(ptr), color, width, height);
 #else
-	fill_rect(RealSeg(ptr), RealOff(ptr), color, width, height);
+	fill_rect(ptr, color, width, height);
 #endif
 }
 
