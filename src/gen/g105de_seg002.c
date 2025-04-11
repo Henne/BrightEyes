@@ -33,7 +33,12 @@ static inline signed short bc_flushall(void) { return 0; }
 #include "g105de_seg003.h"
 #include "g105de_seg004.h"
 #include "g105de_seg005.h"
+
+#if defined(__BORLANDC__)
+#include "AIL.H"
+#else
 #include "g105de_seg006.h"
+#endif
 
 #include "port.h"
 

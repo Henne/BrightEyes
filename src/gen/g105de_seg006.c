@@ -1,5 +1,7 @@
 #if !defined(__BORLANDC__)
 
+#include "g105de_seg006.h"
+
 void AIL_startup()
 {
 }
@@ -8,66 +10,66 @@ void AIL_shutdown(char *signoff_msg)
 {
 }
 
-Bit16s AIL_register_driver(RealPt driver_base_addr)
+signed short AIL_register_driver(void *driver_base_addr)
 {
 	return 0;
 }
 
-RealPt AIL_describe_driver(Bit16s driver)
+drvr_desc* AIL_describe_driver(signed short driver)
 {
 	return 0L;
 }
 
-Bit16u AIL_detect_device(Bit16s driver, Bit16u IO_addr, Bit16u IRQ, Bit16u DMA, Bit16u DRQ)
+unsigned short AIL_detect_device(signed short driver, unsigned short IO_addr, unsigned short IRQ, unsigned short DMA, unsigned short DRQ)
 {
 	return 0;
 }
 
-void AIL_init_driver(Bit16s driver, Bit16u IO_addr, Bit16u IRQ, Bit16u DMA, Bit16u DRQ)
+void AIL_init_driver(signed short driver, unsigned short IO_addr, unsigned short IRQ, unsigned short DMA, unsigned short DRQ)
 {
 }
 
-Bit16u AIL_state_table_size(Bit16s driver)
-{
-	return 0;
-}
-
-Bit16s AIL_register_sequence(Bit16s driver, RealPt FORM_XMID, Bit16u sequence_num, RealPt state_table, RealPt controller_table)
+unsigned short AIL_state_table_size(signed short driver)
 {
 	return 0;
 }
 
-void AIL_release_sequence_handle(Bit16s driver, Bit16s sequence)
-{
-}
-
-Bit16u AIL_default_timbre_cache_size(Bit16s driver)
+signed short AIL_register_sequence(signed short driver, void *FORM_XMID, unsigned short sequence_num, void *state_table, void *controller_table)
 {
 	return 0;
 }
 
-void AIL_define_timbre_cache(Bit16s driver, RealPt cache_addr, Bit16u cache_size)
+void AIL_release_sequence_handle(signed short driver, signed short sequence)
 {
 }
 
-Bit16u AIL_timbre_request(Bit16s driver, Bit16s sequence)
+unsigned short AIL_default_timbre_cache_size(signed short driver)
 {
 	return 0;
 }
 
-void AIL_install_timbre(Bit16s driver, Bit16s bank, Bit16s patch, void *src_addr)
+void AIL_define_timbre_cache(signed short driver, void *cache_addr, unsigned short cache_size)
 {
 }
 
-void AIL_start_sequence(Bit16s driver, Bit16s sequence)
+unsigned short AIL_timbre_request(signed short driver, signed short sequence)
+{
+	return 0;
+}
+
+void AIL_install_timbre(signed short driver, signed short bank, signed short patch, void *src_addr)
 {
 }
 
-void AIL_stop_sequence(Bit16s driver, Bit16s sequence)
+void AIL_start_sequence(signed short driver, signed short sequence)
 {
 }
 
-Bit16u AIL_sequence_status(Bit16s driver, Bit16s sequence)
+void AIL_stop_sequence(signed short driver, signed short sequence)
+{
+}
+
+unsigned short AIL_sequence_status(signed short driver, signed short sequence)
 {
 	return 0;
 }
