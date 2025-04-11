@@ -31,6 +31,12 @@
 #include <CONIO.H>	// clrsrc()
 #endif
 
+#if !defined(__BORLANDC__)
+// DUMMY for BCC CLib func
+static inline signed short bioskey(signed short cmd) { return 0; }
+static inline void clrscr(void) { }
+#endif
+
 #include "port.h"
 
 #include "g105de_seg001.h"
@@ -143,17 +149,17 @@ static signed short CD_set_drive_no(void)
 }
 
 /* Borlandified and identical */
+#if defined(__BORLANDC__)
 static void CD_driver_request(struct driver_request far* req)
 {
-#if defined(__BORLANDC__)
 	asm {
 		mov ax, 0x1510
 		mov cx, [CD_DRIVE_NO]
 		les bx, req
 		int 0x2f
 	}
-#endif
 }
+#endif
 
 /* Borlandified and far from identical, but unused (8 diffs)*/
 /* TODO: check adresses of seg013 */
@@ -357,9 +363,10 @@ void CD_unused3()
 #endif
 
 /* Borlandified and nearly identical */
-void seg001_03a8()
+void seg001_03a8(void)
 {
-	Bit16u v;
+#if defined(__BORLANDC__)
+	unsigned short v;
 
 	if (CD_INIT_SUCCESSFUL == 0) {
 
@@ -367,11 +374,8 @@ void seg001_03a8()
 		host_writew(Real2Host(RealMake(reloc_gen + CDSEG, 0x48)), reloc_gen + CDSEG);
 		host_writew(Real2Host(RealMake(reloc_gen + CDSEG, 0x46)), 0x420);
 		host_writeb(Real2Host(RealMake(reloc_gen + CDSEG, 0x420)), 10);
-#if !defined(__BORLANDC__)
-		CD_driver_request(RealMake(reloc_gen + CDSEG, 0x38));
-#else
+		//CD_driver_request(RealMake(reloc_gen + CDSEG, 0x38));
 		CD_driver_request((struct driver_request*)RealMake(reloc_gen + CDSEG, 0x38));
-#endif
 
 		v = host_readb(Real2Host(RealMake(reloc_gen + CDSEG, 0x421)));
 		for (; host_readb(Real2Host(RealMake(reloc_gen + CDSEG, 0x422))) >= v; v++) {
@@ -387,13 +391,11 @@ void seg001_03a8()
 			host_writeb(Real2Host(RealMake(reloc_gen + CDSEG, v * 8 + 0x108)), 11);
 			host_writeb(Real2Host(RealMake(reloc_gen + CDSEG, v * 8 + 0x109)), (unsigned char)v);
 
-#if !defined(__BORLANDC__)
-			CD_driver_request(RealMake(reloc_gen + CDSEG, 0x38));
-#else
+			//CD_driver_request(RealMake(reloc_gen + CDSEG, 0x38));
 			CD_driver_request((struct driver_request*)RealMake(reloc_gen + CDSEG, 0x38));
-#endif
 		}
 	}
+#endif
 }
 
 /* Borlandified and identical */
