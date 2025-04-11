@@ -209,40 +209,40 @@ static void seg001_00bb(signed short track_no)
 
 	if (CD_INIT_SUCCESSFUL != 0) {
 
-		host_writew(Real2Host(RealMake(reloc_gen + CDSEG, 0x8f)), 0);
+		host_writew(Real2Host(MK_FP(reloc_gen + CDSEG, 0x8f)), 0);
 
-		host_writed(Real2Host(RealMake(reloc_gen + CDSEG, 0x9a)),
-			(host_readb(Real2Host(RealMake(reloc_gen + CDSEG, 0x10b + track_no * 8))) << 8) +
-			(host_readb(Real2Host(RealMake(reloc_gen + CDSEG, 0x10a + track_no * 8)))) +
-			(host_readb(Real2Host(RealMake(reloc_gen + CDSEG, 0x10c + track_no * 8)))) << 16);
+		host_writed(Real2Host(MK_FP(reloc_gen + CDSEG, 0x9a)),
+			(host_readb(Real2Host(MK_FP(reloc_gen + CDSEG, 0x10b + track_no * 8))) << 8) +
+			(host_readb(Real2Host(MK_FP(reloc_gen + CDSEG, 0x10a + track_no * 8)))) +
+			(host_readb(Real2Host(MK_FP(reloc_gen + CDSEG, 0x10c + track_no * 8)))) << 16);
 
 		/* calculate track_start */
-		track_start = (60L * host_readb(Real2Host(RealMake(reloc_gen + CDSEG, 0x10b + track_no * 8)))
-			+ host_readb(Real2Host(RealMake(reloc_gen + CDSEG, 0x10a + track_no * 8)))) * 75L
-			+ host_readb(Real2Host(RealMake(reloc_gen + CDSEG, 0x10c + track_no * 8)));
+		track_start = (60L * host_readb(Real2Host(MK_FP(reloc_gen + CDSEG, 0x10b + track_no * 8)))
+			+ host_readb(Real2Host(MK_FP(reloc_gen + CDSEG, 0x10a + track_no * 8)))) * 75L
+			+ host_readb(Real2Host(MK_FP(reloc_gen + CDSEG, 0x10c + track_no * 8)));
 
 		/* calculate track_end */
-		if (host_readb(Real2Host(RealMake(reloc_gen + CDSEG, 0x422))) == track_no) {
+		if (host_readb(Real2Host(MK_FP(reloc_gen + CDSEG, 0x422))) == track_no) {
 
-			track_end = (60L * host_readb(Real2Host(RealMake(reloc_gen + CDSEG, 0x425))) +
-					   host_readb(Real2Host(RealMake(reloc_gen + CDSEG, 0x424)))) * 75L +
-					   host_readb(Real2Host(RealMake(reloc_gen + CDSEG, 0x423)));
+			track_end = (60L * host_readb(Real2Host(MK_FP(reloc_gen + CDSEG, 0x425))) +
+					   host_readb(Real2Host(MK_FP(reloc_gen + CDSEG, 0x424)))) * 75L +
+					   host_readb(Real2Host(MK_FP(reloc_gen + CDSEG, 0x423)));
 		} else {
-			track_end = (60L * host_readb(Real2Host(RealMake(reloc_gen + CDSEG, 0x114 + track_no * 8))) +
-					   host_readb(Real2Host(RealMake(reloc_gen + CDSEG, 0x113 + track_no * 8)))) * 75L +
-					   host_readb(Real2Host(RealMake(reloc_gen + CDSEG, 0x112 + track_no * 8)));
+			track_end = (60L * host_readb(Real2Host(MK_FP(reloc_gen + CDSEG, 0x114 + track_no * 8))) +
+					   host_readb(Real2Host(MK_FP(reloc_gen + CDSEG, 0x113 + track_no * 8)))) * 75L +
+					   host_readb(Real2Host(MK_FP(reloc_gen + CDSEG, 0x112 + track_no * 8)));
 
 		}
 
 		track_start -= track_end;
 		// track_start is now track length
-		host_writed(Real2Host(RealMake(reloc_gen + CDSEG, 0x9e)), track_start - 150);
+		host_writed(Real2Host(MK_FP(reloc_gen + CDSEG, 0x9e)), track_start - 150);
 
 #if !defined(__BORLANDC__)
-		CD_driver_request(RealMake(reloc_gen + CDSEG, 0x8c));
+		CD_driver_request(MK_FP(reloc_gen + CDSEG, 0x8c));
 		CD_AUDIO_POS = ((track_start - 150) * 0x1234e) / 0x4b000;
 #else
-		CD_driver_request((struct driver_request*)RealMake(reloc_gen + CDSEG, 0x8c));
+		CD_driver_request((struct driver_request*)MK_FP(reloc_gen + CDSEG, 0x8c));
 
 		asm { db 0x66, 0x66, 0x0f, 0x1f, 0x84, 0x00, 0x00 }
 		asm { db 0x66, 0x66, 0x0f, 0x1f, 0x84, 0x00, 0x00 }
@@ -317,7 +317,7 @@ void seg001_033b()
 	if (CD_INIT_SUCCESSFUL != 0) {
 
 		seg001_0312();
-		host_writew(Real2Host(RealMake(reloc_gen + CDSEG, 0x1f)), 0);
+		host_writew(Real2Host(MK_FP(reloc_gen + CDSEG, 0x1f)), 0);
 
 		//CD_driver_request(RealMake(reloc_gen + CDSEG, 0x1c));
 		asm { db 0x0f, 0x1f, 0x00; } // BCC Sync-Point
@@ -335,7 +335,7 @@ void CD_unused2()
 {
 	if (CD_INIT_SUCCESSFUL != 0) {
 
-		host_writew(Real2Host(RealMake(reloc_gen + CDSEG, 0xab)), 0);
+		host_writew(Real2Host(MK_FP(reloc_gen + CDSEG, 0xab)), 0);
 		//CD_driver_request(RealMake(reloc_gen + CDSEG, 0xa8));
 
 		asm { db 0x0f, 0x1f, 0x00; } // BCC Sync-Point
@@ -350,7 +350,7 @@ void CD_unused3()
 {
 	if (CD_INIT_SUCCESSFUL != 0) {
 
-		host_writew(Real2Host(RealMake(reloc_gen + CDSEG, 0xc7)), 0);
+		host_writew(Real2Host(MK_FP(reloc_gen + CDSEG, 0xc7)), 0);
 		//CD_driver_request(RealMake(reloc_gen + CDSEG, 0xc4));
 
 		asm { db 0x0f, 0x1f, 0x00; } // BCC Sync-Point
@@ -370,29 +370,29 @@ void seg001_03a8(void)
 
 	if (CD_INIT_SUCCESSFUL == 0) {
 
-		host_writew(Real2Host(RealMake(reloc_gen + CDSEG, 0x3b)), 0);
-		host_writew(Real2Host(RealMake(reloc_gen + CDSEG, 0x48)), reloc_gen + CDSEG);
-		host_writew(Real2Host(RealMake(reloc_gen + CDSEG, 0x46)), 0x420);
-		host_writeb(Real2Host(RealMake(reloc_gen + CDSEG, 0x420)), 10);
+		host_writew(Real2Host(MK_FP(reloc_gen + CDSEG, 0x3b)), 0);
+		host_writew(Real2Host(MK_FP(reloc_gen + CDSEG, 0x48)), reloc_gen + CDSEG);
+		host_writew(Real2Host(MK_FP(reloc_gen + CDSEG, 0x46)), 0x420);
+		host_writeb(Real2Host(MK_FP(reloc_gen + CDSEG, 0x420)), 10);
 		//CD_driver_request(RealMake(reloc_gen + CDSEG, 0x38));
-		CD_driver_request((struct driver_request*)RealMake(reloc_gen + CDSEG, 0x38));
+		CD_driver_request((struct driver_request*)MK_FP(reloc_gen + CDSEG, 0x38));
 
-		v = host_readb(Real2Host(RealMake(reloc_gen + CDSEG, 0x421)));
-		for (; host_readb(Real2Host(RealMake(reloc_gen + CDSEG, 0x422))) >= v; v++) {
-			host_writew(Real2Host(RealMake(reloc_gen + CDSEG, 0x3b)), 0);
-			host_writew(Real2Host(RealMake(reloc_gen + CDSEG, 0x48)), reloc_gen + CDSEG);
+		v = host_readb(Real2Host(MK_FP(reloc_gen + CDSEG, 0x421)));
+		for (; host_readb(Real2Host(MK_FP(reloc_gen + CDSEG, 0x422))) >= v; v++) {
+			host_writew(Real2Host(MK_FP(reloc_gen + CDSEG, 0x3b)), 0);
+			host_writew(Real2Host(MK_FP(reloc_gen + CDSEG, 0x48)), reloc_gen + CDSEG);
 #if !defined(__BORLANDC__)
-			host_writew(Real2Host(RealMake(reloc_gen + CDSEG, 0x46)), 0x108 + v * 8);
+			host_writew(Real2Host(MK_FP(reloc_gen + CDSEG, 0x46)), 0x108 + v * 8);
 #else
 			asm { db 0x66, 0x90; } // BCC Sync-Point
 			asm { db 0x66, 0x90; }
 			asm { nop; }
 #endif
-			host_writeb(Real2Host(RealMake(reloc_gen + CDSEG, v * 8 + 0x108)), 11);
-			host_writeb(Real2Host(RealMake(reloc_gen + CDSEG, v * 8 + 0x109)), (unsigned char)v);
+			host_writeb(Real2Host(MK_FP(reloc_gen + CDSEG, v * 8 + 0x108)), 11);
+			host_writeb(Real2Host(MK_FP(reloc_gen + CDSEG, v * 8 + 0x109)), (unsigned char)v);
 
 			//CD_driver_request(RealMake(reloc_gen + CDSEG, 0x38));
-			CD_driver_request((struct driver_request*)RealMake(reloc_gen + CDSEG, 0x38));
+			CD_driver_request((struct driver_request*)MK_FP(reloc_gen + CDSEG, 0x38));
 		}
 	}
 #endif

@@ -7260,7 +7260,7 @@ int main_gen(int argc, char **argv)
 void alloc_buffers(void)
 {
 #if defined(__BORLANDC__)
-	g_gfx_ptr = g_vga_memstart = (unsigned char*)RealMake(0xa000, 0x0);
+	g_gfx_ptr = g_vga_memstart = (unsigned char*)MK_FP(0xa000, 0x0);
 #else
 	g_gfx_ptr = g_vga_memstart = (unsigned char*)NULL;
 #endif

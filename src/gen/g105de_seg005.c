@@ -37,7 +37,7 @@ void set_palette(signed char *ptr, unsigned char first_color, unsigned short col
 
 void draw_h_line(unsigned short offset, unsigned short count, unsigned short color)
 {
-	//unsigned char *ptr = RealMake(0xa000, offset);
+	//unsigned char *ptr = MK_FP(0xa000, offset);
 	unsigned char *ptr = NULL;
 	unsigned short i;
 
@@ -47,7 +47,7 @@ void draw_h_line(unsigned short offset, unsigned short count, unsigned short col
 
 void draw_h_spaced_dots(unsigned short offset, unsigned short width, signed short color, unsigned short space)
 {
-	//unsigned char *ptr = RealMake(0xa000, offset);
+	//unsigned char *ptr = MK_FP(0xa000, offset);
 	unsigned char *ptr = NULL;
 	unsigned short i;
 

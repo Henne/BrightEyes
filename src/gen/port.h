@@ -21,7 +21,6 @@ typedef Bit8u* PhysPt;
 
 typedef Bit8u huge * HugePt;
 
-#define RealMake(seg, off) ((RealPt)(MK_FP(seg, off)))
 #define Real2Phys(p) (p)
 #define Real2Host(p) ((Bit8u*)(p))
 
