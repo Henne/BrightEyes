@@ -35,22 +35,24 @@ void set_palette(signed char *ptr, unsigned char first_color, unsigned short col
 		set_color(ptr + 3 * i, first_color + i);
 }
 
-void draw_h_line(Bit16u offset, Bit16s count, Bit16u color)
+void draw_h_line(unsigned short offset, unsigned short count, unsigned short color)
 {
-	PhysPt ptr = Real2Phys(RealMake(0xa000, offset));
-	Bit16u i;
+	//unsigned char *ptr = RealMake(0xa000, offset);
+	unsigned char *ptr = NULL;
+	unsigned short i;
 
 	for (i = 0; i < count; i++)
-		mem_writeb(ptr + i, color);
+		ptr[i] = color;
 }
 
-void draw_h_spaced_dots(Bit16u offset, Bit16u width, Bit16s color, Bit16u space)
+void draw_h_spaced_dots(unsigned short offset, unsigned short width, signed short color, unsigned short space)
 {
-	PhysPt ptr = Real2Phys(RealMake(0xa000, offset));
-	Bit16u i;
+	//unsigned char *ptr = RealMake(0xa000, offset);
+	unsigned char *ptr = NULL;
+	unsigned short i;
 
 	for (i = 0; i < width; i++) {
-		mem_writeb(ptr, color);
+		ptr[0] = color;
 		ptr += space;
 	}
 }
@@ -72,8 +74,8 @@ void pic_copy(RealPt dst, Bit16u x, Bit16u y, Bit16u d1, Bit16u d2,
 			diff = 320 - w;
 			do {
 				for (i = w; i; i--) {
-					if (mem_readb_inline(d) < 0xc8)
-						mem_writeb_inline(d, mem_readb_inline(s));
+					if (mem_readb(d) < 0xc8)
+						mem_writeb(d, mem_readb(s));
 					s++;
 					d++;
 				}
@@ -89,8 +91,8 @@ void pic_copy(RealPt dst, Bit16u x, Bit16u y, Bit16u d1, Bit16u d2,
 
 			do {
 				for (i = w; i != 0; i--) {
-					if ((al = mem_readb_inline(s++)))
-						mem_writeb_inline(d, al);
+					if ((al = mem_readb(s++)))
+						mem_writeb(d, al);
 					d++;
 				}
 				d += diff;
@@ -106,8 +108,7 @@ void pic_copy(RealPt dst, Bit16u x, Bit16u y, Bit16u d1, Bit16u d2,
 
 			do {
 				for (i = w; i > 0; i--)
-					mem_writeb_inline(d++,
-						mem_readb_inline(s++));
+					mem_writeb(d++, mem_readb(s++));
 				d += diff;
 				s += diff;
 			} while (--h > 0);
@@ -120,8 +121,7 @@ void pic_copy(RealPt dst, Bit16u x, Bit16u y, Bit16u d1, Bit16u d2,
 
 			do {
 				for (i = w; i; i--)
-					mem_writeb_inline(d++,
-						mem_readb_inline(s++));
+					mem_writeb(d++,	mem_readb(s++));
 				d += diff;
 			} while (--h > 0);
 
