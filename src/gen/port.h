@@ -12,12 +12,6 @@ typedef Bit8u* RealPt;
 
 #if defined(__BORLANDC__)
 
-#ifdef __cplusplus
-#define INTCAST void interrupt (*)(...)
-#else
-#define INTCAST void interrupt (*)()
-#endif
-
 #define host_readw(p) (*(Bit16u*)(p))
 #define host_readd(p) (*(Bit32u*)(p))
 
@@ -31,8 +25,6 @@ typedef Bit8u* RealPt;
 #define host_writeds(p, d)       (*(Bit32s*)(p) = d)
 
 #else
-
-#define INTCAST RealPt
 
 #define __abs__(v) abs(v)
 

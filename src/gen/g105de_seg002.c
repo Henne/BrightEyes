@@ -1900,7 +1900,7 @@ void mouse_do_enable(Bit16u val, RealPt ptr)
 	g_irq78_bak = ((void interrupt far (*)(void))_dos_getvect(0x78));
 
 	/* set new IRQ 0x78 */
-	_dos_setvect(0x78, (INTCAST)ptr);
+	_dos_setvect(0x78, (void interrupt far (*)(void))ptr);
 
 	/* set the new mouse event handler */
 	do_mouse_action((Bit8u*)&p1, (Bit8u*)&p2, (Bit8u*)&p3, (Bit8u*)&p4, (Bit8u*)&p5);
@@ -1916,7 +1916,7 @@ void mouse_do_disable(void)
 	Bit16u v1, v2, v3, v4, v5;
 
 	/* restore the old int 0x78 handler */
-	_dos_setvect(0x78, (INTCAST)g_irq78_bak);
+	_dos_setvect(0x78, (void interrupt far (*)(void))g_irq78_bak);
 
 	/* uninstall mouse event handler */
 	v1 = 0x0c;
@@ -7158,7 +7158,7 @@ static void set_timer_isr(void)
 	/* save adress of the old ISR */
 	g_timer_isr_bak = ((void interrupt far (*)(void))_dos_getvect(0x1c));
 	/* set a the new one */
-	_dos_setvect(0x1c, (INTCAST)timer_isr);
+	_dos_setvect(0x1c, timer_isr);
 #endif
 }
 
@@ -7166,7 +7166,7 @@ static void set_timer_isr(void)
 void restore_timer_isr(void)
 {
 #if defined(__BORLANDC__)
-	_dos_setvect(0x1c, (INTCAST)g_timer_isr_bak);
+	_dos_setvect(0x1c, (void interrupt far (*)(void))g_timer_isr_bak);
 #endif
 }
 
