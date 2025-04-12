@@ -43,7 +43,7 @@ struct nvf_desc {
 	void restore_mouse_bg(void);
 	void split_textbuffer(char**, char*, unsigned long);
 	signed long process_nvf(struct nvf_desc*);
-	Bit16s open_datfile(Bit16u);
+	signed short open_datfile(unsigned short);
 	Bit32s get_archive_offset(const char*, Bit8u*);
 	Bit16s read_datfile(Bit16u, Bit8u*, Bit16u);
 	Bit32s get_filelength(Bit16s);

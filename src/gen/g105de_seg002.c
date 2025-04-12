@@ -3,6 +3,7 @@
 #include <stdlib.h> // randomize()
 #include <stdarg.h>
 #include <ctype.h>
+#include <fcntl.h>
 
 #if defined(__BORLANDC__)
 #include <IO.H>		// lseek, _read, _close, _creat, open, write
@@ -12,7 +13,6 @@
 #include <TIME.H>	// by randomize()
 #else
 #include <unistd.h> // lseek(), close(), read(), write()
-#include <fcntl.h>  // open(), creat()
 #endif
 
 /* portable Memory Access */
@@ -2725,14 +2725,19 @@ signed long process_nvf(struct nvf_desc *nvf)
 }
 
 /* Borlandified and identical */
-Bit16s open_datfile(Bit16u index)
+signed short open_datfile(unsigned short index)
 {
-	Bit8u buf[800];
-	Bit16s handle;
+	unsigned char buf[800];
+	signed short handle;
 
 	bc_flushall();
 
-	while ((handle = open(g_str_dsagen_dat, 0x8001)) == -1)
+	/* 0x8001 = O_BINARY | O_RDONLY */
+#if defined(__BORLANDC__)
+	while ((handle = open(g_str_dsagen_dat, O_BINARY | O_RDONLY)) == -1)
+#else
+	while ((handle = open(g_str_dsagen_dat, O_RDONLY)) == -1)
+#endif
 	{
 		sprintf(g_gen_ptr2,
 			(const char*)g_str_file_missing,
