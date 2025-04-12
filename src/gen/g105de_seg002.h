@@ -11,10 +11,8 @@ struct mouse_action {
 #if defined(__BORLANDC__)
 /* BCC/DOS-specifig pointer arithmetics */
 #define HUGEPTR huge
-#define bc_F_PADD(p, v) ((unsigned char huge*)(p) + (signed long)(v))
 #else
 #define HUGEPTR
-static inline unsigned char* bc_F_PADD(unsigned char *p, signed long v) { return p + v; }
 #endif
 
 struct nvf_desc {

@@ -2618,7 +2618,7 @@ signed long process_nvf(struct nvf_desc *nvf)
 
 	va = (nvf_type = *(unsigned char*)(nvf->src)) & 0x80;
 	nvf_type &= 0x7f;
-	pics = host_readws(bc_F_PADD(nvf->src, 1L));
+	pics = host_readws(nvf->src + 1L);
 
 	if (nvf->no < 0)
 		nvf->no = 0;
@@ -2629,44 +2629,45 @@ signed long process_nvf(struct nvf_desc *nvf)
 	switch (nvf_type) {
 
 	case 0x00:
-		width = host_readws(bc_F_PADD(nvf->src, 3L));
-		height = host_readws(bc_F_PADD(nvf->src, 5L));
-		memcpy(bc_F_PADD(nvf->dst, -8L), bc_F_PADD(bc_F_PADD(nvf->src, p_size * nvf->no), 7), p_size = height * width);
+		width = host_readws(nvf->src + 3L);
+		height = host_readws(nvf->src + 5L);
+		p_size = height * width;
+		memcpy(nvf->dst - 8L, nvf->src + p_size * nvf->no + 7L, p_size);
 		break;
 	case 0x01:
 		offs = pics * 4 + 3L;
 		for (i = 0; i < nvf->no; i++) {
-			width = host_readws(bc_F_PADD(bc_F_PADD(nvf->src, i * 4), 3L));
-			height = host_readws(bc_F_PADD(bc_F_PADD(nvf->src, i * 4), 5L));
+			width = host_readws(nvf->src + i * 4 + 3L);
+			height = host_readws(nvf->src + i * 4 + 5L);
 			offs += width * height;
 		}
 
-		width = host_readws(bc_F_PADD(bc_F_PADD(nvf->src, nvf->no * 4), 3L));
-		height = host_readws(bc_F_PADD(bc_F_PADD(nvf->src, nvf->no * 4), 5L));
+		width = host_readws(nvf->src + nvf->no * 4 + 3L);
+		height = host_readws(nvf->src + nvf->no * 4 + 5L);
 		p_size = width * height;
-		memcpy(bc_F_PADD(nvf->dst, -8L), bc_F_PADD(nvf->src, offs), p_size);
+		memcpy(nvf->dst - 8L, nvf->src + offs, p_size);
 		break;
 
 	case 0x02:
-		width = host_readws(bc_F_PADD(nvf->src, 3L));
-		height = host_readws(bc_F_PADD(nvf->src, 5L));
-		offs = ((Bit32s)(pics * 4)) + 7L;
+		width = host_readws(nvf->src + 3L);
+		height = host_readws(nvf->src + 5L);
+		offs = ((unsigned long)(pics * 4)) + 7L;
 		for (i = 0; i < nvf->no; i++) {
 			/* BCC adds here in offs = offs + value */
-			offs += (host_readd(bc_F_PADD(bc_F_PADD(nvf->src, i * 4), 7L)));
+			offs += host_readd(nvf->src + i * 4 + 7L);
 		}
 
-		p_size = host_readd(bc_F_PADD(bc_F_PADD(nvf->src, nvf->no * 4), 7L));
-		memcpy(bc_F_PADD(nvf->dst, -8L), bc_F_PADD(nvf->src, offs), p_size);
+		p_size = host_readd(nvf->src + nvf->no * 4 + 7L);
+		memcpy(nvf->dst - 8L, nvf->src + offs, p_size);
 		break;
 
 	case 0x03:
 		offs = pics * 8 + 3L;
 		for (i = 0; i < (Bit16s)nvf->no; i++) {
 			/* First two lines are not neccessary */
-			width = host_readws(bc_F_PADD(bc_F_PADD(nvf->src, i * 8), 3L));
+			width = host_readws(nvf->src + i * 8 + 3L);
 #if !defined(__BORLANDC__)
-			height = host_readws(bc_F_PADD(bc_F_PADD(nvf->src, i * 8), 5L));
+			height = host_readws(nvf->src + i * 8 + 5L);
 #else
 			// Sync-Point
 			asm {db 0x0f, 0x1f, 0x00};
@@ -2683,15 +2684,15 @@ signed long process_nvf(struct nvf_desc *nvf)
 			asm {db 0x66, 0x90}
 #endif
 			/* BCC adds here in offs = offs + value */
-			offs += host_readd(bc_F_PADD(bc_F_PADD(nvf->src, i * 8), 7L));
+			offs += host_readd(nvf->src + i * 8 + 7L);
 		}
 
 		// Selected picture nvf->no, and copy it to nvf->dst
-		width = host_readws(bc_F_PADD(bc_F_PADD(nvf->src, nvf->no * 8), 3L));
-		height = host_readws(bc_F_PADD(bc_F_PADD(nvf->src, nvf->no * 8), 5L));
-		p_size = host_readd(bc_F_PADD(bc_F_PADD(nvf->src, i * 8), 7L));
+		width = host_readws(nvf->src + nvf->no * 8 + 3L);
+		height = host_readws(nvf->src + nvf->no * 8 + 5L);
+		p_size = host_readd(nvf->src + i * 8 + 7L);
 
-		memcpy(bc_F_PADD(nvf->dst, -8L), bc_F_PADD(nvf->src, offs), p_size);
+		memcpy(nvf->dst - 8L, nvf->src + offs, p_size);
 		break;
 	}
 
@@ -2700,8 +2701,7 @@ signed long process_nvf(struct nvf_desc *nvf)
 		if (va != 0) {
 			/* get size from unpacked picture */
 			retval = host_readds(nvf->dst) - 8L;
-			src = bc_F_PADD(nvf->dst, -8L);
-			/* BCC: uses F_PADA here */
+			src = nvf->dst - 8L;
 			src += (retval - 4L);
 			retval = host_readd(src);
 			retval = swap_u32(retval) >> 8;
@@ -2710,11 +2710,11 @@ signed long process_nvf(struct nvf_desc *nvf)
 			retval = width * height;
 		}
 
-		decomp_pp20(nvf->dst, bc_F_PADD(nvf->dst, -8L), p_size);
+		decomp_pp20(nvf->dst, nvf->dst - 8L, p_size);
 
 	} else {
 		/* No decompression, just copy */
-		memmove(nvf->dst, bc_F_PADD(nvf->dst, -8L), (Bit16s)p_size);
+		memmove(nvf->dst, nvf->dst - 8L, (Bit16s)p_size);
 		retval = p_size;
 	}
 
