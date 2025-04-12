@@ -59,7 +59,7 @@ int random_gen(const int val)
  * \brief   checks if val is in a word array
  */
 /* Borlandified and identical */
-int is_in_word_array(const int val, signed short *p)
+int is_in_word_array(const int val, const signed short *p)
 {
 	while (*p >= 0) {
 		if (*p++ == val) {
