@@ -1547,7 +1547,7 @@ unsigned short load_seq(Bit16s sequence_num)
 		if ((g_snd_sequence = AIL_register_sequence(g_snd_driver_handle,
 			g_form_xmid, sequence_num, g_state_table, (void*)NULL)) != -1) {
 
-			while ((answer = AIL_timbre_request(g_snd_driver_handle, g_snd_sequence)) != -1)
+			while ((answer = AIL_timbre_request(g_snd_driver_handle, g_snd_sequence)) != 0xffff)
 			{
 				bank = answer >> 8;
 
