@@ -12,7 +12,7 @@ struct mouse_action {
 #define bc_F_PADD(p, v) ((unsigned char huge*)(p) + (signed long)(v))
 #else
 #define HUGEPTR
-static inline bc_F_PADD(unsigned char *p, signed long v) { return p + v; }
+static inline unsigned char* bc_F_PADD(unsigned char *p, signed long v) { return p + v; }
 #endif
 
 struct nvf_desc {
