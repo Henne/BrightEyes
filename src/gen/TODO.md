@@ -8,16 +8,16 @@ This file tries to give a brief overview over the current state of the project.
 * correct compiler flags + minimal set of Sync-Points
 * have a DOS-Build (not working)
 * compile with GCC/Clang
+* linking with GCC/Clang
 
 ## What's WIP
 * restructuring of uninitialized data (DS:BSS)
-* linking with GCC/Clang
 
 ## Overview
 
 | Filenames    | Content       | BCC/DOS-World      | GCC/Clang-World    | State  |
 | ------------ | ------------- | ------------------ | ------------------ | ------ |
-| seg000.h     | BCC Clib      | should be removed  | should be removed  | WIP    |
+| seg000.h     | BCC Clib      | should be removed  | should be removed  | DONE   |
 | seg001.[ch]  | AudioCD code  | should be rebuild  | should be removed  | WIP    |
 | seg002.[ch]  | Main          | should be rebuld   | should be rebuild  | WIP    |
 | seg003.[ch]  | Random        | should be rebuild  | should be rebuild  | WIP    |

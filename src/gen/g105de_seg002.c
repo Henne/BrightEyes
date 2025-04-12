@@ -39,6 +39,9 @@ static inline void clrscr(void) { }
 static inline void randomize(void) { }
 static inline signed short bc_flushall(void) { return 0; }
 #define __abs__(v) abs(v)
+#define _creat creat
+#define _read read
+#define _close close
 #else
 // <STDIO.H>
 #define bc_flushall flushall
@@ -46,7 +49,6 @@ static inline signed short bc_flushall(void) { return 0; }
 
 #include "hero.h"
 
-#include "g105de_seg000.h"
 #include "g105de_seg001.h"
 #include "g105de_seg002.h"
 #include "g105de_seg003.h"
@@ -1470,12 +1472,8 @@ void read_soundcfg(void)
 	g_midi_disabled = 1;
 
 	if ((handle = open(g_str_sound_cfg, 0x8001)) != -1) {
-		bc__read(handle, (Bit8u*)&port, 2);
-#if !defined(__BORLANDC__)
-		close(handle);
-#else
+		_read(handle, (Bit8u*)&port, 2);
 		_close(handle);
-#endif
 
 #if !defined(__BORLANDC__)
 		/* Small hack: enable MIDI instead of CD-Audio */
@@ -1541,12 +1539,11 @@ unsigned char *load_snd_driver(const char *fname)
 		in_ptr &= 0xfffffff0;
 
 		/* The arguments of read are working, but not identical */
-		bc__read(handle, (norm_ptr = normalize_ptr((unsigned char*)in_ptr)), size);
-		_close(handle);
+		_read(handle, (norm_ptr = normalize_ptr((unsigned char*)in_ptr)), size);
 #else
-		bc__read(handle, (norm_ptr = g_snd_driver), size);
-		close(handle);
+		_read(handle, (norm_ptr = g_snd_driver), size);
 #endif
+		_close(handle);
 		return norm_ptr;
 	} else {
 		return (RealPt)0L;
@@ -2538,7 +2535,6 @@ void save_chr(void)
 	filename[8] = 0;
 	strcat(filename, g_str_chr);
 
-	/* remark: bc_open() and bc__creat() have filename on the stack of the host */
 	if (((handle = open(filename, 0x8001)) == -1) || gui_bool(get_text(261))) {
 
 #if !defined(__BORLANDC__)
@@ -2556,7 +2552,7 @@ void save_chr(void)
 			strcpy(path, g_str_temp_dir);
 			strcat(path, filename);
 
-			if ((handle = bc__creat(path, 0)) != -1) {
+			if ((handle = _creat(path, 0)) != -1) {
 				write(handle, &g_hero, sizeof(g_hero));
 				close(handle);
 			}
@@ -2747,7 +2743,7 @@ Bit16s open_datfile(Bit16u index)
 		g_useless_variable = 0;
 	}
 
-	bc__read(handle, buf, 800);
+	_read(handle, buf, 800);
 
 	if ((Bit32s)(g_gendat_offset = get_archive_offset((char*)g_fnames_g105de[index], buf)) != -1) {
 		lseek(handle, g_gendat_offset, SEEK_SET);
@@ -2788,7 +2784,7 @@ Bit16s read_datfile(Bit16u handle, Bit8u *buf, Bit16u len)
 	if (len > (unsigned long)g_flen_left)
 		len = (unsigned short)g_flen_left;
 
-	len = bc__read(handle, buf, len);
+	len = _read(handle, buf, len);
 
 
 	g_flen_left -= len;
