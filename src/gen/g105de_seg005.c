@@ -9,14 +9,11 @@
 
 #include <stdlib.h>
 
-#include "port.h"
-
-
-void set_video_mode(Bit16u mode)
+void set_video_mode(unsigned short mode)
 {
 }
 
-void set_video_page(Bit16u mode)
+void set_video_page(unsigned short mode)
 {
 }
 
@@ -57,9 +54,9 @@ void draw_h_spaced_dots(unsigned short offset, unsigned short width, signed shor
 	}
 }
 
-void pic_copy(unsigned char *dst, Bit16u x, Bit16u y, Bit16u d1, Bit16u d2,
-		Bit16u v1, Bit16u v2, Bit16u d3, Bit16u d4,
-		Bit16u w, Bit16u h, unsigned char *src, Bit16u mode)
+void pic_copy(unsigned char *dst, unsigned short x, unsigned short y, unsigned short d1, unsigned short d2,
+		unsigned short v1, unsigned short v2, unsigned short d3, unsigned short d4,
+		unsigned short w, unsigned short h, unsigned char *src, unsigned short mode)
 {
 	unsigned char *d;
 	unsigned char *s;
@@ -70,7 +67,7 @@ void pic_copy(unsigned char *dst, Bit16u x, Bit16u y, Bit16u d1, Bit16u d2,
 	switch (mode) {
 		/* this is not used in GEN */
 		case 1: {
-			Bit16u diff, i;
+			unsigned short diff, i;
 
 			diff = 320 - w;
 			do {
@@ -85,8 +82,8 @@ void pic_copy(unsigned char *dst, Bit16u x, Bit16u y, Bit16u d1, Bit16u d2,
 			break;
 		}
 		case 2: {
-			Bit16u diff, i;
-			Bit8u al;
+			unsigned short diff, i;
+			unsigned char al;
 
 			diff = 320 - w;
 
@@ -102,7 +99,7 @@ void pic_copy(unsigned char *dst, Bit16u x, Bit16u y, Bit16u d1, Bit16u d2,
 			break;
 		}
 		case 3: {
-			Bit16u diff, i;
+			unsigned short diff, i;
 
 			s += v2 * 320 + v1;
 			diff = 320 - w;
@@ -119,7 +116,7 @@ void pic_copy(unsigned char *dst, Bit16u x, Bit16u y, Bit16u d1, Bit16u d2,
 			break;
 		}
 		default: {
-			Bit16u diff, i;
+			unsigned short diff, i;
 
 			diff = 320 - w;
 
@@ -173,12 +170,11 @@ unsigned short swap_u16(unsigned short val)
 	return (val << 8) | (val >> 8);
 }
 
-void copy_to_screen(RealPt src, RealPt dst, Bit16s w, Bit16s h, Bit16s mode)
+void copy_to_screen(unsigned char *src, unsigned char *dst, signed short w, signed short h, signed short mode)
 {
-
-	Bit16s v1;
-	Bit16s v2;
-	Bit16s i;
+	signed short v1;
+	signed short v2;
+	signed short i;
 
 	v1 = v2 = 320 - w;
 
@@ -206,7 +202,7 @@ void copy_to_screen(RealPt src, RealPt dst, Bit16s w, Bit16s h, Bit16s mode)
 	}
 }
 
-RealPt normalize_ptr(RealPt ptr)
+unsigned char* normalize_ptr(unsigned char *ptr)
 {
 	return ptr;
 }

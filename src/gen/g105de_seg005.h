@@ -1,19 +1,19 @@
-void set_video_mode(Bit16u mode);
-void set_video_page(Bit16u mode);
+void set_video_mode(unsigned short);
+void set_video_page(unsigned short);
 void save_display_stat(signed short*);
 void set_color(signed char*, unsigned char);
 void set_palette(signed char*, unsigned char, unsigned short);
-void draw_h_line(Bit16u, Bit16s, Bit16u);
-void draw_h_spaced_dots(Bit16u, Bit16u, Bit16s, Bit16u);
-void pic_copy(unsigned char*, Bit16u, Bit16u, Bit16u, Bit16u, Bit16u, Bit16u, Bit16u, Bit16u, Bit16u, Bit16u, unsigned char*, Bit16u);
+void draw_h_line(unsigned short, signed short, unsigned short);
+void draw_h_spaced_dots(unsigned short, unsigned short, signed short, unsigned short);
+void pic_copy(unsigned char*, unsigned short, unsigned short, unsigned short, unsigned short, unsigned short, unsigned short, unsigned short, unsigned short, unsigned short, unsigned short, unsigned char*, unsigned short);
 #if defined(__BORLANDC__)
-void save_rect(Bit16u, Bit16u, unsigned char*, signed short, signed short);
-void fill_rect(Bit16u, Bit16u, signed short, signed short, signed short);
+void save_rect(unsigned short, unsigned short, unsigned char*, signed short, signed short);
+void fill_rect(unsigned short, unsigned short, signed short, signed short, signed short);
 #else
 void save_rect(unsigned char*, unsigned char*, signed short, signed short);
 void fill_rect(unsigned char*, signed short, signed short, signed short);
 #endif
-unsigned short swap_u16(unsigned short val);
-void copy_to_screen(RealPt, RealPt, Bit16s, Bit16s, Bit16s);
+unsigned short swap_u16(unsigned short);
+void copy_to_screen(unsigned char*, unsigned char*, signed short, signed short, signed short);
 
-RealPt normalize_ptr(RealPt);
+unsigned char* normalize_ptr(unsigned char*);
