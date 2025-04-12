@@ -1379,8 +1379,8 @@ static signed short g_in_key_ext;
 static unsigned char g_array_1[64];
 static unsigned char g_array_2[64];
 
-static signed short *g_mouse_last_cursor;
-static signed short *g_mouse_current_cursor;
+static unsigned short *g_mouse_last_cursor;
+static unsigned short *g_mouse_current_cursor;
 static char dummy14[0x40];
 
 static char g_mouse_backbuffer[256];
@@ -1615,7 +1615,7 @@ signed short *get_timbre(signed short bank, signed short patch)
 	lseek(g_handle_timbre, g_gendat_offset, SEEK_SET);
 
 	do {
-		read_datfile(g_handle_timbre, &g_current_timbre_patch, 6);
+		read_datfile(g_handle_timbre, (unsigned char*)&g_current_timbre_patch, 6);
 
 		if (g_current_timbre_bank == -1)
 			return 0;
@@ -1625,11 +1625,11 @@ signed short *get_timbre(signed short bank, signed short patch)
 //	} while ((g_current_timbre_bank != bank) && (g_current_timbre_patch != patch));
 
 	lseek(g_handle_timbre, g_gendat_offset + g_current_timbre_offset, SEEK_SET);
-	read_datfile(g_handle_timbre, &g_current_timbre_length, 2);
+	read_datfile(g_handle_timbre, (unsigned char*)&g_current_timbre_length, 2);
 
 	timbre_ptr = (signed short*)gen_alloc(g_current_timbre_length);
 
-	read_datfile(g_handle_timbre, &timbre_ptr[1], (timbre_ptr[0] = g_current_timbre_length) - 2);
+	read_datfile(g_handle_timbre, (unsigned char*)&timbre_ptr[1], (timbre_ptr[0] = g_current_timbre_length) - 2);
 
 	return timbre_ptr;
 }
