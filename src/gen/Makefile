@@ -1,5 +1,5 @@
-CC='clang'
-CFLAGS=''
+CC=clang
+CFLAGS=-O0 -g -fno-asm
 
 gen: g105de_seg001.o g105de_seg002.o g105de_seg003.o g105de_seg004.o g105de_seg005.o g105de_seg006.o
 	$(CC) $(CFLAGS) -o g105de_$(CC) g105de_seg001.o g105de_seg002.o g105de_seg003.o g105de_seg004.o g105de_seg005.o g105de_seg006.o
