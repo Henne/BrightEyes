@@ -6,14 +6,18 @@ struct mouse_action {
 	signed short action;
 };
 
-struct nvf_desc {
-#if !defined(__BORLANDC__)
-	RealPt dst;
-	RealPt src;
+#if defined(__BORLANDC__)
+/* BCC/DOS-specifig pointer arithmetics */
+#define HUGEPTR huge
+#define bc_F_PADD(p, v) ((unsigned char huge*)(p) + (signed long)(v))
 #else
-	RealPt far dst;
-	RealPt far src;
+#define HUGEPTR
+static inline bc_F_PADD(unsigned char *p, signed long v) { return p + v; }
 #endif
+
+struct nvf_desc {
+	unsigned char HUGEPTR *dst;
+	unsigned char HUGEPTR *src;
 	signed short no;
 	signed char type;
 	signed short *width;
@@ -36,7 +40,7 @@ struct nvf_desc {
 	void save_mouse_bg(void);
 	void restore_mouse_bg(void);
 	void split_textbuffer(char**, char*, unsigned long);
-	Bit32s process_nvf(struct nvf_desc*);
+	signed long process_nvf(struct nvf_desc*);
 	Bit16s open_datfile(Bit16u);
 	Bit32s get_archive_offset(const char*, Bit8u*);
 	Bit16s read_datfile(Bit16u, Bit8u*, Bit16u);

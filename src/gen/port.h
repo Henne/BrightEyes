@@ -18,15 +18,7 @@ typedef Bit8u* RealPt;
 #define INTCAST void interrupt (*)()
 #endif
 
-typedef Bit8u huge * HugePt;
-
 #define Real2Host(p) ((Bit8u*)(p))
-
-#define F_PADA(p, o) (*((HugePt*)p) += o)
-#define F_PADD(p, o) ((HugePt)(p) + o)
-#define F_PSUB(p1, p2) ((HugePt)(p1) - (HugePt)(p2))
-
-#define H_PADD(p, o) F_PADD(p, o)
 
 #define reloc_gen (0)
 
@@ -43,8 +35,6 @@ typedef Bit8u huge * HugePt;
 #define host_writeds(p, d)       (*(Bit32s*)(p) = d)
 
 #else
-
-typedef Bit8u* HugePt;
 
 #define INTCAST RealPt
 

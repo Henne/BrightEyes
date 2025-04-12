@@ -2575,17 +2575,17 @@ void read_common_files(void)
 }
 
 /* Borlandified and far from identical, but works */
-Bit32s process_nvf(struct nvf_desc *nvf)
+signed long process_nvf(struct nvf_desc *nvf)
 {
 	signed long offs;
 	signed short pics;
 	signed short height;
 	signed short va;
-	Bit32s p_size;
-	Bit32s retval;
+	signed long p_size;
+	signed long retval;
 	signed char nvf_type;
 
-	RealPt src;
+	unsigned char *src;
 
 	signed short i;     // si
 	signed short width; // di
@@ -2598,7 +2598,7 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 
 	va = (nvf_type = *(unsigned char*)(nvf->src)) & 0x80;
 	nvf_type &= 0x7f;
-	pics = host_readws(Real2Host(bc_F_PADD(nvf->src, 1L)));
+	pics = host_readws(bc_F_PADD(nvf->src, 1L));
 
 	if (nvf->no < 0)
 		nvf->no = 0;
@@ -2609,34 +2609,34 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 	switch (nvf_type) {
 
 	case 0x00:
-		width = host_readws(Real2Host(bc_F_PADD(nvf->src, 3L)));
-		height = host_readws(Real2Host(bc_F_PADD(nvf->src, 5L)));
+		width = host_readws(bc_F_PADD(nvf->src, 3L));
+		height = host_readws(bc_F_PADD(nvf->src, 5L));
 		memcpy(bc_F_PADD(nvf->dst, -8L), bc_F_PADD(bc_F_PADD(nvf->src, p_size * nvf->no), 7), p_size = height * width);
 		break;
 	case 0x01:
 		offs = pics * 4 + 3L;
 		for (i = 0; i < nvf->no; i++) {
-			width = host_readws(Real2Host(bc_F_PADD(bc_F_PADD(nvf->src, i * 4), 3L)));
-			height = host_readws(Real2Host(bc_F_PADD(bc_F_PADD(nvf->src, i * 4), 5L)));
+			width = host_readws(bc_F_PADD(bc_F_PADD(nvf->src, i * 4), 3L));
+			height = host_readws(bc_F_PADD(bc_F_PADD(nvf->src, i * 4), 5L));
 			offs += width * height;
 		}
 
-		width = host_readws(Real2Host(bc_F_PADD(bc_F_PADD(nvf->src, nvf->no * 4), 3L)));
-		height = host_readws(Real2Host(bc_F_PADD(bc_F_PADD(nvf->src, nvf->no * 4), 5L)));
+		width = host_readws(bc_F_PADD(bc_F_PADD(nvf->src, nvf->no * 4), 3L));
+		height = host_readws(bc_F_PADD(bc_F_PADD(nvf->src, nvf->no * 4), 5L));
 		p_size = width * height;
 		memcpy(bc_F_PADD(nvf->dst, -8L), bc_F_PADD(nvf->src, offs), p_size);
 		break;
 
 	case 0x02:
-		width = host_readws(Real2Host(bc_F_PADD(nvf->src, 3L)));
-		height = host_readws(Real2Host(bc_F_PADD(nvf->src, 5L)));
+		width = host_readws(bc_F_PADD(nvf->src, 3L));
+		height = host_readws(bc_F_PADD(nvf->src, 5L));
 		offs = ((Bit32s)(pics * 4)) + 7L;
 		for (i = 0; i < nvf->no; i++) {
 			/* BCC adds here in offs = offs + value */
-			offs += (host_readd(Real2Host(bc_F_PADD(bc_F_PADD(nvf->src, i * 4), 7L))));
+			offs += (host_readd(bc_F_PADD(bc_F_PADD(nvf->src, i * 4), 7L)));
 		}
 
-		p_size = host_readd(Real2Host(bc_F_PADD(bc_F_PADD(nvf->src, nvf->no * 4), 7L)));
+		p_size = host_readd(bc_F_PADD(bc_F_PADD(nvf->src, nvf->no * 4), 7L));
 		memcpy(bc_F_PADD(nvf->dst, -8L), bc_F_PADD(nvf->src, offs), p_size);
 		break;
 
@@ -2644,9 +2644,9 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 		offs = pics * 8 + 3L;
 		for (i = 0; i < (Bit16s)nvf->no; i++) {
 			/* First two lines are not neccessary */
-			width = host_readws(Real2Host(bc_F_PADD(bc_F_PADD(nvf->src, i * 8), 3L)));
+			width = host_readws(bc_F_PADD(bc_F_PADD(nvf->src, i * 8), 3L));
 #if !defined(__BORLANDC__)
-			height = host_readws(Real2Host(bc_F_PADD(bc_F_PADD(nvf->src, i * 8), 5L)));
+			height = host_readws(bc_F_PADD(bc_F_PADD(nvf->src, i * 8), 5L));
 #else
 			// Sync-Point
 			asm {db 0x0f, 0x1f, 0x00};
@@ -2663,13 +2663,14 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 			asm {db 0x66, 0x90}
 #endif
 			/* BCC adds here in offs = offs + value */
-			offs += host_readd(Real2Host(bc_F_PADD(bc_F_PADD(nvf->src, i * 8), 7L)));
+			offs += host_readd(bc_F_PADD(bc_F_PADD(nvf->src, i * 8), 7L));
 		}
 
 		// Selected picture nvf->no, and copy it to nvf->dst
-		width = host_readws(Real2Host(bc_F_PADD(bc_F_PADD(nvf->src, nvf->no * 8), 3L)));
-		height = host_readws(Real2Host(bc_F_PADD(bc_F_PADD(nvf->src, nvf->no * 8), 5L)));
-		p_size = host_readd(Real2Host(bc_F_PADD(bc_F_PADD(nvf->src, i * 8), 7L)));
+		width = host_readws(bc_F_PADD(bc_F_PADD(nvf->src, nvf->no * 8), 3L));
+		height = host_readws(bc_F_PADD(bc_F_PADD(nvf->src, nvf->no * 8), 5L));
+		p_size = host_readd(bc_F_PADD(bc_F_PADD(nvf->src, i * 8), 7L));
+
 		memcpy(bc_F_PADD(nvf->dst, -8L), bc_F_PADD(nvf->src, offs), p_size);
 		break;
 	}
@@ -2678,22 +2679,22 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 		/* PP20 decompression */
 		if (va != 0) {
 			/* get size from unpacked picture */
-			retval = host_readds(Real2Host(nvf->dst)) - 8L;
+			retval = host_readds(nvf->dst) - 8L;
 			src = bc_F_PADD(nvf->dst, -8L);
 			/* BCC: uses F_PADA here */
 			src += (retval - 4L);
-			retval = host_readd(Real2Host(src));
+			retval = host_readd(src);
 			retval = swap_u32(retval) >> 8;
 
 		} else {
 			retval = width * height;
 		}
 
-		decomp_pp20(nvf->dst, Real2Host(bc_F_PADD(nvf->dst, -8L)), p_size);
+		decomp_pp20(nvf->dst, bc_F_PADD(nvf->dst, -8L), p_size);
 
 	} else {
 		/* No decompression, just copy */
-		memmove(Real2Host(nvf->dst), Real2Host(bc_F_PADD(nvf->dst, -8L)), (Bit16s)p_size);
+		memmove(nvf->dst, bc_F_PADD(nvf->dst, -8L), (Bit16s)p_size);
 		retval = p_size;
 	}
 
@@ -3026,22 +3027,22 @@ void do_draw_pic(Bit16u mode)
 /* Borlandified and identical */
 void unused_func12(void)
 {
-	Bit16s diffX;
-	Bit16s diffY;
-	Bit16s dx2;
-	Bit16s dy2;
-	RealPt src;
-	RealPt dst;
+	signed short diffX;
+	signed short diffY;
+	signed short dx2;
+	signed short dy2;
+	unsigned char *src;
+	unsigned char HUGEPTR *dst;
 
-	Bit16s x1 = g_dst_x1; // si
-	Bit16s y1 = g_dst_y1; // di
+	signed short x1 = g_dst_x1; // si
+	signed short y1 = g_dst_y1; // di
 
 	dx2 = g_dst_x2;
 	dy2 = g_dst_y2;
 	src = g_dst_src;
 	dst = g_dst_dst;
 
-	bc_F_PADA(dst, (Bit32s)(y1 * 320 + x1));
+	dst += y1 * 320 + x1;
 
 	diffX = dx2 - x1 + 1;
 	//diffY = dy2 - y1 + 1;
