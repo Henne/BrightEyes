@@ -2177,7 +2177,7 @@ Bit16u get_mouse_action(Bit16s x, Bit16s y, struct mouse_action *act)
 void unused_func1(signed char *in_ptr, signed short x, signed short y, signed char c1, signed char c2)
 {
 	signed char val;
-	signed char *ptr;
+	unsigned char *ptr;
 	signed short i;
 	signed short j;
 
@@ -2261,7 +2261,7 @@ void draw_mouse_cursor(void)
 {
 	signed char Y;
 	signed char X;
-	signed char *vgaptr;
+	unsigned char *vgaptr;
 	signed short *mouse_cursor;
 	signed short rangeY;
 	signed short diffX;
@@ -2748,34 +2748,33 @@ signed short open_datfile(unsigned short index)
 		g_useless_variable = 0;
 	}
 
+	/* read offset table from file */
 	_read(handle, buf, 800);
 
-	if ((Bit32s)(g_gendat_offset = get_archive_offset((char*)g_fnames_g105de[index], buf)) != -1) {
+	if ((signed long)(g_gendat_offset = get_archive_offset((char*)g_fnames_g105de[index], buf)) != -1) {
 		lseek(handle, g_gendat_offset, SEEK_SET);
 		return handle;
 	} else {
 		return 0;
 	}
-
 }
 
 /* Borlandified and nearly identical */
 /* static */
-Bit32s get_archive_offset(const char *name, Bit8u *table)
+signed long get_archive_offset(const char *name, unsigned char *table)
 {
-	Bit16s i;
+	signed short i;
 
 	for (i = 0; i < 50; i++) {
 
 		/* check the filename */
 		if (!strncmp((char*)name, (char*)table + i * 16, 12)) {
 
-			/* calculate offset and length */
+			/* calculate length */
 			g_flen_left = g_flen =
 				host_readd(table + (i + 1) * 16 + 0x0c) - host_readd(table + i * 16 + 0x0c);
 
-			/* save length in 2 variables */
-
+			/* return offset */
 			return host_readd(table + i * 16 + 0x0c);
 		}
 	}
@@ -2784,13 +2783,12 @@ Bit32s get_archive_offset(const char *name, Bit8u *table)
 }
 
 /* Borlandified and identical */
-Bit16s read_datfile(Bit16u handle, Bit8u *buf, Bit16u len)
+signed short read_datfile(signed short handle, unsigned char *buf, unsigned short len)
 {
 	if (len > (unsigned long)g_flen_left)
 		len = (unsigned short)g_flen_left;
 
 	len = _read(handle, buf, len);
-
 
 	g_flen_left -= len;
 
@@ -3631,13 +3629,13 @@ Bit16s enter_string(char *dst, Bit16s x, Bit16s y, Bit16s num, Bit16s zero)
 /* Borlandified and identical */
 void draw_popup_line(Bit16s line, Bit16s type)
 {
-	RealPt dst;
-	RealPt src;
-	Bit16s i;
-	Bit16s popup_right;
+	unsigned char *dst;
+	unsigned char *src;
+	signed short i;
+	signed short popup_right;
 
-	register Bit16s popup_left;   // si
-	register Bit16s popup_middle; // di
+	register signed short popup_left;   // si
+	register signed short popup_middle; // di
 
 	/* This is a bit bogus */
 	dst = g_vga_memstart;

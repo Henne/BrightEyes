@@ -45,7 +45,7 @@ struct nvf_desc {
 	signed long process_nvf(struct nvf_desc*);
 	signed short open_datfile(unsigned short);
 	Bit32s get_archive_offset(const char*, Bit8u*);
-	Bit16s read_datfile(Bit16u, Bit8u*, Bit16u);
+	signed short read_datfile(signed short, unsigned char*, unsigned short);
 	Bit32s get_filelength(Bit16s);
 	void wait_for_keypress(void);
 	void error_msg(const char*);
