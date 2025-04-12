@@ -18,10 +18,6 @@ typedef Bit8u* RealPt;
 #define INTCAST void interrupt (*)()
 #endif
 
-#define Real2Host(p) ((Bit8u*)(p))
-
-#define reloc_gen (0)
-
 #define host_readw(p) (*(Bit16u*)(p))
 #define host_readd(p) (*(Bit32u*)(p))
 
