@@ -11,6 +11,7 @@
 #include <BIOS.H>	// bioskey, int86x()
 #include <CONIO.H>	// clrsrc()
 #include <TIME.H>	// by randomize()
+#include <ALLOC.H>	// farcalloc()
 #else
 #include <unistd.h> // lseek(), close(), read(), write()
 #endif
