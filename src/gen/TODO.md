@@ -15,19 +15,19 @@ This file tries to give a brief overview over the current state of the project.
 
 ## Overview
 
-| Filenames    | Content       | BCC/DOS-World      | GCC/Clang-World    | State  |
-| ------------ | ------------- | ------------------ | ------------------ | ------ |
-| seg000.h     | BCC Clib      | DONE               | DONE               | DONE   |
-| seg001.[ch]  | AudioCD code  | should be rebuild  | should be removed  | WIP    |
-| seg002.[ch]  | Main          | should be rebuild  | should be rebuild  | WIP    |
-| seg003.[ch]  | Random        | DONE               | DONE               | DONE   |
-| seg004.[ch]  | PowerPack2.0  | -                  | DONE               | DONE   |
-| seg004.asm/h | PowerPack2.0  | should be rebuild  | not portable       | WIP    |
-| seg005.[ch]  | Rasterlib     | -                  | should be rebuild  | WIP    |
-| seg005.asm/h | Rasterlib     | should be rebuild  | not portable       | WIP    |
-| seg006.[ch]  | AIL (Sound)   | -                  | should be replaced | WIP    |
-| seg006.asm/h | AIL (Sound)   | should be rebuild  | not portable       | WIP    |
-| seg007.asm/h | AudioCD data  | should be rebuild  | not portable       | WIP    |
-| hero.h       | hero struct   | should be complete | should be complete | WIP    |
-| port.h       | DOSBox compat | should be removed  | should be removed  | WIP    |
-| symbols.h    | DS adresses   | obsolete           | obsolete           | DONE   |
+| Filenames    | Content       | BCC/DOS-World      | GCC/Clang-World    | State      |
+| ------------ | ------------- | ------------------ | ------------------ | ---------- |
+| seg000.h     | BCC Clib      | **DONE**           | **DONE**           | **DONE**   |
+| seg001.[ch]  | AudioCD code  | should be rebuild  | should be removed  | WIP        |
+| seg002.[ch]  | Main          | should be rebuild  | should be rebuild  | WIP        |
+| seg003.[ch]  | Random        | **DONE**           | **DONE**           | **DONE**   |
+| seg004.[ch]  | PowerPack2.0  | -                  | **DONE**           | **DONE**   |
+| seg004.asm/h | PowerPack2.0  | should be rebuild  | not portable       | WIP        |
+| seg005.[ch]  | Rasterlib     | -                  | should be rebuild  | WIP        |
+| seg005.asm/h | Rasterlib     | should be rebuild  | not portable       | WIP        |
+| seg006.[ch]  | AIL (Sound)   | -                  | should be replaced | WIP        |
+| seg006.asm/h | AIL (Sound)   | should be rebuild  | not portable       | WIP        |
+| seg007.asm/h | AudioCD data  | should be rebuild  | not portable       | WIP        |
+| hero.h       | hero struct   | should be complete | should be complete | WIP        |
+| port.h       | DOSBox compat | should be removed  | should be removed  | WIP        |
+| symbols.h    | DS adresses   | obsolete           | obsolete           | **DONE**   |
