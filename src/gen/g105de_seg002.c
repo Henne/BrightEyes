@@ -1432,6 +1432,9 @@ static inline char* itoa(int value, char* string, int radix)
 	sprintf(string, "%d", value);
 	return string;
 }
+
+// Quit Signal from SDL
+extern int g_lets_quit;
 #endif
 
 #if defined(__BORLANDC__)
@@ -4300,6 +4303,9 @@ void do_gen(void)
 				g_screen_var = 1;
 			}
 		}
+#if !defined(__BORLANDC__)
+		if (g_lets_quit == 1) di = 1;
+#endif
 	}
 }
 

@@ -7,12 +7,96 @@
  *      just a clean C-implementation.
 */
 
+#include <SDL2/SDL.h>
 #include <stdlib.h>
 
 extern unsigned char *g_vga_memstart;
 
+static const int RATIO = 1;
+static const int WIDTH = RATIO * 320;
+static const int HEIGHT = RATIO * 200;
+
+static Uint32 palette[256] = {0};
+
+static SDL_Window *window = NULL;
+static SDL_Renderer *renderer = NULL;
+static SDL_Texture *texture = NULL;
+static Uint32 *pixels = NULL;
+
+int g_lets_quit = 0;
+
 void set_video_mode(unsigned short mode)
 {
+	if (mode == 0x13) {
+		if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+			fprintf(stderr, "Could not initialize SDL: %s\n", SDL_GetError());
+			exit(-1);
+		}
+
+		window = SDL_CreateWindow(
+			"BrightEyes",
+			SDL_WINDOWPOS_UNDEFINED,
+			SDL_WINDOWPOS_UNDEFINED,
+			WIDTH,
+			HEIGHT,
+			SDL_WINDOW_SHOWN
+		);
+
+		if (window == NULL) {
+			fprintf(stderr, "Could not create Window: %s\n", SDL_GetError());
+			SDL_Quit();
+			exit(-1);
+		}
+
+		renderer = SDL_CreateRenderer(
+			window,
+			-1,
+			SDL_RENDERER_ACCELERATED
+		);
+
+		texture = SDL_CreateTexture(
+			renderer,
+			SDL_PIXELFORMAT_ARGB8888,
+			SDL_TEXTUREACCESS_STREAMING,
+			//SDL_TEXTUREACCESS_STATIC,
+			WIDTH,
+			HEIGHT
+		);
+
+		pixels = calloc(WIDTH * HEIGHT * sizeof(Uint32), 1);
+	} else {
+		free(pixels);
+		pixels = NULL;
+		SDL_DestroyTexture(texture);
+		SDL_DestroyRenderer(renderer);
+		SDL_DestroyWindow(window);
+		SDL_Quit();
+	}
+}
+
+void update_sdl_window(void)
+{
+	SDL_Event event;
+	while (SDL_PollEvent(&event)) {
+		if (event.type == SDL_QUIT) {
+			g_lets_quit = 1;
+		}
+	}
+
+	int pos = 0;
+	for (int y = 0; y < HEIGHT; y++) {
+		pos = y * WIDTH;
+		for (int x = 0; x < WIDTH; x++) {
+			pixels[pos] = palette[g_vga_memstart[pos]];
+			pos++;
+		}
+	}
+
+	SDL_UpdateTexture(texture, NULL, pixels, WIDTH * sizeof(Uint32));
+	SDL_RenderClear(renderer);
+	SDL_RenderCopy(renderer, texture, NULL, NULL);
+	SDL_RenderPresent(renderer);
+	SDL_Delay(16);
 }
 
 void set_video_page(unsigned short mode)
@@ -23,45 +107,58 @@ void save_display_stat(signed short *p)
 {
 }
 
+static inline Uint32 get_ARGB(unsigned char *p) {
+	return (p[2] << 2) | (p[1] << 10) | (p[0] << 18);
+}
+
 void set_color(signed char *ptr, unsigned char color)
 {
+	palette[color] = get_ARGB((unsigned char*)ptr);
+
+	update_sdl_window();
 }
 
 void set_palette(signed char *ptr, unsigned char first_color, unsigned short colors)
 {
-	unsigned short i;
+	signed int i;
 	for (i = 0; i < colors; i++)
-		set_color(ptr + 3 * i, first_color + i);
+		palette[first_color + i] = get_ARGB((unsigned char*)ptr + 3 * i);
+
+	update_sdl_window();
 }
 
 void draw_h_line(unsigned short offset, unsigned short count, unsigned short color)
 {
 	//unsigned char *ptr = MK_FP(0xa000, offset);
-	unsigned char *ptr = g_vga_memstart;
+	unsigned char *ptr = g_vga_memstart + offset;
 	unsigned short i;
 
 	for (i = 0; i < count; i++)
 		ptr[i] = color;
+
+	update_sdl_window();
 }
 
 void draw_h_spaced_dots(unsigned short offset, unsigned short width, signed short color, unsigned short space)
 {
 	//unsigned char *ptr = MK_FP(0xa000, offset);
-	unsigned char *ptr = g_vga_memstart;
+	unsigned char *ptr = g_vga_memstart + offset;
 	unsigned short i;
 
 	for (i = 0; i < width; i++) {
 		ptr[0] = color;
 		ptr += space;
 	}
+
+	update_sdl_window();
 }
 
 void pic_copy(unsigned char *dst, unsigned short x, unsigned short y, unsigned short d1, unsigned short d2,
 		unsigned short v1, unsigned short v2, unsigned short d3, unsigned short d4,
 		unsigned short w, unsigned short h, unsigned char *src, unsigned short mode)
 {
-	unsigned char *d;
-	unsigned char *s;
+	unsigned char *d; // es:di
+	unsigned char *s; // ds:si
 
 	d = dst + y * 320 + x;
 	s = src;
@@ -69,7 +166,8 @@ void pic_copy(unsigned char *dst, unsigned short x, unsigned short y, unsigned s
 	switch (mode) {
 		/* this is not used in GEN */
 		case 1: {
-			unsigned short diff, i;
+			signed short diff; // bx
+			signed short i;	   // cx	
 
 			diff = 320 - w;
 			do {
@@ -118,7 +216,8 @@ void pic_copy(unsigned char *dst, unsigned short x, unsigned short y, unsigned s
 			break;
 		}
 		default: {
-			unsigned short diff, i;
+			signed short diff; // bx
+			signed short i;    // cx
 
 			diff = 320 - w;
 
@@ -134,6 +233,8 @@ void pic_copy(unsigned char *dst, unsigned short x, unsigned short y, unsigned s
 			break;
 		}
 	}
+
+	update_sdl_window();
 }
 
 #if defined(__BORLANDC__)
@@ -165,6 +266,8 @@ void fill_rect(unsigned char *p_in, signed short color, signed short width, sign
 		}
 		p += 320 - width;
 	}
+
+	update_sdl_window();
 }
 
 unsigned short swap_u16(unsigned short val)
@@ -202,6 +305,8 @@ void copy_to_screen(unsigned char *src, unsigned char *dst, signed short w, sign
 			src += v2;
 		}
 	}
+
+	update_sdl_window();
 }
 
 unsigned char* normalize_ptr(unsigned char *ptr)
