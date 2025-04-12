@@ -3724,7 +3724,7 @@ signed short infobox(const char *msg, signed short digits)
 	v4 = g_text_x_end;
 
 	di = 32 * g_menu_tiles + 32;
-	g_text_x = g_left_border = ((320 - di) / 2 + g_text_x_mod) + 5;
+	g_text_x = (g_left_border = ((320 - di) / 2 + g_text_x_mod)) + 5;
 	g_text_x_end = di - 10;
 	lines = str_splitter(msg);
 
@@ -3893,11 +3893,11 @@ signed short gui_radio(char *header, signed char options, ...)
 	bak2 = g_text_y;
 	bak3 = g_text_x_end;
 	r9 = 32 * g_menu_tiles + 32;
-	g_text_x = g_left_border = (((320 - r9) / 2) + g_text_x_mod) + 5;
+	g_text_x = (g_left_border = (((320 - r9) / 2) + g_text_x_mod)) + 5;
 	g_text_x_end = 32 * g_menu_tiles + 22;
 	lines_header = str_splitter((char*)header);
 	lines_sum = lines_header + options;
-	g_text_y = g_upper_border = ((200 - (lines_sum + 2) * 8) / 2) + 7;
+	g_text_y = (g_upper_border = ((200 - (lines_sum + 2) * 8) / 2)) + 7;
 	update_mouse_cursor();
 
 	/* save old background */
@@ -3942,7 +3942,7 @@ signed short gui_radio(char *header, signed char options, ...)
 
 	mouse_move_cursor(g_mouse_posx, g_mouse_posy);
 
-	g_mouse_posx = g_left_border + r9 - 16;
+	g_mouse_posx_max = g_left_border + r9 - 16;
 	g_mouse_posx_min = g_left_border;
 	g_mouse_posy_min = g_upper_border + 8 * (lines_header + 1);
 	g_mouse_posy_max = (g_upper_border + 8 * (lines_header + 1) + 8 * options) - 1;
