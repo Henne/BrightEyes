@@ -4403,7 +4403,7 @@ void new_values(void)
 {
 	/* Original-Bugfix:	there once was a char[11],
 				which could not hold a char[16] */
-	RealPt ds_ptr;
+	signed char *att_ptr;
 	Bit8s randval;
 	Bit8s unset_attribs;
 	Bit8s values[8];
@@ -4446,7 +4446,7 @@ void new_values(void)
 
 	g_screen_var = 0;
 
-	ds_ptr = &g_hero.attrib[0].normal;
+	att_ptr = &g_hero.attrib[0].normal;
 
 	for (j = 0; j < 7; j++) {
 		randval = (Bit8s)random_interval_gen(8, 13);
@@ -4454,7 +4454,7 @@ void new_values(void)
 
 		for (i = 0; i < 7; i++) {
 			// NORMAL
-			if (!host_readbs(Real2Host(ds_ptr) + 3 * i)) {
+			if (!att_ptr[ 3 * i]) {
                                 // not initialized attribute
 				values[unset_attribs] = (signed char)i;
 				g_type_names[unset_attribs] = get_text(32 + i);
@@ -4480,14 +4480,14 @@ void new_values(void)
 		di = values[di - 1];
 		/* write randval to the selected positive attribute */
 		//g_hero.attrib[di].normal = g_hero.attrib[di].current = randval;
-		ds_ptr[3 * di + 0] = ds_ptr[3 * di + 1] = randval;
+		att_ptr[3 * di + 0] = att_ptr[3 * di + 1] = randval;
 
 		update_mouse_cursor();
 		refresh_screen();
 		call_mouse();
 	}
 
-	ds_ptr = &g_hero.attrib[7].normal;
+	att_ptr = &g_hero.attrib[7].normal;
 
 	for (j = 0; j < 7; j++) {
 		randval = (Bit8s)random_interval_gen(2, 7);
@@ -4495,7 +4495,7 @@ void new_values(void)
 
 		for (i = 0; i < 7; i++) {
 			// NORMAL
-			if (!host_readbs(Real2Host(ds_ptr) + 3 * i)) {
+			if (!att_ptr[3 * i]) {
 				values[unset_attribs] = (signed char)i;
 				g_type_names[unset_attribs] = get_text(39 + i);
 				unset_attribs++;
@@ -4521,7 +4521,7 @@ void new_values(void)
 
 		/* write randval to the selected negative attribute */
 		//g_hero.attrib[di].normal = g_hero.attrib[di].current = randval;
-		ds_ptr[3 * di + 0] = ds_ptr[3 * di + 1] = randval;
+		att_ptr[3 * di + 0] = att_ptr[3 * di + 1] = randval;
 
 		update_mouse_cursor();
 		refresh_screen();
