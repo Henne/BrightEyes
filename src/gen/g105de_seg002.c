@@ -6828,6 +6828,12 @@ static void BE_cleanup(void)
 {
 	Bit8u *host_ptr;
 
+	if (g_vga_memstart) {
+		free(g_vga_memstart);
+		g_vga_memstart = NULL;
+		g_gfx_ptr = NULL;
+	}
+
 	if ((host_ptr = g_buffer_sex_dat) != 0) {
 		free(host_ptr);
 		g_buffer_sex_dat = NULL;
@@ -7297,7 +7303,7 @@ void alloc_buffers(void)
 #if defined(__BORLANDC__)
 	g_gfx_ptr = g_vga_memstart = (unsigned char*)MK_FP(0xa000, 0x0);
 #else
-	g_gfx_ptr = g_vga_memstart = (unsigned char*)NULL;
+	g_gfx_ptr = g_vga_memstart = (unsigned char*)calloc(320 * 200, 1);
 #endif
 
 	g_gen_ptr1_dis = (gen_alloc(64108) + 8);
