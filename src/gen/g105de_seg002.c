@@ -4479,9 +4479,8 @@ void new_values(void)
 
 		di = values[di - 1];
 		/* write randval to the selected positive attribute */
-		/* TODO: take a look at the next two lines */
-		host_writeb(3 * di + (Real2Host(ds_ptr) + 1), randval); // CURRENT
-		host_writeb(3 * di + (Real2Host(ds_ptr) + 0), randval); // NORMAL
+		//g_hero.attrib[di].normal = g_hero.attrib[di].current = randval;
+		ds_ptr[3 * di + 0] = ds_ptr[3 * di + 1] = randval;
 
 		update_mouse_cursor();
 		refresh_screen();
@@ -4521,9 +4520,8 @@ void new_values(void)
 		di = values[di - 1];
 
 		/* write randval to the selected negative attribute */
-		/* TODO: next two lines */
-		host_writeb(3 * di + (Real2Host(ds_ptr) + 1), randval); // CURRENT
-		host_writeb(3 * di + (Real2Host(ds_ptr) + 0), randval); // NORMAL
+		//g_hero.attrib[di].normal = g_hero.attrib[di].current = randval;
+		ds_ptr[3 * di + 0] = ds_ptr[3 * di + 1] = randval;
 
 		update_mouse_cursor();
 		refresh_screen();
