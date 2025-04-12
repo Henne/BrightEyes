@@ -2543,7 +2543,7 @@ void save_chr(void)
 		handle = _creat(filename, 0);
 
 		if (handle != -1) {
-			bc_write(handle, &g_hero, sizeof(g_hero));
+			write(handle, &g_hero, sizeof(g_hero));
 			close(handle);
 
 			if (g_called_with_args == 0) return;
@@ -2552,7 +2552,7 @@ void save_chr(void)
 			strcat(path, filename);
 
 			if ((handle = bc__creat(path, 0)) != -1) {
-				bc_write(handle, &g_hero, sizeof(g_hero));
+				write(handle, &g_hero, sizeof(g_hero));
 				close(handle);
 			}
 		} else {
