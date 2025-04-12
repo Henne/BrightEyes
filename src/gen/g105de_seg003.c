@@ -3,7 +3,11 @@
 	Functions rewritten: 4/4 (complete)
 */
 
-#include <stdlib.h>
+#if !defined(__BORLANDC__)
+#include <stdlib.h> // do not include with BCC => uses intrinsics => different code
+#else
+#include <MATH.H> //abs()
+#endif
 
 #include "g105de_seg003.h"
 
@@ -15,10 +19,6 @@ static inline
 unsigned short _rotl(unsigned short op, unsigned short count) {
 	return (op << count) | (op >> (16 - count));
 }
-#else
-#undef __cplusplus
-#undef __rotl__
-#undef __abs__
 #endif
 
 /**
@@ -33,7 +33,7 @@ unsigned short random_interval_gen(unsigned short lo, unsigned short hi)
 /**
 	random_gen - generates a u16 random number
 */
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 int random_gen(const int val)
 {
 	signed short retval;
@@ -48,9 +48,7 @@ int random_gen(const int val)
 	retval = _rotl(retval, 3);
 	g_random_gen_seed = retval;
 
-	/* update rand_seed */
-
-	retval = ((signed long)abs(retval)) % val;
+	retval = abs(retval) % val;
 
 	return ++retval;
 }

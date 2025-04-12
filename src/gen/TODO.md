@@ -17,11 +17,11 @@ This file tries to give a brief overview over the current state of the project.
 
 | Filenames    | Content       | BCC/DOS-World      | GCC/Clang-World    | State  |
 | ------------ | ------------- | ------------------ | ------------------ | ------ |
-| seg000.h     | BCC Clib      | should be removed  | should be removed  | DONE   |
+| seg000.h     | BCC Clib      | DONE               | DONE               | DONE   |
 | seg001.[ch]  | AudioCD code  | should be rebuild  | should be removed  | WIP    |
-| seg002.[ch]  | Main          | should be rebuld   | should be rebuild  | WIP    |
-| seg003.[ch]  | Random        | should be rebuild  | should be rebuild  | WIP    |
-| seg004.[ch]  | PowerPack2.0  | -                  | should be rebuild  | WIP    |
+| seg002.[ch]  | Main          | should be rebuild  | should be rebuild  | WIP    |
+| seg003.[ch]  | Random        | DONE               | DONE               | DONE   |
+| seg004.[ch]  | PowerPack2.0  | -                  | DONE               | DONE   |
 | seg004.asm/h | PowerPack2.0  | should be rebuild  | not portable       | WIP    |
 | seg005.[ch]  | Rasterlib     | -                  | should be rebuild  | WIP    |
 | seg005.asm/h | Rasterlib     | should be rebuild  | not portable       | WIP    |

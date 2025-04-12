@@ -143,9 +143,9 @@ for i in ${OBJDIR}/*.OBJ; do
 			echo "SEG002" $DIFFLINES
 			;;
 		"SEG003")
-			# exact 63 differing lines are allowed
+			# exact 5 differing lines are allowed
 			DIFFLINES=$(diff -y -a ${DISORIG}/${PREFIX}.dis ${DISDIR}/${PREFIX}.dis | grep '|' |wc -l)
-			if [ $DIFFLINES -gt 63 ]; then RETVAL=1; fi
+			if [ $DIFFLINES -ne 5 ]; then RETVAL=1; fi
 			echo "SEG003" $DIFFLINES
 			;;
 		"SEG004")
