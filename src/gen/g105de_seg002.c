@@ -4591,7 +4591,7 @@ void fill_values(void)
 	Bit16s i;
 	Bit16s v1;
 	Bit16s v2;
-	struct struct_money *money_ptr;
+	const struct struct_money *money_ptr;
 
 	Bit16s si, di;
 
