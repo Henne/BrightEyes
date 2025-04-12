@@ -944,9 +944,9 @@ static signed short g_mouse_handler_installed = 0;
 static signed short dummy7 = -1;
 static signed short dummy8 = 0;
 
-static char* g_bg_buffer[]       = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+static unsigned char* g_bg_buffer[]       = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 static signed long g_bg_len[]    = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-static char *g_typus_buffer[]    = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+static unsigned char *g_typus_buffer[]    = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 static signed long g_typus_len[13] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 /* declare the filenames here, to use them in g_fnames */
@@ -1502,7 +1502,7 @@ void stop_music(void)
 }
 
 /* Borlandified and nearly identical, but works identically */
-RealPt load_snd_driver(char *fname)
+unsigned char *load_snd_driver(const char *fname)
 {
 	signed long size;
 	unsigned char *norm_ptr;
@@ -2792,7 +2792,7 @@ void wait_for_keypress(void)
 }
 
 /* Borlandified and identical */
-void error_msg(char *msg)
+void error_msg(const char *msg)
 {
 	vsync_or_key(print_line(msg) * 150);
 }
@@ -3118,7 +3118,7 @@ void blit_smth3(unsigned char *ptr, signed short v1, signed short v2)
  */
 /* Borlandified and identical */
 /* static */
-Bit16u str_splitter(char *s)
+unsigned short str_splitter(const char *s)
 {
 	char *tp;
 	Bit16s unknown_var1;
@@ -3136,14 +3136,14 @@ Bit16u str_splitter(char *s)
 	}
 
 	/* replace all CR and LF with spaces */
-	for (tp = s; *tp; tp++) {
+	for (tp = (char*)s; *tp; tp++) {
 		if ((*tp == 0x0d) || (*tp == 0x0a))
 		{
 			*tp = ' '; //0x20;
 		}
 	}
 
-	tp = s;
+	tp = (char*)s;
 
 	i = last_space = unknown_var1 = 0;
 
@@ -3190,9 +3190,9 @@ Bit16u str_splitter(char *s)
 
 /* Borlandified and identical */
 /* static */
-Bit16u print_line(char *str)
+unsigned short print_line(const char *str)
 {
-	Bit16u lines = 1;
+	unsigned short lines = 1;
 
 	update_mouse_cursor();
 
@@ -3207,7 +3207,7 @@ Bit16u print_line(char *str)
 
 /* Borlandified and identical */
 /* static */
-void print_str(char *str, Bit16s x, Bit16s y)
+void print_str(const char *str, Bit16s x, Bit16s y)
 {
 	Bit16s i;
 	Bit16s x_bak;
@@ -3449,7 +3449,7 @@ Bit16s get_str_width(char *str)
  * Returns the X coordinate where the strin must start.
  */
 /* Borlandified and identical */
-Bit16s get_line_start_c(char *str, Bit16s x, Bit16s x_max)
+Bit16s get_line_start_c(const char *str, Bit16s x, Bit16s x_max)
 {
 	Bit16s width;
 
@@ -3666,7 +3666,7 @@ void draw_popup_line(Bit16s line, Bit16s type)
  *	if @digits is zero the function just delays.
  */
 /* Borlandified and identical */
-signed short infobox(char *msg, signed short digits)
+signed short infobox(const char *msg, signed short digits)
 {
 	RealPt src;
 	RealPt dst;
@@ -6598,7 +6598,7 @@ void choose_typus(void)
 	Bit16s choosen_typus;
 	Bit16s randval;
 	Bit8s sex_bak;
-	unsigned char *ptr;
+	signed char *ptr;
 	char name_bak[20];
 
 	Bit16s i;

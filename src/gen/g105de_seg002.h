@@ -42,14 +42,14 @@ struct nvf_desc {
 	Bit16s read_datfile(Bit16u, Bit8u*, Bit16u);
 	Bit32s get_filelength(Bit16s);
 	void wait_for_keypress(void);
-	void error_msg(char*);
+	void error_msg(const char*);
 	void vsync_or_key(Bit16s);
 	Bit32u swap_u32(Bit32u);
 
 	void exit_video(void);
 	void wait_for_vsync(void);
-	Bit16u print_line(char*);
-	void print_str(char *, Bit16s, Bit16s);
+	unsigned short print_line(const char*);
+	void print_str(const char *, Bit16s, Bit16s);
 	Bit16s print_chr(unsigned char, Bit16s, Bit16s);
 	Bit16s get_chr_info(unsigned char, Bit16s*);
 	void call_them_all(Bit16s, Bit16s, Bit16s, Bit16s);
@@ -58,8 +58,8 @@ struct nvf_desc {
 	RealPt get_gfx_ptr(Bit16s, Bit16s, Bit16s*);
 	Bit16s ret_zero(Bit16s, Bit16s);
 	void call_blit_smth3(RealPt, Bit16s, Bit16s, Bit16s, Bit16s);
-	Bit16s get_line_start_c(char*, Bit16s, Bit16s);
-	signed short infobox(char*, signed short);
+	Bit16s get_line_start_c(const char*, Bit16s, Bit16s);
+	signed short infobox(const char*, signed short);
 	signed short gui_bool(char*);
 	signed short gui_radio(char*, signed char, ...);
 
