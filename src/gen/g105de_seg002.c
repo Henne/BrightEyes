@@ -1471,7 +1471,11 @@ void read_soundcfg(void)
 
 	if ((handle = open(g_str_sound_cfg, 0x8001)) != -1) {
 		bc__read(handle, (Bit8u*)&port, 2);
-		bc__close(handle);
+#if !defined(__BORLANDC__)
+		close(handle);
+#else
+		_close(handle);
+#endif
 
 #if !defined(__BORLANDC__)
 		/* Small hack: enable MIDI instead of CD-Audio */
@@ -1538,10 +1542,11 @@ unsigned char *load_snd_driver(const char *fname)
 
 		/* The arguments of read are working, but not identical */
 		bc__read(handle, (norm_ptr = normalize_ptr((unsigned char*)in_ptr)), size);
+		_close(handle);
 #else
 		bc__read(handle, (norm_ptr = g_snd_driver), size);
+		close(handle);
 #endif
-		bc__close(handle);
 		return norm_ptr;
 	} else {
 		return (RealPt)0L;
