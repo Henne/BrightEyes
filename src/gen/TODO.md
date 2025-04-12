@@ -7,9 +7,11 @@ This file tries to give a brief overview over the current state of the project.
 * restructuring of initialized data (DS:INIT)
 * correct compiler flags + minimal set of Sync-Points
 * have a DOS-Build (not working)
+* compile with GCC/Clang
 
 ## What's WIP
 * restructuring of uninitialized data (DS:BSS)
+* linking with GCC/Clang
 
 ## Overview
 
