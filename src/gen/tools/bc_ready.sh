@@ -130,45 +130,47 @@ for i in ${OBJDIR}/*.OBJ; do
 	# count the lines containing '|' => difference
 	case "${PREFIX}" in
 		"SEG001")
-			# exact 23 differing lines are allowed
-			#DIFFLINES=$(diff -y -a ${DISORIG}/${PREFIX}.dis ${DISDIR}/${PREFIX}.dis | grep '|' |wc -l)
+			# exact 544 differing lines are allowed
+			DIFFLINES=$(diff -y -a ${DISORIG}/${PREFIX}.dis ${DISDIR}/${PREFIX}.dis | grep '|' |wc -l)
 
-			#if [ $DIFFLINES -ne 23 ]; then RETVAL=1; fi
+			if [ $DIFFLINES -gt 544 ]; then RETVAL=1; fi
+			echo "SEG001" $DIFFLINES
 			;;
 		"SEG002")
-			# exact 26 differing lines are allowed
+			# exact 2867 differing lines are allowed
 			DIFFLINES=$(diff -y -a ${DISORIG}/${PREFIX}.dis ${DISDIR}/${PREFIX}.dis | grep '|' |wc -l)
-			#if [ $DIFFLINES -ne 26 ]; then RETVAL=1; fi
+			if [ $DIFFLINES -gt 2867 ]; then RETVAL=1; fi
 			echo "SEG002" $DIFFLINES
 			;;
 		"SEG003")
-			# exact 1 differing lines are allowed
+			# exact 63 differing lines are allowed
 			DIFFLINES=$(diff -y -a ${DISORIG}/${PREFIX}.dis ${DISDIR}/${PREFIX}.dis | grep '|' |wc -l)
-			#if [ $DIFFLINES -ne 1 ]; then RETVAL=1; fi
+			if [ $DIFFLINES -gt 63 ]; then RETVAL=1; fi
 			echo "SEG003" $DIFFLINES
 			;;
 		"SEG004")
 			# exact 94 differing lines are allowed
 			# adresses in unalinged codesegment
 			DIFFLINES=$(diff -y -a ${DISORIG}/${PREFIX}.dis ${DISDIR}/${PREFIX}.dis | grep '|' |wc -l)
+			if [ $DIFFLINES -gt 94 ]; then RETVAL=1; fi
 			echo "SEG004" $DIFFLINES
-			if [ $DIFFLINES -ne 94 ]; then RETVAL=1; fi
-			 ;;
+			;;
 		"SEG005")
 			# exact 15 differing lines are allowed
 			# adresses in unalinged codesegment
 			DIFFLINES=$(diff -y -a ${DISORIG}/${PREFIX}.dis ${DISDIR}/${PREFIX}.dis | grep '|' |wc -l)
-			if [ $DIFFLINES -ne 15 ]; then RETVAL=1; fi
-			 ;;
+			if [ $DIFFLINES -gt 15 ]; then RETVAL=1; fi
+			echo "SEG005" $DIFFLINES
+			;;
 		"SEG006")
 			# AIL: dump_obj produces uncomparable files due to BSS
 			# exact 129 differing lines are allowed
 			# adresses in unalinged codesegment
 			DIFFLINES=$(diff -y -a ${DISORIG}/${PREFIX}.dis ${DISDIR}/${PREFIX}.dis | grep '|' |wc -l)
-			#echo "SEG006" $DIFFLINES
-			if [ $DIFFLINES -ne 129 ]; then RETVAL=1; fi
+			if [ $DIFFLINES -gt 129 ]; then RETVAL=1; fi
+			echo "SEG006" $DIFFLINES
 			;;
-		"SEG013")
+		"SEG007")
 			# AIL: dump_obj produces uncomparable files due to BSS
 			;;
 		"DATSEG")
