@@ -1504,19 +1504,24 @@ void stop_music(void)
 /* Borlandified and nearly identical, but works identically */
 RealPt load_snd_driver(char *fname)
 {
-	Bit32s size;
-	RealPt norm_ptr;
-	Bit32u in_ptr;
-	Bit16s handle;
+	signed long size;
+	unsigned char *norm_ptr;
+	unsigned long in_ptr;
+	signed short handle;
 
 	if ((handle = open(fname, 0x8001)) != -1) {
 		size = 16500;
-		g_snd_driver = (Bit8u*)gen_alloc(size + 0x10);
-		in_ptr = ((Bit32u)g_snd_driver) + 0x0f;
+		g_snd_driver = (unsigned char*)gen_alloc(size + 0x10);
+#if defined(__BORLANDC__)
+		// BCC: far pointer normalizaion (DOS only)
+		in_ptr = ((unsigned long)g_snd_driver) + 0x0f;
 		in_ptr &= 0xfffffff0;
 
 		/* The arguments of read are working, but not identical */
-		bc__read(handle, (Bit8u*)Real2Host(norm_ptr = normalize_ptr((RealPt)in_ptr)), size);
+		bc__read(handle, (norm_ptr = normalize_ptr((unsigned char*)in_ptr)), size);
+#else
+		bc__read(handle, (norm_ptr = g_snd_driver), size);
+#endif
 		bc__close(handle);
 		return norm_ptr;
 	} else {
