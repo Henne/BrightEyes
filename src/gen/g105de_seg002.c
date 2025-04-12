@@ -6999,8 +6999,8 @@ static void intro(void)
 	/* glowing at the bottom */
 	for (i = 0; i < 4; i++) {
 		g_dst_x1 = 112;
-		g_dst_x2 = 140;
-		g_dst_y1 = 207;
+		g_dst_y1 = 140;
+		g_dst_x2 = 207;
 		g_dst_y2 = 149;
 		g_dst_src = (RealPt)(i * 960 + g_gen_ptr1_dis + 9600);
 		do_draw_pic(0);
