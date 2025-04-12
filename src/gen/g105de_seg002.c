@@ -2591,7 +2591,7 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 	src = NULL;
 #endif
 
-	va = (nvf_type = host_readbs(Real2Host(nvf->src))) & 0x80;
+	va = (nvf_type = *(unsigned char*)(nvf->src)) & 0x80;
 	nvf_type &= 0x7f;
 	pics = host_readws(Real2Host(bc_F_PADD(nvf->src, 1L)));
 
@@ -5285,7 +5285,7 @@ void change_attribs(void)
 	} else {
 		/* decrement */
 		/* check if the positive attribute can be decremented */
-		if (host_readbs(ptr1) == 8) {
+		if (ptr1[0] == 8) {
 			infobox(get_text(81), 0);
 			return;
 		}
@@ -5335,7 +5335,7 @@ void change_attribs(void)
 			ptr1 = &g_hero.attrib[si + 7].normal;
 			
 			/* check if attribute can be decremented */
-			if (host_readbs(ptr1) == 2) {
+			if (ptr1[0] == 2) {
 				infobox(get_text(81), 0);
 				continue;
 			}
