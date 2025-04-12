@@ -41,6 +41,13 @@ static inline void clrscr(void) { }
 
 #define reloc_gen (0)
 
+/* non-portable Memory Access */
+#if defined(__BORLANDC__)
+#define host_writeb(p, v) (*(unsigned char*)(p) = (v))
+#define host_writew(p, v) (*(unsigned short*)(p) = (v))
+#define host_writed(p, v) (*(unsigned int*)(p) = (v))
+#endif
+
 #include "g105de_seg001.h"
 #include "g105de_seg002.h"
 #include "g105de_seg007.h"

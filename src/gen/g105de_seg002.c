@@ -15,11 +15,30 @@
 #include <fcntl.h>  // open(), creat()
 #endif
 
+/* portable Memory Access */
+#if !defined(__BORLANDC__)
+static inline unsigned short host_readw(unsigned char *p) { return *(unsigned short*)p; }
+static inline signed short host_readws(unsigned char *p) { return *(signed short*)p; }
+static inline unsigned int host_readd(unsigned char *p) { return *(unsigned int*)p; }
+static inline signed int host_readds(unsigned char *p) { return *(signed int*)p; }
+static inline unsigned short host_writew(unsigned char *p, unsigned short v) { return *(unsigned short*)p = v; }
+// TODO: Check if that works on the stack of 64-bit machines
+static inline unsigned int host_writed(unsigned char *p, unsigned int v) { return *(unsigned int*)p = v; }
+#else
+#define host_readw(p) (*(unsigned short*)(p))
+#define host_readws(p) (*(signed short*)(p))
+#define host_readd(p) (*(unsigned long*)(p))
+#define host_readds(p) (*(signed long*)(p))
+#define host_writew(p, v) (*(unsigned short*)(p) = (v))
+#define host_writed(p, v) (*(unsigned long*)(p) = (v))
+#endif
+
 #if !defined(__BORLANDC__)
 // DUMMY for BCC CLib func
 static inline void clrscr(void) { }
 static inline void randomize(void) { }
 static inline signed short bc_flushall(void) { return 0; }
+#define __abs__(v) abs(v)
 #else
 // <STDIO.H>
 #define bc_flushall flushall
