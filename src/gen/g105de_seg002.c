@@ -1388,7 +1388,7 @@ static char g_mouse_backbuffer[256];
 static Bit8u *g_buffer_sex_dat;
 static Bit8u *g_buffer_popup_nvf;
 static Bit8u *g_buffer_heads_dat;
-static Bit8u *g_buffer_text;
+static char  *g_buffer_text;
 static Bit8u *g_buffer_font6;
 
 static signed short g_col_index;
@@ -2365,7 +2365,7 @@ void load_font_and_text(void)
 
 	/* load GENTEXT */
 	handle = open_datfile(15);
-	len = read_datfile(handle, g_buffer_text, 64000);
+	len = read_datfile(handle, (unsigned char*)g_buffer_text, 64000);
 	close(handle);
 
 	split_textbuffer(g_texts, g_buffer_text, len);
@@ -3756,11 +3756,11 @@ signed short infobox(const char *msg, signed short digits)
 	call_mouse();
 
 	if (digits) {
-		enter_string((char*)g_gen_ptr3,
+		enter_string(g_gen_ptr3,
 			g_left_border + (di - digits * 6) / 2,
 			g_upper_border + 8 * lines - 2, digits, 0);
 
-		retval = (Bit16u)atol((char*)g_gen_ptr3);
+		retval = (Bit16u)atol(g_gen_ptr3);
 	} else {
 		g_action_table = (struct mouse_action*)g_action_input;
 		vsync_or_key(150 * lines);
@@ -6849,8 +6849,8 @@ static void BE_cleanup(void)
 		g_buffer_heads_dat = NULL;
 	}
 
-	if ((host_ptr = g_buffer_text) != 0) {
-		free(host_ptr);
+	if (g_buffer_text != NULL) {
+		free(g_buffer_text);
 		g_buffer_text = NULL;
 	}
 
@@ -6894,8 +6894,8 @@ static void BE_cleanup(void)
 		g_gen_ptr4 = NULL;
 	}
 
-	if ((host_ptr = g_gen_ptr2) != 0) {
-		free(host_ptr);
+	if (g_gen_ptr2 != NULL) {
+		free(g_gen_ptr2);
 		g_gen_ptr2 = NULL;
 	}
 
@@ -7310,13 +7310,13 @@ void alloc_buffers(void)
 
 	g_page_buffer = gen_alloc(50000);
 
-	g_gen_ptr2 = gen_alloc(1524);
+	g_gen_ptr2 = (char*)gen_alloc(1524);
 	g_gen_ptr3 = g_gen_ptr2 + 1500;
 
 	// unused
 	g_gen_ptr4 = gen_alloc(200);
 
-	g_buffer_text = gen_alloc(6000);
+	g_buffer_text = (char*)gen_alloc(6000);
 
 	g_buffer_font6 = gen_alloc(592);
 
