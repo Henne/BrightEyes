@@ -3,12 +3,13 @@
  *	Functions rewritten: 21/21 (complete)
  *
  *	Remarks:
- *		The first part of this file is for inclusion in DOSBox.
- *		Aim here is, that they work identical.
- *
- *		The second is a rewrite using the inline assembler of
+ *		This code is a rewrite using the inline assembler of
  *		Borland C++ 3.1. The aim is, to produce exactly the same
  *		OPcodes like in the original. Seems to work. :)
+ *
+ *		This code is not intended to run directly on
+ *		modern system since it's not portable and
+ *		CD-Drives have become a bit outdated meanwhile.
  *
  *	MSCDEX:
  *		In this segment are mostly calls to the MSCDEX-API.
@@ -54,6 +55,7 @@ static inline void clrscr(void) { }
 extern signed short g_called_with_args;
 extern unsigned char *g_vga_memstart;
 
+/* initialized global variables DATA */
 static signed char cd_dummy0 = 0;
 static signed short CD_INIT_SUCCESSFUL = 0;
 static long cd_dummy1 = 0;
@@ -65,6 +67,7 @@ static char STR_REPEAT[] = "WIEDERHOLEN";
 static char STR_QUIT[] = "BEENDEN";
 static char STR_CD_EXEPATH[] = "X:\\DSA\\SCHICKM.EXE";
 
+/* uninitialized global variables BSS */
 static signed short CD_AUDIO_TRACK;
 static signed short cd_dummy3_1;
 #if !defined(__BORLANDC__)
@@ -82,6 +85,10 @@ static signed short CD_DRIVE_NO;
 
 static signed long cd_dummy5;
 static signed short cd_dummy6;
+
+/* internally used prototypes */
+static void seg001_0312(void);
+static signed short CD_check_file(char*);
 
 #define CDSEG (0xc83)
 
@@ -288,18 +295,20 @@ static void seg001_02ba()
 /* Borlandified and identical */
 signed short CD_bioskey(signed short cmd)
 {
+#if defined(__BORLANDC__)
 	seg001_02ba();
 
-#if !defined(__BORLANDC__)
-	return bioskey(cmd);
+	// GEN uses an implicit return here
+	//return bioskey(cmd);
+	bioskey(cmd);
 #else
-	// return
-	bioskey(cmd); // implicit return
+	// DUMMY
+	return 0;
 #endif
 }
 
 /* Borlandified and nearly identical */
-void seg001_0312(void)
+static void seg001_0312(void)
 {
 #if defined(__BORLANDC__)
 	if (CD_INIT_SUCCESSFUL != 0) {
@@ -418,8 +427,7 @@ void seg001_0465(unsigned short track)
 }
 
 /* Borlandified and nearly identical, but works correctly */
-//static
-signed short CD_check_file(char *pathP)
+static signed short CD_check_file(char *pathP)
 {
 #if defined(__BORLANDC__)
 	int handle;
@@ -525,15 +533,15 @@ signed short seg001_0600(void)
 	CD_check_cd();
 	seg001_033b();
 	seg001_03a8();
-#endif
 
-#if !defined(__BORLANDC__)
-	return 1;
-#else
 	asm { db 0x0f, 0x1f, 0x00; } // BCC Sync-Point
+#else
+	// DUMMY
+	return 1;
 #endif
 }
 
+// Empty function which code overlaps into the next segment
 void dummy(void)
 {
 }
