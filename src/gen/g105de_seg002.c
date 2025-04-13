@@ -1455,7 +1455,7 @@ void dummy()
 #endif
 
 /* Borlandified and identical */
-void start_music(Bit16u track)
+void start_music(unsigned short track)
 {
 	if (!g_use_cda) {
 		if (g_midi_disabled == 0) {
@@ -1709,7 +1709,7 @@ signed short load_driver(const char* fname, signed short type, signed short port
 }
 
 /* Borlandified and identical */
-void play_midi(Bit16u index)
+void play_midi(unsigned short index)
 {
 	if ((g_midi_disabled == 0) && (host_readw(g_snd_driver_desc + 0x02) == 3))
 	{
@@ -1855,7 +1855,7 @@ void interrupt mouse_isr(void)
 /* Borlandified and identical */
 void mouse_enable(void)
 {
-	Bit16u p1, p2, p3, p4, p5;
+	unsigned short p1, p2, p3, p4, p5;
 
 	if (g_have_mouse == 2) {
 
@@ -1911,15 +1911,15 @@ void mouse_call_isr(void)
 #endif
 
 /* Borlandified and identical */
-void mouse_do_enable(Bit16u val, RealPt ptr)
+void mouse_do_enable(unsigned short val, RealPt ptr)
 {
 #if defined(__BORLANDC__)
-	Bit16u p1, p2, p3, p4, p5;
+	unsigned short p1, p2, p3, p4, p5;
 
 	p1 = 0x0c;
 	p3 = val;
-	p4 = (Bit16u)FP_OFF(mouse_isr);
-	p5 = (Bit16u)FP_SEG(mouse_isr);
+	p4 = (unsigned short)FP_OFF(mouse_isr);
+	p5 = (unsigned short)FP_SEG(mouse_isr);
 
 	/* save adress of old IRQ 0x78 */
 	g_irq78_bak = ((void interrupt far (*)(void))_dos_getvect(0x78));
@@ -1938,7 +1938,7 @@ void mouse_do_enable(Bit16u val, RealPt ptr)
 void mouse_do_disable(void)
 {
 #if defined(__BORLANDC__)
-	Bit16u v1, v2, v3, v4, v5;
+	unsigned short v1, v2, v3, v4, v5;
 
 	/* restore the old int 0x78 handler */
 	_dos_setvect(0x78, (void interrupt far (*)(void))g_irq78_bak);
@@ -2155,7 +2155,7 @@ void handle_input(void)
 
 /* Borlandified and identical */
 /* static */
-Bit16u get_mouse_action(Bit16s x, Bit16s y, struct mouse_action *act)
+unsigned short get_mouse_action(Bit16s x, Bit16s y, struct mouse_action *act)
 {
 	Bit16s i;
 	
@@ -2222,7 +2222,7 @@ void unused_func1(signed char *in_ptr, signed short x, signed short y, signed ch
 */
 /* Borlandified and identical */
 void decomp_rle(unsigned char *dst, unsigned char *src, Bit16s x, Bit16s y,
-				Bit16s width, Bit16s height, Bit16u mode)
+				Bit16s width, Bit16s height, unsigned short mode)
 {
 	Bit16s i, j, k;
 	signed char val;
@@ -2806,7 +2806,7 @@ Bit32s get_filelength(Bit16s unused)
 }
 
 /* Borlandified and identical */
-Bit16u ret_zero1(void)
+unsigned short ret_zero1(void)
 {
 	return 0;
 }
@@ -2867,11 +2867,11 @@ void unused_func09(Bit16s reps)
 /* Borlandified and identical */
 Bit32u swap_u32(Bit32u v)
 {
-	Bit16u l1;
-	Bit16u l2;
+	unsigned short l1;
+	unsigned short l2;
 	unsigned char *p = (unsigned char*)&l2;
 
-	register Bit16u l_si;
+	register unsigned short l_si;
 
 	host_writed(p, v); // write v to stack and access subvalues with l1 and l2
 	l_si = l2;
@@ -2885,9 +2885,9 @@ Bit32u swap_u32(Bit32u v)
 /* Borlandified and identical */
 Bit32u unused_func10(Bit32u v)
 {
-	Bit16u l1;
-	Bit16u l2;
-	Bit16u l_si;
+	unsigned short l1;
+	unsigned short l2;
+	unsigned short l_si;
 	unsigned char *p = (unsigned char*)&l2;
 
 	l_si = host_writed(p, v); // write v to stack and access subvalues with l1 and l2
@@ -2991,7 +2991,7 @@ void unused_func11(Bit16s x1, Bit16s x2, Bit16s y, Bit16s color)
 #endif
 
 /* Borlandified and nearly identical */
-void draw_v_line(Bit16s x, Bit16s y1, Bit16s y2, Bit16u color)
+void draw_v_line(Bit16s x, Bit16s y1, Bit16s y2, unsigned short color)
 {
 	Bit16s tmp;
 	Bit16s diffY;
@@ -3011,7 +3011,7 @@ void draw_v_line(Bit16s x, Bit16s y1, Bit16s y2, Bit16u color)
 }
 
 /* Borlandified and identical */
-void do_draw_pic(Bit16u mode)
+void do_draw_pic(unsigned short mode)
 {
 	Bit16s d1;
 	Bit16s d2;
@@ -3080,7 +3080,7 @@ void unused_func12(void)
 #endif
 
 /* Borlandified and identical */
-void call_fill_rect_gen(unsigned char *ptr, Bit16u x1, Bit16u y1, Bit16u x2, Bit16u y2, Bit16u color)
+void call_fill_rect_gen(unsigned char *ptr, unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2, unsigned short color)
 {
 	Bit16s width;
 	Bit16s height;
@@ -3764,7 +3764,7 @@ signed short infobox(const char *msg, signed short digits)
 			g_left_border + (di - digits * 6) / 2,
 			g_upper_border + 8 * lines - 2, digits, 0);
 
-		retval = (Bit16u)atol(g_gen_ptr3);
+		retval = (unsigned short)atol(g_gen_ptr3);
 	} else {
 		g_action_table = (struct mouse_action*)g_action_input;
 		vsync_or_key(150 * lines);
@@ -5485,10 +5485,10 @@ void save_picbuf(void)
 void restore_picbuf(RealPt ptr)
 {
 	RealPt p;
-	Bit16u x_1, x_2, x_3;
-	Bit16u y_1, y_2, y_3;
-	Bit16u w_1, w_2, w_3;
-	Bit16u h_1, h_2, h_3;
+	unsigned short x_1, x_2, x_3;
+	unsigned short y_1, y_2, y_3;
+	unsigned short w_1, w_2, w_3;
+	unsigned short h_1, h_2, h_3;
 
 	x_1 = 0;
 

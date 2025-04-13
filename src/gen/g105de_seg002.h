@@ -27,15 +27,15 @@ struct nvf_desc {
 	signed short *get_timbre(signed short, signed short);
 	unsigned short load_file(Bit16s);
 	signed short load_driver(const char*, signed short, signed short);
-	void play_midi(Bit16u);
+	void play_midi(unsigned short);
 	void stop_sequence(void);
 
-	void mouse_do_enable(Bit16u, RealPt);
+	void mouse_do_enable(unsigned short, RealPt);
 	void mouse_do_disable(void);
 	void update_mouse_cursor1(void);
 	void mouse(void);
 	void handle_input(void);
-	Bit16u get_mouse_action(Bit16s, Bit16s, struct mouse_action*);
+	unsigned short get_mouse_action(Bit16s, Bit16s, struct mouse_action*);
 	void draw_mouse_cursor(void);
 	void save_mouse_bg(void);
 	void restore_mouse_bg(void);
