@@ -221,55 +221,48 @@ static void seg001_00bb(signed short track_no)
 #if defined(__BORLANDC__)
 	signed long track_start;
 	signed long track_end;
-	unsigned int track_len, tmp;
 
 	if (CD_INIT_SUCCESSFUL != 0) {
 
 		writew(&cd_buf1[0x8f], 0);
 
 		writed(&cd_buf1[0x9a],
-			((readb(&cd_buf1[0x10b + track_no * 8]) << 8) +
-			(readb(&cd_buf1[0x10a + track_no * 8]))) +
-			(readb(&cd_buf1[0x10c + track_no * 8])) << 16);
+			(unsigned long)MK_FP(readb(&cd_buf1[0x10c + track_no * 8]),
+			(readb(&cd_buf1[0x10b + track_no * 8]) << 8) +
+			(readb(&cd_buf1[0x10a + track_no * 8]))
+			)
+		);
 
 		/* calculate track_start */
-		track_start = (60L * readb(MK_FP(reloc_gen + CDSEG, 0x10b + track_no * 8))
-			+ readb(MK_FP(reloc_gen + CDSEG, 0x10a + track_no * 8))) * 75L
-			+ readb(MK_FP(reloc_gen + CDSEG, 0x10c + track_no * 8));
+		track_start = (60L * (unsigned long)readb(&cd_buf1[0x10c + track_no * 8])
+			+ readb(&cd_buf1[0x10b + track_no * 8])) * 75L
+			+ readb(&cd_buf1[0x10a + track_no * 8]);
+
+		// OK till here: 0x17f
 
 		/* calculate track_end */
-		if (readb(MK_FP(reloc_gen + CDSEG, 0x422)) == track_no) {
+		if (readb(&cd_buf1[0x422]) == track_no) {
 
-			track_end = (60L * readb(MK_FP(reloc_gen + CDSEG, 0x425)) +
-					   readb(MK_FP(reloc_gen + CDSEG, 0x424))) * 75L +
-					   readb(MK_FP(reloc_gen + CDSEG, 0x423));
+			track_end = (60L * readb(&cd_buf1[0x425]) +
+					   readb(&cd_buf1[0x424]) * 75L +
+					   readb(&cd_buf1[0x423]));
 		} else {
-			track_end = (60L * readb(MK_FP(reloc_gen + CDSEG, 0x114 + track_no * 8)) +
-					   readb(MK_FP(reloc_gen + CDSEG, 0x113 + track_no * 8))) * 75L +
-					   readb(MK_FP(reloc_gen + CDSEG, 0x112 + track_no * 8));
+			track_end = (60L * readb(&cd_buf1[0x114 + track_no * 8]) +
+					   readb(&cd_buf1[0x113 + track_no * 8]) * 75L +
+					   readb(&cd_buf1[0x112 + track_no * 8]));
 
 		}
 
 		track_start -= track_end;
 		// track_start is now track length
-		writed(MK_FP(reloc_gen + CDSEG, 0x9e), track_start - 150);
+		writed(&cd_buf1[0x9e], track_start - 150L);
 
-#if !defined(__BORLANDC__)
-		CD_driver_request(MK_FP(reloc_gen + CDSEG, 0x8c));
+		CD_driver_request((struct driver_request*)&cd_buf1[0x8c]);
+
 		CD_AUDIO_POS = ((track_start - 150) * 0x1234e) / 0x4b000;
-#else
-		CD_driver_request((struct driver_request*)MK_FP(reloc_gen + CDSEG, 0x8c));
-
-		asm { db 0x66, 0x66, 0x0f, 0x1f, 0x84, 0x00, 0x00 }
-		asm { db 0x66, 0x66, 0x0f, 0x1f, 0x84, 0x00, 0x00 }
-		asm { db 0x0f, 0x1f, 0x80, 0x00, 0x00 };
-		asm { db 0x0f, 0x1f, 0x80, 0x00, 0x00 };
-		asm { db 0x0f, 0x1f, 0x80, 0x00, 0x00 };
-		asm { db 0x0f, 0x1f, 0x80, 0x00, 0x00 };
-		asm { db 0x0F, 0x1F, 0x40, 0x00; } // BCC Sync-Point
 		asm { db 0x0F, 0x1F, 0x40, 0x00; } // BCC Sync-Point
 		asm { nop; nop; }
-#endif
+
 		CD_AUDIO_TOD = CD_get_tod();
 	}
 #endif
@@ -309,40 +302,29 @@ signed short CD_bioskey(signed short cmd)
 #endif
 }
 
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 static void seg001_0312(void)
 {
 #if defined(__BORLANDC__)
 	if (CD_INIT_SUCCESSFUL != 0) {
 
-		//writew(RealMake(reloc_gen + CDSEG, 3), 0);
-		*(unsigned short*)(&req[3]) = 0;
-		//CD_driver_request(RealMake(reloc_gen + CDSEG, 0));
-		asm { db 0x0f, 0x1f, 0x00; } // BCC Sync-Point
-		asm { db 0x0f, 0x1f, 0x00; }
-		asm { db 0x0f, 0x1f, 0x00; }
-		asm { nop; }
-		asm { nop; }
+		writew(&cd_buf1[0x03], 0);
+		CD_driver_request(&cd_buf1[0]);
 		CD_AUDIO_REPEAT = 0;
 	}
 #endif
 }
 
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 void seg001_033b()
 {
 #if defined(__BORLANDC__)
 	if (CD_INIT_SUCCESSFUL != 0) {
 
 		seg001_0312();
-		writew(MK_FP(reloc_gen + CDSEG, 0x1f), 0);
 
-		//CD_driver_request(RealMake(reloc_gen + CDSEG, 0x1c));
-		asm { db 0x0f, 0x1f, 0x00; } // BCC Sync-Point
-		asm { db 0x0f, 0x1f, 0x00; }
-		asm { db 0x0f, 0x1f, 0x00; }
-		asm { nop; }
-		asm { nop; }
+		writew(&cd_buf1[0x1f], 0);
+		CD_driver_request(&cd_buf1[0x1c]);
 	}
 #endif
 }
@@ -353,14 +335,8 @@ void CD_unused2()
 {
 	if (CD_INIT_SUCCESSFUL != 0) {
 
-		writew(MK_FP(reloc_gen + CDSEG, 0xab), 0);
-		//CD_driver_request(RealMake(reloc_gen + CDSEG, 0xa8));
-
-		asm { db 0x0f, 0x1f, 0x00; } // BCC Sync-Point
-		asm { db 0x0f, 0x1f, 0x00; }
-		asm { db 0x0f, 0x1f, 0x00; }
-		asm { nop; }
-		asm { nop; }
+		writew(&cd_buf1[0xab], 0);
+		CD_driver_request(&cd_buf1[0xa8]);
 	}
 }
 /* Borlandified and nearly identical */
@@ -368,14 +344,8 @@ void CD_unused3()
 {
 	if (CD_INIT_SUCCESSFUL != 0) {
 
-		writew(MK_FP(reloc_gen + CDSEG, 0xc7), 0);
-		//CD_driver_request(RealMake(reloc_gen + CDSEG, 0xc4));
-
-		asm { db 0x0f, 0x1f, 0x00; } // BCC Sync-Point
-		asm { db 0x0f, 0x1f, 0x00; }
-		asm { db 0x0f, 0x1f, 0x00; }
-		asm { nop; }
-		asm { nop; }
+		writew(&cd_buf1[0xc7], 0);
+		CD_driver_request(&cd_buf1[0xc4]);
 	}
 }
 #endif
