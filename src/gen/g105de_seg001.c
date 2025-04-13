@@ -40,9 +40,10 @@ static inline void clrscr(void) { }
 
 /* non-portable Memory Access */
 #if defined(__BORLANDC__)
-#define host_writeb(p, v) (*(unsigned char*)(p) = (v))
-#define host_writew(p, v) (*(unsigned short*)(p) = (v))
-#define host_writed(p, v) (*(unsigned int*)(p) = (v))
+#define readb(p) (*(unsigned char*)(p))
+#define writeb(p, v) (*(unsigned char*)(p) = (v))
+#define writew(p, v) (*(unsigned short*)(p) = (v))
+#define writed(p, v) (*(unsigned int*)(p) = (v))
 #endif
 
 #include "g105de_seg001.h"
@@ -223,34 +224,34 @@ static void seg001_00bb(signed short track_no)
 
 	if (CD_INIT_SUCCESSFUL != 0) {
 
-		host_writew(MK_FP(reloc_gen + CDSEG, 0x8f), 0);
+		writew(MK_FP(reloc_gen + CDSEG, 0x8f), 0);
 
-		host_writed(MK_FP(reloc_gen + CDSEG, 0x9a),
-			((host_readb(MK_FP(reloc_gen + CDSEG, 0x10b + track_no * 8))) << 8) +
-			(host_readb(MK_FP(reloc_gen + CDSEG, 0x10a + track_no * 8))) +
-			(host_readb(MK_FP(reloc_gen + CDSEG, 0x10c + track_no * 8))) << 16);
+		writed(MK_FP(reloc_gen + CDSEG, 0x9a),
+			((readb(MK_FP(reloc_gen + CDSEG, 0x10b + track_no * 8))) << 8) +
+			(readb(MK_FP(reloc_gen + CDSEG, 0x10a + track_no * 8))) +
+			(readb(MK_FP(reloc_gen + CDSEG, 0x10c + track_no * 8))) << 16);
 
 		/* calculate track_start */
-		track_start = (60L * host_readb(MK_FP(reloc_gen + CDSEG, 0x10b + track_no * 8))
-			+ host_readb(MK_FP(reloc_gen + CDSEG, 0x10a + track_no * 8))) * 75L
-			+ host_readb(MK_FP(reloc_gen + CDSEG, 0x10c + track_no * 8));
+		track_start = (60L * readb(MK_FP(reloc_gen + CDSEG, 0x10b + track_no * 8))
+			+ readb(MK_FP(reloc_gen + CDSEG, 0x10a + track_no * 8))) * 75L
+			+ readb(MK_FP(reloc_gen + CDSEG, 0x10c + track_no * 8));
 
 		/* calculate track_end */
-		if (host_readb(MK_FP(reloc_gen + CDSEG, 0x422)) == track_no) {
+		if (readb(MK_FP(reloc_gen + CDSEG, 0x422)) == track_no) {
 
-			track_end = (60L * host_readb(MK_FP(reloc_gen + CDSEG, 0x425)) +
-					   host_readb(MK_FP(reloc_gen + CDSEG, 0x424))) * 75L +
-					   host_readb(MK_FP(reloc_gen + CDSEG, 0x423));
+			track_end = (60L * readb(MK_FP(reloc_gen + CDSEG, 0x425)) +
+					   readb(MK_FP(reloc_gen + CDSEG, 0x424))) * 75L +
+					   readb(MK_FP(reloc_gen + CDSEG, 0x423));
 		} else {
-			track_end = (60L * host_readb(MK_FP(reloc_gen + CDSEG, 0x114 + track_no * 8)) +
-					   host_readb(MK_FP(reloc_gen + CDSEG, 0x113 + track_no * 8))) * 75L +
-					   host_readb(MK_FP(reloc_gen + CDSEG, 0x112 + track_no * 8));
+			track_end = (60L * readb(MK_FP(reloc_gen + CDSEG, 0x114 + track_no * 8)) +
+					   readb(MK_FP(reloc_gen + CDSEG, 0x113 + track_no * 8))) * 75L +
+					   readb(MK_FP(reloc_gen + CDSEG, 0x112 + track_no * 8));
 
 		}
 
 		track_start -= track_end;
 		// track_start is now track length
-		host_writed(MK_FP(reloc_gen + CDSEG, 0x9e), track_start - 150);
+		writed(MK_FP(reloc_gen + CDSEG, 0x9e), track_start - 150);
 
 #if !defined(__BORLANDC__)
 		CD_driver_request(MK_FP(reloc_gen + CDSEG, 0x8c));
@@ -313,7 +314,7 @@ static void seg001_0312(void)
 #if defined(__BORLANDC__)
 	if (CD_INIT_SUCCESSFUL != 0) {
 
-		//host_writew(RealMake(reloc_gen + CDSEG, 3), 0);
+		//writew(RealMake(reloc_gen + CDSEG, 3), 0);
 		*(unsigned short*)(&req[3]) = 0;
 		//CD_driver_request(RealMake(reloc_gen + CDSEG, 0));
 		asm { db 0x0f, 0x1f, 0x00; } // BCC Sync-Point
@@ -333,7 +334,7 @@ void seg001_033b()
 	if (CD_INIT_SUCCESSFUL != 0) {
 
 		seg001_0312();
-		host_writew(MK_FP(reloc_gen + CDSEG, 0x1f), 0);
+		writew(MK_FP(reloc_gen + CDSEG, 0x1f), 0);
 
 		//CD_driver_request(RealMake(reloc_gen + CDSEG, 0x1c));
 		asm { db 0x0f, 0x1f, 0x00; } // BCC Sync-Point
@@ -351,7 +352,7 @@ void CD_unused2()
 {
 	if (CD_INIT_SUCCESSFUL != 0) {
 
-		host_writew(MK_FP(reloc_gen + CDSEG, 0xab), 0);
+		writew(MK_FP(reloc_gen + CDSEG, 0xab), 0);
 		//CD_driver_request(RealMake(reloc_gen + CDSEG, 0xa8));
 
 		asm { db 0x0f, 0x1f, 0x00; } // BCC Sync-Point
@@ -366,7 +367,7 @@ void CD_unused3()
 {
 	if (CD_INIT_SUCCESSFUL != 0) {
 
-		host_writew(MK_FP(reloc_gen + CDSEG, 0xc7), 0);
+		writew(MK_FP(reloc_gen + CDSEG, 0xc7), 0);
 		//CD_driver_request(RealMake(reloc_gen + CDSEG, 0xc4));
 
 		asm { db 0x0f, 0x1f, 0x00; } // BCC Sync-Point
@@ -386,26 +387,26 @@ void seg001_03a8(void)
 
 	if (CD_INIT_SUCCESSFUL == 0) {
 
-		host_writew(MK_FP(reloc_gen + CDSEG, 0x3b), 0);
-		host_writew(MK_FP(reloc_gen + CDSEG, 0x48), reloc_gen + CDSEG);
-		host_writew(MK_FP(reloc_gen + CDSEG, 0x46), 0x420);
-		host_writeb(MK_FP(reloc_gen + CDSEG, 0x420), 10);
+		writew(MK_FP(reloc_gen + CDSEG, 0x3b), 0);
+		writew(MK_FP(reloc_gen + CDSEG, 0x48), reloc_gen + CDSEG);
+		writew(MK_FP(reloc_gen + CDSEG, 0x46), 0x420);
+		writeb(MK_FP(reloc_gen + CDSEG, 0x420), 10);
 		//CD_driver_request(RealMake(reloc_gen + CDSEG, 0x38));
 		CD_driver_request((struct driver_request*)MK_FP(reloc_gen + CDSEG, 0x38));
 
-		v = host_readb(MK_FP(reloc_gen + CDSEG, 0x421));
-		for (; host_readb(MK_FP(reloc_gen + CDSEG, 0x422)) >= v; v++) {
-			host_writew(MK_FP(reloc_gen + CDSEG, 0x3b), 0);
-			host_writew(MK_FP(reloc_gen + CDSEG, 0x48), reloc_gen + CDSEG);
+		v = readb(MK_FP(reloc_gen + CDSEG, 0x421));
+		for (; readb(MK_FP(reloc_gen + CDSEG, 0x422)) >= v; v++) {
+			writew(MK_FP(reloc_gen + CDSEG, 0x3b), 0);
+			writew(MK_FP(reloc_gen + CDSEG, 0x48), reloc_gen + CDSEG);
 #if !defined(__BORLANDC__)
-			host_writew(MK_FP(reloc_gen + CDSEG, 0x46), 0x108 + v * 8);
+			writew(MK_FP(reloc_gen + CDSEG, 0x46), 0x108 + v * 8);
 #else
 			asm { db 0x66, 0x90; } // BCC Sync-Point
 			asm { db 0x66, 0x90; }
 			asm { nop; }
 #endif
-			host_writeb(MK_FP(reloc_gen + CDSEG, v * 8 + 0x108), 11);
-			host_writeb(MK_FP(reloc_gen + CDSEG, v * 8 + 0x109), (unsigned char)v);
+			writeb(MK_FP(reloc_gen + CDSEG, v * 8 + 0x108), 11);
+			writeb(MK_FP(reloc_gen + CDSEG, v * 8 + 0x109), (unsigned char)v);
 
 			//CD_driver_request(RealMake(reloc_gen + CDSEG, 0x38));
 			CD_driver_request((struct driver_request*)MK_FP(reloc_gen + CDSEG, 0x38));
