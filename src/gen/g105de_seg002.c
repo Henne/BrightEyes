@@ -1358,7 +1358,7 @@ static signed short dummy12;
 
 #if !defined(__BORLANDC__)
 /* usage: output */
-static inline char* get_text(Bit16s no) {
+static inline char* get_text(signed short no) {
 	return g_texts[no];
 }
 #else
@@ -1564,7 +1564,7 @@ void unload_snd_driver(void)
 }
 
 /* Borlandified and identical */
-unsigned short load_seq(Bit16s sequence_num)
+unsigned short load_seq(signed short sequence_num)
 {
 	signed short patch;
 	signed short *src_ptr;
@@ -1601,7 +1601,7 @@ unsigned short load_seq(Bit16s sequence_num)
 }
 
 /* Borlandified and identical */
-unsigned short play_sequence(Bit16s sequence_num)
+unsigned short play_sequence(signed short sequence_num)
 {
 	if (load_seq(sequence_num) != 0) {
 		AIL_start_sequence(g_snd_driver_handle, sequence_num);
@@ -1639,15 +1639,15 @@ signed short *get_timbre(signed short bank, signed short patch)
 }
 
 /* Borlandified and identical */
-unsigned short call_load_file(Bit16s index)
+unsigned short call_load_file(signed short index)
 {
 	return load_file(index);
 }
 
 /* Borlandified and identical */
-unsigned short load_file(Bit16s index)
+unsigned short load_file(signed short index)
 {
-	Bit16s handle;
+	signed short handle;
 
 	if ((handle = open_datfile(index)) != -1) {
 		read_datfile(handle, g_form_xmid, 32767);
@@ -2091,7 +2091,7 @@ void mouse_compare(void)
 /* Borlandified and identical */
 void handle_input(void)
 {
-	Bit16s si, i;
+	signed short si, i;
 
 	g_in_key_ascii = g_in_key_ext = si = 0;
 
@@ -2155,9 +2155,9 @@ void handle_input(void)
 
 /* Borlandified and identical */
 /* static */
-unsigned short get_mouse_action(Bit16s x, Bit16s y, struct mouse_action *act)
+unsigned short get_mouse_action(signed short x, signed short y, struct mouse_action *act)
 {
-	Bit16s i;
+	signed short i;
 	
 	for (i = 0; act[i].x1 != -1; i++) {
 
@@ -2221,10 +2221,10 @@ void unused_func1(signed char *in_ptr, signed short x, signed short y, signed ch
  *
 */
 /* Borlandified and identical */
-void decomp_rle(unsigned char *dst, unsigned char *src, Bit16s x, Bit16s y,
-				Bit16s width, Bit16s height, unsigned short mode)
+void decomp_rle(unsigned char *dst, unsigned char *src, signed short x, signed short y,
+				signed short width, signed short height, unsigned short mode)
 {
-	Bit16s i, j, k;
+	signed short i, j, k;
 	signed char val;
 	unsigned char n;
 	signed char pix;
@@ -2359,7 +2359,7 @@ void restore_mouse_bg(void)
 /* Borlandified and nearly identical */
 void load_font_and_text(void)
 {
-	Bit16s handle;
+	signed short handle;
 	Bit32s len;
 
 	/* load FONT6 */
@@ -2475,14 +2475,14 @@ void load_typus(signed short typus)
 /* Borlandified and nearly identical */
 void save_chr(void)
 {
-	Bit16s tmpw;
-	Bit16s tmph;
+	signed short tmpw;
+	signed short tmph;
 	char filename[20];
 	struct nvf_desc nvf;
 	char path[80];
 
-	Bit16s handle; //si
-	Bit16s i;      //di
+	signed short handle; //si
+	signed short i;      //di
 
 	/* check for typus */
 	if (!g_hero.typus) {
@@ -2667,7 +2667,7 @@ signed long process_nvf(struct nvf_desc *nvf)
 
 	case 0x03:
 		offs = pics * 8 + 3L;
-		for (i = 0; i < (Bit16s)nvf->no; i++) {
+		for (i = 0; i < (signed short)nvf->no; i++) {
 			/* First two lines are not neccessary */
 			width = host_readws(nvf->src + i * 8 + 3L);
 #if !defined(__BORLANDC__)
@@ -2718,7 +2718,7 @@ signed long process_nvf(struct nvf_desc *nvf)
 
 	} else {
 		/* No decompression, just copy */
-		memmove(nvf->dst, nvf->dst - 8L, (Bit16s)p_size);
+		memmove(nvf->dst, nvf->dst - 8L, (signed short)p_size);
 		retval = p_size;
 	}
 
@@ -2800,7 +2800,7 @@ signed short read_datfile(signed short handle, unsigned char *buf, unsigned shor
 }
 
 /* Borlandified and identical */
-Bit32s get_filelength(Bit16s unused)
+Bit32s get_filelength(signed short unused)
 {
 	return g_flen;
 }
@@ -2828,16 +2828,16 @@ void error_msg(const char *msg)
 #if defined(__BORLANDC__)
 /* unused */
 /* Borlandified and identical */
-Bit16s get_bioskey(void)
+signed short get_bioskey(void)
 {
 	return CD_bioskey(0);
 }
 #endif
 
 /* Borlandified and identical */
-void vsync_or_key(Bit16s val)
+void vsync_or_key(signed short val)
 {
-	Bit16s i;
+	signed short i;
 
 	for (i = 0; i < val; i++) {
 		handle_input();
@@ -2853,9 +2853,9 @@ void vsync_or_key(Bit16s val)
 #if defined(__BORLANDC__)
 /* unused */
 /* Borlandified and identical */
-void unused_func09(Bit16s reps)
+void unused_func09(signed short reps)
 {
-	Bit16s i;
+	signed short i;
 
 	for (i = 0; i < reps; i++) {
 		wait_for_vsync();
@@ -2899,7 +2899,7 @@ Bit32u unused_func10(Bit32u v)
 #endif
 
 /* Borlandified and identical */
-void init_video(Bit16s unused)
+void init_video(signed short unused)
 {
 	struct struct_color l_white = *(struct struct_color*)&g_col_white2;
 
@@ -2966,15 +2966,15 @@ void ega_unused6(unsigned char val)
 
 #if defined(__BORLANDC__)
 /* Borlandified and identical */
-void unused_func11(Bit16s x1, Bit16s x2, Bit16s y, Bit16s color)
+void unused_func11(signed short x1, signed short x2, signed short y, signed short color)
 {
-	Bit16s tmp;
-	Bit16s count;
-	Bit16s offset;
-	Bit16s width;
+	signed short tmp;
+	signed short count;
+	signed short offset;
+	signed short width;
 
-	Bit16s l_si = x1;
-	Bit16s l_di = x2;
+	signed short l_si = x1;
+	signed short l_di = x2;
 	width = 320;
 
 	if (l_si > l_di) {
@@ -2991,12 +2991,12 @@ void unused_func11(Bit16s x1, Bit16s x2, Bit16s y, Bit16s color)
 #endif
 
 /* Borlandified and nearly identical */
-void draw_v_line(Bit16s x, Bit16s y1, Bit16s y2, unsigned short color)
+void draw_v_line(signed short x, signed short y1, signed short y2, unsigned short color)
 {
-	Bit16s tmp;
-	Bit16s diffY;
-	Bit16s offset;
-	Bit16s width = 320;
+	signed short tmp;
+	signed short diffY;
+	signed short offset;
+	signed short width = 320;
 
 	if (y1 > y2) {
 		tmp = y2;
@@ -3013,19 +3013,19 @@ void draw_v_line(Bit16s x, Bit16s y1, Bit16s y2, unsigned short color)
 /* Borlandified and identical */
 void do_draw_pic(unsigned short mode)
 {
-	Bit16s d1;
-	Bit16s d2;
-	Bit16s v1;
-	Bit16s v2;
-	Bit16s d3;
-	Bit16s d4;
-	Bit16s w;
-	Bit16s h;
+	signed short d1;
+	signed short d2;
+	signed short v1;
+	signed short v2;
+	signed short d3;
+	signed short d4;
+	signed short w;
+	signed short h;
 	RealPt src;
 	RealPt dst;
 
-	register Bit16s x;
-	register Bit16s y;
+	register signed short x;
+	register signed short y;
 
 	x = g_dst_x1;
 	y = g_dst_y1;
@@ -3082,8 +3082,8 @@ void unused_func12(void)
 /* Borlandified and identical */
 void call_fill_rect_gen(unsigned char *ptr, unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2, unsigned short color)
 {
-	Bit16s width;
-	Bit16s height;
+	signed short width;
+	signed short height;
 
 	width = x2 - x1 + 1;
 	height = y2 - y1 + 1;
@@ -3149,13 +3149,13 @@ void blit_smth3(unsigned char *ptr, signed short v1, signed short v2)
 unsigned short str_splitter(const char *s)
 {
 	char *tp;
-	Bit16s unknown_var1;
-	Bit16s lines;
-	Bit16s c_width;
-	Bit16s l_width;
+	signed short unknown_var1;
+	signed short lines;
+	signed short c_width;
+	signed short l_width;
 
-	Bit16s last_space; //di
-	Bit16s i; //si
+	signed short last_space; //di
+	signed short i; //si
 
 	lines = 1;
 
@@ -3235,10 +3235,10 @@ unsigned short print_line(const char *str)
 
 /* Borlandified and identical */
 /* static */
-void print_str(const char *str, Bit16s x, Bit16s y)
+void print_str(const char *str, signed short x, signed short y)
 {
-	Bit16s i;
-	Bit16s x_bak;
+	signed short i;
+	signed short x_bak;
 	unsigned char c;
 
 	i = 0;
@@ -3299,10 +3299,10 @@ void print_str(const char *str, Bit16s x, Bit16s y)
 
 
 /* Borlandified and identical */
-Bit16s print_chr(unsigned char c, Bit16s x, Bit16s y)
+signed short print_chr(unsigned char c, signed short x, signed short y)
 {
-	Bit16s width;
-	Bit16s idx;
+	signed short width;
+	signed short idx;
 
 	idx = get_chr_info(c, &width);
 
@@ -3319,9 +3319,9 @@ Bit16s print_chr(unsigned char c, Bit16s x, Bit16s y)
  * Returns the font index.
  */
 /* Borlandified and identical */
-Bit16s get_chr_info(unsigned char c, Bit16s *width)
+signed short get_chr_info(unsigned char c, signed short *width)
 {
-	Bit16s i;
+	signed short i;
 
 	for (i = 0; i != 222; i += 3) {
 		/* search for the character */
@@ -3342,10 +3342,10 @@ Bit16s get_chr_info(unsigned char c, Bit16s *width)
 
 /* Borlandified and identical */
 /* static */
-void call_them_all(Bit16s v1, Bit16s v2, Bit16s x, Bit16s y)
+void call_them_all(signed short v1, signed short v2, signed short x, signed short y)
 {
 	RealPt gfx_ptr;
-	Bit16s l2;
+	signed short l2;
 	Bit32s bogus;
 
 	fill_smth();
@@ -3354,7 +3354,7 @@ void call_them_all(Bit16s v1, Bit16s v2, Bit16s x, Bit16s y)
 	gfx_ptr = get_gfx_ptr(x, y, &l2);
 	bogus = (Bit32s)ret_zero(v2, l2);
 
-	call_blit_smth3(gfx_ptr, 7, (Bit16s)bogus, l2, v2);
+	call_blit_smth3(gfx_ptr, 7, (signed short)bogus, l2, v2);
 }
 
 /* Borlandified and identical */
@@ -3401,7 +3401,7 @@ void fill_smth2(unsigned char* sptr)
 
 /* Borlandified and identical */
 /* static */
-RealPt get_gfx_ptr(Bit16s x, Bit16s y, Bit16s* unused)
+RealPt get_gfx_ptr(signed short x, signed short y, signed short* unused)
 {
 	RealPt start;
 	return start = g_gfx_ptr + (y * 320 + x);
@@ -3409,21 +3409,21 @@ RealPt get_gfx_ptr(Bit16s x, Bit16s y, Bit16s* unused)
 
 /* Borlandified and identical */
 /* static */
-Bit16s ret_zero(Bit16s unused1, Bit16s unused2)
+signed short ret_zero(signed short unused1, signed short unused2)
 {
 	return 0;
 }
 
 /* Borlandified and identical */
 /* static */
-void call_blit_smth3(RealPt dst, Bit16s v1, Bit16s v2, Bit16s v3, Bit16s v4)
+void call_blit_smth3(RealPt dst, signed short v1, signed short v2, signed short v3, signed short v4)
 {
 	blit_smth3(dst, v1, v4);
 }
 
 /* Borlandified and identical */
 /* static */
-void set_textcolor(Bit16s fg, Bit16s bg)
+void set_textcolor(signed short fg, signed short bg)
 {
 	g_fg_color[0] = fg;
 	g_bg_color = bg;
@@ -3431,7 +3431,7 @@ void set_textcolor(Bit16s fg, Bit16s bg)
 
 /* Borlandified and identical */
 /* static */
-void get_textcolor(Bit16s *p_fg, Bit16s *p_bg)
+void get_textcolor(signed short *p_fg, signed short *p_bg)
 {
 	host_writew((unsigned char*)p_fg, g_fg_color[0]);
 	host_writew((unsigned char*)p_bg, g_bg_color);
@@ -3440,9 +3440,9 @@ void get_textcolor(Bit16s *p_fg, Bit16s *p_bg)
 #if defined(__BORLANDC__)
 /* Borlandified and identical */
 /* static */
-Bit16s count_linebreaks(unsigned char *ptr)
+signed short count_linebreaks(unsigned char *ptr)
 {
-	Bit16s i = 0;
+	signed short i = 0;
 	
 	while (*ptr) {
 		if (*ptr++ == 0x0d) {
@@ -3455,10 +3455,10 @@ Bit16s count_linebreaks(unsigned char *ptr)
 #endif
 
 /* Borlandified and identical */
-Bit16s get_str_width(char *str)
+signed short get_str_width(char *str)
 {
-	Bit16s sum = 0;
-	Bit16s width;
+	signed short sum = 0;
+	signed short width;
 
 	while (*str) {
 		get_chr_info(*str++, &width);
@@ -3477,12 +3477,12 @@ Bit16s get_str_width(char *str)
  * Returns the X coordinate where the strin must start.
  */
 /* Borlandified and identical */
-Bit16s get_line_start_c(const char *str, Bit16s x, Bit16s x_max)
+signed short get_line_start_c(const char *str, signed short x, signed short x_max)
 {
-	Bit16s width;
+	signed short width;
 
-	register Bit16s pos_x;	// si
-	register Bit16s val;	// di
+	register signed short pos_x;	// si
+	register signed short val;	// di
 	
 	for (pos_x = 0; ((val = *str) && (val != 0x40) && (val != 0x0d)); )
 	{
@@ -3498,14 +3498,14 @@ Bit16s get_line_start_c(const char *str, Bit16s x, Bit16s x_max)
 }
 
 /* Borlandified and nearly identical */
-Bit16s enter_string(char *dst, Bit16s x, Bit16s y, Bit16s num, Bit16s zero)
+signed short enter_string(char *dst, signed short x, signed short y, signed short num, signed short zero)
 {
-	Bit16s pos;
-	Bit16s c;
-	Bit16s width;
+	signed short pos;
+	signed short c;
+	signed short width;
 
-	Bit16s di;
-	register Bit16s si;
+	signed short di;
+	register signed short si;
 
 	update_mouse_cursor();
 	di = x;
@@ -3631,7 +3631,7 @@ Bit16s enter_string(char *dst, Bit16s x, Bit16s y, Bit16s num, Bit16s zero)
 }
 
 /* Borlandified and identical */
-void draw_popup_line(Bit16s line, Bit16s type)
+void draw_popup_line(signed short line, signed short type)
 {
 	unsigned char *dst;
 	unsigned char *src;
@@ -3698,16 +3698,16 @@ signed short infobox(const char *msg, signed short digits)
 {
 	RealPt src;
 	RealPt dst;
-	Bit16s retval;
-	Bit16s fg;
-	Bit16s bg;
-	Bit16s v2;
-	Bit16s v3;
-	Bit16s v4;
-	Bit16s i;
+	signed short retval;
+	signed short fg;
+	signed short bg;
+	signed short v2;
+	signed short v3;
+	signed short v4;
+	signed short i;
 
-	Bit16s lines; // si
-	Bit16s di;    // di
+	signed short lines; // si
+	signed short di;    // di
 		      //
 #if !defined(__BORLANDC__)
 	/* Issue: Try to print an infobox without having the background loaded */
@@ -3751,7 +3751,7 @@ signed short infobox(const char *msg, signed short digits)
 
 	draw_popup_line(lines + 1, 3);
 
-	get_textcolor((Bit16s*)&fg, (Bit16s*)&bg);
+	get_textcolor((signed short*)&fg, (signed short*)&bg);
 	set_textcolor(0xff, 0xdf); // WHITE ON GREEN
 
 	print_line(msg);
@@ -3801,7 +3801,7 @@ signed short infobox(const char *msg, signed short digits)
 /* Borlandified and identical */
 signed short gui_bool(char *msg)
 {
-	Bit16s retval;
+	signed short retval;
 
 	g_bool_mode = 1;
 	retval = gui_radio(msg, 2, get_text(4), get_text(5));
@@ -3821,12 +3821,12 @@ signed short gui_bool(char *msg)
  *
  */
 /* Borlandified and identical */
-void fill_radio_button(Bit16s old_pos, Bit16s new_pos, Bit16s offset)
+void fill_radio_button(signed short old_pos, signed short new_pos, signed short offset)
 {
-	Bit16s y;
+	signed short y;
 
-	Bit16s i;
-	Bit16s x;
+	signed short i;
+	signed short x;
 
 	update_mouse_cursor();
 
@@ -3862,28 +3862,28 @@ signed short gui_radio(char *header, signed char options, ...)
 {
 	va_list arguments;
 	char *str;
-	Bit16s r3;
-	Bit16s r4;
-	Bit16s r5;
-	Bit16s retval;
-	Bit16s lines_sum;
-	Bit16s lines_header;
-	Bit16s r6;
-	Bit16s fg_bak;
-	Bit16s bg_bak;
-	Bit16s bak1;
-	Bit16s bak2;
-	Bit16s bak3;
+	signed short r3;
+	signed short r4;
+	signed short r5;
+	signed short retval;
+	signed short lines_sum;
+	signed short lines_header;
+	signed short r6;
+	signed short fg_bak;
+	signed short bg_bak;
+	signed short bak1;
+	signed short bak2;
+	signed short bak3;
 	RealPt src;
 	RealPt dst;
-	Bit16s mx_bak;
-	Bit16s my_bak;
-	Bit16s r7;
-	Bit16s r8;
-	Bit16s r9;
+	signed short mx_bak;
+	signed short my_bak;
+	signed short r7;
+	signed short r8;
+	signed short r9;
 
-	Bit16s i;
-	Bit16s di;
+	signed short i;
+	signed short di;
 
 	r5 = 0;
 	r6 = -1;
@@ -3916,7 +3916,7 @@ signed short gui_radio(char *header, signed char options, ...)
 	draw_popup_line(lines_sum + 1, 3);
 
 	/* save and set text colors */
-	get_textcolor((Bit16s*)&fg_bak, (Bit16s*)&bg_bak);
+	get_textcolor((signed short*)&fg_bak, (signed short*)&bg_bak);
 	set_textcolor(0xff, 0xdf); // WHITE ON GREEN
 
 	/* print header */
@@ -4052,8 +4052,8 @@ void enter_name(void)
 void change_head(void)
 {
 	struct nvf_desc nvf;
-	Bit16s width;
-	Bit16s height;
+	signed short width;
+	signed short height;
 
 	nvf.dst = g_gen_ptr6;
 	nvf.src = g_buffer_heads_dat;
@@ -4118,8 +4118,8 @@ void change_sex(void)
 /* Borlandified and identical */
 void do_gen(void)
 {
-	Bit16s si;
-	Bit16s di;
+	signed short si;
+	signed short di;
 
 	di = 0;
 
@@ -4314,8 +4314,8 @@ void refresh_screen(void)
 {
 	RealPt src;
 	RealPt dst;
-	Bit16s width;
-	Bit16s height;
+	signed short width;
+	signed short height;
 	struct nvf_desc nvf;
 
 	if (g_screen_var) {
@@ -4419,7 +4419,7 @@ void refresh_screen(void)
 /* static */
 void clear_hero(void)
 {
-	Bit16s i;
+	signed short i;
 
 	g_got_mu_bonus = g_got_ch_bonus = 0;
 
@@ -4457,10 +4457,10 @@ void new_values(void)
 #else
 	char name_bak[10];
 #endif
-	Bit16s j;
-	Bit16s i;
+	signed short j;
+	signed short i;
 
-	Bit16s di;
+	signed short di;
 
 	/* set variable if hero has a typus */
 	if (g_hero.typus)
@@ -4581,8 +4581,8 @@ void new_values(void)
 void calc_at_pa(void)
 {
 	div_t res; // BCC <STDLIB.H>
-	Bit16s tmp;
-	Bit16s i;
+	signed short tmp;
+	signed short i;
 
 	res = div(g_hero.attrib[5].normal + g_hero.attrib[6].normal + g_hero.attrib[4].normal, 5);
 	/* round up if neccessary */
@@ -4632,12 +4632,12 @@ void calc_at_pa(void)
 /* Borlandified and nearly identical */
 void fill_values(void)
 {
-	Bit16s i;
-	Bit16s v1;
-	Bit16s v2;
+	signed short i;
+	signed short v1;
+	signed short v2;
 	const struct struct_money *money_ptr;
 
-	Bit16s si, di;
+	signed short si, di;
 
 	/* fill skill values */
 	for (i = 0; i < 52; i++) {
@@ -4905,9 +4905,9 @@ void fill_values(void)
  *
  */
 /* Borlandified and identical */
-void skill_inc_novice(Bit16s skill)
+void skill_inc_novice(signed short skill)
 {
-	Bit16s done = 0;
+	signed short done = 0;
 
 	while (!done) {
 		/* leave the loop if 3 tries have been done */
@@ -4926,7 +4926,7 @@ void skill_inc_novice(Bit16s skill)
 			g_hero.skill_incs--;
 
 			/* check if the test is passed */
-			if ((Bit16s)random_interval_gen(2, 12) > g_hero.skills[skill]) {
+			if ((signed short)random_interval_gen(2, 12) > g_hero.skills[skill]) {
 				/* increment skill */
 				g_hero.skills[skill]++;
 
@@ -4960,9 +4960,9 @@ void skill_inc_novice(Bit16s skill)
  *
  */
 /* Borlandified and identical */
-void spell_inc_novice(Bit16s spell)
+void spell_inc_novice(signed short spell)
 {
-	Bit16s done = 0;
+	signed short done = 0;
 
 	while (!done) {
 		/* leave the loop if 3 tries have been done */
@@ -4982,7 +4982,7 @@ void spell_inc_novice(Bit16s spell)
 		g_hero.spell_incs--;
 
 		/* check if the test is passed */
-		if ((Bit16s)random_interval_gen(2, 12) > g_hero.spells[spell]) {
+		if ((signed short)random_interval_gen(2, 12) > g_hero.spells[spell]) {
 
 			/* increment spell */
 			g_hero.spells[spell]++;
@@ -5009,11 +5009,11 @@ void select_typus(void)
 	signed char possible_types;
 	signed char ltmp2;
 	signed char *ptr;
-	Bit16s i;
-	Bit16s impossible;
+	signed short i;
+	signed short impossible;
 
-	register Bit16s di;
-	register Bit16s si;
+	register signed short di;
+	register signed short si;
 
 
 	struct type_bitmap t;
@@ -5136,14 +5136,14 @@ void select_typus(void)
  *
  */
 /* Borlandified and nearly identical */
-Bit16s can_change_attribs(void)
+signed short can_change_attribs(void)
 {
-	Bit16s na_inc;
-	volatile Bit16s na_dec;
+	signed short na_inc;
+	volatile signed short na_dec;
 	signed char *p;
-	Bit16s i;
-	register Bit16s pa_inc;
-	register Bit16s pa_dec;
+	signed short i;
+	register signed short pa_inc;
+	register signed short pa_dec;
 
 	pa_inc = 0;
 	pa_dec = 0;
@@ -5183,15 +5183,15 @@ Bit16s can_change_attribs(void)
 /* Borlandified and nearly identical */
 void change_attribs(void)
 {
-	Bit16s tmp1;
-	volatile Bit16s tmp2;
-	volatile Bit16s tmp3;
+	signed short tmp1;
+	volatile signed short tmp2;
+	volatile signed short tmp3;
 	signed char *ptr1;
 	signed char *ptr2;
 	signed char c;
 
-	Bit16s si;
-	Bit16s di;
+	signed short si;
+	signed short di;
 
 	/* check if attributes have been set */
 	if (!g_hero.attrib[0].normal) {
@@ -5403,19 +5403,19 @@ void change_attribs(void)
 void save_picbuf(void)
 {
 	RealPt p;
-	Bit16s x_3;
-	Bit16s y_1;
-	Bit16s y_2;
-	Bit16s y_3;
-	Bit16s w_1;
-	Bit16s w_2;
-	Bit16s w_3;
-	Bit16s h_1;
-	Bit16s h_2;
-	Bit16s h_3;
+	signed short x_3;
+	signed short y_1;
+	signed short y_2;
+	signed short y_3;
+	signed short w_1;
+	signed short w_2;
+	signed short w_3;
+	signed short h_1;
+	signed short h_2;
+	signed short h_3;
 
-	register Bit16s x_1;
-	register Bit16s x_2;
+	register signed short x_1;
+	register signed short x_2;
 
 	x_1 = 0;
 
@@ -5586,12 +5586,12 @@ void print_attribs(void)
 void print_values(void)
 {
 	char tmp[4];
-	Bit16s width;
-	Bit16s align_left = 222;
-	Bit16s align_right = 302;
+	signed short width;
+	signed short align_left = 222;
+	signed short align_right = 302;
 
-	register Bit16s i;
-	register Bit16s pos;
+	register signed short i;
+	register signed short pos;
 
 
 	switch (g_gen_page) {
@@ -6051,11 +6051,11 @@ void make_valuta_str(char *dst, Bit32s money)
 		money -= 10;
 	}
 
-	sprintf(dst, get_text(69), d, s, (Bit16s)money);
+	sprintf(dst, get_text(69), d, s, (signed short)money);
 }
 
 /* Borlandified and nearly identical */
-static void inc_skill(Bit16s skill, Bit16s max, char *msg)
+static void inc_skill(signed short skill, signed short max, char *msg)
 {
 	/* no more increments than the maximum */
 	if (g_skill_incs[skill].incs >= max) {
@@ -6070,7 +6070,7 @@ static void inc_skill(Bit16s skill, Bit16s max, char *msg)
 
 	/* decrement total number of skill inc tries */
 	g_hero.skill_incs--;
-	if ((Bit16s)random_interval_gen(2, 12) > g_hero.skills[skill]) {
+	if ((signed short)random_interval_gen(2, 12) > g_hero.skills[skill]) {
 		/* print sucess message */
 		infobox(get_text(152), 0);
 		/* increment skill */
@@ -6104,8 +6104,8 @@ static void inc_skill(Bit16s skill, Bit16s max, char *msg)
 /* Borlandified and identical */
 void select_skill(void)
 {
-	Bit16s skill;
-	Bit16s group;
+	signed short skill;
+	signed short group;
 
 	do {
 
@@ -6244,9 +6244,9 @@ void select_skill(void)
 }
 
 /* Borlandified and identical */
-static void inc_spell(Bit16s spell)
+static void inc_spell(signed short spell)
 {
-	Bit16s max_incs = 1;
+	signed short max_incs = 1;
 
 	/* if typus == warlock and the origin of the spell is warlock */
 	if ((g_hero.typus == 7) && (g_spell_tab[spell].origin == 3))
@@ -6289,7 +6289,7 @@ static void inc_spell(Bit16s spell)
 	/* decrement spell attempts */
 	g_hero.spell_incs--;
 
-	if ((Bit16s)random_interval_gen(2, 12) > g_hero.spells[spell]) {
+	if ((signed short)random_interval_gen(2, 12) > g_hero.spells[spell]) {
 		/* show success */
 		infobox(get_text(152), 0);
 		/* increment spell value */
@@ -6574,8 +6574,8 @@ void select_spell(void)
 /* Borlandified and identical */
 void choose_atpa(void)
 {
-	Bit16s skill;
-	Bit16s increase;
+	signed short skill;
+	signed short increase;
 
 	g_text_x_mod = -80;
 
@@ -6634,14 +6634,14 @@ void choose_atpa(void)
 /* Borlandified and far from identical */
 void choose_typus(void)
 {
-	Bit16s choosen_typus;
-	Bit16s randval;
+	signed short choosen_typus;
+	signed short randval;
 	signed char sex_bak;
 	signed char *ptr;
 	char name_bak[20];
 
-	Bit16s i;
-	Bit16s typus_names;
+	signed short i;
+	signed short typus_names;
 
 	if (!gui_bool(get_text(264)))
 		return;
@@ -6678,7 +6678,7 @@ void choose_typus(void)
 	/* roll out positive attribute values */
 	for (i = 0; i < 7; i ++) {
 
-		randval = (Bit16s)random_interval_gen(8, 13);
+		randval = (signed short)random_interval_gen(8, 13);
 
 		if (randval > 8)
 			randval--;
@@ -6691,7 +6691,7 @@ void choose_typus(void)
 	/* roll out negative attribute values */
 	for (i = 0; i < 7; i ++) {
 
-		randval = (Bit16s)random_interval_gen(2, 7);
+		randval = (signed short)random_interval_gen(2, 7);
 
 		if (randval < 7)
 			randval++;
@@ -6962,15 +6962,15 @@ static void intro(void)
 {
 	signed char cnt1;
 	signed char cnt2;
-	Bit16s width;
-	Bit16s height;
-	Bit16s flen;
+	signed short width;
+	signed short height;
+	signed short flen;
 	signed char *pal_src;
 	signed char *pal_dst;
 	struct nvf_desc nvf;
 
-	Bit16s i;
-	Bit16s handle;
+	signed short i;
+	signed short handle;
 
 	g_in_intro = 1;
 
@@ -7222,7 +7222,7 @@ void print_addr(void);
 #define main_gen main
 int main_gen(int argc, char **argv)
 {
-	Bit16s sound_off = 0;
+	signed short sound_off = 0;
 
 	if (argc > 1)
 		g_called_with_args = 1;

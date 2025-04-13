@@ -25,7 +25,7 @@ struct nvf_desc {
 };
 
 	signed short *get_timbre(signed short, signed short);
-	unsigned short load_file(Bit16s);
+	unsigned short load_file(signed short);
 	signed short load_driver(const char*, signed short, signed short);
 	void play_midi(unsigned short);
 	void stop_sequence(void);
@@ -35,7 +35,7 @@ struct nvf_desc {
 	void update_mouse_cursor1(void);
 	void mouse(void);
 	void handle_input(void);
-	unsigned short get_mouse_action(Bit16s, Bit16s, struct mouse_action*);
+	unsigned short get_mouse_action(signed short, signed short, struct mouse_action*);
 	void draw_mouse_cursor(void);
 	void save_mouse_bg(void);
 	void restore_mouse_bg(void);
@@ -44,25 +44,25 @@ struct nvf_desc {
 	signed short open_datfile(unsigned short);
 	Bit32s get_archive_offset(const char*, unsigned char*);
 	signed short read_datfile(signed short, unsigned char*, unsigned short);
-	Bit32s get_filelength(Bit16s);
+	Bit32s get_filelength(signed short);
 	void wait_for_keypress(void);
 	void error_msg(const char*);
-	void vsync_or_key(Bit16s);
+	void vsync_or_key(signed short);
 	Bit32u swap_u32(Bit32u);
 
 	void exit_video(void);
 	void wait_for_vsync(void);
 	unsigned short print_line(const char*);
-	void print_str(const char *, Bit16s, Bit16s);
-	Bit16s print_chr(unsigned char, Bit16s, Bit16s);
-	Bit16s get_chr_info(unsigned char, Bit16s*);
-	void call_them_all(Bit16s, Bit16s, Bit16s, Bit16s);
+	void print_str(const char *, signed short, signed short);
+	signed short print_chr(unsigned char, signed short, signed short);
+	signed short get_chr_info(unsigned char, signed short*);
+	void call_them_all(signed short, signed short, signed short, signed short);
 	void fill_smth(void);
 	void fill_smth2(unsigned char*);
-	RealPt get_gfx_ptr(Bit16s, Bit16s, Bit16s*);
-	Bit16s ret_zero(Bit16s, Bit16s);
-	void call_blit_smth3(RealPt, Bit16s, Bit16s, Bit16s, Bit16s);
-	Bit16s get_line_start_c(const char*, Bit16s, Bit16s);
+	RealPt get_gfx_ptr(signed short, signed short, signed short*);
+	signed short ret_zero(signed short, signed short);
+	void call_blit_smth3(RealPt, signed short, signed short, signed short, signed short);
+	signed short get_line_start_c(const char*, signed short, signed short);
 	signed short infobox(const char*, signed short);
 	signed short gui_bool(char*);
 	signed short gui_radio(char*, signed char, ...);
@@ -70,10 +70,10 @@ struct nvf_desc {
 	void refresh_screen(void);
 	void clear_hero(void);
 	void new_values(void);
-	void skill_inc_novice(Bit16s);
-	void spell_inc_novice(Bit16s);
+	void skill_inc_novice(signed short);
+	void spell_inc_novice(signed short);
 	void select_typus(void);
-	Bit16s can_change_attribs(void);
+	signed short can_change_attribs(void);
 	void change_attribs(void);
 
 	void save_picbuf(void);

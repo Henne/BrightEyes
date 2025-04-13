@@ -421,7 +421,7 @@ void seg001_0465(unsigned short track)
 
 /* Borlandified and nearly identical, but works correctly */
 //static
-Bit16s CD_check_file(char *pathP)
+signed short CD_check_file(char *pathP)
 {
 #if defined(__BORLANDC__)
 	int handle;
@@ -481,7 +481,7 @@ void CD_radio_insert_cd()
 }
 
 /* Borlandified and identical */
-Bit16s CD_insert_loop()
+signed short CD_insert_loop()
 {
 #if defined(__BORLANDC__)
 	if (CD_INSERT_COUNTER == 0) {
