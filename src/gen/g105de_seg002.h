@@ -42,7 +42,7 @@ struct nvf_desc {
 	void split_textbuffer(char**, char*, unsigned long);
 	signed long process_nvf(struct nvf_desc*);
 	signed short open_datfile(unsigned short);
-	Bit32s get_archive_offset(const char*, Bit8u*);
+	Bit32s get_archive_offset(const char*, unsigned char*);
 	signed short read_datfile(signed short, unsigned char*, unsigned short);
 	Bit32s get_filelength(Bit16s);
 	void wait_for_keypress(void);
@@ -58,7 +58,7 @@ struct nvf_desc {
 	Bit16s get_chr_info(unsigned char, Bit16s*);
 	void call_them_all(Bit16s, Bit16s, Bit16s, Bit16s);
 	void fill_smth(void);
-	void fill_smth2(Bit8u*);
+	void fill_smth2(unsigned char*);
 	RealPt get_gfx_ptr(Bit16s, Bit16s, Bit16s*);
 	Bit16s ret_zero(Bit16s, Bit16s);
 	void call_blit_smth3(RealPt, Bit16s, Bit16s, Bit16s, Bit16s);

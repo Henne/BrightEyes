@@ -1303,12 +1303,12 @@ static signed long g_gendat_offset;
 static signed short g_handle_timbre;
 static signed short g_timbre_cache_size;
 static signed long g_state_table_size;
-static Bit8u* g_snd_driver;
+static unsigned char* g_snd_driver;
 static void* g_form_xmid;
-static Bit8u* g_snd_timbre_cache;
+static unsigned char* g_snd_timbre_cache;
 static void* g_state_table;
-static Bit8u* g_snd_driver_base_addr;
-static Bit8u* g_snd_driver_desc;
+static unsigned char* g_snd_driver_base_addr;
+static unsigned char* g_snd_driver_desc;
 static signed short g_snd_sequence;
 static signed short g_snd_driver_handle;
 
@@ -1386,11 +1386,11 @@ static char dummy14[0x40];
 
 static char g_mouse_backbuffer[256];
 
-static Bit8u *g_buffer_sex_dat;
-static Bit8u *g_buffer_popup_nvf;
-static Bit8u *g_buffer_heads_dat;
+static unsigned char *g_buffer_sex_dat;
+static unsigned char *g_buffer_popup_nvf;
+static unsigned char *g_buffer_heads_dat;
 static char  *g_buffer_text;
-static Bit8u *g_buffer_font6;
+static unsigned char *g_buffer_font6;
 
 static signed short g_col_index;
 static signed short g_bg_color;
@@ -1400,15 +1400,15 @@ static signed short g_text_y;
 static signed short g_text_x;
 static signed long dummy15;
 
-static Bit8u *g_picbuf3;
-static Bit8u *g_picbuf2;
-static Bit8u *g_picbuf1;
-static Bit8u *g_gen_ptr6;
-static Bit8u *g_buffer_dmenge_dat;
-static Bit8u* dummy16;
-static Bit8u* dummy17;
-static Bit8u *g_gen_ptr5;
-static Bit8u *g_gen_ptr4;
+static unsigned char *g_picbuf3;
+static unsigned char *g_picbuf2;
+static unsigned char *g_picbuf1;
+static unsigned char *g_gen_ptr6;
+static unsigned char *g_buffer_dmenge_dat;
+static unsigned char* dummy16;
+static unsigned char* dummy17;
+static unsigned char *g_gen_ptr5;
+static unsigned char *g_gen_ptr4;
 static char *g_gen_ptr3;
 static char *g_gen_ptr2;
 static char *dummy18;
@@ -1476,7 +1476,7 @@ void read_soundcfg(void)
 	g_midi_disabled = 1;
 
 	if ((handle = open(g_str_sound_cfg, 0x8001)) != -1) {
-		_read(handle, (Bit8u*)&port, 2);
+		_read(handle, (unsigned char*)&port, 2);
 		_close(handle);
 
 #if !defined(__BORLANDC__)
@@ -1662,10 +1662,10 @@ unsigned short load_file(Bit16s index)
 signed short load_driver(const char* fname, signed short type, signed short port)
 {
 	if ((port != 0) &&
-		(g_snd_driver_base_addr = (Bit8u*)load_snd_driver(fname)) &&
-		((g_snd_driver_handle = AIL_register_driver((Bit8u*)g_snd_driver_base_addr)) != -1))
+		(g_snd_driver_base_addr = (unsigned char*)load_snd_driver(fname)) &&
+		((g_snd_driver_handle = AIL_register_driver((unsigned char*)g_snd_driver_base_addr)) != -1))
 	{
-		g_snd_driver_desc = (Bit8u*)AIL_describe_driver(g_snd_driver_handle);
+		g_snd_driver_desc = (unsigned char*)AIL_describe_driver(g_snd_driver_handle);
 
 		if (host_readws(g_snd_driver_desc + 0x02) == type)
 		{
@@ -1689,7 +1689,7 @@ signed short load_driver(const char* fname, signed short type, signed short port
 					g_timbre_cache_size = AIL_default_timbre_cache_size(g_snd_driver_handle);
 
 					if (g_timbre_cache_size != 0) {
-						g_snd_timbre_cache = (Bit8u*)gen_alloc((unsigned short)g_timbre_cache_size);
+						g_snd_timbre_cache = (unsigned char*)gen_alloc((unsigned short)g_timbre_cache_size);
 						AIL_define_timbre_cache(g_snd_driver_handle,
 							g_snd_timbre_cache,
 							g_timbre_cache_size);
@@ -1752,7 +1752,7 @@ void restart_midi(void)
  * put the values in the emulated registers, instead in a structure.
  */
 /* Borlandified and identical */
-void do_mouse_action(Bit8u *p1, Bit8u *p2, Bit8u *p3, Bit8u *p4, Bit8u *p5)
+void do_mouse_action(unsigned char *p1, unsigned char *p2, unsigned char *p3, unsigned char *p4, unsigned char *p5)
 {
 #if defined(__BORLANDC__)
 	union REGS myregs;
@@ -1821,7 +1821,7 @@ void interrupt mouse_isr(void)
 			p3 = g_mouse_posx;
 			p4 = g_mouse_posy;
 			
-			do_mouse_action((Bit8u*)&p1, (Bit8u*)&p2, (Bit8u*)&p3, (Bit8u*)&p4, (Bit8u*)&p5);
+			do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
 
 			g_mouse_posx = p3;
 			g_mouse_posy = p4;
@@ -1843,7 +1843,7 @@ void interrupt mouse_isr(void)
 			p3 = g_mouse_posx;
 			p4 = g_mouse_posy;
 			
-			do_mouse_action((Bit8u*)&p1, (Bit8u*)&p2, (Bit8u*)&p3, (Bit8u*)&p4, (Bit8u*)&p5);
+			do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
 			
 			g_mouse_moved = 1;
 		}
@@ -1862,7 +1862,7 @@ void mouse_enable(void)
 		/* initialize mouse */
 		p1 = 0;
 
-		do_mouse_action((Bit8u*)&p1, (Bit8u*)&p2, (Bit8u*)&p3, (Bit8u*)&p4, (Bit8u*)&p5);
+		do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
 
 		if (p1 == 0) {
 			g_have_mouse = 0;
@@ -1878,7 +1878,7 @@ void mouse_enable(void)
 			p3 = g_mouse_posx;
 			p4 = g_mouse_posy;
 
-			do_mouse_action((Bit8u*)&p1, (Bit8u*)&p2, (Bit8u*)&p3, (Bit8u*)&p4, (Bit8u*)&p5);
+			do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
 #if defined(__BORLANDC__)
 			mouse_do_enable(0x1f, (RealPt)&mouse_isr);
 #endif
@@ -1896,11 +1896,11 @@ void mouse_disable(void)
 
 #if defined(__BORLANDC__)
 /* Borlandified and identical */
-void mouse_unused1(Bit8u *p1, Bit8u *p2, Bit8u *p3, Bit8u *p4)
+void mouse_unused1(unsigned char *p1, unsigned char *p2, unsigned char *p3, unsigned char *p4)
 {
 	unsigned short l_var;
 	host_writew(p1, 5);
-	do_mouse_action(p1, p2, p3, p4, (Bit8u*)&l_var);
+	do_mouse_action(p1, p2, p3, p4, (unsigned char*)&l_var);
 }
 
 /* Borlandified and identical */
@@ -1928,7 +1928,7 @@ void mouse_do_enable(Bit16u val, RealPt ptr)
 	_dos_setvect(0x78, (void interrupt far (*)(void))ptr);
 
 	/* set the new mouse event handler */
-	do_mouse_action((Bit8u*)&p1, (Bit8u*)&p2, (Bit8u*)&p3, (Bit8u*)&p4, (Bit8u*)&p5);
+	do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
 
 	g_mouse_handler_installed = 1;
 #endif
@@ -1949,7 +1949,7 @@ void mouse_do_disable(void)
 	v4 = 0;
 	v5 = 0;
 
-	do_mouse_action((Bit8u*)&v1, (Bit8u*)&v2, (Bit8u*)&v3, (Bit8u*)&v4, (Bit8u*)&v5);
+	do_mouse_action((unsigned char*)&v1, (unsigned char*)&v2, (unsigned char*)&v3, (unsigned char*)&v4, (unsigned char*)&v5);
 
 	g_mouse_handler_installed = 0;
 #endif
@@ -1969,7 +1969,7 @@ void mouse_move_cursor(unsigned short x, unsigned short y)
 	p3 = x;
 	p4 = y;
 
-	do_mouse_action((Bit8u*)&p1, (Bit8u*)&p2, (Bit8u*)&p3, (Bit8u*)&p4, (Bit8u*)&p5);
+	do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
 }
 
 #if defined(__BORLANDC__)
@@ -1984,7 +1984,7 @@ void mouse_unused2(unsigned short a1, unsigned short a2, unsigned short a3, unsi
 	p4 = a3;
 	p5 = a4;
 
-	do_mouse_action((Bit8u*)&p1, (Bit8u*)&p2, (Bit8u*)&p3, (Bit8u*)&p4, (Bit8u*)&p5);
+	do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
 }
 
 /* Borlandified and identical */
@@ -1995,7 +1995,7 @@ void mouse_unused3(unsigned short a1)
 	p1 = 0x1d;
 	p2 = a1;
 
-	do_mouse_action((Bit8u*)&p1, (Bit8u*)&p2, (Bit8u*)&p3, (Bit8u*)&p4, (Bit8u*)&p5);
+	do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
 }
 #endif
 
@@ -2221,14 +2221,14 @@ void unused_func1(signed char *in_ptr, signed short x, signed short y, signed ch
  *
 */
 /* Borlandified and identical */
-void decomp_rle(Bit8u *dst, Bit8u *src, Bit16s x, Bit16s y,
+void decomp_rle(unsigned char *dst, unsigned char *src, Bit16s x, Bit16s y,
 				Bit16s width, Bit16s height, Bit16u mode)
 {
 	Bit16s i, j, k;
 	Bit8s val;
-	Bit8u n;
+	unsigned char n;
 	Bit8s pix;
-	Bit8u *dst_loc;
+	unsigned char *dst_loc;
 
 	dst_loc = dst;
 	dst_loc += 320 * y + x;
@@ -2869,7 +2869,7 @@ Bit32u swap_u32(Bit32u v)
 {
 	Bit16u l1;
 	Bit16u l2;
-	Bit8u *p = (Bit8u*)&l2;
+	unsigned char *p = (unsigned char*)&l2;
 
 	register Bit16u l_si;
 
@@ -2888,7 +2888,7 @@ Bit32u unused_func10(Bit32u v)
 	Bit16u l1;
 	Bit16u l2;
 	Bit16u l_si;
-	Bit8u *p = (Bit8u*)&l2;
+	unsigned char *p = (unsigned char*)&l2;
 
 	l_si = host_writed(p, v); // write v to stack and access subvalues with l1 and l2
 	l2 = l1;
@@ -2922,42 +2922,42 @@ void exit_video(void)
 /* unused EGA hardware io functions */
 
 /* Borlandified and identical */
-void ega_unused1(Bit8u val)
+void ega_unused1(unsigned char val)
 {
 	outportb(0x3ce, 5);
 	outportb(0x3cf, val);
 }
 
 /* Borlandified and identical */
-void ega_unused2(Bit8u val)
+void ega_unused2(unsigned char val)
 {
 	outportb(0x3c4, 2);
 	outportb(0x3c5, val);
 }
 
 /* Borlandified and identical */
-void ega_unused3(Bit8u val)
+void ega_unused3(unsigned char val)
 {
 	outportb(0x3ce, 0);
 	outportb(0x3cf, val);
 }
 
 /* Borlandified and identical */
-void ega_unused4(Bit8u val)
+void ega_unused4(unsigned char val)
 {
 	outportb(0x3ce, 1);
 	outportb(0x3cf, val);
 }
 
 /* Borlandified and identical */
-void ega_unused5(Bit8u val)
+void ega_unused5(unsigned char val)
 {
 	outportb(0x3ce, 4);
 	outportb(0x3cf, val);
 }
 
 /* Borlandified and identical */
-void ega_unused6(Bit8u val)
+void ega_unused6(unsigned char val)
 {
 	outportb(0x3ce, 8);
 	outportb(0x3cf, val);
@@ -3239,7 +3239,7 @@ void print_str(const char *str, Bit16s x, Bit16s y)
 {
 	Bit16s i;
 	Bit16s x_bak;
-	Bit8u c;
+	unsigned char c;
 
 	i = 0;
 
@@ -3377,7 +3377,7 @@ void fill_smth(void)
 
 /* Borlandified and identical */
 /* static */
-void fill_smth2(Bit8u* sptr)
+void fill_smth2(unsigned char* sptr)
 {
 	unsigned char *ptr;
 	signed short i;
@@ -3433,14 +3433,14 @@ void set_textcolor(Bit16s fg, Bit16s bg)
 /* static */
 void get_textcolor(Bit16s *p_fg, Bit16s *p_bg)
 {
-	host_writew((Bit8u*)p_fg, g_fg_color[0]);
-	host_writew((Bit8u*)p_bg, g_bg_color);
+	host_writew((unsigned char*)p_fg, g_fg_color[0]);
+	host_writew((unsigned char*)p_bg, g_bg_color);
 }
 
 #if defined(__BORLANDC__)
 /* Borlandified and identical */
 /* static */
-Bit16s count_linebreaks(Bit8u *ptr)
+Bit16s count_linebreaks(unsigned char *ptr)
 {
 	Bit16s i = 0;
 	
@@ -3568,9 +3568,9 @@ Bit16s enter_string(char *dst, Bit16s x, Bit16s y, Bit16s num, Bit16s zero)
 		} else {
 			/* isalnum(c) */
 			if (!(isalnum(c)) &&
-				(((Bit8u)c) != 0x84) && (((Bit8u)c) != 0x94) &&
-				(((Bit8u)c) != 0x81) && (((Bit8u)c) != 0x8e) &&
-				(((Bit8u)c) != 0x99) && (((Bit8u)c) != 0x9a) &&
+				(((unsigned char)c) != 0x84) && (((unsigned char)c) != 0x94) &&
+				(((unsigned char)c) != 0x81) && (((unsigned char)c) != 0x8e) &&
+				(((unsigned char)c) != 0x99) && (((unsigned char)c) != 0x9a) &&
 				(c != 0x20) && (c != 0x2e))
 					continue;
 
@@ -3579,13 +3579,13 @@ Bit16s enter_string(char *dst, Bit16s x, Bit16s y, Bit16s num, Bit16s zero)
 				c = toupper(c);
 
 			/* ae */
-			if ((Bit8u)c == 0x84)
+			if ((unsigned char)c == 0x84)
 				c = (signed short)0xff8e;
 			/* oe */
-			if ((Bit8u)c == 0x94)
+			if ((unsigned char)c == 0x94)
 				c = (signed short)0xff99;
 			/* ue */
-			if ((Bit8u)c == 0x81)
+			if ((unsigned char)c == 0x81)
 				c = (signed short)0xff9a;
 
 			/* are we at the end of the input field */
@@ -3599,10 +3599,10 @@ Bit16s enter_string(char *dst, Bit16s x, Bit16s y, Bit16s num, Bit16s zero)
 				pos--;
 			}
 
-			*dst++ = (Bit8u)c;
+			*dst++ = (unsigned char)c;
 			print_chr(0x20, di, y);
-			print_chr((Bit8u)c, di, y);
-			get_chr_info((Bit8u)c, &width);
+			print_chr((unsigned char)c, di, y);
+			get_chr_info((unsigned char)c, &width);
 
 			di += (zero != 0) ? width : 6;
 
@@ -4088,7 +4088,7 @@ void change_head(void)
 void change_sex(void)
 {
 	RealPt dst;
-	Bit8u* src;
+	unsigned char* src;
 
 	/* change sex of the hero */
 	g_hero.sex ^= 1;
@@ -6833,7 +6833,7 @@ static void pal_fade_in(signed char *dst, signed char *src, signed short col, si
 #if !defined(__BORLANDC__)
 static void BE_cleanup(void)
 {
-	Bit8u *host_ptr;
+	unsigned char *host_ptr;
 
 	if (g_vga_memstart) {
 		free(g_vga_memstart);

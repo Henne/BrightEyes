@@ -430,11 +430,11 @@ Bit16s CD_check_file(char *pathP)
 	
 	if (_dos_open((char*)pathP, 1, &handle)) return -1;
 
-	if (_dos_read(handle, (Bit8u*)&buf, 1, &nread)) return -1;
+	if (_dos_read(handle, (unsigned char*)&buf, 1, &nread)) return -1;
 
 	lseek(handle, 2000L, 0);
 
-	if (_dos_read(handle, (Bit8u*)&buf, 1, &nread)) return -1;
+	if (_dos_read(handle, (unsigned char*)&buf, 1, &nread)) return -1;
 
 	_dos_close(handle);
 
@@ -457,7 +457,7 @@ void CD_radio_insert_cd()
 	
 	while (si == -2) {
 
-		si = gui_radio((Bit8u*)text_buffer,
+		si = gui_radio((unsigned char*)text_buffer,
 				2,
 				(char*)STR_REPEAT,	
 				(char*)STR_QUIT);	
