@@ -260,6 +260,13 @@ static void seg001_00bb(signed short track_no)
 		CD_driver_request((struct driver_request*)&cd_buf1[0x8c]);
 
 		CD_AUDIO_POS = ((track_start - 150) * 0x1234e) / 0x4b000;
+
+		//asm { db 0x0F, 0x1F, 0x40, 0x00; } // BCC Sync-Point
+		//asm { db 0x0F, 0x1F, 0x40, 0x00; } // BCC Sync-Point
+		//asm { db 0x66, 0x90; } // BCC Sync-Point
+		//asm { db 0x66, 0x90; }
+		//asm { nop; }
+
 		asm { db 0x0F, 0x1F, 0x40, 0x00; } // BCC Sync-Point
 		asm { db 0x0F, 0x1F, 0x40, 0x00; } // BCC Sync-Point
 		asm { db 0x66, 0x90; }
@@ -353,34 +360,26 @@ void CD_unused3()
 }
 #endif
 
-/* Borlandified and nearly identical */
+/* Borlandified and nearly identical, but should work correctly */
 void seg001_03a8(void)
 {
 #if defined(__BORLANDC__)
-	unsigned short v;
+	signed short v;
 
 	if (CD_INIT_SUCCESSFUL == 0) {
 
 		writew(&cd_buf1[0x3b], 0);
 		writed(&cd_buf1[0x46], &cd_buf1[0x420]);
-	//	writew(&cd_buf1[0x46], 0x420);
 		writeb(&cd_buf1[0x420], 0x0a);
+		asm { db 0x0f, 0x1f, 0x00 } // BCC Sync-Point
 		CD_driver_request((struct driver_request*)&cd_buf1[0x38]);
 
 		v = readb(&cd_buf1[0x421]);
 		for (; readb(&cd_buf1[0x422]) >= v; v++) {
 			writew(&cd_buf1[0x3b], 0);
-			writew(&cd_buf1[0x48], FP_SEG(&cd_buf1));
-			writew(&cd_buf1[0x46], 0x108 + v * 8);
-
-			asm { db 0x0F, 0x1F, 0x40, 0x00; } // BCC Sync-Point
-			//asm { db 0x0F, 0x1F, 0x40, 0x00; } // BCC Sync-Point
-			asm { db 0x66, 0x90; } // BCC Sync-Point
-			//asm { db 0x66, 0x90; }
-			//asm { nop; }
-
-			writeb(MK_FP(reloc_gen + CDSEG, v * 8 + 0x108), 11);
-			writeb(MK_FP(reloc_gen + CDSEG, v * 8 + 0x109), (unsigned char)v);
+			writed(&cd_buf1[0x46], &cd_buf1[0x108 + 8 * v]);
+			writeb(&cd_buf1[8 * v + 0x108], 11);
+			writeb(&cd_buf1[8 * v + 0x109], (unsigned char)v);
 
 			CD_driver_request((struct driver_request*)&cd_buf1[0x38]);
 		}
