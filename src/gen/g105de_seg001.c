@@ -43,7 +43,7 @@ static inline void clrscr(void) { }
 #define readb(p) (*(unsigned char*)(p))
 #define writeb(p, v) (*(unsigned char*)(p) = (v))
 #define writew(p, v) (*(unsigned short*)(p) = (v))
-#define writed(p, v) (*(unsigned int*)(p) = (v))
+#define writed(p, v) (*(unsigned long*)(p) = (v))
 #endif
 
 #include "g105de_seg001.h"
