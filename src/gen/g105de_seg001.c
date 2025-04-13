@@ -89,9 +89,6 @@ static signed short cd_dummy6;
 static void seg001_0312(void);
 static signed short CD_check_file(char*);
 
-/* DOSBox compat Adresses => should be removed */
-#define reloc_gen (0) // Segment in memory after EXE is loaded
-#define CDSEG (0xc83) // Segment of seg007 / CD-Audio data
 
 /* Borlandified and identical */
 static unsigned short CD_has_drives()
