@@ -212,8 +212,8 @@ static signed long CD_get_tod(void)
 static void seg001_00bb(signed short track_no)
 {
 #if defined(__BORLANDC__)
-	Bit32s track_start;
-	Bit32s track_end;
+	signed long track_start;
+	signed long track_end;
 	unsigned int track_len, tmp;
 
 	if (CD_INIT_SUCCESSFUL != 0) {
@@ -274,7 +274,7 @@ static void seg001_02ba()
 #if defined(__BORLANDC__)
 	if (CD_INIT_SUCCESSFUL != 0) {
 
-		if ((CD_get_tod() - (Bit32s)CD_AUDIO_TOD) >= (Bit32s)CD_AUDIO_POS) {
+		if ((CD_get_tod() - (signed long)CD_AUDIO_TOD) >= (signed long)CD_AUDIO_POS) {
 
 			if (CD_AUDIO_REPEAT == 1) {
 				seg001_0312();

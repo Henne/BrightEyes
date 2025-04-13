@@ -2360,7 +2360,7 @@ void restore_mouse_bg(void)
 void load_font_and_text(void)
 {
 	signed short handle;
-	Bit32s len;
+	signed long len;
 
 	/* load FONT6 */
 	handle = open_datfile(14);
@@ -2800,7 +2800,7 @@ signed short read_datfile(signed short handle, unsigned char *buf, unsigned shor
 }
 
 /* Borlandified and identical */
-Bit32s get_filelength(signed short unused)
+signed long get_filelength(signed short unused)
 {
 	return g_flen;
 }
@@ -3346,13 +3346,13 @@ void call_them_all(signed short v1, signed short v2, signed short x, signed shor
 {
 	RealPt gfx_ptr;
 	signed short l2;
-	Bit32s bogus;
+	signed long bogus;
 
 	fill_smth();
 	fill_smth2(v1 * 8 + g_buffer_font6);
 
 	gfx_ptr = get_gfx_ptr(x, y, &l2);
-	bogus = (Bit32s)ret_zero(v2, l2);
+	bogus = (signed long)ret_zero(v2, l2);
 
 	call_blit_smth3(gfx_ptr, 7, (signed short)bogus, l2, v2);
 }
@@ -6023,7 +6023,7 @@ void print_values(void)
  *	This funcion is buggy.
  */
 /* Borlandified and identical */
-void make_valuta_str(char *dst, Bit32s money)
+void make_valuta_str(char *dst, signed long money)
 {
 	/* Orig-BUG: d can overflow  on D > 65536*/
 	unsigned short d = 0;

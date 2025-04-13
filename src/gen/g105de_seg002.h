@@ -42,9 +42,9 @@ struct nvf_desc {
 	void split_textbuffer(char**, char*, unsigned long);
 	signed long process_nvf(struct nvf_desc*);
 	signed short open_datfile(unsigned short);
-	Bit32s get_archive_offset(const char*, unsigned char*);
+	signed long get_archive_offset(const char*, unsigned char*);
 	signed short read_datfile(signed short, unsigned char*, unsigned short);
-	Bit32s get_filelength(signed short);
+	signed long get_filelength(signed short);
 	void wait_for_keypress(void);
 	void error_msg(const char*);
 	void vsync_or_key(signed short);
@@ -78,7 +78,7 @@ struct nvf_desc {
 
 	void save_picbuf(void);
 	void print_values(void);
-	void make_valuta_str(char *, Bit32s);
+	void make_valuta_str(char *, signed long);
 	void select_skill(void);
 	void select_spell(void);
 	void choose_atpa(void);
