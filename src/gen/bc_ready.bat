@@ -3,7 +3,7 @@
 @REM They shall not change, so the are compared with every commit.
 @REM
 @REM -- here start the complete
-BCC.EXE -mlarge -O- -c -2 SEG001.C
+BCC.EXE -mlarge -O  -c -2 -Z SEG001.C
 BCC.EXE -mlarge -O  -c -2 -Z -IAIL SEG002.C
 BCC.EXE -mlarge -O  -c -2 -Z SEG003.C
 TASM.EXE /os /z SEG004.asm SEG004.OBJ

@@ -185,7 +185,8 @@ static void CD_unused1(void)
 
 		req[3].status = 0;
 		req[3].ptr = cd_buf1;
-		cd_buf1[252] = 0x0c;
+//		cd_buf1[0xfc] = 0x0c;
+		writeb(&cd_buf1[0xfc], 0x0c);
 		CD_driver_request(&req[3]);
 	}
 #endif
@@ -224,12 +225,12 @@ static void seg001_00bb(signed short track_no)
 
 	if (CD_INIT_SUCCESSFUL != 0) {
 
-		writew(MK_FP(reloc_gen + CDSEG, 0x8f), 0);
+		writew(&cd_buf1[0x8f], 0);
 
-		writed(MK_FP(reloc_gen + CDSEG, 0x9a),
-			((readb(MK_FP(reloc_gen + CDSEG, 0x10b + track_no * 8))) << 8) +
-			(readb(MK_FP(reloc_gen + CDSEG, 0x10a + track_no * 8))) +
-			(readb(MK_FP(reloc_gen + CDSEG, 0x10c + track_no * 8))) << 16);
+		writed(&cd_buf1[0x9a],
+			((readb(&cd_buf1[0x10b + track_no * 8]) << 8) +
+			(readb(&cd_buf1[0x10a + track_no * 8]))) +
+			(readb(&cd_buf1[0x10c + track_no * 8])) << 16);
 
 		/* calculate track_start */
 		track_start = (60L * readb(MK_FP(reloc_gen + CDSEG, 0x10b + track_no * 8))
