@@ -48,7 +48,12 @@ struct nvf_desc {
 	void wait_for_keypress(void);
 	void error_msg(const char*);
 	void vsync_or_key(signed short);
-	Bit32u swap_u32(Bit32u);
+
+#if defined(__BORLANDC__)
+	unsigned long swap_u32(unsigned long);
+#else
+	unsigned int swap_u32(unsigned int);
+#endif
 
 	void exit_video(void);
 	void wait_for_vsync(void);

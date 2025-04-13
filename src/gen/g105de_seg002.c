@@ -2708,7 +2708,12 @@ signed long process_nvf(struct nvf_desc *nvf)
 			src = nvf->dst - 8L;
 			src += (retval - 4L);
 			retval = host_readd(src);
+#if defined(__BORLANDC__)
 			retval = swap_u32(retval) >> 8;
+#else
+			retval = swap_u32((unsigned int)retval) >> 8;
+#endif
+
 
 		} else {
 			retval = width * height;
@@ -2863,9 +2868,11 @@ void unused_func09(signed short reps)
 }
 #endif
 
+#if defined(__BORLANDC__)
+/* Remark: u32 is unsigned long in the BCC-world */
 /* seems unused on available input values */
 /* Borlandified and identical */
-Bit32u swap_u32(Bit32u v)
+unsigned long swap_u32(unsigned long v)
 {
 	unsigned short l1;
 	unsigned short l2;
@@ -2880,6 +2887,20 @@ Bit32u swap_u32(Bit32u v)
 
 	return host_readd(p);
 }
+#else
+/* Remark: u32 is unsigned int in the GCC-world */
+unsigned int swap_u32(unsigned int v)
+{
+	unsigned char tmp[4] = {0};
+
+	tmp[0] = (v >> 0) & 0xff;
+	tmp[1] = (v >> 8) & 0xff;
+	tmp[2] = (v >> 16) & 0xff;
+	tmp[3] = (v >> 24) & 0xff;
+
+	return (tmp[0] << 24) | (tmp[1] << 16) | (tmp[2] << 8) | (tmp[3] << 0);
+}
+#endif
 
 #if defined(__BORLANDC__)
 /* Borlandified and identical */
