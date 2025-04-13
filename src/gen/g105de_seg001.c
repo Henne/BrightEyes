@@ -38,8 +38,6 @@ static inline signed short bioskey(signed short cmd) { return 0; }
 static inline void clrscr(void) { }
 #endif
 
-#define reloc_gen (0)
-
 /* non-portable Memory Access */
 #if defined(__BORLANDC__)
 #define host_writeb(p, v) (*(unsigned char*)(p) = (v))
@@ -90,7 +88,9 @@ static signed short cd_dummy6;
 static void seg001_0312(void);
 static signed short CD_check_file(char*);
 
-#define CDSEG (0xc83)
+/* DOSBox compat Adresses => should be removed */
+#define reloc_gen (0) // Segment in memory after EXE is loaded
+#define CDSEG (0xc83) // Segment of seg007 / CD-Audio data
 
 /* Borlandified and identical */
 static unsigned short CD_has_drives()
@@ -164,12 +164,12 @@ static signed short CD_set_drive_no(void)
 
 /* Borlandified and identical */
 #if defined(__BORLANDC__)
-static void CD_driver_request(struct driver_request far* req)
+static void CD_driver_request(struct driver_request far* request)
 {
 	asm {
 		mov ax, 0x1510
 		mov cx, [CD_DRIVE_NO]
-		les bx, req
+		les bx, request
 		int 0x2f
 	}
 }
