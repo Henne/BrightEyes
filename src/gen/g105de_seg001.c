@@ -253,15 +253,18 @@ static void seg001_00bb(signed short track_no)
 
 		}
 
-		track_start -= track_end;
+		track_start = track_end - track_start;
 		// track_start is now track length
-		writed(&cd_buf1[0x9e], track_start - 150L);
+		writew(&cd_buf1[0x9e], track_start - 150);
 
 		CD_driver_request((struct driver_request*)&cd_buf1[0x8c]);
 
 		CD_AUDIO_POS = ((track_start - 150) * 0x1234e) / 0x4b000;
 		asm { db 0x0F, 0x1F, 0x40, 0x00; } // BCC Sync-Point
-		asm { nop; nop; }
+		asm { db 0x0F, 0x1F, 0x40, 0x00; } // BCC Sync-Point
+		asm { db 0x66, 0x90; }
+		asm { db 0x66, 0x90; }
+//		asm { nop; nop; }
 
 		CD_AUDIO_TOD = CD_get_tod();
 	}
@@ -358,29 +361,28 @@ void seg001_03a8(void)
 
 	if (CD_INIT_SUCCESSFUL == 0) {
 
-		writew(MK_FP(reloc_gen + CDSEG, 0x3b), 0);
-		writew(MK_FP(reloc_gen + CDSEG, 0x48), reloc_gen + CDSEG);
-		writew(MK_FP(reloc_gen + CDSEG, 0x46), 0x420);
-		writeb(MK_FP(reloc_gen + CDSEG, 0x420), 10);
-		//CD_driver_request(RealMake(reloc_gen + CDSEG, 0x38));
-		CD_driver_request((struct driver_request*)MK_FP(reloc_gen + CDSEG, 0x38));
+		writew(&cd_buf1[0x3b], 0);
+		writed(&cd_buf1[0x46], &cd_buf1[0x420]);
+	//	writew(&cd_buf1[0x46], 0x420);
+		writeb(&cd_buf1[0x420], 0x0a);
+		CD_driver_request((struct driver_request*)&cd_buf1[0x38]);
 
-		v = readb(MK_FP(reloc_gen + CDSEG, 0x421));
-		for (; readb(MK_FP(reloc_gen + CDSEG, 0x422)) >= v; v++) {
-			writew(MK_FP(reloc_gen + CDSEG, 0x3b), 0);
-			writew(MK_FP(reloc_gen + CDSEG, 0x48), reloc_gen + CDSEG);
-#if !defined(__BORLANDC__)
-			writew(MK_FP(reloc_gen + CDSEG, 0x46), 0x108 + v * 8);
-#else
+		v = readb(&cd_buf1[0x421]);
+		for (; readb(&cd_buf1[0x422]) >= v; v++) {
+			writew(&cd_buf1[0x3b], 0);
+			writew(&cd_buf1[0x48], FP_SEG(&cd_buf1));
+			writew(&cd_buf1[0x46], 0x108 + v * 8);
+
+			asm { db 0x0F, 0x1F, 0x40, 0x00; } // BCC Sync-Point
+			//asm { db 0x0F, 0x1F, 0x40, 0x00; } // BCC Sync-Point
 			asm { db 0x66, 0x90; } // BCC Sync-Point
-			asm { db 0x66, 0x90; }
-			asm { nop; }
-#endif
+			//asm { db 0x66, 0x90; }
+			//asm { nop; }
+
 			writeb(MK_FP(reloc_gen + CDSEG, v * 8 + 0x108), 11);
 			writeb(MK_FP(reloc_gen + CDSEG, v * 8 + 0x109), (unsigned char)v);
 
-			//CD_driver_request(RealMake(reloc_gen + CDSEG, 0x38));
-			CD_driver_request((struct driver_request*)MK_FP(reloc_gen + CDSEG, 0x38));
+			CD_driver_request((struct driver_request*)&cd_buf1[0x38]);
 		}
 	}
 #endif
@@ -398,7 +400,7 @@ void seg001_0465(unsigned short track)
 #endif
 }
 
-/* Borlandified and nearly identical, but works correctly */
+/* Borlandified and identical */
 static signed short CD_check_file(char *pathP)
 {
 #if defined(__BORLANDC__)
@@ -416,8 +418,7 @@ static signed short CD_check_file(char *pathP)
 
 	_dos_close(handle);
 
-	//return nread;
-	asm { db 0x0f, 0x1f, 0x00; } // BCC Sync-Point
+	return nread;
 #endif
 }
 
@@ -467,14 +468,9 @@ signed short CD_insert_loop()
 		CD_INSERT_COUNTER = 5;
 	}
 	CD_INSERT_COUNTER--;
-	_exit(0);
+	_exit(1);
 #endif
-
-#if !defined(__BORLANDC__)
 	return 1;
-#else
-	asm { db 0x0f, 0x1f, 0x00; } // BCC Sync-Point
-#endif
 }
 
 /* Borlandified and nearly identical */
@@ -505,12 +501,9 @@ signed short seg001_0600(void)
 	CD_check_cd();
 	seg001_033b();
 	seg001_03a8();
-
-	asm { db 0x0f, 0x1f, 0x00; } // BCC Sync-Point
-#else
+#endif
 	// DUMMY
 	return 1;
-#endif
 }
 
 // Empty function which code overlaps into the next segment
