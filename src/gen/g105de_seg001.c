@@ -37,8 +37,6 @@ static inline signed short bioskey(signed short cmd) { return 0; }
 static inline void clrscr(void) { }
 #endif
 
-#include "port.h"
-
 #define reloc_gen (0)
 
 /* non-portable Memory Access */

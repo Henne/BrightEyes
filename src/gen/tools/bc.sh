@@ -60,8 +60,6 @@ for i in g105de_*.asm; do
 	cp ${i} ${DRIVE_C}/src/${i##g105de_}
 done
 
-cp symbols.h ${DRIVE_C}/src
-cp port.h ${DRIVE_C}/src
 cp hero.h ${DRIVE_C}/src
 cp TLINK.RES ${DRIVE_C}/src
 cp -r AIL ${DRIVE_C}/src

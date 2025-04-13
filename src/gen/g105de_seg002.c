@@ -62,8 +62,6 @@ static inline signed short bc_flushall(void) { return 0; }
 #include "g105de_seg006.h"
 #endif
 
-#include "port.h"
-
 /** Keyboard Constants */
 
 #define KEY_ESC     (0x01)

@@ -6,12 +6,24 @@ This file tries to give a brief overview over the current state of the project.
 * refactoring of the code
 * restructuring of initialized data (DS:INIT)
 * correct compiler flags + minimal set of Sync-Points
-* have a DOS-Build (not working)
+* have a DOS-Build (not working atm)
 * compile with GCC/Clang
-* linking with GCC/Clang
+* linking with Clang
 
 ## What's WIP
+We distinguish between two different worlds here:
+* BCC-World: DOS / 16-bit => create an identical binary
+* GCC/Clang-World: for now Linux / 64-bit => create an identical working binary
+The BCC-World takes precedence due to it's age.
+The GCC/Clang-world is there for support.
+
+### BCC-World
 * restructuring of uninitialized data (DS:BSS)
+* seg004: normalize_ptr() calls F_LXLSH (32bit left shift) from CLib and is not linked correctly
+
+### GCC/Clang-World
+* linking SDL2 with GCC
+* using compiler warnings to make things better
 
 ## Overview
 
@@ -29,5 +41,5 @@ This file tries to give a brief overview over the current state of the project.
 | seg006.asm/h | AIL (Sound)   | should be rebuild  | not portable       | WIP        |
 | seg007.asm/h | AudioCD data  | should be rebuild  | not portable       | WIP        |
 | hero.h       | hero struct   | should be complete | should be complete | WIP        |
-| port.h       | DOSBox compat | should be removed  | should be removed  | WIP        |
-| symbols.h    | DS adresses   | obsolete           | obsolete           | **DONE**   |
+| port.h       | DOSBox compat | **DONE**           | **DONE**           | **DONE**   |
+| symbols.h    | DS adresses   | **obsolete**       | **obsolete**       | **DONE**   |
