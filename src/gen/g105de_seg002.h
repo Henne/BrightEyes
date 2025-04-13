@@ -87,4 +87,4 @@ struct nvf_desc {
 	void alloc_buffers(void);
 	void init_colors(void);
 	void init_stuff(void);
-	RealPt gen_alloc(Bit32u);
+	RealPt gen_alloc(unsigned long);

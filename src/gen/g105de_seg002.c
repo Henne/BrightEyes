@@ -2883,7 +2883,7 @@ Bit32u swap_u32(Bit32u v)
 
 #if defined(__BORLANDC__)
 /* Borlandified and identical */
-Bit32u unused_func10(Bit32u v)
+unsigned long unused_func10(unsigned long v)
 {
 	unsigned short l1;
 	unsigned short l2;
