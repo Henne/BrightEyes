@@ -2225,9 +2225,9 @@ void decomp_rle(unsigned char *dst, unsigned char *src, Bit16s x, Bit16s y,
 				Bit16s width, Bit16s height, Bit16u mode)
 {
 	Bit16s i, j, k;
-	Bit8s val;
+	signed char val;
 	unsigned char n;
-	Bit8s pix;
+	signed char pix;
 	unsigned char *dst_loc;
 
 	dst_loc = dst;
@@ -4448,10 +4448,10 @@ void new_values(void)
 	/* Original-Bugfix:	there once was a char[11],
 				which could not hold a char[16] */
 	signed char *att_ptr;
-	Bit8s randval;
-	Bit8s unset_attribs;
-	Bit8s values[8];
-	Bit8s sex_bak;
+	signed char randval;
+	signed char unset_attribs;
+	signed char values[8];
+	signed char sex_bak;
 #if !defined(__BORLANDC__)
 	char name_bak[17];
 #else
@@ -4493,7 +4493,7 @@ void new_values(void)
 	att_ptr = &g_hero.attrib[0].normal;
 
 	for (j = 0; j < 7; j++) {
-		randval = (Bit8s)random_interval_gen(8, 13);
+		randval = (signed char)random_interval_gen(8, 13);
 		unset_attribs = 0;
 
 		for (i = 0; i < 7; i++) {
@@ -4534,7 +4534,7 @@ void new_values(void)
 	att_ptr = &g_hero.attrib[7].normal;
 
 	for (j = 0; j < 7; j++) {
-		randval = (Bit8s)random_interval_gen(2, 7);
+		randval = (signed char)random_interval_gen(2, 7);
 		unset_attribs = 0;
 
 		for (i = 0; i < 7; i++) {
@@ -5005,9 +5005,9 @@ void spell_inc_novice(Bit16s spell)
 /* Borlandified and identical */
 void select_typus(void)
 {
-	Bit8s old_typus;
-	Bit8s possible_types;
-	Bit8s ltmp2;
+	signed char old_typus;
+	signed char possible_types;
+	signed char ltmp2;
 	signed char *ptr;
 	Bit16s i;
 	Bit16s impossible;
@@ -5188,7 +5188,7 @@ void change_attribs(void)
 	volatile Bit16s tmp3;
 	signed char *ptr1;
 	signed char *ptr2;
-	Bit8s c;
+	signed char c;
 
 	Bit16s si;
 	Bit16s di;
@@ -6636,7 +6636,7 @@ void choose_typus(void)
 {
 	Bit16s choosen_typus;
 	Bit16s randval;
-	Bit8s sex_bak;
+	signed char sex_bak;
 	signed char *ptr;
 	char name_bak[20];
 
@@ -6960,8 +6960,8 @@ static void BE_cleanup(void)
 /* Borlandified and nearly identical, but works correctly */
 static void intro(void)
 {
-	Bit8s cnt1;
-	Bit8s cnt2;
+	signed char cnt1;
+	signed char cnt2;
 	Bit16s width;
 	Bit16s height;
 	Bit16s flen;
