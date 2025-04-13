@@ -1342,12 +1342,12 @@ static signed short g_upper_border;
 
 static signed short g_level; /* {-1, 0, 1 (= Novice), 2 (= Advanced) } */
 
-static RealPt g_dst_dst;
+static unsigned char* g_dst_dst;
 static signed short g_dst_x1;
 static signed short g_dst_y1;
 static signed short g_dst_x2;
 static signed short g_dst_y2;
-static RealPt g_dst_src;
+static unsigned char* g_dst_src;
 static signed short g_unkn1;
 static signed short g_unkn2;
 static signed short g_unkn3;
@@ -1550,7 +1550,7 @@ unsigned char *load_snd_driver(const char *fname)
 		_close(handle);
 		return norm_ptr;
 	} else {
-		return (RealPt)0L;
+		return (unsigned char*)0L;
 	}
 }
 
@@ -1880,7 +1880,7 @@ void mouse_enable(void)
 
 			do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
 #if defined(__BORLANDC__)
-			mouse_do_enable(0x1f, (RealPt)&mouse_isr);
+			mouse_do_enable(0x1f, (unsigned char*)&mouse_isr);
 #endif
 		}
 	}
@@ -1911,7 +1911,7 @@ void mouse_call_isr(void)
 #endif
 
 /* Borlandified and identical */
-void mouse_do_enable(unsigned short val, RealPt ptr)
+void mouse_do_enable(unsigned short val, unsigned char* ptr)
 {
 #if defined(__BORLANDC__)
 	unsigned short p1, p2, p3, p4, p5;
@@ -3042,8 +3042,8 @@ void do_draw_pic(unsigned short mode)
 	signed short d4;
 	signed short w;
 	signed short h;
-	RealPt src;
-	RealPt dst;
+	unsigned char* src;
+	unsigned char* dst;
 
 	register signed short x;
 	register signed short y;
@@ -3365,7 +3365,7 @@ signed short get_chr_info(unsigned char c, signed short *width)
 /* static */
 void call_them_all(signed short v1, signed short v2, signed short x, signed short y)
 {
-	RealPt gfx_ptr;
+	unsigned char* gfx_ptr;
 	signed short l2;
 	signed long bogus;
 
@@ -3422,9 +3422,9 @@ void fill_smth2(unsigned char* sptr)
 
 /* Borlandified and identical */
 /* static */
-RealPt get_gfx_ptr(signed short x, signed short y, signed short* unused)
+unsigned char* get_gfx_ptr(signed short x, signed short y, signed short* unused)
 {
-	RealPt start;
+	unsigned char* start;
 	return start = g_gfx_ptr + (y * 320 + x);
 }
 
@@ -3437,7 +3437,7 @@ signed short ret_zero(signed short unused1, signed short unused2)
 
 /* Borlandified and identical */
 /* static */
-void call_blit_smth3(RealPt dst, signed short v1, signed short v2, signed short v3, signed short v4)
+void call_blit_smth3(unsigned char* dst, signed short v1, signed short v2, signed short v3, signed short v4)
 {
 	blit_smth3(dst, v1, v4);
 }
@@ -3717,8 +3717,8 @@ void draw_popup_line(signed short line, signed short type)
 /* Borlandified and identical */
 signed short infobox(const char *msg, signed short digits)
 {
-	RealPt src;
-	RealPt dst;
+	unsigned char* src;
+	unsigned char* dst;
 	signed short retval;
 	signed short fg;
 	signed short bg;
@@ -3895,8 +3895,8 @@ signed short gui_radio(char *header, signed char options, ...)
 	signed short bak1;
 	signed short bak2;
 	signed short bak3;
-	RealPt src;
-	RealPt dst;
+	unsigned char* src;
+	unsigned char* dst;
 	signed short mx_bak;
 	signed short my_bak;
 	signed short r7;
@@ -4057,7 +4057,7 @@ signed short gui_radio(char *header, signed char options, ...)
 /* Borlandified and identical */
 void enter_name(void)
 {
-	RealPt dst;
+	unsigned char* dst;
 
 	dst = g_vga_memstart + 12 * 320 + 176;
 
@@ -4108,7 +4108,7 @@ void change_head(void)
 /* Borlandified and identical */
 void change_sex(void)
 {
-	RealPt dst;
+	unsigned char* dst;
 	unsigned char* src;
 
 	/* change sex of the hero */
@@ -4333,8 +4333,8 @@ void do_gen(void)
 /* Borlandified and identical */
 void refresh_screen(void)
 {
-	RealPt src;
-	RealPt dst;
+	unsigned char* src;
+	unsigned char* dst;
 	signed short width;
 	signed short height;
 	struct nvf_desc nvf;
@@ -4382,7 +4382,7 @@ void refresh_screen(void)
 
 			} else {
 				if (g_need_refresh) {
-					call_fill_rect_gen((RealPt)g_vga_memstart, 16, 8, 143, 191, 0);
+					call_fill_rect_gen((unsigned char*)g_vga_memstart, 16, 8, 143, 191, 0);
 					g_need_refresh = 0;
 				}
 
@@ -5117,7 +5117,7 @@ void select_typus(void)
 			asm { db 0x0f, 0x1f, 0x00 }
 #endif
 			update_mouse_cursor();
-			call_fill_rect_gen((RealPt)g_vga_memstart, 16, 8, 143, 191, 0);
+			call_fill_rect_gen((unsigned char*)g_vga_memstart, 16, 8, 143, 191, 0);
 			wait_for_vsync();
 			set_palette((signed char*)g_gen_ptr5 + 0x5c02, 0, 32);
 			call_mouse();
@@ -5423,7 +5423,7 @@ void change_attribs(void)
 /* Borlandified and identical */
 void save_picbuf(void)
 {
-	RealPt p;
+	unsigned char* p;
 	signed short x_3;
 	signed short y_1;
 	signed short y_2;
@@ -5503,9 +5503,9 @@ void save_picbuf(void)
 }
 
 /* Borlandified and identical */
-void restore_picbuf(RealPt ptr)
+void restore_picbuf(unsigned char* ptr)
 {
-	RealPt p;
+	unsigned char* p;
 	unsigned short x_1, x_2, x_3;
 	unsigned short y_1, y_2, y_3;
 	unsigned short w_1, w_2, w_3;
@@ -5618,7 +5618,7 @@ void print_values(void)
 	switch (g_gen_page) {
 
 		case 0: {
-			restore_picbuf((RealPt)g_gfx_ptr);
+			restore_picbuf((unsigned char*)g_gfx_ptr);
 
 			/* print name */
 			print_str(g_hero.name, 180, 12);
@@ -5661,7 +5661,7 @@ void print_values(void)
 #endif
 		case 1: {
 			/* SKILLS Page 1/3 */
-			restore_picbuf((RealPt)g_gfx_ptr);
+			restore_picbuf((unsigned char*)g_gfx_ptr);
 
 
 			/* print fight skills */
@@ -5693,7 +5693,7 @@ void print_values(void)
 		}
 		case 2: {
 			/* SKILLS Page 2/3 */
-			restore_picbuf((RealPt)g_gfx_ptr);
+			restore_picbuf((unsigned char*)g_gfx_ptr);
 
 			/* print social skills */
 			for (i = 19; i < 26; i++) {
@@ -5727,7 +5727,7 @@ void print_values(void)
 		}
 		case 3: {
 			/* SKILLS Page 3/3 */
-			restore_picbuf((RealPt)g_gfx_ptr);
+			restore_picbuf((unsigned char*)g_gfx_ptr);
 
 			/* print craftmansship skills */
 			for (i = 41; i < 50; i++) {
@@ -5778,7 +5778,7 @@ void print_values(void)
 		}
 		case 4: {
 			/* ATPA Page */
-			restore_picbuf((RealPt)g_gfx_ptr);
+			restore_picbuf((unsigned char*)g_gfx_ptr);
 
 			/* Print base value  2x the same */
 			print_str(itoa(g_hero.atpa_base, tmp, 10), 231, 30);
@@ -5813,7 +5813,7 @@ void print_values(void)
 
 		case 5: {
 			/* Spells Page 1/6 */
-			restore_picbuf((RealPt)g_gfx_ptr);
+			restore_picbuf((unsigned char*)g_gfx_ptr);
 
 			for (i = 1; i < 6; i++) {
 
@@ -5857,7 +5857,7 @@ void print_values(void)
 		}
 		case 6: {
 			/* Spells Page 2/6 */
-			restore_picbuf((RealPt)g_gfx_ptr);
+			restore_picbuf((unsigned char*)g_gfx_ptr);
 
 			for (i = 12; i <= 17; i++) {
 
@@ -5902,7 +5902,7 @@ void print_values(void)
 		}
 		case 7: {
 			/* Spells Page 3/6 */
-			restore_picbuf((RealPt)g_gfx_ptr);
+			restore_picbuf((unsigned char*)g_gfx_ptr);
 
 			for (i = 27; i < 33; i++) {
 
@@ -5947,7 +5947,7 @@ void print_values(void)
 		}
 		case 8: {
 			/* Spells Page 4/6 */
-			restore_picbuf((RealPt)g_gfx_ptr);
+			restore_picbuf((unsigned char*)g_gfx_ptr);
 
 			for (i = 47; i <= 48; i++) {
 
@@ -5992,7 +5992,7 @@ void print_values(void)
 		}
 		case 9: {
 			/* Spells Page 5/6 */
-			restore_picbuf((RealPt)g_gfx_ptr);
+			restore_picbuf((unsigned char*)g_gfx_ptr);
 
 			for (i = 60; i < 76; i++) {
 
@@ -6013,7 +6013,7 @@ void print_values(void)
 		}
 		case 10: {
 			/* Spells Page 6/6 */
-			restore_picbuf((RealPt)g_gfx_ptr);
+			restore_picbuf((unsigned char*)g_gfx_ptr);
 
 			for (i = 76; i < 86; i++) {
 
@@ -6746,7 +6746,7 @@ void choose_typus(void)
 
 	load_typus(g_hero.typus);
 	update_mouse_cursor();
-	call_fill_rect_gen((RealPt)g_vga_memstart, 16, 8, 143, 191, 0);
+	call_fill_rect_gen((unsigned char*)g_vga_memstart, 16, 8, 143, 191, 0);
 	wait_for_vsync();
 	set_palette((signed char*)g_gen_ptr5 + 0x5c02, 0, 32);
 	call_mouse();
@@ -7030,7 +7030,7 @@ static void intro(void)
 		g_dst_y1 = 140;
 		g_dst_x2 = 207;
 		g_dst_y2 = 149;
-		g_dst_src = (RealPt)(i * 960 + g_gen_ptr1_dis + 9600);
+		g_dst_src = (unsigned char*)(i * 960 + g_gen_ptr1_dis + 9600);
 		do_draw_pic(0);
 		vsync_or_key(20);
 	}
@@ -7101,7 +7101,7 @@ static void intro(void)
 	process_nvf(&nvf);
 
 	/* clear screen */
-	call_fill_rect_gen((RealPt)g_vga_memstart, 0, 0, 319, 199, 0);
+	call_fill_rect_gen((unsigned char*)g_vga_memstart, 0, 0, 319, 199, 0);
 	wait_for_vsync();
 
 	/* set palette of FANPRO.NVF */
@@ -7131,7 +7131,7 @@ static void intro(void)
 	process_nvf(&nvf);
 
 	/* clear screen */
-	call_fill_rect_gen((RealPt)g_vga_memstart, 0, 0, 319, 199, 0);
+	call_fill_rect_gen((unsigned char*)g_vga_memstart, 0, 0, 319, 199, 0);
 	wait_for_vsync();
 
 
@@ -7198,7 +7198,7 @@ static void intro(void)
 	}
 
 	/* clear screen */
-	call_fill_rect_gen((RealPt)g_vga_memstart, 0, 0, 319, 199, 0);
+	call_fill_rect_gen((unsigned char*)g_vga_memstart, 0, 0, 319, 199, 0);
 
 	g_in_intro = 0;
 	return;
@@ -7310,7 +7310,7 @@ int main_gen(int argc, char **argv)
 
 	if (g_called_with_args != 0) {
 		/* Clear the screen and return to SCHICKM.EXE/BLADEM.EXE */
-		call_fill_rect_gen((RealPt)g_vga_memstart, 0, 0, 319, 199, 0);
+		call_fill_rect_gen((unsigned char*)g_vga_memstart, 0, 0, 319, 199, 0);
 	} else {
 		/* Clear the screen and return to DOS */
 		exit_video();

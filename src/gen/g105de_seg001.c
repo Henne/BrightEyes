@@ -470,7 +470,7 @@ void CD_radio_insert_cd()
 		restore_timer_isr();
 		
 		if (g_called_with_args != 0) {
-			call_fill_rect_gen((RealPt)g_vga_memstart, 0, 0, 319, 199, 0);
+			call_fill_rect_gen((unsigned char*)g_vga_memstart, 0, 0, 319, 199, 0);
 		} else {
 			exit_video();
 			clrscr();
