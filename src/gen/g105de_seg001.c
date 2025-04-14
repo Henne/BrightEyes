@@ -453,7 +453,7 @@ signed short CD_insert_loop()
 		CD_INSERT_COUNTER = 5;
 	}
 	CD_INSERT_COUNTER--;
-	_exit(1);
+	hardresume(1);
 #endif
 	return 1;
 }

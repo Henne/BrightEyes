@@ -1,4 +1,5 @@
 ; define a macro for generating the request sections
+; a request section has 28 byte
 GEN_REQ	MACRO dummy1, function, redbook, dummy4, dummy6
 		db dummy1
 		db 0
