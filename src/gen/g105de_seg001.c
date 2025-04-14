@@ -212,7 +212,7 @@ static signed long CD_get_tod(void)
 #endif
 }
 
-/* Seem Unborlandifiable to me */
+/* Borlandified and nearly identical */
 static void seg001_00bb(signed short track_no)
 {
 #if defined(__BORLANDC__)
@@ -235,41 +235,30 @@ static void seg001_00bb(signed short track_no)
 			+ readb(&cd_buf1[0x10b + track_no * 8])) * 75L
 			+ readb(&cd_buf1[0x10a + track_no * 8]);
 
-		// OK till here: 0x17f
-
 		/* calculate track_end */
 		if (readb(&cd_buf1[0x422]) == track_no) {
 
-			track_end = (60L * readb(&cd_buf1[0x425]) +
-					   readb(&cd_buf1[0x424]) * 75L +
-					   readb(&cd_buf1[0x423]));
+			track_end = (((unsigned long)readb(&cd_buf1[0x425]) * 60
+					       	+ readb(&cd_buf1[0x424])) * 75
+				       		+ readb(&cd_buf1[0x423]));
 		} else {
-			track_end = (60L * readb(&cd_buf1[0x114 + track_no * 8]) +
-					   readb(&cd_buf1[0x113 + track_no * 8]) * 75L +
-					   readb(&cd_buf1[0x112 + track_no * 8]));
+			track_end = (((unsigned long)readb(&cd_buf1[0x114 + track_no * 8]) * 60
+					       	+ readb(&cd_buf1[0x113 + track_no * 8])) * 75
+				       		+ readb(&cd_buf1[0x112 + track_no * 8]));
 
 		}
 
 		track_start = track_end - track_start;
 		// track_start is now track length
+
+		// OK till here: 0x251, but works identical
 		writew(&cd_buf1[0x9e], track_start - 150);
+		writew(&cd_buf1[0xa0], (signed long)(*((signed short*)(&track_start) + 1)));
 
 		CD_driver_request((struct driver_request*)&cd_buf1[0x8c]);
 
-		CD_AUDIO_POS = ((track_start - 150) * 0x1234e) / 0x4b000;
-
-		//asm { db 0x0F, 0x1F, 0x40, 0x00; } // BCC Sync-Point
-		//asm { db 0x0F, 0x1F, 0x40, 0x00; } // BCC Sync-Point
-		//asm { db 0x66, 0x90; } // BCC Sync-Point
-		//asm { db 0x66, 0x90; }
-		//asm { nop; }
-
-		asm { db 0x0F, 0x1F, 0x40, 0x00; } // BCC Sync-Point
-		asm { db 0x0F, 0x1F, 0x40, 0x00; } // BCC Sync-Point
-		asm { db 0x66, 0x90; }
-		asm { db 0x66, 0x90; }
-//		asm { nop; nop; }
-
+		// CD_AUDIO_POS = ((track_start - 150L) * 74574) / 307200;
+		CD_AUDIO_POS = ((track_start - 150L) * 0x1234e) / 0x4b000;
 		CD_AUDIO_TOD = CD_get_tod();
 	}
 #endif
