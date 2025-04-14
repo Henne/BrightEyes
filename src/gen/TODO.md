@@ -30,7 +30,7 @@ The GCC/Clang-world is there for support.
 | Filenames    | Content       | BCC/DOS-World      | GCC/Clang-World    | State      |
 | ------------ | ------------- | ------------------ | ------------------ | ---------- |
 | seg000.h     | BCC Clib      | **DONE**           | **DONE**           | **DONE**   |
-| seg001.[ch]  | AudioCD code  | should be rebuild  | should be removed  | WIP        |
+| seg001.[ch]  | AudioCD code  | **DONE**           | -                  | **DONE**   |
 | seg002.[ch]  | Main          | should be rebuild  | should be rebuild  | WIP        |
 | seg003.[ch]  | Random        | **DONE**           | **DONE**           | **DONE**   |
 | seg004.[ch]  | PowerPack2.0  | -                  | **DONE**           | **DONE**   |

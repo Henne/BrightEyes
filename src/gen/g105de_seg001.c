@@ -7,6 +7,8 @@
  *		Borland C++ 3.1. The aim is, to produce exactly the same
  *		OPcodes like in the original. Seems to work. :)
  *
+ *		Verified on 2025-04-14
+ *
  *		This code is not intended to run directly on
  *		modern system since it's not portable and
  *		CD-Drives have become a bit outdated meanwhile.
@@ -18,33 +20,25 @@
  *		Further this code is written only on the first installed
  *		CD-ROM drive.
  *
- *
  */
+
+#if defined(__BORLANDC__)
 
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
-#if defined(__BORLANDC__)
 #include <DOS.H>	// _dos_open(), harderr()
 #include <IO.H>		// lseek()
 #include <BIOS.H>	// bioskey()
 #include <CONIO.H>	// clrsrc()
-#endif
-
-#if !defined(__BORLANDC__)
-// DUMMY for BCC CLib func
-static inline signed short bioskey(signed short cmd) { return 0; }
-static inline void clrscr(void) { }
-#endif
 
 /* non-portable Memory Access */
-#if defined(__BORLANDC__)
 #define readb(p) (*(unsigned char*)(p))
 #define writeb(p, v) (*(unsigned char*)(p) = (v))
 #define writew(p, v) (*(unsigned short*)(p) = (v))
 #define writed(p, v) (*(unsigned long*)(p) = (v))
-#endif
+
 
 #include "g105de_seg001.h"
 #include "g105de_seg002.h"
@@ -67,6 +61,7 @@ static char STR_QUIT[] = "BEENDEN";
 static char STR_CD_EXEPATH[] = "X:\\DSA\\SCHICKM.EXE";
 
 /* uninitialized global variables BSS */
+/* Remark: ripped code from the binary had the BSS-variable adresses in reverse order */
 static signed short CD_AUDIO_TRACK;
 static signed short cd_dummy3_1;
 #if !defined(__BORLANDC__)
@@ -93,7 +88,6 @@ static signed short CD_check_file(char*);
 /* Borlandified and identical */
 static unsigned short CD_has_drives()
 {
-#if defined(__BORLANDC__)
 	/* al ==  0: return number of drive letters */
 	asm {
 		mov ax, 0x1500
@@ -106,15 +100,11 @@ static unsigned short CD_has_drives()
 	}
 has_cd:
 //	return _AX;
-#else
-	return 0;
-#endif
 }
 
 /* Borlandified and identical */
 static unsigned short CD_count_drives()
 {
-#if defined(__BORLANDC__)
 	asm {
 		mov ax, 0x1500
 		xor bx, bx
@@ -123,15 +113,11 @@ static unsigned short CD_count_drives()
 		_AX = _BX;
 
 //	return _BX;
-#else
-	return 0;
-#endif
 }
 
 /* Borlandified and identical */
 static unsigned short CD_get_first_drive()
 {
-#if defined(__BORLANDC__)
 	asm {
 		mov ax, 0x1500
 		xor bx, bx
@@ -140,28 +126,20 @@ static unsigned short CD_get_first_drive()
 
 	_AX = _CX;
 //	return _CX;
-#else
-	return 0;
-#endif
 }
 
 /* Borlandified and identical */
 static signed short CD_set_drive_no(void)
 {
-#if defined(__BORLANDC__)
 	if (CD_has_drives() == 0) return 0;
 	if (CD_count_drives() == 0) return 0;
 
 	CD_DRIVE_NO = CD_get_first_drive();
 
 	_AX = 1;
-#else
-	return 0;
-#endif
 }
 
 /* Borlandified and identical */
-#if defined(__BORLANDC__)
 static void CD_driver_request(struct driver_request far* request)
 {
 	asm {
@@ -171,22 +149,18 @@ static void CD_driver_request(struct driver_request far* request)
 		int 0x2f
 	}
 }
-#endif
 
-/* Borlandified and far from identical, but unused (8 diffs)*/
-/* TODO: check adresses of seg013 */
+/* Borlandified and identical */
+/* static would be removed in link stage */
 static void CD_unused1(void)
 {
-#if defined(__BORLANDC__)
 	if (CD_INIT_SUCCESSFUL != 0) {
 
 		req[3].status = 0;
 		req[3].ptr = cd_buf1;
-//		cd_buf1[0xfc] = 0x0c;
-		writeb(&cd_buf1[0xfc], 0x0c);
+		writeb(&cd_buf1[0x00], 0x0c);
 		CD_driver_request(&req[3]);
 	}
-#endif
 }
 
 
@@ -200,51 +174,46 @@ static void CD_unused1(void)
 /* Borlandified and identical */
 static signed long CD_get_tod(void)
 {
-#if defined(__BORLANDC__)
 	asm {
 		mov ah, 0x0
 		int 0x1a
 		mov ax, dx
 		mov dx, cx
 	}
-#else
-	return 0;
-#endif
 }
 
 /* Borlandified and nearly identical */
 static void seg001_00bb(signed short track_no)
 {
-#if defined(__BORLANDC__)
 	signed long track_start;
 	signed long track_end;
 
 	if (CD_INIT_SUCCESSFUL != 0) {
 
-		writew(&cd_buf1[0x8f], 0);
+		writew(&req[5].status, 0);
 
-		writed(&cd_buf1[0x9a],
-			(unsigned long)MK_FP(readb(&cd_buf1[0x10c + track_no * 8]),
-			(readb(&cd_buf1[0x10b + track_no * 8]) << 8) +
-			(readb(&cd_buf1[0x10a + track_no * 8]))
+		writed(&req[5].ptr,
+			(unsigned long)MK_FP(readb(&cd_buf1[0x10 + track_no * 8]),
+			(readb(&cd_buf1[0x0f + track_no * 8]) << 8) +
+			(readb(&cd_buf1[0x0e + track_no * 8]))
 			)
 		);
 
 		/* calculate track_start */
-		track_start = (60L * (unsigned long)readb(&cd_buf1[0x10c + track_no * 8])
-			+ readb(&cd_buf1[0x10b + track_no * 8])) * 75L
-			+ readb(&cd_buf1[0x10a + track_no * 8]);
+		track_start = (60L * (unsigned long)readb(&cd_buf1[0x10 + track_no * 8])
+			+ readb(&cd_buf1[0x0f + track_no * 8])) * 75L
+			+ readb(&cd_buf1[0x0e + track_no * 8]);
 
 		/* calculate track_end */
-		if (readb(&cd_buf1[0x422]) == track_no) {
+		if (readb(&cd_buf1[0x326]) == track_no) {
 
-			track_end = (((unsigned long)readb(&cd_buf1[0x425]) * 60
-					       	+ readb(&cd_buf1[0x424])) * 75
-				       		+ readb(&cd_buf1[0x423]));
+			track_end = (((unsigned long)readb(&cd_buf1[0x329]) * 60
+						+ readb(&cd_buf1[0x328])) * 75
+						+ readb(&cd_buf1[0x327]));
 		} else {
-			track_end = (((unsigned long)readb(&cd_buf1[0x114 + track_no * 8]) * 60
-					       	+ readb(&cd_buf1[0x113 + track_no * 8])) * 75
-				       		+ readb(&cd_buf1[0x112 + track_no * 8]));
+			track_end = (((unsigned long)readb(&cd_buf1[0x18 + track_no * 8]) * 60
+						+ readb(&cd_buf1[0x17 + track_no * 8])) * 75
+						+ readb(&cd_buf1[0x16 + track_no * 8]));
 
 		}
 
@@ -252,22 +221,22 @@ static void seg001_00bb(signed short track_no)
 		// track_start is now track length
 
 		// OK till here: 0x251, but works identical
-		writew(&cd_buf1[0x9e], track_start - 150);
-		writew(&cd_buf1[0xa0], (signed long)(*((signed short*)(&track_start) + 1)));
+		writew(&req[5].dummy4, track_start - 150);
+		writew(&req[5].dummy6, (signed long)(*((signed short*)(&track_start) + 1)));
 
-		CD_driver_request((struct driver_request*)&cd_buf1[0x8c]);
+		// req[5] starts at 0x8c
+		//CD_driver_request((struct driver_request*)&cd_buf1[0x8c]);
+		CD_driver_request((struct driver_request*)&req[5]);
 
 		// CD_AUDIO_POS = ((track_start - 150L) * 74574) / 307200;
 		CD_AUDIO_POS = ((track_start - 150L) * 0x1234e) / 0x4b000;
 		CD_AUDIO_TOD = CD_get_tod();
 	}
-#endif
 }
 
 /* Borlandified and nearly identical, but works */
 static void seg001_02ba()
 {
-#if defined(__BORLANDC__)
 	if (CD_INIT_SUCCESSFUL != 0) {
 
 		if ((CD_get_tod() - (signed long)CD_AUDIO_TOD) >= (signed long)CD_AUDIO_POS) {
@@ -280,115 +249,97 @@ static void seg001_02ba()
 			}
 		}
 	}
-#endif
 }
 
 /* Borlandified and identical */
 signed short CD_bioskey(signed short cmd)
 {
-#if defined(__BORLANDC__)
 	seg001_02ba();
 
 	// GEN uses an implicit return here
 	//return bioskey(cmd);
 	bioskey(cmd);
-#else
-	// DUMMY
-	return 0;
-#endif
 }
 
 /* Borlandified and identical */
 static void seg001_0312(void)
 {
-#if defined(__BORLANDC__)
 	if (CD_INIT_SUCCESSFUL != 0) {
 
-		writew(&cd_buf1[0x03], 0);
-		CD_driver_request(&cd_buf1[0]);
+		writew(&req[0].status, 0);
+		CD_driver_request(&req[0]);
 		CD_AUDIO_REPEAT = 0;
 	}
-#endif
 }
 
 /* Borlandified and identical */
-void seg001_033b()
+void seg001_033b(void)
 {
-#if defined(__BORLANDC__)
 	if (CD_INIT_SUCCESSFUL != 0) {
 
 		seg001_0312();
 
-		writew(&cd_buf1[0x1f], 0);
-		CD_driver_request(&cd_buf1[0x1c]);
+		writew(&req[1].status, 0);
+		CD_driver_request(&req[1]);
 	}
-#endif
 }
 
-#if defined (__BORLANDC__)
 /* Borlandified and nearly identical */
-void CD_unused2()
+void CD_unused2(void)
 {
 	if (CD_INIT_SUCCESSFUL != 0) {
 
-		writew(&cd_buf1[0xab], 0);
-		CD_driver_request(&cd_buf1[0xa8]);
+		writew(&req[6].status, 0);
+		CD_driver_request(&req[6]);
 	}
 }
 /* Borlandified and nearly identical */
-void CD_unused3()
+void CD_unused3(void)
 {
 	if (CD_INIT_SUCCESSFUL != 0) {
 
-		writew(&cd_buf1[0xc7], 0);
-		CD_driver_request(&cd_buf1[0xc4]);
+		writew(&req[7].status, 0);
+		CD_driver_request(&req[7]);
 	}
 }
-#endif
 
-/* Borlandified and nearly identical, but should work correctly */
-void seg001_03a8(void)
+/* Borlandified and identical */
+static void seg001_03a8(void)
 {
-#if defined(__BORLANDC__)
 	signed short v;
 
-	if (CD_INIT_SUCCESSFUL == 0) {
+	if (CD_INIT_SUCCESSFUL != 0) {
 
-		writew(&cd_buf1[0x3b], 0);
-		writed(&cd_buf1[0x46], &cd_buf1[0x420]);
-		writeb(&cd_buf1[0x420], 0x0a);
-		asm { db 0x0f, 0x1f, 0x00 } // BCC Sync-Point
-		CD_driver_request((struct driver_request*)&cd_buf1[0x38]);
+		writew(&req[2].status, 0);
+		writed(&req[2].ptr, &cd_buf1[0x324]);
+		writeb(&cd_buf1[0x324], 0x0a);
+		CD_driver_request((struct driver_request*)&req[2]);
 
-		v = readb(&cd_buf1[0x421]);
-		for (; readb(&cd_buf1[0x422]) >= v; v++) {
-			writew(&cd_buf1[0x3b], 0);
-			writed(&cd_buf1[0x46], &cd_buf1[0x108 + 8 * v]);
-			writeb(&cd_buf1[8 * v + 0x108], 11);
-			writeb(&cd_buf1[8 * v + 0x109], (unsigned char)v);
+		v = readb(&cd_buf1[0x325]);
+		for (; readb(&cd_buf1[0x326]) >= v; v++) {
+			writew(&req[2].status, 0);
+			writed(&req[2].ptr, &cd_buf1[0x0c + 8 * v]);
+			writeb(&cd_buf1[0x0c + 8 * v], 11);
+			writeb(&cd_buf1[0x0d + 8 * v], (unsigned char)v);
 
-			CD_driver_request((struct driver_request*)&cd_buf1[0x38]);
+			CD_driver_request((struct driver_request*)&req[2]);
 		}
 	}
-#endif
 }
 
 /* Borlandified and identical */
 void seg001_0465(unsigned short track)
 {
-#if defined(__BORLANDC__)
 	seg001_0312();
 	seg001_0312();
 	CD_AUDIO_TRACK = 4;
 	seg001_00bb(CD_AUDIO_TRACK);
 	CD_AUDIO_REPEAT = 1;
-#endif
 }
 
 /* Borlandified and identical */
 static signed short CD_check_file(char *pathP)
 {
-#if defined(__BORLANDC__)
 	int handle;
 	signed short buf;
 	unsigned int nread;
@@ -404,13 +355,11 @@ static signed short CD_check_file(char *pathP)
 	_dos_close(handle);
 
 	return nread;
-#endif
 }
 
 /* Borlandified and identical */
-void CD_radio_insert_cd()
+static void CD_radio_insert_cd(void)
 {
-#if defined(__BORLANDC__)
 	char text_buffer[160];
 
 	signed short si;
@@ -439,29 +388,26 @@ void CD_radio_insert_cd()
 			exit_video();
 			clrscr();
 		}
+
 		exit(0);
 	}
-#endif
 }
 
 /* Borlandified and identical */
-signed short CD_insert_loop()
+static signed short CD_insert_loop(void)
 {
-#if defined(__BORLANDC__)
 	if (CD_INSERT_COUNTER == 0) {
 		CD_radio_insert_cd();
 		CD_INSERT_COUNTER = 5;
 	}
 	CD_INSERT_COUNTER--;
 	hardresume(1);
-#endif
 	return 1;
 }
 
 /* Borlandified and nearly identical */
-void CD_check_cd()
+static void CD_check_cd(void)
 {
-#if defined(__BORLANDC__)
 	char fname[80];
 
 	harderr((int(*)(int, int, int, int))CD_insert_loop);
@@ -472,13 +418,11 @@ void CD_check_cd()
 	while (CD_check_file(fname) <= 0) {
 		CD_radio_insert_cd();
 	}
-#endif
 }
 
 /* Borlandified and identical */
 signed short seg001_0600(void)
 {
-#if defined(__BORLANDC__)
 	if (CD_set_drive_no() == 0)
 		return 0;
 
@@ -486,12 +430,12 @@ signed short seg001_0600(void)
 	CD_check_cd();
 	seg001_033b();
 	seg001_03a8();
-#endif
-	// DUMMY
+
 	return 1;
 }
 
 // Empty function which code overlaps into the next segment
-void dummy(void)
+static void dummy(void)
 {
 }
+#endif
