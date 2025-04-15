@@ -1273,87 +1273,62 @@ signed short g_random_gen_seed = 0x327b;
 /* END OF INITIALIZED GLOBAL VARIABLES _DATA */
 
 /* START OF UNINITIALIZE GLOBAL VARIABLE _BSS DS:0x2474*/
-static unsigned short g_current_timbre_length;
-/* These 6 bytes are written at once from a file */
-static signed char g_current_timbre_patch;
-static signed char g_current_timbre_bank;
-static unsigned long g_current_timbre_offset;
+static signed char dummy_13;
+static signed short g_ro_var[7];
+static signed long dummy_14;
+static signed short g_display_mode_bak;
+static signed short g_display_page_bak;
+static signed short g_wo_var3;
+static signed short g_wo_var2;
+static unsigned char* g_gen_ptr1_dis;
+static unsigned char* g_page_buffer;
+unsigned char* g_vga_memstart;
+static unsigned char* g_gfx_ptr;
+static char *dummy18;
+static char *g_gen_ptr2;
+static char *g_gen_ptr3;
+static unsigned char *g_gen_ptr4;
+static unsigned char *g_gen_ptr5;
+static unsigned char* dummy17;
+static unsigned char* dummy16;
+static unsigned char *g_buffer_dmenge_dat;
+static unsigned char *g_gen_ptr6;
+static unsigned char *g_picbuf1;
+static unsigned char *g_picbuf2;
+static unsigned char *g_picbuf3;
+static signed long dummy15;
+static signed short g_text_x;
+static signed short g_text_y;
+static signed short g_text_x_end;
+static signed short g_fg_color[6];
+static signed short g_bg_color;
+static signed short g_col_index;
+static unsigned char *g_buffer_font6;
+static char  *g_buffer_text;
+static unsigned char *g_buffer_heads_dat;
+static unsigned char *g_buffer_popup_nvf;
+static unsigned char *g_buffer_sex_dat;
 
-#if defined(__BORLANDC__)
-void far *g_timer_isr_bak;
+static char g_mouse_backbuffer[256];
+static char dummy14[0x40];
+static unsigned short *g_mouse_current_cursor;
+static unsigned short *g_mouse_last_cursor;
+static unsigned char g_array_2[64];
+static unsigned char g_array_1[64];
+static signed short g_in_key_ext;
+static signed short g_in_key_ascii;
+static signed short g_mouse1_event2;
+static signed short g_mouse2_event;
+static signed short g_mouse1_event1;
+static signed short g_wo_var1;
+static signed short dummy13;
+static signed short g_have_mouse;
+/* used by external module */
+signed short g_random_gen_seed2;
 
-static char dummy10[768];
-#endif
-
-static signed short g_got_ch_bonus;
-static signed short g_got_mu_bonus;
-
-static char dummy11[0x26f];
-
-static signed long g_flen;
-static signed long g_flen_left;
-
-#if defined(__BORLANDC__)
-void far *g_irq78_bak;
-#endif
-static signed long g_gendat_offset;
-
-static signed short g_handle_timbre;
-static signed short g_timbre_cache_size;
-static signed long g_state_table_size;
-static unsigned char* g_snd_driver;
-static void* g_form_xmid;
-static unsigned char* g_snd_timbre_cache;
-static void* g_state_table;
-static unsigned char* g_snd_driver_base_addr;
-static unsigned char* g_snd_driver_desc;
-static signed short g_snd_sequence;
-static signed short g_snd_driver_handle;
-
-static signed short g_param_level;
-signed short g_called_with_args;
-
-struct inc_states {
-	signed char tries;
-	signed char incs;
-};
-
-static struct inc_states g_spell_incs[86];
-static struct inc_states g_skill_incs[52];
-static signed char g_attrib_changed[14];
-static char* g_type_names[12];
-
-/* the index of the last head */
-static signed char g_head_last;
-/* the index of the first head */
-static signed char g_head_first;
-/* the index of the current head */
-static signed char g_head_current;
-/* the typus for the heads e.G. all elves are 10 */
-static signed char g_head_typus;
-
-static signed char g_in_intro;
-
-static signed short g_menu_tiles;
-static signed short g_left_border;
-static signed short g_upper_border;
-
-static signed short g_level; /* {-1, 0, 1 (= Novice), 2 (= Advanced) } */
-
-static unsigned char* g_dst_dst;
-static signed short g_dst_x1;
-static signed short g_dst_y1;
-static signed short g_dst_x2;
-static signed short g_dst_y2;
-static unsigned char* g_dst_src;
-static signed short g_unkn1;
-static signed short g_unkn2;
-static signed short g_unkn3;
-static signed short g_unkn4;
-
-static char* g_texts[301];
 static signed short dummy12;
 
+static char* g_texts[301];
 #if !defined(__BORLANDC__)
 /* usage: output */
 static inline char* get_text(signed short no) {
@@ -1363,65 +1338,85 @@ static inline char* get_text(signed short no) {
 #define get_text(no) (g_texts[no])
 #endif
 
-/* used by external module */
-signed short g_random_gen_seed2;
+static signed short g_unkn4;
+static signed short g_unkn3;
+static signed short g_unkn2;
+static signed short g_unkn1;
+static unsigned char* g_dst_src;
+static signed short g_dst_y2;
+static signed short g_dst_x2;
+static signed short g_dst_y1;
+static signed short g_dst_x1;
+static unsigned char* g_dst_dst;
 
-static signed short g_have_mouse;
-static signed short dummy13;
-static signed short g_wo_var1;
+static signed short g_level; /* {-1, 0, 1 (= Novice), 2 (= Advanced) } */
 
-static signed short g_mouse1_event1;
-static signed short g_mouse2_event;
-static signed short g_mouse1_event2;
-static signed short g_in_key_ascii;
-static signed short g_in_key_ext;
-static unsigned char g_array_1[64];
-static unsigned char g_array_2[64];
+static signed short g_upper_border;
+static signed short g_left_border;
+static signed short g_menu_tiles;
+static signed char g_in_intro;
 
-static unsigned short *g_mouse_last_cursor;
-static unsigned short *g_mouse_current_cursor;
-static char dummy14[0x40];
+/* the typus for the heads e.G. all elves are 10 */
+static signed char g_head_typus;
+/* the index of the current head */
+static signed char g_head_current;
+/* the index of the first head */
+static signed char g_head_first;
+/* the index of the last head */
+static signed char g_head_last;
 
-static char g_mouse_backbuffer[256];
+static char* g_type_names[12];
+static signed char g_attrib_changed[14];
 
-static unsigned char *g_buffer_sex_dat;
-static unsigned char *g_buffer_popup_nvf;
-static unsigned char *g_buffer_heads_dat;
-static char  *g_buffer_text;
-static unsigned char *g_buffer_font6;
+struct inc_states {
+	signed char tries;
+	signed char incs;
+};
 
-static signed short g_col_index;
-static signed short g_bg_color;
-static signed short g_fg_color[6];
-static signed short g_text_x_end;
-static signed short g_text_y;
-static signed short g_text_x;
-static signed long dummy15;
+static struct inc_states g_skill_incs[52];
+static struct inc_states g_spell_incs[86];
 
-static unsigned char *g_picbuf3;
-static unsigned char *g_picbuf2;
-static unsigned char *g_picbuf1;
-static unsigned char *g_gen_ptr6;
-static unsigned char *g_buffer_dmenge_dat;
-static unsigned char* dummy16;
-static unsigned char* dummy17;
-static unsigned char *g_gen_ptr5;
-static unsigned char *g_gen_ptr4;
-static char *g_gen_ptr3;
-static char *g_gen_ptr2;
-static char *dummy18;
+signed short g_called_with_args;
+static signed short g_param_level;
 
-static unsigned char* g_gfx_ptr;
-unsigned char* g_vga_memstart;
+static signed short g_snd_driver_handle;
+static signed short g_snd_sequence;
+static unsigned char* g_snd_driver_desc;
+static unsigned char* g_snd_driver_base_addr;
+static void* g_state_table;
+static unsigned char* g_snd_timbre_cache;
+static void* g_form_xmid;
+static unsigned char* g_snd_driver;
+static signed long g_state_table_size;
+static signed short g_timbre_cache_size;
+static signed short g_handle_timbre;
 
-static unsigned char* g_page_buffer;
-static unsigned char* g_gen_ptr1_dis;
-static signed short g_wo_var2;
-static signed short g_wo_var3;
-static signed short g_display_page_bak;
-static signed short g_display_mode_bak;
+static signed long g_gendat_offset;
 
-static signed short g_ro_var[7];
+#if defined(__BORLANDC__)
+void far *g_irq78_bak;
+#endif
+
+static signed long g_flen_left;
+static signed long g_flen;
+
+static signed short dummy11[0xbd3];
+
+static signed short g_got_mu_bonus;
+static signed short g_got_ch_bonus;
+
+#if defined(__BORLANDC__)
+static char dummy10[768];
+void far *g_timer_isr_bak;
+#endif
+
+/* These 6 bytes are written at once from a file */
+static unsigned long g_current_timbre_offset;
+static signed char g_current_timbre_bank;
+static signed char g_current_timbre_patch;
+
+static unsigned short g_current_timbre_length;
+
 
 #if !defined(__BORLANDC__)
 /* use sprintf() for compatibility */
