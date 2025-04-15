@@ -2706,11 +2706,7 @@ signed long process_nvf(struct nvf_desc *nvf)
 			src = nvf->dst - 8L;
 			src += (retval - 4L);
 			retval = host_readd(src);
-#if defined(__BORLANDC__)
-			retval = swap_u32(retval) >> 8;
-#else
-			retval = swap_u32((unsigned int)retval) >> 8;
-#endif
+			retval = ((signed long)swap_u32(retval)) >> 8;
 
 
 		} else {
