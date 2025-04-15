@@ -1920,10 +1920,10 @@ void mouse_do_enable(unsigned short val, unsigned char* ptr)
 	p5 = (unsigned short)FP_SEG(mouse_isr);
 
 	/* save adress of old IRQ 0x78 */
-	g_irq78_bak = ((void interrupt far (*)(void))_dos_getvect(0x78));
+	g_irq78_bak = ((void interrupt far (*)(void))getvect(0x78));
 
 	/* set new IRQ 0x78 */
-	_dos_setvect(0x78, (void interrupt far (*)(void))ptr);
+	setvect(0x78, (void interrupt far (*)(void))ptr);
 
 	/* set the new mouse event handler */
 	do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
@@ -1939,7 +1939,7 @@ void mouse_do_disable(void)
 	unsigned short v1, v2, v3, v4, v5;
 
 	/* restore the old int 0x78 handler */
-	_dos_setvect(0x78, (void interrupt far (*)(void))g_irq78_bak);
+	setvect(0x78, (void interrupt far (*)(void))g_irq78_bak);
 
 	/* uninstall mouse event handler */
 	v1 = 0x0c;
@@ -7219,9 +7219,9 @@ static void set_timer_isr(void)
 {
 #if defined(__BORLANDC__)
 	/* save adress of the old ISR */
-	g_timer_isr_bak = ((void interrupt far (*)(void))_dos_getvect(0x1c));
+	g_timer_isr_bak = ((void interrupt far (*)(void))getvect(0x1c));
 	/* set a the new one */
-	_dos_setvect(0x1c, timer_isr);
+	setvect(0x1c, timer_isr);
 #endif
 }
 
@@ -7229,7 +7229,7 @@ static void set_timer_isr(void)
 void restore_timer_isr(void)
 {
 #if defined(__BORLANDC__)
-	_dos_setvect(0x1c, (void interrupt far (*)(void))g_timer_isr_bak);
+	setvect(0x1c, (void interrupt far (*)(void))g_timer_isr_bak);
 #endif
 }
 
