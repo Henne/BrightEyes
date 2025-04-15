@@ -2592,7 +2592,7 @@ void read_common_files(void)
 	decomp_pp20(g_buffer_dmenge_dat, g_buffer_dmenge_dat - 8, len);
 }
 
-/* Borlandified and far from identical, but works */
+/* Borlandified and identical */
 signed long process_nvf(struct nvf_desc *nvf)
 {
 	signed long offs;
@@ -2603,10 +2603,10 @@ signed long process_nvf(struct nvf_desc *nvf)
 	signed long retval;
 	signed char nvf_type;
 
-	unsigned char *src;
+	unsigned char HUGEPTR *src;
 
-	signed short i;     // si
-	signed short width; // di
+	register signed short i;     // si
+	register signed short width; // di
 #if 0
 	/* Fix: GCC warns about uninitialized values */
 	width = height = 0;
@@ -2629,7 +2629,7 @@ signed long process_nvf(struct nvf_desc *nvf)
 	case 0x00:
 		width = host_readws(nvf->src + 3L);
 		height = host_readws(nvf->src + 5L);
-		p_size = height * width;
+		p_size = width * height;
 		memcpy(nvf->dst - 8L, nvf->src + p_size * nvf->no + 7L, p_size);
 		break;
 	case 0x01:
@@ -2652,10 +2652,10 @@ signed long process_nvf(struct nvf_desc *nvf)
 		offs = ((unsigned long)(pics * 4)) + 7L;
 		for (i = 0; i < nvf->no; i++) {
 			/* BCC adds here in offs = offs + value */
-			offs += host_readd(nvf->src + i * 4 + 7L);
+			offs += host_readds(nvf->src + i * 4 + 7L);
 		}
 
-		p_size = host_readd(nvf->src + nvf->no * 4 + 7L);
+		p_size = host_readds(nvf->src + nvf->no * 4 + 7L);
 		memcpy(nvf->dst - 8L, nvf->src + offs, p_size);
 		break;
 
@@ -2664,31 +2664,15 @@ signed long process_nvf(struct nvf_desc *nvf)
 		for (i = 0; i < (signed short)nvf->no; i++) {
 			/* First two lines are not neccessary */
 			width = host_readws(nvf->src + i * 8 + 3L);
-#if !defined(__BORLANDC__)
 			height = host_readws(nvf->src + i * 8 + 5L);
-#else
-			// Sync-Point
-			asm {db 0x0f, 0x1f, 0x00};
-			asm {nop; nop}
-			asm {nop; nop}
-			asm {nop; nop}
-			asm {nop; nop}
-			asm {nop; nop}
-			asm {nop; nop}
-			asm {nop; nop}
-			asm {nop; nop}
-			asm {nop; nop}
-			asm {nop; nop}
-			asm {db 0x66, 0x90}
-#endif
-			/* BCC adds here in offs = offs + value */
-			offs += host_readd(nvf->src + i * 8 + 7L);
+
+			offs += host_readds(nvf->src + i * 8 + 7L);
 		}
 
 		// Selected picture nvf->no, and copy it to nvf->dst
 		width = host_readws(nvf->src + nvf->no * 8 + 3L);
 		height = host_readws(nvf->src + nvf->no * 8 + 5L);
-		p_size = host_readd(nvf->src + i * 8 + 7L);
+		p_size = host_readds(nvf->src + i * 8 + 7L);
 
 		memcpy(nvf->dst - 8L, nvf->src + offs, p_size);
 		break;
@@ -2703,7 +2687,6 @@ signed long process_nvf(struct nvf_desc *nvf)
 			src += (retval - 4L);
 			retval = host_readd(src);
 			retval = ((signed long)swap_u32(retval)) >> 8;
-
 
 		} else {
 			retval = width * height;
