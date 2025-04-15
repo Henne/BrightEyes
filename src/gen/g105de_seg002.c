@@ -1519,7 +1519,7 @@ void stop_music(void)
 	seg001_033b();
 }
 
-/* Borlandified and nearly identical, but works identically */
+/* Borlandified and identical */
 unsigned char *load_snd_driver(const char *fname)
 {
 	signed long size;
@@ -1534,16 +1534,17 @@ unsigned char *load_snd_driver(const char *fname)
 		// BCC: far pointer normalizaion (DOS only)
 		in_ptr = ((unsigned long)g_snd_driver) + 0x0f;
 		in_ptr &= 0xfffffff0;
+		norm_ptr = normalize_ptr((unsigned char*)in_ptr);
 
-		/* The arguments of read are working, but not identical */
-		_read(handle, (norm_ptr = normalize_ptr((unsigned char*)in_ptr)), size);
+		_read(handle, norm_ptr, size);
 #else
-		_read(handle, (norm_ptr = g_snd_driver), size);
+		norm_ptr = g_snd_driver;
+		_read(handle, norm_ptr, size);
 #endif
 		_close(handle);
 		return norm_ptr;
 	} else {
-		return (unsigned char*)0L;
+		return (unsigned char*)NULL;
 	}
 }
 
