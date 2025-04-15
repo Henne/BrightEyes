@@ -4757,6 +4757,10 @@ void fill_values(void)
 	/* roll out god */
 	g_hero.god = random_gen(12);
 
+#if defined(__BORLANDC__)
+	asm {db 0x0f, 0x1f, 0x00 } // BCC Sync-Point
+	asm {db 0x0f, 0x1f, 0x00 }
+#endif
 	/* add gods boni */
 	switch (g_hero.god) {
 		case 1 : {
@@ -4886,10 +4890,6 @@ void fill_values(void)
 			spell_inc_novice((v2 = g_autospells[g_hero.typus - 7][i]));
 		}
 	}
-#if defined(__BORLANDC__)
-	asm {db 0x0f, 0x1f, 0x00 } // BCC Sync-Point
-	asm {db 0x0f, 0x1f, 0x00 }
-#endif
 }
 
 /**
