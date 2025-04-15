@@ -18,8 +18,9 @@ The BCC-World takes precedence due to it's age.
 The GCC/Clang-world is there for support.
 
 ### BCC-World
-* restructuring of uninitialized data (DS:BSS)
-* seg004: normalize_ptr() calls F_LXLSH (32bit left shift) from CLib and is not linked correctly
+* ~~restructuring of uninitialized data (DS:BSS)~~
+* ~~seg004: normalize_ptr() calls F_LXLSH (32bit left shift) from CLib and is not linked correctly~~
+* comparing differences in the rewritten GEN.EXE on binary level
 
 ### GCC/Clang-World
 * linking SDL2 with GCC
