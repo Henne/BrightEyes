@@ -4643,7 +4643,7 @@ void fill_values(void)
 	}
 
 	/* set skill_attempts */
-	g_hero.skill_incs = g_initial_skill_incs[g_hero.typus];
+	g_hero.skill_incs = g_initial_skill_incs[g_hero.typus - 1];
 
 	/* do magic user init */
 	if (g_hero.typus >= 7) {
@@ -4741,7 +4741,7 @@ void fill_values(void)
 
 	/* roll out the money */
 	i = random_gen(20);
-	money_ptr = g_money_tab[g_hero.typus];
+	money_ptr = g_money_tab[g_hero.typus - 1];
 	for (si = 0; money_ptr[si].value < i; si++);
 
 	g_hero.money = (signed long)(10 * (signed short)random_interval_gen(money_ptr[si].min, money_ptr[si].max));
