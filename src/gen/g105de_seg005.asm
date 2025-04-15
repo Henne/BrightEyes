@@ -4,31 +4,19 @@
 ; Only 14 of them are used in the game, and get meaningful names
 ; The other 18 are called unused_func01 .. unused_func18
 
-.186
-.model large
-.code
 
-	public _set_video_mode
-	public _set_video_page
-	public _save_display_stat
-	public _set_color
-	public _set_palette
-	public _draw_h_line
-	public _draw_h_spaced_dots
-	public _pic_copy
-	public _save_rect
-	public _fill_rect
-	public _copy_solid_permuted
-	public _copy_solid
-	public _swap_u16
-	public _copy_to_screen
-	public unused_func13
-	public _normalize_ptr
+SEG005_TEXT	segment byte public 'CODE'
+SEG005_TEXT	ends
 
-	extrn F_LXLSH@:far
+DGROUP	group _DATA
+	assume cs:SEG005_TEXT,ds:DGROUP
 
-	assume cs:@code
+_DATA		segment word public 'DATA'
+_DATA		ends
 
+SEG005_TEXT	segment byte public 'CODE'
+
+	assume	cs:SEG005_TEXT
 
 _set_video_mode	proc far
 
@@ -362,15 +350,14 @@ unused_func05	proc far
 		mov	cx, 0A0h
 		mov	ax, 0A000h
 		mov	ds, ax
-		assume ds:nothing
 		mov	si, [bp+6]
 		les	di, [bp+8]
 		rep movsw
+
 		pop	di
 		pop	si
 		pop	es
 		pop	ds
-		assume ds:@DATA
 		mov	sp, bp
 		pop	bp
 		retf
@@ -390,7 +377,6 @@ unused_func06	proc far
 		mov	cx, 0A0h
 		mov	ax, 0A000h
 		mov	es, ax
-		assume es:nothing
 		mov	di, [bp+6]
 		lds	si, [bp+8]
 		rep movsw
@@ -398,7 +384,6 @@ unused_func06	proc far
 		pop	di
 		pop	si
 		pop	es
-		assume es:nothing
 		pop	ds
 		mov	sp, bp
 		pop	bp
@@ -455,7 +440,6 @@ unused_func07	proc far
 		cld
 		mov	ax, 0A000h
 		mov	ds, ax
-		assume ds:nothing
 		mov	si, [bp+6]
 		les	di, [bp+8]
 		mov	cx, 200
@@ -468,7 +452,6 @@ u_f07_loop1:
 		pop	si
 		pop	es
 		pop	ds
-		assume ds:@DATA
 		mov	sp, bp
 		pop	bp
 		retf
@@ -488,7 +471,6 @@ unused_func08	proc far
 		cld
 		mov	ax, 0A000h
 		mov	es, ax
-		assume es:nothing
 		mov	di, [bp+6]
 		lds	si, [bp+8]
 		mov	cx, 200
@@ -501,7 +483,6 @@ u_f08_loop1:
 		pop	di
 		pop	si
 		pop	es
-		assume es:nothing
 		pop	ds
 		mov	sp, bp
 		pop	bp
@@ -1011,4 +992,24 @@ pnt		= dword ptr 6
 
 _normalize_ptr	endp
 
-		end
+SEG005_TEXT	ends
+
+	extrn F_LXLSH@:far
+	public _set_video_mode
+	public _set_video_page
+	public _save_display_stat
+	public _set_color
+	public _set_palette
+	public _draw_h_line
+	public _draw_h_spaced_dots
+	public _pic_copy
+	public _save_rect
+	public _fill_rect
+	public _copy_solid_permuted
+	public _copy_solid
+	public _swap_u16
+	public _copy_to_screen
+	public unused_func13
+	public _normalize_ptr
+
+	end

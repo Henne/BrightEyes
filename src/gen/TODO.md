@@ -36,7 +36,7 @@ The GCC/Clang-world is there for support.
 | seg004.[ch]  | PowerPack2.0  | -                  | **DONE**           | **DONE**   |
 | seg004.asm/h | PowerPack2.0  | should be rebuild  | not portable       | WIP        |
 | seg005.[ch]  | Rasterlib     | -                  | should be rebuild  | WIP        |
-| seg005.asm/h | Rasterlib     | should be rebuild  | not portable       | WIP        |
+| seg005.asm/h | Rasterlib     | **DONE**           | **not portable**   | **DONE***  |
 | seg006.[ch]  | AIL (Sound)   | -                  | should be replaced | WIP        |
 | seg006.asm/h | AIL (Sound)   | should be rebuild  | not portable       | WIP        |
 | seg007.asm/h | AudioCD data  | should be rebuild  | not portable       | WIP        |
