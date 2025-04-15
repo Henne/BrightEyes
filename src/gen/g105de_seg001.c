@@ -62,23 +62,15 @@ static char STR_CD_EXEPATH[] = "X:\\DSA\\SCHICKM.EXE";
 
 /* uninitialized global variables BSS */
 /* Remark: ripped code from the binary had the BSS-variable adresses in reverse order */
-static signed short CD_AUDIO_TRACK;
-static signed short cd_dummy3_1;
-#if !defined(__BORLANDC__)
-/* For some reason CD_AUDIO_TRACK
- * is at DS:0x245c instead of DS:0x245a.
- * The two bytes at DS:0x243c and DS:0x243d from CLIB
- * code are responsible for that.
- */
-static signed short cd_dummy3_2;
-#endif
-static long cd_dummy4;
-static signed long CD_AUDIO_TOD;
-static signed long CD_AUDIO_POS;
-static signed short CD_DRIVE_NO;
-
-static signed long cd_dummy5;
 static signed short cd_dummy6;
+static long cd_dummy4;
+static signed short CD_DRIVE_NO;
+static signed long CD_AUDIO_POS;
+static signed long CD_AUDIO_TOD;
+static signed long cd_dummy5;
+static signed short cd_dummy3_1;
+static signed short cd_dummy3_2;
+static signed short CD_AUDIO_TRACK;
 
 /* internally used prototypes */
 static void seg001_0312(void);
