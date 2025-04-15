@@ -64,8 +64,9 @@ struct struct_hero {
 	signed char direction;
 	signed char actions_left;
 	signed char unkn4[3];
+	signed char unkn5;
 	signed char group;
-	signed char unkn5[2];
+	signed char unkn12;
 	signed char position;
 	/* Offset 0x8b */
 #if defined(__BORLANDC__)
