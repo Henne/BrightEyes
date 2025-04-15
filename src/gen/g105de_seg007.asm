@@ -30,7 +30,7 @@ req4 db 18h, 0, 83h, 0h, 0h, 0h,0h,0h,0h,0h,0h,0h,0h, 0h, 0h,0h,0h,0h, 0h, 0h,2h
 req5 db 16h, 0, 84h, 0h, 0h, 0h,0h,0h,0h,0h,0h,0h,0h, 1h, 0h,0h,0h,0h, 0h, 0h,0h, 0h,0h,0h,0h,0h,0h,0h  ; starts at 0x08c
 req6 db 16h, 0, 85h, 0h, 0h, 0h,0h,0h,0h,0h,0h,0h,0h, 1h, 0h,0h,0h,0h, 0h, 0h,0h, 0h,0h,0h,0h,0h,0h,0h  ; starts at 0x0a8
 req7 db 16h, 0, 88h, 0h, 0h, 0h,0h,0h,0h,0h,0h,0h,0h, 1h, 0h,0h,0h,0h, 0h, 0h,0h, 0h,0h,0h,0h,0h,0h,0h  ; starts at 0x0c4
-req8 db 16h, 0, 0ch, 0h, 0h, 0h,0h,0h,0h,0h,0h,0h,0h, 0h, 0h,0h,0h,0h, 1h, 0h,0h, 0h,0h,0h,0h,0h,0h,0h  ; starts at 0x0e0
+req8 db 16h, 0, 0ch, 0h, 0h, 0h,0h,0h,0h,0h,0h,0h,0h, 0h, 94h,0h,0c7h,0ch, 1h, 0h,0h, 0h,0h,0h,0h,0h,0h,0h  ; starts at 0x0e0
 ;;GEN_REQ 16h, 85h, 0h, 00h, 0h		;;STOP CDA HSG-mode
 ;;GEN_REQ 16h, 85h, 1h, 00h, 0h		;;STOP CDA Redbook-mode
 ;;GEN_REQ 1ah, 03h, 0h, 07h, 0h		;;IOCTL input
