@@ -4759,7 +4759,7 @@ void fill_values(void)
 
 #if defined(__BORLANDC__)
 	asm {db 0x0f, 0x1f, 0x00 } // BCC Sync-Point
-	asm {db 0x0f, 0x1f, 0x00 }
+	//asm {db 0x0f, 0x1f, 0x00 }
 #endif
 	/* add gods boni */
 	switch (g_hero.god) {
@@ -5281,7 +5281,7 @@ void change_attribs(void)
 		//g_hero.attrib[tmp2].normal = ++g_ghero.attrib[tmp2].current;
 		ptr1[0] = ++ptr1[1];
 
-		g_attrib_changed[tmp1] = INC;
+		g_attrib_changed[tmp2] = INC;
 
 		refresh_screen();
 
