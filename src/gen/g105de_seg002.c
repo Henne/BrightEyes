@@ -1627,7 +1627,7 @@ signed short *get_timbre(signed short bank, signed short patch)
 
 	timbre_ptr = (signed short*)gen_alloc(g_current_timbre_length);
 
-	read_datfile(g_handle_timbre, (unsigned char*)&timbre_ptr[1], (timbre_ptr[0] = g_current_timbre_length) - 2);
+	read_datfile(g_handle_timbre, (unsigned char*)&timbre_ptr[1], (unsigned short)(timbre_ptr[0] = g_current_timbre_length) - 2);
 
 	return timbre_ptr;
 }
