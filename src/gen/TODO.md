@@ -23,7 +23,7 @@ The GCC/Clang-world is there for support.
 * comparing differences in the rewritten GEN.EXE on binary level
 
 ### GCC/Clang-World
-* linking SDL2 with GCC
+* ~~linking SDL2 with GCC~~
 * using compiler warnings to make things better
 
 ## Overview
