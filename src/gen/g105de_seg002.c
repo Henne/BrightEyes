@@ -13,6 +13,7 @@
 #include <TIME.H>	// by randomize()
 #include <ALLOC.H>	// farcalloc()
 #else
+#include <SDL2/SDL.h>
 #include <unistd.h> // lseek(), close(), read(), write()
 #endif
 
@@ -3113,7 +3114,9 @@ void wait_for_vsync(void)
 		_AH = 0;
 		_BX = _AX;
 	} while (!(_BX & 0x8));
-
+#else
+	// wait 16ms
+	SDL_Delay(16);
 #endif
 }
 
