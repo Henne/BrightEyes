@@ -1912,8 +1912,8 @@ void mouse_do_enable(unsigned short val, unsigned char* ptr)
 
 	p1 = 0x0c;
 	p3 = val;
-	p4 = (unsigned short)FP_OFF(mouse_isr);
-	p5 = (unsigned short)FP_SEG(mouse_isr);
+	p4 = (unsigned short)FP_OFF(mouse_call_isr);
+	p5 = (unsigned short)FP_SEG(mouse_call_isr);
 
 	/* save adress of old IRQ 0x78 */
 	g_irq78_bak = ((void interrupt far (*)(void))getvect(0x78));
