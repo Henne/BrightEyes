@@ -6,16 +6,16 @@ This file tries to give a brief overview over the current state of the project.
 * refactoring of the code
 * restructuring of initialized data (DS:INIT)
 * correct compiler flags + minimal set of Sync-Points
-* have a DOS-Build (not working atm)
-* compile with GCC/Clang
-* linking with Clang
+* have a DOS-Build (working with issues atm)
+* compile 32/64-bit binaries with GCC/Clang
 
 ## What's WIP
 We distinguish between two different worlds here:
 * BCC-World: DOS / 16-bit => create an identical binary
-* GCC/Clang-World: for now Linux / 64-bit => create an identical working binary
+* GCC/Clang-World: for now Linux / 64-bit => create an *identical working* binary
+
 The BCC-World takes precedence due to it's age.
-The GCC/Clang-world is there for support.
+The GCC/Clang-World is there for support.
 
 ### BCC-World
 * ~~restructuring of uninitialized data (DS:BSS)~~
@@ -23,8 +23,7 @@ The GCC/Clang-world is there for support.
 * comparing differences in the rewritten GEN.EXE on binary level
 
 ### GCC/Clang-World
-* ~~linking SDL2 with GCC~~
-* using compiler warnings to improve things
+* using modern software development tools to improve things
 
 ## Overview
 
