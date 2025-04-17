@@ -72,7 +72,7 @@ static long cd_dummy3;
 static signed short g_cd_audio_track;
 
 /* internally used prototypes */
-static void seg001_0312(void);
+static void CD_audio_stop_hsg(void);
 static signed short CD_check_file(char*);
 
 
@@ -229,8 +229,8 @@ static void seg001_02ba()
 	if ((CD_get_tod() - g_cd_audio_tod) < g_cd_audio_pos) return;
 
 	if (g_cd_audio_repeat == 1) {
-		seg001_0312();
-		seg001_0312();
+		CD_audio_stop_hsg();
+		CD_audio_stop_hsg();
 		seg001_00bb(g_cd_audio_track);
 		g_cd_audio_repeat = 1;
 	}
@@ -247,7 +247,7 @@ signed short CD_bioskey(signed short cmd)
 }
 
 /* Borlandified and identical */
-static void seg001_0312(void)
+static void CD_audio_stop_hsg(void)
 {
 	if (g_cd_init_successful != 0) {
 
@@ -262,7 +262,7 @@ void seg001_033b(void)
 {
 	if (g_cd_init_successful != 0) {
 
-		seg001_0312();
+		CD_audio_stop_hsg();
 
 		writew(&req[1].status, 0);
 		CD_driver_request(&req[1]);
@@ -315,8 +315,8 @@ static void seg001_03a8(void)
 /* Borlandified and identical */
 void seg001_0465(unsigned short track)
 {
-	seg001_0312();
-	seg001_0312();
+	CD_audio_stop_hsg();
+	CD_audio_stop_hsg();
 	g_cd_audio_track = 4;
 	seg001_00bb(g_cd_audio_track);
 	g_cd_audio_repeat = 1;
