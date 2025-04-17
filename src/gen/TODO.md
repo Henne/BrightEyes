@@ -24,7 +24,7 @@ The GCC/Clang-world is there for support.
 
 ### GCC/Clang-World
 * ~~linking SDL2 with GCC~~
-* using compiler warnings to make things better
+* using compiler warnings to improve things
 
 ## Overview
 
@@ -37,10 +37,10 @@ The GCC/Clang-world is there for support.
 | seg004.[ch]  | PowerPack2.0  | -                  | **DONE**           | **DONE**   |
 | seg004.asm/h | PowerPack2.0  | should be rebuild  | not portable       | WIP        |
 | seg005.[ch]  | Rasterlib     | -                  | should be rebuild  | WIP        |
-| seg005.asm/h | Rasterlib     | **DONE**           | **not portable**   | **DONE***  |
+| seg005.asm/h | Rasterlib     | **DONE**           | **not portable**   | **DONE**   |
 | seg006.[ch]  | AIL (Sound)   | -                  | should be replaced | WIP        |
 | seg006.asm/h | AIL (Sound)   | should be rebuild  | not portable       | WIP        |
-| seg007.asm/h | AudioCD data  | should be rebuild  | not portable       | WIP        |
+| seg007.asm/h | AudioCD data  | **DONE**           | **not portable**   | **DONE**   |
 | hero.h       | hero struct   | should be complete | should be complete | WIP        |
 | port.h       | DOSBox compat | **DONE**           | **DONE**           | **DONE**   |
 | symbols.h    | DS adresses   | **obsolete**       | **obsolete**       | **DONE**   |
