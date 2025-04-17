@@ -2150,22 +2150,17 @@ void handle_input(void)
 
 /* Borlandified and identical */
 /* static */
-unsigned short get_mouse_action(signed short x, signed short y, struct mouse_action *act)
+signed short get_mouse_action(signed short x, signed short y, struct mouse_action *act)
 {
 	signed short i;
 	
 	for (i = 0; act[i].x1 != -1; i++) {
 
-		if (act[i].x1 > x)
-			continue;
-		if (act[i].x2 < x)
-			continue;
-		if (act[i].y1 > y)
-			continue;
-		if (act[i].y2 < y)
-			continue;
-
-		return act[i].action;
+		if (	(act[i].x1 <= x) && (act[i].x2 >= x) &&
+			(act[i].y1 <= y) && (act[i].y2 >= y))
+		{
+			return act[i].action;
+		}
 	}
 
 	return 0;

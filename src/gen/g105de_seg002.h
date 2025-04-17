@@ -33,7 +33,7 @@ struct nvf_desc {
 	void update_mouse_cursor1(void);
 	void mouse(void);
 	void handle_input(void);
-	unsigned short get_mouse_action(signed short, signed short, struct mouse_action*);
+	signed short get_mouse_action(signed short, signed short, struct mouse_action*);
 	void draw_mouse_cursor(void);
 	void save_mouse_bg(void);
 	void restore_mouse_bg(void);
