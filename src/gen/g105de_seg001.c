@@ -211,12 +211,9 @@ static void seg001_00bb(signed short track_no)
 		track_start = track_end - track_start;
 		// track_start is now track length
 
-		// OK till here: 0x251, but works identical
+		// TODO: 2nd writew() produces different code, but works identical
 		writew(&req[5].dummy4, track_start - 150);
 		writew(&req[5].dummy6, (signed long)(*((signed short*)(&track_start) + 1)));
-
-		// req[5] starts at 0x8c
-		//CD_driver_request((struct driver_request*)&cd_buf1[0x8c]);
 		CD_driver_request((struct driver_request*)&req[5]);
 
 		// g_cd_audio_pos = ((track_start - 150L) * 74574) / 307200;
@@ -225,20 +222,17 @@ static void seg001_00bb(signed short track_no)
 	}
 }
 
-/* Borlandified and nearly identical, but works */
+/* Borlandified and identical */
 static void seg001_02ba()
 {
-	if (g_cd_init_successful != 0) {
+	if (g_cd_init_successful == 0) return;
+	if ((CD_get_tod() - g_cd_audio_tod) < g_cd_audio_pos) return;
 
-		if ((CD_get_tod() - g_cd_audio_tod) >= g_cd_audio_pos) {
-
-			if (g_cd_audio_repeat == 1) {
-				seg001_0312();
-				seg001_0312();
-				seg001_00bb(g_cd_audio_track);
-				g_cd_audio_repeat = 1;
-			}
-		}
+	if (g_cd_audio_repeat == 1) {
+		seg001_0312();
+		seg001_0312();
+		seg001_00bb(g_cd_audio_track);
+		g_cd_audio_repeat = 1;
 	}
 }
 
