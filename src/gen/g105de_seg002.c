@@ -3489,7 +3489,7 @@ signed short get_line_start_c(const char *str, signed short x, signed short x_ma
 	return x_max;
 }
 
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 signed short enter_string(char *dst, signed short x, signed short y, signed short num, signed short zero)
 {
 	signed short pos;
@@ -3544,8 +3544,7 @@ signed short enter_string(char *dst, signed short x, signed short y, signed shor
 		}
 
 		if (c == 8) {
-			if (pos <= 0)
-				continue;
+			if (pos > 0 ) {
 
 			if (zero == 1 && pos != num)
 				print_chr(0x20, di, y);
@@ -3557,16 +3556,15 @@ signed short enter_string(char *dst, signed short x, signed short y, signed shor
 
 			print_chr(0x20, di, y);
 			print_chr(0x5f, di, y);
+			}
 		} else {
-			/* isalnum(c) */
-			if (!(isalnum(c)) &&
+			if ((isalnum(c) == 0) &&
 				(((unsigned char)c) != 0x84) && (((unsigned char)c) != 0x94) &&
 				(((unsigned char)c) != 0x81) && (((unsigned char)c) != 0x8e) &&
 				(((unsigned char)c) != 0x99) && (((unsigned char)c) != 0x9a) &&
 				(c != 0x20) && (c != 0x2e))
 					continue;
 
-			/* isalpha(c) */
 			if (isalpha(c))
 				c = toupper(c);
 
@@ -3607,7 +3605,6 @@ signed short enter_string(char *dst, signed short x, signed short y, signed shor
 		}
 	}
 
-	/* OK from here */
 	if (zero == 0) {
 		while (pos < num) {
 			print_chr(0x20, di, y);
