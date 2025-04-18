@@ -954,7 +954,7 @@ static const signed short g_ro_zero = 0;
 
 static const signed char dummy6 = 0;
 
-static struct struct_hero g_hero = {0};
+static volatile struct struct_hero g_hero = {0};
 
 static const signed char dummy_6_1 = 0;
 
@@ -4746,16 +4746,13 @@ void fill_values(void)
 	g_hero.mr =
 		(g_hero.attrib[1].normal + g_hero.attrib[0].normal + g_hero.level) / 3
 			- 2 * g_hero.attrib[7].normal;
+
 	/* add typus MR Modificator */
 	g_hero.mr += g_mr_mod[g_hero.typus];
 
 	/* roll out god */
 	g_hero.god = random_gen(12);
 
-#if defined(__BORLANDC__)
-	asm {db 0x0f, 0x1f, 0x00 } // BCC Sync-Point
-	//asm {db 0x0f, 0x1f, 0x00 }
-#endif
 	/* add gods boni */
 	switch (g_hero.god) {
 		case 1 : {
@@ -5080,10 +5077,7 @@ void select_typus(void)
 			g_screen_var = 1;
 
 			load_typus((signed short)g_hero.typus);
-#if defined(__BORLANDC__)
-			/* Sync-Point-Reason: Load supression optimizes g_hero.typus to well */
-			asm { db 0x0f, 0x1f, 0x00 }
-#endif
+
 			update_mouse_cursor();
 			call_fill_rect_gen((unsigned char*)g_vga_memstart, 16, 8, 143, 191, 0);
 			wait_for_vsync();
