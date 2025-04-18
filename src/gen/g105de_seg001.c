@@ -49,7 +49,7 @@ extern signed short g_called_with_args;
 extern unsigned char *g_vga_memstart;
 
 /* initialized global variables DATA */
-static char cd_dummy0 = 0;
+static char cd_dummy0 = 2;
 static signed short g_cd_init_successful = 0;
 static long cd_dummy1 = 0;
 static signed short g_cd_audio_repeat = 0;
