@@ -5124,15 +5124,15 @@ void select_typus(void)
  * can_change_attribs() - checks if attribute changes are possible
  *
  */
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 signed short can_change_attribs(void)
 {
 	signed short na_inc;
-	volatile signed short na_dec;
+	signed short na_dec;
 	signed char *p;
-	signed short i;
-	register signed short pa_inc;
-	register signed short pa_dec;
+	register signed short i;      // si
+	register signed short pa_inc; // cx
+	register signed short pa_dec; // di
 
 	pa_inc = 0;
 	pa_dec = 0;
