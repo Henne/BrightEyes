@@ -5195,33 +5195,29 @@ void change_attribs(void)
 	/* if typus != 0 */
 	if (g_hero.typus) {
 
-		if (!gui_bool(get_text(73)))
+		if (gui_bool(get_text(73))) {
+
+			/* set typus to 0 */
+			g_hero.typus = 0;
+
+			/* remove MU boni */
+			if (g_got_mu_bonus) {
+				g_hero.attrib[0].current = --g_hero.attrib[0].normal;
+				g_got_mu_bonus = 0;
+			}
+			/* remove CH boni */
+			if (g_got_ch_bonus) {
+				g_hero.attrib[2].current = --g_hero.attrib[2].normal;
+				g_got_ch_bonus = 0;
+			}
+			g_screen_var = 1;
+			refresh_screen();
+			g_screen_var = 0;
+
+		} else {
 			return;
-
-		/* set typus to 0 */
-		g_hero.typus = 0;
-
-		/* remove MU boni */
-		if (g_got_mu_bonus) {
-			g_hero.attrib[0].current = --g_hero.attrib[0].normal;
-			g_got_mu_bonus = 0;
 		}
-		/* remove CH boni */
-		if (g_got_ch_bonus) {
-			g_hero.attrib[2].current = --g_hero.attrib[2].normal;
-			g_got_ch_bonus = 0;
-		}
-		g_screen_var = 1;
-		refresh_screen();
-		g_screen_var = 0;
-
-#if defined(__BORLANDC__)
-		/* Sync-Point-Reason: jump out of the if-statement and an
-		 *                    unused return */
-		asm { db 0x66, 0x90; db 0x0f, 0x1f, 0x00; } // BCC Sync-Point
-#endif
 	}
-
 
 	/* check again if changing is possible */
 	if (can_change_attribs() == 0) {
