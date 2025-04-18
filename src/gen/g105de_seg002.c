@@ -6043,7 +6043,7 @@ void make_valuta_str(char *dst, signed long money)
 	sprintf(dst, get_text(69), d, s, (signed short)money);
 }
 
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 static void inc_skill(signed short skill, signed short max, char *msg)
 {
 	/* no more increments than the maximum */
@@ -6080,14 +6080,17 @@ static void inc_skill(signed short skill, signed short max, char *msg)
 				g_hero.at_weapon[skill]++;
 			}
 		}
+
+		refresh_screen();
+
 	} else {
 		/* print failure message */
 		infobox(get_text(153), 0);
 		/* increment try */
 		g_skill_incs[skill].tries++;
-	}
 
-	refresh_screen();
+		refresh_screen();
+	}
 }
 
 /* Borlandified and identical */
