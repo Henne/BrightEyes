@@ -6266,38 +6266,35 @@ static void inc_spell(signed short spell)
 		return;
 
 	}
+
 	/* all tries used for that spell */
 	if (g_spell_incs[spell].tries == 3) {
 		infobox(get_text(151), 0);
-#if !defined(__BORLANDC__)
-		/* Sync-Point-Reason: this return would result in different code */
-		return;
-#else
-		// Fool the BCC a bit with a handcoded return
-		asm { db 0xeb, 0x60; }
-#endif
-	}
-
-	/* decrement spell attempts */
-	g_hero.spell_incs--;
-
-	if ((signed short)random_interval_gen(2, 12) > g_hero.spells[spell]) {
-		/* show success */
-		infobox(get_text(152), 0);
-		/* increment spell value */
-		g_hero.spells[spell]++;
-		/* reset tries */
-		g_spell_incs[spell].tries = 0;
-		/* increment incs */
-		g_spell_incs[spell].incs++;
 	} else {
-		/* show failure */
-		infobox(get_text(153), 0);
-		/* increment tries */
-		g_spell_incs[spell].tries++;
-	}
 
-	refresh_screen();
+		/* decrement spell attempts */
+		g_hero.spell_incs--;
+
+		if ((signed short)random_interval_gen(2, 12) > g_hero.spells[spell]) {
+			/* show success */
+			infobox(get_text(152), 0);
+			/* increment spell value */
+			g_hero.spells[spell]++;
+			/* reset tries */
+			g_spell_incs[spell].tries = 0;
+			/* increment incs */
+			g_spell_incs[spell].incs++;
+
+			refresh_screen();
+		} else {
+			/* show failure */
+			infobox(get_text(153), 0);
+			/* increment tries */
+			g_spell_incs[spell].tries++;
+
+			refresh_screen();
+		}
+	}
 }
 
 /* Borlandified and identical */
