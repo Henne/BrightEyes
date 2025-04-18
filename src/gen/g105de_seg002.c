@@ -1431,23 +1431,6 @@ static inline char* itoa(int value, char* string, int radix)
 extern int g_lets_quit;
 #endif
 
-#if defined(__BORLANDC__)
-/* A little quirk here:
- * This Segment starts at offset 0x0005 with some overlapping code from CD-Audio (5 Bytes).
- * To get the correct code we start at offset 0x0000 with some alignement code
- * to obtain correct alignment and the correct adresses from the switch jump-tables.
- */
-#if 1
-void dummy0()
-{
-	asm {nop; };
-}
-void dummy()
-{
-}
-#endif
-#endif
-
 /* Borlandified and identical */
 void start_music(unsigned short track)
 {
@@ -2346,7 +2329,7 @@ void restore_mouse_bg(void)
 }
 
 
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 void load_font_and_text(void)
 {
 	signed short handle;
@@ -2418,7 +2401,7 @@ void load_page(signed short page)
 }
 
 #if defined (__BORLANDC__)
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 void read_datfile_to_buffer(signed short index, unsigned char *dst)
 {
 	signed short handle;
@@ -2462,7 +2445,7 @@ void load_typus(signed short typus)
 /**
  * save_chr() - save the hero the a CHR file
  */
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 void save_chr(void)
 {
 	signed short tmpw;
@@ -2557,7 +2540,7 @@ void save_chr(void)
 	}
 }
 
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 void read_common_files(void)
 {
 	signed short handle; //si
@@ -2737,7 +2720,7 @@ signed short open_datfile(unsigned short index)
 	}
 }
 
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 /* static */
 signed long get_archive_offset(const char *name, unsigned char *table)
 {
@@ -2980,7 +2963,7 @@ void unused_func11(signed short x1, signed short x2, signed short y, signed shor
 }
 #endif
 
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 void draw_v_line(signed short x, signed short y1, signed short y2, unsigned short color)
 {
 	signed short tmp;
@@ -3846,7 +3829,7 @@ void fill_radio_button(signed short old_pos, signed short new_pos, signed short 
  * @options:	the number of options
  *
  */
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 signed short gui_radio(char *header, signed char options, ...)
 {
 	va_list arguments;
@@ -4431,7 +4414,7 @@ void clear_hero(void)
  * new_values() - roll out new attribute values
  *
  */
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 void new_values(void)
 {
 	/* Original-Bugfix:	there once was a char[11],
@@ -4618,7 +4601,7 @@ void calc_at_pa(void)
  * fill_values() - fills the values if typus is chosen
  *
  */
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 void fill_values(void)
 {
 	signed short i;
@@ -6610,7 +6593,7 @@ void choose_atpa(void)
  * choose_typus() - choose a typus manually
  *
  */
-/* Borlandified and far from identical */
+/* Borlandified and identical */
 void choose_typus(void)
 {
 	signed short choosen_typus;
@@ -6723,7 +6706,7 @@ void choose_typus(void)
 	g_screen_var = 1;
 }
 
-/* Borlandified and nearly identical, but works correctly */
+/* Borlandified and identical */
 static void pal_fade_out(signed char *dst, signed char *src, signed short n)
 {
 //	struct struct_color *d = (struct struct_color*)dst;
@@ -6777,7 +6760,7 @@ static void pal_fade_out(signed char *dst, signed char *src, signed short n)
 	}
 }
 
-/* Borlandified and nearly identical, but works correctly */
+/* Borlandified and identical */
 static void pal_fade_in(signed char *dst, signed char *src, signed short col, signed short n)
 {
 	signed short i;
@@ -6936,7 +6919,7 @@ static void BE_cleanup(void)
 /**
  *	intro() - play the intro
  */
-/* Borlandified and nearly identical, but works correctly */
+/* Borlandified and identical */
 static void intro(void)
 {
 	signed char cnt1;
@@ -7193,11 +7176,7 @@ void restore_timer_isr(void)
 #endif
 }
 
-#if defined(__BORLANDC__)
-void print_addr(void);
-#endif
-
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 #define main_gen main
 int main_gen(int argc, char **argv)
 {
@@ -7368,26 +7347,3 @@ unsigned char *gen_alloc(unsigned long nelem)
 	return (unsigned char*)calloc(nelem, 1);
 #endif
 }
-
-#if defined(__BORLANDC__)
-void print_addr(void)
-{
-	printf("Sizeof(hero) =           0x%04x (0x06da)\n\n", sizeof(g_hero));
-	printf("&g_spell_tab =           0x%04x (0x0158)\n", &g_spell_tab);
-	printf("&g_screen_var =          0x%04x (0x11fe)\n", &g_screen_var);
-	printf("&g_mouse_mask =          0x%04x (0x1200)\n", &g_mouse_mask);
-	printf("&hero =                  0x%04x (0x132c)\n", &g_hero);
-	printf("&hero.money =            0x%04x (0x1358)\n", &(g_hero.money));
-	printf("&hero.mr =               0x%04x (0x1392)\n", &(g_hero.mr));
-	printf("&hero.staff_level =      0x%04x (0x14c1)\n", &(g_hero.staff_level));
-	printf("&hero.pic =              0x%04x (0x1606)\n", &(g_hero.pic));
-	printf("&midi_disabled =         0x%04x (0x1a07)\n\n", &g_midi_disabled);
-	printf("&random_gen_seed =       0x%04x (0x1fd6)\n\n", &g_random_gen_seed);
-	printf("&_ctype =                0x%04x (0x1ff9)\n\n", &_ctype);
-	printf("&current_timbre_length = 0x%04x (0x2474)\n", &g_current_timbre_length);
-	printf("&flen =                  0x%04x (0x3f2a)\n", &g_flen);
-	printf("&texts =                 0x%04x (0x40d9)\n", &g_texts);
-	printf("&ro_var =                0x%04x (0x47e3)\n", &g_ro_var);
-	exit(0);
-}
-#endif
