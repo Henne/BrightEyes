@@ -1,18 +1,5 @@
 ; define a macro for generating the request sections
 ; a request section has 28/0x1c byte
-GEN_REQ	MACRO dummy1, function, redbook, dummy4, dummy6
-		db dummy1
-		db 0
-		db function
-		dw 0
-		db 8 dup (0)
-		db redbook
-		dq 0
-		db dummy4
-		db 0
-		db dummy6
-		db 7 dup (0)
-	ENDM
 
 	public _req	; array of 9 requests
 	public _cd_buf1
@@ -46,14 +33,5 @@ _cd_buf1 db 804 dup (0)			;another buffer starts at 0x0fc
 _cd_buf2 db 20 dup (0)			;buffer for IOCTL
 
 _FARDATA	ends
-
-;;dummy1_seg	segment byte public 'DATA'
-;;		assume nothing
-;;		db 0
-;;dummy1_seg	ends
-;;dummy2_seg	segment byte public 'DATA'
-;;		assume nothing
-;;		db 0
-;;dummy2_seg	ends
 
 end
