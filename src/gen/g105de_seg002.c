@@ -2249,7 +2249,7 @@ void decomp_rle(unsigned char *dst, unsigned char *src, signed short x, signed s
 	call_mouse();
 }
 
-/* Borlandified and nearly identical, but works correct */
+/* Borlandified and identical */
 /* static */
 void draw_mouse_cursor(void)
 {
@@ -2257,11 +2257,11 @@ void draw_mouse_cursor(void)
 	signed char X;
 	unsigned char *vgaptr;
 	signed short *mouse_cursor;
-	signed short rangeY;
+	volatile signed short rangeY;
 	signed short diffX;
 	signed short diffY;
 
-	register signed short rangeX; //di
+	signed short rangeX; //di
 	register signed short mask; //si
 
 	vgaptr = g_vga_memstart;
