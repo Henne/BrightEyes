@@ -8,6 +8,7 @@
 */
 
 #include <SDL2/SDL.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 extern unsigned char *g_vga_memstart;
