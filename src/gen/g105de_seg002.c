@@ -7293,7 +7293,7 @@ int main_gen(int argc, char **argv)
 #endif
 }
 
-/* Borlandified and nearly identical, but works correctly */
+/* Borlandified and identical */
 void alloc_buffers(void)
 {
 #if defined(__BORLANDC__)
@@ -7334,12 +7334,10 @@ void alloc_buffers(void)
 
 	g_picbuf3 = gen_alloc(2800);
 
-	if (!(g_gen_ptr6 = (gen_alloc(1100) + 8))) {
-#if defined(__BORLANDC__)
-		/* Sync-Point-Reason: code for if statement is different */
-		asm { db 0x66, 0x90;}; // 2 Byte-Nop
-#endif
-		printf((char*)g_str_malloc_error);
+	g_gen_ptr6 = (gen_alloc(1100) + 8);
+
+	if (g_gen_ptr6 == NULL) {
+		printf(g_str_malloc_error);
 	}
 }
 
