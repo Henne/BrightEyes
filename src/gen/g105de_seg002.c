@@ -5169,7 +5169,7 @@ signed short can_change_attribs(void)
 /**
  * change_attribs() - change attributes
  */
-/* Borlandified and nearly identical */
+/* Borlandified and identical */
 void change_attribs(void)
 {
 	signed short tmp1;
@@ -5231,152 +5231,152 @@ void change_attribs(void)
 			get_text(36), get_text(37), get_text(38));
 	g_text_x_mod = 0;
 
-	if (tmp2 == -1)
-		return;
-	tmp2--;
-	/* get the modification type */
-	if (!g_attrib_changed[tmp2]) {
-		/* ask user if inc or dec */
-		g_text_x_mod = -80;
-		tmp3 = gui_radio((char*)NULL, 2, get_text(75), get_text(76));
-		g_text_x_mod = 0;
+	if (tmp2 != -1) {
 
-		if (tmp3 == -1)
-			return;
-	} else {
-		tmp3 = g_attrib_changed[tmp2];
-	}
+		tmp2--;
+		/* get the modification type */
+		if (!g_attrib_changed[tmp2]) {
+			/* ask user if inc or dec */
+			g_text_x_mod = -80;
+			tmp3 = gui_radio((char*)NULL, 2, get_text(75), get_text(76));
+			g_text_x_mod = 0;
 
-	ptr1 = &g_hero.attrib[tmp2].normal;
-
-	if (tmp3 == INC) {
-		/* increment */
-		if (ptr1[0] == 13) {
-			infobox(get_text(77), 0);
-			return;
+			if (tmp3 == -1)
+				return;
+		} else {
+			tmp3 = g_attrib_changed[tmp2];
 		}
-		c = 0;
-		for (di = 7; di < 14; di++) {
-			if (g_attrib_changed[di] != DEC) {
-				ptr2 = &g_hero.attrib[di].normal;
-				if (ptr2[0] < 8) {
-					c += 8 - ptr2[0];
+
+		ptr1 = &g_hero.attrib[tmp2].normal;
+
+		if (tmp3 == INC) {
+			/* increment */
+			if (ptr1[0] == 13) {
+				infobox(get_text(77), 0);
+				return;
+			}
+			c = 0;
+			for (di = 7; di < 14; di++) {
+				if (g_attrib_changed[di] != DEC) {
+					ptr2 = &g_hero.attrib[di].normal;
+					if (ptr2[0] < 8) {
+						c += 8 - ptr2[0];
+					}
 				}
 			}
-		}
-		if (c < 2) {
-			infobox(get_text(85), 0);
-			return;
-		}
-		/* increment positive attribute */
-		//g_hero.attrib[tmp2].normal = ++g_ghero.attrib[tmp2].current;
-		ptr1[0] = ++ptr1[1];
+			if (c < 2) {
+				infobox(get_text(85), 0);
+				return;
+			}
+			/* increment positive attribute */
+			//g_hero.attrib[tmp2].normal = ++g_ghero.attrib[tmp2].current;
+			ptr1[0] = ++ptr1[1];
 
-		g_attrib_changed[tmp2] = INC;
+			g_attrib_changed[tmp2] = INC;
 
-		refresh_screen();
+			refresh_screen();
 
-		tmp1 = 0;
-		while (tmp1 != 2) {
+			tmp1 = 0;
+			while (tmp1 != 2) {
 		
-			do {
-				/* ask which negative attribute to increment */
-				g_text_x_mod = -80;
-				si = gui_radio(get_text(80), 7,
+				do {
+					/* ask which negative attribute to increment */
+					g_text_x_mod = -80;
+					si = gui_radio(get_text(80), 7,
 						get_text(39), get_text(40), get_text(41),
 						get_text(42), get_text(43), get_text(44),
 						get_text(45));
-				g_text_x_mod = 0;
+					g_text_x_mod = 0;
 
-			} while (si == -1);
+				} while (si == -1);
 
-			si--;
-			/* check if this attribute has been decremented */
-			if (g_attrib_changed[si + 7] == DEC) {
-				infobox(get_text(83), 0);
-				continue;
+				si--;
+				/* check if this attribute has been decremented */
+				if (g_attrib_changed[si + 7] == DEC) {
+					infobox(get_text(83), 0);
+					continue;
+				}
+				ptr1 = &g_hero.attrib[si + 7].normal;
+				/* check if attribute can be incremented */
+				if (ptr1[0] == 8) {
+					infobox(get_text(77), 0);
+				} else {
+					/* increment the negative attribute */
+					tmp1++;
+					g_attrib_changed[si + 7] = INC;
+
+					//g_hero.attrib[si + 7].normal = ++g_ghero.attrib[si + 7].current;
+					ptr1[0] = ++ptr1[1];
+
+					refresh_screen();
+				}
 			}
-			ptr1 = &g_hero.attrib[si + 7].normal;
-			/* check if attribute can be incremented */
+		} else {
+			/* decrement */
+			/* check if the positive attribute can be decremented */
 			if (ptr1[0] == 8) {
-				infobox(get_text(77), 0);
-			} else {
-				/* increment the negative attribute */
-				tmp1++;
-				g_attrib_changed[si + 7] = INC;
+				infobox(get_text(81), 0);
+				return;
+			}
+			c = 0;
+			for (di = 7; di < 14; di++) {
+				if (g_attrib_changed[di] != INC) {
+					ptr2 = &g_hero.attrib[di].normal;
+					if (ptr2[0] > 2) {
+						c += ptr2[0] - 2;
+					}
+				}
+			}
+			if (c < 2) {
+				infobox(get_text(84), 0);
+				return;
+			}
+			/* decrement positive attribute */
+			// g_hero.attrib[tmp3].normal = --g_hero.attrib[tmp3].current;
+			ptr1[0] = --ptr1[1];
 
-				//g_hero.attrib[si + 7].normal = ++g_ghero.attrib[si + 7].current;
-				ptr1[0] = ++ptr1[1];
+			/* mark this attribute as decremented */
+			g_attrib_changed[tmp2] = DEC;
+
+			refresh_screen();
+
+			tmp1 = 0;
+			while (tmp1 != 2) {
+
+				do {
+					/* ask which negative attribute to increment */
+					g_text_x_mod = -80;
+					si = gui_radio(get_text(79), 7,
+						get_text(39), get_text(40), get_text(41),
+						get_text(42), get_text(43), get_text(44),
+						get_text(45));
+					g_text_x_mod = 0;
+				} while (si == -1);
+
+				si--;
+				/* check if this attribute has been incremented */
+				if (g_attrib_changed[si + 7] == INC) {
+					infobox(get_text(82), 0);
+					continue;
+				}
+				
+				ptr1 = &g_hero.attrib[si + 7].normal;
+			
+				/* check if attribute can be decremented */
+				if (ptr1[0] == 2) {
+					infobox(get_text(81), 0);
+					continue;
+				}
+				/* decrement the negative attribute */
+				tmp1++;
+
+				// g_hero.attrib[si + 7].normal = --g_hero.attrib[si + 7].current;
+				ptr1[0] = --ptr1[1];
+
+				g_attrib_changed[si + 7] = DEC;
 
 				refresh_screen();
 			}
-		}
-	} else {
-		/* decrement */
-		/* check if the positive attribute can be decremented */
-		if (ptr1[0] == 8) {
-			infobox(get_text(81), 0);
-			return;
-		}
-		c = 0;
-		for (di = 7; di < 14; di++) {
-			if (g_attrib_changed[di] != INC) {
-				ptr2 = &g_hero.attrib[di].normal;
-				if (ptr2[0] > 2) {
-					c += ptr2[0] - 2;
-				}
-			}
-		}
-		if (c < 2) {
-			infobox(get_text(84), 0);
-			return;
-		}
-		/* decrement positive attribute */
-		// g_hero.attrib[tmp3].normal = --g_hero.attrib[tmp3].current;
-		ptr1[0] = --ptr1[1];
-
-		/* mark this attribute as decremented */
-		g_attrib_changed[tmp2] = DEC;
-
-		refresh_screen();
-
-		tmp1 = 0;
-		while (tmp1 != 2) {
-
-			do {
-				/* ask which negative attribute to increment */
-				g_text_x_mod = -80;
-				si = gui_radio(get_text(79), 7,
-						get_text(39), get_text(40), get_text(41),
-						get_text(42), get_text(43), get_text(44),
-						get_text(45));
-				g_text_x_mod = 0;
-			} while (si == -1);
-
-
-			si--;
-			/* check if this attribute has been incremented */
-			if (g_attrib_changed[si + 7] == INC) {
-				infobox(get_text(82), 0);
-				continue;
-			}
-				
-			ptr1 = &g_hero.attrib[si + 7].normal;
-			
-			/* check if attribute can be decremented */
-			if (ptr1[0] == 2) {
-				infobox(get_text(81), 0);
-				continue;
-			}
-			/* decrement the negative attribute */
-			tmp1++;
-
-			// g_hero.attrib[si + 7].normal = --g_hero.attrib[si + 7].current;
-			ptr1[0] = --ptr1[1];
-
-			g_attrib_changed[si + 7] = DEC;
-
-			refresh_screen();
 		}
 	}
 }
