@@ -694,7 +694,7 @@ static const struct struct_money money_warrior[] = {
 static const struct struct_money money_rouge[] = {
 	{10, 0, 0},  {17, 2, 2}, {18, 5, 5}, {20, 10, 10} };
 static const struct struct_money money_thorwal[] = {
-	{9, 10, 10},  {13, 0x64, 0x64}, {19, 300, 300}, {20, 508, 508} };
+	{9, 10, 10},  {13, 100, 100}, {19, 200, 200}, {20, 500, 500} };
 static const struct struct_money money_dwarf[] = {
 	{7, 100, 100},  {16, 200, 200}, {19, 300, 300}, {20, 1200, 1200} };
 
