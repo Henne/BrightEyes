@@ -1,5 +1,21 @@
 # DSA1/RAK1 Character generator
 
+In this place the actual development of GEN takes place.
+The DOS-Version will be supported for an uncertain ammount of time.
+
+The following rules apply:
+* binary-aequivalency is not important
+* portability is important
+* fixing issues is **allowed**
+* #define(__BORLANDC__) may be true
+
+The new DOS-binary can be build with ./tools/build.sh
+and can be found under ./tools/NGEN.EXE
+
+A Linux binary can be build with make and is called ./ngen_(compilername),
+e.g. ngen_clang or ngen_gcc
+
+
 ## GEN.EXE Versions
 All versions are build with the Borland C++ compiler using Memory Model: LARGE.
 | Version | Language | Compiler Version | Size  | md5sum                           |

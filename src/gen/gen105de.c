@@ -2166,11 +2166,7 @@ void unused_func1(signed char *in_ptr, signed short x, signed short y, signed ch
 	for (i = 0; i < c2; ptr += 320 , i++) {
 		for (j = 0; j < c1; j++) {
 			if ((val = *in_ptr++) != 0) {
-#if !defined(__BORLANDC__)
 				ptr[j] = val;
-#else
-				ptr[j] = _AL;
-#endif
 			}
 		}
 	}

@@ -2,10 +2,10 @@ CC=clang
 CFLAGS=-O0 -g -fno-asm
 
 gen: cda_code.o gen105de.o random.o powerp20.o vgalib.o ail_stub.o
-	$(CC) $(CFLAGS) -o g105de_$(CC) cda_code.o gen105de.o random.o powerp20.o vgalib.o ail_stub.o -lSDL2
+	$(CC) $(CFLAGS) -o ngen_$(CC) cda_code.o gen105de.o random.o powerp20.o vgalib.o ail_stub.o -lSDL2
 
 clean:
-	rm -f g105de_[gc]* *.o
+	rm -f ngen_* *.o
 
 cda_code.o: cda_code.c
 	$(CC) $(CFLAGS) -c cda_code.c

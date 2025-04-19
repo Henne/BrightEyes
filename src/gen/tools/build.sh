@@ -47,20 +47,12 @@ mv ${DRIVE_C}/src/*.MAP ${DSTDIR} 2>/dev/null
 # cleanup
 rm -rf ${DRIVE_C}/src/*
 
+# VERIFICATION: Check if rewritten file exists
 
-# VERIFICATION
-echo $DSTDIR
-
-# Bytewise comparision of original and rewritten file
-CHECK=$(cmp -l ${DSTDIR}/GEN.EXE ${DSTDIR}/GEN105DE.EXE | wc -l)
-
-if [ ${CHECK} -gt 78 ]; then
-	echo "ERROR: ${CHECK} bytes difference in the binaries (max. 78)"
-	exit 1
-elif [ ${CHECK} -eq 78 ]; then
+if [ -f ${DSTDIR}/NGEN.EXE ]; then
 	echo "TEST PASSED"
 	exit 0
 else
-	echo "IMPROVEMENT: Now only ${CHECK} bytes difference"
-	exit 0
+	echo "ERROR: Build must have been failed"
+	exit 1
 fi
