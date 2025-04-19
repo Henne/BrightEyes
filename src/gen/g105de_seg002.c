@@ -1439,7 +1439,7 @@ void start_music(unsigned short track)
 			play_midi(track);
 		}
 	} else {
-		seg001_0465(track);
+		CD_play_track(track);
 	}
 }
 
@@ -3053,7 +3053,7 @@ void unused_func12(void)
 #endif
 
 /* Borlandified and identical */
-void call_fill_rect_gen(unsigned char *ptr, unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2, unsigned short color)
+void call_fill_rect_gen(unsigned char *ptr, signed short x1, signed short y1, signed short x2, signed short y2, signed short color)
 {
 	signed short width;
 	signed short height;

@@ -68,13 +68,24 @@ static long cd_dummy5;
 static long cd_dummy3;
 static signed short g_cd_audio_track;
 
+/* externally used prototypes from (mainfile) */
+extern stop_music(void);
+extern void update_mouse_cursor(void);
+extern void mouse_disable(void);
+extern void call_fill_rect_gen(unsigned char*, signed short, signed short,
+			signed short, signed short, signed short);
+
 /* internally used prototypes */
+static signed short CD_has_drives(void);
+static signed short CD_count_drives(void);
+static signed short CD_get_first_drive(void);
+static void CD_enable_repeat(void);
 static void CD_audio_stop_hsg(void);
 static signed short CD_check_file(char*);
 
 
 /* Borlandified and identical */
-static unsigned short CD_has_drives()
+static signed short CD_has_drives(void)
 {
 	/* al ==  0: return number of drive letters */
 	asm {
@@ -91,7 +102,7 @@ has_cd:
 }
 
 /* Borlandified and identical */
-static unsigned short CD_count_drives()
+static signed short CD_count_drives(void)
 {
 	asm {
 		mov ax, 0x1500
@@ -104,7 +115,7 @@ static unsigned short CD_count_drives()
 }
 
 /* Borlandified and identical */
-static unsigned short CD_get_first_drive()
+static signed short CD_get_first_drive(void)
 {
 	asm {
 		mov ax, 0x1500
@@ -218,7 +229,7 @@ static void seg001_00bb(signed short track_no)
 }
 
 /* Borlandified and identical */
-static void seg001_02ba()
+static void CD_enable_repeat(void)
 {
 	if (g_cd_init_successful == 0) return;
 	if ((CD_get_tod() - g_cd_audio_tod) < g_cd_audio_pos) return;
@@ -234,7 +245,7 @@ static void seg001_02ba()
 /* Borlandified and identical */
 signed short CD_bioskey(signed short cmd)
 {
-	seg001_02ba();
+	CD_enable_repeat();
 
 	// GEN uses an implicit return here
 	//return bioskey(cmd);
@@ -308,7 +319,7 @@ static void seg001_03a8(void)
 }
 
 /* Borlandified and identical */
-void seg001_0465(unsigned short track)
+void CD_play_track(signed short track)
 {
 	CD_audio_stop_hsg();
 	CD_audio_stop_hsg();
