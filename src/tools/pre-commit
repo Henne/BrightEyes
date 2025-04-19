@@ -63,7 +63,7 @@ echo "DOS build check"
 
 BAK=$PWD
 cd src/custom/schick/rewrite_m302de/
-./tools/bc_ready.sh
+./tools/build.sh
 RETVAL=$?
 cd $BAK
 

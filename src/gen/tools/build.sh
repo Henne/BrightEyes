@@ -44,7 +44,7 @@ cp TLINK.RES ${DRIVE_C}/src
 cp -r AIL ${DRIVE_C}/src
 
 # copy c_ready.bat as compile.bat
-cp bc_ready.bat ${DRIVE_C}/src/compile.bat
+cp build.bat ${DRIVE_C}/src/compile.bat
 
 # run compile.bat in a DOSBox environment, needs an installed BCC.EXE there
 pushd ${DRIVE_C}
