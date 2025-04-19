@@ -62,9 +62,8 @@ struct nvf_desc {
 	void call_them_all(signed short, signed short, signed short, signed short);
 	void fill_smth(void);
 	void fill_smth2(unsigned char*);
-	unsigned char* get_gfx_ptr(signed short, signed short, signed short*);
-	signed short ret_zero(signed short, signed short);
-	void call_blit_smth3(unsigned char*, signed short, signed short, signed short, signed short);
+	unsigned char* get_gfx_ptr(signed short, signed short);
+	void call_blit_smth3(unsigned char*, signed short, signed short);
 	signed short get_line_start_c(const char*, signed short, signed short);
 	signed short infobox(const char*, signed short);
 	signed short gui_bool(char*);

@@ -58,13 +58,9 @@ static const char g_str_cd_exepath[] = "X:\\DSA\\SCHICKM.EXE";
 
 /* uninitialized global variables BSS */
 /* Remark: ripped code from the binary had the BSS-variable adresses in reverse order */
-static short cd_dummy6;
-static long cd_dummy4;
 static signed short g_cd_drive_no;
 static signed long g_cd_audio_pos;
 static signed long g_cd_audio_tod;
-static long cd_dummy5;
-static long cd_dummy3;
 static signed short g_cd_audio_track;
 
 /* externally used prototypes from (mainfile) */

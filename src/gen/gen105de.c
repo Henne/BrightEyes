@@ -825,13 +825,8 @@ static const struct struct_attrib_coords g_attrib_coords[] = {
 	{273, 73}, {273, 85}, {273, 97}, {273, 109}, {273, 121}, {273, 133}, {273, 145}
 };
 
-static const signed short dummy1 = 0;
-static const signed char dummy2 = 15;
-
 // Remark: g_mask_switch is read only
 static const signed char g_mask_switch = 0;
-
-static const signed char dummy3[160] = {0};
 
 struct struct_color {
 	signed char r;
@@ -875,10 +870,6 @@ static const struct struct_color g_pal_genbg[32] = {
 	{0x1c, 0x00, 0x00},
 	{0x14, 0x00, 0x00},
 };
-
-static const signed short dummy4 = 50;
-static const signed char dummy5 = -1;
-
 
 static signed short g_screen_var = 0;
 
@@ -948,22 +939,13 @@ static const struct mouse_action g_action_spells[4] = {
 };
 
 static signed short g_gen_page = 0;
-static signed char g_useless_variable = 0;
 static signed short g_text_x_mod = 0;
-static const signed short g_ro_zero = 0;
-
-static const signed char dummy6 = 0;
 
 static volatile struct struct_hero g_hero = {0};
-
-static const signed char dummy_6_1 = 0;
 
 static signed short g_midi_disabled = 0;
 static signed short g_use_cda = 0;
 static signed short g_mouse_handler_installed = 0;
-
-static signed short dummy7 = -1;
-static signed short dummy8 = 0;
 
 static unsigned char* g_bg_buffer[]       = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 static signed long g_bg_len[]    = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -994,8 +976,6 @@ static const char* g_fnames_g105de[] = {
 static const char g_str_file_missing[] = { "FILE %s IS MISSING!" };
 
 static const struct struct_color g_col_white2 = { 0x3f, 0x3f, 0x3f };
-
-static const char dummy9[] = { 0x00, 0x80, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc, 0xfe, 0xff };
 
 struct struct_chr_lookup {
 	unsigned char chr;
@@ -1274,30 +1254,21 @@ signed short g_random_gen_seed = 0x327b;
 /* END OF INITIALIZED GLOBAL VARIABLES _DATA */
 
 /* START OF UNINITIALIZE GLOBAL VARIABLE _BSS DS:0x2474*/
-static signed char dummy_13;
 static signed short g_ro_var[7];
-static signed long dummy_14;
 static signed short g_display_mode_bak;
 static signed short g_display_page_bak;
-static signed short g_wo_var3;
-static signed short g_wo_var2;
 static unsigned char* g_gen_ptr1_dis;
 static unsigned char* g_page_buffer;
 unsigned char* g_vga_memstart;
 static unsigned char* g_gfx_ptr;
-static char *dummy18;
 static char *g_gen_ptr2;
 static char *g_gen_ptr3;
-static unsigned char *g_gen_ptr4;
 static unsigned char *g_gen_ptr5;
-static unsigned char* dummy17;
-static unsigned char* dummy16;
 static unsigned char *g_buffer_dmenge_dat;
 static unsigned char *g_gen_ptr6;
 static unsigned char *g_picbuf1;
 static unsigned char *g_picbuf2;
 static unsigned char *g_picbuf3;
-static signed long dummy15;
 static signed short g_text_x;
 static signed short g_text_y;
 static signed short g_text_x_end;
@@ -1311,7 +1282,6 @@ static unsigned char *g_buffer_popup_nvf;
 static unsigned char *g_buffer_sex_dat;
 
 static char g_mouse_backbuffer[256];
-static char dummy14[0x40];
 static unsigned short *g_mouse_current_cursor;
 static unsigned short *g_mouse_last_cursor;
 static unsigned char g_array_2[64];
@@ -1321,13 +1291,9 @@ static signed short g_in_key_ascii;
 static signed short g_mouse1_event2;
 static signed short g_mouse2_event;
 static signed short g_mouse1_event1;
-static signed short g_wo_var1;
-static signed short dummy13;
 static signed short g_have_mouse;
 /* used by external module */
 signed short g_random_gen_seed2;
-
-static signed short dummy12;
 
 static char* g_texts[301];
 #if !defined(__BORLANDC__)
@@ -1401,13 +1367,10 @@ void far *g_irq78_bak;
 static signed long g_flen_left;
 static signed long g_flen;
 
-static signed short dummy11[0xbd3];
-
 static signed short g_got_mu_bonus;
 static signed short g_got_ch_bonus;
 
 #if defined(__BORLANDC__)
-static char dummy10[768];
 void far *g_timer_isr_bak;
 #endif
 
@@ -2113,7 +2076,6 @@ void handle_input(void)
 				wait_for_vsync();
 
 			if (g_mouse1_event2 != 0) {
-				g_wo_var1 = 1;
 				g_mouse1_event2 = 0;
 			}
 
@@ -2700,9 +2662,7 @@ signed short open_datfile(unsigned short index)
 			(const char*)g_str_file_missing,
 			(const char*)g_fnames_g105de[index]);
 
-		g_useless_variable = 1;
 		infobox(g_gen_ptr2, 0);
-		g_useless_variable = 0;
 	}
 
 	/* read offset table from file */
@@ -2759,12 +2719,6 @@ signed long get_filelength(signed short unused)
 }
 
 /* Borlandified and identical */
-unsigned short ret_zero1(void)
-{
-	return 0;
-}
-
-/* Borlandified and identical */
 void wait_for_keypress(void)
 {
 	while (CD_bioskey(1)) {
@@ -2804,19 +2758,6 @@ void vsync_or_key(signed short val)
 }
 
 #if defined(__BORLANDC__)
-/* unused */
-/* Borlandified and identical */
-void unused_func09(signed short reps)
-{
-	signed short i;
-
-	for (i = 0; i < reps; i++) {
-		wait_for_vsync();
-	}
-}
-#endif
-
-#if defined(__BORLANDC__)
 /* Remark: u32 is unsigned long in the BCC-world */
 /* seems unused on available input values */
 /* Borlandified and identical */
@@ -2850,23 +2791,6 @@ unsigned int swap_u32(unsigned int v)
 }
 #endif
 
-#if defined(__BORLANDC__)
-/* Borlandified and identical */
-unsigned long unused_func10(unsigned long v)
-{
-	unsigned short l1;
-	unsigned short l2;
-	unsigned short l_si;
-	unsigned char *p = (unsigned char*)&l2;
-
-	l_si = host_writed(p, v); // write v to stack and access subvalues with l1 and l2
-	l2 = l1;
-	l1 = l_si;
-
-	return host_readd(p);
-}
-#endif
-
 /* Borlandified and identical */
 void init_video(signed short unused)
 {
@@ -2886,78 +2810,6 @@ void exit_video(void)
 	/* restore old page */
 	set_video_page(g_display_page_bak);
 }
-
-#if defined(__BORLANDC__)
-/* unused EGA hardware io functions */
-
-/* Borlandified and identical */
-void ega_unused1(unsigned char val)
-{
-	outportb(0x3ce, 5);
-	outportb(0x3cf, val);
-}
-
-/* Borlandified and identical */
-void ega_unused2(unsigned char val)
-{
-	outportb(0x3c4, 2);
-	outportb(0x3c5, val);
-}
-
-/* Borlandified and identical */
-void ega_unused3(unsigned char val)
-{
-	outportb(0x3ce, 0);
-	outportb(0x3cf, val);
-}
-
-/* Borlandified and identical */
-void ega_unused4(unsigned char val)
-{
-	outportb(0x3ce, 1);
-	outportb(0x3cf, val);
-}
-
-/* Borlandified and identical */
-void ega_unused5(unsigned char val)
-{
-	outportb(0x3ce, 4);
-	outportb(0x3cf, val);
-}
-
-/* Borlandified and identical */
-void ega_unused6(unsigned char val)
-{
-	outportb(0x3ce, 8);
-	outportb(0x3cf, val);
-}
-#endif
-
-#if defined(__BORLANDC__)
-/* Borlandified and identical */
-void unused_func11(signed short x1, signed short x2, signed short y, signed short color)
-{
-	signed short tmp;
-	signed short count;
-	signed short offset;
-	signed short width;
-
-	signed short l_si = x1;
-	signed short l_di = x2;
-	width = 320;
-
-	if (l_si > l_di) {
-		tmp = l_si;
-		l_si = l_di;
-		l_di = tmp;
-	}
-	
-	count = l_di - l_si + 1;
-	/* not very readable, but here the length of the function fits */
-	offset = y * width + l_si;
-	draw_h_line(offset, count, color);
-}
-#endif
 
 /* Borlandified and identical */
 void draw_v_line(signed short x, signed short y1, signed short y2, unsigned short color)
@@ -3018,35 +2870,6 @@ void do_draw_pic(unsigned short mode)
 
 	call_mouse();
 }
-
-#if defined(__BORLANDC__)
-/* Borlandified and identical */
-void unused_func12(void)
-{
-	signed short diffX;
-	signed short diffY;
-	signed short dx2;
-	signed short dy2;
-	unsigned char *src;
-	unsigned char HUGEPTR *dst;
-
-	signed short x1 = g_dst_x1; // si
-	signed short y1 = g_dst_y1; // di
-
-	dx2 = g_dst_x2;
-	dy2 = g_dst_y2;
-	src = g_dst_src;
-	dst = g_dst_dst;
-
-	dst += y1 * 320 + x1;
-
-	diffX = dx2 - x1 + 1;
-	//diffY = dy2 - y1 + 1;
-
-
-	save_rect(FP_SEG(dst), FP_OFF(dst), src, diffX, (diffY = dy2 - y1 + 1));
-}
-#endif
 
 /* Borlandified and identical */
 void call_fill_rect_gen(unsigned char *ptr, signed short x1, signed short y1, signed short x2, signed short y2, signed short color)
@@ -3316,16 +3139,13 @@ signed short get_chr_info(unsigned char c, signed short *width)
 void call_them_all(signed short v1, signed short v2, signed short x, signed short y)
 {
 	unsigned char* gfx_ptr;
-	signed short l2;
-	signed long bogus;
 
 	fill_smth();
 	fill_smth2(v1 * 8 + g_buffer_font6);
 
-	gfx_ptr = get_gfx_ptr(x, y, &l2);
-	bogus = (signed long)ret_zero(v2, l2);
+	gfx_ptr = get_gfx_ptr(x, y);
 
-	call_blit_smth3(gfx_ptr, 7, (signed short)bogus, l2, v2);
+	call_blit_smth3(gfx_ptr, 7, v2);
 }
 
 /* Borlandified and identical */
@@ -3372,22 +3192,14 @@ void fill_smth2(unsigned char* sptr)
 
 /* Borlandified and identical */
 /* static */
-unsigned char* get_gfx_ptr(signed short x, signed short y, signed short* unused)
+unsigned char* get_gfx_ptr(signed short x, signed short y)
 {
-	unsigned char* start;
-	return start = g_gfx_ptr + (y * 320 + x);
+	return g_gfx_ptr + (y * 320 + x);
 }
 
 /* Borlandified and identical */
 /* static */
-signed short ret_zero(signed short unused1, signed short unused2)
-{
-	return 0;
-}
-
-/* Borlandified and identical */
-/* static */
-void call_blit_smth3(unsigned char* dst, signed short v1, signed short v2, signed short v3, signed short v4)
+void call_blit_smth3(unsigned char* dst, signed short v1, signed short v4)
 {
 	blit_smth3(dst, v1, v4);
 }
@@ -3700,7 +3512,6 @@ signed short infobox(const char *msg, signed short digits)
 		lines += 2;
 
 	g_upper_border = (200 - (lines + 2) * 8) / 2;
-	g_upper_border += g_ro_zero;
 	g_text_y = g_upper_border + 7;
 
 	update_mouse_cursor();
@@ -5592,10 +5403,6 @@ void print_values(void)
 			print_str(itoa(g_hero.mr, tmp, 10), 232, 184);
 			break;
 		}
-#if defined(__BORLANDC__)
-		/* Sync-Point-Reason: an unused return call */
-		asm { db 0xe9, 0x85, 0x0a}; // BCC Sync-Point
-#endif
 		case 1: {
 			/* SKILLS Page 1/3 */
 			restore_picbuf((unsigned char*)g_gfx_ptr);
@@ -6854,11 +6661,6 @@ static void BE_cleanup(void)
 		g_gen_ptr5 = NULL;
 	}
 
-	if ((host_ptr = g_gen_ptr4) != 0) {
-		free(host_ptr);
-		g_gen_ptr4 = NULL;
-	}
-
 	if (g_gen_ptr2 != NULL) {
 		free(g_gen_ptr2);
 		g_gen_ptr2 = NULL;
@@ -7197,8 +6999,6 @@ int main_gen(int argc, char **argv)
 	if (sound_off == 0)
 		init_music(13000);
 
-	g_wo_var2 = ret_zero1();
-
 	set_timer_isr();
 
 	randomize();
@@ -7206,8 +7006,6 @@ int main_gen(int argc, char **argv)
 	save_display_stat(&g_display_page_bak);
 
 	alloc_buffers();
-
-	g_wo_var3 = 2;
 
 	init_video(2);
 
@@ -7273,9 +7071,6 @@ void alloc_buffers(void)
 
 	g_gen_ptr2 = (char*)gen_alloc(1524);
 	g_gen_ptr3 = g_gen_ptr2 + 1500;
-
-	// unused
-	g_gen_ptr4 = gen_alloc(200);
 
 	g_buffer_text = (char*)gen_alloc(6000);
 
