@@ -5,7 +5,7 @@ gen: g105de_seg001.o g105de_seg002.o g105de_seg003.o g105de_seg004.o g105de_seg0
 	$(CC) $(CFLAGS) -o g105de_$(CC) g105de_seg001.o g105de_seg002.o g105de_seg003.o g105de_seg004.o g105de_seg005.o g105de_seg006.o -lSDL2
 
 clean:
-	rm -f g105de_$(CC) g105de_seg00*.o
+	rm -f g105de_[gc]* g105de_seg00*.o
 
 g105de_seg001.o: g105de_seg001.c
 	$(CC) $(CFLAGS) -c g105de_seg001.c
