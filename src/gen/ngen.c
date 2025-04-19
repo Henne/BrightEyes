@@ -52,7 +52,7 @@ static inline signed short bc_flushall(void) { return 0; }
 #include "hero.h"
 
 #include "cda_code.h"
-#include "gen105de.h"
+#include "ngen.h"
 #include "random.h"
 #include "powerp20.h"
 #include "vgalib.h"
@@ -1089,7 +1089,7 @@ struct type_bitmap {
 
 static const struct type_bitmap g_type_bitmap = { {0} };
 
-static const char g_str_version[] = "V1.05";
+static const char g_str_version[] = "V1.06";
 
 static const struct struct_color g_pal_attic[16] = {
 	{0x00, 0x00, 0x00},

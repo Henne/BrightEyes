@@ -22,7 +22,7 @@ done
 
 # copy all source files to DRIVE_C
 cp cda_code.c cda_code.h ${DRIVE_C}/src
-cp gen105de.c gen105de.h ${DRIVE_C}/src
+cp ngen.c ngen.h ${DRIVE_C}/src
 cp random.c random.h ${DRIVE_C}/src
 cp powerp20.asm powerp20.h ${DRIVE_C}/src
 cp vgalib.asm vgalib.h ${DRIVE_C}/src
