@@ -13,7 +13,6 @@ struct driver_request {
 };
 
 extern struct driver_request far req[9];
-extern unsigned char far cd_buf1[804];
-extern unsigned char far cd_buf2[20];
+extern unsigned char far cd_buf1[824];
 
 #endif

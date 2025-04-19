@@ -71,7 +71,8 @@ req8 db 16h, 0, 0ch	; starts at 0x0e0
      dw 0000h		; status
      db 8 dup (0)	; dummy2[8]
      db 0h		; redbook
-     dd 0cc70094h	; ptr
+     ;dd 0cc70094h	; ptr
+     dd byte ptr _cd_dummy0	; ptr
      dw 0001h, 0000h	; dummy4, dummy6
      db 6 dup (0)       ; dummy7[6]
 
@@ -86,13 +87,12 @@ req8 db 16h, 0, 0ch	; starts at 0x0e0
 ;;GEN_REQ 16h, 0ch, 0h, 01h, 0h		;;?_w
 
 
-_cd_buf1 db 804 dup (0)			;another buffer starts at 0x0fc
-_cd_buf2 db 20 dup (0)			;buffer for IOCTL
+_cd_buf1 db 824 dup (0)			;another buffer starts at 0x0fc
 
 _FARDATA	ends
 
+	extrn	_cd_dummy0:byte
 	public _req	; array of 9 requests
 	public _cd_buf1
-	public _cd_buf2
 
 	end
