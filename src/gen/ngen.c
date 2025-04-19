@@ -2333,9 +2333,12 @@ void load_page(signed short page)
 			return;
 		}
 
-		if ((ptr = gen_alloc(get_filelength(handle = open_datfile(page))))) {
+		handle = open_datfile(page);
+		ptr = gen_alloc(get_filelength());
+
+		if (ptr != NULL) {
 			g_bg_buffer[page] = ptr;
-			g_bg_len[page] = get_filelength(handle);
+			g_bg_len[page] = get_filelength();
 
 			read_datfile(handle, g_bg_buffer[page], g_bg_len[page]);
 			decomp_rle(g_gen_ptr1_dis, g_bg_buffer[page], 0, 0, 320, 200, 0);
@@ -2350,7 +2353,7 @@ void load_page(signed short page)
 		handle = open_datfile(page);
 		read_datfile(handle, g_gen_ptr1_dis - 8, 64000);
 		close(handle);
-		decomp_pp20(g_gen_ptr1_dis, g_gen_ptr1_dis - 8, get_filelength(handle));
+		decomp_pp20(g_gen_ptr1_dis, g_gen_ptr1_dis - 8, get_filelength());
 	}
 }
 
@@ -2380,10 +2383,13 @@ void load_typus(signed short typus)
 		return;
 	}
 
-	if ((ptr = gen_alloc(get_filelength(handle = open_datfile(index))))) {
+	handle = open_datfile(index);
+
+	ptr = gen_alloc(get_filelength());
+	if (ptr != NULL) {
 		/* load the file into the typus buffer */
 		g_typus_buffer[typus] = ptr;
-		g_typus_len[typus] = get_filelength(handle);
+		g_typus_len[typus] = get_filelength();
 
 		read_datfile(handle, g_typus_buffer[typus], g_typus_len[typus]);
 
@@ -2391,7 +2397,7 @@ void load_typus(signed short typus)
 	} else {
 		/* load the file direct */
 		read_datfile(handle, g_gen_ptr1_dis, 25000);
-		decomp_pp20(g_gen_ptr5, g_gen_ptr1_dis, get_filelength(handle));
+		decomp_pp20(g_gen_ptr5, g_gen_ptr1_dis, get_filelength());
 	}
 	close(handle);
 }
@@ -2709,7 +2715,7 @@ signed short read_datfile(signed short handle, unsigned char *buf, unsigned shor
 }
 
 /* Borlandified and identical */
-signed long get_filelength(signed short unused)
+signed long get_filelength(void)
 {
 	return g_flen;
 }
@@ -2788,7 +2794,7 @@ unsigned int swap_u32(unsigned int v)
 #endif
 
 /* Borlandified and identical */
-void init_video(signed short unused)
+void init_video(void)
 {
 	struct struct_color l_white = *(struct struct_color*)&g_col_white2;
 
@@ -7003,7 +7009,7 @@ int main_gen(int argc, char **argv)
 
 	alloc_buffers();
 
-	init_video(2);
+	init_video();
 
 	g_have_mouse = 2;
 

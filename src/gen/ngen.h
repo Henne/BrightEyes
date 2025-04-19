@@ -42,7 +42,7 @@ struct nvf_desc {
 	signed short open_datfile(unsigned short);
 	signed long get_archive_offset(const char*, unsigned char*);
 	signed short read_datfile(signed short, unsigned char*, unsigned short);
-	signed long get_filelength(signed short);
+	signed long get_filelength(void);
 	void wait_for_keypress(void);
 	void error_msg(const char*);
 	void vsync_or_key(signed short);
