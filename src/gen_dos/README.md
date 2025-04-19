@@ -1,6 +1,12 @@
 # DSA1/RAK1 Character generator (historical DOS Versions)
 
-This directory contains only pure DOS Versions of GEN.EXE.
+This directory contains only pure DOS Versions of GEN.EXE for historical reasons.
+
+The following rules apply:
+* here is binary-aequivalence very important
+* portability is not relevant
+* fixing issues is **forbidden**
+* #define(__BORLANDC__) is always true
 
 ## GEN.EXE Versions
 All versions are build with the Borland C++ compiler using Memory Model: LARGE.

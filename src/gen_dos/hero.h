@@ -1,15 +1,8 @@
-#ifdef _MSC_VER
-#pragma pack (1)
-#endif
-
 struct struct_attribs {
 	signed char normal;
 	signed char current;
 	signed char mod;
 }
-#if __GNUC__
-__attribute__ ((packed))
-#endif
 ;
 
 #pragma pack ( 1 )
@@ -26,13 +19,8 @@ struct struct_hero {
 	signed short weight;
 	signed char god;
 	signed char level;
-#if defined(__BORLANDC__)
 	signed long ap;
 	signed long money;
-#else
-	signed int ap;
-	signed int money;
-#endif
 	/* Offset 0x30 */
 	signed char rs1;
 	signed char rs2;
@@ -69,13 +57,8 @@ struct struct_hero {
 	signed char unkn12;
 	signed char position;
 	/* Offset 0x8b */
-#if defined(__BORLANDC__)
 	signed long unkn6;
 	signed long unkn7;
-#else
-	signed int unkn6;
-	signed int unkn7;
-#endif
 	signed char unkn8[3];
 	signed char rounds_blinded;
 	signed char rounds_eclipt;
@@ -106,12 +89,4 @@ struct struct_hero {
 	signed short load;
 
 	unsigned char pic[1024];
-}
-#if __GNUC__
-__attribute__ ((packed))
-#endif
-;
-
-#ifdef _MSC_VER
-#pragma pack ()
-#endif
+};

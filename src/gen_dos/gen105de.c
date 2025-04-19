@@ -5,49 +5,20 @@
 #include <ctype.h>
 #include <fcntl.h>
 
-#if defined(__BORLANDC__)
 #include <IO.H>		// lseek, _read, _close, _creat, open, write
 #include <DOS.H>
 #include <BIOS.H>	// bioskey, int86x()
 #include <CONIO.H>	// clrsrc()
 #include <TIME.H>	// by randomize()
 #include <ALLOC.H>	// farcalloc()
-#else
-#include <SDL2/SDL.h>
-#include <unistd.h> // lseek(), close(), read(), write()
-#endif
 
 /* portable Memory Access */
-#if !defined(__BORLANDC__)
-static inline unsigned short host_readw(unsigned char *p) { return *(unsigned short*)p; }
-static inline signed short host_readws(unsigned char *p) { return *(signed short*)p; }
-static inline unsigned int host_readd(unsigned char *p) { return *(unsigned int*)p; }
-static inline signed int host_readds(unsigned char *p) { return *(signed int*)p; }
-static inline unsigned short host_writew(unsigned char *p, unsigned short v) { return *(unsigned short*)p = v; }
-// TODO: Check if that works on the stack of 64-bit machines
-static inline unsigned int host_writed(unsigned char *p, unsigned int v) { return *(unsigned int*)p = v; }
-#else
 #define host_readw(p) (*(unsigned short*)(p))
 #define host_readws(p) (*(signed short*)(p))
 #define host_readd(p) (*(unsigned long*)(p))
 #define host_readds(p) (*(signed long*)(p))
 #define host_writew(p, v) (*(unsigned short*)(p) = (v))
 #define host_writed(p, v) (*(unsigned long*)(p) = (v))
-#endif
-
-#if !defined(__BORLANDC__)
-// DUMMY for BCC CLib func
-static inline void clrscr(void) { }
-static inline void randomize(void) { }
-static inline signed short bc_flushall(void) { return 0; }
-#define __abs__(v) abs(v)
-#define _creat creat
-#define _read read
-#define _close close
-#else
-// <STDIO.H>
-#define bc_flushall flushall
-#endif
 
 #include "hero.h"
 
@@ -57,11 +28,7 @@ static inline signed short bc_flushall(void) { return 0; }
 #include "powerp20.h"
 #include "vgalib.h"
 
-#if defined(__BORLANDC__)
 #include "AIL.H"
-#else
-#include "ail_stub.h"
-#endif
 
 /** Keyboard Constants */
 
@@ -1330,14 +1297,7 @@ signed short g_random_gen_seed2;
 static signed short dummy12;
 
 static char* g_texts[301];
-#if !defined(__BORLANDC__)
-/* usage: output */
-static inline char* get_text(signed short no) {
-	return g_texts[no];
-}
-#else
 #define get_text(no) (g_texts[no])
-#endif
 
 static signed short g_unkn4;
 static signed short g_unkn3;
@@ -1394,9 +1354,7 @@ static signed short g_handle_timbre;
 
 static signed long g_gendat_offset;
 
-#if defined(__BORLANDC__)
 void far *g_irq78_bak;
-#endif
 
 static signed long g_flen_left;
 static signed long g_flen;
@@ -1406,10 +1364,8 @@ static signed short dummy11[0xbd3];
 static signed short g_got_mu_bonus;
 static signed short g_got_ch_bonus;
 
-#if defined(__BORLANDC__)
 static char dummy10[768];
 void far *g_timer_isr_bak;
-#endif
 
 /* These 6 bytes are written at once from a file */
 static unsigned long g_current_timbre_offset;
@@ -1418,18 +1374,6 @@ static signed char g_current_timbre_patch;
 
 static unsigned short g_current_timbre_length;
 
-
-#if !defined(__BORLANDC__)
-/* use sprintf() for compatibility */
-static inline char* itoa(int value, char* string, int radix)
-{
-	sprintf(string, "%d", value);
-	return string;
-}
-
-// Quit Signal from SDL
-extern int g_lets_quit;
-#endif
 
 /* Borlandified and identical */
 void start_music(unsigned short track)
@@ -1456,15 +1400,6 @@ void read_soundcfg(void)
 		_read(handle, (unsigned char*)&port, 2);
 		_close(handle);
 
-#if !defined(__BORLANDC__)
-		/* Small hack: enable MIDI instead of CD-Audio */
-		//D1_INFO("MIDI port 0x%x\n", port);
-		if ((port != 0) && (load_driver(g_str_sound_adv, 3, port))) {
-			/* disable audio-cd */
-			g_use_cda = 0;
-			return;
-		}
-#endif
 		/* enable audio-cd, disable midi */
 		g_use_cda = g_midi_disabled = 1;
 
@@ -1514,17 +1449,13 @@ unsigned char *load_snd_driver(const char *fname)
 	if ((handle = open(fname, 0x8001)) != -1) {
 		size = 16500;
 		g_snd_driver = (unsigned char*)gen_alloc(size + 0x10);
-#if defined(__BORLANDC__)
+
 		// BCC: far pointer normalizaion (DOS only)
 		in_ptr = ((unsigned long)g_snd_driver) + 0x0f;
 		in_ptr &= 0xfffffff0;
 		norm_ptr = normalize_ptr((unsigned char*)in_ptr);
 
 		_read(handle, norm_ptr, size);
-#else
-		norm_ptr = g_snd_driver;
-		_read(handle, norm_ptr, size);
-#endif
 		_close(handle);
 		return norm_ptr;
 	} else {
@@ -1732,7 +1663,6 @@ void restart_midi(void)
 /* Borlandified and identical */
 void do_mouse_action(unsigned char *p1, unsigned char *p2, unsigned char *p3, unsigned char *p4, unsigned char *p5)
 {
-#if defined(__BORLANDC__)
 	union REGS myregs;
 	struct SREGS mysregs;
 
@@ -1772,10 +1702,8 @@ void do_mouse_action(unsigned char *p1, unsigned char *p2, unsigned char *p3, un
 		host_writew(p3, myregs.x.cx);
 		host_writew(p4, myregs.x.dx);
 	}
-#endif
 }
 
-#if defined(__BORLANDC__)
 /* Borlandified and identical */
 void interrupt mouse_isr(void)
 {
@@ -1827,8 +1755,6 @@ void interrupt mouse_isr(void)
 		}
 	}
 }
-#endif
-
 
 /* Borlandified and identical */
 void mouse_enable(void)
@@ -1857,9 +1783,8 @@ void mouse_enable(void)
 			p4 = g_mouse_posy;
 
 			do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
-#if defined(__BORLANDC__)
+
 			mouse_do_enable(0x1f, (unsigned char*)&mouse_isr);
-#endif
 		}
 	}
 }
@@ -1872,7 +1797,6 @@ void mouse_disable(void)
 	}
 }
 
-#if defined(__BORLANDC__)
 /* Borlandified and identical */
 void mouse_unused1(unsigned char *p1, unsigned char *p2, unsigned char *p3, unsigned char *p4)
 {
@@ -1886,12 +1810,10 @@ void mouse_call_isr(void)
 {
 	mouse_isr();
 }
-#endif
 
 /* Borlandified and identical */
 void mouse_do_enable(unsigned short val, unsigned char* ptr)
 {
-#if defined(__BORLANDC__)
 	unsigned short p1, p2, p3, p4, p5;
 
 	p1 = 0x0c;
@@ -1909,13 +1831,11 @@ void mouse_do_enable(unsigned short val, unsigned char* ptr)
 	do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
 
 	g_mouse_handler_installed = 1;
-#endif
 }
 
 /* Borlandified and identical */
 void mouse_do_disable(void)
 {
-#if defined(__BORLANDC__)
 	unsigned short v1, v2, v3, v4, v5;
 
 	/* restore the old int 0x78 handler */
@@ -1930,7 +1850,6 @@ void mouse_do_disable(void)
 	do_mouse_action((unsigned char*)&v1, (unsigned char*)&v2, (unsigned char*)&v3, (unsigned char*)&v4, (unsigned char*)&v5);
 
 	g_mouse_handler_installed = 0;
-#endif
 }
 
 /**
@@ -1950,7 +1869,6 @@ void mouse_move_cursor(unsigned short x, unsigned short y)
 	do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
 }
 
-#if defined(__BORLANDC__)
 /* Borlandified and identical */
 void mouse_unused2(unsigned short a1, unsigned short a2, unsigned short a3, unsigned short a4)
 {
@@ -1975,7 +1893,6 @@ void mouse_unused3(unsigned short a1)
 
 	do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
 }
-#endif
 
 /* Borlandified and identical */
 /* static */
@@ -2149,7 +2066,6 @@ signed short get_mouse_action(signed short x, signed short y, struct mouse_actio
 	return 0;
 }
 
-#if defined(__BORLANDC__)
 /* Borlandified and identical */
 void unused_func1(signed char *in_ptr, signed short x, signed short y, signed char c1, signed char c2)
 {
@@ -2166,20 +2082,13 @@ void unused_func1(signed char *in_ptr, signed short x, signed short y, signed ch
 	for (i = 0; i < c2; ptr += 320 , i++) {
 		for (j = 0; j < c1; j++) {
 			if ((val = *in_ptr++) != 0) {
-#if !defined(__BORLANDC__)
 				ptr[j] = val;
-#else
-				ptr[j] = _AL;
-#endif
 			}
 		}
 	}
 
 	call_mouse();
 }
-#endif
-
-
 
 
 /**
@@ -2400,7 +2309,6 @@ void load_page(signed short page)
 	}
 }
 
-#if defined (__BORLANDC__)
 /* Borlandified and identical */
 void read_datfile_to_buffer(signed short index, unsigned char *dst)
 {
@@ -2409,7 +2317,6 @@ void read_datfile_to_buffer(signed short index, unsigned char *dst)
 	read_datfile(handle, dst, 64000);
 	close(handle);
 }
-#endif
 
 /* Borlandified and identical */
 void load_typus(signed short typus)
@@ -2514,10 +2421,6 @@ void save_chr(void)
 
 	if (((handle = open(filename, 0x8001)) == -1) || gui_bool(get_text(261))) {
 
-#if !defined(__BORLANDC__)
-		/* close an existing file before overwriting it */
-		if (handle != -1) close(handle);
-#endif
 		handle = _creat(filename, 0);
 
 		if (handle != -1) {
@@ -2586,12 +2489,6 @@ signed long process_nvf(struct nvf_desc *nvf)
 
 	register signed short i;     // si
 	register signed short width; // di
-#if 0
-	/* Fix: GCC warns about uninitialized values */
-	width = height = 0;
-	p_size = 0;
-	src = NULL;
-#endif
 
 	va = (nvf_type = *(unsigned char*)(nvf->src)) & 0x80;
 	nvf_type &= 0x7f;
@@ -2691,14 +2588,9 @@ signed short open_datfile(unsigned short index)
 	unsigned char buf[800];
 	signed short handle;
 
-	bc_flushall();
+	flushall();
 
-	/* 0x8001 = O_BINARY | O_RDONLY */
-#if defined(__BORLANDC__)
 	while ((handle = open(g_str_dsagen_dat, O_BINARY | O_RDONLY)) == -1)
-#else
-	while ((handle = open(g_str_dsagen_dat, O_RDONLY)) == -1)
-#endif
 	{
 		sprintf(g_gen_ptr2,
 			(const char*)g_str_file_missing,
@@ -2782,14 +2674,12 @@ void error_msg(const char *msg)
 	vsync_or_key(print_line(msg) * 150);
 }
 
-#if defined(__BORLANDC__)
 /* unused */
 /* Borlandified and identical */
 signed short get_bioskey(void)
 {
 	return CD_bioskey(0);
 }
-#endif
 
 /* Borlandified and identical */
 void vsync_or_key(signed short val)
@@ -2807,7 +2697,6 @@ void vsync_or_key(signed short val)
 	}
 }
 
-#if defined(__BORLANDC__)
 /* unused */
 /* Borlandified and identical */
 void unused_func09(signed short reps)
@@ -2818,9 +2707,7 @@ void unused_func09(signed short reps)
 		wait_for_vsync();
 	}
 }
-#endif
 
-#if defined(__BORLANDC__)
 /* Remark: u32 is unsigned long in the BCC-world */
 /* seems unused on available input values */
 /* Borlandified and identical */
@@ -2839,22 +2726,7 @@ unsigned long swap_u32(unsigned long v)
 
 	return host_readd(p);
 }
-#else
-/* Remark: u32 is unsigned int in the GCC-world */
-unsigned int swap_u32(unsigned int v)
-{
-	unsigned char tmp[4] = {0};
 
-	tmp[0] = (v >> 0) & 0xff;
-	tmp[1] = (v >> 8) & 0xff;
-	tmp[2] = (v >> 16) & 0xff;
-	tmp[3] = (v >> 24) & 0xff;
-
-	return (tmp[0] << 24) | (tmp[1] << 16) | (tmp[2] << 8) | (tmp[3] << 0);
-}
-#endif
-
-#if defined(__BORLANDC__)
 /* Borlandified and identical */
 unsigned long unused_func10(unsigned long v)
 {
@@ -2869,7 +2741,6 @@ unsigned long unused_func10(unsigned long v)
 
 	return host_readd(p);
 }
-#endif
 
 /* Borlandified and identical */
 void init_video(signed short unused)
@@ -2891,7 +2762,6 @@ void exit_video(void)
 	set_video_page(g_display_page_bak);
 }
 
-#if defined(__BORLANDC__)
 /* unused EGA hardware io functions */
 
 /* Borlandified and identical */
@@ -2935,9 +2805,7 @@ void ega_unused6(unsigned char val)
 	outportb(0x3ce, 8);
 	outportb(0x3cf, val);
 }
-#endif
 
-#if defined(__BORLANDC__)
 /* Borlandified and identical */
 void unused_func11(signed short x1, signed short x2, signed short y, signed short color)
 {
@@ -2961,7 +2829,6 @@ void unused_func11(signed short x1, signed short x2, signed short y, signed shor
 	offset = y * width + l_si;
 	draw_h_line(offset, count, color);
 }
-#endif
 
 /* Borlandified and identical */
 void draw_v_line(signed short x, signed short y1, signed short y2, unsigned short color)
@@ -3023,7 +2890,6 @@ void do_draw_pic(unsigned short mode)
 	call_mouse();
 }
 
-#if defined(__BORLANDC__)
 /* Borlandified and identical */
 void unused_func12(void)
 {
@@ -3050,7 +2916,6 @@ void unused_func12(void)
 
 	save_rect(FP_SEG(dst), FP_OFF(dst), src, diffX, (diffY = dy2 - y1 + 1));
 }
-#endif
 
 /* Borlandified and identical */
 void call_fill_rect_gen(unsigned char *ptr, signed short x1, signed short y1, signed short x2, signed short y2, signed short color)
@@ -3062,17 +2927,12 @@ void call_fill_rect_gen(unsigned char *ptr, signed short x1, signed short y1, si
 	height = y2 - y1 + 1;
 	ptr += y1 * 320 + x1;
 
-#if defined(__BORLANDC__)
 	fill_rect(FP_SEG(ptr), FP_OFF(ptr), color, width, height);
-#else
-	fill_rect(ptr, color, width, height);
-#endif
 }
 
 /* Borlandified and identical */
 void wait_for_vsync(void)
 {
-#if defined(__BORLANDC__)
 	outportb(0x3d4, 0x11);
 	_AL = inportb(0x3d5);
 	_AH = 0;
@@ -3092,10 +2952,6 @@ void wait_for_vsync(void)
 		_AH = 0;
 		_BX = _AX;
 	} while (!(_BX & 0x8));
-#else
-	// wait 16ms
-	SDL_Delay(16);
-#endif
 }
 
 /* Borlandified and identical */
@@ -3412,7 +3268,6 @@ void get_textcolor(signed short *p_fg, signed short *p_bg)
 	host_writew((unsigned char*)p_bg, g_bg_color);
 }
 
-#if defined(__BORLANDC__)
 /* Borlandified and identical */
 /* static */
 signed short count_linebreaks(unsigned char *ptr)
@@ -3427,7 +3282,6 @@ signed short count_linebreaks(unsigned char *ptr)
 
 	return i;
 }
-#endif
 
 /* Borlandified and identical */
 signed short get_str_width(char *str)
@@ -3680,14 +3534,6 @@ signed short infobox(const char *msg, signed short digits)
 
 	signed short lines; // si
 	signed short di;    // di
-		      //
-#if !defined(__BORLANDC__)
-	/* Issue: Try to print an infobox without having the background loaded */
-	if (!g_buffer_popup_nvf) {
-		fprintf(stderr, "in %s(): %s => copy DSAGEN.DAT in this directory\n", __func__, msg);
-		exit(-1);
-	}
-#endif
 
 	retval = 0;
 	g_fg_color[4] = 1;
@@ -4275,9 +4121,6 @@ void do_gen(void)
 				g_screen_var = 1;
 			}
 		}
-#if !defined(__BORLANDC__)
-		if (g_lets_quit == 1) di = 1;
-#endif
 	}
 }
 
@@ -4417,18 +4260,12 @@ void clear_hero(void)
 /* Borlandified and identical */
 void new_values(void)
 {
-	/* Original-Bugfix:	there once was a char[11],
-				which could not hold a char[16] */
 	volatile signed char *att_ptr;
 	signed char randval;
 	signed char unset_attribs;
 	signed char values[8];
 	signed char sex_bak;
-#if !defined(__BORLANDC__)
-	char name_bak[17];
-#else
 	char name_bak[10];
-#endif
 	signed short j;
 	signed short i;
 
@@ -4883,13 +4720,6 @@ void skill_inc_novice(signed short skill)
 		if (g_skill_incs[skill].tries == 3) {
 			/* set the flag to leave this loop */
 			done = 1;
-#if !defined(__BORLANDC__)
-		} else
-
-		/* Original-Bugfix: add check if skill_attempts are left */
-		if (g_hero.skill_incs == 0) {
-			done++;
-#endif
 		} else {
 			/* decrement counter for skill increments */
 			g_hero.skill_incs--;
@@ -4940,13 +4770,6 @@ void spell_inc_novice(signed short spell)
 			continue;
 		}
 
-#if !defined(__BORLANDC__)
-			/* Original-Bugfix: add check if skill_attempts are left */
-			if (g_hero.spell_incs == 0) {
-				done = 1;
-				continue;
-			}
-#endif
 		/* decrement counter for spell increments */
 		g_hero.spell_incs--;
 
@@ -5596,10 +5419,10 @@ void print_values(void)
 			print_str(itoa(g_hero.mr, tmp, 10), 232, 184);
 			break;
 		}
-#if defined(__BORLANDC__)
+
 		/* Sync-Point-Reason: an unused return call */
 		asm { db 0xe9, 0x85, 0x0a}; // BCC Sync-Point
-#endif
+   
 		case 1: {
 			/* SKILLS Page 1/3 */
 			restore_picbuf((unsigned char*)g_gfx_ptr);
@@ -5987,22 +5810,9 @@ void print_values(void)
 /* Borlandified and identical */
 void make_valuta_str(char *dst, signed long money)
 {
-	/* Orig-BUG: d can overflow  on D > 65536*/
 	unsigned short d = 0;
 	unsigned short s = 0;
 
-	/*	These loops are not very performant.
-		They take longer the more money you have.
-		Here is a much better solution.
-	*/
-
-	/*
-	d = money / 100;
-	money -= d * 100;
-
-	s = money / 10;
-	money -= s * 10;
-	*/
 	while (money / 100) {
 		d++;
 		money -= 100;
@@ -6237,7 +6047,6 @@ static void inc_spell(signed short spell)
 	if (g_spell_incs[spell].incs >= max_incs) {
 		infobox(get_text(257), 0);
 		return;
-
 	}
 
 	/* all tries used for that spell */
@@ -6735,28 +6544,6 @@ static void pal_fade_out(signed char *dst, signed char *src, signed short n)
 		} else if (*(src + 3 * i + 2) > *(dst + 3 * i + 2)) {
 			(*(signed char*)(dst + 3 * i + 2))++;
 		}
-#if 0
-		if (s[i].r < d[i].r) {
-			d[i].r--;
-		} else {
-			if (s[i].r > d[i].r)
-				d[i].r++;
-		}
-
-		if (s[i].g < d[i].g) {
-			d[i].g--;
-		} else {
-			if (s[i].g > d[i].g)
-				d[i].g++;
-		}
-
-		if (s[i].b < d[i].b) {
-			d[i].b--;
-		} else {
-			if (s[i].b > d[i].b)
-				d[i].b++;
-		}
-#endif
 	}
 }
 
@@ -6769,9 +6556,6 @@ static void pal_fade_in(signed char *dst, signed char *src, signed short col, si
 	si = 0x40 - col;
 
 	for (i = 0; i < n; i++) {
-		//Remark: using this version produces different code
-		//if ((src[3 * i] >= si) && (src[3 * i] > dst[3 * i])) dst[3 * i]++;
-
 		/* RED */
 		if (*(src + 3 * i + 0) >= si) {
 			if (*(src + i * 3 + 0) > *(dst + i * 3 + 0))
@@ -6791,130 +6575,6 @@ static void pal_fade_in(signed char *dst, signed char *src, signed short col, si
 		}
 	}
 }
-
-#if !defined(__BORLANDC__)
-static void BE_cleanup(void)
-{
-	unsigned char *host_ptr;
-
-	if (g_vga_memstart) {
-		free(g_vga_memstart);
-		g_vga_memstart = NULL;
-		g_gfx_ptr = NULL;
-	}
-
-	if ((host_ptr = g_buffer_sex_dat) != 0) {
-		free(host_ptr);
-		g_buffer_sex_dat = NULL;
-	}
-
-	if ((host_ptr = g_buffer_popup_nvf - 8) != 0) {
-		free(host_ptr);
-		g_buffer_popup_nvf = NULL;
-	}
-
-	if ((host_ptr = g_buffer_heads_dat) != 0) {
-		free(host_ptr);
-		g_buffer_heads_dat = NULL;
-	}
-
-	if (g_buffer_text != NULL) {
-		free(g_buffer_text);
-		g_buffer_text = NULL;
-	}
-
-	if ((host_ptr = g_buffer_font6) != 0) {
-		free(host_ptr);
-		g_buffer_font6 = NULL;
-	}
-
-	if ((host_ptr = g_picbuf3) != 0) {
-		free(host_ptr);
-		g_picbuf3 = NULL;
-	}
-
-	if ((host_ptr = g_picbuf2) != 0) {
-		free(host_ptr);
-		g_picbuf2 = NULL;
-	}
-
-	if ((host_ptr = g_picbuf1) != 0) {
-		free(host_ptr);
-		g_picbuf1 = NULL;
-	}
-
-	if ((host_ptr = g_gen_ptr6 - 8) != 0) {
-		free(host_ptr);
-		g_gen_ptr6 = NULL;
-	}
-
-	if ((host_ptr = g_buffer_dmenge_dat - 8) != 0) {
-		free(host_ptr);
-		g_buffer_dmenge_dat = NULL;
-	}
-
-	if ((host_ptr = g_gen_ptr5 - 8) != 0) {
-		free(host_ptr);
-		g_gen_ptr5 = NULL;
-	}
-
-	if ((host_ptr = g_gen_ptr4) != 0) {
-		free(host_ptr);
-		g_gen_ptr4 = NULL;
-	}
-
-	if (g_gen_ptr2 != NULL) {
-		free(g_gen_ptr2);
-		g_gen_ptr2 = NULL;
-	}
-
-	if ((host_ptr = g_page_buffer) != 0) {
-		free(host_ptr);
-		g_page_buffer = NULL;
-	}
-
-	if ((host_ptr = g_gen_ptr1_dis - 8) != 0) {
-		free(host_ptr);
-		g_gen_ptr1_dis = NULL;
-	}
-
-	// missed ones
-	if ((host_ptr = g_snd_timbre_cache) != 0) {
-		free(host_ptr);
-		g_snd_timbre_cache = NULL;
-	}
-
-	if ((host_ptr = g_state_table) != 0) {
-		free(host_ptr);
-		g_state_table = NULL;
-	}
-
-	if ((host_ptr = g_snd_driver) != 0) {
-		free(host_ptr);
-		g_snd_driver = NULL;
-	}
-
-	if ((host_ptr = g_form_xmid) != 0) {
-		free(host_ptr);
-		g_form_xmid = NULL;
-	}
-
-	for (int i = 0; i < 11; i++) {
-		if ((host_ptr = g_bg_buffer[i]) != 0) {
-			free(host_ptr);
-			g_bg_buffer[i] = NULL;
-		}
-	}
-
-	for (int i = 0; i < 13; i++) {
-		if ((host_ptr = g_typus_buffer[i]) != 0) {
-			free(host_ptr);
-			g_typus_buffer[i] = NULL;
-		}
-	}
-}
-#endif
-
 
 /**
  *	intro() - play the intro
@@ -7145,7 +6805,6 @@ static void intro(void)
 	return;
 }
 
-#if defined(__BORLANDC__)
 /* Borlandified and identical */
 static void interrupt timer_isr(void)
 {
@@ -7155,25 +6814,20 @@ static void interrupt timer_isr(void)
 	restart_midi();
 	((void interrupt far (*)(void))g_timer_isr_bak)();
 }
-#endif
 
 /* Borlandified and identical */
 static void set_timer_isr(void)
 {
-#if defined(__BORLANDC__)
 	/* save adress of the old ISR */
 	g_timer_isr_bak = ((void interrupt far (*)(void))getvect(0x1c));
 	/* set a the new one */
 	setvect(0x1c, timer_isr);
-#endif
 }
 
 /* Borlandified and identical */
 void restore_timer_isr(void)
 {
-#if defined(__BORLANDC__)
 	setvect(0x1c, (void interrupt far (*)(void))g_timer_isr_bak);
-#endif
 }
 
 /* Borlandified and identical */
@@ -7193,9 +6847,6 @@ int main_gen(int argc, char **argv)
 		sound_off = 1;
 	}
 
-#if 0
-	print_addr();
-#endif
 	g_in_intro = 1;
 
 	if (sound_off == 0)
@@ -7253,23 +6904,12 @@ int main_gen(int argc, char **argv)
 		exit_video();
 		clrscr();
 	}
-
-#if !defined(__BORLANDC__)
-	BE_cleanup();
-
-	/* to make MSVC happy */
-	return 0;
-#endif
 }
 
 /* Borlandified and identical */
 void alloc_buffers(void)
 {
-#if defined(__BORLANDC__)
 	g_gfx_ptr = g_vga_memstart = (unsigned char*)MK_FP(0xa000, 0x0);
-#else
-	g_gfx_ptr = g_vga_memstart = (unsigned char*)calloc(320 * 200, 1);
-#endif
 
 	g_gen_ptr1_dis = (gen_alloc(64108) + 8);
 
@@ -7341,9 +6981,5 @@ void init_stuff(void)
 /* Borlandified and identical */
 unsigned char *gen_alloc(unsigned long nelem)
 {
-#if defined(__BORLANDC__)
 	return (unsigned char*)farcalloc(nelem, 1);
-#else
-	return (unsigned char*)calloc(nelem, 1);
-#endif
 }

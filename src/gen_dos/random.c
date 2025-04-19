@@ -3,23 +3,12 @@
 	Functions rewritten: 4/4 (complete)
 */
 
-#if !defined(__BORLANDC__)
-#include <stdlib.h> // do not include with BCC => uses intrinsics => different code
-#else
 #include <MATH.H> //abs()
-#endif
 
 #include "random.h"
 
 extern signed short g_random_gen_seed;
 extern signed short g_random_gen_seed2;
-
-#if !defined(__BORLANDC__)
-static inline
-unsigned short _rotl(unsigned short op, unsigned short count) {
-	return (op << count) | (op >> (16 - count));
-}
-#endif
 
 /**
 	random_interval_gen - generates a u16 random number between lo and hi

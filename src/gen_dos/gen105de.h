@@ -6,16 +6,9 @@ struct mouse_action {
 	signed short action;
 };
 
-#if defined(__BORLANDC__)
-/* BCC/DOS-specifig pointer arithmetics */
-#define HUGEPTR huge
-#else
-#define HUGEPTR
-#endif
-
 struct nvf_desc {
-	unsigned char HUGEPTR *dst;
-	unsigned char HUGEPTR *src;
+	unsigned char huge *dst;
+	unsigned char huge *src;
 	signed short no;
 	signed char type;
 	signed short *width;
@@ -47,11 +40,7 @@ struct nvf_desc {
 	void error_msg(const char*);
 	void vsync_or_key(signed short);
 
-#if defined(__BORLANDC__)
 	unsigned long swap_u32(unsigned long);
-#else
-	unsigned int swap_u32(unsigned int);
-#endif
 
 	void exit_video(void);
 	void wait_for_vsync(void);

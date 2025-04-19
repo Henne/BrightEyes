@@ -22,8 +22,6 @@
  *
  */
 
-#if defined(__BORLANDC__)
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -426,4 +424,3 @@ signed short seg001_0600(void)
 static void dummy(void)
 {
 }
-#endif
