@@ -1441,23 +1441,29 @@ void init_music(unsigned long size)
 	}
 }
 
-/* Borlandified and identical */
 void stop_music(void)
 {
 	AIL_shutdown(NULL);
 
-	/* Remark: set pointer to NULL */
-	if (g_snd_timbre_cache)
+	if (g_snd_timbre_cache) {
 		free(g_snd_timbre_cache);
+		g_snd_timbre_cache = NULL;
+	}
 
-	if (g_state_table)
+	if (g_state_table) {
 		free(g_state_table);
+		g_state_table = NULL;
+	}
 
-	if (g_form_xmid)
+	if (g_form_xmid) {
 		free(g_form_xmid);
+		g_form_xmid = NULL;
+	}
 
-	if (g_snd_driver)
+	if (g_snd_driver) {
 		free(g_snd_driver);
+		g_snd_driver = NULL;
+	}
 
 	seg001_033b();
 }
@@ -6597,13 +6603,15 @@ static void pal_fade_in(signed char *dst, signed char *src, signed short col, si
 	}
 }
 
-#if !defined(__BORLANDC__)
-static void BE_cleanup(void)
+static void free_buffers(void)
 {
 	unsigned char *host_ptr;
+	int i;
 
 	if (g_vga_memstart) {
+#if !defined(__BORLANDC__)
 		free(g_vga_memstart);
+#endif
 		g_vga_memstart = NULL;
 		g_gfx_ptr = NULL;
 	}
@@ -6699,21 +6707,20 @@ static void BE_cleanup(void)
 		g_form_xmid = NULL;
 	}
 
-	for (int i = 0; i < 11; i++) {
+	for (i = 0; i < 11; i++) {
 		if ((host_ptr = g_bg_buffer[i]) != 0) {
 			free(host_ptr);
 			g_bg_buffer[i] = NULL;
 		}
 	}
 
-	for (int i = 0; i < 13; i++) {
+	for (i = 0; i < 13; i++) {
 		if ((host_ptr = g_typus_buffer[i]) != 0) {
 			free(host_ptr);
 			g_typus_buffer[i] = NULL;
 		}
 	}
 }
-#endif
 
 
 /**
@@ -7050,12 +7057,10 @@ int main_gen(int argc, char **argv)
 		clrscr();
 	}
 
-#if !defined(__BORLANDC__)
-	BE_cleanup();
+	free_buffers();
 
 	/* to make MSVC happy */
 	return 0;
-#endif
 }
 
 /* Borlandified and identical */
