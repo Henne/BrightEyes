@@ -1,6 +1,6 @@
 #if !defined(__BORLANDC__)
 
-#include "g105de_seg006.h"
+#include "ail_stub.h"
 
 void AIL_startup()
 {

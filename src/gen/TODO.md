@@ -6,8 +6,10 @@ This file tries to give a brief overview over the current state of the project.
 * refactoring of the code
 * restructuring of initialized data (DS:INIT)
 * correct compiler flags + minimal set of Sync-Points
-* have a DOS-Build (working with issues atm)
+* have a working DOS-Build (only 78 bytes difference with identical behaviour)
 * compile 32/64-bit binaries with GCC/Clang
+* give the files meaningful names
+
 
 ## What's WIP
 We distinguish between two different worlds here:
@@ -18,8 +20,6 @@ The BCC-World takes precedence due to it's age.
 The GCC/Clang-World is there for support.
 
 ### BCC-World
-* ~~restructuring of uninitialized data (DS:BSS)~~
-* ~~seg004: normalize_ptr() calls F_LXLSH (32bit left shift) from CLib and is not linked correctly~~
 * comparing differences in the rewritten GEN.EXE on binary level
 
 ### GCC/Clang-World
@@ -31,15 +31,15 @@ The GCC/Clang-World is there for support.
 | ------------ | ------------- | ------------------ | ------------------ | ---------- |
 | seg000.h     | BCC Clib      | **DONE**           | **DONE**           | **DONE**   |
 | seg001.[ch]  | AudioCD code  | **DONE**           | -                  | **DONE**   |
-| seg002.[ch]  | Main          | should be rebuild  | should be rebuild  | WIP        |
+| seg002.[ch]  | Main          | **DONE**           | should be rebuild  | WIP        |
 | seg003.[ch]  | Random        | **DONE**           | **DONE**           | **DONE**   |
 | seg004.[ch]  | PowerPack2.0  | -                  | **DONE**           | **DONE**   |
-| seg004.asm/h | PowerPack2.0  | should be rebuild  | not portable       | WIP        |
+| seg004.asm/h | PowerPack2.0  | **DONE**           | **not portable**   | **DONE**   |
 | seg005.[ch]  | Rasterlib     | -                  | should be rebuild  | WIP        |
 | seg005.asm/h | Rasterlib     | **DONE**           | **not portable**   | **DONE**   |
 | seg006.[ch]  | AIL (Sound)   | -                  | should be replaced | WIP        |
-| seg006.asm/h | AIL (Sound)   | should be rebuild  | not portable       | WIP        |
+| seg006.asm/h | AIL (Sound)   | **DONE**           | **not portable**   | **DONE**   |
 | seg007.asm/h | AudioCD data  | **DONE**           | **not portable**   | **DONE**   |
-| hero.h       | hero struct   | should be complete | should be complete | WIP        |
+| hero.h       | hero struct   | **DONE**           | **DONE**           | **DONE**   |
 | port.h       | DOSBox compat | **DONE**           | **DONE**           | **DONE**   |
 | symbols.h    | DS adresses   | **obsolete**       | **obsolete**       | **DONE**   |

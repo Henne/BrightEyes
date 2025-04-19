@@ -21,27 +21,16 @@ done
 # all tools are available
 
 # copy all source files to DRIVE_C
-for i in g105de_*.c; do
-	#remove prefix from filenames
-	cp ${i} ${DRIVE_C}/src/${i##g105de_}
-	#remove prefix in c-files
-	sed -i 's/g105de_//g' ${DRIVE_C}/src/${i##g105de_}
-done
-for i in g105de_*.h; do
-	#remove prefix from filenames
-	cp ${i} ${DRIVE_C}/src/${i##g105de_}
-	#remove prefix in h -files
-	sed -i 's/g105de_//g' ${DRIVE_C}/src/${i##g105de_}
-done
-
-for i in g105de_*.asm; do
-	#remove prefix from filenames
-	cp ${i} ${DRIVE_C}/src/${i##g105de_}
-done
+cp cda_code.c cda_code.h ${DRIVE_C}/src
+cp gen105de.c gen105de.h ${DRIVE_C}/src
+cp random.c random.h ${DRIVE_C}/src
+cp powerp20.asm powerp20.h ${DRIVE_C}/src
+cp vgalib.asm vgalib.h ${DRIVE_C}/src
+cp -r AIL ${DRIVE_C}/src
+cp cda_data.asm cda_data.h ${DRIVE_C}/src
 
 cp hero.h ${DRIVE_C}/src
 cp TLINK.RES ${DRIVE_C}/src
-cp -r AIL ${DRIVE_C}/src
 
 # copy c_ready.bat as compile.bat
 cp build.bat ${DRIVE_C}/src/compile.bat
@@ -63,7 +52,7 @@ rm -rf ${DRIVE_C}/src/*
 echo $DSTDIR
 
 # Bytewise comparision of original and rewritten file
-CHECK=$(cmp -l ${DSTDIR}/GEN.EXE ${DSTDIR}/NG_105DE.EXE | wc -l)
+CHECK=$(cmp -l ${DSTDIR}/GEN.EXE ${DSTDIR}/GEN105DE.EXE | wc -l)
 
 if [ ${CHECK} -gt 78 ]; then
 	echo "ERROR: ${CHECK} bytes difference in the binaries (max. 78)"

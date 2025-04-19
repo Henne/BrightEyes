@@ -1,26 +1,26 @@
 CC=clang
 CFLAGS=-O0 -g -fno-asm
 
-gen: g105de_seg001.o g105de_seg002.o g105de_seg003.o g105de_seg004.o g105de_seg005.o g105de_seg006.o
-	$(CC) $(CFLAGS) -o g105de_$(CC) g105de_seg001.o g105de_seg002.o g105de_seg003.o g105de_seg004.o g105de_seg005.o g105de_seg006.o -lSDL2
+gen: cda_code.o gen105de.o random.o powerp20.o vgalib.o ail_stub.o
+	$(CC) $(CFLAGS) -o g105de_$(CC) cda_code.o gen105de.o random.o powerp20.o vgalib.o ail_stub.o -lSDL2
 
 clean:
-	rm -f g105de_[gc]* g105de_seg00*.o
+	rm -f g105de_[gc]* *.o
 
-g105de_seg001.o: g105de_seg001.c
-	$(CC) $(CFLAGS) -c g105de_seg001.c
+cda_code.o: cda_code.c
+	$(CC) $(CFLAGS) -c cda_code.c
 	
-g105de_seg002.o: g105de_seg002.c
-	$(CC) $(CFLAGS) -c g105de_seg002.c
+gen105de.o: gen105de.c
+	$(CC) $(CFLAGS) -c gen105de.c
 
-g105de_seg003.o: g105de_seg003.c
-	$(CC) $(CFLAGS) -c g105de_seg003.c
+random.o: random.c
+	$(CC) $(CFLAGS) -c random.c
 
-g105de_seg004.o: g105de_seg004.c
-	$(CC) $(CFLAGS) -c g105de_seg004.c
+powerp20.o: powerp20.c
+	$(CC) $(CFLAGS) -c powerp20.c
 
-g105de_seg005.o: g105de_seg005.c
-	$(CC) $(CFLAGS) -c g105de_seg005.c
+vgalib.o: vgalib.c
+	$(CC) $(CFLAGS) -c vgalib.c
 
-g105de_seg006.o: g105de_seg006.c
-	$(CC) $(CFLAGS) -c g105de_seg006.c
+ail_stub.o: ail_stub.c
+	$(CC) $(CFLAGS) -c ail_stub.c

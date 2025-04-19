@@ -51,16 +51,16 @@ static inline signed short bc_flushall(void) { return 0; }
 
 #include "hero.h"
 
-#include "g105de_seg001.h"
-#include "g105de_seg002.h"
-#include "g105de_seg003.h"
-#include "g105de_seg004.h"
-#include "g105de_seg005.h"
+#include "cda_code.h"
+#include "gen105de.h"
+#include "random.h"
+#include "powerp20.h"
+#include "vgalib.h"
 
 #if defined(__BORLANDC__)
 #include "AIL.H"
 #else
-#include "g105de_seg006.h"
+#include "ail_stub.h"
 #endif
 
 /** Keyboard Constants */

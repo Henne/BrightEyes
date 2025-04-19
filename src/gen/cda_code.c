@@ -1,5 +1,5 @@
 /*
- *	Rewrite of DSA1 GEN v1.05_de functions of seg001 (cdrom)
+ *	Rewrite of DSA1 GEN v1.05_de functions of cda_code (cdrom)
  *	Functions rewritten: 21/21 (complete)
  *
  *	Remarks:
@@ -36,9 +36,9 @@
 /* non-portable Memory Access */
 #define readws(p) (*(signed short*)(p))
 
-#include "g105de_seg001.h"
-#include "g105de_seg002.h"
-#include "g105de_seg007.h"
+#include "cda_code.h"
+#include "gen105de.h"
+#include "cda_data.h"
 
 /* extern variables from seg002 */
 extern signed short g_called_with_args;

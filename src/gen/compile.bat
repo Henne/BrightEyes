@@ -20,13 +20,13 @@
 @REM option -Od can be enabled		(disable optimization)
 @REM
 @REM -- here start the complete
-@REM BCC.EXE -mlarge -O -c -2 -Z -j1 SEG001.C
-     BCC.EXE -mlarge -O -c -2 -Z -j1 -IAIL SEG002.C
-@REM BCC.EXE -mlarge -O -c -2 -Z SEG003.C
-@REM TASM.EXE /os /z SEG004.asm SEG004.OBJ
-@REM TASM.EXE /os /z SEG005.asm SEG005.OBJ
-@REM TASM.EXE /m /w+ /ml /iAIL AIL\AIL.ASM SEG006.OBJ
-@REM TASM.EXE /os /z SEG007.asm SEG007.OBJ
+@REM BCC.EXE -mlarge -O -c -2 -Z -j1 CDA_CODE.C
+@REM BCC.EXE -mlarge -O -c -2 -Z -j1 -IAIL GEN105DE.C
+@REM BCC.EXE -mlarge -O -c -2 -Z RANDOM.C
+@REM TASM.EXE /os /z POWERP20.ASM POWERP20.OBJ
+@REM TASM.EXE /os /z VGALIB.ASM VGALIB.OBJ
+@REM TASM.EXE /m /w+ /ml /iAIL AIL\AIL.ASM AIL.OBJ
+@REM TASM.EXE /os /z CDA_DATA.ASM CDA_DATA.OBJ
 
 @REM examine the ouput and press anykey
 PAUSE

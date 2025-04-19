@@ -9,7 +9,7 @@
 #include <MATH.H> //abs()
 #endif
 
-#include "g105de_seg003.h"
+#include "random.h"
 
 extern signed short g_random_gen_seed;
 extern signed short g_random_gen_seed2;

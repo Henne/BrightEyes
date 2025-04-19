@@ -21,27 +21,16 @@ done
 # all tools are available
 
 # copy all source files to DRIVE_C
-for i in g105de_*.c; do
-	#remove prefix from filenames
-	cp ${i} ${DRIVE_C}/src/${i##g105de_}
-	#remove prefix in c-files
-	sed -i 's/g105de_//g' ${DRIVE_C}/src/${i##g105de_}
-done
-for i in g105de_*.h; do
-	#remove prefix from filenames
-	cp ${i} ${DRIVE_C}/src/${i##g105de_}
-	#remove prefix in h -files
-	sed -i 's/g105de_//g' ${DRIVE_C}/src/${i##g105de_}
-done
-
-for i in g105de_*.asm; do
-	#remove prefix from filenames
-	cp ${i} ${DRIVE_C}/src/${i##g105de_}
-done
+cp cda_code.c cda_code.h ${DRIVE_C}/src
+cp gen105de.c gen105de.h ${DRIVE_C}/src
+cp random.c random.h ${DRIVE_C}/src
+cp powerp20.asm powerp20.h ${DRIVE_C}/src
+cp vgalib.asm vgalib.h ${DRIVE_C}/src
+cp -r AIL ${DRIVE_C}/src
+cp cda_data.asm cda_data.h ${DRIVE_C}/src
 
 cp hero.h ${DRIVE_C}/src
 cp TLINK.RES ${DRIVE_C}/src
-cp -r AIL ${DRIVE_C}/src
 
 # copy and use compile.bat
 cp compile.bat ${DRIVE_C}/src/compile.bat
