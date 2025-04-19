@@ -2480,7 +2480,7 @@ void save_chr(void)
 	process_nvf(&nvf);
 
 	/* copy picture to the character struct */
-	memcpy(g_hero.pic, g_gen_ptr1_dis, 1024);
+	memcpy((void*)g_hero.pic, g_gen_ptr1_dis, 1024);
 
 	/* put the hero in the first group */
 	g_hero.group = 1;
@@ -2491,11 +2491,11 @@ void save_chr(void)
 
 	/* copy name to alias */
 	/* TODO: should use strncpy() here */
-	strcpy(g_hero.alias, g_hero.name);
+	strcpy((char*)g_hero.alias, (const char*)g_hero.name);
 
 	/* copy name to buffer */
 	/* TODO: should use strncpy() here */
-	strcpy(g_gen_ptr2, g_hero.name);
+	strcpy(g_gen_ptr2, (const char*)g_hero.name);
 
 	/* prepare filename */
 	for (i = 0; i < 8; i++) {
@@ -2521,7 +2521,7 @@ void save_chr(void)
 		handle = _creat(filename, 0);
 
 		if (handle != -1) {
-			write(handle, &g_hero, sizeof(g_hero));
+			write(handle, (const void*)&g_hero, sizeof(g_hero));
 			close(handle);
 
 			if (g_called_with_args == 0) return;
@@ -2530,7 +2530,7 @@ void save_chr(void)
 			strcat(path, filename);
 
 			if ((handle = _creat(path, 0)) != -1) {
-				write(handle, &g_hero, sizeof(g_hero));
+				write(handle, (const void*)&g_hero, sizeof(g_hero));
 				close(handle);
 			}
 		} else {
@@ -4014,10 +4014,10 @@ void enter_name(void)
 
 	update_mouse_cursor();
 	copy_to_screen(g_picbuf1, dst, 94, 8, 0);
-	enter_string(g_hero.name, 180, 12, 15, 1);
+	enter_string((char*)g_hero.name, 180, 12, 15, 1);
 	copy_to_screen(g_picbuf1, dst, 94, 8, 0);
 	call_mouse();
-	print_str(g_hero.name, 180, 12);
+	print_str((const char*)g_hero.name, 180, 12);
 }
 
 /* Borlandified and identical */
@@ -4146,7 +4146,7 @@ void do_gen(void)
 								break;
 							}
 							case 4: {
-								memset(&g_hero, 0, sizeof(g_hero));
+								memset((void*)&g_hero, 0, sizeof(g_hero));
 								clear_hero();
 								g_mouse2_event = 1;
 								g_screen_var = 1;
@@ -4419,7 +4419,7 @@ void new_values(void)
 {
 	/* Original-Bugfix:	there once was a char[11],
 				which could not hold a char[16] */
-	signed char *att_ptr;
+	volatile signed char *att_ptr;
 	signed char randval;
 	signed char unset_attribs;
 	signed char values[8];
@@ -4441,13 +4441,13 @@ void new_values(void)
 	/* save the name of the hero */
 	/* TODO strncpy() would be better here */
 
-	strcpy(name_bak, g_hero.name);
+	strcpy(name_bak, (const char*)g_hero.name);
 
 	/* save the sex of the hero */
 	sex_bak = g_hero.sex;
 
 	/* clear the hero */
-	memset(&g_hero, 0, sizeof(g_hero));
+	memset((void*)&g_hero, 0, sizeof(g_hero));
 
 	clear_hero();
 
@@ -4456,7 +4456,7 @@ void new_values(void)
 	/* restore the name of the hero */
 	/* TODO strncpy() would be better here */
 
-	strcpy(g_hero.name, name_bak);
+	strcpy((char*)g_hero.name, name_bak);
 
 	refresh_screen();
 
@@ -4977,7 +4977,7 @@ void select_typus(void)
 	signed char old_typus;
 	signed char possible_types;
 	signed char ltmp2;
-	signed char *ptr;
+	volatile signed char *ptr;
 	signed short i;
 	signed short impossible;
 
@@ -5106,7 +5106,7 @@ signed short can_change_attribs(void)
 {
 	signed short na_inc;
 	signed short na_dec;
-	signed char *p;
+	volatile signed char *p;
 	register signed short i;      // si
 	register signed short pa_inc; // cx
 	register signed short pa_dec; // di
@@ -5152,8 +5152,8 @@ void change_attribs(void)
 	signed short tmp1;
 	volatile signed short tmp2;
 	volatile signed short tmp3;
-	signed char *ptr1;
-	signed char *ptr2;
+	volatile signed char *ptr1;
+	volatile signed char *ptr2;
 	signed char c;
 
 	signed short si;
@@ -5523,7 +5523,7 @@ void restore_picbuf(unsigned char* ptr)
 /* Borlandified and identical */
 void print_attribs(void)
 {
-	signed char *p;
+	volatile signed char *p;
 	char buf[10];
 
 	signed short i;
@@ -5562,7 +5562,7 @@ void print_values(void)
 			restore_picbuf((unsigned char*)g_gfx_ptr);
 
 			/* print name */
-			print_str(g_hero.name, 180, 12);
+			print_str((const char*)g_hero.name, 180, 12);
 
 			/* print attributes */
 			print_attribs();
@@ -6599,7 +6599,7 @@ void choose_typus(void)
 	signed short choosen_typus;
 	signed short randval;
 	signed char sex_bak;
-	signed char *ptr;
+	volatile signed char *ptr;
 	char name_bak[20];
 
 	signed short i;
@@ -6622,15 +6622,15 @@ void choose_typus(void)
 		return;
 
 	/* clear the hero area with saved name and sex */
-	strcpy(name_bak, g_hero.name);
+	strcpy(name_bak, (const char*)g_hero.name);
 	sex_bak = g_hero.sex;
 
-	memset(&g_hero, 0, sizeof(g_hero));
+	memset((void*)&g_hero, 0, sizeof(g_hero));
 
 	clear_hero();
 	g_hero.sex = sex_bak;
 
-	strcpy(g_hero.name, name_bak);
+	strcpy((char*)g_hero.name, name_bak);
 
 	/* set typus */
 	g_hero.typus = (signed char)choosen_typus;
@@ -7046,7 +7046,7 @@ static void intro(void)
 	wait_for_vsync();
 
 	/* set palette of FANPRO.NVF */
-	set_palette(g_buffer_heads_dat + flen - 32 * 3, 0, 32);
+	set_palette((signed char*)g_buffer_heads_dat + flen - 32 * 3, 0, 32);
 
 	/* draw the picture */
 	g_dst_x1 = 60;
