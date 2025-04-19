@@ -1,4 +1,4 @@
-/s /Tde /i /d+
+/s /Tde /d+
 	C0L+
 	CDA_CODE CDA_DATA GEN105DE RANDOM+
 	POWERP20 VGALIB AIL
