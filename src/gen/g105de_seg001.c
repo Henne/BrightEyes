@@ -34,8 +34,7 @@
 #include <CONIO.H>	// clrsrc()
 
 /* non-portable Memory Access */
-#define readw(p) (*(unsigned short*)(p))
-#define readws(p) (*(unsigned short*)(p))
+#define readws(p) (*(signed short*)(p))
 
 #include "g105de_seg001.h"
 #include "g105de_seg002.h"
@@ -219,7 +218,7 @@ static void seg001_00bb(signed short track_no)
 
 		// TODO: write to dummy6 produces different code, but works identical
 		req[5].dummy4 = track_start - 150;
-		req[5].dummy6 = (signed long)(*((signed short*)(&track_start) + 1));
+		req[5].dummy6 = readws(((unsigned char*)&track_start) + 2);
 		CD_driver_request(&req[5]);
 
 		// g_cd_audio_pos = ((track_start - 150L) * 74574) / 307200;

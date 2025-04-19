@@ -7,8 +7,8 @@ struct driver_request {
 	char dummy2[8];		/*@0x05 */
 	char redbook;		/*@0x0d 0 or 1 */
 	void *ptr;		/*@0x0e */
-	unsigned short dummy4;	/*@0x12 0,1,7,b */
-	unsigned short dummy6;	/*@0x14 0 or 2 */
+	signed short dummy4;	/*@0x12 0,1,7,b */
+	signed short dummy6;	/*@0x14 0 or 2 */
 	char dummy7[6];		/*@0x16 */
 };
 
