@@ -1,14 +1,8 @@
+_FARDATA	segment byte public 'FAR_DATA'
+
 ; generating the request sections
 ; a request section has 28/0x1c byte
 
-	public _req	; array of 9 requests
-	public _cd_buf1
-	public _cd_buf2
-
-_FARDATA	segment byte public 'FAR_DATA'
-	assume nothing
-
-;genterate the request sections
 _req db 16h, 0, 85h	; starts at 0x000
      dw 0000h		; status
      db 8 dup (0)	; dummy2[8]
@@ -97,4 +91,8 @@ _cd_buf2 db 20 dup (0)			;buffer for IOCTL
 
 _FARDATA	ends
 
-end
+	public _req	; array of 9 requests
+	public _cd_buf1
+	public _cd_buf2
+
+	end
