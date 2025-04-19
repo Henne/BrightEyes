@@ -39,14 +39,10 @@ static inline unsigned int host_writed(unsigned char *p, unsigned int v) { retur
 // DUMMY for BCC CLib func
 static inline void clrscr(void) { }
 static inline void randomize(void) { }
-static inline signed short bc_flushall(void) { return 0; }
 #define __abs__(v) abs(v)
 #define _creat creat
 #define _read read
 #define _close close
-#else
-// <STDIO.H>
-#define bc_flushall flushall
 #endif
 
 #include "hero.h"
@@ -2649,10 +2645,10 @@ signed short open_datfile(unsigned short index)
 	unsigned char buf[800];
 	signed short handle;
 
-	bc_flushall();
+#if defined(__BORLANDC__)
+	flushall();
 
 	/* 0x8001 = O_BINARY | O_RDONLY */
-#if defined(__BORLANDC__)
 	while ((handle = open(g_str_dsagen_dat, O_BINARY | O_RDONLY)) == -1)
 #else
 	while ((handle = open(g_str_dsagen_dat, O_RDONLY)) == -1)
