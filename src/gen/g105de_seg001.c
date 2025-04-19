@@ -34,11 +34,8 @@
 #include <CONIO.H>	// clrsrc()
 
 /* non-portable Memory Access */
-#define readb(p) (*(unsigned char*)(p))
-#define writeb(p, v) (*(unsigned char*)(p) = (v))
-#define writew(p, v) (*(unsigned short*)(p) = (v))
-#define writed(p, v) (*(unsigned long*)(p) = (v))
-
+#define readw(p) (*(unsigned short*)(p))
+#define readws(p) (*(unsigned short*)(p))
 
 #include "g105de_seg001.h"
 #include "g105de_seg002.h"
@@ -149,7 +146,7 @@ static void CD_unused1(void)
 
 		req[3].status = 0;
 		req[3].ptr = cd_buf1;
-		writeb(&cd_buf1[0x00], 0x0c);
+		cd_buf1[0x00] = 0x0c;
 		CD_driver_request(&req[3]);
 	}
 }
@@ -181,40 +178,38 @@ static void seg001_00bb(signed short track_no)
 
 	if (g_cd_init_successful != 0) {
 
-		writew(&req[5].status, 0);
+		req[5].status = 0;
 
-		writed(&req[5].ptr,
-			(unsigned long)MK_FP(readb(&cd_buf1[0x10 + track_no * 8]),
-			(readb(&cd_buf1[0x0f + track_no * 8]) << 8) +
-			(readb(&cd_buf1[0x0e + track_no * 8]))
-			)
-		);
+		req[5].ptr =
+			MK_FP(cd_buf1[0x10 + track_no * 8],
+			(cd_buf1[0x0f + track_no * 8] << 8) +
+			(cd_buf1[0x0e + track_no * 8]));
 
 		/* calculate track_start */
-		track_start = (60L * (unsigned long)readb(&cd_buf1[0x10 + track_no * 8])
-			+ readb(&cd_buf1[0x0f + track_no * 8])) * 75L
-			+ readb(&cd_buf1[0x0e + track_no * 8]);
+		track_start = (60L * (unsigned long)cd_buf1[0x10 + track_no * 8]
+			+ cd_buf1[0x0f + track_no * 8]) * 75L
+			+ cd_buf1[0x0e + track_no * 8];
 
 		/* calculate track_end */
-		if (readb(&cd_buf1[0x326]) == track_no) {
+		if (cd_buf1[0x326] == track_no) {
 
-			track_end = (((unsigned long)readb(&cd_buf1[0x329]) * 60
-						+ readb(&cd_buf1[0x328])) * 75
-						+ readb(&cd_buf1[0x327]));
+			track_end = (((unsigned long)cd_buf1[0x329] * 60
+					+ cd_buf1[0x328]) * 75
+					+ cd_buf1[0x327]);
 		} else {
-			track_end = (((unsigned long)readb(&cd_buf1[0x18 + track_no * 8]) * 60
-						+ readb(&cd_buf1[0x17 + track_no * 8])) * 75
-						+ readb(&cd_buf1[0x16 + track_no * 8]));
+			track_end = (((unsigned long)cd_buf1[0x18 + track_no * 8] * 60
+					+ cd_buf1[0x17 + track_no * 8]) * 75
+					+ cd_buf1[0x16 + track_no * 8]);
 
 		}
 
 		track_start = track_end - track_start;
 		// track_start is now track length
 
-		// TODO: 2nd writew() produces different code, but works identical
-		writew(&req[5].dummy4, track_start - 150);
-		writew(&req[5].dummy6, (signed long)(*((signed short*)(&track_start) + 1)));
-		CD_driver_request((struct driver_request*)&req[5]);
+		// TODO: write to dummy6 produces different code, but works identical
+		req[5].dummy4 = track_start - 150;
+		req[5].dummy6 = (signed long)(*((signed short*)(&track_start) + 1));
+		CD_driver_request(&req[5]);
 
 		// g_cd_audio_pos = ((track_start - 150L) * 74574) / 307200;
 		g_cd_audio_pos = ((track_start - 150L) * 0x1234e) / 0x4b000;
@@ -251,7 +246,7 @@ static void CD_audio_stop_hsg(void)
 {
 	if (g_cd_init_successful != 0) {
 
-		writew(&req[0].status, 0);
+		req[0].status = 0;
 		CD_driver_request(&req[0]);
 		g_cd_audio_repeat = 0;
 	}
@@ -264,7 +259,7 @@ void seg001_033b(void)
 
 		CD_audio_stop_hsg();
 
-		writew(&req[1].status, 0);
+		req[1].status = 0;
 		CD_driver_request(&req[1]);
 	}
 }
@@ -274,7 +269,7 @@ void CD_unused2(void)
 {
 	if (g_cd_init_successful != 0) {
 
-		writew(&req[6].status, 0);
+		req[6].status = 0;
 		CD_driver_request(&req[6]);
 	}
 }
@@ -283,7 +278,7 @@ void CD_unused3(void)
 {
 	if (g_cd_init_successful != 0) {
 
-		writew(&req[7].status, 0);
+		req[7].status = 0;
 		CD_driver_request(&req[7]);
 	}
 }
@@ -295,19 +290,19 @@ static void seg001_03a8(void)
 
 	if (g_cd_init_successful != 0) {
 
-		writew(&req[2].status, 0);
-		writed(&req[2].ptr, &cd_buf1[0x324]);
-		writeb(&cd_buf1[0x324], 0x0a);
-		CD_driver_request((struct driver_request*)&req[2]);
+		req[2].status = 0;
+		req[2].ptr = &cd_buf1[0x324];
+		cd_buf1[0x324] = 0x0a;
+		CD_driver_request(&req[2]);
 
-		v = readb(&cd_buf1[0x325]);
-		for (; readb(&cd_buf1[0x326]) >= v; v++) {
-			writew(&req[2].status, 0);
-			writed(&req[2].ptr, &cd_buf1[0x0c + 8 * v]);
-			writeb(&cd_buf1[0x0c + 8 * v], 11);
-			writeb(&cd_buf1[0x0d + 8 * v], (unsigned char)v);
+		v = cd_buf1[0x325];
+		for (; cd_buf1[0x326] >= v; v++) {
+			req[2].status = 0;
+			req[2].ptr = &cd_buf1[0x0c + 8 * v];
+			cd_buf1[0x0c + 8 * v] = 11;
+			cd_buf1[0x0d + 8 * v] = (unsigned char)v;
 
-			CD_driver_request((struct driver_request*)&req[2]);
+			CD_driver_request(&req[2]);
 		}
 	}
 }
@@ -366,7 +361,7 @@ static void CD_radio_insert_cd(void)
 		restore_timer_isr();
 		
 		if (g_called_with_args != 0) {
-			call_fill_rect_gen((unsigned char*)g_vga_memstart, 0, 0, 319, 199, 0);
+			call_fill_rect_gen(g_vga_memstart, 0, 0, 319, 199, 0);
 		} else {
 			exit_video();
 			clrscr();
