@@ -925,7 +925,6 @@ static volatile struct struct_hero g_hero = {0};
 static const signed char dummy_6_1 = 0;
 
 static signed short g_midi_disabled = 0;
-static signed short g_use_cda = 0;
 static signed short g_mouse_handler_installed = 0;
 
 static signed short dummy7 = -1;
