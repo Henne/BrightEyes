@@ -4,7 +4,8 @@
 
 # You need a Borland C++ 3.1 compiler installed in $DRIVE_C
 
-DSTDIR=${PWD}/tools
+DSTDIR=${PWD}/build
+ORIGDIR=${PWD}/orig
 
 DRIVE_C=${PWD}/../../drive_c
 
@@ -22,15 +23,17 @@ done
 
 # copy all source files to DRIVE_C
 cp cda_code.c cda_code.h ${DRIVE_C}/src
-cp gen105de.c gen105de.h ${DRIVE_C}/src
+cp gen105de.c gen.h ${DRIVE_C}/src
 cp random.c random.h ${DRIVE_C}/src
 cp powerp20.asm powerp20.h ${DRIVE_C}/src
 cp vgalib.asm vgalib.h ${DRIVE_C}/src
 cp -r AIL ${DRIVE_C}/src
 cp cda_data.asm cda_data.h ${DRIVE_C}/src
-
 cp hero.h ${DRIVE_C}/src
-cp TLINK.RES ${DRIVE_C}/src
+
+cp gen300en.c ${DRIVE_C}/src
+
+cp GEN*.RES ${DRIVE_C}/src
 
 # copy c_ready.bat as compile.bat
 cp build.bat ${DRIVE_C}/src/compile.bat
@@ -41,6 +44,7 @@ dosbox -conf bcc31.conf
 popd
 
 # move the EXE and MAP-file to DIR
+rm -f ${DSTDIR}/*.EXE ${DSTDIR}/*.MAP
 mv ${DRIVE_C}/src/*.EXE ${DSTDIR} 2>/dev/null
 mv ${DRIVE_C}/src/*.MAP ${DSTDIR} 2>/dev/null
 
@@ -52,7 +56,7 @@ rm -rf ${DRIVE_C}/src/*
 echo $DSTDIR
 
 # Bytewise comparision of original and rewritten file
-CHECK=$(cmp -l ${DSTDIR}/GEN.EXE ${DSTDIR}/GEN105DE.EXE | wc -l)
+CHECK=$(cmp -l ${ORIGDIR}/GEN105DE.EXE ${DSTDIR}/GEN105DE.EXE | wc -l)
 
 if [ ${CHECK} -gt 78 ]; then
 	echo "ERROR: ${CHECK} bytes difference in the binaries (max. 78)"

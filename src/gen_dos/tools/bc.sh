@@ -4,8 +4,6 @@
 
 # You need a Borland C++ 3.1 compiler installed in $DRIVE_C
 
-DIR=${PWD}/temp
-
 DRIVE_C=${PWD}/../../drive_c
 
 # check all tools are available
@@ -22,7 +20,7 @@ done
 
 # copy all source files to DRIVE_C
 cp cda_code.c cda_code.h ${DRIVE_C}/src
-cp gen105de.c gen105de.h ${DRIVE_C}/src
+cp gen105de.c gen.h ${DRIVE_C}/src
 cp random.c random.h ${DRIVE_C}/src
 cp powerp20.asm powerp20.h ${DRIVE_C}/src
 cp vgalib.asm vgalib.h ${DRIVE_C}/src
@@ -30,7 +28,8 @@ cp -r AIL ${DRIVE_C}/src
 cp cda_data.asm cda_data.h ${DRIVE_C}/src
 
 cp hero.h ${DRIVE_C}/src
-cp TLINK.RES ${DRIVE_C}/src
+cp gen300en.c ${DRIVE_C}/src
+cp GEN*.RES ${DRIVE_C}/src
 
 # copy and use compile.bat
 cp compile.bat ${DRIVE_C}/src/compile.bat

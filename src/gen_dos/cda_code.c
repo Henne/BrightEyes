@@ -35,7 +35,7 @@
 #define readws(p) (*(signed short*)(p))
 
 #include "cda_code.h"
-#include "gen105de.h"
+#include "gen.h"
 #include "cda_data.h"
 
 /* extern variables from seg002 */
