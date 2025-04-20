@@ -1378,12 +1378,8 @@ static unsigned short g_current_timbre_length;
 /* Borlandified and identical */
 void start_music(unsigned short track)
 {
-	if (!g_use_cda) {
-		if (g_midi_disabled == 0) {
-			play_midi(track);
-		}
-	} else {
-		CD_play_track(track);
+	if (g_midi_disabled == 0) {
+		play_midi(track);
 	}
 }
 
