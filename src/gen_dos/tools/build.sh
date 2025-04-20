@@ -58,10 +58,10 @@ echo $DSTDIR
 # Bytewise comparision of original and rewritten file
 CHECK=$(cmp -l ${ORIGDIR}/GEN105DE.EXE ${DSTDIR}/GEN105DE.EXE | wc -l)
 
-if [ ${CHECK} -gt 78 ]; then
-	echo "ERROR: ${CHECK} bytes difference in the binaries (max. 78)"
+if [ ${CHECK} -gt 13 ]; then
+	echo "ERROR: ${CHECK} bytes difference in the binaries (max. 13)"
 	exit 1
-elif [ ${CHECK} -eq 78 ]; then
+elif [ ${CHECK} -eq 13 ]; then
 	echo "TEST PASSED"
 	exit 0
 else
