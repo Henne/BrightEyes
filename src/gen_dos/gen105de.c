@@ -1374,6 +1374,10 @@ static signed char g_current_timbre_patch;
 
 static unsigned short g_current_timbre_length;
 
+/* Borlandified and identical */
+static void dummy(void)
+{
+}
 
 /* Borlandified and identical */
 void start_music(unsigned short track)

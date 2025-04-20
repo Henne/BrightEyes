@@ -419,8 +419,3 @@ signed short seg001_0600(void)
 
 	return 1;
 }
-
-// Empty function which code overlaps into the next segment
-static void dummy(void)
-{
-}
