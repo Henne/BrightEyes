@@ -1434,8 +1434,6 @@ void stop_music(void)
 
 	if (g_snd_driver)
 		free(g_snd_driver);
-
-	seg001_033b();
 }
 
 /* Borlandified and identical */
