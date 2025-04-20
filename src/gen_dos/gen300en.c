@@ -22,7 +22,6 @@
 
 #include "hero.h"
 
-#include "cda_code.h"
 #include "gen.h"
 #include "random.h"
 #include "powerp20.h"
@@ -1983,9 +1982,9 @@ void handle_input(void)
 
 	g_in_key_ascii = g_in_key_ext = si = 0;
 
-	if (CD_bioskey(1)) {
+	if (bioskey(1)) {
 
-		si = (g_in_key_ascii = CD_bioskey(0)) >> 8;
+		si = (g_in_key_ascii = bioskey(0)) >> 8;
 		g_in_key_ascii &= 0xff;
 
 		if (si == KEY_J)
@@ -2656,8 +2655,8 @@ unsigned short ret_zero1(void)
 /* Borlandified and identical */
 void wait_for_keypress(void)
 {
-	while (CD_bioskey(1)) {
-		CD_bioskey(0);
+	while (bioskey(1)) {
+		bioskey(0);
 	}
 }
 
@@ -2671,7 +2670,7 @@ void error_msg(const char *msg)
 /* Borlandified and identical */
 signed short get_bioskey(void)
 {
-	return CD_bioskey(0);
+	return bioskey(0);
 }
 
 /* Borlandified and identical */
@@ -3350,13 +3349,13 @@ signed short enter_string(char *dst, signed short x, signed short y, signed shor
 	c = 0;
 	while ((c != 0xd) || (pos == 0)) {
 		do {
-			do {} while (!CD_bioskey(1) && (g_mouse1_event1 == 0));
+			do {} while (!bioskey(1) && (g_mouse1_event1 == 0));
 
 			if (g_mouse1_event1) {
 				g_in_key_ascii = 0x0d;
 				g_mouse1_event1 = g_mouse1_event2 = 0;
 			} else {
-				g_in_key_ext = (g_in_key_ascii = CD_bioskey(0)) >> 8;
+				g_in_key_ext = (g_in_key_ascii = bioskey(0)) >> 8;
 				g_in_key_ascii &= 0xff;
 			}
 		} while ((g_in_key_ext == 0) && (g_in_key_ascii == 0));
