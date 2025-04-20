@@ -943,9 +943,9 @@ static const char g_fname15[], g_fname16[], g_fname17[], g_fname18[], g_fname19[
 static const char g_fname20[], g_fname21[], g_fname22[], g_fname23[], g_fname24[];
 static const char g_fname25[], g_fname26[], g_fname27[], g_fname28[], g_fname29[];
 static const char g_fname30[], g_fname31[], g_fname32[], g_fname33[], g_fname34[];
-static const char g_fname35[], g_fname36[];
+static const char g_fname35[], g_fname36[], g_fname37[];
 
-static const char* g_fnames_g105de[] = {
+static const char* g_fnames_g300en[] = {
 	g_fname00, g_fname01, g_fname02, g_fname03, g_fname04,
 	g_fname05, g_fname06, g_fname07, g_fname08, g_fname09,
 	g_fname10, g_fname11, g_fname12, g_fname13, g_fname14,
@@ -953,7 +953,7 @@ static const char* g_fnames_g105de[] = {
 	g_fname20, g_fname21, g_fname22, g_fname23, g_fname24,
 	g_fname25, g_fname26, g_fname27, g_fname28, g_fname29,
 	g_fname30, g_fname31, g_fname32, g_fname33, g_fname34,
-	g_fname35, g_fname36
+	g_fname35, g_fname36, g_fname37
 };
 
 static const char g_str_file_missing[] = { "FILE %s IS MISSING!" };
@@ -1194,24 +1194,24 @@ static const char g_str_temp_dir[] = "TEMP\\";
 static const char g_str_save_error[] = "@SPEICHER FEHLER!@EVENTUELL DISKETTE GESCH\x9aTZT?";
 
 /* Remark: these are stored at DS:0x1e39 */
-static const char g_fname00[] = "GEN1.NVF";
-static const char g_fname01[] = "GEN2.NVF";
-static const char g_fname02[] = "GEN3.NVF";
-static const char g_fname03[] = "GEN4.NVF";
-static const char g_fname04[] = "GEN5.NVF";
-static const char g_fname05[] = "GEN6.NVF";
-static const char g_fname06[] = "GEN7.NVF";
-static const char g_fname07[] = "GEN8.NVF";
-static const char g_fname08[] = "GEN9.NVF";
-static const char g_fname09[] = "GEN10.NVF";
-static const char g_fname10[] = "GEN11.NVF";
+static const char g_fname00[] = "E_GEN1.NVF";
+static const char g_fname01[] = "E_GEN2.NVF";
+static const char g_fname02[] = "E_GEN3.NVF";
+static const char g_fname03[] = "E_GEN4.NVF";
+static const char g_fname04[] = "E_GEN5.NVF";
+static const char g_fname05[] = "E_GEN6.NVF";
+static const char g_fname06[] = "E_GEN7.NVF";
+static const char g_fname07[] = "E_GEN8.NVF";
+static const char g_fname08[] = "E_GEN9.NVF";
+static const char g_fname09[] = "E_GEN10.NVF";
+static const char g_fname10[] = "E_GEN11.NVF";
 static const char g_fname11[] = "HEADS.DAT";
 static const char g_fname12[] = "SEX.DAT";
 static const char g_fname13[] = "TYPPIC.DAT";
 static const char g_fname14[] = "FONT6";
-static const char g_fname15[] = "GENTEXT";
-static const char g_fname16[] = "DSALOGO.DAT";
-static const char g_fname17[] = "GENTIT.DAT";
+static const char g_fname15[] = "E_GENTXT";
+static const char g_fname16[] = "ROALOGUK.DAT";
+static const char g_fname17[] = "E_GENTIT.DAT";
 static const char g_fname18[] = "ATTIC";
 static const char g_fname19[] = "POPUP.DAT";
 static const char g_fname20[] = "DGAUKLER.DAT";
@@ -1231,6 +1231,7 @@ static const char g_fname33[] = "GEN.XMI";
 static const char g_fname34[] = "FANPRO.NVF";
 static const char g_fname35[] = "SAMPLE.AD";
 static const char g_fname36[] = "MT32EMUL.XMI";
+static const char g_fname37[] = "ROALOGUS.DAT";
 
 static const char g_str_dsagen_dat[] = "DSAGEN.DAT";
 static const char g_str_malloc_error[] = "\xaMEMORY MALLOCATION ERROR!";
@@ -2585,7 +2586,7 @@ signed short open_datfile(unsigned short index)
 	{
 		sprintf(g_gen_ptr2,
 			(const char*)g_str_file_missing,
-			(const char*)g_fnames_g105de[index]);
+			(const char*)g_fnames_g300en[index]);
 
 		g_useless_variable = 1;
 		infobox(g_gen_ptr2, 0);
@@ -2595,7 +2596,7 @@ signed short open_datfile(unsigned short index)
 	/* read offset table from file */
 	_read(handle, buf, 800);
 
-	if ((signed long)(g_gendat_offset = get_archive_offset((char*)g_fnames_g105de[index], buf)) != -1) {
+	if ((signed long)(g_gendat_offset = get_archive_offset((char*)g_fnames_g300en[index], buf)) != -1) {
 		lseek(handle, g_gendat_offset, SEEK_SET);
 		return handle;
 	} else {
