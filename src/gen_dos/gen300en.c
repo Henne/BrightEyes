@@ -1393,18 +1393,13 @@ void read_soundcfg(void)
 	signed short handle;
 	signed short port;
 
-	g_use_cda = 0;
-	g_midi_disabled = 1;
-
 	if ((handle = open(g_str_sound_cfg, 0x8001)) != -1) {
 		_read(handle, (unsigned char*)&port, 2);
 		_close(handle);
 
-		/* enable audio-cd, disable midi */
-		g_use_cda = g_midi_disabled = 1;
-
-		/* play audio-cd */
-		seg001_0600();
+		if (port != 0) {
+			load_driver(g_str_sound_adv, 3, port);
+		}
 	}
 }
 
