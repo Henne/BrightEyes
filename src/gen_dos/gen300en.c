@@ -1074,7 +1074,7 @@ struct type_bitmap {
 
 static const struct type_bitmap g_type_bitmap = { {0} };
 
-static const char g_str_version[] = "V1.05";
+static const char g_str_version[] = "V3.00";
 
 static const struct struct_color g_pal_attic[16] = {
 	{0x00, 0x00, 0x00},
@@ -1191,7 +1191,7 @@ static const char g_str_sound_adv[] = "SOUND.ADV";
 static const char g_str_soundhw_not_found[] = "SOUND HARDWARE NOT FOUND!";
 static const char g_str_chr[] = ".CHR";
 static const char g_str_temp_dir[] = "TEMP\\";
-static const char g_str_save_error[] = "@SPEICHER FEHLER!@EVENTUELL DISKETTE GESCH\x9aTZT?";
+static const char g_str_save_error[] = "@SAVE ERROR!@IS YOUR DISK PROTECTED?";
 
 /* Remark: these are stored at DS:0x1e39 */
 static const char g_fname00[] = "E_GEN1.NVF";
@@ -1211,7 +1211,7 @@ static const char g_fname13[] = "TYPPIC.DAT";
 static const char g_fname14[] = "FONT6";
 static const char g_fname15[] = "E_GENTXT";
 static const char g_fname16[] = "ROALOGUK.DAT";
-static const char g_fname17[] = "E_GENTIT.DAT";
+static const char g_fname17[] = "E_GENTIT.NVF";
 static const char g_fname18[] = "ATTIC";
 static const char g_fname19[] = "POPUP.DAT";
 static const char g_fname20[] = "DGAUKLER.DAT";
@@ -1363,7 +1363,7 @@ static signed short dummy11[0xbd3];
 static signed short g_got_mu_bonus;
 static signed short g_got_ch_bonus;
 
-static char dummy10[768];
+static char g_pal_roalogo[768];
 void far *g_timer_isr_bak;
 
 /* These 6 bytes are written at once from a file */
