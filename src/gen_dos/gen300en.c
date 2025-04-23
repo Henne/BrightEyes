@@ -6875,8 +6875,6 @@ int main_gen(int argc, char **argv)
 
 	init_stuff();
 
-	read_common_files();
-
 	if (sound_off == 0)
 		read_soundcfg();
 
@@ -6884,10 +6882,10 @@ int main_gen(int argc, char **argv)
 
 	if (g_called_with_args == 0) {
 		intro();
-		read_common_files();
 	}
 
 	init_colors();
+	read_common_files();
 	wait_for_keypress();
 	call_mouse();
 	do_gen();
