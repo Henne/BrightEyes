@@ -5395,7 +5395,12 @@ void print_values(void)
 			if (g_hero.typus == 0) return;
 
 			/* print height */
-			sprintf(g_gen_ptr2, get_text(70), g_hero.height);
+			/* Difference: calc height in feet and inches for EN Versions */
+			feet = g_hero.height * 100 / 3048;
+			inches = g_hero.height * 100 - feet * 3048;
+			inches = inches / 254;
+
+			sprintf(g_gen_ptr2, get_text(70), feet, inches);
 			print_str(g_gen_ptr2, 205, 25);
 
 			/* print weight */
