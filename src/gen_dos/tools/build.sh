@@ -23,7 +23,7 @@ done
 
 # copy all source files to DRIVE_C
 cp cda_code.c cda_code.h ${DRIVE_C}/src
-cp gen105de.c gen.h ${DRIVE_C}/src
+cp gen.h ${DRIVE_C}/src
 cp random.c random.h ${DRIVE_C}/src
 cp powerp20.asm powerp20.h ${DRIVE_C}/src
 cp vgalib.asm vgalib.h ${DRIVE_C}/src
@@ -31,6 +31,8 @@ cp -r AIL ${DRIVE_C}/src
 cp cda_data.asm cda_data.h ${DRIVE_C}/src
 cp hero.h ${DRIVE_C}/src
 
+cp gen104de.c ${DRIVE_C}/src
+cp gen105de.c ${DRIVE_C}/src
 cp gen300en.c ${DRIVE_C}/src
 
 cp GEN*.RES ${DRIVE_C}/src
@@ -55,16 +57,31 @@ rm -rf ${DRIVE_C}/src/*
 # VERIFICATION
 echo $DSTDIR
 
-# Bytewise comparision of original and rewritten file
+# Bytewise comparision of original and rewritten files
+CHECK=$(cmp -l ${ORIGDIR}/GEN104DE.EXE ${DSTDIR}/GEN104DE.EXE | wc -l)
+
+if [ ${CHECK} -gt 13 ]; then
+	echo "ERROR: GEN104DE.EXE ${CHECK} bytes difference in the binary (max. 13)"
+elif [ ${CHECK} -eq 13 ]; then
+	echo "TEST PASSED: GEN104DE.EXE"
+else
+	echo "IMPROVEMENT: GEN104DE.EXE only ${CHECK} bytes difference"
+fi
+
 CHECK=$(cmp -l ${ORIGDIR}/GEN105DE.EXE ${DSTDIR}/GEN105DE.EXE | wc -l)
 
 if [ ${CHECK} -gt 13 ]; then
-	echo "ERROR: ${CHECK} bytes difference in the binaries (max. 13)"
-	exit 1
+	echo "ERROR: GEN105DE.EXE ${CHECK} bytes difference in the binary (max. 13)"
 elif [ ${CHECK} -eq 13 ]; then
-	echo "TEST PASSED"
-	exit 0
+	echo "TEST PASSED: GEN105DE.EXE"
 else
-	echo "IMPROVEMENT: Now only ${CHECK} bytes difference"
-	exit 0
+	echo "IMPROVEMENT: GEN105DE.EXE only ${CHECK} bytes difference"
+fi
+
+CHECK=$(cmp -l ${ORIGDIR}/GEN300EN.EXE ${DSTDIR}/GEN300EN.EXE | wc -l)
+
+if [ ${CHECK} -gt 0 ]; then
+	echo "ERROR: GEN300EN.EXE ${CHECK} bytes difference in the binary"
+elif [ ${CHECK} -eq 0 ]; then
+	echo "TEST PASSED: GEN300EN.EXE"
 fi

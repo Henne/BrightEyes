@@ -20,7 +20,7 @@ done
 
 # copy all source files to DRIVE_C
 cp cda_code.c cda_code.h ${DRIVE_C}/src
-cp gen105de.c gen.h ${DRIVE_C}/src
+cp gen.h ${DRIVE_C}/src
 cp random.c random.h ${DRIVE_C}/src
 cp powerp20.asm powerp20.h ${DRIVE_C}/src
 cp vgalib.asm vgalib.h ${DRIVE_C}/src
@@ -28,6 +28,8 @@ cp -r AIL ${DRIVE_C}/src
 cp cda_data.asm cda_data.h ${DRIVE_C}/src
 
 cp hero.h ${DRIVE_C}/src
+cp gen104de.c ${DRIVE_C}/src
+cp gen105de.c ${DRIVE_C}/src
 cp gen300en.c ${DRIVE_C}/src
 cp GEN*.RES ${DRIVE_C}/src
 
