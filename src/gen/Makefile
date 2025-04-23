@@ -1,4 +1,4 @@
-CC=clang
+CC=gcc
 CFLAGS=-O0 -g -fno-asm
 
 gen: cda_code.o ngen.o random.o powerp20.o vgalib.o ail_stub.o
