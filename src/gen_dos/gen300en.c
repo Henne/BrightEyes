@@ -6723,34 +6723,28 @@ static void intro(void)
 	do_draw_pic(0);
 	vsync_or_key(200);
 
-	/* load DSALOGO.DAT */
-	handle = open_datfile(16);
-	read_datfile(handle, g_buffer_heads_dat, 20000);
+	/* load ROALOGUS.DAT */
+	/* Difference to G105de: completely other picture */
+	handle = open_datfile(37);
+	flen = read_datfile(handle, g_buffer_heads_dat, 20000);
 	close(handle);
 
-	nvf.src = g_buffer_heads_dat;
-	nvf.type = 0;
-	nvf.width = &width;
-	nvf.height = &height;
-	nvf.dst = g_gen_ptr1_dis;
-	nvf.no = 0;
-
-	process_nvf(&nvf);
+	decomp_pp20(g_gen_ptr1_dis, g_buffer_heads_dat, (unsigned short)flen);
 
 	/* clear screen */
 	call_fill_rect_gen((unsigned char*)g_vga_memstart, 0, 0, 319, 199, 0);
-	wait_for_vsync();
+	memset(g_pal_roalogo, 0, 3 * 256);
+	set_palette((signed char*)&g_pal_roalogo, 0, 256);
 
-
-	set_palette((signed char*)&g_pal_tmp, 0, 32);
-
-	/* draw DSALOGO.DAT */
+	/* draw ROALOGUS.DAT */
 	g_dst_x1 = 0;
 	g_dst_y1 = 0;
 	g_dst_x2 = 319;
-	g_dst_y2 = 99;
+	g_dst_y2 = 139;
 	g_dst_src = g_gen_ptr1_dis;
 	do_draw_pic(0);
+
+	memcpy(g_pal_roalogo, g_gen_ptr1_dis + 140 * 320 + 2, 3 * 256);
 
 	/* load GENTIT.DAT */
 	handle = open_datfile(17);
@@ -6766,15 +6760,15 @@ static void intro(void)
 
 	process_nvf(&nvf);
 
-	/* draw DSALOGO.DAT */
-	g_dst_x1 = 10;
-	g_dst_y1 = 110;
-	g_dst_x2 = 329;
-	g_dst_y2 = 159;
+	/* draw ROALOGUS.DAT */
+	g_dst_y1 = 140;
+	g_dst_y2 = 189;
 	g_dst_src = g_gen_ptr1_dis;
 	do_draw_pic(0);
 
-	memcpy(g_gen_ptr1_dis + 500, &g_pal_dsalogo, 96);
+	memcpy(g_pal_roalogo + 3 * 32, &g_pal_dsalogo, 3 * 32);
+	set_palette((unsigned char*)g_pal_roalogo + 0x180, 128, 128);
+	memcpy(g_gen_ptr1_dis + 0x1f4, &g_pal_dsalogo, 3 * 32);
 
 	pal_src = (signed char*)g_gen_ptr1_dis + 500;
 	pal_dst = (signed char*)g_gen_ptr1_dis;
@@ -6784,24 +6778,24 @@ static void intro(void)
 	for (i = 0; i < 64; i++) {
 		pal_fade_in(pal_dst, pal_src, i, 32);
 		wait_for_vsync();
-		set_palette(pal_dst, 0, 32);
+		set_palette(pal_dst, 32, 32);
 	}
 
 	set_textcolor(0xff, 0x00); // WHITE ON BLACK
 	print_str((char*)g_str_version, 290, 190);
 	vsync_or_key(400);
 
-	memcpy(g_gen_ptr1_dis, &g_pal_dsalogo, 96);
+	memcpy(g_gen_ptr1_dis, &g_pal_roalogo, 3 * 256);
 
-	pal_src = (signed char*)g_gen_ptr1_dis + 500;
+	pal_src = (signed char*)g_gen_ptr1_dis + 800;
 	pal_dst = (signed char*)g_gen_ptr1_dis;
 
-	memset(g_gen_ptr1_dis + 500, 0, 96);
+	memset(g_gen_ptr1_dis + 800, 0, 3 * 256);
 
 	for (i = 0; i < 64; i++) {
-		pal_fade_out(pal_dst, pal_src, 32);
+		pal_fade_out(pal_dst, pal_src, 256);
 		wait_for_vsync();
-		set_palette(pal_dst, 0, 32);
+		set_palette(pal_dst, 0, 256);
 	}
 
 	/* clear screen */
