@@ -4145,6 +4145,10 @@ void refresh_screen(void)
 			src = g_buffer_sex_dat + 512;
 
 			copy_to_screen(src, dst, 20, 15, 0);
+
+			/* Difference to G105de */
+			dst = g_gen_ptr1_dis + 178 * 320 + 145;
+			copy_to_screen(src, dst, 20, 15, 0);
 		}
 		/* if the page is lower than 5 */
 		if (g_gen_page < 5) {
@@ -5215,11 +5219,12 @@ void save_picbuf(void)
 			/* remaining skill augmention tries */
 			x_1 = 270; y_1 = 184; w_1 = 15; h_1 = 8;
 
+			/* Difference to G105de: screen layout */
 			/* left row of skills */
-			x_2 = 205; y_2 = 42; w_2 = 20; h_2 = 140;
+			x_2 = 208; y_2 = 42; w_2 = 20; h_2 = 140;
 
 			/* right row of skills */
-			x_3 = 287; y_3 = 42; w_3 = 20; h_3 = 140;
+			x_3 = 296; y_3 = 42; w_3 = 20; h_3 = 140;
 			break;
 		}
 		/* ATPA page */
@@ -5288,11 +5293,12 @@ void restore_picbuf(unsigned char* ptr)
 			/* remaining skill augmention tries */
 			x_1 = 270; y_1 = 184; w_1 = 15; h_1 = 8;
 
+			/* Difference to G105de: screen layout */
 			/* left row of skills */
-			x_2 = 205; y_2 = 42; w_2 = 20; h_2 = 140;
+			x_2 = 208; y_2 = 42; w_2 = 20; h_2 = 140;
 
 			/* right row of skills */
-			x_3 = 287; y_3 = 42; w_3 = 20; h_3 = 140;
+			x_3 = 296; y_3 = 42; w_3 = 20; h_3 = 140;
 			break;
 		}
 		/* ATPA page */
@@ -5364,8 +5370,11 @@ void print_values(void)
 {
 	char tmp[4];
 	signed short width;
-	signed short align_left = 222;
-	signed short align_right = 302;
+	/* Difference to G105de: screen layout + height */
+	signed short align_left = 225;
+	signed short align_right = 313;
+	signed short feet;
+	signed short inches;
 
 	register signed short i;
 	register signed short pos;
@@ -5408,7 +5417,7 @@ void print_values(void)
 			/* print Endurance */
 			print_str(itoa(g_hero.le_max + g_hero.attrib[6].current, tmp, 10), 296, 164);
 			/* print MR */
-			print_str(itoa(g_hero.mr, tmp, 10), 232, 184);
+			print_str(itoa(g_hero.mr, tmp, 10), 255, 184);
 			break;
 		}
 
