@@ -885,13 +885,12 @@ static const struct mouse_action* g_default_action = &g_action_default[0];
 
 static struct mouse_action* g_action_table = NULL;
 
-static const struct mouse_action g_action_base[9] = {
+static const struct mouse_action g_action_base[8] = {
 	{ 272, 8, 304, 41, 0xfd},	/* credits */
 	{ 305, 7, 319, 21, KEY_CTRL_F3},	/* change sex */
 	{ 145, 13, 175, 21, KEY_CTRL_F4},	/* enter name */
 	{ 271, 42, 286, 56, KEY_UP},	/* previous head */
 	{ 288, 42, 303, 56, KEY_DOWN},	/* next head */
-	{ 145, 178, 164, 192, KEY_LEFT},	/* previous page */
 	{ 284, 178, 303, 192, KEY_RIGHT},	/* next page */
 	{ 0, 0, 319, 199, 0xfe},
 	{ -1, -1, -1, -1, -1}
@@ -922,8 +921,6 @@ static volatile struct struct_hero g_hero = {0};
 
 static const signed char dummy_6_1 = 0;
 
-static signed short g_midi_disabled = 0;
-static signed short g_use_cda = 0;
 static signed short g_mouse_handler_installed = 0;
 
 static signed short dummy7 = -1;
@@ -1071,8 +1068,6 @@ struct type_bitmap {
 
 static const struct type_bitmap g_type_bitmap = { {0} };
 
-static const char g_str_version[] = "V1.05";
-
 static const struct struct_color g_pal_attic[16] = {
 	{0x00, 0x00, 0x00},
 	{0x24, 0x24, 0x3c},
@@ -1183,11 +1178,7 @@ static const struct struct_color g_pal_heads[32] = {
 	{0x3c, 0x3c, 0x3c},
 };
 
-static const char g_str_sound_cfg[] = "SOUND.CFG";
-static const char g_str_sound_adv[] = "SOUND.ADV";
-static const char g_str_soundhw_not_found[] = "SOUND HARDWARE NOT FOUND!";
 static const char g_str_chr[] = ".CHR";
-static const char g_str_temp_dir[] = "TEMP\\";
 static const char g_str_save_error[] = "@SPEICHER FEHLER!@EVENTUELL DISKETTE GESCH\x9aTZT?";
 
 /* Remark: these are stored at DS:0x1e39 */
@@ -1228,8 +1219,7 @@ static const char g_fname33[] = "GEN.AWS";
 static const char g_fname34[] = "FANPRO.NVF";
 
 static const char g_str_dsagen_dat[] = "DSAGEN.DAT";
-static const char g_str_malloc_error[] = "\xaMEMORY MALLOCATION ERROR!";
-
+static const char g_str_version[] = "V1.04";
 signed short g_random_gen_seed = 0x327b;
 /* END OF INITIALIZED GLOBAL VARIABLES _DATA */
 
@@ -1330,22 +1320,13 @@ struct inc_states {
 static struct inc_states g_skill_incs[52];
 static struct inc_states g_spell_incs[86];
 
-signed short g_called_with_args;
 static signed short g_param_level;
 
-static signed short g_snd_driver_handle;
-static signed short g_snd_sequence;
-static unsigned char* g_snd_driver_desc;
-static unsigned char* g_snd_driver_base_addr;
-static void* g_state_table;
-static unsigned char* g_snd_timbre_cache;
-static void* g_form_xmid;
-static unsigned char* g_snd_driver;
-static signed long g_state_table_size;
-static signed short g_timbre_cache_size;
-static signed short g_handle_timbre;
-
 static signed long g_gendat_offset;
+
+static unsigned char *g_ptr_gen_aws;
+
+signed char g_sndlib_byte;
 
 void far *g_irq78_bak;
 
@@ -1357,7 +1338,6 @@ static signed short dummy11[0xbd3];
 static signed short g_got_mu_bonus;
 static signed short g_got_ch_bonus;
 
-static char dummy10[768];
 void far *g_timer_isr_bak;
 
 /**
@@ -2107,10 +2087,6 @@ void save_chr(void)
 	if (!gui_bool(get_text(3)))
 		return;
 
-	/* copy name to alias */
-	/* TODO: should use strncpy() here */
-	strcpy((char*)g_hero.alias, (const char*)g_hero.name);
-
 	/* copy name to buffer */
 	/* TODO: should use strncpy() here */
 	strcpy(g_gen_ptr2, (const char*)g_hero.name);
@@ -2137,16 +2113,6 @@ void save_chr(void)
 		if (handle != -1) {
 			write(handle, (const void*)&g_hero, sizeof(g_hero));
 			close(handle);
-
-			if (g_called_with_args == 0) return;
-
-			strcpy(path, g_str_temp_dir);
-			strcat(path, filename);
-
-			if ((handle = _creat(path, 0)) != -1) {
-				write(handle, (const void*)&g_hero, sizeof(g_hero));
-				close(handle);
-			}
 		} else {
 			/* should be replaced with infobox() */
 			error_msg(g_str_save_error);

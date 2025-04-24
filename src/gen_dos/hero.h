@@ -9,8 +9,10 @@ struct struct_attribs {
 struct struct_hero {
 	/* Offset 0x00 */
 	char name[16];
+#if defined(NEWHERO)
 	/* Offset 0x10 */
 	char alias[16];
+#endif
 	/* Offset 0x20 */
 	signed char items;
 	signed char typus;
