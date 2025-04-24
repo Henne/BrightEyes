@@ -38,8 +38,7 @@ p_seg		= word ptr  8
 		retf
 _sndlib_normalize_ptr	endp
 
-
-sndlib_030	proc far		; CODE XREF: init_sndlib+16P
+_sndlib_set_timer	proc far
 		push	bp
 		mov	bp, sp
 		push	ds
@@ -66,10 +65,10 @@ sndlib_030	proc far		; CODE XREF: init_sndlib+16P
 		mov	sp, bp
 		pop	bp
 		retf
-sndlib_030	endp
+_sndlib_set_timer	endp
 
 
-sndlib_05b	proc far
+_sndlib_restore_timer	proc far
 
 		push	bp
 		mov	bp, sp
@@ -96,10 +95,10 @@ sndlib_05b	proc far
 		mov	sp, bp
 		pop	bp
 		retf
-sndlib_05b	endp
+_sndlib_restore_timer	endp
 
 
-sndlib_084	proc far
+_sndlib_084	proc far
 
 arg_0		= word ptr  6
 
@@ -118,10 +117,10 @@ arg_0		= word ptr  6
 		mov	sp, bp
 		pop	bp
 		retf
-sndlib_084	endp
+_sndlib_084	endp
 
 
-sndlib_099	proc far
+_sndlib_099	proc far
 
 		push	bp
 		mov	bp, sp
@@ -137,10 +136,10 @@ sndlib_099	proc far
 		mov	sp, bp
 		pop	bp
 		retf
-sndlib_099	endp
+_sndlib_099	endp
 
 
-sndlib_0ab	proc far
+_sndlib_0ab	proc far
 
 arg_0		= word ptr  6
 
@@ -159,7 +158,7 @@ arg_0		= word ptr  6
 		mov	sp, bp
 		pop	bp
 		retf
-sndlib_0ab	endp
+_sndlib_0ab	endp
 
 
 sndlib_0c1	proc far
@@ -1323,5 +1322,10 @@ _DATA		ends
 
 		extrn _g_sndlib_byte:byte
 		public _sndlib_normalize_ptr
+		public _sndlib_set_timer
+		public _sndlib_restore_timer
+		public _sndlib_084
+		public _sndlib_099
+		public _sndlib_0ab
 
 		end

@@ -1223,8 +1223,8 @@ static const char g_str_version[] = "V1.04";
 signed short g_random_gen_seed = 0x327b;
 /* END OF INITIALIZED GLOBAL VARIABLES _DATA */
 
-/* START OF UNINITIALIZE GLOBAL VARIABLE _BSS DS:0x2474*/
-static signed char dummy_13;
+/* START OF UNINITIALIZE GLOBAL VARIABLE _BSS */
+//static signed char dummy_13;
 static signed short g_ro_var[7];
 static signed long dummy_14;
 static signed short g_display_mode_bak;
@@ -1320,11 +1320,7 @@ struct inc_states {
 static struct inc_states g_skill_incs[52];
 static struct inc_states g_spell_incs[86];
 
-static signed short g_param_level;
-
-static signed long g_gendat_offset;
-
-static unsigned char *g_ptr_gen_aws;
+static unsigned long g_ptr_gen_aws;
 
 signed char g_sndlib_byte;
 
@@ -1695,6 +1691,8 @@ void handle_input(void)
 			update_mouse_cursor();
 			mouse_disable();
 			restore_timer_isr();
+			sndlib_099();
+			sndlib_restore_timer();
 			exit_video();
 			clrscr();
 			exit(0);
@@ -2259,9 +2257,20 @@ signed long process_nvf(struct nvf_desc *nvf)
 	return retval;
 }
 
+/* Borlandified and not yet identical */
+unsigned char huge *unused_new(unsigned char huge *ptr)
+{
+	signed long val;
+	val = host_readd(ptr);
+
+	asm {db 0x90, 0x66, 0x90, 0x90}
+	return ((unsigned char huge*)((unsigned long)(val >> 4))) + (unsigned long)(FP_OFF(val) & 0x0f);
+}
+
 /* Borlandified and identical */
 signed short open_datfile(unsigned short index)
 {
+	signed long offset;
 	unsigned char buf[800];
 	signed short handle;
 
@@ -2281,8 +2290,8 @@ signed short open_datfile(unsigned short index)
 	/* read offset table from file */
 	_read(handle, buf, 800);
 
-	if ((signed long)(g_gendat_offset = get_archive_offset((char*)g_fnames_g100de[index], buf)) != -1) {
-		lseek(handle, g_gendat_offset, SEEK_SET);
+	if ((signed long)(offset = get_archive_offset((char*)g_fnames_g100de[index], buf)) != -1) {
+		lseek(handle, offset, SEEK_SET);
 		return handle;
 	} else {
 		return 0;
@@ -2335,6 +2344,33 @@ signed long get_filelength(signed short unused)
 unsigned short ret_zero1(void)
 {
 	return 0;
+}
+
+signed short load_gen_aws(void)
+{
+	signed long flen;
+	unsigned long in_ptr;
+	signed short handle;
+
+	/* open GEN.AWS */
+	if ((handle = open_datfile(33)) != 0) {
+		flen = get_filelength(handle);
+		in_ptr = (unsigned long)farmalloc(flen + 16L) + 15;
+		in_ptr &= 0xfffffff0;
+		g_ptr_gen_aws = sndlib_normalize_ptr(in_ptr);
+		read_datfile(handle, (unsigned char*)g_ptr_gen_aws, flen);
+#if 0
+		close(handle);
+#else
+		//asm {db 0x66, 90} // Sync-Point
+		asm {db 0x0f, 0x1f, 0x00}
+		asm {db 0x0f, 0x1f, 0x00}
+#endif
+
+		return 1;
+	} else {
+		return 0;
+	}
 }
 
 /* Borlandified and identical */
@@ -3619,9 +3655,6 @@ void do_gen(void)
 	di = 0;
 
 	g_screen_var = 1;
-
-	/* try to set the level from parameters */
-	g_level = ((g_param_level == 'a') ? 2 : ((g_param_level == 'n') ? 1 : -1));
 
 	/* ask for level */
 	while (g_level == -1) {
