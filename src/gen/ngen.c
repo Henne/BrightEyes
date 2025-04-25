@@ -1278,7 +1278,8 @@ static const char g_str_sound_adv[] = "SOUND.ADV";
 static const char g_str_soundhw_not_found[] = "SOUND HARDWARE NOT FOUND!";
 static const char g_str_chr[] = ".CHR";
 static const char g_str_temp_dir[] = "TEMP\\";
-static const char g_str_save_error[] = "@SPEICHER FEHLER!@EVENTUELL DISKETTE GESCH\x9aTZT?";
+static const char g_str_save_error_de[] = "@SPEICHER FEHLER!@EVENTUELL DISKETTE GESCH\x9aTZT?";
+static const char g_str_save_error_en[] = "@SAVE ERROR!@IS YOUR DISK PROTECTED?";
 
 
 static const char g_str_dsagen_dat[] = "DSAGEN.DAT";
@@ -2787,7 +2788,7 @@ void save_chr(void)
 			}
 		} else {
 			/* should be replaced with infobox() */
-			error_msg(g_str_save_error);
+			error_msg(g_dsagen_lang == LANG_DE ? g_str_save_error_de : g_str_save_error_en);
 		}
 	}
 }
