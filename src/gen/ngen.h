@@ -37,7 +37,6 @@ struct nvf_desc {
 	void draw_mouse_cursor(void);
 	void save_mouse_bg(void);
 	void restore_mouse_bg(void);
-	void split_textbuffer(char**, char*, unsigned long);
 	signed long process_nvf(struct nvf_desc*);
 	signed short open_datfile(unsigned short);
 	signed long get_archive_offset(const char*, unsigned char*);

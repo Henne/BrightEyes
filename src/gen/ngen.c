@@ -58,7 +58,6 @@ static inline void clrscr(void) { }
 #endif
 
 /* static prototypes */
-static void load_font_and_text(void);
 
 /** Keyboard Constants */
 
@@ -1432,8 +1431,6 @@ static int alloc_buffers(void)
 	g_buffer_font6 = gen_alloc(592);
 	if (g_buffer_font6 == NULL) errors++;
 
-	load_font_and_text();
-
 	g_buffer_heads_dat = gen_alloc(39000);
 	if (g_buffer_heads_dat == NULL) errors++;
 
@@ -2486,9 +2483,26 @@ void restore_mouse_bg(void)
 			vgaptr[j] = g_mouse_backbuffer[16 * i + j];
 }
 
+/* Borlandified and identical */
+static void split_textbuffer(char **dst, char *src, unsigned long len)
+{
+	unsigned long i;
+
+	for (i = 0, *dst++ = src; i != len; src++, i++) {
+		/* continue if not the end of the string */
+		if (!*src) {
+			/* return if "\0\0" (never happens) */
+			if (!*(src + 1)) return;
+
+			/* write the adress of the next string */
+			*dst = src + 1;
+			dst++;
+		}
+	}
+}
 
 /* Borlandified and identical */
-void load_font_and_text(void)
+static void load_font_and_text(void)
 {
 	signed short handle;
 	signed long len;
@@ -2504,24 +2518,6 @@ void load_font_and_text(void)
 	close(handle);
 
 	split_textbuffer(g_texts, g_buffer_text, len);
-}
-
-/* Borlandified and identical */
-void split_textbuffer(char **dst, char *src, unsigned long len)
-{
-	unsigned long i;
-
-	for (i = 0, *dst++ = src; i != len; src++, i++) {
-		/* continue if not the end of the string */
-		if (!*src) {
-			/* return if "\0\0" (never happens) */
-			if (!*(src + 1)) return;
-
-			/* write the adress of the next string */
-			*dst = src + 1;
-			dst++;
-		}
-	}
 }
 
 /* Borlandified and identical */
@@ -7093,6 +7089,8 @@ int main_gen(int argc, char **argv)
 		stop_music();
 		return -1;
 	}
+
+	load_font_and_text();
 
 	init_video();
 
