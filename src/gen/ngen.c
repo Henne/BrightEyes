@@ -957,24 +957,92 @@ static unsigned char *g_typus_buffer[]    = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 static signed long g_typus_len[13] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 /* declare the filenames here, to use them in g_fnames */
-static const char g_fname00[], g_fname01[], g_fname02[], g_fname03[], g_fname04[];
-static const char g_fname05[], g_fname06[], g_fname07[], g_fname08[], g_fname09[];
-static const char g_fname10[], g_fname11[], g_fname12[], g_fname13[], g_fname14[];
-static const char g_fname15[], g_fname16[], g_fname17[], g_fname18[], g_fname19[];
-static const char g_fname20[], g_fname21[], g_fname22[], g_fname23[], g_fname24[];
-static const char g_fname25[], g_fname26[], g_fname27[], g_fname28[], g_fname29[];
-static const char g_fname30[], g_fname31[], g_fname32[], g_fname33[], g_fname34[];
-static const char g_fname35[], g_fname36[];
+static const char g_fname00_de[] = "GEN1.NVF";
+static const char g_fname01_de[] = "GEN2.NVF";
+static const char g_fname02_de[] = "GEN3.NVF";
+static const char g_fname03_de[] = "GEN4.NVF";
+static const char g_fname04_de[] = "GEN5.NVF";
+static const char g_fname05_de[] = "GEN6.NVF";
+static const char g_fname06_de[] = "GEN7.NVF";
+static const char g_fname07_de[] = "GEN8.NVF";
+static const char g_fname08_de[] = "GEN9.NVF";
+static const char g_fname09_de[] = "GEN10.NVF";
+static const char g_fname10_de[] = "GEN11.NVF";
+static const char g_fname11_de[] = "HEADS.DAT";
+static const char g_fname12_de[] = "SEX.DAT";
+static const char g_fname13_de[] = "TYPPIC.DAT";
+static const char g_fname14_de[] = "FONT6";
+static const char g_fname15_de[] = "GENTEXT";
+static const char g_fname16_de[] = "DSALOGO.DAT";
+static const char g_fname17_de[] = "GENTIT.DAT";
+static const char g_fname18_de[] = "ATTIC";
+static const char g_fname19_de[] = "POPUP.DAT";
+static const char g_fname20_de[] = "DGAUKLER.DAT";
+static const char g_fname21_de[] = "DJAEGER.DAT";
+static const char g_fname22_de[] = "DKRIEGER.DAT";
+static const char g_fname23_de[] = "DSTREUNE.DAT";
+static const char g_fname24_de[] = "DTHORWAL.DAT";
+static const char g_fname25_de[] = "DZWERG.DAT";
+static const char g_fname26_de[] = "DHEXE.DAT";
+static const char g_fname27_de[] = "DDRUIDE.DAT";
+static const char g_fname28_de[] = "DMAGIER.DAT";
+static const char g_fname29_de[] = "DAELF.DAT";
+static const char g_fname30_de[] = "DFELF.DAT";
+static const char g_fname31_de[] = "DWELF.DAT";
+static const char g_fname32_de[] = "DMENGE.DAT";
+static const char g_fname33_de[] = "GEN.XMI";
+static const char g_fname34_de[] = "FANPRO.NVF";
+static const char g_fname35_de[] = "SAMPLE.AD";
+static const char g_fname36_de[] = "MT32EMUL.XMI";
 
 static const char* g_fnames_g105de[] = {
-	g_fname00, g_fname01, g_fname02, g_fname03, g_fname04,
-	g_fname05, g_fname06, g_fname07, g_fname08, g_fname09,
-	g_fname10, g_fname11, g_fname12, g_fname13, g_fname14,
-	g_fname15, g_fname16, g_fname17, g_fname18, g_fname19,
-	g_fname20, g_fname21, g_fname22, g_fname23, g_fname24,
-	g_fname25, g_fname26, g_fname27, g_fname28, g_fname29,
-	g_fname30, g_fname31, g_fname32, g_fname33, g_fname34,
-	g_fname35, g_fname36
+	g_fname00_de, g_fname01_de, g_fname02_de, g_fname03_de, g_fname04_de,
+	g_fname05_de, g_fname06_de, g_fname07_de, g_fname08_de, g_fname09_de,
+	g_fname10_de, g_fname11_de, g_fname12_de, g_fname13_de, g_fname14_de,
+	g_fname15_de, g_fname16_de, g_fname17_de, g_fname18_de, g_fname19_de,
+	g_fname20_de, g_fname21_de, g_fname22_de, g_fname23_de, g_fname24_de,
+	g_fname25_de, g_fname26_de, g_fname27_de, g_fname28_de, g_fname29_de,
+	g_fname30_de, g_fname31_de, g_fname32_de, g_fname33_de, g_fname34_de,
+	g_fname35_de, g_fname36_de
+};
+
+static const char g_fname31_de_alt[] = "GEN.AWS";
+
+static const char* g_fnames_g100de[] = {
+	g_fname00_de, g_fname01_de, g_fname02_de, g_fname03_de, g_fname04_de,
+	g_fname05_de, g_fname06_de, g_fname07_de, g_fname08_de, g_fname09_de,
+	g_fname10_de, g_fname11_de, g_fname12_de, g_fname13_de, g_fname14_de,
+	g_fname15_de, g_fname16_de, g_fname17_de, g_fname18_de, g_fname19_de,
+	g_fname20_de, g_fname21_de, g_fname22_de, g_fname23_de, g_fname24_de,
+	g_fname25_de, g_fname26_de, g_fname27_de, g_fname28_de, g_fname29_de,
+	g_fname30_de, g_fname31_de_alt, g_fname32_de, g_fname33_de
+};
+
+static const char g_fname00_en[] = "E_GEN1.NVF";
+static const char g_fname01_en[] = "E_GEN2.NVF";
+static const char g_fname02_en[] = "E_GEN3.NVF";
+static const char g_fname03_en[] = "E_GEN4.NVF";
+static const char g_fname04_en[] = "E_GEN5.NVF";
+static const char g_fname05_en[] = "E_GEN6.NVF";
+static const char g_fname06_en[] = "E_GEN7.NVF";
+static const char g_fname07_en[] = "E_GEN8.NVF";
+static const char g_fname08_en[] = "E_GEN9.NVF";
+static const char g_fname09_en[] = "E_GEN10.NVF";
+static const char g_fname10_en[] = "E_GEN11.NVF";
+static const char g_fname15_en[] = "E_GENTXT";
+static const char g_fname16_en[] = "ROALOGUK.DAT";
+static const char g_fname17_en[] = "E_GENTIT.DAT";
+static const char g_fname37_en[] = "ROALOGUS.DAT";
+
+static const char* g_fnames_g300en[] = {
+	g_fname00_en, g_fname01_en, g_fname02_en, g_fname03_en, g_fname04_en,
+	g_fname05_en, g_fname06_en, g_fname07_en, g_fname08_en, g_fname09_en,
+	g_fname10_en, g_fname11_de, g_fname12_de, g_fname13_de, g_fname14_de,
+	g_fname15_en, g_fname16_en, g_fname17_en, g_fname18_de, g_fname19_de,
+	g_fname20_de, g_fname21_de, g_fname22_de, g_fname23_de, g_fname24_de,
+	g_fname25_de, g_fname26_de, g_fname27_de, g_fname28_de, g_fname29_de,
+	g_fname30_de, g_fname31_de, g_fname32_de, g_fname33_de, g_fname34_de,
+	g_fname35_de, g_fname36_de, g_fname37_en
 };
 
 static const char g_str_file_missing[] = { "FILE %s IS MISSING!" };
@@ -1212,44 +1280,6 @@ static const char g_str_chr[] = ".CHR";
 static const char g_str_temp_dir[] = "TEMP\\";
 static const char g_str_save_error[] = "@SPEICHER FEHLER!@EVENTUELL DISKETTE GESCH\x9aTZT?";
 
-/* Remark: these are stored at DS:0x1e39 */
-static const char g_fname00[] = "GEN1.NVF";
-static const char g_fname01[] = "GEN2.NVF";
-static const char g_fname02[] = "GEN3.NVF";
-static const char g_fname03[] = "GEN4.NVF";
-static const char g_fname04[] = "GEN5.NVF";
-static const char g_fname05[] = "GEN6.NVF";
-static const char g_fname06[] = "GEN7.NVF";
-static const char g_fname07[] = "GEN8.NVF";
-static const char g_fname08[] = "GEN9.NVF";
-static const char g_fname09[] = "GEN10.NVF";
-static const char g_fname10[] = "GEN11.NVF";
-static const char g_fname11[] = "HEADS.DAT";
-static const char g_fname12[] = "SEX.DAT";
-static const char g_fname13[] = "TYPPIC.DAT";
-static const char g_fname14[] = "FONT6";
-static const char g_fname15[] = "GENTEXT";
-static const char g_fname16[] = "DSALOGO.DAT";
-static const char g_fname17[] = "GENTIT.DAT";
-static const char g_fname18[] = "ATTIC";
-static const char g_fname19[] = "POPUP.DAT";
-static const char g_fname20[] = "DGAUKLER.DAT";
-static const char g_fname21[] = "DJAEGER.DAT";
-static const char g_fname22[] = "DKRIEGER.DAT";
-static const char g_fname23[] = "DSTREUNE.DAT";
-static const char g_fname24[] = "DTHORWAL.DAT";
-static const char g_fname25[] = "DZWERG.DAT";
-static const char g_fname26[] = "DHEXE.DAT";
-static const char g_fname27[] = "DDRUIDE.DAT";
-static const char g_fname28[] = "DMAGIER.DAT";
-static const char g_fname29[] = "DAELF.DAT";
-static const char g_fname30[] = "DFELF.DAT";
-static const char g_fname31[] = "DWELF.DAT";
-static const char g_fname32[] = "DMENGE.DAT";
-static const char g_fname33[] = "GEN.XMI";
-static const char g_fname34[] = "FANPRO.NVF";
-static const char g_fname35[] = "SAMPLE.AD";
-static const char g_fname36[] = "MT32EMUL.XMI";
 
 static const char g_str_dsagen_dat[] = "DSAGEN.DAT";
 
@@ -2945,8 +2975,16 @@ void detect_datfile(void)
 
 signed short open_datfile(unsigned short index)
 {
+	const char **f_names = NULL;
 	unsigned char buf[800];
 	signed short handle;
+
+	/* set local pointer to the correct filename table */
+	if (g_dsagen_lang == LANG_DE) {
+		f_names = (g_dsagen_medium == MED_DISK) ? g_fnames_g100de : g_fnames_g105de;
+	} else {
+		if (g_dsagen_lang == LANG_EN) f_names = g_fnames_g300en;
+	}
 
 #if defined(__BORLANDC__)
 	flushall();
@@ -2959,7 +2997,7 @@ signed short open_datfile(unsigned short index)
 	{
 		sprintf(g_gen_ptr2,
 			(const char*)g_str_file_missing,
-			(const char*)g_fnames_g105de[index]);
+			(const char*)f_names[index]);
 
 		infobox(g_gen_ptr2, 0);
 	}
@@ -2967,7 +3005,7 @@ signed short open_datfile(unsigned short index)
 	/* read offset table from file */
 	_read(handle, buf, 800);
 
-	if ((signed long)(g_gendat_offset = get_archive_offset((char*)g_fnames_g105de[index], buf)) != -1) {
+	if ((signed long)(g_gendat_offset = get_archive_offset((char*)f_names[index], buf)) != -1) {
 		lseek(handle, g_gendat_offset, SEEK_SET);
 		return handle;
 	} else {
