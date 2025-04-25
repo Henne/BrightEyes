@@ -4455,6 +4455,11 @@ void refresh_screen(void)
 			src = g_buffer_sex_dat + 512;
 
 			copy_to_screen(src, dst, 20, 15, 0);
+
+			if (g_dsagen_lang == LANG_EN) {
+				dst = g_gen_ptr1_dis + 178 * 320 + 145;
+				copy_to_screen(src, dst, 20, 15, 0);
+			}
 		}
 		/* if the page is lower than 5 */
 		if (g_gen_page < 5) {
@@ -5550,6 +5555,9 @@ void save_picbuf(void)
 
 			/* right row of skills */
 			x_3 = 287; y_3 = 42; w_3 = 20; h_3 = 140;
+
+			if (g_dsagen_lang == LANG_EN) { x_2 = 208; x_3 = 296; }
+
 			break;
 		}
 		/* ATPA page */
@@ -5623,6 +5631,9 @@ void restore_picbuf(unsigned char* ptr)
 
 			/* right row of skills */
 			x_3 = 287; y_3 = 42; w_3 = 20; h_3 = 140;
+
+			if (g_dsagen_lang == LANG_EN) { x_2 = 208; x_3 = 296; }
+
 			break;
 		}
 		/* ATPA page */
@@ -5700,6 +5711,7 @@ void print_values(void)
 	register signed short i;
 	register signed short pos;
 
+	if (g_dsagen_lang == LANG_EN) { align_left = 225; align_right = 313; }
 
 	switch (g_gen_page) {
 
@@ -5738,7 +5750,10 @@ void print_values(void)
 			/* print Endurance */
 			print_str(itoa(g_hero.le_max + g_hero.attrib[6].current, tmp, 10), 296, 164);
 			/* print MR */
-			print_str(itoa(g_hero.mr, tmp, 10), 232, 184);
+			if (g_dsagen_lang == LANG_DE)
+				print_str(itoa(g_hero.mr, tmp, 10), 232, 184);
+			else
+				print_str(itoa(g_hero.mr, tmp, 10), 255, 184);
 			break;
 		}
 		case 1: {
