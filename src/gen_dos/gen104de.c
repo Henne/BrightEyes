@@ -27,6 +27,10 @@
 #include "powerp20.h"
 #include "vgalib.h"
 
+/** Prototypes which differ in different versions */
+void set_color(unsigned char*, unsigned short);
+void set_palette(signed char*, unsigned short, unsigned short);
+
 /** Keyboard Constants */
 
 #define KEY_ESC     (0x01)

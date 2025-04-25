@@ -30,6 +30,10 @@
 
 #include "AIL.H"
 
+/** Prototypes which differ in different versions */
+void set_color(unsigned char*, unsigned char);
+void set_palette(signed char*, unsigned char, unsigned short);
+
 /** Keyboard Constants */
 
 #define KEY_ESC     (0x01)
