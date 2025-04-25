@@ -1402,48 +1402,72 @@ static unsigned char *gen_alloc(unsigned long nelem)
 #endif
 }
 
-static void alloc_buffers(void)
+/**
+ * alloc_buffers() - allocate all buffers needed at runtime
+ *
+ * Returns the number of failed allocations.
+ */
+static int alloc_buffers(void)
 {
+	int errors = 0;
+
 #if defined(__BORLANDC__)
 	g_gfx_ptr = g_vga_memstart = (unsigned char*)MK_FP(0xa000, 0x0);
 #else
 	g_gfx_ptr = g_vga_memstart = (unsigned char*)calloc(320 * 200, 1);
 #endif
+	if (g_gfx_ptr == NULL) errors++;
 
 	g_gen_ptr1_dis = (gen_alloc(64108) + 8);
+	if (g_gen_ptr1_dis == NULL) errors++;
 
 	g_page_buffer = gen_alloc(50000);
+	if (g_page_buffer == NULL) errors++;
 
 	g_gen_ptr2 = (char*)gen_alloc(1524);
 	g_gen_ptr3 = g_gen_ptr2 + 1500;
+	if (g_gen_ptr2 == NULL) errors++;
 
 	g_buffer_text = (char*)gen_alloc(6000);
+	if (g_buffer_text == NULL) errors++;
 
 	g_buffer_font6 = gen_alloc(592);
+	if (g_buffer_font6 == NULL) errors++;
 
 	load_font_and_text();
 
 	g_buffer_heads_dat = gen_alloc(39000);
+	if (g_buffer_heads_dat == NULL) errors++;
 
 	g_buffer_popup_nvf = (gen_alloc(1673) + 8);
+	if (g_buffer_popup_nvf == NULL) errors++;
 
 	g_buffer_sex_dat = gen_alloc(812);
+	if (g_buffer_sex_dat == NULL) errors++;
 
 	g_gen_ptr5 = (gen_alloc(23660) + 8);
+	if (g_gen_ptr5 == NULL) errors++;
 
 	g_buffer_dmenge_dat = (gen_alloc(23660) + 8);
+	if (g_buffer_dmenge_dat == NULL) errors++;
 
 	g_picbuf1 = gen_alloc(800);
+	if (g_picbuf1 == NULL) errors++;
 
 	g_picbuf2 = gen_alloc(2800);
+	if (g_picbuf2 == NULL) errors++;
 
 	g_picbuf3 = gen_alloc(2800);
+	if (g_picbuf3 == NULL) errors++;
 
 	g_gen_ptr6 = (gen_alloc(1100) + 8);
+	if (g_gen_ptr6 == NULL) errors++;
 
-	if (g_gen_ptr6 == NULL) {
-		printf(g_str_malloc_error);
+	if (errors > 0) {
+		fprintf(stderr, g_str_malloc_error);
 	}
+
+	return errors;
 }
 
 static void free_buffers(void)
@@ -7070,7 +7094,12 @@ int main_gen(int argc, char **argv)
 
 	save_display_stat(&g_display_page_bak);
 
-	alloc_buffers();
+	if (alloc_buffers() > 0) {
+		free_buffers();
+		restore_timer_isr();
+		stop_music();
+		return -1;
+	}
 
 	init_video();
 
