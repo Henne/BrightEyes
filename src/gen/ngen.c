@@ -18,20 +18,20 @@
 
 /* portable Memory Access */
 #if !defined(__BORLANDC__)
-static inline unsigned short host_readw(unsigned char *p) { return *(unsigned short*)p; }
-static inline signed short host_readws(unsigned char *p) { return *(signed short*)p; }
-static inline unsigned int host_readd(unsigned char *p) { return *(unsigned int*)p; }
-static inline signed int host_readds(unsigned char *p) { return *(signed int*)p; }
-static inline unsigned short host_writew(unsigned char *p, unsigned short v) { return *(unsigned short*)p = v; }
+static inline unsigned short readw(unsigned char *p) { return *(unsigned short*)p; }
+static inline signed short readws(unsigned char *p) { return *(signed short*)p; }
+static inline unsigned int readd(unsigned char *p) { return *(unsigned int*)p; }
+static inline signed int readds(unsigned char *p) { return *(signed int*)p; }
+static inline unsigned short writew(unsigned char *p, unsigned short v) { return *(unsigned short*)p = v; }
 // TODO: Check if that works on the stack of 64-bit machines
-static inline unsigned int host_writed(unsigned char *p, unsigned int v) { return *(unsigned int*)p = v; }
+static inline unsigned int writed(unsigned char *p, unsigned int v) { return *(unsigned int*)p = v; }
 #else
-#define host_readw(p) (*(unsigned short*)(p))
-#define host_readws(p) (*(signed short*)(p))
-#define host_readd(p) (*(unsigned long*)(p))
-#define host_readds(p) (*(signed long*)(p))
-#define host_writew(p, v) (*(unsigned short*)(p) = (v))
-#define host_writed(p, v) (*(unsigned long*)(p) = (v))
+#define readw(p) (*(unsigned short*)(p))
+#define readws(p) (*(signed short*)(p))
+#define readd(p) (*(unsigned long*)(p))
+#define readds(p) (*(signed long*)(p))
+#define writew(p, v) (*(unsigned short*)(p) = (v))
+#define writed(p, v) (*(unsigned long*)(p) = (v))
 #endif
 
 #if !defined(__BORLANDC__)
@@ -1808,20 +1808,20 @@ signed short load_driver(const char* fname, signed short type, signed short port
 	{
 		g_snd_driver_desc = (unsigned char*)AIL_describe_driver(g_snd_driver_handle);
 
-		if (host_readws(g_snd_driver_desc + 0x02) == type)
+		if (readws(g_snd_driver_desc + 0x02) == type)
 		{
 			if (port == -1) {
-				port = host_readws(g_snd_driver_desc + 0x0c);
+				port = readws(g_snd_driver_desc + 0x0c);
 			}
 			if (AIL_detect_device(g_snd_driver_handle, port,
-					host_readw(g_snd_driver_desc + 0x0e),
-					host_readw(g_snd_driver_desc + 0x10),
-					host_readw(g_snd_driver_desc + 0x12)) != 0)
+					readw(g_snd_driver_desc + 0x0e),
+					readw(g_snd_driver_desc + 0x10),
+					readw(g_snd_driver_desc + 0x12)) != 0)
 			{
 				AIL_init_driver(g_snd_driver_handle, port,
-					host_readw(g_snd_driver_desc + 0x0e),
-					host_readw(g_snd_driver_desc + 0x10),
-					host_readw(g_snd_driver_desc + 0x12));
+					readw(g_snd_driver_desc + 0x0e),
+					readw(g_snd_driver_desc + 0x10),
+					readw(g_snd_driver_desc + 0x12));
 				if (type == 3) {
 					g_state_table_size = AIL_state_table_size(g_snd_driver_handle);
 
@@ -1852,7 +1852,7 @@ signed short load_driver(const char* fname, signed short type, signed short port
 /* Borlandified and identical */
 void play_midi(unsigned short index)
 {
-	if ((g_midi_disabled == 0) && (host_readw(g_snd_driver_desc + 0x02) == 3))
+	if ((g_midi_disabled == 0) && (readw(g_snd_driver_desc + 0x02) == 3))
 	{
 		stop_sequence();
 		call_load_file(index);
@@ -1863,7 +1863,7 @@ void play_midi(unsigned short index)
 /* Borlandified and identical */
 void stop_sequence(void)
 {
-	if ((g_midi_disabled == 0) && (host_readw(g_snd_driver_desc + 0x02) == 3))
+	if ((g_midi_disabled == 0) && (readw(g_snd_driver_desc + 0x02) == 3))
 	{
 		AIL_stop_sequence(g_snd_driver_handle, g_snd_sequence);
 		AIL_release_sequence_handle(g_snd_driver_handle, g_snd_sequence);
@@ -1873,7 +1873,7 @@ void stop_sequence(void)
 /* Borlandified and identical */
 void restart_midi(void)
 {
-	if ((g_midi_disabled == 0) && (host_readw(g_snd_driver_desc + 0x02) == 3) &&
+	if ((g_midi_disabled == 0) && (readw(g_snd_driver_desc + 0x02) == 3) &&
 		(AIL_sequence_status(g_snd_driver_handle, g_snd_sequence) == 2))
 	{
 		AIL_start_sequence(g_snd_driver_handle, g_snd_sequence);
@@ -1899,41 +1899,41 @@ void do_mouse_action(unsigned char *p1, unsigned char *p2, unsigned char *p3, un
 	union REGS myregs;
 	struct SREGS mysregs;
 
-	if (host_readws(p1) >= 0) {
-		myregs.x.ax = host_readw(p1);
-		myregs.x.bx = host_readw(p2);
-		myregs.x.cx = host_readw(p3);
+	if (readws(p1) >= 0) {
+		myregs.x.ax = readw(p1);
+		myregs.x.bx = readw(p2);
+		myregs.x.cx = readw(p3);
 
-		switch (host_readws(p1)) {
+		switch (readws(p1)) {
 			case 0x9:	/* define Cursor in graphic mode */
 			case 0xc:	/* install event handler */
 			case 0x14:	/* swap event handler */
 			case 0x16:	/* save mouse state */
 			case 0x17:	/* load mouse state */
-				myregs.x.dx = host_readw(p4);
-				mysregs.es = host_readw(p5);
+				myregs.x.dx = readw(p4);
+				mysregs.es = readw(p5);
 				break;
 			case 0x10:	/* define screen region for update */
-				myregs.x.cx = host_readw(p2);
-				myregs.x.dx = host_readw(p3);
-				myregs.x.si = host_readw(p4);
-				myregs.x.di = host_readw(p5);
+				myregs.x.cx = readw(p2);
+				myregs.x.dx = readw(p3);
+				myregs.x.si = readw(p4);
+				myregs.x.di = readw(p5);
 				break;
 			default:
-				myregs.x.dx = host_readw(p4);
+				myregs.x.dx = readw(p4);
 		}
 
 		int86x(0x33, &myregs, &myregs, &mysregs);
 
-		if (host_readw(p1) == 0x14) {
-			host_writew(p2, mysregs.es);
+		if (readw(p1) == 0x14) {
+			writew(p2, mysregs.es);
 		} else {
-			host_writew(p2, myregs.x.bx);
+			writew(p2, myregs.x.bx);
 		}
 
-		host_writew(p1, myregs.x.ax);
-		host_writew(p3, myregs.x.cx);
-		host_writew(p4, myregs.x.dx);
+		writew(p1, myregs.x.ax);
+		writew(p3, myregs.x.cx);
+		writew(p4, myregs.x.dx);
 	}
 #endif
 }
@@ -2040,7 +2040,7 @@ void mouse_disable(void)
 void mouse_unused1(unsigned char *p1, unsigned char *p2, unsigned char *p3, unsigned char *p4)
 {
 	unsigned short l_var;
-	host_writew(p1, 5);
+	writew(p1, 5);
 	do_mouse_action(p1, p2, p3, p4, (unsigned char*)&l_var);
 }
 
@@ -2759,7 +2759,7 @@ signed long process_nvf(struct nvf_desc *nvf)
 
 	va = (nvf_type = *(unsigned char*)(nvf->src)) & 0x80;
 	nvf_type &= 0x7f;
-	pics = host_readws(nvf->src + 1L);
+	pics = readws(nvf->src + 1L);
 
 	if (nvf->no < 0)
 		nvf->no = 0;
@@ -2770,35 +2770,35 @@ signed long process_nvf(struct nvf_desc *nvf)
 	switch (nvf_type) {
 
 	case 0x00:
-		width = host_readws(nvf->src + 3L);
-		height = host_readws(nvf->src + 5L);
+		width = readws(nvf->src + 3L);
+		height = readws(nvf->src + 5L);
 		p_size = width * height;
 		memcpy(nvf->dst - 8L, nvf->src + p_size * nvf->no + 7L, p_size);
 		break;
 	case 0x01:
 		offs = pics * 4 + 3L;
 		for (i = 0; i < nvf->no; i++) {
-			width = host_readws(nvf->src + i * 4 + 3L);
-			height = host_readws(nvf->src + i * 4 + 5L);
+			width = readws(nvf->src + i * 4 + 3L);
+			height = readws(nvf->src + i * 4 + 5L);
 			offs += width * height;
 		}
 
-		width = host_readws(nvf->src + nvf->no * 4 + 3L);
-		height = host_readws(nvf->src + nvf->no * 4 + 5L);
+		width = readws(nvf->src + nvf->no * 4 + 3L);
+		height = readws(nvf->src + nvf->no * 4 + 5L);
 		p_size = width * height;
 		memcpy(nvf->dst - 8L, nvf->src + offs, p_size);
 		break;
 
 	case 0x02:
-		width = host_readws(nvf->src + 3L);
-		height = host_readws(nvf->src + 5L);
+		width = readws(nvf->src + 3L);
+		height = readws(nvf->src + 5L);
 		offs = ((unsigned long)(pics * 4)) + 7L;
 		for (i = 0; i < nvf->no; i++) {
 			/* BCC adds here in offs = offs + value */
-			offs += host_readds(nvf->src + i * 4 + 7L);
+			offs += readds(nvf->src + i * 4 + 7L);
 		}
 
-		p_size = host_readds(nvf->src + nvf->no * 4 + 7L);
+		p_size = readds(nvf->src + nvf->no * 4 + 7L);
 		memcpy(nvf->dst - 8L, nvf->src + offs, p_size);
 		break;
 
@@ -2806,16 +2806,16 @@ signed long process_nvf(struct nvf_desc *nvf)
 		offs = pics * 8 + 3L;
 		for (i = 0; i < (signed short)nvf->no; i++) {
 			/* First two lines are not neccessary */
-			width = host_readws(nvf->src + i * 8 + 3L);
-			height = host_readws(nvf->src + i * 8 + 5L);
+			width = readws(nvf->src + i * 8 + 3L);
+			height = readws(nvf->src + i * 8 + 5L);
 
-			offs += host_readds(nvf->src + i * 8 + 7L);
+			offs += readds(nvf->src + i * 8 + 7L);
 		}
 
 		// Selected picture nvf->no, and copy it to nvf->dst
-		width = host_readws(nvf->src + nvf->no * 8 + 3L);
-		height = host_readws(nvf->src + nvf->no * 8 + 5L);
-		p_size = host_readds(nvf->src + i * 8 + 7L);
+		width = readws(nvf->src + nvf->no * 8 + 3L);
+		height = readws(nvf->src + nvf->no * 8 + 5L);
+		p_size = readds(nvf->src + i * 8 + 7L);
 
 		memcpy(nvf->dst - 8L, nvf->src + offs, p_size);
 		break;
@@ -2825,10 +2825,10 @@ signed long process_nvf(struct nvf_desc *nvf)
 		/* PP20 decompression */
 		if (va != 0) {
 			/* get size from unpacked picture */
-			retval = host_readds(nvf->dst) - 8L;
+			retval = readds(nvf->dst) - 8L;
 			src = nvf->dst - 8L;
 			src += (retval - 4L);
-			retval = host_readd(src);
+			retval = readd(src);
 			retval = ((signed long)swap_u32(retval)) >> 8;
 
 		} else {
@@ -2895,10 +2895,10 @@ signed long get_archive_offset(const char *name, unsigned char *table)
 
 			/* calculate length */
 			g_flen_left = g_flen =
-				host_readd(table + (i + 1) * 16 + 0x0c) - host_readd(table + i * 16 + 0x0c);
+				readd(table + (i + 1) * 16 + 0x0c) - readd(table + i * 16 + 0x0c);
 
 			/* return offset */
-			return host_readd(table + i * 16 + 0x0c);
+			return readd(table + i * 16 + 0x0c);
 		}
 	}
 
@@ -2975,12 +2975,12 @@ unsigned long swap_u32(unsigned long v)
 
 	register unsigned short l_si;
 
-	host_writed(p, v); // write v to stack and access subvalues with l1 and l2
+	writed(p, v); // write v to stack and access subvalues with l1 and l2
 	l_si = l2;
 	l2 = swap_u16(l1);
 	l1 = swap_u16(l_si);
 
-	return host_readd(p);
+	return readd(p);
 }
 #else
 /* Remark: u32 is unsigned int in the GCC-world */
@@ -3422,8 +3422,8 @@ void set_textcolor(signed short fg, signed short bg)
 /* static */
 void get_textcolor(signed short *p_fg, signed short *p_bg)
 {
-	host_writew((unsigned char*)p_fg, g_fg_color[0]);
-	host_writew((unsigned char*)p_bg, g_bg_color);
+	writew((unsigned char*)p_fg, g_fg_color[0]);
+	writew((unsigned char*)p_bg, g_bg_color);
 }
 
 #if defined(__BORLANDC__)
