@@ -40,7 +40,7 @@ dosbox -conf bcc31.conf
 popd
 
 # move the EXE and MAP-file to DIR
-rm ${DSTDIR}/NGEN.EXE ${DSTDIR}/NGEN.MAP
+rm -f ${DSTDIR}/NGEN.EXE ${DSTDIR}/NGEN.MAP
 mv ${DRIVE_C}/src/*.EXE ${DSTDIR} 2>/dev/null
 mv ${DRIVE_C}/src/*.MAP ${DSTDIR} 2>/dev/null
 
