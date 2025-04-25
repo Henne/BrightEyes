@@ -11,6 +11,7 @@
 #include <BIOS.H>	// bioskey, int86x()
 #include <CONIO.H>	// clrsrc()
 #include <ALLOC.H>	// farcalloc()
+#include <MATH.H>	// abs()
 #else
 #include <SDL2/SDL.h>
 #include <unistd.h> // lseek(), close(), read(), write()
@@ -36,18 +37,25 @@ static inline unsigned int writed(unsigned char *p, unsigned int v) { return *(u
 
 #if !defined(__BORLANDC__)
 // DUMMY for BCC CLib func
+
+static unsigned short gen_rotl(unsigned short op, unsigned short count)
+{
+	return (op << count) | (op >> (16 - count));
+}
+
 static inline void clrscr(void) { }
 #define __abs__(v) abs(v)
 #define _creat creat
 #define _read read
 #define _close close
+#else
+#define gen_rotl _rotl
 #endif
 
 #include "hero.h"
 
 #include "cda_code.h"
 #include "ngen.h"
-#include "random.h"
 #include "powerp20.h"
 #include "vgalib.h"
 
@@ -1246,7 +1254,7 @@ static const char g_fname36[] = "MT32EMUL.XMI";
 static const char g_str_dsagen_dat[] = "DSAGEN.DAT";
 static const char g_str_malloc_error[] = "\xaMEMORY MALLOCATION ERROR!";
 
-signed short g_random_gen_seed = 0x327b;
+static signed short g_random_gen_seed = 0x327b;
 /* END OF INITIALIZED GLOBAL VARIABLES _DATA */
 
 /* START OF UNINITIALIZE GLOBAL VARIABLE _BSS DS:0x2474*/
@@ -1288,8 +1296,7 @@ static signed short g_mouse1_event2;
 static signed short g_mouse2_event;
 static signed short g_mouse1_event1;
 static signed short g_have_mouse;
-/* used by external module */
-signed short g_random_gen_seed2;
+static signed short g_random_gen_seed2;
 
 static char* g_texts[301];
 #if !defined(__BORLANDC__)
@@ -1389,6 +1396,8 @@ static inline char* itoa(int value, char* string, int radix)
 // Quit Signal from SDL
 extern int g_lets_quit;
 #endif
+
+/* MEMORY MANAGEMENT */
 
 static unsigned char *gen_alloc(unsigned long nelem)
 {
@@ -1583,6 +1592,53 @@ static void free_buffers(void)
 		}
 	}
 }
+
+/* RANDOM NUMBER GENERATOR */
+
+/**
+ * random_gen - generates a u16 random number
+ */
+static int random_gen(const int val)
+{
+	signed short retval;
+
+	if (val == 0) {
+		return 0;
+	}
+
+	retval = g_random_gen_seed ^ g_random_gen_seed2;
+	retval = gen_rotl(retval, 2);
+	retval = (retval + g_random_gen_seed2) ^ g_random_gen_seed;
+	retval = gen_rotl(retval, 3);
+	g_random_gen_seed = retval;
+
+	retval = abs(retval) % val;
+
+	return ++retval;
+}
+
+/**
+ * random_interval_gen - generates a u16 random number between lo and hi
+*/
+static unsigned short random_interval_gen(unsigned short lo, unsigned short hi)
+{
+	return lo + random_gen(hi - lo + 1) - 1;
+}
+
+/**
+ * \brief   checks if val is in a word array
+ */
+static int is_in_word_array(const int val, const signed short *p)
+{
+	while (*p >= 0) {
+		if (*p++ == val) {
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
 
 /* AIL Interface */
 /* Borlandified and identical */
