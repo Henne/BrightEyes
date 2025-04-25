@@ -1252,6 +1252,12 @@ static const char g_fname35[] = "SAMPLE.AD";
 static const char g_fname36[] = "MT32EMUL.XMI";
 
 static const char g_str_dsagen_dat[] = "DSAGEN.DAT";
+
+enum e_language { LANG_UNDEF = 0, LANG_DE = 1, LANG_EN = 2};
+static int g_dsagen_lang = 0;
+enum e_medium { MED_UNDEF = 0, MED_DISK = 1, MED_CD = 2};
+static int g_dsagen_medium = 0;
+
 static const char g_str_malloc_error[] = "\xaMEMORY MALLOCATION ERROR!";
 
 static signed short g_random_gen_seed = 0x327b;
@@ -2901,7 +2907,42 @@ signed long process_nvf(struct nvf_desc *nvf)
 	return retval;
 }
 
-/* Borlandified and identical */
+void detect_datfile(void)
+{
+	unsigned char buf[800];
+	signed short handle;
+	signed long flen;
+
+#if defined(__BORLANDC__)
+	flushall();
+
+	/* 0x8001 = O_BINARY | O_RDONLY */
+	if ((handle = open(g_str_dsagen_dat, O_BINARY | O_RDONLY)) == -1)
+#else
+	if ((handle = open(g_str_dsagen_dat, O_RDONLY)) == -1)
+#endif
+	{
+		/* ERROR: no DSAGEN.DAT available */
+		return;
+	}
+
+	/* determine filelength */
+	flen = lseek(handle, 0, SEEK_END);
+	lseek(handle, 0, SEEK_SET);
+
+	if (flen == -1) return;
+
+#if 0
+	/* read offset table from file */
+	_read(handle, buf, 800);
+	close(handle);
+#endif
+
+	if (flen == 671236) { /* EN DISK */ g_dsagen_lang = LANG_EN; g_dsagen_medium = MED_DISK; } else
+	if (flen == 663221) { /* DE CD   */ g_dsagen_lang = LANG_DE; g_dsagen_medium = MED_CD; } else
+	if (flen == 634785) { /* DE DISK */ g_dsagen_lang = LANG_DE; g_dsagen_medium = MED_DISK; }	
+}
+
 signed short open_datfile(unsigned short index)
 {
 	unsigned char buf[800];
@@ -7131,6 +7172,16 @@ int main_gen(int argc, char **argv)
 	}
 
 	g_in_intro = 1;
+
+	detect_datfile();
+	if (g_dsagen_lang == LANG_UNDEF) {
+		fprintf(stderr, "ERROR: DSAGEN.DAT not found\n");
+		return -1;
+	}
+
+	fprintf(stdout, "DSAGEN.DAT %s_%s\n",
+			g_dsagen_lang == LANG_DE ? "DE" : "EN",
+			g_dsagen_medium == MED_DISK ? "DISK" : "CD");
 
 	if (sound_off == 0)
 		init_music(13000);
