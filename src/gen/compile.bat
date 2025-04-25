@@ -22,7 +22,6 @@
 @REM -- here start the complete
 @REM BCC.EXE -mlarge -O -c -2 -Z -j1 CDA_CODE.C
 @REM BCC.EXE -mlarge -O -c -2 -Z -j1 -IAIL NGEN.C
-@REM BCC.EXE -mlarge -O -c -2 -Z RANDOM.C
 @REM TASM.EXE /os /z POWERP20.ASM POWERP20.OBJ
 @REM TASM.EXE /os /z VGALIB.ASM VGALIB.OBJ
 @REM TASM.EXE /m /w+ /ml /iAIL AIL\AIL.ASM AIL.OBJ

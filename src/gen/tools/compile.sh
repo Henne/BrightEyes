@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This script compile the files from compile.bat
+# This script compiles the files from compile.bat
 
 # You need a Borland C++ 3.1 compiler installed in $DRIVE_C
 
