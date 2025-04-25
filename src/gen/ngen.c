@@ -1031,7 +1031,7 @@ static const char g_fname09_en[] = "E_GEN10.NVF";
 static const char g_fname10_en[] = "E_GEN11.NVF";
 static const char g_fname15_en[] = "E_GENTXT";
 static const char g_fname16_en[] = "ROALOGUK.DAT";
-static const char g_fname17_en[] = "E_GENTIT.DAT";
+static const char g_fname17_en[] = "E_GENTIT.NVF";
 static const char g_fname37_en[] = "ROALOGUS.DAT";
 
 static const char* g_fnames_g300en[] = {
