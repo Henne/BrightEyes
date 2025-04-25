@@ -3463,7 +3463,7 @@ signed short get_str_width(char *str)
  * @x:		start position of the string
  * @x_max:	end position of the string
  *
- * Returns the X coordinate where the strin must start.
+ * Returns the X coordinate where the string must start.
  */
 /* Borlandified and identical */
 signed short get_line_start_c(const char *str, signed short x, signed short x_max)
@@ -7078,9 +7078,6 @@ int main_gen(int argc, char **argv)
 		sound_off = 1;
 	}
 
-#if 0
-	print_addr();
-#endif
 	g_in_intro = 1;
 
 	if (sound_off == 0)
