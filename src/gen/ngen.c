@@ -59,6 +59,9 @@ static inline void randomize(void) { }
 #include "ail_stub.h"
 #endif
 
+/* static prototypes */
+static void load_font_and_text(void);
+
 /** Keyboard Constants */
 
 #define KEY_ESC     (0x01)
@@ -1390,6 +1393,179 @@ static inline char* itoa(int value, char* string, int radix)
 extern int g_lets_quit;
 #endif
 
+static unsigned char *gen_alloc(unsigned long nelem)
+{
+#if defined(__BORLANDC__)
+	return (unsigned char*)farcalloc(nelem, 1);
+#else
+	return (unsigned char*)calloc(nelem, 1);
+#endif
+}
+
+static void alloc_buffers(void)
+{
+#if defined(__BORLANDC__)
+	g_gfx_ptr = g_vga_memstart = (unsigned char*)MK_FP(0xa000, 0x0);
+#else
+	g_gfx_ptr = g_vga_memstart = (unsigned char*)calloc(320 * 200, 1);
+#endif
+
+	g_gen_ptr1_dis = (gen_alloc(64108) + 8);
+
+	g_page_buffer = gen_alloc(50000);
+
+	g_gen_ptr2 = (char*)gen_alloc(1524);
+	g_gen_ptr3 = g_gen_ptr2 + 1500;
+
+	g_buffer_text = (char*)gen_alloc(6000);
+
+	g_buffer_font6 = gen_alloc(592);
+
+	load_font_and_text();
+
+	g_buffer_heads_dat = gen_alloc(39000);
+
+	g_buffer_popup_nvf = (gen_alloc(1673) + 8);
+
+	g_buffer_sex_dat = gen_alloc(812);
+
+	g_gen_ptr5 = (gen_alloc(23660) + 8);
+
+	g_buffer_dmenge_dat = (gen_alloc(23660) + 8);
+
+	g_picbuf1 = gen_alloc(800);
+
+	g_picbuf2 = gen_alloc(2800);
+
+	g_picbuf3 = gen_alloc(2800);
+
+	g_gen_ptr6 = (gen_alloc(1100) + 8);
+
+	if (g_gen_ptr6 == NULL) {
+		printf(g_str_malloc_error);
+	}
+}
+
+static void free_buffers(void)
+{
+	unsigned char *host_ptr;
+	int i;
+
+	if (g_vga_memstart) {
+#if !defined(__BORLANDC__)
+		free(g_vga_memstart);
+#endif
+		g_vga_memstart = NULL;
+		g_gfx_ptr = NULL;
+	}
+
+	if ((host_ptr = g_buffer_sex_dat) != 0) {
+		free(host_ptr);
+		g_buffer_sex_dat = NULL;
+	}
+
+	if ((host_ptr = g_buffer_popup_nvf - 8) != 0) {
+		free(host_ptr);
+		g_buffer_popup_nvf = NULL;
+	}
+
+	if ((host_ptr = g_buffer_heads_dat) != 0) {
+		free(host_ptr);
+		g_buffer_heads_dat = NULL;
+	}
+
+	if (g_buffer_text != NULL) {
+		free(g_buffer_text);
+		g_buffer_text = NULL;
+	}
+
+	if ((host_ptr = g_buffer_font6) != 0) {
+		free(host_ptr);
+		g_buffer_font6 = NULL;
+	}
+
+	if ((host_ptr = g_picbuf3) != 0) {
+		free(host_ptr);
+		g_picbuf3 = NULL;
+	}
+
+	if ((host_ptr = g_picbuf2) != 0) {
+		free(host_ptr);
+		g_picbuf2 = NULL;
+	}
+
+	if ((host_ptr = g_picbuf1) != 0) {
+		free(host_ptr);
+		g_picbuf1 = NULL;
+	}
+
+	if ((host_ptr = g_gen_ptr6 - 8) != 0) {
+		free(host_ptr);
+		g_gen_ptr6 = NULL;
+	}
+
+	if ((host_ptr = g_buffer_dmenge_dat - 8) != 0) {
+		free(host_ptr);
+		g_buffer_dmenge_dat = NULL;
+	}
+
+	if ((host_ptr = g_gen_ptr5 - 8) != 0) {
+		free(host_ptr);
+		g_gen_ptr5 = NULL;
+	}
+
+	if (g_gen_ptr2 != NULL) {
+		free(g_gen_ptr2);
+		g_gen_ptr2 = NULL;
+	}
+
+	if ((host_ptr = g_page_buffer) != 0) {
+		free(host_ptr);
+		g_page_buffer = NULL;
+	}
+
+	if ((host_ptr = g_gen_ptr1_dis - 8) != 0) {
+		free(host_ptr);
+		g_gen_ptr1_dis = NULL;
+	}
+
+	// missed ones
+	if ((host_ptr = g_snd_timbre_cache) != 0) {
+		free(host_ptr);
+		g_snd_timbre_cache = NULL;
+	}
+
+	if ((host_ptr = g_state_table) != 0) {
+		free(host_ptr);
+		g_state_table = NULL;
+	}
+
+	if ((host_ptr = g_snd_driver) != 0) {
+		free(host_ptr);
+		g_snd_driver = NULL;
+	}
+
+	if ((host_ptr = g_form_xmid) != 0) {
+		free(host_ptr);
+		g_form_xmid = NULL;
+	}
+
+	for (i = 0; i < 11; i++) {
+		if ((host_ptr = g_bg_buffer[i]) != 0) {
+			free(host_ptr);
+			g_bg_buffer[i] = NULL;
+		}
+	}
+
+	for (i = 0; i < 13; i++) {
+		if ((host_ptr = g_typus_buffer[i]) != 0) {
+			free(host_ptr);
+			g_typus_buffer[i] = NULL;
+		}
+	}
+}
+
+/* AIL Interface */
 /* Borlandified and identical */
 void start_music(unsigned short track)
 {
@@ -6603,126 +6779,6 @@ static void pal_fade_in(signed char *dst, signed char *src, signed short col, si
 	}
 }
 
-static void free_buffers(void)
-{
-	unsigned char *host_ptr;
-	int i;
-
-	if (g_vga_memstart) {
-#if !defined(__BORLANDC__)
-		free(g_vga_memstart);
-#endif
-		g_vga_memstart = NULL;
-		g_gfx_ptr = NULL;
-	}
-
-	if ((host_ptr = g_buffer_sex_dat) != 0) {
-		free(host_ptr);
-		g_buffer_sex_dat = NULL;
-	}
-
-	if ((host_ptr = g_buffer_popup_nvf - 8) != 0) {
-		free(host_ptr);
-		g_buffer_popup_nvf = NULL;
-	}
-
-	if ((host_ptr = g_buffer_heads_dat) != 0) {
-		free(host_ptr);
-		g_buffer_heads_dat = NULL;
-	}
-
-	if (g_buffer_text != NULL) {
-		free(g_buffer_text);
-		g_buffer_text = NULL;
-	}
-
-	if ((host_ptr = g_buffer_font6) != 0) {
-		free(host_ptr);
-		g_buffer_font6 = NULL;
-	}
-
-	if ((host_ptr = g_picbuf3) != 0) {
-		free(host_ptr);
-		g_picbuf3 = NULL;
-	}
-
-	if ((host_ptr = g_picbuf2) != 0) {
-		free(host_ptr);
-		g_picbuf2 = NULL;
-	}
-
-	if ((host_ptr = g_picbuf1) != 0) {
-		free(host_ptr);
-		g_picbuf1 = NULL;
-	}
-
-	if ((host_ptr = g_gen_ptr6 - 8) != 0) {
-		free(host_ptr);
-		g_gen_ptr6 = NULL;
-	}
-
-	if ((host_ptr = g_buffer_dmenge_dat - 8) != 0) {
-		free(host_ptr);
-		g_buffer_dmenge_dat = NULL;
-	}
-
-	if ((host_ptr = g_gen_ptr5 - 8) != 0) {
-		free(host_ptr);
-		g_gen_ptr5 = NULL;
-	}
-
-	if (g_gen_ptr2 != NULL) {
-		free(g_gen_ptr2);
-		g_gen_ptr2 = NULL;
-	}
-
-	if ((host_ptr = g_page_buffer) != 0) {
-		free(host_ptr);
-		g_page_buffer = NULL;
-	}
-
-	if ((host_ptr = g_gen_ptr1_dis - 8) != 0) {
-		free(host_ptr);
-		g_gen_ptr1_dis = NULL;
-	}
-
-	// missed ones
-	if ((host_ptr = g_snd_timbre_cache) != 0) {
-		free(host_ptr);
-		g_snd_timbre_cache = NULL;
-	}
-
-	if ((host_ptr = g_state_table) != 0) {
-		free(host_ptr);
-		g_state_table = NULL;
-	}
-
-	if ((host_ptr = g_snd_driver) != 0) {
-		free(host_ptr);
-		g_snd_driver = NULL;
-	}
-
-	if ((host_ptr = g_form_xmid) != 0) {
-		free(host_ptr);
-		g_form_xmid = NULL;
-	}
-
-	for (i = 0; i < 11; i++) {
-		if ((host_ptr = g_bg_buffer[i]) != 0) {
-			free(host_ptr);
-			g_bg_buffer[i] = NULL;
-		}
-	}
-
-	for (i = 0; i < 13; i++) {
-		if ((host_ptr = g_typus_buffer[i]) != 0) {
-			free(host_ptr);
-			g_typus_buffer[i] = NULL;
-		}
-	}
-}
-
-
 /**
  *	intro() - play the intro
  */
@@ -7064,51 +7120,6 @@ int main_gen(int argc, char **argv)
 }
 
 /* Borlandified and identical */
-void alloc_buffers(void)
-{
-#if defined(__BORLANDC__)
-	g_gfx_ptr = g_vga_memstart = (unsigned char*)MK_FP(0xa000, 0x0);
-#else
-	g_gfx_ptr = g_vga_memstart = (unsigned char*)calloc(320 * 200, 1);
-#endif
-
-	g_gen_ptr1_dis = (gen_alloc(64108) + 8);
-
-	g_page_buffer = gen_alloc(50000);
-
-	g_gen_ptr2 = (char*)gen_alloc(1524);
-	g_gen_ptr3 = g_gen_ptr2 + 1500;
-
-	g_buffer_text = (char*)gen_alloc(6000);
-
-	g_buffer_font6 = gen_alloc(592);
-
-	load_font_and_text();
-
-	g_buffer_heads_dat = gen_alloc(39000);
-
-	g_buffer_popup_nvf = (gen_alloc(1673) + 8);
-
-	g_buffer_sex_dat = gen_alloc(812);
-
-	g_gen_ptr5 = (gen_alloc(23660) + 8);
-
-	g_buffer_dmenge_dat = (gen_alloc(23660) + 8);
-
-	g_picbuf1 = gen_alloc(800);
-
-	g_picbuf2 = gen_alloc(2800);
-
-	g_picbuf3 = gen_alloc(2800);
-
-	g_gen_ptr6 = (gen_alloc(1100) + 8);
-
-	if (g_gen_ptr6 == NULL) {
-		printf(g_str_malloc_error);
-	}
-}
-
-/* Borlandified and identical */
 void init_colors(void)
 {
 	set_palette((signed char*)&g_pal_col_black, 0x00, 1);
@@ -7134,14 +7145,4 @@ void init_stuff(void)
 	g_menu_tiles = 3;
 
 	g_dst_dst = g_vga_memstart;
-}
-
-/* Borlandified and identical */
-unsigned char *gen_alloc(unsigned long nelem)
-{
-#if defined(__BORLANDC__)
-	return (unsigned char*)farcalloc(nelem, 1);
-#else
-	return (unsigned char*)calloc(nelem, 1);
-#endif
 }

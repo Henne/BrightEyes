@@ -86,7 +86,5 @@ struct nvf_desc {
 	void choose_atpa(void);
 	void choose_typus(void);
 	void restore_timer_isr(void);
-	void alloc_buffers(void);
 	void init_colors(void);
 	void init_stuff(void);
-	unsigned char* gen_alloc(unsigned long);
