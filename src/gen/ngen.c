@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h> // randomize()
+#include <stdlib.h>
 #include <stdarg.h>
 #include <ctype.h>
 #include <fcntl.h>
@@ -10,7 +10,6 @@
 #include <DOS.H>
 #include <BIOS.H>	// bioskey, int86x()
 #include <CONIO.H>	// clrsrc()
-#include <TIME.H>	// by randomize()
 #include <ALLOC.H>	// farcalloc()
 #else
 #include <SDL2/SDL.h>
@@ -38,7 +37,6 @@ static inline unsigned int host_writed(unsigned char *p, unsigned int v) { retur
 #if !defined(__BORLANDC__)
 // DUMMY for BCC CLib func
 static inline void clrscr(void) { }
-static inline void randomize(void) { }
 #define __abs__(v) abs(v)
 #define _creat creat
 #define _read read
@@ -7089,8 +7087,6 @@ int main_gen(int argc, char **argv)
 		init_music(13000);
 
 	set_timer_isr();
-
-	randomize();
 
 	save_display_stat(&g_display_page_bak);
 
