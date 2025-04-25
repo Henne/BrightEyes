@@ -3577,10 +3577,10 @@ void enter_name(void)
 
 	update_mouse_cursor();
 	copy_to_screen(g_picbuf1, dst, 94, 8, 0);
-	enter_string((char*)g_hero.name, 180, 12, 15, 1);
+	enter_string((char*)g_hero.name, 180, 13, 15, 1);
 	copy_to_screen(g_picbuf1, dst, 94, 8, 0);
 	call_mouse();
-	print_str((const char*)g_hero.name, 180, 12);
+	print_str((const char*)g_hero.name, 180, 13);
 }
 
 /* Borlandified and identical */
@@ -3659,6 +3659,8 @@ void do_gen(void)
 	di = 0;
 
 	g_screen_var = 1;
+
+	g_level = -1;
 
 	/* ask for level */
 	while (g_level == -1) {
@@ -3809,16 +3811,6 @@ void do_gen(void)
 			if (g_gen_page > 0) {
 				g_screen_var = 1;
 				g_gen_page--;
-			} else {
-				if (g_level != 1) {
-
-					if (!g_hero.typus) {
-						infobox(get_text(72), 0);
-					} else {
-						g_screen_var = 1;
-						g_gen_page = (g_hero.typus < 7 ? 4 : 10);
-					}
-				}
 			}
 		}
 
