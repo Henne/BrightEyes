@@ -73,7 +73,7 @@ static inline void clrscr(void) { }
 #endif
 
 /* static prototypes */
-static signed short infobox(const char*, signed short);
+static signed short infobox(char*, signed short);
 static void stop_music(void);
 
 /** Keyboard Constants */
@@ -1299,11 +1299,11 @@ static const struct struct_color g_pal_heads[32] = {
 
 static const char g_str_sound_cfg[] = "SOUND.CFG";
 static const char g_str_sound_adv[] = "SOUND.ADV";
-static const char g_str_soundhw_not_found[] = "SOUND HARDWARE NOT FOUND!";
+static char g_str_soundhw_not_found[] = "SOUND HARDWARE NOT FOUND!";
 static const char g_str_chr[] = ".CHR";
 static const char g_str_temp_dir[] = "TEMP\\";
-static const char g_str_save_error_de[] = "@SPEICHER FEHLER!@EVENTUELL DISKETTE GESCH\x9aTZT?";
-static const char g_str_save_error_en[] = "@SAVE ERROR!@IS YOUR DISK PROTECTED?";
+static char g_str_save_error_de[] = "@SPEICHER FEHLER!@EVENTUELL DISKETTE GESCH\x9aTZT?";
+static char g_str_save_error_en[] = "@SAVE ERROR!@IS YOUR DISK PROTECTED?";
 
 
 static const char g_str_dsagen_dat[] = "DSAGEN.DAT";
@@ -2983,7 +2983,7 @@ static signed short print_chr(const unsigned char c, const signed short x, const
  *
  * Returns the number of lines the string needs.
  */
-static signed short str_splitter(const char *s)
+static signed short str_splitter(char *s)
 {
 	char *tp;
 	signed short unknown_var1;
@@ -3143,7 +3143,7 @@ static void print_str(const char *str, signed short x, signed short y)
 	call_mouse();
 }
 
-static signed short print_line(const char *str)
+static signed short print_line(char *str)
 {
 	signed short lines = 1;
 
@@ -3158,7 +3158,7 @@ static signed short print_line(const char *str)
 	return lines;
 }
 
-static void error_msg(const char *msg)
+static void error_msg(char *msg)
 {
 	vsync_or_key(print_line(msg) * 150);
 }
@@ -3380,7 +3380,7 @@ static void draw_popup_line(const signed short line, const signed short type)
  *
  *	if @digits is zero the function just delays.
  */
-static signed short infobox(const char *msg, const signed short digits)
+static signed short infobox(char *msg, const signed short digits)
 {
 	unsigned char* src;
 	unsigned char* dst;
@@ -5944,7 +5944,7 @@ static void select_typus(void)
 	}
 }
 
-static void inc_skill(const signed short skill, const signed short max, const char *msg)
+static void inc_skill(const signed short skill, const signed short max, char *msg)
 {
 	/* no more increments than the maximum */
 	if (g_skill_incs[skill].incs >= max) {
