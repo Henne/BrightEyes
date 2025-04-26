@@ -7203,8 +7203,6 @@ int main_gen(int argc, char **argv)
 		sound_off = 1;
 	}
 
-	g_in_intro = 1;
-
 	detect_datfile();
 	if (g_dsagen_lang == LANG_UNDEF) {
 		fprintf(stderr, "ERROR: DSAGEN.DAT not found\n");
@@ -7226,16 +7224,13 @@ int main_gen(int argc, char **argv)
 
 	init_colors();
 
-	/* Remark: gui elements are usable at this point at runtime */
-
-	if (sound_off == 0)
-		init_music(13000);
-
-	set_timer_isr();
-
 	save_display_stat(&g_display_page_bak);
 
 	init_video();
+
+	/* Remark: gui elements are usable at this point at runtime */
+
+	set_timer_isr();
 
 	g_have_mouse = 2;
 
@@ -7246,6 +7241,7 @@ int main_gen(int argc, char **argv)
 	}
 
 	if (sound_off == 0) {
+		init_music(13000);
 		read_soundcfg();
 	}
 
