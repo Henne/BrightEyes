@@ -1814,7 +1814,6 @@ static void interrupt mouse_isr(void)
 }
 #endif
 
-
 static void mouse_unused1(unsigned char *p1, unsigned char *p2, unsigned char *p3, unsigned char *p4)
 {
 	unsigned short l_var;
@@ -3965,6 +3964,35 @@ void stop_music(void)
 	seg001_033b();
 }
 
+/* TIMER MANAGEMENT */
+
+#if defined(__BORLANDC__)
+static void interrupt timer_isr(void)
+{
+	g_random_gen_seed2++;
+	if (g_random_gen_seed2 < 0)
+		g_random_gen_seed2 = 0;
+	restart_midi();
+	((void interrupt far (*)(void))g_timer_isr_bak)();
+}
+#endif
+
+static void set_timer_isr(void)
+{
+#if defined(__BORLANDC__)
+	/* save adress of the old ISR */
+	g_timer_isr_bak = ((void interrupt far (*)(void))getvect(0x1c));
+	/* set a the new one */
+	setvect(0x1c, timer_isr);
+#endif
+}
+
+void restore_timer_isr(void)
+{
+#if defined(__BORLANDC__)
+	setvect(0x1c, (void interrupt far (*)(void))g_timer_isr_bak);
+#endif
+}
 
 
 /**
@@ -7132,34 +7160,6 @@ static void intro(void)
 
 	g_in_intro = 0;
 	return;
-}
-
-#if defined(__BORLANDC__)
-static void interrupt timer_isr(void)
-{
-	g_random_gen_seed2++;
-	if (g_random_gen_seed2 < 0)
-		g_random_gen_seed2 = 0;
-	restart_midi();
-	((void interrupt far (*)(void))g_timer_isr_bak)();
-}
-#endif
-
-static void set_timer_isr(void)
-{
-#if defined(__BORLANDC__)
-	/* save adress of the old ISR */
-	g_timer_isr_bak = ((void interrupt far (*)(void))getvect(0x1c));
-	/* set a the new one */
-	setvect(0x1c, timer_isr);
-#endif
-}
-
-void restore_timer_isr(void)
-{
-#if defined(__BORLANDC__)
-	setvect(0x1c, (void interrupt far (*)(void))g_timer_isr_bak);
-#endif
 }
 
 static void init_palettes(void)
