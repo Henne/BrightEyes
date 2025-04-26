@@ -76,9 +76,7 @@ static inline void clrscr(void) { }
 static signed short infobox(const char*, signed short);
 
 static signed short open_datfile(const signed short);
-static signed long get_archive_offset(const char*, unsigned char*);
 static signed short read_datfile(signed short, unsigned char*, unsigned short);
-static signed long get_filelength(void);
 
 /** Keyboard Constants */
 
@@ -2804,6 +2802,27 @@ static void detect_datfile(void)
 	if (flen == 634785) { /* DE DISK */ g_dsagen_lang = LANG_DE; g_dsagen_medium = MED_DISK; }	
 }
 
+static signed long get_archive_offset(const char *name, unsigned char *table)
+{
+	signed short i;
+
+	for (i = 0; i < 50; i++) {
+
+		/* check the filename */
+		if (!strncmp((char*)name, (char*)table + i * 16, 12)) {
+
+			/* calculate length */
+			g_flen_left = g_flen =
+				readd(table + (i + 1) * 16 + 0x0c) - readd(table + i * 16 + 0x0c);
+
+			/* return offset */
+			return readd(table + i * 16 + 0x0c);
+		}
+	}
+
+	return -1;
+}
+
 static signed short open_datfile(const signed short index)
 {
 	const char **f_names = NULL;
@@ -2842,27 +2861,6 @@ static signed short open_datfile(const signed short index)
 	} else {
 		return 0;
 	}
-}
-
-static signed long get_archive_offset(const char *name, unsigned char *table)
-{
-	signed short i;
-
-	for (i = 0; i < 50; i++) {
-
-		/* check the filename */
-		if (!strncmp((char*)name, (char*)table + i * 16, 12)) {
-
-			/* calculate length */
-			g_flen_left = g_flen =
-				readd(table + (i + 1) * 16 + 0x0c) - readd(table + i * 16 + 0x0c);
-
-			/* return offset */
-			return readd(table + i * 16 + 0x0c);
-		}
-	}
-
-	return -1;
 }
 
 static signed short read_datfile(signed short handle, unsigned char *buf, unsigned short len)
