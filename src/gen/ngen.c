@@ -66,6 +66,7 @@ static inline void clrscr(void) { }
 #endif
 
 /* static prototypes */
+static signed short print_chr(const unsigned char, const signed short, const signed short);
 
 /** Keyboard Constants */
 
@@ -3258,8 +3259,7 @@ void wait_for_vsync(void)
 }
 
 /* Borlandified and identical */
-/* static */
-void blit_smth3(unsigned char *ptr, signed short v1, signed short v2)
+static void blit_chr(unsigned char *gfx_ptr, const signed short chr_height, const signed short chr_width)
 {
 	unsigned char *src;
 	signed short i;
@@ -3267,9 +3267,9 @@ void blit_smth3(unsigned char *ptr, signed short v1, signed short v2)
 
 	src = g_array_2;
 
-	for (i = 0; i < v1; src += 8 - v2, ptr += 320, i++)
-		for (j = 0; j < v2; src++, j++)
-			ptr[j] = *src;
+	for (i = 0; i < chr_height; src += 8 - chr_width, gfx_ptr += 320, i++)
+		for (j = 0; j < chr_width; src++, j++)
+			gfx_ptr[j] = *src;
 }
 
 /**
@@ -3432,18 +3432,6 @@ void print_str(const char *str, signed short x, signed short y)
 }
 
 
-/* Borlandified and identical */
-signed short print_chr(unsigned char c, signed short x, signed short y)
-{
-	signed short width;
-	signed short idx;
-
-	idx = get_chr_info(c, &width);
-
-	call_them_all(idx, width, x, y);
-
-	return width;
-}
 
 /**
  * get_chr_info() - gets font information of a character
@@ -3474,23 +3462,38 @@ signed short get_chr_info(unsigned char c, signed short *width)
 	}
 }
 
-/* Borlandified and identical */
-/* static */
-void call_them_all(signed short v1, signed short v2, signed short x, signed short y)
+static unsigned char* get_gfx_ptr(const signed short x, const signed short y)
+{
+	return g_gfx_ptr + (y * 320 + x);
+}
+
+static void print_chr_to_screen(const signed short chr_index, const signed short chr_width, const signed short x, const signed short y)
 {
 	unsigned char* gfx_ptr;
 
-	fill_smth();
-	fill_smth2(v1 * 8 + g_buffer_font6);
+	prepare_chr_background();
+	prepare_chr_foreground(chr_index * 8 + g_buffer_font6);
 
 	gfx_ptr = get_gfx_ptr(x, y);
 
-	call_blit_smth3(gfx_ptr, 7, v2);
+	blit_chr(gfx_ptr, 7, chr_width);
+}
+
+static signed short print_chr(const unsigned char c, const signed short x, const signed short y)
+{
+	signed short width;
+	signed short idx;
+
+	idx = get_chr_info(c, &width);
+
+	print_chr_to_screen(idx, width, x, y);
+
+	return width;
 }
 
 /* Borlandified and identical */
 /* static */
-void fill_smth(void)
+void prepare_chr_background(void)
 {
 	unsigned char *ptr;
 	signed short i;
@@ -3508,7 +3511,7 @@ void fill_smth(void)
 
 /* Borlandified and identical */
 /* static */
-void fill_smth2(unsigned char* sptr)
+void prepare_chr_foreground(unsigned char* sptr)
 {
 	unsigned char *ptr;
 	signed short i;
@@ -3530,31 +3533,13 @@ void fill_smth2(unsigned char* sptr)
 	}
 }
 
-/* Borlandified and identical */
-/* static */
-unsigned char* get_gfx_ptr(signed short x, signed short y)
-{
-	return g_gfx_ptr + (y * 320 + x);
-}
-
-/* Borlandified and identical */
-/* static */
-void call_blit_smth3(unsigned char* dst, signed short v1, signed short v4)
-{
-	blit_smth3(dst, v1, v4);
-}
-
-/* Borlandified and identical */
-/* static */
-void set_textcolor(signed short fg, signed short bg)
+static void set_textcolor(const signed short fg, const signed short bg)
 {
 	g_fg_color[0] = fg;
 	g_bg_color = bg;
 }
 
-/* Borlandified and identical */
-/* static */
-void get_textcolor(signed short *p_fg, signed short *p_bg)
+static void get_textcolor(signed short *p_fg, signed short *p_bg)
 {
 	writew((unsigned char*)p_fg, g_fg_color[0]);
 	writew((unsigned char*)p_bg, g_bg_color);

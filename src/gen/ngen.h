@@ -56,13 +56,9 @@ struct nvf_desc {
 	void wait_for_vsync(void);
 	unsigned short print_line(const char*);
 	void print_str(const char *, signed short, signed short);
-	signed short print_chr(unsigned char, signed short, signed short);
 	signed short get_chr_info(unsigned char, signed short*);
-	void call_them_all(signed short, signed short, signed short, signed short);
-	void fill_smth(void);
-	void fill_smth2(unsigned char*);
-	unsigned char* get_gfx_ptr(signed short, signed short);
-	void call_blit_smth3(unsigned char*, signed short, signed short);
+	void prepare_chr_background(void);
+	void prepare_chr_foreground(unsigned char*);
 	signed short get_line_start_c(const char*, signed short, signed short);
 	signed short infobox(const char*, signed short);
 	signed short gui_bool(char*);
