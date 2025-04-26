@@ -1973,6 +1973,8 @@ void restart_midi(void)
 	}
 }
 
+/* MOUSE MANAGEMENT */
+
 /**
  * mouse_action -	does mouse programming
  * @p1:		function AX
@@ -1985,8 +1987,7 @@ void restart_midi(void)
  * to call interrupts. We use the one of DOSBox, which means, that we
  * put the values in the emulated registers, instead in a structure.
  */
-/* Borlandified and identical */
-void do_mouse_action(unsigned char *p1, unsigned char *p2, unsigned char *p3, unsigned char *p4, unsigned char *p5)
+static void do_mouse_action(unsigned char *p1, unsigned char *p2, unsigned char *p3, unsigned char *p4, unsigned char *p5)
 {
 #if defined(__BORLANDC__)
 	union REGS myregs;
@@ -2032,8 +2033,7 @@ void do_mouse_action(unsigned char *p1, unsigned char *p2, unsigned char *p3, un
 }
 
 #if defined(__BORLANDC__)
-/* Borlandified and identical */
-void interrupt mouse_isr(void)
+static void interrupt mouse_isr(void)
 {
 	signed short l_si = _AX;
 	signed short p1;
@@ -2086,10 +2086,46 @@ void interrupt mouse_isr(void)
 #endif
 
 
-/* Borlandified and identical */
-void mouse_enable(void)
+static void mouse_unused1(unsigned char *p1, unsigned char *p2, unsigned char *p3, unsigned char *p4)
 {
+	unsigned short l_var;
+	writew(p1, 5);
+	do_mouse_action(p1, p2, p3, p4, (unsigned char*)&l_var);
+}
+
+#if defined(__BORLANDC__)
+static void mouse_call_isr(void)
+{
+	mouse_isr();
+}
+#endif
+
+static void mouse_do_enable(const signed short val, unsigned char* ptr)
+{
+#if defined(__BORLANDC__)
 	unsigned short p1, p2, p3, p4, p5;
+
+	p1 = 0x0c;
+	p3 = val;
+	p4 = (unsigned short)FP_OFF(mouse_call_isr);
+	p5 = (unsigned short)FP_SEG(mouse_call_isr);
+
+	/* save adress of old IRQ 0x78 */
+	g_irq78_bak = ((void interrupt far (*)(void))getvect(0x78));
+
+	/* set new IRQ 0x78 */
+	setvect(0x78, (void interrupt far (*)(void))ptr);
+
+	/* set the new mouse event handler */
+	do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
+
+	g_mouse_handler_installed = 1;
+#endif
+}
+
+static void mouse_enable(void)
+{
+	signed short p1, p2, p3, p4, p5;
 
 	if (g_have_mouse == 2) {
 
@@ -2120,59 +2156,10 @@ void mouse_enable(void)
 	}
 }
 
-/* Borlandified and identical */
-void mouse_disable(void)
-{
-	if (g_have_mouse == 2) {
-		mouse_do_disable();
-	}
-}
-
-#if defined(__BORLANDC__)
-/* Borlandified and identical */
-void mouse_unused1(unsigned char *p1, unsigned char *p2, unsigned char *p3, unsigned char *p4)
-{
-	unsigned short l_var;
-	writew(p1, 5);
-	do_mouse_action(p1, p2, p3, p4, (unsigned char*)&l_var);
-}
-
-/* Borlandified and identical */
-void mouse_call_isr(void)
-{
-	mouse_isr();
-}
-#endif
-
-/* Borlandified and identical */
-void mouse_do_enable(unsigned short val, unsigned char* ptr)
+static void mouse_do_disable(void)
 {
 #if defined(__BORLANDC__)
-	unsigned short p1, p2, p3, p4, p5;
-
-	p1 = 0x0c;
-	p3 = val;
-	p4 = (unsigned short)FP_OFF(mouse_call_isr);
-	p5 = (unsigned short)FP_SEG(mouse_call_isr);
-
-	/* save adress of old IRQ 0x78 */
-	g_irq78_bak = ((void interrupt far (*)(void))getvect(0x78));
-
-	/* set new IRQ 0x78 */
-	setvect(0x78, (void interrupt far (*)(void))ptr);
-
-	/* set the new mouse event handler */
-	do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
-
-	g_mouse_handler_installed = 1;
-#endif
-}
-
-/* Borlandified and identical */
-void mouse_do_disable(void)
-{
-#if defined(__BORLANDC__)
-	unsigned short v1, v2, v3, v4, v5;
+	signed short v1, v2, v3, v4, v5;
 
 	/* restore the old int 0x78 handler */
 	setvect(0x78, (void interrupt far (*)(void))g_irq78_bak);
@@ -2189,15 +2176,21 @@ void mouse_do_disable(void)
 #endif
 }
 
+static void mouse_disable(void)
+{
+	if (g_have_mouse == 2) {
+		mouse_do_disable();
+	}
+}
+
 /**
  * mouse_move_cursor -	move the mouse cursor to a position
  * @x:	X - coordinate
  * @y:	Y - coordinate
  */
-/* Borlandified and identical */
-void mouse_move_cursor(unsigned short x, unsigned short y)
+static void mouse_move_cursor(const signed short x, const signed short y)
 {
-	unsigned short p1, p2, p3, p4, p5;
+	signed short p1, p2, p3, p4, p5;
 
 	p1 = 4;
 	p3 = x;
@@ -2206,11 +2199,9 @@ void mouse_move_cursor(unsigned short x, unsigned short y)
 	do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
 }
 
-#if defined(__BORLANDC__)
-/* Borlandified and identical */
-void mouse_unused2(unsigned short a1, unsigned short a2, unsigned short a3, unsigned short a4)
+static void mouse_unused2(const signed short a1, const signed short a2, const signed short a3, const signed short a4)
 {
-	unsigned short p1, p2, p3, p4, p5;
+	signed short p1, p2, p3, p4, p5;
 
 	p1 = 9;
 	p2 = a1;
@@ -2221,17 +2212,15 @@ void mouse_unused2(unsigned short a1, unsigned short a2, unsigned short a3, unsi
 	do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
 }
 
-/* Borlandified and identical */
-void mouse_unused3(unsigned short a1)
+static void mouse_unused3(const signed short a1)
 {
-	unsigned short p1, p2, p3, p4, p5;
+	signed short p1, p2, p3, p4, p5;
 
 	p1 = 0x1d;
 	p2 = a1;
 
 	do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
 }
-#endif
 
 static void update_mouse_cursor(void)
 {
@@ -2244,6 +2233,96 @@ static void update_mouse_cursor(void)
 		}
 		g_mouse_refresh_flag--;
 	}
+}
+
+static void draw_mouse_cursor(void)
+{
+	signed char Y;
+	signed char X;
+	unsigned char *vgaptr;
+	signed short *mouse_cursor;
+	volatile signed short rangeY;
+	signed short diffX;
+	signed short diffY;
+
+	signed short rangeX;
+	register signed short mask;
+
+	vgaptr = g_vga_memstart;
+	mouse_cursor = (signed short*)g_mouse_current_cursor + (32 / 2);
+
+	rangeX = g_mouse_posx - g_mouse_pointer_offsetx;
+	rangeY = g_mouse_posy - g_mouse_pointer_offsety;
+
+	diffX = diffY = 16;
+
+	if (rangeX > 304) diffX = 320 - rangeX;
+	if (rangeY > 184) diffY = 200 - rangeY;
+
+	vgaptr += rangeY * 320 + rangeX;
+
+	for (Y = 0; Y < diffY; Y++) {
+		mask = *mouse_cursor++;
+		for (X = 0; X < diffX; X++)
+			if ((0x8000 >> X) & mask)
+				vgaptr[X] = 0xff;
+		vgaptr += 320;
+	}
+}
+
+static void save_mouse_bg(void)
+{
+	unsigned char *vgaptr;
+	signed short rangeX;
+	signed short rangeY;
+	signed short diffX;
+	signed short diffY;
+	signed short Y;
+	signed short X;
+
+	vgaptr = g_vga_memstart;
+
+	rangeX = g_mouse_posx - g_mouse_pointer_offsetx;
+	rangeY = g_mouse_posy - g_mouse_pointer_offsety;
+
+	diffX = diffY = 16;
+
+	if (rangeX > 304) diffX = 320 - rangeX;
+	if (rangeY > 184) diffY = 200 - rangeY;
+
+	vgaptr += rangeY * 320 + rangeX;
+
+	for (Y = 0; Y < diffY; vgaptr += 320, Y++)
+		for (X = 0; X < diffX; X++)
+			g_mouse_backbuffer[16 * Y + X] = vgaptr[X];
+}
+
+static void restore_mouse_bg(void)
+{
+	unsigned char *vgaptr;
+	signed short rangeX;
+	signed short rangeY;
+	signed short diffX;
+	signed short diffY;
+	signed short i;
+	signed short j;
+
+	vgaptr = g_vga_memstart;
+
+	rangeX = g_mouse_posx_bak - g_mouse_pointer_offsetx_bak;
+	rangeY = g_mouse_posy_bak - g_mouse_pointer_offsety_bak;
+	diffX = diffY = 16;
+
+	if (rangeX > 304)
+		diffX = 320 - rangeX;
+	if (rangeY > 184)
+		diffY = 200 - rangeY;
+
+	vgaptr += rangeY * 320 + rangeX;
+
+	for (i = 0; i < diffY; vgaptr += 320, i++)
+		for (j = 0; j < diffX; j++)
+			vgaptr[j] = g_mouse_backbuffer[16 * i + j];
 }
 
 static void call_mouse(void)
@@ -2282,9 +2361,7 @@ static void call_mouse(void)
 	}
 }
 
-/* Borlandified and identical */
-/* static */
-void mouse_compare(void)
+static void mouse_compare(void)
 {
 	/* these pointers never differ in gen */
 	if (g_mouse_moved || g_mouse_last_cursor != g_mouse_current_cursor) {
@@ -2303,74 +2380,7 @@ void mouse_compare(void)
 	}
 }
 
-
-/* Borlandified and identical */
-void handle_input(void)
-{
-	signed short si, i;
-
-	g_in_key_ascii = g_in_key_ext = si = 0;
-
-	if (CD_bioskey(1)) {
-
-		si = (g_in_key_ascii = CD_bioskey(0)) >> 8;
-		g_in_key_ascii &= 0xff;
-
-		if (si == KEY_J)
-			si = KEY_Y;
-
-		if ((g_in_key_ascii == 0x11) && !g_in_intro) {
-
-			update_mouse_cursor();
-			mouse_disable();
-			stop_music();
-			restore_timer_isr();
-			exit_video();
-			clrscr();
-			exit(0);
-		}
-	}
-
-	if (g_mouse1_event2 == 0) {
-		// Hm, ...
-		if (g_have_mouse == 0);
-	} else {
-		g_mouse1_event2 = 0;
-		si = 0;
-
-		if (g_action_table)
-			si = get_mouse_action(g_mouse_posx, g_mouse_posy,
-				(struct mouse_action*)g_action_table);
-				
-		if ((si == 0) && (g_default_action))
-			si = get_mouse_action(g_mouse_posx, g_mouse_posy,
-				(struct mouse_action*)g_default_action);
-
-		if (g_have_mouse == 2) {
-			for (i = 0; i < 15; i++)
-				wait_for_vsync();
-
-			if (g_mouse1_event2 != 0) {
-				g_mouse1_event2 = 0;
-			}
-
-			if (si == 0xfd) {
-				si = 0;
-				g_menu_tiles = 4;
-				g_fg_color[4] = 1;
-				infobox(get_text(267), 0);
-				g_fg_color[4] = 0;
-				g_menu_tiles = 3;
-			}
-		}
-	}
-	mouse_compare();
-	g_in_key_ext = si;
-}
-
-/* Borlandified and identical */
-/* static */
-signed short get_mouse_action(signed short x, signed short y, struct mouse_action *act)
+static signed short get_mouse_action(const signed short x, const signed short y, const struct mouse_action *act)
 {
 	signed short i;
 	
@@ -2386,9 +2396,7 @@ signed short get_mouse_action(signed short x, signed short y, struct mouse_actio
 	return 0;
 }
 
-#if defined(__BORLANDC__)
-/* Borlandified and identical */
-void unused_func1(signed char *in_ptr, signed short x, signed short y, signed char c1, signed char c2)
+static void unused_func1(signed char *in_ptr, const signed short x, const signed short y, const signed char c1, const signed char c2)
 {
 	signed char val;
 	unsigned char *ptr;
@@ -2410,9 +2418,6 @@ void unused_func1(signed char *in_ptr, signed short x, signed short y, signed ch
 
 	call_mouse();
 }
-#endif
-
-
 
 
 /**
@@ -2465,101 +2470,69 @@ void decomp_rle(unsigned char *dst, unsigned char *src, signed short x, signed s
 	call_mouse();
 }
 
-/* Borlandified and identical */
-/* static */
-void draw_mouse_cursor(void)
+static void handle_input(void)
 {
-	signed char Y;
-	signed char X;
-	unsigned char *vgaptr;
-	signed short *mouse_cursor;
-	volatile signed short rangeY;
-	signed short diffX;
-	signed short diffY;
+	signed short si, i;
 
-	signed short rangeX; //di
-	register signed short mask; //si
+	g_in_key_ascii = g_in_key_ext = si = 0;
 
-	vgaptr = g_vga_memstart;
-	mouse_cursor = (signed short*)g_mouse_current_cursor + (32 / 2);
+	if (CD_bioskey(1)) {
 
-	rangeX = g_mouse_posx - g_mouse_pointer_offsetx;
-	rangeY = g_mouse_posy - g_mouse_pointer_offsety;
+		si = (g_in_key_ascii = CD_bioskey(0)) >> 8;
+		g_in_key_ascii &= 0xff;
 
-	diffX = diffY = 16;
+		if (si == KEY_J)
+			si = KEY_Y;
 
-	if (rangeX > 304) diffX = 320 - rangeX;
-	if (rangeY > 184) diffY = 200 - rangeY;
+		if ((g_in_key_ascii == 0x11) && !g_in_intro) {
 
-	vgaptr += rangeY * 320 + rangeX;
-
-	for (Y = 0; Y < diffY; Y++) {
-		mask = *mouse_cursor++;
-		for (X = 0; X < diffX; X++)
-			if ((0x8000 >> X) & mask)
-				vgaptr[X] = 0xff;
-		vgaptr += 320;
+			update_mouse_cursor();
+			mouse_disable();
+			stop_music();
+			restore_timer_isr();
+			exit_video();
+			clrscr();
+			exit(0);
+		}
 	}
+
+	if (g_mouse1_event2 == 0) {
+		// Hm, ...
+		if (g_have_mouse == 0);
+	} else {
+		g_mouse1_event2 = 0;
+		si = 0;
+
+		if (g_action_table)
+			si = get_mouse_action(g_mouse_posx, g_mouse_posy,
+				(struct mouse_action*)g_action_table);
+
+		if ((si == 0) && (g_default_action))
+			si = get_mouse_action(g_mouse_posx, g_mouse_posy,
+				(struct mouse_action*)g_default_action);
+
+		if (g_have_mouse == 2) {
+			for (i = 0; i < 15; i++)
+				wait_for_vsync();
+
+			if (g_mouse1_event2 != 0) {
+				g_mouse1_event2 = 0;
+			}
+
+			if (si == 0xfd) {
+				si = 0;
+				g_menu_tiles = 4;
+				g_fg_color[4] = 1;
+				infobox(get_text(267), 0);
+				g_fg_color[4] = 0;
+				g_menu_tiles = 3;
+			}
+		}
+	}
+	mouse_compare();
+	g_in_key_ext = si;
 }
 
-/* Borlandified and identical */
-/* static */
-void save_mouse_bg(void)
-{
-	unsigned char *vgaptr;
-	signed short rangeX;
-	signed short rangeY;
-	signed short diffX;
-	signed short diffY;
-	signed short Y;
-	signed short X;
-
-	vgaptr = g_vga_memstart;
-
-	rangeX = g_mouse_posx - g_mouse_pointer_offsetx;
-	rangeY = g_mouse_posy - g_mouse_pointer_offsety;
-
-	diffX = diffY = 16;
-
-	if (rangeX > 304) diffX = 320 - rangeX;
-	if (rangeY > 184) diffY = 200 - rangeY;
-
-	vgaptr += rangeY * 320 + rangeX;
-
-	for (Y = 0; Y < diffY; vgaptr += 320, Y++)
-		for (X = 0; X < diffX; X++)
-			g_mouse_backbuffer[16 * Y + X] = vgaptr[X];
-}
-
-/* Borlandified and identical */
-/* static */
-static void restore_mouse_bg(void)
-{
-	unsigned char *vgaptr;
-	signed short rangeX;
-	signed short rangeY;
-	signed short diffX;
-	signed short diffY;
-	signed short i;
-	signed short j;
-
-	vgaptr = g_vga_memstart;
-
-	rangeX = g_mouse_posx_bak - g_mouse_pointer_offsetx_bak;
-	rangeY = g_mouse_posy_bak - g_mouse_pointer_offsety_bak;
-	diffX = diffY = 16;
-
-	if (rangeX > 304)
-		diffX = 320 - rangeX;
-	if (rangeY > 184)
-		diffY = 200 - rangeY;
-
-	vgaptr += rangeY * 320 + rangeX;
-
-	for (i = 0; i < diffY; vgaptr += 320, i++)
-		for (j = 0; j < diffX; j++)
-			vgaptr[j] = g_mouse_backbuffer[16 * i + j];
-}
 
 static void split_textbuffer(char **dst, char *src, const unsigned long len)
 {

@@ -28,12 +28,6 @@ struct nvf_desc {
 	void play_midi(unsigned short);
 	void stop_sequence(void);
 
-	void mouse_do_enable(unsigned short, unsigned char*);
-	void mouse_do_disable(void);
-	void handle_input(void);
-	signed short get_mouse_action(signed short, signed short, struct mouse_action*);
-	void draw_mouse_cursor(void);
-	void save_mouse_bg(void);
 	signed short open_datfile(unsigned short);
 	signed long get_archive_offset(const char*, unsigned char*);
 	signed short read_datfile(signed short, unsigned char*, unsigned short);
