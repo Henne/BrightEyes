@@ -2618,24 +2618,6 @@ static void split_textbuffer(char **dst, char *src, const unsigned long len)
 	}
 }
 
-static void load_font_and_text(void)
-{
-	signed short handle;
-	signed long len;
-
-	/* load FONT6 */
-	handle = open_datfile(14);
-	read_datfile(handle, g_buffer_font6, 1000);
-	close(handle);
-
-	/* load GENTEXT */
-	handle = open_datfile(15);
-	len = read_datfile(handle, (unsigned char*)g_buffer_text, 64000);
-	close(handle);
-
-	split_textbuffer(g_texts, g_buffer_text, len);
-}
-
 static void load_page(const signed short page)
 {
 	unsigned char* ptr;
@@ -2711,6 +2693,24 @@ static void load_typus(const signed short typus)
 		decomp_pp20(g_gen_ptr5, g_gen_ptr1_dis, get_filelength());
 	}
 	close(handle);
+}
+
+static void load_font_and_text(void)
+{
+	signed short handle;
+	signed long len;
+
+	/* load FONT6 */
+	handle = open_datfile(14);
+	read_datfile(handle, g_buffer_font6, 1000);
+	close(handle);
+
+	/* load GENTEXT */
+	handle = open_datfile(15);
+	len = read_datfile(handle, (unsigned char*)g_buffer_text, 64000);
+	close(handle);
+
+	split_textbuffer(g_texts, g_buffer_text, len);
 }
 
 static void load_popup(void)
