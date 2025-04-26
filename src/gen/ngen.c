@@ -2466,23 +2466,6 @@ static void vsync_or_key(const signed short val)
 }
 
 
-static void split_textbuffer(char **dst, char *src, const unsigned long len)
-{
-	unsigned long i;
-
-	for (i = 0, *dst++ = src; i != len; src++, i++) {
-		/* continue if not the end of the string */
-		if (!*src) {
-			/* return if "\0\0" (never happens) */
-			if (!*(src + 1)) return;
-
-			/* write the adress of the next string */
-			*dst = src + 1;
-			dst++;
-		}
-	}
-}
-
 /* FILE MANAGEMENT */
 
 static void detect_datfile(void)
@@ -2605,6 +2588,23 @@ static void read_datfile_to_buffer(const signed short index, unsigned char *dst)
 	handle = open_datfile(index);
 	read_datfile(handle, dst, 64000);
 	close(handle);
+}
+
+static void split_textbuffer(char **dst, char *src, const unsigned long len)
+{
+	unsigned long i;
+
+	for (i = 0, *dst++ = src; i != len; src++, i++) {
+		/* continue if not the end of the string */
+		if (!*src) {
+			/* return if "\0\0" (never happens) */
+			if (!*(src + 1)) return;
+
+			/* write the adress of the next string */
+			*dst = src + 1;
+			dst++;
+		}
+	}
 }
 
 static void load_font_and_text(void)
