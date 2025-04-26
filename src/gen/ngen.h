@@ -36,14 +36,11 @@ struct nvf_desc {
 	signed short get_mouse_action(signed short, signed short, struct mouse_action*);
 	void draw_mouse_cursor(void);
 	void save_mouse_bg(void);
-	void restore_mouse_bg(void);
-	signed long process_nvf(struct nvf_desc*);
 	signed short open_datfile(unsigned short);
 	signed long get_archive_offset(const char*, unsigned char*);
 	signed short read_datfile(signed short, unsigned char*, unsigned short);
 	signed long get_filelength(void);
 	void wait_for_keypress(void);
-	void error_msg(const char*);
 	void vsync_or_key(signed short);
 
 #if defined(__BORLANDC__)
@@ -54,12 +51,6 @@ struct nvf_desc {
 
 	void exit_video(void);
 	void wait_for_vsync(void);
-	unsigned short print_line(const char*);
-	void print_str(const char *, signed short, signed short);
-	signed short get_chr_info(unsigned char, signed short*);
-	void prepare_chr_background(void);
-	void prepare_chr_foreground(unsigned char*);
-	signed short get_line_start_c(const char*, signed short, signed short);
 	signed short infobox(const char*, signed short);
 	signed short gui_bool(char*);
 	signed short gui_radio(char*, signed char, ...);

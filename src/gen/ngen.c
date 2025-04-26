@@ -66,7 +66,7 @@ static inline void clrscr(void) { }
 #endif
 
 /* static prototypes */
-static signed short print_chr(const unsigned char, const signed short, const signed short);
+static void restore_mouse_bg(void);
 
 /** Keyboard Constants */
 
@@ -2551,7 +2551,7 @@ void save_mouse_bg(void)
 
 /* Borlandified and identical */
 /* static */
-void restore_mouse_bg(void)
+static void restore_mouse_bg(void)
 {
 	unsigned char *vgaptr;
 	signed short rangeX;
@@ -2579,8 +2579,7 @@ void restore_mouse_bg(void)
 			vgaptr[j] = g_mouse_backbuffer[16 * i + j];
 }
 
-/* Borlandified and identical */
-static void split_textbuffer(char **dst, char *src, unsigned long len)
+static void split_textbuffer(char **dst, char *src, const unsigned long len)
 {
 	unsigned long i;
 
@@ -2597,7 +2596,6 @@ static void split_textbuffer(char **dst, char *src, unsigned long len)
 	}
 }
 
-/* Borlandified and identical */
 static void load_font_and_text(void)
 {
 	signed short handle;
@@ -2616,8 +2614,7 @@ static void load_font_and_text(void)
 	split_textbuffer(g_texts, g_buffer_text, len);
 }
 
-/* Borlandified and identical */
-void load_page(signed short page)
+static void load_page(const signed short page)
 {
 	unsigned char* ptr;
 	signed short handle;
@@ -2653,19 +2650,15 @@ void load_page(signed short page)
 	}
 }
 
-#if defined (__BORLANDC__)
-/* Borlandified and identical */
-void read_datfile_to_buffer(signed short index, unsigned char *dst)
+static void read_datfile_to_buffer(const signed short index, unsigned char *dst)
 {
 	signed short handle;
 	handle = open_datfile(index);
 	read_datfile(handle, dst, 64000);
 	close(handle);
 }
-#endif
 
-/* Borlandified and identical */
-void load_typus(signed short typus)
+static void load_typus(const signed short typus)
 {
 	signed short index;
 	unsigned char *ptr;
@@ -2698,106 +2691,7 @@ void load_typus(signed short typus)
 	close(handle);
 }
 
-/**
- * save_chr() - save the hero the a CHR file
- */
-/* Borlandified and identical */
-void save_chr(void)
-{
-	signed short tmpw;
-	signed short tmph;
-	char filename[20];
-	struct nvf_desc nvf;
-	char path[80];
-
-	signed short handle; //si
-	signed short i;      //di
-
-	/* check for typus */
-	if (!g_hero.typus) {
-		infobox(get_text(72), 0);
-		return;
-	}
-	/* check for name */
-	if (!g_hero.name[0]) {
-		infobox(get_text(154), 0);
-		return;
-	}
-
-	/* Load picture from nvf */
-	/* TODO: why not just copy? */
-	nvf.dst = g_gen_ptr1_dis;
-	nvf.src = g_buffer_heads_dat;
-	nvf.no = g_head_current;
-	nvf.type = 0;
-	nvf.width = &tmpw;
-	nvf.height = &tmph;
-
-	process_nvf(&nvf);
-
-	/* copy picture to the character struct */
-	memcpy((void*)g_hero.pic, g_gen_ptr1_dis, 1024);
-
-	/* put the hero in the first group */
-	g_hero.group = 1;
-
-	/* wanna save ? */
-	if (!gui_bool(get_text(3)))
-		return;
-
-	/* copy name to alias */
-	/* TODO: should use strncpy() here */
-	strcpy((char*)g_hero.alias, (const char*)g_hero.name);
-
-	/* copy name to buffer */
-	/* TODO: should use strncpy() here */
-	strcpy(g_gen_ptr2, (const char*)g_hero.name);
-
-	/* prepare filename */
-	for (i = 0; i < 8; i++) {
-		/* leave the loop if the string ends */
-		if (!g_gen_ptr2[i])
-			break;
-		if (!isalnum(g_gen_ptr2[i])) {
-			/* replace non alphanumerical characters with underscore */
-			g_gen_ptr2[i] = '_';
-		}
-	}
-
-	strncpy(filename, g_gen_ptr2, 8);
-	filename[8] = 0;
-	strcat(filename, g_str_chr);
-
-	if (((handle = open(filename, 0x8001)) == -1) || gui_bool(get_text(261))) {
-
-#if !defined(__BORLANDC__)
-		/* close an existing file before overwriting it */
-		if (handle != -1) close(handle);
-#endif
-		handle = _creat(filename, 0);
-
-		if (handle != -1) {
-			write(handle, (const void*)&g_hero, sizeof(g_hero));
-			close(handle);
-
-			if (g_called_with_args == 0) return;
-
-			strcpy(path, g_str_temp_dir);
-			strcat(path, filename);
-
-			if ((handle = _creat(path, 0)) != -1) {
-				write(handle, (const void*)&g_hero, sizeof(g_hero));
-				close(handle);
-			}
-		} else {
-			/* should be replaced with infobox() */
-			error_msg(g_dsagen_lang == LANG_DE ? g_str_save_error_de : g_str_save_error_en);
-		}
-	}
-}
-
-/* Borlandified and identical */
-void read_common_files(void)
+static void read_common_files(void)
 {
 	signed short handle; //si
 	signed short len; //di
@@ -2827,8 +2721,7 @@ void read_common_files(void)
 	decomp_pp20(g_buffer_dmenge_dat, g_buffer_dmenge_dat - 8, len);
 }
 
-/* Borlandified and identical */
-signed long process_nvf(struct nvf_desc *nvf)
+static signed long process_nvf(struct nvf_desc *nvf)
 {
 	signed long offs;
 	signed short pics;
@@ -3059,18 +2952,24 @@ signed long get_filelength(void)
 	return g_flen;
 }
 
+static void set_textcolor(const signed short fg, const signed short bg)
+{
+	g_fg_color[0] = fg;
+	g_bg_color = bg;
+}
+
+static void get_textcolor(signed short *p_fg, signed short *p_bg)
+{
+	writew((unsigned char*)p_fg, g_fg_color[0]);
+	writew((unsigned char*)p_bg, g_bg_color);
+}
+
 /* Borlandified and identical */
 void wait_for_keypress(void)
 {
 	while (CD_bioskey(1)) {
 		CD_bioskey(0);
 	}
-}
-
-/* Borlandified and identical */
-void error_msg(const char *msg)
-{
-	vsync_or_key(print_line(msg) * 150);
 }
 
 #if defined(__BORLANDC__)
@@ -3258,7 +3157,80 @@ void wait_for_vsync(void)
 #endif
 }
 
-/* Borlandified and identical */
+
+/* CHARACTER AND FONT FUNCTIONS */
+
+/**
+ * get_chr_info() - gets font information of a character
+ * @c:		the character
+ * @width:	pointer to save the width of the character
+ *
+ * Returns the font index.
+ */
+static signed short get_chr_info(const unsigned char c, signed short *width)
+{
+	signed short i;
+
+	for (i = 0; i != 222; i += 3) {
+		/* search for the character */
+		if (*(&g_chr_lookup[0].chr + i) == c) {
+
+			*width = *(&g_chr_lookup[0].width + i) & 0xff;
+			return *(&g_chr_lookup[0].index + i) & 0xff;
+		}
+	}
+
+	if (c == 0x7e || c == 0xf0 || c == 0xf1 || c == 0xf2 || c == 0xf3) {
+		return *width = 0;
+	} else {
+		*width = 6;
+		return 0;
+	}
+}
+
+static void prepare_chr_background(void)
+{
+	unsigned char *ptr;
+	signed short i;
+	signed short j;
+
+	if (g_mask_switch != 0)
+		ptr = g_array_1;
+	else
+		ptr = g_array_2;
+
+	for (i = 0; i < 8; ptr += 8, i++)
+		for (j = 0; j < 8; j++)
+			ptr[j] = (unsigned char)g_bg_color;
+}
+
+static void prepare_chr_foreground(unsigned char* font_ptr)
+{
+	unsigned char *ptr;
+	signed short i;
+	signed short j;
+	unsigned char mask;
+
+	if (g_mask_switch != 0)
+		ptr = g_array_1;
+	else
+		ptr = g_array_2;
+
+	for (i = 0; i < 8; ptr += 8, i++) {
+		mask = *font_ptr++;
+		for (j = 0; j < 8; j++) {
+			if ((0x80 >> j) & mask) {
+				ptr[j] = (unsigned char)g_fg_color[g_col_index];
+			}
+		}
+	}
+}
+
+static unsigned char* get_gfx_ptr(const signed short x, const signed short y)
+{
+	return g_gfx_ptr + (y * 320 + x);
+}
+
 static void blit_chr(unsigned char *gfx_ptr, const signed short chr_height, const signed short chr_width)
 {
 	unsigned char *src;
@@ -3272,15 +3244,39 @@ static void blit_chr(unsigned char *gfx_ptr, const signed short chr_height, cons
 			gfx_ptr[j] = *src;
 }
 
+static void print_chr_to_screen(const signed short chr_index, const signed short chr_width, const signed short x, const signed short y)
+{
+	unsigned char* gfx_ptr;
+
+	prepare_chr_background();
+	prepare_chr_foreground(chr_index * 8 + g_buffer_font6);
+
+	gfx_ptr = get_gfx_ptr(x, y);
+
+	blit_chr(gfx_ptr, 7, chr_width);
+}
+
+static signed short print_chr(const unsigned char c, const signed short x, const signed short y)
+{
+	signed short width;
+	signed short idx;
+
+	idx = get_chr_info(c, &width);
+
+	print_chr_to_screen(idx, width, x, y);
+
+	return width;
+}
+
+/* STRING FUNCTIONS */
+
 /**
  * str_splitter() - sets the line breaks for a string
  * @s:	string
  *
  * Returns the number of lines the string needs.
  */
-/* Borlandified and identical */
-/* static */
-unsigned short str_splitter(const char *s)
+static signed short str_splitter(const char *s)
 {
 	char *tp;
 	signed short unknown_var1;
@@ -3350,26 +3346,30 @@ unsigned short str_splitter(const char *s)
 	return lines;
 }
 
-/* Borlandified and identical */
-/* static */
-unsigned short print_line(const char *str)
+/**
+ * get_line_start_c() - calculates the start positon for a centered line
+ * @str:	the string
+ * @x:		start position of the string
+ * @x_max:	end position of the string
+ *
+ * Returns the X coordinate where the string starts.
+ */
+static signed short get_line_start_c(const char *str, const signed short x, const signed short x_max)
 {
-	unsigned short lines = 1;
+	signed short width;
+	signed short pos_x;
+	signed short val;
+	
+	for (pos_x = 0; ((val = *str) && (val != 0x40) && (val != 0x0d)); )
+	{
+		get_chr_info(*str++, &width);
+		pos_x += width;
+	}
 
-	update_mouse_cursor();
-
-	lines = str_splitter(str);
-
-	print_str(str, g_text_x, g_text_y);
-
-	call_mouse();
-
-	return lines;
+	return (x_max - pos_x) / 2 + x;
 }
 
-/* Borlandified and identical */
-/* static */
-void print_str(const char *str, signed short x, signed short y)
+static void print_str(const char *str, signed short x, signed short y)
 {
 	signed short i;
 	signed short x_bak;
@@ -3379,7 +3379,9 @@ void print_str(const char *str, signed short x, signed short y)
 
 	update_mouse_cursor();
 
-	if (g_fg_color[4] == 1) x = get_line_start_c(str, x, g_text_x_end);
+	if (g_fg_color[4] == 1)
+		x = get_line_start_c(str, x, g_text_x_end);
+
 	x_bak = x;
 
 	while ((c = str[i++])) {
@@ -3431,139 +3433,41 @@ void print_str(const char *str, signed short x, signed short y)
 	call_mouse();
 }
 
-
-
-/**
- * get_chr_info() - gets font information of a character
- * @c:		the character
- * @width:	pointer to save width
- *
- * Returns the font index.
- */
-/* Borlandified and identical */
-signed short get_chr_info(unsigned char c, signed short *width)
+static signed short print_line(const char *str)
 {
-	signed short i;
+	signed short lines = 1;
 
-	for (i = 0; i != 222; i += 3) {
-		/* search for the character */
-		if (*(&g_chr_lookup[0].chr + i) == c) {
+	update_mouse_cursor();
 
-			*width = *(&g_chr_lookup[0].width + i) & 0xff;
-			return *(&g_chr_lookup[0].index + i) & 0xff;
-		}
-	}
+	lines = str_splitter(str);
 
-	if (c == 0x7e || c == 0xf0 || c == 0xf1 || c == 0xf2 || c == 0xf3) {
-		return *width = 0;
-	} else {
-		*width = 6;
-		return 0;
-	}
+	print_str(str, g_text_x, g_text_y);
+
+	call_mouse();
+
+	return lines;
 }
 
-static unsigned char* get_gfx_ptr(const signed short x, const signed short y)
+static void error_msg(const char *msg)
 {
-	return g_gfx_ptr + (y * 320 + x);
+	vsync_or_key(print_line(msg) * 150);
 }
 
-static void print_chr_to_screen(const signed short chr_index, const signed short chr_width, const signed short x, const signed short y)
-{
-	unsigned char* gfx_ptr;
 
-	prepare_chr_background();
-	prepare_chr_foreground(chr_index * 8 + g_buffer_font6);
-
-	gfx_ptr = get_gfx_ptr(x, y);
-
-	blit_chr(gfx_ptr, 7, chr_width);
-}
-
-static signed short print_chr(const unsigned char c, const signed short x, const signed short y)
-{
-	signed short width;
-	signed short idx;
-
-	idx = get_chr_info(c, &width);
-
-	print_chr_to_screen(idx, width, x, y);
-
-	return width;
-}
-
-/* Borlandified and identical */
-/* static */
-void prepare_chr_background(void)
-{
-	unsigned char *ptr;
-	signed short i;
-	signed short j;
-
-	if (g_mask_switch != 0)
-		ptr = g_array_1;
-	else
-		ptr = g_array_2;
-
-	for (i = 0; i < 8; ptr += 8, i++)
-		for (j = 0; j < 8; j++)
-			ptr[j] = (unsigned char)g_bg_color;
-}
-
-/* Borlandified and identical */
-/* static */
-void prepare_chr_foreground(unsigned char* sptr)
-{
-	unsigned char *ptr;
-	signed short i;
-	signed short j;
-	unsigned char mask;
-
-	if (g_mask_switch != 0)
-		ptr = g_array_1;
-	else
-		ptr = g_array_2;
-
-	for (i = 0; i < 8; ptr += 8, i++) {
-		mask = *sptr++;
-		for (j = 0; j < 8; j++) {
-			if ((0x80 >> j) & mask) {
-				ptr[j] = (unsigned char)g_fg_color[g_col_index];
-			}
-		}
-	}
-}
-
-static void set_textcolor(const signed short fg, const signed short bg)
-{
-	g_fg_color[0] = fg;
-	g_bg_color = bg;
-}
-
-static void get_textcolor(signed short *p_fg, signed short *p_bg)
-{
-	writew((unsigned char*)p_fg, g_fg_color[0]);
-	writew((unsigned char*)p_bg, g_bg_color);
-}
-
-#if defined(__BORLANDC__)
-/* Borlandified and identical */
-/* static */
-signed short count_linebreaks(unsigned char *ptr)
+static signed short count_linebreaks(char *str)
 {
 	signed short i = 0;
 	
-	while (*ptr) {
-		if (*ptr++ == 0x0d) {
+	while (*str) {
+		if (*str++ == 0x0d) {
 			i++;
 		}
 	}
 
 	return i;
 }
-#endif
 
-/* Borlandified and identical */
-signed short get_str_width(char *str)
+static signed short get_str_width(char *str)
 {
 	signed short sum = 0;
 	signed short width;
@@ -3577,33 +3481,103 @@ signed short get_str_width(char *str)
 }
 
 /**
- * get_line_start_c() - calculates the start positon for a centered line
- * @str:	the string
- * @x:		start position of the string
- * @x_max:	end position of the string
- *
- * Returns the X coordinate where the string must start.
+ * save_chr() - save the hero the a CHR file
  */
-/* Borlandified and identical */
-signed short get_line_start_c(const char *str, signed short x, signed short x_max)
+static void save_chr(void)
 {
-	signed short width;
+	signed short tmpw;
+	signed short tmph;
+	char filename[20];
+	struct nvf_desc nvf;
+	char path[80];
 
-	register signed short pos_x;	// si
-	register signed short val;	// di
-	
-	for (pos_x = 0; ((val = *str) && (val != 0x40) && (val != 0x0d)); )
-	{
-		get_chr_info(*str++, &width);
-		pos_x += width;
+	signed short handle; //si
+	signed short i;      //di
+
+	/* check for typus */
+	if (!g_hero.typus) {
+		infobox(get_text(72), 0);
+		return;
+	}
+	/* check for name */
+	if (!g_hero.name[0]) {
+		infobox(get_text(154), 0);
+		return;
 	}
 
-	x_max -= pos_x;
-	x_max >>= 1;
-	x_max += x;
-	// readable: xmax = (x_max - pos_x) / 2 + x;
-	return x_max;
+	/* Load picture from nvf */
+	/* TODO: why not just copy? */
+	nvf.dst = g_gen_ptr1_dis;
+	nvf.src = g_buffer_heads_dat;
+	nvf.no = g_head_current;
+	nvf.type = 0;
+	nvf.width = &tmpw;
+	nvf.height = &tmph;
+
+	process_nvf(&nvf);
+
+	/* copy picture to the character struct */
+	memcpy((void*)g_hero.pic, g_gen_ptr1_dis, 1024);
+
+	/* put the hero in the first group */
+	g_hero.group = 1;
+
+	/* wanna save ? */
+	if (!gui_bool(get_text(3)))
+		return;
+
+	/* copy name to alias */
+	/* TODO: should use strncpy() here */
+	strcpy((char*)g_hero.alias, (const char*)g_hero.name);
+
+	/* copy name to buffer */
+	/* TODO: should use strncpy() here */
+	strcpy(g_gen_ptr2, (const char*)g_hero.name);
+
+	/* prepare filename */
+	for (i = 0; i < 8; i++) {
+		/* leave the loop if the string ends */
+		if (!g_gen_ptr2[i])
+			break;
+		if (!isalnum(g_gen_ptr2[i])) {
+			/* replace non alphanumerical characters with underscore */
+			g_gen_ptr2[i] = '_';
+		}
+	}
+
+	strncpy(filename, g_gen_ptr2, 8);
+	filename[8] = 0;
+	strcat(filename, g_str_chr);
+
+	if (((handle = open(filename, 0x8001)) == -1) || gui_bool(get_text(261))) {
+
+#if !defined(__BORLANDC__)
+		/* close an existing file before overwriting it */
+		if (handle != -1) close(handle);
+#endif
+		handle = _creat(filename, 0);
+
+		if (handle != -1) {
+			write(handle, (const void*)&g_hero, sizeof(g_hero));
+			close(handle);
+
+			if (g_called_with_args == 0) return;
+
+			strcpy(path, g_str_temp_dir);
+			strcat(path, filename);
+
+			if ((handle = _creat(path, 0)) != -1) {
+				write(handle, (const void*)&g_hero, sizeof(g_hero));
+				close(handle);
+			}
+		} else {
+			/* should be replaced with infobox() */
+			error_msg(g_dsagen_lang == LANG_DE ? g_str_save_error_de : g_str_save_error_en);
+		}
+	}
 }
+
+
 
 /* Borlandified and identical */
 signed short enter_string(char *dst, signed short x, signed short y, signed short num, signed short zero)
@@ -7338,6 +7312,7 @@ int main_gen(int argc, char **argv)
 	init_stuff();
 
 	read_common_files();
+
 
 	if (sound_off == 0)
 		read_soundcfg();
