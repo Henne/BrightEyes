@@ -2713,15 +2713,10 @@ static void load_typus(const signed short typus)
 	close(handle);
 }
 
-static void read_common_files(void)
+static void load_popup(void)
 {
-	signed short handle; //si
-	signed short len; //di
-
-	/* load HEADS.DAT */
-	handle = open_datfile(11);
-	len = read_datfile(handle, g_buffer_heads_dat, 64000);
-	close(handle);
+	signed short handle;
+	signed short len;
 
 	/* load POPUP.NVF */
 	handle = open_datfile(19);
@@ -2729,6 +2724,17 @@ static void read_common_files(void)
 	close(handle);
 
 	decomp_pp20(g_buffer_popup_nvf, g_buffer_popup_nvf - 8, len);
+}
+
+static void load_common_files(void)
+{
+	signed short handle;
+	signed short len;
+
+	/* load HEADS.DAT */
+	handle = open_datfile(11);
+	len = read_datfile(handle, g_buffer_heads_dat, 64000);
+	close(handle);
 
 	/* load SEX.DAT */
 	handle = open_datfile(12);
@@ -7142,7 +7148,7 @@ void restore_timer_isr(void)
 #endif
 }
 
-static void init_colors(void)
+static void init_palettes(void)
 {
 	set_palette((const unsigned char*)&g_pal_col_black, 0x00, 1);
 	set_palette((const unsigned char*)&g_pal_col_white, 0xff, 1);
@@ -7153,7 +7159,7 @@ static void init_colors(void)
 	set_textcolor(0xff, 0x0); // WHITE ON BLACK
 }
 
-static void init_stuff(void)
+static void init_colors(void)
 {
 	init_colors();
 
@@ -7196,6 +7202,19 @@ int main_gen(int argc, char **argv)
 			g_dsagen_lang == LANG_DE ? "DE" : "EN",
 			g_dsagen_medium == MED_DISK ? "DISK" : "CD");
 
+	if (alloc_buffers() > 0) {
+		free_buffers();
+		return -1;
+	}
+
+	load_font_and_text();
+
+	load_popup();
+
+	init_colors();
+
+	/* Remark: gui elements are usable at this point at runtime */
+
 	if (sound_off == 0)
 		init_music(13000);
 
@@ -7203,46 +7222,42 @@ int main_gen(int argc, char **argv)
 
 	save_display_stat(&g_display_page_bak);
 
-	if (alloc_buffers() > 0) {
-		free_buffers();
-		restore_timer_isr();
-		stop_music();
-		return -1;
-	}
-
-	load_font_and_text();
-
 	init_video();
 
 	g_have_mouse = 2;
 
 	mouse_enable();
 
-	if (g_have_mouse == 0)
+	if (g_have_mouse == 0) {
 		g_mouse_refresh_flag = -2;
+	}
 
-	init_stuff();
-
-	read_common_files();
-
-
-	if (sound_off == 0)
+	if (sound_off == 0) {
 		read_soundcfg();
+	}
 
 	start_music(33);
 
 	if (g_called_with_args == 0) {
 		intro();
-		read_common_files();
 	}
 
-	init_colors();
+	load_common_files();
+
+	init_palettes();
+
 	wait_for_keypress();
+
 	call_mouse();
+
 	do_gen();
+
 	stop_music();
+
 	update_mouse_cursor();
+
 	mouse_disable();
+
 	restore_timer_isr();
 
 	if (g_called_with_args != 0) {
