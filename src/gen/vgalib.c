@@ -119,11 +119,11 @@ void set_color(const unsigned char *ptr, const unsigned char color)
 	update_sdl_window();
 }
 
-void set_palette(signed char *ptr, unsigned char first_color, unsigned short colors)
+void set_palette(const unsigned char *ptr, const unsigned char first_color, const unsigned short colors)
 {
 	signed int i;
 	for (i = 0; i < colors; i++)
-		palette[first_color + i] = get_ARGB((unsigned char*)ptr + 3 * i);
+		palette[first_color + i] = get_ARGB(ptr + 3 * i);
 
 	update_sdl_window();
 }

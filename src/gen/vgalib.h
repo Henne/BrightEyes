@@ -2,7 +2,7 @@ void set_video_mode(unsigned short);
 void set_video_page(unsigned short);
 void save_display_stat(signed short*);
 void set_color(const unsigned char*, const unsigned char);
-void set_palette(signed char*, unsigned char, unsigned short);
+void set_palette(const unsigned char*, const unsigned char, const unsigned short);
 void draw_h_line(unsigned short, signed short, unsigned short);
 void draw_h_spaced_dots(unsigned short, unsigned short, signed short, unsigned short);
 void pic_copy(unsigned char*, unsigned short, unsigned short, unsigned short, unsigned short, unsigned short, unsigned short, unsigned short, unsigned short, unsigned short, unsigned short, unsigned char*, unsigned short);

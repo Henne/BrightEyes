@@ -855,9 +855,9 @@ static const struct struct_attrib_coords g_attrib_coords[] = {
 static const signed char g_mask_switch = 0;
 
 struct struct_color {
-	signed char r;
-	signed char g;
-	signed char b;
+	unsigned char r;
+	unsigned char g;
+	unsigned char b;
 };
 
 static struct struct_color g_pal_tmp[32] = {0};
@@ -1440,7 +1440,7 @@ static signed long g_flen;
 static signed short g_got_mu_bonus;
 static signed short g_got_ch_bonus;
 
-static char g_pal_roalogo[768];
+static unsigned char g_pal_roalogo[768];
 
 #if defined(__BORLANDC__)
 void far *g_timer_isr_bak;
@@ -4859,7 +4859,7 @@ static void refresh_screen(void)
 				}
 
 				wait_for_vsync();
-				set_palette((signed char*)g_buffer_dmenge_dat + 128 * 184 + 2, 0 , 32);
+				set_palette(g_buffer_dmenge_dat + 128 * 184 + 2, 0 , 32);
 				copy_to_screen(g_buffer_dmenge_dat, dst, 128, 184, 0);
 			}
 		}
@@ -5841,7 +5841,7 @@ static void select_typus(void)
 			update_mouse_cursor();
 			call_fill_rect_gen((unsigned char*)g_vga_memstart, 16, 8, 143, 191, 0);
 			wait_for_vsync();
-			set_palette((signed char*)g_gen_ptr5 + 0x5c02, 0, 32);
+			set_palette(g_gen_ptr5 + 0x5c02, 0, 32);
 			call_mouse();
 
 			g_head_typus = (g_hero.typus > 10 ? 10 : g_hero.typus);
@@ -6538,7 +6538,7 @@ static void choose_typus(void)
 	update_mouse_cursor();
 	call_fill_rect_gen((unsigned char*)g_vga_memstart, 16, 8, 143, 191, 0);
 	wait_for_vsync();
-	set_palette((signed char*)g_gen_ptr5 + 0x5c02, 0, 32);
+	set_palette(g_gen_ptr5 + 0x5c02, 0, 32);
 	call_mouse();
 
 
@@ -6853,7 +6853,7 @@ static void intro(void)
 
 	wait_for_vsync();
 
-	set_palette((signed char*)&g_pal_attic, 0, 16);
+	set_palette((const unsigned char*)g_pal_attic, 0, 16);
 
 	cnt1 = 1;
 	cnt2 = 99;
@@ -6939,7 +6939,7 @@ static void intro(void)
 	wait_for_vsync();
 
 	/* set palette of FANPRO.NVF */
-	set_palette((signed char*)g_buffer_heads_dat + flen - 32 * 3, 0, 32);
+	set_palette(g_buffer_heads_dat + flen - 32 * 3, 0, 32);
 
 	/* draw the picture */
 	g_dst_x1 = 60;
@@ -6970,7 +6970,7 @@ static void intro(void)
 		wait_for_vsync();
 
 
-		set_palette((signed char*)&g_pal_tmp, 0, 32);
+		set_palette((const unsigned char*)g_pal_tmp, 0, 32);
 
 		/* draw DSALOGO.DAT */
 		g_dst_x1 = 0;
@@ -7012,7 +7012,7 @@ static void intro(void)
 		for (i = 0; i < 64; i++) {
 			pal_fade_in(pal_dst, pal_src, i, 32);
 			wait_for_vsync();
-			set_palette(pal_dst, 0, 32);
+			set_palette((const unsigned char*)pal_dst, 0, 32);
 		}
 	} else {
 		/* load ROALOGUS.DAT */
@@ -7025,7 +7025,7 @@ static void intro(void)
 		/* clear screen */
 		call_fill_rect_gen((unsigned char*)g_vga_memstart, 0, 0, 319, 199, 0);
 		memset(g_pal_roalogo, 0, 3 * 256);
-		set_palette((signed char*)&g_pal_roalogo, 0, 256);
+		set_palette(g_pal_roalogo, 0, 256);
 
 		/* draw ROALOGUS.DAT */
 		g_dst_x1 = 0;
@@ -7058,7 +7058,7 @@ static void intro(void)
 		do_draw_pic(0);
 
 		memcpy(g_pal_roalogo + 3 * 32, &g_pal_dsalogo, 3 * 32);
-		set_palette((unsigned char*)g_pal_roalogo + 0x180, 128, 128);
+		set_palette(g_pal_roalogo + 0x180, 128, 128);
 		memcpy(g_gen_ptr1_dis + 0x1f4, &g_pal_dsalogo, 3 * 32);
 
 		pal_src = (signed char*)g_gen_ptr1_dis + 500;
@@ -7069,7 +7069,7 @@ static void intro(void)
 		for (i = 0; i < 64; i++) {
 			pal_fade_in(pal_dst, pal_src, i, 32);
 			wait_for_vsync();
-			set_palette(pal_dst, 32, 32);
+			set_palette((const unsigned char*)pal_dst, 32, 32);
 		}
 	}
 
@@ -7089,7 +7089,7 @@ static void intro(void)
 		for (i = 0; i < 64; i++) {
 			pal_fade_out(pal_dst, pal_src, 32);
 			wait_for_vsync();
-			set_palette(pal_dst, 0, 32);
+			set_palette((const unsigned char*)pal_dst, 0, 32);
 		}
 	} else {
 
@@ -7103,7 +7103,7 @@ static void intro(void)
 		for (i = 0; i < 64; i++) {
 			pal_fade_out(pal_dst, pal_src, 256);
 			wait_for_vsync();
-			set_palette(pal_dst, 0, 256);
+			set_palette((const unsigned char*)pal_dst, 0, 256);
 		}
 	}
 
@@ -7144,12 +7144,12 @@ void restore_timer_isr(void)
 
 static void init_colors(void)
 {
-	set_palette((signed char*)&g_pal_col_black, 0x00, 1);
-	set_palette((signed char*)&g_pal_col_white, 0xff, 1);
-	set_palette((signed char*)&g_pal_popup, 0xd8, 8);
-	set_palette((signed char*)&g_pal_misc, 0xc8, 3);
-	set_palette((signed char*)&g_pal_genbg, 0x40, 0x20);
-	set_palette((signed char*)&g_pal_heads, 0x20, 0x20);
+	set_palette((const unsigned char*)&g_pal_col_black, 0x00, 1);
+	set_palette((const unsigned char*)&g_pal_col_white, 0xff, 1);
+	set_palette((const unsigned char*)g_pal_popup, 0xd8, 8);
+	set_palette((const unsigned char*)g_pal_misc, 0xc8, 3);
+	set_palette((const unsigned char*)g_pal_genbg, 0x40, 0x20);
+	set_palette((const unsigned char*)g_pal_heads, 0x20, 0x20);
 	set_textcolor(0xff, 0x0); // WHITE ON BLACK
 }
 
