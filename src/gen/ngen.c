@@ -4382,7 +4382,7 @@ static void print_values(void)
 	switch (g_gen_page) {
 
 		case 0: {
-			restore_picbuf((unsigned char*)g_gfx_ptr);
+			restore_picbuf(g_gfx_ptr);
 
 			/* print name */
 			print_str((const char*)g_hero.name, 180, 12);
@@ -4431,7 +4431,7 @@ static void print_values(void)
 		}
 		case 1: {
 			/* SKILLS Page 1/3 */
-			restore_picbuf((unsigned char*)g_gfx_ptr);
+			restore_picbuf(g_gfx_ptr);
 
 
 			/* print fight skills */
@@ -4463,7 +4463,7 @@ static void print_values(void)
 		}
 		case 2: {
 			/* SKILLS Page 2/3 */
-			restore_picbuf((unsigned char*)g_gfx_ptr);
+			restore_picbuf(g_gfx_ptr);
 
 			/* print social skills */
 			for (i = 19; i < 26; i++) {
@@ -4497,7 +4497,7 @@ static void print_values(void)
 		}
 		case 3: {
 			/* SKILLS Page 3/3 */
-			restore_picbuf((unsigned char*)g_gfx_ptr);
+			restore_picbuf(g_gfx_ptr);
 
 			/* print craftmansship skills */
 			for (i = 41; i < 50; i++) {
@@ -4548,7 +4548,7 @@ static void print_values(void)
 		}
 		case 4: {
 			/* ATPA Page */
-			restore_picbuf((unsigned char*)g_gfx_ptr);
+			restore_picbuf(g_gfx_ptr);
 
 			/* Print base value  2x the same */
 			print_str(itoa(g_hero.atpa_base, tmp, 10), 231, 30);
@@ -4583,7 +4583,7 @@ static void print_values(void)
 
 		case 5: {
 			/* Spells Page 1/6 */
-			restore_picbuf((unsigned char*)g_gfx_ptr);
+			restore_picbuf(g_gfx_ptr);
 
 			for (i = 1; i < 6; i++) {
 
@@ -4627,7 +4627,7 @@ static void print_values(void)
 		}
 		case 6: {
 			/* Spells Page 2/6 */
-			restore_picbuf((unsigned char*)g_gfx_ptr);
+			restore_picbuf(g_gfx_ptr);
 
 			for (i = 12; i <= 17; i++) {
 
@@ -4672,7 +4672,7 @@ static void print_values(void)
 		}
 		case 7: {
 			/* Spells Page 3/6 */
-			restore_picbuf((unsigned char*)g_gfx_ptr);
+			restore_picbuf(g_gfx_ptr);
 
 			for (i = 27; i < 33; i++) {
 
@@ -4717,7 +4717,7 @@ static void print_values(void)
 		}
 		case 8: {
 			/* Spells Page 4/6 */
-			restore_picbuf((unsigned char*)g_gfx_ptr);
+			restore_picbuf(g_gfx_ptr);
 
 			for (i = 47; i <= 48; i++) {
 
@@ -4762,7 +4762,7 @@ static void print_values(void)
 		}
 		case 9: {
 			/* Spells Page 5/6 */
-			restore_picbuf((unsigned char*)g_gfx_ptr);
+			restore_picbuf(g_gfx_ptr);
 
 			for (i = 60; i < 76; i++) {
 
@@ -4783,7 +4783,7 @@ static void print_values(void)
 		}
 		case 10: {
 			/* Spells Page 6/6 */
-			restore_picbuf((unsigned char*)g_gfx_ptr);
+			restore_picbuf(g_gfx_ptr);
 
 			for (i = 76; i < 86; i++) {
 
