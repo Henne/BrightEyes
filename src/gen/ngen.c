@@ -73,7 +73,6 @@ static inline void clrscr(void) { }
 #endif
 
 /* static prototypes */
-static void restore_mouse_bg(void);
 static signed short gui_bool(char*);
 static signed short infobox(const char*, signed short);
 
@@ -2235,19 +2234,6 @@ static void mouse_unused3(const signed short a1)
 	do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
 }
 
-static void update_mouse_cursor(void)
-{
-	if (g_mouse_locked == 0) {
-
-		if (g_mouse_refresh_flag == 0) {
-			g_mouse_locked = 1;
-			restore_mouse_bg();
-			g_mouse_locked = 0;
-		}
-		g_mouse_refresh_flag--;
-	}
-}
-
 static void draw_mouse_cursor(void)
 {
 	signed char Y;
@@ -2336,6 +2322,19 @@ static void restore_mouse_bg(void)
 	for (i = 0; i < diffY; vgaptr += 320, i++)
 		for (j = 0; j < diffX; j++)
 			vgaptr[j] = g_mouse_backbuffer[16 * i + j];
+}
+
+static void update_mouse_cursor(void)
+{
+	if (g_mouse_locked == 0) {
+
+		if (g_mouse_refresh_flag == 0) {
+			g_mouse_locked = 1;
+			restore_mouse_bg();
+			g_mouse_locked = 0;
+		}
+		g_mouse_refresh_flag--;
+	}
 }
 
 static void call_mouse(void)
