@@ -1077,8 +1077,6 @@ static const char* g_fnames_g300en[] = {
 
 static const char g_str_file_missing[] = { "FILE %s IS MISSING!" };
 
-static const unsigned char g_col_white2[] = { 0x3f, 0x3f, 0x3f };
-
 struct struct_chr_lookup {
 	unsigned char chr;
 	signed char index;
@@ -1247,9 +1245,9 @@ static const struct struct_color g_pal_dsalogo[32] = {
 	{0x3c, 0x3c, 0x3c},
 };
 
-static const struct struct_color g_pal_col_white = { 0x3f, 0x3f, 0x3f };
+static const unsigned char g_pal_col_white[] = { 0x3f, 0x3f, 0x3f };
 
-static const struct struct_color g_pal_col_black = { 0x00, 0x00, 0x00 };
+static const unsigned char g_pal_col_black[] = { 0x00, 0x00, 0x00 };
 
 static const struct struct_color g_pal_popup[8] = {
 	{0x00, 0x00, 0x00 },
@@ -3026,7 +3024,7 @@ static void init_video(void)
 	/* set the video mode to 320x200 8bit */
 	set_video_mode(0x13);
 
-	set_color(&g_col_white2[0], 0xff);
+	set_palette(g_pal_col_white, 0xff, 1);
 }
 
 void exit_video(void)
@@ -7150,8 +7148,8 @@ void restore_timer_isr(void)
 
 static void init_palettes(void)
 {
-	set_palette((const unsigned char*)&g_pal_col_black, 0x00, 1);
-	set_palette((const unsigned char*)&g_pal_col_white, 0xff, 1);
+	set_palette(g_pal_col_black, 0x00, 1);
+	set_palette(g_pal_col_white, 0xff, 1);
 	set_palette((const unsigned char*)g_pal_popup, 0xd8, 8);
 	set_palette((const unsigned char*)g_pal_misc, 0xc8, 3);
 	set_palette((const unsigned char*)g_pal_genbg, 0x40, 0x20);
