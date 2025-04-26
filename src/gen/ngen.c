@@ -2802,14 +2802,6 @@ static void load_page(const signed short page)
 	}
 }
 
-static void read_datfile_to_buffer(const signed short index, unsigned char *dst)
-{
-	signed short handle;
-	handle = open_datfile(index);
-	read_datfile(handle, dst, 64000);
-	close(handle);
-}
-
 static void load_typus(const signed short typus)
 {
 	signed short index;
@@ -3010,6 +3002,14 @@ static signed short read_datfile(signed short handle, unsigned char *buf, unsign
 static signed long get_filelength(void)
 {
 	return g_flen;
+}
+
+static void read_datfile_to_buffer(const signed short index, unsigned char *dst)
+{
+	signed short handle;
+	handle = open_datfile(index);
+	read_datfile(handle, dst, 64000);
+	close(handle);
 }
 
 static void set_textcolor(const signed short fg, const signed short bg)
