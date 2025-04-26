@@ -2730,8 +2730,7 @@ static void load_typus(const signed short typus)
 	close(handle);
 }
 
-
-
+/* COLOR MANAGEMENT */
 
 static void set_textcolor(const signed short fg, const signed short bg)
 {
@@ -2743,6 +2742,32 @@ static void get_textcolor(signed short *p_fg, signed short *p_bg)
 {
 	writew((unsigned char*)p_fg, g_fg_color[0]);
 	writew((unsigned char*)p_bg, g_bg_color);
+}
+
+static void init_palettes(void)
+{
+	set_palette(g_pal_col_black, 0x00, 1);
+	set_palette(g_pal_col_white, 0xff, 1);
+	set_palette((const unsigned char*)g_pal_popup, 0xd8, 8);
+	set_palette((const unsigned char*)g_pal_misc, 0xc8, 3);
+	set_palette((const unsigned char*)g_pal_genbg, 0x40, 0x20);
+	set_palette((const unsigned char*)g_pal_heads, 0x20, 0x20);
+	set_textcolor(0xff, 0x0); // WHITE ON BLACK
+}
+
+static void init_colors(void)
+{
+	init_palettes();
+
+	/* these 3 variables are different text colors */
+	g_fg_color[1] = 0xc8; //RED
+	g_fg_color[2] = 0xc9; //YELLOW
+	g_fg_color[3] = 0xca; //BLUE
+
+	/* number of menu tiles width */
+	g_menu_tiles = 3;
+
+	g_dst_dst = g_vga_memstart;
 }
 
 static void init_video(void)
@@ -7160,32 +7185,6 @@ static void intro(void)
 
 	g_in_intro = 0;
 	return;
-}
-
-static void init_palettes(void)
-{
-	set_palette(g_pal_col_black, 0x00, 1);
-	set_palette(g_pal_col_white, 0xff, 1);
-	set_palette((const unsigned char*)g_pal_popup, 0xd8, 8);
-	set_palette((const unsigned char*)g_pal_misc, 0xc8, 3);
-	set_palette((const unsigned char*)g_pal_genbg, 0x40, 0x20);
-	set_palette((const unsigned char*)g_pal_heads, 0x20, 0x20);
-	set_textcolor(0xff, 0x0); // WHITE ON BLACK
-}
-
-static void init_colors(void)
-{
-	init_palettes();
-
-	/* these 3 variables are different text colors */
-	g_fg_color[1] = 0xc8; //RED
-	g_fg_color[2] = 0xc9; //YELLOW
-	g_fg_color[3] = 0xca; //BLUE
-
-	/* number of menu tiles width */
-	g_menu_tiles = 3;
-
-	g_dst_dst = g_vga_memstart;
 }
 
 #define main_gen main
