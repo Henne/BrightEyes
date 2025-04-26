@@ -67,6 +67,13 @@ static inline void clrscr(void) { }
 
 /* static prototypes */
 static void restore_mouse_bg(void);
+static signed short gui_bool(char*);
+static signed short infobox(const char*, signed short);
+
+static signed short open_datfile(unsigned short);
+static signed long get_archive_offset(const char*, unsigned char*);
+static signed short read_datfile(signed short, unsigned char*, unsigned short);
+static signed long get_filelength(void);
 
 /** Keyboard Constants */
 
@@ -2714,6 +2721,40 @@ static void read_common_files(void)
 	decomp_pp20(g_buffer_dmenge_dat, g_buffer_dmenge_dat - 8, len);
 }
 
+#if defined(__BORLANDC__)
+/* Remark: u32 is unsigned long in the BCC-world */
+/* seems unused on available input values */
+/* Borlandified and identical */
+unsigned long swap_u32(unsigned long v)
+{
+	unsigned short l1;
+	unsigned short l2;
+	unsigned char *p = (unsigned char*)&l2;
+
+	register unsigned short l_si;
+
+	writed(p, v); // write v to stack and access subvalues with l1 and l2
+	l_si = l2;
+	l2 = swap_u16(l1);
+	l1 = swap_u16(l_si);
+
+	return readd(p);
+}
+#else
+/* Remark: u32 is unsigned int in the GCC-world */
+unsigned int swap_u32(unsigned int v)
+{
+	unsigned char tmp[4] = {0};
+
+	tmp[0] = (v >> 0) & 0xff;
+	tmp[1] = (v >> 8) & 0xff;
+	tmp[2] = (v >> 16) & 0xff;
+	tmp[3] = (v >> 24) & 0xff;
+
+	return (tmp[0] << 24) | (tmp[1] << 16) | (tmp[2] << 8) | (tmp[3] << 0);
+}
+#endif
+
 static signed long process_nvf(struct nvf_desc *nvf)
 {
 	signed long offs;
@@ -2956,40 +2997,6 @@ static void get_textcolor(signed short *p_fg, signed short *p_bg)
 	writew((unsigned char*)p_fg, g_fg_color[0]);
 	writew((unsigned char*)p_bg, g_bg_color);
 }
-
-#if defined(__BORLANDC__)
-/* Remark: u32 is unsigned long in the BCC-world */
-/* seems unused on available input values */
-/* Borlandified and identical */
-unsigned long swap_u32(unsigned long v)
-{
-	unsigned short l1;
-	unsigned short l2;
-	unsigned char *p = (unsigned char*)&l2;
-
-	register unsigned short l_si;
-
-	writed(p, v); // write v to stack and access subvalues with l1 and l2
-	l_si = l2;
-	l2 = swap_u16(l1);
-	l1 = swap_u16(l_si);
-
-	return readd(p);
-}
-#else
-/* Remark: u32 is unsigned int in the GCC-world */
-unsigned int swap_u32(unsigned int v)
-{
-	unsigned char tmp[4] = {0};
-
-	tmp[0] = (v >> 0) & 0xff;
-	tmp[1] = (v >> 8) & 0xff;
-	tmp[2] = (v >> 16) & 0xff;
-	tmp[3] = (v >> 24) & 0xff;
-
-	return (tmp[0] << 24) | (tmp[1] << 16) | (tmp[2] << 8) | (tmp[3] << 0);
-}
-#endif
 
 /* Borlandified and identical */
 void init_video(void)
@@ -7145,7 +7152,32 @@ void restore_timer_isr(void)
 #endif
 }
 
-/* Borlandified and identical */
+static void init_colors(void)
+{
+	set_palette((signed char*)&g_pal_col_black, 0x00, 1);
+	set_palette((signed char*)&g_pal_col_white, 0xff, 1);
+	set_palette((signed char*)&g_pal_popup, 0xd8, 8);
+	set_palette((signed char*)&g_pal_misc, 0xc8, 3);
+	set_palette((signed char*)&g_pal_genbg, 0x40, 0x20);
+	set_palette((signed char*)&g_pal_heads, 0x20, 0x20);
+	set_textcolor(0xff, 0x0); // WHITE ON BLACK
+}
+
+static void init_stuff(void)
+{
+	init_colors();
+
+	/* these 3 variables are different text colors */
+	g_fg_color[1] = 0xc8; //RED
+	g_fg_color[2] = 0xc9; //YELLOW
+	g_fg_color[3] = 0xca; //BLUE
+
+	/* number of menu tiles width */
+	g_menu_tiles = 3;
+
+	g_dst_dst = g_vga_memstart;
+}
+
 #define main_gen main
 int main_gen(int argc, char **argv)
 {
@@ -7236,32 +7268,4 @@ int main_gen(int argc, char **argv)
 
 	/* to make MSVC happy */
 	return 0;
-}
-
-/* Borlandified and identical */
-void init_colors(void)
-{
-	set_palette((signed char*)&g_pal_col_black, 0x00, 1);
-	set_palette((signed char*)&g_pal_col_white, 0xff, 1);
-	set_palette((signed char*)&g_pal_popup, 0xd8, 8);
-	set_palette((signed char*)&g_pal_misc, 0xc8, 3);
-	set_palette((signed char*)&g_pal_genbg, 0x40, 0x20);
-	set_palette((signed char*)&g_pal_heads, 0x20, 0x20);
-	set_textcolor(0xff, 0x0); // WHITE ON BLACK
-}
-
-/* Borlandified and identical */
-void init_stuff(void)
-{
-	init_colors();
-
-	/* these 3 variables are different text colors */
-	g_fg_color[1] = 0xc8; //RED
-	g_fg_color[2] = 0xc9; //YELLOW
-	g_fg_color[3] = 0xca; //BLUE
-
-	/* number of menu tiles width */
-	g_menu_tiles = 3;
-
-	g_dst_dst = g_vga_memstart;
 }

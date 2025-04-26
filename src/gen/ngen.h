@@ -22,22 +22,7 @@ struct nvf_desc {
 	signed short *height;
 };
 
-	signed short open_datfile(unsigned short);
-	signed long get_archive_offset(const char*, unsigned char*);
-	signed short read_datfile(signed short, unsigned char*, unsigned short);
-	signed long get_filelength(void);
-
-#if defined(__BORLANDC__)
-	unsigned long swap_u32(unsigned long);
-#else
-	unsigned int swap_u32(unsigned int);
-#endif
-
+	// used by external
 	void exit_video(void);
-	signed short infobox(const char*, signed short);
-	signed short gui_bool(char*);
 	signed short gui_radio(char*, signed char, ...);
-
 	void restore_timer_isr(void);
-	void init_colors(void);
-	void init_stuff(void);
