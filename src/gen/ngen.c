@@ -2235,21 +2235,12 @@ void mouse_unused3(unsigned short a1)
 
 /* Borlandified and identical */
 /* static */
-void update_mouse_cursor(void)
-{
-	update_mouse_cursor1();
-}
-
-/* Borlandified and identical */
-/* static */
 void call_mouse(void)
 {
 	mouse();
 }
 
-/* Borlandified and identical */
-/* static */
-void update_mouse_cursor1(void)
+static void update_mouse_cursor(void)
 {
 	if (g_mouse_locked == 0) {
 
@@ -2316,7 +2307,7 @@ void mouse_compare(void)
 			g_mouse_pointer_offsetx = g_mouse_pointer_offsety = 8;
 		}
 		g_mouse_moved = 0;
-		update_mouse_cursor1();
+		update_mouse_cursor();
 		mouse();
 	}
 }
