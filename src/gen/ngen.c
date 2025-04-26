@@ -2233,13 +2233,6 @@ void mouse_unused3(unsigned short a1)
 }
 #endif
 
-/* Borlandified and identical */
-/* static */
-void call_mouse(void)
-{
-	mouse();
-}
-
 static void update_mouse_cursor(void)
 {
 	if (g_mouse_locked == 0) {
@@ -2253,9 +2246,7 @@ static void update_mouse_cursor(void)
 	}
 }
 
-/* Borlandified and identical */
-/* static */
-void mouse(void)
+static void call_mouse(void)
 {
 	if (g_mouse_locked == 0) {
 
@@ -2308,7 +2299,7 @@ void mouse_compare(void)
 		}
 		g_mouse_moved = 0;
 		update_mouse_cursor();
-		mouse();
+		call_mouse();
 	}
 }
 
