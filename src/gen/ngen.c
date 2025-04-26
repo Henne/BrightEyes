@@ -7161,7 +7161,7 @@ static void init_palettes(void)
 
 static void init_colors(void)
 {
-	init_colors();
+	init_palettes();
 
 	/* these 3 variables are different text colors */
 	g_fg_color[1] = 0xc8; //RED
