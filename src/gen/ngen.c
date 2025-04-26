@@ -1077,7 +1077,7 @@ static const char* g_fnames_g300en[] = {
 
 static const char g_str_file_missing[] = { "FILE %s IS MISSING!" };
 
-static const struct struct_color g_col_white2 = { 0x3f, 0x3f, 0x3f };
+static const unsigned char g_col_white2[] = { 0x3f, 0x3f, 0x3f };
 
 struct struct_chr_lookup {
 	unsigned char chr;
@@ -3017,12 +3017,10 @@ static void get_textcolor(signed short *p_fg, signed short *p_bg)
 
 static void init_video(void)
 {
-	struct struct_color l_white = *(struct struct_color*)&g_col_white2;
-
 	/* set the video mode to 320x200 8bit */
 	set_video_mode(0x13);
 
-	set_color((signed char*)&l_white, 0xff);
+	set_color(&g_col_white2[0], 0xff);
 }
 
 void exit_video(void)

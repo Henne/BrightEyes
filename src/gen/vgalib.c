@@ -108,13 +108,13 @@ void save_display_stat(signed short *p)
 {
 }
 
-static inline Uint32 get_ARGB(unsigned char *p) {
+static inline Uint32 get_ARGB(const unsigned char *p) {
 	return (p[2] << 2) | (p[1] << 10) | (p[0] << 18);
 }
 
-void set_color(signed char *ptr, unsigned char color)
+void set_color(const unsigned char *ptr, const unsigned char color)
 {
-	palette[color] = get_ARGB((unsigned char*)ptr);
+	palette[color] = get_ARGB(ptr);
 
 	update_sdl_window();
 }
