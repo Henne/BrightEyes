@@ -17,3 +17,7 @@ unsigned short swap_u16(unsigned short);
 void copy_to_screen(unsigned char*, unsigned char*, signed short, signed short, signed short);
 
 unsigned char* normalize_ptr(unsigned char*);
+
+#if !defined(__BORLANDC__)
+void update_sdl_window(void);
+#endif

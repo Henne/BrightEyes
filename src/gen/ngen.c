@@ -3217,6 +3217,10 @@ static signed short print_chr(const unsigned char c, const signed short x, const
 
 	print_chr_to_screen(idx, width, x, y);
 
+#if !defined(__BORLANDC__)
+	update_sdl_window();
+#endif
+
 	return width;
 }
 
