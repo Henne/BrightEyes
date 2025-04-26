@@ -77,6 +77,8 @@ void set_video_mode(unsigned short mode)
 
 void update_sdl_window(void)
 {
+	if (pixels == NULL) return;
+
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
 		if (event.type == SDL_QUIT) {
