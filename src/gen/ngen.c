@@ -4924,7 +4924,7 @@ static void refresh_screen(void)
 
 			} else {
 				if (g_need_refresh) {
-					call_fill_rect_gen((unsigned char*)g_vga_memstart, 16, 8, 143, 191, 0);
+					call_fill_rect_gen(g_vga_memstart, 16, 8, 143, 191, 0);
 					g_need_refresh = 0;
 				}
 
@@ -5912,7 +5912,7 @@ static void select_typus(void)
 			load_typus((signed short)g_hero.typus);
 
 			update_mouse_cursor();
-			call_fill_rect_gen((unsigned char*)g_vga_memstart, 16, 8, 143, 191, 0);
+			call_fill_rect_gen(g_vga_memstart, 16, 8, 143, 191, 0);
 			wait_for_vsync();
 			set_palette(g_gen_ptr5 + 0x5c02, 0, 32);
 			call_mouse();
@@ -6609,7 +6609,7 @@ static void choose_typus(void)
 
 	load_typus(g_hero.typus);
 	update_mouse_cursor();
-	call_fill_rect_gen((unsigned char*)g_vga_memstart, 16, 8, 143, 191, 0);
+	call_fill_rect_gen(g_vga_memstart, 16, 8, 143, 191, 0);
 	wait_for_vsync();
 	set_palette(g_gen_ptr5 + 0x5c02, 0, 32);
 	call_mouse();
@@ -7008,7 +7008,7 @@ static void intro(void)
 	process_nvf(&nvf);
 
 	/* clear screen */
-	call_fill_rect_gen((unsigned char*)g_vga_memstart, 0, 0, 319, 199, 0);
+	call_fill_rect_gen(g_vga_memstart, 0, 0, 319, 199, 0);
 	wait_for_vsync();
 
 	/* set palette of FANPRO.NVF */
@@ -7039,7 +7039,7 @@ static void intro(void)
 		process_nvf(&nvf);
 
 		/* clear screen */
-		call_fill_rect_gen((unsigned char*)g_vga_memstart, 0, 0, 319, 199, 0);
+		call_fill_rect_gen(g_vga_memstart, 0, 0, 319, 199, 0);
 		wait_for_vsync();
 
 
@@ -7096,7 +7096,7 @@ static void intro(void)
 		decomp_pp20(g_gen_ptr1_dis, g_buffer_heads_dat, (unsigned short)flen);
 
 		/* clear screen */
-		call_fill_rect_gen((unsigned char*)g_vga_memstart, 0, 0, 319, 199, 0);
+		call_fill_rect_gen(g_vga_memstart, 0, 0, 319, 199, 0);
 		memset(g_pal_roalogo, 0, 3 * 256);
 		set_palette(g_pal_roalogo, 0, 256);
 
@@ -7181,7 +7181,7 @@ static void intro(void)
 	}
 
 	/* clear screen */
-	call_fill_rect_gen((unsigned char*)g_vga_memstart, 0, 0, 319, 199, 0);
+	call_fill_rect_gen(g_vga_memstart, 0, 0, 319, 199, 0);
 
 	g_in_intro = 0;
 	return;
@@ -7275,7 +7275,7 @@ int main_gen(int argc, char **argv)
 
 	if (g_called_with_args != 0) {
 		/* Clear the screen and return to SCHICKM.EXE/BLADEM.EXE */
-		call_fill_rect_gen((unsigned char*)g_vga_memstart, 0, 0, 319, 199, 0);
+		call_fill_rect_gen(g_vga_memstart, 0, 0, 319, 199, 0);
 	} else {
 		/* Clear the screen and return to DOS */
 		exit_video();
@@ -7284,6 +7284,5 @@ int main_gen(int argc, char **argv)
 
 	free_buffers();
 
-	/* to make MSVC happy */
 	return 0;
 }
