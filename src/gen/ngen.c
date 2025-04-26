@@ -74,9 +74,7 @@ static inline void clrscr(void) { }
 
 /* static prototypes */
 static signed short infobox(const char*, signed short);
-
-static signed short open_datfile(const signed short);
-static signed short read_datfile(signed short, unsigned char*, unsigned short);
+static void stop_music(void);
 
 /** Keyboard Constants */
 
@@ -1658,7 +1656,7 @@ static void free_buffers(void)
 	}
 }
 
-/* RANDOM NUMBER GENERATOR */
+/* RANDOM NUMBER GENERATOR MANAGEMENT */
 
 /**
  * random_gen - generates a u16 random number
@@ -1702,284 +1700,6 @@ static int is_in_word_array(const int val, const signed short *p)
 	}
 
 	return 0;
-}
-
-
-/* AIL Interface */
-static unsigned char *load_snd_driver(const char *fname)
-{
-	signed long size;
-	unsigned char *norm_ptr;
-	unsigned long in_ptr;
-	signed short handle;
-
-	if ((handle = open(fname, 0x8001)) != -1) {
-		size = 16500;
-		g_snd_driver = (unsigned char*)gen_alloc(size + 0x10);
-#if defined(__BORLANDC__)
-		// BCC: far pointer normalizaion (DOS only)
-		in_ptr = ((unsigned long)g_snd_driver) + 0x0f;
-		in_ptr &= 0xfffffff0;
-		norm_ptr = normalize_ptr((unsigned char*)in_ptr);
-
-		_read(handle, norm_ptr, size);
-#else
-		norm_ptr = g_snd_driver;
-		_read(handle, norm_ptr, size);
-#endif
-		_close(handle);
-		return norm_ptr;
-	} else {
-		return (unsigned char*)NULL;
-	}
-}
-
-static void unload_snd_driver(void)
-{
-	if (g_snd_driver) {
-		free(g_snd_driver);
-		g_snd_driver = NULL;
-	}
-}
-
-static signed short load_driver(const char* fname, const signed short type, signed short port)
-{
-	if ((port != 0) &&
-		(g_snd_driver_base_addr = load_snd_driver(fname)) &&
-		((g_snd_driver_handle = AIL_register_driver(g_snd_driver_base_addr)) != -1))
-	{
-		g_snd_driver_desc = (unsigned char*)AIL_describe_driver(g_snd_driver_handle);
-
-		if (readws(g_snd_driver_desc + 0x02) == type)
-		{
-			if (port == -1) {
-				port = readws(g_snd_driver_desc + 0x0c);
-			}
-			if (AIL_detect_device(g_snd_driver_handle, port,
-					readw(g_snd_driver_desc + 0x0e),
-					readw(g_snd_driver_desc + 0x10),
-					readw(g_snd_driver_desc + 0x12)) != 0)
-			{
-				AIL_init_driver(g_snd_driver_handle, port,
-					readw(g_snd_driver_desc + 0x0e),
-					readw(g_snd_driver_desc + 0x10),
-					readw(g_snd_driver_desc + 0x12));
-				if (type == 3) {
-					g_state_table_size = AIL_state_table_size(g_snd_driver_handle);
-
-					g_state_table = (void*)gen_alloc(g_state_table_size);
-
-					g_timbre_cache_size = AIL_default_timbre_cache_size(g_snd_driver_handle);
-
-					if (g_timbre_cache_size != 0) {
-						g_snd_timbre_cache = (unsigned char*)gen_alloc((unsigned short)g_timbre_cache_size);
-						AIL_define_timbre_cache(g_snd_driver_handle,
-							g_snd_timbre_cache,
-							g_timbre_cache_size);
-					}
-				}
-
-				g_midi_disabled = 0;
-				return 1;
-			} else {
-				infobox(g_str_soundhw_not_found, 0);
-			}
-		}
-	}
-
-	g_midi_disabled = 1;
-	return 0;
-}
-
-static void read_soundcfg(void)
-{
-	signed short handle;
-	signed short port;
-
-	g_use_cda = 0;
-	g_midi_disabled = 1;
-
-	if ((handle = open(g_str_sound_cfg, 0x8001)) != -1) {
-		_read(handle, (unsigned char*)&port, 2);
-		_close(handle);
-
-#if !defined(__BORLANDC__)
-		/* Small hack: enable MIDI instead of CD-Audio */
-		//D1_INFO("MIDI port 0x%x\n", port);
-		if ((port != 0) && (load_driver(g_str_sound_adv, 3, port))) {
-			/* disable audio-cd */
-			g_use_cda = 0;
-			return;
-		}
-#endif
-		/* enable audio-cd, disable midi */
-		g_use_cda = g_midi_disabled = 1;
-
-		/* play audio-cd */
-		seg001_0600();
-	}
-}
-
-static void init_music(const unsigned long size)
-{
-	g_form_xmid = gen_alloc(size);
-
-	if (g_form_xmid != NULL) {
-		AIL_startup();
-		g_midi_disabled = 1;
-	}
-}
-
-static signed short *get_timbre(const signed short bank, const signed short patch)
-{
-	signed short *timbre_ptr;
-
-	lseek(g_handle_timbre, g_gendat_offset, SEEK_SET);
-
-	do {
-		read_datfile(g_handle_timbre, (unsigned char*)&g_current_timbre_patch, 6);
-
-		if (g_current_timbre_bank == -1)
-			return 0;
-
-	} while ((g_current_timbre_bank != bank) || (g_current_timbre_patch != patch));
-//	Remark: Try out the next line instead and get a different sound:
-//	} while ((g_current_timbre_bank != bank) && (g_current_timbre_patch != patch));
-
-	lseek(g_handle_timbre, g_gendat_offset + g_current_timbre_offset, SEEK_SET);
-	read_datfile(g_handle_timbre, (unsigned char*)&g_current_timbre_length, 2);
-
-	timbre_ptr = (signed short*)gen_alloc(g_current_timbre_length);
-
-	read_datfile(g_handle_timbre, (unsigned char*)&timbre_ptr[1], (unsigned short)(timbre_ptr[0] = g_current_timbre_length) - 2);
-
-	return timbre_ptr;
-}
-
-static signed short load_seq(const signed short sequence_num)
-{
-	signed short patch;
-	signed short *src_ptr;
-	unsigned short answer; // si = {bank, patch}
-	signed short bank; // di = bank
-
-	/* open SAMPLE.AD */
-	if ((g_handle_timbre = open_datfile(35)) != -1) {
-
-		if ((g_snd_sequence = AIL_register_sequence(g_snd_driver_handle,
-			g_form_xmid, sequence_num, g_state_table, (void*)NULL)) != -1) {
-
-			while ((answer = AIL_timbre_request(g_snd_driver_handle, g_snd_sequence)) != 0xffff)
-			{
-				bank = answer >> 8;
-
-				if ((src_ptr = get_timbre(bank, patch = (answer & 0xff))) != 0) {
-					/* ptr is passed differently */
-					AIL_install_timbre(g_snd_driver_handle, bank, patch, src_ptr);
-					free(src_ptr);
-				}
-			}
-			/* Remark: set g_handle_timbre to 0 after close() */
-
-			close(g_handle_timbre);
-
-			return 1;
-		} else {
-			close(g_handle_timbre);
-		}
-	}
-
-	return 0;
-}
-
-static signed short play_sequence(const signed short sequence_num)
-{
-	if (load_seq(sequence_num) != 0) {
-		AIL_start_sequence(g_snd_driver_handle, sequence_num);
-		return 1;
-	}
-
-	return 0;
-}
-
-static signed short load_sequence(const signed short index)
-{
-	signed short handle;
-
-	if ((handle = open_datfile(index)) != -1) {
-		read_datfile(handle, g_form_xmid, 32767);
-		close(handle);
-		return 1;
-	}
-
-	return 0;
-}
-
-void stop_sequence(void)
-{
-	if ((g_midi_disabled == 0) && (readw(g_snd_driver_desc + 0x02) == 3))
-	{
-		AIL_stop_sequence(g_snd_driver_handle, g_snd_sequence);
-		AIL_release_sequence_handle(g_snd_driver_handle, g_snd_sequence);
-	}
-}
-
-static void restart_midi(void)
-{
-	if ((g_midi_disabled == 0) && (readw(g_snd_driver_desc + 0x02) == 3) &&
-		(AIL_sequence_status(g_snd_driver_handle, g_snd_sequence) == 2))
-	{
-		AIL_start_sequence(g_snd_driver_handle, g_snd_sequence);
-	}
-}
-
-static void play_midi(const signed short index)
-{
-	if ((g_midi_disabled == 0) && (readw(g_snd_driver_desc + 0x02) == 3))
-	{
-		stop_sequence();
-		load_sequence(index);
-		play_sequence(0);
-	}
-}
-
-static void start_music(const signed short track)
-{
-	if (!g_use_cda) {
-		if (g_midi_disabled == 0) {
-			play_midi(track);
-		}
-	} else {
-		CD_play_track(track);
-	}
-}
-
-/* Remark: used by CD-Audio code => extern */
-void stop_music(void)
-{
-	AIL_shutdown(NULL);
-
-	if (g_snd_timbre_cache) {
-		free(g_snd_timbre_cache);
-		g_snd_timbre_cache = NULL;
-	}
-
-	if (g_state_table) {
-		free(g_state_table);
-		g_state_table = NULL;
-	}
-
-	if (g_form_xmid) {
-		free(g_form_xmid);
-		g_form_xmid = NULL;
-	}
-
-	if (g_snd_driver) {
-		free(g_snd_driver);
-		g_snd_driver = NULL;
-	}
-
-	seg001_033b();
 }
 
 /* MOUSE MANAGEMENT */
@@ -2050,7 +1770,7 @@ static void interrupt mouse_isr(void)
 	signed short p3;
 	signed short p4;
 	signed short p5;
-	
+
 	if (g_mouse_locked == 0) {
 		if (l_si & 0x2) {
 			g_mouse1_event2 = 1;
@@ -2063,12 +1783,12 @@ static void interrupt mouse_isr(void)
 			p1 = 3;
 			p3 = g_mouse_posx;
 			p4 = g_mouse_posy;
-			
+
 			do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
 
 			g_mouse_posx = p3;
 			g_mouse_posy = p4;
-			
+
 			if (g_mouse_posx > g_mouse_posx_max) {
 				g_mouse_posx = g_mouse_posx_max;
 			}
@@ -2081,13 +1801,13 @@ static void interrupt mouse_isr(void)
 			if (g_mouse_posy > g_mouse_posy_max) {
 				g_mouse_posy = g_mouse_posy_max;
 			}
-			
+
 			p1 = 4;
 			p3 = g_mouse_posx;
 			p4 = g_mouse_posy;
-			
+
 			do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
-			
+
 			g_mouse_moved = 1;
 		}
 	}
@@ -3967,6 +3687,285 @@ signed short gui_radio(char *header, signed int options, ...)
 
 	return retval;
 }
+
+/* AIL MANAGEMENT */
+static unsigned char *load_snd_driver(const char *fname)
+{
+	signed long size;
+	unsigned char *norm_ptr;
+	unsigned long in_ptr;
+	signed short handle;
+
+	if ((handle = open(fname, 0x8001)) != -1) {
+		size = 16500;
+		g_snd_driver = (unsigned char*)gen_alloc(size + 0x10);
+#if defined(__BORLANDC__)
+		// BCC: far pointer normalizaion (DOS only)
+		in_ptr = ((unsigned long)g_snd_driver) + 0x0f;
+		in_ptr &= 0xfffffff0;
+		norm_ptr = normalize_ptr((unsigned char*)in_ptr);
+
+		_read(handle, norm_ptr, size);
+#else
+		norm_ptr = g_snd_driver;
+		_read(handle, norm_ptr, size);
+#endif
+		_close(handle);
+		return norm_ptr;
+	} else {
+		return (unsigned char*)NULL;
+	}
+}
+
+static void unload_snd_driver(void)
+{
+	if (g_snd_driver) {
+		free(g_snd_driver);
+		g_snd_driver = NULL;
+	}
+}
+
+static signed short load_driver(const char* fname, const signed short type, signed short port)
+{
+	if ((port != 0) &&
+		(g_snd_driver_base_addr = load_snd_driver(fname)) &&
+		((g_snd_driver_handle = AIL_register_driver(g_snd_driver_base_addr)) != -1))
+	{
+		g_snd_driver_desc = (unsigned char*)AIL_describe_driver(g_snd_driver_handle);
+
+		if (readws(g_snd_driver_desc + 0x02) == type)
+		{
+			if (port == -1) {
+				port = readws(g_snd_driver_desc + 0x0c);
+			}
+			if (AIL_detect_device(g_snd_driver_handle, port,
+					readw(g_snd_driver_desc + 0x0e),
+					readw(g_snd_driver_desc + 0x10),
+					readw(g_snd_driver_desc + 0x12)) != 0)
+			{
+				AIL_init_driver(g_snd_driver_handle, port,
+					readw(g_snd_driver_desc + 0x0e),
+					readw(g_snd_driver_desc + 0x10),
+					readw(g_snd_driver_desc + 0x12));
+				if (type == 3) {
+					g_state_table_size = AIL_state_table_size(g_snd_driver_handle);
+
+					g_state_table = (void*)gen_alloc(g_state_table_size);
+
+					g_timbre_cache_size = AIL_default_timbre_cache_size(g_snd_driver_handle);
+
+					if (g_timbre_cache_size != 0) {
+						g_snd_timbre_cache = (unsigned char*)gen_alloc((unsigned short)g_timbre_cache_size);
+						AIL_define_timbre_cache(g_snd_driver_handle,
+							g_snd_timbre_cache,
+							g_timbre_cache_size);
+					}
+				}
+
+				g_midi_disabled = 0;
+				return 1;
+			} else {
+				infobox(g_str_soundhw_not_found, 0);
+			}
+		}
+	}
+
+	g_midi_disabled = 1;
+	return 0;
+}
+
+static void read_soundcfg(void)
+{
+	signed short handle;
+	signed short port;
+
+	g_use_cda = 0;
+	g_midi_disabled = 1;
+
+	if ((handle = open(g_str_sound_cfg, 0x8001)) != -1) {
+		_read(handle, (unsigned char*)&port, 2);
+		_close(handle);
+
+#if !defined(__BORLANDC__)
+		/* Small hack: enable MIDI instead of CD-Audio */
+		//D1_INFO("MIDI port 0x%x\n", port);
+		if ((port != 0) && (load_driver(g_str_sound_adv, 3, port))) {
+			/* disable audio-cd */
+			g_use_cda = 0;
+			return;
+		}
+#endif
+		/* enable audio-cd, disable midi */
+		g_use_cda = g_midi_disabled = 1;
+
+		/* play audio-cd */
+		seg001_0600();
+	}
+}
+
+static void init_music(const unsigned long size)
+{
+	g_form_xmid = gen_alloc(size);
+
+	if (g_form_xmid != NULL) {
+		AIL_startup();
+		g_midi_disabled = 1;
+	}
+}
+
+static signed short *get_timbre(const signed short bank, const signed short patch)
+{
+	signed short *timbre_ptr;
+
+	lseek(g_handle_timbre, g_gendat_offset, SEEK_SET);
+
+	do {
+		read_datfile(g_handle_timbre, (unsigned char*)&g_current_timbre_patch, 6);
+
+		if (g_current_timbre_bank == -1)
+			return 0;
+
+	} while ((g_current_timbre_bank != bank) || (g_current_timbre_patch != patch));
+//	Remark: Try out the next line instead and get a different sound:
+//	} while ((g_current_timbre_bank != bank) && (g_current_timbre_patch != patch));
+
+	lseek(g_handle_timbre, g_gendat_offset + g_current_timbre_offset, SEEK_SET);
+	read_datfile(g_handle_timbre, (unsigned char*)&g_current_timbre_length, 2);
+
+	timbre_ptr = (signed short*)gen_alloc(g_current_timbre_length);
+
+	read_datfile(g_handle_timbre, (unsigned char*)&timbre_ptr[1], (unsigned short)(timbre_ptr[0] = g_current_timbre_length) - 2);
+
+	return timbre_ptr;
+}
+
+static signed short load_seq(const signed short sequence_num)
+{
+	signed short patch;
+	signed short *src_ptr;
+	unsigned short answer; // si = {bank, patch}
+	signed short bank; // di = bank
+
+	/* open SAMPLE.AD */
+	if ((g_handle_timbre = open_datfile(35)) != -1) {
+
+		if ((g_snd_sequence = AIL_register_sequence(g_snd_driver_handle,
+			g_form_xmid, sequence_num, g_state_table, (void*)NULL)) != -1) {
+
+			while ((answer = AIL_timbre_request(g_snd_driver_handle, g_snd_sequence)) != 0xffff)
+			{
+				bank = answer >> 8;
+
+				if ((src_ptr = get_timbre(bank, patch = (answer & 0xff))) != 0) {
+					/* ptr is passed differently */
+					AIL_install_timbre(g_snd_driver_handle, bank, patch, src_ptr);
+					free(src_ptr);
+				}
+			}
+			/* Remark: set g_handle_timbre to 0 after close() */
+
+			close(g_handle_timbre);
+
+			return 1;
+		} else {
+			close(g_handle_timbre);
+		}
+	}
+
+	return 0;
+}
+
+static signed short play_sequence(const signed short sequence_num)
+{
+	if (load_seq(sequence_num) != 0) {
+		AIL_start_sequence(g_snd_driver_handle, sequence_num);
+		return 1;
+	}
+
+	return 0;
+}
+
+static signed short load_sequence(const signed short index)
+{
+	signed short handle;
+
+	if ((handle = open_datfile(index)) != -1) {
+		read_datfile(handle, g_form_xmid, 32767);
+		close(handle);
+		return 1;
+	}
+
+	return 0;
+}
+
+void stop_sequence(void)
+{
+	if ((g_midi_disabled == 0) && (readw(g_snd_driver_desc + 0x02) == 3))
+	{
+		AIL_stop_sequence(g_snd_driver_handle, g_snd_sequence);
+		AIL_release_sequence_handle(g_snd_driver_handle, g_snd_sequence);
+	}
+}
+
+static void restart_midi(void)
+{
+	if ((g_midi_disabled == 0) && (readw(g_snd_driver_desc + 0x02) == 3) &&
+		(AIL_sequence_status(g_snd_driver_handle, g_snd_sequence) == 2))
+	{
+		AIL_start_sequence(g_snd_driver_handle, g_snd_sequence);
+	}
+}
+
+static void play_midi(const signed short index)
+{
+	if ((g_midi_disabled == 0) && (readw(g_snd_driver_desc + 0x02) == 3))
+	{
+		stop_sequence();
+		load_sequence(index);
+		play_sequence(0);
+	}
+}
+
+static void start_music(const signed short track)
+{
+	if (!g_use_cda) {
+		if (g_midi_disabled == 0) {
+			play_midi(track);
+		}
+	} else {
+		CD_play_track(track);
+	}
+}
+
+/* Remark: used by CD-Audio code => extern */
+void stop_music(void)
+{
+	AIL_shutdown(NULL);
+
+	if (g_snd_timbre_cache) {
+		free(g_snd_timbre_cache);
+		g_snd_timbre_cache = NULL;
+	}
+
+	if (g_state_table) {
+		free(g_state_table);
+		g_state_table = NULL;
+	}
+
+	if (g_form_xmid) {
+		free(g_form_xmid);
+		g_form_xmid = NULL;
+	}
+
+	if (g_snd_driver) {
+		free(g_snd_driver);
+		g_snd_driver = NULL;
+	}
+
+	seg001_033b();
+}
+
+
 
 /**
  * save_chr() - save the hero the a CHR file
