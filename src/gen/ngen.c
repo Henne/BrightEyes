@@ -1747,8 +1747,8 @@ static void unload_snd_driver(void)
 static signed short load_driver(const char* fname, const signed short type, signed short port)
 {
 	if ((port != 0) &&
-		(g_snd_driver_base_addr = (unsigned char*)load_snd_driver(fname)) &&
-		((g_snd_driver_handle = AIL_register_driver((unsigned char*)g_snd_driver_base_addr)) != -1))
+		(g_snd_driver_base_addr = load_snd_driver(fname)) &&
+		((g_snd_driver_handle = AIL_register_driver(g_snd_driver_base_addr)) != -1))
 	{
 		g_snd_driver_desc = (unsigned char*)AIL_describe_driver(g_snd_driver_handle);
 
@@ -1824,7 +1824,9 @@ static void read_soundcfg(void)
 
 static void init_music(const unsigned long size)
 {
-	if ((g_form_xmid = gen_alloc(size))) {
+	g_form_xmid = gen_alloc(size);
+
+	if (g_form_xmid != NULL) {
 		AIL_startup();
 		g_midi_disabled = 1;
 	}
@@ -3340,7 +3342,10 @@ static void print_str(const char *str, signed short x, signed short y)
 
 	x_bak = x;
 
-	while ((c = str[i++])) {
+	while (str[i]) {
+
+		c = str[i++];
+
 		if ((c == 0x0d) || (c == 0x40)) {
 			/* newline */
 			y += 7;
@@ -5278,11 +5283,14 @@ static void fill_values(void)
 			}
 		}
 
-		/* set spell attempts */
-		g_hero.spell_incs = g_initial_spell_incs[g_hero.typus - 7];
+		/* set spell and convertable increase attempts */
+		if (g_hero.typus <= 12) { // check to silence the BCC
+			g_hero.spell_incs = g_initial_spell_incs[g_hero.typus - 7];
+			di = g_initial_conv_incs[g_hero.typus - 7];
+		}
 
 		/* get convertable increase attempts */
-		if ((di = g_initial_conv_incs[g_hero.typus - 7]) && (g_level == 2) && gui_bool(get_text(269))) {
+		if ((di != 0) && (g_level == 2) && gui_bool(get_text(269))) {
 			/* create string */
 			sprintf(g_gen_ptr2, get_text(270), di);
 
