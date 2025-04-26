@@ -65,6 +65,13 @@ static inline void clrscr(void) { }
 #include "ail_stub.h"
 #endif
 
+#if defined(__BORLANDC__)
+/* BCC/DOS-specific pointer arithmetics */
+#define HUGEPTR huge
+#else
+#define HUGEPTR
+#endif
+
 /* static prototypes */
 static void restore_mouse_bg(void);
 static signed short gui_bool(char*);
@@ -106,6 +113,15 @@ static signed long get_filelength(void);
 	@p_height:      pointer where the height of the picture must be stored
 	@p_width:       pointer where the width of the picture must be stored
 */
+struct nvf_desc {
+	unsigned char HUGEPTR *dst;
+	unsigned char HUGEPTR *src;
+	signed short no;
+	signed char type;
+	signed short *width;
+	signed short *height;
+};
+
 
 struct struct_spelltab {
 	signed char origin; /* {0 = Druid, 1 = Mage, 2 = Elven, 3 = Warlock } */
@@ -914,6 +930,14 @@ static signed short g_mouse_pointer_offsetx = 0;
 static signed short g_mouse_pointer_offsety = 0;
 static signed short g_mouse_pointer_offsetx_bak = 0;
 static signed short g_mouse_pointer_offsety_bak = 0;
+
+struct mouse_action {
+	signed short x1;
+	signed short y1;
+	signed short x2;
+	signed short y2;
+	signed short action;
+};
 
 static const struct mouse_action g_action_default[2] = {
 	{ 0, 0, 319, 199, 0xfe},
