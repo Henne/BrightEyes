@@ -2430,6 +2430,7 @@ static void unused_func1(signed char *in_ptr, const signed short x, const signed
 	call_mouse();
 }
 
+/* IMAGE MANAGEMENT */
 
 /**
  * decomp_rle() - decompress a RLE compressed picture
@@ -2479,6 +2480,153 @@ static void decomp_rle(unsigned char *dst, unsigned char *src, signed short x, s
 
 	call_mouse();
 }
+
+#if defined(__BORLANDC__)
+/* Remark: u32 is unsigned long in the BCC-world */
+/* seems unused on available input values */
+static unsigned long swap_u32(unsigned long v)
+{
+	unsigned short l1;
+	unsigned short l2;
+	unsigned char *p = (unsigned char*)&l2;
+
+	register unsigned short l_si;
+
+	writed(p, v); // write v to stack and access subvalues with l1 and l2
+	l_si = l2;
+	l2 = swap_u16(l1);
+	l1 = swap_u16(l_si);
+
+	return readd(p);
+}
+#else
+/* Remark: u32 is unsigned int in the GCC-world */
+static unsigned int swap_u32(unsigned int v)
+{
+	unsigned char tmp[4] = {0};
+
+	tmp[0] = (v >> 0) & 0xff;
+	tmp[1] = (v >> 8) & 0xff;
+	tmp[2] = (v >> 16) & 0xff;
+	tmp[3] = (v >> 24) & 0xff;
+
+	return (tmp[0] << 24) | (tmp[1] << 16) | (tmp[2] << 8) | (tmp[3] << 0);
+}
+#endif
+
+static signed long process_nvf(struct nvf_desc *nvf)
+{
+	signed long offs;
+	signed short pics;
+	signed short height;
+	signed short va;
+	signed long p_size;
+	signed long retval;
+	signed char nvf_type;
+
+	unsigned char HUGEPTR *src;
+
+	register signed short i;     // si
+	register signed short width; // di
+#if 0
+	/* Fix: GCC warns about uninitialized values */
+	width = height = 0;
+	p_size = 0;
+	src = NULL;
+#endif
+
+	va = (nvf_type = *(unsigned char*)(nvf->src)) & 0x80;
+	nvf_type &= 0x7f;
+	pics = readws(nvf->src + 1L);
+
+	if (nvf->no < 0)
+		nvf->no = 0;
+
+	if (nvf->no > pics - 1)
+		nvf->no = pics - 1;
+
+	switch (nvf_type) {
+
+	case 0x00:
+		width = readws(nvf->src + 3L);
+		height = readws(nvf->src + 5L);
+		p_size = width * height;
+		memcpy(nvf->dst - 8L, nvf->src + p_size * nvf->no + 7L, p_size);
+		break;
+	case 0x01:
+		offs = pics * 4 + 3L;
+		for (i = 0; i < nvf->no; i++) {
+			width = readws(nvf->src + i * 4 + 3L);
+			height = readws(nvf->src + i * 4 + 5L);
+			offs += width * height;
+		}
+
+		width = readws(nvf->src + nvf->no * 4 + 3L);
+		height = readws(nvf->src + nvf->no * 4 + 5L);
+		p_size = width * height;
+		memcpy(nvf->dst - 8L, nvf->src + offs, p_size);
+		break;
+
+	case 0x02:
+		width = readws(nvf->src + 3L);
+		height = readws(nvf->src + 5L);
+		offs = ((unsigned long)(pics * 4)) + 7L;
+		for (i = 0; i < nvf->no; i++) {
+			/* BCC adds here in offs = offs + value */
+			offs += readds(nvf->src + i * 4 + 7L);
+		}
+
+		p_size = readds(nvf->src + nvf->no * 4 + 7L);
+		memcpy(nvf->dst - 8L, nvf->src + offs, p_size);
+		break;
+
+	case 0x03:
+		offs = pics * 8 + 3L;
+		for (i = 0; i < (signed short)nvf->no; i++) {
+			/* First two lines are not neccessary */
+			width = readws(nvf->src + i * 8 + 3L);
+			height = readws(nvf->src + i * 8 + 5L);
+
+			offs += readds(nvf->src + i * 8 + 7L);
+		}
+
+		// Selected picture nvf->no, and copy it to nvf->dst
+		width = readws(nvf->src + nvf->no * 8 + 3L);
+		height = readws(nvf->src + nvf->no * 8 + 5L);
+		p_size = readds(nvf->src + i * 8 + 7L);
+
+		memcpy(nvf->dst - 8L, nvf->src + offs, p_size);
+		break;
+	}
+
+	if (!nvf->type) {
+		/* PP20 decompression */
+		if (va != 0) {
+			/* get size from unpacked picture */
+			retval = readds(nvf->dst) - 8L;
+			src = nvf->dst - 8L;
+			src += (retval - 4L);
+			retval = readd(src);
+			retval = ((signed long)swap_u32(retval)) >> 8;
+
+		} else {
+			retval = width * height;
+		}
+
+		decomp_pp20(nvf->dst, nvf->dst - 8L, p_size);
+
+	} else {
+		/* No decompression, just copy */
+		memmove(nvf->dst, nvf->dst - 8L, (signed short)p_size);
+		retval = p_size;
+	}
+
+	*nvf->width = width;
+	*nvf->height = height;
+
+	return retval;
+}
+
 
 /* KEYBOARD AND INPUT MANAGEMENT */
 
@@ -2749,151 +2897,6 @@ static void load_common_files(void)
 	decomp_pp20(g_buffer_dmenge_dat, g_buffer_dmenge_dat - 8, len);
 }
 
-#if defined(__BORLANDC__)
-/* Remark: u32 is unsigned long in the BCC-world */
-/* seems unused on available input values */
-static unsigned long swap_u32(unsigned long v)
-{
-	unsigned short l1;
-	unsigned short l2;
-	unsigned char *p = (unsigned char*)&l2;
-
-	register unsigned short l_si;
-
-	writed(p, v); // write v to stack and access subvalues with l1 and l2
-	l_si = l2;
-	l2 = swap_u16(l1);
-	l1 = swap_u16(l_si);
-
-	return readd(p);
-}
-#else
-/* Remark: u32 is unsigned int in the GCC-world */
-static unsigned int swap_u32(unsigned int v)
-{
-	unsigned char tmp[4] = {0};
-
-	tmp[0] = (v >> 0) & 0xff;
-	tmp[1] = (v >> 8) & 0xff;
-	tmp[2] = (v >> 16) & 0xff;
-	tmp[3] = (v >> 24) & 0xff;
-
-	return (tmp[0] << 24) | (tmp[1] << 16) | (tmp[2] << 8) | (tmp[3] << 0);
-}
-#endif
-
-static signed long process_nvf(struct nvf_desc *nvf)
-{
-	signed long offs;
-	signed short pics;
-	signed short height;
-	signed short va;
-	signed long p_size;
-	signed long retval;
-	signed char nvf_type;
-
-	unsigned char HUGEPTR *src;
-
-	register signed short i;     // si
-	register signed short width; // di
-#if 0
-	/* Fix: GCC warns about uninitialized values */
-	width = height = 0;
-	p_size = 0;
-	src = NULL;
-#endif
-
-	va = (nvf_type = *(unsigned char*)(nvf->src)) & 0x80;
-	nvf_type &= 0x7f;
-	pics = readws(nvf->src + 1L);
-
-	if (nvf->no < 0)
-		nvf->no = 0;
-
-	if (nvf->no > pics - 1)
-		nvf->no = pics - 1;
-
-	switch (nvf_type) {
-
-	case 0x00:
-		width = readws(nvf->src + 3L);
-		height = readws(nvf->src + 5L);
-		p_size = width * height;
-		memcpy(nvf->dst - 8L, nvf->src + p_size * nvf->no + 7L, p_size);
-		break;
-	case 0x01:
-		offs = pics * 4 + 3L;
-		for (i = 0; i < nvf->no; i++) {
-			width = readws(nvf->src + i * 4 + 3L);
-			height = readws(nvf->src + i * 4 + 5L);
-			offs += width * height;
-		}
-
-		width = readws(nvf->src + nvf->no * 4 + 3L);
-		height = readws(nvf->src + nvf->no * 4 + 5L);
-		p_size = width * height;
-		memcpy(nvf->dst - 8L, nvf->src + offs, p_size);
-		break;
-
-	case 0x02:
-		width = readws(nvf->src + 3L);
-		height = readws(nvf->src + 5L);
-		offs = ((unsigned long)(pics * 4)) + 7L;
-		for (i = 0; i < nvf->no; i++) {
-			/* BCC adds here in offs = offs + value */
-			offs += readds(nvf->src + i * 4 + 7L);
-		}
-
-		p_size = readds(nvf->src + nvf->no * 4 + 7L);
-		memcpy(nvf->dst - 8L, nvf->src + offs, p_size);
-		break;
-
-	case 0x03:
-		offs = pics * 8 + 3L;
-		for (i = 0; i < (signed short)nvf->no; i++) {
-			/* First two lines are not neccessary */
-			width = readws(nvf->src + i * 8 + 3L);
-			height = readws(nvf->src + i * 8 + 5L);
-
-			offs += readds(nvf->src + i * 8 + 7L);
-		}
-
-		// Selected picture nvf->no, and copy it to nvf->dst
-		width = readws(nvf->src + nvf->no * 8 + 3L);
-		height = readws(nvf->src + nvf->no * 8 + 5L);
-		p_size = readds(nvf->src + i * 8 + 7L);
-
-		memcpy(nvf->dst - 8L, nvf->src + offs, p_size);
-		break;
-	}
-
-	if (!nvf->type) {
-		/* PP20 decompression */
-		if (va != 0) {
-			/* get size from unpacked picture */
-			retval = readds(nvf->dst) - 8L;
-			src = nvf->dst - 8L;
-			src += (retval - 4L);
-			retval = readd(src);
-			retval = ((signed long)swap_u32(retval)) >> 8;
-
-		} else {
-			retval = width * height;
-		}
-
-		decomp_pp20(nvf->dst, nvf->dst - 8L, p_size);
-
-	} else {
-		/* No decompression, just copy */
-		memmove(nvf->dst, nvf->dst - 8L, (signed short)p_size);
-		retval = p_size;
-	}
-
-	*nvf->width = width;
-	*nvf->height = height;
-
-	return retval;
-}
 
 static void detect_datfile(void)
 {
