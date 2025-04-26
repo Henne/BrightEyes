@@ -2508,16 +2508,16 @@ static void wait_for_vsync(void)
 #endif
 }
 
-static void wait_for_keypress(void)
+static signed short get_bioskey(const int cmd)
 {
-	while (CD_bioskey(1)) {
-		CD_bioskey(0);
-	}
+	return CD_bioskey(cmd);
 }
 
-static signed short get_bioskey(void)
+static void wait_for_keypress(void)
 {
-	return CD_bioskey(0);
+	while (get_bioskey(1)) {
+		get_bioskey(0);
+	}
 }
 
 static void handle_input(void)
@@ -2526,9 +2526,9 @@ static void handle_input(void)
 
 	g_in_key_ascii = g_in_key_ext = si = 0;
 
-	if (CD_bioskey(1)) {
+	if (get_bioskey(1)) {
 
-		si = (g_in_key_ascii = CD_bioskey(0)) >> 8;
+		si = (g_in_key_ascii = get_bioskey(0)) >> 8;
 		g_in_key_ascii &= 0xff;
 
 		if (si == KEY_J)
@@ -3461,13 +3461,13 @@ static signed short enter_string(char *dst, signed short x, signed short y, sign
 	c = 0;
 	while ((c != 0xd) || (pos == 0)) {
 		do {
-			do {} while (!CD_bioskey(1) && (g_mouse1_event1 == 0));
+			do {} while (!get_bioskey(1) && (g_mouse1_event1 == 0));
 
 			if (g_mouse1_event1) {
 				g_in_key_ascii = 0x0d;
 				g_mouse1_event1 = g_mouse1_event2 = 0;
 			} else {
-				g_in_key_ext = (g_in_key_ascii = CD_bioskey(0)) >> 8;
+				g_in_key_ext = (g_in_key_ascii = get_bioskey(0)) >> 8;
 				g_in_key_ascii &= 0xff;
 			}
 		} while ((g_in_key_ext == 0) && (g_in_key_ascii == 0));
