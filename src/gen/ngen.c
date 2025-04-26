@@ -4125,200 +4125,6 @@ void change_sex(void)
 }
 
 /* Borlandified and identical */
-void do_gen(void)
-{
-	signed short si;
-	signed short di;
-
-	di = 0;
-
-	g_screen_var = 1;
-
-	/* try to set the level from parameters */
-	g_level = ((g_param_level == 'a') ? 2 : ((g_param_level == 'n') ? 1 : -1));
-
-	/* ask for level */
-	while (g_level == -1) {
-		g_level = gui_radio(get_text(0), 2, get_text(1), get_text(2));
-	}
-
-	g_mouse2_event = 1;
-
-	/* main loop */
-	while (!di) {
-		if (g_screen_var) {
-			refresh_screen();
-			g_screen_var = 0;
-		}
-
-		g_action_table = (struct mouse_action*)g_action_page[g_gen_page];
-		handle_input();
-		g_action_table = (struct mouse_action*)NULL;
-
-		if (g_mouse2_event || g_in_key_ext == KEY_PGUP) {
-			/* print the menu for each page */
-			switch (g_gen_page) {
-				case 0: {
-					si = gui_radio(get_text(7), 9,
-						get_text(10), get_text(11), get_text(15),
-						get_text(8),  get_text(14), get_text(12),
-						get_text(262),get_text(9),  get_text(258));
-
-					if (si != -1) {
-						if ((si >= 4) && (si < 6) && (g_hero.attrib[0].normal) && !gui_bool(get_text(13))) {
-							si = 0;
-						}
-						g_in_key_ext = 0;
-						switch (si) {
-							case 1: {
-								enter_name();
-								break;
-							}
-							case 2: {
-								change_sex();
-								break;
-							}
-							case 3: {
-								change_attribs();
-								break;
-							}
-							case 4: {
-								memset((void*)&g_hero, 0, sizeof(g_hero));
-								clear_hero();
-								g_mouse2_event = 1;
-								g_screen_var = 1;
-								break;
-							}
-							case 5: {
-								new_values();
-								break;
-							}
-							case 6: {
-								select_typus();
-								break;
-							}
-							case 7: {
-								choose_typus();
-								break;
-							}
-							case 8: {
-								save_chr();
-								break;
-							}
-							case 9: {
-								if (gui_bool(get_text(259)))
-									di = 1;
-								break;
-							}
-						}
-					}
-					break;
-				}
-				case 1:
-				case 2:
-				case 3: {
-					select_skill();
-					break;
-				}
-				case 4: {
-					choose_atpa();
-					break;
-				}
-				case 5:
-				case 6:
-				case 7:
-				case 8:
-				case 9:
-				case 10: {
-					select_spell();
-					break;
-				}
-			}
-		}
-
-		if (g_in_key_ext == KEY_CTRL_F3)
-			change_sex();
-
-		if (g_in_key_ext == KEY_CTRL_F4)
-			enter_name();
-
-		if ((g_in_key_ext == KEY_UP) && (g_gen_page == 0)) {
-			if (!g_hero.typus) {
-				infobox(get_text(17), 0);
-			} else {
-				if (g_head_current < g_head_last) {
-					g_head_current++;
-				} else {
-					g_head_current = g_head_first;
-				}
-				change_head();
-			}
-		}
-
-		if ((g_in_key_ext == KEY_DOWN) && (g_gen_page == 0)) {
-			if (!g_hero.typus) {
-				infobox(get_text(17), 0);
-			} else {
-				if (g_head_current > g_head_first) {
-					g_head_current--;
-				} else {
-					g_head_current = g_head_last;
-				}
-				change_head();
-			}
-		}
-
-		if ((g_in_key_ext == KEY_RIGHT) && (g_level != 1)) {
-			if (!g_hero.typus) {
-				infobox(get_text(72), 0);
-			} else {
-				g_screen_var = 1;
-
-				if (((g_hero.typus < 7) ? 4 : 10) > g_gen_page) {
-					g_gen_page++;
-				} else {
-					g_gen_page = 0;
-				}
-			}
-		}
-
-		if (g_in_key_ext == KEY_LEFT) {
-			if (g_gen_page > 0) {
-				g_screen_var = 1;
-				g_gen_page--;
-			} else {
-				if (g_level != 1) {
-
-					if (!g_hero.typus) {
-						infobox(get_text(72), 0);
-					} else {
-						g_screen_var = 1;
-						g_gen_page = (g_hero.typus < 7 ? 4 : 10);
-					}
-				}
-			}
-		}
-
-		if ((g_in_key_ext >= KEY_1) && (g_in_key_ext <= KEY_5) &&
-			(g_level == 2) && g_hero.typus) {
-
-			si = ((g_in_key_ext == KEY_1) ? 0 : (
-				(g_in_key_ext == KEY_2) ? 1 : (
-				(g_in_key_ext == KEY_3) ? 4 : (
-				(g_in_key_ext == KEY_4) ? 5 : 10))));
-
-			if ((si != g_gen_page) && (si < 5 || g_hero.typus >= 7)) {
-				g_gen_page = si;
-				g_screen_var = 1;
-			}
-		}
-#if !defined(__BORLANDC__)
-		if (g_lets_quit == 1) di = 1;
-#endif
-	}
-}
-
-/* Borlandified and identical */
 void refresh_screen(void)
 {
 	unsigned char* src;
@@ -6763,6 +6569,201 @@ void choose_typus(void)
 	fill_values();
 	g_screen_var = 1;
 }
+
+static void do_gen(void)
+{
+	signed short si;
+	signed short di;
+
+	di = 0;
+
+	g_screen_var = 1;
+
+	/* try to set the level from parameters */
+	g_level = ((g_param_level == 'a') ? 2 : ((g_param_level == 'n') ? 1 : -1));
+
+	/* ask for level */
+	while (g_level == -1) {
+		g_level = gui_radio(get_text(0), 2, get_text(1), get_text(2));
+	}
+
+	g_mouse2_event = 1;
+
+	/* main loop */
+	while (!di) {
+		if (g_screen_var) {
+			refresh_screen();
+			g_screen_var = 0;
+		}
+
+		g_action_table = (struct mouse_action*)g_action_page[g_gen_page];
+		handle_input();
+		g_action_table = (struct mouse_action*)NULL;
+
+		if (g_mouse2_event || g_in_key_ext == KEY_PGUP) {
+			/* print the menu for each page */
+			switch (g_gen_page) {
+				case 0: {
+					si = gui_radio(get_text(7), 9,
+						get_text(10), get_text(11), get_text(15),
+						get_text(8),  get_text(14), get_text(12),
+						get_text(262),get_text(9),  get_text(258));
+
+					if (si != -1) {
+						if ((si >= 4) && (si < 6) && (g_hero.attrib[0].normal) && !gui_bool(get_text(13))) {
+							si = 0;
+						}
+						g_in_key_ext = 0;
+						switch (si) {
+							case 1: {
+								enter_name();
+								break;
+							}
+							case 2: {
+								change_sex();
+								break;
+							}
+							case 3: {
+								change_attribs();
+								break;
+							}
+							case 4: {
+								memset((void*)&g_hero, 0, sizeof(g_hero));
+								clear_hero();
+								g_mouse2_event = 1;
+								g_screen_var = 1;
+								break;
+							}
+							case 5: {
+								new_values();
+								break;
+							}
+							case 6: {
+								select_typus();
+								break;
+							}
+							case 7: {
+								choose_typus();
+								break;
+							}
+							case 8: {
+								save_chr();
+								break;
+							}
+							case 9: {
+								if (gui_bool(get_text(259)))
+									di = 1;
+								break;
+							}
+						}
+					}
+					break;
+				}
+				case 1:
+				case 2:
+				case 3: {
+					select_skill();
+					break;
+				}
+				case 4: {
+					choose_atpa();
+					break;
+				}
+				case 5:
+				case 6:
+				case 7:
+				case 8:
+				case 9:
+				case 10: {
+					select_spell();
+					break;
+				}
+			}
+		}
+
+		if (g_in_key_ext == KEY_CTRL_F3)
+			change_sex();
+
+		if (g_in_key_ext == KEY_CTRL_F4)
+			enter_name();
+
+		if ((g_in_key_ext == KEY_UP) && (g_gen_page == 0)) {
+			if (!g_hero.typus) {
+				infobox(get_text(17), 0);
+			} else {
+				if (g_head_current < g_head_last) {
+					g_head_current++;
+				} else {
+					g_head_current = g_head_first;
+				}
+				change_head();
+			}
+		}
+
+		if ((g_in_key_ext == KEY_DOWN) && (g_gen_page == 0)) {
+			if (!g_hero.typus) {
+				infobox(get_text(17), 0);
+			} else {
+				if (g_head_current > g_head_first) {
+					g_head_current--;
+				} else {
+					g_head_current = g_head_last;
+				}
+				change_head();
+			}
+		}
+
+		if ((g_in_key_ext == KEY_RIGHT) && (g_level != 1)) {
+			if (!g_hero.typus) {
+				infobox(get_text(72), 0);
+			} else {
+				g_screen_var = 1;
+
+				if (((g_hero.typus < 7) ? 4 : 10) > g_gen_page) {
+					g_gen_page++;
+				} else {
+					g_gen_page = 0;
+				}
+			}
+		}
+
+		if (g_in_key_ext == KEY_LEFT) {
+			if (g_gen_page > 0) {
+				g_screen_var = 1;
+				g_gen_page--;
+			} else {
+				if (g_level != 1) {
+
+					if (!g_hero.typus) {
+						infobox(get_text(72), 0);
+					} else {
+						g_screen_var = 1;
+						g_gen_page = (g_hero.typus < 7 ? 4 : 10);
+					}
+				}
+			}
+		}
+
+		if ((g_in_key_ext >= KEY_1) && (g_in_key_ext <= KEY_5) &&
+			(g_level == 2) && g_hero.typus) {
+
+			si = ((g_in_key_ext == KEY_1) ? 0 : (
+				(g_in_key_ext == KEY_2) ? 1 : (
+				(g_in_key_ext == KEY_3) ? 4 : (
+				(g_in_key_ext == KEY_4) ? 5 : 10))));
+
+			if ((si != g_gen_page) && (si < 5 || g_hero.typus >= 7)) {
+				g_gen_page = si;
+				g_screen_var = 1;
+			}
+		}
+#if !defined(__BORLANDC__)
+		if (g_lets_quit == 1) di = 1;
+#endif
+	}
+}
+
+
 
 /* Borlandified and identical */
 static void pal_fade_out(signed char *dst, signed char *src, signed short n)
