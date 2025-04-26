@@ -38,22 +38,6 @@ struct nvf_desc {
 	signed short gui_bool(char*);
 	signed short gui_radio(char*, signed char, ...);
 
-	void refresh_screen(void);
-	void clear_hero(void);
-	void new_values(void);
-	void skill_inc_novice(signed short);
-	void spell_inc_novice(signed short);
-	void select_typus(void);
-	signed short can_change_attribs(void);
-	void change_attribs(void);
-
-	void save_picbuf(void);
-	void print_values(void);
-	void make_valuta_str(char *, signed long);
-	void select_skill(void);
-	void select_spell(void);
-	void choose_atpa(void);
-	void choose_typus(void);
 	void restore_timer_isr(void);
 	void init_colors(void);
 	void init_stuff(void);

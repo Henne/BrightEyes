@@ -4124,1093 +4124,7 @@ void change_sex(void)
 	}
 }
 
-/* Borlandified and identical */
-void refresh_screen(void)
-{
-	unsigned char* src;
-	unsigned char* dst;
-	signed short width;
-	signed short height;
-	struct nvf_desc nvf;
-
-	if (g_screen_var) {
-		g_gfx_ptr = g_gen_ptr1_dis;
-		load_page(g_gen_page);
-		save_picbuf();
-
-		/* page with base values and hero is not male */
-		if ((g_gen_page == 0) && (g_hero.sex != 0)) {
-
-			dst = g_gen_ptr1_dis + 7 * 320 + 305;
-			src = g_buffer_sex_dat + 256 * g_hero.sex;
-			copy_to_screen(src, dst, 16, 16, 0);
-		}
-
-		/* page with base values and level is advanced */
-		if ((g_gen_page == 0) && (g_level == 1)) {
-			dst = g_gen_ptr1_dis + 178 * 320 + 284;
-
-			src = g_buffer_sex_dat + 512;
-
-			copy_to_screen(src, dst, 20, 15, 0);
-
-			if (g_dsagen_lang == LANG_EN) {
-				dst = g_gen_ptr1_dis + 178 * 320 + 145;
-				copy_to_screen(src, dst, 20, 15, 0);
-			}
-		}
-		/* if the page is lower than 5 */
-		if (g_gen_page < 5) {
-			/* draw DMENGE.DAT or the typus name */
-			dst = g_gen_ptr1_dis + 8 * 320 + 16;
-
-			if (g_hero.typus != 0) {
-
-				g_need_refresh = 1;
-				copy_to_screen(g_gen_ptr5, dst, 128, 184, 0);
-
-				if (g_hero.sex != 0) {
-					print_str(get_text(271 + g_hero.typus),
-						get_line_start_c(get_text(271 + g_hero.typus), 16, 128),
-						184);
-				} else {
-					print_str(get_text(17 + g_hero.typus),
-						get_line_start_c(get_text(17 + g_hero.typus), 16, 128),
-						184);
-				}
-
-			} else {
-				if (g_need_refresh) {
-					call_fill_rect_gen((unsigned char*)g_vga_memstart, 16, 8, 143, 191, 0);
-					g_need_refresh = 0;
-				}
-
-				wait_for_vsync();
-				set_palette((signed char*)g_buffer_dmenge_dat + 128 * 184 + 2, 0 , 32);
-				copy_to_screen(g_buffer_dmenge_dat, dst, 128, 184, 0);
-			}
-		}
-		/* if hero has a typus */
-		if (g_hero.typus != 0) {
-			/* draw the head */
-
-			nvf.dst = g_gen_ptr6;
-			nvf.src = g_buffer_heads_dat;
-			nvf.no = g_head_current;
-			nvf.type = 0;
-			nvf.width = &width;
-			nvf.height = &height;
-			process_nvf(&nvf);
-
-			g_dst_src = g_gen_ptr6;
-			g_dst_x1 = 272;
-			g_dst_x2 = 303;
-			g_dst_dst = g_gen_ptr1_dis;
-
-			/* draw the head */
-			if (g_gen_page == 0) {
-				/* on the base page */
-				g_dst_y1 = 8;
-				g_dst_y2 = 39;
-				do_draw_pic(0);
-			} else if (g_gen_page > 4) {
-				/* on the spell pages */
-				g_dst_y1 = 4;
-				g_dst_y2 = 35;
-				do_draw_pic(0);
-			}
-
-			g_dst_dst = g_vga_memstart;
-
-		}
-
-		print_values();
-		dst = g_gfx_ptr = g_vga_memstart;
-		src = g_gen_ptr1_dis;
-		update_mouse_cursor();
-		copy_to_screen(src, dst, 320, 200, 0);
-		call_mouse();
-	} else {
-		print_values();
-	}
-}
-
-/* Borlandified and identical */
-/* static */
-void clear_hero(void)
-{
-	signed short i;
-
-	g_got_mu_bonus = g_got_ch_bonus = 0;
-
-	g_head_typus = g_head_first = g_head_last = g_head_current = 0;
-
-	for (i = 0; i < 14; i++)
-		g_attrib_changed[i] = 0;
-
-	for (i = 0; i < 86; i++) {
-		g_spell_incs[i].tries = g_spell_incs[i].incs = 0;
-	}
-	for (i = 0; i < 52; i++) {
-		g_skill_incs[i].tries = g_skill_incs[i].incs = 0;
-	}
-
-	g_hero.level = 1;
-}
-
-/**
- * new_values() - roll out new attribute values
- *
- */
-/* Borlandified and identical */
-void new_values(void)
-{
-	/* Original-Bugfix:	there once was a char[11],
-				which could not hold a char[16] */
-	volatile signed char *att_ptr;
-	signed char randval;
-	signed char unset_attribs;
-	signed char values[8];
-	signed char sex_bak;
-#if !defined(__BORLANDC__)
-	char name_bak[17];
-#else
-	char name_bak[10];
-#endif
-	signed short j;
-	signed short i;
-
-	signed short di;
-
-	/* set variable if hero has a typus */
-	if (g_hero.typus)
-		g_screen_var = 1;
-
-	/* save the name of the hero */
-	/* TODO strncpy() would be better here */
-
-	strcpy(name_bak, (const char*)g_hero.name);
-
-	/* save the sex of the hero */
-	sex_bak = g_hero.sex;
-
-	/* clear the hero */
-	memset((void*)&g_hero, 0, sizeof(g_hero));
-
-	clear_hero();
-
-	g_hero.sex = sex_bak;
-
-	/* restore the name of the hero */
-	/* TODO strncpy() would be better here */
-
-	strcpy((char*)g_hero.name, name_bak);
-
-	refresh_screen();
-
-	g_screen_var = 0;
-
-	att_ptr = &g_hero.attrib[0].normal;
-
-	for (j = 0; j < 7; j++) {
-		randval = (signed char)random_interval_gen(8, 13);
-		unset_attribs = 0;
-
-		for (i = 0; i < 7; i++) {
-			// NORMAL
-			if (!att_ptr[ 3 * i]) {
-                                // not initialized attribute
-				values[unset_attribs] = (signed char)i;
-				g_type_names[unset_attribs] = get_text(32 + i);
-				unset_attribs++;
-			}
-		}
-
-		sprintf(g_gen_ptr2, get_text(46), randval);
-
-		do {
-			g_text_x_mod = -80;
-
-			di = gui_radio(g_gen_ptr2,
-				unset_attribs,
-				g_type_names[0], g_type_names[1], g_type_names[2],
-				g_type_names[3], g_type_names[4], g_type_names[5],
-				g_type_names[6]);
-
-			g_text_x_mod = 0;
-
-		} while (di == -1);
-
-		di = values[di - 1];
-		/* write randval to the selected positive attribute */
-		//g_hero.attrib[di].normal = g_hero.attrib[di].current = randval;
-		att_ptr[3 * di + 0] = att_ptr[3 * di + 1] = randval;
-
-		update_mouse_cursor();
-		refresh_screen();
-		call_mouse();
-	}
-
-	att_ptr = &g_hero.attrib[7].normal;
-
-	for (j = 0; j < 7; j++) {
-		randval = (signed char)random_interval_gen(2, 7);
-		unset_attribs = 0;
-
-		for (i = 0; i < 7; i++) {
-			// NORMAL
-			if (!att_ptr[3 * i]) {
-				values[unset_attribs] = (signed char)i;
-				g_type_names[unset_attribs] = get_text(39 + i);
-				unset_attribs++;
-			}
-		}
-
-		sprintf(g_gen_ptr2, get_text(46), randval);
-
-		do {
-			g_text_x_mod = -80;
-
-			di = gui_radio(g_gen_ptr2,
-				unset_attribs,
-				g_type_names[0], g_type_names[1], g_type_names[2],
-				g_type_names[3], g_type_names[4], g_type_names[5],
-				g_type_names[6]);
-
-			g_text_x_mod = 0;
-
-		} while (di == -1);
-
-		di = values[di - 1];
-
-		/* write randval to the selected negative attribute */
-		//g_hero.attrib[di].normal = g_hero.attrib[di].current = randval;
-		att_ptr[3 * di + 0] = att_ptr[3 * di + 1] = randval;
-
-		update_mouse_cursor();
-		refresh_screen();
-		call_mouse();
-	}
-}
-
-/**
- * calc_at_pa() - calculate AT and PA values
- */
-/* Borlandified and identical */
-/* static */
-void calc_at_pa(void)
-{
-	div_t res; // BCC <STDLIB.H>
-	signed short tmp;
-	signed short i;
-
-	res = div(g_hero.attrib[5].normal + g_hero.attrib[6].normal + g_hero.attrib[4].normal, 5);
-	/* round up if neccessary */
-	if (res.rem >= 3) {
-		res.quot++;
-	}
-
-	g_hero.atpa_base = res.quot;
-
-	for (i = 0; i < 7; i++) {
-		/* Set base AT/PA value for each weapon */
-		g_hero.at_weapon[i] = g_hero.pa_weapon[i] = g_hero.atpa_base;
-
-		if (g_hero.skills[i] < 0) {
-			tmp = __abs__(g_hero.skills[i]) / 2;
-
-			/* Calculate weapon AT value */
-			g_hero.at_weapon[i] -= tmp;
-
-			/* Calculate weapon PA value */
-			g_hero.pa_weapon[i] -= tmp;
-
-			if (__abs__(g_hero.skills[i]) != 2 * tmp) {
-				g_hero.pa_weapon[i]--;
-			}
-		} else {
-			/* calculate ATPA for positive weapon skill */
-			tmp = g_hero.skills[i] / 2;
-
-			/* Calculate weapon AT value */
-			g_hero.at_weapon[i] += tmp;
-
-			/* Calculate weapon PA value */
-			g_hero.pa_weapon[i] += tmp;
-
-			if (g_hero.skills[i] != 2 * tmp) {
-				g_hero.at_weapon[i]++;
-			}
-		}
-	}
-}
-
-/**
- * fill_values() - fills the values if typus is chosen
- *
- */
-/* Borlandified and identical */
-void fill_values(void)
-{
-	signed short i;
-	signed short v1;
-	signed short v2;
-	const struct struct_money *money_ptr;
-
-	signed short si, di;
-
-	/* fill skill values */
-	for (i = 0; i < 52; i++) {
-
-		g_hero.skills[i] = g_skills[g_hero.typus][i];
-
-		/* set skill_incs and skill_tries to zero */
-		g_skill_incs[i].tries = g_skill_incs[i].incs = 0;
-	}
-
-	/* set skill_attempts */
-	g_hero.skill_incs = g_initial_skill_incs[g_hero.typus - 1];
-
-	/* do magic user init */
-	if (g_hero.typus >= 7) {
-		/* fill initial spell values */
-		for (i = 0; i < 86; i++) {
-			g_hero.spells[i] = g_spells[g_hero.typus - 7][i];
-
-			/* set spell_incs and spell_tries to zero */
-			g_spell_incs[i].tries = g_spell_incs[i].incs = 0;
-		}
-
-		/* special mage values */
-		if (g_hero.typus == 9) {
-			/* set staff spell to level 1 */
-			g_hero.staff_level = 1;
-			/* select mage school */
-			do {
-				g_hero.spell_school = gui_radio(get_text(47),
-							9,
-							get_text(48), get_text(49),
-							get_text(50), get_text(51),
-							get_text(52), get_text(53),
-							get_text(54), get_text(55),
-							get_text(56)) - 1;
-
-			} while (g_hero.spell_school == -2);
-
-
-			/* add magic school modifications */
-			for (i = 0; g_house_mod[g_hero.spell_school].no > i; i++) {
-
-				g_hero.spells[g_house_mod[g_hero.spell_school].spells[i]] +=
-					g_house_mod[g_hero.spell_school].mod[i];
-			}
-		}
-
-		/* set spell attempts */
-		g_hero.spell_incs = g_initial_spell_incs[g_hero.typus - 7];
-
-		/* get convertable increase attempts */
-		if ((di = g_initial_conv_incs[g_hero.typus - 7]) && (g_level == 2) && gui_bool(get_text(269))) {
-			/* create string */
-			sprintf(g_gen_ptr2, get_text(270), di);
-
-			i = infobox(g_gen_ptr2, 1);
-
-			if (i > 0) {
-				/* spell attempts to skill attempts */
-				if (i > di)
-					i = di;
-				di -= i;
-				/* change spell attempts */
-				g_hero.spell_incs -= i;
-				/* change skill attempts */
-				g_hero.skill_incs += i;
-			} else {
-
-				/* create string */
-				sprintf(g_gen_ptr2, get_text(271), di);
-
-				i = infobox(g_gen_ptr2, 1);
-				if (i > 0) {
-					if (i > di)
-						i = di;
-					/* change spell attempts */
-					g_hero.spell_incs += i;
-					/* change skill attempts */
-					g_hero.skill_incs -= i;
-				}
-			}
-		}
-	}
-
-	/* set LE */
-	g_hero.le = g_hero.le_max = g_init_le[g_hero.typus];
-
-	/* set AE */
-	g_hero.ae = g_hero.ae_max = g_init_ae[g_hero.typus];
-
-	/* wanna change 10 spell_attempts against 1W6+2 AE ? */
-	if ((g_hero.typus == 9) && (g_level == 2) && gui_bool(get_text(268))) {
-		/* change spell_attempts */
-		g_hero.spell_incs -= 10;
-		g_hero.ae_max += (signed short)random_interval_gen(3, 8);
-		g_hero.ae = g_hero.ae_max;
-	}
-
-	/* roll out size */
-	g_hero.height =
-		(unsigned char)random_interval_gen(g_height_range[g_hero.typus].min,
-						   g_height_range[g_hero.typus].max);
-
-	/* calculate weight i = (height - weight_mod) * 40 */
-	g_hero.weight = 40 * ((unsigned short)g_hero.height - g_weight_mod[g_hero.typus]);
-
-	/* roll out the money */
-	i = random_gen(20);
-	money_ptr = g_money_tab[g_hero.typus - 1];
-	for (si = 0; money_ptr[si].value < i; si++);
-
-	g_hero.money = (signed long)(10 * (signed short)random_interval_gen(money_ptr[si].min, money_ptr[si].max));
-
-	/* calculate MR  = (KL + MU + Stufe) / 3 - 2 * AG
-	 * 		 = (WD + CO + Level) / 3 - 2 * SN */
-	g_hero.mr =
-		(g_hero.attrib[1].normal + g_hero.attrib[0].normal + g_hero.level) / 3
-			- 2 * g_hero.attrib[7].normal;
-
-	/* add typus MR Modificator */
-	g_hero.mr += g_mr_mod[g_hero.typus];
-
-	/* roll out god */
-	g_hero.god = random_gen(12);
-
-	/* add gods boni */
-	switch (g_hero.god) {
-		case 1 : {
-			/* Praios: MU + 1 */
-			g_hero.attrib[0].current = ++g_hero.attrib[0].normal;
-			g_got_mu_bonus = 1;
-			break;
-		}
-		case 2 : {
-			/* Rondra: skill swords + 1 */
-			g_hero.skills[3]++;
-			break;
-		}
-		case 3 : {
-			/* Efferd: skill swim + 1 */
-			g_hero.skills[14]++;
-			break;
-		}
-		case 4 : {
-			/* Travia: skill treat poison + 1 */
-			g_hero.skills[44]++;
-			break;
-		}
-		case 5 : {
-			/* Boron: skill human nature + 1 */
-			g_hero.skills[24]++;
-			break;
-		}
-		case 6 : {
-			/* Hesinde: skill alchemy + 1 */
-			g_hero.skills[32]++;
-			break;
-		}
-		case 7 : {
-			/* Firun: skills track and missle weapons + 1  */
-			g_hero.skills[26]++;
-			g_hero.skills[7]++;
-			break;
-		}
-		case 8 : {
-			/* Tsa: CH + 1 */
-			g_hero.attrib[2].current = ++g_hero.attrib[2].normal;
-			g_got_ch_bonus = 1;
-			break;
-		}
-		case 9 : {
-			/* Phex: skills hide and pickpocket + 1 */
-			g_hero.skills[49]++;
-			g_hero.skills[13]++;
-			break;
-		}
-		case 10 : {
-			/* Peraine: skills treat disease and wounds + 1 */
-			g_hero.skills[45]++;
-			g_hero.skills[46]++;
-			break;
-		}
-		case 11 : {
-			/* Ingerimm: skill tactics + 1*/
-			g_hero.skills[37]++;
-			break;
-		}
-		case 12 : {
-			/* Rhaja: skills dance, seduce and instrument + 1*/
-			g_hero.skills[20]++;
-			g_hero.skills[16]++;
-			g_hero.skills[47]++;
-			break;
-		}
-	}
-	/* calclate AT and PA values */
-	calc_at_pa();
-
-	/* if mode == novice */
-	if (g_level == 1) {
-		/* increase skills automatically */
-		for (i = 0; g_hero.skill_incs > 0; i++) {
-			skill_inc_novice(v1 = g_autoskills[g_hero.typus][i]);
-		}
-
-		// Okay, till here !
-
-		si = 0;
-		/* prepare mage automatic spell list */
-		if (g_hero.typus == 9) {
-			/* Remark: HERO_TYPUS is equal to 9, g_autospells starts with typus = 7,
-			 * so g_autospells[2] is that of the Mage */
-
-			/* 1. house spells */
-			for (i = 0; g_house_mod[g_hero.spell_school].no > i; si++, i++) {
-				g_autospells[2][si] =
-						g_house_mod[g_hero.spell_school].spells[i];
-			}
-			/* 2. all schools spells */
-			for (i = 0; g_school_tab[g_hero.spell_school].spells > i; si++, i++) {
-				g_autospells[2][si] =
-					g_school_tab[g_hero.spell_school].first_spell + i;
-			}
-			/* 3. five domination spells */
-				/* Herr der Tiere */
-			g_autospells[2][si++] = 0x52;
-				/* Horriphobus */
-			g_autospells[2][si++] = 0x31;
-				/* Mag. Raub */
-			g_autospells[2][si++] = 0x35;
-				/* Respondami */
-			g_autospells[2][si++] = 0x21;
-				/* Sanftmut */
-			g_autospells[2][si++] = 0x4f;
-
-			/* 4. all house spells */
-			for (i = 0; g_house_mod[g_hero.spell_school].no > i; si++, i++) {
-				g_autospells[2][si] = g_house_mod[g_hero.spell_school].spells[i];
-			}
-			/* 5. all house spells */
-			for (i = 0; g_house_mod[g_hero.spell_school].no > i; si++, i++) {
-				g_autospells[2][si] = g_house_mod[g_hero.spell_school].spells[i];
-			}
-			/* 6. random spells */
-			while (si < 45) {
-				g_autospells[2][si++] = random_gen(85);
-			}
-		}
-
-		/* automatic increase spells */
-		for (i = 0; g_hero.spell_incs > 0; i++) {
-			spell_inc_novice((v2 = g_autospells[g_hero.typus - 7][i]));
-		}
-	}
-}
-
-/**
- * skill_inc_novice() - tries to increment a skill in novice mode
- * @skill:	the skill which should be incremented
- *
- *
- */
-/* Borlandified and identical */
-void skill_inc_novice(signed short skill)
-{
-	signed short done = 0;
-
-	while (!done) {
-		/* leave the loop if 3 tries have been done */
-		if (g_skill_incs[skill].tries == 3) {
-			/* set the flag to leave this loop */
-			done = 1;
-#if !defined(__BORLANDC__)
-		} else
-
-		/* Original-Bugfix: add check if skill_attempts are left */
-		if (g_hero.skill_incs == 0) {
-			done++;
-#endif
-		} else {
-			/* decrement counter for skill increments */
-			g_hero.skill_incs--;
-
-			/* check if the test is passed */
-			if ((signed short)random_interval_gen(2, 12) > g_hero.skills[skill]) {
-				/* increment skill */
-				g_hero.skills[skill]++;
-
-				/* set inc tries for this skill to zero */
-				g_skill_incs[skill].tries = 0;
-
-				/* set the flag to leave this loop */
-				done = 1;
-
-				if (skill <= 6) {
-
-					/* set increment the lower AT/PA value */
-					if (g_hero.at_weapon[skill] > g_hero.pa_weapon[skill])
-						g_hero.pa_weapon[skill]++;
-					else
-						g_hero.at_weapon[skill]++;
-				}
-			} else {
-				/* inc tries for that skill */
-				g_skill_incs[skill].tries++;
-			}
-		}
-	}
-}
-
-
-/**
- * spell_inc_novice() - tries to increment a spell in novice mode
- * @spell:	the spell which should be incremented
- *
- *
- */
-/* Borlandified and identical */
-void spell_inc_novice(signed short spell)
-{
-	signed short done = 0;
-
-	while (!done) {
-		/* leave the loop if 3 tries have been done */
-		if (g_spell_incs[spell].tries == 3) {
-			done = 1;
-			continue;
-		}
-
-#if !defined(__BORLANDC__)
-			/* Original-Bugfix: add check if skill_attempts are left */
-			if (g_hero.spell_incs == 0) {
-				done = 1;
-				continue;
-			}
-#endif
-		/* decrement counter for spell increments */
-		g_hero.spell_incs--;
-
-		/* check if the test is passed */
-		if ((signed short)random_interval_gen(2, 12) > g_hero.spells[spell]) {
-
-			/* increment spell */
-			g_hero.spells[spell]++;
-
-			/* set inc tries for this spell to zero */
-			g_spell_incs[spell].tries = 0;
-
-			/* set the flag to leave this loop */
-			done = 1;
-		} else {
-			g_spell_incs[spell].tries++;
-		}
-	}
-}
-
-/**
- * select_typus() - select a possible typus with current attribute values
- *
- */
-/* Borlandified and identical */
-void select_typus(void)
-{
-	signed char old_typus;
-	signed char possible_types;
-	signed char ltmp2;
-	volatile signed char *ptr;
-	signed short i;
-	signed short impossible;
-
-	register signed short di;
-	register signed short si;
-
-
-	struct type_bitmap t;
-
-	old_typus = -1;
-	
-	t = *(struct type_bitmap*)&g_type_bitmap;
-
-	/* check if attribs have been set */
-	if (g_hero.attrib[0].normal != 0) {
-
-		/* save the old typus */
-		old_typus = g_hero.typus;
-		
-		/* disable MU bonus */
-		if (g_got_mu_bonus) {
-			g_hero.attrib[0].current = --g_hero.attrib[0].normal;
-		}
-		/* disable CH bonus */
-		if (g_got_ch_bonus) {
-			g_hero.attrib[2].current = --g_hero.attrib[2].normal;
-		}
-		possible_types = 0;
-
-		for (i = 1; i <= 12; i++) {
-			impossible = 0;
-			for (si = 0; si < 4; si++) {
-
-				ptr = &g_hero.attrib[g_reqs[i][si].attrib].normal;
-
-				ltmp2 = *(ptr);
-
-				if ((g_reqs[i][si].value & 0x80) != 0) {
-					if (ltmp2 > (g_reqs[i][si].value & 0x7f))
-						impossible = 1;
-				} else {
-					if (g_reqs[i][si].value > ltmp2)
-						impossible = 1;
-				}
-			}
-
-			if (!impossible) {
-
-				g_type_names[possible_types] = 	get_text( (g_hero.sex ? 271 : 17 ) + i);
-				t.t[possible_types] = (char)i;
-				possible_types++;
-			}
-		}
-
-		if (!possible_types) {
-			if (!can_change_attribs()) {
-				/* totally messed up values */
-				infobox(get_text(284), 0);
-				return;
-			} else {
-				infobox(get_text(31), 0);
-				return;
-			}
-			return;
-		}
-
-		di = gui_radio(get_text(30), possible_types,
-				g_type_names[0], g_type_names[1], g_type_names[2],
-				g_type_names[3], g_type_names[4], g_type_names[5],
-				g_type_names[6], g_type_names[7], g_type_names[8],
-				g_type_names[9], g_type_names[10], g_type_names[11]);
-
-		/*	restore attibute boni when selection is canceled
-		 *	or the same typus is selected.
-		 */
-		if ((di != -1) && (t.t[di - 1] != old_typus)) {
-
-			/* set new typus */
-			g_hero.typus = t.t[di - 1];
-			g_screen_var = 1;
-
-			load_typus((signed short)g_hero.typus);
-
-			update_mouse_cursor();
-			call_fill_rect_gen((unsigned char*)g_vga_memstart, 16, 8, 143, 191, 0);
-			wait_for_vsync();
-			set_palette((signed char*)g_gen_ptr5 + 0x5c02, 0, 32);
-			call_mouse();
-
-			g_head_typus = (g_hero.typus > 10 ? 10 : g_hero.typus);
-
-			if (g_hero.sex) {
-				g_head_first = g_head_current = g_head_first_female[g_head_typus];
-				g_head_last = g_head_first_male[g_head_typus + 1] - 1;
-			} else {
-				g_head_first = g_head_current = g_head_first_male[g_head_typus];
-				g_head_last = g_head_first_female[g_head_typus] - 1;
-			}
-
-			/* reset boni flags */
-			g_got_mu_bonus = g_got_ch_bonus = 0;
-			fill_values();
-		} else {
-			if (g_got_mu_bonus) {
-				g_hero.attrib[0].current = ++g_hero.attrib[0].normal;
-			}
-			if (g_got_ch_bonus) {
-				g_hero.attrib[2].current = ++g_hero.attrib[2].normal;
-			}
-		}
-	} else {
-		infobox(get_text(265), 0);
-		return;
-	}
-}
-
-#define INC (1)
-#define DEC (2)
-
-/**
- * can_change_attribs() - checks if attribute changes are possible
- *
- */
-/* Borlandified and identical */
-signed short can_change_attribs(void)
-{
-	signed short na_inc;
-	signed short na_dec;
-	volatile signed char *p;
-	register signed short i;      // si
-	register signed short pa_inc; // cx
-	register signed short pa_dec; // di
-
-	pa_inc = 0;
-	pa_dec = 0;
-	na_inc = 0;
-	na_dec = 0;
-
-	for (i = 0; i < 7; i++) {
-		p = &g_hero.attrib[i].normal;
-
-		if ((g_attrib_changed[i] != INC) && (p[0] > 8))
-			pa_dec += 8 - p[0];
-		if ((g_attrib_changed[i] != DEC) && (p[0] < 13))
-			pa_inc += 13 - p[0];
-	}
-
-	for (i = 7; i < 14; i++) {
-		p = &g_hero.attrib[i].normal;
-
-		if ((g_attrib_changed[i] != INC) && (p[0] > 2))
-			na_dec += 2 - p[0];
-		if ((g_attrib_changed[i] != DEC) && (p[0] < 8))
-			na_inc += 8 - p[0];
-	}
-
-	/* no values from positive attributes left */
-	if (((pa_inc == 0) && (pa_dec == 0)) ||
-	    ((pa_inc == 0) && (na_dec < 2))  ||
-	    ((na_inc < 2) && (pa_dec == 0))  ||
-	   ((na_dec < 2) && (na_inc < 2)))  return 0;
-
-	return 1;
-}
-
-/**
- * change_attribs() - change attributes
- */
-/* Borlandified and identical */
-void change_attribs(void)
-{
-	signed short tmp1;
-	volatile signed short tmp2;
-	volatile signed short tmp3;
-	volatile signed char *ptr1;
-	volatile signed char *ptr2;
-	signed char c;
-
-	signed short si;
-	signed short di;
-
-	/* check if attributes have been set */
-	if (!g_hero.attrib[0].normal) {
-		infobox(get_text(16), 0);
-		return;
-	}
-	/* check if changing is possible */
-	if (!can_change_attribs()) {
-		infobox(get_text(266), 0);
-		return;
-	}
-	/* if typus != 0 */
-	if (g_hero.typus) {
-
-		if (gui_bool(get_text(73))) {
-
-			/* set typus to 0 */
-			g_hero.typus = 0;
-
-			/* remove MU boni */
-			if (g_got_mu_bonus) {
-				g_hero.attrib[0].current = --g_hero.attrib[0].normal;
-				g_got_mu_bonus = 0;
-			}
-			/* remove CH boni */
-			if (g_got_ch_bonus) {
-				g_hero.attrib[2].current = --g_hero.attrib[2].normal;
-				g_got_ch_bonus = 0;
-			}
-			g_screen_var = 1;
-			refresh_screen();
-			g_screen_var = 0;
-
-		} else {
-			return;
-		}
-	}
-
-	/* check again if changing is possible */
-	if (can_change_attribs() == 0) {
-		infobox(get_text(266), 0);
-		return;
-	}
-	/* select a positive attribute to change */
-	g_text_x_mod = -80;
-	tmp2 = gui_radio(get_text(78), 7,
-			get_text(32), get_text(33), get_text(34), get_text(35),
-			get_text(36), get_text(37), get_text(38));
-	g_text_x_mod = 0;
-
-	if (tmp2 != -1) {
-
-		tmp2--;
-		/* get the modification type */
-		if (!g_attrib_changed[tmp2]) {
-			/* ask user if inc or dec */
-			g_text_x_mod = -80;
-			tmp3 = gui_radio((char*)NULL, 2, get_text(75), get_text(76));
-			g_text_x_mod = 0;
-
-			if (tmp3 == -1)
-				return;
-		} else {
-			tmp3 = g_attrib_changed[tmp2];
-		}
-
-		ptr1 = &g_hero.attrib[tmp2].normal;
-
-		if (tmp3 == INC) {
-			/* increment */
-			if (ptr1[0] == 13) {
-				infobox(get_text(77), 0);
-				return;
-			}
-			c = 0;
-			for (di = 7; di < 14; di++) {
-				if (g_attrib_changed[di] != DEC) {
-					ptr2 = &g_hero.attrib[di].normal;
-					if (ptr2[0] < 8) {
-						c += 8 - ptr2[0];
-					}
-				}
-			}
-			if (c < 2) {
-				infobox(get_text(85), 0);
-				return;
-			}
-			/* increment positive attribute */
-			//g_hero.attrib[tmp2].normal = ++g_ghero.attrib[tmp2].current;
-			ptr1[0] = ++ptr1[1];
-
-			g_attrib_changed[tmp2] = INC;
-
-			refresh_screen();
-
-			tmp1 = 0;
-			while (tmp1 != 2) {
-		
-				do {
-					/* ask which negative attribute to increment */
-					g_text_x_mod = -80;
-					si = gui_radio(get_text(80), 7,
-						get_text(39), get_text(40), get_text(41),
-						get_text(42), get_text(43), get_text(44),
-						get_text(45));
-					g_text_x_mod = 0;
-
-				} while (si == -1);
-
-				si--;
-				/* check if this attribute has been decremented */
-				if (g_attrib_changed[si + 7] == DEC) {
-					infobox(get_text(83), 0);
-					continue;
-				}
-				ptr1 = &g_hero.attrib[si + 7].normal;
-				/* check if attribute can be incremented */
-				if (ptr1[0] == 8) {
-					infobox(get_text(77), 0);
-				} else {
-					/* increment the negative attribute */
-					tmp1++;
-					g_attrib_changed[si + 7] = INC;
-
-					//g_hero.attrib[si + 7].normal = ++g_ghero.attrib[si + 7].current;
-					ptr1[0] = ++ptr1[1];
-
-					refresh_screen();
-				}
-			}
-		} else {
-			/* decrement */
-			/* check if the positive attribute can be decremented */
-			if (ptr1[0] == 8) {
-				infobox(get_text(81), 0);
-				return;
-			}
-			c = 0;
-			for (di = 7; di < 14; di++) {
-				if (g_attrib_changed[di] != INC) {
-					ptr2 = &g_hero.attrib[di].normal;
-					if (ptr2[0] > 2) {
-						c += ptr2[0] - 2;
-					}
-				}
-			}
-			if (c < 2) {
-				infobox(get_text(84), 0);
-				return;
-			}
-			/* decrement positive attribute */
-			// g_hero.attrib[tmp3].normal = --g_hero.attrib[tmp3].current;
-			ptr1[0] = --ptr1[1];
-
-			/* mark this attribute as decremented */
-			g_attrib_changed[tmp2] = DEC;
-
-			refresh_screen();
-
-			tmp1 = 0;
-			while (tmp1 != 2) {
-
-				do {
-					/* ask which negative attribute to increment */
-					g_text_x_mod = -80;
-					si = gui_radio(get_text(79), 7,
-						get_text(39), get_text(40), get_text(41),
-						get_text(42), get_text(43), get_text(44),
-						get_text(45));
-					g_text_x_mod = 0;
-				} while (si == -1);
-
-				si--;
-				/* check if this attribute has been incremented */
-				if (g_attrib_changed[si + 7] == INC) {
-					infobox(get_text(82), 0);
-					continue;
-				}
-				
-				ptr1 = &g_hero.attrib[si + 7].normal;
-			
-				/* check if attribute can be decremented */
-				if (ptr1[0] == 2) {
-					infobox(get_text(81), 0);
-					continue;
-				}
-				/* decrement the negative attribute */
-				tmp1++;
-
-				// g_hero.attrib[si + 7].normal = --g_hero.attrib[si + 7].current;
-				ptr1[0] = --ptr1[1];
-
-				g_attrib_changed[si + 7] = DEC;
-
-				refresh_screen();
-			}
-		}
-	}
-}
-
-#undef INC
-#undef DEC
-
-/* Borlandified and identical */
-void save_picbuf(void)
+static void save_picbuf(void)
 {
 	unsigned char* p;
 	signed short x_3;
@@ -5294,8 +4208,7 @@ void save_picbuf(void)
 	copy_to_screen(p, g_picbuf3, w_3, h_3, 2);
 }
 
-/* Borlandified and identical */
-void restore_picbuf(unsigned char* ptr)
+static void restore_picbuf(unsigned char* ptr)
 {
 	unsigned char* p;
 	unsigned short x_1, x_2, x_3;
@@ -5370,6 +4283,47 @@ void restore_picbuf(unsigned char* ptr)
 	copy_to_screen(g_picbuf3, p, w_3, h_3, 0);
 }
 
+
+
+/**
+ *	make_valuta_str	-	makes a valuta string
+ *	@dst:	the destination
+ *	@money:	the money in Heller
+ *
+ *	This funcion may have issues in the game (not here).
+ */
+static void make_valuta_str(char *dst, signed long money)
+{
+	/* Orig-BUG: d can overflow  on D > 65536*/
+	unsigned short d = 0;
+	unsigned short s = 0;
+
+	/*	These loops are not very performant.
+		They take longer the more money you have.
+		Here is a much better solution.
+	*/
+
+	/*
+	d = money / 100;
+	money -= d * 100;
+
+	s = money / 10;
+	money -= s * 10;
+	*/
+	while (money / 100) {
+		d++;
+		money -= 100;
+	}
+
+	while (money / 10) {
+		s++;
+		money -= 10;
+	}
+
+	sprintf(dst, get_text(69), d, s, (signed short)money);
+}
+
+
 /**
  * print_attribs() -	print the attribute values
  *
@@ -5398,8 +4352,7 @@ void print_attribs(void)
  * print_values() - print the values of the character
  *
  */
-/* Borlandified and identical */
-void print_values(void)
+static void print_values(void)
 {
 	char tmp[4];
 	signed short width;
@@ -5841,47 +4794,1084 @@ void print_values(void)
 	}
 }
 
-/**
- *	make_valuta_str	-	makes a valuta string
- *	@dst:	the destination
- *	@money:	the money in Heller
- *
- *	This funcion is buggy.
- */
+
 /* Borlandified and identical */
-void make_valuta_str(char *dst, signed long money)
+void refresh_screen(void)
 {
-	/* Orig-BUG: d can overflow  on D > 65536*/
-	unsigned short d = 0;
-	unsigned short s = 0;
+	unsigned char* src;
+	unsigned char* dst;
+	signed short width;
+	signed short height;
+	struct nvf_desc nvf;
 
-	/*	These loops are not very performant.
-		They take longer the more money you have.
-		Here is a much better solution.
-	*/
+	if (g_screen_var) {
+		g_gfx_ptr = g_gen_ptr1_dis;
+		load_page(g_gen_page);
+		save_picbuf();
 
-	/*
-	d = money / 100;
-	money -= d * 100;
+		/* page with base values and hero is not male */
+		if ((g_gen_page == 0) && (g_hero.sex != 0)) {
 
-	s = money / 10;
-	money -= s * 10;
-	*/
-	while (money / 100) {
-		d++;
-		money -= 100;
+			dst = g_gen_ptr1_dis + 7 * 320 + 305;
+			src = g_buffer_sex_dat + 256 * g_hero.sex;
+			copy_to_screen(src, dst, 16, 16, 0);
+		}
+
+		/* page with base values and level is advanced */
+		if ((g_gen_page == 0) && (g_level == 1)) {
+			dst = g_gen_ptr1_dis + 178 * 320 + 284;
+
+			src = g_buffer_sex_dat + 512;
+
+			copy_to_screen(src, dst, 20, 15, 0);
+
+			if (g_dsagen_lang == LANG_EN) {
+				dst = g_gen_ptr1_dis + 178 * 320 + 145;
+				copy_to_screen(src, dst, 20, 15, 0);
+			}
+		}
+		/* if the page is lower than 5 */
+		if (g_gen_page < 5) {
+			/* draw DMENGE.DAT or the typus name */
+			dst = g_gen_ptr1_dis + 8 * 320 + 16;
+
+			if (g_hero.typus != 0) {
+
+				g_need_refresh = 1;
+				copy_to_screen(g_gen_ptr5, dst, 128, 184, 0);
+
+				if (g_hero.sex != 0) {
+					print_str(get_text(271 + g_hero.typus),
+						get_line_start_c(get_text(271 + g_hero.typus), 16, 128),
+						184);
+				} else {
+					print_str(get_text(17 + g_hero.typus),
+						get_line_start_c(get_text(17 + g_hero.typus), 16, 128),
+						184);
+				}
+
+			} else {
+				if (g_need_refresh) {
+					call_fill_rect_gen((unsigned char*)g_vga_memstart, 16, 8, 143, 191, 0);
+					g_need_refresh = 0;
+				}
+
+				wait_for_vsync();
+				set_palette((signed char*)g_buffer_dmenge_dat + 128 * 184 + 2, 0 , 32);
+				copy_to_screen(g_buffer_dmenge_dat, dst, 128, 184, 0);
+			}
+		}
+		/* if hero has a typus */
+		if (g_hero.typus != 0) {
+			/* draw the head */
+
+			nvf.dst = g_gen_ptr6;
+			nvf.src = g_buffer_heads_dat;
+			nvf.no = g_head_current;
+			nvf.type = 0;
+			nvf.width = &width;
+			nvf.height = &height;
+			process_nvf(&nvf);
+
+			g_dst_src = g_gen_ptr6;
+			g_dst_x1 = 272;
+			g_dst_x2 = 303;
+			g_dst_dst = g_gen_ptr1_dis;
+
+			/* draw the head */
+			if (g_gen_page == 0) {
+				/* on the base page */
+				g_dst_y1 = 8;
+				g_dst_y2 = 39;
+				do_draw_pic(0);
+			} else if (g_gen_page > 4) {
+				/* on the spell pages */
+				g_dst_y1 = 4;
+				g_dst_y2 = 35;
+				do_draw_pic(0);
+			}
+
+			g_dst_dst = g_vga_memstart;
+
+		}
+
+		print_values();
+		dst = g_gfx_ptr = g_vga_memstart;
+		src = g_gen_ptr1_dis;
+		update_mouse_cursor();
+		copy_to_screen(src, dst, 320, 200, 0);
+		call_mouse();
+	} else {
+		print_values();
 	}
-
-	while (money / 10) {
-		s++;
-		money -= 10;
-	}
-
-	sprintf(dst, get_text(69), d, s, (signed short)money);
 }
 
+static void clear_hero(void)
+{
+	signed short i;
+
+	g_got_mu_bonus = g_got_ch_bonus = 0;
+
+	g_head_typus = g_head_first = g_head_last = g_head_current = 0;
+
+	for (i = 0; i < 14; i++)
+		g_attrib_changed[i] = 0;
+
+	for (i = 0; i < 86; i++) {
+		g_spell_incs[i].tries = g_spell_incs[i].incs = 0;
+	}
+	for (i = 0; i < 52; i++) {
+		g_skill_incs[i].tries = g_skill_incs[i].incs = 0;
+	}
+
+	g_hero.level = 1;
+}
+
+/**
+ * new_values() - roll out new attribute values
+ *
+ */
+static void new_values(void)
+{
+	/* Original-Bugfix:	there once was a char[11],
+				which could not hold a char[16] */
+	volatile signed char *att_ptr;
+	signed char randval;
+	signed char unset_attribs;
+	signed char values[8];
+	signed char sex_bak;
+#if !defined(__BORLANDC__)
+	char name_bak[17];
+#else
+	char name_bak[10];
+#endif
+	signed short j;
+	signed short i;
+
+	signed short di;
+
+	/* set variable if hero has a typus */
+	if (g_hero.typus)
+		g_screen_var = 1;
+
+	/* save the name of the hero */
+	/* TODO strncpy() would be better here */
+
+	strcpy(name_bak, (const char*)g_hero.name);
+
+	/* save the sex of the hero */
+	sex_bak = g_hero.sex;
+
+	/* clear the hero */
+	memset((void*)&g_hero, 0, sizeof(g_hero));
+
+	clear_hero();
+
+	g_hero.sex = sex_bak;
+
+	/* restore the name of the hero */
+	/* TODO strncpy() would be better here */
+
+	strcpy((char*)g_hero.name, name_bak);
+
+	refresh_screen();
+
+	g_screen_var = 0;
+
+	att_ptr = &g_hero.attrib[0].normal;
+
+	for (j = 0; j < 7; j++) {
+		randval = (signed char)random_interval_gen(8, 13);
+		unset_attribs = 0;
+
+		for (i = 0; i < 7; i++) {
+			// NORMAL
+			if (!att_ptr[ 3 * i]) {
+                                // not initialized attribute
+				values[unset_attribs] = (signed char)i;
+				g_type_names[unset_attribs] = get_text(32 + i);
+				unset_attribs++;
+			}
+		}
+
+		sprintf(g_gen_ptr2, get_text(46), randval);
+
+		do {
+			g_text_x_mod = -80;
+
+			di = gui_radio(g_gen_ptr2,
+				unset_attribs,
+				g_type_names[0], g_type_names[1], g_type_names[2],
+				g_type_names[3], g_type_names[4], g_type_names[5],
+				g_type_names[6]);
+
+			g_text_x_mod = 0;
+
+		} while (di == -1);
+
+		di = values[di - 1];
+		/* write randval to the selected positive attribute */
+		//g_hero.attrib[di].normal = g_hero.attrib[di].current = randval;
+		att_ptr[3 * di + 0] = att_ptr[3 * di + 1] = randval;
+
+		update_mouse_cursor();
+		refresh_screen();
+		call_mouse();
+	}
+
+	att_ptr = &g_hero.attrib[7].normal;
+
+	for (j = 0; j < 7; j++) {
+		randval = (signed char)random_interval_gen(2, 7);
+		unset_attribs = 0;
+
+		for (i = 0; i < 7; i++) {
+			// NORMAL
+			if (!att_ptr[3 * i]) {
+				values[unset_attribs] = (signed char)i;
+				g_type_names[unset_attribs] = get_text(39 + i);
+				unset_attribs++;
+			}
+		}
+
+		sprintf(g_gen_ptr2, get_text(46), randval);
+
+		do {
+			g_text_x_mod = -80;
+
+			di = gui_radio(g_gen_ptr2,
+				unset_attribs,
+				g_type_names[0], g_type_names[1], g_type_names[2],
+				g_type_names[3], g_type_names[4], g_type_names[5],
+				g_type_names[6]);
+
+			g_text_x_mod = 0;
+
+		} while (di == -1);
+
+		di = values[di - 1];
+
+		/* write randval to the selected negative attribute */
+		//g_hero.attrib[di].normal = g_hero.attrib[di].current = randval;
+		att_ptr[3 * di + 0] = att_ptr[3 * di + 1] = randval;
+
+		update_mouse_cursor();
+		refresh_screen();
+		call_mouse();
+	}
+}
+
+/**
+ * calc_at_pa() - calculate AT and PA values
+ */
+static void calc_at_pa(void)
+{
+	div_t res; // BCC <STDLIB.H>
+	signed short tmp;
+	signed short i;
+
+	res = div(g_hero.attrib[5].normal + g_hero.attrib[6].normal + g_hero.attrib[4].normal, 5);
+	/* round up if neccessary */
+	if (res.rem >= 3) {
+		res.quot++;
+	}
+
+	g_hero.atpa_base = res.quot;
+
+	for (i = 0; i < 7; i++) {
+		/* Set base AT/PA value for each weapon */
+		g_hero.at_weapon[i] = g_hero.pa_weapon[i] = g_hero.atpa_base;
+
+		if (g_hero.skills[i] < 0) {
+			tmp = __abs__(g_hero.skills[i]) / 2;
+
+			/* Calculate weapon AT value */
+			g_hero.at_weapon[i] -= tmp;
+
+			/* Calculate weapon PA value */
+			g_hero.pa_weapon[i] -= tmp;
+
+			if (__abs__(g_hero.skills[i]) != 2 * tmp) {
+				g_hero.pa_weapon[i]--;
+			}
+		} else {
+			/* calculate ATPA for positive weapon skill */
+			tmp = g_hero.skills[i] / 2;
+
+			/* Calculate weapon AT value */
+			g_hero.at_weapon[i] += tmp;
+
+			/* Calculate weapon PA value */
+			g_hero.pa_weapon[i] += tmp;
+
+			if (g_hero.skills[i] != 2 * tmp) {
+				g_hero.at_weapon[i]++;
+			}
+		}
+	}
+}
+
+/**
+ * skill_inc_novice() - tries to increment a skill in novice mode
+ * @skill:	the skill which should be incremented
+ *
+ *
+ */
+static void skill_inc_novice(const signed short skill)
+{
+	signed short done = 0;
+
+	while (!done) {
+		/* leave the loop if 3 tries have been done */
+		if (g_skill_incs[skill].tries == 3) {
+			/* set the flag to leave this loop */
+			done = 1;
+#if !defined(__BORLANDC__)
+		} else
+
+		/* Original-Bugfix: add check if skill_attempts are left */
+		if (g_hero.skill_incs == 0) {
+			done++;
+#endif
+		} else {
+			/* decrement counter for skill increments */
+			g_hero.skill_incs--;
+
+			/* check if the test is passed */
+			if ((signed short)random_interval_gen(2, 12) > g_hero.skills[skill]) {
+				/* increment skill */
+				g_hero.skills[skill]++;
+
+				/* set inc tries for this skill to zero */
+				g_skill_incs[skill].tries = 0;
+
+				/* set the flag to leave this loop */
+				done = 1;
+
+				if (skill <= 6) {
+
+					/* set increment the lower AT/PA value */
+					if (g_hero.at_weapon[skill] > g_hero.pa_weapon[skill])
+						g_hero.pa_weapon[skill]++;
+					else
+						g_hero.at_weapon[skill]++;
+				}
+			} else {
+				/* inc tries for that skill */
+				g_skill_incs[skill].tries++;
+			}
+		}
+	}
+}
+
+
+/**
+ * spell_inc_novice() - tries to increment a spell in novice mode
+ * @spell:	the spell which should be incremented
+ *
+ *
+ */
+static void spell_inc_novice(const signed short spell)
+{
+	signed short done = 0;
+
+	while (!done) {
+		/* leave the loop if 3 tries have been done */
+		if (g_spell_incs[spell].tries == 3) {
+			done = 1;
+			continue;
+		}
+
+#if !defined(__BORLANDC__)
+			/* Original-Bugfix: add check if skill_attempts are left */
+			if (g_hero.spell_incs == 0) {
+				done = 1;
+				continue;
+			}
+#endif
+		/* decrement counter for spell increments */
+		g_hero.spell_incs--;
+
+		/* check if the test is passed */
+		if ((signed short)random_interval_gen(2, 12) > g_hero.spells[spell]) {
+
+			/* increment spell */
+			g_hero.spells[spell]++;
+
+			/* set inc tries for this spell to zero */
+			g_spell_incs[spell].tries = 0;
+
+			/* set the flag to leave this loop */
+			done = 1;
+		} else {
+			g_spell_incs[spell].tries++;
+		}
+	}
+}
+
+
+/**
+ * fill_values() - fills the values if typus is chosen
+ *
+ */
+static void fill_values(void)
+{
+	signed short i;
+	signed short v1;
+	signed short v2;
+	const struct struct_money *money_ptr;
+
+	signed short si, di;
+
+	/* fill skill values */
+	for (i = 0; i < 52; i++) {
+
+		g_hero.skills[i] = g_skills[g_hero.typus][i];
+
+		/* set skill_incs and skill_tries to zero */
+		g_skill_incs[i].tries = g_skill_incs[i].incs = 0;
+	}
+
+	/* set skill_attempts */
+	g_hero.skill_incs = g_initial_skill_incs[g_hero.typus - 1];
+
+	/* do magic user init */
+	if (g_hero.typus >= 7) {
+		/* fill initial spell values */
+		for (i = 0; i < 86; i++) {
+			g_hero.spells[i] = g_spells[g_hero.typus - 7][i];
+
+			/* set spell_incs and spell_tries to zero */
+			g_spell_incs[i].tries = g_spell_incs[i].incs = 0;
+		}
+
+		/* special mage values */
+		if (g_hero.typus == 9) {
+			/* set staff spell to level 1 */
+			g_hero.staff_level = 1;
+			/* select mage school */
+			do {
+				g_hero.spell_school = gui_radio(get_text(47),
+							9,
+							get_text(48), get_text(49),
+							get_text(50), get_text(51),
+							get_text(52), get_text(53),
+							get_text(54), get_text(55),
+							get_text(56)) - 1;
+
+			} while (g_hero.spell_school == -2);
+
+
+			/* add magic school modifications */
+			for (i = 0; g_house_mod[g_hero.spell_school].no > i; i++) {
+
+				g_hero.spells[g_house_mod[g_hero.spell_school].spells[i]] +=
+					g_house_mod[g_hero.spell_school].mod[i];
+			}
+		}
+
+		/* set spell attempts */
+		g_hero.spell_incs = g_initial_spell_incs[g_hero.typus - 7];
+
+		/* get convertable increase attempts */
+		if ((di = g_initial_conv_incs[g_hero.typus - 7]) && (g_level == 2) && gui_bool(get_text(269))) {
+			/* create string */
+			sprintf(g_gen_ptr2, get_text(270), di);
+
+			i = infobox(g_gen_ptr2, 1);
+
+			if (i > 0) {
+				/* spell attempts to skill attempts */
+				if (i > di)
+					i = di;
+				di -= i;
+				/* change spell attempts */
+				g_hero.spell_incs -= i;
+				/* change skill attempts */
+				g_hero.skill_incs += i;
+			} else {
+
+				/* create string */
+				sprintf(g_gen_ptr2, get_text(271), di);
+
+				i = infobox(g_gen_ptr2, 1);
+				if (i > 0) {
+					if (i > di)
+						i = di;
+					/* change spell attempts */
+					g_hero.spell_incs += i;
+					/* change skill attempts */
+					g_hero.skill_incs -= i;
+				}
+			}
+		}
+	}
+
+	/* set LE */
+	g_hero.le = g_hero.le_max = g_init_le[g_hero.typus];
+
+	/* set AE */
+	g_hero.ae = g_hero.ae_max = g_init_ae[g_hero.typus];
+
+	/* wanna change 10 spell_attempts against 1W6+2 AE ? */
+	if ((g_hero.typus == 9) && (g_level == 2) && gui_bool(get_text(268))) {
+		/* change spell_attempts */
+		g_hero.spell_incs -= 10;
+		g_hero.ae_max += (signed short)random_interval_gen(3, 8);
+		g_hero.ae = g_hero.ae_max;
+	}
+
+	/* roll out size */
+	g_hero.height =
+		(unsigned char)random_interval_gen(g_height_range[g_hero.typus].min,
+						   g_height_range[g_hero.typus].max);
+
+	/* calculate weight i = (height - weight_mod) * 40 */
+	g_hero.weight = 40 * ((unsigned short)g_hero.height - g_weight_mod[g_hero.typus]);
+
+	/* roll out the money */
+	i = random_gen(20);
+	money_ptr = g_money_tab[g_hero.typus - 1];
+	for (si = 0; money_ptr[si].value < i; si++);
+
+	g_hero.money = (signed long)(10 * (signed short)random_interval_gen(money_ptr[si].min, money_ptr[si].max));
+
+	/* calculate MR  = (KL + MU + Stufe) / 3 - 2 * AG
+	 * 		 = (WD + CO + Level) / 3 - 2 * SN */
+	g_hero.mr =
+		(g_hero.attrib[1].normal + g_hero.attrib[0].normal + g_hero.level) / 3
+			- 2 * g_hero.attrib[7].normal;
+
+	/* add typus MR Modificator */
+	g_hero.mr += g_mr_mod[g_hero.typus];
+
+	/* roll out god */
+	g_hero.god = random_gen(12);
+
+	/* add gods boni */
+	switch (g_hero.god) {
+		case 1 : {
+			/* Praios: MU + 1 */
+			g_hero.attrib[0].current = ++g_hero.attrib[0].normal;
+			g_got_mu_bonus = 1;
+			break;
+		}
+		case 2 : {
+			/* Rondra: skill swords + 1 */
+			g_hero.skills[3]++;
+			break;
+		}
+		case 3 : {
+			/* Efferd: skill swim + 1 */
+			g_hero.skills[14]++;
+			break;
+		}
+		case 4 : {
+			/* Travia: skill treat poison + 1 */
+			g_hero.skills[44]++;
+			break;
+		}
+		case 5 : {
+			/* Boron: skill human nature + 1 */
+			g_hero.skills[24]++;
+			break;
+		}
+		case 6 : {
+			/* Hesinde: skill alchemy + 1 */
+			g_hero.skills[32]++;
+			break;
+		}
+		case 7 : {
+			/* Firun: skills track and missle weapons + 1  */
+			g_hero.skills[26]++;
+			g_hero.skills[7]++;
+			break;
+		}
+		case 8 : {
+			/* Tsa: CH + 1 */
+			g_hero.attrib[2].current = ++g_hero.attrib[2].normal;
+			g_got_ch_bonus = 1;
+			break;
+		}
+		case 9 : {
+			/* Phex: skills hide and pickpocket + 1 */
+			g_hero.skills[49]++;
+			g_hero.skills[13]++;
+			break;
+		}
+		case 10 : {
+			/* Peraine: skills treat disease and wounds + 1 */
+			g_hero.skills[45]++;
+			g_hero.skills[46]++;
+			break;
+		}
+		case 11 : {
+			/* Ingerimm: skill tactics + 1*/
+			g_hero.skills[37]++;
+			break;
+		}
+		case 12 : {
+			/* Rhaja: skills dance, seduce and instrument + 1*/
+			g_hero.skills[20]++;
+			g_hero.skills[16]++;
+			g_hero.skills[47]++;
+			break;
+		}
+	}
+	/* calclate AT and PA values */
+	calc_at_pa();
+
+	/* if mode == novice */
+	if (g_level == 1) {
+		/* increase skills automatically */
+		for (i = 0; g_hero.skill_incs > 0; i++) {
+			skill_inc_novice(v1 = g_autoskills[g_hero.typus][i]);
+		}
+
+		// Okay, till here !
+
+		si = 0;
+		/* prepare mage automatic spell list */
+		if (g_hero.typus == 9) {
+			/* Remark: HERO_TYPUS is equal to 9, g_autospells starts with typus = 7,
+			 * so g_autospells[2] is that of the Mage */
+
+			/* 1. house spells */
+			for (i = 0; g_house_mod[g_hero.spell_school].no > i; si++, i++) {
+				g_autospells[2][si] =
+						g_house_mod[g_hero.spell_school].spells[i];
+			}
+			/* 2. all schools spells */
+			for (i = 0; g_school_tab[g_hero.spell_school].spells > i; si++, i++) {
+				g_autospells[2][si] =
+					g_school_tab[g_hero.spell_school].first_spell + i;
+			}
+			/* 3. five domination spells */
+				/* Herr der Tiere */
+			g_autospells[2][si++] = 0x52;
+				/* Horriphobus */
+			g_autospells[2][si++] = 0x31;
+				/* Mag. Raub */
+			g_autospells[2][si++] = 0x35;
+				/* Respondami */
+			g_autospells[2][si++] = 0x21;
+				/* Sanftmut */
+			g_autospells[2][si++] = 0x4f;
+
+			/* 4. all house spells */
+			for (i = 0; g_house_mod[g_hero.spell_school].no > i; si++, i++) {
+				g_autospells[2][si] = g_house_mod[g_hero.spell_school].spells[i];
+			}
+			/* 5. all house spells */
+			for (i = 0; g_house_mod[g_hero.spell_school].no > i; si++, i++) {
+				g_autospells[2][si] = g_house_mod[g_hero.spell_school].spells[i];
+			}
+			/* 6. random spells */
+			while (si < 45) {
+				g_autospells[2][si++] = random_gen(85);
+			}
+		}
+
+		/* automatic increase spells */
+		for (i = 0; g_hero.spell_incs > 0; i++) {
+			spell_inc_novice((v2 = g_autospells[g_hero.typus - 7][i]));
+		}
+	}
+}
+
+
+#define INC (1)
+#define DEC (2)
+
+/**
+ * can_change_attribs() - checks if attribute changes are possible
+ *
+ */
 /* Borlandified and identical */
-static void inc_skill(signed short skill, signed short max, char *msg)
+signed short can_change_attribs(void)
+{
+	signed short na_inc;
+	signed short na_dec;
+	volatile signed char *p;
+	register signed short i;      // si
+	register signed short pa_inc; // cx
+	register signed short pa_dec; // di
+
+	pa_inc = 0;
+	pa_dec = 0;
+	na_inc = 0;
+	na_dec = 0;
+
+	for (i = 0; i < 7; i++) {
+		p = &g_hero.attrib[i].normal;
+
+		if ((g_attrib_changed[i] != INC) && (p[0] > 8))
+			pa_dec += 8 - p[0];
+		if ((g_attrib_changed[i] != DEC) && (p[0] < 13))
+			pa_inc += 13 - p[0];
+	}
+
+	for (i = 7; i < 14; i++) {
+		p = &g_hero.attrib[i].normal;
+
+		if ((g_attrib_changed[i] != INC) && (p[0] > 2))
+			na_dec += 2 - p[0];
+		if ((g_attrib_changed[i] != DEC) && (p[0] < 8))
+			na_inc += 8 - p[0];
+	}
+
+	/* no values from positive attributes left */
+	if (((pa_inc == 0) && (pa_dec == 0)) ||
+	    ((pa_inc == 0) && (na_dec < 2))  ||
+	    ((na_inc < 2) && (pa_dec == 0))  ||
+	   ((na_dec < 2) && (na_inc < 2)))  return 0;
+
+	return 1;
+}
+
+/**
+ * change_attribs() - change attributes
+ */
+static void change_attribs(void)
+{
+	signed short tmp1;
+	volatile signed short tmp2;
+	volatile signed short tmp3;
+	volatile signed char *ptr1;
+	volatile signed char *ptr2;
+	signed char c;
+
+	signed short si;
+	signed short di;
+
+	/* check if attributes have been set */
+	if (!g_hero.attrib[0].normal) {
+		infobox(get_text(16), 0);
+		return;
+	}
+	/* check if changing is possible */
+	if (!can_change_attribs()) {
+		infobox(get_text(266), 0);
+		return;
+	}
+	/* if typus != 0 */
+	if (g_hero.typus) {
+
+		if (gui_bool(get_text(73))) {
+
+			/* set typus to 0 */
+			g_hero.typus = 0;
+
+			/* remove MU boni */
+			if (g_got_mu_bonus) {
+				g_hero.attrib[0].current = --g_hero.attrib[0].normal;
+				g_got_mu_bonus = 0;
+			}
+			/* remove CH boni */
+			if (g_got_ch_bonus) {
+				g_hero.attrib[2].current = --g_hero.attrib[2].normal;
+				g_got_ch_bonus = 0;
+			}
+			g_screen_var = 1;
+			refresh_screen();
+			g_screen_var = 0;
+
+		} else {
+			return;
+		}
+	}
+
+	/* check again if changing is possible */
+	if (can_change_attribs() == 0) {
+		infobox(get_text(266), 0);
+		return;
+	}
+	/* select a positive attribute to change */
+	g_text_x_mod = -80;
+	tmp2 = gui_radio(get_text(78), 7,
+			get_text(32), get_text(33), get_text(34), get_text(35),
+			get_text(36), get_text(37), get_text(38));
+	g_text_x_mod = 0;
+
+	if (tmp2 != -1) {
+
+		tmp2--;
+		/* get the modification type */
+		if (!g_attrib_changed[tmp2]) {
+			/* ask user if inc or dec */
+			g_text_x_mod = -80;
+			tmp3 = gui_radio((char*)NULL, 2, get_text(75), get_text(76));
+			g_text_x_mod = 0;
+
+			if (tmp3 == -1)
+				return;
+		} else {
+			tmp3 = g_attrib_changed[tmp2];
+		}
+
+		ptr1 = &g_hero.attrib[tmp2].normal;
+
+		if (tmp3 == INC) {
+			/* increment */
+			if (ptr1[0] == 13) {
+				infobox(get_text(77), 0);
+				return;
+			}
+			c = 0;
+			for (di = 7; di < 14; di++) {
+				if (g_attrib_changed[di] != DEC) {
+					ptr2 = &g_hero.attrib[di].normal;
+					if (ptr2[0] < 8) {
+						c += 8 - ptr2[0];
+					}
+				}
+			}
+			if (c < 2) {
+				infobox(get_text(85), 0);
+				return;
+			}
+			/* increment positive attribute */
+			//g_hero.attrib[tmp2].normal = ++g_ghero.attrib[tmp2].current;
+			ptr1[0] = ++ptr1[1];
+
+			g_attrib_changed[tmp2] = INC;
+
+			refresh_screen();
+
+			tmp1 = 0;
+			while (tmp1 != 2) {
+		
+				do {
+					/* ask which negative attribute to increment */
+					g_text_x_mod = -80;
+					si = gui_radio(get_text(80), 7,
+						get_text(39), get_text(40), get_text(41),
+						get_text(42), get_text(43), get_text(44),
+						get_text(45));
+					g_text_x_mod = 0;
+
+				} while (si == -1);
+
+				si--;
+				/* check if this attribute has been decremented */
+				if (g_attrib_changed[si + 7] == DEC) {
+					infobox(get_text(83), 0);
+					continue;
+				}
+				ptr1 = &g_hero.attrib[si + 7].normal;
+				/* check if attribute can be incremented */
+				if (ptr1[0] == 8) {
+					infobox(get_text(77), 0);
+				} else {
+					/* increment the negative attribute */
+					tmp1++;
+					g_attrib_changed[si + 7] = INC;
+
+					//g_hero.attrib[si + 7].normal = ++g_ghero.attrib[si + 7].current;
+					ptr1[0] = ++ptr1[1];
+
+					refresh_screen();
+				}
+			}
+		} else {
+			/* decrement */
+			/* check if the positive attribute can be decremented */
+			if (ptr1[0] == 8) {
+				infobox(get_text(81), 0);
+				return;
+			}
+			c = 0;
+			for (di = 7; di < 14; di++) {
+				if (g_attrib_changed[di] != INC) {
+					ptr2 = &g_hero.attrib[di].normal;
+					if (ptr2[0] > 2) {
+						c += ptr2[0] - 2;
+					}
+				}
+			}
+			if (c < 2) {
+				infobox(get_text(84), 0);
+				return;
+			}
+			/* decrement positive attribute */
+			// g_hero.attrib[tmp3].normal = --g_hero.attrib[tmp3].current;
+			ptr1[0] = --ptr1[1];
+
+			/* mark this attribute as decremented */
+			g_attrib_changed[tmp2] = DEC;
+
+			refresh_screen();
+
+			tmp1 = 0;
+			while (tmp1 != 2) {
+
+				do {
+					/* ask which negative attribute to increment */
+					g_text_x_mod = -80;
+					si = gui_radio(get_text(79), 7,
+						get_text(39), get_text(40), get_text(41),
+						get_text(42), get_text(43), get_text(44),
+						get_text(45));
+					g_text_x_mod = 0;
+				} while (si == -1);
+
+				si--;
+				/* check if this attribute has been incremented */
+				if (g_attrib_changed[si + 7] == INC) {
+					infobox(get_text(82), 0);
+					continue;
+				}
+				
+				ptr1 = &g_hero.attrib[si + 7].normal;
+			
+				/* check if attribute can be decremented */
+				if (ptr1[0] == 2) {
+					infobox(get_text(81), 0);
+					continue;
+				}
+				/* decrement the negative attribute */
+				tmp1++;
+
+				// g_hero.attrib[si + 7].normal = --g_hero.attrib[si + 7].current;
+				ptr1[0] = --ptr1[1];
+
+				g_attrib_changed[si + 7] = DEC;
+
+				refresh_screen();
+			}
+		}
+	}
+}
+
+#undef INC
+#undef DEC
+
+/**
+ * select_typus() - select a possible typus with current attribute values
+ *
+ */
+static void select_typus(void)
+{
+	signed char old_typus;
+	signed char possible_types;
+	signed char ltmp2;
+	volatile signed char *ptr;
+	signed short i;
+	signed short impossible;
+
+	register signed short di;
+	register signed short si;
+
+
+	struct type_bitmap t;
+
+	old_typus = -1;
+	
+	t = *(struct type_bitmap*)&g_type_bitmap;
+
+	/* check if attribs have been set */
+	if (g_hero.attrib[0].normal != 0) {
+
+		/* save the old typus */
+		old_typus = g_hero.typus;
+		
+		/* disable MU bonus */
+		if (g_got_mu_bonus) {
+			g_hero.attrib[0].current = --g_hero.attrib[0].normal;
+		}
+		/* disable CH bonus */
+		if (g_got_ch_bonus) {
+			g_hero.attrib[2].current = --g_hero.attrib[2].normal;
+		}
+		possible_types = 0;
+
+		for (i = 1; i <= 12; i++) {
+			impossible = 0;
+			for (si = 0; si < 4; si++) {
+
+				ptr = &g_hero.attrib[g_reqs[i][si].attrib].normal;
+
+				ltmp2 = *(ptr);
+
+				if ((g_reqs[i][si].value & 0x80) != 0) {
+					if (ltmp2 > (g_reqs[i][si].value & 0x7f))
+						impossible = 1;
+				} else {
+					if (g_reqs[i][si].value > ltmp2)
+						impossible = 1;
+				}
+			}
+
+			if (!impossible) {
+
+				g_type_names[possible_types] = 	get_text( (g_hero.sex ? 271 : 17 ) + i);
+				t.t[possible_types] = (char)i;
+				possible_types++;
+			}
+		}
+
+		if (!possible_types) {
+			if (!can_change_attribs()) {
+				/* totally messed up values */
+				infobox(get_text(284), 0);
+				return;
+			} else {
+				infobox(get_text(31), 0);
+				return;
+			}
+			return;
+		}
+
+		di = gui_radio(get_text(30), possible_types,
+				g_type_names[0], g_type_names[1], g_type_names[2],
+				g_type_names[3], g_type_names[4], g_type_names[5],
+				g_type_names[6], g_type_names[7], g_type_names[8],
+				g_type_names[9], g_type_names[10], g_type_names[11]);
+
+		/*	restore attibute boni when selection is canceled
+		 *	or the same typus is selected.
+		 */
+		if ((di != -1) && (t.t[di - 1] != old_typus)) {
+
+			/* set new typus */
+			g_hero.typus = t.t[di - 1];
+			g_screen_var = 1;
+
+			load_typus((signed short)g_hero.typus);
+
+			update_mouse_cursor();
+			call_fill_rect_gen((unsigned char*)g_vga_memstart, 16, 8, 143, 191, 0);
+			wait_for_vsync();
+			set_palette((signed char*)g_gen_ptr5 + 0x5c02, 0, 32);
+			call_mouse();
+
+			g_head_typus = (g_hero.typus > 10 ? 10 : g_hero.typus);
+
+			if (g_hero.sex) {
+				g_head_first = g_head_current = g_head_first_female[g_head_typus];
+				g_head_last = g_head_first_male[g_head_typus + 1] - 1;
+			} else {
+				g_head_first = g_head_current = g_head_first_male[g_head_typus];
+				g_head_last = g_head_first_female[g_head_typus] - 1;
+			}
+
+			/* reset boni flags */
+			g_got_mu_bonus = g_got_ch_bonus = 0;
+			fill_values();
+		} else {
+			if (g_got_mu_bonus) {
+				g_hero.attrib[0].current = ++g_hero.attrib[0].normal;
+			}
+			if (g_got_ch_bonus) {
+				g_hero.attrib[2].current = ++g_hero.attrib[2].normal;
+			}
+		}
+	} else {
+		infobox(get_text(265), 0);
+		return;
+	}
+}
+static void inc_skill(const signed short skill, const signed short max, const char *msg)
 {
 	/* no more increments than the maximum */
 	if (g_skill_incs[skill].incs >= max) {
@@ -5930,8 +5920,7 @@ static void inc_skill(signed short skill, signed short max, char *msg)
 	}
 }
 
-/* Borlandified and identical */
-void select_skill(void)
+static void select_skill(void)
 {
 	signed short skill;
 	signed short group;
@@ -6072,8 +6061,7 @@ void select_skill(void)
 	} while (group != -1);
 }
 
-/* Borlandified and identical */
-static void inc_spell(signed short spell)
+static void inc_spell(const signed short spell)
 {
 	signed short max_incs = 1;
 
@@ -6134,8 +6122,7 @@ static void inc_spell(signed short spell)
 	}
 }
 
-/* Borlandified and identical */
-void select_spell(void)
+static void select_spell(void)
 {
 	signed short group;
 	signed short spell;
@@ -6397,8 +6384,7 @@ void select_spell(void)
 	} while (group != -1);
 }
 
-/* Borlandified and identical */
-void choose_atpa(void)
+static void choose_atpa(void)
 {
 	signed short skill;
 	signed short increase;
@@ -6457,8 +6443,7 @@ void choose_atpa(void)
  * choose_typus() - choose a typus manually
  *
  */
-/* Borlandified and identical */
-void choose_typus(void)
+static void choose_typus(void)
 {
 	signed short choosen_typus;
 	signed short randval;
@@ -6763,13 +6748,10 @@ static void do_gen(void)
 	}
 }
 
+/* INTRO */
 
-
-/* Borlandified and identical */
 static void pal_fade_out(signed char *dst, signed char *src, signed short n)
 {
-//	struct struct_color *d = (struct struct_color*)dst;
-//	struct struct_color *s = (struct struct_color*)src;
 	signed short i;
 
 	for (i = 0; i < n; i++) {
@@ -6794,32 +6776,9 @@ static void pal_fade_out(signed char *dst, signed char *src, signed short n)
 		} else if (*(src + 3 * i + 2) > *(dst + 3 * i + 2)) {
 			(*(signed char*)(dst + 3 * i + 2))++;
 		}
-#if 0
-		if (s[i].r < d[i].r) {
-			d[i].r--;
-		} else {
-			if (s[i].r > d[i].r)
-				d[i].r++;
-		}
-
-		if (s[i].g < d[i].g) {
-			d[i].g--;
-		} else {
-			if (s[i].g > d[i].g)
-				d[i].g++;
-		}
-
-		if (s[i].b < d[i].b) {
-			d[i].b--;
-		} else {
-			if (s[i].b > d[i].b)
-				d[i].b++;
-		}
-#endif
 	}
 }
 
-/* Borlandified and identical */
 static void pal_fade_in(signed char *dst, signed char *src, signed short col, signed short n)
 {
 	signed short i;
@@ -6854,7 +6813,6 @@ static void pal_fade_in(signed char *dst, signed char *src, signed short col, si
 /**
  *	intro() - play the intro
  */
-/* Borlandified and identical */
 static void intro(void)
 {
 	signed char cnt1;
