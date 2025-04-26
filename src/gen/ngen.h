@@ -22,12 +22,6 @@ struct nvf_desc {
 	signed short *height;
 };
 
-	signed short *get_timbre(signed short, signed short);
-	unsigned short load_file(signed short);
-	signed short load_driver(const char*, signed short, signed short);
-	void play_midi(unsigned short);
-	void stop_sequence(void);
-
 	signed short open_datfile(unsigned short);
 	signed long get_archive_offset(const char*, unsigned char*);
 	signed short read_datfile(signed short, unsigned char*, unsigned short);
