@@ -75,7 +75,7 @@ static inline void clrscr(void) { }
 /* static prototypes */
 static signed short infobox(const char*, signed short);
 
-static signed short open_datfile(unsigned short);
+static signed short open_datfile(const signed short);
 static signed long get_archive_offset(const char*, unsigned char*);
 static signed short read_datfile(signed short, unsigned char*, unsigned short);
 static signed long get_filelength(void);
@@ -2746,8 +2746,7 @@ static void read_common_files(void)
 #if defined(__BORLANDC__)
 /* Remark: u32 is unsigned long in the BCC-world */
 /* seems unused on available input values */
-/* Borlandified and identical */
-unsigned long swap_u32(unsigned long v)
+static unsigned long swap_u32(unsigned long v)
 {
 	unsigned short l1;
 	unsigned short l2;
@@ -2764,7 +2763,7 @@ unsigned long swap_u32(unsigned long v)
 }
 #else
 /* Remark: u32 is unsigned int in the GCC-world */
-unsigned int swap_u32(unsigned int v)
+static unsigned int swap_u32(unsigned int v)
 {
 	unsigned char tmp[4] = {0};
 
@@ -2890,7 +2889,7 @@ static signed long process_nvf(struct nvf_desc *nvf)
 	return retval;
 }
 
-void detect_datfile(void)
+static void detect_datfile(void)
 {
 	unsigned char buf[800];
 	signed short handle;
@@ -2926,7 +2925,7 @@ void detect_datfile(void)
 	if (flen == 634785) { /* DE DISK */ g_dsagen_lang = LANG_DE; g_dsagen_medium = MED_DISK; }	
 }
 
-signed short open_datfile(unsigned short index)
+static signed short open_datfile(const signed short index)
 {
 	const char **f_names = NULL;
 	unsigned char buf[800];
@@ -2966,9 +2965,7 @@ signed short open_datfile(unsigned short index)
 	}
 }
 
-/* Borlandified and identical */
-/* static */
-signed long get_archive_offset(const char *name, unsigned char *table)
+static signed long get_archive_offset(const char *name, unsigned char *table)
 {
 	signed short i;
 
@@ -2989,8 +2986,7 @@ signed long get_archive_offset(const char *name, unsigned char *table)
 	return -1;
 }
 
-/* Borlandified and identical */
-signed short read_datfile(signed short handle, unsigned char *buf, unsigned short len)
+static signed short read_datfile(signed short handle, unsigned char *buf, unsigned short len)
 {
 	if (len > (unsigned long)g_flen_left)
 		len = (unsigned short)g_flen_left;
@@ -3002,8 +2998,7 @@ signed short read_datfile(signed short handle, unsigned char *buf, unsigned shor
 	return len;
 }
 
-/* Borlandified and identical */
-signed long get_filelength(void)
+static signed long get_filelength(void)
 {
 	return g_flen;
 }
@@ -3020,8 +3015,7 @@ static void get_textcolor(signed short *p_fg, signed short *p_bg)
 	writew((unsigned char*)p_bg, g_bg_color);
 }
 
-/* Borlandified and identical */
-void init_video(void)
+static void init_video(void)
 {
 	struct struct_color l_white = *(struct struct_color*)&g_col_white2;
 
@@ -3031,7 +3025,6 @@ void init_video(void)
 	set_color((signed char*)&l_white, 0xff);
 }
 
-/* Borlandified and identical */
 void exit_video(void)
 {
 	/* restore old mode */
@@ -3040,8 +3033,7 @@ void exit_video(void)
 	set_video_page(g_display_page_bak);
 }
 
-/* Borlandified and identical */
-void draw_v_line(signed short x, signed short y1, signed short y2, unsigned short color)
+static void draw_v_line(const signed short x, signed short y1, signed short y2, const signed short color)
 {
 	signed short tmp;
 	signed short diffY;
@@ -3060,8 +3052,7 @@ void draw_v_line(signed short x, signed short y1, signed short y2, unsigned shor
 	draw_h_spaced_dots(offset, diffY, color, width);
 }
 
-/* Borlandified and identical */
-void do_draw_pic(unsigned short mode)
+static void do_draw_pic(const signed short mode)
 {
 	signed short d1;
 	signed short d2;
@@ -3100,7 +3091,6 @@ void do_draw_pic(unsigned short mode)
 	call_mouse();
 }
 
-/* Borlandified and identical */
 void call_fill_rect_gen(unsigned char *ptr, signed short x1, signed short y1, signed short x2, signed short y2, signed short color)
 {
 	signed short width;
@@ -3413,7 +3403,6 @@ static void error_msg(const char *msg)
 	vsync_or_key(print_line(msg) * 150);
 }
 
-
 static signed short count_linebreaks(char *str)
 {
 	signed short i = 0;
@@ -3440,10 +3429,7 @@ static signed short get_str_width(char *str)
 	return sum;
 }
 
-
-
-/* Borlandified and identical */
-signed short enter_string(char *dst, signed short x, signed short y, signed short num, signed short zero)
+static signed short enter_string(char *dst, signed short x, signed short y, signed short num, signed short zero)
 {
 	signed short pos;
 	signed short c;
@@ -3572,8 +3558,7 @@ signed short enter_string(char *dst, signed short x, signed short y, signed shor
 	return 0;
 }
 
-/* Borlandified and identical */
-void draw_popup_line(signed short line, signed short type)
+static void draw_popup_line(const signed short line, const signed short type)
 {
 	unsigned char *dst;
 	unsigned char *src;
@@ -3635,8 +3620,7 @@ void draw_popup_line(signed short line, signed short type)
  *
  *	if @digits is zero the function just delays.
  */
-/* Borlandified and identical */
-signed short infobox(const char *msg, signed short digits)
+static signed short infobox(const char *msg, const signed short digits)
 {
 	unsigned char* src;
 	unsigned char* dst;
@@ -3739,8 +3723,7 @@ signed short infobox(const char *msg, signed short digits)
  * @header:	the header of menu
  *
  */
-/* Borlandified and identical */
-signed short gui_bool(char *msg)
+static signed short gui_bool(char *msg)
 {
 	signed short retval;
 
@@ -3761,8 +3744,7 @@ signed short gui_bool(char *msg)
  * @offset:	the offset of the first radio line
  *
  */
-/* Borlandified and identical */
-void fill_radio_button(signed short old_pos, signed short new_pos, signed short offset)
+static void fill_radio_button(signed short old_pos, signed short new_pos, signed short offset)
 {
 	signed short y;
 
@@ -3798,7 +3780,6 @@ void fill_radio_button(signed short old_pos, signed short new_pos, signed short 
  * @options:	the number of options
  *
  */
-/* Borlandified and identical */
 signed short gui_radio(char *header, signed char options, ...)
 {
 	va_list arguments;
@@ -4071,8 +4052,7 @@ static void save_chr(void)
 /**
  * enter_name() - enter the name of a hero
  */
-/* Borlandified and identical */
-void enter_name(void)
+static void enter_name(void)
 {
 	unsigned char* dst;
 
@@ -4086,8 +4066,7 @@ void enter_name(void)
 	print_str((const char*)g_hero.name, 180, 12);
 }
 
-/* Borlandified and identical */
-void change_head(void)
+static void change_head(void)
 {
 	struct nvf_desc nvf;
 	signed short width;
@@ -4122,8 +4101,7 @@ void change_head(void)
  * change_sex() - changes the sex of the hero
  *
  */
-/* Borlandified and identical */
-void change_sex(void)
+static void change_sex(void)
 {
 	unsigned char* dst;
 	unsigned char* src;
@@ -4357,8 +4335,7 @@ static void make_valuta_str(char *dst, signed long money)
  * print_attribs() -	print the attribute values
  *
  */
-/* Borlandified and identical */
-void print_attribs(void)
+static void print_attribs(void)
 {
 	volatile signed char *p;
 	char buf[10];
@@ -4823,9 +4800,7 @@ static void print_values(void)
 	}
 }
 
-
-/* Borlandified and identical */
-void refresh_screen(void)
+static void refresh_screen(void)
 {
 	unsigned char* src;
 	unsigned char* dst;
@@ -5193,7 +5168,6 @@ static void skill_inc_novice(const signed short skill)
 	}
 }
 
-
 /**
  * spell_inc_novice() - tries to increment a spell in novice mode
  * @spell:	the spell which should be incremented
@@ -5237,7 +5211,6 @@ static void spell_inc_novice(const signed short spell)
 		}
 	}
 }
-
 
 /**
  * fill_values() - fills the values if typus is chosen
@@ -5516,8 +5489,7 @@ static void fill_values(void)
  * can_change_attribs() - checks if attribute changes are possible
  *
  */
-/* Borlandified and identical */
-signed short can_change_attribs(void)
+static signed short can_change_attribs(void)
 {
 	signed short na_inc;
 	signed short na_dec;
@@ -5900,6 +5872,7 @@ static void select_typus(void)
 		return;
 	}
 }
+
 static void inc_skill(const signed short skill, const signed short max, const char *msg)
 {
 	/* no more increments than the maximum */
@@ -7144,7 +7117,6 @@ static void intro(void)
 }
 
 #if defined(__BORLANDC__)
-/* Borlandified and identical */
 static void interrupt timer_isr(void)
 {
 	g_random_gen_seed2++;
@@ -7155,7 +7127,6 @@ static void interrupt timer_isr(void)
 }
 #endif
 
-/* Borlandified and identical */
 static void set_timer_isr(void)
 {
 #if defined(__BORLANDC__)
@@ -7166,7 +7137,6 @@ static void set_timer_isr(void)
 #endif
 }
 
-/* Borlandified and identical */
 void restore_timer_isr(void)
 {
 #if defined(__BORLANDC__)
