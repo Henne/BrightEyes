@@ -1709,7 +1709,7 @@ static unsigned char *load_snd_driver(const char *fname)
 	}
 }
 
-void unload_snd_driver(void)
+static void unload_snd_driver(void)
 {
 	if (g_snd_driver) {
 		free(g_snd_driver);
@@ -1766,8 +1766,7 @@ static signed short load_driver(const char* fname, const signed short type, sign
 	return 0;
 }
 
-/* Borlandified and identical */
-void read_soundcfg(void)
+static void read_soundcfg(void)
 {
 	signed short handle;
 	signed short port;
@@ -1796,8 +1795,7 @@ void read_soundcfg(void)
 	}
 }
 
-/* Borlandified and identical */
-void init_music(unsigned long size)
+static void init_music(const unsigned long size)
 {
 	if ((g_form_xmid = gen_alloc(size))) {
 		AIL_startup();
@@ -1831,8 +1829,7 @@ static signed short *get_timbre(const signed short bank, const signed short patc
 	return timbre_ptr;
 }
 
-/* Borlandified and identical */
-unsigned short load_seq(signed short sequence_num)
+static signed short load_seq(const signed short sequence_num)
 {
 	signed short patch;
 	signed short *src_ptr;
@@ -1864,12 +1861,11 @@ unsigned short load_seq(signed short sequence_num)
 			close(g_handle_timbre);
 		}
 	}
-	return 0;
 
+	return 0;
 }
 
-/* Borlandified and identical */
-unsigned short play_sequence(signed short sequence_num)
+static signed short play_sequence(const signed short sequence_num)
 {
 	if (load_seq(sequence_num) != 0) {
 		AIL_start_sequence(g_snd_driver_handle, sequence_num);
