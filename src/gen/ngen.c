@@ -3778,7 +3778,7 @@ static void fill_radio_button(signed short old_pos, signed short new_pos, signed
  * @options:	the number of options
  *
  */
-signed short gui_radio(char *header, signed char options, ...)
+signed short gui_radio(char *header, signed int options, ...)
 {
 	va_list arguments;
 	char *str;
