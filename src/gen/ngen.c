@@ -2766,60 +2766,7 @@ static void split_textbuffer(char **dst, char *src, const unsigned long len)
 	}
 }
 
-static void load_font_and_text(void)
-{
-	signed short handle;
-	signed long len;
-
-	/* load FONT6 */
-	handle = open_datfile(14);
-	read_datfile(handle, g_buffer_font6, 1000);
-	close(handle);
-
-	/* load GENTEXT */
-	handle = open_datfile(15);
-	len = read_datfile(handle, (unsigned char*)g_buffer_text, 64000);
-	close(handle);
-
-	split_textbuffer(g_texts, g_buffer_text, len);
-}
-
-static void load_popup(void)
-{
-	signed short handle;
-	signed short len;
-
-	/* load POPUP.NVF */
-	handle = open_datfile(19);
-	len = read_datfile(handle, g_buffer_popup_nvf - 8, 500);
-	close(handle);
-
-	decomp_pp20(g_buffer_popup_nvf, g_buffer_popup_nvf - 8, len);
-}
-
-static void load_common_files(void)
-{
-	signed short handle;
-	signed short len;
-
-	/* load HEADS.DAT */
-	handle = open_datfile(11);
-	len = read_datfile(handle, g_buffer_heads_dat, 64000);
-	close(handle);
-
-	/* load SEX.DAT */
-	handle = open_datfile(12);
-	read_datfile(handle, g_buffer_sex_dat, 900);
-	close(handle);
-
-	/* load DMENGE.DAT */
-	handle = open_datfile(32);
-	len = read_datfile(handle, g_buffer_dmenge_dat - 8, 25000);
-	close(handle);
-
-	decomp_pp20(g_buffer_dmenge_dat, g_buffer_dmenge_dat - 8, len);
-}
-
+/* FILE MANAGEMENT */
 
 static void detect_datfile(void)
 {
@@ -2943,6 +2890,59 @@ static void read_datfile_to_buffer(const signed short index, unsigned char *dst)
 	close(handle);
 }
 
+static void load_font_and_text(void)
+{
+	signed short handle;
+	signed long len;
+
+	/* load FONT6 */
+	handle = open_datfile(14);
+	read_datfile(handle, g_buffer_font6, 1000);
+	close(handle);
+
+	/* load GENTEXT */
+	handle = open_datfile(15);
+	len = read_datfile(handle, (unsigned char*)g_buffer_text, 64000);
+	close(handle);
+
+	split_textbuffer(g_texts, g_buffer_text, len);
+}
+
+static void load_popup(void)
+{
+	signed short handle;
+	signed short len;
+
+	/* load POPUP.NVF */
+	handle = open_datfile(19);
+	len = read_datfile(handle, g_buffer_popup_nvf - 8, 500);
+	close(handle);
+
+	decomp_pp20(g_buffer_popup_nvf, g_buffer_popup_nvf - 8, len);
+}
+
+static void load_common_files(void)
+{
+	signed short handle;
+	signed short len;
+
+	/* load HEADS.DAT */
+	handle = open_datfile(11);
+	len = read_datfile(handle, g_buffer_heads_dat, 64000);
+	close(handle);
+
+	/* load SEX.DAT */
+	handle = open_datfile(12);
+	read_datfile(handle, g_buffer_sex_dat, 900);
+	close(handle);
+
+	/* load DMENGE.DAT */
+	handle = open_datfile(32);
+	len = read_datfile(handle, g_buffer_dmenge_dat - 8, 25000);
+	close(handle);
+
+	decomp_pp20(g_buffer_dmenge_dat, g_buffer_dmenge_dat - 8, len);
+}
 
 static void load_page(const signed short page)
 {
