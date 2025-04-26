@@ -26,8 +26,6 @@ struct nvf_desc {
 	signed long get_archive_offset(const char*, unsigned char*);
 	signed short read_datfile(signed short, unsigned char*, unsigned short);
 	signed long get_filelength(void);
-	void wait_for_keypress(void);
-	void vsync_or_key(signed short);
 
 #if defined(__BORLANDC__)
 	unsigned long swap_u32(unsigned long);
@@ -36,7 +34,6 @@ struct nvf_desc {
 #endif
 
 	void exit_video(void);
-	void wait_for_vsync(void);
 	signed short infobox(const char*, signed short);
 	signed short gui_bool(char*);
 	signed short gui_radio(char*, signed char, ...);

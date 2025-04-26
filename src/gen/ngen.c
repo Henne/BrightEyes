@@ -2451,6 +2451,48 @@ static void decomp_rle(unsigned char *dst, unsigned char *src, signed short x, s
 	call_mouse();
 }
 
+/* KEYBOARD AND INPUT MANAGEMENT */
+
+static void wait_for_vsync(void)
+{
+#if defined(__BORLANDC__)
+	outportb(0x3d4, 0x11);
+	_AL = inportb(0x3d5);
+	_AH = 0;
+	_BX = _AX;
+	_BX &= 0xffdf;
+	outportb(0x3d4, 0x11);
+	outportb(0x3d5, _BL);
+
+	do {
+		_AL = inportb(0x3da);
+		_AH = 0;
+		_BX = _AX;
+	} while (_BX & 0x8);
+
+	do {
+		_AL = inportb(0x3da);
+		_AH = 0;
+		_BX = _AX;
+	} while (!(_BX & 0x8));
+#else
+	// wait 16ms
+	SDL_Delay(16);
+#endif
+}
+
+static void wait_for_keypress(void)
+{
+	while (CD_bioskey(1)) {
+		CD_bioskey(0);
+	}
+}
+
+static signed short get_bioskey(void)
+{
+	return CD_bioskey(0);
+}
+
 static void handle_input(void)
 {
 	signed short si, i;
@@ -2512,6 +2554,21 @@ static void handle_input(void)
 	}
 	mouse_compare();
 	g_in_key_ext = si;
+}
+
+static void vsync_or_key(const signed short val)
+{
+	signed short i;
+
+	for (i = 0; i < val; i++) {
+		handle_input();
+		if (g_in_key_ext || g_mouse2_event) {
+			g_mouse2_event = 0;
+			g_in_key_ext = KEY_RET;
+			return;
+		}
+		wait_for_vsync();
+	}
 }
 
 
@@ -2900,39 +2957,6 @@ static void get_textcolor(signed short *p_fg, signed short *p_bg)
 	writew((unsigned char*)p_bg, g_bg_color);
 }
 
-/* Borlandified and identical */
-void wait_for_keypress(void)
-{
-	while (CD_bioskey(1)) {
-		CD_bioskey(0);
-	}
-}
-
-#if defined(__BORLANDC__)
-/* unused */
-/* Borlandified and identical */
-signed short get_bioskey(void)
-{
-	return CD_bioskey(0);
-}
-#endif
-
-/* Borlandified and identical */
-void vsync_or_key(signed short val)
-{
-	signed short i;
-
-	for (i = 0; i < val; i++) {
-		handle_input();
-		if (g_in_key_ext || g_mouse2_event) {
-			g_mouse2_event = 0;
-			g_in_key_ext = KEY_RET;
-			return;
-		}
-		wait_for_vsync();
-	}
-}
-
 #if defined(__BORLANDC__)
 /* Remark: u32 is unsigned long in the BCC-world */
 /* seems unused on available input values */
@@ -3061,35 +3085,6 @@ void call_fill_rect_gen(unsigned char *ptr, signed short x1, signed short y1, si
 	fill_rect(FP_SEG(ptr), FP_OFF(ptr), color, width, height);
 #else
 	fill_rect(ptr, color, width, height);
-#endif
-}
-
-/* Borlandified and identical */
-void wait_for_vsync(void)
-{
-#if defined(__BORLANDC__)
-	outportb(0x3d4, 0x11);
-	_AL = inportb(0x3d5);
-	_AH = 0;
-	_BX = _AX;
-	_BX &= 0xffdf;
-	outportb(0x3d4, 0x11);
-	outportb(0x3d5, _BL);
-
-	do {
-		_AL = inportb(0x3da);
-		_AH = 0;
-		_BX = _AX;
-	} while (_BX & 0x8);
-
-	do {
-		_AL = inportb(0x3da);
-		_AH = 0;
-		_BX = _AX;
-	} while (!(_BX & 0x8));
-#else
-	// wait 16ms
-	SDL_Delay(16);
 #endif
 }
 
