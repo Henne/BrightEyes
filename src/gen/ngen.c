@@ -2766,75 +2766,6 @@ static void split_textbuffer(char **dst, char *src, const unsigned long len)
 	}
 }
 
-static void load_page(const signed short page)
-{
-	unsigned char* ptr;
-	signed short handle;
-
-	if (page <= 10) {
-		/* check if this image is in the buffer */
-		if (g_bg_buffer[page]) {
-			decomp_rle(g_gen_ptr1_dis, g_bg_buffer[page], 0, 0, 320, 200, 0);
-			return;
-		}
-
-		handle = open_datfile(page);
-		ptr = gen_alloc(get_filelength());
-
-		if (ptr != NULL) {
-			g_bg_buffer[page] = ptr;
-			g_bg_len[page] = get_filelength();
-
-			read_datfile(handle, g_bg_buffer[page], g_bg_len[page]);
-			decomp_rle(g_gen_ptr1_dis, g_bg_buffer[page], 0, 0, 320, 200, 0);
-			close(handle);
-		} else {
-			read_datfile(handle, g_page_buffer, 64000);
-			decomp_rle(g_gen_ptr1_dis, g_page_buffer, 0, 0, 320, 200, 0);
-			close(handle);
-		}
-	} else {
-		/* this should not happen */
-		handle = open_datfile(page);
-		read_datfile(handle, g_gen_ptr1_dis - 8, 64000);
-		close(handle);
-		decomp_pp20(g_gen_ptr1_dis, g_gen_ptr1_dis - 8, get_filelength());
-	}
-}
-
-static void load_typus(const signed short typus)
-{
-	signed short index;
-	unsigned char *ptr;
-	signed short handle;
-
-	index = typus + 19;
-
-	/* check if this image is in the buffer */
-	if (g_typus_buffer[typus]) {
-		decomp_pp20(g_gen_ptr5,	g_typus_buffer[typus], g_typus_len[typus]);
-		return;
-	}
-
-	handle = open_datfile(index);
-
-	ptr = gen_alloc(get_filelength());
-	if (ptr != NULL) {
-		/* load the file into the typus buffer */
-		g_typus_buffer[typus] = ptr;
-		g_typus_len[typus] = get_filelength();
-
-		read_datfile(handle, g_typus_buffer[typus], g_typus_len[typus]);
-
-		decomp_pp20(g_gen_ptr5, g_typus_buffer[typus], g_typus_len[typus]);
-	} else {
-		/* load the file direct */
-		read_datfile(handle, g_gen_ptr1_dis, 25000);
-		decomp_pp20(g_gen_ptr5, g_gen_ptr1_dis, get_filelength());
-	}
-	close(handle);
-}
-
 static void load_font_and_text(void)
 {
 	signed short handle;
@@ -3011,6 +2942,79 @@ static void read_datfile_to_buffer(const signed short index, unsigned char *dst)
 	read_datfile(handle, dst, 64000);
 	close(handle);
 }
+
+
+static void load_page(const signed short page)
+{
+	unsigned char* ptr;
+	signed short handle;
+
+	if (page <= 10) {
+		/* check if this image is in the buffer */
+		if (g_bg_buffer[page]) {
+			decomp_rle(g_gen_ptr1_dis, g_bg_buffer[page], 0, 0, 320, 200, 0);
+			return;
+		}
+
+		handle = open_datfile(page);
+		ptr = gen_alloc(get_filelength());
+
+		if (ptr != NULL) {
+			g_bg_buffer[page] = ptr;
+			g_bg_len[page] = get_filelength();
+
+			read_datfile(handle, g_bg_buffer[page], g_bg_len[page]);
+			decomp_rle(g_gen_ptr1_dis, g_bg_buffer[page], 0, 0, 320, 200, 0);
+			close(handle);
+		} else {
+			read_datfile(handle, g_page_buffer, 64000);
+			decomp_rle(g_gen_ptr1_dis, g_page_buffer, 0, 0, 320, 200, 0);
+			close(handle);
+		}
+	} else {
+		/* this should not happen */
+		handle = open_datfile(page);
+		read_datfile(handle, g_gen_ptr1_dis - 8, 64000);
+		close(handle);
+		decomp_pp20(g_gen_ptr1_dis, g_gen_ptr1_dis - 8, get_filelength());
+	}
+}
+
+static void load_typus(const signed short typus)
+{
+	signed short index;
+	unsigned char *ptr;
+	signed short handle;
+
+	index = typus + 19;
+
+	/* check if this image is in the buffer */
+	if (g_typus_buffer[typus]) {
+		decomp_pp20(g_gen_ptr5,	g_typus_buffer[typus], g_typus_len[typus]);
+		return;
+	}
+
+	handle = open_datfile(index);
+
+	ptr = gen_alloc(get_filelength());
+	if (ptr != NULL) {
+		/* load the file into the typus buffer */
+		g_typus_buffer[typus] = ptr;
+		g_typus_len[typus] = get_filelength();
+
+		read_datfile(handle, g_typus_buffer[typus], g_typus_len[typus]);
+
+		decomp_pp20(g_gen_ptr5, g_typus_buffer[typus], g_typus_len[typus]);
+	} else {
+		/* load the file direct */
+		read_datfile(handle, g_gen_ptr1_dis, 25000);
+		decomp_pp20(g_gen_ptr5, g_gen_ptr1_dis, get_filelength());
+	}
+	close(handle);
+}
+
+
+
 
 static void set_textcolor(const signed short fg, const signed short bg)
 {
