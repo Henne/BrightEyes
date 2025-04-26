@@ -73,7 +73,6 @@ static inline void clrscr(void) { }
 #endif
 
 /* static prototypes */
-static signed short gui_bool(char*);
 static signed short infobox(const char*, signed short);
 
 static signed short open_datfile(unsigned short);
@@ -3441,103 +3440,6 @@ static signed short get_str_width(char *str)
 	return sum;
 }
 
-/**
- * save_chr() - save the hero the a CHR file
- */
-static void save_chr(void)
-{
-	signed short tmpw;
-	signed short tmph;
-	char filename[20];
-	struct nvf_desc nvf;
-	char path[80];
-
-	signed short handle; //si
-	signed short i;      //di
-
-	/* check for typus */
-	if (!g_hero.typus) {
-		infobox(get_text(72), 0);
-		return;
-	}
-	/* check for name */
-	if (!g_hero.name[0]) {
-		infobox(get_text(154), 0);
-		return;
-	}
-
-	/* Load picture from nvf */
-	/* TODO: why not just copy? */
-	nvf.dst = g_gen_ptr1_dis;
-	nvf.src = g_buffer_heads_dat;
-	nvf.no = g_head_current;
-	nvf.type = 0;
-	nvf.width = &tmpw;
-	nvf.height = &tmph;
-
-	process_nvf(&nvf);
-
-	/* copy picture to the character struct */
-	memcpy((void*)g_hero.pic, g_gen_ptr1_dis, 1024);
-
-	/* put the hero in the first group */
-	g_hero.group = 1;
-
-	/* wanna save ? */
-	if (!gui_bool(get_text(3)))
-		return;
-
-	/* copy name to alias */
-	/* TODO: should use strncpy() here */
-	strcpy((char*)g_hero.alias, (const char*)g_hero.name);
-
-	/* copy name to buffer */
-	/* TODO: should use strncpy() here */
-	strcpy(g_gen_ptr2, (const char*)g_hero.name);
-
-	/* prepare filename */
-	for (i = 0; i < 8; i++) {
-		/* leave the loop if the string ends */
-		if (!g_gen_ptr2[i])
-			break;
-		if (!isalnum(g_gen_ptr2[i])) {
-			/* replace non alphanumerical characters with underscore */
-			g_gen_ptr2[i] = '_';
-		}
-	}
-
-	strncpy(filename, g_gen_ptr2, 8);
-	filename[8] = 0;
-	strcat(filename, g_str_chr);
-
-	if (((handle = open(filename, 0x8001)) == -1) || gui_bool(get_text(261))) {
-
-#if !defined(__BORLANDC__)
-		/* close an existing file before overwriting it */
-		if (handle != -1) close(handle);
-#endif
-		handle = _creat(filename, 0);
-
-		if (handle != -1) {
-			write(handle, (const void*)&g_hero, sizeof(g_hero));
-			close(handle);
-
-			if (g_called_with_args == 0) return;
-
-			strcpy(path, g_str_temp_dir);
-			strcat(path, filename);
-
-			if ((handle = _creat(path, 0)) != -1) {
-				write(handle, (const void*)&g_hero, sizeof(g_hero));
-				close(handle);
-			}
-		} else {
-			/* should be replaced with infobox() */
-			error_msg(g_dsagen_lang == LANG_DE ? g_str_save_error_de : g_str_save_error_en);
-		}
-	}
-}
-
 
 
 /* Borlandified and identical */
@@ -4067,6 +3969,103 @@ signed short gui_radio(char *header, signed char options, ...)
 	g_in_key_ext = 0;
 
 	return retval;
+}
+
+/**
+ * save_chr() - save the hero the a CHR file
+ */
+static void save_chr(void)
+{
+	signed short tmpw;
+	signed short tmph;
+	char filename[20];
+	struct nvf_desc nvf;
+	char path[80];
+
+	signed short handle; //si
+	signed short i;      //di
+
+	/* check for typus */
+	if (!g_hero.typus) {
+		infobox(get_text(72), 0);
+		return;
+	}
+	/* check for name */
+	if (!g_hero.name[0]) {
+		infobox(get_text(154), 0);
+		return;
+	}
+
+	/* Load picture from nvf */
+	/* TODO: why not just copy? */
+	nvf.dst = g_gen_ptr1_dis;
+	nvf.src = g_buffer_heads_dat;
+	nvf.no = g_head_current;
+	nvf.type = 0;
+	nvf.width = &tmpw;
+	nvf.height = &tmph;
+
+	process_nvf(&nvf);
+
+	/* copy picture to the character struct */
+	memcpy((void*)g_hero.pic, g_gen_ptr1_dis, 1024);
+
+	/* put the hero in the first group */
+	g_hero.group = 1;
+
+	/* wanna save ? */
+	if (!gui_bool(get_text(3)))
+		return;
+
+	/* copy name to alias */
+	/* TODO: should use strncpy() here */
+	strcpy((char*)g_hero.alias, (const char*)g_hero.name);
+
+	/* copy name to buffer */
+	/* TODO: should use strncpy() here */
+	strcpy(g_gen_ptr2, (const char*)g_hero.name);
+
+	/* prepare filename */
+	for (i = 0; i < 8; i++) {
+		/* leave the loop if the string ends */
+		if (!g_gen_ptr2[i])
+			break;
+		if (!isalnum(g_gen_ptr2[i])) {
+			/* replace non alphanumerical characters with underscore */
+			g_gen_ptr2[i] = '_';
+		}
+	}
+
+	strncpy(filename, g_gen_ptr2, 8);
+	filename[8] = 0;
+	strcat(filename, g_str_chr);
+
+	if (((handle = open(filename, 0x8001)) == -1) || gui_bool(get_text(261))) {
+
+#if !defined(__BORLANDC__)
+		/* close an existing file before overwriting it */
+		if (handle != -1) close(handle);
+#endif
+		handle = _creat(filename, 0);
+
+		if (handle != -1) {
+			write(handle, (const void*)&g_hero, sizeof(g_hero));
+			close(handle);
+
+			if (g_called_with_args == 0) return;
+
+			strcpy(path, g_str_temp_dir);
+			strcat(path, filename);
+
+			if ((handle = _creat(path, 0)) != -1) {
+				write(handle, (const void*)&g_hero, sizeof(g_hero));
+				close(handle);
+			}
+		} else {
+			/* should be replaced with infobox() */
+			error_msg(g_dsagen_lang == LANG_DE ? g_str_save_error_de : g_str_save_error_en);
+		}
+	}
 }
 
 /**
