@@ -13,9 +13,22 @@
 
 extern unsigned char *g_vga_memstart;
 
+extern signed short g_mouse_posx;
+extern signed short g_mouse_posy;
+extern signed short g_mouse_moved;
+
+extern signed short g_mouse1_event1;
+extern signed short g_mouse1_event2;
+extern signed short g_mouse2_event;
+
+extern signed short g_in_key_ext;
+extern signed short g_in_key_ascii;
+
 static const int RATIO = 1;
-static const int WIDTH = RATIO * 320;
-static const int HEIGHT = RATIO * 200;
+static const int O_WIDTH = 320;
+static const int O_HEIGHT = 200;
+static const int W_WIDTH = RATIO * 320;
+static const int W_HEIGHT = RATIO * 200;
 
 static Uint32 palette[256] = {0};
 
@@ -29,7 +42,7 @@ int g_lets_quit = 0;
 void set_video_mode(unsigned short mode)
 {
 	if (mode == 0x13) {
-		if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) < 0) {
 			fprintf(stderr, "Could not initialize SDL: %s\n", SDL_GetError());
 			exit(-1);
 		}
@@ -38,8 +51,8 @@ void set_video_mode(unsigned short mode)
 			"BrightEyes",
 			SDL_WINDOWPOS_UNDEFINED,
 			SDL_WINDOWPOS_UNDEFINED,
-			WIDTH,
-			HEIGHT,
+			W_WIDTH,
+			W_HEIGHT,
 			SDL_WINDOW_SHOWN
 		);
 
@@ -60,11 +73,11 @@ void set_video_mode(unsigned short mode)
 			SDL_PIXELFORMAT_ARGB8888,
 			SDL_TEXTUREACCESS_STREAMING,
 			//SDL_TEXTUREACCESS_STATIC,
-			WIDTH,
-			HEIGHT
+			W_WIDTH,
+			W_HEIGHT
 		);
 
-		pixels = calloc(WIDTH * HEIGHT * sizeof(Uint32), 1);
+		pixels = calloc(W_WIDTH * W_HEIGHT * sizeof(Uint32), 1);
 	} else {
 		free(pixels);
 		pixels = NULL;
@@ -79,27 +92,72 @@ void update_sdl_window(void)
 {
 	if (pixels == NULL) return;
 
-	SDL_Event event;
-	while (SDL_PollEvent(&event)) {
-		if (event.type == SDL_QUIT) {
-			g_lets_quit = 1;
-		}
-	}
-
 	int pos = 0;
-	for (int y = 0; y < HEIGHT; y++) {
-		pos = y * WIDTH;
-		for (int x = 0; x < WIDTH; x++) {
+	for (int y = 0; y < O_HEIGHT; y++) {
+		pos = y * O_WIDTH;
+		for (int x = 0; x < O_WIDTH; x++) {
 			pixels[pos] = palette[g_vga_memstart[pos]];
 			pos++;
 		}
 	}
 
-	SDL_UpdateTexture(texture, NULL, pixels, WIDTH * sizeof(Uint32));
+	SDL_UpdateTexture(texture, NULL, pixels, W_WIDTH * sizeof(Uint32));
 	SDL_RenderClear(renderer);
 	SDL_RenderCopy(renderer, texture, NULL, NULL);
 	SDL_RenderPresent(renderer);
 	SDL_Delay(16);
+}
+
+void sdl_event_loop(void)
+{
+	SDL_Event event;
+	while (SDL_PollEvent(&event)) {
+		if (event.type == SDL_QUIT) {
+			g_lets_quit = 1;
+		} else if (event.type == SDL_MOUSEMOTION) {
+			g_mouse_moved = 1;
+			/* Assume 320x200 */
+			g_mouse_posx = event.motion.x;
+			g_mouse_posy = event.motion.y;
+		} else if (event.type == SDL_MOUSEBUTTONDOWN) {
+			if (event.button.button == 1) {
+				g_mouse1_event1 = 1;
+				g_mouse1_event2 = 1;
+			}
+			if (event.button.button == 3) {
+				g_mouse2_event = 1;
+			}
+		} else if (event.type == SDL_KEYDOWN) {
+			SDL_Keymod m = SDL_GetModState();
+			if (m & KMOD_CTRL) {
+				switch (event.key.keysym.sym) {
+					case SDLK_F3: g_in_key_ext = 0x60; break;
+					case SDLK_F4: g_in_key_ext = 0x61; break;
+				}
+			}
+
+			switch (event.key.keysym.sym) {
+				case SDLK_ESCAPE: g_in_key_ext = 0x01; break;
+				case SDLK_1: g_in_key_ext = 0x02; break;
+				case SDLK_2: g_in_key_ext = 0x03; break;
+				case SDLK_3: g_in_key_ext = 0x04; break;
+				case SDLK_4: g_in_key_ext = 0x05; break;
+				case SDLK_5: g_in_key_ext = 0x06; break;
+				case SDLK_RETURN: g_in_key_ext = 0x1c; break;
+				case SDLK_j: g_in_key_ext = 0x24; break;
+				case SDLK_y: g_in_key_ext = 0x2c; break;
+				case SDLK_n: g_in_key_ext = 0x31; break;
+				case SDLK_UP: g_in_key_ext = 0x48; break;
+				case SDLK_LEFT: g_in_key_ext = 0x4b; break;
+				case SDLK_RIGHT: g_in_key_ext = 0x4d; break;
+				case SDLK_DOWN: g_in_key_ext = 0x50; break;
+				case SDLK_PAGEUP: g_in_key_ext = 0x49; break;
+				case SDLK_PAGEDOWN: g_in_key_ext = 0x51; break;
+			}
+
+			//g_in_key_ascii = event.key.keysym.sym;
+		}
+	}
 }
 
 void set_video_page(unsigned short mode)

@@ -921,12 +921,12 @@ static signed short g_mouse_posx_max = 0x136;
 static signed short g_mouse_locked = 0;
 static signed short g_mouse_refresh_flag = -1;
 
-static signed short g_mouse_posx = 0xa0;
-static signed short g_mouse_posy = 0x64;
+signed short g_mouse_posx = 0xa0;
+signed short g_mouse_posy = 0x64;
 static signed short g_mouse_posx_bak = 0xa0;
 static signed short g_mouse_posy_bak = 0x64;
 
-static signed short g_mouse_moved = 0;
+signed short g_mouse_moved = 0;
 
 static signed short g_mouse_pointer_offsetx = 0;
 static signed short g_mouse_pointer_offsety = 0;
@@ -1359,11 +1359,11 @@ static unsigned short *g_mouse_current_cursor;
 static unsigned short *g_mouse_last_cursor;
 static unsigned char g_array_2[64];
 static unsigned char g_array_1[64];
-static signed short g_in_key_ext;
-static signed short g_in_key_ascii;
-static signed short g_mouse1_event2;
-static signed short g_mouse2_event;
-static signed short g_mouse1_event1;
+signed short g_in_key_ext;
+signed short g_in_key_ascii;
+signed short g_mouse1_event2;
+signed short g_mouse2_event;
+signed short g_mouse1_event1;
 static signed short g_have_mouse;
 static signed short g_random_gen_seed2;
 
@@ -2378,6 +2378,9 @@ static void wait_for_vsync(void)
 
 static signed short get_bioskey(const int cmd)
 {
+#if !defined(__BORLANDC__)
+	sdl_event_loop();
+#endif
 	return CD_bioskey(cmd);
 }
 
@@ -2393,6 +2396,10 @@ static void handle_input(void)
 	signed short si, i;
 
 	g_in_key_ascii = g_in_key_ext = si = 0;
+
+#if !defined(__BORLANDC__)
+	sdl_event_loop();
+#endif
 
 	if (get_bioskey(1)) {
 
