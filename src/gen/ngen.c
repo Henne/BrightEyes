@@ -7195,7 +7195,11 @@ static void intro(void)
 	return;
 }
 
+#if defined(_WIN32)
+#define main_gen WinMain
+#else
 #define main_gen main
+#endif
 int main_gen(int argc, char **argv)
 {
 	signed short sound_off = 0;
