@@ -43,6 +43,13 @@ static unsigned short gen_rotl(unsigned short op, unsigned short count)
 	return (op << count) | (op >> (16 - count));
 }
 
+/* use sprintf() for compatibility */
+static inline char* gen_itoa(int value, char* string, int radix)
+{
+	sprintf(string, "%d", value);
+	return string;
+}
+
 static inline void clrscr(void) { }
 #define __abs__(v) abs(v)
 #define _creat creat
@@ -50,6 +57,7 @@ static inline void clrscr(void) { }
 #define _close close
 #else
 #define gen_rotl _rotl
+#define gen_itoa itoa
 #endif
 
 #include "hero.h"
@@ -1449,13 +1457,6 @@ static unsigned short g_current_timbre_length;
 
 
 #if !defined(__BORLANDC__)
-/* use sprintf() for compatibility */
-static inline char* itoa(int value, char* string, int radix)
-{
-	sprintf(string, "%d", value);
-	return string;
-}
-
 // Quit Signal from SDL
 extern int g_lets_quit;
 #endif
@@ -4416,7 +4417,7 @@ static void print_attribs(void)
 		/* don't print 0s */
 		if (p[0] != 0) {
 			/* print attribute value in decimal form */
-			print_str(itoa(p[0], buf, 10),	g_attrib_coords[i].x, g_attrib_coords[i].y);
+			print_str(gen_itoa(p[0], buf, 10),	g_attrib_coords[i].x, g_attrib_coords[i].y);
 		}
 	}
 }
@@ -4479,16 +4480,16 @@ static void print_values(void)
 			print_str(g_gen_ptr2, 205, 61);
 
 			/* print LE */
-			print_str(itoa(g_hero.le_max, tmp, 10), 172, 164);
+			print_str(gen_itoa(g_hero.le_max, tmp, 10), 172, 164);
 			/* print AE */
-			print_str(itoa(g_hero.ae_max, tmp, 10), 221, 164);
+			print_str(gen_itoa(g_hero.ae_max, tmp, 10), 221, 164);
 			/* print Endurance */
-			print_str(itoa(g_hero.le_max + g_hero.attrib[6].current, tmp, 10), 296, 164);
+			print_str(gen_itoa(g_hero.le_max + g_hero.attrib[6].current, tmp, 10), 296, 164);
 			/* print MR */
 			if (g_dsagen_lang == LANG_DE)
-				print_str(itoa(g_hero.mr, tmp, 10), 232, 184);
+				print_str(gen_itoa(g_hero.mr, tmp, 10), 232, 184);
 			else
-				print_str(itoa(g_hero.mr, tmp, 10), 255, 184);
+				print_str(gen_itoa(g_hero.mr, tmp, 10), 255, 184);
 			break;
 		}
 		case 1: {
@@ -4498,7 +4499,7 @@ static void print_values(void)
 
 			/* print fight skills */
 			for (i = 0; i < 9; i++) {
-				itoa(g_hero.skills[i], tmp, 10);
+				gen_itoa(g_hero.skills[i], tmp, 10);
 
 				width = get_str_width(tmp);
 
@@ -4510,7 +4511,7 @@ static void print_values(void)
 			for (i = 9; i < 19; i++) {
 				pos = i - 9;
 
-				itoa(g_hero.skills[i], tmp, 10);
+				gen_itoa(g_hero.skills[i], tmp, 10);
 
 				width = get_str_width(tmp);
 
@@ -4519,7 +4520,7 @@ static void print_values(void)
 			}
 
 			/* remaining attempts for skills */
-			print_str(itoa(g_hero.skill_incs, tmp, 10), 271, 184);
+			print_str(gen_itoa(g_hero.skill_incs, tmp, 10), 271, 184);
 
 			break;
 		}
@@ -4531,7 +4532,7 @@ static void print_values(void)
 			for (i = 19; i < 26; i++) {
 				pos = i - 19;
 
-				itoa(g_hero.skills[i], tmp, 10);
+				gen_itoa(g_hero.skills[i], tmp, 10);
 
 				width = get_str_width(tmp);
 
@@ -4543,7 +4544,7 @@ static void print_values(void)
 			for (i = 32; i < 41; i++) {
 				pos = i - 32;
 
-				itoa(g_hero.skills[i], tmp, 10);
+				gen_itoa(g_hero.skills[i], tmp, 10);
 
 				width = get_str_width(tmp);
 
@@ -4553,7 +4554,7 @@ static void print_values(void)
 
 			/* remaining attempts for skills */
 
-			print_str(itoa(g_hero.skill_incs, tmp, 10), 271, 184);
+			print_str(gen_itoa(g_hero.skill_incs, tmp, 10), 271, 184);
 
 			break;
 		}
@@ -4566,7 +4567,7 @@ static void print_values(void)
 
 				pos = i - 41;
 
-				itoa(g_hero.skills[i], tmp, 10);
+				gen_itoa(g_hero.skills[i], tmp, 10);
 
 				width = get_str_width(tmp);
 
@@ -4580,7 +4581,7 @@ static void print_values(void)
 
 				pos = i - 26;
 
-				itoa(g_hero.skills[i], tmp, 10);
+				gen_itoa(g_hero.skills[i], tmp, 10);
 
 				width = get_str_width(tmp);
 
@@ -4594,7 +4595,7 @@ static void print_values(void)
 
 				pos = i - 50;
 
-				itoa(g_hero.skills[i], tmp, 10);
+				gen_itoa(g_hero.skills[i], tmp, 10);
 
 				width = get_str_width(tmp);
 
@@ -4604,7 +4605,7 @@ static void print_values(void)
 
 			/* remaining attempts for skills */
 
-			print_str(itoa(g_hero.skill_incs, tmp, 10), 271, 184);
+			print_str(gen_itoa(g_hero.skill_incs, tmp, 10), 271, 184);
 
 			break;
 		}
@@ -4613,21 +4614,21 @@ static void print_values(void)
 			restore_picbuf(g_gfx_ptr);
 
 			/* Print base value  2x the same */
-			print_str(itoa(g_hero.atpa_base, tmp, 10), 231, 30);
-			print_str(itoa(g_hero.atpa_base, tmp, 10), 268, 30);
+			print_str(gen_itoa(g_hero.atpa_base, tmp, 10), 231, 30);
+			print_str(gen_itoa(g_hero.atpa_base, tmp, 10), 268, 30);
 
 			for (i = 0; i < 7; i++) {
 
 				/* print AT value */
-				itoa(g_hero.at_weapon[i], tmp, 10);
+				gen_itoa(g_hero.at_weapon[i], tmp, 10);
 				print_str(tmp, 237 - get_str_width(tmp), i * 12 + 48);
 
 				/* print PA value */
-				itoa(g_hero.pa_weapon[i], tmp, 10);
+				gen_itoa(g_hero.pa_weapon[i], tmp, 10);
 				print_str(tmp, 274 - get_str_width(tmp), i * 12 + 48);
 
 				/* print skill value */
-				itoa(g_hero.skills[i], tmp, 10);
+				gen_itoa(g_hero.skills[i], tmp, 10);
 				print_str(tmp, 315 - get_str_width(tmp), i * 12 + 48);
 			}
 
@@ -4637,8 +4638,8 @@ static void print_values(void)
 					+ g_hero.attrib[6].normal) / 4;
 
 			/* print missle and thrown weapon values */
-			print_str(itoa(pos + g_hero.skills[7], tmp, 10), 231, 144);
-			print_str(itoa(pos + g_hero.skills[8], tmp, 10), 231, 156);
+			print_str(gen_itoa(pos + g_hero.skills[7], tmp, 10), 231, 144);
+			print_str(gen_itoa(pos + g_hero.skills[8], tmp, 10), 231, 156);
 
 			break;
 		}
@@ -4651,7 +4652,7 @@ static void print_values(void)
 
 				pos = i - 1;
 
-				itoa(g_hero.spells[i], tmp, 10);
+				gen_itoa(g_hero.spells[i], tmp, 10);
 
 				width = get_str_width(tmp);
 
@@ -4663,7 +4664,7 @@ static void print_values(void)
 
 				pos = i - 33;
 
-				itoa(g_hero.spells[i], tmp, 10);
+				gen_itoa(g_hero.spells[i], tmp, 10);
 
 				width = get_str_width(tmp);
 
@@ -4674,7 +4675,7 @@ static void print_values(void)
 
 				pos = i - 6;
 
-				itoa(g_hero.spells[i], tmp, 10);
+				gen_itoa(g_hero.spells[i], tmp, 10);
 
 				width = get_str_width(tmp);
 
@@ -4683,7 +4684,7 @@ static void print_values(void)
 			}
 
 			/* print spell attempts */
-			print_str(itoa(g_hero.spell_incs, tmp, 10), 217, 184);
+			print_str(gen_itoa(g_hero.spell_incs, tmp, 10), 217, 184);
 
 			break;
 		}
@@ -4695,7 +4696,7 @@ static void print_values(void)
 
 				pos = i - 12;
 
-				itoa(g_hero.spells[i], tmp, 10);
+				gen_itoa(g_hero.spells[i], tmp, 10);
 
 				width = get_str_width(tmp);
 
@@ -4706,7 +4707,7 @@ static void print_values(void)
 
 				pos = i - 18;
 
-				itoa(g_hero.spells[i], tmp, 10);
+				gen_itoa(g_hero.spells[i], tmp, 10);
 
 				width = get_str_width(tmp);
 
@@ -4718,7 +4719,7 @@ static void print_values(void)
 
 				pos = i - 24;
 
-				itoa(g_hero.spells[i], tmp, 10);
+				gen_itoa(g_hero.spells[i], tmp, 10);
 
 				width = get_str_width(tmp);
 
@@ -4728,7 +4729,7 @@ static void print_values(void)
 			}
 
 			/* print spell attempts */
-			print_str(itoa(g_hero.spell_incs, tmp, 10), 217, 184);
+			print_str(gen_itoa(g_hero.spell_incs, tmp, 10), 217, 184);
 
 			break;
 		}
@@ -4740,7 +4741,7 @@ static void print_values(void)
 
 				pos = i - 27;
 
-				itoa(g_hero.spells[i], tmp, 10);
+				gen_itoa(g_hero.spells[i], tmp, 10);
 
 				width = get_str_width(tmp);
 
@@ -4752,7 +4753,7 @@ static void print_values(void)
 
 				pos = i - 38;
 
-				itoa(g_hero.spells[i], tmp, 10);
+				gen_itoa(g_hero.spells[i], tmp, 10);
 
 				width = get_str_width(tmp);
 
@@ -4764,7 +4765,7 @@ static void print_values(void)
 
 				pos = i - 45;
 
-				itoa(g_hero.spells[i], tmp, 10);
+				gen_itoa(g_hero.spells[i], tmp, 10);
 
 				width = get_str_width(tmp);
 
@@ -4773,7 +4774,7 @@ static void print_values(void)
 			}
 
 			/* print spell attempts */
-			print_str(itoa(g_hero.spell_incs, tmp, 10), 217, 184);
+			print_str(gen_itoa(g_hero.spell_incs, tmp, 10), 217, 184);
 
 			break;
 		}
@@ -4785,7 +4786,7 @@ static void print_values(void)
 
 				pos = i - 47;
 
-				itoa(g_hero.spells[i], tmp, 10);
+				gen_itoa(g_hero.spells[i], tmp, 10);
 
 				width = get_str_width(tmp);
 
@@ -4797,7 +4798,7 @@ static void print_values(void)
 
 				pos = i - 49;
 
-				itoa(g_hero.spells[i], tmp, 10);
+				gen_itoa(g_hero.spells[i], tmp, 10);
 
 				width = get_str_width(tmp);
 
@@ -4809,7 +4810,7 @@ static void print_values(void)
 
 				pos = i - 58;
 
-				itoa(g_hero.spells[i], tmp, 10);
+				gen_itoa(g_hero.spells[i], tmp, 10);
 
 				width = get_str_width(tmp);
 
@@ -4818,7 +4819,7 @@ static void print_values(void)
 			}
 
 			/* print spell attempts */
-			print_str(itoa(g_hero.spell_incs, tmp, 10), 217, 184);
+			print_str(gen_itoa(g_hero.spell_incs, tmp, 10), 217, 184);
 
 			break;
 		}
@@ -4830,7 +4831,7 @@ static void print_values(void)
 
 				pos = i - 60;
 
-				itoa(g_hero.spells[i], tmp, 10);
+				gen_itoa(g_hero.spells[i], tmp, 10);
 
 				width = get_str_width(tmp);
 
@@ -4839,7 +4840,7 @@ static void print_values(void)
 			}
 
 			/* print spell attempts */
-			print_str(itoa(g_hero.spell_incs, tmp, 10), 217, 184);
+			print_str(gen_itoa(g_hero.spell_incs, tmp, 10), 217, 184);
 
 			break;
 		}
@@ -4851,7 +4852,7 @@ static void print_values(void)
 
 				pos = i - 76;
 
-				itoa(g_hero.spells[i], tmp, 10);
+				gen_itoa(g_hero.spells[i], tmp, 10);
 
 				width = get_str_width(tmp);
 
@@ -4861,7 +4862,7 @@ static void print_values(void)
 			}
 
 			/* print spell attempts */
-			print_str(itoa(g_hero.spell_incs, tmp, 10), 217, 184);
+			print_str(gen_itoa(g_hero.spell_incs, tmp, 10), 217, 184);
 
 			break;
 		}
