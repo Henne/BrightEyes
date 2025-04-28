@@ -2484,7 +2484,9 @@ static void detect_datfile(void)
 
 #if defined(__BORLANDC__)
 	flushall();
+#endif
 
+#if defined(__BORLANDC__) || defined(_WIN32)
 	/* 0x8001 = O_BINARY | O_RDONLY */
 	if ((handle = open(g_str_dsagen_dat, O_BINARY | O_RDONLY)) == -1)
 #else
