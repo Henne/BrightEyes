@@ -3412,15 +3412,7 @@ static signed short infobox(char *msg, const signed short digits)
 	signed short i;
 
 	signed short lines; // si
-	signed short di;    // di
-		      //
-#if !defined(__BORLANDC__)
-	/* Issue: Try to print an infobox without having the background loaded */
-	if (!g_buffer_popup_nvf) {
-		fprintf(stderr, "in %s(): %s => copy DSAGEN.DAT in this directory\n", __func__, msg);
-		exit(-1);
-	}
-#endif
+	signed short di;
 
 	retval = 0;
 	g_fg_color[4] = 1;
