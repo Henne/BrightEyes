@@ -3177,11 +3177,6 @@ static signed short print_line(char *str)
 	return lines;
 }
 
-static void error_msg(char *msg)
-{
-	vsync_or_key(print_line(msg) * 150);
-}
-
 static signed short count_linebreaks(char *str)
 {
 	signed short i = 0;
@@ -4122,8 +4117,7 @@ static void save_chr(void)
 				close(handle);
 			}
 		} else {
-			/* should be replaced with infobox() */
-			error_msg(g_dsagen_lang == LANG_DE ? g_str_save_error_de : g_str_save_error_en);
+			infobox(g_dsagen_lang == LANG_DE ? g_str_save_error_de : g_str_save_error_en, 0);
 		}
 	}
 }
