@@ -21,14 +21,12 @@ extern signed short g_mouse1_event1;
 extern signed short g_mouse1_event2;
 extern signed short g_mouse2_event;
 
-extern signed short g_in_key_ext;
-extern signed short g_in_key_ascii;
-
-static const int RATIO = 1;
 static const int O_WIDTH = 320;
 static const int O_HEIGHT = 200;
-static const int W_WIDTH = RATIO * 320;
-static const int W_HEIGHT = RATIO * 200;
+
+static int RATIO = 1;
+static int W_WIDTH = O_WIDTH;
+static int W_HEIGHT = O_HEIGHT;
 
 static Uint32 palette[256] = {0};
 
@@ -108,17 +106,20 @@ void update_sdl_window(void)
 	SDL_Delay(16);
 }
 
-void sdl_event_loop(void)
+int sdl_event_loop(const int cmd)
 {
 	SDL_Event event;
+
 	while (SDL_PollEvent(&event)) {
 		if (event.type == SDL_QUIT) {
 			g_lets_quit = 1;
+			return 0;
 		} else if (event.type == SDL_MOUSEMOTION) {
 			g_mouse_moved = 1;
 			/* Assume 320x200 */
 			g_mouse_posx = event.motion.x;
 			g_mouse_posy = event.motion.y;
+
 		} else if (event.type == SDL_MOUSEBUTTONDOWN) {
 			if (event.button.button == 1) {
 				g_mouse1_event1 = 1;
@@ -127,37 +128,55 @@ void sdl_event_loop(void)
 			if (event.button.button == 3) {
 				g_mouse2_event = 1;
 			}
+
 		} else if (event.type == SDL_KEYDOWN) {
-			SDL_Keymod m = SDL_GetModState();
-			if (m & KMOD_CTRL) {
+			if (cmd == 1) {
+				// check if a key was pressed
+				int pressed = (event.type == SDL_KEYDOWN) ? 1 : 0;
+				SDL_Delay(10);
+				//fprintf(stdout, "%s(%d) = %d %d\n", __func__, cmd, pressed, key_cnt);
+				SDL_PushEvent(&event);
+				return pressed;
+			} else {
+
+				SDL_Keymod m = SDL_GetModState();
+
+				if (m & KMOD_CTRL) {
+					switch (event.key.keysym.sym) {
+						case SDLK_q:  return (0x10 << 8) | 0x11; break;
+						case SDLK_F3: return (0x60 << 8); break;
+						case SDLK_F4: return (0x61 << 8); break;
+					}
+				}
+
 				switch (event.key.keysym.sym) {
-					case SDLK_F3: g_in_key_ext = 0x60; break;
-					case SDLK_F4: g_in_key_ext = 0x61; break;
+					case SDLK_ESCAPE:   return (0x01 << 8) | 0x1b; break; //OK
+					case SDLK_1:        return (0x02 << 8) | 0x31; break; //OK
+					case SDLK_2:        return (0x03 << 8) | 0x32; break; //OK
+					case SDLK_3:        return (0x04 << 8) | 0x33; break; //OK
+					case SDLK_4:        return (0x05 << 8) | 0x34; break; //OK
+					case SDLK_5:        return (0x06 << 8) | 0x35; break; //OK
+					case SDLK_RETURN:   return (0x1c << 8) | 0x0d; break; //OK
+					case SDLK_j:        return (0x24 << 8) | 0x6a; break; //OK
+					case SDLK_y:        return (0x15 << 8) | 0x79; break; //DE
+					case SDLK_z:        return (0x2c << 8) | 0x7a; break; //DE
+					case SDLK_n:        return (0x31 << 8) | 0x6e; break; //OK
+					case SDLK_UP:       return (0x48 << 8); break; //OK
+					case SDLK_LEFT:     return (0x4b << 8); break; //OK
+					case SDLK_RIGHT:    return (0x4d << 8); break; //OK
+					case SDLK_DOWN:     return (0x50 << 8); break; //OK
+					case SDLK_PAGEUP:   return (0x49 << 8); break; //OK
+					case SDLK_PAGEDOWN: return (0x51 << 8); break; //OK
+					case 0xe4:          return (0x28 << 8) | 0x84; break; //AE
+					case 0xf6:          return (0x27 << 8) | 0x94; break; //OE
+					case 0xfc:          return (0x1a << 8) | 0x81; break; //UE
+					default:	    return event.key.keysym.sym & 0xff;
 				}
 			}
-
-			switch (event.key.keysym.sym) {
-				case SDLK_ESCAPE: g_in_key_ext = 0x01; break;
-				case SDLK_1: g_in_key_ext = 0x02; break;
-				case SDLK_2: g_in_key_ext = 0x03; break;
-				case SDLK_3: g_in_key_ext = 0x04; break;
-				case SDLK_4: g_in_key_ext = 0x05; break;
-				case SDLK_5: g_in_key_ext = 0x06; break;
-				case SDLK_RETURN: g_in_key_ext = 0x1c; break;
-				case SDLK_j: g_in_key_ext = 0x24; break;
-				case SDLK_y: g_in_key_ext = 0x2c; break;
-				case SDLK_n: g_in_key_ext = 0x31; break;
-				case SDLK_UP: g_in_key_ext = 0x48; break;
-				case SDLK_LEFT: g_in_key_ext = 0x4b; break;
-				case SDLK_RIGHT: g_in_key_ext = 0x4d; break;
-				case SDLK_DOWN: g_in_key_ext = 0x50; break;
-				case SDLK_PAGEUP: g_in_key_ext = 0x49; break;
-				case SDLK_PAGEDOWN: g_in_key_ext = 0x51; break;
-			}
-
-			//g_in_key_ascii = event.key.keysym.sym;
 		}
 	}
+
+	return 0;
 }
 
 void set_video_page(unsigned short mode)

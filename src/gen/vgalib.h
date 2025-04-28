@@ -20,5 +20,5 @@ unsigned char* normalize_ptr(unsigned char*);
 
 #if !defined(__BORLANDC__)
 void update_sdl_window(void);
-void sdl_event_loop(void);
+int sdl_event_loop(const int);
 #endif

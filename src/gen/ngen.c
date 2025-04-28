@@ -92,6 +92,7 @@ static void stop_music(void);
 #define KEY_3       (0x04)
 #define KEY_4       (0x05)
 #define KEY_5       (0x06)
+#define KEY_DC1     (0x11)
 #define KEY_RET     (0x1c)
 #define KEY_J       (0x24)
 #define KEY_Y       (0x2c)
@@ -1359,8 +1360,8 @@ static unsigned short *g_mouse_current_cursor;
 static unsigned short *g_mouse_last_cursor;
 static unsigned char g_array_2[64];
 static unsigned char g_array_1[64];
-signed short g_in_key_ext;
-signed short g_in_key_ascii;
+static signed short g_in_key_ext;
+static signed short g_in_key_ascii;
 signed short g_mouse1_event2;
 signed short g_mouse2_event;
 signed short g_mouse1_event1;
@@ -2379,9 +2380,18 @@ static void wait_for_vsync(void)
 static signed short get_bioskey(const int cmd)
 {
 #if !defined(__BORLANDC__)
-	sdl_event_loop();
-#endif
+	if (cmd == 0) {
+		// return the pressed key imediately
+		int keycode = sdl_event_loop(0);
+		return keycode;
+	} if (cmd == 1) {
+		// check if a key was pressed
+		int pressed = sdl_event_loop(1);
+		return pressed;
+	}
+#else
 	return CD_bioskey(cmd);
+#endif
 }
 
 static void wait_for_keypress(void)
@@ -2393,13 +2403,10 @@ static void wait_for_keypress(void)
 
 static void handle_input(void)
 {
-	signed short si, i;
+	signed short si;
+	signed short i;
 
 	g_in_key_ascii = g_in_key_ext = si = 0;
-
-#if !defined(__BORLANDC__)
-	sdl_event_loop();
-#endif
 
 	if (get_bioskey(1)) {
 
@@ -2409,7 +2416,8 @@ static void handle_input(void)
 		if (si == KEY_J)
 			si = KEY_Y;
 
-		if ((g_in_key_ascii == 0x11) && !g_in_intro) {
+		/* exit Program with CRTL+Q */
+		if ((g_in_key_ascii == KEY_DC1) && !g_in_intro) {
 
 			update_mouse_cursor();
 			mouse_disable();
