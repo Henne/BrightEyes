@@ -6891,6 +6891,17 @@ static void pal_fade_in(signed char *dst, signed char *src, signed short col, si
 	}
 }
 
+#if !defined(__BORLANDC__)
+void print_palette(unsigned char *pal, int first_color, int colors)
+{
+	for (int i = first_color; i < first_color + colors; i++, pal += 3) {
+		fprintf(stdout, "# %02x = (%02x, %02x, %02x)\n",
+				i, pal[0], pal[1], pal[2]);
+	}
+
+}
+#endif
+
 /**
  *	intro() - play the intro
  */
@@ -7018,6 +7029,11 @@ static void intro(void)
 	/* clear screen */
 	call_fill_rect_gen(g_vga_memstart, 0, 0, 319, 199, 0);
 	wait_for_vsync();
+
+#if !defined(__BORLANDC__)
+	fprintf(stdout, "FANPRO.NVF length = %d\n", flen);
+	print_palette(g_buffer_heads_dat + flen - 32 * 3, 0, 32);
+#endif
 
 	/* set palette of FANPRO.NVF */
 	set_palette(g_buffer_heads_dat + flen - 32 * 3, 0, 32);
