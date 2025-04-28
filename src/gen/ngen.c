@@ -2428,6 +2428,10 @@ static void handle_input(void)
 			exit(0);
 		}
 	}
+#if !defined(__BORLANDC__)
+	// enable mouse again
+	g_have_mouse = 2;
+#endif
 
 	if (g_mouse1_event2 == 0) {
 		// Hm, ...
@@ -2452,6 +2456,7 @@ static void handle_input(void)
 				g_mouse1_event2 = 0;
 			}
 
+			/* show credits in an infobox() */
 			if (si == 0xfd) {
 				si = 0;
 				g_menu_tiles = 4;
