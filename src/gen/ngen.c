@@ -2546,9 +2546,11 @@ static signed short open_datfile(const signed short index)
 		if (g_dsagen_lang == LANG_EN) f_names = g_fnames_g300en;
 	}
 
-#if defined(__BORLANDC__) || defined(_WIN32)
+#if defined(__BORLANDC__)
 	flushall();
+#endif
 
+#if defined(__BORLANDC__) || defined(_WIN32)
 	/* 0x8001 = O_BINARY | O_RDONLY */
 	while ((handle = open(g_str_dsagen_dat, O_BINARY | O_RDONLY)) == -1)
 #else
