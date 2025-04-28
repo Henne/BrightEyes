@@ -1457,11 +1457,6 @@ static signed char g_current_timbre_patch;
 static unsigned short g_current_timbre_length;
 
 
-#if !defined(__BORLANDC__)
-// Quit Signal from SDL
-extern int g_lets_quit;
-#endif
-
 /* MEMORY MANAGEMENT */
 
 static unsigned char *gen_alloc(unsigned long nelem)
@@ -2401,7 +2396,11 @@ static void wait_for_keypress(void)
 	}
 }
 
-static void handle_input(void)
+/**
+ * handle_input() - high-level input function
+ * \return 1 to exit the program otherwise 0
+ */
+static int handle_input(void)
 {
 	signed short si;
 	signed short i;
@@ -2418,14 +2417,7 @@ static void handle_input(void)
 
 		/* exit Program with CRTL+Q */
 		if ((g_in_key_ascii == KEY_DC1) && !g_in_intro) {
-
-			update_mouse_cursor();
-			mouse_disable();
-			stop_music();
-			restore_timer_isr();
-			exit_video();
-			clrscr();
-			exit(0);
+			return 1;
 		}
 	}
 #if !defined(__BORLANDC__)
@@ -2469,6 +2461,8 @@ static void handle_input(void)
 	}
 	mouse_compare();
 	g_in_key_ext = si;
+
+	return 0;
 }
 
 static void vsync_or_key(const signed short val)
@@ -6656,9 +6650,9 @@ static void choose_typus(void)
 static void do_gen(void)
 {
 	signed short si;
-	signed short di;
+	signed short done;
 
-	di = 0;
+	done = 0;
 
 	g_screen_var = 1;
 
@@ -6673,14 +6667,14 @@ static void do_gen(void)
 	g_mouse2_event = 1;
 
 	/* main loop */
-	while (!di) {
+	while (!done) {
 		if (g_screen_var) {
 			refresh_screen();
 			g_screen_var = 0;
 		}
 
 		g_action_table = (struct mouse_action*)g_action_page[g_gen_page];
-		handle_input();
+		done = handle_input();
 		g_action_table = (struct mouse_action*)NULL;
 
 		if (g_mouse2_event || g_in_key_ext == KEY_PGUP) {
@@ -6735,7 +6729,7 @@ static void do_gen(void)
 							}
 							case 9: {
 								if (gui_bool(get_text(259)))
-									di = 1;
+									done = 1;
 								break;
 							}
 						}
@@ -6840,9 +6834,6 @@ static void do_gen(void)
 				g_screen_var = 1;
 			}
 		}
-#if !defined(__BORLANDC__)
-		if (g_lets_quit == 1) di = 1;
-#endif
 	}
 }
 
