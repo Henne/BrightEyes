@@ -1041,7 +1041,7 @@ static const char* g_fnames_g105de[] = {
 	g_fname35_de, g_fname36_de
 };
 
-static const char g_fname31_de_alt[] = "GEN.AWS";
+static const char g_fname33_de_alt[] = "GEN.AWS";
 
 static const char* g_fnames_g100de[] = {
 	g_fname00_de, g_fname01_de, g_fname02_de, g_fname03_de, g_fname04_de,
@@ -1050,7 +1050,7 @@ static const char* g_fnames_g100de[] = {
 	g_fname15_de, g_fname16_de, g_fname17_de, g_fname18_de, g_fname19_de,
 	g_fname20_de, g_fname21_de, g_fname22_de, g_fname23_de, g_fname24_de,
 	g_fname25_de, g_fname26_de, g_fname27_de, g_fname28_de, g_fname29_de,
-	g_fname30_de, g_fname31_de_alt, g_fname32_de, g_fname33_de
+	g_fname30_de, g_fname31_de, g_fname32_de, g_fname33_de_alt, g_fname34_de
 };
 
 static const char g_fname00_en[] = "E_GEN1.NVF";
