@@ -2978,10 +2978,6 @@ static signed short print_chr(const unsigned char c, const signed short x, const
 
 	print_chr_to_screen(idx, width, x, y);
 
-#if !defined(__BORLANDC__)
-	update_sdl_window();
-#endif
-
 	return width;
 }
 
@@ -3150,6 +3146,10 @@ static void print_str(const char *str, signed short x, signed short y)
 		}
 	}
 
+#if !defined(__BORLANDC__)
+	update_sdl_window();
+#endif
+
 	call_mouse();
 }
 
@@ -3218,6 +3218,11 @@ static signed short enter_string(char *dst, signed short x, signed short y, sign
 		print_chr(0x20, di, y);
 		print_chr(0x5f, di, y);
 	}
+
+#if !defined(__BORLANDC__)
+	update_sdl_window();
+#endif
+
 	wait_for_keypress();
 	g_mouse1_event1 = 0;
 
@@ -3307,6 +3312,10 @@ static signed short enter_string(char *dst, signed short x, signed short y, sign
 				print_chr(0x5f, di, y);
 			}
 		}
+
+#if !defined(__BORLANDC__)
+	update_sdl_window();
+#endif
 	}
 
 	if (zero == 0) {
