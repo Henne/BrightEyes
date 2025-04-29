@@ -2476,13 +2476,8 @@ static void vsync_or_key(const signed short val)
 
 static void detect_datfile(void)
 {
-	unsigned char buf[800];
 	signed short handle;
 	signed long flen;
-
-#if defined(__BORLANDC__)
-	flushall();
-#endif
 
 #if defined(__BORLANDC__) || defined(_WIN32)
 	/* 0x8001 = O_BINARY | O_RDONLY */
@@ -2491,35 +2486,31 @@ static void detect_datfile(void)
 	if ((handle = open(g_str_dsagen_dat, O_RDONLY)) == -1)
 #endif
 	{
-		/* ERROR: no DSAGEN.DAT available */
+		fprintf(stderr, "ERROR: DSAGEN.DAT not found\n");
 		return;
 	}
 
 	/* determine filelength */
 	flen = lseek(handle, 0, SEEK_END);
 	lseek(handle, 0, SEEK_SET);
+	close(handle);
 
 	if (flen == -1) return;
 
-#if 0
-	/* read offset table from file */
-	_read(handle, buf, 800);
-	close(handle);
-#endif
-
+	/* only these 3 versions are known so far */
 	if (flen == 671236) { /* EN DISK */ g_dsagen_lang = LANG_EN; g_dsagen_medium = MED_DISK; } else
 	if (flen == 663221) { /* DE CD   */ g_dsagen_lang = LANG_DE; g_dsagen_medium = MED_CD; } else
 	if (flen == 634785) { /* DE DISK */ g_dsagen_lang = LANG_DE; g_dsagen_medium = MED_DISK; }	
 }
 
-static signed long get_archive_offset(const char *name, unsigned char *table)
+static signed long get_archive_offset(const char *name, const char *table)
 {
 	signed short i;
 
 	for (i = 0; i < 50; i++) {
 
 		/* check the filename */
-		if (!strncmp((char*)name, (char*)table + i * 16, 12)) {
+		if (!strncmp(name, table + i * 16, 12)) {
 
 			/* calculate length */
 			g_flen_left = g_flen =
@@ -2536,7 +2527,7 @@ static signed long get_archive_offset(const char *name, unsigned char *table)
 static signed short open_datfile(const signed short index)
 {
 	const char **f_names = NULL;
-	unsigned char buf[800];
+	unsigned char table[50 * 16];
 	signed short handle;
 
 	/* set local pointer to the correct filename table */
@@ -2565,9 +2556,10 @@ static signed short open_datfile(const signed short index)
 	}
 
 	/* read offset table from file */
-	_read(handle, buf, 800);
+	_read(handle, table, 800);
 
-	if ((signed long)(g_gendat_offset = get_archive_offset((char*)f_names[index], buf)) != -1) {
+	g_gendat_offset = get_archive_offset((char*)f_names[index], table);
+	if (g_gendat_offset != -1) {
 		lseek(handle, g_gendat_offset, SEEK_SET);
 		return handle;
 	} else {
