@@ -2792,25 +2792,6 @@ void exit_video(void)
 	set_video_page(g_display_page_bak);
 }
 
-static void draw_v_line(const signed short x, signed short y1, signed short y2, const signed short color)
-{
-	signed short tmp;
-	signed short diffY;
-	signed short offset;
-	signed short width = 320;
-
-	if (y1 > y2) {
-		tmp = y2;
-		y2 = y1;
-		y1 = tmp;
-	}
-
-	diffY = y2 - y1 + 1;
-	/* not very readable, but here the length of the function fits */
-	offset = y1 * width + x;
-	draw_h_spaced_dots(offset, diffY, color, width);
-}
-
 static void do_draw_pic(const signed short mode)
 {
 	signed short d1;
@@ -3506,32 +3487,29 @@ static signed short gui_bool(char *msg)
  * @offset:	the offset of the first radio line
  *
  */
-static void fill_radio_button(signed short old_pos, signed short new_pos, signed short offset)
+static void fill_radio_button(const signed short old_pos, const signed short new_pos, const signed short offset)
 {
-	signed short y;
-
-	signed short i;
 	signed short x;
+	signed short y;
+	signed short i;
 
 	update_mouse_cursor();
 
 	/* unmark the old radio button, if any */
 	if (old_pos != -1) {
-		y = g_left_border + 6;
+		x = g_left_border + 6;
 
-		x = g_upper_border + (offset + old_pos) * 8 + 2;
+		y = g_upper_border + (offset + old_pos) * 8 + 2;
 
-		for (i = 0; i < 4; i++)
-			draw_v_line(y + i, x, x + 3, 0xd8);
+		call_fill_rect_gen(g_vga_memstart, x, y, x + 3, y + 3, 0xd8);
 	}
 
 	/* mark the new radio button */
-	y = g_left_border + 6;
+	x = g_left_border + 6;
 
-	x = g_upper_border + (offset + new_pos) * 8 + 2;
+	y = g_upper_border + (offset + new_pos) * 8 + 2;
 
-	for (i = 0; i < 4; i++)
-		draw_v_line(y + i, x, x + 3, 0xd9);
+	call_fill_rect_gen(g_vga_memstart, x, y, x + 3, y + 3, 0xd9);
 
 	call_mouse();
 }

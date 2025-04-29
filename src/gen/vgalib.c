@@ -277,8 +277,6 @@ void draw_h_line(unsigned short offset, unsigned short count, unsigned short col
 
 	for (i = 0; i < count; i++)
 		ptr[i] = color;
-
-	update_sdl_window();
 }
 
 void draw_h_spaced_dots(unsigned short offset, unsigned short width, signed short color, unsigned short space)
@@ -291,8 +289,6 @@ void draw_h_spaced_dots(unsigned short offset, unsigned short width, signed shor
 		ptr[0] = color;
 		ptr += space;
 	}
-
-	update_sdl_window();
 }
 
 void pic_copy(unsigned char *dst, unsigned short x, unsigned short y, unsigned short d1, unsigned short d2,
