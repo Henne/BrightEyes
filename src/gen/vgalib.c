@@ -404,8 +404,6 @@ void fill_rect(unsigned char *p_in, signed short color, signed short width, sign
 		}
 		p += 320 - width;
 	}
-
-	update_sdl_window();
 }
 
 unsigned short swap_u16(unsigned short val)
