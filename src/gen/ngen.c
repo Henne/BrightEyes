@@ -4161,6 +4161,10 @@ static void change_head(void)
 		g_dst_y2 = 35;
 		do_draw_pic(0);
 	}
+
+#if !defined(__BORLANDC__)
+		update_sdl_window();
+#endif
 }
 
 /**
@@ -6943,6 +6947,10 @@ static void intro(void)
 		g_dst_src = (unsigned char*)(i * 960 + g_gen_ptr1_dis + 9600);
 		do_draw_pic(0);
 		vsync_or_key(20);
+
+#if !defined(__BORLANDC__)
+		update_sdl_window();
+#endif
 	}
 
 	/* elevate the attic logo */
@@ -6991,6 +6999,9 @@ static void intro(void)
 			vsync_or_key(2);
 		else
 			vsync_or_key(1);
+#if !defined(__BORLANDC__)
+		update_sdl_window();
+#endif
 	}
 
 	if (g_in_key_ext == 0)
@@ -7024,6 +7035,11 @@ static void intro(void)
 	g_dst_y2 = 149;
 	g_dst_src = g_gen_ptr1_dis;
 	do_draw_pic(0);
+
+#if !defined(__BORLANDC__)
+		update_sdl_window();
+#endif
+
 	vsync_or_key(200);
 
 	if (g_dsagen_lang == LANG_DE) {

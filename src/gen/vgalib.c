@@ -371,8 +371,6 @@ void pic_copy(unsigned char *dst, unsigned short x, unsigned short y, unsigned s
 			break;
 		}
 	}
-
-	update_sdl_window();
 }
 
 #if defined(__BORLANDC__)
