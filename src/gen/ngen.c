@@ -9,7 +9,7 @@
 #include <IO.H>		// lseek, _read, _close, _creat, open, write
 #include <DOS.H>
 #include <BIOS.H>	// bioskey, int86x()
-#include <CONIO.H>	// clrsrc()
+#include <CONIO.H>	// clrscr()
 #include <ALLOC.H>	// farcalloc()
 #include <MATH.H>	// abs()
 #else
@@ -2376,7 +2376,7 @@ static signed short get_bioskey(const int cmd)
 		// check if a key was pressed
 		int pressed = sdl_event_loop(1);
 		return pressed;
-	}
+	} else return 0;
 #else
 	return CD_bioskey(cmd);
 #endif
