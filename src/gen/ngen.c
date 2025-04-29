@@ -3253,18 +3253,18 @@ static signed short enter_string(char *dst, signed short x, signed short y, sign
 		}
 
 		if (c == 8) {
-			if (pos > 0 ) {
+			if (pos > 0) {
 
-			if (zero == 1 && pos != num)
+				if (zero == 1 && pos != num)
+					print_chr(0x20, di, y);
+				pos--;
+				dst--;
+				get_chr_info(*dst, &width);
+
+				di -= (zero != 0) ? width : 6;
+
 				print_chr(0x20, di, y);
-			pos--;
-			dst--;
-			get_chr_info(*dst, &width);
-
-			di -= (zero != 0) ? width : 6;
-
-			print_chr(0x20, di, y);
-			print_chr(0x5f, di, y);
+				print_chr(0x5f, di, y);
 			}
 		} else {
 			if ((isalnum(c) == 0) &&
