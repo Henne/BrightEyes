@@ -123,7 +123,7 @@ void update_sdl_window(void)
 	SDL_RenderClear(renderer);
 	SDL_RenderCopy(renderer, texture, NULL, NULL);
 	SDL_RenderPresent(renderer);
-	SDL_Delay(16);
+	//SDL_Delay(16);
 }
 
 void sdl_change_window_size(void)
@@ -443,8 +443,6 @@ void copy_to_screen(unsigned char *src, unsigned char *dst, signed short w, sign
 			src += v2;
 		}
 	}
-
-	update_sdl_window();
 }
 
 unsigned char* normalize_ptr(unsigned char *ptr)

@@ -3457,6 +3457,9 @@ static signed short infobox(char *msg, const signed short digits)
 	g_fg_color[4] = 0;
 	g_in_key_ext = 0;
 
+#if !defined(__BORLANDC__)
+		update_sdl_window();
+#endif
 	return retval;
 }
 
@@ -3620,6 +3623,12 @@ signed short gui_radio(char *header, signed int options, ...)
 			fill_radio_button(r6, di, lines_header);
 			r6 = di;
 		}
+
+#if !defined(__BORLANDC__)
+		update_sdl_window();
+		SDL_Delay(50);
+#endif
+
 		if ((g_mouse2_event != 0) || (g_in_key_ext == KEY_ESC) || (g_in_key_ext == KEY_PGDOWN)) {
 			/* has the selection been canceled */
 			retval = -1;
@@ -3688,6 +3697,10 @@ signed short gui_radio(char *header, signed int options, ...)
 	g_text_y = bak2;
 	g_text_x_end = bak3;
 	g_in_key_ext = 0;
+
+#if !defined(__BORLANDC__)
+		update_sdl_window();
+#endif
 
 	return retval;
 }
@@ -4182,6 +4195,10 @@ static void change_sex(void)
 		copy_to_screen(src, dst, 16, 16, 0);
 		call_mouse();
 	}
+
+#if !defined(__BORLANDC__)
+		update_sdl_window();
+#endif
 }
 
 static void save_picbuf(void)
@@ -4961,6 +4978,10 @@ static void refresh_screen(void)
 	} else {
 		print_values();
 	}
+
+#if !defined(__BORLANDC__)
+		update_sdl_window();
+#endif
 }
 
 static void clear_hero(void)
