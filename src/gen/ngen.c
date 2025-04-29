@@ -949,7 +949,7 @@ static const struct mouse_action g_action_default[2] = {
 
 static const struct mouse_action* g_default_action = &g_action_default[0];
 
-static struct mouse_action* g_action_table = NULL;
+static const struct mouse_action* g_action_table = NULL;
 
 static const struct mouse_action g_action_base[9] = {
 	{ 272, 8, 304, 41, 0xfd},	/* credits */
@@ -1173,17 +1173,10 @@ static const struct mouse_action g_action_input[2] = {
 static signed short g_bool_mode = 0;
 
 static const struct mouse_action* g_action_page[] = {
-	(struct mouse_action*)&g_action_base,
-	(struct mouse_action*)&g_action_skills,
-	(struct mouse_action*)&g_action_skills,
-	(struct mouse_action*)&g_action_skills,
-	(struct mouse_action*)&g_action_skills,
-	(struct mouse_action*)&g_action_spells,
-	(struct mouse_action*)&g_action_spells,
-	(struct mouse_action*)&g_action_spells,
-	(struct mouse_action*)&g_action_spells,
-	(struct mouse_action*)&g_action_spells,
-	(struct mouse_action*)&g_action_spells
+	g_action_base, g_action_skills, g_action_skills,
+	g_action_skills, g_action_skills, g_action_spells,
+	g_action_spells, g_action_spells, g_action_spells,
+	g_action_spells, g_action_spells
 };
 
 static char g_need_refresh = 1;
@@ -2433,12 +2426,10 @@ static int handle_input(void)
 		si = 0;
 
 		if (g_action_table)
-			si = get_mouse_action(g_mouse_posx, g_mouse_posy,
-				(struct mouse_action*)g_action_table);
+			si = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table);
 
 		if ((si == 0) && (g_default_action))
-			si = get_mouse_action(g_mouse_posx, g_mouse_posy,
-				(struct mouse_action*)g_default_action);
+			si = get_mouse_action(g_mouse_posx, g_mouse_posy, g_default_action);
 
 		if (g_have_mouse == 2) {
 			for (i = 0; i < 15; i++)
@@ -3457,9 +3448,9 @@ static signed short infobox(char *msg, const signed short digits)
 
 		retval = (unsigned short)atol(g_gen_ptr3);
 	} else {
-		g_action_table = (struct mouse_action*)g_action_input;
+		g_action_table = g_action_input;
 		vsync_or_key(150 * lines);
-		g_action_table = (struct mouse_action*)NULL;
+		g_action_table = NULL;
 	}
 
 	set_textcolor(fg, bg);
@@ -3609,7 +3600,7 @@ signed short gui_radio(char *header, signed int options, ...)
 
 	/* print header */
 	if (lines_header)
-		print_line((char*)header);
+		print_line(header);
 
 	r3 = g_text_x + 8;
 	r4 = g_upper_border + 8 * (lines_header + 1);
@@ -3638,9 +3629,9 @@ signed short gui_radio(char *header, signed int options, ...)
 	g_mouse2_event = 0;
 
 	while (r5 == 0) {
-		g_action_table = (struct mouse_action*)g_action_input;
+		g_action_table = g_action_input;
 		handle_input();
-		g_action_table = (struct mouse_action*)NULL;
+		g_action_table = NULL;
 
 		if (r6 != di) {
 			fill_radio_button(r6, di, lines_header);
@@ -6659,9 +6650,9 @@ static void do_gen(void)
 			g_screen_var = 0;
 		}
 
-		g_action_table = (struct mouse_action*)g_action_page[g_gen_page];
+		g_action_table = g_action_page[g_gen_page];
 		done = handle_input();
-		g_action_table = (struct mouse_action*)NULL;
+		g_action_table = NULL;
 
 		if (g_mouse2_event || g_in_key_ext == KEY_PGUP) {
 			/* print the menu for each page */
