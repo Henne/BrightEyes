@@ -1774,6 +1774,7 @@ static void interrupt mouse_isr(void)
 			g_mouse2_event = 1;
 		}
 		if (l_si & 0x1) {
+			/* Report status: position */
 			p1 = 3;
 			p3 = g_mouse_posx;
 			p4 = g_mouse_posy;
@@ -2399,18 +2400,18 @@ static void wait_for_keypress(void)
  */
 static int handle_input(void)
 {
-	signed short si;
+	signed short l_key_ext;
 	signed short i;
 
-	g_in_key_ascii = g_in_key_ext = si = 0;
+	g_in_key_ascii = g_in_key_ext = l_key_ext = 0;
 
 	if (get_bioskey(1)) {
 
-		si = (g_in_key_ascii = get_bioskey(0)) >> 8;
+		l_key_ext = (g_in_key_ascii = get_bioskey(0)) >> 8;
 		g_in_key_ascii &= 0xff;
 
-		if (si == KEY_J)
-			si = KEY_Y;
+		if (l_key_ext == KEY_J)
+			l_key_ext = KEY_Y;
 
 		/* exit Program with CRTL+Q */
 		if ((g_in_key_ascii == KEY_DC1) && !g_in_intro) {
@@ -2422,18 +2423,16 @@ static int handle_input(void)
 	g_have_mouse = 2;
 #endif
 
-	if (g_mouse1_event2 == 0) {
-		// Hm, ...
-		if (g_have_mouse == 0);
-	} else {
+	if (g_mouse1_event2 != 0) {
+
 		g_mouse1_event2 = 0;
-		si = 0;
+		l_key_ext = 0;
 
 		if (g_action_table)
-			si = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table);
+			l_key_ext = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table);
 
-		if ((si == 0) && (g_default_action))
-			si = get_mouse_action(g_mouse_posx, g_mouse_posy, g_default_action);
+		if ((l_key_ext == 0) && (g_default_action))
+			l_key_ext = get_mouse_action(g_mouse_posx, g_mouse_posy, g_default_action);
 
 		if (g_have_mouse == 2) {
 			for (i = 0; i < 15; i++)
@@ -2444,8 +2443,8 @@ static int handle_input(void)
 			}
 
 			/* show credits in an infobox() */
-			if (si == 0xfd) {
-				si = 0;
+			if (l_key_ext == 0xfd) {
+				l_key_ext = 0;
 				g_menu_tiles = 4;
 				g_fg_color[4] = 1;
 				infobox(get_text(267), 0);
@@ -2454,8 +2453,9 @@ static int handle_input(void)
 			}
 		}
 	}
+
 	mouse_compare();
-	g_in_key_ext = si;
+	g_in_key_ext = l_key_ext;
 
 	return 0;
 }
@@ -3983,7 +3983,7 @@ void stop_music(void)
 }
 
 /* TIMER MANAGEMENT */
-
+/* Intel 8253 ticks every 55 ms */
 #if defined(__BORLANDC__)
 static void interrupt timer_isr(void)
 {
