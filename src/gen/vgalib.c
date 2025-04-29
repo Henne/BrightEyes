@@ -21,21 +21,22 @@ extern signed short g_mouse1_event1;
 extern signed short g_mouse1_event2;
 extern signed short g_mouse2_event;
 
-static const int O_WIDTH = 320;
-static const int O_HEIGHT = 200;
+enum FB_VALUES {
+	O_WIDTH = 320, O_HEIGHT = 200, MAX_RATIO = 8
+};
 
-static int RATIO = 1;
-static int W_WIDTH = O_WIDTH;
-static int W_HEIGHT = O_HEIGHT;
+static const int DEF_RATIO = 3;
+static int RATIO = DEF_RATIO;
+static int W_WIDTH = DEF_RATIO * O_WIDTH;
+static int W_HEIGHT = DEF_RATIO * O_HEIGHT;
 
 static Uint32 palette[256] = {0};
 
 static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
 static SDL_Texture *texture = NULL;
-static Uint32 *pixels = NULL;
 
-int g_lets_quit = 0;
+static Uint32 pixels[MAX_RATIO * MAX_RATIO * O_WIDTH * O_HEIGHT];
 
 void set_video_mode(unsigned short mode)
 {
@@ -75,10 +76,7 @@ void set_video_mode(unsigned short mode)
 			W_HEIGHT
 		);
 
-		pixels = calloc(W_WIDTH * W_HEIGHT * sizeof(Uint32), 1);
 	} else {
-		free(pixels);
-		pixels = NULL;
 		SDL_DestroyTexture(texture);
 		SDL_DestroyRenderer(renderer);
 		SDL_DestroyWindow(window);
@@ -88,14 +86,36 @@ void set_video_mode(unsigned short mode)
 
 void update_sdl_window(void)
 {
-	if (pixels == NULL) return;
+	if (RATIO == 1) {
+		int pos = 0;
+		for (int y = 0; y < O_HEIGHT; y++) {
+			pos = y * O_WIDTH;
+			for (int x = 0; x < O_WIDTH; x++) {
+				pixels[pos] = palette[g_vga_memstart[pos]];
+				pos++;
+			}
+		}
+	} else {
+		int o_pos = 0;
+		for (int y_o = 0; y_o < O_HEIGHT; y_o++) {
+			o_pos = y_o * O_WIDTH;
+			for (int x_o = 0; x_o < O_WIDTH; x_o++) {
 
-	int pos = 0;
-	for (int y = 0; y < O_HEIGHT; y++) {
-		pos = y * O_WIDTH;
-		for (int x = 0; x < O_WIDTH; x++) {
-			pixels[pos] = palette[g_vga_memstart[pos]];
-			pos++;
+				/* fill the first line by hand */
+				int w_pos = RATIO * (y_o * W_WIDTH + x_o);
+				int col = palette[g_vga_memstart[o_pos]];
+				for (int i = 0; i < RATIO; i++) {
+					pixels[w_pos + i] = col;
+				}
+				o_pos++;
+			}
+
+			/* copy it RATIO - 1 times */
+			for (int i = 1; i < RATIO; i++) {
+				memcpy(pixels + RATIO * y_o * W_WIDTH + i * W_WIDTH,
+					       pixels + RATIO * y_o * W_WIDTH,
+					       W_WIDTH * sizeof(Uint32));
+			}
 		}
 	}
 
@@ -104,6 +124,54 @@ void update_sdl_window(void)
 	SDL_RenderCopy(renderer, texture, NULL, NULL);
 	SDL_RenderPresent(renderer);
 	SDL_Delay(16);
+}
+
+void sdl_change_window_size(void)
+{
+	RATIO = (RATIO < MAX_RATIO) ? RATIO + 1 : 1;
+	W_WIDTH = RATIO * O_WIDTH;
+	W_HEIGHT = RATIO * O_HEIGHT;
+
+	fprintf(stdout, "RATIO = %d W_WIDTH = %d W_HEIGHT = %d\n",
+			RATIO, W_WIDTH, W_HEIGHT);
+
+	SDL_DestroyTexture(texture);
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+
+	memset(pixels, 0, W_WIDTH * W_HEIGHT * sizeof(Uint32));
+
+	window = SDL_CreateWindow(
+		"BrightEyes",
+		SDL_WINDOWPOS_UNDEFINED,
+		SDL_WINDOWPOS_UNDEFINED,
+		W_WIDTH,
+		W_HEIGHT,
+		SDL_WINDOW_SHOWN
+	);
+
+	if (window == NULL) {
+		fprintf(stderr, "Could not create Window: %s\n", SDL_GetError());
+		SDL_Quit();
+		exit(-1);
+	}
+
+	renderer = SDL_CreateRenderer(
+		window,
+		-1,
+		SDL_RENDERER_ACCELERATED
+	);
+
+	texture = SDL_CreateTexture(
+		renderer,
+		SDL_PIXELFORMAT_ARGB8888,
+		SDL_TEXTUREACCESS_STREAMING,
+		//SDL_TEXTUREACCESS_STATIC,
+		W_WIDTH,
+		W_HEIGHT
+	);
+
+	update_sdl_window();
 }
 
 int sdl_event_loop(const int cmd)
@@ -117,8 +185,8 @@ int sdl_event_loop(const int cmd)
 		} else if (event.type == SDL_MOUSEMOTION) {
 			g_mouse_moved = 1;
 			/* Assume 320x200 */
-			g_mouse_posx = event.motion.x;
-			g_mouse_posy = event.motion.y;
+			g_mouse_posx = event.motion.x / RATIO;
+			g_mouse_posy = event.motion.y / RATIO;
 
 		} else if (event.type == SDL_MOUSEBUTTONDOWN) {
 			if (event.button.button == 1) {
@@ -150,6 +218,7 @@ int sdl_event_loop(const int cmd)
 				}
 
 				switch (event.key.keysym.sym) {
+					case SDLK_TAB:      sdl_change_window_size(); break;
 					case SDLK_ESCAPE:   return (0x01 << 8) | 0x1b; break; //OK
 					case SDLK_1:        return (0x02 << 8) | 0x31; break; //OK
 					case SDLK_2:        return (0x03 << 8) | 0x32; break; //OK
