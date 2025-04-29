@@ -5,6 +5,10 @@
 #include <ctype.h>
 #include <fcntl.h>
 
+#if defined(linux)
+#include <sys/stat.h>
+#endif
+
 #if defined(__BORLANDC__)
 #include <IO.H>		// lseek, _read, _close, _creat, open, write
 #include <DOS.H>
@@ -4096,6 +4100,9 @@ static void save_chr(void)
 		handle = _creat(filename, 0);
 
 		if (handle != -1) {
+#if defined(linux)
+			fchmod(handle, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+#endif
 			write(handle, (const void*)&g_hero, sizeof(g_hero));
 			close(handle);
 
@@ -4105,6 +4112,9 @@ static void save_chr(void)
 			strcat(path, filename);
 
 			if ((handle = _creat(path, 0)) != -1) {
+#if defined(linux)
+				fchmod(handle, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+#endif
 				write(handle, (const void*)&g_hero, sizeof(g_hero));
 				close(handle);
 			}
