@@ -19,18 +19,18 @@
 
 /* portable Memory Access */
 #if !defined(__BORLANDC__)
-static inline unsigned short readw(unsigned char *p) { return *(unsigned short*)p; }
-static inline signed short readws(unsigned char *p) { return *(signed short*)p; }
-static inline unsigned int readd(unsigned char *p) { return *(unsigned int*)p; }
-static inline signed int readds(unsigned char *p) { return *(signed int*)p; }
+static inline unsigned short readw(const unsigned char *p) { return *(const unsigned short*)p; }
+static inline signed short readws(const unsigned char *p) { return *(const signed short*)p; }
+static inline unsigned int readd(const unsigned char *p) { return *(const unsigned int*)p; }
+static inline signed int readds(const unsigned char *p) { return *(const signed int*)p; }
 static inline unsigned short writew(unsigned char *p, unsigned short v) { return *(unsigned short*)p = v; }
 // TODO: Check if that works on the stack of 64-bit machines
 static inline unsigned int writed(unsigned char *p, unsigned int v) { return *(unsigned int*)p = v; }
 #else
-#define readw(p) (*(unsigned short*)(p))
-#define readws(p) (*(signed short*)(p))
-#define readd(p) (*(unsigned long*)(p))
-#define readds(p) (*(signed long*)(p))
+#define readw(p) (*(const unsigned short*)(p))
+#define readws(p) (*(const signed short*)(p))
+#define readd(p) (*(const unsigned long*)(p))
+#define readds(p) (*(const signed long*)(p))
 #define writew(p, v) (*(unsigned short*)(p) = (v))
 #define writed(p, v) (*(unsigned long*)(p) = (v))
 #endif

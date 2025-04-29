@@ -34,7 +34,7 @@
 #include <CONIO.H>	// clrsrc()
 
 /* non-portable Memory Access */
-#define readws(p) (*(signed short*)(p))
+#define readws(p) (*(const signed short*)(p))
 
 #include "cda_code.h"
 #include "ngen.h"
