@@ -3125,10 +3125,6 @@ static void print_str(const char *str, signed short x, signed short y)
 		}
 	}
 
-#if !defined(__BORLANDC__)
-	update_sdl_window();
-#endif
-
 	call_mouse();
 }
 
@@ -4154,6 +4150,11 @@ static void enter_name(void)
 	copy_to_screen(g_picbuf1, dst, 94, 8, 0);
 	call_mouse();
 	print_str((const char*)g_hero.name, 180, 12);
+
+#if !defined(__BORLANDC__)
+	update_sdl_window();
+#endif
+
 }
 
 static void change_head(void)
@@ -4446,9 +4447,13 @@ static void print_attribs(void)
 		/* don't print 0s */
 		if (p[0] != 0) {
 			/* print attribute value in decimal form */
-			print_str(gen_itoa(p[0], buf, 10),	g_attrib_coords[i].x, g_attrib_coords[i].y);
+			print_str(gen_itoa(p[0], buf, 10), g_attrib_coords[i].x, g_attrib_coords[i].y);
 		}
 	}
+
+#if !defined(__BORLANDC__)
+		update_sdl_window();
+#endif
 }
 
 
@@ -4896,6 +4901,10 @@ static void print_values(void)
 			break;
 		}
 	}
+
+#if !defined(__BORLANDC__)
+		update_sdl_window();
+#endif
 }
 
 static void refresh_screen(void)
@@ -7192,6 +7201,10 @@ static void intro(void)
 	set_textcolor(0xff, 0x00); // WHITE ON BLACK
 	print_str((char*)g_str_version, 290, 190);
 	vsync_or_key(400);
+
+#if !defined(__BORLANDC__)
+		update_sdl_window();
+#endif
 
 	if (g_dsagen_lang == LANG_DE) {
 
