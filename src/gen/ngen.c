@@ -1444,6 +1444,8 @@ static unsigned char g_pal_roalogo[768];
 
 #if defined(__BORLANDC__)
 void far *g_timer_isr_bak;
+#else
+static SDL_TimerID g_sdl_timer_id = 0;
 #endif
 
 /* These 6 bytes are written at once from a file */
@@ -1653,9 +1655,9 @@ static void free_buffers(void)
 /* RANDOM NUMBER GENERATOR MANAGEMENT */
 
 /**
- * random_gen - generates a u16 random number
+ * random_gen - generates a non-negative random number
  */
-static int random_gen(const int val)
+static signed short random_gen(const signed short val)
 {
 	signed short retval;
 
@@ -1675,9 +1677,9 @@ static int random_gen(const int val)
 }
 
 /**
- * random_interval_gen - generates a u16 random number between lo and hi
+ * random_interval_gen - generates a non-negative random number between lo and hi
 */
-static unsigned short random_interval_gen(unsigned short lo, unsigned short hi)
+static signed short random_interval_gen(const signed short lo, const signed short hi)
 {
 	return lo + random_gen(hi - lo + 1) - 1;
 }
@@ -3993,6 +3995,18 @@ static void interrupt timer_isr(void)
 	restart_midi();
 	((void interrupt far (*)(void))g_timer_isr_bak)();
 }
+#else
+static Uint32 gen_timer_isr(Uint32 interval, void *param)
+{
+	/* update RNG */
+	g_random_gen_seed2++;
+	if (g_random_gen_seed2 < 0) {
+		g_random_gen_seed2 = 0;
+	}
+
+	/* update MIDI */
+	restart_midi();
+}
 #endif
 
 static void set_timer_isr(void)
@@ -4002,6 +4016,11 @@ static void set_timer_isr(void)
 	g_timer_isr_bak = ((void interrupt far (*)(void))getvect(0x1c));
 	/* set a the new one */
 	setvect(0x1c, timer_isr);
+#else
+	g_sdl_timer_id = SDL_AddTimer(55, gen_timer_isr, NULL);
+	if (g_sdl_timer_id == 0) {
+		fprintf(stderr, "WARNING: Failed to add timer: %s\n", SDL_GetError());
+	}
 #endif
 }
 
@@ -4009,6 +4028,11 @@ void restore_timer_isr(void)
 {
 #if defined(__BORLANDC__)
 	setvect(0x1c, (void interrupt far (*)(void))g_timer_isr_bak);
+#else
+	SDL_bool timer_removed = SDL_RemoveTimer(g_sdl_timer_id);
+	if (timer_removed == SDL_FALSE) {
+		fprintf(stderr, "WARNING: Failed to remove timer\n");
+	}
 #endif
 }
 
@@ -5018,7 +5042,7 @@ static void new_values(void)
 	/* Original-Bugfix:	there once was a char[11],
 				which could not hold a char[16] */
 	volatile signed char *att_ptr;
-	signed char randval;
+	signed short randval;
 	signed char unset_attribs;
 	signed char values[8];
 	signed char sex_bak;
@@ -5063,7 +5087,7 @@ static void new_values(void)
 	att_ptr = &g_hero.attrib[0].normal;
 
 	for (j = 0; j < 7; j++) {
-		randval = (signed char)random_interval_gen(8, 13);
+		randval = random_interval_gen(8, 13);
 		unset_attribs = 0;
 
 		for (i = 0; i < 7; i++) {
@@ -5104,7 +5128,7 @@ static void new_values(void)
 	att_ptr = &g_hero.attrib[7].normal;
 
 	for (j = 0; j < 7; j++) {
-		randval = (signed char)random_interval_gen(2, 7);
+		randval = random_interval_gen(2, 7);
 		unset_attribs = 0;
 
 		for (i = 0; i < 7; i++) {
@@ -5220,7 +5244,7 @@ static void skill_inc_novice(const signed short skill)
 			g_hero.skill_incs--;
 
 			/* check if the test is passed */
-			if ((signed short)random_interval_gen(2, 12) > g_hero.skills[skill]) {
+			if (random_interval_gen(2, 12) > g_hero.skills[skill]) {
 				/* increment skill */
 				g_hero.skills[skill]++;
 
@@ -5274,7 +5298,7 @@ static void spell_inc_novice(const signed short spell)
 		g_hero.spell_incs--;
 
 		/* check if the test is passed */
-		if ((signed short)random_interval_gen(2, 12) > g_hero.spells[spell]) {
+		if (random_interval_gen(2, 12) > g_hero.spells[spell]) {
 
 			/* increment spell */
 			g_hero.spells[spell]++;
@@ -5400,7 +5424,7 @@ static void fill_values(void)
 	if ((g_hero.typus == 9) && (g_level == 2) && gui_bool(get_text(268))) {
 		/* change spell_attempts */
 		g_hero.spell_incs -= 10;
-		g_hero.ae_max += (signed short)random_interval_gen(3, 8);
+		g_hero.ae_max += random_interval_gen(3, 8);
 		g_hero.ae = g_hero.ae_max;
 	}
 
@@ -5417,7 +5441,7 @@ static void fill_values(void)
 	money_ptr = g_money_tab[g_hero.typus - 1];
 	for (si = 0; money_ptr[si].value < i; si++);
 
-	g_hero.money = (signed long)(10 * (signed short)random_interval_gen(money_ptr[si].min, money_ptr[si].max));
+	g_hero.money = (signed long)(10 * random_interval_gen(money_ptr[si].min, money_ptr[si].max));
 
 	/* calculate MR  = (KL + MU + Stufe) / 3 - 2 * AG
 	 * 		 = (WD + CO + Level) / 3 - 2 * SN */
@@ -5969,7 +5993,7 @@ static void inc_skill(const signed short skill, const signed short max, char *ms
 
 	/* decrement total number of skill inc tries */
 	g_hero.skill_incs--;
-	if ((signed short)random_interval_gen(2, 12) > g_hero.skills[skill]) {
+	if (random_interval_gen(2, 12) > g_hero.skills[skill]) {
 		/* print sucess message */
 		infobox(get_text(152), 0);
 		/* increment skill */
@@ -6183,7 +6207,7 @@ static void inc_spell(const signed short spell)
 		/* decrement spell attempts */
 		g_hero.spell_incs--;
 
-		if ((signed short)random_interval_gen(2, 12) > g_hero.spells[spell]) {
+		if (random_interval_gen(2, 12) > g_hero.spells[spell]) {
 			/* show success */
 			infobox(get_text(152), 0);
 			/* increment spell value */
@@ -6572,7 +6596,7 @@ static void choose_typus(void)
 	/* roll out positive attribute values */
 	for (i = 0; i < 7; i ++) {
 
-		randval = (signed short)random_interval_gen(8, 13);
+		randval = random_interval_gen(8, 13);
 
 		if (randval > 8)
 			randval--;
@@ -6585,7 +6609,7 @@ static void choose_typus(void)
 	/* roll out negative attribute values */
 	for (i = 0; i < 7; i ++) {
 
-		randval = (signed short)random_interval_gen(2, 7);
+		randval = random_interval_gen(2, 7);
 
 		if (randval < 7)
 			randval++;

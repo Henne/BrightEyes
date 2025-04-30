@@ -41,7 +41,7 @@ static Uint32 pixels[MAX_RATIO * MAX_RATIO * O_WIDTH * O_HEIGHT];
 void set_video_mode(unsigned short mode)
 {
 	if (mode == 0x13) {
-		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) < 0) {
+		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_TIMER) < 0) {
 			fprintf(stderr, "Could not initialize SDL: %s\n", SDL_GetError());
 			exit(-1);
 		}
