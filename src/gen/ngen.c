@@ -860,9 +860,6 @@ static const struct struct_attrib_coords g_attrib_coords[] = {
 	{273, 73}, {273, 85}, {273, 97}, {273, 109}, {273, 121}, {273, 133}, {273, 145}
 };
 
-// Remark: g_mask_switch is read only
-static const signed char g_mask_switch = 0;
-
 struct struct_color {
 	unsigned char r;
 	unsigned char g;
@@ -1355,8 +1352,7 @@ static unsigned char *g_buffer_sex_dat;
 static char g_mouse_backbuffer[256];
 static unsigned short *g_mouse_current_cursor;
 static unsigned short *g_mouse_last_cursor;
-static unsigned char g_array_2[64];
-static unsigned char g_array_1[64];
+static unsigned char g_char_buffer[64];
 static signed short g_in_key_ext;
 static signed short g_in_key_ascii;
 signed short g_mouse1_event2;
@@ -2882,14 +2878,9 @@ static signed short get_chr_info(const unsigned char c, signed short *width)
 
 static void prepare_chr_background(void)
 {
-	unsigned char *ptr;
+	unsigned char *ptr = g_char_buffer;
 	signed short i;
 	signed short j;
-
-	if (g_mask_switch != 0)
-		ptr = g_array_1;
-	else
-		ptr = g_array_2;
 
 	for (i = 0; i < 8; ptr += 8, i++)
 		for (j = 0; j < 8; j++)
@@ -2898,15 +2889,10 @@ static void prepare_chr_background(void)
 
 static void prepare_chr_foreground(unsigned char* font_ptr)
 {
-	unsigned char *ptr;
+	unsigned char *ptr = g_char_buffer;
 	signed short i;
 	signed short j;
 	unsigned char mask;
-
-	if (g_mask_switch != 0)
-		ptr = g_array_1;
-	else
-		ptr = g_array_2;
 
 	for (i = 0; i < 8; ptr += 8, i++) {
 		mask = *font_ptr++;
@@ -2925,11 +2911,9 @@ static unsigned char* get_gfx_ptr(const signed short x, const signed short y)
 
 static void blit_chr(unsigned char *gfx_ptr, const signed short chr_height, const signed short chr_width)
 {
-	unsigned char *src;
+	unsigned char *src = g_char_buffer;
 	signed short i;
 	signed short j;
-
-	src = g_array_2;
 
 	for (i = 0; i < chr_height; src += 8 - chr_width, gfx_ptr += 320, i++)
 		for (j = 0; j < chr_width; src++, j++)
