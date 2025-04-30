@@ -2878,13 +2878,7 @@ static signed short get_chr_info(const unsigned char c, signed short *width)
 
 static void prepare_chr_background(void)
 {
-	unsigned char *ptr = g_char_buffer;
-	signed short i;
-	signed short j;
-
-	for (i = 0; i < 8; ptr += 8, i++)
-		for (j = 0; j < 8; j++)
-			ptr[j] = (unsigned char)g_bg_color;
+	memset(g_char_buffer, g_bg_color, 8 * 8);
 }
 
 static void prepare_chr_foreground(unsigned char* font_ptr)
