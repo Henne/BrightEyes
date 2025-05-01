@@ -37,7 +37,6 @@
 #define readws(p) (*(const signed short*)(p))
 
 #include "cda_code.h"
-#include "ngen.h"
 #include "cda_data.h"
 
 /* extern variables from seg002 */
@@ -64,11 +63,14 @@ static signed long g_cd_audio_tod;
 static signed short g_cd_audio_track;
 
 /* externally used prototypes from (mainfile) */
-extern void stop_music(void);
 extern void update_mouse_cursor(void);
 extern void mouse_disable(void);
+extern void exit_video(void);
+extern void stop_music(void);
 extern void call_fill_rect_gen(unsigned char*, signed short, signed short,
 			signed short, signed short, signed short);
+extern void restore_timer_isr(void);
+extern signed short gui_radio(char*, const signed int, ...);
 
 /* internally used prototypes */
 static signed short CD_has_drives(void);

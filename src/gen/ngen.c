@@ -67,7 +67,6 @@ static inline void clrscr(void) { }
 #include "hero.h"
 
 #include "cda_code.h"
-#include "ngen.h"
 #include "powerp20.h"
 #include "vgalib.h"
 
