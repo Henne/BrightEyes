@@ -1355,7 +1355,7 @@ static unsigned short *g_mouse_last_cursor;
 static unsigned char g_char_buffer[64];
 static signed short g_in_key_ext;
 static signed short g_in_key_ascii;
-signed short g_mouse1_event2;
+signed short g_mouse_leftclick_event;
 signed short g_mouse_rightclick_event;
 static signed short g_have_mouse;
 static signed short g_random_gen_seed2;
@@ -1764,7 +1764,7 @@ static void interrupt mouse_isr(void)
 
 	if (g_mouse_locked == 0) {
 		if (l_si & 0x2) {
-			g_mouse1_event2 = 1;
+			g_mouse_leftclick_event = 1;
 		}
 		if (l_si & 0x8) {
 			g_mouse_rightclick_event = 1;
@@ -2419,9 +2419,9 @@ static int handle_input(void)
 	g_have_mouse = 2;
 #endif
 
-	if (g_mouse1_event2 != 0) {
+	if (g_mouse_leftclick_event != 0) {
 
-		g_mouse1_event2 = 0;
+		g_mouse_leftclick_event = 0;
 		l_key_ext = 0;
 
 		if (g_action_table)
@@ -2434,8 +2434,8 @@ static int handle_input(void)
 			for (i = 0; i < 15; i++)
 				wait_for_vsync();
 
-			if (g_mouse1_event2 != 0) {
-				g_mouse1_event2 = 0;
+			if (g_mouse_leftclick_event != 0) {
+				g_mouse_leftclick_event = 0;
 			}
 
 			/* show credits in an infobox() */
@@ -3179,16 +3179,16 @@ static signed short enter_string(char *dst, signed short x, signed short y, sign
 #endif
 
 	wait_for_keypress();
-	g_mouse1_event2 = 0;
+	g_mouse_leftclick_event = 0;
 
 	c = 0;
 	while ((c != 0xd) || (pos == 0)) {
 		do {
-			do {} while (!get_bioskey(1) && (g_mouse1_event2 == 0));
+			do {} while (!get_bioskey(1) && (g_mouse_leftclick_event == 0));
 
-			if (g_mouse1_event2) {
+			if (g_mouse_leftclick_event) {
 				g_in_key_ascii = 0x0d;
-				g_mouse1_event2 = 0;
+				g_mouse_leftclick_event = 0;
 			} else {
 				g_in_key_ext = (g_in_key_ascii = get_bioskey(0)) >> 8;
 				g_in_key_ascii &= 0xff;

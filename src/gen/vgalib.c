@@ -17,7 +17,7 @@ extern signed short g_mouse_posx;
 extern signed short g_mouse_posy;
 extern signed short g_mouse_moved;
 
-extern signed short g_mouse1_event2;
+extern signed short g_mouse_leftclick_event;
 extern signed short g_mouse_rightclick_event;
 
 enum FB_VALUES {
@@ -189,7 +189,7 @@ int sdl_event_loop(const int cmd)
 
 		} else if (event.type == SDL_MOUSEBUTTONDOWN) {
 			if (event.button.button == 1) {
-				g_mouse1_event2 = 1;
+				g_mouse_leftclick_event = 1;
 			}
 			if (event.button.button == 3) {
 				g_mouse_rightclick_event = 1;
