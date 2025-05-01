@@ -4016,9 +4016,6 @@ static void save_chr(void)
 	/* copy picture to the character struct */
 	memcpy((void*)g_hero.pic, g_gen_ptr1_dis, 1024);
 
-	/* put the hero in the first group */
-	g_hero.group = 1;
-
 	/* wanna save ? */
 	if (!gui_bool(get_text(3)))
 		return;
@@ -4988,6 +4985,7 @@ static void clear_hero(void)
 	memset((void*)&g_hero, 0, sizeof(g_hero));
 
 	g_hero.level = 1;
+	g_hero.group = 1;
 }
 
 /**
@@ -6631,6 +6629,9 @@ static void do_gen(void)
 	while (g_level == -1) {
 		g_level = gui_radio(get_text(0), 2, get_text(1), get_text(2));
 	}
+
+	/* initialize the hero structure */
+	clear_hero();
 
 	/* emulate a right click to open the menu */
 	g_mouse_rightclick_event = 1;
