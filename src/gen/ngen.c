@@ -3616,7 +3616,15 @@ signed short gui_radio(char *header, const signed int options, ...)
 
 	while (!done) {
 		g_action_table = g_action_input;
+#if defined(__BORLANDC__)
 		handle_input();
+#else
+		if (handle_input()) {
+			/* enable an ungracefully exit in gui_radio() */
+			set_video_mode(0);
+			exit(0);
+		}
+#endif
 		g_action_table = NULL;
 
 		if (l_opt_bak != l_opt_new) {
