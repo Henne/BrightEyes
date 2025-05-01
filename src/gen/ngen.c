@@ -3526,50 +3526,51 @@ signed short gui_radio(char *header, signed int options, ...)
 {
 	va_list arguments;
 	char *str;
-	signed short r3;
-	signed short r4;
-	signed short r5;
+	signed short str_x;
+	signed short str_y;
+	signed short done = 0;
 	signed short retval;
 	signed short lines_sum;
 	signed short lines_header;
-	signed short r6;
+
+	signed short l_opt_bak = -1;
+	signed short l_opt_new = 1;
+
 	signed short fg_bak;
 	signed short bg_bak;
-	signed short bak1;
-	signed short bak2;
-	signed short bak3;
+	signed short l_text_x_bak;
+	signed short l_text_y_bak;
+	signed short l_text_x_end_bak;
+
 	unsigned char* src;
 	unsigned char* dst;
 	signed short mx_bak;
 	signed short my_bak;
 	signed short r7;
 	signed short r8;
-	signed short r9;
+	signed short width;
 
 	signed short i;
-	signed short di;
 
-	r5 = 0;
-	r6 = -1;
-	di = 1;
+	l_text_x_bak = g_text_x;
+	l_text_y_bak = g_text_y;
+	l_text_x_end_bak = g_text_x_end;
 
-	bak1 = g_text_x;
-	bak2 = g_text_y;
-	bak3 = g_text_x_end;
-	r9 = 32 * g_menu_tiles + 32;
-	g_text_x = (g_left_border = (((320 - r9) / 2) + g_text_x_mod)) + 5;
+	width = 32 * g_menu_tiles + 32;
+	g_left_border = ((320 - width) / 2) + g_text_x_mod;
+	g_text_x = g_left_border + 5;
 	g_text_x_end = 32 * g_menu_tiles + 22;
-	lines_header = str_splitter((char*)header);
+	lines_header = str_splitter(header);
 	lines_sum = lines_header + options;
-	g_text_y = (g_upper_border = ((200 - (lines_sum + 2) * 8) / 2)) + 7;
+	g_upper_border = (200 - 8 * (lines_sum + 2)) / 2;
+	g_text_y = g_upper_border + 7;
 	update_mouse_cursor();
 
-	/* save old background */
-	src = g_vga_memstart;
-	src += g_upper_border * 320 + g_left_border;
+	/* save the current background */
+	src = g_vga_memstart + g_upper_border * 320 + g_left_border;
 	dst = g_gen_ptr1_dis;
 
-	copy_to_screen(src, dst, r9, (lines_sum + 2) * 8, 2);
+	copy_to_screen(src, dst, width, 8 * (lines_sum + 2), 2);
 
 	/* draw popup */
 	draw_popup_line(0, 0);
@@ -3587,14 +3588,14 @@ signed short gui_radio(char *header, signed int options, ...)
 	if (lines_header)
 		print_line(header);
 
-	r3 = g_text_x + 8;
-	r4 = g_upper_border + 8 * (lines_header + 1);
+	str_x = g_text_x + 8;
+	str_y = g_upper_border + 8 * (lines_header + 1);
 
 	/* print radio options */
 	va_start(arguments, options);
-	for (i = 1; i <= options; r4 += 8, i++) {
+	for (i = 1; i <= options; str_y += 8, i++) {
 		str = va_arg(arguments, char*);
-		print_str(str, r3, r4);
+		print_str(str, str_x, str_y);
 	}
 	va_end(arguments);
 
@@ -3606,21 +3607,21 @@ signed short gui_radio(char *header, signed int options, ...)
 
 	mouse_move_cursor(g_mouse_posx, g_mouse_posy);
 
-	g_mouse_posx_max = g_left_border + r9 - 16;
+	g_mouse_posx_max = g_left_border + width - 16;
 	g_mouse_posx_min = g_left_border;
 	g_mouse_posy_min = g_upper_border + 8 * (lines_header + 1);
 	g_mouse_posy_max = (g_upper_border + 8 * (lines_header + 1) + 8 * options) - 1;
 	call_mouse();
 	g_mouse_rightclick_event = 0;
 
-	while (r5 == 0) {
+	while (!done) {
 		g_action_table = g_action_input;
 		handle_input();
 		g_action_table = NULL;
 
-		if (r6 != di) {
-			fill_radio_button(r6, di, lines_header);
-			r6 = di;
+		if (l_opt_bak != l_opt_new) {
+			fill_radio_button(l_opt_bak, l_opt_new, lines_header);
+			l_opt_bak = l_opt_new;
 		}
 
 #if !defined(__BORLANDC__)
@@ -3631,42 +3632,43 @@ signed short gui_radio(char *header, signed int options, ...)
 		if ((g_mouse_rightclick_event != 0) || (g_in_key_ext == KEY_ESC) || (g_in_key_ext == KEY_PGDOWN)) {
 			/* has the selection been canceled */
 			retval = -1;
-			r5 = 1;
+			done = 1;
 			g_mouse_rightclick_event = 0;
 		}
 		if (g_in_key_ext == KEY_RET) {
 			/* has the return key been pressed */
-			retval = di;
-			r5 = 1;
+			retval = l_opt_new;
+			done = 1;
 		}
 		if (g_in_key_ext == KEY_UP) {
 			/* has the up key been pressed */
-			if (di == 1)
-				di = options;
+			if (l_opt_new == 1)
+				l_opt_new = options;
 			else
-				di--;
+				l_opt_new--;
 		}
 		if (g_in_key_ext == KEY_DOWN) {
 			/* has the down key been pressed */
-			if (di == options)
-				di = 1;
+			if (l_opt_new == options)
+				l_opt_new = 1;
 			else
-				di++;
+				l_opt_new++;
 		}
 		if (g_mouse_posy != r8) {
 			/* has the mouse been moved */
-			di = ((r8 = g_mouse_posy) - r7) / 8 + 1;
+			r8 = g_mouse_posy;
+			l_opt_new = (r8 - r7) / 8 + 1;
 		}
 		/* is this a bool radiobox ? */
 		if (g_bool_mode) {
 			if (g_in_key_ext == KEY_Y) {
 				/* has the 'j' key been pressed */
 				retval = 1;
-				r5 = 1;
+				done = 1;
 			} else if (g_in_key_ext == KEY_N) {
 				/* has the 'n' key been pressed */
 				retval = 2;
-				r5 = 1;
+				done = 1;
 			}
 		}
 	}
@@ -3681,20 +3683,20 @@ signed short gui_radio(char *header, signed int options, ...)
 	g_mouse_posy_min = 0;
 	g_mouse_posy_max = 199;
 
-	mouse_move_cursor(g_mouse_posx, g_mouse_posy_bak);
+	mouse_move_cursor(g_mouse_posx, g_mouse_posy);
 
-	dst = g_vga_memstart;
-	dst += g_upper_border * 320 + g_left_border;
+	/* restore the previous background */
+	dst = g_vga_memstart + g_upper_border * 320 + g_left_border;
 	src = g_gen_ptr1_dis;
-	copy_to_screen(src, dst, r9, (lines_sum + 2) * 8, 0);
+	copy_to_screen(src, dst, width, (lines_sum + 2) * 8, 0);
 
 	call_mouse();
 
 	set_textcolor(fg_bak, bg_bak);
 
-	g_text_x = bak1;
-	g_text_y = bak2;
-	g_text_x_end = bak3;
+	g_text_x = l_text_x_bak;
+	g_text_y = l_text_y_bak;
+	g_text_x_end = l_text_x_end_bak;
 	g_in_key_ext = 0;
 
 #if !defined(__BORLANDC__)
