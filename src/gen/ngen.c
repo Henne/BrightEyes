@@ -3387,25 +3387,6 @@ static signed short infobox(char *msg, const signed short digits)
 
 
 /**
- * gui_bool() - displays a yes - no radio box
- * @header:	the header of menu
- *
- */
-static signed short gui_bool(char *msg)
-{
-	signed short retval;
-
-	g_bool_mode = 1;
-	retval = gui_radio(msg, 2, get_text(4), get_text(5));
-	g_bool_mode = 0;
-
-	if (retval == 1)
-		return 1;
-	else
-		return 0;
-}
-
-/**
  * fill_radio_button() - marks the active radio button
  * @old_pos:	the position of the last active button (or -1)
  * @new_pos:	the position of the current active button
@@ -3645,6 +3626,25 @@ signed short gui_radio(char *header, const signed int options, ...)
 #endif
 
 	return retval;
+}
+
+/**
+ * gui_bool() - displays a yes - no radio box
+ * @header:	the header of menu
+ *
+ */
+static signed short gui_bool(char *msg)
+{
+	signed short retval;
+
+	g_bool_mode = 1;
+	retval = gui_radio(msg, 2, get_text(4), get_text(5));
+	g_bool_mode = 0;
+
+	if (retval == 1)
+		return 1;
+	else
+		return 0;
 }
 
 /* AIL MANAGEMENT */
