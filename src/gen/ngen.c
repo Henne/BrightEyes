@@ -2383,11 +2383,13 @@ static signed short get_bioskey(const int cmd)
 #endif
 }
 
-static void wait_for_keypress(void)
+static void flush_keyboard_queue(void)
 {
+#if defined(__BORLANDC__)
 	while (get_bioskey(1)) {
 		get_bioskey(0);
 	}
+#endif
 }
 
 /**
@@ -3178,7 +3180,8 @@ static signed short enter_string(char *dst, signed short x, signed short y, sign
 	update_sdl_window();
 #endif
 
-	wait_for_keypress();
+	/* clear all input events */
+	flush_keyboard_queue();
 	g_mouse_leftclick_event = 0;
 
 	c = 0;
@@ -7298,7 +7301,7 @@ int main_gen(int argc, char **argv)
 
 	init_palettes();
 
-	wait_for_keypress();
+	flush_keyboard_queue();
 
 	call_mouse();
 
