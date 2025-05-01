@@ -4969,6 +4969,7 @@ static void clear_hero(void)
 {
 	signed short i;
 
+	/* clear global variables */
 	g_got_mu_bonus = g_got_ch_bonus = 0;
 
 	g_head_typus = g_head_first = g_head_last = g_head_current = 0;
@@ -4982,6 +4983,9 @@ static void clear_hero(void)
 	for (i = 0; i < 52; i++) {
 		g_skill_incs[i].tries = g_skill_incs[i].incs = 0;
 	}
+
+	/* clear and set hero structure */
+	memset((void*)&g_hero, 0, sizeof(g_hero));
 
 	g_hero.level = 1;
 }
@@ -5022,8 +5026,6 @@ static void new_values(void)
 	sex_bak = g_hero.sex;
 
 	/* clear the hero */
-	memset((void*)&g_hero, 0, sizeof(g_hero));
-
 	clear_hero();
 
 	g_hero.sex = sex_bak;
@@ -6534,11 +6536,9 @@ static void choose_typus(void)
 	strcpy(name_bak, (const char*)g_hero.name);
 	sex_bak = g_hero.sex;
 
-	memset((void*)&g_hero, 0, sizeof(g_hero));
-
 	clear_hero();
-	g_hero.sex = sex_bak;
 
+	g_hero.sex = sex_bak;
 	strcpy((char*)g_hero.name, name_bak);
 
 	/* set typus */
@@ -6677,7 +6677,6 @@ static void do_gen(void)
 								break;
 							}
 							case 4: {
-								memset((void*)&g_hero, 0, sizeof(g_hero));
 								clear_hero();
 								g_mouse_rightclick_event = 1;
 								g_screen_var = 1;
