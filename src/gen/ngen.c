@@ -2482,7 +2482,7 @@ static signed short open_datfile(const signed short index)
 #endif
 
 	/* failed to open DSAGEN.DAT */
-	if (handle == -1) return 0;
+	if (handle == -1) return -1;
 
 	/* read offset table from file */
 	_read(handle, table, 50 * 16);
@@ -2504,7 +2504,7 @@ static signed short open_datfile(const signed short index)
 		}
 
 		vsync_or_key(100);
-		return 0;
+		return -1;
 	}
 }
 
