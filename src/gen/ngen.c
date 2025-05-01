@@ -3152,29 +3152,34 @@ static signed short get_str_width(char *str)
 	return sum;
 }
 
-static signed short enter_string(char *dst, signed short x, signed short y, signed short num, signed short zero)
+/**
+ * enter_string - read a string from the keyboard
+ * @dst: memory location to store the string
+ * @x:   screen X Coordinate of the input field
+ * @x:   screen Y Coordinate of the input field
+ * @len: maximal number of allowed characters
+ * @txt: iff 1 enter text otherwise a number
+ */
+static signed short enter_string(char *dst, const signed short x, const signed short y, const signed short len, const signed short txt)
 {
-	signed short pos;
+	signed short x_pos = x;	// position on the screen
+	signed short s_pos = 0;	// position in the string
 	signed short c;
 	signed short width;
-
-	signed short di;
-	register signed short si;
+	signed short i;
 
 	update_mouse_cursor();
-	di = x;
-	pos = 0;
 
-	if (zero == 0) {
-		for (si = 0; si < num; si++) {
-			print_chr(0x20, di, y);
-			print_chr(0x5f, di, y);
-			di += 6;
+	if (txt == 0) {
+		for (i = 0; i < len; i++) {
+			print_chr(' ', x_pos, y);
+			print_chr('_', x_pos, y);
+			x_pos += 6;
 		}
-		di = x;
+		x_pos = x;
 	} else {
-		print_chr(0x20, di, y);
-		print_chr(0x5f, di, y);
+		print_chr(' ', x_pos, y);
+		print_chr('_', x_pos, y);
 	}
 
 #if !defined(__BORLANDC__)
@@ -3186,7 +3191,7 @@ static signed short enter_string(char *dst, signed short x, signed short y, sign
 	g_mouse_leftclick_event = 0;
 
 	c = 0;
-	while ((c != 0xd) || (pos == 0)) {
+	while ((c != 0xd) || (s_pos == 0)) {
 		do {
 			/* Poll an input event */
 			do {
@@ -3218,27 +3223,30 @@ static signed short enter_string(char *dst, signed short x, signed short y, sign
 		}
 
 		if (c == 8) {
-			if (pos > 0) {
+			/* Backspace: remove the last symbol */
+			if (s_pos > 0) {
 
-				if (zero == 1 && pos != num)
-					print_chr(0x20, di, y);
-				pos--;
+				if (txt == 1 && s_pos != len)
+					print_chr(' ', x_pos, y);
+				s_pos--;
 				dst--;
 				get_chr_info(*dst, &width);
 
-				di -= (zero != 0) ? width : 6;
+				x_pos -= (txt != 0) ? width : 6;
 
-				print_chr(0x20, di, y);
-				print_chr(0x5f, di, y);
+				print_chr(' ', x_pos, y);
+				print_chr('_', x_pos, y);
 			}
 		} else {
+			/* check allowed input symbols */
 			if ((isalnum(c) == 0) &&
 				(((unsigned char)c) != 0x84) && (((unsigned char)c) != 0x94) &&
 				(((unsigned char)c) != 0x81) && (((unsigned char)c) != 0x8e) &&
 				(((unsigned char)c) != 0x99) && (((unsigned char)c) != 0x9a) &&
-				(c != 0x20) && (c != 0x2e))
+				(c != ' ') && (c != '.'))
 					continue;
 
+			/* transform input char to uppercase */
 			if (isalpha(c))
 				c = toupper(c);
 
@@ -3253,28 +3261,28 @@ static signed short enter_string(char *dst, signed short x, signed short y, sign
 				c = (signed short)0xff9a;
 
 			/* are we at the end of the input field */
-			if (pos == num) {
+			if (s_pos == len) {
 				dst--;
 
 				get_chr_info(*dst, &width);
 
-				di -= (zero != 0) ? width : 6;
+				x_pos -= (txt != 0) ? width : 6;
 
-				pos--;
+				s_pos--;
 			}
 
 			*dst++ = (unsigned char)c;
-			print_chr(0x20, di, y);
-			print_chr((unsigned char)c, di, y);
+			print_chr(' ', x_pos, y);
+			print_chr((unsigned char)c, x_pos, y);
 			get_chr_info((unsigned char)c, &width);
 
-			di += (zero != 0) ? width : 6;
+			x_pos += (txt != 0) ? width : 6;
 
-			pos++;
+			s_pos++;
 
-			if ((zero == 1) && (pos != num)) {
-				print_chr(0x20, di, y);
-				print_chr(0x5f, di, y);
+			if ((txt == 1) && (s_pos != len)) {
+				print_chr(' ', x_pos, y);
+				print_chr('_', x_pos, y);
 			}
 		}
 
@@ -3283,11 +3291,11 @@ static signed short enter_string(char *dst, signed short x, signed short y, sign
 #endif
 	}
 
-	if (zero == 0) {
-		while (pos < num) {
-			print_chr(0x20, di, y);
-			di += 6;
-			pos++;
+	if (txt == 0) {
+		while (s_pos < len) {
+			print_chr(' ', x_pos, y);
+			x_pos += 6;
+			s_pos++;
 		}
 	}
 
