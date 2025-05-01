@@ -378,15 +378,6 @@ void pic_copy(unsigned char *dst, unsigned short x, unsigned short y, unsigned s
 }
 
 #if defined(__BORLANDC__)
-void save_rect(unsigned short p_seg, unsigned short p_off, unsigned char *src, signed short diffX, signed short diffY)
-#else
-void save_rect(unsigned char *p_in, unsigned char *src, signed short diffX, signed short diffY)
-#endif
-{
-
-}
-
-#if defined(__BORLANDC__)
 void fill_rect(unsigned short p_seg, unsigned short p_off, signed short color, signed short width, signed short height)
 #else
 void fill_rect(unsigned char *p_in, signed short color, signed short width, signed short height)
