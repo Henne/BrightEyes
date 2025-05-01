@@ -6909,101 +6909,104 @@ static void intro(void)
 
 	/* load ATTIC */
 	handle = open_datfile(18);
-	read_datfile(handle, g_buffer_heads_dat, 20000);
-	close(handle);
+	if (handle != -1) {
+		read_datfile(handle, g_buffer_heads_dat, 20000);
+		close(handle);
 
-	nvf.src = g_buffer_heads_dat;
-	nvf.type = 0;
-	nvf.width = &width;
-	nvf.height = &height;
+		nvf.src = g_buffer_heads_dat;
+		nvf.type = 0;
+		nvf.width = &width;
+		nvf.height = &height;
 
-	for (i = 7; i >= 0; i--) {
-		nvf.dst = g_gen_ptr1_dis + i * 960L + 9600;
-		nvf.no = i + 1;
-		process_nvf(&nvf);
+		for (i = 7; i >= 0; i--) {
+			nvf.dst = g_gen_ptr1_dis + i * 960L + 9600;
+			nvf.no = i + 1;
+			process_nvf(&nvf);
 
-	}
-	/* set dst */
-	nvf.dst = g_gen_ptr1_dis;
-	/* set no */
-	nvf.no = 0;
-	process_nvf(&nvf);
-
-	wait_for_vsync();
-
-	set_palette((const unsigned char*)g_pal_attic, 0, 16);
-
-	cnt1 = 1;
-	cnt2 = 99;
-
-	/* glowing at the bottom */
-	for (i = 0; i < 4; i++) {
-		g_dst_x1 = 112;
-		g_dst_y1 = 140;
-		g_dst_x2 = 207;
-		g_dst_y2 = 149;
-		g_dst_src = (unsigned char*)(i * 960 + g_gen_ptr1_dis + 9600);
-		do_draw_pic(0);
-		vsync_or_key(20);
-
-#if !defined(__BORLANDC__)
-		update_sdl_window();
-#endif
-	}
-
-	/* elevate the attic logo */
-	i = 4;
-	g_in_key_ext = 0;
-	while ((cnt1 <= 100) && (g_in_key_ext == 0)) {
-		g_dst_x1 = 0;
-		g_dst_y1 = cnt2 + 60;
-		g_dst_x2 = 95;
-		g_dst_y2 = cnt2 + cnt1 + 59;
-		g_dst_src = g_dst_dst = g_gen_ptr1_dis;
-		do_draw_pic(0);
-
-		if (cnt1 != 100) {
-
-			g_dst_src = g_gen_ptr1_dis + i * 960 + 9600;
-			if (cnt1 % 4 == 1)
-				i++;
-
-			if (i == 8)
-				i = 4;
-
-			g_dst_x1 = 0;
-			g_dst_y1 = 150;
-			g_dst_x2 = 95;
-			g_dst_y2 = 159;
-			g_dst_dst = g_gen_ptr1_dis;
-			do_draw_pic(2);
 		}
 
-		g_dst_x1 = 112;
-		g_dst_y1 = 50;
-		g_dst_x2 = 207;
-		g_dst_y2 = 149;
-		g_dst_src = g_gen_ptr1_dis;
+		/* set dst */
+		nvf.dst = g_gen_ptr1_dis;
+		/* set no */
+		nvf.no = 0;
+		process_nvf(&nvf);
 
-		g_unkn1 = 0;
-		g_unkn2 = 60;
-		g_unkn3 = 95;
-		g_unkn4 = 159;
-		g_dst_dst = g_vga_memstart;
-		do_draw_pic(3);
-		cnt1++;
-		cnt2--;
-		if (cnt1 < 37)
-			vsync_or_key(2);
-		else
-			vsync_or_key(1);
+		wait_for_vsync();
+
+		set_palette((const unsigned char*)g_pal_attic, 0, 16);
+
+		cnt1 = 1;
+		cnt2 = 99;
+
+		/* glowing at the bottom */
+		for (i = 0; i < 4; i++) {
+			g_dst_x1 = 112;
+			g_dst_y1 = 140;
+			g_dst_x2 = 207;
+			g_dst_y2 = 149;
+			g_dst_src = (unsigned char*)(i * 960 + g_gen_ptr1_dis + 9600);
+			do_draw_pic(0);
+			vsync_or_key(20);
+
 #if !defined(__BORLANDC__)
-		update_sdl_window();
+			update_sdl_window();
 #endif
-	}
+		}
 
-	if (g_in_key_ext == 0)
-		vsync_or_key(200);
+		/* elevate the attic logo */
+		i = 4;
+		g_in_key_ext = 0;
+		while ((cnt1 <= 100) && (g_in_key_ext == 0)) {
+			g_dst_x1 = 0;
+			g_dst_y1 = cnt2 + 60;
+			g_dst_x2 = 95;
+			g_dst_y2 = cnt2 + cnt1 + 59;
+			g_dst_src = g_dst_dst = g_gen_ptr1_dis;
+			do_draw_pic(0);
+
+			if (cnt1 != 100) {
+
+				g_dst_src = g_gen_ptr1_dis + i * 960 + 9600;
+				if (cnt1 % 4 == 1)
+					i++;
+
+				if (i == 8)
+					i = 4;
+
+				g_dst_x1 = 0;
+				g_dst_y1 = 150;
+				g_dst_x2 = 95;
+				g_dst_y2 = 159;
+				g_dst_dst = g_gen_ptr1_dis;
+				do_draw_pic(2);
+			}
+
+			g_dst_x1 = 112;
+			g_dst_y1 = 50;
+			g_dst_x2 = 207;
+			g_dst_y2 = 149;
+			g_dst_src = g_gen_ptr1_dis;
+
+			g_unkn1 = 0;
+			g_unkn2 = 60;
+			g_unkn3 = 95;
+			g_unkn4 = 159;
+			g_dst_dst = g_vga_memstart;
+			do_draw_pic(3);
+			cnt1++;
+			cnt2--;
+			if (cnt1 < 37)
+				vsync_or_key(2);
+			else
+				vsync_or_key(1);
+#if !defined(__BORLANDC__)
+			update_sdl_window();
+#endif
+		}
+
+		if (g_in_key_ext == 0)
+			vsync_or_key(200);
+	}
 
 	/* load FANPRO.NVF */
 	handle = open_datfile(34);
