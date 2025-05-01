@@ -2476,26 +2476,34 @@ static signed short open_datfile(const signed short index)
 
 #if defined(__BORLANDC__) || defined(_WIN32)
 	/* 0x8001 = O_BINARY | O_RDONLY */
-	while ((handle = open(g_str_dsagen_dat, O_BINARY | O_RDONLY)) == -1)
+	handle = open(g_str_dsagen_dat, O_BINARY | O_RDONLY);
 #else
-	while ((handle = open(g_str_dsagen_dat, O_RDONLY)) == -1)
+	handle = open(g_str_dsagen_dat, O_RDONLY);
 #endif
-	{
-		sprintf(g_textbuffer,
-			(const char*)g_str_file_missing,
-			(const char*)f_names[index]);
 
-		infobox(g_textbuffer, 0);
-	}
+	/* failed to open DSAGEN.DAT */
+	if (handle == -1) return 0;
 
 	/* read offset table from file */
-	_read(handle, table, 800);
+	_read(handle, table, 50 * 16);
 
-	g_gendat_offset = get_archive_offset((char*)f_names[index], table);
+	g_gendat_offset = get_archive_offset(f_names[index], table);
+
+
 	if (g_gendat_offset != -1) {
 		lseek(handle, g_gendat_offset, SEEK_SET);
 		return handle;
 	} else {
+		sprintf(g_textbuffer, g_str_file_missing, f_names[index]);
+		strcat(g_textbuffer, "\n");
+
+		if (g_essentials_loaded) {
+			infobox(g_textbuffer, 0);
+		} else {
+			printf(g_textbuffer);
+		}
+
+		vsync_or_key(100);
 		return 0;
 	}
 }
