@@ -273,28 +273,6 @@ void set_palette(const unsigned char *ptr, const unsigned char first_color, cons
 	update_sdl_window();
 }
 
-void draw_h_line(unsigned short offset, unsigned short count, unsigned short color)
-{
-	//unsigned char *ptr = MK_FP(0xa000, offset);
-	unsigned char *ptr = g_vga_memstart + offset;
-	unsigned short i;
-
-	for (i = 0; i < count; i++)
-		ptr[i] = color;
-}
-
-void draw_h_spaced_dots(unsigned short offset, unsigned short width, signed short color, unsigned short space)
-{
-	//unsigned char *ptr = MK_FP(0xa000, offset);
-	unsigned char *ptr = g_vga_memstart + offset;
-	unsigned short i;
-
-	for (i = 0; i < width; i++) {
-		ptr[0] = color;
-		ptr += space;
-	}
-}
-
 void pic_copy(unsigned char *dst, unsigned short x, unsigned short y, unsigned short d1, unsigned short d2,
 		unsigned short v1, unsigned short v2, unsigned short d3, unsigned short d4,
 		unsigned short w, unsigned short h, unsigned char *src, unsigned short mode)
