@@ -3620,6 +3620,16 @@ signed short gui_radio(char *header, const signed int options, ...)
 		g_action_table = NULL;
 
 		if (l_opt_bak != l_opt_new) {
+#if !defined(__BORLANDC__)
+			if (l_opt_new < 1) {
+				/* select the first option */
+				l_opt_new = 1;
+			} else if (l_opt_new > options) {
+				/* select the last option */
+				l_opt_new = options;
+			}
+#endif
+			/* default behaviour */
 			fill_radio_button(l_opt_bak, l_opt_new, lines_header);
 			l_opt_bak = l_opt_new;
 		}
