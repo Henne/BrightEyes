@@ -1799,13 +1799,6 @@ static void interrupt mouse_isr(void)
 }
 #endif
 
-static void mouse_unused1(unsigned char *p1, unsigned char *p2, unsigned char *p3, unsigned char *p4)
-{
-	unsigned short l_var;
-	writew(p1, 5);
-	do_mouse_action(p1, p2, p3, p4, (unsigned char*)&l_var);
-}
-
 #if defined(__BORLANDC__)
 static void mouse_call_isr(void)
 {
@@ -1907,29 +1900,6 @@ static void mouse_move_cursor(const signed short x, const signed short y)
 	p1 = 4;
 	p3 = x;
 	p4 = y;
-
-	do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
-}
-
-static void mouse_unused2(const signed short a1, const signed short a2, const signed short a3, const signed short a4)
-{
-	signed short p1, p2, p3, p4, p5;
-
-	p1 = 9;
-	p2 = a1;
-	p3 = a2;
-	p4 = a3;
-	p5 = a4;
-
-	do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
-}
-
-static void mouse_unused3(const signed short a1)
-{
-	signed short p1, p2, p3, p4, p5;
-
-	p1 = 0x1d;
-	p2 = a1;
 
 	do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
 }
