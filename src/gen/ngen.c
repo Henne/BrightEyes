@@ -6689,10 +6689,14 @@ static void do_gen(void)
 		g_level = gui_radio(get_text(0), 2, get_text(1), get_text(2));
 	}
 
+	/* emulate a right click to open the menu */
 	g_mouse_rightclick_event = 1;
 
 	/* main loop */
 	while (!done) {
+#if !defined(__BORLANDC__)
+		SDL_Delay(25);
+#endif
 		if (g_screen_var) {
 			refresh_screen();
 			g_screen_var = 0;
