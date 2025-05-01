@@ -3372,25 +3372,26 @@ static signed short infobox(char *msg, const signed short digits)
 	unsigned char* src;
 	unsigned char* dst;
 	signed short retval;
-	signed short fg;
-	signed short bg;
-	signed short v2;
-	signed short v3;
-	signed short v4;
+	signed short fg_bak;
+	signed short bg_bak;
+	signed short l_text_x_bak;
+	signed short l_text_y_bak;
+	signed short l_text_x_end_bak;
 	signed short i;
 
 	signed short lines; // si
-	signed short di;
+	signed short width;
 
 	retval = 0;
 	g_fg_color[4] = 1;
-	v2 = g_text_x;
-	v3 = g_text_y;
-	v4 = g_text_x_end;
+	l_text_x_bak = g_text_x;
+	l_text_y_bak = g_text_y;
+	l_text_x_end_bak = g_text_x_end;
 
-	di = 32 * g_menu_tiles + 32;
-	g_text_x = (g_left_border = ((320 - di) / 2 + g_text_x_mod)) + 5;
-	g_text_x_end = di - 10;
+	width = 32 * g_menu_tiles + 32;
+	g_left_border = (320 - width) / 2 + g_text_x_mod;
+	g_text_x = g_left_border + 5;
+	g_text_x_end = width - 10;
 	lines = str_splitter(msg);
 
 	if (digits != 0)
@@ -3401,11 +3402,10 @@ static signed short infobox(char *msg, const signed short digits)
 
 	update_mouse_cursor();
 
-	src = g_vga_memstart;
-	src += g_upper_border * 320 + g_left_border;
+	src = g_vga_memstart + g_upper_border * 320 + g_left_border;
 	dst = g_gen_ptr1_dis;
 
-	copy_to_screen(src, dst, di, (lines + 2) * 8, 2);
+	copy_to_screen(src, dst, width, (lines + 2) * 8, 2);
 
 	/* draw the popup box */
 	draw_popup_line(0, 0);
@@ -3415,7 +3415,7 @@ static signed short infobox(char *msg, const signed short digits)
 
 	draw_popup_line(lines + 1, 3);
 
-	get_textcolor((signed short*)&fg, (signed short*)&bg);
+	get_textcolor(&fg_bak, &bg_bak);
 	set_textcolor(0xff, 0xdf); // WHITE ON GREEN
 
 	print_line(msg);
@@ -3425,7 +3425,7 @@ static signed short infobox(char *msg, const signed short digits)
 
 	if (digits) {
 		enter_string(g_gen_ptr3,
-			g_left_border + (di - digits * 6) / 2,
+			g_left_border + (width - digits * 6) / 2,
 			g_upper_border + 8 * lines - 2, digits, 0);
 
 		retval = (unsigned short)atol(g_gen_ptr3);
@@ -3438,20 +3438,19 @@ static signed short infobox(char *msg, const signed short digits)
 		g_action_table = NULL;
 	}
 
-	set_textcolor(fg, bg);
+	set_textcolor(fg_bak, bg_bak);
 	update_mouse_cursor();
 
-	dst = g_vga_memstart;
-	dst += g_upper_border * 320 + g_left_border;
+	dst = g_vga_memstart + g_upper_border * 320 + g_left_border;
 	src = g_gen_ptr1_dis;
 
-	copy_to_screen(src, dst, di, (lines + 2) * 8, 0);
+	copy_to_screen(src, dst, width, (lines + 2) * 8, 0);
 
 	call_mouse();
 
-	g_text_x = v2;
-	g_text_y = v3;
-	g_text_x_end = v4;
+	g_text_x = l_text_x_bak;
+	g_text_y = l_text_y_bak;
+	g_text_x_end = l_text_x_end_bak;
 
 	g_fg_color[4] = 0;
 	g_in_key_ext = 0;
