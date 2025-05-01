@@ -1322,8 +1322,8 @@ static unsigned char* g_gen_ptr1_dis;
 static unsigned char* g_page_buffer;
 unsigned char* g_vga_memstart;
 static unsigned char* g_gfx_ptr;
-static char *g_gen_ptr2;
-static char *g_gen_ptr3;
+static char *g_textbuffer;  // buffer for dynamically created strings
+static char *g_digitbuffer; // pointer near the end of g_textbuffer
 static unsigned char *g_gen_ptr5;
 static unsigned char *g_buffer_dmenge_dat;
 static unsigned char *g_gen_ptr6;
@@ -1476,9 +1476,9 @@ static int alloc_buffers(void)
 	g_page_buffer = gen_alloc(50000);
 	if (g_page_buffer == NULL) errors++;
 
-	g_gen_ptr2 = (char*)gen_alloc(1524);
-	g_gen_ptr3 = g_gen_ptr2 + 1500;
-	if (g_gen_ptr2 == NULL) errors++;
+	g_textbuffer = (char*)gen_alloc(1524);
+	g_digitbuffer = g_textbuffer + 1500;
+	if (g_textbuffer == NULL) errors++;
 
 	g_buffer_text = (char*)gen_alloc(6000);
 	if (g_buffer_text == NULL) errors++;
@@ -1588,9 +1588,10 @@ static void free_buffers(void)
 		g_gen_ptr5 = NULL;
 	}
 
-	if (g_gen_ptr2 != NULL) {
-		free(g_gen_ptr2);
-		g_gen_ptr2 = NULL;
+	if (g_textbuffer != NULL) {
+		free(g_textbuffer);
+		g_textbuffer = NULL;
+		g_digitbuffer = NULL;
 	}
 
 	if ((host_ptr = g_page_buffer) != 0) {
@@ -2478,11 +2479,11 @@ static signed short open_datfile(const signed short index)
 	while ((handle = open(g_str_dsagen_dat, O_RDONLY)) == -1)
 #endif
 	{
-		sprintf(g_gen_ptr2,
+		sprintf(g_textbuffer,
 			(const char*)g_str_file_missing,
 			(const char*)f_names[index]);
 
-		infobox(g_gen_ptr2, 0);
+		infobox(g_textbuffer, 0);
 	}
 
 	/* read offset table from file */
@@ -3347,11 +3348,11 @@ static signed short infobox(char *msg, const signed short digits)
 	call_mouse();
 
 	if (digits) {
-		enter_string(g_gen_ptr3,
+		enter_string(g_digitbuffer,
 			g_left_border + (width - digits * 6) / 2,
 			g_upper_border + 8 * lines - 2, digits, 0);
 
-		retval = (unsigned short)atol(g_gen_ptr3);
+		retval = (unsigned short)atol(g_digitbuffer);
 	} else {
 #if !defined(__BORLANDC__)
 		update_sdl_window();
@@ -4028,20 +4029,20 @@ static void save_chr(void)
 
 	/* copy name to buffer */
 	/* TODO: should use strncpy() here */
-	strcpy(g_gen_ptr2, (const char*)g_hero.name);
+	strcpy(g_textbuffer, (const char*)g_hero.name);
 
 	/* prepare filename */
 	for (i = 0; i < 8; i++) {
 		/* leave the loop if the string ends */
-		if (!g_gen_ptr2[i])
+		if (!g_textbuffer[i])
 			break;
-		if (!isalnum(g_gen_ptr2[i])) {
+		if (!isalnum(g_textbuffer[i])) {
 			/* replace non alphanumerical characters with underscore */
-			g_gen_ptr2[i] = '_';
+			g_textbuffer[i] = '_';
 		}
 	}
 
-	strncpy(filename, g_gen_ptr2, 8);
+	strncpy(filename, g_textbuffer, 8);
 	filename[8] = 0;
 	strcat(filename, g_str_chr);
 
@@ -4435,26 +4436,26 @@ static void print_values(void)
 
 			/* print height */
 			if (g_dsagen_lang == LANG_DE) {
-				sprintf(g_gen_ptr2, get_text(70), g_hero.height);
+				sprintf(g_textbuffer, get_text(70), g_hero.height);
 			} else {
 				feet = g_hero.height * 100 / 3048;
 				inches = g_hero.height * 100 - feet * 3048;
 				inches = inches / 254;
-				sprintf(g_gen_ptr2, get_text(70), feet, inches);
+				sprintf(g_textbuffer, get_text(70), feet, inches);
 			}
-			print_str(g_gen_ptr2, 205, 25);
+			print_str(g_textbuffer, 205, 25);
 
 			/* print weight */
-			sprintf(g_gen_ptr2, get_text(71), g_hero.weight);
+			sprintf(g_textbuffer, get_text(71), g_hero.weight);
 
-			print_str(g_gen_ptr2, 205, 37);
+			print_str(g_textbuffer, 205, 37);
 
 			/* print god name */
 			print_str(get_text(56 + g_hero.god), 205, 49);
 
 			/* print money */
-			make_valuta_str(g_gen_ptr2, g_hero.money);
-			print_str(g_gen_ptr2, 205, 61);
+			make_valuta_str(g_textbuffer, g_hero.money);
+			print_str(g_textbuffer, 205, 61);
 
 			/* print LE */
 			print_str(gen_itoa(g_hero.le_max, tmp, 10), 172, 164);
@@ -5052,12 +5053,12 @@ static void new_values(void)
 			}
 		}
 
-		sprintf(g_gen_ptr2, get_text(46), randval);
+		sprintf(g_textbuffer, get_text(46), randval);
 
 		do {
 			g_text_x_mod = -80;
 
-			di = gui_radio(g_gen_ptr2,
+			di = gui_radio(g_textbuffer,
 				unset_attribs,
 				g_type_names[0], g_type_names[1], g_type_names[2],
 				g_type_names[3], g_type_names[4], g_type_names[5],
@@ -5092,12 +5093,12 @@ static void new_values(void)
 			}
 		}
 
-		sprintf(g_gen_ptr2, get_text(46), randval);
+		sprintf(g_textbuffer, get_text(46), randval);
 
 		do {
 			g_text_x_mod = -80;
 
-			di = gui_radio(g_gen_ptr2,
+			di = gui_radio(g_textbuffer,
 				unset_attribs,
 				g_type_names[0], g_type_names[1], g_type_names[2],
 				g_type_names[3], g_type_names[4], g_type_names[5],
@@ -5335,9 +5336,9 @@ static void fill_values(void)
 		/* get convertable increase attempts */
 		if ((di != 0) && (g_level == 2) && gui_bool(get_text(269))) {
 			/* create string */
-			sprintf(g_gen_ptr2, get_text(270), di);
+			sprintf(g_textbuffer, get_text(270), di);
 
-			i = infobox(g_gen_ptr2, 1);
+			i = infobox(g_textbuffer, 1);
 
 			if (i > 0) {
 				/* spell attempts to skill attempts */
@@ -5351,9 +5352,9 @@ static void fill_values(void)
 			} else {
 
 				/* create string */
-				sprintf(g_gen_ptr2, get_text(271), di);
+				sprintf(g_textbuffer, get_text(271), di);
 
-				i = infobox(g_gen_ptr2, 1);
+				i = infobox(g_textbuffer, 1);
 				if (i > 0) {
 					if (i > di)
 						i = di;
