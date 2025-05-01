@@ -2415,9 +2415,7 @@ static int handle_input(void)
 			for (i = 0; i < 15; i++)
 				wait_for_vsync();
 
-			if (g_mouse_leftclick_event != 0) {
-				g_mouse_leftclick_event = 0;
-			}
+			g_mouse_leftclick_event = 0;
 
 			/* show credits in an infobox() */
 			if (l_key_ext == 0xfd) {
