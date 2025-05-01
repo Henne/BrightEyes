@@ -64,7 +64,7 @@ static signed long g_cd_audio_tod;
 static signed short g_cd_audio_track;
 
 /* externally used prototypes from (mainfile) */
-extern stop_music(void);
+extern void stop_music(void);
 extern void update_mouse_cursor(void);
 extern void mouse_disable(void);
 extern void call_fill_rect_gen(unsigned char*, signed short, signed short,

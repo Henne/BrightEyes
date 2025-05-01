@@ -86,7 +86,6 @@ static inline void clrscr(void) { }
 
 /* static prototypes */
 static signed short infobox(char*, signed short);
-static void stop_music(void);
 
 /** Keyboard Constants */
 
@@ -1881,7 +1880,8 @@ static void mouse_do_disable(void)
 #endif
 }
 
-static void mouse_disable(void)
+/* used by cda code */
+void mouse_disable(void)
 {
 	if (g_have_mouse == 2) {
 		mouse_do_disable();
@@ -1994,7 +1994,8 @@ static void restore_mouse_bg(void)
 			vgaptr[j] = g_mouse_backbuffer[16 * i + j];
 }
 
-static void update_mouse_cursor(void)
+/* used by cda code */
+void update_mouse_cursor(void)
 {
 	if (g_mouse_locked == 0) {
 
@@ -3856,7 +3857,7 @@ static signed short load_sequence(const signed short index)
 	return 0;
 }
 
-void stop_sequence(void)
+static void stop_sequence(void)
 {
 	if ((g_midi_disabled == 0) && (readw(g_snd_driver_desc + 0x02) == 3))
 	{
