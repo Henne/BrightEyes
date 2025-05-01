@@ -7007,38 +7007,39 @@ static void intro(void)
 
 	/* load FANPRO.NVF */
 	handle = open_datfile(34);
-	flen = read_datfile(handle, g_buffer_heads_dat, 20000);
-	close(handle);
+	if (handle != -1) {
+		flen = read_datfile(handle, g_buffer_heads_dat, 20000);
+		close(handle);
 
-	nvf.src = g_buffer_heads_dat;
-	nvf.type = 0;
-	nvf.width = &width;
-	nvf.height = &height;
-	nvf.dst = g_gen_ptr1_dis;
-	nvf.no = 0;
+		nvf.src = g_buffer_heads_dat;
+		nvf.type = 0;
+		nvf.width = &width;
+		nvf.height = &height;
+		nvf.dst = g_gen_ptr1_dis;
+		nvf.no = 0;
 
-	process_nvf(&nvf);
+		process_nvf(&nvf);
 
-	/* clear screen */
-	call_fill_rect_gen(g_vga_memstart, 0, 0, 319, 199, 0);
-	wait_for_vsync();
+		/* clear screen */
+		call_fill_rect_gen(g_vga_memstart, 0, 0, 319, 199, 0);
+		wait_for_vsync();
 
-	/* set palette of FANPRO.NVF */
-	set_palette(g_buffer_heads_dat + flen - 32 * 3, 0, 32);
+		/* set palette of FANPRO.NVF */
+		set_palette(g_buffer_heads_dat + flen - 32 * 3, 0, 32);
 
-	/* draw the picture */
-	g_dst_x1 = 60;
-	g_dst_y1 = 50;
-	g_dst_x2 = 259;
-	g_dst_y2 = 149;
-	g_dst_src = g_gen_ptr1_dis;
-	do_draw_pic(0);
+		/* draw the picture */
+		g_dst_x1 = 60;
+		g_dst_y1 = 50;
+		g_dst_x2 = 259;
+		g_dst_y2 = 149;
+		g_dst_src = g_gen_ptr1_dis;
+		do_draw_pic(0);
 
 #if !defined(__BORLANDC__)
 		update_sdl_window();
 #endif
-
-	vsync_or_key(200);
+		vsync_or_key(200);
+	}
 
 	if (g_dsagen_lang == LANG_DE) {
 		/* load DSALOGO.DAT */
