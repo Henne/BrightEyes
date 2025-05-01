@@ -1701,47 +1701,47 @@ static int is_in_word_array(const int val, const signed short *p)
  * to call interrupts. We use the one of DOSBox, which means, that we
  * put the values in the emulated registers, instead in a structure.
  */
-static void do_mouse_action(unsigned char *p1, unsigned char *p2, unsigned char *p3, unsigned char *p4, unsigned char *p5)
+static void do_mouse_action(unsigned short *p1, unsigned short *p2, unsigned short *p3, unsigned short *p4, unsigned short *p5)
 {
 #if defined(__BORLANDC__)
 	union REGS myregs;
 	struct SREGS mysregs;
 
 	if (readws(p1) >= 0) {
-		myregs.x.ax = readw(p1);
-		myregs.x.bx = readw(p2);
-		myregs.x.cx = readw(p3);
+		myregs.x.ax = *p1;
+		myregs.x.bx = *p2;
+		myregs.x.cx = *p3;
 
-		switch (readws(p1)) {
+		switch (*p1) {
 			case 0x9:	/* define Cursor in graphic mode */
 			case 0xc:	/* install event handler */
 			case 0x14:	/* swap event handler */
 			case 0x16:	/* save mouse state */
 			case 0x17:	/* load mouse state */
-				myregs.x.dx = readw(p4);
-				mysregs.es = readw(p5);
+				myregs.x.dx = *p4;
+				mysregs.es = *p5;
 				break;
 			case 0x10:	/* define screen region for update */
-				myregs.x.cx = readw(p2);
-				myregs.x.dx = readw(p3);
-				myregs.x.si = readw(p4);
-				myregs.x.di = readw(p5);
+				myregs.x.cx = *p2;
+				myregs.x.dx = *p3;
+				myregs.x.si = *p4;
+				myregs.x.di = *p5;
 				break;
 			default:
-				myregs.x.dx = readw(p4);
+				myregs.x.dx = *p4;
 		}
 
 		int86x(0x33, &myregs, &myregs, &mysregs);
 
-		if (readw(p1) == 0x14) {
-			writew(p2, mysregs.es);
+		if (*p1 == 0x14) {
+			*p2 = mysregs.es;
 		} else {
-			writew(p2, myregs.x.bx);
+			*p2 = myregs.x.bx;
 		}
 
-		writew(p1, myregs.x.ax);
-		writew(p3, myregs.x.cx);
-		writew(p4, myregs.x.dx);
+		*p1 = myregs.x.ax;
+		*p3 = myregs.x.cx;
+		*p4 = myregs.x.dx;
 	}
 #endif
 }
@@ -1750,11 +1750,11 @@ static void do_mouse_action(unsigned char *p1, unsigned char *p2, unsigned char 
 static void interrupt mouse_isr(void)
 {
 	signed short l_si = _AX;
-	signed short p1;
-	signed short p2;
-	signed short p3;
-	signed short p4;
-	signed short p5;
+	unsigned short p1;
+	unsigned short p2;
+	unsigned short p3;
+	unsigned short p4;
+	unsigned short p5;
 
 	if (g_mouse_locked == 0) {
 		if (l_si & 0x2) {
@@ -1769,7 +1769,7 @@ static void interrupt mouse_isr(void)
 			p3 = g_mouse_posx;
 			p4 = g_mouse_posy;
 
-			do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
+			do_mouse_action(&p1, &p2, &p3, &p4, &p5);
 
 			g_mouse_posx = p3;
 			g_mouse_posy = p4;
@@ -1791,7 +1791,7 @@ static void interrupt mouse_isr(void)
 			p3 = g_mouse_posx;
 			p4 = g_mouse_posy;
 
-			do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
+			do_mouse_action(&p1, &p2, &p3, &p4, &p5);
 
 			g_mouse_moved = 1;
 		}
@@ -1823,7 +1823,7 @@ static void mouse_do_enable(const signed short val, unsigned char* ptr)
 	setvect(0x78, (void interrupt far (*)(void))ptr);
 
 	/* set the new mouse event handler */
-	do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
+	do_mouse_action(&p1, &p2, &p3, &p4, &p5);
 
 	g_mouse_handler_installed = 1;
 #endif
@@ -1831,14 +1831,14 @@ static void mouse_do_enable(const signed short val, unsigned char* ptr)
 
 static void mouse_enable(void)
 {
-	signed short p1, p2, p3, p4, p5;
+	unsigned short p1, p2, p3, p4, p5;
 
 	if (g_have_mouse == 2) {
 
 		/* initialize mouse */
 		p1 = 0;
 
-		do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
+		do_mouse_action(&p1, &p2, &p3, &p4, &p5);
 
 		if (p1 == 0) {
 			g_have_mouse = 0;
@@ -1853,7 +1853,7 @@ static void mouse_enable(void)
 			p3 = g_mouse_posx;
 			p4 = g_mouse_posy;
 
-			do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
+			do_mouse_action(&p1, &p2, &p3, &p4, &p5);
 #if defined(__BORLANDC__)
 			mouse_do_enable(0x1f, (unsigned char*)&mouse_isr);
 #endif
@@ -1864,18 +1864,18 @@ static void mouse_enable(void)
 static void mouse_do_disable(void)
 {
 #if defined(__BORLANDC__)
-	signed short v1, v2, v3, v4, v5;
+	unsigned short p1, p2, p3, p4, p5;
 
 	/* restore the old int 0x78 handler */
 	setvect(0x78, (void interrupt far (*)(void))g_irq78_bak);
 
 	/* uninstall mouse event handler */
-	v1 = 0x0c;
-	v3 = 0;
-	v4 = 0;
-	v5 = 0;
+	p1 = 0x0c;
+	p3 = 0;
+	p4 = 0;
+	p5 = 0;
 
-	do_mouse_action((unsigned char*)&v1, (unsigned char*)&v2, (unsigned char*)&v3, (unsigned char*)&v4, (unsigned char*)&v5);
+	do_mouse_action(&p1, &p2, &p3, &p4, &p5);
 
 	g_mouse_handler_installed = 0;
 #endif
@@ -1895,13 +1895,13 @@ static void mouse_disable(void)
  */
 static void mouse_move_cursor(const signed short x, const signed short y)
 {
-	signed short p1, p2, p3, p4, p5;
+	unsigned short p1, p2, p3, p4, p5;
 
 	p1 = 4;
 	p3 = x;
 	p4 = y;
 
-	do_mouse_action((unsigned char*)&p1, (unsigned char*)&p2, (unsigned char*)&p3, (unsigned char*)&p4, (unsigned char*)&p5);
+	do_mouse_action(&p1, &p2, &p3, &p4, &p5);
 }
 
 static void draw_mouse_cursor(void)
