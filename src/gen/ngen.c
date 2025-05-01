@@ -1342,6 +1342,8 @@ static unsigned char *g_buffer_heads_dat;
 static unsigned char *g_buffer_popup_nvf;
 static unsigned char *g_buffer_sex_dat;
 
+static signed short g_essentials_loaded;
+
 static char g_mouse_backbuffer[16 * 16];
 static unsigned short *g_mouse_current_cursor;
 static unsigned char g_char_buffer[64];
@@ -2540,35 +2542,42 @@ static void split_textbuffer(char **dst, char *src, const unsigned long len)
 	}
 }
 
-static void load_font_and_text(void)
+static void load_essential_files(void)
 {
 	signed short handle;
 	signed long len;
+	signed short count = 0;
 
 	/* load FONT6 */
 	handle = open_datfile(14);
-	read_datfile(handle, g_buffer_font6, 1000);
-	close(handle);
+	if (handle != -1) {
+		read_datfile(handle, g_buffer_font6, 1000);
+		close(handle);
+		count++;
+	}
 
 	/* load GENTEXT */
 	handle = open_datfile(15);
-	len = read_datfile(handle, (unsigned char*)g_buffer_text, 64000);
-	close(handle);
+	if (handle != -1) {
+		len = read_datfile(handle, (unsigned char*)g_buffer_text, 64000);
+		close(handle);
 
-	split_textbuffer(g_texts, g_buffer_text, len);
-}
-
-static void load_popup(void)
-{
-	signed short handle;
-	signed short len;
+		split_textbuffer(g_texts, g_buffer_text, len);
+		count++;
+	}
 
 	/* load POPUP.NVF */
 	handle = open_datfile(19);
-	len = read_datfile(handle, g_buffer_popup_nvf - 8, 500);
-	close(handle);
+	if (handle != -1) {
+		len = read_datfile(handle, g_buffer_popup_nvf - 8, 500);
+		close(handle);
 
-	decomp_pp20(g_buffer_popup_nvf, g_buffer_popup_nvf - 8, len);
+		decomp_pp20(g_buffer_popup_nvf, g_buffer_popup_nvf - 8, len);
+
+		count++;
+	}
+
+	if (count == 3) g_essentials_loaded = 1;
 }
 
 static void load_common_files(void)
@@ -2578,20 +2587,26 @@ static void load_common_files(void)
 
 	/* load HEADS.DAT */
 	handle = open_datfile(11);
-	len = read_datfile(handle, g_buffer_heads_dat, 64000);
-	close(handle);
+	if (handle != -1) {
+		len = read_datfile(handle, g_buffer_heads_dat, 64000);
+		close(handle);
+	}
 
 	/* load SEX.DAT */
 	handle = open_datfile(12);
-	read_datfile(handle, g_buffer_sex_dat, 900);
-	close(handle);
+	if (handle != -1) {
+		read_datfile(handle, g_buffer_sex_dat, 900);
+		close(handle);
+	}
 
 	/* load DMENGE.DAT */
 	handle = open_datfile(32);
-	len = read_datfile(handle, g_buffer_dmenge_dat - 8, 25000);
-	close(handle);
+	if (handle != -1) {
+		len = read_datfile(handle, g_buffer_dmenge_dat - 8, 25000);
+		close(handle);
 
-	decomp_pp20(g_buffer_dmenge_dat, g_buffer_dmenge_dat - 8, len);
+		decomp_pp20(g_buffer_dmenge_dat, g_buffer_dmenge_dat - 8, len);
+	}
 }
 
 static void load_page(const signed short page)
@@ -7220,9 +7235,7 @@ int main_gen(int argc, char **argv)
 		return -1;
 	}
 
-	load_font_and_text();
-
-	load_popup();
+	load_essential_files();
 
 	init_colors();
 
