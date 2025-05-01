@@ -918,22 +918,17 @@ static unsigned short g_mouse_mask[32] = {
 
 static signed short g_mouse_posy_min = 0;
 static signed short g_mouse_posx_min = 0;
-static signed short g_mouse_posy_max = 0xc7;
-static signed short g_mouse_posx_max = 0x136;
+static signed short g_mouse_posy_max = 199;
+static signed short g_mouse_posx_max = 310;
 static signed short g_mouse_locked = 0;
 static signed short g_mouse_refresh_flag = -1;
 
-signed short g_mouse_posx = 0xa0;
-signed short g_mouse_posy = 0x64;
-static signed short g_mouse_posx_bak = 0xa0;
-static signed short g_mouse_posy_bak = 0x64;
+signed short g_mouse_posx = 160;
+signed short g_mouse_posy = 100;
+static signed short g_mouse_posx_bak = 160;
+static signed short g_mouse_posy_bak = 100;
 
 signed short g_mouse_moved = 0;
-
-static signed short g_mouse_pointer_offsetx = 0;
-static signed short g_mouse_pointer_offsety = 0;
-static signed short g_mouse_pointer_offsetx_bak = 0;
-static signed short g_mouse_pointer_offsety_bak = 0;
 
 struct mouse_action {
 	signed short x1;
@@ -1349,9 +1344,8 @@ static unsigned char *g_buffer_heads_dat;
 static unsigned char *g_buffer_popup_nvf;
 static unsigned char *g_buffer_sex_dat;
 
-static char g_mouse_backbuffer[256];
+static char g_mouse_backbuffer[16 * 16];
 static unsigned short *g_mouse_current_cursor;
-static unsigned short *g_mouse_last_cursor;
 static unsigned char g_char_buffer[64];
 static signed short g_in_key_ext;
 static signed short g_in_key_ascii;
@@ -1858,7 +1852,6 @@ static void mouse_enable(void)
 		}
 
 		g_mouse_current_cursor = g_mouse_mask;
-		g_mouse_last_cursor = g_mouse_mask;
 
 		if (g_have_mouse == 2) {
 
@@ -1957,8 +1950,8 @@ static void draw_mouse_cursor(void)
 	vgaptr = g_vga_memstart;
 	mouse_cursor = (signed short*)g_mouse_current_cursor + (32 / 2);
 
-	rangeX = g_mouse_posx - g_mouse_pointer_offsetx;
-	rangeY = g_mouse_posy - g_mouse_pointer_offsety;
+	rangeX = g_mouse_posx;
+	rangeY = g_mouse_posy;
 
 	diffX = diffY = 16;
 
@@ -1988,8 +1981,8 @@ static void save_mouse_bg(void)
 
 	vgaptr = g_vga_memstart;
 
-	rangeX = g_mouse_posx - g_mouse_pointer_offsetx;
-	rangeY = g_mouse_posy - g_mouse_pointer_offsety;
+	rangeX = g_mouse_posx;
+	rangeY = g_mouse_posy;
 
 	diffX = diffY = 16;
 
@@ -2015,8 +2008,8 @@ static void restore_mouse_bg(void)
 
 	vgaptr = g_vga_memstart;
 
-	rangeX = g_mouse_posx_bak - g_mouse_pointer_offsetx_bak;
-	rangeY = g_mouse_posy_bak - g_mouse_pointer_offsety_bak;
+	rangeX = g_mouse_posx_bak;
+	rangeY = g_mouse_posy_bak;
 	diffX = diffY = 16;
 
 	if (rangeX > 304)
@@ -2054,24 +2047,18 @@ static void call_mouse(void)
 
 			g_mouse_locked = 1;
 
-			if (g_mouse_posx < g_mouse_pointer_offsetx)
-				g_mouse_posx = g_mouse_pointer_offsetx;
+			if (g_mouse_posx < 0)	g_mouse_posx = 0;
 
-			if (g_mouse_posx > 315)
-				g_mouse_posx = 315;
+			if (g_mouse_posx > 315)	g_mouse_posx = 315;
 
-			if (g_mouse_posy < g_mouse_pointer_offsety)
-				g_mouse_posy = g_mouse_pointer_offsety;
+			if (g_mouse_posy < 0)	g_mouse_posy = 0;
 
-			if (g_mouse_posy > 195)
-				g_mouse_posy = 195;
+			if (g_mouse_posy > 195)	g_mouse_posy = 195;
 
 			save_mouse_bg();
 
 			g_mouse_posx_bak = g_mouse_posx;
 			g_mouse_posy_bak = g_mouse_posy;
-			g_mouse_pointer_offsetx_bak = g_mouse_pointer_offsetx;
-			g_mouse_pointer_offsety_bak = g_mouse_pointer_offsety;
 
 			draw_mouse_cursor();
 
@@ -2082,18 +2069,9 @@ static void call_mouse(void)
 
 static void mouse_compare(void)
 {
-	/* these pointers never differ in gen */
-	if (g_mouse_moved || g_mouse_last_cursor != g_mouse_current_cursor) {
-
-		/* copy a pointer */
-		g_mouse_last_cursor = g_mouse_current_cursor;
-
-		if (g_mouse_mask == (unsigned short*)g_mouse_current_cursor) {
-			g_mouse_pointer_offsetx = g_mouse_pointer_offsety = 0;
-		} else {
-			g_mouse_pointer_offsetx = g_mouse_pointer_offsety = 8;
-		}
+	if (g_mouse_moved) {
 		g_mouse_moved = 0;
+
 		update_mouse_cursor();
 		call_mouse();
 	}
