@@ -415,24 +415,22 @@ unsigned short swap_u16(unsigned short val)
 
 void copy_to_screen(unsigned char *src, unsigned char *dst, const signed short width, const signed short height, const signed short mode)
 {
-	signed short h = height;
+	signed short h;
 
 	if (mode == 0) {
 
-		while (h) {
+		for (h = height; h > 0; h--) {
 			memcpy(dst, src, width);
 			dst += 320;
 			src += width;
-			h--;
 		}
 
 	} else if (mode == 2) {
 
-		while (h) {
+		for (h = height; h > 0; h--) {
 			memcpy(dst, src, width);
 			dst += width;
 			src += 320;
-			h--;
 		}
 	}
 }
