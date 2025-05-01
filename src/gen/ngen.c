@@ -2063,29 +2063,6 @@ static signed short get_mouse_action(const signed short x, const signed short y,
 	return 0;
 }
 
-static void unused_func1(signed char *in_ptr, const signed short x, const signed short y, const signed char c1, const signed char c2)
-{
-	signed char val;
-	unsigned char *ptr;
-	signed short i;
-	signed short j;
-
-	update_mouse_cursor();
-
-	ptr = g_vga_memstart;
-	ptr += 320 * y + x;
-
-	for (i = 0; i < c2; ptr += 320 , i++) {
-		for (j = 0; j < c1; j++) {
-			if ((val = *in_ptr++) != 0) {
-				ptr[j] = val;
-			}
-		}
-	}
-
-	call_mouse();
-}
-
 /* IMAGE MANAGEMENT */
 
 /**
