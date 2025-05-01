@@ -2405,7 +2405,8 @@ static int handle_input(void)
 
 	if (get_bioskey(1)) {
 
-		l_key_ext = (g_in_key_ascii = get_bioskey(0)) >> 8;
+		g_in_key_ascii = get_bioskey(0);
+		l_key_ext = g_in_key_ascii >> 8;
 		g_in_key_ascii &= 0xff;
 
 		if (l_key_ext == KEY_J)
@@ -3187,13 +3188,19 @@ static signed short enter_string(char *dst, signed short x, signed short y, sign
 	c = 0;
 	while ((c != 0xd) || (pos == 0)) {
 		do {
-			do {} while (!get_bioskey(1) && (g_mouse_leftclick_event == 0));
+			/* Poll an input event */
+			do {
+			} while (!get_bioskey(1) && (g_mouse_leftclick_event == 0));
 
 			if (g_mouse_leftclick_event) {
+				/* transform mouse leftclick to a keyboard return */
 				g_in_key_ascii = 0x0d;
+				g_in_key_ext = 0x1c;
 				g_mouse_leftclick_event = 0;
 			} else {
-				g_in_key_ext = (g_in_key_ascii = get_bioskey(0)) >> 8;
+				/* keyboard event */
+				g_in_key_ascii = get_bioskey(0);
+				g_in_key_ext = g_in_key_ascii >> 8;
 				g_in_key_ascii &= 0xff;
 			}
 		} while ((g_in_key_ext == 0) && (g_in_key_ascii == 0));
