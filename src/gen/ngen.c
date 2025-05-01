@@ -3622,7 +3622,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 	g_in_key_ext = 0;
 
 #if !defined(__BORLANDC__)
-		update_sdl_window();
+	update_sdl_window();
 #endif
 
 	return retval;
@@ -4991,10 +4991,10 @@ static void clear_hero(void)
 }
 
 /**
- * new_values() - roll out new attribute values
+ * new_attributes() - roll out new attribute values
  *
  */
-static void new_values(void)
+static void new_attributes(void)
 {
 	/* Original-Bugfix:	there once was a char[11],
 				which could not hold a char[16] */
@@ -5546,10 +5546,10 @@ static void fill_values(void)
 #define DEC (2)
 
 /**
- * can_change_attribs() - checks if attribute changes are possible
+ * can_change_attributes() - checks if attribute changes are possible
  *
  */
-static signed short can_change_attribs(void)
+static signed short can_change_attributes(void)
 {
 	signed short na_inc;
 	signed short na_dec;
@@ -5591,9 +5591,9 @@ static signed short can_change_attribs(void)
 }
 
 /**
- * change_attribs() - change attributes
+ * change_attributes() - change attributes
  */
-static void change_attribs(void)
+static void change_attributes(void)
 {
 	signed short tmp1;
 	volatile signed short tmp2;
@@ -5611,7 +5611,7 @@ static void change_attribs(void)
 		return;
 	}
 	/* check if changing is possible */
-	if (!can_change_attribs()) {
+	if (!can_change_attributes()) {
 		infobox(get_text(266), 0);
 		return;
 	}
@@ -5643,7 +5643,7 @@ static void change_attribs(void)
 	}
 
 	/* check again if changing is possible */
-	if (can_change_attribs() == 0) {
+	if (can_change_attributes() == 0) {
 		infobox(get_text(266), 0);
 		return;
 	}
@@ -5872,7 +5872,7 @@ static void select_typus(void)
 		}
 
 		if (!possible_types) {
-			if (!can_change_attribs()) {
+			if (!can_change_attributes()) {
 				/* totally messed up values */
 				infobox(get_text(284), 0);
 				return;
@@ -6673,17 +6673,19 @@ static void do_gen(void)
 								break;
 							}
 							case 3: {
-								change_attribs();
+								change_attributes();
 								break;
 							}
 							case 4: {
 								clear_hero();
+
+								/* imediately open the menu */
 								g_mouse_rightclick_event = 1;
 								g_screen_var = 1;
 								break;
 							}
 							case 5: {
-								new_values();
+								new_attributes();
 								break;
 							}
 							case 6: {
