@@ -13,7 +13,7 @@ void save_rect(unsigned char*, unsigned char*, signed short, signed short);
 void fill_rect(unsigned char*, signed short, signed short, signed short);
 #endif
 unsigned short swap_u16(unsigned short);
-void copy_to_screen(unsigned char*, unsigned char*, signed short, signed short, signed short);
+void copy_to_screen(unsigned char*, unsigned char*, const signed short, const signed short, const signed short);
 
 unsigned char* normalize_ptr(unsigned char*);
 

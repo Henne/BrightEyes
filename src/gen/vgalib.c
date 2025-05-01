@@ -413,34 +413,26 @@ unsigned short swap_u16(unsigned short val)
 	return (val << 8) | (val >> 8);
 }
 
-void copy_to_screen(unsigned char *src, unsigned char *dst, signed short w, signed short h, signed short mode)
+void copy_to_screen(unsigned char *src, unsigned char *dst, const signed short width, const signed short height, const signed short mode)
 {
-	signed short v1;
-	signed short v2;
-	signed short i;
+	signed short h = height;
 
-	v1 = v2 = 320 - w;
+	if (mode == 0) {
 
-	switch (mode & 0x7f) {
-		case 0:	v2 = 0;
-			break;
-		case 2: v1 = 0;
-			break;
-	}
+		while (h) {
+			memcpy(dst, src, width);
+			dst += 320;
+			src += width;
+			h--;
+		}
 
-	if (mode & 0x80) {
-		/* This does not happen */
-		//D1_ERR("%s mode bit set\n", __func__);
-		//exit(0);
-	} else {
-		for (; h; h--) {
-			for (i = 0; i < w; i++) {
-				dst[0] = src[0];
-				dst++;
-				src++;
-			}
-			dst += v1;
-			src += v2;
+	} else if (mode == 2) {
+
+		while (h) {
+			memcpy(dst, src, width);
+			dst += width;
+			src += 320;
+			h--;
 		}
 	}
 }
