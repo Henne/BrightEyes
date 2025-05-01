@@ -2462,6 +2462,10 @@ static void vsync_or_key(const signed short val)
 {
 	signed short i;
 
+#if !defined(__BORLANDC__)
+	update_sdl_window();
+#endif
+
 	for (i = 0; i < val; i++) {
 		handle_input();
 		if (g_in_key_ext || g_mouse2_event) {
@@ -3410,6 +3414,9 @@ static signed short infobox(char *msg, const signed short digits)
 
 		retval = (unsigned short)atol(g_gen_ptr3);
 	} else {
+#if !defined(__BORLANDC__)
+		update_sdl_window();
+#endif
 		g_action_table = g_action_input;
 		vsync_or_key(150 * lines);
 		g_action_table = NULL;
@@ -3434,7 +3441,7 @@ static signed short infobox(char *msg, const signed short digits)
 	g_in_key_ext = 0;
 
 #if !defined(__BORLANDC__)
-		update_sdl_window();
+	update_sdl_window();
 #endif
 	return retval;
 }
