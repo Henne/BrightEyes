@@ -1356,7 +1356,7 @@ static unsigned char g_char_buffer[64];
 static signed short g_in_key_ext;
 static signed short g_in_key_ascii;
 signed short g_mouse1_event2;
-signed short g_mouse2_event;
+signed short g_mouse_rightclick_event;
 signed short g_mouse1_event1;
 static signed short g_have_mouse;
 static signed short g_random_gen_seed2;
@@ -1769,7 +1769,7 @@ static void interrupt mouse_isr(void)
 			g_mouse1_event1 = 1;
 		}
 		if (l_si & 0x8) {
-			g_mouse2_event = 1;
+			g_mouse_rightclick_event = 1;
 		}
 		if (l_si & 0x1) {
 			/* Report status: position */
@@ -2468,8 +2468,8 @@ static void vsync_or_key(const signed short val)
 
 	for (i = 0; i < val; i++) {
 		handle_input();
-		if (g_in_key_ext || g_mouse2_event) {
-			g_mouse2_event = 0;
+		if (g_in_key_ext || g_mouse_rightclick_event) {
+			g_mouse_rightclick_event = 0;
 			g_in_key_ext = KEY_RET;
 			return;
 		}
@@ -3404,7 +3404,7 @@ static signed short infobox(char *msg, const signed short digits)
 
 	print_line(msg);
 
-	g_mouse2_event = 0;
+	g_mouse_rightclick_event = 0;
 	call_mouse();
 
 	if (digits) {
@@ -3595,7 +3595,7 @@ signed short gui_radio(char *header, signed int options, ...)
 	g_mouse_posy_min = g_upper_border + 8 * (lines_header + 1);
 	g_mouse_posy_max = (g_upper_border + 8 * (lines_header + 1) + 8 * options) - 1;
 	call_mouse();
-	g_mouse2_event = 0;
+	g_mouse_rightclick_event = 0;
 
 	while (r5 == 0) {
 		g_action_table = g_action_input;
@@ -3612,11 +3612,11 @@ signed short gui_radio(char *header, signed int options, ...)
 		SDL_Delay(50);
 #endif
 
-		if ((g_mouse2_event != 0) || (g_in_key_ext == KEY_ESC) || (g_in_key_ext == KEY_PGDOWN)) {
+		if ((g_mouse_rightclick_event != 0) || (g_in_key_ext == KEY_ESC) || (g_in_key_ext == KEY_PGDOWN)) {
 			/* has the selection been canceled */
 			retval = -1;
 			r5 = 1;
-			g_mouse2_event = 0;
+			g_mouse_rightclick_event = 0;
 		}
 		if (g_in_key_ext == KEY_RET) {
 			/* has the return key been pressed */
@@ -6673,7 +6673,7 @@ static void do_gen(void)
 		g_level = gui_radio(get_text(0), 2, get_text(1), get_text(2));
 	}
 
-	g_mouse2_event = 1;
+	g_mouse_rightclick_event = 1;
 
 	/* main loop */
 	while (!done) {
@@ -6686,7 +6686,7 @@ static void do_gen(void)
 		done = handle_input();
 		g_action_table = NULL;
 
-		if (g_mouse2_event || g_in_key_ext == KEY_PGUP) {
+		if (g_mouse_rightclick_event || g_in_key_ext == KEY_PGUP) {
 			/* print the menu for each page */
 			switch (g_gen_page) {
 				case 0: {
@@ -6716,7 +6716,7 @@ static void do_gen(void)
 							case 4: {
 								memset((void*)&g_hero, 0, sizeof(g_hero));
 								clear_hero();
-								g_mouse2_event = 1;
+								g_mouse_rightclick_event = 1;
 								g_screen_var = 1;
 								break;
 							}

@@ -19,7 +19,7 @@ extern signed short g_mouse_moved;
 
 extern signed short g_mouse1_event1;
 extern signed short g_mouse1_event2;
-extern signed short g_mouse2_event;
+extern signed short g_mouse_rightclick_event;
 
 enum FB_VALUES {
 	O_WIDTH = 320, O_HEIGHT = 200, MAX_RATIO = 8
@@ -194,7 +194,7 @@ int sdl_event_loop(const int cmd)
 				g_mouse1_event2 = 1;
 			}
 			if (event.button.button == 3) {
-				g_mouse2_event = 1;
+				g_mouse_rightclick_event = 1;
 			}
 
 		} else if (event.type == SDL_KEYDOWN) {
