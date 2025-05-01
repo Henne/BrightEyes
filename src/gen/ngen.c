@@ -6789,29 +6789,21 @@ static void do_gen(void)
 		if (g_in_key_ext == KEY_CTRL_F4)
 			enter_name();
 
-		if ((g_in_key_ext == KEY_UP) && (g_gen_page == 0)) {
-			if (!g_hero.typus) {
-				infobox(get_text(17), 0);
-			} else {
-				if (g_head_current < g_head_last) {
-					g_head_current++;
-				} else {
-					g_head_current = g_head_first;
-				}
-				change_head();
-			}
-		}
+		/* Change Head Logic */
+		if ((g_gen_page == 0) && ((g_in_key_ext == KEY_UP) || (g_in_key_ext == KEY_DOWN))) {
 
-		if ((g_in_key_ext == KEY_DOWN) && (g_gen_page == 0)) {
-			if (!g_hero.typus) {
-				infobox(get_text(17), 0);
-			} else {
-				if (g_head_current > g_head_first) {
-					g_head_current--;
-				} else {
-					g_head_current = g_head_last;
+			if (g_hero.typus != 0) {
+				if (g_in_key_ext == KEY_UP) {
+					g_head_current = (g_head_current < g_head_last) ?
+								g_head_current + 1 : g_head_first;
+
+				} else if (g_in_key_ext == KEY_DOWN) {
+					g_head_current = (g_head_current > g_head_first) ?
+								g_head_current - 1 : g_head_last;
 				}
 				change_head();
+			} else {
+				infobox(get_text(17), 0);
 			}
 		}
 
