@@ -179,8 +179,14 @@ int sdl_event_loop(const int cmd)
 
 	while (SDL_PollEvent(&event)) {
 		if (event.type == SDL_QUIT) {
-			/* return CTRL+Q */
-			return (0x10 << 8) | 0x11;
+			if (cmd == 0) {
+				/* return CTRL+Q as a keyboard event into the game */
+				return (0x10 << 8) | 0x11;
+			} else {
+				/* close the window and exit */
+				set_video_mode(0);
+				exit(0);
+			}
 		} else if (event.type == SDL_MOUSEMOTION) {
 			g_mouse_moved = 1;
 			/* Assume 320x200 */
