@@ -1357,7 +1357,6 @@ static signed short g_in_key_ext;
 static signed short g_in_key_ascii;
 signed short g_mouse1_event2;
 signed short g_mouse_rightclick_event;
-signed short g_mouse1_event1;
 static signed short g_have_mouse;
 static signed short g_random_gen_seed2;
 
@@ -1766,7 +1765,6 @@ static void interrupt mouse_isr(void)
 	if (g_mouse_locked == 0) {
 		if (l_si & 0x2) {
 			g_mouse1_event2 = 1;
-			g_mouse1_event1 = 1;
 		}
 		if (l_si & 0x8) {
 			g_mouse_rightclick_event = 1;
@@ -3181,16 +3179,16 @@ static signed short enter_string(char *dst, signed short x, signed short y, sign
 #endif
 
 	wait_for_keypress();
-	g_mouse1_event1 = 0;
+	g_mouse1_event2 = 0;
 
 	c = 0;
 	while ((c != 0xd) || (pos == 0)) {
 		do {
-			do {} while (!get_bioskey(1) && (g_mouse1_event1 == 0));
+			do {} while (!get_bioskey(1) && (g_mouse1_event2 == 0));
 
-			if (g_mouse1_event1) {
+			if (g_mouse1_event2) {
 				g_in_key_ascii = 0x0d;
-				g_mouse1_event1 = g_mouse1_event2 = 0;
+				g_mouse1_event2 = 0;
 			} else {
 				g_in_key_ext = (g_in_key_ascii = get_bioskey(0)) >> 8;
 				g_in_key_ascii &= 0xff;

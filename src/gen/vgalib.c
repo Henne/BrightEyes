@@ -17,7 +17,6 @@ extern signed short g_mouse_posx;
 extern signed short g_mouse_posy;
 extern signed short g_mouse_moved;
 
-extern signed short g_mouse1_event1;
 extern signed short g_mouse1_event2;
 extern signed short g_mouse_rightclick_event;
 
@@ -190,7 +189,6 @@ int sdl_event_loop(const int cmd)
 
 		} else if (event.type == SDL_MOUSEBUTTONDOWN) {
 			if (event.button.button == 1) {
-				g_mouse1_event1 = 1;
 				g_mouse1_event2 = 1;
 			}
 			if (event.button.button == 3) {
