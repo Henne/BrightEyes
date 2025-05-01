@@ -369,11 +369,8 @@ void fill_rect(unsigned char *p_in, signed short color, signed short width, sign
 	signed short x;
 
 	for (; height; height--) {
-		for (x = 0; x < width; x++) {
-			p[0] = color;
-			p++;
-		}
-		p += 320 - width;
+		memset(p, color, width);
+		p += 320;
 	}
 }
 
