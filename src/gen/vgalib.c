@@ -313,14 +313,42 @@ static inline Uint32 get_ARGB(const unsigned char *p) {
 }
 #endif
 
-void set_palette(const unsigned char *ptr, const unsigned char first_color, const unsigned short colors)
+void set_palette(const unsigned char *pointer, const unsigned char first_color, const unsigned short colors)
 {
-	signed int i;
-	for (i = 0; i < colors; i++)
 #if defined(__BORLANDC__)
-		asm { nop }
+		asm {
+			push ds
+			push es
+			push si
+			push di
+
+			mov dx, 0x3c8
+			mov al, byte ptr first_color
+			out dx, al
+			lds si, pointer
+			mov dx, 0x3c9
+			mov cx, word ptr colors
+		}
+set_palette_loop1:
+		asm {
+			lodsb
+			out dx, al
+			lodsb
+			out dx, al
+			lodsb
+			out dx, al
+			loop set_palette_loop1
+
+			pop di
+			pop si
+			pop es
+			pop ds
+		}
 #else
-		palette[first_color + i] = get_ARGB(ptr + 3 * i);
+	signed int i;
+
+	for (i = 0; i < colors; i++)
+		palette[first_color + i] = get_ARGB(pointer + 3 * i);
 
 	update_sdl_window();
 #endif

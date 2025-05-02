@@ -18,45 +18,6 @@ SEG005_TEXT	segment byte public 'CODE'
 
 	assume	cs:SEG005_TEXT
 
-_set_palette	proc far
-
-p_palette	= dword	ptr  6
-first_color	= byte ptr  0Ah
-colors		= word ptr  0Ch
-
-		push	bp
-		mov	bp, sp
-		push	ds
-		push	es
-		push	si
-		push	di
-
-		mov	dx, 3C8h
-		mov	al, [bp+first_color]	;# of the first color
-		out	dx, al
-		lds	si, [bp+p_palette]	;ds:si == pointer to color data
-		mov	dx, 3C9h
-		mov	cx, [bp+colors]		;# of colors
-
-set_palette_loop1:
-		lodsb
-		out	dx, al
-		lodsb
-		out	dx, al
-		lodsb
-		out	dx, al
-		loop set_palette_loop1
-
-		pop	di
-		pop	si
-		pop	es
-		pop	ds
-		mov	sp, bp
-		pop	bp
-		retf
-_set_palette	endp
-
-
 _pic_copy	proc far
 
 dst		= dword	ptr  6
@@ -356,7 +317,6 @@ _normalize_ptr	endp
 SEG005_TEXT	ends
 
 	extrn F_LXLSH@:far
-	public _set_palette
 	public _pic_copy
 	public _fill_rect
 	public _swap_u16
