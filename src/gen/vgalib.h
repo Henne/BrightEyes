@@ -4,7 +4,7 @@ void save_display_stat(signed short*);
 void set_palette(const unsigned char*, const unsigned char, const unsigned short);
 void pic_copy(unsigned char*, unsigned short, unsigned short, unsigned short, unsigned short, unsigned short, unsigned short, unsigned short, unsigned short, unsigned short, unsigned short, unsigned char*, unsigned short);
 void fill_rect(unsigned char*, const signed short, const signed short, const signed short);
-unsigned short swap_u16(unsigned short);
+const unsigned short swap_u16(const unsigned short);
 void copy_to_screen(unsigned char*, unsigned char*, const signed short, const signed short, const signed short);
 
 unsigned char* normalize_ptr(unsigned char*);

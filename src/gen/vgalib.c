@@ -481,9 +481,9 @@ void fill_rect(unsigned char *p_in, const signed short color, const signed short
 	}
 }
 
-unsigned short swap_u16(unsigned short val)
+const unsigned short swap_u16(const unsigned short val)
 {
-	return (val << 8) | (val >> 8);
+	return ((val & 0xff) << 8) | ((val >> 8) % 0xff);
 }
 
 void copy_to_screen(unsigned char *src, unsigned char *dst, const signed short width, const signed short height, const signed short mode)

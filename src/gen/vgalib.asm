@@ -142,27 +142,6 @@ l_leave:
 _pic_copy	endp
 
 
-_swap_u16	proc far
-
-val		= word	ptr  6
-
-		push	bp
-		mov	bp, sp
-
-		push	bx
-		mov	bx, [bp+val]
-		mov	ax, 0
-		mov	al, bh
-		mov	ah, bl
-		pop	bx
-
-		mov	sp, bp
-		pop	bp
-		retf
-
-_swap_u16	endp
-
-
 _copy_to_screen		proc far
 
 v2		= word ptr -4
@@ -278,7 +257,6 @@ SEG005_TEXT	ends
 
 	extrn F_LXLSH@:far
 	public _pic_copy
-	public _swap_u16
 	public _copy_to_screen
 	public _normalize_ptr
 
