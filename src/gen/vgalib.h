@@ -1,3 +1,9 @@
+enum FB_VALUES {
+	O_WIDTH = 320,
+	O_HEIGHT = 200,
+	MAX_RATIO = 8
+};
+
 void set_video_mode(unsigned short);
 void set_video_page(unsigned short);
 void save_display_stat(signed short*);
@@ -14,12 +20,6 @@ unsigned char* normalize_ptr(unsigned char*);
 #endif
 
 #if !defined(__BORLANDC__)
-enum FB_VALUES {
-	O_WIDTH = 320,
-	O_HEIGHT = 200,
-	MAX_RATIO = 8
-};
-
 void update_sdl_window(void);
 int sdl_get_ratio(void);
 void sdl_change_window_size(void);
