@@ -390,7 +390,7 @@ set_palette_loop1:
 
 void pic_copy(unsigned char *dst, const signed short d_x, const signed short d_y,
 		const signed short s_x, const signed short s_y, const signed short width,
-		const signed short height, signed char *src, const signed short mode)
+		const signed short height, unsigned char *src, const signed short mode)
 {
 	unsigned char *d = dst + 320 * d_y + d_x;
 	unsigned char *s = src;
