@@ -433,21 +433,17 @@ void pic_copy(unsigned char *dst, unsigned short x, unsigned short y, unsigned s
 			}
 			break;
 		}
+		/* copy each value using screen dimensions */
 		case 3: {
-			unsigned short diff, i;
+			int i;
 
 			s += v2 * 320 + v1;
-			diff = 320 - w;
 
-			do {
-				for (i = w; i > 0; i--) {
-					d[0] = s[0];
-					d++;
-					s++;
-				}
-				d += diff;
-				s += diff;
-			} while (--h > 0);
+			for (i = h; i > 0; i--) {
+				memcpy(d, s, w);
+				d += 320;
+				s += 320;
+			}
 			break;
 		}
 		/* copy each value */
