@@ -921,12 +921,12 @@ static signed short g_mouse_posx_max = 310;
 static signed short g_mouse_locked = 0;
 static signed short g_mouse_refresh_flag = -1;
 
-signed short g_mouse_posx = 160;
-signed short g_mouse_posy = 100;
+static signed short g_mouse_posx = 160;
+static signed short g_mouse_posy = 100;
 static signed short g_mouse_posx_bak = 160;
 static signed short g_mouse_posy_bak = 100;
 
-signed short g_mouse_moved = 0;
+static signed short g_mouse_moved = 0;
 
 struct mouse_action {
 	signed short x1;
@@ -1349,8 +1349,8 @@ static unsigned short *g_mouse_current_cursor;
 static unsigned char g_char_buffer[64];
 static signed short g_in_key_ext;
 static signed short g_in_key_ascii;
-signed short g_mouse_leftclick_event;
-signed short g_mouse_rightclick_event;
+static signed short g_mouse_leftclick_event;
+static signed short g_mouse_rightclick_event;
 static signed short g_have_mouse;
 static signed short g_random_gen_seed2;
 
@@ -2265,6 +2265,90 @@ static signed long process_nvf(struct nvf_desc *nvf)
 
 
 /* KEYBOARD AND INPUT MANAGEMENT */
+
+#if !defined(__BORLANDC_)
+
+extern int RATIO; // framebuffer to window ratio
+
+static int sdl_event_loop(const int cmd)
+{
+	SDL_Event event;
+
+	while (SDL_PollEvent(&event)) {
+		if (event.type == SDL_QUIT) {
+			if (cmd == 0) {
+				/* return CTRL+Q as a keyboard event into the game */
+				return (0x10 << 8) | 0x11;
+			} else {
+				/* close the window and exit */
+				set_video_mode(0);
+				exit(0);
+			}
+		} else if (event.type == SDL_MOUSEMOTION) {
+			g_mouse_moved = 1;
+			/* Assume 320x200 */
+			g_mouse_posx = event.motion.x / RATIO;
+			g_mouse_posy = event.motion.y / RATIO;
+
+		} else if (event.type == SDL_MOUSEBUTTONDOWN) {
+			if (event.button.button == 1) {
+				g_mouse_leftclick_event = 1;
+			}
+			if (event.button.button == 3) {
+				g_mouse_rightclick_event = 1;
+			}
+
+		} else if (event.type == SDL_KEYDOWN) {
+			if (cmd == 1) {
+				// check if a key was pressed
+				int pressed = (event.type == SDL_KEYDOWN) ? 1 : 0;
+				SDL_Delay(10);
+				//fprintf(stdout, "%s(%d) = %d %d\n", __func__, cmd, pressed, key_cnt);
+				SDL_PushEvent(&event);
+				return pressed;
+			} else {
+
+				SDL_Keymod m = SDL_GetModState();
+
+				if (m & KMOD_CTRL) {
+					switch (event.key.keysym.sym) {
+						case SDLK_q:  return (0x10 << 8) | 0x11; break;
+						case SDLK_F3: return (0x60 << 8); break;
+						case SDLK_F4: return (0x61 << 8); break;
+					}
+				}
+
+				switch (event.key.keysym.sym) {
+					case SDLK_TAB:      sdl_change_window_size(); break;
+					case SDLK_ESCAPE:   return (0x01 << 8) | 0x1b; break; //OK
+					case SDLK_1:        return (0x02 << 8) | 0x31; break; //OK
+					case SDLK_2:        return (0x03 << 8) | 0x32; break; //OK
+					case SDLK_3:        return (0x04 << 8) | 0x33; break; //OK
+					case SDLK_4:        return (0x05 << 8) | 0x34; break; //OK
+					case SDLK_5:        return (0x06 << 8) | 0x35; break; //OK
+					case SDLK_RETURN:   return (0x1c << 8) | 0x0d; break; //OK
+					case SDLK_j:        return (0x24 << 8) | 0x6a; break; //OK
+					case SDLK_y:        return (0x15 << 8) | 0x79; break; //DE
+					case SDLK_z:        return (0x2c << 8) | 0x7a; break; //DE
+					case SDLK_n:        return (0x31 << 8) | 0x6e; break; //OK
+					case SDLK_UP:       return (0x48 << 8); break; //OK
+					case SDLK_LEFT:     return (0x4b << 8); break; //OK
+					case SDLK_RIGHT:    return (0x4d << 8); break; //OK
+					case SDLK_DOWN:     return (0x50 << 8); break; //OK
+					case SDLK_PAGEUP:   return (0x49 << 8); break; //OK
+					case SDLK_PAGEDOWN: return (0x51 << 8); break; //OK
+					case 0xe4:          return (0x28 << 8) | 0x84; break; //AE
+					case 0xf6:          return (0x27 << 8) | 0x94; break; //OE
+					case 0xfc:          return (0x1a << 8) | 0x81; break; //UE
+					default:	    return event.key.keysym.sym & 0xff;
+				}
+			}
+		}
+	}
+
+	return 0;
+}
+#endif
 
 static void wait_for_vsync(void)
 {

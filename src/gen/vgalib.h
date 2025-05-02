@@ -15,5 +15,5 @@ unsigned char* normalize_ptr(unsigned char*);
 
 #if !defined(__BORLANDC__)
 void update_sdl_window(void);
-int sdl_event_loop(const int);
+void sdl_change_window_size(void);
 #endif
