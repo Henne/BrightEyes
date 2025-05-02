@@ -1468,7 +1468,7 @@ static int alloc_buffers(void)
 #if defined(__BORLANDC__)
 	g_gfx_ptr = g_vga_memstart = (unsigned char*)MK_FP(0xa000, 0x0);
 #else
-	g_gfx_ptr = g_vga_memstart = (unsigned char*)calloc(320 * 200, 1);
+	g_gfx_ptr = g_vga_memstart = (unsigned char*)calloc(O_WIDTH * O_HEIGHT, 1);
 #endif
 	if (g_gfx_ptr == NULL) errors++;
 
@@ -1908,18 +1908,17 @@ static void mouse_move_cursor(const signed short x, const signed short y)
 
 static void draw_mouse_cursor(void)
 {
-	signed char Y;
-	signed char X;
 	unsigned char *vgaptr;
 	signed short *mouse_cursor;
-	volatile signed short rangeY;
+	signed short rangeX;
+	signed short rangeY;
 	signed short diffX;
 	signed short diffY;
+	signed char Y;
+	signed char X;
 
-	signed short rangeX;
-	register signed short mask;
+	signed short mask;
 
-	vgaptr = g_vga_memstart;
 	mouse_cursor = (signed short*)g_mouse_current_cursor + (32 / 2);
 
 	rangeX = g_mouse_posx;
@@ -1927,17 +1926,17 @@ static void draw_mouse_cursor(void)
 
 	diffX = diffY = 16;
 
-	if (rangeX > 304) diffX = 320 - rangeX;
-	if (rangeY > 184) diffY = 200 - rangeY;
+	if (rangeX > (O_WIDTH - 16)) diffX = O_WIDTH - rangeX;
+	if (rangeY > (O_HEIGHT - 16)) diffY = O_HEIGHT - rangeY;
 
-	vgaptr += rangeY * 320 + rangeX;
+	vgaptr = g_vga_memstart + O_WIDTH * rangeY + rangeX;
 
 	for (Y = 0; Y < diffY; Y++) {
 		mask = *mouse_cursor++;
 		for (X = 0; X < diffX; X++)
 			if ((0x8000 >> X) & mask)
 				vgaptr[X] = 0xff;
-		vgaptr += 320;
+		vgaptr += O_WIDTH;
 	}
 }
 
@@ -1951,19 +1950,17 @@ static void save_mouse_bg(void)
 	signed short Y;
 	signed short X;
 
-	vgaptr = g_vga_memstart;
-
 	rangeX = g_mouse_posx;
 	rangeY = g_mouse_posy;
 
 	diffX = diffY = 16;
 
-	if (rangeX > 304) diffX = 320 - rangeX;
-	if (rangeY > 184) diffY = 200 - rangeY;
+	if (rangeX > (O_WIDTH - 16)) diffX = O_WIDTH - rangeX;
+	if (rangeY > (O_HEIGHT - 16)) diffY = O_HEIGHT - rangeY;
 
-	vgaptr += rangeY * 320 + rangeX;
+	vgaptr = g_vga_memstart + O_WIDTH * rangeY + rangeX;
 
-	for (Y = 0; Y < diffY; vgaptr += 320, Y++)
+	for (Y = 0; Y < diffY; vgaptr += O_WIDTH, Y++)
 		for (X = 0; X < diffX; X++)
 			g_mouse_backbuffer[16 * Y + X] = vgaptr[X];
 }
@@ -1978,20 +1975,18 @@ static void restore_mouse_bg(void)
 	signed short i;
 	signed short j;
 
-	vgaptr = g_vga_memstart;
-
 	rangeX = g_mouse_posx_bak;
 	rangeY = g_mouse_posy_bak;
 	diffX = diffY = 16;
 
 	if (rangeX > 304)
-		diffX = 320 - rangeX;
+		diffX = O_WIDTH - rangeX;
 	if (rangeY > 184)
-		diffY = 200 - rangeY;
+		diffY = O_HEIGHT - rangeY;
 
-	vgaptr += rangeY * 320 + rangeX;
+	vgaptr = g_vga_memstart + O_WIDTH * rangeY + rangeX;
 
-	for (i = 0; i < diffY; vgaptr += 320, i++)
+	for (i = 0; i < diffY; vgaptr += O_WIDTH, i++)
 		for (j = 0; j < diffX; j++)
 			vgaptr[j] = g_mouse_backbuffer[16 * i + j];
 }
@@ -2022,11 +2017,11 @@ static void call_mouse(void)
 
 			if (g_mouse_posx < 0)	g_mouse_posx = 0;
 
-			if (g_mouse_posx > 315)	g_mouse_posx = 315;
+			if (g_mouse_posx > O_WIDTH - 5)	g_mouse_posx = O_WIDTH - 5;
 
 			if (g_mouse_posy < 0)	g_mouse_posy = 0;
 
-			if (g_mouse_posy > 195)	g_mouse_posy = 195;
+			if (g_mouse_posy > O_HEIGHT - 5) g_mouse_posy = O_HEIGHT - 5;
 
 			save_mouse_bg();
 
@@ -2089,10 +2084,10 @@ static void decomp_rle(unsigned char *dst, unsigned char *src, signed short x, s
 	unsigned char *dst_loc;
 
 	dst_loc = dst;
-	dst_loc += 320 * y + x;
+	dst_loc += O_WIDTH * y + x;
 	update_mouse_cursor();
 
-	for (i = 0; i < height; dst_loc += 320, i++) {
+	for (i = 0; i < height; dst_loc += O_WIDTH, i++) {
 
 		j = 0;
 
@@ -2708,7 +2703,7 @@ static void load_page(const signed short page)
 	if (page <= 10) {
 		/* check if this image is in the buffer */
 		if (g_bg_buffer[page]) {
-			decomp_rle(g_gen_ptr1_dis, g_bg_buffer[page], 0, 0, 320, 200, 0);
+			decomp_rle(g_gen_ptr1_dis, g_bg_buffer[page], 0, 0, O_WIDTH, O_HEIGHT, 0);
 			return;
 		}
 
@@ -2720,11 +2715,11 @@ static void load_page(const signed short page)
 			g_bg_len[page] = get_filelength();
 
 			read_datfile(handle, g_bg_buffer[page], g_bg_len[page]);
-			decomp_rle(g_gen_ptr1_dis, g_bg_buffer[page], 0, 0, 320, 200, 0);
+			decomp_rle(g_gen_ptr1_dis, g_bg_buffer[page], 0, 0, O_WIDTH, O_HEIGHT, 0);
 			close(handle);
 		} else {
 			read_datfile(handle, g_page_buffer, 64000);
-			decomp_rle(g_gen_ptr1_dis, g_page_buffer, 0, 0, 320, 200, 0);
+			decomp_rle(g_gen_ptr1_dis, g_page_buffer, 0, 0, O_WIDTH, O_HEIGHT, 0);
 			close(handle);
 		}
 	} else {
@@ -2852,7 +2847,7 @@ void call_fill_rect_gen(unsigned char *ptr, signed short x1, signed short y1, si
 
 	width = x2 - x1 + 1;
 	height = y2 - y1 + 1;
-	ptr += y1 * 320 + x1;
+	ptr += y1 * O_WIDTH + x1;
 
 	fill_rect(ptr, color, width, height);
 }
@@ -2912,7 +2907,7 @@ static void prepare_chr_foreground(unsigned char* font_ptr)
 
 static unsigned char* get_gfx_ptr(const signed short x, const signed short y)
 {
-	return g_gfx_ptr + (y * 320 + x);
+	return g_gfx_ptr + (y * O_WIDTH + x);
 }
 
 static void blit_chr(unsigned char *gfx_ptr, const signed short chr_height, const signed short chr_width)
@@ -2921,7 +2916,7 @@ static void blit_chr(unsigned char *gfx_ptr, const signed short chr_height, cons
 	signed short i;
 	signed short j;
 
-	for (i = 0; i < chr_height; src += 8 - chr_width, gfx_ptr += 320, i++)
+	for (i = 0; i < chr_height; src += 8 - chr_width, gfx_ptr += O_WIDTH, i++)
 		for (j = 0; j < chr_width; src++, j++)
 			gfx_ptr[j] = *src;
 }
@@ -3322,11 +3317,8 @@ static void draw_popup_line(const signed short line, const signed short type)
 	register signed short popup_left;   // si
 	register signed short popup_middle; // di
 
-	/* This is a bit bogus */
-	dst = g_vga_memstart;
-
-	/* (line * 8 + y) * 320  + x */
-	dst = (g_vga_memstart) + 320 * (g_upper_border + 8 * line) + g_left_border;
+	/* 320 * (8 * line + y) + x */
+	dst = g_vga_memstart + O_WIDTH * (g_upper_border + 8 * line) + g_left_border;
 
 	switch (type) {
 		case 0: {
@@ -3396,7 +3388,7 @@ static signed short infobox(char *msg, const signed short digits)
 	l_text_x_end_bak = g_text_x_end;
 
 	width = 32 * g_menu_tiles + 32;
-	g_left_border = (320 - width) / 2 + g_text_x_mod;
+	g_left_border = (O_WIDTH - width) / 2 + g_text_x_mod;
 	g_text_x = g_left_border + 5;
 	g_text_x_end = width - 10;
 	lines = str_splitter(msg);
@@ -3404,12 +3396,12 @@ static signed short infobox(char *msg, const signed short digits)
 	if (digits != 0)
 		lines += 2;
 
-	g_upper_border = (200 - (lines + 2) * 8) / 2;
+	g_upper_border = (O_HEIGHT - (lines + 2) * 8) / 2;
 	g_text_y = g_upper_border + 7;
 
 	update_mouse_cursor();
 
-	src = g_vga_memstart + g_upper_border * 320 + g_left_border;
+	src = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
 	dst = g_gen_ptr1_dis;
 
 	copy_to_screen(src, dst, width, (lines + 2) * 8, 2);
@@ -3448,7 +3440,7 @@ static signed short infobox(char *msg, const signed short digits)
 	set_textcolor(fg_bak, bg_bak);
 	update_mouse_cursor();
 
-	dst = g_vga_memstart + g_upper_border * 320 + g_left_border;
+	dst = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
 	src = g_gen_ptr1_dis;
 
 	copy_to_screen(src, dst, width, (lines + 2) * 8, 0);
@@ -3544,17 +3536,17 @@ signed short gui_radio(char *header, const signed int options, ...)
 	l_text_x_end_bak = g_text_x_end;
 
 	width = 32 * g_menu_tiles + 32;
-	g_left_border = ((320 - width) / 2) + g_text_x_mod;
+	g_left_border = ((O_WIDTH - width) / 2) + g_text_x_mod;
 	g_text_x = g_left_border + 5;
 	g_text_x_end = 32 * g_menu_tiles + 22;
 	lines_header = str_splitter(header);
 	lines_sum = lines_header + options;
-	g_upper_border = (200 - 8 * (lines_sum + 2)) / 2;
+	g_upper_border = (O_HEIGHT - 8 * (lines_sum + 2)) / 2;
 	g_text_y = g_upper_border + 7;
 	update_mouse_cursor();
 
 	/* save the current background */
-	src = g_vga_memstart + g_upper_border * 320 + g_left_border;
+	src = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
 	dst = g_gen_ptr1_dis;
 
 	copy_to_screen(src, dst, width, 8 * (lines_sum + 2), 2);
@@ -3691,7 +3683,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 	mouse_move_cursor(g_mouse_posx, g_mouse_posy);
 
 	/* restore the previous background */
-	dst = g_vga_memstart + g_upper_border * 320 + g_left_border;
+	dst = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
 	src = g_gen_ptr1_dis;
 	copy_to_screen(src, dst, width, (lines_sum + 2) * 8, 0);
 
@@ -4166,7 +4158,7 @@ static void enter_name(void)
 {
 	unsigned char* dst;
 
-	dst = g_vga_memstart + 12 * 320 + 176;
+	dst = g_vga_memstart + 12 * O_WIDTH + 176;
 
 	update_mouse_cursor();
 	copy_to_screen(g_picbuf1, dst, 94, 8, 0);
@@ -4242,7 +4234,7 @@ static void change_sex(void)
 		g_screen_var = 1;
 		return;
 	} else {
-		dst = g_vga_memstart + 7 * 320 + 305;
+		dst = g_vga_memstart + 7 * O_WIDTH + 305;
 		src = g_buffer_sex_dat + 256 * g_hero.sex;
 		update_mouse_cursor();
 		copy_to_screen(src, dst, 16, 16, 0);
@@ -4327,14 +4319,14 @@ static void save_picbuf(void)
 	}
 
 	if (x_1) {
-		p = g_gen_ptr1_dis + y_1 * 320 + x_1;
+		p = g_gen_ptr1_dis + y_1 * O_WIDTH + x_1;
 		copy_to_screen(p, g_picbuf1, w_1, h_1, 2);
 	}
 
-	p = g_gen_ptr1_dis + y_2 * 320 + x_2;
+	p = g_gen_ptr1_dis + y_2 * O_WIDTH + x_2;
 	copy_to_screen(p, g_picbuf2, w_2, h_2, 2);
 
-	p = g_gen_ptr1_dis + y_3 * 320 + x_3;
+	p = g_gen_ptr1_dis + y_3 * O_WIDTH + x_3;
 	copy_to_screen(p, g_picbuf3, w_3, h_3, 2);
 }
 
@@ -4402,14 +4394,14 @@ static void restore_picbuf(unsigned char* ptr)
 	}
 
 	if (x_1) {
-		p = ptr + y_1 * 320 + x_1;
+		p = ptr + y_1 * O_WIDTH + x_1;
 		copy_to_screen(g_picbuf1, p, w_1, h_1, 0);
 	}
 
-	p = ptr + y_2 * 320 + x_2;
+	p = ptr + y_2 * O_WIDTH + x_2;
 	copy_to_screen(g_picbuf2, p, w_2, h_2, 0);
 
-	p = ptr + y_3 * 320 + x_3;
+	p = ptr + y_3 * O_WIDTH + x_3;
 	copy_to_screen(g_picbuf3, p, w_3, h_3, 0);
 }
 
@@ -4947,28 +4939,28 @@ static void refresh_screen(void)
 		/* page with base values and hero is not male */
 		if ((g_gen_page == 0) && (g_hero.sex != 0)) {
 
-			dst = g_gen_ptr1_dis + 7 * 320 + 305;
+			dst = g_gen_ptr1_dis + 7 * O_WIDTH + 305;
 			src = g_buffer_sex_dat + 256 * g_hero.sex;
 			copy_to_screen(src, dst, 16, 16, 0);
 		}
 
 		/* page with base values and level is advanced */
 		if ((g_gen_page == 0) && (g_level == 1)) {
-			dst = g_gen_ptr1_dis + 178 * 320 + 284;
+			dst = g_gen_ptr1_dis + 178 * O_WIDTH + 284;
 
 			src = g_buffer_sex_dat + 512;
 
 			copy_to_screen(src, dst, 20, 15, 0);
 
 			if (g_dsagen_lang == LANG_EN) {
-				dst = g_gen_ptr1_dis + 178 * 320 + 145;
+				dst = g_gen_ptr1_dis + 178 * O_WIDTH + 145;
 				copy_to_screen(src, dst, 20, 15, 0);
 			}
 		}
 		/* if the page is lower than 5 */
 		if (g_gen_page < 5) {
 			/* draw DMENGE.DAT or the typus name */
-			dst = g_gen_ptr1_dis + 8 * 320 + 16;
+			dst = g_gen_ptr1_dis + 8 * O_WIDTH + 16;
 
 			if (g_hero.typus != 0) {
 
@@ -5034,7 +5026,7 @@ static void refresh_screen(void)
 		dst = g_gfx_ptr = g_vga_memstart;
 		src = g_gen_ptr1_dis;
 		update_mouse_cursor();
-		copy_to_screen(src, dst, 320, 200, 0);
+		copy_to_screen(src, dst, O_WIDTH, O_HEIGHT, 0);
 		call_mouse();
 	} else {
 		print_values();
@@ -7084,7 +7076,7 @@ static void intro(void)
 		process_nvf(&nvf);
 
 		/* clear screen */
-		call_fill_rect_gen(g_vga_memstart, 0, 0, 319, 199, 0);
+		call_fill_rect_gen(g_vga_memstart, 0, 0, O_WIDTH - 1, O_HEIGHT - 1, 0);
 		wait_for_vsync();
 
 		/* set palette of FANPRO.NVF */
@@ -7120,7 +7112,7 @@ static void intro(void)
 		process_nvf(&nvf);
 
 		/* clear screen */
-		call_fill_rect_gen(g_vga_memstart, 0, 0, 319, 199, 0);
+		call_fill_rect_gen(g_vga_memstart, 0, 0, O_WIDTH - 1, O_HEIGHT - 1, 0);
 		wait_for_vsync();
 
 
@@ -7177,7 +7169,7 @@ static void intro(void)
 		decomp_pp20(g_gen_ptr1_dis, g_buffer_heads_dat, (unsigned short)flen);
 
 		/* clear screen */
-		call_fill_rect_gen(g_vga_memstart, 0, 0, 319, 199, 0);
+		call_fill_rect_gen(g_vga_memstart, 0, 0, O_WIDTH - 1, O_HEIGHT - 1, 0);
 		memset(g_pal_roalogo, 0, 3 * 256);
 		set_palette(g_pal_roalogo, 0, 256);
 
@@ -7189,7 +7181,7 @@ static void intro(void)
 		g_dst_src = g_gen_ptr1_dis;
 		do_draw_pic(0);
 
-		memcpy(g_pal_roalogo, g_gen_ptr1_dis + 140 * 320 + 2, 3 * 256);
+		memcpy(g_pal_roalogo, g_gen_ptr1_dis + 140 * O_WIDTH + 2, 3 * 256);
 
 		/* load E_GENTIT.DAT */
 		handle = open_datfile(17);
@@ -7266,7 +7258,7 @@ static void intro(void)
 	}
 
 	/* clear screen */
-	call_fill_rect_gen(g_vga_memstart, 0, 0, 319, 199, 0);
+	call_fill_rect_gen(g_vga_memstart, 0, 0, O_WIDTH - 1, O_HEIGHT -1, 0);
 
 	g_in_intro = 0;
 	return;
@@ -7358,7 +7350,7 @@ int main_gen(int argc, char **argv)
 
 	if (g_called_with_args != 0) {
 		/* Clear the screen and return to SCHICKM.EXE/BLADEM.EXE */
-		call_fill_rect_gen(g_vga_memstart, 0, 0, 319, 199, 0);
+		call_fill_rect_gen(g_vga_memstart, 0, 0, O_WIDTH - 1, O_HEIGHT - 1, 0);
 	} else {
 		/* Clear the screen and return to DOS */
 		exit_video();

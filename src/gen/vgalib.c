@@ -324,7 +324,7 @@ void pic_copy(unsigned char *dst, const signed short d_x, const signed short d_y
 						d[j] = s[j];
 				}
 				s += width;
-				d += 320;
+				d += O_WIDTH;
 			}
 			break;
 		}
@@ -339,7 +339,7 @@ void pic_copy(unsigned char *dst, const signed short d_x, const signed short d_y
 					}
 				}
 
-				d += 320;
+				d += O_WIDTH;
 				s += width;
 			}
 			break;
@@ -347,12 +347,12 @@ void pic_copy(unsigned char *dst, const signed short d_x, const signed short d_y
 		/* copy each value using screen dimensions */
 		case 3: {
 
-			s += s_y * 320 + s_x;
+			s += s_y * O_WIDTH + s_x;
 
 			for (i = height; i > 0; i--) {
 				memcpy(d, s, width);
-				d += 320;
-				s += 320;
+				d += O_WIDTH;
+				s += O_WIDTH;
 			}
 			break;
 		}
@@ -361,7 +361,7 @@ void pic_copy(unsigned char *dst, const signed short d_x, const signed short d_y
 
 			for (i = height; i > 0; i--) {
 				memcpy(d, s, width);
-				d += 320;
+				d += O_WIDTH;
 				s += width;
 			}
 			break;
@@ -376,7 +376,7 @@ void fill_rect(unsigned char *p_in, const signed short color, const signed short
 
 	for (h = height; h > 0; h--) {
 		memset(p, color, width);
-		p += 320;
+		p += O_WIDTH;
 	}
 }
 
@@ -389,11 +389,16 @@ void copy_to_screen(unsigned char *src, unsigned char *dst, const signed short w
 {
 	signed short h;
 
+	if ((width == O_WIDTH) && (height == O_HEIGHT)) {
+		/* full screen copy */
+		memcpy(dst, src, O_WIDTH * O_HEIGHT);
+	}
+
 	if (mode == 0) {
 
 		for (h = height; h > 0; h--) {
 			memcpy(dst, src, width);
-			dst += 320;
+			dst += O_WIDTH;
 			src += width;
 		}
 
@@ -402,7 +407,7 @@ void copy_to_screen(unsigned char *src, unsigned char *dst, const signed short w
 		for (h = height; h > 0; h--) {
 			memcpy(dst, src, width);
 			dst += width;
-			src += 320;
+			src += O_WIDTH;
 		}
 	}
 }
