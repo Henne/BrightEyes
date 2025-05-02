@@ -2744,39 +2744,20 @@ void exit_video(void)
 
 static void do_draw_pic(const signed short mode)
 {
-	signed short d1;
-	signed short d2;
-	signed short v1;
-	signed short v2;
-	signed short d3;
-	signed short d4;
-	signed short w;
-	signed short h;
-	unsigned char* src;
-	unsigned char* dst;
+	signed short s_x;
+	signed short s_y;
+	signed short width;
+	signed short height;
 
-	register signed short x;
-	register signed short y;
+	s_x = g_unkn1;
+	s_y = g_unkn2;
 
-	x = g_dst_x1;
-	y = g_dst_y1;
-
-	d1 = g_dst_x2;
-	d2 = g_dst_y2;
-	v1 = g_unkn1;
-	v2 = g_unkn2;
-	d3 = g_unkn3;
-	d4 = g_unkn4;
-
-	w = d1 - x + 1;
-	h = d2 - y + 1;
-
-	src = g_dst_src;
-	dst = g_dst_dst;
+	width = g_dst_x2 - g_dst_x1 + 1;
+	height = g_dst_y2 - g_dst_y1 + 1;
 
 	update_mouse_cursor();
 
-	pic_copy(dst, x, y, d1, d2, v1, v2, d3, d4, w, h, src, mode);
+	pic_copy(g_dst_dst, g_dst_x1, g_dst_y1, s_x, s_y, width, height, g_dst_src, mode);
 
 	call_mouse();
 }

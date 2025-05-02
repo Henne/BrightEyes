@@ -388,57 +388,52 @@ set_palette_loop1:
 #endif
 }
 
-void pic_copy(unsigned char *dst, unsigned short x, unsigned short y, unsigned short d1, unsigned short d2,
-		unsigned short v1, unsigned short v2, unsigned short d3, unsigned short d4,
-		unsigned short w, unsigned short h, unsigned char *src, unsigned short mode)
+void pic_copy(unsigned char *dst, const signed short d_x, const signed short d_y,
+		const signed short s_x, const signed short s_y, const signed short width,
+		const signed short height, signed char *src, const signed short mode)
 {
-	unsigned char *d; // es:di
-	unsigned char *s; // ds:si
-
-	d = dst + y * 320 + x;
-	s = src;
+	unsigned char *d = dst + 320 * d_y + d_x;
+	unsigned char *s = src;
+	int i, j;
 
 	switch (mode) {
 		/* this is not used in GEN */
 		/* copy only values < 0xc8 */
 		case 1: {
-			int i, j;
 
-			for (i = h; i > 0; i--) {
-				for (j = 0; j < w; j++) {
+			for (i = height; i > 0; i--) {
+				for (j = 0; j < width; j++) {
 					if (d[j] < 0xc8)
 						d[j] = s[j];
 				}
-				s += w;
+				s += width;
 				d += 320;
 			}
 			break;
 		}
 		/* copy only values != 0 */
 		case 2: {
-			int i, j;
 
-			for (i = h; i > 0; i--) {
+			for (i = height; i > 0; i--) {
 
-				for (j = 0; j < w; j++) {
+				for (j = 0; j < width; j++) {
 					if (s[j]) {
 						d[j] = s[j];
 					}
 				}
 
 				d += 320;
-				s += w;
+				s += width;
 			}
 			break;
 		}
 		/* copy each value using screen dimensions */
 		case 3: {
-			int i;
 
-			s += v2 * 320 + v1;
+			s += s_y * 320 + s_x;
 
-			for (i = h; i > 0; i--) {
-				memcpy(d, s, w);
+			for (i = height; i > 0; i--) {
+				memcpy(d, s, width);
 				d += 320;
 				s += 320;
 			}
@@ -446,14 +441,12 @@ void pic_copy(unsigned char *dst, unsigned short x, unsigned short y, unsigned s
 		}
 		/* copy each value */
 		default: {
-			int i;
 
-			for (i = h; i > 0; i--) {
-				memcpy(d, s, w);
+			for (i = height; i > 0; i--) {
+				memcpy(d, s, width);
 				d += 320;
-				s += w;
+				s += width;
 			}
-
 			break;
 		}
 	}
