@@ -2436,14 +2436,14 @@ static void detect_datfile(void)
 	if (flen == 634785) { /* DE DISK */ g_dsagen_lang = LANG_DE; g_dsagen_medium = MED_DISK; }	
 }
 
-static signed long get_archive_offset(const char *name, const char *table)
+static signed long get_archive_offset(const char *name, const unsigned char *table)
 {
 	signed short i;
 
 	for (i = 0; i < 50; i++) {
 
 		/* check the filename */
-		if (!strncmp(name, table + i * 16, 12)) {
+		if (!strncmp(name, (const char*)table + i * 16, 12)) {
 
 			/* calculate length */
 			g_flen_left = g_flen =
