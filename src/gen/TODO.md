@@ -35,8 +35,8 @@ The GCC/Clang-World is there for support.
 | seg003.[ch]  | Random        | **DONE**           | **DONE**           | **DONE**   |
 | seg004.[ch]  | PowerPack2.0  | -                  | **DONE**           | **DONE**   |
 | seg004.asm/h | PowerPack2.0  | **DONE**           | **not portable**   | **DONE**   |
-| seg005.[ch]  | Rasterlib     | -                  | should be rebuild  | WIP        |
-| seg005.asm/h | Rasterlib     | **DONE**           | **not portable**   | **DONE**   |
+| seg005.[ch]  | VGAlib        | -                  | **DONE**           | **DONE**   |
+| seg005.asm/h | VGAlib        | **DONE**           | **not portable**   | **DONE**   |
 | seg006.[ch]  | AIL (Sound)   | -                  | should be replaced | WIP        |
 | seg006.asm/h | AIL (Sound)   | **DONE**           | **not portable**   | **DONE**   |
 | seg007.asm/h | AudioCD data  | **DONE**           | **not portable**   | **DONE**   |
