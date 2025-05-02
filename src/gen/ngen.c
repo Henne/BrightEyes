@@ -1364,10 +1364,10 @@ static inline char* get_text(signed short no) {
 #define get_text(no) (g_texts[no])
 #endif
 
-static signed short g_unkn4;
-static signed short g_unkn3;
-static signed short g_unkn2;
-static signed short g_unkn1;
+static signed short g_src_y2;
+static signed short g_src_x2;
+static signed short g_src_y1;
+static signed short g_src_x1;
 static unsigned char* g_dst_src;
 static signed short g_dst_y2;
 static signed short g_dst_x2;
@@ -2749,8 +2749,8 @@ static void do_draw_pic(const signed short mode)
 	signed short width;
 	signed short height;
 
-	s_x = g_unkn1;
-	s_y = g_unkn2;
+	s_x = g_src_x1;
+	s_y = g_src_y1;
 
 	width = g_dst_x2 - g_dst_x1 + 1;
 	height = g_dst_y2 - g_dst_y1 + 1;
@@ -6964,10 +6964,10 @@ static void intro(void)
 			g_dst_y2 = 149;
 			g_dst_src = g_gen_ptr1_dis;
 
-			g_unkn1 = 0;
-			g_unkn2 = 60;
-			g_unkn3 = 95;
-			g_unkn4 = 159;
+			g_src_x1 = 0;
+			g_src_y1 = 60;
+			g_src_x2 = 95;
+			g_src_y2 = 159;
 			g_dst_dst = g_vga_memstart;
 			do_draw_pic(3);
 			cnt1++;
