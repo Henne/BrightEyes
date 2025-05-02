@@ -9,7 +9,9 @@ void fill_rect(unsigned char*, const signed short, const signed short, const sig
 const unsigned short swap_u16(const unsigned short);
 void copy_to_screen(unsigned char*, unsigned char*, const signed short, const signed short, const signed short);
 
+#if defined(__BORLANDC__)
 unsigned char* normalize_ptr(unsigned char*);
+#endif
 
 #if !defined(__BORLANDC__)
 void update_sdl_window(void);

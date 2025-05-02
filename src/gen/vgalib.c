@@ -490,7 +490,9 @@ void copy_to_screen(unsigned char *src, unsigned char *dst, const signed short w
 	}
 }
 
+#if defined(__BORLANDC__)
 unsigned char* normalize_ptr(unsigned char *ptr)
 {
 	return ptr;
 }
+#endif
