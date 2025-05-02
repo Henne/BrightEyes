@@ -400,20 +400,18 @@ void pic_copy(unsigned char *dst, unsigned short x, unsigned short y, unsigned s
 
 	switch (mode) {
 		/* this is not used in GEN */
+		/* copy only values < 0xc8 */
 		case 1: {
-			signed short diff; // bx
-			signed short i;	   // cx	
+			int i, j;
 
-			diff = 320 - w;
-			do {
-				for (i = w; i; i--) {
-					if (d[0] < 0xc8)
-						d[0] = s[0];
-					s++;
-					d++;
+			for (i = h; i > 0; i--) {
+				for (j = 0; j < w; j++) {
+					if (d[j] < 0xc8)
+						d[j] = s[j];
 				}
-				d += diff;
-			} while (--h > 0);
+				s += w;
+				d += 320;
+			}
 			break;
 		}
 		/* copy only values != 0 */
