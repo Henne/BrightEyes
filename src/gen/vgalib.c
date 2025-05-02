@@ -374,6 +374,11 @@ void fill_rect(unsigned char *p_in, const signed short color, const signed short
 	unsigned char *p = p_in;
 	signed short h;
 
+	if ((width == O_WIDTH) && (height == O_HEIGHT)) {
+		/* fullscreen fill */
+		memset(p, color, O_WIDTH * O_HEIGHT);
+	}
+
 	for (h = height; h > 0; h--) {
 		memset(p, color, width);
 		p += O_WIDTH;
