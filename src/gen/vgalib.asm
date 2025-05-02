@@ -18,49 +18,6 @@ SEG005_TEXT	segment byte public 'CODE'
 
 	assume	cs:SEG005_TEXT
 
-_save_display_stat proc far
-
-pointer		= dword ptr 6
-
-		push	bp
-		mov	bp, sp
-		push	ds
-		push	es
-		push	si
-		push	di
-		push	bp
-
-		les	di, [bp+pointer]
-		mov	ah, 0Fh
-		int	10h
-		mov	dx, ax
-		xor	ax, ax
-		mov	al, bh
-		stosw
-		mov	al, dl
-		stosw
-		mov	al, dh
-		stosw
-		push	es
-		mov	ax, 1130h
-		mov	bh, 2
-		int	10h
-		xor	dh, dh
-		inc	dx
-		pop	es
-		mov	es:[di], dx
-
-		pop	bp
-		pop	di
-		pop	si
-		pop	es
-		pop	ds
-		mov	sp, bp
-		pop	bp
-		retf
-
-_save_display_stat endp
-
 _set_palette	proc far
 
 p_palette	= dword	ptr  6
@@ -399,7 +356,6 @@ _normalize_ptr	endp
 SEG005_TEXT	ends
 
 	extrn F_LXLSH@:far
-	public _save_display_stat
 	public _set_palette
 	public _pic_copy
 	public _fill_rect

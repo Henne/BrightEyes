@@ -278,8 +278,33 @@ void set_video_page(unsigned short page)
 #endif
 }
 
-void save_display_stat(signed short *p)
+void save_display_stat(signed short *pointer)
 {
+#if defined(__BORLANDC__)
+	asm {
+		les di, [pointer]
+		mov ah, 0x0f
+		int 0x10
+		mov dx,ax
+		xor ax,ax
+
+		mov al, bh
+		stosw
+		mov al, dl
+		stosw
+		mov al, dh
+		stosw
+
+		push es
+		mov ax, 0x1130
+		mov bh, 0x02
+		int 0x10
+		xor dh, dh
+		inc dx
+		pop es
+		mov es:[di], dx
+	}
+#endif
 }
 
 #if !defined(__BORLANDC__)
