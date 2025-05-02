@@ -1908,8 +1908,7 @@ static void mouse_move_cursor(const signed short x, const signed short y)
 
 	do_mouse_action(&p1, &p2, &p3, &p4, &p5);
 #else
-	fprintf(stderr, "%s(%d, %d)\n", __func__, x, y);
-	int ratio = sdl_get_ratio();
+	const int ratio = sdl_get_ratio();
 	SDL_WarpMouseInWindow(sdl_get_window(), x * ratio, y * ratio);
 #endif
 }
