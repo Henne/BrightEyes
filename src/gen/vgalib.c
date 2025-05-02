@@ -470,20 +470,12 @@ void pic_copy(unsigned char *dst, unsigned short x, unsigned short y, unsigned s
 	}
 }
 
-#if defined(__BORLANDC__)
-void fill_rect(unsigned short p_seg, unsigned short p_off, signed short color, signed short width, signed short height)
-#else
-void fill_rect(unsigned char *p_in, signed short color, signed short width, signed short height)
-#endif
+void fill_rect(unsigned char *p_in, const signed short color, const signed short width, const signed short height)
 {
-#if defined(__BORLANDC__)
-	unsigned char *p = MK_FP(p_seg, p_off);
-#else
 	unsigned char *p = p_in;
-#endif
-	signed short x;
+	signed short h;
 
-	for (; height; height--) {
+	for (h = height; h > 0; h--) {
 		memset(p, color, width);
 		p += 320;
 	}

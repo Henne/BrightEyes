@@ -142,46 +142,6 @@ l_leave:
 _pic_copy	endp
 
 
-_fill_rect	proc far
-
-pptr		= dword ptr  6
-color		= byte ptr  0Ah
-p_width		= word ptr  0Ch
-height		= word ptr  0Eh
-
-		push	bp
-		mov	bp, sp
-		push	ds
-		push	es
-		push	si
-		push	di
-
-		mov	ax, word ptr [bp+pptr]
-		mov	es, ax
-		mov	di, word ptr [bp+pptr+2]
-		mov	dx, [bp+height]
-		mov	bx, 320
-		sub	bx, [bp+p_width]
-		mov	cx, [bp+p_width]
-		mov	al, [bp+color]
-
-save_loop:
-		push	cx
-		rep	stosb
-		pop	cx
-		add	di, bx
-		dec	dx
-		jg	save_loop
-
-		pop	di
-		pop	si
-		pop	es
-		pop	ds
-		mov	sp, bp
-		pop	bp
-		retf
-_fill_rect	endp
-
 _swap_u16	proc far
 
 val		= word	ptr  6
@@ -318,7 +278,6 @@ SEG005_TEXT	ends
 
 	extrn F_LXLSH@:far
 	public _pic_copy
-	public _fill_rect
 	public _swap_u16
 	public _copy_to_screen
 	public _normalize_ptr

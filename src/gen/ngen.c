@@ -2790,11 +2790,7 @@ void call_fill_rect_gen(unsigned char *ptr, signed short x1, signed short y1, si
 	height = y2 - y1 + 1;
 	ptr += y1 * 320 + x1;
 
-#if defined(__BORLANDC__)
-	fill_rect(FP_SEG(ptr), FP_OFF(ptr), color, width, height);
-#else
 	fill_rect(ptr, color, width, height);
-#endif
 }
 
 
