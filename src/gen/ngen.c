@@ -2297,7 +2297,7 @@ static int sdl_event_loop(const int cmd)
 			g_mouse_posx = event.motion.x / ratio;
 			g_mouse_posy = event.motion.y / ratio;
 
-			update_sdl_window();
+			sdl_update_full_window();
 
 		} else if (event.type == SDL_MOUSEBUTTONDOWN) {
 			if (event.button.button == 1) {
@@ -2479,7 +2479,7 @@ static void vsync_or_key(const signed short val)
 	signed short i;
 
 #if !defined(__BORLANDC__)
-	update_sdl_window();
+	sdl_update_full_window();
 #endif
 
 	for (i = 0; i < val; i++) {
@@ -3196,7 +3196,7 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 	}
 
 #if !defined(__BORLANDC__)
-	update_sdl_window();
+	sdl_update_full_window();
 #endif
 
 	/* clear all input events */
@@ -3300,7 +3300,7 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 		}
 
 #if !defined(__BORLANDC__)
-	update_sdl_window();
+	sdl_update_full_window();
 #endif
 	}
 
@@ -3441,7 +3441,7 @@ static signed short infobox(char *msg, const signed short digits)
 		retval = (unsigned short)atol(g_digitbuffer);
 	} else {
 #if !defined(__BORLANDC__)
-		update_sdl_window();
+		sdl_update_full_window();
 #endif
 		g_action_table = g_action_input;
 		vsync_or_key(150 * lines);
@@ -3466,7 +3466,7 @@ static signed short infobox(char *msg, const signed short digits)
 	g_in_key_ext = 0;
 
 #if !defined(__BORLANDC__)
-	update_sdl_window();
+	sdl_update_full_window();
 #endif
 	return retval;
 }
@@ -3633,7 +3633,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 		}
 
 #if !defined(__BORLANDC__)
-		update_sdl_window();
+		sdl_update_full_window();
 		SDL_Delay(50);
 #endif
 
@@ -3708,7 +3708,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 	g_in_key_ext = 0;
 
 #if !defined(__BORLANDC__)
-	update_sdl_window();
+	sdl_update_full_window();
 #endif
 
 	return retval;
@@ -4179,7 +4179,7 @@ static void enter_name(void)
 	print_str((const char*)g_hero.name, 180, 12);
 
 #if !defined(__BORLANDC__)
-	update_sdl_window();
+	sdl_update_full_window();
 #endif
 
 }
@@ -4215,7 +4215,7 @@ static void change_head(void)
 	}
 
 #if !defined(__BORLANDC__)
-		update_sdl_window();
+	sdl_update_full_window();
 #endif
 }
 
@@ -4253,7 +4253,7 @@ static void change_sex(void)
 	}
 
 #if !defined(__BORLANDC__)
-		update_sdl_window();
+	sdl_update_full_window();
 #endif
 }
 
@@ -4479,7 +4479,7 @@ static void print_attribs(void)
 	}
 
 #if !defined(__BORLANDC__)
-		update_sdl_window();
+	sdl_update_full_window();
 #endif
 }
 
@@ -4930,7 +4930,7 @@ static void print_values(void)
 	}
 
 #if !defined(__BORLANDC__)
-		update_sdl_window();
+	sdl_update_full_window();
 #endif
 }
 
@@ -5044,7 +5044,7 @@ static void refresh_screen(void)
 	}
 
 #if !defined(__BORLANDC__)
-		update_sdl_window();
+	sdl_update_full_window();
 #endif
 }
 
@@ -7012,7 +7012,7 @@ static void intro(void)
 			vsync_or_key(20);
 
 #if !defined(__BORLANDC__)
-			update_sdl_window();
+			sdl_update_full_window();
 #endif
 		}
 
@@ -7063,7 +7063,7 @@ static void intro(void)
 			else
 				vsync_or_key(1);
 #if !defined(__BORLANDC__)
-			update_sdl_window();
+			sdl_update_full_window();
 #endif
 		}
 
@@ -7102,7 +7102,7 @@ static void intro(void)
 		do_draw_pic(0);
 
 #if !defined(__BORLANDC__)
-		update_sdl_window();
+		sdl_update_full_window();
 #endif
 		vsync_or_key(200);
 	}
@@ -7235,7 +7235,7 @@ static void intro(void)
 	vsync_or_key(400);
 
 #if !defined(__BORLANDC__)
-		update_sdl_window();
+	sdl_update_full_window();
 #endif
 
 	if (g_dsagen_lang == LANG_DE) {

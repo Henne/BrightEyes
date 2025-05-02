@@ -100,7 +100,7 @@ void set_video_mode(unsigned short mode)
 }
 
 #if !defined(__BORLANDC__)
-void update_sdl_window(void)
+void sdl_update_full_window(void)
 {
 	if (RATIO == 1) {
 		int pos = 0;
@@ -197,7 +197,7 @@ void sdl_change_window_size(void)
 		W_HEIGHT
 	);
 
-	update_sdl_window();
+	sdl_update_full_window();
 }
 #endif
 
@@ -306,7 +306,7 @@ set_palette_loop1:
 	for (i = 0; i < colors; i++)
 		palette[first_color + i] = get_ARGB(pointer + 3 * i);
 
-	update_sdl_window();
+	sdl_update_full_window();
 #endif
 }
 
