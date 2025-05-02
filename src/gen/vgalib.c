@@ -6,11 +6,15 @@
  *	These functions were written in assembler and are
  *      just a clean C-implementation.
 */
-
+#if !defined(__BORLANDC__)
 #include <SDL2/SDL.h>
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
+#if !defined(__BORLANDC__)
 extern unsigned char *g_vga_memstart;
 
 extern signed short g_mouse_posx;
@@ -36,9 +40,11 @@ static SDL_Renderer *renderer = NULL;
 static SDL_Texture *texture = NULL;
 
 static Uint32 pixels[MAX_RATIO * MAX_RATIO * O_WIDTH * O_HEIGHT];
+#endif
 
 void set_video_mode(unsigned short mode)
 {
+#if !defined(__BORLANDC__)
 	if (mode == 0x13) {
 		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_TIMER) < 0) {
 			fprintf(stderr, "Could not initialize SDL: %s\n", SDL_GetError());
@@ -81,8 +87,11 @@ void set_video_mode(unsigned short mode)
 		SDL_DestroyWindow(window);
 		SDL_Quit();
 	}
+#else
+#endif
 }
 
+#if !defined(__BORLANDC__)
 void update_sdl_window(void)
 {
 	if (RATIO == 1) {
@@ -251,6 +260,7 @@ int sdl_event_loop(const int cmd)
 
 	return 0;
 }
+#endif
 
 void set_video_page(unsigned short mode)
 {
@@ -260,17 +270,23 @@ void save_display_stat(signed short *p)
 {
 }
 
+#if !defined(__BORLANDC__)
 static inline Uint32 get_ARGB(const unsigned char *p) {
 	return (p[2] << 2) | (p[1] << 10) | (p[0] << 18);
 }
+#endif
 
 void set_palette(const unsigned char *ptr, const unsigned char first_color, const unsigned short colors)
 {
 	signed int i;
 	for (i = 0; i < colors; i++)
+#if defined(__BORLANDC__)
+		asm { nop }
+#else
 		palette[first_color + i] = get_ARGB(ptr + 3 * i);
 
 	update_sdl_window();
+#endif
 }
 
 void pic_copy(unsigned char *dst, unsigned short x, unsigned short y, unsigned short d1, unsigned short d2,
