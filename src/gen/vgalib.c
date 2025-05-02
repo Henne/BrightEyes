@@ -416,21 +416,21 @@ void pic_copy(unsigned char *dst, unsigned short x, unsigned short y, unsigned s
 			} while (--h > 0);
 			break;
 		}
+		/* copy only values != 0 */
 		case 2: {
-			unsigned short diff, i;
-			unsigned char al;
+			int i, j;
 
-			diff = 320 - w;
+			for (i = h; i > 0; i--) {
 
-			do {
-				for (i = w; i != 0; i--) {
-					if ((al = *s++))
-						d[0] = al;
-					d++;
+				for (j = 0; j < w; j++) {
+					if (s[j]) {
+						d[j] = s[j];
+					}
 				}
-				d += diff;
-			} while (--h > 0);
 
+				d += 320;
+				s += w;
+			}
 			break;
 		}
 		case 3: {
@@ -450,6 +450,7 @@ void pic_copy(unsigned char *dst, unsigned short x, unsigned short y, unsigned s
 			} while (--h > 0);
 			break;
 		}
+		/* copy each value */
 		default: {
 			int i;
 
