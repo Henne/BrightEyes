@@ -1,8 +1,4 @@
 ; Segment type:	Pure code
-;
-; There are 32 assembler-written, low-level VGA-routines.
-; Only 14 of them are used in the game, and get meaningful names
-; The other 18 are called unused_func01 .. unused_func18
 
 
 SEG005_TEXT	segment byte public 'CODE'

@@ -5,9 +5,9 @@
 @REM -- here start the complete
 BCC.EXE -mlarge -O  -c -2 -Z CDA_CODE.C
 BCC.EXE -mlarge -O  -c -2 -Z -IAIL NGEN.C
-BCC.EXE -mlarge -O  -c -2 -Z LIBVGA.C
+BCC.EXE -mlarge -O  -c -2 -Z VGALIB.C
 TASM.EXE /os /z POWERP20.ASM POWERP20.OBJ
-TASM.EXE /os /z VGALIB.ASM VGALIB.OBJ
+TASM.EXE /os /z NORMPTR.ASM NORMPTR.OBJ
 TASM.EXE /m /w+ /ml /iAIL AIL\AIL.ASM AIL.OBJ
 TASM.EXE /os /z CDA_DATA.ASM CDA_DATA.OBJ
 TLINK @TLINK.RES

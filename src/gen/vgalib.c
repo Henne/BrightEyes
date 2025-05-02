@@ -491,8 +491,33 @@ void copy_to_screen(unsigned char *src, unsigned char *dst, const signed short w
 }
 
 #if defined(__BORLANDC__)
-unsigned char* normalize_ptr(unsigned char *ptr)
+#if 0
+extern F_LXLSH;
+unsigned char* normalize_ptr(unsigned char *pointer)
 {
-	return ptr;
+	asm {
+		push ds
+		push es
+		push si
+		push di
+
+		xor dx,dx
+		mov ax, word ptr pointer+2
+		mov cx, 4
+		call far ptr F_LXLSH@
+		mov word ptr pointer+2, 0
+		add ax, word ptr pointer
+		adc dx, word ptr pointer+2
+		mov dx, 0x0c
+		call far ptr F_LXLSH@
+		mov ax, word ptr pointer
+
+		pop di
+		pop si
+		pop es
+		pop ds
+	}
+
 }
+#endif
 #endif

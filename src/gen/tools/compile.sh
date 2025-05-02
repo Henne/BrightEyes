@@ -24,8 +24,8 @@ done
 cp cda_code.c cda_code.h ${DRIVE_C}/src
 cp ngen.c ${DRIVE_C}/src
 cp powerp20.asm powerp20.h ${DRIVE_C}/src
-cp vgalib.asm vgalib.h ${DRIVE_C}/src
-cp vgalib.c ${DRIVE_C}/src/libvga.c
+cp vgalib.c vgalib.h ${DRIVE_C}/src
+cp normptr.asm ${DRIVE_C}/src/
 cp -r AIL ${DRIVE_C}/src
 cp cda_data.asm cda_data.h ${DRIVE_C}/src
 
