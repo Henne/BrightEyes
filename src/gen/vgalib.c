@@ -89,9 +89,21 @@ void set_video_mode(unsigned short mode)
 	}
 #else
 	asm {
+		push ds
+		push es
+		push si
+		push di
+		push bp
+
 		mov ah, 0x00
 		mov al, byte ptr mode
 		int 0x10
+
+		pop bp
+		pop di
+		pop si
+		pop es
+		pop ds
 	}
 #endif
 }
@@ -271,9 +283,19 @@ void set_video_page(unsigned short page)
 {
 #if defined(__BORLANDC__)
 	asm {
+		push ds
+		push es
+		push si
+		push di
+
 		mov al, byte ptr page
 		mov ah, 0x05
 		int 0x10
+
+		pop di
+		pop si
+		pop es
+		pop ds
 	}
 #endif
 }
@@ -282,7 +304,13 @@ void save_display_stat(signed short *pointer)
 {
 #if defined(__BORLANDC__)
 	asm {
-		les di, [pointer]
+		push ds
+		push es
+		push si
+		push di
+		push bp
+
+		les di, pointer
 		mov ah, 0x0f
 		int 0x10
 		mov dx,ax
@@ -303,6 +331,12 @@ void save_display_stat(signed short *pointer)
 		inc dx
 		pop es
 		mov es:[di], dx
+
+		pop bp
+		pop di
+		pop si
+		pop es
+		pop ds
 	}
 #endif
 }
