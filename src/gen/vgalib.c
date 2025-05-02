@@ -451,19 +451,13 @@ void pic_copy(unsigned char *dst, unsigned short x, unsigned short y, unsigned s
 			break;
 		}
 		default: {
-			signed short diff; // bx
-			signed short i;    // cx
+			int i;
 
-			diff = 320 - w;
-
-			do {
-				for (i = w; i; i--) {
-					d[0] = s[0];
-					d++;
-					s++;
-				}
-				d += diff;
-			} while (--h > 0);
+			for (i = h; i > 0; i--) {
+				memcpy(d, s, w);
+				d += 320;
+				s += w;
+			}
 
 			break;
 		}
