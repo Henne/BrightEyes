@@ -142,6 +142,11 @@ void update_sdl_window(void)
 	//SDL_Delay(16);
 }
 
+SDL_Window* sdl_get_window(void)
+{
+	return window;
+}
+
 int sdl_get_ratio(void)
 {
 	return RATIO;

@@ -1841,9 +1841,11 @@ static void mouse_enable(void)
 
 		do_mouse_action(&p1, &p2, &p3, &p4, &p5);
 
+#if defined(__BORLANDC__)
 		if (p1 == 0) {
 			g_have_mouse = 0;
 		}
+#endif
 
 		g_mouse_current_cursor = g_mouse_mask;
 
@@ -1897,6 +1899,7 @@ void mouse_disable(void)
  */
 static void mouse_move_cursor(const signed short x, const signed short y)
 {
+#if defined(__BORLANDC__)
 	unsigned short p1, p2, p3, p4, p5;
 
 	p1 = 4;
@@ -1904,6 +1907,11 @@ static void mouse_move_cursor(const signed short x, const signed short y)
 	p4 = y;
 
 	do_mouse_action(&p1, &p2, &p3, &p4, &p5);
+#else
+	fprintf(stderr, "%s(%d, %d)\n", __func__, x, y);
+	int ratio = sdl_get_ratio();
+	SDL_WarpMouseInWindow(sdl_get_window(), x * ratio, y * ratio);
+#endif
 }
 
 static void draw_mouse_cursor(void)
@@ -1979,10 +1987,8 @@ static void restore_mouse_bg(void)
 	rangeY = g_mouse_posy_bak;
 	diffX = diffY = 16;
 
-	if (rangeX > 304)
-		diffX = O_WIDTH - rangeX;
-	if (rangeY > 184)
-		diffY = O_HEIGHT - rangeY;
+	if (rangeX > (O_WIDTH - 16))  diffX = O_WIDTH - rangeX;
+	if (rangeY > (O_HEIGHT - 16)) diffY = O_HEIGHT - rangeY;
 
 	vgaptr = g_vga_memstart + O_WIDTH * rangeY + rangeX;
 
@@ -2045,6 +2051,14 @@ static void mouse_compare(void)
 	}
 }
 
+/**
+ * get_mouse_action() - translate a leftclick into an extendet keycode
+ * @x: X-Coordinate of the leftclick
+ * @y: Y-Coordinate of the leftclick
+ * @act: the action table of of the current page
+ *
+ * \return: an extended keycode or 0 if none was found in the table
+ **/
 static signed short get_mouse_action(const signed short x, const signed short y, const struct mouse_action *act)
 {
 	signed short i;
@@ -2284,6 +2298,8 @@ static int sdl_event_loop(const int cmd)
 			g_mouse_posx = event.motion.x / ratio;
 			g_mouse_posy = event.motion.y / ratio;
 
+			update_sdl_window();
+
 		} else if (event.type == SDL_MOUSEBUTTONDOWN) {
 			if (event.button.button == 1) {
 				g_mouse_leftclick_event = 1;
@@ -2423,10 +2439,6 @@ static int handle_input(void)
 			return 1;
 		}
 	}
-#if !defined(__BORLANDC__)
-	// enable mouse again
-	g_have_mouse = 2;
-#endif
 
 	if (g_mouse_leftclick_event != 0) {
 
@@ -7312,6 +7324,10 @@ int main_gen(int argc, char **argv)
 	set_timer_isr();
 
 	g_have_mouse = 2;
+
+#if !defined(__BORLANDC__)
+	SDL_ShowCursor(SDL_DISABLE);
+#endif
 
 	mouse_enable();
 

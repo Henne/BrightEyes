@@ -21,6 +21,7 @@ unsigned char* normalize_ptr(unsigned char*);
 
 #if !defined(__BORLANDC__)
 void update_sdl_window(void);
+SDL_Window* sdl_get_window(void);
 int sdl_get_ratio(void);
 void sdl_change_window_size(void);
 #endif
