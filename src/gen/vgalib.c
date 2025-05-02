@@ -267,8 +267,15 @@ int sdl_event_loop(const int cmd)
 }
 #endif
 
-void set_video_page(unsigned short mode)
+void set_video_page(unsigned short page)
 {
+#if defined(__BORLANDC__)
+	asm {
+		mov al, byte ptr page
+		mov ah, 0x05
+		int 0x10
+	}
+#endif
 }
 
 void save_display_stat(signed short *p)
