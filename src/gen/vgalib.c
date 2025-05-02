@@ -14,15 +14,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "vgalib.h"
+
 #if !defined(__BORLANDC__)
 extern unsigned char *g_vga_memstart;
 
-enum FB_VALUES {
-	O_WIDTH = 320, O_HEIGHT = 200, MAX_RATIO = 8
-};
-
 static const int DEF_RATIO = 3;
-int RATIO = DEF_RATIO;
+static int RATIO = DEF_RATIO;
 static int W_WIDTH = DEF_RATIO * O_WIDTH;
 static int W_HEIGHT = DEF_RATIO * O_HEIGHT;
 
@@ -142,6 +140,11 @@ void update_sdl_window(void)
 	SDL_RenderCopy(renderer, texture, NULL, NULL);
 	SDL_RenderPresent(renderer);
 	//SDL_Delay(16);
+}
+
+int sdl_get_ratio(void)
+{
+	return RATIO;
 }
 
 void sdl_change_window_size(void)

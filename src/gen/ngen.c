@@ -2266,10 +2266,7 @@ static signed long process_nvf(struct nvf_desc *nvf)
 
 /* KEYBOARD AND INPUT MANAGEMENT */
 
-#if !defined(__BORLANDC_)
-
-extern int RATIO; // framebuffer to window ratio
-
+#if !defined(__BORLANDC__)
 static int sdl_event_loop(const int cmd)
 {
 	SDL_Event event;
@@ -2285,10 +2282,12 @@ static int sdl_event_loop(const int cmd)
 				exit(0);
 			}
 		} else if (event.type == SDL_MOUSEMOTION) {
+			int ratio = sdl_get_ratio();
+
 			g_mouse_moved = 1;
 			/* Assume 320x200 */
-			g_mouse_posx = event.motion.x / RATIO;
-			g_mouse_posy = event.motion.y / RATIO;
+			g_mouse_posx = event.motion.x / ratio;
+			g_mouse_posy = event.motion.y / ratio;
 
 		} else if (event.type == SDL_MOUSEBUTTONDOWN) {
 			if (event.button.button == 1) {
