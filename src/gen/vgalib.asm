@@ -18,32 +18,6 @@ SEG005_TEXT	segment byte public 'CODE'
 
 	assume	cs:SEG005_TEXT
 
-_set_video_mode	proc far
-
-mode		= byte ptr 6
-
-		push	bp
-		mov	bp, sp
-		push	ds
-		push	es
-		push	si
-		push	di
-
-		mov	ah, 0
-		mov	al, [bp+mode]
-		int	10h
-
-		pop	di
-		pop	si
-		pop	es
-		pop	ds
-		mov	sp, bp
-		pop	bp
-		retf
-
-_set_video_mode	endp
-
-
 _set_video_page	proc far
 
 page_no		= byte ptr 6
@@ -451,7 +425,6 @@ _normalize_ptr	endp
 SEG005_TEXT	ends
 
 	extrn F_LXLSH@:far
-	public _set_video_mode
 	public _set_video_page
 	public _save_display_stat
 	public _set_palette

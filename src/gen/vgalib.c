@@ -88,6 +88,11 @@ void set_video_mode(unsigned short mode)
 		SDL_Quit();
 	}
 #else
+	asm {
+		mov ah, 0x00
+		mov al, byte ptr mode
+		int 0x10
+	}
 #endif
 }
 
