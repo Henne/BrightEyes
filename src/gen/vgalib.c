@@ -31,6 +31,25 @@ static SDL_Renderer *renderer = NULL;
 static SDL_Texture *texture = NULL;
 
 static Uint32 pixels[MAX_RATIO * MAX_RATIO * O_WIDTH * O_HEIGHT];
+
+static const int SHOW_DRIVERS = 0; // set to 1 for driver info
+
+static void sdl_renderer_info(void)
+{
+	SDL_RendererInfo info;
+	const int no_drivers = SDL_GetNumRenderDrivers();
+	fprintf(stdout, "SDL_GetNumRenderDrivers() = %d\n", no_drivers);
+	for (int i = 0; i < no_drivers; i++) {
+		if (SDL_GetRenderDriverInfo(i, &info) == 0) {
+			fprintf(stderr, "driver  = %d\n", i);
+			fprintf(stderr, "name    = %s\n", info.name);
+			fprintf(stderr, "flags   = 0x%02x\n", info.flags);
+			fprintf(stderr, "#txt    = %02d\n", info.num_texture_formats);
+			fprintf(stderr, "max res = %dx%d\n\n", info.max_texture_width, info.max_texture_height);
+		}
+	}
+}
+
 #endif
 
 void set_video_mode(unsigned short mode)
@@ -56,6 +75,9 @@ void set_video_mode(unsigned short mode)
 			SDL_Quit();
 			exit(-1);
 		}
+
+		if (SHOW_DRIVERS)
+			sdl_renderer_info();
 
 		renderer = SDL_CreateRenderer(
 			window,
