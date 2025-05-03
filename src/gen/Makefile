@@ -1,6 +1,13 @@
 CC=gcc
 CFLAGS=-O0 -g -fno-asm
 
+
+# * get a mingw-zip-file from https://github.com/libsdl-org/SDL/releases
+# * decompress it on the Desktop
+# * uncomment and adjust the next two lines to match the correct version
+#CFLAGS+=-I${HOME}/Desktop/SDL2-2.32.4/x86_64-w64-mingw32/include/
+#LD_LIBRARY_PATH=${HOME}/Desktop/SDL2-2.32.4/x86_64-mingw32/lib/
+
 gen: cda_code.o ngen.o powerp20.o vgalib.o ail_stub.o
 	$(CC) $(CFLAGS) -o ngen_$(CC) cda_code.o ngen.o powerp20.o vgalib.o ail_stub.o -lSDL2
 
