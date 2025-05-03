@@ -17,7 +17,7 @@
 #include <ALLOC.H>	// farcalloc()
 #include <MATH.H>	// abs()
 #else
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <unistd.h> // lseek(), close(), read(), write()
 #endif
 
