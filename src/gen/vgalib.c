@@ -377,21 +377,39 @@ void pic_copy(unsigned char *dst, const signed short d_x, const signed short d_y
 			break;
 		}
 	}
+#if !defined(__BORLANDC__)
+	if (dst == g_vga_memstart) {
+		sdl_update_rect_window(d_x, d_y, width, height);
+	}
+#endif
 }
 
 void fill_rect(unsigned char *p_in, const signed short color, const signed short width, const signed short height)
 {
-	unsigned char *p = p_in;
+	unsigned char *p;
 	signed short h;
 
 	if ((width == O_WIDTH) && (height == O_HEIGHT)) {
 		/* fullscreen fill */
-		memset(p, color, O_WIDTH * O_HEIGHT);
-	}
+		memset(p_in, color, O_WIDTH * O_HEIGHT);
 
-	for (h = height; h > 0; h--) {
-		memset(p, color, width);
-		p += O_WIDTH;
+#if !defined(__BORLANDC__)
+		sdl_update_rect_window(0, 0, O_WIDTH, O_HEIGHT);
+#endif
+	} else {
+		p = p_in;
+		for (h = height; h > 0; h--) {
+			memset(p, color, width);
+			p += O_WIDTH;
+		}
+
+#if !defined(__BORLANDC__)
+		const int off = p_in - g_vga_memstart;
+		const int y = off / O_WIDTH;
+		const int x = off - y * O_WIDTH;
+
+		sdl_update_rect_window(x, y, width, height);
+#endif
 	}
 }
 
@@ -400,13 +418,19 @@ const unsigned short swap_u16(const unsigned short val)
 	return ((val & 0xff) << 8) | ((val >> 8) & 0xff);
 }
 
-void copy_to_screen(unsigned char *src, unsigned char *dst, const signed short width, const signed short height, const signed short mode)
+void copy_to_screen(unsigned char *src_in, unsigned char *dst_in, const signed short width, const signed short height, const signed short mode)
 {
+	unsigned char *src = src_in;
+	unsigned char *dst = dst_in;
 	signed short h;
 
 	if ((width == O_WIDTH) && (height == O_HEIGHT)) {
 		/* full screen copy */
-		memcpy(dst, src, O_WIDTH * O_HEIGHT);
+		memcpy(dst_in, src_in, O_WIDTH * O_HEIGHT);
+#if !defined(__BORLANDC__)
+		sdl_update_rect_window(0, 0, O_WIDTH, O_HEIGHT);
+#endif
+	} else {
 	}
 
 	if (mode == 0) {
@@ -417,6 +441,13 @@ void copy_to_screen(unsigned char *src, unsigned char *dst, const signed short w
 			src += width;
 		}
 
+#if !defined(__BORLANDC__)
+		const int off = dst_in - g_vga_memstart;
+		const int y = off / O_WIDTH;
+		const int x = off - y * O_WIDTH;
+
+		sdl_update_rect_window(x, y, width, height);
+#endif
 	} else if (mode == 2) {
 
 		for (h = height; h > 0; h--) {
