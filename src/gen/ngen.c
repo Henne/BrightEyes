@@ -4934,12 +4934,12 @@ static void refresh_screen(void)
 			copy_to_screen(src, dst, 16, 16, 0);
 		}
 
-		/* page with base values and level is advanced */
+		/* page with base values and level is novice */
 		if ((g_gen_page == 0) && (g_level == 1)) {
+			/* Hide the arrow buttons to the other page */
+
 			dst = g_gen_ptr1_dis + 178 * O_WIDTH + 284;
-
 			src = g_buffer_sex_dat + 512;
-
 			copy_to_screen(src, dst, 20, 15, 0);
 
 			if (g_dsagen_lang == LANG_EN) {
@@ -4947,9 +4947,11 @@ static void refresh_screen(void)
 				copy_to_screen(src, dst, 20, 15, 0);
 			}
 		}
+
 		/* if the page is lower than 5 */
 		if (g_gen_page < 5) {
-			/* draw DMENGE.DAT or the typus name */
+
+			/* draw DMENGE.DAT or the archetype image and name */
 			dst = g_gen_ptr1_dis + 8 * O_WIDTH + 16;
 
 			if (g_hero.typus != 0) {
@@ -4974,10 +4976,11 @@ static void refresh_screen(void)
 				}
 
 				wait_for_vsync();
-				set_palette(g_buffer_dmenge_dat + 128 * 184 + 2, 0 , 32);
+				set_palette(g_buffer_dmenge_dat + 128 * 184 + 2, 0, 32);
 				copy_to_screen(g_buffer_dmenge_dat, dst, 128, 184, 0);
 			}
 		}
+
 		/* if hero has a typus */
 		if (g_hero.typus != 0) {
 			/* draw the head */
@@ -5549,8 +5552,6 @@ static void fill_values(void)
 			skill_inc_novice(v1 = g_autoskills[g_hero.typus][i]);
 		}
 
-		// Okay, till here !
-
 		si = 0;
 		/* prepare mage automatic spell list */
 		if (g_hero.typus == 9) {
@@ -5599,7 +5600,6 @@ static void fill_values(void)
 		}
 	}
 }
-
 
 #define INC (1)
 #define DEC (2)
@@ -6210,7 +6210,6 @@ static void inc_spell(const signed short spell)
 	if (g_spell_incs[spell].incs >= max_incs) {
 		infobox(get_text(257), 0);
 		return;
-
 	}
 
 	/* all tries used for that spell */
@@ -7090,7 +7089,6 @@ static void intro(void)
 		/* clear screen */
 		call_fill_rect_gen(g_vga_memstart, 0, 0, O_WIDTH - 1, O_HEIGHT - 1, 0);
 		wait_for_vsync();
-
 
 		set_palette((const unsigned char*)g_pal_tmp, 0, 32);
 
