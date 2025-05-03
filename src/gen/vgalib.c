@@ -111,7 +111,7 @@ void set_video_mode(unsigned short mode)
 
 		texture = SDL_CreateTexture(
 			renderer,
-			SDL_PIXELFORMAT_ARGB8888,
+			SDL_PIXELFORMAT_ABGR8888,
 			SDL_TEXTUREACCESS_STREAMING,
 			//SDL_TEXTUREACCESS_STATIC,
 			W_WIDTH,
@@ -241,7 +241,7 @@ void sdl_change_window_size(void)
 
 	texture = SDL_CreateTexture(
 		renderer,
-		SDL_PIXELFORMAT_ARGB8888,
+		SDL_PIXELFORMAT_ABGR8888,
 		SDL_TEXTUREACCESS_STREAMING,
 		//SDL_TEXTUREACCESS_STATIC,
 		W_WIDTH,
@@ -315,8 +315,8 @@ void save_display_stat(signed short *pointer)
 }
 
 #if !defined(__BORLANDC__)
-static inline Uint32 get_ARGB(const unsigned char *p) {
-	return (p[2] << 2) | (p[1] << 10) | (p[0] << 18);
+static inline Uint32 get_ABGR(const unsigned char *p) {
+	return (p[0] << 2) | (p[1] << 10) | (p[2] << 18);
 }
 #endif
 
@@ -355,7 +355,7 @@ set_palette_loop1:
 	signed int i;
 
 	for (i = 0; i < colors; i++)
-		palette[first_color + i] = get_ARGB(pointer + 3 * i);
+		palette[first_color + i] = get_ABGR(pointer + 3 * i);
 
 	sdl_update_rect_window(0, 0, O_WIDTH, O_HEIGHT);
 #endif
