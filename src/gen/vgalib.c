@@ -41,11 +41,35 @@ static void sdl_renderer_info(void)
 	fprintf(stdout, "SDL_GetNumRenderDrivers() = %d\n", no_drivers);
 	for (int i = 0; i < no_drivers; i++) {
 		if (SDL_GetRenderDriverInfo(i, &info) == 0) {
-			fprintf(stderr, "driver  = %d\n", i);
-			fprintf(stderr, "name    = %s\n", info.name);
-			fprintf(stderr, "flags   = 0x%02x\n", info.flags);
-			fprintf(stderr, "#txt    = %02d\n", info.num_texture_formats);
-			fprintf(stderr, "max res = %dx%d\n\n", info.max_texture_width, info.max_texture_height);
+
+			fprintf(stderr, "driver   = %d\n", i);
+			fprintf(stderr, "name     = %s\n", info.name);
+			fprintf(stderr, "flags    = 0x%02x\n", info.flags);
+			fprintf(stderr, "#txt     = %02d\n", info.num_texture_formats);
+			fprintf(stderr, "textures = ");
+			for (int j = 0; j < info.num_texture_formats; j++) {
+				switch (info.texture_formats[j]) {
+				case SDL_PIXELFORMAT_INDEX1LSB: fprintf(stderr, "INDEX1LSB "); break;
+				case SDL_PIXELFORMAT_INDEX1MSB: fprintf(stderr, "INDEX1MSB "); break;
+				case SDL_PIXELFORMAT_INDEX4LSB: fprintf(stderr, "INDEX4LSB "); break;
+				case SDL_PIXELFORMAT_INDEX4MSB: fprintf(stderr, "INDEX4MSB "); break;
+				case SDL_PIXELFORMAT_INDEX8: fprintf(stderr, "INDEX8 "); break;
+				case SDL_PIXELFORMAT_RGB332: fprintf(stderr, "RGB332 "); break;
+				case SDL_PIXELFORMAT_RGB24: fprintf(stderr, "RGB24 "); break;
+				case SDL_PIXELFORMAT_BGR24: fprintf(stderr, "BGR24 "); break;
+				case SDL_PIXELFORMAT_RGB888: fprintf(stderr, "RGB888 "); break;
+				case SDL_PIXELFORMAT_BGR888: fprintf(stderr, "BGR888 "); break;
+				case SDL_PIXELFORMAT_ARGB4444: fprintf(stderr, "ARGB4444 "); break;
+				case SDL_PIXELFORMAT_RGBA4444: fprintf(stderr, "RGBA4444 "); break;
+				case SDL_PIXELFORMAT_ABGR4444: fprintf(stderr, "AGBR4444 "); break;
+				case SDL_PIXELFORMAT_ARGB8888: fprintf(stderr, "ARGB8888 "); break;
+				case SDL_PIXELFORMAT_RGBA8888: fprintf(stderr, "RGBA8888 "); break;
+				case SDL_PIXELFORMAT_ABGR8888: fprintf(stderr, "AGBR8888 "); break;
+				default: fprintf(stderr, "0x%x ", info.texture_formats[j]);
+				}
+			}
+			fprintf(stderr, "\n");
+			fprintf(stderr, "max res  = %dx%d\n\n", info.max_texture_width, info.max_texture_height);
 		}
 	}
 }
