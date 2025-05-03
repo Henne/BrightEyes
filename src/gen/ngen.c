@@ -1945,6 +1945,9 @@ static void draw_mouse_cursor(void)
 				vgaptr[X] = 0xff;
 		vgaptr += O_WIDTH;
 	}
+#if !defined(__BORLANDC__)
+	sdl_update_rect_window(g_mouse_posx, g_mouse_posy, 16, 16);
+#endif
 }
 
 static void save_mouse_bg(void)
@@ -1994,6 +1997,10 @@ static void restore_mouse_bg(void)
 	for (i = 0; i < diffY; vgaptr += O_WIDTH, i++)
 		for (j = 0; j < diffX; j++)
 			vgaptr[j] = g_mouse_backbuffer[16 * i + j];
+
+#if !defined(__BORLANDC__)
+	sdl_update_rect_window(g_mouse_posx_bak, g_mouse_posy_bak, 16, 16);
+#endif
 }
 
 /* used by cda code */
@@ -2297,7 +2304,6 @@ static int sdl_event_loop(const int cmd)
 			g_mouse_posx = event.motion.x / ratio;
 			g_mouse_posy = event.motion.y / ratio;
 
-			sdl_update_full_window();
 
 		} else if (event.type == SDL_MOUSEBUTTONDOWN) {
 			if (event.button.button == 1) {
@@ -2477,10 +2483,6 @@ static int handle_input(void)
 static void vsync_or_key(const signed short val)
 {
 	signed short i;
-
-#if !defined(__BORLANDC__)
-	sdl_update_full_window();
-#endif
 
 	for (i = 0; i < val; i++) {
 		handle_input();
@@ -3057,10 +3059,13 @@ static signed short get_line_start_c(const char *str, const signed short x, cons
 	return (x_max - pos_x) / 2 + x;
 }
 
-static void print_str(const char *str, signed short x, signed short y)
+static void print_str(const char *str, const signed short x_in, const signed short y_in)
 {
 	signed short i;
 	signed short x_bak;
+	signed short x = x_in;
+	signed short y = y_in;
+	signed short x_max = x;
 	unsigned char c;
 
 	i = 0;
@@ -3075,6 +3080,8 @@ static void print_str(const char *str, signed short x, signed short y)
 	while (str[i]) {
 
 		c = str[i++];
+
+		if (x > x_max) x_max = x;
 
 		if ((c == 0x0d) || (c == 0x40)) {
 			/* newline */
@@ -3120,6 +3127,10 @@ static void print_str(const char *str, signed short x, signed short y)
 			x += print_chr(c, x, y);
 		}
 	}
+
+#if !defined(__BORLANDC__)
+	sdl_update_rect_window(x_in, y_in, x_max - x_in + 8, y - y_in + 8);
+#endif
 
 	call_mouse();
 }
@@ -3196,7 +3207,7 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 	}
 
 #if !defined(__BORLANDC__)
-	sdl_update_full_window();
+	sdl_update_rect_window(x, y, len * 8, 8);
 #endif
 
 	/* clear all input events */
@@ -3300,7 +3311,7 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 		}
 
 #if !defined(__BORLANDC__)
-	sdl_update_full_window();
+		sdl_update_rect_window(x, y, len * 8, 8);
 #endif
 	}
 
@@ -3440,9 +3451,6 @@ static signed short infobox(char *msg, const signed short digits)
 
 		retval = (unsigned short)atol(g_digitbuffer);
 	} else {
-#if !defined(__BORLANDC__)
-		sdl_update_full_window();
-#endif
 		g_action_table = g_action_input;
 		vsync_or_key(150 * lines);
 		g_action_table = NULL;
@@ -3465,9 +3473,6 @@ static signed short infobox(char *msg, const signed short digits)
 	g_fg_color[4] = 0;
 	g_in_key_ext = 0;
 
-#if !defined(__BORLANDC__)
-	sdl_update_full_window();
-#endif
 	return retval;
 }
 
@@ -3633,7 +3638,6 @@ signed short gui_radio(char *header, const signed int options, ...)
 		}
 
 #if !defined(__BORLANDC__)
-		sdl_update_full_window();
 		SDL_Delay(50);
 #endif
 
@@ -3706,10 +3710,6 @@ signed short gui_radio(char *header, const signed int options, ...)
 	g_text_y = l_text_y_bak;
 	g_text_x_end = l_text_x_end_bak;
 	g_in_key_ext = 0;
-
-#if !defined(__BORLANDC__)
-	sdl_update_full_window();
-#endif
 
 	return retval;
 }
@@ -4177,11 +4177,6 @@ static void enter_name(void)
 	copy_to_screen(g_picbuf1, dst, 94, 8, 0);
 	call_mouse();
 	print_str((const char*)g_hero.name, 180, 12);
-
-#if !defined(__BORLANDC__)
-	sdl_update_full_window();
-#endif
-
 }
 
 static void change_head(void)
@@ -4213,10 +4208,6 @@ static void change_head(void)
 		g_dst_y2 = 35;
 		do_draw_pic(0);
 	}
-
-#if !defined(__BORLANDC__)
-	sdl_update_full_window();
-#endif
 }
 
 /**
@@ -4251,10 +4242,6 @@ static void change_sex(void)
 		copy_to_screen(src, dst, 16, 16, 0);
 		call_mouse();
 	}
-
-#if !defined(__BORLANDC__)
-	sdl_update_full_window();
-#endif
 }
 
 static void save_picbuf(void)
@@ -4477,10 +4464,6 @@ static void print_attribs(void)
 			print_str(gen_itoa(p[0], buf, 10), g_attrib_coords[i].x, g_attrib_coords[i].y);
 		}
 	}
-
-#if !defined(__BORLANDC__)
-	sdl_update_full_window();
-#endif
 }
 
 
@@ -4928,10 +4911,6 @@ static void print_values(void)
 			break;
 		}
 	}
-
-#if !defined(__BORLANDC__)
-	sdl_update_full_window();
-#endif
 }
 
 static void refresh_screen(void)
@@ -5042,10 +5021,6 @@ static void refresh_screen(void)
 	} else {
 		print_values();
 	}
-
-#if !defined(__BORLANDC__)
-	sdl_update_full_window();
-#endif
 }
 
 static void clear_hero(void)
@@ -7010,10 +6985,6 @@ static void intro(void)
 			g_dst_src = (unsigned char*)(i * 960 + g_gen_ptr1_dis + 9600);
 			do_draw_pic(0);
 			vsync_or_key(20);
-
-#if !defined(__BORLANDC__)
-			sdl_update_full_window();
-#endif
 		}
 
 		/* elevate the attic logo */
@@ -7062,9 +7033,6 @@ static void intro(void)
 				vsync_or_key(2);
 			else
 				vsync_or_key(1);
-#if !defined(__BORLANDC__)
-			sdl_update_full_window();
-#endif
 		}
 
 		if (g_in_key_ext == 0)
@@ -7101,9 +7069,6 @@ static void intro(void)
 		g_dst_src = g_gen_ptr1_dis;
 		do_draw_pic(0);
 
-#if !defined(__BORLANDC__)
-		sdl_update_full_window();
-#endif
 		vsync_or_key(200);
 	}
 
@@ -7233,10 +7198,6 @@ static void intro(void)
 	set_textcolor(0xff, 0x00); // WHITE ON BLACK
 	print_str((char*)g_str_version, 290, 190);
 	vsync_or_key(400);
-
-#if !defined(__BORLANDC__)
-	sdl_update_full_window();
-#endif
 
 	if (g_dsagen_lang == LANG_DE) {
 
