@@ -20,8 +20,8 @@ unsigned char* normalize_ptr(unsigned char*);
 #endif
 
 #if !defined(__BORLANDC__)
-void sdl_update_full_window(void);
 void sdl_update_rect_window(const int, const int, const int, const int);
+static inline void sdl_update_full_window(void) { sdl_update_rect_window(0, 0, O_WIDTH, O_HEIGHT); }
 SDL_Window* sdl_get_window(void);
 int sdl_get_ratio(void);
 void sdl_change_window_size(void);

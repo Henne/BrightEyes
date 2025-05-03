@@ -138,52 +138,6 @@ void sdl_update_rect_window(const int x_in, const int y_in, const int width, con
 	SDL_RenderPresent(renderer);
 }
 
-void sdl_update_full_window(void)
-{
-	//sdl_update_rect_window(0, 0, 320, 200);
-
-#if 0
-	if (RATIO == 1) {
-		int pos = 0;
-		for (int y = 0; y < O_HEIGHT; y++) {
-			pos = y * O_WIDTH;
-			for (int x = 0; x < O_WIDTH; x++) {
-				pixels[pos] = palette[g_vga_memstart[pos]];
-				pos++;
-			}
-		}
-	} else {
-		int o_pos = 0;
-		for (int y_o = 0; y_o < O_HEIGHT; y_o++) {
-			o_pos = y_o * O_WIDTH;
-			for (int x_o = 0; x_o < O_WIDTH; x_o++) {
-
-				/* fill the first line by hand */
-				int w_pos = RATIO * (y_o * W_WIDTH + x_o);
-				int col = palette[g_vga_memstart[o_pos]];
-				for (int i = 0; i < RATIO; i++) {
-					pixels[w_pos + i] = col;
-				}
-				o_pos++;
-			}
-
-			/* copy it RATIO - 1 times */
-			for (int i = 1; i < RATIO; i++) {
-				memcpy(pixels + RATIO * y_o * W_WIDTH + i * W_WIDTH,
-					       pixels + RATIO * y_o * W_WIDTH,
-					       W_WIDTH * sizeof(Uint32));
-			}
-		}
-	}
-
-	SDL_UpdateTexture(texture, NULL, pixels, W_WIDTH * sizeof(Uint32));
-	SDL_RenderClear(renderer);
-	SDL_RenderCopy(renderer, texture, NULL, NULL);
-	SDL_RenderPresent(renderer);
-	//SDL_Delay(16);
-#endif
-}
-
 SDL_Window* sdl_get_window(void)
 {
 	return window;
