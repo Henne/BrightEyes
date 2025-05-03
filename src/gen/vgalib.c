@@ -100,8 +100,17 @@ void set_video_mode(unsigned short mode)
 }
 
 #if !defined(__BORLANDC__)
-void sdl_update_rect_window(const int x_in, const int y_in, const int width, const int height)
+void sdl_update_rect_window(const int x_in, const int y_in, const int width_in, const int height_in)
 {
+	int width = width_in;
+	int height = height_in;
+
+	if ((x_in + width) > O_WIDTH) width = O_WIDTH - x_in;
+	if ((y_in + height) > O_HEIGHT) height = O_HEIGHT - y_in;
+
+	//fprintf(stderr, "%s(x = %d, y = %d, width = %d, height = %d)\n",
+	//	 __func__, x_in, y_in, width_in, height_in);
+
 	if (RATIO == 1) {
 		for (int y_o = y_in; y_o < y_in + height; y_o++) {
 			int o_pos = O_WIDTH * y_o + x_in;
@@ -302,7 +311,7 @@ set_palette_loop1:
 	for (i = 0; i < colors; i++)
 		palette[first_color + i] = get_ARGB(pointer + 3 * i);
 
-	sdl_update_full_window();
+	sdl_update_rect_window(0, 0, O_WIDTH, O_HEIGHT);
 #endif
 }
 
