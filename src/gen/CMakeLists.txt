@@ -16,7 +16,6 @@ cmake_path(GET SDL2_INCLUDE_DIR PARENT_PATH SDL2_INCLUDE_DIR)
 add_executable(ngen
     cda_code.c
     ngen.c
-    random.c
     powerp20.c
     vgalib.c
     ail_stub.c)
