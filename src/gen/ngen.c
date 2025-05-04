@@ -3382,6 +3382,31 @@ static void draw_popup_line(const signed short line, const signed short type)
 }
 
 /**
+ * draw_popup_box() - draws a complete empty popup box
+ * @lines_header: number of lines for the header
+ * @lines_body:   number of lines for the body
+ *
+**/
+static void draw_popup_box(const int lines_header, const int lines_body)
+{
+	int i;
+
+	/* top border */
+	draw_popup_line(0, 0);
+
+	/* header lines */
+	for (i = 0; i < lines_header; i++)
+		draw_popup_line(1 + i, 1);
+
+	/* body lines */
+	for (i = 0; i < lines_body; i++)
+		draw_popup_line(1 + lines_header + i, 2);
+
+	/* bottom border */
+	draw_popup_line(1 + lines_header + lines_body, 3);
+}
+
+/**
  *	infobox() - draws and info- or enter_numberbox
  *	@msg:		the message for the box
  *	@digits:	number of digits to enter
@@ -3400,7 +3425,7 @@ static signed short infobox(char *msg, const signed short digits)
 	signed short l_text_x_end_bak;
 	signed short i;
 
-	signed short lines; // si
+	signed short lines;
 	signed short width;
 
 	retval = 0;
@@ -3423,19 +3448,16 @@ static signed short infobox(char *msg, const signed short digits)
 
 	update_mouse_cursor();
 
+	/* save the current background */
 	src = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
 	dst = g_gen_ptr1_dis;
 
 	vgalib_copy_from_screen(dst, src, width, (lines + 2) * 8);
 
-	/* draw the popup box */
-	draw_popup_line(0, 0);
+	/* draw popup */
+	draw_popup_box(lines, 0);
 
-	for (i = 0; i < lines; i++)
-		draw_popup_line(i + 1, 1);
-
-	draw_popup_line(lines + 1, 3);
-
+	/* save and set text colors */
 	get_textcolor(&fg_bak, &bg_bak);
 	set_textcolor(0xff, 0xdf); // WHITE ON GREEN
 
@@ -3568,12 +3590,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 	vgalib_copy_from_screen(dst, src, width, 8 * (lines_sum + 2));
 
 	/* draw popup */
-	draw_popup_line(0, 0);
-	for (i = 0; i < lines_header; i++)
-		draw_popup_line(i + 1, 1);
-	for (i = 0; options > i; i++)
-		draw_popup_line(lines_header + i + 1, 2);
-	draw_popup_line(lines_sum + 1, 3);
+	draw_popup_box(lines_header, options);
 
 	/* save and set text colors */
 	get_textcolor((signed short*)&fg_bak, (signed short*)&bg_bak);
