@@ -175,22 +175,25 @@ void sdl_update_rect_window(const int x_in, const int y_in, const int width_in, 
 		}
 	} else {
 		for (int y_o = y_in; y_o < y_in + height; y_o++) {
+			Uint32 *wp = pixels + RATIO * (RATIO * O_WIDTH * y_o + x_in);
 			int o_pos = O_WIDTH * y_o + x_in;
 			for (int x_o = x_in; x_o < x_in + width; x_o++) {
 				/* fill the first line by hand */
-				int w_pos = RATIO * (RATIO * O_WIDTH * y_o + x_o);
+				//int w_pos = RATIO * (RATIO * O_WIDTH * y_o + x_o);
 				Uint32 col = palette[g_vga_memstart[o_pos]];
-				for (int i = 0; i < RATIO; i++) {
-					pixels[w_pos + i] = col;
+				int i = RATIO;
+				while (i) {
+					*wp++ = col;
+					i--;
 				}
 				o_pos++;
 			}
 
 			/* copy it RATIO - 1 times */
+			const Uint32 off_src = RATIO * (RATIO * O_WIDTH * y_o + x_in);
 			for (int i = 1; i < RATIO; i++) {
-				memcpy(pixels + RATIO * (RATIO * O_WIDTH * y_o + x_in) + RATIO * O_WIDTH * i,
-					pixels + RATIO * (RATIO * O_WIDTH * y_o + x_in),
-						RATIO * width * sizeof(Uint32));
+				memcpy(pixels + off_src + RATIO * O_WIDTH * i,
+					pixels + off_src, RATIO * width * sizeof(Uint32));
 			}
 		}
 	}
