@@ -260,7 +260,7 @@ void sdl_change_window_size(void)
 		W_HEIGHT
 	);
 
-	sdl_update_full_window();
+	sdl_update_rect_window(0, 0, O_WIDTH, O_HEIGHT);
 }
 #endif
 
