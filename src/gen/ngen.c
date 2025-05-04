@@ -1330,6 +1330,8 @@ static unsigned char *g_gen_ptr6;
 static unsigned char *g_picbuf1;
 static unsigned char *g_picbuf2;
 static unsigned char *g_picbuf3;
+static unsigned char *g_popup_line;
+
 static signed short g_text_x;
 static signed short g_text_y;
 static signed short g_text_x_end;
@@ -1512,6 +1514,9 @@ static int alloc_buffers(void)
 	g_picbuf3 = gen_alloc(2800);
 	if (g_picbuf3 == NULL) errors++;
 
+	g_popup_line = gen_alloc(O_WIDTH * 8);
+	if (g_popup_line == NULL) errors++;
+
 	g_gen_ptr6 = (gen_alloc(1100) + 8);
 	if (g_gen_ptr6 == NULL) errors++;
 
@@ -1540,8 +1545,8 @@ static void free_buffers(void)
 		g_buffer_sex_dat = NULL;
 	}
 
-	if ((host_ptr = g_buffer_popup_dat - 8) != 0) {
-		free(host_ptr);
+	if (g_buffer_popup_dat != NULL) {
+		free(g_buffer_popup_dat - 8);
 		g_buffer_popup_dat = NULL;
 	}
 
@@ -1558,6 +1563,11 @@ static void free_buffers(void)
 	if ((host_ptr = g_buffer_font6) != 0) {
 		free(host_ptr);
 		g_buffer_font6 = NULL;
+	}
+
+	if (g_popup_line != NULL) {
+		free(g_popup_line);
+		g_popup_line = NULL;
 	}
 
 	if ((host_ptr = g_picbuf3) != 0) {
@@ -3366,8 +3376,9 @@ static void draw_popup_line(const signed short line, const signed short type)
 		}
 	}
 
-	/* 320 * (8 * line + y) + x */
-	dst = g_vga_memstart + O_WIDTH * (g_upper_border + 8 * line) + g_left_border;
+	memset(g_popup_line, 0x00, O_WIDTH * 8);
+
+	dst = g_popup_line;
 	src = g_buffer_popup_dat + popup_left;
 	vgalib_copy_to_screen(dst, src, 16, 8);
 
@@ -3378,6 +3389,11 @@ static void draw_popup_line(const signed short line, const signed short type)
 
 	src = g_buffer_popup_dat + popup_right;
 	vgalib_copy_to_screen(dst, src, 16, 8);
+
+	/* 320 * (8 * line + y) + x */
+	dst = g_vga_memstart + O_WIDTH * (g_upper_border + 8 * line) + g_left_border;
+	src = g_popup_line;
+	pic_copy(g_vga_memstart, g_left_border, g_upper_border + 8 * line, 0, 0, 32 * (g_menu_tiles + 1), 8, src, 3);
 }
 
 /**
