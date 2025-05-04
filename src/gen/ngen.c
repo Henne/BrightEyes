@@ -1339,7 +1339,7 @@ static signed short g_col_index;
 static unsigned char *g_buffer_font6;
 static char  *g_buffer_text;
 static unsigned char *g_buffer_heads_dat;
-static unsigned char *g_buffer_popup_nvf;
+static unsigned char *g_buffer_popup_dat;
 static unsigned char *g_buffer_sex_dat;
 
 static signed short g_essentials_loaded;
@@ -1491,8 +1491,8 @@ static int alloc_buffers(void)
 	g_buffer_heads_dat = gen_alloc(39000);
 	if (g_buffer_heads_dat == NULL) errors++;
 
-	g_buffer_popup_nvf = (gen_alloc(1673) + 8);
-	if (g_buffer_popup_nvf == NULL) errors++;
+	g_buffer_popup_dat = (gen_alloc(1673) + 8);
+	if (g_buffer_popup_dat == NULL) errors++;
 
 	g_buffer_sex_dat = gen_alloc(812);
 	if (g_buffer_sex_dat == NULL) errors++;
@@ -1540,9 +1540,9 @@ static void free_buffers(void)
 		g_buffer_sex_dat = NULL;
 	}
 
-	if ((host_ptr = g_buffer_popup_nvf - 8) != 0) {
+	if ((host_ptr = g_buffer_popup_dat - 8) != 0) {
 		free(host_ptr);
-		g_buffer_popup_nvf = NULL;
+		g_buffer_popup_dat = NULL;
 	}
 
 	if ((host_ptr = g_buffer_heads_dat) != 0) {
@@ -2665,13 +2665,13 @@ static void load_essential_files(void)
 		count++;
 	}
 
-	/* load POPUP.NVF */
+	/* load POPUP.DAT */
 	handle = open_datfile(19);
 	if (handle != -1) {
-		len = read_datfile(handle, g_buffer_popup_nvf - 8, 500);
+		len = read_datfile(handle, g_buffer_popup_dat - 8, 500);
 		close(handle);
 
-		decomp_pp20(g_buffer_popup_nvf, g_buffer_popup_nvf - 8, len);
+		decomp_pp20(g_buffer_popup_dat, g_buffer_popup_dat - 8, len);
 
 		count++;
 	}
@@ -3333,51 +3333,50 @@ static void draw_popup_line(const signed short line, const signed short type)
 {
 	unsigned char *dst;
 	unsigned char *src;
-	signed short i;
-	signed short popup_right;
-
-	register signed short popup_left;   // si
-	register signed short popup_middle; // di
-
-	/* 320 * (8 * line + y) + x */
-	dst = g_vga_memstart + O_WIDTH * (g_upper_border + 8 * line) + g_left_border;
+	/* tile offsets in POPUP.DAT */
+	int popup_left;
+	int popup_middle;
+	int popup_right;
+	int i;
 
 	switch (type) {
 		case 0: {
-			popup_left = 0;
-			popup_middle = 0x380;
-			popup_right = 0x80;
+			popup_left   =  0 * 128;
+			popup_middle =  7 * 128;
+			popup_right  =  1 * 128;
 			break;
 		}
 		case 1: {
-			popup_left = 0x100;
-			popup_middle = 0x480;
-			popup_right = 0x180;
+			popup_left   =  2 * 128;
+			popup_middle =  9 * 128;
+			popup_right  =  3 * 128;
 			break;
 		}
 		case 2: {
-			popup_left = 0x200;
-			popup_middle = 0x480;
-			popup_right = 0x180;
+			popup_left   =  4 * 128;
+			popup_middle =  9 * 128;
+			popup_right  =  3 * 128;
 			break;
 		}
 		case 3: {
-			popup_left = 0x280;
-			popup_middle = 0x580;
-			popup_right = 0x300;
+			popup_left   =  5 * 128;
+			popup_middle = 11 * 128;
+			popup_right  =  6 * 128;
 			break;
 		}
 	}
 
-	src = g_buffer_popup_nvf + popup_left;
+	/* 320 * (8 * line + y) + x */
+	dst = g_vga_memstart + O_WIDTH * (g_upper_border + 8 * line) + g_left_border;
+	src = g_buffer_popup_dat + popup_left;
 	vgalib_copy_to_screen(dst, src, 16, 8);
 
-	src = g_buffer_popup_nvf + popup_middle;
+	src = g_buffer_popup_dat + popup_middle;
 	dst += 16;
 	for (i = 0; i < g_menu_tiles; dst += 32, i++)
 		vgalib_copy_to_screen(dst, src, 32, 8);
 
-	src = g_buffer_popup_nvf + popup_right;
+	src = g_buffer_popup_dat + popup_right;
 	vgalib_copy_to_screen(dst, src, 16, 8);
 }
 
