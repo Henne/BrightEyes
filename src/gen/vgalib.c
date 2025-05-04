@@ -470,30 +470,31 @@ void copy_to_screen(unsigned char *src_in, unsigned char *dst_in, const signed s
 	unsigned char *dst = dst_in;
 	signed short h;
 
-	if (mode == 0) {
-		/* mode 0: copy from a buffer to screen */
+	/* mode 0: copy from a buffer to screen */
 
-		if ((width == O_WIDTH) && (height == O_HEIGHT)) {
-			/* special case: full screen copy */
-			memcpy(dst_in, src_in, O_WIDTH * O_HEIGHT);
-		} else {
+	if ((width == O_WIDTH) && (height == O_HEIGHT)) {
+		/* special case: full screen copy */
+		memcpy(dst_in, src_in, O_WIDTH * O_HEIGHT);
+	} else {
 
-			/* regular case */
-			for (h = height; h > 0; h--) {
-				memcpy(dst, src, width);
-				dst += O_WIDTH;
-				src += width;
-			}
+		/* regular case */
+		for (h = height; h > 0; h--) {
+			memcpy(dst, src, width);
+			dst += O_WIDTH;
+			src += width;
 		}
+	}
 
 #if !defined(__BORLANDC__)
-		const int off = dst_in - g_vga_memstart;
-		const int y = off / O_WIDTH;
-		const int x = off - y * O_WIDTH;
+	/* check if its really the vga memory, dst can also be another buffer */
+	const int offset = dst_in - g_vga_memstart;
+	if ((0 <= offset) && (offset <= O_WIDTH * O_HEIGHT)) {
+		const int y = offset / O_WIDTH;
+		const int x = offset - y * O_WIDTH;
 
 		sdl_update_rect_window(x, y, width, height);
-#endif
 	}
+#endif
 }
 
 void vgalib_copy_from_screen(unsigned char *dst_in, unsigned char *src_in, const int width, const int height)
