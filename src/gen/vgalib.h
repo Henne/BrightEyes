@@ -14,7 +14,7 @@ void pic_copy(unsigned char*, const signed short, const signed short, const sign
 void fill_rect(unsigned char*, const signed short, const signed short, const signed short);
 const unsigned short swap_u16(const unsigned short);
 
-void copy_to_screen(unsigned char*, unsigned char*, const signed short, const signed short, const signed short);
+void vgalib_copy_to_screen(unsigned char*, unsigned char*, const int, const int);
 
 void vgalib_copy_from_screen(unsigned char*, unsigned char*, const int, const int);
 

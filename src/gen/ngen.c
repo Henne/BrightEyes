@@ -3370,15 +3370,15 @@ static void draw_popup_line(const signed short line, const signed short type)
 	}
 
 	src = g_buffer_popup_nvf + popup_left;
-	copy_to_screen(src, dst, 16, 8, 0);
+	vgalib_copy_to_screen(dst, src, 16, 8);
 
 	src = g_buffer_popup_nvf + popup_middle;
 	dst += 16;
 	for (i = 0; i < g_menu_tiles; dst += 32, i++)
-		copy_to_screen(src, dst, 32, 8, 0);
+		vgalib_copy_to_screen(dst, src, 32, 8);
 
 	src = g_buffer_popup_nvf + popup_right;
-	copy_to_screen(src, dst, 16, 8, 0);
+	vgalib_copy_to_screen(dst, src, 16, 8);
 }
 
 /**
@@ -3462,7 +3462,7 @@ static signed short infobox(char *msg, const signed short digits)
 	dst = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
 	src = g_gen_ptr1_dis;
 
-	copy_to_screen(src, dst, width, (lines + 2) * 8, 0);
+	vgalib_copy_to_screen(dst, src, width, 8 * (lines + 2));
 
 	call_mouse();
 
@@ -3700,7 +3700,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 	/* restore the previous background */
 	dst = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
 	src = g_gen_ptr1_dis;
-	copy_to_screen(src, dst, width, (lines_sum + 2) * 8, 0);
+	vgalib_copy_to_screen(dst, src, width, 8 * (lines_sum + 2));
 
 	call_mouse();
 
@@ -4172,9 +4172,9 @@ static void enter_name(void)
 	dst = g_vga_memstart + 12 * O_WIDTH + 176;
 
 	update_mouse_cursor();
-	copy_to_screen(g_picbuf1, dst, 94, 8, 0);
+	vgalib_copy_to_screen(dst, g_picbuf1, 94, 8);
 	enter_string((char*)g_hero.name, 180, 12, 15, 1);
-	copy_to_screen(g_picbuf1, dst, 94, 8, 0);
+	vgalib_copy_to_screen(dst, g_picbuf1, 94, 8);
 	call_mouse();
 	print_str((const char*)g_hero.name, 180, 12);
 }
@@ -4239,7 +4239,7 @@ static void change_sex(void)
 		dst = g_vga_memstart + 7 * O_WIDTH + 305;
 		src = g_buffer_sex_dat + 256 * g_hero.sex;
 		update_mouse_cursor();
-		copy_to_screen(src, dst, 16, 16, 0);
+		vgalib_copy_to_screen(dst, src, 16, 16);
 		call_mouse();
 	}
 }
@@ -4393,14 +4393,14 @@ static void restore_picbuf(unsigned char* ptr)
 
 	if (x_1) {
 		p = ptr + y_1 * O_WIDTH + x_1;
-		copy_to_screen(g_picbuf1, p, w_1, h_1, 0);
+		vgalib_copy_to_screen(p, g_picbuf1, w_1, h_1);
 	}
 
 	p = ptr + y_2 * O_WIDTH + x_2;
-	copy_to_screen(g_picbuf2, p, w_2, h_2, 0);
+	vgalib_copy_to_screen(p, g_picbuf2, w_2, h_2);
 
 	p = ptr + y_3 * O_WIDTH + x_3;
-	copy_to_screen(g_picbuf3, p, w_3, h_3, 0);
+	vgalib_copy_to_screen(p, g_picbuf3, w_3, h_3);
 }
 
 
@@ -4931,7 +4931,7 @@ static void refresh_screen(void)
 
 			dst = g_gen_ptr1_dis + 7 * O_WIDTH + 305;
 			src = g_buffer_sex_dat + 256 * g_hero.sex;
-			copy_to_screen(src, dst, 16, 16, 0);
+			vgalib_copy_to_screen(dst, src, 16, 16);
 		}
 
 		/* page with base values and level is novice */
@@ -4940,11 +4940,11 @@ static void refresh_screen(void)
 
 			dst = g_gen_ptr1_dis + 178 * O_WIDTH + 284;
 			src = g_buffer_sex_dat + 512;
-			copy_to_screen(src, dst, 20, 15, 0);
+			vgalib_copy_to_screen(src, dst, 20, 15);
 
 			if (g_dsagen_lang == LANG_EN) {
 				dst = g_gen_ptr1_dis + 178 * O_WIDTH + 145;
-				copy_to_screen(src, dst, 20, 15, 0);
+				vgalib_copy_to_screen(dst, src, 20, 15);
 			}
 		}
 
@@ -4957,7 +4957,7 @@ static void refresh_screen(void)
 			if (g_hero.typus != 0) {
 
 				g_need_refresh = 1;
-				copy_to_screen(g_gen_ptr5, dst, 128, 184, 0);
+				vgalib_copy_to_screen(dst, g_gen_ptr5, 128, 184);
 
 				if (g_hero.sex != 0) {
 					print_str(get_text(271 + g_hero.typus),
@@ -4977,7 +4977,7 @@ static void refresh_screen(void)
 
 				wait_for_vsync();
 				set_palette(g_buffer_dmenge_dat + 128 * 184 + 2, 0, 32);
-				copy_to_screen(g_buffer_dmenge_dat, dst, 128, 184, 0);
+				vgalib_copy_to_screen(dst, g_buffer_dmenge_dat, 128, 184);
 			}
 		}
 
@@ -5019,7 +5019,7 @@ static void refresh_screen(void)
 		dst = g_gfx_ptr = g_vga_memstart;
 		src = g_gen_ptr1_dis;
 		update_mouse_cursor();
-		copy_to_screen(src, dst, O_WIDTH, O_HEIGHT, 0);
+		vgalib_copy_to_screen(dst, src, O_WIDTH, O_HEIGHT);
 		call_mouse();
 	} else {
 		print_values();

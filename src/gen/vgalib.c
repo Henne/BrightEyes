@@ -464,7 +464,7 @@ const unsigned short swap_u16(const unsigned short val)
 	return ((val & 0xff) << 8) | ((val >> 8) & 0xff);
 }
 
-void copy_to_screen(unsigned char *src_in, unsigned char *dst_in, const signed short width, const signed short height, const signed short mode)
+void vgalib_copy_to_screen(unsigned char *dst_in, unsigned char *src_in, const int width, const int height)
 {
 	unsigned char *src = src_in;
 	unsigned char *dst = dst_in;
