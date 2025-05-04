@@ -30,7 +30,7 @@ static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
 static SDL_Texture *texture = NULL;
 
-static Uint32 pixels[MAX_RATIO * MAX_RATIO * O_WIDTH * O_HEIGHT];
+static Uint32 *pixels = NULL;
 
 static const int SHOW_DRIVERS = 0; // set to 1 for driver info
 
@@ -118,6 +118,12 @@ void set_video_mode(unsigned short mode)
 			W_HEIGHT
 		);
 
+		pixels = calloc(RATIO * RATIO * O_WIDTH * O_HEIGHT * sizeof(Uint32), 1);
+		if (pixels == NULL) {
+			fprintf(stderr, "ERROR: cannot allocate pixels\n");
+			exit(-1);
+		}
+
 	} else {
 		SDL_DestroyTexture(texture);
 		SDL_DestroyRenderer(renderer);
@@ -150,6 +156,8 @@ void sdl_update_rect_window(const int x_in, const int y_in, const int width_in, 
 {
 	int width = width_in;
 	int height = height_in;
+
+	if (pixels == NULL) return;
 
 	if ((x_in + width) > O_WIDTH) width = O_WIDTH - x_in;
 	if ((y_in + height) > O_HEIGHT) height = O_HEIGHT - y_in;
@@ -205,6 +213,8 @@ int sdl_get_ratio(void)
 
 void sdl_change_window_size(void)
 {
+	if (pixels == NULL) return;
+
 	RATIO = (RATIO < MAX_RATIO) ? RATIO + 1 : 1;
 	W_WIDTH = RATIO * O_WIDTH;
 	W_HEIGHT = RATIO * O_HEIGHT;
@@ -216,7 +226,9 @@ void sdl_change_window_size(void)
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 
-	memset(pixels, 0, W_WIDTH * W_HEIGHT * sizeof(Uint32));
+	free(pixels);
+
+	pixels = calloc(RATIO * RATIO * W_WIDTH * W_HEIGHT * sizeof(Uint32), 1);
 
 	window = SDL_CreateWindow(
 		"BrightEyes",
