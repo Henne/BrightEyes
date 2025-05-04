@@ -470,21 +470,20 @@ void copy_to_screen(unsigned char *src_in, unsigned char *dst_in, const signed s
 	unsigned char *dst = dst_in;
 	signed short h;
 
-	if ((width == O_WIDTH) && (height == O_HEIGHT)) {
-		/* full screen copy */
-		memcpy(dst_in, src_in, O_WIDTH * O_HEIGHT);
-#if !defined(__BORLANDC__)
-		sdl_update_rect_window(0, 0, O_WIDTH, O_HEIGHT);
-#endif
-	} else {
-	}
-
 	if (mode == 0) {
+		/* mode 0: copy from a buffer to screen */
 
-		for (h = height; h > 0; h--) {
-			memcpy(dst, src, width);
-			dst += O_WIDTH;
-			src += width;
+		if ((width == O_WIDTH) && (height == O_HEIGHT)) {
+			/* special case: full screen copy */
+			memcpy(dst_in, src_in, O_WIDTH * O_HEIGHT);
+		} else {
+
+			/* regular case */
+			for (h = height; h > 0; h--) {
+				memcpy(dst, src, width);
+				dst += O_WIDTH;
+				src += width;
+			}
 		}
 
 #if !defined(__BORLANDC__)
@@ -496,6 +495,7 @@ void copy_to_screen(unsigned char *src_in, unsigned char *dst_in, const signed s
 #endif
 	} else if (mode == 2) {
 
+		/* mode 2: copy screen to a buffer */
 		for (h = height; h > 0; h--) {
 			memcpy(dst, src, width);
 			dst += width;
