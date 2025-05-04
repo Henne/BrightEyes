@@ -493,14 +493,19 @@ void copy_to_screen(unsigned char *src_in, unsigned char *dst_in, const signed s
 
 		sdl_update_rect_window(x, y, width, height);
 #endif
-	} else if (mode == 2) {
+	}
+}
 
-		/* mode 2: copy screen to a buffer */
-		for (h = height; h > 0; h--) {
-			memcpy(dst, src, width);
-			dst += width;
-			src += O_WIDTH;
-		}
+void vgalib_copy_from_screen(unsigned char *dst_in, unsigned char *src_in, const int width, const int height)
+{
+	unsigned char *src = src_in;
+	unsigned char *dst = dst_in;
+	int h;
+
+	for (h = height; h > 0; h--) {
+		memcpy(dst, src, width);
+		dst += width;
+		src += O_WIDTH;
 	}
 }
 

@@ -3426,7 +3426,7 @@ static signed short infobox(char *msg, const signed short digits)
 	src = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
 	dst = g_gen_ptr1_dis;
 
-	copy_to_screen(src, dst, width, (lines + 2) * 8, 2);
+	vgalib_copy_from_screen(dst, src, width, (lines + 2) * 8);
 
 	/* draw the popup box */
 	draw_popup_line(0, 0);
@@ -3565,7 +3565,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 	src = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
 	dst = g_gen_ptr1_dis;
 
-	copy_to_screen(src, dst, width, 8 * (lines_sum + 2), 2);
+	vgalib_copy_from_screen(dst, src, width, 8 * (lines_sum + 2));
 
 	/* draw popup */
 	draw_popup_line(0, 0);
@@ -4318,14 +4318,14 @@ static void save_picbuf(void)
 
 	if (x_1) {
 		p = g_gen_ptr1_dis + y_1 * O_WIDTH + x_1;
-		copy_to_screen(p, g_picbuf1, w_1, h_1, 2);
+		vgalib_copy_from_screen(g_picbuf1, p, w_1, h_1);
 	}
 
 	p = g_gen_ptr1_dis + y_2 * O_WIDTH + x_2;
-	copy_to_screen(p, g_picbuf2, w_2, h_2, 2);
+	vgalib_copy_from_screen(g_picbuf2, p, w_2, h_2);
 
 	p = g_gen_ptr1_dis + y_3 * O_WIDTH + x_3;
-	copy_to_screen(p, g_picbuf3, w_3, h_3, 2);
+	vgalib_copy_from_screen(g_picbuf3, p, w_3, h_3);
 }
 
 static void restore_picbuf(unsigned char* ptr)
