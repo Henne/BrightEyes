@@ -2715,34 +2715,31 @@ static void load_page(const signed short page)
 	unsigned char* ptr;
 	signed short handle;
 
-	if (page <= 10) {
-		/* check if this image is in the buffer */
+	if ((0 <= page) && (page <= 10)) {
+
+		/* check if this compressed image is in the buffer */
 		if (g_bg_buffer[page]) {
 			decomp_rle(g_gen_ptr1_dis, g_bg_buffer[page]);
 			return;
 		}
 
 		handle = open_datfile(page);
-		ptr = gen_alloc(get_filelength());
+		if (handle != -1) {
 
-		if (ptr != NULL) {
-			g_bg_buffer[page] = ptr;
-			g_bg_len[page] = get_filelength();
+			ptr = gen_alloc(get_filelength());
 
-			read_datfile(handle, g_bg_buffer[page], g_bg_len[page]);
-			decomp_rle(g_gen_ptr1_dis, g_bg_buffer[page]);
-			close(handle);
-		} else {
-			read_datfile(handle, g_page_buffer, 64000);
-			decomp_rle(g_gen_ptr1_dis, g_page_buffer);
+			if (ptr != NULL) {
+				g_bg_buffer[page] = ptr;
+				g_bg_len[page] = get_filelength();
+
+				read_datfile(handle, g_bg_buffer[page], g_bg_len[page]);
+				decomp_rle(g_gen_ptr1_dis, g_bg_buffer[page]);
+			} else {
+				read_datfile(handle, g_page_buffer, 64000);
+				decomp_rle(g_gen_ptr1_dis, g_page_buffer);
+			}
 			close(handle);
 		}
-	} else {
-		/* this should not happen */
-		handle = open_datfile(page);
-		read_datfile(handle, g_gen_ptr1_dis - 8, 64000);
-		close(handle);
-		decomp_pp20(g_gen_ptr1_dis, g_gen_ptr1_dis - 8, get_filelength());
 	}
 }
 
