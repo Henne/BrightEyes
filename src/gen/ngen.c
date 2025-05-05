@@ -2097,43 +2097,35 @@ static signed short get_mouse_action(const signed short x, const signed short y,
  * decomp_rle() - decompress a RLE compressed picture
  * @dst:	destination
  * @src:	source
- * @y:		y - Coordinate to start
- * @x:		x - Coordinate to start
- * @width:	width of the picture
- * @height:	height of the picture
- * @mode:	if 2 copy pixels with the value 0
  *
 */
-static void decomp_rle(unsigned char *dst, unsigned char *src, signed short x, signed short y,
-				signed short width, signed short height, unsigned short mode)
+static void decomp_rle(unsigned char *dst, unsigned char *src)
 {
-	signed short i, j, k;
-	signed char val;
+	unsigned char *dst_loc = dst;
+	int i;
+	int j;
+	int k;
 	unsigned char n;
-	signed char pix;
-	unsigned char *dst_loc;
 
-	dst_loc = dst;
-	dst_loc += O_WIDTH * y + x;
 	update_mouse_cursor();
 
-	for (i = 0; i < height; dst_loc += O_WIDTH, i++) {
+	for (i = 0; i < O_HEIGHT; i++) {
 
 		j = 0;
 
-		while (j < width) {
+		while (j < O_WIDTH) {
 
-			if ((val = *(src++)) == 0x7f) {
+			if (*src == 0x7f) {
+				src++;
 				n = *src++;
-				pix = *src++;
 
-				if ((pix != 0) || (mode != 2))
-					for (k = 0; k < n; k++)
-						*(dst_loc + j + k) = pix;
+				for (k = 0; k < n; k++)
+					*dst_loc++ = *src;
+
+				src++;
 				j += n;
 			} else {
-				if ((val != 0) || (mode != 2))
-					*(dst_loc + j) = val;
+				*dst_loc++ = *src++;
 				j++;
 			}
 		}
@@ -2726,7 +2718,7 @@ static void load_page(const signed short page)
 	if (page <= 10) {
 		/* check if this image is in the buffer */
 		if (g_bg_buffer[page]) {
-			decomp_rle(g_gen_ptr1_dis, g_bg_buffer[page], 0, 0, O_WIDTH, O_HEIGHT, 0);
+			decomp_rle(g_gen_ptr1_dis, g_bg_buffer[page]);
 			return;
 		}
 
@@ -2738,11 +2730,11 @@ static void load_page(const signed short page)
 			g_bg_len[page] = get_filelength();
 
 			read_datfile(handle, g_bg_buffer[page], g_bg_len[page]);
-			decomp_rle(g_gen_ptr1_dis, g_bg_buffer[page], 0, 0, O_WIDTH, O_HEIGHT, 0);
+			decomp_rle(g_gen_ptr1_dis, g_bg_buffer[page]);
 			close(handle);
 		} else {
 			read_datfile(handle, g_page_buffer, 64000);
-			decomp_rle(g_gen_ptr1_dis, g_page_buffer, 0, 0, O_WIDTH, O_HEIGHT, 0);
+			decomp_rle(g_gen_ptr1_dis, g_page_buffer);
 			close(handle);
 		}
 	} else {
