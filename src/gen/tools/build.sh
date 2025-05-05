@@ -28,7 +28,6 @@ cp powerp20.c ${DRIVE_C}/src
 cp vgalib.c vgalib.h ${DRIVE_C}/src
 cp normptr.asm ${DRIVE_C}/src
 cp -r AIL ${DRIVE_C}/src
-cp cda_data.asm cda_data.h ${DRIVE_C}/src
 
 cp hero.h ${DRIVE_C}/src
 cp TLINK.RES ${DRIVE_C}/src
