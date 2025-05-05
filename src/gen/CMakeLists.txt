@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 3.26)
+cmake_minimum_required(VERSION 3.25.1)
 project(NGen VERSION 1.0.0
     DESCRIPTION "DSA1/RAK1 Character generator"
-    HOMEPAGE_URL "https://github.com/NewProggie/BrightEyes"
+    HOMEPAGE_URL "https://github.com/Henne/BrightEyes"
     LANGUAGES C)
 
 set(CMAKE_C_STANDARD 11)
