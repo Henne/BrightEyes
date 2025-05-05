@@ -14,17 +14,24 @@
 
 #include <stdio.h> // fprintf, NULL
 
+typedef unsigned char uint8;
+#if !defined(__BORLANDC__)
+typedef unsigned int uint32;
+#else
+typedef unsigned long uint32;
+#endif
+
 // 4 Byte in Little Endian Order
-static inline unsigned int readd(const unsigned char* p) {
+static uint32 readd(const unsigned char* p) {
 	return (p[0] | p[1] << 8 | p[2] << 16 | p[3] << 24);
 }
 
 // 3 Byte in Big Endian Order
-static inline unsigned int val(const unsigned char *p) {
+static uint32 val(const unsigned char *p) {
 	return (p[0]<<16 | p[1] << 8 | p[2]);
 }
 
-static unsigned long depackedlen(const unsigned char *p, unsigned long plen) {
+static uint32 depackedlen(const unsigned char *p, uint32 plen) {
 /*	DSA1/ROA1 doesn't use the first bytes as a signature "PP20".
  *	It's used instead for the lenght of the packed data. */
 
@@ -40,8 +47,6 @@ static unsigned long depackedlen(const unsigned char *p, unsigned long plen) {
 	return 0; /* not a powerpacker file */
 }
 
-typedef unsigned char uint8;
-typedef unsigned int uint32;
 
 #define PP_READ_BITS(nbits, var) do {                          \
   bit_cnt = (nbits);                                           \
@@ -115,7 +120,7 @@ int ppDecrunch(uint8 *src, uint8 *dest, uint8 *offset_lens,
 
 void decomp_pp20(unsigned char *dst, unsigned char *src, signed long plen)
 {
-	unsigned long unplen;
+	uint32 unplen;
 
 	if (plen < 4)
 		fprintf(stderr, "PP20: Length argument is below 4\n");
