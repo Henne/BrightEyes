@@ -6,6 +6,7 @@
 BCC.EXE -mlarge -O  -c -2 -Z CDA_CODE.C
 BCC.EXE -mlarge -O  -c -2 -Z -IAIL NGEN.C
 BCC.EXE -mlarge -O  -c -2 -Z VGALIB.C
+@REM BCC.EXE -mlarge -O  -c -2 -Z POWERP20.C
 TASM.EXE /os /z POWERP20.ASM POWERP20.OBJ
 TASM.EXE /os /z NORMPTR.ASM NORMPTR.OBJ
 TASM.EXE /m /w+ /ml /iAIL AIL\AIL.ASM AIL.OBJ
