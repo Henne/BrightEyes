@@ -1860,15 +1860,17 @@ static void mouse_enable(void)
 		g_mouse_current_cursor = g_mouse_mask;
 
 		if (g_have_mouse == 2) {
-
+#if defined(__BORLANDC__)
 			/* move cursor  to initial position */
 			p1 = 4;
 			p3 = g_mouse_posx;
 			p4 = g_mouse_posy;
 
 			do_mouse_action(&p1, &p2, &p3, &p4, &p5);
-#if defined(__BORLANDC__)
 			mouse_do_enable(0x1f, (unsigned char*)&mouse_isr);
+#else
+			const int ratio = sdl_get_ratio();
+			SDL_WarpMouseInWindow(sdl_get_window(), g_mouse_posx * ratio, g_mouse_posy * ratio);
 #endif
 		}
 	}
