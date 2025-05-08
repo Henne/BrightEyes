@@ -1874,31 +1874,26 @@ static void mouse_enable(void)
 	}
 }
 
-static void mouse_do_disable(void)
-{
-#if defined(__BORLANDC__)
-	unsigned short p1, p2, p3, p4, p5;
-
-	/* restore the old int 0x78 handler */
-	setvect(0x78, (void interrupt far (*)(void))g_irq78_bak);
-
-	/* uninstall mouse event handler */
-	p1 = 0x0c;
-	p3 = 0;
-	p4 = 0;
-	p5 = 0;
-
-	do_mouse_action(&p1, &p2, &p3, &p4, &p5);
-
-	g_mouse_handler_installed = 0;
-#endif
-}
-
 /* used by cda code */
 void mouse_disable(void)
 {
 	if (g_have_mouse == 2) {
-		mouse_do_disable();
+#if defined(__BORLANDC__)
+		unsigned short p1, p2, p3, p4, p5;
+
+		/* restore the old int 0x78 handler */
+		setvect(0x78, (void interrupt far (*)(void))g_irq78_bak);
+
+		/* uninstall mouse event handler */
+		p1 = 0x0c;
+		p3 = 0;
+		p4 = 0;
+		p5 = 0;
+
+		do_mouse_action(&p1, &p2, &p3, &p4, &p5);
+
+		g_mouse_handler_installed = 0;
+#endif
 	}
 }
 
