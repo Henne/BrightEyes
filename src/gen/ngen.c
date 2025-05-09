@@ -4578,7 +4578,7 @@ static void print_values(void)
 			print_attribs();
 
 			/* return if no typus */
-			if (g_hero.typus == 0) return;
+			if (!g_hero.typus) return;
 
 			/* print height */
 			if (g_dsagen_lang == LANG_DE) {
@@ -5034,7 +5034,7 @@ static void refresh_screen(void)
 			/* draw DMENGE.DAT or the archetype image and name */
 			dst = g_gen_ptr1_dis + 8 * O_WIDTH + 16;
 
-			if (g_hero.typus != 0) {
+			if (!g_hero.typus) {
 
 				g_need_refresh = 1;
 				vgalib_copy_to_screen(dst, g_gen_ptr5, 128, 184);
@@ -5062,7 +5062,7 @@ static void refresh_screen(void)
 		}
 
 		/* if hero has a typus */
-		if (g_hero.typus != 0) {
+		if (g_hero.typus) {
 			/* draw the head */
 
 			nvf.dst = g_gen_ptr6;
@@ -5754,7 +5754,7 @@ static void change_attributes(void)
 		infobox(get_text(266), 0);
 		return;
 	}
-	/* if typus != 0 */
+	/* if hero has an archtype */
 	if (g_hero.typus) {
 
 		if (gui_bool(get_text(73))) {
@@ -6035,7 +6035,7 @@ static void select_typus(void)
 			g_hero.typus = t.t[di - 1];
 			g_screen_var = 1;
 
-			load_typus((signed short)g_hero.typus);
+			load_typus(g_hero.typus);
 
 			mouse_bg();
 			call_fill_rect_gen(g_vga_memstart, 16, 8, 143, 191, 0);
@@ -6880,7 +6880,7 @@ static void do_gen(void)
 		/* Change Head Logic */
 		if ((g_gen_page == 0) && ((g_in_key_ext == KEY_UP) || (g_in_key_ext == KEY_DOWN))) {
 
-			if (g_hero.typus != 0) {
+			if (g_hero.typus) {
 				if (g_in_key_ext == KEY_UP) {
 					g_head_current = (g_head_current < g_head_last) ?
 								g_head_current + 1 : g_head_first;
