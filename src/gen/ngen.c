@@ -5622,7 +5622,7 @@ static void fill_values(void)
 			break;
 		}
 	}
-	/* calclate AT and PA values */
+	/* calculate AT and PA values */
 	calc_at_pa();
 
 	/* if mode == novice */
@@ -6899,7 +6899,6 @@ static void do_gen(void)
 		}
 
 		/* Change Page Logic */
-
 		if (g_level == 2) {
 
 			if (g_hero.typus) {
