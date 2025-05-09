@@ -1920,7 +1920,7 @@ static void mouse_move_cursor(const signed short x, const signed short y)
 #endif
 }
 
-static void draw_mouse_cursor(void)
+static void mouse_cursor_draw(void)
 {
 	unsigned char *vgaptr;
 	signed short *mouse_cursor;
@@ -1957,7 +1957,7 @@ static void draw_mouse_cursor(void)
 #endif
 }
 
-static void save_mouse_bg(void)
+static void mouse_save_bg(void)
 {
 	unsigned char *vgaptr;
 	signed short rangeX;
@@ -1982,7 +1982,7 @@ static void save_mouse_bg(void)
 			g_mouse_backbuffer[16 * Y + X] = vgaptr[X];
 }
 
-static void restore_mouse_bg(void)
+static void mouse_restore_bg(void)
 {
 	unsigned char *vgaptr;
 	signed short rangeX;
@@ -2011,20 +2011,20 @@ static void restore_mouse_bg(void)
 }
 
 /* used by cda code */
-void update_mouse_cursor(void)
+void mouse_bg(void)
 {
 	if (g_mouse_locked == 0) {
 
 		if (g_mouse_refresh_flag == 0) {
 			g_mouse_locked = 1;
-			restore_mouse_bg();
+			mouse_restore_bg();
 			g_mouse_locked = 0;
 		}
 		g_mouse_refresh_flag--;
 	}
 }
 
-static void call_mouse(void)
+static void mouse_cursor(void)
 {
 	if (g_mouse_locked == 0) {
 
@@ -2042,25 +2042,25 @@ static void call_mouse(void)
 
 			if (g_mouse_posy > O_HEIGHT - 5) g_mouse_posy = O_HEIGHT - 5;
 
-			save_mouse_bg();
+			mouse_save_bg();
 
 			g_mouse_posx_bak = g_mouse_posx;
 			g_mouse_posy_bak = g_mouse_posy;
 
-			draw_mouse_cursor();
+			mouse_cursor_draw();
 
 			g_mouse_locked = 0;
 		}
 	}
 }
 
-static void mouse_compare(void)
+static void mouse_motion(void)
 {
 	if (g_mouse_moved) {
 		g_mouse_moved = 0;
 
-		update_mouse_cursor();
-		call_mouse();
+		mouse_bg();
+		mouse_cursor();
 	}
 }
 
@@ -2104,7 +2104,7 @@ static void decomp_rle(unsigned char *dst, unsigned char *src)
 	int k;
 	unsigned char n;
 
-	update_mouse_cursor();
+	mouse_bg();
 
 	for (i = 0; i < O_HEIGHT; i++) {
 
@@ -2128,7 +2128,7 @@ static void decomp_rle(unsigned char *dst, unsigned char *src)
 		}
 	}
 
-	call_mouse();
+	mouse_cursor();
 }
 
 #if defined(__BORLANDC__)
@@ -2473,7 +2473,7 @@ static int handle_input(void)
 		}
 	}
 
-	mouse_compare();
+	mouse_motion();
 	g_in_key_ext = l_key_ext;
 
 	return 0;
@@ -2842,11 +2842,11 @@ static void do_draw_pic(const signed short mode)
 	width = g_dst_x2 - g_dst_x1 + 1;
 	height = g_dst_y2 - g_dst_y1 + 1;
 
-	update_mouse_cursor();
+	mouse_bg();
 
 	pic_copy(g_dst_dst, g_dst_x1, g_dst_y1, s_x, s_y, width, height, g_dst_src, mode);
 
-	call_mouse();
+	mouse_cursor();
 }
 
 void call_fill_rect_gen(unsigned char *ptr, signed short x1, signed short y1, signed short x2, signed short y2, signed short color)
@@ -3066,7 +3066,7 @@ static void print_str(const char *str, const signed short x_in, const signed sho
 
 	i = 0;
 
-	update_mouse_cursor();
+	mouse_bg();
 
 	if (g_fg_color[4] == 1)
 		x = get_line_start_c(str, x, g_text_x_end);
@@ -3128,20 +3128,20 @@ static void print_str(const char *str, const signed short x_in, const signed sho
 	sdl_update_rect_window(x_in, y_in, x_max - x_in + 8, y - y_in + 8);
 #endif
 
-	call_mouse();
+	mouse_cursor();
 }
 
 static signed short print_line(char *str)
 {
 	signed short lines = 1;
 
-	update_mouse_cursor();
+	mouse_bg();
 
 	lines = str_splitter(str);
 
 	print_str(str, g_text_x, g_text_y);
 
-	call_mouse();
+	mouse_cursor();
 
 	return lines;
 }
@@ -3188,7 +3188,7 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 	signed short width;
 	signed short i;
 
-	update_mouse_cursor();
+	mouse_bg();
 
 	if (txt == 0) {
 		for (i = 0; i < len; i++) {
@@ -3237,7 +3237,7 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 
 		if (g_in_key_ext == KEY_ESC) {
 			*dst = 0;
-			call_mouse();
+			mouse_cursor();
 			g_in_key_ext = 0;
 			return 1;
 		}
@@ -3320,7 +3320,7 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 	}
 
 	*dst = 0;
-	call_mouse();
+	mouse_cursor();
 
 	return 0;
 }
@@ -3447,7 +3447,7 @@ static signed short infobox(char *msg, const signed short digits)
 	g_upper_border = (O_HEIGHT - (lines + 2) * 8) / 2;
 	g_text_y = g_upper_border + 7;
 
-	update_mouse_cursor();
+	mouse_bg();
 
 	/* save the current background */
 	src = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
@@ -3465,7 +3465,7 @@ static signed short infobox(char *msg, const signed short digits)
 	print_line(msg);
 
 	g_mouse_rightclick_event = 0;
-	call_mouse();
+	mouse_cursor();
 
 	if (digits) {
 		enter_string(g_digitbuffer,
@@ -3480,14 +3480,14 @@ static signed short infobox(char *msg, const signed short digits)
 	}
 
 	set_textcolor(fg_bak, bg_bak);
-	update_mouse_cursor();
+	mouse_bg();
 
 	dst = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
 	src = g_gen_ptr1_dis;
 
 	vgalib_copy_to_screen(dst, src, width, 8 * (lines + 2));
 
-	call_mouse();
+	mouse_cursor();
 
 	g_text_x = l_text_x_bak;
 	g_text_y = l_text_y_bak;
@@ -3513,7 +3513,7 @@ static void fill_radio_button(const signed short old_pos, const signed short new
 	signed short y;
 	signed short i;
 
-	update_mouse_cursor();
+	mouse_bg();
 
 	/* unmark the old radio button, if any */
 	if (old_pos != -1) {
@@ -3531,7 +3531,7 @@ static void fill_radio_button(const signed short old_pos, const signed short new
 
 	call_fill_rect_gen(g_vga_memstart, x, y, x + 3, y + 3, 0xd9);
 
-	call_mouse();
+	mouse_cursor();
 }
 
 /**
@@ -3582,7 +3582,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 	lines_sum = lines_header + options;
 	g_upper_border = (O_HEIGHT - 8 * (lines_sum + 2)) / 2;
 	g_text_y = g_upper_border + 7;
-	update_mouse_cursor();
+	mouse_bg();
 
 	/* save the current background */
 	src = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
@@ -3624,7 +3624,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 	g_mouse_posx_min = g_left_border;
 	g_mouse_posy_min = g_upper_border + 8 * (lines_header + 1);
 	g_mouse_posy_max = (g_upper_border + 8 * (lines_header + 1) + 8 * options) - 1;
-	call_mouse();
+	mouse_cursor();
 	g_mouse_rightclick_event = 0;
 
 	while (!done) {
@@ -3703,7 +3703,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 		}
 	}
 
-	update_mouse_cursor();
+	mouse_bg();
 
 	g_mouse_posx_bak = g_mouse_posx = mx_bak;
 	g_mouse_posy_bak = g_mouse_posy = my_bak;
@@ -3720,7 +3720,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 	src = g_gen_ptr1_dis;
 	vgalib_copy_to_screen(dst, src, width, 8 * (lines_sum + 2));
 
-	call_mouse();
+	mouse_cursor();
 
 	set_textcolor(fg_bak, bg_bak);
 
@@ -4189,11 +4189,11 @@ static void enter_name(void)
 
 	dst = g_vga_memstart + 12 * O_WIDTH + 176;
 
-	update_mouse_cursor();
+	mouse_bg();
 	vgalib_copy_to_screen(dst, g_picbuf1, 94, 8);
 	enter_string((char*)g_hero.name, 180, 12, 15, 1);
 	vgalib_copy_to_screen(dst, g_picbuf1, 94, 8);
-	call_mouse();
+	mouse_cursor();
 	print_str((const char*)g_hero.name, 180, 12);
 }
 
@@ -4256,9 +4256,9 @@ static void change_sex(void)
 	} else {
 		dst = g_vga_memstart + 7 * O_WIDTH + 305;
 		src = g_buffer_sex_dat + 256 * g_hero.sex;
-		update_mouse_cursor();
+		mouse_bg();
 		vgalib_copy_to_screen(dst, src, 16, 16);
-		call_mouse();
+		mouse_cursor();
 	}
 }
 
@@ -5036,9 +5036,9 @@ static void refresh_screen(void)
 		print_values();
 		dst = g_gfx_ptr = g_vga_memstart;
 		src = g_gen_ptr1_dis;
-		update_mouse_cursor();
+		mouse_bg();
 		vgalib_copy_to_screen(dst, src, O_WIDTH, O_HEIGHT);
-		call_mouse();
+		mouse_cursor();
 	} else {
 		print_values();
 	}
@@ -5155,9 +5155,9 @@ static void new_attributes(void)
 		//g_hero.attrib[di].normal = g_hero.attrib[di].current = randval;
 		att_ptr[3 * di + 0] = att_ptr[3 * di + 1] = randval;
 
-		update_mouse_cursor();
+		mouse_bg();
 		refresh_screen();
-		call_mouse();
+		mouse_cursor();
 	}
 
 	att_ptr = &g_hero.attrib[7].normal;
@@ -5196,9 +5196,9 @@ static void new_attributes(void)
 		//g_hero.attrib[di].normal = g_hero.attrib[di].current = randval;
 		att_ptr[3 * di + 0] = att_ptr[3 * di + 1] = randval;
 
-		update_mouse_cursor();
+		mouse_bg();
 		refresh_screen();
-		call_mouse();
+		mouse_cursor();
 	}
 }
 
@@ -5977,11 +5977,11 @@ static void select_typus(void)
 
 			load_typus((signed short)g_hero.typus);
 
-			update_mouse_cursor();
+			mouse_bg();
 			call_fill_rect_gen(g_vga_memstart, 16, 8, 143, 191, 0);
 			wait_for_vsync();
 			set_palette(g_gen_ptr5 + 0x5c02, 0, 32);
-			call_mouse();
+			mouse_cursor();
 
 			g_head_typus = (g_hero.typus > 10 ? 10 : g_hero.typus);
 
@@ -6671,11 +6671,11 @@ static void choose_typus(void)
 	}
 
 	load_typus(g_hero.typus);
-	update_mouse_cursor();
+	mouse_bg();
 	call_fill_rect_gen(g_vga_memstart, 16, 8, 143, 191, 0);
 	wait_for_vsync();
 	set_palette(g_gen_ptr5 + 0x5c02, 0, 32);
-	call_mouse();
+	mouse_cursor();
 
 
 	g_head_typus = (g_hero.typus > 10 ? 10 : g_hero.typus);
@@ -7328,13 +7328,13 @@ int main_gen(int argc, char **argv)
 
 	flush_keyboard_queue();
 
-	call_mouse();
+	mouse_cursor();
 
 	do_gen();
 
 	stop_music();
 
-	update_mouse_cursor();
+	mouse_bg();
 
 	mouse_disable();
 
