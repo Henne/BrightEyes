@@ -5034,7 +5034,7 @@ static void refresh_screen(void)
 			/* draw DMENGE.DAT or the archetype image and name */
 			dst = g_gen_ptr1_dis + 8 * O_WIDTH + 16;
 
-			if (!g_hero.typus) {
+			if (g_hero.typus) {
 
 				g_need_refresh = 1;
 				vgalib_copy_to_screen(dst, g_gen_ptr5, 128, 184);
