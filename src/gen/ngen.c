@@ -6786,6 +6786,8 @@ static void do_gen(void)
 			g_screen_var = 0;
 		}
 
+		flush_keyboard_queue();
+
 		g_action_table = g_action_page[g_gen_page];
 		done = handle_input();
 		g_action_table = NULL;
