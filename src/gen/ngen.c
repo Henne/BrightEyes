@@ -2758,13 +2758,18 @@ static void load_page(const signed short page)
 
 		/* check if this compressed image is in the buffer */
 		if (g_bg_buffer[page]) {
+#if defined(__BORLANDC__)
 			decomp_rle(g_gen_ptr1_dis, g_bg_buffer[page]);
+#else
+			memcpy(g_gen_ptr1_dis, g_bg_buffer[page], g_bg_len[page]);
+#endif
 			return;
 		}
 
 		handle = open_datfile(page);
 		if (handle != -1) {
 
+#if defined(__BORLANDC__)
 			ptr = gen_alloc(get_filelength());
 
 			if (ptr != NULL) {
@@ -2777,6 +2782,21 @@ static void load_page(const signed short page)
 				read_datfile(handle, g_page_buffer, 64000);
 				decomp_rle(g_gen_ptr1_dis, g_page_buffer);
 			}
+#else
+			ptr = gen_alloc(O_WIDTH * O_HEIGHT);
+
+			if (ptr != NULL) {
+				g_bg_buffer[page] = ptr;
+				g_bg_len[page] = O_WIDTH * O_HEIGHT;
+
+				read_datfile(handle, g_page_buffer, g_bg_len[page]);
+				decomp_rle(g_bg_buffer[page], g_page_buffer);
+				memcpy(g_gen_ptr1_dis, g_bg_buffer[page], g_bg_len[page]);
+			} else {
+				read_datfile(handle, g_page_buffer, 64000);
+				decomp_rle(g_gen_ptr1_dis, g_page_buffer);
+			}
+#endif
 			close(handle);
 		}
 	}
