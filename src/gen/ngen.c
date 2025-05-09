@@ -6107,16 +6107,15 @@ static void inc_skill(const signed short skill, const signed short max, char *ms
 			}
 		}
 
-		refresh_screen();
-
 	} else {
 		/* print failure message */
 		infobox(get_text(153), 0);
 		/* increment try */
 		g_skill_incs[skill].tries++;
 
-		refresh_screen();
 	}
+
+	refresh_screen();
 }
 
 static void select_skill(void)
@@ -6308,15 +6307,15 @@ static void inc_spell(const signed short spell)
 			/* increment incs */
 			g_spell_incs[spell].incs++;
 
-			refresh_screen();
 		} else {
 			/* show failure */
 			infobox(get_text(153), 0);
 			/* increment tries */
 			g_spell_incs[spell].tries++;
 
-			refresh_screen();
 		}
+
+		refresh_screen();
 	}
 }
 
