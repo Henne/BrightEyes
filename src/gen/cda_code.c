@@ -90,7 +90,7 @@ static signed short g_cd_audio_track;
 static unsigned char far cd_buf1[824];
 
 /* externally used prototypes from (mainfile) */
-extern void update_mouse_cursor(void);
+extern void mouse_bg(void);
 extern void mouse_disable(void);
 extern void exit_video(void);
 extern void stop_music(void);
@@ -391,7 +391,7 @@ static void CD_radio_insert_cd(void)
 
 	if (si == 2) {
 		stop_music();
-		update_mouse_cursor();
+		mouse_bg();
 		mouse_disable();
 		restore_timer_isr();
 		
