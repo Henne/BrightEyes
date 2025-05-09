@@ -903,6 +903,12 @@ static const struct struct_color g_pal_genbg[32] = {
 
 static signed short g_screen_var = 0;
 
+#if !defined(__BORLANDC__)
+static SDL_Cursor *g_sdl_cursor;
+static Uint8 g_sdl_cursor_data[16 * 16];
+static Uint8 g_sdl_cursor_mask[16 * 16];
+#endif
+
 static unsigned short g_mouse_mask[32] = {
         0x7fff, 0x9fff, 0x87ff, 0xc1ff,
         0xc07f, 0xe01f, 0xe007, 0xf00f,
@@ -1856,8 +1862,43 @@ static void mouse_enable(void)
 			g_have_mouse = 0;
 		}
 #endif
-
 		g_mouse_current_cursor = g_mouse_mask;
+
+#if !defined(__BORLANDC__)
+		signed short *mouse_cursor = (signed short*)g_mouse_current_cursor + 16;
+		int ratio = sdl_get_ratio();
+		int i = -1;
+
+		for (int Y = 0; Y < 16; Y++) {
+			signed short mask = *mouse_cursor++;
+			for (int X = 0; X < 16; X++) {
+				if (X % 8) {
+					g_sdl_cursor_data[i] <<= 0x01;
+					g_sdl_cursor_mask[i] <<= 0x01;
+				} else {
+					++i;
+					g_sdl_cursor_data[i] = 0x00;
+					g_sdl_cursor_mask[i] = 0x00;
+				}
+
+				if ((0x8000 >> X) & mask) {
+					g_sdl_cursor_data[i] |= 0x00;
+					g_sdl_cursor_mask[i] |= 0x01;
+					fprintf(stderr, "X");
+				} else {
+					g_sdl_cursor_data[i] |= 0x00;
+					g_sdl_cursor_mask[i] |= 0x00;
+					fprintf(stderr, " ");
+				}
+
+			}
+			fprintf(stderr, "\n");
+		}
+
+		g_sdl_cursor = SDL_CreateCursor(g_sdl_cursor_data, g_sdl_cursor_mask, 16, 16, 0, 0);
+		SDL_SetCursor(g_sdl_cursor);
+#endif
+
 
 		if (g_have_mouse == 2) {
 #if defined(__BORLANDC__)
@@ -1922,6 +1963,7 @@ static void mouse_move_cursor(const signed short x, const signed short y)
 
 static void mouse_cursor_draw(void)
 {
+#if defined(__BORLANDC__)
 	unsigned char *vgaptr;
 	signed short *mouse_cursor;
 	signed short rangeX;
@@ -1950,15 +1992,15 @@ static void mouse_cursor_draw(void)
 		for (X = 0; X < diffX; X++)
 			if ((0x8000 >> X) & mask)
 				vgaptr[X] = 0xff;
+
 		vgaptr += O_WIDTH;
 	}
-#if !defined(__BORLANDC__)
-	sdl_update_rect_window(g_mouse_posx, g_mouse_posy, 16, 16);
 #endif
 }
 
 static void mouse_save_bg(void)
 {
+#if defined(__BORLANDC__)
 	unsigned char *vgaptr;
 	signed short rangeX;
 	signed short rangeY;
@@ -1980,10 +2022,12 @@ static void mouse_save_bg(void)
 	for (Y = 0; Y < diffY; vgaptr += O_WIDTH, Y++)
 		for (X = 0; X < diffX; X++)
 			g_mouse_backbuffer[16 * Y + X] = vgaptr[X];
+#endif
 }
 
 static void mouse_restore_bg(void)
 {
+#if defined(__BORLANDC__)
 	unsigned char *vgaptr;
 	signed short rangeX;
 	signed short rangeY;
@@ -2005,8 +2049,6 @@ static void mouse_restore_bg(void)
 		for (j = 0; j < diffX; j++)
 			vgaptr[j] = g_mouse_backbuffer[16 * i + j];
 
-#if !defined(__BORLANDC__)
-	sdl_update_rect_window(g_mouse_posx_bak, g_mouse_posy_bak, 16, 16);
 #endif
 }
 
@@ -7328,13 +7370,21 @@ int main_gen(int argc, char **argv)
 
 	flush_keyboard_queue();
 
+#if !defined(__BORLANDC__)
+	SDL_ShowCursor(SDL_ENABLE);
+#else
 	mouse_cursor();
+#endif
 
 	do_gen();
 
 	stop_music();
 
+#if !defined(__BORLANDC__)
+	SDL_ShowCursor(SDL_DISABLE);
+#else
 	mouse_bg();
+#endif
 
 	mouse_disable();
 
