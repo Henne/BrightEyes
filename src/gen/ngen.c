@@ -6014,10 +6014,8 @@ static void select_typus(void)
 			if (!can_change_attributes()) {
 				/* totally messed up values */
 				infobox(get_text(284), 0);
-				return;
 			} else {
 				infobox(get_text(31), 0);
-				return;
 			}
 			return;
 		}
