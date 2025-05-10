@@ -2726,7 +2726,7 @@ static signed short open_datfile(const signed short index)
 		if (g_essentials_loaded) {
 			infobox(g_textbuffer, 0);
 		} else {
-			printf(g_textbuffer);
+			printf("%s", g_textbuffer);
 		}
 
 		vsync_or_key(100);
