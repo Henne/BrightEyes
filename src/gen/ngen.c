@@ -1445,6 +1445,7 @@ static unsigned char g_pal_roalogo[768];
 void far *g_timer_isr_bak;
 #else
 static SDL_TimerID g_sdl_timer_id = 0;
+static SDL_TimerID g_sdl_timer_vga_id = 0;
 #endif
 
 /* These 6 bytes are written at once from a file */
@@ -3280,10 +3281,6 @@ static void print_str(const char *str, const signed short x_in, const signed sho
 		}
 	}
 
-#if !defined(__BORLANDC__)
-	sdl_update_rect_window(x_in, y_in, x_max - x_in + 8, y - y_in + 8);
-#endif
-
 	mouse_cursor();
 }
 
@@ -3357,10 +3354,6 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 		print_chr(' ', x_pos, y);
 		print_chr('_', x_pos, y);
 	}
-
-#if !defined(__BORLANDC__)
-	sdl_update_rect_window(x, y, len * 8, 8);
-#endif
 
 	/* clear all input events */
 	flush_keyboard_queue();
@@ -3461,10 +3454,6 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 				print_chr('_', x_pos, y);
 			}
 		}
-
-#if !defined(__BORLANDC__)
-		sdl_update_rect_window(x, y, len * 8, 8);
-#endif
 	}
 
 	if (txt == 0) {
@@ -4209,6 +4198,12 @@ static Uint32 gen_timer_isr(Uint32 interval, void *param)
 
 	return interval;
 }
+
+static Uint32 gen_timer_vga(Uint32 interval, void *param)
+{
+	sdl_update_rect_window(0, 0, O_WIDTH, O_HEIGHT);
+	return interval;
+}
 #endif
 
 static void set_timer_isr(void)
@@ -4223,6 +4218,10 @@ static void set_timer_isr(void)
 	if (g_sdl_timer_id == 0) {
 		fprintf(stderr, "WARNING: Failed to add timer: %s\n", SDL_GetError());
 	}
+	g_sdl_timer_vga_id = SDL_AddTimer(16, gen_timer_vga, NULL);
+	if (g_sdl_timer_vga_id == 0) {
+		fprintf(stderr, "WARNING: Failed to add VGA timer: %s\n", SDL_GetError());
+	}
 #endif
 }
 
@@ -4231,7 +4230,13 @@ void restore_timer_isr(void)
 #if defined(__BORLANDC__)
 	setvect(0x1c, (void interrupt far (*)(void))g_timer_isr_bak);
 #else
-	SDL_bool timer_removed = SDL_RemoveTimer(g_sdl_timer_id);
+	SDL_bool timer_removed;
+
+	timer_removed = SDL_RemoveTimer(g_sdl_timer_vga_id);
+	if (timer_removed == SDL_FALSE) {
+		fprintf(stderr, "WARNING: Failed to remove VGA timer\n");
+	}
+	timer_removed = SDL_RemoveTimer(g_sdl_timer_id);
 	if (timer_removed == SDL_FALSE) {
 		fprintf(stderr, "WARNING: Failed to remove timer\n");
 	}
