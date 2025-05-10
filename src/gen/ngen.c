@@ -6752,8 +6752,9 @@ static void choose_typus(void)
 
 static void do_gen(void)
 {
-	signed short si;
-	signed short done;
+	int done;
+	int menu_option;
+	int target_page;
 
 	done = 0;
 
@@ -6793,17 +6794,17 @@ static void do_gen(void)
 			/* print the menu for each page */
 			switch (g_gen_page) {
 				case 0: {
-					si = gui_radio(get_text(7), 9,
+					menu_option = gui_radio(get_text(7), 9,
 						get_text(10), get_text(11), get_text(15),
 						get_text(8),  get_text(14), get_text(12),
 						get_text(262),get_text(9),  get_text(258));
 
-					if (si != -1) {
-						if ((si >= 4) && (si < 6) && (g_hero.attrib[0].normal) && !gui_bool(get_text(13))) {
-							si = 0;
+					if (menu_option != -1) {
+						if ((menu_option >= 4) && (menu_option < 6) && (g_hero.attrib[0].normal) && !gui_bool(get_text(13))) {
+							menu_option = 0;
 						}
 						g_in_key_ext = 0;
-						switch (si) {
+						switch (menu_option) {
 							case 1: {
 								enter_name();
 								break;
@@ -6898,42 +6899,53 @@ static void do_gen(void)
 		/* Change Page Logic */
 		if (g_level == 2) {
 
-			if (g_hero.typus) {
+			if (g_in_key_ext == KEY_RIGHT) {
 
-				if (g_in_key_ext == KEY_RIGHT) {
-					g_screen_var = 1;
-
+				if (g_hero.typus) {
 					if (((g_hero.typus < 7) ? 4 : 10) > g_gen_page) {
 						g_gen_page++;
 					} else {
 						g_gen_page = 0;
 					}
-				}
 
-				if (g_in_key_ext == KEY_LEFT) {
 					g_screen_var = 1;
 
+				} else {
+					infobox(get_text(72), 0);
+				}
+			}
+
+			if (g_in_key_ext == KEY_LEFT) {
+
+				if (g_hero.typus) {
 					if (g_gen_page > 0) {
 						g_gen_page--;
 					} else {
 						g_gen_page = (g_hero.typus < 7 ? 4 : 10);
 					}
+
+					g_screen_var = 1;
+
+				} else {
+					infobox(get_text(72), 0);
 				}
+			}
 
-				if ((g_in_key_ext >= KEY_1) && (g_in_key_ext <= KEY_5)) {
+			if ((g_in_key_ext >= KEY_1) && (g_in_key_ext <= KEY_5)) {
 
-					si = ((g_in_key_ext == KEY_1) ? 0 : (
+				if (g_hero.typus) {
+					target_page = ((g_in_key_ext == KEY_1) ? 0 : (
 						(g_in_key_ext == KEY_2) ? 1 : (
 						(g_in_key_ext == KEY_3) ? 4 : (
 						(g_in_key_ext == KEY_4) ? 5 : 10))));
 
-					if ((si != g_gen_page) && (si < 5 || g_hero.typus >= 7)) {
-						g_gen_page = si;
+					if ((target_page != g_gen_page) && (target_page < 5 || g_hero.typus >= 7)) {
+						g_gen_page = target_page;
 						g_screen_var = 1;
 					}
+				} else {
+					infobox(get_text(72), 0);
 				}
-			} else {
-				infobox(get_text(72), 0);
 			}
 		}
 	}
