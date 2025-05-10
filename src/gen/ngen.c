@@ -4206,6 +4206,8 @@ static Uint32 gen_timer_isr(Uint32 interval, void *param)
 
 	/* update MIDI */
 	restart_midi();
+
+	return interval;
 }
 #endif
 
