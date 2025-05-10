@@ -1,7 +1,7 @@
 enum FB_VALUES {
 	O_WIDTH = 320,
 	O_HEIGHT = 200,
-	MAX_RATIO = 8
+	MAX_RATIO = 10
 };
 
 void set_video_mode(unsigned short);
