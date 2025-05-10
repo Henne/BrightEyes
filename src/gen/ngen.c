@@ -905,8 +905,10 @@ static signed short g_screen_var = 0;
 
 #if !defined(__BORLANDC__)
 static SDL_Cursor *g_sdl_cursor;
-static Uint8 g_sdl_cursor_data[16 * 16];
-static Uint8 g_sdl_cursor_mask[16 * 16];
+static Uint8 g_sdl_cursor_data_o[16*16];
+static Uint8 g_sdl_cursor_mask_o[16*16];
+static Uint8 *g_sdl_cursor_data_r;
+static Uint8 *g_sdl_cursor_mask_r;
 #endif
 
 static unsigned short g_mouse_mask[32] = {
@@ -1846,6 +1848,93 @@ static void mouse_do_enable(const signed short val, unsigned char* ptr)
 #endif
 }
 
+#if !defined(__BORLANDC__)
+static void sdl_mouse_cursor_scaled(void)
+{
+	unsigned char src_m[16*16];
+	unsigned char *dst_m = NULL;
+	const int ratio = sdl_get_ratio();
+	int src_off = 0;
+	int dst_off = 0;
+
+	if (g_sdl_cursor) {
+		SDL_FreeCursor(g_sdl_cursor);
+		g_sdl_cursor = NULL;
+	}
+
+	if (g_sdl_cursor_data_r != NULL) {
+		free(g_sdl_cursor_data_r);
+		g_sdl_cursor_data_r = NULL;
+	}
+	g_sdl_cursor_data_r = calloc(ratio * ratio * 16 * 16, 1);
+
+	if (g_sdl_cursor_mask_r != NULL) {
+		free(g_sdl_cursor_mask_r);
+		g_sdl_cursor_mask_r = NULL;
+	}
+	g_sdl_cursor_mask_r = calloc(ratio * ratio * 16 * 16, 1);
+
+	dst_m = calloc(ratio * ratio * 16 * 16, 1);
+
+	if (g_sdl_cursor_data_r && g_sdl_cursor_mask_r && dst_m) {
+
+		//fprintf(stderr, "%s() ratio = %d\n", __func__, ratio);
+		for (int i = 0; i < 16; i++) {
+			for (int j = 0; j < 2; j++) {
+				for (int k = 7; k >= 0; k--) {
+					src_m[src_off] = (g_sdl_cursor_mask_o[src_off] >> k) & 1;
+					for (int l = 0; l < ratio; l++) {
+						dst_m[dst_off] = src_m[src_off];
+						dst_off++;
+					}
+					//fprintf(stderr, "%x", src_m[src_off]);
+				}
+				src_off++;
+			}
+			for (int j = 1; j < ratio; j++) {
+				memcpy(dst_m + dst_off, dst_m + dst_off - 8 * 2 * ratio, 8 * 2 * ratio);
+				dst_off += 8 * 2 * ratio;
+			}
+			//fprintf(stderr, "\n");
+		}
+		fprintf(stderr, "ratio = %d src_off = %d dst_off = %d\n", ratio, src_off, dst_off);
+#if 0
+		fprintf(stderr, "----------------------\n");
+		fflush(stderr);
+		dst_off = 0;
+		for (int i = 0; i < 16 * ratio; i++) {
+			for (int j = 0; j < (2 * 8 * ratio); j++) {
+				fprintf(stderr, "%x", dst_m[dst_off++]);
+			}
+			fprintf(stderr, "\n");
+		}
+		fflush(stderr);
+		fprintf(stderr, "----------------------\n");
+#endif
+
+		src_off = 0;
+		dst_off = 0;
+		for (int i = 0; i < 16 * ratio; i++) {
+			for (int j = 0; j < 16 * ratio; j++) {
+				Uint8 v = 0;
+				for (int k = 7; k >= 0; k--) {
+					v |= (dst_m[src_off] << k);
+					src_off++;
+				}
+				g_sdl_cursor_mask_r[dst_off]  = v;
+				dst_off++;
+			}
+		}
+		free(dst_m);
+
+		g_sdl_cursor = SDL_CreateCursor(g_sdl_cursor_data_r, g_sdl_cursor_mask_r, ratio * 16, ratio * 16, 0, 0);
+		SDL_SetCursor(g_sdl_cursor);
+	} else {
+		fprintf(stderr, "ERROR: faile to allocate mouse scale memory\n");
+	}
+}
+#endif
+
 static void mouse_enable(void)
 {
 	unsigned short p1, p2, p3, p4, p5;
@@ -1866,37 +1955,34 @@ static void mouse_enable(void)
 
 #if !defined(__BORLANDC__)
 		signed short *mouse_cursor = (signed short*)g_mouse_current_cursor + 16;
-		int ratio = sdl_get_ratio();
 		int i = -1;
 
 		for (int Y = 0; Y < 16; Y++) {
 			signed short mask = *mouse_cursor++;
 			for (int X = 0; X < 16; X++) {
 				if (X % 8) {
-					g_sdl_cursor_data[i] <<= 0x01;
-					g_sdl_cursor_mask[i] <<= 0x01;
+					g_sdl_cursor_data_o[i] <<= 0x01;
+					g_sdl_cursor_mask_o[i] <<= 0x01;
 				} else {
-					++i;
-					g_sdl_cursor_data[i] = 0x00;
-					g_sdl_cursor_mask[i] = 0x00;
+					i += 1;
+					g_sdl_cursor_data_o[i] = 0x00;
+					g_sdl_cursor_mask_o[i] = 0x00;
 				}
 
 				if ((0x8000 >> X) & mask) {
-					g_sdl_cursor_data[i] |= 0x00;
-					g_sdl_cursor_mask[i] |= 0x01;
+					g_sdl_cursor_data_o[i] |= 0x00;
+					g_sdl_cursor_mask_o[i] |= 0x01;
 					fprintf(stderr, "X");
 				} else {
-					g_sdl_cursor_data[i] |= 0x00;
-					g_sdl_cursor_mask[i] |= 0x00;
+					g_sdl_cursor_data_o[i] |= 0x00;
+					g_sdl_cursor_mask_o[i] |= 0x00;
 					fprintf(stderr, " ");
 				}
-
 			}
 			fprintf(stderr, "\n");
 		}
 
-		g_sdl_cursor = SDL_CreateCursor(g_sdl_cursor_data, g_sdl_cursor_mask, 16, 16, 0, 0);
-		SDL_SetCursor(g_sdl_cursor);
+		sdl_mouse_cursor_scaled();
 #endif
 
 
@@ -1936,6 +2022,10 @@ void mouse_disable(void)
 		do_mouse_action(&p1, &p2, &p3, &p4, &p5);
 
 		g_mouse_handler_installed = 0;
+#else
+		SDL_FreeCursor(g_sdl_cursor);
+		free(g_sdl_cursor_data_r);
+		free(g_sdl_cursor_mask_r);
 #endif
 	}
 }
@@ -2375,7 +2465,11 @@ static int sdl_event_loop(const int cmd)
 				}
 
 				switch (event.key.keysym.sym) {
-					case SDLK_TAB:      sdl_change_window_size(); break;
+					case SDLK_TAB: {
+								sdl_change_window_size();
+								sdl_mouse_cursor_scaled();
+								break;
+					}
 					case SDLK_ESCAPE:   return (0x01 << 8) | 0x1b; break; //OK
 					case SDLK_1:        return (0x02 << 8) | 0x31; break; //OK
 					case SDLK_2:        return (0x03 << 8) | 0x32; break; //OK
