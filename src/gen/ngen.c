@@ -7512,10 +7512,10 @@ int main_gen(int argc, char **argv)
 
 	mouse_disable();
 
-	restore_timer_isr();
-
 	/* Clear the screen and return to SCHICKM.EXE/BLADEM.EXE */
 	call_fill_rect_gen(g_vga_memstart, 0, 0, O_WIDTH - 1, O_HEIGHT - 1, 0);
+
+	restore_timer_isr();
 
 	if (!g_called_with_args) {
 		/* Clear the screen and return to DOS */
