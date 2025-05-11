@@ -85,6 +85,7 @@ static inline void clrscr(void) { }
 
 /* static prototypes */
 static signed short infobox(char*, signed short);
+void restore_timer_isr(void);
 
 /** Keyboard Constants */
 
@@ -2424,6 +2425,7 @@ static int sdl_event_loop(const int cmd)
 				return (0x10 << 8) | 0x11;
 			} else {
 				/* close the window and exit */
+				restore_timer_isr();
 				set_video_mode(0);
 				exit(0);
 			}
