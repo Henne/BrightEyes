@@ -9,6 +9,10 @@
 #include <sys/stat.h>
 #endif
 
+#if defined(_WIN32)
+#include <wtypes.h>
+#endif
+
 #if defined(__BORLANDC__)
 #include <IO.H>		// lseek, _read, _close, _creat, open, write
 #include <DOS.H>
@@ -7424,13 +7428,19 @@ static void intro(void)
 }
 
 #if defined(_WIN32)
-#define main_gen WinMain
+int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int ShowCmd)
 #else
 #define main_gen main
-#endif
 int main_gen(int argc, char **argv)
+#endif
 {
 	signed short sound_off = 0;
+
+#if defined(_WIN32)
+	int argc;
+	LPWSTR cmdline = GetCommandLineW();
+	LPWSTR *argv = CommandLineToArgvW(cmdline, &argc);
+#endif
 
 	if (argc > 1)
 		g_called_with_args = 1;
