@@ -1897,7 +1897,7 @@ static void sdl_mouse_cursor_scaled(void)
 			}
 			//fprintf(stderr, "\n");
 		}
-		fprintf(stderr, "ratio = %d src_off = %d dst_off = %d\n", ratio, src_off, dst_off);
+		//fprintf(stderr, "ratio = %d src_off = %d dst_off = %d\n", ratio, src_off, dst_off);
 #if 0
 		fprintf(stderr, "----------------------\n");
 		fflush(stderr);
@@ -1972,14 +1972,14 @@ static void mouse_enable(void)
 				if ((0x8000 >> X) & mask) {
 					g_sdl_cursor_data_o[i] |= 0x00;
 					g_sdl_cursor_mask_o[i] |= 0x01;
-					fprintf(stderr, "X");
+					//fprintf(stderr, "X");
 				} else {
 					g_sdl_cursor_data_o[i] |= 0x00;
 					g_sdl_cursor_mask_o[i] |= 0x00;
-					fprintf(stderr, " ");
+					//fprintf(stderr, " ");
 				}
 			}
-			fprintf(stderr, "\n");
+			//fprintf(stderr, "\n");
 		}
 
 		sdl_mouse_cursor_scaled();
