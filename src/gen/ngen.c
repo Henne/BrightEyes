@@ -5112,12 +5112,15 @@ static void refresh_screen(void)
 
 		/* page with base values and level is novice */
 		if ((g_gen_page == 0) && (g_level == 1)) {
-			/* Hide the arrow buttons to the other page */
 
+			/* Hide the arrow buttons to the other pages */
+
+			/* Hide right arrow */
 			dst = g_gen_ptr1_dis + 178 * O_WIDTH + 284;
 			src = g_buffer_sex_dat + 512;
-			vgalib_copy_to_screen(src, dst, 20, 15);
+			vgalib_copy_to_screen(dst, src, 20, 15);
 
+			/* Hide left arrow */
 			if (g_dsagen_lang == LANG_EN) {
 				dst = g_gen_ptr1_dis + 178 * O_WIDTH + 145;
 				vgalib_copy_to_screen(dst, src, 20, 15);
