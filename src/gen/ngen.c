@@ -1450,6 +1450,7 @@ static unsigned char g_pal_roalogo[768];
 void far *g_timer_isr_bak;
 #else
 static SDL_TimerID g_sdl_timer_id = 0;
+static SDL_TimerID g_sdl_timer_vga_id = 0;
 #endif
 
 /* These 6 bytes are written at once from a file */
@@ -4202,17 +4203,43 @@ static void interrupt timer_isr(void)
 	((void interrupt far (*)(void))g_timer_isr_bak)();
 }
 #else
+static SDL_mutex *g_sdl_timer_mutex = NULL;
+
 static Uint32 gen_timer_isr(Uint32 interval, void *param)
 {
-	/* update RNG */
-	g_random_gen_seed2++;
-	if (g_random_gen_seed2 < 0) {
-		g_random_gen_seed2 = 0;
+	if (SDL_LockMutex(g_sdl_timer_mutex) == 0) {
+
+		/* update RNG */
+		g_random_gen_seed2++;
+		if (g_random_gen_seed2 < 0) {
+			g_random_gen_seed2 = 0;
+		}
+
+		/* update MIDI */
+		restart_midi();
+
+		if (SDL_UnlockMutex(g_sdl_timer_mutex) == -1) {
+			fprintf(stderr, "ERROR: Unlock Mutex in %s\n", __func__);
+		}
+	} else {
+		fprintf(stderr, "ERROR: Lock Mutex in %s\n", __func__);
 	}
 
-	/* update MIDI */
-	restart_midi();
+	return interval;
+}
 
+static Uint32 gen_timer_vga(Uint32 interval, void *param)
+{
+	if (SDL_LockMutex(g_sdl_timer_mutex) == 0) {
+
+		sdl_update_rect_window(0, 0, O_WIDTH, O_HEIGHT);
+
+		if (SDL_UnlockMutex(g_sdl_timer_mutex) == -1) {
+			fprintf(stderr, "ERROR: Unlock Mutex in %s\n", __func__);
+		}
+	} else {
+		fprintf(stderr, "ERROR: Lock Mutex in %s\n", __func__);
+	}
 	return interval;
 }
 #endif
@@ -4225,9 +4252,28 @@ static void set_timer_isr(void)
 	/* set a the new one */
 	setvect(0x1c, timer_isr);
 #else
-	g_sdl_timer_id = SDL_AddTimer(55, gen_timer_isr, NULL);
-	if (g_sdl_timer_id == 0) {
-		fprintf(stderr, "WARNING: Failed to add timer: %s\n", SDL_GetError());
+	g_sdl_timer_mutex = SDL_CreateMutex();
+	if (g_sdl_timer_mutex == NULL) {
+		fprintf(stderr, "ERROR: failed to create g_sdl_timer_mutex\n");
+		SDL_Quit();
+		exit(-1);
+	}
+
+	if (SDL_LockMutex(g_sdl_timer_mutex) == 0) {
+		g_sdl_timer_id = SDL_AddTimer(55, gen_timer_isr, NULL);
+		if (g_sdl_timer_id == 0) {
+			fprintf(stderr, "WARNING: Failed to add timer: %s\n", SDL_GetError());
+		}
+		g_sdl_timer_vga_id = SDL_AddTimer(100, gen_timer_vga, NULL);
+		if (g_sdl_timer_vga_id == 0) {
+			fprintf(stderr, "WARNING: Failed to add VGA timer: %s\n", SDL_GetError());
+		}
+
+		if (SDL_UnlockMutex(g_sdl_timer_mutex) == -1) {
+			fprintf(stderr, "ERROR: Unlock Mutex in %s\n", __func__);
+		}
+	} else {
+		fprintf(stderr, "ERROR: Lock Mutex in %s\n", __func__);
 	}
 #endif
 }
@@ -4237,9 +4283,25 @@ void restore_timer_isr(void)
 #if defined(__BORLANDC__)
 	setvect(0x1c, (void interrupt far (*)(void))g_timer_isr_bak);
 #else
-	SDL_bool timer_removed = SDL_RemoveTimer(g_sdl_timer_id);
-	if (timer_removed == SDL_FALSE) {
-		fprintf(stderr, "WARNING: Failed to remove timer\n");
+	if (SDL_LockMutex(g_sdl_timer_mutex) == 0) {
+
+		SDL_bool timer_removed;
+
+		timer_removed = SDL_RemoveTimer(g_sdl_timer_vga_id);
+		if (timer_removed == SDL_FALSE) {
+			fprintf(stderr, "WARNING: Failed to remove VGA timer\n");
+		}
+
+		timer_removed = SDL_RemoveTimer(g_sdl_timer_id);
+		if (timer_removed == SDL_FALSE) {
+			fprintf(stderr, "WARNING: Failed to remove timer\n");
+		}
+
+		if (SDL_UnlockMutex(g_sdl_timer_mutex) == -1) {
+			fprintf(stderr, "ERROR: Unlock Mutex in %s\n", __func__);
+		}
+	} else {
+		fprintf(stderr, "ERROR: Lock Mutex in %s\n", __func__);
 	}
 #endif
 }

@@ -32,6 +32,12 @@ static SDL_Texture *texture = NULL;
 static SDL_mutex *PixelsMutex = NULL;
 
 static Uint32 *pixels = NULL;
+static Uint8 *vga_bak = NULL;
+static int pal_updated = 0;
+static int win_resized = 0;
+
+/* instrumentation to count calls for sdl_update_rect_window */
+static int calls = 0, updates = 0;
 
 static const int SHOW_DRIVERS = 0; // set to 1 for driver info
 
@@ -126,6 +132,11 @@ void set_video_mode(unsigned short mode)
 			exit(-1);
 		}
 
+		vga_bak = calloc(O_WIDTH * O_HEIGHT * sizeof(Uint8), 1);
+		if (vga_bak == NULL) {
+			fprintf(stderr, "ERROR: cannot allocate vga_bak\n");
+			exit(-1);
+		}
 		pixels = calloc(RATIO * RATIO * O_WIDTH * O_HEIGHT * sizeof(Uint32), 1);
 		if (pixels == NULL) {
 			fprintf(stderr, "ERROR: cannot allocate pixels\n");
@@ -134,11 +145,13 @@ void set_video_mode(unsigned short mode)
 
 	} else {
 		free(pixels);
+		free(vga_bak);
 		SDL_DestroyMutex(PixelsMutex);
 		SDL_DestroyTexture(texture);
 		SDL_DestroyRenderer(renderer);
 		SDL_DestroyWindow(window);
 		SDL_Quit();
+		fprintf(stderr, "sdl_update_rect_window() calls = %d updates = %d\n", calls, updates);
 	}
 #else
 	asm {
@@ -206,16 +219,24 @@ static void sdl_update_rect_pixels(const int x_in, const int y_in, const int wid
 
 void sdl_update_rect_window(const int x_in, const int y_in, const int width_in, const int height_in)
 {
+	calls++;
 	if (pixels == NULL) return;
 
 	if (SDL_LockMutex(PixelsMutex) == 0) {
 
 		sdl_update_rect_pixels(x_in, y_in, width_in, height_in);
 
-		SDL_UpdateTexture(texture, NULL, pixels, RATIO * O_WIDTH * sizeof(Uint32));
-		SDL_RenderClear(renderer);
-		SDL_RenderCopy(renderer, texture, NULL, NULL);
-		SDL_RenderPresent(renderer);
+		if (memcmp(g_vga_memstart, vga_bak, O_WIDTH * O_HEIGHT) || pal_updated || win_resized) {
+			updates++;
+			SDL_UpdateTexture(texture, NULL, pixels, RATIO * O_WIDTH * sizeof(Uint32));
+			SDL_RenderClear(renderer);
+			SDL_RenderCopy(renderer, texture, NULL, NULL);
+			SDL_RenderPresent(renderer);
+		}
+
+		pal_updated = 0;
+		win_resized = 0;
+		memcpy(vga_bak, g_vga_memstart, O_WIDTH * O_HEIGHT);
 
 		if (SDL_UnlockMutex(PixelsMutex) == -1) {
 			fprintf(stderr, "ERROR: Unlock Mutex in %s\n", __func__);
@@ -289,6 +310,8 @@ void sdl_change_window_size(void)
 			W_HEIGHT
 		);
 
+		win_resized = 1;
+
 		if (SDL_UnlockMutex(PixelsMutex) == -1) {
 			fprintf(stderr, "ERROR: Unlock Mutex in %s\n", __func__);
 		}
@@ -296,7 +319,6 @@ void sdl_change_window_size(void)
 		fprintf(stderr, "ERROR: Lock Mutex in %s\n", __func__);
 	}
 
-	sdl_update_rect_window(0, 0, O_WIDTH, O_HEIGHT);
 }
 #endif
 
@@ -405,6 +427,7 @@ set_palette_loop1:
 	for (i = 0; i < colors; i++)
 		palette[first_color + i] = get_ABGR(pointer + 3 * i);
 
+	pal_updated = 1;
 	sdl_update_rect_window(0, 0, O_WIDTH, O_HEIGHT);
 #endif
 }
