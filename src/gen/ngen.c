@@ -1875,7 +1875,7 @@ static void sdl_mouse_cursor_scaled(void)
 	}
 	g_sdl_cursor_mask_r = calloc(ratio * ratio * 16 * 16, 1);
 
-	dst_m = calloc(ratio * ratio * 16 * 16, 1);
+	dst_m = calloc(ratio * ratio * 16 * 16 * 8, 1);
 
 	if (g_sdl_cursor_data_r && g_sdl_cursor_mask_r && dst_m) {
 
