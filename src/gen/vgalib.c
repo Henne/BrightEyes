@@ -71,7 +71,7 @@ static void sdl_renderer_info(void)
 				case SDL_PIXELFORMAT_ABGR4444: fprintf(stderr, "AGBR4444 "); break;
 				case SDL_PIXELFORMAT_ARGB8888: fprintf(stderr, "ARGB8888 "); break;
 				case SDL_PIXELFORMAT_RGBA8888: fprintf(stderr, "RGBA8888 "); break;
-				case SDL_PIXELFORMAT_ABGR8888: fprintf(stderr, "AGBR8888 "); break;
+				case SDL_PIXELFORMAT_ABGR8888: fprintf(stderr, "ABGR8888 "); break;
 				default: fprintf(stderr, "0x%x ", info.texture_formats[j]);
 				}
 			}
