@@ -137,7 +137,7 @@ void set_video_mode(unsigned short mode)
 			fprintf(stderr, "ERROR: cannot allocate vga_bak\n");
 			exit(-1);
 		}
-		pixels = calloc(RATIO * RATIO * O_WIDTH * O_HEIGHT * sizeof(Uint32), 1);
+		pixels = calloc(W_WIDTH * W_HEIGHT * sizeof(Uint32), 1);
 		if (pixels == NULL) {
 			fprintf(stderr, "ERROR: cannot allocate pixels\n");
 			exit(-1);
@@ -283,7 +283,13 @@ void sdl_change_window_size(SDL_mutex *timer_mutex)
 			SDL_DestroyWindow(window);
 			window = NULL;
 
-			pixels = calloc(RATIO * RATIO * W_WIDTH * W_HEIGHT * sizeof(Uint32), 1);
+			pixels = calloc(W_WIDTH * W_HEIGHT * sizeof(Uint32), 1);
+			if (pixels == NULL) {
+				fprintf(stderr, "ERROR: %s() failed to allocate pixels: %s\n",
+							__func__, SDL_GetError());
+				SDL_Quit();
+				exit(-1);
+			}
 
 			window = SDL_CreateWindow(
 				"BrightEyes",
