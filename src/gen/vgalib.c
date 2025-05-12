@@ -227,11 +227,13 @@ void sdl_update_rect_window(const int x_in, const int y_in, const int width_in, 
 		sdl_update_rect_pixels(x_in, y_in, width_in, height_in);
 
 		if (memcmp(g_vga_memstart, vga_bak, O_WIDTH * O_HEIGHT) || pal_updated || win_resized) {
-			updates++;
-			SDL_UpdateTexture(texture, NULL, pixels, RATIO * O_WIDTH * sizeof(Uint32));
-			SDL_RenderClear(renderer);
-			SDL_RenderCopy(renderer, texture, NULL, NULL);
-			SDL_RenderPresent(renderer);
+			if ((texture != NULL) && (renderer != NULL)) {
+				updates++;
+				SDL_UpdateTexture(texture, NULL, pixels, RATIO * O_WIDTH * sizeof(Uint32));
+				SDL_RenderClear(renderer);
+				SDL_RenderCopy(renderer, texture, NULL, NULL);
+				SDL_RenderPresent(renderer);
+			}
 		}
 
 		pal_updated = 0;
