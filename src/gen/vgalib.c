@@ -120,7 +120,6 @@ void set_video_mode(unsigned short mode)
 			renderer,
 			SDL_PIXELFORMAT_ABGR8888,
 			SDL_TEXTUREACCESS_STREAMING,
-			//SDL_TEXTUREACCESS_STATIC,
 			W_WIDTH,
 			W_HEIGHT
 		);
@@ -142,6 +141,10 @@ void set_video_mode(unsigned short mode)
 			fprintf(stderr, "ERROR: cannot allocate pixels\n");
 			exit(-1);
 		}
+
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+		SDL_RenderClear(renderer);
+		SDL_RenderPresent(renderer);
 
 	} else {
 		if (SDL_LockMutex(PixelsMutex) == 0) {
@@ -311,12 +314,15 @@ void sdl_change_window_size(SDL_mutex *timer_mutex)
 				renderer,
 				SDL_PIXELFORMAT_ABGR8888,
 				SDL_TEXTUREACCESS_STREAMING,
-				//SDL_TEXTUREACCESS_STATIC,
 				W_WIDTH,
 				W_HEIGHT
 			);
 
 			win_resized = 1;
+
+			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+			SDL_RenderClear(renderer);
+			SDL_RenderPresent(renderer);
 
 			if (SDL_UnlockMutex(PixelsMutex) == -1) {
 				fprintf(stderr, "ERROR: Unlock PixelsMutex in %s\n", __func__);
