@@ -256,69 +256,78 @@ int sdl_get_ratio(void)
 	return RATIO;
 }
 
-void sdl_change_window_size(void)
+void sdl_change_window_size(SDL_mutex *timer_mutex)
 {
 	if (pixels == NULL) return;
 
-	if (SDL_LockMutex(PixelsMutex) == 0) {
+	if (timer_mutex && (SDL_LockMutex(timer_mutex) == 0)) {
 
-		free(pixels);
-		pixels = NULL;
+		if (SDL_LockMutex(PixelsMutex) == 0) {
 
-		RATIO = (RATIO < MAX_RATIO) ? RATIO + 1 : 1;
-		W_WIDTH = RATIO * O_WIDTH;
-		W_HEIGHT = RATIO * O_HEIGHT;
+			RATIO = (RATIO < MAX_RATIO) ? RATIO + 1 : 1;
+			W_WIDTH = RATIO * O_WIDTH;
+			W_HEIGHT = RATIO * O_HEIGHT;
 
-		fprintf(stdout, "RATIO = %d W_WIDTH = %d W_HEIGHT = %d\n",
-				RATIO, W_WIDTH, W_HEIGHT);
-
+			fprintf(stdout, "RATIO = %d W_WIDTH = %d W_HEIGHT = %d\n",
+					RATIO, W_WIDTH, W_HEIGHT);
 
 
-		SDL_DestroyTexture(texture);
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
+			free(pixels);
+			pixels = NULL;
+			SDL_DestroyTexture(texture);
+			texture = NULL;
+			SDL_DestroyRenderer(renderer);
+			renderer = NULL;
+			SDL_DestroyWindow(window);
+			window = NULL;
 
-		pixels = calloc(RATIO * RATIO * W_WIDTH * W_HEIGHT * sizeof(Uint32), 1);
+			pixels = calloc(RATIO * RATIO * W_WIDTH * W_HEIGHT * sizeof(Uint32), 1);
 
-		window = SDL_CreateWindow(
-			"BrightEyes",
-			SDL_WINDOWPOS_UNDEFINED,
-			SDL_WINDOWPOS_UNDEFINED,
-			W_WIDTH,
-			W_HEIGHT,
-			SDL_WINDOW_SHOWN
-		);
+			window = SDL_CreateWindow(
+				"BrightEyes",
+				SDL_WINDOWPOS_UNDEFINED,
+				SDL_WINDOWPOS_UNDEFINED,
+				W_WIDTH,
+				W_HEIGHT,
+				SDL_WINDOW_SHOWN
+			);
 
-		if (window == NULL) {
-			fprintf(stderr, "Could not create Window: %s\n", SDL_GetError());
-			SDL_Quit();
-			exit(-1);
+			if (window == NULL) {
+				fprintf(stderr, "Could not create Window: %s\n", SDL_GetError());
+				SDL_Quit();
+				exit(-1);
+			}
+
+			renderer = SDL_CreateRenderer(
+				window,
+				-1,
+				SDL_RENDERER_ACCELERATED
+			);
+
+			texture = SDL_CreateTexture(
+				renderer,
+				SDL_PIXELFORMAT_ABGR8888,
+				SDL_TEXTUREACCESS_STREAMING,
+				//SDL_TEXTUREACCESS_STATIC,
+				W_WIDTH,
+				W_HEIGHT
+			);
+
+			win_resized = 1;
+
+			if (SDL_UnlockMutex(PixelsMutex) == -1) {
+				fprintf(stderr, "ERROR: Unlock PixelsMutex in %s\n", __func__);
+			}
+		} else {
+			fprintf(stderr, "ERROR: Lock PixelsMutex in %s\n", __func__);
 		}
 
-		renderer = SDL_CreateRenderer(
-			window,
-			-1,
-			SDL_RENDERER_ACCELERATED
-		);
-
-		texture = SDL_CreateTexture(
-			renderer,
-			SDL_PIXELFORMAT_ABGR8888,
-			SDL_TEXTUREACCESS_STREAMING,
-			//SDL_TEXTUREACCESS_STATIC,
-			W_WIDTH,
-			W_HEIGHT
-		);
-
-		win_resized = 1;
-
-		if (SDL_UnlockMutex(PixelsMutex) == -1) {
-			fprintf(stderr, "ERROR: Unlock Mutex in %s\n", __func__);
+		if (SDL_UnlockMutex(timer_mutex) == -1) {
+			fprintf(stderr, "ERROR: Unlock timer_mutex in %s\n", __func__);
 		}
 	} else {
-		fprintf(stderr, "ERROR: Lock Mutex in %s\n", __func__);
+		fprintf(stderr, "ERROR: Lock timer_mutex in %s\n", __func__);
 	}
-
 }
 #endif
 

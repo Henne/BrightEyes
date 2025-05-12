@@ -1451,6 +1451,7 @@ void far *g_timer_isr_bak;
 #else
 static SDL_TimerID g_sdl_timer_id = 0;
 static SDL_TimerID g_sdl_timer_vga_id = 0;
+static SDL_mutex *g_sdl_timer_mutex = NULL;
 #endif
 
 /* These 6 bytes are written at once from a file */
@@ -2473,7 +2474,7 @@ static int sdl_event_loop(const int cmd)
 
 				switch (event.key.keysym.sym) {
 					case SDLK_TAB: {
-								sdl_change_window_size();
+								sdl_change_window_size(g_sdl_timer_mutex);
 								sdl_mouse_cursor_scaled();
 								break;
 					}
@@ -4203,8 +4204,6 @@ static void interrupt timer_isr(void)
 	((void interrupt far (*)(void))g_timer_isr_bak)();
 }
 #else
-static SDL_mutex *g_sdl_timer_mutex = NULL;
-
 static Uint32 gen_timer_isr(Uint32 interval, void *param)
 {
 	if (SDL_LockMutex(g_sdl_timer_mutex) == 0) {
