@@ -280,28 +280,13 @@ void sdl_change_window_size(SDL_mutex *timer_mutex)
 			texture = NULL;
 			SDL_DestroyRenderer(renderer);
 			renderer = NULL;
-			SDL_DestroyWindow(window);
-			window = NULL;
+
+			SDL_SetWindowSize(window, W_WIDTH, W_HEIGHT);
 
 			pixels = calloc(W_WIDTH * W_HEIGHT * sizeof(Uint32), 1);
 			if (pixels == NULL) {
 				fprintf(stderr, "ERROR: %s() failed to allocate pixels: %s\n",
 							__func__, SDL_GetError());
-				SDL_Quit();
-				exit(-1);
-			}
-
-			window = SDL_CreateWindow(
-				"BrightEyes",
-				SDL_WINDOWPOS_UNDEFINED,
-				SDL_WINDOWPOS_UNDEFINED,
-				W_WIDTH,
-				W_HEIGHT,
-				SDL_WINDOW_SHOWN
-			);
-
-			if (window == NULL) {
-				fprintf(stderr, "Could not create Window: %s\n", SDL_GetError());
 				SDL_Quit();
 				exit(-1);
 			}
