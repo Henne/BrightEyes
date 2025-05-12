@@ -235,29 +235,31 @@ void sdl_update_rect_window(const int x_in, const int y_in, const int width_in, 
 	calls++;
 	if (pixels == NULL) return;
 
-	if (SDL_LockMutex(PixelsMutex) == 0) {
+	if (memcmp(g_vga_memstart, vga_bak, O_WIDTH * O_HEIGHT) || pal_updated || win_resized) {
 
-		sdl_update_rect_pixels(x_in, y_in, width_in, height_in);
+		if (SDL_LockMutex(PixelsMutex) == 0) {
 
-		if (memcmp(g_vga_memstart, vga_bak, O_WIDTH * O_HEIGHT) || pal_updated || win_resized) {
+			updates++;
+
+			sdl_update_rect_pixels(x_in, y_in, width_in, height_in);
+
 			if ((texture != NULL) && (renderer != NULL)) {
-				updates++;
-				SDL_UpdateTexture(texture, NULL, pixels, RATIO * O_WIDTH * sizeof(Uint32));
+				SDL_UpdateTexture(texture, NULL, pixels, W_WIDTH * sizeof(Uint32));
 				SDL_RenderClear(renderer);
 				SDL_RenderCopy(renderer, texture, NULL, NULL);
 				SDL_RenderPresent(renderer);
 			}
-		}
 
-		pal_updated = 0;
-		win_resized = 0;
-		memcpy(vga_bak, g_vga_memstart, O_WIDTH * O_HEIGHT);
+			pal_updated = 0;
+			win_resized = 0;
+			memcpy(vga_bak, g_vga_memstart, O_WIDTH * O_HEIGHT);
 
-		if (SDL_UnlockMutex(PixelsMutex) == -1) {
-			fprintf(stderr, "ERROR: Unlock Mutex in %s\n", __func__);
+			if (SDL_UnlockMutex(PixelsMutex) == -1) {
+				fprintf(stderr, "ERROR: Unlock Mutex in %s\n", __func__);
+			}
+		} else {
+			fprintf(stderr, "ERROR: Lock Mutex in %s\n", __func__);
 		}
-	} else {
-		fprintf(stderr, "ERROR: Lock Mutex in %s\n", __func__);
 	}
 }
 
