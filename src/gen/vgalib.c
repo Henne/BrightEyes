@@ -113,7 +113,7 @@ void set_video_mode(unsigned short mode)
 		renderer = SDL_CreateRenderer(
 			window,
 			-1,
-			SDL_RENDERER_ACCELERATED
+			SDL_RENDERER_SOFTWARE
 		);
 
 		texture = SDL_CreateTexture(
@@ -304,7 +304,7 @@ void sdl_change_window_size(SDL_mutex *timer_mutex)
 			renderer = SDL_CreateRenderer(
 				window,
 				-1,
-				SDL_RENDERER_ACCELERATED
+				SDL_RENDERER_SOFTWARE
 			);
 
 			texture = SDL_CreateTexture(
