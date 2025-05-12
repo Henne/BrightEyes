@@ -3786,7 +3786,9 @@ signed short gui_radio(char *header, const signed int options, ...)
 #else
 		if (handle_input()) {
 			/* enable an ungracefully exit in gui_radio() */
+			restore_timer_isr();
 			set_video_mode(0);
+			free_buffers();
 			exit(0);
 		}
 #endif
