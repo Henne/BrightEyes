@@ -144,7 +144,17 @@ void set_video_mode(unsigned short mode)
 		}
 
 	} else {
-		free(pixels);
+		if (SDL_LockMutex(PixelsMutex) == 0) {
+
+			free(pixels);
+
+			if (SDL_UnlockMutex(PixelsMutex) == -1) {
+				fprintf(stderr, "ERROR: Unlock Mutex in %s\n", __func__);
+			}
+		} else {
+			fprintf(stderr, "ERROR: Lock Mutex in %s\n", __func__);
+		}
+
 		free(vga_bak);
 		SDL_DestroyMutex(PixelsMutex);
 		SDL_DestroyTexture(texture);
