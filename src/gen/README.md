@@ -3,6 +3,9 @@
 In this place the actual development of GEN takes place.
 The DOS-Version will be supported for an uncertain ammount of time.
 
+Currently supported platforms are: 16-Bit (DOS), 32-Bit (Linux), 64-Bit (Linux-x86, Linux-ARM, Windows)
+
+
 The following rules apply:
 * binary-aequivalency is not important
 * portability is important
@@ -12,55 +15,9 @@ The following rules apply:
 The new DOS-binary can be build with ./tools/build.sh
 and can be found under ./tools/NGEN.EXE
 
-A Linux binary can be build with make and is called ./ngen_(compilername),
+A Linux binary can be build with make -f Makefile_old and is called ./ngen_(compilername).
+You may use cmake to build a ngen_cc
 e.g. ngen_clang or ngen_gcc
-
-
-## GEN.EXE Versions
-All versions are build with the Borland C++ compiler using Memory Model: LARGE.
-| Version | Language | Compiler Version | Size  | md5sum                           |
-| ------- | -------- | ---------------- | ----  | -------------------------------- |
-| V1.00   | DE       | 2.0              | 57352 | 03a78b1fa703db58bf93238c81d7bdd9 |
-| V1.03   | DE       | 2.0              | 57384 | 51474416de1c84de2d17bd819355d92c |
-| V1.04   | DE       | 3.1              | 57854 | e1cf2251c9217a8992129f3dc42167df |
-| V1.05   | DE       | 3.1              | 74112 | 87be80fb584479d96c4dce3c2fac6eb7 |
-| V3.00   | EN       | 3.1              | 61012 | 10e7f0372c96b467dbde2b60477d61eb |
-
-
-### Layout V1.00 - V1.04 DE
-| Segment | #Funcs | Content |
-| ------- | ------ | ------- |
-| seg000  |      - | C-Lib Codesegment |
-| seg001  |    123 | Charactergenerator (mostly everything) |
-| seg002  |      4 | random number generator |
-| seg003  |     23 | SOUND (NOT AIL) |
-| seg004  |     24 | Rasterlib (VGA) |
-| seg005  |      7 | PP20 decompressor (for compressed images) |
-| seg006  |      - | Datasegment |
-
-### Layout V1.05 DE
-| Segment | #Funcs | Content |
-| ------- | ------ | ------- |
-| seg000  |      - | C-Lib Codesegment |
-| seg001  |     21 | CD-Audio Code |
-| seg002  |    131 | Charactergenerator (mostly everything) |
-| seg003  |      4 | random number generator |
-| seg004  |      7 | PP20 decompressor (for compressed images) |
-| seg005  |     24 | Rasterlib (VGA) |
-| seg006  |      - | AIL (Sound) |
-| seg007  |      - | DATA for CD-Audio |
-| seg008  |      - | Datasegment |
-
-### Layout V3.00 EN
-| Segment | #Funcs | Content |
-| ------- | ------ | ------- |
-| seg000  |      - | C-Lib Codesegment |
-| seg001  |      ? | Charactergenerator (mostly everything) |
-| seg002  |      4 | random number generator |
-| seg003  |      7 | PP20 decompressor (for compressed images) |
-| seg004  |     24 | Rasterlib (VGA) |
-| seg005  |      - | AIL (Sound) |
-| seg006  |      - | Datasegment |
 
 
 ## DSAGEN.DAT Versions

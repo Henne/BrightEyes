@@ -31,15 +31,10 @@ The GCC/Clang-World is there for support.
 | ------------ | ------------- | ------------------ | ------------------ | ---------- |
 | seg000.h     | BCC Clib      | **DONE**           | **DONE**           | **DONE**   |
 | seg001.[ch]  | AudioCD code  | **DONE**           | -                  | **DONE**   |
-| seg002.[ch]  | Main          | **DONE**           | should be rebuild  | WIP        |
+| seg002.[ch]  | Main          | **DONE**           | **DONE**           | WIP        |
 | seg003.[ch]  | Random        | **DONE**           | **DONE**           | **DONE**   |
 | seg004.[ch]  | PowerPack2.0  | -                  | **DONE**           | **DONE**   |
 | seg004.asm/h | PowerPack2.0  | **DONE**           | **not portable**   | **DONE**   |
 | seg005.[ch]  | VGAlib        | -                  | **DONE**           | **DONE**   |
-| seg005.asm/h | VGAlib        | **DONE**           | **not portable**   | **DONE**   |
 | seg006.[ch]  | AIL (Sound)   | -                  | should be replaced | WIP        |
 | seg006.asm/h | AIL (Sound)   | **DONE**           | **not portable**   | **DONE**   |
-| seg007.asm/h | AudioCD data  | **DONE**           | **not portable**   | **DONE**   |
-| hero.h       | hero struct   | **DONE**           | **DONE**           | **DONE**   |
-| port.h       | DOSBox compat | **DONE**           | **DONE**           | **DONE**   |
-| symbols.h    | DS adresses   | **obsolete**       | **obsolete**       | **DONE**   |
