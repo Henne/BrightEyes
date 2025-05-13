@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-O0 -g -fno-asm
+CFLAGS=-O0 -g -fno-asm -fopenmp
 
 
 # * get a mingw-zip-file from https://github.com/libsdl-org/SDL/releases

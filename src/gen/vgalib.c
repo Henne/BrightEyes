@@ -14,6 +14,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#if defined(__GNUC__)
+#include <omp.h>
+#endif
+
 #include "vgalib.h"
 
 #if !defined(__BORLANDC__)
@@ -235,19 +239,36 @@ void sdl_update_rect_window(const int x_in, const int y_in, const int width_in, 
 	calls++;
 	if (pixels == NULL) return;
 
+#if defined(__GNUC__)
+	double start, time_ms;
+#endif
+
 	if (memcmp(g_vga_memstart, vga_bak, O_WIDTH * O_HEIGHT) || pal_updated || win_resized) {
 
 		if (SDL_LockMutex(PixelsMutex) == 0) {
 
 			updates++;
-
+#if defined(__GNUC__)
+			start = omp_get_wtime();
+#endif
 			sdl_update_rect_pixels(x_in, y_in, width_in, height_in);
+#if defined(__GNUC__)
+			time_ms = (omp_get_wtime() - start) * 1000;
+			fprintf(stderr, "%s() scaling   = %f ms\n", __func__, time_ms);
+#endif
 
 			if ((texture != NULL) && (renderer != NULL)) {
 				SDL_UpdateTexture(texture, NULL, pixels, W_WIDTH * sizeof(Uint32));
 				SDL_RenderClear(renderer);
 				SDL_RenderCopy(renderer, texture, NULL, NULL);
+#if defined(__GNUC__)
+				start = omp_get_wtime();
+#endif
 				SDL_RenderPresent(renderer);
+#if defined(__GNUC__)
+				time_ms = (omp_get_wtime() - start) * 1000;
+				fprintf(stderr, "%s() rendering = %f ms\n", __func__, time_ms);
+#endif
 			}
 
 			pal_updated = 0;
