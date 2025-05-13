@@ -2420,6 +2420,8 @@ static signed long process_nvf(struct nvf_desc *nvf)
 /* KEYBOARD AND INPUT MANAGEMENT */
 
 #if !defined(__BORLANDC__)
+static int g_sdl_quit_event = 0;
+
 static int sdl_event_loop(const int cmd)
 {
 	SDL_Event event;
@@ -2429,11 +2431,6 @@ static int sdl_event_loop(const int cmd)
 			if (cmd == 0) {
 				/* return CTRL+Q as a keyboard event into the game */
 				return (0x10 << 8) | 0x11;
-			} else {
-				/* close the window and exit */
-				restore_timer_isr();
-				set_video_mode(0);
-				exit(0);
 			}
 		} else if (event.type == SDL_MOUSEMOTION) {
 			int ratio = sdl_get_ratio();
@@ -2566,7 +2563,7 @@ static void flush_keyboard_queue(void)
  * handle_input() - high-level input function
  * \return 1 to exit the program otherwise 0
  */
-static int handle_input(void)
+static void handle_input(void)
 {
 	signed short l_key_ext;
 	signed short i;
@@ -2584,7 +2581,10 @@ static int handle_input(void)
 
 		/* exit Program with CRTL+Q */
 		if ((g_in_key_ascii == KEY_DC1) && !g_in_intro) {
-			return 1;
+#if !defined(__BORLANDC__)
+			g_sdl_quit_event = 1;
+#endif
+			return;
 		}
 	}
 
@@ -2619,8 +2619,6 @@ static int handle_input(void)
 
 	mouse_motion();
 	g_in_key_ext = l_key_ext;
-
-	return 0;
 }
 
 static void vsync_or_key(const signed short val)
@@ -3793,15 +3791,15 @@ signed short gui_radio(char *header, const signed int options, ...)
 
 	while (!done) {
 		g_action_table = g_action_input;
-#if defined(__BORLANDC__)
 		handle_input();
-#else
-		if (handle_input()) {
-			/* enable an ungracefully exit in gui_radio() */
-			restore_timer_isr();
-			set_video_mode(0);
-			free_buffers();
-			exit(0);
+
+#if !defined(__BORLANDC__)
+		/* check if SDL got a quit event set by handle_input() */
+		if (g_sdl_quit_event) {
+			/* mimic an ESC to return from gui_radio() */
+			retval = -1;
+			done = 1;
+			g_mouse_rightclick_event = 0;
 		}
 #endif
 		g_action_table = NULL;
@@ -6934,6 +6932,9 @@ static void do_gen(void)
 	/* ask for level */
 	while (g_level == -1) {
 		g_level = gui_radio(get_text(0), 2, get_text(1), get_text(2));
+#if !defined(__BORLANDC__)
+		if (g_sdl_quit_event) return;
+#endif
 	}
 
 	/* initialize the hero structure */
@@ -6955,7 +6956,7 @@ static void do_gen(void)
 		flush_keyboard_queue();
 
 		g_action_table = g_action_page[g_gen_page];
-		done = handle_input();
+		handle_input();
 		g_action_table = NULL;
 
 		if (g_mouse_rightclick_event || g_in_key_ext == KEY_PGUP) {
@@ -7116,6 +7117,9 @@ static void do_gen(void)
 				}
 			}
 		}
+#if !defined(__BORLANDC__)
+		if (g_sdl_quit_event) done = 1;
+#endif
 	}
 }
 
