@@ -621,35 +621,3 @@ void vgalib_copy_from_screen(unsigned char *dst_in, unsigned char *src_in, const
 		src += O_WIDTH;
 	}
 }
-
-#if defined(__BORLANDC__)
-#if 0
-extern F_LXLSH;
-unsigned char* normalize_ptr(unsigned char *pointer)
-{
-	asm {
-		push ds
-		push es
-		push si
-		push di
-
-		xor dx,dx
-		mov ax, word ptr pointer+2
-		mov cx, 4
-		call far ptr F_LXLSH@
-		mov word ptr pointer+2, 0
-		add ax, word ptr pointer
-		adc dx, word ptr pointer+2
-		mov dx, 0x0c
-		call far ptr F_LXLSH@
-		mov ax, word ptr pointer
-
-		pop di
-		pop si
-		pop es
-		pop ds
-	}
-
-}
-#endif
-#endif

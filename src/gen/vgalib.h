@@ -18,10 +18,6 @@ void vgalib_copy_to_screen(unsigned char*, unsigned char*, const int, const int)
 
 void vgalib_copy_from_screen(unsigned char*, unsigned char*, const int, const int);
 
-#if defined(__BORLANDC__)
-unsigned char* normalize_ptr(unsigned char*);
-#endif
-
 #if !defined(__BORLANDC__)
 void sdl_update_rect_window(const int, const int, const int, const int);
 SDL_Window* sdl_get_window(void);

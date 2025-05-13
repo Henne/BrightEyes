@@ -3923,14 +3923,15 @@ static unsigned char *load_snd_driver(const char *fname)
 	unsigned long in_ptr;
 	signed short handle;
 
-	if ((handle = open(fname, 0x8001)) != -1) {
+	handle = open(fname, 0x8001);
+	if (handle != -1) {
 		size = 16500;
 		g_snd_driver = (unsigned char*)gen_alloc(size + 0x10);
 #if defined(__BORLANDC__)
 		// BCC: far pointer normalizaion (DOS only)
-		in_ptr = ((unsigned long)g_snd_driver) + 0x0f;
-		in_ptr &= 0xfffffff0;
-		norm_ptr = normalize_ptr((unsigned char*)in_ptr);
+		norm_ptr = (FP_OFF(g_snd_driver) != 0 ?
+				MK_FP(FP_SEG(g_snd_driver) + 1, 0) :
+				MK_FP(FP_SEG(g_snd_driver), 0));
 #else
 		norm_ptr = g_snd_driver;
 #endif
@@ -4007,7 +4008,8 @@ static void read_soundcfg(void)
 	g_use_cda = 0;
 	g_midi_disabled = 1;
 
-	if ((handle = open(g_str_sound_cfg, 0x8001)) != -1) {
+	handle = open(g_str_sound_cfg, 0x8001);
+	if (handle != -1) {
 		_read(handle, (unsigned char*)&port, 2);
 		_close(handle);
 

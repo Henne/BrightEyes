@@ -25,7 +25,6 @@
 @REM BCC.EXE -mlarge -O -c -2 -Z -j1 VGALIB.C
 @REM BCC.EXE -mlarge -O -c -2 -Z -j1 POWERP20.C
 @REM TASM.EXE /os /z POWERP20.ASM POWERP20.OBJ
-@REM TASM.EXE /os /z NORMPTR.ASM NORMPTR.OBJ
 @REM TASM.EXE /m /w+ /ml /iAIL AIL\AIL.ASM AIL.OBJ
 
 @REM examine the ouput and press anykey
