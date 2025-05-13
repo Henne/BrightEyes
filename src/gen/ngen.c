@@ -3931,12 +3931,10 @@ static unsigned char *load_snd_driver(const char *fname)
 		in_ptr = ((unsigned long)g_snd_driver) + 0x0f;
 		in_ptr &= 0xfffffff0;
 		norm_ptr = normalize_ptr((unsigned char*)in_ptr);
-
-		_read(handle, norm_ptr, size);
 #else
 		norm_ptr = g_snd_driver;
-		_read(handle, norm_ptr, size);
 #endif
+		_read(handle, norm_ptr, size);
 		_close(handle);
 		return norm_ptr;
 	} else {
