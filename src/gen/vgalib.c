@@ -469,6 +469,7 @@ set_palette_loop1:
 		palette[first_color + i] = get_ABGR(pointer + 3 * i);
 
 	pal_updated = 1;
+	sdl_update_rect_window(0, 0, O_WIDTH, O_HEIGHT);
 #endif
 }
 
@@ -534,6 +535,11 @@ void pic_copy(unsigned char *dst, const signed short d_x, const signed short d_y
 			break;
 		}
 	}
+#if !defined(__BORLANDC__)
+	if (dst == g_vga_memstart) {
+		sdl_update_rect_window(d_x, d_y, width, height);
+	}
+#endif
 }
 
 void fill_rect(unsigned char *p_in, const signed short color, const signed short width, const signed short height)
@@ -545,12 +551,23 @@ void fill_rect(unsigned char *p_in, const signed short color, const signed short
 		/* fullscreen fill */
 		memset(p_in, color, O_WIDTH * O_HEIGHT);
 
+#if !defined(__BORLANDC__)
+		sdl_update_rect_window(0, 0, O_WIDTH, O_HEIGHT);
+#endif
 	} else {
 		p = p_in;
 		for (h = height; h > 0; h--) {
 			memset(p, color, width);
 			p += O_WIDTH;
 		}
+
+#if !defined(__BORLANDC__)
+		const int off = p_in - g_vga_memstart;
+		const int y = off / O_WIDTH;
+		const int x = off - y * O_WIDTH;
+
+		sdl_update_rect_window(x, y, width, height);
+#endif
 	}
 }
 
@@ -579,6 +596,17 @@ void vgalib_copy_to_screen(unsigned char *dst_in, unsigned char *src_in, const i
 			src += width;
 		}
 	}
+
+#if !defined(__BORLANDC__)
+	/* check if its really the vga memory, dst can also be another buffer */
+	const int offset = dst_in - g_vga_memstart;
+	if ((0 <= offset) && (offset <= O_WIDTH * O_HEIGHT)) {
+		const int y = offset / O_WIDTH;
+		const int x = offset - y * O_WIDTH;
+
+		sdl_update_rect_window(x, y, width, height);
+	}
+#endif
 }
 
 void vgalib_copy_from_screen(unsigned char *dst_in, unsigned char *src_in, const int width, const int height)

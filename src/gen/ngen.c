@@ -3288,6 +3288,10 @@ static void print_str(const char *str, const signed short x_in, const signed sho
 		}
 	}
 
+#if !defined(__BORLANDC__)
+	sdl_update_rect_window(x_in, y_in, x_max - x_in + 8, y - y_in + 8);
+#endif
+
 	mouse_cursor();
 }
 
@@ -3361,6 +3365,10 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 		print_chr(' ', x_pos, y);
 		print_chr('_', x_pos, y);
 	}
+
+#if !defined(__BORLANDC__)
+	sdl_update_rect_window(x, y, len * 8, 8);
+#endif
 
 	/* clear all input events */
 	flush_keyboard_queue();
@@ -3461,6 +3469,10 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 				print_chr('_', x_pos, y);
 			}
 		}
+
+#if !defined(__BORLANDC__)
+		sdl_update_rect_window(x, y, len * 8, 8);
+#endif
 	}
 
 	if (txt == 0) {
