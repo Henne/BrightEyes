@@ -3922,6 +3922,7 @@ static signed short gui_bool(char *msg)
 }
 
 /* AIL MANAGEMENT */
+#if defined(__BORLANDC__)
 static unsigned char *load_snd_driver(const char *fname)
 {
 	signed long size;
@@ -3933,14 +3934,10 @@ static unsigned char *load_snd_driver(const char *fname)
 	if (handle != -1) {
 		size = 16500;
 		g_snd_driver = (unsigned char*)gen_alloc(size + 0x10);
-#if defined(__BORLANDC__)
 		// BCC: far pointer normalizaion (DOS only)
 		norm_ptr = (FP_OFF(g_snd_driver) != 0 ?
 				MK_FP(FP_SEG(g_snd_driver) + 1, 0) :
 				MK_FP(FP_SEG(g_snd_driver), 0));
-#else
-		norm_ptr = g_snd_driver;
-#endif
 		_read(handle, norm_ptr, size);
 		_close(handle);
 		return norm_ptr;
@@ -4019,9 +4016,8 @@ static void read_soundcfg(void)
 		_read(handle, (unsigned char*)&port, 2);
 		_close(handle);
 
-#if !defined(__BORLANDC__)
+#if 0
 		/* Small hack: enable MIDI instead of CD-Audio */
-		//D1_INFO("MIDI port 0x%x\n", port);
 		if ((port != 0) && (load_driver(g_str_sound_adv, 3, port))) {
 			/* disable audio-cd */
 			g_use_cda = 0;
@@ -4035,40 +4031,9 @@ static void read_soundcfg(void)
 		CD_audio_init();
 	}
 }
+#endif
 
-static void init_music(const unsigned long size)
-{
 #if defined(__BORLANDC__)
-	g_form_xmid = gen_alloc(size);
-
-	if (g_form_xmid != NULL) {
-		AIL_startup();
-		g_midi_disabled = 1;
-	}
-#else
-	if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0) {
-		fprintf(stderr, "ERROR: failed to initialize Sound: %s\n", SDL_GetError());
-		return;
-	}
-
-	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) == -1) {
-		fprintf(stderr, "ERROR: failed to initialize SDL2_mixer: %s\n", SDL_GetError());
-		return;
-	}
-#if defined(_WIN32)
-	music = Mix_LoadMUS("..\\..\\music\\1992-Die Schicksalsklinge\\03 Blade of Destiny.flac");
-#else
-	music = Mix_LoadMUS("../../music/1992-Die Schicksalsklinge/03 Blade of Destiny.flac");
-#endif
-	if (music == NULL) {
-		fprintf(stderr, "ERROR: failed to load music file: %s\n", SDL_GetError());
-		return;
-	}
-
-	g_sdl_music = 1;
-#endif
-}
-
 static signed short *get_timbre(const signed short bank, const signed short patch)
 {
 	signed short *timbre_ptr;
@@ -4162,16 +4127,20 @@ static void stop_sequence(void)
 		AIL_release_sequence_handle(g_snd_driver_handle, g_snd_sequence);
 	}
 }
+#endif
 
 static void restart_midi(void)
 {
+#if defined(__BORLANDC__)
 	if ((g_midi_disabled == 0) && (readw(g_snd_driver_desc + 0x02) == 3) &&
 		(AIL_sequence_status(g_snd_driver_handle, g_snd_sequence) == 2))
 	{
 		AIL_start_sequence(g_snd_driver_handle, g_snd_sequence);
 	}
+#endif
 }
 
+#if defined(__BORLANDC__)
 static void play_midi(const signed short index)
 {
 	if ((g_midi_disabled == 0) && (readw(g_snd_driver_desc + 0x02) == 3))
@@ -4181,6 +4150,7 @@ static void play_midi(const signed short index)
 		play_sequence(0);
 	}
 }
+#endif
 
 static void start_music(const signed short track)
 {
@@ -4196,6 +4166,39 @@ static void start_music(const signed short track)
 	if (Mix_PlayMusic(music, -1) == -1) {
 		fprintf(stderr, "ERROR: music cannot be played: %s\n", SDL_GetError());
 	}
+#endif
+}
+
+static void init_music(const unsigned long size)
+{
+#if defined(__BORLANDC__)
+	g_form_xmid = gen_alloc(size);
+
+	if (g_form_xmid != NULL) {
+		AIL_startup();
+		g_midi_disabled = 1;
+	}
+#else
+	if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0) {
+		fprintf(stderr, "ERROR: failed to initialize Sound: %s\n", SDL_GetError());
+		return;
+	}
+
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) == -1) {
+		fprintf(stderr, "ERROR: failed to initialize SDL2_mixer: %s\n", SDL_GetError());
+		return;
+	}
+#if defined(_WIN32)
+	music = Mix_LoadMUS("..\\..\\music\\1992-Die Schicksalsklinge\\03 Blade of Destiny.flac");
+#else
+	music = Mix_LoadMUS("../../music/1992-Die Schicksalsklinge/03 Blade of Destiny.flac");
+#endif
+	if (music == NULL) {
+		fprintf(stderr, "ERROR: failed to load music file: %s\n", SDL_GetError());
+		return;
+	}
+
+	g_sdl_music = 1;
 #endif
 }
 
@@ -7604,7 +7607,9 @@ int main_gen(int argc, char **argv)
 
 	if (sound_off == 0) {
 		init_music(13000);
+#if defined(__BORLANDC__)
 		read_soundcfg();
+#endif
 	}
 
 	start_music(33);
