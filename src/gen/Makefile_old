@@ -6,10 +6,11 @@ CFLAGS=-O0 -g -fno-asm -fopenmp
 #   and SDL2_mixer-devel-2.8.1-mingw.zip from https://www.libsdl.org/projects/SDL_mixer/release
 # * decompress it on the Desktop
 # * uncomment and adjust the next four lines to match the correct version
-#CFLAGS+=-I${HOME}/Desktop/SDL2-2.32.4/x86_64-w64-mingw32/include/
+#CFLAGS+=-I${HOME}/Desktop/SDL2-2.32.4/x86_64-w64-mingw32/include/SDL2/
 #CFLAGS+=-L${HOME}/Desktop/SDL2-2.32.4/x86_64-w64-mingw32/lib/
-#CFLAGS+=-I${HOME}/Desktop/SDL2_mixer-2.8.1/x86_64-w64-mingw32/include/
+#CFLAGS+=-I${HOME}/Desktop/SDL2_mixer-2.8.1/x86_64-w64-mingw32/include/SDL2
 #CFLAGS+=-L${HOME}/Desktop/SDL2_mixer-2.8.1/x86_64-w64-mingw32/lib/
+CFLAGS+=-I/usr/include/SDL2
 
 gen: cda_code.o ngen.o powerp20.o vgalib.o ail_stub.o
 	$(CC) $(CFLAGS) -o ngen_$(CC) cda_code.o ngen.o powerp20.o vgalib.o ail_stub.o -lSDL2 -lSDL2_mixer

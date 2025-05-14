@@ -7,7 +7,7 @@
  *      just a clean C-implementation.
 */
 #if !defined(__BORLANDC__)
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #endif
 
 #include <stdio.h>
