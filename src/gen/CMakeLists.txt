@@ -8,10 +8,13 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0 -g -fno-asm")
 
 find_package(SDL2 REQUIRED)
+find_package(SDL2_mixer REQUIRED)
 
 # Workaround for including either <SDL2/SDL.h> or <SDL.h>
 get_target_property(SDL2_INCLUDE_DIR SDL2::SDL2 INTERFACE_INCLUDE_DIRECTORIES)
 cmake_path(GET SDL2_INCLUDE_DIR PARENT_PATH SDL2_INCLUDE_DIR)
+get_target_property(SDL2_mixer_INCLUDE_DIR SDL2_mixer::SDL2_mixer INTERFACE_INCLUDE_DIRECTORIES)
+cmake_path(GET SDL2_mixer_INCLUDE_DIR PARENT_PATH SDL2_mixer_INCLUDE_DIR)
 
 add_executable(ngen
     cda_code.c
@@ -25,4 +28,5 @@ set_target_properties(ngen PROPERTIES OUTPUT_NAME "ngen_${COMPILER_NAME}")
 
 target_include_directories(ngen PRIVATE ${SDL2_INCLUDE_DIR})
 target_link_libraries(ngen PUBLIC SDL2::SDL2)
+target_link_libraries(ngen PUBLIC SDL2_mixer::SDL2_mixer)
 install(TARGETS ngen RUNTIME DESTINATION bin)

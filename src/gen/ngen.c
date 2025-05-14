@@ -22,6 +22,7 @@
 #include <MATH.H>	// abs()
 #else
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 #include <unistd.h> // lseek(), close(), read(), write()
 #endif
 
@@ -1431,6 +1432,11 @@ static unsigned char* g_snd_driver;
 static signed long g_state_table_size;
 static signed short g_timbre_cache_size;
 static signed short g_handle_timbre;
+#if !defined(__BORLANDC__)
+static int g_sdl_music = 0;
+static Mix_Music *music = NULL;
+#endif
+
 
 static signed long g_gendat_offset;
 
@@ -4025,19 +4031,42 @@ static void read_soundcfg(void)
 		/* enable audio-cd, disable midi */
 		g_use_cda = g_midi_disabled = 1;
 
-		/* play audio-cd */
-		seg001_0600();
+		/* initialize audio-cd */
+		CD_audio_init();
 	}
 }
 
 static void init_music(const unsigned long size)
 {
+#if defined(__BORLANDC__)
 	g_form_xmid = gen_alloc(size);
 
 	if (g_form_xmid != NULL) {
 		AIL_startup();
 		g_midi_disabled = 1;
 	}
+#else
+	if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0) {
+		fprintf(stderr, "ERROR: failed to initialize Sound: %s\n", SDL_GetError());
+		return;
+	}
+
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) == -1) {
+		fprintf(stderr, "ERROR: failed to initialize SDL2_mixer: %s\n", SDL_GetError());
+		return;
+	}
+#if defined(_WIN32)
+	music = Mix_LoadMUS("..\\..\\music\\1992-Die Schicksalsklinge\\03 Blade of Destiny.flac");
+#else
+	music = Mix_LoadMUS("../../music/1992-Die Schicksalsklinge/03 Blade of Destiny.flac");
+#endif
+	if (music == NULL) {
+		fprintf(stderr, "ERROR: failed to load music file: %s\n", SDL_GetError());
+		return;
+	}
+
+	g_sdl_music = 1;
+#endif
 }
 
 static signed short *get_timbre(const signed short bank, const signed short patch)
@@ -4155,6 +4184,7 @@ static void play_midi(const signed short index)
 
 static void start_music(const signed short track)
 {
+#if defined(__BORLANDC__)
 	if (!g_use_cda) {
 		if (g_midi_disabled == 0) {
 			play_midi(track);
@@ -4162,11 +4192,17 @@ static void start_music(const signed short track)
 	} else {
 		CD_play_track(track);
 	}
+#else
+	if (Mix_PlayMusic(music, -1) == -1) {
+		fprintf(stderr, "ERROR: music cannot be played: %s\n", SDL_GetError());
+	}
+#endif
 }
 
 /* Remark: used by CD-Audio code => extern */
-void stop_music(void)
+void exit_music(void)
 {
+#if defined(__BORLANDC__)
 	AIL_shutdown(NULL);
 
 	if (g_snd_timbre_cache) {
@@ -4189,7 +4225,14 @@ void stop_music(void)
 		g_snd_driver = NULL;
 	}
 
-	seg001_033b();
+	CD_audio_stop();
+#else
+	if (music != NULL) {
+		Mix_FreeMusic(music);
+		music = NULL;
+	}
+	Mix_CloseAudio();
+#endif
 }
 
 /* TIMER MANAGEMENT */
@@ -7584,7 +7627,7 @@ int main_gen(int argc, char **argv)
 
 	do_gen();
 
-	stop_music();
+	exit_music();
 
 #if !defined(__BORLANDC__)
 	SDL_ShowCursor(SDL_DISABLE);

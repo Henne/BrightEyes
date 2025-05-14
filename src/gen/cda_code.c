@@ -288,7 +288,7 @@ static void CD_audio_stop_hsg(void)
 }
 
 /* Borlandified and identical */
-void seg001_033b(void)
+void CD_audio_stop(void)
 {
 	if (g_cd_init_successful != 0) {
 
@@ -434,14 +434,14 @@ static void CD_check_cd(void)
 }
 
 /* Borlandified and identical */
-signed short seg001_0600(void)
+signed short CD_audio_init(void)
 {
 	if (CD_set_drive_no() == 0)
 		return 0;
 
 	g_cd_init_successful = 1;
 	CD_check_cd();
-	seg001_033b();
+	CD_audio_stop();
 	seg001_03a8();
 
 	return 1;
