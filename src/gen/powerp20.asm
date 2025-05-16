@@ -1,18 +1,16 @@
 .186
 .model large
 .data
-dword_1EC48	dd 0
-word_1EC4C	dw 0
-word_1EC4E	dw 0
-dword_1EC50	dd 0
-dword_1EC54	dd 0
-word_1EC58	dw 0
-word_1EC5A	dw 0
-word_1EC5C	dw 0
+
+src_ptr	dd 0
+word_1EC4C	dd 0
+dst_ptr	dd 0
+src_end_ptr	dd 0
+pp20_counter	dw 0
+word_1EC5A	dd 0
 word_1EC5E	dw 0
 word_1EC60	dw 0
-word_1EC62	dw 0
-word_1EC64	dw 0
+word_1EC62	dd 0
 
 .code
 
@@ -22,9 +20,9 @@ word_1EC64	dw 0
 _decomp_pp20	proc far
 
 
-arg_0		= dword	ptr  6
-arg_4		= dword	ptr  0Ah
-arg_8		= dword	ptr  0Eh
+dst_in		= dword	ptr  6
+src_in		= dword	ptr  0Ah
+len_in		= dword	ptr  0Eh
 
 		push	bp
 		mov	bp, sp
@@ -32,24 +30,24 @@ arg_8		= dword	ptr  0Eh
 		push	es
 		push	si
 		push	di
-		mov	ax, word ptr [bp+arg_0+2]
-		mov	bx, word ptr [bp+arg_0]
-		mov	word ptr dword_1EC50+2,	ax
-		mov	word ptr dword_1EC50, bx
-		mov	ax, word ptr [bp+arg_4+2]
-		mov	bx, word ptr [bp+arg_4]
+		mov	ax, word ptr [bp+dst_in+2]
+		mov	bx, word ptr [bp+dst_in]
+		mov	word ptr dst_ptr+2,	ax
+		mov	word ptr dst_ptr, bx
+		mov	ax, word ptr [bp+src_in+2]
+		mov	bx, word ptr [bp+src_in]
 		mov	di, bx
 		xor	dx, dx
-		add	bx, word ptr [bp+arg_8]
-		adc	dx, word ptr [bp+arg_8+2]
+		add	bx, word ptr [bp+len_in]
+		adc	dx, word ptr [bp+len_in+2]
 		mov	cx, 0Ch
 		shl	dx, cl
 		add	ax, dx
-		mov	word ptr dword_1EC48+2,	ax
-		mov	word ptr dword_1EC48, bx
+		mov	word ptr src_ptr+2,	ax
+		mov	word ptr src_ptr, bx
 		add	di, 4
-		mov	word ptr dword_1EC54+2,	ax
-		mov	word ptr dword_1EC54, di
+		mov	word ptr src_end_ptr+2,	ax
+		mov	word ptr src_end_ptr, di
 		call	sub_1B3E3
 		pop	di
 		pop	si
@@ -61,50 +59,50 @@ arg_8		= dword	ptr  0Eh
 _decomp_pp20	endp
 
 sub_1B3E3	proc near
-		mov	word_1EC62, 1
-		mov	word_1EC64, 0
-		mov	ax, word ptr dword_1EC50
-		mov	word_1EC4C, ax
-		mov	ax, word ptr dword_1EC50+2
-		mov	word_1EC4E, ax
+		mov	word ptr word_1EC62, 1
+		mov	word ptr word_1EC62+2, 0
+		mov	ax, word ptr dst_ptr
+		mov	word ptr word_1EC4C, ax
+		mov	ax, word ptr dst_ptr+2
+		mov	word ptr word ptr word_1EC4C+2, ax
 		xor	ax, ax
-		sub	word ptr dword_1EC48, 4
+		sub	word ptr src_ptr, 4
 		sbb	ax, 0
 		mov	cx, 0Ch
 		shl	ax, cl
-		add	word ptr dword_1EC48+2,	ax
-		les	di, dword_1EC48
+		add	word ptr src_ptr+2,	ax
+		les	di, src_ptr
 		mov	bh, es:[di]
 		mov	bl, es:[di+1]
 		mov	ah, es:[di+2]
 		mov	al, es:[di+3]
-		mov	word_1EC5A, ax
-		mov	word_1EC5C, bx
+		mov	word ptr word_1EC5A, ax
+		mov	word ptr word_1EC5A+2, bx
 		cmp	al, 0
 		jz	short loc_1B448
 		call	sub_1B589
-		dec	byte ptr word_1EC5A
-		mov	ax, word_1EC62
-		mov	dx, word_1EC64
-		mov	cx, word_1EC5A
+		dec	byte ptr word ptr word_1EC5A
+		mov	ax, word ptr word_1EC62
+		mov	dx, word ptr word_1EC62+2
+		mov	cx, word ptr word_1EC5A
 		call	sub_1B679
-		mov	word_1EC62, ax
-		mov	word_1EC64, dx
+		mov	word ptr word_1EC62, ax
+		mov	word ptr word_1EC62+2, dx
 
 loc_1B448:
 		mov	cl, 8
-		mov	ax, word_1EC5A
-		mov	dx, word_1EC5C
+		mov	ax, word ptr word_1EC5A
+		mov	dx, word ptr word_1EC5A+2
 		call	sub_1B679
-		mov	word_1EC5A, ax
-		mov	word_1EC5C, dx
-		mov	ax, word_1EC5A
+		mov	word ptr word_1EC5A, ax
+		mov	word ptr word_1EC5A+2, dx
+		mov	ax, word ptr word_1EC5A
 		xor	dx, dx
-		add	word ptr dword_1EC50, ax
-		adc	dx, word_1EC5C
+		add	word ptr dst_ptr, ax
+		adc	dx, word ptr word_1EC5A+2
 		mov	cx, 0Ch
 		shl	dx, cl
-		add	word ptr dword_1EC50+2,	dx
+		add	word ptr dst_ptr+2,	dx
 
 loc_1B471:
 		call	sub_1B589
@@ -112,62 +110,62 @@ loc_1B471:
 		mov	word_1EC5E, 0
 
 loc_1B47C:
-		mov	word_1EC58, 1
+		mov	pp20_counter, 1
 		call	sub_1B5F0
-		mov	ax, word_1EC5A
+		mov	ax, word ptr word_1EC5A
 		add	word_1EC5E, ax
 		cmp	ax, 3
 		jz	short loc_1B47C
 
 loc_1B491:
-		mov	word_1EC58, 7
+		mov	pp20_counter, 7
 		call	sub_1B5F0
 		xor	ax, ax
-		sub	word ptr dword_1EC50, 1
+		sub	word ptr dst_ptr, 1
 		sbb	ax, 0
 		mov	cx, 0Ch
 		shl	ax, cl
-		add	word ptr dword_1EC50+2,	ax
-		mov	ax, word_1EC5A
-		les	di, dword_1EC50
+		add	word ptr dst_ptr+2,	ax
+		mov	ax, word ptr word_1EC5A
+		les	di, dst_ptr
 		mov	es:[di], al
 		dec	word_1EC5E
 		jge	short loc_1B491
-		mov	cx, word ptr dword_1EC50+2
-		mov	bx, word ptr dword_1EC50
-		mov	dx, word_1EC4E
-		mov	ax, word_1EC4C
+		mov	cx, word ptr dst_ptr+2
+		mov	bx, word ptr dst_ptr
+		mov	dx, word ptr word ptr word_1EC4C+2
+		mov	ax, word ptr word_1EC4C
 		call	sub_1B697
 		jb	short loc_1B4D2
 		retn
 
 loc_1B4D2:
-		mov	word_1EC58, 1
+		mov	pp20_counter, 1
 		call	sub_1B5F0
-		mov	word_1EC58, 0
-		les	di, dword_1EC54
-		add	di, word_1EC5A
+		mov	pp20_counter, 0
+		les	di, src_end_ptr
+		add	di, word ptr word_1EC5A
 		mov	al, es:[di]
-		mov	byte ptr word_1EC58, al
-		mov	ax, word_1EC5A
+		mov	byte ptr pp20_counter, al
+		mov	ax, word ptr word_1EC5A
 		mov	word_1EC5E, ax
 		cmp	ax, 3
 		jnz	short loc_1B528
 		call	sub_1B589
 		jb	short loc_1B505
-		mov	word_1EC58, 7
+		mov	pp20_counter, 7
 
 loc_1B505:
-		call	sub_1B5EC
-		mov	ax, word_1EC5A
+		call	pp20_dec_counter
+		mov	ax, word ptr word_1EC5A
 		mov	word_1EC60, ax
 
 loc_1B50E:
-		mov	word_1EC58, 2
+		mov	pp20_counter, 2
 		call	sub_1B5F0
-		mov	ax, word_1EC5A
+		mov	ax, word ptr word_1EC5A
 		add	word_1EC5E, ax
-		cmp	word_1EC5A, 7
+		cmp	word ptr word_1EC5A, 7
 		jz	short loc_1B50E
 		jmp	short loc_1B531
 ;REMARK: may become an obstacle
@@ -175,8 +173,8 @@ loc_1B50E:
 ;
 
 loc_1B528:
-		call	sub_1B5EC
-		mov	ax, word_1EC5A
+		call	pp20_dec_counter
+		mov	ax, word ptr word_1EC5A
 		mov	word_1EC60, ax
 
 loc_1B531:
@@ -184,7 +182,7 @@ loc_1B531:
 
 loc_1B535:
 		push	ds
-		les	di, dword_1EC50
+		les	di, dst_ptr
 		xor	ax, ax
 		add	di, word_1EC60
 		adc	ax, 0
@@ -194,21 +192,21 @@ loc_1B535:
 		add	bx, ax
 		mov	es, bx
 		xor	ax, ax
-		sub	word ptr dword_1EC50, 1
+		sub	word ptr dst_ptr, 1
 		sbb	ax, 0
 		mov	cx, 0Ch
 		shl	ax, cl
-		add	word ptr dword_1EC50+2,	ax
-		lds	si, dword_1EC50
+		add	word ptr dst_ptr+2,	ax
+		lds	si, dst_ptr
 		mov	al, es:[di]
 		mov	[si], al
 		pop	ds
 		dec	word_1EC5E
 		jge	short loc_1B535
-		mov	cx, word ptr dword_1EC50+2
-		mov	bx, word ptr dword_1EC50
-		mov	dx, word_1EC4E
-		mov	ax, word_1EC4C
+		mov	cx, word ptr dst_ptr+2
+		mov	bx, word ptr dst_ptr
+		mov	dx, word ptr word ptr word_1EC4C+2
+		mov	ax, word ptr word_1EC4C
 		call	sub_1B697
 		jnb	short locret_1B588
 		jmp	loc_1B471
@@ -219,8 +217,8 @@ sub_1B3E3	endp
 
 
 sub_1B589	proc near
-		mov	bx, word_1EC62
-		mov	ax, word_1EC64
+		mov	bx, word ptr word_1EC62
+		mov	ax, word ptr word_1EC62+2
 		mov	dx, 0
 		shr	ax, 1
 		rcr	bx, 1
@@ -233,12 +231,12 @@ loc_1B59C:
 		cmp	bx, 0
 		jnz	short loc_1B5DE
 		xor	ax, ax
-		sub	word ptr dword_1EC48, 4
+		sub	word ptr src_ptr, 4
 		sbb	ax, 0
 		mov	cx, 0Ch
 		shl	ax, cl
-		add	word ptr dword_1EC48+2,	ax
-		les	di, dword_1EC48
+		add	word ptr src_ptr+2,	ax
+		les	di, src_ptr
 		mov	ah, es:[di]
 		mov	al, es:[di+1]
 		mov	bh, es:[di+2]
@@ -257,8 +255,8 @@ loc_1B5D2:
 
 loc_1B5DE:
 
-		mov	word_1EC62, bx
-		mov	word_1EC64, ax
+		mov	word ptr word_1EC62, bx
+		mov	word ptr word_1EC62+2, ax
 		mov	cx, dx
 		clc
 		jcxz	short locret_1B5EB
@@ -268,18 +266,18 @@ locret_1B5EB:
 		retn
 sub_1B589	endp
 
-sub_1B5EC	proc near
-		dec	word_1EC58
-sub_1B5EC	endp
+pp20_dec_counter	proc near
+		dec	pp20_counter
+pp20_dec_counter	endp
 
 sub_1B5F0	proc near
 
-		mov	word_1EC5A, 0
-		mov	word_1EC5C, 0
+		mov	word ptr word_1EC5A, 0
+		mov	word ptr word_1EC5A+2, 0
 
 loc_1B5FC:
-		mov	bx, word_1EC62
-		mov	ax, word_1EC64
+		mov	bx, word ptr word_1EC62
+		mov	ax, word ptr word_1EC62+2
 		mov	dx, 0
 		shr	ax, 1
 		rcr	bx, 1
@@ -292,12 +290,12 @@ loc_1B60F:
 		cmp	bx, 0
 		jnz	short loc_1B651
 		xor	ax, ax
-		sub	word ptr dword_1EC48, 4
+		sub	word ptr src_ptr, 4
 		sbb	ax, 0
 		mov	cx, 0Ch
 		shl	ax, cl
-		add	word ptr dword_1EC48+2,	ax
-		les	di, dword_1EC48
+		add	word ptr src_ptr+2,	ax
+		les	di, src_ptr
 		mov	ah, es:[di]
 		mov	al, es:[di+1]
 		mov	bh, es:[di+2]
@@ -316,10 +314,10 @@ loc_1B645:
 
 loc_1B651:
 
-		mov	word_1EC62, bx
-		mov	word_1EC64, ax
-		mov	bx, word_1EC5A
-		mov	ax, word_1EC5C
+		mov	word ptr word_1EC62, bx
+		mov	word ptr word_1EC62+2, ax
+		mov	bx, word ptr word_1EC5A
+		mov	ax, word ptr word_1EC5A+2
 		mov	cx, dx
 		clc
 		jcxz	short loc_1B665
@@ -328,9 +326,9 @@ loc_1B651:
 loc_1B665:
 		rcl	bx, 1
 		rcl	ax, 1
-		mov	word_1EC5A, bx
-		mov	word_1EC5C, ax
-		dec	word_1EC58
+		mov	word ptr word_1EC5A, bx
+		mov	word ptr word_1EC5A+2, ax
+		dec	pp20_counter
 		jl	short locret_1B678
 		jmp	short loc_1B5FC
 
