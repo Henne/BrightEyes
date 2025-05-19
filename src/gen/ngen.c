@@ -4189,9 +4189,9 @@ static void init_music(const unsigned long size)
 		return;
 	}
 #if defined(_WIN32)
-	music = Mix_LoadMUS("..\\..\\music\\1992-Die Schicksalsklinge\\03 Blade of Destiny.flac");
+	music = Mix_LoadMUS("..\\..\\music\\1992-Die Schicksalsklinge\\04 A New Life is Born.flac");
 #else
-	music = Mix_LoadMUS("../../music/1992-Die Schicksalsklinge/03 Blade of Destiny.flac");
+	music = Mix_LoadMUS("../../music/1992-Die Schicksalsklinge/04 A New Life is Born.flac");
 #endif
 	if (music == NULL) {
 		fprintf(stderr, "ERROR: failed to load music file: %s\n", SDL_GetError());
