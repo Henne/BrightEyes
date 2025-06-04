@@ -992,7 +992,6 @@ static volatile struct struct_hero g_hero = {0};
 
 static signed short g_midi_disabled = 0;
 static signed short g_use_cda = 0;
-static signed short g_mouse_handler_installed = 0;
 
 static unsigned char* g_bg_buffer[]       = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 static signed long g_bg_len[]    = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -1421,17 +1420,21 @@ static struct inc_states g_spell_incs[86];
 signed short g_called_with_args;
 static signed short g_param_level;
 
+#if defined(__BORLANDC__)
 static signed short g_snd_driver_handle;
 static signed short g_snd_sequence;
 static unsigned char* g_snd_driver_desc;
 static unsigned char* g_snd_driver_base_addr;
+static signed long g_state_table_size;
+static signed short g_timbre_cache_size;
+static signed short g_handle_timbre;
+#endif
+
 static void* g_state_table;
 static unsigned char* g_snd_timbre_cache;
 static void* g_form_xmid;
 static unsigned char* g_snd_driver;
-static signed long g_state_table_size;
-static signed short g_timbre_cache_size;
-static signed short g_handle_timbre;
+
 #if !defined(__BORLANDC__)
 static int g_sdl_music = 0;
 static Mix_Music *music = NULL;
@@ -1638,23 +1641,23 @@ static void free_buffers(void)
 	}
 
 	// missed ones
-	if ((host_ptr = g_snd_timbre_cache) != 0) {
-		free(host_ptr);
+	if (g_snd_timbre_cache != NULL) {
+		free(g_snd_timbre_cache);
 		g_snd_timbre_cache = NULL;
 	}
 
-	if ((host_ptr = g_state_table) != 0) {
-		free(host_ptr);
+	if (g_state_table != NULL) {
+		free(g_state_table);
 		g_state_table = NULL;
 	}
 
-	if ((host_ptr = g_snd_driver) != 0) {
-		free(host_ptr);
+	if (g_snd_driver != NULL) {
+		free(g_snd_driver);
 		g_snd_driver = NULL;
 	}
 
-	if ((host_ptr = g_form_xmid) != 0) {
-		free(host_ptr);
+	if (g_form_xmid != NULL) {
+		free(g_form_xmid);
 		g_form_xmid = NULL;
 	}
 
@@ -1692,9 +1695,7 @@ static signed short random_gen(const signed short val)
 	retval = gen_rotl(retval, 3);
 	g_random_gen_seed = retval;
 
-	retval = abs(retval) % val;
-
-	return ++retval;
+	return abs(retval) % val + 1;
 }
 
 /**
@@ -1721,6 +1722,7 @@ static int is_in_word_array(const int val, const signed short *p)
 
 /* MOUSE MANAGEMENT */
 
+#if defined(__BORLANDC__)
 /**
  * mouse_action -	does mouse programming
  * @p1:		function AX
@@ -1735,7 +1737,6 @@ static int is_in_word_array(const int val, const signed short *p)
  */
 static void do_mouse_action(unsigned short *p1, unsigned short *p2, unsigned short *p3, unsigned short *p4, unsigned short *p5)
 {
-#if defined(__BORLANDC__)
 	union REGS myregs;
 	struct SREGS mysregs;
 
@@ -1775,10 +1776,8 @@ static void do_mouse_action(unsigned short *p1, unsigned short *p2, unsigned sho
 		*p3 = myregs.x.cx;
 		*p4 = myregs.x.dx;
 	}
-#endif
 }
 
-#if defined(__BORLANDC__)
 static void interrupt mouse_isr(void)
 {
 	signed short l_si = _AX;
@@ -1829,18 +1828,14 @@ static void interrupt mouse_isr(void)
 		}
 	}
 }
-#endif
 
-#if defined(__BORLANDC__)
 static void mouse_call_isr(void)
 {
 	mouse_isr();
 }
-#endif
 
 static void mouse_do_enable(const signed short val, unsigned char* ptr)
 {
-#if defined(__BORLANDC__)
 	unsigned short p1, p2, p3, p4, p5;
 
 	p1 = 0x0c;
@@ -1856,10 +1851,8 @@ static void mouse_do_enable(const signed short val, unsigned char* ptr)
 
 	/* set the new mouse event handler */
 	do_mouse_action(&p1, &p2, &p3, &p4, &p5);
-
-	g_mouse_handler_installed = 1;
-#endif
 }
+#endif
 
 #if !defined(__BORLANDC__)
 static void sdl_mouse_cursor_scaled(void)
@@ -1950,20 +1943,23 @@ static void sdl_mouse_cursor_scaled(void)
 
 static void mouse_enable(void)
 {
+#if defined(__BORLANDC__)
 	unsigned short p1, p2, p3, p4, p5;
+#endif
 
 	if (g_have_mouse == 2) {
 
+#if defined(__BORLANDC__)
 		/* initialize mouse */
 		p1 = 0;
 
 		do_mouse_action(&p1, &p2, &p3, &p4, &p5);
 
-#if defined(__BORLANDC__)
 		if (p1 == 0) {
 			g_have_mouse = 0;
 		}
 #endif
+
 		g_mouse_current_cursor = g_mouse_mask;
 
 #if !defined(__BORLANDC__)
@@ -1997,7 +1993,6 @@ static void mouse_enable(void)
 
 		sdl_mouse_cursor_scaled();
 #endif
-
 
 		if (g_have_mouse == 2) {
 #if defined(__BORLANDC__)
@@ -2033,8 +2028,6 @@ void mouse_disable(void)
 		p5 = 0;
 
 		do_mouse_action(&p1, &p2, &p3, &p4, &p5);
-
-		g_mouse_handler_installed = 0;
 #else
 		SDL_FreeCursor(g_sdl_cursor);
 		free(g_sdl_cursor_data_r);
@@ -2219,7 +2212,7 @@ static void mouse_motion(void)
  **/
 static signed short get_mouse_action(const signed short x, const signed short y, const struct mouse_action *act)
 {
-	signed short i;
+	int i;
 	
 	for (i = 0; act[i].x1 != -1; i++) {
 
@@ -2243,7 +2236,6 @@ static signed short get_mouse_action(const signed short x, const signed short y,
 */
 static void decomp_rle(unsigned char *dst, unsigned char *src)
 {
-	unsigned char *dst_loc = dst;
 	int i;
 	int j;
 	int k;
@@ -2262,12 +2254,12 @@ static void decomp_rle(unsigned char *dst, unsigned char *src)
 				n = *src++;
 
 				for (k = 0; k < n; k++)
-					*dst_loc++ = *src;
+					*dst++ = *src;
 
 				src++;
 				j += n;
 			} else {
-				*dst_loc++ = *src++;
+				*dst++ = *src++;
 				j++;
 			}
 		}
@@ -2311,24 +2303,16 @@ static unsigned int swap_u32(unsigned int v)
 
 static signed long process_nvf(struct nvf_desc *nvf)
 {
-	signed long offs;
-	signed short pics;
-	signed short height;
-	signed short va;
-	signed long p_size;
+	unsigned char HUGEPTR *src = NULL;
+	signed long p_size = 0;
 	signed long retval;
+	signed long offs;
+	signed short width = 0;
+	signed short height = 0;
+	signed short pics;
+	signed short va;
+	signed short i;
 	signed char nvf_type;
-
-	unsigned char HUGEPTR *src;
-
-	register signed short i;     // si
-	register signed short width; // di
-#if 0
-	/* Fix: GCC warns about uninitialized values */
-	width = height = 0;
-	p_size = 0;
-	src = NULL;
-#endif
 
 	va = (nvf_type = *(unsigned char*)(nvf->src)) & 0x80;
 	nvf_type &= 0x7f;
@@ -2571,8 +2555,8 @@ static void flush_keyboard_queue(void)
  */
 static void handle_input(void)
 {
+	int i;
 	signed short l_key_ext;
-	signed short i;
 
 	g_in_key_ascii = g_in_key_ext = l_key_ext = 0;
 
@@ -2627,9 +2611,9 @@ static void handle_input(void)
 	g_in_key_ext = l_key_ext;
 }
 
-static void vsync_or_key(const signed short val)
+static void vsync_or_key(const int val)
 {
-	signed short i;
+	int i;
 
 	for (i = 0; i < val; i++) {
 		handle_input();
@@ -2647,8 +2631,8 @@ static void vsync_or_key(const signed short val)
 
 static void detect_datfile(void)
 {
-	signed short handle;
 	signed long flen;
+	signed short handle;
 
 #if defined(__BORLANDC__) || defined(_WIN32)
 	/* 0x8001 = O_BINARY | O_RDONLY */
@@ -2676,7 +2660,7 @@ static void detect_datfile(void)
 
 static signed long get_archive_offset(const char *name, const unsigned char *table)
 {
-	signed short i;
+	int i;
 
 	for (i = 0; i < 50; i++) {
 
@@ -2761,14 +2745,6 @@ static signed short read_datfile(signed short handle, unsigned char *buf, unsign
 static signed long get_filelength(void)
 {
 	return g_flen;
-}
-
-static void read_datfile_to_buffer(const signed short index, unsigned char *dst)
-{
-	signed short handle;
-	handle = open_datfile(index);
-	read_datfile(handle, dst, 64000);
-	close(handle);
 }
 
 static void split_textbuffer(char **dst, char *src, const unsigned long len)
@@ -2910,8 +2886,8 @@ static void load_page(const signed short page)
 
 static void load_typus(const signed short typus)
 {
-	signed short index;
 	unsigned char *ptr;
+	signed short index;
 	signed short handle;
 
 	index = typus + 19;
@@ -2919,26 +2895,26 @@ static void load_typus(const signed short typus)
 	/* check if this image is in the buffer */
 	if (g_typus_buffer[typus]) {
 		decomp_pp20(g_gen_ptr5,	g_typus_buffer[typus], g_typus_len[typus]);
-		return;
-	}
-
-	handle = open_datfile(index);
-
-	ptr = gen_alloc(get_filelength());
-	if (ptr != NULL) {
-		/* load the file into the typus buffer */
-		g_typus_buffer[typus] = ptr;
-		g_typus_len[typus] = get_filelength();
-
-		read_datfile(handle, g_typus_buffer[typus], g_typus_len[typus]);
-
-		decomp_pp20(g_gen_ptr5, g_typus_buffer[typus], g_typus_len[typus]);
 	} else {
-		/* load the file direct */
-		read_datfile(handle, g_gen_ptr1_dis, 25000);
-		decomp_pp20(g_gen_ptr5, g_gen_ptr1_dis, get_filelength());
+
+		handle = open_datfile(index);
+
+		ptr = gen_alloc(get_filelength());
+		if (ptr != NULL) {
+			/* load the file into the typus buffer */
+			g_typus_buffer[typus] = ptr;
+			g_typus_len[typus] = get_filelength();
+
+			read_datfile(handle, g_typus_buffer[typus], g_typus_len[typus]);
+
+			decomp_pp20(g_gen_ptr5, g_typus_buffer[typus], g_typus_len[typus]);
+		} else {
+			/* load the file direct */
+			read_datfile(handle, g_gen_ptr1_dis, 25000);
+			decomp_pp20(g_gen_ptr5, g_gen_ptr1_dis, get_filelength());
+		}
+		close(handle);
 	}
-	close(handle);
 }
 
 /* COLOR MANAGEMENT */
@@ -2999,16 +2975,10 @@ void exit_video(void)
 
 static void do_draw_pic(const signed short mode)
 {
-	signed short s_x;
-	signed short s_y;
-	signed short width;
-	signed short height;
-
-	s_x = g_src_x1;
-	s_y = g_src_y1;
-
-	width = g_dst_x2 - g_dst_x1 + 1;
-	height = g_dst_y2 - g_dst_y1 + 1;
+	signed short s_x = g_src_x1;
+	signed short s_y = g_src_y1;
+	signed short width = g_dst_x2 - g_dst_x1 + 1;
+	signed short height = g_dst_y2 - g_dst_y1 + 1;
 
 	mouse_bg();
 
@@ -3017,13 +2987,11 @@ static void do_draw_pic(const signed short mode)
 	mouse_cursor();
 }
 
-void call_fill_rect_gen(unsigned char *ptr, signed short x1, signed short y1, signed short x2, signed short y2, signed short color)
+void call_fill_rect_gen(unsigned char *ptr, const signed short x1, const signed short y1, const signed short x2, const signed short y2, const signed short color)
 {
-	signed short width;
-	signed short height;
+	signed short width = x2 - x1 + 1;
+	signed short height = y2 - y1 + 1;
 
-	width = x2 - x1 + 1;
-	height = y2 - y1 + 1;
 	ptr += y1 * O_WIDTH + x1;
 
 	fill_rect(ptr, color, width, height);
@@ -3041,10 +3009,11 @@ void call_fill_rect_gen(unsigned char *ptr, signed short x1, signed short y1, si
  */
 static signed short get_chr_info(const unsigned char c, signed short *width)
 {
-	signed short i;
+	int i;
 
+	/* lookup printable characters */
 	for (i = 0; i != 222; i += 3) {
-		/* search for the character */
+		/* search for the printable character */
 		if (*(&g_chr_lookup[0].chr + i) == c) {
 
 			*width = *(&g_chr_lookup[0].width + i) & 0xff;
@@ -3053,11 +3022,12 @@ static signed short get_chr_info(const unsigned char c, signed short *width)
 	}
 
 	if (c == 0x7e || c == 0xf0 || c == 0xf1 || c == 0xf2 || c == 0xf3) {
-		return *width = 0;
+		*width = 0;
 	} else {
 		*width = 6;
-		return 0;
 	}
+
+	return 0;
 }
 
 static void prepare_chr_background(void)
@@ -3068,8 +3038,8 @@ static void prepare_chr_background(void)
 static void prepare_chr_foreground(unsigned char* font_ptr)
 {
 	unsigned char *ptr = g_char_buffer;
-	signed short i;
-	signed short j;
+	int i;
+	int j;
 	unsigned char mask;
 
 	for (i = 0; i < 8; ptr += 8, i++) {
@@ -3090,8 +3060,8 @@ static unsigned char* get_gfx_ptr(const signed short x, const signed short y)
 static void blit_chr(unsigned char *gfx_ptr, const signed short chr_height, const signed short chr_width)
 {
 	unsigned char *src = g_char_buffer;
-	signed short i;
-	signed short j;
+	int i;
+	int j;
 
 	for (i = 0; i < chr_height; src += 8 - chr_width, gfx_ptr += O_WIDTH, i++)
 		for (j = 0; j < chr_width; src++, j++)
@@ -3100,14 +3070,9 @@ static void blit_chr(unsigned char *gfx_ptr, const signed short chr_height, cons
 
 static void print_chr_to_screen(const signed short chr_index, const signed short chr_width, const signed short x, const signed short y)
 {
-	unsigned char* gfx_ptr;
-
 	prepare_chr_background();
 	prepare_chr_foreground(chr_index * 8 + g_buffer_font6);
-
-	gfx_ptr = get_gfx_ptr(x, y);
-
-	blit_chr(gfx_ptr, 7, chr_width);
+	blit_chr(get_gfx_ptr(x, y), 7, chr_width);
 }
 
 static signed short print_chr(const unsigned char c, const signed short x, const signed short y)
@@ -3138,8 +3103,8 @@ static signed short str_splitter(char *s)
 	signed short c_width;
 	signed short l_width;
 
-	signed short last_space; //di
-	signed short i; //si
+	signed short last_space;
+	signed short i;
 
 	lines = 1;
 
@@ -3301,7 +3266,7 @@ static void print_str(const char *str, const signed short x_in, const signed sho
 
 static signed short print_line(char *str)
 {
-	signed short lines = 1;
+	signed short lines;
 
 	mouse_bg();
 
@@ -3314,9 +3279,9 @@ static signed short print_line(char *str)
 	return lines;
 }
 
-static signed short count_linebreaks(char *str)
+static int count_linebreaks(const char *str)
 {
-	signed short i = 0;
+	int i = 0;
 	
 	while (*str) {
 		if (*str++ == 0x0d) {
@@ -3327,9 +3292,9 @@ static signed short count_linebreaks(char *str)
 	return i;
 }
 
-static signed short get_str_width(char *str)
+static int get_str_width(const char *str)
 {
-	signed short sum = 0;
+	int sum = 0;
 	signed short width;
 
 	while (*str) {
@@ -3597,7 +3562,6 @@ static signed short infobox(char *msg, const signed short digits)
 	signed short lines;
 	signed short width;
 
-	retval = 0;
 	g_fg_color[4] = 1;
 	l_text_x_bak = g_text_x;
 	l_text_y_bak = g_text_y;
@@ -3645,6 +3609,8 @@ static signed short infobox(char *msg, const signed short digits)
 		g_action_table = g_action_input;
 		vsync_or_key(150 * lines);
 		g_action_table = NULL;
+
+		retval = 0;
 	}
 
 	set_textcolor(fg_bak, bg_bak);
@@ -3711,6 +3677,8 @@ static void fill_radio_button(const signed short old_pos, const signed short new
 signed short gui_radio(char *header, const signed int options, ...)
 {
 	va_list arguments;
+	unsigned char* src;
+	unsigned char* dst;
 	char *str;
 	signed short str_x;
 	signed short str_y;
@@ -3728,8 +3696,6 @@ signed short gui_radio(char *header, const signed int options, ...)
 	signed short l_text_y_bak;
 	signed short l_text_x_end_bak;
 
-	unsigned char* src;
-	unsigned char* dst;
 	signed short mx_bak;
 	signed short my_bak;
 	signed short r7;
@@ -3915,10 +3881,7 @@ static signed short gui_bool(char *msg)
 	retval = gui_radio(msg, 2, get_text(4), get_text(5));
 	g_bool_mode = 0;
 
-	if (retval == 1)
-		return 1;
-	else
-		return 0;
+	return (retval == 1) ? 1 : 0;
 }
 
 /* AIL MANAGEMENT */
@@ -3943,14 +3906,6 @@ static unsigned char *load_snd_driver(const char *fname)
 		return norm_ptr;
 	} else {
 		return (unsigned char*)NULL;
-	}
-}
-
-static void unload_snd_driver(void)
-{
-	if (g_snd_driver) {
-		free(g_snd_driver);
-		g_snd_driver = NULL;
 	}
 }
 
@@ -4031,9 +3986,7 @@ static void read_soundcfg(void)
 		CD_audio_init();
 	}
 }
-#endif
 
-#if defined(__BORLANDC__)
 static signed short *get_timbre(const signed short bank, const signed short patch)
 {
 	signed short *timbre_ptr;
@@ -4357,14 +4310,14 @@ void restore_timer_isr(void)
  */
 static void save_chr(void)
 {
-	signed short tmpw;
-	signed short tmph;
+	signed short handle;
+	signed short i;
+	signed short width;
+	signed short height;
 	char filename[20];
 	struct nvf_desc nvf;
 	char path[80];
 
-	signed short handle; //si
-	signed short i;      //di
 
 	/* check for typus */
 	if (!g_hero.typus) {
@@ -4383,8 +4336,8 @@ static void save_chr(void)
 	nvf.src = g_buffer_heads_dat;
 	nvf.no = g_head_current;
 	nvf.type = 0;
-	nvf.width = &tmpw;
-	nvf.height = &tmph;
+	nvf.width = &width;
+	nvf.height = &height;
 
 	process_nvf(&nvf);
 
@@ -4418,12 +4371,12 @@ static void save_chr(void)
 	filename[8] = 0;
 	strcat(filename, g_str_chr);
 
-	if (((handle = open(filename, 0x8001)) == -1) || gui_bool(get_text(261))) {
+	handle = open(filename, 0x8001);
+	if ((handle == -1) || gui_bool(get_text(261))) {
 
-#if !defined(__BORLANDC__)
 		/* close an existing file before overwriting it */
 		if (handle != -1) close(handle);
-#endif
+
 		handle = _creat(filename, 0);
 
 		if (handle != -1) {
@@ -4489,10 +4442,13 @@ static void change_head(void)
 	g_dst_x2 = 303;
 
 	if (g_gen_page == 0) {
+
 		g_dst_y1 = 8;
 		g_dst_y2 = 39;
 		do_draw_pic(0);
+
 	} else if (g_gen_page > 4) {
+
 		g_dst_y1 = 4;
 		g_dst_y2 = 35;
 		do_draw_pic(0);
@@ -4514,16 +4470,17 @@ static void change_sex(void)
 	/* hero has a typus */
 	if (g_hero.typus) {
 		if (g_hero.sex != 0) {
-			/* To female */
+			/* from male to female */
 			g_head_first = g_head_current = g_head_first_female[g_head_typus];
 			g_head_last = g_head_first_male[g_head_typus + 1] - 1;
 		} else {
-			/* To male */
+			/* from female to male */
 			g_head_first = g_head_current = g_head_first_male[g_head_typus];
 			g_head_last = g_head_first_female[g_head_typus] - 1;
 		}
+
 		g_screen_var = 1;
-		return;
+
 	} else {
 		dst = g_vga_memstart + 7 * O_WIDTH + 305;
 		src = g_buffer_sex_dat + 256 * g_hero.sex;
@@ -4536,6 +4493,8 @@ static void change_sex(void)
 static void save_picbuf(void)
 {
 	unsigned char* p;
+	signed short x_1;
+	signed short x_2;
 	signed short x_3;
 	signed short y_1;
 	signed short y_2;
@@ -4546,9 +4505,6 @@ static void save_picbuf(void)
 	signed short h_1;
 	signed short h_2;
 	signed short h_3;
-
-	register signed short x_1;
-	register signed short x_2;
 
 	x_1 = 0;
 
@@ -4770,8 +4726,8 @@ static void print_values(void)
 	signed short feet;
 	signed short inches;
 
-	register signed short i;
-	register signed short pos;
+	signed short i;
+	signed short pos;
 
 	if (g_dsagen_lang == LANG_EN) { align_left = 225; align_right = 313; }
 
@@ -5320,7 +5276,7 @@ static void refresh_screen(void)
 
 static void clear_hero(void)
 {
-	signed short i;
+	int i;
 
 	/* clear global variables */
 	g_got_mu_bonus = g_got_ch_bonus = 0;
@@ -5354,18 +5310,17 @@ static void new_attributes(void)
 				which could not hold a char[16] */
 	volatile signed char *att_ptr;
 	signed short randval;
-	signed char unset_attribs;
+	signed short j;
+	signed short i;
+	signed short di;
 	signed char values[8];
+	signed char unset_attribs;
 	signed char sex_bak;
 #if !defined(__BORLANDC__)
 	char name_bak[17];
 #else
 	char name_bak[10];
 #endif
-	signed short j;
-	signed short i;
-
-	signed short di;
 
 	/* set variable if hero has a typus */
 	if (g_hero.typus)
@@ -5597,11 +5552,11 @@ static void spell_inc_novice(const signed short spell)
 		}
 
 #if !defined(__BORLANDC__)
-			/* Original-Bugfix: add check if skill_attempts are left */
-			if (g_hero.spell_incs == 0) {
-				done = 1;
-				continue;
-			}
+		/* Original-Bugfix: add check if skill_attempts are left */
+		if (g_hero.spell_incs == 0) {
+			done = 1;
+			continue;
+		}
 #endif
 		/* decrement counter for spell increments */
 		g_hero.spell_incs--;
@@ -5629,12 +5584,12 @@ static void spell_inc_novice(const signed short spell)
  */
 static void fill_values(void)
 {
+	const struct struct_money *money_ptr;
 	signed short i;
 	signed short v1;
 	signed short v2;
-	const struct struct_money *money_ptr;
-
-	signed short si, di;
+	signed short si;
+	signed short di;
 
 	/* fill skill values */
 	for (i = 0; i < 52; i++) {
@@ -5902,17 +5857,12 @@ static void fill_values(void)
  */
 static signed short can_change_attributes(void)
 {
-	signed short na_inc;
-	signed short na_dec;
 	volatile signed char *p;
-	register signed short i;      // si
-	register signed short pa_inc; // cx
-	register signed short pa_dec; // di
-
-	pa_inc = 0;
-	pa_dec = 0;
-	na_inc = 0;
-	na_dec = 0;
+	signed short i;
+	signed short na_inc = 0;
+	signed short na_dec = 0;
+	signed short pa_inc = 0;
+	signed short pa_dec = 0;
 
 	for (i = 0; i < 7; i++) {
 		p = &g_hero.attrib[i].normal;
@@ -5946,11 +5896,11 @@ static signed short can_change_attributes(void)
  */
 static void change_attributes(void)
 {
-	signed short tmp1;
-	volatile signed short tmp2;
-	volatile signed short tmp3;
 	volatile signed char *ptr1;
 	volatile signed char *ptr2;
+	signed short tmp1;
+	signed short tmp2;
+	signed short tmp3;
 	signed char c;
 
 	signed short si;
@@ -6164,15 +6114,14 @@ static void change_attributes(void)
  */
 static void select_typus(void)
 {
-	signed char old_typus;
-	signed char possible_types;
-	signed char ltmp2;
 	volatile signed char *ptr;
 	signed short i;
 	signed short impossible;
-
-	register signed short di;
-	register signed short si;
+	signed short di;
+	signed short si;
+	signed char old_typus;
+	signed char possible_types;
+	signed char ltmp2;
 
 
 	struct type_bitmap t;
@@ -6278,7 +6227,6 @@ static void select_typus(void)
 		}
 	} else {
 		infobox(get_text(265), 0);
-		return;
 	}
 }
 
@@ -7537,7 +7485,6 @@ static void intro(void)
 	call_fill_rect_gen(g_vga_memstart, 0, 0, O_WIDTH - 1, O_HEIGHT -1, 0);
 
 	g_in_intro = 0;
-	return;
 }
 
 #if defined(_WIN32)

@@ -94,8 +94,8 @@ extern void mouse_bg(void);
 extern void mouse_disable(void);
 extern void exit_video(void);
 extern void stop_music(void);
-extern void call_fill_rect_gen(unsigned char*, signed short, signed short,
-			signed short, signed short, signed short);
+extern void call_fill_rect_gen(unsigned char*, const signed short, const signed short,
+			const signed short, const signed short, const signed short);
 extern void restore_timer_isr(void);
 extern signed short gui_radio(char*, const signed int, ...);
 
