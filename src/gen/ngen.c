@@ -3271,15 +3271,9 @@ static void print_str(const char *str, const signed short x_in, const signed sho
  */
 static signed short print_line(char *str)
 {
-	signed short lines;
-
-	mouse_bg();
-
-	lines = str_splitter(str);
+	signed short lines = str_splitter(str);
 
 	print_str(str, g_text_x, g_text_y);
-
-	mouse_cursor();
 
 	return lines;
 }
