@@ -2550,7 +2550,7 @@ static void flush_keyboard_queue(void)
 }
 
 /**
- * handle_input() - high-level input function
+ * \brief high-level input function
  * \return 1 to exit the program otherwise 0
  */
 static void handle_input(void)
@@ -3001,11 +3001,10 @@ void call_fill_rect_gen(unsigned char *ptr, const signed short x1, const signed 
 /* CHARACTER AND FONT FUNCTIONS */
 
 /**
- * get_chr_info() - gets font information of a character
- * @c:		the character
- * @width:	pointer to save the width of the character
- *
- * Returns the font index.
+ * \brief gets font information of a character
+ * \param[in] c the character
+ * \param[out] width pointer to save the width of the character
+ * \return font index
  */
 static signed short get_chr_info(const unsigned char c, signed short *width)
 {
