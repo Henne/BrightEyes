@@ -4429,7 +4429,10 @@ static void enter_name(void)
 	print_str((const char*)g_hero.name, 180, 12);
 }
 
-static void change_head(void)
+/**
+ * \brief draws the current head image
+ */
+static void draw_head(void)
 {
 	struct nvf_desc nvf;
 	signed short width;
@@ -4464,8 +4467,7 @@ static void change_head(void)
 }
 
 /**
- * change_sex() - changes the sex of the hero
- *
+ * \brief changes the sex of the hero
  */
 static void change_sex(void)
 {
@@ -4490,6 +4492,7 @@ static void change_sex(void)
 		g_screen_var = 1;
 
 	} else {
+		/* draw the gender icon */
 		dst = g_vga_memstart + 7 * O_WIDTH + 305;
 		src = g_buffer_sex_dat + 256 * g_hero.sex;
 		mouse_bg();
@@ -4659,11 +4662,11 @@ static void restore_picbuf(unsigned char* ptr)
 
 
 /**
- *	make_valuta_str	-	makes a valuta string
- *	@dst:	the destination
- *	@money:	the money in Heller
+ * \brief makes a valuta string
+ * \param[out] dst the destination
+ * \param[in] money the money in Heller
  *
- *	This funcion may have issues in the game (not here).
+ * \note This funcion may have slight performance issues in the game (not here).
  */
 static void make_valuta_str(char *dst, signed long money)
 {
@@ -4698,8 +4701,7 @@ static void make_valuta_str(char *dst, signed long money)
 
 
 /**
- * print_attribs() -	print the attribute values
- *
+ * \brief print the attribute values
  */
 static void print_attribs(void)
 {
@@ -4721,8 +4723,7 @@ static void print_attribs(void)
 
 
 /**
- * print_values() - print the values of the character
- *
+ * \brief print the values of the hero
  */
 static void print_values(void)
 {
@@ -5166,6 +5167,9 @@ static void print_values(void)
 	}
 }
 
+/**
+ * \brief refresh the screen content
+ */
 static void refresh_screen(void)
 {
 	unsigned char* src;
@@ -5282,6 +5286,9 @@ static void refresh_screen(void)
 	}
 }
 
+/**
+ * \brief initializes the hero structure and global variables
+ */
 static void clear_hero(void)
 {
 	int i;
@@ -5309,8 +5316,7 @@ static void clear_hero(void)
 }
 
 /**
- * new_attributes() - roll out new attribute values
- *
+ * \brief roll out new attribute values
  */
 static void new_attributes(void)
 {
@@ -5364,7 +5370,7 @@ static void new_attributes(void)
 
 		for (i = 0; i < 7; i++) {
 			// NORMAL
-			if (!att_ptr[ 3 * i]) {
+			if (!att_ptr[3 * i]) {
                                 // not initialized attribute
 				values[unset_attribs] = (signed char)i;
 				g_type_names[unset_attribs] = get_text(32 + i);
@@ -5440,7 +5446,7 @@ static void new_attributes(void)
 }
 
 /**
- * calc_at_pa() - calculate AT and PA values
+ * \brief calculate AT and PA values
  */
 static void calc_at_pa(void)
 {
@@ -5490,10 +5496,8 @@ static void calc_at_pa(void)
 }
 
 /**
- * skill_inc_novice() - tries to increment a skill in novice mode
- * @skill:	the skill which should be incremented
- *
- *
+ * \brief tries to increment a skill in novice mode
+ * \param skill	index of the skill which should be incremented
  */
 static void skill_inc_novice(const signed short skill)
 {
@@ -5543,10 +5547,8 @@ static void skill_inc_novice(const signed short skill)
 }
 
 /**
- * spell_inc_novice() - tries to increment a spell in novice mode
- * @spell:	the spell which should be incremented
- *
- *
+ * \brief tries to increment a spell in novice mode
+ * \param[in] spell index of the spell which should be incremented
  */
 static void spell_inc_novice(const signed short spell)
 {
@@ -5587,8 +5589,7 @@ static void spell_inc_novice(const signed short spell)
 }
 
 /**
- * fill_values() - fills the values if typus is chosen
- *
+ * \brief fills the values if typus is chosen
  */
 static void fill_values(void)
 {
@@ -5860,8 +5861,7 @@ static void fill_values(void)
 #define DEC (2)
 
 /**
- * can_change_attributes() - checks if attribute changes are possible
- *
+ * \brief tests if attribute changes are possible
  */
 static signed short can_change_attributes(void)
 {
@@ -5900,7 +5900,7 @@ static signed short can_change_attributes(void)
 }
 
 /**
- * change_attributes() - change attributes
+ * \brief change attributes
  */
 static void change_attributes(void)
 {
@@ -6117,8 +6117,7 @@ static void change_attributes(void)
 #undef DEC
 
 /**
- * select_typus() - select a possible typus with current attribute values
- *
+ * \brief select a possible typus with current attribute values
  */
 static void select_typus(void)
 {
@@ -6238,6 +6237,10 @@ static void select_typus(void)
 	}
 }
 
+/**
+ * \brief increment a skill
+ * \param[in] skill index of the skill
+ */
 static void inc_skill(const signed short skill, const signed short max, char *msg)
 {
 	/* no more increments than the maximum */
@@ -6286,6 +6289,9 @@ static void inc_skill(const signed short skill, const signed short max, char *ms
 	refresh_screen();
 }
 
+/**
+ * \brief select a skill
+ */
 static void select_skill(void)
 {
 	signed short skill;
@@ -6427,6 +6433,10 @@ static void select_skill(void)
 	} while (group != -1);
 }
 
+/**
+ * \brief increment spell value
+ * \param[in] spell index of the spell to increment
+ */
 static void inc_spell(const signed short spell)
 {
 	signed short max_incs = 1;
@@ -6487,6 +6497,9 @@ static void inc_spell(const signed short spell)
 	}
 }
 
+/**
+ * \brief	select a spell
+ */
 static void select_spell(void)
 {
 	signed short group;
@@ -6749,6 +6762,9 @@ static void select_spell(void)
 	} while (group != -1);
 }
 
+/**
+ * \brief	choose attack and parade values
+ */
 static void choose_atpa(void)
 {
 	signed short skill;
@@ -6805,8 +6821,7 @@ static void choose_atpa(void)
 }
 
 /**
- * choose_typus() - choose a typus manually
- *
+ * \brief	choose a typus manually
  */
 static void choose_typus(void)
 {
@@ -6918,6 +6933,9 @@ static void choose_typus(void)
 	g_screen_var = 1;
 }
 
+/**
+ * \brief main loop of gen
+ */
 static void do_gen(void)
 {
 	int done;
@@ -7061,7 +7079,7 @@ static void do_gen(void)
 					g_head_current = (g_head_current > g_head_first) ?
 								g_head_current - 1 : g_head_last;
 				}
-				change_head();
+				draw_head();
 			} else {
 				infobox(get_text(17), 0);
 			}
@@ -7127,6 +7145,9 @@ static void do_gen(void)
 
 /* INTRO */
 
+/**
+ * \brief fade out for a color palette
+ */
 static void pal_fade_out(signed char *dst, signed char *src, signed short n)
 {
 	signed short i;
@@ -7156,6 +7177,9 @@ static void pal_fade_out(signed char *dst, signed char *src, signed short n)
 	}
 }
 
+/**
+ * \brief fade in for a color palette
+ */
 static void pal_fade_in(signed char *dst, signed char *src, signed short col, signed short n)
 {
 	signed short i;
@@ -7188,7 +7212,7 @@ static void pal_fade_in(signed char *dst, signed char *src, signed short col, si
 }
 
 /**
- *	intro() - play the intro
+ * \brief	play the intro
  */
 static void intro(void)
 {
