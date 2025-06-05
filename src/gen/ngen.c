@@ -7543,6 +7543,8 @@ int main_gen(int argc, char **argv)
 
 	init_video();
 
+	init_palettes();
+
 	/* Remark: gui elements are usable at this point at runtime */
 
 	set_timer_isr();
@@ -7573,8 +7575,6 @@ int main_gen(int argc, char **argv)
 	}
 
 	load_common_files();
-
-	init_palettes();
 
 	flush_keyboard_queue();
 
