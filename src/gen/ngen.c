@@ -1339,7 +1339,7 @@ static char *g_textbuffer;  // buffer for dynamically created strings
 static char *g_digitbuffer; // pointer near the end of g_textbuffer
 static unsigned char *g_gen_ptr5;
 static unsigned char *g_buffer_dmenge_dat;
-static unsigned char *g_gen_ptr6;
+static unsigned char *g_buffer_current_head;
 static unsigned char *g_picbuf1;
 static unsigned char *g_picbuf2;
 static unsigned char *g_picbuf3;
@@ -1541,8 +1541,8 @@ static int alloc_buffers(void)
 	g_popup_line = gen_alloc(O_WIDTH * 8);
 	if (g_popup_line == NULL) errors++;
 
-	g_gen_ptr6 = (gen_alloc(1100) + 8);
-	if (g_gen_ptr6 == NULL) errors++;
+	g_buffer_current_head = (gen_alloc(1024 + 8) + 8);
+	if (g_buffer_current_head == NULL) errors++;
 
 	if (errors > 0) {
 		fprintf(stderr, g_str_malloc_error);
@@ -1609,9 +1609,9 @@ void free_buffers(void)
 		g_picbuf1 = NULL;
 	}
 
-	if ((host_ptr = g_gen_ptr6 - 8) != 0) {
-		free(host_ptr);
-		g_gen_ptr6 = NULL;
+	if (g_buffer_current_head != NULL) {
+		free(g_buffer_current_head - 8);
+		g_buffer_current_head = NULL;
 	}
 
 	if ((host_ptr = g_buffer_dmenge_dat - 8) != 0) {
@@ -4438,7 +4438,7 @@ static void draw_head(void)
 	signed short width;
 	signed short height;
 
-	nvf.dst = g_gen_ptr6;
+	nvf.dst = g_buffer_current_head;
 	nvf.src = g_buffer_heads_dat;
 	nvf.no = g_head_current;
 	nvf.type = 0;
@@ -4447,7 +4447,7 @@ static void draw_head(void)
 
 	process_nvf(&nvf);
 
-	g_dst_src = g_gen_ptr6;
+	g_dst_src = g_buffer_current_head;
 
 	g_dst_x1 = 272;
 	g_dst_x2 = 303;
