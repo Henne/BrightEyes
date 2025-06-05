@@ -1564,8 +1564,8 @@ void free_buffers(void)
 		g_gfx_ptr = NULL;
 	}
 
-	if ((host_ptr = g_buffer_sex_dat) != 0) {
-		free(host_ptr);
+	if (g_buffer_sex_dat != NULL) {
+		free(g_buffer_sex_dat);
 		g_buffer_sex_dat = NULL;
 	}
 
@@ -1574,8 +1574,8 @@ void free_buffers(void)
 		g_buffer_popup_dat = NULL;
 	}
 
-	if ((host_ptr = g_buffer_heads_dat) != 0) {
-		free(host_ptr);
+	if (g_buffer_heads_dat != NULL) {
+		free(g_buffer_heads_dat);
 		g_buffer_heads_dat = NULL;
 	}
 
@@ -1584,8 +1584,8 @@ void free_buffers(void)
 		g_buffer_text = NULL;
 	}
 
-	if ((host_ptr = g_buffer_font6) != 0) {
-		free(host_ptr);
+	if (g_buffer_font6 != NULL) {
+		free(g_buffer_font6);
 		g_buffer_font6 = NULL;
 	}
 
@@ -1594,18 +1594,18 @@ void free_buffers(void)
 		g_popup_line = NULL;
 	}
 
-	if ((host_ptr = g_picbuf3) != 0) {
-		free(host_ptr);
+	if (g_picbuf3 != NULL) {
+		free(g_picbuf3);
 		g_picbuf3 = NULL;
 	}
 
-	if ((host_ptr = g_picbuf2) != 0) {
-		free(host_ptr);
+	if (g_picbuf2 != NULL) {
+		free(g_picbuf2);
 		g_picbuf2 = NULL;
 	}
 
-	if ((host_ptr = g_picbuf1) != 0) {
-		free(host_ptr);
+	if (g_picbuf1 != NULL) {
+		free(g_picbuf1);
 		g_picbuf1 = NULL;
 	}
 
@@ -1630,8 +1630,8 @@ void free_buffers(void)
 		g_digitbuffer = NULL;
 	}
 
-	if ((host_ptr = g_page_buffer) != 0) {
-		free(host_ptr);
+	if (g_page_buffer != NULL) {
+		free(g_page_buffer);
 		g_page_buffer = NULL;
 	}
 
@@ -1662,15 +1662,15 @@ void free_buffers(void)
 	}
 
 	for (i = 0; i < 11; i++) {
-		if ((host_ptr = g_bg_buffer[i]) != 0) {
-			free(host_ptr);
+		if (g_bg_buffer[i] != NULL) {
+			free(g_bg_buffer[i]);
 			g_bg_buffer[i] = NULL;
 		}
 	}
 
 	for (i = 0; i < 13; i++) {
-		if ((host_ptr = g_typus_buffer[i]) != 0) {
-			free(host_ptr);
+		if (g_typus_buffer[i] != NULL) {
+			free(g_typus_buffer[i]);
 			g_typus_buffer[i] = NULL;
 		}
 	}
