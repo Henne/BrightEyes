@@ -260,7 +260,7 @@ static void CD_audio_stop_hsg(void)
 	}
 }
 
-static void CD_enable_repeat(void)
+void CD_enable_repeat(void)
 {
 	if (!g_cd_init_successful) return;
 	if ((CD_get_tod() - g_cd_audio_tod) < g_cd_audio_pos) return;
@@ -273,7 +273,7 @@ static void CD_enable_repeat(void)
 	}
 }
 
-signed short CD_bioskey(const signed short cmd)
+static signed short CD_bioskey(const signed short cmd)
 {
 	CD_enable_repeat();
 

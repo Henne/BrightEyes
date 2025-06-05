@@ -2536,7 +2536,7 @@ static signed short get_bioskey(const int cmd)
 		return pressed;
 	} else return 0;
 #else
-	return CD_bioskey(cmd);
+	return bioskey(cmd);
 #endif
 }
 
@@ -4108,10 +4108,8 @@ static void play_midi(const signed short index)
 static void start_music(const signed short track)
 {
 #if defined(__BORLANDC__)
-	if (!g_use_cda) {
-		if (g_midi_disabled == 0) {
-			play_midi(track);
-		}
+	if (!g_use_cda && !g_midi_disabled) {
+		play_midi(track);
 	} else {
 		CD_play_track(4);
 	}
@@ -4196,10 +4194,19 @@ void exit_music(void)
 #if defined(__BORLANDC__)
 static void interrupt timer_isr(void)
 {
+	/* update RNG seed */
 	g_random_gen_seed2++;
 	if (g_random_gen_seed2 < 0)
 		g_random_gen_seed2 = 0;
-	restart_midi();
+
+	/* restart music */
+	if (!g_use_cda && !g_midi_disabled) {
+		restart_midi();
+	} else {
+		CD_enable_repeat();
+	}
+
+	/* call the former timer interrupt */
 	((void interrupt far (*)(void))g_timer_isr_bak)();
 }
 #else
