@@ -4314,16 +4314,13 @@ void restore_timer_isr(void)
 
 
 /**
- * save_chr() - save the hero the a CHR file
+ * \brief save the hero the a CHR file
  */
 static void save_chr(void)
 {
 	signed short handle;
 	signed short i;
-	signed short width;
-	signed short height;
 	char filename[20];
-	struct nvf_desc nvf;
 	char path[80];
 
 
@@ -4338,19 +4335,8 @@ static void save_chr(void)
 		return;
 	}
 
-	/* Load picture from nvf */
-	/* TODO: why not just copy? */
-	nvf.dst = g_gen_ptr1_dis;
-	nvf.src = g_buffer_heads_dat;
-	nvf.no = g_head_current;
-	nvf.type = 0;
-	nvf.width = &width;
-	nvf.height = &height;
-
-	process_nvf(&nvf);
-
 	/* copy picture to the character struct */
-	memcpy((void*)g_hero.pic, g_gen_ptr1_dis, 1024);
+	memcpy((void*)g_hero.pic, g_buffer_current_head, 1024);
 
 	/* wanna save ? */
 	if (!gui_bool(get_text(3)))
