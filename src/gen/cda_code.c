@@ -33,15 +33,6 @@
 #include <BIOS.H>	// bioskey()
 #include <CONIO.H>	// clrsrc()
 
-/* non-portable Memory Access */
-#define readws(p) (*(const signed short*)(p))
-
-#include "cda_code.h"
-
-/* extern variables from seg002 */
-extern signed short g_called_with_args;
-extern unsigned char *g_vga_memstart;
-
 /* initialized global variables DATA */
 static char cd_dummy0 = 2;
 static signed short g_cd_init_successful = 0;
@@ -87,6 +78,10 @@ static signed short g_cd_audio_track;
 
 static unsigned char far cd_buf1[824];
 
+/* extern variables from seg002 */
+extern signed short g_called_with_args;
+extern unsigned char *g_vga_memstart;
+
 /* externally used prototypes from (mainfile) */
 extern void free_buffers(void);
 extern void mouse_bg(void);
@@ -98,6 +93,8 @@ extern void call_fill_rect_gen(unsigned char*, const signed short, const signed 
 extern void restore_timer_isr(void);
 extern signed short gui_radio(char*, const signed int, ...);
 
+/* non-portable Memory Access */
+#define readws(p) (*(const signed short*)(p))
 
 /**
  * CD_has_drives() - check if CD-Drives are available
