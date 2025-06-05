@@ -99,22 +99,32 @@ extern void restore_timer_isr(void);
 extern signed short gui_radio(char*, const signed int, ...);
 
 
+/**
+ * CD_has_drives() - check if CD-Drives are available
+ *
+ * \return iff available 1 otherwise 0
+ */
 static signed short CD_has_drives(void)
 {
-	/* al ==  0: return number of drive letters */
 	asm {
 		mov ax, 0x1500
 		xor bx, bx
 		int 0x2f
+
 		xor ax, ax
 		or  bx, bx
-		jz has_cd
+		jz has_no_cd
 		inc ax
 	}
-has_cd:
-//	return _AX;
+has_no_cd:
+	return _AX;
 }
 
+/**
+ * CD_count_drives() - count the number of available CD-Drives
+ *
+ * \return number of CD-Drives
+ */
 static signed short CD_count_drives(void)
 {
 	asm {
@@ -122,11 +132,15 @@ static signed short CD_count_drives(void)
 		xor bx, bx
 		int 0x2f
 	}
-		_AX = _BX;
+	return _BX;
 
-//	return _BX;
 }
 
+/**
+ * CD_get_first_drive() - get the drive letter of the first CD-Drive
+ *
+ * \return drive letter 0 = A:, 1 = B:, 2 = C:, 3 = D:, ...
+ */
 static signed short CD_get_first_drive(void)
 {
 	asm {
@@ -135,18 +149,21 @@ static signed short CD_get_first_drive(void)
 		int 0x2f
 	}
 
-	_AX = _CX;
-//	return _CX;
+	return _CX;
 }
 
+/**
+ * CD_set_drive_no() - sets the internal variable of the used CD-Drive
+ *
+ * \return 1 iff CD-Drive is used otherwise 0
+ */
 static signed short CD_set_drive_no(void)
 {
-	if (CD_has_drives() == 0) return 0;
-	if (CD_count_drives() == 0) return 0;
+	if (!CD_has_drives() || !CD_count_drives()) return 0;
 
 	g_cd_drive_no = CD_get_first_drive();
 
-	_AX = 1;
+	return 1;
 }
 
 static void CD_driver_request(struct driver_request far* request)
@@ -175,8 +192,6 @@ static void CD_unused1(void)
  * \brief   get time of day
  *
  * \return              clock ticks since midnight, the system time.
- *
- * \todo    produces a compiler warning and is a bit hacky
  */
 static signed long CD_get_tod(void)
 {
@@ -186,6 +201,7 @@ static signed long CD_get_tod(void)
 		mov ax, dx
 		mov dx, cx
 	}
+	return ((signed long)_DX << 16) | _AX;
 }
 
 static void seg001_00bb(signed short track_no)
@@ -257,13 +273,11 @@ static void CD_enable_repeat(void)
 	}
 }
 
-signed short CD_bioskey(signed short cmd)
+signed short CD_bioskey(const signed short cmd)
 {
 	CD_enable_repeat();
 
-	// GEN uses an implicit return here
-	//return bioskey(cmd);
-	bioskey(cmd);
+	return bioskey(cmd);
 }
 
 void CD_audio_stop(void)
