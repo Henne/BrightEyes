@@ -5,7 +5,7 @@
  *	Remarks:
  *		This code is a rewrite using the inline assembler of
  *		Borland C++ 3.1. The aim is, to produce exactly the same
- *		OPcodes like in the original. Seems to work. :)
+ *		behaviour like the original. Seems to work. :)
  *
  *		Verified on 2025-04-14
  *
@@ -45,9 +45,7 @@ extern unsigned char *g_vga_memstart;
 /* initialized global variables DATA */
 static char cd_dummy0 = 2;
 static signed short g_cd_init_successful = 0;
-static long cd_dummy1 = 0;
 static signed short g_cd_audio_repeat = 0;
-static long cd_dummy2 = 0;
 static signed short g_cd_insert_counter = 5;
 static const char g_str_insert_cd[] = "BITTE LEGEN SIE DIE \xf2SCHICKSALSKLINGE-CD\xf0 IN LAUFWERK %c: EIN. DIESE WIRD BEN\x99TIGT, DA DATEN W\x8eHREND DES SPIELS VON CD GELADEN WERDEN M\x9aSSEN.";
 static const char g_str_repeat[] = "WIEDERHOLEN";
@@ -94,22 +92,13 @@ extern void free_buffers(void);
 extern void mouse_bg(void);
 extern void mouse_disable(void);
 extern void exit_video(void);
-extern void stop_music(void);
+extern void exit_music(void);
 extern void call_fill_rect_gen(unsigned char*, const signed short, const signed short,
 			const signed short, const signed short, const signed short);
 extern void restore_timer_isr(void);
 extern signed short gui_radio(char*, const signed int, ...);
 
-/* internally used prototypes */
-static signed short CD_has_drives(void);
-static signed short CD_count_drives(void);
-static signed short CD_get_first_drive(void);
-static void CD_enable_repeat(void);
-static void CD_audio_stop_hsg(void);
-static signed short CD_check_file(char*);
 
-
-/* Borlandified and identical */
 static signed short CD_has_drives(void)
 {
 	/* al ==  0: return number of drive letters */
@@ -126,7 +115,6 @@ has_cd:
 //	return _AX;
 }
 
-/* Borlandified and identical */
 static signed short CD_count_drives(void)
 {
 	asm {
@@ -139,7 +127,6 @@ static signed short CD_count_drives(void)
 //	return _BX;
 }
 
-/* Borlandified and identical */
 static signed short CD_get_first_drive(void)
 {
 	asm {
@@ -152,7 +139,6 @@ static signed short CD_get_first_drive(void)
 //	return _CX;
 }
 
-/* Borlandified and identical */
 static signed short CD_set_drive_no(void)
 {
 	if (CD_has_drives() == 0) return 0;
@@ -163,7 +149,6 @@ static signed short CD_set_drive_no(void)
 	_AX = 1;
 }
 
-/* Borlandified and identical */
 static void CD_driver_request(struct driver_request far* request)
 {
 	asm {
@@ -174,8 +159,6 @@ static void CD_driver_request(struct driver_request far* request)
 	}
 }
 
-/* Borlandified and identical */
-/* static would be removed in link stage */
 static void CD_unused1(void)
 {
 	if (g_cd_init_successful != 0) {
@@ -195,7 +178,6 @@ static void CD_unused1(void)
  *
  * \todo    produces a compiler warning and is a bit hacky
  */
-/* Borlandified and identical */
 static signed long CD_get_tod(void)
 {
 	asm {
@@ -206,7 +188,6 @@ static signed long CD_get_tod(void)
 	}
 }
 
-/* Borlandified and nearly identical */
 static void seg001_00bb(signed short track_no)
 {
 	signed long track_start;
@@ -253,10 +234,19 @@ static void seg001_00bb(signed short track_no)
 	}
 }
 
-/* Borlandified and identical */
+static void CD_audio_stop_hsg(void)
+{
+	if (!g_cd_init_successful) {
+
+		req[0].status = 0;
+		CD_driver_request(&req[0]);
+		g_cd_audio_repeat = 0;
+	}
+}
+
 static void CD_enable_repeat(void)
 {
-	if (g_cd_init_successful == 0) return;
+	if (!g_cd_init_successful) return;
 	if ((CD_get_tod() - g_cd_audio_tod) < g_cd_audio_pos) return;
 
 	if (g_cd_audio_repeat == 1) {
@@ -267,7 +257,6 @@ static void CD_enable_repeat(void)
 	}
 }
 
-/* Borlandified and identical */
 signed short CD_bioskey(signed short cmd)
 {
 	CD_enable_repeat();
@@ -277,18 +266,6 @@ signed short CD_bioskey(signed short cmd)
 	bioskey(cmd);
 }
 
-/* Borlandified and identical */
-static void CD_audio_stop_hsg(void)
-{
-	if (g_cd_init_successful != 0) {
-
-		req[0].status = 0;
-		CD_driver_request(&req[0]);
-		g_cd_audio_repeat = 0;
-	}
-}
-
-/* Borlandified and identical */
 void CD_audio_stop(void)
 {
 	if (g_cd_init_successful != 0) {
@@ -300,8 +277,7 @@ void CD_audio_stop(void)
 	}
 }
 
-/* Borlandified and nearly identical */
-void CD_unused2(void)
+static void CD_unused2(void)
 {
 	if (g_cd_init_successful != 0) {
 
@@ -309,8 +285,8 @@ void CD_unused2(void)
 		CD_driver_request(&req[6]);
 	}
 }
-/* Borlandified and nearly identical */
-void CD_unused3(void)
+
+static void CD_unused3(void)
 {
 	if (g_cd_init_successful != 0) {
 
@@ -319,7 +295,6 @@ void CD_unused3(void)
 	}
 }
 
-/* Borlandified and identical */
 static void seg001_03a8(void)
 {
 	signed short v;
@@ -343,7 +318,7 @@ static void seg001_03a8(void)
 	}
 }
 
-/* Borlandified and identical */
+/* used externally */
 void CD_play_track(signed short track)
 {
 	CD_audio_stop_hsg();
@@ -353,7 +328,6 @@ void CD_play_track(signed short track)
 	g_cd_audio_repeat = 1;
 }
 
-/* Borlandified and identical */
 static signed short CD_check_file(char *pathP)
 {
 	int handle;
@@ -373,7 +347,6 @@ static signed short CD_check_file(char *pathP)
 	return nread;
 }
 
-/* Borlandified and identical */
 static void CD_radio_insert_cd(void)
 {
 	char text_buffer[160];
@@ -391,14 +364,14 @@ static void CD_radio_insert_cd(void)
 	}
 
 	if (si == 2) {
-		stop_music();
+		exit_music();
 		mouse_bg();
 		mouse_disable();
 		restore_timer_isr();
 		
-		if (g_called_with_args != 0) {
-			call_fill_rect_gen(g_vga_memstart, 0, 0, 319, 199, 0);
-		} else {
+		call_fill_rect_gen(g_vga_memstart, 0, 0, 319, 199, 0);
+
+		if (!g_called_with_args) {
 			exit_video();
 			clrscr();
 		}
