@@ -5174,9 +5174,6 @@ static void refresh_screen(void)
 {
 	unsigned char* src;
 	unsigned char* dst;
-	signed short width;
-	signed short height;
-	struct nvf_desc nvf;
 
 	if (g_screen_var) {
 		g_gfx_ptr = g_gen_ptr1_dis;
@@ -5241,41 +5238,19 @@ static void refresh_screen(void)
 			}
 		}
 
-		/* if hero has a typus */
 		if (g_hero.typus) {
-			/* draw the head */
+			/* draw the head to the backbuffer */
 
-			nvf.dst = g_gen_ptr6;
-			nvf.src = g_buffer_heads_dat;
-			nvf.no = g_head_current;
-			nvf.type = 0;
-			nvf.width = &width;
-			nvf.height = &height;
-			process_nvf(&nvf);
-
-			g_dst_src = g_gen_ptr6;
-			g_dst_x1 = 272;
-			g_dst_x2 = 303;
 			g_dst_dst = g_gen_ptr1_dis;
 
-			/* draw the head */
-			if (g_gen_page == 0) {
-				/* on the base page */
-				g_dst_y1 = 8;
-				g_dst_y2 = 39;
-				do_draw_pic(0);
-			} else if (g_gen_page > 4) {
-				/* on the spell pages */
-				g_dst_y1 = 4;
-				g_dst_y2 = 35;
-				do_draw_pic(0);
-			}
+			draw_head();
 
 			g_dst_dst = g_vga_memstart;
-
 		}
 
 		print_values();
+
+		/* copy backbuffer to screen */
 		dst = g_gfx_ptr = g_vga_memstart;
 		src = g_gen_ptr1_dis;
 		mouse_bg();
