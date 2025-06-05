@@ -3971,20 +3971,21 @@ static void read_soundcfg(void)
 		_read(handle, (unsigned char*)&port, 2);
 		_close(handle);
 
-#if 0
 		/* Small hack: enable MIDI instead of CD-Audio */
-		if ((port != 0) && (load_driver(g_str_sound_adv, 3, port))) {
+		if ((port) && (load_driver(g_str_sound_adv, 3, port))) {
 			/* disable audio-cd */
 			g_use_cda = 0;
+			g_midi_disabled = 0;
 			return;
 		}
-#endif
-		/* enable audio-cd, disable midi */
-		g_use_cda = g_midi_disabled = 1;
-
-		/* initialize audio-cd */
-		CD_audio_init();
 	}
+
+	/* enable audio-cd, disable midi */
+	g_use_cda = 1;
+	g_midi_disabled = 1;
+
+	/* initialize audio-cd */
+	CD_audio_init();
 }
 
 static signed short *get_timbre(const signed short bank, const signed short patch)
