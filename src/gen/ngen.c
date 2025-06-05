@@ -3264,6 +3264,11 @@ static void print_str(const char *str, const signed short x_in, const signed sho
 	mouse_cursor();
 }
 
+/**
+ * \brief print a string to the screen
+ * \param[in] str
+ * \return number of lines
+ */
 static signed short print_line(char *str)
 {
 	signed short lines;
@@ -3279,6 +3284,10 @@ static signed short print_line(char *str)
 	return lines;
 }
 
+/**
+ * \brief get the numer of linebreaks
+ * \param[in] str
+ */
 static int count_linebreaks(const char *str)
 {
 	int i = 0;
@@ -3292,6 +3301,10 @@ static int count_linebreaks(const char *str)
 	return i;
 }
 
+/**
+ * \brief get the width of a string in terms of character font size
+ * \param[in] str
+ */
 static int get_str_width(const char *str)
 {
 	int sum = 0;
@@ -3306,12 +3319,12 @@ static int get_str_width(const char *str)
 }
 
 /**
- * enter_string - read a string from the keyboard
- * @dst: memory location to store the string
- * @x:   screen X Coordinate of the input field
- * @x:   screen Y Coordinate of the input field
- * @len: maximal number of allowed characters
- * @txt: iff 1 enter text otherwise a number
+ * \brief read a string from the keyboard
+ * \param[in] dst memory location to store the string
+ * \param[in] x screen X Coordinate of the input field
+ * \param[in] y screen Y Coordinate of the input field
+ * \param[in] len maximal number of allowed characters
+ * \param[in] txt iff 1 enter text otherwise a number
  */
 static signed short enter_string(char *dst, const signed short x, const signed short y, const signed short len, const signed short txt)
 {
@@ -3458,6 +3471,11 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 	return 0;
 }
 
+/**
+ * \brief draws a popup line
+ * \param[in] line line number
+ * \param[in] type line type
+ */
 static void draw_popup_line(const signed short line, const signed short type)
 {
 	unsigned char *dst;
@@ -3516,11 +3534,10 @@ static void draw_popup_line(const signed short line, const signed short type)
 }
 
 /**
- * draw_popup_box() - draws a complete empty popup box
- * @lines_header: number of lines for the header
- * @lines_body:   number of lines for the body
- *
-**/
+ * \brief draws a complete empty popup box
+ * \param[in] lines_header number of lines for the header
+ * \param[in] lines_body number of lines for the body
+ **/
 static void draw_popup_box(const int lines_header, const int lines_body)
 {
 	int i;
@@ -3541,11 +3558,11 @@ static void draw_popup_box(const int lines_header, const int lines_body)
 }
 
 /**
- *	infobox() - draws and info- or enter_numberbox
- *	@msg:		the message for the box
- *	@digits:	number of digits to enter
+ * \brief draws and info- or enter_numberbox
+ * \param[in] msg the message for the box
+ * \param[in] digits number of digits to enter
  *
- *	if @digits is zero the function just delays.
+ * \note if @digits is zero the function just delays.
  */
 static signed short infobox(char *msg, const signed short digits)
 {
@@ -3635,11 +3652,10 @@ static signed short infobox(char *msg, const signed short digits)
 
 
 /**
- * fill_radio_button() - marks the active radio button
- * @old_pos:	the position of the last active button (or -1)
- * @new_pos:	the position of the current active button
- * @offset:	the offset of the first radio line
- *
+ * \brief marks the active radio button
+ * \param[in] old_pos the position of the last active button (or -1)
+ * \param[in] new_pos the position of the current active button
+ * \param[in] offset the offset of the first radio line
  */
 static void fill_radio_button(const signed short old_pos, const signed short new_pos, const signed short offset)
 {
@@ -3669,9 +3685,9 @@ static void fill_radio_button(const signed short old_pos, const signed short new
 }
 
 /**
- * gui_radio() - displays a radio menu
- * @header:	the header of the menu
- * @options:	the number of options
+ * \brief displays a radio menu
+ * \param[in] header the header of the menu
+ * \param[in] options the number of options
  *
  */
 signed short gui_radio(char *header, const signed int options, ...)
@@ -4399,7 +4415,7 @@ static void save_chr(void)
 }
 
 /**
- * enter_name() - enter the name of a hero
+ * \brief enter the name of a hero
  */
 static void enter_name(void)
 {
