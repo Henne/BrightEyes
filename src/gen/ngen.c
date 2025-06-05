@@ -3090,12 +3090,11 @@ static signed short print_chr(const unsigned char c, const signed short x, const
 /* STRING FUNCTIONS */
 
 /**
- * str_splitter() - sets the line breaks for a string
- * @s:	string
- *
- * Returns the number of lines the string needs.
+ * \brief sets the line breaks for a string
+ * \param str string
+ * \return the number of lines the string needs.
  */
-static signed short str_splitter(char *s)
+static signed short str_splitter(char *str)
 {
 	char *tp;
 	signed short unknown_var1;
@@ -3108,19 +3107,19 @@ static signed short str_splitter(char *s)
 
 	lines = 1;
 
-	if (!s) {
+	if (!str) {
 		return 0;
 	}
 
 	/* replace all CR and LF with spaces */
-	for (tp = (char*)s; *tp; tp++) {
+	for (tp = (char*)str; *tp; tp++) {
 		if ((*tp == 0x0d) || (*tp == 0x0a))
 		{
 			*tp = ' '; //0x20;
 		}
 	}
 
-	tp = (char*)s;
+	tp = (char*)str;
 
 	i = last_space = unknown_var1 = 0;
 
