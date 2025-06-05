@@ -97,7 +97,7 @@ extern signed short gui_radio(char*, const signed int, ...);
 #define readws(p) (*(const signed short*)(p))
 
 /**
- * CD_has_drives() - check if CD-Drives are available
+ * \brief check if CD-Drives are available
  *
  * \return iff available 1 otherwise 0
  */
@@ -118,7 +118,7 @@ has_no_cd:
 }
 
 /**
- * CD_count_drives() - count the number of available CD-Drives
+ * \brief count the number of available CD-Drives
  *
  * \return number of CD-Drives
  */
@@ -134,7 +134,7 @@ static signed short CD_count_drives(void)
 }
 
 /**
- * CD_get_first_drive() - get the drive letter of the first CD-Drive
+ * \brief get the drive letter of the first CD-Drive
  *
  * \return drive letter 0 = A:, 1 = B:, 2 = C:, 3 = D:, ...
  */
@@ -150,7 +150,7 @@ static signed short CD_get_first_drive(void)
 }
 
 /**
- * CD_set_drive_no() - sets the internal variable of the used CD-Drive
+ * \brief sets the internal variable of the used CD-Drive
  *
  * \return 1 iff CD-Drive is used otherwise 0
  */
@@ -188,7 +188,7 @@ static void CD_unused1(void)
 /**
  * \brief   get time of day
  *
- * \return              clock ticks since midnight, the system time.
+ * \return  clock ticks since midnight, the system time.
  */
 static signed long CD_get_tod(void)
 {
@@ -201,7 +201,7 @@ static signed long CD_get_tod(void)
 	return ((signed long)_DX << 16) | _AX;
 }
 
-static void seg001_00bb(signed short track_no)
+static void CD_audio_start_track(const signed short track_no)
 {
 	signed long track_start;
 	signed long track_end;
@@ -265,7 +265,7 @@ void CD_enable_repeat(void)
 	if (g_cd_audio_repeat == 1) {
 		CD_audio_stop_hsg();
 		CD_audio_stop_hsg();
-		seg001_00bb(g_cd_audio_track);
+		CD_audio_start_track(g_cd_audio_track);
 		g_cd_audio_repeat = 1;
 	}
 }
@@ -336,7 +336,8 @@ void CD_play_track(const signed short track)
 	CD_audio_stop_hsg();
 
 	g_cd_audio_track = track;
-	seg001_00bb(g_cd_audio_track);
+
+	CD_audio_start_track(g_cd_audio_track);
 
 	g_cd_audio_repeat = 1;
 }
@@ -395,7 +396,6 @@ static void CD_radio_insert_cd(void)
 	}
 }
 
-/* Borlandified and identical */
 static signed short CD_insert_loop(void)
 {
 	if (g_cd_insert_counter == 0) {
@@ -407,7 +407,6 @@ static signed short CD_insert_loop(void)
 	return 1;
 }
 
-/* Borlandified and nearly identical */
 static void CD_check_cd(void)
 {
 	char fname[80];
@@ -422,11 +421,9 @@ static void CD_check_cd(void)
 	}
 }
 
-/* Borlandified and identical */
 signed short CD_audio_init(void)
 {
-	if (CD_set_drive_no() == 0)
-		return 0;
+	if (!CD_set_drive_no()) return 0;
 
 	g_cd_init_successful = 1;
 	CD_check_cd();
@@ -434,10 +431,5 @@ signed short CD_audio_init(void)
 	seg001_03a8();
 
 	return 1;
-}
-
-// Empty function which code overlaps into the next segment
-static void dummy(void)
-{
 }
 #endif
