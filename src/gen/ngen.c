@@ -4113,7 +4113,7 @@ static void start_music(const signed short track)
 			play_midi(track);
 		}
 	} else {
-		CD_play_track(track);
+		CD_play_track(4);
 	}
 #else
 	if (Mix_PlayMusic(music, -1) == -1) {

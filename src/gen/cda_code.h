@@ -2,7 +2,7 @@
 /* used by external modules */
 signed short CD_bioskey(const signed short);
 void CD_audio_stop(void);
-void CD_play_track(signed short);
+void CD_play_track(const signed short);
 signed short CD_audio_init(void);
 #else
 /* Dummy functions for modern OSes */

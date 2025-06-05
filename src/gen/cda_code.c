@@ -333,12 +333,14 @@ static void seg001_03a8(void)
 }
 
 /* used externally */
-void CD_play_track(signed short track)
+void CD_play_track(const signed short track)
 {
 	CD_audio_stop_hsg();
 	CD_audio_stop_hsg();
-	g_cd_audio_track = 4;
+
+	g_cd_audio_track = track;
 	seg001_00bb(g_cd_audio_track);
+
 	g_cd_audio_repeat = 1;
 }
 
