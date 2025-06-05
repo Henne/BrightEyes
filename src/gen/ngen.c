@@ -1551,7 +1551,7 @@ static int alloc_buffers(void)
 	return errors;
 }
 
-static void free_buffers(void)
+void free_buffers(void)
 {
 	unsigned char *host_ptr;
 	int i;

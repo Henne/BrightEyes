@@ -90,6 +90,7 @@ static signed short g_cd_audio_track;
 static unsigned char far cd_buf1[824];
 
 /* externally used prototypes from (mainfile) */
+extern void free_buffers(void);
 extern void mouse_bg(void);
 extern void mouse_disable(void);
 extern void exit_video(void);
@@ -401,6 +402,8 @@ static void CD_radio_insert_cd(void)
 			exit_video();
 			clrscr();
 		}
+
+		free_buffers();
 
 		exit(0);
 	}
