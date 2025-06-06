@@ -1193,7 +1193,7 @@ struct type_bitmap {
 
 static const struct type_bitmap g_type_bitmap = { {0} };
 
-static const char g_str_version[] = "V1.06";
+static const char g_str_version[] = "V1.07";
 
 static const struct struct_color g_pal_attic[16] = {
 	{0x00, 0x00, 0x00},
