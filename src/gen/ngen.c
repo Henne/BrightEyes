@@ -2228,19 +2228,16 @@ static signed short get_mouse_action(const signed short x, const signed short y,
 /* IMAGE MANAGEMENT */
 
 /**
- * decomp_rle() - decompress a RLE compressed picture
- * @dst:	destination
- * @src:	source
- *
+ * \brief decompress a RLE compressed picture of resolution 320x200
+ * \param[in] dst destination
+ * \param[in] src source
 */
 static void decomp_rle(unsigned char *dst, unsigned char *src)
 {
 	int i;
 	int j;
 	int k;
-	unsigned char n;
-
-	mouse_bg();
+	int n;
 
 	for (i = 0; i < O_HEIGHT; i++) {
 
@@ -2263,8 +2260,6 @@ static void decomp_rle(unsigned char *dst, unsigned char *src)
 			}
 		}
 	}
-
-	mouse_cursor();
 }
 
 #if defined(__BORLANDC__)
