@@ -71,11 +71,11 @@ static inline void clrscr(void) { }
 
 #include "hero.h"
 
-#include "cda_code.h"
 #include "powerp20.h"
 #include "vgalib.h"
 
 #if defined(__BORLANDC__)
+#include "cda_code.h"
 #include "AIL.H"
 #else
 #include "ail_stub.h"
@@ -90,7 +90,6 @@ static inline void clrscr(void) { }
 
 /* static prototypes */
 static signed short infobox(char*, signed short);
-void restore_timer_isr(void);
 
 /** Keyboard Constants */
 
