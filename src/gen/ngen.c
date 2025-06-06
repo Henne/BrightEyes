@@ -2036,9 +2036,9 @@ void mouse_disable(void)
 }
 
 /**
- * mouse_move_cursor -	move the mouse cursor to a position
- * @x:	X - coordinate
- * @y:	Y - coordinate
+ * \brief move the mouse cursor to a position
+ * \param[in] x X - coordinate
+ * \param[in] y Y - coordinate
  */
 static void mouse_move_cursor(const signed short x, const signed short y)
 {
@@ -2060,7 +2060,7 @@ static void mouse_cursor_draw(void)
 {
 #if defined(__BORLANDC__)
 	unsigned char *vgaptr;
-	signed short *mouse_cursor;
+	signed short *cursor;
 	signed short rangeX;
 	signed short rangeY;
 	signed short diffX;
@@ -2070,7 +2070,7 @@ static void mouse_cursor_draw(void)
 
 	signed short mask;
 
-	mouse_cursor = (signed short*)g_mouse_current_cursor + (32 / 2);
+	cursor = (signed short*)g_mouse_current_cursor + (32 / 2);
 
 	rangeX = g_mouse_posx;
 	rangeY = g_mouse_posy;
@@ -2083,7 +2083,7 @@ static void mouse_cursor_draw(void)
 	vgaptr = g_vga_memstart + O_WIDTH * rangeY + rangeX;
 
 	for (Y = 0; Y < diffY; Y++) {
-		mask = *mouse_cursor++;
+		mask = *cursor++;
 		for (X = 0; X < diffX; X++)
 			if ((0x8000 >> X) & mask)
 				vgaptr[X] = 0xff;
@@ -2550,7 +2550,6 @@ static void flush_keyboard_queue(void)
 
 /**
  * \brief high-level input function
- * \return 1 to exit the program otherwise 0
  */
 static void handle_input(void)
 {
@@ -3553,7 +3552,7 @@ static void draw_popup_box(const int lines_header, const int lines_body)
  * \param[in] msg the message for the box
  * \param[in] digits number of digits to enter
  *
- * \note if @digits is zero the function just delays.
+ * \note if digits is zero the function just delays.
  */
 static signed short infobox(char *msg, const signed short digits)
 {
@@ -3876,8 +3875,8 @@ signed short gui_radio(char *header, const signed int options, ...)
 }
 
 /**
- * gui_bool() - displays a yes - no radio box
- * @header:	the header of menu
+ * \brief displays a yes - no radio box
+ * \param[in] header header of the menu
  *
  */
 static signed short gui_bool(char *msg)
@@ -4720,6 +4719,7 @@ static void print_attribs(void)
  */
 static void print_values(void)
 {
+	int i;
 	char tmp[4];
 	signed short width;
 	signed short align_left = 222;
@@ -4728,7 +4728,6 @@ static void print_values(void)
 	signed short feet;
 	signed short inches;
 
-	signed short i;
 	signed short pos;
 
 	if (g_dsagen_lang == LANG_EN) { align_left = 225; align_right = 313; }
@@ -4786,7 +4785,6 @@ static void print_values(void)
 		case 1: {
 			/* SKILLS Page 1/3 */
 			restore_background(g_gfx_ptr);
-
 
 			/* print fight skills */
 			for (i = 0; i < 9; i++) {
@@ -6208,6 +6206,8 @@ static void select_typus(void)
 /**
  * \brief increment a skill
  * \param[in] skill index of the skill
+ * \param[in] max maximum number of increase attempts
+ * \param[in] msg textmessage iff max is reached
  */
 static void inc_skill(const signed short skill, const signed short max, char *msg)
 {
