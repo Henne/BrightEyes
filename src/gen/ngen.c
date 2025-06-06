@@ -2414,7 +2414,7 @@ static int sdl_event_loop(const int cmd)
 		if (event.type == SDL_QUIT) {
 			if (cmd == 0) {
 				/* return CTRL+Q as a keyboard event into the game */
-				return (0x10 << 8) | 0x11;
+				return (0x10 << 8) | KEY_DC1;
 			}
 		} else if (event.type == SDL_MOUSEMOTION) {
 			int ratio = sdl_get_ratio();
@@ -2447,9 +2447,9 @@ static int sdl_event_loop(const int cmd)
 
 				if (m & KMOD_CTRL) {
 					switch (event.key.keysym.sym) {
-						case SDLK_q:  return (0x10 << 8) | 0x11; break;
-						case SDLK_F3: return (0x60 << 8); break;
-						case SDLK_F4: return (0x61 << 8); break;
+						case SDLK_q:  return (0x10 << 8) | KEY_DC1; break;
+						case SDLK_F3: return (KEY_CTRL_F3 << 8); break;
+						case SDLK_F4: return (KEY_CTRL_F4 << 8); break;
 					}
 				}
 
@@ -2459,23 +2459,30 @@ static int sdl_event_loop(const int cmd)
 								sdl_mouse_cursor_scaled();
 								break;
 					}
-					case SDLK_ESCAPE:   return (0x01 << 8) | 0x1b; break; //OK
-					case SDLK_1:        return (0x02 << 8) | 0x31; break; //OK
-					case SDLK_2:        return (0x03 << 8) | 0x32; break; //OK
-					case SDLK_3:        return (0x04 << 8) | 0x33; break; //OK
-					case SDLK_4:        return (0x05 << 8) | 0x34; break; //OK
-					case SDLK_5:        return (0x06 << 8) | 0x35; break; //OK
-					case SDLK_RETURN:   return (0x1c << 8) | 0x0d; break; //OK
-					case SDLK_j:        return (0x24 << 8) | 0x6a; break; //OK
+					case SDLK_ESCAPE:   return (KEY_ESC << 8) | 0x1b; break; //OK
+					case SDLK_1:        return (KEY_1 << 8) | 0x31; break; //OK
+					case SDLK_2:        return (KEY_2 << 8) | 0x32; break; //OK
+					case SDLK_3:        return (KEY_3 << 8) | 0x33; break; //OK
+					case SDLK_4:        return (KEY_4 << 8) | 0x34; break; //OK
+					case SDLK_5:        return (KEY_5 << 8) | 0x35; break; //OK
+					case SDLK_KP_ENTER:
+					case SDLK_RETURN:   return (KEY_RET << 8) | 0x0d; break; //OK
+					case SDLK_j:        return (KEY_J << 8) | 0x6a; break; //OK
 					case SDLK_y:        return (0x15 << 8) | 0x79; break; //DE
-					case SDLK_z:        return (0x2c << 8) | 0x7a; break; //DE
-					case SDLK_n:        return (0x31 << 8) | 0x6e; break; //OK
-					case SDLK_UP:       return (0x48 << 8); break; //OK
-					case SDLK_LEFT:     return (0x4b << 8); break; //OK
-					case SDLK_RIGHT:    return (0x4d << 8); break; //OK
-					case SDLK_DOWN:     return (0x50 << 8); break; //OK
-					case SDLK_PAGEUP:   return (0x49 << 8); break; //OK
-					case SDLK_PAGEDOWN: return (0x51 << 8); break; //OK
+					case SDLK_z:        return (KEY_Y << 8) | 0x7a; break; //DE
+					case SDLK_n:        return (KEY_N << 8) | 0x6e; break; //OK
+					case SDLK_KP_8:
+					case SDLK_UP:       return (KEY_UP << 8); break; //OK
+					case SDLK_KP_4:
+					case SDLK_LEFT:     return (KEY_LEFT << 8); break; //OK
+					case SDLK_KP_6:
+					case SDLK_RIGHT:    return (KEY_RIGHT << 8); break; //OK
+					case SDLK_KP_2:
+					case SDLK_DOWN:     return (KEY_DOWN << 8); break; //OK
+					case SDLK_KP_9:
+					case SDLK_PAGEUP:   return (KEY_PGUP << 8); break; //OK
+					case SDLK_KP_3:
+					case SDLK_PAGEDOWN: return (KEY_PGDOWN << 8); break; //OK
 					case 0xe4:          return (0x28 << 8) | 0x84; break; //AE
 					case 0xf6:          return (0x27 << 8) | 0x94; break; //OE
 					case 0xfc:          return (0x1a << 8) | 0x81; break; //UE
