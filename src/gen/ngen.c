@@ -53,7 +53,7 @@ static unsigned short gen_rotl(unsigned short op, unsigned short count)
 }
 
 /* use sprintf() for compatibility */
-static inline char* gen_itoa(int value, char* string, int radix)
+static inline char* gen_itoa(const int value, char* string, const int radix)
 {
 	sprintf(string, "%d", value);
 	return string;
@@ -2191,6 +2191,9 @@ static void mouse_cursor(void)
 	}
 }
 
+/**
+ * \brief checks for mouse motion and updates the cursor
+ */
 static void mouse_motion(void)
 {
 	if (g_mouse_moved) {
@@ -2202,12 +2205,11 @@ static void mouse_motion(void)
 }
 
 /**
- * get_mouse_action() - translate a leftclick into an extendet keycode
- * @x: X-Coordinate of the leftclick
- * @y: Y-Coordinate of the leftclick
- * @act: the action table of of the current page
- *
- * \return: an extended keycode or 0 if none was found in the table
+ * \brief translate a leftclick into an extendet keycode
+ * \param[in] x X-Coordinate of the leftclick
+ * \param[in] y Y-Coordinate of the leftclick
+ * \param[in] act the action table of of the current page
+ * \return an extended keycode or 0 if none was found in the table
  **/
 static signed short get_mouse_action(const signed short x, const signed short y, const struct mouse_action *act)
 {
@@ -3550,12 +3552,12 @@ static void draw_popup_box(const int lines_header, const int lines_body)
 
 /**
  * \brief draws and info- or enter_numberbox
- * \param[in] msg the message for the box
+ * \param[in] header the message for the box
  * \param[in] digits number of digits to enter
  *
  * \note if digits is zero the function just delays.
  */
-static signed short infobox(char *msg, const signed short digits)
+static signed short infobox(char *header, const signed short digits)
 {
 	unsigned char* src;
 	unsigned char* dst;
@@ -3579,7 +3581,7 @@ static signed short infobox(char *msg, const signed short digits)
 	g_left_border = (O_WIDTH - width) / 2 + g_text_x_mod;
 	g_text_x = g_left_border + 5;
 	g_text_x_end = width - 10;
-	lines = str_splitter(msg);
+	lines = str_splitter(header);
 
 	if (digits != 0)
 		lines += 2;
@@ -3602,7 +3604,7 @@ static signed short infobox(char *msg, const signed short digits)
 	get_textcolor(&fg_bak, &bg_bak);
 	set_textcolor(0xff, 0xdf); // WHITE ON GREEN
 
-	print_line(msg);
+	print_line(header);
 
 	g_mouse_rightclick_event = 0;
 	mouse_cursor();
@@ -3679,7 +3681,6 @@ static void fill_radio_button(const signed short old_pos, const signed short new
  * \brief displays a radio menu
  * \param[in] header the header of the menu
  * \param[in] options the number of options
- *
  */
 signed short gui_radio(char *header, const signed int options, ...)
 {
@@ -3878,13 +3879,14 @@ signed short gui_radio(char *header, const signed int options, ...)
 /**
  * \brief displays a yes - no radio box
  * \param[in] header header of the menu
+ * \return 1 = yes otherwise 0
  */
-static signed short gui_bool(char *msg)
+static signed short gui_bool(char *header)
 {
 	signed short retval;
 
 	g_bool_mode = 1;
-	retval = gui_radio(msg, 2, get_text(4), get_text(5));
+	retval = gui_radio(header, 2, get_text(4), get_text(5));
 	g_bool_mode = 0;
 
 	return (retval == 1) ? 1 : 0;
@@ -4493,6 +4495,9 @@ static void change_sex(void)
 	}
 }
 
+/**
+ * \brief save background areas
+ */
 static void save_background(void)
 {
 	unsigned char* p;
@@ -4576,7 +4581,11 @@ static void save_background(void)
 	vgalib_copy_from_screen(g_picbuf3, p, w_3, h_3);
 }
 
-static void restore_background(unsigned char* ptr)
+/**
+ * \brief restore saved background areas
+ * \param[in] dst destinaton
+ */
+static void restore_background(unsigned char* dst)
 {
 	unsigned char* p;
 	unsigned short x_1, x_2, x_3;
@@ -4640,14 +4649,14 @@ static void restore_background(unsigned char* ptr)
 	}
 
 	if (x_1) {
-		p = ptr + y_1 * O_WIDTH + x_1;
+		p = dst + y_1 * O_WIDTH + x_1;
 		vgalib_copy_to_screen(p, g_picbuf1, w_1, h_1);
 	}
 
-	p = ptr + y_2 * O_WIDTH + x_2;
+	p = dst + y_2 * O_WIDTH + x_2;
 	vgalib_copy_to_screen(p, g_picbuf2, w_2, h_2);
 
-	p = ptr + y_3 * O_WIDTH + x_3;
+	p = dst + y_3 * O_WIDTH + x_3;
 	vgalib_copy_to_screen(p, g_picbuf3, w_3, h_3);
 }
 
@@ -5561,8 +5570,8 @@ static void fill_values(void)
 {
 	const struct struct_money *money_ptr;
 	signed short i;
-	signed short v1;
-	signed short v2;
+	signed short skill;
+	signed short spell;
 	signed short si;
 	signed short di;
 
@@ -5771,7 +5780,8 @@ static void fill_values(void)
 	if (g_level == 1) {
 		/* increase skills automatically */
 		for (i = 0; g_hero.skill_incs > 0; i++) {
-			skill_inc_novice(v1 = g_autoskills[g_hero.typus][i]);
+			skill = g_autoskills[g_hero.typus][i];
+			skill_inc_novice(skill);
 		}
 
 		si = 0;
@@ -5818,7 +5828,8 @@ static void fill_values(void)
 
 		/* automatic increase spells */
 		for (i = 0; g_hero.spell_incs > 0; i++) {
-			spell_inc_novice((v2 = g_autospells[g_hero.typus - 7][i]));
+			spell = g_autospells[g_hero.typus - 7][i];
+			spell_inc_novice(spell);
 		}
 	}
 }
@@ -7114,9 +7125,14 @@ static void do_gen(void)
 /* INTRO */
 
 /**
- * \brief fade out for a color palette
  */
-static void pal_fade_out(signed char *dst, signed char *src, signed short n)
+/**
+ * \brief fade out for a color palette
+ * \param[out] dst destination palette
+ * \param[in] src source palette
+ * \param[in] n the number of colors
+ */
+static void pal_fade_out(signed char *dst, signed char *src, const signed short n)
 {
 	signed short i;
 
@@ -7147,8 +7163,12 @@ static void pal_fade_out(signed char *dst, signed char *src, signed short n)
 
 /**
  * \brief fade in for a color palette
+ * \param[out] dst destination palette
+ * \param[in] src source palette
+ * \param[in] col the first color of the palette
+ * \param[in] n the number of colors
  */
-static void pal_fade_in(signed char *dst, signed char *src, signed short col, signed short n)
+static void pal_fade_in(signed char *dst, signed char *src, const signed short col, const signed short n)
 {
 	signed short i;
 	signed short si;
@@ -7180,7 +7200,7 @@ static void pal_fade_in(signed char *dst, signed char *src, signed short col, si
 }
 
 /**
- * \brief	play the intro
+ * \brief play the intro
  */
 static void intro(void)
 {
