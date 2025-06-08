@@ -3164,12 +3164,11 @@ static signed short str_splitter(char *str)
 }
 
 /**
- * get_line_start_c() - calculates the start positon for a centered line
- * @str:	the string
- * @x:		start position of the string
- * @x_max:	end position of the string
- *
- * Returns the X coordinate where the string starts.
+ * \brief calculates the start positon for a centered line
+ * \param[in] str the string
+ * \param[in] x start position of the string
+ * \param[in] x_max end position of the string
+ * \return X coordinate where the string starts
  */
 static signed short get_line_start_c(const char *str, const signed short x, const signed short x_max)
 {
@@ -3879,7 +3878,6 @@ signed short gui_radio(char *header, const signed int options, ...)
 /**
  * \brief displays a yes - no radio box
  * \param[in] header header of the menu
- *
  */
 static signed short gui_bool(char *msg)
 {
