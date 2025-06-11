@@ -13,7 +13,7 @@ CFLAGS=-O0 -g -fno-asm -fopenmp
 CFLAGS+=-I/usr/include/SDL2
 
 gen: cda_code.o ngen.o powerp20.o vgalib.o ail_stub.o
-	$(CC) $(CFLAGS) -o ngen_$(CC) cda_code.o ngen.o powerp20.o vgalib.o ail_stub.o -lSDL2 -lSDL2_mixer
+	$(CC) $(CFLAGS) -o ngen_$(CC) cda_code.o ngen.o powerp20.o vgalib.o ail_stub.o -lSDL2_mixer -lSDL2
 
 clean:
 	rm -f ngen_* *.o
