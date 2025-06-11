@@ -7602,6 +7602,8 @@ int main_gen(int argc, char **argv)
 		intro();
 	}
 
+	init_palettes();
+
 	load_common_files();
 
 	flush_keyboard_queue();
