@@ -1472,6 +1472,11 @@ static unsigned short g_current_timbre_length;
 
 /* MEMORY MANAGEMENT */
 
+/**
+ * \brief allocate memory
+ * \param nelem number of bytes
+ * \return pointer to memory location or NULL
+ */
 static unsigned char *gen_alloc(unsigned long nelem)
 {
 #if defined(__BORLANDC__)
@@ -1482,9 +1487,8 @@ static unsigned char *gen_alloc(unsigned long nelem)
 }
 
 /**
- * alloc_buffers() - allocate all buffers needed at runtime
- *
- * Returns the number of failed allocations.
+ * \brief allocate most of the buffers needed at runtime
+ * \return number of failed allocations or 0 if none
  */
 static int alloc_buffers(void)
 {
@@ -1550,6 +1554,9 @@ static int alloc_buffers(void)
 	return errors;
 }
 
+/**
+ * \brief free all memory buffers
+ */
 void free_buffers(void)
 {
 	unsigned char *host_ptr;
@@ -1678,13 +1685,15 @@ void free_buffers(void)
 /* RANDOM NUMBER GENERATOR MANAGEMENT */
 
 /**
- * random_gen - generates a non-negative random number
+ * \brief generates a positive random number in {1, ..., n}
+ * \param[in] n maximal random number
+ * \return random number or 0
  */
-static signed short random_gen(const signed short val)
+static signed short random_gen(const signed short n)
 {
 	signed short retval;
 
-	if (val == 0) {
+	if (n == 0) {
 		return 0;
 	}
 
@@ -1694,11 +1703,14 @@ static signed short random_gen(const signed short val)
 	retval = gen_rotl(retval, 3);
 	g_random_gen_seed = retval;
 
-	return abs(retval) % val + 1;
+	return abs(retval) % n + 1;
 }
 
 /**
- * random_interval_gen - generates a non-negative random number between lo and hi
+ * \brief generates a non-negative random number between lo and hi
+ * \param[in] lo lowest value
+ * \param[in] hi highest value
+ * \return random number
 */
 static signed short random_interval_gen(const signed short lo, const signed short hi)
 {
@@ -1706,7 +1718,10 @@ static signed short random_interval_gen(const signed short lo, const signed shor
 }
 
 /**
- * \brief   checks if val is in a word array
+ * \brief checks if val is in a word array
+ * \param[in] val value to check for
+ * \param[in] p pointer to array
+ * \return 1 iff found otherwise 0
  */
 static int is_in_word_array(const int val, const signed short *p)
 {
