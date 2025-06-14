@@ -906,7 +906,7 @@ static const struct struct_color g_pal_genbg[32] = {
 	{0x14, 0x00, 0x00},
 };
 
-static signed short g_screen_var = 0;
+/* MOUSE MANAGEMENT VARIABLES */
 
 #if !defined(__BORLANDC__)
 static SDL_Cursor *g_sdl_cursor;
@@ -927,19 +927,20 @@ static unsigned short g_mouse_mask[32] = {
         0x001c, 0x0008, 0x0000, 0x0000,
 };
 
-static signed short g_mouse_posy_min = 0;
 static signed short g_mouse_posx_min = 0;
-static signed short g_mouse_posy_max = 199;
-static signed short g_mouse_posx_max = 310;
+static signed short g_mouse_posy_min = 0;
+static signed short g_mouse_posx_max = O_WIDTH - 10;
+static signed short g_mouse_posy_max = O_HEIGHT - 1;
+
+static signed short g_mouse_posx = O_WIDTH / 2;
+static signed short g_mouse_posy = O_HEIGHT / 2;
+static signed short g_mouse_posx_bak = O_WIDTH / 2;
+static signed short g_mouse_posy_bak = O_HEIGHT / 2;
+
+static signed short g_mouse_moved = 0;
 static signed short g_mouse_locked = 0;
 static signed short g_mouse_refresh_flag = -1;
 
-static signed short g_mouse_posx = 160;
-static signed short g_mouse_posy = 100;
-static signed short g_mouse_posx_bak = 160;
-static signed short g_mouse_posy_bak = 100;
-
-static signed short g_mouse_moved = 0;
 
 struct mouse_action {
 	signed short x1;
@@ -949,41 +950,55 @@ struct mouse_action {
 	signed short action;
 };
 
-static const struct mouse_action g_action_default[2] = {
-	{ 0, 0, 319, 199, 0xfe},
-	{ -1, -1, -1, -1, -1}
-};
-
-static const struct mouse_action* g_default_action = &g_action_default[0];
-
-static const struct mouse_action* g_action_table = NULL;
-
 static const struct mouse_action g_action_base[9] = {
-	{ 272, 8, 304, 41, 0xfd},	/* credits */
+	{ 272, 8, 304, 41, 0xfd},		/* credits */
 	{ 305, 7, 319, 21, KEY_CTRL_F3},	/* change sex */
 	{ 145, 13, 175, 21, KEY_CTRL_F4},	/* enter name */
-	{ 271, 42, 286, 56, KEY_UP},	/* previous head */
-	{ 288, 42, 303, 56, KEY_DOWN},	/* next head */
+	{ 271, 42, 286, 56, KEY_UP},		/* previous head */
+	{ 288, 42, 303, 56, KEY_DOWN},		/* next head */
 	{ 145, 178, 164, 192, KEY_LEFT},	/* previous page */
 	{ 284, 178, 303, 192, KEY_RIGHT},	/* next page */
-	{ 0, 0, 319, 199, 0xfe},
+	{ 0, 0, O_WIDTH - 1, O_HEIGHT - 1, 0xfe},
 	{ -1, -1, -1, -1, -1}
 };
 
 static const struct mouse_action g_action_skills[4] = {
 	{ 145, 178, 164, 192, KEY_LEFT},	/* previous page */
 	{ 284, 178, 303, 192, KEY_RIGHT},	/* next page */
-	{ 0, 0, 319, 199, 0xfe},
+	{ 0, 0, O_WIDTH - 1, O_HEIGHT - 1, 0xfe},
 	{ -1, -1, -1, -1, -1}
 };
 
 static const struct mouse_action g_action_spells[4] = {
 	{ 16, 178, 35, 192, KEY_LEFT},		/* previous page */
 	{ 284, 178, 303, 192, KEY_RIGHT},	/* next page */
-	{ 0, 0, 319, 199, 0xfe},
+	{ 0, 0, O_WIDTH - 1, O_HEIGHT - 1, 0xfe},
 	{ -1, -1, -1, -1, -1}
 };
 
+static const struct mouse_action g_action_default[2] = {
+	{ 0, 0, O_WIDTH - 1, O_HEIGHT - 1, 0xfe},
+	{ -1, -1, -1, -1, -1}
+};
+
+static const struct mouse_action g_action_input[2] = {
+	{ 0, 0, O_WIDTH - 1, O_HEIGHT -1, KEY_RET},
+	{ -1, -1, -1, -1, -1}
+};
+
+static const struct mouse_action* g_action_page[] = {
+	g_action_base, g_action_skills, g_action_skills,
+	g_action_skills, g_action_skills, g_action_spells,
+	g_action_spells, g_action_spells, g_action_spells,
+	g_action_spells, g_action_spells
+};
+
+static const struct mouse_action* g_default_action = &g_action_default[0];
+
+static const struct mouse_action* g_action_table = NULL;
+
+
+static signed short g_screen_var = 0;
 static signed short g_gen_page = 0;
 static signed short g_text_x_mod = 0;
 
@@ -1171,19 +1186,7 @@ static const struct struct_chr_lookup g_chr_lookup[74] = {
 	{0xd9, 73, 5},
 };
 
-static const struct mouse_action g_action_input[2] = {
-	{ 0, 0, 319, 199, KEY_RET},
-	{ -1, -1, -1, -1, -1}
-};
-
 static signed short g_bool_mode = 0;
-
-static const struct mouse_action* g_action_page[] = {
-	g_action_base, g_action_skills, g_action_skills,
-	g_action_skills, g_action_skills, g_action_spells,
-	g_action_spells, g_action_spells, g_action_spells,
-	g_action_spells, g_action_spells
-};
 
 static char g_need_refresh = 1;
 
