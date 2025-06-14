@@ -2429,10 +2429,16 @@ static int sdl_event_loop(const int cmd)
 
 	while (SDL_PollEvent(&event)) {
 		if (event.type == SDL_QUIT) {
+
+			if (!g_in_intro) {
+				g_sdl_quit_event = 1;
+			}
+
 			if (cmd == 0) {
 				/* return CTRL+Q as a keyboard event into the game */
 				return (0x10 << 8) | KEY_DC1;
 			}
+
 		} else if (event.type == SDL_MOUSEMOTION) {
 			int ratio = sdl_get_ratio();
 
