@@ -1389,7 +1389,7 @@ static signed short g_level; /* {-1, 0, 1 (= Novice), 2 (= Advanced) } */
 
 static signed short g_upper_border;
 static signed short g_left_border;
-static signed short g_menu_tiles;
+static int g_menu_tiles = 3; /* number of menu tiles width {3,4} */
 static signed char g_in_intro;
 
 /* the typus for the heads e.G. all elves are 10 */
@@ -2973,9 +2973,6 @@ static void init_colors(void)
 	g_fg_color[1] = 0xc8; //RED
 	g_fg_color[2] = 0xc9; //YELLOW
 	g_fg_color[3] = 0xca; //BLUE
-
-	/* number of menu tiles width */
-	g_menu_tiles = 3;
 
 	g_dst_dst = g_vga_memstart;
 }
