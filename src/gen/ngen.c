@@ -2854,10 +2854,10 @@ static void load_common_files(void)
 	}
 }
 
-static void load_page(const signed short page)
+static void load_page(const int page)
 {
 	unsigned char* ptr;
-	signed short handle;
+	int handle;
 
 	if ((0 <= page) && (page <= 10)) {
 
@@ -2907,22 +2907,18 @@ static void load_page(const signed short page)
 	}
 }
 
-static void load_typus(const signed short typus)
+static void load_typus(const int typus)
 {
-	unsigned char *ptr;
-	signed short index;
-	signed short handle;
-
-	index = typus + 19;
+	const int index = typus + 19;
 
 	/* check if this image is in the buffer */
 	if (g_typus_buffer[typus]) {
 		decomp_pp20(g_gen_ptr5,	g_typus_buffer[typus], g_typus_len[typus]);
 	} else {
 
-		handle = open_datfile(index);
+		const int handle = open_datfile(index);
+		unsigned char *ptr = gen_alloc(get_filelength());
 
-		ptr = gen_alloc(get_filelength());
 		if (ptr != NULL) {
 			/* load the file into the typus buffer */
 			g_typus_buffer[typus] = ptr;
@@ -3003,24 +2999,22 @@ void exit_video(void)
 	set_video_page(g_display_page_bak);
 }
 
-static void do_draw_pic(const signed short mode)
+static void do_draw_pic(const int mode)
 {
-	signed short s_x = g_src_x1;
-	signed short s_y = g_src_y1;
-	signed short width = g_dst_x2 - g_dst_x1 + 1;
-	signed short height = g_dst_y2 - g_dst_y1 + 1;
+	const int width = g_dst_x2 - g_dst_x1 + 1;
+	const int height = g_dst_y2 - g_dst_y1 + 1;
 
 	mouse_bg();
 
-	pic_copy(g_dst_dst, g_dst_x1, g_dst_y1, s_x, s_y, width, height, g_dst_src, mode);
+	pic_copy(g_dst_dst, g_dst_x1, g_dst_y1, g_src_x1, g_src_y1, width, height, g_dst_src, mode);
 
 	mouse_cursor();
 }
 
 void call_fill_rect_gen(unsigned char *ptr, const signed short x1, const signed short y1, const signed short x2, const signed short y2, const signed short color)
 {
-	signed short width = x2 - x1 + 1;
-	signed short height = y2 - y1 + 1;
+	const int width = x2 - x1 + 1;
+	const int height = y2 - y1 + 1;
 
 	ptr += y1 * O_WIDTH + x1;
 
