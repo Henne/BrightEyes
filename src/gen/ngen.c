@@ -1440,11 +1440,6 @@ static Mix_Music *music = NULL;
 
 
 static signed long g_gendat_offset;
-
-#if defined(__BORLANDC__)
-void far *g_irq78_bak;
-#endif
-
 static signed long g_flen_left;
 static signed long g_flen;
 
@@ -1454,6 +1449,7 @@ static signed short g_got_ch_bonus;
 static unsigned char g_pal_roalogo[768];
 
 #if defined(__BORLANDC__)
+void far *g_irq78_bak;
 void far *g_timer_isr_bak;
 #else
 static SDL_TimerID g_sdl_timer_id = 0;
