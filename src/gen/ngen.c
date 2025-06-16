@@ -1343,8 +1343,8 @@ static unsigned char *g_popup_line;
 static signed short g_text_x;
 static signed short g_text_y;
 static signed short g_text_x_end;
-static signed short g_fg_color[6];
-static signed short g_bg_color;
+static int g_fg_color[5] = {0xff, 0xc8, 0xc9, 0xca, 0x00}; /* {WHITE, RED, YELLOW, BLUE, {0,1}} */
+static int g_bg_color = 0; /* BLACK */
 static signed short g_col_index;
 static unsigned char *g_buffer_font6;
 static char  *g_buffer_text;
@@ -2942,49 +2942,59 @@ static void load_typus(const signed short typus)
 
 /* COLOR MANAGEMENT */
 
-static void set_textcolor(const signed short fg, const signed short bg)
+/**
+ * \brief set fore- and background color of texts
+ * \param[in] fg_color foreground color index
+ * \param[in] bg_color background color index
+ */
+static void set_textcolor(const int fg_color, const int bg_color)
 {
-	g_fg_color[0] = fg;
-	g_bg_color = bg;
+	g_fg_color[0] = fg_color;
+	g_bg_color = bg_color;
 }
 
-static void get_textcolor(signed short *p_fg, signed short *p_bg)
+/**
+ * \brief get fore- and background color of texts
+ * \param[out] p_fg foreground color index
+ * \param[out] p_bg background color index
+ */
+static void get_textcolor(int *p_fg, int *p_bg)
 {
-	writew((unsigned char*)p_fg, g_fg_color[0]);
-	writew((unsigned char*)p_bg, g_bg_color);
+	*p_fg = g_fg_color[0];
+	*p_bg = g_bg_color;
 }
 
-static void init_palettes(void)
+/**
+ * \brief initialize predefined colors
+ */
+static void init_colors(void)
 {
 	set_palette(g_pal_col_black, 0x00, 1);
 	set_palette(g_pal_col_white, 0xff, 1);
-	set_palette((const unsigned char*)g_pal_popup, 0xd8, 8);
-	set_palette((const unsigned char*)g_pal_misc, 0xc8, 3);
-	set_palette((const unsigned char*)g_pal_genbg, 0x40, 0x20);
 	set_palette((const unsigned char*)g_pal_heads, 0x20, 0x20);
+	set_palette((const unsigned char*)g_pal_genbg, 0x40, 0x20);
+	set_palette((const unsigned char*)g_pal_misc, 0xc8, 3);
+	set_palette((const unsigned char*)g_pal_popup, 0xd8, 8);
+
 	set_textcolor(0xff, 0x0); // WHITE ON BLACK
-}
-
-static void init_colors(void)
-{
-	init_palettes();
-
-	/* these 3 variables are different text colors */
-	g_fg_color[1] = 0xc8; //RED
-	g_fg_color[2] = 0xc9; //YELLOW
-	g_fg_color[3] = 0xca; //BLUE
 
 	g_dst_dst = g_vga_memstart;
 }
 
+/**
+ * \brief initialize video mode/create window
+ */
 static void init_video(void)
 {
 	/* set the video mode to 320x200 8bit */
 	set_video_mode(0x13);
 
-	set_palette(g_pal_col_white, 0xff, 1);
+	init_colors();
 }
 
+/**
+ * \brief uninitialize video mode/close window
+ */
 void exit_video(void)
 {
 	/* restore old mode */
@@ -3579,9 +3589,9 @@ static signed short infobox(char *header, const signed short digits)
 {
 	unsigned char* src;
 	unsigned char* dst;
+	int fg_bak;
+	int bg_bak;
 	signed short retval;
-	signed short fg_bak;
-	signed short bg_bak;
 	signed short l_text_x_bak;
 	signed short l_text_y_bak;
 	signed short l_text_x_end_bak;
@@ -3706,6 +3716,8 @@ signed short gui_radio(char *header, const signed int options, ...)
 	unsigned char* src;
 	unsigned char* dst;
 	char *str;
+	int fg_bak;
+	int bg_bak;
 	signed short str_x;
 	signed short str_y;
 	signed short done = 0;
@@ -3716,8 +3728,6 @@ signed short gui_radio(char *header, const signed int options, ...)
 	signed short l_opt_bak = -1;
 	signed short l_opt_new = 1;
 
-	signed short fg_bak;
-	signed short bg_bak;
 	signed short l_text_x_bak;
 	signed short l_text_y_bak;
 	signed short l_text_x_end_bak;
@@ -3754,7 +3764,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 	draw_popup_box(lines_header, options);
 
 	/* save and set text colors */
-	get_textcolor((signed short*)&fg_bak, (signed short*)&bg_bak);
+	get_textcolor(&fg_bak, &bg_bak);
 	set_textcolor(0xff, 0xdf); // WHITE ON GREEN
 
 	/* print header */
@@ -7554,8 +7564,6 @@ int main_gen(int argc, char **argv)
 
 	init_video();
 
-	init_palettes();
-
 	/* Remark: gui elements are usable at this point at runtime */
 
 	set_timer_isr();
@@ -7583,9 +7591,8 @@ int main_gen(int argc, char **argv)
 
 	if (g_called_with_args == 0) {
 		intro();
+		init_colors();
 	}
-
-	init_palettes();
 
 	load_common_files();
 
