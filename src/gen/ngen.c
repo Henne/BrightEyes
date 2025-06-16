@@ -79,13 +79,6 @@ static inline void clrscr(void) { }
 #define gen_itoa itoa
 #endif
 
-#if defined(__BORLANDC__)
-/* BCC/DOS-specific pointer arithmetics */
-#define HUGEPTR huge
-#else
-#define HUGEPTR
-#endif
-
 /* static prototypes */
 static signed short infobox(char*, signed short);
 
@@ -122,8 +115,13 @@ static signed short infobox(char*, signed short);
 	@p_width:       pointer where the width of the picture must be stored
 */
 struct nvf_desc {
-	unsigned char HUGEPTR *dst;
-	unsigned char HUGEPTR *src;
+#if defined (__BORLANDC__)
+	unsigned char huge *dst;
+	unsigned char huge *src;
+#else
+	unsigned char *dst;
+	unsigned char *src;
+#endif
 	signed short no;
 	signed char type;
 	signed short *width;
@@ -2315,7 +2313,11 @@ static unsigned int swap_u32(unsigned int v)
 
 static signed long process_nvf(struct nvf_desc *nvf)
 {
-	unsigned char HUGEPTR *src = NULL;
+#if defined (__BORLANDC__)
+	unsigned char huge *src = NULL;
+#else
+	unsigned char *src = NULL;
+#endif
 	signed long p_size = 0;
 	signed long retval;
 	signed long offs;
