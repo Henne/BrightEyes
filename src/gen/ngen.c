@@ -20,11 +20,21 @@
 #include <CONIO.H>	// clrscr()
 #include <ALLOC.H>	// farcalloc()
 #include <MATH.H>	// abs()
+
+#include "cda_code.h"
+#include "AIL.H"
 #else
 #include <SDL.h>
 #include <SDL_mixer.h>
 #include <unistd.h> // lseek(), close(), read(), write()
+
+#include "ail_stub.h"
 #endif
+
+#include "hero.h"
+
+#include "powerp20.h"
+#include "vgalib.h"
 
 /* portable Memory Access */
 #if !defined(__BORLANDC__)
@@ -67,18 +77,6 @@ static inline void clrscr(void) { }
 #else
 #define gen_rotl _rotl
 #define gen_itoa itoa
-#endif
-
-#include "hero.h"
-
-#include "powerp20.h"
-#include "vgalib.h"
-
-#if defined(__BORLANDC__)
-#include "cda_code.h"
-#include "AIL.H"
-#else
-#include "ail_stub.h"
 #endif
 
 #if defined(__BORLANDC__)
