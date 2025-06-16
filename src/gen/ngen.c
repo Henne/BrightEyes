@@ -1304,9 +1304,6 @@ static const struct struct_color g_pal_heads[32] = {
 	{0x3c, 0x3c, 0x3c},
 };
 
-static const char g_str_sound_cfg[] = "SOUND.CFG";
-static const char g_str_sound_adv[] = "SOUND.ADV";
-static char g_str_soundhw_not_found[] = "SOUND HARDWARE NOT FOUND!";
 static const char g_str_chr[] = ".CHR";
 static const char g_str_temp_dir[] = "TEMP\\";
 static char g_str_save_error_de[] = "@SPEICHER FEHLER!@EVENTUELL DISKETTE GESCH\x9aTZT?";
@@ -1418,7 +1415,12 @@ static struct inc_states g_spell_incs[86];
 signed short g_called_with_args;
 static signed short g_param_level;
 
+/* AIL MANAGEMENT VARIABLES */
 #if defined(__BORLANDC__)
+static const char g_str_sound_cfg[] = "SOUND.CFG";
+static const char g_str_sound_adv[] = "SOUND.ADV";
+static char g_str_soundhw_not_found[] = "SOUND HARDWARE NOT FOUND!";
+
 static signed short g_snd_driver_handle;
 static signed short g_snd_sequence;
 static unsigned char* g_snd_driver_desc;
@@ -1426,14 +1428,19 @@ static unsigned char* g_snd_driver_base_addr;
 static signed long g_state_table_size;
 static signed short g_timbre_cache_size;
 static signed short g_handle_timbre;
-#endif
+
+/* These 6 bytes are written at once from a file */
+static unsigned long g_current_timbre_offset;
+static signed char g_current_timbre_bank;
+static signed char g_current_timbre_patch;
+
+static unsigned short g_current_timbre_length;
 
 static void* g_state_table;
 static unsigned char* g_snd_timbre_cache;
 static void* g_form_xmid;
 static unsigned char* g_snd_driver;
-
-#if !defined(__BORLANDC__)
+#else
 static int g_sdl_music = 0;
 static Mix_Music *music = NULL;
 #endif
@@ -1456,13 +1463,6 @@ static SDL_TimerID g_sdl_timer_id = 0;
 static SDL_TimerID g_sdl_timer_vga_id = 0;
 static SDL_mutex *g_sdl_timer_mutex = NULL;
 #endif
-
-/* These 6 bytes are written at once from a file */
-static unsigned long g_current_timbre_offset;
-static signed char g_current_timbre_bank;
-static signed char g_current_timbre_patch;
-
-static unsigned short g_current_timbre_length;
 
 
 /* MEMORY MANAGEMENT */
@@ -1641,7 +1641,7 @@ void free_buffers(void)
 		g_gen_ptr1_dis = NULL;
 	}
 
-	// missed ones
+#if defined(__BORLANDC__)
 	if (g_snd_timbre_cache != NULL) {
 		free(g_snd_timbre_cache);
 		g_snd_timbre_cache = NULL;
@@ -1661,6 +1661,7 @@ void free_buffers(void)
 		free(g_form_xmid);
 		g_form_xmid = NULL;
 	}
+#endif
 
 	for (i = 0; i < 11; i++) {
 		if (g_bg_buffer[i] != NULL) {
@@ -4187,26 +4188,6 @@ void exit_music(void)
 {
 #if defined(__BORLANDC__)
 	AIL_shutdown(NULL);
-
-	if (g_snd_timbre_cache) {
-		free(g_snd_timbre_cache);
-		g_snd_timbre_cache = NULL;
-	}
-
-	if (g_state_table) {
-		free(g_state_table);
-		g_state_table = NULL;
-	}
-
-	if (g_form_xmid) {
-		free(g_form_xmid);
-		g_form_xmid = NULL;
-	}
-
-	if (g_snd_driver) {
-		free(g_snd_driver);
-		g_snd_driver = NULL;
-	}
 
 	CD_audio_stop();
 #else
