@@ -43,15 +43,12 @@ static inline signed short readws(const unsigned char *p) { return *(const signe
 static inline unsigned int readd(const unsigned char *p) { return *(const unsigned int*)p; }
 static inline signed int readds(const unsigned char *p) { return *(const signed int*)p; }
 static inline unsigned short writew(unsigned char *p, unsigned short v) { return *(unsigned short*)p = v; }
-// TODO: Check if that works on the stack of 64-bit machines
-static inline unsigned int writed(unsigned char *p, unsigned int v) { return *(unsigned int*)p = v; }
 #else
 #define readw(p) (*(const unsigned short*)(p))
 #define readws(p) (*(const signed short*)(p))
 #define readd(p) (*(const unsigned long*)(p))
 #define readds(p) (*(const signed long*)(p))
 #define writew(p, v) (*(unsigned short*)(p) = (v))
-#define writed(p, v) (*(unsigned long*)(p) = (v))
 #endif
 
 #if !defined(__BORLANDC__)
@@ -2289,38 +2286,35 @@ static void decomp_rle(unsigned char *dst, unsigned char *src)
 	}
 }
 
-#if defined(__BORLANDC__)
-/* Remark: u32 is unsigned long in the BCC-world */
-/* seems unused on available input values */
-static unsigned long swap_u32(unsigned long v)
-{
-	unsigned short l1;
-	unsigned short l2;
-	unsigned char *p = (unsigned char*)&l2;
-
-	register unsigned short l_si;
-
-	writed(p, v); // write v to stack and access subvalues with l1 and l2
-	l_si = l2;
-	l2 = swap_u16(l1);
-	l1 = swap_u16(l_si);
-
-	return readd(p);
-}
-#else
-/* Remark: u32 is unsigned int in the GCC-world */
-static unsigned int swap_u32(unsigned int v)
+/**
+ * \brief swaps bytes of an 32bit integer value
+ * \param[in] v input value
+ * \return swapped 32-bit integer value
+ * \note let v = 0xdeadbeef => swap_u32(v) = 0xefbeadde
+ * \note tested successfull with Linux GCC, CLANG on x86_64 and ARM
+ * \note tested successfull with BCC with {-O, -G, -Od}
+ * \note failed on BCC DOS with enabled optimization (-O1, -O2)
+ */
+static unsigned long swap_u32(const unsigned long v)
 {
 	unsigned char tmp[4] = {0};
+	unsigned long retval = 0L;
 
 	tmp[0] = (v >> 0) & 0xff;
 	tmp[1] = (v >> 8) & 0xff;
 	tmp[2] = (v >> 16) & 0xff;
 	tmp[3] = (v >> 24) & 0xff;
 
-	return (tmp[0] << 24) | (tmp[1] << 16) | (tmp[2] << 8) | (tmp[3] << 0);
+	retval |= tmp[0];
+	retval <<= 8L;
+	retval |= tmp[1];
+	retval <<= 8L;
+	retval |= tmp[2];
+	retval <<= 8L;
+	retval |= tmp[3];
+
+	return retval;
 }
-#endif
 
 static signed long process_nvf(struct nvf_desc *nvf)
 {
