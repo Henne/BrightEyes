@@ -922,18 +922,6 @@ static signed short g_mouse_moved = 0;
 static signed short g_mouse_locked = 0;
 static signed short g_mouse_refresh_flag = -1;
 
-static unsigned short *g_mouse_current_cursor;
-
-#if !defined(__BORLANDC__)
-static SDL_Cursor *g_sdl_cursor;
-static Uint8 g_sdl_cursor_data_o[16*16];
-static Uint8 g_sdl_cursor_mask_o[16*16];
-static Uint8 *g_sdl_cursor_data_r;
-static Uint8 *g_sdl_cursor_mask_r;
-#else
-static char g_mouse_backbuffer[16 * 16];
-#endif
-
 static unsigned short g_mouse_mask[32] = {
         0x7fff, 0x9fff, 0x87ff, 0xc1ff,
         0xc07f, 0xe01f, 0xe007, 0xf00f,
@@ -944,6 +932,18 @@ static unsigned short g_mouse_mask[32] = {
         0x0fe0, 0x07f0, 0x0778, 0x023c,
         0x001c, 0x0008, 0x0000, 0x0000,
 };
+
+#if !defined(__BORLANDC__)
+static SDL_Cursor *g_sdl_cursor = NULL;
+static Uint8 *g_sdl_cursor_data_r = NULL;
+static Uint8 *g_sdl_cursor_mask_r = NULL;
+static Uint8 g_sdl_cursor_data_o[16*16];
+static Uint8 g_sdl_cursor_mask_o[16*16];
+#else
+static char g_mouse_backbuffer[16 * 16];
+static unsigned short *g_mouse_current_cursor = g_mouse_mask;
+#endif
+
 
 struct mouse_action {
 	signed short x1;
@@ -1953,6 +1953,10 @@ static void sdl_mouse_cursor_scaled(void)
 }
 #endif
 
+/**
+ * \brief initialize mouse and cursor position
+ * \note The variable g_have_mouse may become 0 iff no mouse was found (DOS)
+ */
 static void mouse_enable(void)
 {
 	if (g_have_mouse == 2) {
@@ -1967,13 +1971,23 @@ static void mouse_enable(void)
 
 		if (p1 == 0) {
 			g_have_mouse = 0;
+			g_mouse_refresh_flag = -2;
 		}
-#endif
 
 		g_mouse_current_cursor = g_mouse_mask;
 
-#if !defined(__BORLANDC__)
-		signed short *mouse_cursor = (signed short*)g_mouse_current_cursor + 16;
+		/* move cursor to initial position */
+		if (g_have_mouse == 2) {
+			p1 = 4;
+			p3 = g_mouse_posx;
+			p4 = g_mouse_posy;
+
+			do_mouse_action(&p1, &p2, &p3, &p4, &p5);
+			mouse_do_enable(0x1f, (unsigned char*)&mouse_isr);
+		}
+#else
+
+		signed short *mouse_cursor = (signed short*)g_mouse_mask + 16;
 		int i = -1;
 
 		SDL_ShowCursor(SDL_DISABLE);
@@ -2005,25 +2019,17 @@ static void mouse_enable(void)
 
 		sdl_mouse_cursor_scaled();
 
-		/* move cursor  to initial position */
+		/* move cursor to initial position */
 		const int ratio = sdl_get_ratio();
 		SDL_WarpMouseInWindow(sdl_get_window(), g_mouse_posx * ratio, g_mouse_posy * ratio);
-#else
-
-		/* move cursor  to initial position */
-		if (g_have_mouse == 2) {
-			p1 = 4;
-			p3 = g_mouse_posx;
-			p4 = g_mouse_posy;
-
-			do_mouse_action(&p1, &p2, &p3, &p4, &p5);
-			mouse_do_enable(0x1f, (unsigned char*)&mouse_isr);
-		}
 #endif
 	}
 }
 
-/* used by cda code */
+/**
+ * \brief uninitialize mouse and cursor position
+ * \note used by cda code (DOS)
+ */
 void mouse_disable(void)
 {
 	if (g_have_mouse == 2) {
@@ -2042,9 +2048,14 @@ void mouse_disable(void)
 		do_mouse_action(&p1, &p2, &p3, &p4, &p5);
 #else
 		SDL_ShowCursor(SDL_DISABLE);
+
 		SDL_FreeCursor(g_sdl_cursor);
+
 		free(g_sdl_cursor_data_r);
+		g_sdl_cursor_data_r = NULL;
 		free(g_sdl_cursor_mask_r);
+		g_sdl_cursor_mask_r = NULL;
+		g_sdl_cursor = NULL;
 #endif
 	}
 }
@@ -7566,10 +7577,6 @@ int main_gen(int argc, char **argv)
 	set_timer_isr();
 
 	mouse_enable();
-
-	if (g_have_mouse == 0) {
-		g_mouse_refresh_flag = -2;
-	}
 
 	if (sound_off == 0) {
 		init_music(13000);
