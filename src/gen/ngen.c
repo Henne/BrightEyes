@@ -2484,7 +2484,13 @@ static int sdl_event_loop(const int cmd)
 
 				if (m & KMOD_CTRL) {
 					switch (event.key.keysym.sym) {
-						case SDLK_q:  return (0x10 << 8) | KEY_DC1; break;
+						case SDLK_q: {
+							if (!g_in_intro) {
+								g_sdl_quit_event = 1;
+							}
+							return (0x10 << 8) | KEY_DC1;
+							break;
+						}
 						case SDLK_F3: return (KEY_CTRL_F3 << 8); break;
 						case SDLK_F4: return (KEY_CTRL_F4 << 8); break;
 					}
@@ -2592,10 +2598,11 @@ static void flush_keyboard_queue(void)
  */
 static void handle_input(void)
 {
-	int i;
-	signed short l_key_ext;
+	int l_key_ext = 0;
 
-	g_in_key_ascii = g_in_key_ext = l_key_ext = 0;
+	/* keyboard events */
+	g_in_key_ascii = 0;
+	g_in_key_ext = 0;
 
 	if (get_bioskey(1)) {
 
@@ -2608,25 +2615,24 @@ static void handle_input(void)
 
 		/* exit Program with CRTL+Q */
 		if ((g_in_key_ascii == KEY_DC1) && !g_in_intro) {
-#if !defined(__BORLANDC__)
-			g_sdl_quit_event = 1;
-#endif
 			return;
 		}
 	}
 
-	if (g_mouse_leftclick_event != 0) {
+	/* mouse events */
+	if (g_have_mouse == 2) {
+		if (g_mouse_leftclick_event) {
 
-		g_mouse_leftclick_event = 0;
-		l_key_ext = 0;
+			int i;
 
-		if (g_action_table)
-			l_key_ext = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table);
+			l_key_ext = 0;
 
-		if ((l_key_ext == 0) && (g_default_action))
-			l_key_ext = get_mouse_action(g_mouse_posx, g_mouse_posy, g_default_action);
+			if (g_action_table)
+				l_key_ext = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table);
 
-		if (g_have_mouse == 2) {
+			if ((l_key_ext == 0) && (g_default_action))
+				l_key_ext = get_mouse_action(g_mouse_posx, g_mouse_posy, g_default_action);
+
 			for (i = 0; i < 15; i++)
 				wait_for_vsync();
 
@@ -2641,10 +2647,12 @@ static void handle_input(void)
 				g_fg_color[4] = 0;
 				g_menu_tiles = 3;
 			}
+
 		}
+
+		mouse_motion();
 	}
 
-	mouse_motion();
 	g_in_key_ext = l_key_ext;
 }
 
