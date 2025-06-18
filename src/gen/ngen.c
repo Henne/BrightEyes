@@ -1330,7 +1330,7 @@ static signed short g_random_gen_seed = 0x327b;
 static signed short g_ro_var[7];
 static signed short g_display_mode_bak;
 static signed short g_display_page_bak;
-static unsigned char* g_gen_ptr1_dis;
+static unsigned char* g_vga_backbuffer;
 static unsigned char* g_page_buffer;
 unsigned char* g_vga_memstart;
 static unsigned char* g_gfx_ptr;
@@ -1495,8 +1495,8 @@ static int alloc_buffers(void)
 #endif
 	if (g_gfx_ptr == NULL) errors++;
 
-	g_gen_ptr1_dis = (gen_alloc(64108) + 8);
-	if (g_gen_ptr1_dis == NULL) errors++;
+	g_vga_backbuffer = (gen_alloc(64108) + 8);
+	if (g_vga_backbuffer == NULL) errors++;
 
 	g_page_buffer = gen_alloc(50000);
 	if (g_page_buffer == NULL) errors++;
@@ -1635,9 +1635,9 @@ void free_buffers(void)
 		g_page_buffer = NULL;
 	}
 
-	if ((host_ptr = g_gen_ptr1_dis - 8) != 0) {
+	if ((host_ptr = g_vga_backbuffer - 8) != 0) {
 		free(host_ptr);
-		g_gen_ptr1_dis = NULL;
+		g_vga_backbuffer = NULL;
 	}
 
 #if defined(__BORLANDC__)
@@ -2880,9 +2880,9 @@ static void load_page(const int page)
 		/* check if this compressed image is in the buffer */
 		if (g_bg_buffer[page]) {
 #if defined(__BORLANDC__)
-			decomp_rle(g_gen_ptr1_dis, g_bg_buffer[page]);
+			decomp_rle(g_vga_backbuffer, g_bg_buffer[page]);
 #else
-			memcpy(g_gen_ptr1_dis, g_bg_buffer[page], g_bg_len[page]);
+			memcpy(g_vga_backbuffer, g_bg_buffer[page], g_bg_len[page]);
 #endif
 			return;
 		}
@@ -2898,10 +2898,10 @@ static void load_page(const int page)
 				g_bg_len[page] = get_filelength();
 
 				read_datfile(handle, g_bg_buffer[page], g_bg_len[page]);
-				decomp_rle(g_gen_ptr1_dis, g_bg_buffer[page]);
+				decomp_rle(g_vga_backbuffer, g_bg_buffer[page]);
 			} else {
 				read_datfile(handle, g_page_buffer, 64000);
-				decomp_rle(g_gen_ptr1_dis, g_page_buffer);
+				decomp_rle(g_vga_backbuffer, g_page_buffer);
 			}
 #else
 			ptr = gen_alloc(O_WIDTH * O_HEIGHT);
@@ -2912,10 +2912,10 @@ static void load_page(const int page)
 
 				read_datfile(handle, g_page_buffer, g_bg_len[page]);
 				decomp_rle(g_bg_buffer[page], g_page_buffer);
-				memcpy(g_gen_ptr1_dis, g_bg_buffer[page], g_bg_len[page]);
+				memcpy(g_vga_backbuffer, g_bg_buffer[page], g_bg_len[page]);
 			} else {
 				read_datfile(handle, g_page_buffer, 64000);
-				decomp_rle(g_gen_ptr1_dis, g_page_buffer);
+				decomp_rle(g_vga_backbuffer, g_page_buffer);
 			}
 #endif
 			close(handle);
@@ -2945,8 +2945,8 @@ static void load_typus(const int typus)
 			decomp_pp20(g_gen_ptr5, g_typus_buffer[typus], g_typus_len[typus]);
 		} else {
 			/* load the file direct */
-			read_datfile(handle, g_gen_ptr1_dis, 25000);
-			decomp_pp20(g_gen_ptr5, g_gen_ptr1_dis, get_filelength());
+			read_datfile(handle, g_vga_backbuffer, 25000);
+			decomp_pp20(g_gen_ptr5, g_vga_backbuffer, get_filelength());
 		}
 		close(handle);
 	}
@@ -3631,7 +3631,7 @@ static signed short infobox(char *header, const signed short digits)
 
 	/* save the current background */
 	src = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
-	dst = g_gen_ptr1_dis;
+	dst = g_vga_backbuffer;
 
 	vgalib_copy_from_screen(dst, src, width, (lines + 2) * 8);
 
@@ -3665,7 +3665,7 @@ static signed short infobox(char *header, const signed short digits)
 	mouse_bg();
 
 	dst = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
-	src = g_gen_ptr1_dis;
+	src = g_vga_backbuffer;
 
 	vgalib_copy_to_screen(dst, src, width, 8 * (lines + 2));
 
@@ -3766,7 +3766,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 
 	/* save the current background */
 	src = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
-	dst = g_gen_ptr1_dis;
+	dst = g_vga_backbuffer;
 
 	vgalib_copy_from_screen(dst, src, width, 8 * (lines_sum + 2));
 
@@ -3899,7 +3899,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 
 	/* restore the previous background */
 	dst = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
-	src = g_gen_ptr1_dis;
+	src = g_vga_backbuffer;
 	vgalib_copy_to_screen(dst, src, width, 8 * (lines_sum + 2));
 
 	mouse_cursor();
@@ -4588,14 +4588,14 @@ static void save_background(void)
 	}
 
 	if (x_1) {
-		p = g_gen_ptr1_dis + y_1 * O_WIDTH + x_1;
+		p = g_vga_backbuffer + y_1 * O_WIDTH + x_1;
 		vgalib_copy_from_screen(g_picbuf1, p, w_1, h_1);
 	}
 
-	p = g_gen_ptr1_dis + y_2 * O_WIDTH + x_2;
+	p = g_vga_backbuffer + y_2 * O_WIDTH + x_2;
 	vgalib_copy_from_screen(g_picbuf2, p, w_2, h_2);
 
-	p = g_gen_ptr1_dis + y_3 * O_WIDTH + x_3;
+	p = g_vga_backbuffer + y_3 * O_WIDTH + x_3;
 	vgalib_copy_from_screen(g_picbuf3, p, w_3, h_3);
 }
 
@@ -5194,14 +5194,14 @@ static void refresh_screen(void)
 	unsigned char* dst;
 
 	if (g_screen_var) {
-		g_gfx_ptr = g_gen_ptr1_dis;
+		g_gfx_ptr = g_vga_backbuffer;
 		load_page(g_gen_page);
 		save_background();
 
 		/* page with base values and hero is not male */
 		if ((g_gen_page == 0) && (g_hero.sex != 0)) {
 
-			dst = g_gen_ptr1_dis + 7 * O_WIDTH + 305;
+			dst = g_vga_backbuffer + 7 * O_WIDTH + 305;
 			src = g_buffer_sex_dat + 256 * g_hero.sex;
 			vgalib_copy_to_screen(dst, src, 16, 16);
 		}
@@ -5212,13 +5212,13 @@ static void refresh_screen(void)
 			/* Hide the arrow buttons to the other pages */
 
 			/* Hide right arrow */
-			dst = g_gen_ptr1_dis + 178 * O_WIDTH + 284;
+			dst = g_vga_backbuffer + 178 * O_WIDTH + 284;
 			src = g_buffer_sex_dat + 512;
 			vgalib_copy_to_screen(dst, src, 20, 15);
 
 			/* Hide left arrow */
 			if (g_dsagen_lang == LANG_EN) {
-				dst = g_gen_ptr1_dis + 178 * O_WIDTH + 145;
+				dst = g_vga_backbuffer + 178 * O_WIDTH + 145;
 				vgalib_copy_to_screen(dst, src, 20, 15);
 			}
 		}
@@ -5227,7 +5227,7 @@ static void refresh_screen(void)
 		if (g_gen_page < 5) {
 
 			/* draw DMENGE.DAT or the archetype image and name */
-			dst = g_gen_ptr1_dis + 8 * O_WIDTH + 16;
+			dst = g_vga_backbuffer + 8 * O_WIDTH + 16;
 
 			if (g_hero.typus) {
 
@@ -5259,7 +5259,7 @@ static void refresh_screen(void)
 		if (g_hero.typus) {
 			/* draw the head to the backbuffer */
 
-			g_dst_dst = g_gen_ptr1_dis;
+			g_dst_dst = g_vga_backbuffer;
 
 			draw_head();
 
@@ -5270,7 +5270,7 @@ static void refresh_screen(void)
 
 		/* copy backbuffer to screen */
 		dst = g_gfx_ptr = g_vga_memstart;
-		src = g_gen_ptr1_dis;
+		src = g_vga_backbuffer;
 		mouse_bg();
 		vgalib_copy_to_screen(dst, src, O_WIDTH, O_HEIGHT);
 		mouse_cursor();
@@ -7248,14 +7248,14 @@ static void intro(void)
 		nvf.height = &height;
 
 		for (i = 7; i >= 0; i--) {
-			nvf.dst = g_gen_ptr1_dis + i * 960L + 9600;
+			nvf.dst = g_vga_backbuffer + i * 960L + 9600;
 			nvf.no = i + 1;
 			process_nvf(&nvf);
 
 		}
 
 		/* set dst */
-		nvf.dst = g_gen_ptr1_dis;
+		nvf.dst = g_vga_backbuffer;
 		/* set no */
 		nvf.no = 0;
 		process_nvf(&nvf);
@@ -7273,7 +7273,7 @@ static void intro(void)
 			g_dst_y1 = 140;
 			g_dst_x2 = 207;
 			g_dst_y2 = 149;
-			g_dst_src = (unsigned char*)(i * 960 + g_gen_ptr1_dis + 9600);
+			g_dst_src = (unsigned char*)(i * 960 + g_vga_backbuffer + 9600);
 			do_draw_pic(0);
 			vsync_or_key(20);
 		}
@@ -7286,12 +7286,12 @@ static void intro(void)
 			g_dst_y1 = cnt2 + 60;
 			g_dst_x2 = 95;
 			g_dst_y2 = cnt2 + cnt1 + 59;
-			g_dst_src = g_dst_dst = g_gen_ptr1_dis;
+			g_dst_src = g_dst_dst = g_vga_backbuffer;
 			do_draw_pic(0);
 
 			if (cnt1 != 100) {
 
-				g_dst_src = g_gen_ptr1_dis + i * 960 + 9600;
+				g_dst_src = g_vga_backbuffer + i * 960 + 9600;
 				if (cnt1 % 4 == 1)
 					i++;
 
@@ -7302,7 +7302,7 @@ static void intro(void)
 				g_dst_y1 = 150;
 				g_dst_x2 = 95;
 				g_dst_y2 = 159;
-				g_dst_dst = g_gen_ptr1_dis;
+				g_dst_dst = g_vga_backbuffer;
 				do_draw_pic(2);
 			}
 
@@ -7310,7 +7310,7 @@ static void intro(void)
 			g_dst_y1 = 50;
 			g_dst_x2 = 207;
 			g_dst_y2 = 149;
-			g_dst_src = g_gen_ptr1_dis;
+			g_dst_src = g_vga_backbuffer;
 
 			g_src_x1 = 0;
 			g_src_y1 = 60;
@@ -7340,7 +7340,7 @@ static void intro(void)
 		nvf.type = 0;
 		nvf.width = &width;
 		nvf.height = &height;
-		nvf.dst = g_gen_ptr1_dis;
+		nvf.dst = g_vga_backbuffer;
 		nvf.no = 0;
 
 		process_nvf(&nvf);
@@ -7357,7 +7357,7 @@ static void intro(void)
 		g_dst_y1 = 50;
 		g_dst_x2 = 259;
 		g_dst_y2 = 149;
-		g_dst_src = g_gen_ptr1_dis;
+		g_dst_src = g_vga_backbuffer;
 		do_draw_pic(0);
 
 		vsync_or_key(200);
@@ -7373,7 +7373,7 @@ static void intro(void)
 		nvf.type = 0;
 		nvf.width = &width;
 		nvf.height = &height;
-		nvf.dst = g_gen_ptr1_dis;
+		nvf.dst = g_vga_backbuffer;
 		nvf.no = 0;
 
 		process_nvf(&nvf);
@@ -7389,7 +7389,7 @@ static void intro(void)
 		g_dst_y1 = 0;
 		g_dst_x2 = 319;
 		g_dst_y2 = 99;
-		g_dst_src = g_gen_ptr1_dis;
+		g_dst_src = g_vga_backbuffer;
 		do_draw_pic(0);
 
 		/* load GENTIT.DAT */
@@ -7401,7 +7401,7 @@ static void intro(void)
 		nvf.type = 0;
 		nvf.width = &width;
 		nvf.height = &height;
-		nvf.dst = g_gen_ptr1_dis;
+		nvf.dst = g_vga_backbuffer;
 		nvf.no = 0;
 
 		process_nvf(&nvf);
@@ -7411,13 +7411,13 @@ static void intro(void)
 		g_dst_y1 = 110;
 		g_dst_x2 = 329;
 		g_dst_y2 = 159;
-		g_dst_src = g_gen_ptr1_dis;
+		g_dst_src = g_vga_backbuffer;
 		do_draw_pic(0);
 
-		memcpy(g_gen_ptr1_dis + 500, &g_pal_dsalogo, 96);
+		memcpy(g_vga_backbuffer + 500, &g_pal_dsalogo, 96);
 
-		pal_src = (signed char*)g_gen_ptr1_dis + 500;
-		pal_dst = (signed char*)g_gen_ptr1_dis;
+		pal_src = (signed char*)g_vga_backbuffer + 500;
+		pal_dst = (signed char*)g_vga_backbuffer;
 
 		memset(pal_dst, 0, 96);
 
@@ -7432,7 +7432,7 @@ static void intro(void)
 		flen = read_datfile(handle, g_buffer_heads_dat, 20000);
 		close(handle);
 
-		decomp_pp20(g_gen_ptr1_dis, g_buffer_heads_dat, (unsigned short)flen);
+		decomp_pp20(g_vga_backbuffer, g_buffer_heads_dat, (unsigned short)flen);
 
 		/* clear screen */
 		call_fill_rect_gen(g_vga_memstart, 0, 0, O_WIDTH - 1, O_HEIGHT - 1, 0);
@@ -7444,10 +7444,10 @@ static void intro(void)
 		g_dst_y1 = 0;
 		g_dst_x2 = 319;
 		g_dst_y2 = 139;
-		g_dst_src = g_gen_ptr1_dis;
+		g_dst_src = g_vga_backbuffer;
 		do_draw_pic(0);
 
-		memcpy(g_pal_roalogo, g_gen_ptr1_dis + 140 * O_WIDTH + 2, 3 * 256);
+		memcpy(g_pal_roalogo, g_vga_backbuffer + 140 * O_WIDTH + 2, 3 * 256);
 
 		/* load E_GENTIT.DAT */
 		handle = open_datfile(17);
@@ -7458,7 +7458,7 @@ static void intro(void)
 		nvf.type = 0;
 		nvf.width = &width;
 		nvf.height = &height;
-		nvf.dst = g_gen_ptr1_dis;
+		nvf.dst = g_vga_backbuffer;
 		nvf.no = 0;
 
 		process_nvf(&nvf);
@@ -7466,15 +7466,15 @@ static void intro(void)
 		/* draw E_GENTIT.DAT */
 		g_dst_y1 = 140;
 		g_dst_y2 = 189;
-		g_dst_src = g_gen_ptr1_dis;
+		g_dst_src = g_vga_backbuffer;
 		do_draw_pic(0);
 
 		memcpy(g_pal_roalogo + 3 * 32, &g_pal_dsalogo, 3 * 32);
 		set_palette(g_pal_roalogo + 0x180, 128, 128);
-		memcpy(g_gen_ptr1_dis + 0x1f4, &g_pal_dsalogo, 3 * 32);
+		memcpy(g_vga_backbuffer + 0x1f4, &g_pal_dsalogo, 3 * 32);
 
-		pal_src = (signed char*)g_gen_ptr1_dis + 500;
-		pal_dst = (signed char*)g_gen_ptr1_dis;
+		pal_src = (signed char*)g_vga_backbuffer + 500;
+		pal_dst = (signed char*)g_vga_backbuffer;
 
 		memset(pal_dst, 0, 96);
 
@@ -7491,12 +7491,12 @@ static void intro(void)
 
 	if (g_dsagen_lang == LANG_DE) {
 
-		memcpy(g_gen_ptr1_dis, &g_pal_dsalogo, 96);
+		memcpy(g_vga_backbuffer, &g_pal_dsalogo, 96);
 
-		pal_src = (signed char*)g_gen_ptr1_dis + 500;
-		pal_dst = (signed char*)g_gen_ptr1_dis;
+		pal_src = (signed char*)g_vga_backbuffer + 500;
+		pal_dst = (signed char*)g_vga_backbuffer;
 
-		memset(g_gen_ptr1_dis + 500, 0, 96);
+		memset(g_vga_backbuffer + 500, 0, 96);
 
 		for (i = 0; i < 64; i++) {
 			pal_fade_out(pal_dst, pal_src, 32);
@@ -7505,12 +7505,12 @@ static void intro(void)
 		}
 	} else {
 
-		memcpy(g_gen_ptr1_dis, &g_pal_roalogo, 3 * 256);
+		memcpy(g_vga_backbuffer, &g_pal_roalogo, 3 * 256);
 
-		pal_src = (signed char*)g_gen_ptr1_dis + 800;
-		pal_dst = (signed char*)g_gen_ptr1_dis;
+		pal_src = (signed char*)g_vga_backbuffer + 800;
+		pal_dst = (signed char*)g_vga_backbuffer;
 
-		memset(g_gen_ptr1_dis + 800, 0, 3 * 256);
+		memset(g_vga_backbuffer + 800, 0, 3 * 256);
 
 		for (i = 0; i < 64; i++) {
 			pal_fade_out(pal_dst, pal_src, 256);
