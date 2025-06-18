@@ -1336,7 +1336,7 @@ unsigned char* g_vga_memstart;
 static unsigned char* g_gfx_ptr;
 static char *g_textbuffer;  // buffer for dynamically created strings
 static char *g_digitbuffer; // pointer near the end of g_textbuffer
-static unsigned char *g_gen_ptr5;
+static unsigned char *g_buffer_typus;
 static unsigned char *g_buffer_dmenge_dat;
 static unsigned char *g_buffer_current_head;
 static unsigned char *g_picbuf1;
@@ -1520,8 +1520,8 @@ static int alloc_buffers(void)
 	g_buffer_sex_dat = gen_alloc(812);
 	if (g_buffer_sex_dat == NULL) errors++;
 
-	g_gen_ptr5 = (gen_alloc(23660) + 8);
-	if (g_gen_ptr5 == NULL) errors++;
+	g_buffer_typus = (gen_alloc(23660) + 8);
+	if (g_buffer_typus == NULL) errors++;
 
 	g_buffer_dmenge_dat = (gen_alloc(23660) + 8);
 	if (g_buffer_dmenge_dat == NULL) errors++;
@@ -1619,9 +1619,9 @@ void free_buffers(void)
 		g_buffer_dmenge_dat = NULL;
 	}
 
-	if ((host_ptr = g_gen_ptr5 - 8) != 0) {
+	if ((host_ptr = g_buffer_typus - 8) != 0) {
 		free(host_ptr);
-		g_gen_ptr5 = NULL;
+		g_buffer_typus = NULL;
 	}
 
 	if (g_textbuffer != NULL) {
@@ -2929,7 +2929,7 @@ static void load_typus(const int typus)
 
 	/* check if this image is in the buffer */
 	if (g_typus_buffer[typus]) {
-		decomp_pp20(g_gen_ptr5,	g_typus_buffer[typus], g_typus_len[typus]);
+		decomp_pp20(g_buffer_typus, g_typus_buffer[typus], g_typus_len[typus]);
 	} else {
 
 		const int handle = open_datfile(index);
@@ -2942,11 +2942,11 @@ static void load_typus(const int typus)
 
 			read_datfile(handle, g_typus_buffer[typus], g_typus_len[typus]);
 
-			decomp_pp20(g_gen_ptr5, g_typus_buffer[typus], g_typus_len[typus]);
+			decomp_pp20(g_buffer_typus, g_typus_buffer[typus], g_typus_len[typus]);
 		} else {
 			/* load the file direct */
 			read_datfile(handle, g_vga_backbuffer, 25000);
-			decomp_pp20(g_gen_ptr5, g_vga_backbuffer, get_filelength());
+			decomp_pp20(g_buffer_typus, g_vga_backbuffer, get_filelength());
 		}
 		close(handle);
 	}
@@ -5232,7 +5232,7 @@ static void refresh_screen(void)
 			if (g_hero.typus) {
 
 				g_need_refresh = 1;
-				vgalib_copy_to_screen(dst, g_gen_ptr5, 128, 184);
+				vgalib_copy_to_screen(dst, g_buffer_typus, 128, 184);
 
 				if (g_hero.sex != 0) {
 					print_str(get_text(271 + g_hero.typus),
@@ -6203,7 +6203,7 @@ static void select_typus(void)
 			mouse_bg();
 			call_fill_rect_gen(g_vga_memstart, 16, 8, 143, 191, 0);
 			wait_for_vsync();
-			set_palette(g_gen_ptr5 + 0x5c02, 0, 32);
+			set_palette(g_buffer_typus + 0x5c02, 0, 32);
 			mouse_cursor();
 
 			g_head_typus = (g_hero.typus > 10 ? 10 : g_hero.typus);
@@ -6913,7 +6913,7 @@ static void choose_typus(void)
 	mouse_bg();
 	call_fill_rect_gen(g_vga_memstart, 16, 8, 143, 191, 0);
 	wait_for_vsync();
-	set_palette(g_gen_ptr5 + 0x5c02, 0, 32);
+	set_palette(g_buffer_typus + 0x5c02, 0, 32);
 	mouse_cursor();
 
 
