@@ -4445,34 +4445,29 @@ static void enter_name(void)
  */
 static void draw_head(void)
 {
-	struct nvf_desc nvf;
-	signed short width;
-	signed short height;
+	if ((g_gen_page == 0) || (g_gen_page > 4)) {
 
-	nvf.dst = g_buffer_current_head;
-	nvf.src = g_buffer_heads_dat;
-	nvf.no = g_head_current;
-	nvf.type = 0;
-	nvf.width = &width;
-	nvf.height = &height;
+		struct nvf_desc nvf;
+		signed short width;
+		signed short height;
 
-	process_nvf(&nvf);
+		nvf.dst = g_buffer_current_head;
+		nvf.src = g_buffer_heads_dat;
+		nvf.no = g_head_current;
+		nvf.type = 0;
+		nvf.width = &width;
+		nvf.height = &height;
 
-	g_dst_src = g_buffer_current_head;
+		process_nvf(&nvf);
 
-	g_dst_x1 = 272;
-	g_dst_x2 = 303;
+		g_dst_src = g_buffer_current_head;
 
-	if (g_gen_page == 0) {
+		g_dst_x1 = 272;
+		g_dst_x2 = 303;
 
-		g_dst_y1 = 8;
-		g_dst_y2 = 39;
-		do_draw_pic(0);
+		g_dst_y1 = (g_gen_page == 0 ? 8 : 4);
+		g_dst_y2 = (g_gen_page == 0 ? 39 : 35);
 
-	} else if (g_gen_page > 4) {
-
-		g_dst_y1 = 4;
-		g_dst_y2 = 35;
 		do_draw_pic(0);
 	}
 }
