@@ -3603,7 +3603,6 @@ static signed short infobox(char *header, const signed short digits)
 	signed short l_text_x_bak;
 	signed short l_text_y_bak;
 	signed short l_text_x_end_bak;
-	signed short i;
 
 	signed short lines;
 	signed short width;
@@ -3690,7 +3689,6 @@ static void fill_radio_button(const signed short old_pos, const signed short new
 {
 	signed short x;
 	signed short y;
-	signed short i;
 
 	mouse_bg();
 
