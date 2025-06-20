@@ -4678,38 +4678,18 @@ static void restore_background(unsigned char* dst)
  * \brief makes a valuta string
  * \param[out] dst the destination
  * \param[in] money the money in Heller
- *
- * \note This funcion may have slight performance issues in the game (not here).
  */
-static void make_valuta_str(char *dst, signed long money)
+static void make_valuta_str(char * const dst, const signed long money)
 {
-	/* Orig-BUG: d can overflow  on D > 65536*/
-	unsigned short d = 0;
-	unsigned short s = 0;
+	int d = 0, s = 0, h = 0;
 
-	/*	These loops are not very performant.
-		They take longer the more money you have.
-		Here is a much better solution.
-	*/
-
-	/*
-	d = money / 100;
-	money -= d * 100;
-
-	s = money / 10;
-	money -= s * 10;
-	*/
-	while (money / 100) {
-		d++;
-		money -= 100;
+	if (money > 0) {
+		d = money / 100;
+		s = money % 100 / 10;
+		h = money % 10;
 	}
 
-	while (money / 10) {
-		s++;
-		money -= 10;
-	}
-
-	sprintf(dst, get_text(69), d, s, (signed short)money);
+	sprintf(dst, get_text(69), d, s, h);
 }
 
 
