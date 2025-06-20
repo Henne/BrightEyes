@@ -2996,6 +2996,8 @@ static void init_colors(void)
  */
 static void init_video(void)
 {
+	save_display_stat(&g_display_page_bak);
+
 	/* set the video mode to 320x200 8bit */
 	set_video_mode(0x13);
 
@@ -7535,10 +7537,6 @@ int main_gen(int argc, char **argv)
 	}
 
 	load_essential_files();
-
-	init_colors();
-
-	save_display_stat(&g_display_page_bak);
 
 	init_video();
 
