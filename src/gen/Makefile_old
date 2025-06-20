@@ -1,6 +1,7 @@
 CC=gcc
-CFLAGS=-O0 -g -fno-asm -fopenmp
-
+CFLAGS=-O2 -g -fno-asm -fopenmp
+#CC=clang
+#CFLAGS=-O0 -g -fno-asm -fopenmp=libgomp
 
 # * get a mingw-zip-file                 from https://github.com/libsdl-org/SDL/releases
 #   and SDL2_mixer-devel-2.8.1-mingw.zip from https://www.libsdl.org/projects/SDL_mixer/release
