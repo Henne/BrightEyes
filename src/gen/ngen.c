@@ -2291,8 +2291,7 @@ static void decomp_rle(unsigned char *dst, unsigned char *src)
  * \return swapped 32-bit integer value
  * \note let v = 0xdeadbeef => swap_u32(v) = 0xefbeadde
  * \note tested successfull with Linux GCC, CLANG on x86_64 and ARM
- * \note tested successfull with BCC with {-O, -G, -Od}
- * \note failed on BCC DOS with enabled optimization (-O1, -O2)
+ * \note tested successfull with BCC with {-O, -G, -Od, -O1, -O2}
  */
 static unsigned long swap_u32(const unsigned long v)
 {
