@@ -5497,20 +5497,14 @@ static void calc_at_pa(void)
  */
 static void skill_inc_novice(const signed short skill)
 {
-	signed short done = 0;
+	int done = 0;
 
 	while (!done) {
-		/* leave the loop if 3 tries have been done */
-		if (g_skill_incs[skill].tries == 3) {
+
+		/* leave the loop if 3 tries have been done or no attempts are left */
+		if ((g_skill_incs[skill].tries == 3) || (g_hero.skill_incs == 0)) {
 			/* set the flag to leave this loop */
 			done = 1;
-#if !defined(__BORLANDC__)
-		} else
-
-		/* Original-Bugfix: add check if skill_attempts are left */
-		if (g_hero.skill_incs == 0) {
-			done++;
-#endif
 		} else {
 			/* decrement counter for skill increments */
 			g_hero.skill_incs--;
@@ -5548,38 +5542,32 @@ static void skill_inc_novice(const signed short skill)
  */
 static void spell_inc_novice(const signed short spell)
 {
-	signed short done = 0;
+	int done = 0;
 
 	while (!done) {
-		/* leave the loop if 3 tries have been done */
-		if (g_spell_incs[spell].tries == 3) {
-			done = 1;
-			continue;
-		}
 
-#if !defined(__BORLANDC__)
-		/* Original-Bugfix: add check if skill_attempts are left */
-		if (g_hero.spell_incs == 0) {
-			done = 1;
-			continue;
-		}
-#endif
-		/* decrement counter for spell increments */
-		g_hero.spell_incs--;
-
-		/* check if the test is passed */
-		if (random_interval_gen(2, 12) > g_hero.spells[spell]) {
-
-			/* increment spell */
-			g_hero.spells[spell]++;
-
-			/* set inc tries for this spell to zero */
-			g_spell_incs[spell].tries = 0;
-
-			/* set the flag to leave this loop */
+		/* leave the loop if 3 tries have been done or no attempts are left */
+		if ((g_spell_incs[spell].tries == 3) || (g_hero.spell_incs == 0)) {
 			done = 1;
 		} else {
-			g_spell_incs[spell].tries++;
+
+			/* decrement counter for spell increments */
+			g_hero.spell_incs--;
+
+			/* check if the test is passed */
+			if (random_interval_gen(2, 12) > g_hero.spells[spell]) {
+
+				/* increment spell */
+				g_hero.spells[spell]++;
+
+				/* set inc tries for this spell to zero */
+				g_spell_incs[spell].tries = 0;
+
+				/* set the flag to leave this loop */
+				done = 1;
+			} else {
+				g_spell_incs[spell].tries++;
+			}
 		}
 	}
 }
