@@ -1004,9 +1004,6 @@ static signed short g_text_x_mod = 0;
 
 static volatile struct struct_hero g_hero = {0};
 
-static signed short g_midi_disabled = 0;
-static signed short g_use_cda = 0;
-
 static unsigned char* g_bg_buffer[]       = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 static signed long g_bg_len[]    = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 static unsigned char *g_typus_buffer[]    = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -1414,7 +1411,11 @@ static struct inc_states g_spell_incs[86];
 signed short g_called_with_args;
 static signed short g_param_level;
 
-/* AIL MANAGEMENT VARIABLES */
+/* MUSIC MANAGEMENT VARIABLES */
+
+enum e_music { MUSIC_OFF = 0, MUSIC_CDA = 1, MUSIC_XMID = 2, MUSIC_AWS = 3};
+static int g_music = MUSIC_CDA; /* default is CDA/FLAC */
+
 #if defined(__BORLANDC__)
 static const char g_str_sound_cfg[] = "SOUND.CFG";
 static const char g_str_sound_adv[] = "SOUND.ADV";
@@ -1440,7 +1441,6 @@ static unsigned char* g_snd_timbre_cache;
 static void* g_form_xmid;
 static unsigned char* g_snd_driver;
 #else
-static int g_sdl_music = 0;
 static Mix_Music *music = NULL;
 #endif
 
@@ -3990,7 +3990,6 @@ static signed short load_driver(const char* fname, const signed short type, sign
 					}
 				}
 
-				g_midi_disabled = 0;
 				return 1;
 			} else {
 				infobox(g_str_soundhw_not_found, 0);
@@ -3998,38 +3997,7 @@ static signed short load_driver(const char* fname, const signed short type, sign
 		}
 	}
 
-	g_midi_disabled = 1;
 	return 0;
-}
-
-static void read_soundcfg(void)
-{
-	signed short handle;
-	signed short port;
-
-	g_use_cda = 0;
-	g_midi_disabled = 1;
-
-	handle = open(g_str_sound_cfg, 0x8001);
-	if (handle != -1) {
-		_read(handle, (unsigned char*)&port, 2);
-		_close(handle);
-
-		/* Small hack: enable MIDI instead of CD-Audio */
-		if ((port) && (load_driver(g_str_sound_adv, 3, port))) {
-			/* disable audio-cd */
-			g_use_cda = 0;
-			g_midi_disabled = 0;
-			return;
-		}
-	}
-
-	/* enable audio-cd, disable midi */
-	g_use_cda = 1;
-	g_midi_disabled = 1;
-
-	/* initialize audio-cd */
-	CD_audio_init();
 }
 
 static signed short *get_timbre(const signed short bank, const signed short patch)
@@ -4109,7 +4077,7 @@ static signed short load_sequence(const signed short index)
 	signed short handle;
 
 	if ((handle = open_datfile(index)) != -1) {
-		read_datfile(handle, g_form_xmid, 32767);
+		read_datfile(handle, g_form_xmid, 12500);
 		close(handle);
 		return 1;
 	}
@@ -4119,7 +4087,7 @@ static signed short load_sequence(const signed short index)
 
 static void stop_sequence(void)
 {
-	if ((g_midi_disabled == 0) && (readw(g_snd_driver_desc + 0x02) == 3))
+	if ((g_music == MUSIC_XMID) && (readw(g_snd_driver_desc + 0x02) == 3))
 	{
 		AIL_stop_sequence(g_snd_driver_handle, g_snd_sequence);
 		AIL_release_sequence_handle(g_snd_driver_handle, g_snd_sequence);
@@ -4130,7 +4098,7 @@ static void stop_sequence(void)
 static void restart_midi(void)
 {
 #if defined(__BORLANDC__)
-	if ((g_midi_disabled == 0) && (readw(g_snd_driver_desc + 0x02) == 3) &&
+	if ((g_music == MUSIC_XMID) && (readw(g_snd_driver_desc + 0x02) == 3) &&
 		(AIL_sequence_status(g_snd_driver_handle, g_snd_sequence) == 2))
 	{
 		AIL_start_sequence(g_snd_driver_handle, g_snd_sequence);
@@ -4141,7 +4109,7 @@ static void restart_midi(void)
 #if defined(__BORLANDC__)
 static void play_midi(const signed short index)
 {
-	if ((g_midi_disabled == 0) && (readw(g_snd_driver_desc + 0x02) == 3))
+	if ((g_music == MUSIC_XMID) && (readw(g_snd_driver_desc + 0x02) == 3))
 	{
 		stop_sequence();
 		load_sequence(index);
@@ -4153,48 +4121,86 @@ static void play_midi(const signed short index)
 static void start_music(const signed short track)
 {
 #if defined(__BORLANDC__)
-	if (!g_use_cda && !g_midi_disabled) {
+	if (g_music == MUSIC_XMID) {
 		play_midi(track);
-	} else {
+	} else if (g_music == MUSIC_CDA) {
 		CD_play_track(4);
 	}
 #else
-	if (Mix_PlayMusic(music, -1) == -1) {
-		fprintf(stderr, "ERROR: music cannot be played: %s\n", SDL_GetError());
+	if (g_music == MUSIC_CDA) {
+		if (track == 33) {
+#if defined(_WIN32)
+			music = Mix_LoadMUS("..\\..\\music\\1992-Die Schicksalsklinge\\04 A New Life is Born.flac");
+#else
+			music = Mix_LoadMUS("../../music/1992-Die Schicksalsklinge/04 A New Life is Born.flac");
+#endif
+			if (music == NULL) {
+				fprintf(stderr, "ERROR: failed to load music file: %s\n", SDL_GetError());
+				g_music = MUSIC_OFF;
+				return;
+			}
+
+			if (Mix_PlayMusic(music, -1) == -1) {
+				fprintf(stderr, "ERROR: music cannot be played: %s\n", SDL_GetError());
+			}
+		}
 	}
 #endif
 }
 
-static void init_music(const unsigned long size)
+static void init_music(void)
 {
 #if defined(__BORLANDC__)
-	g_form_xmid = gen_alloc(size);
 
-	if (g_form_xmid != NULL) {
-		AIL_startup();
-		g_midi_disabled = 1;
+	if (g_music != MUSIC_OFF) {
+
+		signed short handle;
+		signed short port;
+
+		/* try to enable MIDI instead of CD-Audio */
+		handle = open(g_str_sound_cfg, 0x8001);
+		if (handle != -1) {
+			_read(handle, (unsigned char*)&port, 2);
+			_close(handle);
+
+			g_form_xmid = gen_alloc(12500);
+
+			if (g_form_xmid != NULL) {
+
+				AIL_startup();
+
+				if ((port) && (load_driver(g_str_sound_adv, 3, port))) {
+					g_music = MUSIC_XMID;
+					return;
+				}
+
+				AIL_shutdown(NULL);
+
+				free(g_form_xmid);
+				g_form_xmid = NULL;
+			}
+		}
+
+		if (g_music == MUSIC_CDA) {
+			/* initialize audio-cd */
+			CD_audio_init();
+		}
 	}
 #else
-	if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0) {
-		fprintf(stderr, "ERROR: failed to initialize Sound: %s\n", SDL_GetError());
-		return;
-	}
+	if (g_music == MUSIC_CDA) {
 
-	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) == -1) {
-		fprintf(stderr, "ERROR: failed to initialize SDL2_mixer: %s\n", SDL_GetError());
-		return;
-	}
-#if defined(_WIN32)
-	music = Mix_LoadMUS("..\\..\\music\\1992-Die Schicksalsklinge\\04 A New Life is Born.flac");
-#else
-	music = Mix_LoadMUS("../../music/1992-Die Schicksalsklinge/04 A New Life is Born.flac");
-#endif
-	if (music == NULL) {
-		fprintf(stderr, "ERROR: failed to load music file: %s\n", SDL_GetError());
-		return;
-	}
+		if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0) {
+			fprintf(stderr, "ERROR: failed to initialize Sound: %s\n", SDL_GetError());
+			g_music = MUSIC_OFF;
+			return;
+		}
 
-	g_sdl_music = 1;
+		if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) == -1) {
+			fprintf(stderr, "ERROR: failed to initialize SDL2_mixer: %s\n", SDL_GetError());
+			g_music = MUSIC_OFF;
+			return;
+		}
+	}
 #endif
 }
 
@@ -4202,15 +4208,22 @@ static void init_music(const unsigned long size)
 void exit_music(void)
 {
 #if defined(__BORLANDC__)
-	AIL_shutdown(NULL);
-
-	CD_audio_stop();
-#else
-	if (music != NULL) {
-		Mix_FreeMusic(music);
-		music = NULL;
+	if (g_music == MUSIC_XMID) {
+		AIL_shutdown(NULL);
+	} else if (g_music == MUSIC_CDA) {
+		CD_audio_stop();
 	}
-	Mix_CloseAudio();
+#else
+	if (g_music == MUSIC_CDA) {
+
+		if (music != NULL) {
+			Mix_FreeMusic(music);
+			music = NULL;
+		}
+
+		Mix_CloseAudio();
+	}
+	g_music = MUSIC_OFF;
 #endif
 }
 
@@ -4225,9 +4238,9 @@ static void interrupt timer_isr(void)
 		g_random_gen_seed2 = 0;
 
 	/* restart music */
-	if (!g_use_cda && !g_midi_disabled) {
+	if (g_music == MUSIC_XMID) {
 		restart_midi();
-	} else {
+	} else if (g_music == MUSIC_CDA) {
 		CD_enable_repeat();
 	}
 
@@ -4246,7 +4259,9 @@ static Uint32 gen_timer_isr(Uint32 interval, void *param)
 		}
 
 		/* update MIDI */
-		restart_midi();
+		if (g_music == MUSIC_XMID) {
+			restart_midi();
+		}
 
 		if (SDL_UnlockMutex(g_sdl_timer_mutex) == -1) {
 			fprintf(stderr, "ERROR: Unlock Mutex in %s\n", __func__);
@@ -7502,8 +7517,6 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int S
 int main_gen(int argc, char **argv)
 #endif
 {
-	signed short sound_off = 0;
-
 #if defined(_WIN32)
 	int argc;
 	LPWSTR cmdline = GetCommandLineW();
@@ -7517,8 +7530,7 @@ int main_gen(int argc, char **argv)
 		g_param_level = argv[2][0];
 
 	if ((argc > 3) && (argv[3][0] == '0')) {
-		g_midi_disabled = 1;
-		sound_off = 1;
+		g_music = MUSIC_OFF;
 	}
 
 	detect_datfile();
@@ -7546,14 +7558,10 @@ int main_gen(int argc, char **argv)
 
 	mouse_enable();
 
-	if (sound_off == 0) {
-		init_music(13000);
-#if defined(__BORLANDC__)
-		read_soundcfg();
-#endif
+	if (g_music != MUSIC_OFF) {
+		init_music();
+		start_music(33);
 	}
-
-	start_music(33);
 
 	if (g_called_with_args == 0) {
 		intro();
@@ -7572,7 +7580,9 @@ int main_gen(int argc, char **argv)
 
 	do_gen();
 
-	exit_music();
+	if (g_music != MUSIC_OFF) {
+		exit_music();
+	}
 
 #if defined(__BORLANDC__)
 	mouse_bg();
