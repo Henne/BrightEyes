@@ -3316,23 +3316,6 @@ static signed short print_line(char *str)
 }
 
 /**
- * \brief get the numer of linebreaks
- * \param[in] str
- */
-static int count_linebreaks(const char *str)
-{
-	int i = 0;
-	
-	while (*str) {
-		if (*str++ == 0x0d) {
-			i++;
-		}
-	}
-
-	return i;
-}
-
-/**
  * \brief get the width of a string in terms of character font size
  * \param[in] str
  */
