@@ -19,6 +19,8 @@ A Linux binary can be build with make -f Makefile_old and is called ./ngen_(comp
 You may use cmake to build a ngen_cc
 e.g. ngen_clang or ngen_gcc
 
+Remark: make sure you have the package libomp-dev installed for OpenMP with Clang
+
 
 ## DSAGEN.DAT Versions
 
