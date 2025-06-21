@@ -58,7 +58,7 @@ static void sdl_renderer_info(void)
 			fprintf(stderr, "flags    = 0x%02x\n", info.flags);
 			fprintf(stderr, "#txt     = %02d\n", info.num_texture_formats);
 			fprintf(stderr, "textures = ");
-			for (int j = 0; j < info.num_texture_formats; j++) {
+			for (Uint32 j = 0; j < info.num_texture_formats; j++) {
 				switch (info.texture_formats[j]) {
 				case SDL_PIXELFORMAT_INDEX1LSB: fprintf(stderr, "INDEX1LSB "); break;
 				case SDL_PIXELFORMAT_INDEX1MSB: fprintf(stderr, "INDEX1MSB "); break;
