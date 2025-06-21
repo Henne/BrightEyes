@@ -360,6 +360,8 @@ void sdl_change_window_size(SDL_mutex *timer_mutex)
 	} else {
 		fprintf(stderr, "ERROR: Lock timer_mutex in %s\n", __func__);
 	}
+
+	sdl_update_rect_window(0, 0, O_WIDTH, O_HEIGHT);
 }
 #endif
 
