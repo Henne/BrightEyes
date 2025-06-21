@@ -1325,8 +1325,10 @@ static signed short g_random_gen_seed = 0x327b;
 
 /* START OF UNINITIALIZE GLOBAL VARIABLE _BSS DS:0x2474*/
 static signed short g_ro_var[7];
+#if defined(__BORLANDC__)
 static signed short g_display_mode_bak;
 static signed short g_display_page_bak;
+#endif
 static unsigned char* g_vga_backbuffer;
 static unsigned char* g_page_buffer;
 unsigned char* g_vga_memstart;
@@ -2996,7 +2998,9 @@ static void init_colors(void)
  */
 static void init_video(void)
 {
+#if defined(__BORLANDC__)
 	save_display_stat(&g_display_page_bak);
+#endif
 
 	/* set the video mode to 320x200 8bit */
 	set_video_mode(0x13);
@@ -3009,10 +3013,14 @@ static void init_video(void)
  */
 void exit_video(void)
 {
+#if defined(__BORLANDC__)
 	/* restore old mode */
 	set_video_mode(g_display_mode_bak);
 	/* restore old page */
 	set_video_page(g_display_page_bak);
+#else
+	set_video_mode(0x00);
+#endif
 }
 
 static void do_draw_pic(const int mode)
