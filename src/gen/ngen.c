@@ -1342,6 +1342,8 @@ static unsigned char *g_picbuf1;
 static unsigned char *g_picbuf2;
 static unsigned char *g_picbuf3;
 static unsigned char *g_popup_line;
+static unsigned char *g_arrow_area;
+static unsigned char *g_mr_bar;
 
 static signed short g_text_x;
 static signed short g_text_y;
@@ -1543,6 +1545,12 @@ static int alloc_buffers(void)
 	g_buffer_current_head = (gen_alloc(1024 + 8) + 8);
 	if (g_buffer_current_head == NULL) errors++;
 
+	g_arrow_area = gen_alloc(4096);
+	if (g_arrow_area == NULL) errors++;
+
+	g_mr_bar = gen_alloc(1024);
+	if (g_mr_bar == NULL) errors++;
+
 	if (errors > 0) {
 		fprintf(stderr, g_str_malloc_error);
 	}
@@ -1613,6 +1621,16 @@ void free_buffers(void)
 	if (g_buffer_current_head != NULL) {
 		free(g_buffer_current_head - 8);
 		g_buffer_current_head = NULL;
+	}
+
+	if (g_arrow_area != NULL) {
+		free(g_arrow_area);
+		g_arrow_area = NULL;
+	}
+
+	if (g_mr_bar != NULL) {
+		free(g_mr_bar);
+		g_mr_bar = NULL;
 	}
 
 	if (g_buffer_dmenge_dat != NULL) {
@@ -2838,7 +2856,39 @@ static void load_essential_files(void)
 		count++;
 	}
 
-	if (count == 3) g_essentials_loaded = 1;
+	/* copy arrow area from GEN4.NVF/E_GEN4.NVF */
+	handle = open_datfile(4);
+	if (handle != -1) {
+		len = read_datfile(handle, g_page_buffer, 50000);
+		close(handle);
+
+		decomp_rle(g_vga_backbuffer, g_page_buffer);
+
+		vgalib_copy_from_screen(g_arrow_area, g_vga_backbuffer + 178 * O_WIDTH + 145, 170, 20);
+
+		memset(g_vga_backbuffer, 0, 64100);
+		memset(g_page_buffer, 0, 50000);
+
+		count++;
+	}
+
+	/* copy mr_bar from GEN1.NVF/E_GEN1.NVF */
+	handle = open_datfile(0);
+	if (handle != -1) {
+		len = read_datfile(handle, g_page_buffer, 50000);
+		close(handle);
+
+		decomp_rle(g_vga_backbuffer, g_page_buffer);
+
+		vgalib_copy_from_screen(g_mr_bar, g_vga_backbuffer + 182 * O_WIDTH + 145, 77, 9);
+
+		memset(g_vga_backbuffer, 0, 64100);
+		memset(g_page_buffer, 0, 50000);
+
+		count++;
+	}
+
+	if (count == 5) g_essentials_loaded = 1;
 }
 
 static void load_common_files(void)
@@ -4783,7 +4833,7 @@ static void print_values(void)
 			print_str(gen_itoa(g_hero.le_max + g_hero.attrib[6].current, tmp, 10), 296, 164);
 			/* print MR */
 			if (g_dsagen_lang == LANG_DE)
-				print_str(gen_itoa(g_hero.mr, tmp, 10), 232, 184);
+				print_str(gen_itoa(g_hero.mr, tmp, 10), 232 + 15, 184);
 			else
 				print_str(gen_itoa(g_hero.mr, tmp, 10), 255, 184);
 			break;
@@ -5189,6 +5239,14 @@ static void refresh_screen(void)
 				vgalib_copy_to_screen(dst, src, 16, 16);
 			}
 
+			if (g_dsagen_lang == LANG_DE) {
+				/* copy arrow_area to backbuffer */
+				vgalib_copy_to_screen(g_vga_backbuffer + 178 * O_WIDTH + 145, g_arrow_area, 170, 20);
+				/* copy mr_bar to backbuffer */
+				vgalib_copy_to_screen(g_vga_backbuffer + 182 * O_WIDTH + 145 + 20, g_mr_bar, 77, 9);
+
+			}
+
 			/* level is novice */
 			if (g_level == 1) {
 
@@ -5200,10 +5258,8 @@ static void refresh_screen(void)
 				vgalib_copy_to_screen(dst, src, 20, 15);
 
 				/* Hide left arrow */
-				if (g_dsagen_lang == LANG_EN) {
-					dst = g_vga_backbuffer + 178 * O_WIDTH + 145;
-					vgalib_copy_to_screen(dst, src, 20, 15);
-				}
+				dst = g_vga_backbuffer + 178 * O_WIDTH + 145;
+				vgalib_copy_to_screen(dst, src, 20, 15);
 			}
 		}
 
