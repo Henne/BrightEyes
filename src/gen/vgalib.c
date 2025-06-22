@@ -365,9 +365,9 @@ void sdl_change_window_size(SDL_mutex *timer_mutex)
 }
 #endif
 
+#if defined(__BORLANDC__)
 void set_video_page(unsigned short page)
 {
-#if defined(__BORLANDC__)
 	asm {
 		push ds
 		push es
@@ -383,12 +383,10 @@ void set_video_page(unsigned short page)
 		pop es
 		pop ds
 	}
-#endif
 }
 
 void save_display_stat(signed short *pointer)
 {
-#if defined(__BORLANDC__)
 	asm {
 		push ds
 		push es
@@ -424,8 +422,8 @@ void save_display_stat(signed short *pointer)
 		pop es
 		pop ds
 	}
-#endif
 }
+#endif
 
 #if !defined(__BORLANDC__)
 static inline Uint32 get_ABGR(const unsigned char *p) {
