@@ -5301,9 +5301,8 @@ static void clear_hero(void)
  */
 static void new_attributes(void)
 {
-	/* Original-Bugfix:	there once was a char[11],
-				which could not hold a char[16] */
 	volatile signed char *att_ptr;
+	char name_bak[20];
 	signed short randval;
 	signed short j;
 	signed short i;
@@ -5311,11 +5310,6 @@ static void new_attributes(void)
 	signed char values[8];
 	signed char unset_attribs;
 	signed char sex_bak;
-#if !defined(__BORLANDC__)
-	char name_bak[17];
-#else
-	char name_bak[10];
-#endif
 
 	/* set variable if hero has a typus */
 	if (g_hero.typus)
