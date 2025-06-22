@@ -2633,7 +2633,7 @@ static void handle_input(void)
 			g_mouse_leftclick_event = 0;
 
 			/* show credits in an infobox() */
-			if (l_key_ext == 0xfd) {
+			if ((g_gen_page == 0) && (l_key_ext == 0xfd)) {
 				l_key_ext = 0;
 				g_menu_tiles = 4;
 				g_fg_color[4] = 1;
