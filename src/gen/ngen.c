@@ -1345,6 +1345,7 @@ static unsigned char *g_mr_bar;
 static signed short g_text_x;
 static signed short g_text_y;
 static signed short g_text_x_end;
+static int g_in_enter_string = 0;
 static int g_fg_color[5] = {0xff, 0xc8, 0xc9, 0xca, 0x00}; /* {WHITE, RED, YELLOW, BLUE, {0,1}} */
 static int g_bg_color = 0; /* BLACK */
 static signed short g_col_index;
@@ -3164,7 +3165,11 @@ static void blit_chr(unsigned char *gfx_ptr, const signed short chr_height, cons
 
 static void print_chr_to_screen(const signed short chr_index, const signed short chr_width, const signed short x, const signed short y)
 {
-	prepare_chr_background();
+	if (g_in_enter_string) {
+		prepare_chr_background();
+	} else {
+		vgalib_copy_from_screen(g_char_buffer, get_gfx_ptr(x, y), 8, 8);
+	}
 	prepare_chr_foreground(chr_index * 8 + g_buffer_font6);
 	blit_chr(get_gfx_ptr(x, y), 7, chr_width);
 }
@@ -3403,6 +3408,8 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 	signed short width;
 	signed short i;
 
+	g_in_enter_string = 1;
+
 	mouse_bg();
 
 	if (txt == 0) {
@@ -3454,6 +3461,7 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 			*dst = 0;
 			mouse_cursor();
 			g_in_key_ext = 0;
+			g_in_enter_string = 0;
 			return 1;
 		}
 
@@ -3536,6 +3544,7 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 
 	*dst = 0;
 	mouse_cursor();
+	g_in_enter_string = 0;
 
 	return 0;
 }
