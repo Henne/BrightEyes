@@ -5359,12 +5359,13 @@ static void new_attributes(void)
 {
 	volatile signed char *att_ptr;
 	char name_bak[20];
-	signed short randval;
-	signed short j;
-	signed short i;
-	signed short di;
-	signed char values[8];
-	signed char unset_attribs;
+	int i;
+	int j;
+	int randval;
+	int di;
+	int values[8];
+	int pos_attribs[8];
+	int unset_attribs;
 	signed char sex_bak;
 
 	/* set variable if hero has a typus */
@@ -5395,8 +5396,23 @@ static void new_attributes(void)
 
 	att_ptr = &g_hero.attrib[0].normal;
 
+	/* positive attributes ala DSA3 */
+	/* roll 8 times: W6 + 7 and skip a minimal value */
+	for (i = 0; i < 8; i++) {
+		pos_attribs[i] = random_interval_gen(8, 13);
+	}
+
+	/* make sure the last element is a minimal one */
+	for (i = 1; i < 8; i++) {
+		if (pos_attribs[i - 1] < pos_attribs[i]) {
+			const int tmp = pos_attribs[i];
+			pos_attribs[i] = pos_attribs[i - 1];
+			pos_attribs[i - 1] = tmp;
+		}
+	}
+
 	for (j = 0; j < 7; j++) {
-		randval = random_interval_gen(8, 13);
+		randval = pos_attribs[j];
 		unset_attribs = 0;
 
 		for (i = 0; i < 7; i++) {
