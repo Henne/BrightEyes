@@ -1336,8 +1336,6 @@ static unsigned char *g_buffer_typus;
 static unsigned char *g_buffer_dmenge_dat;
 static unsigned char *g_buffer_current_head;
 static unsigned char *g_picbuf1;
-static unsigned char *g_picbuf2;
-static unsigned char *g_picbuf3;
 static unsigned char *g_popup_line;
 static unsigned char *g_arrow_area;
 static unsigned char *g_mr_bar;
@@ -1531,12 +1529,6 @@ static int alloc_buffers(void)
 	g_picbuf1 = gen_alloc(800);
 	if (g_picbuf1 == NULL) errors++;
 
-	g_picbuf2 = gen_alloc(2800);
-	if (g_picbuf2 == NULL) errors++;
-
-	g_picbuf3 = gen_alloc(2800);
-	if (g_picbuf3 == NULL) errors++;
-
 	g_popup_line = gen_alloc(O_WIDTH * 8);
 	if (g_popup_line == NULL) errors++;
 
@@ -1599,16 +1591,6 @@ void free_buffers(void)
 	if (g_popup_line != NULL) {
 		free(g_popup_line);
 		g_popup_line = NULL;
-	}
-
-	if (g_picbuf3 != NULL) {
-		free(g_picbuf3);
-		g_picbuf3 = NULL;
-	}
-
-	if (g_picbuf2 != NULL) {
-		free(g_picbuf2);
-		g_picbuf2 = NULL;
 	}
 
 	if (g_picbuf1 != NULL) {
@@ -4569,173 +4551,6 @@ static void change_sex(void)
 }
 
 /**
- * \brief save background areas
- */
-static void save_background(void)
-{
-	unsigned char* p;
-	signed short x_1;
-	signed short x_2;
-	signed short x_3;
-	signed short y_1;
-	signed short y_2;
-	signed short y_3;
-	signed short w_1;
-	signed short w_2;
-	signed short w_3;
-	signed short h_1;
-	signed short h_2;
-	signed short h_3;
-
-	x_1 = 0;
-
-	/* check on which page we are */
-	switch (g_gen_page) {
-		/* main page */
-		case 0: {
-			/* name field */
-			x_1 = 176; y_1 = 12; w_1 = 94; h_1 = 8;
-
-			/* positive attributes values */
-			x_2 = 205; y_2 = 73; w_2 = 20; h_2 = 90;
-
-			/* negative attribute values */
-			x_3 = 273; y_3 = 73; w_3 = 20; h_3 = 90;
-			break;
-		}
-		/* skill pages */
-		case 1:	case 2: case 3: {
-			/* remaining skill augmention tries */
-			x_1 = 270; y_1 = 184; w_1 = 15; h_1 = 8;
-
-			/* left row of skills */
-			x_2 = 205; y_2 = 42; w_2 = 20; h_2 = 140;
-
-			/* right row of skills */
-			x_3 = 287; y_3 = 42; w_3 = 20; h_3 = 140;
-
-			if (g_dsagen_lang == LANG_EN) { x_2 = 208; x_3 = 296; }
-
-			break;
-		}
-		/* ATPA page */
-		case 4: {
-			/* left row AT values */
-			x_2 = 225; y_2 = 48; w_2 = 20; h_2 = 130;
-
-			/* right row PA values */
-			x_3 = 260; y_3 = 48; w_3 = 20; h_3 = 130;
-			break;
-		}
-		/* spell pages */
-		case 5: case 6:	case 7:
-		case 8:	case 9:	case 10: {
-			/* remaining spell augmention tries */
-			x_1 = 215; y_1 = 184; w_1 = 15; h_1 = 8;
-
-			/* left row of spells */
-			x_2 = 141; y_2 = 42; w_2 = 20;	h_2 = 140;
-
-			/* right row of spells */
-			x_3 = 286; y_3 = 42; w_3 = 20;	h_3 = 140;
-			break;
-		}
-	}
-
-	if (x_1) {
-		p = g_vga_backbuffer + y_1 * O_WIDTH + x_1;
-		vgalib_copy_from_screen(g_picbuf1, p, w_1, h_1);
-	}
-
-	p = g_vga_backbuffer + y_2 * O_WIDTH + x_2;
-	vgalib_copy_from_screen(g_picbuf2, p, w_2, h_2);
-
-	p = g_vga_backbuffer + y_3 * O_WIDTH + x_3;
-	vgalib_copy_from_screen(g_picbuf3, p, w_3, h_3);
-}
-
-/**
- * \brief restore saved background areas
- * \param[in] dst destinaton
- */
-static void restore_background(unsigned char* dst)
-{
-	unsigned char* p;
-	unsigned short x_1, x_2, x_3;
-	unsigned short y_1, y_2, y_3;
-	unsigned short w_1, w_2, w_3;
-	unsigned short h_1, h_2, h_3;
-
-	x_1 = 0;
-
-	/* check on which page we are */
-	switch (g_gen_page) {
-		/* main page */
-		case 0: {
-			/* name field */
-			x_1 = 176; y_1 = 12; w_1 = 94; h_1 = 8;
-
-			/* positive attributes values */
-			x_2 = 205; y_2 = 73; w_2 = 20; h_2 = 90;
-
-			/* negative attribute values */
-			x_3 = 273; y_3 = 73; w_3 = 20; h_3 = 90;
-			break;
-		}
-		/* skill pages */
-		case 1:	case 2: case 3: {
-			/* remaining skill augmention tries */
-			x_1 = 270; y_1 = 184; w_1 = 15; h_1 = 8;
-
-			/* left row of skills */
-			x_2 = 205; y_2 = 42; w_2 = 20; h_2 = 140;
-
-			/* right row of skills */
-			x_3 = 287; y_3 = 42; w_3 = 20; h_3 = 140;
-
-			if (g_dsagen_lang == LANG_EN) { x_2 = 208; x_3 = 296; }
-
-			break;
-		}
-		/* ATPA page */
-		case 4: {
-			/* left row AT values */
-			x_2 = 225; y_2 = 48; w_2 = 20; h_2 = 130;
-
-			/* right row PA values */
-			x_3 = 260; y_3 = 48; w_3 = 20; h_3 = 130;
-			break;
-		}
-		/* spell pages */
-		case 5: case 6:	case 7:
-		case 8:	case 9:	case 10: {
-			/* remaining spell augmention tries */
-			x_1 = 215; y_1 = 184; w_1 = 15; h_1 = 8;
-
-			/* left row of spells */
-			x_2 = 141; y_2 = 42; w_2 = 20;	h_2 = 140;
-
-			/* right row of spells */
-			x_3 = 286; y_3 = 42; w_3 = 20;	h_3 = 140;
-			break;
-		}
-	}
-
-	if (x_1) {
-		p = dst + y_1 * O_WIDTH + x_1;
-		vgalib_copy_to_screen(p, g_picbuf1, w_1, h_1);
-	}
-
-	p = dst + y_2 * O_WIDTH + x_2;
-	vgalib_copy_to_screen(p, g_picbuf2, w_2, h_2);
-
-	p = dst + y_3 * O_WIDTH + x_3;
-	vgalib_copy_to_screen(p, g_picbuf3, w_3, h_3);
-}
-
-
-
-/**
  * \brief makes a valuta string
  * \param[out] dst the destination
  * \param[in] money the money in Heller
@@ -4793,8 +4608,6 @@ static void print_values(void)
 	signed short pos;
 
 	if (g_dsagen_lang == LANG_EN) { align_left = 225; align_right = 313; }
-
-	restore_background(g_gfx_ptr);
 
 	switch (g_gen_page) {
 
@@ -5212,7 +5025,6 @@ static void refresh_screen(void)
 
 		g_gfx_ptr = g_vga_backbuffer;
 		load_page(g_gen_page);
-		save_background();
 
 		/* page with base values */
 		if (g_gen_page == 0) {
