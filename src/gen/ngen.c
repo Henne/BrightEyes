@@ -38,17 +38,14 @@
 
 /* portable Memory Access */
 #if !defined(__BORLANDC__)
-static inline unsigned short readw(const unsigned char *p) { return *(const unsigned short*)p; }
 static inline signed short readws(const unsigned char *p) { return *(const signed short*)p; }
 static inline unsigned int readd(const unsigned char *p) { return *(const unsigned int*)p; }
 static inline signed int readds(const unsigned char *p) { return *(const signed int*)p; }
-static inline unsigned short writew(unsigned char *p, unsigned short v) { return *(unsigned short*)p = v; }
 #else
 #define readw(p) (*(const unsigned short*)(p))
 #define readws(p) (*(const signed short*)(p))
 #define readd(p) (*(const unsigned long*)(p))
 #define readds(p) (*(const signed long*)(p))
-#define writew(p, v) (*(unsigned short*)(p) = (v))
 #endif
 
 #if !defined(__BORLANDC__)
