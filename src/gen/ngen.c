@@ -5243,7 +5243,7 @@ static void refresh_screen(void)
 				/* copy arrow_area to backbuffer */
 				vgalib_copy_to_screen(g_vga_backbuffer + 178 * O_WIDTH + 145, g_arrow_area, 170, 20);
 				/* copy mr_bar to backbuffer */
-				vgalib_copy_to_screen(g_vga_backbuffer + 182 * O_WIDTH + 145 + 20, g_mr_bar, 77, 9);
+				vgalib_copy_to_screen(g_vga_backbuffer + 182 * O_WIDTH + 145 + 20 + 1, g_mr_bar, 77, 9);
 
 			}
 
