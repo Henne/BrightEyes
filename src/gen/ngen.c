@@ -1327,7 +1327,7 @@ static signed short g_display_mode_bak;
 static signed short g_display_page_bak;
 #endif
 static unsigned char* g_vga_backbuffer;
-static unsigned char* g_page_buffer;
+static unsigned char* g_page_buffer; /* intermediate buffer for RLE compressed GEN.NVF background images */
 unsigned char* g_vga_memstart;
 static unsigned char* g_gfx_ptr;
 static char *g_textbuffer;  // buffer for dynamically created strings
@@ -2951,6 +2951,7 @@ static void load_page(const int page)
 			}
 #endif
 			close(handle);
+			memset(g_page_buffer, 0x00, 50000);
 		}
 	}
 }
