@@ -5026,30 +5026,28 @@ static void print_values(void)
  */
 static void refresh_screen(void)
 {
-	unsigned char* src;
-	unsigned char* dst;
-
 	if (g_screen_var) {
 
 		g_gfx_ptr = g_vga_backbuffer;
+
 		load_page(g_gen_page);
 
 		/* page with base values */
 		if (g_gen_page == 0) {
 
+			unsigned char* src;
+
 			/* hero is female */
 			if (g_hero.sex) {
-
-				dst = g_vga_backbuffer + 7 * O_WIDTH + 305;
 				src = g_buffer_sex_dat + 256 * g_hero.sex;
-				vgalib_copy_to_screen(dst, src, 16, 16);
+				vgalib_copy_to_screen(get_gfx_ptr(305, 7), src, 16, 16);
 			}
 
 			if (g_dsagen_lang == LANG_DE) {
 				/* copy arrow_area to backbuffer */
-				vgalib_copy_to_screen(g_vga_backbuffer + 178 * O_WIDTH + 145, g_arrow_area, 170, 20);
+				vgalib_copy_to_screen(get_gfx_ptr(145, 178), g_arrow_area, 170, 20);
 				/* copy mr_bar to backbuffer */
-				vgalib_copy_to_screen(g_vga_backbuffer + 182 * O_WIDTH + 145 + 20 + 1, g_mr_bar, 77, 9);
+				vgalib_copy_to_screen(get_gfx_ptr(166, 182), g_mr_bar, 77, 9);
 
 			}
 
@@ -5057,15 +5055,13 @@ static void refresh_screen(void)
 			if (g_level == 1) {
 
 				/* Hide the arrow buttons to the other pages */
+				src = g_buffer_sex_dat + 512;
 
 				/* Hide right arrow */
-				dst = g_vga_backbuffer + 178 * O_WIDTH + 284;
-				src = g_buffer_sex_dat + 512;
-				vgalib_copy_to_screen(dst, src, 20, 15);
+				vgalib_copy_to_screen(get_gfx_ptr(284, 178), src, 20, 15);
 
 				/* Hide left arrow */
-				dst = g_vga_backbuffer + 178 * O_WIDTH + 145;
-				vgalib_copy_to_screen(dst, src, 20, 15);
+				vgalib_copy_to_screen(get_gfx_ptr(145, 178), src, 20, 15);
 			}
 		}
 
@@ -5073,14 +5069,12 @@ static void refresh_screen(void)
 		if (g_gen_page < 5) {
 
 			/* draw DMENGE.DAT or the archetype image and name */
-			dst = g_vga_backbuffer + 8 * O_WIDTH + 16;
-
 			if (g_hero.typus) {
 
 				g_clear_archetype_pic = 1;
 
 				/* copy archetype picture */
-				vgalib_copy_to_screen(dst, g_buffer_typus, 128, 184);
+				vgalib_copy_to_screen(get_gfx_ptr(16, 8), g_buffer_typus, 128, 184);
 
 				if (g_hero.sex) {
 					/* print female archetype name */
@@ -5096,13 +5090,13 @@ static void refresh_screen(void)
 
 			} else {
 				if (g_clear_archetype_pic) {
-					call_fill_rect_gen(g_vga_memstart, 16, 8, 143, 191, 0);
+					call_fill_rect_gen(g_gfx_ptr, 16, 8, 143, 191, 0);
 					g_clear_archetype_pic = 0;
 				}
 
 				wait_for_vsync();
 				set_palette(g_buffer_dmenge_dat + 128 * 184 + 2, 0, 32);
-				vgalib_copy_to_screen(dst, g_buffer_dmenge_dat, 128, 184);
+				vgalib_copy_to_screen(get_gfx_ptr(16, 8), g_buffer_dmenge_dat, 128, 184);
 			}
 		}
 
@@ -5119,11 +5113,11 @@ static void refresh_screen(void)
 		print_values();
 
 		/* copy the complete backbuffer to the screen */
-		dst = g_gfx_ptr = g_vga_memstart;
-		src = g_vga_backbuffer;
 		mouse_bg();
-		vgalib_copy_to_screen(dst, src, O_WIDTH, O_HEIGHT);
+		vgalib_copy_to_screen(g_vga_memstart, g_vga_backbuffer, O_WIDTH, O_HEIGHT);
 		mouse_cursor();
+
+		g_gfx_ptr = g_vga_memstart;
 	} else {
 		print_values();
 	}
