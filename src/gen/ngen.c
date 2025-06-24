@@ -1326,10 +1326,16 @@ static signed short g_ro_var[7];
 static signed short g_display_mode_bak;
 static signed short g_display_page_bak;
 #endif
-static unsigned char* g_vga_backbuffer;
-static unsigned char* g_page_buffer; /* intermediate buffer for RLE compressed GEN.NVF background images */
+
+/* VGA output buffer */
 unsigned char* g_vga_memstart;
+/* buffer for the modified background image */
+static unsigned char* g_vga_backbuffer;
+/* pointer to g_vga_memstart or g_vga_backbuffer */
 static unsigned char* g_gfx_ptr;
+/* intermediate buffer for RLE compressed GEN.NVF background and PP20 archetype images */
+static unsigned char* g_page_buffer;
+
 static char *g_textbuffer;  // buffer for dynamically created strings
 static char *g_digitbuffer; // pointer near the end of g_textbuffer
 static unsigned char *g_buffer_typus;
@@ -2956,11 +2962,15 @@ static void load_page(const int page)
 	}
 }
 
+/**
+ * \brief load archetype image into g_buffer_typus
+ * \param[in] typus number of typus
+ */
 static void load_typus(const int typus)
 {
 	const int index = typus + 19;
 
-	/* check if this image is in the buffer */
+	/* check if the compressed image is already buffered */
 	if (g_typus_buffer[typus]) {
 		decomp_pp20(g_buffer_typus, g_typus_buffer[typus], g_typus_len[typus]);
 	} else {
@@ -2978,10 +2988,11 @@ static void load_typus(const int typus)
 			decomp_pp20(g_buffer_typus, g_typus_buffer[typus], g_typus_len[typus]);
 		} else {
 			/* load the file direct */
-			read_datfile(handle, g_vga_backbuffer, 25000);
-			decomp_pp20(g_buffer_typus, g_vga_backbuffer, get_filelength());
+			read_datfile(handle, g_page_buffer, 25000);
+			decomp_pp20(g_buffer_typus, g_page_buffer, get_filelength());
 		}
 		close(handle);
+		memset(g_page_buffer, 0x00, 50000);
 	}
 }
 
