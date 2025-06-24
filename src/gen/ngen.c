@@ -7376,6 +7376,10 @@ static void intro(void)
 	/* clear screen */
 	call_fill_rect_gen(g_vga_memstart, 0, 0, O_WIDTH - 1, O_HEIGHT -1, 0);
 
+	/* clear used buffers */
+	memset(g_buffer_heads_dat, 0, 39000);
+	memset(g_vga_backbuffer, 0, 64100);
+
 	g_in_intro = 0;
 }
 
