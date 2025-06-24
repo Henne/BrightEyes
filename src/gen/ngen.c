@@ -3673,7 +3673,7 @@ static signed short infobox(char *header, const signed short digits)
 
 	/* save the current background */
 	src = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
-	dst = g_vga_backbuffer;
+	dst = g_page_buffer;
 
 	vgalib_copy_from_screen(dst, src, width, (lines + 2) * 8);
 
@@ -3707,7 +3707,7 @@ static signed short infobox(char *header, const signed short digits)
 	mouse_bg();
 
 	dst = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
-	src = g_vga_backbuffer;
+	src = g_page_buffer;
 
 	vgalib_copy_to_screen(dst, src, width, 8 * (lines + 2));
 
@@ -3807,7 +3807,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 
 	/* save the current background */
 	src = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
-	dst = g_vga_backbuffer;
+	dst = g_page_buffer;
 
 	vgalib_copy_from_screen(dst, src, width, 8 * (lines_sum + 2));
 
@@ -3940,7 +3940,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 
 	/* restore the previous background */
 	dst = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
-	src = g_vga_backbuffer;
+	src = g_page_buffer;
 	vgalib_copy_to_screen(dst, src, width, 8 * (lines_sum + 2));
 
 	mouse_cursor();
