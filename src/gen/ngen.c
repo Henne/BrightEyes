@@ -1335,7 +1335,7 @@ static char *g_digitbuffer; // pointer near the end of g_textbuffer
 static unsigned char *g_buffer_typus;
 static unsigned char *g_buffer_dmenge_dat;
 static unsigned char *g_buffer_current_head;
-static unsigned char *g_picbuf1;
+static unsigned char *g_name_bar;
 static unsigned char *g_popup_line;
 static unsigned char *g_arrow_area;
 static unsigned char *g_mr_bar;
@@ -1526,8 +1526,8 @@ static int alloc_buffers(void)
 	g_buffer_dmenge_dat = (gen_alloc(23660) + 8);
 	if (g_buffer_dmenge_dat == NULL) errors++;
 
-	g_picbuf1 = gen_alloc(800);
-	if (g_picbuf1 == NULL) errors++;
+	g_name_bar = gen_alloc(720);	/* 15 chars * 6 pixel / char * 8 pixel */
+	if (g_name_bar == NULL) errors++;
 
 	g_popup_line = gen_alloc(O_WIDTH * 8);
 	if (g_popup_line == NULL) errors++;
@@ -1593,9 +1593,9 @@ void free_buffers(void)
 		g_popup_line = NULL;
 	}
 
-	if (g_picbuf1 != NULL) {
-		free(g_picbuf1);
-		g_picbuf1 = NULL;
+	if (g_name_bar != NULL) {
+		free(g_name_bar);
+		g_name_bar = NULL;
 	}
 
 	if (g_buffer_current_head != NULL) {
@@ -2852,7 +2852,7 @@ static void load_essential_files(void)
 		count++;
 	}
 
-	/* copy mr_bar from GEN1.NVF/E_GEN1.NVF */
+	/* copy mr_bar and name_bar from GEN1.NVF/E_GEN1.NVF */
 	handle = open_datfile(0);
 	if (handle != -1) {
 		len = read_datfile(handle, g_page_buffer, 50000);
@@ -2861,6 +2861,8 @@ static void load_essential_files(void)
 		decomp_rle(g_vga_backbuffer, g_page_buffer);
 
 		vgalib_copy_from_screen(g_mr_bar, g_vga_backbuffer + 182 * O_WIDTH + 145, 77, 9);
+
+		vgalib_copy_from_screen(g_name_bar, g_vga_backbuffer + 12 * O_WIDTH + 180, 15 * 6, 8);
 
 		memset(g_vga_backbuffer, 0, 64100);
 		memset(g_page_buffer, 0, 50000);
@@ -4471,15 +4473,21 @@ static void save_chr(void)
  */
 static void enter_name(void)
 {
-	unsigned char* dst;
-
-	dst = g_vga_memstart + 12 * O_WIDTH + 176;
+	unsigned char * const dst = get_gfx_ptr(180, 12);
 
 	mouse_bg();
-	vgalib_copy_to_screen(dst, g_picbuf1, 94, 8);
+
+	/* clear background underneath the name */
+	vgalib_copy_to_screen(dst, g_name_bar, 15 * 6, 8);
+
 	enter_string((char*)g_hero.name, 180, 12, 15, 1);
-	vgalib_copy_to_screen(dst, g_picbuf1, 94, 8);
+
+	/* restore background underneath the name */
+	vgalib_copy_to_screen(dst, g_name_bar, 15 * 6, 8);
+
 	mouse_cursor();
+
+	/* print the name on top */
 	print_str((const char*)g_hero.name, 180, 12);
 }
 
