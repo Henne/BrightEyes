@@ -1465,7 +1465,6 @@ void far *g_irq78_bak;
 void far *g_timer_isr_bak;
 #else
 static SDL_TimerID g_sdl_timer_id = 0;
-static SDL_TimerID g_sdl_timer_vga_id = 0;
 static SDL_mutex *g_sdl_timer_mutex = NULL;
 #endif
 
@@ -4324,21 +4323,6 @@ static Uint32 gen_timer_isr(Uint32 interval, void *param)
 
 	return interval;
 }
-
-static Uint32 gen_timer_vga(Uint32 interval, void *param)
-{
-	if (SDL_LockMutex(g_sdl_timer_mutex) == 0) {
-
-		sdl_update_rect_window(0, 0, O_WIDTH, O_HEIGHT);
-
-		if (SDL_UnlockMutex(g_sdl_timer_mutex) == -1) {
-			fprintf(stderr, "ERROR: Unlock Mutex in %s\n", __func__);
-		}
-	} else {
-		fprintf(stderr, "ERROR: Lock Mutex in %s\n", __func__);
-	}
-	return interval;
-}
 #endif
 
 static void set_timer_isr(void)
@@ -4357,13 +4341,10 @@ static void set_timer_isr(void)
 	}
 
 	if (SDL_LockMutex(g_sdl_timer_mutex) == 0) {
+
 		g_sdl_timer_id = SDL_AddTimer(55, gen_timer_isr, NULL);
 		if (g_sdl_timer_id == 0) {
 			fprintf(stderr, "WARNING: Failed to add timer: %s\n", SDL_GetError());
-		}
-		g_sdl_timer_vga_id = SDL_AddTimer(100, gen_timer_vga, NULL);
-		if (g_sdl_timer_vga_id == 0) {
-			fprintf(stderr, "WARNING: Failed to add VGA timer: %s\n", SDL_GetError());
 		}
 
 		if (SDL_UnlockMutex(g_sdl_timer_mutex) == -1) {
@@ -4382,14 +4363,8 @@ void restore_timer_isr(void)
 #else
 	if (SDL_LockMutex(g_sdl_timer_mutex) == 0) {
 
-		SDL_bool timer_removed;
+		SDL_bool timer_removed = SDL_RemoveTimer(g_sdl_timer_id);
 
-		timer_removed = SDL_RemoveTimer(g_sdl_timer_vga_id);
-		if (timer_removed == SDL_FALSE) {
-			fprintf(stderr, "WARNING: Failed to remove VGA timer\n");
-		}
-
-		timer_removed = SDL_RemoveTimer(g_sdl_timer_id);
 		if (timer_removed == SDL_FALSE) {
 			fprintf(stderr, "WARNING: Failed to remove timer\n");
 		}
