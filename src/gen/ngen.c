@@ -1349,7 +1349,7 @@ static unsigned char *g_mr_bar;
 static signed short g_text_x;
 static signed short g_text_y;
 static signed short g_text_x_end;
-static int g_in_enter_string = 0;
+static int g_use_solid_bg = 0;
 static int g_fg_color[5] = {0xff, 0xc8, 0xc9, 0xca, 0x00}; /* {WHITE, RED, YELLOW, BLUE, {0,1}} */
 static int g_bg_color = 0; /* BLACK */
 static signed short g_col_index;
@@ -3161,10 +3161,12 @@ static void blit_chr(unsigned char *gfx_ptr, const signed short chr_height, cons
 
 static void print_chr_to_screen(const signed short chr_index, const signed short chr_width, const signed short x, const signed short y)
 {
-	if (g_in_enter_string) {
+	if (g_use_solid_bg) {
 		prepare_chr_background();
 	} else {
+		g_gfx_ptr = g_vga_backbuffer;
 		vgalib_copy_from_screen(g_char_buffer, get_gfx_ptr(x, y), 8, 8);
+		g_gfx_ptr = g_vga_memstart;
 	}
 	prepare_chr_foreground(chr_index * 8 + g_buffer_font6);
 	blit_chr(get_gfx_ptr(x, y), 7, chr_width);
@@ -3404,7 +3406,7 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 	signed short width;
 	signed short i;
 
-	g_in_enter_string = 1;
+	g_use_solid_bg = 1;
 
 	mouse_bg();
 
@@ -3457,7 +3459,7 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 			*dst = 0;
 			mouse_cursor();
 			g_in_key_ext = 0;
-			g_in_enter_string = 0;
+			g_use_solid_bg = 0;
 			return 1;
 		}
 
@@ -3540,7 +3542,7 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 
 	*dst = 0;
 	mouse_cursor();
-	g_in_enter_string = 0;
+	g_use_solid_bg = 0;
 
 	return 0;
 }
@@ -3684,7 +3686,10 @@ static signed short infobox(char *header, const signed short digits)
 	get_textcolor(&fg_bak, &bg_bak);
 	set_textcolor(0xff, 0xdf); // WHITE ON GREEN
 
+	g_use_solid_bg = 1;
 	print_line(header);
+	g_use_solid_bg = 0;
+
 
 	g_mouse_rightclick_event = 0;
 	mouse_cursor();
@@ -3818,6 +3823,8 @@ signed short gui_radio(char *header, const signed int options, ...)
 	get_textcolor(&fg_bak, &bg_bak);
 	set_textcolor(0xff, 0xdf); // WHITE ON GREEN
 
+	g_use_solid_bg = 1;
+
 	/* print header */
 	if (lines_header)
 		print_line(header);
@@ -3832,6 +3839,8 @@ signed short gui_radio(char *header, const signed int options, ...)
 		print_str(str, str_x, str_y);
 	}
 	va_end(arguments);
+
+	g_use_solid_bg = 0;
 
 	/* save and set mouse position */
 	mx_bak = g_mouse_posx;
@@ -4610,6 +4619,24 @@ static void print_attribs(void)
 	}
 }
 
+/**
+ * \brief print archetype name to the backbuffer
+ */
+static void print_typusname(void)
+{
+	if ((g_hero.typus) && (0 <= g_gen_page ) && (g_gen_page <= 4)) {
+
+		if (g_hero.sex) {
+			/* print female archetype name */
+			print_str(get_text(271 + g_hero.typus),
+				get_line_start_c(get_text(271 + g_hero.typus), 16, 128), 184);
+		} else {
+			/* print male archetype name */
+			print_str(get_text(17 + g_hero.typus),
+				get_line_start_c(get_text(17 + g_hero.typus), 16, 128),	184);
+		}
+	}
+}
 
 /**
  * \brief print the values of the hero
@@ -4628,6 +4655,13 @@ static void print_values(void)
 	signed short pos;
 
 	if (g_dsagen_lang == LANG_EN) { align_left = 225; align_right = 313; }
+
+	/* copy the complete backbuffer to the screen */
+	mouse_bg();
+	vgalib_copy_to_screen(g_vga_memstart, g_vga_backbuffer, O_WIDTH, O_HEIGHT);
+	mouse_cursor();
+
+	print_typusname();
 
 	switch (g_gen_page) {
 
@@ -5088,18 +5122,6 @@ static void refresh_screen(void)
 				/* copy archetype picture */
 				vgalib_copy_to_screen(get_gfx_ptr(16, 8), g_buffer_typus, 128, 184);
 
-				if (g_hero.sex) {
-					/* print female archetype name */
-					print_str(get_text(271 + g_hero.typus),
-						get_line_start_c(get_text(271 + g_hero.typus), 16, 128),
-						184);
-				} else {
-					/* print male archetype name */
-					print_str(get_text(17 + g_hero.typus),
-						get_line_start_c(get_text(17 + g_hero.typus), 16, 128),
-						184);
-				}
-
 			} else {
 				if (g_clear_archetype_pic) {
 					call_fill_rect_gen(g_gfx_ptr, 16, 8, 143, 191, 0);
@@ -5122,17 +5144,10 @@ static void refresh_screen(void)
 			g_dst_dst = g_vga_memstart;
 		}
 
-		print_values();
-
-		/* copy the complete backbuffer to the screen */
-		mouse_bg();
-		vgalib_copy_to_screen(g_vga_memstart, g_vga_backbuffer, O_WIDTH, O_HEIGHT);
-		mouse_cursor();
-
 		g_gfx_ptr = g_vga_memstart;
-	} else {
-		print_values();
 	}
+
+	print_values();
 }
 
 /**
