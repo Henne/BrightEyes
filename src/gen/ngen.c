@@ -3163,9 +3163,11 @@ static void print_chr_to_screen(const signed short chr_index, const signed short
 	if (g_use_solid_bg) {
 		prepare_chr_background();
 	} else {
+		unsigned char *g_gfx_bak = g_gfx_ptr;
+
 		g_gfx_ptr = g_vga_backbuffer;
 		vgalib_copy_from_screen(g_char_buffer, get_gfx_ptr(x, y), 8, 8);
-		g_gfx_ptr = g_vga_memstart;
+		g_gfx_ptr = g_gfx_bak;
 	}
 	prepare_chr_foreground(chr_index * 8 + g_buffer_font6);
 	blit_chr(get_gfx_ptr(x, y), 7, chr_width);
@@ -3365,9 +3367,14 @@ static void print_str(const char *str, const signed short x_in, const signed sho
  */
 static signed short print_line(char *str)
 {
+	unsigned char *gfx_bak = g_gfx_ptr;
 	signed short lines = str_splitter(str);
 
+	g_gfx_ptr = g_vga_memstart;
+
 	print_str(str, g_text_x, g_text_y);
+
+	g_gfx_ptr = gfx_bak;
 
 	return lines;
 }
@@ -3770,6 +3777,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 	va_list arguments;
 	unsigned char* src;
 	unsigned char* dst;
+	unsigned char* gfx_bak = g_gfx_ptr;
 	char *str;
 	int fg_bak;
 	int bg_bak;
@@ -3832,12 +3840,14 @@ signed short gui_radio(char *header, const signed int options, ...)
 	str_y = g_upper_border + 8 * (lines_header + 1);
 
 	/* print radio options */
+	g_gfx_ptr = g_vga_memstart;
 	va_start(arguments, options);
 	for (i = 1; i <= options; str_y += 8, i++) {
 		str = va_arg(arguments, char*);
 		print_str(str, str_x, str_y);
 	}
 	va_end(arguments);
+	g_gfx_ptr = gfx_bak;
 
 	g_use_solid_bg = 0;
 
@@ -4636,6 +4646,18 @@ static void print_values(void)
 	vgalib_copy_to_screen(g_vga_memstart, g_vga_backbuffer, O_WIDTH, O_HEIGHT);
 	mouse_cursor();
 
+#if !defined(__BORLANDC__)
+	unsigned char *p = gen_alloc(O_WIDTH * O_HEIGHT);
+	unsigned char *gfx_bak = g_gfx_ptr;
+
+	if (p != NULL) {
+		memcpy(p, g_vga_backbuffer, O_WIDTH * O_HEIGHT);
+		g_gfx_ptr = p;
+	} else {
+		fprintf(stderr, "%s() failed\n", __func__);
+	}
+#endif
+
 	print_typusname();
 
 	switch (g_gen_page) {
@@ -5040,6 +5062,20 @@ static void print_values(void)
 			break;
 		}
 	}
+
+#if !defined(__BORLANDC__)
+	if (p != NULL) {
+		/* copy the complete backbuffer to the screen */
+		mouse_bg();
+		vgalib_copy_to_screen(g_vga_memstart, p, O_WIDTH, O_HEIGHT);
+		mouse_cursor();
+
+		free(p);
+		p = NULL;
+
+		g_gfx_ptr = gfx_bak;
+	}
+#endif
 }
 
 /**
