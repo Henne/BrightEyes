@@ -5083,6 +5083,7 @@ static void print_values(void)
  */
 static void refresh_screen(void)
 {
+	//fprintf(stderr, "%s() -------------------\n", __func__);
 	if (g_screen_var) {
 
 		g_gfx_ptr = g_vga_backbuffer;
