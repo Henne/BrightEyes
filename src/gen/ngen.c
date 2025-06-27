@@ -2950,28 +2950,34 @@ static void load_page(const int page)
 
 #if !defined(__BORLANDC__)
 /**
- * \brief buffer all background images
+ * \brief buffer and prepare all background images
  * \note only on newer systems with enough memory
  */
 static void load_pages(void)
 {
-	int page;
+	for (int i = 0; i <= 10; i++) {
 
-	for (page = 0; page <= 10; page++) {
-
-		int handle = open_datfile(page);
+		int handle = open_datfile(i);
 
 		if (handle != -1) {
 
 			read_datfile(handle, g_page_buffer, 50000);
-			decomp_rle(g_bg_buffer[page], g_page_buffer);
+			decomp_rle(g_bg_buffer[i], g_page_buffer);
 			close(handle);
 		}
 	}
 
 	memset(g_page_buffer, 0x00, 50000);
 
-	/* TODO: prepare page 0 */
+	/* prepare page 0 of the german version */
+	if (g_dsagen_lang == LANG_DE) {
+
+		/* copy arrow_area on the image */
+		vgalib_copy_to_screen(g_bg_buffer[0] + 178 * O_WIDTH + 145, g_arrow_area, 170, 20);
+		/* copy mr_bar onto the image */
+		vgalib_copy_to_screen(g_bg_buffer[0] + 182 * O_WIDTH + 166, g_mr_bar, 77, 9);
+
+	}
 }
 #endif
 
@@ -5115,6 +5121,7 @@ static void refresh_screen(void)
 				vgalib_copy_to_screen(get_gfx_ptr(305, 7), src, 16, 16);
 			}
 
+#if defined(__BORLANDC__)
 			if (g_dsagen_lang == LANG_DE) {
 				/* copy arrow_area to backbuffer */
 				vgalib_copy_to_screen(get_gfx_ptr(145, 178), g_arrow_area, 170, 20);
@@ -5122,6 +5129,7 @@ static void refresh_screen(void)
 				vgalib_copy_to_screen(get_gfx_ptr(166, 182), g_mr_bar, 77, 9);
 
 			}
+#endif
 
 			/* level is novice */
 			if (g_level == 1) {
