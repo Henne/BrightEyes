@@ -3931,7 +3931,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 		}
 
 #if !defined(__BORLANDC__)
-		SDL_Delay(50);
+		SDL_Delay(25);
 #endif
 
 		if ((g_mouse_rightclick_event != 0) || (g_in_key_ext == KEY_ESC) || (g_in_key_ext == KEY_PGDOWN)) {
@@ -6867,9 +6867,7 @@ static void do_gen(void)
 
 	/* main loop */
 	while (!done) {
-#if !defined(__BORLANDC__)
-		SDL_Delay(25);
-#endif
+
 		if (g_screen_var) {
 			refresh_screen();
 			g_screen_var = 0;
@@ -7046,6 +7044,7 @@ static void do_gen(void)
 			}
 		}
 #if !defined(__BORLANDC__)
+		SDL_Delay(75);
 		if (g_sdl_quit_event) done = 1;
 #endif
 	}
