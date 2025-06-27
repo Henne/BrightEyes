@@ -3378,7 +3378,7 @@ static void print_str(const char *str, const signed short x_in, const signed sho
 	}
 
 #if !defined(__BORLANDC__)
-	sdl_update_rect_window(x_in, y_in, x_max - x_in + 8, y - y_in + 8);
+	sdl_forced_update();
 #endif
 
 	mouse_cursor();
@@ -3430,6 +3430,7 @@ static int get_str_width(const char *str)
  */
 static signed short enter_string(char *dst, const signed short x, const signed short y, const signed short len, const signed short txt)
 {
+	unsigned char * const gfx_bak = g_gfx_ptr;
 	signed short x_pos = x;	// position on the screen
 	signed short s_pos = 0;	// position in the string
 	signed short c;
@@ -3437,6 +3438,7 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 	signed short i;
 
 	g_use_solid_bg = 1;
+	g_gfx_ptr = g_vga_memstart;
 
 	mouse_bg();
 
@@ -3453,7 +3455,7 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 	}
 
 #if !defined(__BORLANDC__)
-	sdl_update_rect_window(x, y, len * 8, 8);
+	sdl_forced_update();
 #endif
 
 	/* clear all input events */
@@ -3490,6 +3492,8 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 			mouse_cursor();
 			g_in_key_ext = 0;
 			g_use_solid_bg = 0;
+			g_gfx_ptr = gfx_bak;
+
 			return 1;
 		}
 
@@ -3558,7 +3562,7 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 		}
 
 #if !defined(__BORLANDC__)
-		sdl_update_rect_window(x, y, len * 8, 8);
+		sdl_forced_update();
 #endif
 	}
 
@@ -3573,6 +3577,7 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 	*dst = 0;
 	mouse_cursor();
 	g_use_solid_bg = 0;
+	g_gfx_ptr = gfx_bak;
 
 	return 0;
 }
@@ -4665,10 +4670,12 @@ static void print_values(void)
 
 	if (g_dsagen_lang == LANG_EN) { align_left = 225; align_right = 313; }
 
+#if defined(__BORLANDC__)
 	/* copy the complete backbuffer to the screen */
 	mouse_bg();
 	vgalib_copy_to_screen(g_vga_memstart, g_vga_backbuffer, O_WIDTH, O_HEIGHT);
 	mouse_cursor();
+#endif
 
 #if !defined(__BORLANDC__)
 	unsigned char *p = gen_alloc(O_WIDTH * O_HEIGHT);
@@ -4694,7 +4701,7 @@ static void print_values(void)
 			print_attribs();
 
 			/* return if no typus */
-			if (!g_hero.typus) return;
+			if (!g_hero.typus) break;
 
 			/* print height */
 			if (g_dsagen_lang == LANG_DE) {
