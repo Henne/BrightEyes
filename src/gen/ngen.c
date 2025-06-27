@@ -5175,14 +5175,9 @@ static void refresh_screen(void)
 			}
 		}
 
+		/* draw the head to the backbuffer */
 		if (g_hero.typus) {
-			/* draw the head to the backbuffer */
-
-			g_dst_dst = g_vga_backbuffer;
-
 			draw_head();
-
-			g_dst_dst = g_vga_memstart;
 		}
 
 		g_gfx_ptr = g_vga_memstart;
