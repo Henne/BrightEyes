@@ -1001,8 +1001,9 @@ static signed short g_text_x_mod = 0;
 
 static volatile struct struct_hero g_hero = {0};
 
+#if !defined(__BORLANDC__)
 static unsigned char* g_bg_buffer[]       = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
-static signed long g_bg_len[]    = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+#endif
 static unsigned char *g_typus_buffer[]    = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 static signed long g_typus_len[13] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
@@ -1546,6 +1547,13 @@ static int alloc_buffers(void)
 	g_mr_bar = gen_alloc(1024);
 	if (g_mr_bar == NULL) errors++;
 
+#if !defined(__BORLANDC__)
+	for (int i = 0; i <= 10; i++) {
+		g_bg_buffer[i] = gen_alloc(O_WIDTH * O_HEIGHT);
+		if (g_bg_buffer[i] == NULL) errors++;
+	}
+#endif
+
 	if (errors > 0) {
 		fprintf(stderr, g_str_malloc_error);
 	}
@@ -1666,12 +1674,14 @@ void free_buffers(void)
 	}
 #endif
 
-	for (i = 0; i < 11; i++) {
+#if !defined(__BORLANDC__)
+	for (i = 0; i <= 10; i++) {
 		if (g_bg_buffer[i] != NULL) {
 			free(g_bg_buffer[i]);
 			g_bg_buffer[i] = NULL;
 		}
 	}
+#endif
 
 	for (i = 0; i < 13; i++) {
 		if (g_typus_buffer[i] != NULL) {
@@ -2907,59 +2917,63 @@ static void load_common_files(void)
 	}
 }
 
+/**
+ * \brief load a requested page to g_vga_backbuffer
+ * \note newer systems: copy decompressed data from buffer
+ * \note older systems: load it from DSAGEN.DAT
+ */
 static void load_page(const int page)
 {
-	unsigned char* ptr;
+#if !defined(__BORLANDC__)
+	if ((0 <= page) && (page <= 10)) {
+
+		memcpy(g_vga_backbuffer, g_bg_buffer[page], O_WIDTH * O_HEIGHT);
+	}
+#else
 	int handle;
 
 	if ((0 <= page) && (page <= 10)) {
 
-		/* check if this compressed image is in the buffer */
-		if (g_bg_buffer[page]) {
-#if defined(__BORLANDC__)
-			decomp_rle(g_vga_backbuffer, g_bg_buffer[page]);
-#else
-			memcpy(g_vga_backbuffer, g_bg_buffer[page], g_bg_len[page]);
-#endif
-			return;
-		}
-
 		handle = open_datfile(page);
+
 		if (handle != -1) {
 
-#if defined(__BORLANDC__)
-			ptr = gen_alloc(get_filelength());
+			read_datfile(handle, g_page_buffer, 50000);
+			decomp_rle(g_vga_backbuffer, g_page_buffer);
 
-			if (ptr != NULL) {
-				g_bg_buffer[page] = ptr;
-				g_bg_len[page] = get_filelength();
-
-				read_datfile(handle, g_bg_buffer[page], g_bg_len[page]);
-				decomp_rle(g_vga_backbuffer, g_bg_buffer[page]);
-			} else {
-				read_datfile(handle, g_page_buffer, 64000);
-				decomp_rle(g_vga_backbuffer, g_page_buffer);
-			}
-#else
-			ptr = gen_alloc(O_WIDTH * O_HEIGHT);
-
-			if (ptr != NULL) {
-				g_bg_buffer[page] = ptr;
-				g_bg_len[page] = O_WIDTH * O_HEIGHT;
-
-				read_datfile(handle, g_page_buffer, g_bg_len[page]);
-				decomp_rle(g_bg_buffer[page], g_page_buffer);
-				memcpy(g_vga_backbuffer, g_bg_buffer[page], g_bg_len[page]);
-			} else {
-				read_datfile(handle, g_page_buffer, 64000);
-				decomp_rle(g_vga_backbuffer, g_page_buffer);
-			}
-#endif
 			close(handle);
 			memset(g_page_buffer, 0x00, 50000);
 		}
 	}
+#endif
 }
+
+#if !defined(__BORLANDC__)
+/**
+ * \brief buffer all background images
+ * \note only on newer systems with enough memory
+ */
+static void load_pages(void)
+{
+	int page;
+
+	for (page = 0; page <= 10; page++) {
+
+		int handle = open_datfile(page);
+
+		if (handle != -1) {
+
+			read_datfile(handle, g_page_buffer, 50000);
+			decomp_rle(g_bg_buffer[page], g_page_buffer);
+			close(handle);
+		}
+	}
+
+	memset(g_page_buffer, 0x00, 50000);
+
+	/* TODO: prepare page 0 */
+}
+#endif
 
 /**
  * \brief load archetype image into g_buffer_typus
@@ -7470,13 +7484,15 @@ int main_gen(int argc, char **argv)
 
 	load_common_files();
 
-	flush_keyboard_queue();
-
 #if !defined(__BORLANDC__)
+	load_pages();
+
 	SDL_ShowCursor(SDL_ENABLE);
 #else
 	mouse_cursor();
 #endif
+
+	flush_keyboard_queue();
 
 	do_gen();
 
