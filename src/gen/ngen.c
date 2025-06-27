@@ -2460,6 +2460,10 @@ static int sdl_event_loop(const int cmd)
 				return (0x10 << 8) | KEY_DC1;
 			}
 
+		} else if (event.type == SDL_WINDOWEVENT) {
+			if (event.window.event == SDL_WINDOWEVENT_EXPOSED) {
+				sdl_forced_update();
+			}
 		} else if (event.type == SDL_MOUSEMOTION) {
 			int ratio = sdl_get_ratio();
 

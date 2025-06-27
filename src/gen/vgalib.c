@@ -192,6 +192,8 @@ void set_video_mode(unsigned short mode)
 }
 
 #if !defined(__BORLANDC__)
+static int forced_update = 0;
+
 static void sdl_update_rect_pixels(const int x_in, const int y_in, const int width_in, const int height_in)
 {
 	int width = width_in;
@@ -243,7 +245,7 @@ void sdl_update_rect_window(const int x_in, const int y_in, const int width_in, 
 	double start, time_ms;
 #endif
 
-	if (memcmp(g_vga_memstart, vga_bak, O_WIDTH * O_HEIGHT) || pal_updated || win_resized) {
+	if (forced_update || memcmp(g_vga_memstart, vga_bak, O_WIDTH * O_HEIGHT) || pal_updated || win_resized) {
 
 		if (SDL_LockMutex(PixelsMutex) == 0) {
 
@@ -282,6 +284,13 @@ void sdl_update_rect_window(const int x_in, const int y_in, const int width_in, 
 			fprintf(stderr, "ERROR: Lock Mutex in %s\n", __func__);
 		}
 	}
+}
+
+void sdl_forced_update(void)
+{
+	forced_update = 1;
+	sdl_update_rect_window(0, 0, O_WIDTH, O_HEIGHT);
+	forced_update = 0;
 }
 
 SDL_Window* sdl_get_window(void)

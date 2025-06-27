@@ -21,6 +21,7 @@ void set_video_page(unsigned short);
 void save_display_stat(signed short*);
 #else
 void sdl_update_rect_window(const int, const int, const int, const int);
+void sdl_forced_update(void);
 SDL_Window* sdl_get_window(void);
 int sdl_get_ratio(void);
 void sdl_change_window_size(SDL_mutex*);
