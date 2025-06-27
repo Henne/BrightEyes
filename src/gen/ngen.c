@@ -4551,15 +4551,7 @@ static void draw_head(void)
 
 		process_nvf(&nvf);
 
-		g_dst_src = g_buffer_current_head;
-
-		g_dst_x1 = 272;
-		g_dst_x2 = 303;
-
-		g_dst_y1 = (g_gen_page == 0 ? 8 : 4);
-		g_dst_y2 = (g_gen_page == 0 ? 39 : 35);
-
-		do_draw_pic(0);
+		vgalib_copy_to_screen(get_gfx_ptr(272,(g_gen_page == 0 ? 8 : 4)), g_buffer_current_head, 32, 32);
 	}
 }
 
