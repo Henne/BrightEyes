@@ -84,6 +84,7 @@ static signed short infobox(char*, signed short);
 #define KEY_3       (0x04)
 #define KEY_4       (0x05)
 #define KEY_5       (0x06)
+#define KEY_6       (0x07)
 #define KEY_DC1     (0x11)
 #define KEY_RET     (0x1c)
 #define KEY_J       (0x24)
@@ -2519,6 +2520,7 @@ static int sdl_event_loop(const int cmd)
 					case SDLK_3:        return (KEY_3 << 8) | 0x33; break; //OK
 					case SDLK_4:        return (KEY_4 << 8) | 0x34; break; //OK
 					case SDLK_5:        return (KEY_5 << 8) | 0x35; break; //OK
+					case SDLK_6:   	    return (KEY_6 << 8) | 0x36; break; //OK
 					case SDLK_KP_ENTER:
 					case SDLK_RETURN:   return (KEY_RET << 8) | 0x0d; break; //OK
 					case SDLK_j:        return (KEY_J << 8) | 0x6a; break; //OK
@@ -6979,6 +6981,12 @@ static void do_gen(void)
 
 		if (g_in_key_ext == KEY_CTRL_F4)
 			enter_name();
+
+		if (g_in_key_ext == KEY_6) {
+			if (g_level == 1) g_level = 2;
+			else if (g_level == 2) g_level = 1;
+			g_screen_var = 1;
+		}
 
 		/* Change Head Logic */
 		if ((g_gen_page == 0) && ((g_in_key_ext == KEY_UP) || (g_in_key_ext == KEY_DOWN))) {
