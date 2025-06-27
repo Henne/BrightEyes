@@ -6982,7 +6982,7 @@ static void do_gen(void)
 		if (g_in_key_ext == KEY_CTRL_F4)
 			enter_name();
 
-		if (g_in_key_ext == KEY_6) {
+		if ((g_gen_page == 0) && (g_in_key_ext == KEY_6)) {
 			if (g_level == 1) g_level = 2;
 			else if (g_level == 2) g_level = 1;
 			g_screen_var = 1;
