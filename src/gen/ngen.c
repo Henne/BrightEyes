@@ -3378,7 +3378,8 @@ static void print_str(const char *str, const signed short x_in, const signed sho
 	}
 
 #if !defined(__BORLANDC__)
-	sdl_forced_update();
+	if (g_gfx_ptr == g_vga_memstart)
+		sdl_forced_update();
 #endif
 
 	mouse_cursor();
@@ -3455,7 +3456,8 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 	}
 
 #if !defined(__BORLANDC__)
-	sdl_forced_update();
+	if (g_gfx_ptr == g_vga_memstart)
+		sdl_forced_update();
 #endif
 
 	/* clear all input events */
@@ -3562,6 +3564,7 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 		}
 
 #if !defined(__BORLANDC__)
+	if (g_gfx_ptr == g_vga_memstart)
 		sdl_forced_update();
 #endif
 	}
@@ -5114,7 +5117,6 @@ static void print_values(void)
  */
 static void refresh_screen(void)
 {
-	//fprintf(stderr, "%s() -------------------\n", __func__);
 	if (g_screen_var) {
 
 		g_gfx_ptr = g_vga_backbuffer;
