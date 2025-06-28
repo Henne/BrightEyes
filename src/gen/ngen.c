@@ -1378,13 +1378,6 @@ static inline char* get_text(signed short no) {
 #define get_text(no) (g_texts[no])
 #endif
 
-static unsigned char* g_dst_src;
-static signed short g_dst_y2;
-static signed short g_dst_x2;
-static signed short g_dst_y1;
-static signed short g_dst_x1;
-static unsigned char* g_dst_dst;
-
 static signed short g_level; /* {-1, 0, 1 (= Novice), 2 (= Advanced) } */
 
 static signed short g_upper_border;
@@ -1498,7 +1491,6 @@ static int alloc_buffers(void)
 #endif
 	if (g_vga_memstart == NULL) errors++;
 	g_gfx_ptr = g_vga_memstart;
-	g_dst_dst = g_vga_memstart;
 
 	g_vga_backbuffer = (gen_alloc(64108) + 8);
 	if (g_vga_backbuffer == NULL) errors++;
@@ -3086,18 +3078,6 @@ void exit_video(void)
 #else
 	set_video_mode(0x00);
 #endif
-}
-
-static void do_draw_pic(const int mode)
-{
-	const int width = g_dst_x2 - g_dst_x1 + 1;
-	const int height = g_dst_y2 - g_dst_y1 + 1;
-
-	mouse_bg();
-
-	pic_copy(g_dst_dst, g_dst_x1, g_dst_y1, width, height, g_dst_src, mode);
-
-	mouse_cursor();
 }
 
 void call_fill_rect_gen(unsigned char *ptr, const signed short x1, const signed short y1, const signed short x2, const signed short y2, const signed short color)
@@ -7184,12 +7164,9 @@ static void intro(void)
 		i = 4;
 		g_in_key_ext = 0;
 		while ((cnt1 <= 100) && (g_in_key_ext == 0)) {
-			g_dst_x1 = 0;
-			g_dst_y1 = cnt2 + 60;
-			g_dst_x2 = 95;
-			g_dst_y2 = cnt2 + cnt1 + 59;
-			g_dst_src = g_dst_dst = g_vga_backbuffer;
-			do_draw_pic(0);
+
+			vgalib_copy_to_screen(g_vga_backbuffer + (cnt2 + 60) * O_WIDTH,
+					g_vga_backbuffer, 96, cnt1);
 
 			if (cnt1 != 100) {
 
