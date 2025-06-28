@@ -996,7 +996,6 @@ static const struct mouse_action* g_default_action = &g_action_default[0];
 static const struct mouse_action* g_action_table = NULL;
 
 
-static signed short g_screen_var = 0;
 static signed short g_gen_page = 0;
 static signed short g_text_x_mod = 0;
 
@@ -4533,11 +4532,13 @@ static void draw_head(void)
 
 /**
  * \brief changes the sex of the hero
+ * \return 0 = no full screen refresh needed otherwise 1
  */
-static void change_sex(void)
+static int change_sex(void)
 {
 	unsigned char* dst;
 	unsigned char* src;
+	int retval = 0;
 
 	/* change sex of the hero */
 	g_hero.sex ^= 1;
@@ -4554,7 +4555,7 @@ static void change_sex(void)
 			g_head_last = g_head_first_female[g_head_typus] - 1;
 		}
 
-		g_screen_var = 1;
+		retval = 1;
 
 	} else {
 		/* draw the gender icon */
@@ -4564,6 +4565,8 @@ static void change_sex(void)
 		vgalib_copy_to_screen(dst, src, 16, 16);
 		mouse_cursor();
 	}
+
+	return retval;
 }
 
 /**
@@ -5084,10 +5087,11 @@ static void print_values(void)
 
 /**
  * \brief refresh the screen content
+ * \param[in] full_refresh 0 = just update the vaules / 1 = update the background
  */
-static void refresh_screen(void)
+static void refresh_screen(const int full_refresh)
 {
-	if (g_screen_var) {
+	if (full_refresh) {
 
 		g_gfx_ptr = g_vga_backbuffer;
 
@@ -5161,8 +5165,6 @@ static void refresh_screen(void)
 	}
 
 	print_values();
-
-	g_screen_var = 0;
 }
 
 /**
@@ -5208,11 +5210,12 @@ static void new_attributes(void)
 	int values[8];
 	int pos_attribs[8];
 	int unset_attribs;
+	int full_refresh = 0;
 	signed char sex_bak;
 
 	/* set variable if hero has a typus */
 	if (g_hero.typus)
-		g_screen_var = 1;
+		full_refresh = 1;
 
 	/* save the name of the hero */
 	/* TODO strncpy() would be better here */
@@ -5232,7 +5235,7 @@ static void new_attributes(void)
 
 	strcpy((char*)g_hero.name, name_bak);
 
-	refresh_screen();
+	refresh_screen(full_refresh);
 
 	att_ptr = &g_hero.attrib[0].normal;
 
@@ -5286,7 +5289,7 @@ static void new_attributes(void)
 		att_ptr[3 * di + 0] = att_ptr[3 * di + 1] = randval;
 
 		mouse_bg();
-		refresh_screen();
+		refresh_screen(0);
 		mouse_cursor();
 	}
 
@@ -5327,7 +5330,7 @@ static void new_attributes(void)
 		att_ptr[3 * di + 0] = att_ptr[3 * di + 1] = randval;
 
 		mouse_bg();
-		refresh_screen();
+		refresh_screen(0);
 		mouse_cursor();
 	}
 }
@@ -5820,8 +5823,8 @@ static void change_attributes(void)
 				g_hero.attrib[2].current = --g_hero.attrib[2].normal;
 				g_got_ch_bonus = 0;
 			}
-			g_screen_var = 1;
-			refresh_screen();
+
+			refresh_screen(1);
 
 		} else {
 			return;
@@ -5883,7 +5886,7 @@ static void change_attributes(void)
 
 			g_attrib_changed[tmp2] = INC;
 
-			refresh_screen();
+			refresh_screen(0);
 
 			tmp1 = 0;
 			while (tmp1 != 2) {
@@ -5917,7 +5920,7 @@ static void change_attributes(void)
 					//g_hero.attrib[si + 7].normal = ++g_ghero.attrib[si + 7].current;
 					ptr1[0] = ++ptr1[1];
 
-					refresh_screen();
+					refresh_screen(0);
 				}
 			}
 		} else {
@@ -5947,7 +5950,7 @@ static void change_attributes(void)
 			/* mark this attribute as decremented */
 			g_attrib_changed[tmp2] = DEC;
 
-			refresh_screen();
+			refresh_screen(0);
 
 			tmp1 = 0;
 			while (tmp1 != 2) {
@@ -5984,7 +5987,7 @@ static void change_attributes(void)
 
 				g_attrib_changed[si + 7] = DEC;
 
-				refresh_screen();
+				refresh_screen(0);
 			}
 		}
 	}
@@ -6080,7 +6083,6 @@ static int select_typus(const int level)
 
 			/* set new typus */
 			g_hero.typus = t.t[di - 1];
-			g_screen_var = 1;
 
 			load_typus(g_hero.typus);
 
@@ -6103,6 +6105,8 @@ static int select_typus(const int level)
 			/* reset boni flags */
 			g_got_mu_bonus = g_got_ch_bonus = 0;
 			fill_values(level);
+
+			return 1;
 		} else {
 			if (g_got_mu_bonus) {
 				g_hero.attrib[0].current = ++g_hero.attrib[0].normal;
@@ -6112,11 +6116,11 @@ static int select_typus(const int level)
 			}
 		}
 
-		return 1;
 	} else {
 		infobox(get_text(265), 0);
-		return 0;
 	}
+
+	return 0;
 }
 
 /**
@@ -6170,7 +6174,7 @@ static void inc_skill(const signed short skill, const signed short max, char *ms
 
 	}
 
-	refresh_screen();
+	refresh_screen(0);
 }
 
 /**
@@ -6377,7 +6381,7 @@ static void inc_spell(const signed short spell)
 
 		}
 
-		refresh_screen();
+		refresh_screen(0);
 	}
 }
 
@@ -6679,7 +6683,7 @@ static void choose_atpa(void)
 							g_hero.at_weapon[skill]++;
 							/* dec PA */
 							g_hero.pa_weapon[skill]--;
-							refresh_screen();
+							refresh_screen(0);
 						} else {
 							infobox(get_text(255), 0);
 						}
@@ -6690,7 +6694,7 @@ static void choose_atpa(void)
 							g_hero.at_weapon[skill]--;
 							/* inc PA */
 							g_hero.pa_weapon[skill]++;
-							refresh_screen();
+							refresh_screen(0);
 						} else {
 							infobox(get_text(256), 0);
 						}
@@ -6817,7 +6821,7 @@ static int choose_typus(const int level)
 		g_head_last = g_head_first_female[g_head_typus] - 1;
 	}
 	fill_values(level);
-	g_screen_var = 1;
+
 	return 1;
 }
 
@@ -6831,10 +6835,9 @@ static void do_gen(const int init_level)
 	int menu_option;
 	int target_page;
 	int level = init_level;
+	int full_refresh = 1;
 
 	g_level = level;
-
-	g_screen_var = 1;
 
 	/* initialize the hero structure */
 	clear_hero();
@@ -6845,8 +6848,9 @@ static void do_gen(const int init_level)
 	/* main loop */
 	while (!done) {
 
-		if (g_screen_var) {
-			refresh_screen();
+		if (full_refresh) {
+			refresh_screen(1);
+			full_refresh = 0;
 		}
 
 		flush_keyboard_queue();
@@ -6875,7 +6879,7 @@ static void do_gen(const int init_level)
 								break;
 							}
 							case 2: {
-								change_sex();
+								full_refresh = change_sex();
 								break;
 							}
 							case 3: {
@@ -6887,7 +6891,7 @@ static void do_gen(const int init_level)
 
 								/* imediately open the menu */
 								g_mouse_rightclick_event = 1;
-								g_screen_var = 1;
+								full_refresh = 1;
 								break;
 							}
 							case 5: {
@@ -6895,11 +6899,11 @@ static void do_gen(const int init_level)
 								break;
 							}
 							case 6: {
-								select_typus(level);
+								full_refresh = select_typus(level);
 								break;
 							}
 							case 7: {
-								choose_typus(level);
+								full_refresh = choose_typus(level);
 								break;
 							}
 							case 8: {
@@ -6938,16 +6942,15 @@ static void do_gen(const int init_level)
 		}
 
 		if (g_in_key_ext == KEY_CTRL_F3)
-			change_sex();
+			full_refresh = change_sex();
 
 		if (g_in_key_ext == KEY_CTRL_F4)
 			enter_name();
 
 		if ((g_gen_page == 0) && (g_in_key_ext == KEY_6)) {
-			if (level == 1) level = 2;
-			else if (level == 2) level = 1;
-			g_screen_var = 1;
+			level = (level == 1 ? 2 : 1);
 			g_level = level;
+			full_refresh = 1;
 		}
 
 		/* Change Head Logic */
@@ -6980,7 +6983,7 @@ static void do_gen(const int init_level)
 						g_gen_page = 0;
 					}
 
-					g_screen_var = 1;
+					full_refresh = 1;
 
 				} else {
 					infobox(get_text(72), 0);
@@ -6996,7 +6999,7 @@ static void do_gen(const int init_level)
 						g_gen_page = (g_hero.typus < 7 ? 4 : 10);
 					}
 
-					g_screen_var = 1;
+					full_refresh = 1;
 
 				} else {
 					infobox(get_text(72), 0);
@@ -7013,7 +7016,7 @@ static void do_gen(const int init_level)
 
 					if ((target_page != g_gen_page) && (target_page < 5 || g_hero.typus >= 7)) {
 						g_gen_page = target_page;
-						g_screen_var = 1;
+						full_refresh = 1;
 					}
 				} else {
 					infobox(get_text(72), 0);
