@@ -1377,8 +1377,6 @@ static inline char* get_text(signed short no) {
 #define get_text(no) (g_texts[no])
 #endif
 
-static signed short g_level; /* {-1, 0, 1 (= Novice), 2 (= Advanced) } */
-
 static signed short g_upper_border;
 static signed short g_left_border;
 static int g_menu_tiles = 3; /* number of menu tiles width {3,4} */
@@ -6837,8 +6835,6 @@ static void do_gen(const int init_level)
 	int level = init_level;
 	int full_refresh = 1;
 
-	g_level = level;
-
 	/* initialize the hero structure */
 	clear_hero();
 
@@ -6950,7 +6946,6 @@ static void do_gen(const int init_level)
 
 		if ((g_gen_page == 0) && (g_in_key_ext == KEY_6)) {
 			level = (level == 1 ? 2 : 1);
-			g_level = level;
 			full_refresh = 1;
 		}
 
