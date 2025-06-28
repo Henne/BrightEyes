@@ -3111,7 +3111,7 @@ void call_fill_rect_gen(unsigned char *ptr, const signed short x1, const signed 
 
 	ptr += y1 * O_WIDTH + x1;
 
-	fill_rect(ptr, color, width, height);
+	vgalib_fill_rect(ptr, color, width, height);
 }
 
 
