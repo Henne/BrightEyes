@@ -4655,7 +4655,7 @@ static void print_typusname(void)
 static void print_values(void)
 {
 	int i;
-	char tmp[4];
+	char tmp[16];
 	signed short width;
 	signed short align_left = 222;
 	signed short align_right = 302;
