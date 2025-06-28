@@ -5996,8 +5996,9 @@ static void change_attributes(void)
 /**
  * \brief select a possible typus with current attribute values
  * \param[in] level 1 = Novice / 2 = Advanced
+ * \return 0 = no changes / 1 = archetype selected
  */
-static void select_typus(const int level)
+static int select_typus(const int level)
 {
 	volatile signed char *ptr;
 	signed short i;
@@ -6063,7 +6064,7 @@ static void select_typus(const int level)
 			} else {
 				infobox(get_text(31), 0);
 			}
-			return;
+			return 0;
 		}
 
 		di = gui_radio(get_text(30), possible_types,
@@ -6110,8 +6111,11 @@ static void select_typus(const int level)
 				g_hero.attrib[2].current = ++g_hero.attrib[2].normal;
 			}
 		}
+
+		return 1;
 	} else {
 		infobox(get_text(265), 0);
+		return 0;
 	}
 }
 
@@ -6703,20 +6707,21 @@ static void choose_atpa(void)
 /**
  * \brief	choose a typus manually
  * \param[in] level 1 = Novice / 2 = Advanced
+ * \return 0 = no changes / 1 = archetype chosen
  */
-static void choose_typus(const int level)
+static int choose_typus(const int level)
 {
-	signed short choosen_typus;
-	signed short randval;
-	signed char sex_bak;
 	volatile signed char *ptr;
+	int choosen_typus;
+	int randval;
 	char name_bak[20];
+	signed char sex_bak;
 
-	signed short i;
-	signed short typus_names;
+	int i;
+	int typus_names;
 
 	if (!gui_bool(get_text(264)))
-		return;
+		return 0;
 
 	/* female or male typus names */
 	typus_names = (g_hero.sex ? 271 : 17);
@@ -6730,7 +6735,7 @@ static void choose_typus(const int level)
 				get_text(typus_names + 11), get_text(typus_names + 12));
 
 	if (choosen_typus == -1)
-		return;
+		return 0;
 
 	/* clear the hero area with saved name and sex */
 	strcpy(name_bak, (const char*)g_hero.name);
@@ -6813,6 +6818,7 @@ static void choose_typus(const int level)
 	}
 	fill_values(level);
 	g_screen_var = 1;
+	return 1;
 }
 
 /**
