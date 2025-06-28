@@ -482,79 +482,6 @@ set_palette_loop1:
 #endif
 }
 
-void pic_copy(unsigned char *dst, const signed short d_x, const signed short d_y,
-		const signed short width, const signed short height,
-		unsigned char *src, const signed short mode)
-{
-	unsigned char *d = dst + 320 * d_y + d_x;
-	unsigned char *s = src;
-	int i, j;
-
-	switch (mode) {
-		/* this is not used in GEN */
-		/* copy only values < 0xc8 */
-		case 1: {
-
-			for (i = height; i > 0; i--) {
-				for (j = 0; j < width; j++) {
-					if (d[j] < 0xc8)
-						d[j] = s[j];
-				}
-				s += width;
-				d += O_WIDTH;
-			}
-			break;
-		}
-		/* copy each value */
-		default: {
-
-			for (i = height; i > 0; i--) {
-				memcpy(d, s, width);
-				d += O_WIDTH;
-				s += width;
-			}
-			break;
-		}
-	}
-#if !defined(__BORLANDC__)
-	if (dst == g_vga_memstart) {
-		sdl_update_rect_window(d_x, d_y, width, height);
-	}
-#endif
-}
-
-/**
- * \brief copies an area from one screen to another
- * \param[in] dst_in pointer to the start position on the screen
- * \param[in] src_in pointer to the start position on the screen
- * \param[in] width width of the area in pixels
- * \param[in] height height of the area in pixels
- * \note formerly known as pic_copy() with mode 3
- */
-void vgalib_screen_copy(unsigned char *dst_in, unsigned char *src_in, const int width, const int height)
-{
-	unsigned char *dst = dst_in;
-	unsigned char *src = src_in;
-	int i;
-
-	for (i = height; i > 0; i--) {
-		memcpy(dst, src, width);
-		dst += O_WIDTH;
-		src += O_WIDTH;
-	}
-
-#if !defined(__BORLANDC__)
-	/* check if its really the vga memory, dst can also be another buffer */
-	const int offset = dst_in - g_vga_memstart;
-	if ((0 <= offset) && (offset <= O_WIDTH * O_HEIGHT)) {
-		const int y = offset / O_WIDTH;
-		const int x = offset - y * O_WIDTH;
-
-		sdl_update_rect_window(x, y, width, height);
-	}
-#endif
-}
-
 /**
  * \brief fills an area on a screen
  * \param[in] dst_in pointer to the start position on the screen
@@ -635,6 +562,42 @@ void vgalib_copy_to_screen(unsigned char *dst_in, unsigned char *src_in, const i
  * \param[in] src_in pointer to the array
  * \param[in] width width of the area in pixels
  * \param[in] height height of the area in pixels
+ * \note works the same way as pic_copy() with mode 1
+ */
+void vgalib_copy_to_screen_bounded(unsigned char *dst_in, unsigned char *src_in, const int width, const int height)
+{
+	unsigned char *src = src_in;
+	unsigned char *dst = dst_in;
+	int h, j;
+
+
+	/* regular case */
+	for (h = height; h > 0; h--) {
+		for (j = 0; j < width; j++) {
+			if (dst[j] < 0xc8) dst[j] = src[j];
+		}
+		dst += O_WIDTH;
+		src += width;
+	}
+
+#if !defined(__BORLANDC__)
+	/* check if its really the vga memory, dst can also be another buffer */
+	const int offset = dst_in - g_vga_memstart;
+	if ((0 <= offset) && (offset <= O_WIDTH * O_HEIGHT)) {
+		const int y = offset / O_WIDTH;
+		const int x = offset - y * O_WIDTH;
+
+		sdl_update_rect_window(x, y, width, height);
+	}
+#endif
+}
+
+/**
+ * \brief copy the content from an array to a screen
+ * \param[in] dst_in pointer to the start position on the screen
+ * \param[in] src_in pointer to the array
+ * \param[in] width width of the area in pixels
+ * \param[in] height height of the area in pixels
  * \note works the same way as pic_copy() with mode 2
  */
 void vgalib_copy_to_screen_nonzero(unsigned char *dst_in, unsigned char *src_in, const int width, const int height)
@@ -651,6 +614,38 @@ void vgalib_copy_to_screen_nonzero(unsigned char *dst_in, unsigned char *src_in,
 		}
 		dst += O_WIDTH;
 		src += width;
+	}
+
+#if !defined(__BORLANDC__)
+	/* check if its really the vga memory, dst can also be another buffer */
+	const int offset = dst_in - g_vga_memstart;
+	if ((0 <= offset) && (offset <= O_WIDTH * O_HEIGHT)) {
+		const int y = offset / O_WIDTH;
+		const int x = offset - y * O_WIDTH;
+
+		sdl_update_rect_window(x, y, width, height);
+	}
+#endif
+}
+
+/**
+ * \brief copies an area from one screen to another
+ * \param[in] dst_in pointer to the start position on the screen
+ * \param[in] src_in pointer to the start position on the screen
+ * \param[in] width width of the area in pixels
+ * \param[in] height height of the area in pixels
+ * \note formerly known as pic_copy() with mode 3
+ */
+void vgalib_screen_copy(unsigned char *dst_in, unsigned char *src_in, const int width, const int height)
+{
+	unsigned char *dst = dst_in;
+	unsigned char *src = src_in;
+	int i;
+
+	for (i = height; i > 0; i--) {
+		memcpy(dst, src, width);
+		dst += O_WIDTH;
+		src += O_WIDTH;
 	}
 
 #if !defined(__BORLANDC__)
