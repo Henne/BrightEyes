@@ -6824,17 +6824,6 @@ static void do_gen(void)
 
 	g_screen_var = 1;
 
-	/* try to set the level from parameters */
-	g_level = ((g_param_level == 'a') ? 2 : ((g_param_level == 'n') ? 1 : -1));
-
-	/* ask for level */
-	while (g_level == -1) {
-		g_level = gui_radio(get_text(0), 2, get_text(1), get_text(2));
-#if !defined(__BORLANDC__)
-		if (g_sdl_quit_event) return;
-#endif
-	}
-
 	/* initialize the hero structure */
 	clear_hero();
 
@@ -7444,6 +7433,17 @@ int main_gen(int argc, char **argv)
 #endif
 
 	flush_keyboard_queue();
+
+	/* try to set the level from parameters */
+	g_level = ((g_param_level == 'a') ? 2 : ((g_param_level == 'n') ? 1 : -1));
+
+	/* ask for level */
+	while (g_level == -1) {
+		g_level = gui_radio(get_text(0), 2, get_text(1), get_text(2));
+#if !defined(__BORLANDC__)
+		if (g_sdl_quit_event) return 0;
+#endif
+	}
 
 	do_gen();
 
