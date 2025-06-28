@@ -7060,7 +7060,7 @@ static void do_gen(void)
  * \param[in] src source palette
  * \param[in] n the number of colors
  */
-static void pal_fade_out(signed char *dst, signed char *src, const signed short n)
+static void pal_fade_out(unsigned char *dst, const unsigned char *src, const signed short n)
 {
 	signed short i;
 
@@ -7096,7 +7096,7 @@ static void pal_fade_out(signed char *dst, signed char *src, const signed short 
  * \param[in] col the first color of the palette
  * \param[in] n the number of colors
  */
-static void pal_fade_in(signed char *dst, signed char *src, const signed short col, const signed short n)
+static void pal_fade_in(unsigned char *dst, const unsigned char *src, const signed short col, const signed short n)
 {
 	signed short i;
 	signed short si;
@@ -7132,24 +7132,24 @@ static void pal_fade_in(signed char *dst, signed char *src, const signed short c
  */
 static void intro(void)
 {
-	signed char cnt1;
-	signed char cnt2;
+	unsigned char *pal_src;
+	unsigned char *pal_dst;
+	int cnt1;
+	int cnt2;
+	int i;
+	int handle;
+	int flen;
 	signed short width;
 	signed short height;
-	signed short flen;
-	signed char *pal_src;
-	signed char *pal_dst;
 	struct nvf_desc nvf;
 
-	signed short i;
-	signed short handle;
 
 	g_in_intro = 1;
 
 	/* load ATTIC */
 	handle = open_datfile(18);
 	if (handle != -1) {
-		read_datfile(handle, g_buffer_heads_dat, 20000);
+		read_datfile(handle, g_buffer_heads_dat, 4000);
 		close(handle);
 
 		nvf.src = g_buffer_heads_dat;
@@ -7276,7 +7276,7 @@ static void intro(void)
 	if (g_dsagen_lang == LANG_DE) {
 		/* load DSALOGO.DAT */
 		handle = open_datfile(16);
-		read_datfile(handle, g_buffer_heads_dat, 20000);
+		read_datfile(handle, g_buffer_heads_dat, 6000);
 		close(handle);
 
 		nvf.src = g_buffer_heads_dat;
@@ -7304,7 +7304,7 @@ static void intro(void)
 
 		/* load GENTIT.DAT */
 		handle = open_datfile(17);
-		read_datfile(handle, g_buffer_heads_dat, 20000);
+		read_datfile(handle, g_buffer_heads_dat, 2000);
 		close(handle);
 
 		nvf.src = g_buffer_heads_dat;
@@ -7326,20 +7326,20 @@ static void intro(void)
 
 		memcpy(g_vga_backbuffer + 500, &g_pal_dsalogo, 96);
 
-		pal_src = (signed char*)g_vga_backbuffer + 500;
-		pal_dst = (signed char*)g_vga_backbuffer;
+		pal_src = g_vga_backbuffer + 500;
+		pal_dst = g_vga_backbuffer;
 
 		memset(pal_dst, 0, 96);
 
 		for (i = 0; i < 64; i++) {
 			pal_fade_in(pal_dst, pal_src, i, 32);
 			wait_for_vsync();
-			set_palette((const unsigned char*)pal_dst, 0, 32);
+			set_palette(pal_dst, 0, 32);
 		}
 	} else {
 		/* load ROALOGUS.DAT */
 		handle = open_datfile(37);
-		flen = read_datfile(handle, g_buffer_heads_dat, 20000);
+		flen = read_datfile(handle, g_buffer_heads_dat, 12000);
 		close(handle);
 
 		decomp_pp20(g_vga_backbuffer, g_buffer_heads_dat, (unsigned short)flen);
@@ -7365,10 +7365,10 @@ static void intro(void)
 		close(handle);
 
 		nvf.src = g_buffer_heads_dat;
+		nvf.dst = g_vga_backbuffer;
 		nvf.type = 0;
 		nvf.width = &width;
 		nvf.height = &height;
-		nvf.dst = g_vga_backbuffer;
 		nvf.no = 0;
 
 		process_nvf(&nvf);
@@ -7383,15 +7383,15 @@ static void intro(void)
 		set_palette(g_pal_roalogo + 0x180, 128, 128);
 		memcpy(g_vga_backbuffer + 0x1f4, &g_pal_dsalogo, 3 * 32);
 
-		pal_src = (signed char*)g_vga_backbuffer + 500;
-		pal_dst = (signed char*)g_vga_backbuffer;
+		pal_src = g_vga_backbuffer + 500;
+		pal_dst = g_vga_backbuffer;
 
 		memset(pal_dst, 0, 96);
 
 		for (i = 0; i < 64; i++) {
 			pal_fade_in(pal_dst, pal_src, i, 32);
 			wait_for_vsync();
-			set_palette((const unsigned char*)pal_dst, 32, 32);
+			set_palette(pal_dst, 32, 32);
 		}
 	}
 
@@ -7403,29 +7403,29 @@ static void intro(void)
 
 		memcpy(g_vga_backbuffer, &g_pal_dsalogo, 96);
 
-		pal_src = (signed char*)g_vga_backbuffer + 500;
-		pal_dst = (signed char*)g_vga_backbuffer;
+		pal_src = g_vga_backbuffer + 500;
+		pal_dst = g_vga_backbuffer;
 
 		memset(g_vga_backbuffer + 500, 0, 96);
 
 		for (i = 0; i < 64; i++) {
 			pal_fade_out(pal_dst, pal_src, 32);
 			wait_for_vsync();
-			set_palette((const unsigned char*)pal_dst, 0, 32);
+			set_palette(pal_dst, 0, 32);
 		}
 	} else {
 
 		memcpy(g_vga_backbuffer, &g_pal_roalogo, 3 * 256);
 
-		pal_src = (signed char*)g_vga_backbuffer + 800;
-		pal_dst = (signed char*)g_vga_backbuffer;
+		pal_src = g_vga_backbuffer + 800;
+		pal_dst = g_vga_backbuffer;
 
 		memset(g_vga_backbuffer + 800, 0, 3 * 256);
 
 		for (i = 0; i < 64; i++) {
 			pal_fade_out(pal_dst, pal_src, 256);
 			wait_for_vsync();
-			set_palette((const unsigned char*)pal_dst, 0, 256);
+			set_palette(pal_dst, 0, 256);
 		}
 	}
 
