@@ -5465,8 +5465,9 @@ static void spell_inc_novice(const signed short spell)
 
 /**
  * \brief fills the values if typus is chosen
+ * \param[in] level 1 = Novice / 2 = Advanced
  */
-static void fill_values(void)
+static void fill_values(const int level)
 {
 	const struct struct_money *money_ptr;
 	signed short i;
@@ -5529,7 +5530,7 @@ static void fill_values(void)
 		}
 
 		/* get convertable increase attempts */
-		if ((di != 0) && (g_level == 2) && gui_bool(get_text(269))) {
+		if ((di != 0) && (level == 2) && gui_bool(get_text(269))) {
 			/* create string */
 			sprintf(g_textbuffer, get_text(270), di);
 
@@ -5569,7 +5570,7 @@ static void fill_values(void)
 	g_hero.ae = g_hero.ae_max = g_init_ae[g_hero.typus];
 
 	/* wanna change 10 spell_attempts against 1W6+2 AE ? */
-	if ((g_hero.typus == 9) && (g_level == 2) && gui_bool(get_text(268))) {
+	if ((g_hero.typus == 9) && (level == 2) && gui_bool(get_text(268))) {
 		/* change spell_attempts */
 		g_hero.spell_incs -= 10;
 		g_hero.ae_max += random_interval_gen(3, 8);
@@ -5677,7 +5678,7 @@ static void fill_values(void)
 	calc_at_pa();
 
 	/* if mode == novice */
-	if (g_level == 1) {
+	if (level == 1) {
 		/* increase skills automatically */
 		for (i = 0; g_hero.skill_incs > 0; i++) {
 			skill = g_autoskills[g_hero.typus][i];
@@ -5994,8 +5995,9 @@ static void change_attributes(void)
 
 /**
  * \brief select a possible typus with current attribute values
+ * \param[in] level 1 = Novice / 2 = Advanced
  */
-static void select_typus(void)
+static void select_typus(const int level)
 {
 	volatile signed char *ptr;
 	signed short i;
@@ -6099,7 +6101,7 @@ static void select_typus(void)
 
 			/* reset boni flags */
 			g_got_mu_bonus = g_got_ch_bonus = 0;
-			fill_values();
+			fill_values(level);
 		} else {
 			if (g_got_mu_bonus) {
 				g_hero.attrib[0].current = ++g_hero.attrib[0].normal;
@@ -6645,8 +6647,8 @@ static void select_spell(void)
  */
 static void choose_atpa(void)
 {
-	signed short skill;
-	signed short increase;
+	int skill;
+	int increase;
 
 	g_text_x_mod = -80;
 
@@ -6700,8 +6702,9 @@ static void choose_atpa(void)
 
 /**
  * \brief	choose a typus manually
+ * \param[in] level 1 = Novice / 2 = Advanced
  */
-static void choose_typus(void)
+static void choose_typus(const int level)
 {
 	signed short choosen_typus;
 	signed short randval;
@@ -6714,6 +6717,7 @@ static void choose_typus(void)
 
 	if (!gui_bool(get_text(264)))
 		return;
+
 	/* female or male typus names */
 	typus_names = (g_hero.sex ? 271 : 17);
 
@@ -6807,20 +6811,22 @@ static void choose_typus(void)
 		g_head_first = g_head_current = g_head_first_male[g_head_typus];
 		g_head_last = g_head_first_female[g_head_typus] - 1;
 	}
-	fill_values();
+	fill_values(level);
 	g_screen_var = 1;
 }
 
 /**
  * \brief main loop of gen
+ * \param[in] init_level 1 = Novice / 2 = Advanced
  */
-static void do_gen(void)
+static void do_gen(const int init_level)
 {
-	int done;
+	int done = 0;
 	int menu_option;
 	int target_page;
+	int level = init_level;
 
-	done = 0;
+	g_level = level;
 
 	g_screen_var = 1;
 
@@ -6883,11 +6889,11 @@ static void do_gen(void)
 								break;
 							}
 							case 6: {
-								select_typus();
+								select_typus(level);
 								break;
 							}
 							case 7: {
-								choose_typus();
+								choose_typus(level);
 								break;
 							}
 							case 8: {
@@ -6932,9 +6938,10 @@ static void do_gen(void)
 			enter_name();
 
 		if ((g_gen_page == 0) && (g_in_key_ext == KEY_6)) {
-			if (g_level == 1) g_level = 2;
-			else if (g_level == 2) g_level = 1;
+			if (level == 1) level = 2;
+			else if (level == 2) level = 1;
 			g_screen_var = 1;
+			g_level = level;
 		}
 
 		/* Change Head Logic */
@@ -6956,7 +6963,7 @@ static void do_gen(void)
 		}
 
 		/* Change Page Logic */
-		if (g_level == 2) {
+		if (level == 2) {
 
 			if (g_in_key_ext == KEY_RIGHT) {
 
@@ -7375,6 +7382,7 @@ int main_gen(int argc, char **argv)
 	LPWSTR cmdline = GetCommandLineW();
 	LPWSTR *argv = CommandLineToArgvW(cmdline, &argc);
 #endif
+	int l_level = -1;
 
 	if (argc > 1)
 		g_called_with_args = 1;
@@ -7434,17 +7442,17 @@ int main_gen(int argc, char **argv)
 	flush_keyboard_queue();
 
 	/* try to set the level from parameters */
-	g_level = ((g_param_level == 'a') ? 2 : ((g_param_level == 'n') ? 1 : -1));
+	l_level = ((g_param_level == 'a') ? 2 : ((g_param_level == 'n') ? 1 : -1));
 
 	/* ask for level */
-	while (g_level == -1) {
-		g_level = gui_radio(get_text(0), 2, get_text(1), get_text(2));
+	while (l_level == -1) {
+		l_level = gui_radio(get_text(0), 2, get_text(1), get_text(2));
 #if !defined(__BORLANDC__)
 		if (g_sdl_quit_event) return 0;
 #endif
 	}
 
-	do_gen();
+	do_gen(l_level);
 
 	if (g_music != MUSIC_OFF) {
 		exit_music();
