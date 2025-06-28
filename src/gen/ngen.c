@@ -5289,7 +5289,7 @@ static void new_attributes(void)
 		att_ptr[3 * di + 0] = att_ptr[3 * di + 1] = randval;
 
 		mouse_bg();
-		refresh_screen(0);
+		print_values();
 		mouse_cursor();
 	}
 
@@ -5330,7 +5330,7 @@ static void new_attributes(void)
 		att_ptr[3 * di + 0] = att_ptr[3 * di + 1] = randval;
 
 		mouse_bg();
-		refresh_screen(0);
+		print_values();
 		mouse_cursor();
 	}
 }
@@ -5886,7 +5886,7 @@ static void change_attributes(void)
 
 			g_attrib_changed[tmp2] = INC;
 
-			refresh_screen(0);
+			print_values();
 
 			tmp1 = 0;
 			while (tmp1 != 2) {
@@ -5920,7 +5920,7 @@ static void change_attributes(void)
 					//g_hero.attrib[si + 7].normal = ++g_ghero.attrib[si + 7].current;
 					ptr1[0] = ++ptr1[1];
 
-					refresh_screen(0);
+					print_values();
 				}
 			}
 		} else {
@@ -5950,7 +5950,7 @@ static void change_attributes(void)
 			/* mark this attribute as decremented */
 			g_attrib_changed[tmp2] = DEC;
 
-			refresh_screen(0);
+			print_values();
 
 			tmp1 = 0;
 			while (tmp1 != 2) {
@@ -5987,7 +5987,7 @@ static void change_attributes(void)
 
 				g_attrib_changed[si + 7] = DEC;
 
-				refresh_screen(0);
+				print_values();
 			}
 		}
 	}
@@ -6174,7 +6174,7 @@ static void inc_skill(const signed short skill, const signed short max, char *ms
 
 	}
 
-	refresh_screen(0);
+	print_values();
 }
 
 /**
@@ -6381,7 +6381,7 @@ static void inc_spell(const signed short spell)
 
 		}
 
-		refresh_screen(0);
+		print_values();
 	}
 }
 
@@ -6683,7 +6683,7 @@ static void choose_atpa(void)
 							g_hero.at_weapon[skill]++;
 							/* dec PA */
 							g_hero.pa_weapon[skill]--;
-							refresh_screen(0);
+							print_values();
 						} else {
 							infobox(get_text(255), 0);
 						}
@@ -6694,7 +6694,7 @@ static void choose_atpa(void)
 							g_hero.at_weapon[skill]--;
 							/* inc PA */
 							g_hero.pa_weapon[skill]++;
-							refresh_screen(0);
+							print_values();
 						} else {
 							infobox(get_text(256), 0);
 						}
