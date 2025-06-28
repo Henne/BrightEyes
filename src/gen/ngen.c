@@ -7179,12 +7179,8 @@ static void intro(void)
 
 		/* glowing at the bottom */
 		for (i = 0; i < 4; i++) {
-			g_dst_x1 = 112;
-			g_dst_y1 = 140;
-			g_dst_x2 = 207;
-			g_dst_y2 = 149;
-			g_dst_src = (unsigned char*)(i * 960 + g_vga_backbuffer + 9600);
-			do_draw_pic(0);
+			vgalib_copy_to_screen(g_vga_memstart + 140 * O_WIDTH + 112,
+					g_vga_backbuffer + i * 960 + 9600, 96, 10);
 			vsync_or_key(20);
 		}
 
@@ -7263,12 +7259,8 @@ static void intro(void)
 		set_palette(g_buffer_heads_dat + flen - 32 * 3, 0, 32);
 
 		/* draw the picture */
-		g_dst_x1 = 60;
-		g_dst_y1 = 50;
-		g_dst_x2 = 259;
-		g_dst_y2 = 149;
-		g_dst_src = g_vga_backbuffer;
-		do_draw_pic(0);
+		vgalib_copy_to_screen(g_vga_memstart + 50 * O_WIDTH + 60,
+					g_vga_backbuffer, 200, 100);
 
 		vsync_or_key(200);
 	}
@@ -7295,12 +7287,7 @@ static void intro(void)
 		set_palette((const unsigned char*)g_pal_tmp, 0, 32);
 
 		/* draw DSALOGO.DAT */
-		g_dst_x1 = 0;
-		g_dst_y1 = 0;
-		g_dst_x2 = 319;
-		g_dst_y2 = 99;
-		g_dst_src = g_vga_backbuffer;
-		do_draw_pic(0);
+		vgalib_copy_to_screen(g_vga_memstart, g_vga_backbuffer, O_WIDTH, 100);
 
 		/* load GENTIT.DAT */
 		handle = open_datfile(17);
@@ -7316,13 +7303,9 @@ static void intro(void)
 
 		process_nvf(&nvf);
 
-		/* draw DSALOGO.DAT */
-		g_dst_x1 = 10;
-		g_dst_y1 = 110;
-		g_dst_x2 = 329;
-		g_dst_y2 = 159;
-		g_dst_src = g_vga_backbuffer;
-		do_draw_pic(0);
+		/* draw GENTIT.DAT */
+		vgalib_copy_to_screen(g_vga_memstart + 110 * O_WIDTH + 10,
+				g_vga_backbuffer, O_WIDTH, 50);
 
 		memcpy(g_vga_backbuffer + 500, &g_pal_dsalogo, 96);
 
@@ -7350,12 +7333,7 @@ static void intro(void)
 		set_palette(g_pal_roalogo, 0, 256);
 
 		/* draw ROALOGUS.DAT */
-		g_dst_x1 = 0;
-		g_dst_y1 = 0;
-		g_dst_x2 = 319;
-		g_dst_y2 = 139;
-		g_dst_src = g_vga_backbuffer;
-		do_draw_pic(0);
+		vgalib_copy_to_screen(g_vga_memstart, g_vga_backbuffer, O_WIDTH, 140);
 
 		memcpy(g_pal_roalogo, g_vga_backbuffer + 140 * O_WIDTH + 2, 3 * 256);
 
@@ -7374,10 +7352,7 @@ static void intro(void)
 		process_nvf(&nvf);
 
 		/* draw E_GENTIT.DAT */
-		g_dst_y1 = 140;
-		g_dst_y2 = 189;
-		g_dst_src = g_vga_backbuffer;
-		do_draw_pic(0);
+		vgalib_copy_to_screen(g_vga_memstart + 140 * O_WIDTH, g_vga_backbuffer, O_WIDTH, 50);
 
 		memcpy(g_pal_roalogo + 3 * 32, &g_pal_dsalogo, 3 * 32);
 		set_palette(g_pal_roalogo + 0x180, 128, 128);
