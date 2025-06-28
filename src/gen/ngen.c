@@ -5087,84 +5087,78 @@ static void print_values(void)
 
 /**
  * \brief refresh the screen content
- * \param[in] full_refresh 0 = just update the vaules / 1 = update the background
+ * \param[in] level 1 = Novice / 2 = Advanced
  */
-static void refresh_screen(const int full_refresh)
+static void refresh_background(const int level)
 {
-	if (full_refresh) {
+	g_gfx_ptr = g_vga_backbuffer;
 
-		g_gfx_ptr = g_vga_backbuffer;
+	load_page(g_gen_page);
 
-		load_page(g_gen_page);
+	/* page with base values */
+	if (g_gen_page == 0) {
 
-		/* page with base values */
-		if (g_gen_page == 0) {
+		unsigned char* src;
 
-			unsigned char* src;
-
-			/* hero is female */
-			if (g_hero.sex) {
-				src = g_buffer_sex_dat + 256 * g_hero.sex;
-				vgalib_copy_to_screen(get_gfx_ptr(305, 7), src, 16, 16);
-			}
+		/* hero is female */
+		if (g_hero.sex) {
+			src = g_buffer_sex_dat + 256 * g_hero.sex;
+			vgalib_copy_to_screen(get_gfx_ptr(305, 7), src, 16, 16);
+		}
 
 #if defined(__BORLANDC__)
-			if (g_dsagen_lang == LANG_DE) {
-				/* copy arrow_area to backbuffer */
-				vgalib_copy_to_screen(get_gfx_ptr(145, 178), g_arrow_area, 170, 20);
-				/* copy mr_bar to backbuffer */
-				vgalib_copy_to_screen(get_gfx_ptr(166, 182), g_mr_bar, 77, 9);
+		if (g_dsagen_lang == LANG_DE) {
+			/* copy arrow_area to backbuffer */
+			vgalib_copy_to_screen(get_gfx_ptr(145, 178), g_arrow_area, 170, 20);
+			/* copy mr_bar to backbuffer */
+			vgalib_copy_to_screen(get_gfx_ptr(166, 182), g_mr_bar, 77, 9);
 
-			}
+		}
 #endif
 
-			/* level is novice */
-			if (g_level == 1) {
+		/* level is novice */
+		if (level == 1) {
 
-				/* Hide the arrow buttons to the other pages */
-				src = g_buffer_sex_dat + 512;
+			/* Hide the arrow buttons to the other pages */
+			src = g_buffer_sex_dat + 512;
 
-				/* Hide right arrow */
-				vgalib_copy_to_screen(get_gfx_ptr(284, 178), src, 20, 15);
+			/* Hide right arrow */
+			vgalib_copy_to_screen(get_gfx_ptr(284, 178), src, 20, 15);
 
-				/* Hide left arrow */
-				vgalib_copy_to_screen(get_gfx_ptr(145, 178), src, 20, 15);
-			}
+			/* Hide left arrow */
+			vgalib_copy_to_screen(get_gfx_ptr(145, 178), src, 20, 15);
 		}
-
-		/* if the page is lower than 5 */
-		if (g_gen_page < 5) {
-
-			/* draw DMENGE.DAT or the archetype image and name */
-			if (g_hero.typus) {
-
-				g_clear_archetype_pic = 1;
-
-				/* copy archetype picture */
-				vgalib_copy_to_screen(get_gfx_ptr(16, 8), g_buffer_typus, 128, 184);
-
-			} else {
-				if (g_clear_archetype_pic) {
-					call_fill_rect_gen(g_gfx_ptr, 16, 8, 143, 191, 0);
-					g_clear_archetype_pic = 0;
-				}
-
-				wait_for_vsync();
-				set_palette(g_buffer_dmenge_dat + 128 * 184 + 2, 0, 32);
-				vgalib_copy_to_screen(get_gfx_ptr(16, 8), g_buffer_dmenge_dat, 128, 184);
-			}
-		}
-
-		/* draw the head to the backbuffer */
-		if (g_hero.typus) {
-			draw_head();
-		}
-
-		g_gfx_ptr = g_vga_memstart;
-
 	}
 
-	print_values();
+	/* if the page is lower than 5 */
+	if (g_gen_page < 5) {
+
+		/* draw DMENGE.DAT or the archetype image and name */
+		if (g_hero.typus) {
+
+			g_clear_archetype_pic = 1;
+
+			/* copy archetype picture */
+			vgalib_copy_to_screen(get_gfx_ptr(16, 8), g_buffer_typus, 128, 184);
+
+		} else {
+			if (g_clear_archetype_pic) {
+				call_fill_rect_gen(g_gfx_ptr, 16, 8, 143, 191, 0);
+				g_clear_archetype_pic = 0;
+			}
+
+			wait_for_vsync();
+			set_palette(g_buffer_dmenge_dat + 128 * 184 + 2, 0, 32);
+			vgalib_copy_to_screen(get_gfx_ptr(16, 8), g_buffer_dmenge_dat, 128, 184);
+		}
+	}
+
+	/* draw the head to the backbuffer */
+	if (g_hero.typus) {
+		draw_head();
+	}
+
+	g_gfx_ptr = g_vga_memstart;
 }
 
 /**
@@ -5198,8 +5192,9 @@ static void clear_hero(void)
 
 /**
  * \brief roll out new attribute values
+ * \param[in] level 1 = Novice / 2 = Advanced
  */
-static void new_attributes(void)
+static void new_attributes(const int level)
 {
 	volatile signed char *att_ptr;
 	char name_bak[20];
@@ -5235,7 +5230,10 @@ static void new_attributes(void)
 
 	strcpy((char*)g_hero.name, name_bak);
 
-	refresh_screen(full_refresh);
+	if (full_refresh) {
+		refresh_background(level);
+		print_values();
+	}
 
 	att_ptr = &g_hero.attrib[0].normal;
 
@@ -5782,8 +5780,9 @@ static signed short can_change_attributes(void)
 
 /**
  * \brief change attributes
+ * \param[in] level 1 = Novice / 2 = Advanced
  */
-static void change_attributes(void)
+static void change_attributes(const int level)
 {
 	volatile signed char *ptr1;
 	volatile signed char *ptr2;
@@ -5824,7 +5823,8 @@ static void change_attributes(void)
 				g_got_ch_bonus = 0;
 			}
 
-			refresh_screen(1);
+			refresh_background(level);
+			print_values();
 
 		} else {
 			return;
@@ -6849,7 +6849,8 @@ static void do_gen(const int init_level)
 	while (!done) {
 
 		if (full_refresh) {
-			refresh_screen(1);
+			refresh_background(level);
+			print_values();
 			full_refresh = 0;
 		}
 
@@ -6883,7 +6884,7 @@ static void do_gen(const int init_level)
 								break;
 							}
 							case 3: {
-								change_attributes();
+								change_attributes(level);
 								break;
 							}
 							case 4: {
@@ -6895,7 +6896,7 @@ static void do_gen(const int init_level)
 								break;
 							}
 							case 5: {
-								new_attributes();
+								new_attributes(level);
 								break;
 							}
 							case 6: {
