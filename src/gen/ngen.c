@@ -1378,10 +1378,6 @@ static inline char* get_text(signed short no) {
 #define get_text(no) (g_texts[no])
 #endif
 
-static signed short g_src_y2;
-static signed short g_src_x2;
-static signed short g_src_y1;
-static signed short g_src_x1;
 static unsigned char* g_dst_src;
 static signed short g_dst_y2;
 static signed short g_dst_x2;
@@ -3099,7 +3095,7 @@ static void do_draw_pic(const int mode)
 
 	mouse_bg();
 
-	pic_copy(g_dst_dst, g_dst_x1, g_dst_y1, g_src_x1, g_src_y1, width, height, g_dst_src, mode);
+	pic_copy(g_dst_dst, g_dst_x1, g_dst_y1, width, height, g_dst_src, mode);
 
 	mouse_cursor();
 }
@@ -3646,7 +3642,7 @@ static void draw_popup_line(const signed short line, const signed short type)
 	/* 320 * (8 * line + y) + x */
 	dst = g_vga_memstart + O_WIDTH * (g_upper_border + 8 * line) + g_left_border;
 	src = g_popup_line;
-	pic_copy(g_vga_memstart, g_left_border, g_upper_border + 8 * line, 0, 0, 32 * (g_menu_tiles + 1), 8, src, 3);
+	vgalib_screen_copy(dst, src, 32 * (g_menu_tiles + 1), 8);
 }
 
 /**
@@ -7212,18 +7208,10 @@ static void intro(void)
 				do_draw_pic(2);
 			}
 
-			g_dst_x1 = 112;
-			g_dst_y1 = 50;
-			g_dst_x2 = 207;
-			g_dst_y2 = 149;
-			g_dst_src = g_vga_backbuffer;
-
-			g_src_x1 = 0;
-			g_src_y1 = 60;
-			g_src_x2 = 95;
-			g_src_y2 = 159;
-			g_dst_dst = g_vga_memstart;
-			do_draw_pic(3);
+			vgalib_screen_copy(g_vga_memstart + 50 * O_WIDTH + 112,
+						g_vga_backbuffer + 60 * O_WIDTH,
+						96, 100);
+						
 			cnt1++;
 			cnt2--;
 			if (cnt1 < 37)
