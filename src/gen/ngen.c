@@ -1496,11 +1496,13 @@ static int alloc_buffers(void)
 	int errors = 0;
 
 #if defined(__BORLANDC__)
-	g_gfx_ptr = g_vga_memstart = (unsigned char*)MK_FP(0xa000, 0x0);
+	g_vga_memstart = (unsigned char*)MK_FP(0xa000, 0x0);
 #else
-	g_gfx_ptr = g_vga_memstart = (unsigned char*)calloc(O_WIDTH * O_HEIGHT, 1);
+	g_vga_memstart = (unsigned char*)calloc(O_WIDTH * O_HEIGHT, 1);
 #endif
-	if (g_gfx_ptr == NULL) errors++;
+	if (g_vga_memstart == NULL) errors++;
+	g_gfx_ptr = g_vga_memstart;
+	g_dst_dst = g_vga_memstart;
 
 	g_vga_backbuffer = (gen_alloc(64108) + 8);
 	if (g_vga_backbuffer == NULL) errors++;
@@ -3058,8 +3060,6 @@ static void init_colors(void)
 	set_palette((const unsigned char*)g_pal_popup, 0xd8, 8);
 
 	set_textcolor(0xff, 0x0); // WHITE ON BLACK
-
-	g_dst_dst = g_vga_memstart;
 }
 
 /**
