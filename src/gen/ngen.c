@@ -7193,19 +7193,15 @@ static void intro(void)
 
 			if (cnt1 != 100) {
 
-				g_dst_src = g_vga_backbuffer + i * 960 + 9600;
 				if (cnt1 % 4 == 1)
 					i++;
 
 				if (i == 8)
 					i = 4;
 
-				g_dst_x1 = 0;
-				g_dst_y1 = 150;
-				g_dst_x2 = 95;
-				g_dst_y2 = 159;
-				g_dst_dst = g_vga_backbuffer;
-				do_draw_pic(2);
+				vgalib_copy_to_screen_nonzero(g_vga_backbuffer + 150 * O_WIDTH,
+								g_vga_backbuffer + i * 960 + 9600,
+								96, 10);
 			}
 
 			vgalib_screen_copy(g_vga_memstart + 50 * O_WIDTH + 112,

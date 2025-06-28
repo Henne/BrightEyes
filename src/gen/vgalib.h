@@ -14,6 +14,7 @@ unsigned short swap_u16(const unsigned short);
 void vgalib_screen_copy(unsigned char*, unsigned char*, const int, const int);
 void vgalib_fill_rect(unsigned char*, const int, const int, const int);
 void vgalib_copy_to_screen(unsigned char*, unsigned char*, const int, const int);
+void vgalib_copy_to_screen_nonzero(unsigned char*, unsigned char*, const int, const int);
 void vgalib_copy_from_screen(unsigned char*, unsigned char*, const int, const int);
 
 #if defined(__BORLANDC__)
