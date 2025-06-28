@@ -5157,9 +5157,12 @@ static void refresh_screen(void)
 		}
 
 		g_gfx_ptr = g_vga_memstart;
+
 	}
 
 	print_values();
+
+	g_screen_var = 0;
 }
 
 /**
@@ -5230,8 +5233,6 @@ static void new_attributes(void)
 	strcpy((char*)g_hero.name, name_bak);
 
 	refresh_screen();
-
-	g_screen_var = 0;
 
 	att_ptr = &g_hero.attrib[0].normal;
 
@@ -5820,7 +5821,6 @@ static void change_attributes(void)
 			}
 			g_screen_var = 1;
 			refresh_screen();
-			g_screen_var = 0;
 
 		} else {
 			return;
@@ -6835,7 +6835,6 @@ static void do_gen(void)
 
 		if (g_screen_var) {
 			refresh_screen();
-			g_screen_var = 0;
 		}
 
 		flush_keyboard_queue();
