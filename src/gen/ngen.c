@@ -6087,7 +6087,7 @@ static int select_typus(const int level)
 			mouse_bg();
 			call_fill_rect_gen(g_vga_memstart, 16, 8, 143, 191, 0);
 			wait_for_vsync();
-			set_palette(g_buffer_typus + 0x5c02, 0, 32);
+			set_palette(g_buffer_typus + 128 * 184 + 2, 0, 32);
 			mouse_cursor();
 
 			g_head_typus = (g_hero.typus > 10 ? 10 : g_hero.typus);
@@ -6805,7 +6805,7 @@ static int choose_typus(const int level)
 	mouse_bg();
 	call_fill_rect_gen(g_vga_memstart, 16, 8, 143, 191, 0);
 	wait_for_vsync();
-	set_palette(g_buffer_typus + 0x5c02, 0, 32);
+	set_palette(g_buffer_typus + 128 * 184 + 2, 0, 32);
 	mouse_cursor();
 
 
