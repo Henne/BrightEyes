@@ -4597,6 +4597,83 @@ static int change_sex(void)
 }
 
 /**
+ * \brief refresh the screen content
+ * \param[in] page the current page
+ * \param[in] level 1 = Novice / 2 = Advanced
+ */
+static void refresh_background(const int page, const int level)
+{
+	g_gfx_ptr = g_vga_backbuffer;
+
+	load_page(page);
+
+	/* page with base values */
+	if (page == 0) {
+
+		unsigned char* src;
+
+		/* hero is female */
+		if (g_hero.sex) {
+			src = g_buffer_sex_dat + 256 * g_hero.sex;
+			vgalib_copy_to_screen(get_gfx_ptr(305, 7), src, 16, 16);
+		}
+
+#if defined(__BORLANDC__)
+		if (g_dsagen_lang == LANG_DE) {
+			/* copy arrow_area to backbuffer */
+			vgalib_copy_to_screen(get_gfx_ptr(145, 178), g_arrow_area, 170, 20);
+			/* copy mr_bar to backbuffer */
+			vgalib_copy_to_screen(get_gfx_ptr(166, 182), g_mr_bar, 77, 9);
+
+		}
+#endif
+
+		/* level is novice */
+		if (level == 1) {
+
+			/* Hide the arrow buttons to the other pages */
+			src = g_buffer_sex_dat + 512;
+
+			/* Hide right arrow */
+			vgalib_copy_to_screen(get_gfx_ptr(284, 178), src, 20, 15);
+
+			/* Hide left arrow */
+			vgalib_copy_to_screen(get_gfx_ptr(145, 178), src, 20, 15);
+		}
+	}
+
+	/* if the page is lower than 5 */
+	if (page < 5) {
+
+		/* draw DMENGE.DAT or the archetype image and name */
+		if (g_hero.typus) {
+
+			g_clear_archetype_pic = 1;
+
+			/* copy archetype picture */
+			vgalib_copy_to_screen(get_gfx_ptr(16, 8), g_buffer_typus, 128, 184);
+
+		} else {
+			if (g_clear_archetype_pic) {
+				call_fill_rect_gen(g_gfx_ptr, 16, 8, 143, 191, 0);
+				g_clear_archetype_pic = 0;
+			}
+
+			wait_for_vsync();
+			set_palette(g_buffer_dmenge_dat + 128 * 184 + 2, 0, 32);
+			vgalib_copy_to_screen(get_gfx_ptr(16, 8), g_buffer_dmenge_dat, 128, 184);
+		}
+	}
+
+	/* draw the head to the backbuffer */
+	if (g_hero.typus && ((page == 0) || (page > 4))) {
+		draw_head(page);
+	}
+
+	g_gfx_ptr = g_vga_memstart;
+}
+
+/**
  * \brief makes a valuta string
  * \param[out] dst the destination
  * \param[in] money the money in Heller
@@ -4655,8 +4732,9 @@ static void print_typusname(void)
 /**
  * \brief print the values of the hero
  * \param[in] page the current page
+ * \param[in] level 1 = Novice / 2 = Advanced
  */
-static void print_values(const int page)
+static void print_values(const int page, const int level)
 {
 	int i;
 	char tmp[16];
@@ -4670,6 +4748,8 @@ static void print_values(const int page)
 	signed short pos;
 
 	if (g_dsagen_lang == LANG_EN) { align_left = 225; align_right = 313; }
+
+	refresh_background(page, level);
 
 #if defined(__BORLANDC__)
 	/* copy the complete backbuffer to the screen */
@@ -5112,82 +5192,6 @@ static void print_values(const int page)
 #endif
 }
 
-/**
- * \brief refresh the screen content
- * \param[in] page the current page
- * \param[in] level 1 = Novice / 2 = Advanced
- */
-static void refresh_background(const int page, const int level)
-{
-	g_gfx_ptr = g_vga_backbuffer;
-
-	load_page(page);
-
-	/* page with base values */
-	if (page == 0) {
-
-		unsigned char* src;
-
-		/* hero is female */
-		if (g_hero.sex) {
-			src = g_buffer_sex_dat + 256 * g_hero.sex;
-			vgalib_copy_to_screen(get_gfx_ptr(305, 7), src, 16, 16);
-		}
-
-#if defined(__BORLANDC__)
-		if (g_dsagen_lang == LANG_DE) {
-			/* copy arrow_area to backbuffer */
-			vgalib_copy_to_screen(get_gfx_ptr(145, 178), g_arrow_area, 170, 20);
-			/* copy mr_bar to backbuffer */
-			vgalib_copy_to_screen(get_gfx_ptr(166, 182), g_mr_bar, 77, 9);
-
-		}
-#endif
-
-		/* level is novice */
-		if (level == 1) {
-
-			/* Hide the arrow buttons to the other pages */
-			src = g_buffer_sex_dat + 512;
-
-			/* Hide right arrow */
-			vgalib_copy_to_screen(get_gfx_ptr(284, 178), src, 20, 15);
-
-			/* Hide left arrow */
-			vgalib_copy_to_screen(get_gfx_ptr(145, 178), src, 20, 15);
-		}
-	}
-
-	/* if the page is lower than 5 */
-	if (page < 5) {
-
-		/* draw DMENGE.DAT or the archetype image and name */
-		if (g_hero.typus) {
-
-			g_clear_archetype_pic = 1;
-
-			/* copy archetype picture */
-			vgalib_copy_to_screen(get_gfx_ptr(16, 8), g_buffer_typus, 128, 184);
-
-		} else {
-			if (g_clear_archetype_pic) {
-				call_fill_rect_gen(g_gfx_ptr, 16, 8, 143, 191, 0);
-				g_clear_archetype_pic = 0;
-			}
-
-			wait_for_vsync();
-			set_palette(g_buffer_dmenge_dat + 128 * 184 + 2, 0, 32);
-			vgalib_copy_to_screen(get_gfx_ptr(16, 8), g_buffer_dmenge_dat, 128, 184);
-		}
-	}
-
-	/* draw the head to the backbuffer */
-	if (g_hero.typus && ((page == 0) || (page > 4))) {
-		draw_head(page);
-	}
-
-	g_gfx_ptr = g_vga_memstart;
-}
 
 /**
  * \brief initializes the hero structure and global variables
@@ -5220,9 +5224,10 @@ static void clear_hero(void)
 
 /**
  * \brief roll out new attribute values
+ * \param[in] page the current page
  * \param[in] level 1 = Novice / 2 = Advanced
  */
-static void new_attributes(const int level)
+static void new_attributes(const int page, const int level)
 {
 	volatile signed char *att_ptr;
 	char name_bak[20];
@@ -5259,8 +5264,7 @@ static void new_attributes(const int level)
 	strcpy((char*)g_hero.name, name_bak);
 
 	if (full_refresh) {
-		refresh_background(0, level);
-		print_values(0);
+		print_values(page, level);
 	}
 
 	att_ptr = &g_hero.attrib[0].normal;
@@ -5315,7 +5319,7 @@ static void new_attributes(const int level)
 		att_ptr[3 * di + 0] = att_ptr[3 * di + 1] = randval;
 
 		mouse_bg();
-		print_values(0);
+		print_values(page, level);
 		mouse_cursor();
 	}
 
@@ -5356,7 +5360,7 @@ static void new_attributes(const int level)
 		att_ptr[3 * di + 0] = att_ptr[3 * di + 1] = randval;
 
 		mouse_bg();
-		print_values(0);
+		print_values(page, level);
 		mouse_cursor();
 	}
 }
@@ -5808,9 +5812,10 @@ static signed short can_change_attributes(void)
 
 /**
  * \brief change attributes
+ * \param[in] page the current page
  * \param[in] level 1 = Novice / 2 = Advanced
  */
-static void change_attributes(const int level)
+static void change_attributes(const int page, const int level)
 {
 	volatile signed char *ptr1;
 	volatile signed char *ptr2;
@@ -5851,8 +5856,7 @@ static void change_attributes(const int level)
 				g_got_ch_bonus = 0;
 			}
 
-			refresh_background(0, level);
-			print_values(0);
+			print_values(page, level);
 
 		} else {
 			return;
@@ -5914,7 +5918,7 @@ static void change_attributes(const int level)
 
 			g_attrib_changed[tmp2] = INC;
 
-			print_values(0);
+			print_values(page, level);
 
 			tmp1 = 0;
 			while (tmp1 != 2) {
@@ -5948,7 +5952,7 @@ static void change_attributes(const int level)
 					//g_hero.attrib[si + 7].normal = ++g_ghero.attrib[si + 7].current;
 					ptr1[0] = ++ptr1[1];
 
-					print_values(0);
+					print_values(page, level);
 				}
 			}
 		} else {
@@ -5978,7 +5982,7 @@ static void change_attributes(const int level)
 			/* mark this attribute as decremented */
 			g_attrib_changed[tmp2] = DEC;
 
-			print_values(0);
+			print_values(page, level);
 
 			tmp1 = 0;
 			while (tmp1 != 2) {
@@ -6015,7 +6019,7 @@ static void change_attributes(const int level)
 
 				g_attrib_changed[si + 7] = DEC;
 
-				print_values(0);
+				print_values(page, level);
 			}
 		}
 	}
@@ -6346,7 +6350,7 @@ static void select_skill(const int page)
 		g_text_x_mod = 0;
 
 		if (skill != -2) {
-			print_values(page);
+			print_values(page, 2);
 		}
 
 	} while (group != -1);
@@ -6678,7 +6682,7 @@ static void select_spell(const int page)
 		g_text_x_mod = 0;
 
 		if (spell != -2) {
-			print_values(page);
+			print_values(page, 2);
 		}
 
 	} while (group != -1);
@@ -6687,7 +6691,7 @@ static void select_spell(const int page)
 /**
  * \brief	choose attack and parade values
  */
-static void choose_atpa(void)
+static void choose_atpa(const int page, const int level)
 {
 	int skill;
 	int increase;
@@ -6717,7 +6721,7 @@ static void choose_atpa(void)
 							g_hero.at_weapon[skill]++;
 							/* dec PA */
 							g_hero.pa_weapon[skill]--;
-							print_values(4);
+							print_values(page, level);
 						} else {
 							infobox(get_text(255), 0);
 						}
@@ -6728,7 +6732,7 @@ static void choose_atpa(void)
 							g_hero.at_weapon[skill]--;
 							/* inc PA */
 							g_hero.pa_weapon[skill]++;
-							print_values(4);
+							print_values(page, level);
 						} else {
 							infobox(get_text(256), 0);
 						}
@@ -6882,8 +6886,7 @@ static void do_gen(const int init_level)
 	while (!done) {
 
 		if (full_refresh) {
-			refresh_background(page, level);
-			print_values(page);
+			print_values(page, level);
 			full_refresh = 0;
 		}
 
@@ -6917,7 +6920,7 @@ static void do_gen(const int init_level)
 								break;
 							}
 							case 3: {
-								change_attributes(level);
+								change_attributes(page, level);
 								break;
 							}
 							case 4: {
@@ -6929,7 +6932,7 @@ static void do_gen(const int init_level)
 								break;
 							}
 							case 5: {
-								new_attributes(level);
+								new_attributes(page, level);
 								break;
 							}
 							case 6: {
@@ -6960,7 +6963,7 @@ static void do_gen(const int init_level)
 					break;
 				}
 				case 4: {
-					choose_atpa();
+					choose_atpa(page, level);
 					break;
 				}
 				case 5:
