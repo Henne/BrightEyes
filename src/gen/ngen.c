@@ -1391,6 +1391,9 @@ static signed char g_head_first;
 /* the index of the last head */
 static signed char g_head_last;
 
+static int g_got_mu_bonus;
+static int g_got_ch_bonus;
+
 static char* g_type_names[12];
 static signed char g_attrib_changed[14];
 
@@ -1442,9 +1445,6 @@ static Mix_Music *music = NULL;
 static signed long g_gendat_offset;
 static signed long g_flen_left;
 static signed long g_flen;
-
-static signed short g_got_mu_bonus;
-static signed short g_got_ch_bonus;
 
 static unsigned char g_pal_roalogo[768];
 
