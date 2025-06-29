@@ -1409,7 +1409,6 @@ static struct inc_states g_skill_incs[52];
 static struct inc_states g_spell_incs[86];
 
 signed short g_called_with_args;
-static signed short g_param_level;
 
 /* MUSIC MANAGEMENT VARIABLES */
 
@@ -7430,15 +7429,21 @@ int main_gen(int argc, char **argv)
 	LPWSTR *argv = CommandLineToArgvW(cmdline, &argc);
 #endif
 	int l_level = -1;
+	char param_level;
 
-	if (argc > 1)
+	if (argc > 1) {
 		g_called_with_args = 1;
 
-	if (argc > 2)
-		g_param_level = argv[2][0];
+		if (argc > 2) {
+			param_level = argv[2][0];
 
-	if ((argc > 3) && (argv[3][0] == '0')) {
-		g_music = MUSIC_OFF;
+			/* try to set the level from parameters */
+			l_level = ((param_level == 'a') ? 2 : ((param_level == 'n') ? 1 : -1));
+
+			if ((argc > 3) && (argv[3][0] == '0')) {
+				g_music = MUSIC_OFF;
+			}
+		}
 	}
 
 	if (detect_datfile() == -1) return -1;
@@ -7479,9 +7484,6 @@ int main_gen(int argc, char **argv)
 #endif
 
 	flush_keyboard_queue();
-
-	/* try to set the level from parameters */
-	l_level = ((g_param_level == 'a') ? 2 : ((g_param_level == 'n') ? 1 : -1));
 
 	/* ask for level */
 	while (l_level == -1) {
