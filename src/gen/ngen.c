@@ -2814,7 +2814,7 @@ static int detect_datfile(void)
 		}
 	}
 
-	fprintf(stderr, "is %s\n", retval == -1 ? "INVALID" : "VALID");
+	fprintf(stderr, " is %s\n", retval == -1 ? "INVALID" : "VALID");
 
 	return retval;
 }
