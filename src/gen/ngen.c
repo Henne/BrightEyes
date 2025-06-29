@@ -2672,6 +2672,11 @@ static void vsync_or_key(const int val)
 
 /* FILE MANAGEMENT */
 
+static signed long get_filelength(void)
+{
+	return g_flen;
+}
+
 static signed long get_archive_offset(const char *name, const unsigned char *table)
 {
 	int i;
@@ -2812,11 +2817,6 @@ static int detect_datfile(void)
 	fprintf(stderr, "is %s\n", retval == -1 ? "INVALID" : "VALID");
 
 	return retval;
-}
-
-static signed long get_filelength(void)
-{
-	return g_flen;
 }
 
 static void split_textbuffer(char **dst, char *src, const unsigned long len)
