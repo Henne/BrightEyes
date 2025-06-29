@@ -996,7 +996,6 @@ static const struct mouse_action* g_default_action = &g_action_default[0];
 static const struct mouse_action* g_action_table = NULL;
 
 
-static signed short g_gen_page = 0;
 static signed short g_text_x_mod = 0;
 
 static volatile struct struct_hero g_hero = {0};
@@ -4538,8 +4537,9 @@ static void enter_name(void)
 
 /**
  * \brief draws the current head image
+ * \param[in] page the current page
  */
-static void draw_head(void)
+static void draw_head(const int page)
 {
 	struct nvf_desc nvf;
 	signed short width;
@@ -4554,7 +4554,7 @@ static void draw_head(void)
 
 	process_nvf(&nvf);
 
-	vgalib_copy_to_screen(get_gfx_ptr(272, (g_gen_page == 0 ? 8 : 4)), g_buffer_current_head, 32, 32);
+	vgalib_copy_to_screen(get_gfx_ptr(272, (page == 0 ? 8 : 4)), g_buffer_current_head, 32, 32);
 }
 
 /**
@@ -4654,8 +4654,9 @@ static void print_typusname(void)
 
 /**
  * \brief print the values of the hero
+ * \param[in] page the current page
  */
-static void print_values(void)
+static void print_values(const int page)
 {
 	int i;
 	char tmp[16];
@@ -4689,11 +4690,11 @@ static void print_values(void)
 	}
 #endif
 
-	if ((g_hero.typus) && (0 <= g_gen_page) && (g_gen_page <= 4)) {
+	if ((g_hero.typus) && (0 <= page) && (page <= 4)) {
 		print_typusname();
 	}
 
-	switch (g_gen_page) {
+	switch (page) {
 
 		case 0: {
 			/* print name */
@@ -5113,16 +5114,17 @@ static void print_values(void)
 
 /**
  * \brief refresh the screen content
+ * \param[in] page the current page
  * \param[in] level 1 = Novice / 2 = Advanced
  */
-static void refresh_background(const int level)
+static void refresh_background(const int page, const int level)
 {
 	g_gfx_ptr = g_vga_backbuffer;
 
-	load_page(g_gen_page);
+	load_page(page);
 
 	/* page with base values */
-	if (g_gen_page == 0) {
+	if (page == 0) {
 
 		unsigned char* src;
 
@@ -5157,7 +5159,7 @@ static void refresh_background(const int level)
 	}
 
 	/* if the page is lower than 5 */
-	if (g_gen_page < 5) {
+	if (page < 5) {
 
 		/* draw DMENGE.DAT or the archetype image and name */
 		if (g_hero.typus) {
@@ -5180,8 +5182,8 @@ static void refresh_background(const int level)
 	}
 
 	/* draw the head to the backbuffer */
-	if (g_hero.typus && ((g_gen_page == 0) || (g_gen_page > 4))) {
-		draw_head();
+	if (g_hero.typus && ((page == 0) || (page > 4))) {
+		draw_head(page);
 	}
 
 	g_gfx_ptr = g_vga_memstart;
@@ -5257,8 +5259,8 @@ static void new_attributes(const int level)
 	strcpy((char*)g_hero.name, name_bak);
 
 	if (full_refresh) {
-		refresh_background(level);
-		print_values();
+		refresh_background(0, level);
+		print_values(0);
 	}
 
 	att_ptr = &g_hero.attrib[0].normal;
@@ -5313,7 +5315,7 @@ static void new_attributes(const int level)
 		att_ptr[3 * di + 0] = att_ptr[3 * di + 1] = randval;
 
 		mouse_bg();
-		print_values();
+		print_values(0);
 		mouse_cursor();
 	}
 
@@ -5354,7 +5356,7 @@ static void new_attributes(const int level)
 		att_ptr[3 * di + 0] = att_ptr[3 * di + 1] = randval;
 
 		mouse_bg();
-		print_values();
+		print_values(0);
 		mouse_cursor();
 	}
 }
@@ -5849,8 +5851,8 @@ static void change_attributes(const int level)
 				g_got_ch_bonus = 0;
 			}
 
-			refresh_background(level);
-			print_values();
+			refresh_background(0, level);
+			print_values(0);
 
 		} else {
 			return;
@@ -5912,7 +5914,7 @@ static void change_attributes(const int level)
 
 			g_attrib_changed[tmp2] = INC;
 
-			print_values();
+			print_values(0);
 
 			tmp1 = 0;
 			while (tmp1 != 2) {
@@ -5946,7 +5948,7 @@ static void change_attributes(const int level)
 					//g_hero.attrib[si + 7].normal = ++g_ghero.attrib[si + 7].current;
 					ptr1[0] = ++ptr1[1];
 
-					print_values();
+					print_values(0);
 				}
 			}
 		} else {
@@ -5976,7 +5978,7 @@ static void change_attributes(const int level)
 			/* mark this attribute as decremented */
 			g_attrib_changed[tmp2] = DEC;
 
-			print_values();
+			print_values(0);
 
 			tmp1 = 0;
 			while (tmp1 != 2) {
@@ -6013,7 +6015,7 @@ static void change_attributes(const int level)
 
 				g_attrib_changed[si + 7] = DEC;
 
-				print_values();
+				print_values(0);
 			}
 		}
 	}
@@ -6199,14 +6201,13 @@ static void inc_skill(const signed short skill, const signed short max, char *ms
 		g_skill_incs[skill].tries++;
 
 	}
-
-	print_values();
 }
 
 /**
  * \brief select a skill
+ * \param[in] page the current page
  */
-static void select_skill(void)
+static void select_skill(const int page)
 {
 	signed short skill;
 	signed short group;
@@ -6222,7 +6223,7 @@ static void select_skill(void)
 
 		g_text_x_mod = -80;
 
-		switch (g_gen_page) {
+		switch (page) {
 		case 1: {
 			group = gui_radio(get_text(93), 2, get_text(86), get_text(87));
 			if (group != -1) {
@@ -6344,6 +6345,10 @@ static void select_skill(void)
 
 		g_text_x_mod = 0;
 
+		if (skill != -2) {
+			print_values(page);
+		}
+
 	} while (group != -1);
 }
 
@@ -6406,15 +6411,14 @@ static void inc_spell(const signed short spell)
 			g_spell_incs[spell].tries++;
 
 		}
-
-		print_values();
 	}
 }
 
 /**
  * \brief	select a spell
+ * \param[in] page the current page
  */
-static void select_spell(void)
+static void select_spell(const int page)
 {
 	signed short group;
 	signed short spell;
@@ -6430,7 +6434,7 @@ static void select_spell(void)
 
 		g_text_x_mod = -90;
 
-		switch (g_gen_page) {
+		switch (page) {
 			case 5: {
 				group = gui_radio(get_text(155),
 						3,
@@ -6673,6 +6677,10 @@ static void select_spell(void)
 
 		g_text_x_mod = 0;
 
+		if (spell != -2) {
+			print_values(page);
+		}
+
 	} while (group != -1);
 }
 
@@ -6709,7 +6717,7 @@ static void choose_atpa(void)
 							g_hero.at_weapon[skill]++;
 							/* dec PA */
 							g_hero.pa_weapon[skill]--;
-							print_values();
+							print_values(4);
 						} else {
 							infobox(get_text(255), 0);
 						}
@@ -6720,7 +6728,7 @@ static void choose_atpa(void)
 							g_hero.at_weapon[skill]--;
 							/* inc PA */
 							g_hero.pa_weapon[skill]++;
-							print_values();
+							print_values(4);
 						} else {
 							infobox(get_text(256), 0);
 						}
@@ -6862,6 +6870,7 @@ static void do_gen(const int init_level)
 	int target_page;
 	int level = init_level;
 	int full_refresh = 1;
+	int page = 0;
 
 	/* initialize the hero structure */
 	clear_hero();
@@ -6873,20 +6882,20 @@ static void do_gen(const int init_level)
 	while (!done) {
 
 		if (full_refresh) {
-			refresh_background(level);
-			print_values();
+			refresh_background(page, level);
+			print_values(page);
 			full_refresh = 0;
 		}
 
 		flush_keyboard_queue();
 
-		g_action_table = g_action_page[g_gen_page];
+		g_action_table = g_action_page[page];
 		handle_input();
 		g_action_table = NULL;
 
 		if (g_mouse_rightclick_event || g_in_key_ext == KEY_PGUP) {
 			/* print the menu for each page */
-			switch (g_gen_page) {
+			switch (page) {
 				case 0: {
 					menu_option = gui_radio(get_text(7), 9,
 						get_text(10), get_text(11), get_text(15),
@@ -6947,7 +6956,7 @@ static void do_gen(const int init_level)
 				case 1:
 				case 2:
 				case 3: {
-					select_skill();
+					select_skill(page);
 					break;
 				}
 				case 4: {
@@ -6960,7 +6969,7 @@ static void do_gen(const int init_level)
 				case 8:
 				case 9:
 				case 10: {
-					select_spell();
+					select_spell(page);
 					break;
 				}
 			}
@@ -6972,13 +6981,13 @@ static void do_gen(const int init_level)
 		if (g_in_key_ext == KEY_CTRL_F4)
 			enter_name();
 
-		if ((g_gen_page == 0) && (g_in_key_ext == KEY_6)) {
+		if ((page == 0) && (g_in_key_ext == KEY_6)) {
 			level = (level == 1 ? 2 : 1);
 			full_refresh = 1;
 		}
 
 		/* Change Head Logic */
-		if ((g_gen_page == 0) && ((g_in_key_ext == KEY_UP) || (g_in_key_ext == KEY_DOWN))) {
+		if ((page == 0) && ((g_in_key_ext == KEY_UP) || (g_in_key_ext == KEY_DOWN))) {
 
 			if (g_hero.typus) {
 				if (g_in_key_ext == KEY_UP) {
@@ -6989,7 +6998,7 @@ static void do_gen(const int init_level)
 					g_head_current = (g_head_current > g_head_first) ?
 								g_head_current - 1 : g_head_last;
 				}
-				draw_head();
+				draw_head(page);
 			} else {
 				infobox(get_text(17), 0);
 			}
@@ -7001,10 +7010,10 @@ static void do_gen(const int init_level)
 			if (g_in_key_ext == KEY_RIGHT) {
 
 				if (g_hero.typus) {
-					if (((g_hero.typus < 7) ? 4 : 10) > g_gen_page) {
-						g_gen_page++;
+					if (((g_hero.typus < 7) ? 4 : 10) > page) {
+						page++;
 					} else {
-						g_gen_page = 0;
+						page = 0;
 					}
 
 					full_refresh = 1;
@@ -7017,10 +7026,10 @@ static void do_gen(const int init_level)
 			if (g_in_key_ext == KEY_LEFT) {
 
 				if (g_hero.typus) {
-					if (g_gen_page > 0) {
-						g_gen_page--;
+					if (page > 0) {
+						page--;
 					} else {
-						g_gen_page = (g_hero.typus < 7 ? 4 : 10);
+						page = (g_hero.typus < 7 ? 4 : 10);
 					}
 
 					full_refresh = 1;
@@ -7038,8 +7047,8 @@ static void do_gen(const int init_level)
 						(g_in_key_ext == KEY_3) ? 4 : (
 						(g_in_key_ext == KEY_4) ? 5 : 10))));
 
-					if ((target_page != g_gen_page) && (target_page < 5 || g_hero.typus >= 7)) {
-						g_gen_page = target_page;
+					if ((target_page != page) && (target_page < 5 || g_hero.typus >= 7)) {
+						page = target_page;
 						full_refresh = 1;
 					}
 				} else {
