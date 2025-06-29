@@ -7157,7 +7157,47 @@ static void intro_attic(void)
 		if (g_in_key_ext == 0)
 			vsync_or_key(200);
 	}
+}
 
+/**
+ * \brief draw the FANPRO logo
+ */
+static void intro_fanpro(void)
+{
+	int handle;
+	int flen;
+	signed short width;
+	signed short height;
+	struct nvf_desc nvf;
+
+	/* load FANPRO.NVF */
+	handle = open_datfile(34);
+	if (handle != -1) {
+		flen = read_datfile(handle, g_buffer_heads_dat, 20000);
+		close(handle);
+
+		nvf.src = g_buffer_heads_dat;
+		nvf.type = 0;
+		nvf.width = &width;
+		nvf.height = &height;
+		nvf.dst = g_vga_backbuffer;
+		nvf.no = 0;
+
+		process_nvf(&nvf);
+
+		/* clear screen */
+		call_fill_rect_gen(g_vga_memstart, 0, 0, O_WIDTH - 1, O_HEIGHT - 1, 0);
+		wait_for_vsync();
+
+		/* set palette of FANPRO.NVF */
+		set_palette(g_buffer_heads_dat + flen - 32 * 3, 0, 32);
+
+		/* draw the picture */
+		vgalib_copy_to_screen(g_vga_memstart + 50 * O_WIDTH + 60,
+					g_vga_backbuffer, 200, 100);
+
+		vsync_or_key(200);
+	}
 }
 
 /**
@@ -7252,34 +7292,7 @@ static void intro(void)
 
 	intro_attic();
 
-	/* load FANPRO.NVF */
-	handle = open_datfile(34);
-	if (handle != -1) {
-		flen = read_datfile(handle, g_buffer_heads_dat, 20000);
-		close(handle);
-
-		nvf.src = g_buffer_heads_dat;
-		nvf.type = 0;
-		nvf.width = &width;
-		nvf.height = &height;
-		nvf.dst = g_vga_backbuffer;
-		nvf.no = 0;
-
-		process_nvf(&nvf);
-
-		/* clear screen */
-		call_fill_rect_gen(g_vga_memstart, 0, 0, O_WIDTH - 1, O_HEIGHT - 1, 0);
-		wait_for_vsync();
-
-		/* set palette of FANPRO.NVF */
-		set_palette(g_buffer_heads_dat + flen - 32 * 3, 0, 32);
-
-		/* draw the picture */
-		vgalib_copy_to_screen(g_vga_memstart + 50 * O_WIDTH + 60,
-					g_vga_backbuffer, 200, 100);
-
-		vsync_or_key(200);
-	}
+	intro_fanpro();
 
 	if (g_dsagen_lang == LANG_DE) {
 		/* load DSALOGO.DAT */
