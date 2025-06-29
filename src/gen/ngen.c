@@ -2638,7 +2638,7 @@ static void handle_input(void)
 			g_mouse_leftclick_event = 0;
 
 			/* show credits in an infobox() */
-			if ((g_gen_page == 0) && (l_key_ext == 0xfd)) {
+			if (l_key_ext == 0xfd) {
 				l_key_ext = 0;
 				g_menu_tiles = 4;
 				g_fg_color[4] = 1;
@@ -4541,23 +4541,20 @@ static void enter_name(void)
  */
 static void draw_head(void)
 {
-	if ((g_gen_page == 0) || (g_gen_page > 4)) {
+	struct nvf_desc nvf;
+	signed short width;
+	signed short height;
 
-		struct nvf_desc nvf;
-		signed short width;
-		signed short height;
+	nvf.dst = g_buffer_current_head;
+	nvf.src = g_buffer_heads_dat;
+	nvf.no = g_head_current;
+	nvf.type = 0;
+	nvf.width = &width;
+	nvf.height = &height;
 
-		nvf.dst = g_buffer_current_head;
-		nvf.src = g_buffer_heads_dat;
-		nvf.no = g_head_current;
-		nvf.type = 0;
-		nvf.width = &width;
-		nvf.height = &height;
+	process_nvf(&nvf);
 
-		process_nvf(&nvf);
-
-		vgalib_copy_to_screen(get_gfx_ptr(272,(g_gen_page == 0 ? 8 : 4)), g_buffer_current_head, 32, 32);
-	}
+	vgalib_copy_to_screen(get_gfx_ptr(272, (g_gen_page == 0 ? 8 : 4)), g_buffer_current_head, 32, 32);
 }
 
 /**
@@ -4644,17 +4641,14 @@ static void print_attribs(void)
  */
 static void print_typusname(void)
 {
-	if ((g_hero.typus) && (0 <= g_gen_page ) && (g_gen_page <= 4)) {
-
-		if (g_hero.sex) {
-			/* print female archetype name */
-			print_str(get_text(271 + g_hero.typus),
-				get_line_start_c(get_text(271 + g_hero.typus), 16, 128), 184);
-		} else {
-			/* print male archetype name */
-			print_str(get_text(17 + g_hero.typus),
-				get_line_start_c(get_text(17 + g_hero.typus), 16, 128),	184);
-		}
+	if (g_hero.sex) {
+		/* print female archetype name */
+		print_str(get_text(271 + g_hero.typus),
+			get_line_start_c(get_text(271 + g_hero.typus), 16, 128), 184);
+	} else {
+		/* print male archetype name */
+		print_str(get_text(17 + g_hero.typus),
+			get_line_start_c(get_text(17 + g_hero.typus), 16, 128),	184);
 	}
 }
 
@@ -4695,7 +4689,9 @@ static void print_values(void)
 	}
 #endif
 
-	print_typusname();
+	if ((g_hero.typus) && (0 <= g_gen_page) && (g_gen_page <= 4)) {
+		print_typusname();
+	}
 
 	switch (g_gen_page) {
 
@@ -5184,7 +5180,7 @@ static void refresh_background(const int level)
 	}
 
 	/* draw the head to the backbuffer */
-	if (g_hero.typus) {
+	if (g_hero.typus && ((g_gen_page == 0) || (g_gen_page > 4))) {
 		draw_head();
 	}
 
