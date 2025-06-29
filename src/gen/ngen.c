@@ -7071,7 +7071,95 @@ static void do_gen(const int init_level)
 /* INTRO */
 
 /**
+ * \brief draw the ATTIC animation
  */
+static void intro_attic(void)
+{
+	int handle;
+	int ani_height;
+	int ani_y;
+	int i;
+	signed short width;
+	signed short height;
+	struct nvf_desc nvf;
+
+	/* load ATTIC */
+	handle = open_datfile(18);
+	if (handle != -1) {
+		read_datfile(handle, g_buffer_heads_dat, 4000);
+		close(handle);
+
+		nvf.src = g_buffer_heads_dat;
+		nvf.type = 0;
+		nvf.width = &width;
+		nvf.height = &height;
+
+		for (i = 7; i >= 0; i--) {
+			nvf.dst = g_vga_backbuffer + i * 960L + 9600;
+			nvf.no = i + 1;
+			process_nvf(&nvf);
+
+		}
+
+		/* set dst */
+		nvf.dst = g_vga_backbuffer;
+		/* set no */
+		nvf.no = 0;
+		process_nvf(&nvf);
+
+		wait_for_vsync();
+
+		set_palette((const unsigned char*)g_pal_attic, 0, 16);
+
+		ani_height = 1;
+		ani_y = 99;
+
+		/* glowing at the bottom */
+		for (i = 0; i < 4; i++) {
+			vgalib_copy_to_screen(g_vga_memstart + 140 * O_WIDTH + 112,
+					g_vga_backbuffer + i * 960 + 9600, 96, 10);
+			vsync_or_key(20);
+		}
+
+		/* elevate the attic logo */
+		i = 4;
+		g_in_key_ext = 0;
+		while ((ani_height <= 100) && (g_in_key_ext == 0)) {
+
+			vgalib_copy_to_screen(g_vga_backbuffer + (ani_y + 60) * O_WIDTH,
+					g_vga_backbuffer, 96, ani_height);
+
+			if (ani_height != 100) {
+
+				if (ani_height % 4 == 1)
+					i++;
+
+				if (i == 8)
+					i = 4;
+
+				vgalib_copy_to_screen_nonzero(g_vga_backbuffer + 150 * O_WIDTH,
+								g_vga_backbuffer + i * 960 + 9600,
+								96, 10);
+			}
+
+			vgalib_screen_copy(g_vga_memstart + 50 * O_WIDTH + 112,
+						g_vga_backbuffer + 60 * O_WIDTH,
+						96, 100);
+
+			ani_height++;
+			ani_y--;
+			if (ani_height < 37)
+				vsync_or_key(2);
+			else
+				vsync_or_key(1);
+		}
+
+		if (g_in_key_ext == 0)
+			vsync_or_key(200);
+	}
+
+}
+
 /**
  * \brief fade out for a color palette
  * \param[out] dst destination palette
@@ -7152,8 +7240,6 @@ static void intro(void)
 {
 	unsigned char *pal_src;
 	unsigned char *pal_dst;
-	int cnt1;
-	int cnt2;
 	int i;
 	int handle;
 	int flen;
@@ -7164,80 +7250,7 @@ static void intro(void)
 
 	g_in_intro = 1;
 
-	/* load ATTIC */
-	handle = open_datfile(18);
-	if (handle != -1) {
-		read_datfile(handle, g_buffer_heads_dat, 4000);
-		close(handle);
-
-		nvf.src = g_buffer_heads_dat;
-		nvf.type = 0;
-		nvf.width = &width;
-		nvf.height = &height;
-
-		for (i = 7; i >= 0; i--) {
-			nvf.dst = g_vga_backbuffer + i * 960L + 9600;
-			nvf.no = i + 1;
-			process_nvf(&nvf);
-
-		}
-
-		/* set dst */
-		nvf.dst = g_vga_backbuffer;
-		/* set no */
-		nvf.no = 0;
-		process_nvf(&nvf);
-
-		wait_for_vsync();
-
-		set_palette((const unsigned char*)g_pal_attic, 0, 16);
-
-		cnt1 = 1;
-		cnt2 = 99;
-
-		/* glowing at the bottom */
-		for (i = 0; i < 4; i++) {
-			vgalib_copy_to_screen(g_vga_memstart + 140 * O_WIDTH + 112,
-					g_vga_backbuffer + i * 960 + 9600, 96, 10);
-			vsync_or_key(20);
-		}
-
-		/* elevate the attic logo */
-		i = 4;
-		g_in_key_ext = 0;
-		while ((cnt1 <= 100) && (g_in_key_ext == 0)) {
-
-			vgalib_copy_to_screen(g_vga_backbuffer + (cnt2 + 60) * O_WIDTH,
-					g_vga_backbuffer, 96, cnt1);
-
-			if (cnt1 != 100) {
-
-				if (cnt1 % 4 == 1)
-					i++;
-
-				if (i == 8)
-					i = 4;
-
-				vgalib_copy_to_screen_nonzero(g_vga_backbuffer + 150 * O_WIDTH,
-								g_vga_backbuffer + i * 960 + 9600,
-								96, 10);
-			}
-
-			vgalib_screen_copy(g_vga_memstart + 50 * O_WIDTH + 112,
-						g_vga_backbuffer + 60 * O_WIDTH,
-						96, 100);
-						
-			cnt1++;
-			cnt2--;
-			if (cnt1 < 37)
-				vsync_or_key(2);
-			else
-				vsync_or_key(1);
-		}
-
-		if (g_in_key_ext == 0)
-			vsync_or_key(200);
-	}
+	intro_attic();
 
 	/* load FANPRO.NVF */
 	handle = open_datfile(34);
