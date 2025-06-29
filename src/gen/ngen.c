@@ -996,8 +996,6 @@ static const struct mouse_action* g_default_action = &g_action_default[0];
 static const struct mouse_action* g_action_table = NULL;
 
 
-static signed short g_text_x_mod = 0;
-
 static volatile struct struct_hero g_hero = {0};
 
 #if !defined(__BORLANDC__)
@@ -1321,6 +1319,8 @@ static const struct struct_color g_pal_heads[32] = {
 	{0x3c, 0x3c, 0x3c},
 };
 
+static unsigned char g_pal_roalogo[768];
+
 static const char g_str_malloc_error[] = "\xaMEMORY MALLOCATION ERROR!";
 
 static signed short g_random_gen_seed = 0x327b;
@@ -1354,11 +1354,14 @@ static unsigned char *g_mr_bar;
 
 static signed short g_text_x;
 static signed short g_text_y;
+static signed short g_text_x_mod = 0;
 static signed short g_text_x_end;
+
 static int g_use_solid_bg = 0;
 static int g_fg_color[5] = {0xff, 0xc8, 0xc9, 0xca, 0x00}; /* {WHITE, RED, YELLOW, BLUE, {0,1}} */
 static int g_bg_color = 0; /* BLACK */
 static signed short g_col_index;
+
 static unsigned char *g_buffer_font6;
 static char  *g_buffer_text;
 static unsigned char *g_buffer_heads_dat;
@@ -1442,8 +1445,6 @@ static unsigned char* g_snd_driver;
 #else
 static Mix_Music *music = NULL;
 #endif
-
-static unsigned char g_pal_roalogo[768];
 
 #if defined(__BORLANDC__)
 void far *g_irq78_bak;
