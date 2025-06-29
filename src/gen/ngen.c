@@ -73,9 +73,6 @@ static inline void clrscr(void) { }
 #define gen_itoa itoa
 #endif
 
-/* static prototypes */
-static signed short infobox(char*, signed short);
-
 /** Keyboard Constants */
 
 #define KEY_ESC     (0x01)
@@ -2635,17 +2632,6 @@ static void handle_input(void)
 				wait_for_vsync();
 
 			g_mouse_leftclick_event = 0;
-
-			/* show credits in an infobox() */
-			if (l_key_ext == 0xfd) {
-				l_key_ext = 0;
-				g_menu_tiles = 4;
-				g_fg_color[4] = 1;
-				infobox(get_text(267), 0);
-				g_fg_color[4] = 0;
-				g_menu_tiles = 3;
-			}
-
 		}
 
 		mouse_motion();
@@ -2857,7 +2843,7 @@ static int load_essential_files(void)
 	/* load GENTEXT */
 	handle = open_datfile(15);
 	if (handle != -1) {
-		len = read_datfile(handle, (unsigned char*)g_buffer_text, 64000);
+		len = read_datfile(handle, (unsigned char*)g_buffer_text, 6000);
 		close(handle);
 
 		split_textbuffer(g_texts, g_buffer_text, len);
@@ -2920,7 +2906,7 @@ static void load_common_files(void)
 	/* load HEADS.DAT */
 	handle = open_datfile(11);
 	if (handle != -1) {
-		len = read_datfile(handle, g_buffer_heads_dat, 64000);
+		len = read_datfile(handle, g_buffer_heads_dat, 40000);
 		close(handle);
 	}
 
@@ -2934,7 +2920,7 @@ static void load_common_files(void)
 	/* load DMENGE.DAT */
 	handle = open_datfile(32);
 	if (handle != -1) {
-		len = read_datfile(handle, g_buffer_dmenge_dat - 8, 25000);
+		len = read_datfile(handle, g_buffer_dmenge_dat - 8, 12000);
 		close(handle);
 
 		decomp_pp20(g_buffer_dmenge_dat, g_buffer_dmenge_dat - 8, len);
@@ -6989,6 +6975,16 @@ static void do_gen(const int init_level)
 		if ((page == 0) && (g_in_key_ext == KEY_6)) {
 			level = (level == 1 ? 2 : 1);
 			full_refresh = 1;
+		}
+
+		/* show credits in an infobox() */
+		if ((page == 0) && (g_in_key_ext == 0xfd)) {
+
+			g_menu_tiles = 4;
+			g_fg_color[4] = 1;
+			infobox(get_text(267), 0);
+			g_fg_color[4] = 0;
+			g_menu_tiles = 3;
 		}
 
 		/* Change Head Logic */
