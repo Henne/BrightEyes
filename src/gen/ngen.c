@@ -1007,7 +1007,7 @@ static unsigned char* g_bg_buffer[]       = {NULL, NULL, NULL, NULL, NULL, NULL,
 static unsigned char *g_typus_buffer[]    = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 static signed long g_typus_len[13] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-/* declare the filenames here, to use them in g_fnames */
+/* FILE MANAGEMENT VARIABLES */
 static const char g_fname00_de[] = "GEN1.NVF";
 static const char g_fname01_de[] = "GEN2.NVF";
 static const char g_fname02_de[] = "GEN3.NVF";
@@ -1021,7 +1021,7 @@ static const char g_fname09_de[] = "GEN10.NVF";
 static const char g_fname10_de[] = "GEN11.NVF";
 static const char g_fname11_de[] = "HEADS.DAT";
 static const char g_fname12_de[] = "SEX.DAT";
-static const char g_fname13_de[] = "TYPPIC.DAT";
+static const char g_fname13_de[] = "CREATECA.AWS";
 static const char g_fname14_de[] = "FONT6";
 static const char g_fname15_de[] = "GENTEXT";
 static const char g_fname16_de[] = "DSALOGO.DAT";
@@ -1045,6 +1045,7 @@ static const char g_fname33_de[] = "GEN.XMI";
 static const char g_fname34_de[] = "FANPRO.NVF";
 static const char g_fname35_de[] = "SAMPLE.AD";
 static const char g_fname36_de[] = "MT32EMUL.XMI";
+static const char g_fname37_de[] = "ROALOGUS.DAT";
 
 static const char* g_fnames_g105de[] = {
 	g_fname00_de, g_fname01_de, g_fname02_de, g_fname03_de, g_fname04_de,
@@ -1054,15 +1055,16 @@ static const char* g_fnames_g105de[] = {
 	g_fname20_de, g_fname21_de, g_fname22_de, g_fname23_de, g_fname24_de,
 	g_fname25_de, g_fname26_de, g_fname27_de, g_fname28_de, g_fname29_de,
 	g_fname30_de, g_fname31_de, g_fname32_de, g_fname33_de, g_fname34_de,
-	g_fname35_de, g_fname36_de
+	g_fname35_de, g_fname36_de, g_fname37_de
 };
 
+static const char g_fname13_de_alt[] = "TYPPIC.DAT";
 static const char g_fname33_de_alt[] = "GEN.AWS";
 
 static const char* g_fnames_g100de[] = {
 	g_fname00_de, g_fname01_de, g_fname02_de, g_fname03_de, g_fname04_de,
 	g_fname05_de, g_fname06_de, g_fname07_de, g_fname08_de, g_fname09_de,
-	g_fname10_de, g_fname11_de, g_fname12_de, g_fname13_de, g_fname14_de,
+	g_fname10_de, g_fname11_de, g_fname12_de, g_fname13_de_alt, g_fname14_de,
 	g_fname15_de, g_fname16_de, g_fname17_de, g_fname18_de, g_fname19_de,
 	g_fname20_de, g_fname21_de, g_fname22_de, g_fname23_de, g_fname24_de,
 	g_fname25_de, g_fname26_de, g_fname27_de, g_fname28_de, g_fname29_de,
@@ -1083,7 +1085,6 @@ static const char g_fname10_en[] = "E_GEN11.NVF";
 static const char g_fname15_en[] = "E_GENTXT";
 static const char g_fname16_en[] = "ROALOGUK.DAT";
 static const char g_fname17_en[] = "E_GENTIT.NVF";
-static const char g_fname37_en[] = "ROALOGUS.DAT";
 
 static const char* g_fnames_g300en[] = {
 	g_fname00_en, g_fname01_en, g_fname02_en, g_fname03_en, g_fname04_en,
@@ -1093,10 +1094,28 @@ static const char* g_fnames_g300en[] = {
 	g_fname20_de, g_fname21_de, g_fname22_de, g_fname23_de, g_fname24_de,
 	g_fname25_de, g_fname26_de, g_fname27_de, g_fname28_de, g_fname29_de,
 	g_fname30_de, g_fname31_de, g_fname32_de, g_fname33_de, g_fname34_de,
-	g_fname35_de, g_fname36_de, g_fname37_en
+	g_fname35_de, g_fname36_de, g_fname37_de
 };
 
+static const char **g_fnames;
+
+static const char g_str_dsagen_dat[] = "DSAGEN.DAT";
 static const char g_str_file_missing[] = { "FILE %s IS MISSING!" };
+
+enum e_language { LANG_UNDEF = 0, LANG_DE = 1, LANG_EN = 2};
+static int g_dsagen_lang = 0;
+enum e_medium { MED_UNDEF = 0, MED_DISK = 1, MED_CD = 2};
+static int g_dsagen_medium = 0;
+
+static signed long g_gendat_offset;
+static signed long g_flen_left;
+static signed long g_flen;
+
+static const char g_str_chr[] = ".CHR";
+static const char g_str_temp_dir[] = "TEMP\\";
+static char g_str_save_error_de[] = "@SPEICHER FEHLER!@EVENTUELL DISKETTE GESCH\x9aTZT?";
+static char g_str_save_error_en[] = "@SAVE ERROR!@IS YOUR DISK PROTECTED?";
+
 
 struct struct_chr_lookup {
 	unsigned char chr;
@@ -1303,19 +1322,6 @@ static const struct struct_color g_pal_heads[32] = {
 	{0x3c, 0x3c, 0x3c},
 };
 
-static const char g_str_chr[] = ".CHR";
-static const char g_str_temp_dir[] = "TEMP\\";
-static char g_str_save_error_de[] = "@SPEICHER FEHLER!@EVENTUELL DISKETTE GESCH\x9aTZT?";
-static char g_str_save_error_en[] = "@SAVE ERROR!@IS YOUR DISK PROTECTED?";
-
-
-static const char g_str_dsagen_dat[] = "DSAGEN.DAT";
-
-enum e_language { LANG_UNDEF = 0, LANG_DE = 1, LANG_EN = 2};
-static int g_dsagen_lang = 0;
-enum e_medium { MED_UNDEF = 0, MED_DISK = 1, MED_CD = 2};
-static int g_dsagen_medium = 0;
-
 static const char g_str_malloc_error[] = "\xaMEMORY MALLOCATION ERROR!";
 
 static signed short g_random_gen_seed = 0x327b;
@@ -1359,8 +1365,6 @@ static char  *g_buffer_text;
 static unsigned char *g_buffer_heads_dat;
 static unsigned char *g_buffer_popup_dat;
 static unsigned char *g_buffer_sex_dat;
-
-static signed short g_essentials_loaded;
 
 static unsigned char g_char_buffer[64];
 static signed short g_in_key_ext;
@@ -1440,11 +1444,6 @@ static unsigned char* g_snd_driver;
 #else
 static Mix_Music *music = NULL;
 #endif
-
-
-static signed long g_gendat_offset;
-static signed long g_flen_left;
-static signed long g_flen;
 
 static unsigned char g_pal_roalogo[768];
 
@@ -2674,35 +2673,6 @@ static void vsync_or_key(const int val)
 
 /* FILE MANAGEMENT */
 
-static void detect_datfile(void)
-{
-	signed long flen;
-	signed short handle;
-
-#if defined(__BORLANDC__) || defined(_WIN32)
-	/* 0x8001 = O_BINARY | O_RDONLY */
-	if ((handle = open(g_str_dsagen_dat, O_BINARY | O_RDONLY)) == -1)
-#else
-	if ((handle = open(g_str_dsagen_dat, O_RDONLY)) == -1)
-#endif
-	{
-		fprintf(stderr, "ERROR: DSAGEN.DAT not found\n");
-		return;
-	}
-
-	/* determine filelength */
-	flen = lseek(handle, 0, SEEK_END);
-	lseek(handle, 0, SEEK_SET);
-	close(handle);
-
-	if (flen == -1) return;
-
-	/* only these 3 versions are known so far */
-	if (flen == 671236) { /* EN DISK */ g_dsagen_lang = LANG_EN; g_dsagen_medium = MED_DISK; } else
-	if (flen == 663221) { /* DE CD   */ g_dsagen_lang = LANG_DE; g_dsagen_medium = MED_CD; } else
-	if (flen == 634785) { /* DE DISK */ g_dsagen_lang = LANG_DE; g_dsagen_medium = MED_DISK; }	
-}
-
 static signed long get_archive_offset(const char *name, const unsigned char *table)
 {
 	int i;
@@ -2724,18 +2694,15 @@ static signed long get_archive_offset(const char *name, const unsigned char *tab
 	return -1;
 }
 
+/**
+ * \brief open the file DSAGEN.DAT
+ * \param[in] index the index of the file inside DSAGEN.DAT
+ * \return -1 on error otherwise a file handle
+ */
 static signed short open_datfile(const signed short index)
 {
-	const char **f_names = NULL;
 	unsigned char table[50 * 16];
-	signed short handle;
-
-	/* set local pointer to the correct filename table */
-	if (g_dsagen_lang == LANG_DE) {
-		f_names = (g_dsagen_medium == MED_DISK) ? g_fnames_g100de : g_fnames_g105de;
-	} else {
-		if (g_dsagen_lang == LANG_EN) f_names = g_fnames_g300en;
-	}
+	int handle;
 
 #if defined(__BORLANDC__)
 	flushall();
@@ -2754,28 +2721,17 @@ static signed short open_datfile(const signed short index)
 	/* read offset table from file */
 	_read(handle, table, 50 * 16);
 
-	g_gendat_offset = get_archive_offset(f_names[index], table);
-
+	g_gendat_offset = get_archive_offset(g_fnames[index], table);
 
 	if (g_gendat_offset != -1) {
 		lseek(handle, g_gendat_offset, SEEK_SET);
 		return handle;
-	} else {
-		sprintf(g_textbuffer, g_str_file_missing, f_names[index]);
-		strcat(g_textbuffer, "\n");
-
-		if (g_essentials_loaded) {
-			infobox(g_textbuffer, 0);
-		} else {
-			printf("%s", g_textbuffer);
-		}
-
-		vsync_or_key(100);
-		return -1;
 	}
+
+	return -1;
 }
 
-static signed short read_datfile(signed short handle, unsigned char *buf, unsigned short len)
+static signed short read_datfile(const signed short handle, unsigned char *buf, unsigned short len)
 {
 	if (len > (unsigned long)g_flen_left)
 		len = (unsigned short)g_flen_left;
@@ -2785,6 +2741,78 @@ static signed short read_datfile(signed short handle, unsigned char *buf, unsign
 	g_flen_left -= len;
 
 	return len;
+}
+
+/**
+ * \brief detect and validate the file DSAGEN.DAT
+ * \return -1 on error otherwise 0
+ */
+static int detect_datfile(void)
+{
+	signed long flen;
+	int handle;
+	int i;
+	int max_files;
+	int retval = 0;
+	char textbuffer[80];
+
+#if defined(__BORLANDC__) || defined(_WIN32)
+	/* 0x8001 = O_BINARY | O_RDONLY */
+	handle = open(g_str_dsagen_dat, O_BINARY | O_RDONLY);
+#else
+	handle = open(g_str_dsagen_dat, O_RDONLY);
+#endif
+	if (handle == -1) {
+		fprintf(stderr, "ERROR: DSAGEN.DAT not found\n");
+		return -1;
+	}
+
+	/* determine filelength */
+	flen = lseek(handle, 0, SEEK_END);
+	lseek(handle, 0, SEEK_SET);
+	close(handle);
+
+	if (flen == -1) return -1;
+
+	/* only these 3 versions are known so far */
+	if (flen == 671236) { /* EN DISK */ g_dsagen_lang = LANG_EN; g_dsagen_medium = MED_DISK; } else
+	if (flen == 663221) { /* DE CD   */ g_dsagen_lang = LANG_DE; g_dsagen_medium = MED_CD; } else
+	if (flen == 634785) { /* DE DISK */ g_dsagen_lang = LANG_DE; g_dsagen_medium = MED_DISK; }
+
+	/* print info */
+	fprintf(stderr, "DSAGEN.DAT: %s_%s",
+			g_dsagen_lang == LANG_DE ? "DE" : "EN",
+			g_dsagen_medium == MED_DISK ? "DISK" : "CD");
+
+	/* set local pointer to the correct filename table */
+	if (g_dsagen_lang == LANG_DE) {
+		g_fnames = (g_dsagen_medium == MED_DISK) ? g_fnames_g100de : g_fnames_g105de;
+	} else {
+		if (g_dsagen_lang == LANG_EN) g_fnames = g_fnames_g300en;
+	}
+
+	/* validate DSAGEN.DAT */
+	max_files = ((g_dsagen_lang == LANG_DE) && (g_dsagen_medium == MED_DISK)) ? 35 : 38;
+
+	for (i = 0; (i < max_files) && (retval == 0); i++) {
+
+		/* index == 13 (TYPPIC.DAT) is not included in any known DSAGEN.DAT */
+		if ((i == 13) && (g_dsagen_lang == LANG_DE) && (g_dsagen_medium == MED_DISK)) continue;
+
+		//fprintf(stderr, "TRY: %02d %s\n", i, g_fnames[i]);
+		handle = open_datfile(i);
+		if (handle == -1) {
+			sprintf(textbuffer, g_str_file_missing, g_fnames[i]);
+			fprintf(stderr, "ERROR: %s\n", textbuffer);
+			retval = -1;
+		} else {
+			close(handle);
+		}
+	}
+
+	fprintf(stderr, "is %s\n", retval == -1 ? "INVALID" : "VALID");
+
+	return retval;
 }
 
 static signed long get_filelength(void)
@@ -2809,7 +2837,11 @@ static void split_textbuffer(char **dst, char *src, const unsigned long len)
 	}
 }
 
-static void load_essential_files(void)
+/**
+ * \brief load and prepares essential GUI files
+ * \return 0 on success otherwise 1
+ */
+static int load_essential_files(void)
 {
 	signed short handle;
 	signed long len;
@@ -2878,7 +2910,7 @@ static void load_essential_files(void)
 		count++;
 	}
 
-	if (count == 5) g_essentials_loaded = 1;
+	return (count == 5) ? 0 : 1;
 }
 
 static void load_common_files(void)
@@ -7399,15 +7431,7 @@ int main_gen(int argc, char **argv)
 		g_music = MUSIC_OFF;
 	}
 
-	detect_datfile();
-	if (g_dsagen_lang == LANG_UNDEF) {
-		fprintf(stderr, "ERROR: DSAGEN.DAT not found\n");
-		return -1;
-	}
-
-	fprintf(stdout, "DSAGEN.DAT %s_%s\n",
-			g_dsagen_lang == LANG_DE ? "DE" : "EN",
-			g_dsagen_medium == MED_DISK ? "DISK" : "CD");
+	if (detect_datfile() == -1) return -1;
 
 	if (alloc_buffers() > 0) {
 		free_buffers();
