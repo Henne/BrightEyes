@@ -37,6 +37,7 @@ static SDL_mutex *PixelsMutex = NULL;
 
 static Uint32 *pixels = NULL;
 static Uint8 *vga_bak = NULL;
+static int forced_update = 0;
 static int pal_updated = 0;
 static int win_resized = 0;
 
@@ -85,114 +86,89 @@ static void sdl_renderer_info(void)
 	}
 }
 
-#endif
-
-void set_video_mode(unsigned short mode)
+void sdl_init_video(void)
 {
-#if !defined(__BORLANDC__)
-	if (mode == 0x13) {
-		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_TIMER) < 0) {
-			fprintf(stderr, "Could not initialize SDL: %s\n", SDL_GetError());
-			exit(-1);
-		}
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_TIMER) < 0) {
+		fprintf(stderr, "Could not initialize SDL: %s\n", SDL_GetError());
+		exit(-1);
+	}
 
-		window = SDL_CreateWindow(
-			"BrightEyes",
-			SDL_WINDOWPOS_UNDEFINED,
-			SDL_WINDOWPOS_UNDEFINED,
-			W_WIDTH,
-			W_HEIGHT,
-			SDL_WINDOW_SHOWN
-		);
+	window = SDL_CreateWindow(
+		"BrightEyes",
+		SDL_WINDOWPOS_UNDEFINED,
+		SDL_WINDOWPOS_UNDEFINED,
+		W_WIDTH,
+		W_HEIGHT,
+		SDL_WINDOW_SHOWN
+	);
 
-		if (window == NULL) {
-			fprintf(stderr, "Could not create Window: %s\n", SDL_GetError());
-			SDL_Quit();
-			exit(-1);
-		}
-
-		if (SHOW_DRIVERS)
-			sdl_renderer_info();
-
-		renderer = SDL_CreateRenderer(
-			window,
-			-1,
-			SDL_RENDERER_SOFTWARE
-		);
-
-		texture = SDL_CreateTexture(
-			renderer,
-			SDL_PIXELFORMAT_ABGR8888,
-			SDL_TEXTUREACCESS_STREAMING,
-			W_WIDTH,
-			W_HEIGHT
-		);
-
-		PixelsMutex = SDL_CreateMutex();
-		if (PixelsMutex == NULL) {
-			fprintf(stderr, "Could not create PixelsMutex: %s\n", SDL_GetError());
-			SDL_Quit();
-			exit(-1);
-		}
-
-		vga_bak = calloc(O_WIDTH * O_HEIGHT * sizeof(Uint8), 1);
-		if (vga_bak == NULL) {
-			fprintf(stderr, "ERROR: cannot allocate vga_bak\n");
-			exit(-1);
-		}
-		pixels = calloc(W_WIDTH * W_HEIGHT * sizeof(Uint32), 1);
-		if (pixels == NULL) {
-			fprintf(stderr, "ERROR: cannot allocate pixels\n");
-			exit(-1);
-		}
-
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-		SDL_RenderClear(renderer);
-		SDL_RenderPresent(renderer);
-
-	} else {
-		if (SDL_LockMutex(PixelsMutex) == 0) {
-
-			free(pixels);
-
-			if (SDL_UnlockMutex(PixelsMutex) == -1) {
-				fprintf(stderr, "ERROR: Unlock Mutex in %s\n", __func__);
-			}
-		} else {
-			fprintf(stderr, "ERROR: Lock Mutex in %s\n", __func__);
-		}
-
-		free(vga_bak);
-		SDL_DestroyMutex(PixelsMutex);
-		SDL_DestroyTexture(texture);
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
+	if (window == NULL) {
+		fprintf(stderr, "Could not create Window: %s\n", SDL_GetError());
 		SDL_Quit();
-		fprintf(stderr, "sdl_update_rect_window() calls = %d updates = %d\n", calls, updates);
+		exit(-1);
 	}
-#else
-	asm {
-		push ds
-		push es
-		push si
-		push di
-		push bp
 
-		mov ah, 0x00
-		mov al, byte ptr mode
-		int 0x10
+	if (SHOW_DRIVERS)
+		sdl_renderer_info();
 
-		pop bp
-		pop di
-		pop si
-		pop es
-		pop ds
+	renderer = SDL_CreateRenderer(
+		window,
+		-1,
+		SDL_RENDERER_SOFTWARE
+	);
+
+	texture = SDL_CreateTexture(
+		renderer,
+		SDL_PIXELFORMAT_ABGR8888,
+		SDL_TEXTUREACCESS_STREAMING,
+		W_WIDTH,
+		W_HEIGHT
+	);
+
+	PixelsMutex = SDL_CreateMutex();
+	if (PixelsMutex == NULL) {
+		fprintf(stderr, "Could not create PixelsMutex: %s\n", SDL_GetError());
+		SDL_Quit();
+		exit(-1);
 	}
-#endif
+
+	vga_bak = calloc(O_WIDTH * O_HEIGHT * sizeof(Uint8), 1);
+	if (vga_bak == NULL) {
+		fprintf(stderr, "ERROR: cannot allocate vga_bak\n");
+		exit(-1);
+	}
+	pixels = calloc(W_WIDTH * W_HEIGHT * sizeof(Uint32), 1);
+	if (pixels == NULL) {
+		fprintf(stderr, "ERROR: cannot allocate pixels\n");
+		exit(-1);
+	}
+
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	SDL_RenderClear(renderer);
+	SDL_RenderPresent(renderer);
 }
 
-#if !defined(__BORLANDC__)
-static int forced_update = 0;
+void sdl_exit_video(void)
+{
+	if (SDL_LockMutex(PixelsMutex) == 0) {
+
+		free(pixels);
+
+		if (SDL_UnlockMutex(PixelsMutex) == -1) {
+			fprintf(stderr, "ERROR: Unlock Mutex in %s\n", __func__);
+		}
+	} else {
+		fprintf(stderr, "ERROR: Lock Mutex in %s\n", __func__);
+	}
+
+	free(vga_bak);
+	SDL_DestroyMutex(PixelsMutex);
+	SDL_DestroyTexture(texture);
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	SDL_Quit();
+	fprintf(stderr, "sdl_update_rect_window() calls = %d updates = %d\n", calls, updates);
+}
 
 static void sdl_update_rect_pixels(const int x_in, const int y_in, const int width_in, const int height_in)
 {
@@ -372,9 +348,45 @@ void sdl_change_window_size(SDL_mutex *timer_mutex)
 
 	sdl_update_rect_window(0, 0, O_WIDTH, O_HEIGHT);
 }
+
+static inline Uint32 get_ABGR(const unsigned char *p) {
+	return (p[0] << 2) | (p[1] << 10) | (p[2] << 18);
+}
+
+void set_palette(const unsigned char *pointer, const unsigned char first_color, const unsigned short colors)
+{
+	signed int i;
+
+	for (i = 0; i < colors; i++)
+		palette[first_color + i] = get_ABGR(pointer + 3 * i);
+
+	pal_updated = 1;
+	sdl_update_rect_window(0, 0, O_WIDTH, O_HEIGHT);
+}
 #endif
 
 #if defined(__BORLANDC__)
+void set_video_mode(unsigned short mode)
+{
+	asm {
+		push ds
+		push es
+		push si
+		push di
+		push bp
+
+		mov ah, 0x00
+		mov al, byte ptr mode
+		int 0x10
+
+		pop bp
+		pop di
+		pop si
+		pop es
+		pop ds
+	}
+}
+
 void set_video_page(unsigned short page)
 {
 	asm {
@@ -432,17 +444,9 @@ void save_display_stat(signed short *pointer)
 		pop ds
 	}
 }
-#endif
-
-#if !defined(__BORLANDC__)
-static inline Uint32 get_ABGR(const unsigned char *p) {
-	return (p[0] << 2) | (p[1] << 10) | (p[2] << 18);
-}
-#endif
 
 void set_palette(const unsigned char *pointer, const unsigned char first_color, const unsigned short colors)
 {
-#if defined(__BORLANDC__)
 		asm {
 			push ds
 			push es
@@ -471,16 +475,8 @@ set_palette_loop1:
 			pop es
 			pop ds
 		}
-#else
-	signed int i;
-
-	for (i = 0; i < colors; i++)
-		palette[first_color + i] = get_ABGR(pointer + 3 * i);
-
-	pal_updated = 1;
-	sdl_update_rect_window(0, 0, O_WIDTH, O_HEIGHT);
-#endif
 }
+#endif
 
 /**
  * \brief fills an area on a screen

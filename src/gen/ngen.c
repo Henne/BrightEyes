@@ -3085,10 +3085,12 @@ static void init_video(void)
 {
 #if defined(__BORLANDC__)
 	save_display_stat(&g_display_page_bak);
-#endif
 
 	/* set the video mode to 320x200 8bit */
 	set_video_mode(0x13);
+#else
+	sdl_init_video();
+#endif
 
 	init_colors();
 }
@@ -3104,7 +3106,7 @@ void exit_video(void)
 	/* restore old page */
 	set_video_page(g_display_page_bak);
 #else
-	set_video_mode(0x00);
+	sdl_exit_video();
 #endif
 }
 
