@@ -7349,7 +7349,7 @@ static void intro(void)
 
 		memcpy(g_pal_roalogo + 3 * 32, &g_pal_dsalogo, 3 * 32);
 		set_palette(g_pal_roalogo + 0x180, 128, 128);
-		memcpy(g_vga_backbuffer + 0x1f4, &g_pal_dsalogo, 3 * 32);
+		memcpy(g_vga_backbuffer + 500, &g_pal_dsalogo, 3 * 32);
 
 		pal_src = g_vga_backbuffer + 500;
 		pal_dst = g_vga_backbuffer;
