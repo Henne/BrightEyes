@@ -2914,7 +2914,7 @@ static int load_essential_files(void)
 	/* load FONT6 */
 	handle = open_datfile(14);
 	if (handle != -1) {
-		read_datfile(handle, g_buffer_font6, 1000);
+		read_datfile(handle, g_buffer_font6, get_filelength());
 		close(handle);
 		count++;
 	}
@@ -2922,7 +2922,7 @@ static int load_essential_files(void)
 	/* load GENTEXT */
 	handle = open_datfile(15);
 	if (handle != -1) {
-		len = read_datfile(handle, (unsigned char*)g_buffer_text, 6000);
+		len = read_datfile(handle, (unsigned char*)g_buffer_text, get_filelength());
 		close(handle);
 
 		split_textbuffer(g_texts, g_buffer_text, len);
@@ -2932,7 +2932,7 @@ static int load_essential_files(void)
 	/* load POPUP.DAT */
 	handle = open_datfile(19);
 	if (handle != -1) {
-		len = read_datfile(handle, g_buffer_popup_dat - 8, 500);
+		len = read_datfile(handle, g_buffer_popup_dat - 8, get_filelength());
 		close(handle);
 
 		decomp_pp20(g_buffer_popup_dat, g_buffer_popup_dat - 8, len);
@@ -2943,7 +2943,7 @@ static int load_essential_files(void)
 	/* copy arrow area from GEN4.NVF/E_GEN4.NVF */
 	handle = open_datfile(4);
 	if (handle != -1) {
-		len = read_datfile(handle, g_page_buffer, 50000);
+		len = read_datfile(handle, g_page_buffer, get_filelength());
 		close(handle);
 
 		decomp_rle(g_vga_backbuffer, g_page_buffer);
@@ -2959,7 +2959,7 @@ static int load_essential_files(void)
 	/* copy mr_bar and name_bar from GEN1.NVF/E_GEN1.NVF */
 	handle = open_datfile(0);
 	if (handle != -1) {
-		len = read_datfile(handle, g_page_buffer, 50000);
+		len = read_datfile(handle, g_page_buffer, get_filelength());
 		close(handle);
 
 		decomp_rle(g_vga_backbuffer, g_page_buffer);
@@ -2985,21 +2985,21 @@ static void load_common_files(void)
 	/* load HEADS.DAT */
 	handle = open_datfile(11);
 	if (handle != -1) {
-		len = read_datfile(handle, g_buffer_heads_dat, 40000);
+		len = read_datfile(handle, g_buffer_heads_dat, get_filelength());
 		close(handle);
 	}
 
 	/* load SEX.DAT */
 	handle = open_datfile(12);
 	if (handle != -1) {
-		read_datfile(handle, g_buffer_sex_dat, 900);
+		read_datfile(handle, g_buffer_sex_dat, get_filelength());
 		close(handle);
 	}
 
 	/* load DMENGE.DAT */
 	handle = open_datfile(32);
 	if (handle != -1) {
-		len = read_datfile(handle, g_buffer_dmenge_dat - 8, 12000);
+		len = read_datfile(handle, g_buffer_dmenge_dat - 8, get_filelength());
 		close(handle);
 
 		decomp_pp20(g_buffer_dmenge_dat, g_buffer_dmenge_dat - 8, len);
@@ -3027,7 +3027,7 @@ static void load_page(const int page)
 
 		if (handle != -1) {
 
-			read_datfile(handle, g_page_buffer, 50000);
+			read_datfile(handle, g_page_buffer, get_filelength());
 			decomp_rle(g_vga_backbuffer, g_page_buffer);
 
 			close(handle);
@@ -3050,7 +3050,7 @@ static void load_pages(void)
 
 		if (handle != -1) {
 
-			read_datfile(handle, g_page_buffer, 50000);
+			read_datfile(handle, g_page_buffer, get_filelength());
 			decomp_rle(g_bg_buffer[i], g_page_buffer);
 			close(handle);
 		}
@@ -3084,20 +3084,22 @@ static void load_typus(const int typus)
 	} else {
 
 		const int handle = open_datfile(index);
-		unsigned char *ptr = gen_alloc(get_filelength());
+		const signed long length = get_filelength();
+		unsigned char *ptr = gen_alloc(length);
+
 
 		if (ptr != NULL) {
 			/* load the file into the typus buffer */
 			g_typus_buffer[typus] = ptr;
-			g_typus_len[typus] = get_filelength();
+			g_typus_len[typus] = length;
 
-			read_datfile(handle, g_typus_buffer[typus], g_typus_len[typus]);
+			read_datfile(handle, g_typus_buffer[typus], length);
 
-			decomp_pp20(g_buffer_typus, g_typus_buffer[typus], g_typus_len[typus]);
+			decomp_pp20(g_buffer_typus, g_typus_buffer[typus], length);
 		} else {
 			/* load the file direct */
-			read_datfile(handle, g_page_buffer, 25000);
-			decomp_pp20(g_buffer_typus, g_page_buffer, get_filelength());
+			read_datfile(handle, g_page_buffer, length);
+			decomp_pp20(g_buffer_typus, g_page_buffer, length);
 		}
 		close(handle);
 		memset(g_page_buffer, 0x00, 50000);
@@ -4243,7 +4245,7 @@ static signed short load_sequence(const signed short index)
 	signed short handle;
 
 	if ((handle = open_datfile(index)) != -1) {
-		read_datfile(handle, g_form_xmid, 12500);
+		read_datfile(handle, g_form_xmid, get_filelength());
 		close(handle);
 		return 1;
 	}
@@ -7161,7 +7163,7 @@ static void intro_attic(void)
 	/* load ATTIC */
 	handle = open_datfile(18);
 	if (handle != -1) {
-		read_datfile(handle, g_buffer_heads_dat, 4000);
+		read_datfile(handle, g_buffer_heads_dat, get_filelength());
 		close(handle);
 
 		nvf.src = g_buffer_heads_dat;
@@ -7248,7 +7250,7 @@ static void intro_fanpro(void)
 	/* load FANPRO.NVF */
 	handle = open_datfile(34);
 	if (handle != -1) {
-		flen = read_datfile(handle, g_buffer_heads_dat, 20000);
+		flen = read_datfile(handle, g_buffer_heads_dat, get_filelength());
 		close(handle);
 
 		nvf.src = g_buffer_heads_dat;
@@ -7372,7 +7374,7 @@ static void intro(void)
 	if (g_dsagen_lang == LANG_DE) {
 		/* load DSALOGO.DAT */
 		handle = open_datfile(16);
-		read_datfile(handle, g_buffer_heads_dat, 6000);
+		read_datfile(handle, g_buffer_heads_dat, get_filelength());
 		close(handle);
 
 		nvf.src = g_buffer_heads_dat;
@@ -7395,7 +7397,7 @@ static void intro(void)
 
 		/* load GENTIT.DAT */
 		handle = open_datfile(17);
-		read_datfile(handle, g_buffer_heads_dat, 2000);
+		read_datfile(handle, g_buffer_heads_dat, get_filelength());
 		close(handle);
 
 		nvf.src = g_buffer_heads_dat;
@@ -7426,7 +7428,7 @@ static void intro(void)
 	} else {
 		/* load ROALOGUS.DAT */
 		handle = open_datfile(37);
-		flen = read_datfile(handle, g_buffer_heads_dat, 12000);
+		flen = read_datfile(handle, g_buffer_heads_dat, get_filelength());
 		close(handle);
 
 		decomp_pp20(g_vga_backbuffer, g_buffer_heads_dat, (unsigned short)flen);
@@ -7443,7 +7445,7 @@ static void intro(void)
 
 		/* load E_GENTIT.DAT */
 		handle = open_datfile(17);
-		read_datfile(handle, g_buffer_heads_dat, 20000);
+		read_datfile(handle, g_buffer_heads_dat, get_filelength());
 		close(handle);
 
 		nvf.src = g_buffer_heads_dat;
