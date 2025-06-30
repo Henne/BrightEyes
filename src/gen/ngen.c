@@ -1102,7 +1102,6 @@ enum e_medium { MED_UNDEF = 0, MED_DISK = 1, MED_CD = 2};
 static int g_dsagen_medium = 0;
 
 static signed long g_gendat_offset;
-static signed long g_flen_left;
 static signed long g_flen;
 
 static const char g_str_chr[] = ".CHR";
@@ -2669,7 +2668,7 @@ static signed long get_filelength(void)
  * \param[in] table offset table
  * \param[in] length length of DSAGEN.DAT
  * \return offset inside DSAGEN.DAT otherwise -1
- * \note sets g_flen and g_flen_left
+ * \note sets g_flen
  */
 static signed long get_archive_offset(const char *name, const unsigned char *table, const signed long length)
 {
@@ -2698,7 +2697,7 @@ static signed long get_archive_offset(const char *name, const unsigned char *tab
 
 	if (entry == -1) {
 		/* not found */
-		g_flen = g_flen_left = -1;
+		g_flen = -1;
 		retval = -1;
 	} else {
 		const signed long o_cur = readd(table + 16 * entry + 0x0c);
@@ -2711,7 +2710,7 @@ static signed long get_archive_offset(const char *name, const unsigned char *tab
 			flen = readd(table + 16 * (i + 1) + 0x0c) - o_cur;
 		}
 
-		g_flen = g_flen_left = flen;
+		g_flen = flen;
 		retval = o_cur;
 	}
 
