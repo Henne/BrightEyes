@@ -2765,19 +2765,49 @@ static signed short open_datfile(const signed short index)
 	/* update the global variables on error */
 	g_gendat_offset = -1;
 	g_flen = -1;
-	g_flen_left = -1;
 
 	return -1;
 }
 
-static signed short read_datfile(const signed short handle, unsigned char *buf, unsigned short len)
+/**
+ * \brief reads an open file from DSAGEN.DAT into a buffer
+ * \param[in] handle handle of DSAGEN.DAT
+ * \param[out] buffer the buffer to write into
+ * \param[in] len_in length of the file to read
+ * \return number of bytes that were actually read
+ * \note BCC/DOS length of a read is maximal 32kb
+ **/
+static signed long read_datfile(const signed short handle, unsigned char *buffer, const signed long len_in)
 {
-	if (len > (unsigned long)g_flen_left)
-		len = (unsigned short)g_flen_left;
+	const signed long chunk = 16 * 1024;
+	signed long len = 0;
 
-	len = _read(handle, buf, len);
+	if (len_in > chunk) {
+		const int reads = len_in / chunk;
+		const int remainder = len_in - reads * chunk;
+		signed long i;
 
-	g_flen_left -= len;
+		for (i = 0; i < reads; i++) {
+			len += _read(handle, buffer + i * chunk, chunk);
+			if (len != (i + 1) * chunk) {
+				fprintf(stderr, "ERROR: read_datfile() chunk = %ld len = %ld\n", chunk, len);
+			}
+		}
+
+		if (remainder) {
+			len += _read(handle, buffer + reads * chunk, remainder);
+			if (len != reads * chunk + remainder) {
+				fprintf(stderr, "ERROR: read_datfile() remainder = %d len = %ld\n", remainder, len);
+			}
+		}
+
+	} else {
+		/* small file */
+		len = _read(handle, buffer, len_in);
+	}
+
+	if (len != len_in)
+		fprintf(stderr, "ERROR: read_datfile() len_in = %ld len = %ld\n", len_in, len);
 
 	return len;
 }
