@@ -1347,6 +1347,7 @@ static unsigned char *g_name_bar;
 static unsigned char *g_popup_line;
 static unsigned char *g_arrow_area;
 static unsigned char *g_mr_bar;
+static unsigned char *g_popup_box;
 
 static signed short g_text_x;
 static signed short g_text_y;
@@ -1521,6 +1522,9 @@ static int alloc_buffers(void)
 	g_page_buffer = gen_alloc(50000);
 	if (g_page_buffer == NULL) errors++;
 
+	g_popup_box = gen_alloc(32 * (4 + 1) * O_HEIGHT);
+	if (g_popup_box == NULL) errors++;
+
 	g_textbuffer = (char*)gen_alloc(1524);
 	g_digitbuffer = g_textbuffer + 1500;
 	if (g_textbuffer == NULL) errors++;
@@ -1638,6 +1642,11 @@ void free_buffers(void)
 	if (g_mr_bar != NULL) {
 		gen_free(g_mr_bar);
 		g_mr_bar = NULL;
+	}
+
+	if (g_popup_box != NULL) {
+		gen_free(g_popup_box);
+		g_popup_box = NULL;
 	}
 
 	if (g_buffer_dmenge_dat != NULL) {
@@ -3692,6 +3701,27 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 }
 
 /**
+ * \brief calculate the width of a popup window
+ * \param[in] popup_tiles number of tiles (16 + 32 * popup_tiles + 16)
+ * \return width value in pixel
+ */
+static int popup_width(const int popup_tiles)
+{
+	return 32 * (popup_tiles + 1);
+}
+
+/**
+ * \brief calculate the height of a popup window
+ * \param[in] lines_header number of header lines (without radio button)
+ * \param[in] lines_body number of body lines (with radio button)
+ * \return height value in pixel
+ */
+static int popup_height(const int lines_header, const int lines_body)
+{
+	return 8 * (1 + lines_header + lines_body + 1);
+}
+
+/**
  * \brief draws a popup line
  * \param[in] line line number
  * \param[in] type line type
@@ -3748,9 +3778,9 @@ static void draw_popup_line(const signed short line, const signed short type)
 	vgalib_copy_to_screen(dst, src, 16, 8);
 
 	/* 320 * (8 * line + y) + x */
-	dst = g_vga_memstart + O_WIDTH * (g_upper_border + 8 * line) + g_left_border;
 	src = g_popup_line;
-	vgalib_screen_copy(dst, src, 32 * (g_menu_tiles + 1), 8);
+	dst = g_popup_box + line * 8 * popup_width(g_menu_tiles);
+	vgalib_copy_from_screen(dst, src, popup_width(g_menu_tiles), 8);
 }
 
 /**
@@ -3760,7 +3790,15 @@ static void draw_popup_line(const signed short line, const signed short type)
  **/
 static void draw_popup_box(const int lines_header, const int lines_body)
 {
+	unsigned char *dst;
+	const int width = popup_width(g_menu_tiles);
+	const int height = popup_height(lines_header, lines_body);
 	int i;
+
+#if !defined(__BORLANDC__)
+	fprintf(stderr, "popup box start (%d x %d) ----------------------\n", width, height);
+#endif
+	memset(g_popup_box, 0x00, 160 * 200);
 
 	/* top border */
 	draw_popup_line(0, 0);
@@ -3775,6 +3813,13 @@ static void draw_popup_box(const int lines_header, const int lines_body)
 
 	/* bottom border */
 	draw_popup_line(1 + lines_header + lines_body, 3);
+
+	dst = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
+	vgalib_copy_to_screen(dst, g_popup_box, width, height);
+
+#if !defined(__BORLANDC__)
+	fprintf(stderr, "popup box end (%d x %d) ----------------------\n", width, height);
+#endif
 }
 
 /**
