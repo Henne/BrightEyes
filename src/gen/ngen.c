@@ -1450,6 +1450,10 @@ static SDL_TimerID g_sdl_timer_id = 0;
 static SDL_mutex *g_sdl_timer_mutex = NULL;
 #endif
 
+/* MEMORY MANGEMENT VARIABLES */
+static int g_allocs = 0;
+static unsigned long g_max_mem_usage = 0;
+
 
 /* MEMORY MANAGEMENT */
 
@@ -1460,11 +1464,39 @@ static SDL_mutex *g_sdl_timer_mutex = NULL;
  */
 static unsigned char *gen_alloc(unsigned long nelem)
 {
+	unsigned char *p;
 #if defined(__BORLANDC__)
-	return (unsigned char*)farcalloc(nelem, 1);
+	p = (unsigned char*)farcalloc(nelem, 1);
 #else
-	return (unsigned char*)calloc(nelem, 1);
+	p = (unsigned char*)calloc(nelem, 1);
 #endif
+
+	if (p != NULL) {
+		g_allocs++;
+		g_max_mem_usage += nelem;
+	}
+	return p;
+}
+
+/**
+ * \brief free memory
+ * \param[in] p pointer
+ */
+static void gen_free(unsigned char *p)
+{
+	if (p != NULL) {
+		free(p);
+		g_allocs--;
+	}
+}
+
+/**
+ * \brief print memory stats
+ */
+static void gen_memstat(char *str)
+{
+	sprintf(str, "\xf1MEMSTAT\xf0@@NR ALLOCS \xf2%d\xf0@@MAX MEM USAGE \xf2%ld\xf0 KB\xd",
+		       g_allocs, g_max_mem_usage / 1024);
 }
 
 /**
@@ -1552,106 +1584,106 @@ void free_buffers(void)
 
 	if (g_vga_memstart) {
 #if !defined(__BORLANDC__)
-		free(g_vga_memstart);
+		gen_free(g_vga_memstart);
 #endif
 		g_vga_memstart = NULL;
 		g_gfx_ptr = NULL;
 	}
 
 	if (g_buffer_sex_dat != NULL) {
-		free(g_buffer_sex_dat);
+		gen_free(g_buffer_sex_dat);
 		g_buffer_sex_dat = NULL;
 	}
 
 	if (g_buffer_popup_dat != NULL) {
-		free(g_buffer_popup_dat - 8);
+		gen_free(g_buffer_popup_dat - 8);
 		g_buffer_popup_dat = NULL;
 	}
 
 	if (g_buffer_heads_dat != NULL) {
-		free(g_buffer_heads_dat);
+		gen_free(g_buffer_heads_dat);
 		g_buffer_heads_dat = NULL;
 	}
 
 	if (g_buffer_text != NULL) {
-		free(g_buffer_text);
+		gen_free((unsigned char*)g_buffer_text);
 		g_buffer_text = NULL;
 	}
 
 	if (g_buffer_font6 != NULL) {
-		free(g_buffer_font6);
+		gen_free(g_buffer_font6);
 		g_buffer_font6 = NULL;
 	}
 
 	if (g_popup_line != NULL) {
-		free(g_popup_line);
+		gen_free(g_popup_line);
 		g_popup_line = NULL;
 	}
 
 	if (g_name_bar != NULL) {
-		free(g_name_bar);
+		gen_free(g_name_bar);
 		g_name_bar = NULL;
 	}
 
 	if (g_buffer_current_head != NULL) {
-		free(g_buffer_current_head - 8);
+		gen_free(g_buffer_current_head - 8);
 		g_buffer_current_head = NULL;
 	}
 
 	if (g_arrow_area != NULL) {
-		free(g_arrow_area);
+		gen_free(g_arrow_area);
 		g_arrow_area = NULL;
 	}
 
 	if (g_mr_bar != NULL) {
-		free(g_mr_bar);
+		gen_free(g_mr_bar);
 		g_mr_bar = NULL;
 	}
 
 	if (g_buffer_dmenge_dat != NULL) {
-		free(g_buffer_dmenge_dat - 8);
+		gen_free(g_buffer_dmenge_dat - 8);
 		g_buffer_dmenge_dat = NULL;
 	}
 
 	if (g_buffer_typus != NULL) {
-		free(g_buffer_typus - 8);
+		gen_free(g_buffer_typus - 8);
 		g_buffer_typus = NULL;
 	}
 
 	if (g_textbuffer != NULL) {
-		free(g_textbuffer);
+		gen_free((unsigned char*)g_textbuffer);
 		g_textbuffer = NULL;
 		g_digitbuffer = NULL;
 	}
 
 	if (g_page_buffer != NULL) {
-		free(g_page_buffer);
+		gen_free(g_page_buffer);
 		g_page_buffer = NULL;
 	}
 
 	if (g_vga_backbuffer != NULL) {
-		free(g_vga_backbuffer - 8);
+		gen_free(g_vga_backbuffer - 8);
 		g_vga_backbuffer = NULL;
 	}
 
 #if defined(__BORLANDC__)
 	if (g_snd_timbre_cache != NULL) {
-		free(g_snd_timbre_cache);
+		gen_free(g_snd_timbre_cache);
 		g_snd_timbre_cache = NULL;
 	}
 
 	if (g_state_table != NULL) {
-		free(g_state_table);
+		gen_free(g_state_table);
 		g_state_table = NULL;
 	}
 
 	if (g_snd_driver != NULL) {
-		free(g_snd_driver);
+		gen_free(g_snd_driver);
 		g_snd_driver = NULL;
 	}
 
 	if (g_form_xmid != NULL) {
-		free(g_form_xmid);
+		gen_free(g_form_xmid);
 		g_form_xmid = NULL;
 	}
 #endif
@@ -1659,7 +1691,7 @@ void free_buffers(void)
 #if !defined(__BORLANDC__)
 	for (i = 0; i <= 10; i++) {
 		if (g_bg_buffer[i] != NULL) {
-			free(g_bg_buffer[i]);
+			gen_free(g_bg_buffer[i]);
 			g_bg_buffer[i] = NULL;
 		}
 	}
@@ -1667,7 +1699,7 @@ void free_buffers(void)
 
 	for (i = 0; i < 13; i++) {
 		if (g_typus_buffer[i] != NULL) {
-			free(g_typus_buffer[i]);
+			gen_free(g_typus_buffer[i]);
 			g_typus_buffer[i] = NULL;
 		}
 	}
@@ -1874,13 +1906,13 @@ static void sdl_mouse_cursor_scaled(void)
 	}
 
 	if (g_sdl_cursor_data_r != NULL) {
-		free(g_sdl_cursor_data_r);
+		gen_free(g_sdl_cursor_data_r);
 		g_sdl_cursor_data_r = NULL;
 	}
 	g_sdl_cursor_data_r = calloc(ratio * ratio * 16 * 16, 1);
 
 	if (g_sdl_cursor_mask_r != NULL) {
-		free(g_sdl_cursor_mask_r);
+		gen_free(g_sdl_cursor_mask_r);
 		g_sdl_cursor_mask_r = NULL;
 	}
 	g_sdl_cursor_mask_r = calloc(ratio * ratio * 16 * 16, 1);
@@ -1936,7 +1968,7 @@ static void sdl_mouse_cursor_scaled(void)
 				dst_off++;
 			}
 		}
-		free(dst_m);
+		gen_free(dst_m);
 
 		g_sdl_cursor = SDL_CreateCursor(g_sdl_cursor_data_r, g_sdl_cursor_mask_r, ratio * 16, ratio * 16, 0, 0);
 		SDL_SetCursor(g_sdl_cursor);
@@ -2044,9 +2076,9 @@ void mouse_disable(void)
 
 		SDL_FreeCursor(g_sdl_cursor);
 
-		free(g_sdl_cursor_data_r);
+		gen_free(g_sdl_cursor_data_r);
 		g_sdl_cursor_data_r = NULL;
-		free(g_sdl_cursor_mask_r);
+		gen_free(g_sdl_cursor_mask_r);
 		g_sdl_cursor_mask_r = NULL;
 		g_sdl_cursor = NULL;
 #endif
@@ -4213,7 +4245,7 @@ static signed short load_seq(const signed short sequence_num)
 				if ((src_ptr = get_timbre(bank, patch = (answer & 0xff))) != 0) {
 					/* ptr is passed differently */
 					AIL_install_timbre(g_snd_driver_handle, bank, patch, src_ptr);
-					free(src_ptr);
+					gen_free(src_ptr);
 				}
 			}
 			/* Remark: set g_handle_timbre to 0 after close() */
@@ -4343,7 +4375,7 @@ static void init_music(void)
 
 				AIL_shutdown(NULL);
 
-				free(g_form_xmid);
+				gen_free(g_form_xmid);
 				g_form_xmid = NULL;
 			}
 		}
@@ -4827,7 +4859,7 @@ static void print_values(const int page, const int level)
 #endif
 
 #if !defined(__BORLANDC__)
-	unsigned char *p = gen_alloc(O_WIDTH * O_HEIGHT);
+	unsigned char *p = calloc(O_WIDTH * O_HEIGHT, 1);
 	unsigned char *gfx_bak = g_gfx_ptr;
 
 	if (p != NULL) {
@@ -7060,9 +7092,13 @@ static void do_gen(const int init_level)
 		/* show credits in an infobox() */
 		if ((page == 0) && (g_in_key_ext == 0xfd)) {
 
+			char str[100];
+			gen_memstat(str);
+
 			g_menu_tiles = 4;
 			g_fg_color[4] = 1;
 			infobox(get_text(267), 0);
+			infobox(str, 0);
 			g_fg_color[4] = 0;
 			g_menu_tiles = 3;
 		}
