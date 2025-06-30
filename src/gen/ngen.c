@@ -7350,9 +7350,9 @@ static void pal_fade_in(unsigned char *dst, const unsigned char *src, const sign
 }
 
 /**
- * \brief play the intro
+ * \brief draw the FANPRO logo
  */
-static void intro(void)
+static void intro_title(void)
 {
 	unsigned char *pal_src;
 	unsigned char *pal_dst;
@@ -7363,14 +7363,8 @@ static void intro(void)
 	signed short height;
 	struct nvf_desc nvf;
 
-
-	g_in_intro = 1;
-
-	intro_attic();
-
-	intro_fanpro();
-
 	if (g_dsagen_lang == LANG_DE) {
+
 		/* load DSALOGO.DAT */
 		handle = open_datfile(16);
 		read_datfile(handle, g_buffer_heads_dat, get_filelength());
@@ -7394,37 +7388,8 @@ static void intro(void)
 		/* draw DSALOGO.DAT */
 		vgalib_copy_to_screen(g_vga_memstart, g_vga_backbuffer, O_WIDTH, 100);
 
-		/* load GENTIT.DAT */
-		handle = open_datfile(17);
-		read_datfile(handle, g_buffer_heads_dat, get_filelength());
-		close(handle);
-
-		nvf.src = g_buffer_heads_dat;
-		nvf.type = 0;
-		nvf.width = &width;
-		nvf.height = &height;
-		nvf.dst = g_vga_backbuffer;
-		nvf.no = 0;
-
-		process_nvf(&nvf);
-
-		/* draw GENTIT.DAT */
-		vgalib_copy_to_screen(g_vga_memstart + 110 * O_WIDTH + 10,
-				g_vga_backbuffer, O_WIDTH, 50);
-
-		memcpy(g_vga_backbuffer + 500, &g_pal_dsalogo, 96);
-
-		pal_src = g_vga_backbuffer + 500;
-		pal_dst = g_vga_backbuffer;
-
-		memset(pal_dst, 0, 96);
-
-		for (i = 0; i < 64; i++) {
-			pal_fade_in(pal_dst, pal_src, i, 32);
-			wait_for_vsync();
-			set_palette(pal_dst, 0, 32);
-		}
 	} else {
+
 		/* load ROALOGUS.DAT */
 		handle = open_datfile(37);
 		flen = read_datfile(handle, g_buffer_heads_dat, get_filelength());
@@ -7441,23 +7406,47 @@ static void intro(void)
 		vgalib_copy_to_screen(g_vga_memstart, g_vga_backbuffer, O_WIDTH, 140);
 
 		memcpy(g_pal_roalogo, g_vga_backbuffer + 140 * O_WIDTH + 2, 3 * 256);
+	}
 
-		/* load E_GENTIT.DAT */
-		handle = open_datfile(17);
-		read_datfile(handle, g_buffer_heads_dat, get_filelength());
-		close(handle);
+	/* load GENTIT.DAT / E_GENTIT.DAT */
+	handle = open_datfile(17);
+	read_datfile(handle, g_buffer_heads_dat, get_filelength());
+	close(handle);
 
-		nvf.src = g_buffer_heads_dat;
-		nvf.dst = g_vga_backbuffer;
-		nvf.type = 0;
-		nvf.width = &width;
-		nvf.height = &height;
-		nvf.no = 0;
+	nvf.src = g_buffer_heads_dat;
+	nvf.dst = g_vga_backbuffer;
+	nvf.type = 0;
+	nvf.width = &width;
+	nvf.height = &height;
+	nvf.no = 0;
 
-		process_nvf(&nvf);
+	process_nvf(&nvf);
 
+	if (g_dsagen_lang == LANG_DE) {
+		/* draw GENTIT.DAT */
+		vgalib_copy_to_screen(g_vga_memstart + 110 * O_WIDTH + 10, g_vga_backbuffer, O_WIDTH, 50);
+	} else {
 		/* draw E_GENTIT.DAT */
 		vgalib_copy_to_screen(g_vga_memstart + 140 * O_WIDTH, g_vga_backbuffer, O_WIDTH, 50);
+	}
+
+	/* palette fade in */
+	if (g_dsagen_lang == LANG_DE) {
+
+		memcpy(g_vga_backbuffer + 500, &g_pal_dsalogo, 96);
+
+		pal_src = g_vga_backbuffer + 500;
+		pal_dst = g_vga_backbuffer;
+
+		memset(pal_dst, 0, 96);
+
+		for (i = 0; i < 64; i++) {
+			pal_fade_in(pal_dst, pal_src, i, 32);
+			wait_for_vsync();
+			set_palette(pal_dst, 0, 32);
+		}
+
+	} else {
 
 		memcpy(g_pal_roalogo + 3 * 32, &g_pal_dsalogo, 3 * 32);
 		set_palette(g_pal_roalogo + 0x180, 128, 128);
@@ -7473,12 +7462,15 @@ static void intro(void)
 			wait_for_vsync();
 			set_palette(pal_dst, 32, 32);
 		}
+
 	}
 
+	/* print version */
 	set_textcolor(0xff, 0x00); // WHITE ON BLACK
 	print_str((char*)g_str_version, 290, 190);
 	vsync_or_key(400);
 
+	/* palette fade out */
 	if (g_dsagen_lang == LANG_DE) {
 
 		memcpy(g_vga_backbuffer, &g_pal_dsalogo, 96);
@@ -7507,7 +7499,21 @@ static void intro(void)
 			wait_for_vsync();
 			set_palette(pal_dst, 0, 256);
 		}
-	}
+	}	
+}
+
+/**
+ * \brief play the intro
+ */
+static void intro(void)
+{
+	g_in_intro = 1;
+
+	intro_attic();
+
+	intro_fanpro();
+
+	intro_title();
 
 	/* clear screen */
 	call_fill_rect_gen(g_vga_memstart, 0, 0, O_WIDTH - 1, O_HEIGHT -1, 0);
