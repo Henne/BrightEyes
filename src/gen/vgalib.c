@@ -349,8 +349,15 @@ void sdl_change_window_size(SDL_mutex *timer_mutex)
 	sdl_update_rect_window(0, 0, O_WIDTH, O_HEIGHT);
 }
 
-static inline Uint32 get_ABGR(const unsigned char *p) {
+static inline Uint32 get_ABGR(const unsigned char *p)
+{
 	return (p[0] << 2) | (p[1] << 10) | (p[2] << 18);
+}
+
+static inline Uint32 get_ABGR_grey(const unsigned char *p)
+{
+	const int avg = 4 * (p[0] + p[1] +  p[2]) / 3;
+	return (avg) | (avg << 8) | (avg << 16);
 }
 
 void set_palette(const unsigned char *pointer, const unsigned char first_color, const unsigned short colors)
@@ -358,7 +365,7 @@ void set_palette(const unsigned char *pointer, const unsigned char first_color, 
 	signed int i;
 
 	for (i = 0; i < colors; i++)
-		palette[first_color + i] = get_ABGR(pointer + 3 * i);
+		palette[first_color + i] = get_ABGR_grey(pointer + 3 * i);
 
 	pal_updated = 1;
 	sdl_update_rect_window(0, 0, O_WIDTH, O_HEIGHT);
