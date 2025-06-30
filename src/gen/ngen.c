@@ -2663,25 +2663,59 @@ static signed long get_filelength(void)
 	return g_flen;
 }
 
-static signed long get_archive_offset(const char *name, const unsigned char *table)
+/**
+ * \brief get the offset of a file inside DSAGEN.DAT
+ * \param[in] name name of the file
+ * \param[in] table offset table
+ * \param[in] length length of DSAGEN.DAT
+ * \return offset inside DSAGEN.DAT otherwise -1
+ * \note sets g_flen and g_flen_left
+ */
+static signed long get_archive_offset(const char *name, const unsigned char *table, const signed long length)
 {
+	signed long retval = -1;
+	signed long flen;
 	int i;
+	int last = 50;
+	int entry = -1;
 
+
+	/* determine the last entry in the table */
 	for (i = 0; i < 50; i++) {
-
-		/* check the filename */
-		if (!strncmp(name, (const char*)table + i * 16, 12)) {
-
-			/* calculate length */
-			g_flen_left = g_flen =
-				readd(table + (i + 1) * 16 + 0x0c) - readd(table + i * 16 + 0x0c);
-
-			/* return offset */
-			return readd(table + i * 16 + 0x0c);
+		if (table[16 * i] == 0) {
+			last = i - 1;
+			break;
 		}
 	}
 
-	return -1;
+	/* determine the entry in the table */
+	for (i = 0; i < 50; i++) {
+		if (!strncmp(name, (const char*)table + i * 16, 12)) {
+			entry = i;
+			break;
+		}
+	}
+
+	if (entry == -1) {
+		/* not found */
+		g_flen = g_flen_left = -1;
+		retval = -1;
+	} else {
+		const signed long o_cur = readd(table + 16 * entry + 0x0c);
+
+		if (entry == last) {
+			/* found, but last entry */
+			flen = length - o_cur;
+		} else {
+			/* found */
+			flen = readd(table + 16 * (i + 1) + 0x0c) - o_cur;
+		}
+
+		g_flen = g_flen_left = flen;
+		retval = o_cur;
+	}
+
+	return retval;
 }
 
 /**
@@ -2692,6 +2726,7 @@ static signed long get_archive_offset(const char *name, const unsigned char *tab
 static signed short open_datfile(const signed short index)
 {
 	unsigned char table[50 * 16];
+	signed long gendat_offset;
 	int handle;
 
 #if defined(__BORLANDC__)
@@ -2706,17 +2741,31 @@ static signed short open_datfile(const signed short index)
 #endif
 
 	/* failed to open DSAGEN.DAT */
-	if (handle == -1) return -1;
+	if (handle != -1) {
+		signed long gendat_length;
 
-	/* read offset table from file */
-	_read(handle, table, 50 * 16);
+		/* determine filelength */
+		gendat_length = lseek(handle, 0, SEEK_END);
+		lseek(handle, 0, SEEK_SET);
 
-	g_gendat_offset = get_archive_offset(g_fnames[index], table);
+		/* read offset table from file */
+		_read(handle, table, 50 * 16);
 
-	if (g_gendat_offset != -1) {
-		lseek(handle, g_gendat_offset, SEEK_SET);
-		return handle;
+		gendat_offset = get_archive_offset(g_fnames[index], table, gendat_length);
+
+		/* update the global variable */
+		g_gendat_offset = gendat_offset;
+
+		if (gendat_offset != -1) {
+			lseek(handle, gendat_offset, SEEK_SET);
+			return handle;
+		}
 	}
+
+	/* update the global variables on error */
+	g_gendat_offset = -1;
+	g_flen = -1;
+	g_flen_left = -1;
 
 	return -1;
 }
@@ -2739,7 +2788,7 @@ static signed short read_datfile(const signed short handle, unsigned char *buf, 
  */
 static int detect_datfile(void)
 {
-	signed long flen;
+	signed long gendat_length;
 	int handle;
 	int i;
 	int max_files;
@@ -2758,16 +2807,16 @@ static int detect_datfile(void)
 	}
 
 	/* determine filelength */
-	flen = lseek(handle, 0, SEEK_END);
+	gendat_length = lseek(handle, 0, SEEK_END);
 	lseek(handle, 0, SEEK_SET);
 	close(handle);
 
-	if (flen == -1) return -1;
+	if (gendat_length == -1) return -1;
 
 	/* only these 3 versions are known so far */
-	if (flen == 671236) { /* EN DISK */ g_dsagen_lang = LANG_EN; g_dsagen_medium = MED_DISK; } else
-	if (flen == 663221) { /* DE CD   */ g_dsagen_lang = LANG_DE; g_dsagen_medium = MED_CD; } else
-	if (flen == 634785) { /* DE DISK */ g_dsagen_lang = LANG_DE; g_dsagen_medium = MED_DISK; }
+	if (gendat_length == 671236) { /* EN DISK */ g_dsagen_lang = LANG_EN; g_dsagen_medium = MED_DISK; } else
+	if (gendat_length == 663221) { /* DE CD   */ g_dsagen_lang = LANG_DE; g_dsagen_medium = MED_CD; } else
+	if (gendat_length == 634785) { /* DE DISK */ g_dsagen_lang = LANG_DE; g_dsagen_medium = MED_DISK; }
 
 	/* print info */
 	fprintf(stderr, "DSAGEN.DAT: %s_%s",
@@ -2789,8 +2838,8 @@ static int detect_datfile(void)
 		/* index == 13 (TYPPIC.DAT) is not included in any known DSAGEN.DAT */
 		if ((i == 13) && (g_dsagen_lang == LANG_DE) && (g_dsagen_medium == MED_DISK)) continue;
 
-		//fprintf(stderr, "TRY: %02d %s\n", i, g_fnames[i]);
 		handle = open_datfile(i);
+		//fprintf(stderr, "TRY: %02d %s %ld\n", i, g_fnames[i], get_filelength());
 		if (handle == -1) {
 			sprintf(textbuffer, g_str_file_missing, g_fnames[i]);
 			fprintf(stderr, "ERROR: %s\n", textbuffer);
