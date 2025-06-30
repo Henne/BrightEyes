@@ -365,7 +365,7 @@ void set_palette(const unsigned char *pointer, const unsigned char first_color, 
 	signed int i;
 
 	for (i = 0; i < colors; i++)
-		palette[first_color + i] = get_ABGR_grey(pointer + 3 * i);
+		palette[first_color + i] = get_ABGR(pointer + 3 * i);
 
 	pal_updated = 1;
 	sdl_update_rect_window(0, 0, O_WIDTH, O_HEIGHT);
