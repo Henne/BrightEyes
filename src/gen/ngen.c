@@ -3501,22 +3501,21 @@ static void print_str(const char *str, const signed short x_in, const signed sho
 }
 
 /**
- * \brief print a string to the screen
+ * \brief print a string with multiple lines as the header of a popup box
  * \param[in] str
- * \return number of lines
  */
-static signed short print_line(char *str)
+static void print_header(char *str)
 {
 	unsigned char *gfx_bak = g_gfx_ptr;
-	signed short lines = str_splitter(str);
 
 	g_gfx_ptr = g_vga_memstart;
 
+	str_splitter(str);
+
+	//fprintf(stderr, "print_header(%s, %d, %d) ++++++++ \n", str, g_text_x, g_text_y);
 	print_str(str, g_text_x, g_text_y);
 
 	g_gfx_ptr = gfx_bak;
-
-	return lines;
 }
 
 /**
@@ -3876,7 +3875,7 @@ static signed short infobox(char *header, const signed short digits)
 	set_textcolor(0xff, 0xdf); // WHITE ON GREEN
 
 	g_use_solid_bg = 1;
-	print_line(header);
+	print_header(header);
 	g_use_solid_bg = 0;
 
 
@@ -4016,7 +4015,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 
 	/* print header */
 	if (lines_header)
-		print_line(header);
+		print_header(header);
 
 	str_x = g_text_x + 8;
 	str_y = g_upper_border + 8 * (lines_header + 1);
