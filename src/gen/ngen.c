@@ -3301,6 +3301,45 @@ static void prepare_chr_foreground(unsigned char* font_ptr)
 	}
 }
 
+/**
+ * \brief copy a character to the screen
+ * \param[out] gfx_ptr destination address with popup measures
+ * \param[in] chr_height height of the character
+ * \param[in] chr_width width of the character
+ * \param[in] popup_width width of the popup box in pixels
+ * \note requires screen measures
+ */
+static void blit_chr_popup(unsigned char *gfx_ptr, const signed short chr_height, const signed short chr_width, const int popup_width)
+{
+	unsigned char *src = g_char_buffer;
+	int i;
+	int j;
+
+	for (i = 0; i < chr_height; i++) {
+		memcpy(gfx_ptr, src, chr_width);
+		src += 8;
+		gfx_ptr += popup_width;
+	}
+}
+
+/**
+ * \brief calculate the address in a popup box
+ * \param[in] x X-coordinate
+ * \param[in] y Y-coordinate
+ * \param[in] popup_width width of the popup window
+ * \return pointer to the address
+ */
+static unsigned char* get_popup_ptr(const signed short x, const signed short y, const int popup_width)
+{
+	return g_popup_box + popup_width * y + x;
+}
+
+/**
+ * \brief calculate the address on the screen
+ * \param[in] x X-coordinate
+ * \param[in] y Y-coordinate
+ * \return pointer to the address
+ */
 static unsigned char* get_gfx_ptr(const signed short x, const signed short y)
 {
 	return g_gfx_ptr + (y * O_WIDTH + x);
