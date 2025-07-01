@@ -1323,7 +1323,6 @@ static signed short g_random_gen_seed = 0x327b;
 /* END OF INITIALIZED GLOBAL VARIABLES _DATA */
 
 /* START OF UNINITIALIZE GLOBAL VARIABLE _BSS DS:0x2474*/
-static signed short g_ro_var[7];
 #if defined(__BORLANDC__)
 static signed short g_display_mode_bak;
 static signed short g_display_page_bak;
@@ -3447,45 +3446,20 @@ static void print_str(const char *str, const signed short x_in, const signed sho
 
 		if (x > x_max) x_max = x;
 
-		if ((c == 0x0d) || (c == 0x40)) {
+		if ((c == 0x0d) || (c == '@')) {
+
 			/* newline */
 			y += 7;
 
-			x = (g_fg_color[4] == 1) ? get_line_start_c(str + i, g_text_x, g_text_x_end) : x_bak;
+			x = (g_fg_color[4] == 1) ?
+				get_line_start_c(str + i, g_text_x, g_text_x_end) :
+				x_bak;
 
-		} else if (c == 0x7e) {
-			/* CRUFT */
-			if (x < g_ro_var[0]) {
-				x = g_ro_var[0];
-				continue;
-			}
-			if (x < g_ro_var[1]) {
-				x = g_ro_var[1];
-				continue;
-			}
-			if (x < g_ro_var[2]) {
-				x = g_ro_var[2];
-				continue;
-			}
-			if (x < g_ro_var[3]) {
-				x = g_ro_var[3];
-				continue;
-			}
-			if (x < g_ro_var[4]) {
-				x = g_ro_var[4];
-				continue;
-			}
-			if (x < g_ro_var[5]) {
-				x = g_ro_var[5];
-				continue;
-			}
-			if (x < g_ro_var[6]) {
-				x = g_ro_var[6];
-				continue;
-			}
 		} else if ((c == 0xf0) || (c == 0xf1) || (c == 0xf2) || (c == 0xf3)) {
+
 			/* change text color */
 			g_col_index = c - 0xf0;
+
 		} else {
 			/* print normal */
 			x += print_chr(c, x, y);
