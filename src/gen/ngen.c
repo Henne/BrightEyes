@@ -3230,6 +3230,27 @@ void call_fill_rect_gen(unsigned char *ptr, const signed short x1, const signed 
 /* CHARACTER AND FONT FUNCTIONS */
 
 /**
+ * \brief calculate the width of a popup window
+ * \param[in] popup_tiles number of tiles (16 + 32 * popup_tiles + 16)
+ * \return width value in pixel
+ */
+static int popup_width(const int popup_tiles)
+{
+	return 32 * (popup_tiles + 1);
+}
+
+/**
+ * \brief calculate the height of a popup window
+ * \param[in] lines_header number of header lines (without radio button)
+ * \param[in] lines_body number of body lines (with radio button)
+ * \return height value in pixel
+ */
+static int popup_height(const int lines_header, const int lines_body)
+{
+	return 8 * (1 + lines_header + lines_body + 1);
+}
+
+/**
  * \brief gets font information of a character
  * \param[in] c the character
  * \param[out] width pointer to save the width of the character
@@ -3679,27 +3700,6 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 	g_gfx_ptr = gfx_bak;
 
 	return 0;
-}
-
-/**
- * \brief calculate the width of a popup window
- * \param[in] popup_tiles number of tiles (16 + 32 * popup_tiles + 16)
- * \return width value in pixel
- */
-static int popup_width(const int popup_tiles)
-{
-	return 32 * (popup_tiles + 1);
-}
-
-/**
- * \brief calculate the height of a popup window
- * \param[in] lines_header number of header lines (without radio button)
- * \param[in] lines_body number of body lines (with radio button)
- * \return height value in pixel
- */
-static int popup_height(const int lines_header, const int lines_body)
-{
-	return 8 * (1 + lines_header + lines_body + 1);
 }
 
 /**
