@@ -3285,15 +3285,23 @@ static unsigned char* get_gfx_ptr(const signed short x, const signed short y)
 	return g_gfx_ptr + (y * O_WIDTH + x);
 }
 
+/**
+ * \brief copy a character to the screen
+ * \param[out] gfx_ptr destination address with screen measures
+ * \param[in] chr_height height of the character
+ * \param[in] chr_width width of the character
+ * \note requires screen measures
+ */
 static void blit_chr(unsigned char *gfx_ptr, const signed short chr_height, const signed short chr_width)
 {
 	unsigned char *src = g_char_buffer;
 	int i;
-	int j;
 
-	for (i = 0; i < chr_height; src += 8 - chr_width, gfx_ptr += O_WIDTH, i++)
-		for (j = 0; j < chr_width; src++, j++)
-			gfx_ptr[j] = *src;
+	for (i = 0; i < chr_height; i++) {
+		memcpy(gfx_ptr, src, chr_width);
+		src += 8;
+		gfx_ptr += O_WIDTH;
+	}
 }
 
 static void print_chr_to_screen(const signed short chr_index, const signed short chr_width, const signed short x, const signed short y)
