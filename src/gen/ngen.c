@@ -3848,7 +3848,7 @@ static signed short infobox(char *header, const signed short digits)
 	l_text_y_bak = g_text_y;
 	l_text_x_end_bak = g_text_x_end;
 
-	width = 32 * g_menu_tiles + 32;
+	width = popup_width(g_menu_tiles);
 	g_left_border = (O_WIDTH - width) / 2 + g_text_x_mod;
 	g_text_x = g_left_border + 5;
 	g_text_x_end = width - 10;
@@ -3990,10 +3990,10 @@ signed short gui_radio(char *header, const signed int options, ...)
 	l_text_y_bak = g_text_y;
 	l_text_x_end_bak = g_text_x_end;
 
-	width = 32 * g_menu_tiles + 32;
+	width = popup_width(g_menu_tiles);
 	g_left_border = ((O_WIDTH - width) / 2) + g_text_x_mod;
 	g_text_x = g_left_border + 5;
-	g_text_x_end = 32 * g_menu_tiles + 22;
+	g_text_x_end = width - 10;
 	lines_header = str_splitter(header);
 	lines_sum = lines_header + options;
 	g_upper_border = (O_HEIGHT - 8 * (lines_sum + 2)) / 2;
@@ -4003,7 +4003,6 @@ signed short gui_radio(char *header, const signed int options, ...)
 	/* save the current background */
 	src = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
 	dst = g_page_buffer;
-
 	vgalib_copy_from_screen(dst, src, width, 8 * (lines_sum + 2));
 
 	/* draw popup */
