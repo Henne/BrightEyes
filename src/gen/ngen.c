@@ -1348,11 +1348,6 @@ static unsigned char *g_arrow_area;
 static unsigned char *g_mr_bar;
 static unsigned char *g_popup_box;
 
-static signed short g_text_x;
-static signed short g_text_y;
-static signed short g_text_x_mod = 0;
-static signed short g_text_x_end;
-
 static int g_use_solid_bg = 0;
 static int g_fg_color[5] = {0xff, 0xc8, 0xc9, 0xca, 0x00}; /* {WHITE, RED, YELLOW, BLUE, {0,1}} */
 static int g_bg_color = 0; /* BLACK */
@@ -1379,9 +1374,6 @@ static inline char* get_text(signed short no) {
 #define get_text(no) (g_texts[no])
 #endif
 
-static signed short g_upper_border;
-static signed short g_left_border;
-static int g_menu_tiles = 3; /* number of menu tiles width {3,4} */
 static signed char g_in_intro;
 
 /* the typus for the heads e.G. all elves are 10 */
@@ -1449,6 +1441,16 @@ void far *g_timer_isr_bak;
 static SDL_TimerID g_sdl_timer_id = 0;
 static SDL_mutex *g_sdl_timer_mutex = NULL;
 #endif
+
+/* GUI VARIABLES AND FUNCS */
+static signed short g_upper_border;
+static signed short g_left_border;
+static int g_menu_tiles = 3; /* number of menu tiles width {3,4} */
+static signed short g_text_x;
+static signed short g_text_y;
+static signed short g_text_x_mod = 0;
+static signed short g_text_x_end;
+
 
 /* MEMORY MANGEMENT VARIABLES */
 static int g_allocs = 0;
