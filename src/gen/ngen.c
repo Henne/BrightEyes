@@ -1443,13 +1443,17 @@ static SDL_mutex *g_sdl_timer_mutex = NULL;
 #endif
 
 /* GUI VARIABLES AND FUNCS */
+static int g_menu_tiles = 3; /* number of menu tiles width {3,4} */
 static signed short g_upper_border;
 static signed short g_left_border;
-static int g_menu_tiles = 3; /* number of menu tiles width {3,4} */
-static signed short g_text_x;
 static signed short g_text_y;
 static signed short g_text_x_mod = 0;
 static signed short g_text_x_end;
+
+static int text_x(const int left_border)
+{
+	return left_border + 5;
+}
 
 
 /* MEMORY MANGEMENT VARIABLES */
@@ -3522,7 +3526,7 @@ static void print_str(const char *str, const signed short x_in, const signed sho
 			y += 7;
 
 			x = (g_fg_color[4] == 1) ?
-				get_line_start_c(str + i, g_text_x, g_text_x_end) :
+				get_line_start_c(str + i, text_x(g_left_border), g_text_x_end) :
 				x_bak;
 
 		} else if ((c == 0xf0) || (c == 0xf1) || (c == 0xf2) || (c == 0xf3)) {
@@ -3556,8 +3560,8 @@ static void print_header(char *str)
 
 	str_splitter(str);
 
-	//fprintf(stderr, "print_header(%s, %d, %d) ++++++++ \n", str, g_text_x, g_text_y);
-	print_str(str, g_text_x, g_text_y);
+	//fprintf(stderr, "print_header(%s, %d, %d) ++++++++ \n", str, text_x(g_left_border), g_text_y);
+	print_str(str, text_x(g_left_border), g_text_y);
 
 	g_gfx_ptr = gfx_bak;
 }
@@ -3858,7 +3862,6 @@ static signed short infobox(char *header, const signed short digits)
 	int fg_bak;
 	int bg_bak;
 	signed short retval;
-	signed short l_text_x_bak;
 	signed short l_text_y_bak;
 	signed short l_text_x_end_bak;
 
@@ -3866,13 +3869,11 @@ static signed short infobox(char *header, const signed short digits)
 	signed short width;
 
 	g_fg_color[4] = 1;
-	l_text_x_bak = g_text_x;
 	l_text_y_bak = g_text_y;
 	l_text_x_end_bak = g_text_x_end;
 
 	width = popup_width(g_menu_tiles);
 	g_left_border = (O_WIDTH - width) / 2 + g_text_x_mod;
-	g_text_x = g_left_border + 5;
 	g_text_x_end = width - 10;
 	lines = str_splitter(header);
 
@@ -3929,7 +3930,6 @@ static signed short infobox(char *header, const signed short digits)
 
 	mouse_cursor();
 
-	g_text_x = l_text_x_bak;
 	g_text_y = l_text_y_bak;
 	g_text_x_end = l_text_x_end_bak;
 
@@ -3996,7 +3996,6 @@ signed short gui_radio(char *header, const signed int options, ...)
 	signed short l_opt_bak = -1;
 	signed short l_opt_new = 1;
 
-	signed short l_text_x_bak;
 	signed short l_text_y_bak;
 	signed short l_text_x_end_bak;
 
@@ -4008,13 +4007,11 @@ signed short gui_radio(char *header, const signed int options, ...)
 
 	signed short i;
 
-	l_text_x_bak = g_text_x;
 	l_text_y_bak = g_text_y;
 	l_text_x_end_bak = g_text_x_end;
 
 	width = popup_width(g_menu_tiles);
 	g_left_border = ((O_WIDTH - width) / 2) + g_text_x_mod;
-	g_text_x = g_left_border + 5;
 	g_text_x_end = width - 10;
 	lines_header = str_splitter(header);
 	lines_sum = lines_header + options;
@@ -4040,7 +4037,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 	if (lines_header)
 		print_header(header);
 
-	str_x = g_text_x + 8;
+	str_x = text_x(g_left_border) + 8;
 	str_y = g_upper_border + 8 * (lines_header + 1);
 
 	/* print radio options */
@@ -4169,7 +4166,6 @@ signed short gui_radio(char *header, const signed int options, ...)
 
 	set_textcolor(fg_bak, bg_bak);
 
-	g_text_x = l_text_x_bak;
 	g_text_y = l_text_y_bak;
 	g_text_x_end = l_text_x_end_bak;
 	g_in_key_ext = 0;
