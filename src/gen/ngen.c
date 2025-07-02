@@ -1349,7 +1349,7 @@ static unsigned char *g_mr_bar;
 static unsigned char *g_popup_box;
 
 static int g_use_solid_bg = 0;
-static int g_fg_color[5] = {0xff, 0xc8, 0xc9, 0xca, 0x00}; /* {WHITE, RED, YELLOW, BLUE, {0,1}} */
+static int g_fg_color[4] = {0xff, 0xc8, 0xc9, 0xca}; /* {WHITE, RED, YELLOW, BLUE} */
 static int g_bg_color = 0; /* BLACK */
 static signed short g_col_index;
 
@@ -1444,6 +1444,7 @@ static SDL_mutex *g_sdl_timer_mutex = NULL;
 
 /* GUI VARIABLES AND FUNCS */
 static int g_menu_tiles = 3; /* number of menu tiles width {3,4} */
+static int g_in_infobox = 0;
 static signed short g_upper_border;
 static signed short g_left_border;
 static signed short g_text_x_mod = 0;
@@ -3512,7 +3513,7 @@ static void print_str(const char *str, const signed short x_in, const signed sho
 
 	mouse_bg();
 
-	if (g_fg_color[4] == 1)
+	if (g_in_infobox)
 		x = get_line_start_c(str, x, g_text_x_end);
 
 	x_bak = x;
@@ -3528,7 +3529,7 @@ static void print_str(const char *str, const signed short x_in, const signed sho
 			/* newline */
 			y += 7;
 
-			x = (g_fg_color[4] == 1) ?
+			x = (g_in_infobox) ?
 				get_line_start_c(str + i, text_x(g_left_border), g_text_x_end) :
 				x_bak;
 
@@ -3870,7 +3871,7 @@ static signed short infobox(char *header, const signed short digits)
 	signed short lines;
 	signed short width;
 
-	g_fg_color[4] = 1;
+	g_in_infobox = 1;
 	l_text_x_end_bak = g_text_x_end;
 
 	width = popup_width(g_menu_tiles);
@@ -3932,7 +3933,7 @@ static signed short infobox(char *header, const signed short digits)
 
 	g_text_x_end = l_text_x_end_bak;
 
-	g_fg_color[4] = 0;
+	g_in_infobox = 0;
 	g_in_key_ext = 0;
 
 	return retval;
@@ -7154,10 +7155,8 @@ static void do_gen(const int init_level)
 			gen_memstat(str);
 
 			g_menu_tiles = 4;
-			g_fg_color[4] = 1;
 			infobox(get_text(267), 0);
 			infobox(str, 0);
-			g_fg_color[4] = 0;
 			g_menu_tiles = 3;
 		}
 
