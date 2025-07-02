@@ -1446,7 +1446,6 @@ static SDL_mutex *g_sdl_timer_mutex = NULL;
 static int g_menu_tiles = 3; /* number of menu tiles width {3,4} */
 static signed short g_upper_border;
 static signed short g_left_border;
-static signed short g_text_y;
 static signed short g_text_x_mod = 0;
 static signed short g_text_x_end;
 
@@ -1455,6 +1454,10 @@ static int text_x(const int left_border)
 	return left_border + 5;
 }
 
+static int text_y(const int upper_border)
+{
+	return upper_border + 7;
+}
 
 /* MEMORY MANGEMENT VARIABLES */
 static int g_allocs = 0;
@@ -3560,8 +3563,8 @@ static void print_header(char *str)
 
 	str_splitter(str);
 
-	//fprintf(stderr, "print_header(%s, %d, %d) ++++++++ \n", str, text_x(g_left_border), g_text_y);
-	print_str(str, text_x(g_left_border), g_text_y);
+	//fprintf(stderr, "print_header(%s, %d, %d) ++++++++ \n", str, text_x(g_left_border), text_y(g_upper_border));
+	print_str(str, text_x(g_left_border), text_y(g_upper_border));
 
 	g_gfx_ptr = gfx_bak;
 }
@@ -3862,14 +3865,12 @@ static signed short infobox(char *header, const signed short digits)
 	int fg_bak;
 	int bg_bak;
 	signed short retval;
-	signed short l_text_y_bak;
 	signed short l_text_x_end_bak;
 
 	signed short lines;
 	signed short width;
 
 	g_fg_color[4] = 1;
-	l_text_y_bak = g_text_y;
 	l_text_x_end_bak = g_text_x_end;
 
 	width = popup_width(g_menu_tiles);
@@ -3881,7 +3882,6 @@ static signed short infobox(char *header, const signed short digits)
 		lines += 2;
 
 	g_upper_border = (O_HEIGHT - (lines + 2) * 8) / 2;
-	g_text_y = g_upper_border + 7;
 
 	mouse_bg();
 
@@ -3930,7 +3930,6 @@ static signed short infobox(char *header, const signed short digits)
 
 	mouse_cursor();
 
-	g_text_y = l_text_y_bak;
 	g_text_x_end = l_text_x_end_bak;
 
 	g_fg_color[4] = 0;
@@ -3996,7 +3995,6 @@ signed short gui_radio(char *header, const signed int options, ...)
 	signed short l_opt_bak = -1;
 	signed short l_opt_new = 1;
 
-	signed short l_text_y_bak;
 	signed short l_text_x_end_bak;
 
 	signed short mx_bak;
@@ -4007,7 +4005,6 @@ signed short gui_radio(char *header, const signed int options, ...)
 
 	signed short i;
 
-	l_text_y_bak = g_text_y;
 	l_text_x_end_bak = g_text_x_end;
 
 	width = popup_width(g_menu_tiles);
@@ -4016,7 +4013,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 	lines_header = str_splitter(header);
 	lines_sum = lines_header + options;
 	g_upper_border = (O_HEIGHT - 8 * (lines_sum + 2)) / 2;
-	g_text_y = g_upper_border + 7;
+
 	mouse_bg();
 
 	/* save the current background */
@@ -4166,7 +4163,6 @@ signed short gui_radio(char *header, const signed int options, ...)
 
 	set_textcolor(fg_bak, bg_bak);
 
-	g_text_y = l_text_y_bak;
 	g_text_x_end = l_text_x_end_bak;
 	g_in_key_ext = 0;
 
