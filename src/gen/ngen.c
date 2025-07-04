@@ -3954,8 +3954,10 @@ static signed short infobox(char *header, const signed short digits)
  * \param[in] old_pos the position of the last active button (or -1)
  * \param[in] new_pos the position of the current active button
  * \param[in] offset the offset of the first radio line
+ * \param[in] left_border x - coordinate of the left border of the gui box
+ * \param[in] upper_border y - coordinate of the upper border of the gui box
  */
-static void fill_radio_button(const signed short old_pos, const signed short new_pos, const signed short offset)
+static void fill_radio_button(const signed short old_pos, const signed short new_pos, const signed short offset, const int left_border, const int upper_border)
 {
 	signed short x;
 	signed short y;
@@ -3964,17 +3966,17 @@ static void fill_radio_button(const signed short old_pos, const signed short new
 
 	/* unmark the old radio button, if any */
 	if (old_pos != -1) {
-		x = g_left_border + 6;
+		x = left_border + 6;
 
-		y = g_upper_border + (offset + old_pos) * 8 + 2;
+		y = upper_border + (offset + old_pos) * 8 + 2;
 
 		call_fill_rect_gen(g_vga_memstart, x, y, x + 3, y + 3, 0xd8);
 	}
 
 	/* mark the new radio button */
-	x = g_left_border + 6;
+	x = left_border + 6;
 
-	y = g_upper_border + (offset + new_pos) * 8 + 2;
+	y = upper_border + (offset + new_pos) * 8 + 2;
 
 	call_fill_rect_gen(g_vga_memstart, x, y, x + 3, y + 3, 0xd9);
 
@@ -4106,7 +4108,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 			}
 #endif
 			/* default behaviour */
-			fill_radio_button(l_opt_bak, l_opt_new, lines_header);
+			fill_radio_button(l_opt_bak, l_opt_new, lines_header, left_border, upper_border);
 			l_opt_bak = l_opt_new;
 		}
 
