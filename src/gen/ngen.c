@@ -3870,6 +3870,7 @@ static signed short infobox(char *header, const signed short digits)
 
 	signed short lines;
 	signed short width;
+	int height;
 
 	g_in_infobox = 1;
 	l_text_x_end_bak = g_text_x_end;
@@ -3882,7 +3883,8 @@ static signed short infobox(char *header, const signed short digits)
 	if (digits != 0)
 		lines += 2;
 
-	g_upper_border = (O_HEIGHT - (lines + 2) * 8) / 2;
+	height = popup_height(lines, 0);
+	g_upper_border = (O_HEIGHT - height) / 2;
 
 	mouse_bg();
 
@@ -3890,7 +3892,7 @@ static signed short infobox(char *header, const signed short digits)
 	src = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
 	dst = g_page_buffer;
 
-	vgalib_copy_from_screen(dst, src, width, (lines + 2) * 8);
+	vgalib_copy_from_screen(dst, src, width, height);
 
 	/* draw popup */
 	draw_popup_box(lines, 0);
@@ -3927,7 +3929,7 @@ static signed short infobox(char *header, const signed short digits)
 	dst = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
 	src = g_page_buffer;
 
-	vgalib_copy_to_screen(dst, src, width, 8 * (lines + 2));
+	vgalib_copy_to_screen(dst, src, width, height);
 
 	mouse_cursor();
 
@@ -4003,6 +4005,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 	signed short r7;
 	signed short r8;
 	signed short width;
+	int height;
 
 	signed short i;
 
@@ -4013,14 +4016,15 @@ signed short gui_radio(char *header, const signed int options, ...)
 	g_text_x_end = width - 10;
 	lines_header = str_splitter(header);
 	lines_sum = lines_header + options;
-	g_upper_border = (O_HEIGHT - 8 * (lines_sum + 2)) / 2;
+	height = popup_height(lines_header, options);
+	g_upper_border = (O_HEIGHT - height) / 2;
 
 	mouse_bg();
 
 	/* save the current background */
 	src = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
 	dst = g_page_buffer;
-	vgalib_copy_from_screen(dst, src, width, 8 * (lines_sum + 2));
+	vgalib_copy_from_screen(dst, src, width, height);
 
 	/* draw popup */
 	draw_popup_box(lines_header, options);
@@ -4158,7 +4162,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 	/* restore the previous background */
 	dst = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
 	src = g_page_buffer;
-	vgalib_copy_to_screen(dst, src, width, 8 * (lines_sum + 2));
+	vgalib_copy_to_screen(dst, src, width, height);
 
 	mouse_cursor();
 
