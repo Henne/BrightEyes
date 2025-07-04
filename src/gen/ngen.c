@@ -3876,7 +3876,6 @@ static signed short infobox(char *header, const signed short digits)
 	l_text_x_end_bak = g_text_x_end;
 
 	width = popup_width(g_menu_tiles);
-	g_left_border = (O_WIDTH - width) / 2 + g_text_x_mod;
 	left_border = (O_WIDTH - width) / 2 + g_text_x_mod;
 	g_left_border = left_border;
 	g_text_x_end = width - 10;
