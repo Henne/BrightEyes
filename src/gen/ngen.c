@@ -3361,18 +3361,15 @@ static void blit_chr(unsigned char *gfx_ptr, const signed short chr_height, cons
 	}
 }
 
-static void print_chr_to_screen(const signed short chr_index, const signed short chr_width, const signed short x, const signed short y)
+static void print_chr_to_screen(const int chr_index, const int chr_width, const int x, const int y)
 {
 	if (g_use_solid_bg) {
 		prepare_chr_background();
 	} else {
-		unsigned char *g_gfx_bak = g_gfx_ptr;
-
-		g_gfx_ptr = g_vga_backbuffer;
-		vgalib_copy_from_screen(g_char_buffer, get_gfx_ptr(x, y), 8, 8);
-		g_gfx_ptr = g_gfx_bak;
+		vgalib_copy_from_screen(g_char_buffer, g_vga_backbuffer + y * O_WIDTH + x, 8, 8);
 	}
-	prepare_chr_foreground(chr_index * 8 + g_buffer_font6);
+
+	prepare_chr_foreground(g_buffer_font6 + 8 * chr_index);
 
 	if (g_gfx_ptr == g_popup_box) {
 		const int width = popup_width(g_menu_tiles);
@@ -3382,7 +3379,7 @@ static void print_chr_to_screen(const signed short chr_index, const signed short
 	}
 }
 
-static signed short print_chr(const unsigned char c, const signed short x, const signed short y)
+static signed short print_chr(const unsigned char c, const int x, const int y)
 {
 	signed short width;
 	signed short idx;
