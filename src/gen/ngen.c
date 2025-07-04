@@ -2980,7 +2980,7 @@ static int load_essential_files(void)
 	/* copy arrow area from GEN4.NVF/E_GEN4.NVF */
 	handle = open_datfile(4);
 	if (handle != -1) {
-		len = read_datfile(handle, g_page_buffer, get_filelength());
+		read_datfile(handle, g_page_buffer, get_filelength());
 		close(handle);
 
 		decomp_rle(g_vga_backbuffer, g_page_buffer);
@@ -2996,7 +2996,7 @@ static int load_essential_files(void)
 	/* copy mr_bar and name_bar from GEN1.NVF/E_GEN1.NVF */
 	handle = open_datfile(0);
 	if (handle != -1) {
-		len = read_datfile(handle, g_page_buffer, get_filelength());
+		read_datfile(handle, g_page_buffer, get_filelength());
 		close(handle);
 
 		decomp_rle(g_vga_backbuffer, g_page_buffer);
@@ -3022,7 +3022,7 @@ static void load_common_files(void)
 	/* load HEADS.DAT */
 	handle = open_datfile(11);
 	if (handle != -1) {
-		len = read_datfile(handle, g_buffer_heads_dat, get_filelength());
+		read_datfile(handle, g_buffer_heads_dat, get_filelength());
 		close(handle);
 	}
 
