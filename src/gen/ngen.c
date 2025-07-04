@@ -3752,6 +3752,9 @@ static void draw_popup_line(const signed short line, const signed short type)
 	} else if (type == 3) {
 		/* lower edge */
 		popup_left = 5; popup_middle = 11; popup_right = 6;
+	} else {
+		/* middle part (without radio box) as fallback */
+		popup_left = 2; popup_middle = 9; popup_right = 3;
 	}
 
 	popup_left *= 128; popup_middle *= 128; popup_right *= 128;
