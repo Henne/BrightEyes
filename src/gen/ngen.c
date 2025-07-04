@@ -4576,12 +4576,10 @@ static void save_chr(void)
 		return;
 
 	/* copy name to alias */
-	/* TODO: should use strncpy() here */
-	strcpy((char*)g_hero.alias, (const char*)g_hero.name);
+	strncpy((char*)g_hero.alias, (const char*)g_hero.name, 15);
 
 	/* copy name to buffer */
-	/* TODO: should use strncpy() here */
-	strcpy(g_textbuffer, (const char*)g_hero.name);
+	strncpy(g_textbuffer, (const char*)g_hero.name, 15);
 
 	/* prepare filename */
 	for (i = 0; i < 8; i++) {
@@ -4615,7 +4613,7 @@ static void save_chr(void)
 
 			if (g_called_with_args == 0) return;
 
-			strcpy(path, g_str_temp_dir);
+			strncpy(path, g_str_temp_dir, 20);
 			strcat(path, filename);
 
 			if ((handle = _creat(path, 0)) != -1) {
@@ -5360,9 +5358,7 @@ static void new_attributes(const int page, const int level)
 		full_refresh = 1;
 
 	/* save the name of the hero */
-	/* TODO strncpy() would be better here */
-
-	strcpy(name_bak, (const char*)g_hero.name);
+	strncpy(name_bak, (const char*)g_hero.name, 15);
 
 	/* save the sex of the hero */
 	sex_bak = g_hero.sex;
@@ -5373,9 +5369,7 @@ static void new_attributes(const int page, const int level)
 	g_hero.sex = sex_bak;
 
 	/* restore the name of the hero */
-	/* TODO strncpy() would be better here */
-
-	strcpy((char*)g_hero.name, name_bak);
+	strncpy((char*)g_hero.name, name_bak, 15);
 
 	if (full_refresh) {
 		print_values(page, level);
@@ -6894,13 +6888,13 @@ static int choose_typus(const int level)
 		return 0;
 
 	/* clear the hero area with saved name and sex */
-	strcpy(name_bak, (const char*)g_hero.name);
+	strncpy(name_bak, (const char*)g_hero.name, 15);
 	sex_bak = g_hero.sex;
 
 	clear_hero();
 
 	g_hero.sex = sex_bak;
-	strcpy((char*)g_hero.name, name_bak);
+	strncpy((char*)g_hero.name, name_bak, 15);
 
 	/* set typus */
 	g_hero.typus = (signed char)choosen_typus;
