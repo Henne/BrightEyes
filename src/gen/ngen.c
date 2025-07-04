@@ -4642,17 +4642,12 @@ static void save_chr(void)
  */
 static void enter_name(void)
 {
-	unsigned char * const dst = get_gfx_ptr(180, 12);
-
 	mouse_bg();
-
-	/* clear background underneath the name */
-	vgalib_copy_to_screen(dst, g_name_bar, 15 * 6, 8);
 
 	enter_string((char*)g_hero.name, 180, 12, 15, 1);
 
 	/* restore background underneath the name */
-	vgalib_copy_to_screen(dst, g_name_bar, 15 * 6, 8);
+	vgalib_copy_to_screen(get_gfx_ptr(180, 12), g_name_bar, 15 * 6, 8);
 
 	mouse_cursor();
 
