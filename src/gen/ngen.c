@@ -1343,7 +1343,6 @@ static unsigned char *g_buffer_typus;
 static unsigned char *g_buffer_dmenge_dat;
 static unsigned char *g_buffer_current_head;
 static unsigned char *g_name_bar;
-static unsigned char *g_popup_line;
 static unsigned char *g_arrow_area;
 static unsigned char *g_mr_bar;
 static unsigned char *g_popup_box;
@@ -1550,9 +1549,6 @@ static int alloc_buffers(void)
 	g_name_bar = gen_alloc(720);	/* 15 chars * 6 pixel / char * 8 pixel */
 	if (g_name_bar == NULL) errors++;
 
-	g_popup_line = gen_alloc(O_WIDTH * 8);
-	if (g_popup_line == NULL) errors++;
-
 	g_buffer_current_head = (gen_alloc(1024 + 8) + 8);
 	if (g_buffer_current_head == NULL) errors++;
 
@@ -1614,11 +1610,6 @@ void free_buffers(void)
 	if (g_buffer_font6 != NULL) {
 		gen_free(g_buffer_font6);
 		g_buffer_font6 = NULL;
-	}
-
-	if (g_popup_line != NULL) {
-		gen_free(g_popup_line);
-		g_popup_line = NULL;
 	}
 
 	if (g_name_bar != NULL) {
@@ -3738,59 +3729,43 @@ static signed short enter_string(char *dst, const signed short x, const signed s
  */
 static void draw_popup_line(const signed short line, const signed short type)
 {
-	unsigned char *dst;
-	unsigned char *src;
+	const int tiles = g_menu_tiles;
+	const int width = popup_width(tiles);
+	unsigned char *dst = g_popup_box + 8 * width * line;
+
 	/* tile offsets in POPUP.DAT */
 	int popup_left;
 	int popup_middle;
 	int popup_right;
 	int i;
+	int j;
 
-	switch (type) {
-		case 0: {
-			popup_left   =  0 * 128;
-			popup_middle =  7 * 128;
-			popup_right  =  1 * 128;
-			break;
-		}
-		case 1: {
-			popup_left   =  2 * 128;
-			popup_middle =  9 * 128;
-			popup_right  =  3 * 128;
-			break;
-		}
-		case 2: {
-			popup_left   =  4 * 128;
-			popup_middle =  9 * 128;
-			popup_right  =  3 * 128;
-			break;
-		}
-		case 3: {
-			popup_left   =  5 * 128;
-			popup_middle = 11 * 128;
-			popup_right  =  6 * 128;
-			break;
-		}
+	if (type == 0) {
+		/* upper edge */
+		popup_left = 0; popup_middle = 7; popup_right = 1;
+	} else if (type == 1) {
+		/* middle part (without radio box) */
+		popup_left = 2; popup_middle = 9; popup_right = 3;
+	} else if (type == 2) {
+		/* middle part (with radio box) */
+		popup_left = 4; popup_middle = 9; popup_right = 3;
+	} else if (type == 3) {
+		/* lower edge */
+		popup_left = 5; popup_middle = 11; popup_right = 6;
 	}
 
-	memset(g_popup_line, 0x00, O_WIDTH * 8);
+	popup_left *= 128; popup_middle *= 128; popup_right *= 128;
 
-	dst = g_popup_line;
-	src = g_buffer_popup_dat + popup_left;
-	vgalib_copy_to_screen(dst, src, 16, 8);
-
-	src = g_buffer_popup_dat + popup_middle;
-	dst += 16;
-	for (i = 0; i < g_menu_tiles; dst += 32, i++)
-		vgalib_copy_to_screen(dst, src, 32, 8);
-
-	src = g_buffer_popup_dat + popup_right;
-	vgalib_copy_to_screen(dst, src, 16, 8);
-
-	/* 320 * (8 * line + y) + x */
-	src = g_popup_line;
-	dst = g_popup_box + line * 8 * popup_width(g_menu_tiles);
-	vgalib_copy_from_screen(dst, src, popup_width(g_menu_tiles), 8);
+	for (i = 0; i < 8; i++) {
+		memcpy(dst, g_buffer_popup_dat + popup_left + 16 * i, 16);
+		dst += 16;
+		for (j = 0; j < tiles; j++) {
+			memcpy(dst, g_buffer_popup_dat + popup_middle + 32 * i, 32);
+			dst += 32;
+		}
+		memcpy(dst, g_buffer_popup_dat + popup_right + 16 * i, 16);
+		dst += 16;
+	}
 }
 
 /**
@@ -5411,8 +5386,7 @@ static void new_attributes(const int page, const int level)
 		do {
 			g_text_x_mod = -80;
 
-			di = gui_radio(g_textbuffer,
-				unset_attribs,
+			di = gui_radio(g_textbuffer, unset_attribs,
 				g_type_names[0], g_type_names[1], g_type_names[2],
 				g_type_names[3], g_type_names[4], g_type_names[5],
 				g_type_names[6]);
@@ -5451,8 +5425,7 @@ static void new_attributes(const int page, const int level)
 		do {
 			g_text_x_mod = -80;
 
-			di = gui_radio(g_textbuffer,
-				unset_attribs,
+			di = gui_radio(g_textbuffer, unset_attribs,
 				g_type_names[0], g_type_names[1], g_type_names[2],
 				g_type_names[3], g_type_names[4], g_type_names[5],
 				g_type_names[6]);
@@ -5645,8 +5618,7 @@ static void fill_values(const int level)
 			g_hero.staff_level = 1;
 			/* select mage school */
 			do {
-				g_hero.spell_school = gui_radio(get_text(47),
-							9,
+				g_hero.spell_school = gui_radio(get_text(47), 9,
 							get_text(48), get_text(49),
 							get_text(50), get_text(51),
 							get_text(52), get_text(53),
@@ -6342,8 +6314,7 @@ static void select_skill(const int page)
 				switch (group) {
 				case 1: {
 					/* Fight */
-					skill = gui_radio(get_text(147),
-						9,
+					skill = gui_radio(get_text(147), 9,
 						get_text(95), get_text(96), get_text(97),
 						get_text(98), get_text(99), get_text(100),
 						get_text(101), get_text(102), get_text(103)) - 1;
@@ -6355,8 +6326,7 @@ static void select_skill(const int page)
 				}
 				case 2: {
 					/* Body */
-					skill = gui_radio(get_text(147),
-						10,
+					skill = gui_radio(get_text(147), 10,
 						get_text(104), get_text(105),
 						get_text(106), get_text(107),
 						get_text(108), get_text(109),
@@ -6378,8 +6348,7 @@ static void select_skill(const int page)
 			if (group != -1) {
 				switch (group) {
 				case 1: {
-					skill = gui_radio(get_text(147),
-							7,
+					skill = gui_radio(get_text(147), 7,
 							get_text(114), get_text(115), get_text(116),
 							get_text(117), get_text(118), get_text(119),
 							get_text(120)) - 1;
@@ -6391,8 +6360,7 @@ static void select_skill(const int page)
 					break;
 				}
 				case 2: {
-					skill = gui_radio(get_text(147),
-							9,
+					skill = gui_radio(get_text(147), 9,
 							get_text(127), get_text(128), get_text(129),
 							get_text(130), get_text(131), get_text(132),
 							get_text(133), get_text(134), get_text(135)) - 1;
@@ -6413,8 +6381,7 @@ static void select_skill(const int page)
 				switch (group)
 				{
 					case 1: {
-						skill = gui_radio(get_text(147),
-							9,
+						skill = gui_radio(get_text(147), 9,
 							get_text(136), get_text(137), get_text(138),
 							get_text(139), get_text(140), get_text(141),
 							get_text(142), get_text(143), get_text(144)) - 1;
@@ -6426,8 +6393,7 @@ static void select_skill(const int page)
 						break;
 					}
 					case 2: {
-						skill = gui_radio(get_text(147),
-							6,
+						skill = gui_radio(get_text(147), 6,
 							get_text(121), get_text(122), get_text(123),
 							get_text(124), get_text(125), get_text(126)) - 1;
 
@@ -6438,8 +6404,7 @@ static void select_skill(const int page)
 						break;
 					}
 					case 3: {
-						skill = gui_radio(get_text(147),
-							2,
+						skill = gui_radio(get_text(147), 2,
 							get_text(145),
 							get_text(146)) - 1;
 
@@ -6548,16 +6513,14 @@ static void select_spell(const int page)
 
 		switch (page) {
 			case 5: {
-				group = gui_radio(get_text(155),
-						3,
+				group = gui_radio(get_text(155), 3,
 						get_text(157), get_text(162),
 						get_text(158));
 				if (group != -1) {
 				switch (group)
 				{
 					case 1: {
-						spell = gui_radio(get_text(156),
-								5,
+						spell = gui_radio(get_text(156), 5,
 								get_text(169), get_text(170),
 								get_text(171), get_text(172),
 								get_text(173)) - 1;
