@@ -3871,12 +3871,15 @@ static signed short infobox(char *header, const signed short digits)
 	signed short lines;
 	signed short width;
 	int height;
+	int left_border;
 
 	g_in_infobox = 1;
 	l_text_x_end_bak = g_text_x_end;
 
 	width = popup_width(g_menu_tiles);
 	g_left_border = (O_WIDTH - width) / 2 + g_text_x_mod;
+	left_border = (O_WIDTH - width) / 2 + g_text_x_mod;
+	g_left_border = left_border;
 	g_text_x_end = width - 10;
 	lines = str_splitter(header);
 
@@ -3889,7 +3892,7 @@ static signed short infobox(char *header, const signed short digits)
 	mouse_bg();
 
 	/* save the current background */
-	src = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
+	src = g_vga_memstart + g_upper_border * O_WIDTH + left_border;
 	dst = g_page_buffer;
 
 	vgalib_copy_from_screen(dst, src, width, height);
@@ -3911,7 +3914,7 @@ static signed short infobox(char *header, const signed short digits)
 
 	if (digits) {
 		enter_string(g_digitbuffer,
-			g_left_border + (width - digits * 6) / 2,
+			left_border + (width - digits * 6) / 2,
 			g_upper_border + 8 * lines - 2, digits, 0);
 
 		retval = (unsigned short)atol(g_digitbuffer);
@@ -3926,7 +3929,7 @@ static signed short infobox(char *header, const signed short digits)
 	set_textcolor(fg_bak, bg_bak);
 	mouse_bg();
 
-	dst = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
+	dst = g_vga_memstart + g_upper_border * O_WIDTH + left_border;
 	src = g_page_buffer;
 
 	vgalib_copy_to_screen(dst, src, width, height);
@@ -4006,13 +4009,15 @@ signed short gui_radio(char *header, const signed int options, ...)
 	signed short r8;
 	signed short width;
 	int height;
+	int left_border;
 
 	signed short i;
 
 	l_text_x_end_bak = g_text_x_end;
 
 	width = popup_width(g_menu_tiles);
-	g_left_border = ((O_WIDTH - width) / 2) + g_text_x_mod;
+	left_border = (O_WIDTH - width) / 2 + g_text_x_mod;
+	g_left_border = left_border;
 	g_text_x_end = width - 10;
 	lines_header = str_splitter(header);
 	lines_sum = lines_header + options;
@@ -4022,7 +4027,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 	mouse_bg();
 
 	/* save the current background */
-	src = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
+	src = g_vga_memstart + g_upper_border * O_WIDTH + left_border;
 	dst = g_page_buffer;
 	vgalib_copy_from_screen(dst, src, width, height);
 
@@ -4039,7 +4044,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 	if (lines_header)
 		print_header(header);
 
-	str_x = text_x(g_left_border) + 8;
+	str_x = text_x(left_border) + 8;
 	str_y = g_upper_border + 8 * (lines_header + 1);
 
 	/* print radio options */
@@ -4057,13 +4062,13 @@ signed short gui_radio(char *header, const signed int options, ...)
 	/* save and set mouse position */
 	mx_bak = g_mouse_posx;
 	my_bak = g_mouse_posy;
-	g_mouse_posx_bak = g_mouse_posx = g_left_border + 90;
+	g_mouse_posx_bak = g_mouse_posx = left_border + 90;
 	g_mouse_posy_bak = g_mouse_posy = r8 = r7 = g_upper_border + 8 * (lines_header + 1);
 
 	mouse_move_cursor(g_mouse_posx, g_mouse_posy);
 
-	g_mouse_posx_max = g_left_border + width - 16;
-	g_mouse_posx_min = g_left_border;
+	g_mouse_posx_max = left_border + width - 16;
+	g_mouse_posx_min = left_border;
 	g_mouse_posy_min = g_upper_border + 8 * (lines_header + 1);
 	g_mouse_posy_max = (g_upper_border + 8 * (lines_header + 1) + 8 * options) - 1;
 	mouse_cursor();
@@ -4160,7 +4165,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 	mouse_move_cursor(g_mouse_posx, g_mouse_posy);
 
 	/* restore the previous background */
-	dst = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
+	dst = g_vga_memstart + g_upper_border * O_WIDTH + left_border;
 	src = g_page_buffer;
 	vgalib_copy_to_screen(dst, src, width, height);
 
