@@ -3881,6 +3881,10 @@ static signed short infobox(char *header, const signed short digits)
 	height = popup_height(lines, 0);
 	upper_border = (O_HEIGHT - height) / 2;
 
+	/* save and set text colors */
+	get_textcolor(&fg_bak, &bg_bak);
+	set_textcolor(0xff, 0xdf); // WHITE ON GREEN
+
 	mouse_bg();
 
 	/* save the current background in g_page_buffer*/
@@ -3891,10 +3895,6 @@ static signed short infobox(char *header, const signed short digits)
 	draw_popup_box(lines, 0);
 
 	vgalib_copy_to_screen(vga_ptr, g_popup_box, width, height);
-
-	/* save and set text colors */
-	get_textcolor(&fg_bak, &bg_bak);
-	set_textcolor(0xff, 0xdf); // WHITE ON GREEN
 
 	g_use_solid_bg = 1;
 	print_header(header, left_border, upper_border);
