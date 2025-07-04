@@ -3970,7 +3970,6 @@ signed short gui_radio(char *header, const signed int options, ...)
 	char *str;
 	int fg_bak;
 	int bg_bak;
-	signed short str_x;
 	signed short str_y;
 	signed short done = 0;
 	signed short retval;
@@ -4014,7 +4013,6 @@ signed short gui_radio(char *header, const signed int options, ...)
 	/* draw popup */
 	draw_popup_box(lines_header, options);
 	g_use_solid_bg = 1;
-
 	g_gfx_ptr = g_popup_box;
 
 	/* print header */
@@ -4022,22 +4020,19 @@ signed short gui_radio(char *header, const signed int options, ...)
 		print_header(header);
 	}
 
-	vgalib_copy_to_screen(vga_ptr, g_popup_box, width, height);
-
-	str_x = left_border + 8 + 5;
-	str_y = upper_border + 8 * (lines_header + 1);
+	str_y = 8 * (lines_header + 1);
 
 	/* print radio options */
-	g_gfx_ptr = g_vga_memstart;
 	va_start(arguments, options);
 	for (i = 1; i <= options; str_y += 8, i++) {
 		str = va_arg(arguments, char*);
-		print_str(str, str_x, str_y);
+		print_str(str, 8 + 5, str_y);
 	}
 	va_end(arguments);
-	g_gfx_ptr = gfx_bak;
 
+	g_gfx_ptr = gfx_bak;
 	g_use_solid_bg = 0;
+	vgalib_copy_to_screen(vga_ptr, g_popup_box, width, height);
 
 	/* save and set mouse position */
 	mx_bak = g_mouse_posx;
