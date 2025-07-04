@@ -1445,19 +1445,8 @@ static SDL_mutex *g_sdl_timer_mutex = NULL;
 /* GUI VARIABLES AND FUNCS */
 static int g_menu_tiles = 3; /* number of menu tiles width {3,4} */
 static int g_in_infobox = 0;
-static signed short g_left_border;
 static signed short g_text_x_mod = 0;
 static signed short g_text_x_end;
-
-static int text_x(const int left_border)
-{
-	return left_border + 5;
-}
-
-static int text_y(const int upper_border)
-{
-	return upper_border + 7;
-}
 
 /* MEMORY MANGEMENT VARIABLES */
 static int g_allocs = 0;
@@ -3384,7 +3373,13 @@ static void print_chr_to_screen(const signed short chr_index, const signed short
 		g_gfx_ptr = g_gfx_bak;
 	}
 	prepare_chr_foreground(chr_index * 8 + g_buffer_font6);
-	blit_chr(get_gfx_ptr(x, y), 7, chr_width);
+
+	if (g_gfx_ptr == g_popup_box) {
+		const int width = popup_width(g_menu_tiles);
+		blit_chr_popup(get_popup_ptr(x, y, width), 7, chr_width, width);
+	} else {
+		blit_chr(get_gfx_ptr(x, y), 7, chr_width);
+	}
 }
 
 static signed short print_chr(const unsigned char c, const signed short x, const signed short y)
@@ -3528,7 +3523,7 @@ static void print_str(const char *str, const signed short x_in, const signed sho
 			y += 7;
 
 			x = (g_in_infobox) ?
-				get_line_start_c(str + i, text_x(g_left_border), g_text_x_end) :
+				get_line_start_c(str + i, 5, g_text_x_end) :
 				x_bak;
 
 		} else if ((c == 0xf0) || (c == 0xf1) || (c == 0xf2) || (c == 0xf3)) {
@@ -3553,21 +3548,12 @@ static void print_str(const char *str, const signed short x_in, const signed sho
 /**
  * \brief print a string with multiple lines as the header of a popup box
  * \param[in] str
- * \param[in] left_border x - coordinate of the left border of the gui box
- * \param[in] upper_border y - coordinate of the upper border of the gui box
  */
-static void print_header(char *str, const int left_border, const int upper_border)
+static void print_header(char *str)
 {
-	unsigned char *gfx_bak = g_gfx_ptr;
-
-	g_gfx_ptr = g_vga_memstart;
-
 	str_splitter(str);
 
-	//fprintf(stderr, "print_header(%s, %d, %d) ++++++++ \n", str, text_x(left_border), text_y(upper_border));
-	print_str(str, text_x(left_border), text_y(upper_border));
-
-	g_gfx_ptr = gfx_bak;
+	print_str(str, 5, 7);
 }
 
 /**
@@ -3855,6 +3841,7 @@ static void draw_popup_box(const int lines_header, const int lines_body)
 static signed short infobox(char *header, const signed short digits)
 {
 	unsigned char* vga_ptr;
+	unsigned char* gfx_bak = g_gfx_ptr;
 	int fg_bak;
 	int bg_bak;
 	signed short retval;
@@ -3871,7 +3858,6 @@ static signed short infobox(char *header, const signed short digits)
 
 	width = popup_width(g_menu_tiles);
 	left_border = (O_WIDTH - width) / 2 + g_text_x_mod;
-	g_left_border = left_border;
 	g_text_x_end = width - 10;
 	lines = str_splitter(header);
 
@@ -3894,10 +3880,12 @@ static signed short infobox(char *header, const signed short digits)
 	/* draw popup */
 	draw_popup_box(lines, 0);
 
-	vgalib_copy_to_screen(vga_ptr, g_popup_box, width, height);
-
 	g_use_solid_bg = 1;
-	print_header(header, left_border, upper_border);
+	g_gfx_ptr = g_popup_box;
+	print_header(header);
+	g_gfx_ptr = gfx_bak;
+
+	vgalib_copy_to_screen(vga_ptr, g_popup_box, width, height);
 
 	g_mouse_rightclick_event = 0;
 	mouse_cursor();
@@ -4008,7 +3996,6 @@ signed short gui_radio(char *header, const signed int options, ...)
 
 	width = popup_width(g_menu_tiles);
 	left_border = (O_WIDTH - width) / 2 + g_text_x_mod;
-	g_left_border = left_border;
 	g_text_x_end = width - 10;
 	lines_header = str_splitter(header);
 	height = popup_height(lines_header, options);
@@ -4026,15 +4013,18 @@ signed short gui_radio(char *header, const signed int options, ...)
 
 	/* draw popup */
 	draw_popup_box(lines_header, options);
-	vgalib_copy_to_screen(vga_ptr, g_popup_box, width, height);
 	g_use_solid_bg = 1;
 
+	g_gfx_ptr = g_popup_box;
+
 	/* print header */
-	if (lines_header)
-		print_header(header, left_border, upper_border);
+	if (lines_header) {
+		print_header(header);
+	}
 
+	vgalib_copy_to_screen(vga_ptr, g_popup_box, width, height);
 
-	str_x = text_x(left_border) + 8;
+	str_x = left_border + 8 + 5;
 	str_y = upper_border + 8 * (lines_header + 1);
 
 	/* print radio options */
