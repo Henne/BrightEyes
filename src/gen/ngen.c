@@ -3797,20 +3797,15 @@ static void draw_popup_line(const signed short line, const signed short type)
 }
 
 /**
- * \brief draws a complete empty popup box
+ * \brief draws a complete empty popup box in memory
  * \param[in] lines_header number of lines for the header
  * \param[in] lines_body number of lines for the body
  **/
 static void draw_popup_box(const int lines_header, const int lines_body)
 {
-	const int width = popup_width(g_menu_tiles);
-	const int height = popup_height(lines_header, lines_body);
 	int i;
 
-#if !defined(__BORLANDC__)
-	fprintf(stderr, "popup box start (%d x %d) ----------------------\n", width, height);
-#endif
-	memset(g_popup_box, 0x00, 160 * O_HEIGHT);
+	memset(g_popup_box, 0x00, O_WIDTH / 2 * O_HEIGHT);
 
 	/* top border */
 	draw_popup_line(0, 0);
@@ -3825,10 +3820,6 @@ static void draw_popup_box(const int lines_header, const int lines_body)
 
 	/* bottom border */
 	draw_popup_line(1 + lines_header + lines_body, 3);
-
-#if !defined(__BORLANDC__)
-	fprintf(stderr, "popup box end (%d x %d) ----------------------\n", width, height);
-#endif
 }
 
 /**
@@ -3838,23 +3829,20 @@ static void draw_popup_box(const int lines_header, const int lines_body)
  *
  * \note if digits is zero the function just delays.
  */
-static signed short infobox(char *header, const signed short digits)
+static int infobox(char *header, const signed short digits)
 {
 	unsigned char* vga_ptr;
 	unsigned char* gfx_bak = g_gfx_ptr;
 	int fg_bak;
 	int bg_bak;
-	signed short retval;
-	signed short l_text_x_end_bak;
-
-	signed short lines;
-	signed short width;
+	int retval;
+	int lines;
+	int width;
 	int height;
 	int left_border;
 	int upper_border;
 
 	g_in_infobox = 1;
-	l_text_x_end_bak = g_text_x_end;
 
 	width = popup_width(g_menu_tiles);
 	left_border = (O_WIDTH - width) / 2 + g_text_x_mod;
@@ -3914,7 +3902,7 @@ static signed short infobox(char *header, const signed short digits)
 
 	mouse_cursor();
 
-	g_text_x_end = l_text_x_end_bak;
+	g_text_x_end = 0;
 
 	g_in_infobox = 0;
 	g_in_key_ext = 0;
@@ -3978,8 +3966,6 @@ signed short gui_radio(char *header, const signed int options, ...)
 	signed short l_opt_bak = -1;
 	signed short l_opt_new = 1;
 
-	signed short l_text_x_end_bak;
-
 	signed short mx_bak;
 	signed short my_bak;
 	signed short r7;
@@ -3990,8 +3976,6 @@ signed short gui_radio(char *header, const signed int options, ...)
 	int upper_border;
 
 	signed short i;
-
-	l_text_x_end_bak = g_text_x_end;
 
 	width = popup_width(g_menu_tiles);
 	left_border = (O_WIDTH - width) / 2 + g_text_x_mod;
@@ -4132,10 +4116,10 @@ signed short gui_radio(char *header, const signed int options, ...)
 	g_mouse_posx_bak = g_mouse_posx = mx_bak;
 	g_mouse_posy_bak = g_mouse_posy = my_bak;
 
-	g_mouse_posx_max = 319;
+	g_mouse_posx_max = O_WIDTH - 1;
 	g_mouse_posx_min = 0;
 	g_mouse_posy_min = 0;
-	g_mouse_posy_max = 199;
+	g_mouse_posy_max = O_HEIGHT - 1;
 
 	mouse_move_cursor(g_mouse_posx, g_mouse_posy);
 
@@ -4146,7 +4130,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 
 	set_textcolor(fg_bak, bg_bak);
 
-	g_text_x_end = l_text_x_end_bak;
+	g_text_x_end = 0;
 	g_in_key_ext = 0;
 
 	return retval;
