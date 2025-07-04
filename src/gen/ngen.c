@@ -1518,7 +1518,7 @@ static int alloc_buffers(void)
 	g_page_buffer = gen_alloc(50000);
 	if (g_page_buffer == NULL) errors++;
 
-	g_popup_box = gen_alloc(32 * (4 + 1) * O_HEIGHT);
+	g_popup_box = gen_alloc(32 * (4 + 1) * 8 * 20);
 	if (g_popup_box == NULL) errors++;
 
 	g_textbuffer = (char*)gen_alloc(1524);
@@ -3823,6 +3823,8 @@ static int infobox(char *header, const signed short digits)
 	if (digits != 0)
 		lines += 2;
 
+	if (lines + 2 >= 20) return -1;
+
 	height = popup_height(lines, 0);
 	upper_border = (O_HEIGHT - height) / 2;
 
@@ -3947,14 +3949,16 @@ signed short gui_radio(char *header, const signed int options, ...)
 	int height;
 	int upper_border;
 
-
 	const int width = popup_width(g_menu_tiles);
 	const int left_border = (O_WIDTH - width) / 2 + g_text_x_mod;
+
 
 	g_text_x_end = width - 10;
 	lines_header = str_splitter(header);
 	height = popup_height(lines_header, options);
 	upper_border = (O_HEIGHT - height) / 2;
+
+	if (options + lines_header + 2 >= 20) return -1;
 
 	/* save and set text colors */
 	get_textcolor(&fg_bak, &bg_bak);
