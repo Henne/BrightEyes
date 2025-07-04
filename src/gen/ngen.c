@@ -3555,8 +3555,10 @@ static void print_str(const char *str, const signed short x_in, const signed sho
 /**
  * \brief print a string with multiple lines as the header of a popup box
  * \param[in] str
+ * \param[in] left_border x - coordinate of the left border of the gui box
+ * \param[in] upper_border y - coordinate of the upper border of the gui box
  */
-static void print_header(char *str)
+static void print_header(char *str, const int left_border, const int upper_border)
 {
 	unsigned char *gfx_bak = g_gfx_ptr;
 
@@ -3564,8 +3566,8 @@ static void print_header(char *str)
 
 	str_splitter(str);
 
-	//fprintf(stderr, "print_header(%s, %d, %d) ++++++++ \n", str, text_x(g_left_border), text_y(g_upper_border));
-	print_str(str, text_x(g_left_border), text_y(g_upper_border));
+	//fprintf(stderr, "print_header(%s, %d, %d) ++++++++ \n", str, text_x(left_border), text_y(upper_border));
+	print_str(str, text_x(left_border), text_y(upper_border));
 
 	g_gfx_ptr = gfx_bak;
 }
@@ -3907,7 +3909,7 @@ static signed short infobox(char *header, const signed short digits)
 	set_textcolor(0xff, 0xdf); // WHITE ON GREEN
 
 	g_use_solid_bg = 1;
-	print_header(header);
+	print_header(header, left_border, upper_border);
 	g_use_solid_bg = 0;
 
 
@@ -4046,7 +4048,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 
 	/* print header */
 	if (lines_header)
-		print_header(header);
+		print_header(header, left_border, upper_border);
 
 	str_x = text_x(left_border) + 8;
 	str_y = upper_border + 8 * (lines_header + 1);
