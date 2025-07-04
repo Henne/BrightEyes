@@ -5627,7 +5627,7 @@ static void fill_values(const int level)
 	signed short skill;
 	signed short spell;
 	signed short si;
-	signed short di;
+	int conv_incs = 0;
 
 	/* fill skill values */
 	for (i = 0; i < 52; i++) {
@@ -5679,21 +5679,21 @@ static void fill_values(const int level)
 		/* set spell and convertable increase attempts */
 		if (g_hero.typus <= 12) { // check to silence the BCC
 			g_hero.spell_incs = g_initial_spell_incs[g_hero.typus - 7];
-			di = g_initial_conv_incs[g_hero.typus - 7];
+			conv_incs = g_initial_conv_incs[g_hero.typus - 7];
 		}
 
 		/* get convertable increase attempts */
-		if ((di != 0) && (level == 2) && gui_bool(get_text(269))) {
+		if ((conv_incs != 0) && (level == 2) && gui_bool(get_text(269))) {
 			/* create string */
-			sprintf(g_textbuffer, get_text(270), di);
+			sprintf(g_textbuffer, get_text(270), conv_incs);
 
 			i = infobox(g_textbuffer, 1);
 
 			if (i > 0) {
 				/* spell attempts to skill attempts */
-				if (i > di)
-					i = di;
-				di -= i;
+				if (i > conv_incs)
+					i = conv_incs;
+				conv_incs -= i;
 				/* change spell attempts */
 				g_hero.spell_incs -= i;
 				/* change skill attempts */
@@ -5701,12 +5701,12 @@ static void fill_values(const int level)
 			} else {
 
 				/* create string */
-				sprintf(g_textbuffer, get_text(271), di);
+				sprintf(g_textbuffer, get_text(271), conv_incs);
 
 				i = infobox(g_textbuffer, 1);
 				if (i > 0) {
-					if (i > di)
-						i = di;
+					if (i > conv_incs)
+						i = conv_incs;
 					/* change spell attempts */
 					g_hero.spell_incs += i;
 					/* change skill attempts */
