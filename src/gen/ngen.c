@@ -3834,15 +3834,11 @@ static int infobox(char *header, const signed short digits)
 	int bg_bak;
 	int retval;
 	int lines;
-	int width;
 	int height;
-	int left_border;
 	int upper_border;
 
-	g_in_infobox = 1;
-
-	width = popup_width(g_menu_tiles);
-	left_border = (O_WIDTH - width) / 2 + g_text_x_mod;
+	const int width = popup_width(g_menu_tiles);
+	const int left_border = (O_WIDTH - width) / 2 + g_text_x_mod;
 	g_text_x_end = width - 10;
 	lines = str_splitter(header);
 
@@ -3851,6 +3847,8 @@ static int infobox(char *header, const signed short digits)
 
 	height = popup_height(lines, 0);
 	upper_border = (O_HEIGHT - height) / 2;
+
+	g_in_infobox = 1;
 
 	/* save and set text colors */
 	get_textcolor(&fg_bak, &bg_bak);
@@ -3955,6 +3953,7 @@ signed short gui_radio(char *header, const signed int options, ...)
 	char *str;
 	int fg_bak;
 	int bg_bak;
+	int i;
 	signed short str_y;
 	signed short done = 0;
 	signed short retval;
@@ -3967,15 +3966,13 @@ signed short gui_radio(char *header, const signed int options, ...)
 	signed short my_bak;
 	signed short r7;
 	signed short r8;
-	signed short width;
 	int height;
-	int left_border;
 	int upper_border;
 
-	signed short i;
 
-	width = popup_width(g_menu_tiles);
-	left_border = (O_WIDTH - width) / 2 + g_text_x_mod;
+	const int width = popup_width(g_menu_tiles);
+	const int left_border = (O_WIDTH - width) / 2 + g_text_x_mod;
+
 	g_text_x_end = width - 10;
 	lines_header = str_splitter(header);
 	height = popup_height(lines_header, options);
