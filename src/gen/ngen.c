@@ -3605,7 +3605,6 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 	signed short width;
 	signed short i;
 
-	g_use_solid_bg = 1;
 	g_gfx_ptr = g_vga_memstart;
 
 	mouse_bg();
@@ -3660,7 +3659,6 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 			*dst = 0;
 			mouse_cursor();
 			g_in_key_ext = 0;
-			g_use_solid_bg = 0;
 			g_gfx_ptr = gfx_bak;
 
 			return 1;
@@ -3746,7 +3744,6 @@ static signed short enter_string(char *dst, const signed short x, const signed s
 
 	*dst = 0;
 	mouse_cursor();
-	g_use_solid_bg = 0;
 	g_gfx_ptr = gfx_bak;
 
 	return 0;
@@ -3907,7 +3904,6 @@ static signed short infobox(char *header, const signed short digits)
 
 	g_use_solid_bg = 1;
 	print_header(header, left_border, upper_border);
-	g_use_solid_bg = 0;
 
 
 	g_mouse_rightclick_event = 0;
@@ -3926,6 +3922,8 @@ static signed short infobox(char *header, const signed short digits)
 
 		retval = 0;
 	}
+
+	g_use_solid_bg = 0;
 
 	set_textcolor(fg_bak, bg_bak);
 	mouse_bg();
