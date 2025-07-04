@@ -3322,7 +3322,6 @@ static void blit_chr_popup(unsigned char *gfx_ptr, const signed short chr_height
 {
 	unsigned char *src = g_char_buffer;
 	int i;
-	int j;
 
 	for (i = 0; i < chr_height; i++) {
 		memcpy(gfx_ptr, src, chr_width);
@@ -3818,7 +3817,6 @@ static void draw_popup_line(const signed short line, const signed short type)
  **/
 static void draw_popup_box(const int lines_header, const int lines_body)
 {
-	unsigned char *dst;
 	const int width = popup_width(g_menu_tiles);
 	const int height = popup_height(lines_header, lines_body);
 	int i;
@@ -3826,7 +3824,7 @@ static void draw_popup_box(const int lines_header, const int lines_body)
 #if !defined(__BORLANDC__)
 	fprintf(stderr, "popup box start (%d x %d) ----------------------\n", width, height);
 #endif
-	memset(g_popup_box, 0x00, 160 * 200);
+	memset(g_popup_box, 0x00, 160 * O_HEIGHT);
 
 	/* top border */
 	draw_popup_line(0, 0);
@@ -3856,8 +3854,7 @@ static void draw_popup_box(const int lines_header, const int lines_body)
  */
 static signed short infobox(char *header, const signed short digits)
 {
-	unsigned char* src;
-	unsigned char* dst;
+	unsigned char* vga_ptr;
 	int fg_bak;
 	int bg_bak;
 	signed short retval;
@@ -3886,17 +3883,14 @@ static signed short infobox(char *header, const signed short digits)
 
 	mouse_bg();
 
-	/* save the current background */
-	src = g_vga_memstart + upper_border * O_WIDTH + left_border;
-	dst = g_page_buffer;
-
-	vgalib_copy_from_screen(dst, src, width, height);
+	/* save the current background in g_page_buffer*/
+	vga_ptr = g_vga_memstart + upper_border * O_WIDTH + left_border;
+	vgalib_copy_from_screen(g_page_buffer, vga_ptr, width, height);
 
 	/* draw popup */
 	draw_popup_box(lines, 0);
 
-	dst = g_vga_memstart + upper_border * O_WIDTH + left_border;
-	vgalib_copy_to_screen(dst, g_popup_box, width, height);
+	vgalib_copy_to_screen(vga_ptr, g_popup_box, width, height);
 
 	/* save and set text colors */
 	get_textcolor(&fg_bak, &bg_bak);
@@ -3904,7 +3898,6 @@ static signed short infobox(char *header, const signed short digits)
 
 	g_use_solid_bg = 1;
 	print_header(header, left_border, upper_border);
-
 
 	g_mouse_rightclick_event = 0;
 	mouse_cursor();
@@ -3928,10 +3921,8 @@ static signed short infobox(char *header, const signed short digits)
 	set_textcolor(fg_bak, bg_bak);
 	mouse_bg();
 
-	dst = g_vga_memstart + upper_border * O_WIDTH + left_border;
-	src = g_page_buffer;
-
-	vgalib_copy_to_screen(dst, src, width, height);
+	/* restore background from g_page_buffer */
+	vgalib_copy_to_screen(vga_ptr, g_page_buffer, width, height);
 
 	mouse_cursor();
 
@@ -3986,8 +3977,7 @@ static void fill_radio_button(const signed short old_pos, const signed short new
 signed short gui_radio(char *header, const signed int options, ...)
 {
 	va_list arguments;
-	unsigned char* src;
-	unsigned char* dst;
+	unsigned char* vga_ptr;
 	unsigned char* gfx_bak = g_gfx_ptr;
 	char *str;
 	int fg_bak;
@@ -3996,7 +3986,6 @@ signed short gui_radio(char *header, const signed int options, ...)
 	signed short str_y;
 	signed short done = 0;
 	signed short retval;
-	signed short lines_sum;
 	signed short lines_header;
 
 	signed short l_opt_bak = -1;
@@ -4022,32 +4011,28 @@ signed short gui_radio(char *header, const signed int options, ...)
 	g_left_border = left_border;
 	g_text_x_end = width - 10;
 	lines_header = str_splitter(header);
-	lines_sum = lines_header + options;
 	height = popup_height(lines_header, options);
 	upper_border = (O_HEIGHT - height) / 2;
-
-	mouse_bg();
-
-	/* save the current background */
-	src = g_vga_memstart + upper_border * O_WIDTH + left_border;
-	dst = g_page_buffer;
-	vgalib_copy_from_screen(dst, src, width, height);
-
-	/* draw popup */
-	draw_popup_box(lines_header, options);
-
-	dst = g_vga_memstart + upper_border * O_WIDTH + left_border;
-	vgalib_copy_to_screen(dst, g_popup_box, width, height);
 
 	/* save and set text colors */
 	get_textcolor(&fg_bak, &bg_bak);
 	set_textcolor(0xff, 0xdf); // WHITE ON GREEN
 
+	mouse_bg();
+
+	/* save the current background in g_page_buffer */
+	vga_ptr = g_vga_memstart + upper_border * O_WIDTH + left_border;
+	vgalib_copy_from_screen(g_page_buffer, vga_ptr, width, height);
+
+	/* draw popup */
+	draw_popup_box(lines_header, options);
+	vgalib_copy_to_screen(vga_ptr, g_popup_box, width, height);
 	g_use_solid_bg = 1;
 
 	/* print header */
 	if (lines_header)
 		print_header(header, left_border, upper_border);
+
 
 	str_x = text_x(left_border) + 8;
 	str_y = upper_border + 8 * (lines_header + 1);
@@ -4169,10 +4154,8 @@ signed short gui_radio(char *header, const signed int options, ...)
 
 	mouse_move_cursor(g_mouse_posx, g_mouse_posy);
 
-	/* restore the previous background */
-	dst = g_vga_memstart + upper_border * O_WIDTH + left_border;
-	src = g_page_buffer;
-	vgalib_copy_to_screen(dst, src, width, height);
+	/* restore the previous background from g_page_buffer */
+	vgalib_copy_to_screen(vga_ptr, g_page_buffer, width, height);
 
 	mouse_cursor();
 
