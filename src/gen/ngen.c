@@ -1445,7 +1445,6 @@ static SDL_mutex *g_sdl_timer_mutex = NULL;
 /* GUI VARIABLES AND FUNCS */
 static int g_menu_tiles = 3; /* number of menu tiles width {3,4} */
 static int g_in_infobox = 0;
-static signed short g_upper_border;
 static signed short g_left_border;
 static signed short g_text_x_mod = 0;
 static signed short g_text_x_end;
@@ -3888,7 +3887,6 @@ static signed short infobox(char *header, const signed short digits)
 
 	height = popup_height(lines, 0);
 	upper_border = (O_HEIGHT - height) / 2;
-	g_upper_border = upper_border;
 
 	mouse_bg();
 
@@ -4030,7 +4028,6 @@ signed short gui_radio(char *header, const signed int options, ...)
 	lines_sum = lines_header + options;
 	height = popup_height(lines_header, options);
 	upper_border = (O_HEIGHT - height) / 2;
-	g_upper_border = upper_border;
 
 	mouse_bg();
 
