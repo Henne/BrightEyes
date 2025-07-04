@@ -3846,9 +3846,6 @@ static void draw_popup_box(const int lines_header, const int lines_body)
 	/* bottom border */
 	draw_popup_line(1 + lines_header + lines_body, 3);
 
-	dst = g_vga_memstart + g_upper_border * O_WIDTH + g_left_border;
-	vgalib_copy_to_screen(dst, g_popup_box, width, height);
-
 #if !defined(__BORLANDC__)
 	fprintf(stderr, "popup box end (%d x %d) ----------------------\n", width, height);
 #endif
@@ -3903,6 +3900,9 @@ static signed short infobox(char *header, const signed short digits)
 
 	/* draw popup */
 	draw_popup_box(lines, 0);
+
+	dst = g_vga_memstart + upper_border * O_WIDTH + left_border;
+	vgalib_copy_to_screen(dst, g_popup_box, width, height);
 
 	/* save and set text colors */
 	get_textcolor(&fg_bak, &bg_bak);
@@ -4041,6 +4041,9 @@ signed short gui_radio(char *header, const signed int options, ...)
 
 	/* draw popup */
 	draw_popup_box(lines_header, options);
+
+	dst = g_vga_memstart + upper_border * O_WIDTH + left_border;
+	vgalib_copy_to_screen(dst, g_popup_box, width, height);
 
 	/* save and set text colors */
 	get_textcolor(&fg_bak, &bg_bak);
