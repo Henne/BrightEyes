@@ -7504,7 +7504,10 @@ static void intro(void)
 }
 
 #if defined(_WIN32)
-int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int ShowCmd)
+int WinMain(__attribute__((unused)) HINSTANCE hInstance,
+		__attribute__((unused)) HINSTANCE hPrevInstance,
+		__attribute__((unused)) LPSTR lpCmdLine,
+		__attribute__((unused)) int ShowCmd)
 #else
 #define main_gen main
 int main_gen(int argc, char **argv)
