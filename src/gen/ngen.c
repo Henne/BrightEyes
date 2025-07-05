@@ -4924,10 +4924,8 @@ static void print_values(const int page, const int level)
 			/* SKILLS Page 1/3 */
 			/* print fight skills */
 			for (i = 0; i < 9; i++) {
-				gen_itoa(g_hero.skills[i], tmp, 10);
-
+				sprintf(tmp, "%d", g_hero.skills[i]);
 				width = get_str_width(tmp);
-
 				// i & 1 = right column else left column
 				print_str(tmp, ((i & 1) ? align_right - width : align_left - width), (i / 2) * 12 + 42);
 			}
@@ -4935,18 +4933,14 @@ static void print_values(const int page, const int level)
 			/* print body skills */
 			for (i = 9; i < 19; i++) {
 				pos = i - 9;
-
-				gen_itoa(g_hero.skills[i], tmp, 10);
-
+				sprintf(tmp, "%d", g_hero.skills[i]);
 				width = get_str_width(tmp);
-
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? align_right - width : align_left - width), (pos / 2) * 12 + 119);
 			}
 
 			/* remaining attempts for skills */
-			print_str(gen_itoa(g_hero.skill_incs, tmp, 10), 271, 184);
-
+			sprintf(tmp, "%d", g_hero.skill_incs); print_str(tmp, 271, 184);
 			break;
 		}
 		case 2: {
@@ -4954,11 +4948,8 @@ static void print_values(const int page, const int level)
 			/* print social skills */
 			for (i = 19; i < 26; i++) {
 				pos = i - 19;
-
-				gen_itoa(g_hero.skills[i], tmp, 10);
-
+				sprintf(tmp, "%d", g_hero.skills[i]);
 				width = get_str_width(tmp);
-
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? align_right - width : align_left - width), (pos / 2) * 12 + 42);
 			}
@@ -4966,32 +4957,23 @@ static void print_values(const int page, const int level)
 			/* print lore skills */
 			for (i = 32; i < 41; i++) {
 				pos = i - 32;
-
-				gen_itoa(g_hero.skills[i], tmp, 10);
-
+				sprintf(tmp, "%d", g_hero.skills[i]);
 				width = get_str_width(tmp);
-
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? align_right - width : align_left - width), (pos / 2) * 12 + 113);
 			}
 
 			/* remaining attempts for skills */
-
-			print_str(gen_itoa(g_hero.skill_incs, tmp, 10), 271, 184);
-
+			sprintf(tmp, "%d", g_hero.skill_incs); print_str(tmp, 271, 184);
 			break;
 		}
 		case 3: {
 			/* SKILLS Page 3/3 */
 			/* print craftmansship skills */
 			for (i = 41; i < 50; i++) {
-
 				pos = i - 41;
-
-				gen_itoa(g_hero.skills[i], tmp, 10);
-
+				sprintf(tmp, "%d", g_hero.skills[i]);
 				width = get_str_width(tmp);
-
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? align_right - width : align_left - width), (pos / 2) * 12 + 42);
 
@@ -4999,55 +4981,44 @@ static void print_values(const int page, const int level)
 
 			/* print nature skills */
 			for (i = 26; i < 32; i++) {
-
 				pos = i - 26;
-
-				gen_itoa(g_hero.skills[i], tmp, 10);
-
+				sprintf(tmp, "%d", g_hero.skills[i]);
 				width = get_str_width(tmp);
-
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? align_right - width : align_left - width), (pos / 2) * 12 + 119);
-
 			}
 
 			/* print intuition skills */
 			for (i = 50; i < 52; i++) {
-
 				pos = i - 50;
-
-				gen_itoa(g_hero.skills[i], tmp, 10);
-
+				sprintf(tmp, "%d", g_hero.skills[i]);
 				width = get_str_width(tmp);
-
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? align_right - width : align_left - width), (pos / 2) * 12 + 170);
 			}
 
 			/* remaining attempts for skills */
-
-			print_str(gen_itoa(g_hero.skill_incs, tmp, 10), 271, 184);
-
+			sprintf(tmp, "%d", g_hero.skill_incs); print_str(tmp, 271, 184);
 			break;
 		}
 		case 4: {
 			/* ATPA Page */
 			/* Print base value  2x the same */
-			print_str(gen_itoa(g_hero.atpa_base, tmp, 10), 231, 30);
-			print_str(gen_itoa(g_hero.atpa_base, tmp, 10), 268, 30);
+			sprintf(tmp, "%d", g_hero.atpa_base);
+			print_str(tmp, 231, 30); print_str(tmp, 268, 30);
 
 			for (i = 0; i < 7; i++) {
 
 				/* print AT value */
-				gen_itoa(g_hero.at_weapon[i], tmp, 10);
+				sprintf(tmp, "%d", g_hero.at_weapon[i]);
 				print_str(tmp, 237 - get_str_width(tmp), i * 12 + 48);
 
 				/* print PA value */
-				gen_itoa(g_hero.pa_weapon[i], tmp, 10);
+				sprintf(tmp, "%d", g_hero.pa_weapon[i]);
 				print_str(tmp, 274 - get_str_width(tmp), i * 12 + 48);
 
 				/* print skill value */
-				gen_itoa(g_hero.skills[i], tmp, 10);
+				sprintf(tmp, "%d", g_hero.skills[i]);
 				print_str(tmp, 315 - get_str_width(tmp), i * 12 + 48);
 			}
 
@@ -5057,9 +5028,8 @@ static void print_values(const int page, const int level)
 					+ g_hero.attrib[6].normal) / 4;
 
 			/* print missle and thrown weapon values */
-			print_str(gen_itoa(pos + g_hero.skills[7], tmp, 10), 231, 144);
-			print_str(gen_itoa(pos + g_hero.skills[8], tmp, 10), 231, 156);
-
+			sprintf(tmp, "%d", pos + g_hero.skills[7]); print_str(tmp, 231, 144);
+			sprintf(tmp, "%d", pos + g_hero.skills[8]); print_str(tmp, 231, 156);
 			break;
 		}
 
