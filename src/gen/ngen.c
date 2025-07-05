@@ -4908,16 +4908,16 @@ static void print_values(const int page, const int level)
 			print_str(g_textbuffer, 205, 61);
 
 			/* print LE */
-			print_str(gen_itoa(g_hero.le_max, tmp, 10), 172, 164);
+			sprintf(tmp, "%d", g_hero.le_max); print_str(tmp, 172, 164);
 			/* print AE */
-			print_str(gen_itoa(g_hero.ae_max, tmp, 10), 221, 164);
+			sprintf(tmp, "%d", g_hero.ae_max); print_str(tmp, 221, 164);
 			/* print Endurance */
-			print_str(gen_itoa(g_hero.le_max + g_hero.attrib[6].current, tmp, 10), 296, 164);
+			sprintf(tmp, "%d", g_hero.le_max + g_hero.attrib[6].current);
+			print_str(tmp, 296, 164);
+
 			/* print MR */
-			if (g_dsagen_lang == LANG_DE)
-				print_str(gen_itoa(g_hero.mr, tmp, 10), 232 + 15, 184);
-			else
-				print_str(gen_itoa(g_hero.mr, tmp, 10), 255, 184);
+			sprintf(tmp, "%d", g_hero.mr);
+			print_str(tmp, (g_dsagen_lang == LANG_DE ? 232 + 15 : 255), 184);
 			break;
 		}
 		case 1: {
