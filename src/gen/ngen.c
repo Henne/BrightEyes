@@ -56,13 +56,6 @@ static unsigned short gen_rotl(unsigned short op, unsigned short count)
 	return (op << count) | (op >> (16 - count));
 }
 
-/* use sprintf() for compatibility */
-static inline char* gen_itoa(const int value, char* string, const int radix)
-{
-	sprintf(string, "%d", value);
-	return string;
-}
-
 static inline void clrscr(void) { }
 #define __abs__(v) abs(v)
 #define _creat creat
@@ -70,7 +63,6 @@ static inline void clrscr(void) { }
 #define _close close
 #else
 #define gen_rotl _rotl
-#define gen_itoa itoa
 #endif
 
 /** Keyboard Constants */
@@ -5036,36 +5028,23 @@ static void print_values(const int page, const int level)
 		case 5: {
 			/* Spells Page 1/6 */
 			for (i = 1; i < 6; i++) {
-
 				pos = i - 1;
-
-				gen_itoa(g_hero.spells[i], tmp, 10);
-
+				sprintf(tmp, "%d", g_hero.spells[i]);
 				width = get_str_width(tmp);
-
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 42);
-
 			}
 			for (i = 33; i < 38; i++) {
-
 				pos = i - 33;
-
-				gen_itoa(g_hero.spells[i], tmp, 10);
-
+				sprintf(tmp, "%d", g_hero.spells[i]);
 				width = get_str_width(tmp);
-
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 95);
 			}
 			for (i = 6; i <= 11; i++) {
-
 				pos = i - 6;
-
-				gen_itoa(g_hero.spells[i], tmp, 10);
-
+				sprintf(tmp, "%d", g_hero.spells[i]);
 				width = get_str_width(tmp);
-
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 146);
 			}
@@ -5077,39 +5056,25 @@ static void print_values(const int page, const int level)
 		case 6: {
 			/* Spells Page 2/6 */
 			for (i = 12; i <= 17; i++) {
-
 				pos = i - 12;
-
-				gen_itoa(g_hero.spells[i], tmp, 10);
-
+				sprintf(tmp, "%d", g_hero.spells[i]);
 				width = get_str_width(tmp);
-
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 42);
 			}
 			for (i = 18; i < 24; i++) {
-
 				pos = i - 18;
-
-				gen_itoa(g_hero.spells[i], tmp, 10);
-
+				sprintf(tmp, "%d", g_hero.spells[i]);
 				width = get_str_width(tmp);
-
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 95);
-
 			}
 			for (i = 24; i < 27; i++) {
-
 				pos = i - 24;
-
-				gen_itoa(g_hero.spells[i], tmp, 10);
-
+				sprintf(tmp, "%d", g_hero.spells[i]);
 				width = get_str_width(tmp);
-
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 148);
-
 			}
 
 			/* print spell attempts */
@@ -5119,37 +5084,25 @@ static void print_values(const int page, const int level)
 		case 7: {
 			/* Spells Page 3/6 */
 			for (i = 27; i < 33; i++) {
-
 				pos = i - 27;
-
-				gen_itoa(g_hero.spells[i], tmp, 10);
-
+				sprintf(tmp, "%d", g_hero.spells[i]);
 				width = get_str_width(tmp);
-
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 42);
 			}
 
 			for (i = 38; i < 45; i++) {
-
 				pos = i - 38;
-
-				gen_itoa(g_hero.spells[i], tmp, 10);
-
+				sprintf(tmp, "%d", g_hero.spells[i]);
 				width = get_str_width(tmp);
-
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 95);
 			}
 
 			for (i = 45; i <= 46; i++) {
-
 				pos = i - 45;
-
-				gen_itoa(g_hero.spells[i], tmp, 10);
-
+				sprintf(tmp, "%d", g_hero.spells[i]);
 				width = get_str_width(tmp);
-
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 160);
 			}
@@ -5161,37 +5114,25 @@ static void print_values(const int page, const int level)
 		case 8: {
 			/* Spells Page 4/6 */
 			for (i = 47; i <= 48; i++) {
-
 				pos = i - 47;
-
-				gen_itoa(g_hero.spells[i], tmp, 10);
-
+				sprintf(tmp, "%d", g_hero.spells[i]);
 				width = get_str_width(tmp);
-
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 42);
 			}
 
 			for (i = 49; i < 58; i++) {
-
 				pos = i - 49;
-
-				gen_itoa(g_hero.spells[i], tmp, 10);
-
+				sprintf(tmp, "%d", g_hero.spells[i]);
 				width = get_str_width(tmp);
-
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 71);
 			}
 
 			for (i = 58; i < 60; i++) {
-
 				pos = i - 58;
-
-				gen_itoa(g_hero.spells[i], tmp, 10);
-
+				sprintf(tmp, "%d", g_hero.spells[i]);
 				width = get_str_width(tmp);
-
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 148);
 			}
@@ -5203,13 +5144,9 @@ static void print_values(const int page, const int level)
 		case 9: {
 			/* Spells Page 5/6 */
 			for (i = 60; i < 76; i++) {
-
 				pos = i - 60;
-
-				gen_itoa(g_hero.spells[i], tmp, 10);
-
+				sprintf(tmp, "%d", g_hero.spells[i]);
 				width = get_str_width(tmp);
-
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 42);
 			}
@@ -5221,16 +5158,11 @@ static void print_values(const int page, const int level)
 		case 10: {
 			/* Spells Page 6/6 */
 			for (i = 76; i < 86; i++) {
-
 				pos = i - 76;
-
-				gen_itoa(g_hero.spells[i], tmp, 10);
-
+				sprintf(tmp, "%d", g_hero.spells[i]);
 				width = get_str_width(tmp);
-
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 42);
-
 			}
 
 			/* print spell attempts */
