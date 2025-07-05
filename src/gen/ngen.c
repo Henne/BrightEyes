@@ -6470,10 +6470,10 @@ static void inc_spell(const signed short spell)
  */
 static void select_spell(const int page)
 {
-	signed short group;
-	signed short spell;
+	int group = -1;
 
 	do {
+		int spell = -2;
 
 		/* check if we have spell attempts */
 		if (!g_hero.spell_incs) {
