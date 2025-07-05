@@ -32,4 +32,4 @@ vgalib.o: vgalib.c
 	$(CC) $(CFLAGS) -c vgalib.c
 
 ail_stub.o: ail_stub.c
-	$(CC) $(CFLAGS) -c ail_stub.c
+	$(CC) $(CFLAGS) -Wno-unused-parameter -c ail_stub.c
