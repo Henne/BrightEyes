@@ -5071,8 +5071,7 @@ static void print_values(const int page, const int level)
 			}
 
 			/* print spell attempts */
-			print_str(gen_itoa(g_hero.spell_incs, tmp, 10), 217, 184);
-
+			sprintf(tmp, "%d", g_hero.spell_incs); print_str(tmp, 217, 184);
 			break;
 		}
 		case 6: {
@@ -5114,8 +5113,7 @@ static void print_values(const int page, const int level)
 			}
 
 			/* print spell attempts */
-			print_str(gen_itoa(g_hero.spell_incs, tmp, 10), 217, 184);
-
+			sprintf(tmp, "%d", g_hero.spell_incs); print_str(tmp, 217, 184);
 			break;
 		}
 		case 7: {
@@ -5157,8 +5155,7 @@ static void print_values(const int page, const int level)
 			}
 
 			/* print spell attempts */
-			print_str(gen_itoa(g_hero.spell_incs, tmp, 10), 217, 184);
-
+			sprintf(tmp, "%d", g_hero.spell_incs); print_str(tmp, 217, 184);
 			break;
 		}
 		case 8: {
@@ -5200,8 +5197,7 @@ static void print_values(const int page, const int level)
 			}
 
 			/* print spell attempts */
-			print_str(gen_itoa(g_hero.spell_incs, tmp, 10), 217, 184);
-
+			sprintf(tmp, "%d", g_hero.spell_incs); print_str(tmp, 217, 184);
 			break;
 		}
 		case 9: {
@@ -5219,8 +5215,7 @@ static void print_values(const int page, const int level)
 			}
 
 			/* print spell attempts */
-			print_str(gen_itoa(g_hero.spell_incs, tmp, 10), 217, 184);
-
+			sprintf(tmp, "%d", g_hero.spell_incs); print_str(tmp, 217, 184);
 			break;
 		}
 		case 10: {
@@ -5239,8 +5234,7 @@ static void print_values(const int page, const int level)
 			}
 
 			/* print spell attempts */
-			print_str(gen_itoa(g_hero.spell_incs, tmp, 10), 217, 184);
-
+			sprintf(tmp, "%d", g_hero.spell_incs); print_str(tmp, 217, 184);
 			break;
 		}
 	}
