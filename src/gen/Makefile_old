@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-O0 -g -fno-asm -fopenmp
+CFLAGS=-Og -g -fno-asm -fopenmp -Wall -Wextra
 #CC=clang
 #CFLAGS=-O0 -g -fno-asm -fopenmp=libgomp
 

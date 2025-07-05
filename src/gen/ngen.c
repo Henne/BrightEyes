@@ -841,16 +841,6 @@ static const signed char g_head_first_male[] = { 0,
 static const signed char g_head_first_female[] = { 0,
 	3, 9, 15, 21, 27, 34, 37, 46, 51, 58 };
 
-struct struct_attrib_coords {
-	signed short x;
-	signed short y;
-};
-
-static const struct struct_attrib_coords g_attrib_coords[] = {
-	{205, 73}, {205, 85}, {205, 97}, {205, 109}, {205, 121}, {205, 133}, {205, 145},
-	{273, 73}, {273, 85}, {273, 97}, {273, 109}, {273, 121}, {273, 133}, {273, 145}
-};
-
 struct struct_color {
 	unsigned char r;
 	unsigned char g;
@@ -4781,6 +4771,23 @@ static void make_valuta_str(char * const dst, const signed long money)
 	sprintf(dst, get_text(69), d, s, h);
 }
 
+/**
+ * \brief calculate x coordinate for an attribute
+ * \return x coordinate
+ */
+static int attrib_coords_x(const int attrib)
+{
+	return (attrib < 7 ? 205 : 273);
+}
+
+/**
+ * \brief calculate y coordinate for an attribute
+ * \return y coordinate
+ */
+static int attrib_coords_y(const int attrib)
+{
+	return 73 + 12 * (attrib % 7);
+}
 
 /**
  * \brief print the attribute values
@@ -4788,9 +4795,9 @@ static void make_valuta_str(char * const dst, const signed long money)
 static void print_attribs(void)
 {
 	volatile signed char *p;
-	char buf[10];
+	char buf[8];
 
-	signed short i;
+	int i;
 
 	p = &g_hero.attrib[0].normal;
 
@@ -4798,7 +4805,8 @@ static void print_attribs(void)
 		/* don't print 0s */
 		if (p[0] != 0) {
 			/* print attribute value in decimal form */
-			print_str(gen_itoa(p[0], buf, 10), g_attrib_coords[i].x, g_attrib_coords[i].y);
+			sprintf(buf, "%d", p[0]);
+			print_str(buf, attrib_coords_x(i), attrib_coords_y(i));
 		}
 	}
 }
@@ -6296,10 +6304,10 @@ static void inc_skill(const signed short skill, const signed short max, char *ms
  */
 static void select_skill(const int page)
 {
-	signed short skill;
-	signed short group;
+	int group = -1;
 
 	do {
+		int skill = -2;
 
 		/* check skill attempts */
 		if (!g_hero.skill_incs) {
@@ -6310,12 +6318,13 @@ static void select_skill(const int page)
 
 		g_text_x_mod = -80;
 
-		switch (page) {
-		case 1: {
+		if (page == 1) {
+
 			group = gui_radio(get_text(93), 2, get_text(86), get_text(87));
+
 			if (group != -1) {
-				switch (group) {
-				case 1: {
+				if (group == 1) {
+
 					/* Fight */
 					skill = gui_radio(get_text(147), 9,
 						get_text(95), get_text(96), get_text(97),
@@ -6325,9 +6334,9 @@ static void select_skill(const int page)
 					if (skill != -2) {
 						inc_skill(skill, 1, get_text(148));
 					}
-					break;
-				}
-				case 2: {
+
+				} else if (group == 2) {
+
 					/* Body */
 					skill = gui_radio(get_text(147), 10,
 						get_text(104), get_text(105),
@@ -6340,17 +6349,17 @@ static void select_skill(const int page)
 						skill += 9;
 						inc_skill(skill, 2, get_text(149));
 					}
-					break;
-				}
 				}
 			}
-			break;
-		}
-		case 2: {
+
+
+		} else if (page == 2) {
+
 			group = gui_radio(get_text(93), 2, get_text(88), get_text(89));
+
 			if (group != -1) {
-				switch (group) {
-				case 1: {
+				if (group == 1) {
+
 					skill = gui_radio(get_text(147), 7,
 							get_text(114), get_text(115), get_text(116),
 							get_text(117), get_text(118), get_text(119),
@@ -6360,9 +6369,9 @@ static void select_skill(const int page)
 						skill += 19;
 						inc_skill(skill, 2, get_text(149));
 					}
-					break;
-				}
-				case 2: {
+
+				} else if (group == 2) {
+
 					skill = gui_radio(get_text(147), 9,
 							get_text(127), get_text(128), get_text(129),
 							get_text(130), get_text(131), get_text(132),
@@ -6372,54 +6381,45 @@ static void select_skill(const int page)
 						skill += 32;
 						inc_skill(skill, 3, get_text(150));
 					}
-					break;
-				}
 				}
 			}
-			break;
-		}
-		case 3: {
+
+		} else if (page == 3) {
+
 			group = gui_radio(get_text(93), 3, get_text(90), get_text(91), get_text(92));
+
 			if (group != -1) {
-				switch (group)
-				{
-					case 1: {
-						skill = gui_radio(get_text(147), 9,
-							get_text(136), get_text(137), get_text(138),
-							get_text(139), get_text(140), get_text(141),
-							get_text(142), get_text(143), get_text(144)) - 1;
+				if (group == 1) {
+					skill = gui_radio(get_text(147), 9,
+						get_text(136), get_text(137), get_text(138),
+						get_text(139), get_text(140), get_text(141),
+						get_text(142), get_text(143), get_text(144)) - 1;
 
-						if (skill != -2) {
-							skill += 41;
-							inc_skill(skill, 2, get_text(149));
-						}
-						break;
+					if (skill != -2) {
+						skill += 41;
+						inc_skill(skill, 2, get_text(149));
 					}
-					case 2: {
-						skill = gui_radio(get_text(147), 6,
-							get_text(121), get_text(122), get_text(123),
-							get_text(124), get_text(125), get_text(126)) - 1;
 
-						if (skill != -2) {
-							skill += 26;
-							inc_skill(skill, 2, get_text(149));
-						}
-						break;
+				} else if (group == 2) {
+					skill = gui_radio(get_text(147), 6,
+						get_text(121), get_text(122), get_text(123),
+						get_text(124), get_text(125), get_text(126)) - 1;
+
+					if (skill != -2) {
+						skill += 26;
+						inc_skill(skill, 2, get_text(149));
 					}
-					case 3: {
-						skill = gui_radio(get_text(147), 2,
-							get_text(145),
-							get_text(146)) - 1;
 
-						if (skill != -2) {
-							skill += 50;
-							inc_skill(skill, 1, get_text(148));
-						}
-						break;
+				} else if (group == 3) {
+					skill = gui_radio(get_text(147), 2,
+						get_text(145),
+						get_text(146)) - 1;
+
+					if (skill != -2) {
+						skill += 50;
+						inc_skill(skill, 1, get_text(148));
 					}
 				}
-				}
-				break;
 			}
 		}
 
