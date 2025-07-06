@@ -1340,7 +1340,6 @@ static unsigned char *g_buffer_heads_dat;
 static unsigned char *g_buffer_popup_dat;
 static unsigned char *g_buffer_sex_dat;
 
-static unsigned char g_char_buffer[64];
 static signed short g_in_key_ext;
 static signed short g_in_key_ascii;
 static signed short g_random_gen_seed2;
@@ -3250,14 +3249,15 @@ static signed short get_chr_info(const unsigned char c, signed short *width)
 	return 0;
 }
 
-static void prepare_chr_background(void)
+/**
+ * \brief draws the font symbol into a buffer
+ * \param[out] char_buffer the destination
+ * \param[in] font_ptr the source
+ * \param[in] color the color value of the font symbol
+ */
+static void prepare_chr_foreground(unsigned char *char_buffer, const unsigned char* font_ptr, const unsigned char color)
 {
-	memset(g_char_buffer, g_bg_color, 8 * 8);
-}
-
-static void prepare_chr_foreground(unsigned char* font_ptr)
-{
-	unsigned char *ptr = g_char_buffer;
+	unsigned char *ptr = char_buffer;
 	int i;
 	int j;
 	unsigned char mask;
@@ -3266,7 +3266,7 @@ static void prepare_chr_foreground(unsigned char* font_ptr)
 		mask = *font_ptr++;
 		for (j = 0; j < 8; j++) {
 			if ((0x80 >> j) & mask) {
-				ptr[j] = (unsigned char)g_fg_color[g_col_index];
+				ptr[j] = color;
 			}
 		}
 	}
@@ -3275,14 +3275,15 @@ static void prepare_chr_foreground(unsigned char* font_ptr)
 /**
  * \brief copy a character to the screen
  * \param[out] gfx_ptr destination address with popup measures
+ * \param[in] char_buffer the source
  * \param[in] chr_height height of the character
  * \param[in] chr_width width of the character
  * \param[in] popup_width width of the popup box in pixels
  * \note requires screen measures
  */
-static void blit_chr_popup(unsigned char *gfx_ptr, const signed short chr_height, const signed short chr_width, const int popup_width)
+static void blit_chr_popup(unsigned char *gfx_ptr, unsigned char *char_buffer, const signed short chr_height, const signed short chr_width, const int popup_width)
 {
-	unsigned char *src = g_char_buffer;
+	unsigned char *src = char_buffer;
 	int i;
 
 	for (i = 0; i < chr_height; i++) {
@@ -3318,13 +3319,14 @@ static unsigned char* get_gfx_ptr(const signed short x, const signed short y)
 /**
  * \brief copy a character to the screen
  * \param[out] gfx_ptr destination address with screen measures
+ * \param[in] char_buffer the source
  * \param[in] chr_height height of the character
  * \param[in] chr_width width of the character
  * \note requires screen measures
  */
-static void blit_chr(unsigned char *gfx_ptr, const signed short chr_height, const signed short chr_width)
+static void blit_chr(unsigned char *gfx_ptr, unsigned char *char_buffer, const signed short chr_height, const signed short chr_width)
 {
-	unsigned char *src = g_char_buffer;
+	unsigned char *src = char_buffer;
 	int i;
 
 	for (i = 0; i < chr_height; i++) {
@@ -3336,19 +3338,21 @@ static void blit_chr(unsigned char *gfx_ptr, const signed short chr_height, cons
 
 static void print_chr_to_screen(const int chr_index, const int chr_width, const int x, const int y)
 {
+	unsigned char char_buffer[8 * 8];
+
 	if (g_use_solid_bg) {
-		prepare_chr_background();
+		memset(char_buffer, g_bg_color, 8 * 8);
 	} else {
-		vgalib_copy_from_screen(g_char_buffer, g_vga_backbuffer + y * O_WIDTH + x, 8, 8);
+		vgalib_copy_from_screen(char_buffer, g_vga_backbuffer + y * O_WIDTH + x, 8, 8);
 	}
 
-	prepare_chr_foreground(g_buffer_font6 + 8 * chr_index);
+	prepare_chr_foreground(char_buffer, g_buffer_font6 + 8 * chr_index, g_fg_color[g_col_index]);
 
 	if (g_gfx_ptr == g_popup_box) {
 		const int width = popup_width(g_menu_tiles);
-		blit_chr_popup(get_popup_ptr(x, y, width), 7, chr_width, width);
+		blit_chr_popup(get_popup_ptr(x, y, width), char_buffer, 7, chr_width, width);
 	} else {
-		blit_chr(get_gfx_ptr(x, y), 7, chr_width);
+		blit_chr(get_gfx_ptr(x, y), char_buffer, 7, chr_width);
 	}
 }
 
