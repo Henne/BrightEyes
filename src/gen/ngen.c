@@ -4569,6 +4569,9 @@ static void save_chr(volatile struct struct_hero *hero)
 		handle = _creat(filename, 0);
 
 		if (handle != -1) {
+			if (sizeof(*hero) != 0x6da) {
+				fprintf(stderr, "ERROR: sizeof(*hero) = %u\n", (unsigned short)sizeof(*hero));
+			}
 #if defined(linux)
 			fchmod(handle, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 #endif
@@ -7471,7 +7474,7 @@ int main_gen(int argc, char **argv)
 	if (detect_datfile() == -1) return -1;
 
 	if (sizeof(g_hero) != 0x6da) {
-		fprintf(stderr, "sizeof(hero) = %ld\n", sizeof(g_hero));
+		fprintf(stderr, "ERROR: sizeof(hero) = %u\n", (unsigned short)sizeof(g_hero));
 		return -1;
 	}
 
