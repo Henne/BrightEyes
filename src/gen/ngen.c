@@ -5502,6 +5502,7 @@ static void spell_inc_novice(const signed short spell)
 static void fill_values(const int level)
 {
 	const struct struct_money *money_ptr;
+	char textbuffer[92]; // 84 would be enough
 	signed short i;
 	signed short skill;
 	signed short spell;
@@ -5563,9 +5564,9 @@ static void fill_values(const int level)
 		/* get convertable increase attempts */
 		if ((conv_incs != 0) && (level == 2) && gui_bool(get_text(269))) {
 			/* create string */
-			sprintf(g_textbuffer, get_text(270), conv_incs);
+			sprintf(textbuffer, get_text(270), conv_incs);
 
-			i = infobox(g_textbuffer, 1);
+			i = infobox(textbuffer, 1);
 
 			if (i > 0) {
 				/* spell attempts to skill attempts */
@@ -5579,9 +5580,9 @@ static void fill_values(const int level)
 			} else {
 
 				/* create string */
-				sprintf(g_textbuffer, get_text(271), conv_incs);
+				sprintf(textbuffer, get_text(271), conv_incs);
 
-				i = infobox(g_textbuffer, 1);
+				i = infobox(textbuffer, 1);
 				if (i > 0) {
 					if (i > conv_incs)
 						i = conv_incs;
