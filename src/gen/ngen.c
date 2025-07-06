@@ -4511,52 +4511,54 @@ void restore_timer_isr(void)
 
 
 /**
- * \brief save the hero the a CHR file
+ * \brief save the hero to a CHR file
+ * \param[in] hero the hero
  */
-static void save_chr(void)
+static void save_chr(volatile struct struct_hero *hero)
 {
 	signed short handle;
 	signed short i;
 	char filename[20];
 	char path[80];
+	char textbuffer[20];
 
 
 	/* check for typus */
-	if (!g_hero.typus) {
+	if (!hero->typus) {
 		infobox(get_text(72), 0);
 		return;
 	}
 	/* check for name */
-	if (!g_hero.name[0]) {
+	if (!hero->name[0]) {
 		infobox(get_text(154), 0);
 		return;
 	}
 
 	/* copy picture to the character struct */
-	memcpy((void*)g_hero.pic, g_buffer_current_head, 1024);
+	memcpy((void*)hero->pic, g_buffer_current_head, 1024);
 
 	/* wanna save ? */
 	if (!gui_bool(get_text(3)))
 		return;
 
 	/* copy name to alias */
-	strncpy((char*)g_hero.alias, (const char*)g_hero.name, 15);
+	strncpy((char*)hero->alias, (const char*)hero->name, 15);
 
 	/* copy name to buffer */
-	strncpy(g_textbuffer, (const char*)g_hero.name, 15);
+	strncpy(textbuffer, (const char*)hero->name, 15);
 
 	/* prepare filename */
 	for (i = 0; i < 8; i++) {
 		/* leave the loop if the string ends */
-		if (!g_textbuffer[i])
+		if (!textbuffer[i])
 			break;
-		if (!isalnum(g_textbuffer[i])) {
+		if (!isalnum(textbuffer[i])) {
 			/* replace non alphanumerical characters with underscore */
-			g_textbuffer[i] = '_';
+			textbuffer[i] = '_';
 		}
 	}
 
-	strncpy(filename, g_textbuffer, 8);
+	strncpy(filename, textbuffer, 8);
 	filename[8] = 0;
 	strcat(filename, g_str_chr);
 
@@ -4572,7 +4574,7 @@ static void save_chr(void)
 #if defined(linux)
 			fchmod(handle, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 #endif
-			write(handle, (const void*)&g_hero, sizeof(g_hero));
+			write(handle, (const void*)hero, sizeof(*hero));
 			close(handle);
 
 			if (g_called_with_args == 0) return;
@@ -4584,7 +4586,7 @@ static void save_chr(void)
 #if defined(linux)
 				fchmod(handle, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 #endif
-				write(handle, (const void*)&g_hero, sizeof(g_hero));
+				write(handle, (const void*)hero, sizeof(*hero));
 				close(handle);
 			}
 		} else {
@@ -6937,7 +6939,7 @@ static void do_gen(const int init_level)
 							break;
 						}
 						case 8: {
-							save_chr();
+							save_chr(&g_hero);
 							break;
 						}
 						case 9: {
