@@ -6659,16 +6659,21 @@ static void select_spell(const int page)
 }
 
 /**
- * \brief	choose attack and parade values
+ * \brief select attack and parade values
+ * \param[in] page the current page
+ * \param[in] level 1 = Novice / 2 = Advanced
+ * \return 0 = no changes / 1 = at/pa values changed
  */
-static void choose_atpa(const int page, const int level)
+static int select_atpa(const int page, const int level)
 {
 	int skill;
-	int increase;
+	int retval = 0;
 
 	g_text_x_mod = -80;
 
 	do {
+		int full_refresh = 0;
+
 		/* print menu with all melee weapons skills */
 		skill = gui_radio(get_text(78), 7,
 			get_text(95), get_text(96), get_text(97), get_text(98),
@@ -6679,8 +6684,7 @@ static void choose_atpa(const int page, const int level)
 				infobox(get_text(260), 0);
 			} else {
 
-				increase = gui_radio(get_text(254), 2,
-					get_text(75), get_text(76));
+				int increase = gui_radio(get_text(254), 2, get_text(75), get_text(76));
 
 				if (increase != -1) {
 					if (increase == 1) {
@@ -6691,7 +6695,9 @@ static void choose_atpa(const int page, const int level)
 							g_hero.at_weapon[skill]++;
 							/* dec PA */
 							g_hero.pa_weapon[skill]--;
-							print_values(page, level);
+
+							full_refresh = 1;
+							retval = 1;
 						} else {
 							infobox(get_text(255), 0);
 						}
@@ -6702,7 +6708,9 @@ static void choose_atpa(const int page, const int level)
 							g_hero.at_weapon[skill]--;
 							/* inc PA */
 							g_hero.pa_weapon[skill]++;
-							print_values(page, level);
+
+							full_refresh = 1;
+							retval = 1;
 						} else {
 							infobox(get_text(256), 0);
 						}
@@ -6711,9 +6719,13 @@ static void choose_atpa(const int page, const int level)
 			}
 		}
 
+		if (full_refresh) print_values(page, level);
+
 	} while (skill != -2);
 
 	g_text_x_mod = 0;
+
+	return retval;
 }
 
 /**
@@ -6927,7 +6939,7 @@ static void do_gen(const int init_level)
 				}
 
 			} else if ((1 <= page) && (page <= 3)) 	select_skill(page);
-			  else if (page == 4)			choose_atpa(page, level);
+			  else if (page == 4)			select_atpa(page, level);
 			  else if ((5 <= page) && (page <= 10)) select_spell(page);
 		}
 
