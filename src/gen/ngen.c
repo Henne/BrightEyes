@@ -7470,6 +7470,11 @@ int main_gen(int argc, char **argv)
 
 	if (detect_datfile() == -1) return -1;
 
+	if (sizeof(g_hero) != 0x6da) {
+		fprintf(stderr, "sizeof(hero) = %ld\n", sizeof(g_hero));
+		return -1;
+	}
+
 	if (alloc_buffers() > 0) {
 		free_buffers();
 		return -1;
