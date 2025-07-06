@@ -7165,7 +7165,7 @@ static void intro_fanpro(void)
 		process_nvf(&nvf);
 
 		/* clear screen */
-		call_fill_rect_gen(g_vga_memstart, 0, 0, O_WIDTH - 1, O_HEIGHT - 1, 0);
+		vgalib_fill_rect(g_vga_memstart, 0, O_WIDTH, O_HEIGHT);
 		wait_for_vsync();
 
 		/* set palette of FANPRO.NVF */
@@ -7283,7 +7283,7 @@ static void intro_title(void)
 		process_nvf(&nvf);
 
 		/* clear screen */
-		call_fill_rect_gen(g_vga_memstart, 0, 0, O_WIDTH - 1, O_HEIGHT - 1, 0);
+		vgalib_fill_rect(g_vga_memstart, 0, O_WIDTH, O_HEIGHT);
 		wait_for_vsync();
 
 		set_palette((const unsigned char*)g_pal_tmp, 0, 32);
@@ -7301,7 +7301,7 @@ static void intro_title(void)
 		decomp_pp20(g_vga_backbuffer, g_buffer_heads_dat, (unsigned short)flen);
 
 		/* clear screen */
-		call_fill_rect_gen(g_vga_memstart, 0, 0, O_WIDTH - 1, O_HEIGHT - 1, 0);
+		vgalib_fill_rect(g_vga_memstart, 0, O_WIDTH, O_HEIGHT);
 		memset(g_pal_roalogo, 0, 3 * 256);
 		set_palette(g_pal_roalogo, 0, 256);
 
@@ -7419,7 +7419,7 @@ static void intro(void)
 	intro_title();
 
 	/* clear screen */
-	call_fill_rect_gen(g_vga_memstart, 0, 0, O_WIDTH - 1, O_HEIGHT -1, 0);
+	vgalib_fill_rect(g_vga_memstart, 0, O_WIDTH, O_HEIGHT);
 
 	/* clear used buffers */
 	memset(g_buffer_heads_dat, 0, 39000);
