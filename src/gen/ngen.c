@@ -5193,8 +5193,10 @@ static void print_values(const int page, const int level)
 
 /**
  * \brief initializes the hero structure and global variables
+ * \param[in] hero the hero
+ * \return 1 hero cleared
  */
-static void clear_hero(void)
+static int clear_hero(volatile struct struct_hero* hero)
 {
 	int i;
 
@@ -5214,10 +5216,12 @@ static void clear_hero(void)
 	}
 
 	/* clear and set hero structure */
-	memset((void*)&g_hero, 0, sizeof(g_hero));
+	memset((void*)hero, 0, sizeof(*hero));
 
-	g_hero.level = 1;
-	g_hero.group = 1;
+	hero->level = 1;
+	hero->group = 1;
+
+	return 1;
 }
 
 /**
@@ -5250,7 +5254,7 @@ static void new_attributes(const int page, const int level)
 	sex_bak = g_hero.sex;
 
 	/* clear the hero */
-	clear_hero();
+	clear_hero(&g_hero);
 
 	g_hero.sex = sex_bak;
 
@@ -6769,7 +6773,7 @@ static int choose_typus(const int level)
 	strncpy(name_bak, (const char*)g_hero.name, 15);
 	sex_bak = g_hero.sex;
 
-	clear_hero();
+	clear_hero(&g_hero);
 
 	g_hero.sex = sex_bak;
 	strncpy((char*)g_hero.name, name_bak, 15);
@@ -6859,11 +6863,11 @@ static void do_gen(const int init_level)
 	int menu_option;
 	int target_page;
 	int level = init_level;
-	int full_refresh = 1;
+	int full_refresh;
 	int page = 0;
 
 	/* initialize the hero structure */
-	clear_hero();
+	full_refresh = clear_hero(&g_hero);
 
 	/* emulate a right click to open the menu */
 	g_mouse_rightclick_event = 1;
@@ -6911,11 +6915,10 @@ static void do_gen(const int init_level)
 							break;
 						}
 						case 4: {
-							clear_hero();
+							full_refresh = clear_hero(&g_hero);
 
 							/* imediately open the menu */
 							g_mouse_rightclick_event = 1;
-							full_refresh = 1;
 							break;
 						}
 						case 5: {
