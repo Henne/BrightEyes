@@ -6867,85 +6867,68 @@ static void do_gen(const int init_level)
 		g_action_table = NULL;
 
 		if (g_mouse_rightclick_event || g_in_key_ext == KEY_PGUP) {
+
 			/* print the menu for each page */
-			switch (page) {
-				case 0: {
-					menu_option = gui_radio(get_text(7), 9,
-						get_text(10), get_text(11), get_text(15),
-						get_text(8),  get_text(14), get_text(12),
-						get_text(262),get_text(9),  get_text(258));
+			if (page == 0) {
 
-					if (menu_option != -1) {
-						if ((menu_option >= 4) && (menu_option < 6) && (g_hero.attrib[0].normal) && !gui_bool(get_text(13))) {
-							menu_option = 0;
+				menu_option = gui_radio(get_text(7), 9,
+					get_text(10), get_text(11), get_text(15),
+					get_text(8),  get_text(14), get_text(12),
+					get_text(262),get_text(9),  get_text(258));
+
+				if (menu_option != -1) {
+					if ((menu_option >= 4) && (menu_option < 6) && (g_hero.attrib[0].normal) && !gui_bool(get_text(13))) {
+						menu_option = 0;
+					}
+					g_in_key_ext = 0;
+					switch (menu_option) {
+						case 1: {
+							enter_name();
+							break;
 						}
-						g_in_key_ext = 0;
-						switch (menu_option) {
-							case 1: {
-								enter_name();
-								break;
-							}
-							case 2: {
-								full_refresh = change_sex();
-								break;
-							}
-							case 3: {
-								change_attributes(page, level);
-								break;
-							}
-							case 4: {
-								clear_hero();
+						case 2: {
+							full_refresh = change_sex();
+							break;
+						}
+						case 3: {
+							change_attributes(page, level);
+							break;
+						}
+						case 4: {
+							clear_hero();
 
-								/* imediately open the menu */
-								g_mouse_rightclick_event = 1;
-								full_refresh = 1;
-								break;
-							}
-							case 5: {
-								new_attributes(page, level);
-								break;
-							}
-							case 6: {
-								full_refresh = select_typus(level);
-								break;
-							}
-							case 7: {
-								full_refresh = choose_typus(level);
-								break;
-							}
-							case 8: {
-								save_chr();
-								break;
-							}
-							case 9: {
-								if (gui_bool(get_text(259)))
-									done = 1;
-								break;
-							}
+							/* imediately open the menu */
+							g_mouse_rightclick_event = 1;
+							full_refresh = 1;
+							break;
+						}
+						case 5: {
+							new_attributes(page, level);
+							break;
+						}
+						case 6: {
+							full_refresh = select_typus(level);
+							break;
+						}
+						case 7: {
+							full_refresh = choose_typus(level);
+							break;
+						}
+						case 8: {
+							save_chr();
+							break;
+						}
+						case 9: {
+							if (gui_bool(get_text(259)))
+								done = 1;
+							break;
 						}
 					}
-					break;
 				}
-				case 1:
-				case 2:
-				case 3: {
-					select_skill(page);
-					break;
-				}
-				case 4: {
-					choose_atpa(page, level);
-					break;
-				}
-				case 5:
-				case 6:
-				case 7:
-				case 8:
-				case 9:
-				case 10: {
-					select_spell(page);
-					break;
-				}
-			}
+
+			} else if ((1 <= page) && (page <= 3)) 	select_skill(page);
+			  else if (page == 4)			choose_atpa(page, level);
+			  else if ((5 <= page) && (page <= 10)) select_spell(page);
 		}
 
 		if (g_in_key_ext == KEY_CTRL_F3)
