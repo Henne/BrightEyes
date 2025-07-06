@@ -4600,6 +4600,9 @@ static void enter_name(void)
 {
 	mouse_bg();
 
+	/* restore background underneath the name */
+	vgalib_copy_to_screen(get_gfx_ptr(180, 12), g_name_bar, 15 * 6, 8);
+
 	enter_string((char*)g_hero.name, 180, 12, 15, 1);
 
 	/* restore background underneath the name */
