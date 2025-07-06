@@ -1320,7 +1320,6 @@ static unsigned char* g_gfx_ptr;
 static unsigned char* g_page_buffer;
 
 static char *g_textbuffer;  // buffer for dynamically created strings
-static char *g_digitbuffer; // pointer near the end of g_textbuffer
 static unsigned char *g_buffer_typus;
 static unsigned char *g_buffer_dmenge_dat;
 static unsigned char *g_buffer_current_head;
@@ -1503,7 +1502,6 @@ static int alloc_buffers(void)
 	if (g_popup_box == NULL) errors++;
 
 	g_textbuffer = (char*)gen_alloc(1524);
-	g_digitbuffer = g_textbuffer + 1500;
 	if (g_textbuffer == NULL) errors++;
 
 	g_buffer_text = (char*)gen_alloc(6000);
@@ -1631,7 +1629,6 @@ void free_buffers(void)
 	if (g_textbuffer != NULL) {
 		gen_free((unsigned char*)g_textbuffer);
 		g_textbuffer = NULL;
-		g_digitbuffer = NULL;
 	}
 
 	if (g_page_buffer != NULL) {
@@ -3800,6 +3797,7 @@ static int infobox(char *header, const signed short digits)
 	int lines;
 	int height;
 	int upper_border;
+	char digitbuffer[32];
 
 	const int width = popup_width(g_menu_tiles);
 	const int left_border = (O_WIDTH - width) / 2 + g_text_x_mod;
@@ -3838,11 +3836,11 @@ static int infobox(char *header, const signed short digits)
 	mouse_cursor();
 
 	if (digits) {
-		enter_string(g_digitbuffer,
+		enter_string(digitbuffer,
 			left_border + (width - digits * 6) / 2,
 			upper_border + 8 * lines - 2, digits, 0);
 
-		retval = (unsigned short)atol(g_digitbuffer);
+		retval = (unsigned short)atol(digitbuffer);
 	} else {
 		g_action_table = g_action_input;
 		vsync_or_key(150 * lines);
