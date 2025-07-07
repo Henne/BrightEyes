@@ -5400,49 +5400,49 @@ static void new_attributes(volatile struct struct_hero *hero, const int page, co
 
 /**
  * \brief calculate AT and PA values
+ * \param[in] hero the hero
  */
-static void calc_at_pa(void)
+static void calc_at_pa(volatile struct struct_hero *hero)
 {
 	div_t res; // BCC <STDLIB.H>
-	signed short tmp;
 	signed short i;
 
-	res = div(g_hero.attrib[5].normal + g_hero.attrib[6].normal + g_hero.attrib[4].normal, 5);
+	res = div(hero->attrib[5].normal + hero->attrib[6].normal + hero->attrib[4].normal, 5);
 	/* round up if neccessary */
 	if (res.rem >= 3) {
 		res.quot++;
 	}
 
-	g_hero.atpa_base = res.quot;
+	hero->atpa_base = res.quot;
 
 	for (i = 0; i < 7; i++) {
 		/* Set base AT/PA value for each weapon */
-		g_hero.at_weapon[i] = g_hero.pa_weapon[i] = g_hero.atpa_base;
+		hero->at_weapon[i] = hero->pa_weapon[i] = hero->atpa_base;
 
-		if (g_hero.skills[i] < 0) {
-			tmp = __abs__(g_hero.skills[i]) / 2;
+		if (hero->skills[i] < 0) {
+			const int tmp = abs(hero->skills[i]) / 2;
 
 			/* Calculate weapon AT value */
-			g_hero.at_weapon[i] -= tmp;
+			hero->at_weapon[i] -= tmp;
 
 			/* Calculate weapon PA value */
-			g_hero.pa_weapon[i] -= tmp;
+			hero->pa_weapon[i] -= tmp;
 
-			if (__abs__(g_hero.skills[i]) != 2 * tmp) {
-				g_hero.pa_weapon[i]--;
+			if (abs(hero->skills[i]) != 2 * tmp) {
+				hero->pa_weapon[i]--;
 			}
 		} else {
 			/* calculate ATPA for positive weapon skill */
-			tmp = g_hero.skills[i] / 2;
+			const int tmp = hero->skills[i] / 2;
 
 			/* Calculate weapon AT value */
-			g_hero.at_weapon[i] += tmp;
+			hero->at_weapon[i] += tmp;
 
 			/* Calculate weapon PA value */
-			g_hero.pa_weapon[i] += tmp;
+			hero->pa_weapon[i] += tmp;
 
-			if (g_hero.skills[i] != 2 * tmp) {
-				g_hero.at_weapon[i]++;
+			if (hero->skills[i] != 2 * tmp) {
+				hero->at_weapon[i]++;
 			}
 		}
 	}
@@ -5741,7 +5741,7 @@ static void fill_values(const int level)
 		}
 	}
 	/* calculate AT and PA values */
-	calc_at_pa();
+	calc_at_pa(&g_hero);
 
 	/* if mode == novice */
 	if (level == 1) {
