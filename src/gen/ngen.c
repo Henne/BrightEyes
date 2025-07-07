@@ -4581,15 +4581,15 @@ static void save_chr(volatile struct struct_hero *hero)
 
 		if (handle != -1) {
 			int flen = 0;
-			write(handle, (const void*)hero, sizeof(*hero));
+			int written = write(handle, (const void*)hero, sizeof(*hero));
 			flen = lseek(handle, 0, SEEK_END);
 			close(handle);
 
 			if (sizeof(*hero) != 0x6da) {
 				fprintf(stderr, "ERROR: sizeof(*hero) = %u\n", (unsigned short)sizeof(*hero));
 			}
-			if (flen != 0x6da) {
-				fprintf(stderr, "ERROR: flen = %d\n", flen);
+			if (flen != written) {
+				fprintf(stderr, "ERROR: file %12s filelength = %d bytes != written %d\n", filename, flen, written);
 			}
 			if (g_called_with_args == 0) return;
 
@@ -4607,15 +4607,15 @@ static void save_chr(volatile struct struct_hero *hero)
 			handle = open(path, (O_TRUNC | O_CREAT| O_RDWR), (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH));
 #endif
 			if (handle != -1) {
-				write(handle, (const void*)hero, sizeof(*hero));
+				written = write(handle, (const void*)hero, sizeof(*hero));
 				flen = lseek(handle, 0, SEEK_END);
 				close(handle);
 
 				if (sizeof(*hero) != 0x6da) {
 					fprintf(stderr, "ERROR: sizeof(*hero) = %u\n", (unsigned short)sizeof(*hero));
 				}
-				if (flen != 0x6da) {
-					fprintf(stderr, "ERROR: flen = %d\n", flen);
+				if (flen != written) {
+					fprintf(stderr, "ERROR: file %12s filelength = %d bytes != written %d\n", filename, flen, written);
 				}
 			}
 		} else {
