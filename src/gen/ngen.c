@@ -1087,7 +1087,9 @@ static signed long g_gendat_offset;
 static signed long g_flen;
 
 static const char g_str_chr[] = ".CHR";
+#if defined(__BORLANDC__) || defined(_WIN32)
 static const char g_str_temp_dir[] = "TEMP\\";
+#endif
 static char g_str_save_error_de[] = "@SPEICHER FEHLER!@EVENTUELL DISKETTE GESCH\x9aTZT?";
 static char g_str_save_error_en[] = "@SAVE ERROR!@IS YOUR DISK PROTECTED?";
 
@@ -4117,7 +4119,8 @@ static unsigned char *load_snd_driver(const char *fname)
 	unsigned long in_ptr;
 	signed short handle;
 
-	handle = open(fname, 0x8001);
+	/* 0x8001 = O_BINARY | O_RDONLY */
+	handle = open(fname, O_BINARY | O_RDONLY);
 	if (handle != -1) {
 		size = 16500;
 		g_snd_driver = (unsigned char*)gen_alloc(size + 0x10);
@@ -4338,7 +4341,8 @@ static void init_music(void)
 		signed short port;
 
 		/* try to enable MIDI instead of CD-Audio */
-		handle = open(g_str_sound_cfg, 0x8001);
+		/* 0x8001 = O_BINARY | O_RDONLY */
+		handle = open(g_str_sound_cfg, O_BINARY | O_RDONLY);
 		if (handle != -1) {
 			_read(handle, (unsigned char*)&port, 2);
 			_close(handle);
@@ -4560,35 +4564,57 @@ static void save_chr(volatile struct struct_hero *hero)
 	filename[8] = 0;
 	strcat(filename, g_str_chr);
 
-	handle = open(filename, 0x8001);
+#if defined(__BORLANDC__) || defined(_WIN32)
+	/* 0x8001 = O_BINARY | O_RDONLY */
+	handle = open(filename, O_BINARY | O_RDONLY);
+#else
+	handle = open(filename, O_RDONLY);
+#endif
 	if ((handle == -1) || gui_bool(get_text(261))) {
 
 		/* close an existing file before overwriting it */
 		if (handle != -1) close(handle);
 
-		handle = _creat(filename, 0);
+#if defined(__BORLANDC__) || defined(_WIN32)
+		handle = _creat(filename, O_BINARY | O_RDWR);
+#else
+		handle = open(filename, (O_TRUNC | O_CREAT| O_RDWR), (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH));
+#endif
 
 		if (handle != -1) {
+			int flen = 0;
+			write(handle, (const void*)hero, sizeof(*hero));
+			flen = lseek(handle, 0, SEEK_END);
+			close(handle);
+
 			if (sizeof(*hero) != 0x6da) {
 				fprintf(stderr, "ERROR: sizeof(*hero) = %u\n", (unsigned short)sizeof(*hero));
 			}
-#if defined(linux)
-			fchmod(handle, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-#endif
-			write(handle, (const void*)hero, sizeof(*hero));
-			close(handle);
-
+			if (flen != 0x6da) {
+				fprintf(stderr, "ERROR: flen = %d\n", flen);
+			}
 			if (g_called_with_args == 0) return;
 
+#if defined(__BORLANDC__) || defined(_WIN32)
 			strncpy(path, g_str_temp_dir, 20);
 			strcat(path, filename);
-
-			if ((handle = _creat(path, 0)) != -1) {
-#if defined(linux)
-				fchmod(handle, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+			handle = _creat(path, O_BINARY | O_RDWR);
+#else
+			strncpy(path, "TEMP/", 6);
+			strcat(path, filename);
+			handle = open(path, (O_TRUNC | O_CREAT| O_RDWR), (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH));
 #endif
+			if (handle != -1) {
 				write(handle, (const void*)hero, sizeof(*hero));
+				flen = lseek(handle, 0, SEEK_END);
 				close(handle);
+
+				if (sizeof(*hero) != 0x6da) {
+					fprintf(stderr, "ERROR: sizeof(*hero) = %u\n", (unsigned short)sizeof(*hero));
+				}
+				if (flen != 0x6da) {
+					fprintf(stderr, "ERROR: flen = %d\n", flen);
+				}
 			}
 		} else {
 			infobox(g_dsagen_lang == LANG_DE ? g_str_save_error_de : g_str_save_error_en, 0);
