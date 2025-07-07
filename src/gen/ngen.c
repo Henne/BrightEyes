@@ -4860,10 +4860,11 @@ static void print_typusname(volatile struct struct_hero *hero)
 
 /**
  * \brief print the values of the hero
+ * \param[in] hero the hero
  * \param[in] page the current page
  * \param[in] level 1 = Novice / 2 = Advanced
  */
-static void print_values(const int page, const int level)
+static void print_values(volatile struct struct_hero *hero, const int page, const int level)
 {
 	int i;
 	char tmp[16];
@@ -4878,7 +4879,7 @@ static void print_values(const int page, const int level)
 
 	if (g_dsagen_lang == LANG_EN) { align_left = 225; align_right = 313; }
 
-	refresh_background(&g_hero, page, level);
+	refresh_background(hero, page, level);
 
 #if defined(__BORLANDC__)
 	/* copy the complete backbuffer to the screen */
@@ -4899,55 +4900,55 @@ static void print_values(const int page, const int level)
 	}
 #endif
 
-	if ((g_hero.typus) && (0 <= page) && (page <= 4)) {
-		print_typusname(&g_hero);
+	if ((hero->typus) && (0 <= page) && (page <= 4)) {
+		print_typusname(hero);
 	}
 
 	switch (page) {
 
 		case 0: {
 			/* print name */
-			print_str((const char*)g_hero.name, 180, 12);
+			print_str((const char*)hero->name, 180, 12);
 
 			/* print attributes */
-			print_attribs(&g_hero);
+			print_attribs(hero);
 
 			/* return if no typus */
-			if (!g_hero.typus) break;
+			if (!hero->typus) break;
 
 			/* print height */
 			if (g_dsagen_lang == LANG_DE) {
-				sprintf(g_textbuffer, get_text(70), g_hero.height);
+				sprintf(g_textbuffer, get_text(70), hero->height);
 			} else {
-				feet = g_hero.height * 100 / 3048;
-				inches = g_hero.height * 100 - feet * 3048;
+				feet = hero->height * 100 / 3048;
+				inches = hero->height * 100 - feet * 3048;
 				inches = inches / 254;
 				sprintf(g_textbuffer, get_text(70), feet, inches);
 			}
 			print_str(g_textbuffer, 205, 25);
 
 			/* print weight */
-			sprintf(g_textbuffer, get_text(71), g_hero.weight);
+			sprintf(g_textbuffer, get_text(71), hero->weight);
 
 			print_str(g_textbuffer, 205, 37);
 
 			/* print god name */
-			print_str(get_text(56 + g_hero.god), 205, 49);
+			print_str(get_text(56 + hero->god), 205, 49);
 
 			/* print money */
-			make_valuta_str(g_textbuffer, g_hero.money);
+			make_valuta_str(g_textbuffer, hero->money);
 			print_str(g_textbuffer, 205, 61);
 
 			/* print LE */
-			sprintf(tmp, "%d", g_hero.le_max); print_str(tmp, 172, 164);
+			sprintf(tmp, "%d", hero->le_max); print_str(tmp, 172, 164);
 			/* print AE */
-			sprintf(tmp, "%d", g_hero.ae_max); print_str(tmp, 221, 164);
+			sprintf(tmp, "%d", hero->ae_max); print_str(tmp, 221, 164);
 			/* print Endurance */
-			sprintf(tmp, "%d", g_hero.le_max + g_hero.attrib[6].current);
+			sprintf(tmp, "%d", hero->le_max + hero->attrib[6].current);
 			print_str(tmp, 296, 164);
 
 			/* print MR */
-			sprintf(tmp, "%d", g_hero.mr);
+			sprintf(tmp, "%d", hero->mr);
 			print_str(tmp, (g_dsagen_lang == LANG_DE ? 232 + 15 : 255), 184);
 			break;
 		}
@@ -4955,7 +4956,7 @@ static void print_values(const int page, const int level)
 			/* SKILLS Page 1/3 */
 			/* print fight skills */
 			for (i = 0; i < 9; i++) {
-				sprintf(tmp, "%d", g_hero.skills[i]);
+				sprintf(tmp, "%d", hero->skills[i]);
 				width = get_str_width(tmp);
 				// i & 1 = right column else left column
 				print_str(tmp, ((i & 1) ? align_right - width : align_left - width), (i / 2) * 12 + 42);
@@ -4964,14 +4965,14 @@ static void print_values(const int page, const int level)
 			/* print body skills */
 			for (i = 9; i < 19; i++) {
 				pos = i - 9;
-				sprintf(tmp, "%d", g_hero.skills[i]);
+				sprintf(tmp, "%d", hero->skills[i]);
 				width = get_str_width(tmp);
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? align_right - width : align_left - width), (pos / 2) * 12 + 119);
 			}
 
 			/* remaining attempts for skills */
-			sprintf(tmp, "%d", g_hero.skill_incs); print_str(tmp, 271, 184);
+			sprintf(tmp, "%d", hero->skill_incs); print_str(tmp, 271, 184);
 			break;
 		}
 		case 2: {
@@ -4979,7 +4980,7 @@ static void print_values(const int page, const int level)
 			/* print social skills */
 			for (i = 19; i < 26; i++) {
 				pos = i - 19;
-				sprintf(tmp, "%d", g_hero.skills[i]);
+				sprintf(tmp, "%d", hero->skills[i]);
 				width = get_str_width(tmp);
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? align_right - width : align_left - width), (pos / 2) * 12 + 42);
@@ -4988,14 +4989,14 @@ static void print_values(const int page, const int level)
 			/* print lore skills */
 			for (i = 32; i < 41; i++) {
 				pos = i - 32;
-				sprintf(tmp, "%d", g_hero.skills[i]);
+				sprintf(tmp, "%d", hero->skills[i]);
 				width = get_str_width(tmp);
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? align_right - width : align_left - width), (pos / 2) * 12 + 113);
 			}
 
 			/* remaining attempts for skills */
-			sprintf(tmp, "%d", g_hero.skill_incs); print_str(tmp, 271, 184);
+			sprintf(tmp, "%d", hero->skill_incs); print_str(tmp, 271, 184);
 			break;
 		}
 		case 3: {
@@ -5003,7 +5004,7 @@ static void print_values(const int page, const int level)
 			/* print craftmansship skills */
 			for (i = 41; i < 50; i++) {
 				pos = i - 41;
-				sprintf(tmp, "%d", g_hero.skills[i]);
+				sprintf(tmp, "%d", hero->skills[i]);
 				width = get_str_width(tmp);
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? align_right - width : align_left - width), (pos / 2) * 12 + 42);
@@ -5013,7 +5014,7 @@ static void print_values(const int page, const int level)
 			/* print nature skills */
 			for (i = 26; i < 32; i++) {
 				pos = i - 26;
-				sprintf(tmp, "%d", g_hero.skills[i]);
+				sprintf(tmp, "%d", hero->skills[i]);
 				width = get_str_width(tmp);
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? align_right - width : align_left - width), (pos / 2) * 12 + 119);
@@ -5022,45 +5023,45 @@ static void print_values(const int page, const int level)
 			/* print intuition skills */
 			for (i = 50; i < 52; i++) {
 				pos = i - 50;
-				sprintf(tmp, "%d", g_hero.skills[i]);
+				sprintf(tmp, "%d", hero->skills[i]);
 				width = get_str_width(tmp);
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? align_right - width : align_left - width), (pos / 2) * 12 + 170);
 			}
 
 			/* remaining attempts for skills */
-			sprintf(tmp, "%d", g_hero.skill_incs); print_str(tmp, 271, 184);
+			sprintf(tmp, "%d", hero->skill_incs); print_str(tmp, 271, 184);
 			break;
 		}
 		case 4: {
 			/* ATPA Page */
 			/* Print base value  2x the same */
-			sprintf(tmp, "%d", g_hero.atpa_base);
+			sprintf(tmp, "%d", hero->atpa_base);
 			print_str(tmp, 231, 30); print_str(tmp, 268, 30);
 
 			for (i = 0; i < 7; i++) {
 
 				/* print AT value */
-				sprintf(tmp, "%d", g_hero.at_weapon[i]);
+				sprintf(tmp, "%d", hero->at_weapon[i]);
 				print_str(tmp, 237 - get_str_width(tmp), i * 12 + 48);
 
 				/* print PA value */
-				sprintf(tmp, "%d", g_hero.pa_weapon[i]);
+				sprintf(tmp, "%d", hero->pa_weapon[i]);
 				print_str(tmp, 274 - get_str_width(tmp), i * 12 + 48);
 
 				/* print skill value */
-				sprintf(tmp, "%d", g_hero.skills[i]);
+				sprintf(tmp, "%d", hero->skills[i]);
 				print_str(tmp, 315 - get_str_width(tmp), i * 12 + 48);
 			}
 
 			/* calc range base value (KL+GE+KK) /4 */
-			pos = (g_hero.attrib[1].normal
-					+ g_hero.attrib[4].normal
-					+ g_hero.attrib[6].normal) / 4;
+			pos = (hero->attrib[1].normal
+					+ hero->attrib[4].normal
+					+ hero->attrib[6].normal) / 4;
 
 			/* print missle and thrown weapon values */
-			sprintf(tmp, "%d", pos + g_hero.skills[7]); print_str(tmp, 231, 144);
-			sprintf(tmp, "%d", pos + g_hero.skills[8]); print_str(tmp, 231, 156);
+			sprintf(tmp, "%d", pos + hero->skills[7]); print_str(tmp, 231, 144);
+			sprintf(tmp, "%d", pos + hero->skills[8]); print_str(tmp, 231, 156);
 			break;
 		}
 
@@ -5068,63 +5069,63 @@ static void print_values(const int page, const int level)
 			/* Spells Page 1/6 */
 			for (i = 1; i < 6; i++) {
 				pos = i - 1;
-				sprintf(tmp, "%d", g_hero.spells[i]);
+				sprintf(tmp, "%d", hero->spells[i]);
 				width = get_str_width(tmp);
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 42);
 			}
 			for (i = 33; i < 38; i++) {
 				pos = i - 33;
-				sprintf(tmp, "%d", g_hero.spells[i]);
+				sprintf(tmp, "%d", hero->spells[i]);
 				width = get_str_width(tmp);
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 95);
 			}
 			for (i = 6; i <= 11; i++) {
 				pos = i - 6;
-				sprintf(tmp, "%d", g_hero.spells[i]);
+				sprintf(tmp, "%d", hero->spells[i]);
 				width = get_str_width(tmp);
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 146);
 			}
 
 			/* print spell attempts */
-			sprintf(tmp, "%d", g_hero.spell_incs); print_str(tmp, 217, 184);
+			sprintf(tmp, "%d", hero->spell_incs); print_str(tmp, 217, 184);
 			break;
 		}
 		case 6: {
 			/* Spells Page 2/6 */
 			for (i = 12; i <= 17; i++) {
 				pos = i - 12;
-				sprintf(tmp, "%d", g_hero.spells[i]);
+				sprintf(tmp, "%d", hero->spells[i]);
 				width = get_str_width(tmp);
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 42);
 			}
 			for (i = 18; i < 24; i++) {
 				pos = i - 18;
-				sprintf(tmp, "%d", g_hero.spells[i]);
+				sprintf(tmp, "%d", hero->spells[i]);
 				width = get_str_width(tmp);
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 95);
 			}
 			for (i = 24; i < 27; i++) {
 				pos = i - 24;
-				sprintf(tmp, "%d", g_hero.spells[i]);
+				sprintf(tmp, "%d", hero->spells[i]);
 				width = get_str_width(tmp);
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 148);
 			}
 
 			/* print spell attempts */
-			sprintf(tmp, "%d", g_hero.spell_incs); print_str(tmp, 217, 184);
+			sprintf(tmp, "%d", hero->spell_incs); print_str(tmp, 217, 184);
 			break;
 		}
 		case 7: {
 			/* Spells Page 3/6 */
 			for (i = 27; i < 33; i++) {
 				pos = i - 27;
-				sprintf(tmp, "%d", g_hero.spells[i]);
+				sprintf(tmp, "%d", hero->spells[i]);
 				width = get_str_width(tmp);
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 42);
@@ -5132,7 +5133,7 @@ static void print_values(const int page, const int level)
 
 			for (i = 38; i < 45; i++) {
 				pos = i - 38;
-				sprintf(tmp, "%d", g_hero.spells[i]);
+				sprintf(tmp, "%d", hero->spells[i]);
 				width = get_str_width(tmp);
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 95);
@@ -5140,21 +5141,21 @@ static void print_values(const int page, const int level)
 
 			for (i = 45; i <= 46; i++) {
 				pos = i - 45;
-				sprintf(tmp, "%d", g_hero.spells[i]);
+				sprintf(tmp, "%d", hero->spells[i]);
 				width = get_str_width(tmp);
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 160);
 			}
 
 			/* print spell attempts */
-			sprintf(tmp, "%d", g_hero.spell_incs); print_str(tmp, 217, 184);
+			sprintf(tmp, "%d", hero->spell_incs); print_str(tmp, 217, 184);
 			break;
 		}
 		case 8: {
 			/* Spells Page 4/6 */
 			for (i = 47; i <= 48; i++) {
 				pos = i - 47;
-				sprintf(tmp, "%d", g_hero.spells[i]);
+				sprintf(tmp, "%d", hero->spells[i]);
 				width = get_str_width(tmp);
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 42);
@@ -5162,7 +5163,7 @@ static void print_values(const int page, const int level)
 
 			for (i = 49; i < 58; i++) {
 				pos = i - 49;
-				sprintf(tmp, "%d", g_hero.spells[i]);
+				sprintf(tmp, "%d", hero->spells[i]);
 				width = get_str_width(tmp);
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 71);
@@ -5170,42 +5171,42 @@ static void print_values(const int page, const int level)
 
 			for (i = 58; i < 60; i++) {
 				pos = i - 58;
-				sprintf(tmp, "%d", g_hero.spells[i]);
+				sprintf(tmp, "%d", hero->spells[i]);
 				width = get_str_width(tmp);
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 148);
 			}
 
 			/* print spell attempts */
-			sprintf(tmp, "%d", g_hero.spell_incs); print_str(tmp, 217, 184);
+			sprintf(tmp, "%d", hero->spell_incs); print_str(tmp, 217, 184);
 			break;
 		}
 		case 9: {
 			/* Spells Page 5/6 */
 			for (i = 60; i < 76; i++) {
 				pos = i - 60;
-				sprintf(tmp, "%d", g_hero.spells[i]);
+				sprintf(tmp, "%d", hero->spells[i]);
 				width = get_str_width(tmp);
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 42);
 			}
 
 			/* print spell attempts */
-			sprintf(tmp, "%d", g_hero.spell_incs); print_str(tmp, 217, 184);
+			sprintf(tmp, "%d", hero->spell_incs); print_str(tmp, 217, 184);
 			break;
 		}
 		case 10: {
 			/* Spells Page 6/6 */
 			for (i = 76; i < 86; i++) {
 				pos = i - 76;
-				sprintf(tmp, "%d", g_hero.spells[i]);
+				sprintf(tmp, "%d", hero->spells[i]);
 				width = get_str_width(tmp);
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 42);
 			}
 
 			/* print spell attempts */
-			sprintf(tmp, "%d", g_hero.spell_incs); print_str(tmp, 217, 184);
+			sprintf(tmp, "%d", hero->spell_incs); print_str(tmp, 217, 184);
 			break;
 		}
 	}
@@ -5297,7 +5298,7 @@ static void new_attributes(const int page, const int level)
 	strncpy((char*)g_hero.name, name_bak, 15);
 
 	if (full_refresh) {
-		print_values(page, level);
+		print_values(&g_hero, page, level);
 	}
 
 	att_ptr = &g_hero.attrib[0].normal;
@@ -5351,7 +5352,7 @@ static void new_attributes(const int page, const int level)
 		att_ptr[3 * di + 0] = att_ptr[3 * di + 1] = randval;
 
 		mouse_bg();
-		print_values(page, level);
+		print_values(&g_hero, page, level);
 		mouse_cursor();
 	}
 
@@ -5391,7 +5392,7 @@ static void new_attributes(const int page, const int level)
 		att_ptr[3 * di + 0] = att_ptr[3 * di + 1] = randval;
 
 		mouse_bg();
-		print_values(page, level);
+		print_values(&g_hero, page, level);
 		mouse_cursor();
 	}
 }
@@ -5887,7 +5888,7 @@ static void change_attributes(const int page, const int level)
 				g_got_ch_bonus = 0;
 			}
 
-			print_values(page, level);
+			print_values(&g_hero, page, level);
 
 		} else {
 			return;
@@ -5949,7 +5950,7 @@ static void change_attributes(const int page, const int level)
 
 			g_attrib_changed[tmp2] = INC;
 
-			print_values(page, level);
+			print_values(&g_hero, page, level);
 
 			tmp1 = 0;
 			while (tmp1 != 2) {
@@ -5983,7 +5984,7 @@ static void change_attributes(const int page, const int level)
 					//g_hero.attrib[si + 7].normal = ++g_ghero.attrib[si + 7].current;
 					ptr1[0] = ++ptr1[1];
 
-					print_values(page, level);
+					print_values(&g_hero, page, level);
 				}
 			}
 		} else {
@@ -6013,7 +6014,7 @@ static void change_attributes(const int page, const int level)
 			/* mark this attribute as decremented */
 			g_attrib_changed[tmp2] = DEC;
 
-			print_values(page, level);
+			print_values(&g_hero, page, level);
 
 			tmp1 = 0;
 			while (tmp1 != 2) {
@@ -6050,7 +6051,7 @@ static void change_attributes(const int page, const int level)
 
 				g_attrib_changed[si + 7] = DEC;
 
-				print_values(page, level);
+				print_values(&g_hero, page, level);
 			}
 		}
 	}
@@ -6366,7 +6367,7 @@ static void select_skill(const int page)
 		g_text_x_mod = 0;
 
 		if (skill != -2) {
-			print_values(page, 2);
+			print_values(&g_hero, page, 2);
 		}
 
 	} while (group != -1);
@@ -6696,7 +6697,7 @@ static void select_spell(const int page)
 		g_text_x_mod = 0;
 
 		if (spell != -2) {
-			print_values(page, 2);
+			print_values(&g_hero, page, 2);
 		}
 
 	} while (group != -1);
@@ -6763,7 +6764,7 @@ static int select_atpa(const int page, const int level)
 			}
 		}
 
-		if (full_refresh) print_values(page, level);
+		if (full_refresh) print_values(&g_hero, page, level);
 
 	} while (skill != -2);
 
@@ -6912,7 +6913,7 @@ static void do_gen(const int init_level)
 	while (!done) {
 
 		if (full_refresh) {
-			print_values(page, level);
+			print_values(&g_hero, page, level);
 			full_refresh = 0;
 		}
 
