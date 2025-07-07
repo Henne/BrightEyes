@@ -5806,18 +5806,19 @@ static void fill_values(volatile struct struct_hero *hero, const int level)
 
 /**
  * \brief tests if attribute changes are possible
+ * \param[in] hero the hero
+ * \return 1 = yes / 0 = no
  */
-static signed short can_change_attributes(void)
+static signed short can_change_attributes(volatile struct struct_hero *hero)
 {
-	volatile signed char *p;
-	signed short i;
-	signed short na_inc = 0;
-	signed short na_dec = 0;
-	signed short pa_inc = 0;
-	signed short pa_dec = 0;
+	int i;
+	int na_inc = 0;
+	int na_dec = 0;
+	int pa_inc = 0;
+	int pa_dec = 0;
 
 	for (i = 0; i < 7; i++) {
-		p = &g_hero.attrib[i].normal;
+		volatile signed char *p = &hero->attrib[i].normal;
 
 		if ((g_attrib_changed[i] != INC) && (p[0] > 8))
 			pa_dec += 8 - p[0];
@@ -5826,7 +5827,7 @@ static signed short can_change_attributes(void)
 	}
 
 	for (i = 7; i < 14; i++) {
-		p = &g_hero.attrib[i].normal;
+		volatile signed char *p = &hero->attrib[i].normal;
 
 		if ((g_attrib_changed[i] != INC) && (p[0] > 2))
 			na_dec += 2 - p[0];
@@ -5866,7 +5867,7 @@ static void change_attributes(const int page, const int level)
 		return;
 	}
 	/* check if changing is possible */
-	if (!can_change_attributes()) {
+	if (!can_change_attributes(&g_hero)) {
 		infobox(get_text(266), 0);
 		return;
 	}
@@ -5897,7 +5898,7 @@ static void change_attributes(const int page, const int level)
 	}
 
 	/* check again if changing is possible */
-	if (can_change_attributes() == 0) {
+	if (!can_change_attributes(&g_hero)) {
 		infobox(get_text(266), 0);
 		return;
 	}
@@ -6126,7 +6127,7 @@ static int select_typus(const int level)
 		}
 
 		if (!possible_types) {
-			if (!can_change_attributes()) {
+			if (!can_change_attributes(&g_hero)) {
 				/* totally messed up values */
 				infobox(get_text(284), 0);
 			} else {
