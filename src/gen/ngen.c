@@ -5262,10 +5262,11 @@ static int clear_hero(volatile struct struct_hero* hero)
 
 /**
  * \brief roll out new attribute values
+ * \param[in] hero the hero
  * \param[in] page the current page
  * \param[in] level 1 = Novice / 2 = Advanced
  */
-static void new_attributes(const int page, const int level)
+static void new_attributes(volatile struct struct_hero *hero, const int page, const int level)
 {
 	volatile signed char *att_ptr;
 	char name_bak[20];
@@ -5280,28 +5281,28 @@ static void new_attributes(const int page, const int level)
 	signed char sex_bak;
 
 	/* set variable if hero has a typus */
-	if (g_hero.typus)
+	if (hero->typus)
 		full_refresh = 1;
 
 	/* save the name of the hero */
-	strncpy(name_bak, (const char*)g_hero.name, 15);
+	strncpy(name_bak, (const char*)hero->name, 15);
 
 	/* save the sex of the hero */
-	sex_bak = g_hero.sex;
+	sex_bak = hero->sex;
 
 	/* clear the hero */
-	clear_hero(&g_hero);
+	clear_hero(hero);
 
-	g_hero.sex = sex_bak;
+	hero->sex = sex_bak;
 
 	/* restore the name of the hero */
-	strncpy((char*)g_hero.name, name_bak, 15);
+	strncpy((char*)hero->name, name_bak, 15);
 
 	if (full_refresh) {
-		print_values(&g_hero, page, level);
+		print_values(hero, page, level);
 	}
 
-	att_ptr = &g_hero.attrib[0].normal;
+	att_ptr = &hero->attrib[0].normal;
 
 	/* positive attributes ala DSA3 */
 	/* roll 8 times: W6 + 7 and skip a minimal value */
@@ -5352,11 +5353,11 @@ static void new_attributes(const int page, const int level)
 		att_ptr[3 * di + 0] = att_ptr[3 * di + 1] = randval;
 
 		mouse_bg();
-		print_values(&g_hero, page, level);
+		print_values(hero, page, level);
 		mouse_cursor();
 	}
 
-	att_ptr = &g_hero.attrib[7].normal;
+	att_ptr = &hero->attrib[7].normal;
 
 	for (j = 0; j < 7; j++) {
 		randval = random_interval_gen(2, 7);
@@ -5392,7 +5393,7 @@ static void new_attributes(const int page, const int level)
 		att_ptr[3 * di + 0] = att_ptr[3 * di + 1] = randval;
 
 		mouse_bg();
-		print_values(&g_hero, page, level);
+		print_values(hero, page, level);
 		mouse_cursor();
 	}
 }
@@ -6959,7 +6960,7 @@ static void do_gen(const int init_level)
 							break;
 						}
 						case 5: {
-							new_attributes(page, level);
+							new_attributes(&g_hero, page, level);
 							break;
 						}
 						case 6: {
