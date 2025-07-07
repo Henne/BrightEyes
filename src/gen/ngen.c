@@ -10,6 +10,7 @@
 #endif
 
 #if defined(_WIN32)
+#include <sys/stat.h>
 #include <wtypes.h>
 #endif
 
@@ -4575,8 +4576,10 @@ static void save_chr(volatile struct struct_hero *hero)
 		/* close an existing file before overwriting it */
 		if (handle != -1) close(handle);
 
-#if defined(__BORLANDC__) || defined(_WIN32)
+#if defined(__BORLANDC__)
 		handle = _creat(filename, O_BINARY | O_RDWR);
+#elif  defined(_WIN32)
+		handle = _open(filename, (_O_BINARY | _O_CREAT | _O_TRUNC | _O_WRONLY), _S_IWRITE);
 #else
 		handle = open(filename, (O_TRUNC | O_CREAT| O_RDWR), (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH));
 #endif
