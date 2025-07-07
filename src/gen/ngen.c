@@ -5496,27 +5496,28 @@ static void skill_inc_novice(volatile struct struct_hero *hero, const signed sho
 
 /**
  * \brief tries to increment a spell in novice mode
+ * \param[in] hero the hero
  * \param[in] spell index of the spell which should be incremented
  */
-static void spell_inc_novice(const signed short spell)
+static void spell_inc_novice(volatile struct struct_hero *hero, const signed short spell)
 {
 	int done = 0;
 
 	while (!done) {
 
 		/* leave the loop if 3 tries have been done or no attempts are left */
-		if ((g_spell_incs[spell].tries == 3) || (g_hero.spell_incs == 0)) {
+		if ((g_spell_incs[spell].tries == 3) || (hero->spell_incs == 0)) {
 			done = 1;
 		} else {
 
 			/* decrement counter for spell increments */
-			g_hero.spell_incs--;
+			hero->spell_incs--;
 
 			/* check if the test is passed */
-			if (random_interval_gen(2, 12) > g_hero.spells[spell]) {
+			if (random_interval_gen(2, 12) > hero->spells[spell]) {
 
 				/* increment spell */
-				g_hero.spells[spell]++;
+				hero->spells[spell]++;
 
 				/* set inc tries for this spell to zero */
 				g_spell_incs[spell].tries = 0;
@@ -5797,7 +5798,7 @@ static void fill_values(const int level)
 		/* automatic increase spells */
 		for (i = 0; g_hero.spell_incs > 0; i++) {
 			spell = g_autospells[g_hero.typus - 7][i];
-			spell_inc_novice(spell);
+			spell_inc_novice(&g_hero, spell);
 		}
 	}
 }
