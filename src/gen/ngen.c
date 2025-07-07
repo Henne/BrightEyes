@@ -4710,10 +4710,11 @@ static int change_sex(volatile struct struct_hero *hero)
 
 /**
  * \brief refresh the screen content
+ * \param[in] hero the hero
  * \param[in] page the current page
  * \param[in] level 1 = Novice / 2 = Advanced
  */
-static void refresh_background(const int page, const int level)
+static void refresh_background(volatile struct struct_hero *hero, const int page, const int level)
 {
 	g_gfx_ptr = g_vga_backbuffer;
 
@@ -4725,8 +4726,8 @@ static void refresh_background(const int page, const int level)
 		unsigned char* src;
 
 		/* hero is female */
-		if (g_hero.sex) {
-			src = g_buffer_sex_dat + 256 * g_hero.sex;
+		if (hero->sex) {
+			src = g_buffer_sex_dat + 256 * hero->sex;
 			vgalib_copy_to_screen(get_gfx_ptr(305, 7), src, 16, 16);
 		}
 
@@ -4758,7 +4759,7 @@ static void refresh_background(const int page, const int level)
 	if (page < 5) {
 
 		/* draw DMENGE.DAT or the archetype image and name */
-		if (g_hero.typus) {
+		if (hero->typus) {
 
 			g_clear_archetype_pic = 1;
 
@@ -4778,7 +4779,7 @@ static void refresh_background(const int page, const int level)
 	}
 
 	/* draw the head to the backbuffer */
-	if (g_hero.typus && ((page == 0) || (page > 4))) {
+	if (hero->typus && ((page == 0) || (page > 4))) {
 		draw_head(page);
 	}
 
@@ -4879,7 +4880,7 @@ static void print_values(const int page, const int level)
 
 	if (g_dsagen_lang == LANG_EN) { align_left = 225; align_right = 313; }
 
-	refresh_background(page, level);
+	refresh_background(&g_hero, page, level);
 
 #if defined(__BORLANDC__)
 	/* copy the complete backbuffer to the screen */
