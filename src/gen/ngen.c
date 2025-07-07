@@ -5533,68 +5533,67 @@ static void spell_inc_novice(volatile struct struct_hero *hero, const signed sho
 
 /**
  * \brief fills the values if typus is chosen
+ * \param[in] hero the hero
  * \param[in] level 1 = Novice / 2 = Advanced
  */
-static void fill_values(const int level)
+static void fill_values(volatile struct struct_hero *hero, const int level)
 {
 	const struct struct_money *money_ptr;
 	char textbuffer[92]; // 84 would be enough
-	signed short i;
-	signed short skill;
-	signed short spell;
+	int i;
 	signed short si;
 	int conv_incs = 0;
 
 	/* fill skill values */
 	for (i = 0; i < 52; i++) {
 
-		g_hero.skills[i] = g_skills[g_hero.typus][i];
+		hero->skills[i] = g_skills[hero->typus][i];
 
 		/* set skill_incs and skill_tries to zero */
 		g_skill_incs[i].tries = g_skill_incs[i].incs = 0;
 	}
 
 	/* set skill_attempts */
-	g_hero.skill_incs = g_initial_skill_incs[g_hero.typus - 1];
+	hero->skill_incs = g_initial_skill_incs[hero->typus - 1];
 
 	/* do magic user init */
-	if (g_hero.typus >= 7) {
+	if (hero->typus >= 7) {
 		/* fill initial spell values */
 		for (i = 0; i < 86; i++) {
-			g_hero.spells[i] = g_spells[g_hero.typus - 7][i];
+			hero->spells[i] = g_spells[hero->typus - 7][i];
 
 			/* set spell_incs and spell_tries to zero */
 			g_spell_incs[i].tries = g_spell_incs[i].incs = 0;
 		}
 
 		/* special mage values */
-		if (g_hero.typus == 9) {
+		if (hero->typus == 9) {
 			/* set staff spell to level 1 */
-			g_hero.staff_level = 1;
+			hero->staff_level = 1;
 			/* select mage school */
 			do {
-				g_hero.spell_school = gui_radio(get_text(47), 9,
+				hero->spell_school = gui_radio(get_text(47), 9,
 							get_text(48), get_text(49),
 							get_text(50), get_text(51),
 							get_text(52), get_text(53),
 							get_text(54), get_text(55),
 							get_text(56)) - 1;
 
-			} while (g_hero.spell_school == -2);
+			} while (hero->spell_school == -2);
 
 
 			/* add magic school modifications */
-			for (i = 0; g_house_mod[g_hero.spell_school].no > i; i++) {
+			for (i = 0; i < g_house_mod[hero->spell_school].no; i++) {
 
-				g_hero.spells[g_house_mod[g_hero.spell_school].spells[i]] +=
-					g_house_mod[g_hero.spell_school].mod[i];
+				hero->spells[g_house_mod[hero->spell_school].spells[i]] +=
+					g_house_mod[hero->spell_school].mod[i];
 			}
 		}
 
 		/* set spell and convertable increase attempts */
-		if (g_hero.typus <= 12) { // check to silence the BCC
-			g_hero.spell_incs = g_initial_spell_incs[g_hero.typus - 7];
-			conv_incs = g_initial_conv_incs[g_hero.typus - 7];
+		if (hero->typus <= 12) { // check to silence the BCC
+			hero->spell_incs = g_initial_spell_incs[hero->typus - 7];
+			conv_incs = g_initial_conv_incs[hero->typus - 7];
 		}
 
 		/* get convertable increase attempts */
@@ -5610,9 +5609,9 @@ static void fill_values(const int level)
 					i = conv_incs;
 				conv_incs -= i;
 				/* change spell attempts */
-				g_hero.spell_incs -= i;
+				hero->spell_incs -= i;
 				/* change skill attempts */
-				g_hero.skill_incs += i;
+				hero->skill_incs += i;
 			} else {
 
 				/* create string */
@@ -5623,151 +5622,150 @@ static void fill_values(const int level)
 					if (i > conv_incs)
 						i = conv_incs;
 					/* change spell attempts */
-					g_hero.spell_incs += i;
+					hero->spell_incs += i;
 					/* change skill attempts */
-					g_hero.skill_incs -= i;
+					hero->skill_incs -= i;
 				}
 			}
 		}
 	}
 
 	/* set LE */
-	g_hero.le = g_hero.le_max = g_init_le[g_hero.typus];
+	hero->le = hero->le_max = g_init_le[hero->typus];
 
 	/* set AE */
-	g_hero.ae = g_hero.ae_max = g_init_ae[g_hero.typus];
+	hero->ae = hero->ae_max = g_init_ae[hero->typus];
 
 	/* wanna change 10 spell_attempts against 1W6+2 AE ? */
-	if ((g_hero.typus == 9) && (level == 2) && gui_bool(get_text(268))) {
+	if ((hero->typus == 9) && (level == 2) && gui_bool(get_text(268))) {
 		/* change spell_attempts */
-		g_hero.spell_incs -= 10;
-		g_hero.ae_max += random_interval_gen(3, 8);
-		g_hero.ae = g_hero.ae_max;
+		hero->spell_incs -= 10;
+		hero->ae_max += random_interval_gen(3, 8);
+		hero->ae = hero->ae_max;
 	}
 
 	/* roll out size */
-	g_hero.height =
-		(unsigned char)random_interval_gen(g_height_range[g_hero.typus].min,
-						   g_height_range[g_hero.typus].max);
+	hero->height = (unsigned char)random_interval_gen(g_height_range[hero->typus].min,
+						   g_height_range[hero->typus].max);
 
 	/* calculate weight i = (height - weight_mod) * 40 */
-	g_hero.weight = 40 * ((unsigned short)g_hero.height - g_weight_mod[g_hero.typus]);
+	hero->weight = 40 * ((unsigned short)hero->height - g_weight_mod[hero->typus]);
 
 	/* roll out the money */
 	i = random_gen(20);
-	money_ptr = g_money_tab[g_hero.typus - 1];
+	money_ptr = g_money_tab[hero->typus - 1];
 	for (si = 0; money_ptr[si].value < i; si++);
 
-	g_hero.money = (signed long)(10 * random_interval_gen(money_ptr[si].min, money_ptr[si].max));
+	hero->money = (signed long)(10 * random_interval_gen(money_ptr[si].min, money_ptr[si].max));
 
 	/* calculate MR  = (KL + MU + Stufe) / 3 - 2 * AG
 	 * 		 = (WD + CO + Level) / 3 - 2 * SN */
-	g_hero.mr =
-		(g_hero.attrib[1].normal + g_hero.attrib[0].normal + g_hero.level) / 3
-			- 2 * g_hero.attrib[7].normal;
+	hero->mr =
+		(hero->attrib[1].normal + hero->attrib[0].normal + hero->level) / 3
+			- 2 * hero->attrib[7].normal;
 
 	/* add typus MR Modificator */
-	g_hero.mr += g_mr_mod[g_hero.typus];
+	hero->mr += g_mr_mod[hero->typus];
 
 	/* roll out god */
-	g_hero.god = random_gen(12);
+	hero->god = random_gen(12);
 
 	/* add gods boni */
-	switch (g_hero.god) {
+	switch (hero->god) {
 		case 1 : {
 			/* Praios: MU + 1 */
-			g_hero.attrib[0].current = ++g_hero.attrib[0].normal;
+			hero->attrib[0].current = ++hero->attrib[0].normal;
 			g_got_mu_bonus = 1;
 			break;
 		}
 		case 2 : {
 			/* Rondra: skill swords + 1 */
-			g_hero.skills[3]++;
+			hero->skills[3]++;
 			break;
 		}
 		case 3 : {
 			/* Efferd: skill swim + 1 */
-			g_hero.skills[14]++;
+			hero->skills[14]++;
 			break;
 		}
 		case 4 : {
 			/* Travia: skill treat poison + 1 */
-			g_hero.skills[44]++;
+			hero->skills[44]++;
 			break;
 		}
 		case 5 : {
 			/* Boron: skill human nature + 1 */
-			g_hero.skills[24]++;
+			hero->skills[24]++;
 			break;
 		}
 		case 6 : {
 			/* Hesinde: skill alchemy + 1 */
-			g_hero.skills[32]++;
+			hero->skills[32]++;
 			break;
 		}
 		case 7 : {
 			/* Firun: skills track and missle weapons + 1  */
-			g_hero.skills[26]++;
-			g_hero.skills[7]++;
+			hero->skills[26]++;
+			hero->skills[7]++;
 			break;
 		}
 		case 8 : {
 			/* Tsa: CH + 1 */
-			g_hero.attrib[2].current = ++g_hero.attrib[2].normal;
+			hero->attrib[2].current = ++hero->attrib[2].normal;
 			g_got_ch_bonus = 1;
 			break;
 		}
 		case 9 : {
 			/* Phex: skills hide and pickpocket + 1 */
-			g_hero.skills[49]++;
-			g_hero.skills[13]++;
+			hero->skills[49]++;
+			hero->skills[13]++;
 			break;
 		}
 		case 10 : {
 			/* Peraine: skills treat disease and wounds + 1 */
-			g_hero.skills[45]++;
-			g_hero.skills[46]++;
+			hero->skills[45]++;
+			hero->skills[46]++;
 			break;
 		}
 		case 11 : {
 			/* Ingerimm: skill tactics + 1*/
-			g_hero.skills[37]++;
+			hero->skills[37]++;
 			break;
 		}
 		case 12 : {
 			/* Rhaja: skills dance, seduce and instrument + 1*/
-			g_hero.skills[20]++;
-			g_hero.skills[16]++;
-			g_hero.skills[47]++;
+			hero->skills[20]++;
+			hero->skills[16]++;
+			hero->skills[47]++;
 			break;
 		}
 	}
 	/* calculate AT and PA values */
-	calc_at_pa(&g_hero);
+	calc_at_pa(hero);
 
 	/* if mode == novice */
 	if (level == 1) {
 		/* increase skills automatically */
-		for (i = 0; g_hero.skill_incs > 0; i++) {
-			skill = g_autoskills[g_hero.typus][i];
-			skill_inc_novice(&g_hero, skill);
+		for (i = 0; hero->skill_incs > 0; i++) {
+			const int skill = g_autoskills[hero->typus][i];
+			skill_inc_novice(hero, skill);
 		}
 
 		si = 0;
 		/* prepare mage automatic spell list */
-		if (g_hero.typus == 9) {
+		if (hero->typus == 9) {
 			/* Remark: HERO_TYPUS is equal to 9, g_autospells starts with typus = 7,
 			 * so g_autospells[2] is that of the Mage */
 
 			/* 1. house spells */
-			for (i = 0; g_house_mod[g_hero.spell_school].no > i; si++, i++) {
+			for (i = 0; g_house_mod[hero->spell_school].no > i; si++, i++) {
 				g_autospells[2][si] =
-						g_house_mod[g_hero.spell_school].spells[i];
+						g_house_mod[hero->spell_school].spells[i];
 			}
 			/* 2. all schools spells */
-			for (i = 0; g_school_tab[g_hero.spell_school].spells > i; si++, i++) {
+			for (i = 0; g_school_tab[hero->spell_school].spells > i; si++, i++) {
 				g_autospells[2][si] =
-					g_school_tab[g_hero.spell_school].first_spell + i;
+					g_school_tab[hero->spell_school].first_spell + i;
 			}
 			/* 3. five domination spells */
 				/* Herr der Tiere */
@@ -5782,12 +5780,12 @@ static void fill_values(const int level)
 			g_autospells[2][si++] = 0x4f;
 
 			/* 4. all house spells */
-			for (i = 0; g_house_mod[g_hero.spell_school].no > i; si++, i++) {
-				g_autospells[2][si] = g_house_mod[g_hero.spell_school].spells[i];
+			for (i = 0; g_house_mod[hero->spell_school].no > i; si++, i++) {
+				g_autospells[2][si] = g_house_mod[hero->spell_school].spells[i];
 			}
 			/* 5. all house spells */
-			for (i = 0; g_house_mod[g_hero.spell_school].no > i; si++, i++) {
-				g_autospells[2][si] = g_house_mod[g_hero.spell_school].spells[i];
+			for (i = 0; g_house_mod[hero->spell_school].no > i; si++, i++) {
+				g_autospells[2][si] = g_house_mod[hero->spell_school].spells[i];
 			}
 			/* 6. random spells */
 			while (si < 45) {
@@ -5796,9 +5794,9 @@ static void fill_values(const int level)
 		}
 
 		/* automatic increase spells */
-		for (i = 0; g_hero.spell_incs > 0; i++) {
-			spell = g_autospells[g_hero.typus - 7][i];
-			spell_inc_novice(&g_hero, spell);
+		for (i = 0; hero->spell_incs > 0; i++) {
+			const int spell = g_autospells[hero->typus - 7][i];
+			spell_inc_novice(hero, spell);
 		}
 	}
 }
@@ -6171,7 +6169,7 @@ static int select_typus(const int level)
 
 			/* reset boni flags */
 			g_got_mu_bonus = g_got_ch_bonus = 0;
-			fill_values(level);
+			fill_values(&g_hero, level);
 
 			return 1;
 		} else {
@@ -6888,7 +6886,7 @@ static int choose_typus(const int level)
 		g_head_first = g_head_current = g_head_first_male[g_head_typus];
 		g_head_last = g_head_first_female[g_head_typus] - 1;
 	}
-	fill_values(level);
+	fill_values(&g_hero, level);
 
 	return 1;
 }
