@@ -4824,21 +4824,18 @@ static int attrib_coords_y(const int attrib)
 
 /**
  * \brief print the attribute values
+ * \param[in] hero the hero
  */
-static void print_attribs(void)
+static void print_attribs(volatile struct struct_hero *hero)
 {
-	volatile signed char *p;
 	char buf[8];
-
 	int i;
 
-	p = &g_hero.attrib[0].normal;
-
-	for (i = 0; i < 14; p += 3, i++) {
+	for (i = 0; i < 14; i++) {
 		/* don't print 0s */
-		if (p[0] != 0) {
+		if (hero->attrib[i].normal) {
 			/* print attribute value in decimal form */
-			sprintf(buf, "%d", p[0]);
+			sprintf(buf, "%d", hero->attrib[i].normal);
 			print_str(buf, attrib_coords_x(i), attrib_coords_y(i));
 		}
 	}
@@ -4912,7 +4909,7 @@ static void print_values(const int page, const int level)
 			print_str((const char*)g_hero.name, 180, 12);
 
 			/* print attributes */
-			print_attribs();
+			print_attribs(&g_hero);
 
 			/* return if no typus */
 			if (!g_hero.typus) break;
