@@ -4,18 +4,14 @@
 #include <stdarg.h>
 #include <ctype.h>
 #include <fcntl.h>
-
-#if defined(linux)
 #include <sys/stat.h>
-#endif
 
 #if defined(_WIN32)
-#include <sys/stat.h>
 #include <wtypes.h>
 #endif
 
 #if defined(__BORLANDC__)
-#include <IO.H>		// lseek, _read, _close, _creat, open, write
+#include <IO.H>		// lseek, _read, _close, open, write
 #include <DOS.H>
 #include <BIOS.H>	// bioskey, int86x()
 #include <CONIO.H>	// clrscr()
@@ -59,7 +55,6 @@ static unsigned short gen_rotl(unsigned short op, unsigned short count)
 
 static inline void clrscr(void) { }
 #define __abs__(v) abs(v)
-#define _creat creat
 #define _read read
 #define _close close
 #else
@@ -4577,7 +4572,7 @@ static void save_chr(volatile struct struct_hero *hero)
 		if (handle != -1) close(handle);
 
 #if defined(__BORLANDC__)
-		handle = _creat(filename, O_BINARY | O_RDWR);
+		handle = open(filename, O_BINARY | _O_WRITABLE | O_TRUNC | O_CREAT | O_DENYNONE | O_RDWR, S_IREAD | S_IWRITE);
 #elif  defined(_WIN32)
 		handle = _open(filename, (_O_BINARY | _O_CREAT | _O_TRUNC | _O_WRONLY), _S_IWRITE);
 #else
@@ -4598,10 +4593,14 @@ static void save_chr(volatile struct struct_hero *hero)
 			}
 			if (g_called_with_args == 0) return;
 
-#if defined(__BORLANDC__) || defined(_WIN32)
+#if defined(__BORLANDC__)
 			strncpy(path, g_str_temp_dir, 20);
 			strcat(path, filename);
-			handle = _creat(path, O_BINARY | O_RDWR);
+			handle = open(filename, O_BINARY | _O_WRITABLE | O_TRUNC | O_CREAT | O_DENYNONE | O_RDWR, S_IREAD | S_IWRITE);
+#elif defined(_WIN32)
+			strncpy(path, g_str_temp_dir, 20);
+			strcat(path, filename);
+			handle = _open(filename, (_O_BINARY | _O_CREAT | _O_TRUNC | _O_WRONLY), _S_IWRITE);
 #else
 			strncpy(path, "TEMP/", 6);
 			strcat(path, filename);
