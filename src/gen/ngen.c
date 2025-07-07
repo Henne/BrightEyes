@@ -5349,7 +5349,7 @@ static void new_attributes(volatile struct struct_hero *hero, const int page, co
 
 		di = values[di - 1];
 		/* write randval to the selected positive attribute */
-		//g_hero.attrib[di].normal = g_hero.attrib[di].current = randval;
+		//hero->attrib[di].normal = hero->attrib[di].current = randval;
 		att_ptr[3 * di + 0] = att_ptr[3 * di + 1] = randval;
 
 		mouse_bg();
@@ -5389,7 +5389,7 @@ static void new_attributes(volatile struct struct_hero *hero, const int page, co
 		di = values[di - 1];
 
 		/* write randval to the selected negative attribute */
-		//g_hero.attrib[di].normal = g_hero.attrib[di].current = randval;
+		//hero->attrib[di].normal = hero->attrib[di].current = randval;
 		att_ptr[3 * di + 0] = att_ptr[3 * di + 1] = randval;
 
 		mouse_bg();
@@ -5468,7 +5468,7 @@ static void skill_inc_novice(volatile struct struct_hero *hero, const signed sho
 			hero->skill_incs--;
 
 			/* check if the test is passed */
-			if (random_interval_gen(2, 12) > g_hero.skills[skill]) {
+			if (random_interval_gen(2, 12) > hero->skills[skill]) {
 				/* increment skill */
 				hero->skills[skill]++;
 
