@@ -4843,17 +4843,18 @@ static void print_attribs(volatile struct struct_hero *hero)
 
 /**
  * \brief print archetype name to the backbuffer
+ * \param[in] hero the hero
  */
-static void print_typusname(void)
+static void print_typusname(volatile struct struct_hero *hero)
 {
-	if (g_hero.sex) {
+	if (hero->sex) {
 		/* print female archetype name */
-		print_str(get_text(271 + g_hero.typus),
-			get_line_start_c(get_text(271 + g_hero.typus), 16, 128), 184);
+		print_str(get_text(271 + hero->typus),
+			get_line_start_c(get_text(271 + hero->typus), 16, 128), 184);
 	} else {
 		/* print male archetype name */
-		print_str(get_text(17 + g_hero.typus),
-			get_line_start_c(get_text(17 + g_hero.typus), 16, 128),	184);
+		print_str(get_text(17 + hero->typus),
+			get_line_start_c(get_text(17 + hero->typus), 16, 128), 184);
 	}
 }
 
@@ -4899,7 +4900,7 @@ static void print_values(const int page, const int level)
 #endif
 
 	if ((g_hero.typus) && (0 <= page) && (page <= 4)) {
-		print_typusname();
+		print_typusname(&g_hero);
 	}
 
 	switch (page) {
