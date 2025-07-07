@@ -5450,26 +5450,27 @@ static void calc_at_pa(volatile struct struct_hero *hero)
 
 /**
  * \brief tries to increment a skill in novice mode
+ * \param[in] hero the hero
  * \param skill	index of the skill which should be incremented
  */
-static void skill_inc_novice(const signed short skill)
+static void skill_inc_novice(volatile struct struct_hero *hero, const signed short skill)
 {
 	int done = 0;
 
 	while (!done) {
 
 		/* leave the loop if 3 tries have been done or no attempts are left */
-		if ((g_skill_incs[skill].tries == 3) || (g_hero.skill_incs == 0)) {
+		if ((g_skill_incs[skill].tries == 3) || (hero->skill_incs == 0)) {
 			/* set the flag to leave this loop */
 			done = 1;
 		} else {
 			/* decrement counter for skill increments */
-			g_hero.skill_incs--;
+			hero->skill_incs--;
 
 			/* check if the test is passed */
 			if (random_interval_gen(2, 12) > g_hero.skills[skill]) {
 				/* increment skill */
-				g_hero.skills[skill]++;
+				hero->skills[skill]++;
 
 				/* set inc tries for this skill to zero */
 				g_skill_incs[skill].tries = 0;
@@ -5480,10 +5481,10 @@ static void skill_inc_novice(const signed short skill)
 				if (skill <= 6) {
 
 					/* set increment the lower AT/PA value */
-					if (g_hero.at_weapon[skill] > g_hero.pa_weapon[skill])
-						g_hero.pa_weapon[skill]++;
+					if (hero->at_weapon[skill] > hero->pa_weapon[skill])
+						hero->pa_weapon[skill]++;
 					else
-						g_hero.at_weapon[skill]++;
+						hero->at_weapon[skill]++;
 				}
 			} else {
 				/* inc tries for that skill */
@@ -5748,7 +5749,7 @@ static void fill_values(const int level)
 		/* increase skills automatically */
 		for (i = 0; g_hero.skill_incs > 0; i++) {
 			skill = g_autoskills[g_hero.typus][i];
-			skill_inc_novice(skill);
+			skill_inc_novice(&g_hero, skill);
 		}
 
 		si = 0;
