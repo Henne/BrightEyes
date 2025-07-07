@@ -7372,6 +7372,7 @@ static void intro_title(void)
 	}
 
 	/* palette fade in */
+	sdl_toggle_pal_logic();
 	if (g_dsagen_lang == LANG_DE) {
 
 		memcpy(g_vga_backbuffer + 500, &g_pal_dsalogo, 96);
@@ -7405,6 +7406,7 @@ static void intro_title(void)
 		}
 
 	}
+	sdl_toggle_pal_logic();
 
 	/* print version */
 	set_textcolor(0xff, 0x00); // WHITE ON BLACK
@@ -7412,6 +7414,7 @@ static void intro_title(void)
 	vsync_or_key(400);
 
 	/* palette fade out */
+	sdl_toggle_pal_logic();
 	if (g_dsagen_lang == LANG_DE) {
 
 		memcpy(g_vga_backbuffer, &g_pal_dsalogo, 96);
@@ -7441,6 +7444,7 @@ static void intro_title(void)
 			set_palette(pal_dst, 0, 256);
 		}
 	}	
+	sdl_toggle_pal_logic();
 }
 
 /**

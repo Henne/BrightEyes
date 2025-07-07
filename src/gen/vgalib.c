@@ -38,11 +38,17 @@ static SDL_mutex *PixelsMutex = NULL;
 static Uint32 *pixels = NULL;
 static Uint8 *vga_bak = NULL;
 static int forced_update = 0;
+static int pal_logic = 0;
 static int pal_updated = 0;
 static int win_resized = 0;
 
 /* instrumentation to count calls for sdl_update_rect_window */
 static int calls = 0, updates = 0;
+
+void sdl_toggle_pal_logic(void)
+{
+	if (pal_logic) pal_logic = 0; else pal_logic = 1;
+}
 
 static const int SHOW_DRIVERS = 0; // set to 1 for driver info
 
@@ -367,8 +373,10 @@ void set_palette(const unsigned char *pointer, const unsigned char first_color, 
 	for (i = 0; i < colors; i++)
 		palette[first_color + i] = get_ABGR(pointer + 3 * i);
 
-	pal_updated = 1;
-	sdl_update_rect_window(0, 0, O_WIDTH, O_HEIGHT);
+	if (pal_logic) {
+		pal_updated = 1;
+		sdl_update_rect_window(0, 0, O_WIDTH, O_HEIGHT);
+	}
 }
 #endif
 
