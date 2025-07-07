@@ -4626,15 +4626,16 @@ static void save_chr(volatile struct struct_hero *hero)
 
 /**
  * \brief enter the name of a hero
+ * \param[in] hero the hero
  */
-static void enter_name(void)
+static void enter_name(volatile struct struct_hero *hero)
 {
 	mouse_bg();
 
 	/* restore background underneath the name */
 	vgalib_copy_to_screen(get_gfx_ptr(180, 12), g_name_bar, 15 * 6, 8);
 
-	enter_string((char*)g_hero.name, 180, 12, 15, 1);
+	enter_string((char*)hero->name, 180, 12, 15, 1);
 
 	/* restore background underneath the name */
 	vgalib_copy_to_screen(get_gfx_ptr(180, 12), g_name_bar, 15 * 6, 8);
@@ -4642,7 +4643,7 @@ static void enter_name(void)
 	mouse_cursor();
 
 	/* print the name on top */
-	print_str((const char*)g_hero.name, 180, 12);
+	print_str((const char*)hero->name, 180, 12);
 }
 
 /**
@@ -6938,7 +6939,7 @@ static void do_gen(const int init_level)
 					g_in_key_ext = 0;
 					switch (menu_option) {
 						case 1: {
-							enter_name();
+							enter_name(&g_hero);
 							break;
 						}
 						case 2: {
@@ -6989,7 +6990,7 @@ static void do_gen(const int init_level)
 			full_refresh = change_sex();
 
 		if (g_in_key_ext == KEY_CTRL_F4)
-			enter_name();
+			enter_name(&g_hero);
 
 		if ((page == 0) && (g_in_key_ext == KEY_6)) {
 			level = (level == 1 ? 2 : 1);
