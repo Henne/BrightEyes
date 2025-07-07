@@ -4670,20 +4670,21 @@ static void draw_head(const int page)
 
 /**
  * \brief changes the sex of the hero
+ * \param[in] hero the hero
  * \return 0 = no full screen refresh needed otherwise 1
  */
-static int change_sex(void)
+static int change_sex(volatile struct struct_hero *hero)
 {
 	unsigned char* dst;
 	unsigned char* src;
 	int retval = 0;
 
 	/* change sex of the hero */
-	g_hero.sex ^= 1;
+	hero->sex ^= 1;
 
 	/* hero has a typus */
-	if (g_hero.typus) {
-		if (g_hero.sex != 0) {
+	if (hero->typus) {
+		if (hero->sex) {
 			/* from male to female */
 			g_head_first = g_head_current = g_head_first_female[g_head_typus];
 			g_head_last = g_head_first_male[g_head_typus + 1] - 1;
@@ -4698,7 +4699,7 @@ static int change_sex(void)
 	} else {
 		/* draw the gender icon */
 		dst = g_vga_memstart + 7 * O_WIDTH + 305;
-		src = g_buffer_sex_dat + 256 * g_hero.sex;
+		src = g_buffer_sex_dat + 256 * hero->sex;
 		mouse_bg();
 		vgalib_copy_to_screen(dst, src, 16, 16);
 		mouse_cursor();
@@ -6943,7 +6944,7 @@ static void do_gen(const int init_level)
 							break;
 						}
 						case 2: {
-							full_refresh = change_sex();
+							full_refresh = change_sex(&g_hero);
 							break;
 						}
 						case 3: {
@@ -6987,7 +6988,7 @@ static void do_gen(const int init_level)
 		}
 
 		if (g_in_key_ext == KEY_CTRL_F3)
-			full_refresh = change_sex();
+			full_refresh = change_sex(&g_hero);
 
 		if (g_in_key_ext == KEY_CTRL_F4)
 			enter_name(&g_hero);
