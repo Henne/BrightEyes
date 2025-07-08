@@ -6193,11 +6193,12 @@ static int select_typus(volatile struct struct_hero *hero, const int level)
 
 /**
  * \brief increment a skill
+ * \param[in] hero the hero
  * \param[in] skill index of the skill
  * \param[in] max maximum number of increase attempts
  * \param[in] msg textmessage iff max is reached
  */
-static void inc_skill(const signed short skill, const signed short max, char *msg)
+static void inc_skill(volatile struct struct_hero *hero, const signed short skill, const signed short max, char *msg)
 {
 	/* no more increments than the maximum */
 	if (g_skill_incs[skill].incs >= max) {
@@ -6211,12 +6212,13 @@ static void inc_skill(const signed short skill, const signed short max, char *ms
 	}
 
 	/* decrement total number of skill inc tries */
-	g_hero.skill_incs--;
-	if (random_interval_gen(2, 12) > g_hero.skills[skill]) {
+	hero->skill_incs--;
+	if (random_interval_gen(2, 12) > hero->skills[skill]) {
+
 		/* print sucess message */
 		infobox(get_text(152), 0);
 		/* increment skill */
-		g_hero.skills[skill]++;
+		hero->skills[skill]++;
 		/* reset tries */
 		g_skill_incs[skill].tries = 0;
 		/* increment skill increments */
@@ -6225,12 +6227,12 @@ static void inc_skill(const signed short skill, const signed short max, char *ms
 		/* check if we have a melee attack skill */
 		if (skill <= 6) {
 			/* check if AT > PA */
-			if (g_hero.at_weapon[skill] > g_hero.pa_weapon[skill]) {
+			if (hero->at_weapon[skill] > hero->pa_weapon[skill]) {
 				/* inc PA */
-				g_hero.pa_weapon[skill]++;
+				hero->pa_weapon[skill]++;
 			} else {
 				/* inc AT */
-				g_hero.at_weapon[skill]++;
+				hero->at_weapon[skill]++;
 			}
 		}
 
@@ -6277,7 +6279,7 @@ static void select_skill(const int page)
 						get_text(101), get_text(102), get_text(103)) - 1;
 
 					if (skill != -2) {
-						inc_skill(skill, 1, get_text(148));
+						inc_skill(&g_hero, skill, 1, get_text(148));
 					}
 
 				} else if (group == 2) {
@@ -6292,7 +6294,7 @@ static void select_skill(const int page)
 
 					if (skill != -2) {
 						skill += 9;
-						inc_skill(skill, 2, get_text(149));
+						inc_skill(&g_hero, skill, 2, get_text(149));
 					}
 				}
 			}
@@ -6312,7 +6314,7 @@ static void select_skill(const int page)
 
 					if (skill != -2) {
 						skill += 19;
-						inc_skill(skill, 2, get_text(149));
+						inc_skill(&g_hero, skill, 2, get_text(149));
 					}
 
 				} else if (group == 2) {
@@ -6324,7 +6326,7 @@ static void select_skill(const int page)
 
 					if (skill != -2) {
 						skill += 32;
-						inc_skill(skill, 3, get_text(150));
+						inc_skill(&g_hero, skill, 3, get_text(150));
 					}
 				}
 			}
@@ -6342,7 +6344,7 @@ static void select_skill(const int page)
 
 					if (skill != -2) {
 						skill += 41;
-						inc_skill(skill, 2, get_text(149));
+						inc_skill(&g_hero, skill, 2, get_text(149));
 					}
 
 				} else if (group == 2) {
@@ -6352,7 +6354,7 @@ static void select_skill(const int page)
 
 					if (skill != -2) {
 						skill += 26;
-						inc_skill(skill, 2, get_text(149));
+						inc_skill(&g_hero, skill, 2, get_text(149));
 					}
 
 				} else if (group == 3) {
@@ -6362,7 +6364,7 @@ static void select_skill(const int page)
 
 					if (skill != -2) {
 						skill += 50;
-						inc_skill(skill, 1, get_text(148));
+						inc_skill(&g_hero, skill, 1, get_text(148));
 					}
 				}
 			}
