@@ -6712,11 +6712,12 @@ static void select_spell(volatile struct struct_hero *hero, const int page)
 
 /**
  * \brief select attack and parade values
+ * \param[in] hero the hero
  * \param[in] page the current page
  * \param[in] level 1 = Novice / 2 = Advanced
  * \return 0 = no changes / 1 = at/pa values changed
  */
-static int select_atpa(const int page, const int level)
+static int select_atpa(volatile struct struct_hero *hero, const int page, const int level)
 {
 	int skill;
 	int retval = 0;
@@ -6732,7 +6733,7 @@ static int select_atpa(const int page, const int level)
 			get_text(99), get_text(100), get_text(101)) - 1;
 
 		if (skill != -2) {
-			if (g_hero.skills[skill] <= 0) {
+			if (hero->skills[skill] <= 0) {
 				infobox(get_text(260), 0);
 			} else {
 
@@ -6741,12 +6742,12 @@ static int select_atpa(const int page, const int level)
 				if (increase != -1) {
 					if (increase == 1) {
 						/* increase attack */
-						if (g_hero.skills[skill] >= 0 &&
-							(g_hero.pa_weapon[skill] > g_hero.atpa_base)) {
+						if (hero->skills[skill] >= 0 &&
+							(hero->pa_weapon[skill] > hero->atpa_base)) {
 							/* inc AT */
-							g_hero.at_weapon[skill]++;
+							hero->at_weapon[skill]++;
 							/* dec PA */
-							g_hero.pa_weapon[skill]--;
+							hero->pa_weapon[skill]--;
 
 							full_refresh = 1;
 							retval = 1;
@@ -6754,12 +6755,12 @@ static int select_atpa(const int page, const int level)
 							infobox(get_text(255), 0);
 						}
 					} else {
-						if (g_hero.skills[skill] >= 0 &&
-							(g_hero.at_weapon[skill] > g_hero.atpa_base)) {
+						if (hero->skills[skill] >= 0 &&
+							(hero->at_weapon[skill] > hero->atpa_base)) {
 							/* dec AT */
-							g_hero.at_weapon[skill]--;
+							hero->at_weapon[skill]--;
 							/* inc PA */
-							g_hero.pa_weapon[skill]++;
+							hero->pa_weapon[skill]++;
 
 							full_refresh = 1;
 							retval = 1;
@@ -6771,7 +6772,7 @@ static int select_atpa(const int page, const int level)
 			}
 		}
 
-		if (full_refresh) print_values(&g_hero, page, level);
+		if (full_refresh) print_values(hero, page, level);
 
 	} while (skill != -2);
 
@@ -6990,7 +6991,7 @@ static void do_gen(const int init_level)
 				}
 
 			} else if ((1 <= page) && (page <= 3)) 	select_skill(&g_hero, page);
-			  else if (page == 4)			select_atpa(page, level);
+			  else if (page == 4)			select_atpa(&g_hero, page, level);
 			  else if ((5 <= page) && (page <= 10)) select_spell(&g_hero, page);
 		}
 
