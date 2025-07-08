@@ -6797,10 +6797,9 @@ static int choose_typus(volatile struct struct_hero *hero, const int level)
 {
 	int choosen_typus;
 	char name_bak[20];
-	signed char sex_bak;
-
-	int i;
 	int typus_names;
+	int i;
+	signed char sex_bak;
 
 	if (!gui_bool(get_text(264)))
 		return 0;
