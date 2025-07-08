@@ -6795,9 +6795,7 @@ static int select_atpa(volatile struct struct_hero *hero, const int page, const 
  */
 static int choose_typus(volatile struct struct_hero *hero, const int level)
 {
-	volatile signed char *ptr;
 	int choosen_typus;
-	int randval;
 	char name_bak[20];
 	signed char sex_bak;
 
@@ -6833,52 +6831,65 @@ static int choose_typus(volatile struct struct_hero *hero, const int level)
 	/* set typus */
 	hero->typus = (signed char)choosen_typus;
 
-	ptr = &hero->attrib[0].normal;
-
 	/* roll out positive attribute values */
-	for (i = 0; i < 7; i ++) {
+	for (i = 0; i < 7; i++) {
 
-		randval = random_interval_gen(8, 13);
+		signed char randval = random_interval_gen(8, 13);
 
 		if (randval > 8)
 			randval--;
 
-		/* set attrib.current ant attrib.normal */
-		ptr[3 * i] = ptr[3 * i + 1] = (signed char)randval;
+		/* set attributes */
+		hero->attrib[i].normal = randval;
+		hero->attrib[i].current = randval;
 	}
 
-	ptr = &hero->attrib[7].normal;
-
 	/* roll out negative attribute values */
-	for (i = 0; i < 7; i ++) {
+	for (i = 7; i < 14; i++) {
 
-		randval = random_interval_gen(2, 7);
+		signed char randval = random_interval_gen(2, 7);
 
 		if (randval < 7)
 			randval++;
 
-		ptr[3 * i] = ptr[3 * i + 1] = (signed char)randval;
+		/* set attributes */
+		hero->attrib[i].normal = randval;
+		hero->attrib[i].current = randval;
 	}
+
+#if !defined(__BORLANDC__)
+	fprintf(stderr, "choose_typus() initial attribute values\n");
+	for (i = 0; i < 14; i++)
+		fprintf(stderr, "\t%s = %d\n", get_text(i + 32), hero->attrib[i].normal);
+	fprintf(stderr, "choose_typus() attribute requirement adjustments\n");
+#endif
 
 	/* adjust typus attribute requirements */
 	for (i = 0; i < 4; i++) {
 
-		/* calc pointer to attribute */
-		ptr = &hero->attrib[g_reqs[choosen_typus][i].attrib].normal;
-		/* get the required value */
-		randval = g_reqs[choosen_typus][i].value;
+		/* get attribute requirement */
+		const int att = g_reqs[choosen_typus][i].attrib;
+		signed char value = g_reqs[choosen_typus][i].value;
+		const int is_upper = ((unsigned char)value & 0x80) ? 1 : 0;
+		const signed char v = (value & 0x7f);
 
-		if (randval != 1) {
+#if !defined(__BORLANDC__)
+		fprintf(stderr, "\t%s %c= %d\n", get_text(att + 32), is_upper ? '<' : '>', v);
+#endif
 
-			if (randval & 0x80) {
+		if (value != 1) {
+
+			if (is_upper) {
 				/* attribute upper bound */
-				if ((signed char)ptr[0] > (randval & 0x7f)) {
-					ptr[0] = ptr[1] = (signed char)(randval & 0x7f);
+				if (hero->attrib[att].normal > v) {
+					hero->attrib[att].normal = v;
+					hero->attrib[att].current = v;
 				}
 			} else {
 				/* attribute lower bound */
-				if ((signed char)ptr[0] < randval) {
-					ptr[0] = ptr[1] = (signed char)randval;
+				if (hero->attrib[att].normal < v) {
+					hero->attrib[att].normal = v;
+					hero->attrib[att].current = v;
 				}
 			}
 		}
@@ -6890,7 +6901,6 @@ static int choose_typus(volatile struct struct_hero *hero, const int level)
 	wait_for_vsync();
 	set_palette(g_buffer_typus + 128 * 184 + 2, 0, 32);
 	mouse_cursor();
-
 
 	g_head_typus = (hero->typus > 10 ? 10 : hero->typus);
 
