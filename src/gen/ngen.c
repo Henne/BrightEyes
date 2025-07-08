@@ -6066,10 +6066,11 @@ static void change_attributes(volatile struct struct_hero *hero, const int page,
 
 /**
  * \brief select a possible typus with current attribute values
+ * \param[in] hero the hero
  * \param[in] level 1 = Novice / 2 = Advanced
  * \return 0 = no changes / 1 = archetype selected
  */
-static int select_typus(const int level)
+static int select_typus(volatile struct struct_hero *hero, const int level)
 {
 	volatile signed char *ptr;
 	signed short i;
@@ -6080,7 +6081,6 @@ static int select_typus(const int level)
 	signed char possible_types;
 	signed char ltmp2;
 
-
 	struct type_bitmap t;
 
 	old_typus = -1;
@@ -6088,18 +6088,18 @@ static int select_typus(const int level)
 	t = *(struct type_bitmap*)&g_type_bitmap;
 
 	/* check if attribs have been set */
-	if (g_hero.attrib[0].normal != 0) {
+	if (hero->attrib[0].normal) {
 
 		/* save the old typus */
-		old_typus = g_hero.typus;
+		old_typus = hero->typus;
 		
 		/* disable MU bonus */
 		if (g_got_mu_bonus) {
-			g_hero.attrib[0].current = --g_hero.attrib[0].normal;
+			hero->attrib[0].current = --hero->attrib[0].normal;
 		}
 		/* disable CH bonus */
 		if (g_got_ch_bonus) {
-			g_hero.attrib[2].current = --g_hero.attrib[2].normal;
+			hero->attrib[2].current = --hero->attrib[2].normal;
 		}
 		possible_types = 0;
 
@@ -6107,7 +6107,7 @@ static int select_typus(const int level)
 			impossible = 0;
 			for (si = 0; si < 4; si++) {
 
-				ptr = &g_hero.attrib[g_reqs[i][si].attrib].normal;
+				ptr = &hero->attrib[g_reqs[i][si].attrib].normal;
 
 				ltmp2 = *(ptr);
 
@@ -6122,14 +6122,14 @@ static int select_typus(const int level)
 
 			if (!impossible) {
 
-				g_type_names[possible_types] = 	get_text( (g_hero.sex ? 271 : 17 ) + i);
+				g_type_names[possible_types] = 	get_text( (hero->sex ? 271 : 17 ) + i);
 				t.t[possible_types] = (char)i;
 				possible_types++;
 			}
 		}
 
 		if (!possible_types) {
-			if (!can_change_attributes(&g_hero)) {
+			if (!can_change_attributes(hero)) {
 				/* totally messed up values */
 				infobox(get_text(284), 0);
 			} else {
@@ -6150,9 +6150,9 @@ static int select_typus(const int level)
 		if ((di != -1) && (t.t[di - 1] != old_typus)) {
 
 			/* set new typus */
-			g_hero.typus = t.t[di - 1];
+			hero->typus = t.t[di - 1];
 
-			load_typus(g_hero.typus);
+			load_typus(hero->typus);
 
 			mouse_bg();
 			call_fill_rect_gen(g_vga_memstart, 16, 8, 143, 191, 0);
@@ -6160,9 +6160,9 @@ static int select_typus(const int level)
 			set_palette(g_buffer_typus + 128 * 184 + 2, 0, 32);
 			mouse_cursor();
 
-			g_head_typus = (g_hero.typus > 10 ? 10 : g_hero.typus);
+			g_head_typus = (hero->typus > 10 ? 10 : hero->typus);
 
-			if (g_hero.sex) {
+			if (hero->sex) {
 				g_head_first = g_head_current = g_head_first_female[g_head_typus];
 				g_head_last = g_head_first_male[g_head_typus + 1] - 1;
 			} else {
@@ -6172,15 +6172,15 @@ static int select_typus(const int level)
 
 			/* reset boni flags */
 			g_got_mu_bonus = g_got_ch_bonus = 0;
-			fill_values(&g_hero, level);
+			fill_values(hero, level);
 
 			return 1;
 		} else {
 			if (g_got_mu_bonus) {
-				g_hero.attrib[0].current = ++g_hero.attrib[0].normal;
+				hero->attrib[0].current = ++hero->attrib[0].normal;
 			}
 			if (g_got_ch_bonus) {
-				g_hero.attrib[2].current = ++g_hero.attrib[2].normal;
+				hero->attrib[2].current = ++hero->attrib[2].normal;
 			}
 		}
 
@@ -6967,7 +6967,7 @@ static void do_gen(const int init_level)
 							break;
 						}
 						case 6: {
-							full_refresh = select_typus(level);
+							full_refresh = select_typus(&g_hero, level);
 							break;
 						}
 						case 7: {
