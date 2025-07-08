@@ -6903,9 +6903,10 @@ static int choose_typus(volatile struct struct_hero *hero, const int level)
 
 /**
  * \brief main loop of gen
+ * \param[in] hero the hero
  * \param[in] init_level 1 = Novice / 2 = Advanced
  */
-static void do_gen(const int init_level)
+static void do_gen(volatile struct struct_hero *hero, const int init_level)
 {
 	int done = 0;
 	int menu_option;
@@ -6915,7 +6916,7 @@ static void do_gen(const int init_level)
 	int page = 0;
 
 	/* initialize the hero structure */
-	full_refresh = clear_hero(&g_hero);
+	full_refresh = clear_hero(hero);
 
 	/* emulate a right click to open the menu */
 	g_mouse_rightclick_event = 1;
@@ -6924,7 +6925,7 @@ static void do_gen(const int init_level)
 	while (!done) {
 
 		if (full_refresh) {
-			print_values(&g_hero, page, level);
+			print_values(hero, page, level);
 			full_refresh = 0;
 		}
 
@@ -6945,44 +6946,44 @@ static void do_gen(const int init_level)
 					get_text(262),get_text(9),  get_text(258));
 
 				if (menu_option != -1) {
-					if ((menu_option >= 4) && (menu_option < 6) && (g_hero.attrib[0].normal) && !gui_bool(get_text(13))) {
+					if ((menu_option >= 4) && (menu_option < 6) && (hero->attrib[0].normal) && !gui_bool(get_text(13))) {
 						menu_option = 0;
 					}
 					g_in_key_ext = 0;
 					switch (menu_option) {
 						case 1: {
-							enter_name(&g_hero);
+							enter_name(hero);
 							break;
 						}
 						case 2: {
-							full_refresh = change_sex(&g_hero);
+							full_refresh = change_sex(hero);
 							break;
 						}
 						case 3: {
-							change_attributes(&g_hero, page, level);
+							change_attributes(hero, page, level);
 							break;
 						}
 						case 4: {
-							full_refresh = clear_hero(&g_hero);
+							full_refresh = clear_hero(hero);
 
 							/* imediately open the menu */
 							g_mouse_rightclick_event = 1;
 							break;
 						}
 						case 5: {
-							new_attributes(&g_hero, page, level);
+							new_attributes(hero, page, level);
 							break;
 						}
 						case 6: {
-							full_refresh = select_typus(&g_hero, level);
+							full_refresh = select_typus(hero, level);
 							break;
 						}
 						case 7: {
-							full_refresh = choose_typus(&g_hero, level);
+							full_refresh = choose_typus(hero, level);
 							break;
 						}
 						case 8: {
-							save_chr(&g_hero);
+							save_chr(hero);
 							break;
 						}
 						case 9: {
@@ -6993,16 +6994,16 @@ static void do_gen(const int init_level)
 					}
 				}
 
-			} else if ((1 <= page) && (page <= 3)) 	select_skill(&g_hero, page);
-			  else if (page == 4)			select_atpa(&g_hero, page, level);
-			  else if ((5 <= page) && (page <= 10)) select_spell(&g_hero, page);
+			} else if ((1 <= page) && (page <= 3)) 	select_skill(hero, page);
+			  else if (page == 4)			select_atpa(hero, page, level);
+			  else if ((5 <= page) && (page <= 10)) select_spell(hero, page);
 		}
 
 		if (g_in_key_ext == KEY_CTRL_F3)
-			full_refresh = change_sex(&g_hero);
+			full_refresh = change_sex(hero);
 
 		if (g_in_key_ext == KEY_CTRL_F4)
-			enter_name(&g_hero);
+			enter_name(hero);
 
 		if ((page == 0) && (g_in_key_ext == KEY_6)) {
 			level = (level == 1 ? 2 : 1);
@@ -7024,7 +7025,7 @@ static void do_gen(const int init_level)
 		/* Change Head Logic */
 		if ((page == 0) && ((g_in_key_ext == KEY_UP) || (g_in_key_ext == KEY_DOWN))) {
 
-			if (g_hero.typus) {
+			if (hero->typus) {
 				if (g_in_key_ext == KEY_UP) {
 					g_head_current = (g_head_current < g_head_last) ?
 								g_head_current + 1 : g_head_first;
@@ -7044,8 +7045,8 @@ static void do_gen(const int init_level)
 
 			if (g_in_key_ext == KEY_RIGHT) {
 
-				if (g_hero.typus) {
-					if (((g_hero.typus < 7) ? 4 : 10) > page) {
+				if (hero->typus) {
+					if (((hero->typus < 7) ? 4 : 10) > page) {
 						page++;
 					} else {
 						page = 0;
@@ -7060,11 +7061,11 @@ static void do_gen(const int init_level)
 
 			if (g_in_key_ext == KEY_LEFT) {
 
-				if (g_hero.typus) {
+				if (hero->typus) {
 					if (page > 0) {
 						page--;
 					} else {
-						page = (g_hero.typus < 7 ? 4 : 10);
+						page = (hero->typus < 7 ? 4 : 10);
 					}
 
 					full_refresh = 1;
@@ -7076,13 +7077,13 @@ static void do_gen(const int init_level)
 
 			if ((g_in_key_ext >= KEY_1) && (g_in_key_ext <= KEY_5)) {
 
-				if (g_hero.typus) {
+				if (hero->typus) {
 					target_page = ((g_in_key_ext == KEY_1) ? 0 : (
 						(g_in_key_ext == KEY_2) ? 1 : (
 						(g_in_key_ext == KEY_3) ? 4 : (
 						(g_in_key_ext == KEY_4) ? 5 : 10))));
 
-					if ((target_page != page) && (target_page < 5 || g_hero.typus >= 7)) {
+					if ((target_page != page) && (target_page < 5 || hero->typus >= 7)) {
 						page = target_page;
 						full_refresh = 1;
 					}
@@ -7568,7 +7569,7 @@ int main_gen(int argc, char **argv)
 #endif
 	}
 
-	do_gen(l_level);
+	do_gen(&g_hero, l_level);
 
 	if (g_music != MUSIC_OFF) {
 		exit_music();
