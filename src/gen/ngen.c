@@ -6197,7 +6197,7 @@ static int select_typus(volatile struct struct_hero *hero, const int level)
 }
 
 /**
- * \brief increment a skill
+ * \brief increment a skill at level advanced
  * \param[in] hero the hero
  * \param[in] skill index of the skill
  * \param[in] max maximum number of increase attempts
@@ -6218,35 +6218,34 @@ static void inc_skill(volatile struct struct_hero *hero, const signed short skil
 
 	/* decrement total number of skill inc tries */
 	hero->skill_incs--;
-	if (random_interval_gen(2, 12) > hero->skills[skill]) {
 
-		/* print sucess message */
-		infobox(get_text(152), 0);
-		/* increment skill */
-		hero->skills[skill]++;
-		/* reset tries */
-		g_skill_incs[skill].tries = 0;
-		/* increment skill increments */
-		g_skill_incs[skill].incs++;
-
-		/* check if we have a melee attack skill */
-		if (skill <= 6) {
-			/* check if AT > PA */
-			if (hero->at_weapon[skill] > hero->pa_weapon[skill]) {
-				/* inc PA */
-				hero->pa_weapon[skill]++;
-			} else {
-				/* inc AT */
-				hero->at_weapon[skill]++;
-			}
-		}
-
-	} else {
+	/* roll 2W6/2D6 */
+	if (random_interval_gen(2, 12) <= hero->skills[skill]) {
 		/* print failure message */
 		infobox(get_text(153), 0);
 		/* increment try */
 		g_skill_incs[skill].tries++;
+		return;
+	}
 
+	/* print success message */
+	infobox(get_text(152), 0);
+	/* increment skill */
+	hero->skills[skill]++;
+	/* reset tries and increment skill increments */
+	g_skill_incs[skill].tries = 0;
+	g_skill_incs[skill].incs++;
+
+	/* check if we have a melee attack skill */
+	if (skill <= 6) {
+		/* check if AT > PA */
+		if (hero->at_weapon[skill] > hero->pa_weapon[skill]) {
+			/* inc PA */
+			hero->pa_weapon[skill]++;
+		} else {
+			/* inc AT */
+			hero->at_weapon[skill]++;
+		}
 	}
 }
 
