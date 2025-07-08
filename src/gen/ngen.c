@@ -108,6 +108,7 @@ struct nvf_desc {
 	signed short *height;
 };
 
+/* DSA RULE VARIABLES */
 
 struct struct_spelltab {
 	signed char origin; /* {0 = Druid, 1 = Mage, 2 = Elven, 3 = Warlock } */
@@ -928,15 +929,6 @@ static const struct mouse_action* g_default_action = &g_action_default[0];
 
 static const struct mouse_action* g_action_table = NULL;
 
-
-static volatile struct struct_hero g_hero = {0};
-
-#if !defined(__BORLANDC__)
-static unsigned char* g_bg_buffer[]       = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
-#endif
-static unsigned char *g_typus_buffer[]    = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-static signed long g_typus_len[13] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-
 /* FILE MANAGEMENT VARIABLES */
 static const char g_fname00_de[] = "GEN1.NVF";
 static const char g_fname01_de[] = "GEN2.NVF";
@@ -1299,13 +1291,9 @@ static const struct struct_color g_pal_heads[32] = {
 };
 
 static unsigned char g_pal_roalogo[768];
+/* FORMERLY END OF INITIALIZED GLOBAL VARIABLES _DATA */
 
-static const char g_str_malloc_error[] = "\xaMEMORY MALLOCATION ERROR!";
-
-static signed short g_random_gen_seed = 0x327b;
-/* END OF INITIALIZED GLOBAL VARIABLES _DATA */
-
-/* START OF UNINITIALIZE GLOBAL VARIABLE _BSS DS:0x2474*/
+/* FORMERLY START OF UNINITIALIZE GLOBAL VARIABLE _BSS DS:0x2474*/
 #if defined(__BORLANDC__)
 static signed short g_display_mode_bak;
 static signed short g_display_page_bak;
@@ -1342,7 +1330,6 @@ static unsigned char *g_buffer_sex_dat;
 
 static signed short g_in_key_ext;
 static signed short g_in_key_ascii;
-static signed short g_random_gen_seed2;
 
 static char* g_texts[301];
 #if !defined(__BORLANDC__)
@@ -1355,6 +1342,14 @@ static inline char* get_text(signed short no) {
 #endif
 
 static signed char g_in_intro;
+
+static volatile struct struct_hero g_hero = {0};
+
+#if !defined(__BORLANDC__)
+static unsigned char* g_bg_buffer[]       = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+#endif
+static unsigned char *g_typus_buffer[]    = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+static signed long g_typus_len[13] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 /* the typus for the heads e.G. all elves are 10 */
 static signed char g_head_typus;
@@ -1414,6 +1409,7 @@ static unsigned char* g_snd_driver;
 static Mix_Music *music = NULL;
 #endif
 
+/* TIMER VARIABLES */
 #if defined(__BORLANDC__)
 void far *g_irq78_bak;
 void far *g_timer_isr_bak;
@@ -1431,6 +1427,11 @@ static signed short g_text_x_end;
 /* MEMORY MANGEMENT VARIABLES */
 static int g_allocs = 0;
 static unsigned long g_max_mem_usage = 0;
+static const char g_str_malloc_error[] = "\xaMEMORY MALLOCATION ERROR!";
+
+/* RANDOM NUMBER GENERATOR VARIABLES */
+static signed short g_random_gen_seed = 0x327b;
+static signed short g_random_gen_seed2 = 0;
 
 
 /* MEMORY MANAGEMENT */
