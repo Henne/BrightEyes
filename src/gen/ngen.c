@@ -5846,10 +5846,11 @@ static signed short can_change_attributes(volatile struct struct_hero *hero)
 
 /**
  * \brief change attributes
+ * \param[in] hero the hero
  * \param[in] page the current page
  * \param[in] level 1 = Novice / 2 = Advanced
  */
-static void change_attributes(const int page, const int level)
+static void change_attributes(volatile struct struct_hero *hero, const int page, const int level)
 {
 	volatile signed char *ptr1;
 	volatile signed char *ptr2;
@@ -5862,35 +5863,35 @@ static void change_attributes(const int page, const int level)
 	signed short di;
 
 	/* check if attributes have been set */
-	if (!g_hero.attrib[0].normal) {
+	if (!hero->attrib[0].normal) {
 		infobox(get_text(16), 0);
 		return;
 	}
 	/* check if changing is possible */
-	if (!can_change_attributes(&g_hero)) {
+	if (!can_change_attributes(hero)) {
 		infobox(get_text(266), 0);
 		return;
 	}
 	/* if hero has an archtype */
-	if (g_hero.typus) {
+	if (hero->typus) {
 
 		if (gui_bool(get_text(73))) {
 
 			/* set typus to 0 */
-			g_hero.typus = 0;
+			hero->typus = 0;
 
 			/* remove MU boni */
 			if (g_got_mu_bonus) {
-				g_hero.attrib[0].current = --g_hero.attrib[0].normal;
+				hero->attrib[0].current = --hero->attrib[0].normal;
 				g_got_mu_bonus = 0;
 			}
 			/* remove CH boni */
 			if (g_got_ch_bonus) {
-				g_hero.attrib[2].current = --g_hero.attrib[2].normal;
+				hero->attrib[2].current = --hero->attrib[2].normal;
 				g_got_ch_bonus = 0;
 			}
 
-			print_values(&g_hero, page, level);
+			print_values(hero, page, level);
 
 		} else {
 			return;
@@ -5898,7 +5899,7 @@ static void change_attributes(const int page, const int level)
 	}
 
 	/* check again if changing is possible */
-	if (!can_change_attributes(&g_hero)) {
+	if (!can_change_attributes(hero)) {
 		infobox(get_text(266), 0);
 		return;
 	}
@@ -5925,7 +5926,7 @@ static void change_attributes(const int page, const int level)
 			tmp3 = g_attrib_changed[tmp2];
 		}
 
-		ptr1 = &g_hero.attrib[tmp2].normal;
+		ptr1 = &hero->attrib[tmp2].normal;
 
 		if (tmp3 == INC) {
 			/* increment */
@@ -5936,7 +5937,7 @@ static void change_attributes(const int page, const int level)
 			c = 0;
 			for (di = 7; di < 14; di++) {
 				if (g_attrib_changed[di] != DEC) {
-					ptr2 = &g_hero.attrib[di].normal;
+					ptr2 = &hero->attrib[di].normal;
 					if (ptr2[0] < 8) {
 						c += 8 - ptr2[0];
 					}
@@ -5947,12 +5948,12 @@ static void change_attributes(const int page, const int level)
 				return;
 			}
 			/* increment positive attribute */
-			//g_hero.attrib[tmp2].normal = ++g_ghero.attrib[tmp2].current;
+			//hero->attrib[tmp2].normal = ++ghero->attrib[tmp2].current;
 			ptr1[0] = ++ptr1[1];
 
 			g_attrib_changed[tmp2] = INC;
 
-			print_values(&g_hero, page, level);
+			print_values(hero, page, level);
 
 			tmp1 = 0;
 			while (tmp1 != 2) {
@@ -5974,7 +5975,7 @@ static void change_attributes(const int page, const int level)
 					infobox(get_text(83), 0);
 					continue;
 				}
-				ptr1 = &g_hero.attrib[si + 7].normal;
+				ptr1 = &hero->attrib[si + 7].normal;
 				/* check if attribute can be incremented */
 				if (ptr1[0] == 8) {
 					infobox(get_text(77), 0);
@@ -5983,10 +5984,10 @@ static void change_attributes(const int page, const int level)
 					tmp1++;
 					g_attrib_changed[si + 7] = INC;
 
-					//g_hero.attrib[si + 7].normal = ++g_ghero.attrib[si + 7].current;
+					//hero->attrib[si + 7].normal = ++ghero->attrib[si + 7].current;
 					ptr1[0] = ++ptr1[1];
 
-					print_values(&g_hero, page, level);
+					print_values(hero, page, level);
 				}
 			}
 		} else {
@@ -5999,7 +6000,7 @@ static void change_attributes(const int page, const int level)
 			c = 0;
 			for (di = 7; di < 14; di++) {
 				if (g_attrib_changed[di] != INC) {
-					ptr2 = &g_hero.attrib[di].normal;
+					ptr2 = &hero->attrib[di].normal;
 					if (ptr2[0] > 2) {
 						c += ptr2[0] - 2;
 					}
@@ -6010,13 +6011,13 @@ static void change_attributes(const int page, const int level)
 				return;
 			}
 			/* decrement positive attribute */
-			// g_hero.attrib[tmp3].normal = --g_hero.attrib[tmp3].current;
+			// hero->attrib[tmp3].normal = --hero->attrib[tmp3].current;
 			ptr1[0] = --ptr1[1];
 
 			/* mark this attribute as decremented */
 			g_attrib_changed[tmp2] = DEC;
 
-			print_values(&g_hero, page, level);
+			print_values(hero, page, level);
 
 			tmp1 = 0;
 			while (tmp1 != 2) {
@@ -6029,6 +6030,7 @@ static void change_attributes(const int page, const int level)
 						get_text(42), get_text(43), get_text(44),
 						get_text(45));
 					g_text_x_mod = 0;
+
 				} while (si == -1);
 
 				si--;
@@ -6038,7 +6040,7 @@ static void change_attributes(const int page, const int level)
 					continue;
 				}
 				
-				ptr1 = &g_hero.attrib[si + 7].normal;
+				ptr1 = &hero->attrib[si + 7].normal;
 			
 				/* check if attribute can be decremented */
 				if (ptr1[0] == 2) {
@@ -6048,12 +6050,12 @@ static void change_attributes(const int page, const int level)
 				/* decrement the negative attribute */
 				tmp1++;
 
-				// g_hero.attrib[si + 7].normal = --g_hero.attrib[si + 7].current;
+				// hero->attrib[si + 7].normal = --hero->attrib[si + 7].current;
 				ptr1[0] = --ptr1[1];
 
 				g_attrib_changed[si + 7] = DEC;
 
-				print_values(&g_hero, page, level);
+				print_values(hero, page, level);
 			}
 		}
 	}
@@ -6950,7 +6952,7 @@ static void do_gen(const int init_level)
 							break;
 						}
 						case 3: {
-							change_attributes(page, level);
+							change_attributes(&g_hero, page, level);
 							break;
 						}
 						case 4: {
