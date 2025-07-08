@@ -4871,7 +4871,7 @@ static void print_typusname(volatile struct struct_hero *hero)
 static void print_values(volatile struct struct_hero *hero, const int page, const int level)
 {
 	int i;
-	char tmp[16];
+	char tmp[20];
 	signed short width;
 	signed short align_left = 222;
 	signed short align_right = 302;
@@ -4922,26 +4922,26 @@ static void print_values(volatile struct struct_hero *hero, const int page, cons
 
 			/* print height */
 			if (g_dsagen_lang == LANG_DE) {
-				sprintf(g_textbuffer, get_text(70), hero->height);
+				sprintf(tmp, get_text(70), hero->height);
 			} else {
 				feet = hero->height * 100 / 3048;
 				inches = hero->height * 100 - feet * 3048;
 				inches = inches / 254;
-				sprintf(g_textbuffer, get_text(70), feet, inches);
+				sprintf(tmp, get_text(70), feet, inches);
 			}
-			print_str(g_textbuffer, 205, 25);
+			print_str(tmp, 205, 25);
 
 			/* print weight */
-			sprintf(g_textbuffer, get_text(71), hero->weight);
+			sprintf(tmp, get_text(71), hero->weight);
 
-			print_str(g_textbuffer, 205, 37);
+			print_str(tmp, 205, 37);
 
 			/* print god name */
 			print_str(get_text(56 + hero->god), 205, 49);
 
 			/* print money */
-			make_valuta_str(g_textbuffer, hero->money);
-			print_str(g_textbuffer, 205, 61);
+			make_valuta_str(tmp, hero->money);
+			print_str(tmp, 205, 61);
 
 			/* print LE */
 			sprintf(tmp, "%d", hero->le_max); print_str(tmp, 172, 164);
@@ -5274,6 +5274,7 @@ static void new_attributes(volatile struct struct_hero *hero, const int page, co
 {
 	volatile signed char *att_ptr;
 	char name_bak[20];
+	char textbuffer[60];
 	int i;
 	int j;
 	int randval;
@@ -5337,12 +5338,12 @@ static void new_attributes(volatile struct struct_hero *hero, const int page, co
 			}
 		}
 
-		sprintf(g_textbuffer, get_text(46), randval);
+		sprintf(textbuffer, get_text(46), randval);
 
 		do {
 			g_text_x_mod = -80;
 
-			di = gui_radio(g_textbuffer, unset_attribs,
+			di = gui_radio(textbuffer, unset_attribs,
 				g_type_names[0], g_type_names[1], g_type_names[2],
 				g_type_names[3], g_type_names[4], g_type_names[5],
 				g_type_names[6]);
@@ -5376,12 +5377,12 @@ static void new_attributes(volatile struct struct_hero *hero, const int page, co
 			}
 		}
 
-		sprintf(g_textbuffer, get_text(46), randval);
+		sprintf(textbuffer, get_text(46), randval);
 
 		do {
 			g_text_x_mod = -80;
 
-			di = gui_radio(g_textbuffer, unset_attribs,
+			di = gui_radio(textbuffer, unset_attribs,
 				g_type_names[0], g_type_names[1], g_type_names[2],
 				g_type_names[3], g_type_names[4], g_type_names[5],
 				g_type_names[6]);
