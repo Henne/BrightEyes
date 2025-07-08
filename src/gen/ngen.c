@@ -6247,9 +6247,10 @@ static void inc_skill(volatile struct struct_hero *hero, const signed short skil
 
 /**
  * \brief select a skill
+ * \param[in] hero the hero
  * \param[in] page the current page
  */
-static void select_skill(const int page)
+static void select_skill(volatile struct struct_hero *hero, const int page)
 {
 	int group = -1;
 
@@ -6257,7 +6258,7 @@ static void select_skill(const int page)
 		int skill = -2;
 
 		/* check skill attempts */
-		if (!g_hero.skill_incs) {
+		if (!hero->skill_incs) {
 			infobox(get_text(94), 0);
 			g_text_x_mod = 0;
 			return;
@@ -6279,7 +6280,7 @@ static void select_skill(const int page)
 						get_text(101), get_text(102), get_text(103)) - 1;
 
 					if (skill != -2) {
-						inc_skill(&g_hero, skill, 1, get_text(148));
+						inc_skill(hero, skill, 1, get_text(148));
 					}
 
 				} else if (group == 2) {
@@ -6294,11 +6295,10 @@ static void select_skill(const int page)
 
 					if (skill != -2) {
 						skill += 9;
-						inc_skill(&g_hero, skill, 2, get_text(149));
+						inc_skill(hero, skill, 2, get_text(149));
 					}
 				}
 			}
-
 
 		} else if (page == 2) {
 
@@ -6314,7 +6314,7 @@ static void select_skill(const int page)
 
 					if (skill != -2) {
 						skill += 19;
-						inc_skill(&g_hero, skill, 2, get_text(149));
+						inc_skill(hero, skill, 2, get_text(149));
 					}
 
 				} else if (group == 2) {
@@ -6326,7 +6326,7 @@ static void select_skill(const int page)
 
 					if (skill != -2) {
 						skill += 32;
-						inc_skill(&g_hero, skill, 3, get_text(150));
+						inc_skill(hero, skill, 3, get_text(150));
 					}
 				}
 			}
@@ -6344,7 +6344,7 @@ static void select_skill(const int page)
 
 					if (skill != -2) {
 						skill += 41;
-						inc_skill(&g_hero, skill, 2, get_text(149));
+						inc_skill(hero, skill, 2, get_text(149));
 					}
 
 				} else if (group == 2) {
@@ -6354,7 +6354,7 @@ static void select_skill(const int page)
 
 					if (skill != -2) {
 						skill += 26;
-						inc_skill(&g_hero, skill, 2, get_text(149));
+						inc_skill(hero, skill, 2, get_text(149));
 					}
 
 				} else if (group == 3) {
@@ -6364,7 +6364,7 @@ static void select_skill(const int page)
 
 					if (skill != -2) {
 						skill += 50;
-						inc_skill(&g_hero, skill, 1, get_text(148));
+						inc_skill(hero, skill, 1, get_text(148));
 					}
 				}
 			}
@@ -6373,7 +6373,7 @@ static void select_skill(const int page)
 		g_text_x_mod = 0;
 
 		if (skill != -2) {
-			print_values(&g_hero, page, 2);
+			print_values(hero, page, 2);
 		}
 
 	} while (group != -1);
