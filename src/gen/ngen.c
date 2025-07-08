@@ -6390,17 +6390,20 @@ static void select_skill(volatile struct struct_hero *hero, const int page)
  */
 static void inc_spell(volatile struct struct_hero *hero, const signed short spell)
 {
-	signed short max_incs = 1;
+	int max_incs = 1;
 
 	/* if typus == warlock and the origin of the spell is warlock */
 	if ((hero->typus == 7) && (g_spell_tab[spell].origin == 3))
 		max_incs = 2;
+
 	/* if typus == elf and the origin of the spell is elven */
 	if ((hero->typus >= 10) && (g_spell_tab[spell].origin == 2))
 		max_incs = 2;
+
 	/* if typus == druid and the origin of the spell is druid */
 	if ((hero->typus == 8) && (g_spell_tab[spell].origin == 0))
 		max_incs = 2;
+
 	/* if typus == mage */
 	if (hero->typus == 9) {
 		/* and the origin of the spell is mage */
@@ -6421,28 +6424,27 @@ static void inc_spell(volatile struct struct_hero *hero, const signed short spel
 	/* all tries used for that spell */
 	if (g_spell_incs[spell].tries == 3) {
 		infobox(get_text(151), 0);
-	} else {
-
-		/* decrement spell attempts */
-		hero->spell_incs--;
-
-		if (random_interval_gen(2, 12) > hero->spells[spell]) {
-			/* show success */
-			infobox(get_text(152), 0);
-			/* increment spell value */
-			hero->spells[spell]++;
-			/* reset tries */
-			g_spell_incs[spell].tries = 0;
-			/* increment incs */
-			g_spell_incs[spell].incs++;
-
-		} else {
-			/* show failure */
-			infobox(get_text(153), 0);
-			/* increment tries */
-			g_spell_incs[spell].tries++;
-		}
+		return;
 	}
+
+	/* decrement spell attempts of the hero */
+	hero->spell_incs--;
+
+	if (random_interval_gen(2, 12) <= hero->spells[spell]) {
+		/* show failure */
+		infobox(get_text(153), 0);
+		/* increment tries */
+		g_spell_incs[spell].tries++;
+	}
+
+	/* show success */
+	infobox(get_text(152), 0);
+	/* increment spell value */
+	hero->spells[spell]++;
+	/* reset tries */
+	g_spell_incs[spell].tries = 0;
+	/* increment incs */
+	g_spell_incs[spell].incs++;
 }
 
 /**
