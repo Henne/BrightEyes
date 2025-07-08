@@ -6443,9 +6443,10 @@ static void inc_spell(volatile struct struct_hero *hero, const signed short spel
 
 /**
  * \brief	select a spell
+ * \param[in] hero the hero
  * \param[in] page the current page
  */
-static void select_spell(const int page)
+static void select_spell(volatile struct struct_hero *hero, const int page)
 {
 	int group = -1;
 
@@ -6453,7 +6454,7 @@ static void select_spell(const int page)
 		int spell = -2;
 
 		/* check if we have spell attempts */
-		if (!g_hero.spell_incs) {
+		if (!hero->spell_incs) {
 			infobox(get_text(94), 0);
 			g_text_x_mod = 0;
 			return;
@@ -6477,7 +6478,7 @@ static void select_spell(const int page)
 
 						if (spell != -2) {
 							spell++;
-							inc_spell(&g_hero, spell);
+							inc_spell(hero, spell);
 						}
 						break;
 					}
@@ -6491,7 +6492,7 @@ static void select_spell(const int page)
 
 						if (spell != -2) {
 							spell += 33;
-							inc_spell(&g_hero, spell);
+							inc_spell(hero, spell);
 						}
 						break;
 					}
@@ -6505,7 +6506,7 @@ static void select_spell(const int page)
 								get_text(179)) - 1;
 						if (spell != -2) {
 							spell += 6;
-							inc_spell(&g_hero, spell);
+							inc_spell(hero, spell);
 						}
 						break;
 					}
@@ -6531,7 +6532,7 @@ static void select_spell(const int page)
 
 						if (spell != -2) {
 							spell += 12;
-							inc_spell(&g_hero, spell);
+							inc_spell(hero, spell);
 						}
 						break;
 					}
@@ -6546,7 +6547,7 @@ static void select_spell(const int page)
 
 						if (spell != -2) {
 							spell += 18;
-							inc_spell(&g_hero, spell);
+							inc_spell(hero, spell);
 						}
 						break;
 					}
@@ -6557,7 +6558,7 @@ static void select_spell(const int page)
 
 						if (spell != -2) {
 							spell += 24;
-							inc_spell(&g_hero, spell);
+							inc_spell(hero, spell);
 						}
 						break;
 					}
@@ -6583,7 +6584,7 @@ static void select_spell(const int page)
 
 						if (spell != -2) {
 							spell += 27;
-							inc_spell(&g_hero, spell);
+							inc_spell(hero, spell);
 						}
 						break;
 					}
@@ -6599,7 +6600,7 @@ static void select_spell(const int page)
 
 						if (spell != -2) {
 							spell += 38;
-							inc_spell(&g_hero, spell);
+							inc_spell(hero, spell);
 						}
 						break;
 					}
@@ -6610,7 +6611,7 @@ static void select_spell(const int page)
 
 						if (spell != -2) {
 							spell += 45;
-							inc_spell(&g_hero, spell);
+							inc_spell(hero, spell);
 						}
 						break;
 					}
@@ -6631,7 +6632,7 @@ static void select_spell(const int page)
 
 						if (spell != -2) {
 							spell += 47;
-							inc_spell(&g_hero, spell);
+							inc_spell(hero, spell);
 						}
 						break;
 					}
@@ -6643,7 +6644,7 @@ static void select_spell(const int page)
 
 						if (spell != -2) {
 							spell += 49;
-							inc_spell(&g_hero, spell);
+							inc_spell(hero, spell);
 						}
 						break;
 					}
@@ -6655,7 +6656,7 @@ static void select_spell(const int page)
 
 						if (spell != -2) {
 							spell += 58;
-							inc_spell(&g_hero, spell);
+							inc_spell(hero, spell);
 						}
 						break;
 					}
@@ -6676,7 +6677,7 @@ static void select_spell(const int page)
 
 				if (spell != -2) {
 					spell += 60;
-					inc_spell(&g_hero, spell);
+					inc_spell(hero, spell);
 				} else {
 					group = -1;
 				}
@@ -6692,7 +6693,7 @@ static void select_spell(const int page)
 
 				if (spell != -2) {
 					spell += 76;
-					inc_spell(&g_hero, spell);
+					inc_spell(hero, spell);
 				} else {
 					group = -1;
 				}
@@ -6703,7 +6704,7 @@ static void select_spell(const int page)
 		g_text_x_mod = 0;
 
 		if (spell != -2) {
-			print_values(&g_hero, page, 2);
+			print_values(hero, page, 2);
 		}
 
 	} while (group != -1);
@@ -6990,7 +6991,7 @@ static void do_gen(const int init_level)
 
 			} else if ((1 <= page) && (page <= 3)) 	select_skill(&g_hero, page);
 			  else if (page == 4)			select_atpa(page, level);
-			  else if ((5 <= page) && (page <= 10)) select_spell(page);
+			  else if ((5 <= page) && (page <= 10)) select_spell(&g_hero, page);
 		}
 
 		if (g_in_key_ext == KEY_CTRL_F3)
