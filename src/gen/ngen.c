@@ -6381,29 +6381,30 @@ static void select_skill(volatile struct struct_hero *hero, const int page)
 
 /**
  * \brief increment spell value
+ * \param[in] hero the hero
  * \param[in] spell index of the spell to increment
  */
-static void inc_spell(const signed short spell)
+static void inc_spell(volatile struct struct_hero *hero, const signed short spell)
 {
 	signed short max_incs = 1;
 
 	/* if typus == warlock and the origin of the spell is warlock */
-	if ((g_hero.typus == 7) && (g_spell_tab[spell].origin == 3))
+	if ((hero->typus == 7) && (g_spell_tab[spell].origin == 3))
 		max_incs = 2;
 	/* if typus == elf and the origin of the spell is elven */
-	if ((g_hero.typus >= 10) && (g_spell_tab[spell].origin == 2))
+	if ((hero->typus >= 10) && (g_spell_tab[spell].origin == 2))
 		max_incs = 2;
 	/* if typus == druid and the origin of the spell is druid */
-	if ((g_hero.typus == 8) && (g_spell_tab[spell].origin == 0))
+	if ((hero->typus == 8) && (g_spell_tab[spell].origin == 0))
 		max_incs = 2;
 	/* if typus == mage */
-	if (g_hero.typus == 9) {
+	if (hero->typus == 9) {
 		/* and the origin of the spell is mage */
 		if (g_spell_tab[spell].origin == 1)
 			max_incs = 2;
 
 		/* and is a school spell */
-		if (is_in_word_array(spell, g_house_spells[g_hero.spell_school]))
+		if (is_in_word_array(spell, g_house_spells[hero->spell_school]))
 			max_incs = 3;
 	}
 
@@ -6419,13 +6420,13 @@ static void inc_spell(const signed short spell)
 	} else {
 
 		/* decrement spell attempts */
-		g_hero.spell_incs--;
+		hero->spell_incs--;
 
-		if (random_interval_gen(2, 12) > g_hero.spells[spell]) {
+		if (random_interval_gen(2, 12) > hero->spells[spell]) {
 			/* show success */
 			infobox(get_text(152), 0);
 			/* increment spell value */
-			g_hero.spells[spell]++;
+			hero->spells[spell]++;
 			/* reset tries */
 			g_spell_incs[spell].tries = 0;
 			/* increment incs */
@@ -6436,7 +6437,6 @@ static void inc_spell(const signed short spell)
 			infobox(get_text(153), 0);
 			/* increment tries */
 			g_spell_incs[spell].tries++;
-
 		}
 	}
 }
@@ -6477,7 +6477,7 @@ static void select_spell(const int page)
 
 						if (spell != -2) {
 							spell++;
-							inc_spell(spell);
+							inc_spell(&g_hero, spell);
 						}
 						break;
 					}
@@ -6491,7 +6491,7 @@ static void select_spell(const int page)
 
 						if (spell != -2) {
 							spell += 33;
-							inc_spell(spell);
+							inc_spell(&g_hero, spell);
 						}
 						break;
 					}
@@ -6505,7 +6505,7 @@ static void select_spell(const int page)
 								get_text(179)) - 1;
 						if (spell != -2) {
 							spell += 6;
-							inc_spell(spell);
+							inc_spell(&g_hero, spell);
 						}
 						break;
 					}
@@ -6531,7 +6531,7 @@ static void select_spell(const int page)
 
 						if (spell != -2) {
 							spell += 12;
-							inc_spell(spell);
+							inc_spell(&g_hero, spell);
 						}
 						break;
 					}
@@ -6546,7 +6546,7 @@ static void select_spell(const int page)
 
 						if (spell != -2) {
 							spell += 18;
-							inc_spell(spell);
+							inc_spell(&g_hero, spell);
 						}
 						break;
 					}
@@ -6557,7 +6557,7 @@ static void select_spell(const int page)
 
 						if (spell != -2) {
 							spell += 24;
-							inc_spell(spell);
+							inc_spell(&g_hero, spell);
 						}
 						break;
 					}
@@ -6583,7 +6583,7 @@ static void select_spell(const int page)
 
 						if (spell != -2) {
 							spell += 27;
-							inc_spell(spell);
+							inc_spell(&g_hero, spell);
 						}
 						break;
 					}
@@ -6599,7 +6599,7 @@ static void select_spell(const int page)
 
 						if (spell != -2) {
 							spell += 38;
-							inc_spell(spell);
+							inc_spell(&g_hero, spell);
 						}
 						break;
 					}
@@ -6610,7 +6610,7 @@ static void select_spell(const int page)
 
 						if (spell != -2) {
 							spell += 45;
-							inc_spell(spell);
+							inc_spell(&g_hero, spell);
 						}
 						break;
 					}
@@ -6631,7 +6631,7 @@ static void select_spell(const int page)
 
 						if (spell != -2) {
 							spell += 47;
-							inc_spell(spell);
+							inc_spell(&g_hero, spell);
 						}
 						break;
 					}
@@ -6643,7 +6643,7 @@ static void select_spell(const int page)
 
 						if (spell != -2) {
 							spell += 49;
-							inc_spell(spell);
+							inc_spell(&g_hero, spell);
 						}
 						break;
 					}
@@ -6655,7 +6655,7 @@ static void select_spell(const int page)
 
 						if (spell != -2) {
 							spell += 58;
-							inc_spell(spell);
+							inc_spell(&g_hero, spell);
 						}
 						break;
 					}
@@ -6676,7 +6676,7 @@ static void select_spell(const int page)
 
 				if (spell != -2) {
 					spell += 60;
-					inc_spell(spell);
+					inc_spell(&g_hero, spell);
 				} else {
 					group = -1;
 				}
@@ -6692,7 +6692,7 @@ static void select_spell(const int page)
 
 				if (spell != -2) {
 					spell += 76;
-					inc_spell(spell);
+					inc_spell(&g_hero, spell);
 				} else {
 					group = -1;
 				}
@@ -6988,7 +6988,7 @@ static void do_gen(const int init_level)
 					}
 				}
 
-			} else if ((1 <= page) && (page <= 3)) 	select_skill(page);
+			} else if ((1 <= page) && (page <= 3)) 	select_skill(&g_hero, page);
 			  else if (page == 4)			select_atpa(page, level);
 			  else if ((5 <= page) && (page <= 10)) select_spell(page);
 		}
