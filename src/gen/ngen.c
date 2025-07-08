@@ -6783,10 +6783,11 @@ static int select_atpa(volatile struct struct_hero *hero, const int page, const 
 
 /**
  * \brief	choose a typus manually
+ * \param[in] hero the hero
  * \param[in] level 1 = Novice / 2 = Advanced
  * \return 0 = no changes / 1 = archetype chosen
  */
-static int choose_typus(const int level)
+static int choose_typus(volatile struct struct_hero *hero, const int level)
 {
 	volatile signed char *ptr;
 	int choosen_typus;
@@ -6801,7 +6802,7 @@ static int choose_typus(const int level)
 		return 0;
 
 	/* female or male typus names */
-	typus_names = (g_hero.sex ? 271 : 17);
+	typus_names = (hero->sex ? 271 : 17);
 
 	choosen_typus = gui_radio(get_text(30), 12,
 				get_text(typus_names + 1), get_text(typus_names + 2),
@@ -6815,18 +6816,18 @@ static int choose_typus(const int level)
 		return 0;
 
 	/* clear the hero area with saved name and sex */
-	strncpy(name_bak, (const char*)g_hero.name, 15);
-	sex_bak = g_hero.sex;
+	strncpy(name_bak, (const char*)hero->name, 15);
+	sex_bak = hero->sex;
 
-	clear_hero(&g_hero);
+	clear_hero(hero);
 
-	g_hero.sex = sex_bak;
-	strncpy((char*)g_hero.name, name_bak, 15);
+	hero->sex = sex_bak;
+	strncpy((char*)hero->name, name_bak, 15);
 
 	/* set typus */
-	g_hero.typus = (signed char)choosen_typus;
+	hero->typus = (signed char)choosen_typus;
 
-	ptr = &g_hero.attrib[0].normal;
+	ptr = &hero->attrib[0].normal;
 
 	/* roll out positive attribute values */
 	for (i = 0; i < 7; i ++) {
@@ -6835,11 +6836,12 @@ static int choose_typus(const int level)
 
 		if (randval > 8)
 			randval--;
+
 		/* set attrib.current ant attrib.normal */
 		ptr[3 * i] = ptr[3 * i + 1] = (signed char)randval;
 	}
 
-	ptr = &g_hero.attrib[7].normal;
+	ptr = &hero->attrib[7].normal;
 
 	/* roll out negative attribute values */
 	for (i = 0; i < 7; i ++) {
@@ -6856,7 +6858,7 @@ static int choose_typus(const int level)
 	for (i = 0; i < 4; i++) {
 
 		/* calc pointer to attribute */
-		ptr = &g_hero.attrib[g_reqs[choosen_typus][i].attrib].normal;
+		ptr = &hero->attrib[g_reqs[choosen_typus][i].attrib].normal;
 		/* get the required value */
 		randval = g_reqs[choosen_typus][i].value;
 
@@ -6876,7 +6878,7 @@ static int choose_typus(const int level)
 		}
 	}
 
-	load_typus(g_hero.typus);
+	load_typus(hero->typus);
 	mouse_bg();
 	call_fill_rect_gen(g_vga_memstart, 16, 8, 143, 191, 0);
 	wait_for_vsync();
@@ -6884,16 +6886,17 @@ static int choose_typus(const int level)
 	mouse_cursor();
 
 
-	g_head_typus = (g_hero.typus > 10 ? 10 : g_hero.typus);
+	g_head_typus = (hero->typus > 10 ? 10 : hero->typus);
 
-	if (g_hero.sex) {
+	if (hero->sex) {
 		g_head_first = g_head_current = g_head_first_female[g_head_typus];
 		g_head_last = g_head_first_male[g_head_typus + 1] - 1;
 	} else {
 		g_head_first = g_head_current = g_head_first_male[g_head_typus];
 		g_head_last = g_head_first_female[g_head_typus] - 1;
 	}
-	fill_values(&g_hero, level);
+
+	fill_values(hero, level);
 
 	return 1;
 }
@@ -6975,7 +6978,7 @@ static void do_gen(const int init_level)
 							break;
 						}
 						case 7: {
-							full_refresh = choose_typus(level);
+							full_refresh = choose_typus(&g_hero, level);
 							break;
 						}
 						case 8: {
