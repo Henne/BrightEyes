@@ -4908,17 +4908,16 @@ static void print_values(volatile struct struct_hero *hero, const int page, cons
 		print_typusname(hero);
 	}
 
-	switch (page) {
+	if (page == 0) {
 
-		case 0: {
-			/* print name */
-			print_str((const char*)hero->name, 180, 12);
+		/* print name */
+		print_str((const char*)hero->name, 180, 12);
 
-			/* print attributes */
-			print_attribs(hero);
+		/* print attributes */
+		print_attribs(hero);
 
-			/* return if no typus */
-			if (!hero->typus) break;
+		/* return if no typus */
+		if (hero->typus) {
 
 			/* print height */
 			if (g_dsagen_lang == LANG_DE) {
@@ -4954,9 +4953,12 @@ static void print_values(volatile struct struct_hero *hero, const int page, cons
 			/* print MR */
 			sprintf(tmp, "%d", hero->mr);
 			print_str(tmp, (g_dsagen_lang == LANG_DE ? 232 + 15 : 255), 184);
-			break;
 		}
-		case 1: {
+
+	} else if ((1 <= page) && (page <= 3)) {
+
+		if (page == 1) {
+
 			/* SKILLS Page 1/3 */
 			/* print fight skills */
 			for (i = 0; i < 9; i++) {
@@ -4975,11 +4977,8 @@ static void print_values(volatile struct struct_hero *hero, const int page, cons
 				print_str(tmp, ((pos & 1) ? align_right - width : align_left - width), (pos / 2) * 12 + 119);
 			}
 
-			/* remaining attempts for skills */
-			sprintf(tmp, "%d", hero->skill_incs); print_str(tmp, 271, 184);
-			break;
-		}
-		case 2: {
+		} else if (page == 2) {
+
 			/* SKILLS Page 2/3 */
 			/* print social skills */
 			for (i = 19; i < 26; i++) {
@@ -4999,11 +4998,8 @@ static void print_values(volatile struct struct_hero *hero, const int page, cons
 				print_str(tmp, ((pos & 1) ? align_right - width : align_left - width), (pos / 2) * 12 + 113);
 			}
 
-			/* remaining attempts for skills */
-			sprintf(tmp, "%d", hero->skill_incs); print_str(tmp, 271, 184);
-			break;
-		}
-		case 3: {
+		} else if (page == 3) {
+
 			/* SKILLS Page 3/3 */
 			/* print craftmansship skills */
 			for (i = 41; i < 50; i++) {
@@ -5032,44 +5028,46 @@ static void print_values(volatile struct struct_hero *hero, const int page, cons
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? align_right - width : align_left - width), (pos / 2) * 12 + 170);
 			}
-
-			/* remaining attempts for skills */
-			sprintf(tmp, "%d", hero->skill_incs); print_str(tmp, 271, 184);
-			break;
-		}
-		case 4: {
-			/* ATPA Page */
-			/* Print base value  2x the same */
-			sprintf(tmp, "%d", hero->atpa_base);
-			print_str(tmp, 231, 30); print_str(tmp, 268, 30);
-
-			for (i = 0; i < 7; i++) {
-
-				/* print AT value */
-				sprintf(tmp, "%d", hero->at_weapon[i]);
-				print_str(tmp, 237 - get_str_width(tmp), i * 12 + 48);
-
-				/* print PA value */
-				sprintf(tmp, "%d", hero->pa_weapon[i]);
-				print_str(tmp, 274 - get_str_width(tmp), i * 12 + 48);
-
-				/* print skill value */
-				sprintf(tmp, "%d", hero->skills[i]);
-				print_str(tmp, 315 - get_str_width(tmp), i * 12 + 48);
-			}
-
-			/* calc range base value (KL+GE+KK) /4 */
-			pos = (hero->attrib[1].normal
-					+ hero->attrib[4].normal
-					+ hero->attrib[6].normal) / 4;
-
-			/* print missle and thrown weapon values */
-			sprintf(tmp, "%d", pos + hero->skills[7]); print_str(tmp, 231, 144);
-			sprintf(tmp, "%d", pos + hero->skills[8]); print_str(tmp, 231, 156);
-			break;
 		}
 
-		case 5: {
+		/* remaining attempts for skills */
+		sprintf(tmp, "%d", hero->skill_incs); print_str(tmp, 271, 184);
+
+	} else if (page == 4) {
+
+		/* ATPA Page */
+		/* Print base value  2x the same */
+		sprintf(tmp, "%d", hero->atpa_base);
+		print_str(tmp, 231, 30); print_str(tmp, 268, 30);
+
+		for (i = 0; i < 7; i++) {
+
+			/* print AT value */
+			sprintf(tmp, "%d", hero->at_weapon[i]);
+			print_str(tmp, 237 - get_str_width(tmp), i * 12 + 48);
+
+			/* print PA value */
+			sprintf(tmp, "%d", hero->pa_weapon[i]);
+			print_str(tmp, 274 - get_str_width(tmp), i * 12 + 48);
+
+			/* print skill value */
+			sprintf(tmp, "%d", hero->skills[i]);
+			print_str(tmp, 315 - get_str_width(tmp), i * 12 + 48);
+		}
+
+		/* calc range base value (KL+GE+KK) /4 */
+		pos = (hero->attrib[1].normal
+				+ hero->attrib[4].normal
+				+ hero->attrib[6].normal) / 4;
+
+		/* print missle and thrown weapon values */
+		sprintf(tmp, "%d", pos + hero->skills[7]); print_str(tmp, 231, 144);
+		sprintf(tmp, "%d", pos + hero->skills[8]); print_str(tmp, 231, 156);
+
+	} else if ((5 <= page) && (page <= 10)) {
+
+		if (page == 5) {
+
 			/* Spells Page 1/6 */
 			for (i = 1; i < 6; i++) {
 				pos = i - 1;
@@ -5078,6 +5076,7 @@ static void print_values(volatile struct struct_hero *hero, const int page, cons
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 42);
 			}
+
 			for (i = 33; i < 38; i++) {
 				pos = i - 33;
 				sprintf(tmp, "%d", hero->spells[i]);
@@ -5085,6 +5084,7 @@ static void print_values(volatile struct struct_hero *hero, const int page, cons
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 95);
 			}
+
 			for (i = 6; i <= 11; i++) {
 				pos = i - 6;
 				sprintf(tmp, "%d", hero->spells[i]);
@@ -5093,11 +5093,8 @@ static void print_values(volatile struct struct_hero *hero, const int page, cons
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 146);
 			}
 
-			/* print spell attempts */
-			sprintf(tmp, "%d", hero->spell_incs); print_str(tmp, 217, 184);
-			break;
-		}
-		case 6: {
+		} else if (page == 6) {
+
 			/* Spells Page 2/6 */
 			for (i = 12; i <= 17; i++) {
 				pos = i - 12;
@@ -5106,6 +5103,7 @@ static void print_values(volatile struct struct_hero *hero, const int page, cons
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 42);
 			}
+
 			for (i = 18; i < 24; i++) {
 				pos = i - 18;
 				sprintf(tmp, "%d", hero->spells[i]);
@@ -5113,6 +5111,7 @@ static void print_values(volatile struct struct_hero *hero, const int page, cons
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 95);
 			}
+
 			for (i = 24; i < 27; i++) {
 				pos = i - 24;
 				sprintf(tmp, "%d", hero->spells[i]);
@@ -5121,11 +5120,8 @@ static void print_values(volatile struct struct_hero *hero, const int page, cons
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 148);
 			}
 
-			/* print spell attempts */
-			sprintf(tmp, "%d", hero->spell_incs); print_str(tmp, 217, 184);
-			break;
-		}
-		case 7: {
+		} else if (page == 7) {
+
 			/* Spells Page 3/6 */
 			for (i = 27; i < 33; i++) {
 				pos = i - 27;
@@ -5151,11 +5147,8 @@ static void print_values(volatile struct struct_hero *hero, const int page, cons
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 160);
 			}
 
-			/* print spell attempts */
-			sprintf(tmp, "%d", hero->spell_incs); print_str(tmp, 217, 184);
-			break;
-		}
-		case 8: {
+		} else if (page == 8) {
+
 			/* Spells Page 4/6 */
 			for (i = 47; i <= 48; i++) {
 				pos = i - 47;
@@ -5181,11 +5174,8 @@ static void print_values(volatile struct struct_hero *hero, const int page, cons
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 148);
 			}
 
-			/* print spell attempts */
-			sprintf(tmp, "%d", hero->spell_incs); print_str(tmp, 217, 184);
-			break;
-		}
-		case 9: {
+		} else if (page == 9) {
+
 			/* Spells Page 5/6 */
 			for (i = 60; i < 76; i++) {
 				pos = i - 60;
@@ -5195,11 +5185,8 @@ static void print_values(volatile struct struct_hero *hero, const int page, cons
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 42);
 			}
 
-			/* print spell attempts */
-			sprintf(tmp, "%d", hero->spell_incs); print_str(tmp, 217, 184);
-			break;
-		}
-		case 10: {
+		} else if (page == 10) {
+
 			/* Spells Page 6/6 */
 			for (i = 76; i < 86; i++) {
 				pos = i - 76;
@@ -5208,11 +5195,10 @@ static void print_values(volatile struct struct_hero *hero, const int page, cons
 				// pos & 1 = right column else left column
 				print_str(tmp, ((pos & 1) ? 302 - width : 157 - width), (pos / 2) * 12 + 42);
 			}
-
-			/* print spell attempts */
-			sprintf(tmp, "%d", hero->spell_incs); print_str(tmp, 217, 184);
-			break;
 		}
+
+		/* print spell attempts */
+		sprintf(tmp, "%d", hero->spell_incs); print_str(tmp, 217, 184);
 	}
 
 #if !defined(__BORLANDC__)
