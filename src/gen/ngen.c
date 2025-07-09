@@ -259,7 +259,8 @@ struct struct_reqs {
 };
 
 
-/* original attribute reqirements from SCHICK/BLADE as used in the game */
+/* original attribute reqirements from SCHICK/BLADE
+ * as used in the game and in the english handbook */
 static const struct struct_reqs g_reqs_orig[13][4] = {
 	{ {-1, 0}, {-1, 0}, {-1, 0}, {-1, 0} },	//DUMMY
 
@@ -280,6 +281,50 @@ static const struct struct_reqs g_reqs_orig[13][4] = {
 	{ {4, 13}, {5, 13}, {10, 0x80 | 4}, {-1, 0}, },
 };
 
+/* attribute reqirements from SCHICK
+ * as used in the german handbook */
+static const struct struct_reqs g_reqs_hb_de[13][4] = {
+	{ {-1, 0}, {-1, 0}, {-1, 0}, {-1, 0} },	//DUMMY
+
+	{ {0, 12}, {3, 13}, {4, 13}, {-1, 0}, },
+	{ {4, 12}, {5, 12}, {-1, 0}, {-1, 0}, },
+	{ {0, 13}, {6, 12}, {13, 0x80 | 4}, {-1, 0}, }, // like original
+
+	{ {0, 12}, {3, 13}, {4, 13}, {-1, 0}, },	// like original
+	{ {0, 12}, {6, 13}, {7,  7}, {-1, 0}, },	// like original
+	{ {3, 12}, {6, 13}, {10, 7}, {-1, 0}, },
+
+	{ {2, 13}, {5, 12}, {8,  0x80 | 4}, {-1, 0}, },	// like original
+	{ {0, 13}, {1, 12}, {11, 0x80 | 4}, {-1, 0}, },	// like original
+	{ {1, 13}, {2, 12}, {7,  0x80 | 4}, {-1, 0}, }, // like original
+
+	{ {1, 13}, {4, 12}, {10, 0x80 | 4}, {-1, 0}, },	// like original
+	{ {4, 13}, {5, 12}, {10, 0x80 | 4}, {-1, 0}, },	// like original
+	{ {4, 13}, {5, 12}, {10, 0x80 | 4}, {-1, 0}, },
+};
+
+/* attribute reqirements from SCHWEIF/RIVA as found out by Kunar
+ * http://nlt-wiki.crystals-dsa-foren.de/doku.php/spielhilfen/mindestwerte_fuer_die_heldengenerierung */
+static const struct struct_reqs g_reqs_follow[13][6] = {
+	{ {-1, 0}, {-1, 0}, {-1, 0}, {-1, 0} },	//DUMMY
+
+	{ {0, 11}, {3, 12}, {4, 13}, {7, 7}, {-1, 0}, {-1, 0}, },
+	{ {4, 12}, {5, 12}, {9, 7},  {-1, 0}, {-1, 0}, {-1, 0}, },		// like original
+	{ {0, 12}, {4, 11}, {6, 12}, {13, 0x80 | 5}, {-1, 0}, {-1, 0}, }, 	// like DSA3
+
+	{ {0, 13}, {3, 12}, {4, 11}, {10, 7}, {-1, 0}, {-1, 0}, },		// like DSA3
+	{ {0, 11}, {4, 11}, {6, 12}, {7, 6}, {9, 4}, {-1, 0}, },		// like DSA3
+	{ {3, 12}, {6, 12}, {10, 7}, {-1, 0}, {-1, 0}, {-1, 0}, },
+
+	{ {2, 13}, {5, 12}, {8,  0x80 | 4}, {-1, 0}, {-1, 0}, {-1, 0}, }, 	// like original
+	{ {0, 13}, {1, 12}, {11, 0x80 | 4}, {-1, 0}, {-1, 0}, {-1, 0}, }, 	// like original
+	{ {1, 13}, {2, 12}, {7,  0x80 | 4}, {12, 6}, {-1, 0}, {-1, 0}, }, 	// like DSA3
+
+	{ {2, 12}, {4, 12}, {5, 13}, {10, 0x80 | 4}, {-1, 0}, {-1, 0}, },
+	{ {2, 12}, {4, 13}, {5, 13}, {7, 0x80 | 4}, {10, 0x80 | 4}, {-1, 0}, },
+	{ {2, 13}, {4, 13}, {5, 13}, {7, 0x80 | 4}, {10, 0x80 | 4}, {13, 0x80 | 4}, },
+};
+
 static int g_requirement_table = 0;
 
 /**
@@ -291,11 +336,17 @@ static int g_requirement_table = 0;
  */
 static void get_requirement(const int typus, const int no, signed char *attrib, unsigned char *value)
 {
-	if ((1 <= typus) && (typus <= 12) && (0 <= no) && (no <= 3))
+	if ((1 <= typus) && (typus <= 12) && (0 <= no) && (no <= 5))
 	{
 		if (g_requirement_table == 0) {
 			*attrib = g_reqs_orig[typus][no].attrib;
 			*value = g_reqs_orig[typus][no].value;
+		} else if (g_requirement_table == 1) {
+			*attrib = g_reqs_hb_de[typus][no].attrib;
+			*value = g_reqs_hb_de[typus][no].value;
+		} else if (g_requirement_table == 2) {
+			*attrib = g_reqs_follow[typus][no].attrib;
+			*value = g_reqs_follow[typus][no].value;
 		}
 	} else {
 		/* default values */
