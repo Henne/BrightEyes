@@ -254,11 +254,13 @@ static const struct struct_school_tab g_school_tab[] = {
 };
 
 struct struct_reqs {
-	unsigned char attrib;
+	signed char attrib;
 	unsigned char value;
 };
 
-static const struct struct_reqs g_reqs[13][4] = {
+
+/* original attribute reqirements from SCHICK/BLADE as used in the game */
+static const struct struct_reqs g_reqs_orig[13][4] = {
 	{ {0, 0 }, {0,  0}, {0,  0}, {0, 0} },	//DUMMY
 	{ {0, 12}, {3, 12}, {4, 12}, {7, 7}, },
 	{ {4, 12}, {5, 12}, {9,  7}, {2, 1}, },
@@ -275,6 +277,30 @@ static const struct struct_reqs g_reqs[13][4] = {
 	{ {5, 12}, {4, 13}, {10, 0x80 | 4}, {2, 1}, },
 	{ {5, 13}, {4, 13}, {10, 0x80 | 4}, {2, 1}, },
 };
+
+static int g_requirement_table = 0;
+
+/**
+ * \brief get an attribute requirement
+ * \param[in] typus the typus
+ * \param[in] no number of the requirement
+ * \param[out] attrib the number of the attribute
+ * \param[out] value the value of the requirement
+ */
+static void get_requirement(const int typus, const int no, signed char *attrib, unsigned char *value)
+{
+	if ((1 <= typus) && (typus <= 12) && (0 <= no) && (no <= 3))
+	{
+		if (g_requirement_table == 0) {
+			*attrib = g_reqs_orig[typus][no].attrib;
+			*value = g_reqs_orig[typus][no].value;
+		}
+	} else {
+		/* default values */
+		*attrib = -1;
+		*value = 0;
+	}
+}
 
 static const signed char g_skills[13][52] = {
 	/* DUMMY */
@@ -6063,14 +6089,12 @@ static void change_attributes(volatile struct struct_hero *hero, const int page,
  */
 static int select_typus(volatile struct struct_hero *hero, const int level)
 {
-	volatile signed char *ptr;
 	signed short i;
 	signed short impossible;
 	signed short di;
 	signed short si;
 	signed char old_typus;
 	signed char possible_types;
-	signed char ltmp2;
 
 	struct type_bitmap t;
 
@@ -6098,16 +6122,18 @@ static int select_typus(volatile struct struct_hero *hero, const int level)
 			impossible = 0;
 			for (si = 0; si < 4; si++) {
 
-				ptr = &hero->attrib[g_reqs[i][si].attrib].normal;
+				signed char att;
+				unsigned char value;
+				get_requirement(i, si, &att, &value);
+				const int is_upper = ((unsigned char)value & 0x80) ? 1 : 0;
+				const signed char v = (value & 0x7f);
 
-				ltmp2 = *(ptr);
-
-				if ((g_reqs[i][si].value & 0x80) != 0) {
-					if (ltmp2 > (g_reqs[i][si].value & 0x7f))
-						impossible = 1;
-				} else {
-					if (g_reqs[i][si].value > ltmp2)
-						impossible = 1;
+				if (att != -1) {
+					if (is_upper) {
+						if (hero->attrib[att].normal > v) impossible = 1;
+					} else {
+						if (v > hero->attrib[att].normal) impossible = 1;
+					}
 				}
 			}
 
@@ -6853,17 +6879,17 @@ static int choose_typus(volatile struct struct_hero *hero, const int level)
 	for (i = 0; i < 4; i++) {
 
 		/* get attribute requirement */
-		const int att = g_reqs[choosen_typus][i].attrib;
-		signed char value = g_reqs[choosen_typus][i].value;
-		const int is_upper = ((unsigned char)value & 0x80) ? 1 : 0;
+		signed char att;
+		unsigned char value;
+		get_requirement(choosen_typus, i, &att, &value);
+		const int is_upper = (value & 0x80) ? 1 : 0;
 		const signed char v = (value & 0x7f);
 
+		if (att != -1) {
+
 #if !defined(__BORLANDC__)
-		fprintf(stderr, "\t%s %c= %d\n", get_text(att + 32), is_upper ? '<' : '>', v);
+			fprintf(stderr, "\t%s %c= %d\n", get_text(att + 32), is_upper ? '<' : '>', v);
 #endif
-
-		if (value != 1) {
-
 			if (is_upper) {
 				/* attribute upper bound */
 				if (hero->attrib[att].normal > v) {
