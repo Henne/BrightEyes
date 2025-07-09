@@ -1,28 +1,48 @@
-# DSA1/RAK1 Character generator
+# DSA1/RAK1 Character generator (NGEN)
 
-In this place the actual development of GEN takes place.
-The DOS-Version will be supported for an uncertain ammount of time.
+In this place the actual development of NGEN takes place.
+The DOS-Version will be supported for an uncertain amount of time.
 
-Currently supported platforms are: 16-Bit (DOS), 32-Bit (Linux), 64-Bit (Linux-x86, Linux-ARM, Windows)
+Currently supported platforms are:
+* 16-Bit: DOS,
+* 32-Bit: Linux, (maybe also Windows),
+* 64-Bit: Linux-(x86_64, ARM), Windows, GhostBSD
 
+## Features
+* Support for *all known* different DSAGEN.DAT datafiles *(You need your own copy of it!)*
+* Support different Scaling Factors *(up to 10)* to make use of 4K screens
+* Improved Rendering
+* Music Playback of FLAC-Audio files
+* Some minor issues were resolved
+* Some DSA3 rules were added
+* Toggling between Novice / Advanced mode by pressing '6' on the main page
+* Toggling between different attribute value requirements by pressing '7' on the main page
 
+## Planned Features / WIP
+* Music: MIDI/AWS Playback
+* Replacing the Assembler PowerPack 2.0 Algo with portable C-Code
+* Apply modern tools of Software Development: Documentation, Automated Testing, etc.
+
+## Development
 The following rules apply:
 * binary-aequivalency is not important
-* portability is important
+* **portability** is important (means not creating too meny dependencies)
 * fixing issues is **allowed**
+* adding features is **allowed**
 * #define(__BORLANDC__) may be true
 
 The new DOS-binary can be build with ./tools/build.sh
 and can be found under ./tools/NGEN.EXE
 
-A Linux binary can be build with make -f Makefile_old and is called ./ngen_(compilername).
+A Linux binary can be build with make -f Makefile_old and is called ./ngen_(compilername),
+e.g. ngen_clang or ngen_gcc.
+
 You may use cmake to build a ngen_cc
-e.g. ngen_clang or ngen_gcc
 
-Remark: make sure you have the package libomp-dev installed for OpenMP with Clang
+Remark: make sure you have the package *libomp-dev* installed for OpenMP with Clang
 
 
-## DSAGEN.DAT Versions
+## IBM-PC DSAGEN.DAT Versions
 
 There are only 3 different versions of DSAGEN.DAT.
 
