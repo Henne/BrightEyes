@@ -70,6 +70,7 @@ static inline void clrscr(void) { }
 #define KEY_4       (0x05)
 #define KEY_5       (0x06)
 #define KEY_6       (0x07)
+#define KEY_7       (0x08)
 #define KEY_DC1     (0x11)
 #define KEY_RET     (0x1c)
 #define KEY_J       (0x24)
@@ -326,34 +327,6 @@ static const struct struct_reqs g_reqs_follow[13][6] = {
 };
 
 static int g_requirement_table = 0;
-
-/**
- * \brief get an attribute requirement
- * \param[in] typus the typus
- * \param[in] no number of the requirement
- * \param[out] attrib the number of the attribute
- * \param[out] value the value of the requirement
- */
-static void get_requirement(const int typus, const int no, signed char *attrib, unsigned char *value)
-{
-	if ((1 <= typus) && (typus <= 12) && (0 <= no) && (no <= 5))
-	{
-		if (g_requirement_table == 0) {
-			*attrib = g_reqs_orig[typus][no].attrib;
-			*value = g_reqs_orig[typus][no].value;
-		} else if (g_requirement_table == 1) {
-			*attrib = g_reqs_hb_de[typus][no].attrib;
-			*value = g_reqs_hb_de[typus][no].value;
-		} else if (g_requirement_table == 2) {
-			*attrib = g_reqs_follow[typus][no].attrib;
-			*value = g_reqs_follow[typus][no].value;
-		}
-	} else {
-		/* default values */
-		*attrib = -1;
-		*value = 0;
-	}
-}
 
 static const signed char g_skills[13][52] = {
 	/* DUMMY */
@@ -1419,6 +1392,14 @@ static inline char* get_text(signed short no) {
 #else
 #define get_text(no) (g_texts[no])
 #endif
+
+static char g_txt_no285_de[] = "SIE BENUTZEN JETZT DIE \xf1 DT. HANDBUCHVERSION\xf0 DER ATTRIBUTWERTE";
+static char g_txt_no286_de[] = "SIE BENUTZEN JETZT DIE \xf1SCHWEIFVERSION\xf0 DER ATTRIBUTWERTE";
+static char g_txt_no287_de[] = "SIE BENUTZEN JETZT DIE \xf1ORIGINALVERSION\xf0 DER ATTRIBUTWERTE";
+
+static char g_txt_no285_en[] = "YOU NOW USE THE \xf1GERMAN HANDBOOK VERSION\xf0 OF THE ATTRIBUTE VALUES";
+static char g_txt_no286_en[] = "YOU NOW USE THE \xf1STARTRAIL VERSION\xf0 OF THE ATTRIBUTE VALUES";
+static char g_txt_no287_en[] = "YOU NOW USE THE \xf1ORIGINAL VERSION\xf0 OF THE ATTRIBUTE VALUES";
 
 static signed char g_in_intro;
 
@@ -2590,6 +2571,7 @@ static int sdl_event_loop(const int cmd)
 					case SDLK_4:        return (KEY_4 << 8) | 0x34; break; //OK
 					case SDLK_5:        return (KEY_5 << 8) | 0x35; break; //OK
 					case SDLK_6:   	    return (KEY_6 << 8) | 0x36; break; //OK
+					case SDLK_7:   	    return (KEY_7 << 8) | 0x37; break; //OK
 					case SDLK_KP_ENTER:
 					case SDLK_RETURN:   return (KEY_RET << 8) | 0x0d; break; //OK
 					case SDLK_j:        return (KEY_J << 8) | 0x6a; break; //OK
@@ -3013,6 +2995,20 @@ static int load_essential_files(void)
 		close(handle);
 
 		split_textbuffer(g_texts, g_buffer_text, len);
+
+		/* set additional strings */
+		if (g_dsagen_lang == LANG_DE) {
+
+			g_texts[285] = g_txt_no285_de;
+			g_texts[286] = g_txt_no286_de;
+			g_texts[287] = g_txt_no287_de;
+
+		} else {
+
+			g_texts[285] = g_txt_no285_en;
+			g_texts[286] = g_txt_no286_en;
+			g_texts[287] = g_txt_no287_en;
+		}
 		count++;
 	}
 
@@ -4862,11 +4858,70 @@ static void refresh_background(volatile struct struct_hero *hero, const int page
 	}
 
 	/* draw the head to the backbuffer */
-	if (hero->typus && ((page == 0) || (page > 4))) {
+	if (hero->typus && ((page == 0) || ((5 <= page) && (page <= 10)))) {
 		draw_head(page);
 	}
 
 	g_gfx_ptr = g_vga_memstart;
+}
+
+/**
+ * \brief get an attribute requirement
+ * \param[in] typus the typus
+ * \param[in] no number of the requirement
+ * \param[out] attrib the number of the attribute
+ * \param[out] value the value of the requirement
+ */
+static void get_requirement(const int typus, const int no, signed char *attrib, unsigned char *value)
+{
+	if ((1 <= typus) && (typus <= 12) && (0 <= no) && (no <= 5))
+	{
+		if (g_requirement_table == 0) {
+			*attrib = g_reqs_orig[typus][no].attrib;
+			*value = g_reqs_orig[typus][no].value;
+		} else if (g_requirement_table == 1) {
+			*attrib = g_reqs_hb_de[typus][no].attrib;
+			*value = g_reqs_hb_de[typus][no].value;
+		} else if (g_requirement_table == 2) {
+			*attrib = g_reqs_follow[typus][no].attrib;
+			*value = g_reqs_follow[typus][no].value;
+		}
+	} else {
+		/* default values */
+		*attrib = -1;
+		*value = 0;
+	}
+}
+
+/**
+ * \brief toggles between different attibute requirement tables
+ **/
+static void toggle_requirement_table(void)
+{
+	const int tiles_bak = g_menu_tiles;
+	g_menu_tiles = 4;
+
+	if (g_requirement_table == 0) {
+
+		/* to german handbook */
+		infobox(get_text(285), 0);
+		g_requirement_table = 1;
+
+	} else if (g_requirement_table == 1) {
+
+		/* to SCHWEIF/RIVA */
+		infobox(get_text(286), 0);
+		g_requirement_table = 2;
+
+	} else if (g_requirement_table == 2) {
+
+		/* to SCHWEIF/RIVA */
+		infobox(get_text(287), 0);
+		g_requirement_table = 0;
+
+	}
+
+	g_menu_tiles = tiles_bak;
 }
 
 /**
@@ -6173,20 +6228,24 @@ static int select_typus(volatile struct struct_hero *hero, const int level)
 
 		for (i = 1; i <= 12; i++) {
 			impossible = 0;
-			for (si = 0; si < 4; si++) {
+			for (si = 0; si < 6; si++) {
 
 				signed char att;
 				unsigned char value;
+				int is_upper;
+				signed char v;
 				get_requirement(i, si, &att, &value);
-				const int is_upper = ((unsigned char)value & 0x80) ? 1 : 0;
-				const signed char v = (value & 0x7f);
 
-				if (att != -1) {
-					if (is_upper) {
-						if (hero->attrib[att].normal > v) impossible = 1;
-					} else {
-						if (v > hero->attrib[att].normal) impossible = 1;
-					}
+				if (att == -1) break;
+
+				is_upper = ((unsigned char)value & 0x80) ? 1 : 0;
+				v = (value & 0x7f);
+
+
+				if (is_upper) {
+					if (hero->attrib[att].normal > v) impossible = 1;
+				} else {
+					if (v > hero->attrib[att].normal) impossible = 1;
 				}
 			}
 
@@ -6929,32 +6988,35 @@ static int choose_typus(volatile struct struct_hero *hero, const int level)
 #endif
 
 	/* adjust typus attribute requirements */
-	for (i = 0; i < 4; i++) {
+	for (i = 0; i < 6; i++) {
 
 		/* get attribute requirement */
 		signed char att;
 		unsigned char value;
-		get_requirement(choosen_typus, i, &att, &value);
-		const int is_upper = (value & 0x80) ? 1 : 0;
-		const signed char v = (value & 0x7f);
+		int is_upper;
+		signed char v;
 
-		if (att != -1) {
+		get_requirement(choosen_typus, i, &att, &value);
+
+		if (att == -1) break;
+
+		is_upper = (value & 0x80) ? 1 : 0;
+		v = (value & 0x7f);
 
 #if !defined(__BORLANDC__)
-			fprintf(stderr, "\t%s %c= %d\n", get_text(att + 32), is_upper ? '<' : '>', v);
+		fprintf(stderr, "\t%s %c= %d\n", get_text(att + 32), is_upper ? '<' : '>', v);
 #endif
-			if (is_upper) {
-				/* attribute upper bound */
-				if (hero->attrib[att].normal > v) {
-					hero->attrib[att].normal = v;
-					hero->attrib[att].current = v;
-				}
-			} else {
-				/* attribute lower bound */
-				if (hero->attrib[att].normal < v) {
-					hero->attrib[att].normal = v;
-					hero->attrib[att].current = v;
-				}
+		if (is_upper) {
+			/* attribute upper bound */
+			if (hero->attrib[att].normal > v) {
+				hero->attrib[att].normal = v;
+				hero->attrib[att].current = v;
+			}
+		} else {
+			/* attribute lower bound */
+			if (hero->attrib[att].normal < v) {
+				hero->attrib[att].normal = v;
+				hero->attrib[att].current = v;
 			}
 		}
 	}
@@ -7088,6 +7150,10 @@ static void do_gen(volatile struct struct_hero *hero, const int init_level)
 		if ((page == 0) && (g_in_key_ext == KEY_6)) {
 			level = (level == 1 ? 2 : 1);
 			full_refresh = 1;
+		}
+
+		if ((page == 0) && (g_in_key_ext == KEY_7)) {
+			toggle_requirement_table();
 		}
 
 		/* show credits in an infobox() */
