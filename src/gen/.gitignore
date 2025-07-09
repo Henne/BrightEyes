@@ -1,0 +1,10 @@
+doxygen/
+ngen_*
+*.CHR
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+*.DIS
+*.BIN
+DSAGEN.*
+tools/NGEN.*
