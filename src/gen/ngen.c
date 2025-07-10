@@ -4689,12 +4689,10 @@ static void save_chr(volatile struct struct_hero *hero)
 			flen = lseek(handle, 0, SEEK_END);
 			close(handle);
 
-			if (sizeof(*hero) != 0x6da) {
-				fprintf(stderr, "ERROR: sizeof(*hero) = %u\n", (unsigned short)sizeof(*hero));
-			}
 			if (flen != written) {
 				fprintf(stderr, "ERROR: file %12s filelength = %d bytes != written %d\n", filename, flen, written);
 			}
+
 			if (g_called_with_args == 0) return;
 
 #if defined(__BORLANDC__)
@@ -4715,9 +4713,6 @@ static void save_chr(volatile struct struct_hero *hero)
 				flen = lseek(handle, 0, SEEK_END);
 				close(handle);
 
-				if (sizeof(*hero) != 0x6da) {
-					fprintf(stderr, "ERROR: sizeof(*hero) = %u\n", (unsigned short)sizeof(*hero));
-				}
 				if (flen != written) {
 					fprintf(stderr, "ERROR: file %12s filelength = %d bytes != written %d\n", filename, flen, written);
 				}
