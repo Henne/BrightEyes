@@ -1393,13 +1393,19 @@ static inline char* get_text(signed short no) {
 #define get_text(no) (g_texts[no])
 #endif
 
-static char g_txt_no285_de[] = "SIE BENUTZEN JETZT DIE \xf1 DT. HANDBUCHVERSION\xf0 DER ATTRIBUTWERTE";
-static char g_txt_no286_de[] = "SIE BENUTZEN JETZT DIE \xf1SCHWEIFVERSION\xf0 DER ATTRIBUTWERTE";
-static char g_txt_no287_de[] = "SIE BENUTZEN JETZT DIE \xf1ORIGINALVERSION\xf0 DER ATTRIBUTWERTE";
+static char g_txt_no285_de[] = "SIE BENUTZEN JETZT DIE \xf1 DT. HANDBUCHVERSION\xf0 DER ATTRIBUTWERTE.";
+static char g_txt_no286_de[] = "SIE BENUTZEN JETZT DIE \xf1SCHWEIFVERSION\xf0 DER ATTRIBUTWERTE.";
+static char g_txt_no287_de[] = "SIE BENUTZEN JETZT DIE \xf1ORIGINALVERSION\xf0 DER ATTRIBUTWERTE.";
 
-static char g_txt_no285_en[] = "YOU NOW USE THE \xf1GERMAN HANDBOOK VERSION\xf0 OF THE ATTRIBUTE VALUES";
-static char g_txt_no286_en[] = "YOU NOW USE THE \xf1STARTRAIL VERSION\xf0 OF THE ATTRIBUTE VALUES";
-static char g_txt_no287_en[] = "YOU NOW USE THE \xf1ORIGINAL VERSION\xf0 OF THE ATTRIBUTE VALUES";
+static char g_txt_no290_de[] = "W\x8eHLEN SIE DAS ZU SPEICHERNDE AUSGABEFORMAT.";
+static char g_txt_no291[] = "DE_CD / EN_DISK (1754 BYTE)";
+static char g_txt_no292[] = "DE_DISK (1738 BYTE)";
+
+static char g_txt_no285_en[] = "YOU NOW USE THE \xf1GERMAN HANDBOOK VERSION\xf0 OF THE ATTRIBUTE VALUES.";
+static char g_txt_no286_en[] = "YOU NOW USE THE \xf1STARTRAIL VERSION\xf0 OF THE ATTRIBUTE VALUES.";
+static char g_txt_no287_en[] = "YOU NOW USE THE \xf1ORIGINAL VERSION\xf0 OF THE ATTRIBUTE VALUES.";
+
+static char g_txt_no290_en[] = "SELECT THE OUTPUT FORMAT.";
 
 static signed char g_in_intro;
 
@@ -3003,12 +3009,20 @@ static int load_essential_files(void)
 			g_texts[286] = g_txt_no286_de;
 			g_texts[287] = g_txt_no287_de;
 
+			g_texts[290] = g_txt_no290_de;
+
 		} else {
 
 			g_texts[285] = g_txt_no285_en;
 			g_texts[286] = g_txt_no286_en;
 			g_texts[287] = g_txt_no287_en;
+
+			g_texts[290] = g_txt_no290_en;
 		}
+
+		g_texts[291] = g_txt_no291;
+		g_texts[292] = g_txt_no292;
+
 		count++;
 	}
 
@@ -4593,6 +4607,7 @@ void restore_timer_isr(void)
  */
 static void save_chr(volatile struct struct_hero *hero)
 {
+	int answer;
 	signed short handle;
 	signed short i;
 	char filename[20];
@@ -4605,11 +4620,18 @@ static void save_chr(volatile struct struct_hero *hero)
 		infobox(get_text(72), 0);
 		return;
 	}
+
 	/* check for name */
 	if (!hero->name[0]) {
 		infobox(get_text(154), 0);
 		return;
 	}
+
+	/* ask for output format */
+	g_menu_tiles = 5;
+	answer = gui_radio(get_text(290), 2, get_text(291), get_text(292));
+	g_menu_tiles = 3;
+	if (answer == -1) return;
 
 	/* copy picture to the character struct */
 	memcpy((void*)hero->pic, g_buffer_current_head, 1024);
@@ -4647,6 +4669,9 @@ static void save_chr(volatile struct struct_hero *hero)
 #endif
 	if ((handle == -1) || gui_bool(get_text(261))) {
 
+		// floppy versions are 16 bytes shorter
+		const int floppy_disp = (answer == 1 ? 0 : 16);
+
 		/* close an existing file before overwriting it */
 		if (handle != -1) close(handle);
 
@@ -4660,7 +4685,7 @@ static void save_chr(volatile struct struct_hero *hero)
 
 		if (handle != -1) {
 			int flen = 0;
-			int written = write(handle, (const void*)hero, sizeof(*hero));
+			int written = write(handle, (const void*)hero + floppy_disp, sizeof(*hero) - floppy_disp);
 			flen = lseek(handle, 0, SEEK_END);
 			close(handle);
 
@@ -4686,7 +4711,7 @@ static void save_chr(volatile struct struct_hero *hero)
 			handle = open(path, (O_TRUNC | O_CREAT| O_RDWR), (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH));
 #endif
 			if (handle != -1) {
-				written = write(handle, (const void*)hero, sizeof(*hero));
+				written = write(handle, (const void*)hero + floppy_disp, sizeof(*hero) - floppy_disp);
 				flen = lseek(handle, 0, SEEK_END);
 				close(handle);
 

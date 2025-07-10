@@ -17,6 +17,8 @@ Currently supported platforms are:
 * Some DSA3 rules were added
 * Toggling between Novice / Advanced mode by pressing '6' on the main page
 * Toggling between different attribute value requirements by pressing '7' on the main page
+* Saves CHR files with the german Floppy DSAGEN.DAT in the correct size
+
 
 ## Planned Features / WIP
 * Music: MIDI/AWS Playback
