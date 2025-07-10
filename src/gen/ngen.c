@@ -4685,7 +4685,7 @@ static void save_chr(volatile struct struct_hero *hero)
 
 		if (handle != -1) {
 			int flen = 0;
-			int written = write(handle, (const void*)hero + floppy_disp, sizeof(*hero) - floppy_disp);
+			int written = write(handle, (const void*)((unsigned char*)hero + floppy_disp), sizeof(struct struct_hero) - floppy_disp);
 			flen = lseek(handle, 0, SEEK_END);
 			close(handle);
 
@@ -4709,7 +4709,7 @@ static void save_chr(volatile struct struct_hero *hero)
 			handle = open(path, (O_TRUNC | O_CREAT| O_RDWR), (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH));
 #endif
 			if (handle != -1) {
-				written = write(handle, (const void*)hero + floppy_disp, sizeof(*hero) - floppy_disp);
+				written = write(handle, (const void*)((unsigned char*)hero + floppy_disp), sizeof(struct struct_hero) - floppy_disp);
 				flen = lseek(handle, 0, SEEK_END);
 				close(handle);
 
