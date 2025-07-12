@@ -1,0 +1,771 @@
+/*
+ *      Rewrite of DSA1 v3.02_de functions of seg103 (skills)
+ *      Functions rewritten: 8/8 (complete)
+ *
+ *	Borlandified and identical
+ *	Compiler:	Borland C++ 3.1
+ *	Call:		BCC.EXE -mlarge -O- -c -1 -Yo seg103.cpp
+ *
+ */
+
+#include <stdio.h>
+#include <string.h>
+
+#include "v302de.h"
+
+#include "seg002.h"
+#include "seg007.h"
+#include "seg026.h"
+#include "seg047.h"
+#include "seg053.h"
+#include "seg097.h"
+#include "seg104.h"
+
+#if !defined(__BORLANDC__)
+namespace M302de {
+#endif
+
+struct dummy {
+	char a[6];
+};
+
+signed short LVL_select_skill(Bit8u *hero, signed short show_values)
+{
+	signed short i;
+
+	signed short answer;
+	signed short l1;
+	signed short retval = -1;
+	/* string on stack "%s~%d" */
+	struct dummy format_str = *(struct dummy*)(p_datseg + SELECT_SKILL_LVLUP);
+
+	if (show_values != 0) {
+
+		strcpy((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), (char*)get_ttx(205));
+
+		if (host_readbs(hero + HERO_TA_RISE) > 1) {
+			strcat((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), (char*)get_ttx(393));
+		}
+
+		sprintf((char*)Real2Host(ds_readd(DTP2)),
+			(char*)get_ttx(204),
+			/* sind / ist */
+			(host_readbs(hero + HERO_TA_RISE) > 1) ? get_ttx(305) : get_ttx(304),
+			/* # of tries left */
+			host_readbs(hero + HERO_TA_RISE),
+			Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
+	} else {
+
+		strcpy((char*)Real2Host(ds_readd(DTP2)), (char*)get_ttx(216));
+	}
+
+	/* ask for the skill category */
+	answer = GUI_radio(Real2Host(ds_readd(DTP2)), 7,
+				get_ttx(100), get_ttx(101),
+				get_ttx(102), get_ttx(105),
+				get_ttx(103), get_ttx(104),
+				get_ttx(106)) - 1;
+
+	if (answer != -2) {
+
+		l1 = ds_readbs(SKILLS_INDEX + 2 * answer);
+
+		if (show_values != 0) {
+
+			for (i = 0; ds_readbs((SKILLS_INDEX + 1) + 2 * answer) > i; i++) {
+
+				sprintf((char*)Real2Host(ds_readd(DTP2)) + 50 * i,
+					format_str.a,
+					get_ttx(l1 + i + 48),
+					host_readbs(hero + l1 + i + HERO_TALENTS));
+
+				ds_writed(RADIO_NAME_LIST + 4 * i, (Bit32u)((RealPt)ds_readd(DTP2) + 50 * i));
+			}
+		} else {
+
+			for (i = 0; ds_readbs((SKILLS_INDEX + 1) + 2 * answer) > i; i++) {
+				ds_writed(RADIO_NAME_LIST + 4 * i, (Bit32u)(host_readd(Real2Host(ds_readd(TEXT_LTX_INDEX)) + (l1 + i + 48) * 4)));
+			}
+		}
+
+		retval = GUI_radio(get_ttx(218), ds_readbs((SKILLS_INDEX + 1) + 2 * answer),
+				Real2Host(ds_readd(RADIO_NAME_LIST)),
+				Real2Host(ds_readd((RADIO_NAME_LIST + 4))),
+				Real2Host(ds_readd((RADIO_NAME_LIST + 2 * 4))),
+				Real2Host(ds_readd((RADIO_NAME_LIST + 3 * 4))),
+				Real2Host(ds_readd((RADIO_NAME_LIST + 4 * 4))),
+				Real2Host(ds_readd((RADIO_NAME_LIST + 5 * 4))),
+				Real2Host(ds_readd((RADIO_NAME_LIST + 6 * 4))),
+				Real2Host(ds_readd((RADIO_NAME_LIST + 7 * 4))),
+				Real2Host(ds_readd((RADIO_NAME_LIST + 8 * 4))),
+				Real2Host(ds_readd((RADIO_NAME_LIST + 9 * 4))),
+				Real2Host(ds_readd((RADIO_NAME_LIST + 10 * 4))),
+				Real2Host(ds_readd((RADIO_NAME_LIST + 11 * 4))),
+				Real2Host(ds_readd((RADIO_NAME_LIST + 12 * 4))),
+				Real2Host(ds_readd((RADIO_NAME_LIST + 13 * 4))),
+				Real2Host(ds_readd((RADIO_NAME_LIST + 14 * 4))),
+				Real2Host(ds_readd((RADIO_NAME_LIST + 15 * 4))));
+
+		if (retval != -1) {
+			retval += l1 - 1;
+		}
+	} else {
+		retval = -2;
+	}
+
+	return retval;
+}
+
+/**
+ * \brief   returns hero which seems best for a skill
+ *
+ * \param   skill       skill
+ */
+RealPt get_proper_hero(signed short skill)
+/* called from only a single position, namely test_skill(..), and only if game is in 'easy' mode and the tested skill is TA_SINNESSCHAERFE */
+{
+	signed short i;
+	signed short cur;
+
+	signed short max = -1;
+	RealPt hero_i;
+	RealPt retval;
+
+#if !defined(__BORLANDC__)
+	retval = 0;
+#endif
+
+	hero_i = (RealPt)ds_readd(HEROES);
+
+	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
+		if ((host_readbs(Real2Host(hero_i) + HERO_TYPE) != HERO_TYPE_NONE) &&
+			/* Check if in current group */
+			(host_readb(Real2Host(hero_i) + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP)) &&
+			/* Check hero is not dead */
+			/* TODO: potential Original-Bug: What if petrified / unconscious etc.? */
+			!hero_dead(Real2Host(hero_i))) {
+
+			/* add current and maximum attibute values */
+			cur =	host_readbs(Real2Host(hero_i) + HERO_ATTRIB + 3 * ds_readbs(SKILL_DESCRIPTIONS + 4 * skill)) +
+				host_readbs(Real2Host(hero_i) + HERO_ATTRIB_MOD + 3 * ds_readbs(SKILL_DESCRIPTIONS + 4 * skill)) +
+				host_readbs(Real2Host(hero_i) + HERO_ATTRIB + 3 * ds_readbs((SKILL_DESCRIPTIONS + 1) + 4 * skill)) +
+				host_readbs(Real2Host(hero_i) + HERO_ATTRIB_MOD + 3 * ds_readbs((SKILL_DESCRIPTIONS + 1) + 4 * skill)) +
+				host_readbs(Real2Host(hero_i) + HERO_ATTRIB + 3 * ds_readbs((SKILL_DESCRIPTIONS + 2) + 4 * skill)) +
+				host_readbs(Real2Host(hero_i) + HERO_ATTRIB_MOD + 3 * ds_readbs((SKILL_DESCRIPTIONS + 2) + 4 * skill)) +
+				host_readbs(Real2Host(hero_i) + HERO_TALENTS + skill);
+
+			if (cur > max) {
+
+				/* if the sum is greater than the current best */
+				max = cur;
+				retval = hero_i;
+			}
+		}
+	}
+
+#if !defined(__BORLANDC__)
+	/* sanity check for Original Bug hunting */
+	if (retval == 0)
+		D1_ERR("Original-Bug: %s undefinierter Rückgabewert\n",
+			__func__);
+#endif
+
+	return retval;
+}
+
+/**
+ * \brief   performs a skill test
+ *
+ * \param   hero        hero which should be tested
+ * \param   skill       the skill to test
+ * \param   handicap    may be positive or negative. The higher the value, the harder the test.
+ */
+signed short test_skill(Bit8u *hero, signed short skill, signed char handicap)
+{
+	signed short randval;
+	signed short e_skillval;
+
+	/* dont test for weapon skills */
+	if ((skill >= TA_SCHUSSWAFFEN) && (skill <= TA_SINNESSCHAERFE)) {
+
+#if !defined(__BORLANDC__)
+		D1_INFO("%s Talentprobe %s %+d (TaW %d)",(char*)(hero + HERO_NAME2), names_skill[skill], handicap, host_readbs(hero + HERO_TALENTS + skill));
+#endif
+
+		/* special test if skill is a range weapon skill */
+		if ((skill == TA_SCHUSSWAFFEN) || (skill == TA_WURFWAFFEN)) {
+
+			/* calculate range weapon base value */
+			e_skillval = (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KL)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KL)) +
+				host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_GE)) +
+				host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK))) / 4;
+
+			/* add skill value */
+			e_skillval += host_readbs(hero + HERO_TALENTS + skill);
+			/* sub handycap */
+			e_skillval -= handicap;
+
+			randval = random_schick(20);
+
+			/* Unlucky */
+			if (randval == 20) {
+#if !defined(__BORLANDC__)
+				D1_INFO("Ungluecklich\n");
+#endif
+				return -1;
+			}
+			/* Lucky */
+			if (randval == 1) {
+#if !defined(__BORLANDC__)
+				D1_INFO("Gluecklich\n");
+#endif
+				return 99;
+			}
+			if (randval <= e_skillval) {
+				/* test successful */
+#if !defined(__BORLANDC__)
+				D1_INFO(" (%d) -> bestanden\n", randval);
+#endif
+				return e_skillval - randval + 1;
+			}
+
+			/* test unsuccessful */
+#if !defined(__BORLANDC__)
+			D1_INFO(" (%d) -> nicht bestanden\n", randval);
+#endif
+			return 0;
+		}
+
+		/* automatically get hero with best senses in beginner mode */
+		if ((skill == TA_SINNESSCHAERFE) && (ds_readws(GAME_MODE) == GAME_MODE_BEGINNER)) {
+			hero = Real2Host(get_proper_hero(TA_SINNESSCHAERFE));
+
+#if defined(__BORLANDC__)
+			/* seems to have been debug stuff with conditional compilation */
+			if (0) return 0;
+#endif
+		}
+
+		/* do the test */
+		handicap -= host_readbs(hero + HERO_TALENTS + skill);
+
+		return test_attrib3(hero, ds_readbs(SKILL_DESCRIPTIONS + skill * 4), ds_readbs((SKILL_DESCRIPTIONS + 1) + skill * 4), ds_readbs((SKILL_DESCRIPTIONS + 2) + skill * 4), handicap);
+
+	}
+
+	return 0;
+}
+
+struct dummy2 {
+	signed char a[6];
+};
+
+signed short select_skill(void)
+{
+	signed short l_si = -1;
+	signed short nr_skills = 3;
+	/* available skills {TA_HEILEN_GIFT, TA_HEILEN_KRANKHEITEN, TA_HEILEN_WUNDEN, -1, -1, -1} */
+	struct dummy2 a = *(struct dummy2*)(p_datseg + SELECT_SKILL_DEFAULTS);
+
+	/* add skills for special location */
+	if (ds_readbs(CURRENT_LOCTYPE) == LOCTYPE_TAVERN) {
+		a.a[nr_skills] = TA_AKROBATIK;
+		nr_skills++;
+
+		if (ds_readws(CHEATSKILL_USABLE) == 0) {
+			a.a[nr_skills] = TA_FALSCHSPIEL;
+			nr_skills++;
+		}
+
+		a.a[nr_skills] = TA_MUSIZIEREN;
+		nr_skills++;
+	} else if ((ds_readbs(CURRENT_LOCTYPE) == LOCTYPE_WILDCAMP) || (ds_readbs(CURRENT_LOCTYPE) == LOCTYPE_INN)) {
+		a.a[nr_skills] = TA_ALCHIMIE;
+		nr_skills++;
+	} else if (ds_readbs(CURRENT_LOCTYPE) == LOCTYPE_MARKET) {
+		a.a[nr_skills] = TA_AKROBATIK;
+		nr_skills++;
+		a.a[nr_skills] = TA_TASCHENDIEBSTAHL;
+		nr_skills++;
+	} else if (ds_readbs(CURRENT_LOCTYPE) == LOCTYPE_MERCHANT) {
+		a.a[nr_skills] = TA_TASCHENDIEBSTAHL;
+		nr_skills++;
+	}
+
+	l_si = GUI_radio(get_ttx(218), (signed char)nr_skills,
+				get_ttx(a.a[0] + 48),
+				get_ttx(a.a[1] + 48),
+				get_ttx(a.a[2] + 48),
+				get_ttx(a.a[3] + 48),
+				get_ttx(a.a[4] + 48),
+				get_ttx(a.a[5] + 48),
+				get_ttx(a.a[6] + 48));
+
+	if (l_si != -1) {
+		return a.a[l_si - 1];
+	}
+
+	return l_si;
+}
+
+signed short use_skill(signed short hero_pos, signed char handicap, signed short skill)
+{
+	signed short l_si;
+	signed short le_damage;
+
+	signed short patient_pos;
+	signed short le;
+	Bit8u *hero;
+	Bit8u *patient;
+	Bit32s money;
+	signed short poison;
+	signed short tx_file_bak;
+
+	l_si = 1;
+
+	hero = get_hero(hero_pos);
+
+	if (skill != -1) {
+
+		tx_file_bak = ds_readws(TX_FILE_INDEX);
+
+		load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
+
+		switch(skill) {
+		case TA_HEILEN_GIFT: {
+			ds_writeb(HERO_SEL_EXCLUDE, (signed char)hero_pos);
+
+			patient_pos = select_hero_from_group(get_ttx(460));
+
+			if (patient_pos != -1) {
+				patient = get_hero(patient_pos);
+				if (is_hero_healable(patient)) {
+
+					poison = hero_is_poisoned(patient);
+
+					if (poison == 0) {
+						/* patient is not poisoned */
+						sprintf((char*)Real2Host(ds_readd(DTP2)),
+							(char*)get_ttx(463),
+							(char*)patient + HERO_NAME2);
+						GUI_output(Real2Host(ds_readd(DTP2)));
+					} else if (host_readds(patient + HERO_HEAL_TIMER) > 0) {
+						/* patient timer is not zero */
+						sprintf((char*)Real2Host(ds_readd(DTP2)),
+							(char*)get_ttx(697),
+							(char*)patient + HERO_NAME2);
+						GUI_output(Real2Host(ds_readd(DTP2)));
+					} else {
+						/* set patient timer */
+						host_writed(patient + HERO_HEAL_TIMER, HOURS(4)); /* 4 hours */
+
+						if (test_skill(hero, TA_HEILEN_GIFT, handicap) > 0) {
+
+							timewarp(MINUTES(20));
+
+							if (test_skill(hero, TA_HEILEN_GIFT, ds_readbs(POISON_PRICES + 2 * poison) + handicap) > 0) {
+								/* success */
+								sprintf((char*)Real2Host(ds_readd(DTP2)),
+									(char*)get_ttx(690),
+									(char*)hero + HERO_NAME2,
+									(char*)patient + HERO_NAME2);
+
+								GUI_output(Real2Host(ds_readd(DTP2)));
+
+								host_writeb(patient + (HERO_POISON + 1) + 5 * poison, 0);
+								host_writeb(patient + HERO_POISON + 5 * poison, 1);
+
+								sprintf((char*)Real2Host(ds_readd(DTP2)),
+									(char*)get_ttx(692),
+									(char*)hero + HERO_NAME2,
+									(char*)patient + HERO_NAME2);
+
+								if (GUI_bool(Real2Host(ds_readd(DTP2)))) {
+
+									do {
+										le = GUI_input(get_ttx(693), 2);
+									} while (le <= 0);
+
+									if ((l_si = test_skill(hero, TA_HEILEN_GIFT, le + handicap)) > 0) {
+
+										sprintf((char*)Real2Host(ds_readd(DTP2)),
+											(char*)get_ttx(691),
+											(char*)hero + HERO_NAME2,
+											(char*)patient + HERO_NAME2,
+											le);
+
+										add_hero_le(patient, le);
+
+										GUI_output(Real2Host(ds_readd(DTP2)));
+									} else {
+										/* skill test failed */
+										le_damage = 3;
+
+										if (host_readws(patient + HERO_LE) <= le_damage) {
+											/* don't kill the patient: at least 1 LE should remain */
+											le_damage = host_readws(patient + HERO_LE) - 1;
+										}
+
+										sub_hero_le(patient, le_damage);
+
+										sprintf((char*)Real2Host(ds_readd(DTP2)),
+											(char*)get_ttx(694),
+											(char*)patient + HERO_NAME2,
+											le_damage);
+
+										GUI_output(Real2Host(ds_readd(DTP2)));
+
+										l_si = 0;
+									}
+								}
+							} else {
+								/* healing failed */
+								sprintf((char*)Real2Host(ds_readd(DTP2)),
+									(char*)get_ttx(689),
+									(char*)hero + HERO_NAME2,
+									(char*)patient + HERO_NAME2);
+
+								GUI_output(Real2Host(ds_readd(DTP2)));
+							}
+						} else {
+							/* recognizing the poison failed */
+							sprintf((char*)Real2Host(ds_readd(DTP2)),
+								(char*)get_ttx(688),
+								(char*)hero + HERO_NAME2,
+								(char*)patient + HERO_NAME2);
+
+							GUI_output(Real2Host(ds_readd(DTP2)));
+						}
+					}
+				}
+			}
+			break;
+		}
+		case  TA_HEILEN_KRANKHEITEN : {
+			ds_writeb(HERO_SEL_EXCLUDE, (signed char)hero_pos);
+
+			patient_pos = select_hero_from_group(get_ttx(460));
+
+			if (patient_pos != -1) {
+				patient = get_hero(patient_pos);
+
+				skill_cure_disease(hero, patient, handicap, 0);
+			}
+			break;
+		}
+		case TA_HEILEN_WUNDEN : {
+			ds_writeb(HERO_SEL_EXCLUDE, (signed char)hero_pos);
+
+			patient_pos = select_hero_from_group(get_ttx(460));
+
+			if (patient_pos != -1) {
+				patient = get_hero(patient_pos);
+				if (is_hero_healable(patient)) {
+
+					if (host_readws(patient + HERO_LE) >= host_readws(patient + HERO_LE_ORIG)) {
+						/* no need to heal */
+						sprintf((char*)Real2Host(ds_readd(DTP2)),
+							(char*)get_ttx(461),
+							(char*)patient + HERO_NAME2);
+
+						GUI_output(Real2Host(ds_readd(DTP2)));
+					} else if (host_readds(patient + HERO_HEAL_TIMER) > 0) {
+						/* timer is still running */
+						sprintf((char*)Real2Host(ds_readd(DTP2)),
+							(char*)get_ttx(697),
+							(char*)patient + HERO_NAME2);
+
+						GUI_output(Real2Host(ds_readd(DTP2)));
+
+					} else {
+						host_writed(patient + HERO_HEAL_TIMER, DAYS(1));
+
+						if (test_skill(hero, TA_HEILEN_WUNDEN, handicap) > 0) {
+							if (test_skill(hero, TA_HEILEN_WUNDEN, handicap) > 0) {
+
+								l_si = (host_readbs(hero + (HERO_TALENTS + TA_HEILEN_WUNDEN)) > 1) ? host_readbs(hero + (HERO_TALENTS + TA_HEILEN_WUNDEN)) : 1;
+
+								add_hero_le(patient, l_si);
+
+								sprintf((char*)Real2Host(ds_readd(DTP2)),
+									(char*)get_ttx(691),
+									(char*)hero + HERO_NAME2,
+									(char*)patient + HERO_NAME2,
+									l_si);
+
+								GUI_output(Real2Host(ds_readd(DTP2)));
+							} else {
+								/* skill test failed */
+								le_damage = 3;
+
+								if (host_readws(patient + HERO_LE) <= le_damage) {
+									/* don't kill the patient: at least 1 LE should remain */
+									le_damage = host_readws(patient + HERO_LE) - 1;
+								}
+
+								sub_hero_le(patient, le_damage);
+
+								sprintf((char*)Real2Host(ds_readd(DTP2)),
+									(char*)get_ttx(694),
+									(char*)patient + HERO_NAME2,
+									le_damage);
+
+								GUI_output(Real2Host(ds_readd(DTP2)));
+
+								l_si = 0;
+
+								host_writed(patient + HERO_STAFFSPELL_TIMER, DAYS(1)); /* TODO: Why STAFFSPELL ?? */
+							}
+						} else {
+
+							if (random_schick(20) <= 7) {
+								/* 35% chance: infected with Wundfieber illness */
+								sprintf((char*)Real2Host(ds_readd(DTP2)),
+									(char*)get_ttx(699),
+									(char*)hero + HERO_NAME2,
+									(char*)patient + HERO_NAME2);
+
+								host_writeb(patient + (HERO_ILLNESS + 5 * ILLNESS_TYPE_WUNDFIEBER), -1);
+								host_writeb(patient + (HERO_ILLNESS + 5 * ILLNESS_TYPE_WUNDFIEBER + 1), 0);
+							} else {
+								/* 65% chance: just failed, no infection */
+								sprintf((char*)Real2Host(ds_readd(DTP2)),
+									(char*)get_ttx(698),
+									(char*)hero + HERO_NAME2,
+									(char*)patient + HERO_NAME2);
+							}
+
+							GUI_output(Real2Host(ds_readd(DTP2)));
+						}
+					}
+				}
+			}
+			break;
+		}
+		case TA_AKROBATIK : {
+
+			if (ds_readds((INGAME_TIMERS + 4 * INGAME_TIMER_AKROBATIK)) > 0) {
+
+				GUI_output(get_tx(34));
+
+			} else {
+
+				if (test_skill(hero, TA_AKROBATIK, handicap) > 0) {
+
+					money = random_interval(10, 200);
+
+					make_valuta_str((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), money);
+
+					sprintf((char*)Real2Host(ds_readd(DTP2)),
+						(char*)get_tx(35),
+						(char*)hero + HERO_NAME2,
+						Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
+
+					GUI_output(Real2Host(ds_readd(DTP2)));
+
+					add_party_money(money);
+
+					ds_writed((INGAME_TIMERS + 4 * INGAME_TIMER_AKROBATIK), HOURS(8));
+					ds_writew(REQUEST_REFRESH, 1);
+				} else {
+					GUI_output(get_tx(36));
+
+					ds_writed((INGAME_TIMERS + 4 * INGAME_TIMER_AKROBATIK), HOURS(8));
+					l_si = -1;
+				}
+			}
+			break;
+		}
+		case TA_MUSIZIEREN : {
+
+			if (ds_readds((INGAME_TIMERS + 4 * INGAME_TIMER_MUSIZIEREN)) > 0) {
+
+				GUI_output(get_tx(37));
+
+			} else {
+
+				if (test_skill(hero, TA_MUSIZIEREN, handicap) > 0) {
+
+					money = random_interval(100, 300);
+
+					make_valuta_str((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), money);
+
+					sprintf((char*)Real2Host(ds_readd(DTP2)),
+						(char*)get_tx(35),
+						(char*)hero + HERO_NAME2,
+						Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
+
+					GUI_output(Real2Host(ds_readd(DTP2)));
+
+					add_party_money(money);
+
+					ds_writed((INGAME_TIMERS + 4 * INGAME_TIMER_MUSIZIEREN), HOURS(8));
+					ds_writew(REQUEST_REFRESH, 1);
+				} else {
+					GUI_output(get_tx(36));
+
+					ds_writed((INGAME_TIMERS + 4 * INGAME_TIMER_MUSIZIEREN), HOURS(8));
+					l_si = -1;
+				}
+			}
+			break;
+		}
+		case TA_FALSCHSPIEL : {
+
+			if (test_skill(hero, TA_FALSCHSPIEL, handicap) > 0) {
+
+				money = random_interval(500, 1000);
+
+				make_valuta_str((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), money);
+
+				sprintf((char*)Real2Host(ds_readd(DTP2)),
+					(char*)get_tx(38),
+					Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
+					(char*)hero + HERO_NAME2);
+
+				GUI_output(Real2Host(ds_readd(DTP2)));
+
+				add_party_money(money);
+
+				ds_writew(REQUEST_REFRESH, 1);
+			} else {
+				GUI_output(get_tx(39));
+
+				ds_writeb(TAV_CHEATED_FLAGS + ds_readws(CURRENT_TYPEINDEX), 1);
+
+				l_si = -1;
+			}
+
+			break;
+		}
+		case TA_TASCHENDIEBSTAHL : {
+
+			if (test_skill(hero, TA_TASCHENDIEBSTAHL, handicap) > 0) {
+
+				money = random_interval(500, 1000);
+
+				make_valuta_str((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), money);
+
+				sprintf((char*)Real2Host(ds_readd(DTP2)),
+					(char*)get_tx(40),
+					Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
+					(char*)hero + HERO_NAME2);
+
+				GUI_output(Real2Host(ds_readd(DTP2)));
+
+				add_party_money(money);
+
+				ds_writew(REQUEST_REFRESH, 1);
+			} else {
+				sprintf((char*)Real2Host(ds_readd(DTP2)),
+					(char*)get_tx(41),
+					(char*)hero + HERO_NAME2);
+
+				GUI_output(Real2Host(ds_readd(DTP2)));
+
+				set_party_money(0);
+
+				ds_writew(REQUEST_REFRESH, 1);
+
+				l_si = -1;
+			}
+
+			break;
+		}
+		case TA_ALCHIMIE : {
+			l_si = plan_alchemy(hero);
+			break;
+		}
+		}
+
+		if ((tx_file_bak != -1) && (tx_file_bak != ARCHIVE_FILE_SPELLTXT_LTX)) {
+			load_tx(tx_file_bak);
+		}
+	}
+
+	return l_si;
+}
+
+signed short GUI_use_skill(signed short hero_pos, signed char handicap)
+{
+	signed short skill;
+	Bit8u *hero;
+
+	hero = get_hero(hero_pos);
+
+	if (!check_hero(hero)) {
+		return -1;
+	}
+
+	skill = select_skill();
+	return use_skill(hero_pos, handicap, skill);
+}
+
+signed short GUI_use_skill2(signed short handicap, Bit8u *msg)
+{
+	signed short hero_pos;
+	signed short skill;
+
+	skill = select_skill();
+
+	if (skill != -1) {
+
+		ds_writew(SKILLED_HERO_POS, get_skilled_hero_pos(skill));
+
+		hero_pos = select_hero_ok(msg);
+
+		if ((hero_pos != -1) && (hero_brewing(get_hero(hero_pos)))) {
+			GUI_output(get_ttx(730));
+			hero_pos = -1;
+		}
+		if (hero_pos != -1) {
+			return use_skill(hero_pos, (signed char)handicap, skill);
+		}
+	}
+
+	return 1;
+}
+
+/**
+ * \brief   does a bargain throw
+ *
+ * \param   hero        the hero who bargain
+ * \param   items       the number of different goods
+ * \param   price       the total price
+ * \param   percent     how many percent the player wants to get
+ * \param   mod_init    initial value for the modificator
+ * \return              the result of the throw. A value greater than zero
+ *	means success, below or zero means failed.
+ */
+signed short bargain(Bit8u *hero, signed short items, Bit32s price,
+	signed short percent, signed char mod_init)
+{
+
+	signed char mod = mod_init;
+
+	/* NPC Harika gets a bonus on bargain */
+	if (host_readb(get_hero(6) + HERO_NPC_ID) == NPC_HARIKA) {
+		mod -= 2;
+	}
+
+	/* the more different items you buy, the easier the bargain */
+	mod += (items == 1) ? 2 :
+			((items == 2) ?  1 :
+			((items < 5)  ?  0 :
+			((items < 9)  ? -1 : -2)));
+
+	/* the higher the price, the easier the bargain */
+	mod += (price < 100) ? 2 :
+			((price < 500)  ?  1 :
+			((price < 1000) ?  0 :
+			((price < 2000) ? -1 : -2 )));
+
+	/* the lower the percent, the easier the bargain */
+	mod += percent / 5 + 1;
+
+	return test_skill(hero, TA_FEILSCHEN, mod);
+}
+
+#if !defined(__BORLANDC__)
+}
+#endif
