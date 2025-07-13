@@ -4,7 +4,7 @@
 
 # You need a Borland C++ 3.1 compiler installed in $DRIVE_C
 
-DIR=${PWD}/temp
+DIR=${PWD}/TEMP
 
 DRIVE_C=${PWD}/../../drive_c
 
