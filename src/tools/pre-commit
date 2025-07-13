@@ -45,35 +45,81 @@ EOF
 	exit 1
 fi
 
-# build with gcc
+echo "executing ./git/hooks/pre-comit"
+DIR=$PWD
+
+# have g++ installed
 g++ -v 2>/dev/null >/dev/null
 if [ $? -ne 0 ]; then
-	echo "g++ not installed";
+	echo "ERROR: g++ not installed";
 	exit 1
 fi
-
-#check it builds on this system
-echo "Host build check"
-make 2>lastbuild.log >/dev/null
+# have gcc installed
+gcc -v 2>/dev/null >/dev/null
 if [ $? -ne 0 ]; then
-	echo "Build failure";
+	echo "ERROR: g++ not installed";
 	exit 1
 fi
 
-#check no working files are damaged
-echo "DOS build check"
 
-BAK=$PWD
-cd src/custom/schick/rewrite_m302de/
-./tools/build.sh
+# NGEN part begin
+cd src/gen/
+
+#check if NGEN builds on this system
+echo -n "NGEN: Host build check: "
+make -f Makefile_old clean 2>/dev/null >/dev/null
+make -f Makefile_old 2>lastbuild.log >/dev/null
+if [ $? -ne 0 ]; then
+	echo "FAIL";
+	exit 1
+fi
+echo "\tOK"
+
+#check if NGEN builds on DOS
+echo -n "NGEN: DOS build check: "
+./tools/build.sh 2>/dev/null >/dev/null
 RETVAL=$?
-cd $BAK
-
 if [ $RETVAL -gt 0 ]; then
-	echo "Good files were broken";
+	echo "FAIL";
 	exit 1
 fi
+echo "\t\tOK"
 
-#proceed
+cd $DIR
+# GEN part end
+
+
+# GEN_DOS part begin
+cd src/gen_dos/
+
+#check if GEN builds on DOS
+echo -n "GEN: DOS build check: "
+./tools/build.sh 2>/dev/null >/dev/null
+RETVAL=$?
+if [ $RETVAL -gt 0 ]; then
+	echo "FAIL";
+	exit 1
+fi
+echo "\t\tOK"
+
+cd $DIR
+# GEN part end
+
+
+# SCHICK part begin
+cd src/schick/
+
+#check if SCHICK builds on DOS
+echo -n "SCHICK: DOS build check: "
+./tools/build.sh 2>/dev/null >/dev/null
+RETVAL=$?
+if [ $RETVAL -gt 0 ]; then
+	echo "FAIL";
+	exit 1
+fi
+echo "\tOK"
+
+cd $DIR
+# SCHICK part end
 
 exec git diff-index --check --cached $against --
