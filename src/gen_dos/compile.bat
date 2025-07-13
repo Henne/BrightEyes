@@ -21,7 +21,7 @@
 @REM
 @REM -- here start the complete
 @REM BCC.EXE -mlarge -O -c -2 -Z -j1 CDA_CODE.C
- BCC.EXE -mlarge -O -c -Z -UNEWHERO -j1 GEN104DE.C
+@REM BCC.EXE -mlarge -O -c -Z -UNEWHERO -j1 GEN104DE.C
 @REM BCC.EXE -mlarge -O -c -2 -Z -j1 GEN105DE.C
 @REM BCC.EXE -mlarge -O -c -2 -Z -j1 GEN300EN.C
 @REM BCC.EXE -mlarge -O -c -2 -Z RANDOM.C
