@@ -4,7 +4,7 @@
 
 # You need a Borland C++ compiler installed in $DRIVE_C
 
-DIR=${PWD}/temp
+DIR=${PWD}/TEMP
 OBJDIR=${DIR}/OBJ
 BINDIR=${DIR}/BIN
 DISDIR=${DIR}/disasm
@@ -34,17 +34,12 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
-../../tools/dump_obj >/dev/null 2>/dev/null
+../tools/dump_obj >/dev/null 2>/dev/null
 if [ $? -ne 255 ]; then
 	echo "Problems with dump_obj => Recompile Bright-Eyes"
 	exit 1
 fi
 # all tools are available
-
-#rename *.cpp to *.c
-#for file in *.cpp; do
-#	cp "$file" "${file%%cpp}c"
-#done
 
 # copy all source files to DRIVE_C
 cp *.cpp *.h *.asm ${DRIVE_C}/src
@@ -54,7 +49,7 @@ cp compile.bat ${DRIVE_C}/src
 # run compile.bat in a DOSBox environment, needs an installes BCC.EXE there
 # TODO: make this work from here
 pushd ${DRIVE_C}
-dosbox -conf compile.conf
+dosbox -conf bcc31.conf
 popd
 
 # cleanup
@@ -81,7 +76,7 @@ for i in ${OBJDIR}/*.OBJ; do
 
 	echo "$i -- $PREFIX"
 	# extract instructions
-	../../tools/dump_obj $i >/dev/null
+	../tools/dump_obj $i >/dev/null
 	# move the BIN-files to BINDIR
         mv ${OBJDIR}/${PREFIX}.BIN $BINDIR
 

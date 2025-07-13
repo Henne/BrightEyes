@@ -2,12 +2,14 @@
 
 # This script compiles all files maked as finalized and makes sure the have not changed
 
-DIR=${PWD}/temp
+DIR=${PWD}/TEMP
 OBJDIR=${DIR}/OBJ
 BINDIR=${DIR}/BIN
 DISDIR=${DIR}/disasm
 
 DISORIG=${DIR}/disasm_orig
+
+BUILDDIR=build/
 
 DRIVE_C=${PWD}/../../drive_c
 
@@ -21,11 +23,11 @@ cp *.cpp *.h *.asm TLINK.RES ${DRIVE_C}/src
 cp -r AIL ${DRIVE_C}/src
 
 # copy c_ready.bat as compile.bat
-cp bc_ready.bat ${DRIVE_C}/src/compile.bat
+cp build.bat ${DRIVE_C}/src/compile.bat
 
 # run compile.bat in a DOSBox environment, needs an installed BCC.EXE there
 pushd ${DRIVE_C}
-dosbox -conf compile.conf
+dosbox -conf bcc31.conf
 popd
 
 # cleanup
@@ -40,18 +42,18 @@ rm -rf ${DRIVE_C}/src/AIL
 mv ${DRIVE_C}/src/*.OBJ $OBJDIR 2>/dev/null
 
 # move all OBJ-files to OBJDIR
-mv ${DRIVE_C}/src/*.EXE $DIR 2>/dev/null
-mv ${DRIVE_C}/src/*.MAP $DIR 2>/dev/null
+mv ${DRIVE_C}/src/*.EXE $BUILDDIR 2>/dev/null
+mv ${DRIVE_C}/src/*.MAP $BUILDDIR 2>/dev/null
 
 ls ${OBJDIR}/*.OBJ | grep -o -E "SEG[0-9]+" >${OBJDIR}/summary
-grep -o -P "SEG[0-9]+(?=\.(OBJ|CPP))" bc_ready.bat >bc_ready.summary
-if cmp --silent ${OBJDIR}/summary bc_ready.summary; then
+grep -o -P "SEG[0-9]+(?=\.(OBJ|CPP))" build.bat >build.summary
+if cmp --silent ${OBJDIR}/summary build.summary; then
     echo "BCC hat alle OBJ-Dateien erzeugt."
-    rm ${OBJDIR}/summary bc_ready.summary
+    rm ${OBJDIR}/summary build.summary
 else
     echo "Kompilieren der folgenden Segmente fehlgeschlagen:"
-    comm -13 ${OBJDIR}/summary bc_ready.summary
-    rm ${OBJDIR}/summary bc_ready.summary
+    comm -13 ${OBJDIR}/summary build.summary
+    rm ${OBJDIR}/summary build.summary
     exit 1
 fi
 
@@ -76,7 +78,7 @@ for i in ${OBJDIR}/*.OBJ; do
 	fi
 
 	# extract instructions
-	../../tools/dump_obj $i >/dev/null
+	../tools/dump_obj $i >/dev/null
 	# move the BIN-files to BINDIR
 	mv ${OBJDIR}/${PREFIX}.BIN $BINDIR
 
@@ -193,8 +195,8 @@ done
 
 echo "REPORT ${N} Files: Good = ${GOOD} Fail = ${FAIL}"
 
-# count the compile commands in bc_ready.bat, to make sure there is none missing
-COMP=$(grep "\.\." bc_ready.bat | wc -l);
+# count the compile commands in build.bat, to make sure there is none missing
+COMP=$(grep "\.\." build.bat | wc -l);
 
 if [ ${COMP} -ne ${N} ]; then
 	echo "Fehler: ${N} Dateien wurden geprueft, aber es sollten ${COMP} sein"
