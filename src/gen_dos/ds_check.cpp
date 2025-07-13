@@ -176,7 +176,7 @@ static void disjoin_file(const char *name, const char *buffer, unsigned long len
 		char fname[50];
 
 		// EXE Header
-		sprintf(fname, "%s_EXE.bin", name);
+		sprintf(fname, "TEMP/%s_EXE.bin", name);
 		fd = fopen(fname, "w");
 		if (fd != NULL) {
 			fwrite(buffer, 1, off_cs, fd);
@@ -184,7 +184,7 @@ static void disjoin_file(const char *name, const char *buffer, unsigned long len
 		}
 
 		// CODE
-		sprintf(fname, "%s_CODE.bin", name);
+		sprintf(fname, "TEMP/%s_CODE.bin", name);
 		fd = fopen(fname, "w");
 		if (fd != NULL) {
 			fwrite(buffer + off_cs, 1, off_ds - off_cs, fd);
@@ -192,7 +192,7 @@ static void disjoin_file(const char *name, const char *buffer, unsigned long len
 		}
 
 		// DATA
-		sprintf(fname, "%s_DATA.bin", name);
+		sprintf(fname, "TEMP/%s_DATA.bin", name);
 		fd = fopen(fname, "w");
 		if (fd != NULL) {
 			fwrite(buffer + off_ds, 1, len - off_ds, fd);
