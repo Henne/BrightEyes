@@ -94,7 +94,9 @@ for i in ${OBJDIR}/*.OBJ; do
 		head -n $ORIGLINES ${DISDIR}/${PREFIX}.dis >${DISDIR}/${PREFIX}.tmp
 		mv ${DISDIR}/${PREFIX}.tmp ${DISDIR}/${PREFIX}.dis
 	else
-		echo "WARNING: ${PREFIX} is not in the disassembly of the original binary."
+		if [ "${PREFIX}" != "DATSEG" ]; then
+			echo "WARNING: ${PREFIX} is not in the disassembly of the original binary."
+		fi
 	fi
 
 
