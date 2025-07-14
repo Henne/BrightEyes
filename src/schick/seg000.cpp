@@ -208,13 +208,6 @@ Bit32s F_PSUB(RealPt p1, RealPt p2)
 	return ((reg_dx << 16) | reg_ax);
 }
 
-void bc_exit(Bit16s status)
-{
-	CPU_Push16(status);
-	CALLBACK_RunRealFar(reloc_game, 0x6df);
-	CPU_Pop16();
-}
-
 RealPt bc_getvect(Bit8u __interruptno)
 {
 	CPU_Push16(__interruptno);

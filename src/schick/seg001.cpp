@@ -34,11 +34,6 @@
 
 #if defined(__BORLANDC__)
 #include "seg013.h"
-#else
-#include "dosbox.h"
-#include "regs.h"
-#include "callback.h"
-#include "cpu.h"
 #endif
 
 
@@ -54,7 +49,6 @@ namespace M302de {
 /* Borlandified and identical */
 static unsigned short CD_has_drives(void)
 {
-#if defined(__BORLANDC__)
 	/* al ==  0: return number of drive letters */
 	asm {
 		mov ax, 0x1500
@@ -68,22 +62,11 @@ static unsigned short CD_has_drives(void)
 has_cd:
 
 	return _AX;
-#else
-	reg_ax = 0x1500;
-	reg_bx = 0x0000;
-	CALLBACK_RunRealInt(0x2f);
-
-	if (reg_bx == 0)
-		return 0;
-
-	return 1;
-#endif
 }
 
 /* Borlandified and identical */
 static unsigned short CD_count_drives(void)
 {
-#if defined(__BORLANDC__)
 	asm {
 		mov ax, 0x1500
 		xor bx, bx
@@ -91,20 +74,11 @@ static unsigned short CD_count_drives(void)
 	}
 
 	return _BX;
-#else
-
-	reg_ax = 0x1500;
-	reg_bx = 0x0000;
-	CALLBACK_RunRealInt(0x2f);
-
-	return reg_bx;
-#endif
 }
 
 /* Borlandified and identical */
 static unsigned short CD_get_first_drive(void)
 {
-#if defined(__BORLANDC__)
 	asm {
 		mov ax, 0x1500
 		xor bx, bx
@@ -112,14 +86,6 @@ static unsigned short CD_get_first_drive(void)
 	}
 
 	return _CX;
-#else
-
-	reg_ax = 0x1500;
-	reg_bx = 0x0000;
-	CALLBACK_RunRealInt(0x2f);
-
-	return reg_cx;
-#endif
 }
 
 /* Borlandified and identical */
@@ -137,26 +103,14 @@ unsigned short CD_set_drive_no(void)
 }
 
 /* Borlandified and identical */
-#if defined(__BORLANDC__)
 void CD_driver_request(driver_request *req)
-#else
-void CD_driver_request(RealPt req)
-#endif
 {
-#if defined(__BORLANDC__)
 	asm {
 		mov ax, 0x1510
 		mov cx, [CD_DRIVE_NO]
 		les bx, req
 		int 0x2f
 	}
-#else
-	reg_ax = 0x1510;
-	reg_cx = ds_readw(CD_DRIVE_NO);
-	CPU_SetSegGeneral(es, RealSeg(req));
-	reg_bx = RealOff(req);
-	CALLBACK_RunRealInt(0x2f);
-#endif
 }
 
 /* Borlandified and identical */
@@ -165,14 +119,11 @@ static void CD_unused1(void)
 {
 	if (ds_readw(CD_INIT_SUCCESSFUL) == 0)
 		return;
-#if defined(__BORLANDC__)
+
 	req[3].status = 0;
 	req[3].ptr = cd_buf1;
 	cd_buf1[252] = 0x0c;
 	CD_driver_request(&req[3]);
-#else
-	//DUMMY
-#endif
 }
 
 /**
@@ -185,7 +136,6 @@ static void CD_unused1(void)
 /* Borlandified and identical */
 Bit32s CD_get_tod(void)
 {
-#if defined(__BORLANDC__)
 	asm {
 		mov ah, 0x0
 		int 0x1a
@@ -194,14 +144,6 @@ Bit32s CD_get_tod(void)
 		jmp near leave_tod
 	}
 leave_tod:
-#else
-	reg_ah = 0;
-	CALLBACK_RunRealInt(0x1a);
-	reg_ax = reg_dx;
-	reg_dx = reg_cx;
-
-	return (reg_dx << 16) | reg_ax;
-#endif
 }
 
 /* Borlandified and nearly identical */
@@ -210,7 +152,6 @@ void seg001_00c1(signed short track_no)
 	Bit32s track_start;
 	Bit32s track_end;
 
-#if defined(__BORLANDC__)
 	asm {
 		mov si, track_no
 	}
@@ -272,46 +213,11 @@ void seg001_00c1(signed short track_no)
 			(Bit16s)real_readb(reloc_game + CDA_DATASEG, 0x112 + _SI * 8));
 	}
 
-#else
-
-	if (ds_readw(CD_INIT_SUCCESSFUL) == 0)
-		return;
-
-	host_writew(Real2Host(RealMake(reloc_game + CDA_DATASEG, 0x8f)), 0);
-
-	host_writed(Real2Host(RealMake(reloc_game + CDA_DATASEG, 0x9a)),
-		((((Bit16u)host_readb(Real2Host(RealMake(reloc_game + CDA_DATASEG, 0x10b + track_no * 8))) << 8) +
-		(Bit16u)host_readb(Real2Host(RealMake(reloc_game + CDA_DATASEG, 0x10a + track_no * 8)))) +
-		((Bit16u)host_readb(Real2Host(RealMake(reloc_game + CDA_DATASEG, 0x10c + track_no * 8))) << 16)));
-
-	/* calculate track_start */
-	track_start = ((host_readb(Real2Host(RealMake(reloc_game + CDA_DATASEG, 0x10c + track_no * 8))) * 60) +
-		host_readb(Real2Host(RealMake(reloc_game + CDA_DATASEG, 0x10b + track_no * 8)))) * 75 +
-		host_readb(Real2Host(RealMake(reloc_game + CDA_DATASEG, 0x10a + track_no * 8)));
-
-	/* calculate track_end */
-	if (real_readb(reloc_game + CDA_DATASEG, 0x422) == track_no)
-	{
-		track_end = (((60UL * (Bit16u)real_readb(reloc_game + CDA_DATASEG, 0x425) +
-			(Bit16s)real_readb(reloc_game + CDA_DATASEG, 0x424)) * 75UL) +
-			(Bit16s)real_readb(reloc_game + CDA_DATASEG, 0x423));
-	} else {
-		track_end = (((60UL * (Bit16u)real_readb(reloc_game + CDA_DATASEG, 0x114 + track_no * 8) +
-			(Bit16s)real_readb(reloc_game + CDA_DATASEG, 0x113 + track_no * 8)) * 75UL) +
-			(Bit16s)real_readb(reloc_game + CDA_DATASEG, 0x112 + track_no * 8));
-	}
-
-#endif
-
 	track_start = track_end - track_start;
 	host_writew(Real2Host(RealMake(reloc_game + CDA_DATASEG, 0x9e)), ((Bit16u)track_start) - 150);
 	host_writew(Real2Host(RealMake(reloc_game + CDA_DATASEG, 0xa0)), (Bit32s)(track_start >> 16));
 
-#if defined(__BORLANDC__)
 	CD_driver_request((driver_request*)RealMake(reloc_game + CDA_DATASEG, 0x8c));
-#else
-	CD_driver_request(RealMake(reloc_game + CDA_DATASEG, 0x8c));
-#endif
 
 	ds_writed(CD_AUDIO_POS, (((Bit32u)track_start - 150) * 0x1234e) / 0x4b000);
 	ds_writed(CD_AUDIO_TOD, CD_get_tod());
@@ -352,13 +258,8 @@ void CD_audio_stop_hsg(void)
 	if (ds_readw(CD_INIT_SUCCESSFUL) == 0)
 		return;
 
-#if defined(__BORLANDC__)
 	req[0].status = 0;
 	CD_driver_request(&req[0]);
-#else
-	real_writew(reloc_game + CDA_DATASEG, 3, 0);
-	CD_driver_request(RealMake(reloc_game + CDA_DATASEG, 0));
-#endif
 
 	ds_writew(CD_AUDIO_REPEAT, 0);
 }
@@ -373,13 +274,8 @@ void CD_audio_stop(void)
 		return;
 
 	CD_audio_stop_hsg();
-#if defined(__BORLANDC__)
 	req[1].status = 0;
 	CD_driver_request(&req[1]);
-#else
-	real_writew(reloc_game + CDA_DATASEG, 0x1f, 0);
-	CD_driver_request(RealMake(reloc_game + CDA_DATASEG, 0x1c));
-#endif
 }
 
 /* Borlandified and identical */
@@ -402,11 +298,8 @@ void CD_audio_pause(void)
 	ds_writed(CD_AUDIO_POS, 0x7fffffff);
 
 	host_writew(Real2Host(RealMake(reloc_game + CDA_DATASEG, 0xab)), 0);
-#if defined(__BORLANDC__)
+
 	CD_driver_request((driver_request*)RealMake(reloc_game + CDA_DATASEG, 0xa8));
-#else
-	CD_driver_request(RealMake(reloc_game + CDA_DATASEG, 0xa8));
-#endif
 }
 
 /* Borlandified and identical */
@@ -427,11 +320,8 @@ void CD_audio_play(void)
 	ds_writed(CD_AUDIO_POS, ds_readd(CD_AUDIO_PAUSE_POS));
 	add_ds_ds(CD_AUDIO_TOD, (CD_get_tod() - ds_readds(CD_AUDIO_PAUSE_TOD)));
 	host_writew(Real2Host(RealMake(reloc_game + CDA_DATASEG, 0xc7)), 0);
-#if defined(__BORLANDC__)
+
 	CD_driver_request((driver_request*)RealMake(reloc_game + CDA_DATASEG, 0xc4));
-#else
-	CD_driver_request(RealMake(reloc_game + CDA_DATASEG, 0xc4));
-#endif
 }
 
 /* Borlandified and nearly identical */
@@ -445,13 +335,10 @@ void CD_0432(void)
 	host_writew(Real2Host(RealMake(reloc_game + CDA_DATASEG, 0x3b)), 0);
 	host_writed(Real2Host(RealMake(reloc_game + CDA_DATASEG, 0x46)), (Bit32u)(RealMake(reloc_game + CDA_DATASEG, 0x420)));
 	host_writeb(Real2Host(RealMake(reloc_game + CDA_DATASEG, 0x420)), 0x0a);
-#if defined(__BORLANDC__)
-	/* BC-TODO: this constant ist pushed as a byte instead of a word */
+
+	/* BC-TODO: this constant is pushed as a byte instead of a word */
 	CD_driver_request((driver_request*)RealMake(reloc_game + CDA_DATASEG, 0x38));
 	asm {nop}
-#else
-	CD_driver_request(RealMake(reloc_game + CDA_DATASEG, 0x38));
-#endif
 
 	track_no = host_readb(Real2Host(RealMake(reloc_game + CDA_DATASEG, 0x421)));
 
@@ -462,13 +349,10 @@ void CD_0432(void)
 		host_writeb(Real2Host(RealMake(reloc_game + CDA_DATASEG, 8 * track_no + 0x108)), 0x0b);
 		host_writeb(Real2Host(RealMake(reloc_game + CDA_DATASEG, 8 * track_no + 0x109)), track_no);
 
-#if defined(__BORLANDC__)
 		/* BC-TODO: this constant ist pushed as a byte instead of a word */
 		CD_driver_request((driver_request*)RealMake(reloc_game + CDA_DATASEG, 0x38));
 		asm{nop}
-#else
-		CD_driver_request(RealMake(reloc_game + CDA_DATASEG, 0x38));
-#endif
+
 		track_no++;
 	}
 }
@@ -538,7 +422,6 @@ signed short CD_read_exe(char *path)
 	/* skip read check */
 	if (ds_readd(CD_CHECK_SKIPMAGIC) == 0x682772e4) return 1;
 
-#if defined(__BORLANDC__)
 	if (bc__dos_open(path, 1, (int*)&fd)) return -1;
 
 	if (bc__dos_read(fd, &buffer, 1, (unsigned int*)&nread) != 0) return -1;
@@ -546,19 +429,6 @@ signed short CD_read_exe(char *path)
 	bc_lseek(fd, 2000L, 0);
 
 	if (bc__dos_read(fd, &buffer, 1, (unsigned int*)&nread) != 0) return -1;
-#else
-	if (bc__dos_open(path, 1, &fd)) return -1;
-	/* BE-fix */
-	fd = host_readws((Bit8u*)&fd);
-
-	if (bc__dos_read(fd, &buffer, 1, &nread) != 0) return -1;
-
-	bc_lseek(fd, 2000L, 0);
-
-	if (bc__dos_read(fd, &buffer, 1, &nread) != 0) return -1;
-	/* BE-fix */
-	nread = host_readw((Bit8u*)&nread);
-#endif
 
 	bc__dos_close(fd);
 	return nread;
@@ -583,10 +453,6 @@ void CD_insert_msg(void)
 	if (answer == 2)
 	{
 		cleanup_game();
-#if !defined(__BORLANDC__)
-		D1_INFO("\nCHANGED BEHAVIOUR: For technical reasons Bright-Eyes must be started anew\n\n");
-		fflush(stdout);
-#endif
 		exit(0);
 	}
 
@@ -613,11 +479,7 @@ void CD_check(void)
 {
 	char text[80];
 
-#if defined(__BORLANDC__)
 	bc_harderr((int(*)(int, int, int, int))CD_harderr_handler);
-#else
-	bc_harderr(RealMake(reloc_game + 0x4ac, 0x65a));
-#endif
 
 	strcpy(text, (char*)p_datseg + STR_CD_EXEPATH);
 
