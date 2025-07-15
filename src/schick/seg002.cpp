@@ -867,7 +867,9 @@ signed short load_regular_file(Bit16u index)
  */
 signed short load_archive_file(Bit16u index)
 {
-	bc_flushall();
+#if defined(__BORLANDC__)
+	flushall();
+#endif
 
 	return (index & 0x8000) ? open_temp_file(index & 0x7fff) : open_and_seek_dat(index);
 }
@@ -3724,7 +3726,9 @@ void wait_for_keypress(void)
 {
 	signed short si;
 
-	bc_flushall();
+#if defined(__BORLANDC__)
+	flushall();
+#endif
 
 	ds_writew(MOUSE1_EVENT2, 0);
 
