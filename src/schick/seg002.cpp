@@ -14,12 +14,6 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-#if !defined(__BORLANDC__)
-#include "callback.h"
-#include "regs.h"
-#include "dos_inc.h"
-#endif
-
 #include "v302de.h"
 
 /* all global variables are included here, since BCC.EXE would create another module */
@@ -247,14 +241,17 @@ void read_sound_cfg(void)
 
 void init_AIL(Bit32u size)
 {
+#if defined(__BORLANDC__)
 	if (NOT_NULL(Real2Host((RealPt)ds_writed(AIL_MIDI_BUFFER, (Bit32u)schick_alloc_emu(size))))) {
 		AIL_startup();
 		ds_writew(LOAD_SOUND_DRIVER, 1);
 	}
+#endif
 }
 
 void exit_AIL(void)
 {
+#if defined(__BORLANDC__)
 	AIL_shutdown((RealPt)NULL);
 
 	if (ds_readd(AIL_TIMBRE_CACHE) != 0) {
@@ -279,11 +276,12 @@ void exit_AIL(void)
 	if (ds_readw(SND_VOC_ENABLED) != 0) {
 		free_voc_buffer();
 	}
-
+#endif
 }
 
 RealPt read_music_driver(RealPt fname)
 {
+#if defined(__BORLANDC__)
 	Bit32u len;
 	RealPt buf;
 	Bit32u ptr;
@@ -304,12 +302,14 @@ RealPt read_music_driver(RealPt fname)
 		bc_close(handle);
 		return buf;
 	}
-	return (RealPt)0;
+#endif
+	return NULL;
 }
 
 /* static */
 signed short prepare_midi_playback(signed short sequence)
 {
+#if defined(__BORLANDC__)
 	unsigned short l_si;
 	signed short l_di;
 	signed short patch;
@@ -336,17 +336,19 @@ signed short prepare_midi_playback(signed short sequence)
 
 		bc_close(ds_readw(SAMPLE_AD_HANDLE));
 	}
+#endif
 	return 0;
 }
 
 /* static */
 signed short start_midi_playback(signed short seq)
 {
+#if defined(__BORLANDC__)
 	if (prepare_midi_playback(seq)) {
 		AIL_start_sequence(ds_readw(AIL_MUSIC_DRIVER_ID), seq);
 		return 1;
 	}
-
+#endif
 	return 0;
 }
 
@@ -354,6 +356,7 @@ signed short start_midi_playback(signed short seq)
 /* static */
 RealPt prepare_timbre(signed short a1, signed short patch)
 {
+#if defined(__BORLANDC__)
 	RealPt buf;
 
 	seek_archive_file(ds_readws(SAMPLE_AD_HANDLE), 0, 0);
@@ -377,6 +380,9 @@ RealPt prepare_timbre(signed short a1, signed short patch)
 	read_archive_file(ds_readws(SAMPLE_AD_HANDLE), Real2Host(buf) + 2, ds_readw(SAMPLE_AD_LENGTH) - 2);
 
 	return buf;
+#else
+	return 0;
+#endif
 }
 
 /* static */
@@ -388,6 +394,7 @@ signed short load_midi_file(signed short index)
 /* static */
 signed short do_load_midi_file(signed short index)
 {
+#if defined(__BORLANDC__)
 	signed short handle;
 
 	if ((handle = load_archive_file(index)) != -1) {
@@ -395,13 +402,14 @@ signed short do_load_midi_file(signed short index)
 		bc_close(handle);
 		return 1;
 	}
+#endif
 	return 0;
 }
 
 /* static */
 signed short load_music_driver(RealPt fname, signed short type, signed short port)
 {
-
+#if defined(__BORLANDC__)
 	if (port &&
 		NOT_NULL(Real2Host((RealPt)ds_writed(AIL_MUSIC_DRIVER_BUF, (Bit32u)read_music_driver(fname)))) &&
 		((ds_writew(AIL_MUSIC_DRIVER_ID, AIL_register_driver((RealPt)ds_readd(AIL_MUSIC_DRIVER_BUF)))) != 0xffff))
@@ -450,32 +458,38 @@ signed short load_music_driver(RealPt fname, signed short type, signed short por
 	}
 
 	ds_writew(LOAD_SOUND_DRIVER, 1);
+#endif
 	return 0;
 }
 
 /* static */
 void do_play_music_file(signed short index)
 {
+#if defined(__BORLANDC__)
 	if ((ds_readw(LOAD_SOUND_DRIVER) == 0) && (host_readw(Real2Host(ds_readd(AIL_MUSIC_DRIVER_DESCR)) + 2) == 3)) {
 
 		stop_midi_playback();
 		load_midi_file(index);
 		start_midi_playback(0);
 	}
+#endif
 }
 
 /* static */
 void stop_midi_playback(void)
 {
+#if defined(__BORLANDC__)
 	if ((ds_readw(LOAD_SOUND_DRIVER) == 0) && (host_readw(Real2Host(ds_readd(AIL_MUSIC_DRIVER_DESCR)) + 2) == 3))
 	{
 		AIL_stop_sequence(ds_readws(AIL_MUSIC_DRIVER_ID), ds_readws(AIL_SEQUENCE));
 		AIL_release_sequence_handle(ds_readws(AIL_MUSIC_DRIVER_ID), ds_readws(AIL_SEQUENCE));
 	}
+#endif
 }
 
 void start_midi_playback_IRQ(void)
 {
+#if defined(__BORLANDC__)
 	if ((ds_readw(LOAD_SOUND_DRIVER) == 0) &&
 		(ds_readb(MUSIC_ENABLED) != 0) &&
 		(host_readw(Real2Host(ds_readd(AIL_MUSIC_DRIVER_DESCR)) + 2) == 3))
@@ -484,6 +498,7 @@ void start_midi_playback_IRQ(void)
 			AIL_start_sequence(ds_readws(AIL_MUSIC_DRIVER_ID), ds_readws(AIL_SEQUENCE));
 		}
 	}
+#endif
 }
 
 void cruft_1(void)
@@ -514,6 +529,7 @@ void cruft_2(signed short volume)
 
 signed short have_mem_for_sound(void)
 {
+#if defined(__BORLANDC__)
 	Bit32s size;
 	signed short retval;
 	struct ffblk blk;
@@ -543,18 +559,24 @@ signed short have_mem_for_sound(void)
 	}
 
 	return retval;
+#else
+	return 0;
+#endif
 }
 
 void play_voc(signed short index)
 {
+#if defined(__BORLANDC__)
 	if (ds_readw(SND_VOC_ENABLED) && ds_readb(SND_EFFECTS_ENABLED)) {
 		SND_set_volume(90);
 		SND_play_voc(index);
 	}
+#endif
 }
 
 void play_voc_delay(signed short index)
 {
+#if defined(__BORLANDC__)
 	if (ds_readw(SND_VOC_ENABLED) && ds_readb(SND_EFFECTS_ENABLED)) {
 		SND_set_volume(90);
 		SND_play_voc(index);
@@ -563,18 +585,22 @@ void play_voc_delay(signed short index)
 			wait_for_vsync();
 		}
 	}
+#endif
 }
 
 void alloc_voc_buffer(Bit32u size)
 {
+#if defined(__BORLANDC__)
 	if (ds_readw(SND_VOC_ENABLED)) {
 		if (NOT_NULL(Real2Host(ds_writed(AIL_VOC_BUFFER, (Bit32u)schick_alloc_emu(size))))) ;
 	}
+#endif
 }
 
 /* static */
 void free_voc_buffer(void)
 {
+#if defined(__BORLANDC__)
 	if (ds_readw(SND_VOC_ENABLED) != 0) {
 
 		if (ds_readd(AIL_VOC_BUFFER) != 0) {
@@ -588,10 +614,12 @@ void free_voc_buffer(void)
 		ds_writed(AIL_VOC_BUFFER, ds_writed(AIL_DIGI_DRIVER_BUF2, 0));
 
 	}
+#endif
 }
 
 signed short read_new_voc_file(signed short index)
 {
+#if defined(__BORLANDC__)
 	if (AIL_VOC_playback_status(ds_readw(AIL_DIGI_DRIVER_ID)) == 2) {
 		SND_stop_digi();
 	}
@@ -601,12 +629,13 @@ signed short read_new_voc_file(signed short index)
 		AIL_format_VOC_file(ds_readw(AIL_DIGI_DRIVER_ID), (RealPt)ds_readd(AIL_VOC_BUFFER), -1);
 		return 1;
 	}
-
+#endif
 	return 0;
 }
 
 signed short read_voc_file(signed short index)
 {
+#if defined(__BORLANDC__)
 	signed short handle;
 
 	if ( (handle = load_archive_file(index)) != -1) {
@@ -614,12 +643,13 @@ signed short read_voc_file(signed short index)
 		bc_close(handle);
 		return 1;
 	}
-
+#endif
 	return 0;
 }
 
 void SND_play_voc(signed short index)
 {
+#if defined(__BORLANDC__)
 	if (ds_readw(SND_VOC_ENABLED)) {
 
 		AIL_stop_digital_playback(ds_readw(AIL_DIGI_DRIVER_ID));
@@ -627,17 +657,21 @@ void SND_play_voc(signed short index)
 		AIL_play_VOC_file(ds_readw(AIL_DIGI_DRIVER_ID), (RealPt)ds_readd(AIL_VOC_BUFFER), -1);
 		AIL_start_digital_playback(ds_readw(AIL_DIGI_DRIVER_ID));
 	}
+#endif
 }
 
 void SND_stop_digi(void)
 {
+#if defined(__BORLANDC__)
 	if (ds_readw(SND_VOC_ENABLED)) {
 		AIL_stop_digital_playback(ds_readw(AIL_DIGI_DRIVER_ID));
 	}
+#endif
 }
 
 void SND_set_volume(unsigned short volume)
 {
+#if defined(__BORLANDC__)
 	if (ds_readw(SND_VOC_ENABLED)) {
 
 		AIL_set_digital_playback_volume(ds_readw(AIL_DIGI_DRIVER_ID), volume);
@@ -646,12 +680,13 @@ void SND_set_volume(unsigned short volume)
 			SND_stop_digi();
 		}
 	}
+#endif
 }
 
 /* static */
 signed short load_digi_driver(RealPt fname, signed short type, signed short io, signed short irq)
 {
-
+#if defined(__BORLANDC__)
 	if (io &&
 		NOT_NULL(Real2Host((RealPt)ds_writed(AIL_DIGI_DRIVER_BUF, (Bit32u)read_digi_driver(fname)))) &&
 		((ds_writew(AIL_DIGI_DRIVER_ID, AIL_register_driver((RealPt)ds_readd(AIL_DIGI_DRIVER_BUF)))) != 0xffff))
@@ -683,12 +718,14 @@ signed short load_digi_driver(RealPt fname, signed short type, signed short io, 
 			}
 		}
 	}
+#endif
 
 	return 0;
 }
 
 RealPt read_digi_driver(RealPt fname)
 {
+#if defined(__BORLANDC__)
 	Bit32u len;
 	RealPt buf;
 	Bit32u ptr;
@@ -707,7 +744,8 @@ RealPt read_digi_driver(RealPt fname)
 		bc_close(handle);
 		return buf;
 	}
-	return (RealPt)0;
+#endif
+	return NULL;
 }
 
 /**
@@ -836,13 +874,7 @@ signed short load_archive_file(Bit16u index)
 
 signed short open_temp_file(unsigned short index)
 {
-/* HACK: need a Real Pointer to 40 bytes on the DOSBox Stack */
-#if !defined(__BORLANDC__)
-	reg_esp -= 40;
-	RealPt tmppath = RealMake(SegValue(ss), reg_sp);
-#else
 	unsigned char tmppath[40];
-#endif
 	signed short handle;
 
 	sprintf((char*)Real2Host(tmppath),
@@ -860,10 +892,6 @@ signed short open_temp_file(unsigned short index)
 	bc_lseek(handle, 0, 0);
 
 	ds_writed(ARCHIVE_FILE_OFFSET, 0);
-
-#if !defined(__BORLANDC__)
-	reg_esp += 40;
-#endif
 
 	return handle;
 }
@@ -1065,76 +1093,7 @@ Bit32s process_nvf(struct nvf_desc *nvf)
  */
 void mouse_action(Bit8u *p1, Bit8u *p2, Bit8u *p3, Bit8u *p4, Bit8u *p5)
 {
-#if !defined(__BORLANDC__)
-
-	if ((signed short)host_readw(p1) < 0)
-		return;
-
-	unsigned short ba, bb, bc, bd, be, bsi, bdi;
-
-	/* save register content */
-	ba = reg_ax;
-	bb = reg_bx;
-	bc = reg_cx;
-	bd = reg_dx;
-	be = SegValue(es);
-	bsi = reg_si;
-	bdi = reg_di;
-
-	/* write paramters to registers */
-	reg_ax = host_readw(p1);
-	reg_bx = host_readw(p2);
-	reg_cx = host_readw(p3);
-
-	/* respect special functions */
-	switch (reg_ax) {
-		case 0x9:	/* define Cursor in graphic mode */
-		case 0xc:	/* install event handler */
-		case 0x14:	/* swap event handler */
-		case 0x16:	/* save mouse state */
-		case 0x17:	/* load mouse state */
-			reg_dx = host_readw(p4);
-			SegSet16(es, host_readw(p5));
-			break;
-		case 0x10:	/* define screen region for update */
-			reg_cx = host_readw(p2);
-			reg_dx = host_readw(p3);
-			reg_si = host_readw(p4);
-			reg_di = host_readw(p5);
-			break;
-		default:
-			reg_dx = host_readw(p4);
-
-			D1_LOG("%x %x %x %x %x\n", host_readw(p1),
-				host_readw(p2), host_readw(p3),
-				host_readw(p4),	host_readw(p5));
-
-	}
-
-	/* Call the interrupt */
-	CALLBACK_RunRealInt(0x33);
-
-	/* write the return values */
-	if (reg_ax == 0x14)
-		host_writew(p2, SegValue(es));
-	else
-		host_writew(p2, reg_bx);
-
-	host_writew(p1, reg_ax);
-	host_writew(p3, reg_cx);
-	host_writew(p4, reg_dx);
-
-	/* restore register values */
-	reg_ax = ba;
-	reg_bx = bb;
-	reg_cx = bc;
-	reg_dx = bd;
-	SegSet16(es, be);
-	reg_si = bsi;
-	reg_di = bdi;
-
-	return;
-#else
+#if defined(__BORLANDC__)
 	struct SREGS sregs;
 	union REGS wregs;
 
@@ -1311,8 +1270,6 @@ void mouse_init(void)
 			mouse_irq_init(0x1f, (INTCAST)RealMake(reloc_game + 0x51e, 0x1454));
 		}
 	}
-#else
-	CALLBACK_RunRealFar(reloc_game + 0x51e, 0x165e);
 #endif
 }
 
