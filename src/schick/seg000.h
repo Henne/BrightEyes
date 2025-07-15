@@ -1,7 +1,5 @@
 #if !defined(__BORLANDC__)
 
-#include <time.h>
-
 namespace M302de {
 
 struct ffblk {
@@ -29,10 +27,7 @@ Bit16u bc__dos_close(Bit16s);
 Bit16u bc__dos_open(char*, Bit16u, signed short *);
 Bit16u bc__dos_read(Bit16s, signed short*, Bit16u, unsigned short*);
 Bit32s bc_lseek(Bit16u, Bit32u, Bit16s);
-void bc_srand(Bit16u);
 Bit16s bc__read(Bit16u, Bit8u*, Bit16u);
-Bit32s bc_time_dosbox(RealPt);
-Bit32s bc_time(time_t*);
 signed short bc_unlink(RealPt);
 signed short bc_bioskey(signed short);
 static inline void clrscr(void) { };
@@ -114,11 +109,8 @@ Bit16s bc_OvrInitEms(Bit16u, Bit16u, Bit16u);
 
 #define bc_perror perror
 #define bc_lseek lseek
-#define bc_srand srand
 #define bc__read _read
 #define bc__write write
-
-#define bc_time time
 
 #define bc_unlink unlink
 

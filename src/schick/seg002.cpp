@@ -5506,8 +5506,9 @@ int schick_main(int argc, char** argv)
 
 	init_AIL(16000);
 
-	/* randomize() */
-	srand(time((RealPt)0));
+#if defined(__BORLANDC__)
+	randomize();
+#endif
 
 	save_display_stat((RealPt)RealMake(datseg, VIDEO_PAGE_BAK));
 

@@ -206,7 +206,7 @@ void do_tavern(void)
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_3) {
 			/* USE SKILL */
 
-			bc_time(&timeval);
+			time(&timeval);
 
 			/* skill test will be +50 if the game was saved up to 2 minutes ago.
 			 * probably to prevent excessive save & reload */

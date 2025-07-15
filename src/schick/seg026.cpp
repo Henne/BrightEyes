@@ -584,11 +584,7 @@ signed short save_game_state(void)
 			return 0;
 		}
 
-#if !defined(__BORLANDC__)
-		bc_time_dosbox((RealPt)RealMake(datseg, LAST_SAVE_TIME));
-#else
-		bc_time((Bit32s*)RealMake(datseg, LAST_SAVE_TIME));
-#endif
+		time((Bit32s*)RealMake(datseg, LAST_SAVE_TIME));
 
 		filepos = 0;
 

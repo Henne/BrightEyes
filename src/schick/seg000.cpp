@@ -234,13 +234,6 @@ Bit32s bc_lseek(Bit16u handle, Bit32u offset, Bit16s whence) {
 
 }
 
-void bc_srand(Bit16u seed)
-{
-	CPU_Push16(seed);
-	CALLBACK_RunRealFar(reloc_game + 0, 0xbac);
-	CPU_Pop16();
-}
-
 Bit16s bc__read(Bit16u handle, Bit8u *buf, Bit16u count) {
 
 	if ((ds_readw(BC_FILEHANDLE_FLAGS + handle * 2) & 2))
@@ -253,29 +246,6 @@ Bit16s bc__read(Bit16u handle, Bit8u *buf, Bit16u count) {
 		schick_status_update(buf, count);
 
 	return (Bit16s)count;
-}
-
-
-Bit32s bc_time_dosbox(RealPt p)
-{
-	CPU_Push32(p);
-	CALLBACK_RunRealFar(reloc_game + 0, 0x1123);
-	CPU_Pop32();
-
-	return reg_ax;
-}
-
-/* \brief	returns time in seconds */
-Bit32s bc_time(time_t *p)
-{
-	Bit32u reg_esp_bak = reg_esp;
-	reg_esp -= 0x50;
-
-	Bit32s retval = bc_time_dosbox(RealMake(SegValue(ss), reg_sp));
-	host_writed((Bit8u*)p, host_readd(Real2Host(RealMake(SegValue(ss), reg_sp))));
-
-	reg_esp = reg_esp_bak;
-	return retval;
 }
 
 signed short bc_unlink(RealPt fname)
