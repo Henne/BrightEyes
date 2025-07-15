@@ -242,7 +242,7 @@ void read_sound_cfg(void)
 void init_AIL(Bit32u size)
 {
 #if defined(__BORLANDC__)
-	if (((Bit8u*)ds_writed(AIL_MIDI_BUFFER, (Bit32u)schick_alloc_emu(size)))) {
+	if (((Bit8u*)ds_writed(AIL_MIDI_BUFFER, (Bit32u)schick_alloc(size)))) {
 		AIL_startup();
 		ds_writew(LOAD_SOUND_DRIVER, 1);
 	}
@@ -292,7 +292,7 @@ RealPt read_music_driver(RealPt fname)
 
 		len = 16500L;
 
-		ds_writed(AIL_MUSIC_DRIVER_BUF2, (Bit32u)schick_alloc_emu(len + 16L));
+		ds_writed(AIL_MUSIC_DRIVER_BUF2, (Bit32u)schick_alloc(len + 16L));
 		/* insane pointer casting */
 		ptr = (ds_readd(AIL_MUSIC_DRIVER_BUF2) + 15L);
 		ptr &= 0xfffffff0;
@@ -373,7 +373,7 @@ RealPt prepare_timbre(signed short a1, signed short patch)
 
 	read_archive_file(ds_readws(SAMPLE_AD_HANDLE), p_datseg + SAMPLE_AD_LENGTH, 2);
 
-	buf = schick_alloc_emu(ds_readw(SAMPLE_AD_LENGTH));
+	buf = schick_alloc(ds_readw(SAMPLE_AD_LENGTH));
 
 	host_writew(Real2Host(buf), ds_readw(SAMPLE_AD_LENGTH));
 
@@ -435,11 +435,11 @@ signed short load_music_driver(RealPt fname, signed short type, signed short por
 
 				if (type == 3) {
 					ds_writed(AIL_STATE_TABLE_SIZE, AIL_state_table_size(ds_readw(AIL_MUSIC_DRIVER_ID)));
-					ds_writed(AIL_STATE_TABLE, (Bit32u)schick_alloc_emu(ds_readd(AIL_STATE_TABLE_SIZE)));
+					ds_writed(AIL_STATE_TABLE, (Bit32u)schick_alloc(ds_readd(AIL_STATE_TABLE_SIZE)));
 					ds_writew(AIL_TIMBRE_CACHE_SIZE, AIL_default_timbre_cache_size(ds_readw(AIL_MUSIC_DRIVER_ID)));
 
 					if (ds_readw(AIL_TIMBRE_CACHE_SIZE) != 0) {
-						ds_writed(AIL_TIMBRE_CACHE, (Bit32u)schick_alloc_emu(ds_readw(AIL_TIMBRE_CACHE_SIZE)));
+						ds_writed(AIL_TIMBRE_CACHE, (Bit32u)schick_alloc(ds_readw(AIL_TIMBRE_CACHE_SIZE)));
 						AIL_define_timbre_cache(ds_readw(AIL_MUSIC_DRIVER_ID),
 								(RealPt)ds_readd(AIL_TIMBRE_CACHE),
 								ds_readw(AIL_TIMBRE_CACHE_SIZE));
@@ -592,7 +592,7 @@ void alloc_voc_buffer(Bit32u size)
 {
 #if defined(__BORLANDC__)
 	if (ds_readw(SND_VOC_ENABLED)) {
-		if ((((Bit8u*)ds_writed(AIL_VOC_BUFFER, (Bit32u)schick_alloc_emu(size))))) ;
+		if ((((Bit8u*)ds_writed(AIL_VOC_BUFFER, (Bit32u)schick_alloc(size))))) ;
 	}
 #endif
 }
@@ -736,7 +736,7 @@ RealPt read_digi_driver(RealPt fname)
 
 		len = 5000L;
 
-		ds_writed(AIL_DIGI_DRIVER_BUF2, (Bit32u)schick_alloc_emu(len + 16L));
+		ds_writed(AIL_DIGI_DRIVER_BUF2, (Bit32u)schick_alloc(len + 16L));
 		ptr = ds_readd(AIL_DIGI_DRIVER_BUF2) + 15L;
 		ptr &= 0xfffffff0;
 		buf = EMS_norm_ptr((RealPt)ptr);
@@ -5646,7 +5646,7 @@ int schick_main(int argc, char** argv)
 	}
 }
 
-Bit8u* schick_alloc_emu(Bit32u size)
+Bit8u* schick_alloc(Bit32u size)
 {
 #if defined(__BORLANDC__)
 	return (Bit8u*)farcalloc(size, 1);

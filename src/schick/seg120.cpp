@@ -252,7 +252,7 @@ void rabies(RealPt hero, signed short hero_pos)
 void init_global_buffer(void)
 {
 
-	ds_writed(GLOBAL_BUFFER_PTR, (Bit32u)schick_alloc_emu(ds_readd(BUFFERSIZE)));
+	ds_writed(GLOBAL_BUFFER_PTR, (Bit32u)schick_alloc(ds_readd(BUFFERSIZE)));
 	ds_writed(RENDERBUF_PTR, (Bit32u)F_PADD(ds_readd(GLOBAL_BUFFER_PTR), 8));
 	ds_writed(TEXT_LTX_BUFFER, (Bit32u)F_PADD(ds_readd(RENDERBUF_PTR), 65000));
 
@@ -294,26 +294,26 @@ signed short init_memory(void)
 	ds_writed(PRINT_STRING_BUFFER, ds_writed(FRAMEBUF_PTR, (Bit32u)RealMake(0x0a000, 0x0000)));
 
 	/* allocate small chunks of memory */
-	ds_writed(ITEMSNAME,		(Bit32u)schick_alloc_emu(1016));
-	ds_writed(ITEMSDAT,		(Bit32u)schick_alloc_emu(3060));
-	ds_writed(MONNAMES_BUFFER,		(Bit32u)schick_alloc_emu(950));
-	ds_writed(MONNAMES_INDEX,		(Bit32u)schick_alloc_emu(308));
-	ds_writed(MEM_SLOTS_ANIS,		(Bit32u)schick_alloc_emu(296));
-	ds_writed(MEM_SLOTS_MFIG,	(Bit32u)schick_alloc_emu(516));
-	ds_writed(MEM_SLOTS_WFIG,	(Bit32u)schick_alloc_emu(516));
-	ds_writed(MEM_SLOTS_MON,		(Bit32u)schick_alloc_emu(432));
-	ds_writed(HEROES,		(Bit32u)schick_alloc_emu(7 * SIZEOF_HERO));
-	ds_writed(DUNGEON_FIGHTS_BUF,		(Bit32u)schick_alloc_emu(630));
-	ds_writed(DUNGEON_DOORS_BUF,		(Bit32u)schick_alloc_emu(225));
-	ds_writed(DUNGEON_STAIRS_BUF,		(Bit32u)schick_alloc_emu(80));
-	ds_writed(BUF_FONT6,		(Bit32u)schick_alloc_emu(592));
-	ds_writed(SPLASH_BUFFER,		(Bit32u)schick_alloc_emu(1000));
-	ds_writed(TRV_TRACK_PIXEL_BAK,		(Bit32u)schick_alloc_emu(500));
-	ds_writed(CHESSBOARD,		(Bit32u)schick_alloc_emu(625));
-	ds_writed(POPUP,		(Bit32u)(schick_alloc_emu(1673) + 8));
-	ds_writed(ICON,			(Bit32u)(schick_alloc_emu(1500) + 8));
-	ds_writed(BUF_ICON,		(Bit32u)schick_alloc_emu(5184));
-	ds_writed(TOWNPAL_BUF,		(Bit32u)schick_alloc_emu(288));
+	ds_writed(ITEMSNAME,		(Bit32u)schick_alloc(1016));
+	ds_writed(ITEMSDAT,		(Bit32u)schick_alloc(3060));
+	ds_writed(MONNAMES_BUFFER,		(Bit32u)schick_alloc(950));
+	ds_writed(MONNAMES_INDEX,		(Bit32u)schick_alloc(308));
+	ds_writed(MEM_SLOTS_ANIS,		(Bit32u)schick_alloc(296));
+	ds_writed(MEM_SLOTS_MFIG,	(Bit32u)schick_alloc(516));
+	ds_writed(MEM_SLOTS_WFIG,	(Bit32u)schick_alloc(516));
+	ds_writed(MEM_SLOTS_MON,		(Bit32u)schick_alloc(432));
+	ds_writed(HEROES,		(Bit32u)schick_alloc(7 * SIZEOF_HERO));
+	ds_writed(DUNGEON_FIGHTS_BUF,		(Bit32u)schick_alloc(630));
+	ds_writed(DUNGEON_DOORS_BUF,		(Bit32u)schick_alloc(225));
+	ds_writed(DUNGEON_STAIRS_BUF,		(Bit32u)schick_alloc(80));
+	ds_writed(BUF_FONT6,		(Bit32u)schick_alloc(592));
+	ds_writed(SPLASH_BUFFER,		(Bit32u)schick_alloc(1000));
+	ds_writed(TRV_TRACK_PIXEL_BAK,		(Bit32u)schick_alloc(500));
+	ds_writed(CHESSBOARD,		(Bit32u)schick_alloc(625));
+	ds_writed(POPUP,		(Bit32u)(schick_alloc(1673) + 8));
+	ds_writed(ICON,			(Bit32u)(schick_alloc(1500) + 8));
+	ds_writed(BUF_ICON,		(Bit32u)schick_alloc(5184));
+	ds_writed(TOWNPAL_BUF,		(Bit32u)schick_alloc(288));
 
 	freemem = bc_farcoreleft();
 

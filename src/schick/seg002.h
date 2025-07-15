@@ -194,7 +194,7 @@ signed short count_heroes_available_in_group_ignore_npc(void);
 #endif
 void check_group(void);
 int schick_main(int, char **);
-Bit8u* schick_alloc_emu(Bit32u);
+Bit8u* schick_alloc(Bit32u);
 signed short copy_protection(void);
 
 #if !defined(__BORLANDC__)

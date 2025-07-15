@@ -57,7 +57,7 @@ void load_pp20(signed short index)
 		} else {
 			fd = load_archive_file(index);
 
-			if ((buffer_ptr = schick_alloc_emu(get_readlength2(fd)))) {
+			if ((buffer_ptr = schick_alloc(get_readlength2(fd)))) {
 				/* successful allocation */
 
 				/* save pointer */
@@ -233,7 +233,7 @@ RealPt load_fight_figs(signed short fig)
 
 		close(fd);
 
-		if ((dst = schick_alloc_emu(len))) {
+		if ((dst = schick_alloc(len))) {
 #if !defined(__BORLANDC__)
 			D1_LOG("use HEAP for fig %d\n", fig);
 #endif
