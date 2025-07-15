@@ -29,23 +29,23 @@ void init_text(void)
 
 	handle = load_archive_file(ARCHIVE_FILE_FONT6);
 	read_archive_file(handle, Real2Host(ds_readd(BUF_FONT6)), 1000);
-	bc_close(handle);
+	close(handle);
 
 	handle = load_archive_file(ARCHIVE_FILE_TEXT_LTX);
 	len = (signed short)read_archive_file(handle, Real2Host(ds_readd(TEXT_LTX_BUFFER)), 64000);
-	bc_close(handle);
+	close(handle);
 
 	split_textbuffer(Real2Host(ds_readd(TEXT_LTX_INDEX)), (RealPt)ds_readd(TEXT_LTX_BUFFER), len);
 
 	handle = load_archive_file(ARCHIVE_FILE_ITEMNAME);
 	len = (signed short)read_archive_file(handle, Real2Host(ds_readd(BUFFER5_PTR)), 5000);
-	bc_close(handle);
+	close(handle);
 
 	split_textbuffer(Real2Host(ds_readd(ITEMSNAME)), (RealPt)ds_readd(BUFFER5_PTR), len);
 
 	handle = load_archive_file(ARCHIVE_FILE_MONNAMES);
 	len = (signed short)read_archive_file(handle, Real2Host(ds_readd(MONNAMES_BUFFER)), 5000);
-	bc_close(handle);
+	close(handle);
 
 	split_textbuffer(Real2Host(ds_readd(MONNAMES_INDEX)), (RealPt)ds_readd(MONNAMES_BUFFER), len);
 
@@ -63,7 +63,7 @@ void load_tx(signed short index)
 
 	archive_file_len = (signed short)read_archive_file(archive_file_handle, Real2Host(ds_readd(BUFFER7_PTR)), 64000);
 
-	bc_close(archive_file_handle);
+	close(archive_file_handle);
 
 	split_textbuffer(Real2Host(ds_readd(TX_INDEX)), (RealPt)ds_readd(BUFFER7_PTR), archive_file_len);
 
@@ -81,7 +81,7 @@ void load_tx2(signed short index)
 	ds_writew(TEXT_FILE_INDEX, index);
 	fd = load_archive_file(index);
 	len = (signed short)read_archive_file(fd, Real2Host(ds_readd(BUFFER8_PTR)), 12000);
-	bc_close(fd);
+	close(fd);
 
 	split_textbuffer(Real2Host(ds_readd(TX2_INDEX)), (RealPt)ds_readd(BUFFER8_PTR), len);
 }
@@ -94,7 +94,7 @@ void load_ltx(unsigned short index)
 	fd = load_archive_file(index);
 	ds_writew(AREA_PREPARED, 0xffff);
 	len = (signed short)read_archive_file(fd, Real2Host(ds_readd(BUFFER9_PTR3)) + 1000, 64000);
-	bc_close(fd);
+	close(fd);
 
 	split_textbuffer(Real2Host(ds_readd(BUFFER9_PTR3)),
 		F_PADD((RealPt)ds_readd(BUFFER9_PTR3), 1000L), len);
@@ -127,7 +127,7 @@ void load_ggsts_nvf(void)
 	/* read it */
 	read_archive_file(fd, Real2Host(ds_readd(BUFFER10_PTR)), 16771);
 	/* close it */
-	bc_close(fd);
+	close(fd);
 
 	ds_writew(AREA_PREPARED, 0xffff);
 }
@@ -305,7 +305,7 @@ signed short load_game_state(void)
 
 				bc__read(handle_gs, Real2Host(ds_readd(RENDERBUF_PTR)), (unsigned short)host_readd(Real2Host(ds_readd(SAVED_FILES_BUF)) + 4 * i));
 				bc__write(handle, (RealPt)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd(Real2Host(ds_readd(SAVED_FILES_BUF)) + 4 * i));
-				bc_close(handle);
+				close(handle);
 			}
 		}
 
@@ -332,7 +332,7 @@ signed short load_game_state(void)
 				handle = bc__creat((RealPt)ds_readd(TEXT_OUTPUT_BUF), 0);
 
 				bc__write(handle, hero_i, SIZEOF_HERO);
-				bc_close(handle);
+				close(handle);
 
 				if (host_readbs(Real2Host(hero_i) + HERO_GROUP_POS) != 0) {
 
@@ -356,7 +356,7 @@ signed short load_game_state(void)
 			}
 		} while (l3 != 0);
 
-		bc_close(handle_gs);
+		close(handle_gs);
 
 		/* search for "*.CHR" */
 		l2 = bc_findfirst((RealPt)RealMake(datseg, ALL_CHR_WILDCARD), &blk, 0);
@@ -382,7 +382,7 @@ signed short load_game_state(void)
 				handle = bc_open((char*)(&blk) + 30, 0x8004);
 #endif
 				bc__read(handle, Real2Host(ds_readd(RENDERBUF_PTR)), SIZEOF_HERO);
-				bc_close(handle);
+				close(handle);
 
 				handle_gs = bc__creat((RealPt)ds_readd(TEXT_OUTPUT_BUF), 0);
 				bc__write(handle_gs, (RealPt)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
@@ -390,7 +390,7 @@ signed short load_game_state(void)
 				/* Yes, indeed! */
 			}
 
-			bc_close(handle_gs);
+			close(handle_gs);
 
 			l2 = bc_findnext(&blk);
 		}
@@ -626,7 +626,7 @@ signed short save_game_state(void)
 		/* check if enough bytes were written */
 		if (status_len + 16 + 4L != filepos) {
 			GUI_output(get_ttx(348));
-			bc_close(l_di);
+			close(l_di);
 			return 0;
 		}
 
@@ -636,7 +636,7 @@ signed short save_game_state(void)
 
 		if (len != 4 * 286) {
 			GUI_output(get_ttx(348));
-			bc_close(l_di);
+			close(l_di);
 			return 0;
 		}
 
@@ -655,14 +655,14 @@ signed short save_game_state(void)
 				handle = load_archive_file(tw_bak + 0x8000);
 				host_writed(Real2Host(ds_readd(SAVED_FILES_BUF)) + 4 * tw_bak, get_readlength2(handle));
 				bc__read(handle, Real2Host(ds_readd(RENDERBUF_PTR)), (unsigned short)host_readd(Real2Host(ds_readd(SAVED_FILES_BUF)) + 4 * tw_bak));
-				bc_close(handle);
+				close(handle);
 
 				len = (Bit16u)bc__write(l_di, (RealPt)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd(Real2Host(ds_readd(SAVED_FILES_BUF)) + 4 * tw_bak));
 				filepos += len;
 
 				if ((Bit16u)host_readd(Real2Host(ds_readd(SAVED_FILES_BUF)) + 4 * tw_bak) != len) {
 					GUI_output(get_ttx(348));
-					bc_close(l_di);
+					close(l_di);
 					return 0;
 				}
 			}
@@ -709,14 +709,14 @@ signed short save_game_state(void)
 			/* read the CHR file from temp */
 			handle = bc_open(ds_readfp(TEXT_OUTPUT_BUF), 0x8004);
 			bc__read(handle, Real2Host(ds_readd(RENDERBUF_PTR)), SIZEOF_HERO);
-			bc_close(handle);
+			close(handle);
 
 			/* append it */
 			len = bc__write(l_di, (RealPt)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
 
 			if (len != SIZEOF_HERO) {
 				GUI_output(get_ttx(348));
-				bc_close(l_di);
+				close(l_di);
 				return 0;
 			}
 
@@ -724,12 +724,12 @@ signed short save_game_state(void)
 
 		} while (l1 == 0);
 
-		bc_close(l_di);
+		close(l_di);
 
 		/* rewrite GAMES.NAM */
 		l_di = bc__creat((RealPt)ds_readd(FNAMES + 0x33c), 0);
 		bc__write(l_di, RealMake(datseg, SAVEGAME_NAMES), 45);
-		bc_close(l_di);
+		close(l_di);
 
 		return 1;
 	}
@@ -764,7 +764,7 @@ signed short read_chr_temp(RealPt fname, signed short hero_pos, signed short a2)
 
 		hero = get_hero(hero_pos);
 		bc__read(handle, hero, hero_size);
-		bc_close(handle);
+		close(handle);
 
 		host_writeb(hero + HERO_GROUP_NO, (signed char)a2);
 
@@ -821,7 +821,7 @@ void write_chr_temp(unsigned short hero_pos)
 
 	fd = bc__creat((RealPt)ds_readd(TEXT_OUTPUT_BUF), 0);
 	bc__write(fd, (RealPt)ds_readd(HEROES) + SIZEOF_HERO * hero_pos, SIZEOF_HERO);
-	bc_close(fd);
+	close(fd);
 }
 
 /**
@@ -857,7 +857,7 @@ signed short copy_chr_names(Bit8u *ptr, signed short temple_id)
 			/* read the CHR file from temp */
 			handle = bc_open((RealPt)ds_readd(TEXT_OUTPUT_BUF), 0x8004);
 			bc__read(handle, buf, SIZEOF_HERO);
-			bc_close(handle);
+			close(handle);
 
 			if ((host_readbs(buf + 0x88) == temple_id && !host_readbs(buf + 0x8a)) ||
 				(!host_readbs(buf + 0x8a) && temple_id == -1))
@@ -894,7 +894,7 @@ void load_in_head(signed short head)
 
 		read_archive_file(handle, Real2Host(ds_readd(DTP2)), 1024);
 
-		bc_close(handle);
+		close(handle);
 
 		ds_writew(LOADED_HEAD_ID, head);
 	}
@@ -917,7 +917,7 @@ void load_tempicon(signed short no)
 	/* load TEMPICON */
 	handle = load_archive_file(ARCHIVE_FILE_TEMPICON);
 	read_archive_file(handle, Real2Host(ds_readd(BUFFER8_PTR)), 7000);
-	bc_close(handle);
+	close(handle);
 
 	nvf.dst = Real2Host(ds_readd(BUFFER8_PTR)) + 7000;
 	nvf.src = Real2Host(ds_readd(BUFFER8_PTR));

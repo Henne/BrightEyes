@@ -40,7 +40,7 @@ void prepare_map_marker(void)
 
 	read_archive_file(fd, Real2Host(ds_readd(BUFFER6_PTR)), 2000);
 
-	bc_close(fd);
+	close(fd);
 
 
 	for (i = 0; i < 10; i++) {

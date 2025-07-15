@@ -49,8 +49,6 @@ signed short bc_findfirst_dosbox(RealPt, RealPt, signed short);
 signed short bc_findnext(struct ffblk*);
 signed short bc_findnext_dosbox(RealPt);
 
-Bit16s bc_close(Bit16s);
-
 Bit16s bc__creat(RealPt, Bit16u);
 void bc_perror(RealPt);
 Bit16s bc_open(RealPt, Bit16u);
@@ -115,7 +113,6 @@ Bit16s bc_OvrInitEms(Bit16u, Bit16u, Bit16u);
 #define bc__dos_open _dos_open
 #define bc__dos_read _dos_read
 
-#define bc_close close
 #define bc__creat _creat
 
 #define bc_perror perror

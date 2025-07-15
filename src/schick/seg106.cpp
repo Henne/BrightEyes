@@ -761,7 +761,7 @@ void equip_belt_ani(void)
 	/* read NVF part 2 */
 	nvf_length += read_archive_file(handle, Real2Host(F_PADD(ds_readd(BUFFER9_PTR), 64000)), 64000);
 
-	bc_close(handle);
+	close(handle);
 
 	/* calculate palette pointer */
 	p_pal = Real2Host(F_PADD(F_PADD(ds_readd(BUFFER9_PTR), nvf_length), -0x60));

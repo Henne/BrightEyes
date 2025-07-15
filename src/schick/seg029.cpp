@@ -271,7 +271,7 @@ void load_icon(Bit16u fileindex, Bit16s icon, Bit16s pos)
 
 	read_archive_file(fd, Real2Host(ds_readd(BUF_ICON)) + pos * 576, 576);
 
-	bc_close(fd);
+	close(fd);
 
 	/* set a real or blank icon */
 	ds_writeb(LOADED_MENU_ICONS + pos, (fileindex == ARCHIVE_FILE_ICONS) ? icon : -1);

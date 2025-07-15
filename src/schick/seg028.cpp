@@ -85,7 +85,7 @@ void prepare_dungeon_area(void)
 			v2 += v1;
 		} while (v1);
 
-		bc_close(handle);
+		close(handle);
 
 		ds_writed(BUFFER11_PTR, (Bit32u)F_PADD(F_PADD((HugePt)ds_readd(BUFFER9_PTR3), v2), -0xc0));
 
@@ -119,7 +119,7 @@ void load_dungeon_ddt(void)
 	read_archive_file(handle, Real2Host(ds_readd(DUNGEON_DOORS_BUF)), high - low);
 	read_archive_file(handle, Real2Host(ds_readd(DUNGEON_STAIRS_BUF)), 0x7d0);
 
-	bc_close(handle);
+	close(handle);
 
 }
 
@@ -224,7 +224,7 @@ RealPt seg028_0444(signed short index, signed short firstcol, signed short color
 
 	} while (v1);
 
-	bc_close(fd);
+	close(fd);
 
 	if (colors) {
 
@@ -248,7 +248,7 @@ void load_special_textures(signed short arg)
 
 	fd = load_archive_file(arg == 9 ? ARCHIVE_FILE_FINGER_NVF : ARCHIVE_FILE_LTURM_NVF);
 	read_archive_file(fd, Real2Host(ds_readd(BUFFER7_PTR)), 64000);
-	bc_close(fd);
+	close(fd);
 
 }
 
@@ -296,7 +296,7 @@ void load_area_description(signed short type)
 			bc__write(fd, RealMake(datseg, LOCATIONS_LIST),
 				ds_readw(LOCATIONS_LIST_SIZE));
 
-			bc_close(fd);
+			close(fd);
 
 			ds_writew(AREADESCR_FILEID, ds_writew(AREADESCR_DNG_LEVEL, ds_writew(LOCATIONS_LIST_SIZE, ds_writew(AREADESCR_DNG_FLAG, 0))));
 		}
@@ -357,7 +357,7 @@ void load_area_description(signed short type)
 
 			ds_writeb(DNG_MAP_SIZE, 0x10);
 		}
-		bc_close(fd);
+		close(fd);
 	}
 }
 
@@ -440,7 +440,7 @@ void load_map(void)
 	/* open OBJECTS.NVF */
 	fd = load_archive_file(ARCHIVE_FILE_OBJECTS_NVF);
 	read_archive_file(fd, Real2Host(ds_readd(RENDERBUF_PTR)), 2000);
-	bc_close(fd);
+	close(fd);
 
     /* load the grey border for the wallclock overlay */
 	nvf.src = Real2Host(ds_readd(RENDERBUF_PTR));
@@ -470,7 +470,7 @@ void load_map(void)
 		fd = load_archive_file(ARCHIVE_FILE_KARTE_DAT);
 
 		read_archive_file(fd, Real2Host(ds_writed(TRAVEL_MAP_PTR, ds_readd(RENDERBUF_PTR))), 64098);
-		bc_close(fd);
+		close(fd);
 
 		if (ds_readb(EMS_ENABLED) != 0) {
 
@@ -491,17 +491,17 @@ void load_map(void)
 	/* load LROUT.DAT */
 	fd = load_archive_file(ARCHIVE_FILE_LROUT_DAT);
 	read_archive_file(fd, Real2Host(ds_readd(BUFFER9_PTR)), 7600);
-	bc_close(fd);
+	close(fd);
 
 	/* load HSROUT.DAT */
 	fd = load_archive_file(ARCHIVE_FILE_HSROUT_DAT);
 	read_archive_file(fd, Real2Host(F_PADD(ds_readd(BUFFER9_PTR), 7600)), 3800);
-	bc_close(fd);
+	close(fd);
 
 	/* load SROUT.DAT */
 	fd = load_archive_file(ARCHIVE_FILE_SROUT_DAT);
 	read_archive_file(fd, Real2Host(F_PADD(ds_readd(BUFFER9_PTR), 11400)), 5900);
-	bc_close(fd);
+	close(fd);
 
 	load_tx(ARCHIVE_FILE_MAPTEXT_LTX);
 
@@ -518,7 +518,7 @@ void load_npc(signed short index)
 	/* load from temp directory */
 	fd = load_archive_file(index | 0x8000);
 	bc__read(fd, npc_dst, SIZEOF_HERO);
-	bc_close(fd);
+	close(fd);
 
 	if (host_readb(npc_dst + HERO_SEX) == 1) {
 		/* female */
@@ -541,7 +541,7 @@ void save_npc(signed short index)
 
 	bc__write(fd, (RealPt)ds_readd(HEROES) + 6 * SIZEOF_HERO, SIZEOF_HERO);
 
-	bc_close(fd);
+	close(fd);
 }
 
 void load_splashes(void)
@@ -554,7 +554,7 @@ void load_splashes(void)
 	/* read SPLASHES.DAT */
 	fd = load_archive_file(ARCHIVE_FILE_SPLASHES_DAT);
 	read_archive_file(fd, Real2Host(ds_readd(RENDERBUF_PTR)), 3000);
-	bc_close(fd);
+	close(fd);
 
 	/* nvf.dst = splash_le = ds_readd() */
 	nvf.dst = Real2Host(ds_writed(SPLASH_LE, ds_readd(SPLASH_BUFFER)));
@@ -609,7 +609,7 @@ void load_informer_tlk(signed short index)
 	/* read the text */
 	text_len = (signed short)read_archive_file(fd, Real2Host(ds_readd(BUFFER8_PTR)), 10000);
 
-	bc_close(fd);
+	close(fd);
 
 	split_textbuffer(Real2Host(ds_readd(TX2_INDEX)),
 		(RealPt)ds_readd(BUFFER8_PTR), text_len);
@@ -653,7 +653,7 @@ void load_tlk(signed short index)
 	/* read the text */
 	text_len = (signed short)read_archive_file(fd, Real2Host(ds_readd(BUFFER7_PTR)), 64000);
 
-	bc_close(fd);
+	close(fd);
 
 	split_textbuffer(Real2Host(ds_readd(TX_INDEX)),
 		(RealPt)ds_readd(BUFFER7_PTR), text_len);
@@ -670,7 +670,7 @@ void unused_load_archive_file(signed short index, signed short a2, Bit32u seg)
 
 	fd = load_archive_file(index);
 	read_archive_file(fd, Real2Host(RealMake(seg, a2)), 64000);
-	bc_close(fd);
+	close(fd);
 }
 
 
@@ -689,7 +689,7 @@ void load_fightbg(signed short index)
 			FP_SEG(ds_readd(RENDERBUF_PTR)),
 #endif
 			get_readlength2(fd));
-	bc_close(fd);
+	close(fd);
 }
 
 #if !defined(__BORLANDC__)

@@ -407,15 +407,6 @@ signed short bc_findnext(struct ffblk *__ffblk)
 	return retval;
 }
 
-Bit16s bc_close(Bit16s handle)
-{
-	CPU_Push16(handle);
-	CALLBACK_RunRealFar(reloc_game + 0, 0x2eb2);
-	CPU_Pop16();
-
-	return reg_ax;
-}
-
 Bit16s bc__creat(RealPt name, Bit16u attrib)
 {
 	CPU_Push16(attrib);

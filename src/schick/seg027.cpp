@@ -81,7 +81,7 @@ void load_pp20(signed short index)
 #endif
 					ds_readd(PP20_BUFFER_LENGTHS + bi * 4));
 
-				bc_close(fd);
+				close(fd);
 			} else {
 				/* failed allocation */
 
@@ -101,7 +101,7 @@ void load_pp20(signed short index)
 #endif
 					get_readlength2(fd));
 
-				bc_close(fd);
+				close(fd);
 			}
 		}
 	} else {
@@ -122,7 +122,7 @@ void load_pp20(signed short index)
 #endif
 			get_readlength2(fd));
 
-		bc_close(fd);
+		close(fd);
 	}
 }
 
@@ -231,7 +231,7 @@ RealPt load_fight_figs(signed short fig)
 
 		read_archive_file(fd, Real2Host(src), (unsigned short)len);
 
-		bc_close(fd);
+		close(fd);
 
 		if ((dst = schick_alloc_emu(len))) {
 #if !defined(__BORLANDC__)
@@ -382,7 +382,7 @@ void load_ani(const signed short no)
 			to_EMS(ems_handle, (RealPt)ds_readd(BUFFER9_PTR), ani_len);
 		}
 
-		bc_close(fd);
+		close(fd);
 	}
 
 	ani_buffer = (RealPt)ds_readd(BUFFER9_PTR);
@@ -574,7 +574,7 @@ void load_scenario(signed short scenario_id)
 	read_archive_file(scenario_lst_handle, Real2Host(ds_readd(SCENARIO_BUF)), 621);
 
 	/* close archive */
-	bc_close(scenario_lst_handle);
+	close(scenario_lst_handle);
 }
 
 /**
@@ -618,7 +618,7 @@ signed short count_fight_enemies(signed short fight_id)
 	bc__read(fight_lst_handle, fight_lst_buf, SIZEOF_FIGHT);
 
 	/* close FIGHT.LST */
-	bc_close(fight_lst_handle);
+	close(fight_lst_handle);
 
 	/* check all enemies */
 	for (enemy_i = 0; enemy_i < 20; enemy_i++) {
@@ -677,7 +677,7 @@ void read_fight_lst(signed short fight_id)
 #endif
 
 	/* close FIGHT.LST */
-	bc_close(fight_lst_handle);
+	close(fight_lst_handle);
 }
 
 /**
@@ -700,7 +700,7 @@ void write_fight_lst(void)
 	bc__write(fight_lst_handle, (RealPt)ds_readd(CURRENT_FIGHT), SIZEOF_FIGHT);
 
 	/* close the file */
-	bc_close(fight_lst_handle);
+	close(fight_lst_handle);
 }
 
 void init_common_buffers(void)
@@ -710,7 +710,7 @@ void init_common_buffers(void)
 
 	fd = load_archive_file(ARCHIVE_FILE_POPUP_DAT);
 	bytes = read_archive_file(fd, Real2Host((RealPt)ds_readd(POPUP) - 8), 500);
-	bc_close(fd);
+	close(fd);
 
 	/* decompress POPUP.DAT */
 	decomp_pp20(Real2Host((RealPt)ds_readd(POPUP) - 8),
@@ -725,35 +725,35 @@ void init_common_buffers(void)
 
 	fd = load_archive_file(ARCHIVE_FILE_COMPASS);
 	bytes = read_archive_file(fd, Real2Host(ds_readd(BUFFER6_PTR)), 5000);
-	bc_close(fd);
+	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_ITEMS_DAT);
 	bytes = read_archive_file(fd, Real2Host(ds_readd(ITEMSDAT)), 3060);
-	bc_close(fd);
+	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_ANIS_TAB);
 	read_archive_file(fd, Real2Host(RealMake(datseg, BUFFER_ANIS_TAB)), 148);
-	bc_close(fd);
+	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_MFIGS_TAB);
 	read_archive_file(fd, Real2Host(RealMake(datseg, BUFFER_MFIGS_TAB)), 172);
-	bc_close(fd);
+	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_WFIGS_TAB);
 	read_archive_file(fd, Real2Host(RealMake(datseg, BUFFER_WFIGS_TAB)), 172);
-	bc_close(fd);
+	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_MONSTER_TAB);
 	read_archive_file(fd, Real2Host(RealMake(datseg, BUFFER_MONSTER_TAB)), 144);
-	bc_close(fd);
+	close(fd);
 
 	fd = load_regular_file(ARCHIVE_FILE_GAMES_NAM);
 	bc__read(fd, Real2Host(RealMake(datseg, SAVEGAME_NAMES)), 45);
-	bc_close(fd);
+	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_TOWNPAL_DAT);
 	read_archive_file(fd, Real2Host(ds_readd(TOWNPAL_BUF)), 288);
-	bc_close(fd);
+	close(fd);
 
 }
 

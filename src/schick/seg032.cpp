@@ -979,7 +979,7 @@ signed short do_fight(signed short fight_id)
 	/* open MONSTER.DAT */
 	fd = load_archive_file(ARCHIVE_FILE_MONSTER_DAT);
 	read_archive_file(fd, Real2Host(ds_readd(MONSTER_DAT_BUF)), 3476);
-	bc_close(fd);
+	close(fd);
 
 	ds_writew(FIG_DROPPED_COUNTER, 0);
 
@@ -992,7 +992,7 @@ signed short do_fight(signed short fight_id)
 	/* open OBJECTS.NVF */
 	fd = load_archive_file(ARCHIVE_FILE_OBJECTS_NVF);
 	read_archive_file(fd, Real2Host(ds_readd(OBJECTS_NVF_BUF)), 3000);
-	bc_close(fd);
+	close(fd);
 
 	FIG_chessboard_init();
 
@@ -1001,7 +1001,7 @@ signed short do_fight(signed short fight_id)
 	/* open FIGHTOBJ.NVF */
 	fd = load_archive_file(ARCHIVE_FILE_FIGHTOBJ_NVF);
 	read_archive_file(fd, Real2Host(ds_readd(FIGHTOBJ_BUF)), 16919);
-	bc_close(fd);
+	close(fd);
 
 	set_var_to_zero();
 	update_mouse_cursor();
@@ -1023,12 +1023,12 @@ signed short do_fight(signed short fight_id)
 	/* open WEAPONS.NVF */
 	fd = load_archive_file(ARCHIVE_FILE_WEAPONS_NVF);
 	read_archive_file(fd, Real2Host(ds_readd(WEAPONS_NVF_BUF)), 6483);
-	bc_close(fd);
+	close(fd);
 
 	/* open SPELLOBJ.NVF */
 	fd = load_archive_file(ARCHIVE_FILE_SPELLOBJ_NVF);
 	read_archive_file(fd, Real2Host(ds_readd(SPELLOBJ_NVF_BUF)), 3935);
-	bc_close(fd);
+	close(fd);
 
 	FIG_init_enemies();
 	FIG_init_heroes();

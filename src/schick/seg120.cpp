@@ -567,7 +567,7 @@ void prepare_dirs(void)
 
 		bc__read(l_di, Real2Host(ds_readd(RENDERBUF_PTR)), SIZEOF_HERO);
 
-		bc_close(l_di);
+		close(l_di);
 
 		sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
 			(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
@@ -577,7 +577,7 @@ void prepare_dirs(void)
 
 		bc__write(l_di, (RealPt)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
 
-		bc_close(l_di);
+		close(l_di);
 
 		l_si = bc_findnext(&blk);
 	}
@@ -691,7 +691,7 @@ void game_over_screen(void)
 
 	read_archive_file(handle, Real2Host(ds_readd(RENDERBUF_PTR)), 64200);
 
-	bc_close(handle);
+	close(handle);
 
 	update_mouse_cursor();
 

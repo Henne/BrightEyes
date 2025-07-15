@@ -159,7 +159,7 @@ void read_sound_cfg(void)
 		bc__read(handle, (Bit8u*)&dummy, 2);
 		bc__read(handle, (Bit8u*)&digi_port, 2);
 		bc__read(handle, (Bit8u*)&digi_irq, 2);
-		bc_close(handle);
+		close(handle);
 
 #if !defined(__BORLANDC__)
 		/* be byte-ordering independent */
@@ -299,7 +299,7 @@ RealPt read_music_driver(RealPt fname)
 		buf = EMS_norm_ptr((RealPt)ptr);
 		/* and_ptr_ds((Bit8u*)&ptr, 0xfffffff0); */
 		bc__read(handle, Real2Host(buf), (unsigned short)len);
-		bc_close(handle);
+		close(handle);
 		return buf;
 	}
 #endif
@@ -330,11 +330,11 @@ signed short prepare_midi_playback(signed short sequence)
 				}
 			}
 
-			bc_close(ds_readw(SAMPLE_AD_HANDLE));
+			close(ds_readw(SAMPLE_AD_HANDLE));
 			return 1;
 		}
 
-		bc_close(ds_readw(SAMPLE_AD_HANDLE));
+		close(ds_readw(SAMPLE_AD_HANDLE));
 	}
 #endif
 	return 0;
@@ -399,7 +399,7 @@ signed short do_load_midi_file(signed short index)
 
 	if ((handle = load_archive_file(index)) != -1) {
 		read_archive_file(handle, Real2Host(ds_readd(AIL_MIDI_BUFFER)), 0x7fff);
-		bc_close(handle);
+		close(handle);
 		return 1;
 	}
 #endif
@@ -640,7 +640,7 @@ signed short read_voc_file(signed short index)
 
 	if ( (handle = load_archive_file(index)) != -1) {
 		read_archive_file(handle, Real2Host(ds_readd(AIL_VOC_BUFFER)), 0x7fff);
-		bc_close(handle);
+		close(handle);
 		return 1;
 	}
 #endif
@@ -741,7 +741,7 @@ RealPt read_digi_driver(RealPt fname)
 		ptr &= 0xfffffff0;
 		buf = EMS_norm_ptr((RealPt)ptr);
 		bc__read(handle, Real2Host(buf), (unsigned short)len);
-		bc_close(handle);
+		close(handle);
 		return buf;
 	}
 #endif
@@ -915,8 +915,8 @@ void copy_from_archive_to_temp(unsigned short index, RealPt fname)
 			bc__write(handle2, (RealPt)ds_readd(RENDERBUF_PTR), len);
 		}
 
-		bc_close(handle1);
-		bc_close(handle2);
+		close(handle1);
+		close(handle2);
 	}
 }
 
@@ -937,8 +937,8 @@ void copy_file_to_temp(RealPt src_file, RealPt fname)
 			bc__write(handle2, (RealPt)ds_readd(RENDERBUF_PTR), len);
 		}
 
-		bc_close(handle1);
-		bc_close(handle2);
+		close(handle1);
+		close(handle2);
 	}
 }
 

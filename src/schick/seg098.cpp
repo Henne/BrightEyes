@@ -165,7 +165,7 @@ void magic_heal_ani(Bit8u *hero)
 	read_archive_file(fd, Real2Host(ds_readd(BUFFER8_PTR)), 0x400);
 	read_archive_file(fd, Real2Host(ds_readd(BUFFER8_PTR)) + 0x400, 0x400);
 	read_archive_file(fd, Real2Host(ds_readd(BUFFER8_PTR)) + 0x800, 0x400);
-	bc_close(fd);
+	close(fd);
 
 	target_no = host_readbs(hero + HERO_ENEMY_ID) - 1;
 	target = (RealPt)ds_readd(HEROES) + SIZEOF_HERO * target_no;

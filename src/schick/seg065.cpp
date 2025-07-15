@@ -110,7 +110,7 @@ void final_intro(void)
 	/* load FACE.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_FACE_NVF);
 	len = read_archive_file(handle, Real2Host(ds_readd(BUFFER9_PTR)), 64000);
-	bc_close(handle);
+	close(handle);
 
 	ptr1 = Real2Host(F_PADD(F_PADD(ds_readd(BUFFER9_PTR), len), -(96 * 3)));
 
@@ -262,7 +262,7 @@ void show_hyggelik_ani(void)
 
 	handle = load_archive_file(ARCHIVE_FILE_HYGBACK_NVF);
 	filelen = read_archive_file(handle, Real2Host(ds_readd(RENDERBUF_PTR)), 64000);
-	bc_close(handle);
+	close(handle);
 	src = &(Real2Host(ds_readd(RENDERBUF_PTR))[filelen - 0xc0]);
 
 	do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
@@ -277,7 +277,7 @@ void show_hyggelik_ani(void)
 
 	handle = load_archive_file(ARCHIVE_FILE_HYGGELIK_NVF);
 	filelen = read_archive_file(handle, Real2Host(ds_readd(RENDERBUF_PTR)), 64000);
-	bc_close(handle);
+	close(handle);
 	host_writed(array + 0, (Bit32u)ptr1);
 
 	for (i = 0; i < 26; i++) {
@@ -437,7 +437,7 @@ void show_outro(void)
 	/* load OUTRO1.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_OUTRO1_NVF);
 	len = read_archive_file(handle, Real2Host(ds_readd(BUFFER9_PTR)), 64000);
-	bc_close(handle);
+	close(handle);
 
 	pal_ptr = Real2Host(F_PADD(F_PADD((HugePt)ds_readd(BUFFER9_PTR), len), - 0xc0));
 	do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
@@ -471,7 +471,7 @@ void show_outro(void)
 	/* load OUTRO2.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_OUTRO2_NVF);
 	len = read_archive_file(handle, Real2Host(ds_readd(BUFFER9_PTR)), 64000);
-	bc_close(handle);
+	close(handle);
 
 	pal_ptr = Real2Host(F_PADD(F_PADD((HugePt)ds_readd(BUFFER9_PTR), len), - 0xc0));
 	do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
@@ -505,7 +505,7 @@ void show_outro(void)
 	/* load OUTRO3.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_OUTRO3_NVF);
 	len = read_archive_file(handle, Real2Host(ds_readd(BUFFER9_PTR)), 64000);
-	bc_close(handle);
+	close(handle);
 
 	pal_ptr = Real2Host(F_PADD(F_PADD((HugePt)ds_readd(BUFFER9_PTR), len), - 0xc0));
 	do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);

@@ -432,7 +432,7 @@ void level_up(signed short hero_pos)
 
 	read_archive_file(l_si, Real2Host(ds_readd(SKILLS_BUFFER)), 1300);
 
-	bc_close(l_si);
+	close(l_si);
 
 
 	sprintf((char*)Real2Host(ds_readd(DTP2)),

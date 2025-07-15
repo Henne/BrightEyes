@@ -146,14 +146,14 @@ void FIG_preload_gfx(void)
 	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 9851);
 	handle = load_archive_file(ARCHIVE_FILE_ANI_DAT);
 	read_archive_file(handle, Real2Host(ds_readfp(BUFFER_ANIDAT)), 9851);
-	bc_close(handle);
+	close(handle);
 
 	/* load WEAPANI.DAT */
 	ds_writefp(BUFFER_WEAPANIDAT, ds_readfp(FIGHTOBJ_BUF_SEEK_PTR));
 	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 1370);
 	handle = load_archive_file(ARCHIVE_FILE_WEAPANI_DAT);
 	read_archive_file(handle, Real2Host(ds_readd(BUFFER_WEAPANIDAT)), 1370);
-	bc_close(handle);
+	close(handle);
 
 	/* process NVFs */
 

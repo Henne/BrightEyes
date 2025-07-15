@@ -247,7 +247,7 @@ signed short do_travel_mode(void)
 
 	i = load_archive_file(ARCHIVE_FILE_COMPASS);
 	read_archive_file(i, Real2Host(ds_readd(BUFFER6_PTR)), 5000);
-	bc_close(i);
+	close(i);
 
 	ds_writeb(SHOW_TRAVEL_MAP, (signed char)ds_writew(BASEPOS_X, ds_writew(BASEPOS_Y, ds_writew(CURRENT_TOWN_OVER, ds_writew(TRV_MENU_SELECTION, 0)))));
 

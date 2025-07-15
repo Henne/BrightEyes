@@ -700,7 +700,7 @@ void load_wallclock_nvf(void)
 
 	fd = load_archive_file(ARCHIVE_FILE_OBJECTS_NVF);
 	read_archive_file(fd, Real2Host(ds_readd(RENDERBUF_PTR)), 2000);
-	bc_close(fd);
+	close(fd);
 
 	nvf.src = Real2Host(ds_readd(RENDERBUF_PTR));
 	nvf.type = 0;

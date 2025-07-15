@@ -297,7 +297,7 @@ void show_treasure_map(void)
 
 		length = get_readlength2(l_si);
 
-		bc_close(l_si);
+		close(l_si);
 
 		/* clear the screen */
 		wait_for_vsync();
@@ -639,7 +639,7 @@ void draw_icon(signed short id, signed short x, signed short y)
 
 	read_archive_file(handle, Real2Host(ds_readd(ICON)), 576);
 
-	bc_close(handle);
+	close(handle);
 
 	ptr_bak = (RealPt)ds_readd(PIC_COPY_DST);
 
