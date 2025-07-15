@@ -37,7 +37,6 @@ typedef Bit8u* HugePt;
 #include "common.h"
 #include "datseg.h"
 
-
 #define ROUNDED_DIVISION(n,k)	((n + (k-1)/2)/k)
 /* divide n/k and round to the closest integer. In ambigous cases, round down. */
 /* only used in seg064.cpp */
@@ -194,15 +193,34 @@ static inline Bit32s host_readds(Bit8u* p)
 	return (Bit32s)host_readd(p);
 }
 
+static inline Bit8u host_writeb(Bit8u* p, Bit8u val)
+{
+	return (*p = val);
+}
+
 static inline Bit8s host_writebs(Bit8u* p, Bit8s val)
 {
 	host_writeb(p, val);
 	return val;
 }
 
+static inline Bit16u host_writew(Bit8u* p, Bit16u val)
+{
+	host_writeb(p, val & 0xff);
+	host_writeb(p + 1, (val >> 8)& 0xff);
+	return val;
+}
+
 static inline Bit16s host_writews(Bit8u* p, Bit16s val)
 {
 	host_writew(p, val);
+	return val;
+}
+
+static inline Bit32u host_writed(Bit8u* p, Bit32u val)
+{
+	host_writew(p, val & 0xffff);
+	host_writew(p + 2, (val >> 16) & 0xffff);
 	return val;
 }
 
