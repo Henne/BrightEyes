@@ -307,17 +307,6 @@ Bit32u bc_farcoreleft(void)
 	return (reg_dx << 16) + reg_ax;
 }
 
-RealPt bc_farcalloc(Bit32u nmemb, Bit32u size)
-{
-	CPU_Push32(size);
-	CPU_Push32(nmemb);
-	CALLBACK_RunRealFar(reloc_game + 0, 0x2287);
-	CPU_Pop32();
-	CPU_Pop32();
-
-	return RealMake(reg_dx, reg_ax);
-}
-
 void bc_harderr(RealPt p)
 {
 	CPU_Push32(p);

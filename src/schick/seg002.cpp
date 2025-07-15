@@ -5646,9 +5646,13 @@ int schick_main(int argc, char** argv)
 	}
 }
 
-RealPt schick_alloc_emu(Bit32u size)
+Bit8u* schick_alloc_emu(Bit32u size)
 {
-	return (RealPt)bc_farcalloc(size, 1);
+#if defined(__BORLANDC__)
+	return (Bit8u*)farcalloc(size, 1);
+#else
+	return (Bit8u*)calloc(size, 1);
+#endif
 }
 
 signed short copy_protection(void)

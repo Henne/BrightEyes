@@ -40,7 +40,6 @@ void bc_farfree(RealPt);
 Bit32u bc_farcoreleft(void);
 void bc_harderr(RealPt);
 void bc_hardresume(Bit16s);
-RealPt bc_farcalloc(Bit32u, Bit32u);
 
 Bit16s bc_spawnl(Bit16s, RealPt, RealPt, RealPt, RealPt, RealPt, RealPt);
 
@@ -82,7 +81,6 @@ Bit16s bc_OvrInitEms(Bit16u, Bit16u, Bit16u);
 #define RealSeg(p) FP_SEG(p)
 #define RealOff(p) FP_OFF(p)
 #define RealMake(s, o) MK_FP(s, o)
-#define PhysMake(s, o) RealMake(s, o)
 
 /* helper, use only when neccessary */
 #define struct_copy memcpy
@@ -106,7 +104,6 @@ Bit16s bc_OvrInitEms(Bit16u, Bit16u, Bit16u);
 
 #define bc_harderr harderr
 #define bc_hardresume hardresume
-#define bc_farcalloc farcalloc
 #define bc_spawnl spawnl
 
 #define bc__dos_close _dos_close
