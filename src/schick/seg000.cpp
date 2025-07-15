@@ -116,65 +116,6 @@ Bit16s bc_mkdir(char *path)
 	return reg_ax;
 }
 
-Bit16s bc_getcurdir(Bit16s drive, char *dir)
-{
-	Bit32u esp_bak = reg_esp;
-
-	CPU_Push32(RealMake(SegValue(ss), reg_sp - 100));
-	CPU_Push16(drive);
-	CALLBACK_RunRealFar(reloc_game, 0x73e);
-	CPU_Pop16();
-	CPU_Pop32();
-
-	reg_esp -= 100;
-
-	char *str = (char*)Real2Host(RealMake(SegValue(ss), reg_esp));
-
-
-	if (strlen(str) > 40) {
-		D1_ERR("Error: Verzeichnis zu tief. maximal 40 Zeichen\n");
-	}
-
-	strcpy(dir, str);
-
-	reg_esp = esp_bak;
-	return reg_ax;
-}
-
-Bit16s bc_getdisk(void)
-{
-	CALLBACK_RunRealFar(reloc_game, 0x781);
-	return reg_ax;
-}
-
-Bit16s bc_setdisk(Bit16s __drive)
-{
-	CPU_Push16(__drive);
-	CALLBACK_RunRealFar(reloc_game, 0x79b);
-	CPU_Pop16();
-	return reg_ax;
-}
-
-void bc_getdfree(Bit16u drive, Bit8u *p)
-{
-	Bit32u esp_bak = reg_esp;
-
-	CPU_Push32(RealMake(SegValue(ss), reg_sp - 32));
-	CPU_Push16(drive);
-	CALLBACK_RunRealFar(reloc_game, 0x7ed);
-	CPU_Pop16();
-	CPU_Pop32();
-
-	reg_esp -= 32;
-
-	host_writew(p + 0, CPU_Pop16());
-	host_writew(p + 2, CPU_Pop16());
-	host_writew(p + 4, CPU_Pop16());
-	host_writew(p + 6, CPU_Pop16());
-
-	reg_esp = esp_bak;
-}
-
 void F_PADA(RealPt p, Bit32s off)
 {
 	reg_dx = RealSeg(p);

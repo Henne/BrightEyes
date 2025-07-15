@@ -6,6 +6,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#if defined(__BORLANDC__)
+#include <DIR.H>
+#endif
+
 #include "v302de.h"
 
 #include "seg000.h"
@@ -374,18 +378,7 @@ Bit32s get_diskspace(void)
 	unsigned short a[4];
 	Bit32s space;
 
-#if !defined(__BORLANDC__)
-	bc_getdfree(bc_getdisk() + 1, (Bit8u*)&a);
-
-	/* BE-fix */
-	a[0] = host_readws((Bit8u*)&a[0]);
-	a[2] = host_readws((Bit8u*)&a[2]);
-	a[3] = host_readws((Bit8u*)&a[3]);
-
-	D1_INFO("Free Diskspace = %d bytes\n", (Bit32s)a[0] * (Bit32s)a[2] * (Bit32s)a[3]);
-#else
-	bc_getdfree(bc_getdisk() + 1, (struct dfree*)&a);
-#endif
+	getdfree(getdisk() + 1, (struct dfree*)&a);
 
 	space = (Bit32s)a[0] * (Bit32s)a[2] * (Bit32s)a[3];
 
@@ -456,6 +449,7 @@ int err_handler(void)
 /* Borlandified and nearly identical */
 void prepare_dirs(void)
 {
+#if defined(__BORLANDC__)
 	signed short l_si;
 	signed short l_di;
 	signed short drive;
@@ -464,19 +458,15 @@ void prepare_dirs(void)
 	struct ffblk blk;
 	char gamepath[40];
 
-#if !defined(__BORLANDC__)
-	bc_harderr(RealMake(reloc_game + 0x3c0, 0x48));
-#else
 	/* BC-TODO: only the adress differs, should be the stub adress */
 	bc_harderr((int(*)(int, int, int, int))err_handler);
-#endif
 
-	drive_bak = drive = bc_getdisk();
+	drive_bak = drive = getdisk();
 
 	errorval = 0;
 	while (errorval != 2) {
 
-		bc_setdisk(drive);
+		setdisk(drive);
 
 		/* copy "X:\\" */
 		strcpy(gamepath, (char*)p_datseg + STR_DRIVE_X);
@@ -485,7 +475,7 @@ void prepare_dirs(void)
 		gamepath[0] = drive + 'A';
 
 		if (drive_bak == drive) {
-			bc_getcurdir(0, &gamepath[3]);
+			getcurdir(0, &gamepath[3]);
 		} else {
 			gamepath[2] = '\0';
 		}
@@ -582,7 +572,8 @@ void prepare_dirs(void)
 		l_si = bc_findnext(&blk);
 	}
 
-	bc_setdisk(drive_bak);
+	setdisk(drive_bak);
+#endif
 }
 
 /* Borlandified and identical */
