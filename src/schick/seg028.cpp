@@ -287,7 +287,7 @@ void load_area_description(signed short type)
 			if ((ds_readw(AREADESCR_DNG_FLAG) == 0) && (ds_readb(DNG_MAP_SIZE) == 0x20)) {
 				bc__write(fd, RealMake(datseg, DNG_MAP), 0x200);
 			} else {
-				bc_lseek(fd, ds_readws(AREADESCR_DNG_LEVEL) * 0x140, 0);
+				lseek(fd, ds_readws(AREADESCR_DNG_LEVEL) * 0x140, 0);
 				bc__write(fd, RealMake(datseg, DNG_MAP), 0x100);
 			}
 			/* write automap tiles */
@@ -341,7 +341,7 @@ void load_area_description(signed short type)
 			ds_writeb(DNG_MAP_SIZE, 0x20);
 		} else {
 			/* Seek to Dungeon Level * 320 */
-			bc_lseek(fd, ds_readbs(DUNGEON_LEVEL) * 320, 0);
+			lseek(fd, ds_readbs(DUNGEON_LEVEL) * 320, 0);
 			bc__read(fd, p_datseg + DNG_MAP, 0x100);
 
 			/* read automap tiles */

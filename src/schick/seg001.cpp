@@ -426,7 +426,7 @@ signed short CD_read_exe(char *path)
 
 	if (bc__dos_read(fd, &buffer, 1, (unsigned int*)&nread) != 0) return -1;
 
-	bc_lseek(fd, 2000L, 0);
+	lseek(fd, 2000L, 0);
 
 	if (bc__dos_read(fd, &buffer, 1, (unsigned int*)&nread) != 0) return -1;
 

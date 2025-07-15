@@ -26,7 +26,6 @@ void bc_setvect(Bit8u, RealPt);
 Bit16u bc__dos_close(Bit16s);
 Bit16u bc__dos_open(char*, Bit16u, signed short *);
 Bit16u bc__dos_read(Bit16s, signed short*, Bit16u, unsigned short*);
-Bit32s bc_lseek(Bit16u, Bit32u, Bit16s);
 Bit16s bc__read(Bit16u, Bit8u*, Bit16u);
 signed short bc_unlink(RealPt);
 static inline void clrscr(void) { };
@@ -107,7 +106,6 @@ Bit16s bc_OvrInitEms(Bit16u, Bit16u, Bit16u);
 #define bc__creat _creat
 
 #define bc_perror perror
-#define bc_lseek lseek
 #define bc__read _read
 #define bc__write write
 

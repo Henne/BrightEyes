@@ -665,7 +665,7 @@ signed short save_game_state(void)
 		}
 
 		/* skip back to the start of the offset of the CHR data */
-		bc_lseek(l_di, 16, 0);
+		lseek(l_di, 16, 0);
 #if !defined(__BORLANDC__)
 		/*	The value of filepos needs to be written to the file in
 		 *	LE format. bc__write() needs an adress in RealMode-Space,
@@ -686,11 +686,11 @@ signed short save_game_state(void)
 #endif
 
 		/* write the file table */
-		bc_lseek(l_di, filepos2, 0);
+		lseek(l_di, filepos2, 0);
 		bc__write(l_di, (RealPt)ds_readd(SAVED_FILES_BUF), 4 * 286);
 
 		/* append all CHR files */
-		bc_lseek(l_di, filepos, 0);
+		lseek(l_di, filepos, 0);
 		sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
 			(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
 			(char*)p_datseg + ALL_CHR_WILDCARD2);

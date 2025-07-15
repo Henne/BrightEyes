@@ -223,17 +223,6 @@ void bc_setvect(Bit8u __interruptno, RealPt handler)
 	CPU_Pop32();
 }
 
-Bit32s bc_lseek(Bit16u handle, Bit32u offset, Bit16s whence) {
-
-	ds_writew(BC_FILEHANDLE_FLAGS + handle * 2, ds_readw(BC_FILEHANDLE_FLAGS + handle * 2) & 0xfdff);
-
-	if (!DOS_SeekFile(handle, &offset, whence))
-		return -1;
-
-	return offset;
-
-}
-
 Bit16s bc__read(Bit16u handle, Bit8u *buf, Bit16u count) {
 
 	if ((ds_readw(BC_FILEHANDLE_FLAGS + handle * 2) & 2))
