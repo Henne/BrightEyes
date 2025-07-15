@@ -8,8 +8,6 @@
 #include "dos_inc.h"
 #include "paging.h"
 
-#include "schick.h"
-
 #include "v302de.h"
 
 #include "seg000.h"

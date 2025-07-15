@@ -7,7 +7,7 @@
 #include "regs.h"
 #include "callback.h"
 
-#include "schick.h"
+#include "v302de.h"
 
 #define AIL_SEGMENT (0x1042)
 
