@@ -256,14 +256,6 @@ signed short bc_unlink(RealPt fname)
 	return reg_ax;
 }
 
-signed short bc_bioskey(signed short cmd)
-{
-	CPU_Push16(cmd);
-	CALLBACK_RunRealFar(reloc_game + 0, 0x176d);
-	CPU_Pop16();
-	return reg_ax;
-}
-
 void bc_farfree(RealPt ptr)
 {
 	CPU_Push32(ptr);

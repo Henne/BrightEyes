@@ -29,7 +29,6 @@ Bit16u bc__dos_read(Bit16s, signed short*, Bit16u, unsigned short*);
 Bit32s bc_lseek(Bit16u, Bit32u, Bit16s);
 Bit16s bc__read(Bit16u, Bit8u*, Bit16u);
 signed short bc_unlink(RealPt);
-signed short bc_bioskey(signed short);
 static inline void clrscr(void) { };
 void bc_farfree(RealPt);
 Bit32u bc_farcoreleft(void);
@@ -114,7 +113,6 @@ Bit16s bc_OvrInitEms(Bit16u, Bit16u, Bit16u);
 
 #define bc_unlink unlink
 
-#define bc_bioskey bioskey
 #define bc_farfree farfree
 #define bc_farcoreleft farcoreleft
 

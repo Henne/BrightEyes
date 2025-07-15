@@ -191,7 +191,7 @@ dummy:
 				ds_writew(BIOSKEY_EVENT, 0x0d);
 				ds_writew(MOUSE1_EVENT1, ds_writew(MOUSE1_EVENT2, 0x00));
 			} else {
-				ds_writew(ACTION, (signed short)(ds_writew(BIOSKEY_EVENT, bc_bioskey(0))) >> 8);
+				ds_writew(ACTION, (signed short)(ds_writew(BIOSKEY_EVENT, bioskey(0))) >> 8);
 				and_ds_ws(BIOSKEY_EVENT, 0xff);
 			}
 

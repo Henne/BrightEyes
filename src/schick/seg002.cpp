@@ -1514,7 +1514,7 @@ void handle_gui_input(void)
 
 	if (CD_bioskey(1)) {
 
-		l_si = (ds_writews(BIOSKEY_EVENT, bc_bioskey(0))) >> 8;
+		l_si = (ds_writews(BIOSKEY_EVENT, bioskey(0))) >> 8;
 		and_ds_ws(BIOSKEY_EVENT, 0xff);
 
 		if (l_si == 0x24) {
@@ -1695,7 +1695,7 @@ void handle_input(void)
 
 	if (CD_bioskey(1)) {
 
-		l_si = (ds_writews(BIOSKEY_EVENT, bc_bioskey(0))) >> 8;
+		l_si = (ds_writews(BIOSKEY_EVENT, bioskey(0))) >> 8;
 		and_ds_ws(BIOSKEY_EVENT, 0xff);
 
 		if (l_si == 0x24) {
@@ -1777,7 +1777,7 @@ void wait_for_keyboard1(void)
 {
 	while (CD_bioskey(1)) {
 
-		bc_bioskey(0);
+		bioskey(0);
 	}
 }
 
@@ -3711,7 +3711,7 @@ void wait_for_keyboard2(void)
 #if !defined(__BORLANDC__)
 		D1_LOG("loop in %s\n", __func__);
 #endif
-		bc_bioskey(0);
+		bioskey(0);
 	}
 }
 
@@ -3735,7 +3735,7 @@ void wait_for_keypress(void)
 	do {
 		if (CD_bioskey(1)) {
 
-			si = bc_bioskey(0);
+			si = bioskey(0);
 
 			if (((si & 0xff) == 0x20) &&
 				(ds_readw(BIOSKEY_EVENT10) == 0))
@@ -3753,7 +3753,7 @@ void wait_for_keypress(void)
 	} while (!CD_bioskey(1) && ds_readw(MOUSE1_EVENT2) == 0);
 
 	if (CD_bioskey(1))
-		si = bc_bioskey(0);
+		si = bioskey(0);
 
 	ds_writew(MOUSE1_EVENT2, 0);
 }

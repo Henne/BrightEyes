@@ -173,7 +173,7 @@ void interrupt timer_isr(void)
 	}
 
 	if ((ds_readw(AUTOFIGHT) != 0) &&
-		(bc_bioskey(1) || (ds_readw(MOUSE1_EVENT2) != 0)))
+		(bioskey(1) || (ds_readw(MOUSE1_EVENT2) != 0)))
 	{
 		ds_writew(AUTOFIGHT, 2);
 		ds_writew(MOUSE1_EVENT2, 0);
