@@ -35,7 +35,7 @@ Bit32s bc_time_dosbox(RealPt);
 Bit32s bc_time(time_t*);
 signed short bc_unlink(RealPt);
 signed short bc_bioskey(signed short);
-void bc_clrscr(void);
+static inline void clrscr(void) { };
 void bc_farfree(RealPt);
 Bit32u bc_farcoreleft(void);
 void bc_harderr(RealPt);
@@ -136,7 +136,6 @@ Bit16s bc_OvrInitEms(Bit16u, Bit16u, Bit16u);
 #define bc_unlink unlink
 
 #define bc_bioskey bioskey
-#define bc_clrscr clrscr
 #define bc_farfree farfree
 #define bc_farcoreleft farcoreleft
 

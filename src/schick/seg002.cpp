@@ -5634,7 +5634,7 @@ int schick_main(int argc, char** argv)
 		/* not enough memory */
 		exit_AIL();
 		schick_reset_video();
-		bc_clrscr();
+		clrscr();
 	}
 }
 

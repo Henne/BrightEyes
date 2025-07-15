@@ -671,7 +671,7 @@ void cleanup_game(void)
 	disable_mouse();
 	reset_timer();
 	schick_reset_video();
-	bc_clrscr();
+	clrscr();
 }
 
 /**
