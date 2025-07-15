@@ -1,22 +1,6 @@
 #if !defined(M302de_COMMON_H)
 #define M302de_COMMON_H
 
-typedef unsigned char Bit8u;
-typedef signed char Bit8s;
-typedef unsigned short Bit16u;
-typedef signed short Bit16s;
-typedef Bit8u* RealPt;
-typedef Bit8u* PhysPt;
-#if defined(__BORLANDC__)
-typedef unsigned long Bit32u;
-typedef signed long Bit32s;
-typedef Bit8u huge * HugePt;
-#else
-typedef unsigned int Bit32u;
-typedef signed int Bit32s;
-typedef Bit8u huge * HugePt;
-#endif
-
 /**
 	struct nvf_desc - nvf descriptor
 	@src:	pointer to a buffer containing the nvf file

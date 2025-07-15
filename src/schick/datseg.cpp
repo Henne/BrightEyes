@@ -3,6 +3,7 @@
  *	No code is allowed here, only the global data
  */
 
+#include "v302de.h"
 #include "datseg.h"
 #include "common.h"
 

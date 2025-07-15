@@ -17,10 +17,6 @@
 #include <assert.h>
 #endif
 
-#include "symbols.h"
-#include "common.h"
-#include "datseg.h"
-
 typedef unsigned char Bit8u;
 typedef signed char Bit8s;
 typedef unsigned short Bit16u;
@@ -34,8 +30,13 @@ typedef Bit8u huge * HugePt;
 #else
 typedef unsigned int Bit32u;
 typedef signed int Bit32s;
-typedef Bit8u * HugePt;
+typedef Bit8u* HugePt;
 #endif
+
+#include "symbols.h"
+#include "common.h"
+#include "datseg.h"
+
 
 #define ROUNDED_DIVISION(n,k)	((n + (k-1)/2)/k)
 /* divide n/k and round to the closest integer. In ambigous cases, round down. */
@@ -157,6 +158,76 @@ extern unsigned short datseg;
 extern Bit8u *p_datseg;
 #define reloc_game (0)
 
+
+static inline int NOT_NULL(Bit8u* p)
+{
+	return (p != NULL);
+}
+
+static inline Bit8u host_readb(Bit8u* p)
+{
+	return ((Bit8u)*p);
+}
+
+static inline Bit8s host_readbs(Bit8u* p)
+{
+	return ((Bit8s)*p);
+}
+
+static inline Bit16u host_readw(Bit8u* p)
+{
+	return ((Bit16u)(host_readb(p + 1) << 8) | (host_readb(p)));
+}
+
+static inline Bit16s host_readws(Bit8u* p)
+{
+	return (Bit16s)host_readw(p);
+}
+
+static inline Bit32s host_readd(Bit8u* p)
+{
+	return ((Bit32s)(host_readw(p + 2) << 16) | host_readw(p));
+}
+
+static inline Bit32s host_readds(Bit8u* p)
+{
+	return (Bit32s)host_readd(p);
+}
+
+static inline Bit8s host_writebs(Bit8u* p, Bit8s val)
+{
+	host_writeb(p, val);
+	return val;
+}
+
+static inline Bit16s host_writews(Bit8u* p, Bit16s val)
+{
+	host_writew(p, val);
+	return val;
+}
+
+static inline Bit32s host_writeds(Bit8u* p, Bit32s val)
+{
+	host_writed(p, val);
+	return val;
+}
+
+static inline void inc_ptr_bs(Bit8u *p)
+{
+	host_writebs(p, host_readbs(p) + 1);
+}
+
+static inline void inc_ptr_ws(Bit8u *p)
+{
+	host_writews(p, host_readws(p) + 1);
+}
+
+static inline Bit8s dec_ptr_bs(Bit8u *p)
+{
+	host_writebs(p, host_readbs(p) - 1);
+	return host_readbs(p) + 1;
+}
+
 static inline Bit8u ds_readb(unsigned short offs) {
 	return host_readb(p_datseg + offs);
 }
@@ -229,43 +300,6 @@ static inline HugePt ds_writehp(unsigned short offs, HugePt ptr)
 	return ptr;
 }
 
-static inline Bit8s host_readbs(Bit8u* p)
-{
-	return (Bit8s)host_readb(p);
-}
-
-static inline Bit16s host_readws(Bit8u* p)
-{
-	return (Bit16s)host_readw(p);
-}
-
-static inline Bit32s host_readds(Bit8u* p)
-{
-	return (Bit32s)host_readd(p);
-}
-
-static inline Bit8s host_writebs(Bit8u* p, Bit8s val)
-{
-	host_writeb(p, val);
-	return val;
-}
-
-static inline Bit16s host_writews(Bit8u* p, Bit16s val)
-{
-	host_writew(p, val);
-	return val;
-}
-
-static inline Bit32s host_writeds(Bit8u* p, Bit32s val)
-{
-	host_writed(p, val);
-	return val;
-}
-
-static inline int NOT_NULL(Bit8u* p)
-{
-	return (p != NULL);
-}
 
 /**
  *	ds_writeb_z() -	write only if target is 0
@@ -435,22 +469,6 @@ static inline Bit16s dec_ds_ws(Bit16u off)
 static inline Bit16s dec_ds_ws_post(Bit16u off)
 {
 	return ds_writew(off, ds_readws(off) - 1) + 1;
-}
-
-static inline void inc_ptr_bs(Bit8u *p)
-{
-	host_writebs(p, host_readbs(p) + 1);
-}
-
-static inline void inc_ptr_ws(Bit8u *p)
-{
-	host_writews(p, host_readws(p) + 1);
-}
-
-static inline Bit8s dec_ptr_bs(Bit8u *p)
-{
-	host_writebs(p, host_readbs(p) - 1);
-	return host_readbs(p) + 1;
 }
 
 static inline void dec_ptr_ws(Bit8u *p)
