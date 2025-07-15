@@ -603,8 +603,8 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 
 								if (cb_entry == 0) { /* square is empty */
 
-									if (!NOT_NULL(actor_enemy_ptr) ||
-										(NOT_NULL(actor_enemy_ptr) && (!two_squares ||
+									if (!actor_enemy_ptr ||
+										(actor_enemy_ptr && (!two_squares ||
 													((two_squares != 0) &&
 														((!host_readbs(Real2Host(ds_readd(CHESSBOARD_CPY)) + (tail_y * 25) + tail_x)) || /* square is empty */
 														(host_readbs(Real2Host(ds_readd(CHESSBOARD_CPY)) + (tail_y * 25) + tail_x))  == (actor_id + 10)|| /* head of active enemy is on square */
@@ -653,7 +653,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 											}
 										} else { /* some hero on square */
 											if (((mode == 0) || (mode == 1)) /* melee attack */
-												&& (!NOT_NULL(actor_enemy_ptr) || (NOT_NULL(actor_enemy_ptr) && (!two_squares ||
+												&& (!actor_enemy_ptr || (actor_enemy_ptr && (!two_squares ||
 															((two_squares != 0) &&
 																((!host_readbs(Real2Host(ds_readd(CHESSBOARD_CPY)) + (tail_y * 25) + tail_x)) ||
 																(host_readbs(Real2Host(ds_readd(CHESSBOARD_CPY)) + (tail_y * 25) + tail_x))  == (actor_id + 10)||
@@ -682,7 +682,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 											}
 										} else { /* enemy on square */
 											if (((mode == 2) || (mode == 3)) && /* melee attack */
-												(cb_entry < 30) && (!NOT_NULL(actor_enemy_ptr) || (NOT_NULL(actor_enemy_ptr) && (!two_squares ||
+												(cb_entry < 30) && (!actor_enemy_ptr || (actor_enemy_ptr && (!two_squares ||
 															((two_squares != 0) &&
 																((!host_readbs(Real2Host(ds_readd(CHESSBOARD_CPY)) + (tail_y * 25) + tail_x)) ||
 																(host_readbs(Real2Host(ds_readd(CHESSBOARD_CPY)) + (tail_y * 25) + tail_x))  == (actor_id + 10)||

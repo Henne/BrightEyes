@@ -507,7 +507,7 @@ void remove_npc(signed short head_index, signed char days,
 
 
 	/* print farewell message if the NPC has and can */
-	if (NOT_NULL(text)) {
+	if (text) {
 		if (check_hero(get_hero(6)) != 0) {
 			load_in_head(head_index);
 			GUI_dialogbox((RealPt)ds_readd(DTP2), name, text, 0);

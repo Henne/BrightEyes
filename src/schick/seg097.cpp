@@ -342,7 +342,7 @@ signed short GUI_input(Bit8u *str, unsigned short num)
 	l7 = ds_readw(UPDATE_STATUSLINE);
 	ds_writew(UPDATE_STATUSLINE, 0);
 
-	if (!NOT_NULL(str) || !host_readbs(str) || ds_readw(AUTOFIGHT) != 0)
+	if (!str || !host_readbs(str) || ds_readw(AUTOFIGHT) != 0)
 		return -1;
 
 	l6 = ds_readw(WALLCLOCK_UPDATE);
@@ -512,7 +512,7 @@ signed short GUI_dialogbox(RealPt picture, Bit8u *name, Bit8u *text,
 
 	l_si = GUI_count_lines(text) - 1;
 
-	if (NOT_NULL(name))
+	if (name)
 		l_si += 2;
 
 	if (l_si < ds_readws(DIALOGBOX_INDENT_HEIGHT))
@@ -545,7 +545,7 @@ signed short GUI_dialogbox(RealPt picture, Bit8u *name, Bit8u *text,
 		do_pic_copy(0);
 	}
 
-	if (NOT_NULL(name)) {
+	if (name) {
 		/* set text color */
 		ds_writew(TEXTCOLOR, 1);
 

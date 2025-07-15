@@ -76,7 +76,7 @@ int ppDecrunch(uint8 *src, uint8 *dest, uint8 *offset_lens,
   uint8 *buf_src, *out, *dest_end, bits_left = 0, bit_cnt;
   uint32 bit_buffer = 0, x, todo, offbits, offset, written=0;
 
-  if (!NOT_NULL(src) || !NOT_NULL(dest) || offset_lens == NULL) return 0;
+  if (!src || !dest || offset_lens == NULL) return 0;
 
   /* set up input and output pointers */
   buf_src = src + src_len;

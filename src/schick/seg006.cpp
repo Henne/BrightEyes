@@ -128,7 +128,7 @@ void FIG_draw_figures(void)
 			do_pic_copy(2);
 		}
 
-	} while (NOT_NULL(list_i = (Bit8u*)Real2Host((RealPt)host_readd(list_i + FIGHTER_NEXT))));
+	} while (list_i = (Bit8u*)Real2Host((RealPt)host_readd(list_i + FIGHTER_NEXT)));
 
 	/* restore a structure */
 	//struct_copy(p_datseg + PIC_COPY_DS_RECT, screen_mode, 8);
@@ -323,8 +323,7 @@ void FIG_remove_from_list(signed char fighter_id, signed char keep_in_memory)
 	Bit8u* p = Real2Host(ds_readd(FIG_LIST_HEAD));
 
 	/* NULL check */
-	if (!NOT_NULL(p))
-		return;
+	if (!p)	return;
 
 	while (host_readb(p + FIGHTER_ID) != fighter_id) {
 

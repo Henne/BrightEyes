@@ -281,7 +281,7 @@ void spell_hexenknoten(void)
 
 	no = 24;
 
-	if (NOT_NULL(Real2Host(ds_readfp(HEXENKNOTEN_GFX_BUF)))) {
+	if ((Bit8u*)(ds_readfp(HEXENKNOTEN_GFX_BUF))) {
 		rp = ds_readfp(HEXENKNOTEN_GFX_BUF);
 		/* TODO: graphic bug if cast more than once */
 	} else {

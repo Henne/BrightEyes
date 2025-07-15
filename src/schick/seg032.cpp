@@ -832,7 +832,7 @@ void FIG_load_ship_sprites(void)
 
 				l_si -= 50;
 
-			if (NOT_NULL(Real2Host(host_readd(Real2Host(ds_readd(FIGOBJ_GFXBUF_TABLE)) + 4 * l_si)))) {
+			if (((Bit8u*)(host_readd(Real2Host(ds_readd(FIGOBJ_GFXBUF_TABLE)) + 4 * l_si)))) {
 
 				/* this sprite has already been buffered */
 

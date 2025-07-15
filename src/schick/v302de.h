@@ -192,12 +192,6 @@ extern unsigned short datseg;
 extern Bit8u *p_datseg;
 #define reloc_game (0)
 
-
-static inline int NOT_NULL(Bit8u* p)
-{
-	return (p != NULL);
-}
-
 static inline Bit8u host_readb(Bit8u* p)
 {
 	return ((Bit8u)*p);
@@ -1204,8 +1198,6 @@ static inline char* get_itemname(unsigned short item)
 #endif
 
 #include <DOS.H>
-
-#define NOT_NULL(p) ((p) != NULL)
 
 /* poring functions for Borland C++ */
 struct hero_struct {

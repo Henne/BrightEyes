@@ -247,8 +247,7 @@ unsigned short GUI_count_lines(Bit8u *str)
 
 	lines = 0;
 
-	if (!NOT_NULL(str))
-		return 0;
+	if (!str) return 0;
 
 	/* replace all CR and LF in the input string with whitespaces */
 	for (str_loc = str; *str_loc; str_loc++)

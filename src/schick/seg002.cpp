@@ -211,7 +211,7 @@ void read_sound_cfg(void)
 			} else {
 
 				/* music was disabled in SOUND.CFG */
-				if (NOT_NULL(Real2Host(ds_readd(AIL_MIDI_BUFFER)))) {
+				if (((Bit8u*)ds_readd(AIL_MIDI_BUFFER))) {
 					bc_farfree((RealPt)ds_readd(AIL_MIDI_BUFFER));
 				}
 
@@ -242,7 +242,7 @@ void read_sound_cfg(void)
 void init_AIL(Bit32u size)
 {
 #if defined(__BORLANDC__)
-	if (NOT_NULL(Real2Host((RealPt)ds_writed(AIL_MIDI_BUFFER, (Bit32u)schick_alloc_emu(size))))) {
+	if (((Bit8u*)ds_writed(AIL_MIDI_BUFFER, (Bit32u)schick_alloc_emu(size)))) {
 		AIL_startup();
 		ds_writew(LOAD_SOUND_DRIVER, 1);
 	}
@@ -411,7 +411,7 @@ signed short load_music_driver(RealPt fname, signed short type, signed short por
 {
 #if defined(__BORLANDC__)
 	if (port &&
-		NOT_NULL(Real2Host((RealPt)ds_writed(AIL_MUSIC_DRIVER_BUF, (Bit32u)read_music_driver(fname)))) &&
+		(((Bit8u*)ds_writed(AIL_MUSIC_DRIVER_BUF, (Bit32u)read_music_driver(fname)))) &&
 		((ds_writew(AIL_MUSIC_DRIVER_ID, AIL_register_driver((RealPt)ds_readd(AIL_MUSIC_DRIVER_BUF)))) != 0xffff))
 	{
 
@@ -592,7 +592,7 @@ void alloc_voc_buffer(Bit32u size)
 {
 #if defined(__BORLANDC__)
 	if (ds_readw(SND_VOC_ENABLED)) {
-		if (NOT_NULL(Real2Host(ds_writed(AIL_VOC_BUFFER, (Bit32u)schick_alloc_emu(size))))) ;
+		if ((((Bit8u*)ds_writed(AIL_VOC_BUFFER, (Bit32u)schick_alloc_emu(size))))) ;
 	}
 #endif
 }
@@ -688,7 +688,7 @@ signed short load_digi_driver(RealPt fname, signed short type, signed short io, 
 {
 #if defined(__BORLANDC__)
 	if (io &&
-		NOT_NULL(Real2Host((RealPt)ds_writed(AIL_DIGI_DRIVER_BUF, (Bit32u)read_digi_driver(fname)))) &&
+		((Bit8u*)ds_writed(AIL_DIGI_DRIVER_BUF, (Bit32u)read_digi_driver(fname))) &&
 		((ds_writew(AIL_DIGI_DRIVER_ID, AIL_register_driver((RealPt)ds_readd(AIL_DIGI_DRIVER_BUF)))) != 0xffff))
 	{
 
@@ -1573,13 +1573,13 @@ void handle_gui_input(void)
 		ds_writew(MOUSE1_EVENT2, 0);
 		l_si = 0;
 
-		if (NOT_NULL(Real2Host(ds_readd(ACTION_TABLE_SECONDARY)))) {
+		if (((Bit8u*)ds_readd(ACTION_TABLE_SECONDARY))) {
 			l_si = get_mouse_action(ds_readw(MOUSE_POSX),
 					ds_readw(MOUSE_POSY),
 					Real2Host(ds_readd(ACTION_TABLE_SECONDARY)));
 		}
 
-		if (!l_si && NOT_NULL(Real2Host(ds_readd(ACTION_TABLE_PRIMARY)))) {
+		if (!l_si && ((Bit8u*)ds_readd(ACTION_TABLE_PRIMARY))) {
 			l_si = get_mouse_action(ds_readw(MOUSE_POSX),
 					ds_readw(MOUSE_POSY),
 					Real2Host(ds_readd(ACTION_TABLE_PRIMARY)));
@@ -1740,13 +1740,13 @@ void handle_input(void)
 		ds_writew(MOUSE1_EVENT2, 0);
 		l_si = 0;
 
-		if (NOT_NULL(Real2Host(ds_readd(ACTION_TABLE_SECONDARY)))) {
+		if (((Bit8u*)ds_readd(ACTION_TABLE_SECONDARY))) {
 			l_si = get_mouse_action(ds_readw(MOUSE_POSX),
 					ds_readw(MOUSE_POSY),
 					Real2Host(ds_readd(ACTION_TABLE_SECONDARY)));
 		}
 
-		if (!l_si && NOT_NULL(Real2Host(ds_readd(ACTION_TABLE_PRIMARY)))) {
+		if (!l_si && ((Bit8u*)ds_readd(ACTION_TABLE_PRIMARY))) {
 			l_si = get_mouse_action(ds_readw(MOUSE_POSX),
 					ds_readw(MOUSE_POSY),
 					Real2Host(ds_readd(ACTION_TABLE_PRIMARY)));
