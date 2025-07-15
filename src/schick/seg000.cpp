@@ -431,38 +431,6 @@ Bit16s bc__close(Bit16s handle)
 	return reg_ax;
 }
 
-RealPt bc_memset(RealPt dst, Bit8s val, Bit16u count)
-{
-	PhysPt d;
-
-	d = Real2Phys(dst);
-
-	while (count--) {
-		mem_writeb_inline(d++, val);
-	}
-
-	return dst;
-}
-
-RealPt bc_memmove(RealPt dst, RealPt src, Bit16u len)
-{
-	PhysPt s, d;
-
-	s = Real2Phys(src);
-	d = Real2Phys(dst);
-
-	while (len--) {
-		mem_writeb_inline(d++, mem_readb_inline(s++));
-	}
-
-	return dst;
-}
-
-RealPt bc_memcpy(RealPt dst, RealPt src, Bit16u len)
-{
-	return bc_memmove(dst, src, len);
-}
-
 Bit16s bc__creat(RealPt name, Bit16u attrib)
 {
 	CPU_Push16(attrib);

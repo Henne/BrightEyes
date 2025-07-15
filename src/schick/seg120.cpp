@@ -702,13 +702,14 @@ void game_over_screen(void)
 	set_palette(p_datseg + PALETTE_ALLBLACK2, 0x00, 0x20);
 	set_palette(p_datseg + PALETTE_ALLBLACK2, 0x20, 0x20);
 
-	bc_memcpy((RealPt)ds_readd(FRAMEBUF_PTR), (RealPt)ds_readd(RENDERBUF_PTR), 64000);
+	memcpy((void*)((Bit8u*)ds_readd(FRAMEBUF_PTR)), (void*)((Bit8u*)ds_readd(RENDERBUF_PTR)), 320 * 200);
 
 	set_palette(Real2Host(ds_readd(RENDERBUF_PTR)) + 64002, 0x00, 0x40);
 
 	wait_for_keypress();
 
-	bc_memset((RealPt)ds_readd(FRAMEBUF_PTR), 0, 64000);
+	/* TODO: update window */
+	memset((void*)((Bit8u*)ds_readd(FRAMEBUF_PTR)), 0, 320 * 200);
 
 	wait_for_vsync();
 

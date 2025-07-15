@@ -86,7 +86,7 @@ void set_textbox_positions(signed short town_id)
  */
 void TM_func1(signed short route_no, signed short backwards)
 {
-	RealPt fb_start;
+	Bit8u* fb_start;
 	Bit8u *hero;
 	Bit8u *tevent_ptr;
 	signed short bak1;
@@ -202,22 +202,21 @@ void TM_func1(signed short route_no, signed short backwards)
 		{
 			dec_ds_ws(ROUTE_STEPCOUNT);
 
-            /* restore the pixel from the map */
-			mem_writeb(Real2Phys(fb_start) +
-			    host_readws(Real2Host(ds_readfp(ROUTE_COURSE_PTR)) + 2) * 320
-			    + host_readws(Real2Host(ds_readfp(ROUTE_COURSE_PTR))),
-				host_readb(Real2Host(ds_readd(TRV_TRACK_PIXEL_BAK)) + ds_readws(ROUTE_STEPCOUNT)));
+			/* restore the pixel from the map */
+			*(fb_start + host_readws((Bit8u*)ds_readfp(ROUTE_COURSE_PTR) + 2) * 320
+				+ host_readws((Bit8u*)ds_readfp(ROUTE_COURSE_PTR))) =
+				host_readb((Bit8u*)ds_readd(TRV_TRACK_PIXEL_BAK) + ds_readws(ROUTE_STEPCOUNT));
 
-			mem_writeb(Real2Phys(ds_readd(TRV_TRACK_PIXEL_BAK)) + ds_readws(ROUTE_STEPCOUNT), 0xaa);
+			*((Bit8u*)ds_readd(TRV_TRACK_PIXEL_BAK) + ds_readws(ROUTE_STEPCOUNT)) = 0xaa;
 		} else {
-		    /* save the old pixel from the map */
-			host_writeb(Real2Host(ds_readd(TRV_TRACK_PIXEL_BAK)) + ds_readws(ROUTE_STEPCOUNT),
-				mem_readb(Real2Phys(fb_start) + host_readws(Real2Host(ds_readfp(ROUTE_COURSE_PTR)) + 2) * 320 + host_readws(Real2Host(ds_readfp(ROUTE_COURSE_PTR)))));
+			/* save the old pixel from the map */
+			*((Bit8u*)ds_readd(TRV_TRACK_PIXEL_BAK) + ds_readws(ROUTE_STEPCOUNT)) =
+				*(fb_start + host_readws((Bit8u*)ds_readfp(ROUTE_COURSE_PTR) + 2) * 320 + host_readws((Bit8u*)ds_readfp(ROUTE_COURSE_PTR)));
 
 			inc_ds_ws(ROUTE_STEPCOUNT);
 
 			/* write a new pixel */
-			mem_writeb(Real2Phys(fb_start) + host_readws(Real2Host(ds_readfp(ROUTE_COURSE_PTR)) + 2) * 320 + host_readws(Real2Host(ds_readfp(ROUTE_COURSE_PTR))), 0x1c);
+			*(fb_start + host_readws((Bit8u*)ds_readfp(ROUTE_COURSE_PTR) + 2) * 320 + host_readws((Bit8u*)ds_readfp(ROUTE_COURSE_PTR))) = 0x1c;
 		}
 
 		if (ds_readw(ROUTE_MOUSEHOVER) != 0)
@@ -412,7 +411,8 @@ void TM_func1(signed short route_no, signed short backwards)
 		{
 			update_mouse_cursor();
 			load_map();
-			bc_memmove((RealPt)ds_readd(FRAMEBUF_PTR), (RealPt)ds_readd(TRAVEL_MAP_PTR), 64000);
+			/* TODO: update window */
+			memmove((void*)((Bit8u*)ds_readd(FRAMEBUF_PTR)), (void*)((Bit8u*)ds_readd(TRAVEL_MAP_PTR)), 320 * 200);
 
 			wait_for_vsync();
 			set_palette(Real2Host(ds_readd(TRAVEL_MAP_PTR)) + 64000 + 2, 0, 0x20);
@@ -429,7 +429,7 @@ void TM_func1(signed short route_no, signed short backwards)
             /* Redraw the track on the map */
 			while (host_readb(Real2Host(ds_readd(TRV_TRACK_PIXEL_BAK)) + inc_ds_ws_post(TRV_I)) != 0xaa)
 			{
-				mem_writeb(Real2Phys(fb_start) + 320 * host_readws(Real2Host(ds_readd(ROUTE_COURSE_PTR2)) + 2) + host_readws(Real2Host(ds_readd(ROUTE_COURSE_PTR2))), 0x1c);
+				*(fb_start + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR2) + 2) * 320 + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR2))) =  0x1c;
 				add_ds_fp(ROUTE_COURSE_PTR2, 2 * (!backwards ? 2 : -2));
 			}
 
@@ -471,8 +471,8 @@ void TM_func1(signed short route_no, signed short backwards)
 		do {
 			add_ds_fp(ROUTE_COURSE_PTR, 2 * (!backwards ? -2 : 2));
 			dec_ds_ws(ROUTE_STEPCOUNT);
-			mem_writeb(Real2Phys(fb_start) + host_readws(Real2Host(ds_readfp(ROUTE_COURSE_PTR)) + 2) * 320 + host_readws(Real2Host(ds_readfp(ROUTE_COURSE_PTR))),
-				host_readb(Real2Host(ds_readd(TRV_TRACK_PIXEL_BAK)) + ds_readws(ROUTE_STEPCOUNT)));
+			*(fb_start + host_readws((Bit8u*)ds_readfp(ROUTE_COURSE_PTR) + 2) * 320 + host_readws((Bit8u*)ds_readfp(ROUTE_COURSE_PTR))) =
+				host_readb((Bit8u*)ds_readd(TRV_TRACK_PIXEL_BAK) + ds_readws(ROUTE_STEPCOUNT));
 
 		} while (host_readws(Real2Host(ds_readfp(ROUTE_COURSE_PTR))) != -1);
 
@@ -685,10 +685,10 @@ void TM_draw_track(signed short a1, signed short length, signed short direction,
 		{
 			/* save the old pixel from the map */
 			ds_writeb(TRV_DETOUR_PIXEL_BAK + i,
-				mem_readb(Real2Phys(fb_start) + 320 * host_readws(ptr + 2) + host_readws(ptr)));
+				*(fb_start + host_readws(ptr + 2) * 320 + host_readws(ptr)));
 
 			/* write a new one */
-			mem_writeb(Real2Phys(fb_start) + 320 * host_readws(ptr + 2) + host_readws(ptr), 0x1c);
+			*(fb_start + host_readws(ptr + 2) * 320 + host_readws(ptr)) = 0x1c;
 
 			/* move the pointer */
 			ptr += 2 * ((!direction ? 2 : -2));
@@ -697,8 +697,7 @@ void TM_draw_track(signed short a1, signed short length, signed short direction,
 			ptr += 2 * ((!direction ? 2 : -2));
 
 			/* restore the pixel from the map */
-			mem_writeb(Real2Phys(fb_start) + 320 * host_readws(ptr + 2) + host_readws(ptr),
-				ds_readb(TRV_DETOUR_PIXEL_BAK + i));
+			*(fb_start + host_readws(ptr + 2) * 320 + host_readws(ptr)) = ds_readb(TRV_DETOUR_PIXEL_BAK + i);
 		}
 	}
 }

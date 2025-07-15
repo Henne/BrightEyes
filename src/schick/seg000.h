@@ -54,10 +54,6 @@ Bit16s bc_flushall(void);
 Bit16s bc_close(Bit16s);
 Bit16s bc__close(Bit16s);
 
-RealPt bc_memcpy(RealPt, RealPt, Bit16u);
-RealPt bc_memset(RealPt, Bit8s, Bit16u);
-
-RealPt bc_memmove(RealPt, RealPt, Bit16u);
 Bit16s bc__creat(RealPt, Bit16u);
 void bc_perror(RealPt);
 Bit16s bc_open(RealPt, Bit16u);
@@ -146,11 +142,6 @@ Bit16s bc_OvrInitEms(Bit16u, Bit16u, Bit16u);
 #define bc_flushall flushall
 
 #define bc_open open
-
-#define mem_memcpy memcpy
-#define bc_memcpy memcpy
-#define bc_memset memset
-#define bc_memmove memmove
 
 #define my_itoa itoa
 

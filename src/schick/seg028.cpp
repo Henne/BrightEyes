@@ -480,8 +480,10 @@ void load_map(void)
 				EMS_map_memory(ds_readw(EMS_TRAVEL_MAP), 1, 1);
 				EMS_map_memory(ds_readw(EMS_TRAVEL_MAP), 2, 2);
 				EMS_map_memory(ds_readw(EMS_TRAVEL_MAP), 3, 3);
-				bc_memmove((RealPt)ds_readd(EMS_FRAME_PTR),
-					(RealPt)ds_readd(RENDERBUF_PTR), 64098);
+
+				/* TODO: update window */
+				memmove((void*)((Bit8u*)ds_readd(EMS_FRAME_PTR)),
+					(void*)((Bit8u*)ds_readd(RENDERBUF_PTR)), 320 * 200 + 98);
 			}
 		}
 	}

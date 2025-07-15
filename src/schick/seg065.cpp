@@ -170,7 +170,8 @@ void final_intro(void)
 		set_palette(ptr1, 0, 0x60);
 	}
 
-	bc_memset((RealPt)ds_readd(FRAMEBUF_PTR), 0, 64000);
+	/* TODO: update window */
+	memset((void*)((Bit8u*)ds_readd(FRAMEBUF_PTR)), 0, 320 * 200);
 
 	refresh_colors();
 	refresh_screen_size();
@@ -367,7 +368,8 @@ void show_hyggelik_ani(void)
 	}
 
 	refresh_screen_size();
-	bc_memset((RealPt)ds_readd(FRAMEBUF_PTR), 0, 64000);
+	/* TODO: update window */
+	memset((void*)((Bit8u*)ds_readd(FRAMEBUF_PTR)), 0, 320 * 200);
 	refresh_colors();
 }
 

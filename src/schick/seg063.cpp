@@ -555,11 +555,12 @@ void sea_travel(signed short passage, signed short dir)
 			ds_writew(ROUTE_MOUSEHOVER, 1);
 		}
 
-		host_writeb(Real2Host(ds_readd(TRV_TRACK_PIXEL_BAK)) + ds_readws(ROUTE_STEPCOUNT),
-			mem_readb(Real2Phys(ptr) + 320 * host_readws(Real2Host(ds_readfp(ROUTE_COURSE_PTR)) + 2) + host_readws(Real2Host(ds_readfp(ROUTE_COURSE_PTR)))));
+		*((Bit8u*)ds_readd(TRV_TRACK_PIXEL_BAK) + ds_readws(ROUTE_STEPCOUNT)) =
+			*(ptr + host_readws(((Bit8u*)ds_readfp(ROUTE_COURSE_PTR) + 2)) * 320 + host_readws((Bit8u*)ds_readfp(ROUTE_COURSE_PTR)));
+
 		inc_ds_ws(ROUTE_STEPCOUNT);
 
-		mem_writeb(Real2Phys(ptr) + 320 * host_readws(Real2Host(ds_readfp(ROUTE_COURSE_PTR)) + 2) + host_readws(Real2Host(ds_readfp(ROUTE_COURSE_PTR))), 0x1f);
+		*(ptr + host_readws((Bit8u*)ds_readfp(ROUTE_COURSE_PTR) + 2) * 320 + host_readws((Bit8u*)ds_readfp(ROUTE_COURSE_PTR))) = 0x1f;
 
 		if (ds_readws(ROUTE_MOUSEHOVER) != 0) {
 			refresh_screen_size();
@@ -638,7 +639,8 @@ void sea_travel(signed short passage, signed short dir)
 
 			load_map();
 
-			bc_memmove((RealPt)ds_readd(FRAMEBUF_PTR), (RealPt)ds_readd(TRAVEL_MAP_PTR), 64000);
+			/* TODO: update window */
+			memmove((void*)((Bit8u*)ds_readd(FRAMEBUF_PTR)), (void*)((Bit8u*)ds_readd(TRAVEL_MAP_PTR)), 320 * 200);
 
 			wait_for_vsync();
 
@@ -651,7 +653,7 @@ void sea_travel(signed short passage, signed short dir)
 			     host_readb(Real2Host(ds_readd(TRV_TRACK_PIXEL_BAK)) + inc_ds_ws_post(TRV_I)) != 0xaa;
 			     add_ds_fp(ROUTE_COURSE_PTR2, 2 * (!dir ? 2 : -2)))
 			{
-				mem_writeb(Real2Phys(ptr) + 320 * host_readws(Real2Host(ds_readd(ROUTE_COURSE_PTR2)) + 2) + host_readws(Real2Host(ds_readd(ROUTE_COURSE_PTR2))), 0x1f);
+				*(ptr + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR2) + 2) * 320 + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR2))) = 0x1f;
 			}
 
 			refresh_screen_size();
@@ -680,9 +682,9 @@ void sea_travel(signed short passage, signed short dir)
 
 			dec_ds_ws(ROUTE_STEPCOUNT);
 
-			mem_writeb(Real2Phys(ptr) + 320 * host_readws(Real2Host(ds_readfp(ROUTE_COURSE_PTR)) + 2) + host_readws(Real2Host(ds_readfp(ROUTE_COURSE_PTR))),
-				host_readb(Real2Host(ds_readd(TRV_TRACK_PIXEL_BAK)) + ds_readws(ROUTE_STEPCOUNT))
- );
+			*(ptr + host_readws(((Bit8u*)ds_readfp(ROUTE_COURSE_PTR) + 2)) * 320 + host_readws((Bit8u*)ds_readfp(ROUTE_COURSE_PTR))) =
+				host_readb((Bit8u*)ds_readd(TRV_TRACK_PIXEL_BAK) + ds_readws(ROUTE_STEPCOUNT));
+
 		} while (host_readws(Real2Host(ds_readfp(ROUTE_COURSE_PTR))) != -1);
 
 		refresh_screen_size();

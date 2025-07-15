@@ -98,23 +98,24 @@ void set_palette(Bit8u *ptr, unsigned short first_color, unsigned short colors){
 			ptr[i*3], ptr[i*3+1], ptr[i*3+2]);
 }
 
-void draw_h_line(RealPt ptr, unsigned short count, signed short color) {
+void draw_h_line(Bit8u *ptr, unsigned short count, signed short color) {
 	unsigned short i;
 
 	for (i = 0; i < count; i++)
-		mem_writeb(Real2Phys(ptr) + i, color);
+		*(ptr + i) = color;
 }
 
-void draw_h_spaced_dots(RealPt ptr, signed short count, signed short color, signed short space) {
+void draw_h_spaced_dots(Bit8u *ptr, signed short count, signed short color, signed short space)
+{
 	unsigned short i;
 
 	for (i = 0; i < count; i++) {
-		mem_writeb(Real2Phys(ptr), color);
+		*ptr = color;
 		ptr += space;
 	}
 }
 
-void pic_copy(RealPt dst, short x1, short y1, short x2, short y2,
+void pic_copy(Bit8u *dst, short x1, short y1, short x2, short y2,
 	unsigned short val1, unsigned short val2,
 	unsigned short val3, unsigned short val4,
 	unsigned short src_width, unsigned short src_height,
@@ -188,16 +189,16 @@ void pic_copy(RealPt dst, short x1, short y1, short x2, short y2,
 			if (ds_readw(PIC_COPY_FLAG)) {
 				do {
 					if (lines >= 40 || cols <= 75 || cols >= 150)
-						if (mem_readb(Real2Phys(dst)) >= 0xc8)
+						if (*dst >= 0xc8)
 							continue;
 
-					mem_writeb(Real2Phys(dst), *src);
+					*dst = *src;
 
 				} while (src++ && dst++ && --cols);
 			} else {
 				while (cols--) {
-					if (mem_readb(Real2Phys(dst)) < 0xc8)
-						mem_writeb(Real2Phys(dst), *src);
+					if (*dst < 0xc8)
+						*dst = *src;
 					src++;
 					dst++;
 				}
@@ -218,7 +219,7 @@ void pic_copy(RealPt dst, short x1, short y1, short x2, short y2,
 			cols = cur_width;
 			do {
 				if (*src != 0)
-					mem_writeb(Real2Phys(dst), *src);
+					*dst = *src;
 				src++;
 				dst++;
 			} while (--cols);
@@ -237,7 +238,7 @@ void pic_copy(RealPt dst, short x1, short y1, short x2, short y2,
 		bx = 320 - cur_width;
 		do {
 			for (cols = cur_width; cols; cols--)
-				mem_writeb(Real2Phys(dst++), *src++);
+				*dst++ = *src++;
 			dst += bx;
 			src += bx;
 		} while (--lines > 0);
@@ -249,7 +250,7 @@ void pic_copy(RealPt dst, short x1, short y1, short x2, short y2,
 		bx = 320 - cur_width;
 		do {
 			for (cols = cur_width; cols; cols--)
-				mem_writeb(Real2Phys(dst++), *src++);
+				*dst++ = *src++;
 			dst += bx;
 			src += lv5;
 		} while (--lines > 0);
@@ -257,12 +258,12 @@ void pic_copy(RealPt dst, short x1, short y1, short x2, short y2,
 	}
 }
 
-void save_rect(Bit16u seg, Bit16u off, RealPt dest, unsigned short width, unsigned short height)
+void save_rect(Bit16u seg, Bit16u off, Bit8u *dst, unsigned short width, unsigned short height)
 {
 	for (; height; height--) {
-		mem_memcpy(Real2Phys(dest), Real2Phys(RealMake(seg, off)), width);
+		memcpy((void*)dst, MK_FP(seg, off), width);
 		off += 320;
-		dest += width;
+		dst += width;
 	}
 }
 
@@ -272,7 +273,7 @@ void fill_rect(Bit16u seg, Bit16u off, signed short color, signed short width, s
 
 	for (; height; height--) {
 		for (x = 0; x < width; x++) {
-			mem_writeb(Real2Phys(RealMake(seg, off++)) , color);
+			*MK_FP(seg, off++) = color;
 		}
 
 		off += 320 - width;

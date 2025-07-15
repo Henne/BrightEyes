@@ -22,7 +22,6 @@ typedef signed char Bit8s;
 typedef unsigned short Bit16u;
 typedef signed short Bit16s;
 typedef Bit8u* RealPt;
-typedef Bit8u* PhysPt;
 #if defined(__BORLANDC__)
 typedef unsigned long Bit32u;
 typedef signed long Bit32s;
@@ -1286,18 +1285,6 @@ struct hero_struct {
 #define add_ptr_ds(p, v)	(*(Bit32s*)(p) += (v))
 #define sub_ptr_ds(p, v)	(*(Bit32s*)(p) -= (v))
 
-#define mem_readb(p) (*(Bit8u*)(p))
-#define mem_readw(p) (*(Bit16u*)(p))
-#define mem_readd(p) (*(Bit32u*)(p))
-
-#define mem_readbs(p) (*(Bit8s*)(p))
-#define mem_readws(p) (*(Bit16s*)(p))
-#define mem_readds(p) (*(Bit32s*)(p))
-
-#define mem_writeb(p, d) (*(Bit8u*)(p) = (d))
-#define mem_writew(p, d) (*(Bit16u*)(p) = (d))
-#define mem_writed(p, d) (*(Bit32u*)(p) = (d))
-
 #define get_hero(no) ((Bit8u*)ds_readfp(HEROES) + SIZEOF_HERO * (no))
 
 #ifdef M302de_ORIGINAL_BUGFIX
@@ -1310,7 +1297,6 @@ extern Bit8u* text_ltx_index[];
 extern Bit8u* tx_index[];
 extern Bit8u* tx2_index[];
 
-#define Real2Phys(p) ((Bit8u*)(p))
 #define Real2Host(p) ((Bit8u*)(p))
 #define getString(p) ((char*)(p))
 

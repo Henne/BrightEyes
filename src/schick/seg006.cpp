@@ -162,8 +162,7 @@ void FIG_call_draw_pic(void)
 
 void FIG_draw_pic(void)
 {
-	mem_memcpy(Real2Phys(ds_readd(RENDERBUF_PTR)),
-		Real2Phys(ds_readd(BUFFER8_PTR)), 64000);
+	memcpy((void*)ds_readd(RENDERBUF_PTR),	(void*)ds_readd(BUFFER8_PTR), 64000);
 
 	ds_writew(ALWAYS_ONE, 1);
 

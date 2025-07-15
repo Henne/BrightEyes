@@ -84,7 +84,8 @@ signed short do_travel_mode(void)
 
 			wait_for_vsync();
 
-			bc_memmove((RealPt)ds_readd(FRAMEBUF_PTR), (RealPt)ds_readd(TRAVEL_MAP_PTR), 64000);
+			/* TODO: update window */
+			memmove((void*)((Bit8u*)ds_readd(FRAMEBUF_PTR)), (void*)((Bit8u*)ds_readd(TRAVEL_MAP_PTR)), 320 * 200);
 
 			wait_for_vsync();
 

@@ -82,15 +82,8 @@ void draw_fight_screen_pal(signed short mode)
 		update_mouse_cursor();
 
 		/* clear framebuffer */
-#if !defined(__BORLANDC__)
-		PhysPt p = Real2Phys((RealPt)ds_readd(FRAMEBUF_PTR));
-
-		for (int i = 0; i < 64000; i+=4) {
-			mem_writed(p + i, 0);
-		}
-#else
-		memset((RealPt)ds_readd(FRAMEBUF_PTR), 0, 64000);
-#endif
+		/* TODO: add update */
+		memset((void*)((Bit8u*)ds_readd(FRAMEBUF_PTR)), 0, 320 * 200);
 
 		/* set palettes */
 		set_palette(p_datseg + PALETTE_FIGHT1, 0x00, 0x20);
@@ -1270,7 +1263,8 @@ signed short do_fight(signed short fight_id)
 	update_mouse_cursor();
 
 	/* clear the screen */
-	bc_memset((RealPt)ds_readd(FRAMEBUF_PTR), 0, 64000);
+	/* TODO: add update */
+	memset((void*)((Bit8u*)ds_readd(FRAMEBUF_PTR)), 0, 320 * 200);
 
 	refresh_colors();
 

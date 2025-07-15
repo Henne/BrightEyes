@@ -531,30 +531,30 @@ void draw_bar(unsigned short type, signed short hero, signed short pts_cur, sign
 	}
 }
 
-void restore_rect(RealPt dst, Bit8u *src, unsigned short x, unsigned short y, signed char n, signed char m)
+void restore_rect(Bit8u *dst, Bit8u *src, unsigned short x, unsigned short y, signed char n, signed char m)
 {
 	signed short i;
 	signed short j;
 	signed char c;
-	PhysPt p;
+	Bit8u* p;
 
 	update_mouse_cursor();
 
-	p = Real2Phys(dst);
+	p = dst;
 	p += y * 320 + x;
 
 	for (i = 0; i < m; p += 320, i++) {
 		for (j = 0; j < n; j++) {
 			c = *src++;
 			if (c)
-				mem_writeb(p + j, c);
+				*(p + j) = c;
 		}
 	}
 
 	refresh_screen_size();
 }
 
-void restore_rect_rle(RealPt dst, Bit8u *src, unsigned short x, unsigned short y, signed char width, signed char height, unsigned short v1)
+void restore_rect_rle(Bit8u *dst, Bit8u *src, unsigned short x, unsigned short y, signed char width, signed char height, unsigned short v1)
 {
 	signed short si;
 	signed short di;
@@ -562,7 +562,7 @@ void restore_rect_rle(RealPt dst, Bit8u *src, unsigned short x, unsigned short y
 	signed char c;
 	unsigned char cnt;
 	signed char tmp;
-	PhysPt p = Real2Phys(dst);
+	Bit8u *p = dst;
 
 	p += y * 320 + x;
 	update_mouse_cursor();
@@ -576,12 +576,12 @@ void restore_rect_rle(RealPt dst, Bit8u *src, unsigned short x, unsigned short y
 				tmp = *src++;
 				if (tmp || v1 != 2)
 					for (di = 0; di < cnt; di++)
-						mem_writeb(p + si + di, tmp);
+						*(p + si + di) = tmp;
 				si += cnt;
 				continue;
 			}
 			if (c || v1 != 2)
-				mem_writeb(p + si, c);
+				*(p + si) = c;
 			si++;
 		}
 	}
@@ -595,14 +595,14 @@ void draw_mouse_cursor(void)
 	signed short x;
 	signed char i;
 	signed char j;
-	PhysPt dst;
+	Bit8u *dst;
 	signed short *mouse_cursor;
 	signed short y;
 	signed short width;
 	signed short height;
 
-	dst = Real2Phys(ds_readd(FRAMEBUF_PTR));
-	mouse_cursor = (short*)(Real2Host(ds_readd(CURRENT_CURSOR)) + 32);
+	dst = (Bit8u*)ds_readd(FRAMEBUF_PTR);
+	mouse_cursor = (short*)((Bit8u*)ds_readd(CURRENT_CURSOR) + 32);
 
 	x = ds_readw(MOUSE_POSX) - ds_readw(MOUSE_POINTER_OFFSETX);
 	y = ds_readw(MOUSE_POSY) - ds_readw(MOUSE_POINTER_OFFSETY);
@@ -623,13 +623,13 @@ void draw_mouse_cursor(void)
 
 		for (j = 0; j < width; j++)
 			if ((0x8000 >> j) & mask)
-				mem_writeb(dst + j, 0xff);
+				*(dst + j) = 0xff;
 	}
 }
 
 void save_mouse_bg(void)
 {
-	PhysPt src;
+	Bit8u *src;
 	signed short realpos_x;
 	signed short realpos_y;
 	signed short realwidth;
@@ -637,7 +637,7 @@ void save_mouse_bg(void)
 	signed short delta_y;
 	signed short delta_x;
 
-	src = Real2Phys(ds_readd(FRAMEBUF_PTR));
+	src = (Bit8u*)ds_readd(FRAMEBUF_PTR);
 
 	realpos_x = ds_readw(MOUSE_POSX) - ds_readw(MOUSE_POINTER_OFFSETX);
 	realpos_y = ds_readw(MOUSE_POSY) - ds_readw(MOUSE_POINTER_OFFSETY);
@@ -656,7 +656,7 @@ void save_mouse_bg(void)
 
 	for (delta_y = 0; delta_y < realheight; src += 320, delta_y++) {
 		for (delta_x = 0; delta_x < realwidth; delta_x++) {
-			ds_writeb(MOUSE_BG_BAK + delta_y * 16 + delta_x, mem_readb(src + delta_x));
+			ds_writeb(MOUSE_BG_BAK + delta_y * 16 + delta_x, *(src + delta_x));
 		}
 	}
 }
@@ -667,14 +667,14 @@ void restore_mouse_bg(void)
 	signed short realpos_x;
 	signed short delta_x;
 
-	PhysPt dst;
+	Bit8u *dst;
 	signed short realpos_y;
 	signed short realwidth;
 	signed short realheight;
 
 
 	/* gfx memory */
-	dst = Real2Phys(ds_readd(FRAMEBUF_PTR));
+	dst = (Bit8u*)ds_readd(FRAMEBUF_PTR);
 	realpos_x = ds_readw(MOUSE_POSX_BAK) - ds_readw(MOUSE_POINTER_OFFSETX_BAK);
 	realpos_y = ds_readw(MOUSE_POSY_BAK) - ds_readw(MOUSE_POINTER_OFFSETY_BAK);
 	realwidth = realheight = 16;
@@ -689,7 +689,7 @@ void restore_mouse_bg(void)
 
 	for (delta_y = 0; delta_y < realheight; dst += 320, delta_y++)
 		for (delta_x = 0; delta_x < realwidth; delta_x++)
-			mem_writeb(dst + delta_x, ds_readb(MOUSE_BG_BAK + delta_y*16 + delta_x));
+			*(dst + delta_x) = ds_readb(MOUSE_BG_BAK + 16 * delta_y + delta_x);
 
 }
 
@@ -1155,7 +1155,7 @@ void map_effect(Bit8u *src)
 		} while (si >= 64000);
 
 
-		mem_writeb(Real2Phys(ds_readd(FRAMEBUF_PTR)) + si, host_readb(src + si));
+		*((Bit8u*)ds_readd(FRAMEBUF_PTR) + si) = *(src + si);
 
 #ifdef M302de_SPEEDFIX
 		/* this too fast,  we slow it down a bit */

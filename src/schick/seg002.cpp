@@ -3914,9 +3914,11 @@ signed short alloc_EMS(Bit32s bytes)
 
 void from_EMS(RealPt dst, signed short handle, Bit32s bytes)
 {
+#if defined(__BORLANDC__)
 	signed short si;
 	signed short di;
-	signed short v1, v2;
+	signed short v1;
+	signed short len;
 	RealPt ptr;
 
 	di = (signed short)(bytes / 0x4000 + 1);
@@ -3927,21 +3929,23 @@ void from_EMS(RealPt dst, signed short handle, Bit32s bytes)
 		ptr = (RealPt)F_PADD(dst, (((Bit32s)si) << 0x0e));
 		si++;
 
-		v2 = (bytes - 0x4000 > 0) ? 0x4000 : (signed short)bytes;
+		len = (bytes - 0x4000 > 0) ? 0x4000 : (signed short)bytes;
 
 		bytes -= 0x4000;
 
-		bc_memmove(EMS_norm_ptr(ptr), (RealPt)ds_readd(EMS_FRAME_PTR), v2);
+		memmove((void*)EMS_norm_ptr(ptr), (void*)ds_readd(EMS_FRAME_PTR), len);
 
 	} while (--di != 0);
-
+#endif
 }
 
 void to_EMS(signed short handle, RealPt src, Bit32s bytes)
 {
+#if defined(__BORLANDC__)
 	signed short si;
 	signed short di;
-	signed short v1, v2;
+	signed short v1;
+	signed short len;
 	RealPt ptr;
 
 	di = (signed short)(bytes / 0x4000 + 1);
@@ -3952,14 +3956,14 @@ void to_EMS(signed short handle, RealPt src, Bit32s bytes)
 		ptr = (RealPt)F_PADD(src, ((((Bit32s)si) << 0x0e)));
 		si++;
 
-		v2 = (bytes - 0x4000 > 0) ? 0x4000 : (signed short)bytes;
+		len = (bytes - 0x4000 > 0) ? 0x4000 : (signed short)bytes;
 
 		bytes -= 0x4000;
 
-		bc_memmove((RealPt)ds_readd(EMS_FRAME_PTR), EMS_norm_ptr(ptr), v2);
+		memmove((void*)ds_readd(EMS_FRAME_PTR), (void*)EMS_norm_ptr(ptr), len);
 
 	} while (--di != 0);
-
+#endif
 }
 
 void set_to_ff(void)

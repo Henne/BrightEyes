@@ -208,7 +208,7 @@ RealPt GUI_get_ptr2(signed short genus, signed short causus)
 }
 
 //3f8
-void GUI_write_char_to_screen(RealPt dst, signed short char_width, signed short char_height)
+void GUI_write_char_to_screen(Bit8u *dst, signed short char_width, signed short char_height)
 {
 	Bit8u *ptr;
 	signed short y;
@@ -218,7 +218,7 @@ void GUI_write_char_to_screen(RealPt dst, signed short char_width, signed short 
 
 	for (y = 0; y < char_width; ptr += 8 - char_height, dst += 320, y++) {
 		for (x = 0; x < char_height; x++)
-			mem_writeb(Real2Phys(dst) + x, *ptr++);
+			*(dst + x) = *ptr++;
 	}
 }
 
@@ -499,13 +499,13 @@ void GUI_write_fonti_to_screen(unsigned short font_index, unsigned short char_wi
  */
 void GUI_blank_char(void)
 {
-	PhysPt ptr = (PhysPt)PhysMake(datseg, GUI_TEXT_BUFFER);
+	Bit8u *ptr = (Bit8u*)MK_FP(datseg, GUI_TEXT_BUFFER);
 	signed short i;
 	signed short j;
 
 	for (i = 0; i < 8; ptr += 8, i++) {
 		for (j = 0; j < 8; j++)
-			mem_writeb(ptr + j, ds_readbs(TEXTCOLOR_BG));
+			*(ptr + j) = ds_readbs(TEXTCOLOR_BG);
 	}
 }
 
