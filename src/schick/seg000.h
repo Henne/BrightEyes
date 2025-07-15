@@ -50,7 +50,6 @@ signed short bc_findnext(struct ffblk*);
 signed short bc_findnext_dosbox(RealPt);
 
 Bit16s bc_close(Bit16s);
-Bit16s bc__close(Bit16s);
 
 Bit16s bc__creat(RealPt, Bit16u);
 void bc_perror(RealPt);
