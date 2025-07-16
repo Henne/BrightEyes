@@ -59,12 +59,6 @@ Bit16s bc__read(Bit16u handle, Bit8u *buf, Bit16u count) {
 	return (Bit16s)count;
 }
 
-Bit32u bc_farcoreleft(void)
-{
-	CALLBACK_RunRealFar(reloc_game + 0, 0x2315);
-	return (reg_dx << 16) + reg_ax;
-}
-
 void bc_harderr(RealPt p)
 {
 	CPU_Push32(p);
@@ -77,27 +71,6 @@ void bc_hardresume(Bit16s __axret)
 	CPU_Push16(__axret);
 	CALLBACK_RunRealFar(reloc_game, 0x2423);
 	CPU_Pop16();
-}
-
-Bit16s bc_spawnl(Bit16s mode, RealPt a2, RealPt a3, RealPt a4, RealPt a5, RealPt a6, RealPt a7)
-{
-	CPU_Push32(a7);
-	CPU_Push32(a6);
-	CPU_Push32(a5);
-	CPU_Push32(a4);
-	CPU_Push32(a3);
-	CPU_Push32(a2);
-	CPU_Push16(mode);
-	CALLBACK_RunRealFar(reloc_game, 0x2d82);
-	CPU_Pop16();
-	CPU_Pop32();
-	CPU_Pop32();
-	CPU_Pop32();
-	CPU_Pop32();
-	CPU_Pop32();
-	CPU_Pop32();
-
-	return reg_ax;
 }
 
 Bit16s bc__creat(RealPt name, Bit16u attrib)

@@ -14,11 +14,8 @@ static inline Bit8u* H_PADD(Bit8u *p, Bit32s o) { return p + o; }
 
 Bit16s bc__read(Bit16u, Bit8u*, Bit16u);
 static inline void clrscr(void) { };
-Bit32u bc_farcoreleft(void);
 void bc_harderr(RealPt);
 void bc_hardresume(Bit16s);
-
-Bit16s bc_spawnl(Bit16s, RealPt, RealPt, RealPt, RealPt, RealPt, RealPt);
 
 Bit16s bc__creat(RealPt, Bit16u);
 Bit16s bc_open(RealPt, Bit16u);
@@ -62,14 +59,11 @@ Bit32s bc__write(Bit16u, RealPt, Bit16u);
 
 #define bc_harderr harderr
 #define bc_hardresume hardresume
-#define bc_spawnl spawnl
 
 #define bc__creat _creat
 
 #define bc__read _read
 #define bc__write write
-
-#define bc_farcoreleft farcoreleft
 
 #define bc_itoa itoa
 

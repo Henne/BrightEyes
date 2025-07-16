@@ -15,6 +15,7 @@
 #include <stdarg.h>
 
 #if defined(__BORLANDC__)
+#include <ALLOC.H>
 #include <DIR.H>
 #include <DOS.H>
 #endif
@@ -544,10 +545,10 @@ signed short have_mem_for_sound(void)
 		size = host_readd((Bit8u*)(&blk) + 26);
 		size += 4000L;
 
-		if ((Bit32u)size < bc_farcoreleft()) {
+		if ((Bit32u)size < farcoreleft()) {
 			retval = 1;
 
-			if ((Bit32u)(size + 25000L) < bc_farcoreleft()) {
+			if ((Bit32u)(size + 25000L) < farcoreleft()) {
 
 				ds_writew(SND_VOC_ENABLED, 1);
 			}
@@ -558,7 +559,7 @@ signed short have_mem_for_sound(void)
 		/* SOUND.ADV was not found */
 		retval = 1;
 
-		if (25000L < bc_farcoreleft()) {
+		if (25000L < farcoreleft()) {
 			ds_writew(SND_VOC_ENABLED, 1);
 		}
 	}

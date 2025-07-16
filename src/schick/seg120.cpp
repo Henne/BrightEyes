@@ -8,8 +8,10 @@
 #include <stdlib.h>
 
 #if defined(__BORLANDC__)
+#include <ALLOC.H>
 #include <DIR.H>
 #include <DOS.H>
+#include <PROCESS.H>
 #else
 #include <unistd.h>
 #endif
@@ -325,7 +327,12 @@ signed short init_memory(void)
 	ds_writed(BUF_ICON,		(Bit32u)schick_alloc(5184));
 	ds_writed(TOWNPAL_BUF,		(Bit32u)schick_alloc(288));
 
-	freemem = bc_farcoreleft();
+#if defined(__BORLANDC__)
+	freemem = farcoreleft();
+#else
+	/* DUMMY value for newer systems */
+	freemem = 357000;
+#endif
 
 	if (freemem > 334000) {
 
@@ -721,19 +728,17 @@ void call_gen(void)
 	/* free the global buffer */
 	free((void*)ds_readd(GLOBAL_BUFFER_PTR));
 
-	freemem = bc_farcoreleft();
+#if defined(__BORLANDC__)
+	freemem = farcoreleft();
 
-	/* ret = spawnl(0, "gen.exe", "gen.exe", "b", gamemode == 2 ? "a" : "b", "1", NULL); */
-	ret = bc_spawnl(0,
-#if !defined(__BORLANDC__)
-			RealMake(datseg, STR_GEN_EXE), RealMake(datseg, STR_GEN_EXE2),
-#else
+	/* ret = spawnl(0, "gen.exe", "gen.exe", "b", gamemode == 2 ? "a" : "n", "1", NULL); */
+	ret = spawnl(0,
 			(char*)RealMake(datseg, STR_GEN_EXE), (char*)RealMake(datseg, STR_GEN_EXE2),
-#endif
 			RealMake(datseg, STR_GEN_B),
 			ds_readws(GAME_MODE) == GAME_MODE_ADVANCED ? RealMake(datseg, STR_GEN_A) : RealMake(datseg, STR_GEN_N),
 			RealMake(datseg, STR_GEN_1), (RealPt)NULL);
 
+#endif
 	refresh_screen_size();
 
 	if (ret == -1) {
@@ -788,7 +793,6 @@ void call_gen(void)
 		ds_writeb(MONTH, 1);
 		ds_writeb(YEAR, 15);
 	}
-
 }
 
 #if !defined(__BORLANDC__)
