@@ -30,13 +30,13 @@
 #include "seg097.h"
 #include "seg120.h"
 
-#define CDA_DATASEG (0x1238)
-
 #if defined(__BORLANDC__)
 #include <DOS.H>
 #include "seg013.h"
 #endif
 
+#define CDA_DATASEG (0x1238)
+#define cda_readb(o) (*(Bit8u*)(MK_FP(CDA_DATASEG, (o))))
 
 #if !defined(__BORLANDC__)
 namespace M302de {
@@ -203,15 +203,11 @@ void seg001_00c1(signed short track_no)
 			);
 
 	/* calculate track_end */
-	if (real_readb(reloc_game + CDA_DATASEG, 0x422) == _SI)
+	if (cda_readb(0x422) == _SI)
 	{
-		track_end = (((60UL * (Bit16u)real_readb(reloc_game + CDA_DATASEG, 0x425) +
-			(Bit16s)real_readb(reloc_game + CDA_DATASEG, 0x424)) * 75UL) +
-			(Bit16s)real_readb(reloc_game + CDA_DATASEG, 0x423));
+		track_end = (((60UL * (Bit16u)cda_readb(0x425) + (Bit16s)cda_readb(0x424)) * 75UL) + (Bit16s)cda_readb(0x423));
 	} else {
-		track_end = (((60UL * (Bit16u)real_readb(reloc_game + CDA_DATASEG, 0x114 + _SI * 8) +
-			(Bit16s)real_readb(reloc_game + CDA_DATASEG, 0x113 + _SI * 8)) * 75UL) +
-			(Bit16s)real_readb(reloc_game + CDA_DATASEG, 0x112 + _SI * 8));
+		track_end = (((60UL * (Bit16u)cda_readb(0x114 + _SI * 8) + (Bit16s)cda_readb(0x113 + _SI * 8)) * 75UL) + (Bit16s)cda_readb(0x112 + _SI * 8));
 	}
 
 	track_start = track_end - track_start;
