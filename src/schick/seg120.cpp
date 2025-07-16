@@ -484,16 +484,16 @@ void prepare_dirs(void)
 		/* "\\TEMP" */
 		strcat((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), (char*)p_datseg + STR_BACKSLASH_TEMP);
 
-		if (!bc_chdir((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)))) {
+		if (!chdir((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)))) {
 			/*	check if it's possible to change to TEMP-dir: OK
 				change to gamepath */
 
-			bc_chdir(gamepath);
+			chdir(gamepath);
 			errorval = 2;
 
 		} else {
 
-			if (bc_mkdir((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)))) {
+			if (mkdir((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)))) {
 				errorval = 1;
 			} else {
 				errorval = 2;

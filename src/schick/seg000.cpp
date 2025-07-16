@@ -14,28 +14,6 @@
 
 namespace M302de {
 
-Bit16s bc_chdir(char *path)
-{
-	Bit32u esp_bak = reg_esp;
-
-	reg_esp -= 100;
-
-	char *str = (char*)Real2Host(RealMake(SegValue(ss), reg_esp));
-	strcpy(str, path);
-
-	CPU_Push32(RealMake(SegValue(ss), reg_esp));
-	CALLBACK_RunRealFar(reloc_game, 0x2f7);
-	CPU_Pop32();
-
-	if (strlen(str) > 40) {
-		D1_ERR("Error: Verzeichnis zu tief. maximal 40 Zeichen\n");
-	}
-
-	reg_esp = esp_bak;
-
-	return reg_ax;
-}
-
 Bit16u bc__dos_close(Bit16s fd)
 {
 	CPU_Push16(fd);
@@ -90,28 +68,6 @@ Bit16u bc__dos_read(Bit16s fd, signed short *buf, Bit16u len, unsigned short *nr
 
 	host_writew((Bit8u*)buf, CPU_Pop16());
 	host_writew((Bit8u*)nread, CPU_Pop16());
-
-	return reg_ax;
-}
-
-Bit16s bc_mkdir(char *path)
-{
-	Bit32u esp_bak = reg_esp;
-
-	reg_esp -= 100;
-
-	char *str = (char*)Real2Host(RealMake(SegValue(ss), reg_esp));
-	strcpy(str, path);
-
-	CPU_Push32(RealMake(SegValue(ss), reg_esp));
-	CALLBACK_RunRealFar(reloc_game, 0xb5c);
-	CPU_Pop32();
-
-	if (strlen(str) > 40) {
-		D1_ERR("Error: Verzeichnis zu tief. maximal 40 Zeichen\n");
-	}
-
-	reg_esp = esp_bak;
 
 	return reg_ax;
 }
