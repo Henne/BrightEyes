@@ -18,6 +18,9 @@
 #include <ALLOC.H>
 #include <DIR.H>
 #include <DOS.H>
+#include <IO.H>
+#else
+#include <unistd.h>
 #endif
 
 #include "v302de.h"
@@ -161,10 +164,10 @@ void read_sound_cfg(void)
 	/* try to open SOUND.CFG */
 	if ( (handle = bc_open((RealPt)RealMake(datseg, FNAME_SOUND_CFG), 0x8001)) != -1) {
 
-		bc__read(handle, (Bit8u*)&midi_port, 2);
-		bc__read(handle, (Bit8u*)&dummy, 2);
-		bc__read(handle, (Bit8u*)&digi_port, 2);
-		bc__read(handle, (Bit8u*)&digi_irq, 2);
+		_read(handle, (Bit8u*)&midi_port, 2);
+		_read(handle, (Bit8u*)&dummy, 2);
+		_read(handle, (Bit8u*)&digi_port, 2);
+		_read(handle, (Bit8u*)&digi_irq, 2);
 		close(handle);
 
 #if !defined(__BORLANDC__)
@@ -304,7 +307,7 @@ RealPt read_music_driver(RealPt fname)
 		ptr &= 0xfffffff0;
 		buf = EMS_norm_ptr((RealPt)ptr);
 		/* and_ptr_ds((Bit8u*)&ptr, 0xfffffff0); */
-		bc__read(handle, Real2Host(buf), (unsigned short)len);
+		_read(handle, (Bit8u*)buf, (unsigned short)len);
 		close(handle);
 		return buf;
 	}
@@ -733,7 +736,7 @@ RealPt read_digi_driver(RealPt fname)
 {
 #if defined(__BORLANDC__)
 	Bit32u len;
-	RealPt buf;
+	Bit8u *buf;
 	Bit32u ptr;
 
 	signed short handle;
@@ -746,7 +749,7 @@ RealPt read_digi_driver(RealPt fname)
 		ptr = ds_readd(AIL_DIGI_DRIVER_BUF2) + 15L;
 		ptr &= 0xfffffff0;
 		buf = EMS_norm_ptr((RealPt)ptr);
-		bc__read(handle, Real2Host(buf), (unsigned short)len);
+		_read(handle, (Bit8u*)buf, (unsigned short)len);
 		close(handle);
 		return buf;
 	}
@@ -773,10 +776,10 @@ signed short open_and_seek_dat(unsigned short fileindex)
 		lseek(fd, fileindex * 4, SEEK_SET);
 
 		/* read the start offset of the desired file */
-		bc__read(fd, (Bit8u*)&start, 4);
+		_read(fd, (Bit8u*)&start, 4);
 
 		/* read the start offset of the next file */
-		bc__read(fd, (Bit8u*)&end, 4);
+		_read(fd, (Bit8u*)&end, 4);
 #if !defined(__BORLANDC__)
 		/* BE-Fix */
 		start = host_readd((Bit8u*)&start);
@@ -821,7 +824,7 @@ unsigned short read_archive_file(Bit16u handle, Bit8u *buffer, Bit16u len)
 
 		sub_ds_ds(ARCHIVE_FILE_REMAINING, len);
 
-		return bc__read(handle, buffer, len);
+		return _read(handle, buffer, len);
 	} else {
 		return 0;
 	}
@@ -918,7 +921,7 @@ void copy_from_archive_to_temp(unsigned short index, RealPt fname)
 		/* copy it */
 		while ( (len = read_archive_file(handle1, Real2Host(ds_readd(RENDERBUF_PTR)), 60000)) && (len != -1))
 		{
-			bc__write(handle2, (RealPt)ds_readd(RENDERBUF_PTR), len);
+			_write(handle2, (Bit8u*)ds_readd(RENDERBUF_PTR), len);
 		}
 
 		close(handle1);
@@ -938,9 +941,9 @@ void copy_file_to_temp(RealPt src_file, RealPt fname)
 		handle2 = bc__creat(fname, 0);
 
 		/* copy it */
-		while ( (len = bc__read(handle1, Real2Host(ds_readd(RENDERBUF_PTR)), 60000)) && (len != -1))
+		while ( (len = _read(handle1, (Bit8u*)ds_readd(RENDERBUF_PTR), 60000)) && (len != -1))
 		{
-			bc__write(handle2, (RealPt)ds_readd(RENDERBUF_PTR), len);
+			_write(handle2, (Bit8u*)ds_readd(RENDERBUF_PTR), len);
 		}
 
 		close(handle1);

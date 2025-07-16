@@ -11,6 +11,7 @@
 #include <ALLOC.H>
 #include <DIR.H>
 #include <DOS.H>
+#include <IO.H>
 #include <PROCESS.H>
 #else
 #include <unistd.h>
@@ -556,7 +557,7 @@ void prepare_dirs(void)
 		/* open CHR-file and copy it into TEMP-dir */
 		l_di = bc_open(((char*)&blk) + 30, 0x8004);
 
-		bc__read(l_di, Real2Host(ds_readd(RENDERBUF_PTR)), SIZEOF_HERO);
+		_read(l_di, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
 
 		close(l_di);
 
@@ -566,7 +567,7 @@ void prepare_dirs(void)
 
 		l_di = bc__creat((RealPt)ds_readd(TEXT_OUTPUT_BUF), 0);
 
-		bc__write(l_di, (RealPt)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
+		_write(l_di, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
 
 		close(l_di);
 

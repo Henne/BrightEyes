@@ -10,6 +10,13 @@
 
 #include <string.h>
 
+#if defined(__BORLANDC__)
+#include <DOS.H>
+#include <IO.H>
+#else
+#include <unistd.h>
+#endif
+
 #include "v302de.h"
 
 #include "seg000.h"
@@ -601,7 +608,7 @@ signed short count_fight_enemies(signed short fight_id)
 	fight_lst_handle = load_archive_file(0x8000 | ARCHIVE_FILE_FIGHT_LST);
 
 	/* read the first 2 bytes (fight_count number of fights) */
-	bc__read(fight_lst_handle, (Bit8u*)&fight_count, 2);
+	_read(fight_lst_handle, (void*)&fight_count, 2);
 
 #if !defined(__BORLANDC__)
 	/* BE-fix: */
@@ -615,7 +622,7 @@ signed short count_fight_enemies(signed short fight_id)
 	lseek(fight_lst_handle, (long)SIZEOF_FIGHT * fight_id + 2, SEEK_SET);
 
 	/* read the fight entry */
-	bc__read(fight_lst_handle, fight_lst_buf, SIZEOF_FIGHT);
+	_read(fight_lst_handle, (void*)fight_lst_buf, SIZEOF_FIGHT);
 
 	/* close FIGHT.LST */
 	close(fight_lst_handle);
@@ -648,7 +655,7 @@ void read_fight_lst(signed short fight_id)
 	fight_lst_handle = load_archive_file(0x8000 | ARCHIVE_FILE_FIGHT_LST);
 
 	/* read the first 2 bytes (fight_count number of fights) */
-	bc__read(fight_lst_handle, (Bit8u*)&fight_count, 2);
+	_read(fight_lst_handle, (void*)&fight_count, 2);
 
 #if !defined(__BORLANDC__)
 	/* BE-fix: */
@@ -665,7 +672,7 @@ void read_fight_lst(signed short fight_id)
 	lseek(fight_lst_handle, (long)SIZEOF_FIGHT * fight_id + 2, SEEK_SET);
 
 	/* read the fight entry */
-	bc__read(fight_lst_handle, Real2Host(ds_readd(CURRENT_FIGHT)), SIZEOF_FIGHT);
+	_read(fight_lst_handle, (void*)ds_readd(CURRENT_FIGHT), SIZEOF_FIGHT);
 
 #if !defined(__BORLANDC__)
 	char fight_name[21];
@@ -697,7 +704,7 @@ void write_fight_lst(void)
 	lseek(fight_lst_handle, (long)SIZEOF_FIGHT * fight_id + 2, SEEK_SET);
 
 	/* write it */
-	bc__write(fight_lst_handle, (RealPt)ds_readd(CURRENT_FIGHT), SIZEOF_FIGHT);
+	_write(fight_lst_handle, (void*)ds_readd(CURRENT_FIGHT), SIZEOF_FIGHT);
 
 	/* close the file */
 	close(fight_lst_handle);
@@ -724,35 +731,35 @@ void init_common_buffers(void)
 		bytes);
 
 	fd = load_archive_file(ARCHIVE_FILE_COMPASS);
-	bytes = read_archive_file(fd, Real2Host(ds_readd(BUFFER6_PTR)), 5000);
+	bytes = read_archive_file(fd, (Bit8u*)ds_readd(BUFFER6_PTR), 5000);
 	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_ITEMS_DAT);
-	bytes = read_archive_file(fd, Real2Host(ds_readd(ITEMSDAT)), 3060);
+	bytes = read_archive_file(fd, (Bit8u*)ds_readd(ITEMSDAT), 3060);
 	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_ANIS_TAB);
-	read_archive_file(fd, Real2Host(RealMake(datseg, BUFFER_ANIS_TAB)), 148);
+	read_archive_file(fd, p_datseg + BUFFER_ANIS_TAB, 148);
 	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_MFIGS_TAB);
-	read_archive_file(fd, Real2Host(RealMake(datseg, BUFFER_MFIGS_TAB)), 172);
+	read_archive_file(fd, p_datseg + BUFFER_MFIGS_TAB, 172);
 	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_WFIGS_TAB);
-	read_archive_file(fd, Real2Host(RealMake(datseg, BUFFER_WFIGS_TAB)), 172);
+	read_archive_file(fd, p_datseg + BUFFER_WFIGS_TAB, 172);
 	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_MONSTER_TAB);
-	read_archive_file(fd, Real2Host(RealMake(datseg, BUFFER_MONSTER_TAB)), 144);
+	read_archive_file(fd, p_datseg + BUFFER_MONSTER_TAB, 144);
 	close(fd);
 
 	fd = load_regular_file(ARCHIVE_FILE_GAMES_NAM);
-	bc__read(fd, Real2Host(RealMake(datseg, SAVEGAME_NAMES)), 45);
+	_read(fd, p_datseg + SAVEGAME_NAMES, 45);
 	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_TOWNPAL_DAT);
-	read_archive_file(fd, Real2Host(ds_readd(TOWNPAL_BUF)), 288);
+	read_archive_file(fd, (Bit8u*)ds_readd(TOWNPAL_BUF), 288);
 	close(fd);
 
 }

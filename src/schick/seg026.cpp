@@ -12,6 +12,7 @@
 #if defined(__BORLANDC__)
 #include <DIR.H>
 #include <DOS.H>
+#include <IO.H>
 #else
 #include <unistd.h>
 #endif
@@ -276,13 +277,13 @@ signed short load_game_state(void)
 		memset(Real2Host(ds_readd(SAVED_FILES_BUF)), 0, 286 * 4);
 
 		/* read version info */
-		bc__read(handle_gs, Real2Host(ds_readd(TEXT_OUTPUT_BUF)), 12);
-		bc__read(handle_gs, (Bit8u*)&version[3], 1);
-		bc__read(handle_gs, (Bit8u*)&version[2], 1);
-		bc__read(handle_gs, (Bit8u*)&version[0], 1);
-		bc__read(handle_gs, (Bit8u*)&version[1], 1);
+		_read(handle_gs, (Bit8u*)ds_readd(TEXT_OUTPUT_BUF), 12);
+		_read(handle_gs, (Bit8u*)&version[3], 1);
+		_read(handle_gs, (Bit8u*)&version[2], 1);
+		_read(handle_gs, (Bit8u*)&version[0], 1);
+		_read(handle_gs, (Bit8u*)&version[1], 1);
 
-		bc__read(handle_gs, p_datseg + DATSEG_STATUS_START, 4);
+		_read(handle_gs, p_datseg + DATSEG_STATUS_START, 4);
 
 		/* read game status */
 		p_status_start = (HugePt)RealMake(datseg, DATSEG_STATUS_START);
@@ -293,12 +294,12 @@ signed short load_game_state(void)
 		status_length = (signed short)(p_status_end - p_status_start);
 #endif
 
-		bc__read(handle_gs, p_datseg + DATSEG_STATUS_START, status_length);
+		_read(handle_gs, p_datseg + DATSEG_STATUS_START, status_length);
 
 		ds_writeb(SPECIAL_SCREEN, 1);
 
 		/* read file table */
-		bc__read(handle_gs, Real2Host(ds_readd(SAVED_FILES_BUF)), 286 * 4);
+		_read(handle_gs, (Bit8u*)ds_readd(SAVED_FILES_BUF), 286 * 4);
 
 		/* create for each saved file in gam a file in TEMP */
 		for (i = 0; i < 286; i++) {
@@ -312,8 +313,8 @@ signed short load_game_state(void)
 
 				handle = bc__creat((RealPt)ds_readd(TEXT_OUTPUT_BUF), 0);
 
-				bc__read(handle_gs, Real2Host(ds_readd(RENDERBUF_PTR)), (unsigned short)host_readd(Real2Host(ds_readd(SAVED_FILES_BUF)) + 4 * i));
-				bc__write(handle, (RealPt)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd(Real2Host(ds_readd(SAVED_FILES_BUF)) + 4 * i));
+				_read(handle_gs, (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd(Real2Host(ds_readd(SAVED_FILES_BUF)) + 4 * i));
+				_write(handle,   (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd(Real2Host(ds_readd(SAVED_FILES_BUF)) + 4 * i));
 				close(handle);
 			}
 		}
@@ -327,7 +328,7 @@ signed short load_game_state(void)
 		hero_i = (RealPt)ds_readd(RENDERBUF_PTR);
 
 		do {
-			l3 = bc__read(handle_gs, Real2Host(hero_i), SIZEOF_HERO);
+			l3 = _read(handle_gs, (Bit8u*)hero_i, SIZEOF_HERO);
 
 			if (l3 != 0) {
 
@@ -340,7 +341,7 @@ signed short load_game_state(void)
 
 				handle = bc__creat((RealPt)ds_readd(TEXT_OUTPUT_BUF), 0);
 
-				bc__write(handle, hero_i, SIZEOF_HERO);
+				_write(handle, (Bit8u*)hero_i, SIZEOF_HERO);
 				close(handle);
 
 				if (host_readbs(Real2Host(hero_i) + HERO_GROUP_POS) != 0) {
@@ -379,11 +380,11 @@ signed short load_game_state(void)
 
 			if ((handle_gs = bc_open((RealPt)ds_readd(TEXT_OUTPUT_BUF), 0x8004)) == -1) {
 				handle = bc_open((char*)(&blk) + 30, 0x8004);
-				bc__read(handle, Real2Host(ds_readd(RENDERBUF_PTR)), SIZEOF_HERO);
+				_read(handle, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
 				close(handle);
 
 				handle_gs = bc__creat((RealPt)ds_readd(TEXT_OUTPUT_BUF), 0);
-				bc__write(handle_gs, (RealPt)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
+				_write(handle_gs, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
 			} else {
 				/* Yes, indeed! */
 			}
@@ -588,35 +589,18 @@ signed short save_game_state(void)
 		filepos = 0;
 
 		/* write version identifier 16 bytes */
-		filepos += bc__write(l_di, (RealPt)RealMake(datseg, DSA_VERSION_STRING), 12);
-		filepos += bc__write(l_di, (RealPt)RealMake(datseg, VERSION_TOKEN4), 1);
-		filepos += bc__write(l_di, (RealPt)RealMake(datseg, VERSION_TOKEN3), 1);
-		filepos += bc__write(l_di, (RealPt)RealMake(datseg, VERSION_TOKEN1), 1);
-		filepos += bc__write(l_di, (RealPt)RealMake(datseg, VERSION_TOKEN2), 1);
+		filepos += _write(l_di, p_datseg + DSA_VERSION_STRING, 12);
+		filepos += _write(l_di, p_datseg + VERSION_TOKEN4, 1);
+		filepos += _write(l_di, p_datseg + VERSION_TOKEN3, 1);
+		filepos += _write(l_di, p_datseg + VERSION_TOKEN1, 1);
+		filepos += _write(l_di, p_datseg + VERSION_TOKEN2, 1);
 
 		/* write fileposition 4 bytes */
 		/* this will be updated later to find the data of the CHR files */
-#if !defined(__BORLANDC__)
-		/*	The value of filepos needs to be written to the file in
-		 *	LE format. bc__write() needs an adress in RealMode-Space,
-		 *	so some space on the stack is allocated.
-		 */
-		{
-			Bit16u sp_bak = reg_sp;
-			reg_sp -= 64;
-			RealPt fp_le = RealMake(SegValue(ss), reg_sp);
-
-			host_writed(Real2Host(fp_le), filepos);
-			filepos += bc__write(l_di, fp_le, 4);
-
-			reg_sp = sp_bak;
-		}
-#else
-		filepos += bc__write(l_di, &filepos, 4);
-#endif
+		filepos += _write(l_di, &filepos, 4);
 
 		/* save the status section 5952 bytes */
-		filepos += bc__write(l_di, p_status_start, status_len);
+		filepos += _write(l_di, p_status_start, status_len);
 
 		/* check if enough bytes were written */
 		if (status_len + 16 + 4L != filepos) {
@@ -626,7 +610,7 @@ signed short save_game_state(void)
 		}
 
 		filepos2 = filepos;
-		len = (Bit16u)bc__write(l_di, (RealPt)ds_readd(SAVED_FILES_BUF), 4 * 286);
+		len = (Bit16u)_write(l_di, (Bit8u*)ds_readd(SAVED_FILES_BUF), 4 * 286);
 		filepos += len;
 
 		if (len != 4 * 286) {
@@ -650,10 +634,10 @@ signed short save_game_state(void)
 
 				handle = load_archive_file(tw_bak + 0x8000);
 				host_writed(Real2Host(ds_readd(SAVED_FILES_BUF)) + 4 * tw_bak, get_readlength2(handle));
-				bc__read(handle, Real2Host(ds_readd(RENDERBUF_PTR)), (unsigned short)host_readd(Real2Host(ds_readd(SAVED_FILES_BUF)) + 4 * tw_bak));
+				_read(handle, (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd(Real2Host(ds_readd(SAVED_FILES_BUF)) + 4 * tw_bak));
 				close(handle);
 
-				len = (Bit16u)bc__write(l_di, (RealPt)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd(Real2Host(ds_readd(SAVED_FILES_BUF)) + 4 * tw_bak));
+				len = (Bit16u)_write(l_di, (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd(Real2Host(ds_readd(SAVED_FILES_BUF)) + 4 * tw_bak));
 				filepos += len;
 
 				if ((Bit16u)host_readd(Real2Host(ds_readd(SAVED_FILES_BUF)) + 4 * tw_bak) != len) {
@@ -667,28 +651,11 @@ signed short save_game_state(void)
 
 		/* skip back to the start of the offset of the CHR data */
 		lseek(l_di, 16, 0);
-#if !defined(__BORLANDC__)
-		/*	The value of filepos needs to be written to the file in
-		 *	LE format. bc__write() needs an adress in RealMode-Space,
-		 *	so some space on the stack is allocated.
-		 */
-		{
-			Bit16u sp_bak = reg_sp;
-			reg_sp -= 64;
-			RealPt fp_le = RealMake(SegValue(ss), reg_sp);
-
-			host_writed(Real2Host(fp_le), filepos);
-			bc__write(l_di, fp_le, 4);
-
-			reg_sp = sp_bak;
-		}
-#else
-		bc__write(l_di, &filepos, 4);
-#endif
+		_write(l_di, &filepos, 4);
 
 		/* write the file table */
 		lseek(l_di, filepos2, 0);
-		bc__write(l_di, (RealPt)ds_readd(SAVED_FILES_BUF), 4 * 286);
+		_write(l_di, (Bit8u*)ds_readd(SAVED_FILES_BUF), 4 * 286);
 
 		/* append all CHR files */
 		lseek(l_di, filepos, 0);
@@ -705,11 +672,11 @@ signed short save_game_state(void)
 
 			/* read the CHR file from temp */
 			handle = bc_open(ds_readfp(TEXT_OUTPUT_BUF), 0x8004);
-			bc__read(handle, Real2Host(ds_readd(RENDERBUF_PTR)), SIZEOF_HERO);
+			_read(handle, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
 			close(handle);
 
 			/* append it */
-			len = bc__write(l_di, (RealPt)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
+			len = _write(l_di, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
 
 			if (len != SIZEOF_HERO) {
 				GUI_output(get_ttx(348));
@@ -726,7 +693,7 @@ signed short save_game_state(void)
 
 		/* rewrite GAMES.NAM */
 		l_di = bc__creat((RealPt)ds_readd(FNAMES + 0x33c), 0);
-		bc__write(l_di, RealMake(datseg, SAVEGAME_NAMES), 45);
+		_write(l_di, p_datseg + SAVEGAME_NAMES, 45);
 		close(l_di);
 
 		return 1;
@@ -761,7 +728,7 @@ signed short read_chr_temp(RealPt fname, signed short hero_pos, signed short a2)
 	if (handle != -1) {
 
 		hero = get_hero(hero_pos);
-		bc__read(handle, hero, hero_size);
+		_read(handle, hero, hero_size);
 		close(handle);
 
 		host_writeb(hero + HERO_GROUP_NO, (signed char)a2);
@@ -818,7 +785,7 @@ void write_chr_temp(unsigned short hero_pos)
 		fname);
 
 	fd = bc__creat((RealPt)ds_readd(TEXT_OUTPUT_BUF), 0);
-	bc__write(fd, (RealPt)ds_readd(HEROES) + SIZEOF_HERO * hero_pos, SIZEOF_HERO);
+	_write(fd, (Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * hero_pos, SIZEOF_HERO);
 	close(fd);
 }
 
@@ -855,7 +822,7 @@ signed short copy_chr_names(Bit8u *ptr, signed short temple_id)
 
 			/* read the CHR file from temp */
 			handle = bc_open((RealPt)ds_readd(TEXT_OUTPUT_BUF), 0x8004);
-			bc__read(handle, buf, SIZEOF_HERO);
+			_read(handle, buf, SIZEOF_HERO);
 			close(handle);
 
 			if ((host_readbs(buf + 0x88) == temple_id && !host_readbs(buf + 0x8a)) ||

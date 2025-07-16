@@ -8,7 +8,6 @@ Bit32s F_PSUB(RealPt, RealPt);
 
 static inline Bit8u* H_PADD(Bit8u *p, Bit32s o) { return p + o; }
 
-Bit16s bc__read(Bit16u, Bit8u*, Bit16u);
 static inline void clrscr(void) { };
 
 Bit16s bc__creat(RealPt, Bit16u);
@@ -19,8 +18,6 @@ static inline char* my_itoa(int value, char *string, int radix)
 	sprintf(string, "%d", value);
 	return string;
 }
-
-Bit32s bc__write(Bit16u, RealPt, Bit16u);
 
 }
 #else
@@ -49,9 +46,6 @@ Bit32s bc__write(Bit16u, RealPt, Bit16u);
 #define H_PADD(p, o) F_PADD(p, o)
 
 #define bc__creat _creat
-
-#define bc__read _read
-#define bc__write write
 
 #define bc_itoa itoa
 

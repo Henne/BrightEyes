@@ -11,8 +11,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#if !defined(__BORLANDC__)
-#include "callback.h"
+#if defined(__BORLANDC__)
+#include <DOS.H>
+#include <IO.H>
+#else
+#include <unistd.h>
 #endif
 
 #include "v302de.h"
@@ -393,7 +396,7 @@ void draw_fight_screen(Bit16u val)
 
 	/* write TEMP/XX */
 	handle = bc__creat((RealPt)ds_readd(STR_TEMP_XX_PTR), 0);
-	bc__write(handle, (RealPt)ds_readd(BUFFER8_PTR), 64000);
+	_write(handle, (Bit8u*)ds_readd(BUFFER8_PTR), 64000);
 	close(handle);
 
 	if (flag != 0) {
@@ -1011,7 +1014,7 @@ to the DOSBox-CPU and may run the timer.
 
 	/* read TEMP/XX */
 	handle = bc_open((RealPt)ds_readd(STR_TEMP_XX_PTR), 0);
-	bc__read(handle, Real2Host(ds_readd(BUFFER8_PTR)), 64000);
+	_read(handle, (Bit8u*)ds_readd(BUFFER8_PTR), 64000);
 	close(handle);
 
 	ds_writed(PIC_COPY_DST, ds_writed(PRINT_STRING_BUFFER, ds_readd(FRAMEBUF_PTR)));

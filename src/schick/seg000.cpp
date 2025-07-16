@@ -2,11 +2,8 @@
  *	Rewrite of DSA1 v3.02_de functions of seg000 (Borland C-Lib)
  *	Functions rewritten: 0/0
  */
-#include "dosbox.h"
 #include "regs.h"
 #include "callback.h"
-#include "dos_inc.h"
-#include "paging.h"
 
 #include "v302de.h"
 
@@ -45,20 +42,6 @@ Bit32s F_PSUB(RealPt p1, RealPt p2)
 	return ((reg_dx << 16) | reg_ax);
 }
 
-Bit16s bc__read(Bit16u handle, Bit8u *buf, Bit16u count) {
-
-	if ((ds_readw(BC_FILEHANDLE_FLAGS + handle * 2) & 2))
-		return -1;
-
-	if (!DOS_ReadFile(handle, buf, &count))
-		return -1;
-
-	if (count == 5952)
-		schick_status_update(buf, count);
-
-	return (Bit16s)count;
-}
-
 Bit16s bc__creat(RealPt name, Bit16u attrib)
 {
 	CPU_Push16(attrib);
@@ -75,19 +58,6 @@ Bit16s bc_open(RealPt fname, Bit16u attrib)
 	CPU_Push16(attrib);
 	CPU_Push32(fname);
 	CALLBACK_RunRealFar(reloc_game + 0, 0x34c7);
-	CPU_Pop32();
-	CPU_Pop16();
-
-	return reg_ax;
-}
-
-Bit32s bc__write(Bit16u fd, RealPt buf, Bit16u len)
-{
-	CPU_Push16(len);
-	CPU_Push32(buf);
-	CPU_Push16(fd);
-	CALLBACK_RunRealFar(reloc_game + 0, 0x4a85);
-	CPU_Pop16();
 	CPU_Pop32();
 	CPU_Pop16();
 

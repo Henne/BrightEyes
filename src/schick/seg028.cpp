@@ -12,6 +12,13 @@
 
 #include <string.h>
 
+#if defined(__BORLANDC__)
+#include <DOS.H>
+#include <IO.H>
+#else
+#include <unistd.h>
+#endif
+
 #include "v302de.h"
 
 #include "seg000.h"
@@ -285,16 +292,15 @@ void load_area_description(signed short type)
 			fd = load_archive_file(ds_readw(AREADESCR_FILEID) + 0x8000);
 
 			if ((ds_readw(AREADESCR_DNG_FLAG) == 0) && (ds_readb(DNG_MAP_SIZE) == 0x20)) {
-				bc__write(fd, RealMake(datseg, DNG_MAP), 0x200);
+				_write(fd, (void*)MK_FP(datseg, DNG_MAP), 0x200);
 			} else {
 				lseek(fd, ds_readws(AREADESCR_DNG_LEVEL) * 0x140, 0);
-				bc__write(fd, RealMake(datseg, DNG_MAP), 0x100);
+				_write(fd, (void*)MK_FP(datseg, DNG_MAP), 0x100);
 			}
 			/* write automap tiles */
-			bc__write(fd, RealMake(datseg, AUTOMAP_BUF), 64);
+			_write(fd, (void*)MK_FP(datseg, AUTOMAP_BUF), 64);
 			/* write location information */
-			bc__write(fd, RealMake(datseg, LOCATIONS_LIST),
-				ds_readw(LOCATIONS_LIST_SIZE));
+			_write(fd, (void*)MK_FP(datseg, LOCATIONS_LIST), ds_readw(LOCATIONS_LIST_SIZE));
 
 			close(fd);
 
@@ -328,31 +334,29 @@ void load_area_description(signed short type)
 				|| ds_readb(CURRENT_TOWN) == TOWNS_PHEXCAER))
 		{
 			/* path taken in THORWAL PREM and PHEXCAER */
-			bc__read(fd, p_datseg + DNG_MAP, 0x200);
+			_read(fd, p_datseg + DNG_MAP, 0x200);
 			/* read automap tiles */
-			bc__read(fd, p_datseg + AUTOMAP_BUF, 0x40);
+			_read(fd, p_datseg + AUTOMAP_BUF, 0x40);
 
 			/* TODO: is that neccessary ? */
 			memset(p_datseg + LOCATIONS_LIST, -1, 900);
 
-			ds_writew(LOCATIONS_LIST_SIZE,
-				bc__read(fd, p_datseg + LOCATIONS_LIST, 1000));
+			ds_writew(LOCATIONS_LIST_SIZE, _read(fd, p_datseg + LOCATIONS_LIST, 1000));
 
 			ds_writeb(DNG_MAP_SIZE, 0x20);
 		} else {
 			/* Seek to Dungeon Level * 320 */
 			lseek(fd, ds_readbs(DUNGEON_LEVEL) * 320, 0);
-			bc__read(fd, p_datseg + DNG_MAP, 0x100);
+			_read(fd, p_datseg + DNG_MAP, 0x100);
 
 			/* read automap tiles */
-			bc__read(fd, p_datseg + AUTOMAP_BUF, 0x40);
+			_read(fd, p_datseg + AUTOMAP_BUF, 0x40);
 			ds_writew(LOCATIONS_LIST_SIZE, 0);
 
 			if (!ds_readbs(DUNGEON_INDEX)) {
 				/* TODO: is that neccessary ? */
 				memset(p_datseg + LOCATIONS_LIST, -1, 900);
-				ds_writew(LOCATIONS_LIST_SIZE,
-					bc__read(fd, p_datseg + LOCATIONS_LIST, 1000));
+				ds_writew(LOCATIONS_LIST_SIZE, _read(fd, p_datseg + LOCATIONS_LIST, 1000));
 			}
 
 			ds_writeb(DNG_MAP_SIZE, 0x10);
@@ -517,7 +521,7 @@ void load_npc(signed short index)
 
 	/* load from temp directory */
 	fd = load_archive_file(index | 0x8000);
-	bc__read(fd, npc_dst, SIZEOF_HERO);
+	_read(fd, (void*)npc_dst, SIZEOF_HERO);
 	close(fd);
 
 	if (host_readb(npc_dst + HERO_SEX) == 1) {
@@ -539,7 +543,7 @@ void save_npc(signed short index)
 
 	fd = load_archive_file(index | 0x8000);
 
-	bc__write(fd, (RealPt)ds_readd(HEROES) + 6 * SIZEOF_HERO, SIZEOF_HERO);
+	_write(fd, (Bit8u*)ds_readd(HEROES) + 6 * SIZEOF_HERO, SIZEOF_HERO);
 
 	close(fd);
 }
