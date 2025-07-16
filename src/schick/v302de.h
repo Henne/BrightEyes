@@ -13,9 +13,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#if !defined(__BORLANDC__)
-#include <assert.h>
-#else
+#if defined(__BORLANDC__)
 #include <IO.H>
 #include <DOS.H>
 #include <BIOS.H>
@@ -76,6 +74,7 @@ struct screen_rect {
 
 
 #include "symbols.h"
+#include "common.h"
 #include "datseg.h"
 
 #define ROUNDED_DIVISION(n,k)	((n + (k-1)/2)/k)
@@ -341,12 +340,12 @@ static inline HugePt ds_readhp(unsigned short offs)
 {
 	return (HugePt)host_readd(p_datseg + offs);
 }
-static inline RealPt ds_writefp(unsigned short offs, RealPt ptr)
+static inline RealPt ds_writefp(unsigned short offs, Bit8u* ptr)
 {
 	host_writed(p_datseg + offs, (Bit32u)ptr);
 	return ptr;
 }
-static inline HugePt ds_writehp(unsigned short offs, HugePt ptr)
+static inline HugePt ds_writehp(unsigned short offs, Bit8u* ptr)
 {
 	host_writed(p_datseg + offs, (Bit32u)ptr);
 	return ptr;
@@ -362,7 +361,7 @@ static inline HugePt ds_writehp(unsigned short offs, HugePt ptr)
  *	to older states. This helper writes only that value
  *	if the informer is unknown (0).
  */
-static inline void ds_writeb_z(Bitu addr, char val) {
+static inline void ds_writeb_z(Bit16u addr, char val) {
 	if (ds_readb(addr) == 0)
 		ds_writeb(addr, val);
 }
@@ -371,7 +370,7 @@ static inline Bit8u *get_hero(signed short index) {
 	if (index < 0 || index > 6) {
 		D1_ERR("ERROR: Versuch auf Held an Position %d zuzugreifen\n", index);
 	}
-	return Real2Host(ds_readd(HEROES)) + index * SIZEOF_HERO;
+	return (Bit8u*)ds_readd(HEROES) + index * SIZEOF_HERO;
 }
 
 static inline void add_ds_ws(Bit16u off, Bit16s val)
@@ -424,8 +423,6 @@ static inline RealPt add_ds_fp(Bit16u off, Bit16s val)
 	const RealPt p_old = ds_readfp(off);
 	const RealPt p_new = p_old + val;
 
-	assert(RealSeg(p_old) == RealSeg(p_new));
-
 	ds_writefp(off, p_new);
 	return p_new;
 }
@@ -434,8 +431,6 @@ static inline RealPt sub_ds_fp(Bit16u off, Bit16s val)
 {
 	const RealPt p_old = ds_readfp(off);
 	const RealPt p_new = p_old - val;
-
-	assert(RealSeg(p_old) == RealSeg(p_new));
 
 	ds_writefp(off, p_new);
 	return p_new;
@@ -578,7 +573,7 @@ static inline int __abs__(int j)
 	return abs(j);
 }
 
-static inline void F_PADA(Bit8u *p, Bit32s o)		{ return *p += o; }
+static inline void F_PADA(Bit8u *p, Bit32s o)		{ *p += o; }
 static inline Bit8u* F_PADD(Bit8u* ptr, Bit32s o)	{ return ptr + o; }
 static inline Bit32s F_PSUB(Bit8u *p1, Bit8u *p2)	{ return p1 - p2; }
 
@@ -1113,57 +1108,57 @@ static inline unsigned short item_undropable(Bit8u *item) {
 		return 1;
 }
 
-static inline Bit8u *get_spelltarget_e() {
-	return Real2Host(ds_readd(SPELLTARGET_E));
+static inline Bit8u *get_spelltarget_e(void) {
+	return (Bit8u*)ds_readd(SPELLTARGET_E);
 }
 
-static inline Bit8u *get_spelltarget() {
-	return Real2Host(ds_readd(SPELLTARGET));
+static inline Bit8u *get_spelltarget(void) {
+	return (Bit8u*)ds_readd(SPELLTARGET);
 }
 
-static inline Bit8u *get_spelluser() {
-	return Real2Host(ds_readd(SPELLUSER));
+static inline Bit8u *get_spelluser(void) {
+	return (Bit8u*)ds_readd(SPELLUSER);
 }
 
-static inline Bit8u *get_spelluser_e() {
-	return Real2Host(ds_readd(SPELLUSER_E));
+static inline Bit8u *get_spelluser_e(void) {
+	return (Bit8u*)ds_readd(SPELLUSER_E);
 }
 
 
-static inline Bit8u *get_itemuser() {
-	return Real2Host(ds_readd(ITEMUSER));
+static inline Bit8u *get_itemuser(void) {
+	return (Bit8u*)ds_readd(ITEMUSER);
 }
 
 static inline Bit8u *get_fname(unsigned short off) {
-	return Real2Host(ds_readd(FNAMES + off * 4));
+	return (Bit8u*)ds_readd(FNAMES + off * 4);
 }
 
 static inline Bit8u *get_monname(unsigned short off)
 {
-	return Real2Host(host_readd(Real2Host(ds_readd(MONNAMES_INDEX) + off * 4)));
+	return (Bit8u*)host_readd((Bit8u*)ds_readd(MONNAMES_INDEX) + off * 4);
 }
 
 #define get_tx2(no) get_tx2_func(4*(no))
 static inline Bit8u *get_tx2_func(unsigned short off) {
-	return Real2Host(host_readd(Real2Host(ds_readd(TX2_INDEX) + off)));
+	return (Bit8u*)host_readd((Bit8u*)ds_readd(TX2_INDEX) + off);
 }
 
 #define get_ttx(no) get_ttx_func(4*(no))
 static inline Bit8u *get_ttx_func(unsigned short off) {
-	return Real2Host(host_readd(Real2Host(ds_readd(TEXT_LTX_INDEX) + off)));
+	return (Bit8u*)host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + off);
 }
 
 #define get_tx(no) get_tx_func(4*(no))
 static inline Bit8u *get_tx_func(unsigned short off) {
-	return Real2Host(host_readd(Real2Host(ds_readd(TX_INDEX) + off)));
+	return (Bit8u*)host_readd((Bit8u*)ds_readd(TX_INDEX) + off);
 }
 
 static inline signed char get_cb_val(signed short x, signed short y) {
-	return host_readbs(Real2Host(ds_readd(CHESSBOARD)) + y * 25 + x);
+	return host_readbs((Bit8u*)ds_readd(CHESSBOARD) + y * 25 + x);
 }
 
 static inline void set_cb_val(unsigned short x, unsigned short y, signed char val) {
-	host_writeb(Real2Host(ds_readd(CHESSBOARD)) + y * 25 + x, val);
+	host_writeb((Bit8u*)ds_readd(CHESSBOARD) + y * 25 + x, val);
 }
 
 static inline void dump_cb(void)
@@ -1191,12 +1186,12 @@ static inline void dump_cb(void)
 }
 
 static inline Bit8u *get_itemsdat(unsigned short item) {
-	return Real2Host(ds_readd(ITEMSDAT)) + item * 12;
+	return (Bit8u*)ds_readd(ITEMSDAT) + item * 12;
 }
 
 static inline char* get_itemname(unsigned short item)
 {
-	return (char*)Real2Host(host_readd(Real2Host(ds_readd(ITEMSNAME)) + item * 4));
+	return (char*)(host_readd((Bit8u*)ds_readd(ITEMSNAME) + item * 4));
 }
 
 #define DUMMY_WARNING() D1_ERR("Error: %s is not implemented\n", __func__)
