@@ -3,7 +3,7 @@
  *	No code is allowed here, only the global data
  */
 
-#include "v302de.h"
+#include "common.h"
 
 #if !defined(__BORLANDC__)
 namespace M302de {

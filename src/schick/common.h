@@ -375,8 +375,8 @@ struct inventory {
 };
 
 struct passages {
-	RealPt p1;
-	RealPt p2;
+	unsigned char *p1;
+	unsigned char *p2;
 	signed char flag;	/* 0 or 1, write only */
 	signed char v2;		/* 0, read only */
 	unsigned char town;	/* */
