@@ -13,6 +13,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <fcntl.h>
 
 #if defined(__BORLANDC__)
 #include <ALLOC.H>
@@ -162,7 +163,7 @@ void read_sound_cfg(void)
 	signed short handle;
 
 	/* try to open SOUND.CFG */
-	if ( (handle = bc_open((RealPt)RealMake(datseg, FNAME_SOUND_CFG), 0x8001)) != -1) {
+	if ( (handle = open((char*)RealMake(datseg, FNAME_SOUND_CFG), O_BINARY | O_RDONLY)) != -1) {
 
 		_read(handle, (Bit8u*)&midi_port, 2);
 		_read(handle, (Bit8u*)&dummy, 2);
@@ -297,7 +298,7 @@ RealPt read_music_driver(RealPt fname)
 
 	signed short handle;
 
-	if ( (handle = bc_open(fname, 0x8001)) != -1) {
+	if ( (handle = open((char*)fname, O_BINARY | O_RDONLY)) != -1) {
 
 		len = 16500L;
 
@@ -732,7 +733,7 @@ signed short load_digi_driver(RealPt fname, signed short type, signed short io, 
 	return 0;
 }
 
-RealPt read_digi_driver(RealPt fname)
+unsigned char* read_digi_driver(char *fname)
 {
 #if defined(__BORLANDC__)
 	Bit32u len;
@@ -741,7 +742,7 @@ RealPt read_digi_driver(RealPt fname)
 
 	signed short handle;
 
-	if ( (handle = bc_open(fname, 0x8001)) != -1) {
+	if ( (handle = open(fname, O_BINARY | O_RDONLY)) != -1) {
 
 		len = 5000L;
 
@@ -770,7 +771,7 @@ signed short open_and_seek_dat(unsigned short fileindex)
 	signed short fd;
 
 	/* open SCHICK.DAT */
-	if ( (fd =  bc_open((RealPt)RealMake(datseg, FNAME_SCHICK_DAT), 0x8001)) != -1) {
+	if ( (fd = open((char*)RealMake(datseg, FNAME_SCHICK_DAT), O_BINARY | O_RDONLY)) != -1) {
 
 		/* seek to the fileindex position in the offset table */
 		lseek(fd, fileindex * 4, SEEK_SET);
@@ -855,7 +856,7 @@ signed short load_regular_file(Bit16u index)
 
 	signed short handle;
 
-	if ( (handle = bc_open((RealPt)ds_readd(FNAMES + index * 4), 0x8004)) == -1) {
+	if ( (handle = open((char*)ds_readd(FNAMES + index * 4), O_BINARY | O_RDWR)) == -1) {
 		/* "FILE %s IS MISSING!" */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
 			(char*)Real2Host(ds_readd(STR_FILE_MISSING_PTR)),
@@ -892,7 +893,7 @@ signed short open_temp_file(unsigned short index)
 		(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
 		(char*)Real2Host(ds_readd(FNAMES + index * 4)));
 
-	while ( (handle = bc_open(tmppath, 0x8004)) == -1) {
+	while ( (handle = open(tmppath, O_BINARY | O_RDWR)) == -1) {
 
 		copy_from_archive_to_temp(index, tmppath);
 	}
@@ -907,7 +908,7 @@ signed short open_temp_file(unsigned short index)
 	return handle;
 }
 
-void copy_from_archive_to_temp(unsigned short index, RealPt fname)
+void copy_from_archive_to_temp(unsigned short index, char* fname)
 {
 	signed short handle1;
 	signed short handle2;
@@ -916,7 +917,8 @@ void copy_from_archive_to_temp(unsigned short index, RealPt fname)
 	if ( (handle1 = load_archive_file(index)) != -1) {
 
 		/* create new file in TEMP */
-		handle2 = bc__creat(fname, 0);
+		/* TODO: should be O_BINARY | O_WRONLY */
+		handle2 = _creat(fname, 0);
 
 		/* copy it */
 		while ( (len = read_archive_file(handle1, Real2Host(ds_readd(RENDERBUF_PTR)), 60000)) && (len != -1))
@@ -929,16 +931,17 @@ void copy_from_archive_to_temp(unsigned short index, RealPt fname)
 	}
 }
 
-void copy_file_to_temp(RealPt src_file, RealPt fname)
+void copy_file_to_temp(RealPt src_file, char* fname)
 {
 	signed short handle1;
 	signed short handle2;
 	signed short len;
 
-	if ( (handle1 = bc_open(src_file, 0x8001)) != -1) {
+	if ( (handle1 = open(src_file, O_BINARY | O_RDONLY)) != -1) {
 
 		/* create new file in TEMP */
-		handle2 = bc__creat(fname, 0);
+		/* TODO: should be O_BINARY | O_WRONLY */
+		handle2 = _creat(fname, 0);
 
 		/* copy it */
 		while ( (len = _read(handle1, (Bit8u*)ds_readd(RENDERBUF_PTR), 60000)) && (len != -1))

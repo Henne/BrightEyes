@@ -48,7 +48,7 @@ void SND_set_volume(unsigned short);
 /* static */
 signed short load_digi_driver(RealPt, signed short, signed short, signed short);
 /* static */
-RealPt read_digi_driver(RealPt);
+unsigned char* read_digi_driver(char*);
 //static
 signed short open_and_seek_dat(unsigned short);
 Bit32u get_readlength2(signed short);
@@ -57,8 +57,8 @@ void seek_archive_file(Bit16u, Bit32s, ...);
 signed short load_regular_file(Bit16u);
 signed short load_archive_file(Bit16u);
 signed short open_temp_file(unsigned short);
-void copy_from_archive_to_temp(unsigned short, RealPt);
-void copy_file_to_temp(RealPt, RealPt);
+void copy_from_archive_to_temp(unsigned short, char*);
+void copy_file_to_temp(RealPt, char*);
 Bit32s process_nvf(struct nvf_desc *);
 #if defined(__BORLANDC__)
 void interrupt mouse_isr(void);
