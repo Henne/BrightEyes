@@ -471,7 +471,9 @@ signed short CD_harderr_handler(void)
 
 	dec_ds_ws_post(CD_CHECK_ERR_COUNTDOWN);
 
-	bc_hardresume(1);
+#if defined(__BORLANDC__)
+	hardresume(1);
+#endif
 
 	return 1;
 }
@@ -481,7 +483,9 @@ void CD_check(void)
 {
 	char text[80];
 
-	bc_harderr((int(*)(int, int, int, int))CD_harderr_handler);
+#if defined(__BORLANDC__)
+	harderr((int(*)(int, int, int, int))CD_harderr_handler);
+#endif
 
 	strcpy(text, (char*)p_datseg + STR_CD_EXEPATH);
 

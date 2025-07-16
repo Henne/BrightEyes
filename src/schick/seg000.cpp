@@ -59,20 +59,6 @@ Bit16s bc__read(Bit16u handle, Bit8u *buf, Bit16u count) {
 	return (Bit16s)count;
 }
 
-void bc_harderr(RealPt p)
-{
-	CPU_Push32(p);
-	CALLBACK_RunRealFar(reloc_game, 0x2411);
-	CPU_Pop32();
-}
-
-void bc_hardresume(Bit16s __axret)
-{
-	CPU_Push16(__axret);
-	CALLBACK_RunRealFar(reloc_game, 0x2423);
-	CPU_Pop16();
-}
-
 Bit16s bc__creat(RealPt name, Bit16u attrib)
 {
 	CPU_Push16(attrib);
@@ -93,19 +79,6 @@ Bit16s bc_open(RealPt fname, Bit16u attrib)
 	CPU_Pop16();
 
 	return reg_ax;
-}
-
-void bc_qsort(RealPt base, Bit16u nmemb, Bit16u size, RealPt fcmp)
-{
-	CPU_Push32(fcmp);
-	CPU_Push16(size);
-	CPU_Push16(nmemb);
-	CPU_Push32(base);
-	CALLBACK_RunRealFar(reloc_game + 0, 0x3d74);
-	CPU_Pop32();
-	CPU_Pop16();
-	CPU_Pop16();
-	CPU_Pop32();
 }
 
 Bit32s bc__write(Bit16u fd, RealPt buf, Bit16u len)

@@ -770,7 +770,7 @@ signed short open_and_seek_dat(unsigned short fileindex)
 	if ( (fd =  bc_open((RealPt)RealMake(datseg, FNAME_SCHICK_DAT), 0x8001)) != -1) {
 
 		/* seek to the fileindex position in the offset table */
-		lseek(fd, fileindex * 4, DOS_SEEK_SET);
+		lseek(fd, fileindex * 4, SEEK_SET);
 
 		/* read the start offset of the desired file */
 		bc__read(fd, (Bit8u*)&start, 4);
@@ -784,7 +784,7 @@ signed short open_and_seek_dat(unsigned short fileindex)
 #endif
 
 		/* seek to the desired file */
-		lseek(fd, start, DOS_SEEK_SET);
+		lseek(fd, start, SEEK_SET);
 
 		/* save the offset of the desired file */
 		ds_writed(ARCHIVE_FILE_OFFSET, start);
@@ -842,7 +842,7 @@ void seek_archive_file(Bit16u handle, Bit32s off, ...)
 
 	file_off = ds_readd(ARCHIVE_FILE_OFFSET) + off;
 
-	lseek(handle, file_off, DOS_SEEK_SET);
+	lseek(handle, file_off, SEEK_SET);
 
 	return;
 }

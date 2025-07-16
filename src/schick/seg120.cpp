@@ -455,7 +455,9 @@ void init_game_state(void)
 /* Borlandified and identical */
 int err_handler(void)
 {
-	bc_hardresume(3);
+#if defined(__BORLANDC__)
+	hardresume(3);
+#endif
 	return 1;
 }
 
@@ -472,7 +474,7 @@ void prepare_dirs(void)
 	char gamepath[40];
 
 	/* BC-TODO: only the adress differs, should be the stub adress */
-	bc_harderr((int(*)(int, int, int, int))err_handler);
+	harderr((int(*)(int, int, int, int))err_handler);
 
 	drive_bak = drive = getdisk();
 
