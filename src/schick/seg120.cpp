@@ -508,10 +508,6 @@ void prepare_dirs(void)
 
 			cleanup_game();
 
-#if !defined(__BORLANDC__)
-			D1_INFO("\nCHANGED BEHAVIOUR: For technical reasons Bright-Eyes must be started anew\n\n");
-			fflush(stdout);
-#endif
 			exit(0);
 		}
 	}
@@ -521,7 +517,7 @@ void prepare_dirs(void)
 		(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
 		(char*)p_datseg + ALL_FILES_WILDCARD2);
 
-	l_si = bc_findfirst((RealPt)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
+	l_si = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
 
 	if (!l_si) {
 
@@ -532,28 +528,18 @@ void prepare_dirs(void)
 
 			bc_unlink((RealPt)ds_readd(TEXT_OUTPUT_BUF));
 
-			l_si = bc_findnext(&blk);
+			l_si = findnext(&blk);
 
 		} while (!l_si);
 	}
 
 	/* search for "*.CHR" in the gamepath */
-	l_si = bc_findfirst((RealPt)RealMake(datseg, ALL_CHR_WILDCARD4), &blk, 0);
+	l_si = findfirst((char*)RealMake(datseg, ALL_CHR_WILDCARD4), &blk, 0);
 
 	while (!l_si) {
 
 		/* open CHR-file and copy it into TEMP-dir */
-#if !defined(__BORLANDC__)
-		/* need a RealPt => create one on the stack */
-		char *str = (char*)Real2Host(RealMake(SegValue(ss), reg_sp - 100));
-
-		strcpy(str, ((char*)(&blk)) + 30);
-
-		l_di = bc_open(RealMake(SegValue(ss), reg_esp - 100), (signed short)0x8004);
-
-#else
 		l_di = bc_open(((char*)&blk) + 30, 0x8004);
-#endif
 
 		bc__read(l_di, Real2Host(ds_readd(RENDERBUF_PTR)), SIZEOF_HERO);
 
@@ -569,7 +555,7 @@ void prepare_dirs(void)
 
 		close(l_di);
 
-		l_si = bc_findnext(&blk);
+		l_si = findnext(&blk);
 	}
 
 	setdisk(drive_bak);
@@ -579,10 +565,13 @@ void prepare_dirs(void)
 /* Borlandified and identical */
 void cleanup_game(void)
 {
+#if defined(__BORLANDC__)
 	struct ffblk blk;
+#endif
 	signed short l_si;
 	signed short l_di;
 
+#if defined(__BORLANDC__)
 	/* disable AIL */
 	exit_AIL();
 
@@ -642,7 +631,7 @@ void cleanup_game(void)
 		(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),	/* contains "TEMP\\%s" */
 		(char*)p_datseg + ALL_FILES_WILDCARD3);		/* contains "*.*" */
 
-	l_di = bc_findfirst((RealPt)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
+	l_di = findfirst((RealPt)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
 
 	if (l_di == 0) {
 		do {
@@ -653,9 +642,10 @@ void cleanup_game(void)
 
 			bc_unlink((RealPt)ds_readd(TEXT_OUTPUT_BUF));
 
-			l_di = bc_findnext(&blk);
+			l_di = findnext(&blk);
 		} while (!l_di);
 	}
+#endif
 
 	/* misc cleanups */
 	update_mouse_cursor();

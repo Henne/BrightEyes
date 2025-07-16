@@ -30,11 +30,6 @@ void bc_hardresume(Bit16s);
 
 Bit16s bc_spawnl(Bit16s, RealPt, RealPt, RealPt, RealPt, RealPt, RealPt);
 
-signed short bc_findfirst(RealPt, struct ffblk*, signed short);
-signed short bc_findfirst_dosbox(RealPt, RealPt, signed short);
-signed short bc_findnext(struct ffblk*);
-signed short bc_findnext_dosbox(RealPt);
-
 Bit16s bc__creat(RealPt, Bit16u);
 void bc_perror(RealPt);
 Bit16s bc_open(RealPt, Bit16u);
@@ -106,9 +101,6 @@ Bit16s bc_OvrInitEms(Bit16u, Bit16u, Bit16u);
 #define bc_farcoreleft farcoreleft
 
 #define bc_itoa itoa
-
-#define bc_findfirst findfirst
-#define bc_findnext findnext
 
 #define bc_open open
 

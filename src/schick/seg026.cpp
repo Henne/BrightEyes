@@ -9,6 +9,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#if defined(__BORLANDC__)
+#include <DIR.H>
+#endif
+
 #include "v302de.h"
 
 #include "seg000.h"
@@ -246,7 +250,8 @@ signed short load_game_state(void)
 			/* "*.*" */
 			(char*)p_datseg + ALL_FILES_WILDCARD);
 
-		l2 = bc_findfirst((RealPt)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
+#if defined(__BORLANDC__)
+		l2 = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
 
 		if (l2 == 0) {
 
@@ -257,10 +262,11 @@ signed short load_game_state(void)
 
 				bc_unlink((RealPt)ds_readd(TEXT_OUTPUT_BUF));
 
-				l2 = bc_findnext(&blk);
+				l2 = findnext(&blk);
 
 			} while (l2 == 0);
 		}
+#endif
 
 		/* init */
 		ds_writed(SAVED_FILES_BUF, ds_readd(DTP2));
@@ -358,8 +364,9 @@ signed short load_game_state(void)
 
 		close(handle_gs);
 
+#if defined(__BORLANDC__)
 		/* search for "*.CHR" */
-		l2 = bc_findfirst((RealPt)RealMake(datseg, ALL_CHR_WILDCARD), &blk, 0);
+		l2 = findfirst((char*)RealMake(datseg, ALL_CHR_WILDCARD), &blk, 0);
 
 		while (l2 == 0) {
 
@@ -368,19 +375,7 @@ signed short load_game_state(void)
 				((char*)(&blk)) + 30);
 
 			if ((handle_gs = bc_open((RealPt)ds_readd(TEXT_OUTPUT_BUF), 0x8004)) == -1) {
-#if !defined(__BORLANDC__)
-				{
-					Bit16u sp_bak = reg_sp;
-					reg_sp -= 128;
-					RealPt fname = RealMake(SegValue(ss), reg_sp);
-					strncpy((char*)Real2Host(fname), (char*)(&blk) + 30, 128);
-					host_writeb(Real2Host(fname) + 128, 0);
-					handle = bc_open(fname, 0x8004);
-					reg_sp = sp_bak;
-				}
-#else
 				handle = bc_open((char*)(&blk) + 30, 0x8004);
-#endif
 				bc__read(handle, Real2Host(ds_readd(RENDERBUF_PTR)), SIZEOF_HERO);
 				close(handle);
 
@@ -392,8 +387,9 @@ signed short load_game_state(void)
 
 			close(handle_gs);
 
-			l2 = bc_findnext(&blk);
+			l2 = findnext(&blk);
 		}
+#endif
 
 		for (i = ARCHIVE_FILE_NPCS; i <= (ARCHIVE_FILE_NPCS+5); i++) {
 			load_npc(i);
@@ -636,6 +632,7 @@ signed short save_game_state(void)
 			return 0;
 		}
 
+#if defined(__BORLANDC__)
 		/* save all changed files from SCHICK.DAT */
 		for (tw_bak = 0; tw_bak < 286; tw_bak++) {
 
@@ -643,7 +640,7 @@ signed short save_game_state(void)
 				(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
 				(char*)Real2Host(ds_readd(FNAMES + 4 * tw_bak)));
 
-			l1 = bc_findfirst((RealPt)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
+			l1 = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
 
 
 			if (l1 == 0) {
@@ -663,6 +660,7 @@ signed short save_game_state(void)
 				}
 			}
 		}
+#endif
 
 		/* skip back to the start of the offset of the CHR data */
 		lseek(l_di, 16, 0);
@@ -694,8 +692,8 @@ signed short save_game_state(void)
 		sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
 			(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
 			(char*)p_datseg + ALL_CHR_WILDCARD2);
-
-		l1 = bc_findfirst((RealPt)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
+#if defined(__BORLANDC__)
+		l1 = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
 		do {
 			/* create the CHR filename */
 			sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
@@ -716,11 +714,12 @@ signed short save_game_state(void)
 				return 0;
 			}
 
-			l1 = bc_findnext(&blk);
+			l1 = findnext(&blk);
 
 		} while (l1 == 0);
 
 		close(l_di);
+#endif
 
 		/* rewrite GAMES.NAM */
 		l_di = bc__creat((RealPt)ds_readd(FNAMES + 0x33c), 0);
@@ -829,6 +828,7 @@ void write_chr_temp(unsigned short hero_pos)
  */
 signed short copy_chr_names(Bit8u *ptr, signed short temple_id)
 {
+#if defined(__BORLANDC__)
 	signed short count = 0;
 	signed short l_di;
 	signed short handle;
@@ -840,7 +840,7 @@ signed short copy_chr_names(Bit8u *ptr, signed short temple_id)
 		(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
 		(char*)p_datseg + ALL_CHR_WILDCARD3);
 
-	l_di = bc_findfirst((RealPt)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
+	l_di = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
 
 	if (!l_di) {
 
@@ -863,7 +863,7 @@ signed short copy_chr_names(Bit8u *ptr, signed short temple_id)
 				count++;
 			}
 
-			l_di = bc_findnext(&blk);
+			l_di = findnext(&blk);
 
 		} while (!l_di);
 
@@ -871,6 +871,9 @@ signed short copy_chr_names(Bit8u *ptr, signed short temple_id)
 	} else {
 		return 0;
 	}
+#else
+	return 0;
+#endif
 }
 
 /**

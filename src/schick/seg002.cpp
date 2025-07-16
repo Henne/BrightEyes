@@ -14,6 +14,10 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+#if defined(__BORLANDC__)
+#include <DIR.H>
+#endif
+
 #include "v302de.h"
 
 /* all global variables are included here, since BCC.EXE would create another module */
@@ -534,7 +538,7 @@ signed short have_mem_for_sound(void)
 	signed short retval;
 	struct ffblk blk;
 
-	if (!bc_findfirst((RealPt)RealMake(datseg, FNAME_SOUND_ADV), &blk, 0)) {
+	if (!findfirst((char*)RealMake(datseg, FNAME_SOUND_ADV), &blk, 0)) {
 		/* SOUND.ADV was found */
 		size = host_readd((Bit8u*)(&blk) + 26);
 		size += 4000L;

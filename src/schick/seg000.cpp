@@ -234,60 +234,6 @@ Bit16s bc_spawnl(Bit16s mode, RealPt a2, RealPt a3, RealPt a4, RealPt a5, RealPt
 	return reg_ax;
 }
 
-signed short bc_findfirst_dosbox(RealPt path, RealPt __ffblk, signed short __attrib)
-{
-	CPU_Push16(__attrib);
-	CPU_Push32(__ffblk);
-	CPU_Push32(path);
-	CALLBACK_RunRealFar(reloc_game + 0, 0x3040);
-	CPU_Pop32();
-	CPU_Pop32();
-	CPU_Pop16();
-	return reg_ax;
-}
-
-signed short bc_findfirst(RealPt path, struct ffblk *__ffblk, signed short __attrib)
-{
-	Bit32u reg_esp_bak = reg_esp;
-	reg_esp -= 0x50;
-
-	Bit16s retval = bc_findfirst_dosbox(path, RealMake(SegValue(ss), reg_sp), __attrib);
-	memcpy(__ffblk, Real2Host(RealMake(SegValue(ss), reg_sp)), 43);
-
-	reg_esp = reg_esp_bak;
-	return retval;
-}
-
-signed short bc_findnext_dosbox(RealPt __ffblk)
-{
-	CPU_Push32(__ffblk);
-	CALLBACK_RunRealFar(reloc_game + 0, 0x3073);
-	CPU_Pop32();
-	return reg_ax;
-}
-
-signed short bc_findnext(struct ffblk *__ffblk)
-{
-	/* allocate 0x50 bytes on the stack */
-	Bit32u reg_esp_bak = reg_esp;
-	reg_esp -= 0x50;
-
-	/* make a pointer to the location on the stack */
-	RealPt ptr = RealMake(SegValue(ss), reg_sp);
-
-	/* copy the old __ffblk to the stack */
-	memcpy(Real2Host(ptr), __ffblk, 43);
-	/* call findnext() */
-	Bit16s retval = bc_findnext_dosbox(ptr);
-	/* copy the result to host memory */
-	memcpy(__ffblk, Real2Host(ptr), 43);
-
-	/* free memory on the stack */
-	reg_esp = reg_esp_bak;
-
-	return retval;
-}
-
 Bit16s bc__creat(RealPt name, Bit16u attrib)
 {
 	CPU_Push16(attrib);
