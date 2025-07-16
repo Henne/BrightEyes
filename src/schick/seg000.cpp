@@ -103,23 +103,6 @@ Bit32s F_PSUB(RealPt p1, RealPt p2)
 	return ((reg_dx << 16) | reg_ax);
 }
 
-RealPt bc_getvect(Bit8u __interruptno)
-{
-	CPU_Push16(__interruptno);
-	CALLBACK_RunRealFar(reloc_game + 0, 0x816);
-	CPU_Pop16();
-	return RealMake(reg_dx, reg_ax);
-}
-
-void bc_setvect(Bit8u __interruptno, RealPt handler)
-{
-	CPU_Push32(handler);
-	CPU_Push16(__interruptno);
-	CALLBACK_RunRealFar(reloc_game + 0, 0x825);
-	CPU_Pop16();
-	CPU_Pop32();
-}
-
 Bit16s bc__read(Bit16u handle, Bit8u *buf, Bit16u count) {
 
 	if ((ds_readw(BC_FILEHANDLE_FLAGS + handle * 2) & 2))

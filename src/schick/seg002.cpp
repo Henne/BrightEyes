@@ -16,6 +16,7 @@
 
 #if defined(__BORLANDC__)
 #include <DIR.H>
+#include <DOS.H>
 #endif
 
 #include "v302de.h"
@@ -1318,8 +1319,8 @@ void mouse_irq_init(signed short irq_no, void interrupt *(isr))
 	l5 = 0x1742;
 	l6 = 0x51e;
 
-	ds_writefp(MOUSE_HANDLER_BAK, (RealPt)bc_getvect(0x78));
-	bc_setvect(0x78, (INTCAST)isr);
+	ds_writefp(MOUSE_HANDLER_BAK, (RealPt)getvect(0x78));
+	setvect(0x78, (INTCAST)isr);
 
 	mouse_action((Bit8u*)&l1, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5, (Bit8u*)&l6);
 
@@ -1330,13 +1331,14 @@ void mouse_irq_init(signed short irq_no, void interrupt *(isr))
 
 void mouse_reset_ehandler(void)
 {
+#if defined(__BORLANDC__)
 	signed short l1;
 	signed short l2;
 	signed short l3;
 	signed short l4;
 	signed short l5;
 
-	bc_setvect(0x78, (INTCAST) ds_readd(MOUSE_HANDLER_BAK));
+	setvect(0x78, (INTCAST) ds_readd(MOUSE_HANDLER_BAK));
 
 	l1 = 12;
 	l3 = 0;
@@ -1346,6 +1348,7 @@ void mouse_reset_ehandler(void)
 	mouse_action((Bit8u*)&l1, (Bit8u*)&l2, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5);
 
 	ds_writew(MOUSE_IRQ_INIT, 0);
+#endif
 }
 
 /**

@@ -12,8 +12,6 @@ Bit32s F_PSUB(RealPt, RealPt);
 
 static inline Bit8u* H_PADD(Bit8u *p, Bit32s o) { return p + o; }
 
-RealPt bc_getvect(Bit8u);
-void bc_setvect(Bit8u, RealPt);
 Bit16u bc__dos_close(Bit16s);
 Bit16u bc__dos_open(char*, Bit16u, signed short *);
 Bit16u bc__dos_read(Bit16s, signed short*, Bit16u, unsigned short*);
@@ -67,9 +65,6 @@ Bit32s bc__write(Bit16u, RealPt, Bit16u);
 #define F_PSUB(p1, p2) ((HugePt)(p1) - (HugePt)(p2))
 
 #define H_PADD(p, o) F_PADD(p, o)
-
-#define bc_getvect getvect
-#define bc_setvect setvect
 
 #define bc_harderr harderr
 #define bc_hardresume hardresume

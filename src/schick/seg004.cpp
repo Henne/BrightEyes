@@ -7,13 +7,15 @@
  *	Call:		BCC.EXE -mlarge -O- -c -1 -Y seg004.cpp
  */
 
+#include <string.h>
+
 #if !defined(__BORLANDC__)
 #include "mem.h"
 #include "paging.h"
 #include "callback.h"
+#else
+#include <DOS.H>
 #endif
-
-#include <string.h>
 
 #include "v302de.h"
 
@@ -28,18 +30,24 @@ namespace M302de {
 
 void save_and_set_timer(void)
 {
-	ds_writefp(BC_TIMER, (RealPt)bc_getvect(8));
-	bc_setvect(8, (INTCAST)RealMake(0xb2a + reloc_game, 0x244));
+#if defined(__BORLANDC__)
+	ds_writefp(BC_TIMER, (RealPt)getvect(8));
+	setvect(8, (INTCAST)RealMake(0xb2a + reloc_game, 0x244));
+#endif
 }
 
 void set_timer(void)
 {
-	bc_setvect(8, (INTCAST)RealMake(0xb2a + reloc_game, 0x244));
+#if defined(__BORLANDC__)
+	setvect(8, (INTCAST)RealMake(0xb2a + reloc_game, 0x244));
+#endif
 }
 
 void reset_timer(void)
 {
-	bc_setvect(8, (INTCAST)ds_readd(BC_TIMER));
+#if defined(__BORLANDC__)
+	setvect(8, (INTCAST)ds_readd(BC_TIMER));
+#endif
 }
 
 void init_ani(Bit16u v1)
