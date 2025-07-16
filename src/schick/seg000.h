@@ -13,9 +13,7 @@ Bit32s F_PSUB(RealPt, RealPt);
 static inline Bit8u* H_PADD(Bit8u *p, Bit32s o) { return p + o; }
 
 Bit16s bc__read(Bit16u, Bit8u*, Bit16u);
-signed short bc_unlink(RealPt);
 static inline void clrscr(void) { };
-void bc_farfree(RealPt);
 Bit32u bc_farcoreleft(void);
 void bc_harderr(RealPt);
 void bc_hardresume(Bit16s);
@@ -23,7 +21,6 @@ void bc_hardresume(Bit16s);
 Bit16s bc_spawnl(Bit16s, RealPt, RealPt, RealPt, RealPt, RealPt, RealPt);
 
 Bit16s bc__creat(RealPt, Bit16u);
-void bc_perror(RealPt);
 Bit16s bc_open(RealPt, Bit16u);
 
 void bc_qsort(RealPt, Bit16u, Bit16u, RealPt);
@@ -69,13 +66,9 @@ Bit32s bc__write(Bit16u, RealPt, Bit16u);
 
 #define bc__creat _creat
 
-#define bc_perror perror
 #define bc__read _read
 #define bc__write write
 
-#define bc_unlink unlink
-
-#define bc_farfree farfree
 #define bc_farcoreleft farcoreleft
 
 #define bc_itoa itoa

@@ -5,10 +5,13 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #if defined(__BORLANDC__)
 #include <DIR.H>
 #include <DOS.H>
+#else
+#include <unistd.h>
 #endif
 
 #include "v302de.h"
@@ -529,7 +532,7 @@ void prepare_dirs(void)
 				(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
 				((char*)(&blk)) + 30);			/* contains a filename */
 
-			bc_unlink((RealPt)ds_readd(TEXT_OUTPUT_BUF));
+			unlink((char*)ds_readd(TEXT_OUTPUT_BUF));
 
 			l_si = findnext(&blk);
 
@@ -643,7 +646,7 @@ void cleanup_game(void)
 				(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),	/* contains "TEMP\\%s" */
 				((char*)(&blk)) + 30);			/* contains a filename */
 
-			bc_unlink((RealPt)ds_readd(TEXT_OUTPUT_BUF));
+			unlink((char*)ds_readd(TEXT_OUTPUT_BUF));
 
 			l_di = findnext(&blk);
 		} while (!l_di);
@@ -716,7 +719,7 @@ void call_gen(void)
 	exit_AIL();
 
 	/* free the global buffer */
-	bc_farfree((RealPt)ds_readd(GLOBAL_BUFFER_PTR));
+	free((void*)ds_readd(GLOBAL_BUFFER_PTR));
 
 	freemem = bc_farcoreleft();
 
@@ -736,11 +739,7 @@ void call_gen(void)
 	if (ret == -1) {
 
 		/* perror("Generation") */
-#if !defined(__BORLANDC__)
-		bc_perror(RealMake(datseg, STR_GEN_GENERATION));
-#else
-		bc_perror((char*)RealMake(datseg, STR_GEN_GENERATION));
-#endif
+		perror((char*)RealMake(datseg, STR_GEN_GENERATION));
 
 		wait_for_keypress();
 

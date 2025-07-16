@@ -59,21 +59,6 @@ Bit16s bc__read(Bit16u handle, Bit8u *buf, Bit16u count) {
 	return (Bit16s)count;
 }
 
-signed short bc_unlink(RealPt fname)
-{
-	CPU_Push32(fname);
-	CALLBACK_RunRealFar(reloc_game + 0, 0x11a7);
-	CPU_Pop32();
-	return reg_ax;
-}
-
-void bc_farfree(RealPt ptr)
-{
-	CPU_Push32(ptr);
-	CALLBACK_RunRealFar(reloc_game + 0, 0x1e55);
-	CPU_Pop32();
-}
-
 Bit32u bc_farcoreleft(void)
 {
 	CALLBACK_RunRealFar(reloc_game + 0, 0x2315);
@@ -124,13 +109,6 @@ Bit16s bc__creat(RealPt name, Bit16u attrib)
 	CPU_Pop16();
 
 	return reg_ax;
-}
-
-void bc_perror(RealPt __s)
-{
-	CPU_Push32(__s);
-	CALLBACK_RunRealFar(reloc_game + 0, 0x3685);
-	CPU_Pop32();
 }
 
 Bit16s bc_open(RealPt fname, Bit16u attrib)

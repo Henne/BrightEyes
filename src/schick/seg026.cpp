@@ -11,6 +11,9 @@
 
 #if defined(__BORLANDC__)
 #include <DIR.H>
+#include <DOS.H>
+#else
+#include <unistd.h>
 #endif
 
 #include "v302de.h"
@@ -260,7 +263,7 @@ signed short load_game_state(void)
 					(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
 					((char*)(&blk))+ 30);
 
-				bc_unlink((RealPt)ds_readd(TEXT_OUTPUT_BUF));
+				unlink((char*)ds_readd(TEXT_OUTPUT_BUF));
 
 				l2 = findnext(&blk);
 
@@ -529,7 +532,7 @@ signed short save_game_state(void)
 		/* delete the previous file of that slot */
 		prepare_sg_name((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), (char*)p_datseg + SAVEGAME_NAMES + 9 * slot);
 		strcat((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), (char*)p_datseg + SAVEGAME_SUFFIX2);
-		bc_unlink((RealPt)ds_readd(TEXT_OUTPUT_BUF));
+		unlink((char*)ds_readd(TEXT_OUTPUT_BUF));
 		strcpy((char*)p_datseg + SAVEGAME_NAMES + 9 * slot, (char*)Real2Host(ds_readd(TEXT_INPUT_BUF)));
 
 		/* create a CHR-file for each hero in TEMP */

@@ -9,6 +9,12 @@
 #include <stdio.h>
 #include <string.h>
 
+#if defined(__BORLANDC__)
+#include <DOS.H>
+#else
+#include <unistd.h>
+#endif
+
 #include "v302de.h"
 
 #include "seg000.h"
@@ -380,7 +386,7 @@ signed short char_erase(void)
 					prepare_chr_name((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
 								(char*)Real2Host(ds_readd(DTP2)));
 
-					unlink_ret = bc_unlink((RealPt)ds_readd(TEXT_OUTPUT_BUF));
+					unlink_ret = unlink((char*)ds_readd(TEXT_OUTPUT_BUF));
 
 					if (unlink_ret != 0) {
 						GUI_output(get_ttx(294));
@@ -390,7 +396,7 @@ signed short char_erase(void)
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
 						(char*)p_datseg + STR_TEMP_FILE_WILDCARD,
 						(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
-					bc_unlink((RealPt)ds_readd(DTP2));
+					unlink((char*)ds_readd(DTP2));
 				}
 
 				l_di = copy_chr_names(Real2Host(ptr), -1);

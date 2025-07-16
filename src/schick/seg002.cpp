@@ -217,7 +217,7 @@ void read_sound_cfg(void)
 
 				/* music was disabled in SOUND.CFG */
 				if (((Bit8u*)ds_readd(AIL_MIDI_BUFFER))) {
-					bc_farfree((RealPt)ds_readd(AIL_MIDI_BUFFER));
+					free((void*)ds_readd(AIL_MIDI_BUFFER));
 				}
 
 				ds_writed(AIL_MIDI_BUFFER, 0);
@@ -260,19 +260,19 @@ void exit_AIL(void)
 	AIL_shutdown((RealPt)NULL);
 
 	if (ds_readd(AIL_TIMBRE_CACHE) != 0) {
-		bc_farfree((RealPt)ds_readd(AIL_TIMBRE_CACHE));
+		free((void*)ds_readd(AIL_TIMBRE_CACHE));
 	}
 
 	if (ds_readd(AIL_STATE_TABLE) != 0) {
-		bc_farfree((RealPt)ds_readd(AIL_STATE_TABLE));
+		free((void*)ds_readd(AIL_STATE_TABLE));
 	}
 
 	if (ds_readd(AIL_MIDI_BUFFER) != 0) {
-		bc_farfree((RealPt)ds_readd(AIL_MIDI_BUFFER));
+		free((void*)ds_readd(AIL_MIDI_BUFFER));
 	}
 
 	if (ds_readd(AIL_MUSIC_DRIVER_BUF2) != 0) {
-		bc_farfree((RealPt)ds_readd(AIL_MUSIC_DRIVER_BUF2));
+		free((void*)ds_readd(AIL_MUSIC_DRIVER_BUF2));
 	}
 
 	/* set all pointers to NULL */
@@ -331,7 +331,7 @@ signed short prepare_midi_playback(signed short sequence)
 
 				if ( (ptr = prepare_timbre(l_di, patch))) {
 					AIL_install_timbre(ds_readw(AIL_MUSIC_DRIVER_ID), l_di, patch, ptr);
-					bc_farfree(ptr);
+					free(ptr);
 				}
 			}
 
@@ -609,11 +609,11 @@ void free_voc_buffer(void)
 	if (ds_readw(SND_VOC_ENABLED) != 0) {
 
 		if (ds_readd(AIL_VOC_BUFFER) != 0) {
-			bc_farfree((RealPt)ds_readd(AIL_VOC_BUFFER));
+			free((void*)ds_readd(AIL_VOC_BUFFER));
 		}
 
 		if (ds_readd(AIL_DIGI_DRIVER_BUF2) != 0) {
-			bc_farfree((RealPt)ds_readd(AIL_DIGI_DRIVER_BUF2));
+			free((void*)ds_readd(AIL_DIGI_DRIVER_BUF2));
 		}
 
 		ds_writed(AIL_VOC_BUFFER, ds_writed(AIL_DIGI_DRIVER_BUF2, 0));
