@@ -15,6 +15,14 @@
 
 #if !defined(__BORLANDC__)
 #include <assert.h>
+#else
+#include <IO.H>
+#include <DOS.H>
+#include <BIOS.H>
+#include <DIR.H>
+#include <CTYPE.H>
+#include <ALLOC.H>
+#include <TIME.H>
 #endif
 
 typedef unsigned char Bit8u;
@@ -571,6 +579,18 @@ static inline int __abs__(int j)
 {
 	return abs(j);
 }
+
+static inline void F_PADA(Bit8u *p, Bit32s o)		{ return *p += o; }
+static inline Bit8u* F_PADD(Bit8u* ptr, Bit32s o)	{ return ptr + o; }
+static inline Bit32s F_PSUB(Bit8u *p1, Bit8u *p2)	{ return p1 - p2; }
+
+static inline char* my_itoa(int value, char *string, int radix)
+{
+	sprintf(string, "%d", value);
+	return string;
+}
+
+
 
 /**
  * test_bit0() -	check if bit0 ist set
@@ -1196,15 +1216,27 @@ static inline char* get_itemname(unsigned short item)
 #define INTCAST void interrupt (*)()
 #endif
 
-#include <DOS.H>
-
-/* poring functions for Borland C++ */
+/* porting functions for Borland C++ */
 struct hero_struct {
 	char name[16];
 	char alias[16];
 	char dummy;
 	char typus;
 };
+
+
+#define RealSeg(p) FP_SEG(p)
+#define RealOff(p) FP_OFF(p)
+#define RealMake(s, o) MK_FP(s, o)
+
+/* helper, use only when neccessary */
+#define struct_copy memcpy
+
+#define F_PADA(p, o) (*((HugePt*)p) += o)
+#define F_PADD(p, o) ((HugePt)(p) + o)
+#define F_PSUB(p1, p2) ((HugePt)(p1) - (HugePt)(p2))
+
+#define my_itoa itoa
 
 #define schick_main main
 

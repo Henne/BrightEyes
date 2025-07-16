@@ -18,7 +18,6 @@
 /* we need an own prototype of div16 */
 #define DONT_DEF_DIV16
 
-#include "seg000.h"
 #include "seg002.h"
 #include "seg003.h"
 #include "seg007.h"

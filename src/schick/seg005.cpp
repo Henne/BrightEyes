@@ -22,7 +22,6 @@
 #include "v302de.h"
 #include "common.h"
 
-#include "seg000.h"
 #include "seg001.h"
 #include "seg002.h"
 #include "seg004.h"

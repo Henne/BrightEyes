@@ -25,7 +25,6 @@
 
 #include "v302de.h"
 
-#include "seg000.h"
 #include "seg001.h"
 #include "seg097.h"
 #include "seg120.h"

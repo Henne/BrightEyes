@@ -13,7 +13,6 @@
 
 #include "v302de.h"
 
-#include "seg000.h"
 #include "seg002.h"
 #include "seg007.h"
 #include "seg038.h"

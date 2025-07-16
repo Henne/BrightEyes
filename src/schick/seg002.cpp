@@ -30,7 +30,6 @@
 /* all global variables are included here, since BCC.EXE would create another module */
 #include "datseg.cpp"
 
-#include "seg000.h"
 #include "seg001.h"
 #include "seg002.h"
 #include "seg004.h"

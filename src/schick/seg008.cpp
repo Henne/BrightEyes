@@ -21,7 +21,6 @@
 
 #include "v302de.h"
 
-#include "seg000.h"
 
 #if !defined(__BORLANDC__)
 namespace M302de {
