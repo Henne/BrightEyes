@@ -12,9 +12,6 @@ Bit32s F_PSUB(RealPt, RealPt);
 
 static inline Bit8u* H_PADD(Bit8u *p, Bit32s o) { return p + o; }
 
-Bit16u bc__dos_close(Bit16s);
-Bit16u bc__dos_open(char*, Bit16u, signed short *);
-Bit16u bc__dos_read(Bit16s, signed short*, Bit16u, unsigned short*);
 Bit16s bc__read(Bit16u, Bit8u*, Bit16u);
 signed short bc_unlink(RealPt);
 static inline void clrscr(void) { };
@@ -69,10 +66,6 @@ Bit32s bc__write(Bit16u, RealPt, Bit16u);
 #define bc_harderr harderr
 #define bc_hardresume hardresume
 #define bc_spawnl spawnl
-
-#define bc__dos_close _dos_close
-#define bc__dos_open _dos_open
-#define bc__dos_read _dos_read
 
 #define bc__creat _creat
 

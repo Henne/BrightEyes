@@ -33,6 +33,7 @@
 #define CDA_DATASEG (0x1238)
 
 #if defined(__BORLANDC__)
+#include <DOS.H>
 #include "seg013.h"
 #endif
 
@@ -415,22 +416,23 @@ void CD_set_track(signed short index)
 /* Borlandified and identical */
 signed short CD_read_exe(char *path)
 {
-	signed short fd;
+	int handle;
 	signed short buffer;
 	unsigned short nread;
 
 	/* skip read check */
 	if (ds_readd(CD_CHECK_SKIPMAGIC) == 0x682772e4) return 1;
 
-	if (bc__dos_open(path, 1, (int*)&fd)) return -1;
+	if (_dos_open(path, 1, (int*)&handle)) return -1;
 
-	if (bc__dos_read(fd, &buffer, 1, (unsigned int*)&nread) != 0) return -1;
+	if (_dos_read(handle, &buffer, 1, (unsigned int*)&nread)) return -1;
 
-	lseek(fd, 2000L, 0);
+	lseek(handle, 2000L, 0);
 
-	if (bc__dos_read(fd, &buffer, 1, (unsigned int*)&nread) != 0) return -1;
+	if (_dos_read(handle, &buffer, 1, (unsigned int*)&nread)) return -1;
 
-	bc__dos_close(fd);
+	_dos_close(handle);
+
 	return nread;
 }
 
