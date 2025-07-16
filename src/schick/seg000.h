@@ -8,11 +8,6 @@ Bit32s F_PSUB(RealPt, RealPt);
 
 static inline Bit8u* H_PADD(Bit8u *p, Bit32s o) { return p + o; }
 
-static inline void clrscr(void) { };
-
-Bit16s bc__creat(RealPt, Bit16u);
-Bit16s bc_open(RealPt, Bit16u);
-
 static inline char* my_itoa(int value, char *string, int radix)
 {
 	sprintf(string, "%d", value);
@@ -29,7 +24,6 @@ static inline char* my_itoa(int value, char *string, int radix)
 #include <DIR.H>
 #include <CTYPE.H>
 #include <ALLOC.H>
-#include <CONIO.H>
 #include <TIME.H>
 
 #define RealSeg(p) FP_SEG(p)
@@ -45,11 +39,7 @@ static inline char* my_itoa(int value, char *string, int radix)
 
 #define H_PADD(p, o) F_PADD(p, o)
 
-#define bc__creat _creat
-
 #define bc_itoa itoa
-
-#define bc_open open
 
 #define my_itoa itoa
 

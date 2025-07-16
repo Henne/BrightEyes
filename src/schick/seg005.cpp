@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <fcntl.h>
 
 #if defined(__BORLANDC__)
 #include <DOS.H>
@@ -395,7 +396,8 @@ void draw_fight_screen(Bit16u val)
 	} while (list_i = Real2Host(host_readd(list_i + FIGHTER_NEXT)));
 
 	/* write TEMP/XX */
-	handle = bc__creat((RealPt)ds_readd(STR_TEMP_XX_PTR), 0);
+	/* TODO: should be O_BINARY | O_WRONLY */
+	handle = _creat((char*)ds_readd(STR_TEMP_XX_PTR), 0);
 	_write(handle, (Bit8u*)ds_readd(BUFFER8_PTR), 64000);
 	close(handle);
 
@@ -1013,7 +1015,8 @@ to the DOSBox-CPU and may run the timer.
 	}
 
 	/* read TEMP/XX */
-	handle = bc_open((RealPt)ds_readd(STR_TEMP_XX_PTR), 0);
+	/* TODO: should be O_BINARY | O_RDONLY */
+	handle = open((char*)ds_readd(STR_TEMP_XX_PTR), 0);
 	_read(handle, (Bit8u*)ds_readd(BUFFER8_PTR), 64000);
 	close(handle);
 

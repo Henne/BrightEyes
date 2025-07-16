@@ -42,26 +42,4 @@ Bit32s F_PSUB(RealPt p1, RealPt p2)
 	return ((reg_dx << 16) | reg_ax);
 }
 
-Bit16s bc__creat(RealPt name, Bit16u attrib)
-{
-	CPU_Push16(attrib);
-	CPU_Push32(name);
-	CALLBACK_RunRealFar(reloc_game + 0, 0x2f25);
-	CPU_Pop32();
-	CPU_Pop16();
-
-	return reg_ax;
-}
-
-Bit16s bc_open(RealPt fname, Bit16u attrib)
-{
-	CPU_Push16(attrib);
-	CPU_Push32(fname);
-	CALLBACK_RunRealFar(reloc_game + 0, 0x34c7);
-	CPU_Pop32();
-	CPU_Pop16();
-
-	return reg_ax;
-}
-
 }

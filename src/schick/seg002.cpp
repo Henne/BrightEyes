@@ -17,6 +17,7 @@
 
 #if defined(__BORLANDC__)
 #include <ALLOC.H>
+#include <CONIO.H>
 #include <DIR.H>
 #include <DOS.H>
 #include <IO.H>
@@ -5657,7 +5658,9 @@ int schick_main(int argc, char** argv)
 		/* not enough memory */
 		exit_AIL();
 		schick_reset_video();
+#if defined(__BORLANDC__)
 		clrscr();
+#endif
 	}
 }
 

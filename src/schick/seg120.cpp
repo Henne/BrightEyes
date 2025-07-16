@@ -6,9 +6,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <fcntl.h>
 
 #if defined(__BORLANDC__)
 #include <ALLOC.H>
+#include <CONIO.H>
 #include <DIR.H>
 #include <DOS.H>
 #include <IO.H>
@@ -555,7 +557,7 @@ void prepare_dirs(void)
 	while (!l_si) {
 
 		/* open CHR-file and copy it into TEMP-dir */
-		l_di = bc_open(((char*)&blk) + 30, 0x8004);
+		l_di = open(((char*)&blk) + 30, O_BINARY | O_RDWR);
 
 		_read(l_di, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
 
@@ -565,7 +567,7 @@ void prepare_dirs(void)
 			(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
 			((char*)(&blk)) + 30);			/* contains a filename */
 
-		l_di = bc__creat((RealPt)ds_readd(TEXT_OUTPUT_BUF), 0);
+		l_di = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
 
 		_write(l_di, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
 
@@ -668,7 +670,9 @@ void cleanup_game(void)
 	disable_mouse();
 	reset_timer();
 	schick_reset_video();
+#if defined(__BORLANDC__)
 	clrscr();
+#endif
 }
 
 /**
