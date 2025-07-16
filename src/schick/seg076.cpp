@@ -14,6 +14,7 @@
 #include <stdio.h>
 
 #include "v302de.h"
+#include "common.h"
 
 /* we need an own prototype of div16 */
 #define DONT_DEF_DIV16

@@ -27,6 +27,7 @@
 #endif
 
 #include "v302de.h"
+#include "common.h"
 
 /* all global variables are included here, since BCC.EXE would create another module */
 #include "datseg.cpp"

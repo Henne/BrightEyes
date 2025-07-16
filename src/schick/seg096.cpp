@@ -10,11 +10,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#if !defined(__BORLANDC__)
-#include "paging.h"
-#endif
-
 #include "v302de.h"
+#include "common.h"
 
 #include "seg002.h"
 #include "seg004.h"

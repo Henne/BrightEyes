@@ -76,7 +76,6 @@ struct screen_rect {
 
 
 #include "symbols.h"
-#include "common.h"
 #include "datseg.h"
 
 #define ROUNDED_DIVISION(n,k)	((n + (k-1)/2)/k)

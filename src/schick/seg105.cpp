@@ -14,6 +14,7 @@
 #include <string.h>
 
 #include "v302de.h"
+#include "common.h"
 
 #include "seg007.h"
 #include "seg047.h"

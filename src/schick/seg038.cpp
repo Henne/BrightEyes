@@ -9,10 +9,10 @@
  *	Compiler:	Borland C++ 3.1
  *	Call:		BCC.EXE -mlarge -O- -c -1 -Yo seg038.cpp
  */
-
 #include <string.h>
 
 #include "v302de.h"
+#include "common.h"
 
 #include "seg006.h"
 #include "seg007.h"

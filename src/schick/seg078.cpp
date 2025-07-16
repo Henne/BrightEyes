@@ -7,10 +7,11 @@
  *	Call:		BCC.EXE -mlarge -O- -c -1- Yo seg078.cpp
  */
 
-#include "v302de.h"
-
 #include <stdio.h>
 #include <string.h>
+
+#include "v302de.h"
+#include "common.h"
 
 #include "seg002.h"
 #include "seg003.h"

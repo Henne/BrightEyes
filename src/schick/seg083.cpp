@@ -6,11 +6,11 @@
  *	Compiler:	Borland C++ 3.1
  *	Call:		BCC.EXE -mlarge -O- -c -1 -Yo seg083.cpp
  */
-
-#include "v302de.h"
-
 #include <stdio.h>
 #include <string.h>
+
+#include "v302de.h"
+#include "common.h"
 
 #include "seg002.h"
 #include "seg007.h"
