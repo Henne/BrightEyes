@@ -8,6 +8,7 @@
 
 #if defined(__BORLANDC__)
 #include <DIR.H>
+#include <DOS.H>
 #endif
 
 #include "v302de.h"
@@ -288,11 +289,13 @@ signed short init_memory(void)
 	/* disable EMS memory */
 	ds_writeb(EMS_ENABLED, 0);
 
+#if defined(__BORLANDC__)
 	if (EMS_init()) {
-		bc_OvrInitEms(0, 0, 0);
+		_OvrInitEms(0, 0, 0);
 	} else {
 		;
 	}
+#endif
 
 	/* set the pointer for the framebuffer */
 	ds_writed(PRINT_STRING_BUFFER, ds_writed(FRAMEBUF_PTR, (Bit32u)RealMake(0x0a000, 0x0000)));
