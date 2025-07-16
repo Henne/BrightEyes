@@ -8,6 +8,7 @@
  */
 #include <stdio.h>
 #include <string.h>
+#include <fcntl.h>
 
 #if defined(__BORLANDC__)
 #include <DIR.H>
@@ -231,7 +232,7 @@ signed short load_game_state(void)
 		strcat((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), (char*)p_datseg + SAVEGAME_SUFFIX);
 
 		/* open the game state file */
-		if ((handle_gs = bc_open(ds_readfp(TEXT_OUTPUT_BUF), 0x8001)) == -1)
+		if ((handle_gs = open(ds_readfp(TEXT_OUTPUT_BUF), O_BINARY | O_RDONLY)) == -1)
 		{
 			GUI_output(get_ttx(635));
 			retval = -1;
@@ -311,7 +312,8 @@ signed short load_game_state(void)
 					(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
 					(char*)Real2Host(ds_readd(FNAMES + 4 * i)));
 
-				handle = bc__creat((RealPt)ds_readd(TEXT_OUTPUT_BUF), 0);
+				/* TODO: should be O_BINARY | O_WRONLY */
+				handle = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
 
 				_read(handle_gs, (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd(Real2Host(ds_readd(SAVED_FILES_BUF)) + 4 * i));
 				_write(handle,   (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd(Real2Host(ds_readd(SAVED_FILES_BUF)) + 4 * i));
@@ -339,7 +341,8 @@ signed short load_game_state(void)
 					(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
 					name);
 
-				handle = bc__creat((RealPt)ds_readd(TEXT_OUTPUT_BUF), 0);
+				/* TODO: should be O_BINARY | O_WRONLY */
+				handle = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
 
 				_write(handle, (Bit8u*)hero_i, SIZEOF_HERO);
 				close(handle);
@@ -378,12 +381,13 @@ signed short load_game_state(void)
 				(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
 				((char*)(&blk)) + 30);
 
-			if ((handle_gs = bc_open((RealPt)ds_readd(TEXT_OUTPUT_BUF), 0x8004)) == -1) {
-				handle = bc_open((char*)(&blk) + 30, 0x8004);
+			if ((handle_gs = open((char*)ds_readd(TEXT_OUTPUT_BUF), O_BINARY | O_RDWR)) == -1) {
+				handle = open((char*)(&blk) + 30, O_BINARY | O_RDWR);
 				_read(handle, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
 				close(handle);
 
-				handle_gs = bc__creat((RealPt)ds_readd(TEXT_OUTPUT_BUF), 0);
+				/* TODO: should be O_BINARY | O_WRONLY */
+				handle_gs = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
 				_write(handle_gs, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
 			} else {
 				/* Yes, indeed! */
@@ -579,7 +583,8 @@ signed short save_game_state(void)
 		prepare_sg_name((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), (char*)p_datseg + SAVEGAME_NAMES + 9 * slot);
 		strcat((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), (char*)p_datseg + SAVEGAME_SUFFIX3);
 
-		while ((l_di = bc__creat((RealPt)ds_readd(TEXT_OUTPUT_BUF), 0)) == -1) {
+		/* TODO: should be O_BINARY | O_RWONLY */
+		while ((l_di = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0)) == -1) {
 			GUI_output(get_ttx(348));
 			return 0;
 		}
@@ -671,7 +676,7 @@ signed short save_game_state(void)
 				((char*)(&blk)) + 30);
 
 			/* read the CHR file from temp */
-			handle = bc_open(ds_readfp(TEXT_OUTPUT_BUF), 0x8004);
+			handle = open(ds_readfp(TEXT_OUTPUT_BUF), O_BINARY | O_RDWR);
 			_read(handle, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
 			close(handle);
 
@@ -692,7 +697,7 @@ signed short save_game_state(void)
 #endif
 
 		/* rewrite GAMES.NAM */
-		l_di = bc__creat((RealPt)ds_readd(FNAMES + 0x33c), 0);
+		l_di = _creat((char*)ds_readd(FNAMES + 0x33c), 0);
 		_write(l_di, p_datseg + SAVEGAME_NAMES, 45);
 		close(l_di);
 
@@ -720,9 +725,9 @@ signed short read_chr_temp(RealPt fname, signed short hero_pos, signed short a2)
 		(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
 		(char*)Real2Host(fname));
 
-	if ((handle = bc_open((RealPt)ds_readd(TEXT_OUTPUT_BUF), 0x8004)) == -1) {
+	if ((handle = open((char*)ds_readd(TEXT_OUTPUT_BUF), O_BINARY | O_RDWR)) == -1) {
 		copy_file_to_temp(fname, (RealPt)ds_readd(TEXT_OUTPUT_BUF));
-		handle = bc_open((RealPt)ds_readd(TEXT_OUTPUT_BUF), 0x8004);
+		handle = open((char*)ds_readd(TEXT_OUTPUT_BUF), O_BINARY | O_RDWR);
 	}
 
 	if (handle != -1) {
@@ -784,7 +789,8 @@ void write_chr_temp(unsigned short hero_pos)
 		(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),		/* "TEMP\\%s" */
 		fname);
 
-	fd = bc__creat((RealPt)ds_readd(TEXT_OUTPUT_BUF), 0);
+	/* TODO: should be O_BINARY | O_WRONLY */
+	fd = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
 	_write(fd, (Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * hero_pos, SIZEOF_HERO);
 	close(fd);
 }
@@ -821,7 +827,7 @@ signed short copy_chr_names(Bit8u *ptr, signed short temple_id)
 				((char*)(&blk)) + 30);
 
 			/* read the CHR file from temp */
-			handle = bc_open((RealPt)ds_readd(TEXT_OUTPUT_BUF), 0x8004);
+			handle = open((char*)ds_readd(TEXT_OUTPUT_BUF), O_BINARY | O_RDWR);
 			_read(handle, buf, SIZEOF_HERO);
 			close(handle);
 
