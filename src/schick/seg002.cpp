@@ -21,6 +21,7 @@
 #include <DIR.H>
 #include <DOS.H>
 #include <IO.H>
+#include "AIL/AIL.H"
 #else
 #include <unistd.h>
 #endif

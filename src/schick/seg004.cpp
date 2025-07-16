@@ -9,11 +9,7 @@
 
 #include <string.h>
 
-#if !defined(__BORLANDC__)
-#include "mem.h"
-#include "paging.h"
-#include "callback.h"
-#else
+#if defined(__BORLANDC__)
 #include <DOS.H>
 #endif
 

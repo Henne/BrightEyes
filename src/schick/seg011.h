@@ -48,6 +48,4 @@ Bit16u AIL_sequence_status(Bit16u driver, Bit16u sequence);
 void AIL_set_relative_volume(Bit16u, Bit16u, Bit16u, Bit16u);
 
 }
-#else
-#include "AIL.H"
 #endif
