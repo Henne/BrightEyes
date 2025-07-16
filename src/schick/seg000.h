@@ -2,11 +2,9 @@
 
 namespace M302de {
 
-void F_PADA(RealPt, Bit32s);
-RealPt F_PADD(RealPt, Bit32s);
-Bit32s F_PSUB(RealPt, RealPt);
-
-static inline Bit8u* H_PADD(Bit8u *p, Bit32s o) { return p + o; }
+static inline void F_PADA(Bit8u *p, Bit32s o)		{ return *p += o; }
+static inline Bit8u* F_PADD(Bit8u* ptr, Bit32s o)	{ return ptr + o; }
+static inline Bit32s F_PSUB(Bit8u *p1, Bit8u *p2)	{ return p1 - p2; }
 
 static inline char* my_itoa(int value, char *string, int radix)
 {
@@ -36,10 +34,6 @@ static inline char* my_itoa(int value, char *string, int radix)
 #define F_PADA(p, o) (*((HugePt*)p) += o)
 #define F_PADD(p, o) ((HugePt)(p) + o)
 #define F_PSUB(p1, p2) ((HugePt)(p1) - (HugePt)(p2))
-
-#define H_PADD(p, o) F_PADD(p, o)
-
-#define bc_itoa itoa
 
 #define my_itoa itoa
 

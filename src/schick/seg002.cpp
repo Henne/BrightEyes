@@ -980,9 +980,9 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 	nvf_type &= 0x7f;
 
 #if !defined(__BORLANDC__)
-	pics = host_readws(H_PADD(nvf->src, 1L));
+	pics = host_readws(F_PADD(nvf->src, 1L));
 #else
-	pics = host_readws(Real2Host(H_PADD(nvf->src, 1L)));
+	pics = host_readws(Real2Host(F_PADD(nvf->src, 1L)));
 #endif
 
 	if (nvf->no < 0)
@@ -994,10 +994,10 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 	switch (nvf_type) {
 
 	case 0x00:
-		width = host_readws(H_PADD(nvf->src, 3));
-		height = host_readws(H_PADD(nvf->src, 5));
+		width = host_readws(F_PADD(nvf->src, 3));
+		height = host_readws(F_PADD(nvf->src, 5));
 		p_size = width * height;
-		src =  H_PADD(nvf->src, nvf->no * p_size + 7);
+		src =  F_PADD(nvf->src, nvf->no * p_size + 7);
 		break;
 
 	case 0x01:
@@ -1010,33 +1010,33 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 			offs += width * height;
 		}
 
-		width = host_readw(H_PADD(nvf->src, nvf->no * 4 + 3));
-		height = host_readw(H_PADD(nvf->src, nvf->no * 4 + 5));
+		width = host_readw(F_PADD(nvf->src, nvf->no * 4 + 3));
+		height = host_readw(F_PADD(nvf->src, nvf->no * 4 + 5));
 		p_size = width * height;
-		src = H_PADD(nvf->src, offs);
+		src = F_PADD(nvf->src, offs);
 		break;
 
 	case 0x02: case 0x04:
-		width = host_readw(H_PADD(nvf->src, 3L));
-		height = host_readw(H_PADD(nvf->src, 5));
+		width = host_readw(F_PADD(nvf->src, 3L));
+		height = host_readw(F_PADD(nvf->src, 5));
 		offs = pics * 4 + 7L;
 		for (i = 0; i < nvf->no; i++) {
-			offs += host_readd(H_PADD(nvf->src, (i * 4) + 7));
+			offs += host_readd(F_PADD(nvf->src, (i * 4) + 7));
 		}
 
-		p_size = host_readd(H_PADD(nvf->src, nvf->no * 4 + 7));
-		src = H_PADD(nvf->src, offs);
+		p_size = host_readd(F_PADD(nvf->src, nvf->no * 4 + 7));
+		src = F_PADD(nvf->src, offs);
 		break;
 
 	case 0x03: case 0x05:
 		offs = pics * 8 + 3L;
 		for (i = 0; i < nvf->no; i++)
-			offs += host_readd(H_PADD(nvf->src, (i * 8) + 7));
+			offs += host_readd(F_PADD(nvf->src, (i * 8) + 7));
 
-		width = host_readw(H_PADD(nvf->src, nvf->no * 8 + 3));
-		height = host_readw(H_PADD(nvf->src, nvf->no * 8 + 5));
-		p_size = host_readd(H_PADD(nvf->src, i * 8 + 7));
-		src = H_PADD(nvf->src, offs);
+		width = host_readw(F_PADD(nvf->src, nvf->no * 8 + 3));
+		height = host_readw(F_PADD(nvf->src, nvf->no * 8 + 5));
+		p_size = host_readd(F_PADD(nvf->src, i * 8 + 7));
+		src = F_PADD(nvf->src, offs);
 		break;
 	}
 
