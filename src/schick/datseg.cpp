@@ -4,8 +4,6 @@
  */
 
 #include "v302de.h"
-#include "datseg.h"
-#include "common.h"
 
 #if !defined(__BORLANDC__)
 namespace M302de {

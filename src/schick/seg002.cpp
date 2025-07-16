@@ -1281,7 +1281,7 @@ void mouse_init(void)
 
 			/* TODO: we keep the magic numbers here until we can build the binary
 			mouse_irq_init(0x1f, mouse_isr); */
-			mouse_irq_init(0x1f, (INTCAST)RealMake(reloc_game + 0x51e, 0x1454));
+			mouse_irq_init(0x1f, (INTCAST)RealMake(0x51e, 0x1454));
 		}
 	}
 #endif

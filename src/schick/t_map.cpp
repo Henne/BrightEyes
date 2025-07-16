@@ -65,7 +65,7 @@ treasure_type t_map(RealPt ptr, const int off)
 	Bit16u f_seg = RealSeg(func);
 	Bit16u f_off = RealOff(func);
 
-	switch (f_seg - reloc_game) {
+	switch (f_seg) {
 
 	case 0x13d1: {
 		if (f_off == 0x25) return (treasure_type)DNG01_chest1_x1;
@@ -307,7 +307,7 @@ treasure_type t_map(RealPt ptr, const int off)
 		break;
 	}
 	default: {
-		D1_TREAS("ERROR: Segment hat einen ungueltigen Wert 0x%x\n", (Bit16u)(f_seg - reloc_game));
+		D1_TREAS("ERROR: Segment hat einen ungueltigen Wert 0x%x\n", (Bit16u)(f_seg));
 	}
 
 	}

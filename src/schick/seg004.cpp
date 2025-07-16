@@ -31,14 +31,14 @@ void save_and_set_timer(void)
 {
 #if defined(__BORLANDC__)
 	ds_writefp(BC_TIMER, (RealPt)getvect(8));
-	setvect(8, (INTCAST)RealMake(0xb2a + reloc_game, 0x244));
+	setvect(8, (INTCAST)RealMake(0xb2a, 0x244));
 #endif
 }
 
 void set_timer(void)
 {
 #if defined(__BORLANDC__)
-	setvect(8, (INTCAST)RealMake(0xb2a + reloc_game, 0x244));
+	setvect(8, (INTCAST)RealMake(0xb2a, 0x244));
 #endif
 }
 
@@ -1105,10 +1105,7 @@ void do_fill_rect(RealPt dst, signed short x, signed short y, signed short w, si
 
 void wait_for_vsync(void)
 {
-#if !defined(__BORLANDC__)
-	CALLBACK_RunRealFar(reloc_game + 0xb2a, 0x150d);
-#else
-
+#if defined(__BORLANDC__)
 	signed short tmp;
 
 	outportb(0x3d4, 0x11);
@@ -1128,6 +1125,8 @@ void wait_for_vsync(void)
 		tmp = inportb(0x3da);
 
 	} while (!(tmp & 0x8) || !(tmp & 0x1));
+#else
+	//SDL_Delay(16);
 #endif
 }
 

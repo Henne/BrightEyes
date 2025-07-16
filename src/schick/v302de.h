@@ -197,7 +197,6 @@ extern const char* names_mspell[];
 
 extern unsigned short datseg;
 extern Bit8u *p_datseg;
-#define reloc_game (0)
 
 static inline Bit8u host_readb(Bit8u* p)
 {
@@ -1239,8 +1238,6 @@ struct hero_struct {
 #define my_itoa itoa
 
 #define schick_main main
-
-#define reloc_game (0)
 
 #define p_datseg (&ds[0x0000])
 #define datseg (_DS)
