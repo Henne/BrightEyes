@@ -428,8 +428,8 @@ signed short select_hero_from_group(Bit8u *title)
 
 		hero = (RealPt)ds_readd(HEROES) + i * SIZEOF_HERO;
 
-		if (host_readb(Real2Host(hero) + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readb(Real2Host(hero) + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP) &&
+		if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
+			host_readb(hero + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP) &&
 				/* TODO: find out what that means */
 				ds_readbs(HERO_SEL_EXCLUDE) != i) {
 
@@ -503,9 +503,9 @@ signed short select_hero_ok(Bit8u *title)
 
 	for (hero = (RealPt)ds_readd(HEROES), i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
-		if (host_readb(Real2Host(hero) + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readb(Real2Host(hero) + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP) &&
-			check_hero(Real2Host(hero)) &&
+		if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
+			host_readb(hero + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP) &&
+			check_hero(hero) &&
 				/* TODO: find out what that means */
 				ds_readbs(HERO_SEL_EXCLUDE) != i) {
 
@@ -581,9 +581,9 @@ signed short select_hero_ok_forced(Bit8u *title)
 
 	for (hero = (RealPt)ds_readd(HEROES), i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
-		if (host_readb(Real2Host(hero) + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readb(Real2Host(hero) + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP) &&
-			check_hero(Real2Host(hero)) &&
+		if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
+			host_readb(hero + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP) &&
+			check_hero(hero) &&
 				/* TODO: find out what that means */
 				ds_readbs(HERO_SEL_EXCLUDE) != i) {
 

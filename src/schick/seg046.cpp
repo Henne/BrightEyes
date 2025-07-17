@@ -237,12 +237,12 @@ void status_show(Bit16u index)
 
 		for (i = 0; i < NR_HERO_INVENTORY_SLOTS; i++) {
 
-			if (host_readw(Real2Host(hero) + i * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID) == ITEM_NONE)
+			if (host_readw(hero + i * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID) == ITEM_NONE)
 				continue;
 
 			nvf.dst = Real2Host(ds_readd(ICON));
 			/* set no */
-			nvf.no = host_readw(get_itemsdat(host_readw(Real2Host(hero) + i * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID)));
+			nvf.no = host_readw(get_itemsdat(host_readw(hero + i * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID)));
 
 			process_nvf(&nvf);
 
@@ -258,10 +258,10 @@ void status_show(Bit16u index)
 			ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
 
 			/* check if stackable */
-			if (item_stackable(get_itemsdat(host_readw(Real2Host(hero) + i * SIZEOF_INVENTORY + HERO_INVENTORY)))) {
+			if (item_stackable(get_itemsdat(host_readw(hero + i * SIZEOF_INVENTORY + HERO_INVENTORY)))) {
 
 				set_textcolor(0xff, 0);
-				my_itoa(host_readw(Real2Host(hero) + i * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_QUANTITY),
+				my_itoa(host_readw(hero + i * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_QUANTITY),
 					(char*)ds_readd(DTP2), 10);
 
 				GUI_print_string((char*)ds_readd(DTP2),
@@ -275,13 +275,13 @@ void status_show(Bit16u index)
 		/* print height */
 		sprintf((char*)ds_readd(DTP2),
 			get_tx2(33),
-			host_readb(Real2Host(hero) + HERO_HEIGHT));
+			host_readb(hero + HERO_HEIGHT));
 		GUI_print_string((char*)ds_readd(DTP2), 158, 116);
 
 		/* print weight */
 		sprintf((char*)ds_readd(DTP2),
 			get_tx2(34),
-			host_readw(Real2Host(hero) + HERO_WEIGHT));
+			host_readw(hero + HERO_WEIGHT));
 		GUI_print_string((char*)ds_readd(DTP2), 59, 179);
 	} else {
 		do_fill_rect((RealPt)ds_readd(RENDERBUF_PTR), 0, 50, 319, 191, 2);
@@ -291,30 +291,30 @@ void status_show(Bit16u index)
 
 	/* print name */
 	set_textcolor(0xff, 2);
-	GUI_print_string(Real2Host(hero) + HERO_NAME2, 59, 9);
+	GUI_print_string(hero + HERO_NAME2, 59, 9);
 
 	/* print typus */
 	set_textcolor(0, 2);
 
 	GUI_print_string(Real2Host(host_readd(Real2Host(ds_readd(TEXT_LTX_INDEX)) + (
-	((host_readb(Real2Host(hero) + HERO_SEX)) ? 0x251 : 0x9) + host_readbs(Real2Host(hero) + HERO_TYPE)) * 4)), 59, 16);
+	((host_readb(hero + HERO_SEX)) ? 0x251 : 0x9) + host_readbs(hero + HERO_TYPE)) * 4)), 59, 16);
 
 
 	/* show AP */
 	sprintf((char*)ds_readd(DTP2),
 		(char*)Real2Host(host_readd(Real2Host(ds_readd(TEXT_LTX_INDEX)) + 0x9ac)),
-		host_readd(Real2Host(hero) + HERO_AP));
+		host_readd(hero + HERO_AP));
 	GUI_print_string((char*)ds_readd(DTP2), 59, 26);
 
 	/* print level */
 	sprintf((char*)ds_readd(DTP2),
 		get_tx2(7),
-		host_readbs(Real2Host(hero) + HERO_LEVEL));
+		host_readbs(hero + HERO_LEVEL));
 	GUI_print_string((char*)ds_readd(DTP2), 59, 33);
 
 	/* print money */
 	make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF),
-		host_readd(Real2Host(hero) + HERO_MONEY));
+		host_readd(hero + HERO_MONEY));
 
 	sprintf((char*)ds_readd(DTP2),
 		(char*)Real2Host(host_readd(Real2Host(ds_readd(TEXT_LTX_INDEX)) + 0x4b0)),
@@ -322,30 +322,30 @@ void status_show(Bit16u index)
 	GUI_print_string((char*)ds_readd(DTP2), 59, 43);
 
 	/* dead, unconscious or drunk */
-	if (hero_dead(Real2Host(hero)))
+	if (hero_dead(hero))
 		/* print if dead */
 		GUI_print_string(get_tx2(0), 155, 9);
-	else if (hero_unconscious(Real2Host(hero)))
+	else if (hero_unconscious(hero))
 		/* print if uncounscious */
 		GUI_print_string(get_tx2(6), 155, 9);
-	else if (host_readb(Real2Host(hero) + HERO_DRUNK))
+	else if (host_readb(hero + HERO_DRUNK))
 		/* print if drunk */
 		GUI_print_string(get_tx2(54), 155, 9);
 
 	/* print asleep */
-	if (hero_asleep(Real2Host(hero)))
+	if (hero_asleep(hero))
 		GUI_print_string(get_tx2(1), 155, 16);
 
 	/* print petrified */
-	if (hero_petrified(Real2Host(hero)))
+	if (hero_petrified(hero))
 		GUI_print_string(get_tx2(2), 155, 23);
 
 	/* print diseased */
-	if (hero_is_diseased(Real2Host(hero)))
+	if (hero_is_diseased(hero))
 		GUI_print_string(get_tx2(4), 155, 30);
 
 	/* print poison */
-	if (hero_is_poisoned(Real2Host(hero)))
+	if (hero_is_poisoned(hero))
 		GUI_print_string(get_tx2(3), 155, 37);
 
 	/* print hunger */
@@ -364,7 +364,7 @@ void status_show(Bit16u index)
 
 			sprintf((char*)ds_readd(DTP2),
 					get_tx2(10),
-					(char*)Real2Host(host_readd(Real2Host(ds_readd(TEXT_LTX_INDEX)) + (host_readbs(Real2Host(hero) + HERO_GOD) + 0x15) * 4)));
+					(char*)Real2Host(host_readd(Real2Host(ds_readd(TEXT_LTX_INDEX)) + (host_readbs(hero + HERO_GOD) + 0x15) * 4)));
 			GUI_print_string((char*)ds_readd(DTP2), 200, 55);
 
 			/* show attributes */
@@ -374,19 +374,19 @@ void status_show(Bit16u index)
 
 			for (i = 0; i <= 13; i++) {
 
-				val = host_readbs(Real2Host(hero) + i * 3 + HERO_ATTRIB)
-					+ host_readbs(Real2Host(hero) + i * 3 + HERO_ATTRIB_MOD);
+				val = host_readbs(hero + i * 3 + HERO_ATTRIB)
+					+ host_readbs(hero + i * 3 + HERO_ATTRIB_MOD);
 
 				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF) + i * 10,
 					get_tx2(51),
-					host_readbs(Real2Host(hero) + i * 3 + 0x34) != val ?
+					host_readbs(hero + i * 3 + 0x34) != val ?
 						get_tx2(49) :
 						(char*)p_datseg + EMPTY_STRING6,
 					val,
-					host_readbs(Real2Host(hero) + i * 3 + 0x34) != val ?
+					host_readbs(hero + i * 3 + 0x34) != val ?
 						get_tx2(50) :
 						(char*)p_datseg + EMPTY_STRING7,
-					host_readbs(Real2Host(hero) + i * 3 + 0x34));
+					host_readbs(hero + i * 3 + 0x34));
 
 			}
 			sprintf((char*)ds_readd(DTP2),
@@ -410,14 +410,14 @@ void status_show(Bit16u index)
 
 			/* calculate BP */
 			bp = 8;
-			if (host_readbs(Real2Host(hero) + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 50 <= host_readws(Real2Host(hero) + HERO_LOAD))
+			if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 50 <= host_readws(hero + HERO_LOAD))
 				bp--;
-			if (host_readbs(Real2Host(hero) + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 75 <= host_readws(Real2Host(hero) + HERO_LOAD))
+			if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 75 <= host_readws(hero + HERO_LOAD))
 				bp -= 2;
-			if (host_readbs(Real2Host(hero) + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 100 <= host_readws(Real2Host(hero) + HERO_LOAD))
+			if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 100 <= host_readws(hero + HERO_LOAD))
 				bp -= 2;
 #ifdef M302de_ORIGINAL_BUGFIX
-			if (host_readbs(Real2Host(hero) + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 110 <= host_readws(Real2Host(hero) + HERO_LOAD)) {
+			if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 110 <= host_readws(hero + HERO_LOAD)) {
 				/* Original-Bug 6: status screen shows wrong number of BP if the load is at least 110% of the carrying capacity.
 				   (3 BP shown, but in fact only 1 BP, see function FIG_do_round in seg032.cpp) */
 				bp = 1;
@@ -432,23 +432,23 @@ void status_show(Bit16u index)
 				char le_fix[10];
 				set_status_string(get_tx2(13));
 
-				if (host_readb(Real2Host(hero) + HERO_LE_MOD)) {
+				if (host_readb(hero + HERO_LE_MOD)) {
 					/* print max LE in red if hero has permanent damage */
-					sprintf(le_fix, "%c%d%c", 0xf1, host_readw(Real2Host(hero) + HERO_LE_ORIG), 0xf0);
+					sprintf(le_fix, "%c%d%c", 0xf1, host_readw(hero + HERO_LE_ORIG), 0xf0);
 				} else {
 					/* print max LE in black if hero has no permanent damage */
-					sprintf(le_fix, "%d", host_readw(Real2Host(hero) + HERO_LE_ORIG));
+					sprintf(le_fix, "%d", host_readw(hero + HERO_LE_ORIG));
 				}
 
 				sprintf((char*)ds_readd(DTP2),
 					get_tx2(13),
-					host_readw(Real2Host(hero) + HERO_LE), le_fix,			/* LE */
-					host_readw(Real2Host(hero) + HERO_AE), host_readw(Real2Host(hero) + HERO_AE_ORIG),	/* AE */
-					host_readbs(Real2Host(hero) + HERO_MR),			/* MR */
-					host_readbs(Real2Host(hero) + HERO_RS_BONUS1) + host_readbs(Real2Host(hero) + HERO_RS_BONUS2), /* RS */
-					host_readbs(Real2Host(hero) + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readw(Real2Host(hero) + HERO_LE) +
-						host_readbs(Real2Host(hero) + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK)),		/* Ausdauer*/
-					host_readw(Real2Host(hero) + HERO_LOAD),				/* Last */
+					host_readw(hero + HERO_LE), le_fix,			/* LE */
+					host_readw(hero + HERO_AE), host_readw(hero + HERO_AE_ORIG),	/* AE */
+					host_readbs(hero + HERO_MR),			/* MR */
+					host_readbs(hero + HERO_RS_BONUS1) + host_readbs(hero + HERO_RS_BONUS2), /* RS */
+					host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readw(hero + HERO_LE) +
+						host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK)),		/* Ausdauer*/
+					host_readw(hero + HERO_LOAD),				/* Last */
 					bp);							/* BP */
 				reset_status_string(get_tx2(13));
 				/* Original-Bugfix end */
@@ -457,13 +457,13 @@ void status_show(Bit16u index)
 				/* Original Behavior: print max LE in black */
 				sprintf((char*)ds_readd(DTP2),
 					get_tx2(13),
-					host_readw(Real2Host(hero) + HERO_LE), host_readw(Real2Host(hero) + HERO_LE_ORIG),	/* LE */
-					host_readw(Real2Host(hero) + HERO_AE), host_readw(Real2Host(hero) + HERO_AE_ORIG),	/* AE */
-					host_readbs(Real2Host(hero) + HERO_MR),			/* MR */
-					host_readbs(Real2Host(hero) + HERO_RS_BONUS1) + host_readbs(Real2Host(hero) + HERO_RS_BONUS2), /* RS */
-					host_readbs(Real2Host(hero) + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK)) + (host_readws(Real2Host(hero) + HERO_LE) +
-						host_readbs(Real2Host(hero) + (HERO_ATTRIB + 3 * ATTRIB_KK))),		/* Ausdauer*/
-					host_readw(Real2Host(hero) + HERO_LOAD),				/* Last */
+					host_readw(hero + HERO_LE), host_readw(hero + HERO_LE_ORIG),	/* LE */
+					host_readw(hero + HERO_AE), host_readw(hero + HERO_AE_ORIG),	/* AE */
+					host_readbs(hero + HERO_MR),			/* MR */
+					host_readbs(hero + HERO_RS_BONUS1) + host_readbs(hero + HERO_RS_BONUS2), /* RS */
+					host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK)) + (host_readws(hero + HERO_LE) +
+						host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK))),		/* Ausdauer*/
+					host_readw(hero + HERO_LOAD),				/* Last */
 					bp);							/* BP */
 #endif
 
@@ -473,31 +473,31 @@ void status_show(Bit16u index)
 				/* novice mode */
 
 				/* calculate AT base value */
-				if (host_readb(Real2Host(hero) + HERO_RS_BE) & 1) {
+				if (host_readb(hero + HERO_RS_BE) & 1) {
 					l1 = -1;
 				} else {
 					l1 = 0;
 				}
 
-				at = (host_readbs(Real2Host(hero) + HERO_WEAPON_TYPE) < 7) ?
+				at = (host_readbs(hero + HERO_WEAPON_TYPE) < 7) ?
 					/* melee weapons */
-					(host_readbs(Real2Host(hero) + HERO_AT + host_readbs(Real2Host(hero) + HERO_WEAPON_TYPE)) +
-						host_readbs(Real2Host(hero) + HERO_AT_MOD) -
-						(host_readbs(Real2Host(hero) + HERO_RS_BE) / 2)) :
+					(host_readbs(hero + HERO_AT + host_readbs(hero + HERO_WEAPON_TYPE)) +
+						host_readbs(hero + HERO_AT_MOD) -
+						(host_readbs(hero + HERO_RS_BE) / 2)) :
 					/* range weapons */
-					(host_readbs(Real2Host(hero) + HERO_AT) -
-						(host_readbs(Real2Host(hero) + HERO_RS_BE) / 2));
+					(host_readbs(hero + HERO_AT) -
+						(host_readbs(hero + HERO_RS_BE) / 2));
 				at += l1;
 
 				/* calculate PA base value */
-				pa = (host_readbs(Real2Host(hero) + HERO_WEAPON_TYPE) < 7) ?
+				pa = (host_readbs(hero + HERO_WEAPON_TYPE) < 7) ?
 					/* melee weapons */
-					(host_readbs(Real2Host(hero) + HERO_PA + host_readbs(Real2Host(hero) + HERO_WEAPON_TYPE)) +
-						host_readbs(Real2Host(hero) + HERO_PA_MOD) -
-						(host_readbs(Real2Host(hero) + HERO_RS_BE) / 2)) :
+					(host_readbs(hero + HERO_PA + host_readbs(hero + HERO_WEAPON_TYPE)) +
+						host_readbs(hero + HERO_PA_MOD) -
+						(host_readbs(hero + HERO_RS_BE) / 2)) :
 					/* range weapons */
-					 (host_readbs(Real2Host(hero) + HERO_PA) -
-						(host_readbs(Real2Host(hero) + HERO_RS_BE) / 2));
+					 (host_readbs(hero + HERO_PA) -
+						(host_readbs(hero + HERO_RS_BE) / 2));
 
 				if (at < 0)
 					at = 0;
@@ -507,25 +507,25 @@ void status_show(Bit16u index)
 				/* Original-Bugfix: show permanent damage in red */
 				set_status_string(get_tx2(52));
 
-				if (host_readb(Real2Host(hero) + HERO_LE_MOD)) {
+				if (host_readb(hero + HERO_LE_MOD)) {
 					/* print max LE in red if hero has permanent damage */
-					sprintf(le_fix, "%c%d%c", 0xf1, host_readw(Real2Host(hero) + HERO_LE_ORIG), 0xf0);
+					sprintf(le_fix, "%c%d%c", 0xf1, host_readw(hero + HERO_LE_ORIG), 0xf0);
 				} else {
 					/* print max LE in black if hero has no permanent damage */
-					sprintf(le_fix, "%d", host_readw(Real2Host(hero) + HERO_LE_ORIG));
+					sprintf(le_fix, "%d", host_readw(hero + HERO_LE_ORIG));
 				}
 
 
 				sprintf((char*)ds_readd(DTP2),
 					get_tx2(52),
-					host_readw(Real2Host(hero) + HERO_LE), le_fix,			/* LE */
-					host_readw(Real2Host(hero) + HERO_AE), host_readw(Real2Host(hero) + HERO_AE_ORIG),	/* AE */
+					host_readw(hero + HERO_LE), le_fix,			/* LE */
+					host_readw(hero + HERO_AE), host_readw(hero + HERO_AE_ORIG),	/* AE */
 					at, pa,							/* AT PA */
-					host_readbs(Real2Host(hero) + HERO_MR),			/* MR */
-					host_readbs(Real2Host(hero) + HERO_RS_BONUS1) + host_readbs(Real2Host(hero) + HERO_RS_BONUS2),	/* RS */
-					host_readbs(Real2Host(hero) + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readw(Real2Host(hero) + HERO_LE) +
-						host_readbs(Real2Host(hero) + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK)),		/* Ausdauer */
-					host_readw(Real2Host(hero) + HERO_LOAD),				/* Last */
+					host_readbs(hero + HERO_MR),			/* MR */
+					host_readbs(hero + HERO_RS_BONUS1) + host_readbs(hero + HERO_RS_BONUS2),	/* RS */
+					host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readw(hero + HERO_LE) +
+						host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK)),		/* Ausdauer */
+					host_readw(hero + HERO_LOAD),				/* Last */
 					bp);							/* BP */
 
 				reset_status_string(get_tx2(52));
@@ -533,14 +533,14 @@ void status_show(Bit16u index)
 #else
 				sprintf((char*)ds_readd(DTP2),
 					get_tx2(52),
-					host_readw(Real2Host(hero) + HERO_LE), host_readw(Real2Host(hero) + HERO_LE_ORIG),	/* LE */
-					host_readw(Real2Host(hero) + HERO_AE), host_readw(Real2Host(hero) + HERO_AE_ORIG),	/* AE */
+					host_readw(hero + HERO_LE), host_readw(hero + HERO_LE_ORIG),	/* LE */
+					host_readw(hero + HERO_AE), host_readw(hero + HERO_AE_ORIG),	/* AE */
 					at, pa,							/* AT PA */
-					host_readbs(Real2Host(hero) + HERO_MR),			/* MR */
-					host_readbs(Real2Host(hero) + HERO_RS_BONUS1) + host_readbs(Real2Host(hero) + HERO_RS_BONUS2),	/* RS */
-					host_readws(Real2Host(hero) + HERO_LE) + host_readbs(Real2Host(hero) + (HERO_ATTRIB + 3 * ATTRIB_KK)) +
-						host_readbs(Real2Host(hero) + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK)),		/* Ausdauer */
-					host_readw(Real2Host(hero) + HERO_LOAD),				/* Last */
+					host_readbs(hero + HERO_MR),			/* MR */
+					host_readbs(hero + HERO_RS_BONUS1) + host_readbs(hero + HERO_RS_BONUS2),	/* RS */
+					host_readws(hero + HERO_LE) + host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) +
+						host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK)),		/* Ausdauer */
+					host_readw(hero + HERO_LOAD),				/* Last */
 					bp);							/* BP */
 #endif
 
@@ -555,31 +555,31 @@ void status_show(Bit16u index)
 			ds_writew(TXT_TABPOS2, 295);
 
 			/* Fernkampfwaffen-Basiswert: (KL + GE + KK)/4 */
-			j = (host_readbs(Real2Host(hero) + (HERO_ATTRIB + 3 * ATTRIB_KL)) +
-				host_readbs(Real2Host(hero) + (HERO_ATTRIB_MOD + 3 * ATTRIB_KL)) +
-				host_readbs(Real2Host(hero) + (HERO_ATTRIB + 3 * ATTRIB_GE)) +
-				host_readbs(Real2Host(hero) + (HERO_ATTRIB_MOD + 3 * ATTRIB_GE)) +
-				host_readbs(Real2Host(hero) + (HERO_ATTRIB + 3 * ATTRIB_KK)) +
-				host_readbs(Real2Host(hero) + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK))) / 4;
+			j = (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KL)) +
+				host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KL)) +
+				host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE)) +
+				host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_GE)) +
+				host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) +
+				host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK))) / 4;
 
-			if (host_readb(Real2Host(hero) + HERO_RS_BE) & 1)
+			if (host_readb(hero + HERO_RS_BE) & 1)
 				l1 = -1;
 			else
 				l1 = 0;
 
-			at = (host_readbs(Real2Host(hero) + HERO_WEAPON_TYPE) < 7) ?
-				(host_readbs(Real2Host(hero) + HERO_AT + host_readbs(Real2Host(hero) + HERO_WEAPON_TYPE)) +
-					host_readbs(Real2Host(hero) + HERO_AT_MOD) -
-					host_readbs(Real2Host(hero) + HERO_RS_BE) / 2) :
-				host_readbs(Real2Host(hero) + HERO_AT) - host_readbs(Real2Host(hero) + HERO_RS_BE) / 2;
+			at = (host_readbs(hero + HERO_WEAPON_TYPE) < 7) ?
+				(host_readbs(hero + HERO_AT + host_readbs(hero + HERO_WEAPON_TYPE)) +
+					host_readbs(hero + HERO_AT_MOD) -
+					host_readbs(hero + HERO_RS_BE) / 2) :
+				host_readbs(hero + HERO_AT) - host_readbs(hero + HERO_RS_BE) / 2;
 
 			at += l1;
 
-			pa =  (host_readbs(Real2Host(hero) + HERO_WEAPON_TYPE) < 7) ?
-				host_readbs(Real2Host(hero) + HERO_PA + host_readbs(Real2Host(hero) + HERO_WEAPON_TYPE)) +
-					host_readbs(Real2Host(hero) + HERO_PA_MOD) -
-					host_readbs(Real2Host(hero) + HERO_RS_BE) / 2 :
-				host_readbs(Real2Host(hero) + HERO_PA) - host_readbs(Real2Host(hero) + HERO_RS_BE) / 2;
+			pa =  (host_readbs(hero + HERO_WEAPON_TYPE) < 7) ?
+				host_readbs(hero + HERO_PA + host_readbs(hero + HERO_WEAPON_TYPE)) +
+					host_readbs(hero + HERO_PA_MOD) -
+					host_readbs(hero + HERO_RS_BE) / 2 :
+				host_readbs(hero + HERO_PA) - host_readbs(hero + HERO_RS_BE) / 2;
 
 			if (at < 0)
 				at = 0;
@@ -589,50 +589,50 @@ void status_show(Bit16u index)
 
 			sprintf((char*)ds_readd(DTP2),
 				get_tx2(5),
-				host_readbs(Real2Host(hero) + HERO_ATPA_BASIS),
+				host_readbs(hero + HERO_ATPA_BASIS),
 				(char*)Real2Host(host_readd(Real2Host(ds_readd(TEXT_LTX_INDEX)) + 0xc0)),
 
-				host_readbs(Real2Host(hero) + HERO_AT) - host_readbs(Real2Host(hero) + HERO_RS_BE) / 2,
-				host_readbs(Real2Host(hero) + HERO_PA) - host_readbs(Real2Host(hero) + HERO_RS_BE) / 2,
+				host_readbs(hero + HERO_AT) - host_readbs(hero + HERO_RS_BE) / 2,
+				host_readbs(hero + HERO_PA) - host_readbs(hero + HERO_RS_BE) / 2,
 				(char*)Real2Host(host_readd(Real2Host(ds_readd(TEXT_LTX_INDEX)) + 0xc4)),
 
-				host_readbs(Real2Host(hero) + (HERO_AT + 1)) - host_readbs(Real2Host(hero) + HERO_RS_BE) / 2,
-				host_readbs(Real2Host(hero) + (HERO_PA + 1)) - host_readbs(Real2Host(hero) + HERO_RS_BE) / 2,
+				host_readbs(hero + (HERO_AT + 1)) - host_readbs(hero + HERO_RS_BE) / 2,
+				host_readbs(hero + (HERO_PA + 1)) - host_readbs(hero + HERO_RS_BE) / 2,
 				(char*)Real2Host(host_readd(Real2Host(ds_readd(TEXT_LTX_INDEX)) + 0xc8)),
 
-				host_readbs(Real2Host(hero) + (HERO_AT + 2)) - host_readbs(Real2Host(hero) + HERO_RS_BE) / 2,
-				host_readbs(Real2Host(hero) + (HERO_PA + 2)) - host_readbs(Real2Host(hero) + HERO_RS_BE) / 2,
+				host_readbs(hero + (HERO_AT + 2)) - host_readbs(hero + HERO_RS_BE) / 2,
+				host_readbs(hero + (HERO_PA + 2)) - host_readbs(hero + HERO_RS_BE) / 2,
 				(char*)Real2Host(host_readd(Real2Host(ds_readd(TEXT_LTX_INDEX)) + 0xcc)),
 
-				host_readbs(Real2Host(hero) + (HERO_AT + 3)) - host_readbs(Real2Host(hero) + HERO_RS_BE) / 2,
-				host_readbs(Real2Host(hero) + (HERO_PA + 3)) - host_readbs(Real2Host(hero) + HERO_RS_BE) / 2,
+				host_readbs(hero + (HERO_AT + 3)) - host_readbs(hero + HERO_RS_BE) / 2,
+				host_readbs(hero + (HERO_PA + 3)) - host_readbs(hero + HERO_RS_BE) / 2,
 				(char*)Real2Host(host_readd(Real2Host(ds_readd(TEXT_LTX_INDEX)) + 0xd0)),
 
-				host_readbs(Real2Host(hero) + (HERO_AT + 4)) - host_readbs(Real2Host(hero) + HERO_RS_BE) / 2,
-				host_readbs(Real2Host(hero) + (HERO_PA + 4)) - host_readbs(Real2Host(hero) + HERO_RS_BE) / 2,
+				host_readbs(hero + (HERO_AT + 4)) - host_readbs(hero + HERO_RS_BE) / 2,
+				host_readbs(hero + (HERO_PA + 4)) - host_readbs(hero + HERO_RS_BE) / 2,
 				(char*)Real2Host(host_readd(Real2Host(ds_readd(TEXT_LTX_INDEX)) + 0xd4)),
 
-				host_readbs(Real2Host(hero) + (HERO_AT + 5)) - host_readbs(Real2Host(hero) + HERO_RS_BE) / 2,
-				host_readbs(Real2Host(hero) + (HERO_PA + 5)) - host_readbs(Real2Host(hero) + HERO_RS_BE) / 2,
+				host_readbs(hero + (HERO_AT + 5)) - host_readbs(hero + HERO_RS_BE) / 2,
+				host_readbs(hero + (HERO_PA + 5)) - host_readbs(hero + HERO_RS_BE) / 2,
 				(char*)Real2Host(host_readd(Real2Host(ds_readd(TEXT_LTX_INDEX)) + 0xd8)),
 
-				host_readbs(Real2Host(hero) + (HERO_AT + 6)) - host_readbs(Real2Host(hero) + HERO_RS_BE) / 2,
-				host_readbs(Real2Host(hero) + (HERO_PA + 6)) - host_readbs(Real2Host(hero) + HERO_RS_BE) / 2,
+				host_readbs(hero + (HERO_AT + 6)) - host_readbs(hero + HERO_RS_BE) / 2,
+				host_readbs(hero + (HERO_PA + 6)) - host_readbs(hero + HERO_RS_BE) / 2,
 				at,
 				pa,
 
 				(char*)Real2Host(host_readd(Real2Host(ds_readd(TEXT_LTX_INDEX)) + 0xdc)),
-				host_readbs(Real2Host(hero) + (HERO_TALENTS + TA_SCHUSSWAFFEN)) + j,
+				host_readbs(hero + (HERO_TALENTS + TA_SCHUSSWAFFEN)) + j,
 
 				(char*)Real2Host(host_readd(Real2Host(ds_readd(TEXT_LTX_INDEX)) + 0xe0)),
-				host_readbs(Real2Host(hero) + (HERO_TALENTS + TA_WURFWAFFEN)) + j);
+				host_readbs(hero + (HERO_TALENTS + TA_WURFWAFFEN)) + j);
 
 			GUI_print_string((char*)ds_readd(DTP2), 200, 60);
 			break;
 		}
 		/* skills */
 		case 3: {
-			status_show_skills(Real2Host(hero));
+			status_show_skills(hero);
 			break;
 		}
 		/* spells */
@@ -689,7 +689,7 @@ void status_show(Bit16u index)
 
 				while (ds_readbs(SPELLS_INDEX + j * 2) + ds_readbs(SPELLS_INDEX + 1 + j * 2) > i) {
 
-					status_show_spell(Real2Host(hero),
+					status_show_spell(hero,
 						i,
 						ds_readbs(SPELLS_INDEX + j * 2),
 						ds_readws(STATUSPAGE_SPELLS_XY + 0 + j * 6),
@@ -735,7 +735,7 @@ void status_show(Bit16u index)
 
 				while (ds_readbs(SPELLS_INDEX2 + j * 2) + ds_readbs(SPELLS_INDEX2 + 1 + j * 2) > i) {
 
-					status_show_spell(Real2Host(hero),
+					status_show_spell(hero,
 						i,
 						ds_readbs(SPELLS_INDEX2 + j * 2),
 						ds_readws(STATUSPAGE_SPELLS2_XY + 0 + j * 6),

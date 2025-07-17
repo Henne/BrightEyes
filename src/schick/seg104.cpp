@@ -523,10 +523,10 @@ RealPt get_heaviest_hero(void)
 	hero = (RealPt)ds_readd(HEROES);
 	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
-		if ((host_readbs(Real2Host(hero) + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readbs(Real2Host(hero) + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)))
+		if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
+			(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)))
 		{
-			weight = host_readws(Real2Host(hero) + HERO_WEIGHT) + host_readws(Real2Host(hero) + HERO_LOAD);
+			weight = host_readws(hero + HERO_WEIGHT) + host_readws(hero + HERO_LOAD);
 
 			if (weight > w_max) {
 				w_max = weight;

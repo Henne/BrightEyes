@@ -504,20 +504,20 @@ void FIG_draw_char_pic(signed short loc, signed short hero_pos)
 		ds_writew(PIC_COPY_Y1, 10);
 		ds_writew(PIC_COPY_X2, 33);
 		ds_writew(PIC_COPY_Y2, 41);
-		GUI_print_string(Real2Host(hero) + HERO_NAME2, 1, 1);
+		GUI_print_string(hero + HERO_NAME2, 1, 1);
 
-		draw_bar(0, 0, host_readw(Real2Host(hero) + HERO_LE),
-			host_readw(Real2Host(hero) + HERO_LE_ORIG), 1);
+		draw_bar(0, 0, host_readw(hero + HERO_LE),
+			host_readw(hero + HERO_LE_ORIG), 1);
 
-		draw_bar(1, 0, host_readw(Real2Host(hero) + HERO_AE),
-			host_readw(Real2Host(hero) + HERO_AE_ORIG), 1);
+		draw_bar(1, 0, host_readw(hero + HERO_AE),
+			host_readw(hero + HERO_AE_ORIG), 1);
 	} else {
 		do_border((RealPt)ds_readd(RENDERBUF_PTR), 1, 157, 34, 190, 29);
 		ds_writew(PIC_COPY_X1, 2);
 		ds_writew(PIC_COPY_Y1, 158);
 		ds_writew(PIC_COPY_X2, 33);
 		ds_writew(PIC_COPY_Y2, 189);
-		GUI_print_string(Real2Host(hero) + HERO_NAME2, 1, 193);
+		GUI_print_string(hero + HERO_NAME2, 1, 193);
 	}
 
 	do_pic_copy(0);

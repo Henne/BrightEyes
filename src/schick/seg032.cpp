@@ -413,49 +413,49 @@ void FIG_do_round(void)
 
 		hero = (RealPt)ds_readd(HEROES) + SIZEOF_HERO * i;
 
-		if ((host_readbs(Real2Host(hero) + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readbs(Real2Host(hero) + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
-			(host_readbs(Real2Host(hero) + HERO_ACTION_ID) != FIG_ACTION_FLEE))
+		if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
+			(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+			(host_readbs(hero + HERO_ACTION_ID) != FIG_ACTION_FLEE))
 		{
 			/* set #action phases to 1 */
-			host_writeb(Real2Host(hero) + HERO_ACTIONS, 1);
+			host_writeb(hero + HERO_ACTIONS, 1);
 
 			/* give this hero 8 BP */
-			host_writeb(Real2Host(hero) + HERO_BP_LEFT, 8);
+			host_writeb(hero + HERO_BP_LEFT, 8);
 
-			if (host_readbs(Real2Host(hero) + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 50 <= host_readws(Real2Host(hero) + HERO_LOAD)) {
+			if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 50 <= host_readws(hero + HERO_LOAD)) {
 				/* load at least 50% of carrying capacity: give BP malus -1 */
-				dec_ptr_bs(Real2Host(hero) + HERO_BP_LEFT);
+				dec_ptr_bs(hero + HERO_BP_LEFT);
 			}
 
-			if (host_readbs(Real2Host(hero) + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 75 <= host_readws(Real2Host(hero) + HERO_LOAD)) {
+			if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 75 <= host_readws(hero + HERO_LOAD)) {
 				/* load at least 75% of carrying capacity: give additional BP malus -2 */
-				sub_ptr_bs(Real2Host(hero) + HERO_BP_LEFT, 2);
+				sub_ptr_bs(hero + HERO_BP_LEFT, 2);
 			}
 
-			if (host_readbs(Real2Host(hero) + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 100 <= host_readws(Real2Host(hero) + HERO_LOAD)) {
+			if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 100 <= host_readws(hero + HERO_LOAD)) {
 				/* load at least 100% of carrying capacity: give additional give BP malus -2 */
-				sub_ptr_bs(Real2Host(hero) + HERO_BP_LEFT, 2);
+				sub_ptr_bs(hero + HERO_BP_LEFT, 2);
 
 			}
 
-			host_writew(Real2Host(hero) + HERO_ESCAPE_POSITION, 0);
+			host_writew(hero + HERO_ESCAPE_POSITION, 0);
 
 			nr_hero_action_phases_left_in_round++;
 
-			if (host_readbs(Real2Host(hero) + HERO_AXXELERATUS) != 0) {
+			if (host_readbs(hero + HERO_AXXELERATUS) != 0) {
 				/* Axxeleratus => BP + 4 ... */
-				add_ptr_bs(Real2Host(hero) + HERO_BP_LEFT, 4);
+				add_ptr_bs(hero + HERO_BP_LEFT, 4);
 
 				/* ... and one extra action phase */
-				inc_ptr_bs(Real2Host(hero) + HERO_ACTIONS);
+				inc_ptr_bs(hero + HERO_ACTIONS);
 
 				nr_hero_action_phases_left_in_round++;
 			}
 
-			if (host_readbs(Real2Host(hero) + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 110 <= host_readws(Real2Host(hero) + HERO_LOAD)) {
+			if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 110 <= host_readws(hero + HERO_LOAD)) {
 				/* load at least 110% of carrying capacity: set BP to 1 */
-				host_writeb(Real2Host(hero) + HERO_BP_LEFT, 1);
+				host_writeb(hero + HERO_BP_LEFT, 1);
 			}
 		}
 	}
@@ -533,9 +533,9 @@ void FIG_do_round(void)
 
 			hero = (RealPt)ds_readd(HEROES) + SIZEOF_HERO * actor_id;
 
-			dec_ptr_bs(Real2Host(hero) + HERO_ACTIONS);
+			dec_ptr_bs(hero + HERO_ACTIONS);
 
-			if (hero_asleep(Real2Host(hero)) && !hero_dead(Real2Host(hero))) {
+			if (hero_asleep(hero) && !hero_dead(hero)) {
 
 				/* hero asleep and is not dead: 74% chance of waking up */
 
@@ -543,11 +543,11 @@ void FIG_do_round(void)
 
 					/* awake him (or her) */
 
-					and_ptr_bs(Real2Host(hero) + HERO_FLAGS1, 0xfd); /* unset 'sleep' flag */
+					and_ptr_bs(hero + HERO_FLAGS1, 0xfd); /* unset 'sleep' flag */
 
-					fighter_ptr = Real2Host(FIG_get_ptr(host_readbs(Real2Host(hero) + HERO_FIGHTER_ID)));
+					fighter_ptr = Real2Host(FIG_get_ptr(host_readbs(hero + HERO_FIGHTER_ID)));
 
-					host_writeb(fighter_ptr + FIGHTER_NVF_NO, host_readbs(Real2Host(hero) + HERO_VIEWDIR));
+					host_writeb(fighter_ptr + FIGHTER_NVF_NO, host_readbs(hero + HERO_VIEWDIR));
 					host_writeb(fighter_ptr + FIGHTER_RELOAD, -1);
 					host_writeb(fighter_ptr + FIGHTER_OFFSETX, 0);
 					host_writeb(fighter_ptr + FIGHTER_OFFSETY, 0);
@@ -555,7 +555,7 @@ void FIG_do_round(void)
 			}
 
 			if (FIG_search_obj_on_cb(actor_id + 1, &x_coord, &y_coord) &&
-				check_hero(Real2Host(hero)))
+				check_hero(hero))
 			{
 
 #if !defined(__BORLANDC__)
@@ -564,45 +564,45 @@ void FIG_do_round(void)
 				y_coord = host_readws((Bit8u*)&y_coord);
 #endif
 
-				if (host_readbs(Real2Host(hero) + HERO_BLIND) != 0) {
-					dec_ptr_bs(Real2Host(hero) + HERO_BLIND);
+				if (host_readbs(hero + HERO_BLIND) != 0) {
+					dec_ptr_bs(hero + HERO_BLIND);
 				} else {
-					if (host_readbs(Real2Host(hero) + HERO_ECLIPTIFACTUS) != 0) {
-						dec_ptr_bs(Real2Host(hero) + HERO_ECLIPTIFACTUS);
+					if (host_readbs(hero + HERO_ECLIPTIFACTUS) != 0) {
+						dec_ptr_bs(hero + HERO_ECLIPTIFACTUS);
 					}
 
 					/* save the fighter_id of this hero */
 					ds_writew(FIG_CHAR_PIC, actor_id + 1);
 
 					/* select a fight action */
-					FIG_menu(Real2Host(hero), actor_id, x_coord, y_coord);
+					FIG_menu(hero, actor_id, x_coord, y_coord);
 
-					if ((host_readbs(Real2Host(hero) + HERO_ACTION_ID) == FIG_ACTION_MELEE_ATTACK) ||
-						(host_readbs(Real2Host(hero) + HERO_ACTION_ID) == FIG_ACTION_SPELL) ||
-						(host_readbs(Real2Host(hero) + HERO_ACTION_ID) == FIG_ACTION_USE_ITEM) ||
-						(host_readbs(Real2Host(hero) + HERO_ACTION_ID) == FIG_ACTION_RANGE_ATTACK))
+					if ((host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_MELEE_ATTACK) ||
+						(host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_SPELL) ||
+						(host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_USE_ITEM) ||
+						(host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_RANGE_ATTACK))
 					{
 
 						FIG_do_hero_action(hero, actor_id);
 
-						if (host_readbs(Real2Host(hero) + HERO_ENEMY_ID) >= 10) {
+						if (host_readbs(hero + HERO_ENEMY_ID) >= 10) {
 							/* hero did attack some enemy (by weapon/spell/item etc.) */
 
 							/* if the tail of a two-squares enemy has been attacked,
 							 * replace HERO_ENEMY_ID by the main id of that enemy */
-							if (host_readbs(Real2Host(hero) + HERO_ENEMY_ID) >= 30) {
-								sub_ptr_bs(Real2Host(hero) + HERO_ENEMY_ID, 20);
+							if (host_readbs(hero + HERO_ENEMY_ID) >= 30) {
+								sub_ptr_bs(hero + HERO_ENEMY_ID, 20);
 							}
 
-							if (test_bit0(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FLAGS1) + SIZEOF_ENEMY_SHEET * host_readbs(Real2Host(hero) + HERO_ENEMY_ID))) /* check 'dead' flag */
+							if (test_bit0(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FLAGS1) + SIZEOF_ENEMY_SHEET * host_readbs(hero + HERO_ENEMY_ID))) /* check 'dead' flag */
 							{
 								/* attacked enemy is dead */
-								if (is_in_byte_array(host_readbs(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_GFX_ID) + SIZEOF_ENEMY_SHEET * host_readbs(Real2Host(hero) + HERO_ENEMY_ID)), p_datseg + TWO_FIELDED_SPRITE_ID))
+								if (is_in_byte_array(host_readbs(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_GFX_ID) + SIZEOF_ENEMY_SHEET * host_readbs(hero + HERO_ENEMY_ID)), p_datseg + TWO_FIELDED_SPRITE_ID))
 								{
 									/* attacked dead enemy is two-squares */
 									/* goal: remove tail part */
 
-									FIG_search_obj_on_cb(host_readbs(Real2Host(hero) + HERO_ENEMY_ID) + 20, &x, &y);
+									FIG_search_obj_on_cb(host_readbs(hero + HERO_ENEMY_ID) + 20, &x, &y);
 									/* (x,y) are the coordinates of the tail of the enemy. redundant as fighter_ptr + FIGHTER_CBX, fighter_ptr + FIGHTER_CBY could have been used later. */
 
 #if !defined(__BORLANDC__)
@@ -612,7 +612,7 @@ void FIG_do_round(void)
 #endif
 
 
-									fighter_ptr = Real2Host(FIG_get_ptr(host_readbs(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FIGHTER_ID) + SIZEOF_ENEMY_SHEET * host_readbs(Real2Host(hero) + HERO_ENEMY_ID))));
+									fighter_ptr = Real2Host(FIG_get_ptr(host_readbs(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FIGHTER_ID) + SIZEOF_ENEMY_SHEET * host_readbs(hero + HERO_ENEMY_ID))));
 									/* intermediate: fighter_ptr points to the FIGHTER entry of the enemy */
 
 									fighter_ptr = Real2Host(FIG_get_ptr(ds_readbs(FIG_TWOFIELDED_TABLE + host_readbs(fighter_ptr + FIGHTER_TWOFIELDED))));

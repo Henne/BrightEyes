@@ -751,7 +751,7 @@ void TLK_way_to_ruin(signed short state)
 		timewarp(HOURS(1));
 	} else if (state == 6) {
 		hero = (RealPt)ds_readd(HEROES) + SIZEOF_HERO * get_random_hero();
-		ds_writew(DIALOG_NEXT_STATE, test_skill(Real2Host(hero), TA_WILDNISLEBEN, 6) > 0 ? 8 : 7);
+		ds_writew(DIALOG_NEXT_STATE, test_skill(hero, TA_WILDNISLEBEN, 6) > 0 ? 8 : 7);
 	} else if (state == 8) {
 		timewarp(HOURS(1));
 		TRV_ford_test(0, 30);
@@ -761,9 +761,9 @@ void TLK_way_to_ruin(signed short state)
 			hero = (RealPt)ds_readds(HEROES) + SIZEOF_HERO * ds_readws(TLK_RUIN_HERO_COUNTER);
 			inc_ds_ws(TLK_RUIN_HERO_COUNTER);
 
-			if (host_readbs(Real2Host(hero) + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(Real2Host(hero) + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
-				!hero_dead(Real2Host(hero))) {
+			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
+				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				!hero_dead(hero)) {
 
 				ds_writed(RUIN_HERO, (Bit32u)hero);
 				break;
@@ -779,7 +779,7 @@ void TLK_way_to_ruin(signed short state)
 
 		/* Original-Bug: hero != RUIN_HERO */
 		hero_disease_test(Real2Host(ds_readd(RUIN_HERO)), 2,
-			25 - (host_readbs(Real2Host(hero) + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(Real2Host(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK)))));
+			25 - (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(Real2Host(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK)))));
 
 		loose_random_item(Real2Host(ds_readd(RUIN_HERO)), 10, get_ttx(506));
 
@@ -815,10 +815,10 @@ void TLK_way_to_ruin(signed short state)
 
 		for (i = ds_writews(TLK_RUIN_HERO_COUNTER, 0); i <= 6; i++, hero += SIZEOF_HERO) {
 
-			if (host_readbs(Real2Host(hero) + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(Real2Host(hero) + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
-				!hero_dead(Real2Host(hero)) &&
-				test_skill(Real2Host(hero), TA_ORIENTIERUNG, 0) > 0) {
+			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
+				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				!hero_dead(hero) &&
+				test_skill(hero, TA_ORIENTIERUNG, 0) > 0) {
 
 					inc_ds_ws(TLK_RUIN_HERO_COUNTER);
 			}
@@ -844,10 +844,10 @@ void TLK_way_to_ruin(signed short state)
 
 		for (i = ds_writews(TLK_RUIN_HERO_COUNTER, 0); i <= 6; i++, hero += SIZEOF_HERO) {
 
-			if (host_readbs(Real2Host(hero) + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(Real2Host(hero) + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
-				!hero_dead(Real2Host(hero)) &&
-				test_skill(Real2Host(hero), TA_ORIENTIERUNG, 0) > 0) {
+			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
+				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				!hero_dead(hero) &&
+				test_skill(hero, TA_ORIENTIERUNG, 0) > 0) {
 
 					inc_ds_ws(TLK_RUIN_HERO_COUNTER);
 			}

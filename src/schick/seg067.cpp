@@ -72,7 +72,7 @@ void city_event_1(void)
 
 	randval = random_schick(20);
 
-	if (test_skill(Real2Host(hero), TA_SINNESSCHAERFE, 2) <= 0) {
+	if (test_skill(hero, TA_SINNESSCHAERFE, 2) <= 0) {
 
 		/* TODO:	check the format strings in the english version
 		 *		they may be broken.
@@ -80,26 +80,26 @@ void city_event_1(void)
 		 */
 		sprintf((char*)ds_readd(DTP2),
 			get_tx(random_schick(4) - 1),
-			(char*)Real2Host(hero) + HERO_NAME2,
+			(char*)hero + HERO_NAME2,
 			randval);
 
-		GUI_dialogbox(hero + HERO_PORTRAIT, Real2Host(hero) + HERO_NAME2, (char*)ds_readd(DTP2), 0);
+		GUI_dialogbox(hero + HERO_PORTRAIT, hero + HERO_NAME2, (char*)ds_readd(DTP2), 0);
 
 		randval *= 10;
 
-		sub_ptr_ds(Real2Host(hero) + HERO_MONEY, randval);
+		sub_ptr_ds(hero + HERO_MONEY, randval);
 
-		if (host_readds(Real2Host(hero) + HERO_MONEY) < 0) {
-			host_writeds(Real2Host(hero) + HERO_MONEY, 0);
+		if (host_readds(hero + HERO_MONEY) < 0) {
+			host_writeds(hero + HERO_MONEY, 0);
 		}
 	} else {
 
 		sprintf((char*)ds_readd(DTP2),
 			get_tx(random_schick(4) + 3),
-			(char*)Real2Host(hero) + HERO_NAME2,
-			(char*)Real2Host(GUI_get_ptr(host_readbs(Real2Host(hero) + HERO_SEX), 1)));
+			(char*)hero + HERO_NAME2,
+			(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
 
-		answer = GUI_dialogbox(hero + HERO_PORTRAIT, Real2Host(hero) + HERO_NAME2, (char*)ds_readd(DTP2), 3,
+		answer = GUI_dialogbox(hero + HERO_PORTRAIT, hero + HERO_NAME2, (char*)ds_readd(DTP2), 3,
 				get_tx(random_schick(4) + 7),
 				get_tx(random_schick(4) + 11),
 				get_tx(random_schick(4) + 15));
@@ -117,7 +117,7 @@ void city_event_1(void)
 			} else {
 				sprintf((char*)ds_readd(DTP2),
 					get_tx(randval + 24),
-					(char*)Real2Host(hero) + HERO_NAME2);
+					(char*)hero + HERO_NAME2);
 				GUI_output((char*)ds_readd(DTP2));
 			}
 		}
@@ -134,24 +134,24 @@ void city_event_2(void)
 
 	hero = (RealPt)ds_readd(HEROES) + SIZEOF_HERO * get_random_hero();
 
-	if (test_skill(Real2Host(hero), TA_SINNESSCHAERFE, 2) <= 0) {
+	if (test_skill(hero, TA_SINNESSCHAERFE, 2) <= 0) {
 
 		/* hero looses all money */
-		host_writeds(Real2Host(hero) + HERO_MONEY, 0);
+		host_writeds(hero + HERO_MONEY, 0);
 
 		sprintf((char*)ds_readd(DTP2),
 			get_tx(random_schick(4) + 30),
-			(char*)Real2Host(hero) + HERO_NAME2);
+			(char*)hero + HERO_NAME2);
 
-		GUI_dialogbox(hero + HERO_PORTRAIT, Real2Host(hero) + HERO_NAME2, (char*)ds_readd(DTP2), 0);
+		GUI_dialogbox(hero + HERO_PORTRAIT, hero + HERO_NAME2, (char*)ds_readd(DTP2), 0);
 
 	} else {
 
 		sprintf((char*)ds_readd(DTP2),
 			get_tx(random_schick(4) + 34),
-			(char*)Real2Host(hero) + HERO_NAME2);
+			(char*)hero + HERO_NAME2);
 
-		answer = GUI_dialogbox(hero + HERO_PORTRAIT, Real2Host(hero) + HERO_NAME2, (char*)ds_readd(DTP2), 3,
+		answer = GUI_dialogbox(hero + HERO_PORTRAIT, hero + HERO_NAME2, (char*)ds_readd(DTP2), 3,
 				get_tx(random_schick(4) + 38),
 				get_tx(random_schick(4) + 42),
 				get_tx(random_schick(4) + 46));
@@ -162,7 +162,7 @@ void city_event_2(void)
 
 			sprintf((char*)ds_readd(DTP2),
 				get_tx(random_schick(4) + 54),
-				(char*)Real2Host(hero) + HERO_NAME2);
+				(char*)hero + HERO_NAME2);
 
 			GUI_output((char*)ds_readd(DTP2));
 		}
@@ -251,7 +251,7 @@ void city_event_5(void)
 
 		sprintf((char*)ds_readd(DTP2) + 0x400,
 			get_tx(randval + 99),
-			(char*)Real2Host(hero) + HERO_NAME2);
+			(char*)hero + HERO_NAME2);
 
 		GUI_dialogbox((RealPt)ds_readd(DTP2), NULL, (char*)ds_readd(DTP2) + 0x400, 0);
 	} else {
@@ -330,9 +330,9 @@ void city_event_7(void)
 
 		sprintf((char*)ds_readd(DTP2) + 0x400,
 			get_tx(123),
-			(char*)Real2Host(hero) + HERO_NAME2);
+			(char*)hero + HERO_NAME2);
 
-		GUI_dialogbox(hero + HERO_PORTRAIT, Real2Host(hero) + HERO_NAME2, (char*)ds_readd(DTP2) + 0x400, 0);
+		GUI_dialogbox(hero + HERO_PORTRAIT, hero + HERO_NAME2, (char*)ds_readd(DTP2) + 0x400, 0);
 
 	} else if (randval == 1) {
 
@@ -340,13 +340,13 @@ void city_event_7(void)
 
 		sprintf((char*)ds_readd(DTP2) + 0x400,
 			get_tx(124),
-			(char*)Real2Host(hero) + HERO_NAME2);
+			(char*)hero + HERO_NAME2);
 
 		GUI_dialogbox((RealPt)ds_readd(DTP2), NULL, (char*)ds_readd(DTP2) + 0x400, 0);
 
 		sprintf((char*)ds_readd(DTP2) + 0x400,
 			get_tx(125),
-			(char*)Real2Host(GUI_get_ptr(host_readbs(Real2Host(hero) + HERO_SEX), 3)));
+			(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
 		GUI_dialogbox((RealPt)ds_readd(DTP2), NULL, (char*)ds_readd(DTP2) + 0x400, 0);
 
@@ -358,13 +358,13 @@ void city_event_7(void)
 
 		sprintf((char*)ds_readd(DTP2) + 0x400,
 			get_tx(127),
-			(char*)Real2Host(hero) + HERO_NAME2);
+			(char*)hero + HERO_NAME2);
 
 		GUI_dialogbox((RealPt)ds_readd(DTP2), NULL, (char*)ds_readd(DTP2) + 0x400, 0);
 
 		sprintf((char*)ds_readd(DTP2) + 0x400,
 			get_tx(128),
-			(char*)Real2Host(hero) + HERO_NAME2);
+			(char*)hero + HERO_NAME2);
 
 		GUI_dialogbox((RealPt)ds_readd(DTP2), NULL, (char*)ds_readd(DTP2) + 0x400, 0);
 	} else {
@@ -400,7 +400,7 @@ void city_event_8(void)
 	} else {
 		sprintf((char*)ds_readd(DTP2),
 			get_tx(134),
-			(char*)Real2Host(hero) + HERO_NAME2);
+			(char*)hero + HERO_NAME2);
 
 		GUI_output((char*)ds_readd(DTP2));
 	}

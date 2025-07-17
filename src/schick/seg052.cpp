@@ -156,7 +156,7 @@ void do_citycamp(void)
 
 				hero = (RealPt)ds_readd(HEROES) + SIZEOF_HERO * answer;
 
-				if (host_readbs(Real2Host(hero) + HERO_TYPE) >= HERO_TYPE_WITCH) {
+				if (host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH) {
 
 					if (ds_readb(CITYCAMP_GUARDSTATUS + answer) != 0) {
 						GUI_output(get_ttx(331));
@@ -274,12 +274,12 @@ void do_citycamp(void)
 						hero = (RealPt)ds_readd(HEROES);
 						for (l_si = 0; l_si <= 6; l_si++, hero += SIZEOF_HERO) {
 
-							if (host_readbs(Real2Host(hero) + HERO_TYPE) != HERO_TYPE_NONE &&
-								host_readbs(Real2Host(hero) + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+							if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
+								host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
 								ds_readbs(CITYCAMP_GUARDSTATUS + l_si) < 2 &&
 								ds_readbs(CITYCAMP_MAGICSTATUS + l_si) != 1)
 							{
-								GRP_hero_sleep(Real2Host(hero), hours - 10);
+								GRP_hero_sleep(hero, hours - 10);
 							}
 						}
 					}

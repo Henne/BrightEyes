@@ -53,10 +53,10 @@ RealPt get_first_brewing_hero(void)
 	for (i = 0; i < 7; i++, hero += SIZEOF_HERO)
 # endif
 	{
-		if (host_readbs(Real2Host(hero) + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(Real2Host(hero) + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP) &&
-			hero_brewing(Real2Host(hero)) &&
-			host_readbs(Real2Host(hero) + HERO_ALCHEMY_INN_ID) == ds_readws(CURRENT_TYPEINDEX))
+		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
+			host_readbs(hero + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP) &&
+			hero_brewing(hero) &&
+			host_readbs(hero + HERO_ALCHEMY_INN_ID) == ds_readws(CURRENT_TYPEINDEX))
 		{
 			return hero;
 		}
@@ -112,16 +112,16 @@ void do_inn(void)
 
 		hero = get_first_hero_available_in_group();
 
-		if (hero_brewing(Real2Host(hero))) {
+		if (hero_brewing(hero)) {
 			draw_status_line();
 
-			if (host_readbs(Real2Host(hero) + HERO_RECIPE_TIMER) != 0) {
+			if (host_readbs(hero + HERO_RECIPE_TIMER) != 0) {
 
 				sprintf((char*)ds_readd(DTP2),
 					get_ttx(733),
-					(char*)Real2Host(hero) + HERO_NAME2,
-					host_readbs(Real2Host(hero) + HERO_RECIPE_TIMER),
-					(char*)(host_readbs(Real2Host(hero) + HERO_RECIPE_TIMER) < 2 ? get_ttx(735) : get_ttx(736)));
+					(char*)hero + HERO_NAME2,
+					host_readbs(hero + HERO_RECIPE_TIMER),
+					(char*)(host_readbs(hero + HERO_RECIPE_TIMER) < 2 ? get_ttx(735) : get_ttx(736)));
 
 				answer = GUI_radio((char*)ds_readd(DTP2), 2, get_ttx(734), get_ttx(537));
 				/* <HERO> befindet sich inmitten eines alchimistischen Versuchs, der wohl noch <DAYS> Tage dauert.
@@ -131,7 +131,7 @@ void do_inn(void)
 
 				if (answer == 1) {
 					/* abort brewing */
-					do_alchemy(Real2Host(hero), host_readbs(Real2Host(hero) + HERO_RECIPE_ID), 1);
+					do_alchemy(hero, host_readbs(hero + HERO_RECIPE_ID), 1);
 				} else {
 					done = 1;
 					ds_writew(COMBO_MODE, 0);
@@ -139,7 +139,7 @@ void do_inn(void)
 				}
 			} else {
 				/* hero brewing, HERO_RECIPE_TIMER == 0. STAFFSPELL_TIMER not checked */
-				do_alchemy(Real2Host(hero), host_readbs(Real2Host(hero) + HERO_RECIPE_ID), 0);
+				do_alchemy(hero, host_readbs(hero + HERO_RECIPE_ID), 0);
 			}
 		}
 	}
@@ -153,13 +153,13 @@ void do_inn(void)
 
 		draw_status_line();
 
-		if (host_readbs(Real2Host(hero) + HERO_RECIPE_TIMER) != 0) {
+		if (host_readbs(hero + HERO_RECIPE_TIMER) != 0) {
 
 			sprintf((char*)ds_readd(DTP2),
 				get_ttx(733),
-				(char*)Real2Host(hero) + HERO_NAME2,
-				host_readbs(Real2Host(hero) + HERO_RECIPE_TIMER),
-				(char*)(host_readbs(Real2Host(hero) + HERO_RECIPE_TIMER) < 2 ? get_ttx(735) : get_ttx(736)));
+				(char*)hero + HERO_NAME2,
+				host_readbs(hero + HERO_RECIPE_TIMER),
+				(char*)(host_readbs(hero + HERO_RECIPE_TIMER) < 2 ? get_ttx(735) : get_ttx(736)));
 
 			tw_bak = ds_readws(TEXTBOX_WIDTH);
 			ds_writews(TEXTBOX_WIDTH, 4);
@@ -174,7 +174,7 @@ void do_inn(void)
 
 			if (answer == 1) {
 				/* abort brewing */
-				do_alchemy(Real2Host(hero), host_readbs(Real2Host(hero) + HERO_RECIPE_ID), 1);
+				do_alchemy(hero, host_readbs(hero + HERO_RECIPE_ID), 1);
 
 				/* Original-Bug 10:
 				 * If a group of heroes enters an inn where more then one hero is brewing
@@ -188,7 +188,7 @@ void do_inn(void)
 			}
 		} else {
 			/* hero brewing, HERO_RECIPE_TIMER == 0. STAFFSPELL_TIMER not checked */
-			do_alchemy(Real2Host(hero), host_readbs(Real2Host(hero) + HERO_RECIPE_ID), 0);
+			do_alchemy(hero, host_readbs(hero + HERO_RECIPE_ID), 0);
 
 			/* Original-Bug 20:
 			 * If a group of heroes enters an inn where more then one hero is brewing
@@ -204,7 +204,7 @@ void do_inn(void)
 #else
 	/* fix Original-Bug 8, 9, 10, 20 */
 	hero = get_first_hero_available_in_group();
-	if (hero_brewing(Real2Host(hero))) {
+	if (hero_brewing(hero)) {
 		/* situation: 'switch groups' just switched to a group consisting of a single hero which has been separated for brewing a long recipe in an inn */
 		/* ASSERT */
 		/*
@@ -214,13 +214,13 @@ void do_inn(void)
 		*/
 		draw_status_line();
 
-		if (host_readbs(Real2Host(hero) + HERO_RECIPE_TIMER) != 0) {
+		if (host_readbs(hero + HERO_RECIPE_TIMER) != 0) {
 
 			sprintf((char*)ds_readd(DTP2),
 					get_ttx(733),
-					(char*)Real2Host(hero) + HERO_NAME2,
-					host_readbs(Real2Host(hero) + HERO_RECIPE_TIMER),
-					(char*)(host_readbs(Real2Host(hero) + HERO_RECIPE_TIMER) < 2 ? get_ttx(735) : get_ttx(736)));
+					(char*)hero + HERO_NAME2,
+					host_readbs(hero + HERO_RECIPE_TIMER),
+					(char*)(host_readbs(hero + HERO_RECIPE_TIMER) < 2 ? get_ttx(735) : get_ttx(736)));
 
 			answer = GUI_radio((char*)ds_readd(DTP2), 2, get_ttx(734), get_ttx(537));
 			/* <HERO> befindet sich inmitten eines alchimistischen Versuchs, der wohl noch <DAYS> Tage dauert.
@@ -230,7 +230,7 @@ void do_inn(void)
 
 			if (answer == 1) {
 				/* abort brewing */
-				do_alchemy(Real2Host(hero), host_readbs(Real2Host(hero) + HERO_RECIPE_ID), 1);
+				do_alchemy(hero, host_readbs(hero + HERO_RECIPE_ID), 1);
 			} else {
 				done = 1;
 				ds_writew(COMBO_MODE, 0);
@@ -238,27 +238,27 @@ void do_inn(void)
 			}
 		} else {
 			/* hero brewing, HERO_RECIPE_TIMER == 0. STAFFSPELL_TIMER not checked */
-			do_alchemy(Real2Host(hero), host_readbs(Real2Host(hero) + HERO_RECIPE_ID), 0);
+			do_alchemy(hero, host_readbs(hero + HERO_RECIPE_ID), 0);
 		}
 	} else {
 		hero = (RealPt)ds_readd(HEROES);
 		for (i = 0; i < 7; i++, hero += SIZEOF_HERO) {
-			if (host_readbs(Real2Host(hero) + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(Real2Host(hero) + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP) &&
-					hero_brewing(Real2Host(hero)) &&
-					host_readbs(Real2Host(hero) + HERO_ALCHEMY_INN_ID) == ds_readws(CURRENT_TYPEINDEX))
+			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
+					host_readbs(hero + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP) &&
+					hero_brewing(hero) &&
+					host_readbs(hero + HERO_ALCHEMY_INN_ID) == ds_readws(CURRENT_TYPEINDEX))
 			{
 				draw_status_line();
 
 				signed int finalize_alchemy = -1;
 
-				if (host_readbs(Real2Host(hero) + HERO_RECIPE_TIMER) != 0) {
+				if (host_readbs(hero + HERO_RECIPE_TIMER) != 0) {
 
 					sprintf((char*)ds_readd(DTP2),
 							get_ttx(733),
-							(char*)Real2Host(hero) + HERO_NAME2,
-							host_readbs(Real2Host(hero) + HERO_RECIPE_TIMER),
-							(char*)(host_readbs(Real2Host(hero) + HERO_RECIPE_TIMER) < 2 ? get_ttx(735) : get_ttx(736)));
+							(char*)hero + HERO_NAME2,
+							host_readbs(hero + HERO_RECIPE_TIMER),
+							(char*)(host_readbs(hero + HERO_RECIPE_TIMER) < 2 ? get_ttx(735) : get_ttx(736)));
 
 					tw_bak = ds_readws(TEXTBOX_WIDTH);
 					ds_writews(TEXTBOX_WIDTH, 4);
@@ -280,9 +280,9 @@ void do_inn(void)
 					finalize_alchemy = 0;
 				}
 				if (finalize_alchemy != -1) {
-					do_alchemy(Real2Host(hero), host_readbs(Real2Host(hero) + HERO_RECIPE_ID), finalize_alchemy);
+					do_alchemy(hero, host_readbs(hero + HERO_RECIPE_ID), finalize_alchemy);
 
-					signed char group_nr = host_readbs(Real2Host(hero) + HERO_GROUP_NO);
+					signed char group_nr = host_readbs(hero + HERO_GROUP_NO);
 
 					/* ASSERT */
 					/*
@@ -308,7 +308,7 @@ void do_inn(void)
 					ds_writeb(GROUP_MEMBER_COUNTS + group_nr, 0);
 
 					inc_ds_bs_post(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP));
-					host_writeb(Real2Host(hero) + HERO_GROUP_NO, ds_readbs(CURRENT_GROUP));
+					host_writeb(hero + HERO_GROUP_NO, ds_readbs(CURRENT_GROUP));
 
 					GRP_sort_heroes();
 				}
@@ -523,7 +523,7 @@ void do_inn(void)
 
 					hero = (RealPt)ds_readd(HEROES) + SIZEOF_HERO * answer;
 
-					if (host_readbs(Real2Host(hero) + HERO_TYPE) >= HERO_TYPE_WITCH) {
+					if (host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH) {
 
 						if (magic_act[answer] != 0) {
 							GUI_output(get_ttx(334));
@@ -564,8 +564,8 @@ void do_inn(void)
 					hero = (RealPt)ds_readd(HEROES);
 					for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
-						if (host_readbs(Real2Host(hero) + HERO_TYPE) != HERO_TYPE_NONE &&
-							host_readbs(Real2Host(hero) + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+						if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
+							host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
 						{
 							if (booked_days > 1) {
 								/* Original-Bug 7:
@@ -578,7 +578,7 @@ void do_inn(void)
 
 								for (rested_days = 0; rested_days < booked_days; rested_days++)
 								{
-									GRP_hero_sleep(Real2Host(hero), ds_readbs(SLEEP_QUALITY));
+									GRP_hero_sleep(hero, ds_readbs(SLEEP_QUALITY));
 								}
 							}
 						}
