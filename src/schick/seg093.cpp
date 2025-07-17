@@ -118,8 +118,8 @@ signed short do_travel_mode(void)
 					i++;
 
 					sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
-						(char*)get_ttx(545),
-						(char*)get_ttx(235 + ds_readbs(CURRENT_TOWN)));
+						get_ttx(545),
+						get_ttx(235 + ds_readbs(CURRENT_TOWN)));
 
 					tw_bak = ds_readws(TEXTBOX_WIDTH);
 					ds_writew(TEXTBOX_WIDTH, 4);

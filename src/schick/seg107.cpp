@@ -72,11 +72,11 @@ void use_item(signed short item_pos, signed short hero_pos)
 				{
 					/* german grammar, singular and plural are the same */
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_ttx(792),
+						get_ttx(792),
 						(char*)Real2Host(GUI_name_singular((Bit8u*)get_itemname(ds_readws(USED_ITEM_ID)))));
 				} else {
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_ttx(571),
+						get_ttx(571),
 						(char*)Real2Host(GUI_names_grammar(0, ds_readws(USED_ITEM_ID), 0)));
 				}
 
@@ -157,7 +157,7 @@ void item_read_recipe(void)
 
 	/* prepare message */
 	sprintf((char*)Real2Host(ds_readd(DTP2)),
-		(char*)get_ttx(636),
+		get_ttx(636),
 		(char*)str);
 
 	GUI_output(Real2Host(ds_readd(DTP2)));
@@ -396,11 +396,11 @@ void item_weapon_poison(void)
 		give_hero_new_item(get_itemuser(), bottle, 1, 1);
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_ttx(739),
+			get_ttx(739),
 			(char*)Real2Host(GUI_names_grammar((signed short)0x8000, host_readws(get_itemuser() + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID), 0)));
 	} else {
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_ttx(805),
+			get_ttx(805),
 			(char*)get_itemuser() + HERO_NAME2);
 	}
 

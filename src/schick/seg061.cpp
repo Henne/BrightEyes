@@ -85,8 +85,8 @@ void do_temple(void)
 
 			/* location string */
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_ttx(235),
-				(char*)get_ttx(ds_readws(TEMPLE_GOD) + 21),	/* name of the god */
+				get_ttx(235),
+				get_ttx(ds_readws(TEMPLE_GOD) + 21),	/* name of the god */
 				(char*)(ds_readws(CURRENT_TYPEINDEX) != 58 ? get_ttx(ds_readbs(CURRENT_TOWN) + 235): get_ttx(622)));
 
 			GUI_print_loc_line(Real2Host(ds_readd(DTP2)));
@@ -143,9 +143,9 @@ void do_temple(void)
 
 				/* location string */
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_ttx(235),
-					(char*)get_ttx(ds_readws(TEMPLE_GOD) + 21),	/* name of the god */
-					(char*)get_ttx(ds_readbs(CURRENT_TOWN) + 235));
+					get_ttx(235),
+					get_ttx(ds_readws(TEMPLE_GOD) + 21),	/* name of the god */
+					get_ttx(ds_readbs(CURRENT_TOWN) + 235));
 				GUI_print_loc_line(Real2Host(ds_readd(DTP2)));
 
 				draw_status_line();
@@ -202,7 +202,7 @@ void do_temple(void)
 					make_valuta_str((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), money);
 
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_ttx(297),
+						get_ttx(297),
 						(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
 
 					input = GUI_input(Real2Host(ds_readd(DTP2)), 3);
@@ -286,9 +286,9 @@ void char_add(signed short temple_id)
 
 					/* location string */
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_ttx(235),
-						(char*)get_ttx(ds_readws(TEMPLE_GOD) + 21),	/* name of the god */
-						(char*)get_ttx(ds_readbs(CURRENT_TOWN) + 235));
+						get_ttx(235),
+						get_ttx(ds_readws(TEMPLE_GOD) + 21),	/* name of the god */
+						get_ttx(ds_readbs(CURRENT_TOWN) + 235));
 					GUI_print_loc_line(Real2Host(ds_readd(DTP2)));
 				}
 
@@ -335,9 +335,9 @@ void char_letgo(signed short temple_id)
 
 					/* location string */
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_ttx(235),
-						(char*)get_ttx(ds_readws(TEMPLE_GOD) + 21),	/* name of the god */
-						(char*)get_ttx(ds_readbs(CURRENT_TOWN) + 235));
+						get_ttx(235),
+						get_ttx(ds_readws(TEMPLE_GOD) + 21),	/* name of the god */
+						get_ttx(ds_readbs(CURRENT_TOWN) + 235));
 					GUI_print_loc_line(Real2Host(ds_readd(DTP2)));
 				}
 			}
@@ -372,7 +372,7 @@ signed short char_erase(void)
 					(char*)Real2Host(ptr) + 32 * l_si);
 
 				sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
-					(char*)get_ttx(295),
+					get_ttx(295),
 					(char*)Real2Host(ds_readd(DTP2)));
 
 				if (GUI_bool(Real2Host(ds_readd(TEXT_OUTPUT_BUF)))) {
@@ -448,10 +448,10 @@ void miracle_heal_hero(signed short le_in, Bit8u *str)
 		add_hero_le(get_hero(hero_pos), le_in);
 
 		/* prepare a message */
-		strcpy((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), (char*)get_ttx(392));
+		strcpy((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), get_ttx(392));
 
 		if (le_in > 1) {
-			strcat((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), (char*)get_ttx(393));
+			strcat((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), get_ttx(393));
 		}
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),

@@ -118,7 +118,7 @@ void do_inn(void)
 			if (host_readbs(Real2Host(hero) + HERO_RECIPE_TIMER) != 0) {
 
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_ttx(733),
+					get_ttx(733),
 					(char*)Real2Host(hero) + HERO_NAME2,
 					host_readbs(Real2Host(hero) + HERO_RECIPE_TIMER),
 					(char*)(host_readbs(Real2Host(hero) + HERO_RECIPE_TIMER) < 2 ? get_ttx(735) : get_ttx(736)));
@@ -156,7 +156,7 @@ void do_inn(void)
 		if (host_readbs(Real2Host(hero) + HERO_RECIPE_TIMER) != 0) {
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_ttx(733),
+				get_ttx(733),
 				(char*)Real2Host(hero) + HERO_NAME2,
 				host_readbs(Real2Host(hero) + HERO_RECIPE_TIMER),
 				(char*)(host_readbs(Real2Host(hero) + HERO_RECIPE_TIMER) < 2 ? get_ttx(735) : get_ttx(736)));
@@ -217,7 +217,7 @@ void do_inn(void)
 		if (host_readbs(Real2Host(hero) + HERO_RECIPE_TIMER) != 0) {
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_ttx(733),
+					get_ttx(733),
 					(char*)Real2Host(hero) + HERO_NAME2,
 					host_readbs(Real2Host(hero) + HERO_RECIPE_TIMER),
 					(char*)(host_readbs(Real2Host(hero) + HERO_RECIPE_TIMER) < 2 ? get_ttx(735) : get_ttx(736)));
@@ -255,7 +255,7 @@ void do_inn(void)
 				if (host_readbs(Real2Host(hero) + HERO_RECIPE_TIMER) != 0) {
 
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_ttx(733),
+							get_ttx(733),
 							(char*)Real2Host(hero) + HERO_NAME2,
 							host_readbs(Real2Host(hero) + HERO_RECIPE_TIMER),
 							(char*)(host_readbs(Real2Host(hero) + HERO_RECIPE_TIMER) < 2 ? get_ttx(735) : get_ttx(736)));
@@ -384,7 +384,7 @@ void do_inn(void)
 			price += (price * host_readws(inn_ptr + INN_STATS_PRICE_MOD)) / 100L;
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_ttx(473),
+				get_ttx(473),
 				(signed short)price);
 
 			if (GUI_bool(Real2Host(ds_readd(DTP2)))) {
@@ -451,15 +451,15 @@ void do_inn(void)
 			ds_writews(TEXTBOX_WIDTH, 5);
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_ttx(397),
+				get_ttx(397),
 				(signed short)price_schlafsaal);
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)) + 50,
-				(char*)get_ttx(398),
+				get_ttx(398),
 				(signed short)price_einzelzimmer);
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)) + 100,
-				(char*)get_ttx(399),
+				get_ttx(399),
 				(signed short)price_suite);
 
 			ds_writebs(SLEEP_QUALITY, (signed char)GUI_radio(get_ttx(396), 3,

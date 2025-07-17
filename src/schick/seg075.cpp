@@ -812,7 +812,7 @@ void DNG_stub6(void)
 			if (l_si) {
 
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_ttx(768),
+					get_ttx(768),
 					get_hero(l_si - 1) + HERO_NAME2);
 			}
 
@@ -823,7 +823,7 @@ void DNG_stub6(void)
 				hero2 = Real2Host(get_second_hero_available_in_group());
 
 				sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
-					(char*)get_ttx(769),
+					get_ttx(769),
 					hero1 + HERO_NAME2,
 					hero2 + HERO_NAME2);
 
@@ -833,7 +833,7 @@ void DNG_stub6(void)
 				if (test_attrib(hero1, ATTRIB_GE, 2) <= 0) {
 
 					sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
-						(char*)get_ttx(770),
+						get_ttx(770),
 						hero1 + HERO_NAME2,
 						hero2 + HERO_NAME2,
 						l_si = random_schick(3) + 1);
@@ -869,7 +869,7 @@ void DNG_stub6(void)
 				} while (l_di);
 
 				sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
-					(char*)get_ttx(771),
+					get_ttx(771),
 					hero_auto + HERO_NAME2,
 					Real2Host(GUI_get_ptr(host_readbs(hero_auto + HERO_SEX), 0)),
 					Real2Host(GUI_get_ptr(host_readbs(hero_auto + HERO_SEX), 2)));

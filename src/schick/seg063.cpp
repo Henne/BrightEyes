@@ -61,8 +61,8 @@ void passages_init(void)
 
 #if !defined(__BORLANDC__)
 	D1_LOG("%16s - %16s: %d %d %d %d %d %d\n",
-		(char*)get_ttx(host_readb(p + SEA_ROUTE_TOWN_1) + 0xeb),
-		(char*)get_ttx(host_readb(p + SEA_ROUTE_TOWN_2) + 0xeb),
+		get_ttx(host_readb(p + SEA_ROUTE_TOWN_1) + 0xeb),
+		get_ttx(host_readb(p + SEA_ROUTE_TOWN_2) + 0xeb),
 		host_readb(p + SEA_ROUTE_DISTANCE),
 		host_readb(p + SEA_ROUTE_FREQUENCY),
 		host_readb(p + SEA_ROUTE_PASSAGE_TIMER),
@@ -187,7 +187,7 @@ void do_harbor(void)
 						(char*)(!host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TIMER) ? get_tx(5) : get_tx(6)), /* today or tomorrow */
 
 						(char*)get_tx(ds_readws(PASSAGE_TYPE_TO_NAME + 2 * ds_readbs(SHIP_TABLE + SHIP_TABLE_PASSAGE_TYPE + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE)))), /* Kabinenpassage etc. */
-						(char*)get_ttx(host_readb(psg_ptr + HARBOR_OPTION_DESTINATION) + 235),
+						get_ttx(host_readb(psg_ptr + HARBOR_OPTION_DESTINATION) + 235),
 #ifdef __BORLANDC__
 						get_passage_travel_hours(host_readb(Real2Host(host_readd(psg_ptr + HARBOR_OPTION_ROUTE_PTR)) + SEA_ROUTE_DISTANCE), ds_readbs(SHIP_TABLE + SHIP_TABLE_BASE_SPEED + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE))),
 #else
@@ -288,7 +288,7 @@ void do_harbor(void)
 						do {
 
 							strcat((char*)Real2Host(ds_readd(DTP2)),
-								(char*)get_ttx(ds_readb((HARBOR_OPTIONS + HARBOR_OPTION_DESTINATION) + SIZEOF_HARBOR_OPTION * i++) + 235));
+								get_ttx(ds_readb((HARBOR_OPTIONS + HARBOR_OPTION_DESTINATION) + SIZEOF_HARBOR_OPTION * i++) + 235));
 							if (--answer) {
 
 								strcat((char*)Real2Host(ds_readd(DTP2)),

@@ -421,7 +421,7 @@ signed short use_magic(RealPt hero)
 				} else {
 					/* Failed, print only a message */
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_ttx(795),
+						get_ttx(795),
 						(char*)Real2Host(hero) + HERO_NAME2);
 
 					GUI_output(Real2Host(ds_readd(DTP2)));
@@ -469,7 +469,7 @@ signed short use_magic(RealPt hero)
 
 						/* print a message */
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_ttx(339),
+							get_ttx(339),
 							host_readbs(Real2Host(hero) + HERO_STAFFSPELL_LVL) + 1);
 
 						GUI_output(Real2Host(ds_readd(DTP2)));
@@ -571,14 +571,14 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 
 	if (show_vals == 1) {
 
-		strcpy((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), (char*)get_ttx(205));
+		strcpy((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), get_ttx(205));
 
 		if (host_readbs(hero + HERO_SP_RISE) > 1) {
-			strcat((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), (char*)get_ttx(393));
+			strcat((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), get_ttx(393));
 		}
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_ttx(204),
+			get_ttx(204),
 			(host_readbs(hero + HERO_SP_RISE) > 1) ? get_ttx(305) : get_ttx(304),
 			host_readbs(hero + HERO_SP_RISE),
 			Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
@@ -592,7 +592,7 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 					get_ttx(202), get_ttx(203)) - 1;
 	} else {
 
-		strcpy((char*)Real2Host(ds_readd(DTP2)), (char*)get_ttx(216));
+		strcpy((char*)Real2Host(ds_readd(DTP2)), get_ttx(216));
 
 		for (l_di = 0; l_di < 12; l_di++) {
 
@@ -627,7 +627,7 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 			/* this cant use any spells of this class */
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_ttx(559),
+				get_ttx(559),
 				(char*)hero + HERO_NAME2);
 
 			GUI_output(Real2Host(ds_readd(DTP2)));
@@ -647,7 +647,7 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 
 					sprintf((char*)Real2Host(ds_readd(RADIO_NAME_LIST + 4 * l_di)),
 						(char*)str_val.a,
-						(char*)get_ttx(first_spell + l_di + 106),
+						get_ttx(first_spell + l_di + 106),
 						host_readbs(hero + HERO_SPELLS + first_spell + l_di));
 				} else if (
 					(((ds_readw(IN_FIGHT) != 0) && (ds_readbs((SPELL_DESCRIPTIONS + 5) + 10 * (first_spell + l_di)) == 1)) ||
@@ -658,22 +658,22 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 					if (show_vals == 2) {
 						sprintf((char*)Real2Host(ds_readd(RADIO_NAME_LIST + 4 * l_di)),
 							(char*)str_val.a,
-							(char*)get_ttx(first_spell + l_di + 106),
+							get_ttx(first_spell + l_di + 106),
 							host_readbs(hero + HERO_SPELLS + first_spell + l_di));
 					} else {
 						sprintf((char*)Real2Host(ds_readd(RADIO_NAME_LIST + 4 * l_di)),
 							(char*)str.a,
-							(char*)get_ttx(first_spell + l_di + 106));
+							get_ttx(first_spell + l_di + 106));
 					}
 				} else if (show_vals == 2) {
 					sprintf((char*)Real2Host(ds_readd(RADIO_NAME_LIST + 4 * l_di)),
 						(char*)col_str_val.a,
-						(char*)get_ttx(first_spell + l_di + 106),
+						get_ttx(first_spell + l_di + 106),
 						host_readbs(hero + HERO_SPELLS + first_spell + l_di));
 				} else {
 					sprintf((char*)Real2Host(ds_readd(RADIO_NAME_LIST + 4 * l_di)),
 						(char*)col_str.a,
-						(char*)get_ttx(first_spell + l_di + 106));
+						get_ttx(first_spell + l_di + 106));
 				}
 			}
 
@@ -700,7 +700,7 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 					(show_vals == 0))
 				{
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_ttx(560),
+						get_ttx(560),
 						(char*)hero + HERO_NAME2);
 
 					GUI_output(Real2Host(ds_readd(DTP2)));
@@ -955,7 +955,7 @@ signed short use_spell(RealPt hero, signed short selection_menu, signed char han
 
 				/* prepare output */
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_ttx(607),
+					get_ttx(607),
 					(char*)Real2Host(hero) + HERO_NAME2);
 
 				if (ds_readws(IN_FIGHT) == 0) {
@@ -966,7 +966,7 @@ signed short use_spell(RealPt hero, signed short selection_menu, signed char han
 
 			} else if ((ds_readws(SPELLTEST_RESULT) <= 0) || (ds_readds(INGAME_TIMERS + 4 * INGAME_TIMER_RONDRA_NO_SPELLS) > 0)) {
 
-				strcpy((char*)Real2Host(ds_readd(DTP2)), (char*)get_ttx(606));
+				strcpy((char*)Real2Host(ds_readd(DTP2)), get_ttx(606));
 
 				sub_ae_splash(Real2Host(hero), get_spell_cost(spell_id, 1)); /* spell failed -> half AE cost */
 
@@ -1005,11 +1005,11 @@ signed short use_spell(RealPt hero, signed short selection_menu, signed char han
 					retval = -1;
 
 					if (!host_readbs(Real2Host(ds_readd(DTP2)))) {
-						strcpy((char*)Real2Host(ds_readd(DTP2)), (char*)get_ttx(606));
+						strcpy((char*)Real2Host(ds_readd(DTP2)), get_ttx(606));
 					}
 				} else if (ds_readws(SPELL_SPECIAL_AECOST) == -2) {
 
-					strcpy((char*)Real2Host(ds_readd(DTP2)), (char*)get_ttx(606));
+					strcpy((char*)Real2Host(ds_readd(DTP2)), get_ttx(606));
 					sub_ae_splash(Real2Host(hero), get_spell_cost(spell_id, 1));
 					retval = 0;
 				} else if (ds_readws(SPELL_SPECIAL_AECOST) != -1) {

@@ -232,7 +232,7 @@ RealPt get_informer_forename(void)
 				i++;
 			} while (tmp != ' ');
 
-			strncpy((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), (char*)get_ttx(host_readws(p_info)), i);
+			strncpy((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), get_ttx(host_readws(p_info)), i);
 #ifdef M302de_ORIGINAL_BUGFIX
 			break;
 #endif
@@ -352,7 +352,7 @@ RealPt get_random_tavern_message(void)
 
 		sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
 			(char*)Real2Host(ptr),
-			(char*)get_ttx(ds_readbs(CURRENT_TOWN) + 235));
+			get_ttx(ds_readbs(CURRENT_TOWN) + 235));
 
 		return (RealPt)ds_readd(TEXT_OUTPUT_BUF);
 	} else {

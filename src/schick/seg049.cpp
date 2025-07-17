@@ -648,7 +648,7 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 			/* chance of motion sickness is 9% */
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_ttx(796),
+				get_ttx(796),
 				hero + HERO_NAME2);
 
 			GUI_output(Real2Host(ds_readd(DTP2)));
@@ -700,14 +700,14 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 
 						add_hero_le(hero, le_regen);
 
-						strcpy((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), (char*)get_ttx(392));
+						strcpy((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), get_ttx(392));
 
 						if (le_regen > 1) {
-							strcat((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), (char*)get_ttx(393));
+							strcat((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), get_ttx(393));
 						}
 
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_ttx(319),
+							get_ttx(319),
 							hero + HERO_NAME2,
 							le_regen,
 							(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
@@ -734,14 +734,14 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 
 							add_hero_ae(hero, ae_regen);
 
-							strcpy((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), (char*)get_ttx(392));
+							strcpy((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), get_ttx(392));
 
 							if (ae_regen > 1) {
-								strcat((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), (char*)get_ttx(393));
+								strcat((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), get_ttx(393));
 							}
 
 							sprintf((char*)Real2Host(ds_readd(DTP2)),
-								(char*)get_ttx(320),
+								get_ttx(320),
 								hero + HERO_NAME2,
 								ae_regen,
 								(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
@@ -763,7 +763,7 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 				}
 			} else {
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_ttx(558),
+					get_ttx(558),
 					hero + HERO_NAME2);
 
 				GUI_output(Real2Host(ds_readd(DTP2)));

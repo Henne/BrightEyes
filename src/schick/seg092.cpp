@@ -456,7 +456,7 @@ void seg092_06b4(signed short a1)
 			/* There is money in the chest */
 			make_valuta_str((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), host_readw(Real2Host(chest_ptr) + 17));
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_ttx(793),
+				get_ttx(793),
 				(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
 			GUI_output(Real2Host(ds_readd(DTP2)));
 

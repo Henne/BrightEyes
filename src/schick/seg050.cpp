@@ -209,17 +209,17 @@ void inc_skill_advanced(Bit8u *hero, signed short skill)
 				/* increment a melee weapon skill */
 
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_ttx(426), get_ttx(48 + skill));
+					get_ttx(426), get_ttx(48 + skill));
 
 				randval = -1;
 
 				/* AT - value */
 				sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
-					(char*)get_ttx(427), host_readbs(hero + skill + 0x68));
+					get_ttx(427), host_readbs(hero + skill + 0x68));
 
 				/* PA - value */
 				sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)) + 50,
-					(char*)get_ttx(428), host_readbs(hero + skill + 0x6f));
+					get_ttx(428), host_readbs(hero + skill + 0x6f));
 
 				do {
 					randval = GUI_radio(Real2Host(ds_readd(DTP2)), 2,
@@ -436,7 +436,7 @@ void level_up(signed short hero_pos)
 
 
 	sprintf((char*)Real2Host(ds_readd(DTP2)),
-		(char*)get_ttx(411),
+		get_ttx(411),
 		(char*)hero + HERO_NAME2);
 
 	GUI_output(Real2Host(ds_readd(DTP2)));

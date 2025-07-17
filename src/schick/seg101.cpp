@@ -148,7 +148,7 @@ void spell_inc_ch(void)
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
 			(char*)get_tx(113),
 			(char*)get_spelltarget() + HERO_NAME2,
-			(char*)get_ttx(414));
+			get_ttx(414));
 	} else {
 		/* get a free mod_slot */
 		slot = get_free_mod_slot();
@@ -160,7 +160,7 @@ void spell_inc_ch(void)
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
 			(char*)get_tx(101),
 			(char*)get_spelltarget() + HERO_NAME2,
-			(char*)get_ttx(414));
+			get_ttx(414));
 	}
 }
 
@@ -220,7 +220,7 @@ void spell_inc_ff(void)
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
 			(char*)get_tx(113),
 			(char*)get_spelltarget() + HERO_NAME2,
-			(char*)get_ttx(415));
+			get_ttx(415));
 	} else {
 		/* get a free mod_slot */
 		slot = get_free_mod_slot();
@@ -232,7 +232,7 @@ void spell_inc_ff(void)
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
 			(char*)get_tx(101),
 			(char*)get_spelltarget() + HERO_NAME2,
-			(char*)get_ttx(415));
+			get_ttx(415));
 	}
 }
 
@@ -266,7 +266,7 @@ void spell_inc_ge(void)
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
 			(char*)get_tx(113),
 			(char*)get_spelltarget() + HERO_NAME2,
-			(char*)get_ttx(416));
+			get_ttx(416));
 	} else {
 		/* get a free mod_slot */
 		slot = get_free_mod_slot();
@@ -278,7 +278,7 @@ void spell_inc_ge(void)
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
 			(char*)get_tx(101),
 			(char*)get_spelltarget() + HERO_NAME2,
-			(char*)get_ttx(416));
+			get_ttx(416));
 	}
 }
 
@@ -312,7 +312,7 @@ void spell_inc_in(void)
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
 			(char*)get_tx(113),
 			(char*)get_spelltarget() + HERO_NAME2,
-			(char*)get_ttx(417));
+			get_ttx(417));
 	} else {
 		/* get a free mod_slot */
 		slot = get_free_mod_slot();
@@ -324,7 +324,7 @@ void spell_inc_in(void)
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
 			(char*)get_tx(101),
 			(char*)get_spelltarget() + HERO_NAME2,
-			(char*)get_ttx(417));
+			get_ttx(417));
 	}
 }
 
@@ -358,7 +358,7 @@ void spell_inc_kk(void)
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
 			(char*)get_tx(113),
 			(char*)get_spelltarget() + HERO_NAME2,
-			(char*)get_ttx(418));
+			get_ttx(418));
 	} else {
 		/* get a free mod_slot */
 		slot = get_free_mod_slot();
@@ -370,7 +370,7 @@ void spell_inc_kk(void)
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
 			(char*)get_tx(101),
 			(char*)get_spelltarget() + HERO_NAME2,
-			(char*)get_ttx(418));
+			get_ttx(418));
 	}
 }
 
@@ -404,7 +404,7 @@ void spell_inc_kl(void)
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
 			(char*)get_tx(113),
 			(char*)get_spelltarget() + HERO_NAME2,
-			(char*)get_ttx(413));
+			get_ttx(413));
 	} else {
 		/* get a free mod_slot */
 		slot = get_free_mod_slot();
@@ -416,7 +416,7 @@ void spell_inc_kl(void)
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
 			(char*)get_tx(101),
 			(char*)get_spelltarget() + HERO_NAME2,
-			(char*)get_ttx(413));
+			get_ttx(413));
 	}
 }
 
@@ -450,7 +450,7 @@ void spell_inc_mu(void)
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
 			(char*)get_tx(113),
 			(char*)get_spelltarget() + HERO_NAME2,
-			(char*)get_ttx(412));
+			get_ttx(412));
 	} else {
 		/* get a free mod_slot */
 		slot = get_free_mod_slot();
@@ -462,7 +462,7 @@ void spell_inc_mu(void)
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
 			(char*)get_tx(101),
 			(char*)get_spelltarget() + HERO_NAME2,
-			(char*)get_ttx(412));
+			get_ttx(412));
 	}
 }
 
@@ -558,7 +558,7 @@ void spell_salander(void)
 	} else {
 		/* prepare message */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_ttx(607),
+			get_ttx(607),
 			(char*)Real2Host(ds_readd(SPELLUSER)) + HERO_NAME2);
 
 		/* no AE cost */
@@ -614,7 +614,7 @@ void spell_visibili(void)
 			(char*)Real2Host(GUI_get_ptr(host_readbs(get_spelluser() + HERO_SEX), 0)));
 	} else {
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_ttx(607),
+			get_ttx(607),
 			(char*)get_spelluser() + HERO_NAME2);
 
 		ds_writew(SPELL_SPECIAL_AECOST, 0);

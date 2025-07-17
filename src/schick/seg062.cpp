@@ -124,7 +124,7 @@ void ask_miracle(void)
 									}
 
 									sprintf((char*)Real2Host(ds_readd(DTP2)),
-										(char*)get_ttx(565),
+										get_ttx(565),
 										(char*)hero + HERO_NAME2);
 									break;
 								} else {
@@ -248,7 +248,7 @@ void ask_miracle(void)
 								}
 
 								sprintf((char*)Real2Host(ds_readd(DTP2)),
-									(char*)get_ttx(565),
+									get_ttx(565),
 									(char*)hero + HERO_NAME2);
 								break;
 							} else if (hero_renegade(hero) &&

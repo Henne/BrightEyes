@@ -341,7 +341,7 @@ void sell_screen(Bit8u *shop_ptr)
 
 				if (item_undropable(get_itemsdat(item_id))) {
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_ttx(454),
+						get_ttx(454),
 						(char*)Real2Host(GUI_names_grammar((signed short)0x8002, item_id, 0)));
 					GUI_output(Real2Host(ds_readd(DTP2)));
 				} else {
@@ -354,7 +354,7 @@ void sell_screen(Bit8u *shop_ptr)
 						if (item_stackable(get_itemsdat(item_id)) && host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + SIZEOF_INVENTORY * l15) > 1) {
 
 							sprintf((char*)Real2Host(ds_readd(DTP2)),
-								(char*)get_ttx(447),
+								get_ttx(447),
 								(char*)Real2Host(GUI_names_grammar(4, item_id, 0)));
 
 							nice = GUI_input(Real2Host(ds_readd(DTP2)), 2);
@@ -387,7 +387,7 @@ void sell_screen(Bit8u *shop_ptr)
 						if (item_stackable(get_itemsdat(item_id)) && host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + SIZEOF_INVENTORY * l15) > 1) {
 
 							sprintf((char*)Real2Host(ds_readd(DTP2)),
-								(char*)get_ttx(447),
+								get_ttx(447),
 								(char*)Real2Host(GUI_names_grammar(4, item_id, 0)));
 
 							nice = GUI_input(Real2Host(ds_readd(DTP2)), 2);
@@ -436,7 +436,7 @@ void sell_screen(Bit8u *shop_ptr)
 
 				make_valuta_str((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), price);
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_ttx(449),
+					get_ttx(449),
 					(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
 
 
@@ -493,7 +493,7 @@ void sell_screen(Bit8u *shop_ptr)
 						make_valuta_str((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), price);
 
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_ttx(819),
+							get_ttx(819),
 							(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
 
 						GUI_output(Real2Host(ds_readd(DTP2)));

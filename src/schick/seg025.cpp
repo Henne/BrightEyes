@@ -143,7 +143,7 @@ void do_house(void)
 	/* prepare the question */
 	strcpy((char*)Real2Host(ds_readd(DTP2)), (char*)get_tx(ds_readws(CURRENT_LOCDATA)));
 
-	strcat((char*)Real2Host(ds_readd(DTP2)), (char*)get_ttx(623));
+	strcat((char*)Real2Host(ds_readd(DTP2)), get_ttx(623));
 
 	ds_writew(MENU_DEFAULT_SELECT, 1);
 
@@ -375,7 +375,7 @@ void show_treasure_map(void)
 
 			/* */
 			sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
-				(char*)get_ttx(727),
+				get_ttx(727),
 				(char*)get_hero(get_random_hero()) + HERO_NAME2);
 
 			GUI_output(Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
@@ -578,7 +578,7 @@ signed short game_options(void)
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_6) {
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_ttx(827),
+				get_ttx(827),
 				ds_readws(DELAY_FACTOR));
 
 			new_delay = GUI_input(Real2Host(ds_readd(DTP2)), 2);
@@ -823,12 +823,12 @@ void tumult(void)
 
 	/* the guards or a mob */
 	sprintf((char*)Real2Host(ds_readd(DTP2)),
-		(char*)get_ttx(765),
+		get_ttx(765),
 		((ds_readb(CURRENT_TOWN) == TOWNS_PREM ||
 			ds_readb(CURRENT_TOWN) == TOWNS_PHEXCAER ||
 			ds_readb(CURRENT_TOWN) == TOWNS_THORWAL ||
 			ds_readb(CURRENT_TOWN) == TOWNS_OBERORKEN)
-				? (char*)get_ttx(766) : (char*)get_ttx(767)));
+				? get_ttx(766) : get_ttx(767)));
 
 	GUI_output(Real2Host(ds_readd(DTP2)));
 

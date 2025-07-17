@@ -116,13 +116,13 @@ void prepare_date_str(void)
 	if (ds_readbs(DAY_OF_MONTH) < 0) {
 		/* Days of the nameless */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_ttx(391),
+			get_ttx(391),
 			get_ttx(349 + ds_readbs(DAY_OF_WEEK)),
 			ds_readbs(YEAR), hour);
 	} else {
 		/* Normal day */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_ttx(356),
+			get_ttx(356),
 			get_ttx(349 + ds_readbs(DAY_OF_WEEK)),
 			ds_readbs(DAY_OF_MONTH),
 			get_ttx(21 + ds_readbs(MONTH)),
@@ -132,7 +132,7 @@ void prepare_date_str(void)
 
 	if (ds_readbs(SPECIAL_DAY) != 0) {
 		sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
-			(char*)get_ttx(357),
+			get_ttx(357),
 			get_ttx(357 + ds_readbs(SPECIAL_DAY)));
 
 		strcat((char*)Real2Host(ds_readd(DTP2)),
@@ -259,15 +259,15 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 					if (txt_id == 21) {
 
-						sprintf(dst, fmt, (char*)get_ttx(658));
+						sprintf(dst, fmt, get_ttx(658));
 
 					} else if (txt_id == 22) {
 
-						sprintf(dst, fmt, (char*)get_ttx(662));
+						sprintf(dst, fmt, get_ttx(662));
 
 					} else if (txt_id == 23) {
 
-						sprintf(dst, fmt, (char*)get_ttx(661));
+						sprintf(dst, fmt, get_ttx(661));
 
 					} else if (txt_id == 29) {
 
@@ -325,23 +325,23 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 						} else if (txt_id == 28) {
 
-							sprintf(dst, fmt, (char*)get_ttx(663));
+							sprintf(dst, fmt, get_ttx(663));
 
 						} else if (txt_id == 29) {
 
-							sprintf(dst, fmt, (char*)get_ttx(664));
+							sprintf(dst, fmt, get_ttx(664));
 
 						} else if (txt_id == 30) {
 
-							sprintf(dst, fmt, (char*)get_ttx(672));
+							sprintf(dst, fmt, get_ttx(672));
 
 						} else if (txt_id == 38) {
 
-							sprintf(dst, fmt, (char*)get_ttx(235 + ds_readb(SWAFNILD_TP4)));
+							sprintf(dst, fmt, get_ttx(235 + ds_readb(SWAFNILD_TP4)));
 
 						} else if (txt_id == 49) {
 
-							sprintf(dst, fmt, (char*)get_ttx(235 + ds_readb(SWAFNILD_TP4)));
+							sprintf(dst, fmt, get_ttx(235 + ds_readb(SWAFNILD_TP4)));
 
 							ds_writebs(CURRENT_TOWN, ds_readbs(SWAFNILD_TP4));
 
@@ -351,13 +351,13 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 						} else if (txt_id == 52) {
 
 							sprintf(dst, fmt,
-								(char*)get_ttx(235 + ds_readb(SWAFNILD_TP1)),
-								(char*)get_ttx(235 + ds_readb(SWAFNILD_TP2)),
-								(char*)get_ttx(235 + ds_readb(SWAFNILD_TP3)));
+								get_ttx(235 + ds_readb(SWAFNILD_TP1)),
+								get_ttx(235 + ds_readb(SWAFNILD_TP2)),
+								get_ttx(235 + ds_readb(SWAFNILD_TP3)));
 
 						} else if (txt_id == 59) {
 
-							sprintf(dst, fmt, (char*)get_ttx(235 + (
+							sprintf(dst, fmt, get_ttx(235 + (
 							    ds_readb(SWAFNILD_DESTINATION) == 1 ?
                                     ds_readb(SWAFNILD_TP1)
                                 : (ds_readb(SWAFNILD_DESTINATION) == 2 ?

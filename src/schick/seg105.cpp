@@ -326,7 +326,7 @@ signed short give_hero_new_item(Bit8u *hero, signed short item, signed short mod
 
 		if (mode != 0) {
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_ttx(779),
+				get_ttx(779),
 				(char*)(hero + HERO_NAME2));
 			GUI_output(Real2Host(ds_readd(DTP2)));
 		}
@@ -505,7 +505,7 @@ unsigned short drop_item(Bit8u *hero, signed short pos, signed short no)
 			/* this item is not droppable */
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_ttx(454),
+				get_ttx(454),
 				(char*)Real2Host(GUI_names_grammar((signed short)0x8002, item, 0)));
 
 			GUI_output(Real2Host(ds_readd(DTP2)));
@@ -515,7 +515,7 @@ unsigned short drop_item(Bit8u *hero, signed short pos, signed short no)
 			if (item_stackable(p_item)) {
 				if (no == -1) {
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_ttx(219),
+						get_ttx(219),
 						(char*)Real2Host(GUI_names_grammar(6, item, 0)));
 
 					do {
@@ -642,7 +642,7 @@ signed short get_item(signed short id, signed short unused, signed short no)
 			ds_writew(AUTOFIGHT, 0);
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_ttx(549),
+				get_ttx(549),
 				(char*)Real2Host(GUI_names_grammar(((no > 1) ? 4 : 0) + 2, id, 0)));
 
 			if (GUI_bool(Real2Host(ds_readd(DTP2)))) {
@@ -782,7 +782,7 @@ signed short select_item_to_drop(Bit8u *hero)
 
 	if (v6 == 0) {
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_ttx(750),
+			get_ttx(750),
 			(char*)(hero + HERO_NAME2));
 		GUI_output(Real2Host(ds_readd(DTP2)));
 		return -1;

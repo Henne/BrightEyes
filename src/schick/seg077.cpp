@@ -79,7 +79,7 @@ signed short DNG01_handler(void)
 	} else if (target_pos == DNG_POS(1,13,5) && target_pos != ds_readws(DNG_HANDLED_POS) && !ds_readbs(DNG01_SABRE_TAKEN))
 	{
 		sprintf((char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)),
-			(char*)get_ttx(528),
+			get_ttx(528),
 			(char*)Real2Host(GUI_names_grammar(0, 3, 0)),
 			(char*)Real2Host(GUI_2f2(2, 3, 0)));
 
@@ -92,7 +92,7 @@ signed short DNG01_handler(void)
 	} else if (target_pos == DNG_POS(3,2,9) && target_pos != ds_readws(DNG_HANDLED_POS) && !ds_readbs(DNG01_CROSSBOW_TAKEN))
 	{
 		sprintf((char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)),
-			(char*)get_ttx(528),
+			get_ttx(528),
 			(char*)Real2Host(GUI_names_grammar(0, 12, 0)),
 			(char*)Real2Host(GUI_2f2(2, 12, 0)));
 

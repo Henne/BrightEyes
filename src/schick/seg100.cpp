@@ -406,7 +406,7 @@ void spell_ecliptifactus(void)
 		} else {
 			/* prepare the message */
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_ttx(607),
+				get_ttx(607),
 				(char*)get_spelluser() + HERO_NAME2);
 			/* set costs to 0 */
 			ds_writew(SPELL_SPECIAL_AECOST, 0);

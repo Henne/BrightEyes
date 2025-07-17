@@ -146,7 +146,7 @@ void status_menu(signed short hero_pos)
 
 					if (item_weapon(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))))) {
 						strcat((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_ttx(48 + host_readbs(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))) + 3)));
+							get_ttx(48 + host_readbs(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))) + 3)));
 					}
 
 					GUI_print_string(Real2Host(ds_readd(DTP2)), 16, 192);
@@ -331,7 +331,7 @@ void status_menu(signed short hero_pos)
 
 					if (item_weapon(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))))) {
 						strcat((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_ttx(48 + host_readbs(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))) + 3)));
+							get_ttx(48 + host_readbs(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))) + 3)));
 					}
 
 					GUI_print_string(Real2Host(ds_readd(DTP2)), 16, 192);

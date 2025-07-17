@@ -121,7 +121,7 @@ void do_wildcamp(void)
 
 				for (i = 0; i < 3; i++) {
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)), (char*)get_ttx(321), i + 1);
+					sprintf((char*)Real2Host(ds_readd(DTP2)), get_ttx(321), i + 1);
 
 					do {
 						answer = select_hero_ok(Real2Host(ds_readd(DTP2)));
@@ -220,7 +220,7 @@ void do_wildcamp(void)
 				{
 
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_ttx(803),
+						get_ttx(803),
 						(char*)get_hero(answer) + HERO_NAME2);
 
 					GUI_output(Real2Host(ds_readd(DTP2)));
@@ -284,7 +284,7 @@ void do_wildcamp(void)
 				if (ds_readbs(WILDCAMP_GUARDS + l_si) != -1) {
 
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_ttx(774),
+						get_ttx(774),
 						(char*)get_hero(ds_readbs(WILDCAMP_GUARDS + l_si)) + HERO_NAME2);
 
 					GUI_print_loc_line(Real2Host(ds_readd(DTP2)));
@@ -311,7 +311,7 @@ void do_wildcamp(void)
 						if (ds_readbs(WILDCAMP_GUARDS + l_si) != -1) {
 
 							sprintf((char*)Real2Host(ds_readd(DTP2)),
-								(char*)get_ttx(774),
+								get_ttx(774),
 								(char*)get_hero(ds_readbs(WILDCAMP_GUARDS + l_si)) + HERO_NAME2);
 
 							GUI_print_loc_line(Real2Host(ds_readd(DTP2)));
@@ -421,7 +421,7 @@ signed short gather_herbs(Bit8u *hero, signed short hours, signed short handicap
 
 		/* print a sentence with all the herb names */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_ttx(328),
+			get_ttx(328),
 			(char*)hero + HERO_NAME2);
 
 		for (herb_index = 0; herb_index < 12; herb_index++) {
@@ -453,7 +453,7 @@ signed short gather_herbs(Bit8u *hero, signed short hours, signed short handicap
 		/* no herbs found */
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_ttx(342),
+			get_ttx(342),
 			(char*)hero + HERO_NAME2);
 	}
 
@@ -494,7 +494,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 		if (ds_readb(WILDCAMP_REPLSTATUS + hero_pos) != 0) {
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_ttx(802),
+				get_ttx(802),
 				(char*)get_hero(hero_pos) + HERO_NAME2);
 
 			GUI_output(Real2Host(ds_readd(DTP2)));
@@ -521,7 +521,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 
 						/* found water */
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_ttx(324),
+							get_ttx(324),
 							(char*)Real2Host(hero) + HERO_NAME2);
 
 						/* fill up all waterskins and remove thirst of all living heroes in the current group */
@@ -544,7 +544,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 					} else {
 
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_ttx(340),
+							get_ttx(340),
 							(char*)Real2Host(hero) + HERO_NAME2);
 					}
 
@@ -567,18 +567,18 @@ signed short replenish_stocks(signed short mod, signed short tries)
 
 						/* the group may get three food packages */
 						if (!get_item(ITEM_FOOD_PACKAGE, 1, 3)) {
-							strcpy((char*)Real2Host(ds_readd(DTP2)), (char*)get_ttx(306));
+							strcpy((char*)Real2Host(ds_readd(DTP2)), get_ttx(306));
 							ds_writew(REQUEST_REFRESH, 1);
 						} else {
 							sprintf((char*)Real2Host(ds_readd(DTP2)),
-								(char*)get_ttx(325),
+								get_ttx(325),
 								(char*)Real2Host(hero) + HERO_NAME2);
 						}
 
 					} else {
 
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_ttx(341),
+							get_ttx(341),
 							(char*)Real2Host(hero) + HERO_NAME2);
 					}
 

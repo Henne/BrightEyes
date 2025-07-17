@@ -458,7 +458,7 @@ signed short save_game_state(void)
 	if (ds_readws(GAME_STATE) == GAME_STATE_VICTORY) {
 
 		/* game won. creating savegame for import in DSA2 */
-		strcpy((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), (char*)get_ttx(810)); /* "Welcher Spielstand soll fuer die Fortsetzung abgespeichert werden?" */
+		strcpy((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), get_ttx(810)); /* "Welcher Spielstand soll fuer die Fortsetzung abgespeichert werden?" */
 
 	} else {
 
@@ -470,20 +470,20 @@ signed short save_game_state(void)
 			/* create savegame not in a temple */
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_ttx(813), /* "Dabei verliert jeder Held in der Gruppe einen Abenteuerpunkt" */
+				get_ttx(813), /* "Dabei verliert jeder Held in der Gruppe einen Abenteuerpunkt" */
 				1,
 				get_ttx(392),
 				p_datseg + EMPTY_STRING1);
 
 			sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
-				(char*)get_ttx(1), /* "Welchen Spielstand wollen Sie abspeichern ?" */
+				get_ttx(1), /* "Welchen Spielstand wollen Sie abspeichern ?" */
 				(char*)Real2Host(ds_readd(DTP2)));
 		} else {
 #endif
 
 			/* create savegame inside a temple */
 			sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
-				(char*)get_ttx(1), /* "Welchen Spielstand wollen Sie abspeichern ?" */
+				get_ttx(1), /* "Welchen Spielstand wollen Sie abspeichern ?" */
 				(char*)p_datseg + EMPTY_STRING2);
 #ifndef M302de_FEATURE_MOD
 		/* Feature mod 4: In the original game, when creating a savegame while not being in a temple, the AP of all heroes is decreased by 1. This mod stops the AP decrease. */

@@ -164,7 +164,7 @@ void hero_gets_diseased(Bit8u *hero, unsigned short disease)
 #if !defined(__BORLANDC__)
 		D1_INFO("%s erkrankt an %s\n",
 			(char*)hero + HERO_NAME2,
-			(char*)get_ttx(disease + 0x193));
+			get_ttx(disease + 0x193));
 #endif
 
 		host_writeb(hero + disease * 5 + 0xae, 0xff);
@@ -278,7 +278,7 @@ void make_valuta_str(char *dst, Bit32s money) {
 		money -= 10;
 	}
 
-	sprintf(dst, (char*)get_ttx(748), d, s, (short)money);
+	sprintf(dst, get_ttx(748), d, s, (short)money);
 }
 
 /**
@@ -310,7 +310,7 @@ void update_atpa(Bit8u *hero)
 
 		/* prepare message */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_ttx(8), host_readbs(hero + HERO_ATPA_BASIS));
+			get_ttx(8), host_readbs(hero + HERO_ATPA_BASIS));
 
 		/* print message */
 		GUI_output(Real2Host(ds_readd(DTP2)));

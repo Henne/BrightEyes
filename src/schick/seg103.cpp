@@ -42,14 +42,14 @@ signed short LVL_select_skill(Bit8u *hero, signed short show_values)
 
 	if (show_values != 0) {
 
-		strcpy((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), (char*)get_ttx(205));
+		strcpy((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), get_ttx(205));
 
 		if (host_readbs(hero + HERO_TA_RISE) > 1) {
-			strcat((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), (char*)get_ttx(393));
+			strcat((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), get_ttx(393));
 		}
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_ttx(204),
+			get_ttx(204),
 			/* sind / ist */
 			(host_readbs(hero + HERO_TA_RISE) > 1) ? get_ttx(305) : get_ttx(304),
 			/* # of tries left */
@@ -57,7 +57,7 @@ signed short LVL_select_skill(Bit8u *hero, signed short show_values)
 			Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
 	} else {
 
-		strcpy((char*)Real2Host(ds_readd(DTP2)), (char*)get_ttx(216));
+		strcpy((char*)Real2Host(ds_readd(DTP2)), get_ttx(216));
 	}
 
 	/* ask for the skill category */
@@ -347,13 +347,13 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 					if (poison == 0) {
 						/* patient is not poisoned */
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_ttx(463),
+							get_ttx(463),
 							(char*)patient + HERO_NAME2);
 						GUI_output(Real2Host(ds_readd(DTP2)));
 					} else if (host_readds(patient + HERO_HEAL_TIMER) > 0) {
 						/* patient timer is not zero */
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_ttx(697),
+							get_ttx(697),
 							(char*)patient + HERO_NAME2);
 						GUI_output(Real2Host(ds_readd(DTP2)));
 					} else {
@@ -367,7 +367,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 							if (test_skill(hero, TA_HEILEN_GIFT, ds_readbs(POISON_PRICES + 2 * poison) + handicap) > 0) {
 								/* success */
 								sprintf((char*)Real2Host(ds_readd(DTP2)),
-									(char*)get_ttx(690),
+									get_ttx(690),
 									(char*)hero + HERO_NAME2,
 									(char*)patient + HERO_NAME2);
 
@@ -377,7 +377,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 								host_writeb(patient + HERO_POISON + 5 * poison, 1);
 
 								sprintf((char*)Real2Host(ds_readd(DTP2)),
-									(char*)get_ttx(692),
+									get_ttx(692),
 									(char*)hero + HERO_NAME2,
 									(char*)patient + HERO_NAME2);
 
@@ -390,7 +390,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 									if ((l_si = test_skill(hero, TA_HEILEN_GIFT, le + handicap)) > 0) {
 
 										sprintf((char*)Real2Host(ds_readd(DTP2)),
-											(char*)get_ttx(691),
+											get_ttx(691),
 											(char*)hero + HERO_NAME2,
 											(char*)patient + HERO_NAME2,
 											le);
@@ -410,7 +410,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 										sub_hero_le(patient, le_damage);
 
 										sprintf((char*)Real2Host(ds_readd(DTP2)),
-											(char*)get_ttx(694),
+											get_ttx(694),
 											(char*)patient + HERO_NAME2,
 											le_damage);
 
@@ -422,7 +422,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 							} else {
 								/* healing failed */
 								sprintf((char*)Real2Host(ds_readd(DTP2)),
-									(char*)get_ttx(689),
+									get_ttx(689),
 									(char*)hero + HERO_NAME2,
 									(char*)patient + HERO_NAME2);
 
@@ -431,7 +431,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 						} else {
 							/* recognizing the poison failed */
 							sprintf((char*)Real2Host(ds_readd(DTP2)),
-								(char*)get_ttx(688),
+								get_ttx(688),
 								(char*)hero + HERO_NAME2,
 								(char*)patient + HERO_NAME2);
 
@@ -466,14 +466,14 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 					if (host_readws(patient + HERO_LE) >= host_readws(patient + HERO_LE_ORIG)) {
 						/* no need to heal */
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_ttx(461),
+							get_ttx(461),
 							(char*)patient + HERO_NAME2);
 
 						GUI_output(Real2Host(ds_readd(DTP2)));
 					} else if (host_readds(patient + HERO_HEAL_TIMER) > 0) {
 						/* timer is still running */
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_ttx(697),
+							get_ttx(697),
 							(char*)patient + HERO_NAME2);
 
 						GUI_output(Real2Host(ds_readd(DTP2)));
@@ -489,7 +489,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 								add_hero_le(patient, l_si);
 
 								sprintf((char*)Real2Host(ds_readd(DTP2)),
-									(char*)get_ttx(691),
+									get_ttx(691),
 									(char*)hero + HERO_NAME2,
 									(char*)patient + HERO_NAME2,
 									l_si);
@@ -507,7 +507,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 								sub_hero_le(patient, le_damage);
 
 								sprintf((char*)Real2Host(ds_readd(DTP2)),
-									(char*)get_ttx(694),
+									get_ttx(694),
 									(char*)patient + HERO_NAME2,
 									le_damage);
 
@@ -522,7 +522,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 							if (random_schick(20) <= 7) {
 								/* 35% chance: infected with Wundfieber illness */
 								sprintf((char*)Real2Host(ds_readd(DTP2)),
-									(char*)get_ttx(699),
+									get_ttx(699),
 									(char*)hero + HERO_NAME2,
 									(char*)patient + HERO_NAME2);
 
@@ -531,7 +531,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 							} else {
 								/* 65% chance: just failed, no infection */
 								sprintf((char*)Real2Host(ds_readd(DTP2)),
-									(char*)get_ttx(698),
+									get_ttx(698),
 									(char*)hero + HERO_NAME2,
 									(char*)patient + HERO_NAME2);
 							}

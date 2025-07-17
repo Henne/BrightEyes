@@ -749,7 +749,7 @@ void tevent_104(void)
 						} else {
 
 							sprintf((char*)Real2Host(ds_readd(DTP2)),
-								(char*)get_ttx(607),
+								get_ttx(607),
 								(char*)hero + HERO_NAME2);
 
 							GUI_output(Real2Host(ds_readd(DTP2)));

@@ -298,7 +298,7 @@ signed short DNG11_handler(void)
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
 			(char*)get_tx(29),
-			(char*)get_ttx(ds_readw(TRV_DESTINATION) + 0xeb));
+			get_ttx(ds_readw(TRV_DESTINATION) + 0xeb));
 
 		GUI_output(Real2Host(ds_readd(DTP2)));
 

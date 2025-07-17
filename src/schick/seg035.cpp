@@ -131,7 +131,7 @@ void FIG_loot_monsters(void)
 					l6 = l3 - 14;
 				}
 
-				strcpy(a[l5], (char*)get_ttx(751));
+				strcpy(a[l5], get_ttx(751));
 			} else {
 				l_si = 0;
 				l5 = 0;

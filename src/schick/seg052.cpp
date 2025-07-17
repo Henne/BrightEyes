@@ -115,7 +115,7 @@ void do_citycamp(void)
 				for (l_si = 0; l_si < 3; l_si++) {
 
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_ttx(321),
+						get_ttx(321),
 						l_si + 1);
 
 					do {
@@ -198,7 +198,7 @@ void do_citycamp(void)
 					if (ds_readbs(CITYCAMP_GUARDS + l_di) != -1) {
 
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_ttx(774),
+							get_ttx(774),
 							(char*)get_hero(ds_readbs(CITYCAMP_GUARDS + l_di)) + 0x10);
 
 						GUI_print_loc_line(Real2Host(ds_readd(DTP2)));
@@ -225,7 +225,7 @@ void do_citycamp(void)
 							if (ds_readbs(CITYCAMP_GUARDS + l_di) != -1) {
 
 								sprintf((char*)Real2Host(ds_readd(DTP2)),
-									(char*)get_ttx(774),
+									get_ttx(774),
 									(char*)get_hero(ds_readbs(CITYCAMP_GUARDS + l_di)) + 0x10);
 
 								GUI_print_loc_line(Real2Host(ds_readd(DTP2)));

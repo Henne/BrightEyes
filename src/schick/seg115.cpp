@@ -351,7 +351,7 @@ void tevent_095(void)
 
 							/* TODO: this gets output, but no spell costst ??? */
 							sprintf((char*)Real2Host(ds_readd(DTP2)),
-								(char*)get_ttx(607),
+								get_ttx(607),
 								(char*)hero + HERO_NAME2);
 
 							GUI_output(Real2Host(ds_readd(DTP2)));

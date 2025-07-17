@@ -119,7 +119,7 @@ signed short do_alchemy(Bit8u* hero, signed short recipe_index, signed short fla
 		give_hero_new_item(hero, host_readws(r_ptr + RECIPE_OUTCOME), 1, 1);
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_ttx(731),
+			get_ttx(731),
 			hero + HERO_NAME2,
 			Real2Host(GUI_names_grammar(1, host_readws(r_ptr + RECIPE_OUTCOME), 0)));
 
@@ -132,7 +132,7 @@ signed short do_alchemy(Bit8u* hero, signed short recipe_index, signed short fla
 		give_hero_new_item(hero, host_readws(r_ptr + RECIPE_INGREDIENTS), 1, 1);
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_ttx(732),
+			get_ttx(732),
 			hero + HERO_NAME2,
 			Real2Host(GUI_names_grammar(2, host_readws(r_ptr + RECIPE_OUTCOME), 0)));
 
@@ -212,7 +212,7 @@ signed short plan_alchemy(Bit8u *hero)
 						/* AE not sufficient => brewing not possible */
 
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_ttx(607),
+							get_ttx(607),
 							(char*)hero + HERO_NAME2);
 
 							GUI_output(Real2Host(ds_readd(DTP2)));
@@ -412,7 +412,7 @@ signed short skill_cure_disease(Bit8u *healer, Bit8u *patient, signed short hand
 			/* not diseased */
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_ttx(462),
+				get_ttx(462),
 				(char*)patient + HERO_NAME2);
 
 			GUI_output(Real2Host(ds_readd(DTP2)));
@@ -422,7 +422,7 @@ signed short skill_cure_disease(Bit8u *healer, Bit8u *patient, signed short hand
 			/* recently tried to cure with skill */
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_ttx(697),
+				get_ttx(697),
 				(char*)patient + HERO_NAME2);
 
 			GUI_output(Real2Host(ds_readd(DTP2)));
@@ -450,7 +450,7 @@ signed short skill_cure_disease(Bit8u *healer, Bit8u *patient, signed short hand
 					add_hero_le(patient, retval);
 
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_ttx(695),
+						get_ttx(695),
 						(char*)healer + HERO_NAME2,
 						(char*)patient + HERO_NAME2,
 						(char*)Real2Host(GUI_get_ptr(host_readbs(patient + HERO_SEX), 3)),
@@ -484,7 +484,7 @@ signed short skill_cure_disease(Bit8u *healer, Bit8u *patient, signed short hand
 					sub_hero_le(patient, damage);
 
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_ttx(694),
+						get_ttx(694),
 						(char*)patient + HERO_NAME2, damage);
 
 					GUI_output(Real2Host(ds_readd(DTP2)));
@@ -493,7 +493,7 @@ signed short skill_cure_disease(Bit8u *healer, Bit8u *patient, signed short hand
 			} else {
 				/* failed to heal */
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_ttx(696),
+					get_ttx(696),
 					(char*)healer + HERO_NAME2,
 					(char*)patient + HERO_NAME2);
 

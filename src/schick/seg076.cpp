@@ -301,7 +301,7 @@ void DNG_door(signed short action)
 						{
 							/* unlucky => just print a message */
 							sprintf((char*)Real2Host(ds_readd(DTP2)),
-								(char*)get_ttx(607),
+								get_ttx(607),
 								(char*)hero + HERO_NAME2);
 
 							GUI_output(Real2Host(ds_readd(DTP2)));
@@ -883,7 +883,7 @@ void DNG_waterbarrel(Bit8u *unit_ptr)
 
 	do {
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_ttx(781),
+			get_ttx(781),
 			host_readb(unit_ptr));
 
 		answer = GUI_radio(Real2Host(ds_readd(DTP2)), 3,

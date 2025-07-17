@@ -146,7 +146,7 @@ void do_healer(void)
 
 						/* Hero seems OK */
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_ttx(461),
+							get_ttx(461),
 							(char*)(hero + HERO_NAME2));
 						GUI_output(Real2Host(ds_readd(DTP2)));
 					} else {
@@ -161,7 +161,7 @@ void do_healer(void)
 
 						/* ask */
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_ttx(464),
+							get_ttx(464),
 							(char*)(hero + HERO_NAME2),
 							price);
 
@@ -187,7 +187,7 @@ void do_healer(void)
 
 								/* prepare output */
 								sprintf((char*)Real2Host(ds_readd(DTP2)),
-									(char*)get_ttx(467),
+									get_ttx(467),
 									(char*)(hero + HERO_NAME2));
 
 								GUI_output(Real2Host(ds_readd(DTP2)));
@@ -210,7 +210,7 @@ void do_healer(void)
 					if (!disease) {
 						/* Hero is not diseased */
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_ttx(462),
+							get_ttx(462),
 							(char*)(hero + HERO_NAME2));
 
 						GUI_output(Real2Host(ds_readd(DTP2)));
@@ -225,9 +225,9 @@ void do_healer(void)
 
 						/* prepare output */
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_ttx(465),
+							get_ttx(465),
 							(char*)(hero + HERO_NAME2),
-							(char*)get_ttx(disease + 0x193),
+							get_ttx(disease + 0x193),
 							price);
 
 						if (GUI_bool(Real2Host(ds_readd(DTP2)))) {
@@ -245,7 +245,7 @@ void do_healer(void)
 
 									/* prepare output */
 									sprintf((char*)Real2Host(ds_readd(DTP2)),
-										(char*)get_ttx(467),
+										get_ttx(467),
 										(char*)(hero + HERO_NAME2));
 
 									GUI_output(Real2Host(ds_readd(DTP2)));
@@ -275,7 +275,7 @@ void do_healer(void)
 					if (poison == 0) {
 						/* Hero is not poisoned */
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_ttx(463),
+							get_ttx(463),
 							(char*)(hero + HERO_NAME2));
 
 						GUI_output(Real2Host(ds_readd(DTP2)));
@@ -288,7 +288,7 @@ void do_healer(void)
 
 						/* prepare output */
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_ttx(466),
+							get_ttx(466),
 							price,
 							(char*)(hero + HERO_NAME2));
 
@@ -307,7 +307,7 @@ void do_healer(void)
 
 									/* prepare output */
 									sprintf((char*)Real2Host(ds_readd(DTP2)),
-										(char*)get_ttx(467),
+										get_ttx(467),
 										(char*)(hero + HERO_NAME2));
 
 									GUI_output(Real2Host(ds_readd(DTP2)));

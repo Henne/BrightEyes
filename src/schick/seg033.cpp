@@ -522,7 +522,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 
 						if (radio_i == 0) {
 							sprintf((char*)Real2Host(ds_readd(DTP2)),
-								(char*)get_ttx(750),
+								get_ttx(750),
 								(char*)hero + HERO_NAME2);
 							GUI_output(Real2Host(ds_readd(DTP2)));
 						} else {
@@ -842,7 +842,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 
 					if (radio_i == 0) {
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_ttx(750),
+							get_ttx(750),
 							(char*)hero + HERO_NAME2);
 						GUI_output(Real2Host(ds_readd(DTP2)));
 					} else {

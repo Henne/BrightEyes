@@ -95,7 +95,7 @@ void spell_gardanium(void)
 		} else {
 			/* not enough AE */
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_ttx(607), (char*)get_spelluser() + HERO_NAME2);
+				get_ttx(607), (char*)get_spelluser() + HERO_NAME2);
 			/* set AE costs */
 			ds_writew(SPELL_SPECIAL_AECOST, 0);
 		}
@@ -177,7 +177,7 @@ void spell_verwandlung(void)
 			for (i = 0; i <= 6; i++)
 				inc_ptr_bs(get_spelltarget() + HERO_ATTRIB + i * 3);
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_ttx(565),
+				get_ttx(565),
 				(char*)get_spelltarget() + HERO_NAME2);
 		} else {
 
