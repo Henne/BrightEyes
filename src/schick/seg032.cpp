@@ -856,7 +856,9 @@ void FIG_load_ship_sprites(void)
 				host_writew(Real2Host(ds_readd(FIGOBJ_GFXHEIGHT_TABLE)) + 2 * l_si, height);
 
 				/* adjust the pointer */
+#if defined(__BORLANDC__)
 				add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, width * height + 8);
+#endif
 
 				/* adjust the counter */
 				sub_ds_ds(FIGHTOBJ_BUF_FREESPACE, width * height + 8L);

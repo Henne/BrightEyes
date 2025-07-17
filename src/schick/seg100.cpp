@@ -301,9 +301,10 @@ void spell_hexenknoten(void)
 #endif
 
 		ds_writed(HEXENKNOTEN_GFX_BUF, ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
-
+#if defined(__BORLANDC__)
 		/* move pointer further */
 		add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, width * height + 8);
+#endif
 
 		sub_ds_ds(FIGHTOBJ_BUF_FREESPACE, width * height + 8L);
 	}

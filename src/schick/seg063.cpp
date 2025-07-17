@@ -477,7 +477,9 @@ void sea_travel(signed short passage, signed short dir)
 	ds_writed(ROUTE_COURSE_PTR, (Bit32u)(ds_readfp(SEA_TRAVEL_COURSES) + off + 4 * ds_readws(ROUTE_MOUSEHOVER)));
 	ptr = ds_readfp(FRAMEBUF_PTR);
 
+#if defined(__BORLANDC__)
 	add_ds_fp(ROUTE_COURSE_PTR, 4);
+#endif
 
 	memset(Real2Host(ds_readd(TRV_TRACK_PIXEL_BAK)), 0xaa, 500);
 	ds_writew(TRAVEL_SPEED, 10 * ds_readbs(SEA_TRAVEL_PASSAGE_SPEED1)); /* speed [unit: 10m per hour] */
@@ -495,6 +497,7 @@ void sea_travel(signed short passage, signed short dir)
 	D1_INFO_VERBOSE("#Pixel = %d, Entfernung/Pixel: %d0 Schritt, Dauer/Pixel: %d min\n", ds_readw(ROUTE_TOTAL_STEPS), ds_readw(ROUTE_STEPSIZE), ds_readw(ROUTE_TIMEDELTA));
 #endif
 
+#if defined(__BORLANDC__)
 	if (dir) {
 		/* for reverse direction, point ROUTE_COURSE_PTR to end of route */
 
@@ -504,6 +507,7 @@ void sea_travel(signed short passage, signed short dir)
 
 		sub_ds_fp(ROUTE_COURSE_PTR, 4);
 	}
+#endif
 
 	ds_writed(ROUTE_COURSE_START, ds_readd(ROUTE_COURSE_PTR));
 
@@ -649,12 +653,14 @@ void sea_travel(signed short passage, signed short dir)
 			set_audio_track(ARCHIVE_FILE_TERMS_XMI);
 
 			ds_writew(TRV_I, 0);
+#if defined(__BORLANDC__)
 			for (ds_writed(ROUTE_COURSE_PTR2, ds_readd(ROUTE_COURSE_START));
 			     host_readb(Real2Host(ds_readd(TRV_TRACK_PIXEL_BAK)) + inc_ds_ws_post(TRV_I)) != 0xaa;
 			     add_ds_fp(ROUTE_COURSE_PTR2, 2 * (!dir ? 2 : -2)))
 			{
 				*(ptr + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR2) + 2) * 320 + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR2))) = 0x1f;
 			}
+#endif
 
 			refresh_screen_size();
 
@@ -664,7 +670,9 @@ void sea_travel(signed short passage, signed short dir)
 			ds_writew(REQUEST_REFRESH, 0);
 		}
 
+#if defined(__BORLANDC__)
 		add_ds_fp(ROUTE_COURSE_PTR, 2 * (!dir ? 2 : -2));
+#endif
 	}
 
 	ds_writeb(TRAVEL_HEROKEEPING, 0);
@@ -674,12 +682,13 @@ void sea_travel(signed short passage, signed short dir)
 		update_mouse_cursor();
 
 		do {
+#if defined(__BORLANDC__)
 			if (!dir) {
 				sub_ds_fp(ROUTE_COURSE_PTR, 4);
 			} else {
 				add_ds_fp(ROUTE_COURSE_PTR, 4);
 			}
-
+#endif
 			dec_ds_ws(ROUTE_STEPCOUNT);
 
 			*(ptr + host_readws(((Bit8u*)ds_readfp(ROUTE_COURSE_PTR) + 2)) * 320 + host_readws((Bit8u*)ds_readfp(ROUTE_COURSE_PTR))) =

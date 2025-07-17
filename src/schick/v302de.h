@@ -411,30 +411,6 @@ static inline Bit32s sub_ds_ds(Bit16u off, Bit32s val)
 	return ds_writed(off, ds_readds(off) - val);
 }
 
-/* obsolete */
-static void ds_writefp(unsigned short offs, Bit32u ptr)
-{
-	host_writed(p_datseg + offs, ptr);
-}
-
-static inline RealPt add_ds_fp(Bit16u off, Bit16s val)
-{
-	const RealPt p_old = ds_readfp(off);
-	const RealPt p_new = p_old + val;
-
-	ds_writefp(off, p_new);
-	return p_new;
-}
-
-static inline RealPt sub_ds_fp(Bit16u off, Bit16s val)
-{
-	const RealPt p_old = ds_readfp(off);
-	const RealPt p_new = p_old - val;
-
-	ds_writefp(off, p_new);
-	return p_new;
-}
-
 /* Increment and Decrement on Bit8s variables in the datasegment */
 
 static inline Bit8s inc_ds_bs(Bit16u off)

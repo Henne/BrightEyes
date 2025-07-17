@@ -142,14 +142,18 @@ void FIG_preload_gfx(void)
 
 	/* load ANI.DAT */
 	ds_writed(BUFFER_ANIDAT, ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
+#if defined(__BORLANDC__)
 	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 9851);
+#endif
 	handle = load_archive_file(ARCHIVE_FILE_ANI_DAT);
 	read_archive_file(handle, Real2Host(ds_readfp(BUFFER_ANIDAT)), 9851);
 	close(handle);
 
 	/* load WEAPANI.DAT */
 	ds_writed(BUFFER_WEAPANIDAT, ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
+#if defined(__BORLANDC__)
 	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 1370);
+#endif
 	handle = load_archive_file(ARCHIVE_FILE_WEAPANI_DAT);
 	read_archive_file(handle, Real2Host(ds_readd(BUFFER_WEAPANIDAT)), 1370);
 	close(handle);
@@ -157,7 +161,9 @@ void FIG_preload_gfx(void)
 	/* process NVFs */
 
 	ds_writed(FIG_CB_MARKER_BUF, ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
+#if defined(__BORLANDC__)
 	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 300);
+#endif
 
 	nvf.dst = Real2Host(ds_readfp(FIG_CB_MARKER_BUF));
 	nvf.src = Real2Host(ds_readfp(OBJECTS_NVF_BUF));
@@ -168,7 +174,9 @@ void FIG_preload_gfx(void)
 	process_nvf(&nvf);
 
 	ds_writed(FIG_CB_SELECTOR_BUF, ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
+#if defined(__BORLANDC__)
 	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 300);
+#endif
 
 	nvf.dst = Real2Host(ds_readfp(FIG_CB_SELECTOR_BUF));
 	nvf.src = Real2Host(ds_readfp(OBJECTS_NVF_BUF));
@@ -177,7 +185,9 @@ void FIG_preload_gfx(void)
 	process_nvf(&nvf);
 
 	ds_writed(FIG_STAR_GFX, ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
+#if defined(__BORLANDC__)
 	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 0xe8c);
+#endif
 
 	nvf.dst = Real2Host(ds_readfp(FIG_STAR_GFX));
 	nvf.src = Real2Host(ds_readfp(OBJECTS_NVF_BUF));
@@ -186,9 +196,13 @@ void FIG_preload_gfx(void)
 	process_nvf(&nvf);
 
 	ds_writed(FIG_SHOT_BOLT_BUF, ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
+#if defined(__BORLANDC__)
 	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 400);
+#endif
 	ds_writed(FIG_SPELLGFX_BUF, ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
+#if defined(__BORLANDC__)
 	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 1300);
+#endif
 
 	ds_writed(FIGHTOBJ_BUF_FREESPACE, F_PSUB(ds_readfp(FIGHTOBJ_BUF), ds_readfp(FIGHTOBJ_BUF_SEEK_PTR)));
 
@@ -242,7 +256,9 @@ void FIG_draw_scenario(void)
 						host_writew(Real2Host(ds_readd(FIGOBJ_GFXHEIGHT_TABLE)) + obj_id * 2, height);
 
 						/* adjust pointer */
+#if defined(__BORLANDC__)
 						add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, (width * height + 8));
+#endif
 						/* var -= height * width + 8; */
 						sub_ds_ds(FIGHTOBJ_BUF_FREESPACE, (width * height + 8L));
 					}

@@ -621,7 +621,9 @@ void spell_skelettarius(void)
 #ifdef M302de_ORIGINAL_BUGFIX
 		/* Original-Bug 2:
 		 * set FIGHTOBJ_BUF_FREESPACE and FIGHTOBJ_BUF_SEEK_PTR to the correct values as discussed above */
+#if defined(__BORLANDC__)
 		add_ds_fp(FIGHTOBJ_BUF_FREESPACE, 0x508);
+#endif
 		ds_writed(FIGHTOBJ_BUF_SEEK_PTR, (Bit32u)buf_seek_ptr_bak);
 #endif
 

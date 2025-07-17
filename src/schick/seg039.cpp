@@ -307,7 +307,9 @@ void FIG_load_enemy_sprites(Bit8u *ptr, signed short x, signed short y)
 	ds_writed((FIG_LIST_ELEM+FIGHTER_GFXBUF), ds_readd(FIGHTOBJ_BUF_SEEK_PTR)); /* ->prev */
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_OBJ_ID), 0); /* ->next */
 
+#if defined(__BORLANDC__)
 	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 0x508);
+#endif
 	sub_ds_ds(FIGHTOBJ_BUF_FREESPACE, 0x508);
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_Z), 0x63);
 
@@ -519,7 +521,9 @@ void FIG_init_heroes(void)
 		ds_writeb((FIG_LIST_ELEM+FIGHTER_SHEET), 0xff);
 		ds_writed((FIG_LIST_ELEM+FIGHTER_GFXBUF), ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
 		ds_writeb((FIG_LIST_ELEM+FIGHTER_OBJ_ID), 0);
+#if defined(__BORLANDC__)
 		add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 0x508);
+#endif
 		sub_ds_ds(FIGHTOBJ_BUF_FREESPACE, 0x508);
 		ds_writeb((FIG_LIST_ELEM+FIGHTER_Z), 0x63);
 		ds_writeb((FIG_LIST_ELEM+FIGHTER_VISIBLE), 1);

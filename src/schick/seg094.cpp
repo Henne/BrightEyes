@@ -98,7 +98,9 @@ void TM_func1(signed short route_no, signed short backwards)
 	last_tevent_no = -1;
 	ds_writed(ROUTE_COURSE_PTR, (Bit32u)(F_PADD(F_PADD(ds_readd(BUFFER9_PTR), host_readws(Real2Host(ds_readd(BUFFER9_PTR)) + 4 * (route_no - 1))), 0xec)));
 	fb_start = ds_readfp(FRAMEBUF_PTR);
+#if defined(__BORLANDC__)
 	add_ds_fp(ROUTE_COURSE_PTR, 4);
+#endif
 
 	memset((void*)Real2Host(ds_readfp(TRV_TRACK_PIXEL_BAK)), 0xaa, 500);
 	ds_writed(TRAVEL_ROUTE_PTR, (Bit32u)RealMake(datseg, (LAND_ROUTES - SIZEOF_LAND_ROUTE) + SIZEOF_LAND_ROUTE * route_no));
@@ -116,6 +118,7 @@ void TM_func1(signed short route_no, signed short backwards)
 		ds_writew(ROUTE_STEPSIZE, 1);
 	}
 
+#if defined(__BORLANDC__)
 	if (backwards)
 	{
 		while (host_readws(Real2Host(ds_readfp(ROUTE_COURSE_PTR))) != -1)
@@ -124,17 +127,19 @@ void TM_func1(signed short route_no, signed short backwards)
 		}
 		sub_ds_fp(ROUTE_COURSE_PTR, 4);
 	}
+#endif
 
 	memset((void*)(p_datseg + ROUTE_TEVENTS), ds_writews(ROUTE_STEPCOUNT, 0), 60);
 	memset((void*)(p_datseg + ROUTE_TEVENT_FLAGS), 0, 15);
 
 	ds_writed(TEVENTS_TAB_PTR, (Bit32u)RealMake(datseg, TEVENTS_TAB));
-
+#if defined(__BORLANDC__)
 	/* Forward pointer to entries associated with current route. */
 	while (host_readb(Real2Host(ds_readd(TEVENTS_TAB_PTR))) != route_no && host_readbs(Real2Host(ds_readd(TEVENTS_TAB_PTR))) != -1)
 	{
 		add_ds_fp(TEVENTS_TAB_PTR, 3);
 	}
+#endif
 
 	ds_writew(TRV_RETURN, 0);
 	ds_writed(ROUTE_COURSE_START, ds_readd(ROUTE_COURSE_PTR));
@@ -178,8 +183,9 @@ void TM_func1(signed short route_no, signed short backwards)
 		}
 
 		mul_ptr_ws(tevent_ptr, 100);
-
+#if defined(__BORLANDC__)
 		add_ds_fp(TEVENTS_TAB_PTR, 3);
+#endif
 		inc_ds_ws(ROUTE_STEPCOUNT);
 	}
 
@@ -426,12 +432,14 @@ void TM_func1(signed short route_no, signed short backwards)
 				TM_func8(0);
 			}
 
-            /* Redraw the track on the map */
+#if defined(__BORLANDC__)
+			/* Redraw the track on the map */
 			while (host_readb(Real2Host(ds_readd(TRV_TRACK_PIXEL_BAK)) + inc_ds_ws_post(TRV_I)) != 0xaa)
 			{
 				*(fb_start + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR2) + 2) * 320 + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR2))) =  0x1c;
 				add_ds_fp(ROUTE_COURSE_PTR2, 2 * (!backwards ? 2 : -2));
 			}
+#endif
 
 			refresh_screen_size();
 
@@ -454,6 +462,7 @@ void TM_func1(signed short route_no, signed short backwards)
 			ds_writew(REQUEST_REFRESH, 0);
 		}
 
+#if defined(__BORLANDC__)
 		if (ds_readws(TRV_RETURN) == 1 || ds_readws(TRV_RETURN) == -1)
 		{
 			ds_writew(TRV_RETURN, ds_readws(TRV_RETURN) == 1 ? 2: 0);
@@ -462,12 +471,13 @@ void TM_func1(signed short route_no, signed short backwards)
 		}
 
 		add_ds_fp(ROUTE_COURSE_PTR, 2 * ((!backwards && ds_readws(TRV_RETURN) == 0) || (backwards && ds_readws(TRV_RETURN) != 0) ? 2 : -2));
+#endif
 	}
 
 	if (ds_readw(GAME_STATE) == GAME_STATE_MAIN && !ds_readb(TRAVEL_DETOUR) && ds_readw(TRV_RETURN) != 2)
 	{
 		update_mouse_cursor();
-
+#if defined(__BORLANDC__)
 		do {
 			add_ds_fp(ROUTE_COURSE_PTR, 2 * (!backwards ? -2 : 2));
 			dec_ds_ws(ROUTE_STEPCOUNT);
@@ -475,6 +485,7 @@ void TM_func1(signed short route_no, signed short backwards)
 				host_readb((Bit8u*)ds_readd(TRV_TRACK_PIXEL_BAK) + ds_readws(ROUTE_STEPCOUNT));
 
 		} while (host_readws(Real2Host(ds_readfp(ROUTE_COURSE_PTR))) != -1);
+#endif
 
 		if (route_no == 59)
 		{
