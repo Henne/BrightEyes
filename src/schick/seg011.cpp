@@ -2,11 +2,13 @@
  *	Rewrite of DSA1 v3.02_de functions of seg011 (AIL, miles sound system)
  *	Functions rewritten: 0/0
  */
-#if !defined(__BORLANDC__)
+#include "v302de.h"
 
 #define AIL_SEGMENT (0x1042)
 
+#if !defined(__BORLANDC__)
 namespace M302de {
+#endif
 
 void AIL_startup(void)
 {
@@ -63,6 +65,8 @@ void AIL_set_digital_playback_volume(Bit16u driver, Bit16u percent)
 
 Bit16u AIL_state_table_size(Bit16u driver)
 {
+	return 0;
+}
 
 Bit16u AIL_register_sequence(Bit16u driver, RealPt FORM_XMID, Bit16u sequence_num, RealPt state_table, RealPt controller_table)
 {
@@ -108,5 +112,6 @@ void AIL_set_relative_volume(Bit16u driver, Bit16u sequence, Bit16u percent, Bit
 {
 }
 
+#if !defined(__BORLANDC__)
 }
 #endif
