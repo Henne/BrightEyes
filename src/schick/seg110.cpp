@@ -46,7 +46,7 @@ void tevent_011(void)
 		ds_writeb(TEVENT011_FLAG, 1);
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx2(24),
+			get_tx2(24),
 			(char*)hero + HERO_NAME2,
 			(char*)hero + HERO_NAME2);
 
@@ -108,14 +108,14 @@ void TRV_swim2(signed char mod, signed short percent)
 			{
 				/* skill test succeeded */
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx2(31),
+					get_tx2(31),
 					(char*)hero + HERO_NAME2);
 
 				GUI_output(Real2Host(ds_readd(DTP2)));
 			} else {
 				/* skill test failed */
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx2(32),
+					get_tx2(32),
 					(char*)hero + HERO_NAME2,
 					(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
@@ -251,7 +251,7 @@ void tevent_020(void)
 		ds_writeb(TEVENT020_FLAG, 1);
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx2(49),
+			get_tx2(49),
 			(char*)hero + HERO_NAME2);
 
 		do {
@@ -655,7 +655,7 @@ void tevent_044(void)
 		hero = Real2Host(get_first_hero_available_in_group());
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)) + 0x400,
-			(char*)get_tx2(33),
+			get_tx2(33),
 			(char*)hero + HERO_NAME2,
 			(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
@@ -741,7 +741,7 @@ void tevent_046(void)
 		if (test_skill(hero, TA_SINNESSCHAERFE, 0) > 0)
 		{
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx2(45),
+				get_tx2(45),
 				(char*)hero + HERO_NAME2,
 				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
@@ -761,7 +761,7 @@ void tevent_046(void)
 		if (!enter_inn)
 		{
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx2(48),
+				get_tx2(48),
 				(char*)hero + HERO_NAME2);
 
 			GUI_output(Real2Host(ds_readd(DTP2)));

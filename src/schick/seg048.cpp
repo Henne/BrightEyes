@@ -453,7 +453,7 @@ void status_menu(signed short hero_pos)
 			hero_is_diseased(hero2))
 		{
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx2(25 + hero_is_diseased(hero2)),
+				get_tx2(25 + hero_is_diseased(hero2)),
 				(char*)(hero2 + HERO_NAME2),
 				Real2Host(GUI_get_ptr(host_readbs(hero2 + HERO_SEX), 1)));
 
@@ -571,7 +571,7 @@ void status_menu(signed short hero_pos)
 							reset_item_selector();
 						} else if (l1 == 7) {
 							sprintf((char*)Real2Host(ds_readd(DTP2)),
-								(char*)get_tx2(25 + flag3),
+								get_tx2(25 + flag3),
 								(char*)(hero2 + HERO_NAME2),
 								Real2Host(GUI_get_ptr(host_readbs(hero2 + HERO_SEX), 1)));
 
@@ -609,7 +609,7 @@ void status_menu(signed short hero_pos)
 					case 9: {
 						if (flag3 != 0) {
 							sprintf((char*)Real2Host(ds_readd(DTP2)),
-								(char*)get_tx2(25 + flag3),
+								get_tx2(25 + flag3),
 								(char*)(hero2 + HERO_NAME2),
 								Real2Host(GUI_get_ptr(host_readbs(hero2 + HERO_SEX), 1)));
 

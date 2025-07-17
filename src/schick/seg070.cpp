@@ -189,7 +189,7 @@ void PHX_spielhaus(void)
 			/* you loose: at least the half of your group have not passed the test */
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx2(30), pos);
+				get_tx2(30), pos);
 
 			money -= pos * 100;
 
@@ -200,7 +200,7 @@ void PHX_spielhaus(void)
 
 			/* you win */
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx2(31), pos);
+				get_tx2(31), pos);
 
 			money += pos * 100;
 		}

@@ -591,7 +591,7 @@ void level_up(signed short hero_pos)
 
 		/* show the user the new MR value */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx2(41),
+			get_tx2(41),
 			host_readbs(hero + HERO_MR));
 
 		GUI_output(Real2Host(ds_readd(DTP2)));
@@ -622,7 +622,7 @@ void level_up(signed short hero_pos)
 
 		/* show how many LE the hero may get */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx2(39),
+			get_tx2(39),
 			i);
 
 		do {
@@ -658,7 +658,7 @@ void level_up(signed short hero_pos)
 
 		/* show how many LE the hero gets */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx2(38),
+			get_tx2(38),
 			i);
 
 		GUI_output(Real2Host(ds_readd(DTP2)));
@@ -900,7 +900,7 @@ void level_up(signed short hero_pos)
 			GUI_bool(get_tx2(45)))
 		{
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx2(46), l_di);
+				get_tx2(46), l_di);
 
 			i = GUI_input(Real2Host(ds_readd(DTP2)), 1);
 
@@ -917,7 +917,7 @@ void level_up(signed short hero_pos)
 			} else {
 
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx2(47), l_di);
+					get_tx2(47), l_di);
 
 				i = GUI_input(Real2Host(ds_readd(DTP2)), 1);
 

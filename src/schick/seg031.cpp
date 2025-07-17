@@ -101,7 +101,7 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 		if (txt_id_raw != -1) {
 
 			txt_id = (4 * host_readw(state_ptr) + txt_id_rand) & 0x7fff;
-			fmt = (char*)get_tx(txt_id + txt_offset);
+			fmt = get_tx(txt_id + txt_offset);
 
 			if (ds_readws(TLK_ID) == 15) {
 

@@ -282,8 +282,8 @@ void TRV_found_herb_place(signed short a0)
 	randval = random_schick(5) + 2;
 
 	sprintf((char*)Real2Host(ds_readd(DTP2)),
-		(char*)get_tx(0),
-		(char*)get_tx(randval),
+		get_tx(0),
+		get_tx(randval),
 		(char*)hero + HERO_NAME2,
 		(char*)(a0 != 0 ? get_tx(42) : p_datseg + EMPTY_STRING10));
 
@@ -335,8 +335,8 @@ signed short TRV_found_camp_place(signed short a0)
 
 	randval = random_schick(5) + 10;
 	sprintf((char*)Real2Host(ds_readd(DTP2)),
-		(char*)get_tx(8),
-		(char*)get_tx(randval),
+		get_tx(8),
+		get_tx(randval),
 		(char*)(a0 == 1 ? get_tx(42) : (a0 == 2 ? get_tx(45) : p_datseg + EMPTY_STRING11)));
 	do {
 		answer = GUI_radio(Real2Host(ds_readd(DTP2)), 2,
@@ -378,8 +378,8 @@ void TRV_found_replenish_place(signed short a0)
 	signed short answer;
 
 	sprintf((char*)Real2Host(ds_readd(DTP2)),
-		(char*)get_tx(16),
-		(char*)get_tx(random_schick(5) + 11),
+		get_tx(16),
+		get_tx(random_schick(5) + 11),
 		(char*)(a0 != 0 ? get_tx(45) : p_datseg + EMPTY_STRING12));
 	do {
 		answer = GUI_radio(Real2Host(ds_readd(DTP2)), 2,
@@ -479,7 +479,7 @@ signed short TRV_follow_trail_question(void)
 	hero = Real2Host(get_first_hero_available_in_group());
 
 	sprintf((char*)Real2Host(ds_readd(DTP2)),
-		(char*)get_tx(25),
+		get_tx(25),
 		(char*)hero + HERO_NAME2);
 
 	do {
@@ -506,7 +506,7 @@ signed short TRV_cross_a_ford(Bit8u *msg, signed short time, signed short mod)
 
 	do {
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(34),
+			get_tx(34),
 			(char*)msg);
 
 		do {
@@ -557,7 +557,7 @@ void TRV_ford_test(signed short mod, signed short time)
 				timewarp(MINUTES(time));
 
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx(37),
+					get_tx(37),
 					(char*)hero + HERO_NAME2);
 
 				hero_disease_test(hero, 2, 20 - (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK))));
@@ -568,7 +568,7 @@ void TRV_ford_test(signed short mod, signed short time)
 				timewarp(MINUTES(10));
 
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx(38),
+					get_tx(38),
 					(char*)hero + HERO_NAME2);
 			}
 
@@ -590,7 +590,7 @@ signed short TRV_ferry(Bit8u *msg, signed short price)
 	do {
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(28),
+			get_tx(28),
 			(char*)msg,
 			price, 5 * price);
 
@@ -628,7 +628,7 @@ signed short TRV_ferry(Bit8u *msg, signed short price)
 				set_party_money(p_money);
 
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx(32),
+					get_tx(32),
 					done = random_schick(6));
 
 				GUI_output(Real2Host(ds_readd(DTP2)));
@@ -755,7 +755,7 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 		} else {
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx2(city_index + 3),
+				get_tx2(city_index + 3),
 				(char*)hero + HERO_NAME2);
 
 			GUI_input(Real2Host(ds_readd(DTP2)), l_di = 0);
@@ -771,7 +771,7 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 			if (l_di == 2 || i == 99 || l4 == 99) {
 
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx2(city_index + 4),
+					get_tx2(city_index + 4),
 					(char*)hero + HERO_NAME2);
 
 				GUI_output(Real2Host(ds_readd(DTP2)));
@@ -787,7 +787,7 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 			} else {
 
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx2(l_di == 1 ? city_index + 5 : city_index + 6),
+					get_tx2(l_di == 1 ? city_index + 5 : city_index + 6),
 					(char*)hero + HERO_NAME2);
 
 				do {
@@ -942,7 +942,7 @@ void TRV_barrier(signed short text_start)
 						hero = get_hero(select_hero_ok_forced(get_tx2(text_start + 5)));
 
 						sprintf((char*)Real2Host(ds_readd(DTP2)) + 0x400,
-								(char*)get_tx2(text_start + 7),
+								get_tx2(text_start + 7),
 								(char*)hero + HERO_NAME2,
 								Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)),
 								Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));

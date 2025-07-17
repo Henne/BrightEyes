@@ -66,7 +66,7 @@ signed short DNG06_handler(void)
 	{
 		if (GUI_bool(get_tx(2)))
 		{
-			strcpy((char*)Real2Host(ds_readd(DTP2)), (char*)get_tx(3));
+			strcpy((char*)Real2Host(ds_readd(DTP2)), get_tx(3));
 
 			if (!ds_readb(DNG06_MONEY_FLAG))
 			{
@@ -79,7 +79,7 @@ signed short DNG06_handler(void)
 				add_party_money(100L * i);
 
 				sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
-					(char*)get_tx(4),
+					get_tx(4),
 					(char*)hero + HERO_NAME2,
 					i);
 
@@ -121,7 +121,7 @@ signed short DNG06_handler(void)
 			(char*)hero_first + HERO_NAME2,
 			(char*)hero_second + HERO_NAME2);
 
-		strcat((char*)Real2Host(ds_readd(DTP2)), (char*)get_tx(6));
+		strcat((char*)Real2Host(ds_readd(DTP2)), get_tx(6));
 
 		GUI_output(Real2Host(ds_readd(DTP2)));
 
@@ -276,7 +276,7 @@ signed short DNG06_handler(void)
 					test_skill(hero, TA_KOERPERBEHERRSCHUNG, host_readbs(hero + HERO_RS_BONUS1)) <= 0)
 				{
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx(20),
+						get_tx(20),
 						(char*)hero + HERO_NAME2,
 						(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
 						(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
@@ -323,7 +323,7 @@ signed short DNG06_handler(void)
 				hero = Real2Host(get_first_hero_available_in_group());
 
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx(23),
+					get_tx(23),
 					(char*)hero + HERO_NAME2);
 
 				GUI_output(Real2Host(ds_readd(DTP2)));
@@ -367,7 +367,7 @@ signed short DNG06_handler(void)
 				hero = Real2Host(get_first_hero_available_in_group());
 
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx(23),
+					get_tx(23),
 					(char*)hero + HERO_NAME2);
 
 				GUI_output(Real2Host(ds_readd(DTP2)));
@@ -382,7 +382,7 @@ signed short DNG06_handler(void)
 
 		/* large disk comes down from ceiling */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(25),
+			get_tx(25),
 			(char*)hero + HERO_NAME2);
 
 		GUI_output(Real2Host(ds_readd(DTP2)));
@@ -391,7 +391,7 @@ signed short DNG06_handler(void)
 		{
 			/* evasion succeeds */
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(26),
+				get_tx(26),
 				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 			GUI_output(Real2Host(ds_readd(DTP2)));
@@ -399,7 +399,7 @@ signed short DNG06_handler(void)
 		} else {
 			/* disk causes heavy damage */
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(27),
+				get_tx(27),
 				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 
 			GUI_output(Real2Host(ds_readd(DTP2)));
@@ -414,7 +414,7 @@ signed short DNG06_handler(void)
 			hero = Real2Host(get_first_hero_available_in_group());
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(29),
+				get_tx(29),
 				(char*)hero + HERO_NAME2,
 				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
 				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
@@ -460,7 +460,7 @@ signed short DNG06_handler(void)
 		ds_writeb(DIRECTION, (ds_readb(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(38),
+			get_tx(38),
 			get_ttx(ds_readws(TRV_DESTINATION) + 0xeb));
 
 		GUI_output(Real2Host(ds_readd(DTP2)));
@@ -488,7 +488,7 @@ void DNG06_fight_intro(signed short fight_id)
 	{
 		/* this is true all the time */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(30),
+			get_tx(30),
 			(char*)(!ds_readb(ESTORIK_KNOWN) ? get_tx(32) : get_tx(31)));
 
 		GUI_output(Real2Host(ds_readd(DTP2)));
@@ -513,7 +513,7 @@ void DNG06_chest2(RealPt chest)
 	Bit8u *hero;
 
 	sprintf((char*)Real2Host(ds_readd(DTP2)),
-		(char*)get_tx(33));
+		get_tx(33));
 
 	hero = get_hero(0);
 	for (i = 0; i <=6; i++, hero += SIZEOF_HERO)
@@ -523,7 +523,7 @@ void DNG06_chest2(RealPt chest)
 			!hero_dead(hero) &&
 			test_skill(hero, TA_LESEN, 0) > 0)
 		{
-			strcat((char*)Real2Host(ds_readd(DTP2)), (char*)get_tx(34));
+			strcat((char*)Real2Host(ds_readd(DTP2)), get_tx(34));
 			break;
 		}
 	}
@@ -577,7 +577,7 @@ void DNG09_pitfall(void)
 
 				/* print message */
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx(30),
+					get_tx(30),
 					(char*)hero_first + HERO_NAME2,
 					(char*)hero_second + HERO_NAME2);
 
@@ -607,7 +607,7 @@ void DNG09_pitfall(void)
 
 				/* print message */
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx(31),
+					get_tx(31),
 					(char*)hero_first + HERO_NAME2,
 					(char*)Real2Host(GUI_get_ptr(host_readbs(hero_first + HERO_SEX), 0)));
 

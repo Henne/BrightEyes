@@ -83,7 +83,7 @@ void talk_tavern(void)
 		if (host_readws(state_ptr) != -1) {
 
 			txt_id = host_readws(state_ptr) & 0x7fff;
-			format = (char*)get_tx(txt_id);
+			format = get_tx(txt_id);
 			hero = Real2Host(get_first_hero_available_in_group());
 
 			if (txt_id == 52 || txt_id == 72 || txt_id == 78 || txt_id == 83 || txt_id == 89) {
@@ -174,7 +174,7 @@ void talk_tavern(void)
 			}
 
 			txt_id = host_readb(state_ptr + 2);
-			format = (char*)get_tx(txt_id);
+			format = get_tx(txt_id);
 
 
 			if (txt_id == 1 || txt_id == 19) {
@@ -184,7 +184,7 @@ void talk_tavern(void)
 			}
 
 			txt_id = host_readb(state_ptr + 3);
-			format = (char*)get_tx(txt_id);
+			format = get_tx(txt_id);
 
 			if (txt_id == 13) {
 
@@ -206,7 +206,7 @@ void talk_tavern(void)
 			}
 
 			txt_id = host_readb(state_ptr + 4);
-			strcpy(answer3_buffer, (char*)get_tx(txt_id));
+			strcpy(answer3_buffer, get_tx(txt_id));
 
 			do {
 				answer = GUI_radio((Bit8u*)text_buffer, (signed char)options, answer1_buffer, answer2_buffer, answer3_buffer);

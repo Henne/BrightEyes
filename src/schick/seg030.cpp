@@ -194,7 +194,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 			txt_id = host_readws(state_ptr) & 0x7fff;
 
-			fmt = (char*)get_tx2(txt_id + txt_offset);
+			fmt = get_tx2(txt_id + txt_offset);
 
 			if (ds_readws(TLK_ID) == 11) {
 				if (ds_readws(DIALOG_INFORMER) == 2) {

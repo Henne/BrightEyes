@@ -1114,8 +1114,8 @@ static inline Bit8u *get_monname(unsigned short off)
 }
 
 #define get_tx2(no) get_tx2_func(4*(no))
-static inline Bit8u *get_tx2_func(unsigned short off) {
-	return (Bit8u*)host_readd((Bit8u*)ds_readd(TX2_INDEX) + off);
+static inline char *get_tx2_func(unsigned short off) {
+	return (char*)host_readd((Bit8u*)ds_readd(TX2_INDEX) + off);
 }
 
 #define get_ttx(no) get_ttx_func(4*(no))
@@ -1124,8 +1124,8 @@ static inline char *get_ttx_func(unsigned short off) {
 }
 
 #define get_tx(no) get_tx_func(4*(no))
-static inline Bit8u *get_tx_func(unsigned short off) {
-	return (Bit8u*)host_readd((Bit8u*)ds_readd(TX_INDEX) + off);
+static inline char *get_tx_func(unsigned short off) {
+	return (char*)host_readd((Bit8u*)ds_readd(TX_INDEX) + off);
 }
 
 static inline signed char get_cb_val(signed short x, signed short y) {
@@ -1383,8 +1383,8 @@ struct bittest {
 #define get_itemuser() ((Bit8u*)ds_readfp(ITEMUSER))
 
 #define get_ttx(no) ((char*)(host_readd(ds_readfp(TEXT_LTX_INDEX) + 4 * (no))))
-#define get_tx(no) (char*)(host_readd(ds_readfp(TX_INDEX) + 4 * (no)))
-#define get_tx2(no) (char*)(host_readd(ds_readfp(TX2_INDEX) + 4 * (no)))
+#define get_tx(no) ((char*)(host_readd(ds_readfp(TX_INDEX) + 4 * (no))))
+#define get_tx2(no) ((char*)(host_readd(ds_readfp(TX2_INDEX) + 4 * (no))))
 #define get_monname(no) ((char*)(host_readd(ds_readfp(MONNAMES_INDEX) + 4 * (no))))
 #define get_itemsdat(no) ((char*)(ds_readfp(ITEMSDAT) + 12 * (no)))
 #define get_itemname(no) ((char*)(host_readd(ds_readfp(ITEMSNAME) + 4 * (no))))

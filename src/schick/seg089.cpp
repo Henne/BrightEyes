@@ -144,7 +144,7 @@ signed short DNG15_handler(void)
 		tmp = dir;
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(23),
+			get_tx(23),
 			(char*)(tmp == 0 ? get_tx(22) :
 				(tmp == 2 ? get_tx(21) :
 				(tmp == 3 ? get_tx(20) : get_tx(19)))));
@@ -173,7 +173,7 @@ signed short DNG15_handler(void)
 		tmp = dir;
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(23),
+			get_tx(23),
 			(char*)(tmp == 0 ? get_tx(21) :
 				(tmp == 2 ? get_tx(22) :
 				(tmp == 3 ? get_tx(19) : get_tx(20)))));
@@ -471,7 +471,7 @@ signed short DNG15_handler(void)
 			ds_writeb(DIRECTION, (ds_readbs(TRAVEL_DESTINATION_VIEWDIR) + 2) & 0x03);
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(55),
+				get_tx(55),
 				get_ttx(ds_readw(TRV_DESTINATION) + 0xeb));
 
 			GUI_output(Real2Host(ds_readd(DTP2)));
@@ -568,7 +568,7 @@ void DNG15_smelling_chest(RealPt chest)
 		hero = get_hero(get_random_hero());
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(36),
+			get_tx(36),
 			(char*)hero + HERO_NAME2);
 		GUI_output(Real2Host(ds_readd(DTP2)));
 
@@ -662,7 +662,7 @@ void DNG15_collapsing_ceiling(Bit8u* ptr)
 					test_attrib(hero, ATTRIB_GE, 0) <= 0)
 				{
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx(44),
+						get_tx(44),
 						(char*)hero + HERO_NAME2,
 						(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
@@ -729,7 +729,7 @@ void DNG15_clear_way(Bit8u* ptr)
 				test_attrib(hero, ATTRIB_GE, 0) <= 0)
 			{
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx(44),
+					get_tx(44),
 					(char*)hero + HERO_NAME2,
 					(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 

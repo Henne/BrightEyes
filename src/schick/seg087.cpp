@@ -157,7 +157,7 @@ signed short DNG14_handler(void)
 			ds_writeb(DNG14_SECRETDOOR1, 1);
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(7),
+				get_tx(7),
 				(char*)hero + HERO_NAME2);
 
 			sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
@@ -188,7 +188,7 @@ signed short DNG14_handler(void)
 			ds_writeb(DNG14_SECRETDOOR2, 1);
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(7),
+				get_tx(7),
 				(char*)hero + HERO_NAME2);
 
 			sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
@@ -311,7 +311,7 @@ signed short DNG14_handler(void)
 			ds_writeb(DNG14_SECRETDOOR3, 1);
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(7),
+				get_tx(7),
 				(char*)hero + HERO_NAME2);
 
 			sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
@@ -343,7 +343,7 @@ signed short DNG14_handler(void)
 			ds_writeb(DNG14_SECRETDOOR4, 1);
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(7),
+				get_tx(7),
 				(char*)hero + HERO_NAME2);
 
 			sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
@@ -408,7 +408,7 @@ signed short DNG14_handler(void)
 						test_skill(hero, TA_KLETTERN, 0) <= 0)
 					{
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_tx(26),
+							get_tx(26),
 							(char*)hero + HERO_NAME2,
 							(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 
@@ -434,7 +434,7 @@ signed short DNG14_handler(void)
 						test_skill(hero, TA_KLETTERN, 4) <= 0)
 					{
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_tx(27),
+							get_tx(27),
 							(char*)hero + HERO_NAME2);
 
 						GUI_output(Real2Host(ds_readd(DTP2)));
@@ -529,7 +529,7 @@ signed short DNG14_handler(void)
 			ds_writeb(DNG14_SECRETDOOR5, 1);
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(7),
+				get_tx(7),
 				(char*)hero + HERO_NAME2);
 
 			sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
@@ -571,7 +571,7 @@ signed short DNG14_handler(void)
 					if (test_skill(hero, TA_SCHWIMMEN, 8) <= 0) {
 
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_tx(40),
+							get_tx(40),
 							(char*)hero + HERO_NAME2,
 							(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
@@ -585,7 +585,7 @@ signed short DNG14_handler(void)
 						if (hero_dead(hero)) {
 
 							sprintf((char*)Real2Host(ds_readd(DTP2)),
-								(char*)get_tx(63),
+								get_tx(63),
 								(char*)hero + HERO_NAME2);
 
 							GUI_output(Real2Host(ds_readd(DTP2)));
@@ -594,7 +594,7 @@ signed short DNG14_handler(void)
 						}
 					} else {
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_tx(41),
+							get_tx(41),
 							(char*)hero + HERO_NAME2,
 							(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
@@ -637,7 +637,7 @@ signed short DNG14_handler(void)
 	} else if (pos == DNG_POS(3,12,12) && pos != ds_readws(DNG_HANDLED_POS)) {
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(49),
+			get_tx(49),
 			(char*)hero + HERO_NAME2,
 			(char*)hero + HERO_NAME2);
 

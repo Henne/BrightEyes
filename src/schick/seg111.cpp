@@ -123,7 +123,7 @@ void tevent_057(void)
 				{
 
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx2(8),
+						get_tx2(8),
 						(char*)hero + HERO_NAME2,
 						(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
@@ -133,7 +133,7 @@ void tevent_057(void)
 
 				} else {
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx2(7),
+						get_tx2(7),
 						(char*)hero + HERO_NAME2);
 
 					GUI_output(Real2Host(ds_readd(DTP2)));
@@ -468,7 +468,7 @@ void tevent_063(void)
 	hero = get_hero(vomiter);
 
 	sprintf((char*)Real2Host(ds_readd(DTP2)),
-		(char*)get_tx2(47),
+		get_tx2(47),
 		(char*)hero + HERO_NAME2);
 
 	/* print who vomits */

@@ -41,7 +41,7 @@ void DNG14_dive(signed short diver_pos, signed char mod, signed short dest_x)
 			if (test_skill(hero, TA_SCHWIMMEN, mod) <= 0) {
 				/* swimming failed */
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx(42),
+					get_tx(42),
 					(char*)hero + HERO_NAME2,
 					(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
 					(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
@@ -54,7 +54,7 @@ void DNG14_dive(signed short diver_pos, signed char mod, signed short dest_x)
 				/* swimming succeeded */
 
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx(43),
+					get_tx(43),
 					(char*)hero + HERO_NAME2);
 
 				GUI_output(Real2Host(ds_readd(DTP2)));

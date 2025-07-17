@@ -113,7 +113,7 @@ signed short DNG12_handler(void)
 
 						/* prepare a message with the name of the NPC */
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-								(char*)get_tx(22),
+								get_tx(22),
 								(char*)get_hero(6) + HERO_NAME2);
 
 						GUI_output(Real2Host(ds_readd(DTP2)));
@@ -307,7 +307,7 @@ signed short DNG12_handler(void)
 				{
 					/* the hero must at least fall three times into pit */
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx(25),
+						get_tx(25),
 						(char*)hero + HERO_NAME2,
 						Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
 						Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
@@ -315,7 +315,7 @@ signed short DNG12_handler(void)
 					/* the hero falls again into the pit */
 #ifndef M302de_FEATURE_MOD
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx(31),
+						get_tx(31),
 						(char*)hero + HERO_NAME2,
 						Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
 						Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),
@@ -329,7 +329,7 @@ signed short DNG12_handler(void)
 					/* TODO: This mod works only for the German version and has to be
 							reworked, when BLADE.DAT should also be supported.
 					*/
-					if (strlen((char*)get_tx(25)) == 219)
+					if (strlen(get_tx(25)) == 219)
 					/* TODO: test if this block can really be replaced by the two lines below
 					const unsigned char add_line[110] = {	0x40, 0x3c,'I','C','H',' ',
 							'G','L','A','U','B','E',',',' ',
@@ -351,11 +351,11 @@ signed short DNG12_handler(void)
 							'\0'
 							};
 
-					strcpy((char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)), (char*)get_tx(25));
+					strcpy((char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)), get_tx(25));
 					strcat((char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)), (const char*)add_line);
 					*/
 
-					strcpy((char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)), (char*)get_tx(25));
+					strcpy((char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)), get_tx(25));
 					strcat((char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)),
 						"\x40\x3cICH GLAUBE, ICH MUSS ES NUR NOCH "
 						"EIN EINZIGES MAL VERSUCHEN!\x3e MURMELT %s "
@@ -382,7 +382,7 @@ signed short DNG12_handler(void)
 
 #ifndef M302de_FEATURE_MOD
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx(32),
+						get_tx(32),
 						(char*)hero + HERO_NAME2);
 #else
 					/* Feature Mod 7: The following is a translation of a text block in OBER.DTX
@@ -448,13 +448,13 @@ signed short DNG12_handler(void)
 				if (test_skill(hero, TA_SCHLOESSER, 0) <= 0) {
 					/* defusing trap failed */
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx(29),
+						get_tx(29),
 						(char*)hero + HERO_NAME2);
 					sub_hero_le(hero , dice_roll(3, 6, 0));
 				} else {
 					/* trap defused */
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx(30),
+						get_tx(30),
 						(char*)hero + HERO_NAME2,
 						(char*)hero + HERO_NAME2);
 

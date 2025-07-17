@@ -5687,7 +5687,7 @@ signed short copy_protection(void)
 
 			/* prepare the string */
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(39),
+				get_tx(39),
 				ds_readbs((QUESTIONS_HANDBOOK + 3) + 19 * l_di),
 				ds_readbs((QUESTIONS_HANDBOOK + 2) + 19 * l_di),
 				ds_readbs((QUESTIONS_HANDBOOK + 1) + 19 * l_di),
@@ -5718,7 +5718,7 @@ signed short copy_protection(void)
 
 			/* prepare the string */
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(40),
+				get_tx(40),
 				get_tx(41 + ds_readbs((QUESTIONS_MAP + 0) + 3 * l_di)),
 				get_ttx(235 + ds_readbs((QUESTIONS_MAP + 1) + 3 * l_di)));
 

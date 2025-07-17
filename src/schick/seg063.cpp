@@ -179,14 +179,14 @@ void do_harbor(void)
 					psg_ptr = p_datseg + SIZEOF_HARBOR_OPTION * answer + HARBOR_OPTIONS;
 
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx(16),
+						get_tx(16),
 
-						(char*)get_tx(ds_readws(SEA_TRAVEL_TX_SHIP + 2 * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE))), /* Fischerboot, Schnellsegler etc. */
+						get_tx(ds_readws(SEA_TRAVEL_TX_SHIP + 2 * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE))), /* Fischerboot, Schnellsegler etc. */
 						(char*)Real2Host(host_readds(psg_ptr + HARBOR_OPTION_SHIP_NAME_PTR)),
 
 						(char*)(!host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TIMER) ? get_tx(5) : get_tx(6)), /* today or tomorrow */
 
-						(char*)get_tx(ds_readws(PASSAGE_TYPE_TO_NAME + 2 * ds_readbs(SHIP_TABLE + SHIP_TABLE_PASSAGE_TYPE + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE)))), /* Kabinenpassage etc. */
+						get_tx(ds_readws(PASSAGE_TYPE_TO_NAME + 2 * ds_readbs(SHIP_TABLE + SHIP_TABLE_PASSAGE_TYPE + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE)))), /* Kabinenpassage etc. */
 						get_ttx(host_readb(psg_ptr + HARBOR_OPTION_DESTINATION) + 235),
 #ifdef __BORLANDC__
 						get_passage_travel_hours(host_readb(Real2Host(host_readd(psg_ptr + HARBOR_OPTION_ROUTE_PTR)) + SEA_ROUTE_DISTANCE), ds_readbs(SHIP_TABLE + SHIP_TABLE_BASE_SPEED + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE))),
@@ -298,7 +298,7 @@ void do_harbor(void)
 						} while (answer != 0);
 
 						strcat((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_tx(25));
+							get_tx(25));
 
 						GUI_output(Real2Host(ds_readd(DTP2)));
 

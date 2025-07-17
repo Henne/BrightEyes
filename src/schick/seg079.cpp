@@ -131,7 +131,7 @@ signed short DNG03_handler(void)
 				test_skill(hero, TA_KLETTERN, 2) <= 0)
 			{
 				sprintf((char*)Real2Host(ds_readfp(DTP2)),
-					(char*)get_tx(6),
+					get_tx(6),
 					(char*)hero + HERO_NAME2,
 					(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
@@ -221,7 +221,7 @@ signed short DNG03_handler(void)
 		if (j != 0 || test_attrib(hero, ATTRIB_GE, 2) <= 0)
 		{
 			sprintf((char*)Real2Host(ds_readfp(DTP2)),
-				(char*)get_tx(13),
+				get_tx(13),
 				(char*)hero + HERO_NAME2,
 				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
@@ -253,7 +253,7 @@ signed short DNG03_handler(void)
 		{
 
 			sprintf((char*)Real2Host(ds_readfp(DTP2)),
-				(char*)get_tx(13),
+				get_tx(13),
 				(char*)hero + HERO_NAME2,
 				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
@@ -405,7 +405,7 @@ signed short DNG03_handler(void)
 		ds_writeb(DIRECTION, (ds_readws(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(30),
+			get_tx(30),
 			get_ttx(ds_readws(TRV_DESTINATION) + 0xeb));
 
 		GUI_output(Real2Host(ds_readd(DTP2)));
@@ -595,7 +595,7 @@ void DNG03_chest11_func3(RealPt)
 					counter++;
 
 					sprintf((char*)Real2Host(ds_readfp(DTP2)),
-						(char*)get_tx(27),
+						get_tx(27),
 						(char*)hero + HERO_NAME2);
 
 					GUI_output(Real2Host(ds_readfp(DTP2)));

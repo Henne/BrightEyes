@@ -558,7 +558,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 					make_valuta_str((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), money);
 
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx(35),
+						get_tx(35),
 						(char*)hero + HERO_NAME2,
 						Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
 
@@ -592,7 +592,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 					make_valuta_str((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), money);
 
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx(35),
+						get_tx(35),
 						(char*)hero + HERO_NAME2,
 						Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
 
@@ -620,7 +620,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 				make_valuta_str((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), money);
 
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx(38),
+					get_tx(38),
 					Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
 					(char*)hero + HERO_NAME2);
 
@@ -648,7 +648,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 				make_valuta_str((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), money);
 
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx(40),
+					get_tx(40),
 					Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
 					(char*)hero + HERO_NAME2);
 
@@ -659,7 +659,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 				ds_writew(REQUEST_REFRESH, 1);
 			} else {
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx(41),
+					get_tx(41),
 					(char*)hero + HERO_NAME2);
 
 				GUI_output(Real2Host(ds_readd(DTP2)));

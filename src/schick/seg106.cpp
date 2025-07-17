@@ -228,13 +228,13 @@ void print_item_description(Bit8u *hero, signed short pos)
 			is_in_word_array(host_readw(inventory_p + INVENTORY_ITEM_ID), (signed short*)(p_datseg + ITEMS_PLURALWORDS))) {
 			/* more than one item or special */
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx2(72),
+				get_tx2(72),
 				get_ttx(305),
 				Real2Host(GUI_names_grammar(0x4004, host_readw(inventory_p + INVENTORY_ITEM_ID), 0)));
 		} else {
 			/* one item */
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx2(11),
+				get_tx2(11),
 				get_ttx(304),
 				Real2Host(GUI_names_grammar(0, host_readw(inventory_p + INVENTORY_ITEM_ID), 0)));
 		}
@@ -270,7 +270,7 @@ void print_item_description(Bit8u *hero, signed short pos)
 	/* magic wand */
 	if (host_readw(inventory_p + INVENTORY_ITEM_ID) == ITEM_MAGIC_WAND) {
 		sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
-			(char*)get_tx2(53),
+			get_tx2(53),
 			host_readbs(hero + HERO_STAFFSPELL_LVL));
 		strcat((char*)Real2Host(ds_readd(DTP2)),
 			(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
@@ -364,7 +364,7 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 		} else if (two_hand_collision(hero2, item1, pos2)) {
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx2(67),
+				get_tx2(67),
 				(char*)(hero2 + HERO_NAME2));
 
 			GUI_output(Real2Host(ds_readd(DTP2)));

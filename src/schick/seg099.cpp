@@ -41,7 +41,7 @@ void spell_beherrschung(void)
 		ds_writew(SPELL_SPECIAL_AECOST, -2);
 	} else {
 		if (get_spelltarget() == get_spelluser()) {
-			strcpy((char*)Real2Host(ds_readd(DTP2)), (char*)get_tx(0));
+			strcpy((char*)Real2Host(ds_readd(DTP2)), get_tx(0));
 			ds_writew(SPELL_SPECIAL_AECOST, 0);
 		} else {
 			ds_writew(SPELL_SPECIAL_AECOST, random_interval(2, 5) * 4);
@@ -51,7 +51,7 @@ void spell_beherrschung(void)
 			} else {
 				and_ptr_bs(get_spelltarget() + HERO_FLAGS1, 0xdf); /* unset 'renegade' flag */
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx(1),
+					get_tx(1),
 					(char*)get_spelltarget() + HERO_NAME2);
 			}
 		}
@@ -72,7 +72,7 @@ void spell_gardanium(void)
 
 	/* prepare a question */
 	sprintf((char*)Real2Host(ds_readd(DTP2)),
-		(char*)get_tx(2), (char*)(get_spelluser() + HERO_NAME2));
+		get_tx(2), (char*)(get_spelluser() + HERO_NAME2));
 
 	/* ask and get the answer */
 	answer = GUI_input(Real2Host(ds_readd(DTP2)), 2);
@@ -91,7 +91,7 @@ void spell_gardanium(void)
 			ds_writew(SPELL_SPECIAL_AECOST, answer);
 			/* prepare the message */
 			strcpy((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(7));
+				get_tx(7));
 		} else {
 			/* not enough AE */
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
@@ -135,7 +135,7 @@ void spell_illusionen(void)
 	} else {
 		/* print a failure message */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(3),
+			get_tx(3),
 			(char*)Real2Host(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 
 		/* costs 2 AE */
@@ -165,7 +165,7 @@ void spell_verwandlung(void)
 			/* unset petrified bit */
 			and_ptr_bs(get_spelltarget() + HERO_FLAGS1, 0xfb); /* unset 'petrified' flag */
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(4),
+				get_tx(4),
 				(char*)get_spelltarget() + HERO_NAME2);
 		}
 	} else {
@@ -187,7 +187,7 @@ void spell_verwandlung(void)
 #endif
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(5),
+				get_tx(5),
 				(char*)get_spelltarget() + HERO_NAME2);
 			ds_writew(SPELL_SPECIAL_AECOST, 0);
 		}
@@ -220,7 +220,7 @@ void spell_band(void)
 		or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS1, 0x20); /* set 'tied' flag */
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(6),
+				get_tx(6),
 				Real2Host(GUI_names_grammar((signed short)0x8000,
 					host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 	} else {
@@ -238,14 +238,14 @@ void spell_band(void)
 
 			/* prepare message */
 			strcpy((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(112));
+				get_tx(112));
 		} else {
 			/* set flag */
 			or_ptr_bs(get_spelltarget() + HERO_FLAGS1, 0x80); /* set 'tied' flag */
 
 			/* prepare message */
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx(6),
+					get_tx(6),
 					(char*)get_spelltarget() + HERO_NAME2);
 		}
 	}
@@ -264,7 +264,7 @@ void spell_bannbaladin(void)
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(8),
+				get_tx(8),
 				Real2Host(GUI_names_grammar(0,
 					host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 	} else {
@@ -278,7 +278,7 @@ void spell_bannbaladin(void)
 		or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS2, 1); /* set 'tame' flag */
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(9),
+				get_tx(9),
 				Real2Host(GUI_names_grammar((signed short)0x8000,
 					host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 	}
@@ -300,7 +300,7 @@ void spell_boeser_blick(void)
 
 		/* prepare message */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(10),
+			get_tx(10),
 			(char*)Real2Host(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 
 	}
@@ -351,7 +351,7 @@ void spell_herrdertiere(void)
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(11),
+				get_tx(11),
 				Real2Host(GUI_names_grammar(0,
 					host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 	} else {
@@ -365,7 +365,7 @@ void spell_herrdertiere(void)
 			or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS2, 1); /* set 'tame' flag */
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(9),
+				get_tx(9),
 				Real2Host(GUI_names_grammar((signed short)0x8000,
 					host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 		}
@@ -387,7 +387,7 @@ void spell_horriphobus(void)
 		and_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS2, 0xfd); /* unset 'renegade' flag */
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(12),
+			get_tx(12),
 			Real2Host(GUI_names_grammar((signed short)0x8000,
 				host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 	}
@@ -432,7 +432,7 @@ void spell_somnigravis(void)
 
 		/* prepare message */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(13),
+			get_tx(13),
 			Real2Host(GUI_names_grammar((signed short)0x8000,
 				host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 		return;
@@ -452,14 +452,14 @@ void spell_somnigravis(void)
 
 		/* prepare message */
 		strcpy((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(112));
+			get_tx(112));
 	} else {
 		/* set the flag */
 		or_ptr_bs(get_spelltarget() + HERO_FLAGS1, 2); /* set 'sleep' flag */
 
 		/* prepare message */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(13),
+			get_tx(13),
 			(char*)get_spelltarget() + HERO_NAME2);
 	}
 }
@@ -480,7 +480,7 @@ void spell_zwingtanz(void)
 
 		/* prepare message */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(14),
+			get_tx(14),
 			Real2Host(GUI_names_grammar((signed short)0x8000,
 				host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 	}
@@ -563,7 +563,7 @@ void spell_skelettarius(void)
 
 		/* prepare message */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(15),
+			get_tx(15),
 			Real2Host(GUI_names_grammar((signed short)0x8000,
 				host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 
@@ -573,7 +573,7 @@ void spell_skelettarius(void)
 
 		/* prepare message */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(16),
+			get_tx(16),
 			Real2Host(GUI_names_grammar((signed short)0x8000,
 				host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 
@@ -699,7 +699,7 @@ void spell_axxeleratus(void)
 
 		/* prepare message */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(17),
+			get_tx(17),
 			(char*)get_spelltarget() + HERO_NAME2);
 
 	} else {
@@ -769,7 +769,7 @@ void spell_transversalis(void)
 
 		/* prepare message */
 		strcpy((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(18));
+			get_tx(18));
 
 	} else {
 		/* set spell costs */
@@ -824,7 +824,7 @@ void spell_balsam(void)
 	} else {
 		/* prepare message */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(19),
+			get_tx(19),
 			(char*)get_spelluser() + HERO_NAME2,
 			(char*)get_spelltarget() + HERO_NAME2);
 
@@ -880,14 +880,14 @@ void spell_hexenspeichel(void)
 
 		/* prepare message */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(20),
+			get_tx(20),
 			(char*)get_spelluser() + HERO_NAME2);
 		return;
 	}
 
 	/* prepare question */
 	sprintf((char*)Real2Host(ds_readd(DTP2)),
-		(char*)get_tx(19),
+		get_tx(19),
 		(char*)get_spelluser() + HERO_NAME2,
 		(char*)get_spelltarget() + HERO_NAME2);
 
@@ -926,7 +926,7 @@ void spell_klarum_purum(void)
 
 		/* prepare message */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(21),
+			get_tx(21),
 			(char*)get_spelltarget() + HERO_NAME2);
 
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
@@ -946,7 +946,7 @@ void spell_klarum_purum(void)
 
 		/* prepare message */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(22),
+			get_tx(22),
 			(char*)get_spelltarget() + HERO_NAME2);
 	}
 }
@@ -962,7 +962,7 @@ void spell_ruhe_koerper(void)
 
 	/* prepare message */
 	sprintf((char*)Real2Host(ds_readd(DTP2)),
-		(char*)get_tx(51),
+		get_tx(51),
 		(char*)get_spelltarget() + HERO_NAME2);
 }
 
@@ -979,7 +979,7 @@ void spell_tiere_heilen(void)
 
 	/* prepare message */
 	sprintf((char*)Real2Host(ds_readd(DTP2)),
-		(char*)get_tx(23),
+		get_tx(23),
 		(char*)get_spelluser() + HERO_NAME2);
 
 	/* ask how many AE should be spent */
@@ -1012,7 +1012,7 @@ void spell_adleraug(void)
 
 	/* prepare message */
 	sprintf((char*)Real2Host(ds_readd(DTP2)),
-		(char*)get_tx(24),
+		get_tx(24),
 		(char*)get_spelluser() + HERO_NAME2);
 }
 
@@ -1038,7 +1038,7 @@ RealPt spell_analues(void)
 	item_id = host_readws(get_spelluser() + SIZEOF_INVENTORY * item_pos + HERO_INVENTORY + INVENTORY_ITEM_ID);
 #endif
 
-	strcpy((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), (char*)get_tx(52));
+	strcpy((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), get_tx(52));
 
 	if (item_id) {
 
@@ -1059,14 +1059,14 @@ RealPt spell_analues(void)
 
 					/* copy the matching result string */
 					strcpy((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
-						(char*)get_tx(ds_readbs((ANALUES_ITEMS + ANALUES_ITEM_DTP) + i * SIZEOF_ANALUES_ITEM)));
+						get_tx(ds_readbs((ANALUES_ITEMS + ANALUES_ITEM_DTP) + i * SIZEOF_ANALUES_ITEM)));
 
 					or_ptr_bs(get_spelluser() + item_pos * SIZEOF_INVENTORY + (HERO_INVENTORY + INVENTORY_FLAGS), 0x80); /* set 'magic_revealed' flag */
 					break;
 				} else {
 					/* nothing found string */
 					strcpy((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
-						(char*)get_tx(55));
+						get_tx(55));
 					break;
 				}
 			}
@@ -1077,7 +1077,7 @@ RealPt spell_analues(void)
 
 		/* prepare message */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(53),
+			get_tx(53),
 			(char*)get_spelluser() + HERO_NAME2,
 			(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
 	}

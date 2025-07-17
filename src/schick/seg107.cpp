@@ -481,12 +481,12 @@ void item_brenne(void)
 
 			/* prepare message */
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(119),
+				get_tx(119),
 				(char*)get_itemuser() + HERO_NAME2);
 		} else {
 			/* prepare message */
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(120),
+				get_tx(120),
 				(char*)get_itemuser() + HERO_NAME2);
 		}
 	} else {
@@ -495,7 +495,7 @@ void item_brenne(void)
 			/* No tinderbox */
 			/* prepare message */
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(122),
+				get_tx(122),
 				(char*)get_itemuser() + HERO_NAME2);
 		} else {
 

@@ -842,7 +842,7 @@ void FIG_use_item(Bit8u *hero, Bit8u *target_monster, Bit8u *target_hero, signed
 
 		if (host_readbs(hero + HERO_ENEMY_ID) >= 10) {
 
-			strcpy((char*)Real2Host(ds_readd(DTP2)), (char*)get_tx(37));
+			strcpy((char*)Real2Host(ds_readd(DTP2)), get_tx(37));
 
 			FIG_damage_enemy(target_monster, damage, 0);
 
@@ -855,7 +855,7 @@ void FIG_use_item(Bit8u *hero, Bit8u *target_monster, Bit8u *target_hero, signed
 
 			if (flag != 0) {
 
-				strcpy((char*)Real2Host(ds_readd(DTP2)), (char*)get_tx(37));
+				strcpy((char*)Real2Host(ds_readd(DTP2)), get_tx(37));
 
 				sub_hero_le(target_hero, damage);
 

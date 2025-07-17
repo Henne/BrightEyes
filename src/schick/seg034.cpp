@@ -855,7 +855,7 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 
 			if (!problem) {
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx(12), bp_cost); /* Target: %d BP */
+					get_tx(12), bp_cost); /* Target: %d BP */
 			}
 
 

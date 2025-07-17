@@ -130,7 +130,7 @@ signed short DNG01_handler(void)
 					sub_hero_le(hero, 2);
 
 					sprintf((char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)),
-						(char*)get_tx(12),
+						get_tx(12),
 						(char*)hero + HERO_NAME2);
 
 					GUI_output(Real2Host(ds_readfp(TEXT_OUTPUT_BUF)));
@@ -312,11 +312,11 @@ void DNG01_chest6_x3(RealPt chest)
 	 */
 #ifdef M302de_ORIGINAL_BUGFIX
 	sprintf((char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)),
-		(char*)get_tx(14),
+		get_tx(14),
 		(char*)Real2Host(get_first_hero_available_in_group()));
 #else
 	sprintf((char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)),
-		(char*)get_tx(14), 10);
+		get_tx(14), 10);
 #endif
 	print_msg_with_first_hero(Real2Host(ds_readfp(TEXT_OUTPUT_BUF)));
 

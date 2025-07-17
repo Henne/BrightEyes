@@ -248,7 +248,7 @@ signed short DNG07_handler(void)
 		if (GUI_bool(get_tx(6)))
 		{
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(7),
+				get_tx(7),
 				(char*)hero + HERO_NAME2);
 
 			GUI_output(Real2Host(ds_readd(DTP2)));
@@ -281,7 +281,7 @@ signed short DNG07_handler(void)
 			ds_writeb(DIRECTION, (ds_readb(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(14),
+				get_tx(14),
 				get_ttx(ds_readws(TRV_DESTINATION) + 0xeb));
 
 			GUI_output(Real2Host(ds_readd(DTP2)));
@@ -341,7 +341,7 @@ void DNG09_statues(signed short prob, signed short bonus)
 					or_ptr_bs(hero + HERO_FLAGS2, 0x20); /* set 'gods_pissed' flag */
 
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx(8),
+						get_tx(8),
 						(char*)hero + HERO_NAME2);
 
 					GUI_output(Real2Host(ds_readd(DTP2)));
@@ -350,7 +350,7 @@ void DNG09_statues(signed short prob, signed short bonus)
 					sub_hero_le(hero, random_schick(6));
 
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx(9),
+						get_tx(9),
 						(char*)hero + HERO_NAME2);
 
 					GUI_output(Real2Host(ds_readd(DTP2)));

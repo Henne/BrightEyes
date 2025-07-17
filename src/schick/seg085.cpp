@@ -58,7 +58,7 @@ signed short DNG10_handler(void)
 		if (GUI_bool(get_tx(1)))
 		{
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(2),
+				get_tx(2),
 				(char*)hero + HERO_NAME2);
 
 			GUI_output(Real2Host(ds_readd(DTP2)));
@@ -99,14 +99,14 @@ signed short DNG10_handler(void)
 		answer = dice_roll(3, 6, 4);
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(9),
+			get_tx(9),
 			(char*)hero + HERO_NAME2);
 
 		/* check if the hero will survive */
 		if (host_readws(hero + HERO_LE) > answer)
 		{
 			sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
-				(char*)get_tx(10),
+				get_tx(10),
 				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 			strcat((char*)Real2Host(ds_readd(DTP2)),
@@ -132,13 +132,13 @@ signed short DNG10_handler(void)
 				ds_writeb(DNG10_HOLE_STATE, 2);
 
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx(11),
+					get_tx(11),
 					(char*)hero + HERO_NAME2);
 
 				if (GUI_bool(Real2Host(ds_readd(DTP2))))
 				{
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx(12),
+						get_tx(12),
 						(char*)hero + HERO_NAME2);
 
 					GUI_output(Real2Host(ds_readd(DTP2)));
@@ -179,7 +179,7 @@ signed short DNG10_handler(void)
 				{
 
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx(14),
+						get_tx(14),
 						(char*)hero + HERO_NAME2);
 
 					dec_ds_bs_post(DNG10_FLOORPLATE_LOADS);
@@ -187,7 +187,7 @@ signed short DNG10_handler(void)
 					sub_hero_le(hero, dice_roll(3, 6, 0));
 				} else {
 					strcpy((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx(15));
+						get_tx(15));
 				}
 
 				GUI_output(Real2Host(ds_readd(DTP2)));
@@ -271,7 +271,7 @@ signed short DNG10_handler(void)
 			xor_ds_bs(DNG10_MUMMY_LEVER, 1);
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(26),
+				get_tx(26),
 				(char*)hero + HERO_NAME2);
 
 			GUI_output(Real2Host(ds_readd(DTP2)));
@@ -424,7 +424,7 @@ signed short DNG10_handler(void)
 		ds_writeb(DIRECTION, (ds_readbs(TRAVEL_DESTINATION_VIEWDIR) + 2) & 0x03);
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(40),
+			get_tx(40),
 			get_ttx(ds_readw(TRV_DESTINATION) + 0xeb));
 
 		GUI_output(Real2Host(ds_readd(DTP2)));

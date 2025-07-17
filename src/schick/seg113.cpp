@@ -57,7 +57,7 @@ void tevent_080(void)
 			ds_writeb(TEVENT080_TATZELWURM, 1);
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx2(87),
+				get_tx2(87),
 				(char*)hero + HERO_NAME2);
 
 			do {
@@ -293,7 +293,7 @@ void tevent_098(void)
 					if (test_skill(hero, TA_AKROBATIK, 0) > 0) {
 
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_tx2(31),
+							get_tx2(31),
 							(char*)hero + HERO_NAME2);
 
 						GUI_output(Real2Host(ds_readd(DTP2)));
@@ -301,7 +301,7 @@ void tevent_098(void)
 					} else {
 
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_tx2(32),
+							get_tx2(32),
 							(char*)hero + HERO_NAME2);
 
 						GUI_output(Real2Host(ds_readd(DTP2)));
@@ -336,7 +336,7 @@ void tevent_098(void)
 			if (test_skill(hero, TA_AKROBATIK, 0) > 0) {
 
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx2(35),
+					get_tx2(35),
 					(char*)hero + HERO_NAME2);
 
 				GUI_output(Real2Host(ds_readd(DTP2)));
@@ -352,7 +352,7 @@ void tevent_098(void)
 						if (test_attrib(hero, ATTRIB_GE, -4) > 0) {
 
 							sprintf((char*)Real2Host(ds_readd(DTP2)),
-								(char*)get_tx2(36),
+								get_tx2(36),
 								(char*)hero + HERO_NAME2);
 
 							GUI_output(Real2Host(ds_readd(DTP2)));
@@ -360,7 +360,7 @@ void tevent_098(void)
 						} else {
 
 							sprintf((char*)Real2Host(ds_readd(DTP2)),
-								(char*)get_tx2(32),
+								get_tx2(32),
 								(char*)hero + HERO_NAME2);
 
 							GUI_output(Real2Host(ds_readd(DTP2)));
@@ -372,7 +372,7 @@ void tevent_098(void)
 			} else {
 
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx2(32),
+					get_tx2(32),
 					(char*)hero + HERO_NAME2);
 
 				GUI_output(Real2Host(ds_readd(DTP2)));
@@ -497,7 +497,7 @@ void tevent_101(void)
 	if (!ds_readb(TEVENT101_FLAG)) {
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx2(41),
+			get_tx2(41),
 			(mod = random_schick(4) + 2));
 
 
@@ -653,7 +653,7 @@ void tevent_104(void)
 					timewarp(MINUTES(30));
 
 					sprintf((char*)Real2Host(ds_readd(DTP2)) + 0x400,
-						(char*)get_tx2(55),
+						get_tx2(55),
 						(char*)hero + HERO_NAME2);
 
 					GUI_dialog_na(0, Real2Host(ds_readd(DTP2)) + 0x400);
@@ -820,7 +820,7 @@ void tevent_107(void)
 				if (get_first_hero_with_item(ITEM_ROPE) != -1) { /* TODO: ROPE_LADDER? STAFFSPELL? */
 
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx2(70),
+						get_tx2(70),
 						(char*)hero + HERO_NAME2);
 
 					sub_hero_le(hero, random_schick(11) + 1);
@@ -828,7 +828,7 @@ void tevent_107(void)
 				} else {
 
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx2(71),
+						get_tx2(71),
 						(char*)hero + HERO_NAME2);
 
 					sub_hero_le(hero, random_schick(11) + 4);

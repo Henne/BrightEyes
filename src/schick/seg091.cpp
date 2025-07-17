@@ -48,7 +48,7 @@ signed short DNG13_handler(void)
 		hero = get_hero(get_random_hero());
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(18),
+			get_tx(18),
 			(char*)hero + HERO_NAME2);
 
 		GUI_output(Real2Host(ds_readd(DTP2)));

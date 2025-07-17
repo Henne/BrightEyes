@@ -232,7 +232,7 @@ signed short plan_alchemy(Bit8u *hero)
 						if ((ds_readbs((ALCHEMY_RECIPES + RECIPE_DURATION) + recipe_index * SIZEOF_RECIPE) > 8) && (ds_readbs(CURRENT_LOCTYPE) != LOCTYPE_INN)) {
 							/* recipes with durations > 8 hours have to be done in a inn. */
 							sprintf((char*)Real2Host(ds_readd(DTP2)),
-								(char*)get_tx(44),
+								get_tx(44),
 								ds_readbs((ALCHEMY_RECIPES+RECIPE_DURATION) + recipe_index * SIZEOF_RECIPE));
 
 							GUI_output(Real2Host(ds_readd(DTP2)));
@@ -253,11 +253,11 @@ signed short plan_alchemy(Bit8u *hero)
 							) {
 
 								sprintf((char*)Real2Host(ds_readd(DTP2)),
-									(char*)get_tx(45),
+									get_tx(45),
 									ds_readbs((ALCHEMY_RECIPES + RECIPE_DURATION) + recipe_index * SIZEOF_RECIPE));
 
 								sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
-									(char*)get_tx(47),
+									get_tx(47),
 									(char*)hero + HERO_NAME2);
 
 								ds_writew(TEXTBOX_WIDTH, 7);
@@ -325,7 +325,7 @@ signed short plan_alchemy(Bit8u *hero)
 				} else {
 					/* not all ingrendients */
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx(49),
+						get_tx(49),
 						(char*)Real2Host(GUI_name_singular((Bit8u*)get_itemname(ds_readws(ALCHEMY_MISSING_ITEM)))));
 
 					GUI_output(Real2Host(ds_readd(DTP2)));
@@ -334,7 +334,7 @@ signed short plan_alchemy(Bit8u *hero)
 		} else {
 			/* no recipes */
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(50),
+				get_tx(50),
 				(char*)hero + HERO_NAME2);
 
 			GUI_output(Real2Host(ds_readd(DTP2)));
@@ -431,7 +431,7 @@ signed short skill_cure_disease(Bit8u *healer, Bit8u *patient, signed short hand
 			/* not the needed herbs for healing this disease */
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(118),
+				get_tx(118),
 				(char*)healer + HERO_NAME2);
 
 			GUI_output(Real2Host(ds_readd(DTP2)));

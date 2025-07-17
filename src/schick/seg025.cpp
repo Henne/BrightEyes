@@ -106,7 +106,7 @@ void show_citizen(void)
 			init_ani(ds_writew(REQUEST_REFRESH, 0));
 
 			strcpy((char*)Real2Host((RealPt)ds_readd(TEXT_OUTPUT_BUF)),
-				(char*)get_tx(ds_readw(CURRENT_LOCDATA)));
+				get_tx(ds_readw(CURRENT_LOCDATA)));
 
 			if (ds_readbs(YEAR) == 15 && ds_readbs(MONTH) == 1 && random_schick(100) <= 20) {
 
@@ -141,7 +141,7 @@ void do_house(void)
 	Bit8u *hero;
 
 	/* prepare the question */
-	strcpy((char*)Real2Host(ds_readd(DTP2)), (char*)get_tx(ds_readws(CURRENT_LOCDATA)));
+	strcpy((char*)Real2Host(ds_readd(DTP2)), get_tx(ds_readws(CURRENT_LOCDATA)));
 
 	strcat((char*)Real2Host(ds_readd(DTP2)), get_ttx(623));
 

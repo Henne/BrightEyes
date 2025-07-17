@@ -88,7 +88,7 @@ signed short range_attack_check_ammo(Bit8u *hero, signed short arg)
 					if (arg != 2) {
 
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-								(char*)get_tx(8),
+								get_tx(8),
 								(char*)hero + HERO_NAME2);
 
 						GUI_output(Real2Host(ds_readd(DTP2)));
@@ -108,7 +108,7 @@ signed short range_attack_check_ammo(Bit8u *hero, signed short arg)
 					if (arg != 2) {
 
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-								(char*)get_tx(9),
+								get_tx(9),
 								(char*)hero + HERO_NAME2);
 
 						GUI_output(Real2Host(ds_readd(DTP2)));
@@ -130,7 +130,7 @@ signed short range_attack_check_ammo(Bit8u *hero, signed short arg)
 					if (arg != 2) {
 
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-								(char*)get_tx(10),
+								get_tx(10),
 								(char*)hero + HERO_NAME2);
 
 						GUI_output(Real2Host(ds_readd(DTP2)));

@@ -190,7 +190,7 @@ void FIG_loot_monsters(void)
 		make_valuta_str((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), money);
 
 		sprintf((char*)(Real2Host(ds_readd(DTP2))),
-			(char*)get_tx(15),
+			get_tx(15),
 			Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
 		GUI_output(Real2Host(ds_readd(DTP2)));
 
@@ -253,7 +253,7 @@ void FIG_split_ap(void)
 	}
 
 	/* prepare output */
-	sprintf((char*)Real2Host(ds_readd(DTP2)), (char*)get_tx(33), ap);
+	sprintf((char*)Real2Host(ds_readd(DTP2)), get_tx(33), ap);
 	GUI_output(Real2Host(ds_readd(DTP2)));
 
 	/* give AP to the group */

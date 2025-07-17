@@ -104,7 +104,7 @@ void tevent_037(void)
 				if (hours >= 4)
 				{
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx2(36),
+						get_tx2(36),
 						hours);
 
 					GUI_output(Real2Host(ds_readd(DTP2)));
@@ -148,7 +148,7 @@ void tevent_037(void)
 					hero = get_hero(answer = get_random_hero());
 
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx2(45),
+						get_tx2(45),
 						(char*)hero + HERO_NAME2,
 						(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 
@@ -176,7 +176,7 @@ void tevent_037(void)
 							if (strcmp((char*)Real2Host(ds_readd(TEXT_INPUT_BUF)), (char*)p_datseg + STR_RAD3))
 							{
 								sprintf((char*)Real2Host(ds_readd(DTP2)),
-									(char*)get_tx2(50),
+									get_tx2(50),
 									(char*)hero + HERO_NAME2,
 									(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
 									(char*)hero + HERO_NAME2,
@@ -231,7 +231,7 @@ void tevent_037(void)
 						timewarp(HOURS(1));
 
 						sprintf((char*)Real2Host(ds_readd(DTP2)),
-							(char*)get_tx2(44),
+							get_tx2(44),
 							(char*)hero + HERO_NAME2);
 
 						GUI_output(Real2Host(ds_readd(DTP2)));
@@ -554,7 +554,7 @@ void tevent_124(void)
 				{
 					/* fatal */
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx2(56),
+						get_tx2(56),
 						(char*)hero + HERO_NAME2,
 						(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
@@ -565,7 +565,7 @@ void tevent_124(void)
 				} else {
 
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx2(55),
+						get_tx2(55),
 						(char*)hero + HERO_NAME2);
 
 					GUI_output(Real2Host(ds_readd(DTP2)));
@@ -648,7 +648,7 @@ void tevent_145(void)
 	}
 
 	sprintf((char*)Real2Host(ds_readd(DTP2)),
-		(char*)get_tx2(45),
+		get_tx2(45),
 		get_ttx(ds_readws(TRV_DESTINATION) + 0xeb));
 
 	GUI_output(Real2Host(ds_readd(DTP2)));

@@ -197,7 +197,7 @@ signed short DNG11_handler(void)
 			ds_writeb(DNG11_SECRETDOOR1_FLAG, 1);
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(26),
+				get_tx(26),
 				(char*)hero + HERO_NAME2);
 
 			sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
@@ -230,7 +230,7 @@ signed short DNG11_handler(void)
 			ds_writeb(DNG11_SECRETDOOR2_FLAG, 1);
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(26),
+				get_tx(26),
 				(char*)hero + HERO_NAME2);
 
 			sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
@@ -263,7 +263,7 @@ signed short DNG11_handler(void)
 			ds_writeb(DNG11_SECRETDOOR3_FLAG, 1);
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(26),
+				get_tx(26),
 				(char*)hero + HERO_NAME2);
 
 			sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
@@ -297,7 +297,7 @@ signed short DNG11_handler(void)
 		ds_writeb(DIRECTION, (ds_readbs(TRAVEL_DESTINATION_VIEWDIR) + 2) & 0x03);
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(29),
+			get_tx(29),
 			get_ttx(ds_readw(TRV_DESTINATION) + 0xeb));
 
 		GUI_output(Real2Host(ds_readd(DTP2)));

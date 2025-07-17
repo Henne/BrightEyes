@@ -176,7 +176,7 @@ void tevent_133(void)
 					timewarp(HOURS(1));
 
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx2(39),
+						get_tx2(39),
 						(char*)hero + HERO_NAME2,
 						(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)),
 						(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
@@ -259,7 +259,7 @@ void tevent_135(void)
 								GUI_output(get_tx2(50));
 
 								sprintf((char*)Real2Host(ds_readd(DTP2)),
-									(char*)get_tx2(54),
+									get_tx2(54),
 									(char*)hero + HERO_NAME2,
 									(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 								GUI_output(Real2Host(ds_readd(DTP2)));
@@ -267,7 +267,7 @@ void tevent_135(void)
 								load_in_head(45);
 
 								sprintf((char*)Real2Host(ds_readd(DTP2)) + 0x400,
-									(char*)get_tx2(55),
+									get_tx2(55),
 									(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
 									(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
@@ -281,14 +281,14 @@ void tevent_135(void)
 
 								if (count < 5) {
 									sprintf((char*)Real2Host(ds_readd(DTP2)) + 0x400,
-										(char*)get_tx2(56),
+										get_tx2(56),
 										(char*)hero + HERO_NAME2,
-										(char*)get_tx2(57));
+										get_tx2(57));
 								} else {
 									sprintf((char*)Real2Host(ds_readd(DTP2)) + 0x400,
-										(char*)get_tx2(56),
+										get_tx2(56),
 										(char*)hero + HERO_NAME2,
-										(char*)get_tx(random_interval(54, 67)));
+										get_tx(random_interval(54, 67)));
 								}
 
 								GUI_dialog_na(0, Real2Host(ds_readd(DTP2)) + 0x400);
@@ -300,7 +300,7 @@ void tevent_135(void)
 								}
 
 								sprintf((char*)Real2Host(ds_readd(DTP2)) + 0x400,
-									(char*)get_tx2(58),
+									get_tx2(58),
 									(char*)hero + HERO_NAME2,
 									(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 								GUI_dialog_na(0, Real2Host(ds_readd(DTP2)) + 0x400);
@@ -315,7 +315,7 @@ void tevent_135(void)
 
 			if (tmp) {
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx2(51),
+					get_tx2(51),
 					(char*)hero + HERO_NAME2);
 
 				GUI_output(Real2Host(ds_readd(DTP2)));
@@ -613,13 +613,13 @@ void tevent_144(void)
 			hero = get_hero(grimring_hero_pos);
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx2(10),
+				get_tx2(10),
 				(char*)hero + HERO_NAME2);
 
 			GUI_output(Real2Host(ds_readd(DTP2)));
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx2(11),
+				get_tx2(11),
 				(char*)hero + HERO_NAME2);
 
 			GUI_dialogbox((RealPt)ds_readd(BUFFER10_PTR), (RealPt)0, Real2Host(ds_readd(DTP2)), 0);
@@ -627,7 +627,7 @@ void tevent_144(void)
 			GUI_dialogbox((RealPt)ds_readd(BUFFER10_PTR), (RealPt)0, get_tx2(13), 0);
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx2(14),
+				get_tx2(14),
 				(char*)hero + HERO_NAME2);
 
 			GUI_dialogbox((RealPt)ds_readd(BUFFER10_PTR), (RealPt)0, Real2Host(ds_readd(DTP2)), 0);
@@ -645,7 +645,7 @@ void tevent_144(void)
 				if (grimring_hero_pos == 6) {
 
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx2(38),
+						get_tx2(38),
 						(char*)get_hero(6) + HERO_NAME2);
 
 					GUI_dialogbox((RealPt)ds_readd(HEROES) + SIZEOF_HERO * 6 + HERO_PORTRAIT,

@@ -412,7 +412,7 @@ void mspell_verwandlung(void)
 
 			/* prepare message */
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(114),
+				get_tx(114),
 				Real2Host(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
 		}
 	} else if (enemy_mushroom(get_spelltarget_e())) {
@@ -444,7 +444,7 @@ void mspell_bannbaladin(void)
 
 	/* prepare message */
 	sprintf((char*)Real2Host(ds_readd(DTP2)),
-		(char*)get_tx(115),
+		get_tx(115),
 		get_spelltarget() + HERO_NAME2);
 }
 
@@ -459,7 +459,7 @@ void mspell_boeser_blick(void)
 
 	/* prepare message */
 	sprintf((char*)Real2Host(ds_readd(DTP2)),
-		(char*)get_tx(116),
+		get_tx(116),
 		get_spelltarget() + HERO_NAME2);
 }
 
@@ -475,7 +475,7 @@ void mspell_horriphobus(void)
 
 	/* prepare message */
 	sprintf((char*)Real2Host(ds_readd(DTP2)),
-		(char*)get_tx(117),
+		get_tx(117),
 		get_spelltarget() + HERO_NAME2);
 }
 
@@ -566,7 +566,7 @@ void mspell_blitz(void)
 
 		/* prepare message */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(86),
+			get_tx(86),
 			get_spelltarget() + HERO_NAME2);
 	} else {
 		/* target is a monster */
@@ -580,7 +580,7 @@ void mspell_blitz(void)
 
 		/* prepare message */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(85),
+			get_tx(85),
 			Real2Host(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
 	}
 }
@@ -609,7 +609,7 @@ void mspell_eisenrost(void)
 
 				/* prepare message */
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx(92),
+					get_tx(92),
 					Real2Host(GUI_names_grammar((signed short)0x8000, id, 0)),
 					get_spelltarget() + HERO_NAME2);
 			} else {
@@ -632,7 +632,7 @@ void mspell_eisenrost(void)
 
 			/* prepare message */
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(91),
+				get_tx(91),
 				Real2Host(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
 		}
 	}
@@ -766,7 +766,7 @@ void mspell_plumbumbarum(void)
 
 		/* prepare message */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(94),
+			get_tx(94),
 			get_spelltarget() + HERO_NAME2);
 	} else {
 		/* target is a monster */
@@ -781,7 +781,7 @@ void mspell_plumbumbarum(void)
 
 		/* prepare message */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(95),
+			get_tx(95),
 			Real2Host(GUI_names_grammar((signed short)0x8001, host_readbs(get_spelltarget_e()), 1)));
 	}
 }
@@ -844,7 +844,7 @@ void mspell_paralue(void)
 
 		/* prepare message */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(103),
+			get_tx(103),
 			Real2Host(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
 	} else {
 		/* target is a hero */
@@ -858,7 +858,7 @@ void mspell_paralue(void)
 
 		/* prepare message */
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(103),
+			get_tx(103),
 			get_spelltarget() + HERO_NAME2);
 	}
 }

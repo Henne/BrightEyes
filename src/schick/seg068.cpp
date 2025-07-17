@@ -60,7 +60,7 @@ void THO_eisenhof(void)
 			GUI_input(get_tx2(52), 0);
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx(random_schick(26) + 55));
+					get_tx(random_schick(26) + 55));
 			GUI_input(Real2Host(ds_readd(DTP2)), 0);
 		} else {
 			GUI_input(get_tx2(53), 0);
@@ -81,13 +81,13 @@ void THO_imman(void)
 
 		tmp = random_schick(4) + 0x38;
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx2(56),
+			get_tx2(56),
 			/* winner */
-			(char*)get_tx2(tmp),
+			get_tx2(tmp),
 			/* looser */
-			(char*)get_tx2(random_schick(7) + 0x3c),
+			get_tx2(random_schick(7) + 0x3c),
 			/* winner */
-			(char*)get_tx2(tmp),
+			get_tx2(tmp),
 			/* winners points */
 			random_interval(15, 30),
 			/* loosers points */
@@ -142,7 +142,7 @@ void THO_bank(void)
 	do {
 
 		sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
-			(char*)get_tx2(72),
+			get_tx2(72),
 			ds_readws(BANK_DEPOSIT));
 
 		do {
@@ -298,7 +298,7 @@ void THO_arsenal(void)
 			}
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)) + 0x400,
-				(char*)get_tx2(3),
+				get_tx2(3),
 				ds_readws(ARSENAL_MONEY));
 
 			mul_ds_ws(ARSENAL_MONEY, 100);
@@ -488,7 +488,7 @@ void THO_ugdalf(void)
 		dramosch_says(get_tx2(37));
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)) + 0x400,
-			(char*)get_tx(random_schick(26) + 55));
+			get_tx(random_schick(26) + 55));
 
 		dramosch_says(Real2Host(ds_readd(DTP2)) + 0x400);
 
@@ -523,7 +523,7 @@ void academy_analues(void)
 		load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx2(64),
+			get_tx2(64),
 			(char*)Real2Host(spell_analues()));
 
 		if (buffer1_bak != -1 && buffer1_bak != 222) {
@@ -584,7 +584,7 @@ void THO_academy(void)
 		} else {
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx2(53),
+				get_tx2(53),
 				(char*)hero + HERO_NAME2);
 
 			do {
@@ -600,7 +600,7 @@ void THO_academy(void)
 				if (item_id >= 0) {
 
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx2(56),
+						get_tx2(56),
 						(char*)Real2Host(GUI_names_grammar((signed short)0x8002, item_id, 0)));
 
 					do {
@@ -677,7 +677,7 @@ void THO_academy(void)
 				if (item_id >= 0) {
 
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx2(56),
+						get_tx2(56),
 						(char*)Real2Host(GUI_names_grammar((signed short)0x8002, item_id, 0)));
 
 					do {

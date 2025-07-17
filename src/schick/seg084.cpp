@@ -102,7 +102,7 @@ signed short DNG09_handler(void)
 				sub_hero_le(hero, dice_roll(2, 6, 4));
 
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx(12),
+					get_tx(12),
 					(char*)hero + HERO_NAME2);
 
 				GUI_output(Real2Host(ds_readd(DTP2)));
@@ -138,7 +138,7 @@ signed short DNG09_handler(void)
 				sub_hero_le(hero, dice_roll(2, 6, 4));
 
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx(12),
+					get_tx(12),
 					(char*)hero + HERO_NAME2);
 
 				GUI_output(Real2Host(ds_readd(DTP2)));
@@ -163,7 +163,7 @@ signed short DNG09_handler(void)
 				sub_hero_le(hero, dice_roll(2, 6, 4));
 
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx(12),
+					get_tx(12),
 					(char*)hero + HERO_NAME2);
 
 				GUI_output(Real2Host(ds_readd(DTP2)));
@@ -218,7 +218,7 @@ signed short DNG09_handler(void)
 				sub_hero_le(hero, dice_roll(2, 6, 4));
 
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx(12),
+					get_tx(12),
 					(char*)hero + HERO_NAME2);
 
 				GUI_output(Real2Host(ds_readd(DTP2)));
@@ -251,7 +251,7 @@ signed short DNG09_handler(void)
 				sub_hero_le(hero, dice_roll(2, 6, 4));
 
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx(12),
+					get_tx(12),
 					(char*)hero + HERO_NAME2);
 
 				GUI_output(Real2Host(ds_readd(DTP2)));
@@ -300,7 +300,7 @@ signed short DNG09_handler(void)
 				hero = get_hero(i);
 
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx(45),
+					get_tx(45),
 					(char*)hero + HERO_NAME2);
 
 				GUI_output(Real2Host(ds_readd(DTP2)));
@@ -407,7 +407,7 @@ signed short DNG09_handler(void)
 			ds_writeb(DNG09_SECRETDOOR1, 1);
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(51),
+				get_tx(51),
 				(char*)hero + HERO_NAME2);
 
 			sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
@@ -444,7 +444,7 @@ signed short DNG09_handler(void)
 			ds_writeb(DNG09_SECRETDOOR2, 1);
 
 			sprintf((char*)Real2Host(ds_readd(DTP2)),
-				(char*)get_tx(51),
+				get_tx(51),
 				(char*)hero + HERO_NAME2);
 
 			sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
@@ -478,7 +478,7 @@ signed short DNG09_handler(void)
 		ds_writeb(DIRECTION, (ds_readws(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
 
 		sprintf((char*)Real2Host(ds_readd(DTP2)),
-			(char*)get_tx(55),
+			get_tx(55),
 			get_ttx(ds_readws(TRV_DESTINATION) + 0xeb));
 
 		GUI_output(Real2Host(ds_readd(DTP2)));
@@ -568,7 +568,7 @@ void DNG09_chest4_x1(RealPt chest)
 			if (answer == 1)
 			{
 				sprintf((char*)Real2Host(ds_readd(DTP2)),
-					(char*)get_tx(25),
+					get_tx(25),
 					(char*)hero + HERO_NAME2);
 				GUI_output(Real2Host(ds_readd(DTP2)));
 
@@ -590,7 +590,7 @@ void DNG09_chest4_x1(RealPt chest)
 					ds_writeb(DNG09_CRYSTAL_FLAG, 1);
 				} else {
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx(26),
+						get_tx(26),
 						(char*)hero + HERO_NAME2);
 					GUI_output(Real2Host(ds_readd(DTP2)));
 
@@ -614,7 +614,7 @@ void DNG09_chest4_x1(RealPt chest)
 					ds_writeb(DNG09_CRYSTAL_FLAG, 1);
 				} else {
 					sprintf((char*)Real2Host(ds_readd(DTP2)),
-						(char*)get_tx(26),
+						get_tx(26),
 						(char*)hero + HERO_NAME2);
 					GUI_output(Real2Host(ds_readd(DTP2)));
 
