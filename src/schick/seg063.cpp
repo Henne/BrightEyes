@@ -474,7 +474,7 @@ void sea_travel(signed short passage, signed short dir)
 	ds_writew(SEA_TRAVEL_PASSAGE_NO, passage < 7 ? passage : passage - 7);
 
 	off = host_readd(Real2Host(ds_readfp(SEA_TRAVEL_COURSES)) + 4 * ds_readw(SEA_TRAVEL_PASSAGE_NO));
-	ds_writefp(ROUTE_COURSE_PTR, ds_readfp(SEA_TRAVEL_COURSES) + off + 4 * ds_readws(ROUTE_MOUSEHOVER));
+	ds_writed(ROUTE_COURSE_PTR, (Bit32u)(ds_readfp(SEA_TRAVEL_COURSES) + off + 4 * ds_readws(ROUTE_MOUSEHOVER)));
 	ptr = ds_readfp(FRAMEBUF_PTR);
 
 	add_ds_fp(ROUTE_COURSE_PTR, 4);
@@ -505,7 +505,7 @@ void sea_travel(signed short passage, signed short dir)
 		sub_ds_fp(ROUTE_COURSE_PTR, 4);
 	}
 
-	ds_writefp(ROUTE_COURSE_START, ds_readfp(ROUTE_COURSE_PTR));
+	ds_writed(ROUTE_COURSE_START, ds_readd(ROUTE_COURSE_PTR));
 
 	ds_writew(ROUTE_DAYPROGRESS, 18 * (ds_readws(TRAVEL_SPEED) + ds_readws(TRAVEL_SPEED) / 10));
 	/* this is 19.8h * TRAVEL_SPEED, which is the distance [unit: 10m] the ship travels in 19.8 h.

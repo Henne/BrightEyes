@@ -27,7 +27,7 @@ namespace M302de {
 void save_and_set_timer(void)
 {
 #if defined(__BORLANDC__)
-	ds_writefp(BC_TIMER, (RealPt)getvect(8));
+	ds_writed(BC_TIMER, (Bit32u)getvect(8));
 	setvect(8, (INTCAST)RealMake(0xb2a, 0x244));
 #endif
 }

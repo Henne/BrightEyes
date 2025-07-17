@@ -99,7 +99,7 @@ void FIG_preload_gfx(void)
 
 	ds_writed(WEAPONS_NVF_BUF, (Bit32u)(F_PADD((HugePt)ds_readd(CURRENT_FIGHT), SIZEOF_FIGHT)));
 
-	ds_writefp(SPELLOBJ_NVF_BUF, ds_readfp(WEAPONS_NVF_BUF) + 0x1953);
+	ds_writed(SPELLOBJ_NVF_BUF, (Bit32u)(ds_readfp(WEAPONS_NVF_BUF) + 0x1953));
 
 	ds_writed(FIGOBJ_GFXBUF_TABLE, (Bit32u)(F_PADD((HugePt)ds_readd(SPELLOBJ_NVF_BUF), 0xf5f)));
 
@@ -141,14 +141,14 @@ void FIG_preload_gfx(void)
 	ds_writeb(FIG_SPELLGFX_ID, -1);
 
 	/* load ANI.DAT */
-	ds_writefp(BUFFER_ANIDAT, ds_readfp(FIGHTOBJ_BUF_SEEK_PTR));
+	ds_writed(BUFFER_ANIDAT, ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
 	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 9851);
 	handle = load_archive_file(ARCHIVE_FILE_ANI_DAT);
 	read_archive_file(handle, Real2Host(ds_readfp(BUFFER_ANIDAT)), 9851);
 	close(handle);
 
 	/* load WEAPANI.DAT */
-	ds_writefp(BUFFER_WEAPANIDAT, ds_readfp(FIGHTOBJ_BUF_SEEK_PTR));
+	ds_writed(BUFFER_WEAPANIDAT, ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
 	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 1370);
 	handle = load_archive_file(ARCHIVE_FILE_WEAPANI_DAT);
 	read_archive_file(handle, Real2Host(ds_readd(BUFFER_WEAPANIDAT)), 1370);
@@ -156,7 +156,7 @@ void FIG_preload_gfx(void)
 
 	/* process NVFs */
 
-	ds_writefp(FIG_CB_MARKER_BUF, ds_readfp(FIGHTOBJ_BUF_SEEK_PTR));
+	ds_writed(FIG_CB_MARKER_BUF, ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
 	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 300);
 
 	nvf.dst = Real2Host(ds_readfp(FIG_CB_MARKER_BUF));
@@ -167,7 +167,7 @@ void FIG_preload_gfx(void)
 	nvf.height = (Bit8u*)&i;
 	process_nvf(&nvf);
 
-	ds_writefp(FIG_CB_SELECTOR_BUF, ds_readfp(FIGHTOBJ_BUF_SEEK_PTR));
+	ds_writed(FIG_CB_SELECTOR_BUF, ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
 	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 300);
 
 	nvf.dst = Real2Host(ds_readfp(FIG_CB_SELECTOR_BUF));
@@ -176,7 +176,7 @@ void FIG_preload_gfx(void)
 	nvf.type = 0;
 	process_nvf(&nvf);
 
-	ds_writefp(FIG_STAR_GFX, ds_readfp(FIGHTOBJ_BUF_SEEK_PTR));
+	ds_writed(FIG_STAR_GFX, ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
 	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 0xe8c);
 
 	nvf.dst = Real2Host(ds_readfp(FIG_STAR_GFX));
@@ -185,9 +185,9 @@ void FIG_preload_gfx(void)
 	nvf.type = 0;
 	process_nvf(&nvf);
 
-	ds_writefp(FIG_SHOT_BOLT_BUF, ds_readfp(FIGHTOBJ_BUF_SEEK_PTR));
+	ds_writed(FIG_SHOT_BOLT_BUF, ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
 	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 400);
-	ds_writefp(FIG_SPELLGFX_BUF, ds_readfp(FIGHTOBJ_BUF_SEEK_PTR));
+	ds_writed(FIG_SPELLGFX_BUF, ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
 	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 1300);
 
 	ds_writed(FIGHTOBJ_BUF_FREESPACE, F_PSUB(ds_readfp(FIGHTOBJ_BUF), ds_readfp(FIGHTOBJ_BUF_SEEK_PTR)));

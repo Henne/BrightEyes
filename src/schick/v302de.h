@@ -344,12 +344,6 @@ static inline RealPt ds_readfp(unsigned short offs)
 {
 	return (RealPt)host_readd(p_datseg + offs);
 }
-static inline RealPt ds_writefp(unsigned short offs, Bit8u* ptr)
-{
-	host_writed(p_datseg + offs, (Bit32u)ptr);
-	return ptr;
-}
-
 
 /**
  *	ds_writeb_z() -	write only if target is 0
@@ -415,6 +409,12 @@ static inline Bit32s add_ds_ds(Bit16u off, Bit32s val)
 static inline Bit32s sub_ds_ds(Bit16u off, Bit32s val)
 {
 	return ds_writed(off, ds_readds(off) - val);
+}
+
+/* obsolete */
+static void ds_writefp(unsigned short offs, Bit32u ptr)
+{
+	host_writed(p_datseg + offs, ptr);
 }
 
 static inline RealPt add_ds_fp(Bit16u off, Bit16s val)
@@ -1242,7 +1242,6 @@ struct hero_struct {
 #define ds_writeb(p, d)		(*(Bit8u*)(ds + p) = (d))
 #define ds_writew(p, d)		(*(Bit16u*)(ds + p) = (d))
 #define ds_writed(p, d)		(*(Bit32u*)(ds + p) = (d))
-#define ds_writefp(p, d)		(*(RealPt*)(ds + (p)) = (d))
 
 #define inc_ds_bs(o)		(++(*(Bit8s*)(ds + (o))))
 #define dec_ds_bs(o)		(--(*(Bit8s*)(ds + (o))))

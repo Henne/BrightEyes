@@ -96,12 +96,12 @@ void TM_func1(signed short route_no, signed short backwards)
 
 	ds_writeb(TRAVELING, 1);
 	last_tevent_no = -1;
-	ds_writefp(ROUTE_COURSE_PTR, (RealPt)(F_PADD(F_PADD(ds_readd(BUFFER9_PTR), host_readws(Real2Host(ds_readd(BUFFER9_PTR)) + 4 * (route_no - 1))), 0xec)));
+	ds_writed(ROUTE_COURSE_PTR, (Bit32u)(F_PADD(F_PADD(ds_readd(BUFFER9_PTR), host_readws(Real2Host(ds_readd(BUFFER9_PTR)) + 4 * (route_no - 1))), 0xec)));
 	fb_start = ds_readfp(FRAMEBUF_PTR);
 	add_ds_fp(ROUTE_COURSE_PTR, 4);
 
 	memset((void*)Real2Host(ds_readfp(TRV_TRACK_PIXEL_BAK)), 0xaa, 500);
-	ds_writefp(TRAVEL_ROUTE_PTR, (RealPt)RealMake(datseg, (LAND_ROUTES - SIZEOF_LAND_ROUTE) + SIZEOF_LAND_ROUTE * route_no));
+	ds_writed(TRAVEL_ROUTE_PTR, (Bit32u)RealMake(datseg, (LAND_ROUTES - SIZEOF_LAND_ROUTE) + SIZEOF_LAND_ROUTE * route_no));
 	ds_writew(TRAVEL_SPEED, 166);
 	ds_writew(ROUTE_TOTAL_STEPS, TM_get_track_length(Real2Host(ds_readfp(ROUTE_COURSE_PTR))));
 	ds_writew(ROUTE_LENGTH, host_readb(Real2Host(ds_readd(TRAVEL_ROUTE_PTR)) + LAND_ROUTE_DISTANCE) * 100);
@@ -128,7 +128,7 @@ void TM_func1(signed short route_no, signed short backwards)
 	memset((void*)(p_datseg + ROUTE_TEVENTS), ds_writews(ROUTE_STEPCOUNT, 0), 60);
 	memset((void*)(p_datseg + ROUTE_TEVENT_FLAGS), 0, 15);
 
-	ds_writefp(TEVENTS_TAB_PTR, (RealPt)RealMake(datseg, TEVENTS_TAB));
+	ds_writed(TEVENTS_TAB_PTR, (Bit32u)RealMake(datseg, TEVENTS_TAB));
 
 	/* Forward pointer to entries associated with current route. */
 	while (host_readb(Real2Host(ds_readd(TEVENTS_TAB_PTR))) != route_no && host_readbs(Real2Host(ds_readd(TEVENTS_TAB_PTR))) != -1)
@@ -137,7 +137,7 @@ void TM_func1(signed short route_no, signed short backwards)
 	}
 
 	ds_writew(TRV_RETURN, 0);
-	ds_writefp(ROUTE_COURSE_START, ds_readfp(ROUTE_COURSE_PTR));
+	ds_writed(ROUTE_COURSE_START, ds_readd(ROUTE_COURSE_PTR));
 	ds_writew(ROUTE_DAYPROGRESS, (
 	    ds_readws(TRAVEL_SPEED) + host_readbs(Real2Host(ds_readd(TRAVEL_ROUTE_PTR)) + LAND_ROUTE_SPEED_MOD) * ds_readws(TRAVEL_SPEED) / 10
     ) * 18);
@@ -419,7 +419,7 @@ void TM_func1(signed short route_no, signed short backwards)
 
 			ds_writeb(PP20_INDEX, 5);
 			ds_writew(TRV_I, 0);
-			ds_writefp(ROUTE_COURSE_PTR2, ds_readfp(ROUTE_COURSE_START));
+			ds_writed(ROUTE_COURSE_PTR2, ds_readd(ROUTE_COURSE_START));
 
 			if (route_no == 59)
 			{
@@ -528,7 +528,7 @@ signed short TM_unused1(RealPt signpost_ptr, signed short old_route_no)
 					ds_writeb(TRV_MENU_TOWNS + town_i, (signed char)town);
 					destinations_tab[town_i] = get_ttx(547);
 					town_i++;
-					ds_writefp(TM_UNUSED1_PTR, signpost_ptr);
+					ds_writed(TM_UNUSED1_PTR, (Bit32u)signpost_ptr);
 
 					set_textbox_positions(town);
 					answer = GUI_radio(get_ttx(546), (signed char)town_i,

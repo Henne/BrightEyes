@@ -300,7 +300,7 @@ void spell_hexenknoten(void)
 		height = host_readws((Bit8u*)&height);
 #endif
 
-		ds_writefp(HEXENKNOTEN_GFX_BUF, ds_readfp(FIGHTOBJ_BUF_SEEK_PTR));
+		ds_writed(HEXENKNOTEN_GFX_BUF, ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
 
 		/* move pointer further */
 		add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, width * height + 8);
