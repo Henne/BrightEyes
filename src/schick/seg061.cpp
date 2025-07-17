@@ -172,15 +172,9 @@ void do_temple(void)
 		if (ds_readws(ACTION) == ACTION_ID_ICON_6) {
 			/* quit game */
 			if (GUI_bool(get_ttx(299))) {
+
 				done = 1;
 				ds_writews(GAME_STATE, GAME_STATE_QUIT);
-
-#if !defined(__BORLANDC__)
-			/* no call to exit(0) in original game */
-			D1_INFO("\nCHANGED BEHAVIOUR: For technical reasons Bright-Eyes must be started anew\n\n");
-			fflush(stdout);
-			exit(0);
-#endif
 			}
 		}
 

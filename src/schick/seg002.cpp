@@ -5585,16 +5585,10 @@ int schick_main(int argc, char** argv)
 		CD_init();
 
 		if (ds_readw(CD_INIT_SUCCESSFUL) == 0) {
+
 			/* CD init failed */
 			cleanup_game();
-
-#if !defined(__BORLANDC__)
-			D1_INFO("CHANGED BEHAVIOUR: For technical reasons Bright-Eyes must be started anew\n");
-			fflush(stdout);
 			exit(0);
-#else
-			exit(0);
-#endif
 		}
 
 
@@ -5647,13 +5641,6 @@ int schick_main(int argc, char** argv)
 		} else {
 			cleanup_game();
 		}
-
-#if !defined(__BORLANDC__)
-		/* no call to exit(0) in original game */
-		D1_INFO("\nCHANGED BEHAVIOUR: For technical reasons Bright-Eyes must be started anew\n\n");
-		fflush(stdout);
-		exit(0);
-#endif
 
 	} else {
 		/* not enough memory */
