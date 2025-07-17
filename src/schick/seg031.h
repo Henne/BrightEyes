@@ -7,7 +7,7 @@ RealPt load_current_town_gossip(void);
 /* 0x25 */
 void do_random_talk(signed short, signed short);
 /* 0x2a */
-RealPt get_informer_forename(void);
+char* get_informer_forename(void);
 /* 0x2f */
 signed short get_town_lookup_entry(void);
 /* 0x34 */
@@ -17,7 +17,7 @@ RealPt get_informer_name(void);
 /* 0x3e */
 RealPt get_informer_name2(void);
 /* 0x43 */
-RealPt get_random_tavern_message(void);
+char* get_random_tavern_message(void);
 /* 0x48 */
 void drink_while_drinking(signed short);
 /* 0x4d */

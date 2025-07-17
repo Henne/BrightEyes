@@ -100,7 +100,7 @@ void spell_tiere_heilen(void);
 /* 0xd9 */
 void spell_adleraug(void);
 /* 0xde */
-RealPt spell_analues(void);
+char* spell_analues(void);
 
 
 #if !defined(__BORLANDC__)

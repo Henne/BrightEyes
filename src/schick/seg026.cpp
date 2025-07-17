@@ -232,7 +232,7 @@ signed short load_game_state(void)
 		strcat((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)p_datseg + SAVEGAME_SUFFIX);
 
 		/* open the game state file */
-		if ((handle_gs = open(ds_readfp(TEXT_OUTPUT_BUF), O_BINARY | O_RDONLY)) == -1)
+		if ((handle_gs = open((char*)ds_readd(TEXT_OUTPUT_BUF), O_BINARY | O_RDONLY)) == -1)
 		{
 			GUI_output(get_ttx(635));
 			retval = -1;
@@ -676,7 +676,7 @@ signed short save_game_state(void)
 				((char*)(&blk)) + 30);
 
 			/* read the CHR file from temp */
-			handle = open(ds_readfp(TEXT_OUTPUT_BUF), O_BINARY | O_RDWR);
+			handle = open((char*)ds_readd(TEXT_OUTPUT_BUF), O_BINARY | O_RDWR);
 			_read(handle, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
 			close(handle);
 
@@ -726,7 +726,7 @@ signed short read_chr_temp(RealPt fname, signed short hero_pos, signed short a2)
 		(char*)Real2Host(fname));
 
 	if ((handle = open((char*)ds_readd(TEXT_OUTPUT_BUF), O_BINARY | O_RDWR)) == -1) {
-		copy_file_to_temp(fname, (RealPt)ds_readd(TEXT_OUTPUT_BUF));
+		copy_file_to_temp(fname, (char*)ds_readd(TEXT_OUTPUT_BUF));
 		handle = open((char*)ds_readd(TEXT_OUTPUT_BUF), O_BINARY | O_RDWR);
 	}
 

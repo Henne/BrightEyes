@@ -78,26 +78,26 @@ signed short DNG01_handler(void)
 
 	} else if (target_pos == DNG_POS(1,13,5) && target_pos != ds_readws(DNG_HANDLED_POS) && !ds_readbs(DNG01_SABRE_TAKEN))
 	{
-		sprintf((char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)),
+		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 			get_ttx(528),
 			(char*)Real2Host(GUI_names_grammar(0, 3, 0)),
 			(char*)Real2Host(GUI_2f2(2, 3, 0)));
 
 		/* ITEM: get a SABRE */
-		if (GUI_bool(Real2Host(ds_readfp(TEXT_OUTPUT_BUF))) && get_item(ITEM_SABER, 1, 1))
+		if (GUI_bool((char*)ds_readd(TEXT_OUTPUT_BUF)) && get_item(ITEM_SABER, 1, 1))
 		{
 			ds_writeb(DNG01_SABRE_TAKEN, 1);
 		}
 
 	} else if (target_pos == DNG_POS(3,2,9) && target_pos != ds_readws(DNG_HANDLED_POS) && !ds_readbs(DNG01_CROSSBOW_TAKEN))
 	{
-		sprintf((char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)),
+		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 			get_ttx(528),
 			(char*)Real2Host(GUI_names_grammar(0, 12, 0)),
 			(char*)Real2Host(GUI_2f2(2, 12, 0)));
 
 		/* ITEM: get a CROSSBOW */
-		if (GUI_bool(Real2Host(ds_readfp(TEXT_OUTPUT_BUF))) && get_item(ITEM_CROSSBOW, 1, 1))
+		if (GUI_bool((char*)ds_readd(TEXT_OUTPUT_BUF)) && get_item(ITEM_CROSSBOW, 1, 1))
 		{
 			ds_writeb(DNG01_CROSSBOW_TAKEN, 1);
 		}
@@ -129,11 +129,11 @@ signed short DNG01_handler(void)
 				{
 					sub_hero_le(hero, 2);
 
-					sprintf((char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)),
+					sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 						get_tx(12),
 						(char*)hero + HERO_NAME2);
 
-					GUI_output(Real2Host(ds_readfp(TEXT_OUTPUT_BUF)));
+					GUI_output((char*)ds_readd(TEXT_OUTPUT_BUF));
 				}
 			}
 		}
@@ -311,14 +311,14 @@ void DNG01_chest6_x3(RealPt chest)
 	/* Original-Bug: The string 14 from SHIP.DTX needs a pointer to the name of the hero, not an integer.
 	 */
 #ifdef M302de_ORIGINAL_BUGFIX
-	sprintf((char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)),
+	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 		get_tx(14),
 		(char*)Real2Host(get_first_hero_available_in_group()));
 #else
-	sprintf((char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)),
+	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 		get_tx(14), 10);
 #endif
-	print_msg_with_first_hero(Real2Host(ds_readfp(TEXT_OUTPUT_BUF)));
+	print_msg_with_first_hero((char*)ds_readd(TEXT_OUTPUT_BUF));
 
 	ds_writeb(DNG01_KEY_TAKEN, 1);
 #ifdef M302de_ORIGINAL_BUGFIX

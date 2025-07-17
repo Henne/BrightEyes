@@ -173,10 +173,10 @@ void FIG_find_path_to_target_backtrack(Bit8u *dist_table_ptr, signed short targe
 	lowest_nr_dir_changes = 99;
 
 	memset((char*)ds_readd(TEXT_OUTPUT_BUF), 0, 80);
-	path_table[0] = Real2Host((RealPt)ds_readd(TEXT_OUTPUT_BUF));
-	path_table[1] = Real2Host((RealPt)ds_readd(TEXT_OUTPUT_BUF)) + 20;
-	path_table[2] = Real2Host((RealPt)ds_readd(TEXT_OUTPUT_BUF)) + 40;
-	path_table[3] = Real2Host((RealPt)ds_readd(TEXT_OUTPUT_BUF)) + 60;
+	path_table[0] = (char*)ds_readd(TEXT_OUTPUT_BUF);
+	path_table[1] = (char*)ds_readd(TEXT_OUTPUT_BUF) + 20;
+	path_table[2] = (char*)ds_readd(TEXT_OUTPUT_BUF) + 40;
+	path_table[3] = (char*)ds_readd(TEXT_OUTPUT_BUF) + 60;
 
 	cb_or_dist_entry = get_cb_val(target_x, target_y); /* possibly reads out of the boundary of the chessboard. not critical, as the following condition is always true for coordinates (target_x, target_y) out of the map. */
 

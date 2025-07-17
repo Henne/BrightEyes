@@ -210,7 +210,7 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 }
 
 /* This function is dead code */
-RealPt get_informer_forename(void)
+char* get_informer_forename(void)
 {
 	signed short i;
 	char tmp;
@@ -238,7 +238,8 @@ RealPt get_informer_forename(void)
 #endif
 		}
 	}
-	return (RealPt)ds_readd(TEXT_OUTPUT_BUF);
+
+	return (char*)ds_readd(TEXT_OUTPUT_BUF);
 }
 
 /**
@@ -331,30 +332,27 @@ RealPt load_current_town_gossip(void)
 	return (RealPt)host_readd(ptr + 4 * gossip_id);
 }
 
-RealPt get_random_tavern_message(void)
+char* get_random_tavern_message(void)
 {
 	signed short randval;
-	RealPt ptr;
+	char *ptr;
 
 	randval = random_schick(20) - 1;
 
-	ptr = (RealPt)host_readd(Real2Host(ds_readd(TX_INDEX)) + 4 * (randval + 147));
+	ptr = (char*)host_readd(Real2Host(ds_readd(TX_INDEX)) + 4 * (randval + 147));
 
 	if (!randval || randval == 19) {
 
-		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-			(char*)Real2Host(ptr),
-			(char*)Real2Host(load_current_town_gossip()));
+		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)Real2Host(ptr), (char*)Real2Host(load_current_town_gossip()));
 
-		return (RealPt)ds_readd(TEXT_OUTPUT_BUF);
+		return (char*)ds_readd(TEXT_OUTPUT_BUF);
 
 	} else if (randval == 3) {
 
-		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-			(char*)Real2Host(ptr),
-			get_ttx(ds_readbs(CURRENT_TOWN) + 235));
+		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)Real2Host(ptr), get_ttx(ds_readbs(CURRENT_TOWN) + 235));
 
-		return (RealPt)ds_readd(TEXT_OUTPUT_BUF);
+		return (char*)ds_readd(TEXT_OUTPUT_BUF);
+
 	} else {
 		return ptr;
 	}

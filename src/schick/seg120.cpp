@@ -651,7 +651,7 @@ void cleanup_game(void)
 		(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),	/* contains "TEMP\\%s" */
 		(char*)p_datseg + ALL_FILES_WILDCARD3);		/* contains "*.*" */
 
-	l_di = findfirst((RealPt)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
+	l_di = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
 
 	if (l_di == 0) {
 		do {

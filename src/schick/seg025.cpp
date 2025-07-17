@@ -105,18 +105,18 @@ void show_citizen(void)
 			load_ani(20);
 			init_ani(ds_writew(REQUEST_REFRESH, 0));
 
-			strcpy((char*)Real2Host((RealPt)ds_readd(TEXT_OUTPUT_BUF)),
+			strcpy((char*)ds_readd(TEXT_OUTPUT_BUF),
 				get_tx(ds_readw(CURRENT_LOCDATA)));
 
 			if (ds_readbs(YEAR) == 15 && ds_readbs(MONTH) == 1 && random_schick(100) <= 20) {
 
 				if (!show_storytext()) {
-					GUI_print_loc_line(Real2Host((RealPt)ds_readd(TEXT_OUTPUT_BUF)));
+					GUI_print_loc_line((char*)ds_readd(TEXT_OUTPUT_BUF));
 				} else {
 					ds_writew(ACTION, ACTION_ID_ESC);
 				}
 			} else {
-				GUI_print_loc_line(Real2Host((RealPt)ds_readd(TEXT_OUTPUT_BUF)));
+				GUI_print_loc_line((char*)ds_readd(TEXT_OUTPUT_BUF));
 #ifdef M302de_SPEEDFIX
 				delay_or_keypress(200);
 #endif

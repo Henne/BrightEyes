@@ -439,12 +439,12 @@ signed short DNG02_handler(void)
 				get_tx(37),
 				(char*)hero + HERO_NAME2);
 
-			sprintf((char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)),
+			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 				(char*)((i = test_skill(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(39) : get_tx(38)),
 				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 			strcat((char*)Real2Host(ds_readfp(DTP2)),
-				(char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)));
+				(char*)ds_readd(TEXT_OUTPUT_BUF));
 
 			GUI_output(Real2Host(ds_readfp(DTP2)));
 
@@ -475,12 +475,12 @@ signed short DNG02_handler(void)
 				get_tx(37),
 				(char*)hero + HERO_NAME2);
 
-			sprintf((char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)),
+			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 				(char*)((i = test_skill(hero, TA_SCHLOESSER, 2)) > 0 ? get_tx(39) : get_tx(38)),
 				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 			strcat((char*)Real2Host(ds_readfp(DTP2)),
-				(char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)));
+				(char*)ds_readd(TEXT_OUTPUT_BUF));
 
 			GUI_output(Real2Host(ds_readfp(DTP2)));
 
@@ -509,12 +509,12 @@ signed short DNG02_handler(void)
 				get_tx(37),
 				(char*)hero + HERO_NAME2);
 
-			sprintf((char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)),
+			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 				(char*)((i = test_skill(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(39) : get_tx(38)),
 				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 			strcat((char*)Real2Host(ds_readfp(DTP2)),
-				(char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)));
+				(char*)ds_readd(TEXT_OUTPUT_BUF));
 
 			if (i > 0)
 			{
@@ -525,13 +525,13 @@ signed short DNG02_handler(void)
 
 			i = random_schick(6) + 4;
 
-			sprintf((char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)),
+			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 				get_tx(40),
 				(char*)hero + HERO_NAME2,
 				i);
 
 			strcat((char*)Real2Host(ds_readfp(DTP2)),
-				(char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)));
+				(char*)ds_readd(TEXT_OUTPUT_BUF));
 
 			GUI_output(Real2Host(ds_readfp(DTP2)));
 

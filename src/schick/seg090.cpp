@@ -351,18 +351,18 @@ signed short DNG12_handler(void)
 							'\0'
 							};
 
-					strcpy((char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)), get_tx(25));
-					strcat((char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)), (const char*)add_line);
+					strcpy((char*)ds_readd(TEXT_OUTPUT_BUF), get_tx(25));
+					strcat((char*)ds_readd(TEXT_OUTPUT_BUF), (const char*)add_line);
 					*/
 
-					strcpy((char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)), get_tx(25));
-					strcat((char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)),
+					strcpy((char*)ds_readd(TEXT_OUTPUT_BUF), get_tx(25));
+					strcat((char*)ds_readd(TEXT_OUTPUT_BUF),
 						"\x40\x3cICH GLAUBE, ICH MUSS ES NUR NOCH "
 						"EIN EINZIGES MAL VERSUCHEN!\x3e MURMELT %s "
 						"ALS %s WIEDER AUF %sE F\x9aSSE KOMMT.");
 
 					sprintf((char*)Real2Host(ds_readfp(DTP2)),
-						(char*)Real2Host(ds_readfp(TEXT_OUTPUT_BUF)),
+						(char*)ds_readd(TEXT_OUTPUT_BUF),
 						(char*)hero + HERO_NAME2,
 						Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
 						Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),

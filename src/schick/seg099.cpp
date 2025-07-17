@@ -1016,7 +1016,7 @@ void spell_adleraug(void)
 		(char*)get_spelluser() + HERO_NAME2);
 }
 
-RealPt spell_analues(void)
+char* spell_analues(void)
 {
 	signed short item_id;
 	signed short i;
@@ -1058,15 +1058,13 @@ RealPt spell_analues(void)
 				if (ds_readws((ANALUES_ITEMS + ANALUES_ITEM_HANDICAP) + i * SIZEOF_ANALUES_ITEM) <= ds_readws(SPELLTEST_RESULT)) {
 
 					/* copy the matching result string */
-					strcpy((char*)ds_readd(TEXT_OUTPUT_BUF),
-						get_tx(ds_readbs((ANALUES_ITEMS + ANALUES_ITEM_DTP) + i * SIZEOF_ANALUES_ITEM)));
+					strcpy((char*)ds_readd(TEXT_OUTPUT_BUF), get_tx(ds_readbs((ANALUES_ITEMS + ANALUES_ITEM_DTP) + i * SIZEOF_ANALUES_ITEM)));
 
 					or_ptr_bs(get_spelluser() + item_pos * SIZEOF_INVENTORY + (HERO_INVENTORY + INVENTORY_FLAGS), 0x80); /* set 'magic_revealed' flag */
 					break;
 				} else {
 					/* nothing found string */
-					strcpy((char*)ds_readd(TEXT_OUTPUT_BUF),
-						get_tx(55));
+					strcpy((char*)ds_readd(TEXT_OUTPUT_BUF), get_tx(55));
 					break;
 				}
 			}
@@ -1076,13 +1074,10 @@ RealPt spell_analues(void)
 	if (ds_readws(IN_ACADEMY) != 99) {
 
 		/* prepare message */
-		sprintf((char*)ds_readd(DTP2),
-			get_tx(53),
-			(char*)get_spelluser() + HERO_NAME2,
-			(char*)ds_readd(TEXT_OUTPUT_BUF));
+		sprintf((char*)ds_readd(DTP2), get_tx(53), (char*)get_spelluser() + HERO_NAME2, (char*)ds_readd(TEXT_OUTPUT_BUF));
 	}
 
-	return (RealPt)ds_readd(TEXT_OUTPUT_BUF);
+	return (char*)ds_readd(TEXT_OUTPUT_BUF);
 }
 
 #if !defined(__BORLANDC__)

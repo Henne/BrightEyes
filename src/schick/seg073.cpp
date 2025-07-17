@@ -446,7 +446,7 @@ unsigned short get_tavern_gossip(void)
 /**
  * \brief   generates the name of a drinkmate and copies it to a buffer
  */
-RealPt get_drinkmate(void)
+char* get_drinkmate(void)
 {
 	signed short name;
 	signed short surname;
@@ -465,7 +465,7 @@ RealPt get_drinkmate(void)
 		get_tx(surname),
 		get_tx((ds_readb(TLK_TAV_INFORMERSEX) - 1) == 0 ? 207 : 208));
 
-	return (RealPt)ds_readd(TEXT_OUTPUT_BUF);
+	return (char*)ds_readd(TEXT_OUTPUT_BUF);
 }
 
 /**
