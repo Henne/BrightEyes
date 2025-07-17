@@ -45,11 +45,11 @@ void poison_effect(void)
 					/* KK */
 					if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) != 0) {
 
-						sprintf((char*)Real2Host(ds_readd(DTP2)),
+						sprintf((char*)((Bit8u*)ds_readd(DTP2)),
 							(char*)get_ttx(572),
 							(char*)hero + HERO_NAME2);
 
-						GUI_output(Real2Host(ds_readd(DTP2)));
+						GUI_output((Bit8u*)ds_readd(DTP2));
 
 						inc_ptr_bs(poison_ptr + 2);
 						dec_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK));
@@ -58,11 +58,11 @@ void poison_effect(void)
 					/* GE */
 					if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE)) != 0) {
 
-						sprintf((char*)Real2Host(ds_readd(DTP2)),
+						sprintf((char*)((Bit8u*)ds_readd(DTP2)),
 							(char*)get_ttx(45),
 							(char*)hero + HERO_NAME2);
 
-						GUI_output(Real2Host(ds_readd(DTP2)));
+						GUI_output((Bit8u*)ds_readd(DTP2));
 
 						inc_ptr_bs(poison_ptr + 3);
 						dec_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE));
@@ -88,11 +88,11 @@ void poison_effect(void)
 
 				if ((host_readbs(poison_ptr + 2) != 0) && (!host_readbs(poison_ptr + 1) % 12 )) {
 
-						sprintf((char*)Real2Host(ds_readd(DTP2)),
+						sprintf((char*)((Bit8u*)ds_readd(DTP2)),
 							(char*)get_ttx(573),
 							(char*)hero + HERO_NAME2);
 
-						GUI_output(Real2Host(ds_readd(DTP2)));
+						GUI_output((Bit8u*)ds_readd(DTP2));
 
 						dec_ptr_bs(poison_ptr + 2);
 						inc_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK));
@@ -100,11 +100,11 @@ void poison_effect(void)
 
 				if ((host_readbs(poison_ptr + 3) != 0) && (!host_readbs(poison_ptr + 1) % 12 )) {
 
-						sprintf((char*)Real2Host(ds_readd(DTP2)),
+						sprintf((char*)((Bit8u*)ds_readd(DTP2)),
 							(char*)get_ttx(578),
 							(char*)hero + HERO_NAME2);
 
-						GUI_output(Real2Host(ds_readd(DTP2)));
+						GUI_output((Bit8u*)ds_readd(DTP2));
 
 						dec_ptr_bs(poison_ptr + 3);
 						inc_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE));
@@ -133,11 +133,11 @@ void poison_effect(void)
 					/* KK - 2 */
 					host_writebs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK), host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) - 2);
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)((Bit8u*)ds_readd(DTP2)),
 						(char*)get_ttx(37),
 						(char*)hero + HERO_NAME2);
 
-					GUI_output(Real2Host(ds_readd(DTP2)));
+					GUI_output((Bit8u*)ds_readd(DTP2));
 
 				}
 
@@ -166,11 +166,11 @@ void poison_effect(void)
 				/* KK + 2 */
 				host_writebs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK), host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + 2);
 
-				sprintf((char*)Real2Host(ds_readd(DTP2)),
+				sprintf((char*)((Bit8u*)ds_readd(DTP2)),
 					(char*)get_ttx(38),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output(Real2Host(ds_readd(DTP2)));
+				GUI_output((Bit8u*)ds_readd(DTP2));
 			}
 
 
@@ -196,11 +196,11 @@ void poison_effect(void)
 					host_writeb(hero + (HERO_ATTRIB + 3 * ATTRIB_JZ), host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_JZ)) + 2);
 					or_ptr_bs(hero + HERO_FLAGS2, 1); /* set 'scared' flag */
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)((Bit8u*)ds_readd(DTP2)),
 						(char*)get_ttx(39),
 						(char*)hero + HERO_NAME2);
 
-					GUI_output(Real2Host(ds_readd(DTP2)));
+					GUI_output((Bit8u*)ds_readd(DTP2));
 				}
 
 				/* self regeneration */
@@ -227,11 +227,11 @@ void poison_effect(void)
 					host_writeb(hero + (HERO_ATTRIB + 3 * ATTRIB_JZ), host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_JZ)) - 2);
 					and_ptr_bs(hero + HERO_FLAGS2, 0xfe); /* unset 'scared' flag */
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)((Bit8u*)ds_readd(DTP2)),
 						(char*)get_ttx(40),
 						(char*)hero + HERO_NAME2);
 
-					GUI_output(Real2Host(ds_readd(DTP2)));
+					GUI_output((Bit8u*)ds_readd(DTP2));
 			}
 
 
@@ -245,11 +245,11 @@ void poison_effect(void)
 					host_writeb(poison_ptr + 4, 1);
 					or_ptr_bs(hero + HERO_FLAGS1, 0x02); /* set 'asleep' flag */
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)((Bit8u*)ds_readd(DTP2)),
 						(char*)get_ttx(41),
 						(char*)hero + HERO_NAME2);
 
-					GUI_output(Real2Host(ds_readd(DTP2)));
+					GUI_output((Bit8u*)ds_readd(DTP2));
 				}
 
 				/* self regeneration */
@@ -266,11 +266,11 @@ void poison_effect(void)
 				host_writeb(poison_ptr + 4, 0);
 				and_ptr_bs(hero + HERO_FLAGS1, 0xfd); /* unset 'asleep' flag */
 
-				sprintf((char*)Real2Host(ds_readd(DTP2)),
+				sprintf((char*)((Bit8u*)ds_readd(DTP2)),
 					(char*)get_ttx(42),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output(Real2Host(ds_readd(DTP2)));
+				GUI_output((Bit8u*)ds_readd(DTP2));
 			}
 
 
@@ -364,11 +364,11 @@ void poison_effect(void)
 
 					sub_ptr_ws(hero + HERO_AE, j);
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)((Bit8u*)ds_readd(DTP2)),
 						(char*)get_ttx(43),
 						(char*)hero + HERO_NAME2, j);
 
-					GUI_output(Real2Host(ds_readd(DTP2)));
+					GUI_output((Bit8u*)ds_readd(DTP2));
 				}
 			}
 
@@ -383,11 +383,11 @@ void poison_effect(void)
 						dec_ptr_bs(poison_ptr + 2);
 						inc_ptr_ws(hero + HERO_AE);
 
-						sprintf((char*)Real2Host(ds_readd(DTP2)),
+						sprintf((char*)((Bit8u*)ds_readd(DTP2)),
 							(char*)get_ttx(44),
 							(char*)hero + HERO_NAME2);
 
-						GUI_output(Real2Host(ds_readd(DTP2)));
+						GUI_output((Bit8u*)ds_readd(DTP2));
 					}
 				}
 			}
