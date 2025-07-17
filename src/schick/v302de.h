@@ -77,6 +77,17 @@ struct screen_rect {
 #include "common.h"
 #include "datseg.h"
 
+#if defined(__BORLANDC__)
+#define RealSeg(p) FP_SEG(p)
+#define RealOff(p) FP_OFF(p)
+#define RealMake(s, o) MK_FP(s, o)
+#define datseg (_DS)
+#define p_datseg (&ds[0x0000])
+#else
+extern unsigned short datseg;
+extern Bit8u *p_datseg;
+#endif
+
 #define ROUNDED_DIVISION(n,k)	((n + (k-1)/2)/k)
 /* divide n/k and round to the closest integer. In ambigous cases, round down. */
 /* only used in seg064.cpp */
@@ -192,9 +203,6 @@ extern const char* names_attrib[];
 extern const char* names_skill[];
 extern const char* names_spell[];
 extern const char* names_mspell[];
-
-extern unsigned short datseg;
-extern Bit8u *p_datseg;
 
 static inline Bit8u host_readb(Bit8u* p)
 {
@@ -1217,11 +1225,6 @@ struct hero_struct {
 	char typus;
 };
 
-
-#define RealSeg(p) FP_SEG(p)
-#define RealOff(p) FP_OFF(p)
-#define RealMake(s, o) MK_FP(s, o)
-
 /* helper, use only when neccessary */
 #define struct_copy memcpy
 
@@ -1232,9 +1235,6 @@ struct hero_struct {
 #define my_itoa itoa
 
 #define schick_main main
-
-#define p_datseg (&ds[0x0000])
-#define datseg (_DS)
 
 #define ds_readb(p)		(*(Bit8u*)(ds + p))
 #define ds_readw(p)		(*(Bit16u*)(ds + p))
