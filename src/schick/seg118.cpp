@@ -163,17 +163,17 @@ void tevent_037(void)
 					GUI_input(get_tx2(47), 10);
 
 					/* check if the answer is "RAD" 1st */
-					if (strcmp((char*)Real2Host(ds_readd(TEXT_INPUT_BUF)), (char*)p_datseg + STR_RAD1))
+					if (strcmp((char*)ds_readd(TEXT_INPUT_BUF), (char*)p_datseg + STR_RAD1))
 					{
 						GUI_input(get_tx2(48), 10);
 
 						/* check if the answer is "RAD" 2nd */
-						if (strcmp((char*)Real2Host(ds_readd(TEXT_INPUT_BUF)), (char*)p_datseg + STR_RAD2))
+						if (strcmp((char*)ds_readd(TEXT_INPUT_BUF), (char*)p_datseg + STR_RAD2))
 						{
 							GUI_input(get_tx2(49), 10);
 
 							/* check if the answer is "RAD" 3rd */
-							if (strcmp((char*)Real2Host(ds_readd(TEXT_INPUT_BUF)), (char*)p_datseg + STR_RAD3))
+							if (strcmp((char*)ds_readd(TEXT_INPUT_BUF), (char*)p_datseg + STR_RAD3))
 							{
 								sprintf((char*)ds_readd(DTP2),
 									get_tx2(50),

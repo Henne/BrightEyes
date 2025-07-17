@@ -510,17 +510,17 @@ signed short save_game_state(void)
 		do {
 			/* ask for filename */
 			ds_writew(GUI_ENTERING_SAVEGAME, 1);
-			strcpy((char*)Real2Host(ds_readd(TEXT_INPUT_BUF)), (char*)p_datseg + SAVEGAME_NAMES + 9 * slot);
+			strcpy((char*)ds_readd(TEXT_INPUT_BUF), (char*)p_datseg + SAVEGAME_NAMES + 9 * slot);
 			GUI_input(get_ttx(634), 8);
 			ds_writew(GUI_ENTERING_SAVEGAME, 0);
 
-			if (host_readbs(Real2Host(ds_readd(TEXT_INPUT_BUF))) == 0) {
+			if (host_readbs((char*)ds_readd(TEXT_INPUT_BUF)) == 0) {
 				return 0;
 			}
 
 			flag = 0;
 
-			prepare_sg_name((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)Real2Host(ds_readd(TEXT_INPUT_BUF)));
+			prepare_sg_name((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)ds_readd(TEXT_INPUT_BUF));
 
 			for (tw_bak = 0; tw_bak < 5; tw_bak++) {
 
@@ -538,7 +538,7 @@ signed short save_game_state(void)
 		prepare_sg_name((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)p_datseg + SAVEGAME_NAMES + 9 * slot);
 		strcat((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)p_datseg + SAVEGAME_SUFFIX2);
 		unlink((char*)ds_readd(TEXT_OUTPUT_BUF));
-		strcpy((char*)p_datseg + SAVEGAME_NAMES + 9 * slot, (char*)Real2Host(ds_readd(TEXT_INPUT_BUF)));
+		strcpy((char*)p_datseg + SAVEGAME_NAMES + 9 * slot, (char*)ds_readd(TEXT_INPUT_BUF));
 
 		/* create a CHR-file for each hero in TEMP */
 		for (tw_bak = 0; tw_bak < 6; tw_bak++) {

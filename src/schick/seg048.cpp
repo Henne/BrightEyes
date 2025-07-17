@@ -517,7 +517,7 @@ void status_menu(signed short hero_pos)
 							GUI_output(get_tx2(71));
 						} else {
 							GUI_input(get_tx2(70), 15);
-							strcpy((char*)hero2 + HERO_NAME2, (char*)Real2Host(ds_readd(TEXT_INPUT_BUF)));
+							strcpy((char*)hero2 + HERO_NAME2, (char*)ds_readd(TEXT_INPUT_BUF));
 							ds_writew(REQUEST_REFRESH, 1);
 						}
 						break;

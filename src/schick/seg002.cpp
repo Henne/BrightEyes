@@ -5699,15 +5699,15 @@ signed short copy_protection(void)
 			/* ask the question */
 			GUI_input((char*)ds_readd(DTP2), 20);
 
-			l1 = strlen((char*)Real2Host(ds_readd(TEXT_INPUT_BUF)));
+			l1 = strlen((char*)ds_readd(TEXT_INPUT_BUF));
 
 			/* transform the input string in uppercase letters and bitwise invert them */
 			for (i = 0; i < l1; i++) {
-				host_writeb(Real2Host(ds_readd(TEXT_INPUT_BUF)) + i,
-					~toupper(host_readbs(Real2Host(ds_readd(TEXT_INPUT_BUF)) + i)));
+				host_writeb((char*)ds_readd(TEXT_INPUT_BUF) + i,
+					~toupper(host_readbs((char*)ds_readd(TEXT_INPUT_BUF) + i)));
 			}
 
-			if (!strcmp((char*)(p_datseg + (QUESTIONS_HANDBOOK + 4)) + 19 * l_di, (char*)Real2Host(ds_readd(TEXT_INPUT_BUF)))) {
+			if (!strcmp((char*)(p_datseg + (QUESTIONS_HANDBOOK + 4)) + 19 * l_di, (char*)ds_readd(TEXT_INPUT_BUF))) {
 				return 1;
 			}
 		} else {
@@ -5728,15 +5728,15 @@ signed short copy_protection(void)
 			/* ask the question */
 			GUI_input((char*)ds_readd(DTP2), 20);
 
-			l1 = strlen((char*)Real2Host(ds_readd(TEXT_INPUT_BUF)));
+			l1 = strlen((char*)ds_readd(TEXT_INPUT_BUF));
 
 			/* transform the input string in uppercase letters */
 			for (i = 0; i < l1; i++) {
-				host_writeb(Real2Host(ds_readd(TEXT_INPUT_BUF)) + i,
-					toupper(host_readbs(Real2Host(ds_readd(TEXT_INPUT_BUF)) + i)));
+				host_writeb((char*)ds_readd(TEXT_INPUT_BUF) + i,
+					toupper(host_readbs((char*)ds_readd(TEXT_INPUT_BUF) + i)));
 			}
 
-			if (!strcmp(get_ttx(235 + ds_readbs((QUESTIONS_MAP + 2) + 3 * l_di)), (char*)Real2Host(ds_readd(TEXT_INPUT_BUF)))) {
+			if (!strcmp(get_ttx(235 + ds_readbs((QUESTIONS_MAP + 2) + 3 * l_di)), (char*)ds_readd(TEXT_INPUT_BUF))) {
 				return 1;
 			}
 		}
