@@ -368,8 +368,8 @@ void do_harbor(void)
 				ds_writews(CURRENT_ANI, -1);
 				ds_writew(WALLCLOCK_UPDATE, 0);
 
-				memmove(Real2Host(ds_readd(RENDERBUF_PTR)), Real2Host(ds_readd(TRAVEL_MAP_PTR)), 64000);
-				map_effect(Real2Host(ds_readd(RENDERBUF_PTR)));
+				memmove((Bit8u*)ds_readd(RENDERBUF_PTR), Real2Host(ds_readd(TRAVEL_MAP_PTR)), 64000);
+				map_effect((Bit8u*)ds_readd(RENDERBUF_PTR));
 
 				wait_for_vsync();
 

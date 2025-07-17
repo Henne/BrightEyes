@@ -692,7 +692,7 @@ void game_over_screen(void)
 	/* load SKULL.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_SKULL_NVF);
 
-	read_archive_file(handle, Real2Host(ds_readd(RENDERBUF_PTR)), 64200);
+	read_archive_file(handle, (Bit8u*)ds_readd(RENDERBUF_PTR), 64200);
 
 	close(handle);
 
@@ -707,7 +707,7 @@ void game_over_screen(void)
 
 	memcpy((void*)((Bit8u*)ds_readd(FRAMEBUF_PTR)), (void*)((Bit8u*)ds_readd(RENDERBUF_PTR)), 320 * 200);
 
-	set_palette(Real2Host(ds_readd(RENDERBUF_PTR)) + 64002, 0x00, 0x40);
+	set_palette((Bit8u*)ds_readd(RENDERBUF_PTR) + 64002, 0x00, 0x40);
 
 	wait_for_keypress();
 

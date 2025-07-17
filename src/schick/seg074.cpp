@@ -215,7 +215,7 @@ void render_automap(signed short x_off)
 	ds_writew(PIC_COPY_Y2, 6);
 
 	/* set buffer to 0 */
-	memset(Real2Host(ds_readd(RENDERBUF_PTR)), 0, 64000);
+	memset((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 64000);
 
 	for (y = 0; y < 16; y++) {
 		for (x = 0; x < 16; x++) {
@@ -431,7 +431,7 @@ void draw_automap_entrance(signed short x, signed short y, signed short dir)
 	offset_y <<= 3;
 	offset_y *= 320;
 
-	p_img_tile = Real2Host(ds_readd(RENDERBUF_PTR)) + offset_y + 8 * x + 0xca8;
+	p_img_tile = (Bit8u*)ds_readd(RENDERBUF_PTR) + offset_y + 8 * x + 0xca8;
 
 	if (!d) {
 		p_img_tile += 2;

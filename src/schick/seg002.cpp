@@ -923,7 +923,7 @@ void copy_from_archive_to_temp(unsigned short index, char* fname)
 		handle2 = _creat(fname, 0);
 
 		/* copy it */
-		while ( (len = read_archive_file(handle1, Real2Host(ds_readd(RENDERBUF_PTR)), 60000)) && (len != -1))
+		while ( (len = read_archive_file(handle1, (Bit8u*)ds_readd(RENDERBUF_PTR), 60000)) && (len != -1))
 		{
 			_write(handle2, (Bit8u*)ds_readd(RENDERBUF_PTR), len);
 		}

@@ -193,7 +193,7 @@ void draw_status_line(void)
 					load_in_head(head_bak);
 			} else {
 
-				dst = Real2Host(ds_readd(RENDERBUF_PTR));
+				dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
 				head_bak = -1;
 
 				/* load skull if hero is dead */

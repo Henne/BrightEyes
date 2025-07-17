@@ -176,7 +176,7 @@ void door_frame(signed short no, signed short x, signed short y, signed short fr
 			height = 135 - y;
 		}
 
-		p2 = Real2Host(ds_readd(RENDERBUF_PTR)) + 208 * y + x;
+		p2 = (Bit8u*)ds_readd(RENDERBUF_PTR) + 208 * y + x;
 
 		copy_solid(p2, p1, width, height, 208, l1, 0);
 	}

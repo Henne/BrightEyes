@@ -56,9 +56,9 @@ signed short do_travel_mode(void)
 		load_map();
 	}
 
-	memmove((void*)Real2Host(ds_readd(RENDERBUF_PTR)), (void*)Real2Host(ds_readd(TRAVEL_MAP_PTR)), 64000);
+	memmove((void*)(Bit8u*)ds_readd(RENDERBUF_PTR), (void*)Real2Host(ds_readd(TRAVEL_MAP_PTR)), 64000);
 
-	map_effect(Real2Host(ds_readd(RENDERBUF_PTR)));
+	map_effect((Bit8u*)ds_readd(RENDERBUF_PTR));
 
 	wait_for_vsync();
 

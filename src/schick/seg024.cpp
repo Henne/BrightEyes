@@ -86,7 +86,7 @@ void diary_show(void)
 
 	update_mouse_cursor();
 
-	set_palette(Real2Host(ds_readd(RENDERBUF_PTR)) + 0xfa02, 0, 0x20);
+	set_palette((Bit8u*)ds_readd(RENDERBUF_PTR) + 0xfa02, 0, 0x20);
 
 	do_pic_copy(0);
 

@@ -398,7 +398,7 @@ void show_treasure_map(void)
 			update_mouse_cursor();
 			wait_for_vsync();
 
-			set_palette(Real2Host(ds_readd(RENDERBUF_PTR)) + 64000 + 2, 0, 0x20);
+			set_palette((Bit8u*)ds_readd(RENDERBUF_PTR) + 64000 + 2, 0, 0x20);
 
 			do_pic_copy(0);
 
@@ -506,7 +506,7 @@ signed short game_options(void)
 	update_mouse_cursor();
 	wait_for_vsync();
 
-	set_palette(Real2Host(ds_readd(RENDERBUF_PTR)) + 64002, 0, 32);
+	set_palette((Bit8u*)ds_readd(RENDERBUF_PTR) + 64002, 0, 32);
 
 	do_pic_copy(0);
 	refresh_screen_size();
@@ -768,12 +768,12 @@ void leave_dungeon(void)
 	DNG_lights();
 	ptr = Real2Host(ds_readd(TEXT_OUTPUT_BUF));
 
-	memset(Real2Host(ds_readd(RENDERBUF_PTR)), 0, 0xc0);
+	memset((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 0xc0);
 
 	for (i = 0; i < 64; i++) {
 
-		pal_fade(ptr, Real2Host(ds_readd(RENDERBUF_PTR)));
-		pal_fade(ptr + 0x60, Real2Host(ds_readd(RENDERBUF_PTR)) + 0x60);
+		pal_fade(ptr, (Bit8u*)ds_readd(RENDERBUF_PTR));
+		pal_fade(ptr + 0x60, (Bit8u*)ds_readd(RENDERBUF_PTR) + 0x60);
 		wait_for_vsync();
 		set_palette(ptr, 0x80, 0x40);
 	}
@@ -798,7 +798,7 @@ void leave_dungeon(void)
 	do_pic_copy(1);
 	refresh_screen_size();
 	wait_for_vsync();
-	set_palette(Real2Host(ds_readd(RENDERBUF_PTR)), 0 , 0x20);
+	set_palette((Bit8u*)ds_readd(RENDERBUF_PTR), 0 , 0x20);
 
 	/* disable the deathtrap */
 	ds_writew(DEATHTRAP, 0);
@@ -843,19 +843,19 @@ void fade_into(void)
 	Bit8u *ptr;
 	signed short i;
 
-	ptr = Real2Host(ds_readd(RENDERBUF_PTR)) + 0xfa00;
+	ptr = (Bit8u*)ds_readd(RENDERBUF_PTR) + 0xfa00;
 
-	memset(Real2Host(ds_readd(RENDERBUF_PTR)), 0, 0xc0);
+	memset((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 0xc0);
 
 	wait_for_vsync();
 
-	set_palette(Real2Host(ds_readd(RENDERBUF_PTR)), 0x80, 0x40);
+	set_palette((Bit8u*)ds_readd(RENDERBUF_PTR), 0x80, 0x40);
 
 	for (i = 0; i < 0x20; i++) {
 
-		pal_fade(ptr, Real2Host(ds_readd(RENDERBUF_PTR)));
+		pal_fade(ptr, (Bit8u*)ds_readd(RENDERBUF_PTR));
 
-		pal_fade(ptr, Real2Host(ds_readd(RENDERBUF_PTR)));
+		pal_fade(ptr, (Bit8u*)ds_readd(RENDERBUF_PTR));
 
 		wait_for_vsync();
 
@@ -867,7 +867,7 @@ void fade_into(void)
 
 void copy_palette(void)
 {
-	memcpy(Real2Host(ds_readd(RENDERBUF_PTR)) + 0xfa00, Real2Host(ds_readd(ANI_PALETTE)), 0x60);
+	memcpy((Bit8u*)ds_readd(RENDERBUF_PTR) + 0xfa00, Real2Host(ds_readd(ANI_PALETTE)), 0x60);
 	ds_writeb(FADING_STATE, 2);
 }
 

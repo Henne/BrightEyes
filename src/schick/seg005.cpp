@@ -407,7 +407,7 @@ void draw_fight_screen(Bit16u val)
 
 		FIG_draw_figures();
 
-		memcpy(Real2Host(ds_readd(BUFFER8_PTR)), Real2Host(ds_readd(RENDERBUF_PTR)), 64000);
+		memcpy(Real2Host(ds_readd(BUFFER8_PTR)), (Bit8u*)ds_readd(RENDERBUF_PTR), 64000);
 	}
 
 	while (flag != 0) {

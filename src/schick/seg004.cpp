@@ -703,10 +703,10 @@ void load_wallclock_nvf(void)
 	unsigned short fd;
 
 	fd = load_archive_file(ARCHIVE_FILE_OBJECTS_NVF);
-	read_archive_file(fd, Real2Host(ds_readd(RENDERBUF_PTR)), 2000);
+	read_archive_file(fd, (Bit8u*)ds_readd(RENDERBUF_PTR), 2000);
 	close(fd);
 
-	nvf.src = Real2Host(ds_readd(RENDERBUF_PTR));
+	nvf.src = (Bit8u*)ds_readd(RENDERBUF_PTR);
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&fd;
 	nvf.height = (Bit8u*)&fd;

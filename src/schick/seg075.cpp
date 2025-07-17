@@ -42,7 +42,7 @@ void DNG_floor_ceil(void)
 	signed short width, height;
 
 	/* Load ceiling */
-	nvf.dst = Real2Host(ds_readd(RENDERBUF_PTR));
+	nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
 	nvf.src = Real2Host(ds_readd(BUFFER9_PTR3));
 	nvf.no = 0;
 	nvf.type = (!ds_readbs(DNG_FLOOR_TEX)) ? 3 : 5;
@@ -52,7 +52,7 @@ void DNG_floor_ceil(void)
 
 
 	/* Load ceiling */
-	nvf.dst = Real2Host(ds_readd(RENDERBUF_PTR)) + 0x4030;
+	nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR) + 0x4030;
 	nvf.src = Real2Host(ds_readd(BUFFER9_PTR3));
 	nvf.no = (!(ds_readbs(DIRECTION)&1)) ? 1 : 2;
 	nvf.type = (!ds_readbs(DNG_FLOOR_TEX)) ? 3 : 5;
@@ -373,7 +373,7 @@ void DNG_draw_walls(signed short a1, signed short a2, signed short a3)
 		}
 	}
 
-	nvf.dst = dst_ptr = Real2Host(ds_readd(RENDERBUF_PTR)) + 0x7530;
+	nvf.dst = dst_ptr = (Bit8u*)ds_readd(RENDERBUF_PTR) + 0x7530;
 	nvf.src = Real2Host(ds_readd(BUFFER9_PTR3));
 	nvf.no = a3;
 	nvf.width = (Bit8u*)&width;
@@ -412,7 +412,7 @@ void DNG_draw_walls(signed short a1, signed short a2, signed short a3)
 			height2 = 135 - a2;
 		}
 
-		ptr2 = Real2Host(ds_readd(RENDERBUF_PTR)) + 208 * a2 + a1;
+		ptr2 = (Bit8u*)ds_readd(RENDERBUF_PTR) + 208 * a2 + a1;
 
 		if (!flag) {
 			copy_solid(ptr2, dst_ptr, width2, height2, 208, width, 128);
@@ -706,7 +706,7 @@ void DNG_open_door(void)
 	DNG_stub3();
 	DNG_stub4();
 
-	memmove(Real2Host(ds_readd(RENDERBUF_PTR)) + 0x7530, Real2Host(ds_readd(RENDERBUF_PTR)), 0x6db0);
+	memmove((Bit8u*)ds_readd(RENDERBUF_PTR) + 0x7530, (Bit8u*)ds_readd(RENDERBUF_PTR), 0x6db0);
 
 	if (!ds_readb(DUNGEON_GFX_STYLE)) {
 		x = 45;
@@ -732,7 +732,7 @@ void DNG_open_door(void)
 
 		DNG_stub5();
 
-		memmove(Real2Host(ds_readd(RENDERBUF_PTR)), Real2Host(ds_readd(RENDERBUF_PTR)) + 0x7530, 0x6db0);
+		memmove((Bit8u*)ds_readd(RENDERBUF_PTR), (Bit8u*)ds_readd(RENDERBUF_PTR) + 0x7530, 0x6db0);
 	}
 
 	refresh_screen_size();
@@ -751,7 +751,7 @@ void DNG_close_door(void)
 	DNG_stub3();
 	DNG_stub4();
 
-	memmove(Real2Host(ds_readd(RENDERBUF_PTR)) + 0x7530, Real2Host(ds_readd(RENDERBUF_PTR)), 0x6db0);
+	memmove((Bit8u*)ds_readd(RENDERBUF_PTR) + 0x7530, (Bit8u*)ds_readd(RENDERBUF_PTR), 0x6db0);
 
 	if (!ds_readb(DUNGEON_GFX_STYLE)) { /* dungeon graphics: wood */
 		x = 45;
@@ -777,7 +777,7 @@ void DNG_close_door(void)
 
 		DNG_stub5();
 
-		memmove(Real2Host(ds_readd(RENDERBUF_PTR)), Real2Host(ds_readd(RENDERBUF_PTR)) + 0x7530, 0x6db0);
+		memmove((Bit8u*)ds_readd(RENDERBUF_PTR), (Bit8u*)ds_readd(RENDERBUF_PTR) + 0x7530, 0x6db0);
 	}
 
 	refresh_screen_size();
@@ -1059,15 +1059,15 @@ mark2:			   goto mark1;
 
 	if (dungeon_id == DUNGEONS_ZWINGFESTE) {
 
-		ptr = Real2Host(ds_readd(RENDERBUF_PTR)) + 0x1f4;
-		memset(Real2Host(ds_readd(RENDERBUF_PTR)), 0, 0x120);
-		memcpy(Real2Host(ds_readd(RENDERBUF_PTR)) + 0x1f4, p_datseg + PALETTE_FLOOR, 0x120);
+		ptr = (Bit8u*)ds_readd(RENDERBUF_PTR) + 0x1f4;
+		memset((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 0x120);
+		memcpy((Bit8u*)ds_readd(RENDERBUF_PTR) + 0x1f4, p_datseg + PALETTE_FLOOR, 0x120);
 
 		for (i = 0; i < 0x40; i++) {
 
-			pal_fade(ptr, Real2Host(ds_readd(RENDERBUF_PTR)));
-			pal_fade(ptr + 0x60, Real2Host(ds_readd(RENDERBUF_PTR)) + 0x60);
-			pal_fade(ptr + 0xc0, Real2Host(ds_readd(RENDERBUF_PTR)) + 0xc0);
+			pal_fade(ptr, (Bit8u*)ds_readd(RENDERBUF_PTR));
+			pal_fade(ptr + 0x60, (Bit8u*)ds_readd(RENDERBUF_PTR) + 0x60);
+			pal_fade(ptr + 0xc0, (Bit8u*)ds_readd(RENDERBUF_PTR) + 0xc0);
 
 			wait_for_vsync();
 

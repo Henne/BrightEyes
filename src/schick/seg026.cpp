@@ -811,7 +811,7 @@ signed short copy_chr_names(Bit8u *ptr, signed short temple_id)
 	Bit8u *buf;
 	struct ffblk blk;
 
-	buf = Real2Host(ds_readd(RENDERBUF_PTR)) + 60000;
+	buf = (Bit8u*)ds_readd(RENDERBUF_PTR) + 60000;
 	sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
 		(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
 		(char*)p_datseg + ALL_CHR_WILDCARD3);

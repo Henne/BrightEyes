@@ -377,7 +377,7 @@ void unused_store(signed short no)
 	struct nvf_desc nvf;
 	signed short size;
 
-	nvf.dst = Real2Host(ds_readd(RENDERBUF_PTR)) + 30000;
+	nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR) + 30000;
 	nvf.src = Real2Host(ds_readd(BUFFER9_PTR3));
 	nvf.no = no;
 	nvf.type = 0;
@@ -442,11 +442,11 @@ void load_map(void)
 
 	/* open OBJECTS.NVF */
 	fd = load_archive_file(ARCHIVE_FILE_OBJECTS_NVF);
-	read_archive_file(fd, Real2Host(ds_readd(RENDERBUF_PTR)), 2000);
+	read_archive_file(fd, (Bit8u*)ds_readd(RENDERBUF_PTR), 2000);
 	close(fd);
 
     /* load the grey border for the wallclock overlay */
-	nvf.src = Real2Host(ds_readd(RENDERBUF_PTR));
+	nvf.src = (Bit8u*)ds_readd(RENDERBUF_PTR);
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&fd;
 	nvf.height = (Bit8u*)&fd;
@@ -556,12 +556,12 @@ void load_splashes(void)
 
 	/* read SPLASHES.DAT */
 	fd = load_archive_file(ARCHIVE_FILE_SPLASHES_DAT);
-	read_archive_file(fd, Real2Host(ds_readd(RENDERBUF_PTR)), 3000);
+	read_archive_file(fd, (Bit8u*)ds_readd(RENDERBUF_PTR), 3000);
 	close(fd);
 
 	/* nvf.dst = splash_le = ds_readd() */
 	nvf.dst = Real2Host(ds_writed(SPLASH_LE, ds_readd(SPLASH_BUFFER)));
-	nvf.src = Real2Host(ds_readd(RENDERBUF_PTR));
+	nvf.src = (Bit8u*)ds_readd(RENDERBUF_PTR);
 	nvf.no = 0;
 	nvf.type = 1;
 	nvf.width = (Bit8u*)&width;
@@ -570,7 +570,7 @@ void load_splashes(void)
 
 	/* nvf.dst = splash_ae = ds_readd() */
 	nvf.dst = Real2Host(ds_writed(SPLASH_AE, (Bit32u)((RealPt)ds_readd(SPLASH_BUFFER) + fd)));
-	nvf.src = Real2Host(ds_readd(RENDERBUF_PTR));
+	nvf.src = (Bit8u*)ds_readd(RENDERBUF_PTR);
 	nvf.no = 1;
 	nvf.type = 1;
 	nvf.width = (Bit8u*)&width;
@@ -682,11 +682,11 @@ void load_fightbg(signed short index)
 	signed short fd;
 
 	fd = load_archive_file(index);
-	read_archive_file(fd, Real2Host(ds_readd(RENDERBUF_PTR)), 30000);
-	decomp_pp20(Real2Host(ds_readd(RENDERBUF_PTR)),
+	read_archive_file(fd, (Bit8u*)ds_readd(RENDERBUF_PTR), 30000);
+	decomp_pp20((Bit8u*)ds_readd(RENDERBUF_PTR),
 			Real2Host(ds_readd(BUFFER8_PTR)),
 #if !defined(__BORLANDC__)
-			Real2Host(ds_readd(RENDERBUF_PTR)) + 4,
+			(Bit8u*)ds_readd(RENDERBUF_PTR) + 4,
 #else
 			FP_OFF(ds_readd(RENDERBUF_PTR)) + 4,
 			FP_SEG(ds_readd(RENDERBUF_PTR)),
