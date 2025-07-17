@@ -173,7 +173,7 @@ void DNG14_chest_x9(void)
 {
 	Bit8u *hero;
 
-	hero = Real2Host(get_first_hero_available_in_group());
+	hero = (Bit8u*)get_first_hero_available_in_group();
 	print_msg_with_first_hero(get_tx(61));
 	sub_hero_le(hero, dice_roll(2, 6, 0));
 }

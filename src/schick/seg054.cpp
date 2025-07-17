@@ -634,7 +634,7 @@ void do_inn(void)
 
 void TLK_herberg(signed short state)
 {
-	Bit8u *hero = Real2Host(get_first_hero_available_in_group());
+	Bit8u *hero = (Bit8u*)get_first_hero_available_in_group();
 
 	if (!state) {
 		ds_writews(DIALOG_NEXT_STATE, ds_readb(HERBERG_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ? 1 : 2);

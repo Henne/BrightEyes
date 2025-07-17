@@ -75,7 +75,7 @@ void tevent_130(void)
 			if (answer == 1 || answer == 2) {
 				GUI_dialog_na(0, answer == 1 ? get_tx2(26) : get_tx2(27));
 			} else {
-					GUI_dialog_na(0, test_attrib(Real2Host(get_first_hero_available_in_group()), ATTRIB_CH, 0) > 0 ? get_tx2(27) : get_tx2(26));
+					GUI_dialog_na(0, test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0 ? get_tx2(27) : get_tx2(26));
 			}
 		}
 
@@ -90,7 +90,7 @@ void tevent_131(void)
 {
 	signed short answer;
 
-	if (test_skill(Real2Host(get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 8) > 0 && !ds_readb(TEVENT131_FLAG)) {
+	if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 8) > 0 && !ds_readb(TEVENT131_FLAG)) {
 
 		ds_writeb(TEVENT131_FLAG, 1);
 
@@ -126,13 +126,13 @@ void tevent_131(void)
 void tevent_132(void)
 {
 
-	if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_WILDNISLEBEN, 1) > 0 && !ds_readb(TEVENT132_FLAG)) || ds_readb(TEVENT132_FLAG) != 0)
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 1) > 0 && !ds_readb(TEVENT132_FLAG)) || ds_readb(TEVENT132_FLAG) != 0)
 	{
 
 		/* set this camp place as known */
 		ds_writeb(TEVENT132_FLAG, 1);
 
-		if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_PFLANZENKUNDE, 1) > 0 && !ds_readb(TEVENT132_HERB_FLAG)) || ds_readb(TEVENT132_HERB_FLAG) != 0) {
+		if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 1) > 0 && !ds_readb(TEVENT132_HERB_FLAG)) || ds_readb(TEVENT132_HERB_FLAG) != 0) {
 			ds_writeb(TEVENT132_HERB_FLAG, 1);
 			ds_writebs(GATHER_HERBS_SPECIAL, 61);
 			TRV_found_camp_place(2);
@@ -198,7 +198,7 @@ void tevent_133(void)
 
 void tevent_134(void)
 {
-	if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_PFLANZENKUNDE, 6) > 0 && !ds_readb(TEVENT134_FLAG)) ||
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 6) > 0 && !ds_readb(TEVENT134_FLAG)) ||
 		ds_readb(TEVENT134_FLAG) != 0)
 	{
 		ds_writeb(GATHER_HERBS_SPECIAL, 157);
@@ -361,7 +361,7 @@ void tevent_137(void)
 	signed short item_pos;
 	Bit8u *hero;
 
-	if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_WILDNISLEBEN, 5) > 0 && !ds_readb(TEVENT137_FLAG)) ||
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 5) > 0 && !ds_readb(TEVENT137_FLAG)) ||
 		ds_readb(TEVENT137_FLAG) != 0)
 	{
 		ds_writeb(TEVENT137_FLAG, 1);
@@ -410,7 +410,7 @@ void tevent_137(void)
 
 void tevent_138(void)
 {
-	if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_WILDNISLEBEN, 2) > 0 && !ds_readb(TEVENT138_FLAG)) ||
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !ds_readb(TEVENT138_FLAG)) ||
 		ds_readb(TEVENT138_FLAG) != 0)
 	{
 		ds_writeb(TEVENT138_FLAG, 1);
@@ -445,15 +445,15 @@ void tevent_139(void)
 
 		timewarp(HOURS(6));
 
-		GUI_output((i = test_skill(Real2Host(get_first_hero_available_in_group()), TA_ORIENTIERUNG, 3)) > 0 ? get_tx2(66) : get_tx2(68));
+		GUI_output((i = test_skill((Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 3)) > 0 ? get_tx2(66) : get_tx2(68));
 	} else {
 		timewarp(HOURS(2));
 
-		GUI_output((i = test_skill(Real2Host(get_first_hero_available_in_group()), TA_ORIENTIERUNG, 5)) > 0 ? get_tx2(67) : get_tx2(69));
+		GUI_output((i = test_skill((Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 5)) > 0 ? get_tx2(67) : get_tx2(69));
 	}
 
 	if (i <= 0) {
-		if (test_skill(Real2Host(get_first_hero_available_in_group()), TA_ORIENTIERUNG, 3) > 0) {
+		if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 3) > 0) {
 
 			timewarp(HOURS(2));
 
@@ -475,12 +475,12 @@ void tevent_139(void)
 
 void tevent_140(void)
 {
-	if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_WILDNISLEBEN, 2) > 0 && !ds_readb(TEVENT140_FLAG)) || ds_readb(TEVENT140_FLAG) != 0) {
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !ds_readb(TEVENT140_FLAG)) || ds_readb(TEVENT140_FLAG) != 0) {
 
 		/* set this camp place as known */
 		ds_writeb(TEVENT140_FLAG, 1);
 
-		if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_PFLANZENKUNDE, 4) > 0 && !ds_readb(TEVENT140_HERB_FLAG)) || ds_readb(TEVENT140_HERB_FLAG) != 0) {
+		if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 && !ds_readb(TEVENT140_HERB_FLAG)) || ds_readb(TEVENT140_HERB_FLAG) != 0) {
 			ds_writeb(TEVENT140_HERB_FLAG, 1);
 			ds_writebs(GATHER_HERBS_SPECIAL, -126);
 			TRV_found_camp_place(2);
@@ -493,7 +493,7 @@ void tevent_140(void)
 
 void tevent_141(void)
 {
-	if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_FAEHRTENSUCHEN, 0) > 0 && !ds_readb(TEVENT141_FLAG)) ||
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 0) > 0 && !ds_readb(TEVENT141_FLAG)) ||
 		ds_readb(TEVENT141_FLAG) != 0)
 	{
 		/* set this camp place as known */
@@ -507,7 +507,7 @@ void tevent_141(void)
 
 void tevent_142(void)
 {
-	if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_WILDNISLEBEN, 2) > 0 && !ds_readb(TEVENT142_FLAG)) ||
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !ds_readb(TEVENT142_FLAG)) ||
 		ds_readb(TEVENT142_FLAG) != 0)
 	{
 
@@ -543,16 +543,16 @@ void tevent_143(void)
 
 		timewarp(HOURS(4));
 
-		GUI_output((i = test_skill(Real2Host(get_first_hero_available_in_group()), TA_ORIENTIERUNG, 2)) > 0 ? get_tx2(3) : get_tx2(5));
+		GUI_output((i = test_skill((Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 2)) > 0 ? get_tx2(3) : get_tx2(5));
 	} else {
 		timewarp(HOURS(1));
 
-		GUI_output((i = test_skill(Real2Host(get_first_hero_available_in_group()), TA_ORIENTIERUNG, 4)) > 0 ? get_tx2(4) : get_tx2(6));
+		GUI_output((i = test_skill((Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 4)) > 0 ? get_tx2(4) : get_tx2(6));
 	}
 
 	if (i <= 0) {
 
-		if (test_skill(Real2Host(get_first_hero_available_in_group()), TA_ORIENTIERUNG, 3) > 0) {
+		if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 3) > 0) {
 
 			timewarp(HOURS(1));
 

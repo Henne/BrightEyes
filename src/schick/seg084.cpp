@@ -402,7 +402,7 @@ signed short DNG09_handler(void)
 			(target_pos != ds_readws(DNG_HANDLED_POS) || ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK)) &&
 			ds_readbs(DIRECTION) == WEST && ds_readbs(DNG09_SECRETDOOR1) != 2)
 	{
-		if (ds_readb(DNG09_SECRETDOOR1) != 0 || test_skill((hero = Real2Host(get_first_hero_available_in_group())), TA_SINNESSCHAERFE, 6) > 0)
+		if (ds_readb(DNG09_SECRETDOOR1) != 0 || test_skill((hero = (Bit8u*)get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 6) > 0)
 		{
 			ds_writeb(DNG09_SECRETDOOR1, 1);
 
@@ -439,7 +439,7 @@ signed short DNG09_handler(void)
 			(target_pos != ds_readws(DNG_HANDLED_POS) || ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK)) &&
 			ds_readbs(DIRECTION) == EAST && ds_readbs(DNG09_SECRETDOOR2) != 2)
 	{
-		if (ds_readb(DNG09_SECRETDOOR2) != 0 || test_skill((hero = Real2Host(get_first_hero_available_in_group())), TA_SINNESSCHAERFE, 8) > 0)
+		if (ds_readb(DNG09_SECRETDOOR2) != 0 || test_skill((hero = (Bit8u*)get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 8) > 0)
 		{
 			ds_writeb(DNG09_SECRETDOOR2, 1);
 
@@ -563,7 +563,7 @@ void DNG09_chest4_x1(RealPt chest)
 							get_tx(24));
 			} while (answer == -1);
 
-			hero = Real2Host(get_first_hero_available_in_group());
+			hero = (Bit8u*)get_first_hero_available_in_group();
 
 			if (answer == 1)
 			{

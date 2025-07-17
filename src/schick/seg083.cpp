@@ -51,7 +51,7 @@ signed short DNG08_handler(void)
 
 	target_pos = DNG_POS(ds_readbs(DUNGEON_LEVEL), ds_readws(X_TARGET), ds_readws(Y_TARGET));
 
-	hero = Real2Host(get_first_hero_available_in_group());
+	hero = (Bit8u*)get_first_hero_available_in_group();
 
 	if (target_pos == DNG_POS(0,1,10) && target_pos != ds_readws(DNG_HANDLED_POS) && !ds_readb(DNG08_BED_00))
 	{
@@ -340,7 +340,7 @@ signed short DNG08_handler(void)
 			ds_readbs(DNG08_SECRET_DOOR) != 2)
 	{
 		if (ds_readbs(DNG08_SECRET_DOOR) != 0 ||
-			test_skill((hero = Real2Host(get_first_hero_available_in_group())), TA_SINNESSCHAERFE, 1) > 0)
+			test_skill((hero = (Bit8u*)get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 1) > 0)
 		{
 			ds_writeb(DNG08_SECRET_DOOR, 1);
 
@@ -424,7 +424,7 @@ void DNG08_search_bed(void)
 
 	money = counter = 0;
 
-	hero = Real2Host(get_first_hero_available_in_group());
+	hero = (Bit8u*)get_first_hero_available_in_group();
 
 	slot = get_free_mod_slot();
 
@@ -490,7 +490,7 @@ void DNG08_chest1_func2(RealPt)
 {
 	Bit8u *hero;
 
-	hero = Real2Host(get_first_hero_available_in_group());
+	hero = (Bit8u*)get_first_hero_available_in_group();
 
 	sprintf((char*)Real2Host(ds_readfp(DTP2)),
 		get_tx(11),
@@ -535,7 +535,7 @@ void DNG08_chest2_func1(RealPt chest)
 {
 	if (!ds_readb(DNG08_CHEST2_LOOTED))
 	{
-		if (test_skill(Real2Host(get_first_hero_available_in_group()), TA_SPRACHEN, 2) > 0)
+		if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_SPRACHEN, 2) > 0)
 		{
 			GUI_input(get_tx(27), 10);
 
@@ -568,7 +568,7 @@ void DNG08_chest3_func1(RealPt chest)
 {
 	Bit8u *hero;
 
-	hero = Real2Host(get_first_hero_available_in_group());
+	hero = (Bit8u*)get_first_hero_available_in_group();
 
 	if (get_first_hero_with_item(ITEM_KEY_BRONZE) != -1 ||
 		test_skill(hero, TA_SCHLOESSER, 5) > 0)
@@ -595,7 +595,7 @@ void DNG08_chest3_func1(RealPt chest)
 void DNG08_chest4_func1(RealPt chest)
 {
 	Bit8u *hero;
-	hero = Real2Host(get_first_hero_available_in_group());
+	hero = (Bit8u*)get_first_hero_available_in_group();
 
 	if (get_first_hero_with_item(ITEM_KEY_BRONZE) != -1 ||
 		test_skill(hero, TA_SCHLOESSER, 5) > 0)
@@ -618,7 +618,7 @@ void DNG08_chest4_func1(RealPt chest)
 void DNG08_chest5_func1(RealPt chest)
 {
 	Bit8u *hero;
-	hero = Real2Host(get_first_hero_available_in_group());
+	hero = (Bit8u*)get_first_hero_available_in_group();
 
 	if (get_first_hero_with_item(ITEM_KEY_BRONZE) != -1 ||
 		test_skill(hero, TA_SCHLOESSER, 5) > 0)

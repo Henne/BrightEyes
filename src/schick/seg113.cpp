@@ -39,7 +39,7 @@ void tevent_080(void)
 	signed short answer;
 	Bit8u *hero;
 
-	hero = Real2Host(get_first_hero_available_in_group());
+	hero = (Bit8u*)get_first_hero_available_in_group();
 
 	if ((!ds_readb(TEVENT080_FLAG) && (test_skill(hero, TA_WILDNISLEBEN, 4) > 0)) ||
 			ds_readb(TEVENT080_FLAG) != 0)
@@ -102,7 +102,7 @@ void tevent_080(void)
 
 void tevent_081(void)
 {
-	if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_WILDNISLEBEN, 2) > 0 && !ds_readb(TEVENT081_FLAG)) ||
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !ds_readb(TEVENT081_FLAG)) ||
 		 ds_readb(TEVENT081_FLAG) != 0)
 	{
 		TRV_found_camp_place(0);
@@ -117,7 +117,7 @@ void tevent_082(void)
 
 void tevent_083(void)
 {
-	if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_PFLANZENKUNDE, 6) > 0 && !ds_readb(TEVENT083_FLAG)) ||
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 6) > 0 && !ds_readb(TEVENT083_FLAG)) ||
 		 ds_readb(TEVENT083_FLAG) != 0)
 	{
 		ds_writeb(GATHER_HERBS_SPECIAL, 61);
@@ -150,7 +150,7 @@ void tevent_084(void)
 			}
 		} else {
 
-			if (test_skill(Real2Host(get_first_hero_available_in_group()), TA_KRIEGSKUNST, 5) <= 0)
+			if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 5) <= 0)
 			{
 				ds_writeb(FIG_INITIATIVE, 1);
 
@@ -164,7 +164,7 @@ void tevent_084(void)
 
 void tevent_085(void)
 {
-	Bit8u *hero = Real2Host(get_first_hero_available_in_group());
+	Bit8u *hero = (Bit8u*)get_first_hero_available_in_group();
 
 	if ((test_skill(hero, TA_WILDNISLEBEN, 4) > 0 && !ds_readb(TEVENT085_FLAG)) ||
 		 ds_readb(TEVENT085_FLAG) != 0)
@@ -231,7 +231,7 @@ void tevent_086(void)
 
 void tevent_088(void)
 {
-	if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_WILDNISLEBEN, 3) > 0 && !ds_readb(TEVENT088_FLAG)) ||
+	if (((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0) && (!ds_readb(TEVENT088_FLAG))) ||
 		 ds_readb(TEVENT088_FLAG) != 0)
 	{
 		TRV_found_camp_place(0);
@@ -267,6 +267,7 @@ void tevent_098(void)
 	signed short hero_pos;
 	Bit8u *hero;
 
+	/* TODO: this may not be correct */
 	i = get_first_hero_with_item(ITEM_ROPE) != -1 || get_first_hero_with_item(ITEM_ROPE_LADDER) != -1 ? 3 : 2; /* TODO: STAFFSPELL? */
 
 	do {
@@ -318,7 +319,7 @@ void tevent_098(void)
 			/* Original-Bug: hero not initialized */
 #ifdef M302de_ORIGINAL_BUGFIX
 			/* Original-Bugfix: take the leader of the group */
-			hero = Real2Host(get_first_hero_available_in_group());
+			hero = (Bit8u*)get_first_hero_available_in_group();
 #endif
 			hero_disease_test(hero, 2, 20 - (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK))));
 
@@ -473,7 +474,7 @@ void tevent_099(void)
 #endif
 		} else {
 
-			if (test_skill(Real2Host(get_first_hero_available_in_group()), TA_KRIEGSKUNST, 4) <= 0) {
+			if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 4) <= 0) {
 
 				ds_writeb(FIG_INITIATIVE, 1);
 
@@ -519,7 +520,7 @@ void tevent_101(void)
 #endif
 		} else {
 
-			if (test_skill(Real2Host(get_first_hero_available_in_group()), TA_KRIEGSKUNST, (signed char)mod) <= 0) {
+			if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, (signed char)mod) <= 0) {
 
 				ds_writeb(FIG_INITIATIVE, 1);
 
@@ -551,7 +552,7 @@ void tevent_103(void)
 
 	/* Original-Bug: save the address instead the return value of a function as a hero */
 #ifdef M302de_ORIGINAL_BUGFIX
-	hero = Real2Host(get_first_hero_available_in_group());
+	hero = (Bit8u*)get_first_hero_available_in_group();
 #else
 	hero = Real2Host(get_first_hero_available_in_group);
 #endif
@@ -784,7 +785,7 @@ void tevent_105(void)
 
 void tevent_106(void)
 {
-	if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_WILDNISLEBEN, 4) > 0 && !ds_readb(TEVENT106_FLAG)) ||
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 4) > 0 && !ds_readb(TEVENT106_FLAG)) ||
 		 ds_readb(TEVENT106_FLAG) != 0)
 	{
 		ds_writeb(TEVENT106_FLAG, 1);
@@ -803,8 +804,8 @@ void tevent_107(void)
 	init_ani(0);
 
 	do {
-		answer = GUI_radio(get_tx2(64), 2,
-					get_tx2(65), get_tx2(66));
+		answer = GUI_radio(get_tx2(64), 2, get_tx2(65), get_tx2(66));
+
 	} while (answer == -1);
 
 	if (answer == 1) {
@@ -819,9 +820,7 @@ void tevent_107(void)
 
 				if (get_first_hero_with_item(ITEM_ROPE) != -1) { /* TODO: ROPE_LADDER? STAFFSPELL? */
 
-					sprintf((char*)ds_readd(DTP2),
-						get_tx2(70),
-						(char*)hero + HERO_NAME2);
+					sprintf((char*)ds_readd(DTP2), get_tx2(70), (char*)hero + HERO_NAME2);
 
 					sub_hero_le(hero, random_schick(11) + 1);
 
@@ -842,7 +841,7 @@ void tevent_107(void)
 
 	} else {
 
-		if (test_skill(Real2Host(get_first_hero_available_in_group()), TA_ORIENTIERUNG, 1) > 0) {
+		if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 1) > 0) {
 
 			timewarp(HOURS(3));
 
@@ -866,7 +865,7 @@ void tevent_108(void)
 {
 	signed short answer;
 
-	if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 3) > 0) && !ds_readb(TEVENT108_FLAG))
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 3) > 0) && !ds_readb(TEVENT108_FLAG))
 	{
 		ds_writeb(TEVENT108_FLAG, 1);
 
@@ -900,7 +899,7 @@ void tevent_108(void)
 
 void tevent_109(void)
 {
-	if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_WILDNISLEBEN, 6) > 0 && !ds_readb(TEVENT109_FLAG)) ||
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 6) > 0 && !ds_readb(TEVENT109_FLAG)) ||
 		 ds_readb(TEVENT109_FLAG) != 0)
 	{
 		ds_writeb(TEVENT109_FLAG, 1);

@@ -86,7 +86,7 @@ void tevent_110(void)
 
 		/* try to walk arround */
 
-		if (test_skill(Real2Host(get_first_hero_available_in_group()), TA_ORIENTIERUNG, 0) > 0)
+		if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 0) > 0)
 		{
 			/* success */
 			timewarp(HOURS(4));
@@ -110,7 +110,7 @@ void tevent_111(void)
 	signed short unlucky_tests;
 	Bit8u *hero;
 
-	if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_FAEHRTENSUCHEN, 1) > 0 && !ds_readb(TEVENT111_FLAG)) ||
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 1) > 0 && !ds_readb(TEVENT111_FLAG)) ||
 		ds_readb(TEVENT111_FLAG) == 1)
 	{
 		ds_writeb(TEVENT111_FLAG, 1);
@@ -290,12 +290,12 @@ void tevent_111(void)
 /* a camp place */
 void tevent_112(void)
 {
-	if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_WILDNISLEBEN, 2) > 0 && !ds_readb(TEVENT112_FLAG)) ||
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !ds_readb(TEVENT112_FLAG)) ||
 		ds_readb(TEVENT112_FLAG) != 0)
 	{
 		ds_writeb(TEVENT112_FLAG, 1);
 
-		if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_PFLANZENKUNDE, 2) > 0 && !ds_readb(TEVENT112_HERB_FLAG)) ||
+		if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 2) > 0 && !ds_readb(TEVENT112_HERB_FLAG)) ||
 			ds_readb(TEVENT112_HERB_FLAG) != 0)
 		{
 			ds_writeb(TEVENT112_HERB_FLAG, 1);
@@ -489,7 +489,7 @@ void tevent_114(void)
 /* a camp place */
 void tevent_116(void)
 {
-	if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_WILDNISLEBEN, 6) > 0 && !ds_readb(TEVENT116_FLAG)) ||
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 6) > 0 && !ds_readb(TEVENT116_FLAG)) ||
 		ds_readb(TEVENT116_FLAG) != 0)
 	{
 		ds_writeb(TEVENT116_FLAG, 1);
@@ -528,7 +528,7 @@ void tevent_117(void)
 /* a herb place */
 void tevent_118(void)
 {
-	if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_PFLANZENKUNDE, 3) > 0 && !ds_readb(TEVENT118_FLAG)) ||
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 3) > 0 && !ds_readb(TEVENT118_FLAG)) ||
 		ds_readb(TEVENT118_FLAG) != 0)
 	{
 		ds_writeb(GATHER_HERBS_SPECIAL, 60);
@@ -541,7 +541,7 @@ void tevent_118(void)
 /* a camp place */
 void tevent_119(void)
 {
-	if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_WILDNISLEBEN, 2) > 0 && !ds_readb(TEVENT119_FLAG)) ||
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !ds_readb(TEVENT119_FLAG)) ||
 		ds_readb(TEVENT119_FLAG) != 0)
 	{
 		ds_writeb(TEVENT119_FLAG, 1);

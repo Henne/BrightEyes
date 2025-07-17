@@ -818,9 +818,9 @@ void DNG_stub6(void)
 
 			if (l_di == 2) {
 
-				hero1 = Real2Host(get_first_hero_available_in_group());
+				hero1 = (Bit8u*)get_first_hero_available_in_group();
 
-				hero2 = Real2Host(get_second_hero_available_in_group());
+				hero2 = (Bit8u*)get_second_hero_available_in_group();
 
 				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 					get_ttx(769),

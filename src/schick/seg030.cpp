@@ -317,7 +317,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 					if (ds_readws(DIALOG_INFORMER) == 0) {
 
-						hero = Real2Host(get_first_hero_available_in_group());
+						hero = (Bit8u*)get_first_hero_available_in_group();
 
 						if (!txt_id || txt_id == 18) {
 
@@ -418,7 +418,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 				} else if (ds_readws(TLK_ID) == 17) {
 
 
-					hero = Real2Host(get_first_hero_available_in_group());
+					hero = (Bit8u*)get_first_hero_available_in_group();
 
 					if (!txt_id || txt_id == 2 || txt_id == 25 || txt_id == 31 ||
 						txt_id == 32 || txt_id == 60 || txt_id == 78 || txt_id == 87)

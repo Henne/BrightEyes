@@ -33,7 +33,7 @@ namespace M302de {
 /* Ottarje <-> Skjal: alte Feuerstelle. idealer Rastplatz */
 void tevent_053(void)
 {
-	if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_WILDNISLEBEN, 1) > 0 && !ds_readb(TEVENT053_FLAG)) ||
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 1) > 0 && !ds_readb(TEVENT053_FLAG)) ||
 		ds_readbs(TEVENT053_FLAG) != 0)
 	{
 		TRV_found_camp_place(0);
@@ -83,7 +83,7 @@ void tevent_057(void)
 
 	if (answer == 2) {
 
-		if (test_skill(Real2Host(get_first_hero_available_in_group()), TA_ORIENTIERUNG, 2) > 0) {
+		if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 2) > 0) {
 
 			timewarp(HOURS(2));
 
@@ -149,7 +149,7 @@ void tevent_057(void)
 
 void tevent_058(void)
 {
-	if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_WILDNISLEBEN, 2) > 0 && !ds_readb(TEVENT058_FLAG)) ||
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !ds_readb(TEVENT058_FLAG)) ||
 		ds_readbs(TEVENT058_FLAG) != 0)
 	{
 		TRV_found_replenish_place(0);
@@ -197,7 +197,7 @@ void tevent_059(void)
 					GUI_dialog_na(0, get_tx2(16));
 				} else if (answer == 2) {
 					GUI_dialog_na(0, get_tx2(17));
-				} else if (test_attrib(Real2Host(get_first_hero_available_in_group()), ATTRIB_CH, 0) > 0) {
+				} else if (test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0) {
 					GUI_dialog_na(0, get_tx2(17));
 				} else {
 					GUI_dialog_na(0, get_tx2(16));
@@ -240,7 +240,7 @@ void tevent_060(void)
 
 		if (answer == 1) {
 
-			if (test_skill(Real2Host(get_first_hero_available_in_group()), TA_ORIENTIERUNG, 4) > 0) {
+			if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 4) > 0) {
 
 				sub_group_le(1);
 
@@ -289,7 +289,7 @@ void tevent_060(void)
 		} else {
 
 
-			if (test_skill(Real2Host(get_first_hero_available_in_group()), TA_ORIENTIERUNG, 2) > 0) {
+			if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 2) > 0) {
 
 				timewarp(HOURS(3));
 
@@ -383,8 +383,8 @@ void tevent_061(void)
 	/* TODO: not needed here */
 	answer = 0;
 
-	if (test_skill(Real2Host(get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 6) > 0 &&
-		test_skill(Real2Host(get_first_hero_available_in_group()), TA_FAEHRTENSUCHEN, 3) > 0 &&
+	if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 6) > 0 &&
+		test_skill((Bit8u*)get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 3) > 0 &&
 		!ds_readb(TEVENT061_FLAG))
 	{
 		ds_writeb(TEVENT061_FLAG, 1);
@@ -716,13 +716,13 @@ void tevent_066(void)
 	signed short count;
 	Bit8u *hero;
 
-	if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_WILDNISLEBEN, 2) > 0 && !ds_readb(TEVENT066_FLAG)) ||
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !ds_readb(TEVENT066_FLAG)) ||
 		ds_readbs(TEVENT066_FLAG) != 0)
 	{
 		TRV_found_replenish_place(0);
 		ds_writeb(TEVENT066_FLAG, 1);
 
-		if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_FAEHRTENSUCHEN, 4) > 0 && !ds_readb(TEVENT066_TRACK_FLAG)))
+		if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 4) > 0 && !ds_readb(TEVENT066_TRACK_FLAG)))
 		{
 
 			do {

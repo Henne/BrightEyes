@@ -313,7 +313,7 @@ void DNG01_chest6_x3(RealPt chest)
 #ifdef M302de_ORIGINAL_BUGFIX
 	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 		get_tx(14),
-		(char*)Real2Host(get_first_hero_available_in_group()));
+		(char*)(Bit8u*)get_first_hero_available_in_group());
 #else
 	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 		get_tx(14), 10);

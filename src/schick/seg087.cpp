@@ -48,7 +48,7 @@ signed short DNG14_handler(void)
 
 	pos = (ds_readbs(DUNGEON_LEVEL) << 12) + (ds_readws(X_TARGET) << 8) + ds_readws(Y_TARGET);
 
-	hero = Real2Host(get_first_hero_available_in_group());
+	hero = (Bit8u*)get_first_hero_available_in_group();
 
 	if (!(ds_readds(DAY_TIMER) % MINUTES(10)) &&
 		ds_readb(DNG14_POISONTRAP) == 2 &&

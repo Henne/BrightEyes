@@ -37,7 +37,7 @@ void chest_protected_normal(void)
 	print_msg_with_first_hero(get_ttx(518));
 
 	/* the first hero gets wounded with 1W6 */
-	sub_hero_le(Real2Host(get_first_hero_available_in_group()), random_schick(6));
+	sub_hero_le((Bit8u*)get_first_hero_available_in_group(), random_schick(6));
 }
 
 void chest_closed(void)
@@ -52,7 +52,7 @@ void chest_protected_heavy(void)
 	print_msg_with_first_hero(get_ttx(520));
 
 	/* the first hero gets wounded with 2W6 */
-	sub_hero_le(Real2Host(get_first_hero_available_in_group()), dice_roll(2, 6, 0));
+	sub_hero_le((Bit8u*)get_first_hero_available_in_group(), dice_roll(2, 6, 0));
 }
 
 void chest_poisoned1(void)
@@ -97,7 +97,7 @@ void chest_protected_brutal(void)
 	print_msg_with_first_hero(get_ttx(520));
 
 	/* the first hero gets wounded with 4W6 */
-	sub_hero_le(Real2Host(get_first_hero_available_in_group()), dice_roll(4, 6, 0));
+	sub_hero_le((Bit8u*)get_first_hero_available_in_group(), dice_roll(4, 6, 0));
 }
 
 void chest_petrified(void)
@@ -118,7 +118,7 @@ void chest_ignifax_normal(void)
 	print_msg_with_first_hero(get_ttx(777));
 
 	/* the first hero gets wounded with 2W6 */
-	sub_hero_le(Real2Host(get_first_hero_available_in_group()), dice_roll(2, 6, 0));
+	sub_hero_le((Bit8u*)get_first_hero_available_in_group(), dice_roll(2, 6, 0));
 }
 
 void chest_ignifax_brutal(void)
@@ -127,7 +127,7 @@ void chest_ignifax_brutal(void)
 	print_msg_with_first_hero(get_ttx(777));
 
 	/* the first hero gets wounded with 4W6 */
-	sub_hero_le(Real2Host(get_first_hero_available_in_group()), dice_roll(4, 6, 0));
+	sub_hero_le((Bit8u*)get_first_hero_available_in_group(), dice_roll(4, 6, 0));
 }
 
 void chest_ignifax_heavy(void)
@@ -136,7 +136,7 @@ void chest_ignifax_heavy(void)
 	print_msg_with_first_hero(get_ttx(777));
 
 	/* the first hero gets wounded with 3W6 */
-	sub_hero_le(Real2Host(get_first_hero_available_in_group()), dice_roll(3, 6, 0));
+	sub_hero_le((Bit8u*)get_first_hero_available_in_group(), dice_roll(3, 6, 0));
 }
 
 void chest_crossbow_bolts(void)
@@ -145,7 +145,7 @@ void chest_crossbow_bolts(void)
 	print_msg_with_first_hero(get_ttx(788));
 
 	/* the first hero gets wounded with 2W6+6 */
-	sub_hero_le(Real2Host(get_first_hero_available_in_group()), dice_roll(2, 6, 6));
+	sub_hero_le((Bit8u*)get_first_hero_available_in_group(), dice_roll(2, 6, 6));
 }
 
 void chest_cursed(void)
@@ -156,7 +156,7 @@ void chest_cursed(void)
 	Bit8u *hero;
 
 	/* get the group leader */
-	hero = Real2Host(get_first_hero_available_in_group());
+	hero = (Bit8u*)get_first_hero_available_in_group();
 
 	if (!hero_transformed(hero)) {
 
@@ -178,7 +178,7 @@ void chest_fulminictus(void)
 	print_msg_with_first_hero(get_ttx(564));
 
 	/* the first hero gets wounded with 4W6+5 */
-	sub_hero_le(Real2Host(get_first_hero_available_in_group()), dice_roll(4, 6, 5));
+	sub_hero_le((Bit8u*)get_first_hero_available_in_group(), dice_roll(4, 6, 5));
 }
 
 
@@ -476,7 +476,7 @@ void use_lockpicks_on_chest(RealPt chest_ptr)
 	signed short l_di;
 	Bit8u *hero;
 
-	hero = Real2Host(get_first_hero_available_in_group());
+	hero = (Bit8u*)get_first_hero_available_in_group();
 
 	if ((l_si = hero_has_lockpicks(hero)) != -1) {
 
@@ -557,7 +557,7 @@ void use_key_on_chest(RealPt chest_ptr)
 	signed short key_pos;
 	Bit8u *hero;
 
-	hero = Real2Host(get_first_hero_available_in_group());
+	hero = (Bit8u*)get_first_hero_available_in_group();
 
 	/* the leader of the group must have the key */
 	if ((key_pos = get_item_pos(hero, host_readb(Real2Host(chest_ptr) + 2))) != -1)

@@ -35,7 +35,7 @@ void tevent_067(void)
 	signed short count;
 	Bit8u *hero;
 
-	if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 6) > 0 && !ds_readb(TEVENT067_FLAG)) ||
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 6) > 0 && !ds_readb(TEVENT067_FLAG)) ||
 		ds_readb(TEVENT067_FLAG) != 0)
 	{
 		GUI_output(get_tx2(90));
@@ -73,7 +73,7 @@ void tevent_067(void)
 
 				GUI_output(get_tx2(97));
 
-				hero = Real2Host(get_first_hero_available_in_group());
+				hero = (Bit8u*)get_first_hero_available_in_group();
 
 				add_party_money(7L);
 
@@ -130,7 +130,7 @@ void tevent_068(void)
 
 void tevent_069(void)
 {
-	if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_WILDNISLEBEN, 5) > 0 && !ds_readb(TEVENT069_FLAG)) ||
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 5) > 0 && !ds_readb(TEVENT069_FLAG)) ||
 		ds_readb(TEVENT069_FLAG) != 0)
 	{
 		TRV_found_camp_place(0);
@@ -142,12 +142,12 @@ void tevent_070(void)
 {
 	signed short l_si;
 
-	if (test_skill(Real2Host(get_first_hero_available_in_group()), TA_WILDNISLEBEN, 3) > 0 ||
+	if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 ||
 		ds_readb(TEVENT070_FLAG) != 0)
 	{
 		ds_writeb(TEVENT070_FLAG, 1);
 
-		if (test_skill(Real2Host(get_first_hero_available_in_group()), TA_PFLANZENKUNDE, 4) > 0 ||
+		if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 ||
 			ds_readb(TEVENT070_HERB_FLAG) != 0)
 		{
 			ds_writeb(TEVENT070_HERB_FLAG, 1);
@@ -158,7 +158,7 @@ void tevent_070(void)
 			l_si = TRV_found_camp_place(0);
 		}
 
-		if ((l_si && !ds_readb(TEVENT070_TRAIL_FLAG) && test_skill(Real2Host(get_first_hero_available_in_group()), TA_FAEHRTENSUCHEN, 0) > 0) ||
+		if ((l_si && !ds_readb(TEVENT070_TRAIL_FLAG) && test_skill((Bit8u*)get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 0) > 0) ||
 			ds_readb(TEVENT070_TRAIL_FLAG) != 0) {
 
 			ds_writeb(TEVENT070_TRAIL_FLAG, 1);
@@ -189,7 +189,7 @@ void tevent_071(void)
 	have_raft = 0;
 
 	/* Perception + 8, Sinnesschaerfe + 8 */
-	if (test_skill(hero = Real2Host(get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 8) > 0 &&
+	if (test_skill(hero = (Bit8u*)get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 8) > 0 &&
 		!ds_readb(TEVENT071_FLAG))
 	{
 		ds_writeb(TEVENT071_FLAG, 1);
@@ -342,7 +342,7 @@ void tevent_unused01(void)
 
 	has_raft = 0;
 
-	hero = Real2Host(get_first_hero_available_in_group());
+	hero = (Bit8u*)get_first_hero_available_in_group();
 
 	if ((test_skill(hero, TA_SINNESSCHAERFE, 8) > 0 && !ds_readb(TEVENTU01_FLAG)) ||
 		ds_readb(TEVENTU01_FLAG) != 0)
@@ -415,7 +415,7 @@ void tevent_unused01(void)
 
 void tevent_072(void)
 {
-	if ((test_skill(Real2Host(get_first_hero_available_in_group()), TA_WILDNISLEBEN, 3) > 0 && !ds_readb(TEVENT072_FLAG)) ||
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !ds_readb(TEVENT072_FLAG)) ||
 		ds_readb(TEVENT072_FLAG) != 0)
 	{
 		TRV_found_camp_place(1);
@@ -479,7 +479,7 @@ void tevent_074(void)
 
 			/* try to flee */
 
-			if (test_skill(Real2Host(get_first_hero_available_in_group()), TA_KRIEGSKUNST, 2) <= 0)
+			if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 2) <= 0)
 			{
 				/* failed, so fight */
 				ds_writeb(FIG_INITIATIVE, 1);
@@ -544,7 +544,7 @@ void tevent_074(void)
 				/* try to be Charismatic */
 				answer = count_heroes_in_group();
 
-				if (test_attrib(Real2Host(get_first_hero_available_in_group()), ATTRIB_CH, 14 - answer) <= 0)
+				if (test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 14 - answer) <= 0)
 				{
 					/* fight */
 					ds_writeb(FIG_INITIATIVE, 1);
@@ -656,7 +656,7 @@ void tevent_076(void)
 
 	if (!ds_readb(TEVENT076_FLAG)) {
 
-		if (test_skill(Real2Host(get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 5) > 0)
+		if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 5) > 0)
 		{
 			ds_writeb(TEVENT076_FLAG, 1);
 
@@ -720,7 +720,7 @@ void tevent_077(void)
 
 		} else if (answer == 2) {
 
-			if (test_skill(Real2Host(get_first_hero_available_in_group()), TA_KRIEGSKUNST, 6) <= 0) {
+			if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 6) <= 0) {
 
 				/* test failed, so fight */
 				ds_writeb(FIG_INITIATIVE, 1);
@@ -786,7 +786,7 @@ void tevent_077(void)
 				/* try to be Charismatic */
 				answer = count_heroes_in_group();
 
-				if (test_attrib(Real2Host(get_first_hero_available_in_group()), ATTRIB_CH, 14 - answer) <= 0)
+				if (test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 14 - answer) <= 0)
 				{
 					/* fight */
 					ds_writeb(FIG_INITIATIVE, 1);

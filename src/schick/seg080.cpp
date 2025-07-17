@@ -61,7 +61,7 @@ signed short DNG04_handler(void)
 
 		if (i == 2)
 		{
-			hero = Real2Host(get_first_hero_available_in_group());
+			hero = (Bit8u*)get_first_hero_available_in_group();
 
 			sprintf((char*)ds_readd(DTP2),
 				get_tx(5),
@@ -184,7 +184,7 @@ signed short DNG04_handler(void)
 	{
 		/* a very deep gap */
 		i = 1;
-		hero = Real2Host(get_first_hero_available_in_group());
+		hero = (Bit8u*)get_first_hero_available_in_group();
 
 		if (!ds_readb(DNG04_DEEPGAP_FLAG) || test_attrib(hero, ATTRIB_GE, 0) > 0)
 		{
@@ -373,7 +373,7 @@ signed short DNG05_handler(void)
 		{
 			ds_writew(DNG05_TRASH_FLAG, 1);
 
-			hero = Real2Host(get_first_hero_available_in_group());
+			hero = (Bit8u*)get_first_hero_available_in_group();
 
 			GUI_output(get_tx(16));
 
@@ -438,7 +438,7 @@ signed short DNG05_handler(void)
 	{
 		if (GUI_bool(get_tx(12)))
 		{
-			hero = Real2Host(get_first_hero_available_in_group());
+			hero = (Bit8u*)get_first_hero_available_in_group();
 
 			sprintf((char*)ds_readd(DTP2),
 				get_tx(13),

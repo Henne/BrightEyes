@@ -45,7 +45,7 @@ signed short DNG07_handler(void)
 
 	target_pos = DNG_POS(ds_readbs(DUNGEON_LEVEL), ds_readws(X_TARGET), ds_readws(Y_TARGET));
 
-	hero = Real2Host(get_first_hero_available_in_group());
+	hero = (Bit8u*)get_first_hero_available_in_group();
 
 	if (target_pos == DNG_POS(0,13,2) && target_pos != ds_readws(DNG_HANDLED_POS))
 	{
@@ -310,7 +310,7 @@ void DNG09_statues(signed short prob, signed short bonus)
 	Bit8u *hero;
 	Bit8u *amap_ptr;
 
-	hero = Real2Host(get_first_hero_available_in_group());
+	hero = (Bit8u*)get_first_hero_available_in_group();
 
 	amap_ptr = p_datseg + DNG_MAP;
 

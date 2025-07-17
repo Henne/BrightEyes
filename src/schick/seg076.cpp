@@ -216,11 +216,11 @@ void DNG_door(signed short action)
 						ds_writew(DNG_REFRESH_DIRECTION, -1);
 					}
 
-					sub_hero_le(Real2Host(get_first_hero_available_in_group()), 1);
+					sub_hero_le((Bit8u*)get_first_hero_available_in_group(), 1);
 
 					if (get_second_hero_available_in_group())
 					{
-						sub_hero_le(Real2Host(get_second_hero_available_in_group()), 1);
+						sub_hero_le((Bit8u*)get_second_hero_available_in_group(), 1);
 					}
 				}
 			}
@@ -229,7 +229,7 @@ void DNG_door(signed short action)
 			{
 				/* use lockpicks */
 
-				hero = Real2Host(get_first_hero_available_in_group());
+				hero = (Bit8u*)get_first_hero_available_in_group();
 
 				if ((lockpick_pos = hero_has_lockpicks(hero)) != -1)
 				{
@@ -340,7 +340,7 @@ void print_msg_with_first_hero(Bit8u *msg)
 {
 	Bit8u *hero;
 
-	hero = Real2Host(get_first_hero_available_in_group());
+	hero = (Bit8u*)get_first_hero_available_in_group();
 
 	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 		(char*)msg, (char*)hero + HERO_NAME2);

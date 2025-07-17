@@ -202,12 +202,12 @@ signed short DNG03_handler(void)
 	{
 		j = 0;
 
-		if (test_skill(Real2Host(get_first_hero_available_in_group()), TA_GEFAHRENSINN, 4) <= 0)
+		if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_GEFAHRENSINN, 4) <= 0)
 		{
 			j++;
 		}
 
-		if ((hero = Real2Host(get_second_hero_available_in_group())) &&
+		if ((hero = (Bit8u*)get_second_hero_available_in_group()) &&
 			host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 			host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
 			!hero_dead(hero) &&
@@ -216,7 +216,7 @@ signed short DNG03_handler(void)
 			j++;
 		}
 
-		hero = Real2Host(get_first_hero_available_in_group());
+		hero = (Bit8u*)get_first_hero_available_in_group();
 
 		if (j != 0 || test_attrib(hero, ATTRIB_GE, 2) <= 0)
 		{
@@ -244,7 +244,7 @@ signed short DNG03_handler(void)
 			}
 		}
 
-		if ((hero = Real2Host(get_second_hero_available_in_group())) &&
+		if ((hero = (Bit8u*)get_second_hero_available_in_group()) &&
 			(j == 2 ||
 			(host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 			host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
@@ -537,7 +537,7 @@ void DNG03_chest12_func3(RealPt chest)
 
 	crystals = 0;
 
-	hero = Real2Host(get_first_hero_available_in_group());
+	hero = (Bit8u*)get_first_hero_available_in_group();
 
 	/* count the crystals in the knapsack of the leader */
 	for (i = HERO_INVENTORY_SLOT_KNAPSACK_1; i < NR_HERO_INVENTORY_SLOTS; i++)

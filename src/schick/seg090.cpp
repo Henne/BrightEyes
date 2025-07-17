@@ -42,7 +42,7 @@ signed short DNG12_handler(void)
 	ds_writews(TEXTBOX_WIDTH, 7);
 	target_pos = DNG_POS(ds_readbs(DUNGEON_LEVEL),ds_readws(X_TARGET),ds_readws(Y_TARGET));
 
-	hero = Real2Host(get_first_hero_available_in_group());
+	hero = (Bit8u*)get_first_hero_available_in_group();
 
 	if (ds_readds(DAY_TIMER) % MINUTES(5) == 0) {
 		/* TODO: buggy timer for cave in */

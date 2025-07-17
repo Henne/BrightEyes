@@ -84,7 +84,7 @@ void talk_tavern(void)
 
 			txt_id = host_readws(state_ptr) & 0x7fff;
 			format = get_tx(txt_id);
-			hero = Real2Host(get_first_hero_available_in_group());
+			hero = (Bit8u*)get_first_hero_available_in_group();
 
 			if (txt_id == 52 || txt_id == 72 || txt_id == 78 || txt_id == 83 || txt_id == 89) {
 
@@ -259,7 +259,7 @@ void TLK_tavern(signed short answer)
 	signed short hero_pos;
 
 	old_state = ds_readws(DIALOG_STATE);
-	hero = Real2Host(get_first_hero_available_in_group());
+	hero = (Bit8u*)get_first_hero_available_in_group();
 
 	if (!old_state) {
 

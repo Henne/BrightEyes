@@ -78,7 +78,7 @@ signed short DNG02_handler(void)
 
 	} else if ((target_pos == DNG_POS(0,7,13) || target_pos == DNG_POS(1,6,5) || target_pos == DNG_POS(1,4,14)) && target_pos != ds_readws(DNG_HANDLED_POS))
 	{
-		if (test_skill((hero = Real2Host(get_first_hero_available_in_group())), TA_SINNESSCHAERFE, 6) > 0)
+		if (test_skill((hero = (Bit8u*)get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 6) > 0)
 		{
 			GUI_output(get_tx(8));
 
@@ -130,10 +130,10 @@ signed short DNG02_handler(void)
 
 	} else if (target_pos == DNG_POS(0,14,14) && target_pos != ds_readws(DNG_HANDLED_POS))
 	{
-		hero = Real2Host(get_first_hero_available_in_group());
+		hero = (Bit8u*)get_first_hero_available_in_group();
 		weight_sum = get_hero_weight(hero);
 
-		if ((hero = Real2Host(get_second_hero_available_in_group())))
+		if ((hero = (Bit8u*)get_second_hero_available_in_group()))
 		{
 			weight_sum += get_hero_weight(hero);
 		}
@@ -499,7 +499,7 @@ signed short DNG02_handler(void)
 			(target_pos != ds_readws(DNG_HANDLED_POS) || ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK)) &&
 			ds_readb(DNG02_SECRET_DOOR3) != 2)
 	{
-		hero = Real2Host(get_first_hero_available_in_group());
+		hero = (Bit8u*)get_first_hero_available_in_group();
 
 		if (ds_readb(DNG02_SECRET_DOOR3) != 0 || test_skill(hero, TA_SINNESSCHAERFE, 5) > 0)
 		{

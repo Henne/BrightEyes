@@ -72,7 +72,7 @@ signed short DNG06_handler(void)
 			{
 				ds_writeb(DNG06_MONEY_FLAG, 1);
 
-				hero = Real2Host(get_first_hero_available_in_group());
+				hero = (Bit8u*)get_first_hero_available_in_group();
 
 				i = dice_roll(3, 20, 0);
 
@@ -110,10 +110,10 @@ signed short DNG06_handler(void)
 			}
 		}
 
-		hero_first = Real2Host(get_first_hero_available_in_group());
+		hero_first = (Bit8u*)get_first_hero_available_in_group();
 		if (l3 > 1)
 		{
-			hero_second = Real2Host(get_second_hero_available_in_group());
+			hero_second = (Bit8u*)get_second_hero_available_in_group();
 		}
 
 		sprintf((char*)ds_readd(DTP2),
@@ -214,7 +214,7 @@ signed short DNG06_handler(void)
 				get_item(ITEM_KEY_GOLDEN_1, 1, 1);
 
 				/* TODO: This is not neccessary */
-				hero = Real2Host(get_first_hero_available_in_group());
+				hero = (Bit8u*)get_first_hero_available_in_group();
 
 				add_party_money(3000L);
 			}
@@ -230,7 +230,7 @@ signed short DNG06_handler(void)
 
 			l3 = random_schick(5);
 
-			hero = Real2Host(get_first_hero_available_in_group());
+			hero = (Bit8u*)get_first_hero_available_in_group();
 
 			sprintf((char*)ds_readd(DTP2),
 				(char*)(l3 == 1 ? get_tx(12) : get_tx(13)),
@@ -250,7 +250,7 @@ signed short DNG06_handler(void)
 					get_tx(17));
 		} while (i == -1);
 
-		hero = Real2Host(get_first_hero_available_in_group());
+		hero = (Bit8u*)get_first_hero_available_in_group();
 
 		if (i == 1 || i == 3)
 		{
@@ -320,7 +320,7 @@ signed short DNG06_handler(void)
 				ds_writeb(DNG06_LEVER_FLAG, 1);
 			} else {
 				/* liquid from ceiling causes damage */
-				hero = Real2Host(get_first_hero_available_in_group());
+				hero = (Bit8u*)get_first_hero_available_in_group();
 
 				sprintf((char*)ds_readd(DTP2),
 					get_tx(23),
@@ -364,7 +364,7 @@ signed short DNG06_handler(void)
 				ds_writeb(DNG06_LEVER_FLAG, 1);
 			} else {
 				/* liquid from ceiling causes damage */
-				hero = Real2Host(get_first_hero_available_in_group());
+				hero = (Bit8u*)get_first_hero_available_in_group();
 
 				sprintf((char*)ds_readd(DTP2),
 					get_tx(23),
@@ -378,7 +378,7 @@ signed short DNG06_handler(void)
 
 	} else if (target_pos == DNG_POS(1,5,8) && target_pos != ds_readws(DNG_HANDLED_POS) && !ds_readb(DNG06_LEVER_FLAG))
 	{
-		hero = Real2Host(get_first_hero_available_in_group());
+		hero = (Bit8u*)get_first_hero_available_in_group();
 
 		/* large disk comes down from ceiling */
 		sprintf((char*)ds_readd(DTP2),
@@ -411,7 +411,7 @@ signed short DNG06_handler(void)
 	{
 		if (GUI_bool(get_tx(28)))
 		{
-			hero = Real2Host(get_first_hero_available_in_group());
+			hero = (Bit8u*)get_first_hero_available_in_group();
 
 			sprintf((char*)ds_readd(DTP2),
 				get_tx(29),
@@ -547,7 +547,7 @@ void DNG09_pitfall(void)
 	Bit8u *hero_first;
 	Bit8u *hero_second;
 
-	hero = Real2Host(get_first_hero_available_in_group());
+	hero = (Bit8u*)get_first_hero_available_in_group();
 
 	if (!ds_readb(DNG09_PIT_FLAG))
 	{
@@ -568,8 +568,8 @@ void DNG09_pitfall(void)
 			GUI_output(get_tx(29));
 
 		} else {
-			hero_first = Real2Host(get_first_hero_available_in_group());
-			hero_second = Real2Host(get_second_hero_available_in_group());
+			hero_first = (Bit8u*)get_first_hero_available_in_group();
+			hero_second = (Bit8u*)get_second_hero_available_in_group();
 
 			if (ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP)) >= 2)
 			{

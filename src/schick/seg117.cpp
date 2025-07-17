@@ -483,7 +483,7 @@ void octopus_attack(void)
 	GUI_output(get_tx2(32));
 
 	ds_writew(BASEPOS_X, ds_writew(BASEPOS_Y, 0));
-	status_menu(get_hero_index(Real2Host(get_first_hero_available_in_group())));
+	status_menu(get_hero_index((Bit8u*)get_first_hero_available_in_group()));
 	resume_traveling();
 }
 
@@ -562,7 +562,7 @@ void pirates_attack(void)
 
 	ds_writew(BASEPOS_X, ds_writew(BASEPOS_Y, 0));
 
-	status_menu(get_hero_index(Real2Host(get_first_hero_available_in_group())));
+	status_menu(get_hero_index((Bit8u*)get_first_hero_available_in_group()));
 
 	resume_traveling();
 }
@@ -740,7 +740,7 @@ void TLK_way_to_ruin(signed short state)
 	RealPt hero;
 	Bit8u *hero2;
 
-	hero2 = Real2Host(get_first_hero_available_in_group());
+	hero2 = (Bit8u*)get_first_hero_available_in_group();
 
 	if (!state) {
 		ds_writew(DIALOG_NEXT_STATE, ds_readb(TEVENT115_FLAG) != 0 ? 45 : 66);
