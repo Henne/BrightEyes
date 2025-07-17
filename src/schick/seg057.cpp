@@ -434,10 +434,10 @@ void sell_screen(Bit8u *shop_ptr)
 			/* 0xe83 - 11ba */
 			while (l12 == 0 && j < 3) {
 
-				make_valuta_str((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), price);
+				make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), price);
 				sprintf((char*)ds_readd(DTP2),
 					get_ttx(449),
-					(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
+					(char*)ds_readd(TEXT_OUTPUT_BUF));
 
 
 				do {
@@ -490,11 +490,11 @@ void sell_screen(Bit8u *shop_ptr)
 					if (l12 != 2) {
 						GUI_output(get_ttx(451));
 
-						make_valuta_str((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), price);
+						make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), price);
 
 						sprintf((char*)ds_readd(DTP2),
 							get_ttx(819),
-							(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
+							(char*)ds_readd(TEXT_OUTPUT_BUF));
 
 						GUI_output((char*)ds_readd(DTP2));
 					}

@@ -269,11 +269,11 @@ void print_item_description(Bit8u *hero, signed short pos)
 
 	/* magic wand */
 	if (host_readw(inventory_p + INVENTORY_ITEM_ID) == ITEM_MAGIC_WAND) {
-		sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
+		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 			get_tx2(53),
 			host_readbs(hero + HERO_STAFFSPELL_LVL));
 		strcat((char*)ds_readd(DTP2),
-			(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
+			(char*)ds_readd(TEXT_OUTPUT_BUF));
 	}
 
 	GUI_output((char*)ds_readd(DTP2));

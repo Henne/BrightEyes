@@ -1038,7 +1038,7 @@ RealPt spell_analues(void)
 	item_id = host_readws(get_spelluser() + SIZEOF_INVENTORY * item_pos + HERO_INVENTORY + INVENTORY_ITEM_ID);
 #endif
 
-	strcpy((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), get_tx(52));
+	strcpy((char*)ds_readd(TEXT_OUTPUT_BUF), get_tx(52));
 
 	if (item_id) {
 
@@ -1058,14 +1058,14 @@ RealPt spell_analues(void)
 				if (ds_readws((ANALUES_ITEMS + ANALUES_ITEM_HANDICAP) + i * SIZEOF_ANALUES_ITEM) <= ds_readws(SPELLTEST_RESULT)) {
 
 					/* copy the matching result string */
-					strcpy((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
+					strcpy((char*)ds_readd(TEXT_OUTPUT_BUF),
 						get_tx(ds_readbs((ANALUES_ITEMS + ANALUES_ITEM_DTP) + i * SIZEOF_ANALUES_ITEM)));
 
 					or_ptr_bs(get_spelluser() + item_pos * SIZEOF_INVENTORY + (HERO_INVENTORY + INVENTORY_FLAGS), 0x80); /* set 'magic_revealed' flag */
 					break;
 				} else {
 					/* nothing found string */
-					strcpy((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
+					strcpy((char*)ds_readd(TEXT_OUTPUT_BUF),
 						get_tx(55));
 					break;
 				}
@@ -1079,7 +1079,7 @@ RealPt spell_analues(void)
 		sprintf((char*)ds_readd(DTP2),
 			get_tx(53),
 			(char*)get_spelluser() + HERO_NAME2,
-			(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
+			(char*)ds_readd(TEXT_OUTPUT_BUF));
 	}
 
 	return (RealPt)ds_readd(TEXT_OUTPUT_BUF);

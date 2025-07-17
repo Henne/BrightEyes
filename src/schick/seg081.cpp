@@ -78,12 +78,12 @@ signed short DNG06_handler(void)
 
 				add_party_money(100L * i);
 
-				sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
+				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 					get_tx(4),
 					(char*)hero + HERO_NAME2,
 					i);
 
-				strcat((char*)ds_readd(DTP2), (char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
+				strcat((char*)ds_readd(DTP2), (char*)ds_readd(TEXT_OUTPUT_BUF));
 			}
 
 			GUI_output((char*)ds_readd(DTP2));

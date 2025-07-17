@@ -199,11 +199,11 @@ void do_temple(void)
 					GUI_output(get_ttx(401));
 				} else {
 
-					make_valuta_str((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), money);
+					make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), money);
 
 					sprintf((char*)ds_readd(DTP2),
 						get_ttx(297),
-						(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
+						(char*)ds_readd(TEXT_OUTPUT_BUF));
 
 					input = GUI_input((char*)ds_readd(DTP2), 3);
 
@@ -371,13 +371,13 @@ signed short char_erase(void)
 				strcpy((char*)ds_readd(DTP2),
 					(char*)Real2Host(ptr) + 32 * l_si);
 
-				sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
+				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 					get_ttx(295),
 					(char*)ds_readd(DTP2));
 
-				if (GUI_bool(Real2Host(ds_readd(TEXT_OUTPUT_BUF)))) {
+				if (GUI_bool((char*)ds_readd(TEXT_OUTPUT_BUF))) {
 
-					prepare_chr_name((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
+					prepare_chr_name((char*)ds_readd(TEXT_OUTPUT_BUF),
 								(char*)ds_readd(DTP2));
 
 					unlink_ret = unlink((char*)ds_readd(TEXT_OUTPUT_BUF));
@@ -389,7 +389,7 @@ signed short char_erase(void)
 
 					sprintf((char*)ds_readd(DTP2),
 						(char*)p_datseg + STR_TEMP_FILE_WILDCARD,
-						(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
+						(char*)ds_readd(TEXT_OUTPUT_BUF));
 					unlink((char*)ds_readd(DTP2));
 				}
 
@@ -448,17 +448,17 @@ void miracle_heal_hero(signed short le_in, Bit8u *str)
 		add_hero_le(get_hero(hero_pos), le_in);
 
 		/* prepare a message */
-		strcpy((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), get_ttx(392));
+		strcpy((char*)ds_readd(TEXT_OUTPUT_BUF), get_ttx(392));
 
 		if (le_in > 1) {
-			strcat((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), get_ttx(393));
+			strcat((char*)ds_readd(TEXT_OUTPUT_BUF), get_ttx(393));
 		}
 
 		sprintf((char*)ds_readd(DTP2),
 				(char*)str,
 				(char*)get_hero(hero_pos) + HERO_NAME2,
 				le_in,
-				(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
+				(char*)ds_readd(TEXT_OUTPUT_BUF));
 	}
 }
 

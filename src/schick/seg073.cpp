@@ -459,7 +459,7 @@ RealPt get_drinkmate(void)
 	surname = (surname == 0 ? 0xa7 : 0xbb);
 	surname += random_schick(20) - 1;
 
-	sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
+	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 		(char*)p_datseg + GOSSIP_STR_TRIPLE_WILDCARD, /* "%s %s%s" */
 		get_tx(name),
 		get_tx(surname),

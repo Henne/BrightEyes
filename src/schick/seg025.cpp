@@ -374,11 +374,11 @@ void show_treasure_map(void)
 			ds_writew(TEXTBOX_WIDTH, 3);
 
 			/* */
-			sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
+			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 				get_ttx(727),
 				(char*)get_hero(get_random_hero()) + HERO_NAME2);
 
-			GUI_output(Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
+			GUI_output((char*)ds_readd(TEXT_OUTPUT_BUF));
 
 			ds_writew(TEXTBOX_WIDTH, tw_bak);
 			ds_writeb(FIND_HYGGELIK, 1);
@@ -766,7 +766,7 @@ void leave_dungeon(void)
 	Bit8u *ptr;
 
 	DNG_lights();
-	ptr = Real2Host(ds_readd(TEXT_OUTPUT_BUF));
+	ptr = (char*)ds_readd(TEXT_OUTPUT_BUF);
 
 	memset((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 0xc0);
 

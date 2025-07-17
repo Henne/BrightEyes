@@ -42,10 +42,10 @@ signed short LVL_select_skill(Bit8u *hero, signed short show_values)
 
 	if (show_values != 0) {
 
-		strcpy((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), get_ttx(205));
+		strcpy((char*)ds_readd(TEXT_OUTPUT_BUF), get_ttx(205));
 
 		if (host_readbs(hero + HERO_TA_RISE) > 1) {
-			strcat((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), get_ttx(393));
+			strcat((char*)ds_readd(TEXT_OUTPUT_BUF), get_ttx(393));
 		}
 
 		sprintf((char*)ds_readd(DTP2),
@@ -54,7 +54,7 @@ signed short LVL_select_skill(Bit8u *hero, signed short show_values)
 			(host_readbs(hero + HERO_TA_RISE) > 1) ? get_ttx(305) : get_ttx(304),
 			/* # of tries left */
 			host_readbs(hero + HERO_TA_RISE),
-			Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
+			(char*)ds_readd(TEXT_OUTPUT_BUF));
 	} else {
 
 		strcpy((char*)ds_readd(DTP2), get_ttx(216));
@@ -555,12 +555,12 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 					money = random_interval(10, 200);
 
-					make_valuta_str((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), money);
+					make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), money);
 
 					sprintf((char*)ds_readd(DTP2),
 						get_tx(35),
 						(char*)hero + HERO_NAME2,
-						Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
+						(char*)ds_readd(TEXT_OUTPUT_BUF));
 
 					GUI_output((char*)ds_readd(DTP2));
 
@@ -589,12 +589,12 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 					money = random_interval(100, 300);
 
-					make_valuta_str((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), money);
+					make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), money);
 
 					sprintf((char*)ds_readd(DTP2),
 						get_tx(35),
 						(char*)hero + HERO_NAME2,
-						Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
+						(char*)ds_readd(TEXT_OUTPUT_BUF));
 
 					GUI_output((char*)ds_readd(DTP2));
 
@@ -617,11 +617,11 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 				money = random_interval(500, 1000);
 
-				make_valuta_str((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), money);
+				make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), money);
 
 				sprintf((char*)ds_readd(DTP2),
 					get_tx(38),
-					Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
+					(char*)ds_readd(TEXT_OUTPUT_BUF),
 					(char*)hero + HERO_NAME2);
 
 				GUI_output((char*)ds_readd(DTP2));
@@ -645,11 +645,11 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 				money = random_interval(500, 1000);
 
-				make_valuta_str((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), money);
+				make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), money);
 
 				sprintf((char*)ds_readd(DTP2),
 					get_tx(40),
-					Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
+					(char*)ds_readd(TEXT_OUTPUT_BUF),
 					(char*)hero + HERO_NAME2);
 
 				GUI_output((char*)ds_readd(DTP2));

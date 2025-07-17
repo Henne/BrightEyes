@@ -269,7 +269,7 @@ unsigned short fight_printer(void)
 					strcpy(getString(ds_readd(TEXT_OUTPUT_BUF)), get_tx(idx));
 				}
 
-				GUI_print_string(Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
+				GUI_print_string((char*)ds_readd(TEXT_OUTPUT_BUF),
 					1, 194);
 			}
 			ds_writed(PRINT_STRING_BUFFER, (Bit32u)gfx_pos_bak);

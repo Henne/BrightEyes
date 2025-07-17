@@ -313,12 +313,12 @@ void status_show(Bit16u index)
 	GUI_print_string((char*)ds_readd(DTP2), 59, 33);
 
 	/* print money */
-	make_valuta_str((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
+	make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF),
 		host_readd(Real2Host(hero) + HERO_MONEY));
 
 	sprintf((char*)ds_readd(DTP2),
 		(char*)Real2Host(host_readd(Real2Host(ds_readd(TEXT_LTX_INDEX)) + 0x4b0)),
-		(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
+		(char*)ds_readd(TEXT_OUTPUT_BUF));
 	GUI_print_string((char*)ds_readd(DTP2), 59, 43);
 
 	/* dead, unconscious or drunk */
@@ -377,7 +377,7 @@ void status_show(Bit16u index)
 				val = host_readbs(Real2Host(hero) + i * 3 + HERO_ATTRIB)
 					+ host_readbs(Real2Host(hero) + i * 3 + HERO_ATTRIB_MOD);
 
-				sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)) + i * 10,
+				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF) + i * 10,
 					get_tx2(51),
 					host_readbs(Real2Host(hero) + i * 3 + 0x34) != val ?
 						get_tx2(49) :
@@ -391,20 +391,20 @@ void status_show(Bit16u index)
 			}
 			sprintf((char*)ds_readd(DTP2),
 				get_tx2(12),
-				(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
-				(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)) + 70,
-				(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)) + 10,
-				(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)) + 80,
-				(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)) + 20,
-				(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)) + 90,
-				(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)) + 30,
-				(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)) + 100,
-				(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)) + 40,
-				(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)) + 110,
-				(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)) + 50,
-				(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)) + 120,
-				(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)) + 60,
-				(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)) + 130);
+				(char*)ds_readd(TEXT_OUTPUT_BUF),
+				(char*)ds_readd(TEXT_OUTPUT_BUF) + 70,
+				(char*)ds_readd(TEXT_OUTPUT_BUF) + 10,
+				(char*)ds_readd(TEXT_OUTPUT_BUF) + 80,
+				(char*)ds_readd(TEXT_OUTPUT_BUF) + 20,
+				(char*)ds_readd(TEXT_OUTPUT_BUF) + 90,
+				(char*)ds_readd(TEXT_OUTPUT_BUF) + 30,
+				(char*)ds_readd(TEXT_OUTPUT_BUF) + 100,
+				(char*)ds_readd(TEXT_OUTPUT_BUF) + 40,
+				(char*)ds_readd(TEXT_OUTPUT_BUF) + 110,
+				(char*)ds_readd(TEXT_OUTPUT_BUF) + 50,
+				(char*)ds_readd(TEXT_OUTPUT_BUF) + 120,
+				(char*)ds_readd(TEXT_OUTPUT_BUF) + 60,
+				(char*)ds_readd(TEXT_OUTPUT_BUF) + 130);
 
 			GUI_print_string((char*)ds_readd(DTP2), 200, 70);
 

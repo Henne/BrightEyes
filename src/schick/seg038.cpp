@@ -172,7 +172,7 @@ void FIG_find_path_to_target_backtrack(Bit8u *dist_table_ptr, signed short targe
 	target_out_of_reach = 0;
 	lowest_nr_dir_changes = 99;
 
-	memset(Real2Host(ds_readd(TEXT_OUTPUT_BUF)), 0, 80);
+	memset((char*)ds_readd(TEXT_OUTPUT_BUF), 0, 80);
 	path_table[0] = Real2Host((RealPt)ds_readd(TEXT_OUTPUT_BUF));
 	path_table[1] = Real2Host((RealPt)ds_readd(TEXT_OUTPUT_BUF)) + 20;
 	path_table[2] = Real2Host((RealPt)ds_readd(TEXT_OUTPUT_BUF)) + 40;
