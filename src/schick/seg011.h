@@ -1,5 +1,8 @@
+#include "v203de.h"
+
 #if !defined(__BORLANDC__)
 namespace M302de {
+#endif
 
 void AIL_startup(void);
 
@@ -47,5 +50,6 @@ Bit16u AIL_sequence_status(Bit16u driver, Bit16u sequence);
 
 void AIL_set_relative_volume(Bit16u, Bit16u, Bit16u, Bit16u);
 
+#if !defined(__BORLANDC__)
 }
 #endif

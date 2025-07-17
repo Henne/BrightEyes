@@ -24,6 +24,7 @@
 #include "AIL/AIL.H"
 #else
 #include <unistd.h>
+#include "seg011.h"
 #endif
 
 #include "v302de.h"
@@ -40,7 +41,6 @@
 #include "seg008.h"
 #include "seg009.h"
 #include "seg010.h"
-#include "seg011.h"
 #include "seg025.h"
 #include "seg026.h"
 #include "seg027.h"
