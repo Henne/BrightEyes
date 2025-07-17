@@ -263,26 +263,26 @@ signed short do_travel_mode(void)
 
 	if (ds_readb(PP20_INDEX) == 5)
 	{
-		memset((void*)Real2Host(ds_readd(DTP2)), 0, 0xc0);
+		memset((void*)(char*)ds_readd(DTP2), 0, 0xc0);
 
-		memcpy((void*)(Real2Host(ds_readd(DTP2)) + 0xc0),
+		memcpy((void*)((char*)ds_readd(DTP2) + 0xc0),
 			(void*)(Real2Host(ds_readd(TRAVEL_MAP_PTR)) + 64000 + 2), 0x60);
 
-		memcpy((void*)(Real2Host(ds_readd(DTP2)) + 0x120),
+		memcpy((void*)((char*)ds_readd(DTP2) + 0x120),
 			(void*)(p_datseg + PALETTE_SPECIAL), 0x60);
 
 		for (i = 0; i < 64; i++)
 		{
-			pal_fade(Real2Host(ds_readd(DTP2)) + 0xc0, Real2Host(ds_readd(DTP2)));
-			pal_fade(Real2Host(ds_readd(DTP2)) + 0x120, Real2Host(ds_readd(DTP2)) + 0x60);
+			pal_fade((char*)ds_readd(DTP2) + 0xc0, (char*)ds_readd(DTP2));
+			pal_fade((char*)ds_readd(DTP2) + 0x120, (char*)ds_readd(DTP2) + 0x60);
 			wait_for_vsync();
-			set_palette(Real2Host(ds_readd(DTP2)) + 0xc0, 0x00, 0x20);
-			set_palette(Real2Host(ds_readd(DTP2)) + 0x120, 0xe0, 0x20);
+			set_palette((char*)ds_readd(DTP2) + 0xc0, 0x00, 0x20);
+			set_palette((char*)ds_readd(DTP2) + 0x120, 0xe0, 0x20);
 		}
 
 		wait_for_vsync();
-		set_palette(Real2Host(ds_readd(DTP2)), 0x80, 0x40);
-		set_palette(Real2Host(ds_readd(DTP2)), 0x00, 0x20);
+		set_palette((char*)ds_readd(DTP2), 0x80, 0x40);
+		set_palette((char*)ds_readd(DTP2), 0x00, 0x20);
 
 		do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
 	}

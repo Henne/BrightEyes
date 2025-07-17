@@ -122,21 +122,21 @@ void tevent_057(void)
 				if (get_first_hero_with_item(ITEM_ROPE) == -1 || get_first_hero_with_item(ITEM_ROPE_LADDER) != -1)
 				{
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx2(8),
 						(char*)hero + HERO_NAME2,
 						(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-					GUI_output(Real2Host(ds_readd(DTP2)));
+					GUI_output((char*)ds_readd(DTP2));
 
 					sub_hero_le(hero, random_schick(9) + 3);
 
 				} else {
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx2(7),
 						(char*)hero + HERO_NAME2);
 
-					GUI_output(Real2Host(ds_readd(DTP2)));
+					GUI_output((char*)ds_readd(DTP2));
 
 					sub_hero_le(hero, random_schick(8));
 				}
@@ -467,12 +467,12 @@ void tevent_063(void)
 
 	hero = get_hero(vomiter);
 
-	sprintf((char*)Real2Host(ds_readd(DTP2)),
+	sprintf((char*)ds_readd(DTP2),
 		get_tx2(47),
 		(char*)hero + HERO_NAME2);
 
 	/* print who vomits */
-	GUI_output(Real2Host(ds_readd(DTP2)));
+	GUI_output((char*)ds_readd(DTP2));
 
 	/* LE - 2 */
 	sub_hero_le(hero, 2);

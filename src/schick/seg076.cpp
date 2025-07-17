@@ -300,11 +300,11 @@ void DNG_door(signed short action)
 						if (spell_result == -99)
 						{
 							/* unlucky => just print a message */
-							sprintf((char*)Real2Host(ds_readd(DTP2)),
+							sprintf((char*)ds_readd(DTP2),
 								get_ttx(607),
 								(char*)hero + HERO_NAME2);
 
-							GUI_output(Real2Host(ds_readd(DTP2)));
+							GUI_output((char*)ds_readd(DTP2));
 						} else if (spell_result <= 0)
 						{
 							/* failed => half AE costs */
@@ -882,11 +882,11 @@ void DNG_waterbarrel(Bit8u *unit_ptr)
 	/* TODO: check the value of unit_ptr first and skip if *unit_ptr <= 0*/
 
 	do {
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_ttx(781),
 			host_readb(unit_ptr));
 
-		answer = GUI_radio(Real2Host(ds_readd(DTP2)), 3,
+		answer = GUI_radio((char*)ds_readd(DTP2), 3,
 						get_ttx(782),
 						get_ttx(783),
 						get_ttx(784));

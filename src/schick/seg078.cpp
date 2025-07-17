@@ -64,13 +64,13 @@ signed short DNG02_handler(void)
 
 	} else if (target_pos == DNG_POS(0,3,6) && target_pos != ds_readws(DNG_HANDLED_POS) && ds_readbs(DIRECTION) == SOUTH)
 	{
-		strcpy((char*)Real2Host(ds_readd(DTP2)),
+		strcpy((char*)ds_readd(DTP2),
 			get_tx(4));
 
-		strcat((char*)Real2Host(ds_readd(DTP2)),
+		strcat((char*)ds_readd(DTP2),
 			 (char*)((test_spell_group(SP_ODEM_ARCANUM, 0) == 0) ? get_tx(5) : get_tx(6)));
 
-		GUI_output(Real2Host(ds_readd(DTP2)));
+		GUI_output((char*)ds_readd(DTP2));
 
 	} else if (target_pos == DNG_POS(0,4,10) && target_pos != ds_readws(DNG_HANDLED_POS) && ds_readbs(DIRECTION) == SOUTH)
 	{
@@ -83,12 +83,12 @@ signed short DNG02_handler(void)
 			GUI_output(get_tx(8));
 
 		} else {
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_tx(9),
 				(char*)hero + HERO_NAME2,
 				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			GUI_output(Real2Host(ds_readd(DTP2)));
+			GUI_output((char*)ds_readd(DTP2));
 
 			flag = 0;
 
@@ -97,12 +97,12 @@ signed short DNG02_handler(void)
 				/* KK+4 */
 				if (test_attrib(hero, ATTRIB_KK, 4) <= 0)
 				{
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx(10),
 						(char*)hero + HERO_NAME2,
 						(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-					GUI_output(Real2Host(ds_readd(DTP2)));
+					GUI_output((char*)ds_readd(DTP2));
 
 					sub_hero_le(hero, 1);
 
@@ -113,11 +113,11 @@ signed short DNG02_handler(void)
 
 			if (!flag)
 			{
-				sprintf((char*)Real2Host(ds_readd(DTP2)),
+				sprintf((char*)ds_readd(DTP2),
 					get_tx(11),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output(Real2Host(ds_readd(DTP2)));
+				GUI_output((char*)ds_readd(DTP2));
 
 				sub_hero_le(hero, (host_readws(hero + HERO_LE) > 6 ? random_schick(6) : host_readws(hero + HERO_LE) - 1));
 
@@ -549,11 +549,11 @@ signed short DNG02_handler(void)
 		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
 		ds_writeb(DIRECTION, (ds_readws(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
 
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(44),
 			get_ttx(ds_readws(TRV_DESTINATION) + 0xeb));
 
-		GUI_output(Real2Host(ds_readd(DTP2)));
+		GUI_output((char*)ds_readd(DTP2));
 
 		timewarp(HOURS(3));
 

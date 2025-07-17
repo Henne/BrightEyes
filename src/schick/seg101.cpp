@@ -54,7 +54,7 @@ void spell_arcano(void)
 			(signed char)target);
 
 	/* "Die Magieresistenz von %s steigt um 2 Punkte." */
-	sprintf((char*)Real2Host(ds_readd(DTP2)),
+	sprintf((char*)ds_readd(DTP2),
 		get_tx(98),
 		(char*)Real2Host(ds_readd(SPELLTARGET)) + HERO_NAME2);
 }
@@ -86,9 +86,9 @@ void spell_armatrutz(void)
 		max_bonus = 9;
 
 	/* ask the user which bonus he wants */
-	sprintf((char*)Real2Host(ds_readd(DTP2)),
+	sprintf((char*)ds_readd(DTP2),
 		get_tx(99), max_bonus);
-	bonus = GUI_input(Real2Host(ds_readd(DTP2)), 1);
+	bonus = GUI_input((char*)ds_readd(DTP2), 1);
 
 	/* fix wrong input */
 	if (bonus > max_bonus)
@@ -104,7 +104,7 @@ void spell_armatrutz(void)
 			(signed char)bonus, (signed char)pos);
 
 		/* prepare output message */
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(100),
 			(char*)get_spelluser() + HERO_NAME2,
 			bonus);
@@ -114,7 +114,7 @@ void spell_armatrutz(void)
 		/* set AE to 0 */
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 		/* avoid the textbox output */
-		host_writeb(Real2Host(ds_readd(DTP2)), 0);
+		host_writeb((char*)ds_readd(DTP2), 0);
 	}
 }
 
@@ -136,7 +136,7 @@ void spell_inc_ch(void)
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 
 		/* copy message text */
-		strcpy((char*)Real2Host(ds_readd(DTP2)),
+		strcpy((char*)ds_readd(DTP2),
 			get_tx(112));
 
 		return;
@@ -145,7 +145,7 @@ void spell_inc_ch(void)
 	/* check if CH was already increased */
 	if (host_readbs(get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_CH)) > host_readbs(get_spelltarget() + (HERO_ATTRIB_ORIG + 3 * ATTRIB_CH))) {
 		/* "Bei %s ist %s schon magisch gesteigert" */
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(113),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(414));
@@ -157,7 +157,7 @@ void spell_inc_ch(void)
 		set_mod_slot(slot, HOURS(2), get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_CH), 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(101),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(414));
@@ -181,7 +181,7 @@ void spell_feuerbann(void)
 			get_spelluser() + HERO_FIREBAN, 1, (signed char)target);
 
 		/* prepare message */
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(102),
 			(char*)get_spelluser() + HERO_NAME2);
 	} else {
@@ -208,7 +208,7 @@ void spell_inc_ff(void)
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 
 		/* copy message text */
-		strcpy((char*)Real2Host(ds_readd(DTP2)),
+		strcpy((char*)ds_readd(DTP2),
 			get_tx(112));
 
 		return;
@@ -217,7 +217,7 @@ void spell_inc_ff(void)
 	/* check if FF was already increased */
 	if (host_readbs(get_spelltarget() + 0x3e) > host_readbs(get_spelltarget() + (HERO_ATTRIB_ORIG + 3 * ATTRIB_FF))) {
 		/* "Bei %s ist %s schon magisch gesteigert" */
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(113),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(415));
@@ -229,7 +229,7 @@ void spell_inc_ff(void)
 		set_mod_slot(slot, HOURS(2), get_spelltarget() + 0x3e, 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(101),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(415));
@@ -254,7 +254,7 @@ void spell_inc_ge(void)
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 
 		/* copy message text */
-		strcpy((char*)Real2Host(ds_readd(DTP2)),
+		strcpy((char*)ds_readd(DTP2),
 			get_tx(112));
 
 		return;
@@ -263,7 +263,7 @@ void spell_inc_ge(void)
 	/* check if GE was already increased */
 	if (host_readbs(get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_GE)) > host_readbs(get_spelltarget() + (HERO_ATTRIB_ORIG + 3 * ATTRIB_GE))) {
 		/* "Bei %s ist %s schon magisch gesteigert" */
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(113),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(416));
@@ -275,7 +275,7 @@ void spell_inc_ge(void)
 		set_mod_slot(slot, HOURS(2), get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_GE), 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(101),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(416));
@@ -300,7 +300,7 @@ void spell_inc_in(void)
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 
 		/* copy message text */
-		strcpy((char*)Real2Host(ds_readd(DTP2)),
+		strcpy((char*)ds_readd(DTP2),
 			get_tx(112));
 
 		return;
@@ -309,7 +309,7 @@ void spell_inc_in(void)
 	/* check if IN was already increased */
 	if (host_readbs(get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_IN)) > host_readbs(get_spelltarget() + (HERO_ATTRIB_ORIG + 3 * ATTRIB_IN))) {
 		/* "Bei %s ist %s schon magisch gesteigert" */
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(113),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(417));
@@ -321,7 +321,7 @@ void spell_inc_in(void)
 		set_mod_slot(slot, HOURS(2), get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_IN), 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(101),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(417));
@@ -346,7 +346,7 @@ void spell_inc_kk(void)
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 
 		/* copy message text */
-		strcpy((char*)Real2Host(ds_readd(DTP2)),
+		strcpy((char*)ds_readd(DTP2),
 			get_tx(112));
 
 		return;
@@ -355,7 +355,7 @@ void spell_inc_kk(void)
 	/* check if KK was already increased */
 	if (host_readbs(get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_KK)) > host_readbs(get_spelltarget() + (HERO_ATTRIB_ORIG + 3 * ATTRIB_KK))) {
 		/* "Bei %s ist %s schon magisch gesteigert" */
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(113),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(418));
@@ -367,7 +367,7 @@ void spell_inc_kk(void)
 		set_mod_slot(slot, HOURS(2), get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_KK), 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(101),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(418));
@@ -392,7 +392,7 @@ void spell_inc_kl(void)
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 
 		/* copy message text */
-		strcpy((char*)Real2Host(ds_readd(DTP2)),
+		strcpy((char*)ds_readd(DTP2),
 			get_tx(112));
 
 		return;
@@ -401,7 +401,7 @@ void spell_inc_kl(void)
 	/* check if KL was already increased */
 	if (host_readbs(get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_KL)) > host_readbs(get_spelltarget() + (HERO_ATTRIB_ORIG + 3 * ATTRIB_KL))) {
 		/* "Bei %s ist %s schon magisch gesteigert" */
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(113),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(413));
@@ -413,7 +413,7 @@ void spell_inc_kl(void)
 		set_mod_slot(slot, HOURS(2), get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_KL), 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(101),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(413));
@@ -438,7 +438,7 @@ void spell_inc_mu(void)
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 
 		/* copy message text */
-		strcpy((char*)Real2Host(ds_readd(DTP2)),
+		strcpy((char*)ds_readd(DTP2),
 			get_tx(112));
 
 		return;
@@ -447,7 +447,7 @@ void spell_inc_mu(void)
 	/* check if MU was already increased */
 	if (host_readbs(get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_MU)) > host_readbs(get_spelltarget() + (HERO_ATTRIB_ORIG + 3 * ATTRIB_MU))) {
 		/* "Bei %s ist %s schon magisch gesteigert" */
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(113),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(412));
@@ -459,7 +459,7 @@ void spell_inc_mu(void)
 		set_mod_slot(slot, HOURS(2), get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_MU), 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(101),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(412));
@@ -488,7 +488,7 @@ void spell_paralue(void)
 		/* set the enemy to petrified */
 		or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS1, 0x04); /* set 'petrified' flag */
 
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(103),
 			(char*)Real2Host(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
 	} else {
@@ -506,13 +506,13 @@ void spell_paralue(void)
 				/* never cast yourself */
 				ds_writew(SPELL_SPECIAL_AECOST, 0);
 
-				strcpy((char*)Real2Host(ds_readd(DTP2)),
+				strcpy((char*)ds_readd(DTP2),
 					get_tx(112));
 			} else {
 				or_ptr_bs(get_spelltarget() + HERO_FLAGS1, 0x4); /* set 'petrified' flag */
 
 				/* prepare message */
-				sprintf((char*)Real2Host(ds_readd(DTP2)),
+				sprintf((char*)ds_readd(DTP2),
 					get_tx(103),
 					(char*)get_spelltarget() + HERO_NAME2);
 			}
@@ -549,7 +549,7 @@ void spell_salander(void)
 		or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS1, 0x40); /* sets 'mushroom' flag */
 
 		/* prepare message */
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(104),
 			(char*)Real2Host(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
 
@@ -557,7 +557,7 @@ void spell_salander(void)
 		ds_writew(SPELL_SPECIAL_AECOST, ae_cost);
 	} else {
 		/* prepare message */
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_ttx(607),
 			(char*)Real2Host(ds_readd(SPELLUSER)) + HERO_NAME2);
 
@@ -585,9 +585,9 @@ void spell_visibili(void)
 	signed short rounds;
 
 	/* ask the user how many rounds he wants to be invisible */
-	sprintf((char*)Real2Host(ds_readd(DTP2)),
+	sprintf((char*)ds_readd(DTP2),
 		get_tx(105), (char*)get_spelluser() + HERO_NAME2);
-	rounds = GUI_input(Real2Host(ds_readd(DTP2)), 2);
+	rounds = GUI_input((char*)ds_readd(DTP2), 2);
 
 	/* the spell has also no effect if it is already active */
 	if ((rounds <= 0) || (host_readb(get_spelluser() + HERO_INVISIBLE) != 0)) {
@@ -595,7 +595,7 @@ void spell_visibili(void)
 		/* set AE to 0 */
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 		/* clear output string */
-		host_writeb(Real2Host(ds_readd(DTP2)), 0);
+		host_writeb((char*)ds_readd(DTP2), 0);
 
 		return;
 	}
@@ -608,12 +608,12 @@ void spell_visibili(void)
 		slot = get_free_mod_slot();
 		set_mod_slot(slot, (Bit32s)rounds * MINUTES(5), get_spelluser() + HERO_INVISIBLE, 1, (signed char)pos);
 
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(106),
 			(char*)get_spelluser() + HERO_NAME2,
 			(char*)Real2Host(GUI_get_ptr(host_readbs(get_spelluser() + HERO_SEX), 0)));
 	} else {
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_ttx(607),
 			(char*)get_spelluser() + HERO_NAME2);
 
@@ -671,11 +671,11 @@ void spell_brenne(void)
 		if (lantern_pos != -1) {
 			/* lantern and torch are available, must decide */
 
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_tx(107),
 				(char*)get_spelluser() + HERO_NAME2);
 
-			answer = GUI_radio(Real2Host(ds_readd(DTP2)),
+			answer = GUI_radio((char*)ds_readd(DTP2),
 					2,
 					(char*)Real2Host(GUI_names_grammar(0x4000, ITEM_TORCH_OFF, 0)),
 					(char*)Real2Host(GUI_names_grammar(0x4000, ITEM_LANTERN_OFF, 0)));
@@ -703,7 +703,7 @@ void spell_brenne(void)
 		ds_writew(SPELL_SPECIAL_AECOST, random_schick(20));
 
 		/* prepare message */
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(108),
 			get_spelluser() + HERO_NAME2);
 
@@ -730,12 +730,12 @@ void spell_brenne(void)
 			ds_writew(SPELL_SPECIAL_AECOST, random_schick(20));
 
 			/* prepare message */
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_tx(119),
 				get_spelluser() + HERO_NAME2);
 		} else {
 			/* prepare message */
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_tx(120),
 				get_spelluser() + HERO_NAME2);
 		}
@@ -743,7 +743,7 @@ void spell_brenne(void)
 		/* neither torch nor lantern */
 
 		/* prepare message */
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(121),
 			get_spelluser() + HERO_NAME2);
 	}
@@ -765,7 +765,7 @@ void spell_dunkelheit(void)
 		(Bit32s)(host_readbs(get_spelluser() + HERO_LEVEL) + 3) * HOURS(1));
 
 	/* copy message text */
-	strcpy((char*)Real2Host(ds_readd(DTP2)),
+	strcpy((char*)ds_readd(DTP2),
 		get_tx(109));
 
 }
@@ -786,7 +786,7 @@ void spell_flimflam(void)
 		(Bit32s)(host_readbs(get_spelluser() + HERO_LEVEL) + 3) * HOURS(1));
 
 	/* copy message text */
-	strcpy((char*)Real2Host(ds_readd(DTP2)),
+	strcpy((char*)ds_readd(DTP2),
 		get_tx(110));
 
 }
@@ -825,7 +825,7 @@ void spell_silentium(void)
 	ds_writew(SPELL_SPECIAL_AECOST, 5);
 
 	/* copy message text */
-	strcpy((char*)Real2Host(ds_readd(DTP2)),
+	strcpy((char*)ds_readd(DTP2),
 		get_tx(111));
 }
 

@@ -60,7 +60,7 @@ void tevent_110(void)
 				if (get_first_hero_with_item(ITEM_ROPE) != -1)
 				{
 					/* one hero in the group has a rope */
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx2(85),
 						(char*)hero + HERO_NAME2);
 
@@ -68,14 +68,14 @@ void tevent_110(void)
 
 				} else {
 					/* all heroes in the group have no ropes */
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx2(86),
 						(char*)hero + HERO_NAME2);
 
 					sub_hero_le(hero, random_schick(16) + 4);
 				}
 
-				GUI_output(Real2Host(ds_readd(DTP2)));
+				GUI_output((char*)ds_readd(DTP2));
 			}
 
 		}
@@ -180,11 +180,11 @@ void tevent_111(void)
 			} else {
 				/* skill test succeeded */
 
-				sprintf((char*)Real2Host(ds_readd(DTP2)),
+				sprintf((char*)ds_readd(DTP2),
 					get_tx2(3),
 					(char*)hero + HERO_NAME2);
 
-				GUI_input(Real2Host(ds_readd(DTP2)), counter = unlucky_tests = 0);
+				GUI_input((char*)ds_readd(DTP2), counter = unlucky_tests = 0);
 
 				if ((i = test_skill(hero, TA_SCHUSSWAFFEN, 12)) > 0) counter++;
 				if ((ret_skill_test2 = test_skill(hero, TA_SCHUSSWAFFEN, 12)) > 0) counter++;
@@ -196,11 +196,11 @@ void tevent_111(void)
 
 				if (counter == 3 || unlucky_tests >= 2)
 				{
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx2(4),
 						(char*)hero + HERO_NAME2);
 
-					GUI_output(Real2Host(ds_readd(DTP2)));
+					GUI_output((char*)ds_readd(DTP2));
 
 					add_hero_ap_all(5);
 
@@ -256,12 +256,12 @@ void tevent_111(void)
 					}
 
 				} else {
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx2(6),
 						(char*)hero + HERO_NAME2);
 
 					do {
-						answer = GUI_radio(Real2Host(ds_readd(DTP2)), 2,
+						answer = GUI_radio((char*)ds_readd(DTP2), 2,
 									get_tx2(7),
 									get_tx2(8));
 					} while (answer == -1);
@@ -412,12 +412,12 @@ void tevent_114(void)
 						/* attrib test failed */
 						timewarp(MINUTES(30));
 
-						sprintf((char*)Real2Host(ds_readd(DTP2)),
+						sprintf((char*)ds_readd(DTP2),
 							get_tx2(23),
 							(char*)hero + HERO_NAME2,
 							(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 
-						GUI_output(Real2Host(ds_readd(DTP2)));
+						GUI_output((char*)ds_readd(DTP2));
 
 						sub_hero_le(hero, random_schick(8));
 
@@ -444,11 +444,11 @@ void tevent_114(void)
 				/* TODO: ORIGINAL-BUG: this item could have been not taken => get_hero(-1) => SEGFAULT */
 				hero = get_hero(get_first_hero_with_item(ITEM_RECIPE_STRONG_LE_POTION));
 
-				sprintf((char*)Real2Host(ds_readd(DTP2)),
+				sprintf((char*)ds_readd(DTP2),
 					get_tx2(27),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output(Real2Host(ds_readd(DTP2)));
+				GUI_output((char*)ds_readd(DTP2));
 
 				timewarp(HOURS(8));
 
@@ -620,11 +620,11 @@ void tevent_123(void)
 					/* attrib test failed */
 					counter++;
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)) + 0x400,
+					sprintf((char*)ds_readd(DTP2) + 0x400,
 						get_tx2(42),
 						(char*)hero + HERO_NAME2);
 
-					GUI_dialog_na(0, Real2Host(ds_readd(DTP2)) + 0x400);
+					GUI_dialog_na(0, (char*)ds_readd(DTP2) + 0x400);
 				}
 			}
 
@@ -662,11 +662,11 @@ void tevent_123(void)
 
 						if (attrib_result == 99 && skill_result == -1)
 						{
-							sprintf((char*)Real2Host(ds_readd(DTP2)) + 0x400,
+							sprintf((char*)ds_readd(DTP2) + 0x400,
 								get_tx2(48),
 								(char*)hero + HERO_NAME2);
 
-							GUI_dialog_na(0, Real2Host(ds_readd(DTP2)) + 0x400);
+							GUI_dialog_na(0, (char*)ds_readd(DTP2) + 0x400);
 
 							hero_disappear(hero, i, -1);
 
@@ -674,11 +674,11 @@ void tevent_123(void)
 
 						} else if (attrib_result > 0 || skill_result <= 0)
 						{
-							sprintf((char*)Real2Host(ds_readd(DTP2)) + 0x400,
+							sprintf((char*)ds_readd(DTP2) + 0x400,
 								get_tx2(42),
 								(char*)hero + HERO_NAME2);
 
-							GUI_dialog_na(0, Real2Host(ds_readd(DTP2)) + 0x400);
+							GUI_dialog_na(0, (char*)ds_readd(DTP2) + 0x400);
 
 							counter++;
 						}
@@ -715,11 +715,11 @@ void tevent_123(void)
 							host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
 							!hero_dead(hero))
 						{
-							sprintf((char*)Real2Host(ds_readd(DTP2)) + 0x400,
+							sprintf((char*)ds_readd(DTP2) + 0x400,
 								get_tx2(42),
 								(char*)hero + HERO_NAME2);
 
-							GUI_dialog_na(0, Real2Host(ds_readd(DTP2)) + 0x400);
+							GUI_dialog_na(0, (char*)ds_readd(DTP2) + 0x400);
 						}
 					}
 				}
@@ -736,11 +736,11 @@ void tevent_123(void)
 						if (attrib_result == 99)
 						{
 							/* unlucky */
-							sprintf((char*)Real2Host(ds_readd(DTP2)) + 0x400,
+							sprintf((char*)ds_readd(DTP2) + 0x400,
 								get_tx2(48),
 								(char*)hero + HERO_NAME2);
 
-							GUI_dialog_na(0, Real2Host(ds_readd(DTP2)) + 0x400);
+							GUI_dialog_na(0, (char*)ds_readd(DTP2) + 0x400);
 
 							hero_disappear(hero, i, -1);
 
@@ -749,11 +749,11 @@ void tevent_123(void)
 						} else if (attrib_result > 0)
 						{
 							/* succeeded */
-							sprintf((char*)Real2Host(ds_readd(DTP2)) + 0x400,
+							sprintf((char*)ds_readd(DTP2) + 0x400,
 								get_tx2(42),
 								(char*)hero + HERO_NAME2);
 
-							GUI_dialog_na(0, Real2Host(ds_readd(DTP2)) + 0x400);
+							GUI_dialog_na(0, (char*)ds_readd(DTP2) + 0x400);
 
 							counter++;
 						}

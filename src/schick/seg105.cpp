@@ -325,10 +325,10 @@ signed short give_hero_new_item(Bit8u *hero, signed short item, signed short mod
 		(host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 100 <= host_readws(hero + HERO_LOAD))) {
 
 		if (mode != 0) {
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_ttx(779),
 				(char*)(hero + HERO_NAME2));
-			GUI_output(Real2Host(ds_readd(DTP2)));
+			GUI_output((char*)ds_readd(DTP2));
 		}
 	} else {
 		item_p = get_itemsdat(item);
@@ -504,22 +504,22 @@ unsigned short drop_item(Bit8u *hero, signed short pos, signed short no)
 		if (item_undropable(p_item)) {
 			/* this item is not droppable */
 
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_ttx(454),
 				(char*)Real2Host(GUI_names_grammar((signed short)0x8002, item, 0)));
 
-			GUI_output(Real2Host(ds_readd(DTP2)));
+			GUI_output((char*)ds_readd(DTP2));
 		} else {
 			/* this item is droppable */
 
 			if (item_stackable(p_item)) {
 				if (no == -1) {
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_ttx(219),
 						(char*)Real2Host(GUI_names_grammar(6, item, 0)));
 
 					do {
-						answer = GUI_input(Real2Host(ds_readd(DTP2)), 2);
+						answer = GUI_input((char*)ds_readd(DTP2), 2);
 					} while (answer < 0);
 
 					no = answer;
@@ -641,11 +641,11 @@ signed short get_item(signed short id, signed short unused, signed short no)
 			autofight_bak = ds_readws(AUTOFIGHT);
 			ds_writew(AUTOFIGHT, 0);
 
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_ttx(549),
 				(char*)Real2Host(GUI_names_grammar(((no > 1) ? 4 : 0) + 2, id, 0)));
 
-			if (GUI_bool(Real2Host(ds_readd(DTP2)))) {
+			if (GUI_bool((char*)ds_readd(DTP2))) {
 
 				dropper = select_hero_ok(get_ttx(550));
 
@@ -781,10 +781,10 @@ signed short select_item_to_drop(Bit8u *hero)
 	}
 
 	if (v6 == 0) {
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_ttx(750),
 			(char*)(hero + HERO_NAME2));
-		GUI_output(Real2Host(ds_readd(DTP2)));
+		GUI_output((char*)ds_readd(DTP2));
 		return -1;
 	}
 	di = 0;

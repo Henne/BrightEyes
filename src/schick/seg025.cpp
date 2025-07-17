@@ -141,13 +141,13 @@ void do_house(void)
 	Bit8u *hero;
 
 	/* prepare the question */
-	strcpy((char*)Real2Host(ds_readd(DTP2)), get_tx(ds_readws(CURRENT_LOCDATA)));
+	strcpy((char*)ds_readd(DTP2), get_tx(ds_readws(CURRENT_LOCDATA)));
 
-	strcat((char*)Real2Host(ds_readd(DTP2)), get_ttx(623));
+	strcat((char*)ds_readd(DTP2), get_ttx(623));
 
 	ds_writew(MENU_DEFAULT_SELECT, 1);
 
-	if (GUI_bool(Real2Host(ds_readd(DTP2)))) {
+	if (GUI_bool((char*)ds_readd(DTP2))) {
 
 		/* break into the house */
 
@@ -456,7 +456,7 @@ signed short game_options(void)
 
 	prepare_date_str();
 
-	GUI_print_header(Real2Host(ds_readd(DTP2)));
+	GUI_print_header((char*)ds_readd(DTP2));
 
 	ds_writew(PIC_COPY_X1, 0);
 	ds_writew(PIC_COPY_Y1, 0);
@@ -577,11 +577,11 @@ signed short game_options(void)
 			done = 1;
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_6) {
 
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_ttx(827),
 				ds_readws(DELAY_FACTOR));
 
-			new_delay = GUI_input(Real2Host(ds_readd(DTP2)), 2);
+			new_delay = GUI_input((char*)ds_readd(DTP2), 2);
 
 			if (new_delay != -1) {
 				ds_writew(DELAY_FACTOR, new_delay);
@@ -822,7 +822,7 @@ void tumult(void)
 
 
 	/* the guards or a mob */
-	sprintf((char*)Real2Host(ds_readd(DTP2)),
+	sprintf((char*)ds_readd(DTP2),
 		get_ttx(765),
 		((ds_readb(CURRENT_TOWN) == TOWNS_PREM ||
 			ds_readb(CURRENT_TOWN) == TOWNS_PHEXCAER ||
@@ -830,7 +830,7 @@ void tumult(void)
 			ds_readb(CURRENT_TOWN) == TOWNS_OBERORKEN)
 				? get_ttx(766) : get_ttx(767)));
 
-	GUI_output(Real2Host(ds_readd(DTP2)));
+	GUI_output((char*)ds_readd(DTP2));
 
 	ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
 }

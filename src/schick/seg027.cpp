@@ -601,7 +601,7 @@ signed short count_fight_enemies(signed short fight_id)
 
 	enemy_count = 0;
 
-	fight_lst_buf = Real2Host(ds_readd(DTP2));
+	fight_lst_buf = (char*)ds_readd(DTP2);
 
 	/* load FIGHT.LST from TEMP dir */
 	fight_lst_handle = load_archive_file(0x8000 | ARCHIVE_FILE_FIGHT_LST);

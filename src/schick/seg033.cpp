@@ -107,7 +107,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 				ds_writew(BASEPOS_Y, (x + y < 15) ? -30 : 30);
 
 				/* prepare question with BP */
-				sprintf((char*)Real2Host(ds_readd(DTP2)),
+				sprintf((char*)ds_readd(DTP2),
 					get_tx(18),
 					host_readbs(hero + HERO_BP_LEFT));
 
@@ -140,7 +140,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 				}
 
 				/* show radion menu */
-				selected = GUI_radio(Real2Host(ds_readd(DTP2)), l1 != 0 ? 13 : 12,
+				selected = GUI_radio((char*)ds_readd(DTP2), l1 != 0 ? 13 : 12,
 							get_tx(19),
 							get_tx(20),
 							get_tx(21),
@@ -209,17 +209,17 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 
 					} else {
 						/* no BP left */
-						sprintf((char*)Real2Host(ds_readd(DTP2)),
+						sprintf((char*)ds_readd(DTP2),
 							get_tx(17),
 							(char*)hero + HERO_NAME2);
-						GUI_output(Real2Host(ds_readd(DTP2)));
+						GUI_output((char*)ds_readd(DTP2));
 					}
 
 				} else {
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx(7),
 						(char*)hero + HERO_NAME2);
-					GUI_output(Real2Host(ds_readd(DTP2)));
+					GUI_output((char*)ds_readd(DTP2));
 				}
 			} else if (selected == FIG_ACTION_MELEE_ATTACK) {
 				/* ATTACK / ANGRIFF */
@@ -325,10 +325,10 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 					}
 				} else {
 					/* no BP left */
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx(17),
 						(char*)hero + HERO_NAME2);
-					GUI_output(Real2Host(ds_readd(DTP2)));
+					GUI_output((char*)ds_readd(DTP2));
 				}
 			} else if (selected == FIG_ACTION_GUARD) {
 				/* GUARD / SICHERN */
@@ -343,10 +343,10 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 					done = 1;
 				} else {
 					/* no BP left */
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx(17),
 						(char*)hero + HERO_NAME2);
-					GUI_output(Real2Host(ds_readd(DTP2)));
+					GUI_output((char*)ds_readd(DTP2));
 				}
 
 			} else if (selected == FIG_ACTION_SPELL) {
@@ -446,10 +446,10 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						}
 					} else {
 						/* no BP left */
-						sprintf((char*)Real2Host(ds_readd(DTP2)),
+						sprintf((char*)ds_readd(DTP2),
 							get_tx(17),
 							(char*)hero + HERO_NAME2);
-						GUI_output(Real2Host(ds_readd(DTP2)));
+						GUI_output((char*)ds_readd(DTP2));
 					}
 				}
 			} else if (selected == FIG_ACTION_USE_ITEM) {
@@ -491,10 +491,10 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						}
 					} else {
 						/* no BP left */
-						sprintf((char*)Real2Host(ds_readd(DTP2)),
+						sprintf((char*)ds_readd(DTP2),
 							get_tx(17),
 							(char*)hero + HERO_NAME2);
-						GUI_output(Real2Host(ds_readd(DTP2)));
+						GUI_output((char*)ds_readd(DTP2));
 					}
 			} else if (selected == FIG_ACTION_EXCHANGE_ITEM) {
 				/* EXCHANGE ITEM / GGST. WECHSELN */
@@ -521,10 +521,10 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						}
 
 						if (radio_i == 0) {
-							sprintf((char*)Real2Host(ds_readd(DTP2)),
+							sprintf((char*)ds_readd(DTP2),
 								get_ttx(750),
 								(char*)hero + HERO_NAME2);
-							GUI_output(Real2Host(ds_readd(DTP2)));
+							GUI_output((char*)ds_readd(DTP2));
 						} else {
 							if (host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_LEFT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID) == ITEM_NONE) {
 								sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
@@ -572,10 +572,10 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						}
 					} else {
 						/* no BP left */
-						sprintf((char*)Real2Host(ds_readd(DTP2)),
+						sprintf((char*)ds_readd(DTP2),
 							get_tx(17),
 							(char*)hero + HERO_NAME2);
-						GUI_output(Real2Host(ds_readd(DTP2)));
+						GUI_output((char*)ds_readd(DTP2));
 					}
 			} else if (selected == FIG_ACTION_EXCHANGE_WEAPON) {
 				/* CHANGE WEAPON / WAFFE WECHSELN */
@@ -604,10 +604,10 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						}
 
 						if (radio_i == 0) {
-							sprintf((char*)Real2Host(ds_readd(DTP2)),
+							sprintf((char*)ds_readd(DTP2),
 								get_tx(1),
 								(char*)hero + HERO_NAME2);
-							GUI_output(Real2Host(ds_readd(DTP2)));
+							GUI_output((char*)ds_readd(DTP2));
 						} else {
 							sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
 								get_tx(2),
@@ -670,10 +670,10 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						}
 					} else {
 						/* no BP left */
-						sprintf((char*)Real2Host(ds_readd(DTP2)),
+						sprintf((char*)ds_readd(DTP2),
 							get_tx(17),
 							(char*)hero + HERO_NAME2);
-						GUI_output(Real2Host(ds_readd(DTP2)));
+						GUI_output((char*)ds_readd(DTP2));
 					}
 			} else if (selected == FIG_ACTION_CHECK_VALUES) {
 				/* CHECK VALUES / WERTE PRUEFEN */
@@ -764,7 +764,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 					pa = 0;
 				}
 
-				sprintf((char*)Real2Host(ds_readd(DTP2)),
+				sprintf((char*)ds_readd(DTP2),
 					get_tx(0),
 					/* name */
 					(char*)hero + HERO_NAME2,
@@ -789,7 +789,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 					/* renegade */
 					hero_renegade(hero) == 1 ? get_tx(38) : p_datseg + EMPTY_STRING5);
 
-				GUI_output(Real2Host(ds_readd(DTP2)));
+				GUI_output((char*)ds_readd(DTP2));
 
 			} else if (selected == FIG_ACTION_WAIT) {
 				/* WAIT / ABWARTEN */
@@ -841,10 +841,10 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 					}
 
 					if (radio_i == 0) {
-						sprintf((char*)Real2Host(ds_readd(DTP2)),
+						sprintf((char*)ds_readd(DTP2),
 							get_ttx(750),
 							(char*)hero + HERO_NAME2);
-						GUI_output(Real2Host(ds_readd(DTP2)));
+						GUI_output((char*)ds_readd(DTP2));
 					} else {
 						sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
 							get_tx(47),
@@ -886,10 +886,10 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 					}
 				} else {
 					/* no BP left */
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx(17),
 						(char*)hero + HERO_NAME2);
-					GUI_output(Real2Host(ds_readd(DTP2)));
+					GUI_output((char*)ds_readd(DTP2));
 				}
 
 			} else if (selected == FIG_ACTION_QUIT_AND_LOAD) {

@@ -196,7 +196,7 @@ signed short DNG11_handler(void)
 		{
 			ds_writeb(DNG11_SECRETDOOR1_FLAG, 1);
 
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_tx(26),
 				(char*)hero + HERO_NAME2);
 
@@ -204,9 +204,9 @@ signed short DNG11_handler(void)
 				(char*)((ds_readb(DNG11_LEVER_FLAG) == 2 || ds_readb(DNG11_LEVER_FLAG) == 3) && (test_result = test_skill(hero, TA_SCHLOESSER, 5)) > 0 ? get_tx(27) : get_tx(28)),
 				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
-			strcat((char*)Real2Host(ds_readd(DTP2)), (char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
+			strcat((char*)ds_readd(DTP2), (char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
 
-			GUI_output(Real2Host(ds_readd(DTP2)));
+			GUI_output((char*)ds_readd(DTP2));
 
 			if (test_result > 0)
 			{
@@ -229,7 +229,7 @@ signed short DNG11_handler(void)
 		{
 			ds_writeb(DNG11_SECRETDOOR2_FLAG, 1);
 
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_tx(26),
 				(char*)hero + HERO_NAME2);
 
@@ -237,9 +237,9 @@ signed short DNG11_handler(void)
 				(char*)((ds_readb(DNG11_LEVER_FLAG) == 1 || ds_readb(DNG11_LEVER_FLAG) == 3) && (test_result = test_skill(hero, TA_SCHLOESSER, 3)) > 0 ? get_tx(27) : get_tx(28)),
 				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
-			strcat((char*)Real2Host(ds_readd(DTP2)), (char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
+			strcat((char*)ds_readd(DTP2), (char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
 
-			GUI_output(Real2Host(ds_readd(DTP2)));
+			GUI_output((char*)ds_readd(DTP2));
 
 			if (test_result > 0)
 			{
@@ -262,7 +262,7 @@ signed short DNG11_handler(void)
 		{
 			ds_writeb(DNG11_SECRETDOOR3_FLAG, 1);
 
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_tx(26),
 				(char*)hero + HERO_NAME2);
 
@@ -270,9 +270,9 @@ signed short DNG11_handler(void)
 				(char*)((ds_readb(DNG11_LEVER_FLAG) == 5 || ds_readb(DNG11_LEVER_FLAG) == 3) && (test_result = test_skill(hero, TA_SCHLOESSER, 5)) > 0 ? get_tx(27) : get_tx(28)),
 				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
-			strcat((char*)Real2Host(ds_readd(DTP2)), (char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
+			strcat((char*)ds_readd(DTP2), (char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
 
-			GUI_output(Real2Host(ds_readd(DTP2)));
+			GUI_output((char*)ds_readd(DTP2));
 
 			if (test_result > 0)
 			{
@@ -296,11 +296,11 @@ signed short DNG11_handler(void)
 		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
 		ds_writeb(DIRECTION, (ds_readbs(TRAVEL_DESTINATION_VIEWDIR) + 2) & 0x03);
 
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(29),
 			get_ttx(ds_readw(TRV_DESTINATION) + 0xeb));
 
-		GUI_output(Real2Host(ds_readd(DTP2)));
+		GUI_output((char*)ds_readd(DTP2));
 
 		timewarp(HOURS(3));
 

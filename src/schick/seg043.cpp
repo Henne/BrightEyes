@@ -621,7 +621,7 @@ void FIG_do_enemy_action(RealPt monster, signed short monster_pos)
 
 				l14 = ds_readbs((MON_SPELL_DESCRIPTIONS + MON_SPELL_DESCRIPTIONS_ANI_ID) + SIZEOF_MON_SPELL_DESCRIPTIONS * host_readbs(Real2Host(monster) + ENEMY_SHEET_CUR_SPELL));
 
-				host_writebs(Real2Host(ds_readd(DTP2)), 0);
+				host_writebs((char*)ds_readd(DTP2), 0);
 
 				l13 = MON_cast_spell(monster, 0);
 
@@ -791,11 +791,11 @@ void FIG_do_enemy_action(RealPt monster, signed short monster_pos)
 					}
 
 
-					FIG_output(Real2Host(ds_readd(DTP2)));
+					FIG_output((char*)ds_readd(DTP2));
 
 					seg041_8c8();
 				} else {
-					FIG_output(Real2Host(ds_readd(DTP2)));
+					FIG_output((char*)ds_readd(DTP2));
 				}
 			}
 		}
@@ -832,7 +832,7 @@ void FIG_use_item(Bit8u *hero, Bit8u *target_monster, Bit8u *target_hero, signed
 		usecase = 2;
 	}
 
-	host_writeb(Real2Host(ds_readd(DTP2)), 0);
+	host_writeb((char*)ds_readd(DTP2), 0);
 
 	if (host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_LEFT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID) == ITEM_MIASTHMATICUM) {
 		/* MIASTHMATIC */
@@ -842,7 +842,7 @@ void FIG_use_item(Bit8u *hero, Bit8u *target_monster, Bit8u *target_hero, signed
 
 		if (host_readbs(hero + HERO_ENEMY_ID) >= 10) {
 
-			strcpy((char*)Real2Host(ds_readd(DTP2)), get_tx(37));
+			strcpy((char*)ds_readd(DTP2), get_tx(37));
 
 			FIG_damage_enemy(target_monster, damage, 0);
 
@@ -855,7 +855,7 @@ void FIG_use_item(Bit8u *hero, Bit8u *target_monster, Bit8u *target_hero, signed
 
 			if (flag != 0) {
 
-				strcpy((char*)Real2Host(ds_readd(DTP2)), get_tx(37));
+				strcpy((char*)ds_readd(DTP2), get_tx(37));
 
 				sub_hero_le(target_hero, damage);
 
@@ -908,7 +908,7 @@ void FIG_use_item(Bit8u *hero, Bit8u *target_monster, Bit8u *target_hero, signed
 
 		use_item(4, hero_pos);
 
-		host_writeb(Real2Host(ds_readd(DTP2)), 0);
+		host_writeb((char*)ds_readd(DTP2), 0);
 	}
 
 	if (usecase > 0) {
@@ -959,9 +959,9 @@ void FIG_use_item(Bit8u *hero, Bit8u *target_monster, Bit8u *target_hero, signed
 		seg041_8c8();
 	}
 
-	if (host_readb(Real2Host(ds_readd(DTP2))) != 0) {
+	if (host_readb((char*)ds_readd(DTP2)) != 0) {
 		/* show output string if needed */
-		GUI_output(Real2Host(ds_readd(DTP2)));
+		GUI_output((char*)ds_readd(DTP2));
 	}
 }
 

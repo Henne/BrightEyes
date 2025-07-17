@@ -57,11 +57,11 @@ signed short DNG10_handler(void)
 		/* TRAP: a hole in a wall; leader gets 2 LE damage */
 		if (GUI_bool(get_tx(1)))
 		{
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_tx(2),
 				(char*)hero + HERO_NAME2);
 
-			GUI_output(Real2Host(ds_readd(DTP2)));
+			GUI_output((char*)ds_readd(DTP2));
 
 			sub_hero_le(hero, 2);
 		}
@@ -98,7 +98,7 @@ signed short DNG10_handler(void)
 
 		answer = dice_roll(3, 6, 4);
 
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(9),
 			(char*)hero + HERO_NAME2);
 
@@ -109,11 +109,11 @@ signed short DNG10_handler(void)
 				get_tx(10),
 				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			strcat((char*)Real2Host(ds_readd(DTP2)),
+			strcat((char*)ds_readd(DTP2),
 				(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
 		}
 
-		GUI_output(Real2Host(ds_readd(DTP2)));
+		GUI_output((char*)ds_readd(DTP2));
 
 		sub_hero_le(hero, answer);
 
@@ -131,17 +131,17 @@ signed short DNG10_handler(void)
 			{
 				ds_writeb(DNG10_HOLE_STATE, 2);
 
-				sprintf((char*)Real2Host(ds_readd(DTP2)),
+				sprintf((char*)ds_readd(DTP2),
 					get_tx(11),
 					(char*)hero + HERO_NAME2);
 
-				if (GUI_bool(Real2Host(ds_readd(DTP2))))
+				if (GUI_bool((char*)ds_readd(DTP2)))
 				{
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx(12),
 						(char*)hero + HERO_NAME2);
 
-					GUI_output(Real2Host(ds_readd(DTP2)));
+					GUI_output((char*)ds_readd(DTP2));
 
 					result = random_schick(6);
 
@@ -178,7 +178,7 @@ signed short DNG10_handler(void)
 				if (ds_readb(DNG10_FLOORPLATE_LOADS) != 0)
 				{
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx(14),
 						(char*)hero + HERO_NAME2);
 
@@ -186,11 +186,11 @@ signed short DNG10_handler(void)
 
 					sub_hero_le(hero, dice_roll(3, 6, 0));
 				} else {
-					strcpy((char*)Real2Host(ds_readd(DTP2)),
+					strcpy((char*)ds_readd(DTP2),
 						get_tx(15));
 				}
 
-				GUI_output(Real2Host(ds_readd(DTP2)));
+				GUI_output((char*)ds_readd(DTP2));
 			}
 		}
 
@@ -270,11 +270,11 @@ signed short DNG10_handler(void)
 		{
 			xor_ds_bs(DNG10_MUMMY_LEVER, 1);
 
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_tx(26),
 				(char*)hero + HERO_NAME2);
 
-			GUI_output(Real2Host(ds_readd(DTP2)));
+			GUI_output((char*)ds_readd(DTP2));
 
 			sub_hero_le(hero, 2);
 		}
@@ -423,11 +423,11 @@ signed short DNG10_handler(void)
 		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
 		ds_writeb(DIRECTION, (ds_readbs(TRAVEL_DESTINATION_VIEWDIR) + 2) & 0x03);
 
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(40),
 			get_ttx(ds_readw(TRV_DESTINATION) + 0xeb));
 
-		GUI_output(Real2Host(ds_readd(DTP2)));
+		GUI_output((char*)ds_readd(DTP2));
 
 		timewarp(HOURS(3));
 

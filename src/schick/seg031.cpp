@@ -67,7 +67,7 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 	txt_offset = host_readws(partners_tab + 4 + 38 * informer_id);
 	dialog_title = 38 * informer_id + partners_tab + 6;
 	load_in_head(host_readws(partners_tab + 38 * informer_id + 36));
-	dst = (char*)Real2Host(ds_readd(DTP2)) + 0x400;
+	dst = (char*)ds_readd(DTP2) + 0x400;
 
 	do {
 		answer = optioncount = 0;

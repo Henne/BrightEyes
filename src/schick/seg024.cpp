@@ -202,7 +202,7 @@ Bit16u diary_print_entry(Bit16u line)
 					city_name);
 			}
 		}
-		GUI_print_string(Real2Host(ds_readd(DTP2)),
+		GUI_print_string((char*)ds_readd(DTP2),
 			65, (line - startline) * 7);
 		ptr += 8;
 		line++;

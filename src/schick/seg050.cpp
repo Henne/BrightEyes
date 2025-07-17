@@ -208,7 +208,7 @@ void inc_skill_advanced(Bit8u *hero, signed short skill)
 			if (skill <= 6) {
 				/* increment a melee weapon skill */
 
-				sprintf((char*)Real2Host(ds_readd(DTP2)),
+				sprintf((char*)ds_readd(DTP2),
 					get_ttx(426), get_ttx(48 + skill));
 
 				randval = -1;
@@ -222,7 +222,7 @@ void inc_skill_advanced(Bit8u *hero, signed short skill)
 					get_ttx(428), host_readbs(hero + skill + 0x6f));
 
 				do {
-					randval = GUI_radio(Real2Host(ds_readd(DTP2)), 2,
+					randval = GUI_radio((char*)ds_readd(DTP2), 2,
 								Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
 								Real2Host(ds_readd(TEXT_OUTPUT_BUF)) + 50);
 				} while (randval == -1);
@@ -435,11 +435,11 @@ void level_up(signed short hero_pos)
 	close(l_si);
 
 
-	sprintf((char*)Real2Host(ds_readd(DTP2)),
+	sprintf((char*)ds_readd(DTP2),
 		get_ttx(411),
 		(char*)hero + HERO_NAME2);
 
-	GUI_output(Real2Host(ds_readd(DTP2)));
+	GUI_output((char*)ds_readd(DTP2));
 
 	ds_writew(ACTION, 0);
 	ds_writew(STATUS_PAGE_MODE, 1);
@@ -590,11 +590,11 @@ void level_up(signed short hero_pos)
 		}
 
 		/* show the user the new MR value */
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx2(41),
 			host_readbs(hero + HERO_MR));
 
-		GUI_output(Real2Host(ds_readd(DTP2)));
+		GUI_output((char*)ds_readd(DTP2));
 
 		/* update status background */
 		status_show(hero_pos);
@@ -621,12 +621,12 @@ void level_up(signed short hero_pos)
 		i += 2;
 
 		/* show how many LE the hero may get */
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx2(39),
 			i);
 
 		do {
-			l_si = GUI_input(Real2Host(ds_readd(DTP2)), 1);
+			l_si = GUI_input((char*)ds_readd(DTP2), 1);
 		} while (l_si < 0);
 
 		if (l_si > i) {
@@ -657,11 +657,11 @@ void level_up(signed short hero_pos)
 		/* not a magic user */
 
 		/* show how many LE the hero gets */
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx2(38),
 			i);
 
-		GUI_output(Real2Host(ds_readd(DTP2)));
+		GUI_output((char*)ds_readd(DTP2));
 
 		/* add LE and fill them up */
 		add_ptr_ws(hero + HERO_LE_ORIG, i);
@@ -899,10 +899,10 @@ void level_up(signed short hero_pos)
 			(l_di = ds_readbs((LEVELUP_SPTA_CONV - 7) + host_readbs(hero + HERO_TYPE))) &&
 			GUI_bool(get_tx2(45)))
 		{
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_tx2(46), l_di);
 
-			i = GUI_input(Real2Host(ds_readd(DTP2)), 1);
+			i = GUI_input((char*)ds_readd(DTP2), 1);
 
 			if (i > 0) {
 
@@ -916,10 +916,10 @@ void level_up(signed short hero_pos)
 
 			} else {
 
-				sprintf((char*)Real2Host(ds_readd(DTP2)),
+				sprintf((char*)ds_readd(DTP2),
 					get_tx2(47), l_di);
 
-				i = GUI_input(Real2Host(ds_readd(DTP2)), 1);
+				i = GUI_input((char*)ds_readd(DTP2), 1);
 
 				if (i > 0) {
 

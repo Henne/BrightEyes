@@ -647,11 +647,11 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 		if ((ds_readbs(TRAVEL_BY_SHIP) != 0) && (random_schick(100) < 10)) {
 			/* chance of motion sickness is 9% */
 
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_ttx(796),
 				hero + HERO_NAME2);
 
-			GUI_output(Real2Host(ds_readd(DTP2)));
+			GUI_output((char*)ds_readd(DTP2));
 
 		} else {
 
@@ -706,17 +706,17 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 							strcat((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), get_ttx(393));
 						}
 
-						sprintf((char*)Real2Host(ds_readd(DTP2)),
+						sprintf((char*)ds_readd(DTP2),
 							get_ttx(319),
 							hero + HERO_NAME2,
 							le_regen,
 							(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
 						if (ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) {
-							GUI_print_loc_line(Real2Host(ds_readd(DTP2)));
+							GUI_print_loc_line((char*)ds_readd(DTP2));
 							delay_or_keypress(200);
 						} else {
 							if (ds_readbs(TRAVEL_BY_SHIP) != 0) {
-								GUI_output(Real2Host(ds_readd(DTP2)));
+								GUI_output((char*)ds_readd(DTP2));
 							}
 						}
 
@@ -740,18 +740,18 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 								strcat((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), get_ttx(393));
 							}
 
-							sprintf((char*)Real2Host(ds_readd(DTP2)),
+							sprintf((char*)ds_readd(DTP2),
 								get_ttx(320),
 								hero + HERO_NAME2,
 								ae_regen,
 								(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
 
 							if (ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) {
-								GUI_print_loc_line(Real2Host(ds_readd(DTP2)));
+								GUI_print_loc_line((char*)ds_readd(DTP2));
 								delay_or_keypress(200);
 							} else {
 								if (ds_readbs(TRAVEL_BY_SHIP) != 0) {
-									GUI_output(Real2Host(ds_readd(DTP2)));
+									GUI_output((char*)ds_readd(DTP2));
 								}
 							}
 						}
@@ -762,11 +762,11 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 					do_alchemy(hero, host_readbs(hero + HERO_RECIPE_ID), 0);
 				}
 			} else {
-				sprintf((char*)Real2Host(ds_readd(DTP2)),
+				sprintf((char*)ds_readd(DTP2),
 					get_ttx(558),
 					hero + HERO_NAME2);
 
-				GUI_output(Real2Host(ds_readd(DTP2)));
+				GUI_output((char*)ds_readd(DTP2));
 			}
 		}
 	}

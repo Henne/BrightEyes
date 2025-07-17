@@ -406,7 +406,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 		}
 	}
 
-	dist_table_ptr = Real2Host(ds_readd(DTP2));
+	dist_table_ptr = (char*)ds_readd(DTP2);
 	ds_writed(CHESSBOARD_CPY, (Bit32u)((RealPt)ds_readd(DTP2) + 600));
 	new_squares_reached = 1;
 	memset(dist_table_ptr, -1, 600);

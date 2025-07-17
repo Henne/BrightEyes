@@ -56,12 +56,12 @@ void tevent_080(void)
 		{
 			ds_writeb(TEVENT080_TATZELWURM, 1);
 
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_tx2(87),
 				(char*)hero + HERO_NAME2);
 
 			do {
-				answer = GUI_radio(Real2Host(ds_readd(DTP2)), 2,
+				answer = GUI_radio((char*)ds_readd(DTP2), 2,
 							get_tx2(88),
 							get_tx2(89));
 			} while (answer == -1);
@@ -292,19 +292,19 @@ void tevent_098(void)
 
 					if (test_skill(hero, TA_AKROBATIK, 0) > 0) {
 
-						sprintf((char*)Real2Host(ds_readd(DTP2)),
+						sprintf((char*)ds_readd(DTP2),
 							get_tx2(31),
 							(char*)hero + HERO_NAME2);
 
-						GUI_output(Real2Host(ds_readd(DTP2)));
+						GUI_output((char*)ds_readd(DTP2));
 
 					} else {
 
-						sprintf((char*)Real2Host(ds_readd(DTP2)),
+						sprintf((char*)ds_readd(DTP2),
 							get_tx2(32),
 							(char*)hero + HERO_NAME2);
 
-						GUI_output(Real2Host(ds_readd(DTP2)));
+						GUI_output((char*)ds_readd(DTP2));
 
 						hero_disappear(hero, i, 33);
 					}
@@ -335,11 +335,11 @@ void tevent_098(void)
 
 			if (test_skill(hero, TA_AKROBATIK, 0) > 0) {
 
-				sprintf((char*)Real2Host(ds_readd(DTP2)),
+				sprintf((char*)ds_readd(DTP2),
 					get_tx2(35),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output(Real2Host(ds_readd(DTP2)));
+				GUI_output((char*)ds_readd(DTP2));
 
 				hero = get_hero(0);
 				for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
@@ -351,19 +351,19 @@ void tevent_098(void)
 					{
 						if (test_attrib(hero, ATTRIB_GE, -4) > 0) {
 
-							sprintf((char*)Real2Host(ds_readd(DTP2)),
+							sprintf((char*)ds_readd(DTP2),
 								get_tx2(36),
 								(char*)hero + HERO_NAME2);
 
-							GUI_output(Real2Host(ds_readd(DTP2)));
+							GUI_output((char*)ds_readd(DTP2));
 
 						} else {
 
-							sprintf((char*)Real2Host(ds_readd(DTP2)),
+							sprintf((char*)ds_readd(DTP2),
 								get_tx2(32),
 								(char*)hero + HERO_NAME2);
 
-							GUI_output(Real2Host(ds_readd(DTP2)));
+							GUI_output((char*)ds_readd(DTP2));
 
 							hero_disappear(hero, i, 33);
 						}
@@ -371,11 +371,11 @@ void tevent_098(void)
 				}
 			} else {
 
-				sprintf((char*)Real2Host(ds_readd(DTP2)),
+				sprintf((char*)ds_readd(DTP2),
 					get_tx2(32),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output(Real2Host(ds_readd(DTP2)));
+				GUI_output((char*)ds_readd(DTP2));
 
 				hero_disappear(hero, i, 33);
 
@@ -496,13 +496,13 @@ void tevent_101(void)
 
 	if (!ds_readb(TEVENT101_FLAG)) {
 
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx2(41),
 			(mod = random_schick(4) + 2));
 
 
 		do {
-			answer = GUI_radio(Real2Host(ds_readd(DTP2)), 2,
+			answer = GUI_radio((char*)ds_readd(DTP2), 2,
 						get_tx2(42),
 						get_tx2(43));
 		} while (answer == -1);
@@ -652,11 +652,11 @@ void tevent_104(void)
 
 					timewarp(MINUTES(30));
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)) + 0x400,
+					sprintf((char*)ds_readd(DTP2) + 0x400,
 						get_tx2(55),
 						(char*)hero + HERO_NAME2);
 
-					GUI_dialog_na(0, Real2Host(ds_readd(DTP2)) + 0x400);
+					GUI_dialog_na(0, (char*)ds_readd(DTP2) + 0x400);
 
 					l_si++;
 				}
@@ -748,11 +748,11 @@ void tevent_104(void)
 
 						} else {
 
-							sprintf((char*)Real2Host(ds_readd(DTP2)),
+							sprintf((char*)ds_readd(DTP2),
 								get_ttx(607),
 								(char*)hero + HERO_NAME2);
 
-							GUI_output(Real2Host(ds_readd(DTP2)));
+							GUI_output((char*)ds_readd(DTP2));
 						}
 
 						timewarp(MINUTES(30));
@@ -819,7 +819,7 @@ void tevent_107(void)
 
 				if (get_first_hero_with_item(ITEM_ROPE) != -1) { /* TODO: ROPE_LADDER? STAFFSPELL? */
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx2(70),
 						(char*)hero + HERO_NAME2);
 
@@ -827,14 +827,14 @@ void tevent_107(void)
 
 				} else {
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx2(71),
 						(char*)hero + HERO_NAME2);
 
 					sub_hero_le(hero, random_schick(11) + 4);
 				}
 
-				GUI_output(Real2Host(ds_readd(DTP2)));
+				GUI_output((char*)ds_readd(DTP2));
 			}
 		}
 

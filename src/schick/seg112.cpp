@@ -197,7 +197,7 @@ void tevent_071(void)
 		/* Track + 4, Faehrtensuche + 4 */
 		if (test_skill(hero, TA_FAEHRTENSUCHEN, 4) > 0) {
 
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_tx2(13),
 				(char*)hero + HERO_NAME2,
 				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
@@ -205,7 +205,7 @@ void tevent_071(void)
 
 
 			do {
-				l_si = GUI_radio(Real2Host(ds_readd(DTP2)), 2,
+				l_si = GUI_radio((char*)ds_readd(DTP2), 2,
 						get_tx2(14),
 						get_tx2(15));
 			} while (l_si == -1);
@@ -235,11 +235,11 @@ void tevent_071(void)
 
 				if (l_si == 1 || l_si == 2) {
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx2(22),
 						(char*)hero + HERO_NAME2);
 					do {
-						l_si = GUI_radio(Real2Host(ds_readd(DTP2)), 2,
+						l_si = GUI_radio((char*)ds_readd(DTP2), 2,
 								get_tx2(23),
 								get_tx2(24));
 					} while (l_si == -1);
@@ -318,16 +318,16 @@ void TRV_swimm(signed short mod, signed short percent)
 				sub_hero_le(hero, random_schick(5));
 
 
-				sprintf((char*)Real2Host(ds_readd(DTP2)),
+				sprintf((char*)ds_readd(DTP2),
 					get_tx2(21),
 					(char*)hero + HERO_NAME2);
 			} else {
-				sprintf((char*)Real2Host(ds_readd(DTP2)),
+				sprintf((char*)ds_readd(DTP2),
 					get_tx2(20),
 					(char*)hero + HERO_NAME2);
 			}
 
-			GUI_output(Real2Host(ds_readd(DTP2)));
+			GUI_output((char*)ds_readd(DTP2));
 		}
 	}
 }
@@ -350,7 +350,7 @@ void tevent_unused01(void)
 
 		ds_writeb(TEVENTU01_FLAG, 1);
 
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx2(29),
 			(char*)hero + HERO_NAME2,
 			(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
@@ -358,7 +358,7 @@ void tevent_unused01(void)
 
 
 		do {
-			answer = GUI_radio(Real2Host(ds_readd(DTP2)), 2,
+			answer = GUI_radio((char*)ds_readd(DTP2), 2,
 					get_tx2(30),
 					get_tx2(31));
 		} while (answer == -1);
@@ -501,12 +501,12 @@ void tevent_074(void)
 
 				hero = get_hero(answer);
 
-				sprintf((char*)Real2Host(ds_readd(DTP2)) + 0x400,
+				sprintf((char*)ds_readd(DTP2) + 0x400,
 					get_tx2(54),
 					(char*)hero + HERO_NAME2);
 
 				GUI_dialogbox((RealPt)ds_readd(DTP2), get_tx(49),
-						Real2Host(ds_readd(DTP2)) + 0x400, 0);
+						(char*)ds_readd(DTP2) + 0x400, 0);
 
 				/* this hero gets a damage of 2W6+4 */
 				sub_hero_le(hero, dice_roll(2, 6, 4));
@@ -742,12 +742,12 @@ void tevent_077(void)
 
 				hero = get_hero(answer);
 
-				sprintf((char*)Real2Host(ds_readd(DTP2)) + 0x400,
+				sprintf((char*)ds_readd(DTP2) + 0x400,
 					get_tx2(54),
 					(char*)hero + HERO_NAME2);
 
 				GUI_dialogbox((RealPt)ds_readd(DTP2), get_tx(50),
-						Real2Host(ds_readd(DTP2)) + 0x400, 0);
+						(char*)ds_readd(DTP2) + 0x400, 0);
 
 				/* the last hero looses between 6 and 16 LE */
 				sub_hero_le(hero, random_schick(11) + 5);

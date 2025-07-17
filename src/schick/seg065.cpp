@@ -265,8 +265,8 @@ void show_hyggelik_ani(void)
 	src = &(Real2Host(ds_readd(RENDERBUF_PTR))[filelen - 0xc0]);
 
 	do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
-	memcpy((void*)Real2Host(ds_readd(DTP2)), src, 192);
-	src = Real2Host(ds_readd(DTP2));
+	memcpy((void*)(char*)ds_readd(DTP2), src, 192);
+	src = (char*)ds_readd(DTP2);
 
 	wait_for_vsync();
 	set_palette(src, 0 , 0x40);

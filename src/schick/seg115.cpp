@@ -104,17 +104,17 @@ void tevent_016(void)
 							/* success */
 							timewarp(MINUTES(15));
 
-							sprintf((char*)Real2Host(ds_readd(DTP2)) + 0x400,
+							sprintf((char*)ds_readd(DTP2) + 0x400,
 								get_tx2(35),
 								(char*)hero + HERO_NAME2,
 								(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-							GUI_dialog_na(0, Real2Host(ds_readd(DTP2)) + 0x400);
+							GUI_dialog_na(0, (char*)ds_readd(DTP2) + 0x400);
 
 							GUI_dialog_na(0, get_tx2(36));
 						} else {
 							/* fail */
-							sprintf((char*)Real2Host(ds_readd(DTP2)) + 0x400,
+							sprintf((char*)ds_readd(DTP2) + 0x400,
 								get_tx2(34),
 								(char*)hero + HERO_NAME2,
 								(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
@@ -122,16 +122,16 @@ void tevent_016(void)
 								(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)),
 								(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 
-							GUI_dialog_na(0, Real2Host(ds_readd(DTP2)) + 0x400);
+							GUI_dialog_na(0, (char*)ds_readd(DTP2) + 0x400);
 
 							timewarp(HOURS(1));
 
-							sprintf((char*)Real2Host(ds_readd(DTP2)) + 0x400,
+							sprintf((char*)ds_readd(DTP2) + 0x400,
 								get_tx2(37),
 								(char*)hero + HERO_NAME2,
 								(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
 
-							GUI_dialog_na(0, Real2Host(ds_readd(DTP2)) + 0x400);
+							GUI_dialog_na(0, (char*)ds_readd(DTP2) + 0x400);
 
 							add_hero_ap(hero, 5);
 
@@ -253,11 +253,11 @@ void tevent_095(void)
 				{
 					timewarp(MINUTES(30));
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx2(8),
 						(char*)hero + HERO_NAME2);
 
-					GUI_output(Real2Host(ds_readd(DTP2)));
+					GUI_output((char*)ds_readd(DTP2));
 
 					counter_failed++;
 				}
@@ -350,11 +350,11 @@ void tevent_095(void)
 							/* spell failed unluckily */
 
 							/* TODO: this gets output, but no spell costst ??? */
-							sprintf((char*)Real2Host(ds_readd(DTP2)),
+							sprintf((char*)ds_readd(DTP2),
 								get_ttx(607),
 								(char*)hero + HERO_NAME2);
 
-							GUI_output(Real2Host(ds_readd(DTP2)));
+							GUI_output((char*)ds_readd(DTP2));
 						}
 
 						timewarp(MINUTES(30));
@@ -735,13 +735,13 @@ void tevent_100(void)
 					timewarp(MINUTES(15));
 
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx2(69),
 						(char*)hero + HERO_NAME2,
 						(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
 						(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-					GUI_output(Real2Host(ds_readd(DTP2)));
+					GUI_output((char*)ds_readd(DTP2));
 				}
 
 				GUI_output(get_tx2(70));

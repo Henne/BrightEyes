@@ -112,11 +112,11 @@ signed short DNG12_handler(void)
 					if (is_hero_available_in_group(get_hero(6))) {
 
 						/* prepare a message with the name of the NPC */
-						sprintf((char*)Real2Host(ds_readd(DTP2)),
+						sprintf((char*)ds_readd(DTP2),
 								get_tx(22),
 								(char*)get_hero(6) + HERO_NAME2);
 
-						GUI_output(Real2Host(ds_readd(DTP2)));
+						GUI_output((char*)ds_readd(DTP2));
 
 						while (ds_readws(X_TARGET) != 6) {
 
@@ -306,7 +306,7 @@ signed short DNG12_handler(void)
 				if (inc_ds_ws(DNG12_OBSTACLE_TRIES) < 3)
 				{
 					/* the hero must at least fall three times into pit */
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx(25),
 						(char*)hero + HERO_NAME2,
 						Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
@@ -314,7 +314,7 @@ signed short DNG12_handler(void)
 				} else {
 					/* the hero falls again into the pit */
 #ifndef M302de_FEATURE_MOD
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx(31),
 						(char*)hero + HERO_NAME2,
 						Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
@@ -381,7 +381,7 @@ signed short DNG12_handler(void)
 					ds_writebs(DNG12_OBSTACLE_ACTIVE, 0);
 
 #ifndef M302de_FEATURE_MOD
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx(32),
 						(char*)hero + HERO_NAME2);
 #else
@@ -413,12 +413,12 @@ signed short DNG12_handler(void)
 								'H','A','B','T','.',
 								'\0'};
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						(char*)str,
 						(char*)hero + HERO_NAME2);
 					*/
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						"ALS %s MIT DER BARRIERE KOLLIDIERT, BRICHT SIE IN ST\x9aCKE.\x40"
 						"DAS GANZE WAR NUR EIN BILD!\x40"
 						"SCHADE DASS IHR DAS NICHT FR\x9aHER BEMERKT HABT.\0",
@@ -426,7 +426,7 @@ signed short DNG12_handler(void)
 #endif
 				}
 
-				GUI_output(Real2Host(ds_readd(DTP2)));
+				GUI_output((char*)ds_readd(DTP2));
 
 				sub_hero_le(hero, random_schick(4));
 				ds_writew(X_TARGET, ds_readw(X_TARGET_BAK));
@@ -447,13 +447,13 @@ signed short DNG12_handler(void)
 			if (GUI_bool(get_tx(28))) {
 				if (test_skill(hero, TA_SCHLOESSER, 0) <= 0) {
 					/* defusing trap failed */
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx(29),
 						(char*)hero + HERO_NAME2);
 					sub_hero_le(hero , dice_roll(3, 6, 0));
 				} else {
 					/* trap defused */
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx(30),
 						(char*)hero + HERO_NAME2,
 						(char*)hero + HERO_NAME2);
@@ -462,7 +462,7 @@ signed short DNG12_handler(void)
 
 					add_hero_ap(hero, 10);
 				}
-				GUI_output(Real2Host(ds_readd(DTP2)));
+				GUI_output((char*)ds_readd(DTP2));
 			}
 		} else {
 			/* sprung trap */

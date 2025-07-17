@@ -84,12 +84,12 @@ void do_temple(void)
 			ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
 
 			/* location string */
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_ttx(235),
 				get_ttx(ds_readws(TEMPLE_GOD) + 21),	/* name of the god */
 				(char*)(ds_readws(CURRENT_TYPEINDEX) != 58 ? get_ttx(ds_readbs(CURRENT_TOWN) + 235): get_ttx(622)));
 
-			GUI_print_loc_line(Real2Host(ds_readd(DTP2)));
+			GUI_print_loc_line((char*)ds_readd(DTP2));
 
 			ds_writew(REQUEST_REFRESH, 0);
 		}
@@ -142,11 +142,11 @@ void do_temple(void)
 				} while (game_state == -1);
 
 				/* location string */
-				sprintf((char*)Real2Host(ds_readd(DTP2)),
+				sprintf((char*)ds_readd(DTP2),
 					get_ttx(235),
 					get_ttx(ds_readws(TEMPLE_GOD) + 21),	/* name of the god */
 					get_ttx(ds_readbs(CURRENT_TOWN) + 235));
-				GUI_print_loc_line(Real2Host(ds_readd(DTP2)));
+				GUI_print_loc_line((char*)ds_readd(DTP2));
 
 				draw_status_line();
 
@@ -201,11 +201,11 @@ void do_temple(void)
 
 					make_valuta_str((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), money);
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_ttx(297),
 						(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
 
-					input = GUI_input(Real2Host(ds_readd(DTP2)), 3);
+					input = GUI_input((char*)ds_readd(DTP2), 3);
 
 					donation = input;
 
@@ -268,7 +268,7 @@ void char_add(signed short temple_id)
 
 						if (!host_readbs(hero + HERO_TYPE)) {
 
-							prepare_chr_name((char*)Real2Host(ds_readd(DTP2)),
+							prepare_chr_name((char*)ds_readd(DTP2),
 										(char*)(Real2Host(ptr) + 32 * l_si));
 
 							if (read_chr_temp((RealPt)ds_readd(DTP2), i, ds_readbs(CURRENT_GROUP))) {
@@ -285,11 +285,11 @@ void char_add(signed short temple_id)
 					init_ani(2);
 
 					/* location string */
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_ttx(235),
 						get_ttx(ds_readws(TEMPLE_GOD) + 21),	/* name of the god */
 						get_ttx(ds_readbs(CURRENT_TOWN) + 235));
-					GUI_print_loc_line(Real2Host(ds_readd(DTP2)));
+					GUI_print_loc_line((char*)ds_readd(DTP2));
 				}
 
 				l_di = copy_chr_names(Real2Host(ptr), temple_id);
@@ -334,11 +334,11 @@ void char_letgo(signed short temple_id)
 					init_ani(2);
 
 					/* location string */
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_ttx(235),
 						get_ttx(ds_readws(TEMPLE_GOD) + 21),	/* name of the god */
 						get_ttx(ds_readbs(CURRENT_TOWN) + 235));
-					GUI_print_loc_line(Real2Host(ds_readd(DTP2)));
+					GUI_print_loc_line((char*)ds_readd(DTP2));
 				}
 			}
 
@@ -368,17 +368,17 @@ signed short char_erase(void)
 			l_si = menu_enter_delete(ptr, l_di, -1);
 
 			if (l_si != -1) {
-				strcpy((char*)Real2Host(ds_readd(DTP2)),
+				strcpy((char*)ds_readd(DTP2),
 					(char*)Real2Host(ptr) + 32 * l_si);
 
 				sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
 					get_ttx(295),
-					(char*)Real2Host(ds_readd(DTP2)));
+					(char*)ds_readd(DTP2));
 
 				if (GUI_bool(Real2Host(ds_readd(TEXT_OUTPUT_BUF)))) {
 
 					prepare_chr_name((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
-								(char*)Real2Host(ds_readd(DTP2)));
+								(char*)ds_readd(DTP2));
 
 					unlink_ret = unlink((char*)ds_readd(TEXT_OUTPUT_BUF));
 
@@ -387,7 +387,7 @@ signed short char_erase(void)
 						return 0;
 					}
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						(char*)p_datseg + STR_TEMP_FILE_WILDCARD,
 						(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
 					unlink((char*)ds_readd(DTP2));
@@ -454,7 +454,7 @@ void miracle_heal_hero(signed short le_in, Bit8u *str)
 			strcat((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), get_ttx(393));
 		}
 
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 				(char*)str,
 				(char*)get_hero(hero_pos) + HERO_NAME2,
 				le_in,
@@ -485,7 +485,7 @@ void miracle_resurrect(Bit8u *str)
 			draw_status_line();
 
 			/* prepare a message */
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				(char*)str,
 				(char*)hero + HERO_NAME2);
 
@@ -565,7 +565,7 @@ void miracle_weapon(Bit8u *str, signed short mode)
 							or_ptr_bs(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * i, 0x08); /* set 'magic' flag */
 							or_ptr_bs(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * i, 0x80); /* set 'magic_revealed' flag */
 
-							sprintf((char*)Real2Host(ds_readd(DTP2)),
+							sprintf((char*)ds_readd(DTP2),
 								(char*)str,
 								(char*)Real2Host(GUI_names_grammar((signed short)0x8000, item_id, 0)),
 								(char*)hero + HERO_NAME2);
@@ -579,7 +579,7 @@ void miracle_weapon(Bit8u *str, signed short mode)
 						{
 							and_ptr_bs(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * i, 0xfe); /* unset 'broken' flag */
 
-							sprintf((char*)Real2Host(ds_readd(DTP2)),
+							sprintf((char*)ds_readd(DTP2),
 								(char*)str,
 								(char*)Real2Host(GUI_names_grammar((signed short)0x8000, item_id, 0)),
 								(char*)hero + HERO_NAME2);

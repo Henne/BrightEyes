@@ -807,11 +807,11 @@ void DNG_stub6(void)
 		{
 
 			/* ropes oder staff */
-			host_writeb(Real2Host(ds_readd(DTP2)), 0);
+			host_writeb((char*)ds_readd(DTP2), 0);
 
 			if (l_si) {
 
-				sprintf((char*)Real2Host(ds_readd(DTP2)),
+				sprintf((char*)ds_readd(DTP2),
 					get_ttx(768),
 					get_hero(l_si - 1) + HERO_NAME2);
 			}
@@ -827,7 +827,7 @@ void DNG_stub6(void)
 					hero1 + HERO_NAME2,
 					hero2 + HERO_NAME2);
 
-				strcat((char*)Real2Host(ds_readd(DTP2)),
+				strcat((char*)ds_readd(DTP2),
 					(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
 
 				if (test_attrib(hero1, ATTRIB_GE, 2) <= 0) {
@@ -838,7 +838,7 @@ void DNG_stub6(void)
 						hero2 + HERO_NAME2,
 						l_si = random_schick(3) + 1);
 
-					strcat((char*)Real2Host(ds_readd(DTP2)),
+					strcat((char*)ds_readd(DTP2),
 						(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
 
 					sub_hero_le(hero2, l_si);
@@ -857,12 +857,12 @@ void DNG_stub6(void)
 						l_si++;
 					}
 
-					strcat((char*)Real2Host(ds_readd(DTP2)),
+					strcat((char*)ds_readd(DTP2),
 						(char*)(get_hero(l_si++) + HERO_NAME2));
 
 					if (--l_di) {
 
-						strcat((char*)Real2Host(ds_readd(DTP2)),
+						strcat((char*)ds_readd(DTP2),
 							(char*)((l_di >= 2) ? p_datseg + DNG_STUB6_STR_COMMA : p_datseg+ DNG_STUB6_STR_AND));
 					}
 
@@ -874,12 +874,12 @@ void DNG_stub6(void)
 					Real2Host(GUI_get_ptr(host_readbs(hero_auto + HERO_SEX), 0)),
 					Real2Host(GUI_get_ptr(host_readbs(hero_auto + HERO_SEX), 2)));
 
-				strcat((char*)Real2Host(ds_readd(DTP2)),
+				strcat((char*)ds_readd(DTP2),
 					(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
 
 			}
 
-			GUI_output(Real2Host(ds_readd(DTP2)));
+			GUI_output((char*)ds_readd(DTP2));
 		} else {
 
 			sub_group_le(random_schick(5));

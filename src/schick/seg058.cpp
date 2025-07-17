@@ -164,11 +164,11 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 		} else if (get_item(ds_readws(SMITH_REPAIRITEMS + 6 * smith_id), 1, 1)) {
 
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_ttx(486),
 				(char*)Real2Host(GUI_names_grammar((signed short)0x8002, ds_readws(SMITH_REPAIRITEMS + 6 * smith_id), 0)));
 
-			GUI_output(Real2Host(ds_readd(DTP2)));
+			GUI_output((char*)ds_readd(DTP2));
 
 			ds_writed(SMITH_REPAIRITEMS + 2 + 6 * smith_id, 0);
 			ds_writew(SMITH_REPAIRITEMS + 6 * smith_id, 0);
@@ -241,9 +241,9 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 					do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 26, 26, 105, 33, 0);
 
-					make_valuta_str((char*)Real2Host(ds_readd(DTP2)), host_readds(hero2 + HERO_MONEY));
-					GUI_print_string(Real2Host(ds_readd(DTP2)),
-						104 - GUI_get_space_for_string(Real2Host(ds_readd(DTP2)), 0), 26);
+					make_valuta_str((char*)ds_readd(DTP2), host_readds(hero2 + HERO_MONEY));
+					GUI_print_string((char*)ds_readd(DTP2),
+						104 - GUI_get_space_for_string((char*)ds_readd(DTP2), 0), 26);
 				}
 
 				update_mouse_cursor();
@@ -283,22 +283,22 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 								if ((val = host_readws(hero2 + (HERO_INVENTORY + INVENTORY_QUANTITY) + SIZEOF_INVENTORY * host_readbs(Real2Host(ds_readd(SELLITEMS)) + 7 * answer + 6))) > 1)
 								{
-									my_itoa(val, (char*)Real2Host(ds_readd(DTP2)), 10);
+									my_itoa(val, (char*)ds_readd(DTP2), 10);
 
-									GUI_print_string(Real2Host(ds_readd(DTP2)),
-										array3.a[items_x] + 16 - GUI_get_space_for_string(Real2Host(ds_readd(DTP2)), 0),
+									GUI_print_string((char*)ds_readd(DTP2),
+										array3.a[items_x] + 16 - GUI_get_space_for_string((char*)ds_readd(DTP2), 0),
 										array5.a[l_si] + 9);
 
 								}
 							}
 
-							sprintf((char*)Real2Host(ds_readd(DTP2)),
+							sprintf((char*)ds_readd(DTP2),
 								host_readws(Real2Host(ds_readd(SELLITEMS)) + 4 + 7 * answer) == 1 ? fmt_h.a :
 									(host_readws(Real2Host(ds_readd(SELLITEMS)) + 4 + 7 * answer) == 10 ? fmt_s.a : fmt_d.a),
 								host_readws(Real2Host(ds_readd(SELLITEMS)) + 2 + 7 * answer));
 
 
-							GUI_print_string(Real2Host(ds_readd(DTP2)), array3.a[items_x] + 20, array5.a[l_si] + 5);
+							GUI_print_string((char*)ds_readd(DTP2), array3.a[items_x] + 20, array5.a[l_si] + 5);
 						}
 					}
 				}
@@ -388,14 +388,14 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 						make_valuta_str((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)), price);
 
-						sprintf((char*)Real2Host(ds_readd(DTP2)),
+						sprintf((char*)ds_readd(DTP2),
 							get_ttx(488),
 							(char*)Real2Host(GUI_names_grammar((signed short)0x8002, item_id, 0)),
 							(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)));
 
 
 						do {
-							percent = GUI_input(Real2Host(ds_readd(DTP2)), 2);
+							percent = GUI_input((char*)ds_readd(DTP2), 2);
 
 						} while (percent > 50);
 

@@ -705,7 +705,7 @@ void FIG_do_hero_action(RealPt hero, const signed short hero_pos)
 
 				l6 = ds_readbs((SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_UNKN6) + SIZEOF_SPELL_DESCRIPTIONS * host_readbs(Real2Host(hero) + HERO_SPELL_ID));
 
-				host_writeb(Real2Host(ds_readd(DTP2)), 0);
+				host_writeb((char*)ds_readd(DTP2), 0);
 
 				l15 = use_spell(hero, 0, 0);
 
@@ -909,12 +909,12 @@ void FIG_do_hero_action(RealPt hero, const signed short hero_pos)
 						FIG_draw_figures();
 					}
 
-					FIG_output(Real2Host(ds_readd(DTP2)));
+					FIG_output((char*)ds_readd(DTP2));
 
 					seg041_8c8();
 
 				} else {
-					FIG_output(Real2Host(ds_readd(DTP2)));
+					FIG_output((char*)ds_readd(DTP2));
 				}
 
 			} else if (host_readbs(Real2Host(hero) + HERO_ACTION_ID) == FIG_ACTION_USE_ITEM) {

@@ -170,7 +170,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 				drop_item(owner, pos, 1);
 
 				/* terminate output string */
-				host_writeb(Real2Host(ds_readd(DTP2)), 0);
+				host_writeb((char*)ds_readd(DTP2), 0);
 
 				switch (item) {
 				case ITEM_GULMOND_LEAF: {
@@ -184,7 +184,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					add_hero_le(consumer, 2);
 
 					/* prepare output */
-					strcpy((char*)Real2Host(ds_readd(DTP2)), get_ttx(501));
+					strcpy((char*)ds_readd(DTP2), get_ttx(501));
 					break;
 				}
 				case ITEM_EINBEERE: {
@@ -198,7 +198,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					add_hero_le(consumer, l_di);
 
 					/* prepare output */
-					sprintf((char*)Real2Host(ds_readd(DTP2)), get_ttx(502), l_di);
+					sprintf((char*)ds_readd(DTP2), get_ttx(502), l_di);
 
 					break;
 				}
@@ -217,7 +217,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					set_mod_slot(l_di, DAYS(1), consumer + HERO_HERBS, 1, (signed char)consumer_idx);
 
 					/* prepare output */
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_ttx(503),
 						(char*)consumer + HERO_NAME2);
 					break;
@@ -236,7 +236,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					set_mod_slot(l_di, DAYS(1), consumer + HERO_HERBS, 2, (signed char)consumer_idx);
 
 					/* prepare output */
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_ttx(503),
 						(char*)consumer + HERO_NAME2);
 					break;
@@ -250,7 +250,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					}
 
 					/* prepare output */
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_ttx(504),
 						(char*)consumer + HERO_NAME2);
 					break;
@@ -265,7 +265,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					add_hero_le(consumer, l_di);
 					/* prepare output */
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)), get_ttx(505), l_di);
+					sprintf((char*)ds_readd(DTP2), get_ttx(505), l_di);
 					break;
 				}
 				case ITEM_TARNELE: {
@@ -276,7 +276,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 				}
 
 				/* print the output */
-				GUI_output(Real2Host(ds_readd(DTP2)));
+				GUI_output((char*)ds_readd(DTP2));
 			}
 		} else {
 
@@ -301,12 +301,12 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					5, (signed char)consumer_idx);
 
 				/* prepare output */
-				sprintf((char*)Real2Host(ds_readd(DTP2)),
+				sprintf((char*)ds_readd(DTP2),
 					get_ttx(509), (char*)consumer + HERO_NAME2,
 					get_ttx(411 + l_si), 5);
 
 				/* print output */
-				GUI_output(Real2Host(ds_readd(DTP2)));
+				GUI_output((char*)ds_readd(DTP2));
 
 			} else if (id_bad_elex != 0) {
 				/* handle bad elexires */
@@ -324,12 +324,12 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					-7, (signed char)consumer_idx);
 
 				/* prepare output */
-				sprintf((char*)Real2Host(ds_readd(DTP2)),
+				sprintf((char*)ds_readd(DTP2),
 					get_ttx(656), (char*)consumer + HERO_NAME2,
 					get_ttx(411 + id_bad_elex), 7);
 
 				/* print output */
-				GUI_output(Real2Host(ds_readd(DTP2)));
+				GUI_output((char*)ds_readd(DTP2));
 
 			} else {
 				/* everything else */
@@ -362,7 +362,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
 
 					/* prepare output */
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_ttx(510),
 						(char*)consumer + HERO_NAME2,
 						l_si,
@@ -394,7 +394,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					}
 
 					/* prepare output */
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_ttx(510),
 						(char*)consumer + HERO_NAME2,
 						l_si,
@@ -434,7 +434,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
 
 					/* prepare output */
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_ttx(511),
 						(char*)consumer + HERO_NAME2,
 						(char*)Real2Host(GUI_get_ptr(host_readbs(consumer + HERO_SEX), 0)));
@@ -451,7 +451,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
 
 					/* prepare output */
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_ttx(738),
 						(char*)consumer + HERO_NAME2);
 					break;
@@ -482,7 +482,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 								get_ttx(393));
 						}
 
-						sprintf((char*)Real2Host(ds_readd(DTP2)),
+						sprintf((char*)ds_readd(DTP2),
 							get_ttx(512),
 							l_si,
 							(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
@@ -491,7 +491,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 						/* Not a magicuser */
 
 						/* prepare output */
-						strcpy((char*)Real2Host(ds_readd(DTP2)),
+						strcpy((char*)ds_readd(DTP2),
 							get_ttx(804));
 
 						/* give owner a glassbottle */
@@ -520,7 +520,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 
 						/* prepare output */
 						if (host_readws(consumer + HERO_AE) >= host_readws(consumer + HERO_AE_ORIG)) {
-							sprintf((char*)Real2Host(ds_readd(DTP2)),
+							sprintf((char*)ds_readd(DTP2),
 								get_ttx(513),
 								(char*)consumer + HERO_NAME2);
 						} else {
@@ -532,7 +532,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 									get_ttx(393));
 							}
 
-							sprintf((char*)Real2Host(ds_readd(DTP2)),
+							sprintf((char*)ds_readd(DTP2),
 								get_ttx(512),
 								l_si,
 								(char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
@@ -542,7 +542,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 						/* Not a magicuser */
 
 						/* prepare output */
-						strcpy((char*)Real2Host(ds_readd(DTP2)),
+						strcpy((char*)ds_readd(DTP2),
 							get_ttx(804));
 
 						/* give owner a glassbottle */
@@ -564,7 +564,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
 
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_ttx(467),
 						(char*)consumer + HERO_NAME2);
 					break;
@@ -580,7 +580,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					/* give owner a glassbottle */
 					give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_ttx(467),
 						(char*)consumer + HERO_NAME2);
 					break;
@@ -591,7 +591,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 				/* print output: maybe garbage - string not set to 0 */
 				textbox_width_bak = ds_readw(TEXTBOX_WIDTH);
 				ds_writew(TEXTBOX_WIDTH, 5);
-				GUI_output(Real2Host(ds_readd(DTP2)));
+				GUI_output((char*)ds_readd(DTP2));
 				ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
 			}
 		}

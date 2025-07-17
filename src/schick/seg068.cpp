@@ -59,9 +59,9 @@ void THO_eisenhof(void)
 
 			GUI_input(get_tx2(52), 0);
 
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 					get_tx(random_schick(26) + 55));
-			GUI_input(Real2Host(ds_readd(DTP2)), 0);
+			GUI_input((char*)ds_readd(DTP2), 0);
 		} else {
 			GUI_input(get_tx2(53), 0);
 		}
@@ -80,7 +80,7 @@ void THO_imman(void)
 		if (GUI_bool(get_tx2(55)) != 0) {
 
 		tmp = random_schick(4) + 0x38;
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx2(56),
 			/* winner */
 			get_tx2(tmp),
@@ -93,7 +93,7 @@ void THO_imman(void)
 			/* loosers points */
 			random_schick(14));
 
-		GUI_input(Real2Host(ds_readd(DTP2)), 0);
+		GUI_input((char*)ds_readd(DTP2), 0);
 		}
 	} else {
 		/* no imman game at the moment */
@@ -297,12 +297,12 @@ void THO_arsenal(void)
 				}
 			}
 
-			sprintf((char*)Real2Host(ds_readd(DTP2)) + 0x400,
+			sprintf((char*)ds_readd(DTP2) + 0x400,
 				get_tx2(3),
 				ds_readws(ARSENAL_MONEY));
 
 			mul_ds_ws(ARSENAL_MONEY, 100);
-			GUI_dialog_na(0, Real2Host(ds_readd(DTP2)) + 0x400);
+			GUI_dialog_na(0, (char*)ds_readd(DTP2) + 0x400);
 			p_money = get_party_money();
 			set_party_money(ds_readws(ARSENAL_MONEY));
 
@@ -487,10 +487,10 @@ void THO_ugdalf(void)
 
 		dramosch_says(get_tx2(37));
 
-		sprintf((char*)Real2Host(ds_readd(DTP2)) + 0x400,
+		sprintf((char*)ds_readd(DTP2) + 0x400,
 			get_tx(random_schick(26) + 55));
 
-		dramosch_says(Real2Host(ds_readd(DTP2)) + 0x400);
+		dramosch_says((char*)ds_readd(DTP2) + 0x400);
 
 		/* enter the dungeon */
 		DNG_enter_dungeon(DUNGEONS_ZWINGFESTE);
@@ -522,7 +522,7 @@ void academy_analues(void)
 
 		load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx2(64),
 			(char*)Real2Host(spell_analues()));
 
@@ -531,7 +531,7 @@ void academy_analues(void)
 			load_tx(buffer1_bak);
 		}
 
-		GUI_input(Real2Host(ds_readd(DTP2)), 0);
+		GUI_input((char*)ds_readd(DTP2), 0);
 
 		ds_writew(ACADEMY_DAILY_IDENT, 1);
 	}
@@ -583,12 +583,12 @@ void THO_academy(void)
 
 		} else {
 
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_tx2(53),
 				(char*)hero + HERO_NAME2);
 
 			do {
-				answer = GUI_radio(Real2Host(ds_readd(DTP2)), 2,
+				answer = GUI_radio((char*)ds_readd(DTP2), 2,
 							get_tx2(68),
 							get_tx2(69));
 			} while (answer == -1);
@@ -599,12 +599,12 @@ void THO_academy(void)
 
 				if (item_id >= 0) {
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx2(56),
 						(char*)Real2Host(GUI_names_grammar((signed short)0x8002, item_id, 0)));
 
 					do {
-						answer = GUI_radio(Real2Host(ds_readd(DTP2)), 4,
+						answer = GUI_radio((char*)ds_readd(DTP2), 4,
 									get_tx2(57),
 									get_tx2(58),
 									get_tx2(59),
@@ -676,12 +676,12 @@ void THO_academy(void)
 
 				if (item_id >= 0) {
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx2(56),
 						(char*)Real2Host(GUI_names_grammar((signed short)0x8002, item_id, 0)));
 
 					do {
-						answer = GUI_radio(Real2Host(ds_readd(DTP2)), 4,
+						answer = GUI_radio((char*)ds_readd(DTP2), 4,
 									get_tx2(57),
 									get_tx2(58),
 									get_tx2(59),

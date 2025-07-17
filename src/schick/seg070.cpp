@@ -188,7 +188,7 @@ void PHX_spielhaus(void)
 
 			/* you loose: at least the half of your group have not passed the test */
 
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_tx2(30), pos);
 
 			money -= pos * 100;
@@ -199,7 +199,7 @@ void PHX_spielhaus(void)
 		} else {
 
 			/* you win */
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_tx2(31), pos);
 
 			money += pos * 100;
@@ -207,7 +207,7 @@ void PHX_spielhaus(void)
 
 		set_party_money(money);
 
-		GUI_output(Real2Host(ds_readd(DTP2)));
+		GUI_output((char*)ds_readd(DTP2));
 
 	} else if (answer == 2) {
 

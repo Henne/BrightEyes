@@ -178,7 +178,7 @@ void do_harbor(void)
 
 					psg_ptr = p_datseg + SIZEOF_HARBOR_OPTION * answer + HARBOR_OPTIONS;
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx(16),
 
 						get_tx(ds_readws(SEA_TRAVEL_TX_SHIP + 2 * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE))), /* Fischerboot, Schnellsegler etc. */
@@ -203,7 +203,7 @@ void do_harbor(void)
 					i = ds_readws(TEXTBOX_WIDTH);
 					ds_writew(TEXTBOX_WIDTH, 5);
 
-					answer = GUI_bool(Real2Host(ds_readd(DTP2)));
+					answer = GUI_bool((char*)ds_readd(DTP2));
 
 					ds_writew(TEXTBOX_WIDTH, i);
 
@@ -278,7 +278,7 @@ void do_harbor(void)
 
 					if (answer != 0) {
 
-						sprintf((char*)Real2Host(ds_readd(DTP2)),
+						sprintf((char*)ds_readd(DTP2),
 							(char*)(i == 1 ? get_tx(28) : get_tx(22)),
 							(char*)(answer == 1 ? p_datseg + SEA_TRAVEL_STR_T : p_datseg + SEA_TRAVEL_STR_EN),
 							(char*)(answer == 1 ? get_tx(23) : get_tx(24)));
@@ -287,20 +287,20 @@ void do_harbor(void)
 
 						do {
 
-							strcat((char*)Real2Host(ds_readd(DTP2)),
+							strcat((char*)ds_readd(DTP2),
 								get_ttx(ds_readb((HARBOR_OPTIONS + HARBOR_OPTION_DESTINATION) + SIZEOF_HARBOR_OPTION * i++) + 235));
 							if (--answer) {
 
-								strcat((char*)Real2Host(ds_readd(DTP2)),
+								strcat((char*)ds_readd(DTP2),
 									(char*)(answer >= 2 ? p_datseg + SEA_TRAVEL_STR_COMMA : get_tx(7)));
 							}
 
 						} while (answer != 0);
 
-						strcat((char*)Real2Host(ds_readd(DTP2)),
+						strcat((char*)ds_readd(DTP2),
 							get_tx(25));
 
-						GUI_output(Real2Host(ds_readd(DTP2)));
+						GUI_output((char*)ds_readd(DTP2));
 
 					} else {
 

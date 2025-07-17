@@ -50,7 +50,7 @@ void talk_tavern(void)
 
 	answer = 0;
 
-	text_buffer =(char*) Real2Host(ds_readd(DTP2));
+	text_buffer =(char*) (char*)ds_readd(DTP2);
 	answer1_buffer = text_buffer + 1000;
 	answer2_buffer = answer1_buffer + 60;
 	answer3_buffer = answer2_buffer + 60;

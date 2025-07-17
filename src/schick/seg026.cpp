@@ -469,7 +469,7 @@ signed short save_game_state(void)
 
 			/* create savegame not in a temple */
 
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_ttx(813), /* "Dabei verliert jeder Held in der Gruppe einen Abenteuerpunkt" */
 				1,
 				get_ttx(392),
@@ -477,7 +477,7 @@ signed short save_game_state(void)
 
 			sprintf((char*)Real2Host(ds_readd(TEXT_OUTPUT_BUF)),
 				get_ttx(1), /* "Welchen Spielstand wollen Sie abspeichern ?" */
-				(char*)Real2Host(ds_readd(DTP2)));
+				(char*)ds_readd(DTP2));
 		} else {
 #endif
 
@@ -867,7 +867,7 @@ void load_in_head(signed short head)
 
 		seek_archive_file(handle, 1024L * head, 0);
 
-		read_archive_file(handle, Real2Host(ds_readd(DTP2)), 1024);
+		read_archive_file(handle, (char*)ds_readd(DTP2), 1024);
 
 		close(handle);
 

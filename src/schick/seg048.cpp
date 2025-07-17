@@ -135,7 +135,7 @@ void status_menu(signed short hero_pos)
 
 				if (host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO)) != ITEM_NONE) {
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						/* "%s %s " */
 						(char*)(p_datseg + EXTRASPACE_SEPARATED_STRINGS),
 						Real2Host(GUI_name_singular((Bit8u*)get_itemname(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))))),
@@ -145,11 +145,11 @@ void status_menu(signed short hero_pos)
                         ) ? p_datseg + EMPTY_STRING8 : get_tx2(66));
 
 					if (item_weapon(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))))) {
-						strcat((char*)Real2Host(ds_readd(DTP2)),
+						strcat((char*)ds_readd(DTP2),
 							get_ttx(48 + host_readbs(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))) + 3)));
 					}
 
-					GUI_print_string(Real2Host(ds_readd(DTP2)), 16, 192);
+					GUI_print_string((char*)ds_readd(DTP2), 16, 192);
 				}
 
 				if (ds_readbs(STATUSPAGE_SELITEM4_NO) != -1) {
@@ -315,12 +315,12 @@ void status_menu(signed short hero_pos)
 
 				ds_writeb(STATUSPAGE_SELITEM1_NO, ds_readbs(STATUSPAGE_SELITEM3_NO));
 
-				memset(Real2Host(ds_readd(DTP2)), ' ', 60);
-				host_writeb(Real2Host(ds_readd(DTP2)) + 60, 0);
-				GUI_print_string(Real2Host(ds_readd(DTP2)), 16, 192);
+				memset((char*)ds_readd(DTP2), ' ', 60);
+				host_writeb((char*)ds_readd(DTP2) + 60, 0);
+				GUI_print_string((char*)ds_readd(DTP2), 16, 192);
 
 				if (host_readws(hero2 + HERO_INVENTORY + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))) {
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						/* "%s %s " */
 						(char*)(p_datseg + EXTRASPACE_SEPARATED_STRINGS2),
 						Real2Host(GUI_name_singular((Bit8u*)get_itemname(host_readws(hero2 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))))),
@@ -330,11 +330,11 @@ void status_menu(signed short hero_pos)
                         ) ? p_datseg + EMPTY_STRING9 : get_tx2(66));
 
 					if (item_weapon(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))))) {
-						strcat((char*)Real2Host(ds_readd(DTP2)),
+						strcat((char*)ds_readd(DTP2),
 							get_ttx(48 + host_readbs(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))) + 3)));
 					}
 
-					GUI_print_string(Real2Host(ds_readd(DTP2)), 16, 192);
+					GUI_print_string((char*)ds_readd(DTP2), 16, 192);
 				}
 			}
 
@@ -452,12 +452,12 @@ void status_menu(signed short hero_pos)
 			ds_readws(ACTION) == ACTION_ID_240 &&
 			hero_is_diseased(hero2))
 		{
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_tx2(25 + hero_is_diseased(hero2)),
 				(char*)(hero2 + HERO_NAME2),
 				Real2Host(GUI_get_ptr(host_readbs(hero2 + HERO_SEX), 1)));
 
-			GUI_output(Real2Host(ds_readd(DTP2)));
+			GUI_output((char*)ds_readd(DTP2));
 
 		}
 
@@ -570,12 +570,12 @@ void status_menu(signed short hero_pos)
 							flag1 = 1;
 							reset_item_selector();
 						} else if (l1 == 7) {
-							sprintf((char*)Real2Host(ds_readd(DTP2)),
+							sprintf((char*)ds_readd(DTP2),
 								get_tx2(25 + flag3),
 								(char*)(hero2 + HERO_NAME2),
 								Real2Host(GUI_get_ptr(host_readbs(hero2 + HERO_SEX), 1)));
 
-								GUI_output(Real2Host(ds_readd(DTP2)));
+								GUI_output((char*)ds_readd(DTP2));
 						} else {
 							ds_writew(STATUS_PAGE_MODE, 2);
 							ds_writew(REQUEST_REFRESH, 1);
@@ -608,12 +608,12 @@ void status_menu(signed short hero_pos)
 					}
 					case 9: {
 						if (flag3 != 0) {
-							sprintf((char*)Real2Host(ds_readd(DTP2)),
+							sprintf((char*)ds_readd(DTP2),
 								get_tx2(25 + flag3),
 								(char*)(hero2 + HERO_NAME2),
 								Real2Host(GUI_get_ptr(host_readbs(hero2 + HERO_SEX), 1)));
 
-								GUI_output(Real2Host(ds_readd(DTP2)));
+								GUI_output((char*)ds_readd(DTP2));
 								break;
 						}
 					}

@@ -103,11 +103,11 @@ void tevent_037(void)
 
 				if (hours >= 4)
 				{
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx2(36),
 						hours);
 
-					GUI_output(Real2Host(ds_readd(DTP2)));
+					GUI_output((char*)ds_readd(DTP2));
 
 					done = 1;
 
@@ -147,12 +147,12 @@ void tevent_037(void)
 					/* select a hero randomly */
 					hero = get_hero(answer = get_random_hero());
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx2(45),
 						(char*)hero + HERO_NAME2,
 						(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 
-					GUI_output(Real2Host(ds_readd(DTP2)));
+					GUI_output((char*)ds_readd(DTP2));
 
 					add_hero_ap(hero, 20);
 
@@ -175,14 +175,14 @@ void tevent_037(void)
 							/* check if the answer is "RAD" 3rd */
 							if (strcmp((char*)Real2Host(ds_readd(TEXT_INPUT_BUF)), (char*)p_datseg + STR_RAD3))
 							{
-								sprintf((char*)Real2Host(ds_readd(DTP2)),
+								sprintf((char*)ds_readd(DTP2),
 									get_tx2(50),
 									(char*)hero + HERO_NAME2,
 									(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
 									(char*)hero + HERO_NAME2,
 									(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 
-								GUI_output(Real2Host(ds_readd(DTP2)));
+								GUI_output((char*)ds_readd(DTP2));
 
 								/* the hero is now lost completely */
 								hero_disappear(hero, answer, -1);
@@ -230,11 +230,11 @@ void tevent_037(void)
 
 						timewarp(HOURS(1));
 
-						sprintf((char*)Real2Host(ds_readd(DTP2)),
+						sprintf((char*)ds_readd(DTP2),
 							get_tx2(44),
 							(char*)hero + HERO_NAME2);
 
-						GUI_output(Real2Host(ds_readd(DTP2)));
+						GUI_output((char*)ds_readd(DTP2));
 					}
 				}
 			}
@@ -553,22 +553,22 @@ void tevent_124(void)
 #endif
 				{
 					/* fatal */
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx2(56),
 						(char*)hero + HERO_NAME2,
 						(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-					GUI_output(Real2Host(ds_readd(DTP2)));
+					GUI_output((char*)ds_readd(DTP2));
 
 					hero_disappear(hero, i, -1);
 
 				} else {
 
-					sprintf((char*)Real2Host(ds_readd(DTP2)),
+					sprintf((char*)ds_readd(DTP2),
 						get_tx2(55),
 						(char*)hero + HERO_NAME2);
 
-					GUI_output(Real2Host(ds_readd(DTP2)));
+					GUI_output((char*)ds_readd(DTP2));
 
 					sub_hero_le(hero, random_schick(5));
 				}
@@ -647,11 +647,11 @@ void tevent_145(void)
 		}
 	}
 
-	sprintf((char*)Real2Host(ds_readd(DTP2)),
+	sprintf((char*)ds_readd(DTP2),
 		get_tx2(45),
 		get_ttx(ds_readws(TRV_DESTINATION) + 0xeb));
 
-	GUI_output(Real2Host(ds_readd(DTP2)));
+	GUI_output((char*)ds_readd(DTP2));
 }
 
 #if !defined(__BORLANDC__)
