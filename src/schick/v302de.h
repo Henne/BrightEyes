@@ -27,7 +27,6 @@ typedef unsigned char Bit8u;
 typedef signed char Bit8s;
 typedef unsigned short Bit16u;
 typedef signed short Bit16s;
-typedef Bit8u* RealPt;
 #if defined(__BORLANDC__)
 typedef unsigned long Bit32u;
 typedef signed long Bit32s;
@@ -37,6 +36,7 @@ typedef unsigned int Bit32u;
 typedef signed int Bit32s;
 typedef Bit8u* HugePt;
 #endif
+typedef Bit8u* RealPt;
 
 /**
 	struct nvf_desc - nvf descriptor
@@ -344,16 +344,7 @@ static inline RealPt ds_readfp(unsigned short offs)
 {
 	return (RealPt)host_readd(p_datseg + offs);
 }
-static inline HugePt ds_readhp(unsigned short offs)
-{
-	return (HugePt)host_readd(p_datseg + offs);
-}
 static inline RealPt ds_writefp(unsigned short offs, Bit8u* ptr)
-{
-	host_writed(p_datseg + offs, (Bit32u)ptr);
-	return ptr;
-}
-static inline HugePt ds_writehp(unsigned short offs, Bit8u* ptr)
 {
 	host_writed(p_datseg + offs, (Bit32u)ptr);
 	return ptr;
@@ -1244,7 +1235,6 @@ struct hero_struct {
 #define ds_readws(p)		(*(Bit16s*)(ds + p))
 #define ds_readds(p)		(*(Bit32s*)(ds + (p)))
 #define ds_readfp(p)		(*(RealPt*)(ds + (p)))
-#define ds_readhp(p)		(*(HugePt*)(ds + (p)))
 
 #define ds_writebs(p, d)	(*(Bit8s*)(ds + p) = (d))
 #define ds_writews(p, d)	(*(Bit16s*)(ds + p) = (d))
@@ -1253,7 +1243,6 @@ struct hero_struct {
 #define ds_writew(p, d)		(*(Bit16u*)(ds + p) = (d))
 #define ds_writed(p, d)		(*(Bit32u*)(ds + p) = (d))
 #define ds_writefp(p, d)		(*(RealPt*)(ds + (p)) = (d))
-#define ds_writehp(p, d)		(*(HugePt*)(ds + (p)) = (d))
 
 #define inc_ds_bs(o)		(++(*(Bit8s*)(ds + (o))))
 #define dec_ds_bs(o)		(--(*(Bit8s*)(ds + (o))))

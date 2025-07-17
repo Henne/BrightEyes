@@ -86,7 +86,7 @@ void FIG_preload_gfx(void)
 
 	ds_writed(FIG_LIST_HEAD, 0);
 
-	ds_writehp(FIG_LIST_BUFFER, F_PADD(ds_readhp(FIG_FIGURE2_BUF), -0x115d));
+	ds_writed(FIG_LIST_BUFFER, (Bit32u)(F_PADD((HugePt)ds_readd(FIG_FIGURE2_BUF), -0x115d)));
 
 	memset(Real2Host(ds_readd(FIG_LIST_BUFFER)), 0, 0x115d);
 	p1 = Real2Host(ds_readd(FIG_LIST_BUFFER));
@@ -97,19 +97,19 @@ void FIG_preload_gfx(void)
 		ds_writeb(FIG_LIST_ARRAY + i, 0);
 	}
 
-	ds_writehp(WEAPONS_NVF_BUF, F_PADD(ds_readhp(CURRENT_FIGHT), SIZEOF_FIGHT));
+	ds_writed(WEAPONS_NVF_BUF, (Bit32u)(F_PADD((HugePt)ds_readd(CURRENT_FIGHT), SIZEOF_FIGHT)));
 
 	ds_writefp(SPELLOBJ_NVF_BUF, ds_readfp(WEAPONS_NVF_BUF) + 0x1953);
 
-	ds_writehp(FIGOBJ_GFXBUF_TABLE, F_PADD(ds_readfp(SPELLOBJ_NVF_BUF), 0xf5f));
+	ds_writed(FIGOBJ_GFXBUF_TABLE, (Bit32u)(F_PADD((HugePt)ds_readd(SPELLOBJ_NVF_BUF), 0xf5f)));
 
-	ds_writehp(FIGOBJ_GFXWIDTH_TABLE, F_PADD(ds_readfp(FIGOBJ_GFXBUF_TABLE), 0xfc));
+	ds_writed(FIGOBJ_GFXWIDTH_TABLE, (Bit32u)(F_PADD((HugePt)ds_readd(FIGOBJ_GFXBUF_TABLE), 0xfc)));
 
-	ds_writehp(FIGOBJ_GFXHEIGHT_TABLE, F_PADD(ds_readfp(FIGOBJ_GFXWIDTH_TABLE), 0x7e));
+	ds_writed(FIGOBJ_GFXHEIGHT_TABLE, (Bit32u)(F_PADD((HugePt)ds_readd(FIGOBJ_GFXWIDTH_TABLE), 0x7e)));
 
-	ds_writehp(FIGHTOBJ_BUF_SEEK_PTR, F_PADD(ds_readfp(FIGOBJ_GFXHEIGHT_TABLE), 0x7e));
+	ds_writed(FIGHTOBJ_BUF_SEEK_PTR, (Bit32u)(F_PADD((HugePt)ds_readd(FIGOBJ_GFXHEIGHT_TABLE), 0x7e)));
 
-	ds_writehp(FIGHTOBJ_BUF, F_PADD(ds_readfp(FIG_LIST_BUFFER), -0x4217));
+	ds_writed(FIGHTOBJ_BUF, (Bit32u)(F_PADD((HugePt)ds_readd(FIG_LIST_BUFFER), -0x4217)));
 
 	/* set something in the hero charactersheet to -1 */
 	for (i = 0; i <= 6; i++) {

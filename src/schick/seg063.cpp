@@ -462,7 +462,7 @@ void sea_travel(signed short passage, signed short dir)
 
 	ds_writeb(TRAVELING, 1);
 
-	ds_writehp(SEA_TRAVEL_COURSES, (passage < 7 ? F_PADD(ds_readd(BUFFER9_PTR), 7600) : F_PADD(ds_readd(BUFFER9_PTR), 11400)));
+	ds_writed(SEA_TRAVEL_COURSES, (Bit32u)(passage < 7 ? F_PADD(ds_readd(BUFFER9_PTR), 7600) : F_PADD(ds_readd(BUFFER9_PTR), 11400)));
 
 	/* high seas routes have id 0..6, costal routes id 7..44 */
 
