@@ -253,7 +253,7 @@ void load_special_textures(signed short arg)
 	signed short fd;
 
 	fd = load_archive_file(arg == 9 ? ARCHIVE_FILE_FINGER_NVF : ARCHIVE_FILE_LTURM_NVF);
-	read_archive_file(fd, Real2Host(ds_readd(BUFFER7_PTR)), 64000);
+	read_archive_file(fd, (Bit8u*)ds_readd(BUFFER7_PTR), 64000);
 	close(fd);
 
 }
@@ -654,7 +654,7 @@ void load_tlk(signed short index)
 		Real2Host(RealMake(datseg, DIALOG_STATES)), off - partners * 0x26);
 
 	/* read the text */
-	text_len = (signed short)read_archive_file(fd, Real2Host(ds_readd(BUFFER7_PTR)), 64000);
+	text_len = (signed short)read_archive_file(fd, (Bit8u*)ds_readd(BUFFER7_PTR), 64000);
 
 	close(fd);
 
