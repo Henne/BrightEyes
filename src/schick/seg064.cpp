@@ -43,7 +43,7 @@ RealPt get_ship_name(signed char passage_type, signed short nr_ships_created)
 		/* check if there is already a ship with the same name */
 		for (i = 0; i < nr_ships_created; i++) {
 			if (ds_readd(HARBOR_OPTIONS + i * SIZEOF_HARBOR_OPTION + HARBOR_OPTION_SHIP_NAME_PTR)
-				== host_readd(Real2Host(ds_readd(TX_INDEX)) + name * 4)) {
+				== host_readd((Bit8u*)ds_readd(TX_INDEX) + name * 4)) {
 				done = 0;
 				break;
 			}
@@ -51,7 +51,7 @@ RealPt get_ship_name(signed char passage_type, signed short nr_ships_created)
 
 	} while (!done);
 
-	return (RealPt)host_readd(Real2Host(ds_readd(TX_INDEX)) + name * 4);
+	return (RealPt)host_readd((Bit8u*)ds_readd(TX_INDEX) + name * 4);
 }
 
 /**
@@ -99,7 +99,7 @@ unsigned short prepare_passages(void)
 			 * (which has been avoided in the original random assignment code). But this is a rare event and not be a big issue anyway.
 			 */
 			ds_writed(HARBOR_OPTIONS + prepared * SIZEOF_HARBOR_OPTION + HARBOR_OPTION_SHIP_NAME_PTR,
-				(RealPt)host_readd(Real2Host(ds_readd(TX_INDEX)) + 4 * (host_readb(Real2Host(ent) + SEA_ROUTE_PASSAGE_SHIP_TYPE) * 10 + (host_readb(Real2Host(ent) + SEA_ROUTE_PASSAGE_PRICE_MOD)) % 10 + 0x2a))
+				(RealPt)host_readd((Bit8u*)ds_readd(TX_INDEX) + 4 * (host_readb(Real2Host(ent) + SEA_ROUTE_PASSAGE_SHIP_TYPE) * 10 + (host_readb(Real2Host(ent) + SEA_ROUTE_PASSAGE_PRICE_MOD)) % 10 + 0x2a))
 			);
 #endif
 
@@ -131,7 +131,7 @@ unsigned short prepare_passages(void)
 					(Bit32u)get_ship_name(host_readb(Real2Host(ent) + SEA_ROUTE_PASSAGE_SHIP_TYPE), prepared));
 #else
 				ds_writed(HARBOR_OPTIONS + prepared * SIZEOF_HARBOR_OPTION + HARBOR_OPTION_SHIP_NAME_PTR,
-					(RealPt)host_readd(Real2Host(ds_readd(TX_INDEX)) + 4 * (host_readb(Real2Host(ent) + SEA_ROUTE_PASSAGE_SHIP_TYPE) * 10 + (host_readb(Real2Host(ent) + SEA_ROUTE_PASSAGE_PRICE_MOD)) % 10 + 0x2a))
+					(RealPt)host_readd((Bit8u*)ds_readd(TX_INDEX) + 4 * (host_readb(Real2Host(ent) + SEA_ROUTE_PASSAGE_SHIP_TYPE) * 10 + (host_readb(Real2Host(ent) + SEA_ROUTE_PASSAGE_PRICE_MOD)) % 10 + 0x2a))
 				);
 #endif
 

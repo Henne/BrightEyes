@@ -177,7 +177,7 @@ RealPt FIG_get_hero_ptr(signed short v1)
 	signed short i;
 
 	for (i = 0; i <= 6; i++) {
-		if (host_readbs(Real2Host(ds_readd(HEROES)) + i * SIZEOF_HERO + HERO_FIGHTER_ID) == v1)
+		if (host_readbs((Bit8u*)ds_readd(HEROES) + i * SIZEOF_HERO + HERO_FIGHTER_ID) == v1)
 			return (Bit8u*)ds_readd(HEROES) + i * SIZEOF_HERO;
 	}
 

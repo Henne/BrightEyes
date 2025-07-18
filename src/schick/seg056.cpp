@@ -156,7 +156,7 @@ void buy_screen(void)
 			/* ICONS */
 			l_di = load_archive_file(ARCHIVE_FILE_ICONS);
 			seek_archive_file(l_di, 22 * 576L);
-			read_archive_file(l_di, Real2Host(ds_readd(ICON)), 576L);
+			read_archive_file(l_di, (Bit8u*)ds_readd(ICON), 576L);
 			close(l_di);
 
 			ds_writew(PIC_COPY_X1, 108);

@@ -240,7 +240,7 @@ void status_show(Bit16u index)
 			if (host_readw(hero + i * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID) == ITEM_NONE)
 				continue;
 
-			nvf.dst = Real2Host(ds_readd(ICON));
+			nvf.dst = (Bit8u*)ds_readd(ICON);
 			/* set no */
 			nvf.no = host_readw(get_itemsdat(host_readw(hero + i * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID)));
 

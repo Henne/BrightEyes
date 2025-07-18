@@ -1503,7 +1503,7 @@ void mouse_19dc(void)
 		ds_writed(LAST_CURSOR, ds_readd(CURRENT_CURSOR));
 
 		/* check if the new cursor is the default cursor */
-		if (Real2Host(ds_readd(CURRENT_CURSOR)) == p_datseg + DEFAULT_MOUSE_CURSOR) {
+		if ((Bit8u*)ds_readd(CURRENT_CURSOR) == p_datseg + DEFAULT_MOUSE_CURSOR) {
 			/* set cursor size 0x0 */
 			ds_writew(MOUSE_POINTER_OFFSETX, ds_writew(MOUSE_POINTER_OFFSETY, 0));
 		} else {
@@ -1594,13 +1594,13 @@ void handle_gui_input(void)
 		if (((Bit8u*)ds_readd(ACTION_TABLE_SECONDARY))) {
 			l_si = get_mouse_action(ds_readw(MOUSE_POSX),
 					ds_readw(MOUSE_POSY),
-					Real2Host(ds_readd(ACTION_TABLE_SECONDARY)));
+					(Bit8u*)ds_readd(ACTION_TABLE_SECONDARY));
 		}
 
 		if (!l_si && ((Bit8u*)ds_readd(ACTION_TABLE_PRIMARY))) {
 			l_si = get_mouse_action(ds_readw(MOUSE_POSX),
 					ds_readw(MOUSE_POSY),
-					Real2Host(ds_readd(ACTION_TABLE_PRIMARY)));
+					(Bit8u*)ds_readd(ACTION_TABLE_PRIMARY));
 		}
 
 		if (ds_readw(HAVE_MOUSE) == 2) {
@@ -1761,13 +1761,13 @@ void handle_input(void)
 		if (((Bit8u*)ds_readd(ACTION_TABLE_SECONDARY))) {
 			l_si = get_mouse_action(ds_readw(MOUSE_POSX),
 					ds_readw(MOUSE_POSY),
-					Real2Host(ds_readd(ACTION_TABLE_SECONDARY)));
+					(Bit8u*)ds_readd(ACTION_TABLE_SECONDARY));
 		}
 
 		if (!l_si && ((Bit8u*)ds_readd(ACTION_TABLE_PRIMARY))) {
 			l_si = get_mouse_action(ds_readw(MOUSE_POSX),
 					ds_readw(MOUSE_POSY),
-					Real2Host(ds_readd(ACTION_TABLE_PRIMARY)));
+					(Bit8u*)ds_readd(ACTION_TABLE_PRIMARY));
 		}
 
 		if (ds_readw(HAVE_MOUSE) == 2) {
@@ -2846,7 +2846,7 @@ void sub_light_timers(Bit32s quarter)
 
 						/* subtract weight of a torch */
 						sub_ptr_ws(hero_i + HERO_LOAD,
-							host_readws(Real2Host(ds_readd(ITEMSDAT)) + (SIZEOF_ITEM_STATS * ITEM_TORCH_ON + ITEM_STATS_WEIGHT)));
+							host_readws((Bit8u*)ds_readd(ITEMSDAT) + (SIZEOF_ITEM_STATS * ITEM_TORCH_ON + ITEM_STATS_WEIGHT)));
 
 						/* Remove Torch from inventory */
 						memset(hero_i + HERO_INVENTORY + SIZEOF_INVENTORY * j, 0, SIZEOF_INVENTORY);
@@ -4057,7 +4057,7 @@ void draw_compass(void)
 	{
 
 		/* set src */
-		n.dst = Real2Host(ds_readd(ICON));
+		n.dst = (Bit8u*)ds_readd(ICON);
 		/* set dst */
 		n.src = (Bit8u*)ds_readd(BUFFER6_PTR);
 		/* set no */

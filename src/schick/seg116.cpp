@@ -649,7 +649,7 @@ void tevent_144(void)
 						(char*)get_hero(6) + HERO_NAME2);
 
 					GUI_dialogbox((Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * 6 + HERO_PORTRAIT,
-							Real2Host(ds_readd(HEROES)) + SIZEOF_HERO * 6  + HERO_NAME2,
+							(Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * 6  + HERO_NAME2,
 							(char*)ds_readd(DTP2), 0);
 				}
 

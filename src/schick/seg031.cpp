@@ -339,7 +339,7 @@ char* get_random_tavern_message(void)
 
 	randval = random_schick(20) - 1;
 
-	ptr = (char*)host_readd(Real2Host(ds_readd(TX_INDEX)) + 4 * (randval + 147));
+	ptr = (char*)host_readd((Bit8u*)ds_readd(TX_INDEX) + 4 * (randval + 147));
 
 	if (!randval || randval == 19) {
 

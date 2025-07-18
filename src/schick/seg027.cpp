@@ -161,8 +161,8 @@ RealPt load_fight_figs(signed short fig)
 			return (Bit8u*)ds_readd(FIG_FIGURE2_BUF);
 	} else if (ds_readws(FIG_FIGURE2) != -1) {
 		ds_writew(FIG_FIGURE1, ds_readw(FIG_FIGURE2));
-		memcpy(Real2Host(ds_readd(FIG_FIGURE1_BUF)),
-			Real2Host(ds_readd(FIG_FIGURE2_BUF)), 20000);
+		memcpy((Bit8u*)ds_readd(FIG_FIGURE1_BUF),
+			(Bit8u*)ds_readd(FIG_FIGURE2_BUF), 20000);
 		src = (Bit8u*)ds_readd(FIG_FIGURE2_BUF);
 		ds_writew(FIG_FIGURE2, fig);
 	} else if (ds_readws(FIG_FIGURE1) != -1) {
@@ -178,7 +178,7 @@ RealPt load_fight_figs(signed short fig)
 	if (fig >= 88) {
 		/* ...for foes */
 		max_entries = 36;
-		mem_slots = Real2Host(ds_readd(MEM_SLOTS_MON));
+		mem_slots = (Bit8u*)ds_readd(MEM_SLOTS_MON);
 		p_tab = p_datseg + BUFFER_MONSTER_TAB;
 		index = 16;
 		fig -= 88;
@@ -422,15 +422,15 @@ void load_ani(const signed short no)
 
 	/* Process Main Picture */
 	if (ds_readb(ANI_COMPR_FLAG) != 0) {
-		plen = host_readd(Real2Host(ds_readd(ANI_MAIN_PTR)));
-		unplen_ptr = Real2Host(ds_readd(ANI_MAIN_PTR));
+		plen = host_readd((Bit8u*)ds_readd(ANI_MAIN_PTR));
+		unplen_ptr = (Bit8u*)ds_readd(ANI_MAIN_PTR);
 
 		unplen_ptr += (plen - 4);
 
 		unplen = host_readd(unplen_ptr);
 		unplen = swap_u32(unplen) >> 8;
 
-		decomp_pp20(Real2Host(ds_readd(ANI_MAIN_PTR)),
+		decomp_pp20((Bit8u*)ds_readd(ANI_MAIN_PTR),
 			(Bit8u*)ds_readd(RENDERBUF_PTR),
 #if !defined(__BORLANDC__)
 			Real2Host(ds_readd(ANI_MAIN_PTR) + 4),
@@ -441,12 +441,12 @@ void load_ani(const signed short no)
 			plen);
 
 		packed_delta = unplen - plen;
-		ani_residue_ptr = Real2Host(ds_readd(ANI_MAIN_PTR));
+		ani_residue_ptr = (Bit8u*)ds_readd(ANI_MAIN_PTR);
 		ani_residue_ptr += plen;
 		ani_residue_len = ani_end_ptr - ani_residue_ptr;
 		memcpy(ani_end_ptr + packed_delta, ani_residue_ptr, ani_residue_len);
 
-		memcpy(Real2Host(ds_readd(ANI_MAIN_PTR)),
+		memcpy((Bit8u*)ds_readd(ANI_MAIN_PTR),
 			(Bit8u*)ds_readd(RENDERBUF_PTR), unplen);
 		ani_residue_ptr += packed_delta;
 		memcpy(ani_residue_ptr, ani_end_ptr + packed_delta, ani_residue_len);

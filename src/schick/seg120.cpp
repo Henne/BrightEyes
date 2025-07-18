@@ -628,10 +628,10 @@ void cleanup_game(void)
 		/* free monster figures */
 		for (l_si = 0; l_si < 36; l_si++) {
 
-			if ((host_readw(Real2Host(ds_readd(MEM_SLOTS_MON)) + l_si * 12) != 0) &&
-				((host_readw(Real2Host(ds_readd(MEM_SLOTS_MON)) + l_si * 12 + 6) != 0)))
+			if ((host_readw((Bit8u*)ds_readd(MEM_SLOTS_MON) + l_si * 12) != 0) &&
+				((host_readw((Bit8u*)ds_readd(MEM_SLOTS_MON) + l_si * 12 + 6) != 0)))
 			{
-				EMS_free_pages(host_readw(Real2Host(ds_readd(MEM_SLOTS_MON)) + 6 + l_si * 12));
+				EMS_free_pages(host_readw((Bit8u*)ds_readd(MEM_SLOTS_MON) + 6 + l_si * 12));
 			}
 		}
 

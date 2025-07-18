@@ -629,7 +629,7 @@ void draw_icon(signed short id, signed short x, signed short y)
 
 	seek_archive_file(handle, id * 576L, 0);
 
-	read_archive_file(handle, Real2Host(ds_readd(ICON)), 576);
+	read_archive_file(handle, (Bit8u*)ds_readd(ICON), 576);
 
 	close(handle);
 

@@ -486,7 +486,7 @@ signed short GUI_lookup_char_width(signed char c, signed short *p)
 void GUI_write_fonti_to_screen(unsigned short font_index, unsigned short char_width, unsigned short x, unsigned short y)
 {
 	GUI_blank_char();
-	GUI_font_to_buf(Real2Host(ds_readd(BUF_FONT6)) + font_index * 8);
+	GUI_font_to_buf((Bit8u*)ds_readd(BUF_FONT6) + font_index * 8);
 	GUI_write_char_to_screen_xy(x, y, 7, char_width);
 }
 //8c5

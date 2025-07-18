@@ -431,7 +431,7 @@ void status_menu(signed short hero_pos)
 
 					if (host_readws(hero2 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))) {
 
-						nvf.dst = Real2Host(ds_readd(ICON));
+						nvf.dst = (Bit8u*)ds_readd(ICON);
 						nvf.src = (Bit8u*)ds_readd(BUFFER10_PTR);
 						nvf.type = 0;
 						nvf.width = (Bit8u*)&width;
@@ -439,7 +439,7 @@ void status_menu(signed short hero_pos)
 						nvf.no = host_readws(get_itemsdat(host_readws(hero2 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))));
 						process_nvf(&nvf);
 
-						make_ggst_cursor(Real2Host(ds_readd(ICON)));
+						make_ggst_cursor((Bit8u*)ds_readd(ICON));
 
 						ds_writed(CURRENT_CURSOR, (Bit32u)RealMake(datseg, GGST_CURSOR));
 					}

@@ -184,7 +184,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 		/* ICONS */
 		l_si = load_archive_file(ARCHIVE_FILE_ICONS);
 		seek_archive_file(l_si, 18 * 576L);
-		read_archive_file(l_si, Real2Host(ds_readd(ICON)), 576L);
+		read_archive_file(l_si, (Bit8u*)ds_readd(ICON), 576L);
 		close(l_si);
 
 		ds_writew(PIC_COPY_X1, 108);

@@ -37,26 +37,26 @@ void init_text(void)
 	signed short handle;
 
 	handle = load_archive_file(ARCHIVE_FILE_FONT6);
-	read_archive_file(handle, Real2Host(ds_readd(BUF_FONT6)), 1000);
+	read_archive_file(handle, (Bit8u*)ds_readd(BUF_FONT6), 1000);
 	close(handle);
 
 	handle = load_archive_file(ARCHIVE_FILE_TEXT_LTX);
-	len = (signed short)read_archive_file(handle, Real2Host(ds_readd(TEXT_LTX_BUFFER)), 64000);
+	len = (signed short)read_archive_file(handle, (Bit8u*)ds_readd(TEXT_LTX_BUFFER), 64000);
 	close(handle);
 
 	split_textbuffer((Bit8u*)ds_readd(TEXT_LTX_INDEX), (Bit8u*)ds_readd(TEXT_LTX_BUFFER), len);
 
 	handle = load_archive_file(ARCHIVE_FILE_ITEMNAME);
-	len = (signed short)read_archive_file(handle, Real2Host(ds_readd(BUFFER5_PTR)), 5000);
+	len = (signed short)read_archive_file(handle, (Bit8u*)ds_readd(BUFFER5_PTR), 5000);
 	close(handle);
 
-	split_textbuffer(Real2Host(ds_readd(ITEMSNAME)), (Bit8u*)ds_readd(BUFFER5_PTR), len);
+	split_textbuffer((Bit8u*)ds_readd(ITEMSNAME), (Bit8u*)ds_readd(BUFFER5_PTR), len);
 
 	handle = load_archive_file(ARCHIVE_FILE_MONNAMES);
-	len = (signed short)read_archive_file(handle, Real2Host(ds_readd(MONNAMES_BUFFER)), 5000);
+	len = (signed short)read_archive_file(handle, (Bit8u*)ds_readd(MONNAMES_BUFFER), 5000);
 	close(handle);
 
-	split_textbuffer(Real2Host(ds_readd(MONNAMES_INDEX)), (Bit8u*)ds_readd(MONNAMES_BUFFER), len);
+	split_textbuffer((Bit8u*)ds_readd(MONNAMES_INDEX), (Bit8u*)ds_readd(MONNAMES_BUFFER), len);
 
 }
 
@@ -74,7 +74,7 @@ void load_tx(signed short index)
 
 	close(archive_file_handle);
 
-	split_textbuffer(Real2Host(ds_readd(TX_INDEX)), (Bit8u*)ds_readd(BUFFER7_PTR), archive_file_len);
+	split_textbuffer((Bit8u*)ds_readd(TX_INDEX), (Bit8u*)ds_readd(BUFFER7_PTR), archive_file_len);
 
 	ds_writew(TX_FILE_INDEX, index);
 }
@@ -275,7 +275,7 @@ signed short load_game_state(void)
 
 		/* init */
 		ds_writed(SAVED_FILES_BUF, ds_readd(DTP2));
-		memset(Real2Host(ds_readd(SAVED_FILES_BUF)), 0, 286 * 4);
+		memset((Bit8u*)ds_readd(SAVED_FILES_BUF), 0, 286 * 4);
 
 		/* read version info */
 		_read(handle_gs, (Bit8u*)ds_readd(TEXT_OUTPUT_BUF), 12);
@@ -305,7 +305,7 @@ signed short load_game_state(void)
 		/* create for each saved file in gam a file in TEMP */
 		for (i = 0; i < 286; i++) {
 
-			if (host_readd(Real2Host(ds_readd(SAVED_FILES_BUF)) + 4 * i)) {
+			if (host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * i)) {
 
 				/* write file content to TEMP */
 				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
@@ -315,8 +315,8 @@ signed short load_game_state(void)
 				/* TODO: should be O_BINARY | O_WRONLY */
 				handle = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
 
-				_read(handle_gs, (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd(Real2Host(ds_readd(SAVED_FILES_BUF)) + 4 * i));
-				_write(handle,   (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd(Real2Host(ds_readd(SAVED_FILES_BUF)) + 4 * i));
+				_read(handle_gs, (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * i));
+				_write(handle,   (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * i));
 				close(handle);
 			}
 		}
@@ -503,7 +503,7 @@ signed short save_game_state(void)
 	ds_writew(TEXTBOX_WIDTH, tw_bak);
 
 	ds_writed(SAVED_FILES_BUF, ds_readd(DTP2));
-	memset(Real2Host(ds_readd(SAVED_FILES_BUF)), 0, 4 * 286);
+	memset((Bit8u*)ds_readd(SAVED_FILES_BUF), 0, 4 * 286);
 
 	if (slot != -2 && slot != 5) {
 
@@ -638,14 +638,14 @@ signed short save_game_state(void)
 			if (l1 == 0) {
 
 				handle = load_archive_file(tw_bak + 0x8000);
-				host_writed(Real2Host(ds_readd(SAVED_FILES_BUF)) + 4 * tw_bak, get_readlength2(handle));
-				_read(handle, (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd(Real2Host(ds_readd(SAVED_FILES_BUF)) + 4 * tw_bak));
+				host_writed((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * tw_bak, get_readlength2(handle));
+				_read(handle, (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * tw_bak));
 				close(handle);
 
-				len = (Bit16u)_write(l_di, (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd(Real2Host(ds_readd(SAVED_FILES_BUF)) + 4 * tw_bak));
+				len = (Bit16u)_write(l_di, (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * tw_bak));
 				filepos += len;
 
-				if ((Bit16u)host_readd(Real2Host(ds_readd(SAVED_FILES_BUF)) + 4 * tw_bak) != len) {
+				if ((Bit16u)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * tw_bak) != len) {
 					GUI_output(get_ttx(348));
 					close(l_di);
 					return 0;
