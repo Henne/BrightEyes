@@ -280,7 +280,7 @@ void THO_arsenal(void)
 		options = get_first_hero_with_item(ITEM_WRITING_OF_JARDA) != -1 || get_first_hero_with_item(ITEM_WRITING_OF_HETMAN) != -1 ? 2 : 1;
 
 		do {
-			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), (Bit8u*)NULL,
+			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
 					get_tx2(0), options,
 					get_tx2(2), get_tx2(1));
 
@@ -409,7 +409,7 @@ void THO_ugdalf(void)
 		/* talk to the guards */
 		randval = random_schick(10) - 1;
 
-		answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), (Bit8u*)NULL,
+		answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
 					get_tx2(23), 3,
 					get_tx2(randval + 38),
 					get_tx2(24),
@@ -417,13 +417,13 @@ void THO_ugdalf(void)
 
 		if (answer == 1) {
 
-			GUI_dialogbox((Bit8u*)ds_readd(DTP2), (Bit8u*)NULL,
+			GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
 					get_tx2(27), 0);
 
 		} else if (answer == 2) {
 
 			/* talk to DRAMOSCH */
-			GUI_dialogbox((Bit8u*)ds_readd(DTP2), (Bit8u*)NULL,
+			GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
 					get_tx2(28), 0);
 
 			load_in_head(14);

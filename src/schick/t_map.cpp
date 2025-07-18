@@ -60,7 +60,7 @@ treasure_type t_map(RealPt ptr, const int off)
 	RealPt func = (RealPt)host_readd(Real2Host(ptr) + off);
 
 	/* early out for NULL pointers */
-	if (func == (Bit8u*)NULL)	return (treasure_type)NULL;
+	if (func == NULL)	return (treasure_type)NULL;
 
 	Bit16u f_seg = RealSeg(func);
 	Bit16u f_off = RealOff(func);

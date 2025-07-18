@@ -497,7 +497,7 @@ void status_menu(signed short hero_pos)
 					}
 				}
 
-				l_di = GUI_radio((Bit8u*)NULL, (signed char)l1,
+				l_di = GUI_radio(NULL, (signed char)l1,
 						get_tx2(69),
 						get_tx2(16),
 						get_tx2(17),
