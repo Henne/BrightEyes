@@ -377,7 +377,7 @@ RealPt prepare_timbre(signed short a1, signed short patch)
 		read_archive_file(ds_readws(SAMPLE_AD_HANDLE), p_datseg + SAMPLE_AD_IDX_ENTRY, 6);
 
 		if (ds_readbs((SAMPLE_AD_IDX_ENTRY+1)) == -1) {
-			return (RealPt)0;
+			return (Bit8u*)NULL;
 		}
 	} while ((ds_readbs((SAMPLE_AD_IDX_ENTRY+1)) != a1) || (ds_readbs(SAMPLE_AD_IDX_ENTRY) != patch));
 
@@ -5380,7 +5380,7 @@ RealPt get_second_hero_available_in_group(void)
 		}
 	}
 
-	return (RealPt)0;
+	return (Bit8u*)NULL;
 }
 
 /**

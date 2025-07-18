@@ -73,7 +73,7 @@ void THO_hetmann(void)
 		ds_writew(SUBVENTION, 0);
 
 		do {
-			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), (RealPt)0,
+			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), (Bit8u*)NULL,
 					get_tx2(1), 3,
 					get_tx2(2),
 					get_tx2(3),
@@ -82,19 +82,19 @@ void THO_hetmann(void)
 
 		if (answer == 1) {
 
-			GUI_dialogbox((Bit8u*)ds_readd(DTP2), (RealPt)0,
+			GUI_dialogbox((Bit8u*)ds_readd(DTP2), (Bit8u*)NULL,
 					get_tx2(5), 0);
 
 		} else if (answer == 2) {
 
-			GUI_dialogbox((Bit8u*)ds_readd(DTP2), (RealPt)0,
+			GUI_dialogbox((Bit8u*)ds_readd(DTP2), (Bit8u*)NULL,
 					get_tx2(6), 0);
 
 			add_ds_ws(SUBVENTION, 2);
 
 		} else {
 
-			GUI_dialogbox((Bit8u*)ds_readd(DTP2), (RealPt)0,
+			GUI_dialogbox((Bit8u*)ds_readd(DTP2), (Bit8u*)NULL,
 					get_tx2(7), 0);
 
 			inc_ds_ws(SUBVENTION);
