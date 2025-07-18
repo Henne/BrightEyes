@@ -450,12 +450,12 @@ void load_map(void)
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&fd;
 	nvf.height = (Bit8u*)&fd;
-	nvf.dst = Real2Host(F_PADD((RealPt)ds_readd(BUFFER9_PTR), 18000));
+	nvf.dst = Real2Host(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 18000));
 	nvf.no = 16;
 
 	process_nvf(&nvf);
 
-	array_add(Real2Host(F_PADD((RealPt)ds_readd(BUFFER9_PTR), 18000)), 3003, 0xe0, 2);
+	array_add(Real2Host(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 18000)), 3003, 0xe0, 2);
 
 	ds_writeb(PP20_INDEX, ARCHIVE_FILE_KARTE_DAT);
 
@@ -498,12 +498,12 @@ void load_map(void)
 
 	/* load HSROUT.DAT */
 	fd = load_archive_file(ARCHIVE_FILE_HSROUT_DAT);
-	read_archive_file(fd, Real2Host(F_PADD(ds_readd(BUFFER9_PTR), 7600)), 3800);
+	read_archive_file(fd, Real2Host(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 7600)), 3800);
 	close(fd);
 
 	/* load SROUT.DAT */
 	fd = load_archive_file(ARCHIVE_FILE_SROUT_DAT);
-	read_archive_file(fd, Real2Host(F_PADD(ds_readd(BUFFER9_PTR), 11400)), 5900);
+	read_archive_file(fd, Real2Host(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 11400)), 5900);
 	close(fd);
 
 	load_tx(ARCHIVE_FILE_MAPTEXT_LTX);

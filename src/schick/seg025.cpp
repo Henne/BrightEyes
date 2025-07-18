@@ -313,7 +313,7 @@ void show_treasure_map(void)
 				(l_si != 9 || (l_si == 9 && !ds_readbs(TREASURE_MAPS + 6))))
 			{
 				/* decompress picture */
-				nvf.dst = Real2Host(F_PADD((RealPt)ds_readd(BUFFER9_PTR), 30000));
+				nvf.dst = Real2Host(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 30000));
 				nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
 				nvf.no = l_si;
 				nvf.type = 0;
@@ -333,7 +333,7 @@ void show_treasure_map(void)
 				ds_writew(PIC_COPY_Y1, ds_readws(TMAP_Y + 2 * l_si));
 				ds_writew(PIC_COPY_X2, ds_readws(TMAP_X + 2 * l_si) + width - 1);
 				ds_writew(PIC_COPY_Y2, ds_readws(TMAP_Y + 2 * l_si) + height - 1);
-				ds_writed(PIC_COPY_SRC, (Bit32u)F_PADD((RealPt)ds_readd(BUFFER9_PTR), 30000));
+				ds_writed(PIC_COPY_SRC, (Bit32u)F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 30000));
 				ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
 				do_pic_copy(0);
 			}
@@ -341,7 +341,7 @@ void show_treasure_map(void)
 
 		wait_for_vsync();
 
-		set_palette(Real2Host(F_PADD(F_PADD((RealPt)ds_readd(BUFFER9_PTR), length), -0x60)), 0, 0x20);
+		set_palette(Real2Host(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), length), -0x60)), 0, 0x20);
 
 		refresh_screen_size();
 

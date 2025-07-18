@@ -103,7 +103,7 @@ void FIG_loot_monsters(void)
 
 	for (l_di = 0; l_di < 30; l_di++) {
 
-			a[l_di] = (char*)Real2Host(F_PADD(ds_readd(BUFFER9_PTR), 40 * l_di));
+			a[l_di] = (char*)Real2Host(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 40 * l_di));
 	}
 
 	do {

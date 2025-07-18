@@ -354,7 +354,7 @@ signed short char_erase(void)
 	RealPt ptr;
 
 	if (ds_readbs(RENDERBUF_IN_USE_FLAG) != 0) {
-		ptr = F_PADD((HugePt)ds_readd(BUFFER9_PTR), 30000);
+		ptr = F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 30000);
 	} else {
 		ptr = (RealPt)ds_readd(RENDERBUF_PTR) + 50000;
 	}

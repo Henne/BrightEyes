@@ -759,12 +759,12 @@ void equip_belt_ani(void)
 	nvf_length = read_archive_file(handle,
 			(Bit8u*)ds_readd(BUFFER9_PTR), 64000);
 	/* read NVF part 2 */
-	nvf_length += read_archive_file(handle, Real2Host(F_PADD(ds_readd(BUFFER9_PTR), 64000)), 64000);
+	nvf_length += read_archive_file(handle, Real2Host(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 64000)), 64000);
 
 	close(handle);
 
 	/* calculate palette pointer */
-	p_pal = Real2Host(F_PADD(F_PADD(ds_readd(BUFFER9_PTR), nvf_length), -0x60));
+	p_pal = Real2Host(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), nvf_length), -0x60));
 
 	wait_for_vsync();
 

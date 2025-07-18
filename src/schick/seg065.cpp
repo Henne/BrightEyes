@@ -111,7 +111,7 @@ void final_intro(void)
 	len = read_archive_file(handle, (Bit8u*)ds_readd(BUFFER9_PTR), 64000);
 	close(handle);
 
-	ptr1 = Real2Host(F_PADD(F_PADD(ds_readd(BUFFER9_PTR), len), -(96 * 3)));
+	ptr1 = Real2Host(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), len), -(96 * 3)));
 
 	do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
 
@@ -119,7 +119,7 @@ void final_intro(void)
 
 	set_palette(ptr1, 0, 0x60);
 
-	ptr2 = (RealPt)F_PADD(ds_readd(BUFFER9_PTR), 80000);
+	ptr2 = (RealPt)F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 80000);
 
 	nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
 	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
@@ -224,7 +224,7 @@ void hyg_ani_3(void)
 	ds_writew(PIC_COPY_Y1, 0);
 	ds_writew(PIC_COPY_X2, 319);
 	ds_writew(PIC_COPY_Y2, 199);
-	ds_writed(PIC_COPY_SRC, (Bit32u)F_PADD((HugePt)ds_readd(BUFFER9_PTR), 0x1fbd0));
+	ds_writed(PIC_COPY_SRC, (Bit32u)F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 0x1fbd0));
 	ds_writed(PIC_COPY_DST, ds_readd(RENDERBUF_PTR));
 
 	do_pic_copy(0);
@@ -256,8 +256,8 @@ void show_hyggelik_ani(void)
 	Bit8u array[30*8];
 
 	ds_writew(WALLCLOCK_UPDATE, 0);
-	ptr1 = (RealPt)ds_readd(BUFFER9_PTR);
-	ptr2 = (RealPt)F_PADD((HugePt)ds_readd(BUFFER9_PTR), 0x1fbd0);
+	ptr1 = (Bit8u*)ds_readd(BUFFER9_PTR);
+	ptr2 = (RealPt)F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 0x1fbd0);
 
 	handle = load_archive_file(ARCHIVE_FILE_HYGBACK_NVF);
 	filelen = read_archive_file(handle, (Bit8u*)ds_readd(RENDERBUF_PTR), 64000);
@@ -438,7 +438,7 @@ void show_outro(void)
 	len = read_archive_file(handle, (Bit8u*)ds_readd(BUFFER9_PTR), 64000);
 	close(handle);
 
-	pal_ptr = Real2Host(F_PADD(F_PADD((HugePt)ds_readd(BUFFER9_PTR), len), - 0xc0));
+	pal_ptr = Real2Host(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), len), - 0xc0));
 	do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
 	wait_for_vsync();
 	set_palette(pal_ptr, 0, 0x40);
@@ -472,7 +472,7 @@ void show_outro(void)
 	len = read_archive_file(handle, (Bit8u*)ds_readd(BUFFER9_PTR), 64000);
 	close(handle);
 
-	pal_ptr = Real2Host(F_PADD(F_PADD((HugePt)ds_readd(BUFFER9_PTR), len), - 0xc0));
+	pal_ptr = Real2Host(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), len), - 0xc0));
 	do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
 	wait_for_vsync();
 	set_palette(pal_ptr, 0, 0x40);
@@ -506,7 +506,7 @@ void show_outro(void)
 	len = read_archive_file(handle, (Bit8u*)ds_readd(BUFFER9_PTR), 64000);
 	close(handle);
 
-	pal_ptr = Real2Host(F_PADD(F_PADD((HugePt)ds_readd(BUFFER9_PTR), len), - 0xc0));
+	pal_ptr = Real2Host(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), len), - 0xc0));
 	do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
 	wait_for_vsync();
 	set_palette(pal_ptr, 0, 0x40);
