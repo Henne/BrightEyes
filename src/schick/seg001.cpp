@@ -159,7 +159,7 @@ void seg001_00c1(signed short track_no)
 	if (ds_readw(CD_INIT_SUCCESSFUL) == 0)
 		return;
 
-	host_writew(Real2Host(RealMake(CDA_DATASEG, 0x8f)), 0);
+	host_writew(RealMake(CDA_DATASEG, 0x8f), 0);
 
 	/* TODO: write this code in C */
 	asm {
@@ -196,9 +196,9 @@ void seg001_00c1(signed short track_no)
 	}
 	/* calculate track_start */
 	track_start = (
-				((60UL * (Bit16u)host_readb(Real2Host(RealMake(CDA_DATASEG, 0x10c + _SI * 8)))) +
-				((Bit16s)host_readb(Real2Host(RealMake(CDA_DATASEG, 0x10b + _SI * 8))))) * 75UL +
-			((Bit16s)host_readb(Real2Host(RealMake(CDA_DATASEG, 0x10a + _SI * 8))))
+				((60UL * (Bit16u)host_readb(RealMake(CDA_DATASEG, 0x10c + _SI * 8))) +
+				((Bit16s)host_readb(RealMake(CDA_DATASEG, 0x10b + _SI * 8)))) * 75UL +
+			((Bit16s)host_readb(RealMake(CDA_DATASEG, 0x10a + _SI * 8)))
 			);
 
 	/* calculate track_end */
@@ -210,8 +210,8 @@ void seg001_00c1(signed short track_no)
 	}
 
 	track_start = track_end - track_start;
-	host_writew(Real2Host(RealMake(CDA_DATASEG, 0x9e)), ((Bit16u)track_start) - 150);
-	host_writew(Real2Host(RealMake(CDA_DATASEG, 0xa0)), (Bit32s)(track_start >> 16));
+	host_writew(RealMake(CDA_DATASEG, 0x9e), ((Bit16u)track_start) - 150);
+	host_writew(RealMake(CDA_DATASEG, 0xa0), (Bit32s)(track_start >> 16));
 
 	CD_driver_request((driver_request*)RealMake(CDA_DATASEG, 0x8c));
 
@@ -230,7 +230,6 @@ void seg001_02c4(void)
 
 	if (ds_readw(CD_AUDIO_REPEAT) == 1)
 	{
-
 		CD_audio_stop_hsg();
 		CD_audio_stop_hsg();
 		seg001_00c1(ds_readw(CD_AUDIO_TRACK));
@@ -293,7 +292,7 @@ void CD_audio_pause(void)
 	/* set current position to maximum singned int */
 	ds_writed(CD_AUDIO_POS, 0x7fffffff);
 
-	host_writew(Real2Host(RealMake(CDA_DATASEG, 0xab)), 0);
+	host_writew(RealMake(CDA_DATASEG, 0xab), 0);
 
 	CD_driver_request((driver_request*)RealMake(CDA_DATASEG, 0xa8));
 }
@@ -315,7 +314,7 @@ void CD_audio_play(void)
 	ds_writew(CD_AUDIO_PAUSED, 0);
 	ds_writed(CD_AUDIO_POS, ds_readd(CD_AUDIO_PAUSE_POS));
 	add_ds_ds(CD_AUDIO_TOD, (CD_get_tod() - ds_readds(CD_AUDIO_PAUSE_TOD)));
-	host_writew(Real2Host(RealMake(CDA_DATASEG, 0xc7)), 0);
+	host_writew(RealMake(CDA_DATASEG, 0xc7), 0);
 
 	CD_driver_request((driver_request*)RealMake(CDA_DATASEG, 0xc4));
 }
@@ -328,22 +327,22 @@ void CD_0432(void)
 	if (ds_readw(CD_INIT_SUCCESSFUL) == 0)
 		return;
 
-	host_writew(Real2Host(RealMake(CDA_DATASEG, 0x3b)), 0);
-	host_writed(Real2Host(RealMake(CDA_DATASEG, 0x46)), (Bit32u)(RealMake(CDA_DATASEG, 0x420)));
-	host_writeb(Real2Host(RealMake(CDA_DATASEG, 0x420)), 0x0a);
+	host_writew(RealMake(CDA_DATASEG, 0x3b), 0);
+	host_writed(RealMake(CDA_DATASEG, 0x46), (Bit32u)(RealMake(CDA_DATASEG, 0x420)));
+	host_writeb(RealMake(CDA_DATASEG, 0x420), 0x0a);
 
 	/* BC-TODO: this constant is pushed as a byte instead of a word */
 	CD_driver_request((driver_request*)RealMake(CDA_DATASEG, 0x38));
 	asm {nop}
 
-	track_no = host_readb(Real2Host(RealMake(CDA_DATASEG, 0x421)));
+	track_no = host_readb(RealMake(CDA_DATASEG, 0x421));
 
-	while (host_readb(Real2Host(RealMake(CDA_DATASEG, 0x422))) >= track_no)
+	while (host_readb(RealMake(CDA_DATASEG, 0x422)) >= track_no)
 	{
-		host_writew(Real2Host(RealMake(CDA_DATASEG, 0x3b)), 0);
-		host_writed(Real2Host(RealMake(CDA_DATASEG, 0x46)), (Bit32u)(RealMake(CDA_DATASEG, 8 * track_no + 0x108)));
-		host_writeb(Real2Host(RealMake(CDA_DATASEG, 8 * track_no + 0x108)), 0x0b);
-		host_writeb(Real2Host(RealMake(CDA_DATASEG, 8 * track_no + 0x109)), track_no);
+		host_writew(RealMake(CDA_DATASEG, 0x3b), 0);
+		host_writed(RealMake(CDA_DATASEG, 0x46), (Bit32u)(RealMake(CDA_DATASEG, 8 * track_no + 0x108)));
+		host_writeb(RealMake(CDA_DATASEG, 8 * track_no + 0x108), 0x0b);
+		host_writeb(RealMake(CDA_DATASEG, 8 * track_no + 0x109), track_no);
 
 		/* BC-TODO: this constant ist pushed as a byte instead of a word */
 		CD_driver_request((driver_request*)RealMake(CDA_DATASEG, 0x38));
