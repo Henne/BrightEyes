@@ -200,8 +200,8 @@ signed short DNG04_handler(void)
 				sprintf((char*)ds_readd(DTP2),
 					get_tx(18),
 					(char*)hero + HERO_NAME2,
-					(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)),
-					(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)),
+					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 				GUI_output((char*)ds_readd(DTP2));
 
@@ -210,7 +210,7 @@ signed short DNG04_handler(void)
 				sprintf((char*)ds_readd(DTP2),
 					get_tx(19),
 					(char*)hero + HERO_NAME2,
-					(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
 					(char*)hero + HERO_NAME2);
 
 				GUI_output((char*)ds_readd(DTP2));

@@ -309,18 +309,18 @@ signed short DNG12_handler(void)
 					sprintf((char*)ds_readd(DTP2),
 						get_tx(25),
 						(char*)hero + HERO_NAME2,
-						Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-						Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
+						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 				} else {
 					/* the hero falls again into the pit */
 #ifndef M302de_FEATURE_MOD
 					sprintf((char*)ds_readd(DTP2),
 						get_tx(31),
 						(char*)hero + HERO_NAME2,
-						Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-						Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),
-						Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-						Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
+						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),
+						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 #else
 					/* Feature Mod 7: The following is a translation of a text block in OBER.DTX
 					 * of the English version, which has not been present in the German one.
@@ -364,11 +364,11 @@ signed short DNG12_handler(void)
 					sprintf((char*)ds_readd(DTP2),
 						(char*)ds_readd(TEXT_OUTPUT_BUF),
 						(char*)hero + HERO_NAME2,
-						Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-						Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),
-						Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-						Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-						Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
+						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),
+						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
 #endif
 				}
 

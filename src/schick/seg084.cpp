@@ -412,9 +412,9 @@ signed short DNG09_handler(void)
 
 			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 				(char*)(((l3 = test_skill(hero, TA_SCHLOESSER, 4)) > 0) ? get_tx(52) : get_tx(54)),
-				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)),
-				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),
-				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
+				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)),
+				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),
+				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 
 			strcat((char*)ds_readd(DTP2),
 				(char*)ds_readd(TEXT_OUTPUT_BUF));
@@ -449,7 +449,7 @@ signed short DNG09_handler(void)
 
 			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 				(char*)(((l3 = test_skill(hero, TA_SCHLOESSER, 6)) > 0) ? get_tx(52) : get_tx(53)),
-				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
+				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
 			strcat((char*)ds_readd(DTP2),
 				(char*)ds_readd(TEXT_OUTPUT_BUF));

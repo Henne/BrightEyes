@@ -97,7 +97,7 @@ void city_event_1(void)
 		sprintf((char*)ds_readd(DTP2),
 			get_tx(random_schick(4) + 3),
 			(char*)hero + HERO_NAME2,
-			(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
+			(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
 
 		answer = GUI_dialogbox(hero + HERO_PORTRAIT, hero + HERO_NAME2, (char*)ds_readd(DTP2), 3,
 				get_tx(random_schick(4) + 7),
@@ -346,7 +346,7 @@ void city_event_7(void)
 
 		sprintf((char*)ds_readd(DTP2) + 0x400,
 			get_tx(125),
-			(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
+			(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
 		GUI_dialogbox((char*)ds_readd(DTP2), NULL, (char*)ds_readd(DTP2) + 0x400, 0);
 

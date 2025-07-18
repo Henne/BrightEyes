@@ -43,8 +43,8 @@ void DNG14_dive(signed short diver_pos, signed char mod, signed short dest_x)
 				sprintf((char*)ds_readd(DTP2),
 					get_tx(42),
 					(char*)hero + HERO_NAME2,
-					(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-					(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 				GUI_output((char*)ds_readd(DTP2));
 

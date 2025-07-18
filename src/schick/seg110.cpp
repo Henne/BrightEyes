@@ -117,7 +117,7 @@ void TRV_swim2(signed char mod, signed short percent)
 				sprintf((char*)ds_readd(DTP2),
 					get_tx2(32),
 					(char*)hero + HERO_NAME2,
-					(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 				GUI_output((char*)ds_readd(DTP2));
 
@@ -657,7 +657,7 @@ void tevent_044(void)
 		sprintf((char*)ds_readd(DTP2) + 0x400,
 			get_tx2(33),
 			(char*)hero + HERO_NAME2,
-			(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
+			(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
 		do {
 			answer = GUI_dialogbox((char*)ds_readd(DTP2), NULL,
@@ -743,7 +743,7 @@ void tevent_046(void)
 			sprintf((char*)ds_readd(DTP2),
 				get_tx2(45),
 				(char*)hero + HERO_NAME2,
-				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 			do {
 				answer = GUI_radio((char*)ds_readd(DTP2), 2,

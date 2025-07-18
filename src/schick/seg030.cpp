@@ -206,8 +206,8 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 					{
 						sprintf(dst, fmt,
 							(Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_NAME2,
-							Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 0)),
-							Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 1)));
+							(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 0)),
+							(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 1)));
 
 					} else if (txt_id == 19) {
 
@@ -219,32 +219,32 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 						sprintf(dst, fmt,
 							(Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_NAME2,
-							Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 2)));
+							(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 2)));
 					} else if (txt_id == 29) {
 
 						sprintf(dst, fmt,
 							(Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_NAME2,
-							Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 0)),
-							Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 1)),
-							Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 2)));
+							(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 0)),
+							(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 1)),
+							(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 2)));
 
 					} else if (txt_id == 30) {
 
 						sprintf(dst, fmt,
 							(Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_NAME2,
-							Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 1)),
-							Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 2)));
+							(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 1)),
+							(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 2)));
 
 					} else if (txt_id == 31) {
 
 						sprintf(dst, fmt,
-							Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 3)));
+							(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 3)));
 
 					} else if (txt_id == 32) {
 
 						sprintf(dst, fmt,
 							(Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_NAME2,
-							Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 0)),
+							(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 0)),
 							(Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_NAME2);
 
 					} else {
@@ -275,7 +275,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 						sprintf(dst, fmt,
 							(char*)hero + HERO_NAME2,
-							(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+							(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 					} else {
 
@@ -374,19 +374,19 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 							sprintf(dst, fmt,
 								(Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_NAME2,
-								Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 0)));
+								(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 0)));
 
 						} else if (txt_id == 5) {
 
 							sprintf(dst, fmt,
-								Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 0)),
+								(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 0)),
 								(Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_NAME2);
 
 						} else if (txt_id == 6) {
 
 							sprintf(dst, fmt,
 								(Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_NAME2,
-								Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 1)),
+								(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 1)),
 								(Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_NAME2);
 
 						} else if (txt_id == 8) {
@@ -429,22 +429,22 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 						sprintf(dst, fmt,
 							(char*)hero + HERO_NAME2,
-							(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-							(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+							(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+							(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 					} else if (txt_id == 14 || txt_id == 15 || txt_id == 76) {
 
 						sprintf(dst, fmt,
 							(char*)(Bit8u*)ds_readd(RUIN_HERO) + HERO_NAME2,
-							(char*)Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(RUIN_HERO) + 0x22), 0)));
+							(char*)(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(RUIN_HERO) + 0x22), 0)));
 
 					} else if (txt_id == 26 || txt_id == 65) {
 
 						sprintf(dst, fmt,
 							(char*)hero + HERO_NAME2,
-							(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-							(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),
-							(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
+							(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+							(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),
+							(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
 
 					} else {
 
@@ -458,8 +458,8 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 						sprintf(dst, fmt,
 							(char*)(Bit8u*)ds_readd(RANDOM_TLK_HERO) + HERO_NAME2,
-							(char*)Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(RANDOM_TLK_HERO) + 0x22), 0)),
-							(char*)Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(RANDOM_TLK_HERO) + 0x22), 2)));
+							(char*)(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(RANDOM_TLK_HERO) + 0x22), 0)),
+							(char*)(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(RANDOM_TLK_HERO) + 0x22), 2)));
 					} else {
 
 						strcpy(dst, fmt);

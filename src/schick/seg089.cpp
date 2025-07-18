@@ -664,7 +664,7 @@ void DNG15_collapsing_ceiling(Bit8u* ptr)
 					sprintf((char*)ds_readd(DTP2),
 						get_tx(44),
 						(char*)hero + HERO_NAME2,
-						(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+						(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 					GUI_output((char*)ds_readd(DTP2));
 
@@ -731,7 +731,7 @@ void DNG15_clear_way(Bit8u* ptr)
 				sprintf((char*)ds_readd(DTP2),
 					get_tx(44),
 					(char*)hero + HERO_NAME2,
-					(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 				GUI_output((char*)ds_readd(DTP2));
 

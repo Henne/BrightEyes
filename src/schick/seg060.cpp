@@ -100,8 +100,8 @@ void talk_tavern(void)
 
 				sprintf(text_buffer, format,
 					(char*)hero + HERO_NAME2,
-					Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)),
-					Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
+					(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)),
+					(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
 ;
 			} else if (txt_id == 18 || txt_id == 31) {
 
@@ -154,8 +154,8 @@ void talk_tavern(void)
 			} else if (txt_id == 122 || txt_id == 126 || txt_id == 127 || txt_id == 132) {
 
 				sprintf(text_buffer, format,
-					Real2Host(GUI_get_ptr(ds_readb(TLK_TAV_INFORMERSEX) - 1, 0)),
-					Real2Host(GUI_get_ptr(ds_readb(TLK_TAV_INFORMERSEX) - 1, 0)));
+					(GUI_get_ptr(ds_readb(TLK_TAV_INFORMERSEX) - 1, 0)),
+					(GUI_get_ptr(ds_readb(TLK_TAV_INFORMERSEX) - 1, 0)));
 
 			} else if (txt_id == 128) {
 
@@ -164,8 +164,8 @@ void talk_tavern(void)
 			} else if (txt_id == 131) {
 
 				sprintf(text_buffer, format,
-					Real2Host(GUI_get_ptr(ds_readb(TLK_TAV_INFORMERSEX) - 1, 0)),
-					Real2Host(GUI_get_ptr(ds_readb(TLK_TAV_INFORMERSEX) - 1, 0)),
+					(GUI_get_ptr(ds_readb(TLK_TAV_INFORMERSEX) - 1, 0)),
+					(GUI_get_ptr(ds_readb(TLK_TAV_INFORMERSEX) - 1, 0)),
 					Real2Host(load_current_town_gossip()));
 
 			} else {

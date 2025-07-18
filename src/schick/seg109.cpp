@@ -944,8 +944,8 @@ void TRV_barrier(signed short text_start)
 						sprintf((char*)ds_readd(DTP2) + 0x400,
 								get_tx2(text_start + 7),
 								(char*)hero + HERO_NAME2,
-								Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)),
-								Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
+								(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)),
+								(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 						GUI_dialog_na(0, (char*)ds_readd(DTP2) + 0x400);
 
 						hero_disease_test(hero, 2, 30);

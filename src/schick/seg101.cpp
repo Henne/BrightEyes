@@ -606,7 +606,7 @@ void spell_visibili(void)
 		sprintf((char*)ds_readd(DTP2),
 			get_tx(106),
 			(char*)get_spelluser() + HERO_NAME2,
-			(char*)Real2Host(GUI_get_ptr(host_readbs(get_spelluser() + HERO_SEX), 0)));
+			(char*)(GUI_get_ptr(host_readbs(get_spelluser() + HERO_SEX), 0)));
 	} else {
 		sprintf((char*)ds_readd(DTP2),
 			get_ttx(607),

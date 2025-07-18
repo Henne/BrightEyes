@@ -217,7 +217,7 @@ void spell_chamaelioni(void)
 	sprintf((char*)ds_readd(DTP2),
 		get_tx(83),
 		(char*)get_spelluser() + HERO_NAME2,
-		(char*)Real2Host(GUI_get_ptr(host_readbs(get_spelluser() + HERO_SEX), 0)));
+		(char*)(GUI_get_ptr(host_readbs(get_spelluser() + HERO_SEX), 0)));
 
 }
 
@@ -230,7 +230,7 @@ void spell_duplicatus(void)
 	sprintf((char*)ds_readd(DTP2),
 		get_tx(84),
 		(char*)get_spelluser() + HERO_NAME2,
-		(char*)Real2Host(GUI_get_ptr(host_readbs(get_spelluser() + HERO_SEX), 0)));
+		(char*)(GUI_get_ptr(host_readbs(get_spelluser() + HERO_SEX), 0)));
 
 }
 
@@ -401,7 +401,7 @@ void spell_ecliptifactus(void)
 			sprintf((char*)ds_readd(DTP2),
 				get_tx(88),
 				(char*)(get_spelluser() + HERO_NAME2),
-				(char*)Real2Host(GUI_get_ptr(host_readbs(get_spelluser() + HERO_SEX), 3)),
+				(char*)(GUI_get_ptr(host_readbs(get_spelluser() + HERO_SEX), 3)),
 				rounds);
 		} else {
 			/* prepare the message */

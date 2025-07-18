@@ -90,8 +90,8 @@ void rabies(RealPt hero, signed short hero_pos)
 			sprintf((char*)ds_readd(DTP2),
 				get_ttx(741),
 				(char*)hero + HERO_NAME2,
-				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),
-				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
+				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),
+				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 
 			sprintf((char*)ds_readd(DTP2) + 500,
 				get_ttx(742),

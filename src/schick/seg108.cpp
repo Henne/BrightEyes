@@ -437,7 +437,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					sprintf((char*)ds_readd(DTP2),
 						get_ttx(511),
 						(char*)consumer + HERO_NAME2,
-						(char*)Real2Host(GUI_get_ptr(host_readbs(consumer + HERO_SEX), 0)));
+						(char*)(GUI_get_ptr(host_readbs(consumer + HERO_SEX), 0)));
 
 					break;
 				}

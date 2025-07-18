@@ -327,7 +327,7 @@ signed short DNG08_handler(void)
 				sprintf((char*)ds_readd(DTP2),
 					get_tx(21),
 					(char*)hero + HERO_NAME2,
-					(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 				GUI_output((char*)ds_readd(DTP2));
 
 				sub_hero_le(hero, dice_roll(1, 6, 4));
@@ -350,7 +350,7 @@ signed short DNG08_handler(void)
 
 			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 				(char*)((tmp = test_skill(hero, TA_SCHLOESSER, 2)) > 0 ? get_tx(30): get_tx(31)),
-				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 			strcat((char*)ds_readd(DTP2),
 				(char*)ds_readd(TEXT_OUTPUT_BUF));
@@ -495,7 +495,7 @@ void DNG08_chest1_func2(RealPt)
 	sprintf((char*)ds_readd(DTP2),
 		get_tx(11),
 		(char*)hero + HERO_NAME2,
-		(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
+		(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
 
 	GUI_output((char*)ds_readd(DTP2));
 

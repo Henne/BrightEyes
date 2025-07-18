@@ -453,7 +453,7 @@ signed short skill_cure_disease(Bit8u *healer, Bit8u *patient, signed short hand
 						get_ttx(695),
 						(char*)healer + HERO_NAME2,
 						(char*)patient + HERO_NAME2,
-						(char*)Real2Host(GUI_get_ptr(host_readbs(patient + HERO_SEX), 3)),
+						(char*)(GUI_get_ptr(host_readbs(patient + HERO_SEX), 3)),
 						retval);
 
 					GUI_output((char*)ds_readd(DTP2));
