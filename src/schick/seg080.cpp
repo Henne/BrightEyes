@@ -320,36 +320,36 @@ void DNG04_corpse0_chest(RealPt chest)
 {
 	RealPt bak;
 
-	bak = (RealPt)host_readd(Real2Host(chest) + 11);
-	host_writed(Real2Host(chest) + 11, (Bit32u)RealMake(datseg, DNG04_CHEST_CORPSE0));
+	bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)RealMake(datseg, DNG04_CHEST_CORPSE0));
 
-	loot_chest(Real2Host(chest), get_tx(22), get_tx(6));
+	loot_chest((Bit8u*)(chest), get_tx(22), get_tx(6));
 
-	host_writed(Real2Host(chest) + 11, (Bit32u)bak);
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)bak);
 }
 
 void DNG04_corpse1_chest(RealPt chest)
 {
 	RealPt bak;
 
-	bak = (RealPt)host_readd(Real2Host(chest) + 11);
-	host_writed(Real2Host(chest) + 11, (Bit32u)RealMake(datseg, DNG04_CHEST_CORPSE1));
+	bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)RealMake(datseg, DNG04_CHEST_CORPSE1));
 
-	loot_chest(Real2Host(chest), get_tx(23), get_tx(6));
+	loot_chest((Bit8u*)(chest), get_tx(23), get_tx(6));
 
-	host_writed(Real2Host(chest) + 11, (Bit32u)bak);
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)bak);
 }
 
 void DNG04_corpse2_chest(RealPt chest)
 {
 	RealPt bak;
 
-	bak = (RealPt)host_readd(Real2Host(chest) + 11);
-	host_writed(Real2Host(chest) + 11, (Bit32u)RealMake(datseg, DNG04_CHEST_CORPSE2));
+	bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)RealMake(datseg, DNG04_CHEST_CORPSE2));
 
-	loot_chest(Real2Host(chest), get_tx(24), get_tx(6));
+	loot_chest((Bit8u*)(chest), get_tx(24), get_tx(6));
 
-	host_writed(Real2Host(chest) + 11, (Bit32u)bak);
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)bak);
 }
 
 /**

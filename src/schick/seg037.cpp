@@ -100,7 +100,7 @@ void seg037_00ae(Bit8u *enemy, signed short enemy_no)
 	p1 = p_datseg + (FIG_ANISHEETS + 1 + 0xf3); /* second position of the second FIG_ANISHEET */
 
 	i = 0;
-	p3 = Real2Host(ds_readd(GFX_ANI_INDEX + host_readbs(enemy + ENEMY_SHEET_GFX_ID) * 4));
+	p3 = (Bit8u*)(ds_readd(GFX_ANI_INDEX + host_readbs(enemy + ENEMY_SHEET_GFX_ID) * 4));
 
 	while (ds_readbs(FIG_MOVE_PATHDIR + i) != -1) {
 
@@ -172,7 +172,7 @@ void seg037_00ae(Bit8u *enemy, signed short enemy_no)
 
 		memcpy(p_datseg + (FIG_ANISHEETS + 3*0xf3), p_datseg + (FIG_ANISHEETS + 0xf3), 0xf3);
 
-		p2 = Real2Host(FIG_get_ptr(host_readbs(enemy + ENEMY_SHEET_FIGHTER_ID)));
+		p2 = (Bit8u*)(FIG_get_ptr(host_readbs(enemy + ENEMY_SHEET_FIGHTER_ID)));
 
 		FIG_set_sheet(ds_readbs(FIG_TWOFIELDED_TABLE + host_readbs(p2 + FIGHTER_TWOFIELDED)), 3);
 	}

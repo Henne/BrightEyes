@@ -111,7 +111,7 @@ void final_intro(void)
 	len = read_archive_file(handle, (Bit8u*)ds_readd(BUFFER9_PTR), 64000);
 	close(handle);
 
-	ptr1 = Real2Host(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), len), -(96 * 3)));
+	ptr1 = (Bit8u*)(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), len), -(96 * 3)));
 
 	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
 
@@ -131,7 +131,7 @@ void final_intro(void)
 
 	map_effect((Bit8u*)ds_readd(RENDERBUF_PTR));
 
-	nvf.dst = Real2Host(ptr2);
+	nvf.dst = (Bit8u*)(ptr2);
 	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
 	nvf.no = 1;
 	nvf.type = 3;
@@ -184,7 +184,7 @@ RealPt hyg_ani_1(signed short nvf_no, Bit8u *ptr)
 	HugePt retval;
 	struct nvf_desc nvf;
 
-	nvf.dst = Real2Host(host_readd(ptr));
+	nvf.dst = (Bit8u*)(host_readd(ptr));
 	nvf.src = (Bit8u*)ds_readd(RENDERBUF_PTR);
 	nvf.no = nvf_no;
 	nvf.type = 3;
@@ -438,7 +438,7 @@ void show_outro(void)
 	len = read_archive_file(handle, (Bit8u*)ds_readd(BUFFER9_PTR), 64000);
 	close(handle);
 
-	pal_ptr = Real2Host(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), len), - 0xc0));
+	pal_ptr = (Bit8u*)(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), len), - 0xc0));
 	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
 	wait_for_vsync();
 	set_palette(pal_ptr, 0, 0x40);
@@ -472,7 +472,7 @@ void show_outro(void)
 	len = read_archive_file(handle, (Bit8u*)ds_readd(BUFFER9_PTR), 64000);
 	close(handle);
 
-	pal_ptr = Real2Host(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), len), - 0xc0));
+	pal_ptr = (Bit8u*)(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), len), - 0xc0));
 	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
 	wait_for_vsync();
 	set_palette(pal_ptr, 0, 0x40);
@@ -506,7 +506,7 @@ void show_outro(void)
 	len = read_archive_file(handle, (Bit8u*)ds_readd(BUFFER9_PTR), 64000);
 	close(handle);
 
-	pal_ptr = Real2Host(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), len), - 0xc0));
+	pal_ptr = (Bit8u*)(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), len), - 0xc0));
 	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
 	wait_for_vsync();
 	set_palette(pal_ptr, 0, 0x40);

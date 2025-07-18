@@ -469,14 +469,14 @@ void FIG_latecomers(void)
 								host_readbs((Bit8u*)ds_readd(CURRENT_FIGHT) + FIGHT_MONSTERS_VIEWDIR + SIZEOF_FIGHT_MONSTER * i),
 								1);
 
-						p2 = Real2Host(FIG_get_ptr(host_readbs(p_mon + ENEMY_SHEET_FIGHTER_ID)));
+						p2 = (Bit8u*)(FIG_get_ptr(host_readbs(p_mon + ENEMY_SHEET_FIGHTER_ID)));
 
 						host_writebs(p2 + 3, (signed char)x);
 						host_writebs(p2 + 4, (signed char)y);
 
 						l4 = ds_readbs(FIG_TWOFIELDED_TABLE + host_readbs(p2 + FIGHTER_TWOFIELDED));
 
-						p3 = Real2Host(FIG_get_ptr((signed char)l4));
+						p3 = (Bit8u*)(FIG_get_ptr((signed char)l4));
 
 						host_writeb(p3 + 3,
 								x - a.a[host_readbs((Bit8u*)ds_readd(CURRENT_FIGHT) + FIGHT_MONSTERS_VIEWDIR + SIZEOF_FIGHT_MONSTER * i)].x);
@@ -497,7 +497,7 @@ void FIG_latecomers(void)
 								host_readbs((Bit8u*)ds_readd(CURRENT_FIGHT) + FIGHT_MONSTERS_VIEWDIR + SIZEOF_FIGHT_MONSTER * i),
 								0);
 
-						p2 = Real2Host(FIG_get_ptr(host_readbs(p_mon + ENEMY_SHEET_FIGHTER_ID)));
+						p2 = (Bit8u*)(FIG_get_ptr(host_readbs(p_mon + ENEMY_SHEET_FIGHTER_ID)));
 
 						host_writebs(p2 + 3, (signed char)x);
 						host_writebs(p2 + 4, (signed char)y);

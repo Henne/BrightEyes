@@ -423,50 +423,50 @@ void DNG03_chest00_func3(RealPt chest)
 {
         RealPt ptr_bak;
 
-        ptr_bak = (RealPt)host_readd(Real2Host(chest) + 11);
-        host_writed(Real2Host(chest) + 11, (Bit32u)RealMake(datseg, DNG03_CHEST00_CONTENT));
-        loot_simple_chest(Real2Host(chest));
-        host_writed(Real2Host(chest) + 11, (Bit32u)ptr_bak);
+        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        host_writed((Bit8u*)(chest) + 11, (Bit32u)RealMake(datseg, DNG03_CHEST00_CONTENT));
+        loot_simple_chest((Bit8u*)(chest));
+        host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
 void DNG03_chest01_func3(RealPt chest)
 {
         RealPt ptr_bak;
 
-        ptr_bak = (RealPt)host_readd(Real2Host(chest) + 11);
-        host_writed(Real2Host(chest) + 11, (Bit32u)RealMake(datseg, DNG03_CHEST01_CONTENT));
-        loot_simple_chest(Real2Host(chest));
-        host_writed(Real2Host(chest) + 11, (Bit32u)ptr_bak);
+        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        host_writed((Bit8u*)(chest) + 11, (Bit32u)RealMake(datseg, DNG03_CHEST01_CONTENT));
+        loot_simple_chest((Bit8u*)(chest));
+        host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
 void DNG03_chest02_func3(RealPt chest)
 {
         RealPt ptr_bak;
 
-        ptr_bak = (RealPt)host_readd(Real2Host(chest) + 11);
-        host_writed(Real2Host(chest) + 11, (Bit32u)RealMake(datseg, DNG03_CHEST02_CONTENT));
-        loot_simple_chest(Real2Host(chest));
-        host_writed(Real2Host(chest) + 11, (Bit32u)ptr_bak);
+        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        host_writed((Bit8u*)(chest) + 11, (Bit32u)RealMake(datseg, DNG03_CHEST02_CONTENT));
+        loot_simple_chest((Bit8u*)(chest));
+        host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
 void DNG03_chest03_func3(RealPt chest)
 {
         RealPt ptr_bak;
 
-        ptr_bak = (RealPt)host_readd(Real2Host(chest) + 11);
-        host_writed(Real2Host(chest) + 11, (Bit32u)RealMake(datseg, DNG03_CHEST03_CONTENT));
-        loot_simple_chest(Real2Host(chest));
-        host_writed(Real2Host(chest) + 11, (Bit32u)ptr_bak);
+        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        host_writed((Bit8u*)(chest) + 11, (Bit32u)RealMake(datseg, DNG03_CHEST03_CONTENT));
+        loot_simple_chest((Bit8u*)(chest));
+        host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
 void DNG03_chest04_func3(RealPt chest)
 {
         RealPt ptr_bak;
 
-        ptr_bak = (RealPt)host_readd(Real2Host(chest) + 11);
-        host_writed(Real2Host(chest) + 11, (Bit32u)RealMake(datseg, DNG03_CHEST04_CONTENT));
-        loot_simple_chest(Real2Host(chest));
-        host_writed(Real2Host(chest) + 11, (Bit32u)ptr_bak);
+        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        host_writed((Bit8u*)(chest) + 11, (Bit32u)RealMake(datseg, DNG03_CHEST04_CONTENT));
+        loot_simple_chest((Bit8u*)(chest));
+        host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
 void DNG03_chest05_func3(RealPt)
@@ -490,40 +490,40 @@ void DNG03_chest06_func3(RealPt chest)
 {
         RealPt ptr_bak;
 
-        ptr_bak = (RealPt)host_readd(Real2Host(chest) + 11);
-        host_writed(Real2Host(chest) + 11, (Bit32u)RealMake(datseg, DNG03_CHEST06_CONTENT));
-        loot_simple_chest(Real2Host(chest));
-        host_writed(Real2Host(chest) + 11, (Bit32u)ptr_bak);
+        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        host_writed((Bit8u*)(chest) + 11, (Bit32u)RealMake(datseg, DNG03_CHEST06_CONTENT));
+        loot_simple_chest((Bit8u*)(chest));
+        host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
 void DNG03_chest07_func3(RealPt chest)
 {
         RealPt ptr_bak;
 
-        ptr_bak = (RealPt)host_readd(Real2Host(chest) + 11);
-        host_writed(Real2Host(chest) + 11, (Bit32u)RealMake(datseg, DNG03_CHEST07_CONTENT));
-        loot_simple_chest(Real2Host(chest));
-        host_writed(Real2Host(chest) + 11, (Bit32u)ptr_bak);
+        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        host_writed((Bit8u*)(chest) + 11, (Bit32u)RealMake(datseg, DNG03_CHEST07_CONTENT));
+        loot_simple_chest((Bit8u*)(chest));
+        host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
 void DNG03_chest08_func3(RealPt chest)
 {
         RealPt ptr_bak;
 
-        ptr_bak = (RealPt)host_readd(Real2Host(chest) + 11);
-        host_writed(Real2Host(chest) + 11, (Bit32u)RealMake(datseg, DNG03_CHEST08_CONTENT));
-        loot_simple_chest(Real2Host(chest));
-        host_writed(Real2Host(chest) + 11, (Bit32u)ptr_bak);
+        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        host_writed((Bit8u*)(chest) + 11, (Bit32u)RealMake(datseg, DNG03_CHEST08_CONTENT));
+        loot_simple_chest((Bit8u*)(chest));
+        host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
 void DNG03_chest09_func3(RealPt chest)
 {
         RealPt ptr_bak;
 
-        ptr_bak = (RealPt)host_readd(Real2Host(chest) + 11);
-        host_writed(Real2Host(chest) + 11, (Bit32u)RealMake(datseg, DNG03_CHEST09_CONTENT));
-        loot_simple_chest(Real2Host(chest));
-        host_writed(Real2Host(chest) + 11, (Bit32u)ptr_bak);
+        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        host_writed((Bit8u*)(chest) + 11, (Bit32u)RealMake(datseg, DNG03_CHEST09_CONTENT));
+        loot_simple_chest((Bit8u*)(chest));
+        host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
 void DNG03_chest12_func3(RealPt chest)
@@ -549,10 +549,10 @@ void DNG03_chest12_func3(RealPt chest)
 	/* this chest can only be opened with a leader with 4 crystals */
 	if (crystals == 4)
 	{
-		ptr_bak = (RealPt)host_readd(Real2Host(chest) + 11);
-		host_writed(Real2Host(chest) + 11, (Bit32u)RealMake(datseg, DNG03_CHEST12_CONTENT));
-		loot_simple_chest(Real2Host(chest));
-		host_writed(Real2Host(chest) + 11, (Bit32u)ptr_bak);
+		ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+		host_writed((Bit8u*)(chest) + 11, (Bit32u)RealMake(datseg, DNG03_CHEST12_CONTENT));
+		loot_simple_chest((Bit8u*)(chest));
+		host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 
 	} else {
 		DNG03_chest12_func2();

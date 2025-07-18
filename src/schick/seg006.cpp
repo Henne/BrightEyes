@@ -33,16 +33,16 @@ RealPt FIG_get_ptr(signed char fighter_id)
 {
 	RealPt fighter_ptr = (Bit8u*)ds_readd(FIG_LIST_HEAD);
 
-	while (host_readbs(Real2Host(fighter_ptr) + FIGHTER_ID) != fighter_id) {
+	while (host_readbs((Bit8u*)(fighter_ptr) + FIGHTER_ID) != fighter_id) {
 
 		/* check if its the last element */
-		if (host_readd(Real2Host(fighter_ptr) + FIGHTER_NEXT) == 0) {
+		if (host_readd((Bit8u*)(fighter_ptr) + FIGHTER_NEXT) == 0) {
 			/* return list head */
 			return (Bit8u*)ds_readd(FIG_LIST_HEAD);
 		}
 
 		/* set fighter_ptr to the next element */
-		fighter_ptr = (RealPt)host_readd(Real2Host(fighter_ptr) + FIGHTER_NEXT);
+		fighter_ptr = (RealPt)host_readd((Bit8u*)(fighter_ptr) + FIGHTER_NEXT);
 	}
 
 	return fighter_ptr;
@@ -127,7 +127,7 @@ void FIG_draw_figures(void)
 			do_pic_copy(2);
 		}
 
-	} while (list_i = (Bit8u*)Real2Host((RealPt)host_readd(list_i + FIGHTER_NEXT)));
+	} while (list_i = (Bit8u*)(Bit8u*)((RealPt)host_readd(list_i + FIGHTER_NEXT)));
 
 	/* restore a structure */
 	//struct_copy(p_datseg + PIC_COPY_DS_RECT, screen_mode, 8);
@@ -212,7 +212,7 @@ void FIG_set_sheet(signed char fighter_id, signed char val)
 		}
 
 		/* set ptr to ptr->next */
-		ptr = Real2Host(host_readd(ptr + FIGHTER_NEXT));
+		ptr = (Bit8u*)(host_readd(ptr + FIGHTER_NEXT));
 	}
 
 	host_writeb(ptr + FIGHTER_SHEET, val);
@@ -238,7 +238,7 @@ void FIG_make_invisible(signed char fighter_id)
 			return;
 		}
 
-		ptr1 = Real2Host(host_readd(ptr1 + FIGHTER_NEXT));
+		ptr1 = (Bit8u*)(host_readd(ptr1 + FIGHTER_NEXT));
 	}
 
 	host_writeb(ptr1 + FIGHTER_VISIBLE, 0);
@@ -248,7 +248,7 @@ void FIG_make_invisible(signed char fighter_id)
 		ptr2 = (Bit8u*)ds_readd(FIG_LIST_HEAD);
 
 		while (ds_readb(FIG_TWOFIELDED_TABLE + host_readbs(ptr1 + FIGHTER_TWOFIELDED)) != host_readb(ptr2 + FIGHTER_ID)) {
-			ptr2 = Real2Host(host_readd(ptr2 + FIGHTER_NEXT));
+			ptr2 = (Bit8u*)(host_readd(ptr2 + FIGHTER_NEXT));
 		}
 		host_writeb(ptr2 + FIGHTER_VISIBLE, 0);
 	}
@@ -271,7 +271,7 @@ void FIG_make_visible(signed short fighter_id)
 			return;
 		}
 
-		ptr1 = Real2Host(host_readd(ptr1 + FIGHTER_NEXT));
+		ptr1 = (Bit8u*)(host_readd(ptr1 + FIGHTER_NEXT));
 	}
 
 	host_writeb(ptr1 + FIGHTER_VISIBLE, 1);
@@ -282,7 +282,7 @@ void FIG_make_visible(signed short fighter_id)
 
 		while (ds_readb(FIG_TWOFIELDED_TABLE + host_readbs(ptr1 + FIGHTER_TWOFIELDED)) != host_readb(ptr2 + FIGHTER_ID)) {
 
-			ptr2 = Real2Host(host_readd(ptr2 + FIGHTER_NEXT));
+			ptr2 = (Bit8u*)(host_readd(ptr2 + FIGHTER_NEXT));
 
 		}
 
@@ -300,7 +300,7 @@ void FIG_set_weapon_sheet(signed char fighter_id, signed char val)
 			return;
 		}
 
-		ptr = Real2Host(host_readd(ptr + FIGHTER_NEXT));
+		ptr = (Bit8u*)(host_readd(ptr + FIGHTER_NEXT));
 	}
 
 	host_writeb(ptr + FIGHTER_WSHEET, val);
@@ -331,7 +331,7 @@ void FIG_remove_from_list(signed char fighter_id, signed char keep_in_memory)
 		}
 
 		/* ptr = ptr->next; */
-		p = Real2Host(host_readd(p + FIGHTER_NEXT));
+		p = (Bit8u*)(host_readd(p + FIGHTER_NEXT));
 	}
 
 	if (!keep_in_memory) {
@@ -352,13 +352,13 @@ void FIG_remove_from_list(signed char fighter_id, signed char keep_in_memory)
 		/* check if p == tail */
 		if (host_readd(p + FIGHTER_NEXT) == 0) {
 			/* p->prev->next == NULL */
-			host_writed(Real2Host(host_readd(p + FIGHTER_PREV)) + FIGHTER_NEXT , 0);
+			host_writed((Bit8u*)(host_readd(p + FIGHTER_PREV)) + FIGHTER_NEXT , 0);
 		} else {
 			/* remove ptr from list
 			p->prev->next = p->next;
 			p->next->prev = p->prev; */
-			host_writed(Real2Host(host_readd(p + FIGHTER_PREV)) + FIGHTER_NEXT, host_readd(p + FIGHTER_NEXT));
-			host_writed(Real2Host(host_readd(p + FIGHTER_NEXT)) + FIGHTER_PREV, host_readd(p + FIGHTER_PREV));
+			host_writed((Bit8u*)(host_readd(p + FIGHTER_PREV)) + FIGHTER_NEXT, host_readd(p + FIGHTER_NEXT));
+			host_writed((Bit8u*)(host_readd(p + FIGHTER_NEXT)) + FIGHTER_PREV, host_readd(p + FIGHTER_PREV));
 		}
 	}
 
@@ -406,17 +406,17 @@ signed char FIG_add_to_list(signed char fighter_id)
 		return host_readbs((Bit8u*)ds_readd(FIG_LIST_HEAD) + FIGHTER_ID);
 	}
 
-	while (host_readbs(Real2Host(p1) + FIGHTER_ID) != -1) {
+	while (host_readbs((Bit8u*)(p1) + FIGHTER_ID) != -1) {
 		p1 += SIZEOF_FIGHTER;
 	}
 
-//	struct_copy(Real2Host(p1), p_datseg + FIG_LIST_ELEM, SIZEOF_FIGHTER);
-	*((struct dummy*)(Real2Host(p1))) =	*((struct dummy*)(p_datseg + FIG_LIST_ELEM));
+//	struct_copy((Bit8u*)(p1), p_datseg + FIG_LIST_ELEM, SIZEOF_FIGHTER);
+	*((struct dummy*)((Bit8u*)(p1))) =	*((struct dummy*)(p_datseg + FIG_LIST_ELEM));
 
 	if (fighter_id == -1) {
-		host_writeb(Real2Host(p1) + FIGHTER_ID, FIG_set_array());
+		host_writeb((Bit8u*)(p1) + FIGHTER_ID, FIG_set_array());
 	} else {
-		host_writeb(Real2Host(p1) + FIGHTER_ID, fighter_id);
+		host_writeb((Bit8u*)(p1) + FIGHTER_ID, fighter_id);
 	}
 
 	p2 = (Bit8u*)ds_readd(FIG_LIST_HEAD);
@@ -426,55 +426,55 @@ signed char FIG_add_to_list(signed char fighter_id)
 	 * On the same chessboard field, lower z is rendered before larger z.
 	 */
 	if (ds_readbs((FIG_LIST_ELEM + FIGHTER_Z)) != -1) {
-		while ((host_readbs(Real2Host(p2) + FIGHTER_CBX) <= x) &&
-		(host_readbs(Real2Host(p2) + FIGHTER_CBX) != x ||
-		host_readbs(Real2Host(p2) + FIGHTER_CBY) >= y) &&
-		(host_readbs(Real2Host(p2) + FIGHTER_CBX) != x ||
-		host_readbs(Real2Host(p2) + FIGHTER_CBY) != y ||
-		host_readbs(Real2Host(p2) + FIGHTER_Z) <= ds_readbs((FIG_LIST_ELEM + FIGHTER_Z))))
+		while ((host_readbs((Bit8u*)(p2) + FIGHTER_CBX) <= x) &&
+		(host_readbs((Bit8u*)(p2) + FIGHTER_CBX) != x ||
+		host_readbs((Bit8u*)(p2) + FIGHTER_CBY) >= y) &&
+		(host_readbs((Bit8u*)(p2) + FIGHTER_CBX) != x ||
+		host_readbs((Bit8u*)(p2) + FIGHTER_CBY) != y ||
+		host_readbs((Bit8u*)(p2) + FIGHTER_Z) <= ds_readbs((FIG_LIST_ELEM + FIGHTER_Z))))
 		{
 
 			/* p2->next != NULL */
-			if (host_readd(Real2Host(p2) + FIGHTER_NEXT) == 0) {
+			if (host_readd((Bit8u*)(p2) + FIGHTER_NEXT) == 0) {
 
 				/* append to end of the list */
 
 				/* p2->next = p1 */
-				host_writed(Real2Host(p2) + FIGHTER_NEXT, (Bit32u)p1);
+				host_writed((Bit8u*)(p2) + FIGHTER_NEXT, (Bit32u)p1);
 				/* p1->prev = p2 */
-				host_writed(Real2Host(p1) + FIGHTER_PREV, (Bit32u)p2);
+				host_writed((Bit8u*)(p1) + FIGHTER_PREV, (Bit32u)p2);
 				/* p1->next = NULL */
-				host_writed(Real2Host(p1) + FIGHTER_NEXT, 0);
+				host_writed((Bit8u*)(p1) + FIGHTER_NEXT, 0);
 #if !defined(__BORLANDC__)
 				D1_LOG("\tlist appended x = %d, y = %d\n", x, y);
 #endif
-				return host_readbs(Real2Host(p1) + FIGHTER_ID);
+				return host_readbs((Bit8u*)(p1) + FIGHTER_ID);
 			}
 
 			/* p2 = p2->next */
-			p2 = (RealPt)host_readd(Real2Host(p2) + FIGHTER_NEXT);
+			p2 = (RealPt)host_readd((Bit8u*)(p2) + FIGHTER_NEXT);
 		}
 	}
 
 	/* p1->prev = p2->prev; */
-	host_writed(Real2Host(p1) + FIGHTER_PREV, host_readd(Real2Host(p2) + FIGHTER_PREV));
+	host_writed((Bit8u*)(p1) + FIGHTER_PREV, host_readd((Bit8u*)(p2) + FIGHTER_PREV));
 
 	/* if (p2->prev) */
-	if (host_readd(Real2Host(p2) + FIGHTER_PREV) != 0)
+	if (host_readd((Bit8u*)(p2) + FIGHTER_PREV) != 0)
 		/* p2->prev->next = p1 */
-		host_writed(Real2Host(host_readd(Real2Host(p2) + FIGHTER_PREV)) + FIGHTER_NEXT, (Bit32u)p1);
+		host_writed((Bit8u*)(host_readd((Bit8u*)(p2) + FIGHTER_PREV)) + FIGHTER_NEXT, (Bit32u)p1);
 	else
 		/* FIG_list_start = p1 */
 		ds_writed(FIG_LIST_HEAD, (Bit32u)p1);
 
 	/* p2->prev = p1 */
-	host_writed(Real2Host(p2) + FIGHTER_PREV, (Bit32u)p1);
+	host_writed((Bit8u*)(p2) + FIGHTER_PREV, (Bit32u)p1);
 	/* p1->next = p2 */
-	host_writed(Real2Host(p1) + FIGHTER_NEXT, (Bit32u)p2);
+	host_writed((Bit8u*)(p1) + FIGHTER_NEXT, (Bit32u)p2);
 #if !defined(__BORLANDC__)
 	D1_LOG("\tlist insert x = %d, y = %d\n", x, y);
 #endif
-	return host_readbs(Real2Host(p1) + FIGHTER_ID);
+	return host_readbs((Bit8u*)(p1) + FIGHTER_ID);
 }
 
 /**
@@ -547,8 +547,8 @@ void FIG_draw_enemy_pic(signed short loc, signed short id)
 
 	if (ds_readbs(GFXTAB_FIGURES_MAIN + host_readbs(p_enemy + ENEMY_SHEET_GFX_ID) * 5) != ds_readws(FIGHT_FIGS_INDEX)) {
 
-		nvf.src = Real2Host(load_fight_figs(ds_readbs(GFXTAB_FIGURES_MAIN + host_readbs(p_enemy + ENEMY_SHEET_GFX_ID) * 5)));
-		nvf.dst = Real2Host(p1);
+		nvf.src = (Bit8u*)(load_fight_figs(ds_readbs(GFXTAB_FIGURES_MAIN + host_readbs(p_enemy + ENEMY_SHEET_GFX_ID) * 5)));
+		nvf.dst = (Bit8u*)(p1);
 		nvf.no = 1;
 		nvf.type = 0;
 		nvf.width = (Bit8u*)&height_width;

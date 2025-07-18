@@ -394,7 +394,7 @@ void THO_black_finger(void)
 void dramosch_says(Bit8u *msg)
 {
 	GUI_dialogbox((char*)ds_readd(DTP2),
-			Real2Host(host_readd((Bit8u*)ds_readd(TX2_INDEX) + 0xc0)), msg, 0);
+			(Bit8u*)(host_readd((Bit8u*)ds_readd(TX2_INDEX) + 0xc0)), msg, 0);
 }
 
 void THO_ugdalf(void)
@@ -432,7 +432,7 @@ void THO_ugdalf(void)
 
 			do {
 				answer = GUI_dialogbox((char*)ds_readd(DTP2),
-							Real2Host(host_readd((Bit8u*)ds_readd(TX2_INDEX) + 0xc0)),
+							(Bit8u*)(host_readd((Bit8u*)ds_readd(TX2_INDEX) + 0xc0)),
 
 							get_tx2(30), 2,
 							get_tx2(31),
@@ -524,7 +524,7 @@ void academy_analues(void)
 
 		sprintf((char*)ds_readd(DTP2),
 			get_tx2(64),
-			(char*)Real2Host(spell_analues()));
+			(char*)(Bit8u*)(spell_analues()));
 
 		if (buffer1_bak != -1 && buffer1_bak != 222) {
 
@@ -601,7 +601,7 @@ void THO_academy(void)
 
 					sprintf((char*)ds_readd(DTP2),
 						get_tx2(56),
-						(char*)Real2Host(GUI_names_grammar((signed short)0x8002, item_id, 0)));
+						(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8002, item_id, 0)));
 
 					do {
 						answer = GUI_radio((char*)ds_readd(DTP2), 4,
@@ -678,7 +678,7 @@ void THO_academy(void)
 
 					sprintf((char*)ds_readd(DTP2),
 						get_tx2(56),
-						(char*)Real2Host(GUI_names_grammar((signed short)0x8002, item_id, 0)));
+						(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8002, item_id, 0)));
 
 					do {
 						answer = GUI_radio((char*)ds_readd(DTP2), 4,

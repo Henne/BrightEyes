@@ -104,7 +104,7 @@ signed short do_travel_mode(void)
 				if (ds_readws(MOUSE2_EVENT) != 0 || ds_readws(ACTION) == ACTION_ID_PAGE_UP)
 				{
 					i = 0;
-					while ((l_di = host_readb(Real2Host(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + i)) != 255)
+					while ((l_di = host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + i)) != 255)
 					{
 						destinations_tab[i] = get_ttx(235 + ds_writebs(TRV_MENU_TOWNS + i,
 						    (answer = ds_readb((LAND_ROUTES - SIZEOF_LAND_ROUTE + LAND_ROUTE_TOWN_1) + SIZEOF_LAND_ROUTE * l_di)) != ds_readbs(CURRENT_TOWN) ?
@@ -145,7 +145,7 @@ signed short do_travel_mode(void)
 						break;
 					}
 
-					route_id = host_readb(Real2Host(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + answer);
+					route_id = host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + answer);
 					ds_writew(TRV_DESTINATION, ds_readbs(TRV_MENU_TOWNS + answer));
 
 					if (!get_current_season() &&
@@ -161,8 +161,8 @@ signed short do_travel_mode(void)
 
 					ds_writew(WALLCLOCK_UPDATE, 1);
 
-					TM_func1(host_readb(Real2Host(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + answer),
-						(ds_readbs((LAND_ROUTES - SIZEOF_LAND_ROUTE) + SIZEOF_LAND_ROUTE * host_readb(Real2Host(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + answer)) == ds_readbs(CURRENT_TOWN) ? 0 : 1));
+					TM_func1(host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + answer),
+						(ds_readbs((LAND_ROUTES - SIZEOF_LAND_ROUTE) + SIZEOF_LAND_ROUTE * host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + answer)) == ds_readbs(CURRENT_TOWN) ? 0 : 1));
 					ds_writew(WALLCLOCK_UPDATE, 0);
 
 					if (ds_readb(ROUTE59_FLAG) != 0)

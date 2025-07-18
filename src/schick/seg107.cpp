@@ -77,7 +77,7 @@ void use_item(signed short item_pos, signed short hero_pos)
 				} else {
 					sprintf((char*)ds_readd(DTP2),
 						get_ttx(571),
-						(char*)Real2Host(GUI_names_grammar(0, ds_readws(USED_ITEM_ID), 0)));
+						(char*)(Bit8u*)(GUI_names_grammar(0, ds_readws(USED_ITEM_ID), 0)));
 				}
 
 				GUI_output((char*)ds_readd(DTP2));
@@ -397,7 +397,7 @@ void item_weapon_poison(void)
 
 		sprintf((char*)ds_readd(DTP2),
 			get_ttx(739),
-			(char*)Real2Host(GUI_names_grammar((signed short)0x8000, host_readws(get_itemuser() + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID), 0)));
+			(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readws(get_itemuser() + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID), 0)));
 	} else {
 		sprintf((char*)ds_readd(DTP2),
 			get_ttx(805),

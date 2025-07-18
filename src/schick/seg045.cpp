@@ -143,7 +143,7 @@ signed short seg045_01a0(signed short a1, signed short a2, signed short fighter_
 	ds_writeb((FIG_ANISHEETS + 242) + a1 * 0xf3, 0);
 
 	for (i = 0; beeline - 1 > i; i++) {
-		ptr += FIG_copy_it(ptr, Real2Host(host_readd(Real2Host(ds_readd(ANITAB_SHOTBOLT_INDEX + a2 * 4)) + a5 * 4)), -1);
+		ptr += FIG_copy_it(ptr, (Bit8u*)(host_readd((Bit8u*)(ds_readd(ANITAB_SHOTBOLT_INDEX + a2 * 4)) + a5 * 4)), -1);
 	}
 	host_writeb(ptr, -1);
 
@@ -239,7 +239,7 @@ void seg045_0394(signed short a1, Bit8u *hero, signed short spell_ani_id)
 	ds_writeb((FIG_ANISHEETS + 242) + a1 * 0xf3, -1);
 
 	/* copy the ani sequence and terminate it */
-	ptr += FIG_copy_it(ptr, Real2Host(ds_readd((ANITAB_SPELL_INDEX - 4) + spell_ani_id * 4)), -1);
+	ptr += FIG_copy_it(ptr, (Bit8u*)(ds_readd((ANITAB_SPELL_INDEX - 4) + spell_ani_id * 4)), -1);
 	host_writeb(ptr, -1);
 
 	seg045_0273(x, y, spell_ani_id);
@@ -266,7 +266,7 @@ void seg045_041b(signed short a1, Bit8u *enemy, signed short spell_ani_id)
 	ds_writeb((FIG_ANISHEETS + 242) + a1 * 0xf3, -1);
 
 	/* copy the ani sequence and terminate it */
-	ptr += FIG_copy_it(ptr, Real2Host(ds_readd((ANITAB_SPELL_INDEX - 4) + spell_ani_id * 4)), -1);
+	ptr += FIG_copy_it(ptr, (Bit8u*)(ds_readd((ANITAB_SPELL_INDEX - 4) + spell_ani_id * 4)), -1);
 	host_writeb(ptr, -1);
 
 	seg045_0273(x, y, spell_ani_id);

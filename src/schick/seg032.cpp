@@ -545,7 +545,7 @@ void FIG_do_round(void)
 
 					and_ptr_bs(hero + HERO_FLAGS1, 0xfd); /* unset 'sleep' flag */
 
-					fighter_ptr = Real2Host(FIG_get_ptr(host_readbs(hero + HERO_FIGHTER_ID)));
+					fighter_ptr = (Bit8u*)(FIG_get_ptr(host_readbs(hero + HERO_FIGHTER_ID)));
 
 					host_writeb(fighter_ptr + FIGHTER_NVF_NO, host_readbs(hero + HERO_VIEWDIR));
 					host_writeb(fighter_ptr + FIGHTER_RELOAD, -1);
@@ -612,10 +612,10 @@ void FIG_do_round(void)
 #endif
 
 
-									fighter_ptr = Real2Host(FIG_get_ptr(host_readbs(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FIGHTER_ID) + SIZEOF_ENEMY_SHEET * host_readbs(hero + HERO_ENEMY_ID))));
+									fighter_ptr = (Bit8u*)(FIG_get_ptr(host_readbs(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FIGHTER_ID) + SIZEOF_ENEMY_SHEET * host_readbs(hero + HERO_ENEMY_ID))));
 									/* intermediate: fighter_ptr points to the FIGHTER entry of the enemy */
 
-									fighter_ptr = Real2Host(FIG_get_ptr(ds_readbs(FIG_TWOFIELDED_TABLE + host_readbs(fighter_ptr + FIGHTER_TWOFIELDED))));
+									fighter_ptr = (Bit8u*)(FIG_get_ptr(ds_readbs(FIG_TWOFIELDED_TABLE + host_readbs(fighter_ptr + FIGHTER_TWOFIELDED))));
 									/* fighter_ptr now points the FIGHTER entry of the tail part of the enemy */
 									/* should be true: (host_readbs(fighter_ptr + FIGHTER_CBX) == x) and (host_readbs(fighter_ptr + FIGHTER_CBY) == y) */
 
@@ -654,51 +654,51 @@ void FIG_do_round(void)
 
 			enemy = ((Bit8u*)p_datseg + ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * actor_id);
 
-			dec_ptr_bs(Real2Host(enemy) + ENEMY_SHEET_ATTACKS_LEFT);
+			dec_ptr_bs((Bit8u*)(enemy) + ENEMY_SHEET_ATTACKS_LEFT);
 
 			if (FIG_search_obj_on_cb(actor_id + 10, &x_coord, &y_coord) &&
-				FIG_is_enemy_active(Real2Host(enemy)))
+				FIG_is_enemy_active((Bit8u*)(enemy)))
 			{
 #if !defined(__BORLANDC__)
 				/* BE-fix */
 				x_coord = host_readws((Bit8u*)&x_coord);
 				y_coord = host_readws((Bit8u*)&y_coord);
 #endif
-				if (host_readbs(Real2Host(enemy) + ENEMY_SHEET_BLIND) != 0) {
-					dec_ptr_bs(Real2Host(enemy) + ENEMY_SHEET_BLIND);
+				if (host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_BLIND) != 0) {
+					dec_ptr_bs((Bit8u*)(enemy) + ENEMY_SHEET_BLIND);
 				} else {
 
 					ds_writew(FIG_ENEMY_PIC, actor_id + 10);
 
-					host_writebs(Real2Host(enemy) + ENEMY_SHEET_ACTION_ID, 1);
+					host_writebs((Bit8u*)(enemy) + ENEMY_SHEET_ACTION_ID, 1);
 
-					enemy_turn(Real2Host(enemy), actor_id, x_coord, y_coord);
+					enemy_turn((Bit8u*)(enemy), actor_id, x_coord, y_coord);
 
-					if ((host_readbs(Real2Host(enemy) + ENEMY_SHEET_ACTION_ID) == FIG_ACTION_MELEE_ATTACK) ||
-						(host_readbs(Real2Host(enemy) + ENEMY_SHEET_ACTION_ID) == FIG_ACTION_SPELL) ||
-						(host_readbs(Real2Host(enemy) + ENEMY_SHEET_ACTION_ID) == FIG_ACTION_USE_ITEM) ||
-						(host_readbs(Real2Host(enemy) + ENEMY_SHEET_ACTION_ID) == FIG_ACTION_RANGE_ATTACK))
+					if ((host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_ACTION_ID) == FIG_ACTION_MELEE_ATTACK) ||
+						(host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_ACTION_ID) == FIG_ACTION_SPELL) ||
+						(host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_ACTION_ID) == FIG_ACTION_USE_ITEM) ||
+						(host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_ACTION_ID) == FIG_ACTION_RANGE_ATTACK))
 					{
 
 						FIG_do_enemy_action(enemy, actor_id);
 
-						if (host_readbs(Real2Host(enemy) + ENEMY_SHEET_ENEMY_ID) >= 10) {
+						if (host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_ENEMY_ID) >= 10) {
 						/* enemy did attack some enemy (by weapon/spell etc.) */
 
 						/* if the tail of a two-squares enemy has been attacked,
 						 * replace ENEMY_SHEET_ENEMY_ID by the main id of that enemy */
-							if (host_readbs(Real2Host(enemy) + ENEMY_SHEET_ENEMY_ID) >= 30) {
-								sub_ptr_bs(Real2Host(enemy) + ENEMY_SHEET_ENEMY_ID, 20);
+							if (host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_ENEMY_ID) >= 30) {
+								sub_ptr_bs((Bit8u*)(enemy) + ENEMY_SHEET_ENEMY_ID, 20);
 							}
 
-							if (test_bit0(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FLAGS1) + SIZEOF_ENEMY_SHEET * host_readbs(Real2Host(enemy) + ENEMY_SHEET_ENEMY_ID))) /* check 'dead' flag */
+							if (test_bit0(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FLAGS1) + SIZEOF_ENEMY_SHEET * host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_ENEMY_ID))) /* check 'dead' flag */
 							{
 								/* attacked enemy is dead */
-								if (is_in_byte_array(host_readbs(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_GFX_ID) + SIZEOF_ENEMY_SHEET * host_readbs(Real2Host(enemy) + ENEMY_SHEET_ENEMY_ID)), p_datseg + TWO_FIELDED_SPRITE_ID))
+								if (is_in_byte_array(host_readbs(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_GFX_ID) + SIZEOF_ENEMY_SHEET * host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_ENEMY_ID)), p_datseg + TWO_FIELDED_SPRITE_ID))
 								{
 									/* attacked dead enemy is two-squares */
 									/* goal: remove tail part */
-									FIG_search_obj_on_cb(host_readbs(Real2Host(enemy) + ENEMY_SHEET_ENEMY_ID) + 20, &x, &y);
+									FIG_search_obj_on_cb(host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_ENEMY_ID) + 20, &x, &y);
 									/* (x,y) are the coordinates of the tail of the enemy. redundant as fighter_ptr + FIGHTER_CBX, fighter_ptr + FIGHTER_CBY could have been used later. */
 
 #if !defined(__BORLANDC__)
@@ -707,10 +707,10 @@ void FIG_do_round(void)
 									y = host_readws((Bit8u*)&y);
 #endif
 
-									fighter_ptr = Real2Host(FIG_get_ptr(host_readbs(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FIGHTER_ID) + SIZEOF_ENEMY_SHEET * host_readbs(Real2Host(enemy) + ENEMY_SHEET_ENEMY_ID))));
+									fighter_ptr = (Bit8u*)(FIG_get_ptr(host_readbs(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FIGHTER_ID) + SIZEOF_ENEMY_SHEET * host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_ENEMY_ID))));
 									/* intermediate: fighter_ptr points to the FIGHTER entry of the killed enemy */
 
-									fighter_ptr = Real2Host(FIG_get_ptr(ds_readbs(FIG_TWOFIELDED_TABLE + host_readbs(fighter_ptr + FIGHTER_TWOFIELDED))));
+									fighter_ptr = (Bit8u*)(FIG_get_ptr(ds_readbs(FIG_TWOFIELDED_TABLE + host_readbs(fighter_ptr + FIGHTER_TWOFIELDED))));
 									/* fighter_ptr now points the FIGHTER entry of the tail part of the killed enemy */
 									/* should be true: (host_readbs(fighter_ptr + FIGHTER_CBX) == x) and (host_readbs(fighter_ptr + FIGHTER_CBY) == y) */
 
@@ -743,16 +743,16 @@ void FIG_do_round(void)
 						 * It cannot be treated here as the FIGHTER entry of the tail is
 						 * removed in seg005.cpp, which is needed to restore the object under the tail. */
 
-						if (enemy_dead(Real2Host(enemy))) { /* check 'dead' flag */
+						if (enemy_dead((Bit8u*)(enemy))) { /* check 'dead' flag */
 							/* attacking enemy is dead because of critical attack failure */
-							if (is_in_byte_array(host_readbs(Real2Host(enemy) + ENEMY_SHEET_GFX_ID), p_datseg + TWO_FIELDED_SPRITE_ID)) {
+							if (is_in_byte_array(host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_GFX_ID), p_datseg + TWO_FIELDED_SPRITE_ID)) {
 								/* attacking dead enemy is two-squares */
 								/* goal: remove tail part */
 
-								fighter_ptr = Real2Host(FIG_get_ptr(host_readbs(Real2Host(enemy) + ENEMY_SHEET_FIGHTER_ID)));
+								fighter_ptr = (Bit8u*)(FIG_get_ptr(host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_FIGHTER_ID)));
 								/* intermediate: fighter_ptr points to the FIGHTER entry of the enemy */
 
-								fighter_ptr = Real2Host(FIG_get_ptr(ds_readbs(FIG_TWOFIELDED_TABLE + host_readbs(fighter_ptr + FIGHTER_TWOFIELDED))));
+								fighter_ptr = (Bit8u*)(FIG_get_ptr(ds_readbs(FIG_TWOFIELDED_TABLE + host_readbs(fighter_ptr + FIGHTER_TWOFIELDED))));
 								/* fighter_ptr now points the FIGHTER entry of the tail part of the enemy */
 								/* should be true: (host_readbs(fighter_ptr + FIGHTER_CBX) == x) and (host_readbs(fighter_ptr + FIGHTER_CBY) == y) */
 
@@ -829,7 +829,7 @@ void FIG_load_ship_sprites(void)
 
 				/* this sprite has already been buffered */
 
-				ptr = Real2Host(host_readd((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + 4 * l_si));
+				ptr = (Bit8u*)(host_readd((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + 4 * l_si));
 
 			} else {
 				/* this sprite has not been used yet */

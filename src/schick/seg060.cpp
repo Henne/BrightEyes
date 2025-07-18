@@ -109,17 +109,17 @@ void talk_tavern(void)
 
 			} else if (txt_id == 40 || txt_id == 46) {
 
-				gossip_ptr1 = Real2Host(load_current_town_gossip());
+				gossip_ptr1 = (Bit8u*)(load_current_town_gossip());
 
 				do {
-					gossip_ptr2 = Real2Host(load_current_town_gossip());
+					gossip_ptr2 = (Bit8u*)(load_current_town_gossip());
 				} while (gossip_ptr1 == gossip_ptr2);
 
 				sprintf(text_buffer, format, (char*)gossip_ptr1, (char*)gossip_ptr2);
 
 			} else if (txt_id == 66) {
 
-				sprintf(text_buffer, format, Real2Host(get_informer_hint()));
+				sprintf(text_buffer, format, (Bit8u*)(get_informer_hint()));
 
 			} else if (txt_id == 105) {
 
@@ -149,7 +149,7 @@ void talk_tavern(void)
 
 			} else if (txt_id == 119) {
 
-				sprintf(text_buffer, format, Real2Host(get_random_tavern_message()));
+				sprintf(text_buffer, format, (Bit8u*)(get_random_tavern_message()));
 
 			} else if (txt_id == 122 || txt_id == 126 || txt_id == 127 || txt_id == 132) {
 
@@ -160,13 +160,13 @@ void talk_tavern(void)
 			} else if (txt_id == 128) {
 
 				sprintf(text_buffer, format,
-					!ds_readb(CURRENT_INFORMER) ? Real2Host(get_drinkmate()) : Real2Host(get_informer_name()));
+					!ds_readb(CURRENT_INFORMER) ? (Bit8u*)(get_drinkmate()) : (Bit8u*)(get_informer_name()));
 			} else if (txt_id == 131) {
 
 				sprintf(text_buffer, format,
 					(GUI_get_ptr(ds_readb(TLK_TAV_INFORMERSEX) - 1, 0)),
 					(GUI_get_ptr(ds_readb(TLK_TAV_INFORMERSEX) - 1, 0)),
-					Real2Host(load_current_town_gossip()));
+					(Bit8u*)(load_current_town_gossip()));
 
 			} else {
 
@@ -198,8 +198,8 @@ void talk_tavern(void)
 
 				sprintf(answer2_buffer, format,
 					!ds_readb(INFORMER_FLAGS + get_town_lookup_entry()) ?
-						Real2Host(get_drinkmate()) :
-						Real2Host(get_informer_name2()));
+						(Bit8u*)(get_drinkmate()) :
+						(Bit8u*)(get_informer_name2()));
 
 			} else {
 				strcpy(answer2_buffer, format);

@@ -442,7 +442,7 @@ void DNG_stub4(void)
 
 		l4 = (unsigned char)div16(l5);
 
-		ptr = (l4 == 6) ? Real2Host(RealMake(datseg, 4 * l3)) + DNG_STUB4_UNKN2 :
+		ptr = (l4 == 6) ? (Bit8u*)(RealMake(datseg, 4 * l3)) + DNG_STUB4_UNKN2 :
 			(l4 == 5) ? p_datseg + DNG_STUB4_UNKN3 + l3 * 4 :
 			(l4 == 4) ? p_datseg + DNG_STUB4_UNKN1 + l3 * 4 :
 			(l4 == 3) ? p_datseg + DNG_STUB4_UNKN1 + l3 * 4 : p_datseg + DNG_STUB4_UNKN0 + l3 * 4;

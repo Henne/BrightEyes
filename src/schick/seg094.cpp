@@ -510,21 +510,21 @@ signed short TM_unused1(RealPt signpost_ptr, signed short old_route_no)
 	signed short old_route_id;
 	Bit8u *destinations_tab[7];
 
-	old_route_id = host_readb(Real2Host(host_readd(Real2Host(signpost_ptr) + SIGNPOST_LAND_ROUTES)) + old_route_no) - 1;
+	old_route_id = host_readb((Bit8u*)(host_readd((Bit8u*)(signpost_ptr) + SIGNPOST_LAND_ROUTES)) + old_route_no) - 1;
 	ds_writeb(CURRENT_TOWN, (signed char)(town = ds_readws(TRV_DESTINATION)));
 	signpost_ptr = ((Bit8u*)p_datseg + SIGNPOSTS);
 
 	do {
-		if (host_readb(Real2Host(signpost_ptr) + SIGNPOST_TOWN) == town)
+		if (host_readb((Bit8u*)(signpost_ptr) + SIGNPOST_TOWN) == town)
 		{
 			route_no1 = 0;
-			while (host_readbs(Real2Host(host_readd(Real2Host(signpost_ptr) + SIGNPOST_LAND_ROUTES)) + route_no1) != -1)
+			while (host_readbs((Bit8u*)(host_readd((Bit8u*)(signpost_ptr) + SIGNPOST_LAND_ROUTES)) + route_no1) != -1)
 			{
-				if (host_readb(Real2Host(host_readd(Real2Host(signpost_ptr) + SIGNPOST_LAND_ROUTES)) + route_no1) - 1 == old_route_id &&
-					(route_no1 || host_readb(Real2Host(host_readd(Real2Host(signpost_ptr) + SIGNPOST_LAND_ROUTES)) + (route_no1 + 1)) != 255))
+				if (host_readb((Bit8u*)(host_readd((Bit8u*)(signpost_ptr) + SIGNPOST_LAND_ROUTES)) + route_no1) - 1 == old_route_id &&
+					(route_no1 || host_readb((Bit8u*)(host_readd((Bit8u*)(signpost_ptr) + SIGNPOST_LAND_ROUTES)) + (route_no1 + 1)) != 255))
 				{
 					town_i = route_no2 = 0;
-					while ((route_id = host_readb(Real2Host(host_readd(Real2Host(signpost_ptr) + SIGNPOST_LAND_ROUTES)) + route_no2)) != 255)
+					while ((route_id = host_readb((Bit8u*)(host_readd((Bit8u*)(signpost_ptr) + SIGNPOST_LAND_ROUTES)) + route_no2)) != 255)
 					{
 						if (route_no2 != route_no1)
 						{
@@ -565,7 +565,7 @@ signed short TM_unused1(RealPt signpost_ptr, signed short old_route_no)
 
 		signpost_ptr += SIZEOF_SIGNPOST;
 
-	} while (host_readbs(Real2Host(signpost_ptr)) != -1);
+	} while (host_readbs((Bit8u*)(signpost_ptr)) != -1);
 
 	return -1;
 }
@@ -606,7 +606,7 @@ signed short TM_enter_target_town(void)
 				tmp = 0;
 
 				do {
-					tmp2 = host_readb(Real2Host(host_readd(signpost_ptr + 2)) + tmp) - 1;
+					tmp2 = host_readb((Bit8u*)(host_readd(signpost_ptr + 2)) + tmp) - 1;
 
 					if (ds_readbs(LAND_ROUTES + 9 * tmp2) == ds_readbs(CURRENT_TOWN) || ds_readbs((LAND_ROUTES + 1) + 9 * tmp2) == ds_readbs(CURRENT_TOWN))
 					{
@@ -616,7 +616,7 @@ signed short TM_enter_target_town(void)
 
 					tmp++;
 
-				} while (host_readb(Real2Host(host_readd(signpost_ptr + 2)) + tmp) != 255);
+				} while (host_readb((Bit8u*)(host_readd(signpost_ptr + 2)) + tmp) != 255);
 			}
 
 			signpost_ptr += 6;
@@ -676,7 +676,7 @@ void TM_draw_track(signed short a1, signed short length, signed short direction,
 	RealPt fb_start;
 
 	fb_start = (Bit8u*)ds_readd(FRAMEBUF_PTR);
-	ptr = Real2Host(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), host_readws((Bit8u*)ds_readd(BUFFER9_PTR) + 4 * (a1 - 1))), 0xec));
+	ptr = (Bit8u*)(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), host_readws((Bit8u*)ds_readd(BUFFER9_PTR) + 4 * (a1 - 1))), 0xec));
 	ptr += 4;
 
 	if (direction)

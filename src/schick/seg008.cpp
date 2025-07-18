@@ -56,17 +56,17 @@ void save_display_stat(RealPt p) {
 
 	/* write the current active display mode */
 	reg_al = reg_bh;
-	host_writew(Real2Host(p), reg_ax);
+	host_writew((Bit8u*)(p), reg_ax);
 	p += 2;
 
 	/* write the current video mode */
 	reg_al = reg_dl;
-	host_writew(Real2Host(p), reg_ax);
+	host_writew((Bit8u*)(p), reg_ax);
 	p += 2;
 
 	/* write the number of columns in text mode */
 	reg_al = reg_dh;
-	host_writew(Real2Host(p), reg_ax);
+	host_writew((Bit8u*)(p), reg_ax);
 	p += 2;
 
 	reg_ax = 0x1130;
@@ -76,7 +76,7 @@ void save_display_stat(RealPt p) {
 	/* write the number of lines in text mode */
 	reg_dh = 0;
 	reg_dx++;
-	host_writew(Real2Host(p), reg_dx);
+	host_writew((Bit8u*)(p), reg_dx);
 
 	/* restore some registers from the stack */
 	reg_bp = CPU_Pop16();

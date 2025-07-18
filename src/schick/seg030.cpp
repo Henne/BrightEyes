@@ -57,7 +57,7 @@ RealPt seg030_0000(signed short arg0)
 			i = random_schick(15);
 		} while (i == 10 || i == 12 || i == 13 || !ds_readb((INFORMER_FLAGS - 1) + i)|| i == arg0);
 
-		return (RealPt)host_readd(Real2Host((Bit8u*)ds_readd(TEXT_LTX_INDEX) + (0x291 + i) * 4));
+		return (RealPt)host_readd((Bit8u*)((Bit8u*)ds_readd(TEXT_LTX_INDEX) + (0x291 + i) * 4));
 	}
 }
 
@@ -87,7 +87,7 @@ RealPt seg030_008d(signed short arg0)
 		} while (i == 10 || i == 12 || i == 13 || ds_readb((INFORMER_FLAGS - 1) + i)|| i == arg0);
 		ds_writeb((INFORMER_FLAGS - 1) + i, 1);
 
-		return (RealPt)host_readd(Real2Host((Bit8u*)ds_readd(TEXT_LTX_INDEX) + (0x291 + i) * 4));
+		return (RealPt)host_readd((Bit8u*)((Bit8u*)ds_readd(TEXT_LTX_INDEX) + (0x291 + i) * 4));
 	}
 }
 
@@ -175,11 +175,11 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 	ds_writews(DIALOG_STATE, ds_writews(DIALOG_DONE, 0));
 
 	partners_tab = ((Bit8u*)p_datseg + DIALOG_PARTNERS);
-	states_tab = Real2Host(host_readd(Real2Host(partners_tab) + 38 * tlk_informer));
-	txt_offset = host_readws(Real2Host(partners_tab) + 38 * tlk_informer + 4);
+	states_tab = (Bit8u*)(host_readd((Bit8u*)(partners_tab) + 38 * tlk_informer));
+	txt_offset = host_readws((Bit8u*)(partners_tab) + 38 * tlk_informer + 4);
 	ds_writed(DIALOG_TITLE, (Bit32u)(tlk_informer * 38 + partners_tab + 6));
 
-	load_in_head(host_readws(Real2Host(partners_tab) + 38 * tlk_informer + 0x24));
+	load_in_head(host_readws((Bit8u*)(partners_tab) + 38 * tlk_informer + 0x24));
 	dst = (char*)ds_readd(DTP2) + 0x400;
 
 	do {
@@ -286,11 +286,11 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 					if (txt_id == 19) {
 
-						sprintf(dst, fmt, Real2Host(seg030_0000(5)));
+						sprintf(dst, fmt, (Bit8u*)(seg030_0000(5)));
 
 					} else if (txt_id == 20) {
 
-						sprintf(dst, fmt, Real2Host(seg030_008d(5)));
+						sprintf(dst, fmt, (Bit8u*)(seg030_008d(5)));
 
 					} else {
 
@@ -302,11 +302,11 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 					if (txt_id == 35 || txt_id == 36) {
 
-						sprintf(dst, fmt, Real2Host(seg030_008d(1)));
+						sprintf(dst, fmt, (Bit8u*)(seg030_008d(1)));
 
 					} else if (txt_id == 34) {
 
-						sprintf(dst, fmt, Real2Host(seg030_0000(1)));
+						sprintf(dst, fmt, (Bit8u*)(seg030_0000(1)));
 
 					} else {
 
@@ -404,11 +404,11 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 					if (txt_id == 18) {
 
-						sprintf(dst, fmt, Real2Host(seg030_008d(10)));
+						sprintf(dst, fmt, (Bit8u*)(seg030_008d(10)));
 
 					} else if (txt_id == 29) {
 
-						sprintf(dst, fmt, Real2Host(seg030_0000(10)));
+						sprintf(dst, fmt, (Bit8u*)(seg030_0000(10)));
 
 					} else {
 

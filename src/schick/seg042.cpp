@@ -186,7 +186,7 @@ void FIG_do_hero_action(RealPt hero, const signed short hero_pos)
 
 					and_ptr_bs(target_hero + HERO_FLAGS1, 0xfd); /* unset 'asleep' flag */
 
-					p_fighter = Real2Host(FIG_get_ptr(host_readbs(target_hero + HERO_FIGHTER_ID)));
+					p_fighter = (Bit8u*)(FIG_get_ptr(host_readbs(target_hero + HERO_FIGHTER_ID)));
 
 					host_writeb(p_fighter + FIGHTER_NVF_NO, host_readbs(target_hero + HERO_VIEWDIR));
 					host_writeb(p_fighter + FIGHTER_RELOAD, -1);
@@ -656,7 +656,7 @@ void FIG_do_hero_action(RealPt hero, const signed short hero_pos)
 
 					if (FIG_get_range_weapon_type(hero) == -1) {
 
-						p_fighter = Real2Host(FIG_get_ptr(host_readbs(hero + HERO_FIGHTER_ID)));
+						p_fighter = (Bit8u*)(FIG_get_ptr(host_readbs(hero + HERO_FIGHTER_ID)));
 
 						host_writeb(p_fighter + FIGHTER_NVF_NO, host_readbs(hero + HERO_VIEWDIR));
 						host_writeb(p_fighter + FIGHTER_RELOAD, -1);
@@ -821,7 +821,7 @@ void FIG_do_hero_action(RealPt hero, const signed short hero_pos)
 								FIG_remove_from_list(host_readbs(target_monster + ENEMY_SHEET_FIGHTER_ID), 1);
 
 
-								nvf.dst = Real2Host(ds_readd((FIG_LIST_ELEM + FIGHTER_GFXBUF)));
+								nvf.dst = (Bit8u*)(ds_readd((FIG_LIST_ELEM + FIGHTER_GFXBUF)));
 								nvf.src = (Bit8u*)ds_readd(SPELLOBJ_NVF_BUF);
 								nvf.no = 26;
 								nvf.type = 0;
@@ -856,7 +856,7 @@ void FIG_do_hero_action(RealPt hero, const signed short hero_pos)
 
 								if (is_in_byte_array(host_readbs(target_monster + 1), p_datseg + TWO_FIELDED_SPRITE_ID))
 								{
-									p3 = Real2Host(FIG_get_ptr(host_readbs(target_monster + ENEMY_SHEET_FIGHTER_ID)));
+									p3 = (Bit8u*)(FIG_get_ptr(host_readbs(target_monster + ENEMY_SHEET_FIGHTER_ID)));
 
 									FIG_set_sheet(ds_readbs(FIG_TWOFIELDED_TABLE + host_readbs(p3 + FIGHTER_TWOFIELDED)), 3);
 								}
@@ -886,7 +886,7 @@ void FIG_do_hero_action(RealPt hero, const signed short hero_pos)
 
 								if (is_in_byte_array(host_readbs(target_monster + 1), p_datseg + TWO_FIELDED_SPRITE_ID))
 								{
-									p3 = Real2Host(FIG_get_ptr(host_readbs(target_monster + ENEMY_SHEET_FIGHTER_ID)));
+									p3 = (Bit8u*)(FIG_get_ptr(host_readbs(target_monster + ENEMY_SHEET_FIGHTER_ID)));
 
 									FIG_make_invisible(ds_readbs(FIG_TWOFIELDED_TABLE + host_readbs(p3 + FIGHTER_TWOFIELDED)));
 								}

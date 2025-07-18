@@ -77,12 +77,12 @@ void prepare_dungeon_area(void)
 
 		/* clear palette */
 		buf = (HugePt)(ds_readd(BUFFER9_PTR3));
-		memset(Real2Host(buf), 0, 0xc0);
+		memset((Bit8u*)(buf), 0, 0xc0);
 		wait_for_vsync();
-		set_palette(Real2Host(buf), 0x80, 0x40);
+		set_palette((Bit8u*)(buf), 0x80, 0x40);
 
 		do {
-			v1 = read_archive_file(handle, Real2Host(buf), 65000);
+			v1 = read_archive_file(handle, (Bit8u*)(buf), 65000);
 #if !defined(__BORLANDC__)
 			buf = F_PADD(buf, v1);
 #else
@@ -397,8 +397,8 @@ void unused_store(signed short no)
 	EMS_map_memory(ds_readws(EMS_UNUSED_HANDLE), 0, 3);
 
 	size = width * height;
-	memmove(Real2Host((Bit8u*)ds_readd(EMS_FRAME_PTR) + ds_readws(EMS_UNUSED_OFFSET)),
-			Real2Host((Bit8u*)ds_readd(RENDERBUF_PTR) + 0x7530),
+	memmove((Bit8u*)((Bit8u*)ds_readd(EMS_FRAME_PTR) + ds_readws(EMS_UNUSED_OFFSET)),
+			(Bit8u*)((Bit8u*)ds_readd(RENDERBUF_PTR) + 0x7530),
 			size);
 
 	ptr = no * 5 + (Bit8u*)ds_readd(EMS_UNUSED_TAB);
@@ -450,12 +450,12 @@ void load_map(void)
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&fd;
 	nvf.height = (Bit8u*)&fd;
-	nvf.dst = Real2Host(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 18000));
+	nvf.dst = (Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 18000));
 	nvf.no = 16;
 
 	process_nvf(&nvf);
 
-	array_add(Real2Host(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 18000)), 3003, 0xe0, 2);
+	array_add((Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 18000)), 3003, 0xe0, 2);
 
 	ds_writeb(PP20_INDEX, ARCHIVE_FILE_KARTE_DAT);
 
@@ -472,7 +472,7 @@ void load_map(void)
 		/* or read KARTE.DAT from file */
 		fd = load_archive_file(ARCHIVE_FILE_KARTE_DAT);
 
-		read_archive_file(fd, Real2Host(ds_writed(TRAVEL_MAP_PTR, ds_readd(RENDERBUF_PTR))), 64098);
+		read_archive_file(fd, (Bit8u*)(ds_writed(TRAVEL_MAP_PTR, ds_readd(RENDERBUF_PTR))), 64098);
 		close(fd);
 
 		if (ds_readb(EMS_ENABLED) != 0) {
@@ -498,12 +498,12 @@ void load_map(void)
 
 	/* load HSROUT.DAT */
 	fd = load_archive_file(ARCHIVE_FILE_HSROUT_DAT);
-	read_archive_file(fd, Real2Host(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 7600)), 3800);
+	read_archive_file(fd, (Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 7600)), 3800);
 	close(fd);
 
 	/* load SROUT.DAT */
 	fd = load_archive_file(ARCHIVE_FILE_SROUT_DAT);
-	read_archive_file(fd, Real2Host(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 11400)), 5900);
+	read_archive_file(fd, (Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 11400)), 5900);
 	close(fd);
 
 	load_tx(ARCHIVE_FILE_MAPTEXT_LTX);
@@ -560,7 +560,7 @@ void load_splashes(void)
 	close(fd);
 
 	/* nvf.dst = splash_le = ds_readd() */
-	nvf.dst = Real2Host(ds_writed(SPLASH_LE, ds_readd(SPLASH_BUFFER)));
+	nvf.dst = (Bit8u*)(ds_writed(SPLASH_LE, ds_readd(SPLASH_BUFFER)));
 	nvf.src = (Bit8u*)ds_readd(RENDERBUF_PTR);
 	nvf.no = 0;
 	nvf.type = 1;
@@ -569,7 +569,7 @@ void load_splashes(void)
 	fd = (signed short)process_nvf(&nvf);
 
 	/* nvf.dst = splash_ae = ds_readd() */
-	nvf.dst = Real2Host(ds_writed(SPLASH_AE, (Bit32u)((Bit8u*)ds_readd(SPLASH_BUFFER) + fd)));
+	nvf.dst = (Bit8u*)(ds_writed(SPLASH_AE, (Bit32u)((Bit8u*)ds_readd(SPLASH_BUFFER) + fd)));
 	nvf.src = (Bit8u*)ds_readd(RENDERBUF_PTR);
 	nvf.no = 1;
 	nvf.type = 1;
@@ -651,7 +651,7 @@ void load_tlk(signed short index)
 
 	/* read the dialog layouts */
 	read_archive_file(fd,
-		Real2Host(RealMake(datseg, DIALOG_STATES)), off - partners * 0x26);
+		(Bit8u*)(RealMake(datseg, DIALOG_STATES)), off - partners * 0x26);
 
 	/* read the text */
 	text_len = (signed short)read_archive_file(fd, (Bit8u*)ds_readd(BUFFER7_PTR), 64000);
@@ -672,7 +672,7 @@ void unused_load_archive_file(signed short index, signed short a2, Bit32u seg)
 	signed short fd;
 
 	fd = load_archive_file(index);
-	read_archive_file(fd, Real2Host(RealMake(seg, a2)), 64000);
+	read_archive_file(fd, (Bit8u*)(RealMake(seg, a2)), 64000);
 	close(fd);
 }
 

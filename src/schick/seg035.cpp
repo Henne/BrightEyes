@@ -48,9 +48,9 @@ void FIG_tidy_monsters(void)
 
 		/* if the monster is not able to fight anymore ... */
 		if ((ds_readbs(ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * i + ENEMY_SHEET_MON_ID) != 0) &&
-			(enemy_dead(Real2Host(RealMake(datseg, ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * i))) ||
-			enemy_mushroom(Real2Host(RealMake(datseg, ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * i))) ||
-			enemy_petrified(Real2Host(RealMake(datseg, ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * i))) ||
+			(enemy_dead((Bit8u*)(RealMake(datseg, ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * i))) ||
+			enemy_mushroom((Bit8u*)(RealMake(datseg, ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * i))) ||
+			enemy_petrified((Bit8u*)(RealMake(datseg, ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * i))) ||
 			((host_readbs((Bit8u*)ds_readd(CURRENT_FIGHT) + SIZEOF_FIGHT_MONSTER * i + FIGHT_MONSTERS_ROUND_APPEAR) != 0) && (monsters == 0))))
 		{
 
@@ -103,7 +103,7 @@ void FIG_loot_monsters(void)
 
 	for (l_di = 0; l_di < 30; l_di++) {
 
-			a[l_di] = (char*)Real2Host(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 40 * l_di));
+			a[l_di] = (char*)(Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 40 * l_di));
 	}
 
 	do {
@@ -115,7 +115,7 @@ void FIG_loot_monsters(void)
 			/* Apparently a quick "fix" for an unwanted bone with runes in fight THOR8,
 			 * see https://www.crystals-dsa-foren.de/showthread.php?tid=453&pid=172221#pid172221 */
 		{
-			strcpy(a[l_di++], (char*)Real2Host(GUI_name_plural(0, get_itemname(l1))));
+			strcpy(a[l_di++], (char*)(Bit8u*)(GUI_name_plural(0, get_itemname(l1))));
 			l3++;
 		}
 

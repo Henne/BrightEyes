@@ -121,7 +121,7 @@ signed short do_alchemy(Bit8u* hero, signed short recipe_index, signed short fla
 		sprintf((char*)ds_readd(DTP2),
 			get_ttx(731),
 			hero + HERO_NAME2,
-			Real2Host(GUI_names_grammar(1, host_readws(r_ptr + RECIPE_OUTCOME), 0)));
+			(Bit8u*)(GUI_names_grammar(1, host_readws(r_ptr + RECIPE_OUTCOME), 0)));
 
 		GUI_output((char*)ds_readd(DTP2));
 
@@ -134,7 +134,7 @@ signed short do_alchemy(Bit8u* hero, signed short recipe_index, signed short fla
 		sprintf((char*)ds_readd(DTP2),
 			get_ttx(732),
 			hero + HERO_NAME2,
-			Real2Host(GUI_names_grammar(2, host_readws(r_ptr + RECIPE_OUTCOME), 0)));
+			(Bit8u*)(GUI_names_grammar(2, host_readws(r_ptr + RECIPE_OUTCOME), 0)));
 
 		GUI_output((char*)ds_readd(DTP2));
 		return 0;

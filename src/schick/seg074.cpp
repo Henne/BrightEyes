@@ -394,7 +394,7 @@ void draw_automap_square(signed short x, signed short y, signed short color, sig
 	reg_esp -= 50;
 
 	/* make a pointer to this position */
-	Bit8u *p = Real2Host(RealMake(SegValue(ss), reg_sp));
+	Bit8u *p = (Bit8u*)(RealMake(SegValue(ss), reg_sp));
 
 	/* copy the tile from host stack to DOSBox stack */
 	for (i = 0; i < 50; i++, p++) {

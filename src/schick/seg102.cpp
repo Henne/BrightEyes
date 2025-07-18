@@ -327,23 +327,23 @@ signed short MON_cast_spell(RealPt monster, signed char handicap)
 	void (*func)(void);
 	volatile signed short tx_file_bak;
 
-	l_si = host_readbs(Real2Host(monster) + ENEMY_SHEET_CUR_SPELL);
+	l_si = host_readbs((Bit8u*)(monster) + ENEMY_SHEET_CUR_SPELL);
 
 	if (l_si > 0) {
 
 		cost = MON_get_spell_cost(l_si, 0);
 
 		/* check AE */
-		if (host_readws(Real2Host(monster) + ENEMY_SHEET_AE) < cost) {
+		if (host_readws((Bit8u*)(monster) + ENEMY_SHEET_AE) < cost) {
 			return -1;
 		}
 
-		ds_writew(SPELLTEST_RESULT, MON_test_skill(Real2Host(monster), l_si, handicap));
+		ds_writew(SPELLTEST_RESULT, MON_test_skill((Bit8u*)(monster), l_si, handicap));
 
 		if ((ds_readws(SPELLTEST_RESULT) <= 0) || (ds_readds(INGAME_TIMERS + 4 * INGAME_TIMER_RONDRA_NO_SPELLS) > 0)) {
 
 			/* spell failed */
-			MON_sub_ae(Real2Host(monster), MON_get_spell_cost(l_si, 1));
+			MON_sub_ae((Bit8u*)(monster), MON_get_spell_cost(l_si, 1));
 
 			return 0;
 
@@ -377,12 +377,12 @@ signed short MON_cast_spell(RealPt monster, signed char handicap)
 			if (ds_readws(MONSTER_SPELL_AE_COST) == 0) {
 				l_di = -1;
 			} else if (ds_readws(MONSTER_SPELL_AE_COST) == -2) {
-				MON_sub_ae(Real2Host(monster), MON_get_spell_cost(l_si, 1));
+				MON_sub_ae((Bit8u*)(monster), MON_get_spell_cost(l_si, 1));
 				l_di = 0;
 			} else if (ds_readws(MONSTER_SPELL_AE_COST) != -1) {
-				MON_sub_ae(Real2Host(monster), ds_readws(MONSTER_SPELL_AE_COST));
+				MON_sub_ae((Bit8u*)(monster), ds_readws(MONSTER_SPELL_AE_COST));
 			} else {
-				MON_sub_ae(Real2Host(monster), cost);
+				MON_sub_ae((Bit8u*)(monster), cost);
 			}
 
 			return l_di;
@@ -413,7 +413,7 @@ void mspell_verwandlung(void)
 			/* prepare message */
 			sprintf((char*)ds_readd(DTP2),
 				get_tx(114),
-				Real2Host(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
+				(Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
 		}
 	} else if (enemy_mushroom(get_spelltarget_e())) {
 
@@ -581,7 +581,7 @@ void mspell_blitz(void)
 		/* prepare message */
 		sprintf((char*)ds_readd(DTP2),
 			get_tx(85),
-			Real2Host(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
+			(Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
 	}
 }
 
@@ -610,7 +610,7 @@ void mspell_eisenrost(void)
 				/* prepare message */
 				sprintf((char*)ds_readd(DTP2),
 					get_tx(92),
-					Real2Host(GUI_names_grammar((signed short)0x8000, id, 0)),
+					(Bit8u*)(GUI_names_grammar((signed short)0x8000, id, 0)),
 					get_spelltarget() + HERO_NAME2);
 			} else {
 				ds_writew(MONSTER_SPELL_AE_COST, -2);
@@ -633,7 +633,7 @@ void mspell_eisenrost(void)
 			/* prepare message */
 			sprintf((char*)ds_readd(DTP2),
 				get_tx(91),
-				Real2Host(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
+				(Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
 		}
 	}
 }
@@ -782,7 +782,7 @@ void mspell_plumbumbarum(void)
 		/* prepare message */
 		sprintf((char*)ds_readd(DTP2),
 			get_tx(95),
-			Real2Host(GUI_names_grammar((signed short)0x8001, host_readbs(get_spelltarget_e()), 1)));
+			(Bit8u*)(GUI_names_grammar((signed short)0x8001, host_readbs(get_spelltarget_e()), 1)));
 	}
 }
 
@@ -845,7 +845,7 @@ void mspell_paralue(void)
 		/* prepare message */
 		sprintf((char*)ds_readd(DTP2),
 			get_tx(103),
-			Real2Host(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
+			(Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
 	} else {
 		/* target is a hero */
 

@@ -342,7 +342,7 @@ void sell_screen(Bit8u *shop_ptr)
 				if (item_undropable(get_itemsdat(item_id))) {
 					sprintf((char*)ds_readd(DTP2),
 						get_ttx(454),
-						(char*)Real2Host(GUI_names_grammar((signed short)0x8002, item_id, 0)));
+						(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8002, item_id, 0)));
 					GUI_output((char*)ds_readd(DTP2));
 				} else {
 
@@ -355,7 +355,7 @@ void sell_screen(Bit8u *shop_ptr)
 
 							sprintf((char*)ds_readd(DTP2),
 								get_ttx(447),
-								(char*)Real2Host(GUI_names_grammar(4, item_id, 0)));
+								(char*)(Bit8u*)(GUI_names_grammar(4, item_id, 0)));
 
 							nice = GUI_input((char*)ds_readd(DTP2), 2);
 
@@ -388,7 +388,7 @@ void sell_screen(Bit8u *shop_ptr)
 
 							sprintf((char*)ds_readd(DTP2),
 								get_ttx(447),
-								(char*)Real2Host(GUI_names_grammar(4, item_id, 0)));
+								(char*)(Bit8u*)(GUI_names_grammar(4, item_id, 0)));
 
 							nice = GUI_input((char*)ds_readd(DTP2), 2);
 

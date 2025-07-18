@@ -63,7 +63,7 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 	load_tlk(talk_id + ARCHIVE_FILE_DIALOGS_TLK);
 	ds_writew(DIALOG_STATE, ds_writew(DIALOG_DONE, 0));
 	partners_tab = p_datseg + DIALOG_PARTNERS;
-	states_tab = Real2Host(host_readds(partners_tab + 38 * informer_id));
+	states_tab = (Bit8u*)(host_readds(partners_tab + 38 * informer_id));
 	txt_offset = host_readws(partners_tab + 4 + 38 * informer_id);
 	dialog_title = 38 * informer_id + partners_tab + 6;
 	load_in_head(host_readws(partners_tab + 38 * informer_id + 36));
@@ -106,7 +106,7 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 			if (ds_readws(TLK_ID) == 15) {
 
 				if (ds_readws(DIALOG_STATE) == 13) {
-					sprintf(dst, fmt, (char*)Real2Host(waffinfo_herbs()));
+					sprintf(dst, fmt, (char*)(Bit8u*)(waffinfo_herbs()));
 				} else {
 					strcpy(dst, fmt);
 				}
@@ -114,7 +114,7 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 			} else if (ds_readws(TLK_ID) == 14) {
 
 				if (ds_readws(DIALOG_STATE) == 11) {
-					sprintf(dst, fmt, (char*)Real2Host(waffinfo_general()));
+					sprintf(dst, fmt, (char*)(Bit8u*)(waffinfo_general()));
 				} else {
 					strcpy(dst, fmt);
 				}
@@ -122,7 +122,7 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 			} else if (ds_readws(TLK_ID) == 16) {
 
 				if (ds_readws(DIALOG_STATE) == 19 || ds_readws(DIALOG_STATE) == 23) {
-					sprintf(dst, fmt, (char*)Real2Host(waffinfo_weapons()));
+					sprintf(dst, fmt, (char*)(Bit8u*)(waffinfo_weapons()));
 				} else {
 					strcpy(dst, fmt);
 				}
@@ -130,7 +130,7 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 			} else if (ds_readws(TLK_ID) == 1) {
 
 				if (ds_readws(DIALOG_STATE) == 16) {
-					sprintf(dst, fmt, (char*)Real2Host(load_current_town_gossip()));
+					sprintf(dst, fmt, (char*)(Bit8u*)(load_current_town_gossip()));
 				} else {
 					strcpy(dst, fmt);
 				}
@@ -343,13 +343,13 @@ char* get_random_tavern_message(void)
 
 	if (!randval || randval == 19) {
 
-		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)Real2Host(ptr), (char*)Real2Host(load_current_town_gossip()));
+		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)(Bit8u*)(ptr), (char*)(Bit8u*)(load_current_town_gossip()));
 
 		return (char*)ds_readd(TEXT_OUTPUT_BUF);
 
 	} else if (randval == 3) {
 
-		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)Real2Host(ptr), get_ttx(ds_readbs(CURRENT_TOWN) + 235));
+		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)(Bit8u*)(ptr), get_ttx(ds_readbs(CURRENT_TOWN) + 235));
 
 		return (char*)ds_readd(TEXT_OUTPUT_BUF);
 

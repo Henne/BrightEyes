@@ -220,8 +220,8 @@ void FIG_damage_enemy(Bit8u *enemy, Bit16s damage, signed short preserve_renegad
 				if (ds_readb(ENEMY_SHEETS + ENEMY_SHEET_GFX_ID + i * SIZEOF_ENEMY_SHEET) != 26)
 					or_ds_bs((ENEMY_SHEETS + ENEMY_SHEET_FLAGS2) + i * SIZEOF_ENEMY_SHEET, 4); /* set 'scared' flag */
 #else
-				if ( ((struct enemy_sheets*)(Real2Host(RealMake(datseg, ENEMY_SHEETS))))[i].gfx_id != 0x1a)
-					((struct enemy_sheets*)(Real2Host(RealMake(datseg, ENEMY_SHEETS))))[i].flags2.scared = 1;
+				if ( ((struct enemy_sheets*)((Bit8u*)(RealMake(datseg, ENEMY_SHEETS))))[i].gfx_id != 0x1a)
+					((struct enemy_sheets*)((Bit8u*)(RealMake(datseg, ENEMY_SHEETS))))[i].flags2.scared = 1;
 #endif
 			}
 		}

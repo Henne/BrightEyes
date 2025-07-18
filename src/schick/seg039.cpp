@@ -318,8 +318,8 @@ void FIG_load_enemy_sprites(Bit8u *ptr, signed short x, signed short y)
 
 	if (is_in_byte_array(host_readb(ptr + ENEMY_SHEET_GFX_ID), p_datseg + TWO_FIELDED_SPRITE_ID)) {
 
-		nvf.src = Real2Host(load_fight_figs(ds_readw(FIG_LIST_ELEM)));
-		nvf.dst = Real2Host(ds_readd((FIG_LIST_ELEM+FIGHTER_GFXBUF)));
+		nvf.src = (Bit8u*)(load_fight_figs(ds_readw(FIG_LIST_ELEM)));
+		nvf.dst = (Bit8u*)(ds_readd((FIG_LIST_ELEM+FIGHTER_GFXBUF)));
 		nvf.no = ds_readbs((FIG_LIST_ELEM+FIGHTER_NVF_NO));
 		nvf.type = 0;
 		nvf.width = (Bit8u*)&l1;
@@ -400,7 +400,7 @@ void FIG_init_enemies(void)
 
 		/* load the sprites */
 #if !defined(__BORLANDC__)
-		FIG_load_enemy_sprites(Real2Host(RealMake(datseg, ENEMY_SHEETS + i * SIZEOF_ENEMY_SHEET)), x, y);
+		FIG_load_enemy_sprites((Bit8u*)(RealMake(datseg, ENEMY_SHEETS + i * SIZEOF_ENEMY_SHEET)), x, y);
 #else
 		FIG_load_enemy_sprites((Bit8u*)&((struct enemy_sheets*)(p_datseg +  ENEMY_SHEETS))[i], x, y);
 #endif

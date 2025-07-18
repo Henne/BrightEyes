@@ -554,7 +554,7 @@ void tevent_103(void)
 #ifdef M302de_ORIGINAL_BUGFIX
 	hero = (Bit8u*)get_first_hero_available_in_group();
 #else
-	hero = Real2Host(get_first_hero_available_in_group);
+	hero = (Bit8u*)(get_first_hero_available_in_group);
 #endif
 
 	do {

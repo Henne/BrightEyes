@@ -112,7 +112,7 @@ void spell_exposami(void)
 			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 				get_tx(33),		/* "%d %s" */
 				arr[i][1],
-				(char*)Real2Host(GUI_names_grammar(((arr[i][1] > 1)? 4 : 0) + 0x4000,
+				(char*)(Bit8u*)(GUI_names_grammar(((arr[i][1] > 1)? 4 : 0) + 0x4000,
 									arr[i][0], 1)));
 			strcat((char*)ds_readd(DTP2),
 				(char*)ds_readd(TEXT_OUTPUT_BUF));
@@ -131,7 +131,7 @@ void spell_exposami(void)
 		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 			get_tx(33),
 			arr[count - 1][1],	/* TODO: this field access produces other code */
-			(char*)Real2Host(GUI_names_grammar((arr[count - 1][1] > 1 ? 4 : 0) + 0x4000,
+			(char*)(Bit8u*)(GUI_names_grammar((arr[count - 1][1] > 1 ? 4 : 0) + 0x4000,
 								arr[count - 1][0], 1)));
 
 		strcat((char*)ds_readd(DTP2),
@@ -173,14 +173,14 @@ void spell_odem_arcanum(void)
 
 			sprintf((char*)ds_readd(DTP2),
 				get_tx(81),
-				(char*)Real2Host(GUI_names_grammar((signed short)0x8000, id, 0)));
+				(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8000, id, 0)));
 
 			or_ptr_bs(get_spelluser() + pos * SIZEOF_INVENTORY + (HERO_INVENTORY + INVENTORY_FLAGS), 0x80); /* set 'magic_revealed' flag */
 
 		} else {
 			sprintf((char*)ds_readd(DTP2),
 				get_tx(82),
-				(char*)Real2Host(GUI_names_grammar((signed short)0x8000, id, 0)));
+				(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8000, id, 0)));
 		}
 	}
 }
@@ -375,7 +375,7 @@ void spell_blitz(void)
 		/* prepare the message */
 		sprintf((char*)ds_readd(DTP2),
 			get_tx(85),
-			(char*)Real2Host(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
+			(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
 	}
 }
 
@@ -453,7 +453,7 @@ void spell_eisenrost(void)
 						or_ptr_bs(get_spelltarget() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_FLAGS), 0x01); /* set 'broken' flag */
 						sprintf((char*)ds_readd(DTP2),
 							get_tx(92),
-							(char*)Real2Host(GUI_names_grammar((signed short)0x8000, id, 0)),
+							(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8000, id, 0)),
 							(char*)(get_spelltarget() + HERO_NAME2));
 					} else {
 						ds_writew(SPELL_SPECIAL_AECOST, -2);
@@ -483,7 +483,7 @@ void spell_eisenrost(void)
 				/* prepare message */
 				sprintf((char*)ds_readd(DTP2),
 					get_tx(91),
-					(char*)Real2Host(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
+					(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
 			}
 		}
 	}
@@ -716,7 +716,7 @@ void spell_plumbumbarum(void)
 	/* prepare the message */
 	sprintf((char*)ds_readd(DTP2),
 		get_tx(95),
-		(char*)Real2Host(GUI_names_grammar((signed short)0x8001, host_readbs(get_spelltarget_e()), 1)));
+		(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8001, host_readbs(get_spelltarget_e()), 1)));
 }
 
 void spell_radau(void)

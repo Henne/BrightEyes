@@ -118,7 +118,7 @@ void split_textbuffer(Bit8u *dst, RealPt src, Bit32u len)
 
 	for (; i != len; src++, i++) {
 		/* continue if not the end of the string */
-		if (!host_readbs(Real2Host(src))) {
+		if (!host_readbs((Bit8u*)(src))) {
 
 			/* write the adress of the next string */
 			host_writed(dst, (Bit32u)(src + 1));
@@ -310,7 +310,7 @@ signed short load_game_state(void)
 				/* write file content to TEMP */
 				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 					(char*)ds_readd(STR_TEMP_XX_PTR2),
-					(char*)Real2Host(ds_readd(FNAMES + 4 * i)));
+					(char*)(Bit8u*)(ds_readd(FNAMES + 4 * i)));
 
 				/* TODO: should be O_BINARY | O_WRONLY */
 				handle = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
@@ -357,8 +357,8 @@ signed short load_game_state(void)
 						reg_sp -= 20;
 
 						RealPt r_name = RealMake(SegValue(ss), reg_sp);
-						strncpy((char*)Real2Host(r_name), name, 20);
-						host_writeb(Real2Host(r_name) + 20, 0);
+						strncpy((char*)(Bit8u*)(r_name), name, 20);
+						host_writeb((Bit8u*)(r_name) + 20, 0);
 						read_chr_temp(r_name, host_readbs(hero_i + HERO_GROUP_POS) - 1, host_readbs(hero_i + HERO_GROUP_NO));
 						reg_sp = sp_bak;
 					}
@@ -630,7 +630,7 @@ signed short save_game_state(void)
 
 			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 				(char*)ds_readd(STR_TEMP_XX_PTR2),
-				(char*)Real2Host(ds_readd(FNAMES + 4 * tw_bak)));
+				(char*)(Bit8u*)(ds_readd(FNAMES + 4 * tw_bak)));
 
 			l1 = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
 
@@ -723,7 +723,7 @@ signed short read_chr_temp(RealPt fname, signed short hero_pos, signed short a2)
 
 	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 		(char*)ds_readd(STR_TEMP_XX_PTR2),
-		(char*)Real2Host(fname));
+		(char*)(Bit8u*)(fname));
 
 	if ((handle = open((char*)ds_readd(TEXT_OUTPUT_BUF), O_BINARY | O_RDWR)) == -1) {
 		copy_file_to_temp(fname, (char*)ds_readd(TEXT_OUTPUT_BUF));

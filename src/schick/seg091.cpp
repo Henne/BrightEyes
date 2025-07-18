@@ -223,12 +223,12 @@ void DNG13_chest0(RealPt chest)
 {
 	RealPt bak;
 
-	bak = (RealPt)host_readd(Real2Host(chest) + 0xb);
-	host_writed(Real2Host(chest) + 0xb, (Bit32u)RealMake(datseg, DNG13_CHEST0_CONTENT));
+	bak = (RealPt)host_readd((Bit8u*)(chest) + 0xb);
+	host_writed((Bit8u*)(chest) + 0xb, (Bit32u)RealMake(datseg, DNG13_CHEST0_CONTENT));
 
-	loot_chest(Real2Host(chest), get_tx(10), get_tx(11));
+	loot_chest((Bit8u*)(chest), get_tx(10), get_tx(11));
 
-	host_writed(Real2Host(chest) + 0xb, (Bit32u)bak);
+	host_writed((Bit8u*)(chest) + 0xb, (Bit32u)bak);
 }
 
 void DNG13_corpse1(RealPt ptr)
@@ -240,12 +240,12 @@ void DNG13_chest1(RealPt chest)
 {
 	RealPt bak;
 
-	bak = (RealPt)host_readd(Real2Host(chest) + 0xb);
-	host_writed(Real2Host(chest) + 0xb, (Bit32u)RealMake(datseg, DNG13_CHEST1_CONTENT));
+	bak = (RealPt)host_readd((Bit8u*)(chest) + 0xb);
+	host_writed((Bit8u*)(chest) + 0xb, (Bit32u)RealMake(datseg, DNG13_CHEST1_CONTENT));
 
-	loot_chest(Real2Host(chest), get_tx(10), get_tx(11));
+	loot_chest((Bit8u*)(chest), get_tx(10), get_tx(11));
 
-	host_writed(Real2Host(chest) + 0xb, (Bit32u)bak);
+	host_writed((Bit8u*)(chest) + 0xb, (Bit32u)bak);
 }
 
 /**

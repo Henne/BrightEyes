@@ -219,9 +219,9 @@ void tevent_014(void)
 
 void tevent_014_chest(RealPt chest)
 {
-	host_writed(Real2Host(chest) + 11, (Bit32u)RealMake(datseg, TEVENT014_CHEST));
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)RealMake(datseg, TEVENT014_CHEST));
 
-	loot_chest(Real2Host(chest), get_tx2(47), get_tx2(48));
+	loot_chest((Bit8u*)(chest), get_tx2(47), get_tx2(48));
 }
 
 void tevent_015(void)

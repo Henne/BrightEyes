@@ -358,7 +358,7 @@ signed short menu_enter_delete(RealPt ptr, signed short entries, signed short mo
 		i = i_max;
 		if (entries > 10) {
 			ds_writed(RADIO_NAME_LIST + 4 * i,
-				host_readd(Real2Host((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x48c)));
+				host_readd((Bit8u*)((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x48c)));
 			i++;
 		}
 

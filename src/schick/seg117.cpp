@@ -779,7 +779,7 @@ void TLK_way_to_ruin(signed short state)
 
 		/* Original-Bug: hero != RUIN_HERO */
 		hero_disease_test((Bit8u*)ds_readd(RUIN_HERO), 2,
-			25 - (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(Real2Host(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK)))));
+			25 - (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs((Bit8u*)(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK)))));
 
 		loose_random_item((Bit8u*)ds_readd(RUIN_HERO), 10, get_ttx(506));
 

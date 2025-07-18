@@ -239,7 +239,7 @@ signed short test_skill(Bit8u *hero, signed short skill, signed char handicap)
 
 		/* automatically get hero with best senses in beginner mode */
 		if ((skill == TA_SINNESSCHAERFE) && (ds_readws(GAME_MODE) == GAME_MODE_BEGINNER)) {
-			hero = Real2Host(get_proper_hero(TA_SINNESSCHAERFE));
+			hero = (Bit8u*)(get_proper_hero(TA_SINNESSCHAERFE));
 
 #if defined(__BORLANDC__)
 			/* seems to have been debug stuff with conditional compilation */

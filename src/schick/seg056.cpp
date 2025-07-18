@@ -287,7 +287,7 @@ void buy_screen(void)
 			sprintf((char*)ds_readd(DTP2),
 				(char*)fmt_d_s.a,
 				l4,
-				(char*)Real2Host(GUI_names_grammar(0x4000 +  (l4 > 1 || l4 == 0 ? 4 : 0), item_id, 0)));
+				(char*)(Bit8u*)(GUI_names_grammar(0x4000 +  (l4 > 1 || l4 == 0 ? 4 : 0), item_id, 0)));
 
 			if (item_weapon(get_itemsdat(item_id))) {
 
@@ -318,7 +318,7 @@ void buy_screen(void)
 						set_textcolor(111, 0);
 					} else {
 
-						if (!is_in_word_array(item_id, (short*)Real2Host((ds_readds((WEARABLE_ITEMS_INDEX - 4) + 4 * host_readbs(hero1 + HERO_TYPE)))))) {
+						if (!is_in_word_array(item_id, (short*)(Bit8u*)((ds_readds((WEARABLE_ITEMS_INDEX - 4) + 4 * host_readbs(hero1 + HERO_TYPE)))))) {
 							set_textcolor(201, 0);
 						}
 					}
@@ -394,14 +394,14 @@ void buy_screen(void)
 
 							sprintf((char*)ds_readd(DTP2),
 								get_ttx(818),
-								(char*)Real2Host(GUI_names_grammar(4, item_id, 0)));
+								(char*)(Bit8u*)(GUI_names_grammar(4, item_id, 0)));
 
 							l4 = GUI_input((char*)ds_readd(DTP2), 2);
 						}
 					} else {
 						sprintf((char*)ds_readd(DTP2),
 							get_ttx(441),
-							(char*)Real2Host(GUI_names_grammar(4, item_id, 0)));
+							(char*)(Bit8u*)(GUI_names_grammar(4, item_id, 0)));
 
 						l4 = GUI_input((char*)ds_readd(DTP2), 2);
 					}
@@ -458,7 +458,7 @@ void buy_screen(void)
 
 						sprintf((char*)ds_readd(DTP2),
 							get_ttx(441),
-							(char*)Real2Host(GUI_names_grammar(4, host_readws((Bit8u*)ds_readd(BUYITEMS) + 7 * (l7 + item)), 0)));
+							(char*)(Bit8u*)(GUI_names_grammar(4, host_readws((Bit8u*)ds_readd(BUYITEMS) + 7 * (l7 + item)), 0)));
 
 						l4 = GUI_input((char*)ds_readd(DTP2), 2);
 					}

@@ -57,7 +57,7 @@ treasure_type t_map(RealPt ptr, const int off)
 		return (treasure_type)NULL;
 	}
 
-	RealPt func = (RealPt)host_readd(Real2Host(ptr) + off);
+	RealPt func = (RealPt)host_readd((Bit8u*)(ptr) + off);
 
 	/* early out for NULL pointers */
 	if (func == NULL)	return (treasure_type)NULL;

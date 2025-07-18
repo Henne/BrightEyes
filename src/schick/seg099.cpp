@@ -136,7 +136,7 @@ void spell_illusionen(void)
 		/* print a failure message */
 		sprintf((char*)ds_readd(DTP2),
 			get_tx(3),
-			(char*)Real2Host(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
+			(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 
 		/* costs 2 AE */
 		ds_writew(SPELL_SPECIAL_AECOST, 2);
@@ -221,7 +221,7 @@ void spell_band(void)
 
 		sprintf((char*)ds_readd(DTP2),
 				get_tx(6),
-				Real2Host(GUI_names_grammar((signed short)0x8000,
+				(Bit8u*)(GUI_names_grammar((signed short)0x8000,
 					host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 	} else {
 		/* cast hero */
@@ -265,7 +265,7 @@ void spell_bannbaladin(void)
 
 		sprintf((char*)ds_readd(DTP2),
 				get_tx(8),
-				Real2Host(GUI_names_grammar(0,
+				(Bit8u*)(GUI_names_grammar(0,
 					host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 	} else {
 
@@ -279,7 +279,7 @@ void spell_bannbaladin(void)
 
 		sprintf((char*)ds_readd(DTP2),
 				get_tx(9),
-				Real2Host(GUI_names_grammar((signed short)0x8000,
+				(Bit8u*)(GUI_names_grammar((signed short)0x8000,
 					host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 	}
 }
@@ -301,7 +301,7 @@ void spell_boeser_blick(void)
 		/* prepare message */
 		sprintf((char*)ds_readd(DTP2),
 			get_tx(10),
-			(char*)Real2Host(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
+			(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 
 	}
 }
@@ -352,7 +352,7 @@ void spell_herrdertiere(void)
 
 		sprintf((char*)ds_readd(DTP2),
 				get_tx(11),
-				Real2Host(GUI_names_grammar(0,
+				(Bit8u*)(GUI_names_grammar(0,
 					host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 	} else {
 
@@ -366,7 +366,7 @@ void spell_herrdertiere(void)
 
 			sprintf((char*)ds_readd(DTP2),
 				get_tx(9),
-				Real2Host(GUI_names_grammar((signed short)0x8000,
+				(Bit8u*)(GUI_names_grammar((signed short)0x8000,
 					host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 		}
 	}
@@ -388,7 +388,7 @@ void spell_horriphobus(void)
 
 		sprintf((char*)ds_readd(DTP2),
 			get_tx(12),
-			Real2Host(GUI_names_grammar((signed short)0x8000,
+			(Bit8u*)(GUI_names_grammar((signed short)0x8000,
 				host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 	}
 }
@@ -433,7 +433,7 @@ void spell_somnigravis(void)
 		/* prepare message */
 		sprintf((char*)ds_readd(DTP2),
 			get_tx(13),
-			Real2Host(GUI_names_grammar((signed short)0x8000,
+			(Bit8u*)(GUI_names_grammar((signed short)0x8000,
 				host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 		return;
 	}
@@ -481,7 +481,7 @@ void spell_zwingtanz(void)
 		/* prepare message */
 		sprintf((char*)ds_readd(DTP2),
 			get_tx(14),
-			Real2Host(GUI_names_grammar((signed short)0x8000,
+			(Bit8u*)(GUI_names_grammar((signed short)0x8000,
 				host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 	}
 }
@@ -564,7 +564,7 @@ void spell_skelettarius(void)
 		/* prepare message */
 		sprintf((char*)ds_readd(DTP2),
 			get_tx(15),
-			Real2Host(GUI_names_grammar((signed short)0x8000,
+			(Bit8u*)(GUI_names_grammar((signed short)0x8000,
 				host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 
 		/* set ae costs */
@@ -574,10 +574,10 @@ void spell_skelettarius(void)
 		/* prepare message */
 		sprintf((char*)ds_readd(DTP2),
 			get_tx(16),
-			Real2Host(GUI_names_grammar((signed short)0x8000,
+			(Bit8u*)(GUI_names_grammar((signed short)0x8000,
 				host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 
-		fighter = Real2Host(FIG_get_ptr(host_readbs(get_spelltarget_e() + ENEMY_SHEET_FIGHTER_ID)));
+		fighter = (Bit8u*)(FIG_get_ptr(host_readbs(get_spelltarget_e() + ENEMY_SHEET_FIGHTER_ID)));
 
 		x = host_readbs(fighter + FIGHTER_CBX);
 		y = host_readbs(fighter + FIGHTER_CBY);
@@ -633,7 +633,7 @@ void spell_skelettarius(void)
 #ifdef M302de_ORIGINAL_BUGFIX
 		/* Original-Bug 1:
 		 * restore the FIGHTER_OBJ_ID value. */
-		fighter = Real2Host(FIG_get_ptr(host_readbs(get_spelltarget_e() + ENEMY_SHEET_FIGHTER_ID)));
+		fighter = (Bit8u*)(FIG_get_ptr(host_readbs(get_spelltarget_e() + ENEMY_SHEET_FIGHTER_ID)));
 		host_writebs(fighter + FIGHTER_OBJ_ID, obj_id_bak);
 #endif
 	}

@@ -431,7 +431,7 @@ signed short gather_herbs(Bit8u *hero, signed short hours, signed short handicap
 				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 					(char*)p_datseg + GATHER_HERBS_STR_FOUND, /* "%d %s" */
 					herb_count[herb_index],
-					Real2Host(GUI_names_grammar((herb_count[herb_index] > 1 ? 4 : 0) + 0x4002, ds_readb(GATHER_HERBS_TABLE + 4 * herb_index + GATHER_HERBS_ITEM_ID), 0)));
+					(Bit8u*)(GUI_names_grammar((herb_count[herb_index] > 1 ? 4 : 0) + 0x4002, ds_readb(GATHER_HERBS_TABLE + 4 * herb_index + GATHER_HERBS_ITEM_ID), 0)));
 
 				strcat((char*)ds_readd(DTP2), (char*)ds_readd(TEXT_OUTPUT_BUF));
 

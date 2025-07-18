@@ -506,7 +506,7 @@ unsigned short drop_item(Bit8u *hero, signed short pos, signed short no)
 
 			sprintf((char*)ds_readd(DTP2),
 				get_ttx(454),
-				(char*)Real2Host(GUI_names_grammar((signed short)0x8002, item, 0)));
+				(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8002, item, 0)));
 
 			GUI_output((char*)ds_readd(DTP2));
 		} else {
@@ -516,7 +516,7 @@ unsigned short drop_item(Bit8u *hero, signed short pos, signed short no)
 				if (no == -1) {
 					sprintf((char*)ds_readd(DTP2),
 						get_ttx(219),
-						(char*)Real2Host(GUI_names_grammar(6, item, 0)));
+						(char*)(Bit8u*)(GUI_names_grammar(6, item, 0)));
 
 					do {
 						answer = GUI_input((char*)ds_readd(DTP2), 2);
@@ -643,7 +643,7 @@ signed short get_item(signed short id, signed short unused, signed short no)
 
 			sprintf((char*)ds_readd(DTP2),
 				get_ttx(549),
-				(char*)Real2Host(GUI_names_grammar(((no > 1) ? 4 : 0) + 2, id, 0)));
+				(char*)(Bit8u*)(GUI_names_grammar(((no > 1) ? 4 : 0) + 2, id, 0)));
 
 			if (GUI_bool((char*)ds_readd(DTP2))) {
 
@@ -747,7 +747,7 @@ void loose_random_item(Bit8u *hero, signed short percent, Bit8u *text)
 
 			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 				(char*)text, hero + HERO_NAME2,
-				Real2Host(GUI_names_grammar(0, item, 0)));
+				(Bit8u*)(GUI_names_grammar(0, item, 0)));
 
 			GUI_output((char*)ds_readd(TEXT_OUTPUT_BUF));
 
