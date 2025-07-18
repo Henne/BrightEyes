@@ -369,7 +369,7 @@ signed short start_midi_playback(signed short seq)
 RealPt prepare_timbre(signed short a1, signed short patch)
 {
 #if defined(__BORLANDC__)
-	RealPt buf;
+	char *buf;
 
 	seek_archive_file(ds_readws(SAMPLE_AD_HANDLE), 0, 0);
 
@@ -379,6 +379,7 @@ RealPt prepare_timbre(signed short a1, signed short patch)
 		if (ds_readbs((SAMPLE_AD_IDX_ENTRY+1)) == -1) {
 			return NULL;
 		}
+
 	} while ((ds_readbs((SAMPLE_AD_IDX_ENTRY+1)) != a1) || (ds_readbs(SAMPLE_AD_IDX_ENTRY) != patch));
 
 	seek_archive_file(ds_readws(SAMPLE_AD_HANDLE), ds_readd((SAMPLE_AD_IDX_ENTRY+2)), 0);
@@ -387,9 +388,9 @@ RealPt prepare_timbre(signed short a1, signed short patch)
 
 	buf = schick_alloc(ds_readw(SAMPLE_AD_LENGTH));
 
-	host_writew(Real2Host(buf), ds_readw(SAMPLE_AD_LENGTH));
+	host_writew(buf, ds_readw(SAMPLE_AD_LENGTH));
 
-	read_archive_file(ds_readws(SAMPLE_AD_HANDLE), Real2Host(buf) + 2, ds_readw(SAMPLE_AD_LENGTH) - 2);
+	read_archive_file(ds_readws(SAMPLE_AD_HANDLE), buf + 2, ds_readw(SAMPLE_AD_LENGTH) - 2);
 
 	return buf;
 #else
@@ -429,7 +430,7 @@ signed short load_music_driver(RealPt fname, signed short type, signed short por
 
 		ds_writed(AIL_MUSIC_DRIVER_DESCR, (Bit32u)AIL_describe_driver(ds_readw(AIL_MUSIC_DRIVER_ID)));
 
-		if (host_readws(Real2Host((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR)) + 2) == type)
+		if (host_readws((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 2) == type)
 		{
 			if (port == -1) {
 				port = host_readws((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 0xc);
@@ -463,7 +464,7 @@ signed short load_music_driver(RealPt fname, signed short type, signed short por
 			} else {
 
 				/* no sound hardware found */
-				GUI_output(Real2Host(RealMake(datseg, SND_TXT_HW_NOT_FOUND)));
+				GUI_output((char*)p_datseg +SND_TXT_HW_NOT_FOUND);
 				exit_AIL();
 			}
 		}
@@ -706,7 +707,7 @@ signed short load_digi_driver(RealPt fname, signed short type, signed short io, 
 
 		ds_writed(AIL_DIGI_DRIVER_DESCR, (Bit32u)AIL_describe_driver(ds_readw(AIL_DIGI_DRIVER_ID)));
 
-		if (host_readws(Real2Host((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR)) + 2) == type) {
+		if (host_readws((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR) + 2) == type) {
 
 			if (io == -1) {
 				io = host_readws((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR) + 0xc);
@@ -725,7 +726,7 @@ signed short load_digi_driver(RealPt fname, signed short type, signed short io, 
 				return 1;
 			} else {
 				/* no sound hardware found */
-				GUI_output(Real2Host(RealMake(datseg, SND_TXT_HW_NOT_FOUND2)));
+				GUI_output((char*)p_datseg + SND_TXT_HW_NOT_FOUND2);
 				free_voc_buffer();
 			}
 		}
@@ -859,10 +860,10 @@ signed short load_regular_file(Bit16u index)
 	signed short handle;
 
 	if ( (handle = open((char*)ds_readd(FNAMES + index * 4), O_BINARY | O_RDWR)) == -1) {
+
 		/* "FILE %s IS MISSING!" */
-		sprintf((char*)ds_readd(DTP2),
-			(char*)ds_readd(STR_FILE_MISSING_PTR),
-			(char*)Real2Host(ds_readd(FNAMES + index * 4)));
+		sprintf((char*)ds_readd(DTP2), (char*)ds_readd(STR_FILE_MISSING_PTR), (char*)ds_readd(FNAMES + index * 4));
+
 		ds_writeb(MISSING_FILE_GUILOCK, 1);
 		GUI_output((char*)ds_readd(DTP2));
 		ds_writeb(MISSING_FILE_GUILOCK, 0);
@@ -888,12 +889,10 @@ signed short load_archive_file(Bit16u index)
 
 signed short open_temp_file(unsigned short index)
 {
-	unsigned char tmppath[40];
+	char tmppath[40];
 	signed short handle;
 
-	sprintf((char*)Real2Host(tmppath),
-		(char*)ds_readd(STR_TEMP_XX_PTR2),
-		(char*)Real2Host(ds_readd(FNAMES + index * 4)));
+	sprintf((char*)tmppath, (char*)ds_readd(STR_TEMP_XX_PTR2), (char*)ds_readd(FNAMES + index * 4));
 
 	while ( (handle = open(tmppath, O_BINARY | O_RDWR)) == -1) {
 
@@ -980,11 +979,7 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 	va = nvf_type & 0x80;
 	nvf_type &= 0x7f;
 
-#if !defined(__BORLANDC__)
 	pics = host_readws(F_PADD(nvf->src, 1L));
-#else
-	pics = host_readws(Real2Host(F_PADD(nvf->src, 1L)));
-#endif
 
 	if (nvf->no < 0)
 		nvf->no = 0;
@@ -4482,7 +4477,7 @@ void sub_hero_le(Bit8u *hero, signed short le)
 
 			/* in fight mode */
 			if (ds_readw(IN_FIGHT) != 0) {
-				ptr = Real2Host(FIG_get_ptr(host_readb(hero + HERO_FIGHTER_ID)));
+				ptr = (Bit8u*)FIG_get_ptr(host_readb(hero + HERO_FIGHTER_ID));
 
 				/* update looking dir and other  */
 				host_writeb(ptr + FIGHTER_NVF_NO, host_readb(hero + HERO_VIEWDIR));
@@ -4564,7 +4559,7 @@ void sub_hero_le(Bit8u *hero, signed short le)
 				/* in fight mode */
 				if (ds_readw(IN_FIGHT) != 0) {
 
-					ptr = Real2Host(FIG_get_ptr(host_readb(hero + HERO_FIGHTER_ID)));
+					ptr = (Bit8u*)FIG_get_ptr(host_readb(hero + HERO_FIGHTER_ID));
 
 					host_writeb(ptr + 2,
 						ds_readb(NVFTAB_FIGURES_UNCONSCIOUS + host_readbs(hero + HERO_SPRITE_NO) * 2) + host_readbs(hero + HERO_VIEWDIR));
@@ -4634,7 +4629,7 @@ void add_hero_le(Bit8u *hero, signed short le)
 
 			/* maybe if we are in a fight */
 			if (ds_readw(IN_FIGHT)) {
-				ptr = Real2Host(FIG_get_ptr(host_readb(hero + HERO_FIGHTER_ID)));
+				ptr = (Bit8u*)FIG_get_ptr(host_readb(hero + HERO_FIGHTER_ID));
 				ret = FIG_get_range_weapon_type(hero);
 
 				if (ret != -1) {
