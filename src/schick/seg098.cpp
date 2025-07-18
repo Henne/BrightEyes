@@ -921,7 +921,7 @@ signed short use_spell(RealPt hero, signed short selection_menu, signed char han
 			if (spell_id == SP_FORAMEN_FORAMINOR && ds_readbs(DUNGEON_INDEX) != DUNGEONS_NONE && (ds_readw(DNG_MENU_MODE) == DNG_MENU_MODE_OPEN_DOOR || ds_readw(DNG_MENU_MODE) == DNG_MENU_MODE_UNLOCK_DOOR)) {
 				x = ds_readws(X_TARGET);
 				y = ds_readws(Y_TARGET);
-				ptr_doors = Real2Host(ds_readd(DUNGEON_DOORS_BUF));
+				ptr_doors = (Bit8u*)ds_readd(DUNGEON_DOORS_BUF);
 
 				switch (ds_readbs(DIRECTION))
 				{
@@ -933,7 +933,7 @@ signed short use_spell(RealPt hero, signed short selection_menu, signed char han
 
 				pos = DNG_POS(ds_readbs(DUNGEON_LEVEL), x, y);
 
-				if ((host_readb(Real2Host(ds_readd(DNG_MAP_PTR)) + MAP_POS(x,y)) & 0x02) == 0) {
+				if ((host_readb((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(x,y)) & 0x02) == 0) {
 					/* flag 1 'unlocked' is not set -> door is locked  */
 					while (host_readws(ptr_doors + DUNGEON_DOOR_POS) != pos) {
 						/* ASSERT */

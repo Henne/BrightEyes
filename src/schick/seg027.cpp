@@ -551,7 +551,7 @@ void load_scenario(signed short scenario_id)
 	seek_archive_file(scenario_lst_handle, 621L * (scenario_id - 1) + 2, 0);
 
 	/* read scenario */
-	read_archive_file(scenario_lst_handle, Real2Host(ds_readd(SCENARIO_BUF)), 621);
+	read_archive_file(scenario_lst_handle, (Bit8u*)ds_readd(SCENARIO_BUF), 621);
 
 	/* close archive */
 	close(scenario_lst_handle);
@@ -694,9 +694,9 @@ void init_common_buffers(void)
 
 	/* decompress POPUP.DAT */
 	decomp_pp20(Real2Host((Bit8u*)ds_readd(POPUP) - 8),
-		Real2Host(ds_readd(POPUP)),
+		(Bit8u*)ds_readd(POPUP),
 #if !defined(__BORLANDC__)
-		Real2Host(ds_readd(POPUP)) - 8 + 4,
+		(Bit8u*)ds_readd(POPUP) - 8 + 4,
 #else
 		FP_OFF((Bit8u*)ds_readd(POPUP) - 8) + 4,
 		FP_SEG((Bit8u*)ds_readd(POPUP) - 8),

@@ -347,7 +347,7 @@ void refresh_floor_and_sky(void)
 	struct nvf_desc nvf;
 
 	nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
-	nvf.src = Real2Host(ds_readd(TEX_SKY));
+	nvf.src = (Bit8u*)ds_readd(TEX_SKY);
 	nvf.no = 0;
 	nvf.type = 3;
 	nvf.width = (Bit8u*)&width;
@@ -362,7 +362,7 @@ void refresh_floor_and_sky(void)
 #endif
 
 	nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR) + 208 * height;
-	nvf.src = Real2Host(ds_readd(TEX_FLOOR));
+	nvf.src = (Bit8u*)ds_readd(TEX_FLOOR);
 	nvf.no = 0;
 	nvf.type = 3;
 	nvf.width = (Bit8u*)&width;

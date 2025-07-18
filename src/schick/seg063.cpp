@@ -368,12 +368,12 @@ void do_harbor(void)
 				ds_writews(CURRENT_ANI, -1);
 				ds_writew(WALLCLOCK_UPDATE, 0);
 
-				memmove((Bit8u*)ds_readd(RENDERBUF_PTR), Real2Host(ds_readd(TRAVEL_MAP_PTR)), 64000);
+				memmove((Bit8u*)ds_readd(RENDERBUF_PTR), (Bit8u*)ds_readd(TRAVEL_MAP_PTR), 64000);
 				map_effect((Bit8u*)ds_readd(RENDERBUF_PTR));
 
 				wait_for_vsync();
 
-				set_palette(Real2Host(ds_readd(TRAVEL_MAP_PTR)) + 64002, 0, 0x20);
+				set_palette((Bit8u*)ds_readd(TRAVEL_MAP_PTR) + 64002, 0, 0x20);
 
 				mod_clock_pos(ds_readbs(CURRENT_TOWN));
 
@@ -481,7 +481,7 @@ void sea_travel(signed short passage, signed short dir)
 	add_ds_fp(ROUTE_COURSE_PTR, 4);
 #endif
 
-	memset(Real2Host(ds_readd(TRV_TRACK_PIXEL_BAK)), 0xaa, 500);
+	memset((Bit8u*)ds_readd(TRV_TRACK_PIXEL_BAK), 0xaa, 500);
 	ds_writew(TRAVEL_SPEED, 10 * ds_readbs(SEA_TRAVEL_PASSAGE_SPEED1)); /* speed [unit: 10m per hour] */
 	ds_writew(ROUTE_TOTAL_STEPS, get_srout_len((Bit8u*)ds_readd(ROUTE_COURSE_PTR))); /* a step for each pixel on the map. */
 	ds_writew(ROUTE_LENGTH, 100 * ds_readb(SEA_ROUTES + SEA_ROUTE_DISTANCE + SIZEOF_SEA_ROUTE * passage)); /* length of sea route [unit: 10m] */
@@ -647,7 +647,7 @@ void sea_travel(signed short passage, signed short dir)
 
 			wait_for_vsync();
 
-			set_palette(Real2Host(ds_readd(TRAVEL_MAP_PTR)) + 64002, 0, 0x20);
+			set_palette((Bit8u*)ds_readd(TRAVEL_MAP_PTR) + 64002, 0, 0x20);
 
 			set_audio_track(ARCHIVE_FILE_TERMS_XMI);
 

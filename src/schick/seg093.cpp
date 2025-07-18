@@ -56,13 +56,13 @@ signed short do_travel_mode(void)
 		load_map();
 	}
 
-	memmove((void*)(Bit8u*)ds_readd(RENDERBUF_PTR), (void*)Real2Host(ds_readd(TRAVEL_MAP_PTR)), 64000);
+	memmove((void*)(Bit8u*)ds_readd(RENDERBUF_PTR), (void*)(Bit8u*)ds_readd(TRAVEL_MAP_PTR), 64000);
 
 	map_effect((Bit8u*)ds_readd(RENDERBUF_PTR));
 
 	wait_for_vsync();
 
-	set_palette(Real2Host(ds_readd(TRAVEL_MAP_PTR)) + 64000 + 2, 0, 0x20);
+	set_palette((Bit8u*)ds_readd(TRAVEL_MAP_PTR) + 64000 + 2, 0, 0x20);
 
 	refresh_screen_size();
 
@@ -89,7 +89,7 @@ signed short do_travel_mode(void)
 
 			wait_for_vsync();
 
-			set_palette(Real2Host(ds_readd(TRAVEL_MAP_PTR)) + 64000 + 2, 0, 0x20);
+			set_palette((Bit8u*)ds_readd(TRAVEL_MAP_PTR) + 64000 + 2, 0, 0x20);
 
 			refresh_screen_size();
 
@@ -266,7 +266,7 @@ signed short do_travel_mode(void)
 		memset((void*)(char*)ds_readd(DTP2), 0, 0xc0);
 
 		memcpy((void*)((char*)ds_readd(DTP2) + 0xc0),
-			(void*)(Real2Host(ds_readd(TRAVEL_MAP_PTR)) + 64000 + 2), 0x60);
+			(void*)((Bit8u*)ds_readd(TRAVEL_MAP_PTR) + 64000 + 2), 0x60);
 
 		memcpy((void*)((char*)ds_readd(DTP2) + 0x120),
 			(void*)(p_datseg + PALETTE_SPECIAL), 0x60);

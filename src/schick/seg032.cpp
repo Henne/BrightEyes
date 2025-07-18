@@ -980,7 +980,7 @@ signed short do_fight(signed short fight_id)
 
 	/* open MONSTER.DAT */
 	fd = load_archive_file(ARCHIVE_FILE_MONSTER_DAT);
-	read_archive_file(fd, Real2Host(ds_readd(MONSTER_DAT_BUF)), 3476);
+	read_archive_file(fd, (Bit8u*)ds_readd(MONSTER_DAT_BUF), 3476);
 	close(fd);
 
 	ds_writew(FIG_DROPPED_COUNTER, 0);

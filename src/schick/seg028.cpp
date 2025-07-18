@@ -121,9 +121,9 @@ void load_dungeon_ddt(void)
 	high = host_readws((Bit8u*)&high);
 #endif
 
-	read_archive_file(handle, Real2Host(ds_readd(DUNGEON_FIGHTS_BUF)), low);
-	read_archive_file(handle, Real2Host(ds_readd(DUNGEON_DOORS_BUF)), high - low);
-	read_archive_file(handle, Real2Host(ds_readd(DUNGEON_STAIRS_BUF)), 0x7d0);
+	read_archive_file(handle, (Bit8u*)ds_readd(DUNGEON_FIGHTS_BUF), low);
+	read_archive_file(handle, (Bit8u*)ds_readd(DUNGEON_DOORS_BUF), high - low);
+	read_archive_file(handle, (Bit8u*)ds_readd(DUNGEON_STAIRS_BUF), 0x7d0);
 
 	close(handle);
 
@@ -218,7 +218,7 @@ RealPt seg028_0444(signed short index, signed short firstcol, signed short color
 	v1 = v2 = 0L;
 
 	do {
-		v1 = read_archive_file(fd, Real2Host(ds_readd(BUFFER9_PTR4)), 65000);
+		v1 = read_archive_file(fd, (Bit8u*)ds_readd(BUFFER9_PTR4), 65000);
 
 #if !defined(__BORLANDC__)
 		F_PADA(RealMake(datseg, BUFFER9_PTR4), v1);
@@ -401,7 +401,7 @@ void unused_store(signed short no)
 			Real2Host((Bit8u*)ds_readd(RENDERBUF_PTR) + 0x7530),
 			size);
 
-	ptr = no * 5 + Real2Host(ds_readd(EMS_UNUSED_TAB));
+	ptr = no * 5 + (Bit8u*)ds_readd(EMS_UNUSED_TAB);
 
 	host_writeb(ptr, (signed char)ds_readws(EMS_UNUSED_LPAGE));
 	host_writeb(ptr + 1, ds_readws(EMS_UNUSED_OFFSET) >> 8);
@@ -418,13 +418,13 @@ RealPt unused_load(signed short no)
 
 	EMS_map_memory(ds_readws(EMS_UNUSED_HANDLE), 0, 3);
 
-	l_si = host_readb(Real2Host(ds_readd(EMS_UNUSED_TAB)) + 5 * no);
+	l_si = host_readb((Bit8u*)ds_readd(EMS_UNUSED_TAB) + 5 * no);
 
 	EMS_map_memory(ds_readws(EMS_UNUSED_HANDLE), l_si, 0);
 	EMS_map_memory(ds_readws(EMS_UNUSED_HANDLE), l_si + 1, 1);
 	EMS_map_memory(ds_readws(EMS_UNUSED_HANDLE), l_si + 2, 2);
 
-	return (Bit8u*)ds_readd(EMS_FRAME_PTR) + 256 * host_readb(Real2Host(ds_readd(EMS_UNUSED_TAB)) + 5 * no + 1);
+	return (Bit8u*)ds_readd(EMS_FRAME_PTR) + 256 * host_readb((Bit8u*)ds_readd(EMS_UNUSED_TAB) + 5 * no + 1);
 }
 
 void load_map(void)

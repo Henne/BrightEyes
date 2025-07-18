@@ -736,9 +736,9 @@ void spell_foramen(void)
 		case 3: x--; break;
 	}
 
-	and_ptr_bs(Real2Host(ds_readd(DNG_MAP_PTR)) + y * 16 + x, 0x0f); /* clear higher 4 bits */
-	or_ptr_bs(Real2Host(ds_readd(DNG_MAP_PTR)) + y * 16 + x, DNG_TILE_OPEN_DOOR << 4);
-	ds_writeb(STEPTARGET_FRONT, host_readbs(Real2Host(ds_readd(DNG_MAP_PTR)) + y * 16 + x));
+	and_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + y * 16 + x, 0x0f); /* clear higher 4 bits */
+	or_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + y * 16 + x, DNG_TILE_OPEN_DOOR << 4);
+	ds_writeb(STEPTARGET_FRONT, host_readbs((Bit8u*)ds_readd(DNG_MAP_PTR) + y * 16 + x));
 
 	DNG_open_door();
 

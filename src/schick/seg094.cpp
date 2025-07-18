@@ -102,7 +102,7 @@ void TM_func1(signed short route_no, signed short backwards)
 	add_ds_fp(ROUTE_COURSE_PTR, 4);
 #endif
 
-	memset((void*)Real2Host(ds_readd(TRV_TRACK_PIXEL_BAK)), 0xaa, 500);
+	memset((void*)(Bit8u*)ds_readd(TRV_TRACK_PIXEL_BAK), 0xaa, 500);
 	ds_writed(TRAVEL_ROUTE_PTR, (Bit32u)RealMake(datseg, (LAND_ROUTES - SIZEOF_LAND_ROUTE) + SIZEOF_LAND_ROUTE * route_no));
 	ds_writew(TRAVEL_SPEED, 166);
 	ds_writew(ROUTE_TOTAL_STEPS, TM_get_track_length((Bit8u*)ds_readd(ROUTE_COURSE_PTR)));
@@ -421,7 +421,7 @@ void TM_func1(signed short route_no, signed short backwards)
 			memmove((void*)((Bit8u*)ds_readd(FRAMEBUF_PTR)), (void*)((Bit8u*)ds_readd(TRAVEL_MAP_PTR)), 320 * 200);
 
 			wait_for_vsync();
-			set_palette(Real2Host(ds_readd(TRAVEL_MAP_PTR)) + 64000 + 2, 0, 0x20);
+			set_palette((Bit8u*)ds_readd(TRAVEL_MAP_PTR) + 64000 + 2, 0, 0x20);
 
 			ds_writeb(PP20_INDEX, 5);
 			ds_writew(TRV_I, 0);
@@ -434,7 +434,7 @@ void TM_func1(signed short route_no, signed short backwards)
 
 #if defined(__BORLANDC__)
 			/* Redraw the track on the map */
-			while (host_readb(Real2Host(ds_readd(TRV_TRACK_PIXEL_BAK)) + inc_ds_ws_post(TRV_I)) != 0xaa)
+			while (host_readb((Bit8u*)ds_readd(TRV_TRACK_PIXEL_BAK) + inc_ds_ws_post(TRV_I)) != 0xaa)
 			{
 				*(fb_start + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR2) + 2) * 320 + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR2))) =  0x1c;
 				add_ds_fp(ROUTE_COURSE_PTR2, 2 * (!backwards ? 2 : -2));
