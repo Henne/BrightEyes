@@ -861,7 +861,7 @@ signed short load_regular_file(Bit16u index)
 	if ( (handle = open((char*)ds_readd(FNAMES + index * 4), O_BINARY | O_RDWR)) == -1) {
 		/* "FILE %s IS MISSING!" */
 		sprintf((char*)ds_readd(DTP2),
-			(char*)Real2Host(ds_readd(STR_FILE_MISSING_PTR)),
+			(char*)ds_readd(STR_FILE_MISSING_PTR),
 			(char*)Real2Host(ds_readd(FNAMES + index * 4)));
 		ds_writeb(MISSING_FILE_GUILOCK, 1);
 		GUI_output((char*)ds_readd(DTP2));
