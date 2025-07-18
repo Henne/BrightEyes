@@ -44,7 +44,7 @@ void init_text(void)
 	len = (signed short)read_archive_file(handle, Real2Host(ds_readd(TEXT_LTX_BUFFER)), 64000);
 	close(handle);
 
-	split_textbuffer(Real2Host(ds_readd(TEXT_LTX_INDEX)), (Bit8u*)ds_readd(TEXT_LTX_BUFFER), len);
+	split_textbuffer((Bit8u*)ds_readd(TEXT_LTX_INDEX), (Bit8u*)ds_readd(TEXT_LTX_BUFFER), len);
 
 	handle = load_archive_file(ARCHIVE_FILE_ITEMNAME);
 	len = (signed short)read_archive_file(handle, Real2Host(ds_readd(BUFFER5_PTR)), 5000);
