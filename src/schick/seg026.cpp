@@ -89,10 +89,10 @@ void load_tx2(signed short index)
 
 	ds_writew(TEXT_FILE_INDEX, index);
 	fd = load_archive_file(index);
-	len = (signed short)read_archive_file(fd, Real2Host(ds_readd(BUFFER8_PTR)), 12000);
+	len = (signed short)read_archive_file(fd, (Bit8u*)ds_readd(BUFFER8_PTR), 12000);
 	close(fd);
 
-	split_textbuffer(Real2Host(ds_readd(TX2_INDEX)), (RealPt)ds_readd(BUFFER8_PTR), len);
+	split_textbuffer(Real2Host(ds_readd(TX2_INDEX)), (Bit8u*)ds_readd(BUFFER8_PTR), len);
 }
 
 void load_ltx(unsigned short index)
@@ -891,11 +891,11 @@ void load_tempicon(signed short no)
 
 	/* load TEMPICON */
 	handle = load_archive_file(ARCHIVE_FILE_TEMPICON);
-	read_archive_file(handle, Real2Host(ds_readd(BUFFER8_PTR)), 7000);
+	read_archive_file(handle, (Bit8u*)ds_readd(BUFFER8_PTR), 7000);
 	close(handle);
 
-	nvf.dst = Real2Host(ds_readd(BUFFER8_PTR)) + 7000;
-	nvf.src = Real2Host(ds_readd(BUFFER8_PTR));
+	nvf.dst = (Bit8u*)ds_readd(BUFFER8_PTR) + 7000;
+	nvf.src = (Bit8u*)ds_readd(BUFFER8_PTR);
 	nvf.no = no;
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&handle;

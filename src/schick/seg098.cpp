@@ -162,9 +162,9 @@ void magic_heal_ani(Bit8u *hero)
 
 	/* load SPSTAR.NVF */
 	fd = load_archive_file(ARCHIVE_FILE_SPSTAR_NVF);
-	read_archive_file(fd, Real2Host(ds_readd(BUFFER8_PTR)), 0x400);
-	read_archive_file(fd, Real2Host(ds_readd(BUFFER8_PTR)) + 0x400, 0x400);
-	read_archive_file(fd, Real2Host(ds_readd(BUFFER8_PTR)) + 0x800, 0x400);
+	read_archive_file(fd, (Bit8u*)ds_readd(BUFFER8_PTR), 0x400);
+	read_archive_file(fd, (Bit8u*)ds_readd(BUFFER8_PTR) + 0x400, 0x400);
+	read_archive_file(fd, (Bit8u*)ds_readd(BUFFER8_PTR) + 0x800, 0x400);
 	close(fd);
 
 	target_no = host_readbs(hero + HERO_ENEMY_ID) - 1;

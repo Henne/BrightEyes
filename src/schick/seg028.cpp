@@ -610,7 +610,7 @@ void load_informer_tlk(signed short index)
 	read_archive_file(fd, p_datseg + DIALOG_STATES, (Bit16u)(off - partners * 0x26));
 
 	/* read the text */
-	text_len = (signed short)read_archive_file(fd, Real2Host(ds_readd(BUFFER8_PTR)), 10000);
+	text_len = (signed short)read_archive_file(fd, (Bit8u*)ds_readd(BUFFER8_PTR), 10000);
 
 	close(fd);
 
@@ -684,7 +684,7 @@ void load_fightbg(signed short index)
 	fd = load_archive_file(index);
 	read_archive_file(fd, (Bit8u*)ds_readd(RENDERBUF_PTR), 30000);
 	decomp_pp20((Bit8u*)ds_readd(RENDERBUF_PTR),
-			Real2Host(ds_readd(BUFFER8_PTR)),
+			(Bit8u*)ds_readd(BUFFER8_PTR),
 #if !defined(__BORLANDC__)
 			(Bit8u*)ds_readd(RENDERBUF_PTR) + 4,
 #else
