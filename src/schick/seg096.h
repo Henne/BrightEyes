@@ -9,7 +9,7 @@ RealPt GUI_names_grammar(signed short, signed short, signed short);
 //2a
 RealPt GUI_name_plural(signed short, Bit8u*);
 //2f
-RealPt GUI_name_singular(Bit8u*);
+char* GUI_name_singular(char*);
 //34
 RealPt GUI_2f2(signed short, signed short, signed short);
 //39

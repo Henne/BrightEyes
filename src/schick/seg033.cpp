@@ -514,7 +514,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 									(Bit32u)((char*)ds_readd(DTP2) + 30 * radio_i));
 
 								strcpy((char*)Real2Host(ds_readd(RADIO_NAME_LIST + 4 * radio_i)),
-									(char*)Real2Host(GUI_name_singular((Bit8u*)get_itemname(weapon_id))));
+									(GUI_name_singular((Bit8u*)get_itemname(weapon_id))));
 
 								radio_i++;
 							}
@@ -596,7 +596,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 
 								sprintf((char*)Real2Host(ds_readd(RADIO_NAME_LIST + 4 * radio_i)),
 									(char*)p_datseg + SPACE_SEPARATED_STRINGS, /* "%s %s" */
-									(char*)Real2Host(GUI_name_singular((Bit8u*)get_itemname(weapon_id))),
+									(GUI_name_singular((Bit8u*)get_itemname(weapon_id))),
 									inventory_broken(hero + HERO_INVENTORY + SIZEOF_INVENTORY * slot_no) ? get_ttx(478) : p_datseg + EMPTY_STRING3);
 
 								radio_i++;
@@ -777,7 +777,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 					/* RS */
 					host_readbs(hero + HERO_RS_BONUS1),
 					/* weapon name */
-					Real2Host(GUI_name_singular((Bit8u*)get_itemname(host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID)))),
+					(GUI_name_singular((Bit8u*)get_itemname(host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID)))),
 					/* damage bounds */
 					damage_lo, damage_hi,
 					/* LE */
@@ -834,7 +834,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 								(Bit32u)((char*)ds_readd(DTP2) + 30 * radio_i));
 
 							strcpy((char*)Real2Host(ds_readd(RADIO_NAME_LIST + 4 * radio_i)),
-								(char*)Real2Host(GUI_name_singular((Bit8u*)get_itemname(weapon_id))));
+								(GUI_name_singular((Bit8u*)get_itemname(weapon_id))));
 
 							radio_i++;
 						}

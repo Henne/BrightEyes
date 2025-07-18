@@ -73,7 +73,7 @@ void use_item(signed short item_pos, signed short hero_pos)
 					/* german grammar, singular and plural are the same */
 					sprintf((char*)ds_readd(DTP2),
 						get_ttx(792),
-						(char*)Real2Host(GUI_name_singular((Bit8u*)get_itemname(ds_readws(USED_ITEM_ID)))));
+						(GUI_name_singular((Bit8u*)get_itemname(ds_readws(USED_ITEM_ID)))));
 				} else {
 					sprintf((char*)ds_readd(DTP2),
 						get_ttx(571),

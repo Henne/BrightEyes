@@ -775,7 +775,7 @@ signed short select_item_to_drop(Bit8u *hero)
 			str[v6] = i;
 			ds_writed(RADIO_NAME_LIST + v6 * 4 , (Bit32u)((char*)ds_readd(DTP2) + v6 * 30));
 			strcpy((char*)Real2Host(ds_readd(RADIO_NAME_LIST + v6 * 4)),
-				(char*)Real2Host(GUI_name_singular((Bit8u*)get_itemname(item))));
+				(GUI_name_singular((Bit8u*)get_itemname(item))));
 			v6++;
 		}
 	}

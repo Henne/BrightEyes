@@ -48,7 +48,7 @@ void spell_eigenschaften(void)
 
 	sprintf((char*)ds_readd(DTP2),
           get_tx(25),
-          Real2Host(GUI_name_singular(get_monname(host_readbs(get_spelltarget_e())))),
+          (GUI_name_singular(get_monname(host_readbs(get_spelltarget_e())))),
           host_readbs(get_spelltarget_e() + ENEMY_SHEET_LEVEL),	/* Level */
           host_readbs(get_spelltarget_e() + ENEMY_SHEET_AT),	  /* AT */
           host_readbs(get_spelltarget_e() + ENEMY_SHEET_PA),	  /* PA */

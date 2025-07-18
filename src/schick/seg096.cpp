@@ -135,7 +135,7 @@ RealPt GUI_name_plural(signed short v1, Bit8u *s)
 }
 
 //290
-RealPt GUI_name_singular(Bit8u *s)
+char* GUI_name_singular(char *s)
 {
 	Bit8u *p = p_datseg + GRAMMAR_BUFS;
 	char tmp;
@@ -147,7 +147,7 @@ RealPt GUI_name_singular(Bit8u *s)
 		host_writeb(p++, *s++);
 
 	host_writeb(p, 0);
-	return ((Bit8u*)p_datseg + GRAMMAR_BUFS);
+	return (char*)p_datseg + GRAMMAR_BUFS;
 }
 
 //2f2

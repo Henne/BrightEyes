@@ -576,7 +576,7 @@ void FIG_draw_enemy_pic(signed short loc, signed short id)
 		ds_writew(PIC_COPY_Y2, 49);
 		ds_writed(PIC_COPY_SRC, (Bit32u)p1);
 		do_pic_copy(0);
-		GUI_print_string(Real2Host(GUI_name_singular(get_monname(host_readbs(p_enemy)))), 1, 1);
+		GUI_print_string((GUI_name_singular(get_monname(host_readbs(p_enemy)))), 1, 1);
 	} else {
 		do_border((Bit8u*)ds_readd(RENDERBUF_PTR), 1, 149, 34, 190, 0x1d);
 		ds_writew(PIC_COPY_X1, 2);
@@ -585,7 +585,7 @@ void FIG_draw_enemy_pic(signed short loc, signed short id)
 		ds_writew(PIC_COPY_Y2, 189);
 		ds_writed(PIC_COPY_SRC, (Bit32u)p1);
 		do_pic_copy(0);
-		GUI_print_string(Real2Host(GUI_name_singular(get_monname(host_readbs(p_enemy)))), 1, 193);
+		GUI_print_string((GUI_name_singular(get_monname(host_readbs(p_enemy)))), 1, 193);
 	}
 
 	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));

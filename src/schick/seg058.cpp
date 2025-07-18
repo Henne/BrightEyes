@@ -340,7 +340,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 				clear_loc_line();
 
-				GUI_print_loc_line(Real2Host(GUI_name_singular((Bit8u*)get_itemname(host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l7 + item))))));
+				GUI_print_loc_line((GUI_name_singular((Bit8u*)get_itemname(host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l7 + item))))));
 			}
 
 			if (ds_readws(MOUSE2_EVENT) != 0  || ds_readws(ACTION) == ACTION_ID_PAGE_UP) {
