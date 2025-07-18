@@ -52,7 +52,7 @@ signed short KI_copy_ani_sequence(Bit8u *dst, signed short ani_no, signed short 
 
 	/* This function is never calld with mode == 3 */
 	if (mode == 3)
-		p_datbuffer = Real2Host(ds_readd(BUFFER_WEAPANIDAT));
+		p_datbuffer = (Bit8u*)ds_readd(BUFFER_WEAPANIDAT);
 
 	/* read how many ani sequences are in the file */
 	ani_max_no = host_readw(p_datbuffer);

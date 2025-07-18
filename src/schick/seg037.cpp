@@ -45,7 +45,7 @@ signed short copy_ani_stuff(Bit8u *dst, signed short no, signed short mode)
 
 	/* WEAPANI.DAT */
 	if (mode == 3)
-		buffer = Real2Host(ds_readd(BUFFER_WEAPANIDAT));
+		buffer = (Bit8u*)ds_readd(BUFFER_WEAPANIDAT);
 
 	max_no = host_readw(buffer);
 

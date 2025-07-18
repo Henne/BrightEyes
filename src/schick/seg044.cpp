@@ -45,7 +45,7 @@ Bit16s copy_ani_seq(Bit8u *dst, Bit16s ani, Bit16u type)
 
 	/* check if we must use WEAPANI.DAT */
 	if (type == 3)
-		p_start = Real2Host(ds_readd(BUFFER_WEAPANIDAT));
+		p_start = (Bit8u*)ds_readd(BUFFER_WEAPANIDAT);
 
 	/* get number of animation sequences */
 	nr_anis = host_readws(p_start);
