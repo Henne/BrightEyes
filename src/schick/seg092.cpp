@@ -61,7 +61,7 @@ void chest_poisoned1(void)
 	print_msg_with_first_hero(get_ttx(520));
 
 	/* the first hero gets wounded with 2W6 */
-	sub_hero_le(Real2Host((RealPt)(ds_writed(MAIN_ACTING_HERO, (Bit32u)get_first_hero_available_in_group()))), dice_roll(2, 6, 0));
+	sub_hero_le((Bit8u*)ds_writed(MAIN_ACTING_HERO, (Bit32u)get_first_hero_available_in_group()), dice_roll(2, 6, 0));
 
 	/* and gets poisoned */
 	hero_gets_poisoned((Bit8u*)ds_readd(MAIN_ACTING_HERO), 1);
@@ -73,7 +73,7 @@ void chest_poisoned2(void)
 	print_msg_with_first_hero(get_ttx(520));
 
 	/* the first hero gets wounded with 2W6 */
-	sub_hero_le(Real2Host((RealPt)(ds_writed(MAIN_ACTING_HERO, (Bit32u)get_first_hero_available_in_group()))), dice_roll(2, 6, 0));
+	sub_hero_le((Bit8u*)ds_writed(MAIN_ACTING_HERO, (Bit32u)get_first_hero_available_in_group()), dice_roll(2, 6, 0));
 
 	/* and gets poisoned */
 	hero_gets_poisoned((Bit8u*)ds_readd(MAIN_ACTING_HERO), 2);
@@ -85,7 +85,7 @@ void chest_poisoned3(void)
 	print_msg_with_first_hero(get_ttx(520));
 
 	/* the first hero gets wounded with 1W6 */
-	sub_hero_le(Real2Host((RealPt)(ds_writed(MAIN_ACTING_HERO, (Bit32u)get_first_hero_available_in_group()))), dice_roll(1, 6, 0));
+	sub_hero_le((Bit8u*)ds_writed(MAIN_ACTING_HERO, (Bit32u)get_first_hero_available_in_group()), dice_roll(1, 6, 0));
 
 	/* and gets poisoned */
 	hero_gets_poisoned((Bit8u*)ds_readd(MAIN_ACTING_HERO), 8);
@@ -204,11 +204,9 @@ void loot_simple_chest(Bit8u *chest)
 		item_no = 0;
 
 		/* write the names of the items in the chest into names[] */
-		while((item_id = host_readb(Real2Host(host_readd(chest + 0x0b)) + item_no)) != (signed short)0x00ff) {
+		while((item_id = host_readb((Bit8u*)host_readd(chest + 0x0b) + item_no)) != (signed short)0x00ff) {
 
-
-			strcpy(names[item_no++],
-				(char*)Real2Host(GUI_name_plural(0, get_itemname(item_id))));
+			strcpy(names[item_no++], (char*)GUI_name_plural(0, get_itemname(item_id)));
 		}
 
 		if (item_no == 0) {
@@ -227,7 +225,7 @@ void loot_simple_chest(Bit8u *chest)
 
 			if (item_no != -2) {
 				/* if not pressed ESC */
-				if (get_item(host_readb(Real2Host(host_readd(chest + 0xb)) + item_no), 1, 1))
+				if (get_item(host_readb((Bit8u*)host_readd(chest + 0xb) + item_no), 1, 1))
 				{
 					/* got the item in inventory => remove from chest */
 					delete_chest_item(chest, item_no);
@@ -255,10 +253,10 @@ void delete_chest_item(Bit8u *chest, signed short item_no)
 
 	do {
 #if defined(__BORLANDC__)
-		Real2Host(host_readd(chest + 0xb))[item_no] = tmp = Real2Host(host_readd(chest + 0xb))[item_no + 1];
+		((Bit8u*)host_readd(chest + 0xb))[item_no] = tmp = ((Bit8u*)host_readd(chest + 0xb))[item_no + 1];
 #else
-		host_writeb(Real2Host(host_readd(chest + 0xb)) + item_no,
-			tmp = host_readbs(Real2Host(host_readd(chest + 0xb)) + item_no + 1));
+		host_writeb((Bit8u*)host_readd(chest + 0xb) + item_no,
+			tmp = host_readbs((Bit8u*)host_readd(chest + 0xb) + item_no + 1));
 #endif
 		item_no++;
 
@@ -290,11 +288,9 @@ void loot_chest(Bit8u *chest, Bit8u *text_non_empty, Bit8u *text_empty)
 		item_no = 0;
 
 		/* write the names of the items in the chest into names[] */
-		while((item_id = host_readb(Real2Host(host_readd(chest + 0x0b)) + item_no)) != (signed short)0x00ff) {
+		while ((item_id = host_readb((Bit8u*)host_readd(chest + 0x0b) + item_no)) != (signed short)0x00ff) {
 
-
-			strcpy(names[item_no++],
-				(char*)Real2Host(GUI_name_plural(0, get_itemname(item_id))));
+			strcpy(names[item_no++], (char*)GUI_name_plural(0, get_itemname(item_id)));
 		}
 
 		if (item_no == 0) {
@@ -313,7 +309,7 @@ void loot_chest(Bit8u *chest, Bit8u *text_non_empty, Bit8u *text_empty)
 
 			if (item_no != -2) {
 				/* if not pressed ESC */
-				if (get_item(host_readb(Real2Host(host_readd(chest + 0xb)) + item_no), 1, 1))
+				if (get_item(host_readb((Bit8u*)host_readd(chest + 0xb) + item_no), 1, 1))
 				{
 					/* got the item in inventory => remove from chest */
 					delete_chest_item(chest, item_no);
@@ -403,34 +399,34 @@ void seg092_06b4(signed short a1)
 
 	do {
 
-		if (host_readws(Real2Host(chest_ptr)) == pos) {
+		if (host_readws(chest_ptr) == pos) {
 
-			if (l4 != 0 && host_readd(Real2Host(chest_ptr) + 11)) {
+			if (l4 != 0 && host_readd(chest_ptr + 11)) {
 #if defined(__BORLANDC__)
-				((void (*)(RealPt))((RealPt)host_readd(Real2Host(chest_ptr) + 11)))(chest_ptr);
+				((void (*)(RealPt))((Bit8u*)host_readd(chest_ptr + 11)))(chest_ptr);
 #else
 				(t_map(chest_ptr, 11)(chest_ptr));
 #endif
-			} else if (host_readbs(Real2Host(chest_ptr) + 2) != 0) {
+			} else if (host_readbs(chest_ptr + 2) != 0) {
 #if defined(__BORLANDC__)
-				((void (*)(RealPt))((RealPt)host_readd(Real2Host(chest_ptr) + 3)))(chest_ptr);
+				((void (*)(RealPt))((Bit8u*)host_readd(chest_ptr + 3)))(chest_ptr);
 #else
 				(t_map(chest_ptr, 3)(chest_ptr));
 #endif
-			} else if ((RealPt)host_readd(Real2Host(chest_ptr) + 3)) {
+			} else if ((Bit8u*)host_readd(chest_ptr + 3)) {
 #if defined(__BORLANDC__)
-				((void (*)(RealPt))((RealPt)host_readd(Real2Host(chest_ptr) + 3)))(chest_ptr);
+				((void (*)(RealPt))((Bit8u*)host_readd(chest_ptr + 3)))(chest_ptr);
 #else
 				(t_map(chest_ptr, 3)(chest_ptr));
 #endif
-			} else if ((RealPt)host_readd(Real2Host(chest_ptr) + 11)) {
+			} else if ((Bit8u*)host_readd(chest_ptr + 11)) {
 #if defined(__BORLANDC__)
-				((void (*)(RealPt))((RealPt)host_readd(Real2Host(chest_ptr) + 11)))(chest_ptr);
+				((void (*)(RealPt))((Bit8u*)host_readd(chest_ptr + 11)))(chest_ptr);
 #else
 				(t_map(chest_ptr, 11)(chest_ptr));
 #endif
 				ds_writew(GET_EXTRA_LOOT, 1);
-			} else if (host_readws(Real2Host(chest_ptr) + 17) != 0) {
+			} else if (host_readws(chest_ptr + 17) != 0) {
 				ds_writew(GET_EXTRA_LOOT, 1);
 			}
 
@@ -439,33 +435,32 @@ void seg092_06b4(signed short a1)
 
 #if !defined(__BORLANDC__)
 		chest_ptr += 21;
-	} while (host_readws(Real2Host(chest_ptr)) != -1);
+	} while (host_readws(chest_ptr) != -1);
 #else
-	} while (host_readws(Real2Host(((struct chest*)chest_ptr)++)) != -1);
+	} while (host_readws((Bit8u*)((struct chest*)chest_ptr)++) != -1);
 #endif
 
 	if (l4 == 0 && ds_readws(GET_EXTRA_LOOT) != 0) {
 
-		if (host_readws(Real2Host(chest_ptr) + 15) != 0) {
+		if (host_readws(chest_ptr + 15) != 0) {
 			/* There are AP in the chest */
-			add_hero_ap_all(host_readws(Real2Host(chest_ptr) + 15));
+			add_hero_ap_all(host_readws(chest_ptr + 15));
 		}
 
-		if (host_readws(Real2Host(chest_ptr) + 17) != 0) {
+		if (host_readws(chest_ptr + 17) != 0) {
 
 			/* There is money in the chest */
-			make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), host_readw(Real2Host(chest_ptr) + 17));
-			sprintf((char*)ds_readd(DTP2),
-				get_ttx(793),
-				(char*)ds_readd(TEXT_OUTPUT_BUF));
+			make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), host_readw(chest_ptr + 17));
+
+			sprintf((char*)ds_readd(DTP2), get_ttx(793), (char*)ds_readd(TEXT_OUTPUT_BUF));
 			GUI_output((char*)ds_readd(DTP2));
 
-			set_party_money(get_party_money() + host_readw(Real2Host(chest_ptr) + 17));
+			set_party_money(get_party_money() + host_readw(chest_ptr + 17));
 		}
 
-		if (host_readws(Real2Host(chest_ptr) + 19) != 0) {
+		if (host_readws(chest_ptr + 19) != 0) {
 			/* There are FOOD PACKAGES in the chest */
-			get_item(ITEM_FOOD_PACKAGE, 1, host_readws(Real2Host(chest_ptr) + 19));
+			get_item(ITEM_FOOD_PACKAGE, 1, host_readws(chest_ptr + 19));
 		}
 	}
 }
@@ -482,7 +477,7 @@ void use_lockpicks_on_chest(RealPt chest_ptr)
 
 		if (l_si != -2) {
 
-			l_di = test_skill(hero, TA_SCHLOESSER, host_readbs(Real2Host(chest_ptr) + 2));
+			l_di = test_skill(hero, TA_SCHLOESSER, host_readbs(chest_ptr + 2));
 
 			if (l_di == -99) {
 				/* unlucky, your lockpicks break... */
@@ -496,8 +491,8 @@ void use_lockpicks_on_chest(RealPt chest_ptr)
 					((treasure_trap)(t_map(chest_ptr, 7)))();
 				}
 #else
-				if ((RealPt)host_readd(Real2Host(chest_ptr) + 7)) {
-					((void (*)(void))((RealPt)host_readd(Real2Host(chest_ptr) + 7)))();
+				if ((Bit8u*)host_readd(chest_ptr + 7)) {
+					((void (*)(void))((RealPt)host_readd(chest_ptr + 7)))();
 				}
 #endif
 
@@ -508,8 +503,8 @@ void use_lockpicks_on_chest(RealPt chest_ptr)
 					((treasure_trap)(t_map(chest_ptr, 7)))();
 				}
 #else
-				if ((RealPt)host_readd(Real2Host(chest_ptr) + 7)) {
-					((void (*)(void))((RealPt)host_readd(Real2Host(chest_ptr) + 7)))();
+				if ((RealPt)host_readd(chest_ptr + 7)) {
+					((void (*)(void))((RealPt)host_readd(chest_ptr + 7)))();
 				}
 #endif
 
@@ -530,11 +525,11 @@ void use_lockpicks_on_chest(RealPt chest_ptr)
 					}
 				}
 #else
-				if ((RealPt)host_readd(Real2Host(chest_ptr) + 11))
+				if ((RealPt)host_readd(chest_ptr + 11))
 				{
-					((void (*)(RealPt))((RealPt)host_readd(Real2Host(chest_ptr) + 11)))(chest_ptr);
+					((void (*)(RealPt))((RealPt)host_readd(chest_ptr + 11)))(chest_ptr);
 
-					if ((RealPt)host_readd(Real2Host(chest_ptr) + 7) == (RealPt)&chest_protected_heavy)
+					if ((RealPt)host_readd(chest_ptr + 7) == (RealPt)&chest_protected_heavy)
 					{
 						add_hero_ap(hero, 5);
 					}
@@ -560,14 +555,14 @@ void use_key_on_chest(RealPt chest_ptr)
 	hero = (Bit8u*)get_first_hero_available_in_group();
 
 	/* the leader of the group must have the key */
-	if ((key_pos = get_item_pos(hero, host_readb(Real2Host(chest_ptr) + 2))) != -1)
+	if ((key_pos = get_item_pos(hero, host_readb(chest_ptr + 2))) != -1)
 	{
 
 		if (!inventory_broken(hero + HERO_INVENTORY + SIZEOF_INVENTORY * key_pos))
 		{
 
 #if defined(__BORLANDC__)
-			((void (*)(RealPt))((RealPt)host_readd(Real2Host(chest_ptr) + 11)))(chest_ptr);
+			((void (*)(RealPt))((RealPt)host_readd(chest_ptr + 11)))(chest_ptr);
 #else
 			t_map(chest_ptr, 11)(chest_ptr);
 #endif
@@ -576,7 +571,7 @@ void use_key_on_chest(RealPt chest_ptr)
 		}
 	} else {
 #if defined(__BORLANDC__)
-		((void (*)(void))((RealPt)host_readd(Real2Host(chest_ptr) + 7)))();
+		((void (*)(void))((RealPt)host_readd(chest_ptr + 7)))();
 #else
 		((treasure_trap)(t_map(chest_ptr, 7)))();
 #endif
@@ -610,7 +605,7 @@ void loot_multi_chest(Bit8u *chest, Bit8u *msg)
 				strcat(names[item_no], (char*)p_datseg + STR_SINGLE_SPACE);
 			}
 
-			strcat(names[item_no++], (char*)Real2Host(GUI_name_plural( ((signed short)(item_cnt > 1 ? (unsigned short)1 : (unsigned short)0)) ? 4 : 0, get_itemname(i))));
+			strcat(names[item_no++], (char*)GUI_name_plural( ((signed short)(item_cnt > 1 ? (unsigned short)1 : (unsigned short)0)) ? 4 : 0, get_itemname(i)));
 		}
 
 		if (item_no != 0) {

@@ -171,11 +171,6 @@ static inline void D1_GFX(...) { }
 	#define __func__ __FUNCTION__
 #endif
 
-static inline Bit8u* Real2Host(RealPt p) {
-        return (Bit8u*)(p);
-}
-
-
 /**
  * struct_copy() - wrapper for struct assignments
  * @dst:	destination
@@ -1273,8 +1268,6 @@ struct hero_struct {
 extern Bit8u* text_ltx_index[];
 extern Bit8u* tx_index[];
 extern Bit8u* tx2_index[];
-
-#define Real2Host(p) ((Bit8u*)(p))
 
 #define host_readb(p) (*(Bit8u*)(p))
 #define host_readw(p) (*(Bit16u*)(p))
