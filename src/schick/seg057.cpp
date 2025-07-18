@@ -190,7 +190,7 @@ void sell_screen(Bit8u *shop_ptr)
 			do_v_line((RealPt)ds_readd(FRAMEBUF_PTR), 152, 35, 131, -1);
 
 			nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
-			nvf.src = Real2Host(ds_readd(BUFFER10_PTR));
+			nvf.src = (Bit8u*)ds_readd(BUFFER10_PTR);
 			nvf.type = 0;
 			nvf.width =  (Bit8u*)&width;
 			nvf.height = (Bit8u*)&height;

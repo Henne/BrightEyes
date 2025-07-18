@@ -432,7 +432,7 @@ void status_menu(signed short hero_pos)
 					if (host_readws(hero2 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))) {
 
 						nvf.dst = Real2Host(ds_readd(ICON));
-						nvf.src = Real2Host(ds_readd(BUFFER10_PTR));
+						nvf.src = (Bit8u*)ds_readd(BUFFER10_PTR);
 						nvf.type = 0;
 						nvf.width = (Bit8u*)&width;
 						nvf.height = (Bit8u*)&height;

@@ -608,7 +608,7 @@ void tevent_144(void)
 		if (right_time_flag) {
 
 			load_in_head(44);
-			memmove(Real2Host(ds_readd(BUFFER10_PTR)), (char*)ds_readd(DTP2), 0x400);
+			memmove((Bit8u*)ds_readd(BUFFER10_PTR), (char*)ds_readd(DTP2), 0x400);
 
 			hero = get_hero(grimring_hero_pos);
 
