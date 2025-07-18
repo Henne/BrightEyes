@@ -13,7 +13,7 @@ RealPt GUI_name_singular(Bit8u*);
 //34
 RealPt GUI_2f2(signed short, signed short, signed short);
 //39
-RealPt GUI_get_ptr(signed short, signed short);
+char* GUI_get_ptr(const int, const int);
 //3e
 RealPt GUI_get_ptr2(signed short, signed short);
 //43

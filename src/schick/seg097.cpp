@@ -134,7 +134,7 @@ void GUI_1c2(signed short v1, signed short v2, RealPt v3)
 {
 
 	GUI_blank_char();
-	GUI_font_to_buf(Real2Host(ds_readd(SPLASH_BUFFER)) + v1 * 8);
+	GUI_font_to_buf((Bit8u*)ds_readd(SPLASH_BUFFER) + v1 * 8);
 	GUI_write_char_to_screen(v3, 8, v2);
 }
 

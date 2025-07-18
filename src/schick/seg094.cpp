@@ -135,7 +135,7 @@ void TM_func1(signed short route_no, signed short backwards)
 	ds_writed(TEVENTS_TAB_PTR, (Bit32u)RealMake(datseg, TEVENTS_TAB));
 #if defined(__BORLANDC__)
 	/* Forward pointer to entries associated with current route. */
-	while (host_readb(Real2Host(ds_readd(TEVENTS_TAB_PTR))) != route_no && host_readbs(Real2Host(ds_readd(TEVENTS_TAB_PTR))) != -1)
+	while (host_readb((Bit8u*)ds_readd(TEVENTS_TAB_PTR)) != route_no && host_readbs((Bit8u*)ds_readd(TEVENTS_TAB_PTR)) != -1)
 	{
 		add_ds_fp(TEVENTS_TAB_PTR, 3);
 	}
@@ -171,11 +171,11 @@ void TM_func1(signed short route_no, signed short backwards)
 	ds_writew(ROUTE_DAYPROGRESS, 0);
 	/* random section ends */
 
-	while (host_readbs(Real2Host(ds_readd(TEVENTS_TAB_PTR))) != -1 && host_readb(Real2Host(ds_readd(TEVENTS_TAB_PTR))) == route_no)
+	while (host_readbs((Bit8u*)ds_readd(TEVENTS_TAB_PTR)) != -1 && host_readb((Bit8u*)ds_readd(TEVENTS_TAB_PTR)) == route_no)
 	{
 		tevent_ptr = p_datseg + ROUTE_TEVENTS + 4 * ds_readws(ROUTE_STEPCOUNT);
-		host_writew(tevent_ptr, host_readb(Real2Host(ds_readd(TEVENTS_TAB_PTR)) + 1));
-		host_writew(tevent_ptr + 2, host_readb(Real2Host(ds_readd(TEVENTS_TAB_PTR)) + 2));
+		host_writew(tevent_ptr, host_readb((Bit8u*)ds_readd(TEVENTS_TAB_PTR) + 1));
+		host_writew(tevent_ptr + 2, host_readb((Bit8u*)ds_readd(TEVENTS_TAB_PTR) + 2));
 
 		if (backwards)
 		{

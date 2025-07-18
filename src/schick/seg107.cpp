@@ -65,7 +65,7 @@ void use_item(signed short item_pos, signed short hero_pos)
 
 	if (check_hero(get_itemuser())) {
 
-			if (!item_useable(Real2Host(ds_readd(USED_ITEM_DESC)))) {
+			if (!item_useable((Bit8u*)ds_readd(USED_ITEM_DESC))) {
 				/* item is not usable */
 
 				if (is_in_word_array(ds_readws(USED_ITEM_ID), (signed short*)(p_datseg + ITEMS_PLURALWORDS)))
@@ -82,7 +82,7 @@ void use_item(signed short item_pos, signed short hero_pos)
 
 				GUI_output((char*)ds_readd(DTP2));
 
-			} else if ((item_herb_potion(Real2Host(ds_readd(USED_ITEM_DESC)))) &&
+			} else if ((item_herb_potion((Bit8u*)ds_readd(USED_ITEM_DESC))) &&
 					!is_in_word_array(ds_readws(USED_ITEM_ID), (signed short*)(p_datseg + POISON_POTIONS)))
 			{
 				/* don't consume poison */
@@ -94,9 +94,9 @@ void use_item(signed short item_pos, signed short hero_pos)
 			} else {
 				/* special item */
 #if !defined(__BORLANDC__)
-				func = handler[ds_readbs((SPECIALITEMS_TABLE + 2) + 3 * host_readbs(Real2Host(ds_readd(USED_ITEM_DESC)) + 4))];
+				func = handler[ds_readbs((SPECIALITEMS_TABLE + 2) + 3 * host_readbs((Bit8u*)ds_readd(USED_ITEM_DESC) + 4))];
 #else
-				func = (void (*)(void))ds_readd(USE_SPECIAL_ITEM_HANDLERS + 4 * ds_readbs((SPECIALITEMS_TABLE + 2) + 3 * host_readbs(Real2Host(ds_readd(USED_ITEM_DESC)) + 4)));
+				func = (void (*)(void))ds_readd(USE_SPECIAL_ITEM_HANDLERS + 4 * ds_readbs((SPECIALITEMS_TABLE + 2) + 3 * host_readbs((Bit8u*)ds_readd(USED_ITEM_DESC) + 4)));
 #endif
 				func();
 			}

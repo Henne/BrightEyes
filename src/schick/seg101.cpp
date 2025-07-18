@@ -50,13 +50,10 @@ void spell_arcano(void)
 	slot = get_free_mod_slot();
 
 	/* MR + 2 for 1 h */
-	set_mod_slot(slot, HOURS(1), get_spelltarget() + HERO_MR, 2,
-			(signed char)target);
+	set_mod_slot(slot, HOURS(1), get_spelltarget() + HERO_MR, 2, (signed char)target);
 
 	/* "Die Magieresistenz von %s steigt um 2 Punkte." */
-	sprintf((char*)ds_readd(DTP2),
-		get_tx(98),
-		(char*)Real2Host(ds_readd(SPELLTARGET)) + HERO_NAME2);
+	sprintf((char*)ds_readd(DTP2), get_tx(98), (char*)(get_spelltarget() + HERO_NAME2));
 }
 
 void spell_armatrutz(void)
@@ -557,9 +554,7 @@ void spell_salander(void)
 		ds_writew(SPELL_SPECIAL_AECOST, ae_cost);
 	} else {
 		/* prepare message */
-		sprintf((char*)ds_readd(DTP2),
-			get_ttx(607),
-			(char*)Real2Host(ds_readd(SPELLUSER)) + HERO_NAME2);
+		sprintf((char*)ds_readd(DTP2), get_ttx(607), (char*)(get_spelluser() + HERO_NAME2));
 
 		/* no AE cost */
 		ds_writew(SPELL_SPECIAL_AECOST, 0);

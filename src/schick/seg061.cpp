@@ -58,7 +58,7 @@ void do_temple(void)
 			/* search which god owns this temple */
 			ds_writew(TEMPLE_GOD, 1);
 			for (l_si = 1; l_si < 15; l_si++) {
-				if (is_in_byte_array((signed char)ds_readws(CURRENT_TYPEINDEX), Real2Host(ds_readd(GOD_TEMPLES_INDEX + 4 * l_si))))
+				if (is_in_byte_array((signed char)ds_readws(CURRENT_TYPEINDEX), (Bit8u*)ds_readd(GOD_TEMPLES_INDEX + 4 * l_si)))
 				{
 					ds_writew(TEMPLE_GOD, l_si);
 					break;
@@ -239,11 +239,11 @@ void char_add(signed short temple_id)
 	signed short l_si;
 	signed short l_di;
 	signed short i;
-	RealPt ptr;
+	Bit8u *ptr;
 	Bit8u *hero;
 
 	ptr = (Bit8u*)ds_readd(RENDERBUF_PTR) + 50000;
-	l_di = copy_chr_names(Real2Host(ptr), temple_id);
+	l_di = copy_chr_names(ptr, temple_id);
 
 	if (ds_readbs(TOTAL_HERO_COUNTER) == 7 ||
 		(ds_readbs(TOTAL_HERO_COUNTER) == 6 && !host_readbs(get_hero(6) + HERO_TYPE)))
@@ -268,8 +268,7 @@ void char_add(signed short temple_id)
 
 						if (!host_readbs(hero + HERO_TYPE)) {
 
-							prepare_chr_name((char*)ds_readd(DTP2),
-										(char*)(Real2Host(ptr) + 32 * l_si));
+							prepare_chr_name((char*)ds_readd(DTP2),	(char*)(ptr + 32 * l_si));
 
 							if (read_chr_temp((char*)ds_readd(DTP2), i, ds_readbs(CURRENT_GROUP))) {
 								inc_ds_bs_post(TOTAL_HERO_COUNTER);
@@ -289,10 +288,11 @@ void char_add(signed short temple_id)
 						get_ttx(235),
 						get_ttx(ds_readws(TEMPLE_GOD) + 21),	/* name of the god */
 						get_ttx(ds_readbs(CURRENT_TOWN) + 235));
+
 					GUI_print_loc_line((char*)ds_readd(DTP2));
 				}
 
-				l_di = copy_chr_names(Real2Host(ptr), temple_id);
+				l_di = copy_chr_names(ptr, temple_id);
 			}
 		} while (l_si != -1 && ds_readbs(TOTAL_HERO_COUNTER) < (host_readbs(get_hero(6) + HERO_TYPE) ? 7 : 6));
 	}
@@ -351,15 +351,15 @@ signed short char_erase(void)
 	signed short l_si;
 	signed short l_di;
 	signed short unlink_ret;
-	RealPt ptr;
+	Bit8u *ptr;
 
-	if (ds_readbs(RENDERBUF_IN_USE_FLAG) != 0) {
-		ptr = F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 30000);
+	if (ds_readbs(RENDERBUF_IN_USE_FLAG)) {
+		ptr = (HugePt)ds_readd(BUFFER9_PTR) + 30000L;
 	} else {
 		ptr = (Bit8u*)ds_readd(RENDERBUF_PTR) + 50000;
 	}
 
-	l_di = copy_chr_names(Real2Host(ptr), -1);
+	l_di = copy_chr_names(ptr, -1);
 
 	do {
 		if (!l_di) {
@@ -368,17 +368,14 @@ signed short char_erase(void)
 			l_si = menu_enter_delete(ptr, l_di, -1);
 
 			if (l_si != -1) {
-				strcpy((char*)ds_readd(DTP2),
-					(char*)Real2Host(ptr) + 32 * l_si);
 
-				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-					get_ttx(295),
-					(char*)ds_readd(DTP2));
+				strcpy((char*)ds_readd(DTP2), (char*)ptr + 32 * l_si);
+
+				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), get_ttx(295),	(char*)ds_readd(DTP2));
 
 				if (GUI_bool((char*)ds_readd(TEXT_OUTPUT_BUF))) {
 
-					prepare_chr_name((char*)ds_readd(TEXT_OUTPUT_BUF),
-								(char*)ds_readd(DTP2));
+					prepare_chr_name((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)ds_readd(DTP2));
 
 					unlink_ret = unlink((char*)ds_readd(TEXT_OUTPUT_BUF));
 
@@ -387,13 +384,12 @@ signed short char_erase(void)
 						return 0;
 					}
 
-					sprintf((char*)ds_readd(DTP2),
-						(char*)p_datseg + STR_TEMP_FILE_WILDCARD,
-						(char*)ds_readd(TEXT_OUTPUT_BUF));
+					sprintf((char*)ds_readd(DTP2), (char*)p_datseg + STR_TEMP_FILE_WILDCARD, (char*)ds_readd(TEXT_OUTPUT_BUF));
+
 					unlink((char*)ds_readd(DTP2));
 				}
 
-				l_di = copy_chr_names(Real2Host(ptr), -1);
+				l_di = copy_chr_names(ptr, -1);
 
 			} else {
 				return 0;
@@ -454,27 +450,20 @@ void miracle_heal_hero(signed short le_in, Bit8u *str)
 			strcat((char*)ds_readd(TEXT_OUTPUT_BUF), get_ttx(393));
 		}
 
-		sprintf((char*)ds_readd(DTP2),
-				(char*)str,
-				(char*)get_hero(hero_pos) + HERO_NAME2,
-				le_in,
-				(char*)ds_readd(TEXT_OUTPUT_BUF));
+		sprintf((char*)ds_readd(DTP2), (char*)str, (char*)get_hero(hero_pos) + HERO_NAME2, le_in, (char*)ds_readd(TEXT_OUTPUT_BUF));
 	}
 }
 
 void miracle_resurrect(Bit8u *str)
 {
 	signed short i;
-	Bit8u *hero;
 
 	for (i = 0; i <= 6; i++) {
-		hero = get_hero(i);
 
-		if (hero_dead(hero) &&
-			host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
-			!hero_gods_pissed(hero))
+		Bit8u *hero = get_hero(i);
+
+		if (hero_dead(hero) && host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) && !hero_gods_pissed(hero))
 		{
-
 			/* resurrect from the dead */
 			and_ptr_bs(hero + HERO_FLAGS1, 0xfe); /* unset 'dead' flag */
 
@@ -485,9 +474,7 @@ void miracle_resurrect(Bit8u *str)
 			draw_status_line();
 
 			/* prepare a message */
-			sprintf((char*)ds_readd(DTP2),
-				(char*)str,
-				(char*)hero + HERO_NAME2);
+			sprintf((char*)ds_readd(DTP2), (char*)str, (char*)hero + HERO_NAME2);
 
 			break;
 		}
@@ -503,10 +490,10 @@ void miracle_resurrect(Bit8u *str)
  */
 void miracle_modify(unsigned short offset, Bit32s timer_value, signed short mod)
 {
-	signed short i;
-	signed short slot;
+	int i;
+	int slot;
 	HugePt ptr;
-	RealPt hero = (Bit8u*)ds_readd(HEROES);
+	Bit8u *hero = (Bit8u*)ds_readd(HEROES);
 
 	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
@@ -519,7 +506,7 @@ void miracle_modify(unsigned short offset, Bit32s timer_value, signed short mod)
 			ptr = hero;
 			ptr += offset;
 
-			set_mod_slot(slot, timer_value, Real2Host(ptr), (signed char)mod, (signed char)i);
+			set_mod_slot(slot, timer_value, (Bit8u*)ptr, (signed char)mod, (signed char)i);
 		}
 	}
 }
@@ -532,17 +519,14 @@ void miracle_modify(unsigned short offset, Bit32s timer_value, signed short mod)
  */
 void miracle_weapon(Bit8u *str, signed short mode)
 {
-	signed short i;
-	signed short j;
-	signed short done;
-	signed short item_id;
-	Bit8u *hero;
+	int i;
+	int j;
+	int done;
+	int item_id;
 
-	j = done = 0;
+	for (j = done = 0; (j <= 6) && (!done); j++) {
 
-	while (j <= 6 && done == 0) {
-
-		hero = get_hero(j);
+		Bit8u *hero = get_hero(j);
 
 		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 			host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
@@ -565,9 +549,8 @@ void miracle_weapon(Bit8u *str, signed short mode)
 							or_ptr_bs(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * i, 0x08); /* set 'magic' flag */
 							or_ptr_bs(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * i, 0x80); /* set 'magic_revealed' flag */
 
-							sprintf((char*)ds_readd(DTP2),
-								(char*)str,
-								(char*)Real2Host(GUI_names_grammar((signed short)0x8000, item_id, 0)),
+							sprintf((char*)ds_readd(DTP2), (char*)str,
+								(char*)GUI_names_grammar((signed short)0x8000, item_id, 0),
 								(char*)hero + HERO_NAME2);
 
 							done = 1;
@@ -579,9 +562,8 @@ void miracle_weapon(Bit8u *str, signed short mode)
 						{
 							and_ptr_bs(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * i, 0xfe); /* unset 'broken' flag */
 
-							sprintf((char*)ds_readd(DTP2),
-								(char*)str,
-								(char*)Real2Host(GUI_names_grammar((signed short)0x8000, item_id, 0)),
+							sprintf((char*)ds_readd(DTP2), (char*)str,
+								(char*)GUI_names_grammar((signed short)0x8000, item_id, 0),
 								(char*)hero + HERO_NAME2);
 
 							done = 1;
@@ -591,8 +573,6 @@ void miracle_weapon(Bit8u *str, signed short mode)
 				}
 			}
 		}
-
-		j++;
 	}
 }
 

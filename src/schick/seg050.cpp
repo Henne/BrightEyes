@@ -84,7 +84,7 @@ void inc_spell_advanced(Bit8u *hero, signed short spell)
 		}
 
 		/* depending on the HERO_MAGIC_SCHOOL, the mage will get 3 possible increases on certain spells */
-		if (is_in_word_array(spell, (signed short*)Real2Host(ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)))))
+		if (is_in_word_array(spell, (signed short*)((Bit8u*)ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)))))
 		{
 			max_incs = 3;
 		}
@@ -764,39 +764,39 @@ void level_up(signed short hero_pos)
 						i = 0;
 
 						while (host_readbs(hero + HERO_SP_RISE) != 0 &&
-							(host_readws(Real2Host((ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)))) + 2 * i)) != -1) {
+							(host_readws((Bit8u*)ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i)) != -1) {
 
 							if (host_readbs(hero + HERO_SPELLS +
-									host_readws(Real2Host((ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)))) + 2 * i)) < 11)
+									host_readws((Bit8u*)ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i)) < 11)
 							{
 								inc_spell_novice(hero,
-									host_readws(Real2Host((ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)))) + 2 * i));
+									host_readws((Bit8u*)ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i));
 							}
 							i++;
 						}
 
 						i = 0;
 						while (host_readbs(hero + HERO_SP_RISE) != 0 &&
-							(host_readws(Real2Host((ds_readd(AUTOINC_SPELLS_MAGE_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)))) + 2 * i)) != -1) {
+							(host_readws((Bit8u*)ds_readd(AUTOINC_SPELLS_MAGE_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i)) != -1) {
 
 							if (host_readbs(hero + HERO_SPELLS +
-									host_readws(Real2Host((ds_readd(AUTOINC_SPELLS_MAGE_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)))) + 2 * i)) < 11)
+									host_readws((Bit8u*)ds_readd(AUTOINC_SPELLS_MAGE_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i)) < 11)
 							{
 								inc_spell_novice(hero,
-									host_readws(Real2Host((ds_readd(AUTOINC_SPELLS_MAGE_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)))) + 2 * i));
+									host_readws((Bit8u*)ds_readd(AUTOINC_SPELLS_MAGE_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i));
 							}
 							i++;
 						}
 
 						i = 0;
 						while (host_readbs(hero + HERO_SP_RISE) != 0 &&
-							(host_readws(Real2Host((ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)))) + 2 * i)) != -1) {
+							(host_readws((Bit8u*)ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i)) != -1) {
 
 							if (host_readbs(hero + HERO_SPELLS +
-									host_readws(Real2Host((ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)))) + 2 * i)) < 11)
+									host_readws((Bit8u*)ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i)) < 11)
 							{
 								inc_spell_novice(hero,
-									host_readws(Real2Host((ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)))) + 2 * i));
+									host_readws((Bit8u*)ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i));
 							}
 							i++;
 						}
@@ -916,8 +916,7 @@ void level_up(signed short hero_pos)
 
 			} else {
 
-				sprintf((char*)ds_readd(DTP2),
-					get_tx2(47), l_di);
+				sprintf((char*)ds_readd(DTP2), get_tx2(47), l_di);
 
 				i = GUI_input((char*)ds_readd(DTP2), 1);
 

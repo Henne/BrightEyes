@@ -144,7 +144,7 @@ for i in ${OBJDIR}/*.OBJ; do
 			if [ $DIFFLINES -ne 2 ]; then RETVAL=1; fi
 			;;
 		"SEG050")
-			# exact 1 differing lines are allowed
+			# exact 1 differing lines are allowed (ndisasm remainder)
 			DIFFLINES=$(diff -y -a ${DISORIG}/${PREFIX}.dis ${DISDIR}/${PREFIX}.dis | grep '|' |wc -l)
 			if [ $DIFFLINES -ne 1 ]; then RETVAL=1; fi
 			;;

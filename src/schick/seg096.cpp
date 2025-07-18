@@ -79,9 +79,9 @@ RealPt GUI_names_grammar(signed short flag, signed short index, signed short typ
 
 
 	sprintf((char*)p_datseg + (GRAMMAR_BUFS+40) + ds_readw(GRAMMAR_BUF_NO) * 40,
-		(l2 == 0) ? (char*)Real2Host(ds_readd(STR_S_S_PTR)) : (char*)Real2Host(ds_readd(STR_VON_S_S_PTR)),
-		(char*)Real2Host(ds_readd(GRAMMAR_ARTICLES_INDEX + 4 * host_readws((Bit8u*)lp1 + 2 * (((flag & 0x3000) - 1) >> 12)))),
-		(char*)Real2Host(GUI_name_plural(flag, p_name)));
+		(l2 == 0) ? (char*)ds_readd(STR_S_S_PTR) : (char*)ds_readd(STR_VON_S_S_PTR),
+		(char*)ds_readd(GRAMMAR_ARTICLES_INDEX + 4 * host_readws((Bit8u*)lp1 + 2 * (((flag & 0x3000) - 1) >> 12))),
+		(char*)GUI_name_plural(flag, p_name));
 
 	p_name = p_datseg + ds_readw(GRAMMAR_BUF_NO) * 40 + (GRAMMAR_BUFS+40);
 
@@ -170,18 +170,18 @@ RealPt GUI_2f2(signed short v1, signed short word_id, signed short type)
  * \param   genus       gender of the hero
  * \param   causus      the grammatical causus
  */
-RealPt GUI_get_ptr(signed short genus, signed short causus)
+char* GUI_get_ptr(const int genus, const int causus)
 {
 	if (genus == 0) {
-		return (causus == 0) ? ((Bit8u*)p_datseg + GRAMMAR_PRONOUNS_ER) :
-				((causus == 1) ? ((Bit8u*)p_datseg + GRAMMAR_PRONOUNS_SEIN) :
-				((causus == 3) ? ((Bit8u*)p_datseg + GRAMMAR_PRONOUNS_IHM) :
-					((Bit8u*)p_datseg + GRAMMAR_PRONOUNS_IHN)));
+		return (causus == 0) ? ((char*)p_datseg + GRAMMAR_PRONOUNS_ER) :
+				((causus == 1) ? ((char*)p_datseg + GRAMMAR_PRONOUNS_SEIN) :
+				((causus == 3) ? ((char*)p_datseg + GRAMMAR_PRONOUNS_IHM) :
+					((char*)p_datseg + GRAMMAR_PRONOUNS_IHN)));
 	} else {
-		return (causus == 0) ? ((Bit8u*)p_datseg + GRAMMAR_PRONOUNS_SIE) :
-				((causus == 1) ? ((Bit8u*)p_datseg + GRAMMAR_PRONOUNS_IHR) :
-				((causus == 3) ? ((Bit8u*)p_datseg + GRAMMAR_PRONOUNS_IHR) :
-					((Bit8u*)p_datseg + GRAMMAR_PRONOUNS_SIE)));
+		return (causus == 0) ? ((char*)p_datseg + GRAMMAR_PRONOUNS_SIE) :
+				((causus == 1) ? ((char*)p_datseg + GRAMMAR_PRONOUNS_IHR) :
+				((causus == 3) ? ((char*)p_datseg + GRAMMAR_PRONOUNS_IHR) :
+					((char*)p_datseg + GRAMMAR_PRONOUNS_SIE)));
 	}
 }
 

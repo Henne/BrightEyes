@@ -144,12 +144,13 @@ signed short enter_location_daspota(void)
 
 				if (ds_readd((DASPOTA_LOCLOOT_INDEX - 4) + 4 * host_readw(locations_list_ptr + LOCATION_LOCDATA))) {
 
-					loot_multi_chest(Real2Host((Bit8u*)ds_readd((DASPOTA_LOCLOOT_INDEX - 4) + 4 * host_readw(locations_list_ptr + LOCATION_LOCDATA))), get_tx(21));
+					loot_multi_chest((Bit8u*)ds_readd((DASPOTA_LOCLOOT_INDEX - 4) + 4 * host_readw(locations_list_ptr + LOCATION_LOCDATA)), get_tx(21));
 
 				} else {
 
 					do {
 						handle_gui_input();
+
 					} while (ds_readws(ACTION) == 0 && ds_readws(MOUSE1_EVENT2) == 0);
 
 					ds_writew(MOUSE1_EVENT2, 0);
@@ -792,7 +793,7 @@ void load_city_texture(signed short v1, signed short v2, signed short nvf_no,
 	 * the following line accesses memory outside of the
 	 * texture array if v4 is 48 or 49!?
 	 */
-	nvf.src = Real2Host(ds_readd(TEX_FLOOR + v4 * 4));
+	nvf.src = (Bit8u*)ds_readd(TEX_FLOOR + v4 * 4);
 
 	if (v4 == 48 || v4 == 49) {
 		nvf.src = (Bit8u*)ds_readd(BUFFER7_PTR);
