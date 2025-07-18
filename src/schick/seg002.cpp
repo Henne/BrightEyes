@@ -2075,11 +2075,11 @@ void dawning(void)
 	{
 
 		/* floor */
-		pal_fade(p_datseg + PALETTE_FLOOR, Real2Host(ds_readd(TOWNPAL_BUF)));
+		pal_fade(p_datseg + PALETTE_FLOOR, (Bit8u*)ds_readd(TOWNPAL_BUF));
 		/* buildings */
-		pal_fade(p_datseg + PALETTE_BUILDINGS, Real2Host(ds_readd(TOWNPAL_BUF)) + 0x60);
+		pal_fade(p_datseg + PALETTE_BUILDINGS, (Bit8u*)ds_readd(TOWNPAL_BUF) + 0x60);
 		/* sky */
-		pal_fade(p_datseg + PALETTE_SKY, Real2Host(ds_readd(TOWNPAL_BUF)) + 0xc0);
+		pal_fade(p_datseg + PALETTE_SKY, (Bit8u*)ds_readd(TOWNPAL_BUF) + 0xc0);
 
 		/* in a town */
 		if (ds_readbs(CURRENT_TOWN) &&

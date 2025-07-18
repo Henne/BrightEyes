@@ -712,27 +712,27 @@ void load_wallclock_nvf(void)
 	nvf.height = (Bit8u*)&fd;
 
 	/* sky background */
-	nvf.dst = Real2Host(ds_readd(OBJECTS_NVF_BUF));
+	nvf.dst = (Bit8u*)ds_readd(OBJECTS_NVF_BUF);
 	nvf.no = 12;
 	process_nvf(&nvf);
 
 	/* mountains */
-	nvf.dst = Real2Host(ds_readd(OBJECTS_NVF_BUF)) + 0x683;
+	nvf.dst = (Bit8u*)ds_readd(OBJECTS_NVF_BUF) + 0x683;
 	nvf.no = 13;
 	process_nvf(&nvf);
 
 	/* sun */
-	nvf.dst = Real2Host(ds_readd(OBJECTS_NVF_BUF)) + 0xcaf;
+	nvf.dst = (Bit8u*)ds_readd(OBJECTS_NVF_BUF) + 0xcaf;
 	nvf.no = 14;
 	process_nvf(&nvf);
 
 	/* moon */
-	nvf.dst = Real2Host(ds_readd(OBJECTS_NVF_BUF)) + 0xcef;
+	nvf.dst = (Bit8u*)ds_readd(OBJECTS_NVF_BUF) + 0xcef;
 	nvf.no = 15;
 	process_nvf(&nvf);
 
 	/* shift palette by 0xe0 */
-	array_add(Real2Host(ds_readd(OBJECTS_NVF_BUF)), 0xd3f, 0xe0, 2);
+	array_add((Bit8u*)ds_readd(OBJECTS_NVF_BUF), 0xd3f, 0xe0, 2);
 
 }
 

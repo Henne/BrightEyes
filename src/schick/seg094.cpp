@@ -105,10 +105,10 @@ void TM_func1(signed short route_no, signed short backwards)
 	memset((void*)Real2Host(ds_readd(TRV_TRACK_PIXEL_BAK)), 0xaa, 500);
 	ds_writed(TRAVEL_ROUTE_PTR, (Bit32u)RealMake(datseg, (LAND_ROUTES - SIZEOF_LAND_ROUTE) + SIZEOF_LAND_ROUTE * route_no));
 	ds_writew(TRAVEL_SPEED, 166);
-	ds_writew(ROUTE_TOTAL_STEPS, TM_get_track_length(Real2Host(ds_readd(ROUTE_COURSE_PTR))));
-	ds_writew(ROUTE_LENGTH, host_readb(Real2Host(ds_readd(TRAVEL_ROUTE_PTR)) + LAND_ROUTE_DISTANCE) * 100);
+	ds_writew(ROUTE_TOTAL_STEPS, TM_get_track_length((Bit8u*)ds_readd(ROUTE_COURSE_PTR)));
+	ds_writew(ROUTE_LENGTH, host_readb((Bit8u*)ds_readd(TRAVEL_ROUTE_PTR) + LAND_ROUTE_DISTANCE) * 100);
 	ds_writew(ROUTE_DURATION, ds_readws(ROUTE_LENGTH) / (
-        ds_readws(TRAVEL_SPEED) + host_readbs(Real2Host(ds_readd(TRAVEL_ROUTE_PTR)) + LAND_ROUTE_SPEED_MOD) * ds_readws(TRAVEL_SPEED) / 10
+        ds_readws(TRAVEL_SPEED) + host_readbs((Bit8u*)ds_readd(TRAVEL_ROUTE_PTR) + LAND_ROUTE_SPEED_MOD) * ds_readws(TRAVEL_SPEED) / 10
     ) * 60);
 	ds_writew(ROUTE_TIMEDELTA, ds_readws(ROUTE_DURATION) / ds_readws(ROUTE_TOTAL_STEPS));
 	ds_writew(ROUTE_STEPSIZE, ds_readws(ROUTE_LENGTH) / ds_readws(ROUTE_TOTAL_STEPS));
@@ -121,7 +121,7 @@ void TM_func1(signed short route_no, signed short backwards)
 #if defined(__BORLANDC__)
 	if (backwards)
 	{
-		while (host_readws(Real2Host(ds_readd(ROUTE_COURSE_PTR))) != -1)
+		while (host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR)) != -1)
 		{
 			add_ds_fp(ROUTE_COURSE_PTR, 4);
 		}
@@ -144,7 +144,7 @@ void TM_func1(signed short route_no, signed short backwards)
 	ds_writew(TRV_RETURN, 0);
 	ds_writed(ROUTE_COURSE_START, ds_readd(ROUTE_COURSE_PTR));
 	ds_writew(ROUTE_DAYPROGRESS, (
-	    ds_readws(TRAVEL_SPEED) + host_readbs(Real2Host(ds_readd(TRAVEL_ROUTE_PTR)) + LAND_ROUTE_SPEED_MOD) * ds_readws(TRAVEL_SPEED) / 10
+	    ds_readws(TRAVEL_SPEED) + host_readbs((Bit8u*)ds_readd(TRAVEL_ROUTE_PTR) + LAND_ROUTE_SPEED_MOD) * ds_readws(TRAVEL_SPEED) / 10
     ) * 18);
 
 	/* random section starts */
@@ -158,12 +158,12 @@ void TM_func1(signed short route_no, signed short backwards)
 		ds_writew(ROUTE_INFORMER_FLAG, 0);
 	}
 
-	if ((ds_writew(ROUTE_ENCOUNTER_FLAG, (random_schick(100) <= host_readb(Real2Host(ds_readd(TRAVEL_ROUTE_PTR)) + LAND_ROUTE_ENCOUNTERS) ? 1 : 0))) != 0)
+	if ((ds_writew(ROUTE_ENCOUNTER_FLAG, (random_schick(100) <= host_readb((Bit8u*)ds_readd(TRAVEL_ROUTE_PTR) + LAND_ROUTE_ENCOUNTERS) ? 1 : 0))) != 0)
 	{
 		ds_writew(ROUTE_ENCOUNTER_TIME, random_schick(ds_readws(ROUTE_DAYPROGRESS)));
 	}
 
-	if ((ds_writew(ROUTE_FIGHT_FLAG, (random_schick(100) <= host_readb(Real2Host(ds_readd(TRAVEL_ROUTE_PTR)) + LAND_ROUTE_FIGHTS) / 3 ? 1 : 0))) != 0)
+	if ((ds_writew(ROUTE_FIGHT_FLAG, (random_schick(100) <= host_readb((Bit8u*)ds_readd(TRAVEL_ROUTE_PTR) + LAND_ROUTE_FIGHTS) / 3 ? 1 : 0))) != 0)
 	{
 		ds_writew(ROUTE_FIGHT_TIME, random_schick(ds_readws(ROUTE_DAYPROGRESS)));
 	}
@@ -179,7 +179,7 @@ void TM_func1(signed short route_no, signed short backwards)
 
 		if (backwards)
 		{
-			host_writew(tevent_ptr, host_readb(Real2Host(ds_readd(TRAVEL_ROUTE_PTR)) + LAND_ROUTE_DISTANCE) - host_readws(tevent_ptr));
+			host_writew(tevent_ptr, host_readb((Bit8u*)ds_readd(TRAVEL_ROUTE_PTR) + LAND_ROUTE_DISTANCE) - host_readws(tevent_ptr));
 		}
 
 		mul_ptr_ws(tevent_ptr, 100);
@@ -191,14 +191,14 @@ void TM_func1(signed short route_no, signed short backwards)
 
 	ds_writew(ROUTE_STEPCOUNT, ds_writew(ROUTE_PROGRESS, ds_writeb(TRAVEL_DETOUR, 0)));
 
-	while (host_readws(Real2Host(ds_readd(ROUTE_COURSE_PTR)) + 2 * ds_writew(ROUTE_MOUSEHOVER, 0)) != -1 &&
+	while (host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2 * ds_writew(ROUTE_MOUSEHOVER, 0)) != -1 &&
 		!ds_readb(TRAVEL_DETOUR) &&
 		ds_readw(GAME_STATE) == GAME_STATE_MAIN)
 	{
-		if (is_mouse_in_rect(host_readws(Real2Host(ds_readd(ROUTE_COURSE_PTR))) - 16,
-					host_readws(Real2Host(ds_readd(ROUTE_COURSE_PTR)) + 2) - 16,
-					host_readws(Real2Host(ds_readd(ROUTE_COURSE_PTR))) + 16,
-					host_readws(Real2Host(ds_readd(ROUTE_COURSE_PTR)) + 2) + 16))
+		if (is_mouse_in_rect(host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR)) - 16,
+					host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2) - 16,
+					host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR)) + 16,
+					host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2) + 16))
 		{
 			update_mouse_cursor();
 			ds_writew(ROUTE_MOUSEHOVER, 1);
@@ -269,7 +269,7 @@ void TM_func1(signed short route_no, signed short backwards)
 				ds_writew(TRAVEL_SPEED, ds_readws(ROUTE_STEPCOUNT) + 197);
 				ds_writeb(FORCEDMARCH_TIMER, 2);
 				ds_writew(ROUTE_DURATION, ds_readws(ROUTE_LENGTH) / (
-				    ds_readws(TRAVEL_SPEED) + (host_readbs(Real2Host(ds_readd(TRAVEL_ROUTE_PTR)) + LAND_ROUTE_SPEED_MOD) * ds_readws(TRAVEL_SPEED)) / 10
+				    ds_readws(TRAVEL_SPEED) + (host_readbs((Bit8u*)ds_readd(TRAVEL_ROUTE_PTR) + LAND_ROUTE_SPEED_MOD) * ds_readws(TRAVEL_SPEED)) / 10
                 ) * 60);
 				ds_writew(ROUTE_TIMEDELTA, ds_readws(ROUTE_DURATION) / ds_readws(ROUTE_TOTAL_STEPS));
 				shr_ds_ws(FORCEDMARCH_LE_COST, 1);
@@ -381,15 +381,15 @@ void TM_func1(signed short route_no, signed short backwards)
 			{
 			    /* figure out encounters etc. for next day */
 				ds_writew(ROUTE_DAYPROGRESS, (
-				    ds_readws(TRAVEL_SPEED) + (host_readbs(Real2Host(ds_readd(TRAVEL_ROUTE_PTR)) + LAND_ROUTE_SPEED_MOD) * ds_readws(TRAVEL_SPEED) / 10)
+				    ds_readws(TRAVEL_SPEED) + (host_readbs((Bit8u*)ds_readd(TRAVEL_ROUTE_PTR) + LAND_ROUTE_SPEED_MOD) * ds_readws(TRAVEL_SPEED) / 10)
                 ) * 18);
 
-				if ((ds_writew(ROUTE_ENCOUNTER_FLAG, random_schick(100) <= host_readb(Real2Host(ds_readd(TRAVEL_ROUTE_PTR)) + LAND_ROUTE_ENCOUNTERS) ? 1 : 0)) != 0)
+				if ((ds_writew(ROUTE_ENCOUNTER_FLAG, random_schick(100) <= host_readb((Bit8u*)ds_readd(TRAVEL_ROUTE_PTR) + LAND_ROUTE_ENCOUNTERS) ? 1 : 0)) != 0)
 				{
 					ds_writew(ROUTE_ENCOUNTER_TIME, random_schick(ds_readws(ROUTE_DAYPROGRESS)));
 				}
 
-				if ((ds_writew(ROUTE_FIGHT_FLAG, random_schick(100) <= host_readb(Real2Host(ds_readd(TRAVEL_ROUTE_PTR)) + LAND_ROUTE_FIGHTS) / 3 ? 1 : 0)) != 0)
+				if ((ds_writew(ROUTE_FIGHT_FLAG, random_schick(100) <= host_readb((Bit8u*)ds_readd(TRAVEL_ROUTE_PTR) + LAND_ROUTE_FIGHTS) / 3 ? 1 : 0)) != 0)
 				{
 					ds_writew(ROUTE_FIGHT_TIME, random_schick(ds_readws(ROUTE_DAYPROGRESS)));
 				}
@@ -484,7 +484,7 @@ void TM_func1(signed short route_no, signed short backwards)
 			*(fb_start + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2) * 320 + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR))) =
 				host_readb((Bit8u*)ds_readd(TRV_TRACK_PIXEL_BAK) + ds_readws(ROUTE_STEPCOUNT));
 
-		} while (host_readws(Real2Host(ds_readd(ROUTE_COURSE_PTR))) != -1);
+		} while (host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR)) != -1);
 #endif
 
 		if (route_no == 59)

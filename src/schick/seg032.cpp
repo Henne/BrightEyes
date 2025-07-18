@@ -993,7 +993,7 @@ signed short do_fight(signed short fight_id)
 
 	/* open OBJECTS.NVF */
 	fd = load_archive_file(ARCHIVE_FILE_OBJECTS_NVF);
-	read_archive_file(fd, Real2Host(ds_readd(OBJECTS_NVF_BUF)), 3000);
+	read_archive_file(fd, (Bit8u*)ds_readd(OBJECTS_NVF_BUF), 3000);
 	close(fd);
 
 	FIG_chessboard_init();

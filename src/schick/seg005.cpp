@@ -58,7 +58,7 @@ unsigned short FIG_obj_needs_refresh(Bit8u *p, signed short x, signed short y)
 
 		/* i = i->next; */
 		/* check if given object overlaps with any of the objects behind it */
-		for (i = Real2Host(ds_readd(FIG_LIST_HEAD)); i != p; i = Real2Host(host_readd(i + FIGHTER_NEXT)))
+		for (i = (Bit8u*)ds_readd(FIG_LIST_HEAD); i != p; i = Real2Host(host_readd(i + FIGHTER_NEXT)))
 		{
 			/* Ignore invisible objects or objects, that are not refreshed */
 			if (host_readbs(i + FIGHTER_VISIBLE) >= 2) {
@@ -328,7 +328,7 @@ void draw_fight_screen(Bit16u val)
 
 	update_mouse_cursor();
 
-	list_i = Real2Host(ds_readd(FIG_LIST_HEAD));
+	list_i = (Bit8u*)ds_readd(FIG_LIST_HEAD);
 
 	do {
 		/* Check for each list entry if a sprite is needed */
@@ -359,7 +359,7 @@ void draw_fight_screen(Bit16u val)
 		ds_writew(FIG_ANI_STATE + i * 2, -1);
 	}
 
-	list_i = Real2Host(ds_readd(FIG_LIST_HEAD));
+	list_i = (Bit8u*)ds_readd(FIG_LIST_HEAD);
 	flag = 0;
 
 	do {
@@ -416,7 +416,7 @@ void draw_fight_screen(Bit16u val)
 		ds_writed(PIC_COPY_DST, ds_writed(PRINT_STRING_BUFFER, ds_readd(RENDERBUF_PTR)));
 
 
-		for (list_i = Real2Host(ds_readd(FIG_LIST_HEAD)); list_i; list_i = Real2Host(host_readd(list_i + FIGHTER_NEXT))) {
+		for (list_i = (Bit8u*)ds_readd(FIG_LIST_HEAD); list_i; list_i = Real2Host(host_readd(list_i + FIGHTER_NEXT))) {
 			if (host_readb(list_i + FIGHTER_VISIBLE) == 2)
 				host_writeb(list_i + FIGHTER_VISIBLE, 1);
 		}
@@ -441,7 +441,7 @@ void draw_fight_screen(Bit16u val)
 		ds_writed(PIC_COPY_SRC, ds_readd(BUFFER8_PTR));
 		do_pic_copy(3);
 
-		list_i = Real2Host(ds_readd(FIG_LIST_HEAD));
+		list_i = (Bit8u*)ds_readd(FIG_LIST_HEAD);
 
 		do {
 			p_weapon_gfx = 0;	/* NULL */
@@ -963,7 +963,7 @@ void draw_fight_screen(Bit16u val)
 		ds_writed(PIC_COPY_DST, ds_readd(RENDERBUF_PTR));
 	}
 
-	for (list_i = Real2Host(ds_readd(FIG_LIST_HEAD)); list_i; list_i = Real2Host(host_readd(list_i + FIGHTER_NEXT))) {
+	for (list_i = (Bit8u*)ds_readd(FIG_LIST_HEAD); list_i; list_i = Real2Host(host_readd(list_i + FIGHTER_NEXT))) {
 		if (host_readb(list_i + FIGHTER_VISIBLE) != 0)
 			host_writeb(list_i + FIGHTER_VISIBLE, 1);
 	}
