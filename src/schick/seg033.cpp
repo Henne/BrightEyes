@@ -954,7 +954,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 	}
 
 	if ((ds_readws(CURRENT_FIG_NO) == FIGHTS_F144) && /* final fight vs. Orkchampion */
-		(get_hero_index(Real2Host(ds_readd(MAIN_ACTING_HERO))) != hero_pos) &&
+		(get_hero_index((Bit8u*)ds_readd(MAIN_ACTING_HERO)) != hero_pos) &&
 		((host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_MELEE_ATTACK) || (host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_RANGE_ATTACK) ||
 		(host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_SPELL) || (host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_USE_ITEM)))
 	{

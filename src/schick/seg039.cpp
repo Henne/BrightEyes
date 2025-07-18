@@ -438,7 +438,7 @@ void FIG_init_heroes(void)
 
 		/* FINAL FIGHT */
 		if (ds_readw(CURRENT_FIG_NO) == FIGHTS_F144) {
-			if (hero == Real2Host(ds_readd(MAIN_ACTING_HERO))) {
+			if (hero == (Bit8u*)ds_readd(MAIN_ACTING_HERO)) {
 				cb_x = host_readbs((Bit8u*)ds_readd(CURRENT_FIGHT) + FIGHT_PLAYERS_X);
 				cb_y = host_readbs((Bit8u*)ds_readd(CURRENT_FIGHT) + FIGHT_PLAYERS_Y);
 				host_writeb(hero + HERO_VIEWDIR,

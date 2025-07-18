@@ -692,18 +692,18 @@ void INF_treborn_unicorn(signed short informer, signed short state)
 			ds_writeb(INFORMER_FLAGS + INFORMER_UNICORN, 2);
 		} else if (state == 10) {
 			/* test FF+2 */
-			ds_writew(DIALOG_NEXT_STATE, test_attrib(Real2Host(ds_readd(UNICORN_HERO_PTR)), ATTRIB_GE, 2) > 0 ? 11 : 14);
+			ds_writew(DIALOG_NEXT_STATE, test_attrib((Bit8u*)ds_readd(UNICORN_HERO_PTR), ATTRIB_GE, 2) > 0 ? 11 : 14);
 		} else if (state == 11) {
 			/* test FF+5 */
-			ds_writew(DIALOG_NEXT_STATE, test_attrib(Real2Host(ds_readd(UNICORN_HERO_PTR)), ATTRIB_GE, 5) > 0 ? 12 : 13);
+			ds_writew(DIALOG_NEXT_STATE, test_attrib((Bit8u*)ds_readd(UNICORN_HERO_PTR), ATTRIB_GE, 5) > 0 ? 12 : 13);
 		} else if (state == 15) {
 			ds_writew(DIALOG_NEXT_STATE, random_schick(100) <= 50 ? 16 : 17);
 		} else if (state == 16) {
 			/* the hero disappears */
-			hero_disappear(Real2Host(ds_readd(UNICORN_HERO_PTR)), ds_readb(UNICORN_HERO_POS), -1);
+			hero_disappear((Bit8u*)ds_readd(UNICORN_HERO_PTR), ds_readb(UNICORN_HERO_POS), -1);
 		} else if (state == 17) {
 			/* the hero gets heavily wounded, 1 LE left */
-			sub_hero_le(Real2Host(ds_readd(UNICORN_HERO_PTR)), host_readws(Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_LE) - 1);
+			sub_hero_le((Bit8u*)ds_readd(UNICORN_HERO_PTR), host_readws((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_LE) - 1);
 			/* the party opens a camp */
 			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
 			do_location();
@@ -714,7 +714,7 @@ void INF_treborn_unicorn(signed short informer, signed short state)
 			ds_writeb(UNICORN_GET_MAP, 1);
 
 			/* the hero gets 100 AP */
-			add_hero_ap(Real2Host(ds_readd(UNICORN_HERO_PTR)), 100);
+			add_hero_ap((Bit8u*)ds_readd(UNICORN_HERO_PTR), 100);
 
 			/* set the unicorn timer (in days) */
 			ds_writeb(UNICORN_TIMER, random_schick(24) + 36);

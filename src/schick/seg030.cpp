@@ -205,47 +205,47 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 						txt_id == 27 || txt_id == 28)
 					{
 						sprintf(dst, fmt,
-							Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_NAME2,
-							Real2Host(GUI_get_ptr(host_readbs(Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_SEX), 0)),
-							Real2Host(GUI_get_ptr(host_readbs(Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_SEX), 1)));
+							(Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_NAME2,
+							Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 0)),
+							Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 1)));
 
 					} else if (txt_id == 19) {
 
 						sprintf(dst, fmt,
-							Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_NAME2,
-							Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_NAME2);
+							(Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_NAME2,
+							(Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_NAME2);
 
 					} else if (txt_id == 23) {
 
 						sprintf(dst, fmt,
-							Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_NAME2,
-							Real2Host(GUI_get_ptr(host_readbs(Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_SEX), 2)));
+							(Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_NAME2,
+							Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 2)));
 					} else if (txt_id == 29) {
 
 						sprintf(dst, fmt,
-							Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_NAME2,
-							Real2Host(GUI_get_ptr(host_readbs(Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_SEX), 0)),
-							Real2Host(GUI_get_ptr(host_readbs(Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_SEX), 1)),
-							Real2Host(GUI_get_ptr(host_readbs(Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_SEX), 2)));
+							(Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_NAME2,
+							Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 0)),
+							Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 1)),
+							Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 2)));
 
 					} else if (txt_id == 30) {
 
 						sprintf(dst, fmt,
-							Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_NAME2,
-							Real2Host(GUI_get_ptr(host_readbs(Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_SEX), 1)),
-							Real2Host(GUI_get_ptr(host_readbs(Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_SEX), 2)));
+							(Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_NAME2,
+							Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 1)),
+							Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 2)));
 
 					} else if (txt_id == 31) {
 
 						sprintf(dst, fmt,
-							Real2Host(GUI_get_ptr(host_readbs(Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_SEX), 3)));
+							Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 3)));
 
 					} else if (txt_id == 32) {
 
 						sprintf(dst, fmt,
-							Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_NAME2,
-							Real2Host(GUI_get_ptr(host_readbs(Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_SEX), 0)),
-							Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_NAME2);
+							(Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_NAME2,
+							Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 0)),
+							(Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_NAME2);
 
 					} else {
 						strcpy(dst, fmt);
@@ -373,27 +373,27 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 						if (!txt_id || txt_id == 3 || txt_id == 4) {
 
 							sprintf(dst, fmt,
-								Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_NAME2,
-								Real2Host(GUI_get_ptr(host_readbs(Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_SEX), 0)));
+								(Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_NAME2,
+								Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 0)));
 
 						} else if (txt_id == 5) {
 
 							sprintf(dst, fmt,
-								Real2Host(GUI_get_ptr(host_readbs(Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_SEX), 0)),
-								Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_NAME2);
+								Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 0)),
+								(Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_NAME2);
 
 						} else if (txt_id == 6) {
 
 							sprintf(dst, fmt,
-								Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_NAME2,
-								Real2Host(GUI_get_ptr(host_readbs(Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_SEX), 1)),
-								Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_NAME2);
+								(Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_NAME2,
+								Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 1)),
+								(Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_NAME2);
 
 						} else if (txt_id == 8) {
 
 							sprintf(dst, fmt,
-								Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_NAME2,
-								Real2Host(ds_readd(UNICORN_HERO_PTR)) + HERO_NAME2);
+								(Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_NAME2,
+								(Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_NAME2);
 
 						} else {
 							strcpy(dst, fmt);
@@ -435,8 +435,8 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 					} else if (txt_id == 14 || txt_id == 15 || txt_id == 76) {
 
 						sprintf(dst, fmt,
-							(char*)Real2Host(ds_readd(RUIN_HERO)) + HERO_NAME2,
-							(char*)Real2Host(GUI_get_ptr(host_readbs(Real2Host(ds_readd(RUIN_HERO)) + 0x22), 0)));
+							(char*)(Bit8u*)ds_readd(RUIN_HERO) + HERO_NAME2,
+							(char*)Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(RUIN_HERO) + 0x22), 0)));
 
 					} else if (txt_id == 26 || txt_id == 65) {
 
@@ -457,9 +457,9 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 					if (txt_id == 40 || txt_id == 41 || txt_id == 43) {
 
 						sprintf(dst, fmt,
-							(char*)Real2Host(ds_readd(RANDOM_TLK_HERO)) + HERO_NAME2,
-							(char*)Real2Host(GUI_get_ptr(host_readbs(Real2Host(ds_readd(RANDOM_TLK_HERO)) + 0x22), 0)),
-							(char*)Real2Host(GUI_get_ptr(host_readbs(Real2Host(ds_readd(RANDOM_TLK_HERO)) + 0x22), 2)));
+							(char*)(Bit8u*)ds_readd(RANDOM_TLK_HERO) + HERO_NAME2,
+							(char*)Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(RANDOM_TLK_HERO) + 0x22), 0)),
+							(char*)Real2Host(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(RANDOM_TLK_HERO) + 0x22), 2)));
 					} else {
 
 						strcpy(dst, fmt);

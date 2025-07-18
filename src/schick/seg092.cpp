@@ -64,7 +64,7 @@ void chest_poisoned1(void)
 	sub_hero_le(Real2Host((RealPt)(ds_writed(MAIN_ACTING_HERO, (Bit32u)get_first_hero_available_in_group()))), dice_roll(2, 6, 0));
 
 	/* and gets poisoned */
-	hero_gets_poisoned(Real2Host(ds_readd(MAIN_ACTING_HERO)), 1);
+	hero_gets_poisoned((Bit8u*)ds_readd(MAIN_ACTING_HERO), 1);
 }
 
 void chest_poisoned2(void)
@@ -76,7 +76,7 @@ void chest_poisoned2(void)
 	sub_hero_le(Real2Host((RealPt)(ds_writed(MAIN_ACTING_HERO, (Bit32u)get_first_hero_available_in_group()))), dice_roll(2, 6, 0));
 
 	/* and gets poisoned */
-	hero_gets_poisoned(Real2Host(ds_readd(MAIN_ACTING_HERO)), 2);
+	hero_gets_poisoned((Bit8u*)ds_readd(MAIN_ACTING_HERO), 2);
 }
 
 void chest_poisoned3(void)
@@ -88,7 +88,7 @@ void chest_poisoned3(void)
 	sub_hero_le(Real2Host((RealPt)(ds_writed(MAIN_ACTING_HERO, (Bit32u)get_first_hero_available_in_group()))), dice_roll(1, 6, 0));
 
 	/* and gets poisoned */
-	hero_gets_poisoned(Real2Host(ds_readd(MAIN_ACTING_HERO)), 8);
+	hero_gets_poisoned((Bit8u*)ds_readd(MAIN_ACTING_HERO), 8);
 }
 
 void chest_protected_brutal(void)
@@ -109,7 +109,7 @@ void chest_petrified(void)
 	ds_writed(MAIN_ACTING_HERO, (Bit32u)get_first_hero_available_in_group());
 
 	/* and make him petrified */
-	or_ptr_bs(Real2Host(ds_readd(MAIN_ACTING_HERO)) + HERO_FLAGS1, 0x04); /* set 'petrified' flag */
+	or_ptr_bs((Bit8u*)ds_readd(MAIN_ACTING_HERO) + HERO_FLAGS1, 0x04); /* set 'petrified' flag */
 }
 
 void chest_ignifax_normal(void)

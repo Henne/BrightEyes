@@ -773,15 +773,15 @@ void TLK_way_to_ruin(signed short state)
 
 		ds_writew(DIALOG_NEXT_STATE, ds_readws(TLK_RUIN_HERO_COUNTER) == 7 ? 13 : 10);
 	} else if (state == 10) {
-		ds_writew(DIALOG_NEXT_STATE, test_skill(Real2Host(ds_readd(RUIN_HERO)), TA_SCHWIMMEN, 5) > 0 ? 11 : 12);
+		ds_writew(DIALOG_NEXT_STATE, test_skill((Bit8u*)ds_readd(RUIN_HERO), TA_SCHWIMMEN, 5) > 0 ? 11 : 12);
 	} else if (state == 12) {
-		sub_hero_le(Real2Host(ds_readd(RUIN_HERO)), random_schick(4) + 1);
+		sub_hero_le((Bit8u*)ds_readd(RUIN_HERO), random_schick(4) + 1);
 
 		/* Original-Bug: hero != RUIN_HERO */
-		hero_disease_test(Real2Host(ds_readd(RUIN_HERO)), 2,
+		hero_disease_test((Bit8u*)ds_readd(RUIN_HERO), 2,
 			25 - (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(Real2Host(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK)))));
 
-		loose_random_item(Real2Host(ds_readd(RUIN_HERO)), 10, get_ttx(506));
+		loose_random_item((Bit8u*)ds_readd(RUIN_HERO), 10, get_ttx(506));
 
 	} else if (state == 13 || state == 25 || state == 34 || state == 59 || state == 62) {
 		timewarp(MINUTES(30));
@@ -794,7 +794,7 @@ void TLK_way_to_ruin(signed short state)
 	} else if (state == 19) {
 		timewarp(MINUTES(20));
 		ds_writed(RUIN_HERO, (Bit32u)((Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * get_random_hero()));
-		ds_writew(DIALOG_NEXT_STATE, test_skill(Real2Host(ds_readd(RUIN_HERO)), TA_AEXTE, 2) > 0 ? 20 : 21);
+		ds_writew(DIALOG_NEXT_STATE, test_skill((Bit8u*)ds_readd(RUIN_HERO), TA_AEXTE, 2) > 0 ? 20 : 21);
 	} else if (state == 20) {
 		loose_random_item(get_hero(get_random_hero()), 5, get_ttx(506));
 	} else if (state == 21) {

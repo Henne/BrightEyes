@@ -49,7 +49,7 @@ void tevent_080(void)
 
 		TRV_found_replenish_place(0);
 
-		hero = Real2Host(ds_readd(MAIN_ACTING_HERO));
+		hero = (Bit8u*)ds_readd(MAIN_ACTING_HERO);
 
 		if ((hero && !ds_readb(TEVENT080_TATZELWURM) && test_skill(hero, TA_FAEHRTENSUCHEN, 5) > 0) ||
 			ds_readb(TEVENT080_TATZELWURM) == 1)
