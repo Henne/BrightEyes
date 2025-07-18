@@ -28,13 +28,13 @@ void FIG_chessboard_init(void)
 	signed short obj_id;
 
 	/* initialize the chessboard */
-	memset(Real2Host(ds_readd(CHESSBOARD)), 0, 600);
+	memset((Bit8u*)ds_readd(CHESSBOARD), 0, 600);
 
 	for (cb_y = 0; cb_y < 24; cb_y++) {
 
 		for (cb_x = 0; cb_x < 24; cb_x++) {
 
-			obj_id = host_readbs(Real2Host(ds_readd(SCENARIO_BUF)) + cb_y * 25 + cb_x + 0x15);
+			obj_id = host_readbs((Bit8u*)ds_readd(SCENARIO_BUF) + cb_y * 25 + cb_x + 0x15);
 
 			if (obj_id < 0) {
 
@@ -67,7 +67,7 @@ void FIG_chessboard_init(void)
 
 	i = 0;
 
-	if (host_readbs(Real2Host(ds_readd(SCENARIO_BUF)) + 0x14) <= 3) {
+	if (host_readbs((Bit8u*)ds_readd(SCENARIO_BUF) + 0x14) <= 3) {
 
 		while (ds_readbs(CB_REAR_BORDER + i * 2) != -1) {
 
@@ -88,8 +88,8 @@ void FIG_preload_gfx(void)
 
 	ds_writed(FIG_LIST_BUFFER, (Bit32u)(F_PADD((HugePt)ds_readd(FIG_FIGURE2_BUF), -0x115d)));
 
-	memset(Real2Host(ds_readd(FIG_LIST_BUFFER)), 0, 0x115d);
-	p1 = Real2Host(ds_readd(FIG_LIST_BUFFER));
+	memset((Bit8u*)ds_readd(FIG_LIST_BUFFER), 0, 0x115d);
+	p1 = (Bit8u*)ds_readd(FIG_LIST_BUFFER);
 
 	for (i = 0; i < 127; i++) {
 		host_writeb(p1 + 0x10, -1);
@@ -126,9 +126,9 @@ void FIG_preload_gfx(void)
 	}
 
 	for (i = 0; i <= 62; i++) {
-		host_writed(Real2Host(ds_readd(FIGOBJ_GFXBUF_TABLE)) + i * 4, 0);
-		host_writews(Real2Host(ds_readd(FIGOBJ_GFXWIDTH_TABLE)) + i * 2,
-			host_writews(Real2Host(ds_readd(FIGOBJ_GFXHEIGHT_TABLE)) + i * 2, 0));
+		host_writed((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + i * 4, 0);
+		host_writews((Bit8u*)ds_readd(FIGOBJ_GFXWIDTH_TABLE) + i * 2,
+			host_writews((Bit8u*)ds_readd(FIGOBJ_GFXHEIGHT_TABLE) + i * 2, 0));
 	}
 
 	ds_writeb(FIG_CB_MAKRER_ID, -1);
@@ -224,7 +224,7 @@ void FIG_draw_scenario(void)
 	for (cb_x = 0; cb_x < 24; cb_x++) {
 		for (cb_y = 0; cb_y < 24; cb_y++) {
 
-			obj_id = host_readbs(Real2Host(ds_readd(SCENARIO_BUF)) + cb_y * 25 + cb_x + 0x15);
+			obj_id = host_readbs((Bit8u*)ds_readd(SCENARIO_BUF) + cb_y * 25 + cb_x + 0x15);
 
 			if (obj_id >= 0x32) {
 				if (obj_id < 0x6c || obj_id > 0x6f) {
@@ -232,8 +232,8 @@ void FIG_draw_scenario(void)
 					obj_id -= 50;
 
 					/* NULL check */
-					if (host_readd(Real2Host(ds_readd(FIGOBJ_GFXBUF_TABLE)) + obj_id * 4)) {
-						ptr = (Bit8u*)host_readd(Real2Host(ds_readd(FIGOBJ_GFXBUF_TABLE)) + obj_id * 4);
+					if (host_readd((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + obj_id * 4)) {
+						ptr = (Bit8u*)host_readd((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + obj_id * 4);
 					} else {
 						ptr = (Bit8u*)ds_readd(FIGHTOBJ_BUF_SEEK_PTR);
 
@@ -251,9 +251,9 @@ void FIG_draw_scenario(void)
 #endif
 
 						/* save sprite info */
-						host_writed(Real2Host(ds_readd(FIGOBJ_GFXBUF_TABLE)) + obj_id * 4, (Bit32u)ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
-						host_writew(Real2Host(ds_readd(FIGOBJ_GFXWIDTH_TABLE)) + obj_id * 2, width);
-						host_writew(Real2Host(ds_readd(FIGOBJ_GFXHEIGHT_TABLE)) + obj_id * 2, height);
+						host_writed((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + obj_id * 4, (Bit32u)ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
+						host_writew((Bit8u*)ds_readd(FIGOBJ_GFXWIDTH_TABLE) + obj_id * 2, width);
+						host_writew((Bit8u*)ds_readd(FIGOBJ_GFXHEIGHT_TABLE) + obj_id * 2, height);
 
 						/* adjust pointer */
 #if defined(__BORLANDC__)
@@ -269,14 +269,14 @@ void FIG_draw_scenario(void)
 					ds_writeb((FIG_LIST_ELEM+FIGHTER_CBY), (signed char)cb_y);
 					ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETX), ds_readb(GFXTAB_OBJ_OFFSET_X + obj_id * 2));
 					ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETY), ds_readb(GFXTAB_OBJ_OFFSET_Y + obj_id * 2));
-					ds_writeb((FIG_LIST_ELEM+FIGHTER_HEIGHT), host_readb(Real2Host(ds_readd(FIGOBJ_GFXHEIGHT_TABLE)) + obj_id * 2));
-					ds_writeb((FIG_LIST_ELEM+FIGHTER_WIDTH), host_readb(Real2Host(ds_readd(FIGOBJ_GFXWIDTH_TABLE)) + obj_id * 2));
+					ds_writeb((FIG_LIST_ELEM+FIGHTER_HEIGHT), host_readb((Bit8u*)ds_readd(FIGOBJ_GFXHEIGHT_TABLE) + obj_id * 2));
+					ds_writeb((FIG_LIST_ELEM+FIGHTER_WIDTH), host_readb((Bit8u*)ds_readd(FIGOBJ_GFXWIDTH_TABLE) + obj_id * 2));
 					ds_writeb((FIG_LIST_ELEM+FIGHTER_X1), 0);
 					ds_writeb((FIG_LIST_ELEM+FIGHTER_Y1), 0);
 					ds_writebs((FIG_LIST_ELEM+FIGHTER_X2),
-						host_readbs(Real2Host(ds_readd(FIGOBJ_GFXWIDTH_TABLE)) + obj_id * 2) - 1);
+						host_readbs((Bit8u*)ds_readd(FIGOBJ_GFXWIDTH_TABLE) + obj_id * 2) - 1);
 					ds_writebs((FIG_LIST_ELEM+FIGHTER_Y2),
-						host_readbs(Real2Host(ds_readd(FIGOBJ_GFXHEIGHT_TABLE)) + obj_id * 2) - 1);
+						host_readbs((Bit8u*)ds_readd(FIGOBJ_GFXHEIGHT_TABLE) + obj_id * 2) - 1);
 					ds_writeb((FIG_LIST_ELEM+FIGHTER_IS_ENEMY), 0);
 					ds_writeb((FIG_LIST_ELEM+FIGHTER_RELOAD), 0);
 					ds_writeb((FIG_LIST_ELEM+FIGHTER_WSHEET), -1);

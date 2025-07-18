@@ -819,25 +819,25 @@ void FIG_load_ship_sprites(void)
 
 		for (l_di = 0; l_di < 24; l_di++) {
 
-			l_si = host_readbs(Real2Host(ds_readd(SCENARIO_BUF)) + 0x15 + 25 * i + l_di);
+			l_si = host_readbs((Bit8u*)ds_readd(SCENARIO_BUF) + 0x15 + 25 * i + l_di);
 
 			if ((l_si >= 108) && (l_si <= 111)) {
 
 				l_si -= 50;
 
-			if (((Bit8u*)(host_readd(Real2Host(ds_readd(FIGOBJ_GFXBUF_TABLE)) + 4 * l_si)))) {
+			if (((Bit8u*)(host_readd((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + 4 * l_si)))) {
 
 				/* this sprite has already been buffered */
 
-				ptr = Real2Host(host_readd(Real2Host(ds_readd(FIGOBJ_GFXBUF_TABLE)) + 4 * l_si));
+				ptr = Real2Host(host_readd((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + 4 * l_si));
 
 			} else {
 				/* this sprite has not been used yet */
 
-				ptr = Real2Host(ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
+				ptr = (Bit8u*)ds_readd(FIGHTOBJ_BUF_SEEK_PTR);
 
 				nvf.dst = ptr;
-				nvf.src = Real2Host(ds_readd(FIGHTOBJ_BUF));
+				nvf.src = (Bit8u*)ds_readd(FIGHTOBJ_BUF);
 				nvf.no = l_si;
 				nvf.type = 0;
 				nvf.width = (Bit8u*)&width;
@@ -851,9 +851,9 @@ void FIG_load_ship_sprites(void)
 #endif
 
 				/* buffer this picture */
-				host_writed(Real2Host(ds_readd(FIGOBJ_GFXBUF_TABLE)) + 4 * l_si, (Bit32u)ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
-				host_writew(Real2Host(ds_readd(FIGOBJ_GFXWIDTH_TABLE)) + 2 * l_si, width);
-				host_writew(Real2Host(ds_readd(FIGOBJ_GFXHEIGHT_TABLE)) + 2 * l_si, height);
+				host_writed((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + 4 * l_si, (Bit32u)ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
+				host_writew((Bit8u*)ds_readd(FIGOBJ_GFXWIDTH_TABLE) + 2 * l_si, width);
+				host_writew((Bit8u*)ds_readd(FIGOBJ_GFXHEIGHT_TABLE) + 2 * l_si, height);
 
 				/* adjust the pointer */
 #if defined(__BORLANDC__)
@@ -871,8 +871,8 @@ void FIG_load_ship_sprites(void)
 
 
 			/* calculate screen coordinates */
-			l3 = const1 - host_readws(Real2Host(ds_readd(FIGOBJ_GFXWIDTH_TABLE)) + 2 * l_si) / 2 + 10 * (l_di + i);
-			l4 = const2 - host_readws(Real2Host(ds_readd(FIGOBJ_GFXHEIGHT_TABLE)) + 2 * l_si) + 5 * (l_di - i);
+			l3 = const1 - host_readws((Bit8u*)ds_readd(FIGOBJ_GFXWIDTH_TABLE) + 2 * l_si) / 2 + 10 * (l_di + i);
+			l4 = const2 - host_readws((Bit8u*)ds_readd(FIGOBJ_GFXHEIGHT_TABLE) + 2 * l_si) + 5 * (l_di - i);
 
 			l3 += ds_readws(GFXTAB_OBJ_OFFSET_X + 2 * l_si);
 			l4 += ds_readws(GFXTAB_OBJ_OFFSET_Y + 2 * l_si);
@@ -880,9 +880,9 @@ void FIG_load_ship_sprites(void)
 			/* set screen coordinates */
 			ds_writew(PIC_COPY_X1, l3);
 			ds_writew(PIC_COPY_Y1, l4);
-			ds_writew(PIC_COPY_X2, l3 + host_readws(Real2Host(ds_readd(FIGOBJ_GFXWIDTH_TABLE)) + 2 * l_si) - 1);
-			ds_writew(PIC_COPY_Y2, l4 + host_readws(Real2Host(ds_readd(FIGOBJ_GFXHEIGHT_TABLE)) + 2 * l_si) - 1);
-			ds_writed(PIC_COPY_SRC, host_readd(Real2Host(ds_readd(FIGOBJ_GFXBUF_TABLE)) + 4 * l_si));
+			ds_writew(PIC_COPY_X2, l3 + host_readws((Bit8u*)ds_readd(FIGOBJ_GFXWIDTH_TABLE) + 2 * l_si) - 1);
+			ds_writew(PIC_COPY_Y2, l4 + host_readws((Bit8u*)ds_readd(FIGOBJ_GFXHEIGHT_TABLE) + 2 * l_si) - 1);
+			ds_writed(PIC_COPY_SRC, host_readd((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + 4 * l_si));
 			ds_writed(PIC_COPY_DST, ds_readd(BUFFER8_PTR));
 
 			do_pic_copy(2);
@@ -1002,19 +1002,19 @@ signed short do_fight(signed short fight_id)
 
 	/* open FIGHTOBJ.NVF */
 	fd = load_archive_file(ARCHIVE_FILE_FIGHTOBJ_NVF);
-	read_archive_file(fd, Real2Host(ds_readd(FIGHTOBJ_BUF)), 16919);
+	read_archive_file(fd, (Bit8u*)ds_readd(FIGHTOBJ_BUF), 16919);
 	close(fd);
 
 	set_var_to_zero();
 	update_mouse_cursor();
 
-	if (host_readbs(Real2Host(ds_readd(SCENARIO_BUF)) + 0x14) > 3) {
+	if (host_readbs((Bit8u*)ds_readd(SCENARIO_BUF) + 0x14) > 3) {
 
-		load_fightbg(host_readbs(Real2Host(ds_readd(SCENARIO_BUF)) + 0x14) + 197);
+		load_fightbg(host_readbs((Bit8u*)ds_readd(SCENARIO_BUF) + 0x14) + 197);
 
 	} else {
 
-		load_fightbg(host_readbs(Real2Host(ds_readd(SCENARIO_BUF)) + 0x14) + 1);
+		load_fightbg(host_readbs((Bit8u*)ds_readd(SCENARIO_BUF) + 0x14) + 1);
 
 	}
 

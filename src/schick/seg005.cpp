@@ -58,7 +58,7 @@ unsigned short FIG_obj_needs_refresh(Bit8u *p, signed short x, signed short y)
 
 		/* i = i->next; */
 		/* check if given object overlaps with any of the objects behind it */
-		for (i = (Bit8u*)ds_readd(FIG_LIST_HEAD); i != p; i = Real2Host(host_readd(i + FIGHTER_NEXT)))
+		for (i = (Bit8u*)ds_readd(FIG_LIST_HEAD); i != p; i = (Bit8u*)host_readd(i + FIGHTER_NEXT))
 		{
 			/* Ignore invisible objects or objects, that are not refreshed */
 			if (host_readbs(i + FIGHTER_VISIBLE) >= 2) {
@@ -318,7 +318,7 @@ void draw_fight_screen(Bit16u val)
 	signed short viewdir_after;
 	signed short target_id;
 	signed char twofielded_move_tail_first;
-	RealPt p_fighter_tmp;
+	Bit8u *p_fighter_tmp;
 	signed short viewdir_unconsc;
 	Bit8u *sheet;
 	Bit8u *p_weapon_anisheet;
@@ -335,8 +335,8 @@ void draw_fight_screen(Bit16u val)
 
 		if (host_readbs(list_i + FIGHTER_RELOAD) == -1) {
 
-			nvf.src = Real2Host(load_fight_figs(host_readw(list_i + FIGHTER_FIGURE)));
-			nvf.dst = Real2Host(host_readd(list_i + FIGHTER_GFXBUF));
+			nvf.src = (Bit8u*)load_fight_figs(host_readw(list_i + FIGHTER_FIGURE));
+			nvf.dst = (Bit8u*)host_readd(list_i + FIGHTER_GFXBUF);
 			nvf.no = host_readbs(list_i + FIGHTER_NVF_NO);
 			nvf.type = 0;
 			nvf.width = (Bit8u*)&width;
@@ -347,7 +347,7 @@ void draw_fight_screen(Bit16u val)
 			host_writeb(list_i + FIGHTER_RELOAD, 0);
 		}
 
-	} while (list_i = Real2Host(host_readd(list_i + FIGHTER_NEXT)));
+	} while (list_i = (Bit8u*)host_readd(list_i + FIGHTER_NEXT));
 
 	/* set elements array[0] of array[9] */
 	ds_writed(FIG_GFXBUFFERS, ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
@@ -381,17 +381,17 @@ void draw_fight_screen(Bit16u val)
 
 			ds_writew(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2, 0);
 
-			memcpy(Real2Host(ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_SHEET) * 4)),
-				Real2Host(host_readd(list_i + FIGHTER_GFXBUF)),
+			memcpy((Bit8u*)ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_SHEET) * 4),
+				(Bit8u*)host_readd(list_i + FIGHTER_GFXBUF),
 				host_readbs(list_i + FIGHTER_WIDTH) * host_readbs(list_i + FIGHTER_HEIGHT));
 		}
 
 		if (host_readbs(list_i + FIGHTER_WSHEET) != -1) {
-			memset(Real2Host(ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_WSHEET) * 4)), 0, 0x508);
+			memset((Bit8u*)ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_WSHEET) * 4), 0, 0x508);
 		}
 
 
-	} while (list_i = Real2Host(host_readd(list_i + FIGHTER_NEXT)));
+	} while (list_i = (Bit8u*)host_readd(list_i + FIGHTER_NEXT));
 
 	/* write TEMP/XX */
 	/* TODO: should be O_BINARY | O_WRONLY */
@@ -416,7 +416,7 @@ void draw_fight_screen(Bit16u val)
 		ds_writed(PIC_COPY_DST, ds_writed(PRINT_STRING_BUFFER, ds_readd(RENDERBUF_PTR)));
 
 
-		for (list_i = (Bit8u*)ds_readd(FIG_LIST_HEAD); list_i; list_i = Real2Host(host_readd(list_i + FIGHTER_NEXT))) {
+		for (list_i = (Bit8u*)ds_readd(FIG_LIST_HEAD); list_i; list_i = (Bit8u*)host_readd(list_i + FIGHTER_NEXT)) {
 			if (host_readb(list_i + FIGHTER_VISIBLE) == 2)
 				host_writeb(list_i + FIGHTER_VISIBLE, 1);
 		}
@@ -582,12 +582,12 @@ void draw_fight_screen(Bit16u val)
 						obj_y += host_readbs(list_i + FIGHTER_OFFSETY);
 
 						if ((host_readbs(list_i + FIGHTER_SHEET) < 6) && (host_readbs(sheet + 0xf2) >= 0)) {
-							nvf.src = Real2Host(load_fight_figs(host_readw(list_i + FIGHTER_FIGURE)));
+							nvf.src = (Bit8u*)load_fight_figs(host_readw(list_i + FIGHTER_FIGURE));
 						} else {
-							nvf.src =  (Bit8u*)ds_readd(SPELLOBJ_NVF_BUF);
+							nvf.src = (Bit8u*)ds_readd(SPELLOBJ_NVF_BUF);
 						}
 
-						nvf.dst = Real2Host(host_readd(list_i + FIGHTER_GFXBUF));
+						nvf.dst = (Bit8u*)host_readd(list_i + FIGHTER_GFXBUF);
 						nvf.no = host_readbs(list_i + FIGHTER_NVF_NO);
 						nvf.type = 0;
 						nvf.width = (Bit8u*)&width;
@@ -697,9 +697,9 @@ void draw_fight_screen(Bit16u val)
 									/* The FIGHTER_OBJ_ID entry of the head part will be overwritten by the next line in the original code.
 									 * In this way, sometimes dead bodies are lost from the chessboard after a two-fielded enemy walks over it.
 									 * The right thing is to copy it to the FIGHTER_OBJ_ID of tail part. */
-									host_writeb(list_i + FIGHTER_OBJ_ID, (signed char)host_readbs(Real2Host(p_fighter_tmp) + FIGHTER_OBJ_ID));
+									host_writeb(list_i + FIGHTER_OBJ_ID, (signed char)host_readbs(p_fighter_tmp + FIGHTER_OBJ_ID));
 #endif
-									host_writeb(Real2Host(p_fighter_tmp) + FIGHTER_OBJ_ID,  (signed char)obj_id);
+									host_writeb(p_fighter_tmp + FIGHTER_OBJ_ID,  (signed char)obj_id);
 									/* write cb_id of the tail part at FIGHTER_OBJ_ID of the head part.
 									 * when the head part moves lated, it will be written to the cb.
 									 * possible bug: the overwritten FIGHTER_OBJ_ID is lost! */
@@ -716,7 +716,7 @@ void draw_fight_screen(Bit16u val)
 
 										if (host_readbs(list_i + FIGHTER_IS_ENEMY) == 1) {
 											/* enemy escapes */
-											p_enemy_sheet = Real2Host(FIG_get_enemy_sheet(host_readbs(list_i + FIGHTER_ID)));
+											p_enemy_sheet = (Bit8u*)FIG_get_enemy_sheet(host_readbs(list_i + FIGHTER_ID));
 											if (p_enemy_sheet) {
 												or_ptr_bs(p_enemy_sheet + ENEMY_SHEET_FLAGS1, 1); /* set 'dead' flag */
 												host_writeb(p_enemy_sheet + ENEMY_SHEET_BP, 0);
@@ -727,15 +727,15 @@ void draw_fight_screen(Bit16u val)
 													/* Original-Bug 4:
 													 * remove tail of the escaped two-fielded enemy from the chessboard
 													 * For more on this bug, see Original-Bug 3 at seg032.cpp */
-													p_fighter_tmp = FIG_get_ptr(ds_readbs(FIG_TWOFIELDED_TABLE + host_readbs(list_i + FIGHTER_TWOFIELDED)));
-													FIG_set_cb_field(host_readbs(Real2Host(p_fighter_tmp) + FIGHTER_CBY), host_readbs(Real2Host(p_fighter_tmp) + FIGHTER_CBX), host_readbs(Real2Host(p_fighter_tmp) + FIGHTER_OBJ_ID));
+													p_fighter_tmp = (Bit8u*)FIG_get_ptr(ds_readbs(FIG_TWOFIELDED_TABLE + host_readbs(list_i + FIGHTER_TWOFIELDED)));
+													FIG_set_cb_field(host_readbs(p_fighter_tmp + FIGHTER_CBY), host_readbs(p_fighter_tmp + FIGHTER_CBX), host_readbs(p_fighter_tmp + FIGHTER_OBJ_ID));
 #endif
 													figlist_remove[2 + host_readbs(list_i + FIGHTER_SHEET)] = ds_readbs(FIG_TWOFIELDED_TABLE + host_readbs(list_i + FIGHTER_TWOFIELDED));
 												}
 											}
 										} else {
 											/* hero escapes */
-											hero = Real2Host(FIG_get_hero_ptr(host_readbs(list_i + FIGHTER_ID)));
+											hero = (Bit8u*)FIG_get_hero_ptr(host_readbs(list_i + FIGHTER_ID));
 											if (hero) {
 												host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_FLEE);
 												or_ptr_bs(hero + HERO_FLAGS2, 1); /* set 'scared' flag */
@@ -801,12 +801,12 @@ void draw_fight_screen(Bit16u val)
 							i = ds_readbs(GFXTAB_FIGURES_MAIN + (host_readbs(list_i + FIGHTER_SPRITE_NO) * 5) + host_readbs(sheet));
 
 							if ((host_readbs(list_i + FIGHTER_SHEET) < 6) && (host_readbs(sheet + 0xf2) >= 0)) {
-								nvf.src = Real2Host(load_fight_figs(i));
+								nvf.src = (Bit8u*)load_fight_figs(i);
 							} else {
 								nvf.src = (Bit8u*)ds_readd(SPELLOBJ_NVF_BUF);
 							}
 
-							nvf.dst = Real2Host(ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_SHEET) * 4));
+							nvf.dst = (Bit8u*)ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_SHEET) * 4);
 							nvf.no = host_readbs(sheet + 1 + ds_readw(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2) * 3);
 							nvf.type = 0;
 							nvf.width = (Bit8u*)&width;
@@ -828,7 +828,7 @@ void draw_fight_screen(Bit16u val)
 									p_weapon_gfx = (Bit8u*)ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_WSHEET) * 4);
 
 									if (host_readbs(p_weapon_anisheet + 1 + 3 * (ds_readws(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2))) != -5) {
-										nvf.dst = Real2Host(ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_WSHEET) * 4));
+										nvf.dst = (Bit8u*)ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_WSHEET) * 4);
 										nvf.src = (Bit8u*)ds_readd(WEAPONS_NVF_BUF);
 										nvf.no = host_readb(p_weapon_anisheet + 1 + ds_readw(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2) * 3);
 										nvf.type = 0;
@@ -912,7 +912,7 @@ void draw_fight_screen(Bit16u val)
 				}
 			}
 
-		} while (list_i = Real2Host(host_readd(list_i + FIGHTER_NEXT)));
+		} while (list_i = (Bit8u*)host_readd(list_i + FIGHTER_NEXT));
 
 		*(struct dummy_w4*)(p_datseg + PIC_COPY_DS_RECT) = coord_bak;
 		ds_writew(FIGOBJ_UNKN_X2_BAK , ds_readw(FIGOBJ_UNKN_X2));
@@ -963,7 +963,7 @@ void draw_fight_screen(Bit16u val)
 		ds_writed(PIC_COPY_DST, ds_readd(RENDERBUF_PTR));
 	}
 
-	for (list_i = (Bit8u*)ds_readd(FIG_LIST_HEAD); list_i; list_i = Real2Host(host_readd(list_i + FIGHTER_NEXT))) {
+	for (list_i = (Bit8u*)ds_readd(FIG_LIST_HEAD); list_i; list_i = (Bit8u*)host_readd(list_i + FIGHTER_NEXT)) {
 		if (host_readb(list_i + FIGHTER_VISIBLE) != 0)
 			host_writeb(list_i + FIGHTER_VISIBLE, 1);
 	}

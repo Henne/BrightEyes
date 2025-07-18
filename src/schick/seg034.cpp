@@ -842,7 +842,7 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 					} else if (host_readbs(hero + HERO_BP_LEFT) < bp_cost) {
 						problem = 2;
 					} else if ((sel_x > 23) || (sel_x < 0) || (sel_y > 23) || (sel_y < 0) || (get_cb_val(sel_x, sel_y) < 0)) {
-						if ((host_readbs(Real2Host(ds_readd(SCENARIO_BUF)) + 0x14) > 3) || (sel_x >= 0))
+						if ((host_readbs((Bit8u*)ds_readd(SCENARIO_BUF) + 0x14) > 3) || (sel_x >= 0))
 						{
 							problem = 1;
 						}

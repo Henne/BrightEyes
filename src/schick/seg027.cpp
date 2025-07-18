@@ -50,8 +50,7 @@ void load_pp20(signed short index)
 		if (ds_readd(PP20_BUFFERS + bi * 4)) {
 
 			/* already buffered, just decomp */
-			decomp_pp20(Real2Host(ds_readd(PP20_BUFFERS + bi * 4)),
-				(Bit8u*)ds_readd(RENDERBUF_PTR),
+			decomp_pp20(Real2Host(ds_readd(PP20_BUFFERS + bi * 4)), (Bit8u*)ds_readd(RENDERBUF_PTR),
 #if !defined(__BORLANDC__)
 				Real2Host(ds_readd(PP20_BUFFERS) + 4 + bi) + 4,
 #else
@@ -72,13 +71,10 @@ void load_pp20(signed short index)
 				ds_writed(PP20_BUFFER_LENGTHS + bi * 4, get_readlength2(fd));
 
 				/* read pic */
-				read_archive_file(fd,
-					Real2Host(ds_readd(PP20_BUFFERS + bi * 4)),
-					ds_readw(PP20_BUFFER_LENGTHS + bi * 4));
+				read_archive_file(fd, Real2Host(ds_readd(PP20_BUFFERS + bi * 4)), ds_readw(PP20_BUFFER_LENGTHS + bi * 4));
 
 				/* decompress */
-				decomp_pp20(Real2Host(ds_readd(PP20_BUFFERS + bi * 4)),
-					(Bit8u*)ds_readd(RENDERBUF_PTR),
+				decomp_pp20(Real2Host(ds_readd(PP20_BUFFERS + bi * 4)), (Bit8u*)ds_readd(RENDERBUF_PTR),
 #if !defined(__BORLANDC__)
 					Real2Host(ds_readd(PP20_BUFFERS + 4 + bi)) + 4,
 #else
@@ -92,13 +88,10 @@ void load_pp20(signed short index)
 				/* failed allocation */
 
 				/* read it directly */
-				read_archive_file(fd,
-					(Bit8u*)ds_readd(RENDERBUF_PTR) -8,
-					64000);
+				read_archive_file(fd, (Bit8u*)ds_readd(RENDERBUF_PTR) - 8, 64000);
 
 				/* decompress it */
-				decomp_pp20((Bit8u*)ds_readd(RENDERBUF_PTR) -8,
-					(Bit8u*)ds_readd(RENDERBUF_PTR),
+				decomp_pp20((Bit8u*)ds_readd(RENDERBUF_PTR) - 8, (Bit8u*)ds_readd(RENDERBUF_PTR),
 #if !defined(__BORLANDC__)
 					(Bit8u*)ds_readd(RENDERBUF_PTR) -8 +4,
 #else
@@ -118,8 +111,7 @@ void load_pp20(signed short index)
 		read_archive_file(fd, (Bit8u*)ds_readd(RENDERBUF_PTR) - 8, 64000);
 
 		/* decompress it */
-		decomp_pp20((Bit8u*)ds_readd(RENDERBUF_PTR) -8,
-			(Bit8u*)ds_readd(RENDERBUF_PTR),
+		decomp_pp20((Bit8u*)ds_readd(RENDERBUF_PTR) - 8, (Bit8u*)ds_readd(RENDERBUF_PTR),
 #if !defined(__BORLANDC__)
 			Real2Host(ds_readd(RENDERBUF_PTR) - 8 + 4),
 #else
@@ -152,17 +144,16 @@ RealPt load_fight_figs(signed short fig)
 	Bit8u *mem_slots;
 	Bit8u *p_tab;
 	signed short index;
-	RealPt src;
+	Bit8u *src;
 
 	/* check if fig is at a known place */
 	if (fig == ds_readws(FIG_FIGURE1)) {
 		return (Bit8u*)ds_readd(FIG_FIGURE1_BUF);
 	} else if (fig == ds_readws(FIG_FIGURE2)) {
-			return (Bit8u*)ds_readd(FIG_FIGURE2_BUF);
+		return (Bit8u*)ds_readd(FIG_FIGURE2_BUF);
 	} else if (ds_readws(FIG_FIGURE2) != -1) {
 		ds_writew(FIG_FIGURE1, ds_readw(FIG_FIGURE2));
-		memcpy((Bit8u*)ds_readd(FIG_FIGURE1_BUF),
-			(Bit8u*)ds_readd(FIG_FIGURE2_BUF), 20000);
+		memcpy((Bit8u*)ds_readd(FIG_FIGURE1_BUF), (Bit8u*)ds_readd(FIG_FIGURE2_BUF), 20000);
 		src = (Bit8u*)ds_readd(FIG_FIGURE2_BUF);
 		ds_writew(FIG_FIGURE2, fig);
 	} else if (ds_readws(FIG_FIGURE1) != -1) {
@@ -218,9 +209,7 @@ RealPt load_fight_figs(signed short fig)
 #if !defined(__BORLANDC__)
 			D1_LOG("cached from HEAP %d\n", fig);
 #endif
-			memcpy(Real2Host(src),
-				Real2Host(host_readd(mem_slots + i * 12 + 2)),
-				host_readw(mem_slots + i * 12 + 8));
+			memcpy(Real2Host(src), Real2Host(host_readd(mem_slots + i * 12 + 2)), host_readw(mem_slots + i * 12 + 8));
 		}
 	} else {
 #if !defined(__BORLANDC__)
@@ -255,8 +244,7 @@ RealPt load_fight_figs(signed short fig)
 			host_writew(mem_slots + i * 12 + 6, 0);
 			host_writed(mem_slots + i * 12 + 8, len);
 
-			memcpy(Real2Host(dst), Real2Host(src),
-				(unsigned short)len);
+			memcpy(Real2Host(dst), Real2Host(src), (unsigned short)len);
 
 		} else if (ds_readb(EMS_ENABLED) != 0) {
 #if !defined(__BORLANDC__)
@@ -352,8 +340,7 @@ void load_ani(const signed short no)
 	if (i != 37) {
 		/* already buffered in EMS, get from there */
 		ems_handle = host_readw((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8 + 2);
-		from_EMS((Bit8u*)ds_readd(BUFFER9_PTR), ems_handle,
-			host_readd((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8 + 4));
+		from_EMS((Bit8u*)ds_readd(BUFFER9_PTR), ems_handle, host_readd((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8 + 4));
 	} else {
 		/* load it from file */
 		ani_off = ds_readd(BUFFER_ANIS_TAB - 4 + no * 4);
@@ -363,8 +350,7 @@ void load_ani(const signed short no)
 		fd = load_archive_file(ARCHIVE_FILE_ANIS);
 		/* seek to ordered ani */
 		seek_archive_file(fd, ani_off, 0);
-		read_archive_file(fd, (Bit8u*)ds_readd(BUFFER9_PTR),
-			(unsigned short)ani_len);
+		read_archive_file(fd, (Bit8u*)ds_readd(BUFFER9_PTR), (unsigned short)ani_len);
 
 		/* if EMS is enabled buffer it */
 		if ((ds_readb(EMS_ENABLED) != 0) &&
@@ -379,10 +365,8 @@ void load_ani(const signed short no)
 
 			/* fill the entry */
 			host_writew((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8, no);
-			host_writew((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8 + 2,
-				ems_handle);
-			host_writed((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8 + 4,
-				ani_len);
+			host_writew((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8 + 2, ems_handle);
+			host_writed((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8 + 4, ani_len);
 
 			/* copy data to EMS */
 			to_EMS(ems_handle, (Bit8u*)ds_readd(BUFFER9_PTR), ani_len);
@@ -394,23 +378,17 @@ void load_ani(const signed short no)
 	ani_buffer = (Bit8u*)ds_readd(BUFFER9_PTR);
 
 	/* set start of picture data */
-	ds_writed(ANI_MAIN_PTR,
-		(Bit32u)(F_PADD(ani_buffer, host_readd((Bit8u*)ds_readd(BUFFER9_PTR)))));
+	ds_writed(ANI_MAIN_PTR, (Bit32u)(F_PADD(ani_buffer, host_readd((Bit8u*)ds_readd(BUFFER9_PTR)))));
 	/* set start of palette */
-	ds_writed(ANI_PALETTE,
-		(Bit32u)(F_PADD(F_PADD(ani_buffer, host_readd(Real2Host(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 4L)))), 6L)));
+	ds_writed(ANI_PALETTE, (Bit32u)(F_PADD(F_PADD(ani_buffer, host_readd(Real2Host(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 4L)))), 6L)));
 	//	(Bit32u)(host_readd((Bit8u*)ds_readd(BUFFER9_PTR) + 4) + ani_buffer + 6));
 
 	/* read some bytes between data and palette */
-	ds_writew(ANI_UNKNOWN1,
-		host_readw(Real2Host(F_PADD(ds_readd(ANI_PALETTE), -6))));
-	ds_writew(ANI_UNKNOWN2,
-		host_readw(Real2Host(F_PADD(ds_readd(ANI_PALETTE), -4))));
+	ds_writew(ANI_UNKNOWN1,	host_readw(Real2Host(F_PADD(ds_readd(ANI_PALETTE), -6))));
+	ds_writew(ANI_UNKNOWN2,	host_readw(Real2Host(F_PADD(ds_readd(ANI_PALETTE), -4))));
 	/* compression type */
-	ds_writeb(ANI_COMPR_FLAG,
-		host_readb(Real2Host(F_PADD(ds_readd(ANI_PALETTE), -1))));
-	ds_writeb(ANI_PALETTE_SIZE,
-		host_readb(Real2Host(F_PADD(ds_readd(ANI_PALETTE), -2))));
+	ds_writeb(ANI_COMPR_FLAG, host_readb(Real2Host(F_PADD(ds_readd(ANI_PALETTE), -1))));
+	ds_writeb(ANI_PALETTE_SIZE, host_readb(Real2Host(F_PADD(ds_readd(ANI_PALETTE), -2))));
 
 	ani_end_ptr = Real2Host(F_PADD(ds_readd(ANI_PALETTE), 3 * ds_readb(ANI_PALETTE_SIZE)));
 
@@ -446,8 +424,7 @@ void load_ani(const signed short no)
 		ani_residue_len = ani_end_ptr - ani_residue_ptr;
 		memcpy(ani_end_ptr + packed_delta, ani_residue_ptr, ani_residue_len);
 
-		memcpy((Bit8u*)ds_readd(ANI_MAIN_PTR),
-			(Bit8u*)ds_readd(RENDERBUF_PTR), unplen);
+		memcpy((Bit8u*)ds_readd(ANI_MAIN_PTR), (Bit8u*)ds_readd(RENDERBUF_PTR), unplen);
 		ani_residue_ptr += packed_delta;
 		memcpy(ani_residue_ptr, ani_end_ptr + packed_delta, ani_residue_len);
 
@@ -525,8 +502,7 @@ void load_ani(const signed short no)
 		} else {
 			for (j = 0; j < area_pics; j++) {
 				area_data_offset = host_readd(p_area + j * 4 + 0xc);
-				host_writed(p_area2 + j * 4 + ANI_AREA_PICS_TAB,
-					(Bit32u)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), area_data_offset)));
+				host_writed(p_area2 + j * 4 + ANI_AREA_PICS_TAB, (Bit32u)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), area_data_offset)));
 			}
 		}
 
@@ -534,10 +510,8 @@ void load_ani(const signed short no)
 
 		area_changes_ptr = p_area + area_pics * 4 + 0x0e;
 		for (j = 0; j < area_changes; j++) {
-			host_writew(p_area2 + ANI_AREA_CHANGES_TB + j * 4,
-				host_readw(area_changes_ptr + ((j << 1) << 1)));
-			host_writew(p_area2 + (ANI_AREA_CHANGES_TB+2) + j * 4,
-				host_readw(area_changes_ptr + ((j << 1) << 1)  + 2));
+			host_writew(p_area2 + ANI_AREA_CHANGES_TB + j * 4, host_readw(area_changes_ptr + ((j << 1) << 1)));
+			host_writew(p_area2 + (ANI_AREA_CHANGES_TB+2) + j * 4, host_readw(area_changes_ptr + ((j << 1) << 1)  + 2));
 		}
 	}
 
