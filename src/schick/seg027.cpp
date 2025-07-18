@@ -676,7 +676,7 @@ void read_fight_lst(signed short fight_id)
 #if !defined(__BORLANDC__)
 	char fight_name[21];
 	/* Improvement */
-	strncpy(fight_name, (char*)Real2Host(ds_readd(CURRENT_FIGHT)), 20);
+	strncpy(fight_name, (char*)(Bit8u*)ds_readd(CURRENT_FIGHT), 20);
 	fight_name[20] = '\0';
 	D1_INFO("Lade Kampf fight_id %3d\t Name \"%s\"\n", fight_id, fight_name);
 	/* Improvement end */
