@@ -534,7 +534,7 @@ void prepare_dirs(void)
 
 	/* delete *.* in TEMP-dir */
 	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-		(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
+		(char*)ds_readd(STR_TEMP_XX_PTR2),
 		(char*)p_datseg + ALL_FILES_WILDCARD2);
 
 	l_si = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
@@ -543,7 +543,7 @@ void prepare_dirs(void)
 
 		do {
 			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-				(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
+				(char*)ds_readd(STR_TEMP_XX_PTR2),
 				((char*)(&blk)) + 30);			/* contains a filename */
 
 			unlink((char*)ds_readd(TEXT_OUTPUT_BUF));
@@ -566,7 +566,7 @@ void prepare_dirs(void)
 		close(l_di);
 
 		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-			(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
+			(char*)ds_readd(STR_TEMP_XX_PTR2),
 			((char*)(&blk)) + 30);			/* contains a filename */
 
 		l_di = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
@@ -648,7 +648,7 @@ void cleanup_game(void)
 	/* delete all files in TEMP */
 
 	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-		(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),	/* contains "TEMP\\%s" */
+		(char*)ds_readd(STR_TEMP_XX_PTR2),	/* contains "TEMP\\%s" */
 		(char*)p_datseg + ALL_FILES_WILDCARD3);		/* contains "*.*" */
 
 	l_di = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
@@ -657,7 +657,7 @@ void cleanup_game(void)
 		do {
 			/* delete each found file */
 			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-				(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),	/* contains "TEMP\\%s" */
+				(char*)ds_readd(STR_TEMP_XX_PTR2),	/* contains "TEMP\\%s" */
 				((char*)(&blk)) + 30);			/* contains a filename */
 
 			unlink((char*)ds_readd(TEXT_OUTPUT_BUF));

@@ -251,7 +251,7 @@ signed short load_game_state(void)
 		/* delete every file in TEMP */
 		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 			/* "TEMP\\%s" */
-			(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
+			(char*)ds_readd(STR_TEMP_XX_PTR2),
 			/* "*.*" */
 			(char*)p_datseg + ALL_FILES_WILDCARD);
 
@@ -262,7 +262,7 @@ signed short load_game_state(void)
 
 			do {
 				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-					(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
+					(char*)ds_readd(STR_TEMP_XX_PTR2),
 					((char*)(&blk))+ 30);
 
 				unlink((char*)ds_readd(TEXT_OUTPUT_BUF));
@@ -309,7 +309,7 @@ signed short load_game_state(void)
 
 				/* write file content to TEMP */
 				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-					(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
+					(char*)ds_readd(STR_TEMP_XX_PTR2),
 					(char*)Real2Host(ds_readd(FNAMES + 4 * i)));
 
 				/* TODO: should be O_BINARY | O_WRONLY */
@@ -338,7 +338,7 @@ signed short load_game_state(void)
 
 				/* write file content to TEMP */
 				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-					(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
+					(char*)ds_readd(STR_TEMP_XX_PTR2),
 					name);
 
 				/* TODO: should be O_BINARY | O_WRONLY */
@@ -378,7 +378,7 @@ signed short load_game_state(void)
 		while (l2 == 0) {
 
 			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-				(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
+				(char*)ds_readd(STR_TEMP_XX_PTR2),
 				((char*)(&blk)) + 30);
 
 			if ((handle_gs = open((char*)ds_readd(TEXT_OUTPUT_BUF), O_BINARY | O_RDWR)) == -1) {
@@ -629,7 +629,7 @@ signed short save_game_state(void)
 		for (tw_bak = 0; tw_bak < 286; tw_bak++) {
 
 			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-				(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
+				(char*)ds_readd(STR_TEMP_XX_PTR2),
 				(char*)Real2Host(ds_readd(FNAMES + 4 * tw_bak)));
 
 			l1 = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
@@ -665,14 +665,14 @@ signed short save_game_state(void)
 		/* append all CHR files */
 		lseek(l_di, filepos, 0);
 		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-			(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
+			(char*)ds_readd(STR_TEMP_XX_PTR2),
 			(char*)p_datseg + ALL_CHR_WILDCARD2);
 #if defined(__BORLANDC__)
 		l1 = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
 		do {
 			/* create the CHR filename */
 			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-				(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
+				(char*)ds_readd(STR_TEMP_XX_PTR2),
 				((char*)(&blk)) + 30);
 
 			/* read the CHR file from temp */
@@ -722,7 +722,7 @@ signed short read_chr_temp(RealPt fname, signed short hero_pos, signed short a2)
 	Bit8u *hero;
 
 	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-		(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
+		(char*)ds_readd(STR_TEMP_XX_PTR2),
 		(char*)Real2Host(fname));
 
 	if ((handle = open((char*)ds_readd(TEXT_OUTPUT_BUF), O_BINARY | O_RDWR)) == -1) {
@@ -786,7 +786,7 @@ void write_chr_temp(unsigned short hero_pos)
 	prepare_chr_name(fname, (char*)get_hero(hero_pos));
 
 	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-		(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),		/* "TEMP\\%s" */
+		(char*)ds_readd(STR_TEMP_XX_PTR2),		/* "TEMP\\%s" */
 		fname);
 
 	/* TODO: should be O_BINARY | O_WRONLY */
@@ -813,7 +813,7 @@ signed short copy_chr_names(Bit8u *ptr, signed short temple_id)
 
 	buf = (Bit8u*)ds_readd(RENDERBUF_PTR) + 60000;
 	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-		(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
+		(char*)ds_readd(STR_TEMP_XX_PTR2),
 		(char*)p_datseg + ALL_CHR_WILDCARD3);
 
 	l_di = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
@@ -823,7 +823,7 @@ signed short copy_chr_names(Bit8u *ptr, signed short temple_id)
 		do {
 			/* create the CHR filename */
 			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-				(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
+				(char*)ds_readd(STR_TEMP_XX_PTR2),
 				((char*)(&blk)) + 30);
 
 			/* read the CHR file from temp */

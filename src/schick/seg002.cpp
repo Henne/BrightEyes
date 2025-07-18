@@ -892,7 +892,7 @@ signed short open_temp_file(unsigned short index)
 	signed short handle;
 
 	sprintf((char*)Real2Host(tmppath),
-		(char*)Real2Host(ds_readd(STR_TEMP_XX_PTR2)),
+		(char*)ds_readd(STR_TEMP_XX_PTR2),
 		(char*)Real2Host(ds_readd(FNAMES + index * 4)));
 
 	while ( (handle = open(tmppath, O_BINARY | O_RDWR)) == -1) {
