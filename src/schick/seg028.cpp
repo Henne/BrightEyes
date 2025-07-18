@@ -183,7 +183,7 @@ void seg028_0224(void)
 		{
 			ds_writed(TEX_SKY, (Bit32u) seg028_0444(ARCHIVE_FILE_TDIVERSE_NVF, 0x80, 0x40, 0));
 
-			memcpy(p_datseg + PALETTE_BUILDINGS, Real2Host(ds_readd(BUFFER11_PTR)), 0xc0);
+			memcpy(p_datseg + PALETTE_BUILDINGS, (Bit8u*)ds_readd(BUFFER11_PTR), 0xc0);
 		} else {
 			ds_writed(TEX_SKY, (Bit32u) seg028_0444(ARCHIVE_FILE_TDIVERSE_NVF, 0x80, 0x40, 0));
 		}
@@ -192,7 +192,7 @@ void seg028_0224(void)
 
 		if ((ds_readds(DAY_TIMER) >= HOURS(7)) && (ds_readds(DAY_TIMER) <= HOURS(20)))
 		{
-			memcpy(p_datseg + PALETTE_FLOOR, Real2Host(ds_readd(BUFFER11_PTR)), 0x60);
+			memcpy(p_datseg + PALETTE_FLOOR, (Bit8u*)ds_readd(BUFFER11_PTR), 0x60);
 		}
 
 		ds_writew(AREA_PREPARED, 1);
@@ -240,7 +240,7 @@ RealPt seg028_0444(signed short index, signed short firstcol, signed short color
 
 			wait_for_vsync();
 
-			set_palette(Real2Host(ds_readd(BUFFER11_PTR)), firstcol, colors);
+			set_palette((Bit8u*)ds_readd(BUFFER11_PTR), firstcol, colors);
 		}
 	}
 
