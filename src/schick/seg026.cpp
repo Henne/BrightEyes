@@ -102,10 +102,10 @@ void load_ltx(unsigned short index)
 
 	fd = load_archive_file(index);
 	ds_writew(AREA_PREPARED, 0xffff);
-	len = (signed short)read_archive_file(fd, Real2Host(ds_readd(BUFFER9_PTR3)) + 1000, 64000);
+	len = (signed short)read_archive_file(fd, (Bit8u*)ds_readd(BUFFER9_PTR3) + 1000, 64000);
 	close(fd);
 
-	split_textbuffer(Real2Host(ds_readd(BUFFER9_PTR3)),
+	split_textbuffer((Bit8u*)ds_readd(BUFFER9_PTR3),
 		F_PADD((RealPt)ds_readd(BUFFER9_PTR3), 1000L), len);
 }
 

@@ -378,7 +378,7 @@ void unused_store(signed short no)
 	signed short size;
 
 	nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR) + 30000;
-	nvf.src = Real2Host(ds_readd(BUFFER9_PTR3));
+	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR3);
 	nvf.no = no;
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&width;

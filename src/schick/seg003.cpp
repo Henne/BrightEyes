@@ -136,7 +136,7 @@ void door_frame(signed short no, signed short x, signed short y, signed short fr
 	struct nvf_desc nvf;
 
 	nvf.dst = Real2Host(F_PADD(ds_readd(BUFFER9_PTR3), 0x2e248));
-	nvf.src = Real2Host(ds_readd(BUFFER9_PTR3));
+	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR3);
 	nvf.no = no;
 	nvf.type = 3;
 	nvf.width = (Bit8u*)&width;
