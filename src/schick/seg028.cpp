@@ -493,7 +493,7 @@ void load_map(void)
 
 	/* load LROUT.DAT */
 	fd = load_archive_file(ARCHIVE_FILE_LROUT_DAT);
-	read_archive_file(fd, Real2Host(ds_readd(BUFFER9_PTR)), 7600);
+	read_archive_file(fd, (Bit8u*)ds_readd(BUFFER9_PTR), 7600);
 	close(fd);
 
 	/* load HSROUT.DAT */

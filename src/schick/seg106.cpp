@@ -757,7 +757,7 @@ void equip_belt_ani(void)
 
 	/* read NVF part 1 */
 	nvf_length = read_archive_file(handle,
-			Real2Host(ds_readd(BUFFER9_PTR)), 64000);
+			(Bit8u*)ds_readd(BUFFER9_PTR), 64000);
 	/* read NVF part 2 */
 	nvf_length += read_archive_file(handle, Real2Host(F_PADD(ds_readd(BUFFER9_PTR), 64000)), 64000);
 
@@ -809,7 +809,7 @@ void equip_belt_ani(void)
 	for (i = 0; i < 12; i++) {
 
 		nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
-		nvf.src = Real2Host(ds_readd(BUFFER9_PTR));
+		nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
 		nvf.no = i;
 		nvf.type = 3;
 		nvf.width = (Bit8u*)&width;

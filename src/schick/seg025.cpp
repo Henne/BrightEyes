@@ -292,7 +292,7 @@ void show_treasure_map(void)
 		/* load SKARTE.NVF */
 		l_si = load_archive_file(ARCHIVE_FILE_SKARTE_NVF);
 
-		read_archive_file(l_si, Real2Host(ds_readd(BUFFER9_PTR)), 30000);
+		read_archive_file(l_si, (Bit8u*)ds_readd(BUFFER9_PTR), 30000);
 
 		length = get_readlength2(l_si);
 
@@ -314,7 +314,7 @@ void show_treasure_map(void)
 			{
 				/* decompress picture */
 				nvf.dst = Real2Host(F_PADD((RealPt)ds_readd(BUFFER9_PTR), 30000));
-				nvf.src = Real2Host(ds_readd(BUFFER9_PTR));
+				nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
 				nvf.no = l_si;
 				nvf.type = 0;
 				nvf.width = (Bit8u*)&width;
@@ -452,7 +452,7 @@ signed short game_options(void)
 
 	set_textcolor(4, 0);
 
-	memset(Real2Host(ds_readd(BUFFER9_PTR)), 0, 20000);
+	memset((Bit8u*)ds_readd(BUFFER9_PTR), 0, 20000);
 
 	prepare_date_str();
 
@@ -466,7 +466,7 @@ signed short game_options(void)
 	ds_writed(PIC_COPY_DST, (Bit32u)((RealPt)ds_readd(RENDERBUF_PTR) + 9600));
 	do_pic_copy(2);
 
-	memset(Real2Host(ds_readd(BUFFER9_PTR)), 0, 28000);
+	memset((Bit8u*)ds_readd(BUFFER9_PTR), 0, 28000);
 
 	if (ds_readbs(CURRENT_TOWN) != TOWNS_NONE) {
 		/* if the party is in a town */

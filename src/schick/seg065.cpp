@@ -108,7 +108,7 @@ void final_intro(void)
 
 	/* load FACE.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_FACE_NVF);
-	len = read_archive_file(handle, Real2Host(ds_readd(BUFFER9_PTR)), 64000);
+	len = read_archive_file(handle, (Bit8u*)ds_readd(BUFFER9_PTR), 64000);
 	close(handle);
 
 	ptr1 = Real2Host(F_PADD(F_PADD(ds_readd(BUFFER9_PTR), len), -(96 * 3)));
@@ -122,7 +122,7 @@ void final_intro(void)
 	ptr2 = (RealPt)F_PADD(ds_readd(BUFFER9_PTR), 80000);
 
 	nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
-	nvf.src = Real2Host(ds_readd(BUFFER9_PTR));
+	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
 	nvf.no = 0;
 	nvf.type = 3;
 	nvf.width = (Bit8u*)&width;
@@ -132,7 +132,7 @@ void final_intro(void)
 	map_effect((Bit8u*)ds_readd(RENDERBUF_PTR));
 
 	nvf.dst = Real2Host(ptr2);
-	nvf.src = Real2Host(ds_readd(BUFFER9_PTR));
+	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
 	nvf.no = 1;
 	nvf.type = 3;
 	nvf.width = (Bit8u*)&width;
@@ -435,7 +435,7 @@ void show_outro(void)
 
 	/* load OUTRO1.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_OUTRO1_NVF);
-	len = read_archive_file(handle, Real2Host(ds_readd(BUFFER9_PTR)), 64000);
+	len = read_archive_file(handle, (Bit8u*)ds_readd(BUFFER9_PTR), 64000);
 	close(handle);
 
 	pal_ptr = Real2Host(F_PADD(F_PADD((HugePt)ds_readd(BUFFER9_PTR), len), - 0xc0));
@@ -444,7 +444,7 @@ void show_outro(void)
 	set_palette(pal_ptr, 0, 0x40);
 
 	nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
-	nvf.src = Real2Host(ds_readd(BUFFER9_PTR));
+	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
 	nvf.no = 0;
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&width;
@@ -469,7 +469,7 @@ void show_outro(void)
 
 	/* load OUTRO2.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_OUTRO2_NVF);
-	len = read_archive_file(handle, Real2Host(ds_readd(BUFFER9_PTR)), 64000);
+	len = read_archive_file(handle, (Bit8u*)ds_readd(BUFFER9_PTR), 64000);
 	close(handle);
 
 	pal_ptr = Real2Host(F_PADD(F_PADD((HugePt)ds_readd(BUFFER9_PTR), len), - 0xc0));
@@ -478,7 +478,7 @@ void show_outro(void)
 	set_palette(pal_ptr, 0, 0x40);
 
 	nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
-	nvf.src = Real2Host(ds_readd(BUFFER9_PTR));
+	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
 	nvf.no = 0;
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&width;
@@ -503,7 +503,7 @@ void show_outro(void)
 
 	/* load OUTRO3.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_OUTRO3_NVF);
-	len = read_archive_file(handle, Real2Host(ds_readd(BUFFER9_PTR)), 64000);
+	len = read_archive_file(handle, (Bit8u*)ds_readd(BUFFER9_PTR), 64000);
 	close(handle);
 
 	pal_ptr = Real2Host(F_PADD(F_PADD((HugePt)ds_readd(BUFFER9_PTR), len), - 0xc0));
@@ -512,7 +512,7 @@ void show_outro(void)
 	set_palette(pal_ptr, 0, 0x40);
 
 	nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
-	nvf.src = Real2Host(ds_readd(BUFFER9_PTR));
+	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
 	nvf.no = 0;
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&width;

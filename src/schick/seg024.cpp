@@ -152,7 +152,7 @@ Bit16u diary_print_entry(Bit16u line)
 	char *city_name;
 	signed short di = 0;
 
-	memset(Real2Host(ds_readd(BUFFER9_PTR)), 0, 64000);
+	memset((Bit8u*)ds_readd(BUFFER9_PTR), 0, 64000);
 
 	ptr = p_datseg + DIARY_ENTRIES + line * 8;
 

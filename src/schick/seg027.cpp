@@ -363,7 +363,7 @@ void load_ani(const signed short no)
 		fd = load_archive_file(ARCHIVE_FILE_ANIS);
 		/* seek to ordered ani */
 		seek_archive_file(fd, ani_off, 0);
-		read_archive_file(fd, Real2Host(ds_readd(BUFFER9_PTR)),
+		read_archive_file(fd, (Bit8u*)ds_readd(BUFFER9_PTR),
 			(unsigned short)ani_len);
 
 		/* if EMS is enabled buffer it */
@@ -395,11 +395,11 @@ void load_ani(const signed short no)
 
 	/* set start of picture data */
 	ds_writed(ANI_MAIN_PTR,
-		(Bit32u)(F_PADD(ani_buffer, host_readd(Real2Host(ds_readd(BUFFER9_PTR))))));
+		(Bit32u)(F_PADD(ani_buffer, host_readd((Bit8u*)ds_readd(BUFFER9_PTR)))));
 	/* set start of palette */
 	ds_writed(ANI_PALETTE,
 		(Bit32u)(F_PADD(F_PADD(ani_buffer, host_readd(Real2Host(F_PADD(ds_readd(BUFFER9_PTR), 4L)))), 6L)));
-	//	(Bit32u)(host_readd(Real2Host(ds_readd(BUFFER9_PTR)) + 4) + ani_buffer + 6));
+	//	(Bit32u)(host_readd((Bit8u*)ds_readd(BUFFER9_PTR) + 4) + ani_buffer + 6));
 
 	/* read some bytes between data and palette */
 	ds_writew(ANI_UNKNOWN1,
@@ -489,7 +489,7 @@ void load_ani(const signed short no)
 			decomp_pp20(Real2Host(F_PADD(ds_readd(BUFFER9_PTR), area_data_offset)),
 				(Bit8u*)ds_readd(RENDERBUF_PTR),
 #if !defined(__BORLANDC__)
-				Real2Host(ds_readd(BUFFER9_PTR)) + area_data_offset + 4,
+				(Bit8u*)ds_readd(BUFFER9_PTR) + area_data_offset + 4,
 #else
 				FP_OFF(F_PADD(ds_readd(BUFFER9_PTR), area_data_offset)) + 4,
 				FP_SEG(F_PADD(ds_readd(BUFFER9_PTR), area_data_offset)),
@@ -499,7 +499,7 @@ void load_ani(const signed short no)
 			packed_delta2 = area_size - plen;
 			packed_delta += packed_delta2;
 
-			ani_residue_ptr = Real2Host(ds_readd(BUFFER9_PTR));
+			ani_residue_ptr = (Bit8u*)ds_readd(BUFFER9_PTR);
 			ani_residue_ptr += area_data_offset;
 			ani_residue_ptr += plen;
 			ani_residue_len = ani_end_ptr - ani_residue_ptr;
@@ -541,7 +541,7 @@ void load_ani(const signed short no)
 		}
 	}
 
-	ani_len = ani_end_ptr - Real2Host(ds_readd(BUFFER9_PTR));
+	ani_len = ani_end_ptr - (Bit8u*)ds_readd(BUFFER9_PTR);
 	/* this is always true */
 	if (ani_len > (Bit32s)ds_readd(ANI_UNKNOWN4)) {
 		ds_writew(AREA_PREPARED, 0xffff);
