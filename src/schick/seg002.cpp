@@ -5341,10 +5341,10 @@ RealPt get_first_hero_available_in_group(void)
 	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 
 		/* Check class, group, deadness and check_hero() */
-		if (host_readbs(Real2Host(hero_i) + HERO_TYPE) &&
-			(host_readbs(Real2Host(hero_i) + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
-			!hero_dead(Real2Host(hero_i)) &&
-			check_hero(Real2Host(hero_i)))
+		if (host_readbs(hero_i + HERO_TYPE) &&
+			(host_readbs(hero_i + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+			!hero_dead(hero_i) &&
+			check_hero(hero_i))
 		{
 			return hero_i;
 		}
@@ -5368,9 +5368,9 @@ RealPt get_second_hero_available_in_group(void)
 
 	for (i = tmp = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 		/* Check class, group and check_hero() */
-		if (host_readbs(Real2Host(hero_i) + HERO_TYPE) &&
-			(host_readbs(Real2Host(hero_i) + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
-			check_hero(Real2Host(hero_i)))
+		if (host_readbs(hero_i + HERO_TYPE) &&
+			(host_readbs(hero_i + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+			check_hero(hero_i))
 		{
 			if (tmp) {
 				return hero_i;

@@ -324,7 +324,7 @@ signed short load_game_state(void)
 		/* clear the heroes */
 		hero_i = (Bit8u*)ds_readd(HEROES);
 		for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
-			memset(Real2Host(hero_i), 0, SIZEOF_HERO);
+			memset(hero_i, 0, SIZEOF_HERO);
 		}
 
 		hero_i = (Bit8u*)ds_readd(RENDERBUF_PTR);
@@ -334,7 +334,7 @@ signed short load_game_state(void)
 
 			if (l3 != 0) {
 
-				prepare_chr_name(name, (char*)Real2Host(hero_i));
+				prepare_chr_name(name, (char*)hero_i);
 
 				/* write file content to TEMP */
 				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
@@ -347,9 +347,9 @@ signed short load_game_state(void)
 				_write(handle, (Bit8u*)hero_i, SIZEOF_HERO);
 				close(handle);
 
-				if (host_readbs(Real2Host(hero_i) + HERO_GROUP_POS) != 0) {
+				if (host_readbs(hero_i + HERO_GROUP_POS) != 0) {
 
-					prepare_chr_name(name, (char*)Real2Host(hero_i));
+					prepare_chr_name(name, (char*)hero_i);
 #if !defined(__BORLANDC__)
 					{
 						/* create a char[20] on the stack */
@@ -359,11 +359,11 @@ signed short load_game_state(void)
 						RealPt r_name = RealMake(SegValue(ss), reg_sp);
 						strncpy((char*)Real2Host(r_name), name, 20);
 						host_writeb(Real2Host(r_name) + 20, 0);
-						read_chr_temp(r_name, host_readbs(Real2Host(hero_i) + HERO_GROUP_POS) - 1, host_readbs(Real2Host(hero_i) + HERO_GROUP_NO));
+						read_chr_temp(r_name, host_readbs(hero_i + HERO_GROUP_POS) - 1, host_readbs(hero_i + HERO_GROUP_NO));
 						reg_sp = sp_bak;
 					}
 #else
-					read_chr_temp(name, host_readbs(Real2Host(hero_i) + HERO_GROUP_POS) - 1, host_readbs(Real2Host(hero_i) + HERO_GROUP_NO));
+					read_chr_temp(name, host_readbs(hero_i + HERO_GROUP_POS) - 1, host_readbs(hero_i + HERO_GROUP_NO));
 #endif
 				}
 			}

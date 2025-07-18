@@ -139,21 +139,21 @@ RealPt get_proper_hero(signed short skill)
 	hero_i = (Bit8u*)ds_readd(HEROES);
 
 	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
-		if ((host_readbs(Real2Host(hero_i) + HERO_TYPE) != HERO_TYPE_NONE) &&
+		if ((host_readbs(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
 			/* Check if in current group */
-			(host_readb(Real2Host(hero_i) + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP)) &&
+			(host_readb(hero_i + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP)) &&
 			/* Check hero is not dead */
 			/* TODO: potential Original-Bug: What if petrified / unconscious etc.? */
-			!hero_dead(Real2Host(hero_i))) {
+			!hero_dead(hero_i)) {
 
 			/* add current and maximum attibute values */
-			cur =	host_readbs(Real2Host(hero_i) + HERO_ATTRIB + 3 * ds_readbs(SKILL_DESCRIPTIONS + 4 * skill)) +
-				host_readbs(Real2Host(hero_i) + HERO_ATTRIB_MOD + 3 * ds_readbs(SKILL_DESCRIPTIONS + 4 * skill)) +
-				host_readbs(Real2Host(hero_i) + HERO_ATTRIB + 3 * ds_readbs((SKILL_DESCRIPTIONS + 1) + 4 * skill)) +
-				host_readbs(Real2Host(hero_i) + HERO_ATTRIB_MOD + 3 * ds_readbs((SKILL_DESCRIPTIONS + 1) + 4 * skill)) +
-				host_readbs(Real2Host(hero_i) + HERO_ATTRIB + 3 * ds_readbs((SKILL_DESCRIPTIONS + 2) + 4 * skill)) +
-				host_readbs(Real2Host(hero_i) + HERO_ATTRIB_MOD + 3 * ds_readbs((SKILL_DESCRIPTIONS + 2) + 4 * skill)) +
-				host_readbs(Real2Host(hero_i) + HERO_TALENTS + skill);
+			cur =	host_readbs(hero_i + HERO_ATTRIB + 3 * ds_readbs(SKILL_DESCRIPTIONS + 4 * skill)) +
+				host_readbs(hero_i + HERO_ATTRIB_MOD + 3 * ds_readbs(SKILL_DESCRIPTIONS + 4 * skill)) +
+				host_readbs(hero_i + HERO_ATTRIB + 3 * ds_readbs((SKILL_DESCRIPTIONS + 1) + 4 * skill)) +
+				host_readbs(hero_i + HERO_ATTRIB_MOD + 3 * ds_readbs((SKILL_DESCRIPTIONS + 1) + 4 * skill)) +
+				host_readbs(hero_i + HERO_ATTRIB + 3 * ds_readbs((SKILL_DESCRIPTIONS + 2) + 4 * skill)) +
+				host_readbs(hero_i + HERO_ATTRIB_MOD + 3 * ds_readbs((SKILL_DESCRIPTIONS + 2) + 4 * skill)) +
+				host_readbs(hero_i + HERO_TALENTS + skill);
 
 			if (cur > max) {
 
