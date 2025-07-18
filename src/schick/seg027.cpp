@@ -190,13 +190,13 @@ RealPt load_fight_figs(signed short fig)
 			/* female */
 			p_tab = p_datseg + BUFFER_WFIGS_TAB;
 			index = ARCHIVE_FILE_WFIGS;
-			mem_slots = Real2Host(ds_readd(MEM_SLOTS_WFIG));
+			mem_slots = (Bit8u*)ds_readd(MEM_SLOTS_WFIG);
 			fig -= 44;
 		} else {
 			/* male */
 			p_tab = p_datseg + BUFFER_MFIGS_TAB;
 			index = ARCHIVE_FILE_MFIGS;
-			mem_slots = Real2Host(ds_readd(MEM_SLOTS_MFIG));
+			mem_slots = (Bit8u*)ds_readd(MEM_SLOTS_MFIG);
 		}
 	}
 
@@ -345,15 +345,15 @@ void load_ani(const signed short no)
 
 	/* count to the ordered ani in an array*/
 	for (i = 0; i < 37; i++) {
-		if (no == host_readw(Real2Host(ds_readd(MEM_SLOTS_ANIS)) + i * 8))
+		if (no == host_readw((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8))
 			break;
 	}
 
 	if (i != 37) {
 		/* already buffered in EMS, get from there */
-		ems_handle = host_readw(Real2Host(ds_readd(MEM_SLOTS_ANIS)) + i * 8 + 2);
+		ems_handle = host_readw((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8 + 2);
 		from_EMS((Bit8u*)ds_readd(BUFFER9_PTR), ems_handle,
-			host_readd(Real2Host(ds_readd(MEM_SLOTS_ANIS)) + i * 8 + 4));
+			host_readd((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8 + 4));
 	} else {
 		/* load it from file */
 		ani_off = ds_readd(BUFFER_ANIS_TAB - 4 + no * 4);
@@ -373,15 +373,15 @@ void load_ani(const signed short no)
 
 			/* find an empty EMS slot */
 			for (i = 0; i < 36; i++) {
-				if (host_readw(Real2Host(ds_readd(MEM_SLOTS_ANIS)) + i * 8) == 0)
+				if (host_readw((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8) == 0)
 					break;
 			}
 
 			/* fill the entry */
-			host_writew(Real2Host(ds_readd(MEM_SLOTS_ANIS)) + i * 8, no);
-			host_writew(Real2Host(ds_readd(MEM_SLOTS_ANIS)) + i * 8 + 2,
+			host_writew((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8, no);
+			host_writew((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8 + 2,
 				ems_handle);
-			host_writed(Real2Host(ds_readd(MEM_SLOTS_ANIS)) + i * 8 + 4,
+			host_writed((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8 + 4,
 				ani_len);
 
 			/* copy data to EMS */

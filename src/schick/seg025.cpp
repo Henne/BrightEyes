@@ -867,7 +867,7 @@ void fade_into(void)
 
 void copy_palette(void)
 {
-	memcpy((Bit8u*)ds_readd(RENDERBUF_PTR) + 0xfa00, Real2Host(ds_readd(ANI_PALETTE)), 0x60);
+	memcpy((Bit8u*)ds_readd(RENDERBUF_PTR) + 0xfa00, (Bit8u*)ds_readd(ANI_PALETTE), 0x60);
 	ds_writeb(FADING_STATE, 2);
 }
 

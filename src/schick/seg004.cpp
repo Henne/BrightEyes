@@ -87,7 +87,7 @@ void init_ani(Bit16u v1)
 		/* copy the main ani picture */
 		do_pic_copy(1);
 
-		set_ani_pal(Real2Host(ds_readd(ANI_PALETTE)));
+		set_ani_pal((Bit8u*)ds_readd(ANI_PALETTE));
 
 		/* reset flag for pic_copy() */
 		ds_writew(PIC_COPY_FLAG, 0);

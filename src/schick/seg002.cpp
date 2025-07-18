@@ -3674,7 +3674,7 @@ void draw_splash(signed short hero_pos, signed short type)
 	/* Could be in fight */
 	if (ds_readb(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) {
 
-		Bit8u *splash = (type == 0) ? Real2Host(ds_readd(SPLASH_LE)) : Real2Host(ds_readd(SPLASH_AE));
+		Bit8u *splash = (type == 0) ? (Bit8u*)ds_readd(SPLASH_LE) : (Bit8u*)ds_readd(SPLASH_AE);
 
 		restore_rect_rle((Bit8u*)ds_readd(FRAMEBUF_PTR), splash, ds_readw(HERO_PIC_POSX + 2 * hero_pos), 157, 32, 32, 2);
 

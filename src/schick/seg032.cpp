@@ -1024,12 +1024,12 @@ signed short do_fight(signed short fight_id)
 
 	/* open WEAPONS.NVF */
 	fd = load_archive_file(ARCHIVE_FILE_WEAPONS_NVF);
-	read_archive_file(fd, Real2Host(ds_readd(WEAPONS_NVF_BUF)), 6483);
+	read_archive_file(fd, (Bit8u*)ds_readd(WEAPONS_NVF_BUF), 6483);
 	close(fd);
 
 	/* open SPELLOBJ.NVF */
 	fd = load_archive_file(ARCHIVE_FILE_SPELLOBJ_NVF);
-	read_archive_file(fd, Real2Host(ds_readd(SPELLOBJ_NVF_BUF)), 3935);
+	read_archive_file(fd, (Bit8u*)ds_readd(SPELLOBJ_NVF_BUF), 3935);
 	close(fd);
 
 	FIG_init_enemies();

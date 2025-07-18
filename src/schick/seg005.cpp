@@ -203,7 +203,7 @@ unsigned short fight_printer(void)
 			ds_writed(PRINT_STRING_BUFFER, ds_readd(RENDERBUF_PTR));
 			get_textcolor(&fg_bak, &bg_bak);
 
-			FIG_set_star_color(Real2Host(ds_readd(FIG_STAR_GFX)),
+			FIG_set_star_color((Bit8u*)ds_readd(FIG_STAR_GFX),
 				3724, ds_readb((FIG_STAR_COLORS-1) + f_action));
 
 			ds_writew(PIC_COPY_X1, 0);
@@ -584,7 +584,7 @@ void draw_fight_screen(Bit16u val)
 						if ((host_readbs(list_i + FIGHTER_SHEET) < 6) && (host_readbs(sheet + 0xf2) >= 0)) {
 							nvf.src = Real2Host(load_fight_figs(host_readw(list_i + FIGHTER_FIGURE)));
 						} else {
-							nvf.src =  Real2Host(ds_readd(SPELLOBJ_NVF_BUF));
+							nvf.src =  (Bit8u*)ds_readd(SPELLOBJ_NVF_BUF);
 						}
 
 						nvf.dst = Real2Host(host_readd(list_i + FIGHTER_GFXBUF));
@@ -803,7 +803,7 @@ void draw_fight_screen(Bit16u val)
 							if ((host_readbs(list_i + FIGHTER_SHEET) < 6) && (host_readbs(sheet + 0xf2) >= 0)) {
 								nvf.src = Real2Host(load_fight_figs(i));
 							} else {
-								nvf.src = Real2Host(ds_readd(SPELLOBJ_NVF_BUF));
+								nvf.src = (Bit8u*)ds_readd(SPELLOBJ_NVF_BUF);
 							}
 
 							nvf.dst = Real2Host(ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_SHEET) * 4));
@@ -829,7 +829,7 @@ void draw_fight_screen(Bit16u val)
 
 									if (host_readbs(p_weapon_anisheet + 1 + 3 * (ds_readws(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2))) != -5) {
 										nvf.dst = Real2Host(ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_WSHEET) * 4));
-										nvf.src = Real2Host(ds_readd(WEAPONS_NVF_BUF));
+										nvf.src = (Bit8u*)ds_readd(WEAPONS_NVF_BUF);
 										nvf.no = host_readb(p_weapon_anisheet + 1 + ds_readw(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2) * 3);
 										nvf.type = 0;
 										nvf.width = (Bit8u*)&width;

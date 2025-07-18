@@ -822,7 +822,7 @@ void FIG_do_hero_action(RealPt hero, const signed short hero_pos)
 
 
 								nvf.dst = Real2Host(ds_readd((FIG_LIST_ELEM + FIGHTER_GFXBUF)));
-								nvf.src = Real2Host(ds_readd(SPELLOBJ_NVF_BUF));
+								nvf.src = (Bit8u*)ds_readd(SPELLOBJ_NVF_BUF);
 								nvf.no = 26;
 								nvf.type = 0;
 								nvf.width =(Bit8u*) &width;

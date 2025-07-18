@@ -604,24 +604,24 @@ void cleanup_game(void)
 	if (ds_readb(EMS_ENABLED) != 0) {
 
 		for (l_si = 0; l_si < 37; l_si++) {
-			if (host_readw(Real2Host(ds_readd(MEM_SLOTS_ANIS)) + l_si * 8) != 0) {
-				EMS_free_pages(host_readw(Real2Host(ds_readd(MEM_SLOTS_ANIS)) + 2 + l_si * 8));
+			if (host_readw((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + l_si * 8) != 0) {
+				EMS_free_pages(host_readw((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + 2 + l_si * 8));
 			}
 		}
 
 		/* free male and female figures */
 		for (l_si = 0; l_si < 43; l_si++) {
 
-			if ((host_readw(Real2Host(ds_readd(MEM_SLOTS_MFIG)) + l_si * 12) != 0) &&
-				((host_readw(Real2Host(ds_readd(MEM_SLOTS_MFIG)) + l_si * 12 + 6) != 0)))
+			if ((host_readw((Bit8u*)ds_readd(MEM_SLOTS_MFIG) + l_si * 12) != 0) &&
+				((host_readw((Bit8u*)ds_readd(MEM_SLOTS_MFIG) + l_si * 12 + 6) != 0)))
 			{
-				EMS_free_pages(host_readw(Real2Host(ds_readd(MEM_SLOTS_MFIG)) + 6 + l_si * 12));
+				EMS_free_pages(host_readw((Bit8u*)ds_readd(MEM_SLOTS_MFIG) + 6 + l_si * 12));
 			}
 
-			if ((host_readw(Real2Host(ds_readd(MEM_SLOTS_WFIG)) + l_si * 12) != 0) &&
-				((host_readw(Real2Host(ds_readd(MEM_SLOTS_WFIG)) + l_si * 12 + 6) != 0)))
+			if ((host_readw((Bit8u*)ds_readd(MEM_SLOTS_WFIG) + l_si * 12) != 0) &&
+				((host_readw((Bit8u*)ds_readd(MEM_SLOTS_WFIG) + l_si * 12 + 6) != 0)))
 			{
-				EMS_free_pages(host_readw(Real2Host(ds_readd(MEM_SLOTS_WFIG)) + 6 + l_si * 12));
+				EMS_free_pages(host_readw((Bit8u*)ds_readd(MEM_SLOTS_WFIG) + 6 + l_si * 12));
 			}
 		}
 
