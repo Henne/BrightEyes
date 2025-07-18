@@ -84,21 +84,17 @@ signed short DNG01_handler(void)
 			(char*)Real2Host(GUI_2f2(2, 3, 0)));
 
 		/* ITEM: get a SABRE */
-		if (GUI_bool((char*)ds_readd(TEXT_OUTPUT_BUF)) && get_item(ITEM_SABER, 1, 1))
-		{
+		if (GUI_bool((char*)ds_readd(TEXT_OUTPUT_BUF)) && get_item(ITEM_SABER, 1, 1)) {
 			ds_writeb(DNG01_SABRE_TAKEN, 1);
 		}
 
 	} else if (target_pos == DNG_POS(3,2,9) && target_pos != ds_readws(DNG_HANDLED_POS) && !ds_readbs(DNG01_CROSSBOW_TAKEN))
 	{
-		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-			get_ttx(528),
-			(char*)Real2Host(GUI_names_grammar(0, 12, 0)),
-			(char*)Real2Host(GUI_2f2(2, 12, 0)));
+		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), get_ttx(528),	(char*)Real2Host(GUI_names_grammar(0, 12, 0)), (char*)Real2Host(GUI_2f2(2, 12, 0)));
 
 		/* ITEM: get a CROSSBOW */
-		if (GUI_bool((char*)ds_readd(TEXT_OUTPUT_BUF)) && get_item(ITEM_CROSSBOW, 1, 1))
-		{
+		if (GUI_bool((char*)ds_readd(TEXT_OUTPUT_BUF)) && get_item(ITEM_CROSSBOW, 1, 1)) {
+
 			ds_writeb(DNG01_CROSSBOW_TAKEN, 1);
 		}
 
@@ -129,9 +125,7 @@ signed short DNG01_handler(void)
 				{
 					sub_hero_le(hero, 2);
 
-					sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-						get_tx(12),
-						(char*)hero + HERO_NAME2);
+					sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), get_tx(12), (char*)hero + HERO_NAME2);
 
 					GUI_output((char*)ds_readd(TEXT_OUTPUT_BUF));
 				}
@@ -145,12 +139,11 @@ signed short DNG01_handler(void)
 
 		load_in_head(21);
 
-		if (GUI_dialogbox(ds_readfp(DTP2), get_ttx(756), get_tx(8), 2,
-				get_ttx(2), get_ttx(3)) == 1)
+		if (GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_ttx(756), get_tx(8), 2, get_ttx(2), get_ttx(3)) == 1)
 		{
 			ds_writew(TEXTBOX_WIDTH, 3);
 
-			GUI_dialogbox(ds_readfp(DTP2), get_ttx(756), get_tx(9), 0);
+			GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_ttx(756), get_tx(9), 0);
 
 			if (host_readbs(get_hero(6) + HERO_TYPE) != HERO_TYPE_NONE)
 			{
@@ -164,7 +157,7 @@ signed short DNG01_handler(void)
 		} else {
 			ds_writew(TEXTBOX_WIDTH, 3);
 
-			GUI_dialogbox(ds_readfp(DTP2), get_ttx(756), get_tx(10), 0);
+			GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_ttx(756), get_tx(10), 0);
 		}
 
 		ds_writeb(DNG01_ARDORA_FREED, 1);
@@ -344,7 +337,7 @@ void DNG01_chest6_x1(RealPt chest)
 		GUI_input(get_tx(2), 10);
 
 		/* compare if the user wrote MARBO */
-		if (!strcmp((char*)Real2Host(ds_readfp(TEXT_INPUT_BUF)),
+		if (!strcmp((char*)Real2Host(ds_readd(TEXT_INPUT_BUF)),
 				(char*)p_datseg + DNG01_STR_MARBO))
 		{
 			// correct answer

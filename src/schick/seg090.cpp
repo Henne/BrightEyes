@@ -361,7 +361,7 @@ signed short DNG12_handler(void)
 						"EIN EINZIGES MAL VERSUCHEN!\x3e MURMELT %s "
 						"ALS %s WIEDER AUF %sE F\x9aSSE KOMMT.");
 
-					sprintf((char*)Real2Host(ds_readfp(DTP2)),
+					sprintf((char*)Real2Host(ds_readd(DTP2)),
 						(char*)ds_readd(TEXT_OUTPUT_BUF),
 						(char*)hero + HERO_NAME2,
 						Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),

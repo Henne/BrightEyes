@@ -606,7 +606,7 @@ void spell_skelettarius(void)
 		 * https://www.crystals-dsa-foren.de/showthread.php?tid=5039&pid=148252#pid148252
 		 * https://www.crystals-dsa-foren.de/showthread.php?tid=5191&pid=166097#pid166097
 		 * */
-                RealPt buf_seek_ptr_bak = ds_readfp(FIGHTOBJ_BUF_SEEK_PTR); /* backup the entry of FIGHTOBJ_BUF_SEEK_PTR */
+                RealPt buf_seek_ptr_bak = ds_readd(FIGHTOBJ_BUF_SEEK_PTR); /* backup the entry of FIGHTOBJ_BUF_SEEK_PTR */
 		ds_write(FIGHTOBJ_BUF_SEEK_PTR, host_readd(fighter + FIGHTER_GFXBUF));
 #endif
 

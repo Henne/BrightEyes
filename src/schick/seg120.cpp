@@ -361,7 +361,7 @@ signed short init_memory(void)
 
 		init_text();
 
-		ds_writed(FIG_FIGURE1_BUF, (Bit32u)F_PADD(ds_readfp(BUFFER9_PTR3), 180000L));
+		ds_writed(FIG_FIGURE1_BUF, (Bit32u)F_PADD(ds_readd(BUFFER9_PTR3), 180000L));
 #if defined(__BORLANDC__)
 		if (ds_readb(LARGE_BUF) == 1) {
 			add_ds_fp(FIG_FIGURE1_BUF, 23000L);

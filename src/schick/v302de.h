@@ -340,11 +340,6 @@ static inline Bit16s ds_and_ws(unsigned short offs, unsigned short val) {
 	return *(Bit16s*)(p_datseg + offs) &= val;
 }
 
-static inline RealPt ds_readfp(unsigned short offs)
-{
-	return (RealPt)host_readd(p_datseg + offs);
-}
-
 /**
  *	ds_writeb_z() -	write only if target is 0
  *	@addr:	address in datasegment
@@ -1210,7 +1205,6 @@ struct hero_struct {
 #define ds_readbs(p)		(*(Bit8s*)(ds + p))
 #define ds_readws(p)		(*(Bit16s*)(ds + p))
 #define ds_readds(p)		(*(Bit32s*)(ds + (p)))
-#define ds_readfp(p)		(*(RealPt*)(ds + (p)))
 
 #define ds_writebs(p, d)	(*(Bit8s*)(ds + p) = (d))
 #define ds_writews(p, d)	(*(Bit16s*)(ds + p) = (d))
@@ -1272,7 +1266,7 @@ struct hero_struct {
 #define add_ptr_ds(p, v)	(*(Bit32s*)(p) += (v))
 #define sub_ptr_ds(p, v)	(*(Bit32s*)(p) -= (v))
 
-#define get_hero(no) ((Bit8u*)ds_readfp(HEROES) + SIZEOF_HERO * (no))
+#define get_hero(no) ((Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * (no))
 
 #ifdef M302de_ORIGINAL_BUGFIX
 #define ds_writeb_z(addr, val) (if (ds_readb(addr) == 0) ds_writeb(addr, val))
@@ -1375,22 +1369,22 @@ struct bittest {
 #define item_herb_potion(item)	((*(struct item_flags*)(item + ITEM_STATS_FLAGS)).herb_potion)
 #define item_undropable(item)	((*(struct item_flags*)(item + ITEM_STATS_FLAGS)).undropable)
 
-#define get_spelltarget_e()	((Bit8u*)ds_readfp(SPELLTARGET_E))
-#define get_spelltarget()	((Bit8u*)ds_readfp(SPELLTARGET))
-#define get_spelluser()		((Bit8u*)ds_readfp(SPELLUSER))
-#define get_spelluser_e()	((Bit8u*)ds_readfp(SPELLUSER_E))
+#define get_spelltarget_e()	((Bit8u*)ds_readd(SPELLTARGET_E))
+#define get_spelltarget()	((Bit8u*)ds_readd(SPELLTARGET))
+#define get_spelluser()		((Bit8u*)ds_readd(SPELLUSER))
+#define get_spelluser_e()	((Bit8u*)ds_readd(SPELLUSER_E))
 
-#define get_itemuser() ((Bit8u*)ds_readfp(ITEMUSER))
+#define get_itemuser() ((Bit8u*)ds_readd(ITEMUSER))
 
-#define get_ttx(no) ((char*)(host_readd(ds_readfp(TEXT_LTX_INDEX) + 4 * (no))))
-#define get_tx(no) ((char*)(host_readd(ds_readfp(TX_INDEX) + 4 * (no))))
-#define get_tx2(no) ((char*)(host_readd(ds_readfp(TX2_INDEX) + 4 * (no))))
-#define get_monname(no) ((char*)(host_readd(ds_readfp(MONNAMES_INDEX) + 4 * (no))))
-#define get_itemsdat(no) ((char*)(ds_readfp(ITEMSDAT) + 12 * (no)))
-#define get_itemname(no) ((char*)(host_readd(ds_readfp(ITEMSNAME) + 4 * (no))))
+#define get_ttx(no) ((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 4 * (no))))
+#define get_tx(no) ((char*)(host_readd((Bit8u*)ds_readd(TX_INDEX) + 4 * (no))))
+#define get_tx2(no) ((char*)(host_readd((Bit8u*)ds_readd(TX2_INDEX) + 4 * (no))))
+#define get_monname(no) ((char*)(host_readd((Bit8u*)ds_readd(MONNAMES_INDEX) + 4 * (no))))
+#define get_itemsdat(no) ((char*)((Bit8u*)ds_readd(ITEMSDAT) + 12 * (no)))
+#define get_itemname(no) ((char*)(host_readd((Bit8u*)ds_readd(ITEMSNAME) + 4 * (no))))
 
-#define get_cb_val(x, y) (host_readbs(ds_readfp(CHESSBOARD) + ((y) * 25) + (x)))
-#define set_cb_val(x, y, val) (host_writeb((ds_readfp(CHESSBOARD)) + (y) * 25 + (x), (val)))
+#define get_cb_val(x, y) (host_readbs((Bit8u*)ds_readd(CHESSBOARD) + (y) * 25 + (x)))
+#define set_cb_val(x, y, val) (host_writeb((Bit8u*)ds_readd(CHESSBOARD) + (y) * 25 + (x), (val)))
 
 #endif
 #endif

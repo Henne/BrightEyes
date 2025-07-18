@@ -451,7 +451,7 @@ void sea_travel(signed short passage, signed short dir)
 {
 	signed short i;
 	Bit8u *hero;
-	RealPt ptr;
+	Bit8u *ptr;
 	Bit32s off;
 
 #if !defined(__BORLANDC__)
@@ -462,7 +462,7 @@ void sea_travel(signed short passage, signed short dir)
 
 	ds_writeb(TRAVELING, 1);
 
-	ds_writed(SEA_TRAVEL_COURSES, (Bit32u)(passage < 7 ? F_PADD(ds_readd(BUFFER9_PTR), 7600) : F_PADD(ds_readd(BUFFER9_PTR), 11400)));
+	ds_writed(SEA_TRAVEL_COURSES, (Bit32u)(passage < 7 ? F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 7600L) : F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 11400L)));
 
 	/* high seas routes have id 0..6, costal routes id 7..44 */
 
@@ -473,9 +473,9 @@ void sea_travel(signed short passage, signed short dir)
 	/* convert costal route ids to range 0..37 */
 	ds_writew(SEA_TRAVEL_PASSAGE_NO, passage < 7 ? passage : passage - 7);
 
-	off = host_readd(Real2Host(ds_readfp(SEA_TRAVEL_COURSES)) + 4 * ds_readw(SEA_TRAVEL_PASSAGE_NO));
-	ds_writed(ROUTE_COURSE_PTR, (Bit32u)(ds_readfp(SEA_TRAVEL_COURSES) + off + 4 * ds_readws(ROUTE_MOUSEHOVER)));
-	ptr = ds_readfp(FRAMEBUF_PTR);
+	off = host_readd((Bit8u*)ds_readd(SEA_TRAVEL_COURSES) + 4 * ds_readw(SEA_TRAVEL_PASSAGE_NO));
+	ds_writed(ROUTE_COURSE_PTR, (Bit32u)((Bit8u*)ds_readd(SEA_TRAVEL_COURSES) + off + 4 * ds_readws(ROUTE_MOUSEHOVER)));
+	ptr = (Bit8u*)ds_readd(FRAMEBUF_PTR);
 
 #if defined(__BORLANDC__)
 	add_ds_fp(ROUTE_COURSE_PTR, 4);
@@ -483,7 +483,7 @@ void sea_travel(signed short passage, signed short dir)
 
 	memset(Real2Host(ds_readd(TRV_TRACK_PIXEL_BAK)), 0xaa, 500);
 	ds_writew(TRAVEL_SPEED, 10 * ds_readbs(SEA_TRAVEL_PASSAGE_SPEED1)); /* speed [unit: 10m per hour] */
-	ds_writew(ROUTE_TOTAL_STEPS, get_srout_len(Real2Host(ds_readfp(ROUTE_COURSE_PTR)))); /* a step for each pixel on the map. */
+	ds_writew(ROUTE_TOTAL_STEPS, get_srout_len(Real2Host(ds_readd(ROUTE_COURSE_PTR)))); /* a step for each pixel on the map. */
 	ds_writew(ROUTE_LENGTH, 100 * ds_readb(SEA_ROUTES + SEA_ROUTE_DISTANCE + SIZEOF_SEA_ROUTE * passage)); /* length of sea route [unit: 10m] */
 	ds_writew(ROUTE_DURATION, ds_readws(ROUTE_LENGTH) / ds_readws(TRAVEL_SPEED) * 60); /* duration [unit: minutes] */
 	ds_writew(ROUTE_TIMEDELTA, ds_readws(ROUTE_DURATION) / ds_readws(ROUTE_TOTAL_STEPS)); /* duration of each step [unit: minutes] */
@@ -501,7 +501,7 @@ void sea_travel(signed short passage, signed short dir)
 	if (dir) {
 		/* for reverse direction, point ROUTE_COURSE_PTR to end of route */
 
-		while (host_readws(Real2Host(ds_readfp(ROUTE_COURSE_PTR))) != -1) {
+		while (host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR)) != -1) {
 			add_ds_fp(ROUTE_COURSE_PTR, 4);
 		}
 
@@ -547,24 +547,24 @@ void sea_travel(signed short passage, signed short dir)
 	ds_writew(ROUTE_STEPCOUNT, ds_writew(ROUTE_PROGRESS, ds_writew(ROUTE_DAYPROGRESS, ds_writeb(TRAVEL_DETOUR, 0))));
 	ds_writeb(TRAVEL_HEROKEEPING, 1);
 
-	while (host_readws(Real2Host(ds_readfp(ROUTE_COURSE_PTR)) + 2 * ds_writew(ROUTE_MOUSEHOVER, 0)) != -1 && !ds_readb(TRAVEL_DETOUR))
+	while (host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2 * ds_writew(ROUTE_MOUSEHOVER, 0)) != -1 && !ds_readb(TRAVEL_DETOUR))
 	{
 
-		if (is_mouse_in_rect(host_readws(Real2Host(ds_readfp(ROUTE_COURSE_PTR))) - 16,
-					host_readws(Real2Host(ds_readfp(ROUTE_COURSE_PTR)) + 2) - 16,
-					host_readws(Real2Host(ds_readfp(ROUTE_COURSE_PTR))) + 16,
-					host_readws(Real2Host(ds_readfp(ROUTE_COURSE_PTR)) + 2) + 16))
+		if (is_mouse_in_rect(host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR)) - 16,
+					host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2) - 16,
+					host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR)) + 16,
+					host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2) + 16))
 		{
 			update_mouse_cursor();
 			ds_writew(ROUTE_MOUSEHOVER, 1);
 		}
 
 		*((Bit8u*)ds_readd(TRV_TRACK_PIXEL_BAK) + ds_readws(ROUTE_STEPCOUNT)) =
-			*(ptr + host_readws(((Bit8u*)ds_readfp(ROUTE_COURSE_PTR) + 2)) * 320 + host_readws((Bit8u*)ds_readfp(ROUTE_COURSE_PTR)));
+			*(ptr + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2) * 320 + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR)));
 
 		inc_ds_ws(ROUTE_STEPCOUNT);
 
-		*(ptr + host_readws((Bit8u*)ds_readfp(ROUTE_COURSE_PTR) + 2) * 320 + host_readws((Bit8u*)ds_readfp(ROUTE_COURSE_PTR))) = 0x1f;
+		*(ptr + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2) * 320 + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR))) = 0x1f;
 
 		if (ds_readws(ROUTE_MOUSEHOVER) != 0) {
 			refresh_screen_size();
@@ -634,7 +634,6 @@ void sea_travel(signed short passage, signed short dir)
 			}
 
 			ds_writeb(TRAVEL_BY_SHIP, 0);
-
 		}
 
 		if (ds_readws(REQUEST_REFRESH) != 0 && !ds_readb(TRAVEL_DETOUR)) {
@@ -655,7 +654,7 @@ void sea_travel(signed short passage, signed short dir)
 			ds_writew(TRV_I, 0);
 #if defined(__BORLANDC__)
 			for (ds_writed(ROUTE_COURSE_PTR2, ds_readd(ROUTE_COURSE_START));
-			     host_readb(Real2Host(ds_readd(TRV_TRACK_PIXEL_BAK)) + inc_ds_ws_post(TRV_I)) != 0xaa;
+			     host_readb((Bit8u*)ds_readd(TRV_TRACK_PIXEL_BAK) + inc_ds_ws_post(TRV_I)) != 0xaa;
 			     add_ds_fp(ROUTE_COURSE_PTR2, 2 * (!dir ? 2 : -2)))
 			{
 				*(ptr + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR2) + 2) * 320 + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR2))) = 0x1f;
@@ -691,10 +690,10 @@ void sea_travel(signed short passage, signed short dir)
 #endif
 			dec_ds_ws(ROUTE_STEPCOUNT);
 
-			*(ptr + host_readws(((Bit8u*)ds_readfp(ROUTE_COURSE_PTR) + 2)) * 320 + host_readws((Bit8u*)ds_readfp(ROUTE_COURSE_PTR))) =
+			*(ptr + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2) * 320 + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR))) =
 				host_readb((Bit8u*)ds_readd(TRV_TRACK_PIXEL_BAK) + ds_readws(ROUTE_STEPCOUNT));
 
-		} while (host_readws(Real2Host(ds_readfp(ROUTE_COURSE_PTR))) != -1);
+		} while (host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR)) != -1);
 
 		refresh_screen_size();
 	}

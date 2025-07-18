@@ -99,7 +99,7 @@ void FIG_preload_gfx(void)
 
 	ds_writed(WEAPONS_NVF_BUF, (Bit32u)(F_PADD((HugePt)ds_readd(CURRENT_FIGHT), SIZEOF_FIGHT)));
 
-	ds_writed(SPELLOBJ_NVF_BUF, (Bit32u)(ds_readfp(WEAPONS_NVF_BUF) + 0x1953));
+	ds_writed(SPELLOBJ_NVF_BUF, (Bit32u)((Bit8u*)ds_readd(WEAPONS_NVF_BUF) + 0x1953));
 
 	ds_writed(FIGOBJ_GFXBUF_TABLE, (Bit32u)(F_PADD((HugePt)ds_readd(SPELLOBJ_NVF_BUF), 0xf5f)));
 
@@ -146,7 +146,7 @@ void FIG_preload_gfx(void)
 	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 9851);
 #endif
 	handle = load_archive_file(ARCHIVE_FILE_ANI_DAT);
-	read_archive_file(handle, Real2Host(ds_readfp(BUFFER_ANIDAT)), 9851);
+	read_archive_file(handle, Real2Host(ds_readd(BUFFER_ANIDAT)), 9851);
 	close(handle);
 
 	/* load WEAPANI.DAT */
@@ -165,8 +165,8 @@ void FIG_preload_gfx(void)
 	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 300);
 #endif
 
-	nvf.dst = Real2Host(ds_readfp(FIG_CB_MARKER_BUF));
-	nvf.src = Real2Host(ds_readfp(OBJECTS_NVF_BUF));
+	nvf.dst = (Bit8u*)ds_readd(FIG_CB_MARKER_BUF);
+	nvf.src = (Bit8u*)ds_readd(OBJECTS_NVF_BUF);
 	nvf.no = 10;
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&i;
@@ -178,8 +178,8 @@ void FIG_preload_gfx(void)
 	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 300);
 #endif
 
-	nvf.dst = Real2Host(ds_readfp(FIG_CB_SELECTOR_BUF));
-	nvf.src = Real2Host(ds_readfp(OBJECTS_NVF_BUF));
+	nvf.dst = (Bit8u*)ds_readd(FIG_CB_SELECTOR_BUF);
+	nvf.src = (Bit8u*)ds_readd(OBJECTS_NVF_BUF);
 	nvf.no = 11;
 	nvf.type = 0;
 	process_nvf(&nvf);
@@ -189,8 +189,8 @@ void FIG_preload_gfx(void)
 	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 0xe8c);
 #endif
 
-	nvf.dst = Real2Host(ds_readfp(FIG_STAR_GFX));
-	nvf.src = Real2Host(ds_readfp(OBJECTS_NVF_BUF));
+	nvf.dst = (Bit8u*)ds_readd(FIG_STAR_GFX);
+	nvf.src = (Bit8u*)ds_readd(OBJECTS_NVF_BUF);
 	nvf.no = 17;
 	nvf.type = 0;
 	process_nvf(&nvf);
@@ -204,7 +204,7 @@ void FIG_preload_gfx(void)
 	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 1300);
 #endif
 
-	ds_writed(FIGHTOBJ_BUF_FREESPACE, F_PSUB(ds_readfp(FIGHTOBJ_BUF), ds_readfp(FIGHTOBJ_BUF_SEEK_PTR)));
+	ds_writed(FIGHTOBJ_BUF_FREESPACE, F_PSUB(ds_readd(FIGHTOBJ_BUF), ds_readd(FIGHTOBJ_BUF_SEEK_PTR)));
 
 	ds_writew(FIGHTOBJ_COUNT, 0);
 	ds_writeb(FIG_TWOFIELDED_COUNT, 0);
@@ -217,7 +217,7 @@ void FIG_draw_scenario(void)
 	signed short obj_id;
 	signed short width;
 	signed short height;
-	RealPt ptr;
+	Bit8u *ptr;
 	struct nvf_desc nvf;
 
 
@@ -233,12 +233,12 @@ void FIG_draw_scenario(void)
 
 					/* NULL check */
 					if (host_readd(Real2Host(ds_readd(FIGOBJ_GFXBUF_TABLE)) + obj_id * 4)) {
-						ptr = (RealPt)host_readd(Real2Host(ds_readfp(FIGOBJ_GFXBUF_TABLE)) + obj_id * 4);
+						ptr = (Bit8u*)host_readd(Real2Host(ds_readd(FIGOBJ_GFXBUF_TABLE)) + obj_id * 4);
 					} else {
-						ptr = ds_readfp(FIGHTOBJ_BUF_SEEK_PTR);
+						ptr = (Bit8u*)ds_readd(FIGHTOBJ_BUF_SEEK_PTR);
 
-						nvf.dst = Real2Host(ptr);
-						nvf.src = Real2Host(ds_readd(FIGHTOBJ_BUF));
+						nvf.dst = ptr;
+						nvf.src = (Bit8u*)ds_readd(FIGHTOBJ_BUF);
 						nvf.no = obj_id;
 						nvf.type = 0;
 						nvf.width = (Bit8u*)&width;
@@ -251,7 +251,7 @@ void FIG_draw_scenario(void)
 #endif
 
 						/* save sprite info */
-						host_writed(Real2Host(ds_readfp(FIGOBJ_GFXBUF_TABLE)) + obj_id * 4, (Bit32u)ds_readfp(FIGHTOBJ_BUF_SEEK_PTR));
+						host_writed(Real2Host(ds_readd(FIGOBJ_GFXBUF_TABLE)) + obj_id * 4, (Bit32u)ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
 						host_writew(Real2Host(ds_readd(FIGOBJ_GFXWIDTH_TABLE)) + obj_id * 2, width);
 						host_writew(Real2Host(ds_readd(FIGOBJ_GFXHEIGHT_TABLE)) + obj_id * 2, height);
 

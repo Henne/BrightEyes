@@ -244,7 +244,7 @@ void spell_harmlos(void)
 void spell_hexenknoten(void)
 {
 	Bit8u *ptr;
-	RealPt rp;
+	Bit8u *rp;
 	signed short x;
 	signed short y;
 	signed short no;
@@ -257,7 +257,7 @@ void spell_hexenknoten(void)
 		return;
 	}
 
-	ptr = Real2Host(FIG_get_ptr(host_readbs(get_spelluser() + HERO_FIGHTER_ID)));
+	ptr = (Bit8u*)FIG_get_ptr(host_readbs(get_spelluser() + HERO_FIGHTER_ID));
 	x = host_readbs(ptr + 3);
 	y = host_readbs(ptr + 4);
 
@@ -281,13 +281,13 @@ void spell_hexenknoten(void)
 
 	no = 24;
 
-	if ((Bit8u*)(ds_readfp(HEXENKNOTEN_GFX_BUF))) {
-		rp = ds_readfp(HEXENKNOTEN_GFX_BUF);
+	if ((Bit8u*)ds_readd(HEXENKNOTEN_GFX_BUF)) {
+		rp = (Bit8u*)ds_readd(HEXENKNOTEN_GFX_BUF);
 		/* TODO: graphic bug if cast more than once */
 	} else {
-		rp = ds_readfp(FIGHTOBJ_BUF_SEEK_PTR);
-		nvf.dst = Real2Host(rp);
-		nvf.src = Real2Host(ds_readfp(SPELLOBJ_NVF_BUF));
+		rp = (Bit8u*)ds_readd(FIGHTOBJ_BUF_SEEK_PTR);
+		nvf.dst = rp;
+		nvf.src = (Bit8u*)ds_readd(SPELLOBJ_NVF_BUF);
 		nvf.no = no;
 		nvf.type = 0;
 		nvf.width = (Bit8u*)&width;
