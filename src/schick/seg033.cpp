@@ -511,7 +511,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 								slots[radio_i] = slot_no;
 
 								ds_writed(RADIO_NAME_LIST + 4 * radio_i,
-									(Bit32u)((RealPt)(ds_readd(DTP2)) + 30 * radio_i));
+									(Bit32u)((char*)ds_readd(DTP2) + 30 * radio_i));
 
 								strcpy((char*)Real2Host(ds_readd(RADIO_NAME_LIST + 4 * radio_i)),
 									(char*)Real2Host(GUI_name_singular((Bit8u*)get_itemname(weapon_id))));
@@ -592,7 +592,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 								slots[radio_i] = slot_no;
 
 								ds_writed(RADIO_NAME_LIST + 4 * radio_i,
-									(Bit32u)((RealPt)(ds_readd(DTP2)) + 40 * radio_i));
+									(Bit32u)((char*)ds_readd(DTP2) + 40 * radio_i));
 
 								sprintf((char*)Real2Host(ds_readd(RADIO_NAME_LIST + 4 * radio_i)),
 									(char*)p_datseg + SPACE_SEPARATED_STRINGS, /* "%s %s" */
@@ -831,7 +831,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 							slots[radio_i] = slot_no;
 
 							ds_writed(RADIO_NAME_LIST + 4 * radio_i,
-								(Bit32u)((RealPt)(ds_readd(DTP2)) + 30 * radio_i));
+								(Bit32u)((char*)ds_readd(DTP2) + 30 * radio_i));
 
 							strcpy((char*)Real2Host(ds_readd(RADIO_NAME_LIST + 4 * radio_i)),
 								(char*)Real2Host(GUI_name_singular((Bit8u*)get_itemname(weapon_id))));
