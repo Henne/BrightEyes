@@ -146,7 +146,7 @@ void FIG_preload_gfx(void)
 	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 9851);
 #endif
 	handle = load_archive_file(ARCHIVE_FILE_ANI_DAT);
-	read_archive_file(handle, Real2Host(ds_readd(BUFFER_ANIDAT)), 9851);
+	read_archive_file(handle, (Bit8u*)ds_readd(BUFFER_ANIDAT), 9851);
 	close(handle);
 
 	/* load WEAPANI.DAT */

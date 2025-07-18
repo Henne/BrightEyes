@@ -48,7 +48,7 @@ signed short KI_copy_ani_sequence(Bit8u *dst, signed short ani_no, signed short 
 
 
 	/* set the right buffer */
-	p_datbuffer = Real2Host(ds_readd(BUFFER_ANIDAT));
+	p_datbuffer = (Bit8u*)ds_readd(BUFFER_ANIDAT);
 
 	/* This function is never calld with mode == 3 */
 	if (mode == 3)
