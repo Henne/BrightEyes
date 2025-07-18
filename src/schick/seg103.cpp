@@ -90,22 +90,22 @@ signed short LVL_select_skill(Bit8u *hero, signed short show_values)
 		}
 
 		retval = GUI_radio(get_ttx(218), ds_readbs((SKILLS_INDEX + 1) + 2 * answer),
-				Real2Host(ds_readd(RADIO_NAME_LIST)),
-				Real2Host(ds_readd((RADIO_NAME_LIST + 4))),
-				Real2Host(ds_readd((RADIO_NAME_LIST + 2 * 4))),
-				Real2Host(ds_readd((RADIO_NAME_LIST + 3 * 4))),
-				Real2Host(ds_readd((RADIO_NAME_LIST + 4 * 4))),
-				Real2Host(ds_readd((RADIO_NAME_LIST + 5 * 4))),
-				Real2Host(ds_readd((RADIO_NAME_LIST + 6 * 4))),
-				Real2Host(ds_readd((RADIO_NAME_LIST + 7 * 4))),
-				Real2Host(ds_readd((RADIO_NAME_LIST + 8 * 4))),
-				Real2Host(ds_readd((RADIO_NAME_LIST + 9 * 4))),
-				Real2Host(ds_readd((RADIO_NAME_LIST + 10 * 4))),
-				Real2Host(ds_readd((RADIO_NAME_LIST + 11 * 4))),
-				Real2Host(ds_readd((RADIO_NAME_LIST + 12 * 4))),
-				Real2Host(ds_readd((RADIO_NAME_LIST + 13 * 4))),
-				Real2Host(ds_readd((RADIO_NAME_LIST + 14 * 4))),
-				Real2Host(ds_readd((RADIO_NAME_LIST + 15 * 4))));
+				(char*)(ds_readd(RADIO_NAME_LIST)),
+				(char*)(ds_readd((RADIO_NAME_LIST + 4))),
+				(char*)(ds_readd((RADIO_NAME_LIST + 2 * 4))),
+				(char*)(ds_readd((RADIO_NAME_LIST + 3 * 4))),
+				(char*)(ds_readd((RADIO_NAME_LIST + 4 * 4))),
+				(char*)(ds_readd((RADIO_NAME_LIST + 5 * 4))),
+				(char*)(ds_readd((RADIO_NAME_LIST + 6 * 4))),
+				(char*)(ds_readd((RADIO_NAME_LIST + 7 * 4))),
+				(char*)(ds_readd((RADIO_NAME_LIST + 8 * 4))),
+				(char*)(ds_readd((RADIO_NAME_LIST + 9 * 4))),
+				(char*)(ds_readd((RADIO_NAME_LIST + 10 * 4))),
+				(char*)(ds_readd((RADIO_NAME_LIST + 11 * 4))),
+				(char*)(ds_readd((RADIO_NAME_LIST + 12 * 4))),
+				(char*)(ds_readd((RADIO_NAME_LIST + 13 * 4))),
+				(char*)(ds_readd((RADIO_NAME_LIST + 14 * 4))),
+				(char*)(ds_readd((RADIO_NAME_LIST + 15 * 4))));
 
 		if (retval != -1) {
 			retval += l1 - 1;

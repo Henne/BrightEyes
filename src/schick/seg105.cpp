@@ -774,7 +774,7 @@ signed short select_item_to_drop(Bit8u *hero)
 		if ((item = host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + i * SIZEOF_INVENTORY))) {
 			str[v6] = i;
 			ds_writed(RADIO_NAME_LIST + v6 * 4 , (Bit32u)((char*)ds_readd(DTP2) + v6 * 30));
-			strcpy((char*)Real2Host(ds_readd(RADIO_NAME_LIST + v6 * 4)),
+			strcpy((char*)(char*)(ds_readd(RADIO_NAME_LIST + v6 * 4)),
 				(GUI_name_singular(get_itemname(item))));
 			v6++;
 		}
@@ -814,19 +814,19 @@ signed short select_item_to_drop(Bit8u *hero)
 		ds_writew(TEXTBOX_WIDTH, 6);
 		ds_writew(BASEPOS_X, ds_writew(BASEPOS_Y, 0));
 		v4 = GUI_radio((Bit8u*)get_ttx(752), (signed char)i,
-			Real2Host(ds_readd(RADIO_NAME_LIST + 0x00 + di * 4)),
-			Real2Host(ds_readd(RADIO_NAME_LIST + 0x04 + di * 4)),
-			Real2Host(ds_readd(RADIO_NAME_LIST + 0x08 + di * 4)),
-			Real2Host(ds_readd(RADIO_NAME_LIST + 0x0c + di * 4)),
-			Real2Host(ds_readd(RADIO_NAME_LIST + 0x10 + di * 4)),
-			Real2Host(ds_readd(RADIO_NAME_LIST + 0x14 + di * 4)),
-			Real2Host(ds_readd(RADIO_NAME_LIST + 0x18 + di * 4)),
-			Real2Host(ds_readd(RADIO_NAME_LIST + 0x1c + di * 4)),
-			Real2Host(ds_readd(RADIO_NAME_LIST + 0x20 + di * 4)),
-			Real2Host(ds_readd(RADIO_NAME_LIST + 0x24 + di * 4)),
-			Real2Host(ds_readd(RADIO_NAME_LIST + 0x28 + di * 4)),
-			Real2Host(ds_readd(RADIO_NAME_LIST + 0x2c + di * 4)),
-			Real2Host(ds_readd(RADIO_NAME_LIST + 0x30 + di * 4)));
+			(char*)(ds_readd(RADIO_NAME_LIST + 0x00 + di * 4)),
+			(char*)(ds_readd(RADIO_NAME_LIST + 0x04 + di * 4)),
+			(char*)(ds_readd(RADIO_NAME_LIST + 0x08 + di * 4)),
+			(char*)(ds_readd(RADIO_NAME_LIST + 0x0c + di * 4)),
+			(char*)(ds_readd(RADIO_NAME_LIST + 0x10 + di * 4)),
+			(char*)(ds_readd(RADIO_NAME_LIST + 0x14 + di * 4)),
+			(char*)(ds_readd(RADIO_NAME_LIST + 0x18 + di * 4)),
+			(char*)(ds_readd(RADIO_NAME_LIST + 0x1c + di * 4)),
+			(char*)(ds_readd(RADIO_NAME_LIST + 0x20 + di * 4)),
+			(char*)(ds_readd(RADIO_NAME_LIST + 0x24 + di * 4)),
+			(char*)(ds_readd(RADIO_NAME_LIST + 0x28 + di * 4)),
+			(char*)(ds_readd(RADIO_NAME_LIST + 0x2c + di * 4)),
+			(char*)(ds_readd(RADIO_NAME_LIST + 0x30 + di * 4)));
 		ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
 		ds_writew(BASEPOS_X, bak2);
 		ds_writew(BASEPOS_Y, bak3);

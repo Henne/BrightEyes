@@ -185,20 +185,20 @@ signed short plan_alchemy(Bit8u *hero)
 			ds_writew(TEXTBOX_WIDTH, 7);
 
 			answer = GUI_radio(get_tx(43), (signed char)recipes,
-						Real2Host(ds_readd(RADIO_NAME_LIST)),
-						Real2Host(ds_readd((RADIO_NAME_LIST + 4))),
-						Real2Host(ds_readd((RADIO_NAME_LIST + 2 * 4))),
-						Real2Host(ds_readd((RADIO_NAME_LIST + 3 * 4))),
-						Real2Host(ds_readd((RADIO_NAME_LIST + 4 * 4))),
-						Real2Host(ds_readd((RADIO_NAME_LIST + 5 * 4))),
-						Real2Host(ds_readd((RADIO_NAME_LIST + 6 * 4))),
-						Real2Host(ds_readd((RADIO_NAME_LIST + 7 * 4))),
-						Real2Host(ds_readd((RADIO_NAME_LIST + 8 * 4))),
-						Real2Host(ds_readd((RADIO_NAME_LIST + 9 * 4))),
-						Real2Host(ds_readd((RADIO_NAME_LIST + 10 * 4))),
-						Real2Host(ds_readd((RADIO_NAME_LIST + 11 * 4))),
-						Real2Host(ds_readd((RADIO_NAME_LIST + 12 * 4))),
-						Real2Host(ds_readd((RADIO_NAME_LIST + 13 * 4))));
+						(char*)(ds_readd(RADIO_NAME_LIST)),
+						(char*)(ds_readd((RADIO_NAME_LIST + 4))),
+						(char*)(ds_readd((RADIO_NAME_LIST + 2 * 4))),
+						(char*)(ds_readd((RADIO_NAME_LIST + 3 * 4))),
+						(char*)(ds_readd((RADIO_NAME_LIST + 4 * 4))),
+						(char*)(ds_readd((RADIO_NAME_LIST + 5 * 4))),
+						(char*)(ds_readd((RADIO_NAME_LIST + 6 * 4))),
+						(char*)(ds_readd((RADIO_NAME_LIST + 7 * 4))),
+						(char*)(ds_readd((RADIO_NAME_LIST + 8 * 4))),
+						(char*)(ds_readd((RADIO_NAME_LIST + 9 * 4))),
+						(char*)(ds_readd((RADIO_NAME_LIST + 10 * 4))),
+						(char*)(ds_readd((RADIO_NAME_LIST + 11 * 4))),
+						(char*)(ds_readd((RADIO_NAME_LIST + 12 * 4))),
+						(char*)(ds_readd((RADIO_NAME_LIST + 13 * 4))));
 
 			ds_writew(TEXTBOX_WIDTH, l7);
 
