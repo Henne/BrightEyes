@@ -263,11 +263,11 @@ signed short DNG08_handler(void)
 		{
 			hero = get_hero(select_hero_ok_forced(get_tx(18)));
 
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_tx(19),
 				(char*)hero + HERO_NAME2);
 
-			GUI_output(Real2Host(ds_readd(DTP2)));
+			GUI_output((char*)ds_readd(DTP2));
 
 			/* open door at (8,13) */
 			and_ptr_bs(amap_ptr + MAP_POS(8,13), 0x0f);
@@ -324,11 +324,11 @@ signed short DNG08_handler(void)
 				!hero_dead(hero) &&
 				test_skill(hero, TA_KLETTERN, 2) <= 0)
 			{
-				sprintf((char*)Real2Host(ds_readd(DTP2)),
+				sprintf((char*)ds_readd(DTP2),
 					get_tx(21),
 					(char*)hero + HERO_NAME2,
 					(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
-				GUI_output(Real2Host(ds_readd(DTP2)));
+				GUI_output((char*)ds_readd(DTP2));
 
 				sub_hero_le(hero, dice_roll(1, 6, 4));
 			}
@@ -344,7 +344,7 @@ signed short DNG08_handler(void)
 		{
 			ds_writeb(DNG08_SECRET_DOOR, 1);
 
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_tx(29),
 				(char*)hero + HERO_NAME2);
 
@@ -352,10 +352,10 @@ signed short DNG08_handler(void)
 				(char*)((tmp = test_skill(hero, TA_SCHLOESSER, 2)) > 0 ? get_tx(30): get_tx(31)),
 				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			strcat((char*)Real2Host(ds_readd(DTP2)),
+			strcat((char*)ds_readd(DTP2),
 				(char*)ds_readd(TEXT_OUTPUT_BUF));
 
-			GUI_output(Real2Host(ds_readd(DTP2)));
+			GUI_output((char*)ds_readd(DTP2));
 
 			if (tmp > 0)
 			{
@@ -370,19 +370,19 @@ signed short DNG08_handler(void)
 
 	} else if (target_pos == DNG_POS(0,5,7) && target_pos != ds_readws(DNG_HANDLED_POS))
 	{
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(22),
 			(char*)(test_skill(hero, TA_GOETTER_KULTE, 4) <= 0 ? get_tx(23) : get_tx(24)));
 
-		GUI_output(Real2Host(ds_readd(DTP2)));
+		GUI_output((char*)ds_readd(DTP2));
 
 	} else if (target_pos == DNG_POS(0,5,9) && target_pos != ds_readws(DNG_HANDLED_POS))
 	{
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(22),
 			(char*)(test_skill(hero, TA_GOETTER_KULTE, 6) <= 0 ? get_tx(23) : get_tx(25)));
 
-		GUI_output(Real2Host(ds_readd(DTP2)));
+		GUI_output((char*)ds_readd(DTP2));
 
 	} else if (target_pos == DNG_POS(0,0,14) && target_pos != ds_readws(DNG_HANDLED_POS))
 	{
@@ -432,7 +432,7 @@ void DNG08_search_bed(void)
 
 	if (random_schick(100) <= 10)
 	{
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(3),
 			(char*)hero + HERO_NAME2,
 			(char*)Real2Host(GUI_names_grammar(2, 92, 0)));
@@ -440,14 +440,14 @@ void DNG08_search_bed(void)
 		/* a BRANDY BOTTLE */
 		get_item(ITEM_BRANDY, 1, 1);
 
-		GUI_output(Real2Host(ds_readd(DTP2)));
+		GUI_output((char*)ds_readd(DTP2));
 
 		counter++;
 	}
 
 	if (random_schick(100) <= 10)
 	{
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(3),
 			(char*)hero + HERO_NAME2,
 			(char*)Real2Host(GUI_names_grammar(2, 14, 0)));
@@ -455,7 +455,7 @@ void DNG08_search_bed(void)
 		/* a DAGGER */
 		get_item(ITEM_DAGGER, 1, 1);
 
-		GUI_output(Real2Host(ds_readd(DTP2)));
+		GUI_output((char*)ds_readd(DTP2));
 
 		counter++;
 	}
@@ -468,12 +468,12 @@ void DNG08_search_bed(void)
 			get_tx(4),
 			money);
 
-		sprintf((char*)Real2Host(ds_readd(DTP2)),
+		sprintf((char*)ds_readd(DTP2),
 			get_tx(3),
 			(char*)hero + HERO_NAME2,
 			(char*)ds_readd(TEXT_OUTPUT_BUF));
 
-		GUI_output(Real2Host(ds_readd(DTP2)));
+		GUI_output((char*)ds_readd(DTP2));
 
 		add_party_money(money);
 
@@ -492,12 +492,12 @@ void DNG08_chest1_func2(RealPt)
 
 	hero = (Bit8u*)get_first_hero_available_in_group();
 
-	sprintf((char*)Real2Host(ds_readd(DTP2)),
+	sprintf((char*)ds_readd(DTP2),
 		get_tx(11),
 		(char*)hero + HERO_NAME2,
 		(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
 
-	GUI_output(Real2Host(ds_readd(DTP2)));
+	GUI_output((char*)ds_readd(DTP2));
 
 	/* 3W6 damage */
 	sub_hero_le(hero, dice_roll(3, 6, 0));

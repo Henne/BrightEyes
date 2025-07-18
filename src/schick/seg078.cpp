@@ -335,7 +335,7 @@ signed short DNG02_handler(void)
 			{
 				or_ptr_bs(hero + HERO_FLAGS1, 0x04); /* set 'petrified' flag */
 
-				sprintf((char*)Real2Host(ds_readd(DTP2)),
+				sprintf((char*)ds_readd(DTP2),
 					get_tx(42),
 					(char*)hero + HERO_NAME2,
 					(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
@@ -343,7 +343,7 @@ signed short DNG02_handler(void)
 					(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output(Real2Host(ds_readd(DTP2)));
+				GUI_output((char*)ds_readd(DTP2));
 			}
 		}
 
@@ -435,7 +435,7 @@ signed short DNG02_handler(void)
 		{
 			ds_writeb(DNG02_SECRET_DOOR1, 1);
 
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_tx(37),
 				(char*)hero + HERO_NAME2);
 
@@ -443,10 +443,10 @@ signed short DNG02_handler(void)
 				(char*)((i = test_skill(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(39) : get_tx(38)),
 				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			strcat((char*)Real2Host(ds_readd(DTP2)),
+			strcat((char*)ds_readd(DTP2),
 				(char*)ds_readd(TEXT_OUTPUT_BUF));
 
-			GUI_output(Real2Host(ds_readd(DTP2)));
+			GUI_output((char*)ds_readd(DTP2));
 
 			if (i > 0)
 			{
@@ -471,7 +471,7 @@ signed short DNG02_handler(void)
 		{
 			ds_writeb(DNG02_SECRET_DOOR2, 1);
 
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_tx(37),
 				(char*)hero + HERO_NAME2);
 
@@ -479,10 +479,10 @@ signed short DNG02_handler(void)
 				(char*)((i = test_skill(hero, TA_SCHLOESSER, 2)) > 0 ? get_tx(39) : get_tx(38)),
 				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			strcat((char*)Real2Host(ds_readd(DTP2)),
+			strcat((char*)ds_readd(DTP2),
 				(char*)ds_readd(TEXT_OUTPUT_BUF));
 
-			GUI_output(Real2Host(ds_readd(DTP2)));
+			GUI_output((char*)ds_readd(DTP2));
 
 			if (i > 0)
 			{
@@ -505,7 +505,7 @@ signed short DNG02_handler(void)
 		{
 			ds_writeb(DNG02_SECRET_DOOR3, 1);
 
-			sprintf((char*)Real2Host(ds_readd(DTP2)),
+			sprintf((char*)ds_readd(DTP2),
 				get_tx(37),
 				(char*)hero + HERO_NAME2);
 
@@ -513,7 +513,7 @@ signed short DNG02_handler(void)
 				(char*)((i = test_skill(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(39) : get_tx(38)),
 				(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			strcat((char*)Real2Host(ds_readd(DTP2)),
+			strcat((char*)ds_readd(DTP2),
 				(char*)ds_readd(TEXT_OUTPUT_BUF));
 
 			if (i > 0)
@@ -530,10 +530,10 @@ signed short DNG02_handler(void)
 				(char*)hero + HERO_NAME2,
 				i);
 
-			strcat((char*)Real2Host(ds_readd(DTP2)),
+			strcat((char*)ds_readd(DTP2),
 				(char*)ds_readd(TEXT_OUTPUT_BUF));
 
-			GUI_output(Real2Host(ds_readd(DTP2)));
+			GUI_output((char*)ds_readd(DTP2));
 
 			sub_hero_le(hero, i);
 
