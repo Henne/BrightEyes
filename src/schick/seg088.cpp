@@ -83,20 +83,20 @@ void DNG14_chest_x1(RealPt chest)
 {
 	RealPt ptr_bak;
 
-	ptr_bak = (RealPt)host_readd(Real2Host(chest) + 11);
-	host_writed(Real2Host(chest) + 11, (Bit32u)RealMake(datseg, DNG14_CHEST_X1));
-	loot_simple_chest(Real2Host(chest));
-	host_writed(Real2Host(chest) + 11, (Bit32u)ptr_bak);
+	ptr_bak = (RealPt)host_readd(chest + 11);
+	host_writed(chest + 11, (Bit32u)(p_datseg + DNG14_CHEST_X1));
+	loot_simple_chest(chest);
+	host_writed(chest + 11, (Bit32u)ptr_bak);
 }
 
 void DNG14_chest_x2(RealPt chest)
 {
 	RealPt ptr_bak;
 
-	ptr_bak = (RealPt)host_readd(Real2Host(chest) + 11);
-	host_writed(Real2Host(chest) + 11, (Bit32u)RealMake(datseg, DNG14_CHEST_X2));
-	loot_simple_chest(Real2Host(chest));
-	host_writed(Real2Host(chest) + 11, (Bit32u)ptr_bak);
+	ptr_bak = (RealPt)host_readd(chest + 11);
+	host_writed(chest + 11, (Bit32u)(p_datseg + DNG14_CHEST_X2));
+	loot_simple_chest(chest);
+	host_writed(chest + 11, (Bit32u)ptr_bak);
 }
 
 void DNG14_chest_x3(RealPt chest)
@@ -108,20 +108,20 @@ void DNG14_chest_x4(RealPt chest)
 {
 	RealPt ptr_bak;
 
-	ptr_bak = (RealPt)host_readd(Real2Host(chest) + 11);
-	host_writed(Real2Host(chest) + 11, (Bit32u)RealMake(datseg, DNG14_CHEST_X4));
-	loot_simple_chest(Real2Host(chest));
-	host_writed(Real2Host(chest) + 11, (Bit32u)ptr_bak);
+	ptr_bak = (RealPt)host_readd(chest + 11);
+	host_writed(chest + 11, (Bit32u)(p_datseg + DNG14_CHEST_X4));
+	loot_simple_chest(chest);
+	host_writed(chest + 11, (Bit32u)ptr_bak);
 }
 
 void DNG14_chest_x5(RealPt chest)
 {
 	RealPt ptr_bak;
 
-	ptr_bak = (RealPt)host_readd(Real2Host(chest) + 11);
-	host_writed(Real2Host(chest) + 11, (Bit32u)RealMake(datseg, DNG14_CHEST_X5));
-	loot_simple_chest(Real2Host(chest));
-	host_writed(Real2Host(chest) + 11, (Bit32u)ptr_bak);
+	ptr_bak = (RealPt)host_readd(chest + 11);
+	host_writed(chest + 11, (Bit32u)(p_datseg + DNG14_CHEST_X5));
+	loot_simple_chest(chest);
+	host_writed(chest + 11, (Bit32u)ptr_bak);
 }
 
 void DNG14_chest_x6(RealPt chest)
@@ -130,10 +130,10 @@ void DNG14_chest_x6(RealPt chest)
 	unsigned char x;
 	unsigned char y;
 
-	ptr_bak = (RealPt)host_readd(Real2Host(chest) + 11);
-	host_writed(Real2Host(chest) + 11, (Bit32u)RealMake(datseg, DNG14_CHEST_X6));
-	loot_simple_chest(Real2Host(chest));
-	host_writed(Real2Host(chest) + 11, (Bit32u)ptr_bak);
+	ptr_bak = (RealPt)host_readd(chest + 11);
+	host_writed(chest + 11, (Bit32u)(p_datseg + DNG14_CHEST_X6));
+	loot_simple_chest(chest);
+	host_writed(chest + 11, (Bit32u)ptr_bak);
 
 	if (ds_readb(DNG14_FULLMAP_FLAG) != 0) {
 
@@ -153,20 +153,20 @@ void DNG14_chest_x7(RealPt chest)
 {
 	RealPt ptr_bak;
 
-	ptr_bak = (RealPt)host_readd(Real2Host(chest) + 11);
-	host_writed(Real2Host(chest) + 11, (Bit32u)RealMake(datseg, DNG14_CHEST_X7));
-	loot_simple_chest(Real2Host(chest));
-	host_writed(Real2Host(chest) + 11, (Bit32u)ptr_bak);
+	ptr_bak = (RealPt)host_readd(chest + 11);
+	host_writed(chest + 11, (Bit32u)(p_datseg + DNG14_CHEST_X7));
+	loot_simple_chest(chest);
+	host_writed(chest + 11, (Bit32u)ptr_bak);
 }
 
 void DNG14_chest_x8(RealPt chest)
 {
 	RealPt ptr_bak;
 
-	ptr_bak = (RealPt)host_readd(Real2Host(chest) + 11);
-	host_writed(Real2Host(chest) + 11, (Bit32u)RealMake(datseg, DNG14_CHEST_X8));
-	loot_simple_chest(Real2Host(chest));
-	host_writed(Real2Host(chest) + 11, (Bit32u)ptr_bak);
+	ptr_bak = (RealPt)host_readd(chest + 11);
+	host_writed(chest + 11, (Bit32u)(p_datseg + DNG14_CHEST_X8));
+	loot_simple_chest(chest);
+	host_writed(chest + 11, (Bit32u)ptr_bak);
 }
 
 void DNG14_chest_x9(void)
@@ -218,9 +218,8 @@ void DNG15_riddle(void)
 
 		/* ask which lever should be pulled */
 		do {
-			i = GUI_radio(get_tx(29), 2,
-					get_tx(30),
-					get_tx(31));
+			i = GUI_radio(get_tx(29), 2, get_tx(30), get_tx(31));
+
 		} while (i == -1);
 
 		if (i == 2) {
