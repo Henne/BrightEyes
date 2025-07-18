@@ -614,7 +614,7 @@ void load_informer_tlk(signed short index)
 
 	close(fd);
 
-	split_textbuffer(Real2Host(ds_readd(TX2_INDEX)),
+	split_textbuffer((Bit8u*)ds_readd(TX2_INDEX),
 		(Bit8u*)ds_readd(BUFFER8_PTR), text_len);
 
 	/* adjust the pointers to the layouts */

@@ -471,28 +471,28 @@ void status_menu(signed short hero_pos)
 				/* from start-page */
 
 				if (ds_readws(GAME_MODE) == GAME_MODE_ADVANCED) {
-					ds_writed(RADIO_NAME_LIST + 0x0, host_readd(Real2Host(ds_readd(TX2_INDEX)) + 0x4c));
-					ds_writed((RADIO_NAME_LIST + 0x4), host_readd(Real2Host(ds_readd(TX2_INDEX)) + 0x50));
-					ds_writed((RADIO_NAME_LIST + 0x8), host_readd(Real2Host(ds_readd(TX2_INDEX)) + 0x54));
+					ds_writed(RADIO_NAME_LIST + 0x0, host_readd((Bit8u*)ds_readd(TX2_INDEX) + 0x4c));
+					ds_writed((RADIO_NAME_LIST + 0x4), host_readd((Bit8u*)ds_readd(TX2_INDEX) + 0x50));
+					ds_writed((RADIO_NAME_LIST + 0x8), host_readd((Bit8u*)ds_readd(TX2_INDEX) + 0x54));
 
 					flag3 = hero_is_diseased(hero2);
 
 					if (flag3 != 0) {
-						ds_writed((RADIO_NAME_LIST + 0x0c), host_readd(Real2Host(ds_readd(TX2_INDEX)) + 0x64));
-						ds_writed((RADIO_NAME_LIST + 0x10), host_readd(Real2Host(ds_readd(TX2_INDEX)) + 0x3c));
+						ds_writed((RADIO_NAME_LIST + 0x0c), host_readd((Bit8u*)ds_readd(TX2_INDEX) + 0x64));
+						ds_writed((RADIO_NAME_LIST + 0x10), host_readd((Bit8u*)ds_readd(TX2_INDEX) + 0x3c));
 						l1 = 10;
 					} else {
-						ds_writed((RADIO_NAME_LIST + 0x0c), host_readd(Real2Host(ds_readd(TX2_INDEX)) + 0x3c));
+						ds_writed((RADIO_NAME_LIST + 0x0c), host_readd((Bit8u*)ds_readd(TX2_INDEX) + 0x3c));
 						l1 = 9;
 					}
 				} else {
 
 					if ((flag3 = hero_is_diseased(hero2))) {
-						ds_writed((RADIO_NAME_LIST + 0), host_readd(Real2Host(ds_readd(TX2_INDEX)) + 0x64));
-						ds_writed((RADIO_NAME_LIST + 4), host_readd(Real2Host(ds_readd(TX2_INDEX)) + 0x3c));
+						ds_writed((RADIO_NAME_LIST + 0), host_readd((Bit8u*)ds_readd(TX2_INDEX) + 0x64));
+						ds_writed((RADIO_NAME_LIST + 4), host_readd((Bit8u*)ds_readd(TX2_INDEX) + 0x3c));
 						l1 = 7;
 					} else {
-						ds_writed((RADIO_NAME_LIST + 0), host_readd(Real2Host(ds_readd(TX2_INDEX)) + 0x3c));
+						ds_writed((RADIO_NAME_LIST + 0), host_readd((Bit8u*)ds_readd(TX2_INDEX) + 0x3c));
 						l1 = 6;
 					}
 				}

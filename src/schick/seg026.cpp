@@ -92,7 +92,7 @@ void load_tx2(signed short index)
 	len = (signed short)read_archive_file(fd, (Bit8u*)ds_readd(BUFFER8_PTR), 12000);
 	close(fd);
 
-	split_textbuffer(Real2Host(ds_readd(TX2_INDEX)), (Bit8u*)ds_readd(BUFFER8_PTR), len);
+	split_textbuffer((Bit8u*)ds_readd(TX2_INDEX), (Bit8u*)ds_readd(BUFFER8_PTR), len);
 }
 
 void load_ltx(unsigned short index)

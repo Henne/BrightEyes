@@ -394,7 +394,7 @@ void THO_black_finger(void)
 void dramosch_says(Bit8u *msg)
 {
 	GUI_dialogbox((char*)ds_readd(DTP2),
-			Real2Host(host_readd(Real2Host(ds_readd(TX2_INDEX)) + 0xc0)), msg, 0);
+			Real2Host(host_readd((Bit8u*)ds_readd(TX2_INDEX) + 0xc0)), msg, 0);
 }
 
 void THO_ugdalf(void)
@@ -432,7 +432,7 @@ void THO_ugdalf(void)
 
 			do {
 				answer = GUI_dialogbox((char*)ds_readd(DTP2),
-							Real2Host(host_readd(Real2Host(ds_readd(TX2_INDEX)) + 0xc0)),
+							Real2Host(host_readd((Bit8u*)ds_readd(TX2_INDEX) + 0xc0)),
 
 							get_tx2(30), 2,
 							get_tx2(31),
