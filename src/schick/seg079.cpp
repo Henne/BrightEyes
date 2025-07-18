@@ -56,8 +56,7 @@ signed short DNG03_handler(void)
 	{
 		GUI_input(get_tx(2), 15);
 
-		if (!strcmp((char*)Real2Host(ds_readd(TEXT_INPUT_BUF)),
-				(char*)p_datseg + DNG03_STR_SPINNENNETZ))
+		if (!strcmp((char*)ds_readd(TEXT_INPUT_BUF), (char*)p_datseg + DNG03_STR_SPINNENNETZ))
 		{
 			GUI_output(get_tx(4));
 
@@ -147,8 +146,7 @@ signed short DNG03_handler(void)
 	{
 		GUI_input(get_tx(7), 15);
 
-		if (!strcmp((char*)Real2Host(ds_readd(TEXT_INPUT_BUF)),
-				(char*)p_datseg + DNG03_STR_MACTANS))
+		if (!strcmp((char*)ds_readd(TEXT_INPUT_BUF), (char*)p_datseg + DNG03_STR_MACTANS))
 		{
 			GUI_output(get_tx(4));
 

@@ -539,8 +539,7 @@ void DNG08_chest2_func1(RealPt chest)
 		{
 			GUI_input(get_tx(27), 10);
 
-			if (!strcmp((char*)Real2Host(ds_readd(TEXT_INPUT_BUF)),
-					(char*)p_datseg + DNG08_STR_TAIRACH))
+			if (!strcmp((char*)ds_readd(TEXT_INPUT_BUF), (char*)p_datseg + DNG08_STR_TAIRACH))
 			{
 #if defined(__BORLANDC__)
 			((void (*)(RealPt))((RealPt)host_readd(Real2Host(chest) + 11)))(chest);
