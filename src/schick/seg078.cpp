@@ -304,7 +304,7 @@ signed short DNG02_handler(void)
 	{
 		load_in_head(43);
 
-		GUI_dialogbox((char*)ds_readd(DTP2), NULL, get_tx(18), 0);
+		GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, get_tx(18), 0);
 
 		ds_writeb(DNG02_SPHERE_TIMER, 7);
 		ds_writeb(DNG02_SPHERE_KNOWN, 1);

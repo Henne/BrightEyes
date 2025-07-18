@@ -45,13 +45,13 @@ void THO_hetmann(void)
 
 		load_in_head(61);
 
-		GUI_dialogbox((char*)ds_readd(DTP2), get_tx2(85),
+		GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(85),
 				get_tx(82), 0);
 
-		GUI_dialogbox((char*)ds_readd(DTP2), get_tx2(85),
+		GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(85),
 				get_tx(83), 0);
 
-		GUI_dialogbox((char*)ds_readd(DTP2), get_tx2(85),
+		GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(85),
 				ds_readws(MIN_MAP_PARTS) <= map_parts ? get_tx(84) : get_tx(85), 0);
 
 		answer = ds_readws(MIN_MAP_PARTS) <= map_parts ? 10 : 50;
@@ -60,7 +60,7 @@ void THO_hetmann(void)
 			add_ds_ds(GODS_ESTIMATION + 4 * i, answer);
 		}
 
-		GUI_dialogbox((char*)ds_readd(DTP2), get_tx2(85),
+		GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(85),
 				get_tx(86), 0);
 
 		ds_writeb(GOT_LETTER_HET, 1);
@@ -73,7 +73,7 @@ void THO_hetmann(void)
 		ds_writew(SUBVENTION, 0);
 
 		do {
-			answer = GUI_dialogbox((char*)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
 					get_tx2(1), 3,
 					get_tx2(2),
 					get_tx2(3),
@@ -82,19 +82,19 @@ void THO_hetmann(void)
 
 		if (answer == 1) {
 
-			GUI_dialogbox((char*)ds_readd(DTP2), NULL,
+			GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
 					get_tx2(5), 0);
 
 		} else if (answer == 2) {
 
-			GUI_dialogbox((char*)ds_readd(DTP2), NULL,
+			GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
 					get_tx2(6), 0);
 
 			add_ds_ws(SUBVENTION, 2);
 
 		} else {
 
-			GUI_dialogbox((char*)ds_readd(DTP2), NULL,
+			GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
 					get_tx2(7), 0);
 
 			inc_ds_ws(SUBVENTION);
@@ -102,16 +102,16 @@ void THO_hetmann(void)
 
 		load_in_head(61);
 
-		GUI_dialogbox((char*)ds_readd(DTP2), get_tx2(85),
+		GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(85),
 				get_tx2(8), 0);
 
 		ds_writew(HEARD_ANNOUNCE, 3);
 
-		GUI_dialogbox((char*)ds_readd(DTP2), get_tx2(85),
+		GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(85),
 				get_tx2(9), 0);
 
 		do {
-			answer = GUI_dialogbox((char*)ds_readd(DTP2), get_tx2(85),
+			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(85),
 					get_tx2(10), 3,
 					get_tx2(11),
 					get_tx2(12),
@@ -120,7 +120,7 @@ void THO_hetmann(void)
 
 		if (answer == 1) {
 
-			GUI_dialogbox((char*)ds_readd(DTP2), get_tx2(85),
+			GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(85),
 					get_tx2(14), 0);
 
 			ds_writeb(INFORMER_FLAGS + INFORMER_ISLEIF, 1);
@@ -130,7 +130,7 @@ void THO_hetmann(void)
 
 		} else if (answer == 2) {
 
-			GUI_dialogbox((char*)ds_readd(DTP2), get_tx2(85),
+			GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(85),
 					get_tx2(15), 0);
 
 			ds_writeb(INFORMER_FLAGS + INFORMER_ISLEIF, 1);
@@ -144,14 +144,14 @@ void THO_hetmann(void)
 			add_ds_ws(SUBVENTION, 2);
 
 			do {
-				answer = GUI_dialogbox((char*)ds_readd(DTP2), get_tx2(85),
+				answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(85),
 						get_tx2(16), 2,
 						get_tx2(17),
 						get_tx2(18));
 			} while (answer == -1);
 
 			if (answer == 1) {
-				GUI_dialogbox((char*)ds_readd(DTP2), get_tx2(85),
+				GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(85),
 						get_tx2(19), 0);
 
 				ds_writew(GOT_MAIN_QUEST, 1);

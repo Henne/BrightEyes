@@ -209,7 +209,7 @@ void talk_tavern(void)
 			strcpy(answer3_buffer, get_tx(txt_id));
 
 			do {
-				answer = GUI_radio((Bit8u*)text_buffer, (signed char)options, answer1_buffer, answer2_buffer, answer3_buffer);
+				answer = GUI_radio((char*)text_buffer, (signed char)options, answer1_buffer, answer2_buffer, answer3_buffer);
 			} while (answer == -1);
 		}
 

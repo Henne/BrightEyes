@@ -56,26 +56,21 @@ void tevent_130(void)
 		load_in_head(10);
 
 		do {
-			answer = GUI_dialogbox((char*)ds_readd(DTP2), NULL,
-						get_tx2(19), 2,
-						get_tx2(20),
-						get_tx2(21));
+			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, get_tx2(19), 2, get_tx2(20), get_tx2(21));
+
 		} while (answer == -1);
 
 		if (answer == 1) {
 
 			do {
-				answer = GUI_dialogbox((char*)ds_readd(DTP2), NULL,
-							get_tx2(22), 3,
-							get_tx2(23),
-							get_tx2(24),
-							get_tx2(25));
+				answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, get_tx2(22), 3, get_tx2(23), get_tx2(24), get_tx2(25));
+
 			} while (answer == -1);
 
 			if (answer == 1 || answer == 2) {
 				GUI_dialog_na(0, answer == 1 ? get_tx2(26) : get_tx2(27));
 			} else {
-					GUI_dialog_na(0, test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0 ? get_tx2(27) : get_tx2(26));
+				GUI_dialog_na(0, test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0 ? get_tx2(27) : get_tx2(26));
 			}
 		}
 
@@ -97,9 +92,8 @@ void tevent_131(void)
 		GUI_output(get_tx2(28));
 
 		do {
-			answer = GUI_radio(get_tx2(29), 2,
-						get_tx2(30),
-						get_tx2(31));
+			answer = GUI_radio(get_tx2(29), 2, get_tx2(30), get_tx2(31));
+
 		} while (answer == -1);
 
 		if (answer == 1) {
@@ -622,16 +616,16 @@ void tevent_144(void)
 				get_tx2(11),
 				(char*)hero + HERO_NAME2);
 
-			GUI_dialogbox((Bit8u*)ds_readd(BUFFER10_PTR), NULL, (char*)ds_readd(DTP2), 0);
-			GUI_dialogbox((Bit8u*)ds_readd(BUFFER10_PTR), NULL, get_tx2(12), 0);
-			GUI_dialogbox((Bit8u*)ds_readd(BUFFER10_PTR), NULL, get_tx2(13), 0);
+			GUI_dialogbox((unsigned char*)ds_readd(BUFFER10_PTR), NULL, (char*)ds_readd(DTP2), 0);
+			GUI_dialogbox((unsigned char*)ds_readd(BUFFER10_PTR), NULL, get_tx2(12), 0);
+			GUI_dialogbox((unsigned char*)ds_readd(BUFFER10_PTR), NULL, get_tx2(13), 0);
 
 			sprintf((char*)ds_readd(DTP2),
 				get_tx2(14),
 				(char*)hero + HERO_NAME2);
 
-			GUI_dialogbox((Bit8u*)ds_readd(BUFFER10_PTR), NULL, (char*)ds_readd(DTP2), 0);
-			GUI_dialogbox((Bit8u*)ds_readd(BUFFER10_PTR), NULL, get_tx2(15), 0);
+			GUI_dialogbox((unsigned char*)ds_readd(BUFFER10_PTR), NULL, (char*)ds_readd(DTP2), 0);
+			GUI_dialogbox((unsigned char*)ds_readd(BUFFER10_PTR), NULL, get_tx2(15), 0);
 
 			do {
 				status_menu(grimring_hero_pos);
@@ -648,8 +642,8 @@ void tevent_144(void)
 						get_tx2(38),
 						(char*)get_hero(6) + HERO_NAME2);
 
-					GUI_dialogbox((Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * 6 + HERO_PORTRAIT,
-							(Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * 6  + HERO_NAME2,
+					GUI_dialogbox((unsigned char*)ds_readd(HEROES) + SIZEOF_HERO * 6 + HERO_PORTRAIT,
+							(char*)ds_readd(HEROES) + SIZEOF_HERO * 6  + HERO_NAME2,
 							(char*)ds_readd(DTP2), 0);
 				}
 

@@ -23,7 +23,7 @@ void update_atpa(Bit8u*);
 /* 0x4d */
 signed short select_hero_from_group(Bit8u *);
 /* 0x52 */
-signed short select_hero_ok(Bit8u *);
+signed short select_hero_ok(char*);
 /* 0x57 */
 signed short count_heroes_in_group(void);
 /* 0x5c */
@@ -37,7 +37,7 @@ void hero_gets_diseased(Bit8u *hero, unsigned short diseased);
 /* 0x70 */
 void hero_disease_test(Bit8u *hero, unsigned short disease, signed short probability);
 /* 0x75 */
-signed short select_hero_ok_forced(Bit8u *);
+signed short select_hero_ok_forced(char*);
 
 #if !defined(__BORLANDC__)
 }

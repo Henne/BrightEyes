@@ -441,7 +441,7 @@ void CD_insert_msg(void)
 	answer = -2;
 	while (answer == -2)
 	{
-		answer = GUI_radio((Bit8u*)str, 2,
+		answer = GUI_radio((char*)str, 2,
 					(char*)p_datseg + STR_REPEAT,
 					(char*)p_datseg + STR_QUIT);
 	}

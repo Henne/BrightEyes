@@ -626,7 +626,7 @@ void status_menu(signed short hero_pos)
 			case 2: {
 				/* from ATPA-page */
 
-				l_di = GUI_radio((Bit8u*)0, 8,
+				l_di = GUI_radio((char*)0, 8,
 						get_tx2(16),
 						get_tx2(17),
 						get_ttx(212),
@@ -713,7 +713,7 @@ void status_menu(signed short hero_pos)
 			}
 			case 3: {
 				/* from skills-page */
-				l_di = GUI_radio((Bit8u*)0, 6,
+				l_di = GUI_radio((char*)0, 6,
 						get_ttx(212),
 						get_tx2(24),
 						get_tx2(19),
@@ -773,7 +773,7 @@ void status_menu(signed short hero_pos)
 			case 4:
 			case 5:{
 				/* from spells-page */
-				l_di = GUI_radio((Bit8u*)0, 6,
+				l_di = GUI_radio((char*)0, 6,
 						get_ttx(213),    // Zauber sprechen
 						get_tx2(24),     // Grundwerte
 						get_tx2(19),     // AT PA Werte

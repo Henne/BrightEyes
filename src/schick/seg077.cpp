@@ -139,11 +139,11 @@ signed short DNG01_handler(void)
 
 		load_in_head(21);
 
-		if (GUI_dialogbox((char*)ds_readd(DTP2), get_ttx(756), get_tx(8), 2, get_ttx(2), get_ttx(3)) == 1)
+		if (GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_ttx(756), get_tx(8), 2, get_ttx(2), get_ttx(3)) == 1)
 		{
 			ds_writew(TEXTBOX_WIDTH, 3);
 
-			GUI_dialogbox((char*)ds_readd(DTP2), get_ttx(756), get_tx(9), 0);
+			GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_ttx(756), get_tx(9), 0);
 
 			if (host_readbs(get_hero(6) + HERO_TYPE) != HERO_TYPE_NONE)
 			{
@@ -157,7 +157,7 @@ signed short DNG01_handler(void)
 		} else {
 			ds_writew(TEXTBOX_WIDTH, 3);
 
-			GUI_dialogbox((char*)ds_readd(DTP2), get_ttx(756), get_tx(10), 0);
+			GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_ttx(756), get_tx(10), 0);
 		}
 
 		ds_writeb(DNG01_ARDORA_FREED, 1);

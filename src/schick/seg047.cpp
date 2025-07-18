@@ -557,7 +557,7 @@ signed short select_hero_ok(Bit8u *title)
  * Remark: The available heroes must be in the group, pass check_hero() and
  *		you are forced to select a hero.
  */
-signed short select_hero_ok_forced(Bit8u *title)
+signed short select_hero_ok_forced(char *title)
 {
 	signed short i;
 	signed short answer;

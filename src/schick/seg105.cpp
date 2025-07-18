@@ -723,7 +723,7 @@ signed short group_count_item(signed short item)
  * \param   percent     probability to loose
  * \param   text        the displayed text
  */
-void loose_random_item(Bit8u *hero, signed short percent, Bit8u *text)
+void loose_random_item(Bit8u *hero, signed short percent, char *text)
 {
 	Bit8u *p_item;
 	unsigned short item, pos;
@@ -813,7 +813,7 @@ signed short select_item_to_drop(Bit8u *hero)
 		bak3 = ds_readw(BASEPOS_Y);
 		ds_writew(TEXTBOX_WIDTH, 6);
 		ds_writew(BASEPOS_X, ds_writew(BASEPOS_Y, 0));
-		v4 = GUI_radio((Bit8u*)get_ttx(752), (signed char)i,
+		v4 = GUI_radio((char*)get_ttx(752), (signed char)i,
 			(char*)(ds_readd(RADIO_NAME_LIST + 0x00 + di * 4)),
 			(char*)(ds_readd(RADIO_NAME_LIST + 0x04 + di * 4)),
 			(char*)(ds_readd(RADIO_NAME_LIST + 0x08 + di * 4)),

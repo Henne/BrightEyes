@@ -7,6 +7,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#if defined(__BORLANDC__)
+#include <IO.H>
+#else
+#include <unistd.h>
+#endif
+
 #include "v302de.h"
 #include "common.h"
 

@@ -13,7 +13,7 @@ void TRV_found_herb_place(signed short);
 /* 0x34 */
 void TRV_inside_herb_place(void);
 /* 0x39 */
-signed short TRV_cross_a_ford(Bit8u*, signed short, signed short);
+signed short TRV_cross_a_ford(char*, signed short, signed short);
 /* 0x3e */
 void TRV_ford_test(signed short, signed short);
 /* 0x43 */

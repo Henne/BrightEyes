@@ -318,12 +318,12 @@ void GUI_copy_smth(unsigned short width, unsigned short height)
 	do_pic_copy(0);
 }
 
-void GUI_output(Bit8u *str)
+void GUI_output(char *str)
 {
 	GUI_input(str, 0);
 }
 
-signed short GUI_input(Bit8u *str, unsigned short num)
+signed short GUI_input(char *str, unsigned short num)
 {
 	signed short retval;
 	signed short l2;
@@ -429,7 +429,7 @@ signed short GUI_input(Bit8u *str, unsigned short num)
  *
  * \param   text	the displayed text
  */
-signed short GUI_bool(Bit8u *text)
+signed short GUI_bool(char *text)
 {
 	signed short ret_radio;
 
@@ -474,7 +474,7 @@ void GUI_fill_radio_button(signed short old_pos, unsigned short new_pos,
 	refresh_screen_size();
 }
 
-signed short GUI_dialogbox(RealPt picture, Bit8u *name, Bit8u *text,
+signed short GUI_dialogbox(RealPt picture, char *name, char *text,
 		signed short options, ...)
 {
 	va_list arguments;
@@ -712,7 +712,7 @@ signed short GUI_menu_input(signed short positions, signed short h_lines,
 	return retval;
 }
 
-signed short GUI_radio(Bit8u *text, signed char options, ...)
+signed short GUI_radio(char *text, signed char options, ...)
 {
 	signed short i;
 	signed short l_di;
@@ -837,13 +837,13 @@ void GUI_print_fight_intro_msg(signed short fight_id)
  * \param   head_index  the number of a head, if another should be loaded
  * \param   text        the text
  */
-void GUI_dialog_na(unsigned short head_index, Bit8u *text)
+void GUI_dialog_na(unsigned short head_index, char *text)
 {
 
 	if (head_index != 0)
 		load_in_head(head_index);
 
-	GUI_dialogbox((char*)ds_readd(DTP2), NULL, text, 0);
+	GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, text, 0);
 
 }
 
