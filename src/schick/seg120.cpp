@@ -275,8 +275,8 @@ void init_global_buffer(void)
 
 	ds_writed(OBJECTS_NVF_BUF, (Bit32u)(F_PADD(ds_readd(TEXT_LTX_INDEX), 4760)));
 	ds_writed(DTP2, (Bit32u)(F_PADD(ds_readd(OBJECTS_NVF_BUF), 3400)));
-	ds_writed(TEXT_INPUT_BUF, (Bit32u)((Bit8u*)ds_readd(DTP2) + 1500));
-	ds_writed(TEXT_OUTPUT_BUF, (Bit32u)(F_PADD(ds_readd(DTP2), 1524)));
+	ds_writed(TEXT_INPUT_BUF, (Bit32u)((char*)ds_readd(DTP2) + 1500));
+	ds_writed(TEXT_OUTPUT_BUF, (Bit32u)(F_PADD((Bit8u*)ds_readd(DTP2), 1524L)));
 	ds_writed(BUFFER5_PTR, (Bit32u)(F_PADD(ds_readd(TEXT_OUTPUT_BUF), 300)));
 	ds_writed(BUFFER6_PTR, (Bit32u)(F_PADD(ds_readd(BUFFER5_PTR), 3880)));
 	ds_writed(BUFFER7_PTR, (Bit32u)(F_PADD(ds_readd(BUFFER6_PTR), 2200)));

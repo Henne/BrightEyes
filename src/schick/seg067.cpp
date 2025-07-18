@@ -183,13 +183,13 @@ void city_event_3(void)
 
 	answer = money >= 100 ? 3 : 2;
 
-	answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL, get_tx(random_schick(4) + 58), answer,
+	answer = GUI_dialogbox((char*)ds_readd(DTP2), NULL, get_tx(random_schick(4) + 58), answer,
 			get_tx(random_schick(4) + 62),
 			get_tx(random_schick(4) + 66),
 			get_tx(random_schick(4) + 70));
 
 	if (answer == 3) {
-		GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL, get_tx(random_schick(4) + 74), 0);
+		GUI_dialogbox((char*)ds_readd(DTP2), NULL, get_tx(random_schick(4) + 74), 0);
 		money -= 100;
 		set_party_money(money);
 	}
@@ -209,7 +209,7 @@ void city_event_4(void)
 
 	answer = money >= 100 ? 3 : 2;
 
-	answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL, get_tx(random_schick(4) + 58), answer,
+	answer = GUI_dialogbox((char*)ds_readd(DTP2), NULL, get_tx(random_schick(4) + 58), answer,
 			get_tx(random_schick(4) + 78),
 			get_tx(random_schick(4) + 82),
 			get_tx(random_schick(4) + 86));
@@ -218,14 +218,14 @@ void city_event_4(void)
 		money -= 100;
 		set_party_money(money);
 
-		GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL, get_tx(random_schick(4) + 90), 0);
+		GUI_dialogbox((char*)ds_readd(DTP2), NULL, get_tx(random_schick(4) + 90), 0);
 
 
 		sprintf((char*)ds_readd(DTP2) + 0x400,
 			get_tx(random_schick(4) + 94),
 			(char*)Real2Host(load_current_town_gossip()));
 
-		GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL, (char*)ds_readd(DTP2) + 0x400, 0);
+		GUI_dialogbox((char*)ds_readd(DTP2), NULL, (char*)ds_readd(DTP2) + 0x400, 0);
 	}
 }
 
@@ -253,9 +253,9 @@ void city_event_5(void)
 			get_tx(randval + 99),
 			(char*)hero + HERO_NAME2);
 
-		GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL, (char*)ds_readd(DTP2) + 0x400, 0);
+		GUI_dialogbox((char*)ds_readd(DTP2), NULL, (char*)ds_readd(DTP2) + 0x400, 0);
 	} else {
-		GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL, get_tx(randval + 99), 0);
+		GUI_dialogbox((char*)ds_readd(DTP2), NULL, get_tx(randval + 99), 0);
 	}
 
 	ds_writews(TEXTBOX_WIDTH, tw_bak);
@@ -281,13 +281,13 @@ void city_event_6(void)
 			get_tx(random_schick(4) + 102),
 			(char*)get_hero(get_random_hero()) + HERO_NAME2);
 
-		answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL, (char*)ds_readd(DTP2) + 0x400, 3,
+		answer = GUI_dialogbox((char*)ds_readd(DTP2), NULL, (char*)ds_readd(DTP2) + 0x400, 3,
 			get_tx(random_schick(4) + 106),
 			get_tx(random_schick(4) + 110),
 			get_tx(random_schick(4) + 114));
 
 		if (answer == 1 || answer == 2) {
-			GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL, get_tx(random_schick(4) + 118), 0);
+			GUI_dialogbox((char*)ds_readd(DTP2), NULL, get_tx(random_schick(4) + 118), 0);
 		} else if (answer == 3) {
 			location_bak = ds_readbs(CURRENT_LOCTYPE);
 			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_MERCHANT);
@@ -342,31 +342,31 @@ void city_event_7(void)
 			get_tx(124),
 			(char*)hero + HERO_NAME2);
 
-		GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL, (char*)ds_readd(DTP2) + 0x400, 0);
+		GUI_dialogbox((char*)ds_readd(DTP2), NULL, (char*)ds_readd(DTP2) + 0x400, 0);
 
 		sprintf((char*)ds_readd(DTP2) + 0x400,
 			get_tx(125),
 			(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
-		GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL, (char*)ds_readd(DTP2) + 0x400, 0);
+		GUI_dialogbox((char*)ds_readd(DTP2), NULL, (char*)ds_readd(DTP2) + 0x400, 0);
 
 	} else if (randval == 2) {
 
 		load_in_head(47);
 
-		GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL, get_tx(126), 0);
+		GUI_dialogbox((char*)ds_readd(DTP2), NULL, get_tx(126), 0);
 
 		sprintf((char*)ds_readd(DTP2) + 0x400,
 			get_tx(127),
 			(char*)hero + HERO_NAME2);
 
-		GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL, (char*)ds_readd(DTP2) + 0x400, 0);
+		GUI_dialogbox((char*)ds_readd(DTP2), NULL, (char*)ds_readd(DTP2) + 0x400, 0);
 
 		sprintf((char*)ds_readd(DTP2) + 0x400,
 			get_tx(128),
 			(char*)hero + HERO_NAME2);
 
-		GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL, (char*)ds_readd(DTP2) + 0x400, 0);
+		GUI_dialogbox((char*)ds_readd(DTP2), NULL, (char*)ds_readd(DTP2) + 0x400, 0);
 	} else {
 		GUI_output(get_tx(129));
 	}
@@ -391,9 +391,9 @@ void city_event_8(void)
 
 		load_in_head(12);
 
-		GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL, get_tx(131), 0);
+		GUI_dialogbox((char*)ds_readd(DTP2), NULL, get_tx(131), 0);
 
-		GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL, get_tx(132), 0);
+		GUI_dialogbox((char*)ds_readd(DTP2), NULL, get_tx(132), 0);
 
 	} else if (randval == 3) {
 		GUI_output(get_tx(133));

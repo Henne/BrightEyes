@@ -271,7 +271,7 @@ void char_add(signed short temple_id)
 							prepare_chr_name((char*)ds_readd(DTP2),
 										(char*)(Real2Host(ptr) + 32 * l_si));
 
-							if (read_chr_temp((Bit8u*)ds_readd(DTP2), i, ds_readbs(CURRENT_GROUP))) {
+							if (read_chr_temp((char*)ds_readd(DTP2), i, ds_readbs(CURRENT_GROUP))) {
 								inc_ds_bs_post(TOTAL_HERO_COUNTER);
 								inc_ds_bs_post(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP));
 								host_writebs(hero + HERO_GROUP_POS, i + 1);

@@ -843,7 +843,7 @@ void GUI_dialog_na(unsigned short head_index, Bit8u *text)
 	if (head_index != 0)
 		load_in_head(head_index);
 
-	GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL, text, 0);
+	GUI_dialogbox((char*)ds_readd(DTP2), NULL, text, 0);
 
 }
 

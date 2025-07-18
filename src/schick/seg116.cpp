@@ -56,7 +56,7 @@ void tevent_130(void)
 		load_in_head(10);
 
 		do {
-			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((char*)ds_readd(DTP2), NULL,
 						get_tx2(19), 2,
 						get_tx2(20),
 						get_tx2(21));
@@ -65,7 +65,7 @@ void tevent_130(void)
 		if (answer == 1) {
 
 			do {
-				answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
+				answer = GUI_dialogbox((char*)ds_readd(DTP2), NULL,
 							get_tx2(22), 3,
 							get_tx2(23),
 							get_tx2(24),

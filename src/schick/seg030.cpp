@@ -495,7 +495,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 				}
 			}
 
-			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), Real2Host(ds_readd(DIALOG_TITLE)), (Bit8u*)dst, optioncount,
+			answer = GUI_dialogbox((char*)ds_readd(DTP2), Real2Host(ds_readd(DIALOG_TITLE)), (Bit8u*)dst, optioncount,
 					get_tx2(host_readb(state_ptr + 2) + txt_offset),
 					get_tx2(host_readb(state_ptr + 3) + txt_offset),
 					get_tx2(host_readb(state_ptr + 4) + txt_offset));

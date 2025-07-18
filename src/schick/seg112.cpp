@@ -433,7 +433,7 @@ void tevent_073(void)
 		load_in_head(55);
 
 		do {
-			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((char*)ds_readd(DTP2), NULL,
 							get_tx2(42), 2,
 							get_tx2(43), get_tx2(44));
 		} while (answer == -1);
@@ -464,7 +464,7 @@ void tevent_074(void)
 		load_in_head(49);
 
 		do {
-			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_tx(49), get_tx2(46), 3,
+			answer = GUI_dialogbox((char*)ds_readd(DTP2), get_tx(49), get_tx2(46), 3,
 						get_tx2(47),
 						get_tx2(48),
 						get_tx2(49));
@@ -505,7 +505,7 @@ void tevent_074(void)
 					get_tx2(54),
 					(char*)hero + HERO_NAME2);
 
-				GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_tx(49),
+				GUI_dialogbox((char*)ds_readd(DTP2), get_tx(49),
 						(char*)ds_readd(DTP2) + 0x400, 0);
 
 				/* this hero gets a damage of 2W6+4 */
@@ -515,7 +515,7 @@ void tevent_074(void)
 
 			/* try to make a deal */
 			do {
-				answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_tx(49), get_tx2(50), 3,
+				answer = GUI_dialogbox((char*)ds_readd(DTP2), get_tx(49), get_tx2(50), 3,
 							get_tx2(51),
 							get_tx2(52),
 							get_tx2(53));
@@ -663,7 +663,7 @@ void tevent_076(void)
 			GUI_dialog_na(53, get_tx2(63));
 
 			do {
-				answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
+				answer = GUI_dialogbox((char*)ds_readd(DTP2), NULL,
 								get_tx2(64), 2,
 								get_tx2(65),
 								get_tx2(66));
@@ -679,7 +679,7 @@ void tevent_076(void)
 		load_in_head(53);
 
 		do {
-			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((char*)ds_readd(DTP2), NULL,
 							get_tx2(67), 2,
 							get_tx2(68),
 							get_tx2(69));
@@ -706,7 +706,7 @@ void tevent_077(void)
 		load_in_head(4);
 
 		do {
-			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_tx(50),
+			answer = GUI_dialogbox((char*)ds_readd(DTP2), get_tx(50),
 						get_tx2(70), 3,
 						get_tx2(71),
 						get_tx2(72),
@@ -746,7 +746,7 @@ void tevent_077(void)
 					get_tx2(54),
 					(char*)hero + HERO_NAME2);
 
-				GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_tx(50),
+				GUI_dialogbox((char*)ds_readd(DTP2), get_tx(50),
 						(char*)ds_readd(DTP2) + 0x400, 0);
 
 				/* the last hero looses between 6 and 16 LE */
@@ -757,7 +757,7 @@ void tevent_077(void)
 
 			/* try to make a deal */
 			do {
-				answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_tx(50), get_tx2(74), 3,
+				answer = GUI_dialogbox((char*)ds_readd(DTP2), get_tx(50), get_tx2(74), 3,
 							get_tx2(75),
 							get_tx2(76),
 							get_tx2(77));

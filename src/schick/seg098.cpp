@@ -597,7 +597,7 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 		for (l_di = 0; l_di < 12; l_di++) {
 
 			ds_writed(RADIO_NAME_LIST + 4 * l_di,
-				(Bit32u)((Bit8u*)ds_readd(DTP2) + 50 * (l_di + 1)));
+				(Bit32u)((char*)ds_readd(DTP2) + 50 * (l_di + 1)));
 
 			ones.a[l_di] = (signed char)can_use_spellclass(hero, l_di);
 
@@ -640,7 +640,7 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 			for (l_di = 0; l_di < ds_readbs((SPELLS_INDEX + 1) + 2 * answer1); l_di++) {
 
 				ds_writed(RADIO_NAME_LIST + 4 * l_di,
-					(Bit32u)((Bit8u*)ds_readd(DTP2) + 50 * (l_di)));
+					(Bit32u)((char*)ds_readd(DTP2) + 50 * (l_di)));
 
 
 				if (show_vals == 1) {

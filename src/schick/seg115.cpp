@@ -42,7 +42,7 @@ void tevent_016(void)
 		load_in_head(46);
 
 		do {
-			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL, get_tx2(19), 2,
+			answer = GUI_dialogbox((char*)ds_readd(DTP2), NULL, get_tx2(19), 2,
 						get_tx2(20),
 						get_tx2(21));
 		} while (answer == -1);
@@ -55,7 +55,7 @@ void tevent_016(void)
 			/* wave */
 
 			do {
-				answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL, get_tx2(23), 2,
+				answer = GUI_dialogbox((char*)ds_readd(DTP2), NULL, get_tx2(23), 2,
 							get_tx2(24),
 							get_tx2(25));
 			} while (answer == -1);
@@ -68,7 +68,7 @@ void tevent_016(void)
 				/* go towards them */
 
 				do {
-					answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL, get_tx2(27), 2,
+					answer = GUI_dialogbox((char*)ds_readd(DTP2), NULL, get_tx2(27), 2,
 								get_tx2(28),
 								get_tx2(29));
 				} while (answer == -1);
@@ -211,7 +211,7 @@ void tevent_094(void)
 		load_in_head(53);
 
 		do {
-			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL, get_tx2(4), 2,
+			answer = GUI_dialogbox((char*)ds_readd(DTP2), NULL, get_tx2(4), 2,
 						get_tx2(5),
 						get_tx2(6));
 		} while (answer == -1);
@@ -478,7 +478,7 @@ void tevent_127(void)
 	load_in_head(14);
 
 	do {
-		answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
+		answer = GUI_dialogbox((char*)ds_readd(DTP2), NULL,
 					get_tx2(6), 3,
 					get_tx2(7),
 					get_tx2(8),
@@ -525,7 +525,7 @@ void tevent_129(void)
 		load_in_head(53);
 
 		do {
-			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((char*)ds_readd(DTP2), NULL,
 						get_tx2(13), 2,
 						get_tx2(14),
 						get_tx2(15));
@@ -540,7 +540,7 @@ void tevent_129(void)
 		load_in_head(53);
 
 		do {
-			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((char*)ds_readd(DTP2), NULL,
 						get_tx2(16), 2,
 						get_tx2(17),
 						get_tx2(18));
@@ -604,7 +604,7 @@ void tevent_047(void)
 			load_in_head(42);
 
 			do {
-				answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
+				answer = GUI_dialogbox((char*)ds_readd(DTP2), NULL,
 							(!l_di ? get_tx2(15) : get_tx2(11)), 2,
 							get_tx2(12),
 							get_tx2(13));
@@ -622,7 +622,7 @@ void tevent_047(void)
 				if (!l_di)
 				{
 					do {
-						answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
+						answer = GUI_dialogbox((char*)ds_readd(DTP2), NULL,
 									get_tx2(16), 3,
 									get_tx2(17),
 									get_tx2(18),
@@ -653,7 +653,7 @@ void tevent_047(void)
 					}
 				} else {
 					do {
-						answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
+						answer = GUI_dialogbox((char*)ds_readd(DTP2), NULL,
 									get_tx2(21), 2,
 									get_tx2(22),
 									get_tx2(19));

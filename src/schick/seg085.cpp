@@ -308,7 +308,7 @@ signed short DNG10_handler(void)
 			load_in_head(58);
 
 			do {
-				answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_tx(28),
+				answer = GUI_dialogbox((char*)ds_readd(DTP2), get_tx(28),
 						get_tx(29), 2,
 						get_tx(30), get_tx(31));
 			} while (answer == -1);
@@ -318,13 +318,13 @@ signed short DNG10_handler(void)
 				/* try to fight the dragon */
 				ds_writeb(DNG10_DRAGON_QUEST, 1);
 
-				if (GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_tx(28),
+				if (GUI_dialogbox((char*)ds_readd(DTP2), get_tx(28),
 						get_tx(32), 2,
 						get_ttx(2), get_ttx(3)) == 1)
 				{
-					GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_tx(28), get_tx(33), 0);
+					GUI_dialogbox((char*)ds_readd(DTP2), get_tx(28), get_tx(33), 0);
 				} else {
-					GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_tx(28), get_tx(34), 0);
+					GUI_dialogbox((char*)ds_readd(DTP2), get_tx(28), get_tx(34), 0);
 
 					sub_group_le(5000);
 				}
@@ -347,7 +347,7 @@ signed short DNG10_handler(void)
 				{
 					ds_writeb(DNG10_HOARD_PLUNDERED, 1);
 
-					GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_tx(28), get_tx(35), 0);
+					GUI_dialogbox((char*)ds_readd(DTP2), get_tx(28), get_tx(35), 0);
 
 					/* 2x HEALING POTION, MAGIC POTION, THROWING DAGGER and ...*/
 					get_item(ITEM_LE_POTION, 1, 2);
@@ -362,12 +362,12 @@ signed short DNG10_handler(void)
 				} else {
 					ds_writeb(DNG10_DRAGON_QUEST, 1);
 
-					if (GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_tx(28), get_tx(32), 2,
+					if (GUI_dialogbox((char*)ds_readd(DTP2), get_tx(28), get_tx(32), 2,
 								get_ttx(2), get_ttx(3)) == 1)
 					{
-						GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_tx(28), get_tx(33), 0);
+						GUI_dialogbox((char*)ds_readd(DTP2), get_tx(28), get_tx(33), 0);
 					} else {
-						GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_tx(28), get_tx(34), 0);
+						GUI_dialogbox((char*)ds_readd(DTP2), get_tx(28), get_tx(34), 0);
 						sub_group_le(5000);
 					}
 				}
@@ -385,8 +385,8 @@ signed short DNG10_handler(void)
 				result = get_item_pos(hero, ITEM_KEY_PLATIN);
 				drop_item(hero, result, 1);
 
-				GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_tx(28), get_tx(36), 0);
-				GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_tx(28), get_tx(37), 0);
+				GUI_dialogbox((char*)ds_readd(DTP2), get_tx(28), get_tx(36), 0);
+				GUI_dialogbox((char*)ds_readd(DTP2), get_tx(28), get_tx(37), 0);
 
 				/* 2x HEALING POTION, MAGIC POTION, THROWING DAGGER, CRYSTAL BALL and ...*/
 				get_item(ITEM_LE_POTION, 1, 2);
@@ -404,7 +404,7 @@ signed short DNG10_handler(void)
 
 				ds_writeb(DNG10_DRAGON_QUEST, 2);
 			} else {
-				GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_tx(28), get_tx(38), 0);
+				GUI_dialogbox((char*)ds_readd(DTP2), get_tx(28), get_tx(38), 0);
 			}
 		}
 

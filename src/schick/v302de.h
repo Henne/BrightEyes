@@ -171,10 +171,6 @@ static inline void D1_GFX(...) { }
 	#define __func__ __FUNCTION__
 #endif
 
-static inline char* getString(RealPt p) {
-        return (char*)(p);
-}
-
 static inline Bit8u* Real2Host(RealPt p) {
         return (Bit8u*)(p);
 }
@@ -1279,7 +1275,6 @@ extern Bit8u* tx_index[];
 extern Bit8u* tx2_index[];
 
 #define Real2Host(p) ((Bit8u*)(p))
-#define getString(p) ((char*)(p))
 
 #define host_readb(p) (*(Bit8u*)(p))
 #define host_readw(p) (*(Bit16u*)(p))

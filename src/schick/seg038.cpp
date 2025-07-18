@@ -407,7 +407,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 	}
 
 	dist_table_ptr = (char*)ds_readd(DTP2);
-	ds_writed(CHESSBOARD_CPY, (Bit32u)((Bit8u*)ds_readd(DTP2) + 600));
+	ds_writed(CHESSBOARD_CPY, (Bit32u)((char*)ds_readd(DTP2) + 600));
 	new_squares_reached = 1;
 	memset(dist_table_ptr, -1, 600);
 	host_writeb(dist_table_ptr + (y_in * 25) + x_in, 0);

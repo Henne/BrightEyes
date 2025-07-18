@@ -173,7 +173,7 @@ signed short plan_alchemy(Bit8u *hero)
 				strcpy((char*)ds_readd(DTP2) + recipes * 50,
 					(char*)Real2Host(GUI_name_singular((Bit8u*)get_itemname(ds_readws((ALCHEMY_RECIPES + RECIPE_OUTCOME) + i * SIZEOF_RECIPE)))));
 
-				ds_writed(RADIO_NAME_LIST + recipes * 4, (Bit32u)((Bit8u*)ds_readd(DTP2) + recipes * 50));
+				ds_writed(RADIO_NAME_LIST + recipes * 4, (Bit32u)((char*)ds_readd(DTP2) + recipes * 50));
 				array[recipes] = (signed char)i;
 				recipes++;
 			}

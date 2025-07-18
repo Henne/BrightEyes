@@ -80,7 +80,7 @@ signed short LVL_select_skill(Bit8u *hero, signed short show_values)
 					get_ttx(l1 + i + 48),
 					host_readbs(hero + l1 + i + HERO_TALENTS));
 
-				ds_writed(RADIO_NAME_LIST + 4 * i, (Bit32u)((Bit8u*)ds_readd(DTP2) + 50 * i));
+				ds_writed(RADIO_NAME_LIST + 4 * i, (Bit32u)((char*)ds_readd(DTP2) + 50 * i));
 			}
 		} else {
 
