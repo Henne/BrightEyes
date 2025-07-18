@@ -191,7 +191,7 @@ RealPt FIG_get_enemy_sheet(signed short fighter_id)
 	for (i = 0; i < 20; i++) {
 		if (fighter_id == ds_readbs(ENEMY_SHEETS + ENEMY_SHEET_FIGHTER_ID + (i * SIZEOF_ENEMY_SHEET)))
 #if !defined(__BORLANDC__)
-			return (RealPt)RealMake(datseg, ENEMY_SHEETS + i * SIZEOF_ENEMY_SHEET);
+			return ((Bit8u*)p_datseg + ENEMY_SHEETS + i * SIZEOF_ENEMY_SHEET);
 #else
 			return (RealPt)&(((struct enemy_sheets*)(p_datseg + ENEMY_SHEETS))[i]);
 #endif

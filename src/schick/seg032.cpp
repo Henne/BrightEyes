@@ -652,7 +652,7 @@ void FIG_do_round(void)
 
 			actor_id = FIG_choose_next_enemy();
 
-			enemy = (RealPt)RealMake(datseg, ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * actor_id);
+			enemy = ((Bit8u*)p_datseg + ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * actor_id);
 
 			dec_ptr_bs(Real2Host(enemy) + ENEMY_SHEET_ATTACKS_LEFT);
 

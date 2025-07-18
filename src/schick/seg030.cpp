@@ -174,7 +174,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 	ds_writews(DIALOG_STATE, ds_writews(DIALOG_DONE, 0));
 
-	partners_tab = (RealPt)RealMake(datseg, DIALOG_PARTNERS);
+	partners_tab = ((Bit8u*)p_datseg + DIALOG_PARTNERS);
 	states_tab = Real2Host(host_readd(Real2Host(partners_tab) + 38 * tlk_informer));
 	txt_offset = host_readws(Real2Host(partners_tab) + 38 * tlk_informer + 4);
 	ds_writed(DIALOG_TITLE, (Bit32u)(tlk_informer * 38 + partners_tab + 6));

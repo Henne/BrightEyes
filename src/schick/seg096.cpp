@@ -98,7 +98,7 @@ RealPt GUI_names_grammar(signed short flag, signed short index, signed short typ
 		ds_writew(GRAMMAR_BUF_NO, 0);
 
 #if !defined(__BORLANDC__)
-	return (RealPt)RealMake(datseg, (GRAMMAR_BUFS+40) + (l4 * 40));
+	return ((Bit8u*)p_datseg + (GRAMMAR_BUFS+40) + (l4 * 40));
 #else
 	/* TODO: Sorry dear ! */
 	return (RealPt) (&((struct dummy2*)(p_datseg + (GRAMMAR_BUFS+40)))[l4]);
@@ -131,7 +131,7 @@ RealPt GUI_name_plural(signed short v1, Bit8u *s)
 	}
 
 	host_writeb(p, 0);
-	return (RealPt)RealMake(datseg, GRAMMAR_BUFS);
+	return ((Bit8u*)p_datseg + GRAMMAR_BUFS);
 }
 
 //290
@@ -147,7 +147,7 @@ RealPt GUI_name_singular(Bit8u *s)
 		host_writeb(p++, *s++);
 
 	host_writeb(p, 0);
-	return (RealPt)RealMake(datseg, GRAMMAR_BUFS);
+	return ((Bit8u*)p_datseg + GRAMMAR_BUFS);
 }
 
 //2f2
@@ -173,15 +173,15 @@ RealPt GUI_2f2(signed short v1, signed short word_id, signed short type)
 RealPt GUI_get_ptr(signed short genus, signed short causus)
 {
 	if (genus == 0) {
-		return (causus == 0) ? (RealPt)RealMake(datseg, GRAMMAR_PRONOUNS_ER) :
-				((causus == 1) ? (RealPt)RealMake(datseg, GRAMMAR_PRONOUNS_SEIN) :
-				((causus == 3) ? (RealPt)RealMake(datseg, GRAMMAR_PRONOUNS_IHM) :
-					(RealPt)RealMake(datseg, GRAMMAR_PRONOUNS_IHN)));
+		return (causus == 0) ? ((Bit8u*)p_datseg + GRAMMAR_PRONOUNS_ER) :
+				((causus == 1) ? ((Bit8u*)p_datseg + GRAMMAR_PRONOUNS_SEIN) :
+				((causus == 3) ? ((Bit8u*)p_datseg + GRAMMAR_PRONOUNS_IHM) :
+					((Bit8u*)p_datseg + GRAMMAR_PRONOUNS_IHN)));
 	} else {
-		return (causus == 0) ? (RealPt)RealMake(datseg, GRAMMAR_PRONOUNS_SIE) :
-				((causus == 1) ? (RealPt)RealMake(datseg, GRAMMAR_PRONOUNS_IHR) :
-				((causus == 3) ? (RealPt)RealMake(datseg, GRAMMAR_PRONOUNS_IHR) :
-					(RealPt)RealMake(datseg, GRAMMAR_PRONOUNS_SIE)));
+		return (causus == 0) ? ((Bit8u*)p_datseg + GRAMMAR_PRONOUNS_SIE) :
+				((causus == 1) ? ((Bit8u*)p_datseg + GRAMMAR_PRONOUNS_IHR) :
+				((causus == 3) ? ((Bit8u*)p_datseg + GRAMMAR_PRONOUNS_IHR) :
+					((Bit8u*)p_datseg + GRAMMAR_PRONOUNS_SIE)));
 	}
 }
 
@@ -191,15 +191,15 @@ RealPt GUI_get_ptr(signed short genus, signed short causus)
 RealPt GUI_get_ptr2(signed short genus, signed short causus)
 {
 	if (genus == 0) {
-		return (causus == 0) ? (RealPt)RealMake(datseg, GRAMMAR_ARTICLE_DER) :
-				((causus == 1) ? (RealPt)RealMake(datseg, GRAMMAR_ARTICLE_DES) :
-				((causus == 3) ? (RealPt)RealMake(datseg, GRAMMAR_ARTICLE_DEM) :
-					(RealPt)RealMake(datseg, GRAMMAR_ARTICLE_DEN)));
+		return (causus == 0) ? ((Bit8u*)p_datseg + GRAMMAR_ARTICLE_DER) :
+				((causus == 1) ? ((Bit8u*)p_datseg + GRAMMAR_ARTICLE_DES) :
+				((causus == 3) ? ((Bit8u*)p_datseg + GRAMMAR_ARTICLE_DEM) :
+					((Bit8u*)p_datseg + GRAMMAR_ARTICLE_DEN)));
 	} else {
-		return (causus == 0) ? (RealPt)RealMake(datseg, GRAMMAR_ARTICLE_DIE) :
-				((causus == 1) ? (RealPt)RealMake(datseg, GRAMMAR_ARTICLE_DER) :
-				((causus == 3) ? (RealPt)RealMake(datseg, GRAMMAR_ARTICLE_DER) :
-					(RealPt)RealMake(datseg, GRAMMAR_ARTICLE_DIE)));
+		return (causus == 0) ? ((Bit8u*)p_datseg + GRAMMAR_ARTICLE_DIE) :
+				((causus == 1) ? ((Bit8u*)p_datseg + GRAMMAR_ARTICLE_DER) :
+				((causus == 3) ? ((Bit8u*)p_datseg + GRAMMAR_ARTICLE_DER) :
+					((Bit8u*)p_datseg + GRAMMAR_ARTICLE_DIE)));
 	}
 }
 

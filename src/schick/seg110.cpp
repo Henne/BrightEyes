@@ -212,7 +212,7 @@ void tevent_014(void)
 		if (answer == 1)
 		{
 			/* examine the corpse */
-			loot_corpse((RealPt)RealMake(datseg, TEVENT014_CORPSE), get_tx2(46), p_datseg + TEVENT014_FLAG);
+			loot_corpse(((Bit8u*)p_datseg + TEVENT014_CORPSE), get_tx2(46), p_datseg + TEVENT014_FLAG);
 		}
 	}
 }

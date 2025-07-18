@@ -512,7 +512,7 @@ signed short TM_unused1(RealPt signpost_ptr, signed short old_route_no)
 
 	old_route_id = host_readb(Real2Host(host_readd(Real2Host(signpost_ptr) + SIGNPOST_LAND_ROUTES)) + old_route_no) - 1;
 	ds_writeb(CURRENT_TOWN, (signed char)(town = ds_readws(TRV_DESTINATION)));
-	signpost_ptr = (RealPt)RealMake(datseg, SIGNPOSTS);
+	signpost_ptr = ((Bit8u*)p_datseg + SIGNPOSTS);
 
 	do {
 		if (host_readb(Real2Host(signpost_ptr) + SIGNPOST_TOWN) == town)

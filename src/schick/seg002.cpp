@@ -219,7 +219,7 @@ void read_sound_cfg(void)
 #endif
 		{
 			if (midi_port != 0) {
-				load_music_driver((RealPt)RealMake(datseg, FNAME_SOUND_ADV2), 3, midi_port);
+				load_music_driver(((Bit8u*)p_datseg + FNAME_SOUND_ADV2), 3, midi_port);
 			} else {
 
 				/* music was disabled in SOUND.CFG */
@@ -235,7 +235,7 @@ void read_sound_cfg(void)
 
 			if (ds_readw(SND_VOC_ENABLED) != 0) {
 
-				if (!load_digi_driver((RealPt)RealMake(datseg, FNAME_DIGI_ADV), 2, digi_port, digi_irq))
+				if (!load_digi_driver(((Bit8u*)p_datseg + FNAME_DIGI_ADV), 2, digi_port, digi_irq))
 				{
 					ds_writew(SND_VOC_ENABLED, 0);
 				}
@@ -5526,7 +5526,7 @@ int schick_main(int argc, char** argv)
 	randomize();
 #endif
 
-	save_display_stat((RealPt)RealMake(datseg, VIDEO_PAGE_BAK));
+	save_display_stat(((Bit8u*)p_datseg + VIDEO_PAGE_BAK));
 
 	if (!init_memory()) {
 
