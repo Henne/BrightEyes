@@ -63,9 +63,9 @@ void move(void)
 
 	/* direction */
 
-	p_vis_field = Real2Host(RealMake(datseg, ((ds_readb(DIRECTION) == 0) ? VISUAL_FIELD_DIR0 :
+	p_vis_field = (Bit8u*)RealMake(datseg, ((ds_readb(DIRECTION) == 0) ? VISUAL_FIELD_DIR0 :
 				((ds_readb(DIRECTION) == 1) ? VISUAL_FIELD_DIR1 :
-				((ds_readb(DIRECTION) == 2) ? VISUAL_FIELD_DIR2 : VISUAL_FIELD_DIR3)))));
+				((ds_readb(DIRECTION) == 2) ? VISUAL_FIELD_DIR2 : VISUAL_FIELD_DIR3))));
 
 	for (i = 0; i < 29; i++, p_vis_field += 2) {
 		boundary_flag = 0;
@@ -135,7 +135,7 @@ void door_frame(signed short no, signed short x, signed short y, signed short fr
 	Bit8u *p2;
 	struct nvf_desc nvf;
 
-	nvf.dst = Real2Host(F_PADD(ds_readd(BUFFER9_PTR3), 0x2e248));
+	nvf.dst = (Bit8u*)F_PADD(ds_readd(BUFFER9_PTR3), 0x2e248);
 	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR3);
 	nvf.no = no;
 	nvf.type = 3;
@@ -152,7 +152,7 @@ void door_frame(signed short no, signed short x, signed short y, signed short fr
 	height -= frame;
 	l1 = width;
 
-	p1 = Real2Host(F_PADD(F_PADD(ds_readd(BUFFER9_PTR3), frame * width), 0x2e248));
+	p1 = (Bit8u*)F_PADD(F_PADD(ds_readd(BUFFER9_PTR3), frame * width), 0x2e248);
 
 	if ((x < 0) && ((x + width) > 0)) {
 		width += x;
@@ -214,7 +214,7 @@ void loot_corpse(RealPt chest_ptr, Bit8u *text, Bit8u *flag)
 #if !defined(__BORLANDC__)
 			(t_map(chest_ptr, 11))(chest_ptr);
 #else
-			((void(*)(Bit8u*))(Real2Host(host_readd(Real2Host(chest_ptr) + 0xb))))(chest_ptr);
+			((void(*)(Bit8u*))(Bit8u*)host_readd(chest_ptr + 0xb))(chest_ptr);
 #endif
 
 			if (!host_readbs(flag))
