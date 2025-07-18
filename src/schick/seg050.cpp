@@ -430,7 +430,7 @@ void level_up(signed short hero_pos)
 
 	l_si = load_archive_file(ARCHIVE_FILE_BSKILLS_DAT);
 
-	read_archive_file(l_si, Real2Host(ds_readd(SKILLS_BUFFER)), 1300);
+	read_archive_file(l_si, (Bit8u*)ds_readd(SKILLS_BUFFER), 1300);
 
 	close(l_si);
 
@@ -683,9 +683,9 @@ void level_up(signed short hero_pos)
 
 		while (host_readbs(hero + HERO_TA_RISE) > 0) {
 
-			l_si = host_readws(Real2Host(ds_readd(SKILLS_BUFFER)) + 100 * host_readbs(hero + HERO_TYPE) + 4 * i);
+			l_si = host_readws((Bit8u*)ds_readd(SKILLS_BUFFER) + 100 * host_readbs(hero + HERO_TYPE) + 4 * i);
 
-			if (host_readbs(hero + HERO_TALENTS + l_si) < host_readws(Real2Host(ds_readd(SKILLS_BUFFER)) + 100 * host_readbs(hero + HERO_TYPE) + 4 * i + 2))
+			if (host_readbs(hero + HERO_TALENTS + l_si) < host_readws((Bit8u*)ds_readd(SKILLS_BUFFER) + 100 * host_readbs(hero + HERO_TYPE) + 4 * i + 2))
 			{
 				inc_skill_novice(hero, l_si);
 			}
