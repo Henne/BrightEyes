@@ -410,7 +410,7 @@ signed short do_load_midi_file(signed short index)
 	signed short handle;
 
 	if ((handle = load_archive_file(index)) != -1) {
-		read_archive_file(handle, Real2Host(ds_readd(AIL_MIDI_BUFFER)), 0x7fff);
+		read_archive_file(handle, (Bit8u*)ds_readd(AIL_MIDI_BUFFER), 0x7fff);
 		close(handle);
 		return 1;
 	}
@@ -432,18 +432,18 @@ signed short load_music_driver(RealPt fname, signed short type, signed short por
 		if (host_readws(Real2Host((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR)) + 2) == type)
 		{
 			if (port == -1) {
-				port = host_readws(Real2Host(ds_readd(AIL_MUSIC_DRIVER_DESCR)) + 0xc);
+				port = host_readws((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 0xc);
 			}
 
 			if (AIL_detect_device(ds_readw(AIL_MUSIC_DRIVER_ID), port,
-				host_readws(Real2Host(ds_readd(AIL_MUSIC_DRIVER_DESCR)) + 0x0e),
-				host_readws(Real2Host(ds_readd(AIL_MUSIC_DRIVER_DESCR)) + 0x10),
-				host_readws(Real2Host(ds_readd(AIL_MUSIC_DRIVER_DESCR)) + 0x12)))
+				host_readws((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 0x0e),
+				host_readws((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 0x10),
+				host_readws((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 0x12)))
 			{
 				AIL_init_driver(ds_readw(AIL_MUSIC_DRIVER_ID), port,
-					host_readws(Real2Host(ds_readd(AIL_MUSIC_DRIVER_DESCR)) + 0x0e),
-					host_readws(Real2Host(ds_readd(AIL_MUSIC_DRIVER_DESCR)) + 0x10),
-					host_readws(Real2Host(ds_readd(AIL_MUSIC_DRIVER_DESCR)) + 0x12));
+					host_readws((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 0x0e),
+					host_readws((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 0x10),
+					host_readws((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 0x12));
 
 				if (type == 3) {
 					ds_writed(AIL_STATE_TABLE_SIZE, AIL_state_table_size(ds_readw(AIL_MUSIC_DRIVER_ID)));
@@ -478,7 +478,7 @@ signed short load_music_driver(RealPt fname, signed short type, signed short por
 void do_play_music_file(signed short index)
 {
 #if defined(__BORLANDC__)
-	if ((ds_readw(LOAD_SOUND_DRIVER) == 0) && (host_readw(Real2Host(ds_readd(AIL_MUSIC_DRIVER_DESCR)) + 2) == 3)) {
+	if ((ds_readw(LOAD_SOUND_DRIVER) == 0) && (host_readw((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 2) == 3)) {
 
 		stop_midi_playback();
 		load_midi_file(index);
@@ -491,7 +491,7 @@ void do_play_music_file(signed short index)
 void stop_midi_playback(void)
 {
 #if defined(__BORLANDC__)
-	if ((ds_readw(LOAD_SOUND_DRIVER) == 0) && (host_readw(Real2Host(ds_readd(AIL_MUSIC_DRIVER_DESCR)) + 2) == 3))
+	if ((ds_readw(LOAD_SOUND_DRIVER) == 0) && (host_readw((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 2) == 3))
 	{
 		AIL_stop_sequence(ds_readws(AIL_MUSIC_DRIVER_ID), ds_readws(AIL_SEQUENCE));
 		AIL_release_sequence_handle(ds_readws(AIL_MUSIC_DRIVER_ID), ds_readws(AIL_SEQUENCE));
@@ -504,7 +504,7 @@ void start_midi_playback_IRQ(void)
 #if defined(__BORLANDC__)
 	if ((ds_readw(LOAD_SOUND_DRIVER) == 0) &&
 		(ds_readb(MUSIC_ENABLED) != 0) &&
-		(host_readw(Real2Host(ds_readd(AIL_MUSIC_DRIVER_DESCR)) + 2) == 3))
+		(host_readw((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 2) == 3))
 	{
 		if (AIL_sequence_status(ds_readws(AIL_MUSIC_DRIVER_ID), ds_readws(AIL_SEQUENCE)) == 2) {
 			AIL_start_sequence(ds_readws(AIL_MUSIC_DRIVER_ID), ds_readws(AIL_SEQUENCE));
@@ -517,7 +517,7 @@ void cruft_1(void)
 /* This function is never called */
 {
 	if ((ds_readw(LOAD_SOUND_DRIVER) == 0) &&
-		(host_readw(Real2Host(ds_readd(AIL_MUSIC_DRIVER_DESCR)) + 2) == 3))
+		(host_readw((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 2) == 3))
 	{
 		AIL_start_sequence(ds_readws(AIL_MUSIC_DRIVER_ID), ds_readws(AIL_SEQUENCE));
 	}
@@ -528,7 +528,7 @@ void cruft_2(signed short volume)
 {
 	if (ds_readw(LOAD_SOUND_DRIVER) == 0) {
 
-		if (host_readw(Real2Host(ds_readd(AIL_MUSIC_DRIVER_DESCR)) + 2) == 3) {
+		if (host_readw((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 2) == 3) {
 			AIL_set_relative_volume(ds_readws(AIL_MUSIC_DRIVER_ID), ds_readws(AIL_SEQUENCE), volume, 0);
 		}
 
@@ -651,7 +651,7 @@ signed short read_voc_file(signed short index)
 	signed short handle;
 
 	if ( (handle = load_archive_file(index)) != -1) {
-		read_archive_file(handle, Real2Host(ds_readd(AIL_VOC_BUFFER)), 0x7fff);
+		read_archive_file(handle, (Bit8u*)ds_readd(AIL_VOC_BUFFER), 0x7fff);
 		close(handle);
 		return 1;
 	}
@@ -709,17 +709,17 @@ signed short load_digi_driver(RealPt fname, signed short type, signed short io, 
 		if (host_readws(Real2Host((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR)) + 2) == type) {
 
 			if (io == -1) {
-				io = host_readws(Real2Host(ds_readd(AIL_DIGI_DRIVER_DESCR)) + 0xc);
-				irq = host_readws(Real2Host(ds_readd(AIL_DIGI_DRIVER_DESCR)) + 0xe);
+				io = host_readws((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR) + 0xc);
+				irq = host_readws((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR) + 0xe);
 			}
 
 			if (AIL_detect_device(ds_readw(AIL_DIGI_DRIVER_ID), io, irq,
-				host_readws(Real2Host(ds_readd(AIL_DIGI_DRIVER_DESCR)) + 0x10),
-				host_readws(Real2Host(ds_readd(AIL_DIGI_DRIVER_DESCR)) + 0x12)))
+				host_readws((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR) + 0x10),
+				host_readws((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR) + 0x12)))
 			{
 				AIL_init_driver(ds_readw(AIL_DIGI_DRIVER_ID), io, irq,
-					host_readws(Real2Host(ds_readd(AIL_DIGI_DRIVER_DESCR)) + 0x10),
-					host_readws(Real2Host(ds_readd(AIL_DIGI_DRIVER_DESCR)) + 0x12));
+					host_readws((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR) + 0x10),
+					host_readws((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR) + 0x12));
 
 				ds_writeb(SND_EFFECTS_ENABLED, 1);
 				return 1;
