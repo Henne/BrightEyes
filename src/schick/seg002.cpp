@@ -4059,7 +4059,7 @@ void draw_compass(void)
 		/* set src */
 		n.dst = Real2Host(ds_readd(ICON));
 		/* set dst */
-		n.src = Real2Host(ds_readd(BUFFER6_PTR));
+		n.src = (Bit8u*)ds_readd(BUFFER6_PTR);
 		/* set no */
 		n.no = ds_readbs(DIRECTION);
 		/* set type*/
