@@ -39,12 +39,12 @@ namespace M302de {
  */
 void add_item_to_shop(Bit8u *shop_ptr, signed short item_id, signed short pos)
 {
-	host_writews(Real2Host(ds_readd(BUYITEMS)) + 7 * pos, item_id);
+	host_writews((Bit8u*)ds_readd(BUYITEMS) + 7 * pos, item_id);
 
-	host_writews(Real2Host(ds_readd(BUYITEMS)) + 7 * pos + 2,
+	host_writews((Bit8u*)ds_readd(BUYITEMS) + 7 * pos + 2,
 		host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) + host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * host_readbs(shop_ptr) / 100);
 
-	host_writews(Real2Host(ds_readd(BUYITEMS)) + 7 * pos + 4,
+	host_writews((Bit8u*)ds_readd(BUYITEMS) + 7 * pos + 4,
 			host_readbs(get_itemsdat(item_id) + ITEM_STATS_PRICE_UNIT));
 }
 
@@ -110,12 +110,12 @@ void do_merchant(void)
 	refresh = ds_writews(REQUEST_REFRESH, 1);
 
 	ds_writed(BUYITEMS, ds_readd(FIG_FIGURE1_BUF));
-	memset(Real2Host(ds_readd(BUYITEMS)), 0, 3500);
+	memset((Bit8u*)ds_readd(BUYITEMS), 0, 3500);
 	ds_writew(PRICE_MODIFICATOR, 4);
 	shop_p = p_datseg + SHOP_DESCR_TABLE + 9 * ds_readws(CURRENT_TYPEINDEX);
 
 	for (l_si = 0; l_si < 100; l_si++) {
-		host_writews(Real2Host(ds_readd(BUYITEMS)) + 7 * l_si, 0);
+		host_writews((Bit8u*)ds_readd(BUYITEMS) + 7 * l_si, 0);
 	}
 
 	l_si = 1;
@@ -161,22 +161,22 @@ void do_merchant(void)
 
 	if (host_readbs(shop_p + 1) == 1) {
 
-		qsort(Real2Host(ds_readd(BUYITEMS)), item_pos, 7, shop_compar);
-		qsort(Real2Host(ds_readd(BUYITEMS)) + 7 * 70, armor_pos - 70, 7, shop_compar);
+		qsort((Bit8u*)ds_readd(BUYITEMS), item_pos, 7, shop_compar);
+		qsort((Bit8u*)ds_readd(BUYITEMS) + 7 * 70, armor_pos - 70, 7, shop_compar);
 
 		/* copy the rest */
 		for (l_si = 0; armor_pos - 70 > l_si; l_si++) {
 
-			*(struct dummy7*)(Real2Host(ds_readd(BUYITEMS)) + 7 * (item_pos + l_si)) =
-				*(struct dummy7*)(Real2Host(ds_readd(BUYITEMS)) + 7 * (l_si + 70));
+			*(struct dummy7*)((Bit8u*)ds_readd(BUYITEMS) + 7 * (item_pos + l_si)) =
+				*(struct dummy7*)((Bit8u*)ds_readd(BUYITEMS) + 7 * (l_si + 70));
 		}
 		/* cleanup */
 		for (l_si = item_pos + armor_pos - 70; l_si < 100; l_si++) {
-			host_writews(Real2Host(ds_readd(BUYITEMS)) + 7 * l_si, 0);
+			host_writews((Bit8u*)ds_readd(BUYITEMS) + 7 * l_si, 0);
 		}
 
 	} else {
-		qsort(Real2Host(ds_readd(BUYITEMS)), item_pos, 7, shop_compar);
+		qsort((Bit8u*)ds_readd(BUYITEMS), item_pos, 7, shop_compar);
 	}
 
 	while (done == 0 && !ds_readb(MERCHANT_OFFENDED_FLAGS + ds_readws(CURRENT_TYPEINDEX))) {

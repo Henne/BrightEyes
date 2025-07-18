@@ -47,21 +47,21 @@ void add_item_to_smith(Bit8u *smith_ptr, Bit8u *hero, signed short item_pos, sig
 
 	item_id = host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * item_pos);
 
-	host_writews(Real2Host(ds_readd(SELLITEMS)) + 7 * smith_pos, item_id);
+	host_writews((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos, item_id);
 
 	if (item_armor(get_itemsdat(item_id)) || item_weapon(get_itemsdat(item_id))) {
 
 		if (inventory_broken(hero + HERO_INVENTORY + SIZEOF_INVENTORY * item_pos)) {
 
-			host_writews(Real2Host(ds_readd(SELLITEMS)) + 7 * smith_pos + 2,
+			host_writews((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos + 2,
 				(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) +
 					(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * host_readbs(smith_ptr + SMITH_STATS_PRICE_MOD) / 100)) / 2);
 
-			if (host_readws(Real2Host(ds_readd(SELLITEMS)) + 7 * smith_pos + 2) == 0) {
-				host_writews(Real2Host(ds_readd(SELLITEMS)) + 7 * smith_pos + 2, 1);
+			if (host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos + 2) == 0) {
+				host_writews((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos + 2, 1);
 			}
 
-			host_writews(Real2Host(ds_readd(SELLITEMS)) + 7 * smith_pos + 4,
+			host_writews((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos + 4,
 				host_readbs(get_itemsdat(item_id) + ITEM_STATS_PRICE_UNIT));
 
 		} else {
@@ -69,27 +69,27 @@ void add_item_to_smith(Bit8u *smith_ptr, Bit8u *hero, signed short item_pos, sig
 			if (host_readbs(hero + HERO_INVENTORY + INVENTORY_RS_LOST + SIZEOF_INVENTORY * item_pos) != 0) {
 				/* armor has degraded RS */
 
-				host_writews(Real2Host(ds_readd(SELLITEMS)) + 7 * smith_pos + 2,
+				host_writews((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos + 2,
 					(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) +
 						(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * host_readbs(smith_ptr + SMITH_STATS_PRICE_MOD) / 100)) / 4);
 
-				if (host_readws(Real2Host(ds_readd(SELLITEMS)) + 7 * smith_pos + 2) == 0) {
-					host_writews(Real2Host(ds_readd(SELLITEMS)) + 7 * smith_pos + 2, 1);
+				if (host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos + 2) == 0) {
+					host_writews((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos + 2, 1);
 				}
 
-				host_writews(Real2Host(ds_readd(SELLITEMS)) + 7 * smith_pos + 4,
+				host_writews((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos + 4,
 					host_readbs(get_itemsdat(item_id) + ITEM_STATS_PRICE_UNIT));
 			} else {
-				host_writews(Real2Host(ds_readd(SELLITEMS)) + 7 * smith_pos + 2, 0);
-				host_writews(Real2Host(ds_readd(SELLITEMS)) + 7 * smith_pos + 4, 1);
+				host_writews((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos + 2, 0);
+				host_writews((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos + 4, 1);
 			}
 		}
 	} else {
-		host_writews(Real2Host(ds_readd(SELLITEMS)) + 7 * smith_pos + 2, 0);
-		host_writews(Real2Host(ds_readd(SELLITEMS)) + 7 * smith_pos + 4, 1);
+		host_writews((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos + 2, 0);
+		host_writews((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos + 4, 1);
 	}
 
-	host_writebs(Real2Host(ds_readd(SELLITEMS)) + 7 * smith_pos + 6, (signed char)item_pos);
+	host_writebs((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos + 6, (signed char)item_pos);
 }
 
 struct dummy3 {
@@ -195,7 +195,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 		do_pic_copy(0);
 
 		ds_writed(SELLITEMS, ds_readd(FIG_FIGURE1_BUF));
-		memset(Real2Host(ds_readd(SELLITEMS)), 0, 350);
+		memset((Bit8u*)ds_readd(SELLITEMS), 0, 350);
 
 		get_textcolor(&fg_bak, &bg_bak);
 		set_textcolor(255, 0);
@@ -231,7 +231,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 					}
 
 					for (l_si = smith_pos; l_si < 23; l_si++) {
-						host_writew(Real2Host(ds_readd(SELLITEMS)) + 7 * l_si, 0);
+						host_writew((Bit8u*)ds_readd(SELLITEMS) + 7 * l_si, 0);
 					}
 
 					l11 = 0;
@@ -265,7 +265,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 						answer = 5 * items_x + l_si + item;
 
-						if ((j = host_readws(Real2Host(ds_readd(SELLITEMS)) + 7 * answer))) {
+						if ((j = host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * answer))) {
 
 							ds_writew(PIC_COPY_X1, array3.a[items_x]);
 							ds_writew(PIC_COPY_Y1, array5.a[l_si]);
@@ -281,7 +281,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 							if (item_stackable(get_itemsdat(j))) {
 
-								if ((val = host_readws(hero2 + (HERO_INVENTORY + INVENTORY_QUANTITY) + SIZEOF_INVENTORY * host_readbs(Real2Host(ds_readd(SELLITEMS)) + 7 * answer + 6))) > 1)
+								if ((val = host_readws(hero2 + (HERO_INVENTORY + INVENTORY_QUANTITY) + SIZEOF_INVENTORY * host_readbs((Bit8u*)ds_readd(SELLITEMS) + 7 * answer + 6))) > 1)
 								{
 									my_itoa(val, (char*)ds_readd(DTP2), 10);
 
@@ -293,9 +293,9 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 							}
 
 							sprintf((char*)ds_readd(DTP2),
-								host_readws(Real2Host(ds_readd(SELLITEMS)) + 4 + 7 * answer) == 1 ? fmt_h.a :
-									(host_readws(Real2Host(ds_readd(SELLITEMS)) + 4 + 7 * answer) == 10 ? fmt_s.a : fmt_d.a),
-								host_readws(Real2Host(ds_readd(SELLITEMS)) + 2 + 7 * answer));
+								host_readws((Bit8u*)ds_readd(SELLITEMS) + 4 + 7 * answer) == 1 ? fmt_h.a :
+									(host_readws((Bit8u*)ds_readd(SELLITEMS) + 4 + 7 * answer) == 10 ? fmt_s.a : fmt_d.a),
+								host_readws((Bit8u*)ds_readd(SELLITEMS) + 2 + 7 * answer));
 
 
 							GUI_print_string((char*)ds_readd(DTP2), array3.a[items_x] + 20, array5.a[l_si] + 5);
@@ -315,9 +315,9 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 			ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)0L);
 
 			if (ds_readws(HAVE_MOUSE) == 2) {
-				select_with_mouse((Bit8u*)&l7, Real2Host(ds_readd(SELLITEMS)) + 7 * item);
+				select_with_mouse((Bit8u*)&l7, (Bit8u*)ds_readd(SELLITEMS) + 7 * item);
 			} else {
-				select_with_keyboard((Bit8u*)&l7, Real2Host(ds_readd(SELLITEMS)) + 7 * item);
+				select_with_keyboard((Bit8u*)&l7, (Bit8u*)ds_readd(SELLITEMS) + 7 * item);
 			}
 
 			if (l6 != l7) {
@@ -340,7 +340,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 				clear_loc_line();
 
-				GUI_print_loc_line(Real2Host(GUI_name_singular((Bit8u*)get_itemname(host_readws(Real2Host(ds_readd(SELLITEMS)) + 7 * (l7 + item))))));
+				GUI_print_loc_line(Real2Host(GUI_name_singular((Bit8u*)get_itemname(host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l7 + item))))));
 			}
 
 			if (ds_readws(MOUSE2_EVENT) != 0  || ds_readws(ACTION) == ACTION_ID_PAGE_UP) {
@@ -360,7 +360,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 			if (ds_readws(ACTION) == ACTION_ID_ICON_3 && item != 0) {
 				l8 = 1;
 				item -= 15;
-			} else if (ds_readws(ACTION) == ACTION_ID_ICON_2 && host_readws(Real2Host(ds_readd(SELLITEMS)) + 7 * (item + 15))) {
+			} else if (ds_readws(ACTION) == ACTION_ID_ICON_2 && host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (item + 15))) {
 				l8 = 1;
 				item += 15;
 			}
@@ -369,11 +369,11 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 				/* Is ACTION == ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK possible at all?
 				 * ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK can be written to ACTION in buy_screen(), but where should it show up in repair_screen()?? */
 
-				item_id = host_readws(Real2Host(ds_readd(SELLITEMS)) + 7 * (l7 + item));
+				item_id = host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l7 + item));
 
 				p_money = get_party_money();
 
-				if (host_readws(Real2Host(ds_readd(SELLITEMS)) + 7 * (l7 + item) + 2) == 0) {
+				if (host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l7 + item) + 2) == 0) {
 					GUI_output(get_ttx(487));
 				} else {
 
@@ -383,8 +383,8 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 					while (l12 == 0 && j < 3) {
 
 
-						price = (host_readws(Real2Host(ds_readd(SELLITEMS)) + 7 * (l7 + item) + 2)
-							* host_readws(Real2Host(ds_readd(SELLITEMS)) + 7 * (l7 + item) + 4)) * ds_readws(PRICE_MODIFICATOR) / 4;
+						price = (host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l7 + item) + 2)
+							* host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l7 + item) + 4)) * ds_readws(PRICE_MODIFICATOR) / 4;
 
 						make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), price);
 
@@ -436,7 +436,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 									GUI_output(get_ttx(491));
 								}
 
-								drop_item(hero2, host_readbs(Real2Host(ds_readd(SELLITEMS)) + 6 + 7 * (l7 + item)), 1);
+								drop_item(hero2, host_readbs((Bit8u*)ds_readd(SELLITEMS) + 6 + 7 * (l7 + item)), 1);
 								p_money -= price;
 								set_party_money(p_money);
 
