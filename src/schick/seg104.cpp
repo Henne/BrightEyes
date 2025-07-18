@@ -171,7 +171,7 @@ signed short plan_alchemy(Bit8u *hero)
 			if (get_item_pos(hero, ds_readws(ALCHEMY_RECIPES + i * SIZEOF_RECIPE)) != -1) {
 
 				strcpy((char*)ds_readd(DTP2) + recipes * 50,
-					(GUI_name_singular((Bit8u*)get_itemname(ds_readws((ALCHEMY_RECIPES + RECIPE_OUTCOME) + i * SIZEOF_RECIPE)))));
+					(GUI_name_singular(get_itemname(ds_readws((ALCHEMY_RECIPES + RECIPE_OUTCOME) + i * SIZEOF_RECIPE)))));
 
 				ds_writed(RADIO_NAME_LIST + recipes * 4, (Bit32u)((char*)ds_readd(DTP2) + recipes * 50));
 				array[recipes] = (signed char)i;
@@ -326,7 +326,7 @@ signed short plan_alchemy(Bit8u *hero)
 					/* not all ingrendients */
 					sprintf((char*)ds_readd(DTP2),
 						get_tx(49),
-						(GUI_name_singular((Bit8u*)get_itemname(ds_readws(ALCHEMY_MISSING_ITEM)))));
+						(GUI_name_singular(get_itemname(ds_readws(ALCHEMY_MISSING_ITEM)))));
 
 					GUI_output((char*)ds_readd(DTP2));
 				}

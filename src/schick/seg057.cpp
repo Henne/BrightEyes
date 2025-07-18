@@ -303,7 +303,7 @@ void sell_screen(Bit8u *shop_ptr)
 			clear_loc_line();
 
 
-			GUI_print_loc_line((GUI_name_singular((Bit8u*)get_itemname(host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l6 + item))))));
+			GUI_print_loc_line((GUI_name_singular(get_itemname(host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l6 + item))))));
 		}
 
 		if (ds_readws(MOUSE2_EVENT) != 0  || ds_readws(ACTION) == ACTION_ID_PAGE_UP) {

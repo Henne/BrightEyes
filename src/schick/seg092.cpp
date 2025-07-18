@@ -208,7 +208,7 @@ void loot_simple_chest(Bit8u *chest)
 
 
 			strcpy(names[item_no++],
-				(char*)Real2Host(GUI_name_plural(0, (Bit8u*)get_itemname(item_id))));
+				(char*)Real2Host(GUI_name_plural(0, get_itemname(item_id))));
 		}
 
 		if (item_no == 0) {
@@ -294,7 +294,7 @@ void loot_chest(Bit8u *chest, Bit8u *text_non_empty, Bit8u *text_empty)
 
 
 			strcpy(names[item_no++],
-				(char*)Real2Host(GUI_name_plural(0, (Bit8u*)get_itemname(item_id))));
+				(char*)Real2Host(GUI_name_plural(0, get_itemname(item_id))));
 		}
 
 		if (item_no == 0) {
@@ -610,7 +610,7 @@ void loot_multi_chest(Bit8u *chest, Bit8u *msg)
 				strcat(names[item_no], (char*)p_datseg + STR_SINGLE_SPACE);
 			}
 
-			strcat(names[item_no++], (char*)Real2Host(GUI_name_plural( ((signed short)(item_cnt > 1 ? (unsigned short)1 : (unsigned short)0)) ? 4 : 0, (Bit8u*)get_itemname(i))));
+			strcat(names[item_no++], (char*)Real2Host(GUI_name_plural( ((signed short)(item_cnt > 1 ? (unsigned short)1 : (unsigned short)0)) ? 4 : 0, get_itemname(i))));
 		}
 
 		if (item_no != 0) {

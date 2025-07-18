@@ -53,7 +53,7 @@ RealPt GUI_names_grammar(signed short flag, signed short index, signed short typ
 
 	if (type == 0) {
 		/* string_array_itemnames */
-		p_name = (Bit8u*)get_itemname(index);
+		p_name = get_itemname(index);
 
 		flag += lp5.a[ds_readbs(ITEMS_GENDERS + index)];
 

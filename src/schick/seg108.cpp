@@ -69,7 +69,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 				int diff = host_readbs(consumer + HERO_HUNGER) - host_readbs(item_p + 4);
 				D1_INFO("%s isst %s mit Naehrwert %d. Der Hunger sinkt von %d auf %d\n",
 					(consumer + HERO_NAME2),
-					(GUI_name_singular((Bit8u*)get_itemname(item))),
+					(GUI_name_singular(get_itemname(item))),
 					host_readbs(item_p + 4),
 					host_readbs(consumer + HERO_HUNGER),
 					(diff >= 0) ? diff : 0);
@@ -100,7 +100,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 				int diff = host_readbs(consumer + HERO_THIRST) - host_readbs(item_p + 4);
 				D1_INFO("%s trinkt aus %s mit Naehrwert %d. Der Durst sinkt von %d auf %d\n",
 					(consumer + HERO_NAME2),
-					(GUI_name_singular((Bit8u*)get_itemname(item))),
+					(GUI_name_singular(get_itemname(item))),
 					host_readbs(item_p + 4),
 					host_readbs(consumer + HERO_THIRST),
 					(diff >= 0) ? diff : 0);
