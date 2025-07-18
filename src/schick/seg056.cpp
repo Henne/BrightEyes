@@ -123,7 +123,7 @@ void buy_screen(void)
 	signed short l17;
 	struct nvf_desc nvf;
 
-	ds_writed(BUY_SHOPPING_CART, (Bit32u)((RealPt)ds_readd(FIG_FIGURE1_BUF) + 2800));
+	ds_writed(BUY_SHOPPING_CART, (Bit32u)((Bit8u*)ds_readd(FIG_FIGURE1_BUF) + 2800));
 	memset(Real2Host(ds_readd(BUY_SHOPPING_CART)), 0, 250);
 
 	ds_writew(REQUEST_REFRESH, 1);
@@ -185,15 +185,15 @@ void buy_screen(void)
 			/* refresh goods */
 			update_mouse_cursor();
 
-			do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 135, 26, 214, 33, 0);
+			do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 135, 26, 214, 33, 0);
 
 			make_valuta_str((char*)ds_readd(DTP2), price);
 			GUI_print_string((char*)ds_readd(DTP2), 135, 26);
 
-			do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 29, 34, 214, 133, 0);
+			do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 29, 34, 214, 133, 0);
 
-			do_v_line((RealPt)ds_readd(FRAMEBUF_PTR), 87, 35, 131, -1);
-			do_v_line((RealPt)ds_readd(FRAMEBUF_PTR), 152, 35, 131, -1);
+			do_v_line((Bit8u*)ds_readd(FRAMEBUF_PTR), 87, 35, 131, -1);
+			do_v_line((Bit8u*)ds_readd(FRAMEBUF_PTR), 152, 35, 131, -1);
 
 			nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
 			nvf.src = (Bit8u*)ds_readd(BUFFER10_PTR);
@@ -254,14 +254,14 @@ void buy_screen(void)
 
 		if (l6 != l7 || l15 != 0) {
 
-			do_border((RealPt)ds_readd(FRAMEBUF_PTR),
+			do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
 				array3.a[l6 / 5] - 1,
 				array5.a[l6 % 5] - 1,
 				array3.a[l6 / 5] + 16,
 				array5.a[l6 % 5] + 16,
 				0);
 
-			do_border((RealPt)ds_readd(FRAMEBUF_PTR),
+			do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
 				array3.a[l7 / 5] - 1,
 				array5.a[l7 % 5] - 1,
 				array3.a[l7 / 5] + 16,
@@ -304,7 +304,7 @@ void buy_screen(void)
 
 			for (l_di = 0; l_di < 7; l_di++, hero1 += SIZEOF_HERO) {
 
-				do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR),
+				do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR),
 						ds_readws(HERO_PIC_POSX + 2 * l_di),
 						190,
 						ds_readws(HERO_PIC_POSX + 2 * l_di) + 41,
@@ -439,7 +439,7 @@ void buy_screen(void)
 							}
 						}
 
-						do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR),
+						do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR),
 								135, 26, 214, 33, 0);
 
 						make_valuta_str((char*)ds_readd(DTP2), price);
@@ -482,7 +482,7 @@ void buy_screen(void)
 
 							nice++;
 
-							do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 135, 26, 214, 33 ,0);
+							do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 135, 26, 214, 33 ,0);
 
 							make_valuta_str((char*)ds_readd(DTP2), price);
 

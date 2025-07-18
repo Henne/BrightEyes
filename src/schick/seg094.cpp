@@ -675,7 +675,7 @@ void TM_draw_track(signed short a1, signed short length, signed short direction,
 	Bit8u *ptr;
 	RealPt fb_start;
 
-	fb_start = (RealPt)ds_readd(FRAMEBUF_PTR);
+	fb_start = (Bit8u*)ds_readd(FRAMEBUF_PTR);
 	ptr = Real2Host(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), host_readws((Bit8u*)ds_readd(BUFFER9_PTR) + 4 * (a1 - 1))), 0xec));
 	ptr += 4;
 

@@ -57,7 +57,7 @@ RealPt seg030_0000(signed short arg0)
 			i = random_schick(15);
 		} while (i == 10 || i == 12 || i == 13 || !ds_readb((INFORMER_FLAGS - 1) + i)|| i == arg0);
 
-		return (RealPt)host_readd(Real2Host((RealPt)ds_readd(TEXT_LTX_INDEX) + (0x291 + i) * 4));
+		return (RealPt)host_readd(Real2Host((Bit8u*)ds_readd(TEXT_LTX_INDEX) + (0x291 + i) * 4));
 	}
 }
 
@@ -87,7 +87,7 @@ RealPt seg030_008d(signed short arg0)
 		} while (i == 10 || i == 12 || i == 13 || ds_readb((INFORMER_FLAGS - 1) + i)|| i == arg0);
 		ds_writeb((INFORMER_FLAGS - 1) + i, 1);
 
-		return (RealPt)host_readd(Real2Host((RealPt)ds_readd(TEXT_LTX_INDEX) + (0x291 + i) * 4));
+		return (RealPt)host_readd(Real2Host((Bit8u*)ds_readd(TEXT_LTX_INDEX) + (0x291 + i) * 4));
 	}
 }
 
@@ -495,7 +495,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 				}
 			}
 
-			answer = GUI_dialogbox((RealPt)ds_readd(DTP2), Real2Host(ds_readd(DIALOG_TITLE)), (Bit8u*)dst, optioncount,
+			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), Real2Host(ds_readd(DIALOG_TITLE)), (Bit8u*)dst, optioncount,
 					get_tx2(host_readb(state_ptr + 2) + txt_offset),
 					get_tx2(host_readb(state_ptr + 3) + txt_offset),
 					get_tx2(host_readb(state_ptr + 4) + txt_offset));

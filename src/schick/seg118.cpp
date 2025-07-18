@@ -407,7 +407,7 @@ void tevent_051(void)
 			load_in_head(53);
 
 			do {
-				answer = GUI_dialogbox((RealPt)ds_readd(DTP2), NULL, get_tx2(67), 2,
+				answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL, get_tx2(67), 2,
 							get_tx2(68),
 							get_tx2(69));
 			} while (answer == -1);
@@ -423,7 +423,7 @@ void tevent_051(void)
 		load_in_head(53);
 
 		do {
-			answer = GUI_dialogbox((RealPt)ds_readd(DTP2), NULL, get_tx2(70), 2,
+			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL, get_tx2(70), 2,
 						get_tx2(71),
 						get_tx2(72));
 		} while (answer == -1);
@@ -449,7 +449,7 @@ void tevent_052(void)
 	do {
 
 		do {
-			answer = GUI_dialogbox((RealPt)ds_readd(DTP2), NULL, get_tx2(73), 2,
+			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL, get_tx2(73), 2,
 						get_tx2(74),
 						get_tx2(75));
 		} while (answer == -1);
@@ -590,7 +590,7 @@ void tevent_125(void)
 	load_in_head(17);
 
 	do {
-		answer = GUI_dialogbox((RealPt)ds_readd(DTP2), NULL, get_tx2(57), 3,
+		answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL, get_tx2(57), 3,
 					get_tx2(58),
 					get_tx2(59),
 					get_tx2(60));

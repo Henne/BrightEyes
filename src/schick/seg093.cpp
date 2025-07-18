@@ -284,7 +284,7 @@ signed short do_travel_mode(void)
 		set_palette((char*)ds_readd(DTP2), 0x80, 0x40);
 		set_palette((char*)ds_readd(DTP2), 0x00, 0x20);
 
-		do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
+		do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
 	}
 
 	ds_writew(CURRENT_ANI, ds_writebs(CITY_AREA_LOADED, ds_writebs(PP20_INDEX, -1)));

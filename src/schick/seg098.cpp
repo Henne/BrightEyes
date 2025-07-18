@@ -168,7 +168,7 @@ void magic_heal_ani(Bit8u *hero)
 	close(fd);
 
 	target_no = host_readbs(hero + HERO_ENEMY_ID) - 1;
-	target = (RealPt)ds_readd(HEROES) + SIZEOF_HERO * target_no;
+	target = (Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * target_no;
 
 	ds_writew(PIC_COPY_V1, 0);
 	ds_writew(PIC_COPY_V2, 0);
@@ -187,7 +187,7 @@ void magic_heal_ani(Bit8u *hero)
 		do_pic_copy(0);
 
 		/* copy stars over it */
-		ds_writed(PIC_COPY_SRC, (Bit32u)((RealPt)ds_readd(BUFFER8_PTR) + (a.a[i] * 1024)));
+		ds_writed(PIC_COPY_SRC, (Bit32u)((Bit8u*)ds_readd(BUFFER8_PTR) + (a.a[i] * 1024)));
 		do_pic_copy(2);
 
 		/* copy buffer content to screen */
@@ -221,7 +221,7 @@ void FIG_do_spell_damage(signed short le)
 
 		/* set pointer */
 		ds_writed(SPELLTARGET,
-			(Bit32u)((RealPt)ds_readd(HEROES) + (host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1) * SIZEOF_HERO));
+			(Bit32u)((Bit8u*)ds_readd(HEROES) + (host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1) * SIZEOF_HERO));
 
 
 		/* ensure the spelluser does not attack himself */
@@ -272,7 +272,7 @@ signed short get_attackee_parade(void)
 		/* attacked a hero */
 
 		ds_writed(SPELLTARGET,
-			(Bit32u)((RealPt)ds_readd(HEROES) + (host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1) * SIZEOF_HERO));
+			(Bit32u)((Bit8u*)ds_readd(HEROES) + (host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1) * SIZEOF_HERO));
 
 		/* calculate PA  */
 
@@ -306,7 +306,7 @@ signed short get_attackee_rs(void)
 		/* attacked a hero */
 
 		ds_writed(SPELLTARGET,
-			(Bit32u)((RealPt)ds_readd(HEROES) + (host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1) * SIZEOF_HERO));
+			(Bit32u)((Bit8u*)ds_readd(HEROES) + (host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1) * SIZEOF_HERO));
 
 		return host_readbs(get_spelltarget() + HERO_RS_BONUS1); /* why not also HERO_RS_BONUS2? Anyway, function is unused... */
 
@@ -597,7 +597,7 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 		for (l_di = 0; l_di < 12; l_di++) {
 
 			ds_writed(RADIO_NAME_LIST + 4 * l_di,
-				(Bit32u)((RealPt)ds_readd(DTP2) + 50 * (l_di + 1)));
+				(Bit32u)((Bit8u*)ds_readd(DTP2) + 50 * (l_di + 1)));
 
 			ones.a[l_di] = (signed char)can_use_spellclass(hero, l_di);
 
@@ -640,7 +640,7 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 			for (l_di = 0; l_di < ds_readbs((SPELLS_INDEX + 1) + 2 * answer1); l_di++) {
 
 				ds_writed(RADIO_NAME_LIST + 4 * l_di,
-					(Bit32u)((RealPt)ds_readd(DTP2) + 50 * (l_di)));
+					(Bit32u)((Bit8u*)ds_readd(DTP2) + 50 * (l_di)));
 
 
 				if (show_vals == 1) {
@@ -831,7 +831,7 @@ signed short select_magic_user(void)
 	if (answer != -1) {
 		/* valid answer => cast spell */
 /*		return use_spell(get_hero(answer), 1, 0); */
-		return use_spell((RealPt)ds_readd(HEROES) + SIZEOF_HERO * answer, 1, 0);
+		return use_spell((Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * answer, 1, 0);
 	}
 
 	/* abort with error message */

@@ -435,8 +435,8 @@ void tevent_114(void)
 
 				load_in_head(12);
 
-				GUI_dialogbox((RealPt)ds_readd(DTP2), get_tx(52), get_tx2(25), 0);
-				GUI_dialogbox((RealPt)ds_readd(DTP2), get_tx(52), get_tx2(26), 0);
+				GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_tx(52), get_tx2(25), 0);
+				GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_tx(52), get_tx2(26), 0);
 
 				/* get RECIPE FOR POTENT HEALING POTION */
 				get_item(ITEM_RECIPE_STRONG_LE_POTION, 1, 1);
@@ -572,8 +572,8 @@ void tevent_122(void)
 
 				load_in_head(4);
 
-				GUI_dialogbox((RealPt)ds_readd(DTP2), get_tx(68), get_tx2(37), 0);
-				GUI_dialogbox((RealPt)ds_readd(DTP2), get_tx(68), get_tx2(63), 0);
+				GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_tx(68), get_tx2(37), 0);
+				GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_tx(68), get_tx2(63), 0);
 			}
 		} else {
 			/* decline to help */
@@ -599,7 +599,7 @@ void tevent_123(void)
 		done = 0;
 
 		do {
-			answer = GUI_dialogbox((RealPt)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
 						get_tx2(38), 3,
 						get_tx2(39),
 						get_tx2(40),
@@ -641,7 +641,7 @@ void tevent_123(void)
 		} else {
 			/* fight acrophobia */
 			do {
-				answer = GUI_dialogbox((RealPt)ds_readd(DTP2), NULL,
+				answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
 							get_tx2(44), 3,
 							get_tx2(45),
 							get_tx2(46),

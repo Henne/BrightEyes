@@ -361,7 +361,7 @@ void update_status_bars(void)
 					update_mouse_cursor();
 
 					for (i = 0; i < 6; i++) {
-						do_h_line((RealPt)ds_readd(FRAMEBUF_PTR), 260, 310, i + 36, ds_readb(STATUS_PAGE_HUNGER_MAX_COLOR) ? 9 : 10);
+						do_h_line((Bit8u*)ds_readd(FRAMEBUF_PTR), 260, 310, i + 36, ds_readb(STATUS_PAGE_HUNGER_MAX_COLOR) ? 9 : 10);
 					}
 
 					refresh_screen_size();
@@ -376,8 +376,8 @@ void update_status_bars(void)
 				update_mouse_cursor();
 
 				for (i = 0; i < 6; i++) {
-						do_h_line((RealPt)ds_readd(FRAMEBUF_PTR), 260, ds_readbs(STATUS_PAGE_HUNGER) / 2 + 260, i + 36, 9);
-						do_h_line((RealPt)ds_readd(FRAMEBUF_PTR), ds_readbs(STATUS_PAGE_HUNGER) / 2 + 260, 310, i + 36, 10);
+						do_h_line((Bit8u*)ds_readd(FRAMEBUF_PTR), 260, ds_readbs(STATUS_PAGE_HUNGER) / 2 + 260, i + 36, 9);
+						do_h_line((Bit8u*)ds_readd(FRAMEBUF_PTR), ds_readbs(STATUS_PAGE_HUNGER) / 2 + 260, 310, i + 36, 10);
 				}
 
 				refresh_screen_size();
@@ -392,7 +392,7 @@ void update_status_bars(void)
 					update_mouse_cursor();
 
 					for (i = 0; i < 6; i++) {
-						do_h_line((RealPt)ds_readd(FRAMEBUF_PTR), 260, 310, i + 43, ds_readb(STATUS_PAGE_THIRST_MAX_COLOR) ? 11 : 12);
+						do_h_line((Bit8u*)ds_readd(FRAMEBUF_PTR), 260, 310, i + 43, ds_readb(STATUS_PAGE_THIRST_MAX_COLOR) ? 11 : 12);
 					}
 
 					refresh_screen_size();
@@ -407,8 +407,8 @@ void update_status_bars(void)
 				update_mouse_cursor();
 
 				for (i = 0; i < 6; i++) {
-						do_h_line((RealPt)ds_readd(FRAMEBUF_PTR), 260, ds_readbs(STATUS_PAGE_THIRST) / 2 + 260, i + 43, 11);
-						do_h_line((RealPt)ds_readd(FRAMEBUF_PTR), ds_readbs(STATUS_PAGE_THIRST) / 2 + 260, 310, i + 43, 12);
+						do_h_line((Bit8u*)ds_readd(FRAMEBUF_PTR), 260, ds_readbs(STATUS_PAGE_THIRST) / 2 + 260, i + 43, 11);
+						do_h_line((Bit8u*)ds_readd(FRAMEBUF_PTR), ds_readbs(STATUS_PAGE_THIRST) / 2 + 260, 310, i + 43, 12);
 				}
 
 				refresh_screen_size();
@@ -488,11 +488,11 @@ void draw_bar(unsigned short type, signed short hero, signed short pts_cur, sign
 	if (mode == 0) {
 		x = ds_readw(HERO_PIC_POSX + hero * 2) + type * 4 + 34;
 		y_min = 188;
-		dst = (RealPt)ds_readd(FRAMEBUF_PTR);
+		dst = (Bit8u*)ds_readd(FRAMEBUF_PTR);
 	} else {
 		x = type * 4 + 36;
 		y_min = 42;
-		dst = (RealPt)ds_readd(RENDERBUF_PTR);
+		dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
 	}
 
 	if (pts_cur == 0) {
@@ -839,7 +839,7 @@ void draw_wallclock(signed short pos, signed short night)
 	ds_writew(PIC_COPY_Y1, y);
 	ds_writew(PIC_COPY_X2, pos + 7);
 	ds_writew(PIC_COPY_Y2, y + 6);
-	ds_writed(PIC_COPY_SRC, (Bit32u)(!night ? (RealPt)ds_readd(OBJECTS_NVF_BUF) + 0xcaf: (RealPt)ds_readd(OBJECTS_NVF_BUF) + 0xcef));
+	ds_writed(PIC_COPY_SRC, (Bit32u)(!night ? (Bit8u*)ds_readd(OBJECTS_NVF_BUF) + 0xcaf: (Bit8u*)ds_readd(OBJECTS_NVF_BUF) + 0xcef));
 
 	/* draw sun/moon */
 	do_pic_copy(2);
@@ -850,7 +850,7 @@ void draw_wallclock(signed short pos, signed short night)
 	ds_writew(PIC_COPY_Y1, ds_readws(WALLCLOCK_Y) + 3);
 	ds_writew(PIC_COPY_X2, ds_readws(WALLCLOCK_X) + 78);
 	ds_writew(PIC_COPY_Y2, ds_readws(WALLCLOCK_Y) + 22);
-	ds_writed(PIC_COPY_SRC, (Bit32u)((RealPt)ds_readd(OBJECTS_NVF_BUF) + 0x683));
+	ds_writed(PIC_COPY_SRC, (Bit32u)((Bit8u*)ds_readd(OBJECTS_NVF_BUF) + 0x683));
 
 	/* draw backgroud */
 	do_pic_copy(2);
@@ -1057,7 +1057,7 @@ void do_pic_copy(unsigned short mode)
 	height = y2 - y1 + 1;
 
 	src = Real2Host(ds_readd(PIC_COPY_SRC));
-	dst = (RealPt)ds_readd(PIC_COPY_DST);
+	dst = (Bit8u*)ds_readd(PIC_COPY_DST);
 
 	pic_copy(dst, x1, y1, x2, y2, v1, v2, v3, v4, width, height, src, mode);
 }
@@ -1076,8 +1076,8 @@ void do_save_rect(void)
 	x2 = ds_readw(PIC_COPY_X2);
 	y2 = ds_readw(PIC_COPY_Y2);
 
-	src = (RealPt)ds_readd(PIC_COPY_SRC);
-	dst = (RealPt)ds_readd(PIC_COPY_DST);
+	src = (Bit8u*)ds_readd(PIC_COPY_SRC);
+	dst = (Bit8u*)ds_readd(PIC_COPY_DST);
 
 	dst += y1 * 320 + x1;
 	width = x2 - x1 + 1;

@@ -143,7 +143,7 @@ void draw_status_line(void)
 
 	for (i = 0; i < 7; i++) {
 		/* Clear name field */
-		do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR),
+		do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR),
 			ds_readw(HERO_PIC_POSX + i * 2), 190,
 			ds_readw(HERO_PIC_POSX + i * 2) + 41, 197, 0);
 
@@ -185,7 +185,7 @@ void draw_status_line(void)
 
 				/* set the src pointer of the head */
 				ds_writed(PIC_COPY_SRC, (hero_dead(get_hero(i)) ? ds_readd(DTP2) :
-					(Bit32u)((RealPt)ds_readd(HEROES) + i * SIZEOF_HERO + HERO_PORTRAIT)));
+					(Bit32u)((Bit8u*)ds_readd(HEROES) + i * SIZEOF_HERO + HERO_PORTRAIT)));
 
 				do_pic_copy(0);
 
@@ -243,12 +243,12 @@ void clear_hero_icon(unsigned short pos)
 {
 
 	/* fill icon area black */
-	do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), ds_readw(HERO_PIC_POSX + pos * 2), 157,
+	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), ds_readw(HERO_PIC_POSX + pos * 2), 157,
 		ds_readw(HERO_PIC_POSX + pos * 2) + 31, 188, 0);
 
 	if (!host_readbs(get_hero(pos) + HERO_TYPE))
 		/* fill bars area black */
-		do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), ds_readw(HERO_PIC_POSX + pos * 2) + 33, 157,
+		do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), ds_readw(HERO_PIC_POSX + pos * 2) + 33, 157,
 			ds_readw(HERO_PIC_POSX + pos * 2) + 39, 188, 0);
 }
 
@@ -294,7 +294,7 @@ void draw_icons(void)
 		ds_writew(PIC_COPY_Y1, ds_readw(GUI_BUTTONS_POS + i * 4 + 2));
 		ds_writew(PIC_COPY_X2, ds_readw(GUI_BUTTONS_POS + i * 4) + 23);
 		ds_writew(PIC_COPY_Y2, ds_readw(GUI_BUTTONS_POS + i * 4 + 2) + 23);
-		ds_writed(PIC_COPY_SRC, (Bit32u)((RealPt)ds_readd(BUF_ICON) + i * 576));
+		ds_writed(PIC_COPY_SRC, (Bit32u)((Bit8u*)ds_readd(BUF_ICON) + i * 576));
 
 		if (ds_readbs(NEW_MENU_ICONS + i) != MENU_ICON_NONE) {
 			if (ds_readbs(LOADED_MENU_ICONS + i) != ds_readbs(NEW_MENU_ICONS + i))
@@ -340,7 +340,7 @@ void draw_main_screen(void)
 void clear_loc_line(void)
 {
 	update_mouse_cursor();
-	do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 3, 140, 316, 153, 0);
+	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 3, 140, 316, 153, 0);
 	refresh_screen_size();
 }
 
@@ -356,12 +356,12 @@ void select_hero_icon(unsigned short pos) {
 	signed short fg_bak, bg_bak;
 
 	/* paint a blue border for the pic and bars */
-	do_border((RealPt)ds_readd(FRAMEBUF_PTR),
+	do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
 		ds_readw(HERO_PIC_POSX + pos * 2) - 1, 156,
 		ds_readw(HERO_PIC_POSX + pos * 2) + 42, 189, (signed char)0xfc);
 
 	/* paint a blue border for the name */
-	do_border((RealPt)ds_readd(FRAMEBUF_PTR),
+	do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
 		ds_readw(HERO_PIC_POSX + pos * 2) - 1, 189,
 		ds_readw(HERO_PIC_POSX + pos * 2) + 42, 198, (signed char)0xfc);
 
@@ -397,12 +397,12 @@ void deselect_hero_icon(unsigned short pos) {
 	signed short fg_bak, bg_bak;
 
 	/* paint a gray border for the pic and bars */
-	do_border((RealPt)ds_readd(FRAMEBUF_PTR),
+	do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
 		ds_readw(HERO_PIC_POSX + pos * 2) - 1, 156,
 		ds_readw(HERO_PIC_POSX + pos * 2) + 42, 189, (signed char)0xe6);
 
 	/* paint a gray border for the name */
-	do_border((RealPt)ds_readd(FRAMEBUF_PTR),
+	do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
 		ds_readw(HERO_PIC_POSX + pos * 2) - 1, 189,
 		ds_readw(HERO_PIC_POSX + pos * 2) + 42, 198, (signed char)0xe6);
 

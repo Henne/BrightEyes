@@ -193,7 +193,7 @@ void status_show(Bit16u index)
 	txt_tabpos3_bak = ds_readw(TXT_TABPOS3);
 	txt_tabpos4_bak = ds_readw(TXT_TABPOS4);
 
-	hero = (RealPt)ds_readd(HEROES) + index * SIZEOF_HERO;
+	hero = (Bit8u*)ds_readd(HEROES) + index * SIZEOF_HERO;
 
 	set_var_to_zero();
 	update_mouse_cursor();
@@ -201,7 +201,7 @@ void status_show(Bit16u index)
 	if (ds_readb(PP20_INDEX) != ARCHIVE_FILE_ZUSTA_UK) {
 		ds_writew(UPDATE_STATUSLINE, 0);
 		ds_writeb(PP20_INDEX, ARCHIVE_FILE_ZUSTA_UK);
-		do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
+		do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
 		wait_for_vsync();
 		set_palette(p_datseg + STATUSPAGE_PALETTE, 0, 0x20);
 	}
@@ -284,7 +284,7 @@ void status_show(Bit16u index)
 			host_readw(hero + HERO_WEIGHT));
 		GUI_print_string((char*)ds_readd(DTP2), 59, 179);
 	} else {
-		do_fill_rect((RealPt)ds_readd(RENDERBUF_PTR), 0, 50, 319, 191, 2);
+		do_fill_rect((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 50, 319, 191, 2);
 	}
 
 	ds_writew(TXT_TABPOS1, 0x5f);
@@ -758,8 +758,8 @@ void status_show(Bit16u index)
 	ds_writew(UPDATE_STATUSLINE, 1);
 
 	if (ds_readws(STATUS_PAGE_MODE) >= 3) {
-		do_v_line((RealPt)ds_readd(FRAMEBUF_PTR), 107, 54, 195, 0);
-		do_v_line((RealPt)ds_readd(FRAMEBUF_PTR), 212, 54, 195, 0);
+		do_v_line((Bit8u*)ds_readd(FRAMEBUF_PTR), 107, 54, 195, 0);
+		do_v_line((Bit8u*)ds_readd(FRAMEBUF_PTR), 212, 54, 195, 0);
 	}
 
 	ds_writew(TXT_TABPOS1, txt_tabpos1_bak);

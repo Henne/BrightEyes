@@ -31,14 +31,14 @@ namespace M302de {
  */
 RealPt FIG_get_ptr(signed char fighter_id)
 {
-	RealPt fighter_ptr = (RealPt)ds_readd(FIG_LIST_HEAD);
+	RealPt fighter_ptr = (Bit8u*)ds_readd(FIG_LIST_HEAD);
 
 	while (host_readbs(Real2Host(fighter_ptr) + FIGHTER_ID) != fighter_id) {
 
 		/* check if its the last element */
 		if (host_readd(Real2Host(fighter_ptr) + FIGHTER_NEXT) == 0) {
 			/* return list head */
-			return (RealPt)ds_readd(FIG_LIST_HEAD);
+			return (Bit8u*)ds_readd(FIG_LIST_HEAD);
 		}
 
 		/* set fighter_ptr to the next element */
@@ -77,7 +77,7 @@ void FIG_draw_figures(void)
 	l1 = 10;
 	l2 = 118;
 
-	gfx_dst_bak = (RealPt)ds_readd(PIC_COPY_DST);
+	gfx_dst_bak = (Bit8u*)ds_readd(PIC_COPY_DST);
 	ds_writed(PIC_COPY_DST, ds_readd(RENDERBUF_PTR));
 
 	/* backup a structure */
@@ -139,7 +139,7 @@ void FIG_set_gfx(void)
 {
 	RealPt ptr_bak;
 
-	ptr_bak = (RealPt)ds_readd(PIC_COPY_DST);
+	ptr_bak = (Bit8u*)ds_readd(PIC_COPY_DST);
 
 	ds_writew(PIC_COPY_X1, 0);
 	ds_writew(PIC_COPY_Y1, 0);
@@ -178,10 +178,10 @@ RealPt FIG_get_hero_ptr(signed short v1)
 
 	for (i = 0; i <= 6; i++) {
 		if (host_readbs(Real2Host(ds_readd(HEROES)) + i * SIZEOF_HERO + HERO_FIGHTER_ID) == v1)
-			return (RealPt)ds_readd(HEROES) + i * SIZEOF_HERO;
+			return (Bit8u*)ds_readd(HEROES) + i * SIZEOF_HERO;
 	}
 
-	return (RealPt)ds_readd(HEROES);
+	return (Bit8u*)ds_readd(HEROES);
 }
 
 RealPt FIG_get_enemy_sheet(signed short fighter_id)
@@ -379,7 +379,7 @@ signed char FIG_add_to_list(signed char fighter_id)
 	RealPt p2;
 	signed short x, y;
 
-	p1 = (RealPt)ds_readd(FIG_LIST_BUFFER);
+	p1 = (Bit8u*)ds_readd(FIG_LIST_BUFFER);
 	x = ds_readbs((FIG_LIST_ELEM+FIGHTER_CBX));
 	y = ds_readbs((FIG_LIST_ELEM+FIGHTER_CBY));
 
@@ -419,7 +419,7 @@ signed char FIG_add_to_list(signed char fighter_id)
 		host_writeb(Real2Host(p1) + FIGHTER_ID, fighter_id);
 	}
 
-	p2 = (RealPt)ds_readd(FIG_LIST_HEAD);
+	p2 = (Bit8u*)ds_readd(FIG_LIST_HEAD);
 
 	/* The list is filled in the order of rendering, i.e. from rear to front:
 	 * (x1,y1) is rendered before (x2,y2) if (x1 < x2) || (x1 == x2 && y1 > y2)
@@ -488,7 +488,7 @@ void FIG_draw_char_pic(signed short loc, signed short hero_pos)
 	RealPt hero;
 	signed short fg_bak, bg_bak;
 
-	hero = (RealPt)ds_readd(HEROES) + (hero_pos - 1)  * SIZEOF_HERO;
+	hero = (Bit8u*)ds_readd(HEROES) + (hero_pos - 1)  * SIZEOF_HERO;
 	ds_writed(PIC_COPY_SRC, (Bit32u)(hero + HERO_PORTRAIT));
 
 	get_textcolor(&fg_bak, &bg_bak);
@@ -499,7 +499,7 @@ void FIG_draw_char_pic(signed short loc, signed short hero_pos)
 
 	if (loc == 0) {
 
-		do_border((RealPt)ds_readd(RENDERBUF_PTR), 1, 9, 34, 42, 29);
+		do_border((Bit8u*)ds_readd(RENDERBUF_PTR), 1, 9, 34, 42, 29);
 		ds_writew(PIC_COPY_X1, 2);
 		ds_writew(PIC_COPY_Y1, 10);
 		ds_writew(PIC_COPY_X2, 33);
@@ -512,7 +512,7 @@ void FIG_draw_char_pic(signed short loc, signed short hero_pos)
 		draw_bar(1, 0, host_readw(hero + HERO_AE),
 			host_readw(hero + HERO_AE_ORIG), 1);
 	} else {
-		do_border((RealPt)ds_readd(RENDERBUF_PTR), 1, 157, 34, 190, 29);
+		do_border((Bit8u*)ds_readd(RENDERBUF_PTR), 1, 157, 34, 190, 29);
 		ds_writew(PIC_COPY_X1, 2);
 		ds_writew(PIC_COPY_Y1, 158);
 		ds_writew(PIC_COPY_X2, 33);
@@ -569,7 +569,7 @@ void FIG_draw_enemy_pic(signed short loc, signed short id)
 	ds_writed(PRINT_STRING_BUFFER, ds_readd(RENDERBUF_PTR));
 
 	if (loc == 0) {
-		do_border((RealPt)ds_readd(RENDERBUF_PTR), 1, 9, 34, 50, 0x1d);
+		do_border((Bit8u*)ds_readd(RENDERBUF_PTR), 1, 9, 34, 50, 0x1d);
 		ds_writew(PIC_COPY_X1, 2);
 		ds_writew(PIC_COPY_Y1, 10);
 		ds_writew(PIC_COPY_X2, 33);
@@ -578,7 +578,7 @@ void FIG_draw_enemy_pic(signed short loc, signed short id)
 		do_pic_copy(0);
 		GUI_print_string(Real2Host(GUI_name_singular(get_monname(host_readbs(p_enemy)))), 1, 1);
 	} else {
-		do_border((RealPt)ds_readd(RENDERBUF_PTR), 1, 149, 34, 190, 0x1d);
+		do_border((Bit8u*)ds_readd(RENDERBUF_PTR), 1, 149, 34, 190, 0x1d);
 		ds_writew(PIC_COPY_X1, 2);
 		ds_writew(PIC_COPY_Y1, 150);
 		ds_writew(PIC_COPY_X2, 33);

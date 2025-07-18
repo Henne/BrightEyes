@@ -773,7 +773,7 @@ signed short select_item_to_drop(Bit8u *hero)
 	for (; i < NR_HERO_INVENTORY_SLOTS; i++) {
 		if ((item = host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + i * SIZEOF_INVENTORY))) {
 			str[v6] = i;
-			ds_writed(RADIO_NAME_LIST + v6 * 4 , (Bit32u)((RealPt)ds_readd(DTP2) + v6 * 30));
+			ds_writed(RADIO_NAME_LIST + v6 * 4 , (Bit32u)((Bit8u*)ds_readd(DTP2) + v6 * 30));
 			strcpy((char*)Real2Host(ds_readd(RADIO_NAME_LIST + v6 * 4)),
 				(char*)Real2Host(GUI_name_singular((Bit8u*)get_itemname(item))));
 			v6++;
@@ -794,13 +794,13 @@ signed short select_item_to_drop(Bit8u *hero)
 			if (!di) {
 				i = 13;
 				va = i - 1;
-				ptr = (RealPt)ds_readd(RADIO_NAME_LIST + 4 * va);
+				ptr = (Bit8u*)ds_readd(RADIO_NAME_LIST + 4 * va);
 				ds_writed(RADIO_NAME_LIST + 4 * va,
 					host_readd(Real2Host(ds_readd(TEXT_LTX_INDEX)) + 0xbbc));
 			} else {
 				i = v6 + 1;
 				va = i - 1;
-				ptr = (RealPt)ds_readd(RADIO_NAME_LIST + 4 * va);
+				ptr = (Bit8u*)ds_readd(RADIO_NAME_LIST + 4 * va);
 				ds_writed(RADIO_NAME_LIST + 4 * va,
 					host_readd(Real2Host(ds_readd(TEXT_LTX_INDEX)) + 0xbbc));
 				i -= di;

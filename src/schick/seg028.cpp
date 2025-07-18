@@ -211,7 +211,7 @@ RealPt seg028_0444(signed short index, signed short firstcol, signed short color
 	Bit32s v2;
 	RealPt ptr;
 
-	ptr = (RealPt)ds_readd(BUFFER9_PTR4);
+	ptr = (Bit8u*)ds_readd(BUFFER9_PTR4);
 
 	fd = load_archive_file(index);
 
@@ -397,8 +397,8 @@ void unused_store(signed short no)
 	EMS_map_memory(ds_readws(EMS_UNUSED_HANDLE), 0, 3);
 
 	size = width * height;
-	memmove(Real2Host((RealPt)ds_readd(EMS_FRAME_PTR) + ds_readws(EMS_UNUSED_OFFSET)),
-			Real2Host((RealPt)ds_readd(RENDERBUF_PTR) + 0x7530),
+	memmove(Real2Host((Bit8u*)ds_readd(EMS_FRAME_PTR) + ds_readws(EMS_UNUSED_OFFSET)),
+			Real2Host((Bit8u*)ds_readd(RENDERBUF_PTR) + 0x7530),
 			size);
 
 	ptr = no * 5 + Real2Host(ds_readd(EMS_UNUSED_TAB));
@@ -424,7 +424,7 @@ RealPt unused_load(signed short no)
 	EMS_map_memory(ds_readws(EMS_UNUSED_HANDLE), l_si + 1, 1);
 	EMS_map_memory(ds_readws(EMS_UNUSED_HANDLE), l_si + 2, 2);
 
-	return (RealPt)ds_readd(EMS_FRAME_PTR) + 256 * host_readb(Real2Host(ds_readd(EMS_UNUSED_TAB)) + 5 * no + 1);
+	return (Bit8u*)ds_readd(EMS_FRAME_PTR) + 256 * host_readb(Real2Host(ds_readd(EMS_UNUSED_TAB)) + 5 * no + 1);
 }
 
 void load_map(void)
@@ -569,7 +569,7 @@ void load_splashes(void)
 	fd = (signed short)process_nvf(&nvf);
 
 	/* nvf.dst = splash_ae = ds_readd() */
-	nvf.dst = Real2Host(ds_writed(SPLASH_AE, (Bit32u)((RealPt)ds_readd(SPLASH_BUFFER) + fd)));
+	nvf.dst = Real2Host(ds_writed(SPLASH_AE, (Bit32u)((Bit8u*)ds_readd(SPLASH_BUFFER) + fd)));
 	nvf.src = (Bit8u*)ds_readd(RENDERBUF_PTR);
 	nvf.no = 1;
 	nvf.type = 1;
@@ -615,7 +615,7 @@ void load_informer_tlk(signed short index)
 	close(fd);
 
 	split_textbuffer(Real2Host(ds_readd(TX2_INDEX)),
-		(RealPt)ds_readd(BUFFER8_PTR), text_len);
+		(Bit8u*)ds_readd(BUFFER8_PTR), text_len);
 
 	/* adjust the pointers to the layouts */
 	for (i = 0; i < partners; i++, ptr += 0x26) {
@@ -659,7 +659,7 @@ void load_tlk(signed short index)
 	close(fd);
 
 	split_textbuffer(Real2Host(ds_readd(TX_INDEX)),
-		(RealPt)ds_readd(BUFFER7_PTR), text_len);
+		(Bit8u*)ds_readd(BUFFER7_PTR), text_len);
 
 	/* adjust the pointers to the layouts */
 	for (i = 0; i < partners; i++, ptr += 0x26) {

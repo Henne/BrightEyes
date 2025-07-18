@@ -750,7 +750,7 @@ void TLK_way_to_ruin(signed short state)
 	} else if (state == 4 || state == 7) {
 		timewarp(HOURS(1));
 	} else if (state == 6) {
-		hero = (RealPt)ds_readd(HEROES) + SIZEOF_HERO * get_random_hero();
+		hero = (Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * get_random_hero();
 		ds_writew(DIALOG_NEXT_STATE, test_skill(hero, TA_WILDNISLEBEN, 6) > 0 ? 8 : 7);
 	} else if (state == 8) {
 		timewarp(HOURS(1));
@@ -758,7 +758,7 @@ void TLK_way_to_ruin(signed short state)
 	} else if (state == 9) {
 
 		do {
-			hero = (RealPt)ds_readds(HEROES) + SIZEOF_HERO * ds_readws(TLK_RUIN_HERO_COUNTER);
+			hero = (Bit8u*)ds_readds(HEROES) + SIZEOF_HERO * ds_readws(TLK_RUIN_HERO_COUNTER);
 			inc_ds_ws(TLK_RUIN_HERO_COUNTER);
 
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
@@ -793,7 +793,7 @@ void TLK_way_to_ruin(signed short state)
 		ds_writew(DIALOG_NEXT_STATE, test_skill(hero2, TA_ORIENTIERUNG, 5) > 0 ? 18 : 19);
 	} else if (state == 19) {
 		timewarp(MINUTES(20));
-		ds_writed(RUIN_HERO, (Bit32u)((RealPt)ds_readd(HEROES) + SIZEOF_HERO * get_random_hero()));
+		ds_writed(RUIN_HERO, (Bit32u)((Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * get_random_hero()));
 		ds_writew(DIALOG_NEXT_STATE, test_skill(Real2Host(ds_readd(RUIN_HERO)), TA_AEXTE, 2) > 0 ? 20 : 21);
 	} else if (state == 20) {
 		loose_random_item(get_hero(get_random_hero()), 5, get_ttx(506));
@@ -811,7 +811,7 @@ void TLK_way_to_ruin(signed short state)
 		timewarp(HOURS(5));
 	} else if (state == 28) {
 
-		hero = (RealPt)ds_readds(HEROES);
+		hero = (Bit8u*)ds_readds(HEROES);
 
 		for (i = ds_writews(TLK_RUIN_HERO_COUNTER, 0); i <= 6; i++, hero += SIZEOF_HERO) {
 
@@ -840,7 +840,7 @@ void TLK_way_to_ruin(signed short state)
 
 	} else if (state == 48) {
 
-		hero = (RealPt)ds_readds(HEROES);
+		hero = (Bit8u*)ds_readds(HEROES);
 
 		for (i = ds_writews(TLK_RUIN_HERO_COUNTER, 0); i <= 6; i++, hero += SIZEOF_HERO) {
 

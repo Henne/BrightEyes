@@ -154,7 +154,7 @@ void do_citycamp(void)
 
 			if (answer != -1) {
 
-				hero = (RealPt)ds_readd(HEROES) + SIZEOF_HERO * answer;
+				hero = (Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * answer;
 
 				if (host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH) {
 
@@ -271,7 +271,7 @@ void do_citycamp(void)
 
 					if (done == 0) {
 
-						hero = (RealPt)ds_readd(HEROES);
+						hero = (Bit8u*)ds_readd(HEROES);
 						for (l_si = 0; l_si <= 6; l_si++, hero += SIZEOF_HERO) {
 
 							if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&

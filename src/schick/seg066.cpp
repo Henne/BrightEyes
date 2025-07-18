@@ -144,7 +144,7 @@ signed short enter_location_daspota(void)
 
 				if (ds_readd((DASPOTA_LOCLOOT_INDEX - 4) + 4 * host_readw(locations_list_ptr + LOCATION_LOCDATA))) {
 
-					loot_multi_chest(Real2Host((RealPt)ds_readd((DASPOTA_LOCLOOT_INDEX - 4) + 4 * host_readw(locations_list_ptr + LOCATION_LOCDATA))), get_tx(21));
+					loot_multi_chest(Real2Host((Bit8u*)ds_readd((DASPOTA_LOCLOOT_INDEX - 4) + 4 * host_readw(locations_list_ptr + LOCATION_LOCDATA))), get_tx(21));
 
 				} else {
 

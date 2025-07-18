@@ -340,7 +340,7 @@ void draw_automap_square(signed short x, signed short y, signed short color, sig
 	offset_y <<= 3;
 	offset_y *= 320;
 
-	p_img_tile = (RealPt)ds_readd(RENDERBUF_PTR) + offset_y + 8 * x + 0xca8;
+	p_img_tile = (Bit8u*)ds_readd(RENDERBUF_PTR) + offset_y + 8 * x + 0xca8;
 
 	for (i = 0; i < 49; i++) {
 		tile[i] = (signed char)color;
@@ -480,7 +480,7 @@ void draw_automap_to_screen(void)
 	ds_writew(PIC_COPY_X2, 319);
 	ds_writew(PIC_COPY_Y2, 134);
 
-	ds_writed(PIC_COPY_DST, (Bit32u)((RealPt)ds_readd(FRAMEBUF_PTR) + ds_readws(ANI_POSX) + 320 * ds_readws(ANI_POSY)));
+	ds_writed(PIC_COPY_DST, (Bit32u)((Bit8u*)ds_readd(FRAMEBUF_PTR) + ds_readws(ANI_POSX) + 320 * ds_readws(ANI_POSY)));
 
 	update_mouse_cursor();
 

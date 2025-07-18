@@ -239,7 +239,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 					l7 = item = l12 = 0;
 					percent_old = 100;
 
-					do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 26, 26, 105, 33, 0);
+					do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 26, 26, 105, 33, 0);
 
 					make_valuta_str((char*)ds_readd(DTP2), host_readds(hero2 + HERO_MONEY));
 					GUI_print_string((char*)ds_readd(DTP2),
@@ -248,10 +248,10 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 				update_mouse_cursor();
 
-				do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 29, 34, 214, 133, 0);
+				do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 29, 34, 214, 133, 0);
 
-				do_v_line((RealPt)ds_readd(FRAMEBUF_PTR), 87, 35, 131, -1);
-				do_v_line((RealPt)ds_readd(FRAMEBUF_PTR), 152, 35, 131, -1);
+				do_v_line((Bit8u*)ds_readd(FRAMEBUF_PTR), 87, 35, 131, -1);
+				do_v_line((Bit8u*)ds_readd(FRAMEBUF_PTR), 152, 35, 131, -1);
 
 				nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
 				nvf.src = (Bit8u*)ds_readd(BUFFER10_PTR);
@@ -322,14 +322,14 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 			if (l6 != l7) {
 
-				do_border((RealPt)ds_readd(FRAMEBUF_PTR),
+				do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
 					array3.a[l6 / 5] - 1,
 					array5.a[l6 % 5] - 1,
 					array3.a[l6 / 5] + 16,
 					array5.a[l6 % 5] + 16,
 					0);
 
-				do_border((RealPt)ds_readd(FRAMEBUF_PTR),
+				do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
 					array3.a[l7 / 5] - 1,
 					array5.a[l7 % 5] - 1,
 					array3.a[l7 / 5] + 16,

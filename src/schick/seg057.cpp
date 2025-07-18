@@ -92,7 +92,7 @@ void sell_screen(Bit8u *shop_ptr)
 
 	ds_writew(HEROSWAP_ALLOWED, 0);
 	l8 = ds_writews(REQUEST_REFRESH, 1);
-	ds_writed(SELLITEMS, (Bit32u)((RealPt)ds_readd(FIG_FIGURE1_BUF) + 2100));
+	ds_writed(SELLITEMS, (Bit32u)((Bit8u*)ds_readd(FIG_FIGURE1_BUF) + 2100));
 
 	while (done == 0) {
 
@@ -175,7 +175,7 @@ void sell_screen(Bit8u *shop_ptr)
 				percent_old = 100;
 				p_money = get_party_money();
 
-				do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 26, 26, 105, 33, 0);
+				do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 26, 26, 105, 33, 0);
 
 				make_valuta_str((char*)ds_readd(DTP2), p_money);
 				GUI_print_string((char*)ds_readd(DTP2),
@@ -184,10 +184,10 @@ void sell_screen(Bit8u *shop_ptr)
 
 			update_mouse_cursor();
 
-			do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 29, 34, 214, 133, 0);
+			do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 29, 34, 214, 133, 0);
 
-			do_v_line((RealPt)ds_readd(FRAMEBUF_PTR), 87, 35, 131, -1);
-			do_v_line((RealPt)ds_readd(FRAMEBUF_PTR), 152, 35, 131, -1);
+			do_v_line((Bit8u*)ds_readd(FRAMEBUF_PTR), 87, 35, 131, -1);
+			do_v_line((Bit8u*)ds_readd(FRAMEBUF_PTR), 152, 35, 131, -1);
 
 			nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
 			nvf.src = (Bit8u*)ds_readd(BUFFER10_PTR);
@@ -254,7 +254,7 @@ void sell_screen(Bit8u *shop_ptr)
 				}
 			}
 
-			do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 135, 26, 214, 33, 0);
+			do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 135, 26, 214, 33, 0);
 
 			make_valuta_str((char*)ds_readd(DTP2), price);
 			GUI_print_string((char*)ds_readd(DTP2), 135, 26);
@@ -283,7 +283,7 @@ void sell_screen(Bit8u *shop_ptr)
 		if (l5 != l6) {
 
 			if (l5 != -1) {
-				do_border((RealPt)ds_readd(FRAMEBUF_PTR),
+				do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
 					array3.a[l5 / 5] - 1,
 					array5.a[l5 % 5] - 1,
 					array3.a[l5 / 5] + 16,
@@ -291,7 +291,7 @@ void sell_screen(Bit8u *shop_ptr)
 					0);
 			 }
 
-			do_border((RealPt)ds_readd(FRAMEBUF_PTR),
+			do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
 				array3.a[l6 / 5] - 1,
 				array5.a[l6 % 5] - 1,
 				array3.a[l6 / 5] + 16,

@@ -80,7 +80,7 @@ signed short LVL_select_skill(Bit8u *hero, signed short show_values)
 					get_ttx(l1 + i + 48),
 					host_readbs(hero + l1 + i + HERO_TALENTS));
 
-				ds_writed(RADIO_NAME_LIST + 4 * i, (Bit32u)((RealPt)ds_readd(DTP2) + 50 * i));
+				ds_writed(RADIO_NAME_LIST + 4 * i, (Bit32u)((Bit8u*)ds_readd(DTP2) + 50 * i));
 			}
 		} else {
 
@@ -136,7 +136,7 @@ RealPt get_proper_hero(signed short skill)
 	retval = 0;
 #endif
 
-	hero_i = (RealPt)ds_readd(HEROES);
+	hero_i = (Bit8u*)ds_readd(HEROES);
 
 	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 		if ((host_readbs(Real2Host(hero_i) + HERO_TYPE) != HERO_TYPE_NONE) &&

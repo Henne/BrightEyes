@@ -160,7 +160,7 @@ RealPt GUI_2f2(signed short v1, signed short word_id, signed short type)
 
 	genus = (type == 0) ? ds_readbs(ITEMS_GENDERS + word_id) : ds_readbs(word_id + MONNAME_GENDERS);
 
-	return (RealPt)ds_readd(GRAMMAR_PRONOUNS_INDEX + 4 * ds_readbs(GRAMMAR_PRONOUNS_TABLE2 + v1 * 3 + genus));
+	return (Bit8u*)ds_readd(GRAMMAR_PRONOUNS_INDEX + 4 * ds_readbs(GRAMMAR_PRONOUNS_TABLE2 + v1 * 3 + genus));
 }
 
 //330
@@ -531,7 +531,7 @@ void GUI_font_to_buf(Bit8u *fc)
 void GUI_write_char_to_screen_xy(unsigned short x, unsigned short y, unsigned short char_height, unsigned short char_width)
 {
 	/* screen_start */
-	RealPt dst = ((RealPt)ds_readd(PRINT_STRING_BUFFER)) + y * 320 + x;
+	RealPt dst = ((Bit8u*)ds_readd(PRINT_STRING_BUFFER)) + y * 320 + x;
 
 	GUI_write_char_to_screen(dst, char_height, char_width);
 }
@@ -665,11 +665,11 @@ void GUI_draw_popup_line(signed short line, signed short type)
 	ds_writew(PIC_COPY_Y1, y);
 	ds_writew(PIC_COPY_X2, x + 15);
 	ds_writew(PIC_COPY_Y2, y + 7);
-	ds_writed(PIC_COPY_SRC, (Bit32u)((RealPt)ds_readd(POPUP) + popup_left));
+	ds_writed(PIC_COPY_SRC, (Bit32u)((Bit8u*)ds_readd(POPUP) + popup_left));
 
 	do_pic_copy(0);
 
-	ds_writed(PIC_COPY_SRC, (Bit32u)((RealPt)ds_readd(POPUP) + popup_middle));
+	ds_writed(PIC_COPY_SRC, (Bit32u)((Bit8u*)ds_readd(POPUP) + popup_middle));
 
 	x += 16;
 
@@ -680,7 +680,7 @@ void GUI_draw_popup_line(signed short line, signed short type)
 		x += 32;
 	}
 
-	ds_writed(PIC_COPY_SRC, (Bit32u)((RealPt)ds_readd(POPUP) + popup_right));
+	ds_writed(PIC_COPY_SRC, (Bit32u)((Bit8u*)ds_readd(POPUP) + popup_right));
 	ds_writew(PIC_COPY_X1, x);
 	ds_writew(PIC_COPY_X2, x + 15);
 

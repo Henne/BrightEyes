@@ -146,7 +146,7 @@ void THO_bank(void)
 			ds_readws(BANK_DEPOSIT));
 
 		do {
-			answer = GUI_dialogbox((RealPt)ds_readd(DTP2), get_tx2(81),
+			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_tx2(81),
 						(char*)ds_readd(TEXT_OUTPUT_BUF), 3,
 						get_tx2(73), get_tx2(74), get_tx2(80));
 		} while (answer == -1);
@@ -157,7 +157,7 @@ void THO_bank(void)
 			answer = GUI_input(get_tx2(75), 3);
 
 			if (answer <= 0) {
-				GUI_dialogbox((RealPt)ds_readd(DTP2), get_tx2(81),
+				GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_tx2(81),
 						get_tx2(79), 0);
 			} else {
 
@@ -165,7 +165,7 @@ void THO_bank(void)
 					(ds_readws(BANK_DEPOSIT) > 0 && ds_readws(BANK_DEPOSIT) + 200 < answer) ||
 					(ds_readws(BANK_DEPOSIT) <= 0 && answer > 200))
 				{
-					GUI_dialogbox((RealPt)ds_readd(DTP2), get_tx2(81),
+					GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_tx2(81),
 							get_tx2(76), 0);
 				} else {
 
@@ -183,7 +183,7 @@ void THO_bank(void)
 
 						if (ds_readws(MONTHLY_CREDIT) > 200) {
 
-							GUI_dialogbox((RealPt)ds_readd(DTP2), get_tx2(81),
+							GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_tx2(81),
 									get_tx2(76), 0);
 
 							l3 = ds_readws(MONTHLY_CREDIT) - 200;
@@ -225,7 +225,7 @@ void THO_bank(void)
 
 					if (answer <= 0) {
 
-						GUI_dialogbox((RealPt)ds_readd(DTP2), get_tx2(81),
+						GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_tx2(81),
 								get_tx2(79), 0);
 
 					} else {
@@ -280,7 +280,7 @@ void THO_arsenal(void)
 		options = get_first_hero_with_item(ITEM_WRITING_OF_JARDA) != -1 || get_first_hero_with_item(ITEM_WRITING_OF_HETMAN) != -1 ? 2 : 1;
 
 		do {
-			answer = GUI_dialogbox((RealPt)ds_readd(DTP2), (RealPt)0,
+			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), (RealPt)0,
 					get_tx2(0), options,
 					get_tx2(2), get_tx2(1));
 
@@ -393,7 +393,7 @@ void THO_black_finger(void)
 /* static */
 void dramosch_says(Bit8u *msg)
 {
-	GUI_dialogbox((RealPt)ds_readd(DTP2),
+	GUI_dialogbox((Bit8u*)ds_readd(DTP2),
 			Real2Host(host_readd(Real2Host(ds_readd(TX2_INDEX)) + 0xc0)), msg, 0);
 }
 
@@ -409,7 +409,7 @@ void THO_ugdalf(void)
 		/* talk to the guards */
 		randval = random_schick(10) - 1;
 
-		answer = GUI_dialogbox((RealPt)ds_readd(DTP2), (RealPt)0,
+		answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), (RealPt)0,
 					get_tx2(23), 3,
 					get_tx2(randval + 38),
 					get_tx2(24),
@@ -417,13 +417,13 @@ void THO_ugdalf(void)
 
 		if (answer == 1) {
 
-			GUI_dialogbox((RealPt)ds_readd(DTP2), (RealPt)0,
+			GUI_dialogbox((Bit8u*)ds_readd(DTP2), (RealPt)0,
 					get_tx2(27), 0);
 
 		} else if (answer == 2) {
 
 			/* talk to DRAMOSCH */
-			GUI_dialogbox((RealPt)ds_readd(DTP2), (RealPt)0,
+			GUI_dialogbox((Bit8u*)ds_readd(DTP2), (RealPt)0,
 					get_tx2(28), 0);
 
 			load_in_head(14);
@@ -431,7 +431,7 @@ void THO_ugdalf(void)
 			dramosch_says(get_tx2(29));
 
 			do {
-				answer = GUI_dialogbox((RealPt)ds_readd(DTP2),
+				answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2),
 							Real2Host(host_readd(Real2Host(ds_readd(TX2_INDEX)) + 0xc0)),
 
 							get_tx2(30), 2,
@@ -516,7 +516,7 @@ void academy_analues(void)
 
 	if (hero_pos != -1) {
 
-		ds_writed(SPELLUSER, (Bit32u)((RealPt)ds_readd(HEROES) + SIZEOF_HERO * hero_pos));
+		ds_writed(SPELLUSER, (Bit32u)((Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * hero_pos));
 
 		buffer1_bak = ds_readws(TX_FILE_INDEX);
 

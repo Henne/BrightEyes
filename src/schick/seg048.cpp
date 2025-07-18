@@ -34,7 +34,7 @@ void reset_item_selector(void)
 	if (ds_readws(STATUS_PAGE_MODE) < 3) {
 
 		/* remove the previous border */
-		do_border((RealPt)ds_readd(FRAMEBUF_PTR),
+		do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
 				ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)),
 				ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)),
 				ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)) + 17,
@@ -45,7 +45,7 @@ void reset_item_selector(void)
 		ds_writeb(STATUSPAGE_SELITEM1_NO, ds_writeb(STATUSPAGE_SELITEM3_NO, 7));
 
 		/* set the new red border */
-		do_border((RealPt)ds_readd(FRAMEBUF_PTR),
+		do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
 				ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)),
 				ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)),
 				ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)) + 17,
@@ -125,7 +125,7 @@ void status_menu(signed short hero_pos)
 
 				if (hero1 == hero2) {
 					/* set the new red border */
-					do_border((RealPt)ds_readd(FRAMEBUF_PTR),
+					do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
 						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)),
 						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)),
 						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)) + 17,
@@ -154,7 +154,7 @@ void status_menu(signed short hero_pos)
 
 				if (ds_readbs(STATUSPAGE_SELITEM4_NO) != -1) {
 					/* set the new ??? border */
-					do_border((RealPt)ds_readd(FRAMEBUF_PTR),
+					do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
 						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)),
 						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)),
 						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)) + 17,
@@ -299,14 +299,14 @@ void status_menu(signed short hero_pos)
 			if (ds_readbs(STATUSPAGE_SELITEM1_NO) != ds_readbs(STATUSPAGE_SELITEM3_NO) && hero1 == hero2) {
 
 				/* set the new ??? border */
-				do_border((RealPt)ds_readd(FRAMEBUF_PTR),
+				do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
 					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM1_NO)),
 					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM1_NO)),
 					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM1_NO)) + 17,
 					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM1_NO)) + 17,
 					30);
 				/* set the new ??? border */
-				do_border((RealPt)ds_readd(FRAMEBUF_PTR),
+				do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
 					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)),
 					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)),
 					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)) + 17,
@@ -341,7 +341,7 @@ void status_menu(signed short hero_pos)
 			if (ds_readbs(STATUSPAGE_SELITEM2_NO) != ds_readbs(STATUSPAGE_SELITEM4_NO) && ds_readbs(STATUSPAGE_SELITEM4_NO) != -1) {
 
 				/* set the new ??? border */
-				do_border((RealPt)ds_readd(FRAMEBUF_PTR),
+				do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
 					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM2_NO)),
 					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM2_NO)),
 					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM2_NO)) + 17,
@@ -351,7 +351,7 @@ void status_menu(signed short hero_pos)
 				if (hero1 == hero2) {
 
 					/* set the new ??? border */
-					do_border((RealPt)ds_readd(FRAMEBUF_PTR),
+					do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
 						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)),
 						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)),
 						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)) + 17,
@@ -361,7 +361,7 @@ void status_menu(signed short hero_pos)
 
 
 				/* set the new ??? border */
-				do_border((RealPt)ds_readd(FRAMEBUF_PTR),
+				do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
 					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)),
 					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)),
 					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)) + 17,
@@ -386,7 +386,7 @@ void status_menu(signed short hero_pos)
 						}
 
 						/* set the new ??? border */
-						do_border((RealPt)ds_readd(FRAMEBUF_PTR),
+						do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
 							ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)),
 							ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)),
 							ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)) + 17,
@@ -407,7 +407,7 @@ void status_menu(signed short hero_pos)
 						}
 
 						/* set the new ??? border */
-						do_border((RealPt)ds_readd(FRAMEBUF_PTR),
+						do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
 							ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)),
 							ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)),
 							ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)) + 17,
@@ -422,7 +422,7 @@ void status_menu(signed short hero_pos)
 					ds_writeb(STATUSPAGE_SELITEM4_NO, 23);
 
 					/* set the new ??? border */
-					do_border((RealPt)ds_readd(FRAMEBUF_PTR),
+					do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
 						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)),
 						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)),
 						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)) + 17,

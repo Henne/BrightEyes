@@ -1075,7 +1075,7 @@ mark2:			   goto mark1;
 			set_palette(ptr + 0x60, 0x80, 0x40);
 		}
 
-		do_fill_rect((RealPt)ds_readd(RENDERBUF_PTR), 0, 0, 319, 199, 0);
+		do_fill_rect((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 0, 319, 199, 0);
 		ds_writew(PIC_COPY_X1, 0);
 		ds_writew(PIC_COPY_Y1, 0);
 		ds_writew(PIC_COPY_X2, 240);

@@ -113,7 +113,7 @@ void final_intro(void)
 
 	ptr1 = Real2Host(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), len), -(96 * 3)));
 
-	do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
+	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
 
 	wait_for_vsync();
 
@@ -264,7 +264,7 @@ void show_hyggelik_ani(void)
 	close(handle);
 	src = &(((Bit8u*)ds_readd(RENDERBUF_PTR))[filelen - 0xc0]);
 
-	do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
+	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
 	memcpy((void*)(char*)ds_readd(DTP2), src, 192);
 	src = (char*)ds_readd(DTP2);
 
@@ -350,7 +350,7 @@ void show_hyggelik_ani(void)
 	delay_or_keypress(100);
 
 	/* clear the screen */
-	do_fill_rect((RealPt)ds_readd(RENDERBUF_PTR), 0, 0, 319, 199, 0);
+	do_fill_rect((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 0, 319, 199, 0);
 
 	hyg_ani_2(array + 25 * 8, 100, 0);
 	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
@@ -439,7 +439,7 @@ void show_outro(void)
 	close(handle);
 
 	pal_ptr = Real2Host(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), len), - 0xc0));
-	do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
+	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
 	wait_for_vsync();
 	set_palette(pal_ptr, 0, 0x40);
 
@@ -473,7 +473,7 @@ void show_outro(void)
 	close(handle);
 
 	pal_ptr = Real2Host(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), len), - 0xc0));
-	do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
+	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
 	wait_for_vsync();
 	set_palette(pal_ptr, 0, 0x40);
 
@@ -507,7 +507,7 @@ void show_outro(void)
 	close(handle);
 
 	pal_ptr = Real2Host(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), len), - 0xc0));
-	do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
+	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
 	wait_for_vsync();
 	set_palette(pal_ptr, 0, 0x40);
 

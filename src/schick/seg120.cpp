@@ -76,7 +76,7 @@ void rabies(RealPt hero, signed short hero_pos)
 		hero_pos++;
 	}
 
-	hero = (RealPt)ds_readd(HEROES) + SIZEOF_HERO * hero_pos;
+	hero = (Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * hero_pos;
 	host_writeb(hero + HERO_SEX, sex_bak);
 
 	if (ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) {
@@ -270,12 +270,12 @@ void init_global_buffer(void)
 	ds_writed(TEXT_LTX_BUFFER, (Bit32u)F_PADD(ds_readd(RENDERBUF_PTR), 65000));
 
 	ds_writed(TEXT_LTX_INDEX, (Bit32u)F_PADD(ds_readd(TEXT_LTX_BUFFER), 30500));
-	ds_writed(TX_INDEX, (Bit32u)((RealPt)ds_readd(TEXT_LTX_INDEX) + 3360));
-	ds_writed(TX2_INDEX, (Bit32u)((RealPt)ds_readd(TEXT_LTX_INDEX) + 3960));
+	ds_writed(TX_INDEX, (Bit32u)((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 3360));
+	ds_writed(TX2_INDEX, (Bit32u)((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 3960));
 
 	ds_writed(OBJECTS_NVF_BUF, (Bit32u)(F_PADD(ds_readd(TEXT_LTX_INDEX), 4760)));
 	ds_writed(DTP2, (Bit32u)(F_PADD(ds_readd(OBJECTS_NVF_BUF), 3400)));
-	ds_writed(TEXT_INPUT_BUF, (Bit32u)((RealPt)ds_readd(DTP2) + 1500));
+	ds_writed(TEXT_INPUT_BUF, (Bit32u)((Bit8u*)ds_readd(DTP2) + 1500));
 	ds_writed(TEXT_OUTPUT_BUF, (Bit32u)(F_PADD(ds_readd(DTP2), 1524)));
 	ds_writed(BUFFER5_PTR, (Bit32u)(F_PADD(ds_readd(TEXT_OUTPUT_BUF), 300)));
 	ds_writed(BUFFER6_PTR, (Bit32u)(F_PADD(ds_readd(BUFFER5_PTR), 3880)));

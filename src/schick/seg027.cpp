@@ -102,8 +102,8 @@ void load_pp20(signed short index)
 #if !defined(__BORLANDC__)
 					(Bit8u*)ds_readd(RENDERBUF_PTR) -8 +4,
 #else
-					FP_OFF((RealPt)ds_readd(RENDERBUF_PTR) -8) +4,
-					FP_SEG((RealPt)ds_readd(RENDERBUF_PTR) -8),
+					FP_OFF((Bit8u*)ds_readd(RENDERBUF_PTR) -8) +4,
+					FP_SEG((Bit8u*)ds_readd(RENDERBUF_PTR) -8),
 #endif
 					get_readlength2(fd));
 
@@ -123,8 +123,8 @@ void load_pp20(signed short index)
 #if !defined(__BORLANDC__)
 			Real2Host(ds_readd(RENDERBUF_PTR) - 8 + 4),
 #else
-			FP_OFF((RealPt)ds_readd(RENDERBUF_PTR) - 8) + 4,
-			FP_SEG((RealPt)ds_readd(RENDERBUF_PTR) - 8),
+			FP_OFF((Bit8u*)ds_readd(RENDERBUF_PTR) - 8) + 4,
+			FP_SEG((Bit8u*)ds_readd(RENDERBUF_PTR) - 8),
 #endif
 			get_readlength2(fd));
 
@@ -156,20 +156,20 @@ RealPt load_fight_figs(signed short fig)
 
 	/* check if fig is at a known place */
 	if (fig == ds_readws(FIG_FIGURE1)) {
-		return (RealPt)ds_readd(FIG_FIGURE1_BUF);
+		return (Bit8u*)ds_readd(FIG_FIGURE1_BUF);
 	} else if (fig == ds_readws(FIG_FIGURE2)) {
-			return (RealPt)ds_readd(FIG_FIGURE2_BUF);
+			return (Bit8u*)ds_readd(FIG_FIGURE2_BUF);
 	} else if (ds_readws(FIG_FIGURE2) != -1) {
 		ds_writew(FIG_FIGURE1, ds_readw(FIG_FIGURE2));
 		memcpy(Real2Host(ds_readd(FIG_FIGURE1_BUF)),
 			Real2Host(ds_readd(FIG_FIGURE2_BUF)), 20000);
-		src = (RealPt)ds_readd(FIG_FIGURE2_BUF);
+		src = (Bit8u*)ds_readd(FIG_FIGURE2_BUF);
 		ds_writew(FIG_FIGURE2, fig);
 	} else if (ds_readws(FIG_FIGURE1) != -1) {
-		src = (RealPt)ds_readd(FIG_FIGURE2_BUF);
+		src = (Bit8u*)ds_readd(FIG_FIGURE2_BUF);
 		ds_writew(FIG_FIGURE2, fig);
 	} else {
-		src = (RealPt)ds_readd(FIG_FIGURE1_BUF);
+		src = (Bit8u*)ds_readd(FIG_FIGURE1_BUF);
 		ds_writew(FIG_FIGURE1, fig);
 	}
 
@@ -435,8 +435,8 @@ void load_ani(const signed short no)
 #if !defined(__BORLANDC__)
 			Real2Host(ds_readd(ANI_MAIN_PTR) + 4),
 #else
-			FP_OFF((RealPt)ds_readd(ANI_MAIN_PTR)) + 4,
-			FP_SEG((RealPt)ds_readd(ANI_MAIN_PTR)),
+			FP_OFF((Bit8u*)ds_readd(ANI_MAIN_PTR)) + 4,
+			FP_SEG((Bit8u*)ds_readd(ANI_MAIN_PTR)),
 #endif
 			plen);
 
@@ -715,17 +715,17 @@ void init_common_buffers(void)
 	signed short bytes;
 
 	fd = load_archive_file(ARCHIVE_FILE_POPUP_DAT);
-	bytes = read_archive_file(fd, Real2Host((RealPt)ds_readd(POPUP) - 8), 500);
+	bytes = read_archive_file(fd, Real2Host((Bit8u*)ds_readd(POPUP) - 8), 500);
 	close(fd);
 
 	/* decompress POPUP.DAT */
-	decomp_pp20(Real2Host((RealPt)ds_readd(POPUP) - 8),
+	decomp_pp20(Real2Host((Bit8u*)ds_readd(POPUP) - 8),
 		Real2Host(ds_readd(POPUP)),
 #if !defined(__BORLANDC__)
 		Real2Host(ds_readd(POPUP)) - 8 + 4,
 #else
-		FP_OFF((RealPt)ds_readd(POPUP) - 8) + 4,
-		FP_SEG((RealPt)ds_readd(POPUP) - 8),
+		FP_OFF((Bit8u*)ds_readd(POPUP) - 8) + 4,
+		FP_SEG((Bit8u*)ds_readd(POPUP) - 8),
 #endif
 		bytes);
 

@@ -303,7 +303,7 @@ void show_treasure_map(void)
 
 		set_palette(p_datseg + PALETTE_ALLBLACK2, 0, 0x20);
 
-		do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
+		do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
 
 		update_mouse_cursor();
 
@@ -463,7 +463,7 @@ signed short game_options(void)
 	ds_writew(PIC_COPY_X2, 319);
 	ds_writew(PIC_COPY_Y2, 61);
 	ds_writed(PIC_COPY_SRC, ds_readd(BUFFER9_PTR));
-	ds_writed(PIC_COPY_DST, (Bit32u)((RealPt)ds_readd(RENDERBUF_PTR) + 9600));
+	ds_writed(PIC_COPY_DST, (Bit32u)((Bit8u*)ds_readd(RENDERBUF_PTR) + 9600));
 	do_pic_copy(2);
 
 	memset((Bit8u*)ds_readd(BUFFER9_PTR), 0, 28000);
@@ -481,7 +481,7 @@ signed short game_options(void)
 		ds_writew(PIC_COPY_X2, 319);
 		ds_writew(PIC_COPY_Y2, 86);
 		ds_writed(PIC_COPY_SRC, ds_readd(BUFFER9_PTR));
-		ds_writed(PIC_COPY_DST, (Bit32u)((RealPt)ds_readd(RENDERBUF_PTR) + 22400));
+		ds_writed(PIC_COPY_DST, (Bit32u)((Bit8u*)ds_readd(RENDERBUF_PTR) + 22400));
 		do_pic_copy(2);
 	}
 
@@ -633,7 +633,7 @@ void draw_icon(signed short id, signed short x, signed short y)
 
 	close(handle);
 
-	ptr_bak = (RealPt)ds_readd(PIC_COPY_DST);
+	ptr_bak = (Bit8u*)ds_readd(PIC_COPY_DST);
 
 	ds_writed(PIC_COPY_SRC, ds_readd(ICON));
 	ds_writew(PIC_COPY_X1, x);
@@ -785,7 +785,7 @@ void leave_dungeon(void)
 	ds_writebs(CITY_AREA_LOADED, -1);
 	ds_writeb(FADING_STATE, ds_writew(REQUEST_REFRESH, 1));
 
-	do_fill_rect((RealPt)ds_readd(RENDERBUF_PTR), 0, 0, 319, 199, 0);
+	do_fill_rect((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 0, 319, 199, 0);
 
 	ds_writew(PIC_COPY_X1, 0);
 	ds_writew(PIC_COPY_Y1, 0);

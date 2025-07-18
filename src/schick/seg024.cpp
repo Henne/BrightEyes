@@ -217,7 +217,7 @@ Bit16u diary_print_entry(Bit16u line)
 	ds_writed(PIC_COPY_SRC, ds_readd(BUFFER9_PTR));
 #if !defined(__BORLANDC__)
 	ds_writed(PIC_COPY_DST,
-		(Bit32u)(((RealPt)ds_readd(RENDERBUF_PTR) + startline * 2240) + 9600));
+		(Bit32u)(((Bit8u*)ds_readd(RENDERBUF_PTR) + startline * 2240) + 9600));
 #else
 	/* TODO: ugly hack */
 	/*	this calculation of the address of

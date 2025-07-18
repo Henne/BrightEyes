@@ -329,7 +329,7 @@ signed short prepare_midi_playback(signed short sequence)
 
 	if ((ds_writews(SAMPLE_AD_HANDLE, load_archive_file(ARCHIVE_FILE_SAMPLE_AD))) != -1) {
 
-		if ((ds_writews(AIL_SEQUENCE, AIL_register_sequence(ds_readw(AIL_MUSIC_DRIVER_ID), (RealPt)ds_readd(AIL_MIDI_BUFFER), sequence, (RealPt)ds_readd(AIL_STATE_TABLE), 0))) != -1) {
+		if ((ds_writews(AIL_SEQUENCE, AIL_register_sequence(ds_readw(AIL_MUSIC_DRIVER_ID), (Bit8u*)ds_readd(AIL_MIDI_BUFFER), sequence, (Bit8u*)ds_readd(AIL_STATE_TABLE), 0))) != -1) {
 
 			while ( (l_si = AIL_timbre_request(ds_readw(AIL_MUSIC_DRIVER_ID), ds_readw(AIL_SEQUENCE))) != (unsigned short)-1)
 			{
@@ -424,12 +424,12 @@ signed short load_music_driver(RealPt fname, signed short type, signed short por
 #if defined(__BORLANDC__)
 	if (port &&
 		(((Bit8u*)ds_writed(AIL_MUSIC_DRIVER_BUF, (Bit32u)read_music_driver(fname)))) &&
-		((ds_writew(AIL_MUSIC_DRIVER_ID, AIL_register_driver((RealPt)ds_readd(AIL_MUSIC_DRIVER_BUF)))) != 0xffff))
+		((ds_writew(AIL_MUSIC_DRIVER_ID, AIL_register_driver((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_BUF)))) != 0xffff))
 	{
 
 		ds_writed(AIL_MUSIC_DRIVER_DESCR, (Bit32u)AIL_describe_driver(ds_readw(AIL_MUSIC_DRIVER_ID)));
 
-		if (host_readws(Real2Host((RealPt)ds_readd(AIL_MUSIC_DRIVER_DESCR)) + 2) == type)
+		if (host_readws(Real2Host((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR)) + 2) == type)
 		{
 			if (port == -1) {
 				port = host_readws(Real2Host(ds_readd(AIL_MUSIC_DRIVER_DESCR)) + 0xc);
@@ -453,7 +453,7 @@ signed short load_music_driver(RealPt fname, signed short type, signed short por
 					if (ds_readw(AIL_TIMBRE_CACHE_SIZE) != 0) {
 						ds_writed(AIL_TIMBRE_CACHE, (Bit32u)schick_alloc(ds_readw(AIL_TIMBRE_CACHE_SIZE)));
 						AIL_define_timbre_cache(ds_readw(AIL_MUSIC_DRIVER_ID),
-								(RealPt)ds_readd(AIL_TIMBRE_CACHE),
+								(Bit8u*)ds_readd(AIL_TIMBRE_CACHE),
 								ds_readw(AIL_TIMBRE_CACHE_SIZE));
 					}
 				}
@@ -638,7 +638,7 @@ signed short read_new_voc_file(signed short index)
 
 	if (read_voc_file(index)) {
 
-		AIL_format_VOC_file(ds_readw(AIL_DIGI_DRIVER_ID), (RealPt)ds_readd(AIL_VOC_BUFFER), -1);
+		AIL_format_VOC_file(ds_readw(AIL_DIGI_DRIVER_ID), (Bit8u*)ds_readd(AIL_VOC_BUFFER), -1);
 		return 1;
 	}
 #endif
@@ -666,7 +666,7 @@ void SND_play_voc(signed short index)
 
 		AIL_stop_digital_playback(ds_readw(AIL_DIGI_DRIVER_ID));
 		read_new_voc_file(index);
-		AIL_play_VOC_file(ds_readw(AIL_DIGI_DRIVER_ID), (RealPt)ds_readd(AIL_VOC_BUFFER), -1);
+		AIL_play_VOC_file(ds_readw(AIL_DIGI_DRIVER_ID), (Bit8u*)ds_readd(AIL_VOC_BUFFER), -1);
 		AIL_start_digital_playback(ds_readw(AIL_DIGI_DRIVER_ID));
 	}
 #endif
@@ -701,12 +701,12 @@ signed short load_digi_driver(RealPt fname, signed short type, signed short io, 
 #if defined(__BORLANDC__)
 	if (io &&
 		((Bit8u*)ds_writed(AIL_DIGI_DRIVER_BUF, (Bit32u)read_digi_driver(fname))) &&
-		((ds_writew(AIL_DIGI_DRIVER_ID, AIL_register_driver((RealPt)ds_readd(AIL_DIGI_DRIVER_BUF)))) != 0xffff))
+		((ds_writew(AIL_DIGI_DRIVER_ID, AIL_register_driver((Bit8u*)ds_readd(AIL_DIGI_DRIVER_BUF)))) != 0xffff))
 	{
 
 		ds_writed(AIL_DIGI_DRIVER_DESCR, (Bit32u)AIL_describe_driver(ds_readw(AIL_DIGI_DRIVER_ID)));
 
-		if (host_readws(Real2Host((RealPt)ds_readd(AIL_DIGI_DRIVER_DESCR)) + 2) == type) {
+		if (host_readws(Real2Host((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR)) + 2) == type) {
 
 			if (io == -1) {
 				io = host_readws(Real2Host(ds_readd(AIL_DIGI_DRIVER_DESCR)) + 0xc);
@@ -3191,9 +3191,9 @@ void seg002_37c4(void)
 	RealPt p3;
 	struct dummy a = *(struct dummy*)(p_datseg + PIC_COPY_DST);
 
-	p1 = (RealPt)ds_readd(BUFFER6_PTR) + 2000;
-	p2 = (RealPt)ds_readd(BUFFER6_PTR) + 2100;
-	p3 = (RealPt)ds_readd(BUFFER6_PTR) + 1000;
+	p1 = (Bit8u*)ds_readd(BUFFER6_PTR) + 2000;
+	p2 = (Bit8u*)ds_readd(BUFFER6_PTR) + 2100;
+	p3 = (Bit8u*)ds_readd(BUFFER6_PTR) + 1000;
 
 	if ((ds_readws(TRV_MENU_SELECTION) != 0) && (ds_readb(SHOW_TRAVEL_MAP))) {
 
@@ -3657,7 +3657,7 @@ void dec_splash(void)
 			/* check if hero is dead */
 			!hero_dead(get_hero(i))
 		) {
-			restore_rect((RealPt)ds_readd(FRAMEBUF_PTR), get_hero(i) + HERO_PORTRAIT, ds_readw(HERO_PIC_POSX + i * 2), 157, 32, 32);
+			restore_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), get_hero(i) + HERO_PORTRAIT, ds_readw(HERO_PIC_POSX + i * 2), 157, 32, 32);
 		}
 	}
 }
@@ -3676,7 +3676,7 @@ void draw_splash(signed short hero_pos, signed short type)
 
 		Bit8u *splash = (type == 0) ? Real2Host(ds_readd(SPLASH_LE)) : Real2Host(ds_readd(SPLASH_AE));
 
-		restore_rect_rle((RealPt)ds_readd(FRAMEBUF_PTR), splash, ds_readw(HERO_PIC_POSX + 2 * hero_pos), 157, 32, 32, 2);
+		restore_rect_rle((Bit8u*)ds_readd(FRAMEBUF_PTR), splash, ds_readw(HERO_PIC_POSX + 2 * hero_pos), 157, 32, 32, 2);
 
 		/* how long the splash should be displayed */
 		ds_writeb(HERO_SPLASH_TIMER + hero_pos, 10);
@@ -5336,7 +5336,7 @@ void sub_group_le(signed short le)
 RealPt get_first_hero_available_in_group(void)
 {
 	signed short i;
-	RealPt hero_i = (RealPt)ds_readd(HEROES);
+	RealPt hero_i = (Bit8u*)ds_readd(HEROES);
 
 	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 
@@ -5364,7 +5364,7 @@ RealPt get_second_hero_available_in_group(void)
 	signed short tmp;
 	RealPt hero_i;
 
-	hero_i = (RealPt)ds_readd(HEROES);
+	hero_i = (Bit8u*)ds_readd(HEROES);
 
 	for (i = tmp = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 		/* Check class, group and check_hero() */

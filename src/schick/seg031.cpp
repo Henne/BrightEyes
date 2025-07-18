@@ -167,7 +167,7 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 				}
 			}
 
-			answer = GUI_dialogbox((RealPt)ds_readd(DTP2), dialog_title, (Bit8u*)dst, optioncount,
+			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), dialog_title, (Bit8u*)dst, optioncount,
 					get_tx(options[0].txt),
 					get_tx(options[1].txt),
 					get_tx(options[2].txt));

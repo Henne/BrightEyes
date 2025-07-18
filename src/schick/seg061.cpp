@@ -75,8 +75,8 @@ void do_temple(void)
 			ds_writew(PIC_COPY_X1, ds_writew(PIC_COPY_Y1, 0));
 			ds_writew(PIC_COPY_X2, 40);
 			ds_writew(PIC_COPY_Y2, 22);
-			ds_writed(PIC_COPY_DST, (Bit32u)((RealPt)ds_readd(FRAMEBUF_PTR) + 28259));
-			ds_writed(PIC_COPY_SRC, (Bit32u)((RealPt)ds_readd(BUFFER8_PTR) + 7000));
+			ds_writed(PIC_COPY_DST, (Bit32u)((Bit8u*)ds_readd(FRAMEBUF_PTR) + 28259));
+			ds_writed(PIC_COPY_SRC, (Bit32u)((Bit8u*)ds_readd(BUFFER8_PTR) + 7000));
 
 			update_mouse_cursor();
 			do_pic_copy(0);
@@ -242,7 +242,7 @@ void char_add(signed short temple_id)
 	RealPt ptr;
 	Bit8u *hero;
 
-	ptr = (RealPt)ds_readd(RENDERBUF_PTR) + 50000;
+	ptr = (Bit8u*)ds_readd(RENDERBUF_PTR) + 50000;
 	l_di = copy_chr_names(Real2Host(ptr), temple_id);
 
 	if (ds_readbs(TOTAL_HERO_COUNTER) == 7 ||
@@ -271,7 +271,7 @@ void char_add(signed short temple_id)
 							prepare_chr_name((char*)ds_readd(DTP2),
 										(char*)(Real2Host(ptr) + 32 * l_si));
 
-							if (read_chr_temp((RealPt)ds_readd(DTP2), i, ds_readbs(CURRENT_GROUP))) {
+							if (read_chr_temp((Bit8u*)ds_readd(DTP2), i, ds_readbs(CURRENT_GROUP))) {
 								inc_ds_bs_post(TOTAL_HERO_COUNTER);
 								inc_ds_bs_post(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP));
 								host_writebs(hero + HERO_GROUP_POS, i + 1);
@@ -356,7 +356,7 @@ signed short char_erase(void)
 	if (ds_readbs(RENDERBUF_IN_USE_FLAG) != 0) {
 		ptr = F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 30000);
 	} else {
-		ptr = (RealPt)ds_readd(RENDERBUF_PTR) + 50000;
+		ptr = (Bit8u*)ds_readd(RENDERBUF_PTR) + 50000;
 	}
 
 	l_di = copy_chr_names(Real2Host(ptr), -1);
@@ -506,7 +506,7 @@ void miracle_modify(unsigned short offset, Bit32s timer_value, signed short mod)
 	signed short i;
 	signed short slot;
 	HugePt ptr;
-	RealPt hero = (RealPt)ds_readd(HEROES);
+	RealPt hero = (Bit8u*)ds_readd(HEROES);
 
 	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 

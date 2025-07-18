@@ -251,7 +251,7 @@ void do_harbor(void)
 				load_in_head(11);
 
 				do {
-					answer = GUI_dialogbox((RealPt)ds_readd(DTP2), get_tx(4),
+					answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), get_tx(4),
 									get_tx(0), 3,
 									get_tx(1), /* Ankommende Schiffe erfragen */
 									get_tx(2), /* Saemtliche Routen erfragen */

@@ -381,7 +381,7 @@ void seg092_06b4(signed short a1)
 	RealPt chest_ptr;
 	Bit8u *ptr;
 
-	chest_ptr = (RealPt)ds_readd(DNG_SPECIALCHEST_INDEX + 4 * ds_readbs(DUNGEON_INDEX));
+	chest_ptr = (Bit8u*)ds_readd(DNG_SPECIALCHEST_INDEX + 4 * ds_readbs(DUNGEON_INDEX));
 	ptr = p_datseg + DNG_MAP;
 	ds_writew(GET_EXTRA_LOOT, 0);
 	x = ds_readws(X_TARGET);

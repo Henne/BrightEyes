@@ -358,7 +358,7 @@ signed short menu_enter_delete(RealPt ptr, signed short entries, signed short mo
 		i = i_max;
 		if (entries > 10) {
 			ds_writed(RADIO_NAME_LIST + 4 * i,
-				host_readd(Real2Host((RealPt)ds_readd(TEXT_LTX_INDEX) + 0x48c)));
+				host_readd(Real2Host((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x48c)));
 			i++;
 		}
 
@@ -426,7 +426,7 @@ signed short select_hero_from_group(Bit8u *title)
 
 	for (i = 0; i <= 6; i++) {
 
-		hero = (RealPt)ds_readd(HEROES) + i * SIZEOF_HERO;
+		hero = (Bit8u*)ds_readd(HEROES) + i * SIZEOF_HERO;
 
 		if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 			host_readb(hero + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP) &&
@@ -501,7 +501,7 @@ signed short select_hero_ok(Bit8u *title)
 	ds_writew(TEXTBOX_WIDTH, 3);
 	cnt = 0;
 
-	for (hero = (RealPt)ds_readd(HEROES), i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+	for (hero = (Bit8u*)ds_readd(HEROES), i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 		if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 			host_readb(hero + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP) &&
@@ -579,7 +579,7 @@ signed short select_hero_ok_forced(Bit8u *title)
 	ds_writew(TEXTBOX_WIDTH, 3);
 	cnt = 0;
 
-	for (hero = (RealPt)ds_readd(HEROES), i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+	for (hero = (Bit8u*)ds_readd(HEROES), i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 		if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 			host_readb(hero + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP) &&

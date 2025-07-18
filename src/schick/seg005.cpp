@@ -124,7 +124,7 @@ void FIG_set_star_color(Bit8u *ptr, unsigned short count, unsigned char color)
 RealPt FIG_name_3rd_case(unsigned short type, volatile unsigned short pos)
 {
 	if (type == 2) {
-		return (RealPt)ds_readd(HEROES) + pos * SIZEOF_HERO + HERO_NAME2;
+		return (Bit8u*)ds_readd(HEROES) + pos * SIZEOF_HERO + HERO_NAME2;
 	} else {
 		return GUI_names_grammar(3, pos, 1);
 	}
@@ -142,7 +142,7 @@ RealPt FIG_name_4th_case(unsigned short type, volatile unsigned short pos)
 {
 
 	if (type == 2)
-		return (RealPt)ds_readd(HEROES) + pos * SIZEOF_HERO + HERO_NAME2;
+		return (Bit8u*)ds_readd(HEROES) + pos * SIZEOF_HERO + HERO_NAME2;
 	else
 		return GUI_names_grammar(2, pos, 1);
 }
@@ -159,7 +159,7 @@ RealPt FIG_name_1st_case(unsigned short type, volatile unsigned short pos)
 {
 
 	if (type == 2)
-		return (RealPt)ds_readd(HEROES) + pos * SIZEOF_HERO + HERO_NAME2;
+		return (Bit8u*)ds_readd(HEROES) + pos * SIZEOF_HERO + HERO_NAME2;
 	else
 		return GUI_names_grammar(0, pos, 1);
 }
@@ -198,7 +198,7 @@ unsigned short fight_printer(void)
 		f_action = ds_readw(FIG_MSG_DATA + ds_readbs(FIG_STAR_COUNTER) * 4);
 		if (f_action != 0) {
 
-			gfx_pos_bak = (RealPt)ds_readd(PRINT_STRING_BUFFER);
+			gfx_pos_bak = (Bit8u*)ds_readd(PRINT_STRING_BUFFER);
 
 			ds_writed(PRINT_STRING_BUFFER, ds_readd(RENDERBUF_PTR));
 			get_textcolor(&fg_bak, &bg_bak);
@@ -212,7 +212,7 @@ unsigned short fight_printer(void)
 			ds_writew(PIC_COPY_Y2, 198);
 			ds_writed(PIC_COPY_SRC, ds_readd(FIG_STAR_GFX));
 			ds_writed(PIC_COPY_DST, ds_readd(RENDERBUF_PTR));
-			gfx_dst_bak = (RealPt)ds_readd(PIC_COPY_DST);
+			gfx_dst_bak = (Bit8u*)ds_readd(PIC_COPY_DST);
 			do_pic_copy(2);
 
 			ds_writed(PIC_COPY_DST, (Bit32u)gfx_dst_bak);
@@ -356,7 +356,7 @@ void draw_fight_screen(Bit16u val)
 
 	for (i = 1; i < 8; i++) {
 		/* copy a pointer to the next position */
-		ds_writed(FIG_GFXBUFFERS + i * 4, (Bit32u)F_PADD((RealPt)ds_readd((FIG_GFXBUFFERS - 4) + i * 4), 0x508));
+		ds_writed(FIG_GFXBUFFERS + i * 4, (Bit32u)F_PADD((Bit8u*)ds_readd((FIG_GFXBUFFERS - 4) + i * 4), 0x508));
 		ds_writew(FIG_ANI_STATE + i * 2, -1);
 	}
 
@@ -464,7 +464,7 @@ void draw_fight_screen(Bit16u val)
 
 				if (host_readbs(sheet + 1 + ds_readw(FIG_ANI_STATE +  host_readbs(list_i + FIGHTER_SHEET) * 2) * 3) == -1) {
 
-					p_figure_gfx = (RealPt)ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_SHEET) * 4);
+					p_figure_gfx = (Bit8u*)ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_SHEET) * 4);
 					ds_writew(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2, -1);
 					host_writeb(list_i + FIGHTER_SHEET, host_writebs(list_i + FIGHTER_WSHEET, -1));
 
@@ -781,7 +781,7 @@ void draw_fight_screen(Bit16u val)
 
 						if (host_readbs(sheet + 1 + (ds_readw(FIG_ANI_STATE +  host_readbs(list_i + FIGHTER_SHEET) * 2) * 3)) == -1) {
 
-							p_figure_gfx = (RealPt)ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_SHEET) * 4);
+							p_figure_gfx = (Bit8u*)ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_SHEET) * 4);
 							ds_writew(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2, -1);
 							host_writeb(list_i + FIGHTER_SHEET, host_writebs(list_i + FIGHTER_WSHEET, -1));
 
@@ -826,7 +826,7 @@ void draw_fight_screen(Bit16u val)
 									current_x1 = obj_x;
 									current_y1 = obj_y;
 
-									p_weapon_gfx = (RealPt)ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_WSHEET) * 4);
+									p_weapon_gfx = (Bit8u*)ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_WSHEET) * 4);
 
 									if (host_readbs(p_weapon_anisheet + 1 + 3 * (ds_readws(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2))) != -5) {
 										nvf.dst = Real2Host(ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_WSHEET) * 4));
@@ -849,7 +849,7 @@ void draw_fight_screen(Bit16u val)
 						}
 
 						if (host_readbs(list_i + FIGHTER_SHEET) != -1) {
-							p_figure_gfx = (RealPt)ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_SHEET) * 4);
+							p_figure_gfx = (Bit8u*)ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_SHEET) * 4);
 						}
 					}
 				}

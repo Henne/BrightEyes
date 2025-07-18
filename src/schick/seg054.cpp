@@ -42,7 +42,7 @@ RealPt get_first_brewing_hero(void)
 	RealPt hero;
 	signed short i;
 
-	hero = (RealPt)ds_readd(HEROES);
+	hero = (Bit8u*)ds_readd(HEROES);
 # ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 11: If NPC Curian got separated from the group for brewing a recipe at an inn,
 	 * he is stuck in the inn. When the group enters the inn where they left him, no dialog appears.
@@ -241,7 +241,7 @@ void do_inn(void)
 			do_alchemy(hero, host_readbs(hero + HERO_RECIPE_ID), 0);
 		}
 	} else {
-		hero = (RealPt)ds_readd(HEROES);
+		hero = (Bit8u*)ds_readd(HEROES);
 		for (i = 0; i < 7; i++, hero += SIZEOF_HERO) {
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 					host_readbs(hero + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP) &&
@@ -521,7 +521,7 @@ void do_inn(void)
 
 				if (answer != -1) {
 
-					hero = (RealPt)ds_readd(HEROES) + SIZEOF_HERO * answer;
+					hero = (Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * answer;
 
 					if (host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH) {
 
@@ -561,7 +561,7 @@ void do_inn(void)
 
 					ds_writeb(FOOD_MOD, 0);
 
-					hero = (RealPt)ds_readd(HEROES);
+					hero = (Bit8u*)ds_readd(HEROES);
 					for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 						if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&

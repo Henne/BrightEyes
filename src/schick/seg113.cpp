@@ -137,7 +137,7 @@ void tevent_084(void)
 
 		do {
 
-			answer = GUI_dialogbox((RealPt)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
 						get_tx2(97), 2,
 						get_tx2(98),
 						get_tx2(99));
@@ -193,7 +193,7 @@ void tevent_086(void)
 	load_in_head(58);
 
 	do {
-		answer = GUI_dialogbox((RealPt)ds_readd(DTP2), NULL,
+		answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
 					get_tx2(100), 2,
 					get_tx2(101), get_tx2(102));
 	} while (answer == -1);
@@ -676,7 +676,7 @@ void tevent_104(void)
 			/* all heroes have failed the test */
 
 			do {
-				l_si = GUI_dialogbox((RealPt)ds_readd(DTP2), NULL,
+				l_si = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
 							get_tx2(56), 2,
 							get_tx2(57), get_tx2(58));
 			} while (l_si == -1);
@@ -709,7 +709,7 @@ void tevent_104(void)
 			do {
 
 				do {
-					l_si = GUI_dialogbox((RealPt)ds_readd(DTP2), NULL,
+					l_si = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
 								(nr_heroes == 0 ? get_tx2(59) : get_tx2(87)), 3,
 								get_tx2(60), get_tx2(61), get_tx2(62));
 				} while (l_si == -1);
@@ -872,7 +872,7 @@ void tevent_108(void)
 		GUI_dialog_na(53, get_tx2(72));
 
 		do {
-			answer = GUI_dialogbox((RealPt)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
 						get_tx2(73), 2,
 						get_tx2(74), get_tx2(75));
 		} while (answer == -1);
@@ -886,7 +886,7 @@ void tevent_108(void)
 		load_in_head(53);
 
 		do {
-			answer = GUI_dialogbox((RealPt)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
 						get_tx2(76), 2,
 						get_tx2(77), get_tx2(78));
 		} while (answer == -1);

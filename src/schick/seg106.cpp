@@ -770,41 +770,41 @@ void equip_belt_ani(void)
 
 	set_palette(p_pal, 0x80, 0x20);
 
-	do_border((RealPt)ds_readd(FRAMEBUF_PTR), 209, 79, 215, 89, 9);
+	do_border((Bit8u*)ds_readd(FRAMEBUF_PTR), 209, 79, 215, 89, 9);
 
-	do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 209, 79, 215, 89, 0);
-
-	wait_for_vsync();
-	wait_for_vsync();
-	wait_for_vsync();
-
-	do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 189, 69, 235, 99, 0);
-
-	do_border((RealPt)ds_readd(FRAMEBUF_PTR), 189, 69, 235, 99, 9);
+	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 209, 79, 215, 89, 0);
 
 	wait_for_vsync();
 	wait_for_vsync();
 	wait_for_vsync();
 
-	do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 169, 59, 255, 109, 0);
+	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 189, 69, 235, 99, 0);
 
-	do_border((RealPt)ds_readd(FRAMEBUF_PTR), 169, 59, 255, 109, 9);
-
-	wait_for_vsync();
-	wait_for_vsync();
-	wait_for_vsync();
-
-	do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 164, 54, 260, 114, 0);
-
-	do_border((RealPt)ds_readd(FRAMEBUF_PTR), 164, 54, 260, 114, 9);
+	do_border((Bit8u*)ds_readd(FRAMEBUF_PTR), 189, 69, 235, 99, 9);
 
 	wait_for_vsync();
 	wait_for_vsync();
 	wait_for_vsync();
 
-	do_fill_rect((RealPt)ds_readd(FRAMEBUF_PTR), 159, 49, 263, 117, 0);
+	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 169, 59, 255, 109, 0);
 
-	do_border((RealPt)ds_readd(FRAMEBUF_PTR), 159, 49, 263, 117, 9);
+	do_border((Bit8u*)ds_readd(FRAMEBUF_PTR), 169, 59, 255, 109, 9);
+
+	wait_for_vsync();
+	wait_for_vsync();
+	wait_for_vsync();
+
+	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 164, 54, 260, 114, 0);
+
+	do_border((Bit8u*)ds_readd(FRAMEBUF_PTR), 164, 54, 260, 114, 9);
+
+	wait_for_vsync();
+	wait_for_vsync();
+	wait_for_vsync();
+
+	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 159, 49, 263, 117, 0);
+
+	do_border((Bit8u*)ds_readd(FRAMEBUF_PTR), 159, 49, 263, 117, 9);
 
 	for (i = 0; i < 12; i++) {
 

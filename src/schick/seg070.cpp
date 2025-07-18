@@ -37,7 +37,7 @@ void PHX_fuhrhaus(void)
 	load_in_head(42);
 
 	do {
-		answer = GUI_dialogbox((RealPt)ds_readd(DTP2), NULL,
+		answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
 				get_tx2(0), 3,
 				get_tx2(1), get_tx2(2), get_tx2(3));
 
@@ -50,7 +50,7 @@ void PHX_fuhrhaus(void)
 	} else if (answer == 2) {
 
 		do {
-			answer = GUI_dialogbox((RealPt)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
 					get_tx2(5), 3,
 					get_tx2(6), get_tx2(7), get_tx2(8));
 

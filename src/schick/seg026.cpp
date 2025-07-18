@@ -44,19 +44,19 @@ void init_text(void)
 	len = (signed short)read_archive_file(handle, Real2Host(ds_readd(TEXT_LTX_BUFFER)), 64000);
 	close(handle);
 
-	split_textbuffer(Real2Host(ds_readd(TEXT_LTX_INDEX)), (RealPt)ds_readd(TEXT_LTX_BUFFER), len);
+	split_textbuffer(Real2Host(ds_readd(TEXT_LTX_INDEX)), (Bit8u*)ds_readd(TEXT_LTX_BUFFER), len);
 
 	handle = load_archive_file(ARCHIVE_FILE_ITEMNAME);
 	len = (signed short)read_archive_file(handle, Real2Host(ds_readd(BUFFER5_PTR)), 5000);
 	close(handle);
 
-	split_textbuffer(Real2Host(ds_readd(ITEMSNAME)), (RealPt)ds_readd(BUFFER5_PTR), len);
+	split_textbuffer(Real2Host(ds_readd(ITEMSNAME)), (Bit8u*)ds_readd(BUFFER5_PTR), len);
 
 	handle = load_archive_file(ARCHIVE_FILE_MONNAMES);
 	len = (signed short)read_archive_file(handle, Real2Host(ds_readd(MONNAMES_BUFFER)), 5000);
 	close(handle);
 
-	split_textbuffer(Real2Host(ds_readd(MONNAMES_INDEX)), (RealPt)ds_readd(MONNAMES_BUFFER), len);
+	split_textbuffer(Real2Host(ds_readd(MONNAMES_INDEX)), (Bit8u*)ds_readd(MONNAMES_BUFFER), len);
 
 }
 
@@ -74,7 +74,7 @@ void load_tx(signed short index)
 
 	close(archive_file_handle);
 
-	split_textbuffer(Real2Host(ds_readd(TX_INDEX)), (RealPt)ds_readd(BUFFER7_PTR), archive_file_len);
+	split_textbuffer(Real2Host(ds_readd(TX_INDEX)), (Bit8u*)ds_readd(BUFFER7_PTR), archive_file_len);
 
 	ds_writew(TX_FILE_INDEX, index);
 }
@@ -106,7 +106,7 @@ void load_ltx(unsigned short index)
 	close(fd);
 
 	split_textbuffer((Bit8u*)ds_readd(BUFFER9_PTR3),
-		F_PADD((RealPt)ds_readd(BUFFER9_PTR3), 1000L), len);
+		F_PADD((Bit8u*)ds_readd(BUFFER9_PTR3), 1000L), len);
 }
 
 void split_textbuffer(Bit8u *dst, RealPt src, Bit32u len)
@@ -322,12 +322,12 @@ signed short load_game_state(void)
 		}
 
 		/* clear the heroes */
-		hero_i = (RealPt)ds_readd(HEROES);
+		hero_i = (Bit8u*)ds_readd(HEROES);
 		for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 			memset(Real2Host(hero_i), 0, SIZEOF_HERO);
 		}
 
-		hero_i = (RealPt)ds_readd(RENDERBUF_PTR);
+		hero_i = (Bit8u*)ds_readd(RENDERBUF_PTR);
 
 		do {
 			l3 = _read(handle_gs, (Bit8u*)hero_i, SIZEOF_HERO);

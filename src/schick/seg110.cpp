@@ -203,7 +203,7 @@ void tevent_014(void)
 		load_in_head(55);
 
 		do {
-			answer = GUI_dialogbox((RealPt)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
 						get_tx2(43), 2,
 						get_tx2(44),
 						get_tx2(45));
@@ -449,7 +449,7 @@ void tevent_031(void)
 		load_in_head(49);
 
 		do {
-			answer = GUI_dialogbox((RealPt)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
 						get_tx2(0), 2,
 						get_tx2(1),
 						get_tx2(2));
@@ -498,7 +498,7 @@ void tevent_033(void)
 	load_in_head(9);
 
 	do {
-		answer = GUI_dialogbox((RealPt)ds_readd(DTP2), NULL,
+		answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
 					get_tx2(3), 3,
 					get_tx2(4),
 					get_tx2(5),
@@ -660,7 +660,7 @@ void tevent_044(void)
 			(char*)Real2Host(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
 		do {
-			answer = GUI_dialogbox((RealPt)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
 						(char*)ds_readd(DTP2) + 0x400, 2,
 						get_tx2(34),
 						get_tx2(35));
@@ -688,7 +688,7 @@ void tevent_045(void)
 		load_in_head(11);
 
 		do {
-			answer = GUI_dialogbox((RealPt)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
 						get_tx2(36), 3,
 						get_tx2(37),
 						get_tx2(38),

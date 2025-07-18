@@ -665,7 +665,7 @@ void tevent_002(void)
 
 	/* show dialogbox */
 	do {
-		answer = GUI_dialogbox((RealPt)ds_readd(DTP2),
+		answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2),
 				NULL,
 				get_tx2(0),
 				3,
@@ -862,7 +862,7 @@ void TRV_barrier(signed short text_start)
 	do {
 
 		do {
-			answer = GUI_dialogbox((RealPt)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((Bit8u*)ds_readd(DTP2), NULL,
 						get_tx2(text_start + 0), 2,
 						get_tx2(text_start + 1),
 						get_tx2(text_start + 2));
