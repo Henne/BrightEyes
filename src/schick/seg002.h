@@ -58,7 +58,7 @@ signed short load_regular_file(Bit16u);
 signed short load_archive_file(Bit16u);
 signed short open_temp_file(unsigned short);
 void copy_from_archive_to_temp(unsigned short, char*);
-void copy_file_to_temp(RealPt, char*);
+void copy_file_to_temp(char*, char*);
 Bit32s process_nvf(struct nvf_desc *);
 #if defined(__BORLANDC__)
 void interrupt mouse_isr(void);

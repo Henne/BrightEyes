@@ -117,6 +117,8 @@ static inline unsigned short cast_u16(unsigned char v)
 
 #define INTCAST RealPt
 
+#define _creat creat
+
 /* comment this out to have the original, but buggy behaviour */
 #define M302de_ORIGINAL_BUGFIX
 
@@ -170,6 +172,7 @@ static inline void D1_GFX(...) { }
 #if _MSC_VER >= 1300
 	#define __func__ __FUNCTION__
 #endif
+
 
 /**
  * struct_copy() - wrapper for struct assignments
