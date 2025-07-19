@@ -69,8 +69,15 @@ jobs:
           cmake --build .
           test -f ngen_GNU.exe
 
+      - name: Package Windows artifacts
+        run: |
+          pwsh -command "
+            \$buildDir = '${{ github.workspace }}\\src\\gen\\build';
+            Compress-Archive -Path \"\$buildDir\\ngen_GNU.exe\" , \"\$buildDir\\*.dll\" -DestinationPath \"\$buildDir\\windows-release.zip\""
+        shell: bash
+
       - name: Upload Windows binary
         uses: actions/upload-artifact@v4
         with:
           name: bright-eyes-windows
-          path: src/gen/build/ngen_GNU.exe
+          path: src/gen/build/windows-release.zip
