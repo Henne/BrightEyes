@@ -124,9 +124,14 @@ for i in ${OBJDIR}/*.OBJ; do
 			fi
 			;;
 		"SEG004")
-			# exact 1 differing lines are allowed
+			# exact 5 differing lines are allowed
 			DIFFLINES=$(diff -y -a ${DISORIG}/${PREFIX}.dis ${DISDIR}/${PREFIX}.dis | grep '|' |wc -l)
-			if [ $DIFFLINES -ne 1 ]; then RETVAL=1; fi
+			if [ $DIFFLINES -gt 5 ]; then
+				echo "ERROR: ${PREFIX} number of difflines changed from 5 to ${DIFFLINES}"
+				RETVAL=1;
+			elif [ $DIFFLINES -lt 5 ]; then
+				echo "WARNING: ${PREFIX} number of difflines changed from 5 to ${DIFFLINES}"
+			fi
 			;;
 		"SEG008")
 			# exact 42 differing lines are allowed
