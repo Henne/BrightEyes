@@ -37,6 +37,9 @@
 #define CDA_DATASEG (0x1238)
 #define cda_readb(o) (*(Bit8u*)(MK_FP(CDA_DATASEG, (o))))
 
+/* static prototpyes */
+static void CD_audio_stop_hsg(void);
+
 #if !defined(__BORLANDC__)
 namespace M302de {
 #endif
@@ -90,7 +93,7 @@ static unsigned short CD_get_first_drive(void)
 }
 
 /* Borlandified and identical */
-unsigned short CD_set_drive_no(void)
+static unsigned short CD_set_drive_no(void)
 {
 
 	if (CD_has_drives() == 0)
@@ -135,7 +138,7 @@ static void CD_unused1(void)
  * \todo    produces a compiler warning and is a bit hacky
  */
 /* Borlandified and identical */
-Bit32s CD_get_tod(void)
+static Bit32s CD_get_tod(void)
 {
 	asm {
 		mov ah, 0x0
@@ -148,7 +151,7 @@ leave_tod:
 }
 
 /* Borlandified and nearly identical */
-void seg001_00c1(signed short track_no)
+static void seg001_00c1(signed short track_no)
 {
 	Bit32s track_start;
 	Bit32s track_end;
@@ -211,16 +214,15 @@ void seg001_02c4(void)
 }
 
 /* Borlandified and identical */
-signed short CD_bioskey(signed short cmd)
+int CD_bioskey(const int cmd)
 {
 	seg001_02c4();
 	return bioskey(cmd);
 }
 
 /* CD_audio_stop_hsg() - stop audio playback in HSG format */
-/* static */
 /* Borlandified and identical */
-void CD_audio_stop_hsg(void)
+static void CD_audio_stop_hsg(void)
 {
 
 	if (ds_readw(CD_INIT_SUCCESSFUL) == 0)
@@ -293,7 +295,7 @@ void CD_audio_play(void)
 }
 
 /* Borlandified and nearly identical */
-void CD_0432(void)
+static void CD_0432(void)
 {
 	signed short track_no;
 
@@ -326,7 +328,7 @@ struct dummy15 {
 };
 
 /* Borlandified and identical */
-void CD_set_track(signed short index)
+void CD_set_track(const int index)
 {
 	signed short i;
 #if defined(__BORLANDC__)
@@ -377,7 +379,7 @@ void CD_set_track(signed short index)
 }
 
 /* Borlandified and identical */
-signed short CD_read_exe(char *path)
+static signed short CD_read_exe(char *path)
 {
 	int handle;
 	signed short buffer;
@@ -400,7 +402,7 @@ signed short CD_read_exe(char *path)
 }
 
 /* Borlandified and identical */
-void CD_insert_msg(void)
+static void CD_insert_msg(void)
 {
 	signed short answer;
 	char str[160];
@@ -424,7 +426,7 @@ void CD_insert_msg(void)
 }
 
 /* Borlandified and identical */
-signed short CD_harderr_handler(void)
+static signed short CD_harderr_handler(void)
 {
 	if (ds_readw(CD_CHECK_ERR_COUNTDOWN) == 0)
 	{
@@ -461,7 +463,7 @@ void CD_check(void)
 }
 
 /* Borlandified and identical */
-signed short CD_init(void)
+int CD_init(void)
 {
 	char str[80];
 
