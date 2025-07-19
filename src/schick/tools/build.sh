@@ -106,13 +106,22 @@ for i in ${OBJDIR}/*.OBJ; do
 		"SEG001")
 			# exact 23 differing lines are allowed
 			DIFFLINES=$(diff -y -a ${DISORIG}/${PREFIX}.dis ${DISDIR}/${PREFIX}.dis | grep '|' |wc -l)
-
-			if [ $DIFFLINES -ne 23 ]; then RETVAL=1; fi
+			if [ $DIFFLINES -gt 23 ]; then
+				echo "ERROR: ${PREFIX} number of difflines changed from 23 to ${DIFFLINES}"
+				RETVAL=1;
+			elif [ $DIFFLINES -lt 23 ]; then
+				echo "WARNING: ${PREFIX} number of difflines changed from 23 to ${DIFFLINES}"
+			fi
 			;;
 		"SEG002")
 			# exact 28 differing lines are allowed
 			DIFFLINES=$(diff -y -a ${DISORIG}/${PREFIX}.dis ${DISDIR}/${PREFIX}.dis | grep '|' |wc -l)
-			if [ $DIFFLINES -gt 28 ]; then RETVAL=1; fi
+			if [ $DIFFLINES -gt 28 ]; then
+				echo "ERROR: ${PREFIX} number of difflines changed from 28 to ${DIFFLINES}"
+				RETVAL=1;
+			elif [ $DIFFLINES -lt 28 ]; then
+				echo "WARNING: ${PREFIX} number of difflines changed from 28 to ${DIFFLINES}"
+			fi
 			;;
 		"SEG004")
 			# exact 1 differing lines are allowed
