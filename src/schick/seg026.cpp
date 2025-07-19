@@ -350,21 +350,8 @@ signed short load_game_state(void)
 				if (host_readbs(hero_i + HERO_GROUP_POS) != 0) {
 
 					prepare_chr_name(name, (char*)hero_i);
-#if !defined(__BORLANDC__)
-					{
-						/* create a char[20] on the stack */
-						Bit16u sp_bak = reg_sp;
-						reg_sp -= 20;
 
-						RealPt r_name = RealMake(SegValue(ss), reg_sp);
-						strncpy((char*)(Bit8u*)(r_name), name, 20);
-						host_writeb((Bit8u*)(r_name) + 20, 0);
-						read_chr_temp(r_name, host_readbs(hero_i + HERO_GROUP_POS) - 1, host_readbs(hero_i + HERO_GROUP_NO));
-						reg_sp = sp_bak;
-					}
-#else
 					read_chr_temp(name, host_readbs(hero_i + HERO_GROUP_POS) - 1, host_readbs(hero_i + HERO_GROUP_NO));
-#endif
 				}
 			}
 		} while (l3 != 0);
