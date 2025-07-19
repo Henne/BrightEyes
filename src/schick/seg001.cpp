@@ -182,8 +182,8 @@ void seg001_00c1(signed short track_no)
 
 		track_start = track_end - track_start;
 
-		host_writew(&req[5].dummy4, ((Bit16u)track_start) - 150);
-		host_writew(&req[5].dummy6, (Bit32s)(track_start >> 16));
+		req[5].dummy4 = ((unsigned short)track_start) - 150;
+		req[5].dummy6 = (signed long)(track_start >> 16);
 
 		CD_driver_request(&req[5]);
 
