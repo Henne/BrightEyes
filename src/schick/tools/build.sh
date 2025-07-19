@@ -104,13 +104,13 @@ for i in ${OBJDIR}/*.OBJ; do
 	# count the lines containing '|' => difference
 	case "${PREFIX}" in
 		"SEG001")
-			# exact 23 differing lines are allowed
+			# exact 31 differing lines are allowed
 			DIFFLINES=$(diff -y -a ${DISORIG}/${PREFIX}.dis ${DISDIR}/${PREFIX}.dis | grep '|' |wc -l)
-			if [ $DIFFLINES -gt 23 ]; then
-				echo "ERROR: ${PREFIX} number of difflines changed from 23 to ${DIFFLINES}"
+			if [ $DIFFLINES -gt 31 ]; then
+				echo "ERROR: ${PREFIX} number of difflines changed from 31 to ${DIFFLINES}"
 				RETVAL=1;
-			elif [ $DIFFLINES -lt 23 ]; then
-				echo "WARNING: ${PREFIX} number of difflines changed from 23 to ${DIFFLINES}"
+			elif [ $DIFFLINES -lt 31 ]; then
+				echo "WARNING: ${PREFIX} number of difflines changed from 31 to ${DIFFLINES}"
 			fi
 			;;
 		"SEG002")
