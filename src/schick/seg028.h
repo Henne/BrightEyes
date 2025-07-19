@@ -9,7 +9,9 @@ RealPt unused_load(signed short);
 //0x2a
 void load_area_description(signed short);
 //0x2f
+#if defined(__BORLANDC__)
 void unused_load_archive_file(signed short, signed short, Bit32u);
+#endif
 //0x34
 void prepare_dungeon_area(void);
 //0x39

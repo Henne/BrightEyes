@@ -667,15 +667,16 @@ void load_tlk(signed short index)
 	}
 }
 
+#if defined(__BORLANDC__)
 void unused_load_archive_file(signed short index, signed short a2, Bit32u seg)
 {
 	signed short fd;
 
 	fd = load_archive_file(index);
-	read_archive_file(fd, (Bit8u*)(RealMake(seg, a2)), 64000);
+	read_archive_file(fd, (Bit8u*)MK_FP(seg, a2), 64000);
 	close(fd);
 }
-
+#endif
 
 void load_fightbg(signed short index)
 {
