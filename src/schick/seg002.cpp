@@ -1318,7 +1318,7 @@ void mouse_irq_init(signed short irq_no, void interrupt *(isr))
 	l6 = 0x51e;
 
 	ds_writed(MOUSE_HANDLER_BAK, (Bit32u)getvect(0x78));
-	setvect(0x78, (INTCAST)isr);
+	setvect(0x78, (void interrupt far (*)(...))isr);
 
 	mouse_action((Bit8u*)&l1, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5, (Bit8u*)&l6);
 
@@ -1336,7 +1336,7 @@ void mouse_reset_ehandler(void)
 	signed short l4;
 	signed short l5;
 
-	setvect(0x78, (INTCAST) ds_readd(MOUSE_HANDLER_BAK));
+	setvect(0x78, (void interrupt far (*)(...))ds_readd(MOUSE_HANDLER_BAK));
 
 	l1 = 12;
 	l3 = 0;
