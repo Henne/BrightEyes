@@ -389,26 +389,8 @@ void draw_automap_square(signed short x, signed short y, signed short color, sig
 
 	ds_writed(PIC_COPY_DST, (Bit32u)p_img_tile);
 
-#if !defined(__BORLANDC__)
-	/* need 50 bytes on the DOSBox-Stack */
-	reg_esp -= 50;
-
-	/* make a pointer to this position */
-	Bit8u *p = (Bit8u*)(RealMake(SegValue(ss), reg_sp));
-
-	/* copy the tile from host stack to DOSBox stack */
-	for (i = 0; i < 50; i++, p++) {
-		host_writeb(p, tile[i]);
-	}
-
-	/* save the pointer as the graphic source */
-	ds_writed(PIC_COPY_SRC, (Bit32u)RealMake(SegValue(ss), reg_sp));
-
-	/* free 50 bytes */
-	reg_esp += 50;
-#else
 	ds_writed(PIC_COPY_SRC, (Bit32u)&tile);
-#endif
+
 	/* */
 	do_pic_copy(0);
 
