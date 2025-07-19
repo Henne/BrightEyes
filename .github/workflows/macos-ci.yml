@@ -1,0 +1,49 @@
+# Copyright 2025 The BrightEyes Authors
+# Use of this source code is governed by a GPL 3.0 license that can be
+# found in the copyright file.
+
+name: Build & Package macOS Clang
+
+on:
+  push:
+    branches: [ feature/add-ci-support ]
+
+jobs:
+  build-macos-clang:
+    name: macOS Clang
+    runs-on: macos-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Install build tools
+        run: |
+          brew install make llvm libomp zip sdl2 sdl2_mixer
+
+      - name: Put Homebrew LLVM on PATH
+        run: echo "/opt/homebrew/opt/llvm/bin" >> "$GITHUB_PATH"
+
+      - name: Host build (Clang)
+        working-directory: src/gen
+        run: |
+          export CFLAGS_BASE="-Og -g -fno-asm -fopenmp -Wall -Wextra"
+          export SDL2_CFLAGS="$(sdl2-config --cflags)"
+          export OMP_LDFLAGS="-L/opt/homebrew/opt/libomp/lib"
+          export OMP_CFLAGS="-I/opt/homebrew/opt/libomp/include"
+          export MIXER_CFLAGS="$(pkg-config --cflags SDL2_mixer)"
+          export MIXER_LIBS="-L/opt/homebrew/lib"
+          export CFLAGS="$CFLAGS_BASE $SDL2_CFLAGS $OMP_CFLAGS $MIXER_CFLAGS $MIXER_LIBS"
+          export LDFLAGS="$(sdl2-config --libs) $(pkg-config --libs SDL2_mixer) $OMP_LDFLAGS"
+
+          export CC=clang
+          which clang
+
+          make -f Makefile_old clean
+          make -f Makefile_old CC=$CC CFLAGS="$CFLAGS_BASE $CFLAGS" LDFLAGS="$LDFLAGS"
+          test -f ngen_clang
+
+      - name: Upload macOS binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: bright-eyes-macos
+          path: src/gen/ngen_clang
