@@ -115,8 +115,6 @@ static inline unsigned short cast_u16(unsigned char v)
 
 #if !defined(__BORLANDC__)
 
-#define INTCAST RealPt
-
 #define _creat creat
 #define _read read
 
@@ -1167,20 +1165,6 @@ static inline char* get_itemname(unsigned short item)
 #define DUMMY_WARNING()
 
 #undef M302de_ORIGINAL_BUGFIX
-
-#ifdef __cplusplus
-#define INTCAST void interrupt (*)(...)
-#else
-#define INTCAST void interrupt (*)()
-#endif
-
-/* porting functions for Borland C++ */
-struct hero_struct {
-	char name[16];
-	char alias[16];
-	char dummy;
-	char typus;
-};
 
 /* helper, use only when neccessary */
 #define struct_copy memcpy
