@@ -24,25 +24,31 @@
 namespace M302de {
 #endif
 
+#if defined(__BORLANDC__)
+/* static prototype */
+void interrupt timer_isr(void);
+#endif:
+
 void save_and_set_timer(void)
 {
 #if defined(__BORLANDC__)
 	ds_writed(BC_TIMER, (Bit32u)getvect(8));
-	setvect(8, (INTCAST)RealMake(0xb2a, 0x244));
+	setvect(8, (void interrupt far(*)(...))timer_isr);
+	/* REMARK: for C-compilation replace (...) with (void) */
 #endif
 }
 
 void set_timer(void)
 {
 #if defined(__BORLANDC__)
-	setvect(8, (INTCAST)RealMake(0xb2a, 0x244));
+	setvect(8, (void interrupt far(*)(...))timer_isr);
 #endif
 }
 
 void reset_timer(void)
 {
 #if defined(__BORLANDC__)
-	setvect(8, (INTCAST)ds_readd(BC_TIMER));
+	setvect(8, (void interrupt far(*)(...))ds_readd(BC_TIMER));
 #endif
 }
 
@@ -305,7 +311,7 @@ void interrupt timer_isr(void)
 	}
 
 	/* call the old timer ISR */
-	((INTCAST)(ds_readd(BC_TIMER)))();
+	((void interrupt far(*)(...))ds_readd(BC_TIMER))();
 }
 
 void unused_gfx_spinlock(void)
