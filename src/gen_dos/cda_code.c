@@ -32,7 +32,7 @@
 #include <CONIO.H>	// clrsrc()
 
 /* non-portable Memory Access */
-#define readws(p) (*(signed short*)(p))
+#define readws(p) 	(*(signed short*)(p))
 
 #include "cda_code.h"
 #include "gen.h"
@@ -214,9 +214,9 @@ static void seg001_00bb(signed short track_no)
 		track_start = track_end - track_start;
 		// track_start is now track length
 
-		// TODO: write to dummy6 produces different code, but works identical
-		req[5].dummy4 = track_start - 150;
-		req[5].dummy6 = readws(((unsigned char*)&track_start) + 2);
+		req[5].dummy4 = ((signed short)track_start) - 150;
+		req[5].dummy6 = ((signed long)(track_start >> 16));
+
 		CD_driver_request(&req[5]);
 
 		// g_cd_audio_pos = ((track_start - 150L) * 74574) / 307200;
