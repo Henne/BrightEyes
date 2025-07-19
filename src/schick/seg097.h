@@ -3,11 +3,16 @@ namespace M302de {
 #endif
 
 //20
+#if defined(__BORLANDC__)
 void GUI_unused1(Bit8u*, signed short, signed short);
+#endif
+
 //25
 signed short GUI_lookup_char_height(signed char c, signed short *p);
 //2a
+#if defined(__BORLANDC__)
 void GUI_1c2(signed short, signed short, RealPt);
+#endif
 //2f
 signed short GUI_enter_text(Bit8u *, signed short, signed short, signed short, signed short);
 //0x34
@@ -19,7 +24,9 @@ signed short GUI_bool(char*);
 //0x43
 signed short GUI_radio(char*, signed char, ...);
 //0x48
+#if defined(__BORLANDC__)
 signed short GUI_unused2(signed short, RealPt);
+#endif
 //4d
 void GUI_draw_radio_bg(signed short,signed short, signed short, signed short);
 // 52

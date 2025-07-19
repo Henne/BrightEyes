@@ -39,6 +39,7 @@
 namespace M302de {
 #endif
 
+#if defined(__BORLANDC__)
 void GUI_unused1(Bit8u *a1, signed short a2, signed short a3)
 {
 	signed short l1;
@@ -82,7 +83,7 @@ void GUI_unused1(Bit8u *a1, signed short a2, signed short a3)
 		} else if ((c == (signed char)0xf0) || (c == (signed char)0xf1) || (c == (signed char)0xf2) || (c == (signed char)0xf3)) {
 			ds_writew(TEXTCOLOR, (unsigned char)c + 0xff10);
 		} else {
-			a2 += GUI_unused2(c, (RealPt)RealMake(a3, a2));
+			a2 += GUI_unused2(c, (RealPt)MK_FP(a3, a2));
 		}
 	}
 
@@ -95,14 +96,12 @@ signed short GUI_unused2(signed short c, RealPt p)
 	signed short v2;
 
 	v2 = GUI_lookup_char_height((signed char)c, &v1);
-#if !defined(__BORLANDC__)
-	/* BE-fix */
-	v1 = host_readws((Bit8u*)&v1);
-#endif
+
 	GUI_1c2(v2, v1, p);
 
 	return v1;
 }
+#endif
 
 signed short GUI_lookup_char_height(signed char c, signed short *p)
 {
@@ -130,6 +129,7 @@ signed short GUI_lookup_char_height(signed char c, signed short *p)
 	return 0;
 }
 
+#if defined(__BORLANDC__)
 void GUI_1c2(signed short v1, signed short v2, RealPt v3)
 {
 
@@ -137,6 +137,7 @@ void GUI_1c2(signed short v1, signed short v2, RealPt v3)
 	GUI_font_to_buf((Bit8u*)ds_readd(SPLASH_BUFFER) + v1 * 8);
 	GUI_write_char_to_screen(v3, 8, v2);
 }
+#endif
 
 //static
 signed short GUI_enter_text(Bit8u* dst, signed short x, signed short y, signed short num, signed short zero)
