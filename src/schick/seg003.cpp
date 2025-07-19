@@ -62,10 +62,11 @@ void move(void)
 	p_map_small = p_map_large = p_datseg + DNG_MAP;
 
 	/* direction */
-
-	p_vis_field = (Bit8u*)RealMake(datseg, ((ds_readb(DIRECTION) == 0) ? VISUAL_FIELD_DIR0 :
+#if defined(__BORLANDC__)
+	p_vis_field = (Bit8u*)MK_FP(datseg, ((ds_readb(DIRECTION) == 0) ? VISUAL_FIELD_DIR0 :
 				((ds_readb(DIRECTION) == 1) ? VISUAL_FIELD_DIR1 :
 				((ds_readb(DIRECTION) == 2) ? VISUAL_FIELD_DIR2 : VISUAL_FIELD_DIR3))));
+#endif
 
 	for (i = 0; i < 29; i++, p_vis_field += 2) {
 		boundary_flag = 0;
