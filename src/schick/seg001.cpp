@@ -153,71 +153,43 @@ void seg001_00c1(signed short track_no)
 	Bit32s track_start;
 	Bit32s track_end;
 
-	asm {
-		mov si, track_no
+	if (ds_readw(CD_INIT_SUCCESSFUL) != 0) {
+
+		req[5].status = 0;
+
+		req[5].ptr =
+			MK_FP(cd_buf1[0x10c + track_no * 8],
+			(cd_buf1[0x10b + track_no * 8] << 8) +
+			(cd_buf1[0x10a + track_no * 8]));
+
+		/* calculate track_start */
+		track_start = (60L * (unsigned long)cd_buf1[0x10c + track_no * 8]
+			+ cd_buf1[0x10b + track_no * 8]) * 75L
+			+ cd_buf1[0x10a + track_no * 8];
+
+		/* calculate track_end */
+		if (cd_buf1[0x422] == track_no) {
+
+			track_end = (((unsigned long)cd_buf1[0x425] * 60
+					+ cd_buf1[0x424]) * 75
+					+ cd_buf1[0x423]);
+		} else {
+			track_end = (((unsigned long)cd_buf1[0x114 + track_no * 8] * 60
+					+ cd_buf1[0x113 + track_no * 8]) * 75
+					+ cd_buf1[0x112 + track_no * 8]);
+
+		}
+
+		track_start = track_end - track_start;
+
+		host_writew(&req[5].dummy4, ((Bit16u)track_start) - 150);
+		host_writew(&req[5].dummy6, (Bit32s)(track_start >> 16));
+
+		CD_driver_request(&req[5]);
+
+		ds_writed(CD_AUDIO_POS, (((Bit32u)track_start - 150) * 0x1234e) / 0x4b000);
+		ds_writed(CD_AUDIO_TOD, CD_get_tod());
 	}
-
-	if (ds_readw(CD_INIT_SUCCESSFUL) == 0)
-		return;
-
-	host_writew(MK_FP(CDA_DATASEG, 0x8f), 0);
-
-	/* TODO: write this code in C */
-	asm {
-
-		mov bx, si
-		shl bx, 3
-		mov ax, CDA_DATASEG
-		mov es, ax
-		mov al, [es:bx+0x10b]
-		mov ah, 0
-		shl ax, 8
-
-		mov bx, si
-		shl bx, 3
-		mov dx, CDA_DATASEG
-		mov es, dx
-		mov dl, [es:bx+0x10a]
-		mov dh, 0
-
-		add ax,dx
-
-		mov bx, si
-		shl bx, 3
-		mov dx, CDA_DATASEG
-		mov es, dx
-		mov dl, [es:bx+0x10c]
-		mov dh, 0
-
-		mov bx, CDA_DATASEG
-		mov es, bx
-		mov [es:0x9c], dx
-		mov [es:0x9a], ax
-
-	}
-	/* calculate track_start */
-	track_start = (
-				((60UL * (Bit16u)host_readb(MK_FP(CDA_DATASEG, 0x10c + _SI * 8))) +
-				((Bit16s)host_readb(MK_FP(CDA_DATASEG, 0x10b + _SI * 8)))) * 75UL +
-				((Bit16s)host_readb(MK_FP(CDA_DATASEG, 0x10a + _SI * 8)))
-			);
-
-	/* calculate track_end */
-	if (cda_readb(0x422) == _SI)
-	{
-		track_end = (((60UL * (Bit16u)cda_readb(0x425) + (Bit16s)cda_readb(0x424)) * 75UL) + (Bit16s)cda_readb(0x423));
-	} else {
-		track_end = (((60UL * (Bit16u)cda_readb(0x114 + _SI * 8) + (Bit16s)cda_readb(0x113 + _SI * 8)) * 75UL) + (Bit16s)cda_readb(0x112 + _SI * 8));
-	}
-
-	track_start = track_end - track_start;
-	host_writew(MK_FP(CDA_DATASEG, 0x9e), ((Bit16u)track_start) - 150);
-	host_writew(MK_FP(CDA_DATASEG, 0xa0), (Bit32s)(track_start >> 16));
-
-	CD_driver_request(&req[5]);
-
-	ds_writed(CD_AUDIO_POS, (((Bit32u)track_start - 150) * 0x1234e) / 0x4b000);
-	ds_writed(CD_AUDIO_TOD, CD_get_tod());
 }
 
 /* Borlandified and identical */
