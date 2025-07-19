@@ -789,7 +789,7 @@ void do_dungeon(void)
 
 	if (ds_readbs(DNG_AREA_LOADED) != ds_readbs(DUNGEON_INDEX) || ds_readws(AREA_PREPARED) != 0 || ds_readws(DNG_INIT_FLAG) != 0)
 	{
-		ds_writed(DNG_MAP_PTR, (Bit32u)RealMake(datseg, DNG_MAP));
+		ds_writed(DNG_MAP_PTR, (Bit32u)(((Bit8u*)p_datseg) + DNG_MAP));
 
 		seg028_0555(0);
 
