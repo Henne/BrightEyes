@@ -1248,20 +1248,16 @@ signed short is_mouse_in_rect(signed short x1, signed short y1,
 
 void mouse_init(void)
 {
-#if defined(__BORLANDC__)
-	signed short l1;
-	signed short l3;
-	signed short l4;
-	signed short l5;
-	signed short l6;
-
 	if (ds_readw(HAVE_MOUSE) == 2) {
 
-		l1 = 0;
+#if defined(__BORLANDC__)
+		unsigned short p1, p2, p3, p4, p5;
 
-		mouse_action((Bit8u*)&l1, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5, (Bit8u*)&l6);
+		p1 = 0;
 
-		if (l1 == 0) {
+		mouse_action((Bit8u*)&p1, (Bit8u*)&p2, (Bit8u*)&p3, (Bit8u*)&p4, (Bit8u*)&p5);
+
+		if (p1 == 0) {
 			ds_writew(HAVE_MOUSE, 0);
 		}
 
@@ -1270,16 +1266,16 @@ void mouse_init(void)
 
 		if (ds_readw(HAVE_MOUSE) == 2) {
 
-			l1 = 4;
-			l4 = ds_readws(MOUSE_POSX);
-			l5 = ds_readws(MOUSE_POSY);
+			p1 = 4;
+			p3 = ds_readws(MOUSE_POSX);
+			p4 = ds_readws(MOUSE_POSY);
 
-			mouse_action((Bit8u*)&l1, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5, (Bit8u*)&l6);
+			mouse_action((Bit8u*)&p1, (Bit8u*)&p2, (Bit8u*)&p3, (Bit8u*)&p4, (Bit8u*)&p5);
 
 			mouse_irq_init(0x1f, (unsigned char*)&mouse_isr);
 		}
-	}
 #endif
+	}
 }
 
 void disable_mouse(void)
