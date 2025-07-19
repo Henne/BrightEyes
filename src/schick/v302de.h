@@ -118,6 +118,7 @@ static inline unsigned short cast_u16(unsigned char v)
 #define INTCAST RealPt
 
 #define _creat creat
+#define _read read
 
 /* comment this out to have the original, but buggy behaviour */
 #define M302de_ORIGINAL_BUGFIX
