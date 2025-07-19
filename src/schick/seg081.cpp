@@ -501,7 +501,7 @@ void DNG06_chest1(RealPt chest)
 	RealPt ptr_bak;
 
 	ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)RealMake(datseg, DNG06_CHEST1_CONTENT));
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG06_CHEST1_CONTENT));
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }

@@ -436,7 +436,7 @@ signed short game_options(void)
 	ds_writeb(SPECIAL_SCREEN, 1);
 	ds_writew(WALLCLOCK_UPDATE, 0);
 	ds_writew(AREA_PREPARED, -1);
-	ds_writed(CURRENT_CURSOR, (Bit32u)RealMake(datseg, DEFAULT_MOUSE_CURSOR));
+	ds_writed(CURRENT_CURSOR, (Bit32u)(p_datseg + DEFAULT_MOUSE_CURSOR));
 
 	load_pp20(ARCHIVE_FILE_BUCH_DAT);
 	ds_writeb(PP20_INDEX, ARCHIVE_FILE_BUCH_DAT);
@@ -520,7 +520,7 @@ signed short game_options(void)
 	ds_writed(GUI_BUFFER_UNKN, ds_readd(BUFFER9_PTR));
 
 	do {
-		ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)RealMake(datseg, ACTION_TABLE_OPTIONS));
+		ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)(p_datseg + ACTION_TABLE_OPTIONS));
 		handle_input();
 		ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)0);
 
@@ -721,7 +721,7 @@ void do_location(void)
 	func = (void (*)(void))ds_readd(LOCATION_HANDLERS + 4 * ds_readbs(CURRENT_LOCTYPE));
 #endif
 
-	ds_writed(CURRENT_CURSOR, (Bit32u)RealMake(datseg, DEFAULT_MOUSE_CURSOR));
+	ds_writed(CURRENT_CURSOR, (Bit32u)(p_datseg + DEFAULT_MOUSE_CURSOR));
 
 	if (func) {
 		func();

@@ -165,7 +165,7 @@ void read_sound_cfg(void)
 	signed short handle;
 
 	/* try to open SOUND.CFG */
-	if ( (handle = open((char*)RealMake(datseg, FNAME_SOUND_CFG), O_BINARY | O_RDONLY)) != -1) {
+	if ( (handle = open((char*)(p_datseg + FNAME_SOUND_CFG), O_BINARY | O_RDONLY)) != -1) {
 
 		_read(handle, (Bit8u*)&midi_port, 2);
 		_read(handle, (Bit8u*)&dummy, 2);
@@ -547,7 +547,7 @@ signed short have_mem_for_sound(void)
 	signed short retval;
 	struct ffblk blk;
 
-	if (!findfirst((char*)RealMake(datseg, FNAME_SOUND_ADV), &blk, 0)) {
+	if (!findfirst((char*)(p_datseg + FNAME_SOUND_ADV), &blk, 0)) {
 		/* SOUND.ADV was found */
 		size = host_readd((Bit8u*)(&blk) + 26);
 		size += 4000L;
@@ -774,7 +774,7 @@ signed short open_and_seek_dat(unsigned short fileindex)
 	signed short fd;
 
 	/* open SCHICK.DAT */
-	if ( (fd = open((char*)RealMake(datseg, FNAME_SCHICK_DAT), O_BINARY | O_RDONLY)) != -1) {
+	if ( (fd = open((char*)(p_datseg + FNAME_SCHICK_DAT), O_BINARY | O_RDONLY)) != -1) {
 
 		/* seek to the fileindex position in the offset table */
 		lseek(fd, fileindex * 4, SEEK_SET);
@@ -1178,15 +1178,15 @@ void interrupt mouse_isr(void)
 				!ds_readbs(DIALOGBOX_LOCK) &&
 				(ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK))
 		{
-			ds_writed(CURRENT_CURSOR, (Bit32u) (is_mouse_in_rect(68, 4, 171, 51) ? RealMake(datseg, CURSOR_ARROW_UP):
-							(is_mouse_in_rect(68, 89, 171, 136) ? RealMake(datseg, CURSOR_ARROW_DOWN) :
-							(is_mouse_in_rect(16, 36, 67, 96) ? RealMake(datseg, CURSOR_ARROW_LEFT) :
-							(is_mouse_in_rect(172, 36, 223, 96) ? RealMake(datseg, CURSOR_ARROW_RIGHT) :
-							(!is_mouse_in_rect(16, 4, 223, 138) ? RealMake(datseg, DEFAULT_MOUSE_CURSOR) :
+			ds_writed(CURRENT_CURSOR, (Bit32u) (is_mouse_in_rect(68, 4, 171, 51) ? (p_datseg + CURSOR_ARROW_UP):
+							(is_mouse_in_rect(68, 89, 171, 136) ? (p_datseg + CURSOR_ARROW_DOWN) :
+							(is_mouse_in_rect(16, 36, 67, 96) ? (p_datseg + CURSOR_ARROW_LEFT) :
+							(is_mouse_in_rect(172, 36, 223, 96) ? (p_datseg + CURSOR_ARROW_RIGHT) :
+							(!is_mouse_in_rect(16, 4, 223, 138) ? (p_datseg + DEFAULT_MOUSE_CURSOR) :
 								(void*)ds_readd(CURRENT_CURSOR)))))));
 		} else {
 			if (ds_readbs(DIALOGBOX_LOCK) != 0) {
-				ds_writed(CURRENT_CURSOR, (Bit32u) RealMake(datseg, DEFAULT_MOUSE_CURSOR));
+				ds_writed(CURRENT_CURSOR, (Bit32u) (p_datseg + DEFAULT_MOUSE_CURSOR));
 			}
 		}
 
@@ -1265,8 +1265,8 @@ void mouse_init(void)
 			ds_writew(HAVE_MOUSE, 0);
 		}
 
-		ds_writed(CURRENT_CURSOR, (Bit32u)RealMake(datseg, DEFAULT_MOUSE_CURSOR));
-		ds_writed(LAST_CURSOR, (Bit32u)RealMake(datseg, DEFAULT_MOUSE_CURSOR));
+		ds_writed(CURRENT_CURSOR, (Bit32u)(p_datseg + DEFAULT_MOUSE_CURSOR));
+		ds_writed(LAST_CURSOR, (Bit32u)(p_datseg + DEFAULT_MOUSE_CURSOR));
 
 		if (ds_readw(HAVE_MOUSE) == 2) {
 
@@ -4266,7 +4266,7 @@ void seg002_47e2(void)
 	/* set destination */
 	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
 	/* set source */
-	ds_writed(PIC_COPY_SRC, (Bit32u)RealMake(datseg, GFXBUF_WAIT_KEYPRESS));
+	ds_writed(PIC_COPY_SRC, (Bit32u)(p_datseg + GFXBUF_WAIT_KEYPRESS));
 
 	do_save_rect();
 
@@ -4292,7 +4292,7 @@ void seg002_484f(void)
 	/* set destination */
 	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
 	/* set source */
-	ds_writed(PIC_COPY_SRC, (Bit32u)RealMake(datseg, GFXBUF_WAIT_KEYPRESS));
+	ds_writed(PIC_COPY_SRC, (Bit32u)(p_datseg + GFXBUF_WAIT_KEYPRESS));
 
 	do_pic_copy(0);
 

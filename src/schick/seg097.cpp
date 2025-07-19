@@ -390,7 +390,7 @@ signed short GUI_input(char *str, unsigned short num)
 		}
 	} else {
 		/* set action table */
-		ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)RealMake(datseg, ACTION_TABLE_MENU));
+		ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)(p_datseg + ACTION_TABLE_MENU));
 
 		if (ds_readw(BIOSKEY_EVENT10) != 0) {
 			wait_for_keypress();
@@ -638,7 +638,7 @@ signed short GUI_menu_input(signed short positions, signed short h_lines,
 		ds_writew(MOUSE1_EVENT2, ds_writew(MOUSE1_EVENT1, ds_writew(MOUSE2_EVENT, 0)));
 
 		while (!done) {
-			ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)RealMake(datseg, ACTION_TABLE_MENU));
+			ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)(p_datseg + ACTION_TABLE_MENU));
 			handle_input();
 			ds_writed(ACTION_TABLE_SECONDARY, 0);
 

@@ -287,8 +287,8 @@ signed short load_game_state(void)
 		_read(handle_gs, p_datseg + DATSEG_STATUS_START, 4);
 
 		/* read game status */
-		p_status_start = (HugePt)RealMake(datseg, DATSEG_STATUS_START);
-		p_status_end = (HugePt)RealMake(datseg, DATSEG_STATUS_END);
+		p_status_start = (HugePt)(p_datseg + DATSEG_STATUS_START);
+		p_status_end = (HugePt)(p_datseg + DATSEG_STATUS_END);
 #if !defined(__BORLANDC__)
 		status_length = (signed short)F_PSUB(p_status_end, p_status_start);
 #else
@@ -373,7 +373,7 @@ signed short load_game_state(void)
 
 #if defined(__BORLANDC__)
 		/* search for "*.CHR" */
-		l2 = findfirst((char*)RealMake(datseg, ALL_CHR_WILDCARD), &blk, 0);
+		l2 = findfirst((char*)(p_datseg + ALL_CHR_WILDCARD), &blk, 0);
 
 		while (l2 == 0) {
 
@@ -572,8 +572,8 @@ signed short save_game_state(void)
 
 		load_area_description(1);
 
-		p_status_start = (HugePt)RealMake(datseg, DATSEG_STATUS_START);
-		p_status_end = (HugePt)RealMake(datseg, DATSEG_STATUS_END);
+		p_status_start = (HugePt)(p_datseg + DATSEG_STATUS_START);
+		p_status_end = (HugePt)(p_datseg + DATSEG_STATUS_END);
 #if !defined(__BORLANDC__)
 		status_len = (signed short)F_PSUB(p_status_end, p_status_start);
 #else
@@ -589,7 +589,7 @@ signed short save_game_state(void)
 			return 0;
 		}
 
-		time((Bit32s*)RealMake(datseg, LAST_SAVE_TIME));
+		time((Bit32s*)(p_datseg + LAST_SAVE_TIME));
 
 		filepos = 0;
 

@@ -310,7 +310,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 			}
 
-			ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)RealMake(datseg, ACTION_TABLE_MERCHANT));
+			ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)(p_datseg + ACTION_TABLE_MERCHANT));
 			handle_input();
 			ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)0L);
 

@@ -224,7 +224,7 @@ void DNG13_chest0(RealPt chest)
 	RealPt bak;
 
 	bak = (RealPt)host_readd((Bit8u*)(chest) + 0xb);
-	host_writed((Bit8u*)(chest) + 0xb, (Bit32u)RealMake(datseg, DNG13_CHEST0_CONTENT));
+	host_writed((Bit8u*)(chest) + 0xb, (Bit32u)(p_datseg + DNG13_CHEST0_CONTENT));
 
 	loot_chest((Bit8u*)(chest), get_tx(10), get_tx(11));
 
@@ -241,7 +241,7 @@ void DNG13_chest1(RealPt chest)
 	RealPt bak;
 
 	bak = (RealPt)host_readd((Bit8u*)(chest) + 0xb);
-	host_writed((Bit8u*)(chest) + 0xb, (Bit32u)RealMake(datseg, DNG13_CHEST1_CONTENT));
+	host_writed((Bit8u*)(chest) + 0xb, (Bit32u)(p_datseg + DNG13_CHEST1_CONTENT));
 
 	loot_chest((Bit8u*)(chest), get_tx(10), get_tx(11));
 

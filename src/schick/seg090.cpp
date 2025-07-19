@@ -507,7 +507,7 @@ void DNG_oberorken_chest(RealPt chest)
 
 	ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 0x0b);
 
-	host_writed((Bit8u*)(chest) + 0x0b, (Bit32u)RealMake(datseg, DNG12_CHEST1_CONTENT));
+	host_writed((Bit8u*)(chest) + 0x0b, (Bit32u)(p_datseg + DNG12_CHEST1_CONTENT));
 
 	loot_simple_chest((Bit8u*)(chest));
 

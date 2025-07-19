@@ -206,7 +206,7 @@ void status_show(Bit16u index)
 		set_palette(p_datseg + STATUSPAGE_PALETTE, 0, 0x20);
 	}
 
-	ds_writed(ACTION_TABLE_PRIMARY, (Bit32u)RealMake(datseg, ACTION_TABLE_STATUS));
+	ds_writed(ACTION_TABLE_PRIMARY, (Bit32u)(p_datseg + ACTION_TABLE_STATUS));
 	ds_writed(ACTION_TABLE_SECONDARY, 0);
 	ds_writed(PRINT_STRING_BUFFER, ds_readd(RENDERBUF_PTR));
 	set_textcolor(0, 2);

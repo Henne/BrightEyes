@@ -240,7 +240,7 @@ void DNG01_chest1_x1(RealPt chest)
 	RealPt ptr_bak;
 
 	ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)RealMake(datseg, DNG01_CHEST1_CONTENT));
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG01_CHEST1_CONTENT));
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
@@ -250,7 +250,7 @@ void DNG01_chest2_x1(RealPt chest)
 	RealPt ptr_bak;
 
 	ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)RealMake(datseg, DNG01_CHEST2_CONTENT));
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG01_CHEST2_CONTENT));
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
@@ -260,7 +260,7 @@ void DNG01_chest3_x1(RealPt chest)
 	RealPt ptr_bak;
 
 	ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)RealMake(datseg, DNG01_CHEST3_CONTENT));
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG01_CHEST3_CONTENT));
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
@@ -270,7 +270,7 @@ void DNG01_chest5_x1(RealPt chest)
 	RealPt ptr_bak;
 
 	ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)RealMake(datseg, DNG01_CHEST5_CONTENT));
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG01_CHEST5_CONTENT));
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
@@ -285,7 +285,7 @@ void DNG01_chest7_x2(RealPt chest)
 	RealPt ptr_bak;
 
 	ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)RealMake(datseg, DNG01_CHEST7_CONTENT));
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG01_CHEST7_CONTENT));
 	loot_chest((Bit8u*)(chest), get_tx(5), get_tx(6));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }

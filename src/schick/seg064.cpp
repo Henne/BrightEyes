@@ -66,7 +66,7 @@ unsigned short prepare_passages(void)
 	RealPt ent;
 
 #if !defined(__BORLANDC__)
-	ent = RealMake(datseg, SEA_ROUTES);
+	ent = (p_datseg + SEA_ROUTES);
 #else
 	ent = p_datseg + SEA_ROUTES;
 #endif

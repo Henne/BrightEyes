@@ -248,7 +248,7 @@ void buy_screen(void)
 		l7 = host_readws((Bit8u*)&l7);
 #endif
 
-		ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)RealMake(datseg, ACTION_TABLE_MERCHANT));
+		ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)(p_datseg + ACTION_TABLE_MERCHANT));
 		handle_gui_input();
 		ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)0L);
 

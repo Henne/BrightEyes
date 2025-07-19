@@ -221,7 +221,7 @@ RealPt seg028_0444(signed short index, signed short firstcol, signed short color
 		v1 = read_archive_file(fd, (Bit8u*)ds_readd(BUFFER9_PTR4), 65000);
 
 #if !defined(__BORLANDC__)
-		F_PADA(RealMake(datseg, BUFFER9_PTR4), v1);
+		F_PADA((p_datseg + BUFFER9_PTR4), v1);
 #else
 		*(HugePt*)(p_datseg + BUFFER9_PTR4) += v1;
 #endif
@@ -619,7 +619,7 @@ void load_informer_tlk(signed short index)
 
 	/* adjust the pointers to the layouts */
 	for (i = 0; i < partners; i++, ptr += 0x26) {
-		host_writed(ptr, (Bit32u)RealMake(datseg, host_readw(ptr) + DIALOG_STATES));
+		host_writed(ptr, (Bit32u)(p_datseg + host_readw(ptr) + DIALOG_STATES));
 	}
 }
 
@@ -651,7 +651,7 @@ void load_tlk(signed short index)
 
 	/* read the dialog layouts */
 	read_archive_file(fd,
-		(Bit8u*)(RealMake(datseg, DIALOG_STATES)), off - partners * 0x26);
+		(Bit8u*)((p_datseg + DIALOG_STATES)), off - partners * 0x26);
 
 	/* read the text */
 	text_len = (signed short)read_archive_file(fd, (Bit8u*)ds_readd(BUFFER7_PTR), 64000);
@@ -663,7 +663,7 @@ void load_tlk(signed short index)
 
 	/* adjust the pointers to the layouts */
 	for (i = 0; i < partners; i++, ptr += 0x26) {
-		host_writed(ptr, (Bit32u)RealMake(datseg, host_readw(ptr) + DIALOG_STATES));
+		host_writed(ptr, (Bit32u)(p_datseg + host_readw(ptr) + DIALOG_STATES));
 	}
 }
 

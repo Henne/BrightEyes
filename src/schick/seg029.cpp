@@ -90,7 +90,7 @@ void draw_playmask(void)
 
 	ds_writew(TXT_TABPOS1, 205);
 #if !defined(__BORLANDC__)
-	ds_writed(ACTION_TABLE_PRIMARY, (long)RealMake(datseg, ACTION_TABLE_PLAYMASK));
+	ds_writed(ACTION_TABLE_PRIMARY, (long)(p_datseg + ACTION_TABLE_PLAYMASK));
 #else
 	ds_writed(ACTION_TABLE_PRIMARY, (long)MK_FP(datseg, ACTION_TABLE_PLAYMASK));
 #endif

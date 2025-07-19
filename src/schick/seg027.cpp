@@ -439,7 +439,7 @@ void load_ani(const signed short no)
 
 	/* Process the Areas */
 	for (i_area = 0; ds_readbs(ANI_AREACOUNT) > i_area; i_area++) {
-		p_area2 = (Bit8u*)(RealMake(datseg, ANI_AREA_TABLE + i_area * SIZEOF_ANI_AREA));
+		p_area2 = (Bit8u*)((p_datseg + ANI_AREA_TABLE + i_area * SIZEOF_ANI_AREA));
 		area_offset = host_readd((Bit8u*)(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 4 * i_area), 0xc)));
 		p_area = (Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), area_offset));
 		strncpy((char*)p_area2 + ANI_AREA_NAME, (char*)p_area, 4);

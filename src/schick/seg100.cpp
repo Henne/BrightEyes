@@ -38,7 +38,7 @@ void spell_eigenschaften(void)
 	signed short max;
 
 	ds_writed(SPELLTARGET_E,
-		(Bit32u)RealMake(datseg, (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+		(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
 
 	damage_range_template(host_readws(get_spelltarget_e() + ENEMY_SHEET_DAM1),
 		(Bit8u*)&min, (Bit8u*)&max);
@@ -367,7 +367,7 @@ void spell_blitz(void)
 
 		/* set a pointer to the enemy */
 		ds_writed(SPELLTARGET_E,
-			(Bit32u)RealMake(datseg, (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+			(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
 
 		/* set the rounds counter */
 		host_writeb(get_spelltarget_e() + ENEMY_SHEET_BLIND, 3);
@@ -464,7 +464,7 @@ void spell_eisenrost(void)
 	} else {
 		/* target is an enemy */
 		ds_writed(SPELLTARGET_E,
-			(Bit32u)RealMake(datseg, (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+			(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
 
 		/* check if target is an animal */
 		if (host_readbs(get_spelltarget_e() + ENEMY_SHEET_IS_ANIMAL) != 0)
@@ -642,7 +642,7 @@ void spell_ignifaxius(void)
 
 		/* set a pointer to the enemy */
 		ds_writed(SPELLTARGET_E,
-			(Bit32u)RealMake(datseg, (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+			(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
 
 		host_writebs(get_spelltarget_e() + ENEMY_SHEET_RS,
 			host_readbs(get_spelltarget_e() + ENEMY_SHEET_RS) - rs_malus);
@@ -708,7 +708,7 @@ void spell_plumbumbarum(void)
 
 	/* set a pointer to the enemy */
 	ds_writed(SPELLTARGET_E,
-		(Bit32u)RealMake(datseg, (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+		(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
 
 	/* AT-malus of -3 (permanent) */
 	sub_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_AT, 3);

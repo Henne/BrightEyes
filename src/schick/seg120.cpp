@@ -554,7 +554,7 @@ void prepare_dirs(void)
 	}
 
 	/* search for "*.CHR" in the gamepath */
-	l_si = findfirst((char*)RealMake(datseg, ALL_CHR_WILDCARD4), &blk, 0);
+	l_si = findfirst((char*)(p_datseg + ALL_CHR_WILDCARD4), &blk, 0);
 
 	while (!l_si) {
 
@@ -742,10 +742,10 @@ void call_gen(void)
 
 	/* ret = spawnl(0, "gen.exe", "gen.exe", "b", gamemode == 2 ? "a" : "n", "1", NULL); */
 	ret = spawnl(0,
-			(char*)RealMake(datseg, STR_GEN_EXE), (char*)RealMake(datseg, STR_GEN_EXE2),
-			RealMake(datseg, STR_GEN_B),
-			ds_readws(GAME_MODE) == GAME_MODE_ADVANCED ? RealMake(datseg, STR_GEN_A) : RealMake(datseg, STR_GEN_N),
-			RealMake(datseg, STR_GEN_1), (RealPt)NULL);
+			(char*)(p_datseg + STR_GEN_EXE), (char*)(p_datseg + STR_GEN_EXE2),
+			(p_datseg + STR_GEN_B),
+			ds_readws(GAME_MODE) == GAME_MODE_ADVANCED ? (p_datseg + STR_GEN_A) : (p_datseg + STR_GEN_N),
+			(p_datseg + STR_GEN_1), (RealPt)NULL);
 
 #endif
 	refresh_screen_size();
@@ -753,7 +753,7 @@ void call_gen(void)
 	if (ret == -1) {
 
 		/* perror("Generation") */
-		perror((char*)RealMake(datseg, STR_GEN_GENERATION));
+		perror((char*)(p_datseg + STR_GEN_GENERATION));
 
 		wait_for_keypress();
 

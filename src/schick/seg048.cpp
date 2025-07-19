@@ -56,7 +56,7 @@ void reset_item_selector(void)
 		ds_writebs(STATUSPAGE_SELITEM2_NO, 23);
 	}
 
-	ds_writed(CURRENT_CURSOR, ds_writed(CURRENT_CURSOR_BAK, (Bit32u)RealMake(datseg, DEFAULT_MOUSE_CURSOR)));
+	ds_writed(CURRENT_CURSOR, ds_writed(CURRENT_CURSOR_BAK, (Bit32u)(p_datseg + DEFAULT_MOUSE_CURSOR)));
 }
 
 /* nearly identical, same length */
@@ -441,7 +441,7 @@ void status_menu(signed short hero_pos)
 
 						make_ggst_cursor((Bit8u*)ds_readd(ICON));
 
-						ds_writed(CURRENT_CURSOR, (Bit32u)RealMake(datseg, GGST_CURSOR));
+						ds_writed(CURRENT_CURSOR, (Bit32u)(p_datseg + GGST_CURSOR));
 					}
 				}
 			}

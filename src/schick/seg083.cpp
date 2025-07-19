@@ -526,7 +526,7 @@ void DNG08_chest2_func3(RealPt chest)
 	RealPt ptr_bak;
 
 	ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)RealMake(datseg, DNG08_CHEST2_CONTENT));
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG08_CHEST2_CONTENT));
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
@@ -642,7 +642,7 @@ void DNG08_chest4_func3(RealPt chest)
 	RealPt ptr_bak;
 
 	ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)RealMake(datseg, DNG08_CHEST4_CONTENT));
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG08_CHEST4_CONTENT));
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
@@ -652,7 +652,7 @@ void DNG08_chest5_func3(RealPt chest)
 	RealPt ptr_bak;
 
 	ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)RealMake(datseg, DNG08_CHEST5_CONTENT));
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG08_CHEST5_CONTENT));
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 

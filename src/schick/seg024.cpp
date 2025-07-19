@@ -52,7 +52,7 @@ void diary_show(void)
 	ds_writeb(SPECIAL_SCREEN, 1);
 	ds_writew(WALLCLOCK_UPDATE, 0);
 	ds_writew(AREA_PREPARED, 0xffff);
-	ds_writed(CURRENT_CURSOR, (Bit32u)RealMake(datseg, DEFAULT_MOUSE_CURSOR));
+	ds_writed(CURRENT_CURSOR, (Bit32u)(p_datseg + DEFAULT_MOUSE_CURSOR));
 
 	load_pp20(ARCHIVE_FILE_BUCH_DAT);
 	ds_writeb(PP20_INDEX, ARCHIVE_FILE_BUCH_DAT);

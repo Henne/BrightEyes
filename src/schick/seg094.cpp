@@ -103,7 +103,7 @@ void TM_func1(signed short route_no, signed short backwards)
 #endif
 
 	memset((void*)(Bit8u*)ds_readd(TRV_TRACK_PIXEL_BAK), 0xaa, 500);
-	ds_writed(TRAVEL_ROUTE_PTR, (Bit32u)RealMake(datseg, (LAND_ROUTES - SIZEOF_LAND_ROUTE) + SIZEOF_LAND_ROUTE * route_no));
+	ds_writed(TRAVEL_ROUTE_PTR, (Bit32u)(p_datseg + (LAND_ROUTES - SIZEOF_LAND_ROUTE) + SIZEOF_LAND_ROUTE * route_no));
 	ds_writew(TRAVEL_SPEED, 166);
 	ds_writew(ROUTE_TOTAL_STEPS, TM_get_track_length((Bit8u*)ds_readd(ROUTE_COURSE_PTR)));
 	ds_writew(ROUTE_LENGTH, host_readb((Bit8u*)ds_readd(TRAVEL_ROUTE_PTR) + LAND_ROUTE_DISTANCE) * 100);
@@ -132,7 +132,7 @@ void TM_func1(signed short route_no, signed short backwards)
 	memset((void*)(p_datseg + ROUTE_TEVENTS), ds_writews(ROUTE_STEPCOUNT, 0), 60);
 	memset((void*)(p_datseg + ROUTE_TEVENT_FLAGS), 0, 15);
 
-	ds_writed(TEVENTS_TAB_PTR, (Bit32u)RealMake(datseg, TEVENTS_TAB));
+	ds_writed(TEVENTS_TAB_PTR, (Bit32u)(p_datseg + TEVENTS_TAB));
 #if defined(__BORLANDC__)
 	/* Forward pointer to entries associated with current route. */
 	while (host_readb((Bit8u*)ds_readd(TEVENTS_TAB_PTR)) != route_no && host_readbs((Bit8u*)ds_readd(TEVENTS_TAB_PTR)) != -1)

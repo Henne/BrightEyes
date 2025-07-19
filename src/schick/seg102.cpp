@@ -73,7 +73,7 @@ void MON_do_spell_damage(signed short damage)
 
 			/* set the pointer to the target */
 			ds_writed(SPELLTARGET_E,
-				(Bit32u)RealMake(datseg, (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+				(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
 
 			/* do the damage */
 			FIG_damage_enemy(get_spelltarget_e(), damage, 1);
@@ -108,7 +108,7 @@ signed short MON_get_target_PA(void)
 
 		/* set the pointer to the target */
 		ds_writed(SPELLTARGET_E,
-			(Bit32u)RealMake(datseg, (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+			(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
 
 		/* calc and return PA-value */
 		return host_readbs(get_spelltarget_e() + ENEMY_SHEET_PA);
@@ -133,7 +133,7 @@ signed short MON_get_target_RS(void)
 
 		/* set the pointer to the target */
 		ds_writed(SPELLTARGET_E,
-			(Bit32u)RealMake(datseg, (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+			(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
 
 		/* return PA-value */
 		return host_readbs(get_spelltarget_e() + ENEMY_SHEET_RS);
@@ -397,7 +397,7 @@ void mspell_verwandlung(void)
 {
 	/* set pointer to monster target */
 	ds_writed(SPELLTARGET_E,
-		(Bit32u)RealMake(datseg, host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET)));
+		(Bit32u)(p_datseg + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET)));
 
 	if (enemy_petrified(get_spelltarget_e())) {
 
@@ -483,7 +483,7 @@ void mspell_axxeleratus(void)
 {
 	/* set pointer to monster target */
 	ds_writed(SPELLTARGET_E,
-		(Bit32u)RealMake(datseg, host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET)));
+		(Bit32u)(p_datseg + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET)));
 
 	/* #Attacks + 1 */
 	inc_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_ATTACKS);
@@ -505,7 +505,7 @@ void mspell_balsam(void)
 
 	/* set pointer to monster target */
 	ds_writed(SPELLTARGET_E,
-		(Bit32u)RealMake(datseg, host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET)));
+		(Bit32u)(p_datseg + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET)));
 
 #ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug:
@@ -573,7 +573,7 @@ void mspell_blitz(void)
 
 		/* set the pointer to the target */
 		ds_writed(SPELLTARGET_E,
-			(Bit32u)RealMake(datseg, (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+			(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
 
 		/* set blitz timer to 3 rounds */
 		host_writeb(get_spelltarget_e() + ENEMY_SHEET_BLIND, 3);
@@ -622,7 +622,7 @@ void mspell_eisenrost(void)
 
 		/* set the pointer to the target */
 		ds_writed(SPELLTARGET_E,
-			(Bit32u)RealMake(datseg, (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+			(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
 
 		/* if weapon is not broken */
 		if (!host_readbs(get_spelltarget_e() + ENEMY_SHEET_BROKEN)) {
@@ -725,7 +725,7 @@ void mspell_ignifaxius(void)
 
 		/* set the pointer to the target */
 		ds_writed(SPELLTARGET_E,
-			(Bit32u)RealMake(datseg, (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+			(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
 
 		/* subtract RS malus */
 		host_writeb(get_spelltarget_e() + ENEMY_SHEET_RS,
@@ -773,7 +773,7 @@ void mspell_plumbumbarum(void)
 
 		/* set the pointer to the target */
 		ds_writed(SPELLTARGET_E,
-			(Bit32u)RealMake(datseg, (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+			(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
 
 		/* AT - 3 */
 		host_writeb(get_spelltarget_e() + ENEMY_SHEET_AT,
@@ -791,7 +791,7 @@ void mspell_saft_kraft(void)
 
 	/* set the pointer to the target */
 	ds_writed(SPELLTARGET_E,
-		(Bit32u)RealMake(datseg, (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+		(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
 
 	/* AT + 5 */
 	host_writeb(get_spelltarget_e() + ENEMY_SHEET_AT,
@@ -837,7 +837,7 @@ void mspell_paralue(void)
 
 		/* set the pointer to the target */
 		ds_writed(SPELLTARGET_E,
-			(Bit32u)RealMake(datseg, (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+			(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
 
 		/* set the flag */
 		or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS1, 0x04); /* set 'petrified' flag */

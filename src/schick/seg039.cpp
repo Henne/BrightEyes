@@ -400,7 +400,7 @@ void FIG_init_enemies(void)
 
 		/* load the sprites */
 #if !defined(__BORLANDC__)
-		FIG_load_enemy_sprites((Bit8u*)(RealMake(datseg, ENEMY_SHEETS + i * SIZEOF_ENEMY_SHEET)), x, y);
+		FIG_load_enemy_sprites((Bit8u*)((p_datseg + ENEMY_SHEETS + i * SIZEOF_ENEMY_SHEET)), x, y);
 #else
 		FIG_load_enemy_sprites((Bit8u*)&((struct enemy_sheets*)(p_datseg +  ENEMY_SHEETS))[i], x, y);
 #endif
