@@ -794,8 +794,11 @@ void do_dungeon(void)
 		seg028_0555(0);
 
 		set_audio_track(ARCHIVE_FILE_DUNGEON_XMI);
-
-		ds_writed(DNG_GFXTAB, (Bit32u)RealMake(datseg, (!ds_readb(DUNGEON_GFX_STYLE) ? DNG_GFXTAB_WOOD : (ds_readb(DUNGEON_GFX_STYLE) == 1 ? DNG_GFXTAB_MARBLE : DNG_GFXTAB_STONE))));
+#if defined(__BORLANDC__)
+		ds_writed(DNG_GFXTAB, (Bit32u)(MK_FP(datseg, (!ds_readb(DUNGEON_GFX_STYLE) ? DNG_GFXTAB_WOOD : (ds_readb(DUNGEON_GFX_STYLE) == 1 ? DNG_GFXTAB_MARBLE : DNG_GFXTAB_STONE)))));
+#else
+//		ds_writed(DNG_GFXTAB, (Bit32u)RealMake(datseg, (!ds_readb(DUNGEON_GFX_STYLE) ? DNG_GFXTAB_WOOD : (ds_readb(DUNGEON_GFX_STYLE) == 1 ? DNG_GFXTAB_MARBLE : DNG_GFXTAB_STONE))));
+#endif
 
 		ds_writew(DNG_INIT_FLAG, 0);
 		ds_writew(REQUEST_REFRESH, 1);

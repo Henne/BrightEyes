@@ -80,7 +80,6 @@ struct screen_rect {
 #if defined(__BORLANDC__)
 #define RealSeg(p) FP_SEG(p)
 #define RealOff(p) FP_OFF(p)
-#define RealMake(s, o) MK_FP(s, o)
 #define datseg (_DS)
 #define p_datseg (&ds[0x0000])
 #else
