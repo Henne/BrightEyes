@@ -71,12 +71,10 @@ fi
 
 CHECK=$(cmp -l ${ORIGDIR}/GEN105DE.EXE ${DSTDIR}/GEN105DE.EXE | wc -l)
 
-if [ ${CHECK} -gt 13 ]; then
-	echo "ERROR: GEN105DE.EXE ${CHECK} bytes difference in the binary (max. 13)"
-elif [ ${CHECK} -eq 13 ]; then
+if [ ${CHECK} -gt 0 ]; then
+	echo "ERROR: GEN105DE.EXE ${CHECK} bytes difference in the binary"
+elif [ ${CHECK} -eq 0 ]; then
 	echo "TEST PASSED: GEN105DE.EXE"
-else
-	echo "IMPROVEMENT: GEN105DE.EXE only ${CHECK} bytes difference"
 fi
 
 CHECK=$(cmp -l ${ORIGDIR}/GEN300EN.EXE ${DSTDIR}/GEN300EN.EXE | wc -l)
