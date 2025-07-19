@@ -115,6 +115,11 @@ static inline unsigned short cast_u16(unsigned char v)
 
 #if !defined(__BORLANDC__)
 
+extern const char* names_attrib[];
+extern const char* names_skill[];
+extern const char* names_spell[];
+extern const char* names_mspell[];
+
 #define _creat creat
 #define _read read
 
@@ -191,11 +196,6 @@ static inline void struct_copy(Bit8u *dst, Bit8u *src, int len)
 
 	memcpy(dst, src, len);
 }
-
-extern const char* names_attrib[];
-extern const char* names_skill[];
-extern const char* names_spell[];
-extern const char* names_mspell[];
 
 static inline Bit8u host_readb(Bit8u* p)
 {

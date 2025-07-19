@@ -6178,5 +6178,55 @@ void *g_global_buffer_ptr; // ds:0xe5e0, points to the start of the global buffe
 signed char g_large_buf; // ds:0xe5e4
 
 #if !defined(__BORLANDC__)
+/* arrays for meaningful log messages */
+const char* names_attrib[] = {	"MU", "KL", "CH", "FF", "GE", "IN", "KK",
+				"AG", "HA", "RA", "GG", "TA", "NG", "JZ"};
+
+const char* names_skill[] = {
+    "Waffenlos", "Hiebwaffen", "Stichwaffen", "Schwerter", "Äxte", "Speere", "Zweihänder", "Schusswaffen", "Wurfwaffen",
+    "Akrobatik", "Klettern", "Körperbeh.", "Reiten", "Schleichen", "Schwimmen", "Selbstbeh.", "Tanzen", "Verstecken", "Zechen",
+    "Bekehren", "Betören", "Feilschen", "Gassenwissen", "Lügen", "Menschenkenntnis", "Schätzen",
+    "Fährtensuchen", "Fesseln", "Orientierung", "Pflanzenkunde", "Tierkunde", "Wildnisleben",
+    "Alchimie", "Alte Sprachen", "Geographie", "Geschichte", "Götter/Kulte", "Kriegskunst", "Lesen", "Magiekunde", "Sprachen",
+    "Abrichten", "Fahrzeuge", "Falschspiel", "Heilen Gift", "Heilen Krankheit", "Heilen Wunden", "Musizieren", "Schlösser", "Taschendieb",
+    "Gefahrensinn", "Sinnenschärfe"
+};
+
+const char* names_spell[] = {
+    "DUMMY",
+    "Beherrschung brechen", "Destructibo", "Gardianum", "Illusionen zerstören", "Verwandlung beenden", // Antimagie
+    "Band & Fessel", "Bannbaladin", "Böser Blick", "Große Gier", "Große Verwirrung", "Herr der Tiere", "Horriphobus", "Mag. Raub", "Respondami", "Sanftmut", "Somnigravis", "Zwingtanz", // Beherrschung
+    "Furor Blut", "Geister bannen", "Geister rufen", "Heptagon", "Krähenruf", "Skelettarius", // Dämonologie
+    "Elementar herbeirufen", "Nihilatio Gravitas", "Solidrid Farbenspiel", // Elementarmagie
+    "Axxeleraus", "Foramen", "Motoricus", "Spurlos, Trittlos", "Transversalis", "Über Eis", // Bewegung
+    "Balsam", "Hexenspeichel", "Klarum Purum", "Ruhe Körper", "Tiere heilen", // Heilung
+    "Adleraug", "Analüs", "Eigenschaften", "Exposami", "Odem Arcanum", "Penetrizzel", "Sensibar", // Hellsicht
+    "Chamaelioni", "Duplicatus", "Harmlos", "Hexenknoten", // Illusion
+    "Blitz", "Ecliptifactus", "Eisenrost", "Fulminictus", "Ignifaxius", "Plumbumbarum", "Radau", "Saft, Kraft, Monstermacht", "Scharfes Auge", // Kampf
+    "Hexenblick", "Nekropathia", // Verständigung
+    "Adler, Wolf", "Arcano Psychostabilis", "Armatrutz", "CH steigern", "Feuerbann", "FF steigern", "GE steigern", "IN steigern", "KK steigern", "KL steigern", "MU steigern", "Mutabili", "Paralü", "Salander", "See & Fluss", "Visibili", // Verwandlung
+    "Abvenenum", "Aeolitus", "Brenne", "Claudibus", "Dunkelheit", "Erstarre", "Flim Flam", "Schmelze", "Silentium", "Sturmgebrüll" // Veränderung
+};
+
+const char* names_mspell[] = {
+    "Verwandlung Beenden",
+    "Bannbaladin",
+    "Böser Blick",
+    "Horriphobus",
+    "Axxeleratus",
+    "Balsam",
+    "Blitz",
+    "Eisenrost",
+    "Fulminictus",
+    "Ignifaxius",
+    "Plumbumbarum",
+    "Saft, Kraft, Monstermacht",
+    "Armatrutz",
+    "Paralü"
+};
+
+#endif
+
+#if !defined(__BORLANDC__)
 }
 #endif

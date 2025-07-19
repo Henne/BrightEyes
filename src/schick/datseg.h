@@ -7,4 +7,12 @@
 extern char ds[1];
 #endif
 
+#if !defined(__BORLANDC__)
+/* arrays for meaningful log messages */
+const char* names_attrib[];
+const char* names_skill[];
+const char* names_spell[];
+const char* names_mspell[];
+#endif
+
 #endif
