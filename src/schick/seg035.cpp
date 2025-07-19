@@ -48,9 +48,9 @@ void FIG_tidy_monsters(void)
 
 		/* if the monster is not able to fight anymore ... */
 		if ((ds_readbs(ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * i + ENEMY_SHEET_MON_ID) != 0) &&
-			(enemy_dead((Bit8u*)(RealMake(datseg, ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * i))) ||
-			enemy_mushroom((Bit8u*)(RealMake(datseg, ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * i))) ||
-			enemy_petrified((Bit8u*)(RealMake(datseg, ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * i))) ||
+			(enemy_dead(((Bit8u*)p_datseg + (ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * i))) ||
+			enemy_mushroom(((Bit8u*)p_datseg + (ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * i))) ||
+			enemy_petrified(((Bit8u*)p_datseg + (ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * i))) ||
 			((host_readbs((Bit8u*)ds_readd(CURRENT_FIGHT) + SIZEOF_FIGHT_MONSTER * i + FIGHT_MONSTERS_ROUND_APPEAR) != 0) && (monsters == 0))))
 		{
 
