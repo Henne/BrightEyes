@@ -5,8 +5,6 @@ namespace M302de {
 //static
 unsigned short CD_set_drive_no(void);
 //static
-void CD_driver_request(RealPt req);
-//static
 Bit32s CD_get_tod(void);
 //static
 void seg001_00c1(signed short);

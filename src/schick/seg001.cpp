@@ -104,7 +104,7 @@ unsigned short CD_set_drive_no(void)
 }
 
 /* Borlandified and identical */
-void CD_driver_request(driver_request *req)
+static void CD_driver_request(driver_request far* req)
 {
 	asm {
 		mov ax, 0x1510
@@ -214,7 +214,7 @@ void seg001_00c1(signed short track_no)
 	host_writew(MK_FP(CDA_DATASEG, 0x9e), ((Bit16u)track_start) - 150);
 	host_writew(MK_FP(CDA_DATASEG, 0xa0), (Bit32s)(track_start >> 16));
 
-	CD_driver_request((driver_request*)MK_FP(CDA_DATASEG, 0x8c));
+	CD_driver_request(&req[5]);
 
 	ds_writed(CD_AUDIO_POS, (((Bit32u)track_start - 150) * 0x1234e) / 0x4b000);
 	ds_writed(CD_AUDIO_TOD, CD_get_tod());
@@ -332,9 +332,7 @@ void CD_0432(void)
 	host_writed(MK_FP(CDA_DATASEG, 0x46), (Bit32u)(MK_FP(CDA_DATASEG, 0x420)));
 	host_writeb(MK_FP(CDA_DATASEG, 0x420), 0x0a);
 
-	/* BC-TODO: this constant is pushed as a byte instead of a word */
-	CD_driver_request((driver_request*)MK_FP(CDA_DATASEG, 0x38));
-	asm {nop}
+	CD_driver_request((driver_request*)&req[2]);
 
 	track_no = host_readb(MK_FP(CDA_DATASEG, 0x421));
 
@@ -345,9 +343,7 @@ void CD_0432(void)
 		host_writeb(MK_FP(CDA_DATASEG, 8 * track_no + 0x108), 0x0b);
 		host_writeb(MK_FP(CDA_DATASEG, 8 * track_no + 0x109), track_no);
 
-		/* BC-TODO: this constant ist pushed as a byte instead of a word */
-		CD_driver_request((driver_request*)MK_FP(CDA_DATASEG, 0x38));
-		asm{nop}
+		CD_driver_request((driver_request*)&req[2]);
 
 		track_no++;
 	}
