@@ -1276,9 +1276,7 @@ void mouse_init(void)
 
 			mouse_action((Bit8u*)&l1, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5, (Bit8u*)&l6);
 
-			/* TODO: we keep the magic numbers here until we can build the binary
-			mouse_irq_init(0x1f, mouse_isr); */
-			mouse_irq_init(0x1f, (INTCAST)RealMake(0x51e, 0x1454));
+			mouse_irq_init(0x1f, (unsigned char*)&mouse_isr);
 		}
 	}
 #endif
