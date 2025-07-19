@@ -16,7 +16,7 @@ namespace M302de {
 
 static unsigned short EMS_installed(void)
 {
-#if defined(__BORLANDC__)
+#if 0
 	unsigned char *IRQ_67;
 	char *sig;
 
@@ -36,12 +36,12 @@ static unsigned short EMS_installed(void)
 
 static RealPt EMS_get_frame_ptr()
 {
-#if defined(__BORLANDC__)
+#if 0
 	reg_ax = DNG09_SECRETDOOR1;
 	CALLBACK_RunRealInt(0x67);
 
 	if (reg_ax == 0)
-		return RealMake(reg_bx, 0);
+		return MK_FP(reg_bx, 0);
 
 #endif
 	return NULL;
@@ -49,7 +49,7 @@ static RealPt EMS_get_frame_ptr()
 
 signed short EMS_get_num_pages_unalloced(void)
 {
-#if defined(__BORLANDC__)
+#if 0
 	reg_ax = 0x04200;
 	CALLBACK_RunRealInt(0x67);
 
@@ -62,7 +62,7 @@ signed short EMS_get_num_pages_unalloced(void)
 
 unsigned short EMS_alloc_pages(unsigned short pages)
 {
-#if defined(__BORLANDC__)
+#if 0
 	reg_ax = 0x4300;
 	reg_bx = pages;
 	CALLBACK_RunRealInt(0x67);
@@ -76,7 +76,7 @@ unsigned short EMS_alloc_pages(unsigned short pages)
 
 unsigned short EMS_free_pages(unsigned short handle)
 {
-#if defined(__BORLANDC__)
+#if 0
 	reg_ax = 0x4500;
 	reg_dx = handle;
 	CALLBACK_RunRealInt(0x67);
@@ -90,7 +90,7 @@ unsigned short EMS_free_pages(unsigned short handle)
 
 unsigned short EMS_map_memory(unsigned short handle, unsigned short lpage, unsigned char ppage)
 {
-#if defined(__BORLANDC__)
+#if 0
 	reg_ax = 0x4400;
 	reg_al = ppage;
 	reg_bx = lpage;
@@ -106,7 +106,7 @@ unsigned short EMS_map_memory(unsigned short handle, unsigned short lpage, unsig
 
 RealPt EMS_norm_ptr(RealPt p)
 {
-#if defined(__BORLANDC__)
+#if 0
 	RealPt retval;
 
 	retval = RealSeg(p) << 4;
