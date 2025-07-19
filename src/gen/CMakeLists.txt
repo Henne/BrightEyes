@@ -23,15 +23,24 @@ add_executable(ngen
     vgalib.c
     ail_stub.c)
 
-get_filename_component(COMPILER_NAME ${CMAKE_C_COMPILER} NAME)
+# Rename output to include compiler
+get_filename_component(COMPILER_NAME ${CMAKE_C_COMPILER_ID} NAME)
 set_target_properties(ngen PROPERTIES OUTPUT_NAME "ngen_${COMPILER_NAME}")
 
 find_package(OpenMP)
 if(OpenMP_C_FOUND)
-	target_link_libraries(ngen PUBLIC OpenMP::OpenMP_C)
+  target_link_libraries(ngen PUBLIC OpenMP::OpenMP_C)
+endif()
+
+# On Windows copy SDL2 DLLs next to the executable
+if(WIN32)
+  add_custom_command(TARGET ngen POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+      "$<TARGET_FILE:SDL2::SDL2>" "$<TARGET_FILE_DIR:ngen>"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+      "$<TARGET_FILE:SDL2_mixer::SDL2_mixer>" "$<TARGET_FILE_DIR:ngen>")
 endif()
 
 target_include_directories(ngen PRIVATE ${SDL2_INCLUDE_DIR})
-target_link_libraries(ngen PUBLIC SDL2::SDL2)
-target_link_libraries(ngen PUBLIC SDL2_mixer::SDL2_mixer)
+target_link_libraries(ngen PUBLIC SDL2::SDL2 SDL2_mixer::SDL2_mixer)
 install(TARGETS ngen RUNTIME DESTINATION bin)

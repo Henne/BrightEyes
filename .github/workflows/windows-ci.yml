@@ -1,0 +1,76 @@
+# Copyright 2025 The BrightEyes Authors
+# Use of this source code is governed by a GPL 3.0 license that can be
+# found in the copyright file.
+
+name: Build & Package Windows MinGW
+
+on:
+  push:
+    branches: [ feature/add-ci-support ]
+
+jobs:
+  build-windows-mingw:
+    name: Windows MinGW
+    runs-on: windows-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Setup MSYS2 & MinGW toolchain
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: |
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-make
+            mingw-w64-x86_64-pkg-config
+            unzip
+
+      - name: Refresh MSYS2 PGP keys
+        shell: msys2 {0}
+        run: |
+          pacman-key --init
+          pacman-key --populate msys2
+          pacman -Sy --noconfirm
+
+      - name: Cache SDL2/Mixer ZIPs
+        uses: actions/cache@v3
+        with:
+          path: windows-deps
+          key: ${{ runner.os }}-sdl2deps-2.32.8-2.8.1
+
+      - name: Download SDL2 & SDL2_mixer (if needed)
+        shell: bash
+        run: |
+          mkdir -p windows-deps
+          test -f windows-deps/SDL2-devel-2.32.8-mingw.zip || \
+            curl -L -o windows-deps/SDL2-devel-2.32.8-mingw.zip \
+              https://github.com/libsdl-org/SDL/releases/download/release-2.32.8/SDL2-devel-2.32.8-mingw.zip
+          test -f windows-deps/SDL2_mixer-devel-2.8.1-mingw.zip || \
+            curl -L -o windows-deps/SDL2_mixer-devel-2.8.1-mingw.zip \
+              https://github.com/libsdl-org/SDL_mixer/releases/download/release-2.8.1/SDL2_mixer-devel-2.8.1-mingw.zip
+
+      - name: Extract SDL2 & Mixer
+        shell: bash
+        run: |
+          unzip -q windows-deps/SDL2-devel-2.32.8-mingw.zip -d windows-deps
+          unzip -q windows-deps/SDL2_mixer-devel-2.8.1-mingw.zip -d windows-deps
+
+      - name: Configure & Build via CMake
+        working-directory: src/gen
+        shell: msys2 {0}
+        run: |
+          mkdir -p build
+          cd build
+          cmake -G "MinGW Makefiles" \
+            -DSDL2_DIR="${GITHUB_WORKSPACE}/windows-deps/SDL2-2.32.8/cmake" \
+            -DSDL2_mixer_DIR="${GITHUB_WORKSPACE}/windows-deps/SDL2_mixer-2.8.1/cmake" ..
+          cmake --build .
+          test -f ngen_GNU.exe
+
+      - name: Upload Windows binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: bright-eyes-windows
+          path: src/gen/build/ngen_GNU.exe
