@@ -54,8 +54,8 @@ jobs:
       - name: Extract SDL2 & Mixer
         shell: bash
         run: |
-          unzip -q windows-deps/SDL2-devel-2.32.8-mingw.zip -d windows-deps
-          unzip -q windows-deps/SDL2_mixer-devel-2.8.1-mingw.zip -d windows-deps
+          unzip -o -q windows-deps/SDL2-devel-2.32.8-mingw.zip -d windows-deps
+          unzip -o -q windows-deps/SDL2_mixer-devel-2.8.1-mingw.zip -d windows-deps
 
       - name: Configure & Build via CMake
         working-directory: src/gen
