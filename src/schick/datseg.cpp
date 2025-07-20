@@ -6179,10 +6179,10 @@ signed char g_large_buf; // ds:0xe5e4
 
 #if !defined(__BORLANDC__)
 /* arrays for meaningful log messages */
-const char* names_attrib[] = {	"MU", "KL", "CH", "FF", "GE", "IN", "KK",
+const char* names_attrib[14] = {"MU", "KL", "CH", "FF", "GE", "IN", "KK",
 				"AG", "HA", "RA", "GG", "TA", "NG", "JZ"};
 
-const char* names_skill[] = {
+const char* names_skill[52] = {
     "Waffenlos", "Hiebwaffen", "Stichwaffen", "Schwerter", "Äxte", "Speere", "Zweihänder", "Schusswaffen", "Wurfwaffen",
     "Akrobatik", "Klettern", "Körperbeh.", "Reiten", "Schleichen", "Schwimmen", "Selbstbeh.", "Tanzen", "Verstecken", "Zechen",
     "Bekehren", "Betören", "Feilschen", "Gassenwissen", "Lügen", "Menschenkenntnis", "Schätzen",
@@ -6192,7 +6192,7 @@ const char* names_skill[] = {
     "Gefahrensinn", "Sinnenschärfe"
 };
 
-const char* names_spell[] = {
+const char* names_spell[86] = {
     "DUMMY",
     "Beherrschung brechen", "Destructibo", "Gardianum", "Illusionen zerstören", "Verwandlung beenden", // Antimagie
     "Band & Fessel", "Bannbaladin", "Böser Blick", "Große Gier", "Große Verwirrung", "Herr der Tiere", "Horriphobus", "Mag. Raub", "Respondami", "Sanftmut", "Somnigravis", "Zwingtanz", // Beherrschung
@@ -6208,7 +6208,7 @@ const char* names_spell[] = {
     "Abvenenum", "Aeolitus", "Brenne", "Claudibus", "Dunkelheit", "Erstarre", "Flim Flam", "Schmelze", "Silentium", "Sturmgebrüll" // Veränderung
 };
 
-const char* names_mspell[] = {
+const char* names_mspell[14] = {
     "Verwandlung Beenden",
     "Bannbaladin",
     "Böser Blick",

@@ -114,11 +114,6 @@ static inline unsigned short cast_u16(unsigned char v)
 
 #if !defined(__BORLANDC__)
 
-extern const char* names_attrib[];
-extern const char* names_skill[];
-extern const char* names_spell[];
-extern const char* names_mspell[];
-
 #define _creat creat
 #define _read read
 

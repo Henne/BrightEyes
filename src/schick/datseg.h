@@ -9,10 +9,10 @@ extern char ds[1];
 
 #if !defined(__BORLANDC__)
 /* arrays for meaningful log messages */
-const char* names_attrib[];
-const char* names_skill[];
-const char* names_spell[];
-const char* names_mspell[];
+const char* names_attrib[14];
+const char* names_skill[52];
+const char* names_spell[86];
+const char* names_mspell[14];
 #endif
 
 #endif
