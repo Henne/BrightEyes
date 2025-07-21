@@ -54,33 +54,7 @@ mv ${DRIVE_C}/src/*.MAP ${DSTDIR} 2>/dev/null
 # cleanup
 rm -rf ${DRIVE_C}/src/*
 
-
 # VERIFICATION
-echo $DSTDIR
-
-# Bytewise comparision of original and rewritten files
-CHECK=$(cmp -l ${ORIGDIR}/GEN104DE.EXE ${DSTDIR}/GEN104DE.EXE | wc -l)
-
-if [ ${CHECK} -gt 13 ]; then
-	echo "ERROR: GEN104DE.EXE ${CHECK} bytes difference in the binary (max. 13)"
-elif [ ${CHECK} -eq 13 ]; then
-	echo "TEST PASSED: GEN104DE.EXE"
-else
-	echo "IMPROVEMENT: GEN104DE.EXE only ${CHECK} bytes difference"
-fi
-
-CHECK=$(cmp -l ${ORIGDIR}/GEN105DE.EXE ${DSTDIR}/GEN105DE.EXE | wc -l)
-
-if [ ${CHECK} -gt 0 ]; then
-	echo "ERROR: GEN105DE.EXE ${CHECK} bytes difference in the binary"
-elif [ ${CHECK} -eq 0 ]; then
-	echo "TEST PASSED: GEN105DE.EXE"
-fi
-
-CHECK=$(cmp -l ${ORIGDIR}/GEN300EN.EXE ${DSTDIR}/GEN300EN.EXE | wc -l)
-
-if [ ${CHECK} -gt 0 ]; then
-	echo "ERROR: GEN300EN.EXE ${CHECK} bytes difference in the binary"
-elif [ ${CHECK} -eq 0 ]; then
-	echo "TEST PASSED: GEN300EN.EXE"
-fi
+cd build
+sha384sum -c <sha384sum.txt
+cd ..

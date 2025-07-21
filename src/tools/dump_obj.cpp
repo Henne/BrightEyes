@@ -440,7 +440,7 @@ void examine_obj(const unsigned char *b, const size_t flen, char *fname)
 	FILE *fdata_bin = NULL;
 
 	int d_len;
-	int type;
+	int type = 0;
 
 
 	while (pos < flen && (type != 0x8a && type != 0x8b)) {
