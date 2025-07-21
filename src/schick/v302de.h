@@ -117,6 +117,8 @@ static inline unsigned short cast_u16(unsigned char v)
 #define _creat creat
 #define _read read
 
+static inline int bioskey(const int cmd) { return 0; }
+
 /* comment this out to have the original, but buggy behaviour */
 #define M302de_ORIGINAL_BUGFIX
 
