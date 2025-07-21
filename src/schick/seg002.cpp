@@ -78,9 +78,11 @@ void sub_light_timers(Bit32s);
 /* static */
 void play_music_file(signed short index)
 {
+#if defined(__BORLANDC__)
 	if (ds_readbs(MUSIC_ENABLED) != 0) {
 		do_play_music_file(index);
 	}
+#endif
 }
 
 void set_audio_track(Bit16u index)
@@ -108,7 +110,7 @@ void sound_menu(void)
 {
 	signed short answer;
 
-	answer = GUI_radio(p_datseg + SND_MENU_QUESTION, 4,
+	answer = GUI_radio((char*)p_datseg + SND_MENU_QUESTION, 4,
 				p_datseg + SND_MENU_RADIO1,
 				p_datseg + SND_MENU_RADIO2,
 				p_datseg + SND_MENU_RADIO3,
@@ -158,6 +160,7 @@ void sound_menu(void)
 
 void read_sound_cfg(void)
 {
+#if defined(__BORLANDC__)
 	signed short midi_port;
 	signed short dummy;
 	signed short digi_port;
@@ -184,9 +187,9 @@ void read_sound_cfg(void)
 #if !defined(__BORLANDC__)
 		/* menu to select the music source */
 		const Bit16s tw_bak = ds_readws(TEXTBOX_WIDTH);
-		Bit8u question[] = "WIE SOLL DIE MUSIK WIEDERGEGEBEN WERDEN?";
-		Bit8u opt1[] = "AUDIO-CD";
-		Bit8u opt2[] = "MIDI";
+		char question[] = "WIE SOLL DIE MUSIK WIEDERGEGEBEN WERDEN?";
+		char opt1[] = "AUDIO-CD";
+		char opt2[] = "MIDI";
 		signed short answer;
 
 		ds_writews(TEXTBOX_WIDTH, 3);
@@ -241,7 +244,7 @@ void read_sound_cfg(void)
 				}
 			} else {
 				/* print that sound effects are disabled */
-				GUI_output(p_datseg + SND_TXT_DISABLED_MEM);
+				GUI_output((char*)p_datseg + SND_TXT_DISABLED_MEM);
 				ds_writew(SND_VOC_ENABLED, 0);
 			}
 		} else {
@@ -249,6 +252,7 @@ void read_sound_cfg(void)
 		}
 
 	}
+#endif
 }
 
 void init_AIL(Bit32u size)
@@ -464,7 +468,7 @@ signed short load_music_driver(RealPt fname, signed short type, signed short por
 			} else {
 
 				/* no sound hardware found */
-				GUI_output((char*)p_datseg +SND_TXT_HW_NOT_FOUND);
+				GUI_output((char*)p_datseg + SND_TXT_HW_NOT_FOUND);
 				exit_AIL();
 			}
 		}
@@ -924,7 +928,7 @@ void copy_from_archive_to_temp(unsigned short index, char* fname)
 		/* copy it */
 		while ( (len = read_archive_file(handle1, (Bit8u*)ds_readd(RENDERBUF_PTR), 60000)) && (len != -1))
 		{
-			_write(handle2, (Bit8u*)ds_readd(RENDERBUF_PTR), len);
+			write(handle2, (Bit8u*)ds_readd(RENDERBUF_PTR), len);
 		}
 
 		close(handle1);
@@ -947,7 +951,7 @@ void copy_file_to_temp(RealPt src_file, char* fname)
 		/* copy it */
 		while ( (len = _read(handle1, (Bit8u*)ds_readd(RENDERBUF_PTR), 60000)) && (len != -1))
 		{
-			_write(handle2, (Bit8u*)ds_readd(RENDERBUF_PTR), len);
+			write(handle2, (Bit8u*)ds_readd(RENDERBUF_PTR), len);
 		}
 
 		close(handle1);
@@ -1068,8 +1072,7 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 		dst = nvf->dst;
 
 		/* RLE decompression */
-		decomp_rle(width, height, dst, src,
-			(char*)ds_readd(TEXT_OUTPUT_BUF), nvf->type);
+		decomp_rle(width, height, dst, src, (unsigned char*)ds_readd(TEXT_OUTPUT_BUF), nvf->type);
 #ifdef M302de_ORIGINAL_BUGFIX
 		/* retval was originally neither set nor used here.
 			VC++2008 complains about an uninitialized variable
@@ -1569,7 +1572,7 @@ void handle_gui_input(void)
 			ds_writew(GUI_TEXT_CENTERED, 1);
 			l_di = ds_readws(TEXTBOX_WIDTH);
 			ds_writew(TEXTBOX_WIDTH, 2);
-			GUI_output(p_datseg + PAUSE_STRING);		/* P A U S E */
+			GUI_output((char*)p_datseg + PAUSE_STRING);		/* P A U S E */
 			ds_writew(TEXTBOX_WIDTH, l_di);
 			ds_writew(GUI_TEXT_CENTERED, 0);
 			ds_writew(BIOSKEY_EVENT10, l_si = ds_writew(BIOSKEY_EVENT, 0));
@@ -1735,7 +1738,7 @@ void handle_input(void)
 			ds_writew(BIOSKEY_EVENT10, 1);
 			ds_writew(GUI_TEXT_CENTERED, 1);
 			ds_writew(TEXTBOX_WIDTH, 2);
-			GUI_output(p_datseg + PAUSE_STRING);		/* P A U S E */
+			GUI_output((char*)p_datseg + PAUSE_STRING);		/* P A U S E */
 			ds_writew(TEXTBOX_WIDTH, 3);
 			ds_writew(GUI_TEXT_CENTERED, 0);
 			dec_ds_ws(TIMERS_DISABLED);
@@ -3090,7 +3093,7 @@ void herokeeping(void)
 
 					ds_writeb(FOOD_MESSAGE_SHOWN + i, ds_readb(FOOD_MESSAGE + i));
 
-					GUI_output((Bit8u*)buffer);
+					GUI_output(buffer);
 
 					if (ds_readb(PP20_INDEX) == ARCHIVE_FILE_ZUSTA_UK) {
 						ds_writew(REQUEST_REFRESH, 1);
@@ -3113,7 +3116,7 @@ void herokeeping(void)
 						(char*)hero + HERO_NAME2);
 
 					/* print output */
-					GUI_output((Bit8u*)buffer);
+					GUI_output(buffer);
 
 					if (ds_readb(PP20_INDEX) == ARCHIVE_FILE_ZUSTA_UK) {
 						ds_writew(REQUEST_REFRESH, 1);
@@ -3722,10 +3725,12 @@ void wait_for_keyboard2(void)
 
 
 /* unused */
-void seg002_4031(Bit8u *ptr)
+#if defined(__BORLANDC__)
+static void seg002_4031(char *ptr)
 {
 	delay_or_keypress(150 * GUI_print_header(ptr));
 }
+#endif
 
 void wait_for_keypress(void)
 {
@@ -5568,7 +5573,7 @@ int schick_main(int argc, char** argv)
 		} else {
 			/* disable sound */
 			exit_AIL();
-			GUI_output(p_datseg + SND_TXT_DISABLED_MEM2);
+			GUI_output((char*)p_datseg + SND_TXT_DISABLED_MEM2);
 		}
 
 		CD_init();
@@ -5639,6 +5644,10 @@ int schick_main(int argc, char** argv)
 		clrscr();
 #endif
 	}
+
+#if !defined(__BORLANDC__)
+	return 0;
+#endif
 }
 
 Bit8u* schick_alloc(Bit32u size)
@@ -5683,7 +5692,7 @@ signed short copy_protection(void)
 				ds_readbs((QUESTIONS_HANDBOOK + 0) + 19 * l_di));
 
 			/* print version number */
-			GUI_print_string(p_datseg + GAME_VERSION, 290, 190);
+			GUI_print_string((char*)p_datseg + GAME_VERSION, 290, 190);
 
 			/* ask the question */
 			GUI_input((char*)ds_readd(DTP2), 20);
@@ -5712,7 +5721,7 @@ signed short copy_protection(void)
 				get_ttx(235 + ds_readbs((QUESTIONS_MAP + 1) + 3 * l_di)));
 
 			/* print version number */
-			GUI_print_string(p_datseg + GAME_VERSION, 290, 190);
+			GUI_print_string((char*)p_datseg + GAME_VERSION, 290, 190);
 
 			/* ask the question */
 			GUI_input((char*)ds_readd(DTP2), 20);

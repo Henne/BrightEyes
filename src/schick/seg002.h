@@ -127,8 +127,6 @@ void dec_splash(void);
 void draw_splash(signed short, signed short);
 void timewarp_until_midnight(void);
 void wait_for_keyboard2(void);
-/* static */
-void seg002_4031(void);
 void wait_for_keypress(void);
 void delay_or_keypress(signed short);
 void unused_delay(signed short);
