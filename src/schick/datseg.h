@@ -3,9 +3,12 @@
 
 
 #if defined(__BORLANDC__)
-#define DS_SIZE (0xf7af - 0x938 - 2)
 extern char ds[1];
 #endif
+
+/* seg001 */
+extern unsigned short g_cd_init_successful;
+extern Bit32u g_cd_skipmagic;
 
 #if !defined(__BORLANDC__)
 /* arrays for meaningful log messages */

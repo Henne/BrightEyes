@@ -34,8 +34,37 @@
 #include "seg013.h"
 #endif
 
-#define CDA_DATASEG (0x1238)
-#define cda_readb(o) (*(Bit8u*)(MK_FP(CDA_DATASEG, (o))))
+static unsigned char cd_dummy0 = 2;
+unsigned short g_cd_init_successful = 0;
+static unsigned char cd_dummy1[4] = {0};
+static unsigned short g_cd_audio_repeat = 0;
+static unsigned char cd_dummy2[4] = {0};
+static unsigned short g_cd_audio_paused = 0;
+static unsigned short g_cd_audio_track_bak = 0x7fff;
+static const int g_cd_audio_tracklist[15] = {
+	0x7fff,	0x7fff,	0x7fff, 0x7fff,
+	ARCHIVE_FILE_SUMMARY_XMI,
+	ARCHIVE_FILE_THORWAL_XMI,
+	ARCHIVE_FILE_TEMPLE_XMI,
+	ARCHIVE_FILE_TERMS_XMI,
+	ARCHIVE_FILE_SMITH_XMI,
+	ARCHIVE_FILE_INN_XMI,
+	ARCHIVE_FILE_HEALER_XMI,
+	ARCHIVE_FILE_CAMP_XMI,
+	ARCHIVE_FILE_VICTORY_XMI,
+	ARCHIVE_FILE_COMBAT_XMI,
+	ARCHIVE_FILE_DUNGEON_XMI
+};
+Bit32u g_cd_skipmagic = 0L;
+
+static unsigned short g_cd_check_err_countdown = 5;
+static const char g_str_insert_cd[142] = "BITTE LEGEN SIE DIE \xf2SCHICKSALSKLINGE-CD\xf0 IN LAUFWERK %c: EIN. DIESE WIRD BEN\x99TIGT, DA DATEN W\x8eHREND DES SPIELS VON CD GELADEN WERDEN M\x9aSSEN.";
+static const char g_str_repeat[12] = "WIEDERHOLEN";
+static const char g_str_quit[8] = "BEENDEN";
+static const char g_str_cd_exepath[19] = "X:\\DSA\\SCHICKM.EXE";
+static char g_str_cd_missing[204] = "DIESES PROGRAMM IST OHNE CD-ROM-LAUFWERK NICHT LAUFF\x8eHIG. BITTE INSTALLIEREN SIE DIE GER\x8eTETREIBER F\x9aR DAS CD-ROM-LAUFWERK GEM\x8eSS IHRER CD-ROM-DOKUMENTATION UND STARTEN SIE DIE 'SCHICKSALSKLINGE' ERNEUT.";
+static const char g_str_cd_init[37] = "INITIALISIERE CD-ROM IN LAUFWERK %c:";
+static unsigned char g_unkn_004 = 0x00;
 
 /* static prototpyes */
 static void CD_audio_stop_hsg(void);
@@ -95,14 +124,12 @@ static unsigned short CD_get_first_drive(void)
 /* Borlandified and identical */
 static unsigned short CD_set_drive_no(void)
 {
+	if (!CD_has_drives()) return 0;
 
-	if (CD_has_drives() == 0)
-		return 0;
-
-	if (CD_count_drives() == 0)
-		return 0;
+	if (!CD_count_drives()) return 0;
 
 	ds_writew(CD_DRIVE_NO, CD_get_first_drive());
+
 	return 1;
 }
 
@@ -121,12 +148,11 @@ static void CD_driver_request(driver_request far* req)
 /* TODO: check adresses of seg013 */
 static void CD_unused1(void)
 {
-	if (ds_readw(CD_INIT_SUCCESSFUL) == 0)
-		return;
+	if (!g_cd_init_successful) return;
 
 	req[3].status = 0;
 	req[3].ptr = cd_buf1;
-	cd_buf1[252] = 0x0c;
+	cd_buf1[0] = 0x0c;
 	CD_driver_request(&req[3]);
 }
 
@@ -156,30 +182,29 @@ static void seg001_00c1(signed short track_no)
 	Bit32s track_start;
 	Bit32s track_end;
 
-	if (ds_readw(CD_INIT_SUCCESSFUL) != 0) {
+	if (g_cd_init_successful) {
 
 		req[5].status = 0;
 
-		req[5].ptr =
-			MK_FP(cd_buf1[0x10c + track_no * 8],
-			(cd_buf1[0x10b + track_no * 8] << 8) +
-			(cd_buf1[0x10a + track_no * 8]));
+		req[5].ptr = MK_FP(cd_buf1[0x10 + track_no * 8],
+				(cd_buf1[0x0f + track_no * 8] << 8) +
+				(cd_buf1[0x0e + track_no * 8]));
 
 		/* calculate track_start */
-		track_start = (60L * (unsigned long)cd_buf1[0x10c + track_no * 8]
-			+ cd_buf1[0x10b + track_no * 8]) * 75L
-			+ cd_buf1[0x10a + track_no * 8];
+		track_start = (60L * (unsigned long)cd_buf1[0x10 + track_no * 8]
+			+ cd_buf1[0x0f + track_no * 8]) * 75L
+			+ cd_buf1[0x0e + track_no * 8];
 
 		/* calculate track_end */
-		if (cd_buf1[0x422] == track_no) {
+		if (cd_buf1[0x326] == track_no) {
 
-			track_end = (((unsigned long)cd_buf1[0x425] * 60
-					+ cd_buf1[0x424]) * 75
-					+ cd_buf1[0x423]);
+			track_end = (((unsigned long)cd_buf1[0x329] * 60
+					+ cd_buf1[0x328]) * 75
+					+ cd_buf1[0x327]);
 		} else {
-			track_end = (((unsigned long)cd_buf1[0x114 + track_no * 8] * 60
-					+ cd_buf1[0x113 + track_no * 8]) * 75
-					+ cd_buf1[0x112 + track_no * 8]);
+			track_end = (((unsigned long)cd_buf1[0x18 + track_no * 8] * 60
+					+ cd_buf1[0x17 + track_no * 8]) * 75
+					+ cd_buf1[0x16 + track_no * 8]);
 
 		}
 
@@ -198,18 +223,17 @@ static void seg001_00c1(signed short track_no)
 /* Borlandified and identical */
 void seg001_02c4(void)
 {
-	if (ds_readw(CD_INIT_SUCCESSFUL) == 0)
-		return;
+	if (!g_cd_init_successful) return;
 
 	if (CD_get_tod() - (Bit32s)ds_readd(CD_AUDIO_TOD) < (Bit32s)ds_readd(CD_AUDIO_POS))
 		return;
 
-	if (ds_readw(CD_AUDIO_REPEAT) == 1)
+	if (g_cd_audio_repeat == 1)
 	{
 		CD_audio_stop_hsg();
 		CD_audio_stop_hsg();
 		seg001_00c1(ds_readw(CD_AUDIO_TRACK));
-		ds_writew(CD_AUDIO_REPEAT, 1);
+		g_cd_audio_repeat = 1;
 	}
 }
 
@@ -224,14 +248,12 @@ int CD_bioskey(const int cmd)
 /* Borlandified and identical */
 static void CD_audio_stop_hsg(void)
 {
-
-	if (ds_readw(CD_INIT_SUCCESSFUL) == 0)
-		return;
+	if (!g_cd_init_successful) return;
 
 	req[0].status = 0;
 	CD_driver_request(&req[0]);
 
-	ds_writew(CD_AUDIO_REPEAT, 0);
+	g_cd_audio_repeat = 0;
 }
 
 /**
@@ -240,8 +262,7 @@ static void CD_audio_stop_hsg(void)
 /* Borlandified and identical */
 void CD_audio_stop(void)
 {
-	if (ds_readw(CD_INIT_SUCCESSFUL) == 0)
-		return;
+	if (!g_cd_init_successful) return;
 
 	CD_audio_stop_hsg();
 	req[1].status = 0;
@@ -252,46 +273,41 @@ void CD_audio_stop(void)
 void CD_audio_pause(void)
 {
 	/* Is CD initialized ? */
-	if (ds_readw(CD_INIT_SUCCESSFUL) == 0)
-		return;
+	if (!g_cd_init_successful) return;
 
 	/* Is CD already paused ? */
-	if (ds_readw(CD_AUDIO_PAUSED) != 0)
-		return;
+	if (g_cd_audio_paused) return;
 
 	/* set CD pause */
-	ds_writew(CD_AUDIO_PAUSED, 1);
+	g_cd_audio_paused = 1;
 	ds_writed(CD_AUDIO_PAUSE_TOD, CD_get_tod());
 	/* save current position */
 	ds_writed(CD_AUDIO_PAUSE_POS, ds_readd(CD_AUDIO_POS));
-	/* set current position to maximum singned int */
+	/* set current position to maximum signed int */
 	ds_writed(CD_AUDIO_POS, 0x7fffffff);
 
-	host_writew(MK_FP(CDA_DATASEG, 0xab), 0);
-
-	CD_driver_request((driver_request*)MK_FP(CDA_DATASEG, 0xa8));
+	req[6].status = 0;
+	CD_driver_request(&req[6]);
 }
 
 /* Borlandified and identical */
 void CD_audio_play(void)
 {
 	/* Is CD initialized ? */
-	if (ds_readw(CD_INIT_SUCCESSFUL) == 0)
-		return;
+	if (!g_cd_init_successful) return;
 
 	/* Is CD paused ? */
-	if (ds_readw(CD_AUDIO_PAUSED) == 0)
-		return;
+	if (!g_cd_audio_paused)	return;
 
 	CD_check();
 
 	/* reset CD pause */
-	ds_writew(CD_AUDIO_PAUSED, 0);
+	g_cd_audio_paused = 0;
 	ds_writed(CD_AUDIO_POS, ds_readd(CD_AUDIO_PAUSE_POS));
 	add_ds_ds(CD_AUDIO_TOD, (CD_get_tod() - ds_readds(CD_AUDIO_PAUSE_TOD)));
-	host_writew(MK_FP(CDA_DATASEG, 0xc7), 0);
 
-	CD_driver_request((driver_request*)MK_FP(CDA_DATASEG, 0xc4));
+	req[7].status = 0;
+	CD_driver_request(&req[7]);
 }
 
 /* Borlandified and nearly identical */
@@ -299,25 +315,22 @@ static void CD_0432(void)
 {
 	signed short track_no;
 
-	if (ds_readw(CD_INIT_SUCCESSFUL) == 0)
-		return;
+	if (!g_cd_init_successful) return;
 
-	host_writew(MK_FP(CDA_DATASEG, 0x3b), 0);
-	host_writed(MK_FP(CDA_DATASEG, 0x46), (Bit32u)(MK_FP(CDA_DATASEG, 0x420)));
-	host_writeb(MK_FP(CDA_DATASEG, 0x420), 0x0a);
+	req[2].status = 0;
+	req[2].ptr = &cd_buf1[0x324];
+	cd_buf1[0x324] = 0x0a;
+	CD_driver_request(&req[2]);
 
-	CD_driver_request((driver_request*)&req[2]);
+	track_no = (unsigned short)cd_buf1[0x325];
 
-	track_no = host_readb(MK_FP(CDA_DATASEG, 0x421));
-
-	while (host_readb(MK_FP(CDA_DATASEG, 0x422)) >= track_no)
+	while (cd_buf1[0x326] >= track_no)
 	{
-		host_writew(MK_FP(CDA_DATASEG, 0x3b), 0);
-		host_writed(MK_FP(CDA_DATASEG, 0x46), (Bit32u)(MK_FP(CDA_DATASEG, 8 * track_no + 0x108)));
-		host_writeb(MK_FP(CDA_DATASEG, 8 * track_no + 0x108), 0x0b);
-		host_writeb(MK_FP(CDA_DATASEG, 8 * track_no + 0x109), track_no);
-
-		CD_driver_request((driver_request*)&req[2]);
+		req[2].status = 0;
+		req[2].ptr = &cd_buf1[0x0c + 8 * track_no];
+		cd_buf1[0x0c + 8 * track_no] = 0x0b;
+		cd_buf1[0x0d + 8 * track_no] = track_no;
+		CD_driver_request(&req[2]);
 
 		track_no++;
 	}
@@ -331,26 +344,7 @@ struct dummy15 {
 void CD_set_track(const int index)
 {
 	signed short i;
-#if defined(__BORLANDC__)
-	struct dummy15 tracks = *(struct dummy15*)(p_datseg + CD_AUDIO_TRACKLIST);
-#else
-	struct dummy15 tracks;
-	tracks.a[0] = 0x7fff;
-	tracks.a[1] = 0x7fff;
-	tracks.a[2] = 0x7fff;
-	tracks.a[3] = 0x7fff;
-	tracks.a[4] = ARCHIVE_FILE_SUMMARY_XMI;
-	tracks.a[5] = ARCHIVE_FILE_THORWAL_XMI;
-	tracks.a[6] = ARCHIVE_FILE_TEMPLE_XMI;
-	tracks.a[7] = ARCHIVE_FILE_TERMS_XMI;
-	tracks.a[8] = ARCHIVE_FILE_SMITH_XMI;
-	tracks.a[9] = ARCHIVE_FILE_INN_XMI;
-	tracks.a[10] = ARCHIVE_FILE_HEALER_XMI;
-	tracks.a[11] = ARCHIVE_FILE_CAMP_XMI;
-	tracks.a[12] = ARCHIVE_FILE_VICTORY_XMI;
-	tracks.a[13] = ARCHIVE_FILE_COMBAT_XMI;
-	tracks.a[14] = ARCHIVE_FILE_DUNGEON_XMI;
-#endif
+	struct dummy15 tracks = *(struct dummy15*)g_cd_audio_tracklist;
 
 	for (i = 0; i < 15; i++)
 	{
@@ -359,20 +353,20 @@ void CD_set_track(const int index)
 
 	ds_writew(CD_AUDIO_TRACK, i + 1);
 
-	if (ds_readw(CD_AUDIO_TRACK_BAK) == ds_readw(CD_AUDIO_TRACK))
+	if (g_cd_audio_track_bak == ds_readw(CD_AUDIO_TRACK))
 	{
 	} else {
-		ds_writew(CD_AUDIO_TRACK_BAK, ds_readw(CD_AUDIO_TRACK));
+		g_cd_audio_track_bak = ds_readw(CD_AUDIO_TRACK);
 		CD_audio_stop_hsg();
 		CD_audio_stop_hsg();
 
 		seg001_00c1(ds_readw(CD_AUDIO_TRACK));
 
-		ds_writew(CD_AUDIO_REPEAT, 1);
+		g_cd_audio_repeat = 1;
 
-		if (ds_readw(CD_AUDIO_PAUSED) != 0)
+		if (g_cd_audio_paused)
 		{
-			ds_writew(CD_AUDIO_PAUSED, 0);
+			g_cd_audio_paused = 0;
 			CD_audio_pause();
 		}
 	}
@@ -386,7 +380,7 @@ static signed short CD_read_exe(char *path)
 	unsigned short nread;
 
 	/* skip read check */
-	if (ds_readd(CD_CHECK_SKIPMAGIC) == 0x682772e4) return 1;
+	if (g_cd_skipmagic == 0x682772e4L) return 1;
 
 	if (_dos_open(path, 1, (int*)&handle)) return -1;
 
@@ -407,14 +401,13 @@ static void CD_insert_msg(void)
 	signed short answer;
 	char str[160];
 
-	sprintf(str, (char*)p_datseg + STR_INSERT_CD, ds_readws(CD_DRIVE_NO) + 'A');
+	sprintf(str, g_str_insert_cd, ds_readws(CD_DRIVE_NO) + 'A');
 
+	/* TODO: do {} while; would be better */
 	answer = -2;
 	while (answer == -2)
 	{
-		answer = GUI_radio((char*)str, 2,
-					(char*)p_datseg + STR_REPEAT,
-					(char*)p_datseg + STR_QUIT);
+		answer = GUI_radio(str, 2, g_str_repeat, g_str_quit);
 	}
 
 	if (answer == 2)
@@ -422,19 +415,18 @@ static void CD_insert_msg(void)
 		cleanup_game();
 		exit(0);
 	}
-
 }
 
 /* Borlandified and identical */
 static signed short CD_harderr_handler(void)
 {
-	if (ds_readw(CD_CHECK_ERR_COUNTDOWN) == 0)
+	if (g_cd_check_err_countdown == 0)
 	{
 		CD_insert_msg();
-		ds_writew(CD_CHECK_ERR_COUNTDOWN, 5);
+		g_cd_check_err_countdown = 5;
 	}
 
-	dec_ds_ws_post(CD_CHECK_ERR_COUNTDOWN);
+	g_cd_check_err_countdown--;
 
 #if defined(__BORLANDC__)
 	hardresume(1);
@@ -452,7 +444,7 @@ void CD_check(void)
 	harderr((int(*)(int, int, int, int))CD_harderr_handler);
 #endif
 
-	strcpy(text, (char*)p_datseg + STR_CD_EXEPATH);
+	strcpy(text, g_str_cd_exepath);
 
 	text[0] = ds_readw(CD_DRIVE_NO) + 'A';
 
@@ -469,16 +461,16 @@ int CD_init(void)
 
 	if (!CD_set_drive_no())
 	{
-		GUI_output(p_datseg + STR_CD_MISSING);
+		GUI_output((char*)g_str_cd_missing);
 
 		return 0;
 	}
 
-	sprintf(str, (char*)p_datseg + STR_CD_INIT, ds_readws(CD_DRIVE_NO) + 'A');
+	sprintf(str, g_str_cd_init, ds_readws(CD_DRIVE_NO) + 'A');
 
-	GUI_output((Bit8u*)str);
+	GUI_output(str);
 
-	ds_writew(CD_INIT_SUCCESSFUL, 1);
+	g_cd_init_successful = 1;
 
 	CD_audio_stop();
 

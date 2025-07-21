@@ -5553,11 +5553,12 @@ int schick_main(int argc, char** argv)
 			len = strlen(argv[1]);
 
 			l_si = 0;
-			ds_writed(CD_CHECK_SKIPMAGIC, 1);
+			g_cd_skipmagic = 1;
 
 			while (l_si < len) {
 
-				ds_writed(CD_CHECK_SKIPMAGIC, argv[1][0] * ds_readds(CD_CHECK_SKIPMAGIC));
+
+				g_cd_skipmagic = argv[1][0] * g_cd_skipmagic;
 				argv[1]++;
 				l_si++;
 			}
@@ -5578,7 +5579,7 @@ int schick_main(int argc, char** argv)
 
 		CD_init();
 
-		if (ds_readw(CD_INIT_SUCCESSFUL) == 0) {
+		if (!g_cd_init_successful) {
 
 			/* CD init failed */
 			cleanup_game();

@@ -596,7 +596,7 @@ void cleanup_game(void)
 	exit_AIL();
 
 	/* disable CD-Audio */
-	if (ds_readw(CD_INIT_SUCCESSFUL) != 0) {
+	if (g_cd_init_successful) {
 		CD_audio_stop();
 	}
 

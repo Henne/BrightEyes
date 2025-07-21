@@ -10,21 +10,21 @@
 #define SYMBOLS_H
 
 // ?1
-#define CD_INIT_SUCCESSFUL              (0x0095)    /* unsigned short; {0,1} */
+//#define CD_INIT_SUCCESSFUL              (0x0095)    /* unsigned short; {0,1} */
 // ?4
-#define CD_AUDIO_REPEAT                 (0x009b)    /* unsigned short; {0,1} */
+//#define CD_AUDIO_REPEAT                 (0x009b)    /* unsigned short; {0,1} */
 // ?4
-#define CD_AUDIO_PAUSED                 (0x00a1)    /* unsigned short; {0,1} */
-#define CD_AUDIO_TRACK_BAK              (0x00a3)    /* unsigned short */
-#define CD_AUDIO_TRACKLIST              (0x00a5)    /* signed short[15] */
-#define CD_CHECK_SKIPMAGIC              (0x00c3)    /* unsigned long */
-#define CD_CHECK_ERR_COUNTDOWN          (0x00c7)    /* unsigned short */
-#define STR_INSERT_CD                   (0x00c9)    /* char[142]; "BITTE LEGEN SIE DIE \xf2SCHICKSALSKLINGE-CD\xf0 IN LAUFWERK %c: EIN. DIESE WIRD BEN\x99TIGT, DA DATEN W\x8eHREND DES SPIELS VON CD GELADEN WERDEN M\x9aSSEN." */
-#define STR_REPEAT                      (0x0157)    /* char[12]; "WIEDERHOLEN" */
-#define STR_QUIT                        (0x0163)    /* char[8]; "BEENDEN" */
-#define STR_CD_EXEPATH                  (0x016b)    /* char[19]; "X:\DSA\SCHICKM.EXE" */
-#define STR_CD_MISSING                  (0x017e)    /* char[204]; "DIESES PROGRAMM IST OHNE CD-ROM-LAUFWERK NICHT LAUFF\x8eHIG. BITTE INSTALLIEREN SIE DIE GER\x8eTETREIBER F\x9aR DAS CD-ROM-LAUFWERK GEM\x8eSS IHRER CD-ROM-DOKUMENTATION UND STARTEN SIE DIE 'SCHICKSALSKLINGE' ERNEUT." */
-#define STR_CD_INIT                     (0x024a)    /* char[37]; "INITIALISIERE CD-ROM IN LAUFWERK %c:" */
+//#define CD_AUDIO_PAUSED                 (0x00a1)    /* unsigned short; {0,1} */
+//#define CD_AUDIO_TRACK_BAK              (0x00a3)    /* unsigned short */
+//#define CD_AUDIO_TRACKLIST              (0x00a5)    /* signed short[15] */
+//#define CD_CHECK_SKIPMAGIC              (0x00c3)    /* unsigned long */
+//#define CD_CHECK_ERR_COUNTDOWN          (0x00c7)    /* unsigned short */
+//#define STR_INSERT_CD                   (0x00c9)    /* char[142]; "BITTE LEGEN SIE DIE \xf2SCHICKSALSKLINGE-CD\xf0 IN LAUFWERK %c: EIN. DIESE WIRD BEN\x99TIGT, DA DATEN W\x8eHREND DES SPIELS VON CD GELADEN WERDEN M\x9aSSEN." */
+//#define STR_REPEAT                      (0x0157)    /* char[12]; "WIEDERHOLEN" */
+//#define STR_QUIT                        (0x0163)    /* char[8]; "BEENDEN" */
+//#define STR_CD_EXEPATH                  (0x016b)    /* char[19]; "X:\DSA\SCHICKM.EXE" */
+//#define STR_CD_MISSING                  (0x017e)    /* char[204]; "DIESES PROGRAMM IST OHNE CD-ROM-LAUFWERK NICHT LAUFF\x8eHIG. BITTE INSTALLIEREN SIE DIE GER\x8eTETREIBER F\x9aR DAS CD-ROM-LAUFWERK GEM\x8eSS IHRER CD-ROM-DOKUMENTATION UND STARTEN SIE DIE 'SCHICKSALSKLINGE' ERNEUT." */
+//#define STR_CD_INIT                     (0x024a)    /* char[37]; "INITIALISIERE CD-ROM IN LAUFWERK %c:" */
 // ?1
 #define ITEMS_NOPLURAL                  (0x0270)    /* signed short[23]; { LAKRITZE (0x59), BONBONS (0x5a), SHURINKNOLLENGIFT (0x37), ARAXGIFT (0x38), ANGSTGIFT (0x39), SCHLAFGIFT (0x3a), GOLDLEIM (0x3b), LOTUSGIFT (0x8d), KUKRIS (0x8e), BANNSTAUB (0x8f), KROETENSCHEMELGIFT (0x90), ÖL (0x29), EXPURGICUM (0xa6), VOMICUM (0xa8), GEGENGIFT (0xb4), ERZKLUMPEN (0xb5), LOBPREISUNGEN (0xbd), PLATTENZEUG (0x52), LEDERZEUG (0x54), KETTENZEUG (0x53), MIASTHMATICUM (0xee), HYLAILIC_FIRE (0xef), -1 } */
 #define ITEMS_PLURALWORDS               (0x029e)    /* signed short[7]; { DIETRICHE (0x23), SCHUHE (0x32), STIEFEL (0x33), SCHNURSCHUHE (0x34), BONBONS (0x5a), LOBPREISUNGEN (0xbd), -1 } */
