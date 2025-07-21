@@ -17,13 +17,13 @@ char* GUI_get_ptr(const int, const int);
 //3e
 RealPt GUI_get_ptr2(signed short, signed short);
 //43
-void GUI_print_string(Bit8u *, signed short, signed short);
+void GUI_print_string(char*, signed short, signed short);
 //48
 signed short GUI_print_char(unsigned char, unsigned short, unsigned short);
 //4d
 signed short GUI_get_first_pos_centered(Bit8u*, signed short, signed short, unsigned short);
 //52
-unsigned short GUI_count_lines(Bit8u*);
+unsigned short GUI_count_lines(char*);
 //57
 signed short GUI_lookup_char_width(signed char, signed short*);
 //5c
@@ -42,7 +42,7 @@ void get_textcolor(signed short*, signed short*);
 //7f
 void GUI_print_loc_line(Bit8u*);
 //84
-signed short GUI_print_header(Bit8u*);
+signed short GUI_print_header(char*);
 //89
 signed short GUI_get_space_for_string(Bit8u*, signed short);
 //8e

@@ -229,12 +229,12 @@ void GUI_write_char_to_screen(Bit8u *dst, signed short char_width, signed short 
  *	    which should be printed on screen must not be constant.
  *	    Otherwise this application may crash.
  */
-unsigned short GUI_count_lines(Bit8u *str)
+unsigned short GUI_count_lines(char *str)
 {
 	signed short current_pos;
 	signed short last_ws;
 
-	Bit8u *str_loc;
+	char *str_loc;
 	signed short always_zero;
 	signed short lines;
 	signed short max_line_width;
@@ -319,7 +319,7 @@ unsigned short GUI_count_lines(Bit8u *str)
 }
 
 //5d7
-signed short GUI_print_header(Bit8u *str)
+signed short GUI_print_header(char *str)
 {
 	signed short retval = 1;
 
@@ -362,7 +362,7 @@ void GUI_print_loc_line(Bit8u * str)
 }
 
 //691
-void GUI_print_string(Bit8u *str, signed short x, signed short y)
+void GUI_print_string(char *str, signed short x, signed short y)
 {
 	signed short l1;
 	signed short l2;
