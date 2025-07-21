@@ -705,7 +705,7 @@ void FIG_do_hero_action(RealPt hero, const signed short hero_pos)
 
 				l6 = ds_readbs((SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_UNKN6) + SIZEOF_SPELL_DESCRIPTIONS * host_readbs(hero + HERO_SPELL_ID));
 
-				host_writeb((char*)ds_readd(DTP2), 0);
+				host_writeb((unsigned char*)ds_readd(DTP2), 0);
 
 				l15 = use_spell(hero, 0, 0);
 

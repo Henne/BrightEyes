@@ -46,7 +46,7 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 	Bit8u *state_ptr;
 	Bit8u *states_tab;
 	Bit8u *partners_tab;
-	Bit8u *dialog_title;
+	char *dialog_title;
 	char *dst;
 	char *fmt;
 	signed short shufflepair_1;
@@ -65,7 +65,7 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 	partners_tab = p_datseg + DIALOG_PARTNERS;
 	states_tab = (Bit8u*)(host_readds(partners_tab + 38 * informer_id));
 	txt_offset = host_readws(partners_tab + 4 + 38 * informer_id);
-	dialog_title = 38 * informer_id + partners_tab + 6;
+	dialog_title = 38 * informer_id + (char*)partners_tab + 6;
 	load_in_head(host_readws(partners_tab + 38 * informer_id + 36));
 	dst = (char*)ds_readd(DTP2) + 0x400;
 
@@ -167,7 +167,7 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 				}
 			}
 
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), dialog_title, (Bit8u*)dst, optioncount,
+			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), dialog_title, (char*)dst, optioncount,
 					get_tx(options[0].txt),
 					get_tx(options[1].txt),
 					get_tx(options[2].txt));
@@ -215,7 +215,7 @@ char* get_informer_forename(void)
 	signed short i;
 	char tmp;
 	Bit8u *p_info;
-	Bit8u *informer_name;
+	char *informer_name;
 
 	p_info = p_datseg + INFORMER_TAB;
 
@@ -227,7 +227,7 @@ char* get_informer_forename(void)
 			informer_name = get_ttx(host_readws(p_info));
 
 			do {
-				tmp = host_readbs(informer_name);
+				tmp = host_readbs((Bit8u*)informer_name);
 				informer_name++;
 				i++;
 			} while (tmp != ' ');
