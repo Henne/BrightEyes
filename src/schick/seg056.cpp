@@ -324,7 +324,7 @@ void buy_screen(void)
 					}
 
 					GUI_print_string((char*)ds_readd(DTP2),
-						GUI_get_first_pos_centered((char*)ds_readd(DTP2), ds_readws(HERO_PIC_POSX + 2 *l_di), 43, 0),
+						GUI_get_first_pos_centered((char*)ds_readd(DTP2), ds_readws(HERO_PIC_POSX + 2 * l_di), 43, 0),
 						190);
 
 					set_textcolor(255, 0);

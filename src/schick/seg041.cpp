@@ -87,10 +87,7 @@ signed short range_attack_check_ammo(Bit8u *hero, signed short arg)
 				if (left_hand != ITEM_ARROWS) { /* Pfeil */
 					if (arg != 2) {
 
-						sprintf((char*)ds_readd(DTP2),
-								get_tx(8),
-								(char*)hero + HERO_NAME2);
-
+						sprintf((char*)ds_readd(DTP2), get_tx(8), (char*)hero + HERO_NAME2);
 						GUI_output((char*)ds_readd(DTP2));
 					}
 
@@ -107,10 +104,7 @@ signed short range_attack_check_ammo(Bit8u *hero, signed short arg)
 				if (left_hand != ITEM_BOLTS) { /* Bolzen */
 					if (arg != 2) {
 
-						sprintf((char*)ds_readd(DTP2),
-								get_tx(9),
-								(char*)hero + HERO_NAME2);
-
+						sprintf((char*)ds_readd(DTP2), get_tx(9), (char*)hero + HERO_NAME2);
 						GUI_output((char*)ds_readd(DTP2));
 					}
 				} else {
@@ -129,10 +123,7 @@ signed short range_attack_check_ammo(Bit8u *hero, signed short arg)
 				if (left_hand != 999) {
 					if (arg != 2) {
 
-						sprintf((char*)ds_readd(DTP2),
-								get_tx(10),
-								(char*)hero + HERO_NAME2);
-
+						sprintf((char*)ds_readd(DTP2), get_tx(10), (char*)hero + HERO_NAME2);
 						GUI_output((char*)ds_readd(DTP2));
 					}
 				} else {
@@ -155,7 +146,7 @@ signed short range_attack_check_ammo(Bit8u *hero, signed short arg)
 	return retval;
 }
 
-void FIG_output(Bit8u *str)
+void FIG_output(char *str)
 {
 	if (*str != 0) {
 		GUI_output(str);
@@ -331,12 +322,11 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 					target_size = 3;
 				}
 			} else {
-					/* size of the enemy */
+				/* size of the enemy */
 				target_size = host_readbs(target + ENEMY_SHEET_SIZE);
 			}
 
-			damage_mod = (test_skill(
-						hero,
+			damage_mod = (test_skill(hero,
 					/* Original-Bug: For ITEM_SPEAR and ITEM_SPEAR_MAGIC, a test on TA_SCHUSSWAFFEN will be performed */
 						(host_readbs(item_p_rh + ITEM_STATS_SUBTYPE) == WEAPON_TYPE_WURFWAFFE ? TA_WURFWAFFEN : TA_SCHUSSWAFFEN),
 						host_readbs(p_rangedtab + RANGED_WEAPON_STATS_BASE_HANDICAP) + 2 * distance - 2 * target_size
