@@ -291,15 +291,15 @@ void load_area_description(signed short type)
 			fd = load_archive_file(ds_readw(AREADESCR_FILEID) + 0x8000);
 
 			if ((ds_readw(AREADESCR_DNG_FLAG) == 0) && (ds_readb(DNG_MAP_SIZE) == 0x20)) {
-				_write(fd, (void*)MK_FP(datseg, DNG_MAP), 0x200);
+				write(fd, (void*)MK_FP(datseg, DNG_MAP), 0x200);
 			} else {
 				lseek(fd, ds_readws(AREADESCR_DNG_LEVEL) * 0x140, 0);
-				_write(fd, (void*)MK_FP(datseg, DNG_MAP), 0x100);
+				write(fd, (void*)MK_FP(datseg, DNG_MAP), 0x100);
 			}
 			/* write automap tiles */
-			_write(fd, (void*)MK_FP(datseg, AUTOMAP_BUF), 64);
+			write(fd, (void*)MK_FP(datseg, AUTOMAP_BUF), 64);
 			/* write location information */
-			_write(fd, (void*)MK_FP(datseg, LOCATIONS_LIST), ds_readw(LOCATIONS_LIST_SIZE));
+			write(fd, (void*)MK_FP(datseg, LOCATIONS_LIST), ds_readw(LOCATIONS_LIST_SIZE));
 
 			close(fd);
 
@@ -542,7 +542,7 @@ void save_npc(signed short index)
 
 	fd = load_archive_file(index | 0x8000);
 
-	_write(fd, (Bit8u*)ds_readd(HEROES) + 6 * SIZEOF_HERO, SIZEOF_HERO);
+	write(fd, (Bit8u*)ds_readd(HEROES) + 6 * SIZEOF_HERO, SIZEOF_HERO);
 
 	close(fd);
 }

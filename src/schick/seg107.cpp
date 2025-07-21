@@ -137,8 +137,9 @@ void item_arcano(void)
 /* Borlandified and identical */
 void item_read_recipe(void)
 {
-	Bit8u *str;
+	char *str;
 
+	/* TODO: replace magic numbers */
 	switch (ds_readws(USED_ITEM_ID)) {
 	case 0xa7: str = get_ttx(639); break;
 	case 0xa9: str = get_ttx(640); break;
@@ -156,9 +157,7 @@ void item_read_recipe(void)
 	}
 
 	/* prepare message */
-	sprintf((char*)ds_readd(DTP2),
-		get_ttx(636),
-		(char*)str);
+	sprintf((char*)ds_readd(DTP2), get_ttx(636), str);
 
 	GUI_output((char*)ds_readd(DTP2));
 }
@@ -166,9 +165,10 @@ void item_read_recipe(void)
 /* Borlandified and identical */
 void item_read_document(void)
 {
-	Bit8u *str;
+	char *str;
 	signed short textbox_width_bak;
 
+	/* TODO: replace magic numbers */
 	switch (ds_readws(USED_ITEM_ID)) {
 	case 0xaa: str = get_ttx(641); break;
 	case 0xbb: str = get_ttx(645); break;

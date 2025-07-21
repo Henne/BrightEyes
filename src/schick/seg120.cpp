@@ -524,7 +524,7 @@ void prepare_dirs(void)
 
 			/* ERROR, cant write => exit */
 
-			GUI_output(p_datseg + STR_TEMP_DIR_FAIL);
+			GUI_output((char*)p_datseg + STR_TEMP_DIR_FAIL);
 
 			cleanup_game();
 
@@ -571,7 +571,7 @@ void prepare_dirs(void)
 
 		l_di = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
 
-		_write(l_di, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
+		write(l_di, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
 
 		close(l_di);
 

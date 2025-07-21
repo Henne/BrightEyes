@@ -677,7 +677,7 @@ void write_fight_lst(void)
 	lseek(fight_lst_handle, (long)SIZEOF_FIGHT * fight_id + 2, SEEK_SET);
 
 	/* write it */
-	_write(fight_lst_handle, (void*)ds_readd(CURRENT_FIGHT), SIZEOF_FIGHT);
+	write(fight_lst_handle, (void*)ds_readd(CURRENT_FIGHT), SIZEOF_FIGHT);
 
 	/* close the file */
 	close(fight_lst_handle);

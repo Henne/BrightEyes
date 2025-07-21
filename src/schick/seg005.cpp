@@ -396,7 +396,7 @@ void draw_fight_screen(Bit16u val)
 	/* write TEMP/XX */
 	/* TODO: should be O_BINARY | O_WRONLY */
 	handle = _creat((char*)ds_readd(STR_TEMP_XX_PTR), 0);
-	_write(handle, (Bit8u*)ds_readd(BUFFER8_PTR), 64000);
+	write(handle, (Bit8u*)ds_readd(BUFFER8_PTR), 64000);
 	close(handle);
 
 	if (flag != 0) {

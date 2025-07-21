@@ -316,7 +316,7 @@ signed short load_game_state(void)
 				handle = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
 
 				_read(handle_gs, (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * i));
-				_write(handle,   (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * i));
+				write(handle,   (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * i));
 				close(handle);
 			}
 		}
@@ -344,7 +344,7 @@ signed short load_game_state(void)
 				/* TODO: should be O_BINARY | O_WRONLY */
 				handle = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
 
-				_write(handle, (Bit8u*)hero_i, SIZEOF_HERO);
+				write(handle, (Bit8u*)hero_i, SIZEOF_HERO);
 				close(handle);
 
 				if (host_readbs(hero_i + HERO_GROUP_POS) != 0) {
@@ -375,7 +375,7 @@ signed short load_game_state(void)
 
 				/* TODO: should be O_BINARY | O_WRONLY */
 				handle_gs = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
-				_write(handle_gs, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
+				write(handle_gs, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
 			} else {
 				/* Yes, indeed! */
 			}
@@ -581,18 +581,18 @@ signed short save_game_state(void)
 		filepos = 0;
 
 		/* write version identifier 16 bytes */
-		filepos += _write(l_di, p_datseg + DSA_VERSION_STRING, 12);
-		filepos += _write(l_di, p_datseg + VERSION_TOKEN4, 1);
-		filepos += _write(l_di, p_datseg + VERSION_TOKEN3, 1);
-		filepos += _write(l_di, p_datseg + VERSION_TOKEN1, 1);
-		filepos += _write(l_di, p_datseg + VERSION_TOKEN2, 1);
+		filepos += write(l_di, p_datseg + DSA_VERSION_STRING, 12);
+		filepos += write(l_di, p_datseg + VERSION_TOKEN4, 1);
+		filepos += write(l_di, p_datseg + VERSION_TOKEN3, 1);
+		filepos += write(l_di, p_datseg + VERSION_TOKEN1, 1);
+		filepos += write(l_di, p_datseg + VERSION_TOKEN2, 1);
 
 		/* write fileposition 4 bytes */
 		/* this will be updated later to find the data of the CHR files */
-		filepos += _write(l_di, &filepos, 4);
+		filepos += write(l_di, &filepos, 4);
 
 		/* save the status section 5952 bytes */
-		filepos += _write(l_di, p_status_start, status_len);
+		filepos += write(l_di, p_status_start, status_len);
 
 		/* check if enough bytes were written */
 		if (status_len + 16 + 4L != filepos) {
@@ -602,7 +602,7 @@ signed short save_game_state(void)
 		}
 
 		filepos2 = filepos;
-		len = (Bit16u)_write(l_di, (Bit8u*)ds_readd(SAVED_FILES_BUF), 4 * 286);
+		len = (Bit16u)write(l_di, (Bit8u*)ds_readd(SAVED_FILES_BUF), 4 * 286);
 		filepos += len;
 
 		if (len != 4 * 286) {
@@ -629,7 +629,7 @@ signed short save_game_state(void)
 				_read(handle, (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * tw_bak));
 				close(handle);
 
-				len = (Bit16u)_write(l_di, (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * tw_bak));
+				len = (Bit16u)write(l_di, (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * tw_bak));
 				filepos += len;
 
 				if ((Bit16u)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * tw_bak) != len) {
@@ -643,11 +643,11 @@ signed short save_game_state(void)
 
 		/* skip back to the start of the offset of the CHR data */
 		lseek(l_di, 16, 0);
-		_write(l_di, &filepos, 4);
+		write(l_di, &filepos, 4);
 
 		/* write the file table */
 		lseek(l_di, filepos2, 0);
-		_write(l_di, (Bit8u*)ds_readd(SAVED_FILES_BUF), 4 * 286);
+		write(l_di, (Bit8u*)ds_readd(SAVED_FILES_BUF), 4 * 286);
 
 		/* append all CHR files */
 		lseek(l_di, filepos, 0);
@@ -668,7 +668,7 @@ signed short save_game_state(void)
 			close(handle);
 
 			/* append it */
-			len = _write(l_di, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
+			len = write(l_di, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
 
 			if (len != SIZEOF_HERO) {
 				GUI_output(get_ttx(348));
@@ -685,7 +685,7 @@ signed short save_game_state(void)
 
 		/* rewrite GAMES.NAM */
 		l_di = _creat((char*)ds_readd(FNAMES + 0x33c), 0);
-		_write(l_di, p_datseg + SAVEGAME_NAMES, 45);
+		write(l_di, p_datseg + SAVEGAME_NAMES, 45);
 		close(l_di);
 
 		return 1;
@@ -778,7 +778,7 @@ void write_chr_temp(unsigned short hero_pos)
 
 	/* TODO: should be O_BINARY | O_WRONLY */
 	fd = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
-	_write(fd, (Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * hero_pos, SIZEOF_HERO);
+	write(fd, (Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * hero_pos, SIZEOF_HERO);
 	close(fd);
 }
 
