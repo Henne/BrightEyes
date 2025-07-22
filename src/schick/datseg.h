@@ -10,6 +10,22 @@ extern char ds[1];
 extern unsigned short g_cd_init_successful;
 extern Bit32u g_cd_skipmagic;
 
+/* seg096 */
+extern signed short g_items_noplural[23];
+/* seg106 + seg107 */
+extern signed short g_items_pluralwords[7];
+/* seg096 */
+extern signed char g_items_genders[254];
+/* seg048, seg056, seg105 */
+extern signed short* g_wearable_items_index[12];
+/* seg041 */
+struct ranged_weapons {
+	signed char damage_modifier[7];
+	signed char base_handicap;
+};
+/* TODO: use it properly in seg041 */
+extern struct ranged_weapons g_ranged_weapons_table[9];
+
 #if !defined(__BORLANDC__)
 /* arrays for meaningful log messages */
 const char* names_attrib[14];

@@ -68,7 +68,7 @@ void use_item(signed short item_pos, signed short hero_pos)
 			if (!item_useable((Bit8u*)ds_readd(USED_ITEM_DESC))) {
 				/* item is not usable */
 
-				if (is_in_word_array(ds_readws(USED_ITEM_ID), (signed short*)(p_datseg + ITEMS_PLURALWORDS)))
+				if (is_in_word_array(ds_readws(USED_ITEM_ID), g_items_pluralwords))
 				{
 					/* german grammar, singular and plural are the same */
 					sprintf((char*)ds_readd(DTP2),

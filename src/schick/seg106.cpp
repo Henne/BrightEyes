@@ -144,11 +144,10 @@ void move_item(signed short pos1, signed short pos2, Bit8u *hero)
 
 						} else {
 							if (!can_item_at_pos(item2, pos1)) {
-								if (is_in_word_array(item2, (signed short*)(p_datseg + ITEMS_PLURALWORDS)))
-									sprintf((char*)ds_readd(DTP2),
-										get_ttx(222),
-										(char*)(Bit8u*)(GUI_names_grammar(0x4000, item2, 0)),
-										get_ttx(557));
+								if (is_in_word_array(item2, g_items_pluralwords))
+
+									sprintf((char*)ds_readd(DTP2), get_ttx(222),
+										(char*)GUI_names_grammar(0x4000, item2, 0), get_ttx(557));
 								else
 									sprintf((char*)ds_readd(DTP2), get_ttx(222),
 										(char*)GUI_names_grammar(0, item2, 0), get_ttx(556));
@@ -226,7 +225,8 @@ void print_item_description(Bit8u *hero, signed short pos)
 
 		if ((((signed short)host_readw(inventory_p + INVENTORY_QUANTITY) > 1) &&
 			item_stackable(get_itemsdat(host_readw(inventory_p + INVENTORY_ITEM_ID)))) ||
-			is_in_word_array(host_readw(inventory_p + INVENTORY_ITEM_ID), (signed short*)(p_datseg + ITEMS_PLURALWORDS))) {
+			is_in_word_array(host_readw(inventory_p + INVENTORY_ITEM_ID), g_items_pluralwords)) {
+
 			/* more than one item or special */
 			sprintf((char*)ds_readd(DTP2), get_tx2(72), get_ttx(305),
 				(Bit8u*)GUI_names_grammar(0x4004, host_readw(inventory_p + INVENTORY_ITEM_ID), 0));
@@ -341,7 +341,7 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 		} else if (!can_item_at_pos(item1, pos2)) {
 
-			if (is_in_word_array(item1, (signed short*)(p_datseg + ITEMS_PLURALWORDS))) {
+			if (is_in_word_array(item1, g_items_pluralwords)) {
 
 				sprintf((char*)ds_readd(DTP2), get_ttx(222),
 					(char*)GUI_names_grammar(0x4000, item1, 0), get_ttx(557));
@@ -386,7 +386,7 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 		} else if (!can_item_at_pos(item2, pos1)) {
 
-			if (is_in_word_array(item2, (signed short*)(p_datseg + ITEMS_PLURALWORDS))) {
+			if (is_in_word_array(item2, g_items_pluralwords)) {
 
 				sprintf((char*)ds_readd(DTP2), get_ttx(222),
 					(char*)GUI_names_grammar(0x4000, item2, 0), get_ttx(557));

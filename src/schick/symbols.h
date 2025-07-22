@@ -26,22 +26,22 @@
 //#define STR_CD_MISSING                  (0x017e)    /* char[204]; "DIESES PROGRAMM IST OHNE CD-ROM-LAUFWERK NICHT LAUFF\x8eHIG. BITTE INSTALLIEREN SIE DIE GER\x8eTETREIBER F\x9aR DAS CD-ROM-LAUFWERK GEM\x8eSS IHRER CD-ROM-DOKUMENTATION UND STARTEN SIE DIE 'SCHICKSALSKLINGE' ERNEUT." */
 //#define STR_CD_INIT                     (0x024a)    /* char[37]; "INITIALISIERE CD-ROM IN LAUFWERK %c:" */
 // ?1
-#define ITEMS_NOPLURAL                  (0x0270)    /* signed short[23]; { LAKRITZE (0x59), BONBONS (0x5a), SHURINKNOLLENGIFT (0x37), ARAXGIFT (0x38), ANGSTGIFT (0x39), SCHLAFGIFT (0x3a), GOLDLEIM (0x3b), LOTUSGIFT (0x8d), KUKRIS (0x8e), BANNSTAUB (0x8f), KROETENSCHEMELGIFT (0x90), ÖL (0x29), EXPURGICUM (0xa6), VOMICUM (0xa8), GEGENGIFT (0xb4), ERZKLUMPEN (0xb5), LOBPREISUNGEN (0xbd), PLATTENZEUG (0x52), LEDERZEUG (0x54), KETTENZEUG (0x53), MIASTHMATICUM (0xee), HYLAILIC_FIRE (0xef), -1 } */
-#define ITEMS_PLURALWORDS               (0x029e)    /* signed short[7]; { DIETRICHE (0x23), SCHUHE (0x32), STIEFEL (0x33), SCHNURSCHUHE (0x34), BONBONS (0x5a), LOBPREISUNGEN (0xbd), -1 } */
-#define ITEMS_GENDERS                   (0x02ac)    /* signed char[254] */
-#define WEARABLE_ITEMS_JUGGLER          (0x03aa)    /* short[19]; array terminated by -1 */
-#define WEARABLE_ITEMS_HUNTER           (0x03d0)    /* short[19]; array terminated by -1 */
-#define WEARABLE_ITEMS_WARRIOR          (0x03f6)    /* short[12]; array terminated by -1 */
-#define WEARABLE_ITEMS_ESTRAY           (0x040e)    /* short[18]; array terminated by -1 */
-#define WEARABLE_ITEMS_THORWALIAN       (0x0432)    /* short[12]; array terminated by -1 */
-#define WEARABLE_ITEMS_DWARF            (0x044a)    /* short[9]; array terminated by -1 */
-#define WEARABLE_ITEMS_WITCH            (0x045c)    /* short[64]; array terminated by -1 */
-#define WEARABLE_ITEMS_DRUID            (0x04dc)    /* short[57]; array terminated by -1 */
-#define WEARABLE_ITEMS_MAGE             (0x054e)    /* short[64]; array terminated by -1 */
-#define WEARABLE_ITEMS_GREEN_ELF        (0x05ce)    /* short[15]; array terminated by -1 */
-#define WEARABLE_ITEMS_ICE_ELF          (0x05ec)    /* short[19]; array terminated by -1 */
-#define WEARABLE_ITEMS_SYLVAN_ELF       (0x0612)    /* short[19]; array terminated by -1 */
-#define WEARABLE_ITEMS_INDEX            (0x0638)    /* RealPt[12]; items wearable depending on hero type */
+//#define ITEMS_NOPLURAL                  (0x0270)    /* signed short[23]; { LAKRITZE (0x59), BONBONS (0x5a), SHURINKNOLLENGIFT (0x37), ARAXGIFT (0x38), ANGSTGIFT (0x39), SCHLAFGIFT (0x3a), GOLDLEIM (0x3b), LOTUSGIFT (0x8d), KUKRIS (0x8e), BANNSTAUB (0x8f), KROETENSCHEMELGIFT (0x90), ÖL (0x29), EXPURGICUM (0xa6), VOMICUM (0xa8), GEGENGIFT (0xb4), ERZKLUMPEN (0xb5), LOBPREISUNGEN (0xbd), PLATTENZEUG (0x52), LEDERZEUG (0x54), KETTENZEUG (0x53), MIASTHMATICUM (0xee), HYLAILIC_FIRE (0xef), -1 } */
+//#define ITEMS_PLURALWORDS               (0x029e)    /* signed short[7]; { DIETRICHE (0x23), SCHUHE (0x32), STIEFEL (0x33), SCHNURSCHUHE (0x34), BONBONS (0x5a), LOBPREISUNGEN (0xbd), -1 } */
+//#define ITEMS_GENDERS                   (0x02ac)    /* signed char[254] */
+//#define WEARABLE_ITEMS_JUGGLER          (0x03aa)    /* short[19]; array terminated by -1 */
+//#define WEARABLE_ITEMS_HUNTER           (0x03d0)    /* short[19]; array terminated by -1 */
+//#define WEARABLE_ITEMS_WARRIOR          (0x03f6)    /* short[12]; array terminated by -1 */
+//#define WEARABLE_ITEMS_ESTRAY           (0x040e)    /* short[18]; array terminated by -1 */
+//#define WEARABLE_ITEMS_THORWALIAN       (0x0432)    /* short[12]; array terminated by -1 */
+//#define WEARABLE_ITEMS_DWARF            (0x044a)    /* short[9]; array terminated by -1 */
+//#define WEARABLE_ITEMS_WITCH            (0x045c)    /* short[64]; array terminated by -1 */
+//#define WEARABLE_ITEMS_DRUID            (0x04dc)    /* short[57]; array terminated by -1 */
+//#define WEARABLE_ITEMS_MAGE             (0x054e)    /* short[64]; array terminated by -1 */
+//#define WEARABLE_ITEMS_GREEN_ELF        (0x05ce)    /* short[15]; array terminated by -1 */
+//#define WEARABLE_ITEMS_ICE_ELF          (0x05ec)    /* short[19]; array terminated by -1 */
+//#define WEARABLE_ITEMS_SYLVAN_ELF       (0x0612)    /* short[19]; array terminated by -1 */
+//#define WEARABLE_ITEMS_INDEX            (0x0638)    /* RealPt[12]; items wearable depending on hero type */
 #define RANGED_WEAPONS_TABLE            (0x0668)    /* struct(8)[9]; struct{char unkn[8];} */
 #define WEAPONS_TABLE                   (0x06b0)    /* struct(7)[65]; struct{char unkn[7];} */
 #define ARMORS_TABLE                    (0x0877)    /* struct(2)[25]; struct{char rs, be;} */

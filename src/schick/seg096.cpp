@@ -55,9 +55,9 @@ RealPt GUI_names_grammar(signed short flag, signed short index, signed short typ
 		/* string_array_itemnames */
 		p_name = get_itemname(index);
 
-		flag += lp5.a[ds_readbs(ITEMS_GENDERS + index)];
+		flag += lp5.a[g_items_genders[index]];
 
-		lp1 = (signed short*)(p_datseg + ITEMS_NOPLURAL);
+		lp1 = &g_items_noplural[0];
 
 		while (((l4 = host_readws((Bit8u*)(lp1++))) != -1) && (l4 != index));
 
@@ -158,7 +158,7 @@ RealPt GUI_2f2(signed short v1, signed short word_id, signed short type)
 {
 	signed short genus;
 
-	genus = (type == 0) ? ds_readbs(ITEMS_GENDERS + word_id) : ds_readbs(word_id + MONNAME_GENDERS);
+	genus = (type == 0) ? g_items_genders[word_id] : ds_readbs(word_id + MONNAME_GENDERS);
 
 	return (Bit8u*)ds_readd(GRAMMAR_PRONOUNS_INDEX + 4 * ds_readbs(GRAMMAR_PRONOUNS_TABLE2 + v1 * 3 + genus));
 }
