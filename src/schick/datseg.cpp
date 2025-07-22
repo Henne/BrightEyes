@@ -1824,6 +1824,8 @@ signed char g_levelup_ta_rise[12] = { 0x14, 0x14, 0x14, 0x14, 0x14, 0x14, 0x14, 
 signed char g_levelup_sp_rise[6] = { 0x19, 0x19, 0x28, 0x14, 0x14, 0x14 }; // ds:0x2d1b
 signed char g_levelup_spta_conv[6] = { 5, 5, 5, 0, 0, 0 }; // ds:0x2d21
 signed char g_mr_modificators[13] = { 0, 2, 0, 0, 2, -2, 2, 2, 2, 2, 3, 4, 3 }; // ds:0x2d27, { 0, 2, 0, 0, 2, -2, 2, 2, 2, 2, 3, 4, 3 }
+
+
 unsigned char g_datseg_status_start = 0; // ds:0x2d34, 99 = game finished, area of the datseg that is stored one to one in savegame files
 signed char g_current_group = 0; // ds:0x2d35
 signed char g_group_member_counts[6] = { 0, 0, 0, 0, 0, 0 }; // ds:0x2d36, members per group
@@ -2855,6 +2857,7 @@ struct{short day, month, year, town;} g_diary_entries[23] = {
 	{ 0x0000, 0x0000, 0x0000, 0x0000 }
 }; // ds:0x43bc
 char g_datseg_status_end = 0; // ds:0x4474
+
 unsigned char g_fading_state = 0; // ds:0x4475
 unsigned char g_music_enabled = 1; // ds:0x4476
 unsigned char g_snd_effects_enabled = 0; // ds:0x4477
@@ -5741,7 +5744,7 @@ struct{signed short item_id, handicap; signed char dtp;} g_analues_items[28] = {
 	{ ITEM_BAG                   ,  0, 0x50 },
 	{ -0x0001                    ,  0, 0x00 }
 }; // ds:0xac3c
-long g_hexenknoten_gfx_buf = 0; // ds:0xacc8; RealPt
+unsigned char *g_hexenknoten_gfx_buf = NULL; // ds:0xacc8;
 signed short g_monster_spell_ae_cost = -1; // ds:0xaccc
 char g_select_skill_lvlup[6] = "%s~%d"; // ds:0xacce
 signed char g_select_skill_defaults[6] = { TA_HEILEN_GIFT, TA_HEILEN_KRANKHEITEN, TA_HEILEN_WUNDEN, -1, -1, -1 }; // ds:0xacd4, {44, 45, 46, -1, -1, -1}

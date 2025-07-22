@@ -330,7 +330,7 @@ signed short MON_cast_spell(RealPt monster, signed char handicap)
 
 			ds_writed(SPELLUSER_E, (Bit32u)monster);
 
-			ds_writew(MONSTER_SPELL_AE_COST, -1);
+			g_monster_spell_ae_cost = -1;
 
 			/* terminate output string */
 			host_writeb((char*)ds_readd(DTP2), 0);
@@ -348,13 +348,13 @@ signed short MON_cast_spell(RealPt monster, signed char handicap)
 
 			l_di = 1;
 
-			if (ds_readws(MONSTER_SPELL_AE_COST) == 0) {
+			if (!g_monster_spell_ae_cost) {
 				l_di = -1;
-			} else if (ds_readws(MONSTER_SPELL_AE_COST) == -2) {
+			} else if (g_monster_spell_ae_cost == -2) {
 				MON_sub_ae((Bit8u*)(monster), MON_get_spell_cost(l_si, 1));
 				l_di = 0;
-			} else if (ds_readws(MONSTER_SPELL_AE_COST) != -1) {
-				MON_sub_ae((Bit8u*)(monster), ds_readws(MONSTER_SPELL_AE_COST));
+			} else if (g_monster_spell_ae_cost != -1) {
+				MON_sub_ae((Bit8u*)(monster), g_monster_spell_ae_cost);
 			} else {
 				MON_sub_ae((Bit8u*)(monster), cost);
 			}
@@ -376,11 +376,11 @@ void mspell_verwandlung(void)
 	if (enemy_petrified(get_spelltarget_e())) {
 
 		/* set the spellcosts */
-		ds_writew(MONSTER_SPELL_AE_COST, 5 * random_schick(10));
+		g_monster_spell_ae_cost = 5 * random_schick(10);
 
-		if (host_readws(get_spelluser_e() + ENEMY_SHEET_AE) < ds_readws(MONSTER_SPELL_AE_COST)) {
+		if (host_readws(get_spelluser_e() + ENEMY_SHEET_AE) < g_monster_spell_ae_cost) {
 			/* if not enough AE, all AE will be consumed, without further effect */
-			ds_writew(MONSTER_SPELL_AE_COST, host_readws(get_spelluser_e() + ENEMY_SHEET_AE));
+			g_monster_spell_ae_cost = host_readws(get_spelluser_e() + ENEMY_SHEET_AE);
 		} else {
 			and_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS1, 0xfb); /* unset 'petrified' flag */
 
@@ -392,18 +392,18 @@ void mspell_verwandlung(void)
 	} else if (enemy_mushroom(get_spelltarget_e())) {
 
 		/* set the spellcosts */
-		ds_writew(MONSTER_SPELL_AE_COST, 5 * random_schick(10));
+		g_monster_spell_ae_cost = 5 * random_schick(10);
 
-		if (host_readws(get_spelluser_e() + ENEMY_SHEET_AE) < ds_readws(MONSTER_SPELL_AE_COST)) {
+		if (host_readws(get_spelluser_e() + ENEMY_SHEET_AE) < g_monster_spell_ae_cost) {
 			/* if not enough AE, all AE will be consumed, without further effect */
-			ds_writew(MONSTER_SPELL_AE_COST, host_readws(get_spelluser_e() + ENEMY_SHEET_AE));
+			g_monster_spell_ae_cost = host_readws(get_spelluser_e() + ENEMY_SHEET_AE);
 		} else {
 			and_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS1, 0xbf); /* unset 'mushroom' flag */
 
 			ds_writew(MSPELL_AWAKE_FLAG, 1);
 		}
 	} else {
-		ds_writew(MONSTER_SPELL_AE_COST, 2);
+		g_monster_spell_ae_cost = 2;
 	}
 }
 
@@ -492,20 +492,20 @@ void mspell_balsam(void)
 	 *
 	 * Hard to guess what the intended behavior was. */
 
-	ds_writew(MONSTER_SPELL_AE_COST, 0);
+	g_monster_spell_ae_cost = 0;
 
 	le = (host_readws(get_spelltarget_e() + ENEMY_SHEET_LE_ORIG) - host_readws(get_spelltarget_e() + ENEMY_SHEET_LE)) / 2; /* half of the missing LE */
 
 	if (le) {
 		if (le < 7) {
 			/* AE costs are at least 7 */
-			ds_writew(MONSTER_SPELL_AE_COST, 7);
+			g_monster_spell_ae_cost = 7;
 		}
-		if (host_readws(get_spelluser_e() + ENEMY_SHEET_AE) < ds_readws(MONSTER_SPELL_AE_COST)) {
+		if (host_readws(get_spelluser_e() + ENEMY_SHEET_AE) < g_monster_spell_ae_cost) {
 			/* not enough AE: heal only that many LE as the spellcaster has AE available */
-			ds_writew(MONSTER_SPELL_AE_COST, host_readws(get_spelluser_e() + ENEMY_SHEET_AE));
+			g_monster_spell_ae_cost = host_readws(get_spelluser_e() + ENEMY_SHEET_AE);
 		}
-		add_ptr_ws(get_spelltarget_e() + ENEMY_SHEET_LE, ds_readws(MONSTER_SPELL_AE_COST));
+		add_ptr_ws(get_spelltarget_e() + ENEMY_SHEET_LE, g_monster_spell_ae_cost);
 	}
 #else
 	/* Fix:
@@ -521,7 +521,8 @@ void mspell_balsam(void)
 	if (host_readws(get_spelluser_e() + ENEMY_SHEET_AE) < le) {
 		le = host_readws(get_spelluser_e() + ENEMY_SHEET_AE);
 	}
-	ds_writew(MONSTER_SPELL_AE_COST, le);
+
+	g_monster_spell_ae_cost = le;
 	add_ptr_ws(get_spelltarget_e() + ENEMY_SHEET_LE, le);
 #endif
 }
@@ -574,7 +575,8 @@ void mspell_eisenrost(void)
 
 		if (!id) {
 			/* target hero has no weapon */
-			ds_writew(MONSTER_SPELL_AE_COST, 2);
+			g_monster_spell_ae_cost = 2;
+
 		} else if (!inventory_broken(get_spelltarget() + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY)) {
 
 			if (host_readbs(get_spelltarget() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_BF)) > 0) {
@@ -587,7 +589,7 @@ void mspell_eisenrost(void)
 					(Bit8u*)(GUI_names_grammar((signed short)0x8000, id, 0)),
 					get_spelltarget() + HERO_NAME2);
 			} else {
-				ds_writew(MONSTER_SPELL_AE_COST, -2);
+				g_monster_spell_ae_cost = -2;
 			}
 		}
 
@@ -631,7 +633,7 @@ void mspell_fulminictus(void)
 	MON_do_spell_damage(damage);
 
 	/* set the cost */
-	ds_writew(MONSTER_SPELL_AE_COST, damage);
+	g_monster_spell_ae_cost = damage;
 }
 
 void mspell_ignifaxius(void)
@@ -716,7 +718,7 @@ void mspell_ignifaxius(void)
 
 	/* terminate output string */
 	host_writebs((char*)ds_readd(DTP2), 0);
-	ds_writew(MONSTER_SPELL_AE_COST, damage);
+	g_monster_spell_ae_cost = damage;
 }
 
 void mspell_plumbumbarum(void)
@@ -780,7 +782,7 @@ void mspell_saft_kraft(void)
 		host_readbs(get_spelltarget_e() + ENEMY_SHEET_SAFTKRAFT) + 5);
 
 	/* set spellcost */
-	ds_writew(MONSTER_SPELL_AE_COST, random_schick(20));
+	g_monster_spell_ae_cost = random_schick(20);
 }
 
 void mspell_armatrutz(void)
@@ -796,7 +798,7 @@ void mspell_armatrutz(void)
 	rs_bonus = random_interval(1, i);
 
 	/* set spellcost */
-	ds_writew(MONSTER_SPELL_AE_COST, rs_bonus * rs_bonus);
+	g_monster_spell_ae_cost = rs_bonus * rs_bonus;
 
 	/* RS + rs_bonus */
 	host_writebs(get_spelluser_e() + ENEMY_SHEET_RS,

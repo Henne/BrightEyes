@@ -1240,8 +1240,8 @@
 #define SPELL_SELECT_STR_KEYVAL_COLOR   (0xac28)    /* char[8]; "\xf2%s~%d\xf0" */
 #define SPELL_SELECT_ONES               (0xac30)    /* signed char[12]; { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } */
 #define ANALUES_ITEMS                   (0xac3c)    /* struct(5)[28]; struct{signed short item_id, barrier; signed char dtp;} */
-#define HEXENKNOTEN_GFX_BUF             (0xacc8)    /* RealPt */
-#define MONSTER_SPELL_AE_COST           (0xaccc)    /* signed short */
+//#define HEXENKNOTEN_GFX_BUF             (0xacc8)    /* RealPt */
+//#define MONSTER_SPELL_AE_COST           (0xaccc)    /* signed short */
 #define SELECT_SKILL_LVLUP              (0xacce)    /* char[6]; "%s~%d" */
 #define SELECT_SKILL_DEFAULTS           (0xacd4)    /* signed char[6]; {44, 45, 46, -1, -1, -1} */
 #define ALCHEMY_RECIPES                 (0xacda)    /* struct(28)[13] */
