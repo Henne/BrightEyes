@@ -266,7 +266,7 @@ signed short select_skill(void)
 	signed short l_si = -1;
 	signed short nr_skills = 3;
 	/* available skills {TA_HEILEN_GIFT, TA_HEILEN_KRANKHEITEN, TA_HEILEN_WUNDEN, -1, -1, -1} */
-	struct dummy2 a = *(struct dummy2*)(p_datseg + SELECT_SKILL_DEFAULTS);
+	struct dummy2 a = *(struct dummy2*)g_select_skill_defaults;
 
 	/* add skills for special location */
 	if (ds_readbs(CURRENT_LOCTYPE) == LOCTYPE_TAVERN) {

@@ -1243,7 +1243,7 @@
 //#define HEXENKNOTEN_GFX_BUF             (0xacc8)    /* RealPt */
 //#define MONSTER_SPELL_AE_COST           (0xaccc)    /* signed short */
 //#define SELECT_SKILL_LVLUP              (0xacce)    /* char[6]; "%s~%d" */
-#define SELECT_SKILL_DEFAULTS           (0xacd4)    /* signed char[6]; {44, 45, 46, -1, -1, -1} */
+//#define SELECT_SKILL_DEFAULTS           (0xacd4)    /* signed char[6]; {44, 45, 46, -1, -1, -1} */
 #define ALCHEMY_RECIPES                 (0xacda)    /* struct(28)[13] */
 #define PREVENT_DROP_EQUIPPED_ITEMS     (0xae46)    /* unsigned char; {0,1} */
 // ?1

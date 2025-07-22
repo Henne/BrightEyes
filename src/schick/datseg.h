@@ -42,6 +42,8 @@ extern void (*g_location_handlers[19])(void);
 extern unsigned char *g_hexenknoten_gfx_buf;	// ds:0xacc8; seg100
 extern signed short g_monster_spell_ae_cost;	// ds:0xaccc; seg102
 extern char g_select_skill_lvlup[6]; 		// ds:0xacce; seg103
+extern signed char g_select_skill_defaults[6];	// ds:0xacd4; seg103
+
 /* BSS */
 
 #if !defined(__BORLANDC__)
