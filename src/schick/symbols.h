@@ -46,27 +46,27 @@
 #define WEAPONS_TABLE                   (0x06b0)    /* struct(7)[65]; struct{char unkn[7];} */
 #define ARMORS_TABLE                    (0x0877)    /* struct(2)[25]; struct{char rs, be;} */
 #define SPECIALITEMS_TABLE              (0x08a9)    /* struct(3)[14]; struct{char unkn1, unkn2, handler_no;} */
-#define POISON_POTIONS                  (0x08d3)    /* signed short[10]; { SHURINKNOLLENGIFT (0x37), ARAXGIFT (0x38), ANGSTGIFT (0x39), SCHLAFGIFT (0x3a), GOLDLEIM (0x3b), LOTUSGIFT (0x8d), KUKRIS (0x8e), BANNSTAUB (0x8f), KROETENSCHEMELGIFT (0x90), 0xff } */
-#define HERBS_TOXIC                     (0x08e7)    /* signed short[5]; { SHURINKNOLLE (0x7a), ALRAUNE (0x7e), LOTUSBLUTE (0x84), EITRIGER KROTENSCHEMEL (0x3e), 0xff } */
-#define HERBS_UNEATABLE                 (0x08f1)    /* signed short[7]; { ILMENBLATT (0x80), FINAGEBÄUMCHEN (0x81), JORUGAWURZEL (0x82), KAIRANHALM (0x9d), OLGINWURZEL (0x9c), DONFSTENGEL (0x7c), 0xff } */
-#define ELIXIR_POTIONS                  (0x08ff)    /* signed short[8]; { MU ELIXIER (0x93), KL ELIXIER (0x94), CH ELIXIER (0x95), FF ELIXIER (0x96), GE ELIXIER (0x97), IN ELIXIER (0x98), KK ELIXIER (0x99), 0xff } */
-#define BAD_ELIXIRS                     (0x090f)    /* signed short[8]; { MU ELIXIER (0xe2), KL ELIXIER (0xe3), CH ELIXIER (0xe4), FF ELIXIER (0xe5), GE ELIXIER (0xe6), IN ELIXIER (0xe7), KK ELIXIER (0xe8), 0xff } */
-#define ATTACK_ITEMS                    (0x091f)    /* signed short[3]; { ITEM_MIASTHMATICUM (0xee), ITEM_HYLAILIC_FIRE (0xef), -1 } */
-#define MONNAME_GENDERS                 (0x0925)    /* signed char[78] */
+//#define POISON_POTIONS                  (0x08d3)    /* signed short[10]; { SHURINKNOLLENGIFT (0x37), ARAXGIFT (0x38), ANGSTGIFT (0x39), SCHLAFGIFT (0x3a), GOLDLEIM (0x3b), LOTUSGIFT (0x8d), KUKRIS (0x8e), BANNSTAUB (0x8f), KROETENSCHEMELGIFT (0x90), 0xff } */
+//#define HERBS_TOXIC                     (0x08e7)    /* signed short[5]; { SHURINKNOLLE (0x7a), ALRAUNE (0x7e), LOTUSBLUTE (0x84), EITRIGER KROTENSCHEMEL (0x3e), 0xff } */
+//#define HERBS_UNEATABLE                 (0x08f1)    /* signed short[7]; { ILMENBLATT (0x80), FINAGEBÄUMCHEN (0x81), JORUGAWURZEL (0x82), KAIRANHALM (0x9d), OLGINWURZEL (0x9c), DONFSTENGEL (0x7c), 0xff } */
+//#define ELIXIR_POTIONS                  (0x08ff)    /* signed short[8]; { MU ELIXIER (0x93), KL ELIXIER (0x94), CH ELIXIER (0x95), FF ELIXIER (0x96), GE ELIXIER (0x97), IN ELIXIER (0x98), KK ELIXIER (0x99), 0xff } */
+//#define BAD_ELIXIRS                     (0x090f)    /* signed short[8]; { MU ELIXIER (0xe2), KL ELIXIER (0xe3), CH ELIXIER (0xe4), FF ELIXIER (0xe5), GE ELIXIER (0xe6), IN ELIXIER (0xe7), KK ELIXIER (0xe8), 0xff } */
+//#define ATTACK_ITEMS                    (0x091f)    /* signed short[3]; { ITEM_MIASTHMATICUM (0xee), ITEM_HYLAILIC_FIRE (0xef), -1 } */
+//#define MONNAME_GENDERS                 (0x0925)    /* signed char[78] */
 #define STAFFSPELL_DESCRIPTIONS         (0x0973)    /* struct(6)[7]; struct{char attrib1, attrib2, attrib3, handicap, ae_cost, ae_mod;} */
 #define SPELL_DESCRIPTIONS              (0x099d)    /* struct(10)[87]; struct{char herotype, attrib1, attrib2, attrib3, ae_cost, where_to_use, unkn6, target_type, range, fight;} */
 #define SPELLS_INDEX                    (0x0d03)    /* struct(2)[8]; struct{signed char first, length;}; { {1,5}, {6,12}, {18,6}, {24,3}, {27,6}, {33,5}, {38,7}, {45,4} } */
 #define SPELLS_INDEX2                   (0x0d13)    /* struct(2)[4]; struct{signed char first, length;}; { {49,9}, {58,2}, {60,16}, {76,10} } */
-#define MAGIC_SCHOOLS_1                 (0x0d1b)    /* short[7]; array terminated by -1 */
-#define MAGIC_SCHOOLS_2                 (0x0d29)    /* short[6]; array terminated by -1 */
-#define MAGIC_SCHOOLS_3                 (0x0d35)    /* short[7]; array terminated by -1 */
-#define MAGIC_SCHOOLS_4                 (0x0d43)    /* short[6]; array terminated by -1 */
-#define MAGIC_SCHOOLS_5                 (0x0d4f)    /* short[6]; array terminated by -1 */
-#define MAGIC_SCHOOLS_6                 (0x0d5b)    /* short[8]; array terminated by -1 */
-#define MAGIC_SCHOOLS_7                 (0x0d6b)    /* short[8]; array terminated by -1 */
-#define MAGIC_SCHOOLS_8                 (0x0d7b)    /* short[6]; array terminated by -1 */
-#define MAGIC_SCHOOLS_9                 (0x0d87)    /* short[8]; array terminated by -1 */
-#define MAGIC_SCHOOLS_INDEX             (0x0d97)    /* RealPt[9] */
+//#define MAGIC_SCHOOLS_1                 (0x0d1b)    /* short[7]; array terminated by -1 */
+//#define MAGIC_SCHOOLS_2                 (0x0d29)    /* short[6]; array terminated by -1 */
+//#define MAGIC_SCHOOLS_3                 (0x0d35)    /* short[7]; array terminated by -1 */
+//#define MAGIC_SCHOOLS_4                 (0x0d43)    /* short[6]; array terminated by -1 */
+//#define MAGIC_SCHOOLS_5                 (0x0d4f)    /* short[6]; array terminated by -1 */
+//#define MAGIC_SCHOOLS_6                 (0x0d5b)    /* short[8]; array terminated by -1 */
+//#define MAGIC_SCHOOLS_7                 (0x0d6b)    /* short[8]; array terminated by -1 */
+//#define MAGIC_SCHOOLS_8                 (0x0d7b)    /* short[6]; array terminated by -1 */
+//#define MAGIC_SCHOOLS_9                 (0x0d87)    /* short[8]; array terminated by -1 */
+//#define MAGIC_SCHOOLS_INDEX             (0x0d97)    /* RealPt[9] */
 #define SPELL_HANDLERS                  (0x0dbb)    /* long[86]; function pointer[86] */
 #define MON_SPELL_DESCRIPTIONS          (0x0f13)    /* struct(8)[15]; struct{char ae_cost, mode, unkn1, attrib1, attrib2, attrib3, vs_mr, ani_id;} */
 #define MON_SPELL_REPERTOIRE            (0x0f8b)    /* struct(5)[11]; struct{char spells[5];} */

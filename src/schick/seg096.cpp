@@ -70,7 +70,7 @@ RealPt GUI_names_grammar(signed short flag, signed short index, signed short typ
 		}
 	} else {
 		p_name = get_monname(index);
-		flag += lp5.a[ds_readbs(MONNAME_GENDERS + index)];
+		flag += lp5.a[g_monname_genders[index]];
 	}
 
 	lp1 = (flag & 0x8000) ? (signed short*)(p_datseg + GRAMMAR_DEF_TABLE + (flag & 0xf) * 6) :
@@ -158,7 +158,7 @@ RealPt GUI_2f2(signed short v1, signed short word_id, signed short type)
 {
 	signed short genus;
 
-	genus = (type == 0) ? g_items_genders[word_id] : ds_readbs(word_id + MONNAME_GENDERS);
+	genus = (type == 0) ? g_items_genders[word_id] : g_monname_genders[word_id];
 
 	return (Bit8u*)ds_readd(GRAMMAR_PRONOUNS_INDEX + 4 * ds_readbs(GRAMMAR_PRONOUNS_TABLE2 + v1 * 3 + genus));
 }

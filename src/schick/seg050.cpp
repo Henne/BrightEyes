@@ -7,6 +7,9 @@
  *	Call:		BCC.EXE -mlarge -O- -c -1 -Yo seg050.cpp
  */
 #include <stdio.h>
+#if !defined(__BORLANDC__)
+#include <unistd.h>
+#endif
 
 #include "v302de.h"
 #include "common.h"
@@ -84,7 +87,7 @@ void inc_spell_advanced(Bit8u *hero, signed short spell)
 		}
 
 		/* depending on the HERO_MAGIC_SCHOOL, the mage will get 3 possible increases on certain spells */
-		if (is_in_word_array(spell, (signed short*)((Bit8u*)ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)))))
+		if (is_in_word_array(spell, (signed short*)g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)]))
 		{
 			max_incs = 3;
 		}
@@ -764,20 +767,18 @@ void level_up(signed short hero_pos)
 						i = 0;
 
 						while (host_readbs(hero + HERO_SP_RISE) != 0 &&
-							(host_readws((Bit8u*)ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i)) != -1) {
+							(g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i] != -1)) {
 
-							if (host_readbs(hero + HERO_SPELLS +
-									host_readws((Bit8u*)ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i)) < 11)
+							if (host_readbs(hero + HERO_SPELLS + g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i]) < 11)
 							{
-								inc_spell_novice(hero,
-									host_readws((Bit8u*)ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i));
+								inc_spell_novice(hero, g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i]);
 							}
 							i++;
 						}
 
 						i = 0;
 						while (host_readbs(hero + HERO_SP_RISE) != 0 &&
-							(host_readws((Bit8u*)ds_readd(AUTOINC_SPELLS_MAGE_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i)) != -1) {
+							(g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i] != -1)) {
 
 							if (host_readbs(hero + HERO_SPELLS +
 									host_readws((Bit8u*)ds_readd(AUTOINC_SPELLS_MAGE_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i)) < 11)
@@ -790,13 +791,12 @@ void level_up(signed short hero_pos)
 
 						i = 0;
 						while (host_readbs(hero + HERO_SP_RISE) != 0 &&
-							(host_readws((Bit8u*)ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i)) != -1) {
+							(g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i] != -1)) {
 
 							if (host_readbs(hero + HERO_SPELLS +
-									host_readws((Bit8u*)ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i)) < 11)
+									(g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i])) < 11)
 							{
-								inc_spell_novice(hero,
-									host_readws((Bit8u*)ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i));
+								inc_spell_novice(hero, g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i]);
 							}
 							i++;
 						}

@@ -83,7 +83,7 @@ void use_item(signed short item_pos, signed short hero_pos)
 				GUI_output((char*)ds_readd(DTP2));
 
 			} else if ((item_herb_potion((Bit8u*)ds_readd(USED_ITEM_DESC))) &&
-					!is_in_word_array(ds_readws(USED_ITEM_ID), (signed short*)(p_datseg + POISON_POTIONS)))
+					!is_in_word_array(ds_readws(USED_ITEM_ID), g_poison_potions))
 			{
 				/* don't consume poison */
 				consume(get_itemuser(), get_itemuser(), item_pos);

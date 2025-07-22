@@ -157,10 +157,9 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 
 		if (host_readb(item_p + 3) == 0) {
 
-			if (is_in_word_array(item, (signed short*)(p_datseg + HERBS_UNEATABLE))) {
+			if (is_in_word_array(item, g_herbs_uneatable)) {
 				GUI_output(get_ttx(499));
-			} else if (is_in_word_array(item, (signed short*)(p_datseg + HERBS_TOXIC)) ||
-					is_in_word_array(item, (signed short*)(p_datseg + POISON_POTIONS))) {
+			} else if (is_in_word_array(item, g_herbs_toxic) || is_in_word_array(item, g_poison_potions)) {
 				/* herbs and poisons */
 				GUI_output(get_ttx(500));
 			} else {
@@ -281,9 +280,8 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 		} else {
 
 			/* check if item is an elexire */
-			l_si = is_in_word_array(item, (signed short*)(p_datseg + ELIXIR_POTIONS));
-			id_bad_elex = is_in_word_array(item, (signed short*)(p_datseg + BAD_ELIXIRS));
-
+			l_si = is_in_word_array(item, g_elixir_potions);
+			id_bad_elex = is_in_word_array(item, g_bad_elixirs);
 
 			if (l_si != 0) {
 				/* handle good elexires */

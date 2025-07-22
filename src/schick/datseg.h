@@ -26,6 +26,16 @@ struct ranged_weapons {
 /* TODO: use it properly in seg041 */
 extern struct ranged_weapons g_ranged_weapons_table[9];
 
+extern signed short g_poison_potions[10];
+extern signed short g_herbs_toxic[5];
+extern signed short g_herbs_uneatable[7];
+extern signed short g_elixir_potions[8];
+extern signed short g_bad_elixirs[8];
+extern signed short g_attack_items[3];
+extern signed char g_monname_genders[78];
+
+extern const signed short* g_magic_schools_index[9];
+
 #if !defined(__BORLANDC__)
 /* arrays for meaningful log messages */
 const char* names_attrib[14];
