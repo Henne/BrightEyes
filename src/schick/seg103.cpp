@@ -38,7 +38,7 @@ signed short LVL_select_skill(Bit8u *hero, signed short show_values)
 	signed short l1;
 	signed short retval = -1;
 	/* string on stack "%s~%d" */
-	struct dummy format_str = *(struct dummy*)(p_datseg + SELECT_SKILL_LVLUP);
+	struct dummy format_str = *(struct dummy*)g_select_skill_lvlup;
 
 	if (show_values != 0) {
 
