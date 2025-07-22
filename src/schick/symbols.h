@@ -1269,6 +1269,7 @@
 #define STR_RAD1                        (0xb21e)    /* char[4]; "RAD" */
 #define STR_RAD2                        (0xb222)    /* char[4]; "RAD" */
 #define STR_RAD3                        (0xb226)    /* char[4]; "RAD" */
+
 #define COLOR_WHITE                     (0xb22a)    /* unsigned char[3]; { 0x3f, 0x3f, 0x3f } */
 #define COLOR_BLACK                     (0xb22d)    /* unsigned char[3]; { 0x00, 0x00, 0x00 } */
 #define PALETTE_UNKNOWN2                (0xb230)    /* struct(3)[8]; struct{unsigned char r,g,b;} */
@@ -1289,10 +1290,11 @@
 #define STR_GEN_N                       (0xb4d1)    /* char[2]; "n" */
 #define STR_GEN_1                       (0xb4d3)    /* char[2]; "1" */
 #define STR_GEN_GENERATION              (0xb4d5)    /* char[11]; "Generation" */
+
 // ?9
-#define CHAR_TYPE_TABLE                 (0xb4e9)    /* signed char[256] */
+//#define CHAR_TYPE_TABLE                 (0xb4e9)    /* signed char[256] */
 // ?415
-#define BC_FILEHANDLE_FLAGS             (0xb788)    /* unsigned short[600] */
+//#define BC_FILEHANDLE_FLAGS             (0xb788)    /* unsigned short[600] */
 
 //#define CD_AUDIO_PAUSE_POS              (0xbc38)    /* unsigned long */
 //#define CD_AUDIO_PAUSE_TOD              (0xbc3c)    /* unsigned long */

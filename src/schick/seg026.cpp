@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
+#include <ctype.h>
 
 #if defined(__BORLANDC__)
 #include <DIR.H>
@@ -153,8 +154,7 @@ void prepare_chr_name(char *dst, char *src)
 		if (!tmp_str[i])
 			break;
 
-		/* maybe !isalnum(tmp_str[i]) */
-		if (!(ds_readbs(CHAR_TYPE_TABLE + tmp_str[i]) & 0x0e)) {
+		if (!isalnum(tmp_str[i])) {
 			tmp_str[i] = 0x5f;
 		}
 	}
@@ -183,8 +183,7 @@ void prepare_sg_name(char *dst, char *src)
 			break;
 		}
 
-		/* maybe !isalnum(tmp_str[i]) */
-		if (!(ds_readbs(CHAR_TYPE_TABLE + tmp_str[i]) & 0x0e)) {
+		if (!isalnum(tmp_str[i])) {
 			tmp_str[i] = 0x5f;
 		}
 		i++;

@@ -226,9 +226,7 @@ dummy:
 		if (((c >= 0x20) && (c <= 0x7a)) ||
 			(c == 0x81) || (c == 0x84) || (c == 0x94))
 		{
-			/* is_alpha(c) */
-			if (ds_readb(CHAR_TYPE_TABLE + c) & 0xc)
-				c = toupper(c);
+			if (isalpha(c)) c = toupper(c);
 
 			/* ae */
 			if (c == 0x84)
