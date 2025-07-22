@@ -547,7 +547,26 @@ struct{char spells[5];} g_mon_spell_repertoire[11] = {
 	{ 0x06, 0x01, 0x05, 0x07, -1 },
 	{ 0x06, 0x0e, 0x05, 0x0c, 0x09 }
 }; // ds:0x0f8b
-long g_mon_spell_handlers[15] = { 0x00000000, 0x14720025, 0x1472002a, 0x1472002f, 0x14720034, 0x14720039, 0x1472003e, 0x14720043, 0x14720048, 0x1472004d, 0x14720052, 0x14720057, 0x1472005c, 0x14720061, 0x14720066 }; // ds:0x0fc2, function pointer[15]
+
+
+static void (*g_mon_spellhandlers[15])(void) = {
+	NULL,
+	mspell_verwandlung,		/*  1 */
+	mspell_bannbaladin,		/*  2 */
+	mspell_boeser_blick,		/*  3 */
+	mspell_horriphobus,		/*  4 */
+	mspell_axxeleratus,		/*  5 */
+	mspell_balsam,			/*  6 */
+	mspell_blitz,			/*  7 */
+	mspell_eisenrost,		/*  8 */
+	mspell_fulminictus,		/*  9 */
+	mspell_ignifaxius,		/* 10 */
+	mspell_plumbumbarum,		/* 11 */
+	mspell_saft_kraft,		/* 12 */
+	mspell_armatrutz,		/* 13 */
+	mspell_paralue,			/* 14 */
+}; // ds:0x0fc2, function pointer[15]
+
 struct{signed char attrib1, attrib2, attrib3, max_inc;} g_skill_descriptions[52] = {
 	{ 0x00, 0x00, 0x00, 0x01 },
 	{ 0x00, 0x00, 0x00, 0x01 },

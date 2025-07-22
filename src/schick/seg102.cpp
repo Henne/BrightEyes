@@ -25,27 +25,6 @@
 namespace M302de {
 #endif
 
-#if !defined(__BORLANDC__)
-static void (*mspell[])(void) = {
-	NULL,
-	mspell_verwandlung,		/*  1 */
-	mspell_bannbaladin,		/*  2 */
-	mspell_boeser_blick,		/*  3 */
-	mspell_horriphobus,		/*  4 */
-	mspell_axxeleratus,		/*  5 */
-	mspell_balsam,			/*  6 */
-	mspell_blitz,			/*  7 */
-	mspell_eisenrost,		/*  8 */
-	mspell_fulminictus,		/*  9 */
-	mspell_ignifaxius,		/* 10 */
-	mspell_plumbumbarum,		/* 11 */
-	mspell_saft_kraft,		/* 12 */
-	mspell_armatrutz,		/* 13 */
-	mspell_paralue,			/* 14 */
-};
-
-#endif
-
 void MON_do_spell_damage(signed short damage)
 {
 	if (damage > 0) {
@@ -360,12 +339,7 @@ signed short MON_cast_spell(RealPt monster, signed char handicap)
 
 			load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 
-#if !defined(__BORLANDC__)
-			func = mspell[l_si];
-#else
-			func = (void (*)(void))ds_readd(MON_SPELL_HANDLERS + 4 * l_si);
-#endif
-
+			func = g_mon_spellhandlers[l_si];
 			func();
 
 			if ((tx_file_bak != -1) && (tx_file_bak != ARCHIVE_FILE_SPELLTXT_LTX)) {
