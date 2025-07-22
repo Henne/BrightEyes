@@ -32,109 +32,6 @@
 namespace M302de {
 #endif
 
-#if !defined(__BORLANDC__)
-static void (*spellhandler[])(void) = {
-	NULL,
-	/* Dispel / Antimagie */
-	spell_beherrschung,
-	spell_destructibo,
-	spell_gardanium,
-	spell_illusionen,
-	spell_verwandlung,
-	/* Domionation / Beherrschung */
-	spell_band,
-	spell_bannbaladin,
-	spell_boeser_blick,
-	spell_grosse_gier,
-	spell_grosse_ver,
-	spell_herrdertiere,
-	spell_horriphobus,
-	spell_magischerraub,
-	spell_respondami,
-	spell_sanftmut,
-	spell_somnigravis,
-	spell_zwingtanz,
-	/* Demonology / Demonologie */
-	spell_furor_blut,
-	spell_geister_bannen,
-	spell_geister_rufen,
-	spell_heptagon,
-	spell_kraehenruf,
-	spell_skelettarius,
-	/* Elements / Elemente */
-	spell_elementare,
-	spell_nihilatio,
-	spell_solidirid,
-	/* Movement / Bewegung */
-	spell_axxeleratus,
-	spell_foramen,
-	spell_motoricus,
-	spell_spurlos,
-	spell_transversalis,
-	spell_ueber_eis,
-	/* Healing / Heilung */
-	spell_balsam,
-	spell_hexenspeichel,
-	spell_klarum_purum,
-	spell_ruhe_koerper,
-	spell_tiere_heilen,
-	/* Clairvoyance / Hellsicht */
-	spell_adleraug,
-	(void(*)(void))spell_analues,
-	spell_eigenschaften,
-	spell_exposami,
-	spell_odem_arcanum,
-	spell_penetrizzel,
-	spell_sensibar,
-	/* Illusion */
-	spell_chamaelioni,
-	spell_duplicatus,
-	spell_harmlos,
-	spell_hexenknoten,
-	/* Combat / Kampf */
-	spell_blitz,
-	spell_ecliptifactus,
-	spell_eisenrost,
-	spell_fulminictus,
-	spell_ignifaxius,
-	spell_plumbumbarum,
-	spell_radau,
-	spell_saft_kraft,
-	spell_scharfes_auge,
-	/* Communication / Verstaendigung */
-	spell_hexenblick,
-	spell_necropathia,
-	/* Transformation / Verwandlung */
-	spell_adler,
-	spell_arcano,
-	spell_armatrutz,
-	spell_inc_ch,
-	spell_feuerbann,
-	spell_inc_ff,
-	spell_inc_ge,
-	spell_inc_in,
-	spell_inc_kk,
-	spell_inc_kl,
-	spell_inc_mu,
-	spell_mutabili,
-	spell_paralue,
-	spell_salander,
-	spell_see,
-	spell_visibili,
-	/* Transmutation / Veraenderung */
-	spell_abvenenum,
-	spell_aeolitus,
-	spell_brenne,
-	spell_claudibus,
-	spell_dunkelheit,
-	spell_erstarre,
-	spell_flimflam,
-	spell_schmelze,
-	spell_silentium,
-	spell_sturmgebr
-};
-#endif
-
 struct dummy1 {
 	signed short a[5];
 };
@@ -265,7 +162,6 @@ void FIG_do_spell_damage(signed short le)
  */
 signed short get_attackee_parade(void)
 {
-
 	/* check if enemy or hero is attacked */
 	if (host_readbs(get_spelluser() + HERO_ENEMY_ID) < 10) {
 
@@ -988,11 +884,8 @@ signed short use_spell(RealPt hero, signed short selection_menu, signed char han
 				l4 = ds_readws(TX_FILE_INDEX);
 
 				load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
-#if !defined(__BORLANDC__)
-				func = spellhandler[spell_id];
-#else
-				func = (void (*)(void))ds_readd(SPELL_HANDLERS + 4 * spell_id);
-#endif
+
+				func = g_spell_handlers[spell_id];
 				func();
 
 				if ((l4 != -1) && (l4 != 222)) {

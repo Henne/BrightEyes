@@ -5,6 +5,11 @@
 
 #include "v302de.h"
 
+#include "seg099.h"
+#include "seg100.h"
+#include "seg101.h"
+#include "seg102.h"
+
 #if !defined(__BORLANDC__)
 namespace M302de {
 #endif
@@ -410,7 +415,106 @@ const signed short* g_magic_schools_index[9] = {
 	g_magic_schools_9
 };
 
-long g_spell_handlers[86] = { 0x00000000, 0x144f0020, 0x144f0025, 0x144f002a, 0x144f002f, 0x144f0034, 0x144f0039, 0x144f003e, 0x144f0043, 0x144f0048, 0x144f004d, 0x144f0052, 0x144f0057, 0x144f005c, 0x144f0061, 0x144f0066, 0x144f006b, 0x144f0070, 0x144f0075, 0x144f007a, 0x144f007f, 0x144f0084, 0x144f0089, 0x144f008e, 0x144f0093, 0x144f0098, 0x144f009d, 0x144f00a2, 0x144f00a7, 0x144f00ac, 0x144f00b1, 0x144f00b6, 0x144f00bb, 0x144f00c0, 0x144f00c5, 0x144f00ca, 0x144f00cf, 0x144f00d4, 0x144f00d9, 0x144f00de, 0x145e0020, 0x145e0025, 0x145e002a, 0x145e002f, 0x145e0034, 0x145e0039, 0x145e003e, 0x145e0043, 0x145e0048, 0x145e004d, 0x145e0052, 0x145e0057, 0x145e005c, 0x145e0061, 0x145e0066, 0x145e006b, 0x145e0070, 0x145e0075, 0x145e007a, 0x145e007f, 0x14670020, 0x14670025, 0x1467002a, 0x1467002f, 0x14670034, 0x14670039, 0x1467003e, 0x14670043, 0x14670048, 0x1467004d, 0x14670052, 0x14670057, 0x1467005c, 0x14670061, 0x14670066, 0x1467006b, 0x14670070, 0x14670075, 0x1467007a, 0x1467007f, 0x14670084, 0x14670089, 0x1467008e, 0x14670093, 0x14670098, 0x1467009d }; // ds:0x0dbb, function pointer[86]
+void (*g_spell_handlers[86])(void) = {
+	NULL,
+	/* Dispel / Antimagie */
+	spell_beherrschung,
+	spell_destructibo,
+	spell_gardanium,
+	spell_illusionen,
+	spell_verwandlung,
+	/* Domionation / Beherrschung */
+	spell_band,
+	spell_bannbaladin,
+	spell_boeser_blick,
+	spell_grosse_gier,
+	spell_grosse_ver,
+	spell_herrdertiere,
+	spell_horriphobus,
+	spell_magischerraub,
+	spell_respondami,
+	spell_sanftmut,
+	spell_somnigravis,
+	spell_zwingtanz,
+	/* Demonology / Demonologie */
+	spell_furor_blut,
+	spell_geister_bannen,
+	spell_geister_rufen,
+	spell_heptagon,
+	spell_kraehenruf,
+	spell_skelettarius,
+	/* Elements / Elemente */
+	spell_elementare,
+	spell_nihilatio,
+	spell_solidirid,
+	/* Movement / Bewegung */
+	spell_axxeleratus,
+	spell_foramen,
+	spell_motoricus,
+	spell_spurlos,
+	spell_transversalis,
+	spell_ueber_eis,
+	/* Healing / Heilung */
+	spell_balsam,
+	spell_hexenspeichel,
+	spell_klarum_purum,
+	spell_ruhe_koerper,
+	spell_tiere_heilen,
+	/* Clairvoyance / Hellsicht */
+	spell_adleraug,
+	(void(*)(void))spell_analues,
+	spell_eigenschaften,
+	spell_exposami,
+	spell_odem_arcanum,
+	spell_penetrizzel,
+	spell_sensibar,
+	/* Illusion */
+	spell_chamaelioni,
+	spell_duplicatus,
+	spell_harmlos,
+	spell_hexenknoten,
+	/* Combat / Kampf */
+	spell_blitz,
+	spell_ecliptifactus,
+	spell_eisenrost,
+	spell_fulminictus,
+	spell_ignifaxius,
+	spell_plumbumbarum,
+	spell_radau,
+	spell_saft_kraft,
+	spell_scharfes_auge,
+	/* Communication / Verstaendigung */
+	spell_hexenblick,
+	spell_necropathia,
+	/* Transformation / Verwandlung */
+	spell_adler,
+	spell_arcano,
+	spell_armatrutz,
+	spell_inc_ch,
+	spell_feuerbann,
+	spell_inc_ff,
+	spell_inc_ge,
+	spell_inc_in,
+	spell_inc_kk,
+	spell_inc_kl,
+	spell_inc_mu,
+	spell_mutabili,
+	spell_paralue,
+	spell_salander,
+	spell_see,
+	spell_visibili,
+	/* Transmutation / Veraenderung */
+	spell_abvenenum,
+	spell_aeolitus,
+	spell_brenne,
+	spell_claudibus,
+	spell_dunkelheit,
+	spell_erstarre,
+	spell_flimflam,
+	spell_schmelze,
+	spell_silentium,
+	spell_sturmgebr
+}; // ds:0x0dbb, function pointer[86]
 
 
 struct{char ae_cost, mode, unkn1, attrib1, attrib2, attrib3, unkn2, ani_id;} g_mon_spell_descriptions[15] = {
