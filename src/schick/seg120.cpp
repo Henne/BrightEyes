@@ -93,19 +93,15 @@ void rabies(RealPt hero, signed short hero_pos)
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 
-			sprintf((char*)ds_readd(DTP2) + 500,
-				get_ttx(742),
-				(char*)hero + HERO_NAME2);
+			sprintf((char*)ds_readd(DTP2) + 500, get_ttx(742), (char*)hero + HERO_NAME2);
 
-			sprintf((char*)ds_readd(DTP2) + 600,
-				get_ttx(743),
-				(char*)hero + HERO_NAME2);
+			sprintf((char*)ds_readd(DTP2) + 600, get_ttx(743), (char*)hero + HERO_NAME2);
 
 			textbox_width_bak = ds_readws(TEXTBOX_WIDTH);
 			ds_writew(TEXTBOX_WIDTH, 6);
 
 			answer = GUI_dialogbox(hero + HERO_PORTRAIT,
-						hero + HERO_NAME2,
+						(char*)hero + HERO_NAME2,
 						(char*)ds_readd(DTP2),
 						3,
 						(char*)ds_readd(DTP2) + 500,
@@ -119,9 +115,7 @@ void rabies(RealPt hero, signed short hero_pos)
 
 				sub_hero_le(hero, host_readws(hero + HERO_LE) / 2);
 
-				sprintf((char*)ds_readd(DTP2),
-					get_ttx(745),
-					(char*)hero + HERO_NAME2);
+				sprintf((char*)ds_readd(DTP2), get_ttx(745), (char*)hero + HERO_NAME2);
 
 				GUI_output((char*)ds_readd(DTP2));
 
@@ -148,9 +142,7 @@ void rabies(RealPt hero, signed short hero_pos)
 						 * (found by siebenstreich 2021-08-15) */
 					{
 						done = 1;
-						sprintf((char*)ds_readd(DTP2),
-							get_ttx(746),
-							(char*)hero + HERO_NAME2);
+						sprintf((char*)ds_readd(DTP2), get_ttx(746), (char*)hero + HERO_NAME2);
 
 						GUI_output((char*)ds_readd(DTP2));
 
@@ -188,9 +180,7 @@ void rabies(RealPt hero, signed short hero_pos)
 
 								sub_ae_splash(hero2, 15);
 
-								sprintf((char*)ds_readd(DTP2),
-									get_ttx(746),
-									(char*)hero + HERO_NAME2);
+								sprintf((char*)ds_readd(DTP2), get_ttx(746), (char*)hero + HERO_NAME2);
 
 								GUI_output((char*)ds_readd(DTP2));
 
@@ -215,11 +205,7 @@ void rabies(RealPt hero, signed short hero_pos)
 		} else {
 
 			/* Hero has rabies / Tollwut */
-
-			sprintf((char*)ds_readd(DTP2),
-				get_ttx(747),
-				(char*)hero + HERO_NAME2);
-
+			sprintf((char*)ds_readd(DTP2), get_ttx(747), (char*)hero + HERO_NAME2);
 			GUI_output((char*)ds_readd(DTP2));
 
 			done = 1;
@@ -240,11 +226,7 @@ void rabies(RealPt hero, signed short hero_pos)
 			}
 
 			/* hero has berserker fury / Berserkerwut */
-
-			sprintf((char*)ds_readd(DTP2),
-				get_ttx(791),
-				(char*)hero + HERO_NAME2);
-
+			sprintf((char*)ds_readd(DTP2), get_ttx(791), (char*)hero + HERO_NAME2);
 			GUI_output((char*)ds_readd(DTP2));
 
 			done = 1;
@@ -393,6 +375,7 @@ void refresh_colors(void)
 /* Borlandified and identical */
 Bit32s get_diskspace(void)
 {
+#if defined(__BORLANDC__)
 	unsigned short a[4];
 	Bit32s space;
 
@@ -401,6 +384,9 @@ Bit32s get_diskspace(void)
 	space = (Bit32s)a[0] * (Bit32s)a[2] * (Bit32s)a[3];
 
 	return space - 204800;
+#else
+	return 8 * 1024 * 1024;
+#endif
 }
 
 /* Borlandified and identical */
@@ -533,9 +519,7 @@ void prepare_dirs(void)
 	}
 
 	/* delete *.* in TEMP-dir */
-	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-		(char*)ds_readd(STR_TEMP_XX_PTR2),
-		(char*)p_datseg + ALL_FILES_WILDCARD2);
+	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)ds_readd(STR_TEMP_XX_PTR2), (char*)p_datseg + ALL_FILES_WILDCARD2);
 
 	l_si = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
 
