@@ -45,31 +45,6 @@
 namespace M302de {
 #endif
 
-#if !defined(__BORLANDC__)
-
-
-static void (*locationhandler[])(void) = {
-	NULL,
-	do_location1, /* empty function */
-	do_temple,
-	do_tavern,
-	do_healer,
-	do_merchant,
-	do_wildcamp,
-	do_inn,
-	do_smith,
-	do_market,
-	show_citizen,
-	do_harbor,
-	enter_map,
-	do_informer,
-	show_entrance,
-	NULL,
-	do_house,
-	do_special_buildings,
-	do_citycamp,
-};
-#endif
 
 void show_entrance(void)
 {
@@ -715,11 +690,7 @@ void do_location(void)
 	ds_writeb(SHOW_TRAVEL_MAP, 0);
 	ds_writew(TEXTBOX_WIDTH, 3);
 
-#if !defined(__BORLANDC__)
-	func = locationhandler[ds_readbs(CURRENT_LOCTYPE)];
-#else
-	func = (void (*)(void))ds_readd(LOCATION_HANDLERS + 4 * ds_readbs(CURRENT_LOCTYPE));
-#endif
+	func = g_location_handlers[ds_readbs(CURRENT_LOCTYPE)];
 
 	ds_writed(CURRENT_CURSOR, (Bit32u)(p_datseg + DEFAULT_MOUSE_CURSOR));
 

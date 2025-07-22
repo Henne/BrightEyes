@@ -37,6 +37,10 @@ extern signed char g_monname_genders[78];
 extern const signed short* g_magic_schools_index[9];
 extern void (*g_spell_handlers[86])(void);
 extern void (*g_mon_spellhandlers[15])(void);
+extern void (*g_location_handlers[19])(void);
+
+
+/* BSS */
 
 #if !defined(__BORLANDC__)
 /* arrays for meaningful log messages */
