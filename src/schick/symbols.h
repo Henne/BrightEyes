@@ -1293,13 +1293,14 @@
 #define CHAR_TYPE_TABLE                 (0xb4e9)    /* signed char[256] */
 // ?415
 #define BC_FILEHANDLE_FLAGS             (0xb788)    /* unsigned short[600] */
-#define CD_AUDIO_PAUSE_POS              (0xbc38)    /* unsigned long */
-#define CD_AUDIO_PAUSE_TOD              (0xbc3c)    /* unsigned long */
-#define CD_AUDIO_TRACK                  (0xbc40)    /* unsigned short */
+
+//#define CD_AUDIO_PAUSE_POS              (0xbc38)    /* unsigned long */
+//#define CD_AUDIO_PAUSE_TOD              (0xbc3c)    /* unsigned long */
+//#define CD_AUDIO_TRACK                  (0xbc40)    /* unsigned short */
 // ?8
-#define CD_AUDIO_TOD                    (0xbc4a)    /* unsigned long */
-#define CD_AUDIO_POS                    (0xbc4e)    /* unsigned long */
-#define CD_DRIVE_NO                     (0xbc52)    /* unsigned short */
+//#define CD_AUDIO_TOD                    (0xbc4a)    /* unsigned long */
+//#define CD_AUDIO_POS                    (0xbc4e)    /* unsigned long */
+//#define CD_DRIVE_NO                     (0xbc52)    /* unsigned short */
 // ?6
 #define SAMPLE_AD_LENGTH                (0xbc5a)    /* unsigned short */
 #define SAMPLE_AD_IDX_ENTRY             (0xbc5c)    /* struct(6); struct{signed char u1; signed char u2; unsigned long u3;} */

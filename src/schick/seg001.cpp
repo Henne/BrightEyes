@@ -66,6 +66,15 @@ static char g_str_cd_missing[204] = "DIESES PROGRAMM IST OHNE CD-ROM-LAUFWERK NI
 static const char g_str_cd_init[37] = "INITIALISIERE CD-ROM IN LAUFWERK %c:";
 static unsigned char g_unkn_004 = 0x00;
 
+static unsigned char g_unkn_072[6]; // ds:0xbc54
+static unsigned short g_cd_drive_no; // ds:0xbc52
+static unsigned long g_cd_audio_pos; // ds:0xbc4e
+static unsigned long g_cd_audio_tod; // ds:0xbc4a
+static unsigned char g_unkn_071[8]; // ds:0xbc42
+static unsigned short g_cd_audio_track; // ds:0xbc40
+static unsigned long g_cd_audio_pause_tod; // ds:0xbc3c
+static unsigned long g_cd_audio_pause_pos; // ds:0xbc38
+
 /* static prototpyes */
 static void CD_audio_stop_hsg(void);
 
@@ -128,7 +137,7 @@ static unsigned short CD_set_drive_no(void)
 
 	if (!CD_count_drives()) return 0;
 
-	ds_writew(CD_DRIVE_NO, CD_get_first_drive());
+	g_cd_drive_no = CD_get_first_drive();
 
 	return 1;
 }
@@ -138,7 +147,7 @@ static void CD_driver_request(driver_request far* req)
 {
 	asm {
 		mov ax, 0x1510
-		mov cx, [CD_DRIVE_NO]
+		mov cx, [g_cd_drive_no]
 		les bx, req
 		int 0x2f
 	}
@@ -215,8 +224,8 @@ static void seg001_00c1(signed short track_no)
 
 		CD_driver_request(&req[5]);
 
-		ds_writed(CD_AUDIO_POS, (((Bit32u)track_start - 150) * 0x1234e) / 0x4b000);
-		ds_writed(CD_AUDIO_TOD, CD_get_tod());
+		g_cd_audio_pos = (((Bit32u)track_start - 150) * 0x1234e) / 0x4b000;
+		g_cd_audio_tod = CD_get_tod();
 	}
 }
 
@@ -225,14 +234,14 @@ void seg001_02c4(void)
 {
 	if (!g_cd_init_successful) return;
 
-	if (CD_get_tod() - (Bit32s)ds_readd(CD_AUDIO_TOD) < (Bit32s)ds_readd(CD_AUDIO_POS))
+	if (CD_get_tod() - (Bit32s)g_cd_audio_tod < (Bit32s)g_cd_audio_pos)
 		return;
 
 	if (g_cd_audio_repeat == 1)
 	{
 		CD_audio_stop_hsg();
 		CD_audio_stop_hsg();
-		seg001_00c1(ds_readw(CD_AUDIO_TRACK));
+		seg001_00c1(g_cd_audio_track);
 		g_cd_audio_repeat = 1;
 	}
 }
@@ -280,11 +289,11 @@ void CD_audio_pause(void)
 
 	/* set CD pause */
 	g_cd_audio_paused = 1;
-	ds_writed(CD_AUDIO_PAUSE_TOD, CD_get_tod());
+	g_cd_audio_pause_tod = CD_get_tod();
 	/* save current position */
-	ds_writed(CD_AUDIO_PAUSE_POS, ds_readd(CD_AUDIO_POS));
+	g_cd_audio_pause_pos = g_cd_audio_pos;
 	/* set current position to maximum signed int */
-	ds_writed(CD_AUDIO_POS, 0x7fffffff);
+	g_cd_audio_pos = 0x7fffffff;
 
 	req[6].status = 0;
 	CD_driver_request(&req[6]);
@@ -303,8 +312,8 @@ void CD_audio_play(void)
 
 	/* reset CD pause */
 	g_cd_audio_paused = 0;
-	ds_writed(CD_AUDIO_POS, ds_readd(CD_AUDIO_PAUSE_POS));
-	add_ds_ds(CD_AUDIO_TOD, (CD_get_tod() - ds_readds(CD_AUDIO_PAUSE_TOD)));
+	g_cd_audio_pos = g_cd_audio_pause_pos;
+	g_cd_audio_tod += (CD_get_tod() - g_cd_audio_pause_tod);
 
 	req[7].status = 0;
 	CD_driver_request(&req[7]);
@@ -351,16 +360,16 @@ void CD_set_track(const int index)
 		if (tracks.a[i] == index) break;
 	}
 
-	ds_writew(CD_AUDIO_TRACK, i + 1);
+	g_cd_audio_track = i + 1;
 
-	if (g_cd_audio_track_bak == ds_readw(CD_AUDIO_TRACK))
+	if (g_cd_audio_track_bak == g_cd_audio_track)
 	{
 	} else {
-		g_cd_audio_track_bak = ds_readw(CD_AUDIO_TRACK);
+		g_cd_audio_track_bak = g_cd_audio_track;
 		CD_audio_stop_hsg();
 		CD_audio_stop_hsg();
 
-		seg001_00c1(ds_readw(CD_AUDIO_TRACK));
+		seg001_00c1(g_cd_audio_track);
 
 		g_cd_audio_repeat = 1;
 
@@ -401,7 +410,7 @@ static void CD_insert_msg(void)
 	signed short answer;
 	char str[160];
 
-	sprintf(str, g_str_insert_cd, ds_readws(CD_DRIVE_NO) + 'A');
+	sprintf(str, g_str_insert_cd, g_cd_drive_no + 'A');
 
 	/* TODO: do {} while; would be better */
 	answer = -2;
@@ -446,7 +455,7 @@ void CD_check(void)
 
 	strcpy(text, g_str_cd_exepath);
 
-	text[0] = ds_readw(CD_DRIVE_NO) + 'A';
+	text[0] = g_cd_drive_no + 'A';
 
 	while (CD_read_exe(text) <= 0)
 	{
@@ -466,7 +475,7 @@ int CD_init(void)
 		return 0;
 	}
 
-	sprintf(str, g_str_cd_init, ds_readws(CD_DRIVE_NO) + 'A');
+	sprintf(str, g_str_cd_init, g_cd_drive_no + 'A');
 
 	GUI_output(str);
 

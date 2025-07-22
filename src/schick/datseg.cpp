@@ -5819,14 +5819,7 @@ char g_str_gen_generation[11] = "Generation"; // ds:0xb4d5
 
 /* start of the BSS section */
 
-unsigned long g_cd_audio_pause_pos; // ds:0xbc38
-unsigned long g_cd_audio_pause_tod; // ds:0xbc3c
-unsigned short g_cd_audio_track; // ds:0xbc40
-unsigned char g_unkn_071[8]; // ds:0xbc42
-unsigned long g_cd_audio_tod; // ds:0xbc4a
-unsigned long g_cd_audio_pos; // ds:0xbc4e
-unsigned short g_cd_drive_no; // ds:0xbc52
-unsigned char g_unkn_072[6]; // ds:0xbc54
+
 unsigned short g_sample_ad_length; // ds:0xbc5a
 struct{signed char u1; signed char u2; unsigned long u3;} g_sample_ad_idx_entry; // ds:0xbc5c
 unsigned char g_playmask_us; // ds:0xbc62, 1 = PLAYM_US, 0 = PLAYM_UK
