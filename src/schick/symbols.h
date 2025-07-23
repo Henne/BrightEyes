@@ -1341,7 +1341,7 @@
 #define CURRENT_FIGHT                   (0xbd28)    /* RealPt */
 #define SCENARIO_BUF                    (0xbd2c)    /* long */
 #define FIGHTOBJ_BUF                    (0xbd30)    /* RealPt */
-#define HEROES                          (0xbd34)    /* long */
+//#define HEROES                          (0xbd34)    /* long */
 #define NEW_MENU_ICONS                  (0xbd38)    /* signed char[9] */
 // ?12
 #define STEPTARGET_FRONT                (0xbd4d)    /* unsigned char */
