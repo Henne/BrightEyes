@@ -516,7 +516,7 @@ void academy_analues(void)
 
 	if (hero_pos != -1) {
 
-		ds_writed(SPELLUSER, (Bit32u)get_hero(hero_pos));
+		g_spelluser = get_hero(hero_pos);
 
 		buffer1_bak = ds_readws(TX_FILE_INDEX);
 

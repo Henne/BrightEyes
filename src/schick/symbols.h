@@ -1638,7 +1638,7 @@
 #define SPELLTEST_RESULT                (0xe5b2)    /* signed short */
 #define SPELLTARGET_E                   (0xe5b4)    /* RealPt; Pointer to enemy */
 #define SPELLTARGET                     (0xe5b8)    /* long */
-#define SPELLUSER                       (0xe5bc)    /* long */
+//#define SPELLUSER                       (0xe5bc)    /* long */
 #define SPELLUSER_E                     (0xe5c0)    /* long */
 #define ALCHEMY_MISSING_ITEM            (0xe5c4)    /* short */
 #define USED_ITEM_DESC                  (0xe5c6)    /* RealPt; pointer to the item description */

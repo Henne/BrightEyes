@@ -6018,7 +6018,7 @@ signed short g_used_item_id; // ds:0xe5ca, used_item ID
 void *g_used_item_desc; // ds:0xe5c6, pointer to the item description
 short g_alchemy_missing_item; // ds:0xe5c4
 long g_spelluser_e; // ds:0xe5c0
-long g_spelluser; // ds:0xe5bc
+unsigned char *g_spelluser; // ds:0xe5bc
 long g_spelltarget; // ds:0xe5b8
 void *g_spelltarget_e; // ds:0xe5b4, Pointer to enemy
 signed short g_spelltest_result; // ds:0xe5b2

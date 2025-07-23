@@ -868,10 +868,9 @@ signed short use_spell(RealPt hero, signed short selection_menu, signed char han
 				retval = 0;
 			} else {
 				/* set global spelluser variable */
-				ds_writed(SPELLUSER, (Bit32u)hero);
+				g_spelluser = hero;
 
 				ae_cost = get_spell_cost(spell_id, 0); /* spell successful -> full AE cost */
-
 				ds_writew(SPELL_SPECIAL_AECOST, -1);
 
 				host_writeb((char*)ds_readd(DTP2), 0);

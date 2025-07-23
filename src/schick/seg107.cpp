@@ -115,7 +115,7 @@ void item_arcano(void)
 	/* load SPELLTXT*/
 	load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 
-	ds_writed(SPELLUSER, ds_readd(ITEMUSER));
+	g_spelluser = (Bit8u*)ds_readd(ITEMUSER);
 
 	/* ask who should be affected */
 	host_writeb(get_spelluser() + HERO_ENEMY_ID,
@@ -199,7 +199,7 @@ void item_armatrutz(void)
 	/* load SPELLTXT */
 	load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 
-	ds_writed(SPELLUSER, ds_readd(ITEMUSER));
+	g_spelluser = (Bit8u*)ds_readd(ITEMUSER);
 
 	/* ask who should be affected */
 	host_writeb(get_spelluser() + HERO_ENEMY_ID,
@@ -232,7 +232,7 @@ void item_flimflam(void)
 	/* load SPELLTXT*/
 	load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 
-	ds_writed(SPELLUSER, ds_readd(ITEMUSER));
+	g_spelluser = (Bit8u*)ds_readd(ITEMUSER);
 
 	spell_flimflam();
 
@@ -459,7 +459,7 @@ void item_brenne(void)
 
 #ifdef M302de_ORIGINAL_BUGFIX
 		if (get_spelluser() != get_itemuser()) {
-			ds_writed(SPELLUSER, ds_readd(ITEMUSER));
+			g_spelluser = (Bit8u*)ds_readd(ITEMUSER);
 		}
 #endif
 
@@ -509,7 +509,7 @@ void item_brenne(void)
 				ds_writew(LIGHT_TYPE, 0);
 			}
 
-			ds_writed(SPELLUSER, ds_readd(ITEMUSER));
+			g_spelluser = (Bit8u*)ds_readd(ITEMUSER);
 
 			spell_brenne();
 		}
