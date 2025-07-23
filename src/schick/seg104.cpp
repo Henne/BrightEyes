@@ -512,15 +512,15 @@ signed short skill_cure_disease(Bit8u *healer, Bit8u *patient, signed short hand
 
 RealPt get_heaviest_hero(void)
 {
-	RealPt hero;
-	RealPt retval;
+	unsigned char *hero;
+	unsigned char *retval;
 
 	signed short weight;
 	signed short w_max;
 	signed short i;
 
 	w_max = 0;
-	hero = (Bit8u*)ds_readd(HEROES);
+	hero = get_hero(0);
 	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 		if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&

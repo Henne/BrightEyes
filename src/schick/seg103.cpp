@@ -129,14 +129,14 @@ RealPt get_proper_hero(signed short skill)
 	signed short cur;
 
 	signed short max = -1;
-	RealPt hero_i;
+	unsigned char *hero_i;
 	RealPt retval;
 
 #if !defined(__BORLANDC__)
 	retval = 0;
 #endif
 
-	hero_i = (Bit8u*)ds_readd(HEROES);
+	hero_i = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 		if ((host_readbs(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&

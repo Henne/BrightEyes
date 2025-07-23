@@ -1306,7 +1306,7 @@
 // ?6
 #define SAMPLE_AD_LENGTH                (0xbc5a)    /* unsigned short */
 #define SAMPLE_AD_IDX_ENTRY             (0xbc5c)    /* struct(6); struct{signed char u1; signed char u2; unsigned long u3;} */
-#define PLAYMASK_US                     (0xbc62)    /* unsigned char; 1 = PLAYM_US, 0 = PLAYM_UK */
+//#define PLAYMASK_US                     (0xbc62)    /* unsigned char; 1 = PLAYM_US, 0 = PLAYM_UK */
 #define GFXBUF_WAIT_KEYPRESS            (0xbc63)    /* char[100] */
 #define SPLASH_AE                       (0xbcc7)    /* long */
 #define SPLASH_LE                       (0xbccb)    /* long */

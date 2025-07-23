@@ -124,7 +124,7 @@ void FIG_set_star_color(Bit8u *ptr, unsigned short count, unsigned char color)
 RealPt FIG_name_3rd_case(unsigned short type, volatile unsigned short pos)
 {
 	if (type == 2) {
-		return (Bit8u*)ds_readd(HEROES) + pos * SIZEOF_HERO + HERO_NAME2;
+		return get_hero(pos) + HERO_NAME2;
 	} else {
 		return GUI_names_grammar(3, pos, 1);
 	}
@@ -142,7 +142,7 @@ RealPt FIG_name_4th_case(unsigned short type, volatile unsigned short pos)
 {
 
 	if (type == 2)
-		return (Bit8u*)ds_readd(HEROES) + pos * SIZEOF_HERO + HERO_NAME2;
+		return get_hero(pos) + HERO_NAME2;
 	else
 		return GUI_names_grammar(2, pos, 1);
 }
@@ -159,7 +159,7 @@ RealPt FIG_name_1st_case(unsigned short type, volatile unsigned short pos)
 {
 
 	if (type == 2)
-		return (Bit8u*)ds_readd(HEROES) + pos * SIZEOF_HERO + HERO_NAME2;
+		return get_hero(pos) + HERO_NAME2;
 	else
 		return GUI_names_grammar(0, pos, 1);
 }

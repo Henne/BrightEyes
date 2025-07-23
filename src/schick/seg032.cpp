@@ -411,7 +411,7 @@ void FIG_do_round(void)
 	/* initialize heroes' #action phases and BP */
 	for (i = 0; i <= 6; ds_writeb(HERO_IS_TARGET + i, 0), i++) {
 
-		hero = (Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * i;
+		hero = get_hero(i);
 
 		if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
 			(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
@@ -531,7 +531,7 @@ void FIG_do_round(void)
 
 			actor_id = FIG_choose_next_hero();
 
-			hero = (Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * actor_id;
+			hero = get_hero(actor_id);
 
 			dec_ptr_bs(hero + HERO_ACTIONS);
 

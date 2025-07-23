@@ -66,9 +66,9 @@ void city_event_1(void)
 {
 	signed short randval;
 	signed short answer;
-	RealPt hero;
+	unsigned char *hero;
 
-	hero = (Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * get_random_hero();
+	hero = get_hero(get_random_hero());
 
 	randval = random_schick(20);
 
@@ -78,10 +78,7 @@ void city_event_1(void)
 		 *		they may be broken.
 		 *		Or, at least some changes on the code are neccessary.
 		 */
-		sprintf((char*)ds_readd(DTP2),
-			get_tx(random_schick(4) - 1),
-			(char*)hero + HERO_NAME2,
-			randval);
+		sprintf((char*)ds_readd(DTP2), get_tx(random_schick(4) - 1), (char*)hero + HERO_NAME2, randval);
 
 		GUI_dialogbox(hero + HERO_PORTRAIT, hero + HERO_NAME2, (char*)ds_readd(DTP2), 0);
 
@@ -130,9 +127,9 @@ void city_event_1(void)
 void city_event_2(void)
 {
 	signed short answer;
-	RealPt hero;
+	unsigned char *hero;
 
-	hero = (Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * get_random_hero();
+	hero = get_hero(get_random_hero());
 
 	if (test_skill(hero, TA_SINNESSCHAERFE, 2) <= 0) {
 
@@ -321,16 +318,14 @@ void city_event_6(void)
 void city_event_7(void)
 {
 	signed short randval;
-	RealPt hero;
+	unsigned char *hero;
 
 	randval = random_schick(4) - 1;
-	hero = (Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * get_random_hero();
+	hero = get_hero(get_random_hero());
 
 	if (!randval) {
 
-		sprintf((char*)ds_readd(DTP2) + 0x400,
-			get_tx(123),
-			(char*)hero + HERO_NAME2);
+		sprintf((char*)ds_readd(DTP2) + 0x400, get_tx(123), (char*)hero + HERO_NAME2);
 
 		GUI_dialogbox(hero + HERO_PORTRAIT, hero + HERO_NAME2, (char*)ds_readd(DTP2) + 0x400, 0);
 
@@ -338,15 +333,11 @@ void city_event_7(void)
 
 		load_in_head(12);
 
-		sprintf((char*)ds_readd(DTP2) + 0x400,
-			get_tx(124),
-			(char*)hero + HERO_NAME2);
+		sprintf((char*)ds_readd(DTP2) + 0x400, get_tx(124), (char*)hero + HERO_NAME2);
 
 		GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, (char*)ds_readd(DTP2) + 0x400, 0);
 
-		sprintf((char*)ds_readd(DTP2) + 0x400,
-			get_tx(125),
-			(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
+		sprintf((char*)ds_readd(DTP2) + 0x400, get_tx(125), (char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
 		GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, (char*)ds_readd(DTP2) + 0x400, 0);
 
@@ -356,15 +347,11 @@ void city_event_7(void)
 
 		GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, get_tx(126), 0);
 
-		sprintf((char*)ds_readd(DTP2) + 0x400,
-			get_tx(127),
-			(char*)hero + HERO_NAME2);
+		sprintf((char*)ds_readd(DTP2) + 0x400, get_tx(127), (char*)hero + HERO_NAME2);
 
 		GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, (char*)ds_readd(DTP2) + 0x400, 0);
 
-		sprintf((char*)ds_readd(DTP2) + 0x400,
-			get_tx(128),
-			(char*)hero + HERO_NAME2);
+		sprintf((char*)ds_readd(DTP2) + 0x400, get_tx(128), (char*)hero + HERO_NAME2);
 
 		GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, (char*)ds_readd(DTP2) + 0x400, 0);
 	} else {
@@ -378,10 +365,10 @@ void city_event_7(void)
 void city_event_8(void)
 {
 	signed short randval;
-	RealPt hero;
+	unsigned char *hero;
 
 	randval = random_schick(4) - 1;
-	hero = (Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * get_random_hero();
+	hero = get_hero(get_random_hero());
 
 	if (!randval) {
 

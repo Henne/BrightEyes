@@ -177,11 +177,11 @@ RealPt FIG_get_hero_ptr(signed short v1)
 	signed short i;
 
 	for (i = 0; i <= 6; i++) {
-		if (host_readbs((Bit8u*)ds_readd(HEROES) + i * SIZEOF_HERO + HERO_FIGHTER_ID) == v1)
-			return (Bit8u*)ds_readd(HEROES) + i * SIZEOF_HERO;
+		if (host_readbs(get_hero(i) + HERO_FIGHTER_ID) == v1)
+			return get_hero(i);
 	}
 
-	return (Bit8u*)ds_readd(HEROES);
+	return get_hero(0);
 }
 
 RealPt FIG_get_enemy_sheet(signed short fighter_id)
@@ -485,10 +485,10 @@ signed char FIG_add_to_list(signed char fighter_id)
  */
 void FIG_draw_char_pic(signed short loc, signed short hero_pos)
 {
-	RealPt hero;
+	unsigned char *hero;
 	signed short fg_bak, bg_bak;
 
-	hero = (Bit8u*)ds_readd(HEROES) + (hero_pos - 1)  * SIZEOF_HERO;
+	hero = get_hero(hero_pos - 1);
 	ds_writed(PIC_COPY_SRC, (Bit32u)(hero + HERO_PORTRAIT));
 
 	get_textcolor(&fg_bak, &bg_bak);

@@ -6314,7 +6314,7 @@ unsigned char g_steptarget_back; // ds:0xbd4e
 unsigned char g_steptarget_front; // ds:0xbd4d
 unsigned char g_unkn_073[12]; // ds:0xbd41
 signed char g_new_menu_icons[9]; // ds:0xbd38
-long g_heroes; // ds:0xbd34
+unsigned char *g_heroes; // ds:0xbd34
 void *g_fightobj_buf; // ds:0xbd30
 long g_scenario_buf; // ds:0xbd2c
 void *g_current_fight; // ds:0xbd28

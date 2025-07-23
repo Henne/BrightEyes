@@ -178,8 +178,7 @@ void do_wildcamp(void)
 
 			if (answer != -1) {
 
-				hero = (Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * answer;
-
+				hero = get_hero(answer);
 
 				if (host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH) {
 
@@ -235,7 +234,7 @@ void do_wildcamp(void)
 
 					if (herb_tries < 1)
 					{
-						hero = (Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * answer;
+						hero = get_hero(answer);
 
 						herb_hours = (signed char)GUI_input(get_ttx(327), 1);
 
@@ -322,7 +321,7 @@ void do_wildcamp(void)
 
 				if (done == 0) {
 
-					hero = (Bit8u*)ds_readd(HEROES);
+					hero = get_hero(0);
 
 					for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 						if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
@@ -512,7 +511,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 				if (tries < 2) {
 
 					timewarp(HOURS(1));
-					ds_writed(MAIN_ACTING_HERO, (Bit32u)(hero = (Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * hero_pos));
+					ds_writed(MAIN_ACTING_HERO, (Bit32u)(hero = get_hero(hero_pos)));
 					ds_writeb(WILDCAMP_REPLSTATUS + hero_pos, 1);
 					retval = 1;
 

@@ -34,8 +34,7 @@ namespace M302de {
 
 void spell_beherrschung(void)
 {
-	ds_writed(SPELLTARGET,
-		(Bit32u)((Bit8u*)ds_readd(HEROES) + (host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1) * SIZEOF_HERO));
+	ds_writed(SPELLTARGET, (Bit32u)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1));
 
 	if (!hero_renegade(get_spelltarget())) {
 		ds_writew(SPELL_SPECIAL_AECOST, -2);
@@ -148,8 +147,7 @@ void spell_verwandlung(void)
 	signed short i;
 
 	/* set spelltarget */
-	ds_writed(SPELLTARGET,
-		(Bit32u)((Bit8u*)ds_readd(HEROES) + (host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1) * SIZEOF_HERO));
+	ds_writed(SPELLTARGET, (Bit32u)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1));
 
 	if (hero_petrified(get_spelltarget())) {
 
@@ -227,8 +225,7 @@ void spell_band(void)
 		/* cast hero */
 
 		/* Set pointer to hero target */
-		ds_writed(SPELLTARGET,
-			(Bit32u)((Bit8u*)ds_readd(HEROES) + (host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1) * SIZEOF_HERO));
+		ds_writed(SPELLTARGET, (Bit32u)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1));
 
 		if (get_spelltarget() == get_spelluser()) {
 			/* don't cast yourself */
@@ -237,16 +234,13 @@ void spell_band(void)
 			ds_writew(SPELL_SPECIAL_AECOST, 0);
 
 			/* prepare message */
-			strcpy((char*)ds_readd(DTP2),
-				get_tx(112));
+			strcpy((char*)ds_readd(DTP2), get_tx(112));
 		} else {
 			/* set flag */
 			or_ptr_bs(get_spelltarget() + HERO_FLAGS1, 0x80); /* set 'tied' flag */
 
 			/* prepare message */
-			sprintf((char*)ds_readd(DTP2),
-					get_tx(6),
-					(char*)get_spelltarget() + HERO_NAME2);
+			sprintf((char*)ds_readd(DTP2), get_tx(6), (char*)get_spelltarget() + HERO_NAME2);
 		}
 	}
 }
@@ -441,8 +435,7 @@ void spell_somnigravis(void)
 	/* cast hero */
 
 	/* Set pointer to hero target */
-	ds_writed(SPELLTARGET,
-		(Bit32u)((Bit8u*)ds_readd(HEROES) + (host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1) * SIZEOF_HERO));
+	ds_writed(SPELLTARGET, (Bit32u)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1));
 
 	if (get_spelltarget() == get_spelluser()) {
 		/* don't cast yourself */
@@ -451,16 +444,13 @@ void spell_somnigravis(void)
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 
 		/* prepare message */
-		strcpy((char*)ds_readd(DTP2),
-			get_tx(112));
+		strcpy((char*)ds_readd(DTP2), get_tx(112));
 	} else {
 		/* set the flag */
 		or_ptr_bs(get_spelltarget() + HERO_FLAGS1, 2); /* set 'sleep' flag */
 
 		/* prepare message */
-		sprintf((char*)ds_readd(DTP2),
-			get_tx(13),
-			(char*)get_spelltarget() + HERO_NAME2);
+		sprintf((char*)ds_readd(DTP2), get_tx(13), (char*)get_spelltarget() + HERO_NAME2);
 	}
 }
 
@@ -674,8 +664,7 @@ void spell_axxeleratus(void)
 	hero_pos = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
 
 	/* Set pointer to hero target */
-	ds_writed(SPELLTARGET,
-		(Bit32u)((Bit8u*)ds_readd(HEROES) + hero_pos * SIZEOF_HERO));
+	ds_writed(SPELLTARGET, (Bit32u)get_hero(hero_pos));
 
 	if (!host_readbs(get_spelltarget() + HERO_AXXELERATUS)) {
 
@@ -811,8 +800,7 @@ void spell_balsam(void)
 	signed short le_to_heal;
 
 	/* Set pointer to hero target */
-	ds_writed(SPELLTARGET,
-		(Bit32u)((Bit8u*)ds_readd(HEROES) + (host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1) * SIZEOF_HERO));
+	ds_writed(SPELLTARGET, (Bit32u)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1));
 
 	ds_writew(SPELL_SPECIAL_AECOST, 0);
 
@@ -869,8 +857,7 @@ void spell_hexenspeichel(void)
 	signed short le;
 
 	/* Set pointer to hero target */
-	ds_writed(SPELLTARGET,
-		(Bit32u)((Bit8u*)ds_readd(HEROES) + (host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1) * SIZEOF_HERO));
+	ds_writed(SPELLTARGET, (Bit32u)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1));
 
 	/* set costs to 0 */
 	ds_writew(SPELL_SPECIAL_AECOST, 0);
@@ -917,18 +904,14 @@ void spell_klarum_purum(void)
 	signed short poison;
 
 	/* Set pointer to hero target */
-	ds_writed(SPELLTARGET,
-		(Bit32u)((Bit8u*)ds_readd(HEROES) + (host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1) * SIZEOF_HERO));
+	ds_writed(SPELLTARGET, (Bit32u)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1));
 
 	poison = hero_is_poisoned(get_spelltarget());
 
 	if (!poison) {
 
 		/* prepare message */
-		sprintf((char*)ds_readd(DTP2),
-			get_tx(21),
-			(char*)get_spelltarget() + HERO_NAME2);
-
+		sprintf((char*)ds_readd(DTP2), get_tx(21), (char*)get_spelltarget() + HERO_NAME2);
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 		return;
 	}
@@ -954,16 +937,13 @@ void spell_klarum_purum(void)
 void spell_ruhe_koerper(void)
 {
 	/* Set pointer to hero target */
-	ds_writed(SPELLTARGET,
-		(Bit32u)((Bit8u*)ds_readd(HEROES) + (host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1) * SIZEOF_HERO));
+	ds_writed(SPELLTARGET, (Bit32u)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1));
 
 	/* set the flag */
 	host_writeb(get_spelltarget() + HERO_RUHE_KOERPER, 1);
 
 	/* prepare message */
-	sprintf((char*)ds_readd(DTP2),
-		get_tx(51),
-		(char*)get_spelltarget() + HERO_NAME2);
+	sprintf((char*)ds_readd(DTP2), get_tx(51), (char*)get_spelltarget() + HERO_NAME2);
 }
 
 void spell_tiere_heilen(void)

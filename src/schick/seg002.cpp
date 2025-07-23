@@ -5330,7 +5330,7 @@ void sub_group_le(signed short le)
 RealPt get_first_hero_available_in_group(void)
 {
 	signed short i;
-	RealPt hero_i = (Bit8u*)ds_readd(HEROES);
+	unsigned char *hero_i = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 
@@ -5344,7 +5344,7 @@ RealPt get_first_hero_available_in_group(void)
 		}
 	}
 
-	return (RealPt) ds_readd(HEROES);
+	return (RealPt)get_hero(0);
 }
 
 /**
@@ -5356,9 +5356,9 @@ RealPt get_second_hero_available_in_group(void)
 {
 	signed short i;
 	signed short tmp;
-	RealPt hero_i;
+	unsigned char *hero_i;
 
-	hero_i = (Bit8u*)ds_readd(HEROES);
+	hero_i = get_hero(0);
 
 	for (i = tmp = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 		/* Check class, group and check_hero() */
@@ -5512,7 +5512,7 @@ int schick_main(int argc, char** argv)
 	signed short len;
 
 	ds_writew(PREGAME_STATE, 1);
-	ds_writeb(PLAYMASK_US, 1);
+	g_playmask_us = 1;
 
 	init_AIL(16000);
 

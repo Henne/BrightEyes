@@ -46,6 +46,9 @@ extern signed char g_select_skill_defaults[6];	// ds:0xacd4; seg103
 
 /* BSS */
 
+extern unsigned char g_playmask_us; // ds:0xbc62; seg002, seg029
+extern unsigned char *g_heroes; // ds:0xbd34
+
 #if !defined(__BORLANDC__)
 /* arrays for meaningful log messages */
 const char* names_attrib[14];

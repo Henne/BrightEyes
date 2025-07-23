@@ -76,7 +76,7 @@ void rabies(RealPt hero, signed short hero_pos)
 		hero_pos++;
 	}
 
-	hero = (Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * hero_pos;
+	hero = get_hero(hero_pos);
 	host_writeb(hero + HERO_SEX, sex_bak);
 
 	if (ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) {
@@ -299,7 +299,7 @@ signed short init_memory(void)
 	ds_writed(MEM_SLOTS_MFIG,	(Bit32u)schick_alloc(516));
 	ds_writed(MEM_SLOTS_WFIG,	(Bit32u)schick_alloc(516));
 	ds_writed(MEM_SLOTS_MON,		(Bit32u)schick_alloc(432));
-	ds_writed(HEROES,		(Bit32u)schick_alloc(7 * SIZEOF_HERO));
+	g_heroes = (unsigned char*)schick_alloc(7 * SIZEOF_HERO);
 	ds_writed(DUNGEON_FIGHTS_BUF,		(Bit32u)schick_alloc(630));
 	ds_writed(DUNGEON_DOORS_BUF,		(Bit32u)schick_alloc(225));
 	ds_writed(DUNGEON_STAIRS_BUF,		(Bit32u)schick_alloc(80));

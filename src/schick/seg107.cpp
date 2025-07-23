@@ -57,7 +57,7 @@ void use_item(signed short item_pos, signed short hero_pos)
 	/* set global variables for item usage */
 	ds_writew(USED_ITEM_POS, item_pos);
 
-	ds_writed(ITEMUSER, (Bit32u)((Bit8u*)ds_readd(HEROES) + hero_pos * SIZEOF_HERO));
+	ds_writed(ITEMUSER, (Bit32u)get_hero(hero_pos));
 
 	ds_writew(USED_ITEM_ID, host_readws(get_itemuser() + ds_readws(USED_ITEM_POS) * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID));
 

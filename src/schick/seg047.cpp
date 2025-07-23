@@ -418,7 +418,7 @@ signed short select_hero_from_group(Bit8u *title)
 	signed short textbox_width_bak;
 	signed short bak_2;
 	signed short bak_3;
-	RealPt hero;
+	unsigned char *hero;
 
 	textbox_width_bak = ds_readw(TEXTBOX_WIDTH);
 	ds_writew(TEXTBOX_WIDTH, 3);
@@ -426,7 +426,7 @@ signed short select_hero_from_group(Bit8u *title)
 
 	for (i = 0; i <= 6; i++) {
 
-		hero = (Bit8u*)ds_readd(HEROES) + i * SIZEOF_HERO;
+		hero = get_hero(i);
 
 		if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 			host_readb(hero + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP) &&
@@ -495,13 +495,13 @@ signed short select_hero_ok(Bit8u *title)
 	signed short textbox_width_bak;
 	signed short bak_2;
 	signed short bak_3;
-	RealPt hero;
+	unsigned char *hero;
 
 	textbox_width_bak = ds_readw(TEXTBOX_WIDTH);
 	ds_writew(TEXTBOX_WIDTH, 3);
 	cnt = 0;
 
-	for (hero = (Bit8u*)ds_readd(HEROES), i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+	for (hero = get_hero(0), i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 		if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 			host_readb(hero + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP) &&
@@ -573,13 +573,13 @@ signed short select_hero_ok_forced(char *title)
 	signed short textbox_width_bak;
 	signed short bak_2;
 	signed short bak_3;
-	RealPt hero;
+	unsigned char *hero;
 
 	textbox_width_bak = ds_readw(TEXTBOX_WIDTH);
 	ds_writew(TEXTBOX_WIDTH, 3);
 	cnt = 0;
 
-	for (hero = (Bit8u*)ds_readd(HEROES), i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+	for (hero = get_hero(0), i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 		if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 			host_readb(hero + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP) &&

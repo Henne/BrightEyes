@@ -321,7 +321,7 @@ signed short load_game_state(void)
 		}
 
 		/* clear the heroes */
-		hero_i = (Bit8u*)ds_readd(HEROES);
+		hero_i = get_hero(0);
 		for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 			memset(hero_i, 0, SIZEOF_HERO);
 		}
@@ -777,7 +777,7 @@ void write_chr_temp(unsigned short hero_pos)
 
 	/* TODO: should be O_BINARY | O_WRONLY */
 	fd = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
-	write(fd, (Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * hero_pos, SIZEOF_HERO);
+	write(fd, get_hero(hero_pos), SIZEOF_HERO);
 	close(fd);
 }
 

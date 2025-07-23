@@ -45,7 +45,7 @@ void magic_heal_ani(Bit8u *hero)
 {
 	signed short target_no;
 	struct dummy1 a = *(struct dummy1*)(p_datseg + ANI_HEAL_PICSTARS);
-	RealPt target;
+	unsigned char *target;
 	signed short fd;
 	signed short i;
 
@@ -65,7 +65,7 @@ void magic_heal_ani(Bit8u *hero)
 	close(fd);
 
 	target_no = host_readbs(hero + HERO_ENEMY_ID) - 1;
-	target = (Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * target_no;
+	target = get_hero(target_no);
 
 	ds_writew(PIC_COPY_V1, 0);
 	ds_writew(PIC_COPY_V2, 0);
@@ -117,9 +117,7 @@ void FIG_do_spell_damage(signed short le)
 		/* attack hero */
 
 		/* set pointer */
-		ds_writed(SPELLTARGET,
-			(Bit32u)((Bit8u*)ds_readd(HEROES) + (host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1) * SIZEOF_HERO));
-
+		ds_writed(SPELLTARGET, (Bit32u)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1));
 
 		/* ensure the spelluser does not attack himself */
 		if (get_spelltarget() != get_spelluser()) {
@@ -167,8 +165,7 @@ signed short get_attackee_parade(void)
 
 		/* attacked a hero */
 
-		ds_writed(SPELLTARGET,
-			(Bit32u)((Bit8u*)ds_readd(HEROES) + (host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1) * SIZEOF_HERO));
+		ds_writed(SPELLTARGET, (Bit32u)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1));
 
 		/* calculate PA  */
 
@@ -201,8 +198,7 @@ signed short get_attackee_rs(void)
 
 		/* attacked a hero */
 
-		ds_writed(SPELLTARGET,
-			(Bit32u)((Bit8u*)ds_readd(HEROES) + (host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1) * SIZEOF_HERO));
+		ds_writed(SPELLTARGET, (Bit32u)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1));
 
 		return host_readbs(get_spelltarget() + HERO_RS_BONUS1); /* why not also HERO_RS_BONUS2? Anyway, function is unused... */
 
@@ -726,8 +722,7 @@ signed short select_magic_user(void)
 
 	if (answer != -1) {
 		/* valid answer => cast spell */
-/*		return use_spell(get_hero(answer), 1, 0); */
-		return use_spell((Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * answer, 1, 0);
+		return use_spell(get_hero(answer), 1, 0);
 	}
 
 	/* abort with error message */

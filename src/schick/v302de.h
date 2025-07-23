@@ -343,11 +343,11 @@ static inline void ds_writeb_z(Bit16u addr, char val) {
 		ds_writeb(addr, val);
 }
 
-static inline Bit8u *get_hero(signed short index) {
+static inline unsigned char *get_hero(signed short index) {
 	if (index < 0 || index > 6) {
 		D1_ERR("ERROR: Versuch auf Held an Position %d zuzugreifen\n", index);
 	}
-	return (Bit8u*)ds_readd(HEROES) + index * SIZEOF_HERO;
+	return g_heroes + index * SIZEOF_HERO;
 }
 
 static inline void add_ds_ws(Bit16u off, Bit16s val)
@@ -1241,7 +1241,7 @@ static inline char* get_itemname(unsigned short item)
 #define add_ptr_ds(p, v)	(*(Bit32s*)(p) += (v))
 #define sub_ptr_ds(p, v)	(*(Bit32s*)(p) -= (v))
 
-#define get_hero(no) ((Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * (no))
+#define get_hero(no) ((unsigned char*)g_heroes + SIZEOF_HERO * (no))
 
 #ifdef M302de_ORIGINAL_BUGFIX
 #define ds_writeb_z(addr, val) (if (ds_readb(addr) == 0) ds_writeb(addr, val))

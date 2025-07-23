@@ -51,7 +51,7 @@ void draw_playmask(void)
 	ds_writew(UPDATE_STATUSLINE, 0);
 
 	/* load the desired playmask */
-	if (ds_readb(PLAYMASK_US) != 0)
+	if (g_playmask_us != 0)
 		load_pp20(ARCHIVE_FILE_PLAYM_US);
 	else
 		load_pp20(ARCHIVE_FILE_PLAYM_UK);
@@ -184,8 +184,7 @@ void draw_status_line(void)
 				}
 
 				/* set the src pointer of the head */
-				ds_writed(PIC_COPY_SRC, (hero_dead(get_hero(i)) ? ds_readd(DTP2) :
-					(Bit32u)((Bit8u*)ds_readd(HEROES) + i * SIZEOF_HERO + HERO_PORTRAIT)));
+				ds_writed(PIC_COPY_SRC, (hero_dead(get_hero(i)) ? ds_readd(DTP2) : (Bit32u)get_hero(i) + HERO_PORTRAIT));
 
 				do_pic_copy(0);
 

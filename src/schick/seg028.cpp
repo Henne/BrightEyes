@@ -542,7 +542,7 @@ void save_npc(signed short index)
 
 	fd = load_archive_file(index | 0x8000);
 
-	write(fd, (Bit8u*)ds_readd(HEROES) + 6 * SIZEOF_HERO, SIZEOF_HERO);
+	write(fd, get_hero(6), SIZEOF_HERO);
 
 	close(fd);
 }

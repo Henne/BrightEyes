@@ -174,7 +174,7 @@ void status_show(Bit16u index)
 #ifdef M302de_ORIGINAL_BUGFIX
 	char le_fix[10];
 #endif
-	RealPt hero;
+	unsigned char *hero;
 	Bit16u txt_tabpos1_bak, txt_tabpos2_bak, txt_tabpos3_bak, txt_tabpos4_bak;
 	Bit8s val;
 	signed short width;
@@ -193,7 +193,7 @@ void status_show(Bit16u index)
 	txt_tabpos3_bak = ds_readw(TXT_TABPOS3);
 	txt_tabpos4_bak = ds_readw(TXT_TABPOS4);
 
-	hero = (Bit8u*)ds_readd(HEROES) + index * SIZEOF_HERO;
+	hero = get_hero(index);
 
 	set_var_to_zero();
 	update_mouse_cursor();

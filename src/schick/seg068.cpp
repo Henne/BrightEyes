@@ -516,15 +516,13 @@ void academy_analues(void)
 
 	if (hero_pos != -1) {
 
-		ds_writed(SPELLUSER, (Bit32u)((Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * hero_pos));
+		ds_writed(SPELLUSER, (Bit32u)get_hero(hero_pos));
 
 		buffer1_bak = ds_readws(TX_FILE_INDEX);
 
 		load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 
-		sprintf((char*)ds_readd(DTP2),
-			get_tx2(64),
-			(char*)(Bit8u*)(spell_analues()));
+		sprintf((char*)ds_readd(DTP2), get_tx2(64), (char*)spell_analues());
 
 		if (buffer1_bak != -1 && buffer1_bak != 222) {
 

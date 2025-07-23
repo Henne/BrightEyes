@@ -42,7 +42,7 @@ void disease_effect(void)
 {
 	signed short i;
 	signed short j;
-	RealPt hero;
+	unsigned char *hero;
 	Bit8u *hero2;
 	Bit8u *disease_ptr;
 
@@ -52,7 +52,7 @@ void disease_effect(void)
 
 		if ((host_readbs(get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE) && !hero_dead(get_hero(i))) {
 
-			hero = (Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * i;
+			hero = get_hero(i);
 
 			disease_ptr = hero + (HERO_ILLNESS + ILLNESS_TYPE_WUNDFIEBER * SIZEOF_HERO_ILLNESS);
 

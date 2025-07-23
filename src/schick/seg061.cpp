@@ -493,7 +493,7 @@ void miracle_modify(unsigned short offset, Bit32s timer_value, signed short mod)
 	int i;
 	int slot;
 	HugePt ptr;
-	Bit8u *hero = (Bit8u*)ds_readd(HEROES);
+	unsigned char *hero = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
