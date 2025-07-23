@@ -57,7 +57,7 @@ void use_item(signed short item_pos, signed short hero_pos)
 	/* set global variables for item usage */
 	ds_writew(USED_ITEM_POS, item_pos);
 
-	ds_writed(ITEMUSER, (Bit32u)get_hero(hero_pos));
+	g_itemuser = get_hero(hero_pos);
 
 	ds_writew(USED_ITEM_ID, host_readws(get_itemuser() + ds_readws(USED_ITEM_POS) * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID));
 
@@ -107,19 +107,18 @@ void use_item(signed short item_pos, signed short hero_pos)
 void item_arcano(void)
 {
 	/* RING ID 165 */
-	signed short b1_index;
+	signed short tx_index_bak;
 
-	/* save index off buffer1 */
-	b1_index = ds_readws(TX_FILE_INDEX);
+	/* save index of TX_FILE_INDEX */
+	tx_index_bak = ds_readws(TX_FILE_INDEX);
 
 	/* load SPELLTXT*/
 	load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 
-	g_spelluser = (Bit8u*)ds_readd(ITEMUSER);
+	g_spelluser = get_itemuser();
 
 	/* ask who should be affected */
-	host_writeb(get_spelluser() + HERO_ENEMY_ID,
-		select_hero_from_group(get_ttx(637)) + 1);
+	host_writeb(get_spelluser() + HERO_ENEMY_ID, select_hero_from_group(get_ttx(637)) + 1);
 
 	if (host_readbs(get_spelluser() + HERO_ENEMY_ID) > 0) {
 		/* use it */
@@ -128,9 +127,9 @@ void item_arcano(void)
 		dec_ptr_ws(get_itemuser() + (HERO_INVENTORY + INVENTORY_QUANTITY) + ds_readws(USED_ITEM_POS) * SIZEOF_INVENTORY);
 	}
 
-	if ((b1_index != -1) && (b1_index != 0xde)) {
+	if ((tx_index_bak != -1) && (tx_index_bak != ARCHIVE_FILE_SPELLTXT_LTX)) {
 		/* need to reload buffer1 */
-		load_tx(b1_index);
+		load_tx(tx_index_bak);
 	}
 }
 
@@ -191,19 +190,18 @@ void item_read_document(void)
 void item_armatrutz(void)
 {
 	/* ID 171 = ITEM_CORONET_SILVER, 245 = ITEM_CORONET_GREEN */
-	signed short b1_index;
+	signed short tx_index_bak;
 
 	/* save index off buffer1 */
-	b1_index = ds_readws(TX_FILE_INDEX);
+	tx_index_bak = ds_readws(TX_FILE_INDEX);
 
 	/* load SPELLTXT */
 	load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 
-	g_spelluser = (Bit8u*)ds_readd(ITEMUSER);
+	g_spelluser = get_itemuser();
 
 	/* ask who should be affected */
-	host_writeb(get_spelluser() + HERO_ENEMY_ID,
-		select_hero_from_group(get_ttx(637)) + 1);
+	host_writeb(get_spelluser() + HERO_ENEMY_ID, select_hero_from_group(get_ttx(637)) + 1);
 
 	if (host_readbs(get_spelluser() + HERO_ENEMY_ID) > 0) {
 		/* use it */
@@ -214,9 +212,9 @@ void item_armatrutz(void)
 		GUI_output((char*)ds_readd(DTP2));
 	}
 
-	if ((b1_index != -1) && (b1_index != 0xde)) {
+	if ((tx_index_bak != -1) && (tx_index_bak != 0xde)) {
 		/* need to reload buffer1 */
-		load_tx(b1_index);
+		load_tx(tx_index_bak);
 	}
 }
 
@@ -224,24 +222,24 @@ void item_armatrutz(void)
 void item_flimflam(void)
 {
 	/* ID 174 = ITEM_AMULET_GREEN */
-	signed short b1_index;
+	signed short tx_index_bak;
 
 	/* save index off buffer1 */
-	b1_index = ds_readws(TX_FILE_INDEX);
+	tx_index_bak = ds_readws(TX_FILE_INDEX);
 
 	/* load SPELLTXT*/
 	load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 
-	g_spelluser = (Bit8u*)ds_readd(ITEMUSER);
+	g_spelluser = get_itemuser();
 
 	spell_flimflam();
 
 	/* decrement usage counter */
 	dec_ptr_ws(get_itemuser() + (HERO_INVENTORY + INVENTORY_QUANTITY) + ds_readws(USED_ITEM_POS) * SIZEOF_INVENTORY);
 
-	if ((b1_index != -1) && (b1_index != 0xde)) {
+	if ((tx_index_bak != -1) && (tx_index_bak != 0xde)) {
 		/* need to reload buffer1 */
-		load_tx(b1_index);
+		load_tx(tx_index_bak);
 	}
 
 	GUI_output((char*)ds_readd(DTP2));
@@ -395,13 +393,11 @@ void item_weapon_poison(void)
 
 		give_hero_new_item(get_itemuser(), bottle, 1, 1);
 
-		sprintf((char*)ds_readd(DTP2),
-			get_ttx(739),
+		sprintf((char*)ds_readd(DTP2), get_ttx(739),
 			(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readws(get_itemuser() + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID), 0)));
+
 	} else {
-		sprintf((char*)ds_readd(DTP2),
-			get_ttx(805),
-			(char*)get_itemuser() + HERO_NAME2);
+		sprintf((char*)ds_readd(DTP2), get_ttx(805), (char*)get_itemuser() + HERO_NAME2);
 	}
 
 	GUI_output((char*)ds_readd(DTP2));
@@ -444,12 +440,12 @@ void item_brenne(void)
 {
 	/*	LANTERN, TORCH, TINDERBOX, LANTERN
 		ID 25, 65, 85, 249 */
-	signed short b1_index;
+	signed short tx_index_bak;
 	signed short pos;
 	signed short refill_pos;
 
 	/* save index off buffer1 */
-	b1_index = ds_readws(TX_FILE_INDEX);
+	tx_index_bak = ds_readws(TX_FILE_INDEX);
 
 	/* load SPELLTXT*/
 	load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
@@ -459,7 +455,7 @@ void item_brenne(void)
 
 #ifdef M302de_ORIGINAL_BUGFIX
 		if (get_spelluser() != get_itemuser()) {
-			g_spelluser = (Bit8u*)ds_readd(ITEMUSER);
+			g_spelluser = get_itemuser();
 		}
 #endif
 
@@ -480,28 +476,23 @@ void item_brenne(void)
 			give_hero_new_item(get_itemuser(), ITEM_FLASK_BRONZE, 0, 1);
 
 			/* prepare message */
-			sprintf((char*)ds_readd(DTP2),
-				get_tx(119),
-				(char*)get_itemuser() + HERO_NAME2);
+			sprintf((char*)ds_readd(DTP2), get_tx(119), (char*)get_itemuser() + HERO_NAME2);
 		} else {
 			/* prepare message */
-			sprintf((char*)ds_readd(DTP2),
-				get_tx(120),
-				(char*)get_itemuser() + HERO_NAME2);
+			sprintf((char*)ds_readd(DTP2), get_tx(120), (char*)get_itemuser() + HERO_NAME2);
 		}
 	} else {
 
 		if (get_item_pos(get_itemuser(), ITEM_TINDERBOX) == -1) {
 			/* No tinderbox */
 			/* prepare message */
-			sprintf((char*)ds_readd(DTP2),
-				get_tx(122),
-				(char*)get_itemuser() + HERO_NAME2);
+			sprintf((char*)ds_readd(DTP2), get_tx(122), (char*)get_itemuser() + HERO_NAME2);
 		} else {
 
 			if (ds_readws(USED_ITEM_ID) == ITEM_TORCH_OFF) {
 				/* TORCH */
 				ds_writew(LIGHT_TYPE, 1);
+
 			} else if (ds_readws(USED_ITEM_ID) == ITEM_LANTERN_OFF) {
 				/* LANTERN */
 				ds_writew(LIGHT_TYPE, 2);
@@ -509,15 +500,15 @@ void item_brenne(void)
 				ds_writew(LIGHT_TYPE, 0);
 			}
 
-			g_spelluser = (Bit8u*)ds_readd(ITEMUSER);
+			g_spelluser = get_itemuser();
 
 			spell_brenne();
 		}
 	}
 
-	if ((b1_index != -1) && (b1_index != 0xde)) {
+	if ((tx_index_bak != -1) && (tx_index_bak != 0xde)) {
 		/* need to reload buffer1 */
-		load_tx(b1_index);
+		load_tx(tx_index_bak);
 	}
 
 	GUI_output((char*)ds_readd(DTP2));

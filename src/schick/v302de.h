@@ -1083,9 +1083,8 @@ static inline Bit8u *get_spelluser_e(void) {
 	return (Bit8u*)ds_readd(SPELLUSER_E);
 }
 
-
 static inline Bit8u *get_itemuser(void) {
-	return (Bit8u*)ds_readd(ITEMUSER);
+	return (Bit8u*)g_itemuser;
 }
 
 static inline Bit8u *get_fname(unsigned short off) {
@@ -1346,7 +1345,7 @@ struct bittest {
 #define get_spelluser()		((unsigned char*)g_spelluser)
 #define get_spelluser_e()	((Bit8u*)ds_readd(SPELLUSER_E))
 
-#define get_itemuser() ((Bit8u*)ds_readd(ITEMUSER))
+#define get_itemuser() ((unsigned char*)g_itemuser)
 
 #define get_ttx(no) ((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 4 * (no))))
 #define get_tx(no) ((char*)(host_readd((Bit8u*)ds_readd(TX_INDEX) + 4 * (no))))

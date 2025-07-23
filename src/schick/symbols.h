@@ -1644,7 +1644,7 @@
 #define USED_ITEM_DESC                  (0xe5c6)    /* RealPt; pointer to the item description */
 #define USED_ITEM_ID                    (0xe5ca)    /* signed short; used_item ID */
 #define USED_ITEM_POS                   (0xe5cc)    /* signed short; used_item position */
-#define ITEMUSER                        (0xe5ce)    /* RealPt; pointer to hero */
+//#define ITEMUSER                        (0xe5ce)    /* RealPt; pointer to hero */
 #define EVENT_ANI_BUSY                  (0xe5d2)    /* unsigned char; {0,1} */
 #define WALLCLOCK_UPDATE_BAK            (0xe5d3)    /* unsigned short; {0,1} */
 #define TEXTBOX_WIDTH_BAK               (0xe5d5)    /* unsigned short */
