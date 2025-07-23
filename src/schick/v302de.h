@@ -1091,9 +1091,14 @@ static inline Bit8u *get_fname(unsigned short off) {
 	return (Bit8u*)ds_readd(FNAMES + off * 4);
 }
 
-static inline Bit8u *get_monname(unsigned short off)
+static inline char *get_monname(const int no)
 {
-	return (Bit8u*)host_readd((Bit8u*)ds_readd(MONNAMES_INDEX) + off * 4);
+	if ((0 <= no) && (no < 77))
+		return g_monnames_index[no];
+	else {
+		fprintf(stderr, "ERROR: %s[%d] is out of bounds\n", __func__, no);
+		return NULL;
+	}
 }
 
 #define get_tx2(no) get_tx2_func(4*(no))
@@ -1350,7 +1355,7 @@ struct bittest {
 #define get_ttx(no) ((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 4 * (no))))
 #define get_tx(no) ((char*)(host_readd((Bit8u*)ds_readd(TX_INDEX) + 4 * (no))))
 #define get_tx2(no) ((char*)(host_readd((Bit8u*)ds_readd(TX2_INDEX) + 4 * (no))))
-#define get_monname(no) ((char*)(host_readd((Bit8u*)ds_readd(MONNAMES_INDEX) + 4 * (no))))
+#define get_monname(no) ((char*)g_monnames_index[no])
 #define get_itemsdat(no) ((char*)((Bit8u*)ds_readd(ITEMSDAT) + 12 * (no)))
 #define get_itemname(no) ((char*)(host_readd((Bit8u*)ds_readd(ITEMSNAME) + 4 * (no))))
 

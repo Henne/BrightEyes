@@ -47,6 +47,7 @@ extern signed char g_select_skill_defaults[6];	// ds:0xacd4; seg103
 /* BSS */
 
 extern unsigned char *g_itemuser;	// ds:0xe5ce; seg107
+extern char **g_monnames_index;		// ds:0xe129; seg026, seg120
 extern unsigned char *g_spelluser;	// ds:0xecbc; seg068, seg098, seg102, seg107
 extern unsigned char g_playmask_us;	// ds:0xbc62; seg002, seg029
 extern unsigned char *g_heroes;		// ds:0xbd34

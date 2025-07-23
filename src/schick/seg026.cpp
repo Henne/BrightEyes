@@ -57,7 +57,7 @@ void init_text(void)
 	len = (signed short)read_archive_file(handle, (Bit8u*)ds_readd(MONNAMES_BUFFER), 5000);
 	close(handle);
 
-	split_textbuffer((Bit8u*)ds_readd(MONNAMES_INDEX), (Bit8u*)ds_readd(MONNAMES_BUFFER), len);
+	split_textbuffer((Bit8u*)g_monnames_index, (Bit8u*)ds_readd(MONNAMES_BUFFER), len);
 
 }
 
