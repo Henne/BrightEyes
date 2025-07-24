@@ -28,27 +28,6 @@
 namespace M302de {
 #endif
 
-#if !defined(__BORLANDC__)
-
-static void (*handler[])(void) = {
-	NULL,
-	item_arcano,
-	item_read_recipe,
-	item_read_document,
-	item_armatrutz,
-	item_flimflam,
-	item_debtbook,
-	item_orcdocument,
-	item_weapon_poison,
-	item_myastmatic,
-	item_hylailic,
-	item_magic_book,
-	item_brenne,
-	item_bag
-};
-
-#endif
-
 /* Borlandified and identical */
 void use_item(signed short item_pos, signed short hero_pos)
 {
@@ -71,13 +50,9 @@ void use_item(signed short item_pos, signed short hero_pos)
 				if (is_in_word_array(ds_readws(USED_ITEM_ID), g_items_pluralwords))
 				{
 					/* german grammar, singular and plural are the same */
-					sprintf((char*)ds_readd(DTP2),
-						get_ttx(792),
-						(GUI_name_singular(get_itemname(ds_readws(USED_ITEM_ID)))));
+					sprintf((char*)ds_readd(DTP2), get_ttx(792), GUI_name_singular(get_itemname(ds_readws(USED_ITEM_ID))));
 				} else {
-					sprintf((char*)ds_readd(DTP2),
-						get_ttx(571),
-						(char*)(Bit8u*)(GUI_names_grammar(0, ds_readws(USED_ITEM_ID), 0)));
+					sprintf((char*)ds_readd(DTP2), get_ttx(571), (char*)GUI_names_grammar(0, ds_readws(USED_ITEM_ID), 0));
 				}
 
 				GUI_output((char*)ds_readd(DTP2));
@@ -93,11 +68,7 @@ void use_item(signed short item_pos, signed short hero_pos)
 				GUI_output(get_ttx(638));
 			} else {
 				/* special item */
-#if !defined(__BORLANDC__)
-				func = handler[ds_readbs((SPECIALITEMS_TABLE + 2) + 3 * host_readbs((Bit8u*)ds_readd(USED_ITEM_DESC) + 4))];
-#else
-				func = (void (*)(void))ds_readd(USE_SPECIAL_ITEM_HANDLERS + 4 * ds_readbs((SPECIALITEMS_TABLE + 2) + 3 * host_readbs((Bit8u*)ds_readd(USED_ITEM_DESC) + 4)));
-#endif
+				func = g_use_special_item_handlers[ds_readbs((SPECIALITEMS_TABLE + 2) + 3 * host_readbs((Bit8u*)ds_readd(USED_ITEM_DESC) + 4))];
 				func();
 			}
 	}
