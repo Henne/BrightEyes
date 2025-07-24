@@ -117,7 +117,7 @@ void FIG_do_spell_damage(signed short le)
 		/* attack hero */
 
 		/* set pointer */
-		ds_writed(SPELLTARGET, (Bit32u)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1));
+		g_spelltarget = get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
 
 		/* ensure the spelluser does not attack himself */
 		if (get_spelltarget() != get_spelluser()) {
@@ -164,8 +164,7 @@ signed short get_attackee_parade(void)
 	if (host_readbs(get_spelluser() + HERO_ENEMY_ID) < 10) {
 
 		/* attacked a hero */
-
-		ds_writed(SPELLTARGET, (Bit32u)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1));
+		g_spelltarget = get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
 
 		/* calculate PA  */
 
@@ -197,8 +196,7 @@ signed short get_attackee_rs(void)
 	if (host_readbs(get_spelluser() + HERO_ENEMY_ID) < 10) {
 
 		/* attacked a hero */
-
-		ds_writed(SPELLTARGET, (Bit32u)get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1));
+		g_spelltarget = get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
 
 		return host_readbs(get_spelltarget() + HERO_RS_BONUS1); /* why not also HERO_RS_BONUS2? Anyway, function is unused... */
 
