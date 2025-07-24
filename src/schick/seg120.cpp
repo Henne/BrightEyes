@@ -323,10 +323,10 @@ signed short init_memory(void)
 
 		if (freemem >= 357000) {
 			g_buffersize = 357000L;
-			ds_writeb(LARGE_BUF, 1);
+			g_large_buf = 1;
 		} else {
 			g_buffersize = 334000L;
-			ds_writeb(LARGE_BUF, 0);
+			g_large_buf = 0;
 		}
 
 		init_global_buffer();
@@ -345,7 +345,7 @@ signed short init_memory(void)
 
 		ds_writed(FIG_FIGURE1_BUF, (Bit32u)F_PADD(ds_readd(BUFFER9_PTR3), 180000L));
 #if defined(__BORLANDC__)
-		if (ds_readb(LARGE_BUF) == 1) {
+		if (g_large_buf == 1) {
 			add_ds_fp(FIG_FIGURE1_BUF, 23000L);
 		}
 #endif
@@ -771,7 +771,7 @@ void call_gen(void)
 
 		ds_writed(FIG_FIGURE1_BUF, (Bit32u)F_PADD(ds_readd(BUFFER9_PTR3), 180000L));
 #if defined(__BORLANDC__)
-		if (ds_readb(LARGE_BUF) == 1) {
+		if (g_large_buf == 1) {
 			add_ds_fp(FIG_FIGURE1_BUF, 23000L);
 		}
 #endif

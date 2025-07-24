@@ -6180,7 +6180,7 @@ char g_str_gen_generation[11] = "Generation"; // ds:0xb4d5
 
 /* start of the BSS section */
 
-signed char g_large_buf; // ds:0xe5e4
+unsigned char g_large_buf; // ds:0xe5e4
 HugePt g_global_buffer_ptr; // ds:0xe5e0, points to the start of the global buffer
 Bit32u g_buffersize; // ds:0xe5dc, size of the global buffer
 unsigned char g_unkn_093[1]; // ds:0xe5db

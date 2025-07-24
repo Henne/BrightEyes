@@ -48,6 +48,7 @@ extern signed char g_select_skill_defaults[6];	// ds:0xacd4; seg103
 
 /* BSS */
 
+extern unsigned char g_large_buf;	// ds:0xe5e4; seg120, seg028
 extern HugePt g_global_buffer_ptr;	// ds:0xe5e0; seg120
 extern Bit32u g_buffersize;		// ds:0xe5dc; seg120
 extern unsigned char *g_itemuser;	// ds:0xe5ce; seg107
