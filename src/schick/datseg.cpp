@@ -287,8 +287,8 @@ signed short g_bad_elixirs[8] = {
 	-1
 }; // ds:0x090f
 signed short g_attack_items[3] = {
-	ITEM_MIASTHMATICUM,
 	ITEM_HYLAILIC_FIRE,
+	ITEM_MIASTHMATICUM,
 	-1
 }; // ds:0x091f
 signed char g_monname_genders[78] = { 0, 0, 0, 0, 0, 0, 2, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; // ds:0x0925
