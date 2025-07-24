@@ -1450,7 +1450,7 @@
 #define FIG_FIGURE2_BUF                 (0xd2db)    /* RealPt; to buffer of size 20000 */
 #define FIG_FIGURE1_BUF                 (0xd2df)    /* RealPt */
 #define OBJECTS_NVF_BUF                 (0xd2e3)    /* RealPt; to buffer of size 3400 */
-#define BUF_ICON                        (0xd2e7)    /* RealPt */
+//#define BUF_ICON                        (0xd2e7)    /* RealPt */
 #define TEXT_OUTPUT_BUF                 (0xd2eb)    /* RealPt; to buffer of size 300 */
 #define TEXT_INPUT_BUF                  (0xd2ef)    /* RealPt; to buffer of size 24 */
 #define DTP2                            (0xd2f3)    /* long */
@@ -1651,8 +1651,8 @@
 #define BASEPOS_Y_BAK                   (0xe5d7)    /* unsigned short */
 #define BASEPOS_X_BAK                   (0xe5d9)    /* unsigned short */
 // ?1
-#define BUFFERSIZE                      (0xe5dc)    /* unsigned long; size of the global buffer */
-#define GLOBAL_BUFFER_PTR               (0xe5e0)    /* RealPt; points to the start of the global buffer */
+//#define BUFFERSIZE                      (0xe5dc)    /* unsigned long; size of the global buffer */
+//#define GLOBAL_BUFFER_PTR               (0xe5e0)    /* RealPt; points to the start of the global buffer */
 #define LARGE_BUF                       (0xe5e4)    /* signed char; {0,1} */
 /* Unknown Bytes: 831, Undetermined symbols: 0/1479 */
 

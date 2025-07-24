@@ -246,9 +246,9 @@ void rabies(RealPt hero, signed short hero_pos)
 /* Borlandified and identical */
 void init_global_buffer(void)
 {
+	g_global_buffer_ptr = (HugePt)schick_alloc(g_buffersize);
 
-	ds_writed(GLOBAL_BUFFER_PTR, (Bit32u)schick_alloc(ds_readd(BUFFERSIZE)));
-	ds_writed(RENDERBUF_PTR, (Bit32u)F_PADD(ds_readd(GLOBAL_BUFFER_PTR), 8));
+	ds_writed(RENDERBUF_PTR, (Bit32u)(g_global_buffer_ptr + 8L));
 	ds_writed(TEXT_LTX_BUFFER, (Bit32u)F_PADD(ds_readd(RENDERBUF_PTR), 65000));
 
 	ds_writed(TEXT_LTX_INDEX, (Bit32u)F_PADD(ds_readd(TEXT_LTX_BUFFER), 30500));
@@ -309,7 +309,7 @@ signed short init_memory(void)
 	g_chessboard = (signed char*)schick_alloc(625);
 	ds_writed(POPUP,		(Bit32u)(schick_alloc(1673) + 8));
 	ds_writed(ICON,			(Bit32u)(schick_alloc(1500) + 8));
-	ds_writed(BUF_ICON,		(Bit32u)schick_alloc(5184));
+	g_buf_icon =	(unsigned char*)schick_alloc(5184);
 	g_townpal_buf = (unsigned char*)schick_alloc(288);
 
 #if defined(__BORLANDC__)
@@ -322,10 +322,10 @@ signed short init_memory(void)
 	if (freemem > 334000) {
 
 		if (freemem >= 357000) {
-			ds_writed(BUFFERSIZE, 357000);
+			g_buffersize = 357000L;
 			ds_writeb(LARGE_BUF, 1);
 		} else {
-			ds_writed(BUFFERSIZE, 334000);
+			g_buffersize = 334000L;
 			ds_writeb(LARGE_BUF, 0);
 		}
 
@@ -719,7 +719,7 @@ void call_gen(void)
 	exit_AIL();
 
 	/* free the global buffer */
-	free((void*)ds_readd(GLOBAL_BUFFER_PTR));
+	free((HugePt)g_global_buffer_ptr);
 
 #if defined(__BORLANDC__)
 	freemem = farcoreleft();

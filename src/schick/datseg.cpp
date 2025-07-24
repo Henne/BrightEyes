@@ -6181,8 +6181,8 @@ char g_str_gen_generation[11] = "Generation"; // ds:0xb4d5
 /* start of the BSS section */
 
 signed char g_large_buf; // ds:0xe5e4
-void *g_global_buffer_ptr; // ds:0xe5e0, points to the start of the global buffer
-unsigned long g_buffersize; // ds:0xe5dc, size of the global buffer
+HugePt g_global_buffer_ptr; // ds:0xe5e0, points to the start of the global buffer
+Bit32u g_buffersize; // ds:0xe5dc, size of the global buffer
 unsigned char g_unkn_093[1]; // ds:0xe5db
 unsigned char g_route59_flag; // ds:0xe4a2, {0, 1 = from Kravik, 2 = from Peilinen, 3 = from Skelellen, 4 = from Rovamund}
 unsigned short g_sample_ad_length; // ds:0xbc5a
@@ -6384,7 +6384,7 @@ void *g_icon; // ds:0xd2f7
 long g_dtp2; // ds:0xd2f3
 void *g_text_input_buf; // ds:0xd2ef, to buffer of size 24
 void *g_text_output_buf; // ds:0xd2eb, to buffer of size 300
-void *g_buf_icon; // ds:0xd2e7
+unsigned char *g_buf_icon; // ds:0xd2e7
 void *g_objects_nvf_buf; // ds:0xd2e3, to buffer of size 3400
 void *g_fig_figure1_buf; // ds:0xd2df
 void *g_fig_figure2_buf; // ds:0xd2db, to buffer of size 20000

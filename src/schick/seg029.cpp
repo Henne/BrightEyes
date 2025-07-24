@@ -266,7 +266,7 @@ void load_icon(Bit16u fileindex, Bit16s icon, Bit16s pos)
 
 	seek_archive_file(fd, icon * 576L, 0);
 
-	read_archive_file(fd, (Bit8u*)ds_readd(BUF_ICON) + pos * 576, 576);
+	read_archive_file(fd, g_buf_icon + pos * 576, 576);
 
 	close(fd);
 
@@ -292,7 +292,7 @@ void draw_icons(void)
 		ds_writew(PIC_COPY_Y1, ds_readw(GUI_BUTTONS_POS + i * 4 + 2));
 		ds_writew(PIC_COPY_X2, ds_readw(GUI_BUTTONS_POS + i * 4) + 23);
 		ds_writew(PIC_COPY_Y2, ds_readw(GUI_BUTTONS_POS + i * 4 + 2) + 23);
-		ds_writed(PIC_COPY_SRC, (Bit32u)((Bit8u*)ds_readd(BUF_ICON) + i * 576));
+		ds_writed(PIC_COPY_SRC, (Bit32u)g_buf_icon + i * 576);
 
 		if (ds_readbs(NEW_MENU_ICONS + i) != MENU_ICON_NONE) {
 			if (ds_readbs(LOADED_MENU_ICONS + i) != ds_readbs(NEW_MENU_ICONS + i))
