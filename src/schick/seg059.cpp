@@ -8,6 +8,7 @@
  */
 
 #include <stdio.h>
+#include <time.h>
 
 #include "v302de.h"
 #include "common.h"

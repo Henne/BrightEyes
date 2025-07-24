@@ -3,7 +3,7 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-void DNG13_unblock_passage(Bit8u*, Bit8u*);
+void DNG13_unblock_passage(char*, Bit8u*);
 /* 0x25 */
 void DNG13_collapsing_ceiling(void);
 /* 0x2a */

@@ -140,13 +140,13 @@ void GUI_1c2(signed short v1, signed short v2, RealPt v3)
 #endif
 
 //static
-signed short GUI_enter_text(Bit8u* dst, signed short x, signed short y, signed short num, signed short zero)
+signed short GUI_enter_text(char* dst, signed short x, signed short y, signed short num, signed short zero)
 {
 	signed short di;
 	register signed short si;
 	signed short pos;
 	signed short c;
-	Bit8u *dst_start;
+	char *dst_start;
 	signed short length;
 
 	dst_start = dst;
@@ -203,7 +203,7 @@ dummy:
 		if (c == 0x0d) {
 
 		} else if (ds_readw(ACTION) == ACTION_ID_ESC) {
-			host_writeb(dst_start, 0);
+			*dst_start = 0;
 			refresh_screen_size();
 			ds_writew(ACTION, 0);
 			return -1;
@@ -245,7 +245,7 @@ dummy:
 				pos--;
 			}
 
-			host_writeb(dst++, (unsigned char)c);
+			*dst++ = (unsigned char)c;
 			GUI_print_char(0x20, di, y);
 			GUI_print_char((unsigned char)c, di, y);
 			di += 6;
@@ -266,7 +266,7 @@ dummy:
 		}
 	}
 
-	host_writeb(dst, 0);
+	*dst = 0;
 	refresh_screen_size();
 
 	return 0;
@@ -341,7 +341,7 @@ signed short GUI_input(char *str, unsigned short num)
 	l7 = ds_readw(UPDATE_STATUSLINE);
 	ds_writew(UPDATE_STATUSLINE, 0);
 
-	if (!str || !host_readbs(str) || ds_readw(AUTOFIGHT) != 0)
+	if (!str || !(*str) || ds_readw(AUTOFIGHT) != 0)
 		return -1;
 
 	l6 = ds_readw(WALLCLOCK_UPDATE);
@@ -569,7 +569,7 @@ signed short GUI_dialogbox(RealPt picture, char *name, char *text,
 
 		va_start(arguments, options);
 		for (i = 0; i < (signed char)options; l3 += 8, i++) {
-			GUI_print_string((Bit8u*)va_arg(arguments, char*), l2, l3);
+			GUI_print_string((char*)va_arg(arguments, char*), l2, l3);
 		}
 	}
 
@@ -769,7 +769,7 @@ signed short GUI_radio(char *text, signed char options, ...)
 		if (ds_readw(GAME_MODE) == GAME_MODE_BEGINNER && ds_readw(SKILLED_HERO_POS) == i)
 			set_textcolor(0xc9, 0xdf);
 
-		GUI_print_string((Bit8u*)va_arg(arguments, char*), l3, l4);
+		GUI_print_string((char*)va_arg(arguments, char*), l3, l4);
 
 		/* reset highlight special option */
 		if (ds_readw(GAME_MODE) == GAME_MODE_BEGINNER && ds_readw(SKILLED_HERO_POS) == i)

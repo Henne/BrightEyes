@@ -402,7 +402,7 @@ signed short menu_enter_delete(RealPt ptr, signed short entries, signed short mo
  * \return              index of the hero or -1 (ESC).
  * Remark: The available heroes must be in the group only.
  */
-signed short select_hero_from_group(Bit8u *title)
+signed short select_hero_from_group(char *title)
 {
 	signed short i;
 	signed short answer;
@@ -479,7 +479,7 @@ signed short select_hero_from_group(Bit8u *title)
  * \return              index of the hero or -1 (ESC).
  * Remark: The available heroes must be in the group and pass check_hero().
  */
-signed short select_hero_ok(Bit8u *title)
+signed short select_hero_ok(char *title)
 {
 	signed short i;
 	signed short answer;

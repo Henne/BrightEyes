@@ -75,7 +75,7 @@ void spell_armatrutz(void)
 		max_bonus++;
 	}
 	--max_bonus;
-#endif;
+#endif
 
 	/* the maximum bonus is 9 */
 	if (max_bonus > 9)

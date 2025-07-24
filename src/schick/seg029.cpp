@@ -110,17 +110,17 @@ void draw_playmask(void)
  * \param   dst         wheres the forename should be stored
  * \param   name        the full name
  */
-void copy_forename(Bit8u *dst, Bit8u *name)
+void copy_forename(char *dst, char *name)
 {
 
 	int i;
 
 	for (i = 0; i < 7; i++) {
-		if (host_readb(name + i) == 0x20) {
+		if (name[i] == 0x20) {
 			host_writeb(dst + i, 0);
 			break;
 		} else {
-			host_writeb(dst + i, host_readb(name + i));
+			dst[i] = host_readb(name + i);
 		}
 	}
 
@@ -149,8 +149,7 @@ void draw_status_line(void)
 
 		if (host_readb(get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE) {
 
-			copy_forename((char*)ds_readd(DTP2),
-				get_hero(i) + HERO_NAME2);
+			copy_forename((char*)ds_readd(DTP2), (char*)(get_hero(i) + HERO_NAME2));
 
 			set_textcolor(0xff, 0);
 
@@ -368,7 +367,7 @@ void select_hero_icon(unsigned short pos) {
 	get_textcolor(&fg_bak, &bg_bak);
 
 	/* copy the heroes forename */
-	copy_forename((char*)ds_readd(DTP2), get_hero(pos) + HERO_NAME2);
+	copy_forename((char*)ds_readd(DTP2), (char*)(get_hero(pos) + HERO_NAME2));
 
 	/* set the textcolors */
 	set_textcolor(0xfc, 0);
@@ -409,7 +408,7 @@ void deselect_hero_icon(unsigned short pos) {
 	get_textcolor(&fg_bak, &bg_bak);
 
 	/* copy the heroes forename */
-	copy_forename((char*)ds_readd(DTP2), get_hero(pos) + HERO_NAME2);
+	copy_forename((char*)ds_readd(DTP2), (char*)(get_hero(pos) + HERO_NAME2));
 
 	/* set the textcolors */
 	set_textcolor(0xff, 0);

@@ -15,7 +15,7 @@ void npc_garsvik(void);
 //0x39
 void npc_erwo(void);
 //0x3e
-void remove_npc(signed short, signed char, signed short, Bit8u*, Bit8u*);
+void remove_npc(signed short, signed char, signed short, char*, char*);
 //0x43
 void add_npc(signed short);
 //0x48

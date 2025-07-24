@@ -50,7 +50,7 @@ void status_show_spell(Bit8u *hero, unsigned short spell, unsigned short fsig,
 	my_itoa(host_readbs(hero + HERO_SPELLS + spell), str, 10);
 
 	/* print value */
-	GUI_print_string((Bit8u*)str, x2 - GUI_get_space_for_string((Bit8u*)str, 0), gy + group * 7);
+	GUI_print_string(str, x2 - GUI_get_space_for_string((Bit8u*)str, 0), gy + group * 7);
 }
 
 /**
@@ -78,7 +78,7 @@ void status_show_skill(Bit8u *hero, unsigned short skill, unsigned short ftig,
 	my_itoa(host_readbs(hero + HERO_TALENTS + skill) , str, 10);
 
 	/* print value */
-	GUI_print_string((Bit8u*)str, x2 - GUI_get_space_for_string((Bit8u*)str, 0), gy + group * 7);
+	GUI_print_string(str, x2 - GUI_get_space_for_string((Bit8u*)str, 0), gy + group * 7);
 }
 
 /**
@@ -94,26 +94,19 @@ void status_show_skills(Bit8u *hero) {
 	set_textcolor(0xff, 2);
 
 	/* print skill category names */
-	GUI_print_string(get_ttx(100),
-		GUI_get_first_pos_centered(get_ttx(100), 5, 100, 0), 55);
+	GUI_print_string(get_ttx(100), GUI_get_first_pos_centered(get_ttx(100), 5, 100, 0), 55);
 
-	GUI_print_string(get_ttx(104),
-		GUI_get_first_pos_centered(get_ttx(104), 110, 100, 0), 55);
+	GUI_print_string(get_ttx(104), GUI_get_first_pos_centered(get_ttx(104), 110, 100, 0), 55);
 
-	GUI_print_string(get_ttx(101),
-		GUI_get_first_pos_centered(get_ttx(101), 215, 100, 0), 55);
+	GUI_print_string(get_ttx(101), GUI_get_first_pos_centered(get_ttx(101), 215, 100, 0), 55);
 
-	GUI_print_string(get_ttx(105),
-		GUI_get_first_pos_centered(get_ttx(105), 5, 100, 0), 125);
+	GUI_print_string(get_ttx(105), GUI_get_first_pos_centered(get_ttx(105), 5, 100, 0), 125);
 
-	GUI_print_string(get_ttx(103),
-		GUI_get_first_pos_centered(get_ttx(103), 110, 100, 0), 125);
+	GUI_print_string(get_ttx(103), GUI_get_first_pos_centered(get_ttx(103), 110, 100, 0), 125);
 
-	GUI_print_string(get_ttx(102),
-		GUI_get_first_pos_centered(get_ttx(102), 215, 100, 0), 132);
+	GUI_print_string(get_ttx(102), GUI_get_first_pos_centered(get_ttx(102), 215, 100, 0), 132);
 
-	GUI_print_string(get_ttx(106),
-		GUI_get_first_pos_centered(get_ttx(106), 5, 100, 0), 174);
+	GUI_print_string(get_ttx(106), GUI_get_first_pos_centered(get_ttx(106), 5, 100, 0), 174);
 
 	set_textcolor(0, 2);
 
@@ -125,6 +118,7 @@ void status_show_skills(Bit8u *hero) {
 				ds_readw(STATUSPAGE_SKILLS_XY + skill_category * 6),
 				ds_readw((STATUSPAGE_SKILLS_XY + 2) + skill_category * 6),
 				ds_readw((STATUSPAGE_SKILLS_XY + 4) + skill_category * 6));
+
 			skill_no++;
 		}
 	}
@@ -273,16 +267,13 @@ void status_show(Bit16u index)
 		}
 
 		/* print height */
-		sprintf((char*)ds_readd(DTP2),
-			get_tx2(33),
-			host_readb(hero + HERO_HEIGHT));
+		sprintf((char*)ds_readd(DTP2), get_tx2(33), host_readb(hero + HERO_HEIGHT));
 		GUI_print_string((char*)ds_readd(DTP2), 158, 116);
 
 		/* print weight */
-		sprintf((char*)ds_readd(DTP2),
-			get_tx2(34),
-			host_readw(hero + HERO_WEIGHT));
+		sprintf((char*)ds_readd(DTP2), get_tx2(34), host_readw(hero + HERO_WEIGHT));
 		GUI_print_string((char*)ds_readd(DTP2), 59, 179);
+
 	} else {
 		do_fill_rect((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 50, 319, 191, 2);
 	}
@@ -291,12 +282,12 @@ void status_show(Bit16u index)
 
 	/* print name */
 	set_textcolor(0xff, 2);
-	GUI_print_string(hero + HERO_NAME2, 59, 9);
+	GUI_print_string((char*)hero + HERO_NAME2, 59, 9);
 
 	/* print typus */
 	set_textcolor(0, 2);
 
-	GUI_print_string((Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + (
+	GUI_print_string((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + (
 	((host_readb(hero + HERO_SEX)) ? 0x251 : 0x9) + host_readbs(hero + HERO_TYPE)) * 4)), 59, 16);
 
 
@@ -640,44 +631,36 @@ void status_show(Bit16u index)
 			/* print headers */
 			set_textcolor(0xff, 2);
 
-			GUI_print_string(
-				(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x300)),
-				GUI_get_first_pos_centered((Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x300)), 5, 100, 0),
+			GUI_print_string((char*)host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x300),
+				GUI_get_first_pos_centered((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x300)), 5, 100, 0),
 				55);
 
-			GUI_print_string(
-				(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x308)),
-				GUI_get_first_pos_centered((Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x308)), 110, 100, 0),
+			GUI_print_string((char*)host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x308),
+				GUI_get_first_pos_centered((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x308)), 110, 100, 0),
 				55);
 
-			GUI_print_string(
-				(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x314)),
-				GUI_get_first_pos_centered((Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x314)), 215, 100, 0),
+			GUI_print_string((char*)host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x314),
+				GUI_get_first_pos_centered((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x314)), 215, 100, 0),
 				55);
 
-			GUI_print_string(
-				(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x304)),
-				GUI_get_first_pos_centered((Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x304)), 5, 100, 0),
+			GUI_print_string((char*)host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x304),
+				GUI_get_first_pos_centered((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x304)), 5, 100, 0),
 				97);
 
-			GUI_print_string(
-				(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x30c)),
-				GUI_get_first_pos_centered((Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x30c)), 110, 100, 0),
+			GUI_print_string((char*)host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x30c),
+				GUI_get_first_pos_centered((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x30c)), 110, 100, 0),
 				104);
 
-			GUI_print_string(
-				(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x318)),
-				GUI_get_first_pos_centered((Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x318)), 215, 100, 0),
+			GUI_print_string((char*)host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x318),
+				GUI_get_first_pos_centered((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x318)), 215, 100, 0),
 				97);
 
-			GUI_print_string(
-				(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x310)),
-				GUI_get_first_pos_centered((Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x310)), 110, 100, 0),
+			GUI_print_string((char*)host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x310),
+				GUI_get_first_pos_centered((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x310)), 110, 100, 0),
 				132);
 
-			GUI_print_string(
-				(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x31c)),
-				GUI_get_first_pos_centered((Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x31c)), 215, 100, 0),
+			GUI_print_string((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x31c)),
+				GUI_get_first_pos_centered((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x31c)), 215, 100, 0),
 				153);
 
 			/* print values */
@@ -705,24 +688,20 @@ void status_show(Bit16u index)
 			/* print headers */
 			set_textcolor(0xff, 2);
 
-			GUI_print_string(
-				(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x190)),
-				GUI_get_first_pos_centered((Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x190)), 5, 100, 0),
+			GUI_print_string((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x190)),
+				GUI_get_first_pos_centered((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x190)), 5, 100, 0),
 				55);
 
-			GUI_print_string(
-				(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x324)),
-				GUI_get_first_pos_centered((Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x324)), 5, 100, 0),
+			GUI_print_string((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x324)),
+				GUI_get_first_pos_centered((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x324)), 5, 100, 0),
 				129);
 
-			GUI_print_string(
-				(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x328)),
-				GUI_get_first_pos_centered((Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x328)), 110, 100, 0),
+			GUI_print_string((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x328)),
+				GUI_get_first_pos_centered((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x328)), 110, 100, 0),
 				55);
 
-			GUI_print_string(
-				(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x32c)),
-				GUI_get_first_pos_centered((Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x32c)), 215, 100, 0),
+			GUI_print_string((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x32c)),
+				GUI_get_first_pos_centered((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x32c)), 215, 100, 0),
 				55);
 
 

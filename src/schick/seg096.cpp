@@ -43,7 +43,7 @@ RealPt GUI_names_grammar(signed short flag, signed short index, signed short typ
 {
 	signed short *lp1;
 	signed short l2 = 0;
-	Bit8u *p_name;
+	char *p_name;
 	signed short l4;
 #if !defined(__BORLANDC__)
 	struct dummy lp5 = { {0x1000, 0x2000, 0x3000} };
@@ -83,12 +83,13 @@ RealPt GUI_names_grammar(signed short flag, signed short index, signed short typ
 		(char*)ds_readd(GRAMMAR_ARTICLES_INDEX + 4 * host_readws((Bit8u*)lp1 + 2 * (((flag & 0x3000) - 1) >> 12))),
 		(char*)GUI_name_plural(flag, p_name));
 
-	p_name = p_datseg + ds_readw(GRAMMAR_BUF_NO) * 40 + (GRAMMAR_BUFS+40);
+	p_name = (char*)(p_datseg + ds_readw(GRAMMAR_BUF_NO) * 40 + (GRAMMAR_BUFS+40));
 
-	if (host_readb(p_name) == 0x20) {
+	if (*p_name == 0x20) {
 		do {
-			l4 = host_readbs(++p_name);
-			host_writeb(p_name - 1, (signed char)l4);
+			l4 = *(++p_name);
+			*(p_name - 1) = (signed char)l4;
+
 		} while (l4 != 0);
 	}
 
@@ -107,13 +108,14 @@ RealPt GUI_names_grammar(signed short flag, signed short index, signed short typ
 }
 
 //1a7
-RealPt GUI_name_plural(signed short v1, Bit8u *s)
+char* GUI_name_plural(signed short v1, char *s)
 {
-	Bit8u *p = p_datseg + GRAMMAR_BUFS;
+	char *p = (char*)(p_datseg + GRAMMAR_BUFS);
 	char tmp;
 
-	while ((tmp = *s++) && (tmp != 0x2e))
-		host_writeb(p++, tmp);
+	while ((tmp = *s++) && (tmp != 0x2e)) {
+		*p++ = tmp;
+	}
 
 	if (v1 & 4)
 		while ((tmp = *s++) && (tmp != 0x2e));
@@ -127,11 +129,11 @@ RealPt GUI_name_plural(signed short v1, Bit8u *s)
 		host_writeb(p++, 'S');
 	} else {
 		if (((v1 & 0x0f) == 7) && (host_readb(p-1) != 'N') && (host_readb(p-1) != 'S'))
-				host_writeb(p++, 'N');
+				*p++ = 'N';
 	}
 
-	host_writeb(p, 0);
-	return ((Bit8u*)p_datseg + GRAMMAR_BUFS);
+	*p = 0;
+	return (char*)p_datseg + GRAMMAR_BUFS;
 }
 
 //290
@@ -140,13 +142,15 @@ char* GUI_name_singular(char *s)
 	Bit8u *p = p_datseg + GRAMMAR_BUFS;
 	char tmp;
 
-	while ((tmp = *s++) && (tmp != 0x2e))
-		host_writeb(p++, tmp);
+	while ((tmp = *s++) && (tmp != 0x2e)) {
+		*p++ = tmp;
+	}
 
-	while ((tmp = *s) && (tmp != 0x2e))
-		host_writeb(p++, *s++);
+	while ((tmp = *s) && (tmp != 0x2e)) {
+		*p++ = *s++;
+	}
 
-	host_writeb(p, 0);
+	*p = 0;
 	return (char*)p_datseg + GRAMMAR_BUFS;
 }
 
@@ -332,7 +336,7 @@ signed short GUI_print_header(char *str)
 }
 
 //614
-void GUI_print_loc_line(Bit8u * str)
+void GUI_print_loc_line(char *str)
 {
 	signed short tmp1;
 	signed short tmp2;
@@ -573,7 +577,7 @@ unsigned short GUI_unused(Bit8u *str)
 }
 
 //9D6
-signed short GUI_get_space_for_string(Bit8u *p, signed short dir)
+signed short GUI_get_space_for_string(char *p, signed short dir)
 {
 	signed short sum;
 	signed short tmp;
@@ -594,13 +598,13 @@ signed short GUI_get_space_for_string(Bit8u *p, signed short dir)
 }
 
 //A26
-signed short GUI_get_first_pos_centered(Bit8u *p, signed short x, signed short v2, unsigned short dir)
+signed short GUI_get_first_pos_centered(char *p, signed short x, signed short v2, unsigned short dir)
 {
 	register signed short i;
 	register signed short c;
 	signed short tmp;
 
-	for (i = 0;  (c = host_readbs(p)) && (c != 0x40) && (c != 0x0d); i += tmp) {
+	for (i = 0;  (c = *p) && (c != 0x40) && (c != 0x0d); i += tmp) {
 		if (dir)
 			GUI_lookup_char_height(*p++, &tmp);
 		else

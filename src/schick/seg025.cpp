@@ -9,6 +9,11 @@
 #include <string.h>
 #include <stdio.h>
 
+#if !defined(__BORLANDC__)
+#include <unistd.h>
+#endif
+
+
 #include "v302de.h"
 #include "common.h"
 
@@ -631,7 +636,7 @@ void draw_icon(signed short id, signed short x, signed short y)
 /* static */
 signed short show_storytext(void)
 {
-	Bit8u *ptr;
+	char *ptr;
 	signed short person;
 	signed short icon;
 
@@ -737,7 +742,7 @@ void leave_dungeon(void)
 	Bit8u *ptr;
 
 	DNG_lights();
-	ptr = (char*)ds_readd(TEXT_OUTPUT_BUF);
+	ptr = (unsigned char*)ds_readd(TEXT_OUTPUT_BUF);
 
 	memset((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 0xc0);
 

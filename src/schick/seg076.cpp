@@ -336,14 +336,13 @@ void DNG_door(signed short action)
 	} while (host_readws((Bit8u*)(ptr_doors++)) != -1);
 }
 
-void print_msg_with_first_hero(Bit8u *msg)
+void print_msg_with_first_hero(char *msg)
 {
 	Bit8u *hero;
 
 	hero = (Bit8u*)get_first_hero_available_in_group();
 
-	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-		(char*)msg, (char*)hero + HERO_NAME2);
+	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), msg, (char*)(hero + HERO_NAME2));
 
 	GUI_input((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
 	return;

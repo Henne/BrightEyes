@@ -212,7 +212,7 @@ void THO_bank(void)
 			if (ds_readws(BANK_DEPOSIT) >= 30000) {
 
 				/* prevent overflow  at 32767 */
-				GUI_output(p_datseg + STR_BANK_DEPOSIT_TO_BIG);
+				GUI_output((char*)(p_datseg + STR_BANK_DEPOSIT_TO_BIG));
 
 			} else {
 
@@ -325,7 +325,7 @@ void THO_arsenal(void)
 
 	} else {
 
-		GUI_output(p_datseg + STR_OBVIOUSLY_CLOSED);
+		GUI_output((char*)(p_datseg + STR_OBVIOUSLY_CLOSED));
 	}
 }
 
@@ -391,10 +391,10 @@ void THO_black_finger(void)
 }
 
 /* static */
-void dramosch_says(Bit8u *msg)
+void dramosch_says(char *msg)
 {
 	GUI_dialogbox((unsigned char*)ds_readd(DTP2),
-			(Bit8u*)(host_readd((Bit8u*)ds_readd(TX2_INDEX) + 0xc0)), msg, 0);
+			(char*)(host_readd((Bit8u*)ds_readd(TX2_INDEX) + 0xc0)), msg, 0);
 }
 
 void THO_ugdalf(void)
@@ -432,7 +432,7 @@ void THO_ugdalf(void)
 
 			do {
 				answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
-							(Bit8u*)(host_readd((Bit8u*)ds_readd(TX2_INDEX) + 0xc0)),
+							(char*)(host_readd((Bit8u*)ds_readd(TX2_INDEX) + 0xc0)),
 
 							get_tx2(30), 2,
 							get_tx2(31),

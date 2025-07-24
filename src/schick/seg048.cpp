@@ -141,7 +141,7 @@ void status_menu(signed short hero_pos)
 						(char*)GUI_name_singular(get_itemname(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO)))),
 						!is_in_word_array(
 						    host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO)),
-						    g_wearable_items_index[host_readbs(hero2 + HERO_TYPE) - 1]) ? p_datseg + EMPTY_STRING8 : get_tx2(66));
+						    g_wearable_items_index[host_readbs(hero2 + HERO_TYPE) - 1]) ? ((char*)p_datseg + EMPTY_STRING8) : get_tx2(66));
 
 					if (item_weapon(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))))) {
 						strcat((char*)ds_readd(DTP2),
@@ -315,7 +315,7 @@ void status_menu(signed short hero_pos)
 				ds_writeb(STATUSPAGE_SELITEM1_NO, ds_readbs(STATUSPAGE_SELITEM3_NO));
 
 				memset((char*)ds_readd(DTP2), ' ', 60);
-				host_writeb((char*)ds_readd(DTP2) + 60, 0);
+				host_writeb((Bit8u*)ds_readd(DTP2) + 60, 0);
 				GUI_print_string((char*)ds_readd(DTP2), 16, 192);
 
 				if (host_readws(hero2 + HERO_INVENTORY + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))) {
@@ -325,7 +325,7 @@ void status_menu(signed short hero_pos)
 						(char*)GUI_name_singular(get_itemname(host_readws(hero2 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO)))),
 						!is_in_word_array(
 						    host_readws(hero2 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO)),
-						    g_wearable_items_index[host_readbs(hero2 + HERO_TYPE) - 1]) ? p_datseg + EMPTY_STRING9 : get_tx2(66));
+						    g_wearable_items_index[host_readbs(hero2 + HERO_TYPE) - 1]) ? ((char*)p_datseg + EMPTY_STRING9) : get_tx2(66));
 
 					if (item_weapon(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))))) {
 						strcat((char*)ds_readd(DTP2),

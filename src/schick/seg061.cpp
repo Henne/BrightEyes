@@ -165,7 +165,7 @@ void do_temple(void)
 					save_game_state();
 				}
 			} else {
-				GUI_output(p_datseg + STR_NO_SAVE_IN_TEMPLE);
+				GUI_output((char*)(p_datseg + STR_NO_SAVE_IN_TEMPLE));
 			}
 		}
 
@@ -407,7 +407,7 @@ signed short char_erase(void)
  * \param   le_in       healable LE maximum
  * \param   str         a format-string for the output
  */
-void miracle_heal_hero(signed short le_in, Bit8u *str)
+void miracle_heal_hero(signed short le_in, char *str)
 {
 	signed short i;
 	signed short le;
@@ -454,7 +454,7 @@ void miracle_heal_hero(signed short le_in, Bit8u *str)
 	}
 }
 
-void miracle_resurrect(Bit8u *str)
+void miracle_resurrect(char *str)
 {
 	signed short i;
 
@@ -517,7 +517,7 @@ void miracle_modify(unsigned short offset, Bit32s timer_value, signed short mod)
  * \param   str         format string for output
  * \param   mode        0 = magic, != 0 repair
  */
-void miracle_weapon(Bit8u *str, signed short mode)
+void miracle_weapon(char *str, signed short mode)
 {
 	int i;
 	int j;

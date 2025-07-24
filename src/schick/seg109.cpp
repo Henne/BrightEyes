@@ -285,7 +285,7 @@ void TRV_found_herb_place(signed short a0)
 		get_tx(0),
 		get_tx(randval),
 		(char*)hero + HERO_NAME2,
-		(char*)(a0 != 0 ? get_tx(42) : p_datseg + EMPTY_STRING10));
+		(a0 != 0 ? get_tx(42) : (char*)p_datseg + EMPTY_STRING10));
 
 	do {
 		answer = GUI_radio((char*)ds_readd(DTP2), 2,
@@ -337,7 +337,7 @@ signed short TRV_found_camp_place(signed short a0)
 	sprintf((char*)ds_readd(DTP2),
 		get_tx(8),
 		get_tx(randval),
-		(char*)(a0 == 1 ? get_tx(42) : (a0 == 2 ? get_tx(45) : p_datseg + EMPTY_STRING11)));
+		(a0 == 1 ? get_tx(42) : (a0 == 2 ? get_tx(45) : (char*)p_datseg + EMPTY_STRING11)));
 	do {
 		answer = GUI_radio((char*)ds_readd(DTP2), 2,
 					get_tx(9),
@@ -380,7 +380,7 @@ void TRV_found_replenish_place(signed short a0)
 	sprintf((char*)ds_readd(DTP2),
 		get_tx(16),
 		get_tx(random_schick(5) + 11),
-		(char*)(a0 != 0 ? get_tx(45) : p_datseg + EMPTY_STRING12));
+		(a0 != 0 ? get_tx(45) : (char*)p_datseg + EMPTY_STRING12));
 	do {
 		answer = GUI_radio((char*)ds_readd(DTP2), 2,
 					get_tx(21),
@@ -577,7 +577,7 @@ void TRV_ford_test(signed short mod, signed short time)
 	}
 }
 
-signed short TRV_ferry(Bit8u *msg, signed short price)
+signed short TRV_ferry(char *msg, signed short price)
 {
 	signed short done;
 	signed short answer;

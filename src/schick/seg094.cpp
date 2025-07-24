@@ -9,6 +9,10 @@
 
 #include <string.h>
 
+#if !defined(__BORLANDC__)
+#include <unistd.h>
+#endif
+
 #include "v302de.h"
 #include "common.h"
 
@@ -508,7 +512,7 @@ signed short TM_unused1(RealPt signpost_ptr, signed short old_route_no)
 	signed short route_no2;
 	signed short town;
 	signed short old_route_id;
-	Bit8u *destinations_tab[7];
+	char *destinations_tab[7];
 
 	old_route_id = host_readb((Bit8u*)(host_readd((Bit8u*)(signpost_ptr) + SIGNPOST_LAND_ROUTES)) + old_route_no) - 1;
 	ds_writeb(CURRENT_TOWN, (signed char)(town = ds_readws(TRV_DESTINATION)));

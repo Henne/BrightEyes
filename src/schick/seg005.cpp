@@ -224,7 +224,7 @@ unsigned short fight_printer(void)
 				my_itoa(ds_readws((FIG_MSG_DATA + 2) + ds_readbs(FIG_STAR_COUNTER) * 4), str, 10);
 
 				x = GUI_get_first_pos_centered((Bit8u*)str, 30, 20, 0);
-				GUI_print_string((Bit8u*)str, x, 170);
+				GUI_print_string(str, x, 170);
 			}
 
 			/* Generate textmessage */
@@ -268,8 +268,7 @@ unsigned short fight_printer(void)
 					strcpy((char*)ds_readd(TEXT_OUTPUT_BUF), get_tx(idx));
 				}
 
-				GUI_print_string((char*)ds_readd(TEXT_OUTPUT_BUF),
-					1, 194);
+				GUI_print_string((char*)ds_readd(TEXT_OUTPUT_BUF), 1, 194);
 			}
 			ds_writed(PRINT_STRING_BUFFER, (Bit32u)gfx_pos_bak);
 			set_textcolor(fg_bak, bg_bak);

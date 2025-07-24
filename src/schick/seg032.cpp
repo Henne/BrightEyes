@@ -10,6 +10,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#if !defined(__BORLANDC__)
+#include <unistd.h>
+#endif
+
 #include "v302de.h"
 #include "common.h"
 
@@ -865,7 +869,7 @@ void FIG_load_ship_sprites(void)
 
 				/* check for error */
 				if (ds_readds(FIGHTOBJ_BUF_FREESPACE) < 0L) {
-					GUI_input(p_datseg + STR_ERROR_ON_OBJ_MALLOC, 0);
+					GUI_input((char*)p_datseg + STR_ERROR_ON_OBJ_MALLOC, 0);
 				}
 			}
 

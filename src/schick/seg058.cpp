@@ -9,6 +9,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#if !defined(__BORLANDC__)
+#include <unistd.h>
+#endif
+
 #include "v302de.h"
 #include "common.h"
 

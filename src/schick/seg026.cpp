@@ -10,6 +10,7 @@
 #include <string.h>
 #include <fcntl.h>
 #include <ctype.h>
+#include <time.h>
 
 #if defined(__BORLANDC__)
 #include <DIR.H>
@@ -195,6 +196,7 @@ void prepare_sg_name(char *dst, char *src)
 
 signed short load_game_state(void)
 {
+#if defined(__BORLANDC__)
 	register signed short handle_gs;
 	signed short i;
 	signed short handle;
@@ -414,6 +416,9 @@ signed short load_game_state(void)
 	}
 
 	return retval;
+#else
+	return 0;
+#endif
 }
 
 /**
@@ -423,6 +428,7 @@ signed short load_game_state(void)
  */
 signed short save_game_state(void)
 {
+#if defined(__BORLANDC__)
 	signed short l_di;
 	HugePt p_status_start;
 	HugePt p_status_end;
@@ -610,7 +616,6 @@ signed short save_game_state(void)
 			return 0;
 		}
 
-#if defined(__BORLANDC__)
 		/* save all changed files from SCHICK.DAT */
 		for (tw_bak = 0; tw_bak < 286; tw_bak++) {
 
@@ -638,7 +643,6 @@ signed short save_game_state(void)
 				}
 			}
 		}
-#endif
 
 		/* skip back to the start of the offset of the CHR data */
 		lseek(l_di, 16, 0);
@@ -653,7 +657,7 @@ signed short save_game_state(void)
 		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 			(char*)ds_readd(STR_TEMP_XX_PTR2),
 			(char*)p_datseg + ALL_CHR_WILDCARD2);
-#if defined(__BORLANDC__)
+
 		l1 = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
 		do {
 			/* create the CHR filename */
@@ -680,7 +684,6 @@ signed short save_game_state(void)
 		} while (l1 == 0);
 
 		close(l_di);
-#endif
 
 		/* rewrite GAMES.NAM */
 		l_di = _creat((char*)ds_readd(FNAMES + 0x33c), 0);
@@ -689,6 +692,7 @@ signed short save_game_state(void)
 
 		return 1;
 	}
+#endif
 
 	return 0;
 }
@@ -701,18 +705,17 @@ signed short save_game_state(void)
  * \param   a2          ???
  * \return              1 = OK, 0 = Error
  */
-signed short read_chr_temp(RealPt fname, signed short hero_pos, signed short a2)
+signed short read_chr_temp(char *fname, signed short hero_pos, signed short a2)
 {
+#if defined(__BORLANDC__)
 	signed short handle;
 	signed short hero_size = SIZEOF_HERO;
 	Bit8u *hero;
 
-	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-		(char*)ds_readd(STR_TEMP_XX_PTR2),
-		(char*)(Bit8u*)(fname));
+	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)ds_readd(STR_TEMP_XX_PTR2), (char*)fname);
 
 	if ((handle = open((char*)ds_readd(TEXT_OUTPUT_BUF), O_BINARY | O_RDWR)) == -1) {
-		copy_file_to_temp(fname, (char*)ds_readd(TEXT_OUTPUT_BUF));
+		copy_file_to_temp((char*)fname, (char*)ds_readd(TEXT_OUTPUT_BUF));
 		handle = open((char*)ds_readd(TEXT_OUTPUT_BUF), O_BINARY | O_RDWR);
 	}
 
@@ -754,9 +757,8 @@ signed short read_chr_temp(RealPt fname, signed short hero_pos, signed short a2)
 		GUI_output(get_ttx(4));
 		return 0;
 	}
-
+#endif
 	return 1;
-
 }
 
 /**
@@ -853,7 +855,7 @@ void load_in_head(signed short head)
 
 		seek_archive_file(handle, 1024L * head, 0);
 
-		read_archive_file(handle, (char*)ds_readd(DTP2), 1024);
+		read_archive_file(handle, (unsigned char*)ds_readd(DTP2), 1024);
 
 		close(handle);
 

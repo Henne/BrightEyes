@@ -80,7 +80,7 @@ void city_event_1(void)
 		 */
 		sprintf((char*)ds_readd(DTP2), get_tx(random_schick(4) - 1), (char*)hero + HERO_NAME2, randval);
 
-		GUI_dialogbox(hero + HERO_PORTRAIT, hero + HERO_NAME2, (char*)ds_readd(DTP2), 0);
+		GUI_dialogbox(hero + HERO_PORTRAIT, (char*)(hero + HERO_NAME2), (char*)ds_readd(DTP2), 0);
 
 		randval *= 10;
 
@@ -96,7 +96,7 @@ void city_event_1(void)
 			(char*)hero + HERO_NAME2,
 			(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
 
-		answer = GUI_dialogbox(hero + HERO_PORTRAIT, hero + HERO_NAME2, (char*)ds_readd(DTP2), 3,
+		answer = GUI_dialogbox(hero + HERO_PORTRAIT, (char*)(hero + HERO_NAME2), (char*)ds_readd(DTP2), 3,
 				get_tx(random_schick(4) + 7),
 				get_tx(random_schick(4) + 11),
 				get_tx(random_schick(4) + 15));
@@ -140,7 +140,7 @@ void city_event_2(void)
 			get_tx(random_schick(4) + 30),
 			(char*)hero + HERO_NAME2);
 
-		GUI_dialogbox(hero + HERO_PORTRAIT, hero + HERO_NAME2, (char*)ds_readd(DTP2), 0);
+		GUI_dialogbox(hero + HERO_PORTRAIT, (char*)(hero + HERO_NAME2), (char*)ds_readd(DTP2), 0);
 
 	} else {
 
@@ -148,7 +148,7 @@ void city_event_2(void)
 			get_tx(random_schick(4) + 34),
 			(char*)hero + HERO_NAME2);
 
-		answer = GUI_dialogbox(hero + HERO_PORTRAIT, hero + HERO_NAME2, (char*)ds_readd(DTP2), 3,
+		answer = GUI_dialogbox(hero + HERO_PORTRAIT, (char*)(hero + HERO_NAME2), (char*)ds_readd(DTP2), 3,
 				get_tx(random_schick(4) + 38),
 				get_tx(random_schick(4) + 42),
 				get_tx(random_schick(4) + 46));
@@ -327,7 +327,7 @@ void city_event_7(void)
 
 		sprintf((char*)ds_readd(DTP2) + 0x400, get_tx(123), (char*)hero + HERO_NAME2);
 
-		GUI_dialogbox(hero + HERO_PORTRAIT, hero + HERO_NAME2, (char*)ds_readd(DTP2) + 0x400, 0);
+		GUI_dialogbox(hero + HERO_PORTRAIT, (char*)(hero + HERO_NAME2), (char*)ds_readd(DTP2) + 0x400, 0);
 
 	} else if (randval == 1) {
 

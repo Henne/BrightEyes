@@ -9,6 +9,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#if !defined(__BORLANDC__)
+#include <unistd.h>
+#endif
+
 #include "v302de.h"
 #include "common.h"
 
@@ -311,7 +315,7 @@ void buy_screen(void)
 						197, 0);
 
 				if (host_readbs(hero1 + HERO_TYPE) != HERO_TYPE_NONE) {
-					copy_forename((char*)ds_readd(DTP2), hero1 + HERO_NAME2);
+					copy_forename((char*)ds_readd(DTP2), (char*)(hero1 + HERO_NAME2));
 					set_textcolor(255, 0);
 
 					if (host_readbs(hero1 + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP)) {

@@ -509,7 +509,7 @@ void tevent_033(void)
 	{
 		timewarp(MINUTES(15));
 
-		GUI_dialog_na(0, (Bit8u*)(answer == 1 ? get_tx2(7) : get_tx2(8)));
+		GUI_dialog_na(0, (answer == 1 ? get_tx2(7) : get_tx2(8)));
 	}
 }
 
@@ -699,7 +699,7 @@ void tevent_045(void)
 		{
 			timewarp(MINUTES(15));
 
-			GUI_dialog_na(0, (Bit8u*)(answer == 1 ? get_tx2(40) : get_tx2(41)));
+			GUI_dialog_na(0, (answer == 1 ? get_tx2(40) : get_tx2(41)));
 		}
 	}
 }

@@ -762,12 +762,12 @@ void DNG15_cursed_money(Bit8u* ptr)
 }
 
 /**
- * \brief   * \param text		pointer to the output text
- *
- * \param   wounds      group may get wounds (0/1)
- * \param   ladder      here is a ladder to the next level
+ * \brief
+ * \param text		pointer to the output text
+ * \param wounds      group may get wounds (0/1)
+ * \param ladder      here is a ladder to the next level
  */
-void DNG15_wounds_and_ladders(Bit8u* text, signed short wounds, signed short ladder)
+void DNG15_wounds_and_ladders(char* text, signed short wounds, signed short ladder)
 {
 	GUI_output(text);
 

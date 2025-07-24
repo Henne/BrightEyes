@@ -575,17 +575,17 @@ void DNG_lights(void)
 
 		for (i = 0; i < 0xc0; i++) {
 
-			l2 = host_readbs((char*)ds_readd(TEXT_OUTPUT_BUF) + i) - l1;
+			l2 = host_readbs((Bit8u*)ds_readd(TEXT_OUTPUT_BUF) + i) - l1;
 
 			if (l2 < 0) {
 				l2 = 0;
 			}
 
-			host_writeb((char*)ds_readd(TEXT_OUTPUT_BUF) + i, l2);
+			host_writeb((Bit8u*)ds_readd(TEXT_OUTPUT_BUF) + i, l2);
 		}
 
 		wait_for_vsync();
-		set_palette((char*)ds_readd(TEXT_OUTPUT_BUF), 0x80, 0x40);
+		set_palette((Bit8u*)ds_readd(TEXT_OUTPUT_BUF), 0x80, 0x40);
 	}
 }
 
@@ -807,13 +807,11 @@ void DNG_stub6(void)
 		{
 
 			/* ropes oder staff */
-			host_writeb((char*)ds_readd(DTP2), 0);
+			host_writeb((unsigned char*)ds_readd(DTP2), 0);
 
 			if (l_si) {
 
-				sprintf((char*)ds_readd(DTP2),
-					get_ttx(768),
-					get_hero(l_si - 1) + HERO_NAME2);
+				sprintf((char*)ds_readd(DTP2), get_ttx(768), get_hero(l_si - 1) + HERO_NAME2);
 			}
 
 			if (l_di == 2) {
@@ -1090,4 +1088,3 @@ mark2:			   goto mark1;
 #if !defined(__BORLANDC__)
 }
 #endif
-

@@ -174,7 +174,7 @@ signed short DNG13_handler(void)
  * \param   text        text for the output
  * \param   flag        pointer to the flag (0 = blocked / 1 = free)
  */
-void DNG13_unblock_passage(Bit8u* text, Bit8u* flag)
+void DNG13_unblock_passage(char* text, Bit8u* flag)
 {
 	signed short has_items;
 

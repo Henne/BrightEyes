@@ -10,6 +10,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#if !defined(__BORLANDC__)
+#include <unistd.h>
+#endif
+
 #include "v302de.h"
 #include "common.h"
 
@@ -292,7 +296,7 @@ void do_harbor(void)
 							if (--answer) {
 
 								strcat((char*)ds_readd(DTP2),
-									(char*)(answer >= 2 ? p_datseg + SEA_TRAVEL_STR_COMMA : get_tx(7)));
+									(answer >= 2 ? (char*)(p_datseg + SEA_TRAVEL_STR_COMMA) : get_tx(7)));
 							}
 
 						} while (answer != 0);

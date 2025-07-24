@@ -270,7 +270,7 @@ void show_hyggelik_ani(void)
 
 	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
 	memcpy((void*)(char*)ds_readd(DTP2), src, 192);
-	src = (char*)ds_readd(DTP2);
+	src = (unsigned char*)ds_readd(DTP2);
 
 	wait_for_vsync();
 	set_palette(src, 0 , 0x40);

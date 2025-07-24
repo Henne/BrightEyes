@@ -7,7 +7,7 @@ void GUI_write_char_to_screen(Bit8u*, signed short, signed short);
 //25
 RealPt GUI_names_grammar(signed short, signed short, signed short);
 //2a
-RealPt GUI_name_plural(signed short, Bit8u*);
+char* GUI_name_plural(signed short, char*);
 //2f
 char* GUI_name_singular(char*);
 //34
@@ -21,7 +21,7 @@ void GUI_print_string(char*, signed short, signed short);
 //48
 signed short GUI_print_char(unsigned char, unsigned short, unsigned short);
 //4d
-signed short GUI_get_first_pos_centered(Bit8u*, signed short, signed short, unsigned short);
+signed short GUI_get_first_pos_centered(char*, signed short, signed short, unsigned short);
 //52
 unsigned short GUI_count_lines(char*);
 //57
@@ -40,11 +40,11 @@ void GUI_write_char_to_screen_xy(unsigned short, unsigned short, unsigned short,
 void set_textcolor(signed short, signed short);
 void get_textcolor(signed short*, signed short*);
 //7f
-void GUI_print_loc_line(Bit8u*);
+void GUI_print_loc_line(char*);
 //84
 signed short GUI_print_header(char*);
 //89
-signed short GUI_get_space_for_string(Bit8u*, signed short);
+signed short GUI_get_space_for_string(char*, signed short);
 //8e
 void GUI_draw_popup_line(signed short, signed short);
 

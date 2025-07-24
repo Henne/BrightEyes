@@ -597,7 +597,7 @@ void spell_skelettarius(void)
 		 * https://www.crystals-dsa-foren.de/showthread.php?tid=5191&pid=166097#pid166097
 		 * */
                 RealPt buf_seek_ptr_bak = ds_readd(FIGHTOBJ_BUF_SEEK_PTR); /* backup the entry of FIGHTOBJ_BUF_SEEK_PTR */
-		dswrite(FIGHTOBJ_BUF_SEEK_PTR, host_readd(fighter + FIGHTER_GFXBUF));
+		ds_write(FIGHTOBJ_BUF_SEEK_PTR, host_readd(fighter + FIGHTER_GFXBUF));
 #endif
 
 		FIG_remove_from_list(host_readbs(get_spelltarget_e() + ENEMY_SHEET_FIGHTER_ID), 0);

@@ -11,13 +11,13 @@ void char_letgo(signed short);
 /* 0x2f */
 signed short char_erase(void);
 /* 0x34 */
-void miracle_heal_hero(signed short, Bit8u*);
+void miracle_heal_hero(signed short, char*);
 /* 0x39 */
-void miracle_resurrect(Bit8u*);
+void miracle_resurrect(char*);
 /* 0x3e */
 void miracle_modify(unsigned short, Bit32s, signed short);
 /* 0x43 */
-void miracle_weapon(Bit8u*, signed short);
+void miracle_weapon(char*, signed short);
 
 #if !defined(__BORLANDC__)
 }

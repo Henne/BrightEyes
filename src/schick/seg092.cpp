@@ -206,7 +206,7 @@ void loot_simple_chest(Bit8u *chest)
 		/* write the names of the items in the chest into names[] */
 		while((item_id = host_readb((Bit8u*)host_readd(chest + 0x0b) + item_no)) != (signed short)0x00ff) {
 
-			strcpy(names[item_no++], (char*)GUI_name_plural(0, get_itemname(item_id)));
+			strcpy(names[item_no++], GUI_name_plural(0, get_itemname(item_id)));
 		}
 
 		if (item_no == 0) {
@@ -271,7 +271,7 @@ void delete_chest_item(Bit8u *chest, signed short item_no)
  * \param   text_non_empty shown text if chest is not empty
  * \param   text_empty  shown text if chest is empty
  */
-void loot_chest(Bit8u *chest, Bit8u *text_non_empty, Bit8u *text_empty)
+void loot_chest(Bit8u *chest, char *text_non_empty, char *text_empty)
 {
 	signed short item_no;
 	signed short item_id;
@@ -284,13 +284,12 @@ void loot_chest(Bit8u *chest, Bit8u *text_non_empty, Bit8u *text_empty)
 	ds_writews(TEXTBOX_WIDTH, 7);
 
 	do {
-
 		item_no = 0;
 
 		/* write the names of the items in the chest into names[] */
 		while ((item_id = host_readb((Bit8u*)host_readd(chest + 0x0b) + item_no)) != (signed short)0x00ff) {
 
-			strcpy(names[item_no++], (char*)GUI_name_plural(0, get_itemname(item_id)));
+			strcpy(names[item_no++], GUI_name_plural(0, get_itemname(item_id)));
 		}
 
 		if (item_no == 0) {
@@ -578,7 +577,7 @@ void use_key_on_chest(RealPt chest_ptr)
 	}
 }
 
-void loot_multi_chest(Bit8u *chest, Bit8u *msg)
+void loot_multi_chest(Bit8u *chest, char *msg)
 {
 	unsigned short item_cnt;
 	signed short item_no;
@@ -605,7 +604,7 @@ void loot_multi_chest(Bit8u *chest, Bit8u *msg)
 				strcat(names[item_no], (char*)p_datseg + STR_SINGLE_SPACE);
 			}
 
-			strcat(names[item_no++], (char*)GUI_name_plural( ((signed short)(item_cnt > 1 ? (unsigned short)1 : (unsigned short)0)) ? 4 : 0, get_itemname(i)));
+			strcat(names[item_no++], GUI_name_plural( ((signed short)(item_cnt > 1 ? (unsigned short)1 : (unsigned short)0)) ? 4 : 0, get_itemname(i)));
 		}
 
 		if (item_no != 0) {

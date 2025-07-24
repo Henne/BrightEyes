@@ -702,7 +702,7 @@ signed short GUI_use_skill(signed short hero_pos, signed char handicap)
 	return use_skill(hero_pos, handicap, skill);
 }
 
-signed short GUI_use_skill2(signed short handicap, Bit8u *msg)
+signed short GUI_use_skill2(signed short handicap, char *msg)
 {
 	signed short hero_pos;
 	signed short skill;

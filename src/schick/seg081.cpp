@@ -642,17 +642,14 @@ void DNG09_pitfall(void)
 
 			if (l3 >= 2 || (l3 == 1 && i))
 			{
-				host_writeb((char*)ds_readd(DTP2), 0);
+				host_writeb((Bit8u*)ds_readd(DTP2), 0);
 
 				if (i)
 				{
-					sprintf((char*)ds_readd(DTP2),
-						get_ttx(768),
-						(char*)get_hero(i - 1) + HERO_NAME2);
+					sprintf((char*)ds_readd(DTP2), get_ttx(768), (char*)get_hero(i - 1) + HERO_NAME2);
 				}
 
-				strcat((char*)ds_readd(DTP2),
-					(char*)(ds_readbs(DNG09_PIT_FLAG) == 2 ? get_tx(36) : get_tx(37)));
+				strcat((char*)ds_readd(DTP2), (char*)(ds_readbs(DNG09_PIT_FLAG) == 2 ? get_tx(36) : get_tx(37)));
 
 				GUI_output((char*)ds_readd(DTP2));
 

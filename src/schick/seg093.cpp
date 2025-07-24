@@ -10,6 +10,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#if !defined(__BORLANDC__)
+#include <unistd.h>
+#endif
+
 #include "v302de.h"
 #include "common.h"
 
@@ -38,7 +42,7 @@ signed short do_travel_mode(void)
 	signed short l7;
 	signed short bak1;
 	signed short tw_bak;
-	Bit8u *destinations_tab[6];
+	char *destinations_tab[6];
 
 	bak1 = ds_readws(WALLCLOCK_UPDATE);
 	ds_writeb(ROUTE59_FLAG, (unsigned char)ds_writew(WALLCLOCK_UPDATE, (unsigned short)ds_writeb(TRAVEL_DETOUR, 0)));
@@ -273,16 +277,16 @@ signed short do_travel_mode(void)
 
 		for (i = 0; i < 64; i++)
 		{
-			pal_fade((char*)ds_readd(DTP2) + 0xc0, (char*)ds_readd(DTP2));
-			pal_fade((char*)ds_readd(DTP2) + 0x120, (char*)ds_readd(DTP2) + 0x60);
+			pal_fade((Bit8u*)ds_readd(DTP2) + 0xc0, (Bit8u*)ds_readd(DTP2));
+			pal_fade((Bit8u*)ds_readd(DTP2) + 0x120, (Bit8u*)ds_readd(DTP2) + 0x60);
 			wait_for_vsync();
-			set_palette((char*)ds_readd(DTP2) + 0xc0, 0x00, 0x20);
-			set_palette((char*)ds_readd(DTP2) + 0x120, 0xe0, 0x20);
+			set_palette((Bit8u*)ds_readd(DTP2) + 0xc0, 0x00, 0x20);
+			set_palette((Bit8u*)ds_readd(DTP2) + 0x120, 0xe0, 0x20);
 		}
 
 		wait_for_vsync();
-		set_palette((char*)ds_readd(DTP2), 0x80, 0x40);
-		set_palette((char*)ds_readd(DTP2), 0x00, 0x20);
+		set_palette((Bit8u*)ds_readd(DTP2), 0x80, 0x40);
+		set_palette((Bit8u*)ds_readd(DTP2), 0x00, 0x20);
 
 		do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
 	}

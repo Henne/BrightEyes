@@ -116,8 +116,7 @@ void npc_farewell(void)
 	switch (host_readbs(get_hero(6) + HERO_NPC_ID)) {
 		case NPC_NARIELL: {
 			if (ds_readws(NPC_MONTHS) >= 2)
-				remove_npc(0x14, 0x1f, 0xe2,
-					get_ttx(753), get_tx(9));
+				remove_npc(0x14, 0x1f, 0xe2, get_ttx(753), get_tx(9));
 			break;
 		}
 		case NPC_HARIKA: {
@@ -128,8 +127,7 @@ void npc_farewell(void)
 					ds_readb(CURRENT_TOWN) == TOWNS_PREM ||
 					ds_readb(CURRENT_TOWN) == TOWNS_OBERORKEN) {
 
-					remove_npc(0x16, 0x1f, 0xe3,
-						get_ttx(754), get_tx(19));
+					remove_npc(0x16, 0x1f, 0xe3, get_ttx(754), get_tx(19));
 
 					hero_i = get_hero(0);
 					for (i = 0; i < 6; i++, hero_i += SIZEOF_HERO) {
@@ -161,26 +159,22 @@ void npc_farewell(void)
 		}
 		case NPC_CURIAN: {
 			if (ds_readws(NPC_MONTHS) >= 6)
-				remove_npc(0x19, 0x40, 0xe4,
-					get_ttx(755), get_tx(29));
+				remove_npc(0x19, 0x40, 0xe4, get_ttx(755), get_tx(29));
 			break;
 		}
 		case NPC_ARDORA: {
 			if (ds_readws(NPC_MONTHS) >= 1)
-				remove_npc(0x15, 0x1f, 0xe5,
-					get_ttx(756), get_tx(43));
+				remove_npc(0x15, 0x1f, 0xe5, get_ttx(756), get_tx(43));
 			break;
 		}
 		case NPC_GARSVIK: {
 			if (ds_readws(NPC_MONTHS) >= 2)
-				remove_npc(0x17, 0x1f, 0xe6,
-					get_ttx(757), get_tx(53));
+				remove_npc(0x17, 0x1f, 0xe6, get_ttx(757), get_tx(53));
 			break;
 		}
 		case NPC_ERWO: {
 			if (ds_readws(NPC_MONTHS) >= 2)
-				remove_npc(0x18, 0x1f, 0xe7,
-					get_ttx(758), get_tx(63));
+				remove_npc(0x18, 0x1f, 0xe7, get_ttx(758), get_tx(63));
 			break;
 		}
 	}
@@ -493,7 +487,7 @@ void npc_erwo(void)
 }
 
 void remove_npc(signed short head_index, signed char days,
-		signed short index, Bit8u* name, Bit8u *text)
+		signed short index, char *name, char *text)
 {
 
 	if (ds_readb(FADING_STATE) != 0)
