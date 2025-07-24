@@ -39,6 +39,7 @@ extern void (*g_spell_handlers[86])(void);
 extern void (*g_mon_spellhandlers[15])(void);
 extern void (*g_location_handlers[19])(void);
 extern void (*g_use_special_item_handlers[14])(void);
+extern void (*g_travel_event_handlers[146])(void);
 
 extern unsigned char *g_hexenknoten_gfx_buf;	// ds:0xacc8; seg100
 extern signed short g_monster_spell_ae_cost;	// ds:0xaccc; seg102
