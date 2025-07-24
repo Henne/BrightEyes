@@ -6354,7 +6354,7 @@ void *g_fig_cb_marker_buf; // ds:0xd862
 void *g_fig_cb_selector_buf; // ds:0xd85e
 void *g_fig_shot_bolt_buf; // ds:0xd85a
 void *g_fig_spellgfx_buf; // ds:0xd856
-void *g_chessboard; // ds:0xd852
+signed char *g_chessboard;// ds:0xd852
 signed char g_hero_is_target[7]; // ds:0xd84b
 signed char g_fig_actors_unkn[30]; // ds:0xd82d, see FIG_ACTION_UNKNOWN2
 signed char g_fig_move_pathdir[10]; // ds:0xd823
@@ -6364,7 +6364,7 @@ signed short g_replenish_stocks_mod; // ds:0xd331
 signed short g_gather_herbs_mod; // ds:0xd32f
 signed short g_wildcamp_sleep_quality; // ds:0xd32d
 signed short g_fig_flee_position[4]; // ds:0xd325, see HERO_ESCAPE_POSITION
-void *g_townpal_buf; // ds:0xd321
+unsigned char *g_townpal_buf; // ds:0xd321
 signed short g_txt_tabpos7; // ds:0xd31f
 signed short g_txt_tabpos6; // ds:0xd31d
 signed short g_txt_tabpos5; // ds:0xd31b

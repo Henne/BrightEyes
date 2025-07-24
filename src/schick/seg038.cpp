@@ -411,7 +411,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 	new_squares_reached = 1;
 	memset(dist_table_ptr, -1, 600);
 	host_writeb(dist_table_ptr + (y_in * 25) + x_in, 0);
-	memcpy((Bit8u*)ds_readd(CHESSBOARD_CPY), (Bit8u*)ds_readd(CHESSBOARD), 600);
+	memcpy((Bit8u*)ds_readd(CHESSBOARD_CPY), g_chessboard, 600);
 
 	for (i = 0; i < 10; i++) {
 		target_reached_x[i] = target_reached_y[i] = unused[i] = 0;

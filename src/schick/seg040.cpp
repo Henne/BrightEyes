@@ -32,7 +32,7 @@ void FIG_chessboard_init(void)
 	signed short obj_id;
 
 	/* initialize the chessboard */
-	memset((Bit8u*)ds_readd(CHESSBOARD), 0, 600);
+	memset(g_chessboard, 0, 600);
 
 	for (cb_y = 0; cb_y < 24; cb_y++) {
 

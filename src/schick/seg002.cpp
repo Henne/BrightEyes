@@ -2067,11 +2067,11 @@ void dawning(void)
 	{
 
 		/* floor */
-		pal_fade(p_datseg + PALETTE_FLOOR, (Bit8u*)ds_readd(TOWNPAL_BUF));
+		pal_fade(p_datseg + PALETTE_FLOOR, g_townpal_buf);
 		/* buildings */
-		pal_fade(p_datseg + PALETTE_BUILDINGS, (Bit8u*)ds_readd(TOWNPAL_BUF) + 0x60);
+		pal_fade(p_datseg + PALETTE_BUILDINGS, g_townpal_buf + 0x60);
 		/* sky */
-		pal_fade(p_datseg + PALETTE_SKY, (Bit8u*)ds_readd(TOWNPAL_BUF) + 0xc0);
+		pal_fade(p_datseg + PALETTE_SKY, g_townpal_buf + 0xc0);
 
 		/* in a town */
 		if (ds_readbs(CURRENT_TOWN) &&

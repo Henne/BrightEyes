@@ -1116,12 +1116,12 @@ static inline char *get_tx_func(unsigned short off) {
 	return (char*)host_readd((Bit8u*)ds_readd(TX_INDEX) + off);
 }
 
-static inline signed char get_cb_val(signed short x, signed short y) {
-	return host_readbs((Bit8u*)ds_readd(CHESSBOARD) + y * 25 + x);
+static inline signed char get_cb_val(const signed short x, const signed short y) {
+	return *(g_chessboard + 25 * y + x);
 }
 
-static inline void set_cb_val(unsigned short x, unsigned short y, signed char val) {
-	host_writeb((Bit8u*)ds_readd(CHESSBOARD) + y * 25 + x, val);
+static inline void set_cb_val(const unsigned short x, const unsigned short y, const signed char val) {
+	*(g_chessboard + 25 * y + x) = val;
 }
 
 static inline void dump_cb(void)
@@ -1359,8 +1359,8 @@ struct bittest {
 #define get_itemsdat(no) ((char*)((Bit8u*)ds_readd(ITEMSDAT) + 12 * (no)))
 #define get_itemname(no) ((char*)(host_readd((Bit8u*)ds_readd(ITEMSNAME) + 4 * (no))))
 
-#define get_cb_val(x, y) (host_readbs((Bit8u*)ds_readd(CHESSBOARD) + (y) * 25 + (x)))
-#define set_cb_val(x, y, val) (host_writeb((Bit8u*)ds_readd(CHESSBOARD) + (y) * 25 + (x), (val)))
+#define get_cb_val(x, y) (*(g_chessboard + (y) * 25 + (x)))
+#define set_cb_val(x, y, val) (*(g_chessboard + (y) * 25 + (x)) = (val))
 
 #endif
 #endif

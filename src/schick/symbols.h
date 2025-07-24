@@ -1470,7 +1470,7 @@
 #define TXT_TABPOS5                     (0xd31b)    /* signed short */
 #define TXT_TABPOS6                     (0xd31d)    /* signed short */
 #define TXT_TABPOS7                     (0xd31f)    /* signed short */
-#define TOWNPAL_BUF                     (0xd321)    /* RealPt */
+//#define TOWNPAL_BUF                     (0xd321)    /* RealPt */
 #define FIG_FLEE_POSITION               (0xd325)    /* signed short[4]; the goal square in the dungeon if a hero escapes, depending on the direction the fight board is exited. the direction is stored at HERO_ESCAPE_POSITION */
 #define WILDCAMP_SLEEP_QUALITY          (0xd32d)    /* signed short */
 #define GATHER_HERBS_MOD                (0xd32f)    /* signed short */
@@ -1480,7 +1480,7 @@
 #define FIG_MOVE_PATHDIR                (0xd823)    /* signed char[10] */
 #define FIG_ACTORS_UNKN                 (0xd82d)    /* signed char[30]; see FIG_ACTION_UNKNOWN2 */
 #define HERO_IS_TARGET                  (0xd84b)    /* signed char[7] */
-#define CHESSBOARD                      (0xd852)    /* RealPt */
+//#define CHESSBOARD                      (0xd852)    /* RealPt */
 #define FIG_SPELLGFX_BUF                (0xd856)    /* RealPt */
 #define FIG_SHOT_BOLT_BUF               (0xd85a)    /* RealPt */
 #define FIG_CB_SELECTOR_BUF             (0xd85e)    /* RealPt */

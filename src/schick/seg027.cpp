@@ -732,7 +732,7 @@ void init_common_buffers(void)
 	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_TOWNPAL_DAT);
-	read_archive_file(fd, (Bit8u*)ds_readd(TOWNPAL_BUF), 288);
+	read_archive_file(fd, g_townpal_buf, 288);
 	close(fd);
 
 }
