@@ -1811,7 +1811,7 @@ unsigned char g_unkn_009[33] = { 0x00, 0x00, 0x0a, 0x46, 0x82, 0xbe, 0xff, 0xe5,
 unsigned char g_ani_unknown_flag = 1; // ds:0x2cca, writeonly (0,1)
 signed short g_area_prepared = -1; // ds:0x2ccb, -1 = unprepared, 0 = dungeon, 1 = town
 unsigned char g_unkn_010[1] = { 0x00 }; // ds:0x2ccd
-char g_always_zero4 = 0; // ds:0x2cce, writeonly (0)
+unsigned char g_always_zero4 = 0; // ds:0x2cce, writeonly (0)
 short g_current_ani = -1; // ds:0x2ccf
 signed short g_fig_figure1 = -1; // ds:0x2cd1
 signed short g_fig_figure2 = -1; // ds:0x2cd3

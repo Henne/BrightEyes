@@ -1253,7 +1253,7 @@ signed short do_fight(signed short fight_id)
 		retval = 4;
 	}
 
-	ds_writeb(FIG_INITIATIVE, ds_writeb(ALWAYS_ZERO4, 0));
+	ds_writeb(FIG_INITIATIVE, g_always_zero4 = 0);
 	ds_writew(FIG_DISCARD, 0);
 	ds_writew(MAX_ENEMIES, 0);
 	ds_writew(IN_FIGHT, 0);
