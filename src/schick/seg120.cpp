@@ -277,7 +277,7 @@ signed short init_memory(void)
 	Bit32u freemem;
 
 	/* disable EMS memory */
-	ds_writeb(EMS_ENABLED, 0);
+	g_ems_enabled = 0;
 
 #if defined(__BORLANDC__)
 	if (EMS_init()) {
@@ -585,7 +585,7 @@ void cleanup_game(void)
 	}
 
 	/* free EMS memory */
-	if (ds_readb(EMS_ENABLED) != 0) {
+	if (g_ems_enabled != 0) {
 
 		for (l_si = 0; l_si < 37; l_si++) {
 			if (host_readw((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + l_si * 8) != 0) {

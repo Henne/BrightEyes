@@ -475,7 +475,7 @@ void load_map(void)
 		read_archive_file(fd, (Bit8u*)(ds_writed(TRAVEL_MAP_PTR, ds_readd(RENDERBUF_PTR))), 64098);
 		close(fd);
 
-		if (ds_readb(EMS_ENABLED) != 0) {
+		if (g_ems_enabled != 0) {
 
 			if ((ds_writew(EMS_TRAVEL_MAP, alloc_EMS(64100)))) {
 				/* map the map into EMS */

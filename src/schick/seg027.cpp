@@ -246,7 +246,7 @@ RealPt load_fight_figs(signed short fig)
 
 			memcpy((Bit8u*)(dst), (Bit8u*)(src), (unsigned short)len);
 
-		} else if (ds_readb(EMS_ENABLED) != 0) {
+		} else if (g_ems_enabled != 0) {
 #if !defined(__BORLANDC__)
 			D1_LOG("use EMS for fig %d\n", fig);
 #endif
@@ -353,7 +353,7 @@ void load_ani(const signed short no)
 		read_archive_file(fd, (Bit8u*)ds_readd(BUFFER9_PTR), (unsigned short)ani_len);
 
 		/* if EMS is enabled buffer it */
-		if ((ds_readb(EMS_ENABLED) != 0) &&
+		if ((g_ems_enabled != 0) &&
 			((ems_handle = alloc_EMS(ani_len))))
 		{
 
