@@ -27,7 +27,7 @@ void poison_effect(void)
 	Bit8u *hero;
 	Bit8u *poison_ptr;
 
-	ds_writew(CHECK_POISON, 0);
+	g_check_poison = 0;
 
 	hero = get_hero(0);
 

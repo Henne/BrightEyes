@@ -122,7 +122,7 @@
 //#define FIG_ENEMY_PIC                   (0x26b5)    /* unsigned short */
 //#define GUI_ENTERING_SAVEGAME           (0x26b7)    /* unsigned short; {0,1} */
 //#define CHECK_DISEASE                   (0x26b9)    /* unsigned short; {0,1} */
-#define CHECK_POISON                    (0x26bb)    /* unsigned short; {0,1} */
+//#define CHECK_POISON                    (0x26bb)    /* unsigned short; {0,1} */
 #define TEXT_FILE_INDEX                 (0x26bd)    /* unsigned short */
 #define TX_FILE_INDEX                   (0x26bf)    /* signed short; index of file stored with load_tx */
 #define FIG_DISCARD                     (0x26c1)    /* unsigned short; {0,1}, whether to discard the fight data after the fight */

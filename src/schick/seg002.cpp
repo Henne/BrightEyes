@@ -1813,7 +1813,7 @@ void game_loop(void)
 			disease_effect();
 		}
 
-		if (ds_readw(CHECK_POISON) != 0) {
+		if (g_check_poison) {
 			poison_effect();
 		}
 
@@ -2735,7 +2735,7 @@ void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr,
  * \param   fmin        five minutes
  *
  *	This function decrements the timers for the healing and staffspell timeouts.
- *	Furthermore, the CHECK_POISON flag is set.
+ *	Furthermore, the g_check_poison flag is set.
  */
 void sub_heal_staffspell_timers(Bit32s fmin)
 {
@@ -2787,7 +2787,7 @@ void sub_heal_staffspell_timers(Bit32s fmin)
 			 * This won't work if the game does not jump back to game_loop() where poison_effect() is called.
 			 * Also, fmin > 1 triggers only one call of poison_effect().
 			 * Solution could be to move the poison_effect() call from game_loop() to do_timers() and timewarp(..). */
-			ds_writew(CHECK_POISON, 1);
+			g_check_poison = 1;
 		}
 	}
 }
