@@ -336,7 +336,7 @@ void do_wildcamp(void)
 				} else if (!have_guards) {
 
 					ds_writews(CAMP_INCIDENT, -1);
-					ds_writeb(FIG_INITIATIVE, 1);
+					g_fig_initiative = 1;
 					ds_writew(FIG_DISCARD, 1);
 
 					/* pick a random campfight out of 4 possibilities */

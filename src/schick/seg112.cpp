@@ -482,7 +482,7 @@ void tevent_074(void)
 			if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 2) <= 0)
 			{
 				/* failed, so fight */
-				ds_writeb(FIG_INITIATIVE, 1);
+				g_fig_initiative = 1;
 				ds_writeb(TEVENT074_FIGHT_FLAG, (signed char)TRV_fight_event(FIGHTS_F074, 74));
 
 			} else {
@@ -547,7 +547,7 @@ void tevent_074(void)
 				if (test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 14 - answer) <= 0)
 				{
 					/* fight */
-					ds_writeb(FIG_INITIATIVE, 1);
+					g_fig_initiative = 1;
 					ds_writeb(TEVENT074_FIGHT_FLAG, (signed char)TRV_fight_event(FIGHTS_F074, 74));
 				}
 			}
@@ -583,7 +583,7 @@ void tevent_075(void)
 
 			if (answer == 1) {
 
-				ds_writeb(FIG_INITIATIVE, 2);
+				g_fig_initiative = 2;
 
 				ret = TRV_fight_event(FIGHTS_F075_A, 75);
 
@@ -620,7 +620,7 @@ void tevent_075(void)
 
 					GUI_output(get_tx2(62));
 
-					ds_writeb(FIG_INITIATIVE, 1);
+					g_fig_initiative = 1;
 
 					i = FIGHTS_F075_B;
 
@@ -723,7 +723,7 @@ void tevent_077(void)
 			if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 6) <= 0) {
 
 				/* test failed, so fight */
-				ds_writeb(FIG_INITIATIVE, 1);
+				g_fig_initiative = 1;
 				ds_writeb(TEVENT077_FIGHT_FLAG, (signed char)TRV_fight_event(FIGHTS_F077, 77));
 
 			} else {
@@ -789,7 +789,7 @@ void tevent_077(void)
 				if (test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 14 - answer) <= 0)
 				{
 					/* fight */
-					ds_writeb(FIG_INITIATIVE, 1);
+					g_fig_initiative = 1;
 					ds_writeb(TEVENT077_FIGHT_FLAG, (signed char)TRV_fight_event(FIGHTS_F077, 77));
 				}
 			}

@@ -114,7 +114,7 @@
 #define WEAPONANI_TYPES                 (0x268e)    /* signed char[22]; { 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0 } */
 #define FOOD_MESSAGE_SHOWN              (0x26a4)    /* signed char[7] */
 //#define EMS_ENABLED                     (0x26ab)    /* char */
-#define FIG_INITIATIVE                  (0x26ac)    /* signed char; 0 = random, 1 = enemies, 2 = heroes (attack first) */
+//#define FIG_INITIATIVE                  (0x26ac)    /* signed char; 0 = random, 1 = enemies, 2 = heroes (attack first) */
 #define FIG_MSG_COUNTER                 (0x26ad)    /* signed short */
 #define ALWAYS_ONE                      (0x26af)    /* unsigned short; writeonly (1) */
 #define FIG_CONTINUE_PRINT              (0x26b1)    /* unsigned short; {0,1} */

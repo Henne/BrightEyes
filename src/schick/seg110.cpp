@@ -460,7 +460,7 @@ void tevent_031(void)
 			if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 7) <= 0)
 			{
 				/* skill test failed */
-				ds_writeb(FIG_INITIATIVE, 1);
+				g_fig_initiative = 1;
 				do_fight(FIGHTS_F031);
 			}
 		} else {
@@ -540,7 +540,7 @@ void tevent_035(void)
 			if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 8) <= 0)
 			{
 				/* skill test failed */
-				ds_writeb(FIG_INITIATIVE, 1);
+				g_fig_initiative = 1;
 				do_fight(FIGHTS_F035);
 			}
 		} else {

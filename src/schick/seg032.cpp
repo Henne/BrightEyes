@@ -481,9 +481,10 @@ void FIG_do_round(void)
 
 	nr_action_phases_left_in_turn = 0;
 
-
-	is_enemies_turn = (ds_readbs(FIG_INITIATIVE) == 2 ? 1 : (ds_readbs(FIG_INITIATIVE) == 1 ? 0 : random_interval(0, 1))); /* the variable is set up 'the wrong way round', as it will be flipped in the first run */
-
+	/* the variable is set up 'the wrong way round',
+	 * as it will be flipped in the first run */
+	is_enemies_turn = (g_fig_initiative == 2 ? 1 :
+				(g_fig_initiative == 1 ? 0 : random_interval(0, 1)));
 
 	while ((ds_readws(IN_FIGHT) != 0) && (nr_hero_action_phases_left_in_round + nr_enemy_action_phases_left_in_round > 0)) {
 
@@ -1253,7 +1254,7 @@ signed short do_fight(signed short fight_id)
 		retval = 4;
 	}
 
-	ds_writeb(FIG_INITIATIVE, g_always_zero4 = 0);
+	g_fig_initiative = g_always_zero4 = 0;
 	ds_writew(FIG_DISCARD, 0);
 	ds_writew(MAX_ENEMIES, 0);
 	ds_writew(IN_FIGHT, 0);

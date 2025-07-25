@@ -241,7 +241,7 @@ void do_citycamp(void)
 						if (ds_readb(CITYCAMP_CITY) == 0) {
 							/* in a dungeon */
 
-							ds_writeb(FIG_INITIATIVE, 1);
+							g_fig_initiative = 1;
 							ds_writew(FIG_DISCARD, 1);
 
 							do_fight(ds_readws((DCAMPFIGHTS-2) + 2 * random_schick(4)));

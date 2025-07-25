@@ -152,7 +152,7 @@ void tevent_084(void)
 
 			if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 5) <= 0)
 			{
-				ds_writeb(FIG_INITIATIVE, 1);
+				g_fig_initiative = 1;
 
 				if (!do_fight(FIGHTS_F084)) {
 					ds_writeb(TEVENT084_FLAG, 1);
@@ -476,7 +476,7 @@ void tevent_099(void)
 
 			if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 4) <= 0) {
 
-				ds_writeb(FIG_INITIATIVE, 1);
+				g_fig_initiative = 1;
 
 				if (!do_fight(FIGHTS_F099)) {
 					ds_writeb(TEVENT099_FLAG, 1);
@@ -522,7 +522,7 @@ void tevent_101(void)
 
 			if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, (signed char)mod) <= 0) {
 
-				ds_writeb(FIG_INITIATIVE, 1);
+				g_fig_initiative = 1;
 
 				if (!do_fight(FIGHTS_F101)) {
 					ds_writeb(TEVENT101_FLAG, 1);
