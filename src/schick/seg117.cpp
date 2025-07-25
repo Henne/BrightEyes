@@ -43,7 +43,7 @@ static
 void pause_traveling(signed short ani_no)
 {
 
-	ds_writeb(EVENT_ANI_BUSY, 1);
+	g_event_ani_busy = 1;
 
 	load_ani(ani_no);
 
@@ -83,7 +83,7 @@ void resume_traveling(void)
 
 	ds_writew(REQUEST_REFRESH, ds_writeb(SHOW_TRAVEL_MAP, 1));
 
-	ds_writeb(EVENT_ANI_BUSY, 0);
+	g_event_ani_busy = 0;
 	ds_writeb(TRAVEL_EVENT_ACTIVE, 0);
 }
 
@@ -829,7 +829,7 @@ void TLK_way_to_ruin(signed short state)
 		ds_writew(DIALOG_NEXT_STATE, (count_heroes_in_group() >> 1) < ds_readws(TLK_RUIN_HERO_COUNTER) ? 29 : 30);
 
 	} else if (state == 41) {
-		ds_writeb(EVENT_ANI_BUSY, 1);
+		g_event_ani_busy = 1;
 		load_ani(11);
 		draw_main_screen();
 		init_ani(0);
@@ -858,7 +858,7 @@ void TLK_way_to_ruin(signed short state)
 		ds_writew(DIALOG_NEXT_STATE, (count_heroes_in_group() >> 1) < ds_readws(TLK_RUIN_HERO_COUNTER) ? 49 : 50);
 	}
 
-	ds_writeb(EVENT_ANI_BUSY, 0);
+	g_event_ani_busy = 0;
 }
 
 void tevent_087(void)

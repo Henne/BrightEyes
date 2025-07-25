@@ -2082,7 +2082,7 @@ void dawning(void)
 			/* not in a travel mode */
 			!ds_readb(SHOW_TRAVEL_MAP) &&
 			/* no event animation */
-			!ds_readb(EVENT_ANI_BUSY) &&
+			!g_event_ani_busy &&
 			/* unknown */
 			!ds_readbs(SPECIAL_SCREEN) &&
 			/* unknown */
@@ -2123,7 +2123,7 @@ void nightfall(void)
 			/* not in a travel mode */
 			!ds_readb(SHOW_TRAVEL_MAP) &&
 			/* no event animation */
-			!ds_readb(EVENT_ANI_BUSY) &&
+			!g_event_ani_busy &&
 			/* unknown */
 			!ds_readbs(SPECIAL_SCREEN) &&
 			/* unknown */

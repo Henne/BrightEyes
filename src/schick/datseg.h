@@ -55,6 +55,7 @@ extern signed short g_basepos_x_bak;	// ds:0xe5d9; seg117
 extern signed short g_basepos_y_bak;	// ds:0xe5d7; seg117
 extern signed short g_textbox_width_bak; // ds:0xe5d5; seg117
 extern signed short g_wallclock_update_bak; // ds:0xe5d3; seg117
+extern unsigned char g_event_ani_busy;	// ds:0xe5d2; seg002, seg109-seg118
 extern unsigned char *g_itemuser;	// ds:0xe5ce; seg107
 extern char **g_monnames_index;		// ds:0xe129; seg026, seg120
 extern unsigned char *g_spelltarget;	// ds:0xe5b8; seg098-seg102

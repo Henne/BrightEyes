@@ -45,7 +45,7 @@ void tevent_037(void)
 
 	if (!ds_readb(TEVENT037_FLAG))
 	{
-		ds_writeb(EVENT_ANI_BUSY, 1);
+		g_event_ani_busy = 1;
 
 		load_ani(28);
 		draw_main_screen();
@@ -243,7 +243,7 @@ void tevent_037(void)
 
 		set_var_to_zero();
 
-		ds_writeb(EVENT_ANI_BUSY, 0);
+		g_event_ani_busy = 0;
 		ds_writew(REQUEST_REFRESH, 1);
 	}
 }

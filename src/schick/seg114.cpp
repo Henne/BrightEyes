@@ -114,7 +114,7 @@ void tevent_111(void)
 		ds_readb(TEVENT111_FLAG) == 1)
 	{
 		ds_writeb(TEVENT111_FLAG, 1);
-		ds_writeb(EVENT_ANI_BUSY, 1);
+		g_event_ani_busy = 1;
 
 		load_ani(33);
 		draw_main_screen();
@@ -284,7 +284,7 @@ void tevent_111(void)
 		ds_writew(REQUEST_REFRESH, 1);
 	}
 
-	ds_writeb(EVENT_ANI_BUSY, 0);
+	g_event_ani_busy = 0;
 }
 
 /* a camp place */

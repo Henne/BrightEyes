@@ -344,7 +344,7 @@ signed short TRV_cross_a_ford(char *msg, signed short time, signed short mod)
 	signed short done;
 
 	done = 0;
-	ds_writeb(EVENT_ANI_BUSY, 1);
+	g_event_ani_busy = 1;
 
 	load_ani(7);
 	draw_main_screen();
@@ -375,7 +375,7 @@ signed short TRV_cross_a_ford(char *msg, signed short time, signed short mod)
 	} while (!done);
 
 	set_var_to_zero();
-	ds_writeb(EVENT_ANI_BUSY, 0);
+	g_event_ani_busy = 0;
 	ds_writew(REQUEST_REFRESH, 1);
 	return 1;
 }
@@ -557,7 +557,7 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 	signed short answer;
 	Bit8u *hero;
 
-	ds_writeb(EVENT_ANI_BUSY, 1);
+	g_event_ani_busy = 1;
 
 	load_ani(ani_id);
 	draw_main_screen();
@@ -663,7 +663,7 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 	}
 
 	set_var_to_zero();
-	ds_writeb(EVENT_ANI_BUSY, 0);
+	g_event_ani_busy = 0;
 	ds_writew(REQUEST_REFRESH, 1);
 }
 

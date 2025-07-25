@@ -714,7 +714,7 @@ void tevent_046(void)
 	enter_inn = 0;
 
 	/* pause traveling */
-	ds_writeb(EVENT_ANI_BUSY, 1);
+	g_event_ani_busy = 1;
 
 	load_ani(12);
 	draw_main_screen();
@@ -785,7 +785,7 @@ void tevent_046(void)
 
 	set_var_to_zero();
 	/* resume traveling */
-	ds_writeb(EVENT_ANI_BUSY, 0);
+	g_event_ani_busy = 0;
 	ds_writew(REQUEST_REFRESH, 1);
 }
 

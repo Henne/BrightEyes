@@ -691,7 +691,7 @@ void tevent_100(void)
 		{
 			GUI_output(get_tx2(56));
 
-			ds_writeb(EVENT_ANI_BUSY, 1);
+			g_event_ani_busy = 1;
 
 			load_ani(11);
 			draw_main_screen();
@@ -750,7 +750,7 @@ void tevent_100(void)
 	}
 
 	set_var_to_zero();
-	ds_writeb(EVENT_ANI_BUSY, 0);
+	g_event_ani_busy = 0;
 }
 
 #if !defined(__BORLANDC__)
