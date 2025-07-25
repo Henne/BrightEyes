@@ -260,7 +260,7 @@ void load_special_textures(signed short arg)
 
 void call_load_buffer(void)
 {
-	load_tx(ds_readws(TX_FILE_INDEX));
+	load_tx(g_tx_file_index);
 }
 
 void seg028_0555(signed short town)

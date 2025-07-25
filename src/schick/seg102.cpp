@@ -332,7 +332,7 @@ signed short MON_cast_spell(RealPt monster, signed char handicap)
 			/* terminate output string */
 			host_writeb((char*)ds_readd(DTP2), 0);
 
-			tx_file_bak = ds_readws(TX_FILE_INDEX);
+			tx_file_bak = g_tx_file_index;
 
 			load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 

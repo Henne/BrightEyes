@@ -48,6 +48,7 @@ extern signed short g_gui_entering_savegame;		//ds:0x26b7; seg026,seg097
 extern signed short g_check_disease;			//ds:0x26b9; seg002,seg026,seg063,seg094,seg119
 extern signed short g_check_poison;			//ds:0x26bb; seg002,seg026,seg121
 extern signed short g_text_file_index;			//ds:0x26bd; seg026-seg065
+extern signed short g_tx_file_index;			//ds:0x26bf; seg026-seg107
 
 extern unsigned char g_always_zero4;			//ds:0x2cce; seg032
 extern void (*g_location_handlers[19])(void);

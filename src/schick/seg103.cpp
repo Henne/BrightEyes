@@ -328,7 +328,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 	if (skill != -1) {
 
-		tx_file_bak = ds_readws(TX_FILE_INDEX);
+		tx_file_bak = g_tx_file_index;
 
 		load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 

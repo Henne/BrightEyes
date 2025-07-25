@@ -873,7 +873,7 @@ signed short use_spell(RealPt hero, signed short selection_menu, signed char han
 
 				host_writeb((char*)ds_readd(DTP2), 0);
 
-				l4 = ds_readws(TX_FILE_INDEX);
+				l4 = g_tx_file_index;
 
 				load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 

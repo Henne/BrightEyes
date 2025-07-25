@@ -81,7 +81,7 @@ void item_arcano(void)
 	signed short tx_index_bak;
 
 	/* save index of TX_FILE_INDEX */
-	tx_index_bak = ds_readws(TX_FILE_INDEX);
+	tx_index_bak = g_tx_file_index;
 
 	/* load SPELLTXT*/
 	load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
@@ -164,7 +164,7 @@ void item_armatrutz(void)
 	signed short tx_index_bak;
 
 	/* save index off buffer1 */
-	tx_index_bak = ds_readws(TX_FILE_INDEX);
+	tx_index_bak = g_tx_file_index;
 
 	/* load SPELLTXT */
 	load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
@@ -196,7 +196,7 @@ void item_flimflam(void)
 	signed short tx_index_bak;
 
 	/* save index off buffer1 */
-	tx_index_bak = ds_readws(TX_FILE_INDEX);
+	tx_index_bak = g_tx_file_index;
 
 	/* load SPELLTXT*/
 	load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
@@ -416,7 +416,7 @@ void item_brenne(void)
 	signed short refill_pos;
 
 	/* save index off buffer1 */
-	tx_index_bak = ds_readws(TX_FILE_INDEX);
+	tx_index_bak = g_tx_file_index;
 
 	/* load SPELLTXT*/
 	load_tx(ARCHIVE_FILE_SPELLTXT_LTX);

@@ -546,7 +546,7 @@ void status_menu(signed short hero_pos)
 						GUI_use_skill(hero_pos, 0);
 						ds_writew(CHEATSKILL_USABLE, 0);
 
-						if (ds_readws(TX_FILE_INDEX) == 19) {
+						if (g_tx_file_index == 19) {
 							load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
 						}
 						break;
@@ -663,7 +663,7 @@ void status_menu(signed short hero_pos)
 						GUI_use_skill(hero_pos, 0);
 						ds_writew(CHEATSKILL_USABLE, 0);
 
-						if (ds_readws(TX_FILE_INDEX) == 19) {
+						if (g_tx_file_index == 19) {
 							load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
 						}
 						break;
@@ -727,7 +727,7 @@ void status_menu(signed short hero_pos)
 						GUI_use_skill(hero_pos, 0);
 						ds_writew(CHEATSKILL_USABLE, 0);
 
-						if (ds_readws(TX_FILE_INDEX) == 19) {
+						if (g_tx_file_index == 19) {
 							load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
 						}
 						break;

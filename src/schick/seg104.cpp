@@ -400,7 +400,7 @@ signed short skill_cure_disease(Bit8u *healer, Bit8u *patient, signed short hand
 	retval = 0;
 
 	if (flag) {
-		tx_file_bak = ds_readws(TX_FILE_INDEX);
+		tx_file_bak = g_tx_file_index;
 		load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 	}
 

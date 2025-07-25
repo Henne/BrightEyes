@@ -518,7 +518,7 @@ void academy_analues(void)
 
 		g_spelluser = get_hero(hero_pos);
 
-		buffer1_bak = ds_readws(TX_FILE_INDEX);
+		buffer1_bak = g_tx_file_index;
 
 		load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 

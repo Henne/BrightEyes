@@ -110,7 +110,7 @@ void npc_farewell(void)
 	if (check_hero(get_hero(6)) == 0 && ds_readws(NPC_MONTHS) < 99)
 		return;
 
-	tmp = ds_readw(TX_FILE_INDEX);
+	tmp = g_tx_file_index;
 	load_tx(ARCHIVE_FILE_NSC_LTX);
 
 	switch (host_readbs(get_hero(6) + HERO_NPC_ID)) {
