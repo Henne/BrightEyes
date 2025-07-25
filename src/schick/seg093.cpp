@@ -52,7 +52,7 @@ signed short do_travel_mode(void)
 
 	for (i = 0; i < 6; i++)
 	{
-		ds_writeb(FOOD_MESSAGE_SHOWN + i, 0);
+		g_food_message_shown[i] = 0;
 	}
 
 	if (ds_readb(TRAVEL_MAP_LOADED) != ds_readb(SHOW_TRAVEL_MAP))

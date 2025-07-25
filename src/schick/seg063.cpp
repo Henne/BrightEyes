@@ -364,7 +364,7 @@ void do_harbor(void)
 				ds_writeb(TRAVEL_HEROKEEPING, 0);
 
 				for (i = 0; i < 6; i++) {
-					ds_writeb(FOOD_MESSAGE_SHOWN + i, 0);
+					g_food_message_shown[i] = 0;
 				}
 
 				load_map();
