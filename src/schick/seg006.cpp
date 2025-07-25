@@ -167,10 +167,10 @@ void FIG_draw_pic(void)
 	g_always_one = 1;
 #endif
 
-	if (ds_readw(FIG_CHAR_PIC)) {
-		FIG_draw_char_pic(0, ds_readw(FIG_CHAR_PIC));
-	} else if (ds_readw(FIG_ENEMY_PIC)) {
-		FIG_draw_enemy_pic(0, ds_readw(FIG_ENEMY_PIC));
+	if (g_fig_char_pic) {
+		FIG_draw_char_pic(0, g_fig_char_pic);
+	} else if (g_fig_enemy_pic) {
+		FIG_draw_enemy_pic(0, g_fig_enemy_pic);
 	}
 }
 

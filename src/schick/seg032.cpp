@@ -577,7 +577,7 @@ void FIG_do_round(void)
 					}
 
 					/* save the fighter_id of this hero */
-					ds_writew(FIG_CHAR_PIC, actor_id + 1);
+					g_fig_char_pic = actor_id + 1;
 
 					/* select a fight action */
 					FIG_menu(hero, actor_id, x_coord, y_coord);
@@ -641,7 +641,7 @@ void FIG_do_round(void)
 					}
 
 					/* set fighter_id of the hero to 0 */
-					ds_writew(FIG_CHAR_PIC, 0);
+					g_fig_char_pic = 0;
 				}
 			}
 
@@ -673,7 +673,7 @@ void FIG_do_round(void)
 					dec_ptr_bs((Bit8u*)(enemy) + ENEMY_SHEET_BLIND);
 				} else {
 
-					ds_writew(FIG_ENEMY_PIC, actor_id + 10);
+					g_fig_enemy_pic = actor_id + 10;
 
 					host_writebs((Bit8u*)(enemy) + ENEMY_SHEET_ACTION_ID, 1);
 
@@ -770,7 +770,7 @@ void FIG_do_round(void)
 						herokeeping();
 					}
 
-					ds_writew(FIG_ENEMY_PIC, 0);
+					g_fig_enemy_pic = 0;
 				}
 			}
 

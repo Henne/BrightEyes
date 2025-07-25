@@ -118,8 +118,8 @@
 //#define FIG_MSG_COUNTER                 (0x26ad)    /* signed short */
 //#define ALWAYS_ONE                      (0x26af)    /* unsigned short; writeonly (1) */
 //#define FIG_CONTINUE_PRINT              (0x26b1)    /* unsigned short; {0,1} */
-#define FIG_CHAR_PIC                    (0x26b3)    /* unsigned short */
-#define FIG_ENEMY_PIC                   (0x26b5)    /* unsigned short */
+//#define FIG_CHAR_PIC                    (0x26b3)    /* unsigned short */
+//#define FIG_ENEMY_PIC                   (0x26b5)    /* unsigned short */
 #define GUI_ENTERING_SAVEGAME           (0x26b7)    /* unsigned short; {0,1} */
 #define CHECK_DISEASE                   (0x26b9)    /* unsigned short; {0,1} */
 #define CHECK_POISON                    (0x26bb)    /* unsigned short; {0,1} */

@@ -1541,8 +1541,8 @@ signed char g_fig_initiative = 0; // ds:0x26ac, 0 = random, 1 = enemies, 2 = her
 signed short g_fig_msg_counter = 0; // ds:0x26ad
 unsigned short g_always_one = 0; // ds:0x26af, writeonly (1)
 signed short g_fig_continue_print = 0; // ds:0x26b1
-unsigned short g_fig_char_pic = 0; // ds:0x26b3
-unsigned short g_fig_enemy_pic = 0; // ds:0x26b5
+signed short g_fig_char_pic = 0; // ds:0x26b3
+signed short g_fig_enemy_pic = 0; // ds:0x26b5
 unsigned short g_gui_entering_savegame = 0; // ds:0x26b7
 unsigned short g_check_disease = 0; // ds:0x26b9
 unsigned short g_check_poison = 0; // ds:0x26bb
