@@ -38,6 +38,7 @@ extern const signed short* g_magic_schools_index[9];
 extern void (*g_spell_handlers[86])(void);		//ds:0x0dbb; seg098
 extern void (*g_mon_spellhandlers[15])(void);		//ds:0x0fc2; seg102
 
+extern signed char g_weaponani_types[22];		//ds:0x268e; seg044
 extern signed char g_food_message_shown[7];		//ds:0x26a4; seg002-seg093
 extern unsigned char g_ems_enabled;			//ds:0x26ab; seg027-seg028, seg120
 extern signed char g_fig_initiative;			//ds:0x26ac; seg032,seg051,seg052,seg110-seg113

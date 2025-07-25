@@ -286,7 +286,7 @@ void FIG_prepare_hero_fight_ani(signed short a1, Bit8u *hero, signed short weapo
 
 			p2 += copy_ani_seq(p2,
 				ds_readw(WEAPONANI_TABLE +
-				((ds_readbs(WEAPONANI_TYPES + host_readbs(hero + HERO_SPRITE_NO)) * 48 + weapon_type * 16) +
+				((g_weaponani_types[host_readbs(hero + HERO_SPRITE_NO)] * 48 + weapon_type * 16) +
 				((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + host_readbs(hero + HERO_VIEWDIR) * 2)), 3);
 		}
 	}
@@ -302,7 +302,7 @@ void FIG_prepare_hero_fight_ani(signed short a1, Bit8u *hero, signed short weapo
 			{
 				p2 += copy_ani_seq(p2,
 					ds_readw(WEAPONANI_TABLE +
-					((ds_readbs(WEAPONANI_TYPES + host_readbs(hero + HERO_SPRITE_NO)) * 48 + weapon_type * 16) +
+					((g_weaponani_types[host_readbs(hero + HERO_SPRITE_NO)] * 48 + weapon_type * 16) +
 					((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + host_readbs(hero + HERO_VIEWDIR) * 2)), 3);
 			}
 	}
@@ -515,8 +515,7 @@ void FIG_prepare_enemy_fight_ani(signed short a1, Bit8u *enemy, signed short f_a
 			/* copy the weapon ani */
 			p2 += copy_ani_seq(p2,
 				ds_readws(WEAPONANI_TABLE +
-					(	ds_readbs(WEAPONANI_TYPES + host_readbs(enemy + ENEMY_SHEET_GFX_ID)) * 48 +
-						weapon_type * 16 +
+					(g_weaponani_types[host_readbs(enemy + ENEMY_SHEET_GFX_ID)] * 48 + weapon_type * 16 +
 						((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 +
 						host_readbs(enemy + ENEMY_SHEET_VIEWDIR) * 2
 					)
@@ -534,7 +533,7 @@ void FIG_prepare_enemy_fight_ani(signed short a1, Bit8u *enemy, signed short f_a
 				/* copy the weapon ani */
 				p2 += copy_ani_seq(p2,
 					ds_readws(WEAPONANI_TABLE +
-					((ds_readbs(WEAPONANI_TYPES + host_readbs(enemy + ENEMY_SHEET_GFX_ID)) * 48 + weapon_type * 16) +
+					((g_weaponani_types[host_readbs(enemy + ENEMY_SHEET_GFX_ID)] * 48 + weapon_type * 16) +
 					((f_action == FIG_ACTION_MELEE_ATTACK) ? 0 : 1) * 8 + host_readbs(enemy + ENEMY_SHEET_VIEWDIR) * 2)), 3);
 			}
 	}

@@ -111,7 +111,7 @@
 #define GFX_ANI_INDEX                   (0x2555)    /* RealPt[41] */
 #define TWO_FIELDED_SPRITE_ID           (0x25f9)    /* char[5] */
 #define WEAPONANI_TABLE                 (0x25fe)    /* unsigned short[72] */
-#define WEAPONANI_TYPES                 (0x268e)    /* signed char[22]; { 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0 } */
+//#define WEAPONANI_TYPES                 (0x268e)    /* signed char[22]; { 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0 } */
 //#define FOOD_MESSAGE_SHOWN              (0x26a4)    /* signed char[7] */
 //#define EMS_ENABLED                     (0x26ab)    /* char */
 //#define FIG_INITIATIVE                  (0x26ac)    /* signed char; 0 = random, 1 = enemies, 2 = heroes (attack first) */
