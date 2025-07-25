@@ -1809,7 +1809,7 @@ void game_loop(void)
 			ds_writew(GAME_STATE, GAME_STATE_OUTRO);
 		}
 
-		if (ds_readw(CHECK_DISEASE) != 0) {
+		if (g_check_disease) {
 			disease_effect();
 		}
 
@@ -1904,7 +1904,7 @@ void game_loop(void)
 //static
 /*
  *	This function does daily accounting stuff.
- *	The CHECK_DISEASE flag is set here, indicating that the disease status should be updated. */
+ *	The g_check_disease flag is set here, indicating that the disease status should be updated. */
 
 void timers_daily(void)
 {
@@ -1936,7 +1936,7 @@ void timers_daily(void)
 	}
 
 	/* enable disease check */
-	ds_writew(CHECK_DISEASE, 1);
+	g_check_disease = 1;
 
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug: Reenable identifying item in the academy */

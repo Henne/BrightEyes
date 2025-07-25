@@ -340,12 +340,12 @@ void do_harbor(void)
 
 				timewarp_until_time_of_day(HOURS(9));
 
-				/* CHECK_DISEASE is set to 1 each midnight in timers_daily() */
-				if (ds_readws(CHECK_DISEASE) != 0) {
+				/* g_check_disease is set to 1 each midnight in timers_daily() */
+				if (g_check_disease) {
 					/* effectively, this branch is reached if the ship was entered before midnight. */
 
 					disease_effect();
-					/* in this call, CHECK_DISEASE is reset to 0 */
+					/* in this call, g_check_disease is reset to 0 */
 
 					hero = get_hero(0);
 					for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
@@ -616,11 +616,11 @@ void sea_travel(signed short passage, signed short dir)
 		}
 
 		/* This looks dirty.
-		 * CHECK_DISEASE is set to 1 each midnight in timers_daily()
+		 * g_check_disease is set to 1 each midnight in timers_daily()
 		 * Usually, the disease_effect() function is called within game_loop(). But the game does not jump back to that function at this point,
 		 * which is probably the reason to replicate the disease_effect() call here.
 		 * Why the dependence on CHECK_PARTY? */
-		if (ds_readws(CHECK_DISEASE) != 0 && !ds_readbs(CHECK_PARTY)) {
+		if (g_check_disease && !ds_readbs(CHECK_PARTY)) {
 
 			disease_effect();
 

@@ -46,7 +46,7 @@ void disease_effect(void)
 	Bit8u *hero2;
 	Bit8u *disease_ptr;
 
-	ds_writew(CHECK_DISEASE, 0);
+	g_check_disease = 0;
 
 	for (i = 0; i <= 6; i++) {
 

@@ -412,7 +412,7 @@ void TM_func1(signed short route_no, signed short backwards)
 			}
 		}
 
-		if (ds_readw(CHECK_DISEASE) != 0 && !ds_readb(TRAVEL_DETOUR) && ds_readw(GAME_STATE) == GAME_STATE_MAIN)
+		if (g_check_disease && !ds_readb(TRAVEL_DETOUR) && ds_readw(GAME_STATE) == GAME_STATE_MAIN)
 		{
 			disease_effect();
 		}
