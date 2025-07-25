@@ -517,7 +517,7 @@ void FIG_do_enemy_action(RealPt monster, signed short monster_pos)
 			}
 
 			FIG_prepare_enemy_fight_ani(1, (Bit8u*)(monster), 2, monster_pos + 10, host_readbs((Bit8u*)(monster) + ENEMY_SHEET_ENEMY_ID), 0);
-			ds_writew(FIG_CONTINUE_PRINT, 1);
+			g_fig_continue_print = 1;
 			draw_fight_screen_pal(0);
 			seg041_8c8();
 
@@ -598,7 +598,7 @@ void FIG_do_enemy_action(RealPt monster, signed short monster_pos)
 					FIG_make_invisible(ds_readbs(FIG_SHOT_BOLT_ID));
 				}
 
-				ds_writew(FIG_CONTINUE_PRINT, 1);
+				g_fig_continue_print = 1;
 
 				if (ds_readws(DEFENDER_DEAD) != 0) {
 
@@ -718,7 +718,7 @@ void FIG_do_enemy_action(RealPt monster, signed short monster_pos)
 							}
 						}
 
-						ds_writew(FIG_CONTINUE_PRINT, 1);
+						g_fig_continue_print = 1;
 
 						draw_fight_screen(1);
 
@@ -922,7 +922,7 @@ void FIG_use_item(Bit8u *hero, Bit8u *target_monster, Bit8u *target_hero, signed
 		if (hylailic != 0) {
 			seg045_0394(6, hero, 2);
 		} else {
-			ds_writew(FIG_CONTINUE_PRINT, 1);
+			g_fig_continue_print = 1;
 		}
 
 		draw_fight_screen_pal(0);
@@ -933,7 +933,7 @@ void FIG_use_item(Bit8u *hero, Bit8u *target_monster, Bit8u *target_hero, signed
 
 			l3 = 1;
 
-			ds_writew(FIG_CONTINUE_PRINT, 1);
+			g_fig_continue_print = 1;
 
 			draw_fight_screen(1);
 		}

@@ -198,7 +198,7 @@ void interrupt timer_isr(void)
 
 	/* another timer used in fights */
 	if ((ds_readws(FIG_STAR_TIMER) > 0) &&
-		(ds_readws(FIG_CONTINUE_PRINT) != 0) &&
+		(g_fig_continue_print) &&
 		(ds_readbs(FIG_STAR_PRINTED) != 0))
 	{
 		dec_ds_ws(FIG_STAR_TIMER);

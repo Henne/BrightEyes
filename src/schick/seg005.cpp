@@ -178,7 +178,7 @@ unsigned short fight_printer(void)
 	Bit16s f_action;
 
 	if (ds_readw(FIG_MSG_DATA) == 0)
-		ds_writew(FIG_CONTINUE_PRINT, 0);
+		g_fig_continue_print = 0;
 
 	if (ds_readw(FIG_STAR_TIMER) == 0 && ds_readb(FIG_STAR_PRINTED) != 0) {
 		inc_ds_bs_post(FIG_STAR_COUNTER);
@@ -187,10 +187,11 @@ unsigned short fight_printer(void)
 		ds_writew(FIG_STAR_TIMER, ds_readw(AUTOFIGHT) ? 10: ds_readws(DELAY_FACTOR) * 6);
 
 		if (ds_readw(FIG_MSG_DATA + ds_readbs(FIG_STAR_COUNTER) * 4) == 0)
-			ds_writew(FIG_CONTINUE_PRINT, 0);
+			g_fig_continue_print = 0;
 	}
 
-	if (ds_readw(FIG_CONTINUE_PRINT) != 0) {
+	if (g_fig_continue_print) {
+
 		if (ds_readb(FIG_STAR_COUNTER) != ds_readb(FIG_STAR_LAST_COUNT)) {
 
 		ds_writeb(FIG_STAR_PRINTED, 1);
@@ -984,10 +985,10 @@ void draw_fight_screen(Bit16u val)
 
 		do_pic_copy(0);
 
-		while (ds_readw(FIG_CONTINUE_PRINT) == 1) {
+		while (g_fig_continue_print == 1) {
 
 /* We get in an endless loop here,
-when the Timer IRQ cannot set ds:FIG_CONTINUE_PRINT to 0.
+when the Timer IRQ cannot set g_fig_continue_print to 0.
 So this call to wait_for_vsync() passes control
 to the DOSBox-CPU and may run the timer.
  */
@@ -1008,7 +1009,7 @@ to the DOSBox-CPU and may run the timer.
 		}
 
 	} else {
-		ds_writew(FIG_CONTINUE_PRINT, 0);
+		g_fig_continue_print = 0;
 	}
 
 	/* read TEMP/XX */

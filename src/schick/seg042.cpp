@@ -561,7 +561,7 @@ void FIG_do_hero_action(RealPt hero, const signed short hero_pos)
 				}
 			}
 
-			ds_writew(FIG_CONTINUE_PRINT, 1);
+			g_fig_continue_print = 1;
 
 			draw_fight_screen_pal(0);
 
@@ -671,7 +671,7 @@ void FIG_do_hero_action(RealPt hero, const signed short hero_pos)
 						FIG_make_invisible(ds_readbs(FIG_SHOT_BOLT_ID));
 					}
 
-					ds_writew(FIG_CONTINUE_PRINT, 1);
+					g_fig_continue_print = 1;
 
 					if (ds_readws(DEFENDER_DEAD) != 0) {
 
@@ -870,7 +870,7 @@ void FIG_do_hero_action(RealPt hero, const signed short hero_pos)
 							}
 						}
 
-						ds_writew(FIG_CONTINUE_PRINT, 1);
+						g_fig_continue_print = 1;
 
 						draw_fight_screen(1);
 

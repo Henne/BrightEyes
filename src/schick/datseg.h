@@ -41,6 +41,8 @@ extern unsigned char g_ems_enabled;			//ds:0x26ab; seg027-seg028, seg120
 extern signed char g_fig_initiative;			//ds:0x26ac; seg032,seg051,seg052,seg110-seg113
 extern signed short g_fig_msg_counter;			//ds:0x26ad; seg041
 extern unsigned short g_always_one;			//ds:0x26af; seg006
+extern signed short g_fig_continue_print;		//ds:0x26b1; seg004,seg005,seg042,seg043
+
 extern unsigned char g_always_zero4;			//ds:0x2cce; seg032
 extern void (*g_location_handlers[19])(void);
 extern void (*g_use_special_item_handlers[14])(void);

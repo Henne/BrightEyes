@@ -117,7 +117,7 @@
 //#define FIG_INITIATIVE                  (0x26ac)    /* signed char; 0 = random, 1 = enemies, 2 = heroes (attack first) */
 //#define FIG_MSG_COUNTER                 (0x26ad)    /* signed short */
 //#define ALWAYS_ONE                      (0x26af)    /* unsigned short; writeonly (1) */
-#define FIG_CONTINUE_PRINT              (0x26b1)    /* unsigned short; {0,1} */
+//#define FIG_CONTINUE_PRINT              (0x26b1)    /* unsigned short; {0,1} */
 #define FIG_CHAR_PIC                    (0x26b3)    /* unsigned short */
 #define FIG_ENEMY_PIC                   (0x26b5)    /* unsigned short */
 #define GUI_ENTERING_SAVEGAME           (0x26b7)    /* unsigned short; {0,1} */
