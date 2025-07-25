@@ -337,7 +337,7 @@ void do_wildcamp(void)
 
 					ds_writews(CAMP_INCIDENT, -1);
 					g_fig_initiative = 1;
-					ds_writew(FIG_DISCARD, 1);
+					g_fig_discard = 1;
 
 					/* pick a random campfight out of 4 possibilities */
 					do_fight(ds_readws((CAMPFIGHTS-2) + 2 * random_schick(4)));

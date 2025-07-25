@@ -550,12 +550,12 @@ void talk_switch(void)
 		if (ds_readws(DIALOG_INFORMER) == 0) {
 			if ((state == 1 || state == 2 || state == 3) && !ds_readb((DASPOTA_FIGHTFLAGS + 1))) {
 
-				ds_writew(FIG_DISCARD, 1);
+				g_fig_discard = 1;
 
 				if (!do_fight(FIGHTS_DASP1A)) {
 					if (GUI_bool(get_tx(22))) {
 
-						ds_writew(FIG_DISCARD, 0);
+						g_fig_discard = 0;
 
 						if (!do_fight(FIGHTS_DASP1B)) {
 							ds_writeb((DASPOTA_FIGHTFLAGS + 1), 1);
@@ -563,7 +563,7 @@ void talk_switch(void)
 					}
 				}
 
-				ds_writew(FIG_DISCARD, 0);
+				g_fig_discard = 0;
 			}
 		}
 

@@ -1149,7 +1149,7 @@ signed short do_fight(signed short fight_id)
 			FIG_loot_monsters();
 			FIG_split_ap();
 
-			if ((ds_readws(MAX_ENEMIES) != 0) && (ds_readws(FIG_DISCARD) == 0)) {
+			if ((ds_readws(MAX_ENEMIES) != 0) && !g_fig_discard) {
 
 				for (i = 0; i < 20; i++) {
 					or_ds_bs((ENEMY_SHEETS + ENEMY_SHEET_FLAGS1) + SIZEOF_ENEMY_SHEET * i, 1); /* set 'dead' flag */
@@ -1158,7 +1158,7 @@ signed short do_fight(signed short fight_id)
 
 		}
 
-		if ((retval != 2) && (ds_readws(FIG_DISCARD) == 0)) {
+		if ((retval != 2) && !g_fig_discard) {
 
 			FIG_tidy_monsters();
 			write_fight_lst();
@@ -1255,7 +1255,7 @@ signed short do_fight(signed short fight_id)
 	}
 
 	g_fig_initiative = g_always_zero4 = 0;
-	ds_writew(FIG_DISCARD, 0);
+	g_fig_discard = 0;
 	ds_writew(MAX_ENEMIES, 0);
 	ds_writew(IN_FIGHT, 0);
 	ds_writew(REQUEST_REFRESH, 1);

@@ -1548,7 +1548,7 @@ signed short g_check_disease = 0; // ds:0x26b9
 signed short g_check_poison = 0; // ds:0x26bb
 signed short g_text_file_index = -1; // ds:0x26bd
 signed short g_tx_file_index = -1; // ds:0x26bf, index of file stored with load_tx
-unsigned short g_fig_discard = 0; // ds:0x26c1, , whether to discard the fight data after the fight
+signed short g_fig_discard = 0; // ds:0x26c1, whether to discard the fight data after the fight
 struct{unsigned char r,g,b;} g_palette_allblack2[32] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x00, 0x00, 0x00 },

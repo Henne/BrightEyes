@@ -284,7 +284,7 @@ signed short DNG10_handler(void)
 		/* FIGHT: four mummies again and again */
 		ds_writew((FIG_FLEE_POSITION + 0), ds_writew((FIG_FLEE_POSITION + 6), DNG_POS_DIR(1,5,3,WEST)));
 		ds_writew((FIG_FLEE_POSITION + 2), ds_writew((FIG_FLEE_POSITION + 4), DNG_POS_DIR(1,12,3,EAST)));
-		ds_writew(FIG_DISCARD, 1);
+		g_fig_discard = 1;
 		do_fight(FIGHTS_F129_21);
 
 	} else if (target_pos == DNG_POS(1,1,12) && target_pos != ds_readws(DNG_HANDLED_POS) && ds_readbs(DIRECTION) == SOUTH)

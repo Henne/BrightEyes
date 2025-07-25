@@ -125,7 +125,7 @@
 //#define CHECK_POISON                    (0x26bb)    /* signed short; {0,1} */
 //#define TEXT_FILE_INDEX                 (0x26bd)    /* signed short */
 //#define TX_FILE_INDEX                   (0x26bf)    /* signed short; index of file stored with load_tx */
-#define FIG_DISCARD                     (0x26c1)    /* unsigned short; {0,1}, whether to discard the fight data after the fight */
+//#define FIG_DISCARD                     (0x26c1)    /* signed short; {0,1}, whether to discard the fight data after the fight */
 #define PALETTE_ALLBLACK2               (0x26c3)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
 #define PALETTE_UNKNOWN1                (0x2723)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
 #define PALETTE_FIGHT1                  (0x2783)    /* struct(3)[32]; struct{unsigned char r,g,b;} */

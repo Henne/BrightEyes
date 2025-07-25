@@ -558,7 +558,7 @@ void pirates_attack(void)
 	GUI_output(get_tx2(47));
 
 	ds_writew(MAX_ENEMIES, random_interval(3, 8));
-	ds_writew(FIG_DISCARD, 1);
+	g_fig_discard = 1;
 
 	do_fight(FIGHTS_S001);
 
@@ -582,7 +582,7 @@ void do_wild8_fight(void)
 	ds_writeb(SHOW_TRAVEL_MAP, 0);
 
 	ds_writew(MAX_ENEMIES, random_interval(5, 10));
-	ds_writew(FIG_DISCARD, 1);
+	g_fig_discard = 1;
 
 	do_fight(FIGHTS_WILD8);
 
@@ -623,7 +623,7 @@ void random_encounter(signed short arg)
 
 			ds_writeb(SHOW_TRAVEL_MAP, (signed char)ds_writew(WALLCLOCK_UPDATE, 0));
 			ds_writeb(TRAVEL_EVENT_ACTIVE, 1);
-			ds_writew(FIG_DISCARD, 1);
+			g_fig_discard = 1;
 
 			switch (i) {
 				case 0: {
@@ -708,7 +708,7 @@ void random_encounter(signed short arg)
 				}
 			}
 
-			ds_writew(FIG_DISCARD, 0);
+			g_fig_discard = 0;
 			ds_writeb(SHOW_TRAVEL_MAP, 1);
 			ds_writeb(TRAVEL_EVENT_ACTIVE, 0);
 			break;

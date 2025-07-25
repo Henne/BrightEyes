@@ -766,7 +766,7 @@ void tevent_046(void)
 
 			GUI_output((char*)ds_readd(DTP2));
 
-			ds_writew(FIG_DISCARD, 1);
+			g_fig_discard = 1;
 
 			TRV_fight_event(FIGHTS_F046, 46);
 
