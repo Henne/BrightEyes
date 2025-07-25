@@ -614,8 +614,7 @@ void load_informer_tlk(signed short index)
 
 	close(fd);
 
-	split_textbuffer((Bit8u*)ds_readd(TX2_INDEX),
-		(Bit8u*)ds_readd(BUFFER8_PTR), text_len);
+	split_textbuffer((char**)ds_readd(TX2_INDEX), (char*)ds_readd(BUFFER8_PTR), text_len);
 
 	/* adjust the pointers to the layouts */
 	for (i = 0; i < partners; i++, ptr += 0x26) {
@@ -650,16 +649,14 @@ void load_tlk(signed short index)
 	read_archive_file(fd, ptr = p_datseg + DIALOG_PARTNERS, partners * 0x26);
 
 	/* read the dialog layouts */
-	read_archive_file(fd,
-		(Bit8u*)((p_datseg + DIALOG_STATES)), off - partners * 0x26);
+	read_archive_file(fd, (Bit8u*)(p_datseg + DIALOG_STATES), off - partners * 0x26);
 
 	/* read the text */
 	text_len = (signed short)read_archive_file(fd, (Bit8u*)ds_readd(BUFFER7_PTR), 64000);
 
 	close(fd);
 
-	split_textbuffer((Bit8u*)ds_readd(TX_INDEX),
-		(Bit8u*)ds_readd(BUFFER7_PTR), text_len);
+	split_textbuffer((char**)ds_readd(TX_INDEX), (char*)ds_readd(BUFFER7_PTR), text_len);
 
 	/* adjust the pointers to the layouts */
 	for (i = 0; i < partners; i++, ptr += 0x26) {

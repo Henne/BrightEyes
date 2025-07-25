@@ -46,20 +46,19 @@ void init_text(void)
 	len = (signed short)read_archive_file(handle, (Bit8u*)ds_readd(TEXT_LTX_BUFFER), 64000);
 	close(handle);
 
-	split_textbuffer((Bit8u*)ds_readd(TEXT_LTX_INDEX), (Bit8u*)ds_readd(TEXT_LTX_BUFFER), len);
+	split_textbuffer((char**)ds_readd(TEXT_LTX_INDEX), (char*)ds_readd(TEXT_LTX_BUFFER), len);
 
 	handle = load_archive_file(ARCHIVE_FILE_ITEMNAME);
 	len = (signed short)read_archive_file(handle, (Bit8u*)ds_readd(BUFFER5_PTR), 5000);
 	close(handle);
 
-	split_textbuffer((Bit8u*)ds_readd(ITEMSNAME), (Bit8u*)ds_readd(BUFFER5_PTR), len);
+	split_textbuffer((char**)ds_readd(ITEMSNAME), (char*)ds_readd(BUFFER5_PTR), len);
 
 	handle = load_archive_file(ARCHIVE_FILE_MONNAMES);
 	len = (signed short)read_archive_file(handle, (Bit8u*)ds_readd(MONNAMES_BUFFER), 5000);
 	close(handle);
 
-	split_textbuffer((Bit8u*)g_monnames_index, (Bit8u*)ds_readd(MONNAMES_BUFFER), len);
-
+	split_textbuffer((char**)g_monnames_index, (char*)ds_readd(MONNAMES_BUFFER), len);
 }
 
 void load_tx(signed short index)
@@ -76,7 +75,7 @@ void load_tx(signed short index)
 
 	close(archive_file_handle);
 
-	split_textbuffer((Bit8u*)ds_readd(TX_INDEX), (Bit8u*)ds_readd(BUFFER7_PTR), archive_file_len);
+	split_textbuffer((char**)ds_readd(TX_INDEX), (char*)ds_readd(BUFFER7_PTR), archive_file_len);
 
 	ds_writew(TX_FILE_INDEX, index);
 }
@@ -94,7 +93,7 @@ void load_tx2(signed short index)
 	len = (signed short)read_archive_file(fd, (Bit8u*)ds_readd(BUFFER8_PTR), 12000);
 	close(fd);
 
-	split_textbuffer((Bit8u*)ds_readd(TX2_INDEX), (Bit8u*)ds_readd(BUFFER8_PTR), len);
+	split_textbuffer((char**)ds_readd(TX2_INDEX), (char*)ds_readd(BUFFER8_PTR), len);
 }
 
 void load_ltx(unsigned short index)
@@ -107,24 +106,23 @@ void load_ltx(unsigned short index)
 	len = (signed short)read_archive_file(fd, (Bit8u*)ds_readd(BUFFER9_PTR3) + 1000, 64000);
 	close(fd);
 
-	split_textbuffer((Bit8u*)ds_readd(BUFFER9_PTR3),
-		F_PADD((Bit8u*)ds_readd(BUFFER9_PTR3), 1000L), len);
+	split_textbuffer((char**)ds_readd(BUFFER9_PTR3),
+		(char*)F_PADD((Bit8u*)ds_readd(BUFFER9_PTR3), 1000L), len);
 }
 
-void split_textbuffer(Bit8u *dst, RealPt src, Bit32u len)
+void split_textbuffer(char **dst, char *src, Bit32u len)
 {
 	Bit32u i = 0;
 
-	host_writed(dst, (Bit32u)src);
-	dst += 4;
+	*dst = src;
+	dst += sizeof(char*);
 
 	for (; i != len; src++, i++) {
 		/* continue if not the end of the string */
-		if (!host_readbs((Bit8u*)(src))) {
-
+		if (!(*src)) {
 			/* write the adress of the next string */
-			host_writed(dst, (Bit32u)(src + 1));
-			dst += 4;
+			*dst = src + 1;
+			dst += sizeof(char*);
 		}
 	}
 }

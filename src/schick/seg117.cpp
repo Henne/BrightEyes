@@ -53,10 +53,11 @@ void pause_traveling(signed short ani_no)
 
 	load_tx2(ARCHIVE_FILE_WILD_LTX);
 
-	ds_writew(BASEPOS_X_BAK, ds_readw(BASEPOS_X));
-	ds_writew(BASEPOS_Y_BAK, ds_readw(BASEPOS_Y));
-	ds_writew(TEXTBOX_WIDTH_BAK, ds_readw(TEXTBOX_WIDTH));
-	ds_writew(WALLCLOCK_UPDATE_BAK, ds_readw(WALLCLOCK_UPDATE));
+	g_basepos_x_bak = ds_readw(BASEPOS_X);
+	g_basepos_y_bak = ds_readw(BASEPOS_Y);
+
+	g_textbox_width_bak = ds_readw(TEXTBOX_WIDTH);
+	g_wallclock_update_bak = ds_readw(WALLCLOCK_UPDATE);
 
 	ds_writeb(TRAVEL_EVENT_ACTIVE, 1);
 
@@ -72,10 +73,11 @@ static
 #endif
 void resume_traveling(void)
 {
-	ds_writew(BASEPOS_X, ds_readw(BASEPOS_X_BAK));
-	ds_writew(BASEPOS_Y, ds_readw(BASEPOS_Y_BAK));
-	ds_writew(TEXTBOX_WIDTH, ds_readw(TEXTBOX_WIDTH_BAK));
-	ds_writew(WALLCLOCK_UPDATE, ds_readw(WALLCLOCK_UPDATE_BAK));
+	ds_writew(BASEPOS_X, g_basepos_x_bak);
+	ds_writew(BASEPOS_Y, g_basepos_y_bak);
+
+	ds_writew(TEXTBOX_WIDTH, g_textbox_width_bak);
+	ds_writew(WALLCLOCK_UPDATE, g_wallclock_update_bak);
 
 	set_var_to_zero();
 
@@ -574,7 +576,7 @@ void do_wild8_fight(void)
 
 	bak1 = ds_readws(BASEPOS_X);
 	bak2 = ds_readws(BASEPOS_Y);
-	ds_writew(WALLCLOCK_UPDATE_BAK, ds_readws(WALLCLOCK_UPDATE));
+	g_wallclock_update_bak = ds_readws(WALLCLOCK_UPDATE);
 	ds_writew(BASEPOS_X, 0);
 	ds_writew(BASEPOS_Y, 0);
 	ds_writeb(SHOW_TRAVEL_MAP, 0);

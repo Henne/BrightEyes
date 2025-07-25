@@ -1646,14 +1646,14 @@
 #define USED_ITEM_POS                   (0xe5cc)    /* signed short; used_item position */
 //#define ITEMUSER                        (0xe5ce)    /* RealPt; pointer to hero */
 #define EVENT_ANI_BUSY                  (0xe5d2)    /* unsigned char; {0,1} */
-#define WALLCLOCK_UPDATE_BAK            (0xe5d3)    /* unsigned short; {0,1} */
-#define TEXTBOX_WIDTH_BAK               (0xe5d5)    /* unsigned short */
-#define BASEPOS_Y_BAK                   (0xe5d7)    /* unsigned short */
-#define BASEPOS_X_BAK                   (0xe5d9)    /* unsigned short */
+//#define WALLCLOCK_UPDATE_BAK            (0xe5d3)    /* unsigned short; {0,1} */
+//#define TEXTBOX_WIDTH_BAK               (0xe5d5)    /* unsigned short */
+//#define BASEPOS_Y_BAK                   (0xe5d7)    /* unsigned short */
+//#define BASEPOS_X_BAK                   (0xe5d9)    /* unsigned short */
 // ?1
 //#define BUFFERSIZE                      (0xe5dc)    /* unsigned long; size of the global buffer */
 //#define GLOBAL_BUFFER_PTR               (0xe5e0)    /* RealPt; points to the start of the global buffer */
-#define LARGE_BUF                       (0xe5e4)    /* signed char; {0,1} */
+//#define LARGE_BUF                       (0xe5e4)    /* signed char; {0,1} */
 /* Unknown Bytes: 831, Undetermined symbols: 0/1479 */
 
 #endif

@@ -6180,16 +6180,16 @@ char g_str_gen_generation[11] = "Generation"; // ds:0xb4d5
 
 /* start of the BSS section */
 
-unsigned char g_large_buf; // ds:0xe5e4
+signed char g_large_buf; // ds:0xe5e4
 HugePt g_global_buffer_ptr; // ds:0xe5e0, points to the start of the global buffer
 Bit32u g_buffersize; // ds:0xe5dc, size of the global buffer
 unsigned char g_unkn_093[1]; // ds:0xe5db
 unsigned char g_route59_flag; // ds:0xe4a2, {0, 1 = from Kravik, 2 = from Peilinen, 3 = from Skelellen, 4 = from Rovamund}
 unsigned short g_sample_ad_length; // ds:0xbc5a
-unsigned short g_basepos_x_bak; // ds:0xe5d9
-unsigned short g_basepos_y_bak; // ds:0xe5d7
-unsigned short g_textbox_width_bak; // ds:0xe5d5
-unsigned short g_wallclock_update_bak; // ds:0xe5d3
+signed short g_basepos_x_bak; // ds:0xe5d9
+signed short g_basepos_y_bak; // ds:0xe5d7
+signed short g_textbox_width_bak; // ds:0xe5d5
+signed short g_wallclock_update_bak; // ds:0xe5d3
 unsigned char g_event_ani_busy; // ds:0xe5d2
 unsigned char *g_itemuser; // ds:0xe5ce, pointer to hero
 signed short g_used_item_pos; // ds:0xe5cc, used_item position

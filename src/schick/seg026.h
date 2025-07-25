@@ -5,7 +5,7 @@ namespace M302de {
 //0x20
 void init_text(void);
 //0x25
-void split_textbuffer(Bit8u *, RealPt, Bit32u);
+void split_textbuffer(char **, char*, Bit32u);
 //0x2a
 void load_ggsts_nvf(void);
 /* 0x2f */
