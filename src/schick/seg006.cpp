@@ -163,7 +163,9 @@ void FIG_draw_pic(void)
 {
 	memcpy((void*)ds_readd(RENDERBUF_PTR),	(void*)ds_readd(BUFFER8_PTR), 64000);
 
-	ds_writew(ALWAYS_ONE, 1);
+#if defined(__BORLANDC__)
+	g_always_one = 1;
+#endif
 
 	if (ds_readw(FIG_CHAR_PIC)) {
 		FIG_draw_char_pic(0, ds_readw(FIG_CHAR_PIC));

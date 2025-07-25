@@ -116,7 +116,7 @@
 //#define EMS_ENABLED                     (0x26ab)    /* char */
 //#define FIG_INITIATIVE                  (0x26ac)    /* signed char; 0 = random, 1 = enemies, 2 = heroes (attack first) */
 //#define FIG_MSG_COUNTER                 (0x26ad)    /* signed short */
-#define ALWAYS_ONE                      (0x26af)    /* unsigned short; writeonly (1) */
+//#define ALWAYS_ONE                      (0x26af)    /* unsigned short; writeonly (1) */
 #define FIG_CONTINUE_PRINT              (0x26b1)    /* unsigned short; {0,1} */
 #define FIG_CHAR_PIC                    (0x26b3)    /* unsigned short */
 #define FIG_ENEMY_PIC                   (0x26b5)    /* unsigned short */
@@ -331,7 +331,7 @@
 #define QUEST_DEADSHIP                  (0x35f0)    /* unsigned char; {0,1} */
 // ?1
 #define QUEST_DEADSHIP_DONE             (0x35f2)    /* unsigned char; {0,1} */
-#define ALWAYS_ONE2                     (0x35f3)    /* unsigned char;  writeonly (1) */
+//#define ALWAYS_ONE2                     (0x35f3)    /* unsigned char;  writeonly (1) */
 #define DNG03_SPIDEREGGS_BURNED         (0x35f4)    /* unsigned char; {0,1} */
 // ?2
 #define DNG06_DASPTREAS_FOUND           (0x35f7)    /* unsigned char; {0,1} */
