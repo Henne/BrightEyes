@@ -423,7 +423,7 @@ void level_up(signed short hero_pos)
 
 	ds_writew(TIMERS_DISABLED, 1);
 
-	city_bak = ds_readws(TEXT_FILE_INDEX);
+	city_bak = g_text_file_index;
 
 	load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
 

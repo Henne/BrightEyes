@@ -533,7 +533,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 	} while (ds_readws(DIALOG_DONE) == 0);
 
-	ds_writews(TEXT_FILE_INDEX, -1);
+	g_text_file_index = -1;
 	ds_writews(CURRENT_ANI, -1);
 }
 

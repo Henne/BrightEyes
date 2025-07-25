@@ -245,7 +245,7 @@ void talk_tavern(void)
 
 	ds_writews(NPC_MEET_TAVERN, 0);
 	ds_writews(TEXTBOX_WIDTH, 3);
-	ds_writews(TEXT_FILE_INDEX, -1);
+	g_text_file_index = -1;
 	load_tx(ds_readws(TX_FILE_INDEX));
 	set_var_to_zero();
 }

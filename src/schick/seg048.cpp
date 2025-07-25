@@ -97,7 +97,7 @@ void status_menu(signed short hero_pos)
 
 	set_audio_track(ARCHIVE_FILE_SUMMARY_XMI);
 
-	file_bak = ds_readws(TEXT_FILE_INDEX);
+	file_bak = g_text_file_index;
 
 	load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
 

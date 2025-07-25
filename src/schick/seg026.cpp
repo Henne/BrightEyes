@@ -88,7 +88,7 @@ void load_tx2(signed short index)
 	if (index == -1)
 		return;
 
-	ds_writew(TEXT_FILE_INDEX, index);
+	g_text_file_index = index;
 	fd = load_archive_file(index);
 	len = (signed short)read_archive_file(fd, (Bit8u*)ds_readd(BUFFER8_PTR), 12000);
 	close(fd);

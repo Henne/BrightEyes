@@ -589,7 +589,7 @@ void load_informer_tlk(signed short index)
 	Bit8u *ptr;
 
 
-	ds_writew(TEXT_FILE_INDEX, index);
+	g_text_file_index = index;
 
 	fd = load_archive_file(index);
 
@@ -631,7 +631,7 @@ void load_tlk(signed short index)
 	signed short partners;
 	Bit8u *ptr;
 
-	ds_writew(TEXT_FILE_INDEX, index);
+	g_text_file_index = index;
 
 	fd = load_archive_file(index);
 

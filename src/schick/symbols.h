@@ -117,13 +117,13 @@
 //#define FIG_INITIATIVE                  (0x26ac)    /* signed char; 0 = random, 1 = enemies, 2 = heroes (attack first) */
 //#define FIG_MSG_COUNTER                 (0x26ad)    /* signed short */
 //#define ALWAYS_ONE                      (0x26af)    /* unsigned short; writeonly (1) */
-//#define FIG_CONTINUE_PRINT              (0x26b1)    /* unsigned short; {0,1} */
-//#define FIG_CHAR_PIC                    (0x26b3)    /* unsigned short */
-//#define FIG_ENEMY_PIC                   (0x26b5)    /* unsigned short */
-//#define GUI_ENTERING_SAVEGAME           (0x26b7)    /* unsigned short; {0,1} */
-//#define CHECK_DISEASE                   (0x26b9)    /* unsigned short; {0,1} */
-//#define CHECK_POISON                    (0x26bb)    /* unsigned short; {0,1} */
-#define TEXT_FILE_INDEX                 (0x26bd)    /* unsigned short */
+//#define FIG_CONTINUE_PRINT              (0x26b1)    /* signed short; {0,1} */
+//#define FIG_CHAR_PIC                    (0x26b3)    /* signed short */
+//#define FIG_ENEMY_PIC                   (0x26b5)    /* signed short */
+//#define GUI_ENTERING_SAVEGAME           (0x26b7)    /* signed short; {0,1} */
+//#define CHECK_DISEASE                   (0x26b9)    /* signed short; {0,1} */
+//#define CHECK_POISON                    (0x26bb)    /* signed short; {0,1} */
+//#define TEXT_FILE_INDEX                 (0x26bd)    /* signed short */
 #define TX_FILE_INDEX                   (0x26bf)    /* signed short; index of file stored with load_tx */
 #define FIG_DISCARD                     (0x26c1)    /* unsigned short; {0,1}, whether to discard the fight data after the fight */
 #define PALETTE_ALLBLACK2               (0x26c3)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
