@@ -499,10 +499,10 @@ signed short save_game_state(void)
 
 		do {
 			/* ask for filename */
-			ds_writew(GUI_ENTERING_SAVEGAME, 1);
+			g_gui_entering_savegame = 1;
 			strcpy((char*)ds_readd(TEXT_INPUT_BUF), (char*)p_datseg + SAVEGAME_NAMES + 9 * slot);
 			GUI_input(get_ttx(634), 8);
-			ds_writew(GUI_ENTERING_SAVEGAME, 0);
+			g_gui_entering_savegame = 0;
 
 			if (host_readbs((char*)ds_readd(TEXT_INPUT_BUF)) == 0) {
 				return 0;

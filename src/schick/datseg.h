@@ -44,6 +44,7 @@ extern unsigned short g_always_one;			//ds:0x26af; seg006
 extern signed short g_fig_continue_print;		//ds:0x26b1; seg004,seg005,seg042,seg043
 extern signed short g_fig_char_pic;			//ds:0x26b3; seg006,seg032
 extern signed short g_fig_enemy_pic;			//ds:0x26b5; seg006,seg032
+extern signed short g_gui_entering_savegame;		//ds:0x26b7; seg026,seg097
 
 extern unsigned char g_always_zero4;			//ds:0x2cce; seg032
 extern void (*g_location_handlers[19])(void);

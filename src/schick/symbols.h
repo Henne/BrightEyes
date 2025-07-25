@@ -120,7 +120,7 @@
 //#define FIG_CONTINUE_PRINT              (0x26b1)    /* unsigned short; {0,1} */
 //#define FIG_CHAR_PIC                    (0x26b3)    /* unsigned short */
 //#define FIG_ENEMY_PIC                   (0x26b5)    /* unsigned short */
-#define GUI_ENTERING_SAVEGAME           (0x26b7)    /* unsigned short; {0,1} */
+//#define GUI_ENTERING_SAVEGAME           (0x26b7)    /* unsigned short; {0,1} */
 #define CHECK_DISEASE                   (0x26b9)    /* unsigned short; {0,1} */
 #define CHECK_POISON                    (0x26bb)    /* unsigned short; {0,1} */
 #define TEXT_FILE_INDEX                 (0x26bd)    /* unsigned short */

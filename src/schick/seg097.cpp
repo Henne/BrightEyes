@@ -157,7 +157,7 @@ signed short GUI_enter_text(char* dst, signed short x, signed short y, signed sh
 
 	if (zero == 0) {
 		for (si = 0; si < num; si++) {
-			if ((ds_readws(GUI_ENTERING_SAVEGAME) != 0) && (length >= si)) {
+			if ((g_gui_entering_savegame) && (length >= si)) {
 				GUI_print_char(0x20, di, y);
 				GUI_print_char(*dst, di, y);
 				pos++;
