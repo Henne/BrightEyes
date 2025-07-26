@@ -85,7 +85,7 @@ signed short LVL_select_skill(Bit8u *hero, signed short show_values)
 		} else {
 
 			for (i = 0; ds_readbs((SKILLS_INDEX + 1) + 2 * answer) > i; i++) {
-				ds_writed(RADIO_NAME_LIST + 4 * i, (Bit32u)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + (l1 + i + 48) * 4)));
+				ds_writed(RADIO_NAME_LIST + 4 * i, (Bit32u)get_ttx(l1 + i + 48));
 			}
 		}
 

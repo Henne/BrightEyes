@@ -287,29 +287,21 @@ void status_show(Bit16u index)
 	/* print typus */
 	set_textcolor(0, 2);
 
-	GUI_print_string((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + (
-	((host_readb(hero + HERO_SEX)) ? 0x251 : 0x9) + host_readbs(hero + HERO_TYPE)) * 4)), 59, 16);
+	GUI_print_string(get_ttx(((host_readb(hero + HERO_SEX)) ? 0x251 : 0x9) + host_readbs(hero + HERO_TYPE)), 59, 16);
 
 
 	/* show AP */
-	sprintf((char*)ds_readd(DTP2),
-		(char*)(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x9ac)),
-		host_readd(hero + HERO_AP));
+	sprintf((char*)ds_readd(DTP2), get_ttx(619), host_readd(hero + HERO_AP));
 	GUI_print_string((char*)ds_readd(DTP2), 59, 26);
 
 	/* print level */
-	sprintf((char*)ds_readd(DTP2),
-		get_tx2(7),
-		host_readbs(hero + HERO_LEVEL));
+	sprintf((char*)ds_readd(DTP2), get_tx2(7), host_readbs(hero + HERO_LEVEL));
 	GUI_print_string((char*)ds_readd(DTP2), 59, 33);
 
 	/* print money */
-	make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF),
-		host_readd(hero + HERO_MONEY));
+	make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), host_readd(hero + HERO_MONEY));
 
-	sprintf((char*)ds_readd(DTP2),
-		(char*)(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x4b0)),
-		(char*)ds_readd(TEXT_OUTPUT_BUF));
+	sprintf((char*)ds_readd(DTP2), get_ttx(300), (char*)ds_readd(TEXT_OUTPUT_BUF));
 	GUI_print_string((char*)ds_readd(DTP2), 59, 43);
 
 	/* dead, unconscious or drunk */
@@ -353,9 +345,7 @@ void status_show(Bit16u index)
 			/* print god */
 			ds_writew(TXT_TABPOS1, 265);
 
-			sprintf((char*)ds_readd(DTP2),
-					get_tx2(10),
-					(char*)(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + (host_readbs(hero + HERO_GOD) + 0x15) * 4)));
+			sprintf((char*)ds_readd(DTP2), get_tx2(10), get_ttx(host_readbs(hero + HERO_GOD) + 21));
 			GUI_print_string((char*)ds_readd(DTP2), 200, 55);
 
 			/* show attributes */
@@ -365,8 +355,7 @@ void status_show(Bit16u index)
 
 			for (i = 0; i <= 13; i++) {
 
-				val = host_readbs(hero + i * 3 + HERO_ATTRIB)
-					+ host_readbs(hero + i * 3 + HERO_ATTRIB_MOD);
+				val = host_readbs(hero + i * 3 + HERO_ATTRIB) + host_readbs(hero + i * 3 + HERO_ATTRIB_MOD);
 
 				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF) + i * 10,
 					get_tx2(51),
@@ -581,41 +570,40 @@ void status_show(Bit16u index)
 			sprintf((char*)ds_readd(DTP2),
 				get_tx2(5),
 				host_readbs(hero + HERO_ATPA_BASIS),
-				(char*)(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0xc0)),
-
+				get_ttx(48),
 				host_readbs(hero + HERO_AT) - host_readbs(hero + HERO_RS_BE) / 2,
 				host_readbs(hero + HERO_PA) - host_readbs(hero + HERO_RS_BE) / 2,
-				(char*)(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0xc4)),
+				get_ttx(49),
 
 				host_readbs(hero + (HERO_AT + 1)) - host_readbs(hero + HERO_RS_BE) / 2,
 				host_readbs(hero + (HERO_PA + 1)) - host_readbs(hero + HERO_RS_BE) / 2,
-				(char*)(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0xc8)),
+				get_ttx(50),
 
 				host_readbs(hero + (HERO_AT + 2)) - host_readbs(hero + HERO_RS_BE) / 2,
 				host_readbs(hero + (HERO_PA + 2)) - host_readbs(hero + HERO_RS_BE) / 2,
-				(char*)(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0xcc)),
+				get_ttx(51),
 
 				host_readbs(hero + (HERO_AT + 3)) - host_readbs(hero + HERO_RS_BE) / 2,
 				host_readbs(hero + (HERO_PA + 3)) - host_readbs(hero + HERO_RS_BE) / 2,
-				(char*)(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0xd0)),
+				get_ttx(52),
 
 				host_readbs(hero + (HERO_AT + 4)) - host_readbs(hero + HERO_RS_BE) / 2,
 				host_readbs(hero + (HERO_PA + 4)) - host_readbs(hero + HERO_RS_BE) / 2,
-				(char*)(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0xd4)),
+				get_ttx(53),
 
 				host_readbs(hero + (HERO_AT + 5)) - host_readbs(hero + HERO_RS_BE) / 2,
 				host_readbs(hero + (HERO_PA + 5)) - host_readbs(hero + HERO_RS_BE) / 2,
-				(char*)(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0xd8)),
+				get_ttx(54),
 
 				host_readbs(hero + (HERO_AT + 6)) - host_readbs(hero + HERO_RS_BE) / 2,
 				host_readbs(hero + (HERO_PA + 6)) - host_readbs(hero + HERO_RS_BE) / 2,
 				at,
 				pa,
 
-				(char*)(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0xdc)),
+				get_ttx(55),
 				host_readbs(hero + (HERO_TALENTS + TA_SCHUSSWAFFEN)) + j,
 
-				(char*)(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0xe0)),
+				get_ttx(56),
 				host_readbs(hero + (HERO_TALENTS + TA_WURFWAFFEN)) + j);
 
 			GUI_print_string((char*)ds_readd(DTP2), 200, 60);
@@ -631,37 +619,21 @@ void status_show(Bit16u index)
 			/* print headers */
 			set_textcolor(0xff, 2);
 
-			GUI_print_string((char*)host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x300),
-				GUI_get_first_pos_centered((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x300)), 5, 100, 0),
-				55);
+			GUI_print_string(get_ttx(192), GUI_get_first_pos_centered(get_ttx(192), 5, 100, 0), 55);
 
-			GUI_print_string((char*)host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x308),
-				GUI_get_first_pos_centered((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x308)), 110, 100, 0),
-				55);
+			GUI_print_string(get_ttx(194), GUI_get_first_pos_centered(get_ttx(194), 110, 100, 0), 55);
 
-			GUI_print_string((char*)host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x314),
-				GUI_get_first_pos_centered((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x314)), 215, 100, 0),
-				55);
+			GUI_print_string(get_ttx(197), GUI_get_first_pos_centered(get_ttx(197), 215, 100, 0), 55);
 
-			GUI_print_string((char*)host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x304),
-				GUI_get_first_pos_centered((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x304)), 5, 100, 0),
-				97);
+			GUI_print_string(get_ttx(193), GUI_get_first_pos_centered(get_ttx(193), 5, 100, 0), 97);
 
-			GUI_print_string((char*)host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x30c),
-				GUI_get_first_pos_centered((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x30c)), 110, 100, 0),
-				104);
+			GUI_print_string(get_ttx(195), GUI_get_first_pos_centered(get_ttx(195), 110, 100, 0), 104);
 
-			GUI_print_string((char*)host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x318),
-				GUI_get_first_pos_centered((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x318)), 215, 100, 0),
-				97);
+			GUI_print_string(get_ttx(198), GUI_get_first_pos_centered(get_ttx(198), 215, 100, 0), 97);
 
-			GUI_print_string((char*)host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x310),
-				GUI_get_first_pos_centered((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x310)), 110, 100, 0),
-				132);
+			GUI_print_string(get_ttx(196), GUI_get_first_pos_centered(get_ttx(196), 110, 100, 0), 132);
 
-			GUI_print_string((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x31c)),
-				GUI_get_first_pos_centered((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x31c)), 215, 100, 0),
-				153);
+			GUI_print_string(get_ttx(199), GUI_get_first_pos_centered(get_ttx(199), 215, 100, 0), 153);
 
 			/* print values */
 			set_textcolor(0, 2);
@@ -688,22 +660,13 @@ void status_show(Bit16u index)
 			/* print headers */
 			set_textcolor(0xff, 2);
 
-			GUI_print_string((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x190)),
-				GUI_get_first_pos_centered((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x190)), 5, 100, 0),
-				55);
+			GUI_print_string(get_ttx(100), GUI_get_first_pos_centered(get_ttx(100), 5, 100, 0), 55);
 
-			GUI_print_string((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x324)),
-				GUI_get_first_pos_centered((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x324)), 5, 100, 0),
-				129);
+			GUI_print_string(get_ttx(201), GUI_get_first_pos_centered(get_ttx(201), 5, 100, 0), 129);
 
-			GUI_print_string((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x328)),
-				GUI_get_first_pos_centered((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x328)), 110, 100, 0),
-				55);
+			GUI_print_string(get_ttx(202), GUI_get_first_pos_centered(get_ttx(202), 110, 100, 0), 55);
 
-			GUI_print_string((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x32c)),
-				GUI_get_first_pos_centered((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x32c)), 215, 100, 0),
-				55);
-
+			GUI_print_string(get_ttx(203), GUI_get_first_pos_centered(get_ttx(203), 215, 100, 0), 55);
 
 			/* show values */
 			set_textcolor(0, 2);

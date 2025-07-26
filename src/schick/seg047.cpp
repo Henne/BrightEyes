@@ -351,14 +351,12 @@ signed short menu_enter_delete(RealPt ptr, signed short entries, signed short mo
 
 		/* fill a pointer array with the pointer to the names */
 		for (i = 0; i < i_max; i++) {
-			ds_writed(RADIO_NAME_LIST + 4 * i,
-				(Bit32u)((i + i_min) * 32 + ptr + 0x10));
+			ds_writed(RADIO_NAME_LIST + 4 * i, (Bit32u)((i + i_min) * 32 + ptr + 0x10));
 		}
 
 		i = i_max;
 		if (entries > 10) {
-			ds_writed(RADIO_NAME_LIST + 4 * i,
-				host_readd((Bit8u*)((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x48c)));
+			ds_writed(RADIO_NAME_LIST + 4 * i, (Bit32u)get_ttx(291));
 			i++;
 		}
 

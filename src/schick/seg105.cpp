@@ -795,14 +795,12 @@ signed short select_item_to_drop(Bit8u *hero)
 				i = 13;
 				va = i - 1;
 				ptr = (Bit8u*)ds_readd(RADIO_NAME_LIST + 4 * va);
-				ds_writed(RADIO_NAME_LIST + 4 * va,
-					host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0xbbc));
+				ds_writed(RADIO_NAME_LIST + 4 * va, (Bit32u)get_ttx(751));
 			} else {
 				i = v6 + 1;
 				va = i - 1;
 				ptr = (Bit8u*)ds_readd(RADIO_NAME_LIST + 4 * va);
-				ds_writed(RADIO_NAME_LIST + 4 * va,
-					host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0xbbc));
+				ds_writed(RADIO_NAME_LIST + 4 * va, (Bit32u)get_ttx(751));
 				i -= di;
 			}
 		} else {

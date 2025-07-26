@@ -57,7 +57,7 @@ RealPt seg030_0000(signed short arg0)
 			i = random_schick(15);
 		} while (i == 10 || i == 12 || i == 13 || !ds_readb((INFORMER_FLAGS - 1) + i)|| i == arg0);
 
-		return (RealPt)host_readd((Bit8u*)((Bit8u*)ds_readd(TEXT_LTX_INDEX) + (0x291 + i) * 4));
+		return (RealPt)get_ttx(657 + i);
 	}
 }
 
@@ -87,7 +87,7 @@ RealPt seg030_008d(signed short arg0)
 		} while (i == 10 || i == 12 || i == 13 || ds_readb((INFORMER_FLAGS - 1) + i)|| i == arg0);
 		ds_writeb((INFORMER_FLAGS - 1) + i, 1);
 
-		return (RealPt)host_readd((Bit8u*)((Bit8u*)ds_readd(TEXT_LTX_INDEX) + (0x291 + i) * 4));
+		return (RealPt)get_ttx(657 + i);
 	}
 }
 

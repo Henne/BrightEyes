@@ -84,6 +84,7 @@ extern unsigned char *g_townpal_buf;	// ds:0xd312; seg002, seg027, seg120
 extern unsigned char *g_renderbuf_ptr;	// ds:0xd303; seg002-seg120
 extern unsigned char *g_buf_icon;	// ds:0xd2e7; seg029, seg120
 extern char *g_text_ltx_buffer;		// ds:0xd2b9; seg026, seg120
+extern char **g_text_ltx_index;		// ds:0xc3b4;
 extern unsigned char g_playmask_us;	// ds:0xbc62; seg002, seg029
 extern unsigned char *g_heroes;		// ds:0xbd34
 
