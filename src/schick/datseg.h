@@ -81,8 +81,9 @@ extern unsigned char *g_spelltarget;	// ds:0xe5b8; seg098-seg102
 extern unsigned char *g_spelluser;	// ds:0xecbc; seg068, seg098, seg102, seg107
 extern signed char *g_chessboard;	// ds:0xd852;
 extern unsigned char *g_townpal_buf;	// ds:0xd312; seg002, seg027, seg120
-extern unsigned char *g_renderbuf_ptr;		// ds:0xd303; seg002-seg120
-extern unsigned char *g_buf_icon;	// ds:0xd2e73 seg029, seg120
+extern unsigned char *g_renderbuf_ptr;	// ds:0xd303; seg002-seg120
+extern unsigned char *g_buf_icon;	// ds:0xd2e7; seg029, seg120
+extern char *g_text_ltx_buffer;		// ds:0xd2b9; seg026, seg120
 extern unsigned char g_playmask_us;	// ds:0xbc62; seg002, seg029
 extern unsigned char *g_heroes;		// ds:0xbd34
 

@@ -43,10 +43,10 @@ void init_text(void)
 	close(handle);
 
 	handle = load_archive_file(ARCHIVE_FILE_TEXT_LTX);
-	len = (signed short)read_archive_file(handle, (Bit8u*)ds_readd(TEXT_LTX_BUFFER), 64000);
+	len = (signed short)read_archive_file(handle, g_text_ltx_buffer, 64000);
 	close(handle);
 
-	split_textbuffer((char**)ds_readd(TEXT_LTX_INDEX), (char*)ds_readd(TEXT_LTX_BUFFER), len);
+	split_textbuffer((char**)ds_readd(TEXT_LTX_INDEX), g_text_ltx_buffer, len);
 
 	handle = load_archive_file(ARCHIVE_FILE_ITEMNAME);
 	len = (signed short)read_archive_file(handle, (Bit8u*)ds_readd(BUFFER5_PTR), 5000);

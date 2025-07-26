@@ -249,8 +249,9 @@ void init_global_buffer(void)
 	g_global_buffer_ptr = (HugePt)schick_alloc(g_buffersize);
 	g_renderbuf_ptr = g_global_buffer_ptr + 8L;
 
-	ds_writed(TEXT_LTX_BUFFER, (Bit32u)((HugePt)g_renderbuf_ptr + 65000L));
-	ds_writed(TEXT_LTX_INDEX, (Bit32u)F_PADD(ds_readd(TEXT_LTX_BUFFER), 30500));
+	g_text_ltx_buffer = (char*)(((HugePt)g_renderbuf_ptr) + 65000L);
+
+	ds_writed(TEXT_LTX_INDEX, (Bit32u)(((HugePt)g_text_ltx_buffer) + 30500L));
 	ds_writed(TX_INDEX, (Bit32u)((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 3360));
 	ds_writed(TX2_INDEX, (Bit32u)((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 3960));
 
