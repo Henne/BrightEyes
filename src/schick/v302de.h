@@ -1273,9 +1273,6 @@ extern Bit8u* tx2_index[];
 #define host_writews(p, d)	(*(Bit16s*)(p) = (d))
 #define host_writeds(p, d)	(*(Bit32s*)(p) = (d))
 
-/* TODO: ugly hack, BASM does not like 16bit immediate values with imul */
-#define calc_twodim_array_ptr(start, width, disp, off, dst) \
-asm { mov ax,disp; db 0x69,0xc0,0xc0,0x08; mov dx, [start + 2]; add ax, [start]; add ax, off; mov[dst + 2],dx; mov [dst],ax }
 struct bittest {
 	unsigned short bit0:1;
 	unsigned short bit1:1;

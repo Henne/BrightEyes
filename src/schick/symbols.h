@@ -1457,7 +1457,7 @@
 #define ICON                            (0xd2f7)    /* RealPt */
 #define PRINT_STRING_BUFFER             (0xd2fb)    /* RealPt */
 #define FRAMEBUF_PTR                    (0xd2ff)    /* RealPt */
-#define RENDERBUF_PTR                   (0xd303)    /* RealPt; to buffer of size 65000 */
+//#define RENDERBUF_PTR                   (0xd303)    /* RealPt; to buffer of size 65000 */
 // ?2
 #define GAMEINIT_FLAG                   (0xd309)    /* unsigned short; writeonly (1) */
 #define VIDEO_PAGE_BAK                  (0xd30b)    /* signed short */

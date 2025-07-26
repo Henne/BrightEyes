@@ -212,6 +212,11 @@ Bit16u diary_print_entry(Bit16u line)
 #if !defined(__BORLANDC__)
 	ds_writed(PIC_COPY_DST, (Bit32u)((g_renderbuf_ptr + startline * 2240) + 9600));
 #else
+#define RENDERBUF_PTR (0xd303)
+/* TODO: ugly hack, BASM does not like 16bit immediate values with imul */
+#define calc_twodim_array_ptr(start, width, disp, off, dst) \
+asm { mov ax,disp; db 0x69,0xc0,0xc0,0x08; mov dx, [start + 2]; add ax, [start]; add ax, off; mov[dst + 2],dx; mov [dst],ax }
+
 	/* TODO: ugly hack */
 	/*	this calculation of the address of
 		a two-dimensional array is done	here with inline assembly */
