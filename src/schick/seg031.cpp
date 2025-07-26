@@ -333,22 +333,18 @@ RealPt load_current_town_gossip(void)
 
 char* get_random_tavern_message(void)
 {
-	signed short randval;
-	char *ptr;
-
-	randval = random_schick(20) - 1;
-
-	ptr = (char*)host_readd((Bit8u*)ds_readd(TX_INDEX) + 4 * (randval + 147));
+	const signed short randval = random_schick(20) - 1;
+	char *ptr = get_tx(randval + 147);
 
 	if (!randval || randval == 19) {
 
-		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)(Bit8u*)(ptr), (char*)(Bit8u*)(load_current_town_gossip()));
+		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), ptr, (char*)load_current_town_gossip());
 
 		return (char*)ds_readd(TEXT_OUTPUT_BUF);
 
 	} else if (randval == 3) {
 
-		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)(Bit8u*)(ptr), get_ttx(ds_readbs(CURRENT_TOWN) + 235));
+		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), ptr, get_ttx(ds_readbs(CURRENT_TOWN) + 235));
 
 		return (char*)ds_readd(TEXT_OUTPUT_BUF);
 

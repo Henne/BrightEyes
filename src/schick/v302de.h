@@ -1110,9 +1110,8 @@ static inline char *get_ttx(unsigned short no) {
 	return (char*)g_text_ltx_index[no];
 }
 
-#define get_tx(no) get_tx_func(4*(no))
-static inline char *get_tx_func(unsigned short off) {
-	return (char*)host_readd((Bit8u*)ds_readd(TX_INDEX) + off);
+static inline char *get_tx(unsigned short no) {
+	return (char*)g_tx_index[no];
 }
 
 static inline signed char get_cb_val(const signed short x, const signed short y) {
@@ -1348,7 +1347,7 @@ struct bittest {
 #define get_itemuser() ((unsigned char*)g_itemuser)
 
 #define get_ttx(no) ((char*)(g_text_ltx_index[(no)]))
-#define get_tx(no) ((char*)(host_readd((Bit8u*)ds_readd(TX_INDEX) + 4 * (no))))
+#define get_tx(no) ((char*)(g_tx_index[(no)]))
 #define get_tx2(no) ((char*)(host_readd((Bit8u*)ds_readd(TX2_INDEX) + 4 * (no))))
 #define get_monname(no) ((char*)g_monnames_index[no])
 #define get_itemsdat(no) ((char*)((Bit8u*)ds_readd(ITEMSDAT) + 12 * (no)))

@@ -75,7 +75,7 @@ void load_tx(signed short index)
 
 	close(archive_file_handle);
 
-	split_textbuffer((char**)ds_readd(TX_INDEX), (char*)ds_readd(BUFFER7_PTR), archive_file_len);
+	split_textbuffer((char**)g_tx_index, (char*)ds_readd(BUFFER7_PTR), archive_file_len);
 
 	g_tx_file_index = index;
 }

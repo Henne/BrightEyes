@@ -252,7 +252,7 @@ void init_global_buffer(void)
 	g_text_ltx_buffer = (char*)(((HugePt)g_renderbuf_ptr) + 65000L);
 
 	g_text_ltx_index = (char**)(((HugePt)g_text_ltx_buffer) + 30500L);
-	ds_writed(TX_INDEX, (Bit32u)((Bit8u*)g_text_ltx_index + 3360));
+	g_tx_index = g_text_ltx_index + 3360;
 	ds_writed(TX2_INDEX, (Bit32u)((Bit8u*)g_text_ltx_index + 3960));
 
 	ds_writed(OBJECTS_NVF_BUF, (Bit32u)(((HugePt)g_text_ltx_index) + 4760L));

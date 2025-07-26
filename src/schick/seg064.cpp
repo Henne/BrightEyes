@@ -42,8 +42,7 @@ RealPt get_ship_name(signed char passage_type, signed short nr_ships_created)
 
 		/* check if there is already a ship with the same name */
 		for (i = 0; i < nr_ships_created; i++) {
-			if (ds_readd(HARBOR_OPTIONS + i * SIZEOF_HARBOR_OPTION + HARBOR_OPTION_SHIP_NAME_PTR)
-				== host_readd((Bit8u*)ds_readd(TX_INDEX) + name * 4)) {
+			if ((char*)ds_readd(HARBOR_OPTIONS + i * SIZEOF_HARBOR_OPTION + HARBOR_OPTION_SHIP_NAME_PTR) == get_tx(name)) {
 				done = 0;
 				break;
 			}
@@ -51,7 +50,7 @@ RealPt get_ship_name(signed char passage_type, signed short nr_ships_created)
 
 	} while (!done);
 
-	return (RealPt)host_readd((Bit8u*)ds_readd(TX_INDEX) + name * 4);
+	return (RealPt)get_tx(name);
 }
 
 /**
@@ -99,8 +98,7 @@ unsigned short prepare_passages(void)
 			 * (which has been avoided in the original random assignment code). But this is a rare event and not be a big issue anyway.
 			 */
 			ds_writed(HARBOR_OPTIONS + prepared * SIZEOF_HARBOR_OPTION + HARBOR_OPTION_SHIP_NAME_PTR,
-				(Bit32u)host_readd((Bit8u*)ds_readd(TX_INDEX) + 4 * (host_readb((Bit8u*)(ent) + SEA_ROUTE_PASSAGE_SHIP_TYPE) * 10 + (host_readb((Bit8u*)(ent) + SEA_ROUTE_PASSAGE_PRICE_MOD)) % 10 + 0x2a))
-			);
+				(Bit32u)get_tx(host_readb((Bit8u*)(ent) + SEA_ROUTE_PASSAGE_SHIP_TYPE) * 10 + (host_readb((Bit8u*)(ent) + SEA_ROUTE_PASSAGE_PRICE_MOD)) % 10 + 0x2a));
 #endif
 
 			ds_writeb((HARBOR_OPTIONS + HARBOR_OPTION_DESTINATION) + prepared * SIZEOF_HARBOR_OPTION,
@@ -131,8 +129,7 @@ unsigned short prepare_passages(void)
 					(Bit32u)get_ship_name(host_readb((Bit8u*)(ent) + SEA_ROUTE_PASSAGE_SHIP_TYPE), prepared));
 #else
 				ds_writed(HARBOR_OPTIONS + prepared * SIZEOF_HARBOR_OPTION + HARBOR_OPTION_SHIP_NAME_PTR,
-					(Bit32u)host_readd((Bit8u*)ds_readd(TX_INDEX) + 4 * (host_readb((Bit8u*)(ent) + SEA_ROUTE_PASSAGE_SHIP_TYPE) * 10 + (host_readb((Bit8u*)(ent) + SEA_ROUTE_PASSAGE_PRICE_MOD)) % 10 + 0x2a))
-				);
+					(Bit32u)get_tx(host_readb((Bit8u*)(ent) + SEA_ROUTE_PASSAGE_SHIP_TYPE) * 10 + (host_readb((Bit8u*)(ent) + SEA_ROUTE_PASSAGE_PRICE_MOD)) % 10 + 0x2a));
 #endif
 
 				ds_writeb((HARBOR_OPTIONS + HARBOR_OPTION_DESTINATION) + prepared * SIZEOF_HARBOR_OPTION ,
