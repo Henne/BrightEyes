@@ -1101,9 +1101,8 @@ static inline char *get_monname(const int no)
 	}
 }
 
-#define get_tx2(no) get_tx2_func(4*(no))
-static inline char *get_tx2_func(unsigned short off) {
-	return (char*)host_readd((Bit8u*)ds_readd(TX2_INDEX) + off);
+static inline char *get_tx2(unsigned short no) {
+	return (char*)g_tx2_index[no];
 }
 
 static inline char *get_ttx(unsigned short no) {
@@ -1251,9 +1250,6 @@ static inline char* get_itemname(unsigned short item)
 #define ds_writeb_z(addr, val) (ds_writeb(addr, val))
 #endif
 
-extern Bit8u* tx_index[];
-extern Bit8u* tx2_index[];
-
 #define host_readb(p) (*(Bit8u*)(p))
 #define host_readw(p) (*(Bit16u*)(p))
 #define host_readd(p) (*(Bit32u*)(p))
@@ -1348,7 +1344,7 @@ struct bittest {
 
 #define get_ttx(no) ((char*)(g_text_ltx_index[(no)]))
 #define get_tx(no) ((char*)(g_tx_index[(no)]))
-#define get_tx2(no) ((char*)(host_readd((Bit8u*)ds_readd(TX2_INDEX) + 4 * (no))))
+#define get_tx2(no) ((char*)(g_tx2_index[(no)]))
 #define get_monname(no) ((char*)g_monnames_index[no])
 #define get_itemsdat(no) ((char*)((Bit8u*)ds_readd(ITEMSDAT) + 12 * (no)))
 #define get_itemname(no) ((char*)(host_readd((Bit8u*)ds_readd(ITEMSNAME) + 4 * (no))))

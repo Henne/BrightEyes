@@ -614,7 +614,7 @@ void load_informer_tlk(signed short index)
 
 	close(fd);
 
-	split_textbuffer((char**)ds_readd(TX2_INDEX), (char*)ds_readd(BUFFER8_PTR), text_len);
+	split_textbuffer((char**)g_tx2_index, (char*)ds_readd(BUFFER8_PTR), text_len);
 
 	/* adjust the pointers to the layouts */
 	for (i = 0; i < partners; i++, ptr += 0x26) {

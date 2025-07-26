@@ -253,7 +253,7 @@ void init_global_buffer(void)
 
 	g_text_ltx_index = (char**)(((HugePt)g_text_ltx_buffer) + 30500L);
 	g_tx_index = g_text_ltx_index + 3360;
-	ds_writed(TX2_INDEX, (Bit32u)((Bit8u*)g_text_ltx_index + 3960));
+	g_tx2_index = g_text_ltx_index + 3960;
 
 	ds_writed(OBJECTS_NVF_BUF, (Bit32u)(((HugePt)g_text_ltx_index) + 4760L));
 	ds_writed(DTP2, (Bit32u)(F_PADD(ds_readd(OBJECTS_NVF_BUF), 3400)));
@@ -267,7 +267,6 @@ void init_global_buffer(void)
 
 	ds_writed(BUFFER9_PTR3, ds_writed(BUFFER9_PTR2, ds_readd(BUFFER9_PTR)));
 	ds_writed(ANI_UNKNOWN4, 0);
-
 }
 
 /* Borlandified and identical */

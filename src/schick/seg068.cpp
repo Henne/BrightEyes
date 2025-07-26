@@ -393,8 +393,7 @@ void THO_black_finger(void)
 /* static */
 void dramosch_says(char *msg)
 {
-	GUI_dialogbox((unsigned char*)ds_readd(DTP2),
-			(char*)(host_readd((Bit8u*)ds_readd(TX2_INDEX) + 0xc0)), msg, 0);
+	GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(48), msg, 0);
 }
 
 void THO_ugdalf(void)
@@ -417,14 +416,12 @@ void THO_ugdalf(void)
 
 		if (answer == 1) {
 
-			GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
-					get_tx2(27), 0);
+			GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, get_tx2(27), 0);
 
 		} else if (answer == 2) {
 
 			/* talk to DRAMOSCH */
-			GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
-					get_tx2(28), 0);
+			GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, get_tx2(28), 0);
 
 			load_in_head(14);
 
@@ -432,11 +429,8 @@ void THO_ugdalf(void)
 
 			do {
 				answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
-							(char*)(host_readd((Bit8u*)ds_readd(TX2_INDEX) + 0xc0)),
-
-							get_tx2(30), 2,
-							get_tx2(31),
-							get_tx2(32));
+							get_tx2(48), get_tx2(30), 2,
+							get_tx2(31), get_tx2(32));
 			} while (answer == -1);
 
 			if (answer == 1) {
@@ -487,8 +481,7 @@ void THO_ugdalf(void)
 
 		dramosch_says(get_tx2(37));
 
-		sprintf((char*)ds_readd(DTP2) + 0x400,
-			get_tx(random_schick(26) + 55));
+		sprintf((char*)ds_readd(DTP2) + 0x400, get_tx(random_schick(26) + 55));
 
 		dramosch_says((char*)ds_readd(DTP2) + 0x400);
 
