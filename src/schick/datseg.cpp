@@ -6377,7 +6377,7 @@ signed short g_video_mode_bak; // ds:0xd30d
 signed short g_video_page_bak; // ds:0xd30b
 unsigned short g_gameinit_flag; // ds:0xd309, writeonly (1)
 unsigned char g_unkn_082[2]; // ds:0xd307
-void *g_renderbuf_ptr; // ds:0xd303, to buffer of size 65000
+unsigned char *g_renderbuf_ptr; // ds:0xd303, to buffer of size 65000
 void *g_framebuf_ptr; // ds:0xd2ff
 void *g_print_string_buffer; // ds:0xd2fb
 void *g_icon; // ds:0xd2f7

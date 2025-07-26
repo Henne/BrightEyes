@@ -1275,7 +1275,7 @@ signed short do_fight(signed short fight_id)
 
 	refresh_colors();
 
-	ds_writed(GUI_BUFFER_UNKN, ds_readd(RENDERBUF_PTR));
+	ds_writed(GUI_BUFFER_UNKN, (Bit32u)g_renderbuf_ptr);
 
 	if (!ds_readb(SHOW_TRAVEL_MAP)) {
 		seg028_0555(ds_readbs(DUNGEON_INDEX) != DUNGEONS_NONE ? 0 : 1);

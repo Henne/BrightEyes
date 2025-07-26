@@ -197,7 +197,7 @@ signed short is_group_in_prison(signed short group_no)
 }
 
 /**
- * \brief   render the automap in RENDERBUF
+ * \brief   render the automap in g_renderbuf
  *
  * \param   x_off           x offset for vertical scroll
  */
@@ -215,7 +215,7 @@ void render_automap(signed short x_off)
 	ds_writew(PIC_COPY_Y2, 6);
 
 	/* set buffer to 0 */
-	memset((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 64000);
+	memset(g_renderbuf_ptr, 0, 64000);
 
 	for (y = 0; y < 16; y++) {
 		for (x = 0; x < 16; x++) {
@@ -340,7 +340,7 @@ void draw_automap_square(signed short x, signed short y, signed short color, sig
 	offset_y <<= 3;
 	offset_y *= 320;
 
-	p_img_tile = (Bit8u*)ds_readd(RENDERBUF_PTR) + offset_y + 8 * x + 0xca8;
+	p_img_tile = ((Bit8u*)g_renderbuf_ptr) + offset_y + 8 * x + 0xca8;
 
 	for (i = 0; i < 49; i++) {
 		tile[i] = (signed char)color;
@@ -413,7 +413,7 @@ void draw_automap_entrance(signed short x, signed short y, signed short dir)
 	offset_y <<= 3;
 	offset_y *= 320;
 
-	p_img_tile = (Bit8u*)ds_readd(RENDERBUF_PTR) + offset_y + 8 * x + 0xca8;
+	p_img_tile = ((Bit8u*)g_renderbuf_ptr) + offset_y + 8 * x + 0xca8;
 
 	if (!d) {
 		p_img_tile += 2;
@@ -455,7 +455,7 @@ void draw_automap_to_screen(void)
 	ds_writew((PIC_COPY_DS_RECT + 6), ds_readw(ANI_POSX) + 208);
 	ds_writew((PIC_COPY_DS_RECT + 4), ds_readw(ANI_POSY) + 135);
 
-	ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
 
 	ds_writew(PIC_COPY_X1, 0);
 	ds_writew(PIC_COPY_Y1, 0);

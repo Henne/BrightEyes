@@ -78,7 +78,7 @@ void FIG_draw_figures(void)
 	l2 = 118;
 
 	gfx_dst_bak = (Bit8u*)ds_readd(PIC_COPY_DST);
-	ds_writed(PIC_COPY_DST, ds_readd(RENDERBUF_PTR));
+	ds_writed(PIC_COPY_DST, (Bit32u)g_renderbuf_ptr);
 
 	/* backup a structure */
 	screen_mode = *((struct screen_rect*)(p_datseg + PIC_COPY_DS_RECT));
@@ -145,7 +145,7 @@ void FIG_set_gfx(void)
 	ds_writew(PIC_COPY_Y1, 0);
 	ds_writew(PIC_COPY_X2, 319);
 	ds_writew(PIC_COPY_Y2, 199);
-	ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
 	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
 	update_mouse_cursor();
 	do_pic_copy(0);
@@ -161,7 +161,7 @@ void FIG_call_draw_pic(void)
 
 void FIG_draw_pic(void)
 {
-	memcpy((void*)ds_readd(RENDERBUF_PTR),	(void*)ds_readd(BUFFER8_PTR), 64000);
+	memcpy((void*)g_renderbuf_ptr, (void*)ds_readd(BUFFER8_PTR), 64000);
 
 #if defined(__BORLANDC__)
 	g_always_one = 1;
@@ -496,12 +496,12 @@ void FIG_draw_char_pic(signed short loc, signed short hero_pos)
 	get_textcolor(&fg_bak, &bg_bak);
 	set_textcolor(0xff, 0);
 
-	ds_writed(PIC_COPY_DST, ds_readd(RENDERBUF_PTR));
-	ds_writed(PRINT_STRING_BUFFER, ds_readd(RENDERBUF_PTR));
+	ds_writed(PIC_COPY_DST, (Bit32u)g_renderbuf_ptr);
+	ds_writed(PRINT_STRING_BUFFER, (Bit32u)g_renderbuf_ptr);
 
 	if (loc == 0) {
 
-		do_border((Bit8u*)ds_readd(RENDERBUF_PTR), 1, 9, 34, 42, 29);
+		do_border(g_renderbuf_ptr, 1, 9, 34, 42, 29);
 		ds_writew(PIC_COPY_X1, 2);
 		ds_writew(PIC_COPY_Y1, 10);
 		ds_writew(PIC_COPY_X2, 33);
@@ -512,7 +512,7 @@ void FIG_draw_char_pic(signed short loc, signed short hero_pos)
 
 		draw_bar(1, 0, host_readw(hero + HERO_AE), host_readw(hero + HERO_AE_ORIG), 1);
 	} else {
-		do_border((Bit8u*)ds_readd(RENDERBUF_PTR), 1, 157, 34, 190, 29);
+		do_border(g_renderbuf_ptr, 1, 157, 34, 190, 29);
 		ds_writew(PIC_COPY_X1, 2);
 		ds_writew(PIC_COPY_Y1, 158);
 		ds_writew(PIC_COPY_X2, 33);
@@ -565,11 +565,11 @@ void FIG_draw_enemy_pic(signed short loc, signed short id)
 	set_textcolor(0xff, 0);
 
 	/* set gfx address */
-	ds_writed(PIC_COPY_DST, ds_readd(RENDERBUF_PTR));
-	ds_writed(PRINT_STRING_BUFFER, ds_readd(RENDERBUF_PTR));
+	ds_writed(PIC_COPY_DST, (Bit32u)g_renderbuf_ptr);
+	ds_writed(PRINT_STRING_BUFFER, (Bit32u)g_renderbuf_ptr);
 
 	if (loc == 0) {
-		do_border((Bit8u*)ds_readd(RENDERBUF_PTR), 1, 9, 34, 50, 0x1d);
+		do_border(g_renderbuf_ptr, 1, 9, 34, 50, 0x1d);
 		ds_writew(PIC_COPY_X1, 2);
 		ds_writew(PIC_COPY_Y1, 10);
 		ds_writew(PIC_COPY_X2, 33);
@@ -578,7 +578,7 @@ void FIG_draw_enemy_pic(signed short loc, signed short id)
 		do_pic_copy(0);
 		GUI_print_string((GUI_name_singular(get_monname(host_readbs(p_enemy)))), 1, 1);
 	} else {
-		do_border((Bit8u*)ds_readd(RENDERBUF_PTR), 1, 149, 34, 190, 0x1d);
+		do_border(g_renderbuf_ptr, 1, 149, 34, 190, 0x1d);
 		ds_writew(PIC_COPY_X1, 2);
 		ds_writew(PIC_COPY_Y1, 150);
 		ds_writew(PIC_COPY_X2, 33);

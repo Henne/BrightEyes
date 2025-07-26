@@ -201,7 +201,7 @@ unsigned short fight_printer(void)
 
 			gfx_pos_bak = (Bit8u*)ds_readd(PRINT_STRING_BUFFER);
 
-			ds_writed(PRINT_STRING_BUFFER, ds_readd(RENDERBUF_PTR));
+			ds_writed(PRINT_STRING_BUFFER, (Bit32u)g_renderbuf_ptr);
 			get_textcolor(&fg_bak, &bg_bak);
 
 			FIG_set_star_color((Bit8u*)ds_readd(FIG_STAR_GFX),
@@ -212,7 +212,7 @@ unsigned short fight_printer(void)
 			ds_writew(PIC_COPY_X2, 75);
 			ds_writew(PIC_COPY_Y2, 198);
 			ds_writed(PIC_COPY_SRC, ds_readd(FIG_STAR_GFX));
-			ds_writed(PIC_COPY_DST, ds_readd(RENDERBUF_PTR));
+			ds_writed(PIC_COPY_DST, (Bit32u)g_renderbuf_ptr);
 			gfx_dst_bak = (Bit8u*)ds_readd(PIC_COPY_DST);
 			do_pic_copy(2);
 
@@ -406,14 +406,14 @@ void draw_fight_screen(Bit16u val)
 
 		FIG_draw_figures();
 
-		memcpy((Bit8u*)ds_readd(BUFFER8_PTR), (Bit8u*)ds_readd(RENDERBUF_PTR), 64000);
+		memcpy((Bit8u*)ds_readd(BUFFER8_PTR), g_renderbuf_ptr, 64000);
 	}
 
 	while (flag != 0) {
 
 		set_delay_timer();
 
-		ds_writed(PIC_COPY_DST, ds_writed(PRINT_STRING_BUFFER, ds_readd(RENDERBUF_PTR)));
+		ds_writed(PIC_COPY_DST, ds_writed(PRINT_STRING_BUFFER, (Bit32u)g_renderbuf_ptr));
 
 
 		for (list_i = (Bit8u*)ds_readd(FIG_LIST_HEAD); list_i; list_i = (Bit8u*)host_readd(list_i + FIGHTER_NEXT)) {
@@ -953,14 +953,14 @@ void draw_fight_screen(Bit16u val)
 		ds_writew(PIC_COPY_X2, 319);
 		ds_writew(PIC_COPY_Y2, 199);
 
-		ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+		ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
 		ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
 
 		fight_delay();
 
 		do_pic_copy(0);
 
-		ds_writed(PIC_COPY_DST, ds_readd(RENDERBUF_PTR));
+		ds_writed(PIC_COPY_DST, (Bit32u)g_renderbuf_ptr);
 	}
 
 	for (list_i = (Bit8u*)ds_readd(FIG_LIST_HEAD); list_i; list_i = (Bit8u*)host_readd(list_i + FIGHTER_NEXT)) {
@@ -980,7 +980,7 @@ void draw_fight_screen(Bit16u val)
 		ds_writew(PIC_COPY_X2, 319);
 		ds_writew(PIC_COPY_Y2, 199);
 
-		ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+		ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
 		ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
 
 		do_pic_copy(0);
@@ -1001,7 +1001,7 @@ to the DOSBox-CPU and may run the timer.
 				ds_writew(PIC_COPY_X2, 319);
 				ds_writew(PIC_COPY_Y2, 199);
 
-				ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+				ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
 				ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
 
 				do_pic_copy(0);

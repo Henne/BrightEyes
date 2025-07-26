@@ -372,13 +372,13 @@ void show_treasure_map(void)
 			ds_writew(PIC_COPY_Y1, 0);
 			ds_writew(PIC_COPY_X2, 319);
 			ds_writew(PIC_COPY_Y2, 199);
-			ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+			ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
 			ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
 
 			update_mouse_cursor();
 			wait_for_vsync();
 
-			set_palette((Bit8u*)ds_readd(RENDERBUF_PTR) + 64000 + 2, 0, 0x20);
+			set_palette(g_renderbuf_ptr + 64000 + 2, 0, 0x20);
 
 			do_pic_copy(0);
 
@@ -443,7 +443,7 @@ signed short game_options(void)
 	ds_writew(PIC_COPY_X2, 319);
 	ds_writew(PIC_COPY_Y2, 61);
 	ds_writed(PIC_COPY_SRC, ds_readd(BUFFER9_PTR));
-	ds_writed(PIC_COPY_DST, (Bit32u)((Bit8u*)ds_readd(RENDERBUF_PTR) + 9600));
+	ds_writed(PIC_COPY_DST, (Bit32u)(g_renderbuf_ptr + 9600));
 	do_pic_copy(2);
 
 	memset((Bit8u*)ds_readd(BUFFER9_PTR), 0, 28000);
@@ -461,7 +461,7 @@ signed short game_options(void)
 		ds_writew(PIC_COPY_X2, 319);
 		ds_writew(PIC_COPY_Y2, 86);
 		ds_writed(PIC_COPY_SRC, ds_readd(BUFFER9_PTR));
-		ds_writed(PIC_COPY_DST, (Bit32u)((Bit8u*)ds_readd(RENDERBUF_PTR) + 22400));
+		ds_writed(PIC_COPY_DST, (Bit32u)(g_renderbuf_ptr + 22400));
 		do_pic_copy(2);
 	}
 
@@ -480,13 +480,13 @@ signed short game_options(void)
 	ds_writew(PIC_COPY_Y1, 0);
 	ds_writew(PIC_COPY_X2, 319);
 	ds_writew(PIC_COPY_Y2, 199);
-	ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
 	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
 
 	update_mouse_cursor();
 	wait_for_vsync();
 
-	set_palette((Bit8u*)ds_readd(RENDERBUF_PTR) + 64002, 0, 32);
+	set_palette(g_renderbuf_ptr + 64002, 0, 32);
 
 	do_pic_copy(0);
 	refresh_screen_size();
@@ -585,7 +585,7 @@ signed short game_options(void)
 
 	} while (!done);
 
-	ds_writed(GUI_BUFFER_UNKN, ds_readd(RENDERBUF_PTR));
+	ds_writed(GUI_BUFFER_UNKN, (Bit32u)g_renderbuf_ptr);
 
 	ds_writews(FIG_FIGURE1, ds_writews(FIG_FIGURE2, ds_writews(CURRENT_ANI, ds_writebs(PP20_INDEX, 0xff))));
 	ds_writew(REQUEST_REFRESH, 1);
@@ -620,7 +620,7 @@ void draw_icon(signed short id, signed short x, signed short y)
 	ds_writew(PIC_COPY_Y1, y);
 	ds_writew(PIC_COPY_X2, x + 23);
 	ds_writew(PIC_COPY_Y2, y + 23);
-	ds_writed(PIC_COPY_DST, ds_readd(RENDERBUF_PTR));
+	ds_writed(PIC_COPY_DST, (Bit32u)g_renderbuf_ptr);
 	do_pic_copy(2);
 
 	ds_writed(PIC_COPY_DST, (Bit32u)ptr_bak);
@@ -744,12 +744,12 @@ void leave_dungeon(void)
 	DNG_lights();
 	ptr = (unsigned char*)ds_readd(TEXT_OUTPUT_BUF);
 
-	memset((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 0xc0);
+	memset(g_renderbuf_ptr, 0, 0xc0);
 
 	for (i = 0; i < 64; i++) {
 
-		pal_fade(ptr, (Bit8u*)ds_readd(RENDERBUF_PTR));
-		pal_fade(ptr + 0x60, (Bit8u*)ds_readd(RENDERBUF_PTR) + 0x60);
+		pal_fade(ptr, g_renderbuf_ptr);
+		pal_fade(ptr + 0x60, g_renderbuf_ptr + 0x60);
 		wait_for_vsync();
 		set_palette(ptr, 0x80, 0x40);
 	}
@@ -761,20 +761,20 @@ void leave_dungeon(void)
 	ds_writebs(CITY_AREA_LOADED, -1);
 	ds_writeb(FADING_STATE, ds_writew(REQUEST_REFRESH, 1));
 
-	do_fill_rect((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 0, 319, 199, 0);
+	do_fill_rect(g_renderbuf_ptr, 0, 0, 319, 199, 0);
 
 	ds_writew(PIC_COPY_X1, 0);
 	ds_writew(PIC_COPY_Y1, 0);
 	ds_writew(PIC_COPY_X2, 240);
 	ds_writew(PIC_COPY_Y2, 136);
-	ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
 
 	update_mouse_cursor();
 
 	do_pic_copy(1);
 	refresh_screen_size();
 	wait_for_vsync();
-	set_palette((Bit8u*)ds_readd(RENDERBUF_PTR), 0 , 0x20);
+	set_palette(g_renderbuf_ptr, 0 , 0x20);
 
 	/* disable the deathtrap */
 	ds_writew(DEATHTRAP, 0);
@@ -819,19 +819,19 @@ void fade_into(void)
 	Bit8u *ptr;
 	signed short i;
 
-	ptr = (Bit8u*)ds_readd(RENDERBUF_PTR) + 0xfa00;
+	ptr = g_renderbuf_ptr + 0xfa00;
 
-	memset((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 0xc0);
+	memset(g_renderbuf_ptr, 0, 0xc0);
 
 	wait_for_vsync();
 
-	set_palette((Bit8u*)ds_readd(RENDERBUF_PTR), 0x80, 0x40);
+	set_palette(g_renderbuf_ptr, 0x80, 0x40);
 
 	for (i = 0; i < 0x20; i++) {
 
-		pal_fade(ptr, (Bit8u*)ds_readd(RENDERBUF_PTR));
+		pal_fade(ptr, g_renderbuf_ptr);
 
-		pal_fade(ptr, (Bit8u*)ds_readd(RENDERBUF_PTR));
+		pal_fade(ptr, g_renderbuf_ptr);
 
 		wait_for_vsync();
 
@@ -843,7 +843,7 @@ void fade_into(void)
 
 void copy_palette(void)
 {
-	memcpy((Bit8u*)ds_readd(RENDERBUF_PTR) + 0xfa00, (Bit8u*)ds_readd(ANI_PALETTE), 0x60);
+	memcpy(g_renderbuf_ptr + 0xfa00, (Bit8u*)ds_readd(ANI_PALETTE), 0x60);
 	ds_writeb(FADING_STATE, 2);
 }
 

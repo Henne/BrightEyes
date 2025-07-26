@@ -60,9 +60,9 @@ signed short do_travel_mode(void)
 		load_map();
 	}
 
-	memmove((void*)(Bit8u*)ds_readd(RENDERBUF_PTR), (void*)(Bit8u*)ds_readd(TRAVEL_MAP_PTR), 64000);
+	memmove((void*)g_renderbuf_ptr, (void*)(Bit8u*)ds_readd(TRAVEL_MAP_PTR), 64000);
 
-	map_effect((Bit8u*)ds_readd(RENDERBUF_PTR));
+	map_effect((Bit8u*)g_renderbuf_ptr);
 
 	wait_for_vsync();
 

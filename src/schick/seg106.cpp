@@ -793,7 +793,7 @@ void equip_belt_ani(void)
 
 	for (i = 0; i < 12; i++) {
 
-		nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
+		nvf.dst = g_renderbuf_ptr;
 		nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
 		nvf.no = i;
 		nvf.type = 3;
@@ -811,7 +811,7 @@ void equip_belt_ani(void)
 		ds_writew(PIC_COPY_Y1, 50);
 		ds_writew(PIC_COPY_X2, width + 159);
 		ds_writew(PIC_COPY_Y2, height + 49);
-		ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+		ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
 
 		wait_for_vsync();
 		wait_for_vsync();

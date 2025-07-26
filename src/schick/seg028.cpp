@@ -377,7 +377,7 @@ void unused_store(signed short no)
 	struct nvf_desc nvf;
 	signed short size;
 
-	nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR) + 30000;
+	nvf.dst = g_renderbuf_ptr + 30000;
 	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR3);
 	nvf.no = no;
 	nvf.type = 0;
@@ -398,7 +398,7 @@ void unused_store(signed short no)
 
 	size = width * height;
 	memmove((Bit8u*)((Bit8u*)ds_readd(EMS_FRAME_PTR) + ds_readws(EMS_UNUSED_OFFSET)),
-			(Bit8u*)((Bit8u*)ds_readd(RENDERBUF_PTR) + 0x7530),
+			(Bit8u*)(g_renderbuf_ptr + 0x7530),
 			size);
 
 	ptr = no * 5 + (Bit8u*)ds_readd(EMS_UNUSED_TAB);
@@ -442,11 +442,11 @@ void load_map(void)
 
 	/* open OBJECTS.NVF */
 	fd = load_archive_file(ARCHIVE_FILE_OBJECTS_NVF);
-	read_archive_file(fd, (Bit8u*)ds_readd(RENDERBUF_PTR), 2000);
+	read_archive_file(fd, g_renderbuf_ptr, 2000);
 	close(fd);
 
     /* load the grey border for the wallclock overlay */
-	nvf.src = (Bit8u*)ds_readd(RENDERBUF_PTR);
+	nvf.src = g_renderbuf_ptr;
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&fd;
 	nvf.height = (Bit8u*)&fd;
@@ -472,7 +472,7 @@ void load_map(void)
 		/* or read KARTE.DAT from file */
 		fd = load_archive_file(ARCHIVE_FILE_KARTE_DAT);
 
-		read_archive_file(fd, (Bit8u*)(ds_writed(TRAVEL_MAP_PTR, ds_readd(RENDERBUF_PTR))), 64098);
+		read_archive_file(fd, (Bit8u*)(ds_writed(TRAVEL_MAP_PTR, (Bit32u)g_renderbuf_ptr)), 64098);
 		close(fd);
 
 		if (g_ems_enabled != 0) {
@@ -486,7 +486,7 @@ void load_map(void)
 
 				/* TODO: update window */
 				memmove((void*)((Bit8u*)ds_readd(EMS_FRAME_PTR)),
-					(void*)((Bit8u*)ds_readd(RENDERBUF_PTR)), 320 * 200 + 98);
+					(void*)(g_renderbuf_ptr), 320 * 200 + 98);
 			}
 		}
 	}
@@ -556,12 +556,12 @@ void load_splashes(void)
 
 	/* read SPLASHES.DAT */
 	fd = load_archive_file(ARCHIVE_FILE_SPLASHES_DAT);
-	read_archive_file(fd, (Bit8u*)ds_readd(RENDERBUF_PTR), 3000);
+	read_archive_file(fd, g_renderbuf_ptr, 3000);
 	close(fd);
 
 	/* nvf.dst = splash_le = ds_readd() */
 	nvf.dst = (Bit8u*)(ds_writed(SPLASH_LE, ds_readd(SPLASH_BUFFER)));
-	nvf.src = (Bit8u*)ds_readd(RENDERBUF_PTR);
+	nvf.src = g_renderbuf_ptr;
 	nvf.no = 0;
 	nvf.type = 1;
 	nvf.width = (Bit8u*)&width;
@@ -570,7 +570,7 @@ void load_splashes(void)
 
 	/* nvf.dst = splash_ae = ds_readd() */
 	nvf.dst = (Bit8u*)(ds_writed(SPLASH_AE, (Bit32u)((Bit8u*)ds_readd(SPLASH_BUFFER) + fd)));
-	nvf.src = (Bit8u*)ds_readd(RENDERBUF_PTR);
+	nvf.src = g_renderbuf_ptr;
 	nvf.no = 1;
 	nvf.type = 1;
 	nvf.width = (Bit8u*)&width;
@@ -680,14 +680,13 @@ void load_fightbg(signed short index)
 	signed short fd;
 
 	fd = load_archive_file(index);
-	read_archive_file(fd, (Bit8u*)ds_readd(RENDERBUF_PTR), 30000);
-	decomp_pp20((Bit8u*)ds_readd(RENDERBUF_PTR),
-			(Bit8u*)ds_readd(BUFFER8_PTR),
+	read_archive_file(fd, g_renderbuf_ptr, 30000);
+	decomp_pp20(g_renderbuf_ptr, (Bit8u*)ds_readd(BUFFER8_PTR),
 #if !defined(__BORLANDC__)
-			(Bit8u*)ds_readd(RENDERBUF_PTR) + 4,
+			g_renderbuf_ptr + 4,
 #else
-			FP_OFF(ds_readd(RENDERBUF_PTR)) + 4,
-			FP_SEG(ds_readd(RENDERBUF_PTR)),
+			FP_OFF(g_renderbuf_ptr) + 4,
+			FP_SEG(g_renderbuf_ptr),
 #endif
 			get_readlength2(fd));
 	close(fd);

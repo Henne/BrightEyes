@@ -926,9 +926,9 @@ void copy_from_archive_to_temp(unsigned short index, char* fname)
 		handle2 = _creat(fname, 0);
 
 		/* copy it */
-		while ( (len = read_archive_file(handle1, (Bit8u*)ds_readd(RENDERBUF_PTR), 60000)) && (len != -1))
+		while ( (len = read_archive_file(handle1, g_renderbuf_ptr, 60000)) && (len != -1))
 		{
-			write(handle2, (Bit8u*)ds_readd(RENDERBUF_PTR), len);
+			write(handle2, g_renderbuf_ptr, len);
 		}
 
 		close(handle1);
@@ -949,9 +949,9 @@ void copy_file_to_temp(RealPt src_file, char* fname)
 		handle2 = _creat(fname, 0);
 
 		/* copy it */
-		while ( (len = _read(handle1, (Bit8u*)ds_readd(RENDERBUF_PTR), 60000)) && (len != -1))
+		while ( (len = _read(handle1, g_renderbuf_ptr, 60000)) && (len != -1))
 		{
-			write(handle2, (Bit8u*)ds_readd(RENDERBUF_PTR), len);
+			write(handle2, g_renderbuf_ptr, len);
 		}
 
 		close(handle1);

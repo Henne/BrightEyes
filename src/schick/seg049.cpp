@@ -513,7 +513,7 @@ void GRP_move_hero(signed short src_pos)
 		ds_writew(PIC_COPY_Y1, 157);
 		ds_writew(PIC_COPY_X2, ds_readw(HERO_PIC_POSX + 2 * src_pos) + 31);
 		ds_writew(PIC_COPY_Y2, 188);
-		ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+		ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
 
 		do_save_rect();
 
@@ -551,7 +551,7 @@ void GRP_move_hero(signed short src_pos)
 
 				do_save_rect();
 
-				ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+				ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
 
 				do_pic_copy(0);
 
@@ -593,7 +593,7 @@ void GRP_move_hero(signed short src_pos)
 					}
 				}
 
-				memcpy((Bit8u*)ds_readd(RENDERBUF_PTR), src, SIZEOF_HERO);
+				memcpy(g_renderbuf_ptr, src, SIZEOF_HERO);
 
 				src_guardstatus = ds_readbs(WILDCAMP_GUARDSTATUS + src_pos);
 				src_magicstatus = ds_readbs(WILDCAMP_MAGICSTATUS + src_pos);
@@ -607,7 +607,7 @@ void GRP_move_hero(signed short src_pos)
 				ds_writeb(WILDCAMP_REPLSTATUS + src_pos, ds_readbs(WILDCAMP_REPLSTATUS + dst_pos));
 				ds_writeb(WILDCAMP_HERBSTATUS + src_pos, ds_readbs(WILDCAMP_HERBSTATUS + dst_pos));
 
-				memcpy(dst, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
+				memcpy(dst, g_renderbuf_ptr, SIZEOF_HERO);
 
 				ds_writeb(WILDCAMP_GUARDSTATUS + dst_pos, src_guardstatus);
 				ds_writeb(WILDCAMP_MAGICSTATUS + dst_pos, src_magicstatus);

@@ -81,12 +81,12 @@ void diary_show(void)
 	ds_writew(PIC_COPY_Y1, 0);
 	ds_writew(PIC_COPY_X2, 319);
 	ds_writew(PIC_COPY_Y2, 199);
-	ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
 	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
 
 	update_mouse_cursor();
 
-	set_palette((Bit8u*)ds_readd(RENDERBUF_PTR) + 0xfa02, 0, 0x20);
+	set_palette(g_renderbuf_ptr + 0xfa02, 0, 0x20);
 
 	do_pic_copy(0);
 
@@ -210,13 +210,11 @@ Bit16u diary_print_entry(Bit16u line)
 	ds_writew(PIC_COPY_Y2, line * 7);
 	ds_writed(PIC_COPY_SRC, ds_readd(BUFFER9_PTR));
 #if !defined(__BORLANDC__)
-	ds_writed(PIC_COPY_DST,
-		(Bit32u)(((Bit8u*)ds_readd(RENDERBUF_PTR) + startline * 2240) + 9600));
+	ds_writed(PIC_COPY_DST, (Bit32u)((g_renderbuf_ptr + startline * 2240) + 9600));
 #else
 	/* TODO: ugly hack */
 	/*	this calculation of the address of
-		a twodimiensional array is done
-		here with inline assembly */
+		a two-dimensional array is done	here with inline assembly */
 	calc_twodim_array_ptr(RENDERBUF_PTR, 0x8c0, startline, 9600, PIC_COPY_DST);
 #endif
 	do_pic_copy(2);

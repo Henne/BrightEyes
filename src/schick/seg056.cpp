@@ -199,7 +199,7 @@ void buy_screen(void)
 			do_v_line((Bit8u*)ds_readd(FRAMEBUF_PTR), 87, 35, 131, -1);
 			do_v_line((Bit8u*)ds_readd(FRAMEBUF_PTR), 152, 35, 131, -1);
 
-			nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
+			nvf.dst = g_renderbuf_ptr;
 			nvf.src = (Bit8u*)ds_readd(BUFFER10_PTR);
 			nvf.type = 0;
 			nvf.width =  (Bit8u*)&width;
@@ -217,7 +217,7 @@ void buy_screen(void)
 						ds_writew(PIC_COPY_Y1, array5.a[l_di]);
 						ds_writew(PIC_COPY_X2, array3.a[items_x] + 15);
 						ds_writew(PIC_COPY_Y2, array5.a[l_di] + 15);
-						ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+						ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
 
 						nvf.no = host_readws(get_itemsdat(j));
 

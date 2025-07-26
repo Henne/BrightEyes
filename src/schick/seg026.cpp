@@ -314,8 +314,8 @@ signed short load_game_state(void)
 				/* TODO: should be O_BINARY | O_WRONLY */
 				handle = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
 
-				_read(handle_gs, (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * i));
-				write(handle,   (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * i));
+				_read(handle_gs, g_renderbuf_ptr, (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * i));
+				write(handle,   g_renderbuf_ptr, (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * i));
 				close(handle);
 			}
 		}
@@ -326,7 +326,7 @@ signed short load_game_state(void)
 			memset(hero_i, 0, SIZEOF_HERO);
 		}
 
-		hero_i = (Bit8u*)ds_readd(RENDERBUF_PTR);
+		hero_i = g_renderbuf_ptr;
 
 		do {
 			l3 = _read(handle_gs, (Bit8u*)hero_i, SIZEOF_HERO);
@@ -369,12 +369,12 @@ signed short load_game_state(void)
 
 			if ((handle_gs = open((char*)ds_readd(TEXT_OUTPUT_BUF), O_BINARY | O_RDWR)) == -1) {
 				handle = open((char*)(&blk) + 30, O_BINARY | O_RDWR);
-				_read(handle, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
+				_read(handle, g_renderbuf_ptr, SIZEOF_HERO);
 				close(handle);
 
 				/* TODO: should be O_BINARY | O_WRONLY */
 				handle_gs = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
-				write(handle_gs, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
+				write(handle_gs, g_renderbuf_ptr, SIZEOF_HERO);
 			} else {
 				/* Yes, indeed! */
 			}
@@ -628,10 +628,10 @@ signed short save_game_state(void)
 
 				handle = load_archive_file(tw_bak + 0x8000);
 				host_writed((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * tw_bak, get_readlength2(handle));
-				_read(handle, (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * tw_bak));
+				_read(handle, g_renderbuf_ptr, (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * tw_bak));
 				close(handle);
 
-				len = (Bit16u)write(l_di, (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * tw_bak));
+				len = (Bit16u)write(l_di, g_renderbuf_ptr, (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * tw_bak));
 				filepos += len;
 
 				if ((Bit16u)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * tw_bak) != len) {
@@ -665,11 +665,11 @@ signed short save_game_state(void)
 
 			/* read the CHR file from temp */
 			handle = open((char*)ds_readd(TEXT_OUTPUT_BUF), O_BINARY | O_RDWR);
-			_read(handle, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
+			_read(handle, g_renderbuf_ptr, SIZEOF_HERO);
 			close(handle);
 
 			/* append it */
-			len = write(l_di, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
+			len = write(l_di, g_renderbuf_ptr, SIZEOF_HERO);
 
 			if (len != SIZEOF_HERO) {
 				GUI_output(get_ttx(348));
@@ -797,7 +797,7 @@ signed short copy_chr_names(Bit8u *ptr, signed short temple_id)
 	Bit8u *buf;
 	struct ffblk blk;
 
-	buf = (Bit8u*)ds_readd(RENDERBUF_PTR) + 60000;
+	buf = g_renderbuf_ptr + 60000;
 	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 		(char*)ds_readd(STR_TEMP_XX_PTR2),
 		(char*)p_datseg + ALL_CHR_WILDCARD3);

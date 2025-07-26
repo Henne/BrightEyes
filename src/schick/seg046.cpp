@@ -202,7 +202,7 @@ void status_show(Bit16u index)
 
 	ds_writed(ACTION_TABLE_PRIMARY, (Bit32u)(p_datseg + ACTION_TABLE_STATUS));
 	ds_writed(ACTION_TABLE_SECONDARY, 0);
-	ds_writed(PRINT_STRING_BUFFER, ds_readd(RENDERBUF_PTR));
+	ds_writed(PRINT_STRING_BUFFER, (Bit32u)g_renderbuf_ptr);
 	set_textcolor(0, 2);
 
 	/* load and draw the background */
@@ -213,7 +213,7 @@ void status_show(Bit16u index)
 	ds_writew(PIC_COPY_Y1, 9);
 	ds_writew(PIC_COPY_X2, 47);
 	ds_writew(PIC_COPY_Y2, 40);
-	ds_writed(PIC_COPY_DST, ds_readd(RENDERBUF_PTR));
+	ds_writed(PIC_COPY_DST, (Bit32u)g_renderbuf_ptr);
 	/* the source must be passed here as RealPt */
 	ds_writed(PIC_COPY_SRC, (Bit32u)(hero + HERO_PORTRAIT));
 	do_pic_copy(0);
@@ -245,7 +245,7 @@ void status_show(Bit16u index)
 			ds_writew(PIC_COPY_Y1, ds_readw(INVSLOT_ICONXY_TABLE + i * 4 + 2));
 			ds_writew(PIC_COPY_X2, ds_readw(INVSLOT_ICONXY_TABLE + i * 4) + 15);
 			ds_writew(PIC_COPY_Y2, ds_readw(INVSLOT_ICONXY_TABLE + i * 4 + 2) + 15);
-			ds_writed(PIC_COPY_DST, ds_readd(RENDERBUF_PTR));
+			ds_writed(PIC_COPY_DST, (Bit32u)g_renderbuf_ptr);
 			ds_writed(PIC_COPY_SRC, ds_readd(ICON));
 			do_pic_copy(0);
 
@@ -275,7 +275,7 @@ void status_show(Bit16u index)
 		GUI_print_string((char*)ds_readd(DTP2), 59, 179);
 
 	} else {
-		do_fill_rect((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 50, 319, 191, 2);
+		do_fill_rect(g_renderbuf_ptr, 0, 50, 319, 191, 2);
 	}
 
 	ds_writew(TXT_TABPOS1, 0x5f);
@@ -731,7 +731,7 @@ void status_show(Bit16u index)
 	ds_writew(PIC_COPY_Y1, 0);
 	ds_writew(PIC_COPY_X2, 319);
 	ds_writew(PIC_COPY_Y2, 199);
-	ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
 	do_pic_copy(0);
 
 	ds_writew(UPDATE_STATUSLINE, 1);

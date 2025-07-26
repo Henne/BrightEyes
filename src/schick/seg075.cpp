@@ -42,7 +42,7 @@ void DNG_floor_ceil(void)
 	signed short width, height;
 
 	/* Load ceiling */
-	nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
+	nvf.dst = g_renderbuf_ptr;
 	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR3);
 	nvf.no = 0;
 	nvf.type = (!ds_readbs(DNG_FLOOR_TEX)) ? 3 : 5;
@@ -52,7 +52,7 @@ void DNG_floor_ceil(void)
 
 
 	/* Load ceiling */
-	nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR) + 0x4030;
+	nvf.dst = ((Bit8u*)g_renderbuf_ptr) + 0x4030;
 	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR3);
 	nvf.no = (!(ds_readbs(DIRECTION)&1)) ? 1 : 2;
 	nvf.type = (!ds_readbs(DNG_FLOOR_TEX)) ? 3 : 5;
@@ -373,7 +373,7 @@ void DNG_draw_walls(signed short a1, signed short a2, signed short a3)
 		}
 	}
 
-	nvf.dst = dst_ptr = (Bit8u*)ds_readd(RENDERBUF_PTR) + 0x7530;
+	nvf.dst = dst_ptr = ((Bit8u*)g_renderbuf_ptr) + 0x7530;
 	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR3);
 	nvf.no = a3;
 	nvf.width = (Bit8u*)&width;
@@ -412,7 +412,7 @@ void DNG_draw_walls(signed short a1, signed short a2, signed short a3)
 			height2 = 135 - a2;
 		}
 
-		ptr2 = (Bit8u*)ds_readd(RENDERBUF_PTR) + 208 * a2 + a1;
+		ptr2 = ((Bit8u*)g_renderbuf_ptr) + 208 * a2 + a1;
 
 		if (!flag) {
 			copy_solid(ptr2, dst_ptr, width2, height2, 208, width, 128);
@@ -497,7 +497,7 @@ void DNG_stub5(void)
 	ds_writew(PIC_COPY_Y1, ds_readw(ANI_POSY));
 	ds_writew(PIC_COPY_X2, ds_readw(ANI_POSX) + 207);
 	ds_writew(PIC_COPY_Y2, ds_readw(ANI_POSY) + 134);
-	ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
 
 	update_mouse_cursor();
 
@@ -706,7 +706,7 @@ void DNG_open_door(void)
 	DNG_stub3();
 	DNG_stub4();
 
-	memmove((Bit8u*)ds_readd(RENDERBUF_PTR) + 0x7530, (Bit8u*)ds_readd(RENDERBUF_PTR), 0x6db0);
+	memmove(((Bit8u*)g_renderbuf_ptr) + 0x7530, g_renderbuf_ptr, 0x6db0);
 
 	if (!ds_readb(DUNGEON_GFX_STYLE)) {
 		x = 45;
@@ -732,7 +732,7 @@ void DNG_open_door(void)
 
 		DNG_stub5();
 
-		memmove((Bit8u*)ds_readd(RENDERBUF_PTR), (Bit8u*)ds_readd(RENDERBUF_PTR) + 0x7530, 0x6db0);
+		memmove(g_renderbuf_ptr, ((Bit8u*)g_renderbuf_ptr) + 0x7530, 0x6db0);
 	}
 
 	refresh_screen_size();
@@ -751,7 +751,7 @@ void DNG_close_door(void)
 	DNG_stub3();
 	DNG_stub4();
 
-	memmove((Bit8u*)ds_readd(RENDERBUF_PTR) + 0x7530, (Bit8u*)ds_readd(RENDERBUF_PTR), 0x6db0);
+	memmove(((Bit8u*)g_renderbuf_ptr) + 0x7530, g_renderbuf_ptr, 0x6db0);
 
 	if (!ds_readb(DUNGEON_GFX_STYLE)) { /* dungeon graphics: wood */
 		x = 45;
@@ -777,7 +777,7 @@ void DNG_close_door(void)
 
 		DNG_stub5();
 
-		memmove((Bit8u*)ds_readd(RENDERBUF_PTR), (Bit8u*)ds_readd(RENDERBUF_PTR) + 0x7530, 0x6db0);
+		memmove(g_renderbuf_ptr, ((Bit8u*)g_renderbuf_ptr) + 0x7530, 0x6db0);
 	}
 
 	refresh_screen_size();
@@ -1057,15 +1057,15 @@ mark2:			   goto mark1;
 
 	if (dungeon_id == DUNGEONS_ZWINGFESTE) {
 
-		ptr = (Bit8u*)ds_readd(RENDERBUF_PTR) + 0x1f4;
-		memset((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 0x120);
-		memcpy((Bit8u*)ds_readd(RENDERBUF_PTR) + 0x1f4, p_datseg + PALETTE_FLOOR, 0x120);
+		ptr = ((Bit8u*)g_renderbuf_ptr) + 0x1f4;
+		memset(g_renderbuf_ptr, 0, 0x120);
+		memcpy(((Bit8u*)g_renderbuf_ptr) + 0x1f4, p_datseg + PALETTE_FLOOR, 0x120);
 
 		for (i = 0; i < 0x40; i++) {
 
-			pal_fade(ptr, (Bit8u*)ds_readd(RENDERBUF_PTR));
-			pal_fade(ptr + 0x60, (Bit8u*)ds_readd(RENDERBUF_PTR) + 0x60);
-			pal_fade(ptr + 0xc0, (Bit8u*)ds_readd(RENDERBUF_PTR) + 0xc0);
+			pal_fade(ptr, ((Bit8u*)g_renderbuf_ptr));
+			pal_fade(ptr + 0x60, ((Bit8u*)g_renderbuf_ptr) + 0x60);
+			pal_fade(ptr + 0xc0, ((Bit8u*)g_renderbuf_ptr) + 0xc0);
 
 			wait_for_vsync();
 
@@ -1073,12 +1073,12 @@ mark2:			   goto mark1;
 			set_palette(ptr + 0x60, 0x80, 0x40);
 		}
 
-		do_fill_rect((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 0, 319, 199, 0);
+		do_fill_rect(((Bit8u*)g_renderbuf_ptr), 0, 0, 319, 199, 0);
 		ds_writew(PIC_COPY_X1, 0);
 		ds_writew(PIC_COPY_Y1, 0);
 		ds_writew(PIC_COPY_X2, 240);
 		ds_writew(PIC_COPY_Y2, 136);
-		ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+		ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
 		update_mouse_cursor();
 		do_pic_copy(1);
 		refresh_screen_size();

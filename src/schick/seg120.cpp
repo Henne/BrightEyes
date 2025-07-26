@@ -247,10 +247,9 @@ void rabies(RealPt hero, signed short hero_pos)
 void init_global_buffer(void)
 {
 	g_global_buffer_ptr = (HugePt)schick_alloc(g_buffersize);
+	g_renderbuf_ptr = g_global_buffer_ptr + 8L;
 
-	ds_writed(RENDERBUF_PTR, (Bit32u)(g_global_buffer_ptr + 8L));
-	ds_writed(TEXT_LTX_BUFFER, (Bit32u)F_PADD(ds_readd(RENDERBUF_PTR), 65000));
-
+	ds_writed(TEXT_LTX_BUFFER, (Bit32u)((HugePt)g_renderbuf_ptr + 65000L));
 	ds_writed(TEXT_LTX_INDEX, (Bit32u)F_PADD(ds_readd(TEXT_LTX_BUFFER), 30500));
 	ds_writed(TX_INDEX, (Bit32u)((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 3360));
 	ds_writed(TX2_INDEX, (Bit32u)((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 3960));
@@ -439,7 +438,7 @@ void init_game_state(void)
 	ds_writew(CURRENT_ANI, -1);
 	ds_writew(WALLCLOCK_UPDATE, 1);
 
-	ds_writed(GUI_BUFFER_UNKN, ds_readd(RENDERBUF_PTR));
+	ds_writed(GUI_BUFFER_UNKN, (Bit32u)g_renderbuf_ptr);
 	load_splashes();
 }
 
@@ -545,7 +544,7 @@ void prepare_dirs(void)
 		/* open CHR-file and copy it into TEMP-dir */
 		l_di = open(((char*)&blk) + 30, O_BINARY | O_RDWR);
 
-		_read(l_di, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
+		_read(l_di, g_renderbuf_ptr, SIZEOF_HERO);
 
 		close(l_di);
 
@@ -555,7 +554,7 @@ void prepare_dirs(void)
 
 		l_di = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
 
-		write(l_di, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
+		write(l_di, g_renderbuf_ptr, SIZEOF_HERO);
 
 		close(l_di);
 
@@ -676,7 +675,7 @@ void game_over_screen(void)
 	/* load SKULL.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_SKULL_NVF);
 
-	read_archive_file(handle, (Bit8u*)ds_readd(RENDERBUF_PTR), 64200);
+	read_archive_file(handle, g_renderbuf_ptr, 64200);
 
 	close(handle);
 
@@ -689,9 +688,9 @@ void game_over_screen(void)
 	set_palette(p_datseg + PALETTE_ALLBLACK2, 0x00, 0x20);
 	set_palette(p_datseg + PALETTE_ALLBLACK2, 0x20, 0x20);
 
-	memcpy((void*)((Bit8u*)ds_readd(FRAMEBUF_PTR)), (void*)((Bit8u*)ds_readd(RENDERBUF_PTR)), 320 * 200);
+	memcpy((void*)((Bit8u*)ds_readd(FRAMEBUF_PTR)), (void*)g_renderbuf_ptr, 320 * 200);
 
-	set_palette((Bit8u*)ds_readd(RENDERBUF_PTR) + 64002, 0x00, 0x40);
+	set_palette((Bit8u*)g_renderbuf_ptr + 64002L, 0x00, 0x40);
 
 	wait_for_keypress();
 

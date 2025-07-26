@@ -372,8 +372,8 @@ void do_harbor(void)
 				ds_writews(CURRENT_ANI, -1);
 				ds_writew(WALLCLOCK_UPDATE, 0);
 
-				memmove((Bit8u*)ds_readd(RENDERBUF_PTR), (Bit8u*)ds_readd(TRAVEL_MAP_PTR), 64000);
-				map_effect((Bit8u*)ds_readd(RENDERBUF_PTR));
+				memmove(g_renderbuf_ptr, (Bit8u*)ds_readd(TRAVEL_MAP_PTR), 64000);
+				map_effect(g_renderbuf_ptr);
 
 				wait_for_vsync();
 

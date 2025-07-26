@@ -347,7 +347,7 @@ void refresh_floor_and_sky(void)
 	signed short height;
 	struct nvf_desc nvf;
 
-	nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
+	nvf.dst = g_renderbuf_ptr;
 	nvf.src = (Bit8u*)ds_readd(TEX_SKY);
 	nvf.no = 0;
 	nvf.type = 3;
@@ -362,7 +362,7 @@ void refresh_floor_and_sky(void)
 	height = host_readws((Bit8u*)&height);
 #endif
 
-	nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR) + 208 * height;
+	nvf.dst = ((Bit8u*)g_renderbuf_ptr) + 208 * height;
 	nvf.src = (Bit8u*)ds_readd(TEX_FLOOR);
 	nvf.no = 0;
 	nvf.type = 3;
@@ -787,7 +787,7 @@ void load_city_texture(signed short v1, signed short v2, signed short nvf_no,
 
 	v4 -= 184;
 
-	nvf.dst = src = (Bit8u*)ds_readd(RENDERBUF_PTR) + 30000;
+	nvf.dst = src = ((Bit8u*)g_renderbuf_ptr) + 30000;
 
 	/*
 	 * the following line accesses memory outside of the
@@ -841,10 +841,9 @@ void load_city_texture(signed short v1, signed short v2, signed short nvf_no,
 			copy_height = 135 - v2;
 		}
 
-		dst = (Bit8u*)ds_readd(RENDERBUF_PTR) + v2 * 208 + v1;
+		dst = ((Bit8u*)g_renderbuf_ptr) + v2 * 208 + v1;
 
-		copy_solid(dst, src, copy_width, copy_height, 208, width,
-			v4 == 0 ? 0 : 128);
+		copy_solid(dst, src, copy_width, copy_height, 208, width, v4 == 0 ? 0 : 128);
 	}
 }
 
@@ -1131,7 +1130,7 @@ void city_fade_and_colors(void)
 	ds_writew(PIC_COPY_Y1, ds_readws(ANI_POSY));
 	ds_writew(PIC_COPY_X2, ds_readws(ANI_POSX) + 207);
 	ds_writew(PIC_COPY_Y2, ds_readws(ANI_POSY) + 134);
-	ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
 
 	ds_writeb(SPECIAL_SCREEN, 0);
 
@@ -1144,10 +1143,10 @@ void city_fade_and_colors(void)
 
 	if (ds_readb(FADING_STATE) != 0) {
 
-		dst = (Bit8u*)ds_readd(RENDERBUF_PTR) + 500;
-		pal_ptr = (Bit8u*)ds_readd(RENDERBUF_PTR);
+		dst = ((Bit8u*)g_renderbuf_ptr) + 500;
+		pal_ptr = g_renderbuf_ptr;
 
-		memset((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 0x120);
+		memset(g_renderbuf_ptr, 0, 0x120);
 		memcpy(dst, p_datseg + PALETTE_FLOOR, 0x120);
 
 		for (i = 0; i < 64; i += 2) {

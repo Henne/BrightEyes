@@ -242,7 +242,7 @@ void char_add(signed short temple_id)
 	Bit8u *ptr;
 	Bit8u *hero;
 
-	ptr = (Bit8u*)ds_readd(RENDERBUF_PTR) + 50000;
+	ptr = g_renderbuf_ptr + 50000;
 	l_di = copy_chr_names(ptr, temple_id);
 
 	if (ds_readbs(TOTAL_HERO_COUNTER) == 7 ||
@@ -356,7 +356,7 @@ signed short char_erase(void)
 	if (ds_readbs(RENDERBUF_IN_USE_FLAG)) {
 		ptr = (HugePt)ds_readd(BUFFER9_PTR) + 30000L;
 	} else {
-		ptr = (Bit8u*)ds_readd(RENDERBUF_PTR) + 50000;
+		ptr = g_renderbuf_ptr + 50000;
 	}
 
 	l_di = copy_chr_names(ptr, -1);

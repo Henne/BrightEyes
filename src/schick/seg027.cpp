@@ -50,7 +50,7 @@ void load_pp20(signed short index)
 		if (ds_readd(PP20_BUFFERS + bi * 4)) {
 
 			/* already buffered, just decomp */
-			decomp_pp20((Bit8u*)(ds_readd(PP20_BUFFERS + bi * 4)), (Bit8u*)ds_readd(RENDERBUF_PTR),
+			decomp_pp20((Bit8u*)(ds_readd(PP20_BUFFERS + bi * 4)), g_renderbuf_ptr,
 #if !defined(__BORLANDC__)
 				(Bit8u*)(ds_readd(PP20_BUFFERS) + 4 + bi) + 4,
 #else
@@ -74,7 +74,7 @@ void load_pp20(signed short index)
 				read_archive_file(fd, (Bit8u*)(ds_readd(PP20_BUFFERS + bi * 4)), ds_readw(PP20_BUFFER_LENGTHS + bi * 4));
 
 				/* decompress */
-				decomp_pp20((Bit8u*)(ds_readd(PP20_BUFFERS + bi * 4)), (Bit8u*)ds_readd(RENDERBUF_PTR),
+				decomp_pp20((Bit8u*)(ds_readd(PP20_BUFFERS + bi * 4)), g_renderbuf_ptr,
 #if !defined(__BORLANDC__)
 					(Bit8u*)(ds_readd(PP20_BUFFERS + 4 + bi)) + 4,
 #else
@@ -88,15 +88,15 @@ void load_pp20(signed short index)
 				/* failed allocation */
 
 				/* read it directly */
-				read_archive_file(fd, (Bit8u*)ds_readd(RENDERBUF_PTR) - 8, 64000);
+				read_archive_file(fd, g_renderbuf_ptr - 8, 64000);
 
 				/* decompress it */
-				decomp_pp20((Bit8u*)ds_readd(RENDERBUF_PTR) - 8, (Bit8u*)ds_readd(RENDERBUF_PTR),
+				decomp_pp20(g_renderbuf_ptr - 8, g_renderbuf_ptr,
 #if !defined(__BORLANDC__)
-					(Bit8u*)ds_readd(RENDERBUF_PTR) -8 +4,
+					g_renderbuf_ptr -8 +4,
 #else
-					FP_OFF((Bit8u*)ds_readd(RENDERBUF_PTR) -8) +4,
-					FP_SEG((Bit8u*)ds_readd(RENDERBUF_PTR) -8),
+					FP_OFF(g_renderbuf_ptr -8) +4,
+					FP_SEG(g_renderbuf_ptr -8),
 #endif
 					get_readlength2(fd));
 
@@ -108,15 +108,15 @@ void load_pp20(signed short index)
 
 		fd = load_archive_file(index);
 
-		read_archive_file(fd, (Bit8u*)ds_readd(RENDERBUF_PTR) - 8, 64000);
+		read_archive_file(fd, g_renderbuf_ptr - 8, 64000);
 
 		/* decompress it */
-		decomp_pp20((Bit8u*)ds_readd(RENDERBUF_PTR) - 8, (Bit8u*)ds_readd(RENDERBUF_PTR),
+		decomp_pp20(g_renderbuf_ptr - 8, g_renderbuf_ptr,
 #if !defined(__BORLANDC__)
-			(Bit8u*)(ds_readd(RENDERBUF_PTR) - 8 + 4),
+			(Bit8u*)(g_renderbuf_ptr - 8 + 4),
 #else
-			FP_OFF((Bit8u*)ds_readd(RENDERBUF_PTR) - 8) + 4,
-			FP_SEG((Bit8u*)ds_readd(RENDERBUF_PTR) - 8),
+			FP_OFF(g_renderbuf_ptr - 8) + 4,
+			FP_SEG(g_renderbuf_ptr - 8),
 #endif
 			get_readlength2(fd));
 
@@ -409,7 +409,7 @@ void load_ani(const signed short no)
 		unplen = swap_u32(unplen) >> 8;
 
 		decomp_pp20((Bit8u*)ds_readd(ANI_MAIN_PTR),
-			(Bit8u*)ds_readd(RENDERBUF_PTR),
+			g_renderbuf_ptr,
 #if !defined(__BORLANDC__)
 			(Bit8u*)(ds_readd(ANI_MAIN_PTR) + 4),
 #else
@@ -424,7 +424,7 @@ void load_ani(const signed short no)
 		ani_residue_len = ani_end_ptr - ani_residue_ptr;
 		memcpy(ani_end_ptr + packed_delta, ani_residue_ptr, ani_residue_len);
 
-		memcpy((Bit8u*)ds_readd(ANI_MAIN_PTR), (Bit8u*)ds_readd(RENDERBUF_PTR), unplen);
+		memcpy((Bit8u*)ds_readd(ANI_MAIN_PTR), g_renderbuf_ptr, unplen);
 		ani_residue_ptr += packed_delta;
 		memcpy(ani_residue_ptr, ani_end_ptr + packed_delta, ani_residue_len);
 
@@ -464,7 +464,7 @@ void load_ani(const signed short no)
 			area_size = swap_u32(area_size) >> 8;
 
 			decomp_pp20((Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), area_data_offset)),
-				(Bit8u*)ds_readd(RENDERBUF_PTR),
+				g_renderbuf_ptr,
 #if !defined(__BORLANDC__)
 				(Bit8u*)ds_readd(BUFFER9_PTR) + area_data_offset + 4,
 #else
@@ -483,7 +483,7 @@ void load_ani(const signed short no)
 			memcpy(ani_end_ptr + packed_delta2, ani_residue_ptr, (unsigned short)ani_residue_len);
 
 			memcpy((Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), area_data_offset)),
-				(Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)area_size);
+				g_renderbuf_ptr, (unsigned short)area_size);
 			ani_residue_ptr += packed_delta2;
 			memcpy(ani_residue_ptr, ani_end_ptr + packed_delta2, (unsigned short)ani_residue_len);
 #if !defined(__BORLANDC__)

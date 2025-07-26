@@ -498,7 +498,7 @@ void draw_bar(unsigned short type, signed short hero, signed short pts_cur, sign
 	} else {
 		x = type * 4 + 36;
 		y_min = 42;
-		dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
+		dst = (Bit8u*)g_renderbuf_ptr;
 	}
 
 	if (pts_cur == 0) {
@@ -709,10 +709,10 @@ void load_wallclock_nvf(void)
 	unsigned short fd;
 
 	fd = load_archive_file(ARCHIVE_FILE_OBJECTS_NVF);
-	read_archive_file(fd, (Bit8u*)ds_readd(RENDERBUF_PTR), 2000);
+	read_archive_file(fd, g_renderbuf_ptr, 2000);
 	close(fd);
 
-	nvf.src = (Bit8u*)ds_readd(RENDERBUF_PTR);
+	nvf.src = g_renderbuf_ptr;
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&fd;
 	nvf.height = (Bit8u*)&fd;

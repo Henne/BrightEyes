@@ -125,7 +125,7 @@ void final_intro(void)
 
 	ptr2 = (RealPt)F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 80000);
 
-	nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
+	nvf.dst = g_renderbuf_ptr;
 	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
 	nvf.no = 0;
 	nvf.type = 3;
@@ -133,9 +133,9 @@ void final_intro(void)
 	nvf.height = (Bit8u*)&height;
 	process_nvf(&nvf);
 
-	map_effect((Bit8u*)ds_readd(RENDERBUF_PTR));
+	map_effect(g_renderbuf_ptr);
 
-	nvf.dst = (Bit8u*)(ptr2);
+	nvf.dst = (Bit8u*)ptr2;
 	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
 	nvf.no = 1;
 	nvf.type = 3;
@@ -148,25 +148,25 @@ void final_intro(void)
 	ds_writew(PIC_COPY_X2, 319);
 	ds_writew(PIC_COPY_Y2, 39);
 	ds_writed(PIC_COPY_SRC, (Bit32u)ptr2);
-	ds_writed(PIC_COPY_DST, ds_readd(RENDERBUF_PTR));
+	ds_writed(PIC_COPY_DST, (Bit32u)g_renderbuf_ptr);
 
 	do_pic_copy(2);
 
 	delay_or_keypress(100);
 
-	map_effect((Bit8u*)ds_readd(RENDERBUF_PTR));
+	map_effect(g_renderbuf_ptr);
 
 	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
 
 	delay_or_keypress(250);
 
-	memset((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 96 * 3);
+	memset(g_renderbuf_ptr, 0, 96 * 3);
 
 	for (i = 0; i < 0x40; i++) {
 
-		pal_fade(ptr1, (Bit8u*)ds_readd(RENDERBUF_PTR));
-		pal_fade(ptr1 + 0x60, (Bit8u*)ds_readd(RENDERBUF_PTR) + 0x60);
-		pal_fade(ptr1 + 0xc0, (Bit8u*)ds_readd(RENDERBUF_PTR) + 0xc0);
+		pal_fade(ptr1, g_renderbuf_ptr);
+		pal_fade(ptr1 + 0x60, g_renderbuf_ptr + 0x60);
+		pal_fade(ptr1 + 0xc0, g_renderbuf_ptr + 0xc0);
 
 		wait_for_vsync();
 
@@ -189,7 +189,7 @@ RealPt hyg_ani_1(signed short nvf_no, Bit8u *ptr)
 	struct nvf_desc nvf;
 
 	nvf.dst = (Bit8u*)(host_readd(ptr));
-	nvf.src = (Bit8u*)ds_readd(RENDERBUF_PTR);
+	nvf.src = g_renderbuf_ptr;
 	nvf.no = nvf_no;
 	nvf.type = 3;
 	nvf.width = ptr + 4;
@@ -214,7 +214,7 @@ void hyg_ani_2(Bit8u *ptr, signed short x, signed short y)
 	ds_writew(PIC_COPY_Y2, y + host_readws(ptr + 6) - 1);
 
 	ds_writed(PIC_COPY_SRC, host_readd(ptr));
-	ds_writed(PIC_COPY_DST, ds_readd(RENDERBUF_PTR));
+	ds_writed(PIC_COPY_DST, (Bit32u)g_renderbuf_ptr);
 
 	do_pic_copy(2);
 }
@@ -229,7 +229,7 @@ void hyg_ani_3(void)
 	ds_writew(PIC_COPY_X2, 319);
 	ds_writew(PIC_COPY_Y2, 199);
 	ds_writed(PIC_COPY_SRC, (Bit32u)F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 0x1fbd0));
-	ds_writed(PIC_COPY_DST, ds_readd(RENDERBUF_PTR));
+	ds_writed(PIC_COPY_DST, (Bit32u)g_renderbuf_ptr);
 
 	do_pic_copy(0);
 }
@@ -243,7 +243,7 @@ void hyg_ani_4(void)
 	ds_writew(PIC_COPY_Y1, 0);
 	ds_writew(PIC_COPY_X2, 319);
 	ds_writew(PIC_COPY_Y2, 199);
-	ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
 	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
 
 	do_pic_copy(0);
@@ -264,9 +264,9 @@ void show_hyggelik_ani(void)
 	ptr2 = (RealPt)F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 0x1fbd0);
 
 	handle = load_archive_file(ARCHIVE_FILE_HYGBACK_NVF);
-	filelen = read_archive_file(handle, (Bit8u*)ds_readd(RENDERBUF_PTR), 64000);
+	filelen = read_archive_file(handle, g_renderbuf_ptr, 64000);
 	close(handle);
-	src = &(((Bit8u*)ds_readd(RENDERBUF_PTR))[filelen - 0xc0]);
+	src = &(g_renderbuf_ptr[filelen - 0xc0]);
 
 	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
 	memcpy((void*)(char*)ds_readd(DTP2), src, 192);
@@ -279,7 +279,7 @@ void show_hyggelik_ani(void)
 	hyg_ani_1(0, array);
 
 	handle = load_archive_file(ARCHIVE_FILE_HYGGELIK_NVF);
-	filelen = read_archive_file(handle, (Bit8u*)ds_readd(RENDERBUF_PTR), 64000);
+	filelen = read_archive_file(handle, g_renderbuf_ptr, 64000);
 	close(handle);
 	host_writed(array + 0, (Bit32u)ptr1);
 
@@ -295,7 +295,7 @@ void show_hyggelik_ani(void)
 	hyg_ani_2(array + 10 * 8, 82, 67);
 	hyg_ani_2(array + 20 * 8, 186, 67);
 
-	map_effect((Bit8u*)ds_readd(RENDERBUF_PTR));
+	map_effect(g_renderbuf_ptr);
 
 	for (i = 0; i < 7; i++) {
 		hyg_ani_3();
@@ -354,18 +354,18 @@ void show_hyggelik_ani(void)
 	delay_or_keypress(100);
 
 	/* clear the screen */
-	do_fill_rect((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 0, 319, 199, 0);
+	do_fill_rect(g_renderbuf_ptr, 0, 0, 319, 199, 0);
 
 	hyg_ani_2(array + 25 * 8, 100, 0);
 	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
-	map_effect((Bit8u*)ds_readd(RENDERBUF_PTR));
+	map_effect(g_renderbuf_ptr);
 	delay_or_keypress(500);
 
-	memset((void*)(Bit8u*)ds_readd(RENDERBUF_PTR), 0, 0xc0);
+	memset(g_renderbuf_ptr, 0, 0xc0);
 
 	for (i = 0; i < 64; i++) {
-		pal_fade(src, (Bit8u*)ds_readd(RENDERBUF_PTR));
-		pal_fade(src + 0x60, (Bit8u*)ds_readd(RENDERBUF_PTR) + 0x60);
+		pal_fade(src, g_renderbuf_ptr);
+		pal_fade(src + 0x60, g_renderbuf_ptr + 0x60);
 		wait_for_vsync();
 		set_palette(src, 0, 0x40);
 	}
@@ -447,7 +447,7 @@ void show_outro(void)
 	wait_for_vsync();
 	set_palette(pal_ptr, 0, 0x40);
 
-	nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
+	nvf.dst = g_renderbuf_ptr;
 	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
 	nvf.no = 0;
 	nvf.type = 0;
@@ -464,7 +464,7 @@ void show_outro(void)
 	ds_writew(PIC_COPY_Y1, 0);
 	ds_writew(PIC_COPY_X2, (320 - width) / 2 + width - 1);
 	ds_writew(PIC_COPY_Y2, height - 1);
-	ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
 	do_pic_copy(0);
 
 	delay_or_keypress(200);
@@ -481,7 +481,7 @@ void show_outro(void)
 	wait_for_vsync();
 	set_palette(pal_ptr, 0, 0x40);
 
-	nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
+	nvf.dst = g_renderbuf_ptr;
 	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
 	nvf.no = 0;
 	nvf.type = 0;
@@ -498,7 +498,7 @@ void show_outro(void)
 	ds_writew(PIC_COPY_Y1, 0);
 	ds_writew(PIC_COPY_X2, (320 - width) / 2 + width - 1);
 	ds_writew(PIC_COPY_Y2, height - 1);
-	ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
 	do_pic_copy(0);
 
 	delay_or_keypress(200);
@@ -515,7 +515,7 @@ void show_outro(void)
 	wait_for_vsync();
 	set_palette(pal_ptr, 0, 0x40);
 
-	nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
+	nvf.dst = g_renderbuf_ptr;
 	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
 	nvf.no = 0;
 	nvf.type = 0;
@@ -532,7 +532,7 @@ void show_outro(void)
 	ds_writew(PIC_COPY_Y1, 0);
 	ds_writew(PIC_COPY_X2, (320 - width) / 2 + width - 1);
 	ds_writew(PIC_COPY_Y2, height - 1);
-	ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
 	do_pic_copy(0);
 
 	delay_or_keypress(200);
