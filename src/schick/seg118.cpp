@@ -52,9 +52,8 @@ void tevent_037(void)
 		init_ani(0);
 
 		do {
-			answer = GUI_radio(get_tx2(26), 2,
-						get_tx2(27),
-						get_tx2(28));
+			answer = GUI_radio(get_tx2(26), 2, get_tx2(27), get_tx2(28));
+
 		} while (answer == -1);
 
 		if (answer == 1) {
@@ -63,9 +62,8 @@ void tevent_037(void)
 			timewarp(MINUTES(15));
 
 			do {
-				answer = GUI_radio(get_tx2(29), 2,
-							get_tx2(30),
-							get_tx2(28));
+				answer = GUI_radio(get_tx2(29), 2, get_tx2(30),	get_tx2(28));
+
 			} while (answer == -1);
 
 			if (answer == 1)
@@ -75,9 +73,7 @@ void tevent_037(void)
 
 				/* loop until you decide to go on */
 				do {
-					answer = GUI_radio(get_tx2(31), 2,
-								get_tx2(30),
-								get_tx2(28));
+					answer = GUI_radio(get_tx2(31), 2, get_tx2(30), get_tx2(28));
 
 				} while (answer == -1 || answer == 1);
 			}
@@ -87,9 +83,7 @@ void tevent_037(void)
 			/* go on */
 
 			do {
-				answer = GUI_radio(get_tx2(32), 2,
-							get_tx2(33),
-							get_tx2(34));
+				answer = GUI_radio(get_tx2(32), 2, get_tx2(33), get_tx2(34));
 
 			} while (answer == -1);
 		}
@@ -103,10 +97,7 @@ void tevent_037(void)
 
 				if (hours >= 4)
 				{
-					sprintf((char*)ds_readd(DTP2),
-						get_tx2(36),
-						hours);
-
+					sprintf((char*)ds_readd(DTP2), get_tx2(36), hours);
 					GUI_output((char*)ds_readd(DTP2));
 
 					done = 1;
@@ -115,9 +106,7 @@ void tevent_037(void)
 
 					/* entered time was too short */
 					do {
-						answer = GUI_radio(get_tx2(37), 2,
-									get_tx2(33),
-									get_tx2(34));
+						answer = GUI_radio(get_tx2(37), 2, get_tx2(33), get_tx2(34));
 
 					} while (answer == -1);
 
@@ -132,10 +121,7 @@ void tevent_037(void)
 				}
 			} else {
 				do {
-					answer = GUI_radio(get_tx2(39), 3,
-								get_tx2(40),
-								get_tx2(41),
-								get_tx2(42));
+					answer = GUI_radio(get_tx2(39), 3, get_tx2(40), get_tx2(41), get_tx2(42));
 
 				} while (answer == -1);
 
@@ -147,10 +133,8 @@ void tevent_037(void)
 					/* select a hero randomly */
 					hero = get_hero(answer = get_random_hero());
 
-					sprintf((char*)ds_readd(DTP2),
-						get_tx2(45),
-						(char*)hero + HERO_NAME2,
-						(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
+					sprintf((char*)ds_readd(DTP2), get_tx2(45), (char*)hero + HERO_NAME2,
+						(char*)GUI_get_ptr(host_readbs(hero + HERO_SEX), 2));
 
 					GUI_output((char*)ds_readd(DTP2));
 
@@ -175,12 +159,9 @@ void tevent_037(void)
 							/* check if the answer is "RAD" 3rd */
 							if (strcmp((char*)ds_readd(TEXT_INPUT_BUF), (char*)p_datseg + STR_RAD3))
 							{
-								sprintf((char*)ds_readd(DTP2),
-									get_tx2(50),
-									(char*)hero + HERO_NAME2,
-									(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-									(char*)hero + HERO_NAME2,
-									(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
+								sprintf((char*)ds_readd(DTP2), get_tx2(50),
+									(char*)hero + HERO_NAME2, (char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+									(char*)hero + HERO_NAME2, (char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 
 								GUI_output((char*)ds_readd(DTP2));
 
@@ -217,9 +198,7 @@ void tevent_037(void)
 					/* talk of hetmann or hyggelik */
 
 					do {
-						answer = GUI_radio(get_tx2(43), 2,
-									get_tx2(33),
-									get_tx2(34));
+						answer = GUI_radio(get_tx2(43), 2, get_tx2(33), get_tx2(34));
 
 					} while (answer == -1);
 
@@ -230,10 +209,7 @@ void tevent_037(void)
 
 						timewarp(HOURS(1));
 
-						sprintf((char*)ds_readd(DTP2),
-							get_tx2(44),
-							(char*)hero + HERO_NAME2);
-
+						sprintf((char*)ds_readd(DTP2), get_tx2(44), (char*)hero + HERO_NAME2);
 						GUI_output((char*)ds_readd(DTP2));
 					}
 				}
@@ -271,9 +247,8 @@ void tevent_078(void)
 	{
 
 		do {
-			answer = GUI_radio(get_tx2(78), 2,
-						get_tx2(79),
-						get_tx2(80));
+			answer = GUI_radio(get_tx2(78), 2, get_tx2(79), get_tx2(80));
+
 		} while (answer == -1);
 
 		load_in_head(57);
@@ -520,9 +495,8 @@ void tevent_124(void)
 	}
 
 	do {
-		answer = GUI_radio(get_tx2(51), 2,
-					get_tx2(52),
-					get_tx2(53));
+		answer = GUI_radio(get_tx2(51), 2, get_tx2(52), get_tx2(53));
+
 	} while (answer == -1);
 
 	if (answer == 2)
@@ -550,21 +524,15 @@ void tevent_124(void)
 #endif
 				{
 					/* fatal */
-					sprintf((char*)ds_readd(DTP2),
-						get_tx2(56),
-						(char*)hero + HERO_NAME2,
-						(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
-
+					sprintf((char*)ds_readd(DTP2), get_tx2(56), (char*)hero + HERO_NAME2,
+						(char*)GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
 					GUI_output((char*)ds_readd(DTP2));
 
 					hero_disappear(hero, i, -1);
 
 				} else {
 
-					sprintf((char*)ds_readd(DTP2),
-						get_tx2(55),
-						(char*)hero + HERO_NAME2);
-
+					sprintf((char*)ds_readd(DTP2), get_tx2(55), (char*)hero + HERO_NAME2);
 					GUI_output((char*)ds_readd(DTP2));
 
 					sub_hero_le(hero, random_schick(5));
@@ -572,8 +540,7 @@ void tevent_124(void)
 			}
 		}
 
-		if (!counter)
-		{
+		if (!counter) {
 			GUI_output(get_tx2(54));
 		}
 	}
@@ -588,7 +555,6 @@ void tevent_125(void)
 
 	do {
 		answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, get_tx2(57), 3, get_tx2(58), get_tx2(59), get_tx2(60));
-
 	} while (answer == -1);
 
 	if (answer == 1 || answer == 2)
@@ -609,9 +575,8 @@ void tevent_145(void)
 	if (!(cast_u16(ds_readb(ROUTE59_FLAG)) & 1))
 	{
 		do {
-			answer = GUI_radio(get_tx2(42), 2,
-						get_tx2(43),
-						get_tx2(44));
+			answer = GUI_radio(get_tx2(42), 2, get_tx2(43), get_tx2(44));
+
 		} while (answer == -1);
 
 		if (answer == 1)
@@ -626,13 +591,12 @@ void tevent_145(void)
 
 	} else {
 		do {
-			answer = GUI_radio(get_tx2(39), 2,
-						get_tx2(40),
-						get_tx2(41));
+			answer = GUI_radio(get_tx2(39), 2, get_tx2(40),	get_tx2(41));
+
 		} while (answer == -1);
 
-		if (answer == 1)
-		{
+		if (answer == 1) {
+
 			ds_writew(TRV_DESTINATION, TOWNS_PEILINEN);
 			ds_writeb(CURRENT_TOWN, TOWNS_ROVAMUND);
 
@@ -642,10 +606,7 @@ void tevent_145(void)
 		}
 	}
 
-	sprintf((char*)ds_readd(DTP2),
-		get_tx2(45),
-		get_ttx(ds_readws(TRV_DESTINATION) + 0xeb));
-
+	sprintf((char*)ds_readd(DTP2), get_tx2(45), get_ttx(ds_readws(TRV_DESTINATION) + 0xeb));
 	GUI_output((char*)ds_readd(DTP2));
 }
 

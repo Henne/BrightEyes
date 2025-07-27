@@ -42,7 +42,6 @@ static
 #endif
 void pause_traveling(signed short ani_no)
 {
-
 	g_event_ani_busy = 1;
 
 	load_ani(ani_no);
@@ -344,9 +343,7 @@ void hunt_viper(void)
 		hero_i = get_hero(choosen_hero);
 
 		/* print a message */
-		sprintf((char*)ds_readd(DTP2),
-			get_tx2(26),
-			hero_i + HERO_NAME2);
+		sprintf((char*)ds_readd(DTP2), get_tx2(26), hero_i + HERO_NAME2);
 
 		GUI_output((char*)ds_readd(DTP2));
 
@@ -423,9 +420,7 @@ void octopus_attack(void)
 
 					add_hero_ap(hero, 5);
 					sub_hero_le(hero, random_schick(6));
-					sprintf((char*)ds_readd(DTP2),
-						get_tx2(30),
-						(char*)hero + HERO_NAME2);
+					sprintf((char*)ds_readd(DTP2), get_tx2(30), (char*)hero + HERO_NAME2);
 					GUI_output((char*)ds_readd(DTP2));
 				}
 
@@ -441,9 +436,7 @@ void octopus_attack(void)
 
 					add_hero_ap(hero, 20);
 					sub_hero_le(hero, random_schick(6));
-					sprintf((char*)ds_readd(DTP2),
-						get_tx2(31),
-						(char*)hero + HERO_NAME2);
+					sprintf((char*)ds_readd(DTP2), get_tx2(31), (char*)hero + HERO_NAME2);
 					GUI_output((char*)ds_readd(DTP2));
 
 					if (test_skill(hero, TA_SCHWIMMEN, 0) <= 0) {
@@ -508,10 +501,9 @@ void hunt_bison(void)
 		GUI_output(get_tx2(36));
 
 		hero = get_hero(get_random_hero());
-		sprintf((char*)ds_readd(DTP2),
-			get_tx2(37),
-			(char*)hero + HERO_NAME2);
+		sprintf((char*)ds_readd(DTP2), get_tx2(37), (char*)hero + HERO_NAME2);
 		GUI_output((char*)ds_readd(DTP2));
+
 		sub_hero_le(hero, random_schick(6));
 		add_hero_ap(hero, 2);
 	}
@@ -538,9 +530,7 @@ void hunt_rhino(void)
 		GUI_output(get_tx2(42));
 
 		hero = get_hero(get_random_hero());
-		sprintf((char*)ds_readd(DTP2),
-			get_tx2(43),
-			(char*)hero + HERO_NAME2);
+		sprintf((char*)ds_readd(DTP2), get_tx2(43), (char*)hero + HERO_NAME2);
 		GUI_output((char*)ds_readd(DTP2));
 		sub_hero_le(hero, dice_roll(2, 6, 0));
 		add_hero_ap(hero, 6);
