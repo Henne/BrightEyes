@@ -6404,7 +6404,7 @@ void *g_splash_buffer; // ds:0xd2bd, to buffer of size 1000, used for Splashes
 char *g_text_ltx_buffer; // ds:0xd2b9, to buffer of size 30500
 void *g_buffer7_ptr; // ds:0xd2b5, to buffer of size 10000, used for NVF and text
 void *g_buffer6_ptr; // ds:0xd2b1, to buffer of size 2200, used for NVF
-void *g_popup; // ds:0xd2ad
+unsigned char *g_popup; // ds:0xd2ad
 void *g_buffer10_ptr; // ds:0xd2a9, to buffer of size 16771, used for NVF and text
 void *g_buffer5_ptr; // ds:0xd2a5, to buffer of size 3880
 void *g_monnames_buffer; // ds:0xd2a1

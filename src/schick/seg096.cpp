@@ -669,11 +669,11 @@ void GUI_draw_popup_line(signed short line, signed short type)
 	ds_writew(PIC_COPY_Y1, y);
 	ds_writew(PIC_COPY_X2, x + 15);
 	ds_writew(PIC_COPY_Y2, y + 7);
-	ds_writed(PIC_COPY_SRC, (Bit32u)((Bit8u*)ds_readd(POPUP) + popup_left));
+	ds_writed(PIC_COPY_SRC, (Bit32u)(g_popup + popup_left));
 
 	do_pic_copy(0);
 
-	ds_writed(PIC_COPY_SRC, (Bit32u)((Bit8u*)ds_readd(POPUP) + popup_middle));
+	ds_writed(PIC_COPY_SRC, (Bit32u)(g_popup + popup_middle));
 
 	x += 16;
 
@@ -684,7 +684,7 @@ void GUI_draw_popup_line(signed short line, signed short type)
 		x += 32;
 	}
 
-	ds_writed(PIC_COPY_SRC, (Bit32u)((Bit8u*)ds_readd(POPUP) + popup_right));
+	ds_writed(PIC_COPY_SRC, (Bit32u)(g_popup + popup_right));
 	ds_writew(PIC_COPY_X1, x);
 	ds_writew(PIC_COPY_X2, x + 15);
 

@@ -689,17 +689,16 @@ void init_common_buffers(void)
 	signed short bytes;
 
 	fd = load_archive_file(ARCHIVE_FILE_POPUP_DAT);
-	bytes = read_archive_file(fd, (Bit8u*)((Bit8u*)ds_readd(POPUP) - 8), 500);
+	bytes = read_archive_file(fd, g_popup - 8, 500);
 	close(fd);
 
 	/* decompress POPUP.DAT */
-	decomp_pp20((Bit8u*)((Bit8u*)ds_readd(POPUP) - 8),
-		(Bit8u*)ds_readd(POPUP),
+	decomp_pp20(g_popup - 8, g_popup,
 #if !defined(__BORLANDC__)
-		(Bit8u*)ds_readd(POPUP) - 8 + 4,
+		g_popup - 8 + 4,
 #else
-		FP_OFF((Bit8u*)ds_readd(POPUP) - 8) + 4,
-		FP_SEG((Bit8u*)ds_readd(POPUP) - 8),
+		FP_OFF(g_popup - 8) + 4,
+		FP_SEG(g_popup - 8),
 #endif
 		bytes);
 
