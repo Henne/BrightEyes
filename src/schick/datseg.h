@@ -91,6 +91,7 @@ extern char *g_monnames_buffer;		// ds:0xd2a1; seg026, seg120
 extern char **g_text_ltx_index;		// ds:0xc3b5;
 extern char **g_tx_index;		// ds:0xc3b1; seg026, seg028, seg031, seg064, seg120
 extern char **g_tx2_index;		// ds:0xc3ad; seg
+extern unsigned char g_gfx_wait_keypress[100];	// ds:0xbc63; seg002
 extern unsigned char g_playmask_us;	// ds:0xbc62; seg002, seg029
 extern unsigned char *g_heroes;		// ds:0xbd34
 

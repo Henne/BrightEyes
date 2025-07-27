@@ -4265,7 +4265,7 @@ void seg002_47e2(void)
 	/* set destination */
 	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
 	/* set source */
-	ds_writed(PIC_COPY_SRC, (Bit32u)(p_datseg + GFXBUF_WAIT_KEYPRESS));
+	ds_writed(PIC_COPY_SRC, (Bit32u)g_gfxbuf_wait_keypress);
 
 	do_save_rect();
 
@@ -4291,7 +4291,7 @@ void seg002_484f(void)
 	/* set destination */
 	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
 	/* set source */
-	ds_writed(PIC_COPY_SRC, (Bit32u)(p_datseg + GFXBUF_WAIT_KEYPRESS));
+	ds_writed(PIC_COPY_SRC, (Bit32u)g_gfxbuf_wait_keypress);
 
 	do_pic_copy(0);
 

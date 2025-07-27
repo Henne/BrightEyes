@@ -6527,7 +6527,7 @@ unsigned short g_spinlock_flag; // ds:0xbcd6
 signed char g_hero_splash_timer[7]; // ds:0xbccf
 long g_splash_le; // ds:0xbccb
 long g_splash_ae; // ds:0xbcc7
-char g_gfxbuf_wait_keypress[100]; // ds:0xbc63
+unsigned char g_gfxbuf_wait_keypress[100]; // ds:0xbc63
 unsigned char g_playmask_us; // ds:0xbc62, 1 = PLAYM_US, 0 = PLAYM_UK
 struct{signed char u1; signed char u2; unsigned long u3;} g_sample_ad_idx_entry; // ds:0xbc5c
 
