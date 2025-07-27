@@ -1449,7 +1449,7 @@
 #define TEXTLINE_POSX                   (0xd2d9)    /* unsigned short */
 #define FIG_FIGURE2_BUF                 (0xd2db)    /* RealPt; to buffer of size 20000 */
 #define FIG_FIGURE1_BUF                 (0xd2df)    /* RealPt */
-#define OBJECTS_NVF_BUF                 (0xd2e3)    /* RealPt; to buffer of size 3400 */
+//#define OBJECTS_NVF_BUF                 (0xd2e3)    /* RealPt; to buffer of size 3400 */
 //#define BUF_ICON                        (0xd2e7)    /* RealPt */
 #define TEXT_OUTPUT_BUF                 (0xd2eb)    /* RealPt; to buffer of size 300 */
 #define TEXT_INPUT_BUF                  (0xd2ef)    /* RealPt; to buffer of size 24 */

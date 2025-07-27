@@ -998,7 +998,7 @@ signed short do_fight(signed short fight_id)
 
 	/* open OBJECTS.NVF */
 	fd = load_archive_file(ARCHIVE_FILE_OBJECTS_NVF);
-	read_archive_file(fd, (Bit8u*)ds_readd(OBJECTS_NVF_BUF), 3000);
+	read_archive_file(fd, g_objects_nvf_buf, 3000);
 	close(fd);
 
 	FIG_chessboard_init();

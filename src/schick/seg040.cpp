@@ -170,7 +170,7 @@ void FIG_preload_gfx(void)
 #endif
 
 	nvf.dst = (Bit8u*)ds_readd(FIG_CB_MARKER_BUF);
-	nvf.src = (Bit8u*)ds_readd(OBJECTS_NVF_BUF);
+	nvf.src = g_objects_nvf_buf;
 	nvf.no = 10;
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&i;
@@ -183,7 +183,7 @@ void FIG_preload_gfx(void)
 #endif
 
 	nvf.dst = (Bit8u*)ds_readd(FIG_CB_SELECTOR_BUF);
-	nvf.src = (Bit8u*)ds_readd(OBJECTS_NVF_BUF);
+	nvf.src = g_objects_nvf_buf;
 	nvf.no = 11;
 	nvf.type = 0;
 	process_nvf(&nvf);
@@ -194,7 +194,7 @@ void FIG_preload_gfx(void)
 #endif
 
 	nvf.dst = (Bit8u*)ds_readd(FIG_STAR_GFX);
-	nvf.src = (Bit8u*)ds_readd(OBJECTS_NVF_BUF);
+	nvf.src = g_objects_nvf_buf;
 	nvf.no = 17;
 	nvf.type = 0;
 	process_nvf(&nvf);

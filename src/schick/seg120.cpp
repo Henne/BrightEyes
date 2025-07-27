@@ -255,8 +255,8 @@ void init_global_buffer(void)
 	g_tx_index = g_text_ltx_index + 3360;
 	g_tx2_index = g_text_ltx_index + 3960;
 
-	ds_writed(OBJECTS_NVF_BUF, (Bit32u)(((HugePt)g_text_ltx_index) + 4760L));
-	ds_writed(DTP2, (Bit32u)(F_PADD(ds_readd(OBJECTS_NVF_BUF), 3400)));
+	g_objects_nvf_buf = (((HugePt)g_text_ltx_index) + 4760L);
+	ds_writed(DTP2, (Bit32u)(((HugePt)g_objects_nvf_buf) + 3400L));
 	ds_writed(TEXT_INPUT_BUF, (Bit32u)((char*)ds_readd(DTP2) + 1500));
 	ds_writed(TEXT_OUTPUT_BUF, (Bit32u)(F_PADD((Bit8u*)ds_readd(DTP2), 1524L)));
 	ds_writed(BUFFER5_PTR, (Bit32u)(F_PADD(ds_readd(TEXT_OUTPUT_BUF), 300)));

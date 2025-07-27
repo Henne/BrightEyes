@@ -718,27 +718,27 @@ void load_wallclock_nvf(void)
 	nvf.height = (Bit8u*)&fd;
 
 	/* sky background */
-	nvf.dst = (Bit8u*)ds_readd(OBJECTS_NVF_BUF);
+	nvf.dst = g_objects_nvf_buf;
 	nvf.no = 12;
 	process_nvf(&nvf);
 
 	/* mountains */
-	nvf.dst = (Bit8u*)ds_readd(OBJECTS_NVF_BUF) + 0x683;
+	nvf.dst = g_objects_nvf_buf + 0x683;
 	nvf.no = 13;
 	process_nvf(&nvf);
 
 	/* sun */
-	nvf.dst = (Bit8u*)ds_readd(OBJECTS_NVF_BUF) + 0xcaf;
+	nvf.dst = g_objects_nvf_buf + 0xcaf;
 	nvf.no = 14;
 	process_nvf(&nvf);
 
 	/* moon */
-	nvf.dst = (Bit8u*)ds_readd(OBJECTS_NVF_BUF) + 0xcef;
+	nvf.dst = g_objects_nvf_buf + 0xcef;
 	nvf.no = 15;
 	process_nvf(&nvf);
 
 	/* shift palette by 0xe0 */
-	array_add((Bit8u*)ds_readd(OBJECTS_NVF_BUF), 0xd3f, 0xe0, 2);
+	array_add(g_objects_nvf_buf, 0xd3f, 0xe0, 2);
 
 }
 
@@ -834,7 +834,7 @@ void draw_wallclock(signed short pos, signed short night)
 	ds_writew(PIC_COPY_Y1, ds_readws(WALLCLOCK_Y));
 	ds_writew(PIC_COPY_X2, ds_readws(WALLCLOCK_X) + 78);
 	ds_writew(PIC_COPY_Y2, ds_readws(WALLCLOCK_Y) + 20);
-	ds_writed(PIC_COPY_SRC, ds_readd(OBJECTS_NVF_BUF));
+	ds_writed(PIC_COPY_SRC, (Bit32u)g_objects_nvf_buf);
 
 	/* draw backgroud */
 	do_pic_copy(2);
@@ -845,7 +845,7 @@ void draw_wallclock(signed short pos, signed short night)
 	ds_writew(PIC_COPY_Y1, y);
 	ds_writew(PIC_COPY_X2, pos + 7);
 	ds_writew(PIC_COPY_Y2, y + 6);
-	ds_writed(PIC_COPY_SRC, (Bit32u)(!night ? (Bit8u*)ds_readd(OBJECTS_NVF_BUF) + 0xcaf: (Bit8u*)ds_readd(OBJECTS_NVF_BUF) + 0xcef));
+	ds_writed(PIC_COPY_SRC, (Bit32u)(!night ? (g_objects_nvf_buf + 0xcaf) : (g_objects_nvf_buf + 0xcef)));
 
 	/* draw sun/moon */
 	do_pic_copy(2);
@@ -856,7 +856,7 @@ void draw_wallclock(signed short pos, signed short night)
 	ds_writew(PIC_COPY_Y1, ds_readws(WALLCLOCK_Y) + 3);
 	ds_writew(PIC_COPY_X2, ds_readws(WALLCLOCK_X) + 78);
 	ds_writew(PIC_COPY_Y2, ds_readws(WALLCLOCK_Y) + 22);
-	ds_writed(PIC_COPY_SRC, (Bit32u)((Bit8u*)ds_readd(OBJECTS_NVF_BUF) + 0x683));
+	ds_writed(PIC_COPY_SRC, (Bit32u)(g_objects_nvf_buf + 0x683));
 
 	/* draw backgroud */
 	do_pic_copy(2);

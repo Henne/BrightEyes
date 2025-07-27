@@ -83,6 +83,7 @@ extern signed char *g_chessboard;	// ds:0xd852;
 extern unsigned char *g_townpal_buf;	// ds:0xd312; seg002, seg027, seg120
 extern unsigned char *g_renderbuf_ptr;	// ds:0xd303; seg002-seg120
 extern unsigned char *g_buf_icon;	// ds:0xd2e7; seg029, seg120
+extern unsigned char *g_objects_nvf_buf;// ds:0xd2e3; seg004, seg032, seg040, seg120
 extern char *g_text_ltx_buffer;		// ds:0xd2b9; seg026, seg120
 extern char **g_text_ltx_index;		// ds:0xc3b5;
 extern char **g_tx_index;		// ds:0xc3b1; seg026, seg028, seg031, seg064, seg120

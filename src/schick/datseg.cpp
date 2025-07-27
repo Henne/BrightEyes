@@ -6385,7 +6385,7 @@ long g_dtp2; // ds:0xd2f3
 void *g_text_input_buf; // ds:0xd2ef, to buffer of size 24
 void *g_text_output_buf; // ds:0xd2eb, to buffer of size 300
 unsigned char *g_buf_icon; // ds:0xd2e7
-void *g_objects_nvf_buf; // ds:0xd2e3, to buffer of size 3400
+unsigned char *g_objects_nvf_buf; // ds:0xd2e3, to buffer of size 3400
 void *g_fig_figure1_buf; // ds:0xd2df
 void *g_fig_figure2_buf; // ds:0xd2db, to buffer of size 20000
 unsigned short g_textline_posx; // ds:0xd2d9
