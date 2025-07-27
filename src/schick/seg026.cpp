@@ -52,7 +52,7 @@ void init_text(void)
 	len = (signed short)read_archive_file(handle, (Bit8u*)ds_readd(BUFFER5_PTR), 5000);
 	close(handle);
 
-	split_textbuffer((char**)ds_readd(ITEMSNAME), (char*)ds_readd(BUFFER5_PTR), len);
+	split_textbuffer((char**)g_itemsname, (char*)ds_readd(BUFFER5_PTR), len);
 
 	handle = load_archive_file(ARCHIVE_FILE_MONNAMES);
 	len = (signed short)read_archive_file(handle, g_monnames_buffer, 5000);

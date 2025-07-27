@@ -1150,7 +1150,7 @@ static inline Bit8u *get_itemsdat(unsigned short item) {
 
 static inline char* get_itemname(unsigned short item)
 {
-	return (char*)(host_readd((Bit8u*)ds_readd(ITEMSNAME) + item * 4));
+	return (char*)g_itemsname[item];
 }
 
 #define DUMMY_WARNING() D1_ERR("Error: %s is not implemented\n", __func__)
@@ -1346,7 +1346,7 @@ struct bittest {
 #define get_tx2(no) ((char*)(g_tx2_index[(no)]))
 #define get_monname(no) ((char*)g_monnames_index[no])
 #define get_itemsdat(no) ((char*)((Bit8u*)ds_readd(ITEMSDAT) + 12 * (no)))
-#define get_itemname(no) ((char*)(host_readd((Bit8u*)ds_readd(ITEMSNAME) + 4 * (no))))
+#define get_itemname(no) ((char*)g_itemsname[(no)])
 
 #define get_cb_val(x, y) (*(g_chessboard + (y) * 25 + (x)))
 #define set_cb_val(x, y, val) (*(g_chessboard + (y) * 25 + (x)) = (val))
