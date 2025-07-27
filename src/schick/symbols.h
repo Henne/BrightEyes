@@ -1308,8 +1308,8 @@
 #define SAMPLE_AD_IDX_ENTRY             (0xbc5c)    /* struct(6); struct{signed char u1; signed char u2; unsigned long u3;} */
 //#define PLAYMASK_US                     (0xbc62)    /* unsigned char; 1 = PLAYM_US, 0 = PLAYM_UK */
 //#define GFXBUF_WAIT_KEYPRESS            (0xbc63)    /* char[100] */
-#define SPLASH_AE                       (0xbcc7)    /* long */
-#define SPLASH_LE                       (0xbccb)    /* long */
+//#define SPLASH_AE                       (0xbcc7)    /* long */
+//#define SPLASH_LE                       (0xbccb)    /* long */
 #define HERO_SPLASH_TIMER               (0xbccf)    /* signed char[7] */
 #define SPINLOCK_FLAG                   (0xbcd6)    /* unsigned short; {0,1} */
 #define MAP_TOWNMARK_STATE              (0xbcd8)    /* unsigned short; {0, 1, 2, 3, 4} */
@@ -1434,7 +1434,7 @@
 #define BUFFER6_PTR                     (0xd2b1)    /* Bit8u*; to buffer of size 2200, used for NVF */
 #define BUFFER7_PTR                     (0xd2b5)    /* Bit8u*; to buffer of size 10000, used for NVF and text */
 #define TEXT_LTX_BUFFER                 (0xd2b9)    /* Bit8u*; to buffer of size 30500 */
-#define SPLASH_BUFFER                   (0xd2bd)    /* Bit8u*; to buffer of size 1000, used for Splashes */
+//#define SPLASH_BUFFER                   (0xd2bd)    /* Bit8u*; to buffer of size 1000, used for Splashes */
 //#define BUF_FONT6                       (0xd2c1)    /* Bit8u* */
 #define TEXTCOLOR                       (0xd2c5)    /* short */
 #define TEXTCOLOR_BG                    (0xd2c7)    /* short */

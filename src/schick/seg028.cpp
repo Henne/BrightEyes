@@ -560,7 +560,7 @@ void load_splashes(void)
 	close(fd);
 
 	/* nvf.dst = splash_le = ds_readd() */
-	nvf.dst = (Bit8u*)(ds_writed(SPLASH_LE, ds_readd(SPLASH_BUFFER)));
+	nvf.dst = g_splash_le = g_splash_buffer;
 	nvf.src = g_renderbuf_ptr;
 	nvf.no = 0;
 	nvf.type = 1;
@@ -569,7 +569,7 @@ void load_splashes(void)
 	fd = (signed short)process_nvf(&nvf);
 
 	/* nvf.dst = splash_ae = ds_readd() */
-	nvf.dst = (Bit8u*)(ds_writed(SPLASH_AE, (Bit32u)((Bit8u*)ds_readd(SPLASH_BUFFER) + fd)));
+	nvf.dst = g_splash_ae = (g_splash_buffer + fd);
 	nvf.src = g_renderbuf_ptr;
 	nvf.no = 1;
 	nvf.type = 1;

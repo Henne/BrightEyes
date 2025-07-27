@@ -6400,7 +6400,7 @@ short g_textcolor_fg; // ds:0xd2c9
 short g_textcolor_bg; // ds:0xd2c7
 short g_textcolor; // ds:0xd2c5
 unsigned char *g_buf_font6; // ds:0xd2c1
-void *g_splash_buffer; // ds:0xd2bd, to buffer of size 1000, used for Splashes
+unsigned char *g_splash_buffer; // ds:0xd2bd, to buffer of size 1000, used for Splashes
 char *g_text_ltx_buffer; // ds:0xd2b9, to buffer of size 30500
 void *g_buffer7_ptr; // ds:0xd2b5, to buffer of size 10000, used for NVF and text
 void *g_buffer6_ptr; // ds:0xd2b1, to buffer of size 2200, used for NVF
@@ -6525,8 +6525,8 @@ unsigned char g_freeze_timers; // ds:0xbcda
 unsigned short g_map_townmark_state; // ds:0xbcd8
 unsigned short g_spinlock_flag; // ds:0xbcd6
 signed char g_hero_splash_timer[7]; // ds:0xbccf
-long g_splash_le; // ds:0xbccb
-long g_splash_ae; // ds:0xbcc7
+unsigned char *g_splash_le; // ds:0xbccb
+unsigned char *g_splash_ae; // ds:0xbcc7
 unsigned char g_gfxbuf_wait_keypress[100]; // ds:0xbc63
 unsigned char g_playmask_us; // ds:0xbc62, 1 = PLAYM_US, 0 = PLAYM_UK
 struct{signed char u1; signed char u2; unsigned long u3;} g_sample_ad_idx_entry; // ds:0xbc5c

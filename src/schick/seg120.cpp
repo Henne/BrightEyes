@@ -303,7 +303,7 @@ signed short init_memory(void)
 	g_dungeon_doors_buf	= (unsigned char*)schick_alloc(225);
 	g_dungeon_stairs_buf	= (unsigned char*)schick_alloc(80);
 	g_buf_font6		= (unsigned char*)schick_alloc(592);
-	ds_writed(SPLASH_BUFFER,		(Bit32u)schick_alloc(1000));
+	g_splash_buffer		= (unsigned char*)schick_alloc(1000);
 	ds_writed(TRV_TRACK_PIXEL_BAK,		(Bit32u)schick_alloc(500));
 	g_chessboard		= (signed char*)schick_alloc(625);
 	g_popup			= (unsigned char*)(schick_alloc(1673) + 8);

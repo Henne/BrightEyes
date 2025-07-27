@@ -104,6 +104,7 @@ extern unsigned char *g_icon;		// ds:0xd2f7; seg002-seg058
 extern unsigned char *g_buf_icon;	// ds:0xd2e7; seg029, seg120
 extern unsigned char *g_objects_nvf_buf;// ds:0xd2e3; seg004, seg032, seg040, seg120
 extern unsigned char *g_buf_font6;	// ds:0xd2c1; seg026, seg096, seg120
+extern unsigned char *g_splash_buffer;	// ds:0xbcc7; seg002, seg028, seg097, seg120
 extern char *g_text_ltx_buffer;		// ds:0xd2b9; seg026, seg120
 extern unsigned char *g_popup;		// ds:0xd2ad; seg027, seg096, seg120
 extern char *g_monnames_buffer;		// ds:0xd2a1; seg026, seg120
@@ -111,6 +112,8 @@ extern Bit32s g_ani_unknown4;		// ds:0xce43; seg027, seg120
 extern char **g_text_ltx_index;		// ds:0xc3b5;
 extern char **g_tx_index;		// ds:0xc3b1; seg026, seg028, seg031, seg064, seg120
 extern char **g_tx2_index;		// ds:0xc3ad; seg
+extern unsigned char *g_splash_le;	// ds:0xbccb; seg002, seg028
+extern unsigned char *g_splash_ae;	// ds:0xbcc7; seg002, seg028
 extern unsigned char g_gfx_wait_keypress[100];	// ds:0xbc63; seg002
 extern unsigned char g_playmask_us;	// ds:0xbc62; seg002, seg029
 extern unsigned char *g_heroes;		// ds:0xbd34

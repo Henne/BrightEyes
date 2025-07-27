@@ -130,11 +130,11 @@ signed short GUI_lookup_char_height(signed char c, signed short *p)
 }
 
 #if defined(__BORLANDC__)
-void GUI_1c2(signed short v1, signed short v2, Bit8u* v3)
+void GUI_1c2(signed short index, signed short v2, Bit8u* v3)
 {
 
 	GUI_blank_char();
-	GUI_font_to_buf((Bit8u*)ds_readd(SPLASH_BUFFER) + v1 * 8);
+	GUI_font_to_buf(g_splash_buffer + index * 8);
 	GUI_write_char_to_screen(v3, 8, v2);
 }
 #endif
