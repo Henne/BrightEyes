@@ -333,14 +333,14 @@ void load_ani(const signed short no)
 
 	/* count to the ordered ani in an array*/
 	for (i = 0; i < 37; i++) {
-		if (no == host_readw((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8))
+		if (no == host_readw(g_mem_slots_anis + i * 8))
 			break;
 	}
 
 	if (i != 37) {
 		/* already buffered in EMS, get from there */
-		ems_handle = host_readw((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8 + 2);
-		from_EMS((Bit8u*)ds_readd(BUFFER9_PTR), ems_handle, host_readd((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8 + 4));
+		ems_handle = host_readw(g_mem_slots_anis + i * 8 + 2);
+		from_EMS((Bit8u*)ds_readd(BUFFER9_PTR), ems_handle, host_readd(g_mem_slots_anis + i * 8 + 4));
 	} else {
 		/* load it from file */
 		ani_off = ds_readd(BUFFER_ANIS_TAB - 4 + no * 4);
@@ -359,14 +359,14 @@ void load_ani(const signed short no)
 
 			/* find an empty EMS slot */
 			for (i = 0; i < 36; i++) {
-				if (host_readw((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8) == 0)
+				if (host_readw(g_mem_slots_anis + i * 8) == 0)
 					break;
 			}
 
 			/* fill the entry */
-			host_writew((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8, no);
-			host_writew((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8 + 2, ems_handle);
-			host_writed((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8 + 4, ani_len);
+			host_writew(g_mem_slots_anis + i * 8, no);
+			host_writew(g_mem_slots_anis + i * 8 + 2, ems_handle);
+			host_writed(g_mem_slots_anis + i * 8 + 4, ani_len);
 
 			/* copy data to EMS */
 			to_EMS(ems_handle, (Bit8u*)ds_readd(BUFFER9_PTR), ani_len);

@@ -294,7 +294,7 @@ signed short init_memory(void)
 	g_itemsdat = 	(unsigned char*)schick_alloc(255 * SIZEOF_ITEM_STATS);
 	g_monnames_buffer =(char*)schick_alloc(950);
 	g_monnames_index = (char**)schick_alloc(77 * sizeof(char*));
-	ds_writed(MEM_SLOTS_ANIS,		(Bit32u)schick_alloc(296));
+	g_mem_slots_anis =	(unsigned char*)schick_alloc(37 * 8);
 	ds_writed(MEM_SLOTS_MFIG,	(Bit32u)schick_alloc(516));
 	ds_writed(MEM_SLOTS_WFIG,	(Bit32u)schick_alloc(516));
 	ds_writed(MEM_SLOTS_MON,		(Bit32u)schick_alloc(432));
@@ -587,8 +587,8 @@ void cleanup_game(void)
 	if (g_ems_enabled != 0) {
 
 		for (l_si = 0; l_si < 37; l_si++) {
-			if (host_readw((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + l_si * 8) != 0) {
-				EMS_free_pages(host_readw((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + 2 + l_si * 8));
+			if (host_readw(g_mem_slots_anis + l_si * 8) != 0) {
+				EMS_free_pages(host_readw(g_mem_slots_anis + 2 + l_si * 8));
 			}
 		}
 

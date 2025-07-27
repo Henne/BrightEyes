@@ -79,6 +79,7 @@ extern unsigned char *g_itemuser;	// ds:0xe5ce; seg107
 extern char **g_itemsname;		// ds:0xe22f; seg026, seg120
 extern unsigned char *g_itemsdat;	// ds:0xe22b; seg002, seg027, seg105, seg107, seg120
 extern char **g_monnames_index;		// ds:0xe129; seg026, seg120
+extern unsigned char *g_mem_slots_anis;	// ds:0xe121; seg027, seg120
 extern unsigned char *g_spelltarget;	// ds:0xe5b8; seg098-seg102
 extern unsigned char *g_spelluser;	// ds:0xecbc; seg068, seg098, seg102, seg107
 extern signed char *g_chessboard;	// ds:0xd852;
