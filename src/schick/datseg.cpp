@@ -1834,7 +1834,7 @@ unsigned short g_hero_pic_posx[7] = { 0x0003, 0x002e, 0x0059, 0x0084, 0x00af, 0x
 signed char g_levelup_ta_rise[12] = { 0x14, 0x14, 0x14, 0x14, 0x14, 0x14, 0x14, 0x14, 0x0f, 0x14, 0x14, 0x14 }; // ds:0x2d0f
 signed char g_levelup_sp_rise[6] = { 0x19, 0x19, 0x28, 0x14, 0x14, 0x14 }; // ds:0x2d1b
 signed char g_levelup_spta_conv[6] = { 5, 5, 5, 0, 0, 0 }; // ds:0x2d21
-signed char g_mr_modificators[13] = { 0, 2, 0, 0, 2, -2, 2, 2, 2, 2, 3, 4, 3 }; // ds:0x2d27, { 0, 2, 0, 0, 2, -2, 2, 2, 2, 2, 3, 4, 3 }
+signed char g_mr_modificators[13] = { 0, 2, 0, 0, 2, -2, 2, 2, 2, 2, 3, 4, 3 }; // ds:0x2d27
 
 
 unsigned char g_datseg_status_start = 0; // ds:0x2d34, 99 = game finished, area of the datseg that is stored one to one in savegame files

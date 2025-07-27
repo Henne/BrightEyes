@@ -199,10 +199,10 @@
 #define SKILLED_HERO_POS                (0x2cdb)    /* signed short; {-1, 0..6} */
 #define GUI_BUTTONS_POS                 (0x2cdd)    /* struct(4)[9]; struct{unsigned short x,y;} */
 #define HERO_PIC_POSX                   (0x2d01)    /* unsigned short[7]; { 3, 46, 89, 132, 175, 218, 275 } */
-#define LEVELUP_TA_RISE                 (0x2d0f)    /* signed char[12] */
-#define LEVELUP_SP_RISE                 (0x2d1b)    /* signed char[6] */
-#define LEVELUP_SPTA_CONV               (0x2d21)    /* signed char[6]; { 5, 5, 5, 0, 0, 0 } */
-#define MR_MODIFICATORS                 (0x2d27)    /* signed char[13]; { 0, 2, 0, 0, 2, -2, 2, 2, 2, 2, 3, 4, 3 } */
+//#define LEVELUP_TA_RISE                 (0x2d0f)    /* signed char[12] */
+//#define LEVELUP_SP_RISE                 (0x2d1b)    /* signed char[6] */
+//#define LEVELUP_SPTA_CONV               (0x2d21)    /* signed char[6]; { 5, 5, 5, 0, 0, 0 } */
+//#define MR_MODIFICATORS                 (0x2d27)    /* signed char[13]; */
 #define DATSEG_STATUS_START             (0x2d34)    /* unsigned char; 99 = game finished, area of the datseg that is stored one to one in savegame files */
 #define CURRENT_GROUP                   (0x2d35)    /* signed char */
 #define GROUP_MEMBER_COUNTS             (0x2d36)    /* signed char[6]; members per group */

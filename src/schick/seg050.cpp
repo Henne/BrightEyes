@@ -573,7 +573,7 @@ void level_up(signed short hero_pos)
 	/* check changes in MR */
 
 	mr = (host_readbs(hero + (HERO_ATTRIB_ORIG + 3 * ATTRIB_KL)) + host_readbs(hero + (HERO_ATTRIB_ORIG + 3 * ATTRIB_MU)) + host_readbs(hero + HERO_LEVEL)) / 3 - 2 * host_readbs(hero + (HERO_ATTRIB_ORIG + 3 * ATTRIB_AG));
-	mr += ds_readbs(MR_MODIFICATORS + host_readbs(hero + HERO_TYPE));
+	mr += g_mr_modificators[host_readbs(hero + HERO_TYPE)];
 
 	if (host_readbs(hero + HERO_MR) != mr) {
 		/* set new basic MR */
@@ -593,10 +593,7 @@ void level_up(signed short hero_pos)
 		}
 
 		/* show the user the new MR value */
-		sprintf((char*)ds_readd(DTP2),
-			get_tx2(41),
-			host_readbs(hero + HERO_MR));
-
+		sprintf((char*)ds_readd(DTP2), get_tx2(41), host_readbs(hero + HERO_MR));
 		GUI_output((char*)ds_readd(DTP2));
 
 		/* update status background */
@@ -610,7 +607,7 @@ void level_up(signed short hero_pos)
 
 
 	/* add skill increasements */
-	add_ptr_bs(hero + HERO_TA_RISE, ds_readbs((LEVELUP_TA_RISE-1) + host_readbs(hero + HERO_TYPE)));
+	add_ptr_bs(hero + HERO_TA_RISE, g_levelup_ta_rise[host_readbs(hero + HERO_TYPE) - 1]);
 
 	/* roll how many LE points the hero may get */
 	i = random_schick(6);
@@ -619,17 +616,16 @@ void level_up(signed short hero_pos)
 		/* a magic user */
 
 		/* add spell increasements */
-		add_ptr_bs(hero + HERO_SP_RISE, ds_readbs((LEVELUP_SP_RISE - 7) + host_readbs(hero + HERO_TYPE)));
+		add_ptr_bs(hero + HERO_SP_RISE, g_levelup_sp_rise[host_readbs(hero + HERO_TYPE) - 7]);
 
 		i += 2;
 
 		/* show how many LE the hero may get */
-		sprintf((char*)ds_readd(DTP2),
-			get_tx2(39),
-			i);
+		sprintf((char*)ds_readd(DTP2), get_tx2(39), i);
 
 		do {
 			l_si = GUI_input((char*)ds_readd(DTP2), 1);
+
 		} while (l_si < 0);
 
 		if (l_si > i) {
@@ -660,10 +656,7 @@ void level_up(signed short hero_pos)
 		/* not a magic user */
 
 		/* show how many LE the hero gets */
-		sprintf((char*)ds_readd(DTP2),
-			get_tx2(38),
-			i);
-
+		sprintf((char*)ds_readd(DTP2), get_tx2(38), i);
 		GUI_output((char*)ds_readd(DTP2));
 
 		/* add LE and fill them up */
@@ -896,11 +889,10 @@ void level_up(signed short hero_pos)
 	} else {
 
 		if ((host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH) &&
-			(l_di = ds_readbs((LEVELUP_SPTA_CONV - 7) + host_readbs(hero + HERO_TYPE))) &&
+			(l_di = g_levelup_spta_conv[host_readbs(hero + HERO_TYPE) - 7]) &&
 			GUI_bool(get_tx2(45)))
 		{
-			sprintf((char*)ds_readd(DTP2),
-				get_tx2(46), l_di);
+			sprintf((char*)ds_readd(DTP2), get_tx2(46), l_di);
 
 			i = GUI_input((char*)ds_readd(DTP2), 1);
 

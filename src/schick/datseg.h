@@ -55,6 +55,11 @@ extern signed short g_tx_file_index;			//ds:0x26bf; seg026-seg107
 extern signed short g_fig_discard;			//ds:0x26c1; seg030-seg117
 
 extern unsigned char g_always_zero4;			//ds:0x2cce; seg032
+
+extern signed char g_levelup_ta_rise[12];		//ds:0x2d0f; seg050
+extern signed char g_levelup_sp_rise[6];		//ds:0x2d1b; seg050
+extern signed char g_levelup_spta_conv[6];		//ds:0x2d21; seg050
+extern signed char g_mr_modificators[13];		//ds:0x2d27; seg050
 extern void (*g_location_handlers[19])(void);
 extern void (*g_use_special_item_handlers[14])(void);
 extern void (*g_travel_event_handlers[146])(void);
