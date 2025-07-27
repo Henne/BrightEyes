@@ -401,8 +401,8 @@ void init_game_state(void)
 
 	set_to_ff();
 
-	for (i = 0; i < 0xfe; i++) {
-		ds_writeb(MARKET_ITEMSALDO_TABLE + i, 0);
+	for (i = 0; i < 254; i++) {
+		g_market_itemsaldo_table[i] = 0;
 	}
 
 	ds_writeb(CURRENT_LOCTYPE_BAK, LOCTYPE_NONE);

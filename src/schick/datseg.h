@@ -78,6 +78,7 @@ extern unsigned char g_event_ani_busy;	// ds:0xe5d2; seg002, seg109-seg118
 extern unsigned char *g_itemuser;	// ds:0xe5ce; seg107
 extern char **g_itemsname;		// ds:0xe22f; seg026, seg120
 extern unsigned char *g_itemsdat;	// ds:0xe22b; seg002, seg027, seg105, seg107, seg120
+extern signed char g_market_itemsaldo_table[254]; // ds:0xe12d; seg056, seg057, seg120
 extern char **g_monnames_index;		// ds:0xe129; seg026, seg120
 extern unsigned char *g_mem_slots_anis;	// ds:0xe121; seg027, seg120
 extern unsigned char *g_mem_slots_mfig;	// ds:0xe11d; seg027, seg120

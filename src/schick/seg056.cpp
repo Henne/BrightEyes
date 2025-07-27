@@ -559,11 +559,11 @@ void buy_screen(void)
 						item_id = host_readws((Bit8u*)ds_readd(BUY_SHOPPING_CART) + 4 * l_di);
 						given_items = get_item(item_id, 1, host_readws((Bit8u*)ds_readd(BUY_SHOPPING_CART) + 4 * l_di + 2));
 
-						ds_writeb(MARKET_ITEMSALDO_TABLE + item_id, ds_readbs(MARKET_ITEMSALDO_TABLE + item_id) + given_items);
+						g_market_itemsaldo_table[item_id] = g_market_itemsaldo_table[item_id] + given_items;
 
-						if (ds_readbs(MARKET_ITEMSALDO_TABLE + item_id) >= 10) {
+						if (g_market_itemsaldo_table[item_id] >= 10) {
 
-							ds_writeb(MARKET_ITEMSALDO_TABLE + item_id, 0);
+							g_market_itemsaldo_table[item_id] = 0;
 
 							add_ptr_ws(get_itemsdat(item_id) + ITEM_STATS_PRICE, host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * 10 / 100);
 						}

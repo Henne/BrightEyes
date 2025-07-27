@@ -1505,7 +1505,7 @@
 //#define MEM_SLOTS_ANIS                  (0xe121)    /* unsigned long; to (struct { unsigned short no, ems_handle; long ani_len; })[36] */
 #define MONSTER_DAT_BUF                 (0xe125)    /* Bit8u* */
 //#define MONNAMES_INDEX                  (0xe129)    /* Bit8u* */
-#define MARKET_ITEMSALDO_TABLE          (0xe12d)    /* signed char[254] */
+//#define MARKET_ITEMSALDO_TABLE          (0xe12d)    /* signed char[254] */
 #define ITEMSDAT                        (0xe22b)    /* long */
 //#define ITEMSNAME                       (0xe22f)    /* long */
 // ?1

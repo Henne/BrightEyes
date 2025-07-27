@@ -475,10 +475,10 @@ void sell_screen(Bit8u *shop_ptr)
 							if (tmp[items_x][l_di] != 0) {
 								item_id = host_readws(hero3 + (HERO_INVENTORY + INVENTORY_ITEM_ID) + SIZEOF_INVENTORY * l_di);
 								drop_item(hero3, l_di, tmp[items_x][l_di]);
-								ds_writeb(MARKET_ITEMSALDO_TABLE + item_id, ds_readbs(MARKET_ITEMSALDO_TABLE + item_id) - tmp[items_x][l_di]);
+								g_market_itemsaldo_table[item_id] = g_market_itemsaldo_table[item_id] - tmp[items_x][l_di];
 
-								if (ds_readbs(MARKET_ITEMSALDO_TABLE + item_id) <= -10) {
-									ds_writeb(MARKET_ITEMSALDO_TABLE + item_id, 0);
+								if (g_market_itemsaldo_table[item_id] <= -10) {
+									g_market_itemsaldo_table[item_id] = 0;
 									sub_ptr_ws(get_itemsdat(item_id) + ITEM_STATS_PRICE, host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * 10 / 100);
 								}
 							}
