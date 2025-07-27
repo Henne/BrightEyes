@@ -290,8 +290,8 @@ signed short init_memory(void)
 #endif
 
 	/* allocate small chunks of memory */
-	g_itemsname = (char**)schick_alloc(254 * sizeof(char*));
-	ds_writed(ITEMSDAT,		(Bit32u)schick_alloc(3060));
+	g_itemsname = 	(char**)schick_alloc(254 * sizeof(char*));
+	g_itemsdat = 	(unsigned char*)schick_alloc(255 * SIZEOF_ITEM_STATS);
 	g_monnames_buffer =(char*)schick_alloc(950);
 	g_monnames_index = (char**)schick_alloc(77 * sizeof(char*));
 	ds_writed(MEM_SLOTS_ANIS,		(Bit32u)schick_alloc(296));

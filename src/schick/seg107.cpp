@@ -40,7 +40,7 @@ void use_item(signed short item_pos, signed short hero_pos)
 
 	ds_writew(USED_ITEM_ID, host_readws(get_itemuser() + ds_readws(USED_ITEM_POS) * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID));
 
-	ds_writed(USED_ITEM_DESC, (Bit32u)((Bit8u*)ds_readd(ITEMSDAT) + ds_readws(USED_ITEM_ID) * 12));
+	ds_writed(USED_ITEM_DESC, (Bit32u)(g_itemsdat + ds_readws(USED_ITEM_ID) * SIZEOF_ITEM_STATS));
 
 	if (check_hero(get_itemuser())) {
 

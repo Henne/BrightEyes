@@ -1145,7 +1145,7 @@ static inline void dump_cb(void)
 }
 
 static inline Bit8u *get_itemsdat(unsigned short item) {
-	return (Bit8u*)ds_readd(ITEMSDAT) + item * 12;
+	return g_itemsdat + SIZEOF_ITEM_STATS * item;
 }
 
 static inline char* get_itemname(unsigned short item)
@@ -1345,7 +1345,7 @@ struct bittest {
 #define get_tx(no) ((char*)(g_tx_index[(no)]))
 #define get_tx2(no) ((char*)(g_tx2_index[(no)]))
 #define get_monname(no) ((char*)g_monnames_index[no])
-#define get_itemsdat(no) ((char*)((Bit8u*)ds_readd(ITEMSDAT) + 12 * (no)))
+#define get_itemsdat(no) ((unsigned char*)(g_itemsdat + SIZEOF_ITEM_STATS * (no)))
 #define get_itemname(no) ((char*)g_itemsname[(no)])
 
 #define get_cb_val(x, y) (*(g_chessboard + (y) * 25 + (x)))

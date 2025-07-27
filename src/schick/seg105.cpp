@@ -95,7 +95,7 @@ void add_equip_boni(Bit8u *owner, Bit8u *equipper, signed short item, signed sho
 
 	if (item) {
 		/* calculate pointer to item description */
-		item_p = (Bit8u*)ds_readd(ITEMSDAT) + item * SIZEOF_ITEM_STATS;
+		item_p = g_itemsdat + item * SIZEOF_ITEM_STATS;
 
 		/* armor and shield */
 		if (item_armor(item_p)) {

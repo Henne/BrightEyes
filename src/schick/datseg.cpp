@@ -6328,7 +6328,7 @@ signed short g_ani_change_dir[10]; // ds:0xe238
 signed long g_gfx_spinlock; // ds:0xe234
 unsigned char g_unkn_084[1]; // ds:0xe233
 char **g_itemsname; // ds:0xe22f
-long g_itemsdat; // ds:0xe22b
+unsigned char* g_itemsdat; // ds:0xe22b
 signed char g_market_itemsaldo_table[254]; // ds:0xe12d
 char **g_monnames_index; // ds:0xe129
 void *g_monster_dat_buf; // ds:0xe125
