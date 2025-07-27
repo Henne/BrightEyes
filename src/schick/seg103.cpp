@@ -122,7 +122,7 @@ signed short LVL_select_skill(Bit8u *hero, signed short show_values)
  *
  * \param   skill       skill
  */
-RealPt get_proper_hero(signed short skill)
+Bit8u* get_proper_hero(signed short skill)
 /* called from only a single position, namely test_skill(..), and only if game is in 'easy' mode and the tested skill is TA_SINNESSCHAERFE */
 {
 	signed short i;
@@ -130,7 +130,7 @@ RealPt get_proper_hero(signed short skill)
 
 	signed short max = -1;
 	unsigned char *hero_i;
-	RealPt retval;
+	Bit8u* retval;
 
 #if !defined(__BORLANDC__)
 	retval = 0;

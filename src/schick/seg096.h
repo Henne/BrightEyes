@@ -11,11 +11,11 @@ char* GUI_name_plural(signed short, char*);
 //2f
 char* GUI_name_singular(char*);
 //34
-RealPt GUI_2f2(signed short, signed short, signed short);
+Bit8u* GUI_2f2(signed short, signed short, signed short);
 //39
 char* GUI_get_ptr(const int, const int);
 //3e
-RealPt GUI_get_ptr2(signed short, signed short);
+Bit8u* GUI_get_ptr2(signed short, signed short);
 //43
 void GUI_print_string(char*, signed short, signed short);
 //48

@@ -501,11 +501,11 @@ void DNG_clear_corridor(Bit8u *ptr)
 	}
 }
 
-void DNG_oberorken_chest(RealPt chest)
+void DNG_oberorken_chest(Bit8u* chest)
 {
-	RealPt ptr_bak;
+	Bit8u* ptr_bak;
 
-	ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 0x0b);
+	ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 0x0b);
 
 	host_writed((Bit8u*)(chest) + 0x0b, (Bit32u)(p_datseg + DNG12_CHEST1_CONTENT));
 

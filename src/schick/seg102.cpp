@@ -295,7 +295,7 @@ void MON_sub_ae(Bit8u *monster, signed short ae)
 	}
 }
 
-signed short MON_cast_spell(RealPt monster, signed char handicap)
+signed short MON_cast_spell(Bit8u* monster, signed char handicap)
 {
 	signed short l_si;
 	signed short l_di;

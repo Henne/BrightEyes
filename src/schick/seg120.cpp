@@ -46,7 +46,7 @@ namespace M302de {
 #endif
 
 /* Borlandified and identical */
-void rabies(RealPt hero, signed short hero_pos)
+void rabies(Bit8u* hero, signed short hero_pos)
 {
 	signed short answer;
 	signed short l_di;
@@ -728,7 +728,7 @@ void call_gen(void)
 			(char*)(p_datseg + STR_GEN_EXE), (char*)(p_datseg + STR_GEN_EXE2),
 			(p_datseg + STR_GEN_B),
 			ds_readws(GAME_MODE) == GAME_MODE_ADVANCED ? (p_datseg + STR_GEN_A) : (p_datseg + STR_GEN_N),
-			(p_datseg + STR_GEN_1), (RealPt)NULL);
+			(p_datseg + STR_GEN_1), (Bit8u*)NULL);
 
 #endif
 	refresh_screen_size();

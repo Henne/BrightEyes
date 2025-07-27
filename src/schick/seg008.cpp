@@ -38,7 +38,7 @@ void set_video_page(signed short page) {
 	INT10_SetActivePage(page);
 }
 
-void save_display_stat(RealPt p) {
+void save_display_stat(Bit8u* p) {
 
 	/* save some registers that may change on the stack,
 		because we call an interrupt */

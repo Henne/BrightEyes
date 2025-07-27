@@ -7,7 +7,7 @@ void load_pp20(signed short);
 /* 0x25 */
 void load_ani(const signed short);
 /* 0x2a */
-RealPt load_fight_figs(signed short);
+Bit8u* load_fight_figs(signed short);
 /* 0x2f */
 void init_common_buffers(void);
 /* 0x34 */

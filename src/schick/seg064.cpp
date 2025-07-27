@@ -26,7 +26,7 @@ namespace M302de {
  * \param   nr_ships_created	number of ships which have already been created before (for avoiding duplicate ship names)
  */
 
-RealPt get_ship_name(signed char passage_type, signed short nr_ships_created)
+Bit8u* get_ship_name(signed char passage_type, signed short nr_ships_created)
 	/* Function is called in a single place only, which is contained in the code of Original-Bug 23 (see below).
 	 * Therefore, the function could be removed if M302de_ORIGINAL_BUGFIX is activated.
 	 */
@@ -50,7 +50,7 @@ RealPt get_ship_name(signed char passage_type, signed short nr_ships_created)
 
 	} while (!done);
 
-	return (RealPt)get_tx(name);
+	return (Bit8u*)get_tx(name);
 }
 
 /**
@@ -62,7 +62,7 @@ unsigned short prepare_passages(void)
 {
 	signed short prepared;
 	signed short i;
-	RealPt ent;
+	Bit8u* ent;
 
 #if !defined(__BORLANDC__)
 	ent = (p_datseg + SEA_ROUTES);

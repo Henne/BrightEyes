@@ -40,7 +40,7 @@ void do_citycamp(void)
 	signed short done;
 	signed short answer;
 	signed short l3;
-	RealPt hero;
+	Bit8u* hero;
 	signed char hours;
 	signed short l5;
 	signed short l6;

@@ -30,7 +30,7 @@ namespace M302de {
 void load_pp20(signed short index)
 {
 	volatile signed short fd;
-	RealPt buffer_ptr;
+	Bit8u* buffer_ptr;
 	signed short bi;
 
 	if (index <= 5
@@ -131,11 +131,11 @@ void load_pp20(signed short index)
  * \return              a pointer to the location where the data is.
  */
 /* Original-Bug: when using EMS for caching something strage happens. */
-RealPt load_fight_figs(signed short fig)
+Bit8u* load_fight_figs(signed short fig)
 {
 	signed short i;
 
-	RealPt dst;
+	Bit8u* dst;
 	unsigned short ems_handle;
 	Bit32u offset;
 	Bit32u len;
@@ -288,7 +288,7 @@ void load_ani(const signed short no)
 	signed short i;
 	Bit8u *p_area;
 	unsigned short ems_handle;
-	RealPt ani_buffer;
+	Bit8u* ani_buffer;
 #if !defined(__BORLANDC__)
 	Bit8u *unplen_ptr;
 #else

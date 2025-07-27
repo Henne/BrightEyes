@@ -34,7 +34,7 @@ static unsigned short EMS_installed(void)
 	return 0;
 }
 
-static RealPt EMS_get_frame_ptr()
+static Bit8u* EMS_get_frame_ptr()
 {
 #if 0
 	reg_ax = DNG09_SECRETDOOR1;
@@ -104,10 +104,10 @@ unsigned short EMS_map_memory(unsigned short handle, unsigned short lpage, unsig
 #endif
 }
 
-RealPt EMS_norm_ptr(RealPt p)
+Bit8u* EMS_norm_ptr(Bit8u* p)
 {
 #if 0
-	RealPt retval;
+	Bit8u* retval;
 
 	retval = RealSeg(p) << 4;
 	retval += RealOff(p);

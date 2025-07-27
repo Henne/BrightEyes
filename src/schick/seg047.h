@@ -17,7 +17,7 @@ unsigned short hero_is_diseased(Bit8u *hero);
 /* 0x3e */
 unsigned short hero_is_poisoned(Bit8u *hero);
 /* 0x43 */
-signed short menu_enter_delete(RealPt, signed short, signed short);
+signed short menu_enter_delete(Bit8u*, signed short, signed short);
 /* 0x48 */
 void update_atpa(Bit8u*);
 /* 0x4d */

@@ -14,16 +14,16 @@ void AIL_startup(void)
 {
 }
 
-void AIL_shutdown(RealPt signoff_msg)
+void AIL_shutdown(Bit8u* signoff_msg)
 {
 }
 
-Bit16s AIL_register_driver(RealPt driver)
+Bit16s AIL_register_driver(Bit8u* driver)
 {
 	return 0;
 }
 
-RealPt AIL_describe_driver(Bit16u driver)
+Bit8u* AIL_describe_driver(Bit16u driver)
 {
 	return NULL;
 }
@@ -37,11 +37,11 @@ void AIL_init_driver(Bit16u driver, Bit16u IO_addr, Bit16u IRQ, Bit16u DMA, Bit1
 {
 }
 
-void AIL_play_VOC_file(Bit16u driver, RealPt VOC_file, Bit16s block_marker)
+void AIL_play_VOC_file(Bit16u driver, Bit8u* VOC_file, Bit16s block_marker)
 {
 }
 
-Bit16u AIL_format_VOC_file(Bit16u driver, RealPt VOC_file, Bit16s block_marker)
+Bit16u AIL_format_VOC_file(Bit16u driver, Bit8u* VOC_file, Bit16s block_marker)
 {
 	return 0;
 }
@@ -68,7 +68,7 @@ Bit16u AIL_state_table_size(Bit16u driver)
 	return 0;
 }
 
-Bit16u AIL_register_sequence(Bit16u driver, RealPt FORM_XMID, Bit16u sequence_num, RealPt state_table, RealPt controller_table)
+Bit16u AIL_register_sequence(Bit16u driver, Bit8u* FORM_XMID, Bit16u sequence_num, Bit8u* state_table, Bit8u* controller_table)
 {
 	return 0;
 }
@@ -82,7 +82,7 @@ Bit16u AIL_default_timbre_cache_size(Bit16u driver)
 	return 0;
 }
 
-void AIL_define_timbre_cache(Bit16u driver, RealPt cache_addr, Bit16u cache_size)
+void AIL_define_timbre_cache(Bit16u driver, Bit8u* cache_addr, Bit16u cache_size)
 {
 }
 
@@ -91,7 +91,7 @@ Bit16u AIL_timbre_request(Bit16u driver, Bit16u sequence)
 	return 0;
 }
 
-void AIL_install_timbre(Bit16u driver, Bit16u bank, Bit16u patch, RealPt src_addr)
+void AIL_install_timbre(Bit16u driver, Bit16u bank, Bit16u patch, Bit8u* src_addr)
 {
 }
 

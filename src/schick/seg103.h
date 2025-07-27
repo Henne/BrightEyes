@@ -20,7 +20,7 @@ signed short LVL_select_skill(Bit8u *, signed short);
 
 /* 0x39 */
 /* can be static */
-RealPt get_proper_hero(signed short);
+Bit8u* get_proper_hero(signed short);
 
 /* 0x3e */
 /* can be static */

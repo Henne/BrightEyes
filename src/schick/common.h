@@ -23,7 +23,7 @@ enum {
 	ANI_AREA_WIDTH		 = 0x09,
 	ANI_AREA_CYCLIC		 = 0x0b,
 	ANI_AREA_PICS		 = 0x0c,
-	ANI_AREA_PICS_TAB	 = 0x0d, /* RealPt[20] */
+	ANI_AREA_PICS_TAB	 = 0x0d, /* Bit8u*[20] */
 	ANI_AREA_CHANGES	 = 0x5d,
 	ANI_AREA_CHANGES_TB	 = 0x5f, /* struct{ short pic, duration; }[42] */
 	SIZEOF_ANI_AREA 	 = 0x107
@@ -518,9 +518,9 @@ enum {
 	FIGHTER_OBJ_ID		= 0x14, /* stores the id of the cb_entry of the square before the fighter entered it */
 	FIGHTER_IS_ENEMY	= 0x15, /* {0	= hero, 1	= enemy, 2	= hero} */ /* strangly, at one position in seg039.cpp the value 2 is written */
 	FIGHTER_SPRITE_NO	= 0x16, /* 0x12c0, 0x1531, 0x1210 */
-	FIGHTER_GFXBUF		= 0x17, /* RealPt */
-	FIGHTER_NEXT		= 0x1b, /* RealPt */
-	FIGHTER_PREV		= 0x1f, /* RealPt */
+	FIGHTER_GFXBUF		= 0x17, /* Bit8u* */
+	FIGHTER_NEXT		= 0x1b, /* Bit8u* */
+	FIGHTER_PREV		= 0x1f, /* Bit8u* */
 };
 
 #define SIZEOF_FIGHTER (0x23)
@@ -1932,14 +1932,14 @@ enum {
 enum { // struct signpost
 	SIGNPOST_TOWN = 0, /* one byte */ /* ID of the town where the harbor is located */
 	SIGNPOST_TYPEINDEX = 1, /* one byte */ /* TYPEINDEX of the signpost within its town */
-	SIGNPOST_LAND_ROUTES = 2, /* four byte, RealPt to the route. Points to the first associated entry in SIGNPOSTS_LINKED_LAND_ROUTES */
+	SIGNPOST_LAND_ROUTES = 2, /* four byte, Bit8u* to the route. Points to the first associated entry in SIGNPOSTS_LINKED_LAND_ROUTES */
 	SIZEOF_SIGNPOST = 6
 };
 
 enum { // struct harbor
 	HARBOR_TOWN = 0, /* one byte */ /* ID of the town where the harbor is located */
 	HARBOR_TYPEINDEX = 1, /* one byte */ /* TYPEINDEX of the harbor within its town */
-	HARBOR_SEA_ROUTES = 2, /* four byte, RealPt to the route. Points to the first associated entry in HARBORS_LINKED_SEA_ROUTES */
+	HARBOR_SEA_ROUTES = 2, /* four byte, Bit8u* to the route. Points to the first associated entry in HARBORS_LINKED_SEA_ROUTES */
 	SIZEOF_HARBOR = 6
 };
 

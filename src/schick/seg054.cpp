@@ -37,7 +37,7 @@ void talk_inn(void)
 /**
  * \brief   returns a pointer to the first brewing hero, who is not in this group, but in this location
  */
-RealPt get_first_brewing_hero(void)
+Bit8u* get_first_brewing_hero(void)
 {
 	unsigned char *hero;
 	signed short i;
@@ -62,7 +62,7 @@ RealPt get_first_brewing_hero(void)
 		}
 	}
 
-	return (RealPt)NULL;
+	return (Bit8u*)NULL;
 }
 
 /**
@@ -82,7 +82,7 @@ void do_inn(void)
 # else
 	signed char magic_act[7];
 # endif
-	RealPt hero;
+	Bit8u* hero;
 	Bit8u *hero2;
 	Bit8u *inn_ptr;
 	Bit32s party_money;

@@ -335,7 +335,7 @@ void update_atpa(Bit8u *hero)
  * \return              the number of the selected hero.
  * Used only in temples.
  */
-signed short menu_enter_delete(RealPt ptr, signed short entries, signed short mode)
+signed short menu_enter_delete(Bit8u* ptr, signed short entries, signed short mode)
 {
 	signed short i;
 	signed short answer;

@@ -496,18 +496,18 @@ void DNG06_fight_intro(signed short fight_id)
 }
 
 
-void DNG06_chest1(RealPt chest)
+void DNG06_chest1(Bit8u* chest)
 {
-	RealPt ptr_bak;
+	Bit8u* ptr_bak;
 
-	ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+	ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG06_CHEST1_CONTENT));
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
 
-void DNG06_chest2(RealPt chest)
+void DNG06_chest2(Bit8u* chest)
 {
 	signed short i;
 	Bit8u *hero;

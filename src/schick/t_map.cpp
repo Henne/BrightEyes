@@ -49,7 +49,7 @@ namespace M302de {
  * \param   off         offset of the pointer in the treasure description
  * \return              pointer to the tresure function
  */
-treasure_type t_map(RealPt ptr, const int off)
+treasure_type t_map(Bit8u* ptr, const int off)
 {
 	/* only 3 offsets are allowed */
 	if (off != 3 && off != 7 && off != 11) {
@@ -57,7 +57,7 @@ treasure_type t_map(RealPt ptr, const int off)
 		return (treasure_type)NULL;
 	}
 
-	RealPt func = (RealPt)host_readd((Bit8u*)(ptr) + off);
+	Bit8u* func = (Bit8u*)host_readd((Bit8u*)(ptr) + off);
 
 	/* early out for NULL pointers */
 	if (func == NULL)	return (treasure_type)NULL;

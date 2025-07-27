@@ -486,7 +486,7 @@ void draw_bar(unsigned short type, signed short hero, signed short pts_cur, sign
 	signed short y_min;
 	signed short x;
 	signed short lost;
-	RealPt dst;
+	Bit8u* dst;
 
 	if (mode == 0)
 		update_mouse_cursor();
@@ -988,11 +988,11 @@ void unused_ega6(unsigned char a)
 
 #endif
 
-void do_h_line(RealPt ptr, signed short x1, signed short x2, signed short y, signed char color)
+void do_h_line(Bit8u* ptr, signed short x1, signed short x2, signed short y, signed char color)
 {
 	signed short tmp;
 	signed short count;
-	RealPt dst;
+	Bit8u* dst;
 
 	if (x1 == x2)
 		return;
@@ -1009,11 +1009,11 @@ void do_h_line(RealPt ptr, signed short x1, signed short x2, signed short y, sig
 	draw_h_line(dst, count, color);
 }
 
-void do_v_line(RealPt ptr, signed short y, signed short x1, signed short x2, signed char color)
+void do_v_line(Bit8u* ptr, signed short y, signed short x1, signed short x2, signed char color)
 {
 	signed short tmp;
 	signed short count;
-	RealPt dst;
+	Bit8u* dst;
 
 	if (x1 == x2)
 		return;
@@ -1030,7 +1030,7 @@ void do_v_line(RealPt ptr, signed short y, signed short x1, signed short x2, sig
 	draw_h_spaced_dots(dst, count, color, 320);
 }
 
-void do_border(RealPt dst, signed short x1, signed short y1, signed short x2, signed short y2, signed char color)
+void do_border(Bit8u* dst, signed short x1, signed short y1, signed short x2, signed short y2, signed char color)
 {
 	update_mouse_cursor();
 	do_h_line(dst, x1, x2, y1, color);
@@ -1047,7 +1047,7 @@ void do_pic_copy(unsigned short mode)
 	short v1, v2, v3, v4;
 	short width, height;
 	Bit8u *src;
-	RealPt dst;
+	Bit8u* dst;
 
 	x1 = ds_readw(PIC_COPY_X1);
 	y1 = ds_readw(PIC_COPY_Y1);
@@ -1073,8 +1073,8 @@ void do_save_rect(void)
 	signed short x1,y1;
 	signed short width,height;
 	signed short x2,y2;
-	RealPt src;
-	RealPt dst;
+	Bit8u* src;
+	Bit8u* dst;
 
 	x1 = ds_readw(PIC_COPY_X1);
 	y1 = ds_readw(PIC_COPY_Y1);
@@ -1092,7 +1092,7 @@ void do_save_rect(void)
 	save_rect(RealSeg(dst), RealOff(dst), src, width, height);
 }
 
-void do_fill_rect(RealPt dst, signed short x, signed short y, signed short w, signed short h, signed short color)
+void do_fill_rect(Bit8u* dst, signed short x, signed short y, signed short w, signed short h, signed short color)
 {
 	signed short width, height;
 

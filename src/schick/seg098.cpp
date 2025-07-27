@@ -246,7 +246,7 @@ signed short get_spell_cost(signed short spell, signed short half_cost)
  * \param   hero        pointer to the hero
  * \return              {0, 1, 2}
  */
-signed short use_magic(RealPt hero)
+signed short use_magic(Bit8u* hero)
 {
 	signed short ae;
 	signed short retval;
@@ -734,7 +734,7 @@ signed short select_magic_user(void)
  * \param   selection_menu	1: select spell from menu / 0: spell is preselected in HERO_SPELL_ID
  * \param   handicap		modifier for the spell cast
  */
-signed short use_spell(RealPt hero, signed short selection_menu, signed char handicap)
+signed short use_spell(Bit8u* hero, signed short selection_menu, signed char handicap)
 {
 	signed short retval = 1;
 	signed short spell_id;

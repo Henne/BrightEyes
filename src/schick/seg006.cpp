@@ -29,9 +29,9 @@ namespace M302de {
  * \param   fighter_id  id of the fighter
  * \return              a pointer to the fighter with id fighter_id
  */
-RealPt FIG_get_ptr(signed char fighter_id)
+Bit8u* FIG_get_ptr(signed char fighter_id)
 {
-	RealPt fighter_ptr = (Bit8u*)ds_readd(FIG_LIST_HEAD);
+	Bit8u* fighter_ptr = (Bit8u*)ds_readd(FIG_LIST_HEAD);
 
 	while (host_readbs((Bit8u*)(fighter_ptr) + FIGHTER_ID) != fighter_id) {
 
@@ -42,7 +42,7 @@ RealPt FIG_get_ptr(signed char fighter_id)
 		}
 
 		/* set fighter_ptr to the next element */
-		fighter_ptr = (RealPt)host_readd((Bit8u*)(fighter_ptr) + FIGHTER_NEXT);
+		fighter_ptr = (Bit8u*)host_readd((Bit8u*)(fighter_ptr) + FIGHTER_NEXT);
 	}
 
 	return fighter_ptr;
@@ -71,7 +71,7 @@ void FIG_draw_figures(void)
 	signed short l1, l2;
 	Bit8u *list_i;
 	struct screen_rect screen_mode;
-	RealPt gfx_dst_bak;
+	Bit8u* gfx_dst_bak;
 	signed short l_si, l_di;
 
 	l1 = 10;
@@ -127,7 +127,7 @@ void FIG_draw_figures(void)
 			do_pic_copy(2);
 		}
 
-	} while (list_i = (Bit8u*)(Bit8u*)((RealPt)host_readd(list_i + FIGHTER_NEXT)));
+	} while (list_i = (Bit8u*)(Bit8u*)((Bit8u*)host_readd(list_i + FIGHTER_NEXT)));
 
 	/* restore a structure */
 	//struct_copy(p_datseg + PIC_COPY_DS_RECT, screen_mode, 8);
@@ -137,7 +137,7 @@ void FIG_draw_figures(void)
 
 void FIG_set_gfx(void)
 {
-	RealPt ptr_bak;
+	Bit8u* ptr_bak;
 
 	ptr_bak = (Bit8u*)ds_readd(PIC_COPY_DST);
 
@@ -174,7 +174,7 @@ void FIG_draw_pic(void)
 	}
 }
 
-RealPt FIG_get_hero_ptr(signed short v1)
+Bit8u* FIG_get_hero_ptr(signed short v1)
 {
 	signed short i;
 
@@ -186,7 +186,7 @@ RealPt FIG_get_hero_ptr(signed short v1)
 	return get_hero(0);
 }
 
-RealPt FIG_get_enemy_sheet(signed short fighter_id)
+Bit8u* FIG_get_enemy_sheet(signed short fighter_id)
 {
 	signed short i;
 
@@ -195,7 +195,7 @@ RealPt FIG_get_enemy_sheet(signed short fighter_id)
 #if !defined(__BORLANDC__)
 			return ((Bit8u*)p_datseg + ENEMY_SHEETS + i * SIZEOF_ENEMY_SHEET);
 #else
-			return (RealPt)&(((struct enemy_sheets*)(p_datseg + ENEMY_SHEETS))[i]);
+			return (Bit8u*)&(((struct enemy_sheets*)(p_datseg + ENEMY_SHEETS))[i]);
 #endif
 	}
 
@@ -377,8 +377,8 @@ void FIG_remove_from_list(signed char fighter_id, signed char keep_in_memory)
  */
 signed char FIG_add_to_list(signed char fighter_id)
 {
-	RealPt p1;
-	RealPt p2;
+	Bit8u* p1;
+	Bit8u* p2;
 	signed short x, y;
 
 	p1 = (Bit8u*)ds_readd(FIG_LIST_BUFFER);
@@ -454,7 +454,7 @@ signed char FIG_add_to_list(signed char fighter_id)
 			}
 
 			/* p2 = p2->next */
-			p2 = (RealPt)host_readd((Bit8u*)(p2) + FIGHTER_NEXT);
+			p2 = (Bit8u*)host_readd((Bit8u*)(p2) + FIGHTER_NEXT);
 		}
 	}
 
@@ -538,10 +538,10 @@ void FIG_draw_enemy_pic(signed short loc, signed short id)
 	Bit8u *p_enemy;
 	signed short fg_bak;
 	signed short bg_bak;
-	RealPt p1;
+	Bit8u* p1;
 	struct nvf_desc nvf;
 
-	p1 = F_PADD((RealPt)(ds_readd(BUFFER8_PTR)), -1288);
+	p1 = F_PADD((Bit8u*)(ds_readd(BUFFER8_PTR)), -1288);
 
 	p_enemy = p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + id * SIZEOF_ENEMY_SHEET;
 

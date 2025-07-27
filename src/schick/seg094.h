@@ -14,7 +14,7 @@ void prepare_map_marker(void);
 /* static */
 void set_textbox_positions(signed short);
 /* 0x39 */
-signed short TM_unused1(RealPt, signed short);
+signed short TM_unused1(Bit8u*, signed short);
 /* 0x3e */
 signed short TM_enter_target_town_viewdir(signed short);
 

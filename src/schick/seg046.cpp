@@ -214,7 +214,7 @@ void status_show(Bit16u index)
 	ds_writew(PIC_COPY_X2, 47);
 	ds_writew(PIC_COPY_Y2, 40);
 	ds_writed(PIC_COPY_DST, (Bit32u)g_renderbuf_ptr);
-	/* the source must be passed here as RealPt */
+	/* the source must be passed here as Bit8u* */
 	ds_writed(PIC_COPY_SRC, (Bit32u)(hero + HERO_PORTRAIT));
 	do_pic_copy(0);
 

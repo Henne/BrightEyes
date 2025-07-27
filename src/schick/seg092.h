@@ -30,10 +30,10 @@ void loot_chest(Bit8u*, char*, char*);
 void seg092_06b4(signed short);
 
 /* 0x4d */
-void use_lockpicks_on_chest(RealPt);
+void use_lockpicks_on_chest(Bit8u*);
 
 /* 0x52 */
-void use_key_on_chest(RealPt);
+void use_key_on_chest(Bit8u*);
 
 /* 0x57 */
 void loot_multi_chest(Bit8u*, char*);

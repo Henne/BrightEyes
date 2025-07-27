@@ -268,7 +268,7 @@ void init_AIL(Bit32u size)
 void exit_AIL(void)
 {
 #if defined(__BORLANDC__)
-	AIL_shutdown((RealPt)NULL);
+	AIL_shutdown((Bit8u*)NULL);
 
 	if (ds_readd(AIL_TIMBRE_CACHE) != 0) {
 		free((void*)ds_readd(AIL_TIMBRE_CACHE));
@@ -295,11 +295,11 @@ void exit_AIL(void)
 #endif
 }
 
-RealPt read_music_driver(RealPt fname)
+Bit8u* read_music_driver(Bit8u* fname)
 {
 #if defined(__BORLANDC__)
 	Bit32u len;
-	RealPt buf;
+	Bit8u* buf;
 	Bit32u ptr;
 
 	signed short handle;
@@ -312,7 +312,7 @@ RealPt read_music_driver(RealPt fname)
 		/* insane pointer casting */
 		ptr = (ds_readd(AIL_MUSIC_DRIVER_BUF2) + 15L);
 		ptr &= 0xfffffff0;
-		buf = EMS_norm_ptr((RealPt)ptr);
+		buf = EMS_norm_ptr((Bit8u*)ptr);
 		/* and_ptr_ds((Bit8u*)&ptr, 0xfffffff0); */
 		_read(handle, (Bit8u*)buf, (unsigned short)len);
 		close(handle);
@@ -329,7 +329,7 @@ signed short prepare_midi_playback(signed short sequence)
 	unsigned short l_si;
 	signed short l_di;
 	signed short patch;
-	RealPt ptr;
+	Bit8u* ptr;
 
 	if ((ds_writews(SAMPLE_AD_HANDLE, load_archive_file(ARCHIVE_FILE_SAMPLE_AD))) != -1) {
 
@@ -370,7 +370,7 @@ signed short start_midi_playback(signed short seq)
 
 
 /* static */
-RealPt prepare_timbre(signed short a1, signed short patch)
+Bit8u* prepare_timbre(signed short a1, signed short patch)
 {
 #if defined(__BORLANDC__)
 	char *buf;
@@ -424,7 +424,7 @@ signed short do_load_midi_file(signed short index)
 }
 
 /* static */
-signed short load_music_driver(RealPt fname, signed short type, signed short port)
+signed short load_music_driver(Bit8u* fname, signed short type, signed short port)
 {
 #if defined(__BORLANDC__)
 	if (port &&
@@ -701,7 +701,7 @@ void SND_set_volume(unsigned short volume)
 }
 
 /* static */
-signed short load_digi_driver(RealPt fname, signed short type, signed short io, signed short irq)
+signed short load_digi_driver(Bit8u* fname, signed short type, signed short io, signed short irq)
 {
 #if defined(__BORLANDC__)
 	if (io &&
@@ -756,7 +756,7 @@ unsigned char* read_digi_driver(char *fname)
 		ds_writed(AIL_DIGI_DRIVER_BUF2, (Bit32u)schick_alloc(len + 16L));
 		ptr = ds_readd(AIL_DIGI_DRIVER_BUF2) + 15L;
 		ptr &= 0xfffffff0;
-		buf = EMS_norm_ptr((RealPt)ptr);
+		buf = EMS_norm_ptr((Bit8u*)ptr);
 		_read(handle, (Bit8u*)buf, (unsigned short)len);
 		close(handle);
 		return buf;
@@ -936,7 +936,7 @@ void copy_from_archive_to_temp(unsigned short index, char* fname)
 	}
 }
 
-void copy_file_to_temp(RealPt src_file, char* fname)
+void copy_file_to_temp(Bit8u* src_file, char* fname)
 {
 	signed short handle1;
 	signed short handle2;
@@ -3178,9 +3178,9 @@ struct dummy {
 void seg002_37c4(void)
 {
 	signed short l_si = 0;
-	RealPt p1;
-	RealPt p2;
-	RealPt p3;
+	Bit8u* p1;
+	Bit8u* p2;
+	Bit8u* p3;
 	struct dummy a = *(struct dummy*)(p_datseg + PIC_COPY_DST);
 
 	p1 = (Bit8u*)ds_readd(BUFFER6_PTR) + 2000;
@@ -3926,21 +3926,21 @@ signed short alloc_EMS(Bit32s bytes)
 	return 0;
 }
 
-void from_EMS(RealPt dst, signed short handle, Bit32s bytes)
+void from_EMS(Bit8u* dst, signed short handle, Bit32s bytes)
 {
 #if defined(__BORLANDC__)
 	signed short si;
 	signed short di;
 	signed short v1;
 	signed short len;
-	RealPt ptr;
+	Bit8u* ptr;
 
 	di = (signed short)(bytes / 0x4000 + 1);
 	v1 = si = 0;
 
 	do {
 		EMS_map_memory(handle, v1++, 0);
-		ptr = (RealPt)F_PADD(dst, (((Bit32s)si) << 0x0e));
+		ptr = (Bit8u*)F_PADD(dst, (((Bit32s)si) << 0x0e));
 		si++;
 
 		len = (bytes - 0x4000 > 0) ? 0x4000 : (signed short)bytes;
@@ -3953,21 +3953,21 @@ void from_EMS(RealPt dst, signed short handle, Bit32s bytes)
 #endif
 }
 
-void to_EMS(signed short handle, RealPt src, Bit32s bytes)
+void to_EMS(signed short handle, Bit8u* src, Bit32s bytes)
 {
 #if defined(__BORLANDC__)
 	signed short si;
 	signed short di;
 	signed short v1;
 	signed short len;
-	RealPt ptr;
+	Bit8u* ptr;
 
 	di = (signed short)(bytes / 0x4000 + 1);
 	v1 = si = 0;
 
 	do {
 		EMS_map_memory(handle, v1++, 0);
-		ptr = (RealPt)F_PADD(src, ((((Bit32s)si) << 0x0e)));
+		ptr = (Bit8u*)F_PADD(src, ((((Bit32s)si) << 0x0e)));
 		si++;
 
 		len = (bytes - 0x4000 > 0) ? 0x4000 : (signed short)bytes;
@@ -5327,7 +5327,7 @@ void sub_group_le(signed short le)
  *
  * \return              a pointer to the first available hero. If none in available it returns a pointer to the first hero.
  */
-RealPt get_first_hero_available_in_group(void)
+Bit8u* get_first_hero_available_in_group(void)
 {
 	signed short i;
 	unsigned char *hero_i = get_hero(0);
@@ -5344,7 +5344,7 @@ RealPt get_first_hero_available_in_group(void)
 		}
 	}
 
-	return (RealPt)get_hero(0);
+	return (Bit8u*)get_hero(0);
 }
 
 /**
@@ -5352,7 +5352,7 @@ RealPt get_first_hero_available_in_group(void)
  *
  * \return              a pointer to the second available hero in the group or NULL.
  */
-RealPt get_second_hero_available_in_group(void)
+Bit8u* get_second_hero_available_in_group(void)
 {
 	signed short i;
 	signed short tmp;

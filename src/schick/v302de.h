@@ -36,7 +36,6 @@ typedef unsigned int Bit32u;
 typedef signed int Bit32s;
 typedef Bit8u* HugePt;
 #endif
-typedef Bit8u* RealPt;
 
 /**
 	struct nvf_desc - nvf descriptor
@@ -1220,8 +1219,8 @@ static inline char* get_itemname(unsigned short item)
 #define add_ds_ds(o, v)		(*(Bit32s*)(ds + (o)) += (v))
 #define sub_ds_ds(o, v)		(*(Bit32s*)(ds + (o)) -= (v))
 
-#define add_ds_fp(o, v)		(*(RealPt*)(ds + (o)) += (v))
-#define sub_ds_fp(o, v)		(*(RealPt*)(ds + (o)) -= (v))
+#define add_ds_fp(o, v)		(*(Bit8u**)(ds + (o)) += (v))
+#define sub_ds_fp(o, v)		(*(Bit8u**)(ds + (o)) -= (v))
 
 #define inc_ptr_bs(p)		((*(Bit8s*)(p))++)
 #define dec_ptr_bs(p)		((*(Bit8s*)(p))--)

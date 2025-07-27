@@ -764,7 +764,7 @@ signed short select_item_to_drop(Bit8u *hero)
 	signed short item;
 	signed short va;
 	signed short textbox_width_bak, bak2, bak3;
-	RealPt ptr;
+	Bit8u* ptr;
 	signed short str[23];
 	signed short di;
 

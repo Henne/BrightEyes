@@ -419,57 +419,57 @@ signed short DNG03_handler(void)
 	return 0;
 }
 
-void DNG03_chest00_func3(RealPt chest)
+void DNG03_chest00_func3(Bit8u* chest)
 {
-        RealPt ptr_bak;
+        Bit8u* ptr_bak;
 
-        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
         host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG03_CHEST00_CONTENT));
         loot_simple_chest((Bit8u*)(chest));
         host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG03_chest01_func3(RealPt chest)
+void DNG03_chest01_func3(Bit8u* chest)
 {
-        RealPt ptr_bak;
+        Bit8u* ptr_bak;
 
-        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
         host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG03_CHEST01_CONTENT));
         loot_simple_chest((Bit8u*)(chest));
         host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG03_chest02_func3(RealPt chest)
+void DNG03_chest02_func3(Bit8u* chest)
 {
-        RealPt ptr_bak;
+        Bit8u* ptr_bak;
 
-        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
         host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG03_CHEST02_CONTENT));
         loot_simple_chest((Bit8u*)(chest));
         host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG03_chest03_func3(RealPt chest)
+void DNG03_chest03_func3(Bit8u* chest)
 {
-        RealPt ptr_bak;
+        Bit8u* ptr_bak;
 
-        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
         host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG03_CHEST03_CONTENT));
         loot_simple_chest((Bit8u*)(chest));
         host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG03_chest04_func3(RealPt chest)
+void DNG03_chest04_func3(Bit8u* chest)
 {
-        RealPt ptr_bak;
+        Bit8u* ptr_bak;
 
-        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
         host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG03_CHEST04_CONTENT));
         loot_simple_chest((Bit8u*)(chest));
         host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG03_chest05_func3(RealPt)
+void DNG03_chest05_func3(Bit8u*)
 {
 	signed short answer;
 	do {
@@ -486,49 +486,49 @@ void DNG03_chest05_func3(RealPt)
 	}
 }
 
-void DNG03_chest06_func3(RealPt chest)
+void DNG03_chest06_func3(Bit8u* chest)
 {
-        RealPt ptr_bak;
+        Bit8u* ptr_bak;
 
-        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
         host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG03_CHEST06_CONTENT));
         loot_simple_chest((Bit8u*)(chest));
         host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG03_chest07_func3(RealPt chest)
+void DNG03_chest07_func3(Bit8u* chest)
 {
-        RealPt ptr_bak;
+        Bit8u* ptr_bak;
 
-        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
         host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG03_CHEST07_CONTENT));
         loot_simple_chest((Bit8u*)(chest));
         host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG03_chest08_func3(RealPt chest)
+void DNG03_chest08_func3(Bit8u* chest)
 {
-        RealPt ptr_bak;
+        Bit8u* ptr_bak;
 
-        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
         host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG03_CHEST08_CONTENT));
         loot_simple_chest((Bit8u*)(chest));
         host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG03_chest09_func3(RealPt chest)
+void DNG03_chest09_func3(Bit8u* chest)
 {
-        RealPt ptr_bak;
+        Bit8u* ptr_bak;
 
-        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
         host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG03_CHEST09_CONTENT));
         loot_simple_chest((Bit8u*)(chest));
         host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG03_chest12_func3(RealPt chest)
+void DNG03_chest12_func3(Bit8u* chest)
 {
-	RealPt ptr_bak;
+	Bit8u* ptr_bak;
 	signed char crystals;
 	signed char i;
 	Bit8u *hero;
@@ -549,7 +549,7 @@ void DNG03_chest12_func3(RealPt chest)
 	/* this chest can only be opened with a leader with 4 crystals */
 	if (crystals == 4)
 	{
-		ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+		ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
 		host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG03_CHEST12_CONTENT));
 		loot_simple_chest((Bit8u*)(chest));
 		host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
@@ -559,12 +559,12 @@ void DNG03_chest12_func3(RealPt chest)
 	}
 }
 
-void DNG03_chest10_func3(RealPt)
+void DNG03_chest10_func3(Bit8u*)
 {
 	GUI_output(get_ttx(522));
 }
 
-void DNG03_chest11_func3(RealPt)
+void DNG03_chest11_func3(Bit8u*)
 {
 	signed short l_si;
 	signed short l_di;

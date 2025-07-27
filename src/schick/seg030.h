@@ -11,9 +11,9 @@ void prepare_date_str(void);
 /* 0x2f */
 void talk_switch(void);
 /* 0x34 */
-RealPt seg030_008d(signed short);
+Bit8u* seg030_008d(signed short);
 /* 0x39 */
-RealPt seg030_0000(signed short);
+Bit8u* seg030_0000(signed short);
 
 #if !defined(__BORLANDC__)
 }

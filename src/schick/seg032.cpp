@@ -385,8 +385,8 @@ void FIG_do_round(void)
 	signed short y_coord;
 	signed short nr_action_phases_left_in_turn; /* number of action phases left in the turn of an actor */
 	signed char is_enemies_turn; /* 0: enemies' turn; 1: heroes' turn */
-	RealPt hero;
-	RealPt enemy;
+	Bit8u* hero;
+	Bit8u* enemy;
 	signed short x;
 	signed short y;
 	Bit8u *fighter_ptr;

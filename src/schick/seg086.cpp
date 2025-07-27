@@ -345,121 +345,121 @@ void DNG11_chest2(void)
 	}
 }
 
-void DNG11_chest3(RealPt chest)
+void DNG11_chest3(Bit8u* chest)
 {
-        RealPt ptr_bak;
+        Bit8u* ptr_bak;
 
-        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
         host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG11_CHEST3));
         loot_simple_chest((Bit8u*)(chest));
         host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG11_chest4(RealPt chest)
+void DNG11_chest4(Bit8u* chest)
 {
-        RealPt ptr_bak;
+        Bit8u* ptr_bak;
 
-        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
         host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG11_CHEST4));
         loot_simple_chest((Bit8u*)(chest));
         host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG11_chest5(RealPt chest)
+void DNG11_chest5(Bit8u* chest)
 {
-        RealPt ptr_bak;
+        Bit8u* ptr_bak;
 
-        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
         host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG11_CHEST5));
         loot_simple_chest((Bit8u*)(chest));
         host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG11_chest6(RealPt chest)
+void DNG11_chest6(Bit8u* chest)
 {
-        RealPt ptr_bak;
+        Bit8u* ptr_bak;
 
-        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
         host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG11_CHEST6));
         loot_simple_chest((Bit8u*)(chest));
         host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG11_chest7(RealPt chest)
+void DNG11_chest7(Bit8u* chest)
 {
-        RealPt ptr_bak;
+        Bit8u* ptr_bak;
 
-        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
         host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG11_CHEST7));
         loot_simple_chest((Bit8u*)(chest));
         host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG11_chest8(RealPt chest)
+void DNG11_chest8(Bit8u* chest)
 {
-        RealPt ptr_bak;
+        Bit8u* ptr_bak;
 
-        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
         host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG11_CHEST8));
         loot_simple_chest((Bit8u*)(chest));
         host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG11_chest9(RealPt chest)
+void DNG11_chest9(Bit8u* chest)
 {
-        RealPt ptr_bak;
+        Bit8u* ptr_bak;
 
-        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
         host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG11_CHEST9));
         loot_simple_chest((Bit8u*)(chest));
         host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG11_chest10(RealPt chest)
+void DNG11_chest10(Bit8u* chest)
 {
-        RealPt ptr_bak;
+        Bit8u* ptr_bak;
 
-        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
         host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG11_CHEST10));
         loot_simple_chest((Bit8u*)(chest));
         host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG11_chest11(RealPt chest)
+void DNG11_chest11(Bit8u* chest)
 {
-        RealPt ptr_bak;
+        Bit8u* ptr_bak;
 
-        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
         host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG11_CHEST11));
         loot_simple_chest((Bit8u*)(chest));
         host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG11_chest12(RealPt chest)
+void DNG11_chest12(Bit8u* chest)
 {
-        RealPt ptr_bak;
+        Bit8u* ptr_bak;
 
-        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
         host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG11_CHEST12));
         loot_simple_chest((Bit8u*)(chest));
         host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG11_chest13(RealPt chest)
+void DNG11_chest13(Bit8u* chest)
 {
-        RealPt ptr_bak;
+        Bit8u* ptr_bak;
 
-        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
         host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG11_CHEST13));
         loot_simple_chest((Bit8u*)(chest));
         host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG11_chest14(RealPt chest)
+void DNG11_chest14(Bit8u* chest)
 {
-        RealPt ptr_bak;
+        Bit8u* ptr_bak;
 
-        ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
         host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG11_CHEST14));
         loot_simple_chest((Bit8u*)(chest));
         host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);

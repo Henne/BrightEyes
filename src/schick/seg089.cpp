@@ -550,17 +550,17 @@ void DNG15_debris(signed short ladder)
 	}
 }
 
-void DNG15_empty_chest(RealPt chest)
+void DNG15_empty_chest(Bit8u* chest)
 {
 	GUI_output(get_ttx(522));
 }
 
-void DNG15_rotten_clothes_chest(RealPt chest)
+void DNG15_rotten_clothes_chest(Bit8u* chest)
 {
 	GUI_output(get_tx(34));
 }
 
-void DNG15_smelling_chest(RealPt chest)
+void DNG15_smelling_chest(Bit8u* chest)
 {
 	Bit8u *hero;
 	if (GUI_bool(get_tx(35)))
@@ -576,7 +576,7 @@ void DNG15_smelling_chest(RealPt chest)
 	}
 }
 
-void DNG15_figures_chest(RealPt chest)
+void DNG15_figures_chest(Bit8u* chest)
 {
 	signed short tw_bak;
 
@@ -586,7 +586,7 @@ void DNG15_figures_chest(RealPt chest)
 	ds_writew(TEXTBOX_WIDTH, tw_bak);
 }
 
-void DNG15_cursed_money_chest(RealPt chest)
+void DNG15_cursed_money_chest(Bit8u* chest)
 {
 	Bit32s p_money;
 	signed short tw_bak;

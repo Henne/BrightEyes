@@ -503,7 +503,7 @@ void TM_func1(signed short route_no, signed short backwards)
 }
 
 /* continue travel after arrival while still on map */
-signed short TM_unused1(RealPt signpost_ptr, signed short old_route_no)
+signed short TM_unused1(Bit8u* signpost_ptr, signed short old_route_no)
 {
 	signed short route_no1;
 	signed short route_id;
@@ -677,7 +677,7 @@ void TM_draw_track(signed short a1, signed short length, signed short direction,
 {
 	signed short i;
 	Bit8u *ptr;
-	RealPt fb_start;
+	Bit8u* fb_start;
 
 	fb_start = (Bit8u*)ds_readd(FRAMEBUF_PTR);
 	ptr = (Bit8u*)(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), host_readws((Bit8u*)ds_readd(BUFFER9_PTR) + 4 * (a1 - 1))), 0xec));

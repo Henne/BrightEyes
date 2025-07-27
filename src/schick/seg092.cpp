@@ -353,14 +353,14 @@ signed short hero_has_lockpicks(Bit8u *hero)
 	return retval;
 }
 
-void (*func)(RealPt);
+void (*func)(Bit8u*);
 
 struct chest {
 	signed short pos;
 	signed char mod;
-	void (*func1)(RealPt);
+	void (*func1)(Bit8u*);
 	void (*func2)(void);
-	void (*func3)(RealPt);
+	void (*func3)(Bit8u*);
 	unsigned short ap;
 	unsigned short money;
 	signed short food;
@@ -373,7 +373,7 @@ void seg092_06b4(signed short a1)
 	signed short y;
 	signed short pos;
 	signed short l4;
-	RealPt chest_ptr;
+	Bit8u* chest_ptr;
 	Bit8u *ptr;
 
 	chest_ptr = (Bit8u*)ds_readd(DNG_SPECIALCHEST_INDEX + 4 * ds_readbs(DUNGEON_INDEX));
@@ -402,25 +402,25 @@ void seg092_06b4(signed short a1)
 
 			if (l4 != 0 && host_readd(chest_ptr + 11)) {
 #if defined(__BORLANDC__)
-				((void (*)(RealPt))((Bit8u*)host_readd(chest_ptr + 11)))(chest_ptr);
+				((void (*)(Bit8u*))((Bit8u*)host_readd(chest_ptr + 11)))(chest_ptr);
 #else
 				(t_map(chest_ptr, 11)(chest_ptr));
 #endif
 			} else if (host_readbs(chest_ptr + 2) != 0) {
 #if defined(__BORLANDC__)
-				((void (*)(RealPt))((Bit8u*)host_readd(chest_ptr + 3)))(chest_ptr);
+				((void (*)(Bit8u*))((Bit8u*)host_readd(chest_ptr + 3)))(chest_ptr);
 #else
 				(t_map(chest_ptr, 3)(chest_ptr));
 #endif
 			} else if ((Bit8u*)host_readd(chest_ptr + 3)) {
 #if defined(__BORLANDC__)
-				((void (*)(RealPt))((Bit8u*)host_readd(chest_ptr + 3)))(chest_ptr);
+				((void (*)(Bit8u*))((Bit8u*)host_readd(chest_ptr + 3)))(chest_ptr);
 #else
 				(t_map(chest_ptr, 3)(chest_ptr));
 #endif
 			} else if ((Bit8u*)host_readd(chest_ptr + 11)) {
 #if defined(__BORLANDC__)
-				((void (*)(RealPt))((Bit8u*)host_readd(chest_ptr + 11)))(chest_ptr);
+				((void (*)(Bit8u*))((Bit8u*)host_readd(chest_ptr + 11)))(chest_ptr);
 #else
 				(t_map(chest_ptr, 11)(chest_ptr));
 #endif
@@ -464,7 +464,7 @@ void seg092_06b4(signed short a1)
 	}
 }
 
-void use_lockpicks_on_chest(RealPt chest_ptr)
+void use_lockpicks_on_chest(Bit8u* chest_ptr)
 {
 	signed short l_si;
 	signed short l_di;
@@ -491,7 +491,7 @@ void use_lockpicks_on_chest(RealPt chest_ptr)
 				}
 #else
 				if ((Bit8u*)host_readd(chest_ptr + 7)) {
-					((void (*)(void))((RealPt)host_readd(chest_ptr + 7)))();
+					((void (*)(void))((Bit8u*)host_readd(chest_ptr + 7)))();
 				}
 #endif
 
@@ -502,8 +502,8 @@ void use_lockpicks_on_chest(RealPt chest_ptr)
 					((treasure_trap)(t_map(chest_ptr, 7)))();
 				}
 #else
-				if ((RealPt)host_readd(chest_ptr + 7)) {
-					((void (*)(void))((RealPt)host_readd(chest_ptr + 7)))();
+				if ((Bit8u*)host_readd(chest_ptr + 7)) {
+					((void (*)(void))((Bit8u*)host_readd(chest_ptr + 7)))();
 				}
 #endif
 
@@ -524,11 +524,11 @@ void use_lockpicks_on_chest(RealPt chest_ptr)
 					}
 				}
 #else
-				if ((RealPt)host_readd(chest_ptr + 11))
+				if ((Bit8u*)host_readd(chest_ptr + 11))
 				{
-					((void (*)(RealPt))((RealPt)host_readd(chest_ptr + 11)))(chest_ptr);
+					((void (*)(Bit8u*))((Bit8u*)host_readd(chest_ptr + 11)))(chest_ptr);
 
-					if ((RealPt)host_readd(chest_ptr + 7) == (RealPt)&chest_protected_heavy)
+					if ((Bit8u*)host_readd(chest_ptr + 7) == (Bit8u*)&chest_protected_heavy)
 					{
 						add_hero_ap(hero, 5);
 					}
@@ -546,7 +546,7 @@ void use_lockpicks_on_chest(RealPt chest_ptr)
 	}
 }
 
-void use_key_on_chest(RealPt chest_ptr)
+void use_key_on_chest(Bit8u* chest_ptr)
 {
 	signed short key_pos;
 	Bit8u *hero;
@@ -561,7 +561,7 @@ void use_key_on_chest(RealPt chest_ptr)
 		{
 
 #if defined(__BORLANDC__)
-			((void (*)(RealPt))((RealPt)host_readd(chest_ptr + 11)))(chest_ptr);
+			((void (*)(Bit8u*))((Bit8u*)host_readd(chest_ptr + 11)))(chest_ptr);
 #else
 			t_map(chest_ptr, 11)(chest_ptr);
 #endif
@@ -570,7 +570,7 @@ void use_key_on_chest(RealPt chest_ptr)
 		}
 	} else {
 #if defined(__BORLANDC__)
-		((void (*)(void))((RealPt)host_readd(chest_ptr + 7)))();
+		((void (*)(void))((Bit8u*)host_readd(chest_ptr + 7)))();
 #else
 		((treasure_trap)(t_map(chest_ptr, 7)))();
 #endif

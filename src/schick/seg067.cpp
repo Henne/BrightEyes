@@ -233,7 +233,7 @@ void city_event_5(void)
 {
 	signed short randval;
 	signed short tw_bak;
-	RealPt hero;
+	Bit8u* hero;
 
 	load_in_head(48);
 
@@ -415,7 +415,7 @@ void city_event_9(void)
 /**
  * \brief   return a pointer to a weapon related information
  */
-RealPt waffinfo_weapons(void)
+Bit8u* waffinfo_weapons(void)
 {
 	signed short randval;
 	Bit8u *ptr;
@@ -426,13 +426,13 @@ RealPt waffinfo_weapons(void)
 
 	randval = random_schick(19) - 1;
 
-	return (RealPt)host_readd(ptr + 4 * randval);
+	return (Bit8u*)host_readd(ptr + 4 * randval);
 }
 
 /**
  * \brief   return a pointer to a herb related information
  */
-RealPt waffinfo_herbs(void)
+Bit8u* waffinfo_herbs(void)
 {
 	signed short randval;
 	Bit8u *ptr;
@@ -443,13 +443,13 @@ RealPt waffinfo_herbs(void)
 
 	randval = random_schick(40) - 1;
 
-	return (RealPt)host_readd(ptr + 4 * randval);
+	return (Bit8u*)host_readd(ptr + 4 * randval);
 }
 
 /**
  * \brief   return a pointer to a general information
  */
-RealPt waffinfo_general(void)
+Bit8u* waffinfo_general(void)
 {
 	signed short randval;
 	Bit8u *ptr;
@@ -460,7 +460,7 @@ RealPt waffinfo_general(void)
 
 	randval = random_schick(67) - 1;
 
-	return (RealPt)host_readd(ptr + 4 * randval);
+	return (Bit8u*)host_readd(ptr + 4 * randval);
 }
 
 

@@ -603,7 +603,7 @@ signed short game_options(void)
 void draw_icon(signed short id, signed short x, signed short y)
 {
 	signed short handle;
-	RealPt ptr_bak;
+	Bit8u* ptr_bak;
 
 	handle = load_archive_file(ARCHIVE_FILE_ICONS);
 

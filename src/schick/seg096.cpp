@@ -158,7 +158,7 @@ char* GUI_name_singular(char *s)
 /**
  * \brief   return a pointer to the pronoun
  */
-RealPt GUI_2f2(signed short v1, signed short word_id, signed short type)
+Bit8u* GUI_2f2(signed short v1, signed short word_id, signed short type)
 {
 	signed short genus;
 
@@ -192,7 +192,7 @@ char* GUI_get_ptr(const int genus, const int causus)
 //394
 /**
  */
-RealPt GUI_get_ptr2(signed short genus, signed short causus)
+Bit8u* GUI_get_ptr2(signed short genus, signed short causus)
 {
 	if (genus == 0) {
 		return (causus == 0) ? ((Bit8u*)p_datseg + GRAMMAR_ARTICLE_DER) :
@@ -528,7 +528,7 @@ void GUI_font_to_buf(Bit8u *fc)
 void GUI_write_char_to_screen_xy(unsigned short x, unsigned short y, unsigned short char_height, unsigned short char_width)
 {
 	/* screen_start */
-	RealPt dst = ((Bit8u*)ds_readd(PRINT_STRING_BUFFER)) + y * 320 + x;
+	Bit8u* dst = ((Bit8u*)ds_readd(PRINT_STRING_BUFFER)) + y * 320 + x;
 
 	GUI_write_char_to_screen(dst, char_height, char_width);
 }

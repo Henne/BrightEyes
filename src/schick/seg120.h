@@ -15,7 +15,7 @@ void prepare_dirs(void);
 void cleanup_game(void);
 
 /* 0x34 */
-void rabies(RealPt, signed short);
+void rabies(Bit8u*, signed short);
 
 /* 0x39 */
 /* should be static */

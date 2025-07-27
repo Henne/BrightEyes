@@ -8,7 +8,7 @@ void move(void);
 
 void door_frame(signed short, signed short, signed short, signed short);
 
-void loot_corpse(RealPt, char*, Bit8u*);
+void loot_corpse(Bit8u*, char*, Bit8u*);
 
 void no_way(void);
 

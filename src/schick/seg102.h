@@ -3,7 +3,7 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-signed short MON_cast_spell(RealPt, signed char);
+signed short MON_cast_spell(Bit8u*, signed char);
 
 /* 0x25 */
 void mspell_verwandlung(void);

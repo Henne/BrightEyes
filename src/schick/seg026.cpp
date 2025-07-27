@@ -206,7 +206,7 @@ signed short load_game_state(void)
 	signed short l3;
 	signed short retval;
 	signed short l4;
-	RealPt hero_i;
+	Bit8u* hero_i;
 	signed char version[4];
 	struct ffblk blk;
 	char name[20];

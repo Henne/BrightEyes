@@ -510,7 +510,7 @@ signed short skill_cure_disease(Bit8u *healer, Bit8u *patient, signed short hand
 	return retval;
 }
 
-RealPt get_heaviest_hero(void)
+Bit8u* get_heaviest_hero(void)
 {
 	unsigned char *hero;
 	unsigned char *retval;

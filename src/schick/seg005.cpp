@@ -121,7 +121,7 @@ void FIG_set_star_color(Bit8u *ptr, unsigned short count, unsigned char color)
  * \return              "einem Magier" if the enemy is a "Magier".
  */
 //static
-RealPt FIG_name_3rd_case(unsigned short type, volatile unsigned short pos)
+Bit8u* FIG_name_3rd_case(unsigned short type, volatile unsigned short pos)
 {
 	if (type == 2) {
 		return get_hero(pos) + HERO_NAME2;
@@ -138,7 +138,7 @@ RealPt FIG_name_3rd_case(unsigned short type, volatile unsigned short pos)
  * \return              "einen Magier" if the enemy is a "Magier".
  */
 //static
-RealPt FIG_name_4th_case(unsigned short type, volatile unsigned short pos)
+Bit8u* FIG_name_4th_case(unsigned short type, volatile unsigned short pos)
 {
 
 	if (type == 2)
@@ -155,7 +155,7 @@ RealPt FIG_name_4th_case(unsigned short type, volatile unsigned short pos)
  * \return              "ein Magier" if the enemy is a "Magier".
  */
 //static
-RealPt FIG_name_1st_case(unsigned short type, volatile unsigned short pos)
+Bit8u* FIG_name_1st_case(unsigned short type, volatile unsigned short pos)
 {
 
 	if (type == 2)
@@ -170,10 +170,10 @@ unsigned short fight_printer(void)
 {
 	signed short fg_bak;
 	signed short bg_bak;
-	RealPt gfx_pos_bak;
+	Bit8u* gfx_pos_bak;
 	Bit16u x;
 	char str[6];
-	RealPt gfx_dst_bak;
+	Bit8u* gfx_dst_bak;
 
 	Bit16s f_action;
 
@@ -306,8 +306,8 @@ void draw_fight_screen(Bit16u val)
 	signed short obj_x;
 	signed short obj_y;
 
-	RealPt p_figure_gfx;
-	RealPt p_weapon_gfx;
+	Bit8u* p_figure_gfx;
+	Bit8u* p_weapon_gfx;
 	Bit8u *list_i;
 
 	struct dummy_w4 coord_bak;
@@ -454,7 +454,7 @@ void draw_fight_screen(Bit16u val)
 			obj_x += host_readbs(list_i + FIGHTER_OFFSETX);
 			obj_y += host_readbs(list_i + FIGHTER_OFFSETY);
 
-			p_figure_gfx = (RealPt)host_readd(list_i + FIGHTER_GFXBUF);
+			p_figure_gfx = (Bit8u*)host_readd(list_i + FIGHTER_GFXBUF);
 
 			if ((host_readbs(list_i + FIGHTER_SHEET) != -1) &&
 				(ds_readws(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2) != -1)) {
@@ -597,7 +597,7 @@ void draw_fight_screen(Bit16u val)
 
 						inc_ds_ws(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2);
 
-						p_figure_gfx = (RealPt)host_readd(list_i + FIGHTER_GFXBUF);
+						p_figure_gfx = (Bit8u*)host_readd(list_i + FIGHTER_GFXBUF);
 
 						if (host_readbs(list_i + FIGHTER_TWOFIELDED) > 20) {
 							/* list_i is the fighter entry of the tail of a twofielded enemy */
@@ -898,7 +898,7 @@ void draw_fight_screen(Bit16u val)
 				}
 
 
-				/* NULL check on RealPt */
+				/* NULL check on Bit8u* */
 				if (p_weapon_gfx != 0)  {
 
 					ds_writew(PIC_COPY_X1, current_x1);

@@ -301,26 +301,26 @@ signed short DNG04_handler(void)
 	return 0;
 }
 
-void DNG04_corpse0(RealPt ptr)
+void DNG04_corpse0(Bit8u* ptr)
 {
 	loot_corpse(ptr, get_tx(1), p_datseg + DNG04_CORPSE0_FLAG);
 }
 
-void DNG04_corpse1(RealPt ptr)
+void DNG04_corpse1(Bit8u* ptr)
 {
 	loot_corpse(ptr, get_tx(8), p_datseg + DNG04_CORPSE1_FLAG);
 }
 
-void DNG04_corpse2(RealPt ptr)
+void DNG04_corpse2(Bit8u* ptr)
 {
 	loot_corpse(ptr, get_tx(20), p_datseg + DNG04_CORPSE2_FLAG);
 }
 
-void DNG04_corpse0_chest(RealPt chest)
+void DNG04_corpse0_chest(Bit8u* chest)
 {
-	RealPt bak;
+	Bit8u* bak;
 
-	bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+	bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG04_CHEST_CORPSE0));
 
 	loot_chest((Bit8u*)(chest), get_tx(22), get_tx(6));
@@ -328,11 +328,11 @@ void DNG04_corpse0_chest(RealPt chest)
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)bak);
 }
 
-void DNG04_corpse1_chest(RealPt chest)
+void DNG04_corpse1_chest(Bit8u* chest)
 {
-	RealPt bak;
+	Bit8u* bak;
 
-	bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+	bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG04_CHEST_CORPSE1));
 
 	loot_chest((Bit8u*)(chest), get_tx(23), get_tx(6));
@@ -340,11 +340,11 @@ void DNG04_corpse1_chest(RealPt chest)
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)bak);
 }
 
-void DNG04_corpse2_chest(RealPt chest)
+void DNG04_corpse2_chest(Bit8u* chest)
 {
-	RealPt bak;
+	Bit8u* bak;
 
-	bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+	bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG04_CHEST_CORPSE2));
 
 	loot_chest((Bit8u*)(chest), get_tx(24), get_tx(6));

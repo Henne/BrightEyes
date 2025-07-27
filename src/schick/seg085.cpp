@@ -440,46 +440,46 @@ signed short DNG10_handler(void)
 	return 0;
 }
 
-void DNG10_chest0_x1(RealPt ptr)
+void DNG10_chest0_x1(Bit8u* ptr)
 {
 	loot_corpse(ptr, get_tx(3), p_datseg + DNG10_CORPSE_LOOTED);
 }
 
-void DNG10_chest0_x2(RealPt chest)
+void DNG10_chest0_x2(Bit8u* chest)
 {
-	RealPt ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+	Bit8u* ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG10_CHEST0_CONTENT));
 	loot_chest((Bit8u*)(chest), get_tx(4), get_tx(5));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG10_chest1_x1(RealPt chest)
+void DNG10_chest1_x1(Bit8u* chest)
 {
-	RealPt ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+	Bit8u* ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG10_CHEST1_CONTENT));
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG10_chest2_x1(RealPt chest)
+void DNG10_chest2_x1(Bit8u* chest)
 {
-	RealPt ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+	Bit8u* ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG10_CHEST2_CONTENT));
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG10_chest3_x1(RealPt chest)
+void DNG10_chest3_x1(Bit8u* chest)
 {
-	RealPt ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+	Bit8u* ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG10_CHEST3_CONTENT));
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG10_chest4_x1(RealPt chest)
+void DNG10_chest4_x1(Bit8u* chest)
 {
-	RealPt ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+	Bit8u* ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG10_CHEST4_CONTENT));
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);

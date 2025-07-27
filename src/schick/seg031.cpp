@@ -270,7 +270,7 @@ signed short get_town_lookup_entry(void)
  *
  * \return              a pointer to the string.
  */
-RealPt get_informer_hint(void)
+Bit8u* get_informer_hint(void)
 {
 	signed short i;
 	Bit8u *ptr;
@@ -278,11 +278,11 @@ RealPt get_informer_hint(void)
 	ptr = p_datseg + INFORMER_TAB;
 	for (i = 0; i < 15; i++, ptr += 4) {
 		if (host_readb(ptr + 2) == ds_readb(CURRENT_TOWN)) {
-			return (RealPt)get_ttx(i + 715);
+			return (Bit8u*)get_ttx(i + 715);
 		}
 	}
 
-	return (RealPt)get_ttx(725);
+	return (Bit8u*)get_ttx(725);
 }
 
 /**
@@ -290,9 +290,9 @@ RealPt get_informer_hint(void)
  *
  * \return  a pointer to the name of the informer
  */
-RealPt get_informer_name(void)
+Bit8u* get_informer_name(void)
 {
-	return (RealPt)get_ttx(ds_readw(INFORMER_TAB - 4 + ds_readb(CURRENT_INFORMER) * 4));
+	return (Bit8u*)get_ttx(ds_readw(INFORMER_TAB - 4 + ds_readb(CURRENT_INFORMER) * 4));
 }
 
 /**
@@ -300,9 +300,9 @@ RealPt get_informer_name(void)
  *
  * \return a pointer to the name of the informer
  */
-RealPt get_informer_name2(void)
+Bit8u* get_informer_name2(void)
 {
-	return (RealPt)get_ttx(ds_readw(INFORMER_TAB + get_town_lookup_entry() * 4));
+	return (Bit8u*)get_ttx(ds_readw(INFORMER_TAB + get_town_lookup_entry() * 4));
 }
 
 /**
@@ -310,7 +310,7 @@ RealPt get_informer_name2(void)
  *
  * \return              a pointer to the message.
  */
-RealPt load_current_town_gossip(void)
+Bit8u* load_current_town_gossip(void)
 {
 	signed short gossip_id;
 	Bit8u *ptr;
@@ -328,7 +328,7 @@ RealPt load_current_town_gossip(void)
 	gossip_id = get_tavern_gossip();
 
 	/* return the pointer to the gossip (pointers are stored in the first 1000 bytes) */
-	return (RealPt)host_readd(ptr + 4 * gossip_id);
+	return (Bit8u*)host_readd(ptr + 4 * gossip_id);
 }
 
 char* get_random_tavern_message(void)

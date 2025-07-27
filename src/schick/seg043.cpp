@@ -47,7 +47,7 @@ struct msg {
  * \param   monster     pointer to a monster datasheet
  * \param   monster_pos position of the monster (fighter_id = monster_pos + 10)
  */
-void FIG_do_enemy_action(RealPt monster, signed short monster_pos)
+void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 {
 	signed short damage;
 

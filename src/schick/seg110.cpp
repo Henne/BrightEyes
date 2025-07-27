@@ -217,7 +217,7 @@ void tevent_014(void)
 	}
 }
 
-void tevent_014_chest(RealPt chest)
+void tevent_014_chest(Bit8u* chest)
 {
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + TEVENT014_CHEST));
 

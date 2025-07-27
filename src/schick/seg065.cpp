@@ -101,7 +101,7 @@ void final_intro(void)
 	signed short height;
 	Bit32u len;
 	Bit8u *ptr1;
-	RealPt ptr2;
+	Bit8u* ptr2;
 	struct nvf_desc nvf;
 
 	ds_writebs(PP20_INDEX, (signed char)(ARCHIVE_FILE_DNGS + 12));
@@ -123,7 +123,7 @@ void final_intro(void)
 
 	set_palette(ptr1, 0, 0x60);
 
-	ptr2 = (RealPt)F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 80000);
+	ptr2 = (Bit8u*)F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 80000);
 
 	nvf.dst = g_renderbuf_ptr;
 	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
@@ -183,7 +183,7 @@ void final_intro(void)
 #if defined(__BORLANDC__)
 static
 #endif
-RealPt hyg_ani_1(signed short nvf_no, Bit8u *ptr)
+Bit8u* hyg_ani_1(signed short nvf_no, Bit8u *ptr)
 {
 	HugePt retval;
 	struct nvf_desc nvf;
@@ -197,10 +197,10 @@ RealPt hyg_ani_1(signed short nvf_no, Bit8u *ptr)
 
 	process_nvf(&nvf);
 
-	retval = F_PADD((RealPt)host_readd(ptr),
+	retval = F_PADD((Bit8u*)host_readd(ptr),
 			host_readws(ptr + 4) * host_readws(ptr + 6));
 
-	return (RealPt)retval;
+	return (Bit8u*)retval;
 }
 
 #if defined(__BORLANDC__)
@@ -255,13 +255,13 @@ void show_hyggelik_ani(void)
 	signed short handle;
 	Bit32s filelen;
 	Bit8u *src;
-	RealPt ptr1;
-	RealPt ptr2;
+	Bit8u* ptr1;
+	Bit8u* ptr2;
 	Bit8u array[30*8];
 
 	ds_writew(WALLCLOCK_UPDATE, 0);
 	ptr1 = (Bit8u*)ds_readd(BUFFER9_PTR);
-	ptr2 = (RealPt)F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 0x1fbd0);
+	ptr2 = (Bit8u*)F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 0x1fbd0);
 
 	handle = load_archive_file(ARCHIVE_FILE_HYGBACK_NVF);
 	filelen = read_archive_file(handle, g_renderbuf_ptr, 64000);

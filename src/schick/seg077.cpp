@@ -235,62 +235,62 @@ signed short DNG01_handler(void)
 	return 0;
 }
 
-void DNG01_chest1_x1(RealPt chest)
+void DNG01_chest1_x1(Bit8u* chest)
 {
-	RealPt ptr_bak;
+	Bit8u* ptr_bak;
 
-	ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+	ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG01_CHEST1_CONTENT));
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG01_chest2_x1(RealPt chest)
+void DNG01_chest2_x1(Bit8u* chest)
 {
-	RealPt ptr_bak;
+	Bit8u* ptr_bak;
 
-	ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+	ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG01_CHEST2_CONTENT));
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG01_chest3_x1(RealPt chest)
+void DNG01_chest3_x1(Bit8u* chest)
 {
-	RealPt ptr_bak;
+	Bit8u* ptr_bak;
 
-	ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+	ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG01_CHEST3_CONTENT));
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG01_chest5_x1(RealPt chest)
+void DNG01_chest5_x1(Bit8u* chest)
 {
-	RealPt ptr_bak;
+	Bit8u* ptr_bak;
 
-	ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+	ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG01_CHEST5_CONTENT));
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG01_chest7_x1(RealPt chest)
+void DNG01_chest7_x1(Bit8u* chest)
 {
 	loot_corpse(chest, get_tx(4), p_datseg + DNG01_CORPSE_LOOTED);
 }
 
-void DNG01_chest7_x2(RealPt chest)
+void DNG01_chest7_x2(Bit8u* chest)
 {
-	RealPt ptr_bak;
+	Bit8u* ptr_bak;
 
-	ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+	ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG01_CHEST7_CONTENT));
 	loot_chest((Bit8u*)(chest), get_tx(5), get_tx(6));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG01_chest6_x3(RealPt chest)
+void DNG01_chest6_x3(Bit8u* chest)
 {
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* Enabling the extra loot in function DNG01_chest6_x1() also causes the special chest handler to call this function instead of DNG01_chest6_x1().
@@ -325,12 +325,12 @@ void DNG01_chest6_x3(RealPt chest)
 #endif
 }
 
-void DNG01_chest6_x2(RealPt chest)
+void DNG01_chest6_x2(Bit8u* chest)
 {
 	GUI_output(get_tx(3));
 }
 
-void DNG01_chest6_x1(RealPt chest)
+void DNG01_chest6_x1(Bit8u* chest)
 {
 	if (!ds_readbs(DNG01_KEY_TAKEN))
 	{
@@ -341,7 +341,7 @@ void DNG01_chest6_x1(RealPt chest)
 		{
 			// correct answer
 #if defined(__BORLANDC__)
-			((void (*)(RealPt))((RealPt)host_readd((Bit8u*)(chest) + 11)))(chest);
+			((void (*)(Bit8u*))((Bit8u*)host_readd((Bit8u*)(chest) + 11)))(chest);
 #else
 			t_map(chest, 11)(chest);
 #endif
@@ -350,9 +350,9 @@ void DNG01_chest6_x1(RealPt chest)
 #ifdef M302de_ORIGINAL_BUGFIX
 			ds_writew(GET_EXTRA_LOOT, 1);
 #endif
-		} else if ((RealPt)host_readd((Bit8u*)(chest) + 7) != 0){
+		} else if ((Bit8u*)host_readd((Bit8u*)(chest) + 7) != 0){
 #if defined(__BORLANDC__)
-			((void (*)(void))((RealPt)host_readd((Bit8u*)(chest) + 7)))();
+			((void (*)(void))((Bit8u*)host_readd((Bit8u*)(chest) + 7)))();
 #else
 			// wrong answer
 			((treasure_trap)(t_map(chest, 7)))();
@@ -364,7 +364,7 @@ void DNG01_chest6_x1(RealPt chest)
 	}
 }
 
-void DNG01_chest0_x1(RealPt chest)
+void DNG01_chest0_x1(Bit8u* chest)
 {
 	if (!ds_readb(DEADSHIP_FINAL) && GUI_bool(get_tx(1)))
 	{

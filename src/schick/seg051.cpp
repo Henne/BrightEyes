@@ -43,7 +43,7 @@ void do_wildcamp(void)
 	signed char stock_tries;
 	signed char herb_tries;
 	signed char herb_hours;
-	RealPt hero;
+	Bit8u* hero;
 	signed char l3;
 	signed short l4;
 	signed short l5;
@@ -474,7 +474,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 	signed short l_di;
 	signed short retval;
 	signed short j;
-	RealPt hero;
+	Bit8u* hero;
 	Bit8u *hero2;
 
 	retval = 0;

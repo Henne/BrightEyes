@@ -48,7 +48,7 @@ struct msg {
  * \param   hero        pointer to the hero
  * \param   hero_pos    position in the group (fighter_id = hero_pos + 1)
  */
-void FIG_do_hero_action(RealPt hero, const signed short hero_pos)
+void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 {
 	signed short damage;
 	Bit8u *target_monster;

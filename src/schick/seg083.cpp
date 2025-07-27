@@ -486,7 +486,7 @@ void DNG08_search_bed(void)
 	}
 }
 
-void DNG08_chest1_func2(RealPt)
+void DNG08_chest1_func2(Bit8u*)
 {
 	Bit8u *hero;
 
@@ -503,7 +503,7 @@ void DNG08_chest1_func2(RealPt)
 	sub_hero_le(hero, dice_roll(3, 6, 0));
 }
 
-void DNG08_chest0_func3(RealPt)
+void DNG08_chest0_func3(Bit8u*)
 {
 	if (!ds_readb(DNG08_CHEST0_LOOTED))
 	{
@@ -516,22 +516,22 @@ void DNG08_chest0_func3(RealPt)
 	}
 }
 
-void DNG08_chest1_func3(RealPt)
+void DNG08_chest1_func3(Bit8u*)
 {
 	loot_multi_chest(p_datseg + DNG08_CHEST1_CONTENT, get_tx(34));
 }
 
-void DNG08_chest2_func3(RealPt chest)
+void DNG08_chest2_func3(Bit8u* chest)
 {
-	RealPt ptr_bak;
+	Bit8u* ptr_bak;
 
-	ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+	ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG08_CHEST2_CONTENT));
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG08_chest2_func1(RealPt chest)
+void DNG08_chest2_func1(Bit8u* chest)
 {
 	if (!ds_readb(DNG08_CHEST2_LOOTED))
 	{
@@ -542,15 +542,15 @@ void DNG08_chest2_func1(RealPt chest)
 			if (!strcmp((char*)ds_readd(TEXT_INPUT_BUF), (char*)p_datseg + DNG08_STR_TAIRACH))
 			{
 #if defined(__BORLANDC__)
-			((void (*)(RealPt))((RealPt)host_readd((Bit8u*)(chest) + 11)))(chest);
+			((void (*)(Bit8u*))((Bit8u*)host_readd((Bit8u*)(chest) + 11)))(chest);
 #else
 			t_map(chest, 11)(chest);
 #endif
 
-			} else if ((RealPt)host_readd((Bit8u*)(chest) + 7) != 0)
+			} else if ((Bit8u*)host_readd((Bit8u*)(chest) + 7) != 0)
 			{
 #if defined(__BORLANDC__)
-			((void (*)(void))((RealPt)host_readd((Bit8u*)(chest) + 7)))();
+			((void (*)(void))((Bit8u*)host_readd((Bit8u*)(chest) + 7)))();
 #else
 			((treasure_trap)(t_map(chest, 7)))();
 #endif
@@ -563,7 +563,7 @@ void DNG08_chest2_func1(RealPt chest)
 	}
 }
 
-void DNG08_chest3_func1(RealPt chest)
+void DNG08_chest3_func1(Bit8u* chest)
 {
 	Bit8u *hero;
 
@@ -584,14 +584,14 @@ void DNG08_chest3_func1(RealPt chest)
 		}
 	} else {
 #if defined(__BORLANDC__)
-			((void (*)(void))((RealPt)host_readd((Bit8u*)(chest) + 7)))();
+			((void (*)(void))((Bit8u*)host_readd((Bit8u*)(chest) + 7)))();
 #else
 			((treasure_trap)(t_map(chest, 7)))();
 #endif
 	}
 }
 
-void DNG08_chest4_func1(RealPt chest)
+void DNG08_chest4_func1(Bit8u* chest)
 {
 	Bit8u *hero;
 	hero = (Bit8u*)get_first_hero_available_in_group();
@@ -600,21 +600,21 @@ void DNG08_chest4_func1(RealPt chest)
 		test_skill(hero, TA_SCHLOESSER, 5) > 0)
 	{
 #if defined(__BORLANDC__)
-		((void (*)(RealPt))((RealPt)host_readd((Bit8u*)(chest) + 11)))(chest);
+		((void (*)(Bit8u*))((Bit8u*)host_readd((Bit8u*)(chest) + 11)))(chest);
 #else
 		t_map(chest, 11)(chest);
 #endif
 
 	} else {
 #if defined(__BORLANDC__)
-		((void (*)(void))((RealPt)host_readd((Bit8u*)(chest) + 7)))();
+		((void (*)(void))((Bit8u*)host_readd((Bit8u*)(chest) + 7)))();
 #else
 		((treasure_trap)(t_map(chest, 7)))();
 #endif
 	}
 }
 
-void DNG08_chest5_func1(RealPt chest)
+void DNG08_chest5_func1(Bit8u* chest)
 {
 	Bit8u *hero;
 	hero = (Bit8u*)get_first_hero_available_in_group();
@@ -623,35 +623,35 @@ void DNG08_chest5_func1(RealPt chest)
 		test_skill(hero, TA_SCHLOESSER, 5) > 0)
 	{
 #if defined(__BORLANDC__)
-		((void (*)(RealPt))((RealPt)host_readd((Bit8u*)(chest) + 11)))(chest);
+		((void (*)(Bit8u*))((Bit8u*)host_readd((Bit8u*)(chest) + 11)))(chest);
 #else
 		t_map(chest, 11)(chest);
 #endif
 
 	} else {
 #if defined(__BORLANDC__)
-		((void (*)(void))((RealPt)host_readd((Bit8u*)(chest) + 7)))();
+		((void (*)(void))((Bit8u*)host_readd((Bit8u*)(chest) + 7)))();
 #else
 		((treasure_trap)(t_map(chest, 7)))();
 #endif
 	}
 }
 
-void DNG08_chest4_func3(RealPt chest)
+void DNG08_chest4_func3(Bit8u* chest)
 {
-	RealPt ptr_bak;
+	Bit8u* ptr_bak;
 
-	ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+	ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG08_CHEST4_CONTENT));
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG08_chest5_func3(RealPt chest)
+void DNG08_chest5_func3(Bit8u* chest)
 {
-	RealPt ptr_bak;
+	Bit8u* ptr_bak;
 
-	ptr_bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
+	ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG08_CHEST5_CONTENT));
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);

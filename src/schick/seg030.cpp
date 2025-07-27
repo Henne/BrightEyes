@@ -33,7 +33,7 @@ namespace M302de {
 #endif
 
 /* get random known informer */
-RealPt seg030_0000(signed short arg0)
+Bit8u* seg030_0000(signed short arg0)
 {
 	signed short i;
 	signed short counter;
@@ -57,12 +57,12 @@ RealPt seg030_0000(signed short arg0)
 			i = random_schick(15);
 		} while (i == 10 || i == 12 || i == 13 || !ds_readb((INFORMER_FLAGS - 1) + i)|| i == arg0);
 
-		return (RealPt)get_ttx(657 + i);
+		return (Bit8u*)get_ttx(657 + i);
 	}
 }
 
 /* get random unknown informer */
-RealPt seg030_008d(signed short arg0)
+Bit8u* seg030_008d(signed short arg0)
 {
 	signed short i;
 	signed short v2;
@@ -87,7 +87,7 @@ RealPt seg030_008d(signed short arg0)
 		} while (i == 10 || i == 12 || i == 13 || ds_readb((INFORMER_FLAGS - 1) + i)|| i == arg0);
 		ds_writeb((INFORMER_FLAGS - 1) + i, 1);
 
-		return (RealPt)get_ttx(657 + i);
+		return (Bit8u*)get_ttx(657 + i);
 	}
 }
 
@@ -152,7 +152,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 	signed short optioncount;
 	Bit8u *state_ptr;
 	Bit8u *states_tab;
-	RealPt partners_tab;
+	Bit8u* partners_tab;
 	char *dst;
 	char *fmt;
 	Bit8u *hero;

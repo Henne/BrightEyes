@@ -190,7 +190,7 @@ void door_frame(signed short no, signed short x, signed short y, signed short fr
  * \param   text        output text
  * \param   flag        to mark this chest as done
  */
-void loot_corpse(RealPt chest_ptr, char *text, Bit8u *flag)
+void loot_corpse(Bit8u* chest_ptr, char *text, Bit8u *flag)
 {
 	signed short answer;
 

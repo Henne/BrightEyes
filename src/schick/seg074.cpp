@@ -333,7 +333,7 @@ void draw_automap_square(signed short x, signed short y, signed short color, sig
 {
 	signed short i;
 	unsigned short offset_y;
-	RealPt p_img_tile;
+	Bit8u* p_img_tile;
 	signed char tile[50];
 
 	offset_y = y;

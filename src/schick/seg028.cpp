@@ -133,7 +133,7 @@ void seg028_0224(void)
 {
 	signed short l_si;
 	signed short l1;
-	RealPt arr[4];
+	Bit8u* arr[4];
 
 	l1 = ds_readbs(CURRENT_TOWN) + 77;
 
@@ -204,12 +204,12 @@ void seg028_0224(void)
 	set_automap_tiles(ds_readw(X_TARGET), ds_readw(Y_TARGET));
 }
 
-RealPt seg028_0444(signed short index, signed short firstcol, signed short colors, signed short ref)
+Bit8u* seg028_0444(signed short index, signed short firstcol, signed short colors, signed short ref)
 {
 	signed short fd;
 	Bit32s v1;
 	Bit32s v2;
-	RealPt ptr;
+	Bit8u* ptr;
 
 	ptr = (Bit8u*)ds_readd(BUFFER9_PTR4);
 
@@ -412,7 +412,7 @@ void unused_store(signed short no)
 	ds_writew(EMS_UNUSED_OFFSET, ((((ds_readw(0x5ec2) + size) & 0x3fff) + 0x100) & 0xff00));
 }
 
-RealPt unused_load(signed short no)
+Bit8u* unused_load(signed short no)
 {
 	signed short l_si;
 
