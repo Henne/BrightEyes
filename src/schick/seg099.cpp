@@ -135,7 +135,7 @@ void spell_illusionen(void)
 		/* print a failure message */
 		sprintf((char*)ds_readd(DTP2),
 			get_tx(3),
-			(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
+			(char*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 
 		/* costs 2 AE */
 		ds_writew(SPELL_SPECIAL_AECOST, 2);
@@ -295,7 +295,7 @@ void spell_boeser_blick(void)
 		/* prepare message */
 		sprintf((char*)ds_readd(DTP2),
 			get_tx(10),
-			(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
+			(char*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 
 	}
 }

@@ -186,7 +186,7 @@ void do_harbor(void)
 						get_tx(16),
 
 						get_tx(ds_readws(SEA_TRAVEL_TX_SHIP + 2 * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE))), /* Fischerboot, Schnellsegler etc. */
-						(char*)(Bit8u*)(host_readds(psg_ptr + HARBOR_OPTION_SHIP_NAME_PTR)),
+						(char*)(host_readds(psg_ptr + HARBOR_OPTION_SHIP_NAME_PTR)),
 
 						(char*)(!host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TIMER) ? get_tx(5) : get_tx(6)), /* today or tomorrow */
 

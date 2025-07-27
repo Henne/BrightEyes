@@ -308,7 +308,7 @@ signed short load_game_state(void)
 				/* write file content to TEMP */
 				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 					(char*)ds_readd(STR_TEMP_XX_PTR2),
-					(char*)(Bit8u*)(ds_readd(FNAMES + 4 * i)));
+					(char*)(ds_readd(FNAMES + 4 * i)));
 
 				/* TODO: should be O_BINARY | O_WRONLY */
 				handle = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
@@ -618,7 +618,7 @@ signed short save_game_state(void)
 
 			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 				(char*)ds_readd(STR_TEMP_XX_PTR2),
-				(char*)(Bit8u*)(ds_readd(FNAMES + 4 * tw_bak)));
+				(char*)(ds_readd(FNAMES + 4 * tw_bak)));
 
 			l1 = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
 

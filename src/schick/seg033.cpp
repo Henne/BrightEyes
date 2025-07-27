@@ -534,7 +534,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 								sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 									get_tx(31),
 									(char*)hero + HERO_NAME2,
-									(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8002, host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_LEFT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID), 0)));
+									(char*)(GUI_names_grammar((signed short)0x8002, host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_LEFT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID), 0)));
 							}
 
 							refresh_screen_size();
@@ -612,7 +612,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 							sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 								get_tx(2),
 								(char*)hero + HERO_NAME2,
-								(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8002, host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID), 0)));
+								(char*)(GUI_names_grammar((signed short)0x8002, host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID), 0)));
 
 							refresh_screen_size();
 							textbox_width_bak = ds_readws(TEXTBOX_WIDTH);

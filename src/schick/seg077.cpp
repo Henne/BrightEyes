@@ -80,8 +80,8 @@ signed short DNG01_handler(void)
 	{
 		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 			get_ttx(528),
-			(char*)(Bit8u*)(GUI_names_grammar(0, 3, 0)),
-			(char*)(Bit8u*)(GUI_2f2(2, 3, 0)));
+			(char*)(GUI_names_grammar(0, 3, 0)),
+			(char*)(GUI_2f2(2, 3, 0)));
 
 		/* ITEM: get a SABRE */
 		if (GUI_bool((char*)ds_readd(TEXT_OUTPUT_BUF)) && get_item(ITEM_SABER, 1, 1)) {
@@ -90,7 +90,7 @@ signed short DNG01_handler(void)
 
 	} else if (target_pos == DNG_POS(3,2,9) && target_pos != ds_readws(DNG_HANDLED_POS) && !ds_readbs(DNG01_CROSSBOW_TAKEN))
 	{
-		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), get_ttx(528),	(char*)(Bit8u*)(GUI_names_grammar(0, 12, 0)), (char*)(Bit8u*)(GUI_2f2(2, 12, 0)));
+		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), get_ttx(528),	(char*)(GUI_names_grammar(0, 12, 0)), (char*)(GUI_2f2(2, 12, 0)));
 
 		/* ITEM: get a CROSSBOW */
 		if (GUI_bool((char*)ds_readd(TEXT_OUTPUT_BUF)) && get_item(ITEM_CROSSBOW, 1, 1)) {
@@ -306,7 +306,7 @@ void DNG01_chest6_x3(RealPt chest)
 #ifdef M302de_ORIGINAL_BUGFIX
 	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 		get_tx(14),
-		(char*)(Bit8u*)get_first_hero_available_in_group());
+		(char*)get_first_hero_available_in_group());
 #else
 	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 		get_tx(14), 10);

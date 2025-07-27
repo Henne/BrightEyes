@@ -435,7 +435,7 @@ void DNG08_search_bed(void)
 		sprintf((char*)ds_readd(DTP2),
 			get_tx(3),
 			(char*)hero + HERO_NAME2,
-			(char*)(Bit8u*)(GUI_names_grammar(2, 92, 0)));
+			(char*)(GUI_names_grammar(2, 92, 0)));
 
 		/* a BRANDY BOTTLE */
 		get_item(ITEM_BRANDY, 1, 1);
@@ -450,7 +450,7 @@ void DNG08_search_bed(void)
 		sprintf((char*)ds_readd(DTP2),
 			get_tx(3),
 			(char*)hero + HERO_NAME2,
-			(char*)(Bit8u*)(GUI_names_grammar(2, 14, 0)));
+			(char*)(GUI_names_grammar(2, 14, 0)));
 
 		/* a DAGGER */
 		get_item(ITEM_DAGGER, 1, 1);

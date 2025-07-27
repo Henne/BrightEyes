@@ -220,7 +220,7 @@ void city_event_4(void)
 
 		sprintf((char*)ds_readd(DTP2) + 0x400,
 			get_tx(random_schick(4) + 94),
-			(char*)(Bit8u*)(load_current_town_gossip()));
+			(char*)(load_current_town_gossip()));
 
 		GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, (char*)ds_readd(DTP2) + 0x400, 0);
 	}

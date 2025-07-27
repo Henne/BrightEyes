@@ -39,7 +39,7 @@ struct dummy2 {
  * \param   flag        * \param   index        index of the word of which a worgroup should be made
  * \param   type        if index is true the index is an enemy, if not it is an item
  */
-RealPt GUI_names_grammar(signed short flag, signed short index, signed short type)
+Bit8u* GUI_names_grammar(signed short flag, signed short index, signed short type)
 {
 	signed short *lp1;
 	signed short l2 = 0;
@@ -102,7 +102,7 @@ RealPt GUI_names_grammar(signed short flag, signed short index, signed short typ
 	return ((Bit8u*)p_datseg + (GRAMMAR_BUFS+40) + (l4 * 40));
 #else
 	/* TODO: Sorry dear ! */
-	return (RealPt) (&((struct dummy2*)(p_datseg + (GRAMMAR_BUFS+40)))[l4]);
+	return (Bit8u*) (&((struct dummy2*)(p_datseg + (GRAMMAR_BUFS+40)))[l4]);
 #endif
 
 }
@@ -444,13 +444,6 @@ signed short GUI_print_char(unsigned char c, unsigned short x, unsigned short y)
 
 	ds_writeb(GUI_PRINT_CHAR, c);
 	font_index = GUI_lookup_char_width(c, &char_width);
-
-#if !defined(__BORLANDC__)
-	/* BE-fix */
-	char_width = host_readws((Bit8u*)&char_width);
-	D1_LOG("GUI_lookup_char_width(%c); w=%d, fi=%d\n",
-		c, char_width, font_index);
-#endif
 
 	GUI_write_fonti_to_screen(font_index, char_width, x, y);
 

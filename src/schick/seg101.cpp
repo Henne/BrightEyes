@@ -486,7 +486,7 @@ void spell_paralue(void)
 
 		sprintf((char*)ds_readd(DTP2),
 			get_tx(103),
-			(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
+			(char*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
 	} else {
 		/* cast a hero */
 		/* TODO: the first check can be removed, cause it would not give a message */
@@ -543,7 +543,7 @@ void spell_salander(void)
 		/* prepare message */
 		sprintf((char*)ds_readd(DTP2),
 			get_tx(104),
-			(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
+			(char*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
 
 		/* set AE cost */
 		ds_writew(SPELL_SPECIAL_AECOST, ae_cost);
@@ -667,8 +667,8 @@ void spell_brenne(void)
 
 			answer = GUI_radio((char*)ds_readd(DTP2),
 					2,
-					(char*)(Bit8u*)(GUI_names_grammar(0x4000, ITEM_TORCH_OFF, 0)),
-					(char*)(Bit8u*)(GUI_names_grammar(0x4000, ITEM_LANTERN_OFF, 0)));
+					(char*)(GUI_names_grammar(0x4000, ITEM_TORCH_OFF, 0)),
+					(char*)(GUI_names_grammar(0x4000, ITEM_LANTERN_OFF, 0)));
 
 			if (answer == -1) {
 				/* abort */

@@ -5,7 +5,7 @@ namespace M302de {
 //20
 void GUI_write_char_to_screen(Bit8u*, signed short, signed short);
 //25
-RealPt GUI_names_grammar(signed short, signed short, signed short);
+Bit8u* GUI_names_grammar(signed short, signed short, signed short);
 //2a
 char* GUI_name_plural(signed short, char*);
 //2f

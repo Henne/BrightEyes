@@ -106,7 +106,7 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 			if (ds_readws(TLK_ID) == 15) {
 
 				if (ds_readws(DIALOG_STATE) == 13) {
-					sprintf(dst, fmt, (char*)(Bit8u*)(waffinfo_herbs()));
+					sprintf(dst, fmt, (char*)(waffinfo_herbs()));
 				} else {
 					strcpy(dst, fmt);
 				}
@@ -114,7 +114,7 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 			} else if (ds_readws(TLK_ID) == 14) {
 
 				if (ds_readws(DIALOG_STATE) == 11) {
-					sprintf(dst, fmt, (char*)(Bit8u*)(waffinfo_general()));
+					sprintf(dst, fmt, (char*)(waffinfo_general()));
 				} else {
 					strcpy(dst, fmt);
 				}
@@ -122,7 +122,7 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 			} else if (ds_readws(TLK_ID) == 16) {
 
 				if (ds_readws(DIALOG_STATE) == 19 || ds_readws(DIALOG_STATE) == 23) {
-					sprintf(dst, fmt, (char*)(Bit8u*)(waffinfo_weapons()));
+					sprintf(dst, fmt, (char*)(waffinfo_weapons()));
 				} else {
 					strcpy(dst, fmt);
 				}
@@ -130,7 +130,7 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 			} else if (ds_readws(TLK_ID) == 1) {
 
 				if (ds_readws(DIALOG_STATE) == 16) {
-					sprintf(dst, fmt, (char*)(Bit8u*)(load_current_town_gossip()));
+					sprintf(dst, fmt, (char*)(load_current_town_gossip()));
 				} else {
 					strcpy(dst, fmt);
 				}

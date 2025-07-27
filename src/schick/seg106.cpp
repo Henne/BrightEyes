@@ -309,7 +309,7 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 		sprintf((char*)ds_readd(DTP2),
 			get_ttx(454),
-			(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8002, item1, 0)));
+			(char*)(GUI_names_grammar((signed short)0x8002, item1, 0)));
 
 		GUI_output((char*)ds_readd(DTP2));
 		return;
@@ -319,7 +319,7 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 		sprintf((char*)ds_readd(DTP2),
 			get_ttx(454),
-			(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8002, item2, 0)));
+			(char*)(GUI_names_grammar((signed short)0x8002, item2, 0)));
 
 		GUI_output((char*)ds_readd(DTP2));
 		return;
@@ -334,7 +334,7 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 				get_ttx(221),
 				(char*)(hero2 + HERO_NAME2),
 				get_ttx((host_readbs(hero2 + HERO_SEX) ? 593 : 9) + host_readbs(hero2 + HERO_TYPE)),
-				(char*)(Bit8u*)(GUI_names_grammar(2, item1, 0)));
+				(char*)(GUI_names_grammar(2, item1, 0)));
 
 			GUI_output((char*)ds_readd(DTP2));
 			return;
@@ -375,7 +375,7 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 				get_ttx(221),
 				(char*)(hero1 + HERO_NAME2),
 				get_ttx((host_readbs(hero1 + HERO_SEX) ? 593 : 9) + host_readbs(hero1 + HERO_TYPE)),
-				(char*)(Bit8u*)(GUI_names_grammar(2, item2, 0)));
+				(char*)(GUI_names_grammar(2, item2, 0)));
 
 #if defined(__BORLANDC__)
 			desc1_5 = desc1_5;
@@ -416,7 +416,7 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 				sprintf((char*)ds_readd(DTP2),
 					get_ttx(210),
 					host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + pos1 * SIZEOF_INVENTORY),
-					(char*)(Bit8u*)(GUI_names_grammar(6, item1, 0)),
+					(char*)(GUI_names_grammar(6, item1, 0)),
 					(char*)hero2 + HERO_NAME2);
 
 
@@ -541,7 +541,7 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 			sprintf((char*)ds_readd(DTP2),
 				get_ttx(210),
 				host_readws(hero1+ (HERO_INVENTORY + INVENTORY_QUANTITY) + pos1 * SIZEOF_INVENTORY),
-				(char*)(Bit8u*)(GUI_names_grammar(6, item1, 0)),
+				(char*)(GUI_names_grammar(6, item1, 0)),
 				(char*)hero2 + HERO_NAME2);
 
 

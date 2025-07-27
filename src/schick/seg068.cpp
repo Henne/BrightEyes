@@ -592,7 +592,7 @@ void THO_academy(void)
 
 					sprintf((char*)ds_readd(DTP2),
 						get_tx2(56),
-						(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8002, item_id, 0)));
+						(char*)(GUI_names_grammar((signed short)0x8002, item_id, 0)));
 
 					do {
 						answer = GUI_radio((char*)ds_readd(DTP2), 4,
@@ -669,7 +669,7 @@ void THO_academy(void)
 
 					sprintf((char*)ds_readd(DTP2),
 						get_tx2(56),
-						(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8002, item_id, 0)));
+						(char*)(GUI_names_grammar((signed short)0x8002, item_id, 0)));
 
 					do {
 						answer = GUI_radio((char*)ds_readd(DTP2), 4,

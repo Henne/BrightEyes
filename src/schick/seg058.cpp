@@ -170,7 +170,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 			sprintf((char*)ds_readd(DTP2),
 				get_ttx(486),
-				(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8002, ds_readws(SMITH_REPAIRITEMS + 6 * smith_id), 0)));
+				(char*)(GUI_names_grammar((signed short)0x8002, ds_readws(SMITH_REPAIRITEMS + 6 * smith_id), 0)));
 
 			GUI_output((char*)ds_readd(DTP2));
 
@@ -394,7 +394,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 						sprintf((char*)ds_readd(DTP2),
 							get_ttx(488),
-							(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8002, item_id, 0)),
+							(char*)(GUI_names_grammar((signed short)0x8002, item_id, 0)),
 							(char*)ds_readd(TEXT_OUTPUT_BUF));
 
 

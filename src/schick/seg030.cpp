@@ -435,7 +435,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 					} else if (txt_id == 14 || txt_id == 15 || txt_id == 76) {
 
 						sprintf(dst, fmt,
-							(char*)(Bit8u*)ds_readd(RUIN_HERO) + HERO_NAME2,
+							(char*)ds_readd(RUIN_HERO) + HERO_NAME2,
 							(char*)(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(RUIN_HERO) + 0x22), 0)));
 
 					} else if (txt_id == 26 || txt_id == 65) {
@@ -457,7 +457,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 					if (txt_id == 40 || txt_id == 41 || txt_id == 43) {
 
 						sprintf(dst, fmt,
-							(char*)(Bit8u*)ds_readd(RANDOM_TLK_HERO) + HERO_NAME2,
+							(char*)ds_readd(RANDOM_TLK_HERO) + HERO_NAME2,
 							(char*)(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(RANDOM_TLK_HERO) + 0x22), 0)),
 							(char*)(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(RANDOM_TLK_HERO) + 0x22), 2)));
 					} else {
