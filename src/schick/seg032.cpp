@@ -981,7 +981,7 @@ signed short do_fight(signed short fight_id)
 
 	ds_writed(ACTION_TABLE_PRIMARY, (Bit32u)(p_datseg + ACTION_TABLE_MENU));
 
-	ds_writew(WALLCLOCK_UPDATE, 0);
+	g_wallclock_update = 0;
 
 	/* open MONSTER.DAT */
 	fd = load_archive_file(ARCHIVE_FILE_MONSTER_DAT);

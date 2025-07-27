@@ -57,12 +57,12 @@ void pause_traveling(signed short ani_no)
 	g_basepos_y_bak = ds_readw(BASEPOS_Y);
 
 	g_textbox_width_bak = ds_readw(TEXTBOX_WIDTH);
-	g_wallclock_update_bak = ds_readw(WALLCLOCK_UPDATE);
+	g_wallclock_update_bak = g_wallclock_update;
 
 	ds_writeb(TRAVEL_EVENT_ACTIVE, 1);
 
 	/* c = b = a = 0 */
-	ds_writeb(SHOW_TRAVEL_MAP, (unsigned char)ds_writew(BASEPOS_X, ds_writew(WALLCLOCK_UPDATE, 0)));
+	ds_writeb(SHOW_TRAVEL_MAP, (unsigned char)ds_writew(BASEPOS_X, g_wallclock_update = 0));
 
 	ds_writew(BASEPOS_Y, ani_no == 21 ? 60: 70);
 	ds_writew(TEXTBOX_WIDTH, 9);
@@ -77,7 +77,7 @@ void resume_traveling(void)
 	ds_writew(BASEPOS_Y, g_basepos_y_bak);
 
 	ds_writew(TEXTBOX_WIDTH, g_textbox_width_bak);
-	ds_writew(WALLCLOCK_UPDATE, g_wallclock_update_bak);
+	g_wallclock_update = g_wallclock_update_bak;
 
 	set_var_to_zero();
 
@@ -576,7 +576,7 @@ void do_wild8_fight(void)
 
 	bak1 = ds_readws(BASEPOS_X);
 	bak2 = ds_readws(BASEPOS_Y);
-	g_wallclock_update_bak = ds_readws(WALLCLOCK_UPDATE);
+	g_wallclock_update_bak = g_wallclock_update;
 	ds_writew(BASEPOS_X, 0);
 	ds_writew(BASEPOS_Y, 0);
 	ds_writeb(SHOW_TRAVEL_MAP, 0);
@@ -609,7 +609,7 @@ void random_encounter(signed short arg)
 
 	bak1 = ds_readws(BASEPOS_X);
 	bak2 = ds_readws(BASEPOS_Y);
-	wallclock_update_bak = ds_readws(WALLCLOCK_UPDATE);
+	wallclock_update_bak = g_wallclock_update;
 	ds_writew(BASEPOS_X, 0);
 	ds_writew(BASEPOS_Y, 0);
 
@@ -621,7 +621,7 @@ void random_encounter(signed short arg)
 
 		if ((ds_readb(RANDOM_ENCOUNTER_DESCR + 7 * i + arg) <= randval) && (ds_readb(RANDOM_ENCOUNTER_DESCR + 7 * i + arg) != 0)) {
 
-			ds_writeb(SHOW_TRAVEL_MAP, (signed char)ds_writew(WALLCLOCK_UPDATE, 0));
+			ds_writeb(SHOW_TRAVEL_MAP, (signed char)g_wallclock_update = 0);
 			ds_writeb(TRAVEL_EVENT_ACTIVE, 1);
 			g_fig_discard = 1;
 
@@ -717,7 +717,7 @@ void random_encounter(signed short arg)
 
 	ds_writew(BASEPOS_X, bak1);
 	ds_writew(BASEPOS_Y, bak2);
-	ds_writew(WALLCLOCK_UPDATE, wallclock_update_bak);
+	g_wallclock_update = wallclock_update_bak;
 	load_tx(ARCHIVE_FILE_MAPTEXT_LTX);
 }
 

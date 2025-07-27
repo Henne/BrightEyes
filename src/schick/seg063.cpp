@@ -370,7 +370,7 @@ void do_harbor(void)
 				load_map();
 
 				ds_writews(CURRENT_ANI, -1);
-				ds_writew(WALLCLOCK_UPDATE, 0);
+				g_wallclock_update = 0;
 
 				memmove(g_renderbuf_ptr, (Bit8u*)ds_readd(TRAVEL_MAP_PTR), 64000);
 				map_effect(g_renderbuf_ptr);
@@ -385,12 +385,12 @@ void do_harbor(void)
 
 				ds_writew(WALLCLOCK_X, ds_readws(BASEPOS_X) + 120);
 				ds_writew(WALLCLOCK_Y, ds_readws(BASEPOS_Y) + 87);
-				ds_writew(WALLCLOCK_UPDATE, 1);
+				g_wallclock_update = 1;
 
 				sea_travel(ds_readb(CURRENT_SEA_ROUTE_ID), ds_readbs(SEA_ROUTES + SIZEOF_SEA_ROUTE * ds_readb(CURRENT_SEA_ROUTE_ID)) == ds_readbs(CURRENT_TOWN) ? 0 : 1);
 				passage_arrival();
 
-				ds_writew(WALLCLOCK_UPDATE, ds_writew(BASEPOS_X, ds_writew(BASEPOS_Y, ds_writeb(SEA_TRAVEL_PSGBOOKED_FLAG, 0))));
+				g_wallclock_update = ds_writew(BASEPOS_X, ds_writew(BASEPOS_Y, ds_writeb(SEA_TRAVEL_PSGBOOKED_FLAG, 0)));
 				ds_writews(CURRENT_ANI, ds_writebs(CITY_AREA_LOADED, ds_writebs(PP20_INDEX, (signed char)0xff)));
 				ds_writew(REQUEST_REFRESH, 1);
 				ds_writeb(SHOW_TRAVEL_MAP, 0);
@@ -669,7 +669,7 @@ void sea_travel(signed short passage, signed short dir)
 
 			ds_writew(WALLCLOCK_X, ds_readws(BASEPOS_X) + 120);
 			ds_writew(WALLCLOCK_Y, ds_readws(BASEPOS_Y) + 87);
-			ds_writew(WALLCLOCK_UPDATE, 1);
+			g_wallclock_update = 1;
 			ds_writew(REQUEST_REFRESH, 0);
 		}
 

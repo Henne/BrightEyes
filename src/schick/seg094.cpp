@@ -298,7 +298,7 @@ void TM_func1(signed short route_no, signed short backwards)
 				ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
 				do_location();
 				ds_writeb(GOOD_CAMP_PLACE, ds_writeb(CURRENT_LOCTYPE, (unsigned char)ds_writew(WILDCAMP_SLEEP_QUALITY, 0)));
-				ds_writew(WALLCLOCK_UPDATE, 0);
+				g_wallclock_update = 0;
 				ds_writew(REQUEST_REFRESH, 2);
 			}
 		}
@@ -351,7 +351,7 @@ void TM_func1(signed short route_no, signed short backwards)
 
 						if (ds_readws(REQUEST_REFRESH) != 0 && !ds_readb(TRAVEL_DETOUR))
 						{
-							ds_writew(WALLCLOCK_UPDATE, 0);
+							g_wallclock_update = 0;
 						}
 					}
 				}
@@ -365,7 +365,7 @@ void TM_func1(signed short route_no, signed short backwards)
 			2 * ds_readws(ROUTE_STEPSIZE) < ds_readws(ROUTE_PROGRESS) &&
 			ds_readws(ROUTE_LENGTH) - 2 * ds_readws(ROUTE_STEPSIZE) > ds_readws(ROUTE_PROGRESS))
 		{
-			ds_writew(WALLCLOCK_UPDATE, 0);
+			g_wallclock_update = 0;
 
 			if (ds_readws(REQUEST_REFRESH) != 0)
 			{
@@ -379,7 +379,7 @@ void TM_func1(signed short route_no, signed short backwards)
 			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
 
 			ds_writew(REQUEST_REFRESH, 2);
-			ds_writew(WALLCLOCK_UPDATE, 0);
+			g_wallclock_update = 0;
 
 			if (ds_readws(GAME_STATE) == GAME_STATE_MAIN)
 			{
@@ -462,7 +462,7 @@ void TM_func1(signed short route_no, signed short backwards)
 			}
 			ds_writew(WALLCLOCK_X, ds_readws(BASEPOS_X) + 120);
 			ds_writew(WALLCLOCK_Y, ds_readws(BASEPOS_Y) + 87);
-			ds_writew(WALLCLOCK_UPDATE, 1);
+			g_wallclock_update = 1;
 			ds_writew(REQUEST_REFRESH, 0);
 		}
 

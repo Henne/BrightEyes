@@ -1498,7 +1498,7 @@
 #define WALLCLOCK_REDRAW                (0xe10d)    /* unsigned short; {0,1} */
 #define WALLCLOCK_Y                     (0xe10f)    /* short */
 #define WALLCLOCK_X                     (0xe111)    /* short */
-#define WALLCLOCK_UPDATE                (0xe113)    /* unsigned short; 0 = don't update the wallclock */
+//#define WALLCLOCK_UPDATE                (0xe113)    /* unsigned short; 0 = don't update the wallclock */
 #define MEM_SLOTS_MON                   (0xe115)    /* long */
 #define MEM_SLOTS_WFIG                  (0xe119)    /* long */
 #define MEM_SLOTS_MFIG                  (0xe11d)    /* long */

@@ -436,7 +436,7 @@ void init_game_state(void)
 	passages_init();
 
 	ds_writew(CURRENT_ANI, -1);
-	ds_writew(WALLCLOCK_UPDATE, 1);
+	g_wallclock_update = 1;
 
 	ds_writed(GUI_BUFFER_UNKN, (Bit32u)g_renderbuf_ptr);
 	load_splashes();
@@ -596,13 +596,13 @@ void cleanup_game(void)
 		for (l_si = 0; l_si < 43; l_si++) {
 
 			if ((host_readw((Bit8u*)ds_readd(MEM_SLOTS_MFIG) + l_si * 12) != 0) &&
-				((host_readw((Bit8u*)ds_readd(MEM_SLOTS_MFIG) + l_si * 12 + 6) != 0)))
+				(host_readw((Bit8u*)ds_readd(MEM_SLOTS_MFIG) + l_si * 12 + 6) != 0))
 			{
 				EMS_free_pages(host_readw((Bit8u*)ds_readd(MEM_SLOTS_MFIG) + 6 + l_si * 12));
 			}
 
 			if ((host_readw((Bit8u*)ds_readd(MEM_SLOTS_WFIG) + l_si * 12) != 0) &&
-				((host_readw((Bit8u*)ds_readd(MEM_SLOTS_WFIG) + l_si * 12 + 6) != 0)))
+				(host_readw((Bit8u*)ds_readd(MEM_SLOTS_WFIG) + l_si * 12 + 6) != 0))
 			{
 				EMS_free_pages(host_readw((Bit8u*)ds_readd(MEM_SLOTS_WFIG) + 6 + l_si * 12));
 			}
@@ -612,7 +612,7 @@ void cleanup_game(void)
 		for (l_si = 0; l_si < 36; l_si++) {
 
 			if ((host_readw((Bit8u*)ds_readd(MEM_SLOTS_MON) + l_si * 12) != 0) &&
-				((host_readw((Bit8u*)ds_readd(MEM_SLOTS_MON) + l_si * 12 + 6) != 0)))
+				(host_readw((Bit8u*)ds_readd(MEM_SLOTS_MON) + l_si * 12 + 6) != 0))
 			{
 				EMS_free_pages(host_readw((Bit8u*)ds_readd(MEM_SLOTS_MON) + 6 + l_si * 12));
 			}
@@ -637,6 +637,7 @@ void cleanup_game(void)
 	l_di = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
 
 	if (l_di == 0) {
+
 		do {
 			/* delete each found file */
 			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
@@ -646,6 +647,7 @@ void cleanup_game(void)
 			unlink((char*)ds_readd(TEXT_OUTPUT_BUF));
 
 			l_di = findnext(&blk);
+
 		} while (!l_di);
 	}
 #endif
@@ -681,7 +683,7 @@ void game_over_screen(void)
 
 	update_mouse_cursor();
 
-	ds_writew(WALLCLOCK_UPDATE, 0);
+	g_wallclock_update = 0;
 
 	wait_for_vsync();
 

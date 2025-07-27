@@ -6336,7 +6336,7 @@ unsigned char *g_mem_slots_anis; // ds:0xe121, to ()[36]
 long g_mem_slots_mfig; // ds:0xe11d
 long g_mem_slots_wfig; // ds:0xe119
 long g_mem_slots_mon; // ds:0xe115
-unsigned short g_wallclock_update; // ds:0xe113, 0 = don't update the wallclock
+signed short g_wallclock_update; // ds:0xe113, 0 = don't update the wallclock
 short g_wallclock_x; // ds:0xe111
 short g_wallclock_y; // ds:0xe10f
 unsigned short g_wallclock_redraw; // ds:0xe10d

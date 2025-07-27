@@ -97,7 +97,7 @@ void TRV_event(signed short travel_event)
 	ds_writews(TEXTBOX_WIDTH, tw_bak);
 	ds_writeb(DIALOGBOX_LOCK, 0);
 	load_tx(ARCHIVE_FILE_MAPTEXT_LTX);
-	ds_writew(WALLCLOCK_UPDATE, 1);
+	g_wallclock_update = 1;
 }
 
 /**

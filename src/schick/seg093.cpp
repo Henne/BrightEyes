@@ -44,8 +44,8 @@ signed short do_travel_mode(void)
 	signed short tw_bak;
 	char *destinations_tab[6];
 
-	bak1 = ds_readws(WALLCLOCK_UPDATE);
-	ds_writeb(ROUTE59_FLAG, (unsigned char)ds_writew(WALLCLOCK_UPDATE, (unsigned short)ds_writeb(TRAVEL_DETOUR, 0)));
+	bak1 = g_wallclock_update;
+	ds_writeb(ROUTE59_FLAG, (unsigned char)(g_wallclock_update = (unsigned short)ds_writeb(TRAVEL_DETOUR, 0)));
 	ds_writeb(CURRENT_TOWN, ds_readbs(CURRENT_TYPEINDEX));
 
 	update_mouse_cursor();
@@ -163,11 +163,11 @@ signed short do_travel_mode(void)
 					ds_writew(WALLCLOCK_X, ds_readws(BASEPOS_X) + 120);
 					ds_writew(WALLCLOCK_Y, ds_readws(BASEPOS_Y) + 87);
 
-					ds_writew(WALLCLOCK_UPDATE, 1);
+					g_wallclock_update = 1;
 
 					TM_func1(host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + answer),
 						(ds_readbs((LAND_ROUTES - SIZEOF_LAND_ROUTE) + SIZEOF_LAND_ROUTE * host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + answer)) == ds_readbs(CURRENT_TOWN) ? 0 : 1));
-					ds_writew(WALLCLOCK_UPDATE, 0);
+					g_wallclock_update = 0;
 
 					if (ds_readb(ROUTE59_FLAG) != 0)
 					{
@@ -257,7 +257,7 @@ signed short do_travel_mode(void)
 
 	if (!ds_readb(TRAVEL_DETOUR))
 	{
-		ds_writew(WALLCLOCK_UPDATE, 0);
+		g_wallclock_update = 0;
 		leave_location();
 
 	} else if (ds_readb(TRAVEL_DETOUR) != 99)
@@ -293,7 +293,7 @@ signed short do_travel_mode(void)
 
 	ds_writew(CURRENT_ANI, ds_writebs(CITY_AREA_LOADED, ds_writebs(PP20_INDEX, -1)));
 	ds_writew(REQUEST_REFRESH, (unsigned short)ds_writeb(FADING_STATE, 1));
-	ds_writew(WALLCLOCK_UPDATE, bak1);
+	g_wallclock_update = bak1;
 
 	return 0;
 }

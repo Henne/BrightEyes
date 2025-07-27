@@ -747,7 +747,7 @@ void update_wallclock(void)
 	signed short night;
 	Bit32s d;
 
-	if ((ds_readw(WALLCLOCK_UPDATE) != 0) &&
+	if ((g_wallclock_update != 0) &&
 		((ds_readb(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) || (ds_readb(PP20_INDEX) == ARCHIVE_FILE_KARTE_DAT)) &&
 		!ds_readbs(DIALOGBOX_LOCK))
 	{
@@ -1147,8 +1147,8 @@ void map_effect(Bit8u *src)
 
 	seed = 0;
 
-	wallclock_update_bak = ds_readws(WALLCLOCK_UPDATE);
-	ds_writew(WALLCLOCK_UPDATE, 0);
+	wallclock_update_bak = g_wallclock_update;
+	g_wallclock_update = 0;
 
 	wait_for_vsync();
 
@@ -1175,7 +1175,7 @@ void map_effect(Bit8u *src)
 
 	refresh_screen_size();
 
-	ds_writew(WALLCLOCK_UPDATE, wallclock_update_bak);
+	g_wallclock_update = wallclock_update_bak;
 }
 
 #if !defined(__BORLANDC__)

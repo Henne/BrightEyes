@@ -433,8 +433,8 @@ void load_map(void)
 	signed short wallclock_update_bak;
 	struct nvf_desc nvf;
 
-	wallclock_update_bak = ds_readw(WALLCLOCK_UPDATE);
-	ds_writew(WALLCLOCK_UPDATE, 0);
+	wallclock_update_bak = g_wallclock_update;
+	g_wallclock_update = 0;
 
 	ds_writew(AREA_PREPARED, 0xffff);
 	/* set current_ani to -1 */
@@ -445,7 +445,7 @@ void load_map(void)
 	read_archive_file(fd, g_renderbuf_ptr, 2000);
 	close(fd);
 
-    /* load the grey border for the wallclock overlay */
+	/* load the grey border for the wallclock overlay */
 	nvf.src = g_renderbuf_ptr;
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&fd;
@@ -508,7 +508,7 @@ void load_map(void)
 
 	load_tx(ARCHIVE_FILE_MAPTEXT_LTX);
 
-	ds_writew(WALLCLOCK_UPDATE, wallclock_update_bak);
+	g_wallclock_update = wallclock_update_bak;
 }
 
 void load_npc(signed short index)

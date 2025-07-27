@@ -108,7 +108,7 @@ void final_intro(void)
 
 	update_mouse_cursor();
 
-	ds_writew(WALLCLOCK_UPDATE, 0);
+	g_wallclock_update = 0;
 
 	/* load FACE.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_FACE_NVF);
@@ -259,7 +259,7 @@ void show_hyggelik_ani(void)
 	Bit8u* ptr2;
 	Bit8u array[30*8];
 
-	ds_writew(WALLCLOCK_UPDATE, 0);
+	g_wallclock_update = 0;
 	ptr1 = (Bit8u*)ds_readd(BUFFER9_PTR);
 	ptr2 = (Bit8u*)F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 0x1fbd0);
 
