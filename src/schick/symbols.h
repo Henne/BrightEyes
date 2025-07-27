@@ -1409,7 +1409,7 @@
 #define ANI_PALETTE                     (0xce3b)    /* Bit8u* */
 #define ANI_POSY                        (0xce3f)    /* signed short */
 #define ANI_POSX                        (0xce41)    /* signed short */
-#define ANI_UNKNOWN4                    (0xce43)    /* unsigned long; writeonly (0) */
+//#define ANI_UNKNOWN4                    (0xce43)    /* unsigned long; writeonly (0) */
 // ?64
 #define GUI_TEXT_BUFFER                 (0xce87)    /* unsigned char[64] */
 #define LAST_CURSOR                     (0xcec7)    /* Bit8u* */
@@ -1499,10 +1499,10 @@
 #define WALLCLOCK_Y                     (0xe10f)    /* short */
 #define WALLCLOCK_X                     (0xe111)    /* short */
 //#define WALLCLOCK_UPDATE                (0xe113)    /* unsigned short; 0 = don't update the wallclock */
-#define MEM_SLOTS_MON                   (0xe115)    /* long */
-#define MEM_SLOTS_WFIG                  (0xe119)    /* long */
-#define MEM_SLOTS_MFIG                  (0xe11d)    /* long */
-#define MEM_SLOTS_ANIS                  (0xe121)    /* unsigned long; to (struct { unsigned short no, ems_handle; long ani_len; })[36] */
+//#define MEM_SLOTS_MON                   (0xe115)    /* long */
+//#define MEM_SLOTS_WFIG                  (0xe119)    /* long */
+//#define MEM_SLOTS_MFIG                  (0xe11d)    /* long */
+//#define MEM_SLOTS_ANIS                  (0xe121)    /* unsigned long; to (struct { unsigned short no, ems_handle; long ani_len; })[36] */
 #define MONSTER_DAT_BUF                 (0xe125)    /* Bit8u* */
 //#define MONNAMES_INDEX                  (0xe129)    /* Bit8u* */
 #define MARKET_ITEMSALDO_TABLE          (0xe12d)    /* signed char[254] */

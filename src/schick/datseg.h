@@ -80,6 +80,9 @@ extern char **g_itemsname;		// ds:0xe22f; seg026, seg120
 extern unsigned char *g_itemsdat;	// ds:0xe22b; seg002, seg027, seg105, seg107, seg120
 extern char **g_monnames_index;		// ds:0xe129; seg026, seg120
 extern unsigned char *g_mem_slots_anis;	// ds:0xe121; seg027, seg120
+extern unsigned char *g_mem_slots_mfig;	// ds:0xe11d; seg027, seg120
+extern unsigned char *g_mem_slots_wfig;	// ds:0xe119; seg027, seg120
+extern unsigned char *g_mem_slots_mon;	// ds:0xe115; seg027, seg120
 extern signed short g_wallclock_update;	// ds:0xe113; seg004-seg117, seg120
 extern unsigned char *g_spelltarget;	// ds:0xe5b8; seg098-seg102
 extern unsigned char *g_spelluser;	// ds:0xecbc; seg068, seg098, seg102, seg107
@@ -93,6 +96,7 @@ extern unsigned char *g_buf_font6;	// ds:0xd2c1; seg026, seg096, seg120
 extern char *g_text_ltx_buffer;		// ds:0xd2b9; seg026, seg120
 extern unsigned char *g_popup;		// ds:0xd2ad; seg027, seg096, seg120
 extern char *g_monnames_buffer;		// ds:0xd2a1; seg026, seg120
+extern Bit32s g_ani_unknown4;		// ds:0xce43; seg027, seg120
 extern char **g_text_ltx_index;		// ds:0xc3b5;
 extern char **g_tx_index;		// ds:0xc3b1; seg026, seg028, seg031, seg064, seg120
 extern char **g_tx2_index;		// ds:0xc3ad; seg

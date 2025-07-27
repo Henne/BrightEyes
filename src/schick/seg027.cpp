@@ -169,7 +169,7 @@ Bit8u* load_fight_figs(signed short fig)
 	if (fig >= 88) {
 		/* ...for foes */
 		max_entries = 36;
-		mem_slots = (Bit8u*)ds_readd(MEM_SLOTS_MON);
+		mem_slots = g_mem_slots_mon;
 		p_tab = p_datseg + BUFFER_MONSTER_TAB;
 		index = 16;
 		fig -= 88;
@@ -181,13 +181,13 @@ Bit8u* load_fight_figs(signed short fig)
 			/* female */
 			p_tab = p_datseg + BUFFER_WFIGS_TAB;
 			index = ARCHIVE_FILE_WFIGS;
-			mem_slots = (Bit8u*)ds_readd(MEM_SLOTS_WFIG);
+			mem_slots = g_mem_slots_wfig;
 			fig -= 44;
 		} else {
 			/* male */
 			p_tab = p_datseg + BUFFER_MFIGS_TAB;
 			index = ARCHIVE_FILE_MFIGS;
-			mem_slots = (Bit8u*)ds_readd(MEM_SLOTS_MFIG);
+			mem_slots = g_mem_slots_mfig;
 		}
 	}
 
@@ -515,7 +515,7 @@ void load_ani(const signed short no)
 
 	ani_len = ani_end_ptr - (Bit8u*)ds_readd(BUFFER9_PTR);
 	/* this is always true */
-	if (ani_len > (Bit32s)ds_readd(ANI_UNKNOWN4)) {
+	if (ani_len > g_ani_unknown4) {
 		ds_writew(AREA_PREPARED, 0xffff);
 	}
 }

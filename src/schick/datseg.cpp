@@ -6333,9 +6333,9 @@ signed char g_market_itemsaldo_table[254]; // ds:0xe12d
 char **g_monnames_index; // ds:0xe129
 void *g_monster_dat_buf; // ds:0xe125
 unsigned char *g_mem_slots_anis; // ds:0xe121, to ()[36]
-long g_mem_slots_mfig; // ds:0xe11d
-long g_mem_slots_wfig; // ds:0xe119
-long g_mem_slots_mon; // ds:0xe115
+unsigned char *g_mem_slots_mfig; // ds:0xe11d
+unsigned char *g_mem_slots_wfig; // ds:0xe119
+unsigned char *g_mem_slots_mon; // ds:0xe115
 signed short g_wallclock_update; // ds:0xe113, 0 = don't update the wallclock
 short g_wallclock_x; // ds:0xe111
 short g_wallclock_y; // ds:0xe10f
@@ -6425,7 +6425,7 @@ void *g_current_cursor; // ds:0xcecb
 void *g_last_cursor; // ds:0xcec7
 unsigned char g_gui_text_buffer[64]; // ds:0xce87
 unsigned char g_unkn_081[64]; // ds:0xce47
-unsigned long g_ani_unknown4; // ds:0xce43, writeonly (0)
+Bit32s g_ani_unknown4; // ds:0xce43, writeonly (0)
 signed short g_ani_posx; // ds:0xce41
 signed short g_ani_posy; // ds:0xce3f
 void *g_ani_palette; // ds:0xce3b

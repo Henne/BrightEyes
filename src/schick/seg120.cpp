@@ -266,7 +266,7 @@ void init_global_buffer(void)
 	ds_writed(BUFFER9_PTR, (Bit32u)(F_PADD(ds_readd(BUFFER7_PTR), 22008)));
 
 	ds_writed(BUFFER9_PTR3, ds_writed(BUFFER9_PTR2, ds_readd(BUFFER9_PTR)));
-	ds_writed(ANI_UNKNOWN4, 0);
+	g_ani_unknown4 = 0;
 }
 
 /* Borlandified and identical */
@@ -290,26 +290,26 @@ signed short init_memory(void)
 #endif
 
 	/* allocate small chunks of memory */
-	g_itemsname = 	(char**)schick_alloc(254 * sizeof(char*));
-	g_itemsdat = 	(unsigned char*)schick_alloc(255 * SIZEOF_ITEM_STATS);
-	g_monnames_buffer =(char*)schick_alloc(950);
-	g_monnames_index = (char**)schick_alloc(77 * sizeof(char*));
-	g_mem_slots_anis =	(unsigned char*)schick_alloc(37 * 8);
-	ds_writed(MEM_SLOTS_MFIG,	(Bit32u)schick_alloc(516));
-	ds_writed(MEM_SLOTS_WFIG,	(Bit32u)schick_alloc(516));
-	ds_writed(MEM_SLOTS_MON,		(Bit32u)schick_alloc(432));
-	g_heroes = (unsigned char*)schick_alloc(7 * SIZEOF_HERO);
+	g_itemsname		= (char**)schick_alloc(254 * sizeof(char*));
+	g_itemsdat 		= (unsigned char*)schick_alloc(255 * SIZEOF_ITEM_STATS);
+	g_monnames_buffer	= (char*)schick_alloc(950);
+	g_monnames_index	= (char**)schick_alloc(77 * sizeof(char*));
+	g_mem_slots_anis	= (unsigned char*)schick_alloc(37 * 8);
+	g_mem_slots_mfig	= (unsigned char*)schick_alloc(43 * 12);
+	g_mem_slots_wfig	= (unsigned char*)schick_alloc(43 * 12);
+	g_mem_slots_mon		= (unsigned char*)schick_alloc(36 * 12);
+	g_heroes		= (unsigned char*)schick_alloc(7 * SIZEOF_HERO);
 	ds_writed(DUNGEON_FIGHTS_BUF,		(Bit32u)schick_alloc(630));
 	ds_writed(DUNGEON_DOORS_BUF,		(Bit32u)schick_alloc(225));
 	ds_writed(DUNGEON_STAIRS_BUF,		(Bit32u)schick_alloc(80));
-	g_buf_font6 =	(unsigned char*)schick_alloc(592);
+	g_buf_font6		= (unsigned char*)schick_alloc(592);
 	ds_writed(SPLASH_BUFFER,		(Bit32u)schick_alloc(1000));
 	ds_writed(TRV_TRACK_PIXEL_BAK,		(Bit32u)schick_alloc(500));
-	g_chessboard =	(signed char*)schick_alloc(625);
-	g_popup =	(unsigned char*)(schick_alloc(1673) + 8);
-	g_icon =	(unsigned char*)(schick_alloc(1500) + 8);
-	g_buf_icon =	(unsigned char*)schick_alloc(5184);
-	g_townpal_buf = (unsigned char*)schick_alloc(288);
+	g_chessboard		= (signed char*)schick_alloc(625);
+	g_popup			= (unsigned char*)(schick_alloc(1673) + 8);
+	g_icon			= (unsigned char*)(schick_alloc(1500) + 8);
+	g_buf_icon		= (unsigned char*)schick_alloc(5184);
+	g_townpal_buf		= (unsigned char*)schick_alloc(288);
 
 #if defined(__BORLANDC__)
 	freemem = farcoreleft();
@@ -595,26 +595,26 @@ void cleanup_game(void)
 		/* free male and female figures */
 		for (l_si = 0; l_si < 43; l_si++) {
 
-			if ((host_readw((Bit8u*)ds_readd(MEM_SLOTS_MFIG) + l_si * 12) != 0) &&
-				(host_readw((Bit8u*)ds_readd(MEM_SLOTS_MFIG) + l_si * 12 + 6) != 0))
+			if ((host_readw(g_mem_slots_mfig + l_si * 12) != 0) &&
+				(host_readw(g_mem_slots_mfig + l_si * 12 + 6) != 0))
 			{
-				EMS_free_pages(host_readw((Bit8u*)ds_readd(MEM_SLOTS_MFIG) + 6 + l_si * 12));
+				EMS_free_pages(host_readw(g_mem_slots_mfig + 6 + l_si * 12));
 			}
 
-			if ((host_readw((Bit8u*)ds_readd(MEM_SLOTS_WFIG) + l_si * 12) != 0) &&
-				(host_readw((Bit8u*)ds_readd(MEM_SLOTS_WFIG) + l_si * 12 + 6) != 0))
+			if ((host_readw(g_mem_slots_wfig + l_si * 12) != 0) &&
+				(host_readw(g_mem_slots_wfig + l_si * 12 + 6) != 0))
 			{
-				EMS_free_pages(host_readw((Bit8u*)ds_readd(MEM_SLOTS_WFIG) + 6 + l_si * 12));
+				EMS_free_pages(host_readw(g_mem_slots_wfig + 6 + l_si * 12));
 			}
 		}
 
 		/* free monster figures */
 		for (l_si = 0; l_si < 36; l_si++) {
 
-			if ((host_readw((Bit8u*)ds_readd(MEM_SLOTS_MON) + l_si * 12) != 0) &&
-				(host_readw((Bit8u*)ds_readd(MEM_SLOTS_MON) + l_si * 12 + 6) != 0))
+			if ((host_readw(g_mem_slots_mon + l_si * 12) != 0) &&
+				(host_readw(g_mem_slots_mon + l_si * 12 + 6) != 0))
 			{
-				EMS_free_pages(host_readw((Bit8u*)ds_readd(MEM_SLOTS_MON) + 6 + l_si * 12));
+				EMS_free_pages(host_readw(g_mem_slots_mon + 6 + l_si * 12));
 			}
 		}
 
