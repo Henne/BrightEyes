@@ -234,7 +234,7 @@ void status_show(Bit16u index)
 			if (host_readw(hero + i * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID) == ITEM_NONE)
 				continue;
 
-			nvf.dst = (Bit8u*)ds_readd(ICON);
+			nvf.dst = g_icon;
 			/* set no */
 			nvf.no = host_readw(get_itemsdat(host_readw(hero + i * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID)));
 
@@ -246,7 +246,7 @@ void status_show(Bit16u index)
 			ds_writew(PIC_COPY_X2, ds_readw(INVSLOT_ICONXY_TABLE + i * 4) + 15);
 			ds_writew(PIC_COPY_Y2, ds_readw(INVSLOT_ICONXY_TABLE + i * 4 + 2) + 15);
 			ds_writed(PIC_COPY_DST, (Bit32u)g_renderbuf_ptr);
-			ds_writed(PIC_COPY_SRC, ds_readd(ICON));
+			ds_writed(PIC_COPY_SRC, (Bit32u)g_icon);
 			do_pic_copy(0);
 
 			ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));

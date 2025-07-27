@@ -4051,7 +4051,7 @@ void draw_compass(void)
 	{
 
 		/* set src */
-		n.dst = (Bit8u*)ds_readd(ICON);
+		n.dst = g_icon;
 		/* set dst */
 		n.src = (Bit8u*)ds_readd(BUFFER6_PTR);
 		/* set no */
@@ -4072,7 +4072,7 @@ void draw_compass(void)
 		ds_writew(PIC_COPY_Y2, 136);
 
 		/* set source */
-		ds_writed(PIC_COPY_SRC, ds_readd(ICON));
+		ds_writed(PIC_COPY_SRC, (Bit32u)g_icon);
 
 		update_mouse_cursor();
 		do_pic_copy(2);

@@ -499,7 +499,7 @@ void GRP_move_hero(signed short src_pos)
 		ds_writew(PIC_COPY_Y1, ds_readw(MOUSE_POSY));
 		ds_writew(PIC_COPY_X2, ds_readw(MOUSE_POSX) + 31);
 		ds_writew(PIC_COPY_Y2, ds_readw(MOUSE_POSY) + 31);
-		ds_writed(PIC_COPY_SRC, ds_readd(ICON));
+		ds_writed(PIC_COPY_SRC, (Bit32u)g_icon);
 
 		do_save_rect();
 
@@ -539,7 +539,7 @@ void GRP_move_hero(signed short src_pos)
 				ds_writew(PIC_COPY_Y1, ds_readw(MOUSE_POSY_BAK));
 				ds_writew(PIC_COPY_X2, ds_readw(MOUSE_POSX_BAK) + 31);
 				ds_writew(PIC_COPY_Y2, ds_readw(MOUSE_POSY_BAK) + 31);
-				ds_writed(PIC_COPY_SRC, ds_readd(ICON));
+				ds_writed(PIC_COPY_SRC, (Bit32u)g_icon);
 
 				do_pic_copy(0);
 
@@ -547,7 +547,7 @@ void GRP_move_hero(signed short src_pos)
 				ds_writew(PIC_COPY_Y1, ds_readw(MOUSE_POSY));
 				ds_writew(PIC_COPY_X2, ds_readw(MOUSE_POSX) + 31);
 				ds_writew(PIC_COPY_Y2, ds_readw(MOUSE_POSY) + 31);
-				ds_writed(PIC_COPY_SRC, ds_readd(ICON));
+				ds_writed(PIC_COPY_SRC, (Bit32u)g_icon);
 
 				do_save_rect();
 
@@ -566,7 +566,7 @@ void GRP_move_hero(signed short src_pos)
 		ds_writew(PIC_COPY_Y1, ds_readw(MOUSE_POSY_BAK));
 		ds_writew(PIC_COPY_X2, ds_readw(MOUSE_POSX_BAK) + 31);
 		ds_writew(PIC_COPY_Y2, ds_readw(MOUSE_POSY_BAK) + 31);
-		ds_writed(PIC_COPY_SRC, ds_readd(ICON));
+		ds_writed(PIC_COPY_SRC, (Bit32u)g_icon);
 
 		do_pic_copy(0);
 

@@ -1454,7 +1454,7 @@
 #define TEXT_OUTPUT_BUF                 (0xd2eb)    /* RealPt; to buffer of size 300 */
 #define TEXT_INPUT_BUF                  (0xd2ef)    /* RealPt; to buffer of size 24 */
 #define DTP2                            (0xd2f3)    /* long */
-#define ICON                            (0xd2f7)    /* RealPt */
+//#define ICON                            (0xd2f7)    /* RealPt */
 #define PRINT_STRING_BUFFER             (0xd2fb)    /* RealPt */
 #define FRAMEBUF_PTR                    (0xd2ff)    /* RealPt */
 //#define RENDERBUF_PTR                   (0xd303)    /* RealPt; to buffer of size 65000 */

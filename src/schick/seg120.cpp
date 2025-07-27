@@ -307,7 +307,7 @@ signed short init_memory(void)
 	ds_writed(TRV_TRACK_PIXEL_BAK,		(Bit32u)schick_alloc(500));
 	g_chessboard = (signed char*)schick_alloc(625);
 	ds_writed(POPUP,		(Bit32u)(schick_alloc(1673) + 8));
-	ds_writed(ICON,			(Bit32u)(schick_alloc(1500) + 8));
+	g_icon =	(unsigned char*)(schick_alloc(1500) + 8);
 	g_buf_icon =	(unsigned char*)schick_alloc(5184);
 	g_townpal_buf = (unsigned char*)schick_alloc(288);
 

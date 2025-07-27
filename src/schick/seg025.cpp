@@ -609,13 +609,13 @@ void draw_icon(signed short id, signed short x, signed short y)
 
 	seek_archive_file(handle, id * 576L, 0);
 
-	read_archive_file(handle, (Bit8u*)ds_readd(ICON), 576);
+	read_archive_file(handle, g_icon, 576);
 
 	close(handle);
 
 	ptr_bak = (Bit8u*)ds_readd(PIC_COPY_DST);
 
-	ds_writed(PIC_COPY_SRC, ds_readd(ICON));
+	ds_writed(PIC_COPY_SRC, (Bit32u)g_icon);
 	ds_writew(PIC_COPY_X1, x);
 	ds_writew(PIC_COPY_Y1, y);
 	ds_writew(PIC_COPY_X2, x + 23);

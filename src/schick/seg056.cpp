@@ -160,14 +160,14 @@ void buy_screen(void)
 			/* ICONS */
 			l_di = load_archive_file(ARCHIVE_FILE_ICONS);
 			seek_archive_file(l_di, 22 * 576L);
-			read_archive_file(l_di, (Bit8u*)ds_readd(ICON), 576L);
+			read_archive_file(l_di, g_icon, 576L);
 			close(l_di);
 
 			ds_writew(PIC_COPY_X1, 108);
 			ds_writew(PIC_COPY_Y1, 5);
 			ds_writew(PIC_COPY_X2, 131);
 			ds_writew(PIC_COPY_Y2, 28);
-			ds_writed(PIC_COPY_SRC, ds_readd(ICON));
+			ds_writed(PIC_COPY_SRC, (Bit32u)g_icon);
 			update_mouse_cursor();
 			do_pic_copy(0);
 			refresh_screen_size();
