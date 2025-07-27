@@ -107,7 +107,7 @@ void DNG_door(signed short action)
 	signed short lockpick_pos;
 	signed short lockpick_result;
 
-	ptr_doors = (struct dummy5*)(Bit8u*)ds_readd(DUNGEON_DOORS_BUF);
+	ptr_doors = (struct dummy5*)g_dungeon_doors_buf;
 	x = ds_readws(X_TARGET);
 	y = ds_readws(Y_TARGET);
 
@@ -680,7 +680,7 @@ void DNG_see_stairs(void)
 {
 	signed short target_pos;
 	stair_struct *stair_ptr;
-	stair_ptr = (stair_struct*)(Bit8u*)ds_readd(DUNGEON_STAIRS_BUF);
+	stair_ptr = (stair_struct*)g_dungeon_stairs_buf;
 
 	target_pos = DNG_POS(ds_readbs(DUNGEON_LEVEL), ds_readws(X_TARGET), ds_readws(Y_TARGET));
 
@@ -830,7 +830,7 @@ void DNG_fight(void)
 	signed short target_pos;
 	struct fight_struct *fight_ptr;
 
-	fight_ptr = (struct fight_struct*)(Bit8u*)ds_readd(DUNGEON_FIGHTS_BUF);
+	fight_ptr = (struct fight_struct*)g_dungeon_fights_buf;
 
 	target_pos = DNG_POS(ds_readbs(DUNGEON_LEVEL), ds_readws(X_TARGET), ds_readws(Y_TARGET));
 

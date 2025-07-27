@@ -6222,9 +6222,9 @@ unsigned short g_current_town_overy; // ds:0xe4a7
 unsigned short g_current_town_over; // ds:0xe4a5
 unsigned short g_trv_menu_selection; // ds:0xe4a3
 signed short g_get_extra_loot; // ds:0xe4a0
-void *g_dungeon_doors_buf; // ds:0xe49c, to buffer of size 225
-void *g_dungeon_stairs_buf; // ds:0xe498, to buffer of size 80
-void *g_dungeon_fights_buf; // ds:0xe494, to buffer of size 630
+unsigned char *g_dungeon_doors_buf; // ds:0xe49c, to buffer of size 225
+unsigned char *g_dungeon_stairs_buf; // ds:0xe498, to buffer of size 80
+unsigned char *g_dungeon_fights_buf; // ds:0xe494, to buffer of size 630
 signed short g_lockpick_try_counter; // ds:0xe492, {0..4}
 unsigned char g_unkn_090[1]; // ds:0xe491
 void *g_dng_gfxtab; // ds:0xe48d, to GFXTAB(_WOOD|_STONE|_MARBLE)

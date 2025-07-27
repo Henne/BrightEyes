@@ -1610,9 +1610,9 @@
 #define DNG_GFXTAB                      (0xe48d)    /* Bit8u*; to GFXTAB(_SHIPS|_STONES|_MARBLES) */
 // ?1
 #define LOCKPICK_TRY_COUNTER            (0xe492)    /* signed short; {0..4} */
-#define DUNGEON_FIGHTS_BUF              (0xe494)    /* Bit8u*; to buffer of size 630 */
-#define DUNGEON_STAIRS_BUF              (0xe498)    /* Bit8u*; to buffer of size 80 */
-#define DUNGEON_DOORS_BUF               (0xe49c)    /* Bit8u*; to buffer of size 225 = 45 * 5; each 5-byte entry consists of [pos (2 bytes), smash-handicap, lockpick-handicap, foramen-handicap] */
+//#define DUNGEON_FIGHTS_BUF              (0xe494)    /* Bit8u*; to buffer of size 630 */
+//#define DUNGEON_STAIRS_BUF              (0xe498)    /* Bit8u*; to buffer of size 80 */
+//#define DUNGEON_DOORS_BUF               (0xe49c)    /* Bit8u*; to buffer of size 225 = 45 * 5; each 5-byte entry consists of [pos (2 bytes), smash-handicap, lockpick-handicap, foramen-handicap] */
 #define GET_EXTRA_LOOT                  (0xe4a0)    /* signed short; {0,1} */
 #define ROUTE59_FLAG                    (0xe4a2)    /* unsigned char; {0, 1 = from Kravik, 2 = from Peilinen, 3 = from Skelellen, 4 = from Rovamund} */
 #define TRV_MENU_SELECTION              (0xe4a3)    /* unsigned short */

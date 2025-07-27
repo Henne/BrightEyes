@@ -81,6 +81,11 @@ extern signed short g_textbox_width_bak; // ds:0xe5d5; seg117
 extern signed short g_wallclock_update_bak; // ds:0xe5d3; seg117
 extern unsigned char g_event_ani_busy;	// ds:0xe5d2; seg002, seg109-seg118
 extern unsigned char *g_itemuser;	// ds:0xe5ce; seg107
+
+extern unsigned char *g_dungeon_doors_buf; 	// ds:0xe49c; seg028,seg076,seg098,seg120
+extern unsigned char *g_dungeon_stairs_buf; 	// ds:0xe498; seg028,seg076,seg098,seg120
+extern unsigned char *g_dungeon_fights_buf; 	// ds:0xe494; seg028,seg076,seg098,seg120
+
 extern char **g_itemsname;		// ds:0xe22f; seg026, seg120
 extern unsigned char *g_itemsdat;	// ds:0xe22b; seg002, seg027, seg105, seg107, seg120
 extern signed char g_market_itemsaldo_table[254]; // ds:0xe12d; seg056, seg057, seg120

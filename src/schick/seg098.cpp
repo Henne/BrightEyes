@@ -810,7 +810,7 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 			if (spell_id == SP_FORAMEN_FORAMINOR && ds_readbs(DUNGEON_INDEX) != DUNGEONS_NONE && (ds_readw(DNG_MENU_MODE) == DNG_MENU_MODE_OPEN_DOOR || ds_readw(DNG_MENU_MODE) == DNG_MENU_MODE_UNLOCK_DOOR)) {
 				x = ds_readws(X_TARGET);
 				y = ds_readws(Y_TARGET);
-				ptr_doors = (Bit8u*)ds_readd(DUNGEON_DOORS_BUF);
+				ptr_doors = g_dungeon_doors_buf;
 
 				switch (ds_readbs(DIRECTION))
 				{

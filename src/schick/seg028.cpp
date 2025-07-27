@@ -121,9 +121,9 @@ void load_dungeon_ddt(void)
 	high = host_readws((Bit8u*)&high);
 #endif
 
-	read_archive_file(handle, (Bit8u*)ds_readd(DUNGEON_FIGHTS_BUF), low);
-	read_archive_file(handle, (Bit8u*)ds_readd(DUNGEON_DOORS_BUF), high - low);
-	read_archive_file(handle, (Bit8u*)ds_readd(DUNGEON_STAIRS_BUF), 0x7d0);
+	read_archive_file(handle, g_dungeon_fights_buf, low);
+	read_archive_file(handle, g_dungeon_doors_buf, high - low);
+	read_archive_file(handle, g_dungeon_stairs_buf, 0x7d0);
 
 	close(handle);
 
