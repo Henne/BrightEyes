@@ -302,10 +302,10 @@ signed short init_memory(void)
 	ds_writed(DUNGEON_FIGHTS_BUF,		(Bit32u)schick_alloc(630));
 	ds_writed(DUNGEON_DOORS_BUF,		(Bit32u)schick_alloc(225));
 	ds_writed(DUNGEON_STAIRS_BUF,		(Bit32u)schick_alloc(80));
-	ds_writed(BUF_FONT6,		(Bit32u)schick_alloc(592));
+	g_buf_font6 =	(unsigned char*)schick_alloc(592);
 	ds_writed(SPLASH_BUFFER,		(Bit32u)schick_alloc(1000));
 	ds_writed(TRV_TRACK_PIXEL_BAK,		(Bit32u)schick_alloc(500));
-	g_chessboard = (signed char*)schick_alloc(625);
+	g_chessboard =	(signed char*)schick_alloc(625);
 	g_popup =	(unsigned char*)(schick_alloc(1673) + 8);
 	g_icon =	(unsigned char*)(schick_alloc(1500) + 8);
 	g_buf_icon =	(unsigned char*)schick_alloc(5184);

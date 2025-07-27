@@ -6399,7 +6399,7 @@ unsigned short g_init_color1; // ds:0xd2cb, writeonly (0xc8)
 short g_textcolor_fg; // ds:0xd2c9
 short g_textcolor_bg; // ds:0xd2c7
 short g_textcolor; // ds:0xd2c5
-void *g_buf_font6; // ds:0xd2c1
+unsigned char *g_buf_font6; // ds:0xd2c1
 void *g_splash_buffer; // ds:0xd2bd, to buffer of size 1000, used for Splashes
 char *g_text_ltx_buffer; // ds:0xd2b9, to buffer of size 30500
 void *g_buffer7_ptr; // ds:0xd2b5, to buffer of size 10000, used for NVF and text

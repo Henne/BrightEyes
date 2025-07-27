@@ -39,7 +39,7 @@ void init_text(void)
 	signed short handle;
 
 	handle = load_archive_file(ARCHIVE_FILE_FONT6);
-	read_archive_file(handle, (Bit8u*)ds_readd(BUF_FONT6), 1000);
+	read_archive_file(handle, g_buf_font6, 1000);
 	close(handle);
 
 	handle = load_archive_file(ARCHIVE_FILE_TEXT_LTX);
@@ -55,7 +55,7 @@ void init_text(void)
 	split_textbuffer((char**)g_itemsname, (char*)ds_readd(BUFFER5_PTR), len);
 
 	handle = load_archive_file(ARCHIVE_FILE_MONNAMES);
-	len = (signed short)read_archive_file(handle, g_monnames_buffer, 5000);
+	len = (signed short)read_archive_file(handle, (Bit8u*)g_monnames_buffer, 5000);
 	close(handle);
 
 	split_textbuffer((char**)g_monnames_index, g_monnames_buffer, len);

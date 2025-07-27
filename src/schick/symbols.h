@@ -1435,7 +1435,7 @@
 #define BUFFER7_PTR                     (0xd2b5)    /* Bit8u*; to buffer of size 10000, used for NVF and text */
 #define TEXT_LTX_BUFFER                 (0xd2b9)    /* Bit8u*; to buffer of size 30500 */
 #define SPLASH_BUFFER                   (0xd2bd)    /* Bit8u*; to buffer of size 1000, used for Splashes */
-#define BUF_FONT6                       (0xd2c1)    /* Bit8u* */
+//#define BUF_FONT6                       (0xd2c1)    /* Bit8u* */
 #define TEXTCOLOR                       (0xd2c5)    /* short */
 #define TEXTCOLOR_BG                    (0xd2c7)    /* short */
 #define TEXTCOLOR_FG                    (0xd2c9)    /* short */
