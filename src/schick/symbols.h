@@ -1506,7 +1506,7 @@
 #define MONSTER_DAT_BUF                 (0xe125)    /* Bit8u* */
 //#define MONNAMES_INDEX                  (0xe129)    /* Bit8u* */
 //#define MARKET_ITEMSALDO_TABLE          (0xe12d)    /* signed char[254] */
-#define ITEMSDAT                        (0xe22b)    /* long */
+//#define ITEMSDAT                        (0xe22b)    /* long */
 //#define ITEMSNAME                       (0xe22f)    /* long */
 // ?1
 #define GFX_SPINLOCK                    (0xe234)    /* signed long */
