@@ -485,7 +485,7 @@ void sea_travel(signed short passage, signed short dir)
 	add_ds_fp(ROUTE_COURSE_PTR, 4);
 #endif
 
-	memset((Bit8u*)ds_readd(TRV_TRACK_PIXEL_BAK), 0xaa, 500);
+	memset(g_trv_track_pixel_bak, 0xaa, 500);
 	ds_writew(TRAVEL_SPEED, 10 * ds_readbs(SEA_TRAVEL_PASSAGE_SPEED1)); /* speed [unit: 10m per hour] */
 	ds_writew(ROUTE_TOTAL_STEPS, get_srout_len((Bit8u*)ds_readd(ROUTE_COURSE_PTR))); /* a step for each pixel on the map. */
 	ds_writew(ROUTE_LENGTH, 100 * ds_readb(SEA_ROUTES + SEA_ROUTE_DISTANCE + SIZEOF_SEA_ROUTE * passage)); /* length of sea route [unit: 10m] */
@@ -563,7 +563,7 @@ void sea_travel(signed short passage, signed short dir)
 			ds_writew(ROUTE_MOUSEHOVER, 1);
 		}
 
-		*((Bit8u*)ds_readd(TRV_TRACK_PIXEL_BAK) + ds_readws(ROUTE_STEPCOUNT)) =
+		g_trv_track_pixel_bak[ds_readws(ROUTE_STEPCOUNT)] =
 			*(ptr + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2) * 320 + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR)));
 
 		inc_ds_ws(ROUTE_STEPCOUNT);
@@ -658,8 +658,8 @@ void sea_travel(signed short passage, signed short dir)
 			ds_writew(TRV_I, 0);
 #if defined(__BORLANDC__)
 			for (ds_writed(ROUTE_COURSE_PTR2, ds_readd(ROUTE_COURSE_START));
-			     host_readb((Bit8u*)ds_readd(TRV_TRACK_PIXEL_BAK) + inc_ds_ws_post(TRV_I)) != 0xaa;
-			     add_ds_fp(ROUTE_COURSE_PTR2, 2 * (!dir ? 2 : -2)))
+				g_trv_track_pixel_bak[inc_ds_ws_post(TRV_I)] != 0xaa;
+				add_ds_fp(ROUTE_COURSE_PTR2, 2 * (!dir ? 2 : -2)))
 			{
 				*(ptr + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR2) + 2) * 320 + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR2))) = 0x1f;
 			}
@@ -695,7 +695,7 @@ void sea_travel(signed short passage, signed short dir)
 			dec_ds_ws(ROUTE_STEPCOUNT);
 
 			*(ptr + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2) * 320 + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR))) =
-				host_readb((Bit8u*)ds_readd(TRV_TRACK_PIXEL_BAK) + ds_readws(ROUTE_STEPCOUNT));
+				g_trv_track_pixel_bak[ds_readws(ROUTE_STEPCOUNT)];
 
 		} while (host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR)) != -1);
 

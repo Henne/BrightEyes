@@ -106,7 +106,7 @@ void TM_func1(signed short route_no, signed short backwards)
 	add_ds_fp(ROUTE_COURSE_PTR, 4);
 #endif
 
-	memset((void*)(Bit8u*)ds_readd(TRV_TRACK_PIXEL_BAK), 0xaa, 500);
+	memset((void*)g_trv_track_pixel_bak, 0xaa, 500);
 	ds_writed(TRAVEL_ROUTE_PTR, (Bit32u)(p_datseg + (LAND_ROUTES - SIZEOF_LAND_ROUTE) + SIZEOF_LAND_ROUTE * route_no));
 	ds_writew(TRAVEL_SPEED, 166);
 	ds_writew(ROUTE_TOTAL_STEPS, TM_get_track_length((Bit8u*)ds_readd(ROUTE_COURSE_PTR)));
@@ -215,12 +215,12 @@ void TM_func1(signed short route_no, signed short backwards)
 			/* restore the pixel from the map */
 			*(fb_start + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2) * 320
 				+ host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR))) =
-				host_readb((Bit8u*)ds_readd(TRV_TRACK_PIXEL_BAK) + ds_readws(ROUTE_STEPCOUNT));
+				g_trv_track_pixel_bak[ds_readws(ROUTE_STEPCOUNT)];
 
-			*((Bit8u*)ds_readd(TRV_TRACK_PIXEL_BAK) + ds_readws(ROUTE_STEPCOUNT)) = 0xaa;
+			g_trv_track_pixel_bak[ds_readws(ROUTE_STEPCOUNT)] = 0xaa;
 		} else {
 			/* save the old pixel from the map */
-			*((Bit8u*)ds_readd(TRV_TRACK_PIXEL_BAK) + ds_readws(ROUTE_STEPCOUNT)) =
+			g_trv_track_pixel_bak[ds_readws(ROUTE_STEPCOUNT)] =
 				*(fb_start + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2) * 320 + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR)));
 
 			inc_ds_ws(ROUTE_STEPCOUNT);
@@ -438,7 +438,7 @@ void TM_func1(signed short route_no, signed short backwards)
 
 #if defined(__BORLANDC__)
 			/* Redraw the track on the map */
-			while (host_readb((Bit8u*)ds_readd(TRV_TRACK_PIXEL_BAK) + inc_ds_ws_post(TRV_I)) != 0xaa)
+			while (g_trv_track_pixel_bak[inc_ds_ws_post(TRV_I)] != 0xaa)
 			{
 				*(fb_start + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR2) + 2) * 320 + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR2))) =  0x1c;
 				add_ds_fp(ROUTE_COURSE_PTR2, 2 * (!backwards ? 2 : -2));
@@ -486,7 +486,7 @@ void TM_func1(signed short route_no, signed short backwards)
 			add_ds_fp(ROUTE_COURSE_PTR, 2 * (!backwards ? -2 : 2));
 			dec_ds_ws(ROUTE_STEPCOUNT);
 			*(fb_start + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2) * 320 + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR))) =
-				host_readb((Bit8u*)ds_readd(TRV_TRACK_PIXEL_BAK) + ds_readws(ROUTE_STEPCOUNT));
+				g_trv_track_pixel_bak[ds_readws(ROUTE_STEPCOUNT)];
 
 		} while (host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR)) != -1);
 #endif

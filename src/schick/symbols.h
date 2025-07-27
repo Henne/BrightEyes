@@ -1425,7 +1425,7 @@
 #define BUFFER_WFIGS_TAB                (0xd0ad)    /* unsigned long[43] */
 #define BUFFER_MFIGS_TAB                (0xd159)    /* unsigned long[43] */
 #define BUFFER_ANIS_TAB                 (0xd205)    /* unsigned long[37] */
-#define TRV_TRACK_PIXEL_BAK             (0xd299)    /* Bit8u*; to buffer of size 500 */
+//#define TRV_TRACK_PIXEL_BAK             (0xd299)    /* Bit8u*; to buffer of size 500 */
 #define FIG_STAR_GFX                    (0xd29d)    /* Bit8u* */
 //#define MONNAMES_BUFFER                 (0xd2a1)    /* Bit8u* */
 #define BUFFER5_PTR                     (0xd2a5)    /* Bit8u*; to buffer of size 3880 */
