@@ -1427,7 +1427,7 @@
 #define BUFFER_ANIS_TAB                 (0xd205)    /* unsigned long[37] */
 #define TRV_TRACK_PIXEL_BAK             (0xd299)    /* RealPt; to buffer of size 500 */
 #define FIG_STAR_GFX                    (0xd29d)    /* RealPt */
-#define MONNAMES_BUFFER                 (0xd2a1)    /* RealPt */
+//#define MONNAMES_BUFFER                 (0xd2a1)    /* RealPt */
 #define BUFFER5_PTR                     (0xd2a5)    /* RealPt; to buffer of size 3880 */
 #define BUFFER10_PTR                    (0xd2a9)    /* RealPt; to buffer of size 16771, used for NVF and text */
 #define POPUP                           (0xd2ad)    /* RealPt */

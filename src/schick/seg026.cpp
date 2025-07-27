@@ -55,10 +55,10 @@ void init_text(void)
 	split_textbuffer((char**)ds_readd(ITEMSNAME), (char*)ds_readd(BUFFER5_PTR), len);
 
 	handle = load_archive_file(ARCHIVE_FILE_MONNAMES);
-	len = (signed short)read_archive_file(handle, (Bit8u*)ds_readd(MONNAMES_BUFFER), 5000);
+	len = (signed short)read_archive_file(handle, g_monnames_buffer, 5000);
 	close(handle);
 
-	split_textbuffer((char**)g_monnames_index, (char*)ds_readd(MONNAMES_BUFFER), len);
+	split_textbuffer((char**)g_monnames_index, g_monnames_buffer, len);
 }
 
 void load_tx(signed short index)
