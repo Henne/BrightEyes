@@ -2329,13 +2329,13 @@ void do_timers(void)
 	}
 
 	/* poison timer in the mage dungeon */
-	if (ds_readd(DNG07_POISON_TIMER) != 0) {
+	if (gs_dng07_poison_timer) {
 
 		/* decrement the timer */
-		sub_ds_ds(DNG07_POISON_TIMER, 1);
+		gs_dng07_poison_timer -= 1L;
 
 		/* every 15 minutes do damage */
-		if (ds_readd(DNG07_POISON_TIMER) % MINUTES(15) == 0) {
+		if (gs_dng07_poison_timer % MINUTES(15) == 0) {
 
 			ptr = get_hero(0);
 

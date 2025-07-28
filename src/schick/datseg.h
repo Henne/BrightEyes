@@ -65,6 +65,9 @@ extern void (*g_use_special_item_handlers[14])(void);
 extern void (*g_travel_event_handlers[146])(void);
 extern unsigned char g_always_one2;			//ds:0x35f3; seg078
 
+extern Bit8s  gs_dng07_poison_flag;		//ds:0x3cb5; seg082
+extern Bit32s gs_dng07_poison_timer;		//ds:0x3cb6; seg002, seg082
+
 extern unsigned char *g_hexenknoten_gfx_buf;	// ds:0xacc8; seg100
 extern signed short g_monster_spell_ae_cost;	// ds:0xaccc; seg102
 extern char g_select_skill_lvlup[6]; 		// ds:0xacce; seg103

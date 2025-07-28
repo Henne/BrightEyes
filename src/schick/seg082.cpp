@@ -243,20 +243,17 @@ signed short DNG07_handler(void)
 
 		ds_writeb(DIRECTION, (ds_readbs(DIRECTION) + 2) & 3);
 
-	} else if (target_pos == DNG_POS(2,1,2) && target_pos != ds_readws(DNG_HANDLED_POS) && !ds_readb(DNG07_POISON_FLAG))
+	} else if (target_pos == DNG_POS(2,1,2) && target_pos != ds_readws(DNG_HANDLED_POS) && !gs_dng07_poison_flag)
 	{
 		if (GUI_bool(get_tx(6)))
 		{
-			sprintf((char*)g_dtp2,
-				get_tx(7),
-				(char*)hero + HERO_NAME2);
-
+			sprintf((char*)g_dtp2, get_tx(7), (char*)hero + HERO_NAME2);
 			GUI_output((char*)g_dtp2);
 
-			ds_writeb(DNG07_POISON_FLAG, 1);
-
-			ds_writed(DNG07_POISON_TIMER, DAYS(1));
+			gs_dng07_poison_flag = 1;
+			gs_dng07_poison_timer = DAYS(1);
 		}
+
 	} else if (target_pos == DNG_POS(0,1,14) && target_pos != ds_readws(DNG_HANDLED_POS))
 	{
 		if (GUI_bool(get_tx(15)))

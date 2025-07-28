@@ -392,8 +392,8 @@
 #define DNG07_MUELIXIER_FLAG            (0x3cb2)    /* unsigned char; {0,1,2} */
 #define DNG07_ANTIMUELIXIER_FLAG        (0x3cb3)    /* unsigned char; {0,1} */
 #define DNG07_FLICKER_FLAG              (0x3cb4)    /* unsigned char; {0,1} */
-#define DNG07_POISON_FLAG               (0x3cb5)    /* unsigned char; {0,1} */
-#define DNG07_POISON_TIMER              (0x3cb6)    /* unsigned long */
+//#define DNG07_POISON_FLAG               (0x3cb5)    /* unsigned char; {0,1} */
+//#define DNG07_POISON_TIMER              (0x3cb6)    /* unsigned long */
 #define DNG08_BED_00                    (0x3cba)    /* unsigned char; {0,1} */
 #define DNG08_BED_01                    (0x3cbb)    /* unsigned char; {0,1} */
 #define DNG08_BED_02                    (0x3cbc)    /* unsigned char; {0,1} */
