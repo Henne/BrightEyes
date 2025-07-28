@@ -1431,7 +1431,7 @@
 #define BUFFER5_PTR                     (0xd2a5)    /* Bit8u*; to buffer of size 3880 */
 #define BUFFER10_PTR                    (0xd2a9)    /* Bit8u*; to buffer of size 16771, used for NVF and text */
 #define POPUP                           (0xd2ad)    /* Bit8u* */
-#define BUFFER6_PTR                     (0xd2b1)    /* Bit8u*; to buffer of size 2200, used for NVF */
+//#define BUFFER6_PTR                     (0xd2b1)    /* Bit8u*; to buffer of size 2200, used for NVF */
 #define BUFFER7_PTR                     (0xd2b5)    /* Bit8u*; to buffer of size 10000, used for NVF and text */
 #define TEXT_LTX_BUFFER                 (0xd2b9)    /* Bit8u*; to buffer of size 30500 */
 //#define SPLASH_BUFFER                   (0xd2bd)    /* Bit8u*; to buffer of size 1000, used for Splashes */

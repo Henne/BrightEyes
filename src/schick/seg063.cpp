@@ -415,7 +415,7 @@ void do_harbor(void)
 	} while (!done);
 
 	i = load_archive_file(ARCHIVE_FILE_COMPASS);
-	read_archive_file(i, (Bit8u*)ds_readd(BUFFER6_PTR), 5000);
+	read_archive_file(i, g_buffer6_ptr, 5000);
 	close(i);
 
 	set_var_to_zero();

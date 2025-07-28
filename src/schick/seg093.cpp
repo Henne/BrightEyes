@@ -250,7 +250,7 @@ signed short do_travel_mode(void)
 	ds_writew(CURRENT_TOWN_ANIX, ds_writew(CURRENT_TOWN_ANIY, ds_writew(SELECTED_TOWN_ANIX, ds_writew(SELECTED_TOWN_ANIY, 0))));
 
 	i = load_archive_file(ARCHIVE_FILE_COMPASS);
-	read_archive_file(i, (Bit8u*)ds_readd(BUFFER6_PTR), 5000);
+	read_archive_file(i, g_buffer6_ptr, 5000);
 	close(i);
 
 	ds_writeb(SHOW_TRAVEL_MAP, (signed char)ds_writew(BASEPOS_X, ds_writew(BASEPOS_Y, ds_writew(CURRENT_TOWN_OVER, ds_writew(TRV_MENU_SELECTION, 0)))));

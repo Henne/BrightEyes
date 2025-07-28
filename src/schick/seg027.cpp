@@ -701,7 +701,7 @@ void init_common_buffers(void)
 		bytes);
 
 	fd = load_archive_file(ARCHIVE_FILE_COMPASS);
-	bytes = read_archive_file(fd, (Bit8u*)ds_readd(BUFFER6_PTR), 5000);
+	bytes = read_archive_file(fd, g_buffer6_ptr, 5000);
 	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_ITEMS_DAT);

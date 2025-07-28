@@ -3183,9 +3183,9 @@ void seg002_37c4(void)
 	Bit8u* p3;
 	struct dummy a = *(struct dummy*)(p_datseg + PIC_COPY_DST);
 
-	p1 = (Bit8u*)ds_readd(BUFFER6_PTR) + 2000;
-	p2 = (Bit8u*)ds_readd(BUFFER6_PTR) + 2100;
-	p3 = (Bit8u*)ds_readd(BUFFER6_PTR) + 1000;
+	p1 = g_buffer6_ptr + 2000;
+	p2 = g_buffer6_ptr + 2100;
+	p3 = g_buffer6_ptr + 1000;
 
 	if ((ds_readws(TRV_MENU_SELECTION) != 0) && (ds_readb(SHOW_TRAVEL_MAP))) {
 
@@ -4053,7 +4053,7 @@ void draw_compass(void)
 		/* set src */
 		n.dst = g_icon;
 		/* set dst */
-		n.src = (Bit8u*)ds_readd(BUFFER6_PTR);
+		n.src = g_buffer6_ptr;
 		/* set no */
 		n.no = ds_readbs(DIRECTION);
 		/* set type*/
