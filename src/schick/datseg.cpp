@@ -6347,7 +6347,7 @@ struct{unsigned char unkn[35];} g_fig_list_elem; // ds:0xe066
 struct{unsigned char unkn[243];} g_fig_anisheets[8]; // ds:0xd8ce
 unsigned char g_fightobj_list[90]; // ds:0xd874
 short g_nr_of_enemies; // ds:0xd872, ?
-void *g_fightobj_buf_seek_ptr; // ds:0xd86e, points to end of FIGHTOBJ buffer
+unsigned char *g_fightobj_buf_seek_ptr; // ds:0xd86e, points to end of FIGHTOBJ buffer
 void *g_weapons_nvf_buf; // ds:0xd86a, to buffer of size 0x1953
 void *g_spellobj_nvf_buf; // ds:0xd866, to buffer of size 0xf5f
 void *g_fig_cb_marker_buf; // ds:0xd862

@@ -304,12 +304,11 @@ void FIG_load_enemy_sprites(Bit8u *ptr, signed short x, signed short y)
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_RELOAD), -1);
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_WSHEET), -1);
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_SHEET), -1);
-	ds_writed((FIG_LIST_ELEM+FIGHTER_GFXBUF), ds_readd(FIGHTOBJ_BUF_SEEK_PTR)); /* ->prev */
+	ds_writed((FIG_LIST_ELEM+FIGHTER_GFXBUF), (Bit32u)g_fightobj_buf_seek_ptr); /* ->prev */
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_OBJ_ID), 0); /* ->next */
 
-#if defined(__BORLANDC__)
-	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 0x508);
-#endif
+	g_fightobj_buf_seek_ptr += 0x508;
+
 	g_fightobj_buf_freespace -= 0x508;
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_Z), 0x63);
 
@@ -519,11 +518,9 @@ void FIG_init_heroes(void)
 		ds_writeb((FIG_LIST_ELEM+FIGHTER_RELOAD), 0xff);
 		ds_writeb((FIG_LIST_ELEM+FIGHTER_WSHEET), 0xff);
 		ds_writeb((FIG_LIST_ELEM+FIGHTER_SHEET), 0xff);
-		ds_writed((FIG_LIST_ELEM+FIGHTER_GFXBUF), ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
+		ds_writed((FIG_LIST_ELEM+FIGHTER_GFXBUF), (Bit32u)g_fightobj_buf_seek_ptr);
 		ds_writeb((FIG_LIST_ELEM+FIGHTER_OBJ_ID), 0);
-#if defined(__BORLANDC__)
-		add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 0x508);
-#endif
+		g_fightobj_buf_seek_ptr += 0x508;
 		g_fightobj_buf_freespace -= 0x508L;
 		ds_writeb((FIG_LIST_ELEM+FIGHTER_Z), 0x63);
 		ds_writeb((FIG_LIST_ELEM+FIGHTER_VISIBLE), 1);

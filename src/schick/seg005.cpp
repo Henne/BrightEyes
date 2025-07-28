@@ -350,7 +350,7 @@ void draw_fight_screen(Bit16u val)
 	} while (list_i = (Bit8u*)host_readd(list_i + FIGHTER_NEXT));
 
 	/* set elements array[0] of array[9] */
-	ds_writed(FIG_GFXBUFFERS, ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
+	ds_writed(FIG_GFXBUFFERS, (Bit32u)g_fightobj_buf_seek_ptr);
 	ds_writew(FIG_ANI_STATE, -1);
 
 	for (i = 1; i < 8; i++) {

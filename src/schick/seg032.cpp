@@ -839,7 +839,7 @@ void FIG_load_ship_sprites(void)
 			} else {
 				/* this sprite has not been used yet */
 
-				ptr = (Bit8u*)ds_readd(FIGHTOBJ_BUF_SEEK_PTR);
+				ptr = g_fightobj_buf_seek_ptr;
 
 				nvf.dst = ptr;
 				nvf.src = (Bit8u*)ds_readd(FIGHTOBJ_BUF);
@@ -856,14 +856,12 @@ void FIG_load_ship_sprites(void)
 #endif
 
 				/* buffer this picture */
-				host_writed((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + 4 * l_si, (Bit32u)ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
+				host_writed((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + 4 * l_si, (Bit32u)g_fightobj_buf_seek_ptr);
 				host_writew((Bit8u*)ds_readd(FIGOBJ_GFXWIDTH_TABLE) + 2 * l_si, width);
 				host_writew((Bit8u*)ds_readd(FIGOBJ_GFXHEIGHT_TABLE) + 2 * l_si, height);
 
 				/* adjust the pointer */
-#if defined(__BORLANDC__)
-				add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, width * height + 8);
-#endif
+				g_fightobj_buf_seek_ptr +=  width * height + 8;
 
 				/* adjust the counter */
 				g_fightobj_buf_freespace -= width * height + 8L;

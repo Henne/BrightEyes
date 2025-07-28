@@ -596,8 +596,8 @@ void spell_skelettarius(void)
 		 * https://www.crystals-dsa-foren.de/showthread.php?tid=5039&pid=148252#pid148252
 		 * https://www.crystals-dsa-foren.de/showthread.php?tid=5191&pid=166097#pid166097
 		 * */
-                Bit8u* buf_seek_ptr_bak = ds_readd(FIGHTOBJ_BUF_SEEK_PTR); /* backup the entry of FIGHTOBJ_BUF_SEEK_PTR */
-		ds_write(FIGHTOBJ_BUF_SEEK_PTR, host_readd(fighter + FIGHTER_GFXBUF));
+                Bit8u* buf_seek_ptr_bak = g_fightobj_buf_seek_ptr; /* backup the entry of FIGHTOBJ_BUF_SEEK_PTR */
+		g_fightobj_buf_seek_ptr = (unsigned char*)host_readd(fighter + FIGHTER_GFXBUF);
 #endif
 
 		FIG_remove_from_list(host_readbs(get_spelltarget_e() + ENEMY_SHEET_FIGHTER_ID), 0);
@@ -611,10 +611,8 @@ void spell_skelettarius(void)
 #ifdef M302de_ORIGINAL_BUGFIX
 		/* Original-Bug 2:
 		 * set FIGHTOBJ_BUF_FREESPACE and FIGHTOBJ_BUF_SEEK_PTR to the correct values as discussed above */
-#if defined(__BORLANDC__)
 		g_fightobj_buf_freespace += 0x508L;
-#endif
-		ds_writed(FIGHTOBJ_BUF_SEEK_PTR, (Bit32u)buf_seek_ptr_bak);
+		g_fightobj_buf_seek_ptr = buf_seek_ptr_bak;
 #endif
 
 		/* zombie will fight for the heroes */

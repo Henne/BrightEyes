@@ -271,7 +271,7 @@ void spell_hexenknoten(void)
 		rp = g_hexenknoten_gfx_buf;
 		/* TODO: graphic bug if cast more than once */
 	} else {
-		rp = (Bit8u*)ds_readd(FIGHTOBJ_BUF_SEEK_PTR);
+		rp = g_fightobj_buf_seek_ptr;
 		nvf.dst = rp;
 		nvf.src = (Bit8u*)ds_readd(SPELLOBJ_NVF_BUF);
 		nvf.no = no;
@@ -286,11 +286,9 @@ void spell_hexenknoten(void)
 		height = host_readws((Bit8u*)&height);
 #endif
 
-		g_hexenknoten_gfx_buf = (Bit8u*)ds_readd(FIGHTOBJ_BUF_SEEK_PTR);
-#if defined(__BORLANDC__)
+		g_hexenknoten_gfx_buf = g_fightobj_buf_seek_ptr;
 		/* move pointer further */
-		add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, width * height + 8);
-#endif
+		g_fightobj_buf_seek_ptr += width * height + 8;
 		g_fightobj_buf_freespace -= width * height + 8L;
 	}
 

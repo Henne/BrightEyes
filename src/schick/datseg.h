@@ -114,6 +114,7 @@ extern signed short g_wallclock_update;	// ds:0xe113; seg004-seg117, seg120
 extern unsigned char *g_saved_files_buf;// ds:0xe2d2; seg026;
 extern unsigned char *g_spelltarget;	// ds:0xe5b8; seg098-seg102
 extern unsigned char *g_spelluser;	// ds:0xecbc; seg068, seg098, seg102, seg107
+extern unsigned char *g_fightobj_buf_seek_ptr; // ds:0xd86e; seg005-seg100
 extern signed char *g_chessboard;	// ds:0xd852;
 extern unsigned char *g_townpal_buf;	// ds:0xd312; seg002, seg027, seg120
 extern unsigned char *g_renderbuf_ptr;	// ds:0xd303; seg002-seg120

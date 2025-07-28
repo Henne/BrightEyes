@@ -111,7 +111,7 @@ void FIG_preload_gfx(void)
 
 	ds_writed(FIGOBJ_GFXHEIGHT_TABLE, (Bit32u)(F_PADD((HugePt)ds_readd(FIGOBJ_GFXWIDTH_TABLE), 0x7e)));
 
-	ds_writed(FIGHTOBJ_BUF_SEEK_PTR, (Bit32u)(F_PADD((HugePt)ds_readd(FIGOBJ_GFXHEIGHT_TABLE), 0x7e)));
+	g_fightobj_buf_seek_ptr = (unsigned char*)(F_PADD((HugePt)ds_readd(FIGOBJ_GFXHEIGHT_TABLE), 0x7e));
 
 	ds_writed(FIGHTOBJ_BUF, (Bit32u)(F_PADD((HugePt)ds_readd(FIG_LIST_BUFFER), -0x4217)));
 
@@ -145,29 +145,23 @@ void FIG_preload_gfx(void)
 	ds_writeb(FIG_SPELLGFX_ID, -1);
 
 	/* load ANI.DAT */
-	ds_writed(BUFFER_ANIDAT, ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
-#if defined(__BORLANDC__)
-	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 9851);
-#endif
+	ds_writed(BUFFER_ANIDAT, (Bit32u)g_fightobj_buf_seek_ptr);
+	g_fightobj_buf_seek_ptr += 9851;
 	handle = load_archive_file(ARCHIVE_FILE_ANI_DAT);
 	read_archive_file(handle, (Bit8u*)ds_readd(BUFFER_ANIDAT), 9851);
 	close(handle);
 
 	/* load WEAPANI.DAT */
-	ds_writed(BUFFER_WEAPANIDAT, ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
-#if defined(__BORLANDC__)
-	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 1370);
-#endif
+	ds_writed(BUFFER_WEAPANIDAT, (Bit32u)g_fightobj_buf_seek_ptr);
+	g_fightobj_buf_seek_ptr += 1370;
 	handle = load_archive_file(ARCHIVE_FILE_WEAPANI_DAT);
 	read_archive_file(handle, (Bit8u*)ds_readd(BUFFER_WEAPANIDAT), 1370);
 	close(handle);
 
 	/* process NVFs */
 
-	ds_writed(FIG_CB_MARKER_BUF, ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
-#if defined(__BORLANDC__)
-	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 300);
-#endif
+	ds_writed(FIG_CB_MARKER_BUF, (Bit32u)g_fightobj_buf_seek_ptr);
+	g_fightobj_buf_seek_ptr += 300;
 
 	nvf.dst = (Bit8u*)ds_readd(FIG_CB_MARKER_BUF);
 	nvf.src = g_objects_nvf_buf;
@@ -177,10 +171,8 @@ void FIG_preload_gfx(void)
 	nvf.height = (Bit8u*)&i;
 	process_nvf(&nvf);
 
-	ds_writed(FIG_CB_SELECTOR_BUF, ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
-#if defined(__BORLANDC__)
-	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 300);
-#endif
+	ds_writed(FIG_CB_SELECTOR_BUF, (Bit32u)g_fightobj_buf_seek_ptr);
+	g_fightobj_buf_seek_ptr += 300;
 
 	nvf.dst = (Bit8u*)ds_readd(FIG_CB_SELECTOR_BUF);
 	nvf.src = g_objects_nvf_buf;
@@ -188,10 +180,8 @@ void FIG_preload_gfx(void)
 	nvf.type = 0;
 	process_nvf(&nvf);
 
-	ds_writed(FIG_STAR_GFX, ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
-#if defined(__BORLANDC__)
-	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 0xe8c);
-#endif
+	ds_writed(FIG_STAR_GFX, (Bit32u)g_fightobj_buf_seek_ptr);
+	g_fightobj_buf_seek_ptr += 0xe8c;
 
 	nvf.dst = (Bit8u*)ds_readd(FIG_STAR_GFX);
 	nvf.src = g_objects_nvf_buf;
@@ -199,17 +189,13 @@ void FIG_preload_gfx(void)
 	nvf.type = 0;
 	process_nvf(&nvf);
 
-	ds_writed(FIG_SHOT_BOLT_BUF, ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
-#if defined(__BORLANDC__)
-	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 400);
-#endif
-	ds_writed(FIG_SPELLGFX_BUF, ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
-#if defined(__BORLANDC__)
-	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 1300);
-#endif
+	ds_writed(FIG_SHOT_BOLT_BUF, (Bit32u)g_fightobj_buf_seek_ptr);
+	g_fightobj_buf_seek_ptr += 400;
+	ds_writed(FIG_SPELLGFX_BUF, (Bit32u)g_fightobj_buf_seek_ptr);
+	g_fightobj_buf_seek_ptr += 1300;
 
 	/* TODO: check if pointer arithmetics works with other pointer types */
-	g_fightobj_buf_freespace = (Bit32s)((HugePt)ds_readd(FIGHTOBJ_BUF) - (HugePt)ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
+	g_fightobj_buf_freespace = (Bit32s)((HugePt)ds_readd(FIGHTOBJ_BUF) - (HugePt)g_fightobj_buf_seek_ptr);
 
 	ds_writew(FIGHTOBJ_COUNT, 0);
 	ds_writeb(FIG_TWOFIELDED_COUNT, 0);
@@ -240,7 +226,7 @@ void FIG_draw_scenario(void)
 					if (host_readd((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + obj_id * 4)) {
 						ptr = (Bit8u*)host_readd((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + obj_id * 4);
 					} else {
-						ptr = (Bit8u*)ds_readd(FIGHTOBJ_BUF_SEEK_PTR);
+						ptr = g_fightobj_buf_seek_ptr;
 
 						nvf.dst = ptr;
 						nvf.src = (Bit8u*)ds_readd(FIGHTOBJ_BUF);
@@ -256,14 +242,12 @@ void FIG_draw_scenario(void)
 #endif
 
 						/* save sprite info */
-						host_writed((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + obj_id * 4, (Bit32u)ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
+						host_writed((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + obj_id * 4, (Bit32u)g_fightobj_buf_seek_ptr);
 						host_writew((Bit8u*)ds_readd(FIGOBJ_GFXWIDTH_TABLE) + obj_id * 2, width);
 						host_writew((Bit8u*)ds_readd(FIGOBJ_GFXHEIGHT_TABLE) + obj_id * 2, height);
 
 						/* adjust pointer */
-#if defined(__BORLANDC__)
-						add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, (width * height + 8));
-#endif
+						g_fightobj_buf_seek_ptr += width * height + 8;
 						g_fightobj_buf_freespace -= width * height + 8L;
 					}
 

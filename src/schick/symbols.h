@@ -1487,7 +1487,7 @@
 #define FIG_CB_MARKER_BUF               (0xd862)    /* Bit8u* */
 #define SPELLOBJ_NVF_BUF                (0xd866)    /* Bit8u*; to buffer of size 0xf5f */
 #define WEAPONS_NVF_BUF                 (0xd86a)    /* Bit8u*; to buffer of size 0x1953 */
-#define FIGHTOBJ_BUF_SEEK_PTR           (0xd86e)    /* Bit8u*; points to end of FIGHTOBJ buffer */
+//#define FIGHTOBJ_BUF_SEEK_PTR           (0xd86e)    /* Bit8u*; points to end of FIGHTOBJ buffer */
 #define NR_OF_ENEMIES                   (0xd872)    /* short; ? */
 #define FIGHTOBJ_LIST                   (0xd874)    /* unsigned char[90] */
 #define FIG_ANISHEETS                   (0xd8ce)    /* struct(243)[8] */
