@@ -582,7 +582,7 @@
 #define DNG12_INGERIMM_SACRIFICE        (0x3f9f)    /* unsigned char; {0,1} */
 #define DNG12_INGERIMM_HINT             (0x3fa0)    /* unsigned char; {0,1} */
 #define DNG12_WATERTRAP_WATER_RUNS      (0x3fa1)    /* signed char; {0,1} */
-#define DNG12_WATERTRAP_TIMER           (0x3fa2)    /* signed long */
+//#define DNG12_WATERTRAP_TIMER           (0x3fa2)    /* signed long */
 #define DNG12_WATERTRAP_ACTIVE          (0x3fa6)    /* signed char; {0,1} */
 #define DNG12_OBSTACLE_HP               (0x3fa7)    /* signed char; {-25,...,40} */
 #define DNG12_OBSTACLE_ACTIVE           (0x3fa8)    /* signed char; {0,1} */

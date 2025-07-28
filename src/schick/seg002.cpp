@@ -2378,9 +2378,8 @@ void do_timers(void)
 		}
 	}
 
-	if (ds_readd(DNG12_WATERTRAP_TIMER) != 0)
-	{
-		sub_ds_ds(DNG12_WATERTRAP_TIMER, 1);
+	if (gs_dng12_watertrap_timer) {
+		gs_dng12_watertrap_timer -= 1L;
 	}
 
 	/* at 24 o'clock, daily stuff */

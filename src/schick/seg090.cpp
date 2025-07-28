@@ -85,16 +85,16 @@ signed short DNG12_handler(void)
 			/* water trap room, activate */
 			ds_writeb(DNG12_WATERTRAP_WATER_RUNS, 1);
 
-			if (ds_readds(DNG12_WATERTRAP_TIMER) / MINUTES(5) != ds_readws(DNG12_WATERTRAP_BAK))
+			if (gs_dng12_watertrap_timer / MINUTES(5) != ds_readws(DNG12_WATERTRAP_BAK))
 			{
 
-				ds_writews(DNG12_WATERTRAP_BAK, (signed short)(ds_readds(DNG12_WATERTRAP_TIMER) / MINUTES(5)));
+				ds_writews(DNG12_WATERTRAP_BAK, (signed short)(gs_dng12_watertrap_timer / MINUTES(5)));
 
 				/* warning according to water level */
-				GUI_output(ds_readds(DNG12_WATERTRAP_TIMER) == MINUTES(0) ? get_tx(20) :
-						(ds_readds(DNG12_WATERTRAP_TIMER) <= MINUTES(10) ? get_tx(19) : get_tx(18)));
+				GUI_output(gs_dng12_watertrap_timer == MINUTES(0) ? get_tx(20) :
+						(gs_dng12_watertrap_timer <= MINUTES(10) ? get_tx(19) : get_tx(18)));
 
-				if (ds_readds(DNG12_WATERTRAP_TIMER) == MINUTES(0)) {
+				if (gs_dng12_watertrap_timer == MINUTES(0)) {
 					/* time is up, drown party */
 					hero = get_hero(0);
 					for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
@@ -106,7 +106,7 @@ signed short DNG12_handler(void)
 							hero_disappear(hero, i, -1);
 						}
 					}
-				} else if (ds_readds(DNG12_WATERTRAP_TIMER) <= MINUTES(40)) {
+				} else if (gs_dng12_watertrap_timer <= MINUTES(40)) {
 					/* NPC will find secret door */
 
 					if (is_hero_available_in_group(get_hero(6))) {
@@ -148,7 +148,7 @@ signed short DNG12_handler(void)
 			/* clear water */
 			ds_writeb(DNG12_WATERTRAP_WATER_RUNS, 0);
 			/* reset countdown */
-			ds_writed(DNG12_WATERTRAP_TIMER, MINUTES(50) + 5);
+			gs_dng12_watertrap_timer = MINUTES(50) + 5;
 		}
 	}
 
