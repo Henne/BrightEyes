@@ -108,6 +108,7 @@ extern signed char *g_text_output_buf;	// ds:0xd2eb: seg002-seg120
 extern unsigned char *g_buf_icon;	// ds:0xd2e7; seg029, seg120
 extern unsigned char *g_objects_nvf_buf;// ds:0xd2e3; seg004, seg032, seg040, seg120
 extern unsigned char *g_buf_font6;	// ds:0xd2c1; seg026, seg096, seg120
+extern char *g_buffer7_ptr;		// ds:0xd2b5; seg026, seg028, seg066, seg120
 extern unsigned char *g_buffer6_ptr;	// ds:0xd2b1; seg002, seg027, seg063, seg093, seg094, seg120
 extern char *g_buffer5_ptr;		// ds:0xd2a5; seg026, seg120
 extern unsigned char *g_splash_buffer;	// ds:0xbcc7; seg002, seg028, seg097, seg120

@@ -253,7 +253,7 @@ void load_special_textures(signed short arg)
 	signed short fd;
 
 	fd = load_archive_file(arg == 9 ? ARCHIVE_FILE_FINGER_NVF : ARCHIVE_FILE_LTURM_NVF);
-	read_archive_file(fd, (Bit8u*)ds_readd(BUFFER7_PTR), 64000);
+	read_archive_file(fd, (Bit8u*)g_buffer7_ptr, 64000);
 	close(fd);
 
 }
@@ -652,11 +652,11 @@ void load_tlk(signed short index)
 	read_archive_file(fd, (Bit8u*)(p_datseg + DIALOG_STATES), off - partners * 0x26);
 
 	/* read the text */
-	text_len = (signed short)read_archive_file(fd, (Bit8u*)ds_readd(BUFFER7_PTR), 64000);
+	text_len = (signed short)read_archive_file(fd, (Bit8u*)g_buffer7_ptr, 64000);
 
 	close(fd);
 
-	split_textbuffer((char**)g_tx_index, (char*)ds_readd(BUFFER7_PTR), text_len);
+	split_textbuffer((char**)g_tx_index, g_buffer7_ptr, text_len);
 
 	/* adjust the pointers to the layouts */
 	for (i = 0; i < partners; i++, ptr += 0x26) {

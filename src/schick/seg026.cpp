@@ -71,11 +71,11 @@ void load_tx(signed short index)
 
 	archive_file_handle = load_archive_file(index);
 
-	archive_file_len = (signed short)read_archive_file(archive_file_handle, (Bit8u*)ds_readd(BUFFER7_PTR), 64000);
+	archive_file_len = (signed short)read_archive_file(archive_file_handle, (Bit8u*)g_buffer7_ptr, 64000);
 
 	close(archive_file_handle);
 
-	split_textbuffer((char**)g_tx_index, (char*)ds_readd(BUFFER7_PTR), archive_file_len);
+	split_textbuffer((char**)g_tx_index, g_buffer7_ptr, archive_file_len);
 
 	g_tx_file_index = index;
 }

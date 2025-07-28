@@ -796,7 +796,7 @@ void load_city_texture(signed short v1, signed short v2, signed short nvf_no,
 	nvf.src = (Bit8u*)ds_readd(TEX_FLOOR + v4 * 4);
 
 	if (v4 == 48 || v4 == 49) {
-		nvf.src = (Bit8u*)ds_readd(BUFFER7_PTR);
+		nvf.src = (Bit8u*)g_buffer7_ptr;
 	}
 
 	nvf.no = nvf_no;

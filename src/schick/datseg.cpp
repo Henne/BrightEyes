@@ -6402,7 +6402,7 @@ short g_textcolor; // ds:0xd2c5
 unsigned char *g_buf_font6; // ds:0xd2c1
 unsigned char *g_splash_buffer; // ds:0xd2bd, to buffer of size 1000, used for Splashes
 char *g_text_ltx_buffer; // ds:0xd2b9, to buffer of size 30500
-void *g_buffer7_ptr; // ds:0xd2b5, to buffer of size 10000, used for NVF and text
+char *g_buffer7_ptr; // ds:0xd2b5, to buffer of size 10000, used for NVF and text
 unsigned char *g_buffer6_ptr; // ds:0xd2b1, to buffer of size 2200, used for NVF
 unsigned char *g_popup; // ds:0xd2ad
 void *g_buffer10_ptr; // ds:0xd2a9, to buffer of size 16771, used for NVF and text
