@@ -198,7 +198,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 		ds_writed(PIC_COPY_SRC, (Bit32u)g_icon);
 		do_pic_copy(0);
 
-		ds_writed(SELLITEMS, ds_readd(FIG_FIGURE1_BUF));
+		ds_writed(SELLITEMS, (Bit32u)g_fig_figure1_buf);
 		memset((Bit8u*)ds_readd(SELLITEMS), 0, 350);
 
 		get_textcolor(&fg_bak, &bg_bak);

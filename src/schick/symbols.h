@@ -1447,8 +1447,8 @@
 #define TEXTLINE_MAXLEN                 (0xd2d5)    /* unsigned short */
 #define TEXTLINE_POSY                   (0xd2d7)    /* unsigned short */
 #define TEXTLINE_POSX                   (0xd2d9)    /* unsigned short */
-#define FIG_FIGURE2_BUF                 (0xd2db)    /* Bit8u*; to buffer of size 20000 */
-#define FIG_FIGURE1_BUF                 (0xd2df)    /* Bit8u* */
+//#define FIG_FIGURE2_BUF                 (0xd2db)    /* Bit8u*; to buffer of size 20000 */
+//#define FIG_FIGURE1_BUF                 (0xd2df)    /* Bit8u* */
 //#define OBJECTS_NVF_BUF                 (0xd2e3)    /* Bit8u*; to buffer of size 3400 */
 //#define BUF_ICON                        (0xd2e7)    /* Bit8u* */
 //#define TEXT_OUTPUT_BUF                 (0xd2eb)    /* Bit8u*; to buffer of size 300 */

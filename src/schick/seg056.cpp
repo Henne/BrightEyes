@@ -127,7 +127,7 @@ void buy_screen(void)
 	signed short l17;
 	struct nvf_desc nvf;
 
-	ds_writed(BUY_SHOPPING_CART, (Bit32u)((Bit8u*)ds_readd(FIG_FIGURE1_BUF) + 2800));
+	ds_writed(BUY_SHOPPING_CART, (Bit32u)(g_fig_figure1_buf + 2800));
 	memset((Bit8u*)ds_readd(BUY_SHOPPING_CART), 0, 250);
 
 	ds_writew(REQUEST_REFRESH, 1);

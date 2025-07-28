@@ -148,19 +148,19 @@ Bit8u* load_fight_figs(signed short fig)
 
 	/* check if fig is at a known place */
 	if (fig == ds_readws(FIG_FIGURE1)) {
-		return (Bit8u*)ds_readd(FIG_FIGURE1_BUF);
+		return (Bit8u*)g_fig_figure1_buf;
 	} else if (fig == ds_readws(FIG_FIGURE2)) {
-		return (Bit8u*)ds_readd(FIG_FIGURE2_BUF);
+		return (Bit8u*)g_fig_figure2_buf;
 	} else if (ds_readws(FIG_FIGURE2) != -1) {
 		ds_writew(FIG_FIGURE1, ds_readw(FIG_FIGURE2));
-		memcpy((Bit8u*)ds_readd(FIG_FIGURE1_BUF), (Bit8u*)ds_readd(FIG_FIGURE2_BUF), 20000);
-		src = (Bit8u*)ds_readd(FIG_FIGURE2_BUF);
+		memcpy((Bit8u*)g_fig_figure1_buf, (Bit8u*)g_fig_figure2_buf, 20000);
+		src = (Bit8u*)g_fig_figure2_buf;
 		ds_writew(FIG_FIGURE2, fig);
 	} else if (ds_readws(FIG_FIGURE1) != -1) {
-		src = (Bit8u*)ds_readd(FIG_FIGURE2_BUF);
+		src = (Bit8u*)g_fig_figure2_buf;
 		ds_writew(FIG_FIGURE2, fig);
 	} else {
-		src = (Bit8u*)ds_readd(FIG_FIGURE1_BUF);
+		src = (Bit8u*)g_fig_figure1_buf;
 		ds_writew(FIG_FIGURE1, fig);
 	}
 

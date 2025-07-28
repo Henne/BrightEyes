@@ -109,7 +109,7 @@ void do_merchant(void)
 	load_ggsts_nvf();
 	refresh = ds_writews(REQUEST_REFRESH, 1);
 
-	ds_writed(BUYITEMS, ds_readd(FIG_FIGURE1_BUF));
+	ds_writed(BUYITEMS, (Bit32u)g_fig_figure1_buf);
 	memset((Bit8u*)ds_readd(BUYITEMS), 0, 3500);
 	ds_writew(PRICE_MODIFICATOR, 4);
 	shop_p = p_datseg + SHOP_DESCR_TABLE + 9 * ds_readws(CURRENT_TYPEINDEX);

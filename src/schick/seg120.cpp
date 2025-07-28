@@ -342,15 +342,13 @@ signed short init_memory(void)
 
 		init_text();
 
-		ds_writed(FIG_FIGURE1_BUF, (Bit32u)(g_buffer9_ptr3 + 180000L));
-#if defined(__BORLANDC__)
+		g_fig_figure1_buf = (unsigned char*)(g_buffer9_ptr3 + 180000L);
 		if (g_large_buf == 1) {
-			add_ds_fp(FIG_FIGURE1_BUF, 23000L);
+			g_fig_figure1_buf += 23000L;
 		}
-#endif
 
-		ds_writed(FIG_FIGURE2_BUF, (Bit32u)F_PADD(ds_readd(FIG_FIGURE1_BUF), -20000L));
-		ds_writed(BUFFER10_PTR, (Bit32u)F_PADD(ds_readd(FIG_FIGURE2_BUF), -16771L));
+		g_fig_figure2_buf = (unsigned char*)(((HugePt)g_fig_figure1_buf) -20000L);
+		ds_writed(BUFFER10_PTR, (Bit32u)(((HugePt)g_fig_figure2_buf) - 16771L));
 	}
 
 	return error;
@@ -770,15 +768,13 @@ void call_gen(void)
 			exit_AIL();
 		}
 
-		ds_writed(FIG_FIGURE1_BUF, (Bit32u)(g_buffer9_ptr3 + 180000L));
-#if defined(__BORLANDC__)
+		g_fig_figure1_buf = (unsigned char*)(g_buffer9_ptr3 + 180000L);
 		if (g_large_buf == 1) {
-			add_ds_fp(FIG_FIGURE1_BUF, 23000L);
+			g_fig_figure1_buf += 23000L;
 		}
-#endif
 
-		ds_writed(FIG_FIGURE2_BUF, (Bit32u)F_PADD(ds_readd(FIG_FIGURE1_BUF), -20000L));
-		ds_writed(BUFFER10_PTR, (Bit32u)F_PADD(ds_readd(FIG_FIGURE2_BUF), -16771L));
+		g_fig_figure2_buf = (unsigned char*)(((HugePt)g_fig_figure1_buf) - 20000L);
+		ds_writed(BUFFER10_PTR, (Bit32u)(((HugePt)g_fig_figure2_buf) - 16771L));
 
 		gs_day_timer = HOURS(24) - 1;
 		timewarp_until_time_of_day(1);

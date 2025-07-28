@@ -90,7 +90,7 @@ void FIG_preload_gfx(void)
 
 	ds_writed(FIG_LIST_HEAD, 0);
 
-	ds_writed(FIG_LIST_BUFFER, (Bit32u)(F_PADD((HugePt)ds_readd(FIG_FIGURE2_BUF), -0x115d)));
+	ds_writed(FIG_LIST_BUFFER, (Bit32u)(((HugePt)g_fig_figure2_buf) - 0x115d));
 
 	memset((Bit8u*)ds_readd(FIG_LIST_BUFFER), 0, 0x115d);
 	p1 = (Bit8u*)ds_readd(FIG_LIST_BUFFER);

@@ -96,7 +96,7 @@ void sell_screen(Bit8u *shop_ptr)
 
 	ds_writew(HEROSWAP_ALLOWED, 0);
 	l8 = ds_writews(REQUEST_REFRESH, 1);
-	ds_writed(SELLITEMS, (Bit32u)((Bit8u*)ds_readd(FIG_FIGURE1_BUF) + 2100));
+	ds_writed(SELLITEMS, (Bit32u)(g_fig_figure1_buf + 2100));
 
 	while (done == 0) {
 
@@ -496,10 +496,7 @@ void sell_screen(Bit8u *shop_ptr)
 
 						make_valuta_str((char*)g_text_output_buf, price);
 
-						sprintf((char*)g_dtp2,
-							get_ttx(819),
-							g_text_output_buf);
-
+						sprintf((char*)g_dtp2, get_ttx(819), g_text_output_buf);
 						GUI_output((char*)g_dtp2);
 					}
 
