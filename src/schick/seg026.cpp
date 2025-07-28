@@ -272,8 +272,8 @@ signed short load_game_state(void)
 #endif
 
 		/* init */
-		ds_writed(SAVED_FILES_BUF, (Bit32u)g_dtp2);
-		memset((Bit8u*)ds_readd(SAVED_FILES_BUF), 0, 286 * 4);
+		g_saved_files_buf = g_dtp2;
+		memset(g_saved_files_buf, 0, 286 * 4);
 
 		/* read version info */
 		_read(handle_gs, (Bit8u*)g_text_output_buf, 12);
@@ -298,12 +298,12 @@ signed short load_game_state(void)
 		ds_writeb(SPECIAL_SCREEN, 1);
 
 		/* read file table */
-		_read(handle_gs, (Bit8u*)ds_readd(SAVED_FILES_BUF), 286 * 4);
+		_read(handle_gs, g_saved_files_buf, 286 * 4);
 
 		/* create for each saved file in gam a file in TEMP */
 		for (i = 0; i < 286; i++) {
 
-			if (host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * i)) {
+			if (host_readd(g_saved_files_buf + 4 * i)) {
 
 				/* write file content to TEMP */
 				sprintf((char*)g_text_output_buf,
@@ -313,8 +313,8 @@ signed short load_game_state(void)
 				/* TODO: should be O_BINARY | O_WRONLY */
 				handle = _creat(g_text_output_buf, 0);
 
-				_read(handle_gs, g_renderbuf_ptr, (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * i));
-				write(handle,   g_renderbuf_ptr, (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * i));
+				_read(handle_gs, g_renderbuf_ptr, (unsigned short)host_readd(g_saved_files_buf + 4 * i));
+				write(handle,   g_renderbuf_ptr, (unsigned short)host_readd(g_saved_files_buf + 4 * i));
 				close(handle);
 			}
 		}
@@ -491,8 +491,8 @@ signed short save_game_state(void)
 
 	ds_writew(TEXTBOX_WIDTH, tw_bak);
 
-	ds_writed(SAVED_FILES_BUF, (Bit32u)g_dtp2);
-	memset((Bit8u*)ds_readd(SAVED_FILES_BUF), 0, 4 * 286);
+	g_saved_files_buf = g_dtp2;
+	memset(g_saved_files_buf, 0, 4 * 286);
 
 	if (slot != -2 && slot != 5) {
 
@@ -604,7 +604,7 @@ signed short save_game_state(void)
 		}
 
 		filepos2 = filepos;
-		len = (Bit16u)write(l_di, (Bit8u*)ds_readd(SAVED_FILES_BUF), 4 * 286);
+		len = (Bit16u)write(l_di, g_saved_files_buf, 4 * 286);
 		filepos += len;
 
 		if (len != 4 * 286) {
@@ -626,14 +626,14 @@ signed short save_game_state(void)
 			if (l1 == 0) {
 
 				handle = load_archive_file(tw_bak + 0x8000);
-				host_writed((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * tw_bak, get_readlength2(handle));
-				_read(handle, g_renderbuf_ptr, (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * tw_bak));
+				host_writed(g_saved_files_buf + 4 * tw_bak, get_readlength2(handle));
+				_read(handle, g_renderbuf_ptr, (unsigned short)host_readd(g_saved_files_buf + 4 * tw_bak));
 				close(handle);
 
-				len = (Bit16u)write(l_di, g_renderbuf_ptr, (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * tw_bak));
+				len = (Bit16u)write(l_di, g_renderbuf_ptr, (unsigned short)host_readd(g_saved_files_buf + 4 * tw_bak));
 				filepos += len;
 
-				if ((Bit16u)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * tw_bak) != len) {
+				if ((Bit16u)host_readd(g_saved_files_buf + 4 * tw_bak) != len) {
 					GUI_output(get_ttx(348));
 					close(l_di);
 					return 0;
@@ -647,7 +647,7 @@ signed short save_game_state(void)
 
 		/* write the file table */
 		lseek(l_di, filepos2, 0);
-		write(l_di, (Bit8u*)ds_readd(SAVED_FILES_BUF), 4 * 286);
+		write(l_di, g_saved_files_buf, 4 * 286);
 
 		/* append all CHR files */
 		lseek(l_di, filepos, 0);

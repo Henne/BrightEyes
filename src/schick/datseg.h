@@ -95,6 +95,7 @@ extern unsigned char *g_mem_slots_mfig;	// ds:0xe11d; seg027, seg120
 extern unsigned char *g_mem_slots_wfig;	// ds:0xe119; seg027, seg120
 extern unsigned char *g_mem_slots_mon;	// ds:0xe115; seg027, seg120
 extern signed short g_wallclock_update;	// ds:0xe113; seg004-seg117, seg120
+extern unsigned char *g_saved_files_buf;// ds:0xe2d2; seg026;
 extern unsigned char *g_spelltarget;	// ds:0xe5b8; seg098-seg102
 extern unsigned char *g_spelluser;	// ds:0xecbc; seg068, seg098, seg102, seg107
 extern signed char *g_chessboard;	// ds:0xd852;

@@ -1530,7 +1530,7 @@
 #define FIGOBJ_UNKN_X2                  (0xe2cc)    /* unsigned short */
 #define FIGOBJ_UNKN_X2_BAK              (0xe2ce)    /* unsigned short */
 #define DELAY_TIMER                     (0xe2d0)    /* unsigned short */
-#define SAVED_FILES_BUF                 (0xe2d2)    /* Bit8u* */
+//#define SAVED_FILES_BUF                 (0xe2d2)    /* Bit8u* */
 #define LAST_SAVE_TIME                  (0xe2d6)    /* signed long */
 #define SAVEGAME_NAMES                  (0xe2da)    /* char[45] */
 // ?1
