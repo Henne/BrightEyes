@@ -152,7 +152,7 @@ void seg028_0224(void)
 
 		seg066_172b();
 
-		ds_writed(BUFFER9_PTR4, (Bit32u)g_buffer9_ptr3);
+		g_buffer9_ptr4 = g_buffer9_ptr3;
 
 		for (l_si = 0; l_si < 4; l_si++) {
 
@@ -211,20 +211,16 @@ Bit8u* seg028_0444(signed short index, signed short firstcol, signed short color
 	Bit32s v2;
 	Bit8u* ptr;
 
-	ptr = (Bit8u*)ds_readd(BUFFER9_PTR4);
+	ptr = (Bit8u*)g_buffer9_ptr4;
 
 	fd = load_archive_file(index);
 
 	v1 = v2 = 0L;
 
 	do {
-		v1 = read_archive_file(fd, (Bit8u*)ds_readd(BUFFER9_PTR4), 65000);
+		v1 = read_archive_file(fd, (Bit8u*)g_buffer9_ptr4, 65000);
 
-#if !defined(__BORLANDC__)
-		F_PADA((p_datseg + BUFFER9_PTR4), v1);
-#else
-		*(HugePt*)(p_datseg + BUFFER9_PTR4) += v1;
-#endif
+		g_buffer9_ptr4 += v1;
 
 		v2 += v1;
 
@@ -378,7 +374,7 @@ void unused_store(signed short no)
 	signed short size;
 
 	nvf.dst = g_renderbuf_ptr + 30000;
-	nvf.src = (Bit8u*)g_buffer9_ptr3;
+	nvf.src = (Bit8u*)g_buffer9_ptr4;
 	nvf.no = no;
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&width;

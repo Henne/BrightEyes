@@ -6250,7 +6250,7 @@ signed short g_city_refresh_y_target; // ds:0xe40a
 signed short g_city_refresh_direction; // ds:0xe408
 void *g_buffer11_ptr; // ds:0xe404, to buffer of size 192, used for palettes
 unsigned char g_city_house_count[4]; // ds:0xe400, counts of the four different kinds of houses on the current map
-void *g_buffer9_ptr4; // ds:0xe3fc, copy of BUFFER9_PTR
+HugePt g_buffer9_ptr4; // ds:0xe3fc, copy of BUFFER9_PTR
 unsigned char g_unkn_089[1]; // ds:0xe3fb
 unsigned char g_sea_travel_sleep_quality; // ds:0xe3fa
 signed short g_temple_god; // ds:0xe3f8, id of current temple's god

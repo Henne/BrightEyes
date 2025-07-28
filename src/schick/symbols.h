@@ -1584,7 +1584,7 @@
 #define TEMPLE_GOD                      (0xe3f8)    /* signed short; id of current temple's god */
 #define SEA_TRAVEL_SLEEP_QUALITY        (0xe3fa)    /* unsigned char */
 // ?1
-#define BUFFER9_PTR4                    (0xe3fc)    /* Bit8u*; copy of BUFFER9_PTR */
+//#define BUFFER9_PTR4                    (0xe3fc)    /* Bit8u*; copy of BUFFER9_PTR */
 #define CITY_HOUSE_COUNT                (0xe400)    /* unsigned char[4]; counts of the four different kinds of houses on the current map */
 #define BUFFER11_PTR                    (0xe404)    /* Bit8u*; to buffer of size 192, used for palettes */
 #define CITY_REFRESH_DIRECTION          (0xe408)    /* signed short */

@@ -531,7 +531,6 @@ static inline int __abs__(int j)
 	return abs(j);
 }
 
-static inline void F_PADA(Bit8u *p, Bit32s o)		{ *p += o; }
 static inline Bit8u* F_PADD(Bit8u* ptr, Bit32s o)	{ return ptr + o; }
 static inline Bit32s F_PSUB(Bit8u *p1, Bit8u *p2)	{ return p1 - p2; }
 
@@ -1165,7 +1164,6 @@ static inline char* get_itemname(unsigned short item)
 /* helper, use only when neccessary */
 #define struct_copy memcpy
 
-#define F_PADA(p, o) (*((HugePt*)p) += o)
 #define F_PADD(p, o) ((HugePt)(p) + o)
 #define F_PSUB(p1, p2) ((HugePt)(p1) - (HugePt)(p2))
 
