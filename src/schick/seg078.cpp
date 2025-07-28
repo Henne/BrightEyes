@@ -411,7 +411,7 @@ signed short DNG02_handler(void)
 		if (!do_fight(FIGHTS_F046_31))
 		{
 #if defined(__BORLANDC__)
-			g_always_one2 = 1;
+			gs_always_one2 = 1;
 #endif
 
 			add_hero_ap_all(30);

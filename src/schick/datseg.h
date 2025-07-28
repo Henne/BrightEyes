@@ -65,7 +65,7 @@ extern void (*g_use_special_item_handlers[14])(void);
 extern void (*g_travel_event_handlers[146])(void);
 
 extern Bit32s gs_day_timer;			//ds:0x2dbb; seg002-seg120
-extern unsigned char g_always_one2;			//ds:0x35f3; seg078
+extern Bit8s  gs_always_one2;			//ds:0x35f3; seg078
 
 extern Bit8s  gs_dng07_poison_flag;		//ds:0x3cb5; seg082
 extern Bit32s gs_dng07_poison_timer;		//ds:0x3cb6; seg002, seg082
