@@ -105,12 +105,12 @@ signed short DNG10_handler(void)
 		/* check if the hero will survive */
 		if (host_readws(hero + HERO_LE) > answer)
 		{
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+			sprintf(g_text_output_buf,
 				get_tx(10),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 			strcat(g_dtp2,
-				(char*)ds_readd(TEXT_OUTPUT_BUF));
+				g_text_output_buf);
 		}
 
 		GUI_output(g_dtp2);

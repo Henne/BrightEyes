@@ -390,12 +390,12 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 						price = (host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l7 + item) + 2)
 							* host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l7 + item) + 4)) * ds_readws(PRICE_MODIFICATOR) / 4;
 
-						make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), price);
+						make_valuta_str(g_text_output_buf, price);
 
 						sprintf(g_dtp2,
 							get_ttx(488),
 							(char*)(GUI_names_grammar((signed short)0x8002, item_id, 0)),
-							(char*)ds_readd(TEXT_OUTPUT_BUF));
+							g_text_output_buf);
 
 
 						do {

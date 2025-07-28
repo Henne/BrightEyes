@@ -121,14 +121,14 @@ signed short do_travel_mode(void)
 					destinations_tab[i] = get_ttx(613);
 					i++;
 
-					sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+					sprintf(g_text_output_buf,
 						get_ttx(545),
 						get_ttx(235 + ds_readbs(CURRENT_TOWN)));
 
 					tw_bak = ds_readws(TEXTBOX_WIDTH);
 					ds_writew(TEXTBOX_WIDTH, 4);
 
-					answer = GUI_radio((char*)ds_readd(TEXT_OUTPUT_BUF), (signed char)i,
+					answer = GUI_radio(g_text_output_buf, (signed char)i,
 								destinations_tab[0],
 								destinations_tab[1],
 								destinations_tab[2],

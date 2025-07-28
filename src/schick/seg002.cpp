@@ -1072,7 +1072,7 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 		dst = nvf->dst;
 
 		/* RLE decompression */
-		decomp_rle(width, height, dst, src, (unsigned char*)ds_readd(TEXT_OUTPUT_BUF), nvf->type);
+		decomp_rle(width, height, dst, src, (Bit8u*)g_text_output_buf, nvf->type);
 #ifdef M302de_ORIGINAL_BUGFIX
 		/* retval was originally neither set nor used here.
 			VC++2008 complains about an uninitialized variable

@@ -441,12 +441,12 @@ signed short DNG02_handler(void)
 				get_tx(37),
 				(char*)hero + HERO_NAME2);
 
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+			sprintf(g_text_output_buf,
 				(char*)((i = test_skill(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(39) : get_tx(38)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 			strcat(g_dtp2,
-				(char*)ds_readd(TEXT_OUTPUT_BUF));
+				g_text_output_buf);
 
 			GUI_output(g_dtp2);
 
@@ -477,12 +477,12 @@ signed short DNG02_handler(void)
 				get_tx(37),
 				(char*)hero + HERO_NAME2);
 
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+			sprintf(g_text_output_buf,
 				(char*)((i = test_skill(hero, TA_SCHLOESSER, 2)) > 0 ? get_tx(39) : get_tx(38)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 			strcat(g_dtp2,
-				(char*)ds_readd(TEXT_OUTPUT_BUF));
+				g_text_output_buf);
 
 			GUI_output(g_dtp2);
 
@@ -511,12 +511,12 @@ signed short DNG02_handler(void)
 				get_tx(37),
 				(char*)hero + HERO_NAME2);
 
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+			sprintf(g_text_output_buf,
 				(char*)((i = test_skill(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(39) : get_tx(38)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 			strcat(g_dtp2,
-				(char*)ds_readd(TEXT_OUTPUT_BUF));
+				g_text_output_buf);
 
 			if (i > 0)
 			{
@@ -527,13 +527,13 @@ signed short DNG02_handler(void)
 
 			i = random_schick(6) + 4;
 
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+			sprintf(g_text_output_buf,
 				get_tx(40),
 				(char*)hero + HERO_NAME2,
 				i);
 
 			strcat(g_dtp2,
-				(char*)ds_readd(TEXT_OUTPUT_BUF));
+				g_text_output_buf);
 
 			GUI_output(g_dtp2);
 

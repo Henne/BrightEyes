@@ -427,12 +427,12 @@ signed short gather_herbs(Bit8u *hero, signed short hours, signed short handicap
 
 			if (herb_count[herb_index] != 0) {
 
-				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+				sprintf(g_text_output_buf,
 					(char*)p_datseg + GATHER_HERBS_STR_FOUND, /* "%d %s" */
 					herb_count[herb_index],
 					(Bit8u*)(GUI_names_grammar((herb_count[herb_index] > 1 ? 4 : 0) + 0x4002, ds_readb(GATHER_HERBS_TABLE + 4 * herb_index + GATHER_HERBS_ITEM_ID), 0)));
 
-				strcat(g_dtp2, (char*)ds_readd(TEXT_OUTPUT_BUF));
+				strcat(g_dtp2, g_text_output_buf);
 
 				if (--unique_herbs_count > 1) {
 					/* add a comma ", " */

@@ -42,10 +42,10 @@ signed short LVL_select_skill(Bit8u *hero, signed short show_values)
 
 	if (show_values != 0) {
 
-		strcpy((char*)ds_readd(TEXT_OUTPUT_BUF), get_ttx(205));
+		strcpy(g_text_output_buf, get_ttx(205));
 
 		if (host_readbs(hero + HERO_TA_RISE) > 1) {
-			strcat((char*)ds_readd(TEXT_OUTPUT_BUF), get_ttx(393));
+			strcat(g_text_output_buf, get_ttx(393));
 		}
 
 		sprintf(g_dtp2,
@@ -54,7 +54,7 @@ signed short LVL_select_skill(Bit8u *hero, signed short show_values)
 			(host_readbs(hero + HERO_TA_RISE) > 1) ? get_ttx(305) : get_ttx(304),
 			/* # of tries left */
 			host_readbs(hero + HERO_TA_RISE),
-			(char*)ds_readd(TEXT_OUTPUT_BUF));
+			g_text_output_buf);
 	} else {
 
 		strcpy(g_dtp2, get_ttx(216));
@@ -555,12 +555,12 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 					money = random_interval(10, 200);
 
-					make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), money);
+					make_valuta_str(g_text_output_buf, money);
 
 					sprintf(g_dtp2,
 						get_tx(35),
 						(char*)hero + HERO_NAME2,
-						(char*)ds_readd(TEXT_OUTPUT_BUF));
+						g_text_output_buf);
 
 					GUI_output(g_dtp2);
 
@@ -589,12 +589,12 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 					money = random_interval(100, 300);
 
-					make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), money);
+					make_valuta_str(g_text_output_buf, money);
 
 					sprintf(g_dtp2,
 						get_tx(35),
 						(char*)hero + HERO_NAME2,
-						(char*)ds_readd(TEXT_OUTPUT_BUF));
+						g_text_output_buf);
 
 					GUI_output(g_dtp2);
 
@@ -617,11 +617,11 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 				money = random_interval(500, 1000);
 
-				make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), money);
+				make_valuta_str(g_text_output_buf, money);
 
 				sprintf(g_dtp2,
 					get_tx(38),
-					(char*)ds_readd(TEXT_OUTPUT_BUF),
+					g_text_output_buf,
 					(char*)hero + HERO_NAME2);
 
 				GUI_output(g_dtp2);
@@ -645,11 +645,11 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 				money = random_interval(500, 1000);
 
-				make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), money);
+				make_valuta_str(g_text_output_buf, money);
 
 				sprintf(g_dtp2,
 					get_tx(40),
-					(char*)ds_readd(TEXT_OUTPUT_BUF),
+					g_text_output_buf,
 					(char*)hero + HERO_NAME2);
 
 				GUI_output(g_dtp2);

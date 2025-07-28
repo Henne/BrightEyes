@@ -342,9 +342,9 @@ void print_msg_with_first_hero(char *msg)
 
 	hero = (Bit8u*)get_first_hero_available_in_group();
 
-	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), msg, (char*)(hero + HERO_NAME2));
+	sprintf(g_text_output_buf, msg, (char*)(hero + HERO_NAME2));
 
-	GUI_input((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
+	GUI_input(g_text_output_buf, 0);
 	return;
 }
 

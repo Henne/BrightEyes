@@ -141,13 +141,13 @@ void THO_bank(void)
 
 	do {
 
-		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+		sprintf(g_text_output_buf,
 			get_tx2(72),
 			ds_readws(BANK_DEPOSIT));
 
 		do {
 			answer = GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(81),
-						(char*)ds_readd(TEXT_OUTPUT_BUF), 3,
+						g_text_output_buf, 3,
 						get_tx2(73), get_tx2(74), get_tx2(80));
 		} while (answer == -1);
 

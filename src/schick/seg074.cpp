@@ -350,27 +350,27 @@ void draw_automap_square(signed short x, signed short y, signed short color, sig
 
 		if (dir == 0) {
 
-			memcpy((char*)ds_readd(TEXT_OUTPUT_BUF), p_datseg + AUTOMAP_TILE_ARROWUP, 49);
+			memcpy(g_text_output_buf, p_datseg + AUTOMAP_TILE_ARROWUP, 49);
 
 		} else if (dir == 2) {
 
 			for (i = 0; i < 49; i++) {
-				host_writeb((Bit8u*)ds_readd(TEXT_OUTPUT_BUF) + i, ds_readb(AUTOMAP_TILE_ARROWUP + (48 - i)));
+				host_writeb((Bit8u*)g_text_output_buf + i, ds_readb(AUTOMAP_TILE_ARROWUP + (48 - i)));
 			}
 
 		} else if (dir == 1) {
 
-			memcpy((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)(p_datseg + AUTOMAP_TILE_ARROWRIGHT), 49);
+			memcpy(g_text_output_buf, (char*)(p_datseg + AUTOMAP_TILE_ARROWRIGHT), 49);
 
 		} else {
 
 			for (i = 0; i < 49; i++) {
-				host_writeb((Bit8u*)ds_readd(TEXT_OUTPUT_BUF) + i, ds_readb(AUTOMAP_TILE_ARROWRIGHT + (48 - i)));
+				host_writeb((Bit8u*)g_text_output_buf + i, ds_readb(AUTOMAP_TILE_ARROWRIGHT + (48 - i)));
 			}
 		}
 
 		for (i = 0; i < 49; i++) {
-			if (!host_readbs((Bit8u*)ds_readd(TEXT_OUTPUT_BUF) + i)) {
+			if (!host_readbs((Bit8u*)g_text_output_buf + i)) {
 				tile[i] = 0;
 			}
 		}

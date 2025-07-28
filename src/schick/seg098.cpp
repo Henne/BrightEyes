@@ -461,17 +461,17 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 
 	if (show_vals == 1) {
 
-		strcpy((char*)ds_readd(TEXT_OUTPUT_BUF), get_ttx(205));
+		strcpy(g_text_output_buf, get_ttx(205));
 
 		if (host_readbs(hero + HERO_SP_RISE) > 1) {
-			strcat((char*)ds_readd(TEXT_OUTPUT_BUF), get_ttx(393));
+			strcat(g_text_output_buf, get_ttx(393));
 		}
 
 		sprintf(g_dtp2,
 			get_ttx(204),
 			(host_readbs(hero + HERO_SP_RISE) > 1) ? get_ttx(305) : get_ttx(304),
 			host_readbs(hero + HERO_SP_RISE),
-			(char*)ds_readd(TEXT_OUTPUT_BUF));
+			g_text_output_buf);
 
 		answer1 = GUI_radio(g_dtp2, 12,
 					get_ttx(192), get_ttx(193),

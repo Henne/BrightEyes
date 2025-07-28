@@ -131,12 +131,12 @@ void prepare_date_str(void)
 	}
 
 	if (ds_readbs(SPECIAL_DAY) != 0) {
-		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+		sprintf(g_text_output_buf,
 			get_ttx(357),
 			get_ttx(357 + ds_readbs(SPECIAL_DAY)));
 
 		strcat(g_dtp2,
-			(char*)ds_readd(TEXT_OUTPUT_BUF));
+			g_text_output_buf);
 	}
 }
 

@@ -449,9 +449,9 @@ void seg092_06b4(signed short a1)
 		if (host_readws(chest_ptr + 17) != 0) {
 
 			/* There is money in the chest */
-			make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), host_readw(chest_ptr + 17));
+			make_valuta_str(g_text_output_buf, host_readw(chest_ptr + 17));
 
-			sprintf(g_dtp2, get_ttx(793), (char*)ds_readd(TEXT_OUTPUT_BUF));
+			sprintf(g_dtp2, get_ttx(793), g_text_output_buf);
 			GUI_output(g_dtp2);
 
 			set_party_money(get_party_money() + host_readw(chest_ptr + 17));

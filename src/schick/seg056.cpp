@@ -514,10 +514,10 @@ void buy_screen(void)
 
 			while (offended == 0 && j < 3) {
 
-				make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), price);
+				make_valuta_str(g_text_output_buf, price);
 				sprintf(g_dtp2,
 					get_ttx(439),
-					(char*)ds_readd(TEXT_OUTPUT_BUF));
+					g_text_output_buf);
 
 
 				do {
@@ -585,11 +585,11 @@ void buy_screen(void)
 
 						set_party_money(p_money);
 
-						make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), price);
+						make_valuta_str(g_text_output_buf, price);
 
 						sprintf(g_dtp2,
 							get_ttx(819),
-							(char*)ds_readd(TEXT_OUTPUT_BUF));
+							g_text_output_buf);
 
 						GUI_output(g_dtp2);
 					}

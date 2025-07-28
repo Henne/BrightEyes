@@ -85,18 +85,18 @@ void show_citizen(void)
 			load_ani(20);
 			init_ani(ds_writew(REQUEST_REFRESH, 0));
 
-			strcpy((char*)ds_readd(TEXT_OUTPUT_BUF),
+			strcpy(g_text_output_buf,
 				get_tx(ds_readw(CURRENT_LOCDATA)));
 
 			if (ds_readbs(YEAR) == 15 && ds_readbs(MONTH) == 1 && random_schick(100) <= 20) {
 
 				if (!show_storytext()) {
-					GUI_print_loc_line((char*)ds_readd(TEXT_OUTPUT_BUF));
+					GUI_print_loc_line(g_text_output_buf);
 				} else {
 					ds_writew(ACTION, ACTION_ID_ESC);
 				}
 			} else {
-				GUI_print_loc_line((char*)ds_readd(TEXT_OUTPUT_BUF));
+				GUI_print_loc_line(g_text_output_buf);
 #ifdef M302de_SPEEDFIX
 				delay_or_keypress(200);
 #endif
@@ -354,11 +354,11 @@ void show_treasure_map(void)
 			ds_writew(TEXTBOX_WIDTH, 3);
 
 			/* */
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+			sprintf(g_text_output_buf,
 				get_ttx(727),
 				(char*)get_hero(get_random_hero()) + HERO_NAME2);
 
-			GUI_output((char*)ds_readd(TEXT_OUTPUT_BUF));
+			GUI_output(g_text_output_buf);
 
 			ds_writew(TEXTBOX_WIDTH, tw_bak);
 			ds_writeb(FIND_HYGGELIK, 1);
@@ -742,7 +742,7 @@ void leave_dungeon(void)
 	Bit8u *ptr;
 
 	DNG_lights();
-	ptr = (unsigned char*)ds_readd(TEXT_OUTPUT_BUF);
+	ptr = (Bit8u*)g_text_output_buf;
 
 	memset(g_renderbuf_ptr, 0, 0xc0);
 

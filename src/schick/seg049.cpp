@@ -700,17 +700,17 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 
 						add_hero_le(hero, le_regen);
 
-						strcpy((char*)ds_readd(TEXT_OUTPUT_BUF), get_ttx(392));
+						strcpy(g_text_output_buf, get_ttx(392));
 
 						if (le_regen > 1) {
-							strcat((char*)ds_readd(TEXT_OUTPUT_BUF), get_ttx(393));
+							strcat(g_text_output_buf, get_ttx(393));
 						}
 
 						sprintf(g_dtp2,
 							get_ttx(319),
 							hero + HERO_NAME2,
 							le_regen,
-							(char*)ds_readd(TEXT_OUTPUT_BUF));
+							g_text_output_buf);
 						if (ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) {
 							GUI_print_loc_line(g_dtp2);
 							delay_or_keypress(200);
@@ -734,17 +734,17 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 
 							add_hero_ae(hero, ae_regen);
 
-							strcpy((char*)ds_readd(TEXT_OUTPUT_BUF), get_ttx(392));
+							strcpy(g_text_output_buf, get_ttx(392));
 
 							if (ae_regen > 1) {
-								strcat((char*)ds_readd(TEXT_OUTPUT_BUF), get_ttx(393));
+								strcat(g_text_output_buf, get_ttx(393));
 							}
 
 							sprintf(g_dtp2,
 								get_ttx(320),
 								hero + HERO_NAME2,
 								ae_regen,
-								(char*)ds_readd(TEXT_OUTPUT_BUF));
+								g_text_output_buf);
 
 							if (ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) {
 								GUI_print_loc_line(g_dtp2);

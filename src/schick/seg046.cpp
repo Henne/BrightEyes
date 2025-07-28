@@ -299,9 +299,9 @@ void status_show(Bit16u index)
 	GUI_print_string(g_dtp2, 59, 33);
 
 	/* print money */
-	make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), host_readd(hero + HERO_MONEY));
+	make_valuta_str(g_text_output_buf, host_readd(hero + HERO_MONEY));
 
-	sprintf(g_dtp2, get_ttx(300), (char*)ds_readd(TEXT_OUTPUT_BUF));
+	sprintf(g_dtp2, get_ttx(300), g_text_output_buf);
 	GUI_print_string(g_dtp2, 59, 43);
 
 	/* dead, unconscious or drunk */
@@ -357,7 +357,7 @@ void status_show(Bit16u index)
 
 				val = host_readbs(hero + i * 3 + HERO_ATTRIB) + host_readbs(hero + i * 3 + HERO_ATTRIB_MOD);
 
-				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF) + i * 10,
+				sprintf(g_text_output_buf + i * 10,
 					get_tx2(51),
 					host_readbs(hero + i * 3 + 0x34) != val ?
 						get_tx2(49) :
@@ -371,20 +371,20 @@ void status_show(Bit16u index)
 			}
 			sprintf(g_dtp2,
 				get_tx2(12),
-				(char*)ds_readd(TEXT_OUTPUT_BUF),
-				(char*)ds_readd(TEXT_OUTPUT_BUF) + 70,
-				(char*)ds_readd(TEXT_OUTPUT_BUF) + 10,
-				(char*)ds_readd(TEXT_OUTPUT_BUF) + 80,
-				(char*)ds_readd(TEXT_OUTPUT_BUF) + 20,
-				(char*)ds_readd(TEXT_OUTPUT_BUF) + 90,
-				(char*)ds_readd(TEXT_OUTPUT_BUF) + 30,
-				(char*)ds_readd(TEXT_OUTPUT_BUF) + 100,
-				(char*)ds_readd(TEXT_OUTPUT_BUF) + 40,
-				(char*)ds_readd(TEXT_OUTPUT_BUF) + 110,
-				(char*)ds_readd(TEXT_OUTPUT_BUF) + 50,
-				(char*)ds_readd(TEXT_OUTPUT_BUF) + 120,
-				(char*)ds_readd(TEXT_OUTPUT_BUF) + 60,
-				(char*)ds_readd(TEXT_OUTPUT_BUF) + 130);
+				g_text_output_buf,
+				g_text_output_buf + 70,
+				g_text_output_buf + 10,
+				g_text_output_buf + 80,
+				g_text_output_buf + 20,
+				g_text_output_buf + 90,
+				g_text_output_buf + 30,
+				g_text_output_buf + 100,
+				g_text_output_buf + 40,
+				g_text_output_buf + 110,
+				g_text_output_buf + 50,
+				g_text_output_buf + 120,
+				g_text_output_buf + 60,
+				g_text_output_buf + 130);
 
 			GUI_print_string(g_dtp2, 200, 70);
 

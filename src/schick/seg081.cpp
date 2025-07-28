@@ -78,12 +78,12 @@ signed short DNG06_handler(void)
 
 				add_party_money(100L * i);
 
-				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+				sprintf(g_text_output_buf,
 					get_tx(4),
 					(char*)hero + HERO_NAME2,
 					i);
 
-				strcat(g_dtp2, (char*)ds_readd(TEXT_OUTPUT_BUF));
+				strcat(g_dtp2, g_text_output_buf);
 			}
 
 			GUI_output(g_dtp2);

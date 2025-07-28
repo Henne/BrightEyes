@@ -348,12 +348,12 @@ signed short DNG08_handler(void)
 				get_tx(29),
 				(char*)hero + HERO_NAME2);
 
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+			sprintf(g_text_output_buf,
 				(char*)((tmp = test_skill(hero, TA_SCHLOESSER, 2)) > 0 ? get_tx(30): get_tx(31)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 			strcat(g_dtp2,
-				(char*)ds_readd(TEXT_OUTPUT_BUF));
+				g_text_output_buf);
 
 			GUI_output(g_dtp2);
 
@@ -464,14 +464,14 @@ void DNG08_search_bed(void)
 	{
 		money = random_schick(6);
 
-		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+		sprintf(g_text_output_buf,
 			get_tx(4),
 			money);
 
 		sprintf(g_dtp2,
 			get_tx(3),
 			(char*)hero + HERO_NAME2,
-			(char*)ds_readd(TEXT_OUTPUT_BUF));
+			g_text_output_buf);
 
 		GUI_output(g_dtp2);
 

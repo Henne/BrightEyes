@@ -745,11 +745,11 @@ void loose_random_item(Bit8u *hero, signed short percent, char *text)
 			/* drop 1 item */
 			drop_item(hero, pos, 1);
 
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+			sprintf(g_text_output_buf,
 				(char*)text, hero + HERO_NAME2,
 				(Bit8u*)(GUI_names_grammar(0, item, 0)));
 
-			GUI_output((char*)ds_readd(TEXT_OUTPUT_BUF));
+			GUI_output(g_text_output_buf);
 
 			return;
 		}

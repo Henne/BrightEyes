@@ -108,10 +108,10 @@ void spell_exposami(void)
 		strcpy(g_dtp2, get_tx(31));
 
 		for (i = 0; count - 1 > i; i++) {
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), get_tx(33),		/* "%d %s" */
+			sprintf(g_text_output_buf, get_tx(33),		/* "%d %s" */
 				arr[i][1],
 				(char*)(Bit8u*)GUI_names_grammar(((arr[i][1] > 1) ? 4 : 0) + 0x4000, arr[i][0], 1));
-			strcat(g_dtp2, (char*)ds_readd(TEXT_OUTPUT_BUF));
+			strcat(g_dtp2, g_text_output_buf);
 
 			if (count - 2 > i) {
 				strcat(g_dtp2, get_tx(28));		/* "," */
@@ -122,12 +122,12 @@ void spell_exposami(void)
 			strcat(g_dtp2, get_tx(29));		/* "AND" */
 		}
 
-		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), get_tx(33),
+		sprintf(g_text_output_buf, get_tx(33),
 			arr[count - 1][1],	/* TODO: this field access produces other code */
 			(char*)(Bit8u*)GUI_names_grammar((arr[count - 1][1] > 1 ? 4 : 0) + 0x4000,
 								arr[count - 1][0], 1));
 
-		strcat(g_dtp2, (char*)ds_readd(TEXT_OUTPUT_BUF));
+		strcat(g_dtp2, g_text_output_buf);
 
 		strcat(g_dtp2, get_tx(30));			/* "." */
 	} else {

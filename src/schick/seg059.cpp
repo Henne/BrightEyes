@@ -120,10 +120,10 @@ void do_tavern(void)
 
 			if (p_money_before != p_money_after) {
 
-				make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), p_money_before - p_money_after);
+				make_valuta_str(g_text_output_buf, p_money_before - p_money_after);
 
 				sprintf(g_dtp2, get_ttx(825),
-					(char*)ds_readd(TEXT_OUTPUT_BUF));
+					g_text_output_buf);
 
 				GUI_output(g_dtp2);
 			}

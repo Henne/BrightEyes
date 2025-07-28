@@ -225,12 +225,12 @@ signed short load_game_state(void)
 	/* sanity check if answer is in range */
 	if (answer != -2 && answer != 5) {
 
-		prepare_sg_name((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)p_datseg + SAVEGAME_NAMES + 9 * answer);
+		prepare_sg_name(g_text_output_buf, (char*)p_datseg + SAVEGAME_NAMES + 9 * answer);
 		/* concat with ".gam" */
-		strcat((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)p_datseg + SAVEGAME_SUFFIX);
+		strcat(g_text_output_buf, (char*)p_datseg + SAVEGAME_SUFFIX);
 
 		/* open the game state file */
-		if ((handle_gs = open((char*)ds_readd(TEXT_OUTPUT_BUF), O_BINARY | O_RDONLY)) == -1)
+		if ((handle_gs = open(g_text_output_buf, O_BINARY | O_RDONLY)) == -1)
 		{
 			GUI_output(get_ttx(635));
 			retval = -1;
@@ -247,23 +247,23 @@ signed short load_game_state(void)
 		ds_writew(ANI_ENABLED, 0);
 
 		/* delete every file in TEMP */
-		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+		sprintf(g_text_output_buf,
 			/* "TEMP\\%s" */
 			(char*)ds_readd(STR_TEMP_XX_PTR2),
 			/* "*.*" */
 			(char*)p_datseg + ALL_FILES_WILDCARD);
 
 #if defined(__BORLANDC__)
-		l2 = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
+		l2 = findfirst(g_text_output_buf, &blk, 0);
 
 		if (l2 == 0) {
 
 			do {
-				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+				sprintf(g_text_output_buf,
 					(char*)ds_readd(STR_TEMP_XX_PTR2),
 					((char*)(&blk))+ 30);
 
-				unlink((char*)ds_readd(TEXT_OUTPUT_BUF));
+				unlink(g_text_output_buf);
 
 				l2 = findnext(&blk);
 
@@ -276,7 +276,7 @@ signed short load_game_state(void)
 		memset((Bit8u*)ds_readd(SAVED_FILES_BUF), 0, 286 * 4);
 
 		/* read version info */
-		_read(handle_gs, (Bit8u*)ds_readd(TEXT_OUTPUT_BUF), 12);
+		_read(handle_gs, (Bit8u*)g_text_output_buf, 12);
 		_read(handle_gs, (Bit8u*)&version[3], 1);
 		_read(handle_gs, (Bit8u*)&version[2], 1);
 		_read(handle_gs, (Bit8u*)&version[0], 1);
@@ -306,12 +306,12 @@ signed short load_game_state(void)
 			if (host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * i)) {
 
 				/* write file content to TEMP */
-				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+				sprintf(g_text_output_buf,
 					(char*)ds_readd(STR_TEMP_XX_PTR2),
 					(char*)(ds_readd(FNAMES + 4 * i)));
 
 				/* TODO: should be O_BINARY | O_WRONLY */
-				handle = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
+				handle = _creat(g_text_output_buf, 0);
 
 				_read(handle_gs, g_renderbuf_ptr, (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * i));
 				write(handle,   g_renderbuf_ptr, (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * i));
@@ -335,12 +335,12 @@ signed short load_game_state(void)
 				prepare_chr_name(name, (char*)hero_i);
 
 				/* write file content to TEMP */
-				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+				sprintf(g_text_output_buf,
 					(char*)ds_readd(STR_TEMP_XX_PTR2),
 					name);
 
 				/* TODO: should be O_BINARY | O_WRONLY */
-				handle = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
+				handle = _creat(g_text_output_buf, 0);
 
 				write(handle, (Bit8u*)hero_i, SIZEOF_HERO);
 				close(handle);
@@ -362,17 +362,17 @@ signed short load_game_state(void)
 
 		while (l2 == 0) {
 
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+			sprintf(g_text_output_buf,
 				(char*)ds_readd(STR_TEMP_XX_PTR2),
 				((char*)(&blk)) + 30);
 
-			if ((handle_gs = open((char*)ds_readd(TEXT_OUTPUT_BUF), O_BINARY | O_RDWR)) == -1) {
+			if ((handle_gs = open(g_text_output_buf, O_BINARY | O_RDWR)) == -1) {
 				handle = open((char*)(&blk) + 30, O_BINARY | O_RDWR);
 				_read(handle, g_renderbuf_ptr, SIZEOF_HERO);
 				close(handle);
 
 				/* TODO: should be O_BINARY | O_WRONLY */
-				handle_gs = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
+				handle_gs = _creat(g_text_output_buf, 0);
 				write(handle_gs, g_renderbuf_ptr, SIZEOF_HERO);
 			} else {
 				/* Yes, indeed! */
@@ -447,7 +447,7 @@ signed short save_game_state(void)
 	if (ds_readws(GAME_STATE) == GAME_STATE_VICTORY) {
 
 		/* game won. creating savegame for import in DSA2 */
-		strcpy((char*)ds_readd(TEXT_OUTPUT_BUF), get_ttx(810)); /* "Welcher Spielstand soll fuer die Fortsetzung abgespeichert werden?" */
+		strcpy(g_text_output_buf, get_ttx(810)); /* "Welcher Spielstand soll fuer die Fortsetzung abgespeichert werden?" */
 
 	} else {
 
@@ -464,14 +464,14 @@ signed short save_game_state(void)
 				get_ttx(392),
 				p_datseg + EMPTY_STRING1);
 
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+			sprintf(g_text_output_buf,
 				get_ttx(1), /* "Welchen Spielstand wollen Sie abspeichern ?" */
 				g_dtp2);
 		} else {
 #endif
 
 			/* create savegame inside a temple */
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+			sprintf(g_text_output_buf,
 				get_ttx(1), /* "Welchen Spielstand wollen Sie abspeichern ?" */
 				(char*)p_datseg + EMPTY_STRING2);
 #ifndef M302de_FEATURE_MOD
@@ -481,7 +481,7 @@ signed short save_game_state(void)
 	}
 
 	/* get the slot number */
-	slot = GUI_radio((char*)ds_readd(TEXT_OUTPUT_BUF), 6,
+	slot = GUI_radio(g_text_output_buf, 6,
 			p_datseg + (SAVEGAME_NAMES + 9 * 0),
 			p_datseg + (SAVEGAME_NAMES + 9 * 1),
 			p_datseg + (SAVEGAME_NAMES + 9 * 2),
@@ -509,13 +509,13 @@ signed short save_game_state(void)
 
 			flag = 0;
 
-			prepare_sg_name((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)ds_readd(TEXT_INPUT_BUF));
+			prepare_sg_name(g_text_output_buf, (char*)ds_readd(TEXT_INPUT_BUF));
 
 			for (tw_bak = 0; tw_bak < 5; tw_bak++) {
 
-				prepare_sg_name((char*)ds_readd(TEXT_OUTPUT_BUF) + 50, (char*)p_datseg + SAVEGAME_NAMES + 9 * tw_bak);
+				prepare_sg_name(g_text_output_buf + 50, (char*)p_datseg + SAVEGAME_NAMES + 9 * tw_bak);
 
-				if (slot != tw_bak && !strcmp((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)ds_readd(TEXT_OUTPUT_BUF) + 50)) {
+				if (slot != tw_bak && !strcmp(g_text_output_buf, g_text_output_buf + 50)) {
 
 					GUI_output(get_ttx(806));
 					flag = 1;
@@ -524,9 +524,9 @@ signed short save_game_state(void)
 		} while (flag != 0);
 
 		/* delete the previous file of that slot */
-		prepare_sg_name((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)p_datseg + SAVEGAME_NAMES + 9 * slot);
-		strcat((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)p_datseg + SAVEGAME_SUFFIX2);
-		unlink((char*)ds_readd(TEXT_OUTPUT_BUF));
+		prepare_sg_name(g_text_output_buf, (char*)p_datseg + SAVEGAME_NAMES + 9 * slot);
+		strcat(g_text_output_buf, (char*)p_datseg + SAVEGAME_SUFFIX2);
+		unlink(g_text_output_buf);
 		strcpy((char*)p_datseg + SAVEGAME_NAMES + 9 * slot, (char*)ds_readd(TEXT_INPUT_BUF));
 
 		/* create a CHR-file for each hero in TEMP */
@@ -569,11 +569,11 @@ signed short save_game_state(void)
 		status_len = (signed short)(p_status_end - p_status_start);
 #endif
 
-		prepare_sg_name((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)p_datseg + SAVEGAME_NAMES + 9 * slot);
-		strcat((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)p_datseg + SAVEGAME_SUFFIX3);
+		prepare_sg_name(g_text_output_buf, (char*)p_datseg + SAVEGAME_NAMES + 9 * slot);
+		strcat(g_text_output_buf, (char*)p_datseg + SAVEGAME_SUFFIX3);
 
 		/* TODO: should be O_BINARY | O_RWONLY */
-		while ((l_di = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0)) == -1) {
+		while ((l_di = _creat(g_text_output_buf, 0)) == -1) {
 			GUI_output(get_ttx(348));
 			return 0;
 		}
@@ -616,11 +616,11 @@ signed short save_game_state(void)
 		/* save all changed files from SCHICK.DAT */
 		for (tw_bak = 0; tw_bak < 286; tw_bak++) {
 
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+			sprintf(g_text_output_buf,
 				(char*)ds_readd(STR_TEMP_XX_PTR2),
 				(char*)(ds_readd(FNAMES + 4 * tw_bak)));
 
-			l1 = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
+			l1 = findfirst(g_text_output_buf, &blk, 0);
 
 
 			if (l1 == 0) {
@@ -651,19 +651,19 @@ signed short save_game_state(void)
 
 		/* append all CHR files */
 		lseek(l_di, filepos, 0);
-		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+		sprintf(g_text_output_buf,
 			(char*)ds_readd(STR_TEMP_XX_PTR2),
 			(char*)p_datseg + ALL_CHR_WILDCARD2);
 
-		l1 = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
+		l1 = findfirst(g_text_output_buf, &blk, 0);
 		do {
 			/* create the CHR filename */
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+			sprintf(g_text_output_buf,
 				(char*)ds_readd(STR_TEMP_XX_PTR2),
 				((char*)(&blk)) + 30);
 
 			/* read the CHR file from temp */
-			handle = open((char*)ds_readd(TEXT_OUTPUT_BUF), O_BINARY | O_RDWR);
+			handle = open(g_text_output_buf, O_BINARY | O_RDWR);
 			_read(handle, g_renderbuf_ptr, SIZEOF_HERO);
 			close(handle);
 
@@ -709,11 +709,11 @@ signed short read_chr_temp(char *fname, signed short hero_pos, signed short a2)
 	signed short hero_size = SIZEOF_HERO;
 	Bit8u *hero;
 
-	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)ds_readd(STR_TEMP_XX_PTR2), (char*)fname);
+	sprintf(g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), (char*)fname);
 
-	if ((handle = open((char*)ds_readd(TEXT_OUTPUT_BUF), O_BINARY | O_RDWR)) == -1) {
-		copy_file_to_temp((char*)fname, (char*)ds_readd(TEXT_OUTPUT_BUF));
-		handle = open((char*)ds_readd(TEXT_OUTPUT_BUF), O_BINARY | O_RDWR);
+	if ((handle = open(g_text_output_buf, O_BINARY | O_RDWR)) == -1) {
+		copy_file_to_temp((char*)fname, g_text_output_buf);
+		handle = open(g_text_output_buf, O_BINARY | O_RDWR);
 	}
 
 	if (handle != -1) {
@@ -770,12 +770,12 @@ void write_chr_temp(unsigned short hero_pos)
 
 	prepare_chr_name(fname, (char*)get_hero(hero_pos));
 
-	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+	sprintf(g_text_output_buf,
 		(char*)ds_readd(STR_TEMP_XX_PTR2),		/* "TEMP\\%s" */
 		fname);
 
 	/* TODO: should be O_BINARY | O_WRONLY */
-	fd = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
+	fd = _creat(g_text_output_buf, 0);
 	write(fd, get_hero(hero_pos), SIZEOF_HERO);
 	close(fd);
 }
@@ -797,22 +797,22 @@ signed short copy_chr_names(Bit8u *ptr, signed short temple_id)
 	struct ffblk blk;
 
 	buf = g_renderbuf_ptr + 60000;
-	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+	sprintf(g_text_output_buf,
 		(char*)ds_readd(STR_TEMP_XX_PTR2),
 		(char*)p_datseg + ALL_CHR_WILDCARD3);
 
-	l_di = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
+	l_di = findfirst(g_text_output_buf, &blk, 0);
 
 	if (!l_di) {
 
 		do {
 			/* create the CHR filename */
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+			sprintf(g_text_output_buf,
 				(char*)ds_readd(STR_TEMP_XX_PTR2),
 				((char*)(&blk)) + 30);
 
 			/* read the CHR file from temp */
-			handle = open((char*)ds_readd(TEXT_OUTPUT_BUF), O_BINARY | O_RDWR);
+			handle = open(g_text_output_buf, O_BINARY | O_RDWR);
 			_read(handle, buf, SIZEOF_HERO);
 			close(handle);
 

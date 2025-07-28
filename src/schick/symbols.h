@@ -1451,7 +1451,7 @@
 #define FIG_FIGURE1_BUF                 (0xd2df)    /* Bit8u* */
 //#define OBJECTS_NVF_BUF                 (0xd2e3)    /* Bit8u*; to buffer of size 3400 */
 //#define BUF_ICON                        (0xd2e7)    /* Bit8u* */
-#define TEXT_OUTPUT_BUF                 (0xd2eb)    /* Bit8u*; to buffer of size 300 */
+//#define TEXT_OUTPUT_BUF                 (0xd2eb)    /* Bit8u*; to buffer of size 300 */
 #define TEXT_INPUT_BUF                  (0xd2ef)    /* Bit8u*; to buffer of size 24 */
 //#define DTP2                            (0xd2f3)    /* long */
 //#define ICON                            (0xd2f7)    /* Bit8u* */

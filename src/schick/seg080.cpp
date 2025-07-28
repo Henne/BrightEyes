@@ -240,11 +240,11 @@ signed short DNG04_handler(void)
 				{
 					sub_hero_le(hero, 2);
 
-					sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+					sprintf(g_text_output_buf,
 						get_tx(21),
 						(char*)hero + HERO_NAME2);
 
-					GUI_output((char*)ds_readd(TEXT_OUTPUT_BUF));
+					GUI_output(g_text_output_buf);
 				}
 			}
 		}
@@ -264,11 +264,11 @@ signed short DNG04_handler(void)
 				{
 					sub_hero_le(hero, 2);
 
-					sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+					sprintf(g_text_output_buf,
 						get_tx(25),
 						(char*)hero + HERO_NAME2);
 
-					GUI_output((char*)ds_readd(TEXT_OUTPUT_BUF));
+					GUI_output(g_text_output_buf);
 				}
 			}
 		}

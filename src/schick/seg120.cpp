@@ -258,8 +258,8 @@ void init_global_buffer(void)
 	g_objects_nvf_buf = (((HugePt)g_text_ltx_index) + 4760L);
 	g_dtp2 = (signed char*)(((HugePt)g_objects_nvf_buf) + 3400L);
 	ds_writed(TEXT_INPUT_BUF, (Bit32u)(g_dtp2 + 1500));
-	ds_writed(TEXT_OUTPUT_BUF, (Bit32u)(((HugePt)g_dtp2) + 1524L));
-	ds_writed(BUFFER5_PTR, (Bit32u)(F_PADD(ds_readd(TEXT_OUTPUT_BUF), 300)));
+	g_text_output_buf = (signed char*)(((HugePt)g_dtp2) + 1524L);
+	ds_writed(BUFFER5_PTR, (Bit32u)(((HugePt)g_text_output_buf) + 300L));
 	ds_writed(BUFFER6_PTR, (Bit32u)(F_PADD(ds_readd(BUFFER5_PTR), 3880)));
 	ds_writed(BUFFER7_PTR, (Bit32u)(F_PADD(ds_readd(BUFFER6_PTR), 2200)));
 	ds_writed(BUFFER8_PTR, (Bit32u)(F_PADD(ds_readd(BUFFER7_PTR), 10000)));
@@ -485,11 +485,11 @@ void prepare_dirs(void)
 			gamepath[2] = '\0';
 		}
 
-		strcpy((char*)ds_readd(TEXT_OUTPUT_BUF), gamepath);
+		strcpy(g_text_output_buf, gamepath);
 		/* "\\TEMP" */
-		strcat((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)p_datseg + STR_BACKSLASH_TEMP);
+		strcat(g_text_output_buf, (char*)p_datseg + STR_BACKSLASH_TEMP);
 
-		if (!chdir((char*)ds_readd(TEXT_OUTPUT_BUF))) {
+		if (!chdir(g_text_output_buf)) {
 			/*	check if it's possible to change to TEMP-dir: OK
 				change to gamepath */
 
@@ -498,7 +498,7 @@ void prepare_dirs(void)
 
 		} else {
 
-			if (mkdir((char*)ds_readd(TEXT_OUTPUT_BUF))) {
+			if (mkdir(g_text_output_buf)) {
 				errorval = 1;
 			} else {
 				errorval = 2;
@@ -518,18 +518,18 @@ void prepare_dirs(void)
 	}
 
 	/* delete *.* in TEMP-dir */
-	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)ds_readd(STR_TEMP_XX_PTR2), (char*)p_datseg + ALL_FILES_WILDCARD2);
+	sprintf(g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), (char*)p_datseg + ALL_FILES_WILDCARD2);
 
-	l_si = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
+	l_si = findfirst(g_text_output_buf, &blk, 0);
 
 	if (!l_si) {
 
 		do {
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+			sprintf(g_text_output_buf,
 				(char*)ds_readd(STR_TEMP_XX_PTR2),
 				((char*)(&blk)) + 30);			/* contains a filename */
 
-			unlink((char*)ds_readd(TEXT_OUTPUT_BUF));
+			unlink(g_text_output_buf);
 
 			l_si = findnext(&blk);
 
@@ -548,11 +548,11 @@ void prepare_dirs(void)
 
 		close(l_di);
 
-		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+		sprintf(g_text_output_buf,
 			(char*)ds_readd(STR_TEMP_XX_PTR2),
 			((char*)(&blk)) + 30);			/* contains a filename */
 
-		l_di = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
+		l_di = _creat(g_text_output_buf, 0);
 
 		write(l_di, g_renderbuf_ptr, SIZEOF_HERO);
 
@@ -630,21 +630,21 @@ void cleanup_game(void)
 
 	/* delete all files in TEMP */
 
-	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+	sprintf(g_text_output_buf,
 		(char*)ds_readd(STR_TEMP_XX_PTR2),	/* contains "TEMP\\%s" */
 		(char*)p_datseg + ALL_FILES_WILDCARD3);		/* contains "*.*" */
 
-	l_di = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
+	l_di = findfirst(g_text_output_buf, &blk, 0);
 
 	if (l_di == 0) {
 
 		do {
 			/* delete each found file */
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+			sprintf(g_text_output_buf,
 				(char*)ds_readd(STR_TEMP_XX_PTR2),	/* contains "TEMP\\%s" */
 				((char*)(&blk)) + 30);			/* contains a filename */
 
-			unlink((char*)ds_readd(TEXT_OUTPUT_BUF));
+			unlink(g_text_output_buf);
 
 			l_di = findnext(&blk);
 

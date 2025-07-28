@@ -256,7 +256,7 @@ signed short plan_alchemy(Bit8u *hero)
 									get_tx(45),
 									ds_readbs((ALCHEMY_RECIPES + RECIPE_DURATION) + recipe_index * SIZEOF_RECIPE));
 
-								sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+								sprintf(g_text_output_buf,
 									get_tx(47),
 									(char*)hero + HERO_NAME2);
 
@@ -265,7 +265,7 @@ signed short plan_alchemy(Bit8u *hero)
 								do {
 									decision = GUI_radio(g_dtp2, 3,
 											get_tx(46), /* Die Zeit einfach verstreichen lassen */
-											(char*)ds_readd(TEXT_OUTPUT_BUF), /* <Held> von der Gruppe trennen */
+											g_text_output_buf, /* <Held> von der Gruppe trennen */
 											get_tx(48)); /* Lieber doch nicht brauen */
 								} while (decision == -1);
 

@@ -163,15 +163,15 @@ char* print_passage_price(signed short price, Bit8u *route_ptr)
 		price = ROUNDED_DIVISION(di,100);
 
 		/* generate a price string "%d^HELLER" */
-		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)p_datseg + SEA_TRAVEL_STR_HELLER, price);
+		sprintf(g_text_output_buf, (char*)p_datseg + SEA_TRAVEL_STR_HELLER, price);
 	} else {
 		/* "NICHTS" */
-		strcpy((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)p_datseg + SEA_TRAVEL_STR_NOTHING);
+		strcpy(g_text_output_buf, (char*)p_datseg + SEA_TRAVEL_STR_NOTHING);
 	}
 
 	ds_writew(SEA_TRAVEL_PASSAGE_PRICE, price);
 
-	return (char*)ds_readd(TEXT_OUTPUT_BUF);
+	return g_text_output_buf;
 }
 
 /**

@@ -547,7 +547,7 @@ void DNG_lights(void)
 	if (div16(ds_readb((VISUAL_FIELD_VALS + 1))) != 11) {
 
 		/* copy palette */
-		memcpy((char*)ds_readd(TEXT_OUTPUT_BUF), (Bit8u*)ds_readd(BUFFER11_PTR), 0xc0);
+		memcpy(g_text_output_buf, (Bit8u*)ds_readd(BUFFER11_PTR), 0xc0);
 
 		if (!(ds_readb((VISUAL_FIELD_VALS + 1)) & 1)) {
 
@@ -575,17 +575,17 @@ void DNG_lights(void)
 
 		for (i = 0; i < 0xc0; i++) {
 
-			l2 = host_readbs((Bit8u*)ds_readd(TEXT_OUTPUT_BUF) + i) - l1;
+			l2 = host_readbs((Bit8u*)g_text_output_buf + i) - l1;
 
 			if (l2 < 0) {
 				l2 = 0;
 			}
 
-			host_writeb((Bit8u*)ds_readd(TEXT_OUTPUT_BUF) + i, l2);
+			host_writeb((Bit8u*)g_text_output_buf + i, l2);
 		}
 
 		wait_for_vsync();
-		set_palette((Bit8u*)ds_readd(TEXT_OUTPUT_BUF), 0x80, 0x40);
+		set_palette((Bit8u*)g_text_output_buf, 0x80, 0x40);
 	}
 }
 
@@ -820,24 +820,24 @@ void DNG_stub6(void)
 
 				hero2 = (Bit8u*)get_second_hero_available_in_group();
 
-				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+				sprintf(g_text_output_buf,
 					get_ttx(769),
 					hero1 + HERO_NAME2,
 					hero2 + HERO_NAME2);
 
 				strcat(g_dtp2,
-					(char*)ds_readd(TEXT_OUTPUT_BUF));
+					g_text_output_buf);
 
 				if (test_attrib(hero1, ATTRIB_GE, 2) <= 0) {
 
-					sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+					sprintf(g_text_output_buf,
 						get_ttx(770),
 						hero1 + HERO_NAME2,
 						hero2 + HERO_NAME2,
 						l_si = random_schick(3) + 1);
 
 					strcat(g_dtp2,
-						(char*)ds_readd(TEXT_OUTPUT_BUF));
+						g_text_output_buf);
 
 					sub_hero_le(hero2, l_si);
 				}
@@ -866,14 +866,14 @@ void DNG_stub6(void)
 
 				} while (l_di);
 
-				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+				sprintf(g_text_output_buf,
 					get_ttx(771),
 					hero_auto + HERO_NAME2,
 					(GUI_get_ptr(host_readbs(hero_auto + HERO_SEX), 0)),
 					(GUI_get_ptr(host_readbs(hero_auto + HERO_SEX), 2)));
 
 				strcat(g_dtp2,
-					(char*)ds_readd(TEXT_OUTPUT_BUF));
+					g_text_output_buf);
 
 			}
 
