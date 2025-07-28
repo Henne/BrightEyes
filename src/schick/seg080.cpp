@@ -63,11 +63,11 @@ signed short DNG04_handler(void)
 		{
 			hero = (Bit8u*)get_first_hero_available_in_group();
 
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_tx(5),
 				(char*)hero + HERO_NAME2);
 
-			GUI_output((char*)ds_readd(DTP2));
+			GUI_output(g_dtp2);
 
 			sub_hero_le(hero, 2);
 
@@ -108,11 +108,11 @@ signed short DNG04_handler(void)
 				!hero_dead(hero) &&
 				test_skill(hero, TA_SCHLEICHEN, 2) <= 0)
 			{
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx(10),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output((char*)ds_readd(DTP2));
+				GUI_output(g_dtp2);
 
 				sub_group_le(dice_roll(2, 6, 0));
 
@@ -155,11 +155,11 @@ signed short DNG04_handler(void)
 				!hero_dead(hero) &&
 				test_skill(hero, TA_SCHLEICHEN, 4) <= 0)
 			{
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx(10),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output((char*)ds_readd(DTP2));
+				GUI_output(g_dtp2);
 
 				sub_group_le(dice_roll(1, 6, 2));
 
@@ -197,23 +197,23 @@ signed short DNG04_handler(void)
 		{
 			if (test_attrib(hero, ATTRIB_GE, 0) > 0)
 			{
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx(18),
 					(char*)hero + HERO_NAME2,
 					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)),
 					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-				GUI_output((char*)ds_readd(DTP2));
+				GUI_output(g_dtp2);
 
 			} else {
 
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx(19),
 					(char*)hero + HERO_NAME2,
 					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output((char*)ds_readd(DTP2));
+				GUI_output(g_dtp2);
 
 				hero_disappear(hero, 0, -1);
 			}
@@ -284,11 +284,11 @@ signed short DNG04_handler(void)
 		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
 		ds_writeb(DIRECTION, (ds_readb(TRAVEL_DESTINATION_VIEWDIR) + 2) & 0x03);
 
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx(26),
 			get_ttx(ds_readws(TRV_DESTINATION) + 0xeb));
 
-		GUI_output((char*)ds_readd(DTP2));
+		GUI_output(g_dtp2);
 
 		timewarp(HOURS(2));
 
@@ -440,11 +440,11 @@ signed short DNG05_handler(void)
 		{
 			hero = (Bit8u*)get_first_hero_available_in_group();
 
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_tx(13),
 				(char*)hero + HERO_NAME2);
 
-			GUI_output((char*)ds_readd(DTP2));
+			GUI_output(g_dtp2);
 
 			sub_hero_le(hero, dice_roll(1, 3, 2));
 
@@ -474,11 +474,11 @@ signed short DNG05_handler(void)
 		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
 		ds_writeb(DIRECTION, (ds_readb(TRAVEL_DESTINATION_VIEWDIR) + 2) & 0x03);
 
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx(17),
 			get_ttx(ds_readws(TRV_DESTINATION) + 0xeb));
 
-		GUI_output((char*)ds_readd(DTP2));
+		GUI_output(g_dtp2);
 
 		timewarp(HOURS(2));
 

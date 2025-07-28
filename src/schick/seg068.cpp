@@ -59,9 +59,9 @@ void THO_eisenhof(void)
 
 			GUI_input(get_tx2(52), 0);
 
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 					get_tx(random_schick(26) + 55));
-			GUI_input((char*)ds_readd(DTP2), 0);
+			GUI_input(g_dtp2, 0);
 		} else {
 			GUI_input(get_tx2(53), 0);
 		}
@@ -80,7 +80,7 @@ void THO_imman(void)
 		if (GUI_bool(get_tx2(55)) != 0) {
 
 		tmp = random_schick(4) + 0x38;
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx2(56),
 			/* winner */
 			get_tx2(tmp),
@@ -93,7 +93,7 @@ void THO_imman(void)
 			/* loosers points */
 			random_schick(14));
 
-		GUI_input((char*)ds_readd(DTP2), 0);
+		GUI_input(g_dtp2, 0);
 		}
 	} else {
 		/* no imman game at the moment */
@@ -146,7 +146,7 @@ void THO_bank(void)
 			ds_readws(BANK_DEPOSIT));
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(81),
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(81),
 						(char*)ds_readd(TEXT_OUTPUT_BUF), 3,
 						get_tx2(73), get_tx2(74), get_tx2(80));
 		} while (answer == -1);
@@ -157,7 +157,7 @@ void THO_bank(void)
 			answer = GUI_input(get_tx2(75), 3);
 
 			if (answer <= 0) {
-				GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(81),
+				GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(81),
 						get_tx2(79), 0);
 			} else {
 
@@ -165,7 +165,7 @@ void THO_bank(void)
 					(ds_readws(BANK_DEPOSIT) > 0 && ds_readws(BANK_DEPOSIT) + 200 < answer) ||
 					(ds_readws(BANK_DEPOSIT) <= 0 && answer > 200))
 				{
-					GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(81),
+					GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(81),
 							get_tx2(76), 0);
 				} else {
 
@@ -183,7 +183,7 @@ void THO_bank(void)
 
 						if (ds_readws(MONTHLY_CREDIT) > 200) {
 
-							GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(81),
+							GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(81),
 									get_tx2(76), 0);
 
 							l3 = ds_readws(MONTHLY_CREDIT) - 200;
@@ -225,7 +225,7 @@ void THO_bank(void)
 
 					if (answer <= 0) {
 
-						GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(81),
+						GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(81),
 								get_tx2(79), 0);
 
 					} else {
@@ -280,7 +280,7 @@ void THO_arsenal(void)
 		options = get_first_hero_with_item(ITEM_WRITING_OF_JARDA) != -1 || get_first_hero_with_item(ITEM_WRITING_OF_HETMAN) != -1 ? 2 : 1;
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 					get_tx2(0), options,
 					get_tx2(2), get_tx2(1));
 
@@ -297,12 +297,12 @@ void THO_arsenal(void)
 				}
 			}
 
-			sprintf((char*)ds_readd(DTP2) + 0x400,
+			sprintf(g_dtp2 + 0x400,
 				get_tx2(3),
 				ds_readws(ARSENAL_MONEY));
 
 			mul_ds_ws(ARSENAL_MONEY, 100);
-			GUI_dialog_na(0, (char*)ds_readd(DTP2) + 0x400);
+			GUI_dialog_na(0, g_dtp2 + 0x400);
 			p_money = get_party_money();
 			set_party_money(ds_readws(ARSENAL_MONEY));
 
@@ -393,7 +393,7 @@ void THO_black_finger(void)
 /* static */
 void dramosch_says(char *msg)
 {
-	GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(48), msg, 0);
+	GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(48), msg, 0);
 }
 
 void THO_ugdalf(void)
@@ -408,7 +408,7 @@ void THO_ugdalf(void)
 		/* talk to the guards */
 		randval = random_schick(10) - 1;
 
-		answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+		answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 					get_tx2(23), 3,
 					get_tx2(randval + 38),
 					get_tx2(24),
@@ -416,19 +416,19 @@ void THO_ugdalf(void)
 
 		if (answer == 1) {
 
-			GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, get_tx2(27), 0);
+			GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(27), 0);
 
 		} else if (answer == 2) {
 
 			/* talk to DRAMOSCH */
-			GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, get_tx2(28), 0);
+			GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(28), 0);
 
 			load_in_head(14);
 
 			dramosch_says(get_tx2(29));
 
 			do {
-				answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+				answer = GUI_dialogbox((unsigned char*)g_dtp2,
 							get_tx2(48), get_tx2(30), 2,
 							get_tx2(31), get_tx2(32));
 			} while (answer == -1);
@@ -481,9 +481,9 @@ void THO_ugdalf(void)
 
 		dramosch_says(get_tx2(37));
 
-		sprintf((char*)ds_readd(DTP2) + 0x400, get_tx(random_schick(26) + 55));
+		sprintf(g_dtp2 + 0x400, get_tx(random_schick(26) + 55));
 
-		dramosch_says((char*)ds_readd(DTP2) + 0x400);
+		dramosch_says(g_dtp2 + 0x400);
 
 		/* enter the dungeon */
 		DNG_enter_dungeon(DUNGEONS_ZWINGFESTE);
@@ -515,14 +515,14 @@ void academy_analues(void)
 
 		load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 
-		sprintf((char*)ds_readd(DTP2), get_tx2(64), (char*)spell_analues());
+		sprintf(g_dtp2, get_tx2(64), (char*)spell_analues());
 
 		if (buffer1_bak != -1 && buffer1_bak != 222) {
 
 			load_tx(buffer1_bak);
 		}
 
-		GUI_input((char*)ds_readd(DTP2), 0);
+		GUI_input(g_dtp2, 0);
 
 		ds_writew(ACADEMY_DAILY_IDENT, 1);
 	}
@@ -574,12 +574,12 @@ void THO_academy(void)
 
 		} else {
 
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_tx2(53),
 				(char*)hero + HERO_NAME2);
 
 			do {
-				answer = GUI_radio((char*)ds_readd(DTP2), 2,
+				answer = GUI_radio(g_dtp2, 2,
 							get_tx2(68),
 							get_tx2(69));
 			} while (answer == -1);
@@ -590,12 +590,12 @@ void THO_academy(void)
 
 				if (item_id >= 0) {
 
-					sprintf((char*)ds_readd(DTP2),
+					sprintf(g_dtp2,
 						get_tx2(56),
 						(char*)(GUI_names_grammar((signed short)0x8002, item_id, 0)));
 
 					do {
-						answer = GUI_radio((char*)ds_readd(DTP2), 4,
+						answer = GUI_radio(g_dtp2, 4,
 									get_tx2(57),
 									get_tx2(58),
 									get_tx2(59),
@@ -667,12 +667,12 @@ void THO_academy(void)
 
 				if (item_id >= 0) {
 
-					sprintf((char*)ds_readd(DTP2),
+					sprintf(g_dtp2,
 						get_tx2(56),
 						(char*)(GUI_names_grammar((signed short)0x8002, item_id, 0)));
 
 					do {
-						answer = GUI_radio((char*)ds_readd(DTP2), 4,
+						answer = GUI_radio(g_dtp2, 4,
 									get_tx2(57),
 									get_tx2(58),
 									get_tx2(59),

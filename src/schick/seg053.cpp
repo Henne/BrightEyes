@@ -145,10 +145,10 @@ void do_healer(void)
 						&& !host_readbs(hero + HERO_LE_MOD)) {
 
 						/* Hero seems OK */
-						sprintf((char*)ds_readd(DTP2),
+						sprintf(g_dtp2,
 							get_ttx(461),
 							(char*)(hero + HERO_NAME2));
-						GUI_output((char*)ds_readd(DTP2));
+						GUI_output(g_dtp2);
 					} else {
 
 						/* calculate price */
@@ -160,12 +160,12 @@ void do_healer(void)
 							price *= 2;
 
 						/* ask */
-						sprintf((char*)ds_readd(DTP2),
+						sprintf(g_dtp2,
 							get_ttx(464),
 							(char*)(hero + HERO_NAME2),
 							price);
 
-						if (GUI_bool((char*)ds_readd(DTP2))) {
+						if (GUI_bool(g_dtp2)) {
 							price *= 10;
 
 							if (money < price) {
@@ -186,11 +186,11 @@ void do_healer(void)
 								add_hero_le(hero, host_readws(hero + HERO_LE_ORIG));
 
 								/* prepare output */
-								sprintf((char*)ds_readd(DTP2),
+								sprintf(g_dtp2,
 									get_ttx(467),
 									(char*)(hero + HERO_NAME2));
 
-								GUI_output((char*)ds_readd(DTP2));
+								GUI_output(g_dtp2);
 							}
 						}
 					}
@@ -209,11 +209,11 @@ void do_healer(void)
 
 					if (!disease) {
 						/* Hero is not diseased */
-						sprintf((char*)ds_readd(DTP2),
+						sprintf(g_dtp2,
 							get_ttx(462),
 							(char*)(hero + HERO_NAME2));
 
-						GUI_output((char*)ds_readd(DTP2));
+						GUI_output(g_dtp2);
 					} else {
 						/* calculate price */
 						price = ds_readws(DISEASE_PRICES + disease * 2) * 10;
@@ -224,13 +224,13 @@ void do_healer(void)
 							price *= 2;
 
 						/* prepare output */
-						sprintf((char*)ds_readd(DTP2),
+						sprintf(g_dtp2,
 							get_ttx(465),
 							(char*)(hero + HERO_NAME2),
 							get_ttx(disease + 0x193),
 							price);
 
-						if (GUI_bool((char*)ds_readd(DTP2))) {
+						if (GUI_bool(g_dtp2)) {
 							price *= 10;
 
 							if (money < price) {
@@ -244,11 +244,11 @@ void do_healer(void)
 									host_writeb(hero + (HERO_ILLNESS + 1) + disease * SIZEOF_HERO_ILLNESS, 0);
 
 									/* prepare output */
-									sprintf((char*)ds_readd(DTP2),
+									sprintf(g_dtp2,
 										get_ttx(467),
 										(char*)(hero + HERO_NAME2));
 
-									GUI_output((char*)ds_readd(DTP2));
+									GUI_output(g_dtp2);
 								} else {
 									price /= 2;
 									GUI_output(get_ttx(468));
@@ -274,11 +274,11 @@ void do_healer(void)
 
 					if (poison == 0) {
 						/* Hero is not poisoned */
-						sprintf((char*)ds_readd(DTP2),
+						sprintf(g_dtp2,
 							get_ttx(463),
 							(char*)(hero + HERO_NAME2));
 
-						GUI_output((char*)ds_readd(DTP2));
+						GUI_output(g_dtp2);
 					} else {
 						/* calculate price */
 						price = ds_readws(POISON_PRICES + poison * 2) * 20;
@@ -287,12 +287,12 @@ void do_healer(void)
 							price *= 2;
 
 						/* prepare output */
-						sprintf((char*)ds_readd(DTP2),
+						sprintf(g_dtp2,
 							get_ttx(466),
 							price,
 							(char*)(hero + HERO_NAME2));
 
-						if (GUI_bool((char*)ds_readd(DTP2))) {
+						if (GUI_bool(g_dtp2)) {
 							price *= 10;
 
 							if (money < price) {
@@ -306,11 +306,11 @@ void do_healer(void)
 									host_writeb(hero + (HERO_POISON) + poison * SIZEOF_HERO_POISON, 1);
 
 									/* prepare output */
-									sprintf((char*)ds_readd(DTP2),
+									sprintf(g_dtp2,
 										get_ttx(467),
 										(char*)(hero + HERO_NAME2));
 
-									GUI_output((char*)ds_readd(DTP2));
+									GUI_output(g_dtp2);
 								} else {
 									price /= 2;
 									GUI_output(get_ttx(468));

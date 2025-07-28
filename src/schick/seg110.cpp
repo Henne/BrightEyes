@@ -45,13 +45,13 @@ void tevent_011(void)
 	{
 		ds_writeb(TEVENT011_FLAG, 1);
 
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx2(24),
 			(char*)hero + HERO_NAME2,
 			(char*)hero + HERO_NAME2);
 
 		do {
-			answer = GUI_radio((char*)ds_readd(DTP2), 2,
+			answer = GUI_radio(g_dtp2, 2,
 						get_tx2(25),
 						get_tx2(26));
 		} while (answer == -1);
@@ -107,19 +107,19 @@ void TRV_swim2(signed char mod, signed short percent)
 			if (test_skill(hero, TA_SCHWIMMEN, (signed char)mod) > 0)
 			{
 				/* skill test succeeded */
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx2(31),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output((char*)ds_readd(DTP2));
+				GUI_output(g_dtp2);
 			} else {
 				/* skill test failed */
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx2(32),
 					(char*)hero + HERO_NAME2,
 					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-				GUI_output((char*)ds_readd(DTP2));
+				GUI_output(g_dtp2);
 
 				hero_disease_test(hero, 2, 20 - (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK))));
 
@@ -203,7 +203,7 @@ void tevent_014(void)
 		load_in_head(55);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 						get_tx2(43), 2,
 						get_tx2(44),
 						get_tx2(45));
@@ -250,12 +250,12 @@ void tevent_020(void)
 	{
 		ds_writeb(TEVENT020_FLAG, 1);
 
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx2(49),
 			(char*)hero + HERO_NAME2);
 
 		do {
-			answer = GUI_radio((char*)ds_readd(DTP2), 2,
+			answer = GUI_radio(g_dtp2, 2,
 						get_tx2(50),
 						get_tx2(51));
 		} while (answer == -1);
@@ -449,7 +449,7 @@ void tevent_031(void)
 		load_in_head(49);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 						get_tx2(0), 2,
 						get_tx2(1),
 						get_tx2(2));
@@ -498,7 +498,7 @@ void tevent_033(void)
 	load_in_head(9);
 
 	do {
-		answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+		answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 					get_tx2(3), 3,
 					get_tx2(4),
 					get_tx2(5),
@@ -654,14 +654,14 @@ void tevent_044(void)
 
 		hero = (Bit8u*)get_first_hero_available_in_group();
 
-		sprintf((char*)ds_readd(DTP2) + 0x400,
+		sprintf(g_dtp2 + 0x400,
 			get_tx2(33),
 			(char*)hero + HERO_NAME2,
 			(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
-						(char*)ds_readd(DTP2) + 0x400, 2,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
+						g_dtp2 + 0x400, 2,
 						get_tx2(34),
 						get_tx2(35));
 		} while (answer == -1);
@@ -688,7 +688,7 @@ void tevent_045(void)
 		load_in_head(11);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 						get_tx2(36), 3,
 						get_tx2(37),
 						get_tx2(38),
@@ -740,13 +740,13 @@ void tevent_046(void)
 
 		if (test_skill(hero, TA_SINNESSCHAERFE, 0) > 0)
 		{
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_tx2(45),
 				(char*)hero + HERO_NAME2,
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 			do {
-				answer = GUI_radio((char*)ds_readd(DTP2), 2,
+				answer = GUI_radio(g_dtp2, 2,
 							get_tx2(46),
 							get_tx2(47));
 			} while (answer == -1);
@@ -760,11 +760,11 @@ void tevent_046(void)
 
 		if (!enter_inn)
 		{
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_tx2(48),
 				(char*)hero + HERO_NAME2);
 
-			GUI_output((char*)ds_readd(DTP2));
+			GUI_output(g_dtp2);
 
 			g_fig_discard = 1;
 

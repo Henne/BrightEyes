@@ -45,7 +45,7 @@ void PHX_drogentempel(void)
 
 		if (ds_readb(DRUG_TIMER) && (nr_heroes * 2000 <= money)) {
 
-			GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(15), get_tx2(14), 0);
+			GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(15), get_tx2(14), 0);
 
 			money -= nr_heroes * 2000;
 			set_party_money(money);
@@ -53,7 +53,7 @@ void PHX_drogentempel(void)
 		} else {
 
 			do {
-				answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+				answer = GUI_dialogbox((unsigned char*)g_dtp2,
 						get_tx2(15), get_tx2(0),
 						3,
 						get_tx2(1),
@@ -64,7 +64,7 @@ void PHX_drogentempel(void)
 			if (answer == 1) {
 
 				do {
-					answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+					answer = GUI_dialogbox((unsigned char*)g_dtp2,
 							get_tx2(15), get_tx2(4),
 							3,
 							get_tx2(5),
@@ -73,7 +73,7 @@ void PHX_drogentempel(void)
 				} while (answer == -1);
 
 				if (answer == 3) {
-					GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+					GUI_dialogbox((unsigned char*)g_dtp2,
 							get_tx2(15), get_tx2(8), 0);
 
 					ds_writeb(DRUG_TIMER, 10);
@@ -81,14 +81,14 @@ void PHX_drogentempel(void)
 
 			} else if (answer == 2) {
 
-				GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+				GUI_dialogbox((unsigned char*)g_dtp2,
 						get_tx2(15), get_tx2(8), 0);
 
 				ds_writeb(DRUG_TIMER, 10);
 			} else {
 
 				do {
-					answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+					answer = GUI_dialogbox((unsigned char*)g_dtp2,
 							get_tx2(15), get_tx2(9),
 							3,
 							get_tx2(10),
@@ -98,12 +98,12 @@ void PHX_drogentempel(void)
 
 				if (answer == 3) {
 
-					GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+					GUI_dialogbox((unsigned char*)g_dtp2,
 						get_tx2(15), get_tx2(13), 0);
 
 				} else {
 
-					GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+					GUI_dialogbox((unsigned char*)g_dtp2,
 						get_tx2(15), get_tx2(8), 0);
 
 					ds_writeb(DRUG_TIMER, 10);
@@ -119,7 +119,7 @@ void PHX_drogentempel(void)
 
 		if (ds_readb(GREMOB_INVITED) != 0) {
 
-			GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+			GUI_dialogbox((unsigned char*)g_dtp2,
 					get_tx2(16), get_tx2(29), 0);
 
 			do_fight(FIGHTS_PHEX3);
@@ -127,14 +127,14 @@ void PHX_drogentempel(void)
 
 			if (ds_readb(DRUG_TIMER) && (nr_heroes * 2500 <= money)) {
 
-				GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(16), get_tx2(28), 0);
+				GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(16), get_tx2(28), 0);
 
 				money -= nr_heroes * 2500;
 				set_party_money(money);
 			} else {
 
 				do {
-					answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+					answer = GUI_dialogbox((unsigned char*)g_dtp2,
 							get_tx2(16), get_tx2(17),
 							2,
 							get_tx2(19),
@@ -144,7 +144,7 @@ void PHX_drogentempel(void)
 				if (answer == 1) {
 
 					do {
-						answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+						answer = GUI_dialogbox((unsigned char*)g_dtp2,
 							get_tx2(16), get_tx2(18),
 							3,
 							get_tx2(19),
@@ -152,7 +152,7 @@ void PHX_drogentempel(void)
 							get_tx2(21));
 					} while (answer == -1);
 
-					GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(16), get_tx2(26), 0);
+					GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(16), get_tx2(26), 0);
 
 					if (nr_heroes * 2000 <= money) {
 
@@ -163,7 +163,7 @@ void PHX_drogentempel(void)
 					}
 				} else {
 					do {
-						answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+						answer = GUI_dialogbox((unsigned char*)g_dtp2,
 							get_tx2(16), get_tx2(22),
 							3,
 							get_tx2(23),
@@ -172,10 +172,10 @@ void PHX_drogentempel(void)
 					} while (answer == -1);
 
 					if (answer == 1) {
-						GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(16), get_tx2(27), 0);
+						GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(16), get_tx2(27), 0);
 						ds_writeb(GREMOB_INVITED, 1);
 					} else {
-						GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(16), get_tx2(8), 0);
+						GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(16), get_tx2(8), 0);
 						ds_writeb(DRUG_TIMER, 10);
 					}
 				}
@@ -217,7 +217,7 @@ void PHX_phextempel(void)
 		GUI_output(get_tx2(33));
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+			answer = GUI_dialogbox((unsigned char*)g_dtp2,
 					get_tx2(32), get_tx2(34),
 					3,
 					get_tx2(35),
@@ -228,7 +228,7 @@ void PHX_phextempel(void)
 		if (answer == 1) {
 
 			do {
-				answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+				answer = GUI_dialogbox((unsigned char*)g_dtp2,
 						get_tx2(32), get_tx2(38),
 						3,
 						get_tx2(39),
@@ -238,13 +238,13 @@ void PHX_phextempel(void)
 
 			if (answer == 1) {
 
-				GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+				GUI_dialogbox((unsigned char*)g_dtp2,
 						get_tx2(32), get_tx2(50), 0);
 			} else {
 
 				/* enter the temple */
 
-				GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+				GUI_dialogbox((unsigned char*)g_dtp2,
 						get_tx2(32), get_tx2(51), 0);
 
 				ds_writew(CURRENT_TYPEINDEX, 59);
@@ -265,7 +265,7 @@ void PHX_phextempel(void)
 		} else if (answer == 2) {
 
 			do {
-				answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+				answer = GUI_dialogbox((unsigned char*)g_dtp2,
 						get_tx2(32), get_tx2(42),
 						3,
 						get_tx2(43),
@@ -275,13 +275,13 @@ void PHX_phextempel(void)
 
 			if (answer == 1) {
 
-				GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+				GUI_dialogbox((unsigned char*)g_dtp2,
 						get_tx2(32), get_tx2(50), 0);
 
 			} else if (answer == 2) {
 
 				do {
-					answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+					answer = GUI_dialogbox((unsigned char*)g_dtp2,
 							get_tx2(32), get_tx2(52),
 							3,
 							get_tx2(53),
@@ -291,7 +291,7 @@ void PHX_phextempel(void)
 
 				if (answer == 2) {
 
-					GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+					GUI_dialogbox((unsigned char*)g_dtp2,
 						get_tx2(32), get_tx2(56), 0);
 				}
 
@@ -299,7 +299,7 @@ void PHX_phextempel(void)
 
 				/* enter the temple */
 
-				GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+				GUI_dialogbox((unsigned char*)g_dtp2,
 						get_tx2(32), get_tx2(51), 0);
 
 				ds_writew(CURRENT_TYPEINDEX, 59);
@@ -320,7 +320,7 @@ void PHX_phextempel(void)
 		} else {
 
 			do {
-				answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+				answer = GUI_dialogbox((unsigned char*)g_dtp2,
 						get_tx2(32), get_tx2(46),
 						3,
 						get_tx2(47),
@@ -330,15 +330,15 @@ void PHX_phextempel(void)
 
 			if (answer == 1) {
 
-				GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+				GUI_dialogbox((unsigned char*)g_dtp2,
 						get_tx2(32), get_tx2(57), 0);
 			} else if (answer == 2) {
 
-				GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+				GUI_dialogbox((unsigned char*)g_dtp2,
 						get_tx2(32), get_tx2(58), 0);
 			} else if (answer == 3) {
 
-				GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+				GUI_dialogbox((unsigned char*)g_dtp2,
 						get_tx2(32), get_tx2(59), 0);
 			}
 
@@ -376,7 +376,7 @@ void PHX_alrik_derondan(void)
 	load_in_head(3);
 
 	do {
-		answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+		answer = GUI_dialogbox((unsigned char*)g_dtp2,
 				get_tx2(61), get_tx2(62),
 				3,
 				get_tx2(63),
@@ -387,7 +387,7 @@ void PHX_alrik_derondan(void)
 	if (answer == 1) {
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+			answer = GUI_dialogbox((unsigned char*)g_dtp2,
 					get_tx2(61), get_tx2(66),
 					3,
 					get_tx2(67),
@@ -398,7 +398,7 @@ void PHX_alrik_derondan(void)
 		if (answer == 3) {
 
 			do {
-				answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+				answer = GUI_dialogbox((unsigned char*)g_dtp2,
 						get_tx2(61), get_tx2(74),
 						3,
 						get_tx2(75),
@@ -408,7 +408,7 @@ void PHX_alrik_derondan(void)
 
 			if (answer == 1) {
 
-				GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+				GUI_dialogbox((unsigned char*)g_dtp2,
 					get_tx2(61), get_tx2(81), 0);
 
 				ds_writeb(ALRIK_DERONDAN_INSULTED, 1);
@@ -419,14 +419,14 @@ void PHX_alrik_derondan(void)
 				l_di = 3;
 			}
 		} else {
-			GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+			GUI_dialogbox((unsigned char*)g_dtp2,
 					get_tx2(61), get_tx2(78), 0);
 		}
 
 	} else if (answer == 2) {
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+			answer = GUI_dialogbox((unsigned char*)g_dtp2,
 					get_tx2(61), get_tx2(70),
 					3,
 					get_tx2(71),
@@ -436,7 +436,7 @@ void PHX_alrik_derondan(void)
 
 		if (answer == 1) {
 
-			GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+			GUI_dialogbox((unsigned char*)g_dtp2,
 					get_tx2(61), get_tx2(78), 0);
 
 		} else if (answer == 2) {
@@ -446,7 +446,7 @@ void PHX_alrik_derondan(void)
 		}
 	} else {
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+			answer = GUI_dialogbox((unsigned char*)g_dtp2,
 					get_tx2(61), get_tx2(74),
 					3,
 					get_tx2(75),
@@ -456,7 +456,7 @@ void PHX_alrik_derondan(void)
 
 		if (answer == 1) {
 
-			GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+			GUI_dialogbox((unsigned char*)g_dtp2,
 				get_tx2(61), get_tx2(81), 0);
 
 			ds_writeb(ALRIK_DERONDAN_INSULTED, 1);
@@ -470,7 +470,7 @@ void PHX_alrik_derondan(void)
 	if ((l_di == 2) || (l_di == 3)) {
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+			answer = GUI_dialogbox((unsigned char*)g_dtp2,
 					get_tx2(61),
 					l_di == 3 ? get_tx2(82) : get_tx2(79),
 					3,
@@ -480,10 +480,10 @@ void PHX_alrik_derondan(void)
 		} while (answer == -1);
 
 		if (answer == 1) {
-			GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+			GUI_dialogbox((unsigned char*)g_dtp2,
 				get_tx2(61), get_tx2(87), 0);
 		} else if (answer == 2) {
-			GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+			GUI_dialogbox((unsigned char*)g_dtp2,
 				get_tx2(61), get_tx2(88), 0);
 		} else {
 
@@ -498,7 +498,7 @@ void PHX_alrik_derondan(void)
 		answer = money >= 500 ? 3 : 2;
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+			answer = GUI_dialogbox((unsigned char*)g_dtp2,
 					get_tx2(61),
 					get_tx2(80),
 					answer,
@@ -512,15 +512,15 @@ void PHX_alrik_derondan(void)
 			money -= 500;
 			set_party_money(money);
 
-			GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+			GUI_dialogbox((unsigned char*)g_dtp2,
 				get_tx2(61), get_tx2(92), 0);
 
 		} else if (answer == 2) {
-			GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+			GUI_dialogbox((unsigned char*)g_dtp2,
 				get_tx2(61), get_tx2(78), 0);
 		} else {
 
-			GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+			GUI_dialogbox((unsigned char*)g_dtp2,
 				get_tx2(61),
 				(test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0) ? get_tx2(92) : get_tx2(78),
 				0);

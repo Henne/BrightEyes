@@ -84,12 +84,12 @@ void do_temple(void)
 			ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
 
 			/* location string */
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_ttx(235),
 				get_ttx(ds_readws(TEMPLE_GOD) + 21),	/* name of the god */
 				(char*)(ds_readws(CURRENT_TYPEINDEX) != 58 ? get_ttx(ds_readbs(CURRENT_TOWN) + 235): get_ttx(622)));
 
-			GUI_print_loc_line((char*)ds_readd(DTP2));
+			GUI_print_loc_line(g_dtp2);
 
 			ds_writew(REQUEST_REFRESH, 0);
 		}
@@ -142,11 +142,11 @@ void do_temple(void)
 				} while (game_state == -1);
 
 				/* location string */
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_ttx(235),
 					get_ttx(ds_readws(TEMPLE_GOD) + 21),	/* name of the god */
 					get_ttx(ds_readbs(CURRENT_TOWN) + 235));
-				GUI_print_loc_line((char*)ds_readd(DTP2));
+				GUI_print_loc_line(g_dtp2);
 
 				draw_status_line();
 
@@ -201,11 +201,11 @@ void do_temple(void)
 
 					make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), money);
 
-					sprintf((char*)ds_readd(DTP2),
+					sprintf(g_dtp2,
 						get_ttx(297),
 						(char*)ds_readd(TEXT_OUTPUT_BUF));
 
-					input = GUI_input((char*)ds_readd(DTP2), 3);
+					input = GUI_input(g_dtp2, 3);
 
 					donation = input;
 
@@ -268,9 +268,9 @@ void char_add(signed short temple_id)
 
 						if (!host_readbs(hero + HERO_TYPE)) {
 
-							prepare_chr_name((char*)ds_readd(DTP2),	(char*)(ptr + 32 * l_si));
+							prepare_chr_name(g_dtp2,	(char*)(ptr + 32 * l_si));
 
-							if (read_chr_temp((char*)ds_readd(DTP2), i, ds_readbs(CURRENT_GROUP))) {
+							if (read_chr_temp(g_dtp2, i, ds_readbs(CURRENT_GROUP))) {
 								inc_ds_bs_post(TOTAL_HERO_COUNTER);
 								inc_ds_bs_post(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP));
 								host_writebs(hero + HERO_GROUP_POS, i + 1);
@@ -284,12 +284,12 @@ void char_add(signed short temple_id)
 					init_ani(2);
 
 					/* location string */
-					sprintf((char*)ds_readd(DTP2),
+					sprintf(g_dtp2,
 						get_ttx(235),
 						get_ttx(ds_readws(TEMPLE_GOD) + 21),	/* name of the god */
 						get_ttx(ds_readbs(CURRENT_TOWN) + 235));
 
-					GUI_print_loc_line((char*)ds_readd(DTP2));
+					GUI_print_loc_line(g_dtp2);
 				}
 
 				l_di = copy_chr_names(ptr, temple_id);
@@ -334,11 +334,11 @@ void char_letgo(signed short temple_id)
 					init_ani(2);
 
 					/* location string */
-					sprintf((char*)ds_readd(DTP2),
+					sprintf(g_dtp2,
 						get_ttx(235),
 						get_ttx(ds_readws(TEMPLE_GOD) + 21),	/* name of the god */
 						get_ttx(ds_readbs(CURRENT_TOWN) + 235));
-					GUI_print_loc_line((char*)ds_readd(DTP2));
+					GUI_print_loc_line(g_dtp2);
 				}
 			}
 
@@ -369,13 +369,13 @@ signed short char_erase(void)
 
 			if (l_si != -1) {
 
-				strcpy((char*)ds_readd(DTP2), (char*)ptr + 32 * l_si);
+				strcpy(g_dtp2, (char*)ptr + 32 * l_si);
 
-				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), get_ttx(295),	(char*)ds_readd(DTP2));
+				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), get_ttx(295),	g_dtp2);
 
 				if (GUI_bool((char*)ds_readd(TEXT_OUTPUT_BUF))) {
 
-					prepare_chr_name((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)ds_readd(DTP2));
+					prepare_chr_name((char*)ds_readd(TEXT_OUTPUT_BUF), g_dtp2);
 
 					unlink_ret = unlink((char*)ds_readd(TEXT_OUTPUT_BUF));
 
@@ -384,9 +384,9 @@ signed short char_erase(void)
 						return 0;
 					}
 
-					sprintf((char*)ds_readd(DTP2), (char*)p_datseg + STR_TEMP_FILE_WILDCARD, (char*)ds_readd(TEXT_OUTPUT_BUF));
+					sprintf(g_dtp2, (char*)p_datseg + STR_TEMP_FILE_WILDCARD, (char*)ds_readd(TEXT_OUTPUT_BUF));
 
-					unlink((char*)ds_readd(DTP2));
+					unlink(g_dtp2);
 				}
 
 				l_di = copy_chr_names(ptr, -1);
@@ -450,7 +450,7 @@ void miracle_heal_hero(signed short le_in, char *str)
 			strcat((char*)ds_readd(TEXT_OUTPUT_BUF), get_ttx(393));
 		}
 
-		sprintf((char*)ds_readd(DTP2), (char*)str, (char*)get_hero(hero_pos) + HERO_NAME2, le_in, (char*)ds_readd(TEXT_OUTPUT_BUF));
+		sprintf(g_dtp2, (char*)str, (char*)get_hero(hero_pos) + HERO_NAME2, le_in, (char*)ds_readd(TEXT_OUTPUT_BUF));
 	}
 }
 
@@ -474,7 +474,7 @@ void miracle_resurrect(char *str)
 			draw_status_line();
 
 			/* prepare a message */
-			sprintf((char*)ds_readd(DTP2), (char*)str, (char*)hero + HERO_NAME2);
+			sprintf(g_dtp2, (char*)str, (char*)hero + HERO_NAME2);
 
 			break;
 		}
@@ -549,7 +549,7 @@ void miracle_weapon(char *str, signed short mode)
 							or_ptr_bs(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * i, 0x08); /* set 'magic' flag */
 							or_ptr_bs(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * i, 0x80); /* set 'magic_revealed' flag */
 
-							sprintf((char*)ds_readd(DTP2), (char*)str,
+							sprintf(g_dtp2, (char*)str,
 								(char*)GUI_names_grammar((signed short)0x8000, item_id, 0),
 								(char*)hero + HERO_NAME2);
 
@@ -562,7 +562,7 @@ void miracle_weapon(char *str, signed short mode)
 						{
 							and_ptr_bs(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * i, 0xfe); /* unset 'broken' flag */
 
-							sprintf((char*)ds_readd(DTP2), (char*)str,
+							sprintf(g_dtp2, (char*)str,
 								(char*)GUI_names_grammar((signed short)0x8000, item_id, 0),
 								(char*)hero + HERO_NAME2);
 

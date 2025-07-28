@@ -196,7 +196,7 @@ void npc_nariell(void)
 
 	/* show dialog window */
 	do {
-		answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+		answer = GUI_dialogbox((unsigned char*)g_dtp2,
 				get_ttx(753), get_tx(0),
 				3,
 				get_tx(1), get_tx(2),
@@ -205,11 +205,11 @@ void npc_nariell(void)
 
 	/* process the answer */
 	if (answer == 1) {
-		GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+		GUI_dialogbox((unsigned char*)g_dtp2,
 			get_ttx(753), get_tx(4), 0);
 	} else {
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+			answer = GUI_dialogbox((unsigned char*)g_dtp2,
 					get_ttx(753),
 					(answer == 2) ? get_tx(5): get_tx(6),
 					2, get_tx(7),
@@ -238,7 +238,7 @@ void npc_harika(void)
 
 	/* show dialog window */
 	do {
-		answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+		answer = GUI_dialogbox((unsigned char*)g_dtp2,
 				get_ttx(754), get_tx(10),
 				3,
 				get_tx(11), get_tx(12),
@@ -246,7 +246,7 @@ void npc_harika(void)
 	} while (answer == -1);
 
 	if (answer == 1) {
-		GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_ttx(754),
+		GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(754),
 			get_tx(14), 0);
 	} else if (answer == 2) {
 		money = get_party_money();
@@ -254,7 +254,7 @@ void npc_harika(void)
 		answer = (money >= 2000) ? 2 : 1;
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+			answer = GUI_dialogbox((unsigned char*)g_dtp2,
 					get_ttx(754), get_tx(15),
 					answer,
 					get_tx(17), get_tx(18));
@@ -275,7 +275,7 @@ void npc_harika(void)
 		answer = (money >= 1500) ? 2 : 1;
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+			answer = GUI_dialogbox((unsigned char*)g_dtp2,
 					get_ttx(754), get_tx(16),
 					answer,
 					get_tx(17), get_tx(18));
@@ -307,7 +307,7 @@ void npc_curian(void)
 
 	/* show dialog window */
 	do {
-		answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+		answer = GUI_dialogbox((unsigned char*)g_dtp2,
 				get_ttx(755), get_tx(20),
 				3,
 				get_tx(21), get_tx(22),
@@ -315,11 +315,11 @@ void npc_curian(void)
 	} while (answer == -1);
 
 	if (answer == 1) {
-		GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_ttx(755),
+		GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(755),
 			get_tx(24), 0);
 	} else {
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+			answer = GUI_dialogbox((unsigned char*)g_dtp2,
 					get_ttx(755),
 					(answer == 2) ? get_tx(25): get_tx(26),
 					2,
@@ -348,7 +348,7 @@ void npc_ardora(void)
 
 	/* show dialog window */
 	do {
-		answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+		answer = GUI_dialogbox((unsigned char*)g_dtp2,
 				get_ttx(756), get_tx(30),
 				3,
 				get_tx(31), get_tx(32),
@@ -357,18 +357,18 @@ void npc_ardora(void)
 
 	if (answer == 1) {
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+			answer = GUI_dialogbox((unsigned char*)g_dtp2,
 					get_ttx(756), get_tx(34),
 					2,
 					get_tx(35), get_tx(36));
 		} while (answer == -1);
 
 		if (answer == 2) {
-			GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_ttx(756),
+			GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(756),
 				get_tx(37), 0);
 		} else {
 			do {
-				answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+				answer = GUI_dialogbox((unsigned char*)g_dtp2,
 						get_ttx(756), get_tx(39),
 						2,
 						get_tx(40), get_tx(41));
@@ -377,18 +377,18 @@ void npc_ardora(void)
 			if (answer == 1) {
 				add_npc(0xe5);
 			} else {
-				GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_ttx(756),
+				GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(756),
 					get_tx(42), 0);
 			}
 		}
 	} else {
 		if (answer == 2) {
-			GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_ttx(756),
+			GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(756),
 				get_tx(38), 0);
 		}
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_ttx(756),
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(756),
 					get_tx(39), 2,
 					get_tx(40), get_tx(41));
 		} while (answer == -1);
@@ -396,7 +396,7 @@ void npc_ardora(void)
 		if (answer == 1) {
 			add_npc(0xe5);
 		} else {
-			GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_ttx(756),
+			GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(756),
 				get_tx(42), 0);
 		}
 	}
@@ -417,7 +417,7 @@ void npc_garsvik(void)
 
 	/* show dialog window */
 	do {
-		answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+		answer = GUI_dialogbox((unsigned char*)g_dtp2,
 				get_ttx(757), get_tx(44),
 				3,
 				get_tx(45), get_tx(46),
@@ -425,11 +425,11 @@ void npc_garsvik(void)
 	} while (answer == -1);
 
 	if (answer == 1) {
-		GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_ttx(757),
+		GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(757),
 			get_tx(48), 0);
 	} else {
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+			answer = GUI_dialogbox((unsigned char*)g_dtp2,
 					get_ttx(757),
 					(answer == 2) ? get_tx(49): get_tx(50),
 					2,
@@ -458,7 +458,7 @@ void npc_erwo(void)
 
 	/* show dialog window */
 	do {
-		answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+		answer = GUI_dialogbox((unsigned char*)g_dtp2,
 				get_ttx(758), get_tx(54),
 				3,
 				get_tx(55), get_tx(56),
@@ -466,11 +466,11 @@ void npc_erwo(void)
 	} while (answer == -1);
 
 	if (answer == 1) {
-		GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_ttx(758),
+		GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(758),
 			get_tx(58), 0);
 	} else {
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+			answer = GUI_dialogbox((unsigned char*)g_dtp2,
 					get_ttx(758),
 					(answer == 2) ? get_tx(59): get_tx(60),
 					2,
@@ -505,7 +505,7 @@ void remove_npc(signed short head_index, signed char days,
 	if (text) {
 		if (check_hero(get_hero(6)) != 0) {
 			load_in_head(head_index);
-			GUI_dialogbox((unsigned char*)ds_readd(DTP2), name, text, 0);
+			GUI_dialogbox((unsigned char*)g_dtp2, name, text, 0);
 		}
 	}
 
@@ -535,7 +535,7 @@ void add_npc(signed short index)
 	load_npc(index);
 
 	/* overwrite the picture of the NPC with one from IN_HEAD.NVF */
-	memcpy(get_hero(6) + HERO_PORTRAIT, (char*)ds_readd(DTP2), 0x400);
+	memcpy(get_hero(6) + HERO_PORTRAIT, g_dtp2, 0x400);
 
 	/* increment heroes in that group */
 	inc_ds_bs_post(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP));

@@ -48,7 +48,7 @@ signed short LVL_select_skill(Bit8u *hero, signed short show_values)
 			strcat((char*)ds_readd(TEXT_OUTPUT_BUF), get_ttx(393));
 		}
 
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_ttx(204),
 			/* sind / ist */
 			(host_readbs(hero + HERO_TA_RISE) > 1) ? get_ttx(305) : get_ttx(304),
@@ -57,11 +57,11 @@ signed short LVL_select_skill(Bit8u *hero, signed short show_values)
 			(char*)ds_readd(TEXT_OUTPUT_BUF));
 	} else {
 
-		strcpy((char*)ds_readd(DTP2), get_ttx(216));
+		strcpy(g_dtp2, get_ttx(216));
 	}
 
 	/* ask for the skill category */
-	answer = GUI_radio((char*)ds_readd(DTP2), 7,
+	answer = GUI_radio(g_dtp2, 7,
 				get_ttx(100), get_ttx(101),
 				get_ttx(102), get_ttx(105),
 				get_ttx(103), get_ttx(104),
@@ -75,12 +75,12 @@ signed short LVL_select_skill(Bit8u *hero, signed short show_values)
 
 			for (i = 0; ds_readbs((SKILLS_INDEX + 1) + 2 * answer) > i; i++) {
 
-				sprintf((char*)ds_readd(DTP2) + 50 * i,
+				sprintf(g_dtp2 + 50 * i,
 					format_str.a,
 					get_ttx(l1 + i + 48),
 					host_readbs(hero + l1 + i + HERO_TALENTS));
 
-				ds_writed(RADIO_NAME_LIST + 4 * i, (Bit32u)((char*)ds_readd(DTP2) + 50 * i));
+				ds_writed(RADIO_NAME_LIST + 4 * i, (Bit32u)(g_dtp2 + 50 * i));
 			}
 		} else {
 
@@ -346,16 +346,16 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 					if (poison == 0) {
 						/* patient is not poisoned */
-						sprintf((char*)ds_readd(DTP2),
+						sprintf(g_dtp2,
 							get_ttx(463),
 							(char*)patient + HERO_NAME2);
-						GUI_output((char*)ds_readd(DTP2));
+						GUI_output(g_dtp2);
 					} else if (host_readds(patient + HERO_HEAL_TIMER) > 0) {
 						/* patient timer is not zero */
-						sprintf((char*)ds_readd(DTP2),
+						sprintf(g_dtp2,
 							get_ttx(697),
 							(char*)patient + HERO_NAME2);
-						GUI_output((char*)ds_readd(DTP2));
+						GUI_output(g_dtp2);
 					} else {
 						/* set patient timer */
 						host_writed(patient + HERO_HEAL_TIMER, HOURS(4)); /* 4 hours */
@@ -366,22 +366,22 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 							if (test_skill(hero, TA_HEILEN_GIFT, ds_readbs(POISON_PRICES + 2 * poison) + handicap) > 0) {
 								/* success */
-								sprintf((char*)ds_readd(DTP2),
+								sprintf(g_dtp2,
 									get_ttx(690),
 									(char*)hero + HERO_NAME2,
 									(char*)patient + HERO_NAME2);
 
-								GUI_output((char*)ds_readd(DTP2));
+								GUI_output(g_dtp2);
 
 								host_writeb(patient + (HERO_POISON + 1) + 5 * poison, 0);
 								host_writeb(patient + HERO_POISON + 5 * poison, 1);
 
-								sprintf((char*)ds_readd(DTP2),
+								sprintf(g_dtp2,
 									get_ttx(692),
 									(char*)hero + HERO_NAME2,
 									(char*)patient + HERO_NAME2);
 
-								if (GUI_bool((char*)ds_readd(DTP2))) {
+								if (GUI_bool(g_dtp2)) {
 
 									do {
 										le = GUI_input(get_ttx(693), 2);
@@ -389,7 +389,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 									if ((l_si = test_skill(hero, TA_HEILEN_GIFT, le + handicap)) > 0) {
 
-										sprintf((char*)ds_readd(DTP2),
+										sprintf(g_dtp2,
 											get_ttx(691),
 											(char*)hero + HERO_NAME2,
 											(char*)patient + HERO_NAME2,
@@ -397,7 +397,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 										add_hero_le(patient, le);
 
-										GUI_output((char*)ds_readd(DTP2));
+										GUI_output(g_dtp2);
 									} else {
 										/* skill test failed */
 										le_damage = 3;
@@ -409,33 +409,33 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 										sub_hero_le(patient, le_damage);
 
-										sprintf((char*)ds_readd(DTP2),
+										sprintf(g_dtp2,
 											get_ttx(694),
 											(char*)patient + HERO_NAME2,
 											le_damage);
 
-										GUI_output((char*)ds_readd(DTP2));
+										GUI_output(g_dtp2);
 
 										l_si = 0;
 									}
 								}
 							} else {
 								/* healing failed */
-								sprintf((char*)ds_readd(DTP2),
+								sprintf(g_dtp2,
 									get_ttx(689),
 									(char*)hero + HERO_NAME2,
 									(char*)patient + HERO_NAME2);
 
-								GUI_output((char*)ds_readd(DTP2));
+								GUI_output(g_dtp2);
 							}
 						} else {
 							/* recognizing the poison failed */
-							sprintf((char*)ds_readd(DTP2),
+							sprintf(g_dtp2,
 								get_ttx(688),
 								(char*)hero + HERO_NAME2,
 								(char*)patient + HERO_NAME2);
 
-							GUI_output((char*)ds_readd(DTP2));
+							GUI_output(g_dtp2);
 						}
 					}
 				}
@@ -465,18 +465,18 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 					if (host_readws(patient + HERO_LE) >= host_readws(patient + HERO_LE_ORIG)) {
 						/* no need to heal */
-						sprintf((char*)ds_readd(DTP2),
+						sprintf(g_dtp2,
 							get_ttx(461),
 							(char*)patient + HERO_NAME2);
 
-						GUI_output((char*)ds_readd(DTP2));
+						GUI_output(g_dtp2);
 					} else if (host_readds(patient + HERO_HEAL_TIMER) > 0) {
 						/* timer is still running */
-						sprintf((char*)ds_readd(DTP2),
+						sprintf(g_dtp2,
 							get_ttx(697),
 							(char*)patient + HERO_NAME2);
 
-						GUI_output((char*)ds_readd(DTP2));
+						GUI_output(g_dtp2);
 
 					} else {
 						host_writed(patient + HERO_HEAL_TIMER, DAYS(1));
@@ -488,13 +488,13 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 								add_hero_le(patient, l_si);
 
-								sprintf((char*)ds_readd(DTP2),
+								sprintf(g_dtp2,
 									get_ttx(691),
 									(char*)hero + HERO_NAME2,
 									(char*)patient + HERO_NAME2,
 									l_si);
 
-								GUI_output((char*)ds_readd(DTP2));
+								GUI_output(g_dtp2);
 							} else {
 								/* skill test failed */
 								le_damage = 3;
@@ -506,12 +506,12 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 								sub_hero_le(patient, le_damage);
 
-								sprintf((char*)ds_readd(DTP2),
+								sprintf(g_dtp2,
 									get_ttx(694),
 									(char*)patient + HERO_NAME2,
 									le_damage);
 
-								GUI_output((char*)ds_readd(DTP2));
+								GUI_output(g_dtp2);
 
 								l_si = 0;
 
@@ -521,7 +521,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 							if (random_schick(20) <= 7) {
 								/* 35% chance: infected with Wundfieber illness */
-								sprintf((char*)ds_readd(DTP2),
+								sprintf(g_dtp2,
 									get_ttx(699),
 									(char*)hero + HERO_NAME2,
 									(char*)patient + HERO_NAME2);
@@ -530,13 +530,13 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 								host_writeb(patient + (HERO_ILLNESS + 5 * ILLNESS_TYPE_WUNDFIEBER + 1), 0);
 							} else {
 								/* 65% chance: just failed, no infection */
-								sprintf((char*)ds_readd(DTP2),
+								sprintf(g_dtp2,
 									get_ttx(698),
 									(char*)hero + HERO_NAME2,
 									(char*)patient + HERO_NAME2);
 							}
 
-							GUI_output((char*)ds_readd(DTP2));
+							GUI_output(g_dtp2);
 						}
 					}
 				}
@@ -557,12 +557,12 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 					make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), money);
 
-					sprintf((char*)ds_readd(DTP2),
+					sprintf(g_dtp2,
 						get_tx(35),
 						(char*)hero + HERO_NAME2,
 						(char*)ds_readd(TEXT_OUTPUT_BUF));
 
-					GUI_output((char*)ds_readd(DTP2));
+					GUI_output(g_dtp2);
 
 					add_party_money(money);
 
@@ -591,12 +591,12 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 					make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), money);
 
-					sprintf((char*)ds_readd(DTP2),
+					sprintf(g_dtp2,
 						get_tx(35),
 						(char*)hero + HERO_NAME2,
 						(char*)ds_readd(TEXT_OUTPUT_BUF));
 
-					GUI_output((char*)ds_readd(DTP2));
+					GUI_output(g_dtp2);
 
 					add_party_money(money);
 
@@ -619,12 +619,12 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 				make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), money);
 
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx(38),
 					(char*)ds_readd(TEXT_OUTPUT_BUF),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output((char*)ds_readd(DTP2));
+				GUI_output(g_dtp2);
 
 				add_party_money(money);
 
@@ -647,22 +647,22 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 				make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), money);
 
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx(40),
 					(char*)ds_readd(TEXT_OUTPUT_BUF),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output((char*)ds_readd(DTP2));
+				GUI_output(g_dtp2);
 
 				add_party_money(money);
 
 				ds_writew(REQUEST_REFRESH, 1);
 			} else {
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx(41),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output((char*)ds_readd(DTP2));
+				GUI_output(g_dtp2);
 
 				set_party_money(0);
 

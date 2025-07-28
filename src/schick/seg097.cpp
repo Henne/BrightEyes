@@ -842,7 +842,7 @@ void GUI_dialog_na(unsigned short head_index, char *text)
 	if (head_index != 0)
 		load_in_head(head_index);
 
-	GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, text, 0);
+	GUI_dialogbox((unsigned char*)g_dtp2, NULL, text, 0);
 
 }
 

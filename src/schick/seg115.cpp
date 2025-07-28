@@ -42,7 +42,7 @@ void tevent_016(void)
 		load_in_head(46);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, get_tx2(19), 2, get_tx2(20), get_tx2(21));
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(19), 2, get_tx2(20), get_tx2(21));
 
 		} while (answer == -1);
 
@@ -55,7 +55,7 @@ void tevent_016(void)
 			/* wave */
 
 			do {
-				answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, get_tx2(23), 2, get_tx2(24), get_tx2(25));
+				answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(23), 2, get_tx2(24), get_tx2(25));
 
 			} while (answer == -1);
 
@@ -67,7 +67,7 @@ void tevent_016(void)
 				/* go towards them */
 
 				do {
-					answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+					answer = GUI_dialogbox((unsigned char*)g_dtp2,
 							NULL, get_tx2(27), 2,
 							get_tx2(28), get_tx2(29));
 
@@ -104,17 +104,17 @@ void tevent_016(void)
 							/* success */
 							timewarp(MINUTES(15));
 
-							sprintf((char*)ds_readd(DTP2) + 0x400,
+							sprintf(g_dtp2 + 0x400,
 								get_tx2(35),
 								(char*)hero + HERO_NAME2,
 								(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-							GUI_dialog_na(0, (char*)ds_readd(DTP2) + 0x400);
+							GUI_dialog_na(0, g_dtp2 + 0x400);
 
 							GUI_dialog_na(0, get_tx2(36));
 						} else {
 							/* fail */
-							sprintf((char*)ds_readd(DTP2) + 0x400,
+							sprintf(g_dtp2 + 0x400,
 								get_tx2(34),
 								(char*)hero + HERO_NAME2,
 								(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
@@ -122,16 +122,16 @@ void tevent_016(void)
 								(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)),
 								(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 
-							GUI_dialog_na(0, (char*)ds_readd(DTP2) + 0x400);
+							GUI_dialog_na(0, g_dtp2 + 0x400);
 
 							timewarp(HOURS(1));
 
-							sprintf((char*)ds_readd(DTP2) + 0x400,
+							sprintf(g_dtp2 + 0x400,
 								get_tx2(37),
 								(char*)hero + HERO_NAME2,
 								(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
 
-							GUI_dialog_na(0, (char*)ds_readd(DTP2) + 0x400);
+							GUI_dialog_na(0, g_dtp2 + 0x400);
 
 							add_hero_ap(hero, 5);
 
@@ -211,7 +211,7 @@ void tevent_094(void)
 		load_in_head(53);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+			answer = GUI_dialogbox((unsigned char*)g_dtp2,
 				       NULL, get_tx2(4), 2,
 				       get_tx2(5), get_tx2(6));
 
@@ -254,11 +254,11 @@ void tevent_095(void)
 				{
 					timewarp(MINUTES(30));
 
-					sprintf((char*)ds_readd(DTP2),
+					sprintf(g_dtp2,
 						get_tx2(8),
 						(char*)hero + HERO_NAME2);
 
-					GUI_output((char*)ds_readd(DTP2));
+					GUI_output(g_dtp2);
 
 					counter_failed++;
 				}
@@ -351,11 +351,11 @@ void tevent_095(void)
 							/* spell failed unluckily */
 
 							/* TODO: this gets output, but no spell costst ??? */
-							sprintf((char*)ds_readd(DTP2),
+							sprintf(g_dtp2,
 								get_ttx(607),
 								(char*)hero + HERO_NAME2);
 
-							GUI_output((char*)ds_readd(DTP2));
+							GUI_output(g_dtp2);
 						}
 
 						timewarp(MINUTES(30));
@@ -479,7 +479,7 @@ void tevent_127(void)
 	load_in_head(14);
 
 	do {
-		answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+		answer = GUI_dialogbox((unsigned char*)g_dtp2,
 					NULL, get_tx2(6), 3,
 					get_tx2(7),get_tx2(8), get_tx2(9));
 	} while (answer == -1);
@@ -524,7 +524,7 @@ void tevent_129(void)
 		load_in_head(53);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+			answer = GUI_dialogbox((unsigned char*)g_dtp2,
 					NULL, get_tx2(13), 2,
 					get_tx2(14), get_tx2(15));
 
@@ -539,7 +539,7 @@ void tevent_129(void)
 		load_in_head(53);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+			answer = GUI_dialogbox((unsigned char*)g_dtp2,
 				       NULL, get_tx2(16), 2, get_tx2(17), get_tx2(18));
 
 		} while (answer == -1);
@@ -602,7 +602,7 @@ void tevent_047(void)
 			load_in_head(42);
 
 			do {
-				answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+				answer = GUI_dialogbox((unsigned char*)g_dtp2,
 							NULL, (!l_di ? get_tx2(15) : get_tx2(11)), 2,
 							get_tx2(12), get_tx2(13));
 
@@ -620,7 +620,7 @@ void tevent_047(void)
 				if (!l_di)
 				{
 					do {
-						answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+						answer = GUI_dialogbox((unsigned char*)g_dtp2,
 								NULL, get_tx2(16), 3,
 								get_tx2(17), get_tx2(18), get_tx2(19));
 					} while (answer == -1);
@@ -649,7 +649,7 @@ void tevent_047(void)
 					}
 				} else {
 					do {
-						answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, get_tx2(21), 2, get_tx2(22), get_tx2(19));
+						answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(21), 2, get_tx2(22), get_tx2(19));
 
 					} while (answer == -1);
 
@@ -729,13 +729,13 @@ void tevent_100(void)
 					timewarp(MINUTES(15));
 
 
-					sprintf((char*)ds_readd(DTP2),
+					sprintf(g_dtp2,
 						get_tx2(69),
 						(char*)hero + HERO_NAME2,
 						(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
 						(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-					GUI_output((char*)ds_readd(DTP2));
+					GUI_output(g_dtp2);
 				}
 
 				GUI_output(get_tx2(70));

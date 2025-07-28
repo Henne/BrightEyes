@@ -149,7 +149,7 @@ void draw_status_line(void)
 
 		if (host_readb(get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE) {
 
-			copy_forename((char*)ds_readd(DTP2), (char*)(get_hero(i) + HERO_NAME2));
+			copy_forename(g_dtp2, (char*)(get_hero(i) + HERO_NAME2));
 
 			set_textcolor(0xff, 0);
 
@@ -158,8 +158,8 @@ void draw_status_line(void)
 				set_textcolor(0x6f, 0);
 
 			/* print the name */
-			GUI_print_string((char*)ds_readd(DTP2),
-				GUI_get_first_pos_centered((char*)ds_readd(DTP2),	ds_readw(HERO_PIC_POSX + i * 2), 43, 0), 190);
+			GUI_print_string(g_dtp2,
+				GUI_get_first_pos_centered(g_dtp2,	ds_readw(HERO_PIC_POSX + i * 2), 43, 0), 190);
 		}
 
 		wait_for_vsync();
@@ -183,7 +183,7 @@ void draw_status_line(void)
 				}
 
 				/* set the src pointer of the head */
-				ds_writed(PIC_COPY_SRC, (hero_dead(get_hero(i)) ? ds_readd(DTP2) : (Bit32u)get_hero(i) + HERO_PORTRAIT));
+				ds_writed(PIC_COPY_SRC, (hero_dead(get_hero(i)) ? (Bit32u)g_dtp2 : (Bit32u)get_hero(i) + HERO_PORTRAIT));
 
 				do_pic_copy(0);
 
@@ -202,7 +202,7 @@ void draw_status_line(void)
 
 				/* set the src pointer of the head */
 				/* TODO: expression to complicated ? */
-				src = (hero_dead(get_hero(i))) ? (char*)ds_readd(DTP2) : (get_hero(i) + HERO_PORTRAIT);
+				src = (hero_dead(get_hero(i))) ? g_dtp2 : (get_hero(i) + HERO_PORTRAIT);
 
 				/* Gray out picture */
 				for (j = 0; j < 1024; src++, dst++, j++)
@@ -367,14 +367,14 @@ void select_hero_icon(unsigned short pos) {
 	get_textcolor(&fg_bak, &bg_bak);
 
 	/* copy the heroes forename */
-	copy_forename((char*)ds_readd(DTP2), (char*)(get_hero(pos) + HERO_NAME2));
+	copy_forename(g_dtp2, (char*)(get_hero(pos) + HERO_NAME2));
 
 	/* set the textcolors */
 	set_textcolor(0xfc, 0);
 
 	/* print forename */
-	GUI_print_string((char*)ds_readd(DTP2),
-		GUI_get_first_pos_centered((char*)ds_readd(DTP2),
+	GUI_print_string(g_dtp2,
+		GUI_get_first_pos_centered(g_dtp2,
 			ds_readw(HERO_PIC_POSX + pos * 2), 43, 0), 190);
 
 
@@ -408,14 +408,14 @@ void deselect_hero_icon(unsigned short pos) {
 	get_textcolor(&fg_bak, &bg_bak);
 
 	/* copy the heroes forename */
-	copy_forename((char*)ds_readd(DTP2), (char*)(get_hero(pos) + HERO_NAME2));
+	copy_forename(g_dtp2, (char*)(get_hero(pos) + HERO_NAME2));
 
 	/* set the textcolors */
 	set_textcolor(0xff, 0);
 
 	/* print forename */
-	GUI_print_string((char*)ds_readd(DTP2),
-		GUI_get_first_pos_centered((char*)ds_readd(DTP2),
+	GUI_print_string(g_dtp2,
+		GUI_get_first_pos_centered(g_dtp2,
 			ds_readw(HERO_PIC_POSX + pos * 2), 43, 0), 190);
 
 

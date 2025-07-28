@@ -189,10 +189,10 @@ void FIG_loot_monsters(void)
 
 		make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), money);
 
-		sprintf((char*)((char*)ds_readd(DTP2)),
+		sprintf((char*)(g_dtp2),
 			get_tx(15),
 			(char*)ds_readd(TEXT_OUTPUT_BUF));
-		GUI_output((char*)ds_readd(DTP2));
+		GUI_output(g_dtp2);
 
 		set_party_money(get_party_money() + money);
 	}
@@ -253,8 +253,8 @@ void FIG_split_ap(void)
 	}
 
 	/* prepare output */
-	sprintf((char*)ds_readd(DTP2), get_tx(33), ap);
-	GUI_output((char*)ds_readd(DTP2));
+	sprintf(g_dtp2, get_tx(33), ap);
+	GUI_output(g_dtp2);
 
 	/* give AP to the group */
 	add_group_ap(ap);

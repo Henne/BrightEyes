@@ -118,12 +118,12 @@ signed short do_alchemy(Bit8u* hero, signed short recipe_index, signed short fla
 
 		give_hero_new_item(hero, host_readws(r_ptr + RECIPE_OUTCOME), 1, 1);
 
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_ttx(731),
 			hero + HERO_NAME2,
 			(Bit8u*)(GUI_names_grammar(1, host_readws(r_ptr + RECIPE_OUTCOME), 0)));
 
-		GUI_output((char*)ds_readd(DTP2));
+		GUI_output(g_dtp2);
 
 		return 1;
 	} else {
@@ -131,12 +131,12 @@ signed short do_alchemy(Bit8u* hero, signed short recipe_index, signed short fla
 		/* give first ingredient back, which is always the bottle (glass or bronze). */
 		give_hero_new_item(hero, host_readws(r_ptr + RECIPE_INGREDIENTS), 1, 1);
 
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_ttx(732),
 			hero + HERO_NAME2,
 			(Bit8u*)(GUI_names_grammar(2, host_readws(r_ptr + RECIPE_OUTCOME), 0)));
 
-		GUI_output((char*)ds_readd(DTP2));
+		GUI_output(g_dtp2);
 		return 0;
 	}
 
@@ -170,10 +170,10 @@ signed short plan_alchemy(Bit8u *hero)
 		for (i = 0; i <= 12; i++) {
 			if (get_item_pos(hero, ds_readws(ALCHEMY_RECIPES + i * SIZEOF_RECIPE)) != -1) {
 
-				strcpy((char*)ds_readd(DTP2) + recipes * 50,
+				strcpy(g_dtp2 + recipes * 50,
 					(GUI_name_singular(get_itemname(ds_readws((ALCHEMY_RECIPES + RECIPE_OUTCOME) + i * SIZEOF_RECIPE)))));
 
-				ds_writed(RADIO_NAME_LIST + recipes * 4, (Bit32u)((char*)ds_readd(DTP2) + recipes * 50));
+				ds_writed(RADIO_NAME_LIST + recipes * 4, (Bit32u)(g_dtp2 + recipes * 50));
 				array[recipes] = (signed char)i;
 				recipes++;
 			}
@@ -211,11 +211,11 @@ signed short plan_alchemy(Bit8u *hero)
 					if (ds_readws((ALCHEMY_RECIPES + RECIPE_AE_COST) + recipe_index * SIZEOF_RECIPE) > host_readws(hero + HERO_AE)) {
 						/* AE not sufficient => brewing not possible */
 
-						sprintf((char*)ds_readd(DTP2),
+						sprintf(g_dtp2,
 							get_ttx(607),
 							(char*)hero + HERO_NAME2);
 
-							GUI_output((char*)ds_readd(DTP2));
+							GUI_output(g_dtp2);
 
 							retval = 0;
 					} else {
@@ -231,11 +231,11 @@ signed short plan_alchemy(Bit8u *hero)
 
 						if ((ds_readbs((ALCHEMY_RECIPES + RECIPE_DURATION) + recipe_index * SIZEOF_RECIPE) > 8) && (ds_readbs(CURRENT_LOCTYPE) != LOCTYPE_INN)) {
 							/* recipes with durations > 8 hours have to be done in a inn. */
-							sprintf((char*)ds_readd(DTP2),
+							sprintf(g_dtp2,
 								get_tx(44),
 								ds_readbs((ALCHEMY_RECIPES+RECIPE_DURATION) + recipe_index * SIZEOF_RECIPE));
 
-							GUI_output((char*)ds_readd(DTP2));
+							GUI_output(g_dtp2);
 
 							retval = 0;
 						} else {
@@ -252,7 +252,7 @@ signed short plan_alchemy(Bit8u *hero)
 								(ds_readbs((ALCHEMY_RECIPES + RECIPE_DURATION) + recipe_index * SIZEOF_RECIPE) > 8)
 							) {
 
-								sprintf((char*)ds_readd(DTP2),
+								sprintf(g_dtp2,
 									get_tx(45),
 									ds_readbs((ALCHEMY_RECIPES + RECIPE_DURATION) + recipe_index * SIZEOF_RECIPE));
 
@@ -263,7 +263,7 @@ signed short plan_alchemy(Bit8u *hero)
 								ds_writew(TEXTBOX_WIDTH, 7);
 
 								do {
-									decision = GUI_radio((char*)ds_readd(DTP2), 3,
+									decision = GUI_radio(g_dtp2, 3,
 											get_tx(46), /* Die Zeit einfach verstreichen lassen */
 											(char*)ds_readd(TEXT_OUTPUT_BUF), /* <Held> von der Gruppe trennen */
 											get_tx(48)); /* Lieber doch nicht brauen */
@@ -324,20 +324,20 @@ signed short plan_alchemy(Bit8u *hero)
 					}
 				} else {
 					/* not all ingrendients */
-					sprintf((char*)ds_readd(DTP2),
+					sprintf(g_dtp2,
 						get_tx(49),
 						(GUI_name_singular(get_itemname(ds_readws(ALCHEMY_MISSING_ITEM)))));
 
-					GUI_output((char*)ds_readd(DTP2));
+					GUI_output(g_dtp2);
 				}
 			}
 		} else {
 			/* no recipes */
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_tx(50),
 				(char*)hero + HERO_NAME2);
 
-			GUI_output((char*)ds_readd(DTP2));
+			GUI_output(g_dtp2);
 		}
 	}
 
@@ -411,30 +411,30 @@ signed short skill_cure_disease(Bit8u *healer, Bit8u *patient, signed short hand
 		if (!disease) {
 			/* not diseased */
 
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_ttx(462),
 				(char*)patient + HERO_NAME2);
 
-			GUI_output((char*)ds_readd(DTP2));
+			GUI_output(g_dtp2);
 
 		} else if (host_readds(patient + HERO_HEAL_TIMER) > 0) {
 
 			/* recently tried to cure with skill */
 
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_ttx(697),
 				(char*)patient + HERO_NAME2);
 
-			GUI_output((char*)ds_readd(DTP2));
+			GUI_output(g_dtp2);
 
 		} else if (!(herb = has_herb_for_disease(healer, disease))) {
 			/* not the needed herbs for healing this disease */
 
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_tx(118),
 				(char*)healer + HERO_NAME2);
 
-			GUI_output((char*)ds_readd(DTP2));
+			GUI_output(g_dtp2);
 		} else {
 			timewarp(MINUTES(5));
 
@@ -449,14 +449,14 @@ signed short skill_cure_disease(Bit8u *healer, Bit8u *patient, signed short hand
 
 					add_hero_le(patient, retval);
 
-					sprintf((char*)ds_readd(DTP2),
+					sprintf(g_dtp2,
 						get_ttx(695),
 						(char*)healer + HERO_NAME2,
 						(char*)patient + HERO_NAME2,
 						(char*)(GUI_get_ptr(host_readbs(patient + HERO_SEX), 3)),
 						retval);
 
-					GUI_output((char*)ds_readd(DTP2));
+					GUI_output(g_dtp2);
 
 					/* cure the disease */
 					host_writeb(patient + HERO_ILLNESS + disease * 5, 1);
@@ -483,21 +483,21 @@ signed short skill_cure_disease(Bit8u *healer, Bit8u *patient, signed short hand
 
 					sub_hero_le(patient, damage);
 
-					sprintf((char*)ds_readd(DTP2),
+					sprintf(g_dtp2,
 						get_ttx(694),
 						(char*)patient + HERO_NAME2, damage);
 
-					GUI_output((char*)ds_readd(DTP2));
+					GUI_output(g_dtp2);
 				}
 
 			} else {
 				/* failed to heal */
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_ttx(696),
 					(char*)healer + HERO_NAME2,
 					(char*)patient + HERO_NAME2);
 
-				GUI_output((char*)ds_readd(DTP2));
+				GUI_output(g_dtp2);
 			}
 		}
 

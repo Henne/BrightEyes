@@ -37,7 +37,7 @@ void PHX_fuhrhaus(void)
 	load_in_head(42);
 
 	do {
-		answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+		answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 				get_tx2(0), 3,
 				get_tx2(1), get_tx2(2), get_tx2(3));
 
@@ -50,7 +50,7 @@ void PHX_fuhrhaus(void)
 	} else if (answer == 2) {
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 					get_tx2(5), 3,
 					get_tx2(6), get_tx2(7), get_tx2(8));
 
@@ -188,7 +188,7 @@ void PHX_spielhaus(void)
 
 			/* you loose: at least the half of your group have not passed the test */
 
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_tx2(30), pos);
 
 			money -= pos * 100;
@@ -199,7 +199,7 @@ void PHX_spielhaus(void)
 		} else {
 
 			/* you win */
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_tx2(31), pos);
 
 			money += pos * 100;
@@ -207,7 +207,7 @@ void PHX_spielhaus(void)
 
 		set_party_money(money);
 
-		GUI_output((char*)ds_readd(DTP2));
+		GUI_output(g_dtp2);
 
 	} else if (answer == 2) {
 

@@ -64,13 +64,13 @@ signed short DNG02_handler(void)
 
 	} else if (target_pos == DNG_POS(0,3,6) && target_pos != ds_readws(DNG_HANDLED_POS) && ds_readbs(DIRECTION) == SOUTH)
 	{
-		strcpy((char*)ds_readd(DTP2),
+		strcpy(g_dtp2,
 			get_tx(4));
 
-		strcat((char*)ds_readd(DTP2),
+		strcat(g_dtp2,
 			 (char*)((test_spell_group(SP_ODEM_ARCANUM, 0) == 0) ? get_tx(5) : get_tx(6)));
 
-		GUI_output((char*)ds_readd(DTP2));
+		GUI_output(g_dtp2);
 
 	} else if (target_pos == DNG_POS(0,4,10) && target_pos != ds_readws(DNG_HANDLED_POS) && ds_readbs(DIRECTION) == SOUTH)
 	{
@@ -83,12 +83,12 @@ signed short DNG02_handler(void)
 			GUI_output(get_tx(8));
 
 		} else {
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_tx(9),
 				(char*)hero + HERO_NAME2,
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			GUI_output((char*)ds_readd(DTP2));
+			GUI_output(g_dtp2);
 
 			flag = 0;
 
@@ -97,12 +97,12 @@ signed short DNG02_handler(void)
 				/* KK+4 */
 				if (test_attrib(hero, ATTRIB_KK, 4) <= 0)
 				{
-					sprintf((char*)ds_readd(DTP2),
+					sprintf(g_dtp2,
 						get_tx(10),
 						(char*)hero + HERO_NAME2,
 						(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-					GUI_output((char*)ds_readd(DTP2));
+					GUI_output(g_dtp2);
 
 					sub_hero_le(hero, 1);
 
@@ -113,11 +113,11 @@ signed short DNG02_handler(void)
 
 			if (!flag)
 			{
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx(11),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output((char*)ds_readd(DTP2));
+				GUI_output(g_dtp2);
 
 				sub_hero_le(hero, (host_readws(hero + HERO_LE) > 6 ? random_schick(6) : host_readws(hero + HERO_LE) - 1));
 
@@ -304,7 +304,7 @@ signed short DNG02_handler(void)
 	{
 		load_in_head(43);
 
-		GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, get_tx(18), 0);
+		GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx(18), 0);
 
 		ds_writeb(DNG02_SPHERE_TIMER, 7);
 		ds_writeb(DNG02_SPHERE_KNOWN, 1);
@@ -335,7 +335,7 @@ signed short DNG02_handler(void)
 			{
 				or_ptr_bs(hero + HERO_FLAGS1, 0x04); /* set 'petrified' flag */
 
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx(42),
 					(char*)hero + HERO_NAME2,
 					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
@@ -343,7 +343,7 @@ signed short DNG02_handler(void)
 					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output((char*)ds_readd(DTP2));
+				GUI_output(g_dtp2);
 			}
 		}
 
@@ -437,7 +437,7 @@ signed short DNG02_handler(void)
 		{
 			ds_writeb(DNG02_SECRET_DOOR1, 1);
 
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_tx(37),
 				(char*)hero + HERO_NAME2);
 
@@ -445,10 +445,10 @@ signed short DNG02_handler(void)
 				(char*)((i = test_skill(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(39) : get_tx(38)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			strcat((char*)ds_readd(DTP2),
+			strcat(g_dtp2,
 				(char*)ds_readd(TEXT_OUTPUT_BUF));
 
-			GUI_output((char*)ds_readd(DTP2));
+			GUI_output(g_dtp2);
 
 			if (i > 0)
 			{
@@ -473,7 +473,7 @@ signed short DNG02_handler(void)
 		{
 			ds_writeb(DNG02_SECRET_DOOR2, 1);
 
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_tx(37),
 				(char*)hero + HERO_NAME2);
 
@@ -481,10 +481,10 @@ signed short DNG02_handler(void)
 				(char*)((i = test_skill(hero, TA_SCHLOESSER, 2)) > 0 ? get_tx(39) : get_tx(38)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			strcat((char*)ds_readd(DTP2),
+			strcat(g_dtp2,
 				(char*)ds_readd(TEXT_OUTPUT_BUF));
 
-			GUI_output((char*)ds_readd(DTP2));
+			GUI_output(g_dtp2);
 
 			if (i > 0)
 			{
@@ -507,7 +507,7 @@ signed short DNG02_handler(void)
 		{
 			ds_writeb(DNG02_SECRET_DOOR3, 1);
 
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_tx(37),
 				(char*)hero + HERO_NAME2);
 
@@ -515,7 +515,7 @@ signed short DNG02_handler(void)
 				(char*)((i = test_skill(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(39) : get_tx(38)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			strcat((char*)ds_readd(DTP2),
+			strcat(g_dtp2,
 				(char*)ds_readd(TEXT_OUTPUT_BUF));
 
 			if (i > 0)
@@ -532,10 +532,10 @@ signed short DNG02_handler(void)
 				(char*)hero + HERO_NAME2,
 				i);
 
-			strcat((char*)ds_readd(DTP2),
+			strcat(g_dtp2,
 				(char*)ds_readd(TEXT_OUTPUT_BUF));
 
-			GUI_output((char*)ds_readd(DTP2));
+			GUI_output(g_dtp2);
 
 			sub_hero_le(hero, i);
 
@@ -551,11 +551,11 @@ signed short DNG02_handler(void)
 		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
 		ds_writeb(DIRECTION, (ds_readws(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
 
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx(44),
 			get_ttx(ds_readws(TRV_DESTINATION) + 0xeb));
 
-		GUI_output((char*)ds_readd(DTP2));
+		GUI_output(g_dtp2);
 
 		timewarp(HOURS(3));
 

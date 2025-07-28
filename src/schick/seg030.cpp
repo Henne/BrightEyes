@@ -100,7 +100,7 @@ void print_date(void)
 	textbox_width_bak = ds_readw(TEXTBOX_WIDTH);
 	ds_writew(TEXTBOX_WIDTH, 3);
 
-	GUI_input((char*)ds_readd(DTP2), 0);
+	GUI_input(g_dtp2, 0);
 	ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
 }
 
@@ -115,13 +115,13 @@ void prepare_date_str(void)
 
 	if (ds_readbs(DAY_OF_MONTH) < 0) {
 		/* Days of the nameless */
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_ttx(391),
 			get_ttx(349 + ds_readbs(DAY_OF_WEEK)),
 			ds_readbs(YEAR), hour);
 	} else {
 		/* Normal day */
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_ttx(356),
 			get_ttx(349 + ds_readbs(DAY_OF_WEEK)),
 			ds_readbs(DAY_OF_MONTH),
@@ -135,7 +135,7 @@ void prepare_date_str(void)
 			get_ttx(357),
 			get_ttx(357 + ds_readbs(SPECIAL_DAY)));
 
-		strcat((char*)ds_readd(DTP2),
+		strcat(g_dtp2,
 			(char*)ds_readd(TEXT_OUTPUT_BUF));
 	}
 }
@@ -180,7 +180,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 	ds_writed(DIALOG_TITLE, (Bit32u)(tlk_informer * 38 + partners_tab + 6));
 
 	load_in_head(host_readws((Bit8u*)(partners_tab) + 38 * tlk_informer + 0x24));
-	dst = (char*)ds_readd(DTP2) + 0x400;
+	dst = g_dtp2 + 0x400;
 
 	do {
 		answer = optioncount = 0;
@@ -495,7 +495,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 				}
 			}
 
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), (char*)ds_readd(DIALOG_TITLE), (char*)dst, optioncount,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, (char*)ds_readd(DIALOG_TITLE), (char*)dst, optioncount,
 					get_tx2(host_readb(state_ptr + 2) + txt_offset),
 					get_tx2(host_readb(state_ptr + 3) + txt_offset),
 					get_tx2(host_readb(state_ptr + 4) + txt_offset));

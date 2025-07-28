@@ -87,25 +87,25 @@ void rabies(Bit8u* hero, signed short hero_pos)
 
 		if (count_heroes_available_in_group() > 1) {
 
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_ttx(741),
 				(char*)hero + HERO_NAME2,
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 
-			sprintf((char*)ds_readd(DTP2) + 500, get_ttx(742), (char*)hero + HERO_NAME2);
+			sprintf(g_dtp2 + 500, get_ttx(742), (char*)hero + HERO_NAME2);
 
-			sprintf((char*)ds_readd(DTP2) + 600, get_ttx(743), (char*)hero + HERO_NAME2);
+			sprintf(g_dtp2 + 600, get_ttx(743), (char*)hero + HERO_NAME2);
 
 			textbox_width_bak = ds_readws(TEXTBOX_WIDTH);
 			ds_writew(TEXTBOX_WIDTH, 6);
 
 			answer = GUI_dialogbox(hero + HERO_PORTRAIT,
 						(char*)hero + HERO_NAME2,
-						(char*)ds_readd(DTP2),
+						g_dtp2,
 						3,
-						(char*)ds_readd(DTP2) + 500,
-						(char*)ds_readd(DTP2) + 600,
+						g_dtp2 + 500,
+						g_dtp2 + 600,
 						get_ttx(744));
 
 			ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
@@ -115,9 +115,9 @@ void rabies(Bit8u* hero, signed short hero_pos)
 
 				sub_hero_le(hero, host_readws(hero + HERO_LE) / 2);
 
-				sprintf((char*)ds_readd(DTP2), get_ttx(745), (char*)hero + HERO_NAME2);
+				sprintf(g_dtp2, get_ttx(745), (char*)hero + HERO_NAME2);
 
-				GUI_output((char*)ds_readd(DTP2));
+				GUI_output(g_dtp2);
 
 				ds_writeb(HERO_SEL_EXCLUDE, (signed char)hero_pos);
 
@@ -142,9 +142,9 @@ void rabies(Bit8u* hero, signed short hero_pos)
 						 * (found by siebenstreich 2021-08-15) */
 					{
 						done = 1;
-						sprintf((char*)ds_readd(DTP2), get_ttx(746), (char*)hero + HERO_NAME2);
+						sprintf(g_dtp2, get_ttx(746), (char*)hero + HERO_NAME2);
 
-						GUI_output((char*)ds_readd(DTP2));
+						GUI_output(g_dtp2);
 
 						ds_writeb(HERO_SEL_EXCLUDE, (signed char)hero_pos);
 
@@ -180,9 +180,9 @@ void rabies(Bit8u* hero, signed short hero_pos)
 
 								sub_ae_splash(hero2, 15);
 
-								sprintf((char*)ds_readd(DTP2), get_ttx(746), (char*)hero + HERO_NAME2);
+								sprintf(g_dtp2, get_ttx(746), (char*)hero + HERO_NAME2);
 
-								GUI_output((char*)ds_readd(DTP2));
+								GUI_output(g_dtp2);
 
 								ds_writeb(HERO_SEL_EXCLUDE, (signed char)hero_pos);
 
@@ -193,11 +193,11 @@ void rabies(Bit8u* hero, signed short hero_pos)
 								}
 							}
 						} else {
-							sprintf((char*)ds_readd(DTP2),
+							sprintf(g_dtp2,
 								get_ttx(607),
 								(char*)hero2 + HERO_NAME2);
 
-							GUI_output((char*)ds_readd(DTP2));
+							GUI_output(g_dtp2);
 						}
 					}
 				}
@@ -205,8 +205,8 @@ void rabies(Bit8u* hero, signed short hero_pos)
 		} else {
 
 			/* Hero has rabies / Tollwut */
-			sprintf((char*)ds_readd(DTP2), get_ttx(747), (char*)hero + HERO_NAME2);
-			GUI_output((char*)ds_readd(DTP2));
+			sprintf(g_dtp2, get_ttx(747), (char*)hero + HERO_NAME2);
+			GUI_output(g_dtp2);
 
 			done = 1;
 		}
@@ -226,8 +226,8 @@ void rabies(Bit8u* hero, signed short hero_pos)
 			}
 
 			/* hero has berserker fury / Berserkerwut */
-			sprintf((char*)ds_readd(DTP2), get_ttx(791), (char*)hero + HERO_NAME2);
-			GUI_output((char*)ds_readd(DTP2));
+			sprintf(g_dtp2, get_ttx(791), (char*)hero + HERO_NAME2);
+			GUI_output(g_dtp2);
 
 			done = 1;
 		}
@@ -256,9 +256,9 @@ void init_global_buffer(void)
 	g_tx2_index = g_text_ltx_index + 3960;
 
 	g_objects_nvf_buf = (((HugePt)g_text_ltx_index) + 4760L);
-	ds_writed(DTP2, (Bit32u)(((HugePt)g_objects_nvf_buf) + 3400L));
-	ds_writed(TEXT_INPUT_BUF, (Bit32u)((char*)ds_readd(DTP2) + 1500));
-	ds_writed(TEXT_OUTPUT_BUF, (Bit32u)(F_PADD((Bit8u*)ds_readd(DTP2), 1524L)));
+	g_dtp2 = (signed char*)(((HugePt)g_objects_nvf_buf) + 3400L);
+	ds_writed(TEXT_INPUT_BUF, (Bit32u)(g_dtp2 + 1500));
+	ds_writed(TEXT_OUTPUT_BUF, (Bit32u)(((HugePt)g_dtp2) + 1524L));
 	ds_writed(BUFFER5_PTR, (Bit32u)(F_PADD(ds_readd(TEXT_OUTPUT_BUF), 300)));
 	ds_writed(BUFFER6_PTR, (Bit32u)(F_PADD(ds_readd(BUFFER5_PTR), 3880)));
 	ds_writed(BUFFER7_PTR, (Bit32u)(F_PADD(ds_readd(BUFFER6_PTR), 2200)));

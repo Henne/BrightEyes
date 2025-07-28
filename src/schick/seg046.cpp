@@ -256,10 +256,10 @@ void status_show(Bit16u index)
 
 				set_textcolor(0xff, 0);
 				my_itoa(host_readw(hero + i * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_QUANTITY),
-					(char*)ds_readd(DTP2), 10);
+					g_dtp2, 10);
 
-				GUI_print_string((char*)ds_readd(DTP2),
-					ds_readw(INVSLOT_ICONXY_TABLE + i * 4) + 16 - GUI_get_space_for_string((char*)ds_readd(DTP2), 0),
+				GUI_print_string(g_dtp2,
+					ds_readw(INVSLOT_ICONXY_TABLE + i * 4) + 16 - GUI_get_space_for_string(g_dtp2, 0),
 					ds_readw(INVSLOT_ICONXY_TABLE + i * 4 + 2) + 9);
 
 				set_textcolor(0, 2);
@@ -267,12 +267,12 @@ void status_show(Bit16u index)
 		}
 
 		/* print height */
-		sprintf((char*)ds_readd(DTP2), get_tx2(33), host_readb(hero + HERO_HEIGHT));
-		GUI_print_string((char*)ds_readd(DTP2), 158, 116);
+		sprintf(g_dtp2, get_tx2(33), host_readb(hero + HERO_HEIGHT));
+		GUI_print_string(g_dtp2, 158, 116);
 
 		/* print weight */
-		sprintf((char*)ds_readd(DTP2), get_tx2(34), host_readw(hero + HERO_WEIGHT));
-		GUI_print_string((char*)ds_readd(DTP2), 59, 179);
+		sprintf(g_dtp2, get_tx2(34), host_readw(hero + HERO_WEIGHT));
+		GUI_print_string(g_dtp2, 59, 179);
 
 	} else {
 		do_fill_rect(g_renderbuf_ptr, 0, 50, 319, 191, 2);
@@ -291,18 +291,18 @@ void status_show(Bit16u index)
 
 
 	/* show AP */
-	sprintf((char*)ds_readd(DTP2), get_ttx(619), host_readd(hero + HERO_AP));
-	GUI_print_string((char*)ds_readd(DTP2), 59, 26);
+	sprintf(g_dtp2, get_ttx(619), host_readd(hero + HERO_AP));
+	GUI_print_string(g_dtp2, 59, 26);
 
 	/* print level */
-	sprintf((char*)ds_readd(DTP2), get_tx2(7), host_readbs(hero + HERO_LEVEL));
-	GUI_print_string((char*)ds_readd(DTP2), 59, 33);
+	sprintf(g_dtp2, get_tx2(7), host_readbs(hero + HERO_LEVEL));
+	GUI_print_string(g_dtp2, 59, 33);
 
 	/* print money */
 	make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), host_readd(hero + HERO_MONEY));
 
-	sprintf((char*)ds_readd(DTP2), get_ttx(300), (char*)ds_readd(TEXT_OUTPUT_BUF));
-	GUI_print_string((char*)ds_readd(DTP2), 59, 43);
+	sprintf(g_dtp2, get_ttx(300), (char*)ds_readd(TEXT_OUTPUT_BUF));
+	GUI_print_string(g_dtp2, 59, 43);
 
 	/* dead, unconscious or drunk */
 	if (hero_dead(hero))
@@ -345,8 +345,8 @@ void status_show(Bit16u index)
 			/* print god */
 			ds_writew(TXT_TABPOS1, 265);
 
-			sprintf((char*)ds_readd(DTP2), get_tx2(10), get_ttx(host_readbs(hero + HERO_GOD) + 21));
-			GUI_print_string((char*)ds_readd(DTP2), 200, 55);
+			sprintf(g_dtp2, get_tx2(10), get_ttx(host_readbs(hero + HERO_GOD) + 21));
+			GUI_print_string(g_dtp2, 200, 55);
 
 			/* show attributes */
 			ds_writew(TXT_TABPOS1, 220);
@@ -369,7 +369,7 @@ void status_show(Bit16u index)
 					host_readbs(hero + i * 3 + 0x34));
 
 			}
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_tx2(12),
 				(char*)ds_readd(TEXT_OUTPUT_BUF),
 				(char*)ds_readd(TEXT_OUTPUT_BUF) + 70,
@@ -386,7 +386,7 @@ void status_show(Bit16u index)
 				(char*)ds_readd(TEXT_OUTPUT_BUF) + 60,
 				(char*)ds_readd(TEXT_OUTPUT_BUF) + 130);
 
-			GUI_print_string((char*)ds_readd(DTP2), 200, 70);
+			GUI_print_string(g_dtp2, 200, 70);
 
 			/* calculate BP */
 			bp = 8;
@@ -420,7 +420,7 @@ void status_show(Bit16u index)
 					sprintf(le_fix, "%d", host_readw(hero + HERO_LE_ORIG));
 				}
 
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx2(13),
 					host_readw(hero + HERO_LE), le_fix,			/* LE */
 					host_readw(hero + HERO_AE), host_readw(hero + HERO_AE_ORIG),	/* AE */
@@ -435,7 +435,7 @@ void status_show(Bit16u index)
 #else
 
 				/* Original Behavior: print max LE in black */
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx2(13),
 					host_readw(hero + HERO_LE), host_readw(hero + HERO_LE_ORIG),	/* LE */
 					host_readw(hero + HERO_AE), host_readw(hero + HERO_AE_ORIG),	/* AE */
@@ -448,7 +448,7 @@ void status_show(Bit16u index)
 #endif
 
 
-				GUI_print_string((char*)ds_readd(DTP2), 200, 130);
+				GUI_print_string(g_dtp2, 200, 130);
 			} else {
 				/* novice mode */
 
@@ -496,7 +496,7 @@ void status_show(Bit16u index)
 				}
 
 
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx2(52),
 					host_readw(hero + HERO_LE), le_fix,			/* LE */
 					host_readw(hero + HERO_AE), host_readw(hero + HERO_AE_ORIG),	/* AE */
@@ -511,7 +511,7 @@ void status_show(Bit16u index)
 				reset_status_string(get_tx2(52));
 				/* Original-Bugfix end */
 #else
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx2(52),
 					host_readw(hero + HERO_LE), host_readw(hero + HERO_LE_ORIG),	/* LE */
 					host_readw(hero + HERO_AE), host_readw(hero + HERO_AE_ORIG),	/* AE */
@@ -524,7 +524,7 @@ void status_show(Bit16u index)
 					bp);							/* BP */
 #endif
 
-				GUI_print_string((char*)ds_readd(DTP2), 200, 124);
+				GUI_print_string(g_dtp2, 200, 124);
 			}
 
 			break;
@@ -567,7 +567,7 @@ void status_show(Bit16u index)
 			if (pa < 0)
 				pa = 0;
 
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_tx2(5),
 				host_readbs(hero + HERO_ATPA_BASIS),
 				get_ttx(48),
@@ -606,7 +606,7 @@ void status_show(Bit16u index)
 				get_ttx(56),
 				host_readbs(hero + (HERO_TALENTS + TA_WURFWAFFEN)) + j);
 
-			GUI_print_string((char*)ds_readd(DTP2), 200, 60);
+			GUI_print_string(g_dtp2, 200, 60);
 			break;
 		}
 		/* skills */

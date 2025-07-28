@@ -618,16 +618,16 @@ signed short select_teleport_dest(void)
 		(ds_readws(AUTOMAP_SELY) == ds_readws(Y_TARGET)))
 	{
 		ae_costs = 0;
-		host_writeb((Bit8u*)ds_readd(DTP2), 0);
+		host_writeb((Bit8u*)g_dtp2, 0);
 
 	} else if (((ds_readbs(DUNGEON_INDEX) != 0) && (l_di == 15)) ||
 			((ds_readbs(CURRENT_TOWN) != TOWNS_NONE) && (((l_di >= 2) && (l_di <= 5)) ||
 			(l_di == 6))))
 	{
-		strcpy((char*)ds_readd(DTP2), get_ttx(611));
+		strcpy(g_dtp2, get_ttx(611));
 		ae_costs = -2;
 	} else {
-		host_writeb((Bit8u*)ds_readd(DTP2), 0);
+		host_writeb((Bit8u*)g_dtp2, 0);
 		ae_costs = 15;
 	}
 

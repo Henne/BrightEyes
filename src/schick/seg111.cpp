@@ -59,7 +59,7 @@ void tevent_055(void)
 
 		load_in_head(52);
 
-		GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, get_tx2(0), 0);
+		GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(0), 0);
 
 		timewarp(HOURS(3));
 	}
@@ -122,21 +122,21 @@ void tevent_057(void)
 				if (get_first_hero_with_item(ITEM_ROPE) == -1 || get_first_hero_with_item(ITEM_ROPE_LADDER) != -1)
 				{
 
-					sprintf((char*)ds_readd(DTP2),
+					sprintf(g_dtp2,
 						get_tx2(8),
 						(char*)hero + HERO_NAME2,
 						(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-					GUI_output((char*)ds_readd(DTP2));
+					GUI_output(g_dtp2);
 
 					sub_hero_le(hero, random_schick(9) + 3);
 
 				} else {
-					sprintf((char*)ds_readd(DTP2),
+					sprintf(g_dtp2,
 						get_tx2(7),
 						(char*)hero + HERO_NAME2);
 
-					GUI_output((char*)ds_readd(DTP2));
+					GUI_output(g_dtp2);
 
 					sub_hero_le(hero, random_schick(8));
 				}
@@ -175,7 +175,7 @@ void tevent_059(void)
 		load_in_head(10);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 						get_tx2(9), 2,
 						get_tx2(10),
 						get_tx2(11));
@@ -186,7 +186,7 @@ void tevent_059(void)
 			if (get_first_hero_with_item(ITEM_BRANDY) != -1 || get_first_hero_with_item(ITEM_WINE) != -1)
 			{
 				do {
-					answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+					answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 								get_tx2(12), 3,
 								get_tx2(13),
 								get_tx2(14),
@@ -204,7 +204,7 @@ void tevent_059(void)
 				}
 
 			} else {
-				GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+				GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 						get_tx2(12), 1,
 						get_tx2(18));
 
@@ -232,7 +232,7 @@ void tevent_060(void)
 
 	do {
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 						get_tx2(19), 2,
 						get_tx2(20),
 						get_tx2(21));
@@ -246,7 +246,7 @@ void tevent_060(void)
 
 				timewarp(HOURS(3));
 
-				GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, get_tx2(22), 0);
+				GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(22), 0);
 
 				done = 1;
 			} else {
@@ -256,7 +256,7 @@ void tevent_060(void)
 				timewarp(HOURS(4));
 
 				do {
-					answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+					answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 								get_tx2(24), 2,
 								get_tx2(26),
 								get_tx2(27));
@@ -279,7 +279,7 @@ void tevent_060(void)
 						}
 					}
 
-					GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, get_tx2(29), 0);
+					GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(29), 0);
 
 					done = 1;
 				} else {
@@ -293,7 +293,7 @@ void tevent_060(void)
 
 				timewarp(HOURS(3));
 
-				GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, get_tx2(23), 0);
+				GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(23), 0);
 
 				done = 1;
 			} else {
@@ -303,7 +303,7 @@ void tevent_060(void)
 				timewarp(HOURS(4));
 
 				do {
-					answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+					answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 								get_tx2(25), 2,
 								get_tx2(27),
 								get_tx2(28));
@@ -398,7 +398,7 @@ void tevent_061(void)
 			load_in_head(53);
 
 			do {
-				answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+				answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 							get_tx2(36), 2,
 							get_tx2(37),
 							get_tx2(38));
@@ -414,7 +414,7 @@ void tevent_061(void)
 		load_in_head(53);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 						get_tx2(39), 2,
 						get_tx2(40),
 						get_tx2(41));
@@ -467,12 +467,12 @@ void tevent_063(void)
 
 	hero = get_hero(vomiter);
 
-	sprintf((char*)ds_readd(DTP2),
+	sprintf(g_dtp2,
 		get_tx2(47),
 		(char*)hero + HERO_NAME2);
 
 	/* print who vomits */
-	GUI_output((char*)ds_readd(DTP2));
+	GUI_output(g_dtp2);
 
 	/* LE - 2 */
 	sub_hero_le(hero, 2);
@@ -682,7 +682,7 @@ void tevent_065(void)
 
 	/* show dialogbox */
 	do {
-		answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+		answer = GUI_dialogbox((unsigned char*)g_dtp2,
 				NULL,
 				get_tx2(75),
 				3,

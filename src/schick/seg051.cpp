@@ -121,10 +121,10 @@ void do_wildcamp(void)
 
 				for (i = 0; i < 3; i++) {
 
-					sprintf((char*)ds_readd(DTP2), get_ttx(321), i + 1);
+					sprintf(g_dtp2, get_ttx(321), i + 1);
 
 					do {
-						answer = select_hero_ok((char*)ds_readd(DTP2));
+						answer = select_hero_ok(g_dtp2);
 
 						/* Original-Bug: not checked answer for following options */
 						if ((answer != -1 && ds_readbs(WILDCAMP_MAGICSTATUS + answer) != 0) ||
@@ -218,11 +218,11 @@ void do_wildcamp(void)
 				if (ds_readbs(WILDCAMP_HERBSTATUS + answer) != 0)
 				{
 
-					sprintf((char*)ds_readd(DTP2),
+					sprintf(g_dtp2,
 						get_ttx(803),
 						(char*)get_hero(answer) + HERO_NAME2);
 
-					GUI_output((char*)ds_readd(DTP2));
+					GUI_output(g_dtp2);
 
 				} else if (ds_readbs(WILDCAMP_GUARDSTATUS + answer) != 0 ||
 						ds_readbs(WILDCAMP_REPLSTATUS + answer) != 0 ||
@@ -282,11 +282,11 @@ void do_wildcamp(void)
 
 				if (ds_readbs(WILDCAMP_GUARDS + l_si) != -1) {
 
-					sprintf((char*)ds_readd(DTP2),
+					sprintf(g_dtp2,
 						get_ttx(774),
 						(char*)get_hero(ds_readbs(WILDCAMP_GUARDS + l_si)) + HERO_NAME2);
 
-					GUI_print_loc_line((char*)ds_readd(DTP2));
+					GUI_print_loc_line(g_dtp2);
 				}
 
 				do {
@@ -309,11 +309,11 @@ void do_wildcamp(void)
 
 						if (ds_readbs(WILDCAMP_GUARDS + l_si) != -1) {
 
-							sprintf((char*)ds_readd(DTP2),
+							sprintf(g_dtp2,
 								get_ttx(774),
 								(char*)get_hero(ds_readbs(WILDCAMP_GUARDS + l_si)) + HERO_NAME2);
 
-							GUI_print_loc_line((char*)ds_readd(DTP2));
+							GUI_print_loc_line(g_dtp2);
 						}
 					}
 
@@ -419,7 +419,7 @@ signed short gather_herbs(Bit8u *hero, signed short hours, signed short handicap
 	if (unique_herbs_count) {
 
 		/* print a sentence with all the herb names */
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_ttx(328),
 			(char*)hero + HERO_NAME2);
 
@@ -432,31 +432,31 @@ signed short gather_herbs(Bit8u *hero, signed short hours, signed short handicap
 					herb_count[herb_index],
 					(Bit8u*)(GUI_names_grammar((herb_count[herb_index] > 1 ? 4 : 0) + 0x4002, ds_readb(GATHER_HERBS_TABLE + 4 * herb_index + GATHER_HERBS_ITEM_ID), 0)));
 
-				strcat((char*)ds_readd(DTP2), (char*)ds_readd(TEXT_OUTPUT_BUF));
+				strcat(g_dtp2, (char*)ds_readd(TEXT_OUTPUT_BUF));
 
 				if (--unique_herbs_count > 1) {
 					/* add a comma ", " */
-					strcat((char*)ds_readd(DTP2), (char*)p_datseg + GATHER_HERBS_STR_COMMA);
+					strcat(g_dtp2, (char*)p_datseg + GATHER_HERBS_STR_COMMA);
 				} else if (unique_herbs_count == 1) {
 					/* add an and " UND " */
-					strcat((char*)ds_readd(DTP2), (char*)p_datseg + GATHER_HERBS_STR_AND);
+					strcat(g_dtp2, (char*)p_datseg + GATHER_HERBS_STR_AND);
 				}
 			}
 		}
 
 		/* add a dot "." */
-		strcat((char*)ds_readd(DTP2), (char*)p_datseg + GATHER_HERBS_STR_DOT);
+		strcat(g_dtp2, (char*)p_datseg + GATHER_HERBS_STR_DOT);
 
 	} else {
 
 		/* no herbs found */
 
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_ttx(342),
 			(char*)hero + HERO_NAME2);
 	}
 
-	GUI_output((char*)ds_readd(DTP2));
+	GUI_output(g_dtp2);
 
 	return 0;
 }
@@ -492,11 +492,11 @@ signed short replenish_stocks(signed short mod, signed short tries)
 
 		if (ds_readb(WILDCAMP_REPLSTATUS + hero_pos) != 0) {
 
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_ttx(802),
 				(char*)get_hero(hero_pos) + HERO_NAME2);
 
-			GUI_output((char*)ds_readd(DTP2));
+			GUI_output(g_dtp2);
 
 		} else {
 
@@ -519,7 +519,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 					if (test_skill(hero, TA_WILDNISLEBEN, (signed char)mod) > 0 || ds_readd(INGAME_TIMERS + 4 * INGAME_TIMER_EFFERD_FIND_WATER)) {
 
 						/* found water */
-						sprintf((char*)ds_readd(DTP2),
+						sprintf(g_dtp2,
 							get_ttx(324),
 							(char*)hero + HERO_NAME2);
 
@@ -542,12 +542,12 @@ signed short replenish_stocks(signed short mod, signed short tries)
 						}
 					} else {
 
-						sprintf((char*)ds_readd(DTP2),
+						sprintf(g_dtp2,
 							get_ttx(340),
 							(char*)hero + HERO_NAME2);
 					}
 
-					GUI_print_loc_line((char*)ds_readd(DTP2));
+					GUI_print_loc_line(g_dtp2);
 					delay_or_keypress(200);
 
 					/* search for food */
@@ -566,22 +566,22 @@ signed short replenish_stocks(signed short mod, signed short tries)
 
 						/* the group may get three food packages */
 						if (!get_item(ITEM_FOOD_PACKAGE, 1, 3)) {
-							strcpy((char*)ds_readd(DTP2), get_ttx(306));
+							strcpy(g_dtp2, get_ttx(306));
 							ds_writew(REQUEST_REFRESH, 1);
 						} else {
-							sprintf((char*)ds_readd(DTP2),
+							sprintf(g_dtp2,
 								get_ttx(325),
 								(char*)hero + HERO_NAME2);
 						}
 
 					} else {
 
-						sprintf((char*)ds_readd(DTP2),
+						sprintf(g_dtp2,
 							get_ttx(341),
 							(char*)hero + HERO_NAME2);
 					}
 
-					GUI_print_loc_line((char*)ds_readd(DTP2));
+					GUI_print_loc_line(g_dtp2);
 					delay_or_keypress(200);
 
 				} else {

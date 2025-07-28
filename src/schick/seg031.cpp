@@ -67,7 +67,7 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 	txt_offset = host_readws(partners_tab + 4 + 38 * informer_id);
 	dialog_title = 38 * informer_id + (char*)partners_tab + 6;
 	load_in_head(host_readws(partners_tab + 38 * informer_id + 36));
-	dst = (char*)ds_readd(DTP2) + 0x400;
+	dst = g_dtp2 + 0x400;
 
 	do {
 		answer = optioncount = 0;
@@ -167,7 +167,7 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 				}
 			}
 
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), dialog_title, (char*)dst, optioncount,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, dialog_title, (char*)dst, optioncount,
 					get_tx(options[0].txt),
 					get_tx(options[1].txt),
 					get_tx(options[2].txt));

@@ -1453,7 +1453,7 @@
 //#define BUF_ICON                        (0xd2e7)    /* Bit8u* */
 #define TEXT_OUTPUT_BUF                 (0xd2eb)    /* Bit8u*; to buffer of size 300 */
 #define TEXT_INPUT_BUF                  (0xd2ef)    /* Bit8u*; to buffer of size 24 */
-#define DTP2                            (0xd2f3)    /* long */
+//#define DTP2                            (0xd2f3)    /* long */
 //#define ICON                            (0xd2f7)    /* Bit8u* */
 #define PRINT_STRING_BUFFER             (0xd2fb)    /* Bit8u* */
 #define FRAMEBUF_PTR                    (0xd2ff)    /* Bit8u* */

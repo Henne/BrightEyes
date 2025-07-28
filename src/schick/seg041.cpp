@@ -87,8 +87,8 @@ signed short range_attack_check_ammo(Bit8u *hero, signed short arg)
 				if (left_hand != ITEM_ARROWS) { /* Pfeil */
 					if (arg != 2) {
 
-						sprintf((char*)ds_readd(DTP2), get_tx(8), (char*)hero + HERO_NAME2);
-						GUI_output((char*)ds_readd(DTP2));
+						sprintf(g_dtp2, get_tx(8), (char*)hero + HERO_NAME2);
+						GUI_output(g_dtp2);
 					}
 
 				} else {
@@ -104,8 +104,8 @@ signed short range_attack_check_ammo(Bit8u *hero, signed short arg)
 				if (left_hand != ITEM_BOLTS) { /* Bolzen */
 					if (arg != 2) {
 
-						sprintf((char*)ds_readd(DTP2), get_tx(9), (char*)hero + HERO_NAME2);
-						GUI_output((char*)ds_readd(DTP2));
+						sprintf(g_dtp2, get_tx(9), (char*)hero + HERO_NAME2);
+						GUI_output(g_dtp2);
 					}
 				} else {
 					if (!arg) {
@@ -123,8 +123,8 @@ signed short range_attack_check_ammo(Bit8u *hero, signed short arg)
 				if (left_hand != 999) {
 					if (arg != 2) {
 
-						sprintf((char*)ds_readd(DTP2), get_tx(10), (char*)hero + HERO_NAME2);
-						GUI_output((char*)ds_readd(DTP2));
+						sprintf(g_dtp2, get_tx(10), (char*)hero + HERO_NAME2);
+						GUI_output(g_dtp2);
 					}
 				} else {
 					if (!arg) {

@@ -866,10 +866,10 @@ signed short load_regular_file(Bit16u index)
 	if ( (handle = open((char*)ds_readd(FNAMES + index * 4), O_BINARY | O_RDWR)) == -1) {
 
 		/* "FILE %s IS MISSING!" */
-		sprintf((char*)ds_readd(DTP2), (char*)ds_readd(STR_FILE_MISSING_PTR), (char*)ds_readd(FNAMES + index * 4));
+		sprintf(g_dtp2, (char*)ds_readd(STR_FILE_MISSING_PTR), (char*)ds_readd(FNAMES + index * 4));
 
 		ds_writeb(MISSING_FILE_GUILOCK, 1);
-		GUI_output((char*)ds_readd(DTP2));
+		GUI_output(g_dtp2);
 		ds_writeb(MISSING_FILE_GUILOCK, 0);
 	}
 
@@ -1651,7 +1651,7 @@ void handle_gui_input(void)
 			ds_writew(TEXTBOX_WIDTH, 5);
 			ds_writew(GUI_TEXT_CENTERED, 1);
 			prepare_date_str();
-			GUI_output((char*)ds_readd(DTP2));
+			GUI_output(g_dtp2);
 			ds_writew(GUI_TEXT_CENTERED, 0);
 			ds_writew(TEXTBOX_WIDTH, l_di);
 
@@ -5602,8 +5602,8 @@ int schick_main(int argc, char** argv)
 
 			if (l3 < 0) {
 
-				sprintf((char*)ds_readd(DTP2), get_ttx(807), -l3);
-				GUI_output((char*)ds_readd(DTP2));
+				sprintf(g_dtp2, get_ttx(807), -l3);
+				GUI_output(g_dtp2);
 				cleanup_game();
 
 			} else {
@@ -5685,7 +5685,7 @@ signed short copy_protection(void)
 			l_di = random_schick(10) - 1;
 
 			/* prepare the string */
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_tx(39),
 				ds_readbs((QUESTIONS_HANDBOOK + 3) + 19 * l_di),
 				ds_readbs((QUESTIONS_HANDBOOK + 2) + 19 * l_di),
@@ -5696,7 +5696,7 @@ signed short copy_protection(void)
 			GUI_print_string((char*)p_datseg + GAME_VERSION, 290, 190);
 
 			/* ask the question */
-			GUI_input((char*)ds_readd(DTP2), 20);
+			GUI_input(g_dtp2, 20);
 
 			l1 = strlen((char*)ds_readd(TEXT_INPUT_BUF));
 
@@ -5716,7 +5716,7 @@ signed short copy_protection(void)
 			l_di = random_schick(10) - 1;
 
 			/* prepare the string */
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_tx(40),
 				get_tx(41 + ds_readbs((QUESTIONS_MAP + 0) + 3 * l_di)),
 				get_ttx(235 + ds_readbs((QUESTIONS_MAP + 1) + 3 * l_di)));
@@ -5725,7 +5725,7 @@ signed short copy_protection(void)
 			GUI_print_string((char*)p_datseg + GAME_VERSION, 290, 190);
 
 			/* ask the question */
-			GUI_input((char*)ds_readd(DTP2), 20);
+			GUI_input(g_dtp2, 20);
 
 			l1 = strlen((char*)ds_readd(TEXT_INPUT_BUF));
 

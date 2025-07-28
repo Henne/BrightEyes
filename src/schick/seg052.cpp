@@ -114,13 +114,13 @@ void do_citycamp(void)
 
 				for (l_si = 0; l_si < 3; l_si++) {
 
-					sprintf((char*)ds_readd(DTP2),
+					sprintf(g_dtp2,
 						get_ttx(321),
 						l_si + 1);
 
 					do {
 
-						answer = select_hero_ok((char*)ds_readd(DTP2));
+						answer = select_hero_ok(g_dtp2);
 
 						if (answer != -1 && ds_readbs(CITYCAMP_MAGICSTATUS + answer) != 0) {
 							GUI_output(get_ttx(331));
@@ -197,11 +197,11 @@ void do_citycamp(void)
 
 					if (ds_readbs(CITYCAMP_GUARDS + l_di) != -1) {
 
-						sprintf((char*)ds_readd(DTP2),
+						sprintf(g_dtp2,
 							get_ttx(774),
 							(char*)get_hero(ds_readbs(CITYCAMP_GUARDS + l_di)) + 0x10);
 
-						GUI_print_loc_line((char*)ds_readd(DTP2));
+						GUI_print_loc_line(g_dtp2);
 					}
 
 					do {
@@ -224,11 +224,11 @@ void do_citycamp(void)
 
 							if (ds_readbs(CITYCAMP_GUARDS + l_di) != -1) {
 
-								sprintf((char*)ds_readd(DTP2),
+								sprintf(g_dtp2,
 									get_ttx(774),
 									(char*)get_hero(ds_readbs(CITYCAMP_GUARDS + l_di)) + 0x10);
 
-								GUI_print_loc_line((char*)ds_readd(DTP2));
+								GUI_print_loc_line(g_dtp2);
 							}
 						}
 

@@ -705,7 +705,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 				l6 = ds_readbs((SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_UNKN6) + SIZEOF_SPELL_DESCRIPTIONS * host_readbs(hero + HERO_SPELL_ID));
 
-				host_writeb((unsigned char*)ds_readd(DTP2), 0);
+				*g_dtp2 = '\0';
 
 				l15 = use_spell(hero, 0, 0);
 
@@ -909,12 +909,12 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 						FIG_draw_figures();
 					}
 
-					FIG_output((char*)ds_readd(DTP2));
+					FIG_output(g_dtp2);
 
 					seg041_8c8();
 
 				} else {
-					FIG_output((char*)ds_readd(DTP2));
+					FIG_output(g_dtp2);
 				}
 
 			} else if (host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_USE_ITEM) {

@@ -56,12 +56,12 @@ void tevent_080(void)
 		{
 			ds_writeb(TEVENT080_TATZELWURM, 1);
 
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_tx2(87),
 				(char*)hero + HERO_NAME2);
 
 			do {
-				answer = GUI_radio((char*)ds_readd(DTP2), 2,
+				answer = GUI_radio(g_dtp2, 2,
 							get_tx2(88),
 							get_tx2(89));
 			} while (answer == -1);
@@ -137,7 +137,7 @@ void tevent_084(void)
 
 		do {
 
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 						get_tx2(97), 2,
 						get_tx2(98),
 						get_tx2(99));
@@ -193,7 +193,7 @@ void tevent_086(void)
 	load_in_head(58);
 
 	do {
-		answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+		answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 					get_tx2(100), 2,
 					get_tx2(101), get_tx2(102));
 	} while (answer == -1);
@@ -293,19 +293,19 @@ void tevent_098(void)
 
 					if (test_skill(hero, TA_AKROBATIK, 0) > 0) {
 
-						sprintf((char*)ds_readd(DTP2),
+						sprintf(g_dtp2,
 							get_tx2(31),
 							(char*)hero + HERO_NAME2);
 
-						GUI_output((char*)ds_readd(DTP2));
+						GUI_output(g_dtp2);
 
 					} else {
 
-						sprintf((char*)ds_readd(DTP2),
+						sprintf(g_dtp2,
 							get_tx2(32),
 							(char*)hero + HERO_NAME2);
 
-						GUI_output((char*)ds_readd(DTP2));
+						GUI_output(g_dtp2);
 
 						hero_disappear(hero, i, 33);
 					}
@@ -336,11 +336,11 @@ void tevent_098(void)
 
 			if (test_skill(hero, TA_AKROBATIK, 0) > 0) {
 
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx2(35),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output((char*)ds_readd(DTP2));
+				GUI_output(g_dtp2);
 
 				hero = get_hero(0);
 				for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
@@ -352,19 +352,19 @@ void tevent_098(void)
 					{
 						if (test_attrib(hero, ATTRIB_GE, -4) > 0) {
 
-							sprintf((char*)ds_readd(DTP2),
+							sprintf(g_dtp2,
 								get_tx2(36),
 								(char*)hero + HERO_NAME2);
 
-							GUI_output((char*)ds_readd(DTP2));
+							GUI_output(g_dtp2);
 
 						} else {
 
-							sprintf((char*)ds_readd(DTP2),
+							sprintf(g_dtp2,
 								get_tx2(32),
 								(char*)hero + HERO_NAME2);
 
-							GUI_output((char*)ds_readd(DTP2));
+							GUI_output(g_dtp2);
 
 							hero_disappear(hero, i, 33);
 						}
@@ -372,11 +372,11 @@ void tevent_098(void)
 				}
 			} else {
 
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx2(32),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output((char*)ds_readd(DTP2));
+				GUI_output(g_dtp2);
 
 				hero_disappear(hero, i, 33);
 
@@ -497,13 +497,13 @@ void tevent_101(void)
 
 	if (!ds_readb(TEVENT101_FLAG)) {
 
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx2(41),
 			(mod = random_schick(4) + 2));
 
 
 		do {
-			answer = GUI_radio((char*)ds_readd(DTP2), 2,
+			answer = GUI_radio(g_dtp2, 2,
 						get_tx2(42),
 						get_tx2(43));
 		} while (answer == -1);
@@ -653,11 +653,11 @@ void tevent_104(void)
 
 					timewarp(MINUTES(30));
 
-					sprintf((char*)ds_readd(DTP2) + 0x400,
+					sprintf(g_dtp2 + 0x400,
 						get_tx2(55),
 						(char*)hero + HERO_NAME2);
 
-					GUI_dialog_na(0, (char*)ds_readd(DTP2) + 0x400);
+					GUI_dialog_na(0, g_dtp2 + 0x400);
 
 					l_si++;
 				}
@@ -676,7 +676,7 @@ void tevent_104(void)
 			/* all heroes have failed the test */
 
 			do {
-				l_si = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+				l_si = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 							get_tx2(56), 2,
 							get_tx2(57), get_tx2(58));
 			} while (l_si == -1);
@@ -709,7 +709,7 @@ void tevent_104(void)
 			do {
 
 				do {
-					l_si = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+					l_si = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 								(nr_heroes == 0 ? get_tx2(59) : get_tx2(87)), 3,
 								get_tx2(60), get_tx2(61), get_tx2(62));
 				} while (l_si == -1);
@@ -749,11 +749,11 @@ void tevent_104(void)
 
 						} else {
 
-							sprintf((char*)ds_readd(DTP2),
+							sprintf(g_dtp2,
 								get_ttx(607),
 								(char*)hero + HERO_NAME2);
 
-							GUI_output((char*)ds_readd(DTP2));
+							GUI_output(g_dtp2);
 						}
 
 						timewarp(MINUTES(30));
@@ -820,20 +820,20 @@ void tevent_107(void)
 
 				if (get_first_hero_with_item(ITEM_ROPE) != -1) { /* TODO: ROPE_LADDER? STAFFSPELL? */
 
-					sprintf((char*)ds_readd(DTP2), get_tx2(70), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_tx2(70), (char*)hero + HERO_NAME2);
 
 					sub_hero_le(hero, random_schick(11) + 1);
 
 				} else {
 
-					sprintf((char*)ds_readd(DTP2),
+					sprintf(g_dtp2,
 						get_tx2(71),
 						(char*)hero + HERO_NAME2);
 
 					sub_hero_le(hero, random_schick(11) + 4);
 				}
 
-				GUI_output((char*)ds_readd(DTP2));
+				GUI_output(g_dtp2);
 			}
 		}
 
@@ -872,7 +872,7 @@ void tevent_108(void)
 		GUI_dialog_na(53, get_tx2(72));
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 						get_tx2(73), 2,
 						get_tx2(74), get_tx2(75));
 		} while (answer == -1);
@@ -886,7 +886,7 @@ void tevent_108(void)
 		load_in_head(53);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 						get_tx2(76), 2,
 						get_tx2(77), get_tx2(78));
 		} while (answer == -1);

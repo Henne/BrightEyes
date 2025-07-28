@@ -101,6 +101,7 @@ extern signed char *g_chessboard;	// ds:0xd852;
 extern unsigned char *g_townpal_buf;	// ds:0xd312; seg002, seg027, seg120
 extern unsigned char *g_renderbuf_ptr;	// ds:0xd303; seg002-seg120
 extern unsigned char *g_icon;		// ds:0xd2f7; seg002-seg058
+extern signed char *g_dtp2;		// ds:0xd2f3: seg002-seg121
 extern unsigned char *g_buf_icon;	// ds:0xd2e7; seg029, seg120
 extern unsigned char *g_objects_nvf_buf;// ds:0xd2e3; seg004, seg032, seg040, seg120
 extern unsigned char *g_buf_font6;	// ds:0xd2c1; seg026, seg096, seg120

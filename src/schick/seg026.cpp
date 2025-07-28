@@ -272,7 +272,7 @@ signed short load_game_state(void)
 #endif
 
 		/* init */
-		ds_writed(SAVED_FILES_BUF, ds_readd(DTP2));
+		ds_writed(SAVED_FILES_BUF, (Bit32u)g_dtp2);
 		memset((Bit8u*)ds_readd(SAVED_FILES_BUF), 0, 286 * 4);
 
 		/* read version info */
@@ -458,7 +458,7 @@ signed short save_game_state(void)
 
 			/* create savegame not in a temple */
 
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_ttx(813), /* "Dabei verliert jeder Held in der Gruppe einen Abenteuerpunkt" */
 				1,
 				get_ttx(392),
@@ -466,7 +466,7 @@ signed short save_game_state(void)
 
 			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
 				get_ttx(1), /* "Welchen Spielstand wollen Sie abspeichern ?" */
-				(char*)ds_readd(DTP2));
+				g_dtp2);
 		} else {
 #endif
 
@@ -491,7 +491,7 @@ signed short save_game_state(void)
 
 	ds_writew(TEXTBOX_WIDTH, tw_bak);
 
-	ds_writed(SAVED_FILES_BUF, ds_readd(DTP2));
+	ds_writed(SAVED_FILES_BUF, (Bit32u)g_dtp2);
 	memset((Bit8u*)ds_readd(SAVED_FILES_BUF), 0, 4 * 286);
 
 	if (slot != -2 && slot != 5) {
@@ -852,7 +852,7 @@ void load_in_head(signed short head)
 
 		seek_archive_file(handle, 1024L * head, 0);
 
-		read_archive_file(handle, (unsigned char*)ds_readd(DTP2), 1024);
+		read_archive_file(handle, (unsigned char*)g_dtp2, 1024);
 
 		close(handle);
 
