@@ -825,7 +825,7 @@
 #define MERCHANT_ITEMS_POSY             (0x46c1)    /* signed short[15] */
 #define REFRESH_STATUS_LINE             (0x46df)    /* signed char; {0,1} */
 #define DSA_VERSION_STRING              (0x46e0)    /* char[12]; "DSA VERSION" */
-#define GAME_VERSION                    (0x46ec)    /* char[6]; "V3.02" */
+//#define GAME_VERSION                    (0x46ec)    /* char[6]; "V3.02" */
 // ?6
 #define VERSION_TOKEN1                  (0x46f8)    /* unsigned char; = 3 */
 #define VERSION_TOKEN2                  (0x46f9)    /* unsigned char; = 1 */

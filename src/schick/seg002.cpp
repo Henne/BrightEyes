@@ -5692,7 +5692,7 @@ signed short copy_protection(void)
 				ds_readbs((QUESTIONS_HANDBOOK + 0) + 19 * l_di));
 
 			/* print version number */
-			GUI_print_string((char*)p_datseg + GAME_VERSION, 290, 190);
+			GUI_print_string(g_game_version, 290, 190);
 
 			/* ask the question */
 			GUI_input((char*)g_dtp2, 20);
@@ -5721,7 +5721,7 @@ signed short copy_protection(void)
 				get_ttx(235 + ds_readbs((QUESTIONS_MAP + 1) + 3 * l_di)));
 
 			/* print version number */
-			GUI_print_string((char*)p_datseg + GAME_VERSION, 290, 190);
+			GUI_print_string(g_game_version, 290, 190);
 
 			/* ask the question */
 			GUI_input((char*)g_dtp2, 20);

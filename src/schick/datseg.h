@@ -74,6 +74,7 @@ extern Bit32s gs_dng07_poison_timer;		//ds:0x3cb6; seg002, seg082
 
 extern Bit32s gs_dng12_watertrap_timer;		//ds:0x3fa2; seg002, seg090
 
+extern char g_game_version[6];			//ds:0x46ec; seg002
 extern signed short g_delay_factor;		//ds:0x4b66; seg005, seg025
 
 extern unsigned char *g_hexenknoten_gfx_buf;	// ds:0xacc8; seg100
