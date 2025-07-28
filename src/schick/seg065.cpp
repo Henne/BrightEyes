@@ -112,10 +112,10 @@ void final_intro(void)
 
 	/* load FACE.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_FACE_NVF);
-	len = read_archive_file(handle, (Bit8u*)ds_readd(BUFFER9_PTR), 64000);
+	len = read_archive_file(handle, (Bit8u*)g_buffer9_ptr, 64000);
 	close(handle);
 
-	ptr1 = (Bit8u*)(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), len), -(96 * 3)));
+	ptr1 = (Bit8u*)(F_PADD(F_PADD((Bit8u*)g_buffer9_ptr, len), -(96 * 3)));
 
 	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
 
@@ -123,10 +123,10 @@ void final_intro(void)
 
 	set_palette(ptr1, 0, 0x60);
 
-	ptr2 = (Bit8u*)F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 80000);
+	ptr2 = (Bit8u*)F_PADD((Bit8u*)g_buffer9_ptr, 80000);
 
 	nvf.dst = g_renderbuf_ptr;
-	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
+	nvf.src = (Bit8u*)g_buffer9_ptr;
 	nvf.no = 0;
 	nvf.type = 3;
 	nvf.width = (Bit8u*)&width;
@@ -136,7 +136,7 @@ void final_intro(void)
 	map_effect(g_renderbuf_ptr);
 
 	nvf.dst = (Bit8u*)ptr2;
-	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
+	nvf.src = (Bit8u*)g_buffer9_ptr;
 	nvf.no = 1;
 	nvf.type = 3;
 	nvf.width = (Bit8u*)&width;
@@ -228,7 +228,7 @@ void hyg_ani_3(void)
 	ds_writew(PIC_COPY_Y1, 0);
 	ds_writew(PIC_COPY_X2, 319);
 	ds_writew(PIC_COPY_Y2, 199);
-	ds_writed(PIC_COPY_SRC, (Bit32u)F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 0x1fbd0));
+	ds_writed(PIC_COPY_SRC, (Bit32u)F_PADD((Bit8u*)g_buffer9_ptr, 0x1fbd0));
 	ds_writed(PIC_COPY_DST, (Bit32u)g_renderbuf_ptr);
 
 	do_pic_copy(0);
@@ -260,8 +260,8 @@ void show_hyggelik_ani(void)
 	Bit8u array[30*8];
 
 	g_wallclock_update = 0;
-	ptr1 = (Bit8u*)ds_readd(BUFFER9_PTR);
-	ptr2 = (Bit8u*)F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 0x1fbd0);
+	ptr1 = (Bit8u*)g_buffer9_ptr;
+	ptr2 = (Bit8u*)F_PADD((Bit8u*)g_buffer9_ptr, 0x1fbd0);
 
 	handle = load_archive_file(ARCHIVE_FILE_HYGBACK_NVF);
 	filelen = read_archive_file(handle, g_renderbuf_ptr, 64000);
@@ -439,16 +439,16 @@ void show_outro(void)
 
 	/* load OUTRO1.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_OUTRO1_NVF);
-	len = read_archive_file(handle, (Bit8u*)ds_readd(BUFFER9_PTR), 64000);
+	len = read_archive_file(handle, (Bit8u*)g_buffer9_ptr, 64000);
 	close(handle);
 
-	pal_ptr = (Bit8u*)(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), len), - 0xc0));
+	pal_ptr = (Bit8u*)(F_PADD(F_PADD((Bit8u*)g_buffer9_ptr, len), - 0xc0));
 	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
 	wait_for_vsync();
 	set_palette(pal_ptr, 0, 0x40);
 
 	nvf.dst = g_renderbuf_ptr;
-	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
+	nvf.src = (Bit8u*)g_buffer9_ptr;
 	nvf.no = 0;
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&width;
@@ -473,16 +473,16 @@ void show_outro(void)
 
 	/* load OUTRO2.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_OUTRO2_NVF);
-	len = read_archive_file(handle, (Bit8u*)ds_readd(BUFFER9_PTR), 64000);
+	len = read_archive_file(handle, (Bit8u*)g_buffer9_ptr, 64000);
 	close(handle);
 
-	pal_ptr = (Bit8u*)(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), len), - 0xc0));
+	pal_ptr = (Bit8u*)(F_PADD(F_PADD((Bit8u*)g_buffer9_ptr, len), - 0xc0));
 	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
 	wait_for_vsync();
 	set_palette(pal_ptr, 0, 0x40);
 
 	nvf.dst = g_renderbuf_ptr;
-	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
+	nvf.src = (Bit8u*)g_buffer9_ptr;
 	nvf.no = 0;
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&width;
@@ -507,16 +507,16 @@ void show_outro(void)
 
 	/* load OUTRO3.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_OUTRO3_NVF);
-	len = read_archive_file(handle, (Bit8u*)ds_readd(BUFFER9_PTR), 64000);
+	len = read_archive_file(handle, (Bit8u*)g_buffer9_ptr, 64000);
 	close(handle);
 
-	pal_ptr = (Bit8u*)(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), len), - 0xc0));
+	pal_ptr = (Bit8u*)(F_PADD(F_PADD((Bit8u*)g_buffer9_ptr, len), - 0xc0));
 	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
 	wait_for_vsync();
 	set_palette(pal_ptr, 0, 0x40);
 
 	nvf.dst = g_renderbuf_ptr;
-	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
+	nvf.src = (Bit8u*)g_buffer9_ptr;
 	nvf.no = 0;
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&width;

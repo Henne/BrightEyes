@@ -450,12 +450,12 @@ void load_map(void)
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&fd;
 	nvf.height = (Bit8u*)&fd;
-	nvf.dst = (Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 18000));
+	nvf.dst = (Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, 18000));
 	nvf.no = 16;
 
 	process_nvf(&nvf);
 
-	array_add((Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 18000)), 3003, 0xe0, 2);
+	array_add((Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, 18000)), 3003, 0xe0, 2);
 
 	ds_writeb(PP20_INDEX, ARCHIVE_FILE_KARTE_DAT);
 
@@ -493,17 +493,17 @@ void load_map(void)
 
 	/* load LROUT.DAT */
 	fd = load_archive_file(ARCHIVE_FILE_LROUT_DAT);
-	read_archive_file(fd, (Bit8u*)ds_readd(BUFFER9_PTR), 7600);
+	read_archive_file(fd, (Bit8u*)g_buffer9_ptr, 7600);
 	close(fd);
 
 	/* load HSROUT.DAT */
 	fd = load_archive_file(ARCHIVE_FILE_HSROUT_DAT);
-	read_archive_file(fd, (Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 7600)), 3800);
+	read_archive_file(fd, (Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, 7600)), 3800);
 	close(fd);
 
 	/* load SROUT.DAT */
 	fd = load_archive_file(ARCHIVE_FILE_SROUT_DAT);
-	read_archive_file(fd, (Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 11400)), 5900);
+	read_archive_file(fd, (Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, 11400)), 5900);
 	close(fd);
 
 	load_tx(ARCHIVE_FILE_MAPTEXT_LTX);

@@ -1395,7 +1395,7 @@
 #define MOUSE1_EVENT2                   (0xc3d5)    /* unsigned short; {0,1}. Indicates a click-and-drag event on mouse button 1 */
 #define BIOSKEY_EVENT                   (0xc3d7)    /* unsigned short */
 #define ACTION                          (0xc3d9)    /* unsigned short */
-#define BUFFER9_PTR                     (0xc3db)    /* Bit8u*; to buffer of size 180000 (or 203000 if LARGE_BUF), used for NVF */
+//#define BUFFER9_PTR                     (0xc3db)    /* Bit8u*; to buffer of size 180000 (or 203000 if LARGE_BUF), used for NVF */
 // ?8
 #define ANI_WIDTH                       (0xc3e7)    /* unsigned short */
 #define ANI_UNKNOWN1                    (0xc3e9)    /* unsigned short */

@@ -429,7 +429,7 @@ void level_up(signed short hero_pos)
 
 	ds_writed(INC_SKILLS_COUNTER, (Bit32u)(g_buffer8_ptr + 4500));
 	ds_writed(INC_SPELLS_COUNTER, (Bit32u)((Bit8u*)ds_readd(INC_SKILLS_COUNTER) + 208));
-	ds_writed(SKILLS_BUFFER, ds_readd(BUFFER9_PTR));
+	ds_writed(SKILLS_BUFFER, (Bit32u)g_buffer9_ptr);
 
 	l_si = load_archive_file(ARCHIVE_FILE_BSKILLS_DAT);
 

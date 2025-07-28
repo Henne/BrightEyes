@@ -100,7 +100,7 @@ void TM_func1(signed short route_no, signed short backwards)
 
 	ds_writeb(TRAVELING, 1);
 	last_tevent_no = -1;
-	ds_writed(ROUTE_COURSE_PTR, (Bit32u)(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), host_readws((Bit8u*)ds_readd(BUFFER9_PTR) + 4 * (route_no - 1))), 0xec)));
+	ds_writed(ROUTE_COURSE_PTR, (Bit32u)(F_PADD(F_PADD((Bit8u*)g_buffer9_ptr, host_readws((Bit8u*)g_buffer9_ptr + 4 * (route_no - 1))), 0xec)));
 	fb_start = (Bit8u*)ds_readd(FRAMEBUF_PTR);
 #if defined(__BORLANDC__)
 	add_ds_fp(ROUTE_COURSE_PTR, 4);
@@ -680,7 +680,7 @@ void TM_draw_track(signed short a1, signed short length, signed short direction,
 	Bit8u* fb_start;
 
 	fb_start = (Bit8u*)ds_readd(FRAMEBUF_PTR);
-	ptr = (Bit8u*)(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), host_readws((Bit8u*)ds_readd(BUFFER9_PTR) + 4 * (a1 - 1))), 0xec));
+	ptr = (Bit8u*)(F_PADD(F_PADD((Bit8u*)g_buffer9_ptr, host_readws((Bit8u*)g_buffer9_ptr + 4 * (a1 - 1))), 0xec));
 	ptr += 4;
 
 	if (direction)

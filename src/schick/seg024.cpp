@@ -59,7 +59,7 @@ void diary_show(void)
 
 	get_textcolor(&fg_bak, &bg_bak);
 
-	ds_writed(PRINT_STRING_BUFFER, ds_readd(BUFFER9_PTR));
+	ds_writed(PRINT_STRING_BUFFER, (Bit32u)g_buffer9_ptr);
 	bak1 = ds_readw(TEXTLINE_MAXLEN);
 	bak2 = ds_readw(TEXTLINE_POSX);
 	txt_tabpos1_bak = ds_readw(TXT_TABPOS1);
@@ -152,7 +152,7 @@ Bit16u diary_print_entry(Bit16u line)
 	char *city_name;
 	signed short di = 0;
 
-	memset((Bit8u*)ds_readd(BUFFER9_PTR), 0, 64000);
+	memset((Bit8u*)g_buffer9_ptr, 0, 64000);
 
 	ptr = p_datseg + DIARY_ENTRIES + line * 8;
 
@@ -208,7 +208,7 @@ Bit16u diary_print_entry(Bit16u line)
 	ds_writew(PIC_COPY_Y1, 0);
 	ds_writew(PIC_COPY_X2, 319);
 	ds_writew(PIC_COPY_Y2, line * 7);
-	ds_writed(PIC_COPY_SRC, ds_readd(BUFFER9_PTR));
+	ds_writed(PIC_COPY_SRC, (Bit32u)g_buffer9_ptr);
 #if !defined(__BORLANDC__)
 	ds_writed(PIC_COPY_DST, (Bit32u)((g_renderbuf_ptr + startline * 2240) + 9600));
 #else

@@ -354,7 +354,7 @@ signed short char_erase(void)
 	Bit8u *ptr;
 
 	if (ds_readbs(RENDERBUF_IN_USE_FLAG)) {
-		ptr = (HugePt)ds_readd(BUFFER9_PTR) + 30000L;
+		ptr = (Bit8u*)(g_buffer9_ptr + 30000L);
 	} else {
 		ptr = g_renderbuf_ptr + 50000;
 	}
@@ -385,7 +385,6 @@ signed short char_erase(void)
 					}
 
 					sprintf((char*)g_dtp2, (char*)p_datseg + STR_TEMP_FILE_WILDCARD, g_text_output_buf);
-
 					unlink(g_dtp2);
 				}
 

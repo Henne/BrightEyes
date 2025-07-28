@@ -872,7 +872,7 @@ void draw_wallclock(signed short pos, signed short night)
 		ds_writew(PIC_COPY_Y1, ds_readws(WALLCLOCK_Y) - 4);
 		ds_writew(PIC_COPY_X2, ds_readws(WALLCLOCK_X) + 85);
 		ds_writew(PIC_COPY_Y2, ds_readws(WALLCLOCK_Y) + 28);
-		ds_writed(PIC_COPY_SRC, (Bit32u)(F_PADD(ds_readds(BUFFER9_PTR), 0x4650)));
+		ds_writed(PIC_COPY_SRC, (Bit32u)(g_buffer9_ptr + 0x4650L));
 
 		/* draw backgroud */
 		do_pic_copy(2);

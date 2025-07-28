@@ -742,14 +742,14 @@ void equip_belt_ani(void)
 
 	/* read NVF part 1 */
 	nvf_length = read_archive_file(handle,
-			(Bit8u*)ds_readd(BUFFER9_PTR), 64000);
+			(Bit8u*)g_buffer9_ptr, 64000);
 	/* read NVF part 2 */
-	nvf_length += read_archive_file(handle, (Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 64000)), 64000);
+	nvf_length += read_archive_file(handle, (Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, 64000)), 64000);
 
 	close(handle);
 
 	/* calculate palette pointer */
-	p_pal = (Bit8u*)(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), nvf_length), -0x60));
+	p_pal = (Bit8u*)(F_PADD(F_PADD((Bit8u*)g_buffer9_ptr, nvf_length), -0x60));
 
 	wait_for_vsync();
 
@@ -794,7 +794,7 @@ void equip_belt_ani(void)
 	for (i = 0; i < 12; i++) {
 
 		nvf.dst = g_renderbuf_ptr;
-		nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
+		nvf.src = (Bit8u*)g_buffer9_ptr;
 		nvf.no = i;
 		nvf.type = 3;
 		nvf.width = (Bit8u*)&width;

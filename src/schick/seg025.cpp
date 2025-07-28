@@ -272,7 +272,7 @@ void show_treasure_map(void)
 		/* load SKARTE.NVF */
 		l_si = load_archive_file(ARCHIVE_FILE_SKARTE_NVF);
 
-		read_archive_file(l_si, (Bit8u*)ds_readd(BUFFER9_PTR), 30000);
+		read_archive_file(l_si, (Bit8u*)g_buffer9_ptr, 30000);
 
 		length = get_readlength2(l_si);
 
@@ -293,8 +293,8 @@ void show_treasure_map(void)
 				(l_si != 9 || (l_si == 9 && !ds_readbs(TREASURE_MAPS + 6))))
 			{
 				/* decompress picture */
-				nvf.dst = (Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 30000));
-				nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
+				nvf.dst = (Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, 30000));
+				nvf.src = (Bit8u*)g_buffer9_ptr;
 				nvf.no = l_si;
 				nvf.type = 0;
 				nvf.width = (Bit8u*)&width;
@@ -313,7 +313,7 @@ void show_treasure_map(void)
 				ds_writew(PIC_COPY_Y1, ds_readws(TMAP_Y + 2 * l_si));
 				ds_writew(PIC_COPY_X2, ds_readws(TMAP_X + 2 * l_si) + width - 1);
 				ds_writew(PIC_COPY_Y2, ds_readws(TMAP_Y + 2 * l_si) + height - 1);
-				ds_writed(PIC_COPY_SRC, (Bit32u)F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 30000));
+				ds_writed(PIC_COPY_SRC, (Bit32u)F_PADD((Bit8u*)g_buffer9_ptr, 30000));
 				ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
 				do_pic_copy(0);
 			}
@@ -321,7 +321,7 @@ void show_treasure_map(void)
 
 		wait_for_vsync();
 
-		set_palette((Bit8u*)(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), length), -0x60)), 0, 0x20);
+		set_palette((Bit8u*)(F_PADD(F_PADD((Bit8u*)g_buffer9_ptr, length), -0x60)), 0, 0x20);
 
 		refresh_screen_size();
 
@@ -423,7 +423,7 @@ signed short game_options(void)
 
 	get_textcolor(&fg_bak, &bg_bak);
 
-	ds_writed(PRINT_STRING_BUFFER, ds_readd(BUFFER9_PTR));
+	ds_writed(PRINT_STRING_BUFFER, (Bit32u)g_buffer9_ptr);
 
 	bak1 = ds_readws(TEXTLINE_MAXLEN);
 	bak2 = ds_readws(TEXTLINE_POSX);
@@ -432,7 +432,7 @@ signed short game_options(void)
 
 	set_textcolor(4, 0);
 
-	memset((Bit8u*)ds_readd(BUFFER9_PTR), 0, 20000);
+	memset((Bit8u*)g_buffer9_ptr, 0, 20000);
 
 	prepare_date_str();
 
@@ -442,11 +442,11 @@ signed short game_options(void)
 	ds_writew(PIC_COPY_Y1, 0);
 	ds_writew(PIC_COPY_X2, 319);
 	ds_writew(PIC_COPY_Y2, 61);
-	ds_writed(PIC_COPY_SRC, ds_readd(BUFFER9_PTR));
+	ds_writed(PIC_COPY_SRC, (Bit32u)g_buffer9_ptr);
 	ds_writed(PIC_COPY_DST, (Bit32u)(g_renderbuf_ptr + 9600));
 	do_pic_copy(2);
 
-	memset((Bit8u*)ds_readd(BUFFER9_PTR), 0, 28000);
+	memset((Bit8u*)g_buffer9_ptr, 0, 28000);
 
 	if (ds_readbs(CURRENT_TOWN) != TOWNS_NONE) {
 		/* if the party is in a town */
@@ -460,7 +460,7 @@ signed short game_options(void)
 		ds_writew(PIC_COPY_Y1, 0);
 		ds_writew(PIC_COPY_X2, 319);
 		ds_writew(PIC_COPY_Y2, 86);
-		ds_writed(PIC_COPY_SRC, ds_readd(BUFFER9_PTR));
+		ds_writed(PIC_COPY_SRC, (Bit32u)g_buffer9_ptr);
 		ds_writed(PIC_COPY_DST, (Bit32u)(g_renderbuf_ptr + 22400));
 		do_pic_copy(2);
 	}
@@ -497,7 +497,7 @@ signed short game_options(void)
 
 	ds_writew(TEXTLINE_POSX, bak2);
 	ds_writew(TEXTLINE_MAXLEN, bak1);
-	ds_writed(GUI_BUFFER_UNKN, ds_readd(BUFFER9_PTR));
+	ds_writed(GUI_BUFFER_UNKN, (Bit32u)g_buffer9_ptr);
 
 	do {
 		ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)(p_datseg + ACTION_TABLE_OPTIONS));

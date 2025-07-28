@@ -6439,7 +6439,7 @@ unsigned short g_ani_unknown2; // ds:0xc3eb
 unsigned short g_ani_unknown1; // ds:0xc3e9
 unsigned short g_ani_width; // ds:0xc3e7
 unsigned char g_unkn_080[8]; // ds:0xc3df
-void *g_buffer9_ptr; // ds:0xc3db, to buffer of size 180000 (or 203000 if LARGE_BUF), used for NVF
+HugePt g_buffer9_ptr; // ds:0xc3db, to buffer of size 180000 (or 203000 if LARGE_BUF), used for NVF
 unsigned short g_action; // ds:0xc3d9
 unsigned short g_bioskey_event; // ds:0xc3d7
 unsigned short g_mouse1_event2; // ds:0xc3d5

@@ -103,7 +103,7 @@ void FIG_loot_monsters(void)
 
 	for (l_di = 0; l_di < 30; l_di++) {
 
-			a[l_di] = (char*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 40 * l_di));
+			a[l_di] = (char*)(F_PADD((Bit8u*)g_buffer9_ptr, 40 * l_di));
 	}
 
 	do {

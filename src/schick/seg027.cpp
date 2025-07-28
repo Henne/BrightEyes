@@ -340,7 +340,7 @@ void load_ani(const signed short no)
 	if (i != 37) {
 		/* already buffered in EMS, get from there */
 		ems_handle = host_readw(g_mem_slots_anis + i * 8 + 2);
-		from_EMS((Bit8u*)ds_readd(BUFFER9_PTR), ems_handle, host_readd(g_mem_slots_anis + i * 8 + 4));
+		from_EMS((Bit8u*)g_buffer9_ptr, ems_handle, host_readd(g_mem_slots_anis + i * 8 + 4));
 	} else {
 		/* load it from file */
 		ani_off = ds_readd(BUFFER_ANIS_TAB - 4 + no * 4);
@@ -350,7 +350,7 @@ void load_ani(const signed short no)
 		fd = load_archive_file(ARCHIVE_FILE_ANIS);
 		/* seek to ordered ani */
 		seek_archive_file(fd, ani_off, 0);
-		read_archive_file(fd, (Bit8u*)ds_readd(BUFFER9_PTR), (unsigned short)ani_len);
+		read_archive_file(fd, (Bit8u*)g_buffer9_ptr, (unsigned short)ani_len);
 
 		/* if EMS is enabled buffer it */
 		if ((g_ems_enabled != 0) && (ems_handle = alloc_EMS(ani_len))) {
@@ -367,19 +367,19 @@ void load_ani(const signed short no)
 			host_writed(g_mem_slots_anis + i * 8 + 4, ani_len);
 
 			/* copy data to EMS */
-			to_EMS(ems_handle, (Bit8u*)ds_readd(BUFFER9_PTR), ani_len);
+			to_EMS(ems_handle, (Bit8u*)g_buffer9_ptr, ani_len);
 		}
 
 		close(fd);
 	}
 
-	ani_buffer = (Bit8u*)ds_readd(BUFFER9_PTR);
+	ani_buffer = (Bit8u*)g_buffer9_ptr;
 
 	/* set start of picture data */
-	ds_writed(ANI_MAIN_PTR, (Bit32u)(F_PADD(ani_buffer, host_readd((Bit8u*)ds_readd(BUFFER9_PTR)))));
+	ds_writed(ANI_MAIN_PTR, (Bit32u)(F_PADD(ani_buffer, host_readd((Bit8u*)g_buffer9_ptr))));
 	/* set start of palette */
-	ds_writed(ANI_PALETTE, (Bit32u)(F_PADD(F_PADD(ani_buffer, host_readd((Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 4L)))), 6L)));
-	//	(Bit32u)(host_readd((Bit8u*)ds_readd(BUFFER9_PTR) + 4) + ani_buffer + 6));
+	ds_writed(ANI_PALETTE, (Bit32u)(F_PADD(F_PADD(ani_buffer, host_readd((Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, 4L)))), 6L)));
+	//	(Bit32u)(host_readd((Bit8u*)g_buffer9_ptr + 4) + ani_buffer + 6));
 
 	/* read some bytes between data and palette */
 	ds_writew(ANI_UNKNOWN1,	host_readw((Bit8u*)(F_PADD(ds_readd(ANI_PALETTE), -6))));
@@ -391,10 +391,10 @@ void load_ani(const signed short no)
 	ani_end_ptr = (Bit8u*)(F_PADD(ds_readd(ANI_PALETTE), 3 * ds_readb(ANI_PALETTE_SIZE)));
 
 	/* set picture size */
-	ds_writew(ANI_WIDTH, host_readw((Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 8))));
-	ds_writeb(ANI_HEIGHT, host_readb((Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 10))));
+	ds_writew(ANI_WIDTH, host_readw((Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, 8))));
+	ds_writeb(ANI_HEIGHT, host_readb((Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, 10))));
 	/* set number of areas */
-	ds_writeb(ANI_AREACOUNT, host_readb((Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 11))));
+	ds_writeb(ANI_AREACOUNT, host_readb((Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, 11))));
 
 	/* Process Main Picture */
 	if (ds_readb(ANI_COMPR_FLAG) != 0) {
@@ -438,8 +438,8 @@ void load_ani(const signed short no)
 	/* Process the Areas */
 	for (i_area = 0; ds_readbs(ANI_AREACOUNT) > i_area; i_area++) {
 		p_area2 = (Bit8u*)((p_datseg + ANI_AREA_TABLE + i_area * SIZEOF_ANI_AREA));
-		area_offset = host_readd((Bit8u*)(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 4 * i_area), 0xc)));
-		p_area = (Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), area_offset));
+		area_offset = host_readd((Bit8u*)(F_PADD(F_PADD((Bit8u*)g_buffer9_ptr, 4 * i_area), 0xc)));
+		p_area = (Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, area_offset));
 		strncpy((char*)p_area2 + ANI_AREA_NAME, (char*)p_area, 4);
 
 		host_writew(p_area2 + ANI_AREA_X, host_readw(p_area + 4));
@@ -454,33 +454,33 @@ void load_ani(const signed short no)
 
 			area_data_offset = host_readd(p_area + 0xc);
 			area_data_offset += packed_delta;
-			unplen_ptr = (Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), area_data_offset));
+			unplen_ptr = (Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, area_data_offset));
 
 			plen = host_readd(unplen_ptr);
 			unplen_ptr += (plen - 4);
 			area_size = host_readd(unplen_ptr);
 			area_size = swap_u32(area_size) >> 8;
 
-			decomp_pp20((Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), area_data_offset)),
+			decomp_pp20((Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, area_data_offset)),
 				g_renderbuf_ptr,
 #if !defined(__BORLANDC__)
-				(Bit8u*)ds_readd(BUFFER9_PTR) + area_data_offset + 4,
+				(Bit8u*)g_buffer9_ptr + area_data_offset + 4,
 #else
-				FP_OFF(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), area_data_offset)) + 4,
-				FP_SEG(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), area_data_offset)),
+				FP_OFF(F_PADD((Bit8u*)g_buffer9_ptr, area_data_offset)) + 4,
+				FP_SEG(F_PADD((Bit8u*)g_buffer9_ptr, area_data_offset)),
 #endif
 				plen);
 
 			packed_delta2 = area_size - plen;
 			packed_delta += packed_delta2;
 
-			ani_residue_ptr = (Bit8u*)ds_readd(BUFFER9_PTR);
+			ani_residue_ptr = (Bit8u*)g_buffer9_ptr;
 			ani_residue_ptr += area_data_offset;
 			ani_residue_ptr += plen;
 			ani_residue_len = ani_end_ptr - ani_residue_ptr;
 			memcpy(ani_end_ptr + packed_delta2, ani_residue_ptr, (unsigned short)ani_residue_len);
 
-			memcpy((Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), area_data_offset)),
+			memcpy((Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, area_data_offset)),
 				g_renderbuf_ptr, (unsigned short)area_size);
 			ani_residue_ptr += packed_delta2;
 			memcpy(ani_residue_ptr, ani_end_ptr + packed_delta2, (unsigned short)ani_residue_len);
@@ -495,12 +495,12 @@ void load_ani(const signed short no)
 
 			for (j = 0; j < area_pics; j++) {
 				host_writed(p_area2 + j * 4 + ANI_AREA_PICS_TAB,
-					(Bit32u)(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), area_data_offset), j * area_size)));
+					(Bit32u)(F_PADD(F_PADD((Bit8u*)g_buffer9_ptr, area_data_offset), j * area_size)));
 			}
 		} else {
 			for (j = 0; j < area_pics; j++) {
 				area_data_offset = host_readd(p_area + j * 4 + 0xc);
-				host_writed(p_area2 + j * 4 + ANI_AREA_PICS_TAB, (Bit32u)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), area_data_offset)));
+				host_writed(p_area2 + j * 4 + ANI_AREA_PICS_TAB, (Bit32u)(F_PADD((Bit8u*)g_buffer9_ptr, area_data_offset)));
 			}
 		}
 
@@ -513,7 +513,7 @@ void load_ani(const signed short no)
 		}
 	}
 
-	ani_len = ani_end_ptr - (Bit8u*)ds_readd(BUFFER9_PTR);
+	ani_len = ani_end_ptr - (Bit8u*)g_buffer9_ptr;
 	/* this is always true */
 	if (ani_len > g_ani_unknown4) {
 		ds_writew(AREA_PREPARED, 0xffff);
