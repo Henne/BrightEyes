@@ -6458,7 +6458,7 @@ unsigned char g_unkn_077[6]; // ds:0xc3b9
 char **g_text_ltx_index; // ds:0xc3b5, to index table of TEXT.LTX
 char **g_tx_index; // ds:0xc3b1, to index table of primary text file
 char **g_tx2_index; // ds:0xc3ad, to index table of secondary text file
-void *g_buffer8_ptr; // ds:0xc3a9, to buffer of size 12008
+unsigned char *g_buffer8_ptr; // ds:0xc3a9, to buffer of size 12008
 struct{short pos; char loc, type; short id;} g_locations_tab[150]; // ds:0xc025
 unsigned short g_pic_copy_v4; // ds:0xc023
 unsigned short g_pic_copy_v3; // ds:0xc021

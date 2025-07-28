@@ -76,7 +76,7 @@ void do_temple(void)
 			ds_writew(PIC_COPY_X2, 40);
 			ds_writew(PIC_COPY_Y2, 22);
 			ds_writed(PIC_COPY_DST, (Bit32u)((Bit8u*)ds_readd(FRAMEBUF_PTR) + 28259));
-			ds_writed(PIC_COPY_SRC, (Bit32u)((Bit8u*)ds_readd(BUFFER8_PTR) + 7000));
+			ds_writed(PIC_COPY_SRC, (Bit32u)(g_buffer8_ptr + 7000));
 
 			update_mouse_cursor();
 			do_pic_copy(0);

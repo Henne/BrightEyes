@@ -262,7 +262,7 @@ void init_global_buffer(void)
 	g_buffer5_ptr = (char*)(((HugePt)g_text_output_buf) + 300L);
 	g_buffer6_ptr = (unsigned char*)(((HugePt)g_buffer5_ptr) + 3880L);
 	g_buffer7_ptr = (char*)(((HugePt)g_buffer6_ptr) + 2200L);
-	ds_writed(BUFFER8_PTR, (Bit32u)(((HugePt)g_buffer7_ptr) + 10000L));
+	g_buffer8_ptr = (unsigned char*)(((HugePt)g_buffer7_ptr) + 10000L);
 	ds_writed(BUFFER9_PTR, (Bit32u)(((HugePt)g_buffer7_ptr) + 22008L));
 
 	ds_writed(BUFFER9_PTR3, ds_writed(BUFFER9_PTR2, ds_readd(BUFFER9_PTR)));

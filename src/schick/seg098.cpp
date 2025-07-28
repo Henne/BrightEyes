@@ -59,9 +59,9 @@ void magic_heal_ani(Bit8u *hero)
 
 	/* load SPSTAR.NVF */
 	fd = load_archive_file(ARCHIVE_FILE_SPSTAR_NVF);
-	read_archive_file(fd, (Bit8u*)ds_readd(BUFFER8_PTR), 0x400);
-	read_archive_file(fd, (Bit8u*)ds_readd(BUFFER8_PTR) + 0x400, 0x400);
-	read_archive_file(fd, (Bit8u*)ds_readd(BUFFER8_PTR) + 0x800, 0x400);
+	read_archive_file(fd, g_buffer8_ptr, 0x400);
+	read_archive_file(fd, g_buffer8_ptr + 0x400, 0x400);
+	read_archive_file(fd, g_buffer8_ptr + 0x800, 0x400);
 	close(fd);
 
 	target_no = host_readbs(hero + HERO_ENEMY_ID) - 1;
@@ -84,7 +84,7 @@ void magic_heal_ani(Bit8u *hero)
 		do_pic_copy(0);
 
 		/* copy stars over it */
-		ds_writed(PIC_COPY_SRC, (Bit32u)((Bit8u*)ds_readd(BUFFER8_PTR) + (a.a[i] * 1024)));
+		ds_writed(PIC_COPY_SRC, (Bit32u)(g_buffer8_ptr + (a.a[i] * 1024)));
 		do_pic_copy(2);
 
 		/* copy buffer content to screen */

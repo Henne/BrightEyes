@@ -234,7 +234,7 @@ unsigned short fight_printer(void)
 				ds_writew(PIC_COPY_Y1, ds_writew(PIC_COPY_V2, 194));
 				ds_writew(PIC_COPY_X2, 318);
 				ds_writew(PIC_COPY_Y2, 199);
-				ds_writed(PIC_COPY_SRC, ds_readd(BUFFER8_PTR));
+				ds_writed(PIC_COPY_SRC, (Bit32u)g_buffer8_ptr);
 				do_pic_copy(3);
 
 				set_textcolor(0xff, 0);
@@ -396,7 +396,7 @@ void draw_fight_screen(Bit16u val)
 	/* write TEMP/XX */
 	/* TODO: should be O_BINARY | O_WRONLY */
 	handle = _creat((char*)ds_readd(STR_TEMP_XX_PTR), 0);
-	write(handle, (Bit8u*)ds_readd(BUFFER8_PTR), 64000);
+	write(handle, g_buffer8_ptr, 64000);
 	close(handle);
 
 	if (flag != 0) {
@@ -406,7 +406,7 @@ void draw_fight_screen(Bit16u val)
 
 		FIG_draw_figures();
 
-		memcpy((Bit8u*)ds_readd(BUFFER8_PTR), g_renderbuf_ptr, 64000);
+		memcpy(g_buffer8_ptr, g_renderbuf_ptr, 64000);
 	}
 
 	while (flag != 0) {
@@ -431,14 +431,14 @@ void draw_fight_screen(Bit16u val)
 		ds_writew(PIC_COPY_Y1, ds_writew(PIC_COPY_V2, 0));
 		ds_writew(PIC_COPY_X2, 318);
 		ds_writew(PIC_COPY_Y2, 149);
-		ds_writed(PIC_COPY_SRC, ds_readd(BUFFER8_PTR));
+		ds_writed(PIC_COPY_SRC, (Bit32u)g_buffer8_ptr);
 		do_pic_copy(3);
 
 		ds_writew(PIC_COPY_X1, ds_writew(PIC_COPY_V1, 80));
 		ds_writew(PIC_COPY_Y1, ds_writew(PIC_COPY_V2, 150));
 		ds_writew(PIC_COPY_X2, 318);
 		ds_writew(PIC_COPY_Y2, 193);
-		ds_writed(PIC_COPY_SRC, ds_readd(BUFFER8_PTR));
+		ds_writed(PIC_COPY_SRC, (Bit32u)g_buffer8_ptr);
 		do_pic_copy(3);
 
 		list_i = (Bit8u*)ds_readd(FIG_LIST_HEAD);
@@ -1015,7 +1015,7 @@ to the DOSBox-CPU and may run the timer.
 	/* read TEMP/XX */
 	/* TODO: should be O_BINARY | O_RDONLY */
 	handle = open((char*)ds_readd(STR_TEMP_XX_PTR), 0);
-	_read(handle, (Bit8u*)ds_readd(BUFFER8_PTR), 64000);
+	_read(handle, g_buffer8_ptr, 64000);
 	close(handle);
 
 	ds_writed(PIC_COPY_DST, ds_writed(PRINT_STRING_BUFFER, ds_readd(FRAMEBUF_PTR)));

@@ -92,7 +92,7 @@ void draw_fight_screen_pal(signed short mode)
 		/* set palettes */
 		set_palette(p_datseg + PALETTE_FIGHT1, 0x00, 0x20);
 		set_palette(p_datseg + PALETTE_FIGHT2, 0x80, 0x14);
-		set_palette((Bit8u*)ds_readd(BUFFER8_PTR) + 0xfa02, 0x60, 0x20);
+		set_palette(g_buffer8_ptr + 0xfa02, 0x60, 0x20);
 
 		ds_writeb(PP20_INDEX, 0xff);
 
@@ -888,7 +888,7 @@ void FIG_load_ship_sprites(void)
 			ds_writew(PIC_COPY_X2, l3 + host_readws((Bit8u*)ds_readd(FIGOBJ_GFXWIDTH_TABLE) + 2 * l_si) - 1);
 			ds_writew(PIC_COPY_Y2, l4 + host_readws((Bit8u*)ds_readd(FIGOBJ_GFXHEIGHT_TABLE) + 2 * l_si) - 1);
 			ds_writed(PIC_COPY_SRC, host_readd((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + 4 * l_si));
-			ds_writed(PIC_COPY_DST, ds_readd(BUFFER8_PTR));
+			ds_writed(PIC_COPY_DST, (Bit32u)g_buffer8_ptr);
 
 			do_pic_copy(2);
 
@@ -948,7 +948,7 @@ signed short do_fight(signed short fight_id)
 	ds_writew(TEXTBOX_WIDTH, 3);
 
 	/* set some pointers */
-	ds_writed(SCENARIO_BUF, (Bit32u)F_PADD(ds_readd(BUFFER8_PTR), 64100));
+	ds_writed(SCENARIO_BUF, (Bit32u)(((HugePt)g_buffer8_ptr) + 64100L));
 	ds_writed(MONSTER_DAT_BUF, (Bit32u)F_PADD(ds_readd(SCENARIO_BUF), 621));
 	ds_writed(CURRENT_FIGHT, (Bit32u)F_PADD(ds_readd(MONSTER_DAT_BUF), 3476));
 

@@ -90,10 +90,10 @@ void load_tx2(signed short index)
 
 	g_text_file_index = index;
 	fd = load_archive_file(index);
-	len = (signed short)read_archive_file(fd, (Bit8u*)ds_readd(BUFFER8_PTR), 12000);
+	len = (signed short)read_archive_file(fd, g_buffer8_ptr, 12000);
 	close(fd);
 
-	split_textbuffer((char**)g_tx2_index, (char*)ds_readd(BUFFER8_PTR), len);
+	split_textbuffer((char**)g_tx2_index, (char*)g_buffer8_ptr, len);
 }
 
 void load_ltx(unsigned short index)
@@ -876,11 +876,11 @@ void load_tempicon(signed short no)
 
 	/* load TEMPICON */
 	handle = load_archive_file(ARCHIVE_FILE_TEMPICON);
-	read_archive_file(handle, (Bit8u*)ds_readd(BUFFER8_PTR), 7000);
+	read_archive_file(handle, g_buffer8_ptr, 7000);
 	close(handle);
 
-	nvf.dst = (Bit8u*)ds_readd(BUFFER8_PTR) + 7000;
-	nvf.src = (Bit8u*)ds_readd(BUFFER8_PTR);
+	nvf.dst = g_buffer8_ptr + 7000;
+	nvf.src = g_buffer8_ptr;
 	nvf.no = no;
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&handle;

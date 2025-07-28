@@ -161,7 +161,7 @@ void FIG_call_draw_pic(void)
 
 void FIG_draw_pic(void)
 {
-	memcpy((void*)g_renderbuf_ptr, (void*)ds_readd(BUFFER8_PTR), 64000);
+	memcpy((void*)g_renderbuf_ptr, (void*)g_buffer8_ptr, 64000);
 
 #if defined(__BORLANDC__)
 	g_always_one = 1;
@@ -541,7 +541,7 @@ void FIG_draw_enemy_pic(signed short loc, signed short id)
 	Bit8u* p1;
 	struct nvf_desc nvf;
 
-	p1 = F_PADD((Bit8u*)(ds_readd(BUFFER8_PTR)), -1288);
+	p1 = (((HugePt)g_buffer8_ptr) - 1288L);
 
 	p_enemy = p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + id * SIZEOF_ENEMY_SHEET;
 

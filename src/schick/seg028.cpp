@@ -610,11 +610,11 @@ void load_informer_tlk(signed short index)
 	read_archive_file(fd, p_datseg + DIALOG_STATES, (Bit16u)(off - partners * 0x26));
 
 	/* read the text */
-	text_len = (signed short)read_archive_file(fd, (Bit8u*)ds_readd(BUFFER8_PTR), 10000);
+	text_len = (signed short)read_archive_file(fd, g_buffer8_ptr, 10000);
 
 	close(fd);
 
-	split_textbuffer((char**)g_tx2_index, (char*)ds_readd(BUFFER8_PTR), text_len);
+	split_textbuffer((char**)g_tx2_index, (char*)g_buffer8_ptr, text_len);
 
 	/* adjust the pointers to the layouts */
 	for (i = 0; i < partners; i++, ptr += 0x26) {
@@ -681,7 +681,7 @@ void load_fightbg(signed short index)
 
 	fd = load_archive_file(index);
 	read_archive_file(fd, g_renderbuf_ptr, 30000);
-	decomp_pp20(g_renderbuf_ptr, (Bit8u*)ds_readd(BUFFER8_PTR),
+	decomp_pp20(g_renderbuf_ptr, g_buffer8_ptr,
 #if !defined(__BORLANDC__)
 			g_renderbuf_ptr + 4,
 #else

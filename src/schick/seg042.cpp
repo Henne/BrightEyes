@@ -716,7 +716,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 					ds_writew(PIC_COPY_Y1, ds_writew(PIC_COPY_V2, 194));
 					ds_writew(PIC_COPY_X2, 318);
 					ds_writew(PIC_COPY_Y2, 199);
-					ds_writed(PIC_COPY_SRC, ds_readd(BUFFER8_PTR));
+					ds_writed(PIC_COPY_SRC, (Bit32u)g_buffer8_ptr);
 
 					do_pic_copy(3);
 
