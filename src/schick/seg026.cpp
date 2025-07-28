@@ -49,10 +49,10 @@ void init_text(void)
 	split_textbuffer((char**)g_text_ltx_index, g_text_ltx_buffer, len);
 
 	handle = load_archive_file(ARCHIVE_FILE_ITEMNAME);
-	len = (signed short)read_archive_file(handle, (Bit8u*)ds_readd(BUFFER5_PTR), 5000);
+	len = (signed short)read_archive_file(handle, (Bit8u*)g_buffer5_ptr, 5000);
 	close(handle);
 
-	split_textbuffer((char**)g_itemsname, (char*)ds_readd(BUFFER5_PTR), len);
+	split_textbuffer((char**)g_itemsname, g_buffer5_ptr, len);
 
 	handle = load_archive_file(ARCHIVE_FILE_MONNAMES);
 	len = (signed short)read_archive_file(handle, (Bit8u*)g_monnames_buffer, 5000);

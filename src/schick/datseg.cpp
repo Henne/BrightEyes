@@ -6406,7 +6406,7 @@ void *g_buffer7_ptr; // ds:0xd2b5, to buffer of size 10000, used for NVF and tex
 void *g_buffer6_ptr; // ds:0xd2b1, to buffer of size 2200, used for NVF
 unsigned char *g_popup; // ds:0xd2ad
 void *g_buffer10_ptr; // ds:0xd2a9, to buffer of size 16771, used for NVF and text
-void *g_buffer5_ptr; // ds:0xd2a5, to buffer of size 3880
+char *g_buffer5_ptr; // ds:0xd2a5, to buffer of size 3880
 char *g_monnames_buffer; // ds:0xd2a1
 void *g_fig_star_gfx; // ds:0xd29d
 unsigned char *g_trv_track_pixel_bak; // ds:0xd299, to buffer of size 500

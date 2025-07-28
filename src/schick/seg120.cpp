@@ -259,8 +259,8 @@ void init_global_buffer(void)
 	g_dtp2 = (signed char*)(((HugePt)g_objects_nvf_buf) + 3400L);
 	g_text_input_buf = (signed char*)(g_dtp2 + 1500);
 	g_text_output_buf = (signed char*)(((HugePt)g_dtp2) + 1524L);
-	ds_writed(BUFFER5_PTR, (Bit32u)(((HugePt)g_text_output_buf) + 300L));
-	ds_writed(BUFFER6_PTR, (Bit32u)(F_PADD(ds_readd(BUFFER5_PTR), 3880)));
+	g_buffer5_ptr = (char*)(((HugePt)g_text_output_buf) + 300L);
+	ds_writed(BUFFER6_PTR, (Bit32u)(((HugePt)g_buffer5_ptr) + 3880L));
 	ds_writed(BUFFER7_PTR, (Bit32u)(F_PADD(ds_readd(BUFFER6_PTR), 2200)));
 	ds_writed(BUFFER8_PTR, (Bit32u)(F_PADD(ds_readd(BUFFER7_PTR), 10000)));
 	ds_writed(BUFFER9_PTR, (Bit32u)(F_PADD(ds_readd(BUFFER7_PTR), 22008)));
