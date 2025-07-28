@@ -499,17 +499,17 @@ signed short save_game_state(void)
 		do {
 			/* ask for filename */
 			g_gui_entering_savegame = 1;
-			strcpy((char*)ds_readd(TEXT_INPUT_BUF), (char*)p_datseg + SAVEGAME_NAMES + 9 * slot);
+			strcpy(g_text_input_buf, (char*)p_datseg + SAVEGAME_NAMES + 9 * slot);
 			GUI_input(get_ttx(634), 8);
 			g_gui_entering_savegame = 0;
 
-			if (host_readbs((char*)ds_readd(TEXT_INPUT_BUF)) == 0) {
+			if (host_readbs(g_text_input_buf) == 0) {
 				return 0;
 			}
 
 			flag = 0;
 
-			prepare_sg_name(g_text_output_buf, (char*)ds_readd(TEXT_INPUT_BUF));
+			prepare_sg_name(g_text_output_buf, g_text_input_buf);
 
 			for (tw_bak = 0; tw_bak < 5; tw_bak++) {
 
@@ -527,7 +527,7 @@ signed short save_game_state(void)
 		prepare_sg_name(g_text_output_buf, (char*)p_datseg + SAVEGAME_NAMES + 9 * slot);
 		strcat(g_text_output_buf, (char*)p_datseg + SAVEGAME_SUFFIX2);
 		unlink(g_text_output_buf);
-		strcpy((char*)p_datseg + SAVEGAME_NAMES + 9 * slot, (char*)ds_readd(TEXT_INPUT_BUF));
+		strcpy((char*)p_datseg + SAVEGAME_NAMES + 9 * slot, g_text_input_buf);
 
 		/* create a CHR-file for each hero in TEMP */
 		for (tw_bak = 0; tw_bak < 6; tw_bak++) {

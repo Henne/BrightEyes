@@ -539,7 +539,7 @@ void DNG08_chest2_func1(Bit8u* chest)
 		{
 			GUI_input(get_tx(27), 10);
 
-			if (!strcmp((char*)ds_readd(TEXT_INPUT_BUF), (char*)p_datseg + DNG08_STR_TAIRACH))
+			if (!strcmp(g_text_input_buf, (char*)p_datseg + DNG08_STR_TAIRACH))
 			{
 #if defined(__BORLANDC__)
 			((void (*)(Bit8u*))((Bit8u*)host_readd((Bit8u*)(chest) + 11)))(chest);

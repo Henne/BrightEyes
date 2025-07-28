@@ -6382,7 +6382,7 @@ void *g_framebuf_ptr; // ds:0xd2ff
 void *g_print_string_buffer; // ds:0xd2fb
 unsigned char *g_icon; // ds:0xd2f7
 signed char *g_dtp2; // ds:0xd2f3
-void *g_text_input_buf; // ds:0xd2ef, to buffer of size 24
+signed char *g_text_input_buf; // ds:0xd2ef, to buffer of size 24
 signed char *g_text_output_buf; // ds:0xd2eb, to buffer of size 300
 unsigned char *g_buf_icon; // ds:0xd2e7
 unsigned char *g_objects_nvf_buf; // ds:0xd2e3, to buffer of size 3400
