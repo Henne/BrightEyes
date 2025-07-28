@@ -239,7 +239,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 			}
 
 			/* spell_dunkelheit is active */
-			if (ds_readd(INGAME_TIMERS + 4 * INGAME_TIMER_DARKNESS)) {
+			if (gs_ingame_timers[INGAME_TIMER_DARKNESS]) {
 				atpa -= 4;
 			}
 
@@ -256,7 +256,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 				}
 
 				/* spell_dunkelheit is active */
-				if (ds_readd(INGAME_TIMERS + 4 * INGAME_TIMER_DARKNESS)) {
+				if (gs_ingame_timers[INGAME_TIMER_DARKNESS]) {
 					l11 -= 4;
 				}
 
@@ -381,7 +381,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 					}
 
 					/* spell_dunkelheit is active */
-					if (ds_readd(INGAME_TIMERS + 4 * INGAME_TIMER_DARKNESS)) {
+					if (gs_ingame_timers[INGAME_TIMER_DARKNESS]) {
 						l10 -= 4;
 					}
 

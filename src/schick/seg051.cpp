@@ -269,7 +269,7 @@ void do_wildcamp(void)
 
 				if (ds_readws(CAMP_INCIDENT) == -1) {
 
-					if ((ds_readbs(WILDCAMP_GUARDS) == -1 ? 60 : 10) > random_schick(100) && !ds_readds(INGAME_TIMERS + 4 * INGAME_TIMER_TRAVIA_SAFE_REST))
+					if (((ds_readbs(WILDCAMP_GUARDS) == -1 ? 60 : 10) > random_schick(100)) && !gs_ingame_timers[INGAME_TIMER_TRAVIA_SAFE_REST])
 					{
 						ds_writews(CAMP_INCIDENT, random_schick(3) - 1);
 					}
@@ -516,12 +516,10 @@ signed short replenish_stocks(signed short mod, signed short tries)
 					retval = 1;
 
 					/* search for water */
-					if (test_skill(hero, TA_WILDNISLEBEN, (signed char)mod) > 0 || ds_readd(INGAME_TIMERS + 4 * INGAME_TIMER_EFFERD_FIND_WATER)) {
+					if ((test_skill(hero, TA_WILDNISLEBEN, (signed char)mod) > 0) || gs_ingame_timers[INGAME_TIMER_EFFERD_FIND_WATER]) {
 
 						/* found water */
-						sprintf((char*)g_dtp2,
-							get_ttx(324),
-							(char*)hero + HERO_NAME2);
+						sprintf((char*)g_dtp2, get_ttx(324), (char*)hero + HERO_NAME2);
 
 						/* fill up all waterskins and remove thirst of all living heroes in the current group */
 						hero2 = get_hero(0);
@@ -542,16 +540,14 @@ signed short replenish_stocks(signed short mod, signed short tries)
 						}
 					} else {
 
-						sprintf((char*)g_dtp2,
-							get_ttx(340),
-							(char*)hero + HERO_NAME2);
+						sprintf((char*)g_dtp2, get_ttx(340), (char*)hero + HERO_NAME2);
 					}
 
 					GUI_print_loc_line((char*)g_dtp2);
 					delay_or_keypress(200);
 
 					/* search for food */
-					if (test_skill(hero, TA_FAEHRTENSUCHEN, (signed char)mod) > 0 || ds_readd(INGAME_TIMERS + 4 * INGAME_TIMER_FIRUN_HUNT)) {
+					if ((test_skill(hero, TA_FAEHRTENSUCHEN, (signed char)mod) > 0) || gs_ingame_timers[INGAME_TIMER_FIRUN_HUNT]) {
 
 						/* remove hunger of all living heroes in the current group */
 						hero2 = get_hero(0);

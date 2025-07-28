@@ -598,7 +598,7 @@ void sea_travel(signed short passage, signed short dir)
 			 * In that case, TRAVEL_DETOUR is set to DUNGEONS_TOTENSCHIFF (instead of 0) */
 
 			ds_writew(PASSAGE_DEADSHIP_FLAG, 0);
-		} else if (ds_readws(PASSAGE_OCTOPUS_FLAG) != 0 && ds_readws(ROUTE_DAYPROGRESS) >= ds_readws(PASSAGE_OCTOPUS_POSITION) && !ds_readd(INGAME_TIMERS + 4 * INGAME_TIMER_EFFERD_SAFE_PASSAGE)) {
+		} else if (ds_readws(PASSAGE_OCTOPUS_FLAG) != 0 && ds_readws(ROUTE_DAYPROGRESS) >= ds_readws(PASSAGE_OCTOPUS_POSITION) && !gs_ingame_timers[INGAME_TIMER_EFFERD_SAFE_PASSAGE]) {
 			octopus_attack_wrapper();
 			ds_writew(PASSAGE_OCTOPUS_FLAG, 0);
 		} else if
@@ -608,7 +608,7 @@ void sea_travel(signed short passage, signed short dir)
 			 * For sea traveling, it prevents octopus encounters. However, pirate encounters are still possible, which feels wrong. */
 			(ds_readws(PASSAGE_PIRATES_FLAG) != 0 && ds_readws(ROUTE_DAYPROGRESS) >= ds_readws(PASSAGE_PIRATES_POSITION))
 #else
-			(ds_readws(PASSAGE_PIRATES_FLAG) != 0 && ds_readws(ROUTE_DAYPROGRESS) >= ds_readws(PASSAGE_PIRATES_POSITION) && !ds_readd(INGAME_TIMERS + 4 * INGAME_TIMER_EFFERD_SAFE_PASSAGE))
+			(ds_readws(PASSAGE_PIRATES_FLAG) != 0 && ds_readws(ROUTE_DAYPROGRESS) >= ds_readws(PASSAGE_PIRATES_POSITION) && !gs_ingame_timers[INGAME_TIMER_EFFERD_SAFE_PASSAGE])
 #endif
 		{
 			pirates_attack_wrapper();

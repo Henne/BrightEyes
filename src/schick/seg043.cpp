@@ -208,13 +208,13 @@ void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 			}
 
 			/* spell_dunkelheit() is active => AT-4, PA-4*/
-			if (ds_readds(INGAME_TIMERS + 4 * INGAME_TIMER_DARKNESS)) {
+			if (gs_ingame_timers[INGAME_TIMER_DARKNESS]) {
 				defender_at -= 4;
 				defender_pa -= 4;
 			}
 
 			attacker_at = host_readbs((Bit8u*)(monster) + ENEMY_SHEET_AT);
-			if (ds_readds(INGAME_TIMERS + 4 * INGAME_TIMER_DARKNESS)) {
+			if (gs_ingame_timers[INGAME_TIMER_DARKNESS]) {
 				attacker_at -= 4;
 			}
 

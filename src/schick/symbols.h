@@ -241,7 +241,7 @@
 #define MONTH                           (0x2dc1)    /* char */
 #define YEAR                            (0x2dc2)    /* char */
 #define SPECIAL_DAY                     (0x2dc3)    /* char */
-#define INGAME_TIMERS                   (0x2dc4)    /* signed long[26] */
+//#define INGAME_TIMERS                   (0x2dc4)    /* signed long[26] */
 #define MODIFICATION_TIMERS             (0x2e2c)    /* struct(8)[100]; struct{long u1; short u2; char u3; char u4;} */
 // ?2
 #define GODS_ESTIMATION                 (0x314e)    /* signed long[15] */

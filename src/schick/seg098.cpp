@@ -843,9 +843,7 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 			if (ds_readws(SPELLTEST_RESULT) == -99) {
 
 				/* prepare output */
-				sprintf((char*)g_dtp2,
-					get_ttx(607),
-					(char*)hero + HERO_NAME2);
+				sprintf((char*)g_dtp2, get_ttx(607), (char*)hero + HERO_NAME2);
 
 				if (ds_readws(IN_FIGHT) == 0) {
 					GUI_output((char*)g_dtp2);
@@ -853,7 +851,7 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 
 				retval = -1;
 
-			} else if ((ds_readws(SPELLTEST_RESULT) <= 0) || (ds_readds(INGAME_TIMERS + 4 * INGAME_TIMER_RONDRA_NO_SPELLS) > 0)) {
+			} else if ((ds_readws(SPELLTEST_RESULT) <= 0) || (gs_ingame_timers[INGAME_TIMER_RONDRA_NO_SPELLS] > 0)) {
 
 				strcpy((char*)g_dtp2, get_ttx(606));
 

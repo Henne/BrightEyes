@@ -748,16 +748,11 @@ void spell_claudibus(void)
 
 void spell_dunkelheit(void)
 {
-
-
-	/* set dunkelheit duration (level + 3) hours */
-	ds_writed(INGAME_TIMERS + 4 * INGAME_TIMER_DARKNESS,
-		(Bit32s)(host_readbs(get_spelluser() + HERO_LEVEL) + 3) * HOURS(1));
+	/* set dunkelheit duration (level + 3) * hours */
+	gs_ingame_timers[INGAME_TIMER_DARKNESS] = (Bit32s)(host_readbs(get_spelluser() + HERO_LEVEL) + 3) * HOURS(1);
 
 	/* copy message text */
-	strcpy((char*)g_dtp2,
-		get_tx(109));
-
+	strcpy((char*)g_dtp2, get_tx(109));
 }
 
 void spell_erstarre(void)
@@ -769,16 +764,11 @@ void spell_erstarre(void)
 
 void spell_flimflam(void)
 {
-
-
 	/* set flim flam duration (level + 3) hours */
-	ds_writed(INGAME_TIMERS + 4 * INGAME_TIMER_FLIM_FLAM,
-		(Bit32s)(host_readbs(get_spelluser() + HERO_LEVEL) + 3) * HOURS(1));
+	gs_ingame_timers[INGAME_TIMER_FLIM_FLAM] = (Bit32s)(host_readbs(get_spelluser() + HERO_LEVEL) + 3) * HOURS(1);
 
 	/* copy message text */
-	strcpy((char*)g_dtp2,
-		get_tx(110));
-
+	strcpy((char*)g_dtp2, get_tx(110));
 }
 
 void spell_schmelze(void)
