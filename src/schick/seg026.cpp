@@ -285,13 +285,10 @@ signed short load_game_state(void)
 		_read(handle_gs, p_datseg + DATSEG_STATUS_START, 4);
 
 		/* read game status */
+		/* TODO: check pointer arithmetics work with other pointers */
 		p_status_start = (HugePt)(p_datseg + DATSEG_STATUS_START);
 		p_status_end = (HugePt)(p_datseg + DATSEG_STATUS_END);
-#if !defined(__BORLANDC__)
-		status_length = (signed short)F_PSUB(p_status_end, p_status_start);
-#else
 		status_length = (signed short)(p_status_end - p_status_start);
-#endif
 
 		_read(handle_gs, p_datseg + DATSEG_STATUS_START, status_length);
 
@@ -561,13 +558,10 @@ signed short save_game_state(void)
 
 		load_area_description(1);
 
+		/* TODO: check if pointer arithmetics work with other pointers */
 		p_status_start = (HugePt)(p_datseg + DATSEG_STATUS_START);
 		p_status_end = (HugePt)(p_datseg + DATSEG_STATUS_END);
-#if !defined(__BORLANDC__)
-		status_len = (signed short)F_PSUB(p_status_end, p_status_start);
-#else
 		status_len = (signed short)(p_status_end - p_status_start);
-#endif
 
 		prepare_sg_name(g_text_output_buf, (char*)p_datseg + SAVEGAME_NAMES + 9 * slot);
 		strcat(g_text_output_buf, (char*)p_datseg + SAVEGAME_SUFFIX3);

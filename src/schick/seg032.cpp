@@ -866,10 +866,10 @@ void FIG_load_ship_sprites(void)
 #endif
 
 				/* adjust the counter */
-				sub_ds_ds(FIGHTOBJ_BUF_FREESPACE, width * height + 8L);
+				g_fightobj_buf_freespace -= width * height + 8L;
 
-				/* check for error */
-				if (ds_readds(FIGHTOBJ_BUF_FREESPACE) < 0L) {
+				/* check for memory allocation error */
+				if (g_fightobj_buf_freespace < 0L) {
 					GUI_input((char*)p_datseg + STR_ERROR_ON_OBJ_MALLOC, 0);
 				}
 			}

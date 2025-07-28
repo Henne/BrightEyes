@@ -310,7 +310,7 @@ void FIG_load_enemy_sprites(Bit8u *ptr, signed short x, signed short y)
 #if defined(__BORLANDC__)
 	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 0x508);
 #endif
-	sub_ds_ds(FIGHTOBJ_BUF_FREESPACE, 0x508);
+	g_fightobj_buf_freespace -= 0x508;
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_Z), 0x63);
 
 	/* check presence in the first round */
@@ -524,7 +524,7 @@ void FIG_init_heroes(void)
 #if defined(__BORLANDC__)
 		add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 0x508);
 #endif
-		sub_ds_ds(FIGHTOBJ_BUF_FREESPACE, 0x508);
+		g_fightobj_buf_freespace -= 0x508L;
 		ds_writeb((FIG_LIST_ELEM+FIGHTER_Z), 0x63);
 		ds_writeb((FIG_LIST_ELEM+FIGHTER_VISIBLE), 1);
 		ds_writeb((FIG_LIST_ELEM+FIGHTER_TWOFIELDED), 0xff);

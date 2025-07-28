@@ -208,7 +208,8 @@ void FIG_preload_gfx(void)
 	add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, 1300);
 #endif
 
-	ds_writed(FIGHTOBJ_BUF_FREESPACE, F_PSUB(ds_readd(FIGHTOBJ_BUF), ds_readd(FIGHTOBJ_BUF_SEEK_PTR)));
+	/* TODO: check if pointer arithmetics works with other pointer types */
+	g_fightobj_buf_freespace = (Bit32s)((HugePt)ds_readd(FIGHTOBJ_BUF) - (HugePt)ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
 
 	ds_writew(FIGHTOBJ_COUNT, 0);
 	ds_writeb(FIG_TWOFIELDED_COUNT, 0);
@@ -263,8 +264,7 @@ void FIG_draw_scenario(void)
 #if defined(__BORLANDC__)
 						add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, (width * height + 8));
 #endif
-						/* var -= height * width + 8; */
-						sub_ds_ds(FIGHTOBJ_BUF_FREESPACE, (width * height + 8L));
+						g_fightobj_buf_freespace -= width * height + 8L;
 					}
 
 					ds_writew(FIG_LIST_ELEM, 0);

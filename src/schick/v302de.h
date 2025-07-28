@@ -532,7 +532,6 @@ static inline int __abs__(int j)
 }
 
 static inline Bit8u* F_PADD(Bit8u* ptr, Bit32s o)	{ return ptr + o; }
-static inline Bit32s F_PSUB(Bit8u *p1, Bit8u *p2)	{ return p1 - p2; }
 
 static inline char* my_itoa(int value, char *string, int radix)
 {
@@ -1165,7 +1164,6 @@ static inline char* get_itemname(unsigned short item)
 #define struct_copy memcpy
 
 #define F_PADD(p, o) ((HugePt)(p) + o)
-#define F_PSUB(p1, p2) ((HugePt)(p1) - (HugePt)(p2))
 
 #define my_itoa itoa
 

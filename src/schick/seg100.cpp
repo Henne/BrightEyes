@@ -238,7 +238,7 @@ void spell_hexenknoten(void)
 	signed short width;
 	struct nvf_desc nvf;
 
-	if (ds_readds(FIGHTOBJ_BUF_FREESPACE) < 0x240) {
+	if (g_fightobj_buf_freespace < 0x240L) {
 		ds_writew(SPELL_SPECIAL_AECOST, -2);
 		return;
 	}
@@ -291,8 +291,7 @@ void spell_hexenknoten(void)
 		/* move pointer further */
 		add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, width * height + 8);
 #endif
-
-		sub_ds_ds(FIGHTOBJ_BUF_FREESPACE, width * height + 8L);
+		g_fightobj_buf_freespace -= width * height + 8L;
 	}
 
 	ds_writew(FIG_LIST_ELEM, 0);
