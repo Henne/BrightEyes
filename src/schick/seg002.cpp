@@ -1568,7 +1568,7 @@ void handle_gui_input(void)
 			(ds_readws(PREGAME_STATE) == 0))
 		{
 			ds_writew(BIOSKEY_EVENT10, 1);
-			inc_ds_ws(TIMERS_DISABLED);
+			g_timers_disabled++;
 			ds_writew(GUI_TEXT_CENTERED, 1);
 			l_di = ds_readws(TEXTBOX_WIDTH);
 			ds_writew(TEXTBOX_WIDTH, 2);
@@ -1576,7 +1576,7 @@ void handle_gui_input(void)
 			ds_writew(TEXTBOX_WIDTH, l_di);
 			ds_writew(GUI_TEXT_CENTERED, 0);
 			ds_writew(BIOSKEY_EVENT10, l_si = ds_writew(BIOSKEY_EVENT, 0));
-			dec_ds_ws(TIMERS_DISABLED);
+			g_timers_disabled--;
 		}
 	} else {
 		play_voc(ARCHIVE_FILE_FX1_VOC);
@@ -1734,14 +1734,14 @@ void handle_input(void)
 			!ds_readbs(DIALOGBOX_LOCK) &&
 			(ds_readws(PREGAME_STATE) == 0))
 		{
-			inc_ds_ws(TIMERS_DISABLED);
+			g_timers_disabled++;
 			ds_writew(BIOSKEY_EVENT10, 1);
 			ds_writew(GUI_TEXT_CENTERED, 1);
 			ds_writew(TEXTBOX_WIDTH, 2);
 			GUI_output((char*)p_datseg + PAUSE_STRING);		/* P A U S E */
 			ds_writew(TEXTBOX_WIDTH, 3);
 			ds_writew(GUI_TEXT_CENTERED, 0);
-			dec_ds_ws(TIMERS_DISABLED);
+			g_timers_disabled--;
 
 			ds_writew(BIOSKEY_EVENT10, l_si = ds_writew(BIOSKEY_EVENT, 0));
 		}
@@ -2218,7 +2218,7 @@ void do_timers(void)
 
 	afternoon = 0;
 
-	if (ds_readw(TIMERS_DISABLED) != 0)
+	if (g_timers_disabled)
 		/* TIMERS_DISABLED is set during a fight or a level-up or if the game is paused (Ctrl + P) */
 		return;
 
@@ -2501,7 +2501,7 @@ void sub_ingame_timers(Bit32s val)
 {
 	signed short i = 0;
 
-	if (ds_readw(TIMERS_DISABLED)) return;
+	if (g_timers_disabled) return;
 
 	for (i = 0; i < 26; i++) {
 
@@ -2540,7 +2540,7 @@ void sub_mod_timers(Bit32s val)
 
 	h_index = -1;
 
-	if (ds_readw(TIMERS_DISABLED))
+	if (g_timers_disabled)
 		return;
 
 	for (i = 0; i < 100; i++) {
@@ -2741,7 +2741,7 @@ void sub_heal_staffspell_timers(Bit32s fmin)
 	signed short i;
 	Bit8u *hero_i;
 
-	if (ds_readw(TIMERS_DISABLED) != 0)
+	if (g_timers_disabled)
 		return;
 
 	hero_i = get_hero(0);
@@ -2808,7 +2808,7 @@ void sub_light_timers(Bit32s quarter)
 	Bit8u *hero_i;
 	signed char tmp;
 
-	if (ds_readw(TIMERS_DISABLED))
+	if (g_timers_disabled)
 		return;
 
 	hero_i = get_hero(0);
@@ -2868,7 +2868,7 @@ void magical_chainmail_damage(void)
 	signed short i;
 	Bit8u *hero_i;
 
-	if (ds_readw(TIMERS_DISABLED) != 0) {
+	if (g_timers_disabled) {
 		return;
 	}
 
@@ -3136,7 +3136,7 @@ void check_level_up(void)
 	signed short done;
 	Bit8u *hero;
 
-	if (ds_readw(TIMERS_DISABLED) != 0) {
+	if (g_timers_disabled) {
 		return;
 	}
 
@@ -3445,8 +3445,8 @@ void timewarp(Bit32s time)
 	Bit32s timer_bak;
 
 	timer_bak = gs_day_timer;
-	td_bak = ds_readw(TIMERS_DISABLED);
-	ds_writew(TIMERS_DISABLED, 0);
+	td_bak = g_timers_disabled;
+	g_timers_disabled = 0;
 
 	ds_writeb(FREEZE_TIMERS, 1);
 	/* this deactivates the function calls sub_ingame_timers(1); and sub_mod_timers(1); in do_timers(); within the following loop.
@@ -3545,7 +3545,7 @@ void timewarp(Bit32s time)
 
 	/* restore variables */
 	ds_writeb(FREEZE_TIMERS, 0);
-	ds_writew(TIMERS_DISABLED, td_bak);
+	g_timers_disabled = td_bak;
 }
 
 /**
@@ -3575,8 +3575,8 @@ void timewarp_until_time_of_day(Bit32s time)
 
 	i = 0;
 	timer_bak = gs_day_timer;
-	td_bak = ds_readw(TIMERS_DISABLED);
-	ds_writew(TIMERS_DISABLED, 0);
+	td_bak = g_timers_disabled;
+	g_timers_disabled = 0;
 
 	ds_writeb(FREEZE_TIMERS, 1);
 
@@ -3622,7 +3622,7 @@ void timewarp_until_time_of_day(Bit32s time)
 
 	/* restore variables */
 	ds_writeb(FREEZE_TIMERS, 0);
-	ds_writew(TIMERS_DISABLED, td_bak);
+	g_timers_disabled = td_bak;
 #endif
 }
 
@@ -3686,10 +3686,10 @@ void timewarp_until_midnight(void)
 	signed short td_bak;
 
 	/* save the timers status */
-	td_bak = ds_readw(TIMERS_DISABLED);
+	td_bak = g_timers_disabled;
 
 	/* enable timers */
-	ds_writew(TIMERS_DISABLED, 0);
+	g_timers_disabled = 0;
 
 	/* calculate the ticks left on this day */
 	ticks_left = (HOURS(24) - 1) - gs_day_timer;
@@ -3709,7 +3709,7 @@ void timewarp_until_midnight(void)
 	 * and two timers for barrels with orc muck in the orc dungeon are not affected from passing in-game time. */
 
 	/* restore the timer status */
-	ds_writew(TIMERS_DISABLED, td_bak);
+	g_timers_disabled = td_bak;
 }
 
 void wait_for_keyboard2(void)

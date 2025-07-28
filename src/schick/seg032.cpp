@@ -939,7 +939,7 @@ signed short do_fight(signed short fight_id)
 		return 1;
 	}
 
-	ds_writew(TIMERS_DISABLED, 1);
+	g_timers_disabled = 1;
 	ds_writew(CURRENT_FIG_NO, fight_id);
 
 	textbox_width_bak = ds_readws(TEXTBOX_WIDTH);
@@ -1259,7 +1259,7 @@ signed short do_fight(signed short fight_id)
 	ds_writew(REQUEST_REFRESH, 1);
 	ds_writew(CURRENT_ANI, -1);
 	ds_writew(AREA_PREPARED, -1);
-	ds_writew(TIMERS_DISABLED, 0);
+	g_timers_disabled = 0;
 	ds_writew(AUTOFIGHT, 0);
 	ds_writeb(CHECK_PARTY, 1);
 	ds_writew(TEXTBOX_WIDTH, textbox_width_bak);

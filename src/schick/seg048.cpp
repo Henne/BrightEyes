@@ -89,7 +89,7 @@ void status_menu(signed short hero_pos)
 	}
 
 	/* disable timers */
-	inc_ds_ws(TIMERS_DISABLED);
+	g_timers_disabled++;
 
 	/* set textbox width */
 	tw_bak = ds_readws(TEXTBOX_WIDTH);
@@ -837,7 +837,7 @@ void status_menu(signed short hero_pos)
 
 	ds_writew(REQUEST_REFRESH, 1);
 	ds_writew(TEXTBOX_WIDTH, tw_bak);
-	dec_ds_ws(TIMERS_DISABLED);
+	g_timers_disabled--;
 
 	if (ds_readbs(CURRENT_TOWN) != TOWNS_NONE) {
 		ds_writeb(FADING_STATE, 3);

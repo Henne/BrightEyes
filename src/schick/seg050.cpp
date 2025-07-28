@@ -421,7 +421,7 @@ void level_up(signed short hero_pos)
 		refresh_colors();
 	}
 
-	ds_writew(TIMERS_DISABLED, 1);
+	g_timers_disabled = 1;
 
 	city_bak = g_text_file_index;
 
@@ -959,7 +959,7 @@ void level_up(signed short hero_pos)
 
 	ds_writew(BASEPOS_X, 0);
 	ds_writew(REQUEST_REFRESH, 1);
-	ds_writew(TIMERS_DISABLED, 0);
+	g_timers_disabled = 0;
 
 	ds_writews(CURRENT_ANI, -1);
 
