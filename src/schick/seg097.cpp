@@ -285,7 +285,7 @@ void GUI_draw_radio_bg(signed short header, signed short options, signed short w
 	ds_writew(PIC_COPY_X2, ds_readw(TEXTBOX_POS_X) + width - 1);
 	ds_writew(PIC_COPY_Y2, ds_readw(TEXTBOX_POS_Y) + height - 1);
 	/* set pointer */
-	ds_writed(PIC_COPY_SRC, ds_readd(GUI_BUFFER_UNKN));
+	ds_writed(PIC_COPY_SRC, (Bit32u)g_gui_buffer_unkn);
 	do_save_rect();
 
 	/* play FX3.VOC */
@@ -313,7 +313,7 @@ void GUI_copy_smth(unsigned short width, unsigned short height)
 	ds_writew(PIC_COPY_Y1, ds_readw(TEXTBOX_POS_Y));
 	ds_writew(PIC_COPY_X2, ds_readw(TEXTBOX_POS_X) + width - 1);
 	ds_writew(PIC_COPY_Y2, ds_readw(TEXTBOX_POS_Y) + height - 1);
-	ds_writed(PIC_COPY_SRC, ds_readd(GUI_BUFFER_UNKN));
+	ds_writed(PIC_COPY_SRC, (Bit32u)g_gui_buffer_unkn);
 	do_pic_copy(0);
 }
 

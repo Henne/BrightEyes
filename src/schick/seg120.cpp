@@ -438,7 +438,7 @@ void init_game_state(void)
 	ds_writew(CURRENT_ANI, -1);
 	g_wallclock_update = 1;
 
-	ds_writed(GUI_BUFFER_UNKN, (Bit32u)g_renderbuf_ptr);
+	g_gui_buffer_unkn = g_renderbuf_ptr;
 	load_splashes();
 }
 

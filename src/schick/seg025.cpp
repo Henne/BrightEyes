@@ -497,7 +497,7 @@ signed short game_options(void)
 
 	ds_writew(TEXTLINE_POSX, bak2);
 	ds_writew(TEXTLINE_MAXLEN, bak1);
-	ds_writed(GUI_BUFFER_UNKN, (Bit32u)g_buffer9_ptr);
+	g_gui_buffer_unkn = (unsigned char*)g_buffer9_ptr;
 
 	do {
 		ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)(p_datseg + ACTION_TABLE_OPTIONS));
@@ -585,7 +585,7 @@ signed short game_options(void)
 
 	} while (!done);
 
-	ds_writed(GUI_BUFFER_UNKN, (Bit32u)g_renderbuf_ptr);
+	g_gui_buffer_unkn = g_renderbuf_ptr;
 
 	ds_writews(FIG_FIGURE1, ds_writews(FIG_FIGURE2, ds_writews(CURRENT_ANI, ds_writebs(PP20_INDEX, 0xff))));
 	ds_writew(REQUEST_REFRESH, 1);
