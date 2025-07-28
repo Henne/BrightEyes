@@ -264,7 +264,7 @@ void THO_arsenal(void)
 	signed short tw_bak;
 	Bit32s p_money;
 
-	if (ds_readds(DAY_TIMER) < HOURS(8) || ds_readds(DAY_TIMER) > HOURS(19)) {
+	if (gs_day_timer < HOURS(8) || gs_day_timer > HOURS(19)) {
 
 		GUI_output(get_ttx(482));
 

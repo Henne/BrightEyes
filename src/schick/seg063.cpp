@@ -246,7 +246,7 @@ void do_harbor(void)
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_2) {
 			/* Hafenmeister */
 
-			if (ds_readds(DAY_TIMER) <= HOURS(6) || ds_readds(DAY_TIMER) >= HOURS(21)) {
+			if (gs_day_timer <= HOURS(6) || gs_day_timer >= HOURS(21)) {
 
 				GUI_output(get_ttx(568));
 

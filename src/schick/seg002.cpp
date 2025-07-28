@@ -2061,9 +2061,9 @@ void pal_fade_in(Bit8u *dst, Bit8u *p2, signed short v3, signed short colors)
 void dawning(void)
 {
 	/* Between 6 and 7, in 64 steps (i.e. each 56 seconds) */
-	if ((ds_readds(DAY_TIMER) >= HOURS(6)) &&
-		(ds_readds(DAY_TIMER) <= HOURS(7)) &&
-		!((ds_readds(DAY_TIMER) - HOURS(6)) % SECONDS(56)))
+	if ((gs_day_timer >= HOURS(6)) &&
+		(gs_day_timer <= HOURS(7)) &&
+		!((gs_day_timer - HOURS(6)) % SECONDS(56)))
 	{
 
 		/* floor */
@@ -2102,9 +2102,9 @@ void dawning(void)
 void nightfall(void)
 {
 	/* Between 20 and 21, in 64 steps (i.e. each 56 seconds) */
-	if ((ds_readds(DAY_TIMER) >= HOURS(20)) &&
-		(ds_readds(DAY_TIMER) <= HOURS(21)) &&
-		!((ds_readds(DAY_TIMER) - HOURS(20)) % SECONDS(56)))
+	if ((gs_day_timer >= HOURS(20)) &&
+		(gs_day_timer <= HOURS(21)) &&
+		!((gs_day_timer - HOURS(20)) % SECONDS(56)))
 	{
 
 		/* floor */
@@ -2227,7 +2227,7 @@ void do_timers(void)
 	nightfall();
 
 	/* inc day timer */
-	add_ds_ds(DAY_TIMER, 1);
+	gs_day_timer += 1L;
 
 	if (!ds_readbs(FREEZE_TIMERS)) {
 		/* FREEZE_TIMERS is set in timewarp(..) and timewarp_until_time_of_day(..) for efficiency reasons,
@@ -2240,22 +2240,22 @@ void do_timers(void)
 
 		/* set day timer to pm */
 		/* TODO: afternoon is useless */
-		if (ds_readds(DAY_TIMER) >= HOURS(12)) {
-			sub_ds_ds(DAY_TIMER, HOURS(12));
+		if (gs_day_timer >= HOURS(12)) {
+			gs_day_timer -= HOURS(12);
 			afternoon = 1;
 		}
 
 		/* every 5 minutes ingame */
-		if (!(ds_readds(DAY_TIMER) % MINUTES(5))) {
+		if (!(gs_day_timer % MINUTES(5))) {
 			sub_heal_staffspell_timers(1);
 		}
 
 		/* every 15 minutes ingame */
-		if (!(ds_readds(DAY_TIMER) % MINUTES(15))) {
+		if (!(gs_day_timer % MINUTES(15))) {
 			sub_light_timers(1L);
 		}
 		/* every hour ingame */
-		if (!(ds_readds(DAY_TIMER) % HOURS(1))) {
+		if (!(gs_day_timer % HOURS(1))) {
 
 			magical_chainmail_damage();
 
@@ -2287,12 +2287,12 @@ void do_timers(void)
 
 		/* reset the day timer to 24h time */
 		if (afternoon) {
-			add_ds_ds(DAY_TIMER, HOURS(12));
+			gs_day_timer += HOURS(12);
 		}
 	}
 
 	/* at 6 o'clock in the morninig */
-	if (ds_readd(DAY_TIMER) == HOURS(6)) {
+	if (gs_day_timer == HOURS(6)) {
 
 		hero_i = get_hero(0);
 
@@ -2315,7 +2315,7 @@ void do_timers(void)
 	}
 
 	/* at 10 o'clock */
-	if (ds_readd(DAY_TIMER) == HOURS(10)) {
+	if (gs_day_timer == HOURS(10)) {
 
 		hero_i = get_hero(0);
 
@@ -2384,14 +2384,14 @@ void do_timers(void)
 	}
 
 	/* at 24 o'clock, daily stuff */
-	if (ds_readds(DAY_TIMER) >= HOURS(24)) {
+	if (gs_day_timer >= HOURS(24)) {
 
 		timers_daily();
 
 		seg002_2177();
 
 		/* reset day timer */
-		ds_writed(DAY_TIMER, 0);
+		gs_day_timer = 0L;
 
 		/* inc DAY date */
 		inc_ds_bs_post(DAY_OF_WEEK);
@@ -2486,7 +2486,7 @@ void do_timers(void)
 	}
 
 	/* at 9 o'clock */
-	if (ds_readd(DAY_TIMER) == HOURS(9)) {
+	if (gs_day_timer == HOURS(9)) {
 		/* ships leave the harbor at 9 o'clock */
 		passages_reset();
 	}
@@ -3445,7 +3445,7 @@ void timewarp(Bit32s time)
 	signed short hour_diff;
 	Bit32s timer_bak;
 
-	timer_bak = ds_readd(DAY_TIMER);
+	timer_bak = gs_day_timer;
 	td_bak = ds_readw(TIMERS_DISABLED);
 	ds_writew(TIMERS_DISABLED, 0);
 
@@ -3494,7 +3494,7 @@ void timewarp(Bit32s time)
 	 *
 	 * Again, sloppy treatment of modular arithmetics. */
 	hour_old = (signed short)(timer_bak / HOURS(1));
-	hour_new = (signed short)(ds_readd(DAY_TIMER) / HOURS(1));
+	hour_new = (signed short)(gs_day_timer / HOURS(1));
 
 	if (hour_old != hour_new) {
 		if (hour_new > hour_old) {
@@ -3560,10 +3560,10 @@ void timewarp_until_time_of_day(Bit32s time)
 	/* The code of the function replicates the one of timewarp(..)
 	 * Better call timewarp(..), such that we don't have to apply the same bugfixes twice.
 	 * The bypassed code below suffers from Original-Bug 37 and 38. */
-	if (ds_readd(DAY_TIMER) < time) {
-		timewarp(time - ds_readd(DAY_TIMER));
+	if (gs_day_timer < time) {
+		timewarp(time - gs_day_timer);
 	} else {
-		timewarp(DAYS(1) + time - ds_readd(DAY_TIMER));
+		timewarp(DAYS(1) + time - gs_day_timer);
 	}
 #else
 	signed short hour_old;
@@ -3575,7 +3575,7 @@ void timewarp_until_time_of_day(Bit32s time)
 	Bit32s timer_bak;
 
 	i = 0;
-	timer_bak = ds_readd(DAY_TIMER);
+	timer_bak = gs_day_timer;
 	td_bak = ds_readw(TIMERS_DISABLED);
 	ds_writew(TIMERS_DISABLED, 0);
 
@@ -3588,7 +3588,7 @@ void timewarp_until_time_of_day(Bit32s time)
 		if (i % 768 == 0)
 			wait_for_vsync();
 #endif
-	} while (ds_readds(DAY_TIMER) != time);
+	} while (gs_day_timer != time);
 
 	sub_ingame_timers(i);
 
@@ -3599,7 +3599,7 @@ void timewarp_until_time_of_day(Bit32s time)
 	sub_light_timers(i / MINUTES(15));
 
 	hour_old = (signed short)(timer_bak / HOURS(1));
-	hour_new = (signed short)(ds_readds(DAY_TIMER) / HOURS(1));
+	hour_new = (signed short)(gs_day_timer / HOURS(1));
 
 	/* Original-Bug 38: see above */
 	if (hour_old != hour_new) {
@@ -3693,11 +3693,11 @@ void timewarp_until_midnight(void)
 	ds_writew(TIMERS_DISABLED, 0);
 
 	/* calculate the ticks left on this day */
-	ticks_left = (HOURS(24) - 1) - ds_readd(DAY_TIMER);
+	ticks_left = (HOURS(24) - 1) - gs_day_timer;
 
 	/* Set the day timer to one tick before midnight.
 	 * Original-Bug: Hard setting the time skips events at a fixed time of the day, like getting sober at 10 o'clock. */
-	ds_writed(DAY_TIMER, (HOURS(24) - 1));
+	gs_day_timer = HOURS(24) - 1L;
 
 	do_timers(); /* now it is precisely midnight */
 	sub_ingame_timers(ticks_left);
@@ -4031,7 +4031,7 @@ void draw_loc_icons(signed short icons, ...)
 
 signed short mod_day_timer(signed short val)
 {
-	return ((ds_readds(DAY_TIMER) % val) == 0) ? 1 : 0;
+	return ((gs_day_timer % val) == 0) ? 1 : 0;
 }
 
 void draw_compass(void)

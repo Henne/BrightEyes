@@ -63,6 +63,8 @@ extern signed char g_mr_modificators[13];		//ds:0x2d27; seg050
 extern void (*g_location_handlers[19])(void);
 extern void (*g_use_special_item_handlers[14])(void);
 extern void (*g_travel_event_handlers[146])(void);
+
+extern Bit32s gs_day_timer;			//ds:0x2dbb; seg002-seg120
 extern unsigned char g_always_one2;			//ds:0x35f3; seg078
 
 extern Bit8s  gs_dng07_poison_flag;		//ds:0x3cb5; seg082

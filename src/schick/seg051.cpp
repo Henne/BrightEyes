@@ -258,9 +258,9 @@ void do_wildcamp(void)
 
 			if (GUI_bool(get_ttx(318))) {
 
-				l3 = (signed char)(ds_readds(DAY_TIMER) / HOURS(1));
+				l3 = (signed char)(gs_day_timer / HOURS(1));
 
-				l3 = ds_readds(DAY_TIMER) < HOURS(8) ? 8 - l3 : 24 - l3 + 8;
+				l3 = gs_day_timer < HOURS(8) ? 8 - l3 : 24 - l3 + 8;
 
 				l4 = l3 / 3;
 				l5 = l4;

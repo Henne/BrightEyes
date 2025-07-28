@@ -41,7 +41,7 @@ signed short DNG13_handler(void)
 
 	hero = (Bit8u*)get_first_hero_available_in_group();
 
-	if (!(ds_readds(DAY_TIMER) % MINUTES(5)) &&
+	if (!(gs_day_timer % MINUTES(5)) &&
 		(pos == DNG_POS(0,5,1) || pos == DNG_POS(0,6,1) || pos == DNG_POS(0,7,1) || pos == DNG_POS(0,8,1)) &&
 		random_schick(100) <= 5)
 	{

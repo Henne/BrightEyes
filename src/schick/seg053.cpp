@@ -93,7 +93,7 @@ void do_healer(void)
 				motivation = 1;
 
 				/* from 9.00 pm to 6.00 am the healer gets unkind */
-				if (ds_readds(DAY_TIMER) > HOURS(21) || ds_readds(DAY_TIMER) < HOURS(6)) {
+				if (gs_day_timer > HOURS(21) || gs_day_timer < HOURS(6)) {
 					GUI_output(get_ttx(484));
 					motivation = 2;
 				}

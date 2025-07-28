@@ -50,7 +50,7 @@ signed short DNG02_handler(void)
 
 	if ((target_pos == DNG_POS(0,1,2) || target_pos == DNG_POS(0,2,1)))
 	{
-		if (ds_readds(DAY_TIMER) >= HOURS(8) && ds_readds(DAY_TIMER) <= HOURS(20))
+		if (gs_day_timer >= HOURS(8) && gs_day_timer <= HOURS(20))
 		{
 		} else {
 

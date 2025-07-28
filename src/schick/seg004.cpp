@@ -752,23 +752,23 @@ void update_wallclock(void)
 		!ds_readbs(DIALOGBOX_LOCK))
 	{
 
-		if ((ds_readds(DAY_TIMER) >= HOURS(7)) && (ds_readds(DAY_TIMER) <= HOURS(19))) {
+		if ((gs_day_timer >= HOURS(7)) && (gs_day_timer <= HOURS(19))) {
 			/* day */
-			d = ds_readds(DAY_TIMER) - HOURS(7);
+			d = gs_day_timer - HOURS(7);
 		} else {
-			if (ds_readds(DAY_TIMER) < HOURS(7)) {
+			if (gs_day_timer < HOURS(7)) {
 				/* morning */
-				d = ds_readds(DAY_TIMER) + HOURS(5);
+				d = gs_day_timer + HOURS(5);
 			} else {
 				/* evening */
-				d = ds_readds(DAY_TIMER) + HOURS(-19);
+				d = gs_day_timer + HOURS(-19);
 			}
 		}
 
 		if (((d % 771) != ds_readws(WALLCLOCK_POS)) || (ds_readw(WALLCLOCK_REDRAW) != 0)) {
 
 			ds_writew(WALLCLOCK_REDRAW, 0);
-			night = ((ds_readds(DAY_TIMER) >= HOURS(7)) && (ds_readds(DAY_TIMER) <= HOURS(19))) ? 0 : 1;
+			night = ((gs_day_timer >= HOURS(7)) && (gs_day_timer <= HOURS(19))) ? 0 : 1;
 			draw_wallclock((signed short)(d / 771), night);
 			ds_writew(WALLCLOCK_POS, (signed short)(d / 771));
 		}

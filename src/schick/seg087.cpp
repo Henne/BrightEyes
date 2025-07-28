@@ -50,7 +50,7 @@ signed short DNG14_handler(void)
 
 	hero = (Bit8u*)get_first_hero_available_in_group();
 
-	if (!(ds_readds(DAY_TIMER) % MINUTES(10)) &&
+	if (!(gs_day_timer % MINUTES(10)) &&
 		ds_readb(DNG14_POISONTRAP) == 2 &&
 		(pos == DNG_POS(0,13,6) || pos == DNG_POS(0,14,6) || pos == DNG_POS(0,13,7) || pos == DNG_POS(0,14,7)))
 	{

@@ -109,7 +109,7 @@ unsigned short prepare_passages(void)
 			prepared++;
 		} else {
 			if (
-				((signed long)ds_readd(DAY_TIMER) > HOURS(14))
+				((signed long)gs_day_timer > HOURS(14))
 				&& (host_readb((Bit8u*)(ent) + SEA_ROUTE_PASSAGE_TIMER) == 1)
 				&& ((host_readb((Bit8u*)(ent) + SEA_ROUTE_TOWN_1) == ds_readb(CURRENT_TOWN))
 				|| (host_readb((Bit8u*)(ent) + SEA_ROUTE_TOWN_2) == ds_readb(CURRENT_TOWN)))

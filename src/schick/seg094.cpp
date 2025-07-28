@@ -359,7 +359,7 @@ void TM_func1(signed short route_no, signed short backwards)
 		}
 
         /* night camp */
-		if (ds_readds(DAY_TIMER) >= HOURS(20) &&
+		if (gs_day_timer >= HOURS(20) &&
 			!ds_readb(TRAVEL_DETOUR) &&
 			ds_readws(GAME_STATE) == GAME_STATE_MAIN &&
 			2 * ds_readws(ROUTE_STEPSIZE) < ds_readws(ROUTE_PROGRESS) &&

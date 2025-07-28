@@ -605,10 +605,10 @@ void do_inn(void)
 			tavern_ptr = p_datseg + TAVERN_DESCR_TABLE + 4 * ds_readws(CURRENT_TYPEINDEX);
 
 			if (host_readws(tavern_ptr) >= 6 && host_readws(tavern_ptr) <= 13 &&
-				ds_readds(DAY_TIMER) < HOURS(11) && ds_readds(DAY_TIMER) > HOURS(3)) {
+				gs_day_timer < HOURS(11) && gs_day_timer > HOURS(3)) {
 				GUI_output(get_ttx(801));
 			} else if ((host_readws(tavern_ptr) < 6 || host_readws(tavern_ptr) > 13) &&
-				ds_readds(DAY_TIMER) < HOURS(16) && ds_readds(DAY_TIMER) > HOURS(3)) {
+				gs_day_timer < HOURS(16) && gs_day_timer > HOURS(3)) {
 				GUI_output(get_ttx(481));
 			} else if (ds_readbs(SLEEP_QUALITY) != -1) {
 

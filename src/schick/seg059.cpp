@@ -52,14 +52,14 @@ void do_tavern(void)
 
 	if (host_readws(tav_ptr) >= 6 && host_readws(tav_ptr) <= 13) {
 
-		if (ds_readds(DAY_TIMER) < HOURS(11) && ds_readds(DAY_TIMER) > HOURS(3)) {
+		if (gs_day_timer < HOURS(11) && gs_day_timer > HOURS(3)) {
 
 			GUI_output(get_ttx(801));
 			leave_location();
 			return;
 		}
 
-	} else if (ds_readds(DAY_TIMER) < HOURS(16) && ds_readds(DAY_TIMER) > HOURS(3)) {
+	} else if (gs_day_timer < HOURS(16) && gs_day_timer > HOURS(3)) {
 
 			GUI_output(get_ttx(481));
 			leave_location();
@@ -90,7 +90,7 @@ void do_tavern(void)
 			ds_writew(MOUSE2_EVENT, ds_writew(ACTION, 0));
 		}
 
-		if (ds_readds(DAY_TIMER) < HOURS(11) && ds_readds(DAY_TIMER) > HOURS(3)) {
+		if (gs_day_timer < HOURS(11) && gs_day_timer > HOURS(3)) {
 
 			GUI_output(get_ttx(9));
 			done = 1;

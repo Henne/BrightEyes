@@ -422,9 +422,9 @@ void init_game_state(void)
 	ds_writew(TEXTBOX_WIDTH, 3);
 
 	/* timer */
-	ds_writed(DAY_TIMER, HOURS(24) - 1);
+	gs_day_timer = HOURS(24) - 1;
 	timewarp_until_time_of_day(1);
-	ds_writed(DAY_TIMER,  HOURS(8));
+	gs_day_timer = HOURS(8);
 	ds_writeb(DAY_OF_WEEK, 4);
 	ds_writeb(DAY_OF_MONTH, 17);
 	ds_writeb(MONTH, 1);
@@ -780,9 +780,9 @@ void call_gen(void)
 		ds_writed(FIG_FIGURE2_BUF, (Bit32u)F_PADD(ds_readd(FIG_FIGURE1_BUF), -20000L));
 		ds_writed(BUFFER10_PTR, (Bit32u)F_PADD(ds_readd(FIG_FIGURE2_BUF), -16771L));
 
-		ds_writed(DAY_TIMER, HOURS(24) - 1);
+		gs_day_timer = HOURS(24) - 1;
 		timewarp_until_time_of_day(1);
-		ds_writed(DAY_TIMER, HOURS(8));
+		gs_day_timer = HOURS(8);
 
 		ds_writeb(DAY_OF_WEEK, 4);
 		ds_writeb(DAY_OF_MONTH, 17);

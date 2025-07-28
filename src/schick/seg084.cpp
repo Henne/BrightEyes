@@ -52,7 +52,7 @@ signed short DNG09_handler(void)
 	/* TODO: not the leader ? */
 	hero = get_hero(0);
 
-	if (ds_readb(DNG09_PIT_FLAG) != 0 && !(ds_readds(DAY_TIMER) / 90 * 20))
+	if (ds_readb(DNG09_PIT_FLAG) != 0 && !(gs_day_timer / 90 * 20))
 	{
 		GUI_output(get_tx(32));
 	}

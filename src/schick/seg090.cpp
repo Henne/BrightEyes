@@ -44,7 +44,7 @@ signed short DNG12_handler(void)
 
 	hero = (Bit8u*)get_first_hero_available_in_group();
 
-	if (ds_readds(DAY_TIMER) % MINUTES(5) == 0) {
+	if (gs_day_timer % MINUTES(5) == 0) {
 		/* TODO: buggy timer for cave in */
 
 		if (ds_readbs(DNG12_TUNNEL1) > 0) dec_ds_bs(DNG12_TUNNEL1);

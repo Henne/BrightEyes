@@ -183,7 +183,7 @@ void do_house(void)
 
 					} else {
 
-						if (ds_readds(DAY_TIMER) < HOURS(6)) {
+						if (gs_day_timer < HOURS(6)) {
 							/* before 6:00 turn clock to 0:00 */
 							timewarp_until_time_of_day(HOURS(0));
 						}

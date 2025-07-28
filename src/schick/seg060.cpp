@@ -516,7 +516,7 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 104) {
 
-		ds_writew(DIALOG_NEXT_STATE, ds_readds(DAY_TIMER) >= HOURS(22) && ds_readb(TLK_TAV_FULLNESS) != 3 ? 117 : 119);
+		ds_writew(DIALOG_NEXT_STATE, gs_day_timer >= HOURS(22) && ds_readb(TLK_TAV_FULLNESS) != 3 ? 117 : 119);
 
 	} else if (old_state == 106) {
 

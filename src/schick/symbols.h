@@ -235,7 +235,7 @@
 #define GROUPS_DNG_INDEX_BAK            (0x2dae)    /* signed char[6] */
 #define DUNGEON_LEVEL_BAK               (0x2db4)    /* signed char */
 #define GROUPS_DNG_LEVEL_BAK            (0x2db5)    /* signed char[6] */
-#define DAY_TIMER                       (0x2dbb)    /* long */
+//#define DAY_TIMER                       (0x2dbb)    /* long */
 #define DAY_OF_WEEK                     (0x2dbf)    /* char */
 #define DAY_OF_MONTH                    (0x2dc0)    /* char */
 #define MONTH                           (0x2dc1)    /* char */

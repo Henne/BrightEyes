@@ -1017,8 +1017,8 @@ signed short city_step(void)
 		{
 
 			if (random_schick(100) <= 1 && /* 1% chance */
-				ds_readds(DAY_TIMER) > HOURS(8) && /* only between 8:00 and 20:00 o'clock */
-				ds_readds(DAY_TIMER) < HOURS(20))
+				gs_day_timer > HOURS(8) && /* only between 8:00 and 20:00 o'clock */
+				gs_day_timer < HOURS(20))
 			{
 				city_event_switch();
 			}
@@ -1028,8 +1028,8 @@ signed short city_step(void)
 
 			if (((i = ds_readws((MARKET_DESCR_TABLE + 4) + 8 * ds_readws(CURRENT_TYPEINDEX))) == -1 ||
 				ds_readbs(DAY_OF_WEEK) == i) &&
-				ds_readds(DAY_TIMER) >= HOURS(6) &&
-				ds_readds(DAY_TIMER) <= HOURS(16))
+				gs_day_timer >= HOURS(6) &&
+				gs_day_timer <= HOURS(16))
 			{
 				ds_writebs((NEW_MENU_ICONS + 7), MENU_ICON_MARKET);
 				draw_icons();

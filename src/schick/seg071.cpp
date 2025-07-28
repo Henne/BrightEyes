@@ -35,7 +35,7 @@ void PHX_drogentempel(void)
 
 	money = get_party_money();
 
-	if ((ds_readds(DAY_TIMER) >= HOURS(15)) && (ds_readds(DAY_TIMER) <= HOURS(19))) {
+	if ((gs_day_timer >= HOURS(15)) && (gs_day_timer <= HOURS(19))) {
 
 		/* load the picture of the TEMPLE SERVANT */
 

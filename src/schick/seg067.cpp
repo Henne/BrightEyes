@@ -270,7 +270,7 @@ void city_event_6(void)
 	signed short type_bak;
 #endif
 
-	if (ds_readds(DAY_TIMER) >= HOURS(8) && ds_readds(DAY_TIMER) <= HOURS(20)) {
+	if (gs_day_timer >= HOURS(8) && gs_day_timer <= HOURS(20)) {
 
 		load_in_head(4);
 

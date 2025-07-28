@@ -162,7 +162,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 	/* check if this smith has an item in repair */
 	if (ds_readws(SMITH_REPAIRITEMS + 6 * smith_id) != 0) {
 
-		if (ds_readds(SMITH_REPAIRITEMS + 2 + 6 * smith_id) > ds_readds(DAY_TIMER)) {
+		if (ds_readds(SMITH_REPAIRITEMS + 2 + 6 * smith_id) > gs_day_timer) {
 			/* not ready yet */
 			GUI_output(get_ttx(485));
 
@@ -432,11 +432,11 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 								ds_writew(SMITH_REPAIRITEMS + 6 * smith_id, item_id);
 
-								if (ds_readds(DAY_TIMER) > HOURS(14)) {
+								if (gs_day_timer > HOURS(14)) {
 									ds_writed(SMITH_REPAIRITEMS + 2 + 6 * smith_id, HOURS(23));
 									GUI_output(get_ttx(490));
 								} else {
-									ds_writed(SMITH_REPAIRITEMS + 2 + 6 * smith_id, ds_readd(DAY_TIMER) + HOURS(6));
+									ds_writed(SMITH_REPAIRITEMS + 2 + 6 * smith_id, gs_day_timer + HOURS(6));
 									GUI_output(get_ttx(491));
 								}
 
@@ -497,7 +497,7 @@ void do_smith(void)
 	signed short answer;
 	Bit8u *smith_ptr;
 
-	if (ds_readds(DAY_TIMER) < HOURS(6) || ds_readds(DAY_TIMER) > HOURS(20)) {
+	if (gs_day_timer < HOURS(6) || gs_day_timer > HOURS(20)) {
 
 		GUI_output(get_ttx(483));
 		leave_location();

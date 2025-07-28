@@ -85,7 +85,7 @@ void do_merchant(void)
 
 #endif
 
-	if ((ds_readds(DAY_TIMER) < HOURS(8) || ds_readds(DAY_TIMER) > HOURS(19)) && ds_readbs(CURRENT_LOCTYPE) != LOCTYPE_MARKET)
+	if ((gs_day_timer < HOURS(8) || gs_day_timer > HOURS(19)) && ds_readbs(CURRENT_LOCTYPE) != LOCTYPE_MARKET)
 	{
 		/* shop closed */
 
