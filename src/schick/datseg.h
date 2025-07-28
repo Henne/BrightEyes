@@ -117,6 +117,7 @@ extern char *g_text_ltx_buffer;		// ds:0xd2b9; seg026, seg120
 extern unsigned char *g_popup;		// ds:0xd2ad; seg027, seg096, seg120
 extern char *g_monnames_buffer;		// ds:0xd2a1; seg026, seg120
 extern unsigned char *g_trv_track_pixel_bak;	// ds:0xd299; seg063, seg094, seg120
+extern unsigned char *g_buffer9_ptr2;	// ds:0xd015; seg120
 extern Bit32s g_ani_unknown4;		// ds:0xce43; seg027, seg120
 extern char **g_text_ltx_index;		// ds:0xc3b5;
 extern char **g_tx_index;		// ds:0xc3b1; seg026, seg028, seg031, seg064, seg120

@@ -265,7 +265,7 @@ void init_global_buffer(void)
 	g_buffer8_ptr = (unsigned char*)(((HugePt)g_buffer7_ptr) + 10000L);
 	g_buffer9_ptr = (HugePt)(((HugePt)g_buffer7_ptr) + 22008L);
 
-	ds_writed(BUFFER9_PTR3, ds_writed(BUFFER9_PTR2, (Bit32u)g_buffer9_ptr));
+	ds_writed(BUFFER9_PTR3, (Bit32u)(g_buffer9_ptr2 = (unsigned char*)g_buffer9_ptr));
 	g_ani_unknown4 = 0;
 }
 

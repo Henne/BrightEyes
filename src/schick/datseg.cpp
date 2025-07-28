@@ -6415,7 +6415,7 @@ unsigned long g_buffer_mfigs_tab[43]; // ds:0xd159
 unsigned long g_buffer_wfigs_tab[43]; // ds:0xd0ad
 unsigned long g_buffer_monster_tab[36]; // ds:0xd01d
 void *g_buffer9_ptr3; // ds:0xd019, copy of BUFFER9_PTR
-void *g_buffer9_ptr2; // ds:0xd015, copy of BUFFER9_PTR
+unsigned char *g_buffer9_ptr2; // ds:0xd015, copy of BUFFER9_PTR
 unsigned short g_redraw_menuicons; // ds:0xd013
 unsigned short g_dng_extra_action; // ds:0xd011, {0 = warehouse,1 = open door,2 = open chest,3 = close door,4 = lever,5 = smash door}
 unsigned short g_dng_init_flag; // ds:0xd00f
