@@ -192,8 +192,8 @@ void interrupt timer_isr(void)
 
 	start_midi_playback_IRQ();
 
-	if (ds_readw(DELAY_TIMER) != 0) {
-		dec_ds_ws(DELAY_TIMER);
+	if (g_delay_timer) {
+		g_delay_timer--;
 	}
 
 	/* another timer used in fights */

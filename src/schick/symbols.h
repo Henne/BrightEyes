@@ -876,7 +876,7 @@
 #define WALLCLOCK_PALETTE_NIGHT         (0x4afa)    /* struct(3)[3]; struct{unsigned char r,g,b;} */
 #define COLOR_PAL_BLACK                 (0x4b03)    /* char[3]; {0x3f,0x3f,0x3f} */
 #define PALETTE_ALLBLACK                (0x4b06)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
-#define DELAY_FACTOR                    (0x4b66)    /* short */
+//#define DELAY_FACTOR                    (0x4b66)    /* short */
 #define STR_TEMP_XX_PTR                 (0x4b68)    /* Bit8u*; to STR_TEMP_XX */
 #define FIG_STAR_COLORS                 (0x4b6c)    /* signed char[12] */
 #define FIG_STAR_COUNTER                (0x4b78)    /* signed char */
@@ -1529,7 +1529,7 @@
 #define FIGOBJ_UNKN_Y2_BAK              (0xe2ca)    /* unsigned short */
 #define FIGOBJ_UNKN_X2                  (0xe2cc)    /* unsigned short */
 #define FIGOBJ_UNKN_X2_BAK              (0xe2ce)    /* unsigned short */
-#define DELAY_TIMER                     (0xe2d0)    /* unsigned short */
+//#define DELAY_TIMER                     (0xe2d0)    /* unsigned short */
 //#define SAVED_FILES_BUF                 (0xe2d2)    /* Bit8u* */
 #define LAST_SAVE_TIME                  (0xe2d6)    /* signed long */
 #define SAVEGAME_NAMES                  (0xe2da)    /* char[45] */

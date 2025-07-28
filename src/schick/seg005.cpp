@@ -184,7 +184,7 @@ unsigned short fight_printer(void)
 		inc_ds_bs_post(FIG_STAR_COUNTER);
 		ds_writeb(FIG_STAR_PRINTED, 0);
 
-		ds_writew(FIG_STAR_TIMER, ds_readw(AUTOFIGHT) ? 10: ds_readws(DELAY_FACTOR) * 6);
+		ds_writew(FIG_STAR_TIMER, ds_readw(AUTOFIGHT) ? 10 : g_delay_factor * 6);
 
 		if (ds_readw(FIG_MSG_DATA + ds_readbs(FIG_STAR_COUNTER) * 4) == 0)
 			g_fig_continue_print = 0;
@@ -282,7 +282,7 @@ unsigned short fight_printer(void)
 	} else {
 		ds_writeb(FIG_STAR_COUNTER, 0);
 
-		ds_writew(FIG_STAR_TIMER, ds_readw(AUTOFIGHT) ? 10 : ds_readw(DELAY_FACTOR) * 6);
+		ds_writew(FIG_STAR_TIMER, ds_readw(AUTOFIGHT) ? 10 : g_delay_factor * 6);
 
 		ds_writeb(FIG_STAR_LAST_COUNT, 0xff);
 
@@ -1025,7 +1025,7 @@ to the DOSBox-CPU and may run the timer.
 void set_delay_timer(void)
 {
 	/* set delay_timer to delay_factor */
-	ds_writew(DELAY_TIMER, ds_readw(DELAY_FACTOR));
+	g_delay_timer = g_delay_factor;
 }
 
 //static
@@ -1033,8 +1033,8 @@ void fight_delay(void)
 {
 	seg001_02c4();
 
-	while (ds_readws(DELAY_TIMER) > 0) {
-		dec_ds_ws(DELAY_TIMER);
+	while (g_delay_timer > 0) {
+		g_delay_timer--;
 		wait_for_vsync();
 	}
 

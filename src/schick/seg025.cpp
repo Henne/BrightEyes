@@ -557,14 +557,12 @@ signed short game_options(void)
 			done = 1;
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_6) {
 
-			sprintf((char*)g_dtp2,
-				get_ttx(827),
-				ds_readws(DELAY_FACTOR));
+			sprintf((char*)g_dtp2, get_ttx(827), g_delay_factor);
 
 			new_delay = GUI_input((char*)g_dtp2, 2);
 
 			if (new_delay != -1) {
-				ds_writew(DELAY_FACTOR, new_delay);
+				g_delay_factor = new_delay;
 			}
 
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_7) {

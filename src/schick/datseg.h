@@ -74,6 +74,8 @@ extern Bit32s gs_dng07_poison_timer;		//ds:0x3cb6; seg002, seg082
 
 extern Bit32s gs_dng12_watertrap_timer;		//ds:0x3fa2; seg002, seg090
 
+extern signed short g_delay_factor;		//ds:0x4b66; seg005, seg025
+
 extern unsigned char *g_hexenknoten_gfx_buf;	// ds:0xacc8; seg100
 extern signed short g_monster_spell_ae_cost;	// ds:0xaccc; seg102
 extern char g_select_skill_lvlup[6]; 		// ds:0xacce; seg103
@@ -98,6 +100,7 @@ extern unsigned char *g_dungeon_fights_buf; 	// ds:0xe494; seg028,seg076,seg098,
 extern HugePt g_buffer9_ptr;		// ds:0xc3db; seg004-seg120
 extern HugePt g_buffer9_ptr4;		// ds:0xe3fc; seg028
 extern Bit32s g_fightobj_buf_freespace;	// ds:0xe370; seg032-seg100
+extern signed short g_delay_timer;	// ds:0xe2d0; seg004, seg005
 extern Bit32s g_gfx_spinlock;		// ds:0xe234; seg004
 extern char **g_itemsname;		// ds:0xe22f; seg026, seg120
 extern unsigned char *g_itemsdat;	// ds:0xe22b; seg002, seg027, seg105, seg107, seg120

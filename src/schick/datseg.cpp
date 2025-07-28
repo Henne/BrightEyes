@@ -3281,7 +3281,7 @@ struct{unsigned char r,g,b;} g_palette_allblack[32] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x00, 0x00, 0x00 }
 }; // ds:0x4b06
-short g_delay_factor = 4; // ds:0x4b66
+signed short g_delay_factor = 4; // ds:0x4b66
 long g_str_temp_xx_ptr = 0x14fc4b95; // ds:0x4b68, to STR_TEMP_XX; Bit8u*
 signed char g_fig_star_colors[12] = { 0x03, 0x03, 0x0c, 0x0c, 0x04, 0x0b, 0x0d, 0x01, 0x07, 0x0e, 0x02, 0x07 }; // ds:0x4b6c
 signed char g_fig_star_counter = 0; // ds:0x4b78
@@ -6305,7 +6305,7 @@ unsigned char g_unkn_085[1]; // ds:0xe307
 char g_savegame_names[45]; // ds:0xe2da
 signed long g_last_save_time; // ds:0xe2d6
 unsigned char *g_saved_files_buf; // ds:0xe2d2
-unsigned short g_delay_timer; // ds:0xe2d0
+signed short g_delay_timer; // ds:0xe2d0
 unsigned short g_figobj_unkn_x2_bak; // ds:0xe2ce
 unsigned short g_figobj_unkn_x2; // ds:0xe2cc
 unsigned short g_figobj_unkn_y2_bak; // ds:0xe2ca
