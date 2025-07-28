@@ -325,7 +325,7 @@ void do_wildcamp(void)
 
 					for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 						if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-							host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+							host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 							ds_readbs(WILDCAMP_GUARDSTATUS + i) < 2 &&
 							ds_readbs(WILDCAMP_MAGICSTATUS + i) != 1)
 						{
@@ -525,7 +525,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 						hero2 = get_hero(0);
 						for (l_di = 0; l_di <= 6; l_di++, hero2 += SIZEOF_HERO) {
 							if (host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE &&
-								host_readbs(hero2 + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+								host_readbs(hero2 + HERO_GROUP_NO) == gs_current_group &&
 								!hero_dead(hero2))
 							{
 								host_writebs(hero2 + HERO_THIRST, 0);
@@ -553,7 +553,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 						hero2 = get_hero(0);
 						for (l_di = 0; l_di <= 6; l_di++, hero2 += SIZEOF_HERO) {
 							if (host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE &&
-								host_readbs(hero2 + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+								host_readbs(hero2 + HERO_GROUP_NO) == gs_current_group &&
 								!hero_dead(hero2))
 							{
 								host_writebs(hero2 + HERO_HUNGER, 0);

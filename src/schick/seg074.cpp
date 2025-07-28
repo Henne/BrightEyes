@@ -286,7 +286,7 @@ void render_automap(signed short x_off)
 	/* draw purple arrows at the positions of other groups */
 	for (group_i = 0; group_i < 6; group_i++) {
 
-		if ((ds_readbs(CURRENT_GROUP) != group_i) &&
+		if ((gs_current_group != group_i) &&
 			(ds_readbs(GROUP_MEMBER_COUNTS + group_i) > 0) &&
 			(ds_readb(GROUPS_DNG_LEVEL + group_i) == ds_readbs(DUNGEON_LEVEL)) &&
 			(ds_readb(GROUPS_TOWN + group_i) == ds_readbs(CURRENT_TOWN)) &&

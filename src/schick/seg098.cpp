@@ -696,7 +696,7 @@ signed short test_spell_group(signed short spell, signed char handicap)
 			/* Check class  BOGUS */
 			(host_readbs(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
 			/* Check in group */
-			(host_readbs(hero_i + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) &&
 			/* Check if dead */
 			!hero_dead(hero_i))
 			/* Original-Bug: what if petrified, sleeping, unconcious etc. */

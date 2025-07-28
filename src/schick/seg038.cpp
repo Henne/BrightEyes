@@ -457,7 +457,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 				hero_ptr = get_hero(i);
 
 				if ((host_readbs(hero_ptr + HERO_TYPE) != HERO_TYPE_NONE) &&
-					(host_readbs(hero_ptr + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+					(host_readbs(hero_ptr + HERO_GROUP_NO) == gs_current_group) &&
 					!hero_dead(hero_ptr))
 				{ /* hero_ptr points to an actual alive hero in the current group */
 					FIG_search_obj_on_cb(i + 1, &x, &y);

@@ -103,7 +103,7 @@ signed short DNG06_handler(void)
 		for (i = l3 = 0; i < 2; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero))
 			{
 				l3++;
@@ -137,7 +137,7 @@ signed short DNG06_handler(void)
 		for (i = l3 = 0; i <= 6; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_skill(hero, TA_GEFAHRENSINN, 5) > 0)
 			{
@@ -156,7 +156,7 @@ signed short DNG06_handler(void)
 				for (i = l3 = 0; i <= 6; i++, hero += SIZEOF_HERO)
 				{
 					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 						!hero_dead(hero) &&
 						test_skill(hero, TA_GEFAHRENSINN, 5) > 0)
 					{
@@ -195,7 +195,7 @@ signed short DNG06_handler(void)
 		for (i = l3 = 0; i <= 6; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_skill(hero, TA_SINNESSCHAERFE, 10) > 0)
 			{
@@ -271,7 +271,7 @@ signed short DNG06_handler(void)
 			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 			{
 				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 					!hero_dead(hero) &&
 					test_skill(hero, TA_KOERPERBEHERRSCHUNG, host_readbs(hero + HERO_RS_BONUS1)) <= 0)
 				{
@@ -297,7 +297,7 @@ signed short DNG06_handler(void)
 			{
 				if (ds_readws(GROUPS_X_TARGET + 2 * i) == 3 &&
 					ds_readws(GROUPS_Y_TARGET + 2 * i) == 6 &&
-					ds_readbs(CURRENT_GROUP) != i)
+					gs_current_group != i)
 				{
 					hero = get_hero(0);
 					for (l4 = 0; l4 <= 6; l4++, hero += SIZEOF_HERO)
@@ -341,7 +341,7 @@ signed short DNG06_handler(void)
 			{
 				if (ds_readws(GROUPS_X_TARGET + 2 * i) == 1 &&
 					ds_readws(GROUPS_Y_TARGET + 2 * i) == 2 &&
-					ds_readbs(CURRENT_GROUP) != i)
+					gs_current_group != i)
 				{
 					hero = get_hero(0);
 					for (l4 = 0; l4 <= 6; l4++, hero += SIZEOF_HERO)
@@ -519,7 +519,7 @@ void DNG06_chest2(Bit8u* chest)
 	for (i = 0; i <=6; i++, hero += SIZEOF_HERO)
 	{
 		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 			!hero_dead(hero) &&
 			test_skill(hero, TA_LESEN, 0) > 0)
 		{
@@ -554,7 +554,7 @@ void DNG09_pitfall(void)
 		for (i = l3 = 0; i <= 6; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_skill(hero, TA_GEFAHRENSINN, 4) > 0)
 				/* TODO: potential Original-Bug: Why should 'petrified' or 'uncouscious' (or maybe other properties ) be o.k. here?? */
@@ -571,7 +571,7 @@ void DNG09_pitfall(void)
 			hero_first = (Bit8u*)get_first_hero_available_in_group();
 			hero_second = (Bit8u*)get_second_hero_available_in_group();
 
-			if (ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP)) >= 2)
+			if (ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group) >= 2)
 			{
 				/* the current group has at least two heroes */
 
@@ -595,7 +595,7 @@ void DNG09_pitfall(void)
 				host_writeb(hero_first + HERO_GROUP_NO, (signed char)l3);
 				host_writeb(hero_second + HERO_GROUP_NO, (signed char)l3);
 				add_ds_bs(GROUP_MEMBER_COUNTS + l3, 2);
-				sub_ds_bs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP), 2);
+				sub_ds_bs(GROUP_MEMBER_COUNTS + gs_current_group, 2);
 
 				GRP_save_pos(l3);
 
@@ -623,7 +623,7 @@ void DNG09_pitfall(void)
 				/* put this hero in an empty group */
 				host_writeb(hero_first + HERO_GROUP_NO, (signed char)l3);
 				inc_ds_bs_post(GROUP_MEMBER_COUNTS + l3);
-				dec_ds_bs_post(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP));
+				dec_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
 
 				GRP_save_pos(l3);
 

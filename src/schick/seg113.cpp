@@ -205,7 +205,7 @@ void tevent_086(void)
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 			{
 				sub_hero_le(hero, 2);
 			}
@@ -287,7 +287,7 @@ void tevent_098(void)
 			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 					!hero_dead(hero))
 				{
 
@@ -347,7 +347,7 @@ void tevent_098(void)
 
 					if (i != hero_pos &&
 						host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 						!hero_dead(hero))
 					{
 						if (test_attrib(hero, ATTRIB_GE, -4) > 0) {
@@ -414,7 +414,7 @@ void hero_disappear(Bit8u *hero, unsigned short pos, signed short temple_id)
 	}
 
 	/* decrement group counter */
-	dec_ds_bs_post(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP));
+	dec_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
 
 	/* write temple_id to character sheet */
 	host_writeb(hero + HERO_TEMPLE_ID, (signed char)temple_id);
@@ -641,7 +641,7 @@ void tevent_104(void)
 		for (i = l_si = nr_heroes = 0; i <= 6; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero))
 			{
 				nr_heroes++;
@@ -813,7 +813,7 @@ void tevent_107(void)
 		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_skill(hero, TA_KLETTERN, 1) <= 0)
 			{

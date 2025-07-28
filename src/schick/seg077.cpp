@@ -121,7 +121,7 @@ signed short DNG01_handler(void)
 			{
 				if (random_schick(100) <= 10 &&
 					host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+					host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 				{
 					sub_hero_le(hero, 2);
 

@@ -34,7 +34,7 @@ void DNG14_dive(signed short diver_pos, signed char mod, signed short dest_x)
 	{
 		if (i != diver_pos &&
 			host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 			!hero_dead(hero))
 		{
 
@@ -197,13 +197,13 @@ void DNG15_riddle(void)
 	for (i = l_di = 0; i < 6; i++) {
 
 		if (pos == DNG_POS(1,8,1) && ds_readws(GROUPS_X_TARGET + 2 * i) == 8 &&
-			ds_readws(GROUPS_Y_TARGET + 2 * i) == 5 && ds_readbs(CURRENT_GROUP) != i)
+			ds_readws(GROUPS_Y_TARGET + 2 * i) == 5 && gs_current_group != i)
 		{
 			l_di = 1;
 		}
 
 		if (pos == DNG_POS(1,8,5) && ds_readws(GROUPS_X_TARGET + 2 * i) == 8 &&
-			ds_readws(GROUPS_Y_TARGET + 2 * i) == 1 && ds_readbs(CURRENT_GROUP) != i)
+			ds_readws(GROUPS_Y_TARGET + 2 * i) == 1 && gs_current_group != i)
 		{
 			l_di = 1;
 		}

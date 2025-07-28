@@ -100,7 +100,7 @@ void tevent_057(void)
 			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+					host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 				{
 					sub_hero_le(hero, random_schick(3));
 				}
@@ -113,7 +113,7 @@ void tevent_057(void)
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_skill(hero, TA_KLETTERN, 3) <= 0)
 			{
@@ -271,7 +271,7 @@ void tevent_060(void)
 					for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 						if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-							host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+							host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 							!hero_dead(hero) &&
 							test_skill(hero, TA_KLETTERN, 0) <= 0)
 						{
@@ -316,7 +316,7 @@ void tevent_060(void)
 					for (i = has_magic_rope = nr_items = 0; i <= 6 ; i++, hero += SIZEOF_HERO){
 
 						if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-							host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+							host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 							!hero_dead(hero))
 						{
 							nr_items += hero_count_item(hero, ITEM_ROPE);
@@ -453,7 +453,7 @@ void tevent_063(void)
 	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP) &&
+			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 			!hero_dead(hero))
 		{
 
@@ -548,7 +548,7 @@ void tevent_064(void)
 				for (i = result = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 						!hero_dead(hero) &&
 						test_skill(hero, TA_SCHLEICHEN, 0) <= 0)
 					{
@@ -739,7 +739,7 @@ void tevent_066(void)
 				for (l_di = count = 0; l_di <= 6; l_di++, hero += SIZEOF_HERO)
 				{
 					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 						!hero_dead(hero) &&
 						test_skill(hero, TA_SCHLEICHEN, -2) <= 0)
 					{

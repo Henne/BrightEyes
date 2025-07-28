@@ -141,7 +141,7 @@ void buy_screen(void)
 			for (l_di = 0; l_di <= 6; l_di++, hero2 += SIZEOF_HERO) {
 
 				if (host_readbs(hero2 + HERO_TYPE) &&
-					host_readbs(hero2 + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+					host_readbs(hero2 + HERO_GROUP_NO) == gs_current_group)
 				{
 					for (j = HERO_INVENTORY_SLOT_KNAPSACK_1; j < NR_HERO_INVENTORY_SLOTS; j++) {
 						if (host_readws(hero2 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * j) == ITEM_NONE) {
@@ -318,7 +318,7 @@ void buy_screen(void)
 					copy_forename(g_dtp2, (char*)(hero1 + HERO_NAME2));
 					set_textcolor(255, 0);
 
-					if (host_readbs(hero1 + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP)) {
+					if (host_readbs(hero1 + HERO_GROUP_NO) != gs_current_group) {
 						set_textcolor(111, 0);
 					} else {
 

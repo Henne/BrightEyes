@@ -59,7 +59,7 @@ void rabies(Bit8u* hero, signed short hero_pos)
 
 	done = 0;
 
-	group_bak = ds_readbs(CURRENT_GROUP);
+	group_bak = gs_current_group;
 	sex_bak = host_readbs(hero + HERO_SEX);
 	group_no = host_readbs(hero + HERO_GROUP_NO);
 
@@ -67,7 +67,7 @@ void rabies(Bit8u* hero, signed short hero_pos)
 	host_writeb(hero + HERO_SEX, 50);
 
 	/* switch to the group of the hero */
-	while (ds_readbs(CURRENT_GROUP) != group_no) {
+	while (gs_current_group != group_no) {
 		GRP_switch_to_next(1);
 	}
 
@@ -218,7 +218,7 @@ void rabies(Bit8u* hero, signed short hero_pos)
 
 				if ((l_di != hero_pos) &&
 					(host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE) &&
-					(host_readbs(hero2 + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+					(host_readbs(hero2 + HERO_GROUP_NO) == gs_current_group) &&
 					!hero_dead(hero2))
 				{
 					sub_hero_le(hero2, dice_roll(1, 6, 2));
@@ -234,7 +234,7 @@ void rabies(Bit8u* hero, signed short hero_pos)
 	}
 
 	/* switch back to the group */
-	while (ds_readbs(CURRENT_GROUP) != group_bak) {
+	while (gs_current_group != group_bak) {
 		GRP_switch_to_next(1);
 	}
 

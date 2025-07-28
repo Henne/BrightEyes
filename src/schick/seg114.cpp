@@ -51,7 +51,7 @@ void tevent_110(void)
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_skill(hero, TA_KLETTERN, 0) <= 0)
 			{
@@ -126,7 +126,7 @@ void tevent_111(void)
 		for (i = counter = 0; i <= 6; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_skill(hero, TA_SCHLEICHEN, -5) <= 0)
 			{
@@ -242,7 +242,7 @@ void tevent_111(void)
 						for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 						{
 							if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-								host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+								host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 								!hero_dead(hero) &&
 								test_attrib(hero, ATTRIB_GE, 2) <= 0)
 							{
@@ -402,7 +402,7 @@ void tevent_114(void)
 				for (i = 0, hero = get_hero(0); i <= 6; i++, hero += SIZEOF_HERO)
 				{
 					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 						!hero_dead(hero) &&
 						test_attrib(hero, ATTRIB_GE, 4) <= 0)
 					{
@@ -452,7 +452,7 @@ void tevent_114(void)
 				for (i = 0, hero = get_hero(0); i <= 6; i++, hero += SIZEOF_HERO)
 				{
 					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 						!hero_dead(hero))
 					{
 						add_hero_le(hero, 7);
@@ -469,7 +469,7 @@ void tevent_114(void)
 				for (i = 0, hero = get_hero(0); i <= 6; i++, hero += SIZEOF_HERO)
 				{
 					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 						!hero_dead(hero))
 					{
 						add_hero_le(hero, 4);
@@ -506,7 +506,7 @@ void tevent_117(void)
 	for (hero = get_hero(0), i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 	{
 		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 			!hero_dead(hero) &&
 			test_attrib(hero, ATTRIB_GE, 0) <= 0)
 		{
@@ -610,7 +610,7 @@ void tevent_123(void)
 			for (i = counter = 0; i <= 6; i++, hero += SIZEOF_HERO)
 			{
 				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 					!hero_dead(hero) &&
 					test_attrib(hero, ATTRIB_HA, 0) > 0)
 				{
@@ -651,7 +651,7 @@ void tevent_123(void)
 				for (i = counter = 0; i <= 6; i++, hero += SIZEOF_HERO)
 				{
 					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 						!hero_dead(hero))
 					{
 						attrib_result = test_attrib(hero, ATTRIB_HA, 4);
@@ -709,7 +709,7 @@ void tevent_123(void)
 					for (i = counter = 0; i <= 6; i++, hero += SIZEOF_HERO)
 					{
 						if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-							host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+							host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 							!hero_dead(hero))
 						{
 							sprintf((char*)g_dtp2 + 0x400,
@@ -725,7 +725,7 @@ void tevent_123(void)
 				for (i = counter = 0; i <= 6; i++, hero += SIZEOF_HERO)
 				{
 					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 						!hero_dead(hero))
 					{
 						attrib_result = test_attrib(hero, ATTRIB_HA, 2);

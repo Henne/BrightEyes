@@ -94,7 +94,7 @@ signed short DNG09_handler(void)
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_attrib(hero, ATTRIB_GE, 4) <= 0)
 			{
@@ -130,7 +130,7 @@ signed short DNG09_handler(void)
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_attrib(hero, ATTRIB_GE, 4) <= 0)
 			{
@@ -155,7 +155,7 @@ signed short DNG09_handler(void)
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_attrib(hero, ATTRIB_GE, 4) <= 0)
 			{
@@ -183,7 +183,7 @@ signed short DNG09_handler(void)
 		for (i = l3 = 0; i <= 6; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_skill(hero, TA_GEFAHRENSINN, 2) > 0)
 			{
@@ -210,7 +210,7 @@ signed short DNG09_handler(void)
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_attrib(hero, ATTRIB_GE, 4) <= 0)
 			{
@@ -243,7 +243,7 @@ signed short DNG09_handler(void)
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_attrib(hero, ATTRIB_GE, 4) <= 0)
 			{
@@ -309,7 +309,7 @@ signed short DNG09_handler(void)
 				and_ptr_bs(amap_ptr + MAP_POS(4,5), (DNG_TILE_CORRIDOR << 4) + MAP_POS(15,0));
 				or_ptr_bs(amap_ptr + MAP_POS(3,5), 0xf0); /* clear flags */
 
-				if (ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP)) > 1)
+				if (ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group) > 1)
 				{
 					ds_writeb(DIRECTION_BAK, ds_readbs(DIRECTION));
 					l3 = 0;
@@ -320,7 +320,7 @@ signed short DNG09_handler(void)
 
 					host_writeb(hero + HERO_GROUP_NO, (signed char)l3);
 					inc_ds_bs_post(GROUP_MEMBER_COUNTS + l3);
-					dec_ds_bs_post(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP));
+					dec_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
 					GRP_save_pos(l3);
 					ds_writeb(DNG09_LEVER_FAST, 1);
 				}
@@ -345,7 +345,7 @@ signed short DNG09_handler(void)
 			if (ds_readws(GROUPS_X_TARGET + 2 * i) == 7 &&
 				ds_readws(GROUPS_Y_TARGET + 2 * i) == 13 &&
 				ds_readbs(GROUPS_DNG_LEVEL + i) == 1 &&
-				ds_readbs(CURRENT_GROUP) != i)
+				gs_current_group != i)
 			{
 				l3 = 1;
 			}

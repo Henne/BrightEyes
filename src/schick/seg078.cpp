@@ -149,7 +149,7 @@ signed short DNG02_handler(void)
 		for (i = (signed short)(weight_sum = 0); i <= 6; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 			{
 				weight_sum += get_hero_weight(hero);
 			}
@@ -189,7 +189,7 @@ signed short DNG02_handler(void)
 			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 			{
 				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP) &&
+					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 					!hero_dead(hero)) /* TODO: Why !dead? */
 				{
 					hero_disappear(hero, i, -1);
@@ -201,7 +201,7 @@ signed short DNG02_handler(void)
 			for (i = mod_slot = 0; i <= 6; i++, hero += SIZEOF_HERO)
 			{
 				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP) &&
+					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 					!hero_dead(hero) &&
 					!hero_seen_phantom(hero))
 				{
@@ -239,7 +239,7 @@ signed short DNG02_handler(void)
 		for (i = (signed short)(weight_sum = 0); i <= 6; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 			{
 				weight_sum += get_hero_weight(hero);
 			}
@@ -329,7 +329,7 @@ signed short DNG02_handler(void)
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				host_readbs(hero + HERO_MR) < 8)
 			{
@@ -636,7 +636,7 @@ void DNG02_chest04_func3(Bit8u*)
 			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 			{
 				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+					host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 				{
 					sub_hero_le(hero, random_schick(6));
 				}

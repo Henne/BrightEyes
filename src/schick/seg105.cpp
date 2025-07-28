@@ -627,7 +627,7 @@ signed short get_item(signed short id, signed short unused, signed short no)
 		hero_i = get_hero(0);
 		for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 			if (host_readb(hero_i + HERO_TYPE) &&
-				host_readb(hero_i + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP))
+				host_readb(hero_i + HERO_GROUP_NO) == gs_current_group)
 			{
 
 				while ((no > 0) && (v6 = give_hero_new_item(hero_i, id, 0, no)) > 0) {
@@ -707,7 +707,7 @@ signed short group_count_item(signed short item)
 		/* check class */
 		if (host_readb(hero_i + HERO_TYPE) &&
 			/* check group */
-			(host_readb(hero_i + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP))) {
+			(host_readb(hero_i + HERO_GROUP_NO) == gs_current_group)) {
 
 			ret += hero_count_item(hero_i, item);
 		}

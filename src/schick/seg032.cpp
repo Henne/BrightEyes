@@ -143,11 +143,11 @@ signed short FIG_choose_next_hero(void)
 				D1_ERR("Hero %d typus = %x group=%x current_group=%x actions=%x\n",
 					i, host_readb(hero + HERO_TYPE),
 					host_readb(hero + HERO_GROUP_NO),
-					ds_readb(CURRENT_GROUP),
+					gs_current_group,
 					host_readb(hero + HERO_ACTIONS));
 
 				if (host_readb(hero + HERO_TYPE) &&
-					host_readb(hero + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP) &&
+					host_readb(hero + HERO_GROUP_NO) == gs_current_group &&
 					host_readb(hero + HERO_ACTIONS))
 						retval = i;
 			}
@@ -167,7 +167,7 @@ signed short FIG_choose_next_hero(void)
 	/* search for a hero who has a class, is in the current group and
 		something still unknown */
 	} while (host_readb(get_hero(retval) + HERO_TYPE) == HERO_TYPE_NONE ||
-			host_readb(get_hero(retval) + HERO_GROUP_NO) != ds_readb(CURRENT_GROUP) ||
+			host_readb(get_hero(retval) + HERO_GROUP_NO) != gs_current_group ||
 			host_readb(get_hero(retval) + HERO_ACTIONS) == 0);
 
 	return retval;
@@ -310,7 +310,7 @@ signed short FIG_get_first_active_hero(void)
 
 	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 		if ((host_readb(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readb(hero_i + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP)) &&
+			(host_readb(hero_i + HERO_GROUP_NO) == gs_current_group) &&
 			!hero_dead(hero_i) &&
 			!hero_petrified(hero_i) &&
 			!hero_renegade(hero_i) &&
@@ -341,7 +341,7 @@ unsigned short FIG_all_heroes_escaped(void)
 		hero_i = get_hero(0);
 		for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 			if ((host_readb(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
-				(host_readb(hero_i + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP)) &&
+				(host_readb(hero_i + HERO_GROUP_NO) == gs_current_group) &&
 				!hero_dead(hero_i) &&
 				(host_readb(hero_i + HERO_ACTION_ID) == FIG_ACTION_FLEE))
 			{
@@ -418,7 +418,7 @@ void FIG_do_round(void)
 		hero = get_hero(i);
 
 		if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+			(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 			(host_readbs(hero + HERO_ACTION_ID) != FIG_ACTION_FLEE))
 		{
 			/* set #action phases to 1 */
@@ -923,7 +923,7 @@ signed short do_fight(signed short fight_id)
 	signed short textbox_width_bak;
 	signed short escape_positions[6];
 
-	if ((ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP)) == 1)
+	if ((ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group) == 1)
 		&& (host_readbs(get_hero(0) + HERO_INVISIBLE) != 0))
 	{
 		/* group consists of a single hero with an active Visibili spell */
@@ -1085,7 +1085,7 @@ signed short do_fight(signed short fight_id)
 		for (i = 0; i <=6; i++, hero += SIZEOF_HERO) {
 
 			if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE)
-				&& (host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)))
+				&& (host_readbs(hero + HERO_GROUP_NO) == gs_current_group))
 			{
 
 				and_ptr_bs(hero + HERO_FLAGS1, 0x7f); /* unset 'unconscious' flag */
@@ -1114,7 +1114,7 @@ signed short do_fight(signed short fight_id)
 					for (j = 0; j <=6; j++, ptr += SIZEOF_HERO) {
 
 						if ((host_readbs(ptr + HERO_TYPE) != HERO_TYPE_NONE)
-							&& (host_readbs(ptr + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)))
+							&& (host_readbs(ptr + HERO_GROUP_NO) == gs_current_group))
 						{
 							hero_disappear(ptr, j, -2);
 						}
@@ -1167,7 +1167,7 @@ signed short do_fight(signed short fight_id)
 
 			nr_escape_positions = 0;
 
-			for (i = 0; ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP)) > i; i++) {
+			for (i = 0; ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group) > i; i++) {
 
 				hero = get_hero(i);
 
@@ -1196,7 +1196,7 @@ signed short do_fight(signed short fight_id)
 						group_nr++;
 					}
 
-					group_size = ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP));
+					group_size = ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group);
 					x_target_bak = ds_readws(X_TARGET);
 					y_target_bak = ds_readws(Y_TARGET);
 					direction_bak = ds_readbs(DIRECTION);
@@ -1216,7 +1216,7 @@ signed short do_fight(signed short fight_id)
 							host_writeb(hero + HERO_GROUP_NO, (signed char)group_nr);
 							host_writew(hero + HERO_ESCAPE_POSITION, 0);
 							inc_ds_bs_post(GROUP_MEMBER_COUNTS + group_nr);
-							dec_ds_bs_post(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP));
+							dec_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
 						}
 					}
 
@@ -1227,7 +1227,7 @@ signed short do_fight(signed short fight_id)
 					ds_writebs(DUNGEON_LEVEL, (signed char)dungeon_level_bak);
 				}
 
-				group_size = ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP));
+				group_size = ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group);
 
 				for (j = 0; j < group_size; j++) {
 					host_writews(get_hero(j) + HERO_ESCAPE_POSITION, 0);

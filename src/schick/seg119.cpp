@@ -131,7 +131,7 @@ void disease_effect(void)
 
 					for (j = 0; j <= 6; j++, hero2 += SIZEOF_HERO) {
 						if ((host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE) &&
-							(host_readbs(hero2 + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+							(host_readbs(hero2 + HERO_GROUP_NO) == gs_current_group) &&
 							!hero_dead(hero2) &&
 							(hero2 != hero) &&
 							(random_schick(100) <= 20))
@@ -234,7 +234,7 @@ void disease_effect(void)
 
 					for (j = 0; j <= 6; j++, hero2 += SIZEOF_HERO) {
 						if ((host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE) &&
-							(host_readbs(hero2 + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+							(host_readbs(hero2 + HERO_GROUP_NO) == gs_current_group) &&
 							!hero_dead(hero2) &&
 							(hero2 != hero) &&
 							(random_schick(100) <= 20))
@@ -364,7 +364,7 @@ void disease_effect(void)
 							hero2 = get_hero(j);
 
 							if ((host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE) &&
-								(host_readbs(hero2 + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+								(host_readbs(hero2 + HERO_GROUP_NO) == gs_current_group) &&
 								!hero_dead(hero2) &&
 								(hero2 != hero) &&
 								(random_schick(100) <= 5))
@@ -477,7 +477,7 @@ void disease_effect(void)
 
 
 						if ((host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE) &&
-							(host_readbs(hero2 + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+							(host_readbs(hero2 + HERO_GROUP_NO) == gs_current_group) &&
 							!hero_dead(hero2) &&
 							(hero2 != hero) &&
 							(random_schick(100) <= 10))

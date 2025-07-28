@@ -59,7 +59,7 @@ void tevent_067(void)
 			for (i = count = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 					!hero_dead(hero) &&
 					test_attrib(hero, ATTRIB_GE, 0) > 0)
 				{
@@ -88,7 +88,7 @@ void tevent_067(void)
 				for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+						host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 					{
 						sub_hero_le(hero, random_schick(8));
 					}
@@ -304,7 +304,7 @@ void TRV_swimm(signed short mod, signed short percent)
 	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 			!hero_dead(hero))
 		{
 
@@ -492,7 +492,7 @@ void tevent_074(void)
 				for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 						!hero_dead(hero))
 					{
 						answer = i;
@@ -608,7 +608,7 @@ void tevent_075(void)
 				for (i = answer = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 						!hero_dead(hero) &&
 						test_skill(hero, TA_SCHLEICHEN, 0) <= 0)
 					{
@@ -733,7 +733,7 @@ void tevent_077(void)
 				for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 						!hero_dead(hero))
 					{
 						answer = i;

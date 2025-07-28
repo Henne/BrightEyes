@@ -429,7 +429,7 @@ void FIG_init_heroes(void)
 		if (host_readb(hero + HERO_TYPE) == HERO_TYPE_NONE)
 			continue;
 		/* check group */
-		if (host_readb(hero + HERO_GROUP_NO) != ds_readb(CURRENT_GROUP))
+		if (host_readb(hero + HERO_GROUP_NO) != gs_current_group)
 			continue;
 
 		host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_WAIT);

@@ -103,7 +103,7 @@ void npc_farewell(void)
 		return;
 
 	/* no NPC in that group */
-	if (host_readb(get_hero(6) + HERO_GROUP_NO) != ds_readb(CURRENT_GROUP))
+	if (host_readb(get_hero(6) + HERO_GROUP_NO) != gs_current_group)
 		return;
 
 	/* Unconscious or dead NPCs cannot be removed automatically (99 means manual). */
@@ -132,7 +132,7 @@ void npc_farewell(void)
 					hero_i = get_hero(0);
 					for (i = 0; i < 6; i++, hero_i += SIZEOF_HERO) {
 						if (host_readb(hero_i + HERO_TYPE) &&
-							(host_readb(hero_i + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP)) &&
+							(host_readb(hero_i + HERO_GROUP_NO) == gs_current_group) &&
 							(!hero_dead(hero_i)))
 						{
 							/* Original-Bug 42:
@@ -513,7 +513,7 @@ void remove_npc(signed short head_index, signed char days,
 	memset(get_hero(6), 0, SIZEOF_HERO);
 
 	/* dec group counter */
-	dec_ds_bs_post(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP));
+	dec_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
 
 	/* dec global hero counter */
 	dec_ds_bs_post(TOTAL_HERO_COUNTER);
@@ -538,7 +538,7 @@ void add_npc(signed short index)
 	memcpy(get_hero(6) + HERO_PORTRAIT, (char*)g_dtp2, 0x400);
 
 	/* increment heroes in that group */
-	inc_ds_bs_post(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP));
+	inc_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
 
 	/* increment heroes */
 	inc_ds_bs_post(TOTAL_HERO_COUNTER);
@@ -550,7 +550,7 @@ void add_npc(signed short index)
 	host_writeb(get_hero(6) + HERO_NPC_ID, index - 0xe1);
 
 	/* set the group the NPC contains in */
-	host_writeb(get_hero(6) + HERO_GROUP_NO, ds_readb(CURRENT_GROUP));
+	host_writeb(get_hero(6) + HERO_GROUP_NO, gs_current_group);
 
 	draw_status_line();
 }

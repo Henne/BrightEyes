@@ -160,7 +160,7 @@ void tevent_133(void)
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero))
 			{
 				timewarp(HOURS(1));
@@ -357,7 +357,7 @@ void tevent_137(void)
 			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 				if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-					(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+					(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 					!hero_dead(hero))
 				{
 					/* each hero gets five FOODPACKAGES */
@@ -414,7 +414,7 @@ void tevent_139(void)
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 			if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-				(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 				!hero_dead(hero))
 			{
 				sub_hero_le(hero, random_schick(2));
@@ -512,7 +512,7 @@ void tevent_143(void)
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 			if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-				(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)))
+				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group))
 			{
 				sub_hero_le(hero, random_schick(2) + 1);
 			}

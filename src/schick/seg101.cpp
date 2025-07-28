@@ -790,7 +790,7 @@ void spell_silentium(void)
 	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 		if ((host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
 			/* check group */
-			(host_readb(hero + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP)) &&
+			(host_readb(hero + HERO_GROUP_NO) == gs_current_group) &&
 			/* check dead */
 			!(hero_dead(hero))) {
 

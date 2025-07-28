@@ -43,7 +43,7 @@ unsigned short get_hero_CH_best()
 	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 
 		if ((host_readb(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readb(hero_i + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP)) &&
+			(host_readb(hero_i + HERO_GROUP_NO) == gs_current_group) &&
 				/* check if in group */
 			(!hero_dead(hero_i)) &&
 				/* check if not dead */
@@ -74,7 +74,7 @@ unsigned short get_hero_KK_best() {
 
 	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 		if ((host_readb(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readb(hero_i + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP)) &&
+			(host_readb(hero_i + HERO_GROUP_NO) == gs_current_group) &&
 				/* check if in group */
 			(!hero_dead(hero_i)) &&
 				/* check if not dead */
@@ -231,7 +231,7 @@ short check_heroes_KK(short val) {
 	hero = get_hero(1);
 
 	/* check class, group and dead status of hero in slot 2*/
-	if (host_readb(hero + HERO_TYPE) && host_readb(hero + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP) && (!hero_dead(hero))) {
+	if (host_readb(hero + HERO_TYPE) && host_readb(hero + HERO_GROUP_NO) == gs_current_group && (!hero_dead(hero))) {
 		sum += host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK));
 	}
 
@@ -427,7 +427,7 @@ signed short select_hero_from_group(char *title)
 		hero = get_hero(i);
 
 		if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readb(hero + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP) &&
+			host_readb(hero + HERO_GROUP_NO) == gs_current_group &&
 				/* TODO: find out what that means */
 				ds_readbs(HERO_SEL_EXCLUDE) != i) {
 
@@ -502,7 +502,7 @@ signed short select_hero_ok(char *title)
 	for (hero = get_hero(0), i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 		if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readb(hero + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP) &&
+			host_readb(hero + HERO_GROUP_NO) == gs_current_group &&
 			check_hero(hero) &&
 				/* TODO: find out what that means */
 				ds_readbs(HERO_SEL_EXCLUDE) != i) {
@@ -580,7 +580,7 @@ signed short select_hero_ok_forced(char *title)
 	for (hero = get_hero(0), i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 		if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readb(hero + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP) &&
+			host_readb(hero + HERO_GROUP_NO) == gs_current_group &&
 			check_hero(hero) &&
 				/* TODO: find out what that means */
 				ds_readbs(HERO_SEL_EXCLUDE) != i) {
@@ -642,7 +642,7 @@ signed short count_heroes_in_group(void)
 	for (hero_i = get_hero(0), i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 		/* Check class, group and dead */
 		if ((host_readb(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readb(hero_i + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP)) &&
+			(host_readb(hero_i + HERO_GROUP_NO) == gs_current_group) &&
 			(!hero_dead(hero_i))) {
 
 			retval++;

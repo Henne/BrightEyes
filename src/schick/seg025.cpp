@@ -143,7 +143,7 @@ void do_house(void)
 		for (i = 0; i < 6; i++, hero += SIZEOF_HERO) {
 
 			if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-				(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 				!hero_dead(hero) && /* Original-Bug: What if petrified, sleeping etc. */
 				(test_skill(hero, TA_VERSTECKEN, -2) <= 0))
 			{
@@ -168,11 +168,11 @@ void do_house(void)
 						}
 					}
 
-					if ((ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP)) < ds_readbs(TOTAL_HERO_COUNTER)) && l_di)
+					if ((ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group) < ds_readbs(TOTAL_HERO_COUNTER)) && l_di)
 					{
 						i = 0;
 
-						while (host_readbs(get_hero(i) + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+						while (host_readbs(get_hero(i) + HERO_GROUP_NO) == gs_current_group)
 						{
 							/* imprison hero */
 							host_writeb(get_hero(i) + HERO_JAIL, 1);

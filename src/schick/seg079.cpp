@@ -125,7 +125,7 @@ signed short DNG03_handler(void)
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_skill(hero, TA_KLETTERN, 2) <= 0)
 			{
@@ -207,7 +207,7 @@ signed short DNG03_handler(void)
 
 		if ((hero = (Bit8u*)get_second_hero_available_in_group()) &&
 			host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 			!hero_dead(hero) &&
 			test_skill(hero, TA_GEFAHRENSINN, 4) <= 0)
 		{
@@ -245,7 +245,7 @@ signed short DNG03_handler(void)
 		if ((hero = (Bit8u*)get_second_hero_available_in_group()) &&
 			(j == 2 ||
 			(host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 			!hero_dead(hero) &&
 			test_attrib(hero, ATTRIB_GE, 2) <= 0)))
 		{
@@ -581,7 +581,7 @@ void DNG03_chest11_func3(Bit8u*)
 		for (l_di = counter = l_si = 0; l_di <= 6; l_di++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero))
 			{
 				l_si++;

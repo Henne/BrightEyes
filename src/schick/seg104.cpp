@@ -283,7 +283,7 @@ signed short plan_alchemy(Bit8u *hero)
 									hero_p = get_hero(0);
 									for (i = 0; i <= 6; i++, hero_p += SIZEOF_HERO) {
 										if ((host_readbs(hero_p + HERO_TYPE) != HERO_TYPE_NONE) &&
-											(host_readbs(hero_p + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)))
+											(host_readbs(hero_p + HERO_GROUP_NO) == gs_current_group))
 										{
 											GRP_hero_sleep(hero_p, ds_readbs(SLEEP_QUALITY));
 										}
@@ -305,7 +305,7 @@ signed short plan_alchemy(Bit8u *hero)
 
 								host_writebs(hero + HERO_GROUP_NO, (signed char)l5);
 								inc_ds_bs_post(GROUP_MEMBER_COUNTS + l5);
-								dec_ds_bs_post(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP));
+								dec_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
 
 								host_writeb(hero + HERO_RECIPE_TIMER,
 									ds_readbs((ALCHEMY_RECIPES + RECIPE_DURATION) + recipe_index * SIZEOF_RECIPE) / 24);
@@ -524,7 +524,7 @@ Bit8u* get_heaviest_hero(void)
 	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 		if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)))
+			(host_readbs(hero + HERO_GROUP_NO) == gs_current_group))
 		{
 			weight = host_readws(hero + HERO_WEIGHT) + host_readws(hero + HERO_LOAD);
 
@@ -559,7 +559,7 @@ signed short get_skilled_hero_pos(signed short skill)
 	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 		if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)))
+			(host_readbs(hero + HERO_GROUP_NO) == gs_current_group))
 		{
 
 			cur =	host_readbs(hero + HERO_ATTRIB + 3 * (ds_readbs(SKILL_DESCRIPTIONS + 4 * skill))) +

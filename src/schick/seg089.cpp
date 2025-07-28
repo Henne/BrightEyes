@@ -78,7 +78,7 @@ signed short DNG15_handler(void)
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_attrib(hero, ATTRIB_GE, -3) <= 0)
 			{
@@ -153,7 +153,7 @@ signed short DNG15_handler(void)
 		{
 			if (ds_readw(GROUPS_X_TARGET + 2 * i) == 8 &&
 				ds_readw(GROUPS_Y_TARGET + 2 * i) == 5 &&
-				ds_readbs(CURRENT_GROUP) != i)
+				gs_current_group != i)
 			{
 				tmp = 1;
 			}
@@ -182,7 +182,7 @@ signed short DNG15_handler(void)
 		{
 			if (ds_readw(GROUPS_X_TARGET + 2 * i) == 8 &&
 				ds_readw(GROUPS_Y_TARGET + 2 * i) == 1 &&
-				ds_readbs(CURRENT_GROUP) != i)
+				gs_current_group != i)
 			{
 				tmp = 1;
 			}
@@ -202,7 +202,7 @@ signed short DNG15_handler(void)
 		{
 			if (ds_readw(GROUPS_X_TARGET + 2 * i) == 8 &&
 				ds_readw(GROUPS_Y_TARGET + 2 * i) == 5 &&
-				ds_readbs(CURRENT_GROUP) != i)
+				gs_current_group != i)
 			{
 				tmp = 1;
 			}
@@ -228,7 +228,7 @@ signed short DNG15_handler(void)
 		{
 			if (ds_readw(GROUPS_X_TARGET + 2 * i) == 8 &&
 				ds_readw(GROUPS_Y_TARGET + 2 * i) == 1 &&
-				ds_readbs(CURRENT_GROUP) != i)
+				gs_current_group != i)
 			{
 				tmp = 1;
 			}
@@ -505,7 +505,7 @@ void DNG15_small_wounds(void)
 	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 	{
 		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 			!hero_dead(hero) &&
 			test_attrib(hero, ATTRIB_GE, -3) <= 0)
 		{
@@ -629,7 +629,7 @@ void DNG15_collapsing_ceiling(Bit8u* ptr)
 			for (i = cnt = 0; i <= 6; i++, hero += SIZEOF_HERO)
 			{
 				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 					!hero_dead(hero) &&
 					test_attrib(hero, ATTRIB_GE, -3) <= 0)
 				{
@@ -657,7 +657,7 @@ void DNG15_collapsing_ceiling(Bit8u* ptr)
 			for (i = cnt = 0; i <= 6; i++, hero += SIZEOF_HERO)
 			{
 				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 					!hero_dead(hero) &&
 					test_attrib(hero, ATTRIB_GE, 0) <= 0)
 				{
@@ -724,7 +724,7 @@ void DNG15_clear_way(Bit8u* ptr)
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_attrib(hero, ATTRIB_GE, 0) <= 0)
 			{

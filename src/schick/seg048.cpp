@@ -170,7 +170,7 @@ void status_menu(signed short hero_pos)
 		handle_input();
 
 		/* RIGHT_KEY */
-		if (ds_readws(ACTION) == ACTION_ID_RIGHT && ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP)) > 1)
+		if (ds_readws(ACTION) == ACTION_ID_RIGHT && ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group) > 1)
 		{
 
 			/* set hero_pos to the next possible hero */
@@ -179,7 +179,7 @@ void status_menu(signed short hero_pos)
 
 				if (hero_pos > 6) hero_pos = 0;
 			} while (!host_readbs(get_hero(hero_pos) + HERO_TYPE) ||
-					host_readbs(get_hero(hero_pos) + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP) ||
+					host_readbs(get_hero(hero_pos) + HERO_GROUP_NO) != gs_current_group ||
 					(host_readbs(get_hero(hero_pos) + HERO_TYPE) < HERO_TYPE_WITCH && ds_readws(STATUS_PAGE_MODE) > 3));
 
 
@@ -203,7 +203,7 @@ void status_menu(signed short hero_pos)
 		}
 
 		/* LEFT_KEY */
-		if (ds_readws(ACTION) == ACTION_ID_LEFT && ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP)) > 1)
+		if (ds_readws(ACTION) == ACTION_ID_LEFT && ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group) > 1)
 		{
 
 			/* set hero_pos to the next possible hero */
@@ -212,7 +212,7 @@ void status_menu(signed short hero_pos)
 
 				if (hero_pos < 0) hero_pos = 6;
 			} while (!host_readbs(get_hero(hero_pos) + HERO_TYPE) ||
-					host_readbs(get_hero(hero_pos) + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP) ||
+					host_readbs(get_hero(hero_pos) + HERO_GROUP_NO) != gs_current_group ||
 					(host_readbs(get_hero(hero_pos) + HERO_TYPE) < HERO_TYPE_WITCH && ds_readws(STATUS_PAGE_MODE) > 3));
 
 
@@ -848,7 +848,7 @@ void status_menu(signed short hero_pos)
 void status_select_hero(void)
 {
 
-	if (ds_readws(STATUSMENU_ALLOWED) == 0 || !ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP))) {
+	if (ds_readws(STATUSMENU_ALLOWED) == 0 || !ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group)) {
 		/* Yes, it was written that way! */
 	} else {
 		signed short hero_pos = select_hero_from_group(get_ttx(301));

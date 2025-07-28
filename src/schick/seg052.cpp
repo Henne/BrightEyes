@@ -275,7 +275,7 @@ void do_citycamp(void)
 						for (l_si = 0; l_si <= 6; l_si++, hero += SIZEOF_HERO) {
 
 							if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-								host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+								host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 								ds_readbs(CITYCAMP_GUARDSTATUS + l_si) < 2 &&
 								ds_readbs(CITYCAMP_MAGICSTATUS + l_si) != 1)
 							{

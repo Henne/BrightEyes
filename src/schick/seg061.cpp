@@ -117,7 +117,7 @@ void do_temple(void)
 
 		if (ds_readws(ACTION) == ACTION_ID_ICON_9) {
 			/* leave temple */
-			if (!ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP))) {
+			if (!ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group)) {
 				GUI_output(get_ttx(232));
 			} else {
 				done = 1;
@@ -159,7 +159,7 @@ void do_temple(void)
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_5) {
 			/* save game */
 			if (ds_readws(CURRENT_TYPEINDEX) != 58) {
-				if (!ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP))) {
+				if (!ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group)) {
 					GUI_output(get_ttx(232));
 				} else {
 					save_game_state();
@@ -180,7 +180,7 @@ void do_temple(void)
 
 		if (ds_readws(ACTION) == ACTION_ID_ICON_7) {
 			/* ask for a miracle */
-			if (!ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP))) {
+			if (!ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group)) {
 				GUI_output(get_ttx(232));
 			} else {
 				ask_miracle();
@@ -189,7 +189,7 @@ void do_temple(void)
 
 		if (ds_readws(ACTION) == ACTION_ID_ICON_8) {
 			/* make a donation */
-			if (!ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP))) {
+			if (!ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group)) {
 				GUI_output(get_ttx(232));
 			} else {
 
@@ -268,9 +268,9 @@ void char_add(signed short temple_id)
 
 							prepare_chr_name(g_dtp2,	(char*)(ptr + 32 * l_si));
 
-							if (read_chr_temp(g_dtp2, i, ds_readbs(CURRENT_GROUP))) {
+							if (read_chr_temp(g_dtp2, i, gs_current_group)) {
 								inc_ds_bs_post(TOTAL_HERO_COUNTER);
-								inc_ds_bs_post(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP));
+								inc_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
 								host_writebs(hero + HERO_GROUP_POS, i + 1);
 								write_chr_temp(i);
 							}
@@ -301,7 +301,7 @@ void char_letgo(signed short temple_id)
 	signed short hero_pos;
 	Bit8u *hero;
 
-	if (!ds_readbs(TOTAL_HERO_COUNTER) || !ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP))) {
+	if (!ds_readbs(TOTAL_HERO_COUNTER) || !ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group)) {
 		GUI_output(get_ttx(232));
 	} else {
 
@@ -319,7 +319,7 @@ void char_letgo(signed short temple_id)
 					/* let go a hero */
 					hero = get_hero(hero_pos);
 					dec_ds_bs_post(TOTAL_HERO_COUNTER);
-					dec_ds_bs_post(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP));
+					dec_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
 
 					host_writeb(hero + HERO_TEMPLE_ID, (signed char)temple_id);
 					host_writeb(hero + HERO_GROUP_POS, 0);
@@ -340,7 +340,7 @@ void char_letgo(signed short temple_id)
 				}
 			}
 
-		} while (hero_pos != -1 && ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP)) > (host_readbs(get_hero(6) + HERO_TYPE) ? 1 : 0));
+		} while (hero_pos != -1 && ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group) > (host_readbs(get_hero(6) + HERO_TYPE) ? 1 : 0));
 	}
 }
 
@@ -420,7 +420,7 @@ void miracle_heal_hero(signed short le_in, char *str)
 		hero = get_hero(i);
 
 		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 			!hero_dead(hero) &&
 			!hero_gods_pissed(hero) &&
 			!hero_dead(hero) &&
@@ -459,7 +459,7 @@ void miracle_resurrect(char *str)
 
 		Bit8u *hero = get_hero(i);
 
-		if (hero_dead(hero) && host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) && !hero_gods_pissed(hero))
+		if (hero_dead(hero) && host_readbs(hero + HERO_GROUP_NO) == gs_current_group && !hero_gods_pissed(hero))
 		{
 			/* resurrect from the dead */
 			and_ptr_bs(hero + HERO_FLAGS1, 0xfe); /* unset 'dead' flag */
@@ -495,7 +495,7 @@ void miracle_modify(unsigned short offset, Bit32s timer_value, signed short mod)
 	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 			!hero_dead(hero) &&
 			!hero_gods_pissed(hero))
 		{
@@ -526,7 +526,7 @@ void miracle_weapon(char *str, signed short mode)
 		Bit8u *hero = get_hero(j);
 
 		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 			!hero_dead(hero) &&
 			!hero_gods_pissed(hero))
 		{

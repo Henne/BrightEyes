@@ -141,7 +141,7 @@ Bit8u* get_proper_hero(signed short skill)
 	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 		if ((host_readbs(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
 			/* Check if in current group */
-			(host_readb(hero_i + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP)) &&
+			(host_readb(hero_i + HERO_GROUP_NO) == gs_current_group) &&
 			/* Check hero is not dead */
 			/* TODO: potential Original-Bug: What if petrified / unconscious etc.? */
 			!hero_dead(hero_i)) {

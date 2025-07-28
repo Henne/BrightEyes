@@ -36,9 +36,9 @@ int GRP_compare_heroes(const void *p1, const void *p2)
 	hero2 = (Bit8u*)p2;
 
 	if ((host_readbs(hero1 + HERO_TYPE) != HERO_TYPE_NONE) &&
-		(host_readbs(hero1 + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+		(host_readbs(hero1 + HERO_GROUP_NO) == gs_current_group) &&
 		(host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE) &&
-		(host_readbs(hero2 + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)))
+		(host_readbs(hero2 + HERO_GROUP_NO) == gs_current_group))
 	{
 		if (host_readbs(hero1 + HERO_GROUP_POS) < host_readbs(hero2 + HERO_GROUP_POS))
 		{
@@ -49,25 +49,25 @@ int GRP_compare_heroes(const void *p1, const void *p2)
 	}
 
 	if ((host_readbs(hero1 + HERO_TYPE) != HERO_TYPE_NONE) &&
-		(host_readbs(hero1 + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+		(host_readbs(hero1 + HERO_GROUP_NO) == gs_current_group) &&
 		(host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE) &&
-		(host_readbs(hero2 + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP)))
+		(host_readbs(hero2 + HERO_GROUP_NO) != gs_current_group))
 	{
 		return -1;
 	}
 
 	if ((host_readbs(hero1 + HERO_TYPE) != HERO_TYPE_NONE) &&
-		(host_readbs(hero1 + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP)) &&
+		(host_readbs(hero1 + HERO_GROUP_NO) != gs_current_group) &&
 		(host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE) &&
-		(host_readbs(hero2 + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)))
+		(host_readbs(hero2 + HERO_GROUP_NO) == gs_current_group))
 	{
 		return 1;
 	}
 
 	if ((host_readbs(hero1 + HERO_TYPE) != HERO_TYPE_NONE) &&
-		(host_readbs(hero1 + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP)) &&
+		(host_readbs(hero1 + HERO_GROUP_NO) != gs_current_group) &&
 		(host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE) &&
-		(host_readbs(hero2 + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP)))
+		(host_readbs(hero2 + HERO_GROUP_NO) != gs_current_group))
 	{
 		if (host_readbs(hero1 + HERO_GROUP_POS) < host_readbs(hero2 + HERO_GROUP_POS))
 		{
@@ -79,14 +79,14 @@ int GRP_compare_heroes(const void *p1, const void *p2)
 
 	if (!(host_readbs(hero1 + HERO_TYPE)) &&
 		(host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE) &&
-		(host_readbs(hero2 + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)))
+		(host_readbs(hero2 + HERO_GROUP_NO) == gs_current_group))
 	{
 		return 1;
 	}
 
 	if (!(host_readbs(hero1 + HERO_TYPE)) &&
 		(host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE) &&
-		(host_readbs(hero2 + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP)))
+		(host_readbs(hero2 + HERO_GROUP_NO) != gs_current_group))
 	{
 		return -1;
 	}
@@ -98,14 +98,14 @@ int GRP_compare_heroes(const void *p1, const void *p2)
 	}
 
 	if ((host_readbs(hero1 + HERO_TYPE) != HERO_TYPE_NONE) &&
-		(host_readbs(hero1 + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+		(host_readbs(hero1 + HERO_GROUP_NO) == gs_current_group) &&
 		!(host_readbs(hero2 + HERO_TYPE)))
 	{
 		return -1;
 	}
 
 	if ((host_readbs(hero1 + HERO_TYPE) != HERO_TYPE_NONE) &&
-		(host_readbs(hero1 + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP)) &&
+		(host_readbs(hero1 + HERO_GROUP_NO) != gs_current_group) &&
 		!(host_readbs(hero2 + HERO_TYPE)))
 	{
 		return 1;
@@ -198,7 +198,7 @@ void GRP_split(void)
 				not_empty = 1;
 				host_writeb(get_hero(answer) + HERO_GROUP_NO, (signed char)new_group_id);
 				inc_ds_bs_post(GROUP_MEMBER_COUNTS + new_group_id);
-				dec_ds_bs_post(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP));
+				dec_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
 			}
 
 		}
@@ -251,8 +251,8 @@ void GRP_merge(void)
 				if ((host_readbs(get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE) &&
 					host_readbs(get_hero(i) + HERO_GROUP_NO) == answer)
 				{
-					host_writeb(get_hero(i) + HERO_GROUP_NO, ds_readbs(CURRENT_GROUP));
-					inc_ds_bs_post(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP));
+					host_writeb(get_hero(i) + HERO_GROUP_NO, gs_current_group);
+					inc_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
 				}
 			}
 			GRP_sort_heroes();
@@ -272,7 +272,7 @@ void GRP_switch_to_next(signed short mode)
 	signed short done = 0;
 	signed short dng_level;
 
-	group = ds_readbs(CURRENT_GROUP);
+	group = gs_current_group;
 
 	do {
 		/* select next group */
@@ -326,7 +326,7 @@ void GRP_switch_to_next(signed short mode)
 
 	} while (done == 0);
 
-	if (ds_readbs(CURRENT_GROUP) != group) {
+	if (gs_current_group != group) {
 
 		if ( ( (ds_readbs(CURRENT_TOWN) != TOWNS_NONE) && !ds_readbs(GROUPS_TOWN + group)) ||
 			(!ds_readbs(CURRENT_TOWN) && (ds_readbs(GROUPS_TOWN + group) != TOWNS_NONE)))
@@ -349,23 +349,23 @@ void GRP_switch_to_next(signed short mode)
 		}
 
 		/* save positions from the old group */
-		ds_writeb(GROUPS_DIRECTION + ds_readbs(CURRENT_GROUP), ds_readbs(DIRECTION));
-		ds_writew(GROUPS_X_TARGET + ds_readbs(CURRENT_GROUP) * 2, ds_readw(X_TARGET));
-		ds_writew(GROUPS_Y_TARGET + ds_readbs(CURRENT_GROUP) * 2, ds_readw(Y_TARGET));
-		ds_writeb(GROUPS_CURRENT_LOCTYPE + ds_readbs(CURRENT_GROUP), ds_readbs(CURRENT_LOCTYPE));
-		ds_writeb(GROUPS_TOWN + ds_readbs(CURRENT_GROUP), ds_readbs(CURRENT_TOWN));
-		ds_writeb(GROUPS_DNG_INDEX + ds_readbs(CURRENT_GROUP), ds_readbs(DUNGEON_INDEX));
-		ds_writeb(GROUPS_DNG_LEVEL + ds_readbs(CURRENT_GROUP), ds_readbs(DUNGEON_LEVEL));
-		ds_writeb(GROUPS_DIRECTION_BAK + ds_readbs(CURRENT_GROUP), ds_readbs(DIRECTION_BAK));
-		ds_writew(GROUPS_X_TARGET_BAK + ds_readbs(CURRENT_GROUP) * 2, ds_readw(X_TARGET_BAK));
-		ds_writew(GROUPS_Y_TARGET_BAK + ds_readbs(CURRENT_GROUP) * 2, ds_readw(Y_TARGET_BAK));
-		ds_writeb(GROUPS_CURRENT_LOCTYPE_BAK + ds_readbs(CURRENT_GROUP), ds_readbs(CURRENT_LOCTYPE_BAK));
-		ds_writeb(GROUPS_TOWN_BAK + ds_readbs(CURRENT_GROUP), ds_readbs(CURRENT_TOWN_BAK));
-		ds_writeb(GROUPS_DNG_INDEX_BAK + ds_readbs(CURRENT_GROUP), ds_readbs(DUNGEON_INDEX_BAK));
-		ds_writeb(GROUPS_DNG_LEVEL_BAK + ds_readbs(CURRENT_GROUP), ds_readbs(DUNGEON_LEVEL_BAK));
+		ds_writeb(GROUPS_DIRECTION + gs_current_group, ds_readbs(DIRECTION));
+		ds_writew(GROUPS_X_TARGET + gs_current_group * 2, ds_readw(X_TARGET));
+		ds_writew(GROUPS_Y_TARGET + gs_current_group * 2, ds_readw(Y_TARGET));
+		ds_writeb(GROUPS_CURRENT_LOCTYPE + gs_current_group, ds_readbs(CURRENT_LOCTYPE));
+		ds_writeb(GROUPS_TOWN + gs_current_group, ds_readbs(CURRENT_TOWN));
+		ds_writeb(GROUPS_DNG_INDEX + gs_current_group, ds_readbs(DUNGEON_INDEX));
+		ds_writeb(GROUPS_DNG_LEVEL + gs_current_group, ds_readbs(DUNGEON_LEVEL));
+		ds_writeb(GROUPS_DIRECTION_BAK + gs_current_group, ds_readbs(DIRECTION_BAK));
+		ds_writew(GROUPS_X_TARGET_BAK + gs_current_group * 2, ds_readw(X_TARGET_BAK));
+		ds_writew(GROUPS_Y_TARGET_BAK + gs_current_group * 2, ds_readw(Y_TARGET_BAK));
+		ds_writeb(GROUPS_CURRENT_LOCTYPE_BAK + gs_current_group, ds_readbs(CURRENT_LOCTYPE_BAK));
+		ds_writeb(GROUPS_TOWN_BAK + gs_current_group, ds_readbs(CURRENT_TOWN_BAK));
+		ds_writeb(GROUPS_DNG_INDEX_BAK + gs_current_group, ds_readbs(DUNGEON_INDEX_BAK));
+		ds_writeb(GROUPS_DNG_LEVEL_BAK + gs_current_group, ds_readbs(DUNGEON_LEVEL_BAK));
 
 		/* set positions for the new group */
-		ds_writeb(CURRENT_GROUP, (signed char)group);
+		gs_current_group = (signed char)group;
 		ds_writeb(DIRECTION, ds_readb(GROUPS_DIRECTION + group));
 		ds_writew(X_TARGET, ds_readw(GROUPS_X_TARGET + group * 2));
 		ds_writew(Y_TARGET, ds_readw(GROUPS_Y_TARGET + group * 2));
@@ -412,7 +412,7 @@ void GRP_swap_heroes(void)
 	signed char i;
 	signed char tmp[SIZEOF_HERO];
 
-	if ((ds_readw(HEROSWAP_ALLOWED) == 0) || !ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP))) {
+	if ((ds_readw(HEROSWAP_ALLOWED) == 0) || !ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group)) {
 		return;
 	}
 
@@ -585,7 +585,7 @@ void GRP_move_hero(signed short src_pos)
 			dst = get_hero(dst_pos);
 			src = get_hero(src_pos);
 
-			if (!host_readbs(dst + 0x21) || (host_readbs(dst + 0x87) == ds_readbs(CURRENT_GROUP))) {
+			if (!host_readbs(dst + 0x21) || (host_readbs(dst + 0x87) == gs_current_group)) {
 
 				for (i = 0; i < 3; i++) {
 					if (ds_readbs(WILDCAMP_GUARDS + i) == src_pos) {

@@ -530,7 +530,7 @@ void sell_screen(Bit8u *shop_ptr)
 			hero3 = get_hero(hero_pos);
 
 			if ((host_readbs(hero3 + HERO_TYPE) != HERO_TYPE_NONE) &&
-				host_readbs(hero3 + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+				host_readbs(hero3 + HERO_GROUP_NO) == gs_current_group)
 			{
 				hero1 = get_hero(hero_pos);
 				deselect_hero_icon(hero_pos_old);

@@ -1613,7 +1613,7 @@ void handle_gui_input(void)
 
 				/* open character screen by double click on hero picture */
 				if ((host_readbs(get_hero(l_si - 241) + HERO_TYPE) != HERO_TYPE_NONE) &&
-						host_readbs(get_hero(l_si - 241) + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+						host_readbs(get_hero(l_si - 241) + HERO_GROUP_NO) == gs_current_group)
 				{
 					status_menu(l_si - 241);
 					l_si = 0;
@@ -1624,7 +1624,7 @@ void handle_gui_input(void)
 				/* swap heroes by click - move mouse - click */
 				if ((ds_readws(HEROSWAP_ALLOWED) != 0) &&
 					(host_readbs(get_hero(l_si - 241) + HERO_TYPE) != HERO_TYPE_NONE) &&
-						host_readbs(get_hero(l_si - 241) + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+						host_readbs(get_hero(l_si - 241) + HERO_GROUP_NO) == gs_current_group)
 				{
 					/* the destination will be selected by a mouse klick in the following function call */
 					GRP_move_hero(l_si - 241);
@@ -2345,7 +2345,7 @@ void do_timers(void)
 					di = host_readbs(ptr + HERO_GROUP_NO);
 
 					/* hero is in group and in mage dungeon */
-					if ((ds_readbs(CURRENT_GROUP) == di) &&
+					if ((gs_current_group == di) &&
 						(ds_readb(DUNGEON_INDEX) == DUNGEONS_RUINE_DES_SCHWARZMAGIERS))
 					{
 
@@ -2992,9 +2992,9 @@ void herokeeping(void)
 			/* check if someone in the group of the hero has the magic bread bag */
 			/* check for magic waterskin in group */
 			if ((get_first_hero_with_item_in_group(ITEM_MAGIC_WATERSKIN, host_readbs(hero + HERO_GROUP_NO)) == -1) &&
-				((host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				((host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				(!ds_readbs(CURRENT_TOWN) || (ds_readbs(CURRENT_TOWN) != TOWNS_NONE && ds_readb(SHOW_TRAVEL_MAP) != 0))) ||
-				((host_readbs(hero + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP) &&
+				((host_readbs(hero + HERO_GROUP_NO) != gs_current_group &&
 				!ds_readbs(GROUPS_TOWN + host_readbs(hero + HERO_GROUP_NO)))))) {
 
 					/* check for food amulett */
@@ -3076,7 +3076,7 @@ void herokeeping(void)
 		{
 
 			if ((host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-				(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 				!hero_dead(hero) &&
 				(!ds_readb(SHOW_TRAVEL_MAP) || (g_food_message_shown[i] != ds_readb(FOOD_MESSAGE + i)))) {
 
@@ -3107,7 +3107,7 @@ void herokeeping(void)
 		if ((ds_readb(UNCONSCIOUS_MESSAGE + i) != 0) && !ds_readbs(DIALOGBOX_LOCK)) {
 
 			if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 				!hero_dead(hero)) {
 
 					/* prepare output */
@@ -4084,7 +4084,7 @@ signed short can_merge_group(void)
 	signed short i;
 	signed short retval = -1;
 
-	if (ds_readbs(ds_readbs(CURRENT_GROUP) + GROUP_MEMBER_COUNTS) == ds_readbs(TOTAL_HERO_COUNTER)) {
+	if (ds_readbs(gs_current_group + GROUP_MEMBER_COUNTS) == ds_readbs(TOTAL_HERO_COUNTER)) {
 
 		retval = -1;
 
@@ -4092,7 +4092,7 @@ signed short can_merge_group(void)
 
 		for (i = 0; i < 6; i++)	{
 
-			if ((i != ds_readbs(CURRENT_GROUP)) &&
+			if ((i != gs_current_group) &&
 				(0 != ds_readb(i + GROUP_MEMBER_COUNTS)) &&
 				/* check XTarget */
 				(ds_readw(i * 2 + GROUPS_X_TARGET) == ds_readw(X_TARGET)) &&
@@ -4368,7 +4368,7 @@ signed short is_hero_available_in_group(Bit8u *hero)
 
 	if (
 		check_hero(hero) &&
-		(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+		(host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 	) {
 		return 1;
 	}
@@ -4535,7 +4535,7 @@ void sub_hero_le(Bit8u *hero, signed short le)
 				hero_i = get_hero(0);
 				for (i = 0; i <=6; i++, hero_i += SIZEOF_HERO) {
 					if ((host_readbs(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
-						(host_readbs(hero_i + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)))
+						(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group))
 					{
 						hero_disappear(hero_i, i, -1);
 					}
@@ -4662,7 +4662,7 @@ void add_group_le(signed short le)
 	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 		if ((host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)))
+			(host_readbs(hero + HERO_GROUP_NO) == gs_current_group))
 		{
 			add_hero_le(hero, le);
 		}
@@ -4946,7 +4946,7 @@ signed short unused_cruft(void)
 	do {
 		l_si = random_schick(6) - 1;
 
-	} while (!(host_readbs(get_hero(l_si) + HERO_TYPE)) || (host_readbs(get_hero(l_si) + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP)));
+	} while (!(host_readbs(get_hero(l_si) + HERO_TYPE)) || (host_readbs(get_hero(l_si) + HERO_GROUP_NO) != gs_current_group));
 
 	return l_si;
 }
@@ -4964,7 +4964,7 @@ signed short get_random_hero(void)
 
 	do {
 		/* get number of current group */
-		cur_hero = random_schick(ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP))) - 1;
+		cur_hero = random_schick(ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group)) - 1;
 
 #ifdef M302de_ORIGINAL_BUGFIX
 		signed short pos = 0;
@@ -4975,7 +4975,7 @@ signed short get_random_hero(void)
 			if (host_readbs(hero + HERO_TYPE) == HERO_TYPE_NONE)
 				continue;
 			/* Check if in current group */
-			if (host_readbs(hero + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP))
+			if (host_readbs(hero + HERO_GROUP_NO) != gs_current_group)
 				continue;
 
 			if (pos == cur_hero) {
@@ -4990,7 +4990,7 @@ signed short get_random_hero(void)
 
 	} while (
 		!host_readbs(get_hero(cur_hero) + HERO_TYPE) ||
-		(host_readbs(get_hero(cur_hero) + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP)) ||
+		(host_readbs(get_hero(cur_hero) + HERO_GROUP_NO) != gs_current_group) ||
 		hero_dead(get_hero(cur_hero))
 	);
 
@@ -5012,7 +5012,7 @@ Bit32s get_party_money(void)
 
 	for (i=0; i < 6; i++, hero += SIZEOF_HERO) {
 		if (host_readbs(hero + HERO_TYPE) &&
-			(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)))
+			(host_readbs(hero + HERO_GROUP_NO) == gs_current_group))
 		{
 			sum += host_readds(hero + HERO_MONEY);
 		}
@@ -5047,7 +5047,7 @@ void set_party_money(Bit32s money)
 	/* if we have an NPC in current group and alive */
 	if (
 		host_readbs(hero + HERO_TYPE) &&
-		(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+		(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 		!hero_dead(hero)
 	) {
 
@@ -5070,13 +5070,13 @@ void set_party_money(Bit32s money)
 
 			if (
 				host_readbs(hero + HERO_TYPE) &&
-				(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 				!hero_dead(hero)
 			) {
 				/* account the money to hero */
 				host_writed(hero + HERO_MONEY, hero_money);
 			} else {
-				if (host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) {
+				if (host_readbs(hero + HERO_GROUP_NO) == gs_current_group) {
 					host_writed(hero + HERO_MONEY, 0);
 				}
 			}
@@ -5126,7 +5126,7 @@ void add_group_ap(Bit32s ap)
 	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 
 		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) &&
 			!hero_dead(hero_i))
 		{
 			add_hero_ap(hero_i, ap);
@@ -5151,7 +5151,7 @@ void add_hero_ap_all(signed short ap)
 	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 
 		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) &&
 			!hero_dead(hero_i))
 		{
 #if !defined(__BORLANDC__)
@@ -5180,7 +5180,7 @@ void sub_hero_ap_all(signed short ap)
 	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 
 		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) &&
 			!hero_dead(hero_i))
 		{
 			if ((Bit32u)ap <= host_readd(hero_i + HERO_AP)) {
@@ -5254,7 +5254,7 @@ signed short get_first_hero_with_item(signed short item)
 	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 
 		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)))
+			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group))
 		{
 			/* Search inventory */
 			for (j = 0; j < NR_HERO_INVENTORY_SLOTS; j++) {
@@ -5314,7 +5314,7 @@ void sub_group_le(signed short le)
 		hero_i = get_hero(i);
 
 		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)))
+			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group))
 		{
 			sub_hero_le(hero_i, le);
 		}
@@ -5335,7 +5335,7 @@ Bit8u* get_first_hero_available_in_group(void)
 
 		/* Check class, group, deadness and check_hero() */
 		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) &&
 			!hero_dead(hero_i) &&
 			check_hero(hero_i))
 		{
@@ -5362,7 +5362,7 @@ Bit8u* get_second_hero_available_in_group(void)
 	for (i = tmp = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 		/* Check class, group and check_hero() */
 		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) &&
 			check_hero(hero_i))
 		{
 			if (tmp) {
@@ -5439,7 +5439,7 @@ signed short count_heroes_available_in_group(void)
 
 	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 		if (host_readbs(hero_i + HERO_TYPE) && /* != HERO_TYPE_NONE */
-			(host_readbs(hero_i + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) && /* hero in current group */
+			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) && /* hero in current group */
 			check_hero_no2(hero_i)) /* hero not dead, petrified, unconscious or renegade */
 		{
 			heroes++;
@@ -5459,7 +5459,7 @@ signed short count_heroes_available_in_group_ignore_npc(void)
 
 	for (i = 0; i < 6; i++, hero_i += SIZEOF_HERO) {
 		if (host_readbs(hero_i + HERO_TYPE) && /* != HERO_TYPE_NONE */
-			(host_readbs(hero_i + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) && /* hero in current group */
+			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) && /* hero in current group */
 			check_hero_no2(hero_i)) /* hero not dead, petrified, unconscious or renegade */
 		{
 			heroes++;

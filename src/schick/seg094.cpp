@@ -282,7 +282,7 @@ void TM_func1(signed short route_no, signed short backwards)
 				for (ds_writew(TRV_I, 0); ds_readws(TRV_I) <= 6; inc_ds_ws(TRV_I), hero += SIZEOF_HERO)
 				{
 					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 						!hero_dead(hero))
 					{
 						sub_hero_le(hero, ds_readws(FORCEDMARCH_LE_COST));

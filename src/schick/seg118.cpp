@@ -341,7 +341,7 @@ void tevent_078(void)
 					hero_disappear(hero, tmp, -1);
 #else
 					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP)
+						host_readbs(hero + HERO_GROUP_NO) == gs_current_group
 					) {
 						hero_disappear(hero, tmp, -1);
 					}
@@ -509,7 +509,7 @@ void tevent_124(void)
 		for (i = counter = 0; i <= 6; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				(skill_ret = test_skill(hero, TA_KLETTERN, -2)) <= 0)
 			{

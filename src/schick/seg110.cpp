@@ -100,31 +100,26 @@ void TRV_swim2(signed char mod, signed short percent)
 	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 	{
 		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+			(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 			!hero_dead(hero))
 		{
 			/* a swim test */
 			if (test_skill(hero, TA_SCHWIMMEN, (signed char)mod) > 0)
 			{
 				/* skill test succeeded */
-				sprintf((char*)g_dtp2,
-					get_tx2(31),
-					(char*)hero + HERO_NAME2);
-
+				sprintf((char*)g_dtp2, get_tx2(31), (char*)hero + HERO_NAME2);
 				GUI_output((char*)g_dtp2);
+
 			} else {
 				/* skill test failed */
-				sprintf((char*)g_dtp2,
-					get_tx2(32),
-					(char*)hero + HERO_NAME2,
+				sprintf((char*)g_dtp2, get_tx2(32), (char*)hero + HERO_NAME2,
 					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 				GUI_output((char*)g_dtp2);
 
 				hero_disease_test(hero, 2, 20 - (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK))));
 
-				if (percent)
-				{
+				if (percent) {
 					loose_random_item(hero, percent, get_ttx(506));
 				}
 
@@ -132,7 +127,6 @@ void TRV_swim2(signed char mod, signed short percent)
 			}
 		}
 	}
-
 }
 
 /* Path east from the route Rovamund <-> Peilinen. */
@@ -397,23 +391,21 @@ void tevent_029(void)
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 				!hero_dead(hero))
 			{
 				sub_hero_le(hero, 2);
 
 				item_pos = get_item_pos(hero, ITEM_FOOD_PACKAGE);
 
-				if (item_pos != -1)
-				{
+				if (item_pos != -1) {
 					/* hero looses the first set of FOOD PACKAGES */
 					drop_item(hero, item_pos, host_readws(hero + HERO_INVENTORY + INVENTORY_QUANTITY + SIZEOF_INVENTORY * item_pos));
 				}
 
 				item_pos = hero_count_item(hero, ITEM_WATERSKIN);
 
-				if (item_pos)
-				{
+				if (item_pos) {
 					/* hero looses the first WATERSKIN */
 					drop_item(hero, get_item_pos(hero, ITEM_WATERSKIN), item_pos - 1);
 				}
@@ -716,9 +708,8 @@ void tevent_046(void)
 	init_ani(0);
 
 	do {
-		answer = GUI_radio(get_tx2(42), 2,
-					get_tx2(43),
-					get_tx2(44));
+		answer = GUI_radio(get_tx2(42), 2, get_tx2(43),	get_tx2(44));
+
 	} while (answer == -1);
 
 	if (answer == 1)

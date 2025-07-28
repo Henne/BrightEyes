@@ -184,7 +184,7 @@ signed short DNG07_handler(void)
 			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 			{
 				if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 					!hero_dead(hero))
 				{
 					add_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_MU), 3); /* MU + 3 */
@@ -372,7 +372,7 @@ void DNG09_statues(signed short prob, signed short bonus)
 			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 			{
 				if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 					!hero_dead(hero))
 				{
 					/* the twelve will grant miracles again */

@@ -77,7 +77,7 @@ void ask_miracle(void)
 				case GOD_PRAIOS: {
 					l5 = 1;
 
-					for (i = 0; ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP)) > i; i++) {
+					for (i = 0; ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group) > i; i++) {
 						if (host_readbs(get_hero(i) + HERO_TYPE) >= HERO_TYPE_WITCH) {
 							l5 = 1;
 						}
@@ -134,7 +134,7 @@ void ask_miracle(void)
 									break;
 								} else {
 									if (hero_renegade(hero) &&
-										host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+										host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 										!hero_gods_pissed(hero))
 									{
 										and_ptr_bs(hero + HERO_FLAGS1, 0xdf); /* unset 'renegade' flag */
@@ -206,7 +206,7 @@ void ask_miracle(void)
 							hero = get_hero(i);
 
 							if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-								host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+								host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 								!hero_gods_pissed(hero))
 							{
 								host_writebs(hero + HERO_HUNGER, host_writebs(hero + HERO_THIRST, 0));
@@ -265,7 +265,7 @@ void ask_miracle(void)
 									(char*)hero + HERO_NAME2);
 								break;
 							} else if (hero_renegade(hero) &&
-								host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+								host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 								!hero_gods_pissed(hero))
 							{
 								and_ptr_bs(hero + HERO_FLAGS1, 0xdf); /* unset 'renegade' flag */
@@ -327,7 +327,7 @@ void ask_miracle(void)
 						for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 							if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-								host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+								host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 								!hero_dead(hero) &&
 								!hero_gods_pissed(hero))
 							{
@@ -387,7 +387,7 @@ void ask_miracle(void)
 							disease = hero_is_diseased(hero);
 
 							if (disease != 0 &&
-								host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+								host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 								!hero_gods_pissed(hero))
 							{
 								host_writeb(hero + HERO_ILLNESS + 5 * disease, 1);
@@ -411,7 +411,7 @@ void ask_miracle(void)
 							hero = get_hero(i);
 
 							if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-								host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+								host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 								!hero_dead(hero) &&
 								!hero_gods_pissed(hero))
 							{
@@ -469,7 +469,7 @@ void ask_miracle(void)
 							for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 								if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-									host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+									host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 									!hero_dead(hero) &&
 									!hero_gods_pissed(hero))
 								{

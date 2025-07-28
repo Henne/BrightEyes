@@ -389,7 +389,7 @@ void TRV_ford_test(signed short mod, signed short time)
 	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 			!hero_dead(hero))
 		{
 			/* Original-Bugfix: tests fail if their result is lower or equal than zero */
@@ -569,7 +569,7 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 	for (i = l_di = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 		if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+			(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 			!hero_dead(hero) &&
 			test_skill(hero, TA_SCHLEICHEN, (signed char)mod1) <= 0)
 		{
@@ -728,7 +728,7 @@ void TRV_barrier(signed short text_start)
 			for (i = l_di = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+					host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 				{
 					l_di+=hero_count_item(hero, ITEM_ROPE);
 					l_di+=hero_count_item(hero, ITEM_ROPE_LADDER);

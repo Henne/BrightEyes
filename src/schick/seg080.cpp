@@ -104,7 +104,7 @@ signed short DNG04_handler(void)
 		for (i = 0; i <= 6 ; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_skill(hero, TA_SCHLEICHEN, 2) <= 0)
 			{
@@ -151,7 +151,7 @@ signed short DNG04_handler(void)
 		for (i = 0; i <= 6 ; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_skill(hero, TA_SCHLEICHEN, 4) <= 0)
 			{
@@ -235,7 +235,7 @@ signed short DNG04_handler(void)
 			{
 				if (random_schick(100) <= 5 &&
 					host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 					!hero_dead(hero))
 				{
 					sub_hero_le(hero, 2);
@@ -260,7 +260,7 @@ signed short DNG04_handler(void)
 				/* Original-Bug: forgot to check if the hero is dead */
 				if (random_schick(100) <= 10 &&
 					host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+					host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 				{
 					sub_hero_le(hero, 2);
 

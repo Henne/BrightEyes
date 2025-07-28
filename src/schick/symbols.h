@@ -204,7 +204,7 @@
 //#define LEVELUP_SPTA_CONV               (0x2d21)    /* signed char[6]; { 5, 5, 5, 0, 0, 0 } */
 //#define MR_MODIFICATORS                 (0x2d27)    /* signed char[13]; */
 #define DATSEG_STATUS_START             (0x2d34)    /* unsigned char; 99 = game finished, area of the datseg that is stored one to one in savegame files */
-#define CURRENT_GROUP                   (0x2d35)    /* signed char */
+//#define CURRENT_GROUP                   (0x2d35)    /* signed char */
 #define GROUP_MEMBER_COUNTS             (0x2d36)    /* signed char[6]; members per group */
 #define TOTAL_HERO_COUNTER              (0x2d3c)    /* signed char */
 #define DIRECTION                       (0x2d3d)    /* unsigned char */

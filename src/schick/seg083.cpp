@@ -162,7 +162,7 @@ signed short DNG08_handler(void)
 			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 			{
 				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 					!hero_dead(hero))
 				{
 					ds_writeb(DNG08_TIMER1, 24);
@@ -188,7 +188,7 @@ signed short DNG08_handler(void)
 			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 			{
 				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 					!hero_dead(hero))
 				{
 					ds_writeb(DNG08_TIMER2, 24);
@@ -273,7 +273,7 @@ signed short DNG08_handler(void)
 			and_ptr_bs(amap_ptr + MAP_POS(8,13), 0x0f);
 			or_ptr_bs(amap_ptr + MAP_POS(8,13), DNG_TILE_OPEN_DOOR << 4);
 
-			if (ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP)) > 1)
+			if (ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group) > 1)
 			{
 				ds_writeb(DIRECTION_BAK, ds_readbs(DIRECTION));
 
@@ -281,7 +281,7 @@ signed short DNG08_handler(void)
 
 				host_writebs(hero + HERO_GROUP_NO, (signed char)tmp);
 				inc_ds_bs_post(GROUP_MEMBER_COUNTS + tmp);
-				dec_ds_bs_post(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP));
+				dec_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
 
 				GRP_save_pos(tmp);
 			}
@@ -300,7 +300,7 @@ signed short DNG08_handler(void)
 		{
 			if (ds_readws(GROUPS_X_TARGET + 2 * i) == 11 &&
 				ds_readws(GROUPS_Y_TARGET + 2 * i) == 11 &&
-				ds_readbs(CURRENT_GROUP) != i)
+				gs_current_group != i)
 			{
 				tmp = 1;
 			}
@@ -320,7 +320,7 @@ signed short DNG08_handler(void)
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_skill(hero, TA_KLETTERN, 2) <= 0)
 			{

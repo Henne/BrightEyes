@@ -380,7 +380,7 @@ signed short DNG14_handler(void)
 			for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero += SIZEOF_HERO) {
 
 				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 					!hero_dead(hero) &&
 					host_readbs(hero + HERO_TYPE) == HERO_TYPE_MAGE &&
 					host_readbs(hero + HERO_STAFFSPELL_LVL) > 2)
@@ -403,7 +403,7 @@ signed short DNG14_handler(void)
 				for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero += SIZEOF_HERO) {
 
 					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 						!hero_dead(hero) &&
 						test_skill(hero, TA_KLETTERN, 0) <= 0)
 					{
@@ -429,7 +429,7 @@ signed short DNG14_handler(void)
 				for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero += SIZEOF_HERO) {
 
 					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 						!hero_dead(hero) &&
 						test_skill(hero, TA_KLETTERN, 4) <= 0)
 					{
@@ -469,7 +469,7 @@ signed short DNG14_handler(void)
 		for (hero_pos = 0; hero_pos <= 6; hero_pos++, hero += SIZEOF_HERO) {
 
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_attrib(hero, ATTRIB_TA, 0) <= 0)
 			{

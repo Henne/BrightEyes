@@ -54,7 +54,7 @@ Bit8u* get_first_brewing_hero(void)
 # endif
 	{
 		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP) &&
+			host_readbs(hero + HERO_GROUP_NO) != gs_current_group &&
 			hero_brewing(hero) &&
 			host_readbs(hero + HERO_ALCHEMY_INN_ID) == ds_readws(CURRENT_TYPEINDEX))
 		{
@@ -107,7 +107,7 @@ void do_inn(void)
 	 * a textbox is shown with the possibility to interrupt the brewing process.
 	 * However, this textbox is not shown if a single hero enters the inn. */
 
-	if (ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP)) == 1) {
+	if (ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group) == 1) {
 		/* current group consists only of a single hero */
 
 		hero = get_first_hero_available_in_group();
@@ -208,7 +208,7 @@ void do_inn(void)
 		/* situation: 'switch groups' just switched to a group consisting of a single hero which has been separated for brewing a long recipe in an inn */
 		/* ASSERT */
 		/*
-		if ((host_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP))) != 1) {
+		if ((host_readbs(GROUP_MEMBER_COUNTS + gs_current_group)) != 1) {
 			D1_INFO("FEHLER: Gruppengroesse eines brauenden Helden ist nicht 1.");
 		}
 		*/
@@ -244,7 +244,7 @@ void do_inn(void)
 		hero = get_hero(0);
 		for (i = 0; i < 7; i++, hero += SIZEOF_HERO) {
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP) &&
+					host_readbs(hero + HERO_GROUP_NO) != gs_current_group &&
 					hero_brewing(hero) &&
 					host_readbs(hero + HERO_ALCHEMY_INN_ID) == ds_readws(CURRENT_TYPEINDEX))
 			{
@@ -307,8 +307,8 @@ void do_inn(void)
 					ds_writeb(GROUPS_DNG_LEVEL_BAK + group_nr, 0);
 					ds_writeb(GROUP_MEMBER_COUNTS + group_nr, 0);
 
-					inc_ds_bs_post(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP));
-					host_writeb(hero + HERO_GROUP_NO, ds_readbs(CURRENT_GROUP));
+					inc_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
+					host_writeb(hero + HERO_GROUP_NO, gs_current_group);
 
 					GRP_sort_heroes();
 				}
@@ -406,7 +406,7 @@ void do_inn(void)
 					for (i = 0, hero2 = get_hero(0); i <= 6; i++, hero2 += SIZEOF_HERO) {
 
 						if (host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE &&
-							host_readbs(hero2 + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+							host_readbs(hero2 + HERO_GROUP_NO) == gs_current_group &&
 							!hero_dead(hero2))
 						{
 							portion_size = (21 - host_readws(inn_ptr + INN_STATS_QUALITY)) * 20;
@@ -565,7 +565,7 @@ void do_inn(void)
 					for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 						if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-							host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+							host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 						{
 							if (booked_days > 1) {
 								/* Original-Bug 7:

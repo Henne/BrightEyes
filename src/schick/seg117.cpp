@@ -112,7 +112,7 @@ void hunt_karen(void)
 			for (i = passed = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 				if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-					(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+					(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 					!hero_dead(hero) &&
 					(test_skill(hero, TA_SCHLEICHEN, 2) > 0))
 				{
@@ -130,7 +130,7 @@ void hunt_karen(void)
 				for (i = passed = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 					if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-						(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+						(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 						!hero_dead(hero) &&
 						(test_skill(hero, TA_SCHUSSWAFFEN, 0) > 0))
 					{
@@ -194,7 +194,7 @@ void hunt_wildboar(void)
 			for (i = passed = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 				if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-					(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+					(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 					!hero_dead(hero) &&
 					(test_skill(hero, TA_SCHLEICHEN, 0) > 0))
 				{
@@ -212,7 +212,7 @@ void hunt_wildboar(void)
 				for (i = passed = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 					if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-						(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+						(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 						!hero_dead(hero) &&
 						(test_skill(hero, TA_SCHUSSWAFFEN, 0) > 0))
 					{
@@ -271,7 +271,7 @@ void hunt_cavebear(void)
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 			if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-				(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 				!hero_dead(hero))
 			{
 
@@ -328,7 +328,7 @@ void hunt_viper(void)
 		/* check GE+0 */
 		/* Original-Bug: something was forgotten */
 		if ((host_readb(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readb(hero_i + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP)) &&
+			(host_readb(hero_i + HERO_GROUP_NO) == gs_current_group) &&
 			(!hero_dead(hero_i)) &&
 			(test_attrib(hero_i, ATTRIB_GE, 0) < l_di))
 		{
@@ -394,7 +394,7 @@ void octopus_attack(void)
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				!overboard[i])
 			{
@@ -466,7 +466,7 @@ void octopus_attack(void)
 		/* octopus has won. all heroes disappear in the open sea. */
 		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
-			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE && host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) {
+			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE && host_readbs(hero + HERO_GROUP_NO) == gs_current_group) {
 				hero_disappear(hero, i, -2);
 			}
 		}
@@ -754,7 +754,7 @@ void TLK_way_to_ruin(signed short state)
 			inc_ds_ws(TLK_RUIN_HERO_COUNTER);
 
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero)) {
 
 				ds_writed(RUIN_HERO, (Bit32u)hero);
@@ -808,7 +808,7 @@ void TLK_way_to_ruin(signed short state)
 		for (i = ds_writews(TLK_RUIN_HERO_COUNTER, 0); i <= 6; i++, hero += SIZEOF_HERO) {
 
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_skill(hero, TA_ORIENTIERUNG, 0) > 0) {
 
@@ -837,7 +837,7 @@ void TLK_way_to_ruin(signed short state)
 		for (i = ds_writews(TLK_RUIN_HERO_COUNTER, 0); i <= 6; i++, hero += SIZEOF_HERO) {
 
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_skill(hero, TA_ORIENTIERUNG, 0) > 0) {
 

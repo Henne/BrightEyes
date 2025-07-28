@@ -67,6 +67,7 @@ extern void (*g_location_handlers[19])(void);
 extern void (*g_use_special_item_handlers[14])(void);
 extern void (*g_travel_event_handlers[146])(void);
 
+extern Bit8s  gs_current_group;			//ds:0x2d35; seg002-seg120
 extern Bit32s gs_day_timer;			//ds:0x2dbb; seg002-seg120
 extern Bit32s gs_ingame_timers[26];		//ds:0x2dc4; seg002, seg042-seg103
 extern Bit32s gs_gods_estimation[15];		//ds:0x314e; seg003-seg114
