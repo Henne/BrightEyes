@@ -403,7 +403,7 @@ void FIG_do_round(void)
 
 	if (!FIG_fight_continues()) {
 		/* this fight is over */
-		ds_writew(IN_FIGHT, 0);
+		g_in_fight = 0;
 	}
 
 #if !defined(__BORLANDC__)
@@ -486,7 +486,7 @@ void FIG_do_round(void)
 	is_enemies_turn = (g_fig_initiative == 2 ? 1 :
 				(g_fig_initiative == 1 ? 0 : random_interval(0, 1)));
 
-	while ((ds_readws(IN_FIGHT) != 0) && (nr_hero_action_phases_left_in_round + nr_enemy_action_phases_left_in_round > 0)) {
+	while ((g_in_fight) && (nr_hero_action_phases_left_in_round + nr_enemy_action_phases_left_in_round > 0)) {
 
 		if (ds_readws(AUTOFIGHT) == 2) {
 			ds_writew(AUTOFIGHT, 0);
@@ -647,7 +647,7 @@ void FIG_do_round(void)
 
 			if (!FIG_fight_continues()) {
 				/* this fight is over */
-				ds_writew(IN_FIGHT, 0);
+				g_in_fight = 0;
 			}
 
 			nr_hero_action_phases_left_in_round--;
@@ -775,7 +775,7 @@ void FIG_do_round(void)
 			}
 
 			if (!FIG_fight_continues()) {
-				ds_writew(IN_FIGHT, 0);
+				g_in_fight = 0;
 			}
 
 			nr_enemy_action_phases_left_in_round--;
@@ -967,7 +967,7 @@ signed short do_fight(signed short fight_id)
 	}
 
 	/* state that we are in a fight */
-	ds_writew(IN_FIGHT, 1);
+	g_in_fight = 1;
 
 	/* set some vars to 0 */
 	ds_writew(AUTOFIGHT, ds_writew(FIGHT_ROUND, ds_writew(FIG_ALL_HEROES_ESCAPED, 0)));
@@ -1041,7 +1041,7 @@ signed short do_fight(signed short fight_id)
 	set_audio_track(ARCHIVE_FILE_COMBAT_XMI);
 
 	/* the fight happens in this loop */
-	while (ds_readws(IN_FIGHT) != 0) {
+	while (g_in_fight) {
 
 		if (ds_readws(REQUEST_REFRESH) != 0) {
 			draw_fight_screen_pal(0);
@@ -1049,7 +1049,7 @@ signed short do_fight(signed short fight_id)
 		}
 
 		/* TODO: isnt that bogus? */
-		if (ds_readws(IN_FIGHT) != 0) {
+		if (g_in_fight) {
 
 			/* fight a round */
 			FIG_do_round();
@@ -1057,13 +1057,13 @@ signed short do_fight(signed short fight_id)
 			inc_ds_ws(FIGHT_ROUND);
 			timewarp(SECONDS(6));
 
-			if (ds_readws(IN_FIGHT) != 0) {
+			if (g_in_fight) {
 				FIG_latecomers();
 			}
 
 			if ((fight_id == 138) && (ds_readws(FIGHT_ROUND) >= 10)) {
 				/* This fight ends after 9 rounds */
-				ds_writew(IN_FIGHT, 0);
+				g_in_fight = 0;
 			}
 		}
 	}
@@ -1255,7 +1255,7 @@ signed short do_fight(signed short fight_id)
 	g_fig_initiative = g_always_zero4 = 0;
 	g_fig_discard = 0;
 	ds_writew(MAX_ENEMIES, 0);
-	ds_writew(IN_FIGHT, 0);
+	g_in_fight = 0;
 	ds_writew(REQUEST_REFRESH, 1);
 	ds_writew(CURRENT_ANI, -1);
 	ds_writew(AREA_PREPARED, -1);

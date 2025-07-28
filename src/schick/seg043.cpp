@@ -81,7 +81,7 @@ void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 
 	update_mouse_cursor();
 
-	if (ds_readws(IN_FIGHT) != 0) {
+	if (g_in_fight) {
 
 		FIG_clear_msgs();
 

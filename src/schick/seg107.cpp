@@ -377,7 +377,7 @@ void item_weapon_poison(void)
 void item_myastmatic(void)
 {
 	/* MYASTMATIC, ID 238 */
-	if (ds_readws(IN_FIGHT) == 0) {
+	if (!g_in_fight) {
 		GUI_output(get_ttx(687));
 		return;
 	}
@@ -386,7 +386,7 @@ void item_myastmatic(void)
 void item_hylailic(void)
 {
 	/* HYLAILIC FIRE, ID 239 */
-	if (ds_readws(IN_FIGHT) == 0) {
+	if (!g_in_fight) {
 		GUI_output(get_ttx(687));
 		return;
 	}

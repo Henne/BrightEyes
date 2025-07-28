@@ -803,7 +803,7 @@ void spell_balsam(void)
 	ds_writew(SPELL_SPECIAL_AECOST, 0);
 
 	if ((ds_readw(AUTOFIGHT) != 0) ||
-		((host_readbs(get_spelluser() + HERO_NPC_ID) != 0) && ds_readws(IN_FIGHT) != 0))
+		((host_readbs(get_spelluser() + HERO_NPC_ID) != 0) && g_in_fight))
 	{
 		/* automatic */
 		le_to_heal = (host_readws(get_spelltarget() + HERO_LE_ORIG) - host_readws(get_spelltarget() + HERO_LE)) / 2;

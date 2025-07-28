@@ -420,8 +420,8 @@ signed short can_use_spellclass(Bit8u *hero, signed short spellclass_no)
 	for (i = 0; ds_readbs((SPELLS_INDEX + 1) + 2 * spellclass_no) > i; i++) {
 
 		if ((host_readbs(hero + HERO_SPELLS + first_spell + i) >= -5) &&
-			(((ds_readw(IN_FIGHT) != 0) && (ds_readbs((SPELL_DESCRIPTIONS + 5) + 10 * (first_spell + i)) == 1)) ||
-			((ds_readw(IN_FIGHT) == 0) && (ds_readbs((SPELL_DESCRIPTIONS + 5) + 10 * (first_spell + i)) != 1))))
+			((g_in_fight && (ds_readbs((SPELL_DESCRIPTIONS + 5) + 10 * (first_spell + i)) == 1)) ||
+			(!g_in_fight && (ds_readbs((SPELL_DESCRIPTIONS + 5) + 10 * (first_spell + i)) != 1))))
 		{
 			return 1;
 		}
@@ -540,8 +540,8 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 						get_ttx(first_spell + l_di + 106),
 						host_readbs(hero + HERO_SPELLS + first_spell + l_di));
 				} else if (
-					(((ds_readw(IN_FIGHT) != 0) && (ds_readbs((SPELL_DESCRIPTIONS + 5) + 10 * (first_spell + l_di)) == 1)) ||
-					((ds_readw(IN_FIGHT) == 0) && (ds_readbs((SPELL_DESCRIPTIONS + 5) + 10 * (first_spell + l_di)) != 1))) &&
+					((g_in_fight && (ds_readbs((SPELL_DESCRIPTIONS + 5) + 10 * (first_spell + l_di)) == 1)) ||
+					(!g_in_fight && (ds_readbs((SPELL_DESCRIPTIONS + 5) + 10 * (first_spell + l_di)) != 1))) &&
 					(host_readbs(hero + HERO_SPELLS + first_spell + l_di) >= -5))
 				{
 
@@ -602,14 +602,14 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 		}
 
 		if (retval > 0) {
-			if ((ds_readw(IN_FIGHT) == 0) &&
+			if (!g_in_fight &&
 				(ds_readbs((SPELL_DESCRIPTIONS + 5) + 10 * retval) == 1) &&
 				(show_vals == 0))
 			{
 				GUI_output(get_ttx(591));
 				retval = -2;
 			} else {
-				if ((ds_readw(IN_FIGHT) != 0) &&
+				if (g_in_fight &&
 					(ds_readbs((SPELL_DESCRIPTIONS + 5) + 10 * retval) == -1))
 				{
 					GUI_output(get_ttx(592));
@@ -794,11 +794,11 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 		/* pointer to the spell description */
 		ptr = p_datseg + SPELL_DESCRIPTIONS + SIZEOF_SPELL_DESCRIPTIONS * spell_id;
 
-		if ((ds_readws(IN_FIGHT) == 0) && (host_readbs(ptr + SPELL_DESCRIPTIONS_WHERE_TO_USE) == 1)) {
+		if (!g_in_fight && (host_readbs(ptr + SPELL_DESCRIPTIONS_WHERE_TO_USE) == 1)) {
 			GUI_output(get_ttx(591));
 			retval = 0;
 
-		} else if ((ds_readws(IN_FIGHT) != 0) && (host_readbs(ptr + SPELL_DESCRIPTIONS_WHERE_TO_USE) == -1)) {
+		} else if (g_in_fight && (host_readbs(ptr + SPELL_DESCRIPTIONS_WHERE_TO_USE) == -1)) {
 			GUI_output(get_ttx(592));
 			retval = 0;
 		}
@@ -845,7 +845,7 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 				/* prepare output */
 				sprintf((char*)g_dtp2, get_ttx(607), (char*)hero + HERO_NAME2);
 
-				if (ds_readws(IN_FIGHT) == 0) {
+				if (!g_in_fight) {
 					GUI_output((char*)g_dtp2);
 				}
 
@@ -857,7 +857,7 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 
 				sub_ae_splash(hero, get_spell_cost(spell_id, 1)); /* spell failed -> half AE cost */
 
-				if (ds_readws(IN_FIGHT) == 0) {
+				if (!g_in_fight) {
 					GUI_output((char*)g_dtp2);
 				}
 
@@ -901,7 +901,7 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 					sub_ae_splash(hero, ae_cost);
 				}
 
-				if (ds_readws(IN_FIGHT) == 0) {
+				if (!g_in_fight) {
 
 					GUI_output((char*)g_dtp2);
 

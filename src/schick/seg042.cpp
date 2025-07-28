@@ -89,7 +89,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 	update_mouse_cursor();
 
-	if (ds_readws(IN_FIGHT) != 0) {
+	if (g_in_fight) {
 
 		FIG_clear_msgs();
 

@@ -55,6 +55,7 @@ extern signed short g_tx_file_index;			//ds:0x26bf; seg026-seg107
 extern signed short g_fig_discard;			//ds:0x26c1; seg030-seg117
 
 extern unsigned char g_always_zero4;			//ds:0x2cce; seg032
+extern signed short g_in_fight;				//ds:0x2cd5; seg002-seg107
 
 extern signed char g_levelup_ta_rise[12];		//ds:0x2d0f; seg050
 extern signed char g_levelup_sp_rise[6];		//ds:0x2d1b; seg050

@@ -1845,7 +1845,7 @@ void game_loop(void)
 			ds_writeb(NPC_LAST_FAREWELLCHECK, (signed short)ds_readws(NPC_MONTHS));
 		}
 
-		if ((ds_readws(IN_FIGHT) == 0) &&
+		if (!g_in_fight &&
 			((ds_readws(GAME_STATE) == GAME_STATE_MAIN) || (ds_readws(GAME_STATE) == GAME_STATE_VICTORY)) &&
 			!ds_readbs(CURRENT_LOCTYPE))
 		{
@@ -3071,7 +3071,7 @@ void herokeeping(void)
 		/* print hero message */
 		if ((ds_readb(FOOD_MESSAGE + i) != 0) &&
 			!ds_readbs(DIALOGBOX_LOCK) &&
-			(ds_readw(IN_FIGHT) == 0) &&
+			!g_in_fight &&
 			!ds_readbs(FREEZE_TIMERS))
 		{
 
@@ -4412,7 +4412,7 @@ void sub_ae_splash(Bit8u *hero, signed short ae)
 
 #ifdef M302de_ORIGINAL_BUGFIX
 		/* AE bar was not updated in pseudo 3D mode */
-		if (ds_readw(IN_FIGHT) == 0 && ds_readw(MOUSE1_DOUBLECLICK) != 0) {
+		if (!g_in_fight && ds_readw(MOUSE1_DOUBLECLICK) != 0) {
 			/* redraw AE bar */
 			draw_bar(1, get_hero_index(hero), host_readw(hero + HERO_AE),
 				host_readw(hero + HERO_AE_ORIG), 0);
@@ -4474,7 +4474,7 @@ void sub_hero_le(Bit8u *hero, signed short le)
 			and_ptr_bs(hero + HERO_FLAGS1, 0xfd); /* unset 'asleep' flag */
 
 			/* in fight mode */
-			if (ds_readw(IN_FIGHT) != 0) {
+			if (g_in_fight) {
 				ptr = (Bit8u*)FIG_get_ptr(host_readb(hero + HERO_FIGHTER_ID));
 
 				/* update looking dir and other  */
@@ -4520,12 +4520,12 @@ void sub_hero_le(Bit8u *hero, signed short le)
 			if (ds_readw(CURRENT_FIG_NO) == FIGHTS_F144) {
 				if (hero == (Bit8u*)ds_readd(MAIN_ACTING_HERO)) {
 					ds_writew(GAME_STATE, GAME_STATE_DEAD);
-					ds_writew(IN_FIGHT, 0);
+					g_in_fight = 0;
 				}
 			}
 
 			if ((ds_readb(TRAVELING) != 0)
-				&& (ds_readw(IN_FIGHT) == 0) &&
+				&& !g_in_fight &&
 				(!count_heroes_available_in_group() || ((count_heroes_available_in_group() == 1) && is_hero_available_in_group(get_hero(6))))) /* count_heroes_available_in_group_ignore_npc() == 0 */
 			{
 				/* if traveling, not in a fight, and no hero in the group (except possibly the NPC) is available. */
@@ -4555,7 +4555,7 @@ void sub_hero_le(Bit8u *hero, signed short le)
 				ds_writeb(UNCONSCIOUS_MESSAGE + get_hero_index(hero), 1);
 
 				/* in fight mode */
-				if (ds_readw(IN_FIGHT) != 0) {
+				if (g_in_fight) {
 
 					ptr = (Bit8u*)FIG_get_ptr(host_readb(hero + HERO_FIGHTER_ID));
 
@@ -4577,7 +4577,7 @@ void sub_hero_le(Bit8u *hero, signed short le)
 					if (ds_readw(CURRENT_FIG_NO) == FIGHTS_F144) {
 						if (hero == (Bit8u*)ds_readd(MAIN_ACTING_HERO)) {
 							ds_writew(GAME_STATE, GAME_STATE_DEAD);
-							ds_writew(IN_FIGHT, 0);
+							g_in_fight = 0;
 						}
 					}
 				}
@@ -4587,7 +4587,7 @@ void sub_hero_le(Bit8u *hero, signed short le)
 		ds_writew(UPDATE_STATUSLINE, bak);
 	}
 
-	if (ds_readw(IN_FIGHT) == 0) {
+	if (!g_in_fight) {
 		ds_writeb(CHECK_PARTY, 1);
 	}
 }
@@ -4626,7 +4626,7 @@ void add_hero_le(Bit8u *hero, signed short le)
 			and_ptr_bs(hero + HERO_FLAGS1, 0xbf); /* set 'conscious' flag */
 
 			/* maybe if we are in a fight */
-			if (ds_readw(IN_FIGHT)) {
+			if (g_in_fight) {
 				ptr = (Bit8u*)FIG_get_ptr(host_readb(hero + HERO_FIGHTER_ID));
 				ret = FIG_get_range_weapon_type(hero);
 

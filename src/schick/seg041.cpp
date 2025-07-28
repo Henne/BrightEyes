@@ -202,7 +202,7 @@ void FIG_damage_enemy(Bit8u *enemy, Bit16s damage, signed short preserve_renegad
 				!ds_readbs(FINALFIGHT_TUMULT))
 		{
 			/* slaying the orc champion, ends the fight */
-				ds_writew(IN_FIGHT, 0);
+				g_in_fight = 0;
 
 		} else if ((ds_readw(CURRENT_FIG_NO) == FIGHTS_F064) && (host_readb(enemy) == 0x46)) {
 
