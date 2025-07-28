@@ -801,7 +801,7 @@ signed short open_and_seek_dat(unsigned short fileindex)
 		ds_writed(ARCHIVE_FILE_OFFSET, start);
 
 		/* save the length of the desired file in 2 variables */
-		ds_writed(ARCHIVE_FILE_LENGTH, ds_writed(ARCHIVE_FILE_REMAINING, end - start));
+		ds_writed(ARCHIVE_FILE_LENGTH, (g_archive_file_remaining = end - start));
 	}
 
 	return fd;
@@ -824,13 +824,13 @@ unsigned short read_archive_file(Bit16u handle, Bit8u *buffer, Bit16u len)
 {
 
 	/* no need to read */
-	if (ds_readd(ARCHIVE_FILE_REMAINING) != 0) {
+	if (g_archive_file_remaining != 0) {
 
 		/* adjust number of bytes to read */
-		if (len > ds_readds(ARCHIVE_FILE_REMAINING))
-			len = ds_readw(ARCHIVE_FILE_REMAINING);
+		if (len > g_archive_file_remaining)
+			len = (Bit16u)g_archive_file_remaining;
 
-		sub_ds_ds(ARCHIVE_FILE_REMAINING, len);
+		g_archive_file_remaining -= len;
 
 		return _read(handle, buffer, len);
 	} else {
@@ -849,7 +849,7 @@ void seek_archive_file(Bit16u handle, Bit32s off, ...)
 
 	Bit32u file_off;
 
-	ds_writed(ARCHIVE_FILE_REMAINING, ds_readd(ARCHIVE_FILE_LENGTH) - off);
+	g_archive_file_remaining = (Bit32s)(ds_readd(ARCHIVE_FILE_LENGTH) - off);
 
 	file_off = ds_readd(ARCHIVE_FILE_OFFSET) + off;
 
@@ -904,7 +904,7 @@ signed short open_temp_file(unsigned short index)
 	}
 
 	/* get the length of the file */
-	ds_writed(ARCHIVE_FILE_LENGTH, ds_writed(ARCHIVE_FILE_REMAINING, lseek(handle, 0, 2)));
+	ds_writed(ARCHIVE_FILE_LENGTH, (g_archive_file_remaining = lseek(handle, 0, 2)));
 	/* seek to start */
 	lseek(handle, 0, 0);
 

@@ -131,6 +131,7 @@ extern char **g_text_ltx_index;		// ds:0xc3b5;
 extern char **g_tx_index;		// ds:0xc3b1; seg026, seg028, seg031, seg064, seg120
 extern char **g_tx2_index;		// ds:0xc3ad; seg
 extern unsigned char *g_buffer8_ptr;	// ds:0xc3a9; seg005, seg026, seg028, seg032, seg042, seg050, seg061, seg098, seg120
+extern Bit32s g_archive_file_remaining;	//ds:0xbce3; seg002
 extern unsigned char *g_splash_le;	// ds:0xbccb; seg002, seg028
 extern unsigned char *g_splash_ae;	// ds:0xbcc7; seg002, seg028
 extern unsigned char g_gfx_wait_keypress[100];	// ds:0xbc63; seg002

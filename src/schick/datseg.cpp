@@ -6518,7 +6518,7 @@ void *g_ail_digi_driver_buf; // ds:0xbcf3
 void *g_ail_voc_buffer; // ds:0xbcef
 void *g_ail_digi_driver_buf2; // ds:0xbceb, to buffer of size 5016
 unsigned long g_archive_file_length; // ds:0xbce7
-unsigned long g_archive_file_remaining; // ds:0xbce3, flen - off
+Bit32s g_archive_file_remaining; // ds:0xbce3, flen - off
 unsigned long g_archive_file_offset; // ds:0xbcdf, start offset in SCHICK.DAT
 unsigned long g_mouse_handler_bak; // ds:0xbcdb
 unsigned char g_freeze_timers; // ds:0xbcda
