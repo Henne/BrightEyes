@@ -87,15 +87,15 @@ void rabies(Bit8u* hero, signed short hero_pos)
 
 		if (count_heroes_available_in_group() > 1) {
 
-			sprintf(g_dtp2,
+			sprintf((char*)g_dtp2,
 				get_ttx(741),
 				(char*)hero + HERO_NAME2,
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 
-			sprintf(g_dtp2 + 500, get_ttx(742), (char*)hero + HERO_NAME2);
+			sprintf((char*)g_dtp2 + 500, get_ttx(742), (char*)hero + HERO_NAME2);
 
-			sprintf(g_dtp2 + 600, get_ttx(743), (char*)hero + HERO_NAME2);
+			sprintf((char*)g_dtp2 + 600, get_ttx(743), (char*)hero + HERO_NAME2);
 
 			textbox_width_bak = ds_readws(TEXTBOX_WIDTH);
 			ds_writew(TEXTBOX_WIDTH, 6);
@@ -115,9 +115,9 @@ void rabies(Bit8u* hero, signed short hero_pos)
 
 				sub_hero_le(hero, host_readws(hero + HERO_LE) / 2);
 
-				sprintf(g_dtp2, get_ttx(745), (char*)hero + HERO_NAME2);
+				sprintf((char*)g_dtp2, get_ttx(745), (char*)hero + HERO_NAME2);
 
-				GUI_output(g_dtp2);
+				GUI_output((char*)g_dtp2);
 
 				ds_writeb(HERO_SEL_EXCLUDE, (signed char)hero_pos);
 
@@ -142,9 +142,9 @@ void rabies(Bit8u* hero, signed short hero_pos)
 						 * (found by siebenstreich 2021-08-15) */
 					{
 						done = 1;
-						sprintf(g_dtp2, get_ttx(746), (char*)hero + HERO_NAME2);
+						sprintf((char*)g_dtp2, get_ttx(746), (char*)hero + HERO_NAME2);
 
-						GUI_output(g_dtp2);
+						GUI_output((char*)g_dtp2);
 
 						ds_writeb(HERO_SEL_EXCLUDE, (signed char)hero_pos);
 
@@ -180,9 +180,9 @@ void rabies(Bit8u* hero, signed short hero_pos)
 
 								sub_ae_splash(hero2, 15);
 
-								sprintf(g_dtp2, get_ttx(746), (char*)hero + HERO_NAME2);
+								sprintf((char*)g_dtp2, get_ttx(746), (char*)hero + HERO_NAME2);
 
-								GUI_output(g_dtp2);
+								GUI_output((char*)g_dtp2);
 
 								ds_writeb(HERO_SEL_EXCLUDE, (signed char)hero_pos);
 
@@ -193,11 +193,11 @@ void rabies(Bit8u* hero, signed short hero_pos)
 								}
 							}
 						} else {
-							sprintf(g_dtp2,
+							sprintf((char*)g_dtp2,
 								get_ttx(607),
 								(char*)hero2 + HERO_NAME2);
 
-							GUI_output(g_dtp2);
+							GUI_output((char*)g_dtp2);
 						}
 					}
 				}
@@ -205,8 +205,8 @@ void rabies(Bit8u* hero, signed short hero_pos)
 		} else {
 
 			/* Hero has rabies / Tollwut */
-			sprintf(g_dtp2, get_ttx(747), (char*)hero + HERO_NAME2);
-			GUI_output(g_dtp2);
+			sprintf((char*)g_dtp2, get_ttx(747), (char*)hero + HERO_NAME2);
+			GUI_output((char*)g_dtp2);
 
 			done = 1;
 		}
@@ -226,8 +226,8 @@ void rabies(Bit8u* hero, signed short hero_pos)
 			}
 
 			/* hero has berserker fury / Berserkerwut */
-			sprintf(g_dtp2, get_ttx(791), (char*)hero + HERO_NAME2);
-			GUI_output(g_dtp2);
+			sprintf((char*)g_dtp2, get_ttx(791), (char*)hero + HERO_NAME2);
+			GUI_output((char*)g_dtp2);
 
 			done = 1;
 		}
@@ -518,14 +518,14 @@ void prepare_dirs(void)
 	}
 
 	/* delete *.* in TEMP-dir */
-	sprintf(g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), (char*)p_datseg + ALL_FILES_WILDCARD2);
+	sprintf((char*)g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), (char*)p_datseg + ALL_FILES_WILDCARD2);
 
 	l_si = findfirst(g_text_output_buf, &blk, 0);
 
 	if (!l_si) {
 
 		do {
-			sprintf(g_text_output_buf,
+			sprintf((char*)g_text_output_buf,
 				(char*)ds_readd(STR_TEMP_XX_PTR2),
 				((char*)(&blk)) + 30);			/* contains a filename */
 
@@ -548,7 +548,7 @@ void prepare_dirs(void)
 
 		close(l_di);
 
-		sprintf(g_text_output_buf,
+		sprintf((char*)g_text_output_buf,
 			(char*)ds_readd(STR_TEMP_XX_PTR2),
 			((char*)(&blk)) + 30);			/* contains a filename */
 
@@ -630,7 +630,7 @@ void cleanup_game(void)
 
 	/* delete all files in TEMP */
 
-	sprintf(g_text_output_buf,
+	sprintf((char*)g_text_output_buf,
 		(char*)ds_readd(STR_TEMP_XX_PTR2),	/* contains "TEMP\\%s" */
 		(char*)p_datseg + ALL_FILES_WILDCARD3);		/* contains "*.*" */
 
@@ -640,7 +640,7 @@ void cleanup_game(void)
 
 		do {
 			/* delete each found file */
-			sprintf(g_text_output_buf,
+			sprintf((char*)g_text_output_buf,
 				(char*)ds_readd(STR_TEMP_XX_PTR2),	/* contains "TEMP\\%s" */
 				((char*)(&blk)) + 30);			/* contains a filename */
 

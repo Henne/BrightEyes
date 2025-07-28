@@ -101,11 +101,11 @@ signed short DNG09_handler(void)
 				/* failed FF+4 test */
 				sub_hero_le(hero, dice_roll(2, 6, 4));
 
-				sprintf(g_dtp2,
+				sprintf((char*)g_dtp2,
 					get_tx(12),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output(g_dtp2);
+				GUI_output((char*)g_dtp2);
 			}
 		}
 
@@ -137,11 +137,11 @@ signed short DNG09_handler(void)
 				/* failed FF+4 test */
 				sub_hero_le(hero, dice_roll(2, 6, 4));
 
-				sprintf(g_dtp2,
+				sprintf((char*)g_dtp2,
 					get_tx(12),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output(g_dtp2);
+				GUI_output((char*)g_dtp2);
 			}
 		}
 
@@ -162,11 +162,11 @@ signed short DNG09_handler(void)
 				/* failed FF+4 test */
 				sub_hero_le(hero, dice_roll(2, 6, 4));
 
-				sprintf(g_dtp2,
+				sprintf((char*)g_dtp2,
 					get_tx(12),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output(g_dtp2);
+				GUI_output((char*)g_dtp2);
 			}
 		}
 
@@ -217,11 +217,11 @@ signed short DNG09_handler(void)
 				/* failed FF+4 test */
 				sub_hero_le(hero, dice_roll(2, 6, 4));
 
-				sprintf(g_dtp2,
+				sprintf((char*)g_dtp2,
 					get_tx(12),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output(g_dtp2);
+				GUI_output((char*)g_dtp2);
 			}
 		}
 
@@ -250,11 +250,11 @@ signed short DNG09_handler(void)
 				/* failed FF+4 test */
 				sub_hero_le(hero, dice_roll(2, 6, 4));
 
-				sprintf(g_dtp2,
+				sprintf((char*)g_dtp2,
 					get_tx(12),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output(g_dtp2);
+				GUI_output((char*)g_dtp2);
 			}
 		}
 
@@ -299,11 +299,11 @@ signed short DNG09_handler(void)
 			{
 				hero = get_hero(i);
 
-				sprintf(g_dtp2,
+				sprintf((char*)g_dtp2,
 					get_tx(45),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output(g_dtp2);
+				GUI_output((char*)g_dtp2);
 
 				/* remove wall at (4,5), lvl 2 */
 				and_ptr_bs(amap_ptr + MAP_POS(4,5), (DNG_TILE_CORRIDOR << 4) + MAP_POS(15,0));
@@ -406,20 +406,20 @@ signed short DNG09_handler(void)
 		{
 			ds_writeb(DNG09_SECRETDOOR1, 1);
 
-			sprintf(g_dtp2,
+			sprintf((char*)g_dtp2,
 				get_tx(51),
 				(char*)hero + HERO_NAME2);
 
-			sprintf(g_text_output_buf,
+			sprintf((char*)g_text_output_buf,
 				(char*)(((l3 = test_skill(hero, TA_SCHLOESSER, 4)) > 0) ? get_tx(52) : get_tx(54)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 
-			strcat(g_dtp2,
+			strcat((char*)g_dtp2,
 				g_text_output_buf);
 
-			GUI_output(g_dtp2);
+			GUI_output((char*)g_dtp2);
 
 			if (l3 > 0)
 			{
@@ -443,18 +443,18 @@ signed short DNG09_handler(void)
 		{
 			ds_writeb(DNG09_SECRETDOOR2, 1);
 
-			sprintf(g_dtp2,
+			sprintf((char*)g_dtp2,
 				get_tx(51),
 				(char*)hero + HERO_NAME2);
 
-			sprintf(g_text_output_buf,
+			sprintf((char*)g_text_output_buf,
 				(char*)(((l3 = test_skill(hero, TA_SCHLOESSER, 6)) > 0) ? get_tx(52) : get_tx(53)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
-			strcat(g_dtp2,
+			strcat((char*)g_dtp2,
 				g_text_output_buf);
 
-			GUI_output(g_dtp2);
+			GUI_output((char*)g_dtp2);
 
 			if (l3 > 0)
 			{
@@ -477,11 +477,11 @@ signed short DNG09_handler(void)
 		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
 		ds_writeb(DIRECTION, (ds_readws(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
 
-		sprintf(g_dtp2,
+		sprintf((char*)g_dtp2,
 			get_tx(55),
 			get_ttx(ds_readws(TRV_DESTINATION) + 0xeb));
 
-		GUI_output(g_dtp2);
+		GUI_output((char*)g_dtp2);
 
 		timewarp(HOURS(3));
 
@@ -567,10 +567,10 @@ void DNG09_chest4_x1(Bit8u* chest)
 
 			if (answer == 1)
 			{
-				sprintf(g_dtp2,
+				sprintf((char*)g_dtp2,
 					get_tx(25),
 					(char*)hero + HERO_NAME2);
-				GUI_output(g_dtp2);
+				GUI_output((char*)g_dtp2);
 
 				sub_hero_le(hero, dice_roll(2, 20, 0));
 			} else if (answer == 2)
@@ -589,10 +589,10 @@ void DNG09_chest4_x1(Bit8u* chest)
 
 					ds_writeb(DNG09_CRYSTAL_FLAG, 1);
 				} else {
-					sprintf(g_dtp2,
+					sprintf((char*)g_dtp2,
 						get_tx(26),
 						(char*)hero + HERO_NAME2);
-					GUI_output(g_dtp2);
+					GUI_output((char*)g_dtp2);
 
 					sub_ae_splash(hero, 10);
 				}
@@ -613,10 +613,10 @@ void DNG09_chest4_x1(Bit8u* chest)
 
 					ds_writeb(DNG09_CRYSTAL_FLAG, 1);
 				} else {
-					sprintf(g_dtp2,
+					sprintf((char*)g_dtp2,
 						get_tx(26),
 						(char*)hero + HERO_NAME2);
-					GUI_output(g_dtp2);
+					GUI_output((char*)g_dtp2);
 
 					sub_ae_splash(hero, 20);
 				}

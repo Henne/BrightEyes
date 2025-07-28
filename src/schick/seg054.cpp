@@ -117,13 +117,13 @@ void do_inn(void)
 
 			if (host_readbs(hero + HERO_RECIPE_TIMER) != 0) {
 
-				sprintf(g_dtp2,
+				sprintf((char*)g_dtp2,
 					get_ttx(733),
 					(char*)hero + HERO_NAME2,
 					host_readbs(hero + HERO_RECIPE_TIMER),
 					(char*)(host_readbs(hero + HERO_RECIPE_TIMER) < 2 ? get_ttx(735) : get_ttx(736)));
 
-				answer = GUI_radio(g_dtp2, 2, get_ttx(734), get_ttx(537));
+				answer = GUI_radio((char*)g_dtp2, 2, get_ttx(734), get_ttx(537));
 				/* <HERO> befindet sich inmitten eines alchimistischen Versuchs, der wohl noch <DAYS> Tage dauert.
 				 * * Versuch abbrechen
 				 * * Weiter brauen lassen
@@ -155,7 +155,7 @@ void do_inn(void)
 
 		if (host_readbs(hero + HERO_RECIPE_TIMER) != 0) {
 
-			sprintf(g_dtp2,
+			sprintf((char*)g_dtp2,
 				get_ttx(733),
 				(char*)hero + HERO_NAME2,
 				host_readbs(hero + HERO_RECIPE_TIMER),
@@ -164,7 +164,7 @@ void do_inn(void)
 			tw_bak = ds_readws(TEXTBOX_WIDTH);
 			ds_writews(TEXTBOX_WIDTH, 4);
 
-			answer = GUI_radio(g_dtp2, 2, get_ttx(734), get_ttx(562));
+			answer = GUI_radio((char*)g_dtp2, 2, get_ttx(734), get_ttx(562));
 			/* <HERO> befindet sich inmitten eines alchimistischen Versuchs, der wohl noch <DAYS> Tage dauert.
 			 * * Versuch abbrechen
 			 * * Weiter brauen lassen
@@ -216,13 +216,13 @@ void do_inn(void)
 
 		if (host_readbs(hero + HERO_RECIPE_TIMER) != 0) {
 
-			sprintf(g_dtp2,
+			sprintf((char*)g_dtp2,
 					get_ttx(733),
 					(char*)hero + HERO_NAME2,
 					host_readbs(hero + HERO_RECIPE_TIMER),
 					(char*)(host_readbs(hero + HERO_RECIPE_TIMER) < 2 ? get_ttx(735) : get_ttx(736)));
 
-			answer = GUI_radio(g_dtp2, 2, get_ttx(734), get_ttx(537));
+			answer = GUI_radio((char*)g_dtp2, 2, get_ttx(734), get_ttx(537));
 			/* <HERO> befindet sich inmitten eines alchimistischen Versuchs, der wohl noch <DAYS> Tage dauert.
 			 * * Versuch abbrechen
 			 * * Weiter brauen lassen
@@ -254,7 +254,7 @@ void do_inn(void)
 
 				if (host_readbs(hero + HERO_RECIPE_TIMER) != 0) {
 
-					sprintf(g_dtp2,
+					sprintf((char*)g_dtp2,
 							get_ttx(733),
 							(char*)hero + HERO_NAME2,
 							host_readbs(hero + HERO_RECIPE_TIMER),
@@ -263,7 +263,7 @@ void do_inn(void)
 					tw_bak = ds_readws(TEXTBOX_WIDTH);
 					ds_writews(TEXTBOX_WIDTH, 4);
 
-					answer = GUI_radio(g_dtp2, 2, get_ttx(734), get_ttx(562));
+					answer = GUI_radio((char*)g_dtp2, 2, get_ttx(734), get_ttx(562));
 					/* <HERO> befindet sich inmitten eines alchimistischen Versuchs, der wohl noch <DAYS> Tage dauert.
 					 * * Versuch abbrechen
 					 * * Weiter brauen lassen
@@ -383,11 +383,11 @@ void do_inn(void)
 			price = count_heroes_in_group() * (6L - host_readws(inn_ptr + INN_STATS_QUALITY) / 4L); /* higher food quality -> higher price */
 			price += (price * host_readws(inn_ptr + INN_STATS_PRICE_MOD)) / 100L;
 
-			sprintf(g_dtp2,
+			sprintf((char*)g_dtp2,
 				get_ttx(473),
 				(signed short)price);
 
-			if (GUI_bool(g_dtp2)) {
+			if (GUI_bool((char*)g_dtp2)) {
 
 				party_money = get_party_money();
 				price *= 10;
@@ -450,15 +450,15 @@ void do_inn(void)
 			tw_bak = ds_readws(TEXTBOX_WIDTH);
 			ds_writews(TEXTBOX_WIDTH, 5);
 
-			sprintf(g_dtp2,
+			sprintf((char*)g_dtp2,
 				get_ttx(397),
 				(signed short)price_schlafsaal);
 
-			sprintf(g_dtp2 + 50,
+			sprintf((char*)g_dtp2 + 50,
 				get_ttx(398),
 				(signed short)price_einzelzimmer);
 
-			sprintf(g_dtp2 + 100,
+			sprintf((char*)g_dtp2 + 100,
 				get_ttx(399),
 				(signed short)price_suite);
 

@@ -67,7 +67,7 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 	txt_offset = host_readws(partners_tab + 4 + 38 * informer_id);
 	dialog_title = 38 * informer_id + (char*)partners_tab + 6;
 	load_in_head(host_readws(partners_tab + 38 * informer_id + 36));
-	dst = g_dtp2 + 0x400;
+	dst = (char*)((char*)(g_dtp2 + 0x400));
 
 	do {
 		answer = optioncount = 0;
@@ -232,14 +232,14 @@ char* get_informer_forename(void)
 				i++;
 			} while (tmp != ' ');
 
-			strncpy(g_text_output_buf, get_ttx(host_readws(p_info)), i);
+			strncpy((char*)g_text_output_buf, get_ttx(host_readws(p_info)), i);
 #ifdef M302de_ORIGINAL_BUGFIX
 			break;
 #endif
 		}
 	}
 
-	return g_text_output_buf;
+	return (char*)g_text_output_buf;
 }
 
 /**
@@ -338,15 +338,15 @@ char* get_random_tavern_message(void)
 
 	if (!randval || randval == 19) {
 
-		sprintf(g_text_output_buf, ptr, (char*)load_current_town_gossip());
+		sprintf((char*)g_text_output_buf, ptr, (char*)load_current_town_gossip());
 
-		return g_text_output_buf;
+		return (char*)g_text_output_buf;
 
 	} else if (randval == 3) {
 
-		sprintf(g_text_output_buf, ptr, get_ttx(ds_readbs(CURRENT_TOWN) + 235));
+		sprintf((char*)g_text_output_buf, ptr, get_ttx(ds_readbs(CURRENT_TOWN) + 235));
 
-		return g_text_output_buf;
+		return (char*)g_text_output_buf;
 
 	} else {
 		return ptr;

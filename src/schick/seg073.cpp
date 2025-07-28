@@ -459,13 +459,13 @@ char* get_drinkmate(void)
 	surname = (surname == 0 ? 0xa7 : 0xbb);
 	surname += random_schick(20) - 1;
 
-	sprintf(g_text_output_buf,
+	sprintf((char*)g_text_output_buf,
 		(char*)p_datseg + GOSSIP_STR_TRIPLE_WILDCARD, /* "%s %s%s" */
 		get_tx(name),
 		get_tx(surname),
 		get_tx((ds_readb(TLK_TAV_INFORMERSEX) - 1) == 0 ? 207 : 208));
 
-	return g_text_output_buf;
+	return (char*)g_text_output_buf;
 }
 
 /**

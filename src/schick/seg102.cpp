@@ -382,7 +382,7 @@ void mspell_verwandlung(void)
 			and_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS1, 0xfb); /* unset 'petrified' flag */
 
 			/* prepare message */
-			sprintf(g_dtp2,
+			sprintf((char*)g_dtp2,
 				get_tx(114),
 				(Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
 		}
@@ -413,7 +413,7 @@ void mspell_bannbaladin(void)
 	or_ptr_bs(get_spelltarget() + HERO_FLAGS2, 0x08); /* set 'tame' flag */
 
 	/* prepare message */
-	sprintf(g_dtp2, get_tx(115), get_spelltarget() + HERO_NAME2);
+	sprintf((char*)g_dtp2, get_tx(115), get_spelltarget() + HERO_NAME2);
 }
 
 void mspell_boeser_blick(void)
@@ -425,7 +425,7 @@ void mspell_boeser_blick(void)
 	or_ptr_bs(get_spelltarget() + HERO_FLAGS1, 0x20); /* set 'renegade' flag */
 
 	/* prepare message */
-	sprintf(g_dtp2, get_tx(116), get_spelltarget() + HERO_NAME2);
+	sprintf((char*)g_dtp2, get_tx(116), get_spelltarget() + HERO_NAME2);
 }
 
 void mspell_horriphobus(void)
@@ -438,7 +438,7 @@ void mspell_horriphobus(void)
 	and_ptr_bs(get_spelltarget() + HERO_FLAGS1, 0xdf); /* unset 'renegade' flag */
 
 	/* prepare message */
-	sprintf(g_dtp2,
+	sprintf((char*)g_dtp2,
 		get_tx(117),
 		get_spelltarget() + HERO_NAME2);
 }
@@ -529,7 +529,7 @@ void mspell_blitz(void)
 		host_writeb(get_spelltarget() + HERO_BLIND, 3);
 
 		/* prepare message */
-		sprintf(g_dtp2, get_tx(86), get_spelltarget() + HERO_NAME2);
+		sprintf((char*)g_dtp2, get_tx(86), get_spelltarget() + HERO_NAME2);
 	} else {
 		/* target is a monster */
 
@@ -541,7 +541,7 @@ void mspell_blitz(void)
 		host_writeb(get_spelltarget_e() + ENEMY_SHEET_BLIND, 3);
 
 		/* prepare message */
-		sprintf(g_dtp2,
+		sprintf((char*)g_dtp2,
 			get_tx(85),
 			(Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
 	}
@@ -570,7 +570,7 @@ void mspell_eisenrost(void)
 				or_ptr_bs(get_spelltarget() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_FLAGS), 1); /* set 'broken' flag */
 
 				/* prepare message */
-				sprintf(g_dtp2,
+				sprintf((char*)g_dtp2,
 					get_tx(92),
 					(Bit8u*)(GUI_names_grammar((signed short)0x8000, id, 0)),
 					get_spelltarget() + HERO_NAME2);
@@ -593,7 +593,7 @@ void mspell_eisenrost(void)
 			host_writebs(get_spelltarget_e() + ENEMY_SHEET_BROKEN, 1);
 
 			/* prepare message */
-			sprintf(g_dtp2,
+			sprintf((char*)g_dtp2,
 				get_tx(91),
 				(Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
 		}
@@ -725,7 +725,7 @@ void mspell_plumbumbarum(void)
 		set_mod_slot(slot, HOURS(1), get_spelltarget() + HERO_AT + host_readbs(get_spelltarget() + HERO_WEAPON_TYPE), -3, (signed char)hero_pos);
 
 		/* prepare message */
-		sprintf(g_dtp2, get_tx(94), get_spelltarget() + HERO_NAME2);
+		sprintf((char*)g_dtp2, get_tx(94), get_spelltarget() + HERO_NAME2);
 	} else {
 		/* target is a monster */
 
@@ -738,7 +738,7 @@ void mspell_plumbumbarum(void)
 			host_readbs(get_spelltarget_e() + ENEMY_SHEET_AT) - 3);
 
 		/* prepare message */
-		sprintf(g_dtp2,
+		sprintf((char*)g_dtp2,
 			get_tx(95),
 			(Bit8u*)(GUI_names_grammar((signed short)0x8001, host_readbs(get_spelltarget_e()), 1)));
 	}
@@ -801,7 +801,7 @@ void mspell_paralue(void)
 		or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS1, 0x04); /* set 'petrified' flag */
 
 		/* prepare message */
-		sprintf(g_dtp2,
+		sprintf((char*)g_dtp2,
 			get_tx(103),
 			(Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
 	} else {
@@ -814,7 +814,7 @@ void mspell_paralue(void)
 		or_ptr_bs(get_spelltarget() + HERO_FLAGS1, 0x04); /* set 'petrified' flag */
 
 		/* prepare message */
-		sprintf(g_dtp2, get_tx(103), get_spelltarget() + HERO_NAME2);
+		sprintf((char*)g_dtp2, get_tx(103), get_spelltarget() + HERO_NAME2);
 	}
 }
 

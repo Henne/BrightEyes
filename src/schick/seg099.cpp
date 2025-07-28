@@ -40,7 +40,7 @@ void spell_beherrschung(void)
 		ds_writew(SPELL_SPECIAL_AECOST, -2);
 	} else {
 		if (get_spelltarget() == get_spelluser()) {
-			strcpy(g_dtp2, get_tx(0));
+			strcpy((char*)g_dtp2, get_tx(0));
 			ds_writew(SPELL_SPECIAL_AECOST, 0);
 		} else {
 			ds_writew(SPELL_SPECIAL_AECOST, random_interval(2, 5) * 4);
@@ -49,7 +49,7 @@ void spell_beherrschung(void)
 				ds_writew(SPELL_SPECIAL_AECOST, -2);
 			} else {
 				and_ptr_bs(get_spelltarget() + HERO_FLAGS1, 0xdf); /* unset 'renegade' flag */
-				sprintf(g_dtp2,
+				sprintf((char*)g_dtp2,
 					get_tx(1),
 					(char*)get_spelltarget() + HERO_NAME2);
 			}
@@ -70,11 +70,11 @@ void spell_gardanium(void)
 	signed short answer;
 
 	/* prepare a question */
-	sprintf(g_dtp2,
+	sprintf((char*)g_dtp2,
 		get_tx(2), (char*)(get_spelluser() + HERO_NAME2));
 
 	/* ask and get the answer */
-	answer = GUI_input(g_dtp2, 2);
+	answer = GUI_input((char*)g_dtp2, 2);
 
 	/* clear the textbuffer */
 	host_writeb(g_dtp2, 0);
@@ -89,11 +89,11 @@ void spell_gardanium(void)
 			/* set AE costs */
 			ds_writew(SPELL_SPECIAL_AECOST, answer);
 			/* prepare the message */
-			strcpy(g_dtp2,
+			strcpy((char*)g_dtp2,
 				get_tx(7));
 		} else {
 			/* not enough AE */
-			sprintf(g_dtp2,
+			sprintf((char*)g_dtp2,
 				get_ttx(607), (char*)get_spelluser() + HERO_NAME2);
 			/* set AE costs */
 			ds_writew(SPELL_SPECIAL_AECOST, 0);
@@ -133,7 +133,7 @@ void spell_illusionen(void)
 		}
 	} else {
 		/* print a failure message */
-		sprintf(g_dtp2,
+		sprintf((char*)g_dtp2,
 			get_tx(3),
 			(char*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 
@@ -162,7 +162,7 @@ void spell_verwandlung(void)
 			/* YES: spell has effect */
 			/* unset petrified bit */
 			and_ptr_bs(get_spelltarget() + HERO_FLAGS1, 0xfb); /* unset 'petrified' flag */
-			sprintf(g_dtp2,
+			sprintf((char*)g_dtp2,
 				get_tx(4),
 				(char*)get_spelltarget() + HERO_NAME2);
 		}
@@ -174,7 +174,7 @@ void spell_verwandlung(void)
 			/* increase attributes */
 			for (i = 0; i <= 6; i++)
 				inc_ptr_bs(get_spelltarget() + HERO_ATTRIB + i * 3);
-			sprintf(g_dtp2,
+			sprintf((char*)g_dtp2,
 				get_ttx(565),
 				(char*)get_spelltarget() + HERO_NAME2);
 		} else {
@@ -184,7 +184,7 @@ void spell_verwandlung(void)
 			host_writeb(get_tx(5) + 5, 's');
 #endif
 
-			sprintf(g_dtp2,
+			sprintf((char*)g_dtp2,
 				get_tx(5),
 				(char*)get_spelltarget() + HERO_NAME2);
 			ds_writew(SPELL_SPECIAL_AECOST, 0);
@@ -217,7 +217,7 @@ void spell_band(void)
 
 		or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS1, 0x20); /* set 'tied' flag */
 
-		sprintf(g_dtp2,
+		sprintf((char*)g_dtp2,
 				get_tx(6),
 				(Bit8u*)(GUI_names_grammar((signed short)0x8000,
 					host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
@@ -234,13 +234,13 @@ void spell_band(void)
 			ds_writew(SPELL_SPECIAL_AECOST, 0);
 
 			/* prepare message */
-			strcpy(g_dtp2, get_tx(112));
+			strcpy((char*)g_dtp2, get_tx(112));
 		} else {
 			/* set flag */
 			or_ptr_bs(get_spelltarget() + HERO_FLAGS1, 0x80); /* set 'tied' flag */
 
 			/* prepare message */
-			sprintf(g_dtp2, get_tx(6), (char*)get_spelltarget() + HERO_NAME2);
+			sprintf((char*)g_dtp2, get_tx(6), (char*)get_spelltarget() + HERO_NAME2);
 		}
 	}
 }
@@ -257,7 +257,7 @@ void spell_bannbaladin(void)
 
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 
-		sprintf(g_dtp2,
+		sprintf((char*)g_dtp2,
 				get_tx(8),
 				(Bit8u*)(GUI_names_grammar(0,
 					host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
@@ -271,7 +271,7 @@ void spell_bannbaladin(void)
 
 		or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS2, 1); /* set 'tame' flag */
 
-		sprintf(g_dtp2,
+		sprintf((char*)g_dtp2,
 				get_tx(9),
 				(Bit8u*)(GUI_names_grammar((signed short)0x8000,
 					host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
@@ -293,7 +293,7 @@ void spell_boeser_blick(void)
 		host_writeb(get_spelltarget_e() + ENEMY_SHEET_ATTACKS, 2); /* set number of attacks to 2 */
 
 		/* prepare message */
-		sprintf(g_dtp2,
+		sprintf((char*)g_dtp2,
 			get_tx(10),
 			(char*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 
@@ -344,7 +344,7 @@ void spell_herrdertiere(void)
 
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 
-		sprintf(g_dtp2,
+		sprintf((char*)g_dtp2,
 				get_tx(11),
 				(Bit8u*)(GUI_names_grammar(0,
 					host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
@@ -358,7 +358,7 @@ void spell_herrdertiere(void)
 
 			or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS2, 1); /* set 'tame' flag */
 
-			sprintf(g_dtp2,
+			sprintf((char*)g_dtp2,
 				get_tx(9),
 				(Bit8u*)(GUI_names_grammar((signed short)0x8000,
 					host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
@@ -380,7 +380,7 @@ void spell_horriphobus(void)
 		or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS2, 4); /* set 'scared' flag */
 		and_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS2, 0xfd); /* unset 'renegade' flag */
 
-		sprintf(g_dtp2,
+		sprintf((char*)g_dtp2,
 			get_tx(12),
 			(Bit8u*)(GUI_names_grammar((signed short)0x8000,
 				host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
@@ -425,7 +425,7 @@ void spell_somnigravis(void)
 		or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS1, 2); /* set 'asleep' flag */
 
 		/* prepare message */
-		sprintf(g_dtp2,
+		sprintf((char*)g_dtp2,
 			get_tx(13),
 			(Bit8u*)(GUI_names_grammar((signed short)0x8000,
 				host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
@@ -444,13 +444,13 @@ void spell_somnigravis(void)
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 
 		/* prepare message */
-		strcpy(g_dtp2, get_tx(112));
+		strcpy((char*)g_dtp2, get_tx(112));
 	} else {
 		/* set the flag */
 		or_ptr_bs(get_spelltarget() + HERO_FLAGS1, 2); /* set 'sleep' flag */
 
 		/* prepare message */
-		sprintf(g_dtp2, get_tx(13), (char*)get_spelltarget() + HERO_NAME2);
+		sprintf((char*)g_dtp2, get_tx(13), (char*)get_spelltarget() + HERO_NAME2);
 	}
 }
 
@@ -469,7 +469,7 @@ void spell_zwingtanz(void)
 		or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS2, 8); /* set 'dancing' flag */
 
 		/* prepare message */
-		sprintf(g_dtp2,
+		sprintf((char*)g_dtp2,
 			get_tx(14),
 			(Bit8u*)(GUI_names_grammar((signed short)0x8000,
 				host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
@@ -552,7 +552,7 @@ void spell_skelettarius(void)
 	if (!enemy_dead(get_spelltarget_e())) {
 
 		/* prepare message */
-		sprintf(g_dtp2,
+		sprintf((char*)g_dtp2,
 			get_tx(15),
 			(Bit8u*)(GUI_names_grammar((signed short)0x8000,
 				host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
@@ -562,7 +562,7 @@ void spell_skelettarius(void)
 	} else {
 
 		/* prepare message */
-		sprintf(g_dtp2,
+		sprintf((char*)g_dtp2,
 			get_tx(16),
 			(Bit8u*)(GUI_names_grammar((signed short)0x8000,
 				host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
@@ -687,7 +687,7 @@ void spell_axxeleratus(void)
 			1, (signed char)hero_pos);
 
 		/* prepare message */
-		sprintf(g_dtp2,
+		sprintf((char*)g_dtp2,
 			get_tx(17),
 			(char*)get_spelltarget() + HERO_NAME2);
 
@@ -757,7 +757,7 @@ void spell_transversalis(void)
 		/* cannot be used outside of a dungeon or a town */
 
 		/* prepare message */
-		strcpy(g_dtp2,
+		strcpy((char*)g_dtp2,
 			get_tx(18));
 
 	} else {
@@ -811,13 +811,13 @@ void spell_balsam(void)
 		le_to_heal = (host_readws(get_spelltarget() + HERO_LE_ORIG) - host_readws(get_spelltarget() + HERO_LE)) / 2;
 	} else {
 		/* prepare message */
-		sprintf(g_dtp2,
+		sprintf((char*)g_dtp2,
 			get_tx(19),
 			(char*)get_spelluser() + HERO_NAME2,
 			(char*)get_spelltarget() + HERO_NAME2);
 
 		/* ask question */
-		le_to_heal = GUI_input(g_dtp2, 2);
+		le_to_heal = GUI_input((char*)g_dtp2, 2);
 
 		/* terminate string */
 		host_writeb(g_dtp2, 0);
@@ -866,19 +866,19 @@ void spell_hexenspeichel(void)
 		/* spell cannot be used to heal yourself */
 
 		/* prepare message */
-		sprintf(g_dtp2,
+		sprintf((char*)g_dtp2,
 			get_tx(20),
 			(char*)get_spelluser() + HERO_NAME2);
 		return;
 	}
 
 	/* prepare question */
-	sprintf(g_dtp2,
+	sprintf((char*)g_dtp2,
 		get_tx(19),
 		(char*)get_spelluser() + HERO_NAME2,
 		(char*)get_spelltarget() + HERO_NAME2);
 
-	le = GUI_input(g_dtp2, 2);
+	le = GUI_input((char*)g_dtp2, 2);
 
 	host_writeb(g_dtp2, 0);
 
@@ -911,7 +911,7 @@ void spell_klarum_purum(void)
 	if (!poison) {
 
 		/* prepare message */
-		sprintf(g_dtp2, get_tx(21), (char*)get_spelltarget() + HERO_NAME2);
+		sprintf((char*)g_dtp2, get_tx(21), (char*)get_spelltarget() + HERO_NAME2);
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 		return;
 	}
@@ -928,7 +928,7 @@ void spell_klarum_purum(void)
 		host_writeb(get_spelltarget() + poison * 5 + 0xd6, 1);
 
 		/* prepare message */
-		sprintf(g_dtp2,
+		sprintf((char*)g_dtp2,
 			get_tx(22),
 			(char*)get_spelltarget() + HERO_NAME2);
 	}
@@ -943,7 +943,7 @@ void spell_ruhe_koerper(void)
 	host_writeb(get_spelltarget() + HERO_RUHE_KOERPER, 1);
 
 	/* prepare message */
-	sprintf(g_dtp2, get_tx(51), (char*)get_spelltarget() + HERO_NAME2);
+	sprintf((char*)g_dtp2, get_tx(51), (char*)get_spelltarget() + HERO_NAME2);
 }
 
 void spell_tiere_heilen(void)
@@ -958,12 +958,12 @@ void spell_tiere_heilen(void)
 	ds_writew(SPELL_SPECIAL_AECOST, 0);
 
 	/* prepare message */
-	sprintf(g_dtp2,
+	sprintf((char*)g_dtp2,
 		get_tx(23),
 		(char*)get_spelluser() + HERO_NAME2);
 
 	/* ask how many AE should be spent */
-	ae = GUI_input(g_dtp2, 2);
+	ae = GUI_input((char*)g_dtp2, 2);
 
 	/* terminate string */
 	host_writebs(g_dtp2, 0);
@@ -991,7 +991,7 @@ void spell_adleraug(void)
 	set_mod_slot(slot, MINUTES(6), get_spelluser() + (HERO_TALENTS + TA_SINNESSCHAERFE), 7, (signed char)hero_pos);
 
 	/* prepare message */
-	sprintf(g_dtp2,
+	sprintf((char*)g_dtp2,
 		get_tx(24),
 		(char*)get_spelluser() + HERO_NAME2);
 }
@@ -1054,7 +1054,7 @@ char* spell_analues(void)
 	if (ds_readws(IN_ACADEMY) != 99) {
 
 		/* prepare message */
-		sprintf(g_dtp2, get_tx(53), (char*)get_spelluser() + HERO_NAME2, g_text_output_buf);
+		sprintf((char*)g_dtp2, get_tx(53), (char*)get_spelluser() + HERO_NAME2, g_text_output_buf);
 	}
 
 	return g_text_output_buf;

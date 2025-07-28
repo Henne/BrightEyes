@@ -309,11 +309,11 @@ void update_atpa(Bit8u *hero)
 		host_writeb(hero + HERO_ATPA_BASIS, erg.quot);
 
 		/* prepare message */
-		sprintf(g_dtp2,
+		sprintf((char*)g_dtp2,
 			get_ttx(8), host_readbs(hero + HERO_ATPA_BASIS));
 
 		/* print message */
-		GUI_output(g_dtp2);
+		GUI_output((char*)g_dtp2);
 
 		for (i = 0; i < 7; i++) {
 			/* add diff to AT value */

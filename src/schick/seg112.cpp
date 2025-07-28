@@ -197,7 +197,7 @@ void tevent_071(void)
 		/* Track + 4, Faehrtensuche + 4 */
 		if (test_skill(hero, TA_FAEHRTENSUCHEN, 4) > 0) {
 
-			sprintf(g_dtp2,
+			sprintf((char*)g_dtp2,
 				get_tx2(13),
 				(char*)hero + HERO_NAME2,
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
@@ -205,7 +205,7 @@ void tevent_071(void)
 
 
 			do {
-				l_si = GUI_radio(g_dtp2, 2,
+				l_si = GUI_radio((char*)g_dtp2, 2,
 						get_tx2(14),
 						get_tx2(15));
 			} while (l_si == -1);
@@ -235,11 +235,11 @@ void tevent_071(void)
 
 				if (l_si == 1 || l_si == 2) {
 
-					sprintf(g_dtp2,
+					sprintf((char*)g_dtp2,
 						get_tx2(22),
 						(char*)hero + HERO_NAME2);
 					do {
-						l_si = GUI_radio(g_dtp2, 2,
+						l_si = GUI_radio((char*)g_dtp2, 2,
 								get_tx2(23),
 								get_tx2(24));
 					} while (l_si == -1);
@@ -318,16 +318,16 @@ void TRV_swimm(signed short mod, signed short percent)
 				sub_hero_le(hero, random_schick(5));
 
 
-				sprintf(g_dtp2,
+				sprintf((char*)g_dtp2,
 					get_tx2(21),
 					(char*)hero + HERO_NAME2);
 			} else {
-				sprintf(g_dtp2,
+				sprintf((char*)g_dtp2,
 					get_tx2(20),
 					(char*)hero + HERO_NAME2);
 			}
 
-			GUI_output(g_dtp2);
+			GUI_output((char*)g_dtp2);
 		}
 	}
 }
@@ -350,7 +350,7 @@ void tevent_unused01(void)
 
 		ds_writeb(TEVENTU01_FLAG, 1);
 
-		sprintf(g_dtp2,
+		sprintf((char*)g_dtp2,
 			get_tx2(29),
 			(char*)hero + HERO_NAME2,
 			(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
@@ -358,7 +358,7 @@ void tevent_unused01(void)
 
 
 		do {
-			answer = GUI_radio(g_dtp2, 2,
+			answer = GUI_radio((char*)g_dtp2, 2,
 					get_tx2(30),
 					get_tx2(31));
 		} while (answer == -1);
@@ -501,7 +501,7 @@ void tevent_074(void)
 
 				hero = get_hero(answer);
 
-				sprintf(g_dtp2 + 0x400,
+				sprintf((char*)g_dtp2 + 0x400,
 					get_tx2(54),
 					(char*)hero + HERO_NAME2);
 
@@ -742,7 +742,7 @@ void tevent_077(void)
 
 				hero = get_hero(answer);
 
-				sprintf(g_dtp2 + 0x400,
+				sprintf((char*)g_dtp2 + 0x400,
 					get_tx2(54),
 					(char*)hero + HERO_NAME2);
 

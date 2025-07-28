@@ -168,11 +168,11 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 		} else if (get_item(ds_readws(SMITH_REPAIRITEMS + 6 * smith_id), 1, 1)) {
 
-			sprintf(g_dtp2,
+			sprintf((char*)g_dtp2,
 				get_ttx(486),
 				(char*)(GUI_names_grammar((signed short)0x8002, ds_readws(SMITH_REPAIRITEMS + 6 * smith_id), 0)));
 
-			GUI_output(g_dtp2);
+			GUI_output((char*)g_dtp2);
 
 			ds_writed(SMITH_REPAIRITEMS + 2 + 6 * smith_id, 0);
 			ds_writew(SMITH_REPAIRITEMS + 6 * smith_id, 0);
@@ -245,7 +245,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 					do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 26, 26, 105, 33, 0);
 
-					make_valuta_str(g_dtp2, host_readds(hero2 + HERO_MONEY));
+					make_valuta_str((char*)g_dtp2, host_readds(hero2 + HERO_MONEY));
 					GUI_print_string(g_dtp2,
 						104 - GUI_get_space_for_string(g_dtp2, 0), 26);
 				}
@@ -287,7 +287,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 								if ((val = host_readws(hero2 + (HERO_INVENTORY + INVENTORY_QUANTITY) + SIZEOF_INVENTORY * host_readbs((Bit8u*)ds_readd(SELLITEMS) + 7 * answer + 6))) > 1)
 								{
-									my_itoa(val, g_dtp2, 10);
+									my_itoa(val, (char*)g_dtp2, 10);
 
 									GUI_print_string(g_dtp2,
 										array3.a[items_x] + 16 - GUI_get_space_for_string(g_dtp2, 0),
@@ -296,7 +296,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 								}
 							}
 
-							sprintf(g_dtp2,
+							sprintf((char*)g_dtp2,
 								host_readws((Bit8u*)ds_readd(SELLITEMS) + 4 + 7 * answer) == 1 ? fmt_h.a :
 									(host_readws((Bit8u*)ds_readd(SELLITEMS) + 4 + 7 * answer) == 10 ? fmt_s.a : fmt_d.a),
 								host_readws((Bit8u*)ds_readd(SELLITEMS) + 2 + 7 * answer));
@@ -390,16 +390,16 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 						price = (host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l7 + item) + 2)
 							* host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l7 + item) + 4)) * ds_readws(PRICE_MODIFICATOR) / 4;
 
-						make_valuta_str(g_text_output_buf, price);
+						make_valuta_str((char*)g_text_output_buf, price);
 
-						sprintf(g_dtp2,
+						sprintf((char*)g_dtp2,
 							get_ttx(488),
 							(char*)(GUI_names_grammar((signed short)0x8002, item_id, 0)),
 							g_text_output_buf);
 
 
 						do {
-							percent = GUI_input(g_dtp2, 2);
+							percent = GUI_input((char*)g_dtp2, 2);
 
 						} while (percent > 50);
 

@@ -127,14 +127,14 @@ void TRV_found_herb_place(signed short a0)
 
 	randval = random_schick(5) + 2;
 
-	sprintf(g_dtp2,
+	sprintf((char*)g_dtp2,
 		get_tx(0),
 		get_tx(randval),
 		(char*)hero + HERO_NAME2,
 		(a0 != 0 ? get_tx(42) : (char*)p_datseg + EMPTY_STRING10));
 
 	do {
-		answer = GUI_radio(g_dtp2, 2,
+		answer = GUI_radio((char*)g_dtp2, 2,
 				get_tx(1),
 				get_tx(2));
 
@@ -180,12 +180,12 @@ signed short TRV_found_camp_place(signed short a0)
 	signed short randval;
 
 	randval = random_schick(5) + 10;
-	sprintf(g_dtp2,
+	sprintf((char*)g_dtp2,
 		get_tx(8),
 		get_tx(randval),
 		(a0 == 1 ? get_tx(42) : (a0 == 2 ? get_tx(45) : (char*)p_datseg + EMPTY_STRING11)));
 	do {
-		answer = GUI_radio(g_dtp2, 2,
+		answer = GUI_radio((char*)g_dtp2, 2,
 					get_tx(9),
 					get_tx(10));
 	} while (answer == -1);
@@ -223,12 +223,12 @@ void TRV_found_replenish_place(signed short a0)
 	signed short hero_pos;
 	signed short answer;
 
-	sprintf(g_dtp2,
+	sprintf((char*)g_dtp2,
 		get_tx(16),
 		get_tx(random_schick(5) + 11),
 		(a0 != 0 ? get_tx(45) : (char*)p_datseg + EMPTY_STRING12));
 	do {
-		answer = GUI_radio(g_dtp2, 2,
+		answer = GUI_radio((char*)g_dtp2, 2,
 					get_tx(21),
 					get_tx(22));
 	} while (answer == -1);
@@ -324,12 +324,12 @@ signed short TRV_follow_trail_question(void)
 
 	hero = (Bit8u*)get_first_hero_available_in_group();
 
-	sprintf(g_dtp2,
+	sprintf((char*)g_dtp2,
 		get_tx(25),
 		(char*)hero + HERO_NAME2);
 
 	do {
-		answer = GUI_radio(g_dtp2, 2,
+		answer = GUI_radio((char*)g_dtp2, 2,
 				get_tx(26),
 				get_tx(27));
 
@@ -351,12 +351,12 @@ signed short TRV_cross_a_ford(char *msg, signed short time, signed short mod)
 	init_ani(0);
 
 	do {
-		sprintf(g_dtp2,
+		sprintf((char*)g_dtp2,
 			get_tx(34),
 			(char*)msg);
 
 		do {
-			answer = GUI_radio(g_dtp2, 2,
+			answer = GUI_radio((char*)g_dtp2, 2,
 						get_tx(35),
 						get_tx(36));
 		} while (answer == -1);
@@ -402,7 +402,7 @@ void TRV_ford_test(signed short mod, signed short time)
 				/* test failed */
 				timewarp(MINUTES(time));
 
-				sprintf(g_dtp2,
+				sprintf((char*)g_dtp2,
 					get_tx(37),
 					(char*)hero + HERO_NAME2);
 
@@ -413,12 +413,12 @@ void TRV_ford_test(signed short mod, signed short time)
 				/* test succeded */
 				timewarp(MINUTES(10));
 
-				sprintf(g_dtp2,
+				sprintf((char*)g_dtp2,
 					get_tx(38),
 					(char*)hero + HERO_NAME2);
 			}
 
-			GUI_output(g_dtp2);
+			GUI_output((char*)g_dtp2);
 		}
 	}
 }
@@ -435,13 +435,13 @@ signed short TRV_ferry(char *msg, signed short price)
 
 	do {
 
-		sprintf(g_dtp2,
+		sprintf((char*)g_dtp2,
 			get_tx(28),
 			(char*)msg,
 			price, 5 * price);
 
 		do {
-			answer = GUI_radio(g_dtp2, 3,
+			answer = GUI_radio((char*)g_dtp2, 3,
 						get_tx(29),
 						get_tx(30),
 						get_tx(31));
@@ -473,11 +473,11 @@ signed short TRV_ferry(char *msg, signed short price)
 				p_money -= price;
 				set_party_money(p_money);
 
-				sprintf(g_dtp2,
+				sprintf((char*)g_dtp2,
 					get_tx(32),
 					done = random_schick(6));
 
-				GUI_output(g_dtp2);
+				GUI_output((char*)g_dtp2);
 
 				timewarp(HOURS(done));
 
@@ -600,11 +600,11 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 			} while (answer == -1);
 		} else {
 
-			sprintf(g_dtp2,
+			sprintf((char*)g_dtp2,
 				get_tx2(city_index + 3),
 				(char*)hero + HERO_NAME2);
 
-			GUI_input(g_dtp2, l_di = 0);
+			GUI_input((char*)g_dtp2, l_di = 0);
 
 			if ((i = test_skill(hero, TA_SCHUSSWAFFEN, (signed char)mod3)) > 0) {
 				l_di++;
@@ -616,11 +616,11 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 
 			if (l_di == 2 || i == 99 || l4 == 99) {
 
-				sprintf(g_dtp2,
+				sprintf((char*)g_dtp2,
 					get_tx2(city_index + 4),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output(g_dtp2);
+				GUI_output((char*)g_dtp2);
 
 				add_hero_ap_all(ap_all1);
 				add_hero_ap(hero, ap_hero);
@@ -632,12 +632,12 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 				answer = 0;
 			} else {
 
-				sprintf(g_dtp2,
+				sprintf((char*)g_dtp2,
 					get_tx2(l_di == 1 ? city_index + 5 : city_index + 6),
 					(char*)hero + HERO_NAME2);
 
 				do {
-					answer = GUI_radio(g_dtp2, 2,
+					answer = GUI_radio((char*)g_dtp2, 2,
 								get_tx2(city_index + 7),
 								get_tx2(city_index + 8));
 				} while (answer == -1);
@@ -787,12 +787,12 @@ void TRV_barrier(signed short text_start)
 
 						hero = get_hero(select_hero_ok_forced(get_tx2(text_start + 5)));
 
-						sprintf(g_dtp2 + 0x400,
+						sprintf((char*)g_dtp2 + 0x400,
 								get_tx2(text_start + 7),
 								(char*)hero + HERO_NAME2,
 								(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)),
 								(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
-						GUI_dialog_na(0, g_dtp2 + 0x400);
+						GUI_dialog_na(0, (char*)((char*)(g_dtp2 + 0x400)));
 
 						hero_disease_test(hero, 2, 30);
 

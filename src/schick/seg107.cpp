@@ -50,12 +50,12 @@ void use_item(signed short item_pos, signed short hero_pos)
 				if (is_in_word_array(ds_readws(USED_ITEM_ID), g_items_pluralwords))
 				{
 					/* german grammar, singular and plural are the same */
-					sprintf(g_dtp2, get_ttx(792), GUI_name_singular(get_itemname(ds_readws(USED_ITEM_ID))));
+					sprintf((char*)g_dtp2, get_ttx(792), GUI_name_singular(get_itemname(ds_readws(USED_ITEM_ID))));
 				} else {
-					sprintf(g_dtp2, get_ttx(571), (char*)GUI_names_grammar(0, ds_readws(USED_ITEM_ID), 0));
+					sprintf((char*)g_dtp2, get_ttx(571), (char*)GUI_names_grammar(0, ds_readws(USED_ITEM_ID), 0));
 				}
 
-				GUI_output(g_dtp2);
+				GUI_output((char*)g_dtp2);
 
 			} else if ((item_herb_potion((Bit8u*)ds_readd(USED_ITEM_DESC))) &&
 					!is_in_word_array(ds_readws(USED_ITEM_ID), g_poison_potions))
@@ -127,9 +127,9 @@ void item_read_recipe(void)
 	}
 
 	/* prepare message */
-	sprintf(g_dtp2, get_ttx(636), str);
+	sprintf((char*)g_dtp2, get_ttx(636), str);
 
-	GUI_output(g_dtp2);
+	GUI_output((char*)g_dtp2);
 }
 
 /* Borlandified and identical */
@@ -180,7 +180,7 @@ void item_armatrutz(void)
 		/* decrement usage counter */
 		dec_ptr_ws(get_itemuser() + (HERO_INVENTORY + INVENTORY_QUANTITY) + ds_readws(USED_ITEM_POS) * SIZEOF_INVENTORY);
 
-		GUI_output(g_dtp2);
+		GUI_output((char*)g_dtp2);
 	}
 
 	if ((tx_index_bak != -1) && (tx_index_bak != 0xde)) {
@@ -213,7 +213,7 @@ void item_flimflam(void)
 		load_tx(tx_index_bak);
 	}
 
-	GUI_output(g_dtp2);
+	GUI_output((char*)g_dtp2);
 
 }
 
@@ -364,14 +364,14 @@ void item_weapon_poison(void)
 
 		give_hero_new_item(get_itemuser(), bottle, 1, 1);
 
-		sprintf(g_dtp2, get_ttx(739),
+		sprintf((char*)g_dtp2, get_ttx(739),
 			(char*)(GUI_names_grammar((signed short)0x8000, host_readws(get_itemuser() + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID), 0)));
 
 	} else {
-		sprintf(g_dtp2, get_ttx(805), (char*)get_itemuser() + HERO_NAME2);
+		sprintf((char*)g_dtp2, get_ttx(805), (char*)get_itemuser() + HERO_NAME2);
 	}
 
-	GUI_output(g_dtp2);
+	GUI_output((char*)g_dtp2);
 }
 
 void item_myastmatic(void)
@@ -447,17 +447,17 @@ void item_brenne(void)
 			give_hero_new_item(get_itemuser(), ITEM_FLASK_BRONZE, 0, 1);
 
 			/* prepare message */
-			sprintf(g_dtp2, get_tx(119), (char*)get_itemuser() + HERO_NAME2);
+			sprintf((char*)g_dtp2, get_tx(119), (char*)get_itemuser() + HERO_NAME2);
 		} else {
 			/* prepare message */
-			sprintf(g_dtp2, get_tx(120), (char*)get_itemuser() + HERO_NAME2);
+			sprintf((char*)g_dtp2, get_tx(120), (char*)get_itemuser() + HERO_NAME2);
 		}
 	} else {
 
 		if (get_item_pos(get_itemuser(), ITEM_TINDERBOX) == -1) {
 			/* No tinderbox */
 			/* prepare message */
-			sprintf(g_dtp2, get_tx(122), (char*)get_itemuser() + HERO_NAME2);
+			sprintf((char*)g_dtp2, get_tx(122), (char*)get_itemuser() + HERO_NAME2);
 		} else {
 
 			if (ds_readws(USED_ITEM_ID) == ITEM_TORCH_OFF) {
@@ -482,7 +482,7 @@ void item_brenne(void)
 		load_tx(tx_index_bak);
 	}
 
-	GUI_output(g_dtp2);
+	GUI_output((char*)g_dtp2);
 }
 
 /* Borlandified and identical */

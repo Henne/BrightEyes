@@ -181,7 +181,7 @@ void sell_screen(Bit8u *shop_ptr)
 
 				do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 26, 26, 105, 33, 0);
 
-				make_valuta_str(g_dtp2, p_money);
+				make_valuta_str((char*)g_dtp2, p_money);
 				GUI_print_string(g_dtp2,
 					104 - GUI_get_space_for_string(g_dtp2, 0), 26);
 			}
@@ -223,7 +223,7 @@ void sell_screen(Bit8u *shop_ptr)
 
 							if ((nice = host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + SIZEOF_INVENTORY * host_readbs((Bit8u*)ds_readd(SELLITEMS) + 7 * answer + 6))) > 1)
 							{
-								my_itoa(nice, g_dtp2, 10);
+								my_itoa(nice, (char*)g_dtp2, 10);
 
 								GUI_print_string(g_dtp2,
 									array3.a[items_x] + 16 - GUI_get_space_for_string(g_dtp2, 0),
@@ -232,7 +232,7 @@ void sell_screen(Bit8u *shop_ptr)
 								if (tmp[hero_pos][host_readbs((Bit8u*)ds_readd(SELLITEMS) + 7 * answer + 6)] != 0)
 								{
 									set_textcolor(201, 0);
-									my_itoa(tmp[hero_pos][host_readbs((Bit8u*)ds_readd(SELLITEMS) + 7 * answer + 6)], g_dtp2, 10);
+									my_itoa(tmp[hero_pos][host_readbs((Bit8u*)ds_readd(SELLITEMS) + 7 * answer + 6)], (char*)g_dtp2, 10);
 
 									GUI_print_string(g_dtp2,
 										array3.a[items_x] + 16 - GUI_get_space_for_string(g_dtp2, 0),
@@ -243,7 +243,7 @@ void sell_screen(Bit8u *shop_ptr)
 							}
 						}
 
-						sprintf(g_dtp2,
+						sprintf((char*)g_dtp2,
 							host_readws((Bit8u*)ds_readd(SELLITEMS) + 4 + 7 * answer) == 1 ? fmt_h.a :
 								(host_readws((Bit8u*)ds_readd(SELLITEMS) + 4 + 7 * answer) == 10 ? fmt_s.a : fmt_d.a),
 							host_readws((Bit8u*)ds_readd(SELLITEMS) + 2 + 7 * answer));
@@ -260,7 +260,7 @@ void sell_screen(Bit8u *shop_ptr)
 
 			do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 135, 26, 214, 33, 0);
 
-			make_valuta_str(g_dtp2, price);
+			make_valuta_str((char*)g_dtp2, price);
 			GUI_print_string(g_dtp2, 135, 26);
 
 			l5 = -1;
@@ -344,10 +344,10 @@ void sell_screen(Bit8u *shop_ptr)
 			} else {
 
 				if (item_undropable(get_itemsdat(item_id))) {
-					sprintf(g_dtp2,
+					sprintf((char*)g_dtp2,
 						get_ttx(454),
 						(char*)(GUI_names_grammar((signed short)0x8002, item_id, 0)));
-					GUI_output(g_dtp2);
+					GUI_output((char*)g_dtp2);
 				} else {
 
 					nice = 1;
@@ -357,11 +357,11 @@ void sell_screen(Bit8u *shop_ptr)
 
 						if (item_stackable(get_itemsdat(item_id)) && host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + SIZEOF_INVENTORY * l15) > 1) {
 
-							sprintf(g_dtp2,
+							sprintf((char*)g_dtp2,
 								get_ttx(447),
 								(char*)(GUI_names_grammar(4, item_id, 0)));
 
-							nice = GUI_input(g_dtp2, 2);
+							nice = GUI_input((char*)g_dtp2, 2);
 
 							if (nice < 0) {
 								nice = 0;
@@ -390,11 +390,11 @@ void sell_screen(Bit8u *shop_ptr)
 					} else {
 						if (item_stackable(get_itemsdat(item_id)) && host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + SIZEOF_INVENTORY * l15) > 1) {
 
-							sprintf(g_dtp2,
+							sprintf((char*)g_dtp2,
 								get_ttx(447),
 								(char*)(GUI_names_grammar(4, item_id, 0)));
 
-							nice = GUI_input(g_dtp2, 2);
+							nice = GUI_input((char*)g_dtp2, 2);
 
 							if (nice < 0) {
 								nice = 0;
@@ -438,14 +438,14 @@ void sell_screen(Bit8u *shop_ptr)
 			/* 0xe83 - 11ba */
 			while (l12 == 0 && j < 3) {
 
-				make_valuta_str(g_text_output_buf, price);
-				sprintf(g_dtp2,
+				make_valuta_str((char*)g_text_output_buf, price);
+				sprintf((char*)g_dtp2,
 					get_ttx(449),
 					g_text_output_buf);
 
 
 				do {
-					percent = GUI_input(g_dtp2, 2);
+					percent = GUI_input((char*)g_dtp2, 2);
 
 				} while (percent > 50);
 
@@ -494,13 +494,13 @@ void sell_screen(Bit8u *shop_ptr)
 					if (l12 != 2) {
 						GUI_output(get_ttx(451));
 
-						make_valuta_str(g_text_output_buf, price);
+						make_valuta_str((char*)g_text_output_buf, price);
 
-						sprintf(g_dtp2,
+						sprintf((char*)g_dtp2,
 							get_ttx(819),
 							g_text_output_buf);
 
-						GUI_output(g_dtp2);
+						GUI_output((char*)g_dtp2);
 					}
 
 					l11 = 1;

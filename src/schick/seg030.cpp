@@ -100,7 +100,7 @@ void print_date(void)
 	textbox_width_bak = ds_readw(TEXTBOX_WIDTH);
 	ds_writew(TEXTBOX_WIDTH, 3);
 
-	GUI_input(g_dtp2, 0);
+	GUI_input((char*)g_dtp2, 0);
 	ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
 }
 
@@ -115,13 +115,13 @@ void prepare_date_str(void)
 
 	if (ds_readbs(DAY_OF_MONTH) < 0) {
 		/* Days of the nameless */
-		sprintf(g_dtp2,
+		sprintf((char*)g_dtp2,
 			get_ttx(391),
 			get_ttx(349 + ds_readbs(DAY_OF_WEEK)),
 			ds_readbs(YEAR), hour);
 	} else {
 		/* Normal day */
-		sprintf(g_dtp2,
+		sprintf((char*)g_dtp2,
 			get_ttx(356),
 			get_ttx(349 + ds_readbs(DAY_OF_WEEK)),
 			ds_readbs(DAY_OF_MONTH),
@@ -131,11 +131,11 @@ void prepare_date_str(void)
 	}
 
 	if (ds_readbs(SPECIAL_DAY) != 0) {
-		sprintf(g_text_output_buf,
+		sprintf((char*)g_text_output_buf,
 			get_ttx(357),
 			get_ttx(357 + ds_readbs(SPECIAL_DAY)));
 
-		strcat(g_dtp2,
+		strcat((char*)g_dtp2,
 			g_text_output_buf);
 	}
 }

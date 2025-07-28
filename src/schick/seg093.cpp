@@ -121,7 +121,7 @@ signed short do_travel_mode(void)
 					destinations_tab[i] = get_ttx(613);
 					i++;
 
-					sprintf(g_text_output_buf,
+					sprintf((char*)g_text_output_buf,
 						get_ttx(545),
 						get_ttx(235 + ds_readbs(CURRENT_TOWN)));
 

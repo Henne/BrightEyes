@@ -211,21 +211,21 @@ void inc_skill_advanced(Bit8u *hero, signed short skill)
 			if (skill <= 6) {
 				/* increment a melee weapon skill */
 
-				sprintf(g_dtp2,
+				sprintf((char*)g_dtp2,
 					get_ttx(426), get_ttx(48 + skill));
 
 				randval = -1;
 
 				/* AT - value */
-				sprintf(g_text_output_buf,
+				sprintf((char*)g_text_output_buf,
 					get_ttx(427), host_readbs(hero + skill + 0x68));
 
 				/* PA - value */
-				sprintf(g_text_output_buf + 50,
+				sprintf((char*)g_text_output_buf + 50,
 					get_ttx(428), host_readbs(hero + skill + 0x6f));
 
 				do {
-					randval = GUI_radio(g_dtp2, 2,
+					randval = GUI_radio((char*)g_dtp2, 2,
 								g_text_output_buf,
 								g_text_output_buf + 50);
 				} while (randval == -1);
@@ -438,11 +438,11 @@ void level_up(signed short hero_pos)
 	close(l_si);
 
 
-	sprintf(g_dtp2,
+	sprintf((char*)g_dtp2,
 		get_ttx(411),
 		(char*)hero + HERO_NAME2);
 
-	GUI_output(g_dtp2);
+	GUI_output((char*)g_dtp2);
 
 	ds_writew(ACTION, 0);
 	ds_writew(STATUS_PAGE_MODE, 1);
@@ -593,8 +593,8 @@ void level_up(signed short hero_pos)
 		}
 
 		/* show the user the new MR value */
-		sprintf(g_dtp2, get_tx2(41), host_readbs(hero + HERO_MR));
-		GUI_output(g_dtp2);
+		sprintf((char*)g_dtp2, get_tx2(41), host_readbs(hero + HERO_MR));
+		GUI_output((char*)g_dtp2);
 
 		/* update status background */
 		status_show(hero_pos);
@@ -621,10 +621,10 @@ void level_up(signed short hero_pos)
 		i += 2;
 
 		/* show how many LE the hero may get */
-		sprintf(g_dtp2, get_tx2(39), i);
+		sprintf((char*)g_dtp2, get_tx2(39), i);
 
 		do {
-			l_si = GUI_input(g_dtp2, 1);
+			l_si = GUI_input((char*)g_dtp2, 1);
 
 		} while (l_si < 0);
 
@@ -656,8 +656,8 @@ void level_up(signed short hero_pos)
 		/* not a magic user */
 
 		/* show how many LE the hero gets */
-		sprintf(g_dtp2, get_tx2(38), i);
-		GUI_output(g_dtp2);
+		sprintf((char*)g_dtp2, get_tx2(38), i);
+		GUI_output((char*)g_dtp2);
 
 		/* add LE and fill them up */
 		add_ptr_ws(hero + HERO_LE_ORIG, i);
@@ -892,9 +892,9 @@ void level_up(signed short hero_pos)
 			(l_di = g_levelup_spta_conv[host_readbs(hero + HERO_TYPE) - 7]) &&
 			GUI_bool(get_tx2(45)))
 		{
-			sprintf(g_dtp2, get_tx2(46), l_di);
+			sprintf((char*)g_dtp2, get_tx2(46), l_di);
 
-			i = GUI_input(g_dtp2, 1);
+			i = GUI_input((char*)g_dtp2, 1);
 
 			if (i > 0) {
 
@@ -908,9 +908,9 @@ void level_up(signed short hero_pos)
 
 			} else {
 
-				sprintf(g_dtp2, get_tx2(47), l_di);
+				sprintf((char*)g_dtp2, get_tx2(47), l_di);
 
-				i = GUI_input(g_dtp2, 1);
+				i = GUI_input((char*)g_dtp2, 1);
 
 				if (i > 0) {
 

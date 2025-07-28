@@ -300,11 +300,11 @@ void DNG_door(signed short action)
 						if (spell_result == -99)
 						{
 							/* unlucky => just print a message */
-							sprintf(g_dtp2,
+							sprintf((char*)g_dtp2,
 								get_ttx(607),
 								(char*)hero + HERO_NAME2);
 
-							GUI_output(g_dtp2);
+							GUI_output((char*)g_dtp2);
 						} else if (spell_result <= 0)
 						{
 							/* failed => half AE costs */
@@ -342,7 +342,7 @@ void print_msg_with_first_hero(char *msg)
 
 	hero = (Bit8u*)get_first_hero_available_in_group();
 
-	sprintf(g_text_output_buf, msg, (char*)(hero + HERO_NAME2));
+	sprintf((char*)g_text_output_buf, msg, (char*)(hero + HERO_NAME2));
 
 	GUI_input(g_text_output_buf, 0);
 	return;
@@ -884,11 +884,11 @@ void DNG_waterbarrel(Bit8u *unit_ptr)
 	/* TODO: check the value of unit_ptr first and skip if *unit_ptr <= 0*/
 
 	do {
-		sprintf(g_dtp2,
+		sprintf((char*)g_dtp2,
 			get_ttx(781),
 			host_readb(unit_ptr));
 
-		answer = GUI_radio(g_dtp2, 3,
+		answer = GUI_radio((char*)g_dtp2, 3,
 						get_ttx(782),
 						get_ttx(783),
 						get_ttx(784));

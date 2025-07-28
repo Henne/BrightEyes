@@ -723,12 +723,12 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 					get_textcolor(&fg_bak, &bg_bak);
 					set_textcolor(0xff, 0x00);
 
-					sprintf(g_text_output_buf,
+					sprintf((char*)g_text_output_buf,
 						(char*)p_datseg + STRING_CASTS_SPELL,		/* "%s ZAUBERT %s" */
 						(char*)hero + HERO_NAME2,
 						get_ttx(host_readbs(hero + HERO_SPELL_ID) + 0x6a));
 
-					GUI_print_string(g_text_output_buf, 1, 194);
+					GUI_print_string((char*)g_text_output_buf, 1, 194);
 
 					set_textcolor(fg_bak, bg_bak);
 
@@ -909,12 +909,12 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 						FIG_draw_figures();
 					}
 
-					FIG_output(g_dtp2);
+					FIG_output((char*)g_dtp2);
 
 					seg041_8c8();
 
 				} else {
-					FIG_output(g_dtp2);
+					FIG_output((char*)g_dtp2);
 				}
 
 			} else if (host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_USE_ITEM) {

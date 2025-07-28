@@ -194,7 +194,7 @@ void loot_corpse(Bit8u* chest_ptr, char *text, Bit8u *flag)
 {
 	signed short answer;
 
-	sprintf(g_text_output_buf,
+	sprintf((char*)g_text_output_buf,
 		(char*)(!host_readbs(flag) ? get_ttx(523) : get_ttx(527)),
 		text);
 

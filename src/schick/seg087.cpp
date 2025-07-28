@@ -156,17 +156,17 @@ signed short DNG14_handler(void)
 
 			ds_writeb(DNG14_SECRETDOOR1, 1);
 
-			sprintf(g_dtp2,
+			sprintf((char*)g_dtp2,
 				get_tx(7),
 				(char*)hero + HERO_NAME2);
 
-			sprintf(g_text_output_buf,
+			sprintf((char*)g_text_output_buf,
 				(char*)((l_di = test_skill(hero, TA_SCHLOESSER, -6)) > 0 ? get_tx(8): get_tx(9)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			strcat(g_dtp2, g_text_output_buf);
+			strcat((char*)g_dtp2, g_text_output_buf);
 
-			GUI_output(g_dtp2);
+			GUI_output((char*)g_dtp2);
 
 			if (l_di > 0) {
 				and_ptr_bs(amap_ptr + MAP_POS(5,11), (DNG_TILE_CORRIDOR << 4) + 0x0f);
@@ -187,17 +187,17 @@ signed short DNG14_handler(void)
 
 			ds_writeb(DNG14_SECRETDOOR2, 1);
 
-			sprintf(g_dtp2,
+			sprintf((char*)g_dtp2,
 				get_tx(7),
 				(char*)hero + HERO_NAME2);
 
-			sprintf(g_text_output_buf,
+			sprintf((char*)g_text_output_buf,
 				(char*)((l_di = test_skill(hero, TA_SCHLOESSER, 6)) > 0 ? get_tx(8): get_tx(9)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			strcat(g_dtp2, g_text_output_buf);
+			strcat((char*)g_dtp2, g_text_output_buf);
 
-			GUI_output(g_dtp2);
+			GUI_output((char*)g_dtp2);
 
 			if (l_di > 0) {
 				and_ptr_bs(amap_ptr + MAP_POS(12,7), (DNG_TILE_CORRIDOR << 4) + 0x0f);
@@ -310,17 +310,17 @@ signed short DNG14_handler(void)
 			/* acticate trap */
 			ds_writeb(DNG14_SECRETDOOR3, 1);
 
-			sprintf(g_dtp2,
+			sprintf((char*)g_dtp2,
 				get_tx(7),
 				(char*)hero + HERO_NAME2);
 
-			sprintf(g_text_output_buf,
+			sprintf((char*)g_text_output_buf,
 				(char*)((l_di = test_skill(hero, TA_SCHLOESSER, -6)) > 0 ? get_tx(8) : get_tx(9)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			strcat(g_dtp2, g_text_output_buf);
+			strcat((char*)g_dtp2, g_text_output_buf);
 
-			GUI_output(g_dtp2);
+			GUI_output((char*)g_dtp2);
 
 			if (l_di > 0) {
 				/* test was sucessful => disable trap */
@@ -342,17 +342,17 @@ signed short DNG14_handler(void)
 			/* acticate trap */
 			ds_writeb(DNG14_SECRETDOOR4, 1);
 
-			sprintf(g_dtp2,
+			sprintf((char*)g_dtp2,
 				get_tx(7),
 				(char*)hero + HERO_NAME2);
 
-			sprintf(g_text_output_buf,
+			sprintf((char*)g_text_output_buf,
 				(char*)((l_di = test_skill(hero, TA_SCHLOESSER, 7)) > 0 ? get_tx(8) : get_tx(9)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			strcat(g_dtp2, g_text_output_buf);
+			strcat((char*)g_dtp2, g_text_output_buf);
 
-			GUI_output(g_dtp2);
+			GUI_output((char*)g_dtp2);
 
 			if (l_di > 0) {
 				/* test was sucessful => disable trap */
@@ -407,12 +407,12 @@ signed short DNG14_handler(void)
 						!hero_dead(hero) &&
 						test_skill(hero, TA_KLETTERN, 0) <= 0)
 					{
-						sprintf(g_dtp2,
+						sprintf((char*)g_dtp2,
 							get_tx(26),
 							(char*)hero + HERO_NAME2,
 							(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 
-						GUI_output(g_dtp2);
+						GUI_output((char*)g_dtp2);
 
 						/* 1W6 damage */
 						sub_hero_le(hero, random_schick(6));
@@ -433,11 +433,11 @@ signed short DNG14_handler(void)
 						!hero_dead(hero) &&
 						test_skill(hero, TA_KLETTERN, 4) <= 0)
 					{
-						sprintf(g_dtp2,
+						sprintf((char*)g_dtp2,
 							get_tx(27),
 							(char*)hero + HERO_NAME2);
 
-						GUI_output(g_dtp2);
+						GUI_output((char*)g_dtp2);
 
 						/* 2W6+4 damage */
 						sub_hero_le(hero, dice_roll(2, 6, 4));
@@ -528,17 +528,17 @@ signed short DNG14_handler(void)
 	{
 			ds_writeb(DNG14_SECRETDOOR5, 1);
 
-			sprintf(g_dtp2,
+			sprintf((char*)g_dtp2,
 				get_tx(7),
 				(char*)hero + HERO_NAME2);
 
-			sprintf(g_text_output_buf,
+			sprintf((char*)g_text_output_buf,
 				(char*)((l_di = test_skill(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(8) : get_tx(9)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			strcat(g_dtp2, g_text_output_buf);
+			strcat((char*)g_dtp2, g_text_output_buf);
 
-			GUI_output(g_dtp2);
+			GUI_output((char*)g_dtp2);
 
 			if (l_di > 0) {
 				/* disable trap */
@@ -570,12 +570,12 @@ signed short DNG14_handler(void)
 
 					if (test_skill(hero, TA_SCHWIMMEN, 8) <= 0) {
 
-						sprintf(g_dtp2,
+						sprintf((char*)g_dtp2,
 							get_tx(40),
 							(char*)hero + HERO_NAME2,
 							(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-						GUI_output(g_dtp2);
+						GUI_output((char*)g_dtp2);
 
 						/* 1W6 damage */
 						sub_hero_le(hero, random_schick(6));
@@ -584,21 +584,21 @@ signed short DNG14_handler(void)
 
 						if (hero_dead(hero)) {
 
-							sprintf(g_dtp2,
+							sprintf((char*)g_dtp2,
 								get_tx(63),
 								(char*)hero + HERO_NAME2);
 
-							GUI_output(g_dtp2);
+							GUI_output((char*)g_dtp2);
 
 							draw_status_line();
 						}
 					} else {
-						sprintf(g_dtp2,
+						sprintf((char*)g_dtp2,
 							get_tx(41),
 							(char*)hero + HERO_NAME2,
 							(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-						GUI_output(g_dtp2);
+						GUI_output((char*)g_dtp2);
 
 						DNG14_dive(hero_pos, 2, (pos == DNG_POS(3,10,10) ? 13 : 9));
 					}
@@ -636,12 +636,12 @@ signed short DNG14_handler(void)
 
 	} else if (pos == DNG_POS(3,12,12) && pos != ds_readws(DNG_HANDLED_POS)) {
 
-		sprintf(g_dtp2,
+		sprintf((char*)g_dtp2,
 			get_tx(49),
 			(char*)hero + HERO_NAME2,
 			(char*)hero + HERO_NAME2);
 
-		GUI_output(g_dtp2);
+		GUI_output((char*)g_dtp2);
 
 		/* 1W6 damage */
 		sub_hero_le(hero, 3);

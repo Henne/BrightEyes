@@ -624,7 +624,7 @@ signed short select_teleport_dest(void)
 			((ds_readbs(CURRENT_TOWN) != TOWNS_NONE) && (((l_di >= 2) && (l_di <= 5)) ||
 			(l_di == 6))))
 	{
-		strcpy(g_dtp2, get_ttx(611));
+		strcpy((char*)g_dtp2, get_ttx(611));
 		ae_costs = -2;
 	} else {
 		host_writeb((Bit8u*)g_dtp2, 0);

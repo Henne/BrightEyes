@@ -243,7 +243,7 @@ unsigned short fight_printer(void)
 //					case 1:	/* heroes attack fails */
 //					case 3: /* enemy attack fails */
 
-					sprintf(g_text_output_buf, get_tx(idx),
+					sprintf((char*)g_text_output_buf, get_tx(idx),
 						(char*)FIG_name_3rd_case(ds_readw(FIG_ACTOR_GRAMMAR_TYPE), ds_readw(FIG_ACTOR_GRAMMAR_ID)));
 
 				} else if (f_action == 2 || f_action == 4 || f_action == 7) {
@@ -251,7 +251,7 @@ unsigned short fight_printer(void)
 //					case 4: /* enemy parade fails */
 //					case 7:	/* hero get unconscious */
 
-					sprintf(g_text_output_buf, get_tx(idx),
+					sprintf((char*)g_text_output_buf, get_tx(idx),
 						(char*)FIG_name_3rd_case(ds_readw(FIG_TARGET_GRAMMAR_TYPE), ds_readw(FIG_TARGET_GRAMMAR_ID)));
 
 
@@ -260,7 +260,7 @@ unsigned short fight_printer(void)
 //					case 8:		/* enemy hits hero */
 //					case 11:	/* hero hits enemy */
 
-					sprintf(g_text_output_buf, get_tx(idx),
+					sprintf((char*)g_text_output_buf, get_tx(idx),
 						(char*)FIG_name_1st_case(ds_readw(FIG_ACTOR_GRAMMAR_TYPE), ds_readw(FIG_ACTOR_GRAMMAR_ID)),
 						(char*)FIG_name_4th_case(ds_readw(FIG_TARGET_GRAMMAR_TYPE), ds_readw(FIG_TARGET_GRAMMAR_ID)));
 				} else {
