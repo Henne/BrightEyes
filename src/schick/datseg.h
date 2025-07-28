@@ -98,6 +98,7 @@ extern unsigned char *g_dungeon_fights_buf; 	// ds:0xe494; seg028,seg076,seg098,
 extern HugePt g_buffer9_ptr;		// ds:0xc3db; seg004-seg120
 extern HugePt g_buffer9_ptr4;		// ds:0xe3fc; seg028
 extern Bit32s g_fightobj_buf_freespace;	// ds:0xe370; seg032-seg100
+extern Bit32s g_gfx_spinlock;		// ds:0xe234; seg004
 extern char **g_itemsname;		// ds:0xe22f; seg026, seg120
 extern unsigned char *g_itemsdat;	// ds:0xe22b; seg002, seg027, seg105, seg107, seg120
 extern signed char g_market_itemsaldo_table[254]; // ds:0xe12d; seg056, seg057, seg120

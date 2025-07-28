@@ -174,7 +174,8 @@ void interrupt timer_isr(void)
 	Bit8u *ptr;
 	struct dummy a;
 
-	add_ds_ds(GFX_SPINLOCK, 1);
+	/* TODO: unused feature */
+	g_gfx_spinlock += 1;
 
 	inc_ds_ws(RANDOM_SCHICK_SEED2);
 
@@ -190,7 +191,6 @@ void interrupt timer_isr(void)
 	}
 
 	start_midi_playback_IRQ();
-
 
 	if (ds_readw(DELAY_TIMER) != 0) {
 		dec_ds_ws(DELAY_TIMER);
@@ -314,11 +314,11 @@ void interrupt timer_isr(void)
 	((void interrupt far(*)(...))ds_readd(BC_TIMER))();
 }
 
-void unused_gfx_spinlock(void)
+static void unused_gfx_spinlock(void)
 {
-	Bit32s v = ds_readds(GFX_SPINLOCK);
+	Bit32s v = g_gfx_spinlock;
 
-	while (v == ds_readds(GFX_SPINLOCK)) { ; }
+	while (v == g_gfx_spinlock) { ; }
 }
 #endif
 

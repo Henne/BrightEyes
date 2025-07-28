@@ -6325,7 +6325,7 @@ void *g_bc_timer; // ds:0xe274
 signed short g_ani_area_timeout[10]; // ds:0xe260
 signed short g_ani_area_status[10]; // ds:0xe24c
 signed short g_ani_change_dir[10]; // ds:0xe238
-signed long g_gfx_spinlock; // ds:0xe234
+Bit32s g_gfx_spinlock; // ds:0xe234
 unsigned char g_unkn_084[1]; // ds:0xe233
 char **g_itemsname; // ds:0xe22f
 unsigned char* g_itemsdat; // ds:0xe22b
