@@ -926,7 +926,7 @@
 // ?1
 #define INFORMER_TAB                    (0x5ed6)    /* struct(4)[15]; struct{short name_id; char town, unkn;} */
 #define FIG_DROPPED_COUNTER             (0x5f12)    /* signed short */
-#define FIG_ALL_HEROES_ESCAPED          (0x5f14)    /* unsigned short; {0,1} */
+//#define FIG_ALL_HEROES_ESCAPED          (0x5f14)    /* unsigned short; {0,1} */
 #define MAX_ENEMIES                     (0x5f16)    /* signed short; an upper bound for the number of enemies */
 #define STR_ERROR_ON_OBJ_MALLOC         (0x5f18)    /* char[23]; "ERROR ON OBJECT MALLOC" */
 // ?1

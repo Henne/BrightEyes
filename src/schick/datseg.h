@@ -78,6 +78,8 @@ extern Bit32s gs_dng12_watertrap_timer;		//ds:0x3fa2; seg002, seg090
 extern char g_game_version[6];			//ds:0x46ec; seg002
 extern signed short g_delay_factor;		//ds:0x4b66; seg005, seg025
 
+extern signed short g_fig_all_heroes_withdrawn; //ds:0x5f14; seg032
+
 extern unsigned char *g_hexenknoten_gfx_buf;	// ds:0xacc8; seg100
 extern signed short g_monster_spell_ae_cost;	// ds:0xaccc; seg102
 extern char g_select_skill_lvlup[6]; 		// ds:0xacce; seg103

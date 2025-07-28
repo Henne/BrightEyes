@@ -360,7 +360,7 @@ unsigned short FIG_fight_continues(void)
 {
 
 	if (FIG_all_heroes_escaped()) {
-		ds_writew(FIG_ALL_HEROES_ESCAPED, 1);
+		g_fig_all_heroes_withdrawn = 1;
 		return 0;
 	}
 
@@ -970,7 +970,7 @@ signed short do_fight(signed short fight_id)
 	g_in_fight = 1;
 
 	/* set some vars to 0 */
-	ds_writew(AUTOFIGHT, ds_writew(FIGHT_ROUND, ds_writew(FIG_ALL_HEROES_ESCAPED, 0)));
+	ds_writew(AUTOFIGHT, ds_writew(FIGHT_ROUND, (g_fig_all_heroes_withdrawn = 0)));
 	/* set some vars to -1 */
 	ds_writew(FIG_FIGURE1, ds_writew(FIG_FIGURE2, -1));
 	ds_writew(FIGHT_FIGS_INDEX, -1);
@@ -1131,7 +1131,7 @@ signed short do_fight(signed short fight_id)
 			retval = 2;
 		}
 
-		if (ds_readws(FIG_ALL_HEROES_ESCAPED) != 0) {
+		if (g_fig_all_heroes_withdrawn) {
 			retval = 1;
 		}
 
