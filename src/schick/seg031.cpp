@@ -322,7 +322,7 @@ Bit8u* load_current_town_gossip(void)
 	ds_writews(AREA_PREPARED, ds_writews(CURRENT_ANI, -1));
 
 	/* get the pointer to the ltx buffer */
-	ptr = (Bit8u*)ds_readd(BUFFER9_PTR3);
+	ptr = (Bit8u*)g_buffer9_ptr3;
 
 	/* get some gossip */
 	gossip_id = get_tavern_gossip();

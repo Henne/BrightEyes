@@ -265,7 +265,7 @@ void init_global_buffer(void)
 	g_buffer8_ptr = (unsigned char*)(((HugePt)g_buffer7_ptr) + 10000L);
 	g_buffer9_ptr = (HugePt)(((HugePt)g_buffer7_ptr) + 22008L);
 
-	ds_writed(BUFFER9_PTR3, (Bit32u)(g_buffer9_ptr2 = (unsigned char*)g_buffer9_ptr));
+	g_buffer9_ptr3 = (HugePt)(g_buffer9_ptr2 = (unsigned char*)g_buffer9_ptr);
 	g_ani_unknown4 = 0;
 }
 
@@ -342,7 +342,7 @@ signed short init_memory(void)
 
 		init_text();
 
-		ds_writed(FIG_FIGURE1_BUF, (Bit32u)F_PADD(ds_readd(BUFFER9_PTR3), 180000L));
+		ds_writed(FIG_FIGURE1_BUF, (Bit32u)(g_buffer9_ptr3 + 180000L));
 #if defined(__BORLANDC__)
 		if (g_large_buf == 1) {
 			add_ds_fp(FIG_FIGURE1_BUF, 23000L);
@@ -770,7 +770,7 @@ void call_gen(void)
 			exit_AIL();
 		}
 
-		ds_writed(FIG_FIGURE1_BUF, (Bit32u)F_PADD(ds_readd(BUFFER9_PTR3), 180000L));
+		ds_writed(FIG_FIGURE1_BUF, (Bit32u)(g_buffer9_ptr3 + 180000L));
 #if defined(__BORLANDC__)
 		if (g_large_buf == 1) {
 			add_ds_fp(FIG_FIGURE1_BUF, 23000L);

@@ -43,7 +43,7 @@ void DNG_floor_ceil(void)
 
 	/* Load ceiling */
 	nvf.dst = g_renderbuf_ptr;
-	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR3);
+	nvf.src = (Bit8u*)g_buffer9_ptr3;
 	nvf.no = 0;
 	nvf.type = (!ds_readbs(DNG_FLOOR_TEX)) ? 3 : 5;
 	nvf.width = (unsigned char*)&width;
@@ -53,7 +53,7 @@ void DNG_floor_ceil(void)
 
 	/* Load ceiling */
 	nvf.dst = ((Bit8u*)g_renderbuf_ptr) + 0x4030;
-	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR3);
+	nvf.src = (Bit8u*)g_buffer9_ptr3;
 	nvf.no = (!(ds_readbs(DIRECTION)&1)) ? 1 : 2;
 	nvf.type = (!ds_readbs(DNG_FLOOR_TEX)) ? 3 : 5;
 	nvf.width = (unsigned char*)&width;
@@ -374,7 +374,7 @@ void DNG_draw_walls(signed short a1, signed short a2, signed short a3)
 	}
 
 	nvf.dst = dst_ptr = ((Bit8u*)g_renderbuf_ptr) + 0x7530;
-	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR3);
+	nvf.src = (Bit8u*)g_buffer9_ptr3;
 	nvf.no = a3;
 	nvf.width = (Bit8u*)&width;
 	nvf.height = (Bit8u*)&height;

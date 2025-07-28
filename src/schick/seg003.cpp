@@ -136,8 +136,8 @@ void door_frame(signed short no, signed short x, signed short y, signed short fr
 	Bit8u *p2;
 	struct nvf_desc nvf;
 
-	nvf.dst = (Bit8u*)F_PADD(ds_readd(BUFFER9_PTR3), 0x2e248);
-	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR3);
+	nvf.dst = (Bit8u*)((HugePt)g_buffer9_ptr3 + 0x2e248L);
+	nvf.src = (Bit8u*)g_buffer9_ptr3;
 	nvf.no = no;
 	nvf.type = 3;
 	nvf.width = (Bit8u*)&width;
@@ -153,7 +153,7 @@ void door_frame(signed short no, signed short x, signed short y, signed short fr
 	height -= frame;
 	l1 = width;
 
-	p1 = (Bit8u*)F_PADD(F_PADD(ds_readd(BUFFER9_PTR3), frame * width), 0x2e248);
+	p1 = (Bit8u*)((((HugePt)g_buffer9_ptr3) + frame * width) + 0x2e248L);
 
 	if ((x < 0) && ((x + width) > 0)) {
 		width += x;

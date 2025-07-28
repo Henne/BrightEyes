@@ -422,7 +422,7 @@ Bit8u* waffinfo_weapons(void)
 
 	load_ltx(ARCHIVE_FILE_WAFFINFO_LTX);
 
-	ptr = (Bit8u*)ds_readd(BUFFER9_PTR3);
+	ptr = (Bit8u*)g_buffer9_ptr3;
 
 	randval = random_schick(19) - 1;
 
@@ -439,7 +439,7 @@ Bit8u* waffinfo_herbs(void)
 
 	load_ltx(ARCHIVE_FILE_WAFFINFO_LTX);
 
-	ptr = (Bit8u*)ds_readd(BUFFER9_PTR3) + 0x4c;
+	ptr = ((Bit8u*)g_buffer9_ptr3) + 0x4c;
 
 	randval = random_schick(40) - 1;
 
@@ -456,7 +456,7 @@ Bit8u* waffinfo_general(void)
 
 	load_ltx(ARCHIVE_FILE_WAFFINFO_LTX);
 
-	ptr = (Bit8u*)ds_readd(BUFFER9_PTR3) + 0xec;
+	ptr = ((Bit8u*)g_buffer9_ptr3) + 0xec;
 
 	randval = random_schick(67) - 1;
 

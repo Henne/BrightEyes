@@ -1420,7 +1420,7 @@
 #define DNG_MENU_MODE                   (0xd011)    /* unsigned short; {0 = warehouse (?), 1: 7th symbol is "open door" , 2: 7th symbol is "open chest", 3: 7th symbol is "close door", 4: 7th symbol is "lever", 5: 7th to 9th symbol are the different options to smash/unlock a door } */
 #define REDRAW_MENUICONS                (0xd013)    /* unsigned short; {0,1} */
 //#define BUFFER9_PTR2                    (0xd015)    /* Bit8u*; unused copy of BUFFER9_PTR */
-#define BUFFER9_PTR3                    (0xd019)    /* Bit8u*; copy of BUFFER9_PTR */
+//#define BUFFER9_PTR3                    (0xd019)    /* Bit8u*; copy of BUFFER9_PTR */
 #define BUFFER_MONSTER_TAB              (0xd01d)    /* unsigned long[36] */
 #define BUFFER_WFIGS_TAB                (0xd0ad)    /* unsigned long[43] */
 #define BUFFER_MFIGS_TAB                (0xd159)    /* unsigned long[43] */

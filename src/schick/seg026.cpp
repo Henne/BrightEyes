@@ -103,10 +103,10 @@ void load_ltx(unsigned short index)
 
 	fd = load_archive_file(index);
 	ds_writew(AREA_PREPARED, 0xffff);
-	len = (signed short)read_archive_file(fd, (Bit8u*)ds_readd(BUFFER9_PTR3) + 1000, 64000);
+	len = (signed short)read_archive_file(fd, ((Bit8u*)g_buffer9_ptr3) + 1000, 64000);
 	close(fd);
 
-	split_textbuffer((char**)ds_readd(BUFFER9_PTR3), (char*)F_PADD((Bit8u*)ds_readd(BUFFER9_PTR3), 1000L), len);
+	split_textbuffer((char**)g_buffer9_ptr3, (char*)(g_buffer9_ptr3 + 1000L), len);
 }
 
 void split_textbuffer(char **dst, char *src, Bit32u len)

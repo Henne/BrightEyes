@@ -76,7 +76,7 @@ void prepare_dungeon_area(void)
 		v1 = v2 = 0;
 
 		/* clear palette */
-		buf = (HugePt)(ds_readd(BUFFER9_PTR3));
+		buf = g_buffer9_ptr3;
 		memset((Bit8u*)(buf), 0, 0xc0);
 		wait_for_vsync();
 		set_palette((Bit8u*)(buf), 0x80, 0x40);
@@ -93,7 +93,7 @@ void prepare_dungeon_area(void)
 
 		close(handle);
 
-		ds_writed(BUFFER11_PTR, (Bit32u)F_PADD(F_PADD((HugePt)ds_readd(BUFFER9_PTR3), v2), -0xc0));
+		ds_writed(BUFFER11_PTR, (Bit32u)((((HugePt)g_buffer9_ptr) + v2) - 0xc0L));
 
 		ds_writew(AREA_PREPARED, !ds_readbs(DUNGEON_INDEX));
 	}
@@ -152,7 +152,7 @@ void seg028_0224(void)
 
 		seg066_172b();
 
-		ds_writed(BUFFER9_PTR4, ds_readd(BUFFER9_PTR3));
+		ds_writed(BUFFER9_PTR4, (Bit32u)g_buffer9_ptr3);
 
 		for (l_si = 0; l_si < 4; l_si++) {
 
@@ -378,7 +378,7 @@ void unused_store(signed short no)
 	signed short size;
 
 	nvf.dst = g_renderbuf_ptr + 30000;
-	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR3);
+	nvf.src = (Bit8u*)g_buffer9_ptr3;
 	nvf.no = no;
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&width;
