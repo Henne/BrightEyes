@@ -364,9 +364,8 @@ void DNG09_statues(signed short prob, signed short bonus)
 			GUI_output(get_tx(10));
 
 			/* increase estimation */
-			for (i = 0; i < 14; i++)
-			{
-				add_ds_ds((GODS_ESTIMATION + 4 * i), bonus);
+			for (i = 0; i < 14; i++) {
+				gs_gods_estimation[i] += bonus;
 			}
 
 			hero = get_hero(0);

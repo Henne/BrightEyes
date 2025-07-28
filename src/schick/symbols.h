@@ -244,7 +244,7 @@
 //#define INGAME_TIMERS                   (0x2dc4)    /* signed long[26] */
 #define MODIFICATION_TIMERS             (0x2e2c)    /* struct(8)[100]; struct{long u1; short u2; char u3; char u4;} */
 // ?2
-#define GODS_ESTIMATION                 (0x314e)    /* signed long[15] */
+//#define GODS_ESTIMATION                 (0x314e)    /* signed long[15] */
 #define TAV_CHEATED_FLAGS               (0x318a)    /* unsigned char[88] */
 #define SMITH_REPAIRITEMS               (0x31e2)    /* struct(6)[50]; struct{short unkn1; long unkn2;} */
 #define DNG_HANDLED_POS                 (0x330e)    /* unsigned short */

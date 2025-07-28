@@ -269,20 +269,14 @@ void PHX_bordell(void)
 	init_ani(0);
 
 	do {
-		answer = GUI_radio(get_tx2(41), 3,
-					get_tx2(42),
-					get_tx2(43),
-					get_tx2(44));
+		answer = GUI_radio(get_tx2(41), 3, get_tx2(42), get_tx2(43), get_tx2(44));
 
 	} while (answer == -1);
 
 	if (answer == 1) {
 
 		do {
-			answer = GUI_radio(get_tx2(45), 3,
-						get_tx2(46),
-						get_tx2(47),
-						get_tx2(48));
+			answer = GUI_radio(get_tx2(45), 3, get_tx2(46), get_tx2(47), get_tx2(48));
 
 		} while (answer == -1);
 
@@ -293,8 +287,9 @@ void PHX_bordell(void)
 		}
 
 	} else if (answer == 2) {
-	    /* increase RAHJA's estimation */
-		add_ds_ds((GODS_ESTIMATION + 4 * GOD_RAHJA), 30L);
+
+		/* increase RAHJA's estimation */
+		gs_gods_estimation[GOD_RAHJA] += 30L;
 
 		timewarp_until_time_of_day(HOURS(7));
 

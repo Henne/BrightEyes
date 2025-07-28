@@ -194,23 +194,17 @@ void loot_corpse(Bit8u* chest_ptr, char *text, Bit8u *flag)
 {
 	signed short answer;
 
-	sprintf((char*)g_text_output_buf,
-		(char*)(!host_readbs(flag) ? get_ttx(523) : get_ttx(527)),
-		text);
+	sprintf((char*)g_text_output_buf, (char*)(!host_readbs(flag) ? get_ttx(523) : get_ttx(527)), text);
 
-	if (!host_readbs(flag))
-	{
+	if (!host_readbs(flag)) {
+
 		ds_writew(TEXTBOX_WIDTH, 7);
 
-		answer = GUI_radio(g_text_output_buf, 3,
-					get_ttx(524),
-					get_ttx(525),
-					get_ttx(526)) - 1;
+		answer = GUI_radio(g_text_output_buf, 3, get_ttx(524), get_ttx(525), get_ttx(526)) - 1;
 
 		ds_writew(TEXTBOX_WIDTH, 3);
 
-		if (answer == 0)
-		{
+		if (answer == 0) {
 			/* examine the corpse */
 #if !defined(__BORLANDC__)
 			(t_map(chest_ptr, 11))(chest_ptr);
@@ -218,23 +212,22 @@ void loot_corpse(Bit8u* chest_ptr, char *text, Bit8u *flag)
 			((void(*)(Bit8u*))(Bit8u*)host_readd(chest_ptr + 0xb))(chest_ptr);
 #endif
 
-			if (!host_readbs(flag))
-			{
+			if (!host_readbs(flag))	{
+
 				/* mark this corpse as done */
 				host_writeb(flag, 1);
 				/* Boron - 20 */
-				sub_ds_ds(GODS_ESTIMATION + 4 * GOD_BORON, 20);
+				gs_gods_estimation[GOD_BORON] -= 20L;
 			}
 
-		} else if (answer == 1)
-		{
+		} else if (answer == 1) {
+
 			/* Borons Blessing */
-			if (!host_readbs(flag))
-			{
+			if (!host_readbs(flag)) {
 				/* mark this corpse as done */
 				host_writeb(flag, 1);
 				/* Boron + 20 */
-				add_ds_ds(GODS_ESTIMATION + 4 * GOD_BORON, 20);
+				gs_gods_estimation[GOD_BORON] += 20L;
 			}
 		}
 	} else {

@@ -1979,7 +1979,7 @@ struct{long u1; short u2; char u3; char u4;} g_modification_timers[100] = {
 	{ 0x00000000, 0x0000, 0x00, 0x00 }
 }; // ds:0x2e2c
 unsigned char g_unkn_012[2] = { 0x00, 0x00 }; // ds:0x314c
-signed long g_gods_estimation[15] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; // ds:0x314e
+Bit32s gs_gods_estimation[15] = {0}; // ds:0x314e
 unsigned char g_tav_cheated_flags[88] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; // ds:0x318a
 struct{short unkn1; long unkn2;} g_smith_repairitems[50] = {
 	{ 0x0000, 0x00000000 },

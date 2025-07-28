@@ -406,12 +406,11 @@ signed short DNG05_handler(void)
 	} else if (pos == DNG_POS(0,3,9) && pos != ds_readws(DNG_HANDLED_POS) && !ds_readb(DNG05_GOD_FLAG))
 	{
 		do {
-			tmp = GUI_radio(get_tx(6), 2,
-						get_tx(7),
-						get_tx(8));
+			tmp = GUI_radio(get_tx(6), 2, get_tx(7), get_tx(8));
+
 		} while (tmp == -1);
 
-		add_ds_ds((GODS_ESTIMATION + 4 * GOD_TRAVIA), tmp == 1 ? -15 : 15);
+		gs_gods_estimation[GOD_TRAVIA] += (tmp == 1 ? -15 : 15);
 
 		GUI_output(get_tx(9));
 

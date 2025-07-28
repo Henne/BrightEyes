@@ -646,30 +646,25 @@ void tevent_044(void)
 	signed short answer;
 	Bit8u *hero;
 
-	if (!ds_readb(TEVENT094_FLAG))
-	{
+	if (!ds_readb(TEVENT094_FLAG)) {
+
 		ds_writeb(TEVENT094_FLAG, 1);
 
 		load_in_head(1);
 
 		hero = (Bit8u*)get_first_hero_available_in_group();
 
-		sprintf((char*)g_dtp2 + 0x400,
-			get_tx2(33),
-			(char*)hero + HERO_NAME2,
-			(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
+		sprintf((char*)g_dtp2 + 0x400, get_tx2(33), (char*)hero + HERO_NAME2, (char*)GUI_get_ptr(host_readbs(hero + HERO_SEX), 3));
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
-						g_dtp2 + 0x400, 2,
-						get_tx2(34),
-						get_tx2(35));
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, g_dtp2 + 0x400, 2, get_tx2(34), get_tx2(35));
+
 		} while (answer == -1);
 
-		if (answer == 2)
-		{
+		if (answer == 2) {
+
 			/* bury her */
-			add_ds_ds(GODS_ESTIMATION + 4 * GOD_BORON, 50L);
+			gs_gods_estimation[GOD_BORON] += 50L;
 
 			timewarp(HOURS(1));
 

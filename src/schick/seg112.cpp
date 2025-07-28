@@ -251,7 +251,7 @@ void tevent_071(void)
 
 						/* REWARD: get gods estimation + 500 for each god */
 						for (i = 1; i <= 14; i++) {
-							add_ds_ds(GODS_ESTIMATION + 4 * i, 500L);
+							gs_gods_estimation[i] += 500L;
 						}
 
 						/* mark the statuette as destroyed => has effects in fights */
@@ -264,7 +264,7 @@ void tevent_071(void)
 
 						/* PUNISHMENT: set gods estimation to 0 for each god */
 						for (i = 1; i <= 14; i++) {
-							ds_writed(GODS_ESTIMATION + 4 * i, 0L);
+							gs_gods_estimation[i] = 0L;
 						}
 					}
 

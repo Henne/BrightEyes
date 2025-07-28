@@ -56,15 +56,15 @@ void ask_miracle(void)
 	strcpy((char*)g_dtp2, get_tx2(0)); /* "Eure Bitten werden nicht erhoert" */
 
 	/* check gods estimation */
-	if (ds_readds(GODS_ESTIMATION + 4 * ds_readws(TEMPLE_GOD)) >= 100) {
+	if (gs_gods_estimation[ds_readws(TEMPLE_GOD)] >= 100) {
 
-		bonus = (signed short)((ga1.a[ds_readws(TEMPLE_GOD)] * (ds_readds(GODS_ESTIMATION + 4 * ds_readws(TEMPLE_GOD)) / 100) / 10) - l3);
+		bonus = (signed short)((ga1.a[ds_readws(TEMPLE_GOD)] * (gs_gods_estimation[ds_readws(TEMPLE_GOD)] / 100) / 10) - l3);
 
 		if (ds_readbs(CURRENT_TOWN) == TOWNS_CLANEGH) {
 			bonus += 2;
 		}
 
-		sub_ds_ds(GODS_ESTIMATION + 4 * ds_readws(TEMPLE_GOD), 10);
+		gs_gods_estimation[ds_readws(TEMPLE_GOD)] -= 10L;
 
 		if (random_schick(100) <= god_dice.a[ds_readws(TEMPLE_GOD)] + bonus) {
 
@@ -346,7 +346,7 @@ void ask_miracle(void)
 				}
 				case GOD_PHEX: {
 					/* PHEX wants a bit more estimation */
-					if (ds_readds(GODS_ESTIMATION + 4 * ds_readws(TEMPLE_GOD)) > 500) {
+					if (gs_gods_estimation[ds_readws(TEMPLE_GOD)] > 500L) {
 
 						if (l_si <= 5) {
 							if (!gs_ingame_timers[INGAME_TIMER_PHEX_THIEF]) {

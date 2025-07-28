@@ -104,7 +104,7 @@ signed short DNG01_handler(void)
 		if (GUI_bool(get_tx(7)) && get_item(ITEM_AMULET_GREEN, 1, 1))
 		{
 			ds_writeb(DNG01_AMULET_TAKEN, 1);
-			sub_ds_ds(GODS_ESTIMATION + 4 * GOD_BORON, 100L);
+			gs_gods_estimation[GOD_BORON] -= 100L;
 		}
 
 	} else if (target_pos == DNG_POS(4,13,6) && target_pos != ds_readws(DNG_HANDLED_POS))

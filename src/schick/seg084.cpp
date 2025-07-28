@@ -365,32 +365,30 @@ signed short DNG09_handler(void)
 		init_ani(0);
 		delay_or_keypress(100);
 
-		if (GUI_bool(get_tx(46)))
-		{
+		if (GUI_bool(get_tx(46))) {
+
 			ds_writeb(DNG09_ALTAR_FLAG, 1);
 
 			add_hero_ap_all(60);
 
-			for (i = 0; i < 14; i++)
-			{
-				add_ds_ds(GODS_ESTIMATION + 4 * i, 100L);
+			for (i = 0; i < 14; i++) {
+				gs_gods_estimation[i] += 100L;
 			}
 
 			/* mark quest as done */
 			ds_writeb(QUEST_NAMELESS_DONE, 1);
 
-
 			do {
-				i = GUI_radio(get_tx(47), 2,
-						get_tx(48),
-						get_tx(49));
+				i = GUI_radio(get_tx(47), 2, get_tx(48), get_tx(49));
+
 			} while (i == -1);
 
-			if (i == 1)
-			{
+			if (i == 1) {
+
 				get_item(ITEM_BLACK_FIGURINE, 1, 1);
 
 			} else {
+
 				GUI_output(get_tx(50));
 			}
 		}

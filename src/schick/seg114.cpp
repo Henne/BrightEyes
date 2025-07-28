@@ -317,18 +317,17 @@ void tevent_113(void)
 	Bit32s est_diff;
 
 	do {
-		answer = GUI_radio(get_tx2(14), 2,
-					get_tx2(15),
-					get_tx2(16));
+		answer = GUI_radio(get_tx2(14), 2, get_tx2(15), get_tx2(16));
+
 	} while (answer == -1);
 
-	if (answer == 1)
-	{
+	if (answer == 1) {
+
 		GUI_output(get_tx2(17));
 
 		/* enter the temple */
 		ds_writew(CURRENT_TYPEINDEX, 58);
-		est_old = ds_readds(GODS_ESTIMATION + 4 * GOD_FIRUN);
+		est_old = gs_gods_estimation[GOD_FIRUN];
 		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_TEMPLE);
 		do_location();
 		TRV_load_textfile(-1);
@@ -336,14 +335,12 @@ void tevent_113(void)
 		GUI_output(get_tx2(18));
 
 		/* calculate the difference of the estimation */
-		est_diff = ds_readds(GODS_ESTIMATION + 4 * GOD_FIRUN) - est_old;
+		est_diff = gs_gods_estimation[GOD_FIRUN] - est_old;
 
 		ds_writew(TEXTBOX_WIDTH, 3);
 
 		/* the more money you spend, the better the group will sleep */
-		ds_writew(WILDCAMP_SLEEP_QUALITY, (est_diff <= 10 ? 1 :
-					(est_diff <= 50 ? 2 :
-					(est_diff <= 100 ? 3 : 4))));
+		ds_writew(WILDCAMP_SLEEP_QUALITY, (est_diff <= 10 ? 1 :	(est_diff <= 50 ? 2 : (est_diff <= 100 ? 3 : 4))));
 
 		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
 		do_location();

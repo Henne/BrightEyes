@@ -201,9 +201,7 @@ void do_temple(void)
 
 					make_valuta_str((char*)g_text_output_buf, money);
 
-					sprintf((char*)g_dtp2,
-						get_ttx(297),
-						g_text_output_buf);
+					sprintf((char*)g_dtp2, get_ttx(297), g_text_output_buf);
 
 					input = GUI_input((char*)g_dtp2, 3);
 
@@ -213,10 +211,10 @@ void do_temple(void)
 
 						if (10 * donation >= money) {
 							/* donate all money */
-							add_ds_ds(GODS_ESTIMATION + 4 * ds_readws(TEMPLE_GOD), money / 10);
+							gs_gods_estimation[ds_readws(TEMPLE_GOD)] += money / 10L;
 							money = 0;
 						} else {
-							add_ds_ds(GODS_ESTIMATION + 4 * ds_readws(TEMPLE_GOD), donation);
+							gs_gods_estimation[ds_readws(TEMPLE_GOD)] += donation;
 							money -= 10 * donation;
 						}
 
