@@ -5662,9 +5662,9 @@ Bit8u* schick_alloc(Bit32u size)
 signed short copy_protection(void)
 {
 	signed short i;
-	signed short l_di;
+	signed short randval;
 	signed short tries;
-	signed short l1;
+	signed short len;
 
 #ifndef M302de_FEATURE_MOD
 	load_tx(ARCHIVE_FILE_FIGHTTXT_LTX);
@@ -5681,15 +5681,14 @@ signed short copy_protection(void)
 			/* handbook question */
 
 			/* select a question */
-			l_di = random_schick(10) - 1;
+			randval = random_schick(10) - 1;
 
 			/* prepare the string */
-			sprintf((char*)g_dtp2,
-				get_tx(39),
-				ds_readbs((QUESTIONS_HANDBOOK + 3) + 19 * l_di),
-				ds_readbs((QUESTIONS_HANDBOOK + 2) + 19 * l_di),
-				ds_readbs((QUESTIONS_HANDBOOK + 1) + 19 * l_di),
-				ds_readbs((QUESTIONS_HANDBOOK + 0) + 19 * l_di));
+			sprintf((char*)g_dtp2, get_tx(39),
+				ds_readbs((QUESTIONS_HANDBOOK + 3) + 19 * randval),
+				ds_readbs((QUESTIONS_HANDBOOK + 2) + 19 * randval),
+				ds_readbs((QUESTIONS_HANDBOOK + 1) + 19 * randval),
+				ds_readbs((QUESTIONS_HANDBOOK + 0) + 19 * randval));
 
 			/* print version number */
 			GUI_print_string(g_game_version, 290, 190);
@@ -5697,28 +5696,26 @@ signed short copy_protection(void)
 			/* ask the question */
 			GUI_input((char*)g_dtp2, 20);
 
-			l1 = strlen(g_text_input_buf);
+			len = strlen(g_text_input_buf);
 
 			/* transform the input string in uppercase letters and bitwise invert them */
-			for (i = 0; i < l1; i++) {
-				host_writeb(g_text_input_buf + i,
-					~toupper(host_readbs(g_text_input_buf + i)));
+			for (i = 0; i < len; i++) {
+				g_text_input_buf[i] = ~toupper(g_text_input_buf[i]);
 			}
 
-			if (!strcmp((char*)(p_datseg + (QUESTIONS_HANDBOOK + 4)) + 19 * l_di, g_text_input_buf)) {
+			if (!strcmp((char*)(p_datseg + (QUESTIONS_HANDBOOK + 4)) + 19 * randval, g_text_input_buf)) {
 				return 1;
 			}
 		} else {
 			/* map question */
 
 			/* select a question */
-			l_di = random_schick(10) - 1;
+			randval = random_schick(10) - 1;
 
 			/* prepare the string */
-			sprintf((char*)g_dtp2,
-				get_tx(40),
-				get_tx(41 + ds_readbs((QUESTIONS_MAP + 0) + 3 * l_di)),
-				get_ttx(235 + ds_readbs((QUESTIONS_MAP + 1) + 3 * l_di)));
+			sprintf((char*)g_dtp2, get_tx(40),
+				get_tx(41 + ds_readbs((QUESTIONS_MAP + 0) + 3 * randval)),
+				get_ttx(235 + ds_readbs((QUESTIONS_MAP + 1) + 3 * randval)));
 
 			/* print version number */
 			GUI_print_string(g_game_version, 290, 190);
@@ -5726,15 +5723,14 @@ signed short copy_protection(void)
 			/* ask the question */
 			GUI_input((char*)g_dtp2, 20);
 
-			l1 = strlen(g_text_input_buf);
+			len = strlen(g_text_input_buf);
 
 			/* transform the input string in uppercase letters */
-			for (i = 0; i < l1; i++) {
-				host_writeb(g_text_input_buf + i,
-					toupper(host_readbs(g_text_input_buf + i)));
+			for (i = 0; i < len; i++) {
+				g_text_input_buf[i] = toupper(g_text_input_buf[i]);
 			}
 
-			if (!strcmp(get_ttx(235 + ds_readbs((QUESTIONS_MAP + 2) + 3 * l_di)), g_text_input_buf)) {
+			if (!strcmp(get_ttx(235 + ds_readbs((QUESTIONS_MAP + 2) + 3 * randval)), g_text_input_buf)) {
 				return 1;
 			}
 		}
