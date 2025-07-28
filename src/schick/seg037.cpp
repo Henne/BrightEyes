@@ -721,14 +721,14 @@ void enemy_turn(Bit8u *enemy, signed short enemy_no, signed short x, signed shor
 		if (host_readbs(enemy) == 0x46) {
 			/* GORAH waits the first 5 rounds */
 
-			if (ds_readws(FIGHT_ROUND) < 5) {
+			if (g_fight_round < 5) {
 				host_writeb(enemy + ENEMY_SHEET_BP, 0);
 			}
 		}
 
 	} else if ((ds_readws(CURRENT_FIG_NO) == FIGHTS_F099) &&
 		/* F099: fight against four HARPIES */
-			(random_interval(8, 12) <= ds_readws(FIGHT_ROUND))) {
+			(random_interval(8, 12) <= g_fight_round)) {
 
 			/* after 8-12 rounds, the enemies flee */
 			or_ptr_bs(enemy + ENEMY_SHEET_FLAGS2, 4); /* set 'scared' flag */

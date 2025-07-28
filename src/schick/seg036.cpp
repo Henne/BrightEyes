@@ -802,7 +802,7 @@ void KI_hero(Bit8u *hero, signed short hero_pos, signed short x, signed short y)
 		if (host_readbs(hero + HERO_NPC_ID) == NPC_NARIELL) {
 			/* equip LONGBOW and ARROWS in the first round,
 			 * if the hero has them in the inventory */
-			if ((ds_readws(FIGHT_ROUND) == 0) &&
+			if ((g_fight_round == 0) &&
 				(host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID) != ITEM_LONGBOW) &&
 				(get_item_pos(hero, ITEM_ARROWS) != -1) &&
 				(get_item_pos(hero, ITEM_LONGBOW) != -1))
@@ -820,7 +820,7 @@ void KI_hero(Bit8u *hero, signed short hero_pos, signed short x, signed short y)
 
 				/* equip LONGBOW and ARROWS in the first round,
 				 * if the hero has them in the inventory */
-				if ((ds_readws(FIGHT_ROUND) == 0) &&
+				if ((g_fight_round == 0) &&
 					(host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID) != ITEM_LONGBOW) &&
 					(get_item_pos(hero, ITEM_ARROWS) != -1) &&
 					(get_item_pos(hero, ITEM_LONGBOW) != -1))

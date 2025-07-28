@@ -407,7 +407,7 @@ void FIG_do_round(void)
 	}
 
 #if !defined(__BORLANDC__)
-	D1_INFO("Kampfrunde %d beginnt\n", ds_readws(FIGHT_ROUND));
+	D1_INFO("Kampfrunde %d beginnt\n", g_fight_round);
 #endif
 
 	nr_hero_action_phases_left_in_round = 0;
@@ -798,7 +798,7 @@ void FIG_do_round(void)
 	}
 
 #if !defined(__BORLANDC__)
-	D1_INFO("Kampfrunde %d endet\n", ds_readws(FIGHT_ROUND));
+	D1_INFO("Kampfrunde %d endet\n", g_fight_round);
 #endif
 }
 
@@ -970,7 +970,7 @@ signed short do_fight(signed short fight_id)
 	g_in_fight = 1;
 
 	/* set some vars to 0 */
-	ds_writew(AUTOFIGHT, ds_writew(FIGHT_ROUND, (g_fig_all_heroes_withdrawn = 0)));
+	ds_writew(AUTOFIGHT, g_fight_round = g_fig_all_heroes_withdrawn = 0);
 	/* set some vars to -1 */
 	ds_writew(FIG_FIGURE1, ds_writew(FIG_FIGURE2, -1));
 	ds_writew(FIGHT_FIGS_INDEX, -1);
@@ -1054,14 +1054,14 @@ signed short do_fight(signed short fight_id)
 			/* fight a round */
 			FIG_do_round();
 			/* increment round counter */
-			inc_ds_ws(FIGHT_ROUND);
+			g_fight_round++;
 			timewarp(SECONDS(6));
 
 			if (g_in_fight) {
 				FIG_latecomers();
 			}
 
-			if ((fight_id == 138) && (ds_readws(FIGHT_ROUND) >= 10)) {
+			if ((fight_id == 138) && (g_fight_round >= 10)) {
 				/* This fight ends after 9 rounds */
 				g_in_fight = 0;
 			}
