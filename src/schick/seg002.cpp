@@ -2305,7 +2305,7 @@ void do_timers(void)
 				host_writeb(hero_i + HERO_JAIL, 0);
 
 				ds_writeb(GROUPS_CURRENT_LOCTYPE + host_readbs(hero_i + HERO_GROUP_NO),
-					ds_readb(GROUPS_CURRENT_LOCTYPE_BAK + host_readbs(hero_i + HERO_GROUP_NO)));
+					gs_groups_current_loctype_bak[host_readbs(hero_i + HERO_GROUP_NO)]);
 
 				ds_writew(GROUPS_X_TARGET + host_readbs(hero_i + HERO_GROUP_NO) * 2,
 					ds_readw(GROUPS_X_TARGET_BAK + host_readbs(hero_i + HERO_GROUP_NO) * 2));
