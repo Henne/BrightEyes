@@ -67,6 +67,7 @@ extern signed char g_mr_modificators[13];		//ds:0x2d27; seg050
 /* GameState written directly into SaveGame file starts at 0x2d34 */
 extern Bit8s  gs_current_group;			//ds:0x2d35; seg002-seg120
 extern Bit8s  gs_current_loctype;		//ds:0x2d60; seg002-seg120
+extern Bit8s  gs_groups_current_loctype[6];	//ds:0x2d61; seg002, seg049
 extern Bit8s  gs_current_loctype_bak;		//ds:0x2d9f; seg002-seg120
 extern Bit8s  gs_groups_current_loctype_bak[6];	//ds:0x2da0; seg002, seg049, seg054
 extern Bit32s gs_day_timer;			//ds:0x2dbb; seg002-seg120

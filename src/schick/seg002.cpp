@@ -2304,8 +2304,8 @@ void do_timers(void)
 			{
 				host_writeb(hero_i + HERO_JAIL, 0);
 
-				ds_writeb(GROUPS_CURRENT_LOCTYPE + host_readbs(hero_i + HERO_GROUP_NO),
-					gs_groups_current_loctype_bak[host_readbs(hero_i + HERO_GROUP_NO)]);
+				gs_groups_current_loctype[host_readbs(hero_i + HERO_GROUP_NO)] =
+					gs_groups_current_loctype_bak[host_readbs(hero_i + HERO_GROUP_NO)];
 
 				ds_writew(GROUPS_X_TARGET + host_readbs(hero_i + HERO_GROUP_NO) * 2,
 					ds_readw(GROUPS_X_TARGET_BAK + host_readbs(hero_i + HERO_GROUP_NO) * 2));
@@ -4100,7 +4100,7 @@ signed short can_merge_group(void)
 				/* check YTarget */
 				(ds_readw(i * 2 + GROUPS_Y_TARGET) == ds_readw(Y_TARGET)) &&
 				/* check Location */
-				(ds_readbs(GROUPS_CURRENT_LOCTYPE + i) == gs_current_loctype) &&
+				(gs_groups_current_loctype[i] == gs_current_loctype) &&
 				/* check currentTown */
 				(ds_readb(GROUPS_TOWN + i) == ds_readb(CURRENT_TOWN)) &&
 				/* check DungeonIndex */

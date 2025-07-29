@@ -214,7 +214,7 @@
 #define GROUPS_X_TARGET                 (0x2d48)    /* unsigned short[6] */
 #define GROUPS_Y_TARGET                 (0x2d54)    /* unsigned short[6] */
 //#define CURRENT_LOCTYPE                 (0x2d60)    /* signed char */
-#define GROUPS_CURRENT_LOCTYPE          (0x2d61)    /* signed char[6] */
+//#define GROUPS_CURRENT_LOCTYPE          (0x2d61)    /* signed char[6] */
 #define CURRENT_TOWN                    (0x2d67)    /* signed char */
 #define GROUPS_TOWN                     (0x2d68)    /* signed char[6] */
 #define DUNGEON_INDEX                   (0x2d6e)    /* signed char */
