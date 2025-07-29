@@ -1837,7 +1837,7 @@ signed char g_levelup_spta_conv[6] = { 5, 5, 5, 0, 0, 0 }; // ds:0x2d21
 signed char g_mr_modificators[13] = { 0, 2, 0, 0, 2, -2, 2, 2, 2, 2, 3, 4, 3 }; // ds:0x2d27
 
 
-unsigned char g_datseg_status_start = 0; // ds:0x2d34, 99 = game finished, area of the datseg that is stored one to one in savegame files
+Bit8s gs_datseg_status_start = 0; // ds:0x2d34, 99 = game finished, area of the datseg that is stored one to one in savegame files
 Bit8s  gs_current_group = 0; // ds:0x2d35
 signed char g_group_member_counts[6] = { 0, 0, 0, 0, 0, 0 }; // ds:0x2d36, members per group
 signed char g_total_hero_counter = 0; // ds:0x2d3c

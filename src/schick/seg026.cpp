@@ -282,15 +282,15 @@ signed short load_game_state(void)
 		_read(handle_gs, (Bit8u*)&version[0], 1);
 		_read(handle_gs, (Bit8u*)&version[1], 1);
 
-		_read(handle_gs, p_datseg + DATSEG_STATUS_START, 4);
+		_read(handle_gs, &gs_datseg_status_start, 4);
 
 		/* read game status */
 		/* TODO: check pointer arithmetics work with other pointers */
-		p_status_start = (HugePt)(p_datseg + DATSEG_STATUS_START);
+		p_status_start = (HugePt)&gs_datseg_status_start;
 		p_status_end = (HugePt)(p_datseg + DATSEG_STATUS_END);
 		status_length = (signed short)(p_status_end - p_status_start);
 
-		_read(handle_gs, p_datseg + DATSEG_STATUS_START, status_length);
+		_read(handle_gs, &gs_datseg_status_start, status_length);
 
 		ds_writeb(SPECIAL_SCREEN, 1);
 
@@ -559,7 +559,7 @@ signed short save_game_state(void)
 		load_area_description(1);
 
 		/* TODO: check if pointer arithmetics work with other pointers */
-		p_status_start = (HugePt)(p_datseg + DATSEG_STATUS_START);
+		p_status_start = (HugePt)&gs_datseg_status_start;
 		p_status_end = (HugePt)(p_datseg + DATSEG_STATUS_END);
 		status_len = (signed short)(p_status_end - p_status_start);
 

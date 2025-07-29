@@ -629,7 +629,7 @@ void show_outro(void)
 	set_party_money(get_party_money());
 
 	/* mark the game as done */
-	ds_writeb(DATSEG_STATUS_START, 99);
+	gs_datseg_status_start = 99;
 
 	ds_writew(BASEPOS_X, 0);
 	ds_writew(BASEPOS_Y, 0);

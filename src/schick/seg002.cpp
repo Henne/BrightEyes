@@ -1806,7 +1806,7 @@ void game_loop(void)
 			do_travel_mode();
 		}
 
-		if (ds_readb(DATSEG_STATUS_START) == 99) {
+		if (gs_datseg_status_start == 99) {
 			ds_writew(GAME_STATE, GAME_STATE_OUTRO);
 		}
 
@@ -2616,9 +2616,7 @@ void sub_mod_timers(Bit32s val)
 					/* reset all slots of invalid target */
 					for (j = 0; j < 100; j++) {
 						if (ds_readb((MODIFICATION_TIMERS+6) + j * 8) == target) {
-							host_writeb(sp + 6,
-									host_writebs(sp + 7, 0));
-
+							host_writeb(sp + 6, host_writebs(sp + 7, 0));
 							host_writew(sp + 4, 0);
 						}
 					}
@@ -2626,15 +2624,13 @@ void sub_mod_timers(Bit32s val)
 
 			} else {
 				/* target affects the savegame */
-				mp = p_datseg + DATSEG_STATUS_START;
+				mp = (Bit8u*)&gs_datseg_status_start;
 				mp += host_readw(sp + 4);
 				sub_ptr_bs(mp, host_readbs(sp + 7));
 			}
 
 			/* reset offset, target, and modificator */
-			host_writeb(sp + 6,
-				host_writebs(sp + 7, 0));
-
+			host_writeb(sp + 6, host_writebs(sp + 7, 0));
 			host_writew(sp + 4, 0);
 		}
 	}
@@ -2671,8 +2667,7 @@ signed short get_free_mod_slot(void)
 	return i;
 }
 
-void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr,
-	signed char mod, signed char who)
+void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr, signed char mod, signed char who)
 {
 	signed short j;
 
@@ -2688,7 +2683,7 @@ void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr,
 
 	if (who == -1) {
 		/* mod slot is on savegame */
-		mod_ptr = p_datseg + DATSEG_STATUS_START;
+		mod_ptr = (Bit8u*)&gs_datseg_status_start;
 	} else {
 		/* mod slot is on a hero/npc */
 		mod_ptr = get_hero(who);

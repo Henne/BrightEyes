@@ -65,6 +65,7 @@ extern signed char g_levelup_spta_conv[6];		//ds:0x2d21; seg050
 extern signed char g_mr_modificators[13];		//ds:0x2d27; seg050
 
 /* GameState written directly into SaveGame file starts at 0x2d34 */
+extern Bit8s  gs_datseg_status_start;		//ds:0x2d34; seg002, seg026, seg065
 extern Bit8s  gs_current_group;			//ds:0x2d35; seg002-seg120
 extern Bit8s  gs_current_loctype;		//ds:0x2d60; seg002-seg120
 extern Bit8s  gs_groups_current_loctype[6];	//ds:0x2d61; seg002, seg049
