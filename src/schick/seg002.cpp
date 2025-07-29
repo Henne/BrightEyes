@@ -4080,7 +4080,7 @@ signed short can_merge_group(void)
 	signed short i;
 	signed short retval = -1;
 
-	if (ds_readbs(gs_current_group + GROUP_MEMBER_COUNTS) == ds_readbs(TOTAL_HERO_COUNTER)) {
+	if (ds_readbs(gs_current_group + GROUP_MEMBER_COUNTS) == gs_total_hero_counter) {
 
 		retval = -1;
 
@@ -4935,7 +4935,7 @@ signed short unused_cruft(void)
 
 	signed short l_si;
 
-	if (!ds_readbs(TOTAL_HERO_COUNTER)) {
+	if (!gs_total_hero_counter) {
 		return -1;
 	}
 

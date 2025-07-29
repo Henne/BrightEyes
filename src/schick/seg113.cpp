@@ -405,11 +405,11 @@ void hero_disappear(Bit8u *hero, unsigned short pos, signed short temple_id)
 {
 
 	/* decrement the number of heroes */
-	dec_ds_bs_post(TOTAL_HERO_COUNTER);
+	gs_total_hero_counter--;
 
 	/* load a new savegame if no hero is present */
 	/* TODO: potential Original-Bug: What if only the NPC is left? */
-	if (!ds_readbs(TOTAL_HERO_COUNTER)) {
+	if (!gs_total_hero_counter) {
 		ds_writew(GAME_STATE, GAME_STATE_DEAD);
 	}
 

@@ -244,7 +244,7 @@ signed short plan_alchemy(Bit8u *hero)
 								/* Original-Bug 12: If the total number of heroes is >= 2, and the current group consists only of a single available hero (+possibly the non-brewing NPC),
 								 * the option to separate that hero from the group is shown, resulting in an active group which is empty or contains only the NPC and dead/petrified/unconscious/renegade heroes
 								 * See https://www.crystals-dsa-foren.de/showthread.php?tid=98&pid=166399#pid166399 and the following posts. */
-								(ds_readbs(TOTAL_HERO_COUNTER) > 1) &&
+								(gs_total_hero_counter > 1) &&
 #else
 								((hero == get_hero(6)) || (count_heroes_available_in_group_ignore_npc() > 1)) && /* still allow to single out the NPC if he is the brewing hero */
 #endif

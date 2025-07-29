@@ -243,10 +243,10 @@ void char_add(signed short temple_id)
 	ptr = g_renderbuf_ptr + 50000;
 	l_di = copy_chr_names(ptr, temple_id);
 
-	if (ds_readbs(TOTAL_HERO_COUNTER) == 7 ||
-		(ds_readbs(TOTAL_HERO_COUNTER) == 6 && !host_readbs(get_hero(6) + HERO_TYPE)))
+	if (gs_total_hero_counter == 7 || (gs_total_hero_counter == 6 && !host_readbs(get_hero(6) + HERO_TYPE)))
 	{
 		GUI_output(get_ttx(288));
+
 	} else {
 
 		do {
@@ -266,10 +266,10 @@ void char_add(signed short temple_id)
 
 						if (!host_readbs(hero + HERO_TYPE)) {
 
-							prepare_chr_name(g_dtp2,	(char*)(ptr + 32 * l_si));
+							prepare_chr_name(g_dtp2, (char*)(ptr + 32 * l_si));
 
 							if (read_chr_temp(g_dtp2, i, gs_current_group)) {
-								inc_ds_bs_post(TOTAL_HERO_COUNTER);
+								gs_total_hero_counter++;
 								inc_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
 								host_writebs(hero + HERO_GROUP_POS, i + 1);
 								write_chr_temp(i);
@@ -282,9 +282,8 @@ void char_add(signed short temple_id)
 					init_ani(2);
 
 					/* location string */
-					sprintf((char*)g_dtp2,
-						get_ttx(235),
-						get_ttx(ds_readws(TEMPLE_GOD) + 21),	/* name of the god */
+					sprintf((char*)g_dtp2, get_ttx(235),
+						get_ttx(ds_readws(TEMPLE_GOD) + 21),
 						get_ttx(ds_readbs(CURRENT_TOWN) + 235));
 
 					GUI_print_loc_line((char*)g_dtp2);
@@ -292,7 +291,7 @@ void char_add(signed short temple_id)
 
 				l_di = copy_chr_names(ptr, temple_id);
 			}
-		} while (l_si != -1 && ds_readbs(TOTAL_HERO_COUNTER) < (host_readbs(get_hero(6) + HERO_TYPE) ? 7 : 6));
+		} while ((l_si != -1) && (gs_total_hero_counter < (host_readbs(get_hero(6) + HERO_TYPE) ? 7 : 6)));
 	}
 }
 
@@ -301,7 +300,7 @@ void char_letgo(signed short temple_id)
 	signed short hero_pos;
 	Bit8u *hero;
 
-	if (!ds_readbs(TOTAL_HERO_COUNTER) || !ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group)) {
+	if (!gs_total_hero_counter || !ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group)) {
 		GUI_output(get_ttx(232));
 	} else {
 
@@ -318,7 +317,7 @@ void char_letgo(signed short temple_id)
 				} else {
 					/* let go a hero */
 					hero = get_hero(hero_pos);
-					dec_ds_bs_post(TOTAL_HERO_COUNTER);
+					gs_total_hero_counter--;
 					dec_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
 
 					host_writeb(hero + HERO_TEMPLE_ID, (signed char)temple_id);
@@ -340,7 +339,7 @@ void char_letgo(signed short temple_id)
 				}
 			}
 
-		} while (hero_pos != -1 && ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group) > (host_readbs(get_hero(6) + HERO_TYPE) ? 1 : 0));
+		} while ((hero_pos != -1) && (ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group) > (host_readbs(get_hero(6) + HERO_TYPE) ? 1 : 0)));
 	}
 }
 

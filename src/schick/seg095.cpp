@@ -516,7 +516,7 @@ void remove_npc(signed short head_index, signed char days,
 	dec_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
 
 	/* dec global hero counter */
-	dec_ds_bs_post(TOTAL_HERO_COUNTER);
+	gs_total_hero_counter--;
 
 	ds_writeb(REFRESH_STATUS_LINE, 1);
 
@@ -541,7 +541,7 @@ void add_npc(signed short index)
 	inc_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
 
 	/* increment heroes */
-	inc_ds_bs_post(TOTAL_HERO_COUNTER);
+	gs_total_hero_counter++;
 
 	/* reset the months the NPC is in the group */
 	ds_writew(NPC_MONTHS, 0);
