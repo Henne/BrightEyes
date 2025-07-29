@@ -123,10 +123,10 @@ void do_harbor(void)
 				flag = 0;
 
 				if (
-					ds_readws(QUESTED_MONTHS) > 2 &&
+					gs_quested_months > 2 &&
 					!ds_readbs((TREASURE_MAPS + 6)) &&
 					ds_readb(INFORMER_FLAGS + INFORMER_SWAFNILD) &&
-					random_schick(100) <= ds_readws(QUESTED_MONTHS) + 4
+					random_schick(100) <= gs_quested_months + 4
 				) {
 					/* meet SWAFNILD */
 					do_talk(12, 0);

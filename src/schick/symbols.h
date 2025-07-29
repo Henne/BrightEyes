@@ -271,18 +271,18 @@
 //#define OTTA_STORMCHILDREN              (0x3346)    /* unsigned short */
 //#define OTTA_GARALDSSON                 (0x3348)    /* unsigned short */
 //#define HEARD_ANNOUNCE                  (0x334a)    /* signed short; {0 = not heard, 1 = heard, 3 = spoke with hetman} */
-#define GOT_MAIN_QUEST                  (0x334c)    /* signed short; {0,1} */
-#define QUESTED_MONTHS                  (0x334e)    /* short */
-#define MONTHLY_CREDIT                  (0x3350)    /* signed short */
-#define GOT_LETTER_JAD                  (0x3352)    /* signed short; {0,1} */
-#define VISITED_MILLER                  (0x3354)    /* signed short; {0,1} */
-#define QUEST_UGDALF                    (0x3356)    /* signed short; {0, 1, 3, 4} */
-#define ACADEMY_DAILY_CURSE             (0x3358)    /* signed short; {0,1} */
-#define ACADEMY_DAILY_IDENT             (0x335a)    /* signed short; {0,1} */
-#define BANK_DEPOSIT                    (0x335c)    /* signed short */
-#define DAYS_TO_CENS                    (0x335e)    /* signed short */
-#define DEBT_DAYS                       (0x3360)    /* signed short */
-#define IN_ACADEMY                      (0x3362)    /* unsigned short; {0,99} */
+//#define GOT_MAIN_QUEST                  (0x334c)    /* signed short; {0,1} */
+//#define QUESTED_MONTHS                  (0x334e)    /* short */
+//#define MONTHLY_CREDIT                  (0x3350)    /* signed short */
+//#define GOT_LETTER_JAD                  (0x3352)    /* signed short; {0,1} */
+//#define VISITED_MILLER                  (0x3354)    /* signed short; {0,1} */
+//#define QUEST_UGDALF                    (0x3356)    /* signed short; {0, 1, 3, 4} */
+//#define ACADEMY_DAILY_CURSE             (0x3358)    /* signed short; {0,1} */
+//#define ACADEMY_DAILY_IDENT             (0x335a)    /* signed short; {0,1} */
+//#define BANK_DEPOSIT                    (0x335c)    /* signed short */
+//#define DAYS_TO_CENS                    (0x335e)    /* signed short */
+//#define DEBT_DAYS                       (0x3360)    /* signed short */
+//#define IN_ACADEMY                      (0x3362)    /* unsigned short; {0,99} */
 #define INFORMER_FLAGS                  (0x3364)    /* unsigned char[15]; {0,1,2} */
 // ?1
 #define TAV_KICKED_FLAGS                (0x3374)    /* signed char[88]; {0,1} */

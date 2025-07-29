@@ -217,13 +217,13 @@ void do_merchant(void)
 
 			/* debt logic in shops */
 
-			if (ds_readws(BANK_DEPOSIT) <= -1000 && ds_readws(DEBT_DAYS) == 0) {
+			if ((gs_bank_deposit <= -1000) && !gs_debt_days) {
 
 				GUI_output(get_ttx(761));
-				ds_writews(DEBT_DAYS, 7);
+				gs_debt_days = 7;
 			}
 
-			if (ds_readws(DEBT_DAYS) == -1) {
+			if (gs_debt_days == -1) {
 
 				if (GUI_bool(get_ttx(762))) {
 
@@ -236,9 +236,9 @@ void do_merchant(void)
 						done = 1;
 
 					} else {
-						add_ds_ws(BANK_DEPOSIT, 500);
-						if (ds_readws(BANK_DEPOSIT) > -1000) {
-							ds_writews(DEBT_DAYS, 0);
+						gs_bank_deposit += 500;
+						if (gs_bank_deposit > -1000) {
+							gs_debt_days = 0;
 						}
 
 						party_money -= 5000;

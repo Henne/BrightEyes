@@ -32,7 +32,7 @@ void THO_hetmann(void)
 	load_in_head(66);
 
 	if (!ds_readb(GOT_LETTER_HET) &&
-		ds_readw(GOT_MAIN_QUEST) != 0 &&
+		gs_got_main_quest != 0 &&
 		(ds_readb(JURGE_AWAITS_LETTER) != 0 || gs_need_letter))
 	{
 
@@ -62,7 +62,7 @@ void THO_hetmann(void)
 		ds_writeb(GOT_LETTER_HET, 1);
 		get_item(ITEM_WRITING_OF_HETMAN, 1, 1);
 
-	} else if (!gs_heard_announce || ds_readw(GOT_MAIN_QUEST) != 0) {
+	} else if (!gs_heard_announce || gs_got_main_quest != 0) {
 
 		GUI_output(get_tx2(0));
 
@@ -116,16 +116,16 @@ void THO_hetmann(void)
 
 			ds_writeb(INFORMER_FLAGS + INFORMER_ISLEIF, 1);
 			gs_subvention++;
-			ds_writew(GOT_MAIN_QUEST, 1);
-			ds_writew(QUESTED_MONTHS, 0);
+			gs_got_main_quest = 1;
+			gs_quested_months = 0;
 
 		} else if (answer == 2) {
 
 			GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(85), get_tx2(15), 0);
 
 			ds_writeb(INFORMER_FLAGS + INFORMER_ISLEIF, 1);
-			ds_writew(GOT_MAIN_QUEST, 1);
-			ds_writew(QUESTED_MONTHS, 0);
+			gs_got_main_quest = 1;
+			gs_quested_months = 0;
 			ds_writeb(GOT_LETTER_HET, 1);
 			get_item(ITEM_WRITING_OF_HETMAN, 1, 1);
 
@@ -143,8 +143,8 @@ void THO_hetmann(void)
 			if (answer == 1) {
 				GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(85), get_tx2(19), 0);
 
-				ds_writew(GOT_MAIN_QUEST, 1);
-				ds_writew(QUESTED_MONTHS, 0);
+				gs_got_main_quest = 1;
+				gs_quested_months = 0;
 			}
 		}
 	}

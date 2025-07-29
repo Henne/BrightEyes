@@ -152,7 +152,7 @@ void TM_func1(signed short route_no, signed short backwards)
     ) * 18);
 
 	/* random section starts */
-	if (ds_readws(QUESTED_MONTHS) > 3)
+	if (gs_quested_months > 3)
 	{
 		if ((ds_writew(ROUTE_INFORMER_FLAG, (random_schick(100) <= 2 ? 1 : 0))) != 0)
 		{
@@ -401,7 +401,7 @@ void TM_func1(signed short route_no, signed short backwards)
 					ds_writew(ROUTE_FIGHT_TIME, random_schick(ds_readws(ROUTE_DAYPROGRESS)));
 				}
 
-				if (ds_readws(QUESTED_MONTHS) > 3)
+				if (gs_quested_months > 3)
 				{
 					if ((ds_writew(ROUTE_INFORMER_FLAG, random_schick(100) <= 2 ? 1 : 0)) != 0)
 					{

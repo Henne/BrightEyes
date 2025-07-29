@@ -298,7 +298,7 @@ signed short DNG14_handler(void)
 
 		ds_writeb(DNG14_UGDALF_DONE, 1);
 
-		ds_writew(QUEST_UGDALF, 3);
+		gs_quest_ugdalf = 3;
 
 	} else if (pos == DNG_POS(1,1,9) &&
 		(pos != ds_readws(DNG_HANDLED_POS) || ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK)) &&

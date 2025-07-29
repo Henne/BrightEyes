@@ -1941,27 +1941,27 @@ void timers_daily(void)
 
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug: Reenable identifying item in the academy */
-	ds_writew(ACADEMY_DAILY_IDENT, 0);
+	gs_academy_daily_ident = 0;
 #endif
 
 	/* Decrase monthly credit cens timer (bank) */
-	if (ds_readws(DAYS_TO_CENS) > 0) {
+	if (gs_days_to_cens > 0) {
 
-		dec_ds_ws(DAYS_TO_CENS);
+		gs_days_to_cens--;
 
-		if (ds_readws(DAYS_TO_CENS) == 0) {
-			ds_writew(MONTHLY_CREDIT, 0);
+		if (!gs_days_to_cens) {
+			gs_monthly_credit = 0;
 		}
 	}
 
 	/* Days until you run in trouble, if you have more
 		than 1000S debt at the bank */
-	if (ds_readws(DEBT_DAYS) > 0) {
+	if (gs_debt_days > 0) {
 
-		dec_ds_ws(DEBT_DAYS);
+		gs_debt_days--;
 
-		if (ds_readws(DEBT_DAYS) == 0) {
-			ds_writew(DEBT_DAYS, -1);
+		if (!gs_debt_days) {
+			gs_debt_days = -1;
 		}
 	}
 }
@@ -2170,9 +2170,9 @@ void do_census(void)
 	signed short si = 0;
 	Bit32s val;
 
-	if (ds_readws(BANK_DEPOSIT) > 0) {
+	if (gs_bank_deposit > 0) {
 		si = 1;
-	} else if (ds_readws(BANK_DEPOSIT) < 0) {
+	} else if (gs_bank_deposit < 0) {
 			si = -1;
 	}
 
@@ -2181,15 +2181,16 @@ void do_census(void)
 		return;
 
 	/* convert to heller */
-	val = ds_readws(BANK_DEPOSIT) * 10L;
+	val = gs_bank_deposit * 10L;
 	val += ds_readws(BANK_HELLER);
 
-	if (val < 0)
+	if (val < 0) {
 		/* 15% Interest for borrowed money */
 		val += val * 15 / 100L / 12L;
-	else if (val > 0)
+	} else if (val > 0) {
 		/* 5% Interest for deposited money */
-			val += val * 5 / 100L / 12L;
+		val += val * 5 / 100L / 12L;
+	}
 
 	/* remember the heller */
 	ds_writew(BANK_HELLER, val % 10);
@@ -2199,18 +2200,20 @@ void do_census(void)
 	}
 
 	/* save the new deposit */
-	ds_writew(BANK_DEPOSIT, (signed short)(val / 10));
+	gs_bank_deposit = val / 10;
 
 	/* fixup over- and underflows */
-	if ((ds_readws(BANK_DEPOSIT) < 0) && (si == 1))
-		ds_writew(BANK_DEPOSIT, 32760);
-	else if ((ds_readws(BANK_DEPOSIT) > 0) && (si == -1))
-			ds_writew(BANK_DEPOSIT, -32760);
+	if ((gs_bank_deposit < 0) && (si == 1)) {
+		gs_bank_deposit = 32760;
+	} else if ((gs_bank_deposit > 0) && (si == -1)) {
+		gs_bank_deposit = -32760;
+	}
 
 }
 
+/* called from timewarp(..), timewarp_until_time_of_day(..),
+ * timewarp_until_midnight(..) and interrupt timer_isr() */
 void do_timers(void)
-	/* called from timewarp(..), timewarp_until_time_of_day(..), timewarp_until_midnight(..) and interrupt timer_isr() */
 {
 	Bit8u *hero_i;
 	signed char afternoon;
@@ -2219,8 +2222,9 @@ void do_timers(void)
 
 	afternoon = 0;
 
+	/* TIMERS_DISABLED is set during a fight, a level-up or if
+	 * the game is paused (Ctrl + P) */
 	if (g_timers_disabled)
-		/* TIMERS_DISABLED is set during a fight or a level-up or if the game is paused (Ctrl + P) */
 		return;
 
 	dawning();
@@ -2423,13 +2427,14 @@ void do_timers(void)
 
 		/* calendar */
 		if (gs_day_of_month == 31) {
+
 			/* new month */
 			gs_day_of_month = 1;
 			gs_month++;
 
 			/* increment quested months counter */
-			if (ds_readw(GOT_MAIN_QUEST) != 0) {
-				inc_ds_ws(QUESTED_MONTHS);
+			if (gs_got_main_quest) {
+				gs_quested_months++;
 			}
 
 			/* increment the months the NPC is in the group */

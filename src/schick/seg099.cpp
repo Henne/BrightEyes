@@ -1001,7 +1001,7 @@ char* spell_analues(void)
 	signed short item_pos;
 
 	/* set analyzation capabilities */
-	if (ds_readw(IN_ACADEMY) == 99) {
+	if (gs_in_academy == 99) {
 		ds_writew(SPELLTEST_RESULT, 99);
 	}
 
@@ -1049,7 +1049,7 @@ char* spell_analues(void)
 		}
 	}
 
-	if (ds_readws(IN_ACADEMY) != 99) {
+	if (gs_in_academy != 99) {
 
 		/* prepare message */
 		sprintf((char*)g_dtp2, get_tx(53), (char*)get_spelluser() + HERO_NAME2, g_text_output_buf);

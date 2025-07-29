@@ -227,7 +227,7 @@ void tevent_037(void)
 /* unicorn 1st time */
 void tevent_038(void)
 {
-	if (!ds_readb(MET_UNICORN_FLAG) && ds_readws(GOT_MAIN_QUEST) != 0)
+	if (!ds_readb(MET_UNICORN_FLAG) && gs_got_main_quest != 0)
 	{
 		do_talk(11, 2);
 		ds_writeb(MET_UNICORN_FLAG, 1);

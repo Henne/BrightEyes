@@ -547,7 +547,7 @@ signed short tavern_quest_infos(void)
 			((ds_readws(CURRENT_TYPEINDEX) == 14) || (ds_readws(CURRENT_TYPEINDEX) == 15)) &&
 			(ds_readb(INFORMER_FLAGS + INFORMER_ASGRIMM) != 2) &&
 			(ds_readb(INFORMER_FLAGS + INFORMER_ASGRIMM) != 0) &&
-			(ds_readws(GOT_MAIN_QUEST) != 0))
+			(gs_got_main_quest != 0))
 	{
 		/* meet Informer Asgrimm */
 

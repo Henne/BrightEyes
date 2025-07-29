@@ -396,7 +396,7 @@ void INF_eliane_tiomar(signed short informer, signed short state)
 		/* ELIANE WINDENBECK */
 
 		if (!state) {
-			ds_writew(DIALOG_NEXT_STATE, ds_readb(ELIANE_QUEST_NAMELESS) || ds_readw(GOT_MAIN_QUEST) == 0 ? 1 : 6);
+			ds_writew(DIALOG_NEXT_STATE, ds_readb(ELIANE_QUEST_NAMELESS) || gs_got_main_quest == 0 ? 1 : 6);
 		} else if (state == 1) {
 			ds_writew(DIALOG_NEXT_STATE, ds_readb(QUEST_NAMELESS_DONE) && ds_readb(INFORMER_FLAGS + INFORMER_ELIANE) != 2 ? 2 : 3);
 		} else if (state == 5 || state == 27) {
@@ -550,7 +550,7 @@ void INF_olvir_asgrimm(signed short informer, signed short state)
 		/* ASGRIMM THURBOLDSSON */
 
 		if (!state) {
-			ds_writew(DIALOG_NEXT_STATE, ds_readb(TLK_TAV_FOLLOWINFORMER) != 0 ? 22 : (ds_readw(GOT_MAIN_QUEST) == 0|| ds_readb(INFORMER_FLAGS + INFORMER_ASGRIMM) == 2 ? 1 : 2));
+			ds_writew(DIALOG_NEXT_STATE, ds_readb(TLK_TAV_FOLLOWINFORMER) != 0 ? 22 : (gs_got_main_quest == 0|| ds_readb(INFORMER_FLAGS + INFORMER_ASGRIMM) == 2 ? 1 : 2));
 		} else if (state == 2) {
 			/* mark ASGRIMM THURBOLDSSON as done */
 			ds_writeb(INFORMER_FLAGS + INFORMER_ASGRIMM, 2);

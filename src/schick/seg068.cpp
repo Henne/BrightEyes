@@ -35,10 +35,8 @@ void THO_eisenhof(void)
 	Bit32s money;
 
 	do {
-		answer = GUI_radio(get_tx2(47), 3,
-					get_tx2(48),
-					get_tx2(49),
-					get_tx2(50));
+		answer = GUI_radio(get_tx2(47), 3, get_tx2(48),	get_tx2(49), get_tx2(50));
+
 	} while (answer == -1);
 
 	if (answer == 1) {
@@ -59,8 +57,7 @@ void THO_eisenhof(void)
 
 			GUI_input(get_tx2(52), 0);
 
-			sprintf((char*)g_dtp2,
-					get_tx(random_schick(26) + 55));
+			sprintf((char*)g_dtp2, get_tx(random_schick(26) + 55));
 			GUI_input((char*)g_dtp2, 0);
 		} else {
 			GUI_input(get_tx2(53), 0);
@@ -79,21 +76,20 @@ void THO_imman(void)
 		/* ask to visit the game */
 		if (GUI_bool(get_tx2(55)) != 0) {
 
-		tmp = random_schick(4) + 0x38;
-		sprintf((char*)g_dtp2,
-			get_tx2(56),
-			/* winner */
-			get_tx2(tmp),
-			/* looser */
-			get_tx2(random_schick(7) + 0x3c),
-			/* winner */
-			get_tx2(tmp),
-			/* winners points */
-			random_interval(15, 30),
-			/* loosers points */
-			random_schick(14));
+			tmp = random_schick(4) + 0x38;
+			sprintf((char*)g_dtp2, get_tx2(56),
+				/* winner */
+				get_tx2(tmp),
+				/* looser */
+				get_tx2(random_schick(7) + 0x3c),
+				/* winner */
+				get_tx2(tmp),
+				/* winners points */
+				random_interval(15, 30),
+				/* loosers points */
+				random_schick(14));
 
-		GUI_input((char*)g_dtp2, 0);
+			GUI_input((char*)g_dtp2, 0);
 		}
 	} else {
 		/* no imman game at the moment */
@@ -128,12 +124,12 @@ void THO_bank(void)
 
 	done = 0;
 
-	if (ds_readws(BANK_DEPOSIT) <= -1000) {
+	if (gs_bank_deposit <= -1000) {
 
 		GUI_input(get_tx2(77), 0);
 
-		if (ds_readws(DEBT_DAYS) == 0) {
-			ds_writews(DEBT_DAYS, 7);
+		if (!gs_debt_days) {
+			gs_debt_days = 7;
 		}
 	}
 
@@ -141,13 +137,10 @@ void THO_bank(void)
 
 	do {
 
-		sprintf((char*)g_text_output_buf,
-			get_tx2(72),
-			ds_readws(BANK_DEPOSIT));
+		sprintf((char*)g_text_output_buf, get_tx2(72), gs_bank_deposit);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(81),
-						(char*)g_text_output_buf, 3,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(81), (char*)g_text_output_buf, 3,
 						get_tx2(73), get_tx2(74), get_tx2(80));
 		} while (answer == -1);
 
@@ -157,50 +150,50 @@ void THO_bank(void)
 			answer = GUI_input(get_tx2(75), 3);
 
 			if (answer <= 0) {
-				GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(81),
-						get_tx2(79), 0);
+
+				GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(81), get_tx2(79), 0);
+
 			} else {
 
-				if (ds_readws(DAYS_TO_CENS) != 0 ||
-					(ds_readws(BANK_DEPOSIT) > 0 && ds_readws(BANK_DEPOSIT) + 200 < answer) ||
-					(ds_readws(BANK_DEPOSIT) <= 0 && answer > 200))
-				{
-					GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(81),
-							get_tx2(76), 0);
+				if (gs_days_to_cens
+					|| ((gs_bank_deposit > 0) && (gs_bank_deposit + 200 < answer))
+					|| ((gs_bank_deposit <= 0) && (answer > 200))) {
+
+					GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(81), get_tx2(76), 0);
+
 				} else {
 
-					if (ds_readws(BANK_DEPOSIT) < answer) {
+					if (gs_bank_deposit < answer) {
 
-						if (ds_readws(BANK_DEPOSIT) > 0) {
-							answer -= ds_readws(BANK_DEPOSIT);
+						if (gs_bank_deposit > 0) {
+							answer -= gs_bank_deposit;
 							p_money = get_party_money();
-							p_money += 10 * ds_readws(BANK_DEPOSIT);
+							p_money += 10 * gs_bank_deposit;
 							set_party_money(p_money);
-							ds_writews(BANK_DEPOSIT, 0);
+							gs_bank_deposit = 0;
 						}
 
-						add_ds_ws(MONTHLY_CREDIT, answer);
+						gs_monthly_credit += answer;
 
-						if (ds_readws(MONTHLY_CREDIT) > 200) {
+						if (gs_monthly_credit > 200) {
 
-							GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(81),
-									get_tx2(76), 0);
+							GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(81), get_tx2(76), 0);
 
-							l3 = ds_readws(MONTHLY_CREDIT) - 200;
+							l3 = gs_monthly_credit - 200;
 							answer -= l3;
-							ds_writews(MONTHLY_CREDIT, 200);
+							gs_monthly_credit = 200;
 
 							if (answer < 0) {
 								answer = 0;
 							}
 						}
 
-						if (ds_readws(MONTHLY_CREDIT) >= 200) {
-							ds_writews(DAYS_TO_CENS, 30);
+						if (gs_monthly_credit >= 200) {
+							gs_days_to_cens = 30;
 						}
 					}
 
-					sub_ds_ws(BANK_DEPOSIT, answer);
+					gs_bank_deposit -= answer;
 					p_money = get_party_money();
 					p_money += 10 * answer;
 					set_party_money(p_money);
@@ -209,7 +202,7 @@ void THO_bank(void)
 
 		} else if (answer == 1) {
 
-			if (ds_readws(BANK_DEPOSIT) >= 30000) {
+			if (gs_bank_deposit >= 30000) {
 
 				/* prevent overflow  at 32767 */
 				GUI_output((char*)(p_datseg + STR_BANK_DEPOSIT_TO_BIG));
@@ -220,31 +213,34 @@ void THO_bank(void)
 				p_money = get_party_money();
 
 				if (answer * 10 > p_money) {
+
 					GUI_output(get_ttx(401));
+
 				} else {
 
 					if (answer <= 0) {
 
-						GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(81),
-								get_tx2(79), 0);
+						GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(81), get_tx2(79), 0);
 
 					} else {
 
 						p_money -= 10 * answer;
 						set_party_money(p_money);
-						ds_writews(DAYS_TO_CENS, 0);
-						add_ds_ws(BANK_DEPOSIT, answer);
+						gs_days_to_cens = 0;
+						gs_bank_deposit += answer;
 
-						if (ds_readws(MONTHLY_CREDIT) != 0) {
+						if (gs_monthly_credit) {
 
-							sub_ds_ws(MONTHLY_CREDIT, answer);
+							gs_monthly_credit -= answer;
 
-							if (ds_readws(MONTHLY_CREDIT) < 0) {
-								ds_writews(MONTHLY_CREDIT, 0);
+							if (gs_monthly_credit < 0) {
+
+								gs_monthly_credit = 0;
 							}
 						}
-						if (ds_readws(BANK_DEPOSIT) > -1000) {
-							ds_writews(DEBT_DAYS, 0);
+
+						if (gs_bank_deposit > -1000) {
+							gs_debt_days = 0;
 						}
 					}
 				}
@@ -329,7 +325,7 @@ void THO_magistracy(void)
 {
 	signed short answer;
 
-	if (ds_readw(GOT_MAIN_QUEST) == 0) {
+	if (!gs_got_main_quest) {
 
 		GUI_output(get_tx2(5));
 		GUI_output(get_tx2(6));
@@ -338,17 +334,16 @@ void THO_magistracy(void)
 	} else {
 
 		do {
-			answer = GUI_radio(get_tx2(5), 3,
-						get_tx2(8),
-						get_tx2(9),
-						get_tx2(10));
+			answer = GUI_radio(get_tx2(5), 3, get_tx2(8), get_tx2(9), get_tx2(10));
+
 		} while (answer == -1);
 
 		if (answer == 1) {
 
-			if (ds_readws(GOT_LETTER_JAD) == 0) {
+			if (!gs_got_letter_jad) {
 
-				ds_writews(GOT_LETTER_JAD, 1);
+				gs_got_letter_jad = 1;
+
 				GUI_output(get_tx2(14));
 
 				/* get "LETTER FROM JADRA" */
@@ -357,9 +352,11 @@ void THO_magistracy(void)
 			} else {
 				GUI_output(get_tx2(15));
 			}
+
 		} else if (answer == 2) {
 
 			GUI_output(get_tx2(12));
+
 		} else {
 			GUI_output(get_tx2(13));
 		}
@@ -370,11 +367,11 @@ void THO_mueller(void)
 {
 	if (GUI_bool(get_tx2(16))) {
 
-		GUI_output((ds_readw(VISITED_MILLER) == 0) ? /* first visit ? */
-			get_tx2(17) : get_tx2(18));
+		/* first visit ? */
+		GUI_output(!gs_visited_miller ? get_tx2(17) : get_tx2(18));
 
 		/* mark the miller as visited */
-		ds_writew(VISITED_MILLER, 1);
+		gs_visited_miller = 1;
 	}
 }
 
@@ -397,9 +394,9 @@ void THO_ugdalf(void)
 	signed short answer;
 	signed short randval;
 
-	load_in_head(ds_readw(QUEST_UGDALF) == 0 ? 0 : 14);
+	load_in_head(gs_quest_ugdalf == 0 ? 0 : 14);
 
-	if (ds_readw(QUEST_UGDALF) == 0) {
+	if (gs_quest_ugdalf == 0) {
 
 		/* talk to the guards */
 		randval = random_schick(10) - 1;
@@ -424,22 +421,21 @@ void THO_ugdalf(void)
 			dramosch_says(get_tx2(29));
 
 			do {
-				answer = GUI_dialogbox((unsigned char*)g_dtp2,
-							get_tx2(48), get_tx2(30), 2,
-							get_tx2(31), get_tx2(32));
+				answer = GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(48), get_tx2(30), 2, get_tx2(31), get_tx2(32));
+
 			} while (answer == -1);
 
 			if (answer == 1) {
 				/* take the quest */
 				dramosch_says(get_tx2(33));
-				ds_writew(QUEST_UGDALF, 1);
+				gs_quest_ugdalf = 1;
 
 			} else {
 
 				dramosch_says(get_tx2(34));
 			}
 		}
-	} else if (ds_readw(QUEST_UGDALF) == 1 || !ds_readb(DNG14_UGDALF_DONE)) {
+	} else if (gs_quest_ugdalf == 1 || !ds_readb(DNG14_UGDALF_DONE)) {
 
 		dramosch_says(get_tx2(35));
 
@@ -449,7 +445,7 @@ void THO_ugdalf(void)
 		ds_writews(X_TARGET_BAK, ds_readw(X_TARGET));
 		ds_writews(Y_TARGET_BAK, ds_readw(Y_TARGET));
 
-		if (ds_readw(QUEST_UGDALF) == 1) {
+		if (gs_quest_ugdalf == 1) {
 			add_party_money(2000L);
 
 		/* Original-Bug:	Everytime the heroes enter the dungeon they get 20D.
@@ -457,18 +453,18 @@ void THO_ugdalf(void)
 					As long as ds_readb(DNG14_UGDALF_DONE) is 0 this block is executed.
 		 */
 #ifdef M302de_ORIGINAL_BUGFIX
-			ds_writew(QUEST_UGDALF, 2);
+			gs_quest_ugdalf = 2;
 #endif
 		}
 
-	} else if (ds_readw(QUEST_UGDALF) == 3) {
+	} else if (gs_quest_ugdalf == 3) {
 
 		/* talk with DRAMOSCH for 8 h */
 		dramosch_says(get_tx2(36));
 		timewarp(HOURS(8));
 
 		/* mark this quest as done */
-		ds_writew(QUEST_UGDALF, 4);
+		gs_quest_ugdalf = 4;
 
 		/* get the reward */
 		add_hero_ap_all(25);
@@ -498,7 +494,7 @@ void academy_analues(void)
 	GUI_input(get_tx2(62), 0);
 
 	/* change behavior of analues spell */
-	ds_writew(IN_ACADEMY, 99);
+	gs_in_academy = 99;
 
 	/* select a hero (does not need to be a magic user here) */
 	hero_pos = select_hero_ok(get_ttx(794));
@@ -520,11 +516,11 @@ void academy_analues(void)
 
 		GUI_input((char*)g_dtp2, 0);
 
-		ds_writew(ACADEMY_DAILY_IDENT, 1);
+		gs_academy_daily_ident = 1;
 	}
 
 	/* change behaviour of analues spell */
-	ds_writew(IN_ACADEMY, 0);
+	gs_in_academy = 0;
 }
 
 void THO_academy(void)
@@ -550,10 +546,8 @@ void THO_academy(void)
 	}
 
 	do {
-		answer = GUI_radio(get_tx2(49), 3,
-					get_tx2(50),
-					get_tx2(51),
-					get_tx2(52));
+		answer = GUI_radio(get_tx2(49), 3, get_tx2(50), get_tx2(51), get_tx2(52));
+
 	} while (answer == -1);
 
 	if (answer == 1) {
@@ -564,20 +558,17 @@ void THO_academy(void)
 
 			GUI_input(get_tx2(67), 0);
 
-		} else if (ds_readw(ACADEMY_DAILY_CURSE) != 0) {
+		} else if (gs_academy_daily_curse != 0) {
 
 			GUI_input(get_tx2(65), 0);
 
 		} else {
 
-			sprintf((char*)g_dtp2,
-				get_tx2(53),
-				(char*)hero + HERO_NAME2);
+			sprintf((char*)g_dtp2, get_tx2(53), (char*)hero + HERO_NAME2);
 
 			do {
-				answer = GUI_radio((char*)g_dtp2, 2,
-							get_tx2(68),
-							get_tx2(69));
+				answer = GUI_radio((char*)g_dtp2, 2, get_tx2(68), get_tx2(69));
+
 			} while (answer == -1);
 
 			if (answer == 1) {
@@ -586,16 +577,12 @@ void THO_academy(void)
 
 				if (item_id >= 0) {
 
-					sprintf((char*)g_dtp2,
-						get_tx2(56),
-						(char*)(GUI_names_grammar((signed short)0x8002, item_id, 0)));
+					sprintf((char*)g_dtp2, get_tx2(56),
+						(char*)GUI_names_grammar((signed short)0x8002, item_id, 0));
 
 					do {
-						answer = GUI_radio((char*)g_dtp2, 4,
-									get_tx2(57),
-									get_tx2(58),
-									get_tx2(59),
-									get_tx2(60));
+						answer = GUI_radio((char*)g_dtp2, 4, get_tx2(57), get_tx2(58), get_tx2(59), get_tx2(60));
+
 					} while (answer == -1);
 
 					if (answer == 1 || answer == 3) {
@@ -612,9 +599,10 @@ void THO_academy(void)
 							GUI_input(get_tx2(62), 0);
 							GUI_input(get_tx2(63), 0);
 
-							ds_writew(ACADEMY_DAILY_CURSE, 1);
+							gs_academy_daily_curse = 1;
 
-							and_ptr_bs(get_hero(cursed_hero_pos) + HERO_FLAGS1, 0xdf); /* unset 'renegate' flag */
+							/* unset 'renegate' flag */
+							and_ptr_bs(get_hero(cursed_hero_pos) + HERO_FLAGS1, 0xdf);
 
 						} else {
 							GUI_input(get_tx2(70), 0);
@@ -629,7 +617,7 @@ void THO_academy(void)
 
 					GUI_input(get_tx2(63), 0);
 
-					ds_writew(ACADEMY_DAILY_CURSE, 1);
+					gs_academy_daily_curse = 1;
 
 					and_ptr_bs(get_hero(cursed_hero_pos) + HERO_FLAGS1, 0xdf); /* unset 'renegate' flag */
 
@@ -645,16 +633,15 @@ void THO_academy(void)
 
 		/* identify item */
 
-		if (ds_readw(ACADEMY_DAILY_IDENT) != 0) {
+		if (gs_academy_daily_ident != 0) {
 
 			GUI_input(get_tx2(66), 0);
 
 		} else {
 
 			do {
-				answer = GUI_radio(get_tx2(54), 2,
-							get_tx2(68),
-							get_tx2(69));
+				answer = GUI_radio(get_tx2(54), 2, get_tx2(68), get_tx2(69));
+
 			} while (answer == -1);
 
 			if (answer == 1) {
@@ -663,16 +650,12 @@ void THO_academy(void)
 
 				if (item_id >= 0) {
 
-					sprintf((char*)g_dtp2,
-						get_tx2(56),
-						(char*)(GUI_names_grammar((signed short)0x8002, item_id, 0)));
+					sprintf((char*)g_dtp2, get_tx2(56),
+						(char*)GUI_names_grammar((signed short)0x8002, item_id, 0));
 
 					do {
-						answer = GUI_radio((char*)g_dtp2, 4,
-									get_tx2(57),
-									get_tx2(58),
-									get_tx2(59),
-									get_tx2(60));
+						answer = GUI_radio((char*)g_dtp2, 4, get_tx2(57), get_tx2(58), get_tx2(59), get_tx2(60));
+
 					} while (answer == -1);
 
 					if (answer == 1 || answer == 3) {

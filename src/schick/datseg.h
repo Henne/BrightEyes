@@ -88,6 +88,19 @@ extern Bit16s gs_otta_stormchildren;		//ds:0x3346; seg069
 extern Bit16s gs_otta_garaldsson;		//ds:0x3348; seg069
 extern Bit16s gs_heard_announce;		//ds:0x334a; seg069, seg073
 extern Bit16s gs_got_main_quest;		//ds:0x334c; seg069, seg073
+extern Bit16s gs_quested_months;		//ds:0x334e; seg002-seg094
+extern Bit16s gs_monthly_credit;		//ds:0x3350; seg002, seg068
+extern Bit16s gs_got_letter_jad;		//ds:0x3352; seg068
+extern Bit16s gs_visited_miller;		//ds:0x3354; seg068
+extern Bit16s gs_quest_ugdalf;			//ds:0x3356; seg068, seg087
+extern Bit16s gs_academy_daily_curse;		//ds:0x3358; seg068
+extern Bit16s gs_academy_daily_ident;		//ds:0x335a; seg002, seg068
+extern Bit16s gs_bank_deposit;			//ds:0x335c; seg002, seg055, seg068
+extern Bit16s gs_days_to_cens;			//ds:0x335e; seg002, seg068
+extern Bit16s gs_debt_days;			//ds:0x3360; seg002, seg055, seg068
+extern Bit16s gs_in_academy;			//ds:0x3362; seg068, seg099
+extern Bit8s  gs_informer_flags[16];		//ds:0x3364;
+
 extern Bit8s  gs_always_one2;			//ds:0x35f3; seg078
 
 extern Bit8s  gs_dng07_poison_flag;		//ds:0x3cb5; seg082
