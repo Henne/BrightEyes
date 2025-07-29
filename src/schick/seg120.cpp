@@ -87,11 +87,9 @@ void rabies(Bit8u* hero, signed short hero_pos)
 
 		if (count_heroes_available_in_group() > 1) {
 
-			sprintf((char*)g_dtp2,
-				get_ttx(741),
-				(char*)hero + HERO_NAME2,
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
+			sprintf((char*)g_dtp2, get_ttx(741), (char*)hero + HERO_NAME2,
+				(char*)GUI_get_ptr(host_readbs(hero + HERO_SEX), 2),
+				(char*)GUI_get_ptr(host_readbs(hero + HERO_SEX), 2));
 
 			sprintf((char*)g_dtp2 + 500, get_ttx(742), (char*)hero + HERO_NAME2);
 
@@ -114,7 +112,7 @@ void rabies(Bit8u* hero, signed short hero_pos)
 
 				GUI_output((char*)g_dtp2);
 
-				ds_writeb(HERO_SEL_EXCLUDE, (signed char)hero_pos);
+				g_hero_sel_exclude = (signed char)hero_pos;
 
 				answer = select_hero_ok(get_ttx(395));
 
@@ -141,7 +139,7 @@ void rabies(Bit8u* hero, signed short hero_pos)
 
 						GUI_output((char*)g_dtp2);
 
-						ds_writeb(HERO_SEL_EXCLUDE, (signed char)hero_pos);
+						g_hero_sel_exclude = (signed char)hero_pos;
 
 						answer = select_hero_ok(get_ttx(395));
 
@@ -154,7 +152,7 @@ void rabies(Bit8u* hero, signed short hero_pos)
 			} else if (answer == 3) {
 				/* cast a spell */
 
-				ds_writeb(HERO_SEL_EXCLUDE, (signed char)hero_pos);
+				g_hero_sel_exclude = (signed char)hero_pos;
 
 				answer = select_hero_ok(get_ttx(213));
 
@@ -179,7 +177,7 @@ void rabies(Bit8u* hero, signed short hero_pos)
 
 								GUI_output((char*)g_dtp2);
 
-								ds_writeb(HERO_SEL_EXCLUDE, (signed char)hero_pos);
+								g_hero_sel_exclude = (signed char)hero_pos;
 
 								answer = select_hero_ok(get_ttx(395));
 
@@ -188,10 +186,7 @@ void rabies(Bit8u* hero, signed short hero_pos)
 								}
 							}
 						} else {
-							sprintf((char*)g_dtp2,
-								get_ttx(607),
-								(char*)hero2 + HERO_NAME2);
-
+							sprintf((char*)g_dtp2, get_ttx(607), (char*)hero2 + HERO_NAME2);
 							GUI_output((char*)g_dtp2);
 						}
 					}

@@ -82,6 +82,7 @@ extern char g_game_version[6];			//ds:0x46ec; seg002
 extern signed short g_delay_factor;		//ds:0x4b66; seg005, seg025
 
 extern signed short g_fig_all_heroes_withdrawn; //ds:0x5f14; seg032
+extern signed char g_hero_sel_exclude;		//ds:0x64a2; seg047, seg049, seg103, seg120
 
 extern unsigned char *g_hexenknoten_gfx_buf;	// ds:0xacc8; seg100
 extern signed short g_monster_spell_ae_cost;	// ds:0xaccc; seg102

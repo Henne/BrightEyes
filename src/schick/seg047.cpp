@@ -429,7 +429,7 @@ signed short select_hero_from_group(char *title)
 		if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 			host_readb(hero + HERO_GROUP_NO) == gs_current_group &&
 				/* TODO: find out what that means */
-				ds_readbs(HERO_SEL_EXCLUDE) != i) {
+				g_hero_sel_exclude != i) {
 
 			/* save pointer to the name of the hero */
 			ds_writed(RADIO_NAME_LIST + cnt * 4, (Bit32u)(hero + HERO_NAME2));
@@ -439,7 +439,7 @@ signed short select_hero_from_group(char *title)
 	}
 
 
-	ds_writeb(HERO_SEL_EXCLUDE, -1);
+	g_hero_sel_exclude = -1;
 
 	if (cnt != 0) {
 		bak_2 = ds_readw(BASEPOS_X);
@@ -505,7 +505,7 @@ signed short select_hero_ok(char *title)
 			host_readb(hero + HERO_GROUP_NO) == gs_current_group &&
 			check_hero(hero) &&
 				/* TODO: find out what that means */
-				ds_readbs(HERO_SEL_EXCLUDE) != i) {
+				g_hero_sel_exclude != i) {
 
 			/* save pointer to the name of the hero */
 			ds_writed(RADIO_NAME_LIST + cnt * 4, (Bit32u)(hero + HERO_NAME2));
@@ -514,7 +514,7 @@ signed short select_hero_ok(char *title)
 		}
 	}
 
-	ds_writeb(HERO_SEL_EXCLUDE, -1);
+	g_hero_sel_exclude = -1;
 
 	if (cnt != 0) {
 		bak_2 = ds_readw(BASEPOS_X);
@@ -583,7 +583,7 @@ signed short select_hero_ok_forced(char *title)
 			host_readb(hero + HERO_GROUP_NO) == gs_current_group &&
 			check_hero(hero) &&
 				/* TODO: find out what that means */
-				ds_readbs(HERO_SEL_EXCLUDE) != i) {
+				g_hero_sel_exclude != i) {
 
 			/* save pointer to the name of the hero */
 			ds_writed(RADIO_NAME_LIST + cnt * 4, (Bit32u)(hero + HERO_NAME2));
@@ -592,7 +592,7 @@ signed short select_hero_ok_forced(char *title)
 		}
 	}
 
-	ds_writeb(HERO_SEL_EXCLUDE, -1);
+	g_hero_sel_exclude = -1;
 
 	if (cnt != 0) {
 		do {

@@ -334,7 +334,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 		switch(skill) {
 		case TA_HEILEN_GIFT: {
-			ds_writeb(HERO_SEL_EXCLUDE, (signed char)hero_pos);
+			g_hero_sel_exclude = (signed char)hero_pos;
 
 			patient_pos = select_hero_from_group(get_ttx(460));
 
@@ -443,7 +443,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 			break;
 		}
 		case  TA_HEILEN_KRANKHEITEN : {
-			ds_writeb(HERO_SEL_EXCLUDE, (signed char)hero_pos);
+			g_hero_sel_exclude = (signed char)hero_pos;
 
 			patient_pos = select_hero_from_group(get_ttx(460));
 
@@ -455,7 +455,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 			break;
 		}
 		case TA_HEILEN_WUNDEN : {
-			ds_writeb(HERO_SEL_EXCLUDE, (signed char)hero_pos);
+			g_hero_sel_exclude = (signed char)hero_pos;
 
 			patient_pos = select_hero_from_group(get_ttx(460));
 

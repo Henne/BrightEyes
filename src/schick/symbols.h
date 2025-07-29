@@ -993,7 +993,7 @@
 #define STATUSPAGE_SKILLS_XY            (0x6476)    /* struct(6)[7]; struct{unsigned short x_name,x_val,y;} */
 #define EMPTY_STRING6                   (0x64a0)    /* char; "" */
 #define EMPTY_STRING7                   (0x64a1)    /* char; "" */
-#define HERO_SEL_EXCLUDE                (0x64a2)    /* signed char */
+//#define HERO_SEL_EXCLUDE                (0x64a2)    /* signed char */
 #define SEG047_INIT1                    (0x64a3)    /* signed short[7]; filled with zeroes */
 #define SEG047_INIT2                    (0x64b1)    /* signed short[7]; filled with zeroes */
 #define SEG047_INIT3                    (0x64bf)    /* signed short[7]; filled with zeroes */

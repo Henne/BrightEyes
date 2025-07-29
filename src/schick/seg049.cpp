@@ -188,7 +188,7 @@ void GRP_split(void)
 		}
 
 		do {
-			ds_writeb(HERO_SEL_EXCLUDE, 6);
+			g_hero_sel_exclude = 6;
 			answer = select_hero_from_group(get_ttx(515));
 
 			if (answer == -1) {
