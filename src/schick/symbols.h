@@ -237,11 +237,11 @@
 #define DUNGEON_LEVEL_BAK               (0x2db4)    /* signed char */
 #define GROUPS_DNG_LEVEL_BAK            (0x2db5)    /* signed char[6] */
 //#define DAY_TIMER                       (0x2dbb)    /* long */
-#define DAY_OF_WEEK                     (0x2dbf)    /* char */
-#define DAY_OF_MONTH                    (0x2dc0)    /* char */
-#define MONTH                           (0x2dc1)    /* char */
-#define YEAR                            (0x2dc2)    /* char */
-#define SPECIAL_DAY                     (0x2dc3)    /* char */
+//#define DAY_OF_WEEK                     (0x2dbf)    /* char */
+//#define DAY_OF_MONTH                    (0x2dc0)    /* char */
+//#define MONTH                           (0x2dc1)    /* char */
+//#define YEAR                            (0x2dc2)    /* char */
+//#define SPECIAL_DAY                     (0x2dc3)    /* char */
 //#define INGAME_TIMERS                   (0x2dc4)    /* signed long[26] */
 #define MODIFICATION_TIMERS             (0x2e2c)    /* struct(8)[100]; struct{long u1; short u2; char u3; char u4;} */
 // ?2

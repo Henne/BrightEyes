@@ -129,11 +129,11 @@ void diary_new_entry(void)
 		inc_ds_ws(DIARY_ENTRY_COUNTER);
 
 		/* Write day of month */
-		host_writew(ptr, ds_readbs(DAY_OF_MONTH));
+		host_writew(ptr, gs_day_of_month);
 		/* Write month */
-		host_writew(ptr + 2, ds_readbs(MONTH));
+		host_writew(ptr + 2, gs_month);
 		/* Write year */
-		host_writew(ptr + 4, ds_readbs(YEAR));
+		host_writew(ptr + 4, gs_year);
 		/* Write city */
 		host_writew(ptr + 6, ds_readbs(CURRENT_TOWN));
 	}

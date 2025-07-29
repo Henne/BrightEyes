@@ -1027,7 +1027,7 @@ signed short city_step(void)
 		if (ds_readb(LOCATION_MARKET_FLAG) != 0 && ds_readb((NEW_MENU_ICONS + 7)) != MENU_ICON_MARKET) {
 
 			if (((i = ds_readws((MARKET_DESCR_TABLE + 4) + 8 * ds_readws(CURRENT_TYPEINDEX))) == -1 ||
-				ds_readbs(DAY_OF_WEEK) == i) &&
+				gs_day_of_week == i) &&
 				gs_day_timer >= HOURS(6) &&
 				gs_day_timer <= HOURS(16))
 			{

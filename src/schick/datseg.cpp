@@ -1870,11 +1870,11 @@ signed char g_groups_dng_index_bak[6] = { 0, 0, 0, 0, 0, 0 }; // ds:0x2dae
 signed char g_dungeon_level_bak = 0; // ds:0x2db4
 signed char g_groups_dng_level_bak[6] = { 0, 0, 0, 0, 0, 0 }; // ds:0x2db5
 Bit32s gs_day_timer = 0; // ds:0x2dbb
-char g_day_of_week = 0; // ds:0x2dbf
-char g_day_of_month = 0; // ds:0x2dc0
-char g_month = 0; // ds:0x2dc1
-char g_year = 0; // ds:0x2dc2
-char g_special_day = 0; // ds:0x2dc3
+Bit8s  gs_day_of_week = 0; // ds:0x2dbf
+Bit8s  gs_day_of_month = 0; // ds:0x2dc0
+Bit8s  gs_month = 0; // ds:0x2dc1
+Bit8s  gs_year = 0; // ds:0x2dc2
+Bit8s  g_special_day = 0; // ds:0x2dc3
 Bit32s gs_ingame_timers[26] = {0}; // ds:0x2dc4
 struct{long u1; short u2; char u3; char u4;} g_modification_timers[100] = {
 	{ 0x00000000, 0x0000, 0x00, 0x00 },

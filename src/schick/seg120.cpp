@@ -413,10 +413,10 @@ void init_game_state(void)
 	gs_day_timer = HOURS(24) - 1;
 	timewarp_until_time_of_day(1);
 	gs_day_timer = HOURS(8);
-	ds_writeb(DAY_OF_WEEK, 4);
-	ds_writeb(DAY_OF_MONTH, 17);
-	ds_writeb(MONTH, 1);
-	ds_writeb(YEAR, 15);
+	gs_day_of_week = 4;
+	gs_day_of_month = 17;
+	gs_month = 1;
+	gs_year = 15;
 
 	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
 
@@ -770,10 +770,10 @@ void call_gen(void)
 		timewarp_until_time_of_day(1);
 		gs_day_timer = HOURS(8);
 
-		ds_writeb(DAY_OF_WEEK, 4);
-		ds_writeb(DAY_OF_MONTH, 17);
-		ds_writeb(MONTH, 1);
-		ds_writeb(YEAR, 15);
+		gs_day_of_week = 4;
+		gs_day_of_month = 17;
+		gs_month = 1;
+		gs_year = 15;
 	}
 }
 

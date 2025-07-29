@@ -559,7 +559,7 @@ void tevent_144(void)
 
 	if ((grimring_hero_pos = get_first_hero_with_item(ITEM_GRIMRING)) != -1) {
 
-		if (ds_readbs(YEAR) == 17 && ds_readbs(MONTH) == 10 && ds_readbs(DAY_OF_MONTH) >= 10) {
+		if ((gs_year == 17) && (gs_month == 10) && (gs_day_of_month >= 10)) {
 			right_time_flag = 1;
 		} else {
 			if (ds_readb(ORCDOCUMENT_READ_FLAG) != 0 && GUI_bool(get_tx2(46))) {
@@ -569,9 +569,9 @@ void tevent_144(void)
 				GUI_output(get_tx2(47));
 
 				/* set date */
-				ds_writebs(YEAR, 17);
-				ds_writebs(MONTH, 10);
-				ds_writebs(DAY_OF_MONTH, 10);
+				gs_year = 17;
+				gs_month = 10;
+				gs_day_of_month = 10;
 
 				/* seems like the timers are simply forwarded by an arbitrary time span. */
 				sub_ingame_timers(MONTHS(1));

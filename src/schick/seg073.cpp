@@ -488,7 +488,7 @@ signed short tavern_quest_infos(void)
 		/* calculate the day in a week */
 		/* not used in the game */
 		/* TODO: Does this work with the nameless days ? */
-		ds_writeb(ANNOUNCE_DAY, ds_readbs(DAY_OF_MONTH) + 7);
+		ds_writeb(ANNOUNCE_DAY, gs_day_of_month + 7);
 
 		if (ds_readbs(ANNOUNCE_DAY) > 30) {
 

@@ -87,7 +87,7 @@ void show_citizen(void)
 
 			strcpy(g_text_output_buf, get_tx(ds_readw(CURRENT_LOCDATA)));
 
-			if (ds_readbs(YEAR) == 15 && ds_readbs(MONTH) == 1 && random_schick(100) <= 20) {
+			if ((gs_year == 15) && (gs_month == 1) && (random_schick(100) <= 20)) {
 
 				if (!show_storytext()) {
 					GUI_print_loc_line(g_text_output_buf);

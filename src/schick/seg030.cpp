@@ -112,30 +112,20 @@ void prepare_date_str(void)
 
 	hour = (signed short)(gs_day_timer / HOURS(1));
 
-	if (ds_readbs(DAY_OF_MONTH) < 0) {
+	if (gs_day_of_month < 0) {
+
 		/* Days of the nameless */
-		sprintf((char*)g_dtp2,
-			get_ttx(391),
-			get_ttx(349 + ds_readbs(DAY_OF_WEEK)),
-			ds_readbs(YEAR), hour);
+		sprintf((char*)g_dtp2, get_ttx(391), get_ttx(349 + gs_day_of_week), gs_year, hour);
 	} else {
 		/* Normal day */
-		sprintf((char*)g_dtp2,
-			get_ttx(356),
-			get_ttx(349 + ds_readbs(DAY_OF_WEEK)),
-			ds_readbs(DAY_OF_MONTH),
-			get_ttx(21 + ds_readbs(MONTH)),
-			get_ttx(551 + get_current_season()),
-			ds_readbs(YEAR), hour);
+		sprintf((char*)g_dtp2, get_ttx(356), get_ttx(349 + gs_day_of_week), gs_day_of_month,
+			get_ttx(21 + gs_month), get_ttx(551 + get_current_season()), gs_year, hour);
 	}
 
-	if (ds_readbs(SPECIAL_DAY) != 0) {
-		sprintf((char*)g_text_output_buf,
-			get_ttx(357),
-			get_ttx(357 + ds_readbs(SPECIAL_DAY)));
+	if (gs_special_day) {
 
-		strcat((char*)g_dtp2,
-			g_text_output_buf);
+		sprintf((char*)g_text_output_buf, get_ttx(357), get_ttx(357 + gs_special_day));
+		strcat((char*)g_dtp2, g_text_output_buf);
 	}
 }
 

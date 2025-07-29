@@ -73,6 +73,11 @@ extern Bit8s  gs_groups_current_loctype[6];	//ds:0x2d61; seg002, seg049
 extern Bit8s  gs_current_loctype_bak;		//ds:0x2d9f; seg002-seg120
 extern Bit8s  gs_groups_current_loctype_bak[6];	//ds:0x2da0; seg002, seg049, seg054
 extern Bit32s gs_day_timer;			//ds:0x2dbb; seg002-seg120
+extern Bit8s  gs_day_of_week;			//ds:0x2dbf; seg002, seg030, seg066, seg068, seg120
+extern Bit8s  gs_day_of_month;			//ds:0x2dc0; seg002, seg024, seg030, seg073, seg116, seg120
+extern Bit8s  gs_month;				//ds:0x2dc1; seg002, seg024, seg025, seg030, seg068, seg116, seg120
+extern Bit8s  gs_year;				//ds:0x2dc2; seg002, seg024, seg025, seg030, seg068, seg116, seg120
+extern Bit8s  gs_special_day;			//ds:0x2dc3; seg002, seg030
 extern Bit32s gs_ingame_timers[26];		//ds:0x2dc4; seg002, seg042-seg103
 extern Bit32s gs_gods_estimation[15];		//ds:0x314e; seg003-seg114
 extern Bit8s  gs_always_one2;			//ds:0x35f3; seg078

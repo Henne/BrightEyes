@@ -2145,11 +2145,11 @@ void nightfall(void)
  */
 signed short get_current_season(void)
 {
-	if (is_in_byte_array(ds_readb(MONTH), p_datseg + MONTHS_WINTER)) {
+	if (is_in_byte_array(gs_month, p_datseg + MONTHS_WINTER)) {
 		return SEASON_WINTER;
-	} else if (is_in_byte_array(ds_readb(MONTH), p_datseg + MONTHS_SUMMER)) {
+	} else if (is_in_byte_array(gs_month, p_datseg + MONTHS_SUMMER)) {
 		return SEASON_SUMMER;
-	} else if (is_in_byte_array(ds_readb(MONTH), p_datseg + MONTHS_SPRING)) {
+	} else if (is_in_byte_array(gs_month, p_datseg + MONTHS_SPRING)) {
 		return SEASON_SPRING;
 	} else {
 		return SEASON_AUTUMN;
@@ -2394,11 +2394,11 @@ void do_timers(void)
 		gs_day_timer = 0L;
 
 		/* inc DAY date */
-		inc_ds_bs_post(DAY_OF_WEEK);
-		inc_ds_bs_post(DAY_OF_MONTH);
+		gs_day_of_week++;
+		gs_day_of_month++;
 
-		if (ds_readb(DAY_OF_WEEK) == 7) {
-			ds_writeb(DAY_OF_WEEK, 0);
+		if (gs_day_of_week == 7) {
+			gs_day_of_week = 0;
 		}
 
 		/* decrement NPC timers */
@@ -2422,10 +2422,10 @@ void do_timers(void)
 		}
 
 		/* calendar */
-		if (ds_readb(DAY_OF_MONTH) == 31) {
+		if (gs_day_of_month == 31) {
 			/* new month */
-			ds_writeb(DAY_OF_MONTH, 1);
-			inc_ds_bs_post(MONTH);
+			gs_day_of_month = 1;
+			gs_month++;
 
 			/* increment quested months counter */
 			if (ds_readw(GOT_MAIN_QUEST) != 0) {
@@ -2440,27 +2440,27 @@ void do_timers(void)
 			do_census();
 
 			/* set days of the nameless (negative) */
-			if (ds_readb(MONTH) == 13) {
-				ds_writeb(DAY_OF_MONTH, -5);
+			if (gs_month == 13) {
+				gs_day_of_month = -5;
 			}
 		} else {
 			/* new year */
-			if (ds_readb(DAY_OF_MONTH) == 0) {
-				ds_writeb(MONTH, 1);
-				inc_ds_bs_post(YEAR);
-				ds_writeb(DAY_OF_MONTH, 1);
+			if (gs_day_of_month == 0) {
+				gs_month = 1;
+				gs_year++;
+				gs_day_of_month = 1;
 			}
 		}
 
 		/* check if we have a special day */
-		ds_writeb(SPECIAL_DAY, 0);
+		gs_special_day = 0;
 
 		for (i = 0; ds_readbs(SPECIAL_DAYS + 3 * i) != -1; i++) {
 
-			if ((ds_readbs(SPECIAL_DAYS + 3 * i) == ds_readbs(MONTH)) &&
-				(ds_readbs((SPECIAL_DAYS + 1) + 3 * i) == ds_readbs(DAY_OF_MONTH)))
+			if ((ds_readbs(SPECIAL_DAYS + 3 * i) == gs_month) &&
+				(ds_readbs((SPECIAL_DAYS + 1) + 3 * i) == gs_day_of_month))
 			{
-				ds_writeb(SPECIAL_DAY, ds_readb((SPECIAL_DAYS + 2) + 3 * i));
+				gs_special_day = ds_readb((SPECIAL_DAYS + 2) + 3 * i);
 				break;
 			}
 		}
@@ -2477,10 +2477,7 @@ void do_timers(void)
 #endif
 
 		/* check if times up */
-		if ((ds_readbs(YEAR) == 17) &&
-			(ds_readbs(MONTH) >= 10) &&
-			(ds_readbs(DAY_OF_MONTH) >= 17))
-		{
+		if ((gs_year == 17) && (gs_month >= 10) && (gs_day_of_month >= 17)) {
 			ds_writew(GAME_STATE, GAME_STATE_TIMEUP);
 		}
 	}

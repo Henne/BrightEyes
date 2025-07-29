@@ -75,7 +75,7 @@ void THO_imman(void)
 
 	tmp = get_current_season();
 
-	if ((tmp == 1 || tmp == 3) && (ds_readb(DAY_OF_WEEK) == 5)) {
+	if ((tmp == 1 || tmp == 3) && (gs_day_of_week == 5)) {
 		/* ask to visit the game */
 		if (GUI_bool(get_tx2(55)) != 0) {
 
@@ -110,13 +110,13 @@ void THO_botschaft(void)
 	/* Reason:
 	 * Diplomatische Probleme infolge des Bruchs des Garether Vertrags? (Die Thorwaler besetzen im Hesinde Salzerhaven) *
 	 * https://www.crystals-dsa-foren.de/showthread.php?tid=700&pid=99706#pid99706 */
-	if (ds_readbs(YEAR) > 17 ||
-		(ds_readbs(YEAR) == 17 && ds_readbs(MONTH) > 5)) {
+
+	if ((gs_year > 17) || ((gs_year == 17) && (gs_month > 5))) {
 
 		closed = 1;
 	}
 
-	GUI_input( (!closed) ? get_tx2(68): get_tx2(69), 0);
+	GUI_input(!closed ? get_tx2(68) : get_tx2(69), 0);
 }
 
 void THO_bank(void)
