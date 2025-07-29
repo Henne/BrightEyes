@@ -617,10 +617,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 				make_valuta_str((char*)g_text_output_buf, money);
 
-				sprintf((char*)g_dtp2,
-					get_tx(38),
-					g_text_output_buf,
-					(char*)hero + HERO_NAME2);
+				sprintf((char*)g_dtp2, get_tx(38), g_text_output_buf, (char*)hero + HERO_NAME2);
 
 				GUI_output((char*)g_dtp2);
 
@@ -630,7 +627,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 			} else {
 				GUI_output(get_tx(39));
 
-				ds_writeb(TAV_CHEATED_FLAGS + ds_readws(CURRENT_TYPEINDEX), 1);
+				gs_tav_cheated_flags[ds_readws(CURRENT_TYPEINDEX)] = 1;
 
 				l_si = -1;
 			}

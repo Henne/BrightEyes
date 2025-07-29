@@ -83,7 +83,7 @@ void do_tavern(void)
 
 		handle_gui_input();
 
-		if (ds_readbs(TAV_CHEATED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0) {
+		if (gs_tav_cheated_flags[ds_readws(CURRENT_TYPEINDEX)]) {
 
 			GUI_output(get_ttx(472));
 			done = 1;
@@ -193,7 +193,7 @@ void do_tavern(void)
 
 					GUI_output(get_ttx(474));
 
-					ds_writeb(TAV_CHEATED_FLAGS + ds_readws(CURRENT_TYPEINDEX), 1);
+					gs_tav_cheated_flags[ds_readws(CURRENT_TYPEINDEX)] = 1;
 					done = 1;
 					ds_writew(COMBO_MODE, 0);
 
