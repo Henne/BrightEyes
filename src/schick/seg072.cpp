@@ -805,7 +805,7 @@ void INF_swafnild_unicorn(signed short informer, signed short state)
 				case TOWNS_RUNINSHAVEN: ds_writew(X_TARGET_BAK,  6); ds_writew(Y_TARGET_BAK,  6); break;
 			}
 
-			ds_writeb(CURRENT_LOCTYPE_BAK, LOCTYPE_NONE);
+			gs_current_loctype_bak = LOCTYPE_NONE;
 			ds_writeb(SWAFNILD_TRAVELED, 1);
 
 			timewarp_until_midnight();

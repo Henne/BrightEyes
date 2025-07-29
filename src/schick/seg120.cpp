@@ -393,7 +393,7 @@ void init_game_state(void)
 		g_market_itemsaldo_table[i] = 0;
 	}
 
-	ds_writeb(CURRENT_LOCTYPE_BAK, LOCTYPE_NONE);
+	gs_current_loctype_bak = LOCTYPE_NONE;
 	/* Travia Temple in Thorwal */
 	gs_current_loctype = LOCTYPE_TEMPLE;
 	ds_writew(CURRENT_TYPEINDEX, 1);

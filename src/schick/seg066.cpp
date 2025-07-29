@@ -64,7 +64,7 @@ signed short enter_location(signed short town_id)
 		if (host_readws(locations_list_ptr + LOCATION_XY) == map_pos) {
 
 			/* found the location */
-			ds_writeb(CURRENT_LOCTYPE_BAK, LOCTYPE_NONE);
+			gs_current_loctype_bak = LOCTYPE_NONE;
 			gs_current_loctype = host_readbs(locations_list_ptr + LOCATION_LOCTYPE);
 			ds_writew(CURRENT_TYPEINDEX, host_readb(locations_list_ptr + LOCATION_TYPEINDEX));
 			ds_writew(CURRENT_LOCDATA, host_readw(locations_list_ptr + LOCATION_LOCDATA));
@@ -85,7 +85,7 @@ signed short enter_location(signed short town_id)
 
 	if ((b_index = get_border_index(cast_u16(ds_readbs((VISUAL_FIELD_VALS + 1))))) >= 2 && b_index <= 5) {
 
-		ds_writeb(CURRENT_LOCTYPE_BAK, LOCTYPE_NONE);
+		gs_current_loctype_bak = LOCTYPE_NONE;
 		ds_writew(CURRENT_LOCDATA, ds_readb((TOWNS_CITYINDEX_TABLE-1) + town_id));
 
 		if (!((ds_readbs(DIRECTION) + ds_readws(X_TARGET) + ds_readws(Y_TARGET)) & 1)) {
@@ -167,7 +167,7 @@ signed short enter_location_daspota(void)
 				leave_location();
 
 			} else {
-				ds_writeb(CURRENT_LOCTYPE_BAK, LOCTYPE_NONE);
+				gs_current_loctype_bak = LOCTYPE_NONE;
 				gs_current_loctype = host_readbs(locations_list_ptr + LOCATION_LOCTYPE);
 				ds_writew(CURRENT_LOCDATA, host_readw(locations_list_ptr + LOCATION_LOCDATA));
 			}
@@ -183,7 +183,7 @@ signed short enter_location_daspota(void)
 
 	if ((b_index = get_border_index(cast_u16(ds_readb((VISUAL_FIELD_VALS + 1))))) >= 2 && b_index <= 5) {
 
-		ds_writeb(CURRENT_LOCTYPE_BAK, LOCTYPE_NONE);
+		gs_current_loctype_bak = LOCTYPE_NONE;
 		gs_current_loctype = LOCTYPE_CITIZEN;
 		ds_writew(CURRENT_LOCDATA, 19);
 		return 1;

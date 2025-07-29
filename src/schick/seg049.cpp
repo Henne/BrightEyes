@@ -151,7 +151,7 @@ void GRP_save_pos(signed short group)
 	ds_writew(GROUPS_X_TARGET_BAK + group * 2, ds_readws(X_TARGET_BAK));
 	ds_writew(GROUPS_Y_TARGET_BAK + group * 2, ds_readws(Y_TARGET_BAK));
 
-	ds_writeb(GROUPS_CURRENT_LOCTYPE_BAK + group, ds_readbs(CURRENT_LOCTYPE_BAK));
+	ds_writeb(GROUPS_CURRENT_LOCTYPE_BAK + group, gs_current_loctype_bak);
 	ds_writeb(GROUPS_TOWN_BAK + group, ds_readbs(CURRENT_TOWN_BAK));
 	ds_writeb(GROUPS_DNG_INDEX_BAK + group, ds_readbs(DUNGEON_INDEX_BAK));
 	ds_writeb(GROUPS_DNG_LEVEL_BAK + group, ds_readbs(DUNGEON_LEVEL_BAK));
@@ -359,7 +359,7 @@ void GRP_switch_to_next(signed short mode)
 		ds_writeb(GROUPS_DIRECTION_BAK + gs_current_group, ds_readbs(DIRECTION_BAK));
 		ds_writew(GROUPS_X_TARGET_BAK + gs_current_group * 2, ds_readw(X_TARGET_BAK));
 		ds_writew(GROUPS_Y_TARGET_BAK + gs_current_group * 2, ds_readw(Y_TARGET_BAK));
-		ds_writeb(GROUPS_CURRENT_LOCTYPE_BAK + gs_current_group, ds_readbs(CURRENT_LOCTYPE_BAK));
+		ds_writeb(GROUPS_CURRENT_LOCTYPE_BAK + gs_current_group, gs_current_loctype_bak);
 		ds_writeb(GROUPS_TOWN_BAK + gs_current_group, ds_readbs(CURRENT_TOWN_BAK));
 		ds_writeb(GROUPS_DNG_INDEX_BAK + gs_current_group, ds_readbs(DUNGEON_INDEX_BAK));
 		ds_writeb(GROUPS_DNG_LEVEL_BAK + gs_current_group, ds_readbs(DUNGEON_LEVEL_BAK));

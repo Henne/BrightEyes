@@ -201,7 +201,7 @@ void do_house(void)
 		leave_location();
 
 	} else {
-		gs_current_loctype = ds_readb(CURRENT_LOCTYPE_BAK);
+		gs_current_loctype = gs_current_loctype_bak;
 		ds_writew(X_TARGET, ds_readw(X_TARGET_BAK));
 		ds_writew(Y_TARGET, ds_readw(Y_TARGET_BAK));
 	}
@@ -718,7 +718,7 @@ void leave_location(void)
 	set_var_to_zero();
 
 	/* reset location */
-	gs_current_loctype = ds_readb(CURRENT_LOCTYPE_BAK);
+	gs_current_loctype = gs_current_loctype_bak;
 
 	/* set target  coordinates*/
 	ds_writew(X_TARGET, ds_readw(X_TARGET_BAK));
@@ -750,7 +750,7 @@ void leave_dungeon(void)
 		set_palette(ptr, 0x80, 0x40);
 	}
 
-	gs_current_loctype = ds_writeb(CURRENT_LOCTYPE_BAK, LOCTYPE_NONE);
+	gs_current_loctype = gs_current_loctype_bak = LOCTYPE_NONE;
 	ds_writeb(CURRENT_TOWN, ds_readb(CURRENT_TOWN_BAK));
 	ds_writeb(DUNGEON_INDEX_BAK, ds_readb(DUNGEON_INDEX));
 	ds_writeb(DUNGEON_INDEX, ds_writeb(DUNGEON_LEVEL, ds_writeb(DUNGEON_LIGHT, 0)));
