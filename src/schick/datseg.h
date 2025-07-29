@@ -81,12 +81,15 @@ extern Bit8s  gs_special_day;			//ds:0x2dc3; seg002, seg030
 extern Bit32s gs_ingame_timers[26];		//ds:0x2dc4; seg002, seg042-seg103
 extern Bit32s gs_gods_estimation[15];		//ds:0x314e; seg003-seg114
 extern Bit8s  gs_tav_cheated_flags[88];		//ds:0x318a; seg059, seg103
+extern Bit16s gs_subvention;			//ds:0x3342; seg068
 extern Bit8s  gs_always_one2;			//ds:0x35f3; seg078
 
 extern Bit8s  gs_dng07_poison_flag;		//ds:0x3cb5; seg082
 extern Bit32s gs_dng07_poison_timer;		//ds:0x3cb6; seg002, seg082
 
 extern Bit32s gs_dng12_watertrap_timer;		//ds:0x3fa2; seg002, seg090
+
+extern Bit16s gs_arsenal_money;			//ds:0x43a3; seg068
 /* GameState written directly into SaveGame file ends at 0x4474 */
 
 extern char g_game_version[6];			//ds:0x46ec; seg002

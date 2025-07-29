@@ -272,7 +272,7 @@ void THO_arsenal(void)
 
 			talk_merchant();
 
-	} else if (ds_readws(ARSENAL_MONEY) != 0) {
+	} else if (gs_arsenal_money) {
 
 		load_in_head(13);
 
@@ -280,31 +280,27 @@ void THO_arsenal(void)
 		options = get_first_hero_with_item(ITEM_WRITING_OF_JARDA) != -1 || get_first_hero_with_item(ITEM_WRITING_OF_HETMAN) != -1 ? 2 : 1;
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
-					get_tx2(0), options,
-					get_tx2(2), get_tx2(1));
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(0), options, get_tx2(2), get_tx2(1));
 
 		} while (answer == -1);
 
 		if (answer == 2) {
 
-			if (ds_readws(ARSENAL_MONEY) == -1) {
+			if (gs_arsenal_money == -1) {
 
 				/* calculate the maximal shopping price [10-60] D */
-				if (ds_writews(ARSENAL_MONEY, 15 * ds_readws(SUBVENTION)) < 10) {
+				if ((gs_arsenal_money = 15 * gs_subvention) < 10) {
 					/* at least 10D */
-					ds_writew(ARSENAL_MONEY, 10);
+					gs_arsenal_money = 10;
 				}
 			}
 
-			sprintf((char*)g_dtp2 + 0x400,
-				get_tx2(3),
-				ds_readws(ARSENAL_MONEY));
+			sprintf((char*)g_dtp2 + 0x400, get_tx2(3), gs_arsenal_money);
 
-			mul_ds_ws(ARSENAL_MONEY, 100);
-			GUI_dialog_na(0, (char*)((char*)(g_dtp2 + 0x400)));
+			gs_arsenal_money *= 100;
+			GUI_dialog_na(0, (char*)(g_dtp2 + 0x400));
 			p_money = get_party_money();
-			set_party_money(ds_readws(ARSENAL_MONEY));
+			set_party_money(gs_arsenal_money);
 
 			ds_writew(CURRENT_TYPEINDEX, 92);
 			tw_bak = g_textbox_width;
@@ -312,8 +308,8 @@ void THO_arsenal(void)
 
 			do_merchant();
 
-			ds_writews(ARSENAL_MONEY, (signed short)get_party_money());
-			div_ds_ws(ARSENAL_MONEY, 100);
+			gs_arsenal_money = (signed short)get_party_money();
+			gs_arsenal_money /= 100;
 			g_textbox_width = tw_bak;
 			set_party_money(p_money);
 

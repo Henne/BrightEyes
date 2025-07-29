@@ -266,7 +266,7 @@
 #define ORCDOCUMENT_READ_FLAG           (0x333d)    /* unsigned char; {0,1} */
 #define GARDANIUM_USED_AE               (0x333e)    /* unsigned short */
 #define MIN_MAP_PARTS                   (0x3340)    /* signed short; {0} */
-#define SUBVENTION                      (0x3342)    /* short; {0-4} */
+//#define SUBVENTION                      (0x3342)    /* short; {0-4} */
 #define OTTA_WINDRIDERS                 (0x3344)    /* unsigned short */
 #define OTTA_STORMCHILDREN              (0x3346)    /* unsigned short */
 #define OTTA_GARALDSSON                 (0x3348)    /* unsigned short */
@@ -786,7 +786,7 @@
 #define DEADSHIP_FINAL                  (0x43a0)    /* unsigned char; {0,1} */
 #define DNG09_LEVER_FAST                (0x43a1)    /* unsigned char; {0,1} */
 #define DNG11_SOUP_SUPPLY               (0x43a2)    /* unsigned char */
-#define ARSENAL_MONEY                   (0x43a3)    /* signed short; {-1, 0 - 60 } */
+//#define ARSENAL_MONEY                   (0x43a3)    /* signed short; {-1, 0 - 60 } */
 #define ANNOUNCE_DAY                    (0x43a5)    /* signed char; UNUSED */
 #define KNOWN_PERSONS                   (0x43a6)    /* char[17] */
 // ?3

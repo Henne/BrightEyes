@@ -67,7 +67,7 @@ void THO_hetmann(void)
 		GUI_output(get_tx2(0));
 
 	} else {
-		ds_writew(SUBVENTION, 0);
+		gs_subvention = 0;
 
 		do {
 			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
@@ -85,13 +85,13 @@ void THO_hetmann(void)
 
 			GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(6), 0);
 
-			add_ds_ws(SUBVENTION, 2);
+			gs_subvention += 2;
 
 		} else {
 
 			GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(7), 0);
 
-			inc_ds_ws(SUBVENTION);
+			gs_subvention++;
 		}
 
 		load_in_head(61);
@@ -115,7 +115,7 @@ void THO_hetmann(void)
 			GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(85), get_tx2(14), 0);
 
 			ds_writeb(INFORMER_FLAGS + INFORMER_ISLEIF, 1);
-			inc_ds_ws(SUBVENTION);
+			gs_subvention++;
 			ds_writew(GOT_MAIN_QUEST, 1);
 			ds_writew(QUESTED_MONTHS, 0);
 
@@ -131,7 +131,7 @@ void THO_hetmann(void)
 
 		} else if (answer == 3) {
 
-			add_ds_ws(SUBVENTION, 2);
+			gs_subvention += 2;
 
 			do {
 				answer = GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(85),
