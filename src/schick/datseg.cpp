@@ -2050,13 +2050,13 @@ signed char g_treasure_maps[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; // ds:0x3332
 unsigned char g_debtbook_read_flag = 1; // ds:0x333c
 unsigned char g_orcdocument_read_flag = 0; // ds:0x333d
 unsigned short g_gardanium_used_ae = 0; // ds:0x333e
-signed short g_min_map_parts = 0; // ds:0x3340
-Bit16s gs_subvention = 0; // ds:0x3342, {0-4}
-unsigned short g_otta_windriders = 0; // ds:0x3344
-unsigned short g_otta_stormchildren = 0; // ds:0x3346
-unsigned short g_otta_garaldsson = 0; // ds:0x3348
-signed short g_heard_announce = 0; // ds:0x334a, {0 = not heard, 1 = heard, 3 = spoke with hetman}
-signed short g_got_main_quest = 0; // ds:0x334c
+Bit16s gs_min_map_parts = 0;	// ds:0x3340
+Bit16s gs_subvention = 0;	// ds:0x3342, {0-4}
+Bit16s gs_otta_windriders = 0;	// ds:0x3344
+Bit16s gs_otta_stormchildren = 0; // ds:0x3346
+Bit16s gs_otta_garaldsson = 0;	// ds:0x3348
+Bit16s gs_heard_announce = 0;	// ds:0x334a, {0 = not heard, 1 = heard, 3 = spoke with hetman}
+Bit16s gs_got_main_quest = 0;	// ds:0x334c
 short g_quested_months = 0; // ds:0x334e
 signed short g_monthly_credit = 0; // ds:0x3350
 signed short g_got_letter_jad = 0; // ds:0x3352

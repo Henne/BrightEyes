@@ -477,13 +477,13 @@ signed short tavern_quest_infos(void)
 {
 	signed short l_si;
 
-	if (ds_readws(HEARD_ANNOUNCE) == 0) {
+	if (!gs_heard_announce) {
 
 		/* print the announcement from the hetman */
 		GUI_output(get_tx(210));
 
 		/* remember you heard the announcement */
-		ds_writews(HEARD_ANNOUNCE, 1);
+		gs_heard_announce = 1;
 
 		/* calculate the day in a week */
 		/* not used in the game */

@@ -265,12 +265,12 @@
 #define DEBTBOOK_READ_FLAG              (0x333c)    /* unsigned char; {0,1} */
 #define ORCDOCUMENT_READ_FLAG           (0x333d)    /* unsigned char; {0,1} */
 #define GARDANIUM_USED_AE               (0x333e)    /* unsigned short */
-#define MIN_MAP_PARTS                   (0x3340)    /* signed short; {0} */
+//#define MIN_MAP_PARTS                   (0x3340)    /* signed short; {0} */
 //#define SUBVENTION                      (0x3342)    /* short; {0-4} */
-#define OTTA_WINDRIDERS                 (0x3344)    /* unsigned short */
-#define OTTA_STORMCHILDREN              (0x3346)    /* unsigned short */
-#define OTTA_GARALDSSON                 (0x3348)    /* unsigned short */
-#define HEARD_ANNOUNCE                  (0x334a)    /* signed short; {0 = not heard, 1 = heard, 3 = spoke with hetman} */
+//#define OTTA_WINDRIDERS                 (0x3344)    /* unsigned short */
+//#define OTTA_STORMCHILDREN              (0x3346)    /* unsigned short */
+//#define OTTA_GARALDSSON                 (0x3348)    /* unsigned short */
+//#define HEARD_ANNOUNCE                  (0x334a)    /* signed short; {0 = not heard, 1 = heard, 3 = spoke with hetman} */
 #define GOT_MAIN_QUEST                  (0x334c)    /* signed short; {0,1} */
 #define QUESTED_MONTHS                  (0x334e)    /* short */
 #define MONTHLY_CREDIT                  (0x3350)    /* signed short */

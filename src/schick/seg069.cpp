@@ -49,9 +49,9 @@ void THO_hetmann(void)
 
 		GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(85), get_tx(83), 0);
 
-		GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(85), ds_readws(MIN_MAP_PARTS) <= map_parts ? get_tx(84) : get_tx(85), 0);
+		GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(85), gs_min_map_parts <= map_parts ? get_tx(84) : get_tx(85), 0);
 
-		answer = ds_readws(MIN_MAP_PARTS) <= map_parts ? 10 : 50;
+		answer = gs_min_map_parts <= map_parts ? 10 : 50;
 
 		for (i = 0; i < 14; i++) {
 			gs_gods_estimation[i] += answer;
@@ -62,7 +62,7 @@ void THO_hetmann(void)
 		ds_writeb(GOT_LETTER_HET, 1);
 		get_item(ITEM_WRITING_OF_HETMAN, 1, 1);
 
-	} else if (ds_readw(HEARD_ANNOUNCE) == 0 || ds_readw(GOT_MAIN_QUEST) != 0) {
+	} else if (!gs_heard_announce || ds_readw(GOT_MAIN_QUEST) != 0) {
 
 		GUI_output(get_tx2(0));
 
@@ -98,7 +98,7 @@ void THO_hetmann(void)
 
 		GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(85), get_tx2(8), 0);
 
-		ds_writew(HEARD_ANNOUNCE, 3);
+		gs_heard_announce = 3;
 
 		GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(85), get_tx2(9), 0);
 
@@ -166,11 +166,11 @@ void THO_windriders(void)
 
 		} else if (answer == 2 || answer == 3) {
 
-			if (ds_readw(OTTA_WINDRIDERS) == 0) {
+			if (!gs_otta_windriders) {
 
 				GUI_output(answer == 2 ? get_tx2(25): get_tx2(26));
 
-			} else if (ds_readw(OTTA_WINDRIDERS) == 1) {
+			} else if (gs_otta_windriders == 1) {
 
 				GUI_output(get_tx2(27));
 
@@ -182,7 +182,7 @@ void THO_windriders(void)
 				do_fight(FIGHTS_THOR8);
 			}
 
-			inc_ds_ws(OTTA_WINDRIDERS);
+			gs_otta_windriders++;
 		}
 	}
 }
@@ -285,11 +285,11 @@ void THO_stormchildren(void)
 
 		} else if (answer == 2 || answer == 3) {
 
-			if (ds_readw(OTTA_STORMCHILDREN) == 0) {
+			if (gs_otta_stormchildren == 0) {
 
 				GUI_output(answer == 2 ? get_tx2(34): get_tx2(35));
 
-			} else if (ds_readw(OTTA_STORMCHILDREN) == 1) {
+			} else if (gs_otta_stormchildren == 1) {
 
 				GUI_output(get_tx2(36));
 
@@ -301,7 +301,7 @@ void THO_stormchildren(void)
 				do_fight(FIGHTS_THOR8);
 			}
 
-			inc_ds_ws(OTTA_STORMCHILDREN);
+			gs_otta_stormchildren++;
 		}
 	}
 }
@@ -310,10 +310,7 @@ void THO_garaldsson(void)
 {
 	signed short answer;
 
-	answer = GUI_radio(get_tx2(38), 3,
-				get_tx2(39),
-				get_tx2(40),
-				get_tx2(41));
+	answer = GUI_radio(get_tx2(38), 3, get_tx2(39), get_tx2(40), get_tx2(41));
 	if (answer != -1) {
 
 		if (answer == 1) {
@@ -322,11 +319,11 @@ void THO_garaldsson(void)
 
 		} else if (answer == 2 || answer == 3) {
 
-			if (ds_readw(OTTA_GARALDSSON) == 0) {
+			if (gs_otta_garaldsson == 0) {
 
 				GUI_output(answer == 2 ? get_tx2(43): get_tx2(44));
 
-			} else if (ds_readw(OTTA_GARALDSSON) == 1) {
+			} else if (gs_otta_garaldsson == 1) {
 
 				GUI_output(get_tx2(45));
 
@@ -338,7 +335,7 @@ void THO_garaldsson(void)
 				do_fight(FIGHTS_THOR8);
 			}
 
-			inc_ds_ws(OTTA_GARALDSSON);
+			gs_otta_garaldsson++;
 		}
 	}
 }
