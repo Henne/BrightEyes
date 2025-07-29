@@ -382,7 +382,7 @@ void GRP_switch_to_next(signed short mode)
 		ds_writeb(DIRECTION_BAK, ds_readb(GROUPS_DIRECTION_BAK + group));
 		ds_writew(X_TARGET_BAK, ds_readw(GROUPS_X_TARGET_BAK + group * 2));
 		ds_writew(Y_TARGET_BAK, ds_readw(GROUPS_Y_TARGET_BAK + group * 2));
-		ds_writeb(CURRENT_LOCTYPE_BAK, gs_groups_current_loctype_bak[group]);
+		gs_current_loctype_bak = gs_groups_current_loctype_bak[group];
 		ds_writeb(CURRENT_TOWN_BAK, ds_readb(GROUPS_TOWN_BAK + group));
 		ds_writeb(DUNGEON_INDEX_BAK, ds_readb(GROUPS_DNG_INDEX_BAK + group));
 		ds_writeb(DUNGEON_LEVEL_BAK, ds_readb(GROUPS_DNG_LEVEL_BAK + group));
