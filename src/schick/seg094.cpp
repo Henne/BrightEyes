@@ -293,11 +293,14 @@ void TM_func1(signed short route_no, signed short backwards)
 					(answer == 2 && !ds_readb(FORCEDMARCH_TIMER))) /* Kampieren */
 				// Depending on FORCEDMARCH_TIMER, the "Kampieren" answer is on position 1 or 2.
 			{
+				/* make gather_herbs and replenish_stocks practically impossible */
 				ds_writew(WILDCAMP_SLEEP_QUALITY, -3);
-				ds_writeb(GOOD_CAMP_PLACE, 99); /* make gather_herbs and replenish_stocks practically impossible */
+				g_good_camp_place = 99;
 				gs_current_loctype = LOCTYPE_WILDCAMP;
+
 				do_location();
-				ds_writeb(GOOD_CAMP_PLACE, gs_current_loctype = ds_writews(WILDCAMP_SLEEP_QUALITY, 0));
+
+				g_good_camp_place = gs_current_loctype = ds_writews(WILDCAMP_SLEEP_QUALITY, 0);
 				g_wallclock_update = 0;
 				ds_writew(REQUEST_REFRESH, 2);
 			}

@@ -200,12 +200,12 @@ signed short TRV_found_camp_place(signed short a0)
 			ds_writews(GATHER_HERBS_MOD, -3);
 		}
 
-		ds_writeb(GOOD_CAMP_PLACE, 1);
+		g_good_camp_place = 1;
 		gs_current_loctype = LOCTYPE_WILDCAMP;
 
 		do_location();
 
-		gs_current_loctype = ds_writeb(GOOD_CAMP_PLACE, 0);
+		gs_current_loctype = g_good_camp_place = LOCTYPE_NONE; /* == 0 */
 
 		TRV_load_textfile(-1);
 
