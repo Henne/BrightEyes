@@ -237,8 +237,8 @@ void city_event_5(void)
 
 	load_in_head(48);
 
-	tw_bak = ds_readws(TEXTBOX_WIDTH);
-	ds_writews(TEXTBOX_WIDTH, 5);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 5;
 
 	randval = random_schick(4) - 1;
 
@@ -255,7 +255,7 @@ void city_event_5(void)
 		GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx(randval + 99), 0);
 	}
 
-	ds_writews(TEXTBOX_WIDTH, tw_bak);
+	g_textbox_width = tw_bak;
 }
 
 /**

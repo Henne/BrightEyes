@@ -135,13 +135,13 @@ signed short DNG01_handler(void)
 	} else if (target_pos == DNG_POS(5,1,8) && !ds_readbs(DNG01_ARDORA_FREED))
 	{
 		/* NPC: ARDORA */
-		ds_writew(TEXTBOX_WIDTH, 7);
+		g_textbox_width = 7;
 
 		load_in_head(21);
 
 		if (GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(756), get_tx(8), 2, get_ttx(2), get_ttx(3)) == 1)
 		{
-			ds_writew(TEXTBOX_WIDTH, 3);
+			g_textbox_width = 3;
 
 			GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(756), get_tx(9), 0);
 
@@ -155,7 +155,7 @@ signed short DNG01_handler(void)
 
 			add_npc(ARCHIVE_FILE_NSC_LTX + 4);
 		} else {
-			ds_writew(TEXTBOX_WIDTH, 3);
+			g_textbox_width = 3;
 
 			GUI_dialogbox((unsigned char*)g_dtp2, get_ttx(756), get_tx(10), 0);
 		}

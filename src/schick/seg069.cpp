@@ -222,7 +222,7 @@ void THO_tav_inn_combi(void)
 					answer == 14 ? 1 : (
 					answer == 17 ? 2 : 6)));
 
-			ds_writew(TEXTBOX_WIDTH, 3);
+			g_textbox_width = 3;
 
 			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_TAVERN);
 			do_tavern();
@@ -246,7 +246,7 @@ void THO_tav_inn_combi(void)
 					answer == 14 ? 71 : (
 					answer == 17 ? 72 : 73)));
 
-			ds_writew(TEXTBOX_WIDTH, 3);
+			g_textbox_width = 3;
 
 			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_INN);
 			do_inn();

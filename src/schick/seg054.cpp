@@ -161,8 +161,8 @@ void do_inn(void)
 				host_readbs(hero + HERO_RECIPE_TIMER),
 				(char*)(host_readbs(hero + HERO_RECIPE_TIMER) < 2 ? get_ttx(735) : get_ttx(736)));
 
-			tw_bak = ds_readws(TEXTBOX_WIDTH);
-			ds_writews(TEXTBOX_WIDTH, 4);
+			tw_bak = g_textbox_width;
+			g_textbox_width = 4;
 
 			answer = GUI_radio((char*)g_dtp2, 2, get_ttx(734), get_ttx(562));
 			/* <HERO> befindet sich inmitten eines alchimistischen Versuchs, der wohl noch <DAYS> Tage dauert.
@@ -170,7 +170,7 @@ void do_inn(void)
 			 * * Weiter brauen lassen
 			 */
 
-			ds_writews(TEXTBOX_WIDTH, tw_bak);
+			g_textbox_width = tw_bak;
 
 			if (answer == 1) {
 				/* abort brewing */
@@ -260,8 +260,8 @@ void do_inn(void)
 							host_readbs(hero + HERO_RECIPE_TIMER),
 							(char*)(host_readbs(hero + HERO_RECIPE_TIMER) < 2 ? get_ttx(735) : get_ttx(736)));
 
-					tw_bak = ds_readws(TEXTBOX_WIDTH);
-					ds_writews(TEXTBOX_WIDTH, 4);
+					tw_bak = g_textbox_width;
+					g_textbox_width = 4;
 
 					answer = GUI_radio((char*)g_dtp2, 2, get_ttx(734), get_ttx(562));
 					/* <HERO> befindet sich inmitten eines alchimistischen Versuchs, der wohl noch <DAYS> Tage dauert.
@@ -269,7 +269,7 @@ void do_inn(void)
 					 * * Weiter brauen lassen
 					 */
 
-					ds_writews(TEXTBOX_WIDTH, tw_bak);
+					g_textbox_width = tw_bak;
 
 					if (answer == 1) {
 						/* abort brewing */
@@ -447,8 +447,8 @@ void do_inn(void)
 			price_einzelzimmer += price_schlafsaal * host_readws(inn_ptr + INN_STATS_PRICE_MOD) / 100;
 			price_suite += price_schlafsaal * host_readws(inn_ptr + INN_STATS_PRICE_MOD) / 100;
 
-			tw_bak = ds_readws(TEXTBOX_WIDTH);
-			ds_writews(TEXTBOX_WIDTH, 5);
+			tw_bak = g_textbox_width;
+			g_textbox_width = 5;
 
 			sprintf((char*)g_dtp2,
 				get_ttx(397),
@@ -475,7 +475,7 @@ void do_inn(void)
 				ds_writebs(SLEEP_QUALITY, -1);
 			}
 
-			ds_writews(TEXTBOX_WIDTH, tw_bak);
+			g_textbox_width = tw_bak;
 
 			if (ds_readbs(SLEEP_QUALITY) != -1) {
 

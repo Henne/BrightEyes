@@ -43,8 +43,8 @@ signed short DNG14_handler(void)
 
 	amap_ptr = p_datseg + DNG_MAP;
 
-	tw_bak = ds_readws(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 7);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 7;
 
 	pos = (ds_readbs(DUNGEON_LEVEL) << 12) + (ds_readws(X_TARGET) << 8) + ds_readws(Y_TARGET);
 
@@ -711,7 +711,7 @@ signed short DNG14_handler(void)
 		ds_writeb(DIRECTION, NORTH);
 	}
 
-	ds_writew(TEXTBOX_WIDTH, tw_bak);
+	g_textbox_width = tw_bak;
 	ds_writew(DNG_HANDLED_POS, pos);
 
 	return 0;

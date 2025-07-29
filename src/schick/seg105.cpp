@@ -763,7 +763,7 @@ signed short select_item_to_drop(Bit8u *hero)
 	signed short v6 = 0;
 	signed short item;
 	signed short va;
-	signed short textbox_width_bak, bak2, bak3;
+	signed short tw_bak, bak2, bak3;
 	Bit8u* ptr;
 	signed short str[23];
 	signed short di;
@@ -806,10 +806,10 @@ signed short select_item_to_drop(Bit8u *hero)
 		} else {
 			i = v6;
 		}
-		textbox_width_bak = ds_readw(TEXTBOX_WIDTH);
+		tw_bak = g_textbox_width;
 		bak2 = ds_readw(BASEPOS_X);
 		bak3 = ds_readw(BASEPOS_Y);
-		ds_writew(TEXTBOX_WIDTH, 6);
+		g_textbox_width = 6;
 		ds_writew(BASEPOS_X, ds_writew(BASEPOS_Y, 0));
 		v4 = GUI_radio((char*)get_ttx(752), (signed char)i,
 			(char*)(ds_readd(RADIO_NAME_LIST + 0x00 + di * 4)),
@@ -825,7 +825,7 @@ signed short select_item_to_drop(Bit8u *hero)
 			(char*)(ds_readd(RADIO_NAME_LIST + 0x28 + di * 4)),
 			(char*)(ds_readd(RADIO_NAME_LIST + 0x2c + di * 4)),
 			(char*)(ds_readd(RADIO_NAME_LIST + 0x30 + di * 4)));
-		ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
+		g_textbox_width = tw_bak;
 		ds_writew(BASEPOS_X, bak2);
 		ds_writew(BASEPOS_Y, bak3);
 

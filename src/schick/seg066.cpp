@@ -197,13 +197,13 @@ void do_special_buildings(void)
 	signed short type;
 	signed short tw_bak;
 
-	tw_bak = ds_readws(TEXTBOX_WIDTH);
+	tw_bak = g_textbox_width;
 	type = ds_readws(CURRENT_TYPEINDEX);
 
 	if (ds_readb(CURRENT_TOWN) == TOWNS_THORWAL) {
 
 		load_tx2(type < 41 ? ARCHIVE_FILE_THORWAL1_LTX : ARCHIVE_FILE_THORWAL2_LTX);
-		ds_writew(TEXTBOX_WIDTH, 9);
+		g_textbox_width = 9;
 
 		if (type == 28) {
 			THO_hetmann();
@@ -250,7 +250,7 @@ void do_special_buildings(void)
 	} else if (ds_readb(CURRENT_TOWN) == TOWNS_PHEXCAER) {
 
 		load_tx2(type <= 3 ? ARCHIVE_FILE_PHEX2_LTX : ARCHIVE_FILE_PHEX1_LTX);
-		ds_writew(TEXTBOX_WIDTH, 9);
+		g_textbox_width = 9;
 
 		if (type == 1) {
 			PHX_phextempel();
@@ -284,7 +284,7 @@ void do_special_buildings(void)
 		}
 	}
 
-	ds_writew(TEXTBOX_WIDTH, tw_bak);
+	g_textbox_width = tw_bak;
 	leave_location();
 }
 

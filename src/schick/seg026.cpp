@@ -437,8 +437,8 @@ signed short save_game_state(void)
 	Bit32u len;
 	struct ffblk blk;
 
-	tw_bak = ds_readws(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 5);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 5;
 
 	/* prepare the header for the radio box */
 	if (ds_readws(GAME_STATE) == GAME_STATE_VICTORY) {
@@ -486,7 +486,7 @@ signed short save_game_state(void)
 			p_datseg + (SAVEGAME_NAMES + 9 * 4),
 			get_ttx(737)) - 1;
 
-	ds_writew(TEXTBOX_WIDTH, tw_bak);
+	g_textbox_width = tw_bak;
 
 	g_saved_files_buf = g_dtp2;
 	memset(g_saved_files_buf, 0, 4 * 286);

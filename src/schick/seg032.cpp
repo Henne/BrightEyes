@@ -920,7 +920,7 @@ signed short do_fight(signed short fight_id)
 	signed short y_target_bak;
 	signed short dungeon_level_bak;
 	signed short direction_bak;
-	signed short textbox_width_bak;
+	signed short tw_bak;
 	signed short escape_positions[6];
 
 	if ((ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group) == 1)
@@ -942,8 +942,8 @@ signed short do_fight(signed short fight_id)
 	g_timers_disabled = 1;
 	ds_writew(CURRENT_FIG_NO, fight_id);
 
-	textbox_width_bak = ds_readws(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 3);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 3;
 
 	/* set some pointers */
 	ds_writed(SCENARIO_BUF, (Bit32u)(((HugePt)g_buffer8_ptr) + 64100L));
@@ -1262,7 +1262,7 @@ signed short do_fight(signed short fight_id)
 	g_timers_disabled = 0;
 	ds_writew(AUTOFIGHT, 0);
 	ds_writeb(CHECK_PARTY, 1);
-	ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
+	g_textbox_width = tw_bak;
 	ds_writeb(PP20_INDEX, (ARCHIVE_FILE_DNGS + 12));
 
 	update_mouse_cursor();

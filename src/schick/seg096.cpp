@@ -670,7 +670,7 @@ void GUI_draw_popup_line(signed short line, signed short type)
 
 	x += 16;
 
-	for (i = 0; i < ds_readws(TEXTBOX_WIDTH); i++) {
+	for (i = 0; i < g_textbox_width; i++) {
 		ds_writew(PIC_COPY_X1, x);
 		ds_writew(PIC_COPY_X2, x + 31);
 		do_pic_copy(0);

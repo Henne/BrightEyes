@@ -43,11 +43,12 @@ void diary_show(void)
 {
 	signed short fg_bak;
 	signed short bg_bak;
-	Bit16u bak1, bak2, txt_tabpos1_bak, txt_tabpos2_bak, textbox_width_bak;
+	Bit16u bak1, bak2, txt_tabpos1_bak, txt_tabpos2_bak;
+	signed short tw_bak;
 	signed short i;
 
-	textbox_width_bak = ds_readw(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 3);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 3;
 
 	ds_writeb(SPECIAL_SCREEN, 1);
 	g_wallclock_update = 0;
@@ -100,7 +101,7 @@ void diary_show(void)
 	ds_writew(TEXTLINE_MAXLEN, bak1);
 	ds_writew(TXT_TABPOS1, txt_tabpos1_bak);
 	ds_writew(TXT_TABPOS2, txt_tabpos2_bak);
-	ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
+	g_textbox_width = tw_bak;
 
 	delay_or_keypress(5000);
 }

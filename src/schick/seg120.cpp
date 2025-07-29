@@ -51,7 +51,7 @@ void rabies(Bit8u* hero, signed short hero_pos)
 	signed short answer;
 	signed short l_di;
 	signed short done;
-	signed short textbox_width_bak;
+	signed short tw_bak;
 	Bit8u *hero2;
 	signed short group_bak;
 	signed short group_no;
@@ -97,18 +97,13 @@ void rabies(Bit8u* hero, signed short hero_pos)
 
 			sprintf((char*)g_dtp2 + 600, get_ttx(743), (char*)hero + HERO_NAME2);
 
-			textbox_width_bak = ds_readws(TEXTBOX_WIDTH);
-			ds_writew(TEXTBOX_WIDTH, 6);
+			tw_bak = g_textbox_width;
+			g_textbox_width = 6;
 
-			answer = GUI_dialogbox(hero + HERO_PORTRAIT,
-						(char*)hero + HERO_NAME2,
-						g_dtp2,
-						3,
-						g_dtp2 + 500,
-						g_dtp2 + 600,
-						get_ttx(744));
+			answer = GUI_dialogbox(hero + HERO_PORTRAIT, (char*)hero + HERO_NAME2,
+						g_dtp2,	3, g_dtp2 + 500, g_dtp2 + 600, get_ttx(744));
 
-			ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
+			g_textbox_width = tw_bak;
 
 			if (answer == 1) {
 				/* knock the infected hero out */
@@ -417,7 +412,7 @@ void init_game_state(void)
 
 	ds_writeb(CURRENT_TOWN_BAK, ds_writeb(CURRENT_TOWN, TOWNS_THORWAL));
 
-	ds_writew(TEXTBOX_WIDTH, 3);
+	g_textbox_width = 3;
 
 	/* timer */
 	gs_day_timer = HOURS(24) - 1;

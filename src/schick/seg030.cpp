@@ -94,14 +94,13 @@ Bit8u* seg030_008d(signed short arg0)
 /* unused in the game */
 void print_date(void)
 {
-	unsigned short textbox_width_bak;
+	signed short tw_bak;
 
 	prepare_date_str();
-	textbox_width_bak = ds_readw(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 3);
-
+	tw_bak = g_textbox_width;
+	g_textbox_width = 3;
 	GUI_input((char*)g_dtp2, 0);
-	ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
+	g_textbox_width = tw_bak;
 }
 
 void prepare_date_str(void)

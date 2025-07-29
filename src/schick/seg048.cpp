@@ -92,8 +92,8 @@ void status_menu(signed short hero_pos)
 	g_timers_disabled++;
 
 	/* set textbox width */
-	tw_bak = ds_readws(TEXTBOX_WIDTH);
-	ds_writews(TEXTBOX_WIDTH, 3);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 3;
 
 	set_audio_track(ARCHIVE_FILE_SUMMARY_XMI);
 
@@ -836,7 +836,7 @@ void status_menu(signed short hero_pos)
 	}
 
 	ds_writew(REQUEST_REFRESH, 1);
-	ds_writew(TEXTBOX_WIDTH, tw_bak);
+	g_textbox_width = tw_bak;
 	g_timers_disabled--;
 
 	if (ds_readbs(CURRENT_TOWN) != TOWNS_NONE) {

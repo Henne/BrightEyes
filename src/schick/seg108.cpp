@@ -41,7 +41,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 
 	signed short disease;
 	signed short poison;
-	signed short textbox_width_bak;
+	signed short tw_bak;
 	signed short consumer_idx;
 
 	signed short l_di, l_si;
@@ -587,10 +587,10 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 				}
 
 				/* print output: maybe garbage - string not set to 0 */
-				textbox_width_bak = ds_readw(TEXTBOX_WIDTH);
-				ds_writew(TEXTBOX_WIDTH, 5);
+				tw_bak = g_textbox_width;
+				g_textbox_width = 5;
 				GUI_output((char*)g_dtp2);
-				ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
+				g_textbox_width = tw_bak;
 			}
 		}
 

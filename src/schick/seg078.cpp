@@ -615,8 +615,8 @@ void DNG02_chest04_func3(Bit8u*)
 	signed short tw_bak;
 	Bit8u *hero;
 
-	tw_bak = ds_readws(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 7);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 7;
 
 	if (!ds_readb(DNG02_APPARATURE_DESTROYED))
 	{
@@ -646,7 +646,7 @@ void DNG02_chest04_func3(Bit8u*)
 		GUI_output(get_ttx(522));
 	}
 
-	ds_writew(TEXTBOX_WIDTH, tw_bak);
+	g_textbox_width = tw_bak;
 }
 
 void DNG02_chest05_func3(Bit8u* chest)

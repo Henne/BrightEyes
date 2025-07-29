@@ -307,14 +307,14 @@ void THO_arsenal(void)
 			set_party_money(ds_readws(ARSENAL_MONEY));
 
 			ds_writew(CURRENT_TYPEINDEX, 92);
-			tw_bak = ds_readws(TEXTBOX_WIDTH);
-			ds_writew(TEXTBOX_WIDTH, 3);
+			tw_bak = g_textbox_width;
+			g_textbox_width = 3;
 
 			do_merchant();
 
 			ds_writews(ARSENAL_MONEY, (signed short)get_party_money());
 			div_ds_ws(ARSENAL_MONEY, 100);
-			ds_writew(TEXTBOX_WIDTH, tw_bak);
+			g_textbox_width = tw_bak;
 			set_party_money(p_money);
 
 

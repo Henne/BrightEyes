@@ -186,8 +186,8 @@ void DNG15_riddle(void)
 	signed short tw_bak;
 	Bit8u *ptr;
 
-	tw_bak = ds_readws(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 8);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 8;
 
 	ptr = p_datseg + DNG_MAP;
 
@@ -251,7 +251,7 @@ void DNG15_riddle(void)
 		}
 	}
 
-	ds_writew(TEXTBOX_WIDTH, tw_bak);
+	g_textbox_width = tw_bak;
 }
 
 #if !defined(__BORLANDC__)

@@ -92,7 +92,7 @@ void FIG_loot_monsters(void)
 	signed short l6;
 	Bit32s money;
 	signed short autofight_bak;
-	signed short textbox_width_bak;
+	signed short tw_bak;
 
 	char *a[31];
 
@@ -138,8 +138,8 @@ void FIG_loot_monsters(void)
 				l6 = l3;
 			}
 
-			textbox_width_bak = ds_readws(TEXTBOX_WIDTH);
-			ds_writew(TEXTBOX_WIDTH, 6);
+			tw_bak = g_textbox_width;
+			g_textbox_width = 6;
 
 			l4 = GUI_radio(get_tx(14), l6,
 						a[0 + l_si], a[1 + l_si], a[2 + l_si], a[3 + l_si],
@@ -147,8 +147,7 @@ void FIG_loot_monsters(void)
 						a[8 + l_si], a[9 + l_si], a[10 + l_si], a[11 + l_si],
 						a[12 + l_si], a[13 + l_si], a[14 + l_si], a[15 + l_si]) - 1;
 
-			ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
-
+			g_textbox_width = tw_bak;
 
 			if ((l5 != 0) && (l6 - 1 == l4)) {
 				if (!l_si) {

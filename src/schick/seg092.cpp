@@ -194,8 +194,8 @@ void loot_simple_chest(Bit8u *chest)
 	signed short tw_bak;
 	char names[20][30];
 
-	tw_bak = ds_readws(TEXTBOX_WIDTH);
-	ds_writews(TEXTBOX_WIDTH, 7);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 7;
 
 	host_writeb(chest + 0x2, 0);
 
@@ -238,7 +238,7 @@ void loot_simple_chest(Bit8u *chest)
 
 	} while (item_no != -2);
 
-	ds_writews(TEXTBOX_WIDTH, tw_bak);
+	g_textbox_width = tw_bak;
 }
 
 /**
@@ -280,8 +280,8 @@ void loot_chest(Bit8u *chest, char *text_non_empty, char *text_empty)
 
 	host_writeb(chest + 0x2, 0);
 
-	tw_bak = ds_readws(TEXTBOX_WIDTH);
-	ds_writews(TEXTBOX_WIDTH, 7);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 7;
 
 	do {
 		item_no = 0;
@@ -321,7 +321,7 @@ void loot_chest(Bit8u *chest, char *text_non_empty, char *text_empty)
 
 	} while (item_no != -2);
 
-	ds_writews(TEXTBOX_WIDTH, tw_bak);
+	g_textbox_width = tw_bak;
 }
 
 /**
@@ -587,8 +587,8 @@ void loot_multi_chest(Bit8u *chest, char *msg)
 	signed short len;
 	char names[20][25];
 
-	tw_bak = ds_readws(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 7);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 7;
 
 	do {
 
@@ -663,7 +663,7 @@ void loot_multi_chest(Bit8u *chest, char *msg)
 
 	} while (item_no != -2);
 
-	ds_writew(TEXTBOX_WIDTH, tw_bak);
+	g_textbox_width = tw_bak;
 }
 
 #if !defined(__BORLANDC__)

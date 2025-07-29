@@ -109,14 +109,14 @@ void do_healer(void)
 
 		if (ds_readw(MOUSE2_EVENT) != 0 || ds_readw(ACTION) == ACTION_ID_PAGE_UP) {
 
-			ds_writew(TEXTBOX_WIDTH, 4);
+			g_textbox_width = 4;
 
 			answer = GUI_radio(get_ttx(459), 4,
 						get_ttx(455),
 						get_ttx(456),
 						get_ttx(457),
 						get_ttx(458)) - 1;
-			ds_writew(TEXTBOX_WIDTH, 3);
+			g_textbox_width = 3;
 
 			if (answer != -2) {
 				ds_writew(ACTION, answer + ACTION_ID_ICON_1);

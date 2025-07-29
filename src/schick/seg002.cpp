@@ -186,18 +186,18 @@ void read_sound_cfg(void)
 
 #if !defined(__BORLANDC__)
 		/* menu to select the music source */
-		const Bit16s tw_bak = ds_readws(TEXTBOX_WIDTH);
+		const Bit16s tw_bak = g_textbox_width;
 		char question[] = "WIE SOLL DIE MUSIK WIEDERGEGEBEN WERDEN?";
 		char opt1[] = "AUDIO-CD";
 		char opt2[] = "MIDI";
 		signed short answer;
 
-		ds_writews(TEXTBOX_WIDTH, 3);
+		g_textbox_width = 3;
 		do {
 			answer = GUI_radio(question, 2, opt1, opt2);
 
 		} while (answer == -1);
-		ds_writews(TEXTBOX_WIDTH, tw_bak);
+		g_textbox_width = tw_bak;
 
 		if (answer == 1)
 		{
@@ -1513,7 +1513,7 @@ void mouse_19dc(void)
 void handle_gui_input(void)
 {
 	signed short l_si;
-	signed short l_di;
+	signed short tw_bak;
 	signed short l1;
 
 	ds_writew(BIOSKEY_EVENT, ds_writew(ACTION, l_si = 0));
@@ -1570,10 +1570,10 @@ void handle_gui_input(void)
 			ds_writew(BIOSKEY_EVENT10, 1);
 			g_timers_disabled++;
 			ds_writew(GUI_TEXT_CENTERED, 1);
-			l_di = ds_readws(TEXTBOX_WIDTH);
-			ds_writew(TEXTBOX_WIDTH, 2);
+			tw_bak = g_textbox_width;
+			g_textbox_width = 2;
 			GUI_output((char*)p_datseg + PAUSE_STRING);		/* P A U S E */
-			ds_writew(TEXTBOX_WIDTH, l_di);
+			g_textbox_width = tw_bak;
 			ds_writew(GUI_TEXT_CENTERED, 0);
 			ds_writew(BIOSKEY_EVENT10, l_si = ds_writew(BIOSKEY_EVENT, 0));
 			g_timers_disabled--;
@@ -1637,23 +1637,23 @@ void handle_gui_input(void)
 			/* Credits */
 
 			l_si = 0;
-			l_di = ds_readws(TEXTBOX_WIDTH);
-			ds_writew(TEXTBOX_WIDTH, 5);
+			tw_bak = g_textbox_width;
+			g_textbox_width = 5;
 			ds_writew(GUI_TEXT_CENTERED, 1);
 			GUI_output(get_ttx(394));
 			ds_writew(GUI_TEXT_CENTERED, 0);
-			ds_writew(TEXTBOX_WIDTH, l_di);
+			g_textbox_width = tw_bak;
 
 		} else if (l_si == 0xfc) {
 			/* Clock */
 			l_si = 0;
-			l_di = ds_readws(TEXTBOX_WIDTH);
-			ds_writew(TEXTBOX_WIDTH, 5);
+			tw_bak = g_textbox_width;
+			g_textbox_width = 5;
 			ds_writew(GUI_TEXT_CENTERED, 1);
 			prepare_date_str();
 			GUI_output((char*)g_dtp2);
 			ds_writew(GUI_TEXT_CENTERED, 0);
-			ds_writew(TEXTBOX_WIDTH, l_di);
+			g_textbox_width = tw_bak;
 
 		}
 	}
@@ -1729,6 +1729,7 @@ void handle_input(void)
 		}
 
 		/* Ctrl + P -> pause game */
+		/* TODO: use tw_bak here */
 		if ((ds_readw(BIOSKEY_EVENT) == 0x10) &&
 			(ds_readws(BIOSKEY_EVENT10) == 0) &&
 			!ds_readbs(DIALOGBOX_LOCK) &&
@@ -1737,9 +1738,9 @@ void handle_input(void)
 			g_timers_disabled++;
 			ds_writew(BIOSKEY_EVENT10, 1);
 			ds_writew(GUI_TEXT_CENTERED, 1);
-			ds_writew(TEXTBOX_WIDTH, 2);
+			g_textbox_width = 2;
 			GUI_output((char*)p_datseg + PAUSE_STRING);		/* P A U S E */
-			ds_writew(TEXTBOX_WIDTH, 3);
+			g_textbox_width = 3;
 			ds_writew(GUI_TEXT_CENTERED, 0);
 			g_timers_disabled--;
 
@@ -5541,7 +5542,7 @@ int schick_main(int argc, char** argv)
 
 		init_common_buffers();
 
-		ds_writew(TEXTBOX_WIDTH, 3);
+		g_textbox_width = 3;
 
 		refresh_screen_size();
 
@@ -5595,7 +5596,7 @@ int schick_main(int argc, char** argv)
 
 		if (copy_protection()) {
 
-			ds_writew(TEXTBOX_WIDTH, 3);
+			g_textbox_width = 3;
 
 			l3 = get_diskspace();
 
@@ -5669,7 +5670,7 @@ signed short copy_protection(void)
 #ifndef M302de_FEATURE_MOD
 	load_tx(ARCHIVE_FILE_FIGHTTXT_LTX);
 
-	ds_writew(TEXTBOX_WIDTH, 4);
+	g_textbox_width = 4;
 
 	set_textcolor(0xff, 0);
 

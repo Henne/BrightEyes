@@ -125,8 +125,8 @@ signed short do_travel_mode(void)
 						get_ttx(545),
 						get_ttx(235 + ds_readbs(CURRENT_TOWN)));
 
-					tw_bak = ds_readws(TEXTBOX_WIDTH);
-					ds_writew(TEXTBOX_WIDTH, 4);
+					tw_bak = g_textbox_width;
+					g_textbox_width = 4;
 
 					answer = GUI_radio(g_text_output_buf, (signed char)i,
 								destinations_tab[0],
@@ -136,7 +136,7 @@ signed short do_travel_mode(void)
 								destinations_tab[4],
 								destinations_tab[5]) - 1;
 
-					ds_writew(TEXTBOX_WIDTH, tw_bak);
+					g_textbox_width = tw_bak;
 
 					ds_writew(CURRENT_TOWN_ANIX, 0);
 

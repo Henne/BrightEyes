@@ -54,7 +54,7 @@ void talk_tavern(void)
 	answer1_buffer = text_buffer + 1000;
 	answer2_buffer = answer1_buffer + 60;
 	answer3_buffer = answer2_buffer + 60;
-	ds_writews(TEXTBOX_WIDTH, 9);
+	g_textbox_width = 9;
 	ds_writeb(TLK_TAV_FULLNESS, ds_writeb(TLK_TAV_TESTDRUNK, ds_writeb(CURRENT_INFORMER, ds_writeb(TLK_TAV_FOLLOWINFORMER, 0))));
 	ds_writeb(TLK_TAV_DRINKCOUNT, 0);
 
@@ -244,7 +244,7 @@ void talk_tavern(void)
 	} while (ds_readws(DIALOG_DONE) == 0);
 
 	ds_writews(NPC_MEET_TAVERN, 0);
-	ds_writews(TEXTBOX_WIDTH, 3);
+	g_textbox_width = 3;
 	g_text_file_index = -1;
 	load_tx(g_tx_file_index);
 	set_var_to_zero();

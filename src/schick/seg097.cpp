@@ -353,7 +353,7 @@ signed short GUI_input(char *str, unsigned short num)
 	l4 = ds_readw(TEXTLINE_POSY);
 	l5 = ds_readw(TEXTLINE_MAXLEN);
 
-	l_di = (ds_readw(TEXTBOX_WIDTH) * 32) + 32;
+	l_di = (g_textbox_width * 32) + 32;
 	ds_writew(TEXTBOX_POS_X, ((signed short)(320u - l_di) >> 1) + ds_readws(BASEPOS_X));
 
 	ds_writew(TEXTLINE_POSX, ds_readw(TEXTBOX_POS_X) + 5);
@@ -394,7 +394,7 @@ signed short GUI_input(char *str, unsigned short num)
 		if (ds_readw(BIOSKEY_EVENT10) != 0) {
 			wait_for_keypress();
 		} else {
-			delay_or_keypress(l_si * ds_readw(TEXTBOX_WIDTH) * 50);
+			delay_or_keypress(l_si * g_textbox_width * 50);
 		}
 
 		/* delete action table */
@@ -478,7 +478,8 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
 {
 	va_list arguments;
 	signed short i;
-	signed short l2, l3, l4, l5, l6;
+	signed short l2, l3, l4, l5;
+	signed short tw_bak;
 	signed short fg_bak, bg_bak;
 	signed short l7, l8, l9, l10;
 	signed short retval;
@@ -497,10 +498,10 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
 	l7 = ds_readw(TEXTLINE_POSX);
 	l8 = ds_readw(TEXTLINE_POSY);
 	l9 = ds_readw(TEXTLINE_MAXLEN);
-	l6 = ds_readw(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 9);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 9;
 
-	l_di = ds_readw(TEXTBOX_WIDTH) * 32 + 32;
+	l_di = g_textbox_width * 32 + 32;
 	ds_writew(TEXTBOX_POS_X, ((signed short)(320 - l_di) >> 1) + ds_readw(BASEPOS_X));
 	ds_writew(TEXTLINE_POSX, ds_readw(TEXTBOX_POS_X) + 5);
 	ds_writew(TEXTLINE_MAXLEN, l_di - 8);
@@ -586,7 +587,7 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
 	ds_writew(TEXTLINE_POSY, l8);
 	ds_writew(TEXTLINE_MAXLEN, l9);
 
-	ds_writew(TEXTBOX_WIDTH, l6);
+	g_textbox_width = tw_bak;
 
 	ds_writew(TXT_TABPOS1, l10);
 
@@ -737,7 +738,7 @@ signed short GUI_radio(char *text, signed char options, ...)
 	l8 = ds_readw(TEXTLINE_POSY);
 	l9 = ds_readw(TEXTLINE_MAXLEN);
 
-	l11 = ds_readw(TEXTBOX_WIDTH) * 32 + 32;
+	l11 = g_textbox_width * 32 + 32;
 	ds_writew(TEXTBOX_POS_X, ((320 - l11) >> 1) + ds_readw(BASEPOS_X));
 	ds_writew(TEXTLINE_POSX, ds_readw(TEXTBOX_POS_X) + 5);
 	ds_writew(TEXTLINE_MAXLEN, l11 - 8);
@@ -799,8 +800,8 @@ signed short GUI_radio(char *text, signed char options, ...)
  */
 void GUI_print_fight_intro_msg(signed short fight_id)
 {
-	signed short textbox_width_bak = ds_readws(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 7);
+	signed short tw_bak = g_textbox_width;
+	g_textbox_width = 7;
 
 	if (ds_readbs(DUNGEON_INDEX) == DUNGEONS_VERFALLENE_HERBERGE) {
 		DNG02_fight_intro(fight_id);
@@ -827,7 +828,7 @@ void GUI_print_fight_intro_msg(signed short fight_id)
 		DNG14_fight_intro(fight_id);
 	}
 
-	ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
+	g_textbox_width = tw_bak;
 }
 
 /**

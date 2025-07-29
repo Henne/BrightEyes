@@ -326,41 +326,40 @@ void show_treasure_map(void)
 		refresh_screen_size();
 
 		if (ds_readb(TMAP_DOUBLE1) != 0) {
+
 			/* unicorn brought a piece you already have */
-			tw_bak = ds_readws(TEXTBOX_WIDTH);
-			ds_writew(TEXTBOX_WIDTH, 3);
+			tw_bak = g_textbox_width;
+			g_textbox_width = 3;
 
 			GUI_output(get_ttx(808));
 
-			ds_writew(TEXTBOX_WIDTH, tw_bak);
+			g_textbox_width = tw_bak;
 			ds_writeb(TMAP_DOUBLE1, 0);
 		}
 
 		if (ds_readb(TMAP_DOUBLE2) != 0) {
 			/* you got a piece you already have from the unicorn */
-			tw_bak = ds_readws(TEXTBOX_WIDTH);
-			ds_writew(TEXTBOX_WIDTH, 3);
+			tw_bak = g_textbox_width;
+			g_textbox_width = 3;
 
 			GUI_output(get_ttx(809));
 
-			ds_writew(TEXTBOX_WIDTH, tw_bak);
+			g_textbox_width = tw_bak;
 			ds_writeb(TMAP_DOUBLE2, 0);
 		}
 
 		if (count >= 7 && !ds_readb(FIND_HYGGELIK)) {
 			/* the way can now be found */
 
-			tw_bak = ds_readws(TEXTBOX_WIDTH);
-			ds_writew(TEXTBOX_WIDTH, 3);
+			tw_bak = g_textbox_width;
+			g_textbox_width = 3;
 
 			/* */
-			sprintf((char*)g_text_output_buf,
-				get_ttx(727),
-				(char*)get_hero(get_random_hero()) + HERO_NAME2);
-
+			sprintf((char*)g_text_output_buf, get_ttx(727),	(char*)get_hero(get_random_hero()) + HERO_NAME2);
 			GUI_output(g_text_output_buf);
 
-			ds_writew(TEXTBOX_WIDTH, tw_bak);
+			g_textbox_width = tw_bak;
+
 			ds_writeb(FIND_HYGGELIK, 1);
 		}
 
@@ -411,8 +410,8 @@ signed short game_options(void)
 
 	done = 0;
 
-	tw_bak = ds_readws(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 3);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 3;
 	ds_writeb(SPECIAL_SCREEN, 1);
 	g_wallclock_update = 0;
 	ds_writew(AREA_PREPARED, -1);
@@ -593,7 +592,7 @@ signed short game_options(void)
 		ds_writeb(FADING_STATE, 3);
 	}
 
-	ds_writew(TEXTBOX_WIDTH, tw_bak);
+	g_textbox_width = tw_bak;
 
 	return done == -1 ? 1 : 0;
 }
@@ -684,14 +683,14 @@ void do_location(void)
 	void (*func)(void);
 
 	tm_bak = ds_readb(SHOW_TRAVEL_MAP);
-	tw_bak = ds_readws(TEXTBOX_WIDTH);
+	tw_bak = g_textbox_width;
 	bak1 = ds_readws(BASEPOS_X);
 	bak2 = ds_readws(BASEPOS_Y);
 
 	ds_writew(BASEPOS_X, 0);
 	ds_writew(BASEPOS_Y, 0);
 	ds_writeb(SHOW_TRAVEL_MAP, 0);
-	ds_writew(TEXTBOX_WIDTH, 3);
+	g_textbox_width = 3;
 
 	func = g_location_handlers[ds_readbs(CURRENT_LOCTYPE)];
 
@@ -703,7 +702,7 @@ void do_location(void)
 
 	ds_writew(BASEPOS_X, bak1);
 	ds_writew(BASEPOS_Y, bak2);
-	ds_writew(TEXTBOX_WIDTH, tw_bak);
+	g_textbox_width = tw_bak;
 
 	if (!ds_readb(SHOW_TRAVEL_MAP)) {
 		ds_writeb(SHOW_TRAVEL_MAP, tm_bak);
@@ -783,10 +782,10 @@ void leave_dungeon(void)
  */
 void tumult(void)
 {
-	signed short textbox_width_bak;
+	signed short tw_bak;
 
-	textbox_width_bak = ds_readw(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 7);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 7;
 
 	/* print message */
 	GUI_output(get_ttx(764));
@@ -794,10 +793,8 @@ void tumult(void)
 	/* each hero in the group looses 1W6 LE */
 	sub_group_le(random_schick(6));
 
-
 	/* the guards or a mob */
-	sprintf((char*)g_dtp2,
-		get_ttx(765),
+	sprintf((char*)g_dtp2, get_ttx(765),
 		((ds_readb(CURRENT_TOWN) == TOWNS_PREM ||
 			ds_readb(CURRENT_TOWN) == TOWNS_PHEXCAER ||
 			ds_readb(CURRENT_TOWN) == TOWNS_THORWAL ||
@@ -806,7 +803,7 @@ void tumult(void)
 
 	GUI_output((char*)g_dtp2);
 
-	ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
+	g_textbox_width = tw_bak;
 }
 
 /**

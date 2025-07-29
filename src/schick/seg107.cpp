@@ -136,7 +136,7 @@ void item_read_recipe(void)
 void item_read_document(void)
 {
 	char *str;
-	signed short textbox_width_bak;
+	signed short tw_bak;
 
 	/* TODO: replace magic numbers */
 	switch (ds_readws(USED_ITEM_ID)) {
@@ -151,10 +151,10 @@ void item_read_document(void)
 	case 0xf7: str = get_ttx(759); break;
 	}
 
-	textbox_width_bak = ds_readws(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 7);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 7;
 	GUI_output(str);
-	ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
+	g_textbox_width = tw_bak;
 }
 
 /* Borlandified and identical */

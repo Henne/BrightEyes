@@ -63,7 +63,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 	signed short radio_i;
 	signed short slot_no;
 	Bit8u *ptr;
-	signed short textbox_width_bak;
+	signed short tw_bak;
 	signed short slots[16];
 
 	l1 = 1;
@@ -538,8 +538,8 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 							}
 
 							refresh_screen_size();
-							textbox_width_bak = ds_readws(TEXTBOX_WIDTH);
-							ds_writews(TEXTBOX_WIDTH, 6);
+							tw_bak = g_textbox_width;
+							g_textbox_width = 6;
 
 							selected = GUI_radio(g_text_output_buf, radio_i,
 									(char*)(ds_readd((RADIO_NAME_LIST + 0x00))),
@@ -559,7 +559,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 									(char*)(ds_readd((RADIO_NAME_LIST + 0x38))),
 									(char*)(ds_readd((RADIO_NAME_LIST + 0x3c))));
 
-							ds_writews(TEXTBOX_WIDTH, textbox_width_bak);
+							g_textbox_width = tw_bak;
 
 							update_mouse_cursor();
 
@@ -615,8 +615,8 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 								(char*)(GUI_names_grammar((signed short)0x8002, host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID), 0)));
 
 							refresh_screen_size();
-							textbox_width_bak = ds_readws(TEXTBOX_WIDTH);
-							ds_writews(TEXTBOX_WIDTH, 6);
+							tw_bak = g_textbox_width;
+							g_textbox_width = 6;
 
 							selected = GUI_radio(g_text_output_buf, radio_i,
 									(char*)(ds_readd((RADIO_NAME_LIST + 0x00))),
@@ -636,7 +636,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 									(char*)(ds_readd((RADIO_NAME_LIST + 0x38))),
 									(char*)(ds_readd((RADIO_NAME_LIST + 0x3c))));
 
-							ds_writews(TEXTBOX_WIDTH, textbox_width_bak);
+							g_textbox_width = tw_bak;
 
 							update_mouse_cursor();
 
@@ -851,8 +851,8 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 							(char*)hero + HERO_NAME2);
 
 						refresh_screen_size();
-						textbox_width_bak = ds_readws(TEXTBOX_WIDTH);
-						ds_writews(TEXTBOX_WIDTH, 6);
+						tw_bak = g_textbox_width;
+						g_textbox_width = 6;
 
 						selected = GUI_radio(g_text_output_buf, radio_i,
 								(char*)(ds_readd((RADIO_NAME_LIST + 0x00))),
@@ -872,7 +872,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 								(char*)(ds_readd((RADIO_NAME_LIST + 0x38))),
 								(char*)(ds_readd((RADIO_NAME_LIST + 0x3c))));
 
-						ds_writews(TEXTBOX_WIDTH, textbox_width_bak);
+						g_textbox_width = tw_bak;
 
 						update_mouse_cursor();
 

@@ -39,8 +39,8 @@ signed short DNG03_handler(void)
 	signed short l3;
 	signed short l4;
 
-	tw_bak = ds_readws(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 7);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 7;
 
 	target_pos = DNG_POS(ds_readbs(DUNGEON_LEVEL), ds_readws(X_TARGET), ds_readws(Y_TARGET));
 
@@ -413,7 +413,7 @@ signed short DNG03_handler(void)
 		ds_writeb(FADING_STATE, 3);
 	}
 
-	ds_writew(TEXTBOX_WIDTH, tw_bak);
+	g_textbox_width = tw_bak;
 	ds_writew(DNG_HANDLED_POS, target_pos);
 
 	return 0;

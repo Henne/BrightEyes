@@ -485,8 +485,8 @@ signed short DNG_step(void)
 
 	if (ds_readw(MOUSE2_EVENT) != 0 || ds_readws(ACTION) == ACTION_ID_PAGE_UP)
 	{
-		tw_bak = ds_readws(TEXTBOX_WIDTH);
-		ds_writew(TEXTBOX_WIDTH, 3);
+		tw_bak = g_textbox_width;
+		g_textbox_width = 3;
 
 		for (l_di = retval = 0; l_di < 9; l_di++)
 		{
@@ -516,7 +516,7 @@ signed short DNG_step(void)
 			ds_writew(ACTION, l_di + ACTION_ID_ICON_1);
 		}
 
-		ds_writew(TEXTBOX_WIDTH, tw_bak);
+		g_textbox_width = tw_bak;
 	}
 
 	l_di = 0;
@@ -807,12 +807,12 @@ void do_dungeon(void)
 
 	ds_writeb(DUNGEON_INDEX_BAK, ds_readbs(DUNGEON_INDEX));
 
-	tw_bak = ds_readws(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 7);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 7;
 
 	DNG_step();
 
-	ds_writew(TEXTBOX_WIDTH, tw_bak);
+	g_textbox_width = tw_bak;
 }
 
 struct fight_struct {

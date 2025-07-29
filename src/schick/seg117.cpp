@@ -55,7 +55,7 @@ void pause_traveling(signed short ani_no)
 	g_basepos_x_bak = ds_readw(BASEPOS_X);
 	g_basepos_y_bak = ds_readw(BASEPOS_Y);
 
-	g_textbox_width_bak = ds_readw(TEXTBOX_WIDTH);
+	g_textbox_width_bak = g_textbox_width;
 	g_wallclock_update_bak = g_wallclock_update;
 
 	ds_writeb(TRAVEL_EVENT_ACTIVE, 1);
@@ -64,7 +64,7 @@ void pause_traveling(signed short ani_no)
 	ds_writeb(SHOW_TRAVEL_MAP, (unsigned char)ds_writew(BASEPOS_X, g_wallclock_update = 0));
 
 	ds_writew(BASEPOS_Y, ani_no == 21 ? 60: 70);
-	ds_writew(TEXTBOX_WIDTH, 9);
+	g_textbox_width = 9;
 }
 
 #if defined(__BORLANDC__)
@@ -75,7 +75,7 @@ void resume_traveling(void)
 	ds_writew(BASEPOS_X, g_basepos_x_bak);
 	ds_writew(BASEPOS_Y, g_basepos_y_bak);
 
-	ds_writew(TEXTBOX_WIDTH, g_textbox_width_bak);
+	g_textbox_width = g_textbox_width_bak;
 	g_wallclock_update = g_wallclock_update_bak;
 
 	set_var_to_zero();

@@ -393,11 +393,11 @@ void show_times_up(void)
 
 	delay_or_keypress(200);
 
-	tw_bak = ds_readws(TEXTBOX_WIDTH);
+	tw_bak = g_textbox_width;
 	bak1 = ds_readws(BASEPOS_X);
 	bak2 = ds_readws(BASEPOS_Y);
 
-	ds_writew(TEXTBOX_WIDTH, 7);
+	g_textbox_width = 7;
 	ds_writew(BASEPOS_X, 0);
 	ds_writew(BASEPOS_Y, 55);
 
@@ -407,7 +407,7 @@ void show_times_up(void)
 
 	ds_writew(BASEPOS_X, bak1);
 	ds_writew(BASEPOS_Y, bak2);
-	ds_writew(TEXTBOX_WIDTH, tw_bak);
+	g_textbox_width = tw_bak;
 
 	/* restore text file except for CHARTEXT.LTX, TAVERN.TLK and except for dialogs */
 	if (fi_bak != -1 && fi_bak != ARCHIVE_FILE_CHARTEXT_LTX
@@ -429,7 +429,7 @@ void show_outro(void)
 	signed short i;
 	struct nvf_desc nvf;
 
-	ds_writew(TEXTBOX_WIDTH, 7);
+	g_textbox_width = 7;
 	ds_writew(BASEPOS_X, 0);
 	ds_writew(BASEPOS_Y, 60);
 

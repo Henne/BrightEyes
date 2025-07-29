@@ -198,11 +198,11 @@ void loot_corpse(Bit8u* chest_ptr, char *text, Bit8u *flag)
 
 	if (!host_readbs(flag)) {
 
-		ds_writew(TEXTBOX_WIDTH, 7);
+		g_textbox_width = 7;
 
 		answer = GUI_radio(g_text_output_buf, 3, get_ttx(524), get_ttx(525), get_ttx(526)) - 1;
 
-		ds_writew(TEXTBOX_WIDTH, 3);
+		g_textbox_width = 3;
 
 		if (answer == 0) {
 			/* examine the corpse */

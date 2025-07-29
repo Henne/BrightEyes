@@ -739,7 +739,7 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 	signed short retval = 1;
 	signed short spell_id;
 	signed short ae_cost;
-	signed short textbox_width_bak;
+	signed short tw_bak;
 	Bit8u *ptr;
 	void (*func)(void);
 	signed short l4;
@@ -756,8 +756,8 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 		return 0;
 	}
 
-	textbox_width_bak = ds_readws(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 3);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 3;
 
 	if (selection_menu == 1) {
 		spell_id = select_spell(hero, 0);
@@ -924,7 +924,7 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 		retval = -1;
 	}
 
-	ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
+	g_textbox_width = tw_bak;
 
 	return retval;
 }

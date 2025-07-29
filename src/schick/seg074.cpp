@@ -36,7 +36,7 @@ void show_automap(void)
 	signed short done;
 	signed short dungeon;
 	signed short town;
-	signed short textbox_width_bak;
+	signed short tw_bak;
 
 	if (!ds_readb(DUNGEON_LIGHT) ||
 		((ds_readbs(DUNGEON_LIGHT) == 1) && (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 6) > 0)))
@@ -49,8 +49,8 @@ void show_automap(void)
 
 		ds_writeb(CURRENT_TOWN, ds_writeb(DUNGEON_INDEX, 0));
 
-		textbox_width_bak = ds_readw(TEXTBOX_WIDTH);
-		ds_writew(TEXTBOX_WIDTH, 3);
+		tw_bak = g_textbox_width;
+		g_textbox_width = 3;
 
 		l_si = (ds_readb(DNG_MAP_SIZE) == 16) ? 0 :
 				((ds_readws(X_TARGET) - 8 < 0) ? 0 :
@@ -130,7 +130,7 @@ void show_automap(void)
 			}
 		} while (done == 0);
 
-		ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
+		g_textbox_width = tw_bak;
 		ds_writew(REQUEST_REFRESH, 1);
 
 		clear_ani_pal();
@@ -493,7 +493,7 @@ signed short select_teleport_dest(void)
 	signed short dungeon;
 	signed short town;
 	signed short ae_costs;
-	signed short textbox_width_bak;
+	signed short tw_bak;
 
 	draw_main_screen();
 
@@ -509,8 +509,8 @@ signed short select_teleport_dest(void)
 	ds_writew(AUTOMAP_SELY, ds_readws(Y_TARGET));
 	ds_writeb(DUNGEON_INDEX, (signed char)dungeon);
 	ds_writeb(CURRENT_TOWN, (signed char)town);
-	textbox_width_bak = ds_readws(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 3);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 3;
 
 	render_automap(l_si);
 
@@ -631,7 +631,7 @@ signed short select_teleport_dest(void)
 		ae_costs = 15;
 	}
 
-	ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
+	g_textbox_width = tw_bak;
 	ds_writew(REQUEST_REFRESH, 1);
 
 	return ae_costs;

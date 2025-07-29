@@ -204,12 +204,12 @@ void do_harbor(void)
 #endif
 						(Bit8u*)(print_passage_price(ds_readbs(SHIP_TABLE + SHIP_TABLE_BASE_PRICE_PER_DISTANCE + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE)), (Bit8u*)(host_readds(psg_ptr + HARBOR_OPTION_ROUTE_PTR)))));
 
-					i = ds_readws(TEXTBOX_WIDTH);
-					ds_writew(TEXTBOX_WIDTH, 5);
+					i = g_textbox_width;
+					g_textbox_width = 5;
 
 					answer = GUI_bool((char*)g_dtp2);
 
-					ds_writew(TEXTBOX_WIDTH, i);
+					g_textbox_width_bak = i;
 
 					if (answer != 0) {
 

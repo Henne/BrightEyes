@@ -536,7 +536,7 @@ void do_smith(void)
 
 		if (ds_readws(MOUSE2_EVENT) != 0 || ds_readws(ACTION) == ACTION_ID_PAGE_UP) {
 
-			ds_writew(TEXTBOX_WIDTH, 4);
+			g_textbox_width = 4;
 
 			answer = GUI_radio(get_ttx(496), 3,
 						get_ttx(343),
@@ -544,7 +544,7 @@ void do_smith(void)
 						get_ttx(498)) - 1;
 
 			/* TODO: why should it be 3??? Better make a backup */
-			ds_writew(TEXTBOX_WIDTH, 3);
+			g_textbox_width = 3;
 
 			if (answer != -2) {
 				ds_writew(ACTION, answer + ACTION_ID_ICON_1);

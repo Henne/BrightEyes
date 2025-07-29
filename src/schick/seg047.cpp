@@ -413,13 +413,13 @@ signed short select_hero_from_group(char *title)
 	struct helper dst = *(((struct helper*)(p_datseg + SEG047_INIT1)));
 #endif
 	signed short cnt;
-	signed short textbox_width_bak;
+	signed short tw_bak;
 	signed short bak_2;
 	signed short bak_3;
 	unsigned char *hero;
 
-	textbox_width_bak = ds_readw(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 3);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 3;
 	cnt = 0;
 
 	for (i = 0; i <= 6; i++) {
@@ -458,7 +458,7 @@ signed short select_hero_from_group(char *title)
 
 		ds_writew(BASEPOS_X, bak_2);
 		ds_writew(BASEPOS_Y, bak_3);
-		ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
+		g_textbox_width = tw_bak;
 
 		if (answer != -2)
 			return dst.v[answer];
@@ -466,7 +466,7 @@ signed short select_hero_from_group(char *title)
 			return -1;
 	}
 
-	ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
+	g_textbox_width = tw_bak;
 	return -1;
 }
 
@@ -490,13 +490,13 @@ signed short select_hero_ok(char *title)
 	struct helper dst = *(((struct helper*)(p_datseg + SEG047_INIT2)));
 #endif
 	signed short cnt;
-	signed short textbox_width_bak;
+	signed short tw_bak;
 	signed short bak_2;
 	signed short bak_3;
 	unsigned char *hero;
 
-	textbox_width_bak = ds_readw(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 3);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 3;
 	cnt = 0;
 
 	for (hero = get_hero(0), i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
@@ -533,7 +533,7 @@ signed short select_hero_ok(char *title)
 
 		ds_writew(BASEPOS_X, bak_2);
 		ds_writew(BASEPOS_Y, bak_3);
-		ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
+		g_textbox_width = tw_bak;
 		ds_writew(SKILLED_HERO_POS, -1);
 
 		if (answer != -2)
@@ -542,7 +542,7 @@ signed short select_hero_ok(char *title)
 			return -1;
 	}
 
-	ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
+	g_textbox_width = tw_bak;
 	ds_writew(SKILLED_HERO_POS, -1);
 	return -1;
 }
@@ -568,13 +568,13 @@ signed short select_hero_ok_forced(char *title)
 	struct helper dst = *(((struct helper*)(p_datseg + SEG047_INIT3)));
 #endif
 	signed short cnt;
-	signed short textbox_width_bak;
+	signed short tw_bak;
 	signed short bak_2;
 	signed short bak_3;
 	unsigned char *hero;
 
-	textbox_width_bak = ds_readw(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 3);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 3;
 	cnt = 0;
 
 	for (hero = get_hero(0), i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
@@ -616,7 +616,7 @@ signed short select_hero_ok_forced(char *title)
 		} while (answer == -2);
 
 		ds_writew(SKILLED_HERO_POS, -1);
-		ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
+		g_textbox_width = tw_bak;
 
 		return dst.v[answer];
 	} else {

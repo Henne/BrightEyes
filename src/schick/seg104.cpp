@@ -153,7 +153,7 @@ signed short plan_alchemy(Bit8u *hero)
 	signed short i;
 	signed char recipe_index;
 	Bit8u *hero_p;
-	signed short l7;
+	signed short tw_bak;
 	signed char array[13];
 
 
@@ -181,8 +181,8 @@ signed short plan_alchemy(Bit8u *hero)
 
 		if (recipes != 0) {
 			/* ask which recipe should be used */
-			l7 = ds_readws(TEXTBOX_WIDTH);
-			ds_writew(TEXTBOX_WIDTH, 7);
+			tw_bak = g_textbox_width;
+			g_textbox_width = 7;
 
 			answer = GUI_radio(get_tx(43), (signed char)recipes,
 						(char*)(ds_readd(RADIO_NAME_LIST)),
@@ -200,7 +200,7 @@ signed short plan_alchemy(Bit8u *hero)
 						(char*)(ds_readd((RADIO_NAME_LIST + 12 * 4))),
 						(char*)(ds_readd((RADIO_NAME_LIST + 13 * 4))));
 
-			ds_writew(TEXTBOX_WIDTH, l7);
+			g_textbox_width = tw_bak;
 
 			if (answer != -1) {
 
@@ -260,7 +260,7 @@ signed short plan_alchemy(Bit8u *hero)
 									get_tx(47),
 									(char*)hero + HERO_NAME2);
 
-								ds_writew(TEXTBOX_WIDTH, 7);
+								g_textbox_width = 7;
 
 								do {
 									decision = GUI_radio((char*)g_dtp2, 3,
@@ -269,7 +269,7 @@ signed short plan_alchemy(Bit8u *hero)
 											get_tx(48)); /* Lieber doch nicht brauen */
 								} while (decision == -1);
 
-								ds_writew(TEXTBOX_WIDTH, 3);
+								g_textbox_width = 3;
 
 							} else {
 								decision = 1;

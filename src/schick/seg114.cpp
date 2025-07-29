@@ -337,7 +337,7 @@ void tevent_113(void)
 		/* calculate the difference of the estimation */
 		est_diff = gs_gods_estimation[GOD_FIRUN] - est_old;
 
-		ds_writew(TEXTBOX_WIDTH, 3);
+		g_textbox_width = 3;
 
 		/* the more money you spend, the better the group will sleep */
 		ds_writew(WILDCAMP_SLEEP_QUALITY, (est_diff <= 10 ? 1 :	(est_diff <= 50 ? 2 : (est_diff <= 100 ? 3 : 4))));
@@ -346,7 +346,7 @@ void tevent_113(void)
 		do_location();
 		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
 
-		ds_writew(TEXTBOX_WIDTH, 9);
+		g_textbox_width = 9;
 		ds_writew(REQUEST_REFRESH, 2);
 	}
 }
