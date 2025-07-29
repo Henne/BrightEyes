@@ -33,7 +33,7 @@ void THO_hetmann(void)
 
 	if (!ds_readb(GOT_LETTER_HET) &&
 		ds_readw(GOT_MAIN_QUEST) != 0 &&
-		(ds_readb(JURGE_AWAITS_LETTER) != 0 || ds_readb(NEED_LETTER) != 0))
+		(ds_readb(JURGE_AWAITS_LETTER) != 0 || gs_need_letter))
 	{
 
 		/* count already collected parts of the map */

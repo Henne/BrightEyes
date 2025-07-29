@@ -2412,8 +2412,8 @@ void do_timers(void)
 		}
 
 		/* drug timer (phexcaer) */
-		if (ds_readb(DRUG_TIMER) != 0) {
-			dec_ds_bs_post(DRUG_TIMER);
+		if (gs_drug_timer) {
+			gs_drug_timer--;
 		}
 
 		/* unknown timer */

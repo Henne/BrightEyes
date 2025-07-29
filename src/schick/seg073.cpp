@@ -568,7 +568,7 @@ signed short tavern_quest_infos(void)
 			ds_writeb(CURRENT_INFORMER, (unsigned char)(l_si = 14));
 		}
 
-	} else if ((ds_readbs(CURRENT_TOWN) == TOWNS_PHEXCAER) && (ds_readb(ALRIK_DERONDAN))) {
+	} else if ((ds_readbs(CURRENT_TOWN) == TOWNS_PHEXCAER) && gs_alrik_derondan) {
 
 		/* meet Alrik Derondan */
 		PHX_alrik_derondan();

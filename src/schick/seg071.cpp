@@ -43,7 +43,7 @@ void PHX_drogentempel(void)
 
 		nr_heroes = count_heroes_in_group();
 
-		if (ds_readb(DRUG_TIMER) && (nr_heroes * 2000 <= money)) {
+		if (gs_drug_timer && (nr_heroes * 2000 <= money)) {
 
 			GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(15), get_tx2(14), 0);
 
@@ -73,18 +73,17 @@ void PHX_drogentempel(void)
 				} while (answer == -1);
 
 				if (answer == 3) {
-					GUI_dialogbox((unsigned char*)g_dtp2,
-							get_tx2(15), get_tx2(8), 0);
 
-					ds_writeb(DRUG_TIMER, 10);
+					GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(15), get_tx2(8), 0);
+
+					gs_drug_timer = 10;
 				}
 
 			} else if (answer == 2) {
 
-				GUI_dialogbox((unsigned char*)g_dtp2,
-						get_tx2(15), get_tx2(8), 0);
+				GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(15), get_tx2(8), 0);
 
-				ds_writeb(DRUG_TIMER, 10);
+				gs_drug_timer = 10;
 			} else {
 
 				do {
@@ -98,15 +97,13 @@ void PHX_drogentempel(void)
 
 				if (answer == 3) {
 
-					GUI_dialogbox((unsigned char*)g_dtp2,
-						get_tx2(15), get_tx2(13), 0);
+					GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(15), get_tx2(13), 0);
 
 				} else {
 
-					GUI_dialogbox((unsigned char*)g_dtp2,
-						get_tx2(15), get_tx2(8), 0);
+					GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(15), get_tx2(8), 0);
 
-					ds_writeb(DRUG_TIMER, 10);
+					gs_drug_timer = 10;
 				}
 			}
 		}
@@ -117,15 +114,14 @@ void PHX_drogentempel(void)
 
 		nr_heroes = count_heroes_in_group();
 
-		if (ds_readb(GREMOB_INVITED) != 0) {
+		if (gs_gremob_invited) {
 
-			GUI_dialogbox((unsigned char*)g_dtp2,
-					get_tx2(16), get_tx2(29), 0);
+			GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(16), get_tx2(29), 0);
 
 			do_fight(FIGHTS_PHEX3);
 		} else {
 
-			if (ds_readb(DRUG_TIMER) && (nr_heroes * 2500 <= money)) {
+			if (gs_drug_timer && (nr_heroes * 2500 <= money)) {
 
 				GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(16), get_tx2(28), 0);
 
@@ -134,22 +130,18 @@ void PHX_drogentempel(void)
 			} else {
 
 				do {
-					answer = GUI_dialogbox((unsigned char*)g_dtp2,
-							get_tx2(16), get_tx2(17),
-							2,
-							get_tx2(19),
-							get_tx2(30));
+					answer = GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(16), get_tx2(17),
+							2, get_tx2(19), get_tx2(30));
+
 				} while (answer == -1);
 
 				if (answer == 1) {
 
 					do {
 						answer = GUI_dialogbox((unsigned char*)g_dtp2,
-							get_tx2(16), get_tx2(18),
-							3,
-							get_tx2(19),
-							get_tx2(20),
-							get_tx2(21));
+							get_tx2(16), get_tx2(18), 3,
+							get_tx2(19), get_tx2(20), get_tx2(21));
+
 					} while (answer == -1);
 
 					GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(16), get_tx2(26), 0);
@@ -164,19 +156,17 @@ void PHX_drogentempel(void)
 				} else {
 					do {
 						answer = GUI_dialogbox((unsigned char*)g_dtp2,
-							get_tx2(16), get_tx2(22),
-							3,
-							get_tx2(23),
-							get_tx2(24),
-							get_tx2(25));
+							get_tx2(16), get_tx2(22), 3,
+							get_tx2(23), get_tx2(24), get_tx2(25));
+
 					} while (answer == -1);
 
 					if (answer == 1) {
 						GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(16), get_tx2(27), 0);
-						ds_writeb(GREMOB_INVITED, 1);
+						gs_gremob_invited = 1;
 					} else {
 						GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(16), get_tx2(8), 0);
-						ds_writeb(DRUG_TIMER, 10);
+						gs_drug_timer = 10;
 					}
 				}
 			}
@@ -202,7 +192,7 @@ void PHX_phextempel(void)
 	tw_bak = g_textbox_width;
 
 	/* this variable is never != 0 */
-	if (ds_readb(PTEMPLE_CLOSED) != 0) {
+	if (gs_ptemple_closed) {
 
 		/* the cleric is gone */
 		GUI_output(get_tx2(60));
@@ -244,8 +234,7 @@ void PHX_phextempel(void)
 
 				/* enter the temple */
 
-				GUI_dialogbox((unsigned char*)g_dtp2,
-						get_tx2(32), get_tx2(51), 0);
+				GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(32), get_tx2(51), 0);
 
 				ds_writew(CURRENT_TYPEINDEX, 59);
 
@@ -275,8 +264,7 @@ void PHX_phextempel(void)
 
 			if (answer == 1) {
 
-				GUI_dialogbox((unsigned char*)g_dtp2,
-						get_tx2(32), get_tx2(50), 0);
+				GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(32), get_tx2(50), 0);
 
 			} else if (answer == 2) {
 
@@ -291,16 +279,14 @@ void PHX_phextempel(void)
 
 				if (answer == 2) {
 
-					GUI_dialogbox((unsigned char*)g_dtp2,
-						get_tx2(32), get_tx2(56), 0);
+					GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(32), get_tx2(56), 0);
 				}
 
 			} else {
 
 				/* enter the temple */
 
-				GUI_dialogbox((unsigned char*)g_dtp2,
-						get_tx2(32), get_tx2(51), 0);
+				GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(32), get_tx2(51), 0);
 
 				ds_writew(CURRENT_TYPEINDEX, 59);
 
@@ -320,26 +306,21 @@ void PHX_phextempel(void)
 		} else {
 
 			do {
-				answer = GUI_dialogbox((unsigned char*)g_dtp2,
-						get_tx2(32), get_tx2(46),
-						3,
-						get_tx2(47),
-						get_tx2(48),
-						get_tx2(49));
+				answer = GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(32), get_tx2(46),
+						3, get_tx2(47), get_tx2(48), get_tx2(49));
 			} while (answer == -1);
 
 			if (answer == 1) {
 
-				GUI_dialogbox((unsigned char*)g_dtp2,
-						get_tx2(32), get_tx2(57), 0);
+				GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(32), get_tx2(57), 0);
+
 			} else if (answer == 2) {
 
-				GUI_dialogbox((unsigned char*)g_dtp2,
-						get_tx2(32), get_tx2(58), 0);
+				GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(32), get_tx2(58), 0);
+
 			} else if (answer == 3) {
 
-				GUI_dialogbox((unsigned char*)g_dtp2,
-						get_tx2(32), get_tx2(59), 0);
+				GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(32), get_tx2(59), 0);
 			}
 
 			/* enter the temple */
@@ -376,42 +357,32 @@ void PHX_alrik_derondan(void)
 	load_in_head(3);
 
 	do {
-		answer = GUI_dialogbox((unsigned char*)g_dtp2,
-				get_tx2(61), get_tx2(62),
-				3,
-				get_tx2(63),
-				get_tx2(64),
-				get_tx2(65));
+		answer = GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(61), get_tx2(62),
+				3, get_tx2(63), get_tx2(64), get_tx2(65));
+
 	} while (answer == -1);
 
 	if (answer == 1) {
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2,
-					get_tx2(61), get_tx2(66),
-					3,
-					get_tx2(67),
-					get_tx2(68),
-					get_tx2(69));
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(61), get_tx2(66),
+					3, get_tx2(67), get_tx2(68), get_tx2(69));
+
 		} while (answer == -1);
 
 		if (answer == 3) {
 
 			do {
-				answer = GUI_dialogbox((unsigned char*)g_dtp2,
-						get_tx2(61), get_tx2(74),
-						3,
-						get_tx2(75),
-						get_tx2(76),
-						get_tx2(77));
+				answer = GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(61), get_tx2(74),
+						3, get_tx2(75), get_tx2(76), get_tx2(77));
+
 			} while (answer == -1);
 
 			if (answer == 1) {
 
-				GUI_dialogbox((unsigned char*)g_dtp2,
-					get_tx2(61), get_tx2(81), 0);
+				GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(61), get_tx2(81), 0);
 
-				ds_writeb(ALRIK_DERONDAN_INSULTED, 1);
+				gs_alrik_derondan_insulted = 1;
 
 			} else if (answer == 2) {
 				l_di = 1;
@@ -456,10 +427,10 @@ void PHX_alrik_derondan(void)
 
 		if (answer == 1) {
 
-			GUI_dialogbox((unsigned char*)g_dtp2,
-				get_tx2(61), get_tx2(81), 0);
+			GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(61), get_tx2(81), 0);
 
-			ds_writeb(ALRIK_DERONDAN_INSULTED, 1);
+			gs_alrik_derondan_insulted = 1;
+
 		} else if (answer == 2) {
 			l_di = 1;
 		} else {
@@ -470,21 +441,19 @@ void PHX_alrik_derondan(void)
 	if ((l_di == 2) || (l_di == 3)) {
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2,
-					get_tx2(61),
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(61),
 					l_di == 3 ? get_tx2(82) : get_tx2(79),
-					3,
-					get_tx2(84),
-					get_tx2(85),
-					get_tx2(86));
+					3, get_tx2(84),	get_tx2(85), get_tx2(86));
 		} while (answer == -1);
 
 		if (answer == 1) {
-			GUI_dialogbox((unsigned char*)g_dtp2,
-				get_tx2(61), get_tx2(87), 0);
+
+			GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(61), get_tx2(87), 0);
+
 		} else if (answer == 2) {
-			GUI_dialogbox((unsigned char*)g_dtp2,
-				get_tx2(61), get_tx2(88), 0);
+
+			GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(61), get_tx2(88), 0);
+
 		} else {
 
 			l_di = 1;
@@ -498,13 +467,9 @@ void PHX_alrik_derondan(void)
 		answer = money >= 500 ? 3 : 2;
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2,
-					get_tx2(61),
-					get_tx2(80),
-					answer,
-					get_tx2(89),
-					get_tx2(91),
-					get_tx2(90));
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(61), get_tx2(80),
+					answer, get_tx2(89), get_tx2(91), get_tx2(90));
+
 		} while (answer == -1);
 
 		if (answer == 3) {
@@ -512,23 +477,21 @@ void PHX_alrik_derondan(void)
 			money -= 500;
 			set_party_money(money);
 
-			GUI_dialogbox((unsigned char*)g_dtp2,
-				get_tx2(61), get_tx2(92), 0);
+			GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(61), get_tx2(92), 0);
 
 		} else if (answer == 2) {
-			GUI_dialogbox((unsigned char*)g_dtp2,
-				get_tx2(61), get_tx2(78), 0);
+
+			GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(61), get_tx2(78), 0);
+
 		} else {
 
-			GUI_dialogbox((unsigned char*)g_dtp2,
-				get_tx2(61),
-				(test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0) ? get_tx2(92) : get_tx2(78),
-				0);
+			GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(61),
+				(test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0) ? get_tx2(92) : get_tx2(78), 0);
 		}
 	}
 
 	/* reset the flag */
-	ds_writeb(ALRIK_DERONDAN, 0);
+	gs_alrik_derondan = 0;
 
 	load_tlk(ARCHIVE_FILE_TAVERN_TLK);
 }

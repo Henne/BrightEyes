@@ -2581,13 +2581,13 @@ struct{unsigned char r,g,b;} g_palette_sky[32] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x00, 0x00, 0x00 }
 }; // ds:0x3f13
-unsigned char g_need_letter = 0; // ds:0x3f73
-unsigned char g_gremob_invited = 0; // ds:0x3f74
-unsigned char g_harlot_date = 0; // ds:0x3f75
-unsigned char g_drug_timer = 0; // ds:0x3f76, {0, 1, ..., 10}
-unsigned char g_ptemple_closed = 0; // ds:0x3f77
-unsigned char g_alrik_derondan = 0; // ds:0x3f78
-unsigned char g_alrik_derondan_insulted = 0; // ds:0x3f79
+Bit8u  gs_need_letter = 0;	// ds:0x3f73
+Bit8u  gs_gremob_invited = 0;	// ds:0x3f74
+Bit8u  gs_harlot_date = 0;	// ds:0x3f75
+Bit8u  gs_drug_timer = 0;	// ds:0x3f76, {0, 1, ..., 10}
+Bit8u  gs_ptemple_closed = 0;	// ds:0x3f77
+Bit8u  gs_alrik_derondan = 0;	// ds:0x3f78
+Bit8u  gs_alrik_derondan_insulted = 0; // ds:0x3f79
 unsigned char g_dng13_lantern_flag = 0; // ds:0x3f7a
 unsigned char g_dng13_corpse0_flag = 0; // ds:0x3f7b
 unsigned char g_dng13_corpse1_flag = 0; // ds:0x3f7c

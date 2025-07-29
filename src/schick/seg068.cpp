@@ -316,7 +316,7 @@ void THO_arsenal(void)
 
 		} else {
 			GUI_dialog_na(0, get_tx2(4));
-			ds_writeb(NEED_LETTER, 1);
+			gs_need_letter = 1;
 		}
 
 	} else {

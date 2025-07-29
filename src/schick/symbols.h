@@ -557,13 +557,13 @@
 #define PALETTE_FLOOR                   (0x3e53)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
 #define PALETTE_BUILDINGS               (0x3eb3)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
 #define PALETTE_SKY                     (0x3f13)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
-#define NEED_LETTER                     (0x3f73)    /* unsigned char; {0,1} */
-#define GREMOB_INVITED                  (0x3f74)    /* unsigned char; {0,1} */
-#define HARLOT_DATE                     (0x3f75)    /* unsigned char; {0,1} */
-#define DRUG_TIMER                      (0x3f76)    /* unsigned char; {0, 1, ..., 10} */
-#define PTEMPLE_CLOSED                  (0x3f77)    /* unsigned char; {0,1} */
-#define ALRIK_DERONDAN                  (0x3f78)    /* unsigned char; {0,1} */
-#define ALRIK_DERONDAN_INSULTED         (0x3f79)    /* unsigned char; {0,1} */
+//#define NEED_LETTER                     (0x3f73)    /* unsigned char; {0,1} */
+//#define GREMOB_INVITED                  (0x3f74)    /* unsigned char; {0,1} */
+//#define HARLOT_DATE                     (0x3f75)    /* unsigned char; {0,1} */
+//#define DRUG_TIMER                      (0x3f76)    /* unsigned char; {0, 1, ..., 10} */
+//#define PTEMPLE_CLOSED                  (0x3f77)    /* unsigned char; {0,1} */
+//#define ALRIK_DERONDAN                  (0x3f78)    /* unsigned char; {0,1} */
+//#define ALRIK_DERONDAN_INSULTED         (0x3f79)    /* unsigned char; {0,1} */
 #define DNG13_LANTERN_FLAG              (0x3f7a)    /* unsigned char; {0,1} */
 #define DNG13_CORPSE0_FLAG              (0x3f7b)    /* unsigned char; {0,1} */
 #define DNG13_CORPSE1_FLAG              (0x3f7c)    /* unsigned char; {0,1} */
