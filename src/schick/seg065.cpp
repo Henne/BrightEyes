@@ -76,7 +76,7 @@ void do_market(void)
 			do_merchant();
 
 			/* change back to market */
-			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_MARKET);
+			gs_current_loctype = LOCTYPE_MARKET;
 
 			/* clean up */
 			ds_writew(CURRENT_TYPEINDEX, type_bak);
@@ -89,7 +89,7 @@ void do_market(void)
 
 	} while (!done);
 
-	ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+	gs_current_loctype = LOCTYPE_NONE;
 	copy_palette();
 }
 

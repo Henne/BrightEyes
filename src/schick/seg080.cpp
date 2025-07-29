@@ -281,7 +281,7 @@ signed short DNG04_handler(void)
 		ds_writeb(CURRENT_TOWN, ds_readb(TRAVEL_DESTINATION_TOWN_ID));
 		ds_writew(X_TARGET, ds_readws(TRAVEL_DESTINATION_X));
 		ds_writew(Y_TARGET, ds_readws(TRAVEL_DESTINATION_Y));
-		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+		gs_current_loctype = LOCTYPE_NONE;
 		ds_writeb(DIRECTION, (ds_readb(TRAVEL_DESTINATION_VIEWDIR) + 2) & 0x03);
 
 		sprintf((char*)g_dtp2,
@@ -470,7 +470,7 @@ signed short DNG05_handler(void)
 		ds_writeb(CURRENT_TOWN, ds_readb(TRAVEL_DESTINATION_TOWN_ID));
 		ds_writew(X_TARGET, ds_readws(TRAVEL_DESTINATION_X));
 		ds_writew(Y_TARGET, ds_readws(TRAVEL_DESTINATION_Y));
-		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+		gs_current_loctype = LOCTYPE_NONE;
 		ds_writeb(DIRECTION, (ds_readb(TRAVEL_DESTINATION_VIEWDIR) + 2) & 0x03);
 
 		sprintf((char*)g_dtp2,

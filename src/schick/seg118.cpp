@@ -273,9 +273,9 @@ void tevent_078(void)
 
 			ds_writews(WILDCAMP_SLEEP_QUALITY, -6);
 
-			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+			gs_current_loctype = LOCTYPE_WILDCAMP;
 			do_location();
-			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+			gs_current_loctype = LOCTYPE_NONE;
 
 			TRV_load_textfile(-1);
 
@@ -311,9 +311,9 @@ void tevent_078(void)
 
 					ds_writews(WILDCAMP_SLEEP_QUALITY, -6);
 					/* make a camp */
-					ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+					gs_current_loctype = LOCTYPE_WILDCAMP;
 					do_location();
-					ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+					gs_current_loctype = LOCTYPE_NONE;
 
 					TRV_load_textfile(-1);
 

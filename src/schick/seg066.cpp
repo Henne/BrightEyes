@@ -65,12 +65,12 @@ signed short enter_location(signed short town_id)
 
 			/* found the location */
 			ds_writeb(CURRENT_LOCTYPE_BAK, LOCTYPE_NONE);
-			ds_writebs(CURRENT_LOCTYPE, host_readbs(locations_list_ptr + LOCATION_LOCTYPE));
+			gs_current_loctype = host_readbs(locations_list_ptr + LOCATION_LOCTYPE);
 			ds_writew(CURRENT_TYPEINDEX, host_readb(locations_list_ptr + LOCATION_TYPEINDEX));
 			ds_writew(CURRENT_LOCDATA, host_readw(locations_list_ptr + LOCATION_LOCDATA));
 
-			if (ds_readbs(CURRENT_LOCTYPE) == LOCTYPE_MARKET) {
-				ds_writebs(CURRENT_LOCTYPE, LOCTYPE_NONE);
+			if (gs_current_loctype == LOCTYPE_MARKET) {
+				gs_current_loctype = LOCTYPE_NONE;
 				ds_writeb(LOCATION_MARKET_FLAG, 1);
 			}
 
@@ -89,9 +89,9 @@ signed short enter_location(signed short town_id)
 		ds_writew(CURRENT_LOCDATA, ds_readb((TOWNS_CITYINDEX_TABLE-1) + town_id));
 
 		if (!((ds_readbs(DIRECTION) + ds_readws(X_TARGET) + ds_readws(Y_TARGET)) & 1)) {
-			ds_writebs(CURRENT_LOCTYPE, LOCTYPE_CITIZEN);
+			gs_current_loctype = LOCTYPE_CITIZEN;
 		} else {
-			ds_writebs(CURRENT_LOCTYPE, LOCTYPE_HOUSE);
+			gs_current_loctype = LOCTYPE_HOUSE;
 			inc_ds_ws(CURRENT_LOCDATA);
 		}
 
@@ -168,7 +168,7 @@ signed short enter_location_daspota(void)
 
 			} else {
 				ds_writeb(CURRENT_LOCTYPE_BAK, LOCTYPE_NONE);
-				ds_writebs(CURRENT_LOCTYPE, host_readbs(locations_list_ptr + LOCATION_LOCTYPE));
+				gs_current_loctype = host_readbs(locations_list_ptr + LOCATION_LOCTYPE);
 				ds_writew(CURRENT_LOCDATA, host_readw(locations_list_ptr + LOCATION_LOCDATA));
 			}
 
@@ -184,7 +184,7 @@ signed short enter_location_daspota(void)
 	if ((b_index = get_border_index(cast_u16(ds_readb((VISUAL_FIELD_VALS + 1))))) >= 2 && b_index <= 5) {
 
 		ds_writeb(CURRENT_LOCTYPE_BAK, LOCTYPE_NONE);
-		ds_writebs(CURRENT_LOCTYPE, LOCTYPE_CITIZEN);
+		gs_current_loctype = LOCTYPE_CITIZEN;
 		ds_writew(CURRENT_LOCDATA, 19);
 		return 1;
 	}
@@ -960,13 +960,13 @@ signed short city_step(void)
 
 	} else if (ds_readws(ACTION) == ACTION_ID_ICON_7) {
 
-		ds_writebs(CURRENT_LOCTYPE, LOCTYPE_CITYCAMP);
+		gs_current_loctype = LOCTYPE_CITYCAMP;
 		ds_writeb(CITYCAMP_CITY, 1); /* CITYCAMP takes place in a town */
 		i = 1;
 
 	} else if (ds_readws(ACTION) == ACTION_ID_ICON_8 && ds_readbs((NEW_MENU_ICONS + 7)) != MENU_ICON_NONE) {
 
-		ds_writebs(CURRENT_LOCTYPE, LOCTYPE_MARKET);
+		gs_current_loctype = LOCTYPE_MARKET;
 		i = 1;
 
 	} else if (ds_readws(ACTION) == ACTION_ID_LEFT) {

@@ -64,11 +64,13 @@ void show_automap(void)
 		do {
 
 			if (ds_readw(REQUEST_REFRESH) != 0) {
-				loc_bak = ds_readbs(CURRENT_LOCTYPE);
-				ds_writeb(CURRENT_LOCTYPE, LOCTYPE_UNKN1);
+
+				loc_bak = gs_current_loctype;
+				gs_current_loctype = LOCTYPE_UNKN1;
 
 				draw_main_screen();
-				ds_writeb(CURRENT_LOCTYPE, (signed char)loc_bak);
+
+				gs_current_loctype = loc_bak;
 
 				if (ds_readb(DNG_MAP_SIZE) == 16) {
 					draw_loc_icons(1, MENU_ICON_LEAVE);

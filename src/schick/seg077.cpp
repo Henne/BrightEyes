@@ -196,7 +196,7 @@ signed short DNG01_handler(void)
 			ds_writebs(CURRENT_TOWN, (signed char)ds_readws(TRAVEL_DESTINATION_TOWN_ID));
 			ds_writew(X_TARGET, ds_readws(TRAVEL_DESTINATION_X));
 			ds_writew(Y_TARGET, ds_readws(TRAVEL_DESTINATION_Y));
-			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+			gs_current_loctype = LOCTYPE_NONE;
 			ds_writeb(DIRECTION, (ds_readws(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
 
 			GUI_output(get_tx(15));

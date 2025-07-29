@@ -46,9 +46,9 @@ void tevent_130(void)
 
 		ds_writews(CAMP_INCIDENT, 0);
 
-		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+		gs_current_loctype = LOCTYPE_WILDCAMP;
 		do_location();
-		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+		gs_current_loctype = LOCTYPE_NONE;
 
 		TRV_load_textfile(-1);
 		ds_writews(CAMP_INCIDENT, -1);
@@ -74,9 +74,9 @@ void tevent_130(void)
 			}
 		}
 
-		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+		gs_current_loctype = LOCTYPE_WILDCAMP;
 		do_location();
-		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+		gs_current_loctype = LOCTYPE_NONE;
 	}
 }
 
@@ -443,9 +443,9 @@ void tevent_139(void)
 
 			GUI_output(get_tx2(71));
 
-			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+			gs_current_loctype = LOCTYPE_WILDCAMP;
 			do_location();
-			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+			gs_current_loctype = LOCTYPE_NONE;
 
 		}
 	}
@@ -541,9 +541,9 @@ void tevent_143(void)
 
 			GUI_output(get_tx2(8));
 
-			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+			gs_current_loctype = LOCTYPE_WILDCAMP;
 			do_location();
-			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+			gs_current_loctype = LOCTYPE_NONE;
 		}
 	}
 }
@@ -634,7 +634,7 @@ void tevent_144(void)
 
 				add_hero_ap_all(500);
 
-				ds_writebs(CURRENT_LOCTYPE, LOCTYPE_NONE);
+				gs_current_loctype = LOCTYPE_NONE;
 				ds_writews(NPC_MONTHS, 200);
 			} else {
 				/* you lost the final fight */

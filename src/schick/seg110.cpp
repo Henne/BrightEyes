@@ -716,9 +716,9 @@ void tevent_046(void)
 	{
 		/* make a camp */
 		ds_writew(CAMP_INCIDENT, 1);
-		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+		gs_current_loctype = LOCTYPE_WILDCAMP;
 		do_location();
-		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+		gs_current_loctype = LOCTYPE_NONE;
 		TRV_load_textfile(-1);
 
 		hero = (ds_readws(CAMP_INCIDENT) != -1 ? get_hero(ds_readw(CAMP_INCIDENT)) : (Bit8u*)get_first_hero_available_in_group());

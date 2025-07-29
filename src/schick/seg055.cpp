@@ -85,7 +85,7 @@ void do_merchant(void)
 
 #endif
 
-	if ((gs_day_timer < HOURS(8) || gs_day_timer > HOURS(19)) && ds_readbs(CURRENT_LOCTYPE) != LOCTYPE_MARKET)
+	if ((gs_day_timer < HOURS(8) || gs_day_timer > HOURS(19)) && gs_current_loctype != LOCTYPE_MARKET)
 	{
 		/* shop closed */
 
@@ -195,7 +195,7 @@ void do_merchant(void)
 
 			set_audio_track(ARCHIVE_FILE_TERMS_XMI);
 
-			GUI_print_loc_line(ds_readbs(CURRENT_LOCTYPE) == LOCTYPE_MARKET ? get_ttx(679) : (ds_readws(CURRENT_TYPEINDEX) == 93 ?  get_ttx(46) : get_tx(ds_readws(CURRENT_LOCDATA))));
+			GUI_print_loc_line(gs_current_loctype == LOCTYPE_MARKET ? get_ttx(679) : (ds_readws(CURRENT_TYPEINDEX) == 93 ?  get_ttx(46) : get_tx(ds_readws(CURRENT_LOCDATA))));
 			// CURRENT_TYPEINDEX 93 is the merchant from random city event 6.
 
 			ds_writew(REQUEST_REFRESH, refresh = 0);

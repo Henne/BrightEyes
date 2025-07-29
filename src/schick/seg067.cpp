@@ -264,7 +264,7 @@ void city_event_5(void)
 void city_event_6(void)
 {
 	signed short answer;
-	signed short location_bak;
+	signed short loc_bak;
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 24 */
 	signed short type_bak;
@@ -286,8 +286,8 @@ void city_event_6(void)
 		if (answer == 1 || answer == 2) {
 			GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx(random_schick(4) + 118), 0);
 		} else if (answer == 3) {
-			location_bak = ds_readbs(CURRENT_LOCTYPE);
-			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_MERCHANT);
+			loc_bak = gs_current_loctype;
+			gs_current_loctype = LOCTYPE_MERCHANT;
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 24:
 	 * When entering a building in Thorwal, Prem, Phexcaer or Oberorken between 8:00 and 20:00 o'clock, the street merchant (random city event) shows up with a chance 1:900. Selecting the third answer in the text box, the shop screen appears. After leaving the street merchant, the entered building is corrupted. For example, an entered temple will be a Praios temple (which otherwise does not exist in the game), or an entered tavern may offer negative food prices.
@@ -296,7 +296,7 @@ void city_event_6(void)
 #endif
 			ds_writew(CURRENT_TYPEINDEX, 93);
 			do_merchant();
-			ds_writeb(CURRENT_LOCTYPE, (unsigned char)location_bak);
+			gs_current_loctype = loc_bak;
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 24 */
 			ds_writew(CURRENT_TYPEINDEX, type_bak);

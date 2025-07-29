@@ -705,7 +705,7 @@ void INF_treborn_unicorn(signed short informer, signed short state)
 			/* the hero gets heavily wounded, 1 LE left */
 			sub_hero_le((Bit8u*)ds_readd(UNICORN_HERO_PTR), host_readws((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_LE) - 1);
 			/* the party opens a camp */
-			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+			gs_current_loctype = LOCTYPE_WILDCAMP;
 			do_location();
 		} else if (state == 18) {
 			timewarp(HOURS(2));

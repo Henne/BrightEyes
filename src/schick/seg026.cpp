@@ -397,7 +397,7 @@ signed short load_game_state(void)
 		g_check_poison = 0;
 		ds_writeb(FADING_STATE, 3);
 
-		if (ds_readbs(CURRENT_LOCTYPE) != LOCTYPE_TEMPLE) {
+		if (gs_current_loctype != LOCTYPE_TEMPLE) {
 			ds_writebs((NEW_MENU_ICONS + 6), ds_writebs((NEW_MENU_ICONS + 7), ds_writebs((NEW_MENU_ICONS + 8), MENU_ICON_NONE)));
 		}
 
@@ -451,7 +451,7 @@ signed short save_game_state(void)
 #ifndef M302de_FEATURE_MOD
 		/* Feature mod 4: In the original game, when creating a savegame while not being in a temple, the AP of all heroes is decreased by 1. This feature mod stops the AP decrease.
 		 * Here, the warning message "Dabei verliert jeder Held in der Gruppe einen Abenteuerpunkt" is displayed. */
-		if (ds_readbs(CURRENT_LOCTYPE) != LOCTYPE_TEMPLE && ds_readws(GAME_STATE) != GAME_STATE_VICTORY) {
+		if (gs_current_loctype != LOCTYPE_TEMPLE && ds_readws(GAME_STATE) != GAME_STATE_VICTORY) {
 
 			/* create savegame not in a temple */
 
@@ -538,7 +538,7 @@ signed short save_game_state(void)
 				/* Feature mod 4: In the original game, when creating a savegame while not being in a temple, the AP of all heroes is decrease by 1. This feature mod stops the AP decrease.
 				 * Here, the actual decrease is executed */
 				if (ds_readws(GAME_STATE) != GAME_STATE_VICTORY &&
-					ds_readbs(CURRENT_LOCTYPE) != LOCTYPE_TEMPLE &&
+					gs_current_loctype != LOCTYPE_TEMPLE &&
 					host_readds(get_hero(tw_bak) + HERO_AP) > 0)
 				{
 					add_hero_ap(get_hero(tw_bak), -1L);

@@ -295,9 +295,9 @@ void TM_func1(signed short route_no, signed short backwards)
 			{
 				ds_writew(WILDCAMP_SLEEP_QUALITY, -3);
 				ds_writeb(GOOD_CAMP_PLACE, 99); /* make gather_herbs and replenish_stocks practically impossible */
-				ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+				gs_current_loctype = LOCTYPE_WILDCAMP;
 				do_location();
-				ds_writeb(GOOD_CAMP_PLACE, ds_writeb(CURRENT_LOCTYPE, (unsigned char)ds_writew(WILDCAMP_SLEEP_QUALITY, 0)));
+				ds_writeb(GOOD_CAMP_PLACE, gs_current_loctype = ds_writews(WILDCAMP_SLEEP_QUALITY, 0));
 				g_wallclock_update = 0;
 				ds_writew(REQUEST_REFRESH, 2);
 			}
@@ -374,9 +374,9 @@ void TM_func1(signed short route_no, signed short backwards)
 
 			GUI_input(get_tx(70), 0);
 
-			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+			gs_current_loctype = LOCTYPE_WILDCAMP;
 			do_location();
-			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+			gs_current_loctype = LOCTYPE_NONE;
 
 			ds_writew(REQUEST_REFRESH, 2);
 			g_wallclock_update = 0;

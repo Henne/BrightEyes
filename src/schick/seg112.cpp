@@ -49,9 +49,9 @@ void tevent_067(void)
 
 		if (answer == 2) {
 
-			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+			gs_current_loctype = LOCTYPE_WILDCAMP;
 			do_location();
-			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+			gs_current_loctype = LOCTYPE_NONE;
 
 		} else if (answer == 3) {
 
@@ -77,9 +77,9 @@ void tevent_067(void)
 
 				add_party_money(7L);
 
-				ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+				gs_current_loctype = LOCTYPE_WILDCAMP;
 				do_location();
-				ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+				gs_current_loctype = LOCTYPE_NONE;
 			} else {
 
 				GUI_output(get_tx2(95));
@@ -94,9 +94,9 @@ void tevent_067(void)
 					}
 				}
 
-				ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+				gs_current_loctype = LOCTYPE_WILDCAMP;
 				do_location();
-				ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+				gs_current_loctype = LOCTYPE_NONE;
 
 				TRV_load_textfile(-1);
 			}
@@ -114,9 +114,9 @@ void tevent_067(void)
 		} while (answer == -1);
 
 		if (answer == 2) {
-			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+			gs_current_loctype = LOCTYPE_WILDCAMP;
 			do_location();
-			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+			gs_current_loctype = LOCTYPE_NONE;
 		}
 	}
 }

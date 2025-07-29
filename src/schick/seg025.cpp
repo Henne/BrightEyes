@@ -85,8 +85,7 @@ void show_citizen(void)
 			load_ani(20);
 			init_ani(ds_writew(REQUEST_REFRESH, 0));
 
-			strcpy(g_text_output_buf,
-				get_tx(ds_readw(CURRENT_LOCDATA)));
+			strcpy(g_text_output_buf, get_tx(ds_readw(CURRENT_LOCDATA)));
 
 			if (ds_readbs(YEAR) == 15 && ds_readbs(MONTH) == 1 && random_schick(100) <= 20) {
 
@@ -202,7 +201,7 @@ void do_house(void)
 		leave_location();
 
 	} else {
-		ds_writeb(CURRENT_LOCTYPE, ds_readb(CURRENT_LOCTYPE_BAK));
+		gs_current_loctype = ds_readb(CURRENT_LOCTYPE_BAK);
 		ds_writew(X_TARGET, ds_readw(X_TARGET_BAK));
 		ds_writew(Y_TARGET, ds_readw(Y_TARGET_BAK));
 	}
@@ -238,7 +237,7 @@ void enter_map(void)
 
 	ds_writew(CURRENT_TYPEINDEX, ds_readbs(CURRENT_TOWN));
 
-	ds_writeb(CURRENT_LOCTYPE, ds_writeb(CURRENT_TOWN, TOWNS_NONE));
+	gs_current_loctype = ds_writeb(CURRENT_TOWN, TOWNS_NONE);
 	ds_writeb(SHOW_TRAVEL_MAP, 1);
 }
 
@@ -692,7 +691,7 @@ void do_location(void)
 	ds_writeb(SHOW_TRAVEL_MAP, 0);
 	g_textbox_width = 3;
 
-	func = g_location_handlers[ds_readbs(CURRENT_LOCTYPE)];
+	func = g_location_handlers[gs_current_loctype];
 
 	ds_writed(CURRENT_CURSOR, (Bit32u)(p_datseg + DEFAULT_MOUSE_CURSOR));
 
@@ -719,7 +718,7 @@ void leave_location(void)
 	set_var_to_zero();
 
 	/* reset location */
-	ds_writeb(CURRENT_LOCTYPE, ds_readb(CURRENT_LOCTYPE_BAK));
+	gs_current_loctype = ds_readb(CURRENT_LOCTYPE_BAK);
 
 	/* set target  coordinates*/
 	ds_writew(X_TARGET, ds_readw(X_TARGET_BAK));
@@ -751,7 +750,7 @@ void leave_dungeon(void)
 		set_palette(ptr, 0x80, 0x40);
 	}
 
-	ds_writeb(CURRENT_LOCTYPE, ds_writeb(CURRENT_LOCTYPE_BAK, LOCTYPE_NONE));
+	gs_current_loctype = ds_writeb(CURRENT_LOCTYPE_BAK, LOCTYPE_NONE);
 	ds_writeb(CURRENT_TOWN, ds_readb(CURRENT_TOWN_BAK));
 	ds_writeb(DUNGEON_INDEX_BAK, ds_readb(DUNGEON_INDEX));
 	ds_writeb(DUNGEON_INDEX, ds_writeb(DUNGEON_LEVEL, ds_writeb(DUNGEON_LIGHT, 0)));

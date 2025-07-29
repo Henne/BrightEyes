@@ -467,13 +467,10 @@ signed short DNG15_handler(void)
 			ds_writeb(CURRENT_TOWN, ds_readbs(TRAVEL_DESTINATION_TOWN_ID));
 			ds_writew(X_TARGET, ds_readws(TRAVEL_DESTINATION_X));
 			ds_writew(Y_TARGET, ds_readws(TRAVEL_DESTINATION_Y));
-			ds_writeb(CURRENT_LOCTYPE, 0);
+			gs_current_loctype = LOCTYPE_NONE;
 			ds_writeb(DIRECTION, (ds_readbs(TRAVEL_DESTINATION_VIEWDIR) + 2) & 0x03);
 
-			sprintf((char*)g_dtp2,
-				get_tx(55),
-				get_ttx(ds_readw(TRV_DESTINATION) + 0xeb));
-
+			sprintf((char*)g_dtp2, get_tx(55), get_ttx(ds_readw(TRV_DESTINATION) + 0xeb));
 			GUI_output((char*)g_dtp2);
 
 			timewarp(HOURS(2));

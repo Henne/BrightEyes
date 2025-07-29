@@ -197,7 +197,7 @@ void PHX_phextempel(void)
 {
 	signed short answer;		/* the selected answer from the dialogs */
 	signed short tw_bak;		/* saving the width of the textboxes */
-	signed short old_loc;		/* saving the no of the old location */
+	signed short loc_bak;		/* saving the no of the old location */
 
 	tw_bak = g_textbox_width;
 
@@ -251,13 +251,13 @@ void PHX_phextempel(void)
 
 				g_textbox_width = 3;
 
-				old_loc = ds_readbs(CURRENT_LOCTYPE);
+				loc_bak = gs_current_loctype;
 
-				ds_writebs(CURRENT_LOCTYPE, LOCTYPE_TEMPLE);
+				gs_current_loctype = LOCTYPE_TEMPLE;
 
 				do_temple();
 
-				ds_writebs(CURRENT_LOCTYPE, (signed char)old_loc);
+				gs_current_loctype = loc_bak;
 
 				g_textbox_width = tw_bak;
 			}
@@ -306,13 +306,13 @@ void PHX_phextempel(void)
 
 				g_textbox_width = 3;
 
-				old_loc = ds_readbs(CURRENT_LOCTYPE);
+				loc_bak = gs_current_loctype;
 
-				ds_writebs(CURRENT_LOCTYPE, LOCTYPE_TEMPLE);
+				gs_current_loctype = LOCTYPE_TEMPLE;
 
 				do_temple();
 
-				ds_writebs(CURRENT_LOCTYPE, (signed char)old_loc);
+				gs_current_loctype = loc_bak;
 
 				g_textbox_width = tw_bak;
 			}
@@ -348,13 +348,13 @@ void PHX_phextempel(void)
 
 			g_textbox_width = 3;
 
-			old_loc = ds_readbs(CURRENT_LOCTYPE);
+			loc_bak = gs_current_loctype;
 
-			ds_writebs(CURRENT_LOCTYPE, LOCTYPE_TEMPLE);
+			gs_current_loctype = LOCTYPE_TEMPLE;
 
 			do_temple();
 
-			ds_writebs(CURRENT_LOCTYPE, (signed char)old_loc);
+			gs_current_loctype = loc_bak;
 
 			g_textbox_width = tw_bak;
 		}

@@ -201,11 +201,11 @@ signed short TRV_found_camp_place(signed short a0)
 		}
 
 		ds_writeb(GOOD_CAMP_PLACE, 1);
-		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+		gs_current_loctype = LOCTYPE_WILDCAMP;
 
 		do_location();
 
-		ds_writeb(CURRENT_LOCTYPE, ds_writeb(GOOD_CAMP_PLACE, 0));
+		gs_current_loctype = ds_writeb(GOOD_CAMP_PLACE, 0);
 
 		TRV_load_textfile(-1);
 
@@ -283,11 +283,11 @@ void TRV_found_inn(signed short town_id, signed short type)
 	if (GUI_bool(get_tx(23))) {
 		ds_writew(CURRENT_LOCDATA, town_id);
 		ds_writew(CURRENT_TYPEINDEX, type);
-		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_INN);
+		gs_current_loctype = LOCTYPE_INN;
 
 		do_location();
 
-		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+		gs_current_loctype = LOCTYPE_NONE;
 
 		TRV_load_textfile(-1);
 	}

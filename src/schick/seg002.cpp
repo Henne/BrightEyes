@@ -1177,7 +1177,7 @@ void interrupt mouse_isr(void)
 		}
 
 		if (((ds_readb(DUNGEON_INDEX) != DUNGEONS_NONE) || (ds_readb(CURRENT_TOWN) != TOWNS_NONE)) &&
-				!ds_readbs(CURRENT_LOCTYPE) &&
+				!gs_current_loctype &&
 				!ds_readbs(DIALOGBOX_LOCK) &&
 				(ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK))
 		{
@@ -1796,7 +1796,7 @@ void game_loop(void)
 
 	while (ds_readw(GAME_STATE) == GAME_STATE_MAIN) {
 
-		if (ds_readbs(CURRENT_LOCTYPE) != LOCTYPE_NONE) {
+		if (gs_current_loctype != LOCTYPE_NONE) {
 			do_location();
 		} else if (ds_readbs(CURRENT_TOWN) != TOWNS_NONE) {
 			do_town();
@@ -1848,7 +1848,7 @@ void game_loop(void)
 
 		if (!g_in_fight &&
 			((ds_readws(GAME_STATE) == GAME_STATE_MAIN) || (ds_readws(GAME_STATE) == GAME_STATE_VICTORY)) &&
-			!ds_readbs(CURRENT_LOCTYPE))
+			!gs_current_loctype)
 		{
 			check_level_up();
 		}
@@ -1880,7 +1880,7 @@ void game_loop(void)
 			ds_readws(GAME_STATE) == GAME_STATE_OUTRO ||
 			ds_readws(GAME_STATE) == GAME_STATE_FIGQUIT)
 		{
-			ds_writebs(CURRENT_LOCTYPE, LOCTYPE_NONE);
+			gs_current_loctype = LOCTYPE_NONE;
 
 			do {
 				answer = load_game_state();
@@ -2079,7 +2079,7 @@ void dawning(void)
 			/* not in a dungeon */
 			!ds_readbs(DUNGEON_INDEX) &&
 			/* not in a location */
-			!ds_readbs(CURRENT_LOCTYPE) &&
+			!gs_current_loctype &&
 			/* not in a travel mode */
 			!ds_readb(SHOW_TRAVEL_MAP) &&
 			/* no event animation */
@@ -2120,7 +2120,7 @@ void nightfall(void)
 			/* not in a dungeon */
 			!ds_readbs(DUNGEON_INDEX) &&
 			/* not in a location */
-			!ds_readbs(CURRENT_LOCTYPE) &&
+			!gs_current_loctype &&
 			/* not in a travel mode */
 			!ds_readb(SHOW_TRAVEL_MAP) &&
 			/* no event animation */
@@ -4041,7 +4041,7 @@ void draw_compass(void)
 	struct nvf_desc n;
 
 	/* No compass in a location */
-	if (!ds_readbs(CURRENT_LOCTYPE) &&
+	if (!gs_current_loctype &&
 		/* Has something to do with traveling */
 		!ds_readbs(TRAVEL_EVENT_ACTIVE) &&
 		/* Not in town or dungeon */
@@ -4100,7 +4100,7 @@ signed short can_merge_group(void)
 				/* check YTarget */
 				(ds_readw(i * 2 + GROUPS_Y_TARGET) == ds_readw(Y_TARGET)) &&
 				/* check Location */
-				(ds_readbs(GROUPS_CURRENT_LOCTYPE + i) == ds_readbs(CURRENT_LOCTYPE)) &&
+				(ds_readbs(GROUPS_CURRENT_LOCTYPE + i) == gs_current_loctype) &&
 				/* check currentTown */
 				(ds_readb(GROUPS_TOWN + i) == ds_readb(CURRENT_TOWN)) &&
 				/* check DungeonIndex */
