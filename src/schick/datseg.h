@@ -174,6 +174,7 @@ extern unsigned char *g_gui_buffer_unkn;// ds:0xbff9; seg025, seg032, seg097, se
 extern unsigned char *g_heroes;		// ds:0xbd34
 extern unsigned char *g_fightobj_buf;	// ds:0xbd30; seg032, seg040
 extern Bit32s g_archive_file_remaining;	// ds:0xbce3; seg002
+extern signed short g_map_townmark_state;	// ds:0xbcd8; seg002
 extern unsigned char *g_splash_le;	// ds:0xbccb; seg002, seg028
 extern unsigned char *g_splash_ae;	// ds:0xbcc7; seg002, seg028
 extern unsigned char g_gfx_wait_keypress[100];	// ds:0xbc63; seg002

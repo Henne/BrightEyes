@@ -2790,7 +2790,7 @@ void sub_heal_staffspell_timers(Bit32s fmin)
  * \param   quarter     the time in quarters of an hour
  *
  *	This function decrements the timers of burning torches and lanterns.
- *	If the time of the lightsource is up the toch is removed from the
+ *	If the time of the lightsource is up the torch is removed from the
  *	inventory and the lantern is turned off.
  */
 void sub_light_timers(Bit32s quarter)
@@ -3277,7 +3277,7 @@ void seg002_37c4(void)
 			}
 
 			do_save_rect();
-			ds_writed(PIC_COPY_SRC, (Bit32u)(p3 + 100 * ds_readws(MAP_TOWNMARK_STATE)));
+			ds_writed(PIC_COPY_SRC, (Bit32u)(p3 + 100 * g_map_townmark_state));
 			do_pic_copy(2);
 
 			if (l_si) {
@@ -3292,7 +3292,7 @@ void seg002_37c4(void)
 		ds_writew(PIC_COPY_Y1, ds_readws(CURRENT_TOWN_ANIY) - 4);
 		ds_writew(PIC_COPY_X2, ds_readws(CURRENT_TOWN_ANIX) + 4);
 		ds_writew(PIC_COPY_Y2, ds_readws(CURRENT_TOWN_ANIY) + 4);
-		ds_writed(PIC_COPY_SRC, (Bit32u)(p3 + 100 * (ds_readws(MAP_TOWNMARK_STATE) + 5)));
+		ds_writed(PIC_COPY_SRC, (Bit32u)(p3 + 100 * (g_map_townmark_state + 5)));
 
 		if (is_mouse_in_rect(ds_readws(PIC_COPY_X1) - 16, ds_readws(PIC_COPY_Y1) - 16, ds_readws(PIC_COPY_X2) + 16, ds_readws(PIC_COPY_Y2) + 16))
 		{
@@ -3311,9 +3311,8 @@ void seg002_37c4(void)
 
 
 	ds_writew(SPINLOCK_FLAG, 0);
-	inc_ds_ws(MAP_TOWNMARK_STATE);
-
-	mod_ds_ws(MAP_TOWNMARK_STATE, 5);
+	g_map_townmark_state++;
+	g_map_townmark_state %= 5;
 
 	*(struct dummy*)(p_datseg + PIC_COPY_DST) = a;
 }

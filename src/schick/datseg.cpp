@@ -6522,7 +6522,7 @@ Bit32s g_archive_file_remaining; // ds:0xbce3, flen - off
 unsigned long g_archive_file_offset; // ds:0xbcdf, start offset in SCHICK.DAT
 unsigned long g_mouse_handler_bak; // ds:0xbcdb
 unsigned char g_freeze_timers; // ds:0xbcda
-unsigned short g_map_townmark_state; // ds:0xbcd8
+signed short g_map_townmark_state; // ds:0xbcd8
 unsigned short g_spinlock_flag; // ds:0xbcd6
 signed char g_hero_splash_timer[7]; // ds:0xbccf
 unsigned char *g_splash_le; // ds:0xbccb
