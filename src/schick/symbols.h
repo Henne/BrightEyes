@@ -1472,8 +1472,8 @@
 #define TXT_TABPOS7                     (0xd31f)    /* signed short */
 //#define TOWNPAL_BUF                     (0xd321)    /* Bit8u* */
 #define FIG_FLEE_POSITION               (0xd325)    /* signed short[4]; the goal square in the dungeon if a hero escapes, depending on the direction the fight board is exited. the direction is stored at HERO_ESCAPE_POSITION */
-#define WILDCAMP_SLEEP_QUALITY          (0xd32d)    /* signed short */
-#define GATHER_HERBS_MOD                (0xd32f)    /* signed short */
+//#define WILDCAMP_SLEEP_QUALITY          (0xd32d)    /* signed short */
+//#define GATHER_HERBS_MOD                (0xd32f)    /* signed short */
 #define REPLENISH_STOCKS_MOD            (0xd331)    /* signed short */
 #define FIG_MSG_DATA                    (0xd333)    /* struct(4)[6]; struct{signed short type, damage;} */
 #define ENEMY_SHEETS                    (0xd34b)    /* struct(62)[20]; struct enemy[20] */

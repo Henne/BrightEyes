@@ -243,9 +243,9 @@ void do_wildcamp(void)
 							ds_writebs(WILDCAMP_HERBSTATUS + answer, herb_tries = (signed char)(l_di = 1));
 
 							if (g_good_camp_place == 99) {
-								gather_herbs(hero, herb_hours - 1, ds_readws(GATHER_HERBS_MOD) + 99);
+								gather_herbs(hero, herb_hours - 1, g_gather_herbs_mod + 99);
 							} else {
-								gather_herbs(hero, herb_hours - 1, ds_readws(GATHER_HERBS_MOD));
+								gather_herbs(hero, herb_hours - 1, g_gather_herbs_mod);
 							}
 						}
 					} else {
@@ -329,7 +329,7 @@ void do_wildcamp(void)
 							ds_readbs(WILDCAMP_GUARDSTATUS + i) < 2 &&
 							ds_readbs(WILDCAMP_MAGICSTATUS + i) != 1)
 						{
-							GRP_hero_sleep(hero, ds_readws(WILDCAMP_SLEEP_QUALITY));
+							GRP_hero_sleep(hero, g_wildcamp_sleep_quality);
 						}
 					}
 

@@ -128,6 +128,8 @@ extern signed short g_wallclock_update;	// ds:0xe113; seg004-seg117, seg120
 
 extern unsigned char *g_fightobj_buf_seek_ptr; // ds:0xd86e; seg005-seg100
 extern signed char *g_chessboard;	// ds:0xd852;
+extern signed short g_gather_herbs_mod;	// ds:0xd32f; seg051, seg109
+extern signed short g_wildcamp_sleep_quality;	// ds:0xd32f; seg051, seg094, seg109, seg114, seg118
 extern unsigned char *g_townpal_buf;	// ds:0xd312; seg002, seg027, seg120
 extern unsigned char *g_renderbuf_ptr;	// ds:0xd303; seg002-seg120
 extern unsigned char *g_icon;		// ds:0xd2f7; seg002-seg058

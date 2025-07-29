@@ -340,7 +340,7 @@ void tevent_113(void)
 		g_textbox_width = 3;
 
 		/* the more money you spend, the better the group will sleep */
-		ds_writew(WILDCAMP_SLEEP_QUALITY, (est_diff <= 10 ? 1 :	(est_diff <= 50 ? 2 : (est_diff <= 100 ? 3 : 4))));
+		g_wildcamp_sleep_quality = (est_diff <= 10 ? 1 : (est_diff <= 50 ? 2 : (est_diff <= 100 ? 3 : 4)));
 
 		gs_current_loctype = LOCTYPE_WILDCAMP;
 		do_location();

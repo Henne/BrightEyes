@@ -294,13 +294,13 @@ void TM_func1(signed short route_no, signed short backwards)
 				// Depending on FORCEDMARCH_TIMER, the "Kampieren" answer is on position 1 or 2.
 			{
 				/* make gather_herbs and replenish_stocks practically impossible */
-				ds_writew(WILDCAMP_SLEEP_QUALITY, -3);
+				g_wildcamp_sleep_quality = -3;
 				g_good_camp_place = 99;
 				gs_current_loctype = LOCTYPE_WILDCAMP;
 
 				do_location();
 
-				g_good_camp_place = gs_current_loctype = ds_writews(WILDCAMP_SLEEP_QUALITY, 0);
+				g_good_camp_place = gs_current_loctype = g_wildcamp_sleep_quality = 0;
 				g_wallclock_update = 0;
 				ds_writew(REQUEST_REFRESH, 2);
 			}

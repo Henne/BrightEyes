@@ -271,7 +271,7 @@ void tevent_078(void)
 			/* each hero in the group looses tmp / 2 LE */
 			sub_group_le(tmp >> 1);
 
-			ds_writews(WILDCAMP_SLEEP_QUALITY, -6);
+			g_wildcamp_sleep_quality = -6;
 
 			gs_current_loctype = LOCTYPE_WILDCAMP;
 			do_location();
@@ -309,7 +309,7 @@ void tevent_078(void)
 
 					sub_group_le(4);
 
-					ds_writews(WILDCAMP_SLEEP_QUALITY, -6);
+					g_wildcamp_sleep_quality = -6;
 					/* make a camp */
 					gs_current_loctype = LOCTYPE_WILDCAMP;
 					do_location();
@@ -350,7 +350,7 @@ void tevent_078(void)
 			}
 		}
 
-		ds_writews(WILDCAMP_SLEEP_QUALITY, 0);
+		g_wildcamp_sleep_quality = 0;
 	}
 }
 
