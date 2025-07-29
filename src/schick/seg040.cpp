@@ -102,18 +102,12 @@ void FIG_preload_gfx(void)
 	}
 
 	ds_writed(WEAPONS_NVF_BUF, (Bit32u)(F_PADD((HugePt)ds_readd(CURRENT_FIGHT), SIZEOF_FIGHT)));
-
 	ds_writed(SPELLOBJ_NVF_BUF, (Bit32u)((Bit8u*)ds_readd(WEAPONS_NVF_BUF) + 0x1953));
-
 	ds_writed(FIGOBJ_GFXBUF_TABLE, (Bit32u)(F_PADD((HugePt)ds_readd(SPELLOBJ_NVF_BUF), 0xf5f)));
-
 	ds_writed(FIGOBJ_GFXWIDTH_TABLE, (Bit32u)(F_PADD((HugePt)ds_readd(FIGOBJ_GFXBUF_TABLE), 0xfc)));
-
 	ds_writed(FIGOBJ_GFXHEIGHT_TABLE, (Bit32u)(F_PADD((HugePt)ds_readd(FIGOBJ_GFXWIDTH_TABLE), 0x7e)));
-
 	g_fightobj_buf_seek_ptr = (unsigned char*)(F_PADD((HugePt)ds_readd(FIGOBJ_GFXHEIGHT_TABLE), 0x7e));
-
-	ds_writed(FIGHTOBJ_BUF, (Bit32u)(F_PADD((HugePt)ds_readd(FIG_LIST_BUFFER), -0x4217)));
+	g_fightobj_buf = (unsigned char*)(F_PADD((HugePt)ds_readd(FIG_LIST_BUFFER), -0x4217));
 
 	/* set something in the hero charactersheet to -1 */
 	for (i = 0; i <= 6; i++) {
@@ -194,8 +188,8 @@ void FIG_preload_gfx(void)
 	ds_writed(FIG_SPELLGFX_BUF, (Bit32u)g_fightobj_buf_seek_ptr);
 	g_fightobj_buf_seek_ptr += 1300;
 
-	/* TODO: check if pointer arithmetics works with other pointer types */
-	g_fightobj_buf_freespace = (Bit32s)((HugePt)ds_readd(FIGHTOBJ_BUF) - (HugePt)g_fightobj_buf_seek_ptr);
+	/* TODO: check if pointer arithmetics works with other pointer types: NO! */
+	g_fightobj_buf_freespace = (Bit32s)((HugePt)g_fightobj_buf - (Bit8u*)g_fightobj_buf_seek_ptr);
 
 	ds_writew(FIGHTOBJ_COUNT, 0);
 	ds_writeb(FIG_TWOFIELDED_COUNT, 0);

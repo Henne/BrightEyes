@@ -842,7 +842,7 @@ void FIG_load_ship_sprites(void)
 				ptr = g_fightobj_buf_seek_ptr;
 
 				nvf.dst = ptr;
-				nvf.src = (Bit8u*)ds_readd(FIGHTOBJ_BUF);
+				nvf.src = g_fightobj_buf;
 				nvf.no = l_si;
 				nvf.type = 0;
 				nvf.width = (Bit8u*)&width;
@@ -1005,7 +1005,7 @@ signed short do_fight(signed short fight_id)
 
 	/* open FIGHTOBJ.NVF */
 	fd = load_archive_file(ARCHIVE_FILE_FIGHTOBJ_NVF);
-	read_archive_file(fd, (Bit8u*)ds_readd(FIGHTOBJ_BUF), 16919);
+	read_archive_file(fd, g_fightobj_buf, 16919);
 	close(fd);
 
 	set_var_to_zero();
