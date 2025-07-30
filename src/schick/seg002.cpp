@@ -3131,7 +3131,7 @@ void herokeeping(void)
 void check_level_up(void)
 {
 	signed short i;
-	signed short done;
+	signed short not_done;
 	Bit8u *hero;
 
 	if (g_timers_disabled) {
@@ -3139,7 +3139,7 @@ void check_level_up(void)
 	}
 
 	do {
-		done = 0;
+		not_done = 0;
 		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
@@ -3153,7 +3153,7 @@ void check_level_up(void)
 				 * Adjust AP requirement for level up to match the original DSA 2/3 rules.
 				 * Without this mod, it is "off by one".
 				 * For example, for level 2, 100 AP should be enough, but the game requires 101 AP. */
-				(ds_readds(LEVEL_AP_TAB + 4 * host_readbs(hero + HERO_LEVEL)) < host_readds(hero + HERO_AP))
+				(g_level_ap_tab[host_readbs(hero + HERO_LEVEL)] < host_readds(hero + HERO_AP))
 				/* could be easily done without accessing the data segment by the formula level_ap_tab[i] = 50 * i * (i+1) */
 #else
 				(50 * host_readbs(hero + HERO_LEVEL) * (host_readbs(hero + HERO_LEVEL) + 1) <= host_readds(hero + HERO_AP))
@@ -3161,11 +3161,11 @@ void check_level_up(void)
 #endif
 			) {
 				level_up(i);
-				done = 1;
+				not_done = 1;
 			}
 		}
 
-	} while(done);
+	} while (not_done);
 }
 
 struct dummy {

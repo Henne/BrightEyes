@@ -820,7 +820,7 @@
 #define CONSUME_QUIET                   (0x4648)    /* char */
 #define HEROKEEPING_FLAG                (0x4649)    /* unsigned char; {0,1,2} */
 // ?4
-#define LEVEL_AP_TAB                    (0x464e)    /* signed long[21] */
+//#define LEVEL_AP_TAB                    (0x464e)    /* signed long[21] */
 #define DELAY_OR_KEYPRESS_FLAG          (0x46a2)    /* unsigned char; writeonly (0,1) */
 #define MERCHANT_ITEMS_POSX             (0x46a3)    /* signed short[15] */
 #define MERCHANT_ITEMS_POSY             (0x46c1)    /* signed short[15] */
