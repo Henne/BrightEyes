@@ -376,7 +376,7 @@ void load_ani(const signed short no)
 	ani_buffer = (Bit8u*)g_buffer9_ptr;
 
 	/* set start of picture data */
-	ds_writed(ANI_MAIN_PTR, (Bit32u)(F_PADD(ani_buffer, host_readd((Bit8u*)g_buffer9_ptr))));
+	g_ani_main_ptr = (Bit8u*)(F_PADD(ani_buffer, host_readd((Bit8u*)g_buffer9_ptr)));
 	/* set start of palette */
 	ds_writed(ANI_PALETTE, (Bit32u)(F_PADD(F_PADD(ani_buffer, host_readd((Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, 4L)))), 6L)));
 	//	(Bit32u)(host_readd((Bit8u*)g_buffer9_ptr + 4) + ani_buffer + 6));
@@ -398,31 +398,30 @@ void load_ani(const signed short no)
 
 	/* Process Main Picture */
 	if (ds_readb(ANI_COMPR_FLAG) != 0) {
-		plen = host_readd((Bit8u*)ds_readd(ANI_MAIN_PTR));
-		unplen_ptr = (Bit8u*)ds_readd(ANI_MAIN_PTR);
+		plen = host_readd((Bit8u*)g_ani_main_ptr);
+		unplen_ptr = (Bit8u*)g_ani_main_ptr;
 
 		unplen_ptr += (plen - 4);
 
 		unplen = host_readd(unplen_ptr);
 		unplen = swap_u32(unplen) >> 8;
 
-		decomp_pp20((Bit8u*)ds_readd(ANI_MAIN_PTR),
-			g_renderbuf_ptr,
+		decomp_pp20((Bit8u*)g_ani_main_ptr, g_renderbuf_ptr,
 #if !defined(__BORLANDC__)
-			(Bit8u*)(ds_readd(ANI_MAIN_PTR) + 4),
+			(Bit8u*)(g_ani_main_ptr + 4),
 #else
-			FP_OFF((Bit8u*)ds_readd(ANI_MAIN_PTR)) + 4,
-			FP_SEG((Bit8u*)ds_readd(ANI_MAIN_PTR)),
+			FP_OFF((Bit8u*)g_ani_main_ptr) + 4,
+			FP_SEG((Bit8u*)g_ani_main_ptr),
 #endif
 			plen);
 
 		packed_delta = unplen - plen;
-		ani_residue_ptr = (Bit8u*)ds_readd(ANI_MAIN_PTR);
+		ani_residue_ptr = (Bit8u*)g_ani_main_ptr;
 		ani_residue_ptr += plen;
 		ani_residue_len = ani_end_ptr - ani_residue_ptr;
 		memcpy(ani_end_ptr + packed_delta, ani_residue_ptr, ani_residue_len);
 
-		memcpy((Bit8u*)ds_readd(ANI_MAIN_PTR), g_renderbuf_ptr, unplen);
+		memcpy((Bit8u*)g_ani_main_ptr, g_renderbuf_ptr, unplen);
 		ani_residue_ptr += packed_delta;
 		memcpy(ani_residue_ptr, ani_end_ptr + packed_delta, ani_residue_len);
 

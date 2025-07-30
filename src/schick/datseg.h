@@ -232,6 +232,7 @@ extern HugePt g_buffer9_ptr3;		// ds:0xd019; seg003-seg120
 extern unsigned char *g_buffer9_ptr2;	// ds:0xd015; seg120
 
 extern Bit32s g_ani_unknown4;		// ds:0xce43; seg027, seg120
+extern unsigned char *g_ani_main_ptr;	// ds:0xce36; seg004, seg027
 extern HugePt g_buffer9_ptr;		// ds:0xc3db; seg004-seg120
 extern char **g_text_ltx_index;		// ds:0xc3b5;
 extern char **g_tx_index;		// ds:0xc3b1; seg026, seg028, seg031, seg064, seg120

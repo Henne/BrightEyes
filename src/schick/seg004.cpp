@@ -88,7 +88,7 @@ void init_ani(Bit16u v1)
 		ds_writew(PIC_COPY_Y2, ds_readw(ANI_POSY) + ds_readb(ANI_HEIGHT) - 1);
 
 		/* copy pointer */
-		ds_writed(PIC_COPY_SRC, ds_readd(ANI_MAIN_PTR));
+		ds_writed(PIC_COPY_SRC, (Bit32u)g_ani_main_ptr);
 
 		/* copy the main ani picture */
 		do_pic_copy(1);
@@ -137,7 +137,7 @@ void clear_ani(void)
 	ds_writew(ANI_WIDTH, 0);
 	ds_writeb(ANI_HEIGHT, 0);
 	ds_writeb(ANI_AREACOUNT, 0);
-	ds_writed(ANI_MAIN_PTR, 0);
+	g_ani_main_ptr = NULL;
 	ds_writew((ANI_PALETTE+2), 0);
 	ds_writew(ANI_PALETTE, 0);
 

@@ -1405,7 +1405,7 @@
 #define ANI_HEIGHT                      (0xc3ed)    /* unsigned char */
 #define ANI_AREACOUNT                   (0xc3ee)    /* unsigned char */
 #define ANI_AREA_TABLE                  (0xc3ef)    /* struct(263)[10] */
-#define ANI_MAIN_PTR                    (0xce35)    /* Bit8u* */
+//#define ANI_MAIN_PTR                    (0xce35)    /* Bit8u* */
 #define ANI_COMPR_FLAG                  (0xce39)    /* unsigned char; {0,1 = compressed} */
 #define ANI_PALETTE_SIZE                (0xce3a)    /* unsigned char */
 #define ANI_PALETTE                     (0xce3b)    /* Bit8u* */
