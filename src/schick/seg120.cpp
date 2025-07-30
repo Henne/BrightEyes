@@ -338,7 +338,7 @@ signed short init_memory(void)
 		}
 
 		g_fig_figure2_buf = (unsigned char*)(((HugePt)g_fig_figure1_buf) -20000L);
-		ds_writed(BUFFER10_PTR, (Bit32u)(((HugePt)g_fig_figure2_buf) - 16771L));
+		g_buffer10_ptr = (unsigned char*)(((HugePt)g_fig_figure2_buf) - 16771L);
 	}
 
 	return error;
@@ -764,7 +764,7 @@ void call_gen(void)
 		}
 
 		g_fig_figure2_buf = (unsigned char*)(((HugePt)g_fig_figure1_buf) - 20000L);
-		ds_writed(BUFFER10_PTR, (Bit32u)(((HugePt)g_fig_figure2_buf) - 16771L));
+		g_buffer10_ptr = (unsigned char*)(((HugePt)g_fig_figure2_buf) - 16771L);
 
 		gs_day_timer = HOURS(24) - 1;
 		timewarp_until_time_of_day(1);

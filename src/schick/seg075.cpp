@@ -547,7 +547,7 @@ void DNG_lights(void)
 	if (div16(ds_readb((VISUAL_FIELD_VALS + 1))) != 11) {
 
 		/* copy palette */
-		memcpy(g_text_output_buf, (Bit8u*)ds_readd(BUFFER11_PTR), 0xc0);
+		memcpy(g_text_output_buf, g_buffer11_ptr, 0xc0);
 
 		if (!(ds_readb((VISUAL_FIELD_VALS + 1)) & 1)) {
 

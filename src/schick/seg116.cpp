@@ -585,7 +585,7 @@ void tevent_144(void)
 		if (right_time_flag) {
 
 			load_in_head(44);
-			memmove((Bit8u*)ds_readd(BUFFER10_PTR), (char*)g_dtp2, 0x400);
+			memmove(g_buffer10_ptr, (char*)g_dtp2, 0x400);
 
 			hero = get_hero(grimring_hero_pos);
 
@@ -595,14 +595,14 @@ void tevent_144(void)
 
 			sprintf((char*)g_dtp2, get_tx2(11), (char*)hero + HERO_NAME2);
 
-			GUI_dialogbox((unsigned char*)ds_readd(BUFFER10_PTR), NULL, (char*)g_dtp2, 0);
-			GUI_dialogbox((unsigned char*)ds_readd(BUFFER10_PTR), NULL, get_tx2(12), 0);
-			GUI_dialogbox((unsigned char*)ds_readd(BUFFER10_PTR), NULL, get_tx2(13), 0);
+			GUI_dialogbox(g_buffer10_ptr, NULL, (char*)g_dtp2, 0);
+			GUI_dialogbox(g_buffer10_ptr, NULL, get_tx2(12), 0);
+			GUI_dialogbox(g_buffer10_ptr, NULL, get_tx2(13), 0);
 
 			sprintf((char*)g_dtp2, get_tx2(14), (char*)hero + HERO_NAME2);
 
-			GUI_dialogbox((unsigned char*)ds_readd(BUFFER10_PTR), NULL, (char*)g_dtp2, 0);
-			GUI_dialogbox((unsigned char*)ds_readd(BUFFER10_PTR), NULL, get_tx2(15), 0);
+			GUI_dialogbox(g_buffer10_ptr, NULL, (char*)g_dtp2, 0);
+			GUI_dialogbox(g_buffer10_ptr, NULL, get_tx2(15), 0);
 
 			do {
 				status_menu(grimring_hero_pos);

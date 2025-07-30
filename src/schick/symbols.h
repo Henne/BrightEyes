@@ -1430,12 +1430,12 @@
 //#define TRV_TRACK_PIXEL_BAK             (0xd299)    /* Bit8u*; to buffer of size 500 */
 //#define FIG_STAR_GFX                    (0xd29d)    /* Bit8u* */
 //#define MONNAMES_BUFFER                 (0xd2a1)    /* Bit8u* */
-#define BUFFER5_PTR                     (0xd2a5)    /* Bit8u*; to buffer of size 3880 */
-#define BUFFER10_PTR                    (0xd2a9)    /* Bit8u*; to buffer of size 16771, used for NVF and text */
-#define POPUP                           (0xd2ad)    /* Bit8u* */
+//#define BUFFER5_PTR                     (0xd2a5)    /* Bit8u*; to buffer of size 3880 */
+//#define BUFFER10_PTR                    (0xd2a9)    /* Bit8u*; to buffer of size 16771, used for NVF and text */
+//#define POPUP                           (0xd2ad)    /* Bit8u* */
 //#define BUFFER6_PTR                     (0xd2b1)    /* Bit8u*; to buffer of size 2200, used for NVF */
-#define BUFFER7_PTR                     (0xd2b5)    /* Bit8u*; to buffer of size 10000, used for NVF and text */
-#define TEXT_LTX_BUFFER                 (0xd2b9)    /* Bit8u*; to buffer of size 30500 */
+//#define BUFFER7_PTR                     (0xd2b5)    /* Bit8u*; to buffer of size 10000, used for NVF and text */
+//#define TEXT_LTX_BUFFER                 (0xd2b9)    /* Bit8u*; to buffer of size 30500 */
 //#define SPLASH_BUFFER                   (0xd2bd)    /* Bit8u*; to buffer of size 1000, used for Splashes */
 //#define BUF_FONT6                       (0xd2c1)    /* Bit8u* */
 #define TEXTCOLOR                       (0xd2c5)    /* short */
@@ -1588,7 +1588,7 @@
 // ?1
 //#define BUFFER9_PTR4                    (0xe3fc)    /* Bit8u*; copy of BUFFER9_PTR */
 #define CITY_HOUSE_COUNT                (0xe400)    /* unsigned char[4]; counts of the four different kinds of houses on the current map */
-#define BUFFER11_PTR                    (0xe404)    /* Bit8u*; to buffer of size 192, used for palettes */
+//#define BUFFER11_PTR                    (0xe404)    /* Bit8u*; to buffer of size 192, used for palettes */
 #define CITY_REFRESH_DIRECTION          (0xe408)    /* signed short */
 #define CITY_REFRESH_Y_TARGET           (0xe40a)    /* signed short */
 #define CITY_REFRESH_X_TARGET           (0xe40c)    /* signed short */

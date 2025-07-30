@@ -185,6 +185,7 @@ extern unsigned char g_good_camp_place;		// ds:0xe4c8; seg051, seg094, seg109
 extern unsigned char *g_dungeon_doors_buf; 	// ds:0xe49c; seg028,seg076,seg098,seg120
 extern unsigned char *g_dungeon_stairs_buf; 	// ds:0xe498; seg028,seg076,seg098,seg120
 extern unsigned char *g_dungeon_fights_buf; 	// ds:0xe494; seg028,seg076,seg098,seg120
+extern unsigned char *g_buffer11_ptr;		// ds:0xe404; seg028, seg075
 
 extern HugePt g_buffer9_ptr4;		// ds:0xe3fc; seg028
 extern Bit32s g_fightobj_buf_freespace;	// ds:0xe370; seg032-seg100
@@ -222,6 +223,7 @@ extern char *g_text_ltx_buffer;		// ds:0xd2b9; seg026, seg120
 extern char *g_buffer7_ptr;		// ds:0xd2b5; seg026, seg028, seg066, seg120
 extern unsigned char *g_buffer6_ptr;	// ds:0xd2b1; seg002, seg027, seg063, seg093, seg094, seg120
 extern unsigned char *g_popup;		// ds:0xd2ad; seg027, seg096, seg120
+extern unsigned char *g_buffer10_ptr;	// ds:0xd2a9; seg026-seg120
 extern char *g_buffer5_ptr;		// ds:0xd2a5; seg026, seg120
 extern char *g_monnames_buffer;		// ds:0xd2a1; seg026, seg120
 extern unsigned char *g_fig_star_gfx;	// ds:0xd29d; seg005, seg040

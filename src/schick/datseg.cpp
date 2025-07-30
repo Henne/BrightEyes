@@ -6152,7 +6152,7 @@ unsigned short g_always_zero1; // ds:0xe40e, writeonly (0)
 signed short g_city_refresh_x_target; // ds:0xe40c
 signed short g_city_refresh_y_target; // ds:0xe40a
 signed short g_city_refresh_direction; // ds:0xe408
-void *g_buffer11_ptr; // ds:0xe404, to buffer of size 192, used for palettes
+unsigned char *g_buffer11_ptr; // ds:0xe404, to buffer of size 192, used for palettes
 unsigned char g_city_house_count[4]; // ds:0xe400, counts of the four different kinds of houses on the current map
 HugePt g_buffer9_ptr4; // ds:0xe3fc, copy of BUFFER9_PTR
 unsigned char g_unkn_089[1]; // ds:0xe3fb
@@ -6311,7 +6311,7 @@ char *g_text_ltx_buffer; // ds:0xd2b9, to buffer of size 30500
 char *g_buffer7_ptr; // ds:0xd2b5, to buffer of size 10000, used for NVF and text
 unsigned char *g_buffer6_ptr; // ds:0xd2b1, to buffer of size 2200, used for NVF
 unsigned char *g_popup; // ds:0xd2ad
-void *g_buffer10_ptr; // ds:0xd2a9, to buffer of size 16771, used for NVF and text
+unsigned char *g_buffer10_ptr; // ds:0xd2a9, to buffer of size 16771, used for NVF and text
 char *g_buffer5_ptr; // ds:0xd2a5, to buffer of size 3880
 char *g_monnames_buffer; // ds:0xd2a1
 unsigned char *g_fig_star_gfx; // ds:0xd29d

@@ -93,7 +93,7 @@ void prepare_dungeon_area(void)
 
 		close(handle);
 
-		ds_writed(BUFFER11_PTR, (Bit32u)((((HugePt)g_buffer9_ptr) + v2) - 0xc0L));
+		g_buffer11_ptr = (((HugePt)g_buffer9_ptr) + v2) - 0xc0L;
 
 		ds_writew(AREA_PREPARED, !ds_readbs(DUNGEON_INDEX));
 	}
@@ -183,7 +183,7 @@ void seg028_0224(void)
 		{
 			ds_writed(TEX_SKY, (Bit32u) seg028_0444(ARCHIVE_FILE_TDIVERSE_NVF, 0x80, 0x40, 0));
 
-			memcpy(gs_palette_buildings, (Bit8u*)ds_readd(BUFFER11_PTR), 0xc0);
+			memcpy(gs_palette_buildings, g_buffer11_ptr, 0xc0);
 		} else {
 			ds_writed(TEX_SKY, (Bit32u) seg028_0444(ARCHIVE_FILE_TDIVERSE_NVF, 0x80, 0x40, 0));
 		}
@@ -192,7 +192,7 @@ void seg028_0224(void)
 
 		if ((gs_day_timer >= HOURS(7)) && (gs_day_timer <= HOURS(20)))
 		{
-			memcpy(gs_palette_floor, (Bit8u*)ds_readd(BUFFER11_PTR), 0x60);
+			memcpy(gs_palette_floor, g_buffer11_ptr, 0x60);
 		}
 
 		ds_writew(AREA_PREPARED, 1);
@@ -230,13 +230,13 @@ Bit8u* seg028_0444(signed short index, signed short firstcol, signed short color
 
 	if (colors) {
 
-		ds_writed(BUFFER11_PTR, (Bit32u)(ptr + v2 - 3 * colors));
+		g_buffer11_ptr = ptr + v2 - 3 * colors;
 
 		if ((ref != 0) && (!g_fading_state)) {
 
 			wait_for_vsync();
 
-			set_palette((Bit8u*)ds_readd(BUFFER11_PTR), firstcol, colors);
+			set_palette(g_buffer11_ptr, firstcol, colors);
 		}
 	}
 

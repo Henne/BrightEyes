@@ -200,7 +200,7 @@ void buy_screen(void)
 			do_v_line((Bit8u*)ds_readd(FRAMEBUF_PTR), 152, 35, 131, -1);
 
 			nvf.dst = g_renderbuf_ptr;
-			nvf.src = (Bit8u*)ds_readd(BUFFER10_PTR);
+			nvf.src = g_buffer10_ptr;
 			nvf.type = 0;
 			nvf.width =  (Bit8u*)&width;
 			nvf.height = (Bit8u*)&height;

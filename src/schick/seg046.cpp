@@ -223,7 +223,7 @@ void status_show(Bit16u index)
 	/* print inventory and silouette values */
 	if (ds_readws(STATUS_PAGE_MODE) < 3) {
 
-		nvf.src = (Bit8u*)ds_readd(BUFFER10_PTR);
+		nvf.src = g_buffer10_ptr;
 		nvf.type = 0;
 
 		nvf.width = (Bit8u*)&width;

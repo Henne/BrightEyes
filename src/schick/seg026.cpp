@@ -133,7 +133,7 @@ void load_ggsts_nvf(void)
 	/* seek to GGSTS.NVF */
 	fd = load_archive_file(ARCHIVE_FILE_GGSTS_NVF);
 	/* read it */
-	read_archive_file(fd, (Bit8u*)ds_readd(BUFFER10_PTR), 16771);
+	read_archive_file(fd, g_buffer10_ptr, 16771);
 	/* close it */
 	close(fd);
 
