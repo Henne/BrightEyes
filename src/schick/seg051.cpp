@@ -291,9 +291,9 @@ void do_wildcamp(void)
 
 				do {
 
-					ds_writeb(FOOD_MOD, 1);
+					g_food_mod = 1;
 					timewarp(HOURS(1));
-					ds_writeb(FOOD_MOD, 0);
+					g_food_mod = 0;
 					l5--;
 					l8++;
 					l6--;
@@ -354,9 +354,9 @@ void do_wildcamp(void)
 						ds_writew(REQUEST_REFRESH, l_di = 0);
 
 						if (l6 > 0) {
-							ds_writeb(FOOD_MOD, 1);
+							g_food_mod = 1;
 							timewarp_until_time_of_day(HOURS(8));
-							ds_writeb(FOOD_MOD, 0);
+							g_food_mod = 0;
 						}
 					}
 				} else {

@@ -1262,7 +1262,7 @@ signed short do_fight(signed short fight_id)
 	ds_writew(AREA_PREPARED, -1);
 	g_timers_disabled = 0;
 	g_autofight = 0;
-	ds_writeb(CHECK_PARTY, 1);
+	g_check_party = 1;
 	g_textbox_width = tw_bak;
 	ds_writeb(PP20_INDEX, (ARCHIVE_FILE_DNGS + 12));
 

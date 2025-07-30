@@ -443,7 +443,7 @@ void hero_disappear(Bit8u *hero, unsigned short pos, signed short temple_id)
 	}
 
 	/* set flag to check all heroes */
-	ds_writeb(CHECK_PARTY, 1);
+	g_check_party = 1;
 }
 
 /* fight with 4 harpyes */

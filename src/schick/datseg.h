@@ -123,6 +123,11 @@ extern Bit16s gs_arsenal_money;			//ds:0x43a3; seg068
 /* GameState written directly into SaveGame file ends at 0x4474 */
 
 extern unsigned char g_fading_state;		//ds:0x4475; seg002-seg095
+extern signed char g_check_party;		//ds:0x4495; seg002, seg032, seg063, seg113
+extern signed char g_food_mod;			//ds:0x4496; seg002, seg051, seg052, seg054
+extern signed char g_travel_herokeeping;	//ds:0x4497; seg002, seg063
+
+extern signed char g_special_screen;		//ds:0x45b8; seg002-seg109
 
 extern char g_game_version[6];			//ds:0x46ec; seg002
 extern signed short g_delay_factor;		//ds:0x4b66; seg005, seg025

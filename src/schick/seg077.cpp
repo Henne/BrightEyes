@@ -224,7 +224,7 @@ signed short DNG01_handler(void)
 				GUI_output(get_tx(17));
 			}
 
-			ds_writeb(SPECIAL_SCREEN, 1);
+			g_special_screen = 1;
 			timewarp(HOURS(6));
 			g_fading_state = 3;
 		}

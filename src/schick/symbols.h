@@ -801,19 +801,21 @@
 //#define MUSIC_CURRENT_TRACK             (0x447a)    /* signed short */
 //#define SND_VOC_ENABLED                 (0x447c)    /* unsigned short; {0,1} */
 // ?2
-#define STR_FILE_MISSING_PTR            (0x4480)    /* Bit8u*; to STR_FILE_MISSING */
-#define MOUSE_IRQ_INIT                  (0x4484)    /* unsigned short */
+//#define STR_FILE_MISSING_PTR            (0x4480)    /* Bit8u*; to STR_FILE_MISSING */
+//#define MOUSE_IRQ_INIT                  (0x4484)    /* unsigned short */
 // ?4
 //#define PAUSE_STRING                    (0x448a)    /* char[10]; "P A U S E" */
-#define NPC_LAST_FAREWELLCHECK          (0x4494)    /* unsigned char */
-#define CHECK_PARTY                     (0x4495)    /* char; indicates that the groups need to be checked if active heroes are available. set after a fight, at sub_hero_le (outside of a fight) and at hero_disappear(). check is done in game_loop() */
-#define FOOD_MOD                        (0x4496)    /* char */
-#define TRAVEL_HEROKEEPING              (0x4497)    /* unsigned char; {0,1} */
+//#define NPC_LAST_FAREWELLCHECK          (0x4494)    /* unsigned char */
+//#define CHECK_PARTY                     (0x4495)    /* char; indicates that the groups need to be checked if active heroes are available. set after a fight, at sub_hero_le (outside of a fight) and at hero_disappear(). check is done in game_loop() */
+//#define FOOD_MOD                        (0x4496)    /* char */
+//#define TRAVEL_HEROKEEPING              (0x4497)    /* unsigned char; {0,1} */
+
 #define FLOOR_FADE_PALETTE              (0x4498)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
 #define BUILDING_FADE_PALETTE           (0x44f8)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
 #define SKY_FADE_PALETTE                (0x4558)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
-#define SPECIAL_SCREEN                  (0x45b8)    /* unsigned char; {0,1}, e.g. diary, treasure map, game options, automap */
-#define SPECIAL_DAYS                    (0x45b9)    /* struct(3)[43]; struct{char month, day, id;} */
+
+//#define SPECIAL_SCREEN                  (0x45b8)    /* unsigned char; {0,1}, e.g. diary, treasure map, game options, automap */
+//#define SPECIAL_DAYS                    (0x45b9)    /* struct(3)[43]; struct{char month, day, id;} */
 #define MONTHS_SPRING                   (0x463a)    /* char[4] */
 #define MONTHS_WINTER                   (0x463e)    /* char[4] */
 #define MONTHS_SUMMER                   (0x4642)    /* char[4] */
@@ -847,7 +849,7 @@
 #define SND_TXT_HW_NOT_FOUND            (0x486d)    /* char[31]; "SOUND HARDWARE NICHT GEFUNDEN!" */
 #define FNAME_SOUND_ADV                 (0x488c)    /* char[10]; "SOUND.ADV" */
 #define SND_TXT_HW_NOT_FOUND2           (0x4896)    /* char[31]; == SND_TXT_HW_NOT_FOUND */
-#define STR_FILE_MISSING                (0x48b5)    /* char[20]; "FILE %s IS MISSING!" */
+//#define STR_FILE_MISSING                (0x48b5)    /* char[20]; "FILE %s IS MISSING!" */
 // ?1
 #define FNAME_SCHICK_DAT                (0x48ca)    /* char[11]; "SCHICK.DAT" */
 #define SND_TXT_DISABLED_MEM2           (0x48d5)    /* char[43]; "MUSIK ABGESCHALTET - NICHT GENUG SPEICHER!" */

@@ -292,7 +292,7 @@ signed short load_game_state(void)
 
 		_read(handle_gs, &gs_datseg_status_start, status_length);
 
-		ds_writeb(SPECIAL_SCREEN, 1);
+		g_special_screen = 1;
 
 		/* read file table */
 		_read(handle_gs, g_saved_files_buf, 286 * 4);

@@ -860,13 +860,11 @@ void seek_archive_file(Bit16u handle, Bit32s off, ...)
 
 signed short load_regular_file(Bit16u index)
 {
-
 	signed short handle;
 
 	if ( (handle = open((char*)ds_readd(FNAMES + index * 4), O_BINARY | O_RDWR)) == -1) {
 
-		/* "FILE %s IS MISSING!" */
-		sprintf((char*)g_dtp2, (char*)ds_readd(STR_FILE_MISSING_PTR), (char*)ds_readd(FNAMES + index * 4));
+		sprintf((char*)g_dtp2, g_str_file_missing_ptr, (char*)ds_readd(FNAMES + index * 4));
 
 		ds_writeb(MISSING_FILE_GUILOCK, 1);
 		GUI_output((char*)g_dtp2);
@@ -1325,7 +1323,7 @@ void mouse_irq_init(signed short irq_no, void interrupt *(isr))
 
 	mouse_action((Bit8u*)&l1, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5, (Bit8u*)&l6);
 
-	ds_writew(MOUSE_IRQ_INIT, 1);
+	g_mouse_irq_init = 1;
 }
 #endif
 
@@ -1348,7 +1346,7 @@ void mouse_reset_ehandler(void)
 
 	mouse_action((Bit8u*)&l1, (Bit8u*)&l2, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5);
 
-	ds_writew(MOUSE_IRQ_INIT, 0);
+	g_mouse_irq_init = 1;
 #endif
 }
 
@@ -1816,11 +1814,11 @@ void game_loop(void)
 			poison_effect();
 		}
 
-		if (ds_readbs(CHECK_PARTY) != 0) {
+		if (g_check_party) {
 			/* check the party for active heroes.
 			 * If necessary, switch to another group or in fatal case: game over */
 
-			ds_writeb(CHECK_PARTY, 0);
+			g_check_party = 0;
 
 			if (!count_heroes_available() || ((count_heroes_available() == 1) && check_hero(get_hero(6)))) // count_heroes_available_ignore_npc() == 0
 			{
@@ -1837,11 +1835,10 @@ void game_loop(void)
 
 		if ((host_readbs(get_hero(6) + HERO_TYPE) != HERO_TYPE_NONE) &&
 			((ds_readbs(CURRENT_TOWN) != TOWNS_NONE) || (ds_readws(GAME_STATE) == GAME_STATE_VICTORY)) &&
-			(ds_readws(NPC_MONTHS) >= 1) &&
-			(ds_readbs(NPC_LAST_FAREWELLCHECK) != ds_readws(NPC_MONTHS)))
+			(ds_readws(NPC_MONTHS) >= 1) &&	(g_npc_last_farewellcheck != ds_readws(NPC_MONTHS)))
 		{
 			npc_farewell();
-			ds_writeb(NPC_LAST_FAREWELLCHECK, (signed short)ds_readws(NPC_MONTHS));
+			g_npc_last_farewellcheck = ds_readws(NPC_MONTHS);
 		}
 
 		if (!g_in_fight &&
@@ -2083,7 +2080,7 @@ void dawning(void)
 			/* no event animation */
 			!g_event_ani_busy &&
 			/* unknown */
-			!ds_readbs(SPECIAL_SCREEN) &&
+			!g_special_screen &&
 			/* unknown */
 			(ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK))
 		{
@@ -2124,7 +2121,7 @@ void nightfall(void)
 			/* no event animation */
 			!g_event_ani_busy &&
 			/* unknown */
-			!ds_readbs(SPECIAL_SCREEN) &&
+			!g_special_screen &&
 			/* unknown */
 			(ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK))
 		{
@@ -2458,12 +2455,11 @@ void do_timers(void)
 		/* check if we have a special day */
 		gs_special_day = 0;
 
-		for (i = 0; ds_readbs(SPECIAL_DAYS + 3 * i) != -1; i++) {
+		for (i = 0; g_special_days[i].month != -1; i++) {
 
-			if ((ds_readbs(SPECIAL_DAYS + 3 * i) == gs_month) &&
-				(ds_readbs((SPECIAL_DAYS + 1) + 3 * i) == gs_day_of_month))
+			if ((g_special_days[i].month == gs_month) && (g_special_days[i].day == gs_day_of_month))
 			{
-				gs_special_day = ds_readb((SPECIAL_DAYS + 2) + 3 * i);
+				gs_special_day = g_special_days[i].id;
 				break;
 			}
 		}
@@ -2914,7 +2910,7 @@ void herokeeping(void)
 			ds_readb(HEROKEEPING_FLAG) != 0 &&
 			check_hero_no3(hero) &&			/* must be vital */
 			!host_readbs(hero + HERO_JAIL) &&
-			!ds_readbs(TRAVEL_HEROKEEPING))
+			!g_travel_herokeeping)
 		{
 			/* Do the eating */
 
@@ -2957,10 +2953,10 @@ void herokeeping(void)
 						/* increase hunger value. FOOD_MOD is always 0 or 1 */
 						if (host_readbs(hero + HERO_HUNGER_TIMER) <= 0) {
 							/* increase more (FOOD_MOD == 0 -> increase by 2. FOOD_MOD == 1 -> increase by 0.) */
-							add_ptr_bs(hero + HERO_HUNGER, 2 / (ds_readbs(FOOD_MOD) * 2 + 1));
+							add_ptr_bs(hero + HERO_HUNGER, 2 / (g_food_mod * 2 + 1));
 						} else {
 							/* increase less (FOOD_MOD == 0 -> increase by 1. FOOD_MOD == 1 -> increase by 0.) */
-							add_ptr_bs(hero + HERO_HUNGER, 1 / (ds_readbs(FOOD_MOD) * 2 + 1));
+							add_ptr_bs(hero + HERO_HUNGER, 1 / (g_food_mod * 2 + 1));
 						}
 
 						/* adjust hunger */
@@ -3036,11 +3032,11 @@ void herokeeping(void)
 							if (host_readbs(hero + HERO_HUNGER_TIMER) <= 0) {
 
 								/* increase more (FOOD_MOD == 0 -> increase by 4. FOOD_MOD == 1 -> increase by 1.) */
-								add_ptr_bs(hero + HERO_THIRST, 4 / (ds_readbs(FOOD_MOD) * 2 + 1));
+								add_ptr_bs(hero + HERO_THIRST, 4 / (g_food_mod * 2 + 1));
 							} else {
 
 								/* increase less (FOOD_MOD == 0 -> increase by 2. FOOD_MOD == 1 -> increase by 0.) */
-								add_ptr_bs(hero + HERO_THIRST, 2 / (ds_readbs(FOOD_MOD) * 2 + 1));
+								add_ptr_bs(hero + HERO_THIRST, 2 / (g_food_mod * 2 + 1));
 							}
 
 							/* adjust thirst */
@@ -4583,7 +4579,7 @@ void sub_hero_le(Bit8u *hero, signed short le)
 	}
 
 	if (!g_in_fight) {
-		ds_writeb(CHECK_PARTY, 1);
+		g_check_party = 1;
 	}
 }
 

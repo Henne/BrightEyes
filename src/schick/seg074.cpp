@@ -42,7 +42,7 @@ void show_automap(void)
 		((ds_readbs(DUNGEON_LIGHT) == 1) && (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 6) > 0)))
 	{
 
-		ds_writeb(SPECIAL_SCREEN, 1);
+		g_special_screen = 1;
 
 		dungeon = ds_readbs(DUNGEON_INDEX);
 		town = ds_readbs(CURRENT_TOWN);

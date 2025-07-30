@@ -205,9 +205,9 @@ void do_citycamp(void)
 					}
 
 					do {
-						ds_writeb(FOOD_MOD, 1);
+						g_food_mod = 1;
 						timewarp(HOURS(1));
-						ds_writeb(FOOD_MOD, 0);
+						g_food_mod = 0;
 
 						l6--;
 						l8++;
@@ -263,9 +263,9 @@ void do_citycamp(void)
 						}
 
 						if (l7 > 0) {
-							ds_writeb(FOOD_MOD, 1);
+							g_food_mod = 1;
 							timewarp(HOURS(l7));
-							ds_writeb(FOOD_MOD, 0);
+							g_food_mod = 0;
 						}
 					}
 

@@ -50,7 +50,7 @@ void diary_show(void)
 	tw_bak = g_textbox_width;
 	g_textbox_width = 3;
 
-	ds_writeb(SPECIAL_SCREEN, 1);
+	g_special_screen = 1;
 	g_wallclock_update = 0;
 	ds_writew(AREA_PREPARED, 0xffff);
 	ds_writed(CURRENT_CURSOR, (Bit32u)(p_datseg + DEFAULT_MOUSE_CURSOR));

@@ -161,12 +161,12 @@ void TRV_inside_herb_place(void)
 		hours = GUI_input(get_ttx(327), 1);
 
 		if (hours > 0) {
-			bak = ds_readbs(SPECIAL_SCREEN);
-			ds_writebs(SPECIAL_SCREEN, 1);
+			bak = g_special_screen;
+			g_special_screen = 1;
 
 			gather_herbs(get_hero(hero_pos), hours - 1, -3);
 
-			ds_writebs(SPECIAL_SCREEN, (signed char)bak);
+			g_special_screen = (signed char)bak;
 		}
 	}
 

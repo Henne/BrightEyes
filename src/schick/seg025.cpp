@@ -263,7 +263,7 @@ void show_treasure_map(void)
 		/* no treasure map parts found */
 		GUI_output(get_ttx(609));
 	} else {
-		ds_writeb(SPECIAL_SCREEN, 1);
+		g_special_screen = 1;
 		pp20_index_bak = ds_readbs(PP20_INDEX);
 		ds_writeb(PP20_INDEX, 0xff);
 		set_var_to_zero();
@@ -383,13 +383,13 @@ void show_treasure_map(void)
 			refresh_screen_size();
 
 			ds_writeb(RENDERBUF_IN_USE_FLAG, 0);
-			ds_writeb(SPECIAL_SCREEN, 0);
+			g_special_screen = 0;
 			ds_writeb(PP20_INDEX, pp20_index_bak);
 		} else {
 			ds_writew(CURRENT_ANI, -1);
 			ds_writew(REQUEST_REFRESH, 1);
 			ds_writew(AREA_PREPARED, -1);
-			ds_writeb(SPECIAL_SCREEN, 0);
+			g_special_screen = 0;
 			draw_main_screen();
 		}
 	}
@@ -411,7 +411,7 @@ signed short game_options(void)
 
 	tw_bak = g_textbox_width;
 	g_textbox_width = 3;
-	ds_writeb(SPECIAL_SCREEN, 1);
+	g_special_screen = 1;
 	g_wallclock_update = 0;
 	ds_writew(AREA_PREPARED, -1);
 	ds_writed(CURRENT_CURSOR, (Bit32u)(p_datseg + DEFAULT_MOUSE_CURSOR));
@@ -547,7 +547,7 @@ signed short game_options(void)
 
 			ds_writeb(RENDERBUF_IN_USE_FLAG, 1);
 			show_treasure_map();
-			ds_writeb(SPECIAL_SCREEN, 1);
+			g_special_screen = 1;
 
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_5) {
 
@@ -585,7 +585,7 @@ signed short game_options(void)
 
 	ds_writews(FIG_FIGURE1, ds_writews(FIG_FIGURE2, ds_writews(CURRENT_ANI, ds_writebs(PP20_INDEX, 0xff))));
 	ds_writew(REQUEST_REFRESH, 1);
-	ds_writeb(SPECIAL_SCREEN, 0);
+	g_special_screen = 0;
 
 	if (ds_readbs(CURRENT_TOWN) != TOWNS_NONE) {
 		g_fading_state = 3;
@@ -729,7 +729,7 @@ void leave_location(void)
 
 	set_to_ff();
 
-	ds_writew(REQUEST_REFRESH, ds_writebs(SPECIAL_SCREEN, 1));
+	ds_writew(REQUEST_REFRESH, g_special_screen = 1);
 }
 
 void leave_dungeon(void)

@@ -1132,7 +1132,7 @@ void city_fade_and_colors(void)
 	ds_writew(PIC_COPY_Y2, ds_readws(ANI_POSY) + 134);
 	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
 
-	ds_writeb(SPECIAL_SCREEN, 0);
+	g_special_screen = 0;
 
 	update_mouse_cursor();
 	wait_for_vsync();

@@ -336,7 +336,7 @@ void do_harbor(void)
 				GUI_output(get_tx(21));
 				/* "Ihr begebt euch an Bord. <Macht's euch gemuetlich!> brummelt der Kapitaen. <Wir legen bald ab!>" */
 
-				ds_writeb(TRAVEL_HEROKEEPING, 1);
+				g_travel_herokeeping = 1;
 
 				timewarp_until_time_of_day(HOURS(9));
 
@@ -361,7 +361,7 @@ void do_harbor(void)
 					}
 				}
 
-				ds_writeb(TRAVEL_HEROKEEPING, 0);
+				g_travel_herokeeping = 0;
 
 				for (i = 0; i < 6; i++) {
 					g_food_message_shown[i] = 0;
@@ -549,7 +549,7 @@ void sea_travel(signed short passage, signed short dir)
 	}
 
 	ds_writew(ROUTE_STEPCOUNT, ds_writew(ROUTE_PROGRESS, ds_writew(ROUTE_DAYPROGRESS, ds_writeb(TRAVEL_DETOUR, 0))));
-	ds_writeb(TRAVEL_HEROKEEPING, 1);
+	g_travel_herokeeping = 1;
 
 	while (host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2 * ds_writew(ROUTE_MOUSEHOVER, 0)) != -1 && !ds_readb(TRAVEL_DETOUR))
 	{
@@ -619,8 +619,8 @@ void sea_travel(signed short passage, signed short dir)
 		 * g_check_disease is set to 1 each midnight in timers_daily()
 		 * Usually, the disease_effect() function is called within game_loop(). But the game does not jump back to that function at this point,
 		 * which is probably the reason to replicate the disease_effect() call here.
-		 * Why the dependence on CHECK_PARTY? */
-		if (g_check_disease && !ds_readbs(CHECK_PARTY)) {
+		 * Why the dependence on g_check_party? */
+		if (g_check_disease && !g_check_party) {
 
 			disease_effect();
 
@@ -678,7 +678,7 @@ void sea_travel(signed short passage, signed short dir)
 #endif
 	}
 
-	ds_writeb(TRAVEL_HEROKEEPING, 0);
+	g_travel_herokeeping = 0;
 
 	if (!ds_readb(TRAVEL_DETOUR)) {
 

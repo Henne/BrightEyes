@@ -553,13 +553,13 @@ void do_inn(void)
 
 					done = 1;
 					ds_writews(COMBO_MODE, 0);
-					ds_writebs(FOOD_MOD, 1);
+					g_food_mod = 1;
 
 					do {
 						timewarp_until_time_of_day(HOURS(8));
 					} while (dec_ds_bs(BOOKED_INN_DAYS));
 
-					ds_writeb(FOOD_MOD, 0);
+					g_food_mod = 0;
 
 					hero = get_hero(0);
 					for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {

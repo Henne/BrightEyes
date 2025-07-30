@@ -501,7 +501,7 @@ void DNG_stub5(void)
 
 	update_mouse_cursor();
 
-	ds_writeb(SPECIAL_SCREEN, 0);
+	g_special_screen = 0;
 
 	wait_for_vsync();
 

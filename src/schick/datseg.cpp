@@ -2875,14 +2875,16 @@ unsigned char g_unkn_028[2] = { 0xff, 0xff }; // ds:0x4478
 signed short g_music_current_track = -1; // ds:0x447a
 signed short g_snd_voc_enabled = 0; // ds:0x447c
 unsigned char g_unkn_029[2] = { 0x00, 0x20 }; // ds:0x447e
-long g_str_file_missing_ptr = 0x14fc48b5; // ds:0x4480, to STR_FILE_MISSING; Bit8u*
+
+extern char g_str_file_missing[20];	//forward declaration
+char *g_str_file_missing_ptr = (char*)&g_str_file_missing; // ds:0x4480, to STR_FILE_MISSING; Bit8u*
 unsigned short g_mouse_irq_init = 0; // ds:0x4484
 unsigned char g_unkn_030[4] = { 0xff, 0xff, 0x00, 0x00 }; // ds:0x4486
 char g_pause_string[10] = "P A U S E"; // ds:0x448a
-unsigned char g_npc_last_farewellcheck = 0; // ds:0x4494
-char g_check_party = 0; // ds:0x4495
-char g_food_mod = 0; // ds:0x4496
-unsigned char g_travel_herokeeping = 0; // ds:0x4497
+signed char g_npc_last_farewellcheck = 0; // ds:0x4494
+signed char g_check_party = 0; // ds:0x4495
+signed char g_food_mod = 0; // ds:0x4496
+signed char g_travel_herokeeping = 0; // ds:0x4497
 struct{unsigned char r,g,b;} g_floor_fade_palette[32] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x28, 0x00, 0x28 },
@@ -2985,8 +2987,8 @@ struct{unsigned char r,g,b;} g_sky_fade_palette[32] = {
 	{ 0x07, 0x07, 0x14 },
 	{ 0x08, 0x07, 0x13 }
 }; // ds:0x4558
-unsigned char g_special_screen = 1; // ds:0x45b8, , e.g. diary, treasure map, game options, automap
-struct{char month, day, id;} g_special_days[43] = {
+signed char g_special_screen = 1; // ds:0x45b8, , e.g. diary, treasure map, game options, automap
+struct{signed char month, day; unsigned char id;} g_special_days[43] = {
 	{ 0x01, 0x01, 0x01 },
 	{ 0x01, 0x02, 0x02 },
 	{ 0x01, 0x03, 0x02 },
