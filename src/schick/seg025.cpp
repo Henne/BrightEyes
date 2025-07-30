@@ -386,7 +386,7 @@ void show_treasure_map(void)
 			g_special_screen = 0;
 			ds_writeb(PP20_INDEX, pp20_index_bak);
 		} else {
-			ds_writew(CURRENT_ANI, -1);
+			g_current_ani = -1;
 			ds_writew(REQUEST_REFRESH, 1);
 			ds_writew(AREA_PREPARED, -1);
 			g_special_screen = 0;
@@ -583,7 +583,7 @@ signed short game_options(void)
 
 	g_gui_buffer_unkn = g_renderbuf_ptr;
 
-	ds_writews(FIG_FIGURE1, ds_writews(FIG_FIGURE2, ds_writews(CURRENT_ANI, ds_writebs(PP20_INDEX, 0xff))));
+	g_fig_figure1 = g_fig_figure2 = g_current_ani = ds_writebs(PP20_INDEX, -1);
 	ds_writew(REQUEST_REFRESH, 1);
 	g_special_screen = 0;
 

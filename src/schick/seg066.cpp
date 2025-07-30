@@ -331,7 +331,7 @@ void do_town(void)
 		diary_new_entry();
 	}
 
-	ds_writews(CURRENT_ANI, -1);
+	g_current_ani = -1;
 
 	ds_writebs(CURRENT_TOWN_BAK, ds_readbs(CURRENT_TOWN));
 

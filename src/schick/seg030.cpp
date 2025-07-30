@@ -532,7 +532,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 	} while (g_dialog_done == 0);
 
 	g_text_file_index = -1;
-	ds_writews(CURRENT_ANI, -1);
+	g_current_ani = -1;
 }
 
 /* Borlandified and identical */

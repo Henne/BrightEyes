@@ -147,21 +147,21 @@ Bit8u* load_fight_figs(signed short fig)
 	Bit8u *src;
 
 	/* check if fig is at a known place */
-	if (fig == ds_readws(FIG_FIGURE1)) {
+	if (fig == g_fig_figure1) {
 		return (Bit8u*)g_fig_figure1_buf;
-	} else if (fig == ds_readws(FIG_FIGURE2)) {
+	} else if (fig == g_fig_figure2) {
 		return (Bit8u*)g_fig_figure2_buf;
-	} else if (ds_readws(FIG_FIGURE2) != -1) {
-		ds_writew(FIG_FIGURE1, ds_readw(FIG_FIGURE2));
+	} else if (g_fig_figure2 != -1) {
+		g_fig_figure1 = g_fig_figure2;
 		memcpy((Bit8u*)g_fig_figure1_buf, (Bit8u*)g_fig_figure2_buf, 20000);
 		src = (Bit8u*)g_fig_figure2_buf;
-		ds_writew(FIG_FIGURE2, fig);
-	} else if (ds_readws(FIG_FIGURE1) != -1) {
+		g_fig_figure2 = fig;
+	} else if (g_fig_figure1 != -1) {
 		src = (Bit8u*)g_fig_figure2_buf;
-		ds_writew(FIG_FIGURE2, fig);
+		g_fig_figure2 = fig;
 	} else {
 		src = (Bit8u*)g_fig_figure1_buf;
-		ds_writew(FIG_FIGURE1, fig);
+		g_fig_figure1 = fig;
 	}
 
 	/* prepare archive access... */
@@ -322,12 +322,12 @@ void load_ani(const signed short no)
 		return;
 
 	/* no need to reload  the same ani*/
-	if (no == (signed short)ds_readw(CURRENT_ANI))
+	if (no == g_current_ani)
 		return;
 
 	ds_writew(ANI_ENABLED, 0);
 	/* set the new ani no*/
-	ds_writew(CURRENT_ANI, no);
+	g_current_ani = no;
 	/* clear the old ani */
 	clear_ani();
 

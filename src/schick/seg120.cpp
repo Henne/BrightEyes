@@ -423,7 +423,7 @@ void init_game_state(void)
 	load_wallclock_nvf();
 	passages_init();
 
-	ds_writew(CURRENT_ANI, -1);
+	g_current_ani = -1;
 	g_wallclock_update = 1;
 
 	g_gui_buffer_unkn = g_renderbuf_ptr;

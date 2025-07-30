@@ -205,7 +205,7 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 
 	} while (g_dialog_done == 0);
 
-	g_text_file_index = ds_writews(CURRENT_ANI, -1);
+	g_text_file_index = g_current_ani = -1;
 	load_tx(g_tx_file_index);
 }
 
@@ -319,7 +319,7 @@ Bit8u* load_current_town_gossip(void)
 	load_ltx(ds_readbs(CURRENT_TOWN) + ARCHIVE_FILE_CITY_LTX);
 
 	/* mark some buffers invalid */
-	ds_writews(AREA_PREPARED, ds_writews(CURRENT_ANI, -1));
+	ds_writews(AREA_PREPARED, g_current_ani = -1);
 
 	/* get the pointer to the ltx buffer */
 	ptr = (Bit8u*)g_buffer9_ptr3;

@@ -961,7 +961,7 @@ void level_up(signed short hero_pos)
 	ds_writew(REQUEST_REFRESH, 1);
 	g_timers_disabled = 0;
 
-	ds_writews(CURRENT_ANI, -1);
+	g_current_ani = -1;
 
 	/* restore text file except for CHARTEXT.LTX, TAVERN.TLK and except for dialogs */
 	if (city_bak != -1 && city_bak != ARCHIVE_FILE_CHARTEXT_LTX

@@ -58,7 +58,7 @@ void prepare_dungeon_area(void)
 	if ((ds_readws(AREA_PREPARED) == -1) || (ds_readws(AREA_PREPARED) == 1)) {
 
 		set_var_to_zero();
-		ds_writew(CURRENT_ANI, -1);
+		g_current_ani = -1;
 
 		l_si = (ds_readbs(DUNGEON_INDEX) == DUNGEONS_TOTENSCHIFF) ? ARCHIVE_FILE_SHIPSL_NVF :
 			(((ds_readbs(DUNGEON_INDEX) == DUNGEONS_VERFALLENE_HERBERGE) ||
@@ -148,7 +148,7 @@ void seg028_0224(void)
 
 		set_var_to_zero();
 
-		ds_writew(CURRENT_ANI, -1);
+		g_current_ani = -1;
 
 		seg066_172b();
 
@@ -434,7 +434,7 @@ void load_map(void)
 
 	ds_writew(AREA_PREPARED, 0xffff);
 	/* set current_ani to -1 */
-	ds_writew(CURRENT_ANI, 0xffff);
+	g_current_ani = -1;
 
 	/* open OBJECTS.NVF */
 	fd = load_archive_file(ARCHIVE_FILE_OBJECTS_NVF);

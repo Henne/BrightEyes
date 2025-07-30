@@ -190,9 +190,9 @@
 #define AREA_PREPARED                   (0x2ccb)    /* signed short; -1 = unprepared, 0 = dungeon, 1 = town */
 // ?1
 //#define ALWAYS_ZERO4                    (0x2cce)    /* char; writeonly (0) */
-#define CURRENT_ANI                     (0x2ccf)    /* short */
-#define FIG_FIGURE1                     (0x2cd1)    /* signed short */
-#define FIG_FIGURE2                     (0x2cd3)    /* signed short */
+//#define CURRENT_ANI                     (0x2ccf)    /* short */
+//#define FIG_FIGURE1                     (0x2cd1)    /* signed short */
+//#define FIG_FIGURE2                     (0x2cd3)    /* signed short */
 //#define IN_FIGHT                        (0x2cd5)    /* short */
 //#define FIGHT_ROUND                     (0x2cd7)    /* short */
 // ?2

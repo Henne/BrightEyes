@@ -369,7 +369,7 @@ void do_harbor(void)
 
 				load_map();
 
-				ds_writews(CURRENT_ANI, -1);
+				g_current_ani = -1;
 				g_wallclock_update = 0;
 
 				memmove(g_renderbuf_ptr, (Bit8u*)ds_readd(TRAVEL_MAP_PTR), 64000);
@@ -391,7 +391,7 @@ void do_harbor(void)
 				passage_arrival();
 
 				g_wallclock_update = ds_writew(BASEPOS_X, ds_writew(BASEPOS_Y, ds_writeb(SEA_TRAVEL_PSGBOOKED_FLAG, 0)));
-				ds_writews(CURRENT_ANI, ds_writebs(CITY_AREA_LOADED, ds_writebs(PP20_INDEX, (signed char)0xff)));
+				g_current_ani = ds_writebs(CITY_AREA_LOADED, ds_writebs(PP20_INDEX, (signed char)0xff));
 				ds_writew(REQUEST_REFRESH, 1);
 				ds_writeb(SHOW_TRAVEL_MAP, 0);
 

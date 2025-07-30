@@ -289,7 +289,7 @@ signed short do_travel_mode(void)
 		do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
 	}
 
-	ds_writew(CURRENT_ANI, ds_writebs(CITY_AREA_LOADED, ds_writebs(PP20_INDEX, -1)));
+	g_current_ani = ds_writebs(CITY_AREA_LOADED, ds_writebs(PP20_INDEX, -1));
 	ds_writew(REQUEST_REFRESH, (unsigned short)(g_fading_state = 1));
 	g_wallclock_update = bak1;
 

@@ -824,7 +824,7 @@ void equip_belt_ani(void)
 		refresh_screen_size();
 	}
 
-	ds_writew(CURRENT_ANI, ds_writebs(DNG_AREA_LOADED, ds_writebs(CITY_AREA_LOADED, -1)));
+	g_current_ani = ds_writebs(DNG_AREA_LOADED, ds_writebs(CITY_AREA_LOADED, -1));
 }
 
 /**

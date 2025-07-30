@@ -803,7 +803,7 @@ void do_dungeon(void)
 		ds_writew(REQUEST_REFRESH, 1);
 	}
 
-	ds_writew(CURRENT_ANI, -1);
+	g_current_ani = -1;
 
 	ds_writeb(DUNGEON_INDEX_BAK, ds_readbs(DUNGEON_INDEX));
 

@@ -973,7 +973,7 @@ signed short do_fight(signed short fight_id)
 	/* set some vars to 0 */
 	g_autofight = (g_fight_round = g_fig_all_heroes_withdrawn = 0);
 	/* set some vars to -1 */
-	ds_writew(FIG_FIGURE1, ds_writew(FIG_FIGURE2, -1));
+	g_fig_figure1 = g_fig_figure2 = -1;
 	ds_writew(FIGHT_FIGS_INDEX, -1);
 
 	ds_writew(REQUEST_REFRESH, 1);
@@ -1258,7 +1258,7 @@ signed short do_fight(signed short fight_id)
 	g_max_enemies = 0;
 	g_in_fight = 0;
 	ds_writew(REQUEST_REFRESH, 1);
-	ds_writew(CURRENT_ANI, -1);
+	g_current_ani = -1;
 	ds_writew(AREA_PREPARED, -1);
 	g_timers_disabled = 0;
 	g_autofight = 0;

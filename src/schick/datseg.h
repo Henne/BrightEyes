@@ -61,6 +61,9 @@ extern Bit8u g_palette_special[32][3];			//ds:0x27e3; seg029, seg093
 
 extern signed short g_timers_disabled;			//ds:0x2c99; seg002-seg050
 extern unsigned char g_always_zero4;			//ds:0x2cce; seg032
+extern signed short g_current_ani;			//ds:0x2ccf; seg004-seg120
+extern signed short g_fig_figure1;			//ds:0x2cd1; seg025, seg027, seg032
+extern signed short g_fig_figure2;			//ds:0x2cd3; seg025, seg027, seg032
 extern signed short g_in_fight;				//ds:0x2cd5; seg002-seg107
 extern signed short g_fight_round;			//ds:0x2cd7; seg032, seg036, seg037
 extern signed short g_skilled_hero_pos;			//ds:0x2cdb; seg047, seg051, seg056, seg057, seg097, seg103

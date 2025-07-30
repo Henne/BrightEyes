@@ -54,10 +54,9 @@ void reset_timer(void)
 
 void init_ani(Bit16u v1)
 {
-
 	signed short i;
 
-	if (ds_readws(CURRENT_ANI) == -1)
+	if (g_current_ani == -1)
 		return;
 
 	if ((v1 & 0x7f) != 2) {
