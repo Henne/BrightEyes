@@ -6294,12 +6294,14 @@ void *g_chessboard_cpy; // ds:0xe356
 signed short g_fig_dropped_weapons[30]; // ds:0xe31a
 signed short g_autofight; // ds:0xe318
 unsigned short g_current_fig_no; // ds:0xe316
-signed short g_tlk_id; // ds:0xe314
-signed short g_dialog_state; // ds:0xe312
-signed short g_dialog_done; // ds:0xe310
-signed short g_dialog_next_state; // ds:0xe30e
-signed short g_dialog_informer; // ds:0xe30c
-char *g_dialog_title; // ds:0xe308
+
+signed int g_tlk_id;		// ds:0xe314
+signed int g_dialog_state;	// ds:0xe312
+signed int g_dialog_done;	// ds:0xe310
+signed int g_dialog_next_state; // ds:0xe30e
+signed int g_dialog_informer;	// ds:0xe30c
+char *g_dialog_title;		// ds:0xe308
+
 unsigned char g_unkn_085[1]; // ds:0xe307
 char g_savegame_names[45]; // ds:0xe2da
 signed long g_last_save_time; // ds:0xe2d6

@@ -57,11 +57,11 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 	signed short tmp2;
 	struct tlk_option options[3];
 
-	ds_writew(DIALOG_INFORMER, informer_id);
-	ds_writew(TLK_ID, talk_id);
+	g_dialog_informer = informer_id;
+	g_tlk_id = (talk_id);
 
 	load_tlk(talk_id + ARCHIVE_FILE_DIALOGS_TLK);
-	ds_writew(DIALOG_STATE, ds_writew(DIALOG_DONE, 0));
+	g_dialog_state = (g_dialog_done = 0);
 	partners_tab = p_datseg + DIALOG_PARTNERS;
 	states_tab = (Bit8u*)(host_readds(partners_tab + 38 * informer_id));
 	txt_offset = host_readws(partners_tab + 4 + 38 * informer_id);
@@ -71,9 +71,9 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 
 	do {
 		answer = optioncount = 0;
-		state_ptr = 8 * ds_readws(DIALOG_STATE) + states_tab;
+		state_ptr = 8 * g_dialog_state + states_tab;
 
-		if (ds_readws(TLK_ID) == 13 && ds_readws(DIALOG_STATE) >= 20) {
+		if (g_tlk_id == 13 && g_dialog_state >= 20) {
 			txt_id_rand = opt0_rand = opt1_rand = opt2_rand = 0;
 		} else {
 			txt_id_rand = random_schick(4) - 1;
@@ -103,33 +103,33 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 			txt_id = (4 * host_readw(state_ptr) + txt_id_rand) & 0x7fff;
 			fmt = get_tx(txt_id + txt_offset);
 
-			if (ds_readws(TLK_ID) == 15) {
+			if (g_tlk_id == 15) {
 
-				if (ds_readws(DIALOG_STATE) == 13) {
+				if (g_dialog_state == 13) {
 					sprintf(dst, fmt, (char*)(waffinfo_herbs()));
 				} else {
 					strcpy(dst, fmt);
 				}
 
-			} else if (ds_readws(TLK_ID) == 14) {
+			} else if (g_tlk_id == 14) {
 
-				if (ds_readws(DIALOG_STATE) == 11) {
+				if (g_dialog_state == 11) {
 					sprintf(dst, fmt, (char*)(waffinfo_general()));
 				} else {
 					strcpy(dst, fmt);
 				}
 
-			} else if (ds_readws(TLK_ID) == 16) {
+			} else if (g_tlk_id == 16) {
 
-				if (ds_readws(DIALOG_STATE) == 19 || ds_readws(DIALOG_STATE) == 23) {
+				if (g_dialog_state == 19 || g_dialog_state == 23) {
 					sprintf(dst, fmt, (char*)(waffinfo_weapons()));
 				} else {
 					strcpy(dst, fmt);
 				}
 
-			} else if (ds_readws(TLK_ID) == 1) {
+			} else if (g_tlk_id == 1) {
 
-				if (ds_readws(DIALOG_STATE) == 16) {
+				if (g_dialog_state == 16) {
 					sprintf(dst, fmt, (char*)(load_current_town_gossip()));
 				} else {
 					strcpy(dst, fmt);
@@ -176,34 +176,34 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 			options[0].goto_state = host_readb(state_ptr + 5);
 		}
 
-		ds_writews(DIALOG_NEXT_STATE, -1);
+		g_dialog_next_state = (-1);
 		if ((host_readw(state_ptr) & 0x8000) || host_readws(state_ptr) == -1) {
 			talk_switch();
 		}
 
-		ds_writew(DIALOG_STATE, ds_readws(DIALOG_NEXT_STATE) == -1 ? options[0].goto_state : ds_readws(DIALOG_NEXT_STATE));
+		g_dialog_state = (g_dialog_next_state == -1 ? options[0].goto_state : g_dialog_next_state);
 
-		if (ds_readws(DIALOG_DONE) == 0) {
+		if (g_dialog_done == 0) {
 
 			if (optioncount) {
 
 				if (answer == -1) {
-					ds_writew(DIALOG_DONE, 1);
+					g_dialog_done = 1;
 				} else if (answer == 1) {
-					ds_writew(DIALOG_STATE, options[0].goto_state);
+					g_dialog_state = (options[0].goto_state);
 				} else if (answer == 2) {
-					ds_writew(DIALOG_STATE, options[1].goto_state);
+					g_dialog_state = (options[1].goto_state);
 				} else if (answer == 3) {
-					ds_writew(DIALOG_STATE, options[2].goto_state);
+					g_dialog_state = (options[2].goto_state);
 				}
 			}
 
-			if (ds_readws(DIALOG_STATE) == 255) {
-				ds_writew(DIALOG_DONE, 1);
+			if (g_dialog_state == 255) {
+				g_dialog_done = 1;
 			}
 		}
 
-	} while (ds_readws(DIALOG_DONE) == 0);
+	} while (g_dialog_done == 0);
 
 	g_text_file_index = ds_writews(CURRENT_ANI, -1);
 	load_tx(g_tx_file_index);

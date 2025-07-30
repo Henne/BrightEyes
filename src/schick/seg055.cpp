@@ -308,21 +308,21 @@ void talk_merchant(void)
 void TLK_ghandel(signed short state)
 {
 	if (!state) {
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(MERCHANT_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ? 1 : 4);
+		g_dialog_next_state = (ds_readb(MERCHANT_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ? 1 : 4);
 	} else if (state == 1) {
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(MERCHANT_KICKED2_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ? 2 : 3);
+		g_dialog_next_state = (ds_readb(MERCHANT_KICKED2_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ? 2 : 3);
 	} else if (state == 6 && ds_readws(CURRENT_TYPEINDEX) != 90) {
 		ds_writeb(MERCHANT_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX), 1);
 	} else if (state == 10) {
 		/* test CH+0 */
-		ds_writew(DIALOG_NEXT_STATE, test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0 ? 11 : 12);
+		g_dialog_next_state = (test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0 ? 11 : 12);
 	}
 }
 
 void TLK_khandel(signed short state)
 {
 	if (!state) {
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(MERCHANT_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ? 1 : 2);
+		g_dialog_next_state = (ds_readb(MERCHANT_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ? 1 : 2);
 	} else if (state == 5) {
 		tumult();
 		if (ds_readws(CURRENT_TYPEINDEX) != 90) {
@@ -332,19 +332,19 @@ void TLK_khandel(signed short state)
 	} else if (state == 7 && ds_readws(CURRENT_TYPEINDEX) != 90) {
 		ds_writeb(MERCHANT_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX), 1);
 	} else if (state == 8) {
-		ds_writew(DIALOG_NEXT_STATE, random_schick(20) <= 3 ? 9 : -1);
+		g_dialog_next_state = (random_schick(20) <= 3 ? 9 : -1);
 	} else if (state == 11) {
 		ds_writew(PRICE_MODIFICATOR, 3);
 	} else if (state == 12) {
 		/* test CH+4 */
-		ds_writew(DIALOG_NEXT_STATE, test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 4) > 0 ? 13 : 10);
+		g_dialog_next_state = (test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 4) > 0 ? 13 : 10);
 	}
 }
 
 void TLK_whandel(signed short state)
 {
 	if (!state) {
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(MERCHANT_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ? 26 : 1);
+		g_dialog_next_state = (ds_readb(MERCHANT_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ? 26 : 1);
 	} else if (state == 7 || state == 13) {
 		tumult();
 		if (ds_readws(CURRENT_TYPEINDEX) != 90) {
@@ -355,14 +355,14 @@ void TLK_whandel(signed short state)
 		ds_writeb(MERCHANT_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX), 1);
 	} else if (state == 18) {
 		/* test CH+0 */
-		ds_writew(DIALOG_NEXT_STATE, test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0 ? 19 : -1);
+		g_dialog_next_state = (test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0 ? 19 : -1);
 	} else if (state == 25) {
 
 		if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_FEILSCHEN, 0) > 0) {
-			ds_writew(DIALOG_NEXT_STATE, 23);
+			g_dialog_next_state = (23);
 			ds_writew(PRICE_MODIFICATOR, 3);
 		} else {
-			ds_writew(DIALOG_NEXT_STATE, 24);
+			g_dialog_next_state = (24);
 		}
 	}
 }

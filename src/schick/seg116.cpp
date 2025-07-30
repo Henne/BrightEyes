@@ -667,7 +667,7 @@ void TLK_old_woman(signed short state)
 			}
 		}
 
-		ds_writew(DIALOG_NEXT_STATE, count_heroes_in_group() == counter ? 4 : 5);
+		g_dialog_next_state = (count_heroes_in_group() == counter ? 4 : 5);
 
 	} else if (state == 4 || state == 14 || state == 21) {
 
@@ -689,7 +689,7 @@ void TLK_old_woman(signed short state)
 
 		ds_writed(RANDOM_TLK_HERO, (Bit32u)get_hero(get_random_hero()));
 
-		ds_writew(DIALOG_NEXT_STATE, count_heroes_in_group() == counter ? 24 : 25);
+		g_dialog_next_state = (count_heroes_in_group() == counter ? 24 : 25);
 
 	} else if (state == 33) {
 
@@ -698,7 +698,7 @@ void TLK_old_woman(signed short state)
 		} while (1);
 
 	} else if (state == 34) {
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(CURRENT_TOWN) == TOWNS_FELSTEYN ? 35 : 39);
+		g_dialog_next_state = (ds_readb(CURRENT_TOWN) == TOWNS_FELSTEYN ? 35 : 39);
 	} else if (state == 37) {
 		ds_writeb(TEVENT093_FLAG, ds_writeb(TEVENT088_FLAG, 1));
 	} else if (state == 38) {

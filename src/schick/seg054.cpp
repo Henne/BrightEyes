@@ -637,7 +637,7 @@ void TLK_herberg(signed short state)
 	Bit8u *hero = (Bit8u*)get_first_hero_available_in_group();
 
 	if (!state) {
-		ds_writews(DIALOG_NEXT_STATE, ds_readb(HERBERG_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ? 1 : 2);
+		g_dialog_next_state = (ds_readb(HERBERG_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ? 1 : 2);
 	} else if (state == 1 || state == 14) {
 		ds_writeb(HERBERG_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX), 1);
 	} else if (state == 11) {
@@ -646,13 +646,13 @@ void TLK_herberg(signed short state)
 		ds_writeb(HERBERG_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX), 1);
 	} else if (state == 12) {
 		/* CH + 5 */
-		ds_writews(DIALOG_NEXT_STATE, test_attrib(hero, ATTRIB_CH, 5) > 0 ? 14 : 11);
+		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 5) > 0 ? 14 : 11);
 	} else if (state == 13) {
 		/* CH + 0 */
-		ds_writews(DIALOG_NEXT_STATE, test_attrib(hero, ATTRIB_CH, 0) > 0 ? 14 : 7);
+		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 0) > 0 ? 14 : 7);
 	} else if (state == 15) {
 		/* CH - 3 */
-		ds_writews(DIALOG_NEXT_STATE, test_attrib(hero, ATTRIB_CH, -3) > 0 ? 16 : 17);
+		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, -3) > 0 ? 16 : 17);
 	} else if (state == 17) {
 		ds_writew(ACTION, ACTION_ID_ICON_2);
 	}

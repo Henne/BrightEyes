@@ -735,7 +735,7 @@ void TLK_way_to_ruin(signed short state)
 	hero2 = (Bit8u*)get_first_hero_available_in_group();
 
 	if (!state) {
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(TEVENT115_FLAG) != 0 ? 45 : 66);
+		g_dialog_next_state = (ds_readb(TEVENT115_FLAG) != 0 ? 45 : 66);
 		ds_writew(TLK_RUIN_HERO_COUNTER, 0);
 	} else if (state == 66 || state == 45) {
 		show_treasure_map();
@@ -743,7 +743,7 @@ void TLK_way_to_ruin(signed short state)
 		timewarp(HOURS(1));
 	} else if (state == 6) {
 		hero = get_hero(get_random_hero());
-		ds_writew(DIALOG_NEXT_STATE, test_skill(hero, TA_WILDNISLEBEN, 6) > 0 ? 8 : 7);
+		g_dialog_next_state = (test_skill(hero, TA_WILDNISLEBEN, 6) > 0 ? 8 : 7);
 	} else if (state == 8) {
 		timewarp(HOURS(1));
 		TRV_ford_test(0, 30);
@@ -763,9 +763,9 @@ void TLK_way_to_ruin(signed short state)
 
 		} while (ds_readws(TLK_RUIN_HERO_COUNTER) != 7);
 
-		ds_writew(DIALOG_NEXT_STATE, ds_readws(TLK_RUIN_HERO_COUNTER) == 7 ? 13 : 10);
+		g_dialog_next_state = (ds_readws(TLK_RUIN_HERO_COUNTER) == 7 ? 13 : 10);
 	} else if (state == 10) {
-		ds_writew(DIALOG_NEXT_STATE, test_skill((Bit8u*)ds_readd(RUIN_HERO), TA_SCHWIMMEN, 5) > 0 ? 11 : 12);
+		g_dialog_next_state = (test_skill((Bit8u*)ds_readd(RUIN_HERO), TA_SCHWIMMEN, 5) > 0 ? 11 : 12);
 	} else if (state == 12) {
 		sub_hero_le((Bit8u*)ds_readd(RUIN_HERO), random_schick(4) + 1);
 
@@ -782,11 +782,11 @@ void TLK_way_to_ruin(signed short state)
 	} else if (state == 15 || state == 16) {
 		timewarp(MINUTES(20));
 	} else if (state == 17) {
-		ds_writew(DIALOG_NEXT_STATE, test_skill(hero2, TA_ORIENTIERUNG, 5) > 0 ? 18 : 19);
+		g_dialog_next_state = (test_skill(hero2, TA_ORIENTIERUNG, 5) > 0 ? 18 : 19);
 	} else if (state == 19) {
 		timewarp(MINUTES(20));
 		ds_writed(RUIN_HERO, (Bit32u)get_hero(get_random_hero()));
-		ds_writew(DIALOG_NEXT_STATE, test_skill((Bit8u*)ds_readd(RUIN_HERO), TA_AEXTE, 2) > 0 ? 20 : 21);
+		g_dialog_next_state = (test_skill((Bit8u*)ds_readd(RUIN_HERO), TA_AEXTE, 2) > 0 ? 20 : 21);
 	} else if (state == 20) {
 		loose_random_item(get_hero(get_random_hero()), 5, get_ttx(506));
 	} else if (state == 21) {
@@ -816,7 +816,7 @@ void TLK_way_to_ruin(signed short state)
 			}
 		}
 
-		ds_writew(DIALOG_NEXT_STATE, (count_heroes_in_group() >> 1) < ds_readws(TLK_RUIN_HERO_COUNTER) ? 29 : 30);
+		g_dialog_next_state = ((count_heroes_in_group() >> 1) < ds_readws(TLK_RUIN_HERO_COUNTER) ? 29 : 30);
 
 	} else if (state == 41) {
 		g_event_ani_busy = 1;
@@ -845,7 +845,7 @@ void TLK_way_to_ruin(signed short state)
 			}
 		}
 
-		ds_writew(DIALOG_NEXT_STATE, (count_heroes_in_group() >> 1) < ds_readws(TLK_RUIN_HERO_COUNTER) ? 49 : 50);
+		g_dialog_next_state = ((count_heroes_in_group() >> 1) < ds_readws(TLK_RUIN_HERO_COUNTER) ? 49 : 50);
 	}
 
 	g_event_ani_busy = 0;

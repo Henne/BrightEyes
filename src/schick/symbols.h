@@ -1536,11 +1536,11 @@
 #define SAVEGAME_NAMES                  (0xe2da)    /* char[45] */
 // ?1
 //#define DIALOG_TITLE                    (0xe308)    /* Bit8u* */
-#define DIALOG_INFORMER                 (0xe30c)    /* signed short */
-#define DIALOG_NEXT_STATE               (0xe30e)    /* signed short */
-#define DIALOG_DONE                     (0xe310)    /* signed short; {0,1} */
-#define DIALOG_STATE                    (0xe312)    /* signed short */
-#define TLK_ID                          (0xe314)    /* signed short */
+//#define DIALOG_INFORMER                 (0xe30c)    /* signed short */
+//#define DIALOG_NEXT_STATE               (0xe30e)    /* signed short */
+//#define DIALOG_DONE                     (0xe310)    /* signed short; {0,1} */
+//#define DIALOG_STATE                    (0xe312)    /* signed short */
+//#define TLK_ID                          (0xe314)    /* signed short */
 #define CURRENT_FIG_NO                  (0xe316)    /* unsigned short */
 #define AUTOFIGHT                       (0xe318)    /* signed short */
 #define FIG_DROPPED_WEAPONS             (0xe31a)    /* signed short[30] */

@@ -150,6 +150,12 @@ extern unsigned char *g_spelluser;	// ds:0xe5bc; seg068, seg098, seg102, seg107
 extern unsigned char *g_spelltarget;	// ds:0xe5b8; seg098-seg102
 
 extern char g_str_beorn_hjall[20];	// ds:0xe42e; seg072
+
+extern signed int g_tlk_id;		// ds:0xe314; seg030, seg031
+extern signed int g_dialog_state;	// ds:0xe312; seg030, seg031, seg060
+extern signed int g_dialog_done;	// ds:0xe310; seg030, seg031, seg060
+extern signed int g_dialog_next_state;	// ds:0xe30e; seg030-seg117
+extern signed int g_dialog_informer;	// ds:0xe30c; seg030, seg031
 extern char *g_dialog_title;		// ds:0xe308; seg030, seg072
 
 extern unsigned char g_good_camp_place;		// ds:0xe4c8; seg051, seg094, seg109

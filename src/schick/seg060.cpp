@@ -62,13 +62,13 @@ void talk_tavern(void)
 	load_ani(13);
 	init_ani(0);
 	load_tlk(ARCHIVE_FILE_TAVERN_TLK);
-	ds_writews(DIALOG_STATE, ds_writews(DIALOG_DONE, 0));
+	g_dialog_state = (g_dialog_done = 0);
 	states_tab = p_datseg + DIALOG_STATES;
 
 	do {
 		answer = options = 0;
 
-		state_ptr = states_tab + 8 * ds_readws(DIALOG_STATE);
+		state_ptr = states_tab + 8 * g_dialog_state;
 
 		if (host_readbs(state_ptr + 2) != 0) {
 			options++;
@@ -213,35 +213,35 @@ void talk_tavern(void)
 			} while (answer == -1);
 		}
 
-		ds_writews(DIALOG_NEXT_STATE, -1);
+		g_dialog_next_state = (-1);
 
 		if (host_readws(state_ptr) & 0x8000 || host_readws(state_ptr) == -1) {
 			TLK_tavern(answer);
 		}
 
-		ds_writews(DIALOG_STATE, ds_readws(DIALOG_NEXT_STATE) == -1 ? host_readb(state_ptr + 5) : ds_readws(DIALOG_NEXT_STATE));
+		g_dialog_state = (g_dialog_next_state == -1 ? host_readb(state_ptr + 5) : g_dialog_next_state);
 
-		if (ds_readws(DIALOG_DONE) == 0) {
+		if (g_dialog_done == 0) {
 
 			if (options != 0) {
 
 				if (answer == -1) {
-					ds_writew(DIALOG_DONE, 1);
+					g_dialog_done = 1;
 				} else if (answer == 1) {
-					ds_writew(DIALOG_STATE, host_readb(state_ptr + 5));
+					g_dialog_state = (host_readb(state_ptr + 5));
 				} else if (answer == 2) {
-					ds_writew(DIALOG_STATE, host_readb(state_ptr + 6));
+					g_dialog_state = (host_readb(state_ptr + 6));
 				} else if (answer == 3) {
-					ds_writew(DIALOG_STATE, host_readb(state_ptr + 7));
+					g_dialog_state = (host_readb(state_ptr + 7));
 				}
 			}
 
-			if (ds_readws(DIALOG_STATE) == 255) {
-				ds_writew(DIALOG_DONE, 1);
+			if (g_dialog_state == 255) {
+				g_dialog_done = 1;
 			}
 		}
 
-	} while (ds_readws(DIALOG_DONE) == 0);
+	} while (g_dialog_done == 0);
 
 	ds_writews(NPC_MEET_TAVERN, 0);
 	g_textbox_width = 3;
@@ -258,7 +258,7 @@ void TLK_tavern(signed short answer)
 	Bit8u *hero;
 	signed short hero_pos;
 
-	old_state = ds_readws(DIALOG_STATE);
+	old_state = g_dialog_state;
 	hero = (Bit8u*)get_first_hero_available_in_group();
 
 	if (!old_state) {
@@ -267,31 +267,31 @@ void TLK_tavern(signed short answer)
 
 			hero_pos = get_hero_CH_best();
 
-			ds_writew(DIALOG_NEXT_STATE, test_attrib(get_hero(hero_pos), ATTRIB_CH, 0) <= 0 ? 112 : 113);
+			g_dialog_next_state = (test_attrib(get_hero(hero_pos), ATTRIB_CH, 0) <= 0 ? 112 : 113);
 
 			ds_writeb(TAV_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX), 0);
 
 		} else {
-			ds_writew(DIALOG_NEXT_STATE, 113);
+			g_dialog_next_state = (113);
 		}
 
 	} else if (old_state == 2) {
 
 		if ((ds_readb(TLK_TAV_FULLNESS) == 1 || ds_readb(TLK_TAV_FULLNESS) == 2) && answer == 1) {
-			ds_writew(DIALOG_NEXT_STATE, 3);
+			g_dialog_next_state = (3);
 		} else if ((ds_readb(TLK_TAV_FULLNESS) == 1 || ds_readb(TLK_TAV_FULLNESS) == 2) && answer == 2) {
-			ds_writew(DIALOG_NEXT_STATE, 5);
+			g_dialog_next_state = (5);
 		} else {
-			ds_writew(DIALOG_NEXT_STATE, 4);
+			g_dialog_next_state = (4);
 		}
 
 	} else if (old_state == 5) {
 
-		ds_writew(DIALOG_NEXT_STATE, test_attrib(hero, ATTRIB_CH, 3) > 0 ? 81 : 3);
+		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 3) > 0 ? 81 : 3);
 
 	} else if (old_state == 9) {
 
-		ds_writew(DIALOG_NEXT_STATE, gs_informer_flags[get_town_lookup_entry()] != 0 ? 10 : 11);
+		g_dialog_next_state = (gs_informer_flags[get_town_lookup_entry()] != 0 ? 10 : 11);
 
 	} else if (old_state == 12 || old_state == 19 || old_state == 21) {
 
@@ -300,9 +300,9 @@ void TLK_tavern(signed short answer)
 	} else if (old_state == 14) {
 
 		if (test_attrib(hero, ATTRIB_CH, 0) > 0) {
-			ds_writew(DIALOG_NEXT_STATE, ds_readb(TLK_TAV_FULLNESS) == 1 ? 16 : 17);
+			g_dialog_next_state = (ds_readb(TLK_TAV_FULLNESS) == 1 ? 16 : 17);
 		} else {
-			ds_writew(DIALOG_NEXT_STATE, 15);
+			g_dialog_next_state = (15);
 		}
 
 	} else if (old_state == 17 || old_state == 39 || old_state == 57) {
@@ -311,7 +311,7 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 18) {
 
-		ds_writew(DIALOG_NEXT_STATE, test_attrib(hero, ATTRIB_CH, 2) > 0 ? 19 : 20);
+		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 2) > 0 ? 19 : 20);
 
 	} else if (old_state == 24) {
 
@@ -321,7 +321,7 @@ void TLK_tavern(signed short answer)
 
 		p_money = get_party_money();
 
-		ds_writew(DIALOG_NEXT_STATE, tmp <= p_money ? 25 : 26);
+		g_dialog_next_state = (tmp <= p_money ? 25 : 26);
 
 	} else if (old_state == 27) {
 
@@ -359,7 +359,7 @@ void TLK_tavern(signed short answer)
 
 		p_money = get_party_money();
 
-		ds_writew(DIALOG_NEXT_STATE, tmp <= p_money ? 30 : 31);
+		g_dialog_next_state = (tmp <= p_money ? 30 : 31);
 
 	} else if (old_state == 32) {
 
@@ -401,27 +401,27 @@ void TLK_tavern(signed short answer)
 
 		p_money = get_party_money();
 
-		ds_writew(DIALOG_NEXT_STATE, tmp <= p_money ? 41 : 42);
+		g_dialog_next_state = (tmp <= p_money ? 41 : 42);
 
 	} else if (old_state == 43) {
 
 		if (test_attrib(hero, ATTRIB_CH, 4) > 0 && (ds_readb(TLK_TAV_FULLNESS) == 1 || ds_readb(TLK_TAV_FULLNESS) == 2)) {
-			ds_writew(DIALOG_NEXT_STATE, 56);
+			g_dialog_next_state = (56);
 		} else {
-			ds_writew(DIALOG_NEXT_STATE, 44);
+			g_dialog_next_state = (44);
 		}
 
 	} else if (old_state == 45) {
 
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(TLK_TAV_FULLNESS) == 3 ? 57 : 46);
+		g_dialog_next_state = (ds_readb(TLK_TAV_FULLNESS) == 3 ? 57 : 46);
 
 	} else if (old_state == 46) {
 
-		ds_writew(DIALOG_NEXT_STATE, gs_informer_flags[get_town_lookup_entry()] != 0 ? 47 : 48);
+		g_dialog_next_state = (gs_informer_flags[get_town_lookup_entry()] != 0 ? 47 : 48);
 
 	} else if (old_state == 49) {
 
-		ds_writew(DIALOG_NEXT_STATE, test_attrib(hero, ATTRIB_CH, 4) > 0 ? 19 : 20);
+		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 4) > 0 ? 19 : 20);
 
 	} else if (old_state == 54) {
 
@@ -441,19 +441,19 @@ void TLK_tavern(signed short answer)
 
 		add_party_money(10);
 
-		ds_writew(DIALOG_NEXT_STATE, gs_informer_flags[get_town_lookup_entry()] != 0 ? 59 : 60);
+		g_dialog_next_state = (gs_informer_flags[get_town_lookup_entry()] != 0 ? 59 : 60);
 
 	} else if (old_state == 61) {
 
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(TLK_TAV_FULLNESS) == 3 ? 63 : 77);
+		g_dialog_next_state = (ds_readb(TLK_TAV_FULLNESS) == 3 ? 63 : 77);
 
 	} else if (old_state == 63) {
 
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(TLK_TAV_INFOPROMISE) != 0 ? 64 : 65);
+		g_dialog_next_state = (ds_readb(TLK_TAV_INFOPROMISE) != 0 ? 64 : 65);
 
 	} else if (old_state == 68) {
 
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(TLK_TAV_INFOPROMISE) != 0 ? 69 : 36);
+		g_dialog_next_state = (ds_readb(TLK_TAV_INFOPROMISE) != 0 ? 69 : 36);
 
 	} else if (old_state == 71) {
 
@@ -462,84 +462,84 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 73) {
 
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(TLK_TAV_FIRSTINFO) != 0 ? 74 : 4);
+		g_dialog_next_state = (ds_readb(TLK_TAV_FIRSTINFO) != 0 ? 74 : 4);
 
 	} else if (old_state == 77) {
 
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(TLK_TAV_INFOPROMISE) != 0 ? 78 : 82);
+		g_dialog_next_state = (ds_readb(TLK_TAV_INFOPROMISE) != 0 ? 78 : 82);
 
 	} else if (old_state == 79) {
 
-		ds_writew(DIALOG_NEXT_STATE, gs_informer_flags[get_town_lookup_entry()] != 0 ? 153 : 154);
+		g_dialog_next_state = (gs_informer_flags[get_town_lookup_entry()] != 0 ? 153 : 154);
 
 	} else if (old_state == 80) {
 
-		ds_writew(DIALOG_NEXT_STATE, test_attrib(hero, ATTRIB_CH, 0) <= 0 && ds_readb(TLK_TAV_ROUND) != 0 ? 20 : 19);
+		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 0) <= 0 && ds_readb(TLK_TAV_ROUND) != 0 ? 20 : 19);
 
 	} else if (old_state == 85) {
 
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(TLK_TAV_FIRSTINFO) != 0 ? 88 : 7);
+		g_dialog_next_state = (ds_readb(TLK_TAV_FIRSTINFO) != 0 ? 88 : 7);
 
 	} else if (old_state == 86) {
 
 		tmp = test_attrib(hero, ATTRIB_CH, 0);
 
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(TLK_TAV_FIRSTINFO) != 0 || (!ds_readb(TLK_TAV_FIRSTINFO) && !ds_readb(TLK_TAV_ROUND) && tmp <= 0) ? 84 : 81);
+		g_dialog_next_state = (ds_readb(TLK_TAV_FIRSTINFO) != 0 || (!ds_readb(TLK_TAV_FIRSTINFO) && !ds_readb(TLK_TAV_ROUND) && tmp <= 0) ? 84 : 81);
 
 	} else if (old_state == 87) {
 
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(TLK_TAV_FIRSTINFO) != 0 ? 88 : 89);
+		g_dialog_next_state = (ds_readb(TLK_TAV_FIRSTINFO) != 0 ? 88 : 89);
 
 	} else if (old_state == 88) {
 
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(TLK_TAV_ROUND) != 0 ? 92 : 97);
+		g_dialog_next_state = (ds_readb(TLK_TAV_ROUND) != 0 ? 92 : 97);
 
 	} else if (old_state == 89) {
 
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(TLK_TAV_ROUND) != 0 ? 90 : 91);
+		g_dialog_next_state = (ds_readb(TLK_TAV_ROUND) != 0 ? 90 : 91);
 
 	} else if (old_state == 93) {
 
-		ds_writew(DIALOG_NEXT_STATE, gs_informer_flags[get_town_lookup_entry()] != 0 ? 94 : 95);
+		g_dialog_next_state = (gs_informer_flags[get_town_lookup_entry()] != 0 ? 94 : 95);
 
 	} else if (old_state == 98) {
 
-		ds_writew(DIALOG_NEXT_STATE, test_attrib(hero, ATTRIB_CH, 0) > 0 ? 99 : 102);
+		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 0) > 0 ? 99 : 102);
 
 	} else if (old_state == 99) {
 
-		ds_writew(DIALOG_NEXT_STATE, gs_informer_flags[get_town_lookup_entry()] != 0 ? 100 : 101);
+		g_dialog_next_state = (gs_informer_flags[get_town_lookup_entry()] != 0 ? 100 : 101);
 
 	} else if (old_state == 103) {
 
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(TLK_TAV_FULLNESS) == 3 ? 131 : 132);
+		g_dialog_next_state = (ds_readb(TLK_TAV_FULLNESS) == 3 ? 131 : 132);
 
 	} else if (old_state == 104) {
 
-		ds_writew(DIALOG_NEXT_STATE, gs_day_timer >= HOURS(22) && ds_readb(TLK_TAV_FULLNESS) != 3 ? 117 : 119);
+		g_dialog_next_state = (gs_day_timer >= HOURS(22) && ds_readb(TLK_TAV_FULLNESS) != 3 ? 117 : 119);
 
 	} else if (old_state == 106) {
 
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(TLK_TAV_ROUND) != 0 ? 107 : 108);
+		g_dialog_next_state = (ds_readb(TLK_TAV_ROUND) != 0 ? 107 : 108);
 
 	} else if (old_state == 108) {
 
 		if (ds_readb(TLK_TAV_TESTDRUNK) < count_heroes_in_group()) {
-			ds_writew(DIALOG_NEXT_STATE, 109);
+			g_dialog_next_state = (109);
 		} else {
-			ds_writew(DIALOG_NEXT_STATE, 111);
+			g_dialog_next_state = (111);
 			ds_writeb(TLK_TAV_TESTDRUNK, 0);
 		}
 
 	} else if (old_state == 109) {
 
-		ds_writew(DIALOG_NEXT_STATE, 108);
+		g_dialog_next_state = (108);
 
 		if ((host_readbs(get_hero(ds_readb(TLK_TAV_TESTDRUNK)) + 0x21) != 0) &&
 			!hero_dead(get_hero(ds_readb(TLK_TAV_TESTDRUNK))) &&
 			ds_readb(TLK_TAV_DRINKCOUNT) != 0)
 		{
-			ds_writew(DIALOG_NEXT_STATE, test_skill(get_hero(ds_readb(TLK_TAV_TESTDRUNK)), TA_ZECHEN, ds_readbs(TLK_TAV_DRINKCOUNT) - 8) > 0 ? 108 : 110);
+			g_dialog_next_state = (test_skill(get_hero(ds_readb(TLK_TAV_TESTDRUNK)), TA_ZECHEN, ds_readbs(TLK_TAV_DRINKCOUNT) - 8) > 0 ? 108 : 110);
 		}
 
 		inc_ds_bs_post(TLK_TAV_TESTDRUNK);	/* TODO: this variable is unsigned */
@@ -556,27 +556,27 @@ void TLK_tavern(signed short answer)
 
 		ds_writeb(TLK_TAV_FULLNESS, random_schick(3));
 
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(TLK_TAV_FULLNESS) == 1 ? 114 : (ds_readb(TLK_TAV_FULLNESS) == 2 ? 115 : 116));
+		g_dialog_next_state = (ds_readb(TLK_TAV_FULLNESS) == 1 ? 114 : (ds_readb(TLK_TAV_FULLNESS) == 2 ? 115 : 116));
 
 	} else if (old_state == 119) {
 
 		tmp = random_schick(3);
 
-		ds_writew(DIALOG_NEXT_STATE, tmp == 1 ? 120 : (tmp == 2 ? 121 : 122));
+		g_dialog_next_state = (tmp == 1 ? 120 : (tmp == 2 ? 121 : 122));
 
 	} else if (old_state == 120) {
 
-		ds_writew(DIALOG_NEXT_STATE, random_schick(2) == 1 ? 123 : 124);
+		g_dialog_next_state = (random_schick(2) == 1 ? 123 : 124);
 
 	} else if (old_state == 121) {
 
 		tmp = random_schick(5);
 
-		ds_writew(DIALOG_NEXT_STATE, tmp == 1 || tmp == 2 ? 125 : (tmp == 3 ? 126 : 127));
+		g_dialog_next_state = (tmp == 1 || tmp == 2 ? 125 : (tmp == 3 ? 126 : 127));
 
 	} else if (old_state == 122) {
 
-		ds_writew(DIALOG_NEXT_STATE, random_schick(3) == 1 ? 128 : 129);
+		g_dialog_next_state = (random_schick(3) == 1 ? 128 : 129);
 
 	} else if (old_state == 124 || old_state == 128) {
 
@@ -614,16 +614,16 @@ void TLK_tavern(signed short answer)
 
 		drink_while_drinking(10);
 
-		ds_writew(DIALOG_NEXT_STATE, p_money >= 10 ? 104 : 105);
+		g_dialog_next_state = (p_money >= 10 ? 104 : 105);
 	}
 
 	if (old_state == 132) {
 
-		ds_writew(DIALOG_NEXT_STATE, npc_meetings(ds_readws(CURRENT_TYPEINDEX)) ? 144 : (!tavern_quest_infos() ? 133 : 144));
+		g_dialog_next_state = (npc_meetings(ds_readws(CURRENT_TYPEINDEX)) ? 144 : (!tavern_quest_infos() ? 133 : 144));
 
 	} else if (old_state == 133) {
 
-		ds_writew(DIALOG_NEXT_STATE, random_schick(5) == 5 ? 152 : 131);
+		g_dialog_next_state = (random_schick(5) == 5 ? 152 : 131);
 
 	} else if (old_state == 134) {
 
@@ -635,11 +635,11 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 139) {
 
-		ds_writew(DIALOG_NEXT_STATE, random_schick(4) == 1 ? 140 : 138);
+		g_dialog_next_state = (random_schick(4) == 1 ? 140 : 138);
 
 	} else if (old_state == 140) {
 
-		ds_writew(DIALOG_NEXT_STATE, random_schick(3) == 2 ? 142 : 141);
+		g_dialog_next_state = (random_schick(3) == 2 ? 142 : 141);
 
 	} else if (old_state == 146) {
 
@@ -649,7 +649,7 @@ void TLK_tavern(signed short answer)
 			get_informer_name();
 		}
 
-		ds_writew(DIALOG_NEXT_STATE, !ds_readb(CURRENT_INFORMER) ? 148 : 147);
+		g_dialog_next_state = (!ds_readb(CURRENT_INFORMER) ? 148 : 147);
 
 	} else if (old_state == 151) {
 
@@ -657,7 +657,7 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 152) {
 
-		ds_writew(DIALOG_NEXT_STATE, random_schick(3) == 2 ? 134 : 135);
+		g_dialog_next_state = (random_schick(3) == 2 ? 134 : 135);
 
 	}
 }

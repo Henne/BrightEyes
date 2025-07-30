@@ -581,11 +581,11 @@ void talk_smith(void)
 void TLK_schmied(signed short state)
 {
 	if (!state) {
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(SMITH_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ? 1 :
+		g_dialog_next_state = (ds_readb(SMITH_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ? 1 :
 					(ds_readws(CURRENT_TYPEINDEX) == 17 ? 27 :
 					(ds_readws(CURRENT_TYPEINDEX) == 1 && ds_readb(DNG14_CELLAREXIT_FLAG) != 0 ? 28 : 4)));
 	} else if (state == 1) {
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(SMITH_FLOGGED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ? 2 : 3);
+		g_dialog_next_state = (ds_readb(SMITH_FLOGGED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ? 2 : 3);
 	} else if (state == 3) {
 		ds_writeb(SMITH_FLOGGED_FLAGS + ds_readws(CURRENT_TYPEINDEX), 1);
 	} else if (state == 6 || state == 26) {

@@ -165,12 +165,12 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 	answer = 0;
 
-	ds_writews(DIALOG_INFORMER, tlk_informer);
-	ds_writews(TLK_ID, talk_id);
+	g_dialog_informer = tlk_informer;
+	g_tlk_id = (talk_id);
 
 	load_informer_tlk(talk_id + ARCHIVE_FILE_DIALOGS_TLK);
 
-	ds_writews(DIALOG_STATE, ds_writews(DIALOG_DONE, 0));
+	g_dialog_state = (g_dialog_done = 0);
 
 	partners_tab = ((Bit8u*)p_datseg + DIALOG_PARTNERS);
 	states_tab = (Bit8u*)(host_readd((Bit8u*)(partners_tab) + 38 * tlk_informer));
@@ -182,7 +182,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 	do {
 		answer = optioncount = 0;
-		state_ptr = 8 * ds_readws(DIALOG_STATE) + states_tab;
+		state_ptr = 8 * g_dialog_state + states_tab;
 
 		if (host_readbs(state_ptr + 2) != 0) optioncount++;
 		if (host_readbs(state_ptr + 3) != 0) optioncount++;
@@ -194,8 +194,8 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 			fmt = get_tx2(txt_id + txt_offset);
 
-			if (ds_readws(TLK_ID) == 11) {
-				if (ds_readws(DIALOG_INFORMER) == 2) {
+			if (g_tlk_id == 11) {
+				if (g_dialog_informer == 2) {
 
 					if (txt_id == 12 || txt_id == 16 || txt_id == 17 ||
 						txt_id == 18 || txt_id == 20 || txt_id == 21 ||
@@ -253,7 +253,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 				}
 			} else {
 
-				if (ds_readws(TLK_ID) == 9 && ds_readws(DIALOG_INFORMER) == 1) {
+				if (g_tlk_id == 9 && g_dialog_informer == 1) {
 
 					if (txt_id == 21) {
 
@@ -280,7 +280,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 						strcpy(dst, fmt);
 
 					}
-				} else if (ds_readws(TLK_ID) == 7 && ds_readws(DIALOG_INFORMER) == 2) {
+				} else if (g_tlk_id == 7 && g_dialog_informer == 2) {
 
 					if (txt_id == 19) {
 
@@ -296,7 +296,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 					}
 
-				} else if (ds_readws(TLK_ID) == 6 && ds_readws(DIALOG_INFORMER) == 0) {
+				} else if (g_tlk_id == 6 && g_dialog_informer == 0) {
 
 					if (txt_id == 35 || txt_id == 36) {
 
@@ -311,9 +311,9 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 						strcpy(dst, fmt);
 					}
 
-				} else if (ds_readws(TLK_ID) == 12) {
+				} else if (g_tlk_id == 12) {
 
-					if (ds_readws(DIALOG_INFORMER) == 0) {
+					if (g_dialog_informer == 0) {
 
 						hero = (Bit8u*)get_first_hero_available_in_group();
 
@@ -366,7 +366,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 							strcpy(dst, fmt);
 						}
 
-					} else if (ds_readws(DIALOG_INFORMER) == 1) {
+					} else if (g_dialog_informer == 1) {
 
 						if (!txt_id || txt_id == 3 || txt_id == 4) {
 
@@ -398,7 +398,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 						}
 
 					}
-				} else if (ds_readws(TLK_ID) == 10 && ds_readws(DIALOG_INFORMER) == 0) {
+				} else if (g_tlk_id == 10 && g_dialog_informer == 0) {
 
 					if (txt_id == 18) {
 
@@ -413,7 +413,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 						strcpy(dst, fmt);
 					}
 
-				} else if (ds_readws(TLK_ID) == 17) {
+				} else if (g_tlk_id == 17) {
 
 
 					hero = (Bit8u*)get_first_hero_available_in_group();
@@ -450,7 +450,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 					}
 
-				} else if (ds_readws(TLK_ID) == 0) {
+				} else if (g_tlk_id == 0) {
 
 					if (txt_id == 40 || txt_id == 41 || txt_id == 43) {
 
@@ -500,36 +500,36 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 		}
 
 
-		ds_writews(DIALOG_NEXT_STATE, -1);
+		g_dialog_next_state = (-1);
 
 		if (host_readws(state_ptr) & 0x8000 || host_readws(state_ptr) == -1) {
 			talk_switch();
 		}
 
-		ds_writew(DIALOG_STATE, ds_readws(DIALOG_NEXT_STATE) == -1 ? host_readb(state_ptr + 5) : ds_readws(DIALOG_NEXT_STATE));
+		g_dialog_state = (g_dialog_next_state == -1 ? host_readb(state_ptr + 5) : g_dialog_next_state);
 
-		if (ds_readws(DIALOG_DONE) == 0) {
+		if (g_dialog_done == 0) {
 
 			/* set the new dialog state */
 
 			if (optioncount != 0 ) {
 				if (answer == -1) {
-					ds_writew(DIALOG_DONE, 1);
+					g_dialog_done = 1;
 				} else if (answer == 1) {
-					ds_writews(DIALOG_STATE, host_readb(state_ptr + 5));
+					g_dialog_state = (host_readb(state_ptr + 5));
 				} else if (answer == 2) {
-					ds_writews(DIALOG_STATE, host_readb(state_ptr + 6));
+					g_dialog_state = (host_readb(state_ptr + 6));
 				} else if (answer == 3) {
-					ds_writews(DIALOG_STATE, host_readb(state_ptr + 7));
+					g_dialog_state = (host_readb(state_ptr + 7));
 				}
 			}
 
-			if (ds_readws(DIALOG_STATE) == 255) {
-				ds_writew(DIALOG_DONE, 1);
+			if (g_dialog_state == 255) {
+				g_dialog_done = 1;
 			}
 		}
 
-	} while (ds_readws(DIALOG_DONE) == 0);
+	} while (g_dialog_done == 0);
 
 	g_text_file_index = -1;
 	ds_writews(CURRENT_ANI, -1);
@@ -540,12 +540,12 @@ void talk_switch(void)
 {
 	signed short state;
 
-	state = ds_readws(DIALOG_STATE);
+	state = g_dialog_state;
 
-	if (ds_readws(TLK_ID) == 3) {
+	if (g_tlk_id == 3) {
 		/* DASPOTA1.TLK */
 
-		if (ds_readws(DIALOG_INFORMER) == 0) {
+		if (g_dialog_informer == 0) {
 			if ((state == 1 || state == 2 || state == 3) && !ds_readb((DASPOTA_FIGHTFLAGS + 1))) {
 
 				g_fig_discard = 1;
@@ -565,7 +565,7 @@ void talk_switch(void)
 			}
 		}
 
-		if (ds_readws(DIALOG_INFORMER) == 1) {
+		if (g_dialog_informer == 1) {
 
 			if (state == 1 && !ds_readb((DASPOTA_FIGHTFLAGS + 2))) {
 
@@ -575,7 +575,7 @@ void talk_switch(void)
 			}
 		}
 
-		if (ds_readws(DIALOG_INFORMER) == 2) {
+		if (g_dialog_informer == 2) {
 
 			if ((state == 4 || state == 6) && !ds_readb((DASPOTA_FIGHTFLAGS + 3))) {
 
@@ -585,7 +585,7 @@ void talk_switch(void)
 			}
 		}
 
-		if (ds_readws(DIALOG_INFORMER) == 3) {
+		if (g_dialog_informer == 3) {
 
 			if (state == 4 && !ds_readb((DASPOTA_FIGHTFLAGS + 4))) {
 
@@ -595,7 +595,7 @@ void talk_switch(void)
 			}
 		}
 
-		if (ds_readws(DIALOG_INFORMER) == 4) {
+		if (g_dialog_informer == 4) {
 
 			if ((state == 1 || state == 4 || state == 7) && !ds_readb((DASPOTA_FIGHTFLAGS + 5))) {
 
@@ -605,7 +605,7 @@ void talk_switch(void)
 			}
 		}
 
-		if (ds_readws(DIALOG_INFORMER) == 5) {
+		if (g_dialog_informer == 5) {
 
 			if ((state == 4 || state == 5) && !ds_readb((DASPOTA_FIGHTFLAGS + 6))) {
 
@@ -615,7 +615,7 @@ void talk_switch(void)
 			}
 		}
 
-		if (ds_readws(DIALOG_INFORMER) == 6) {
+		if (g_dialog_informer == 6) {
 
 			if ((state == 1 || state == 4 || state == 7) && !ds_readb((DASPOTA_FIGHTFLAGS + 7))) {
 
@@ -625,10 +625,10 @@ void talk_switch(void)
 			}
 		}
 
-	} else if (ds_readws(TLK_ID) == 4) {
+	} else if (g_tlk_id == 4) {
 		/* DASPOTA2.TLK */
 
-		if (ds_readws(DIALOG_INFORMER) == 0) {
+		if (g_dialog_informer == 0) {
 
 			if (state == 4 && !ds_readb((DASPOTA_FIGHTFLAGS + 8))) {
 
@@ -638,7 +638,7 @@ void talk_switch(void)
 			}
 		}
 
-		if (ds_readws(DIALOG_INFORMER) == 1) {
+		if (g_dialog_informer == 1) {
 
 			if (state == 1 && !ds_readb((DASPOTA_FIGHTFLAGS + 9))) {
 
@@ -648,7 +648,7 @@ void talk_switch(void)
 			}
 		}
 
-		if (ds_readws(DIALOG_INFORMER) == 2) {
+		if (g_dialog_informer == 2) {
 
 			if (state == 1 && !ds_readb((DASPOTA_FIGHTFLAGS + 10))) {
 
@@ -658,7 +658,7 @@ void talk_switch(void)
 			}
 		}
 
-		if (ds_readws(DIALOG_INFORMER) == 3) {
+		if (g_dialog_informer == 3) {
 
 			if (state == 4 && !ds_readb((DASPOTA_FIGHTFLAGS + 11))) {
 
@@ -668,7 +668,7 @@ void talk_switch(void)
 			}
 		}
 
-		if (ds_readws(DIALOG_INFORMER) == 4) {
+		if (g_dialog_informer == 4) {
 
 			if (state == 1 && !ds_readb((DASPOTA_FIGHTFLAGS + 12))) {
 
@@ -678,7 +678,7 @@ void talk_switch(void)
 			}
 		}
 
-		if (ds_readws(DIALOG_INFORMER) == 5) {
+		if (g_dialog_informer == 5) {
 
 			if (state == 5 && !ds_readb((DASPOTA_FIGHTFLAGS + 13))) {
 
@@ -688,7 +688,7 @@ void talk_switch(void)
 			}
 		}
 
-		if (ds_readws(DIALOG_INFORMER) == 6) {
+		if (g_dialog_informer == 6) {
 
 			if (state == 1 && !ds_readb((DASPOTA_FIGHTFLAGS + 14))) {
 
@@ -698,10 +698,10 @@ void talk_switch(void)
 			}
 		}
 
-	} else if (ds_readws(TLK_ID) == 5) {
+	} else if (g_tlk_id == 5) {
 		/* DASPOTA3.TLK */
 
-		if (ds_readws(DIALOG_INFORMER) == 0) {
+		if (g_dialog_informer == 0) {
 
 			if ((state == 4 || state == 6) && !ds_readb((DASPOTA_FIGHTFLAGS + 16))) {
 
@@ -711,7 +711,7 @@ void talk_switch(void)
 			}
 		}
 
-		if (ds_readws(DIALOG_INFORMER) == 1) {
+		if (g_dialog_informer == 1) {
 
 			if ((state == 4 || state == 5 || state == 6) && !ds_readb((DASPOTA_FIGHTFLAGS + 17))) {
 
@@ -721,7 +721,7 @@ void talk_switch(void)
 			}
 		}
 
-		if (ds_readws(DIALOG_INFORMER) == 2) {
+		if (g_dialog_informer == 2) {
 
 			if ((state == 6 || state == 7) && !ds_readb((DASPOTA_FIGHTFLAGS + 18))) {
 
@@ -731,63 +731,63 @@ void talk_switch(void)
 			}
 		}
 
-	} else if (ds_readws(TLK_ID) == 6) {
+	} else if (g_tlk_id == 6) {
 		/* INFO1.TLK */
-		INF_jurge_hjore(ds_readws(DIALOG_INFORMER), state);
+		INF_jurge_hjore(g_dialog_informer, state);
 
-	} else if (ds_readws(TLK_ID) == 7) {
+	} else if (g_tlk_id == 7) {
 		/* INFO2.TLK */
-		INF_yasma_umbrik_isleif(ds_readws(DIALOG_INFORMER), state);
+		INF_yasma_umbrik_isleif(g_dialog_informer, state);
 
-	} else if (ds_readws(TLK_ID) == 8) {
+	} else if (g_tlk_id == 8) {
 		/* INFO3.TLK */
-		INF_ragna_beorn_algrid(ds_readws(DIALOG_INFORMER), state);
+		INF_ragna_beorn_algrid(g_dialog_informer, state);
 
-	} else if (ds_readws(TLK_ID) == 9) {
+	} else if (g_tlk_id == 9) {
 		/* INFO4.TLK */
-		INF_eliane_tiomar(ds_readws(DIALOG_INFORMER), state);
+		INF_eliane_tiomar(g_dialog_informer, state);
 
-	} else if (ds_readws(TLK_ID) == 10) {
+	} else if (g_tlk_id == 10) {
 		/* INFO5.TLK */
-		INF_olvir_asgrimm(ds_readws(DIALOG_INFORMER), state);
+		INF_olvir_asgrimm(g_dialog_informer, state);
 
-	} else if (ds_readws(TLK_ID) == 11) {
+	} else if (g_tlk_id == 11) {
 		/* INFO6.TLK */
-		INF_treborn_unicorn(ds_readws(DIALOG_INFORMER), state);
+		INF_treborn_unicorn(g_dialog_informer, state);
 
-	} else if (ds_readws(TLK_ID) == 12) {
+	} else if (g_tlk_id == 12) {
 		/* INFO7.TLK */
-		INF_swafnild_unicorn(ds_readws(DIALOG_INFORMER), state);
+		INF_swafnild_unicorn(g_dialog_informer, state);
 
-	} else if (ds_readws(TLK_ID) == 13) {
+	} else if (g_tlk_id == 13) {
 		/* SCHMIED.TLK */
 		TLK_schmied(state);
 
-	} else if (ds_readws(TLK_ID) == 14) {
+	} else if (g_tlk_id == 14) {
 		/* GHANDEL.TLK */
 		TLK_ghandel(state);
 
-	} else if (ds_readws(TLK_ID) == 15) {
+	} else if (g_tlk_id == 15) {
 		/* KHANDEL.TLK */
 		TLK_khandel(state);
 
-	} else if (ds_readws(TLK_ID) == 16) {
+	} else if (g_tlk_id == 16) {
 		/* WHANDEL.TLK */
 		TLK_whandel(state);
 
-	} else if (ds_readws(TLK_ID) == 1) {
+	} else if (g_tlk_id == 1) {
 		/* HERBERG.TLK */
 		TLK_herberg(state);
 
-	} else if (ds_readws(TLK_ID) == 0) {
+	} else if (g_tlk_id == 0) {
 		/* F092.TLK */
 		TLK_old_woman(state);
 
-	} else if (ds_readws(TLK_ID) == 17) {
+	} else if (g_tlk_id == 17) {
 		/* F115.TLK */
 		TLK_way_to_ruin(state);
 
-	} else if (ds_readws(TLK_ID) == 18) {
+	} else if (g_tlk_id == 18) {
 		/* EREMIT.TLK */
 		TLK_eremit(state);
 	}

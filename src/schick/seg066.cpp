@@ -294,7 +294,7 @@ void TLK_eremit(signed short state)
 	Bit8u *hero;
 
 	if (!state) {
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(HERMIT_VISITED) != 0 ? 1 : 2);
+		g_dialog_next_state = (ds_readb(HERMIT_VISITED) != 0 ? 1 : 2);
 	} else if (state == 6) {
 
 		hero = get_hero(0);
