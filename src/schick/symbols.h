@@ -926,8 +926,8 @@
 #define LOADED_MENU_ICONS               (0x5ecc)    /* signed char[9]; { -2, -2, -2, -2, -2, -2, -2, -2, -2 } */
 // ?1
 #define INFORMER_TAB                    (0x5ed6)    /* struct(4)[15]; struct{short name_id; char town, unkn;} */
-#define FIG_DROPPED_COUNTER             (0x5f12)    /* signed short */
-//#define FIG_ALL_HEROES_ESCAPED          (0x5f14)    /* unsigned short; {0,1} */
+//#define FIG_DROPPED_COUNTER             (0x5f12)    /* signed short */
+//#define FIG_ALL_HEROES_WITHDRAWN        (0x5f14)    /* unsigned short; {0,1} */
 #define MAX_ENEMIES                     (0x5f16)    /* signed short; an upper bound for the number of enemies */
 #define STR_ERROR_ON_OBJ_MALLOC         (0x5f18)    /* char[23]; "ERROR ON OBJECT MALLOC" */
 // ?1
@@ -1543,7 +1543,7 @@
 //#define TLK_ID                          (0xe314)    /* signed short */
 //#define CURRENT_FIGHT_ID                (0xe316)    /* unsigned short */
 //#define AUTOFIGHT                       (0xe318)    /* signed short */
-#define FIG_DROPPED_WEAPONS             (0xe31a)    /* signed short[30] */
+//#define FIG_DROPPED_WEAPONS             (0xe31a)    /* signed short[30] */
 #define CHESSBOARD_CPY                  (0xe356)    /* Bit8u* */
 #define FIG_TWOFIELDED_TABLE            (0xe35a)    /* signed char[21]; table containing the fighter-ids of the head parts of the twofielded enemies */
 #define FIG_TWOFIELDED_COUNT            (0xe36f)    /* signed char */

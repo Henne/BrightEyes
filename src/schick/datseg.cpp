@@ -3364,7 +3364,7 @@ unsigned char g_unkn_039[8] = { 0x0b, 0xc0, 0x75, 0x06, 0xb8, 0x01, 0x00, 0x00 }
 signed char g_loaded_menu_icons[9] = { -2, -2, -2, -2, -2, -2, -2, -2, -2 }; // ds:0x5ecc, { -2, -2, -2, -2, -2, -2, -2, -2, -2 }
 unsigned char g_unkn_040[1] = { 0x00 }; // ds:0x5ed5
 struct{short name_id; char town, unkn;} g_informer_tab[15] = { { 0x02bc, 0x26, 0x00 }, { 0x02bd, 0x25, 0x00 }, { 0x02be, 0x19, 0x01 }, { 0x02bf, 0x1c, 0x00 }, { 0x02c0, 0x14, 0x00 }, { 0x02c1, 0x2e, 0x01 }, { 0x02c2, 0x0d, 0x00 }, { 0x02c3, 0x03, 0x00 }, { 0x02c4, 0x2b, 0x01 }, { 0x02c5, -0x01, 0x00 }, { 0x02c6, -0x01, 0x01 }, { 0x02c7, -0x01, 0x00 }, { 0x02c8, -0x01, 0x00 }, { 0x02c9, 0x1f, 0x01 }, { 0x02ca, 0x30, 0x00 } }; // ds:0x5ed6
-signed short g_fig_dropped_counter = 0; // ds:0x5f12
+signed int g_fig_dropped_counter = 0;	// ds:0x5f12
 signed short g_fig_all_heroes_withdrawn = 0; // ds:0x5f14
 signed short g_max_enemies = 0; // ds:0x5f16, an upper bound for the number of enemies
 char g_str_error_on_obj_malloc[23] = "ERROR ON OBJECT MALLOC"; // ds:0x5f18
@@ -6291,8 +6291,8 @@ Bit32s g_fightobj_buf_freespace; // ds:0xe370
 signed char g_fig_twofielded_count; // ds:0xe36f
 signed char g_fig_twofielded_table[21]; // ds:0xe35a
 void *g_chessboard_cpy; // ds:0xe356
-signed short g_fig_dropped_weapons[30]; // ds:0xe31a
 
+signed int g_fig_dropped_weapons[30]; // ds:0xe31a
 signed int g_autofight;		// ds:0xe318
 signed int g_current_fight_no;	// ds:0xe316
 signed int g_tlk_id;		// ds:0xe314

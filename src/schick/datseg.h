@@ -125,6 +125,7 @@ extern char g_game_version[6];			//ds:0x46ec; seg002
 extern signed short g_delay_factor;		//ds:0x4b66; seg005, seg025
 extern void (*g_location_handlers[19])(void);		//ds:0x4c3b; seg025
 
+extern signed int g_fig_dropped_counter;	//ds:0x5f12; seg032, seg041
 extern signed short g_fig_all_heroes_withdrawn; //ds:0x5f14; seg032
 extern signed char g_hero_sel_exclude;		//ds:0x64a2; seg047, seg049, seg103, seg120
 
@@ -151,6 +152,7 @@ extern unsigned char *g_spelltarget;	// ds:0xe5b8; seg098-seg102
 
 extern char g_str_beorn_hjall[20];	// ds:0xe42e; seg072
 
+extern signed int g_fig_dropped_weapons[30];	// ds:0xe31a; seg032, seg041
 extern signed int g_autofight;		// ds:0xe318; seg004-seg105
 extern signed int g_current_fight_no;	// ds:0xe316; seg002-seg042
 extern signed int g_tlk_id;		// ds:0xe314; seg030, seg031

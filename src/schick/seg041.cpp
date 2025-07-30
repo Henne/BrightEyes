@@ -63,12 +63,12 @@ signed short range_attack_check_ammo(Bit8u *hero, signed short arg)
 			{
 				if (!arg) {
 
-					if (ds_readws(FIG_DROPPED_COUNTER) < 30) {
+					if (g_fig_dropped_counter < 30) {
 						/* potential Original-Bug: Only the item IDs are stored, but not the other item stats. Is this a problem?
 						 * For example, magic_revealed for the ITEM_THROWING_DAGGER_MAGIC might get lost.
 						 * Moreover, it would be nice to store the owner, to give it back the hero who used the ranged weapon. */
-						ds_writew(FIG_DROPPED_WEAPONS + ds_readw(FIG_DROPPED_COUNTER) * 2, right_hand);
-						inc_ds_ws(FIG_DROPPED_COUNTER);
+						g_fig_dropped_weapons[g_fig_dropped_counter] = right_hand;
+						g_fig_dropped_counter++;
 					}
 
 					drop_item(hero, HERO_INVENTORY_SLOT_RIGHT_HAND, 1);

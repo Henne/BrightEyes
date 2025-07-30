@@ -987,10 +987,10 @@ signed short do_fight(signed short fight_id)
 	read_archive_file(fd, (Bit8u*)ds_readd(MONSTER_DAT_BUF), 3476);
 	close(fd);
 
-	ds_writew(FIG_DROPPED_COUNTER, 0);
-
+	/* clear all dropped weapons */
+	g_fig_dropped_counter = 0;
 	for (i = 0; i < 30; i++) {
-		ds_writew(FIG_DROPPED_WEAPONS + 2 * i, 0);
+		g_fig_dropped_weapons[i] = 0;
 	}
 
 	load_tx(ARCHIVE_FILE_FIGHTTXT_LTX);
@@ -1139,13 +1139,14 @@ signed short do_fight(signed short fight_id)
 		if (retval == 0) {
 			/* the heroes won the fight => loot */
 
+			/* give automatically dropped items to the heroes */
 			i = 0;
-			while (ds_readws(FIG_DROPPED_WEAPONS + 2 * i) != 0) {
-				/* give automatic items to the heroes. dropped broken weapons ?*/
-				get_item(ds_readws(FIG_DROPPED_WEAPONS + 2 * i++), 0, 1);
+			while (g_fig_dropped_weapons[i]) {
+				get_item(g_fig_dropped_weapons[i++], 0, 1);
 			}
 
 			FIG_loot_monsters();
+
 			FIG_split_ap();
 
 			if ((ds_readws(MAX_ENEMIES) != 0) && !g_fig_discard) {
@@ -1154,7 +1155,6 @@ signed short do_fight(signed short fight_id)
 					or_ds_bs((ENEMY_SHEETS + ENEMY_SHEET_FLAGS1) + SIZEOF_ENEMY_SHEET * i, 1); /* set 'dead' flag */
 				}
 			}
-
 		}
 
 		if ((retval != 2) && !g_fig_discard) {
