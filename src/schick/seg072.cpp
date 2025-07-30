@@ -50,6 +50,7 @@ void INF_jurge_hjore(signed short informer, signed short state)
 		} else if (state == 20) {
 			ds_writew(DIALOG_NEXT_STATE, has_intro_letter() ? 21 : 22);
 		} else if (state == 27) {
+
 			/* get the map */
 			ds_writew(DIALOG_NEXT_STATE, count_map_parts() ? 29 : 30);
 
@@ -60,6 +61,7 @@ void INF_jurge_hjore(signed short informer, signed short state)
 			ds_writeb(TREASURE_MAPS, 1);
 
 			add_hero_ap_all(10);
+
 		} else if (state == 29 || state == 30) {
 			show_treasure_map();
 		} else if (state == 35) {
@@ -77,6 +79,7 @@ void INF_jurge_hjore(signed short informer, signed short state)
 		} else if (state == 45) {
 			ds_writew(DIALOG_NEXT_STATE, !gs_informer_flags[INFORMER_JURGE] ? 6 : 5);
 		}
+
 	} else if (informer == 1) {
 		/* HJORE AHRENSSON */
 
@@ -89,6 +92,7 @@ void INF_jurge_hjore(signed short informer, signed short state)
 		} else if (state == 10) {
 			if (!gs_informer_flags[INFORMER_BEORN]) gs_informer_flags[INFORMER_BEORN] = 1;
 		} else if (state == 13) {
+
 			/* get the false map part ?*/
 			if (ds_readb(TREASURE_MAPS + 9) == 2) {
 				ds_writeb(TMAP_DOUBLE2, 1);
@@ -99,6 +103,7 @@ void INF_jurge_hjore(signed short informer, signed short state)
 			add_hero_ap_all(10);
 
 			show_treasure_map();
+
 		} else if (state == 14) {
 			gs_informer_flags[INFORMER_HJORE] = 2;
 
@@ -240,19 +245,21 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 			if (!gs_informer_flags[INFORMER_SWAFNILD]) gs_informer_flags[INFORMER_SWAFNILD] = 1;
 		} else if (state == 16) {
 			/* mark JURGE TORFINSSON as known */
-			if (!gs_informer_flags[INFORMER_JURGE])
-			    gs_informer_flags[INFORMER_JURGE] = 1;
+			if (!gs_informer_flags[INFORMER_JURGE]) gs_informer_flags[INFORMER_JURGE] = 1;
 		} else if (state == 17) {
 			/* see state 12 */
 			ds_writew(DIALOG_NEXT_STATE, ds_readb(RAGNA_ASKED_MAP) != 0 ? 18 : 19);
 		} else if (state == 21) {
+
 			/* check if the party already has this map piece */
 			if (ds_readb(TREASURE_MAPS + 3) == 2) ds_writeb(TMAP_DOUBLE2, 1);
 			/* get the map piece */
 			ds_writeb(TREASURE_MAPS + 3, 1);
 			/* each of the heroes gets 10 AP */
 			add_hero_ap_all(10);
+
 		} else if (state == 22) {
+
 			/* test the group leader on KL+5, to get the map */
 			if (test_attrib(get_hero(0), ATTRIB_KL, 5) > 0) {
 				/* check if the party already has this map piece */
@@ -262,6 +269,7 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 				/* each of the heroes gets 10 AP */
 				add_hero_ap_all(10);
 			}
+
 		} else if (state == 23) {
 
 			/* she only shows you the map piece */
@@ -278,6 +286,7 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 			/* remove the map piece */
 			ds_writeb(TREASURE_MAPS + 3, tmp);
 		}
+
 	} else if (informer == 1) {
 			/* BEORN HJALLASSON */
 
@@ -429,10 +438,8 @@ void INF_eliane_tiomar(signed short informer, signed short state)
 		/* TIOMAR SWAFNILDSSON */
 
 		if (!state) {
-			ds_writew(DIALOG_NEXT_STATE,
-			    ds_readb(TLK_TAV_FOLLOWINFORMER) != 0 ? 44
-                : (!gs_informer_flags[INFORMER_TIOMAR]
-                    || gs_informer_flags[INFORMER_TIOMAR] == 2 ? 2 : 1));
+			ds_writew(DIALOG_NEXT_STATE, (ds_readb(TLK_TAV_FOLLOWINFORMER) != 0 ? 44
+		                : (!gs_informer_flags[INFORMER_TIOMAR] || gs_informer_flags[INFORMER_TIOMAR] == 2 ? 2 : 1)));
 		} else if (state == 1) {
 			ds_writew(DIALOG_NEXT_STATE, ds_readb(TIOMAR_AWAITS_LETTER) != 0 ? 36 : 3);
 		} else if (state == 4) {
@@ -457,9 +464,7 @@ void INF_eliane_tiomar(signed short informer, signed short state)
 		} else if (state == 20) {
 			/* drink with TIOMAR */
 			timewarp(HOURS(1));
-			ds_writew(DIALOG_NEXT_STATE,
-			    test_skill(get_hero(ds_writeb(TIOMAR_DRINKMATE, (unsigned char)get_random_hero())),
-                TA_ZECHEN, 0) > 0 ? 21 : 22);
+			ds_writew(DIALOG_NEXT_STATE, test_skill(get_hero(ds_writeb(TIOMAR_DRINKMATE, (unsigned char)get_random_hero())), TA_ZECHEN, 0) > 0 ? 21 : 22);
 		} else if (state == 22) {
 			/* TIOMARS drinkmate gets drunken */
 			hero_get_drunken(get_hero(ds_readb(TIOMAR_DRINKMATE)));
@@ -531,10 +536,8 @@ void INF_olvir_asgrimm(signed short informer, signed short state)
 			ds_writew(DIALOG_NEXT_STATE, ds_readb(OLVIR_INTERRUPTED) != 0 ? 19 : 30);
 			ds_writeb(OLVIR_INTERRUPTED, 1);
 		} else if (state == 33) {
-            /* whenever one of the songs is over, the name of an informer is given */
-			ds_writew(DIALOG_NEXT_STATE,
-                ds_readb(OLVIR_SINGING_HETMANN) != 0 ? 11
-                    : (ds_readb(OLVIR_SINGING_HYGGELIK) != 0 ? 35 : 36));
+		        /* whenever one of the songs is over, the name of an informer is given */
+			ds_writew(DIALOG_NEXT_STATE, ds_readb(OLVIR_SINGING_HETMANN) != 0 ? 11 : (ds_readb(OLVIR_SINGING_HYGGELIK) != 0 ? 35 : 36));
 		} else if (state == 34) {
 			ds_writeb(OLVIR_SINGING_HETMANN, 0);
 			ds_writeb(OLVIR_SINGING_HYGGELIK, 1);
@@ -550,7 +553,7 @@ void INF_olvir_asgrimm(signed short informer, signed short state)
 		/* ASGRIMM THURBOLDSSON */
 
 		if (!state) {
-			ds_writew(DIALOG_NEXT_STATE, ds_readb(TLK_TAV_FOLLOWINFORMER) != 0 ? 22 : (gs_got_main_quest == 0|| gs_informer_flags[INFORMER_ASGRIMM] == 2 ? 1 : 2));
+			ds_writew(DIALOG_NEXT_STATE, ds_readb(TLK_TAV_FOLLOWINFORMER) != 0 ? 22 : (gs_got_main_quest == 0 || gs_informer_flags[INFORMER_ASGRIMM] == 2 ? 1 : 2));
 		} else if (state == 2) {
 			/* mark ASGRIMM THURBOLDSSON as done */
 			gs_informer_flags[INFORMER_ASGRIMM] = 2;
@@ -788,14 +791,11 @@ void INF_swafnild_unicorn(signed short informer, signed short state)
 				add_hero_ap_all(10);
 
 				show_treasure_map();
+
 		} else if (state == 37) {
 
-			ds_writeb(CURRENT_TOWN,
-			    ds_readb(SWAFNILD_DESTINATION) == 1 ?
-			        ds_readb(SWAFNILD_TP1)
-                : ds_readb(SWAFNILD_DESTINATION) == 2 ?
-                    ds_readb(SWAFNILD_TP2)
-                : ds_readb(SWAFNILD_TP3));
+			ds_writeb(CURRENT_TOWN, ds_readb(SWAFNILD_DESTINATION) == 1 ? ds_readb(SWAFNILD_TP1) :
+						(ds_readb(SWAFNILD_DESTINATION) == 2 ? ds_readb(SWAFNILD_TP2) : ds_readb(SWAFNILD_TP3)));
 
 			switch (ds_readbs(CURRENT_TOWN)) {
 				case TOWNS_PREM: ds_writew(X_TARGET_BAK, 22); ds_writew(Y_TARGET_BAK,  8); break;
