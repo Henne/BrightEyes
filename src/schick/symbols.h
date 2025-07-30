@@ -804,7 +804,7 @@
 #define STR_FILE_MISSING_PTR            (0x4480)    /* Bit8u*; to STR_FILE_MISSING */
 #define MOUSE_IRQ_INIT                  (0x4484)    /* unsigned short */
 // ?4
-#define PAUSE_STRING                    (0x448a)    /* char[10]; "P A U S E" */
+//#define PAUSE_STRING                    (0x448a)    /* char[10]; "P A U S E" */
 #define NPC_LAST_FAREWELLCHECK          (0x4494)    /* unsigned char */
 #define CHECK_PARTY                     (0x4495)    /* char; indicates that the groups need to be checked if active heroes are available. set after a fight, at sub_hero_le (outside of a fight) and at hero_disappear(). check is done in game_loop() */
 #define FOOD_MOD                        (0x4496)    /* char */

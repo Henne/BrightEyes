@@ -1572,7 +1572,7 @@ void handle_gui_input(void)
 			ds_writew(GUI_TEXT_CENTERED, 1);
 			tw_bak = g_textbox_width;
 			g_textbox_width = 2;
-			GUI_output((char*)p_datseg + PAUSE_STRING);		/* P A U S E */
+			GUI_output(g_pause_string);		/* P A U S E */
 			g_textbox_width = tw_bak;
 			ds_writew(GUI_TEXT_CENTERED, 0);
 			ds_writew(BIOSKEY_EVENT10, l_si = ds_writew(BIOSKEY_EVENT, 0));
@@ -1739,7 +1739,7 @@ void handle_input(void)
 			ds_writew(BIOSKEY_EVENT10, 1);
 			ds_writew(GUI_TEXT_CENTERED, 1);
 			g_textbox_width = 2;
-			GUI_output((char*)p_datseg + PAUSE_STRING);		/* P A U S E */
+			GUI_output(g_pause_string);		/* P A U S E */
 			g_textbox_width = 3;
 			ds_writew(GUI_TEXT_CENTERED, 0);
 			g_timers_disabled--;
@@ -1752,14 +1752,12 @@ void handle_input(void)
 		l_si = 0;
 
 		if (((Bit8u*)ds_readd(ACTION_TABLE_SECONDARY))) {
-			l_si = get_mouse_action(ds_readw(MOUSE_POSX),
-					ds_readw(MOUSE_POSY),
+			l_si = get_mouse_action(ds_readw(MOUSE_POSX), ds_readw(MOUSE_POSY),
 					(Bit8u*)ds_readd(ACTION_TABLE_SECONDARY));
 		}
 
 		if (!l_si && ((Bit8u*)ds_readd(ACTION_TABLE_PRIMARY))) {
-			l_si = get_mouse_action(ds_readw(MOUSE_POSX),
-					ds_readw(MOUSE_POSY),
+			l_si = get_mouse_action(ds_readw(MOUSE_POSX), ds_readw(MOUSE_POSY),
 					(Bit8u*)ds_readd(ACTION_TABLE_PRIMARY));
 		}
 
