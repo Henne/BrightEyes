@@ -840,7 +840,7 @@ void status_menu(signed short hero_pos)
 	g_timers_disabled--;
 
 	if (ds_readbs(CURRENT_TOWN) != TOWNS_NONE) {
-		ds_writeb(FADING_STATE, 3);
+		g_fading_state = 3;
 	}
 }
 

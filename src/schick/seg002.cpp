@@ -79,7 +79,7 @@ void sub_light_timers(Bit32s);
 void play_music_file(signed short index)
 {
 #if defined(__BORLANDC__)
-	if (ds_readbs(MUSIC_ENABLED) != 0) {
+	if (g_music_enabled != 0) {
 		do_play_music_file(index);
 	}
 #endif
@@ -92,9 +92,9 @@ void set_audio_track(Bit16u index)
 #endif
 
 	/* only do something when index is not the current track */
-	if (ds_readw(MUSIC_CURRENT_TRACK) != index) {
+	if (g_music_current_track != index) {
 
-		ds_writew(MUSIC_CURRENT_TRACK, index);
+		g_music_current_track = index;
 
 		if (ds_readw(USE_CDAUDIO_FLAG) != 0) {
 			/* we use CD */
@@ -118,28 +118,28 @@ void sound_menu(void)
 
 	switch (answer - 1) {
 		case 0: {
-			ds_writeb(MUSIC_ENABLED, 0);
-			ds_writeb(SND_EFFECTS_ENABLED, 0);
+			g_music_enabled = 0;
+			g_snd_effects_enabled = 0;
 			break;
 		}
 		case 1: {
-			ds_writeb(MUSIC_ENABLED, 1);
-			ds_writeb(SND_EFFECTS_ENABLED, 0);
+			g_music_enabled = 1;
+			g_snd_effects_enabled = 0;
 			break;
 		}
 		case 2: {
-			ds_writeb(MUSIC_ENABLED, 0);
-			ds_writeb(SND_EFFECTS_ENABLED, 1);
+			g_music_enabled = 0;
+			g_snd_effects_enabled = 1;
 			break;
 		}
 		case 3: {
-			ds_writeb(MUSIC_ENABLED, 1);
-			ds_writeb(SND_EFFECTS_ENABLED, 1);
+			g_music_enabled = 1;
+			g_snd_effects_enabled = 1;
 			break;
 		}
 	}
 
-	if (ds_readb(MUSIC_ENABLED) == 0) {
+	if (g_music_enabled == 0) {
 		/* music disabled */
 		if (ds_readw(USE_CDAUDIO_FLAG) != 0) {
 			CD_audio_pause();
@@ -147,12 +147,12 @@ void sound_menu(void)
 			stop_midi_playback();
 		}
 	} else {
-		if (ds_readws(MUSIC_CURRENT_TRACK) != -1) {
+		if (g_music_current_track != -1) {
 			/* music enabled */
 			if (ds_readw(USE_CDAUDIO_FLAG) != 0) {
 				CD_audio_play();
 			} else {
-				play_music_file(ds_readws(MUSIC_CURRENT_TRACK));
+				play_music_file(g_music_current_track);
 			}
 		}
 	}
@@ -236,19 +236,19 @@ void read_sound_cfg(void)
 
 		if (digi_port != 0) {
 
-			if (ds_readw(SND_VOC_ENABLED) != 0) {
+			if (g_snd_voc_enabled != 0) {
 
 				if (!load_digi_driver(((Bit8u*)p_datseg + FNAME_DIGI_ADV), 2, digi_port, digi_irq))
 				{
-					ds_writew(SND_VOC_ENABLED, 0);
+					g_snd_voc_enabled = 0;
 				}
 			} else {
 				/* print that sound effects are disabled */
 				GUI_output((char*)p_datseg + SND_TXT_DISABLED_MEM);
-				ds_writew(SND_VOC_ENABLED, 0);
+				g_snd_voc_enabled = 0;
 			}
 		} else {
-			ds_writew(SND_VOC_ENABLED, 0);
+			g_snd_voc_enabled = 0;
 		}
 
 	}
@@ -289,7 +289,7 @@ void exit_AIL(void)
 	/* set all pointers to NULL */
 	ds_writed(AIL_TIMBRE_CACHE, ds_writed(AIL_STATE_TABLE, ds_writed(AIL_MIDI_BUFFER, ds_writed(AIL_MUSIC_DRIVER_BUF2, 0))));
 
-	if (ds_readw(SND_VOC_ENABLED) != 0) {
+	if (g_snd_voc_enabled != 0) {
 		free_voc_buffer();
 	}
 #endif
@@ -508,7 +508,7 @@ void start_midi_playback_IRQ(void)
 {
 #if defined(__BORLANDC__)
 	if ((ds_readw(LOAD_SOUND_DRIVER) == 0) &&
-		(ds_readb(MUSIC_ENABLED) != 0) &&
+		(g_music_enabled != 0) &&
 		(host_readw((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 2) == 3))
 	{
 		if (AIL_sequence_status(ds_readws(AIL_MUSIC_DRIVER_ID), ds_readws(AIL_SEQUENCE)) == 2) {
@@ -561,7 +561,7 @@ signed short have_mem_for_sound(void)
 
 			if ((Bit32u)(size + 25000L) < farcoreleft()) {
 
-				ds_writew(SND_VOC_ENABLED, 1);
+				g_snd_voc_enabled = 1;
 			}
 		} else {
 			retval = 0;
@@ -571,7 +571,7 @@ signed short have_mem_for_sound(void)
 		retval = 1;
 
 		if (25000L < farcoreleft()) {
-			ds_writew(SND_VOC_ENABLED, 1);
+			g_snd_voc_enabled = 1;
 		}
 	}
 
@@ -584,7 +584,7 @@ signed short have_mem_for_sound(void)
 void play_voc(signed short index)
 {
 #if defined(__BORLANDC__)
-	if (ds_readw(SND_VOC_ENABLED) && ds_readb(SND_EFFECTS_ENABLED)) {
+	if (g_snd_voc_enabled && g_snd_effects_enabled) {
 		SND_set_volume(90);
 		SND_play_voc(index);
 	}
@@ -594,7 +594,7 @@ void play_voc(signed short index)
 void play_voc_delay(signed short index)
 {
 #if defined(__BORLANDC__)
-	if (ds_readw(SND_VOC_ENABLED) && ds_readb(SND_EFFECTS_ENABLED)) {
+	if (g_snd_voc_enabled && g_snd_effects_enabled) {
 		SND_set_volume(90);
 		SND_play_voc(index);
 
@@ -608,7 +608,7 @@ void play_voc_delay(signed short index)
 void alloc_voc_buffer(Bit32u size)
 {
 #if defined(__BORLANDC__)
-	if (ds_readw(SND_VOC_ENABLED)) {
+	if (g_snd_voc_enabled) {
 		if ((((Bit8u*)ds_writed(AIL_VOC_BUFFER, (Bit32u)schick_alloc(size))))) ;
 	}
 #endif
@@ -618,7 +618,7 @@ void alloc_voc_buffer(Bit32u size)
 void free_voc_buffer(void)
 {
 #if defined(__BORLANDC__)
-	if (ds_readw(SND_VOC_ENABLED) != 0) {
+	if (g_snd_voc_enabled != 0) {
 
 		if (ds_readd(AIL_VOC_BUFFER) != 0) {
 			free((void*)ds_readd(AIL_VOC_BUFFER));
@@ -667,7 +667,7 @@ signed short read_voc_file(signed short index)
 void SND_play_voc(signed short index)
 {
 #if defined(__BORLANDC__)
-	if (ds_readw(SND_VOC_ENABLED)) {
+	if (g_snd_voc_enabled) {
 
 		AIL_stop_digital_playback(ds_readw(AIL_DIGI_DRIVER_ID));
 		read_new_voc_file(index);
@@ -680,7 +680,7 @@ void SND_play_voc(signed short index)
 void SND_stop_digi(void)
 {
 #if defined(__BORLANDC__)
-	if (ds_readw(SND_VOC_ENABLED)) {
+	if (g_snd_voc_enabled) {
 		AIL_stop_digital_playback(ds_readw(AIL_DIGI_DRIVER_ID));
 	}
 #endif
@@ -689,7 +689,7 @@ void SND_stop_digi(void)
 void SND_set_volume(unsigned short volume)
 {
 #if defined(__BORLANDC__)
-	if (ds_readw(SND_VOC_ENABLED)) {
+	if (g_snd_voc_enabled) {
 
 		AIL_set_digital_playback_volume(ds_readw(AIL_DIGI_DRIVER_ID), volume);
 
@@ -726,7 +726,7 @@ signed short load_digi_driver(Bit8u* fname, signed short type, signed short io, 
 					host_readws((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR) + 0x10),
 					host_readws((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR) + 0x12));
 
-				ds_writeb(SND_EFFECTS_ENABLED, 1);
+				g_snd_effects_enabled = 1;
 				return 1;
 			} else {
 				/* no sound hardware found */
@@ -1862,7 +1862,7 @@ void game_loop(void)
 			}
 		}
 
-		if ((ds_readws(GAME_STATE) != GAME_STATE_MAIN) && (ds_readbs(FADING_STATE) != 0)) {
+		if ((ds_readws(GAME_STATE) != GAME_STATE_MAIN) && (g_fading_state != 0)) {
 			refresh_colors();
 		}
 
@@ -4043,7 +4043,7 @@ void draw_compass(void)
 		/* Not in town or dungeon */
 		((ds_readbs(DUNGEON_INDEX) != DUNGEONS_NONE) || (ds_readbs(CURRENT_TOWN) != TOWNS_NONE)) &&
 		/* I have no clue */
-		(ds_readb(FADING_STATE) != 2))
+		(g_fading_state != 2))
 	{
 
 		/* set src */

@@ -285,7 +285,7 @@ signed short DNG07_handler(void)
 
 			timewarp(HOURS(3));
 
-			ds_writeb(FADING_STATE, 3);
+			g_fading_state = 3;
 		} else
 		{
 			ds_writew(Y_TARGET, ds_readws(Y_TARGET_BAK));

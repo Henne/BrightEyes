@@ -417,7 +417,7 @@ void level_up(signed short hero_pos)
 
 	hero = get_hero(hero_pos);
 
-	if (ds_readb(FADING_STATE) != 0) {
+	if (g_fading_state != 0) {
 		refresh_colors();
 	}
 

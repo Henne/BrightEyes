@@ -490,7 +490,7 @@ void remove_npc(signed short head_index, signed char days,
 		signed short index, char *name, char *text)
 {
 
-	if (ds_readb(FADING_STATE) != 0)
+	if (g_fading_state != 0)
 		refresh_colors();
 
 	/* reset NPCs groups position */

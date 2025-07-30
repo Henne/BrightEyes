@@ -226,7 +226,7 @@ signed short DNG01_handler(void)
 
 			ds_writeb(SPECIAL_SCREEN, 1);
 			timewarp(HOURS(6));
-			ds_writeb(FADING_STATE, 3);
+			g_fading_state = 3;
 		}
 	}
 

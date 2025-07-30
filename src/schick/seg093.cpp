@@ -292,7 +292,7 @@ signed short do_travel_mode(void)
 	}
 
 	ds_writew(CURRENT_ANI, ds_writebs(CITY_AREA_LOADED, ds_writebs(PP20_INDEX, -1)));
-	ds_writew(REQUEST_REFRESH, (unsigned short)ds_writeb(FADING_STATE, 1));
+	ds_writew(REQUEST_REFRESH, (unsigned short)(g_fading_state = 1));
 	g_wallclock_update = bak1;
 
 	return 0;

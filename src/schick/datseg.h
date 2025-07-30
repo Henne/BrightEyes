@@ -122,6 +122,8 @@ extern Bit32s gs_dng12_watertrap_timer;		//ds:0x3fa2; seg002, seg090
 extern Bit16s gs_arsenal_money;			//ds:0x43a3; seg068
 /* GameState written directly into SaveGame file ends at 0x4474 */
 
+extern unsigned char g_fading_state;		//ds:0x4475; seg002-seg095
+
 extern char g_game_version[6];			//ds:0x46ec; seg002
 extern signed short g_delay_factor;		//ds:0x4b66; seg005, seg025
 extern void (*g_location_handlers[19])(void);	//ds:0x4c3b; seg025

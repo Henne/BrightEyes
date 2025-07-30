@@ -292,7 +292,7 @@ signed short DNG04_handler(void)
 
 		timewarp(HOURS(2));
 
-		ds_writeb(FADING_STATE, 3);
+		g_fading_state = 3;
 	}
 
 	g_textbox_width = tw_bak;
@@ -481,7 +481,7 @@ signed short DNG05_handler(void)
 
 		timewarp(HOURS(2));
 
-		ds_writeb(FADING_STATE, 3);
+		g_fading_state = 3;
 	}
 
 	g_textbox_width = tw_bak;

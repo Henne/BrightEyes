@@ -793,12 +793,13 @@
 #define DIARY_ENTRY_COUNTER             (0x43ba)    /* signed short */
 #define DIARY_ENTRIES                   (0x43bc)    /* struct(8)[23]; struct{short day, month, year, town;} */
 #define DATSEG_STATUS_END               (0x4474)    /* char */
-#define FADING_STATE                    (0x4475)    /* unsigned char; {0,1,2,3} */
-#define MUSIC_ENABLED                   (0x4476)    /* unsigned char; {0,1} */
-#define SND_EFFECTS_ENABLED             (0x4477)    /* unsigned char; {0,1} */
+
+//#define FADING_STATE                    (0x4475)    /* unsigned char; {0,1,2,3} */
+//#define MUSIC_ENABLED                   (0x4476)    /* unsigned char; {0,1} */
+//#define SND_EFFECTS_ENABLED             (0x4477)    /* unsigned char; {0,1} */
 // ?2
-#define MUSIC_CURRENT_TRACK             (0x447a)    /* signed short */
-#define SND_VOC_ENABLED                 (0x447c)    /* unsigned short; {0,1} */
+//#define MUSIC_CURRENT_TRACK             (0x447a)    /* signed short */
+//#define SND_VOC_ENABLED                 (0x447c)    /* unsigned short; {0,1} */
 // ?2
 #define STR_FILE_MISSING_PTR            (0x4480)    /* Bit8u*; to STR_FILE_MISSING */
 #define MOUSE_IRQ_INIT                  (0x4484)    /* unsigned short */

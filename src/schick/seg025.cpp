@@ -588,7 +588,7 @@ signed short game_options(void)
 	ds_writeb(SPECIAL_SCREEN, 0);
 
 	if (ds_readbs(CURRENT_TOWN) != TOWNS_NONE) {
-		ds_writeb(FADING_STATE, 3);
+		g_fading_state = 3;
 	}
 
 	g_textbox_width = tw_bak;
@@ -755,7 +755,7 @@ void leave_dungeon(void)
 	ds_writeb(DUNGEON_INDEX_BAK, ds_readb(DUNGEON_INDEX));
 	ds_writeb(DUNGEON_INDEX, ds_writeb(DUNGEON_LEVEL, ds_writeb(DUNGEON_LIGHT, 0)));
 	ds_writebs(CITY_AREA_LOADED, -1);
-	ds_writeb(FADING_STATE, ds_writew(REQUEST_REFRESH, 1));
+	g_fading_state = ds_writew(REQUEST_REFRESH, 1);
 
 	do_fill_rect(g_renderbuf_ptr, 0, 0, 319, 199, 0);
 
@@ -838,7 +838,7 @@ void fade_into(void)
 void copy_palette(void)
 {
 	memcpy(g_renderbuf_ptr + 0xfa00, (Bit8u*)ds_readd(ANI_PALETTE), 0x60);
-	ds_writeb(FADING_STATE, 2);
+	g_fading_state = 2;
 }
 
 #if !defined(__BORLANDC__)

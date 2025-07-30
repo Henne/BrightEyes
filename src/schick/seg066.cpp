@@ -1108,20 +1108,20 @@ void city_fade_and_colors(void)
 	Bit8u *dst;
 	Bit8u *pal_ptr;
 
-	if (ds_readb(FADING_STATE) == 2) {
+	if (g_fading_state == 2) {
 
 		fade_into();
-		ds_writeb(FADING_STATE, 1);
+		g_fading_state = 1;
 
 	}
 
-	if (ds_readb(FADING_STATE) == 3) {
+	if (g_fading_state == 3) {
 
 		set_palette(p_datseg + PALETTE_ALLBLACK2, 0x00, 0x20);
 		set_palette(p_datseg + PALETTE_ALLBLACK2, 0x80, 0x20);
 		set_palette(p_datseg + PALETTE_ALLBLACK2, 0xa0, 0x20);
 
-		ds_writeb(FADING_STATE, 1);
+		g_fading_state = 1;
 	}
 
 	draw_compass();
@@ -1141,7 +1141,7 @@ void city_fade_and_colors(void)
 
 	refresh_screen_size();
 
-	if (ds_readb(FADING_STATE) != 0) {
+	if (g_fading_state != 0) {
 
 		dst = ((Bit8u*)g_renderbuf_ptr) + 500;
 		pal_ptr = g_renderbuf_ptr;
@@ -1160,7 +1160,7 @@ void city_fade_and_colors(void)
 			set_palette(pal_ptr + 0x60, 0x80, 0x40);
 		}
 
-		ds_writeb(FADING_STATE, 0);
+		g_fading_state = 0;
 
 	} else {
 

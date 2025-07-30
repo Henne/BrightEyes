@@ -395,7 +395,7 @@ signed short load_game_state(void)
 		ds_writew(REQUEST_REFRESH, retval = 1);
 		g_check_disease = 0;
 		g_check_poison = 0;
-		ds_writeb(FADING_STATE, 3);
+		g_fading_state = 3;
 
 		if (gs_current_loctype != LOCTYPE_TEMPLE) {
 			ds_writebs((NEW_MENU_ICONS + 6), ds_writebs((NEW_MENU_ICONS + 7), ds_writebs((NEW_MENU_ICONS + 8), MENU_ICON_NONE)));

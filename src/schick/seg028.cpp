@@ -232,7 +232,7 @@ Bit8u* seg028_0444(signed short index, signed short firstcol, signed short color
 
 		ds_writed(BUFFER11_PTR, (Bit32u)(ptr + v2 - 3 * colors));
 
-		if ((ref != 0) && (!ds_readb(FADING_STATE))) {
+		if ((ref != 0) && (!g_fading_state)) {
 
 			wait_for_vsync();
 
