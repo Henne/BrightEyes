@@ -420,7 +420,7 @@ signed short DNG05_handler(void)
 	{
 		if (random_schick(100) < 30)
 		{
-			ds_writew(MAX_ENEMIES, random_schick(100) < 10 ? 3 : 2);
+			g_max_enemies = (random_schick(100) < 10 ? 3 : 2);
 			ds_writew((FIG_FLEE_POSITION + 0),
 				 ds_writew((FIG_FLEE_POSITION + 2),
 				 ds_writew((FIG_FLEE_POSITION + 4),

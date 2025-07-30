@@ -508,7 +508,7 @@ void tevent_101(void)
 						get_tx2(43));
 		} while (answer == -1);
 
-		ds_writew(MAX_ENEMIES, mod);
+		g_max_enemies = (mod);
 
 		/* Original-Bugfix: see description in tevent_099() */
 		if (answer == 1) {

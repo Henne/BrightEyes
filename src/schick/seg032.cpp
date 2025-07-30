@@ -961,10 +961,10 @@ signed short do_fight(signed short fight_id)
 		host_writeb((Bit8u*)ds_readd(CURRENT_FIGHT) + FIGHT_INTRO_SEEN, 1);
 	}
 
-	if (ds_readws(MAX_ENEMIES) > 0) {
+	if (g_max_enemies > 0) {
 		/* reduce number of enemies to MAX_ENEMIES */
-		memset((Bit8u*)ds_readd(CURRENT_FIGHT) + SIZEOF_FIGHT_MONSTER * ds_readws(MAX_ENEMIES) + FIGHT_MONSTERS_ID, 0, SIZEOF_FIGHT_MONSTER * (20 - ds_readws(MAX_ENEMIES)));
-		ds_writew(MAX_ENEMIES, 0);
+		memset((Bit8u*)ds_readd(CURRENT_FIGHT) + SIZEOF_FIGHT_MONSTER * g_max_enemies + FIGHT_MONSTERS_ID, 0, SIZEOF_FIGHT_MONSTER * (20 - g_max_enemies));
+		g_max_enemies = 0;
 	}
 
 	/* state that we are in a fight */
@@ -1149,7 +1149,7 @@ signed short do_fight(signed short fight_id)
 
 			FIG_split_ap();
 
-			if ((ds_readws(MAX_ENEMIES) != 0) && !g_fig_discard) {
+			if ((g_max_enemies != 0) && !g_fig_discard) {
 
 				for (i = 0; i < 20; i++) {
 					or_ds_bs((ENEMY_SHEETS + ENEMY_SHEET_FLAGS1) + SIZEOF_ENEMY_SHEET * i, 1); /* set 'dead' flag */
@@ -1255,7 +1255,7 @@ signed short do_fight(signed short fight_id)
 
 	g_fig_initiative = g_always_zero4 = 0;
 	g_fig_discard = 0;
-	ds_writew(MAX_ENEMIES, 0);
+	g_max_enemies = 0;
 	g_in_fight = 0;
 	ds_writew(REQUEST_REFRESH, 1);
 	ds_writew(CURRENT_ANI, -1);

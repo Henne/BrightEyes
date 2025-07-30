@@ -123,10 +123,12 @@ extern Bit16s gs_arsenal_money;			//ds:0x43a3; seg068
 
 extern char g_game_version[6];			//ds:0x46ec; seg002
 extern signed short g_delay_factor;		//ds:0x4b66; seg005, seg025
-extern void (*g_location_handlers[19])(void);		//ds:0x4c3b; seg025
+extern void (*g_location_handlers[19])(void);	//ds:0x4c3b; seg025
 
 extern signed int g_fig_dropped_counter;	//ds:0x5f12; seg032, seg041
-extern signed short g_fig_all_heroes_withdrawn; //ds:0x5f14; seg032
+extern signed int g_fig_all_heroes_withdrawn;	//ds:0x5f14; seg032
+extern signed int g_max_enemies;		//ds:0x5f16; seg032, seg080, seg117
+
 extern signed char g_hero_sel_exclude;		//ds:0x64a2; seg047, seg049, seg103, seg120
 
 extern unsigned char *g_hexenknoten_gfx_buf;	// ds:0xacc8; seg100

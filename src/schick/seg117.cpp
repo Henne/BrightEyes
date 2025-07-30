@@ -547,7 +547,7 @@ void pirates_attack(void)
 	GUI_output(get_tx2(46));
 	GUI_output(get_tx2(47));
 
-	ds_writew(MAX_ENEMIES, random_interval(3, 8));
+	g_max_enemies = random_interval(3, 8);
 	g_fig_discard = 1;
 
 	do_fight(FIGHTS_S001);
@@ -571,7 +571,7 @@ void do_wild8_fight(void)
 	ds_writew(BASEPOS_Y, 0);
 	ds_writeb(SHOW_TRAVEL_MAP, 0);
 
-	ds_writew(MAX_ENEMIES, random_interval(5, 10));
+	g_max_enemies = random_interval(5, 10);
 	g_fig_discard = 1;
 
 	do_fight(FIGHTS_WILD8);
@@ -618,14 +618,14 @@ void random_encounter(signed short arg)
 			switch (i) {
 				case 0: {
 					if (!l_si) {
-						ds_writew(MAX_ENEMIES, random_schick(6) + 1);
+						g_max_enemies = random_schick(6) + 1;
 						do_fight(FIGHTS_WILD1);
 					}
 					break;
 				}
 				case 1: {
 					if (!l_si) {
-						ds_writew(MAX_ENEMIES, random_schick(3));
+						g_max_enemies = random_schick(3);
 						do_fight(FIGHTS_WILD2);
 					}
 					break;
@@ -636,7 +636,7 @@ void random_encounter(signed short arg)
 				}
 				case 3: {
 					if (!l_si) {
-						ds_writew(MAX_ENEMIES, random_schick(2));
+						g_max_enemies = random_schick(2);
 						do_fight(FIGHTS_WILD3);
 					}
 					break;
@@ -647,21 +647,21 @@ void random_encounter(signed short arg)
 				}
 				case 5: {
 					if (!l_si) {
-						ds_writew(MAX_ENEMIES, random_schick(6) + 1);
+						g_max_enemies = random_schick(6) + 1;
 						do_fight(FIGHTS_WILD4);
 					}
 					break;
 				}
 				case 6: {
 					if (!l_si) {
-						ds_writew(MAX_ENEMIES, random_schick(3) + 3);
+						g_max_enemies = random_schick(3) + 3;
 						do_fight(FIGHTS_WILD4);
 					}
 					break;
 				}
 				case 7: {
 					if (!l_si) {
-						ds_writew(MAX_ENEMIES, random_schick(2) + 1);
+						g_max_enemies = random_schick(2) + 1;
 						do_fight(FIGHTS_WILD5);
 					}
 					break;
@@ -676,7 +676,7 @@ void random_encounter(signed short arg)
 				}
 				case 10: {
 					if (!l_si) {
-						ds_writew(MAX_ENEMIES, random_schick(3));
+						g_max_enemies = random_schick(3);
 						do_fight(FIGHTS_WILD6);
 					}
 					break;
@@ -687,7 +687,7 @@ void random_encounter(signed short arg)
 				}
 				case 12: {
 					if (!l_si) {
-						ds_writew(MAX_ENEMIES, random_schick(3));
+						g_max_enemies = random_schick(3);
 						do_fight(FIGHTS_WILD7);
 					}
 					break;
