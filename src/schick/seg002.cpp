@@ -4514,7 +4514,7 @@ void sub_hero_le(Bit8u *hero, signed short le)
 			}
 
 			/* FINAL FIGHT */
-			if (ds_readw(CURRENT_FIG_NO) == FIGHTS_F144) {
+			if (g_current_fight_no == FIGHTS_F144) {
 				if (hero == (Bit8u*)ds_readd(MAIN_ACTING_HERO)) {
 					ds_writew(GAME_STATE, GAME_STATE_DEAD);
 					g_in_fight = 0;
@@ -4571,7 +4571,7 @@ void sub_hero_le(Bit8u *hero, signed short le)
 					FIG_add_msg(7, 0);
 
 					/* FINAL FIGHT */
-					if (ds_readw(CURRENT_FIG_NO) == FIGHTS_F144) {
+					if (g_current_fight_no == FIGHTS_F144) {
 						if (hero == (Bit8u*)ds_readd(MAIN_ACTING_HERO)) {
 							ds_writew(GAME_STATE, GAME_STATE_DEAD);
 							g_in_fight = 0;

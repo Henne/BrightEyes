@@ -135,11 +135,11 @@ void fill_enemy_sheet(unsigned short sheet_no, signed char enemy_id, unsigned ch
 	/* Terrible hack:
 		if the current fight is FIGHTS_F084, set MR to 5 (Travel-Event 84),
 		if the current fight is FIGHTS_F144 (final fight), and the enemy is no "Orkchampion" then set the 'tied' flag */
-	if (ds_readw(CURRENT_FIG_NO) == FIGHTS_F084) {
+	if (g_current_fight_no == FIGHTS_F084) {
 
 		host_writeb(sheet + ENEMY_SHEET_MR, 5);
 
-	} else if ((ds_readw(CURRENT_FIG_NO) == FIGHTS_F144) && (host_readb(sheet + ENEMY_SHEET_MON_ID) != 0x48)) {
+	} else if ((g_current_fight_no == FIGHTS_F144) && (host_readb(sheet + ENEMY_SHEET_MON_ID) != 0x48)) {
 		or_ptr_bs(sheet + ENEMY_SHEET_FLAGS1, 0x20); /* set 'tied' flag */
 
 	}
@@ -179,7 +179,7 @@ void fill_enemy_sheet(unsigned short sheet_no, signed char enemy_id, unsigned ch
 
 	/* Another hack:
 		If the current fight == FIGHTS_F126_08 (fleeing cultist) and the enemy is "Kultist", set the 'scared' flag */
-	if ((ds_readw(CURRENT_FIG_NO) == FIGHTS_F126_08) && (host_readb(sheet + ENEMY_SHEET_MON_ID) == 0x38)) {
+	if ((g_current_fight_no == FIGHTS_F126_08) && (host_readb(sheet + ENEMY_SHEET_MON_ID) == 0x38)) {
 		/* Kultist will flee */
 		or_ptr_bs(sheet + ENEMY_SHEET_FLAGS2, 0x4); /* set 'scared' flag */
 
@@ -436,7 +436,7 @@ void FIG_init_heroes(void)
 		host_writeb(hero + HERO_ENEMY_ID, 0);
 
 		/* FINAL FIGHT */
-		if (ds_readw(CURRENT_FIG_NO) == FIGHTS_F144) {
+		if (g_current_fight_no == FIGHTS_F144) {
 			if (hero == (Bit8u*)ds_readd(MAIN_ACTING_HERO)) {
 				cb_x = host_readbs((Bit8u*)ds_readd(CURRENT_FIGHT) + FIGHT_PLAYERS_X);
 				cb_y = host_readbs((Bit8u*)ds_readd(CURRENT_FIGHT) + FIGHT_PLAYERS_Y);

@@ -1541,8 +1541,8 @@
 //#define DIALOG_DONE                     (0xe310)    /* signed short; {0,1} */
 //#define DIALOG_STATE                    (0xe312)    /* signed short */
 //#define TLK_ID                          (0xe314)    /* signed short */
-#define CURRENT_FIG_NO                  (0xe316)    /* unsigned short */
-#define AUTOFIGHT                       (0xe318)    /* signed short */
+//#define CURRENT_FIGHT_ID                (0xe316)    /* unsigned short */
+//#define AUTOFIGHT                       (0xe318)    /* signed short */
 #define FIG_DROPPED_WEAPONS             (0xe31a)    /* signed short[30] */
 #define CHESSBOARD_CPY                  (0xe356)    /* Bit8u* */
 #define FIG_TWOFIELDED_TABLE            (0xe35a)    /* signed char[21]; table containing the fighter-ids of the head parts of the twofielded enemies */

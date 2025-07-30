@@ -151,6 +151,8 @@ extern unsigned char *g_spelltarget;	// ds:0xe5b8; seg098-seg102
 
 extern char g_str_beorn_hjall[20];	// ds:0xe42e; seg072
 
+extern signed int g_autofight;		// ds:0xe318; seg004-seg105
+extern signed int g_current_fight_no;	// ds:0xe316; seg002-seg042
 extern signed int g_tlk_id;		// ds:0xe314; seg030, seg031
 extern signed int g_dialog_state;	// ds:0xe312; seg030, seg031, seg060
 extern signed int g_dialog_done;	// ds:0xe310; seg030, seg031, seg060

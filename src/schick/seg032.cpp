@@ -488,8 +488,8 @@ void FIG_do_round(void)
 
 	while ((g_in_fight) && (nr_hero_action_phases_left_in_round + nr_enemy_action_phases_left_in_round > 0)) {
 
-		if (ds_readws(AUTOFIGHT) == 2) {
-			ds_writew(AUTOFIGHT, 0);
+		if (g_autofight == 2) {
+			g_autofight = 0;
 		}
 
 		/* decide if heroes or enemies are next */
@@ -940,7 +940,8 @@ signed short do_fight(signed short fight_id)
 	}
 
 	g_timers_disabled = 1;
-	ds_writew(CURRENT_FIG_NO, fight_id);
+
+	g_current_fight_no = fight_id;
 
 	tw_bak = g_textbox_width;
 	g_textbox_width = 3;
@@ -970,7 +971,7 @@ signed short do_fight(signed short fight_id)
 	g_in_fight = 1;
 
 	/* set some vars to 0 */
-	ds_writew(AUTOFIGHT, g_fight_round = g_fig_all_heroes_withdrawn = 0);
+	g_autofight = (g_fight_round = g_fig_all_heroes_withdrawn = 0);
 	/* set some vars to -1 */
 	ds_writew(FIG_FIGURE1, ds_writew(FIG_FIGURE2, -1));
 	ds_writew(FIGHT_FIGS_INDEX, -1);
@@ -1260,7 +1261,7 @@ signed short do_fight(signed short fight_id)
 	ds_writew(CURRENT_ANI, -1);
 	ds_writew(AREA_PREPARED, -1);
 	g_timers_disabled = 0;
-	ds_writew(AUTOFIGHT, 0);
+	g_autofight = 0;
 	ds_writeb(CHECK_PARTY, 1);
 	g_textbox_width = tw_bak;
 	ds_writeb(PP20_INDEX, (ARCHIVE_FILE_DNGS + 12));

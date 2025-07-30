@@ -695,7 +695,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 				/* cast a spell */
 
-				if (ds_readws(CURRENT_FIG_NO) == FIGHTS_F144) {
+				if (g_current_fight_no == FIGHTS_F144) {
 					/* no spells allowed in the final fight */
 
 					sub_hero_le(hero, host_readws(hero + HERO_LE) + 1);
@@ -711,7 +711,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 				seg041_8c8();
 
-				if (ds_readw(AUTOFIGHT) != 0) {
+				if (g_autofight != 0) {
 					ds_writew(PIC_COPY_X1, ds_writew(PIC_COPY_V1, 0));
 					ds_writew(PIC_COPY_Y1, ds_writew(PIC_COPY_V2, 194));
 					ds_writew(PIC_COPY_X2, 318);

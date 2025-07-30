@@ -98,8 +98,8 @@ void FIG_loot_monsters(void)
 
 	l_si = 0;
 
-	autofight_bak = ds_readws(AUTOFIGHT);
-	ds_writew(AUTOFIGHT, 0);
+	autofight_bak = g_autofight;
+	g_autofight = 0;
 
 	for (l_di = 0; l_di < 30; l_di++) {
 
@@ -196,7 +196,7 @@ void FIG_loot_monsters(void)
 		set_party_money(get_party_money() + money);
 	}
 
-	ds_writew(AUTOFIGHT, autofight_bak);
+	g_autofight = autofight_bak;
 }
 
 /**
@@ -210,8 +210,8 @@ void FIG_split_ap(void)
 	signed short autofight_bak;
 
 	ap = 0;
-	autofight_bak = ds_readws(AUTOFIGHT);
-	ds_writew(AUTOFIGHT, 0);
+	autofight_bak = g_autofight;
+	g_autofight = 0;
 
 	/* calculate ap from all monsters in that fight */
 	for (l_si = 0; l_si < 20; l_si++) {
@@ -258,7 +258,7 @@ void FIG_split_ap(void)
 	/* give AP to the group */
 	add_group_ap(ap);
 
-	ds_writew(AUTOFIGHT, autofight_bak);
+	g_autofight = autofight_bak;
 }
 
 /**

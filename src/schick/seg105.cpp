@@ -638,8 +638,8 @@ signed short get_item(signed short id, signed short unused, signed short no)
 		}
 
 		if (no > 0) {
-			autofight_bak = ds_readws(AUTOFIGHT);
-			ds_writew(AUTOFIGHT, 0);
+			autofight_bak = g_autofight;
+			g_autofight = 0;
 
 			sprintf((char*)g_dtp2,
 				get_ttx(549),
@@ -662,7 +662,7 @@ signed short get_item(signed short id, signed short unused, signed short no)
 			} else {
 				done = 1;
 			}
-			ds_writew(AUTOFIGHT, autofight_bak);
+			g_autofight = autofight_bak;
 		} else {
 			done = 1;
 		}

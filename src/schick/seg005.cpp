@@ -184,7 +184,7 @@ unsigned short fight_printer(void)
 		inc_ds_bs_post(FIG_STAR_COUNTER);
 		ds_writeb(FIG_STAR_PRINTED, 0);
 
-		ds_writew(FIG_STAR_TIMER, ds_readw(AUTOFIGHT) ? 10 : g_delay_factor * 6);
+		ds_writew(FIG_STAR_TIMER, g_autofight ? 10 : g_delay_factor * 6);
 
 		if (ds_readw(FIG_MSG_DATA + ds_readbs(FIG_STAR_COUNTER) * 4) == 0)
 			g_fig_continue_print = 0;
@@ -282,7 +282,7 @@ unsigned short fight_printer(void)
 	} else {
 		ds_writeb(FIG_STAR_COUNTER, 0);
 
-		ds_writew(FIG_STAR_TIMER, ds_readw(AUTOFIGHT) ? 10 : g_delay_factor * 6);
+		ds_writew(FIG_STAR_TIMER, g_autofight ? 10 : g_delay_factor * 6);
 
 		ds_writeb(FIG_STAR_LAST_COUNT, 0xff);
 

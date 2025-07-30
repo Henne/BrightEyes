@@ -341,7 +341,7 @@ signed short GUI_input(char *str, unsigned short num)
 	l7 = ds_readw(UPDATE_STATUSLINE);
 	ds_writew(UPDATE_STATUSLINE, 0);
 
-	if (!str || !(*str) || ds_readw(AUTOFIGHT) != 0)
+	if (!str || !(*str) || g_autofight != 0)
 		return -1;
 
 	l6 = g_wallclock_update;

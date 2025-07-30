@@ -183,10 +183,10 @@ void interrupt timer_isr(void)
 		ds_writew(RANDOM_SCHICK_SEED2, 0);
 	}
 
-	if ((ds_readw(AUTOFIGHT) != 0) &&
+	if ((g_autofight != 0) &&
 		(bioskey(1) || (ds_readw(MOUSE1_EVENT2) != 0)))
 	{
-		ds_writew(AUTOFIGHT, 2);
+		g_autofight = 2;
 		ds_writew(MOUSE1_EVENT2, 0);
 	}
 

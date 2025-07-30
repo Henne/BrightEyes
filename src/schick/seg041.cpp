@@ -192,19 +192,19 @@ void FIG_damage_enemy(Bit8u *enemy, Bit16s damage, signed short preserve_renegad
 		or_ptr_bs(enemy + ENEMY_SHEET_FLAGS1, 1); /* set 'dead' flag */
 		host_writew(enemy + ENEMY_SHEET_LE, 0); /* set LE to 0 */
 
-		if ((ds_readw(CURRENT_FIG_NO) == FIGHTS_F126_08) && (host_readb(enemy) == 0x38)) {
+		if ((g_current_fight_no == FIGHTS_F126_08) && (host_readb(enemy) == 0x38)) {
 			/* slaying a special cultist */
 			/* set a flag in the status area */
 			ds_writeb(DNG09_CULTIST_FLAG, 0);
 
-		} else if ((ds_readw(CURRENT_FIG_NO) == FIGHTS_F144) &&
+		} else if ((g_current_fight_no == FIGHTS_F144) &&
 				(host_readb(enemy) == 0x48) &&
 				!ds_readbs(FINALFIGHT_TUMULT))
 		{
 			/* slaying the orc champion, ends the fight */
 				g_in_fight = 0;
 
-		} else if ((ds_readw(CURRENT_FIG_NO) == FIGHTS_F064) && (host_readb(enemy) == 0x46)) {
+		} else if ((g_current_fight_no == FIGHTS_F064) && (host_readb(enemy) == 0x46)) {
 
 			/* slaying Gorah makes everyone flee except Heshthot */
 			for (i = 0; i < 20; i++) {

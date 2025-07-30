@@ -802,7 +802,7 @@ void spell_balsam(void)
 
 	ds_writew(SPELL_SPECIAL_AECOST, 0);
 
-	if ((ds_readw(AUTOFIGHT) != 0) ||
+	if ((g_autofight != 0) ||
 		((host_readbs(get_spelluser() + HERO_NPC_ID) != 0) && g_in_fight))
 	{
 		/* automatic */

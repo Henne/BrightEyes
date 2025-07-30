@@ -89,11 +89,11 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 			}
 			done = 1;
 
-		} else if (hero_renegade(hero) || (host_readbs(hero + HERO_NPC_ID) > 0)|| (ds_readws(AUTOFIGHT) != 0)) {
+		} else if (hero_renegade(hero) || (host_readbs(hero + HERO_NPC_ID) > 0)|| (g_autofight != 0)) {
 
 			host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_WAIT);
 
-			if (((ds_readws(CURRENT_FIG_NO) != FIGHTS_F144) || (ds_readbs(FINALFIGHT_TUMULT) != 0)) &&
+			if (((g_current_fight_no != FIGHTS_F144) || (ds_readbs(FINALFIGHT_TUMULT) != 0)) &&
 				(host_readbs(hero + HERO_BP_LEFT) >= 3))
 			{
 				KI_hero(hero, hero_pos, x, y);
@@ -741,7 +741,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						(Bit8u*)&damage_lo, (Bit8u*)&damage_hi);
 
 					/* "THE SWORD GRIMRING" gets a damage bonus + 5 in the final fight */
-					if ((host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID) == ITEM_GRIMRING) && (ds_readws(CURRENT_FIG_NO) == FIGHTS_F144)) {
+					if ((host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID) == ITEM_GRIMRING) && (g_current_fight_no == FIGHTS_F144)) {
 						damage_lo += 5;
 						damage_hi += 5;
 					}
@@ -804,7 +804,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 			} else if (selected == FIG_ACTION_COMPUTER_FIGHT) {
 				/* COMPUTER FIGHT / COMPUTERKAMPF */
 
-				if (ds_readws(CURRENT_FIG_NO) != FIGHTS_F144) {
+				if (g_current_fight_no != FIGHTS_F144) {
 
 					refresh_screen_size();
 
@@ -813,7 +813,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 
 					update_mouse_cursor();
 
-					ds_writew(AUTOFIGHT, 1);
+					g_autofight = 1;
 				}
 
 			} else if (selected == FIG_ACTION_DROP_ITEM) {
@@ -953,7 +953,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 		}
 	}
 
-	if ((ds_readws(CURRENT_FIG_NO) == FIGHTS_F144) && /* final fight vs. Orkchampion */
+	if ((g_current_fight_no == FIGHTS_F144) && /* final fight vs. Orkchampion */
 		(get_hero_index((Bit8u*)ds_readd(MAIN_ACTING_HERO)) != hero_pos) &&
 		((host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_MELEE_ATTACK) || (host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_RANGE_ATTACK) ||
 		(host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_SPELL) || (host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_USE_ITEM)))

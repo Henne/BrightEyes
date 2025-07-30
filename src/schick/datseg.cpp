@@ -6292,9 +6292,9 @@ signed char g_fig_twofielded_count; // ds:0xe36f
 signed char g_fig_twofielded_table[21]; // ds:0xe35a
 void *g_chessboard_cpy; // ds:0xe356
 signed short g_fig_dropped_weapons[30]; // ds:0xe31a
-signed short g_autofight; // ds:0xe318
-unsigned short g_current_fig_no; // ds:0xe316
 
+signed int g_autofight;		// ds:0xe318
+signed int g_current_fight_no;	// ds:0xe316
 signed int g_tlk_id;		// ds:0xe314
 signed int g_dialog_state;	// ds:0xe312
 signed int g_dialog_done;	// ds:0xe310
