@@ -572,7 +572,7 @@ signed short save_game_state(void)
 			return 0;
 		}
 
-		time((Bit32s*)(p_datseg + LAST_SAVE_TIME));
+		time(&g_last_save_time);
 
 		filepos = 0;
 

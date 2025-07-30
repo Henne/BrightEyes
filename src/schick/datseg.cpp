@@ -6304,7 +6304,7 @@ char *g_dialog_title;		// ds:0xe308
 
 unsigned char g_unkn_085[1]; // ds:0xe307
 char g_savegame_names[45]; // ds:0xe2da
-signed long g_last_save_time; // ds:0xe2d6
+time_t g_last_save_time; // ds:0xe2d6
 unsigned char *g_saved_files_buf; // ds:0xe2d2
 signed short g_delay_timer; // ds:0xe2d0
 unsigned short g_figobj_unkn_x2_bak; // ds:0xe2ce

@@ -121,10 +121,7 @@ void do_tavern(void)
 			if (p_money_before != p_money_after) {
 
 				make_valuta_str((char*)g_text_output_buf, p_money_before - p_money_after);
-
-				sprintf((char*)g_dtp2, get_ttx(825),
-					g_text_output_buf);
-
+				sprintf((char*)g_dtp2, get_ttx(825), g_text_output_buf);
 				GUI_output((char*)g_dtp2);
 			}
 
@@ -142,9 +139,7 @@ void do_tavern(void)
 			p_money_after = count_heroes_in_group() * (6 - host_readws(tav_ptr) / 4);
 
 			p_money_after += host_readws(tav_ptr + 2) * p_money_after / 100;
-			sprintf((char*)g_dtp2,
-				get_ttx(473),
-				(signed short)p_money_after);
+			sprintf((char*)g_dtp2, get_ttx(473), (signed short)p_money_after);
 
 			if (GUI_bool((char*)g_dtp2)) {
 
@@ -211,7 +206,7 @@ void do_tavern(void)
 
 			/* skill test will be +50 if the game was saved up to 2 minutes ago.
 			 * probably to prevent excessive save & reload */
-			bonus = (timeval - ds_readds(LAST_SAVE_TIME)) > 120 ? 0 : 50;
+			bonus = (timeval - g_last_save_time) > 120 ? 0 : 50;
 
 			if (GUI_use_skill2(bonus, get_ttx(395)) == -1) {
 				done = 1;
