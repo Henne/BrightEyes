@@ -174,10 +174,10 @@ void FIG_preload_gfx(void)
 	nvf.type = 0;
 	process_nvf(&nvf);
 
-	ds_writed(FIG_STAR_GFX, (Bit32u)g_fightobj_buf_seek_ptr);
+	g_fig_star_gfx = g_fightobj_buf_seek_ptr;
 	g_fightobj_buf_seek_ptr += 0xe8c;
 
-	nvf.dst = (Bit8u*)ds_readd(FIG_STAR_GFX);
+	nvf.dst = g_fig_star_gfx;
 	nvf.src = g_objects_nvf_buf;
 	nvf.no = 17;
 	nvf.type = 0;

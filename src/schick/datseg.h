@@ -224,6 +224,7 @@ extern unsigned char *g_buffer6_ptr;	// ds:0xd2b1; seg002, seg027, seg063, seg09
 extern unsigned char *g_popup;		// ds:0xd2ad; seg027, seg096, seg120
 extern char *g_buffer5_ptr;		// ds:0xd2a5; seg026, seg120
 extern char *g_monnames_buffer;		// ds:0xd2a1; seg026, seg120
+extern unsigned char *g_fig_star_gfx;	// ds:0xd29d; seg005, seg040
 extern unsigned char *g_trv_track_pixel_bak;	// ds:0xd299; seg063, seg094, seg120
 extern HugePt g_buffer9_ptr3;		// ds:0xd019; seg003-seg120
 extern unsigned char *g_buffer9_ptr2;	// ds:0xd015; seg120

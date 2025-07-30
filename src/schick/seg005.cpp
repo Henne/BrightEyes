@@ -204,14 +204,13 @@ unsigned short fight_printer(void)
 			ds_writed(PRINT_STRING_BUFFER, (Bit32u)g_renderbuf_ptr);
 			get_textcolor(&fg_bak, &bg_bak);
 
-			FIG_set_star_color((Bit8u*)ds_readd(FIG_STAR_GFX),
-				3724, ds_readb((FIG_STAR_COLORS-1) + f_action));
+			FIG_set_star_color(g_fig_star_gfx, 3724, ds_readb((FIG_STAR_COLORS-1) + f_action));
 
 			ds_writew(PIC_COPY_X1, 0);
 			ds_writew(PIC_COPY_Y1, 150);
 			ds_writew(PIC_COPY_X2, 75);
 			ds_writew(PIC_COPY_Y2, 198);
-			ds_writed(PIC_COPY_SRC, ds_readd(FIG_STAR_GFX));
+			ds_writed(PIC_COPY_SRC, (Bit32u)g_fig_star_gfx);
 			ds_writed(PIC_COPY_DST, (Bit32u)g_renderbuf_ptr);
 			gfx_dst_bak = (Bit8u*)ds_readd(PIC_COPY_DST);
 			do_pic_copy(2);
