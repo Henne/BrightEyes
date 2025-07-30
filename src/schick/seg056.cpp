@@ -533,7 +533,7 @@ void buy_screen(void)
 				} else if (percent < 0) {
 					break;
 				} else {
-					ds_writew(SKILLED_HERO_POS, get_skilled_hero_pos(TA_FEILSCHEN));
+					g_skilled_hero_pos = get_skilled_hero_pos(TA_FEILSCHEN);
 
 					l3 = select_hero_ok(get_ttx(442));
 

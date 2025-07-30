@@ -457,7 +457,7 @@ void sell_screen(Bit8u *shop_ptr)
 				} else if (percent < 0) {
 					break;
 				} else {
-					ds_writew(SKILLED_HERO_POS, get_skilled_hero_pos(TA_FEILSCHEN));
+					g_skilled_hero_pos = get_skilled_hero_pos(TA_FEILSCHEN);
 
 					answer = select_hero_ok_forced(get_ttx(442));
 

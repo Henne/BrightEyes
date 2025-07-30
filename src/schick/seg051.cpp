@@ -204,7 +204,7 @@ void do_wildcamp(void)
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_5) {
 			/* COLLECT HERBS */
 
-			ds_writews(SKILLED_HERO_POS, get_skilled_hero_pos(TA_PFLANZENKUNDE));
+			g_skilled_hero_pos = get_skilled_hero_pos(TA_PFLANZENKUNDE);
 
 			answer = select_hero_ok(get_ttx(326));
 
@@ -480,7 +480,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 	retval = 0;
 	mod += 5;
 
-	ds_writews(SKILLED_HERO_POS, get_skilled_hero_pos(TA_WILDNISLEBEN));
+	g_skilled_hero_pos = get_skilled_hero_pos(TA_WILDNISLEBEN);
 	hero_pos = select_hero_ok(get_ttx(322));
 
 	if (hero_pos != -1 && hero_brewing(get_hero(hero_pos))) {
@@ -492,10 +492,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 
 		if (ds_readb(WILDCAMP_REPLSTATUS + hero_pos) != 0) {
 
-			sprintf((char*)g_dtp2,
-				get_ttx(802),
-				(char*)get_hero(hero_pos) + HERO_NAME2);
-
+			sprintf((char*)g_dtp2, get_ttx(802), (char*)get_hero(hero_pos) + HERO_NAME2);
 			GUI_output((char*)g_dtp2);
 
 		} else {

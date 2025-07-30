@@ -534,7 +534,7 @@ signed short select_hero_ok(char *title)
 		ds_writew(BASEPOS_X, bak_2);
 		ds_writew(BASEPOS_Y, bak_3);
 		g_textbox_width = tw_bak;
-		ds_writew(SKILLED_HERO_POS, -1);
+		g_skilled_hero_pos = -1;
 
 		if (answer != -2)
 			return dst.v[answer];
@@ -543,7 +543,7 @@ signed short select_hero_ok(char *title)
 	}
 
 	g_textbox_width = tw_bak;
-	ds_writew(SKILLED_HERO_POS, -1);
+	g_skilled_hero_pos = -1;
 	return -1;
 }
 
@@ -615,13 +615,13 @@ signed short select_hero_ok_forced(char *title)
 
 		} while (answer == -2);
 
-		ds_writew(SKILLED_HERO_POS, -1);
+		g_skilled_hero_pos = -1;
 		g_textbox_width = tw_bak;
 
 		return dst.v[answer];
 	} else {
 
-		ds_writew(SKILLED_HERO_POS, -1);
+		g_skilled_hero_pos = -1;
 		return 0;
 	}
 }

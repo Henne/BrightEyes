@@ -706,7 +706,7 @@ signed short GUI_use_skill2(signed short handicap, char *msg)
 
 	if (skill != -1) {
 
-		ds_writew(SKILLED_HERO_POS, get_skilled_hero_pos(skill));
+		g_skilled_hero_pos = get_skilled_hero_pos(skill);
 
 		hero_pos = select_hero_ok(msg);
 
