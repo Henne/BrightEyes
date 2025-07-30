@@ -90,7 +90,7 @@ void draw_fight_screen_pal(signed short mode)
 		memset((void*)((Bit8u*)ds_readd(FRAMEBUF_PTR)), 0, 320 * 200);
 
 		/* set palettes */
-		set_palette(p_datseg + PALETTE_FIGHT1, 0x00, 0x20);
+		set_palette((Bit8u*)g_palette_fight1, 0x00, 0x20);
 		set_palette(p_datseg + PALETTE_FIGHT2, 0x80, 0x14);
 		set_palette(g_buffer8_ptr + 0xfa02, 0x60, 0x20);
 

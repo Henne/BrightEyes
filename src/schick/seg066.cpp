@@ -1117,9 +1117,9 @@ void city_fade_and_colors(void)
 
 	if (g_fading_state == 3) {
 
-		set_palette(p_datseg + PALETTE_ALLBLACK2, 0x00, 0x20);
-		set_palette(p_datseg + PALETTE_ALLBLACK2, 0x80, 0x20);
-		set_palette(p_datseg + PALETTE_ALLBLACK2, 0xa0, 0x20);
+		set_palette(g_palette_allblack2, 0x00, 0x20);
+		set_palette(g_palette_allblack2, 0x80, 0x20);
+		set_palette(g_palette_allblack2, 0xa0, 0x20);
 
 		g_fading_state = 1;
 	}
@@ -1147,7 +1147,7 @@ void city_fade_and_colors(void)
 		pal_ptr = g_renderbuf_ptr;
 
 		memset(g_renderbuf_ptr, 0, 0x120);
-		memcpy(dst, p_datseg + PALETTE_FLOOR, 0x120);
+		memcpy(dst, gs_palette_floor, 0x120);
 
 		for (i = 0; i < 64; i += 2) {
 
@@ -1166,8 +1166,8 @@ void city_fade_and_colors(void)
 
 		wait_for_vsync();
 
-		set_palette(p_datseg + PALETTE_FLOOR, 0x00, 0x20);
-		set_palette(p_datseg + PALETTE_BUILDINGS, 0x80, 0x40);
+		set_palette(gs_palette_floor, 0x00, 0x20);
+		set_palette(gs_palette_buildings, 0x80, 0x40);
 	}
 }
 

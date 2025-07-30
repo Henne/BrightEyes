@@ -126,10 +126,10 @@
 //#define TEXT_FILE_INDEX                 (0x26bd)    /* signed short */
 //#define TX_FILE_INDEX                   (0x26bf)    /* signed short; index of file stored with load_tx */
 //#define FIG_DISCARD                     (0x26c1)    /* signed short; {0,1}, whether to discard the fight data after the fight */
-#define PALETTE_ALLBLACK2               (0x26c3)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
-#define PALETTE_UNKNOWN1                (0x2723)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
-#define PALETTE_FIGHT1                  (0x2783)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
-#define PALETTE_SPECIAL                 (0x27e3)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
+//#define PALETTE_ALLBLACK2               (0x26c3)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
+//#define PALETTE_UNKNOWN1                (0x2723)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
+//#define PALETTE_FIGHT1                  (0x2783)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
+//#define PALETTE_SPECIAL                 (0x27e3)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
 // ?2
 #define PP20_INDEX                      (0x2845)    /* signed char; archive file index of current pp20 */
 #define REQUEST_REFRESH                 (0x2846)    /* signed short; {0,1} */
@@ -554,9 +554,9 @@
 #define TEVENT014_CHEST                 (0x3e27)    /* unsigned char[4] */
 #define TEVENT064_HUT_CONTENT           (0x3e2b)    /* unsigned char[19] */
 #define TEVENT064_CHEST                 (0x3e3e)    /* unsigned char[21] */
-#define PALETTE_FLOOR                   (0x3e53)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
-#define PALETTE_BUILDINGS               (0x3eb3)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
-#define PALETTE_SKY                     (0x3f13)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
+//#define PALETTE_FLOOR                   (0x3e53)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
+//#define PALETTE_BUILDINGS               (0x3eb3)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
+//#define PALETTE_SKY                     (0x3f13)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
 //#define NEED_LETTER                     (0x3f73)    /* unsigned char; {0,1} */
 //#define GREMOB_INVITED                  (0x3f74)    /* unsigned char; {0,1} */
 //#define HARLOT_DATE                     (0x3f75)    /* unsigned char; {0,1} */
@@ -809,11 +809,9 @@
 //#define CHECK_PARTY                     (0x4495)    /* char; indicates that the groups need to be checked if active heroes are available. set after a fight, at sub_hero_le (outside of a fight) and at hero_disappear(). check is done in game_loop() */
 //#define FOOD_MOD                        (0x4496)    /* char */
 //#define TRAVEL_HEROKEEPING              (0x4497)    /* unsigned char; {0,1} */
-
-#define FLOOR_FADE_PALETTE              (0x4498)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
-#define BUILDING_FADE_PALETTE           (0x44f8)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
-#define SKY_FADE_PALETTE                (0x4558)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
-
+//#define FLOOR_FADE_PALETTE              (0x4498)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
+//#define BUILDING_FADE_PALETTE           (0x44f8)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
+//#define SKY_FADE_PALETTE                (0x4558)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
 //#define SPECIAL_SCREEN                  (0x45b8)    /* unsigned char; {0,1}, e.g. diary, treasure map, game options, automap */
 //#define SPECIAL_DAYS                    (0x45b9)    /* struct(3)[43]; struct{char month, day, id;} */
 #define MONTHS_SPRING                   (0x463a)    /* char[4] */

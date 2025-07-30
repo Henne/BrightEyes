@@ -354,7 +354,7 @@ void refresh_colors(void)
 	set_palette(p_datseg + PALETTE_UNKNOWN3, 0xc8, 3);
 	set_palette(p_datseg + PALETTE_UNKNOWN4, 0x40, 0x20);
 	set_palette(p_datseg + PALETTE_GENERAL, 0x20, 0x20);
-	set_palette(p_datseg + PALETTE_UNKNOWN1, 0x60, 0x20);
+	set_palette((Bit8u*)g_palette_unknown1, 0x60, 0x20);
 
 }
 
@@ -675,8 +675,8 @@ void game_over_screen(void)
 
 	wait_for_vsync();
 
-	set_palette(p_datseg + PALETTE_ALLBLACK2, 0x00, 0x20);
-	set_palette(p_datseg + PALETTE_ALLBLACK2, 0x20, 0x20);
+	set_palette(g_palette_allblack2, 0x00, 0x20);
+	set_palette(g_palette_allblack2, 0x20, 0x20);
 
 	memcpy((void*)((Bit8u*)ds_readd(FRAMEBUF_PTR)), (void*)g_renderbuf_ptr, 320 * 200);
 
@@ -689,8 +689,8 @@ void game_over_screen(void)
 
 	wait_for_vsync();
 
-	set_palette(p_datseg + PALETTE_ALLBLACK2, 0x00, 0x20);
-	set_palette(p_datseg + PALETTE_ALLBLACK2, 0x20, 0x20);
+	set_palette(g_palette_allblack2, 0x00, 0x20);
+	set_palette(g_palette_allblack2, 0x20, 0x20);
 
 	refresh_screen_size();
 

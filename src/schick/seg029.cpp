@@ -60,7 +60,7 @@ void draw_playmask(void)
 
 	wait_for_vsync();
 
-	set_palette(p_datseg + PALETTE_ALLBLACK2, 0xe0, 0x20);
+	set_palette(g_palette_allblack2, 0xe0, 0x20);
 
 	update_mouse_cursor();
 
@@ -76,7 +76,7 @@ void draw_playmask(void)
 
 	set_color(p_datseg + COLOR_BLACK, 0);
 
-	set_palette(p_datseg + PALETTE_SPECIAL, 0xe0, 0x20);
+	set_palette((Bit8u*)g_palette_special, 0xe0, 0x20);
 
 	ds_writew(ANI_POSX, 16);
 	ds_writew(ANI_POSY, 2);

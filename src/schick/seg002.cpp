@@ -2063,11 +2063,11 @@ void dawning(void)
 	{
 
 		/* floor */
-		pal_fade(p_datseg + PALETTE_FLOOR, g_townpal_buf);
+		pal_fade(gs_palette_floor, g_townpal_buf);
 		/* buildings */
-		pal_fade(p_datseg + PALETTE_BUILDINGS, g_townpal_buf + 0x60);
+		pal_fade(gs_palette_buildings, g_townpal_buf + 0x60);
 		/* sky */
-		pal_fade(p_datseg + PALETTE_SKY, g_townpal_buf + 0xc0);
+		pal_fade(gs_palette_sky, g_townpal_buf + 0xc0);
 
 		/* in a town */
 		if (ds_readbs(CURRENT_TOWN) &&
@@ -2086,8 +2086,8 @@ void dawning(void)
 		{
 			wait_for_vsync();
 
-			set_palette(p_datseg + PALETTE_FLOOR, 0, 0x20);
-			set_palette(p_datseg + PALETTE_BUILDINGS, 0x80, 0x40);
+			set_palette(gs_palette_floor, 0, 0x20);
+			set_palette(gs_palette_buildings, 0x80, 0x40);
 		}
 	}
 }
@@ -2104,11 +2104,11 @@ void nightfall(void)
 	{
 
 		/* floor */
-		pal_fade(p_datseg + PALETTE_FLOOR, p_datseg + FLOOR_FADE_PALETTE);
+		pal_fade(gs_palette_floor, (Bit8u*)g_floor_fade_palette);
 		/* buildings */
-		pal_fade(p_datseg + PALETTE_BUILDINGS, p_datseg + BUILDING_FADE_PALETTE);
+		pal_fade(gs_palette_buildings, (Bit8u*)g_building_fade_palette);
 		/* sky */
-		pal_fade(p_datseg + PALETTE_SKY, p_datseg + SKY_FADE_PALETTE);
+		pal_fade(gs_palette_sky, (Bit8u*)g_sky_fade_palette);
 
 		/* in a town */
 		if (ds_readbs(CURRENT_TOWN) &&
@@ -2127,8 +2127,8 @@ void nightfall(void)
 		{
 			wait_for_vsync();
 
-			set_palette(p_datseg + PALETTE_FLOOR, 0, 0x20);
-			set_palette(p_datseg + PALETTE_BUILDINGS, 0x80, 0x40);
+			set_palette(gs_palette_floor, 0, 0x20);
+			set_palette(gs_palette_buildings, 0x80, 0x40);
 		}
 	}
 }

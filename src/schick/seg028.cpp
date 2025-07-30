@@ -183,7 +183,7 @@ void seg028_0224(void)
 		{
 			ds_writed(TEX_SKY, (Bit32u) seg028_0444(ARCHIVE_FILE_TDIVERSE_NVF, 0x80, 0x40, 0));
 
-			memcpy(p_datseg + PALETTE_BUILDINGS, (Bit8u*)ds_readd(BUFFER11_PTR), 0xc0);
+			memcpy(gs_palette_buildings, (Bit8u*)ds_readd(BUFFER11_PTR), 0xc0);
 		} else {
 			ds_writed(TEX_SKY, (Bit32u) seg028_0444(ARCHIVE_FILE_TDIVERSE_NVF, 0x80, 0x40, 0));
 		}
@@ -192,7 +192,7 @@ void seg028_0224(void)
 
 		if ((gs_day_timer >= HOURS(7)) && (gs_day_timer <= HOURS(20)))
 		{
-			memcpy(p_datseg + PALETTE_FLOOR, (Bit8u*)ds_readd(BUFFER11_PTR), 0x60);
+			memcpy(gs_palette_floor, (Bit8u*)ds_readd(BUFFER11_PTR), 0x60);
 		}
 
 		ds_writew(AREA_PREPARED, 1);

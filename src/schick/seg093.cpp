@@ -269,11 +269,9 @@ signed short do_travel_mode(void)
 	{
 		memset((void*)g_dtp2, 0, 0xc0);
 
-		memcpy((void*)(g_dtp2 + 0xc0),
-			(void*)((Bit8u*)ds_readd(TRAVEL_MAP_PTR) + 64000 + 2), 0x60);
+		memcpy((void*)(g_dtp2 + 0xc0), (void*)((Bit8u*)ds_readd(TRAVEL_MAP_PTR) + 64000 + 2), 0x60);
 
-		memcpy((void*)(g_dtp2 + 0x120),
-			(void*)(p_datseg + PALETTE_SPECIAL), 0x60);
+		memcpy((void*)(g_dtp2 + 0x120),	(void*)g_palette_special, 0x60);
 
 		for (i = 0; i < 64; i++)
 		{

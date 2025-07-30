@@ -829,8 +829,7 @@ void DNG_stub6(void)
 
 				if (test_attrib(hero1, ATTRIB_GE, 2) <= 0) {
 
-					sprintf((char*)g_text_output_buf,
-						get_ttx(770),
+					sprintf((char*)g_text_output_buf, get_ttx(770),
 						hero1 + HERO_NAME2,
 						hero2 + HERO_NAME2,
 						l_si = random_schick(3) + 1);
@@ -863,11 +862,9 @@ void DNG_stub6(void)
 
 				} while (l_di);
 
-				sprintf((char*)g_text_output_buf,
-					get_ttx(771),
-					hero_auto + HERO_NAME2,
-					(GUI_get_ptr(host_readbs(hero_auto + HERO_SEX), 0)),
-					(GUI_get_ptr(host_readbs(hero_auto + HERO_SEX), 2)));
+				sprintf((char*)g_text_output_buf, get_ttx(771), hero_auto + HERO_NAME2,
+					GUI_get_ptr(host_readbs(hero_auto + HERO_SEX), 0),
+					GUI_get_ptr(host_readbs(hero_auto + HERO_SEX), 2));
 
 				strcat((char*)g_dtp2, (char*)g_text_output_buf);
 			}
@@ -1054,7 +1051,7 @@ mark2:			   goto mark1;
 
 		ptr = ((Bit8u*)g_renderbuf_ptr) + 0x1f4;
 		memset(g_renderbuf_ptr, 0, 0x120);
-		memcpy(((Bit8u*)g_renderbuf_ptr) + 0x1f4, p_datseg + PALETTE_FLOOR, 0x120);
+		memcpy(((Bit8u*)g_renderbuf_ptr) + 0x1f4, gs_palette_floor, 0x120);
 
 		for (i = 0; i < 0x40; i++) {
 

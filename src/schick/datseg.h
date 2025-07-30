@@ -54,6 +54,10 @@ extern signed short g_check_poison;			//ds:0x26bb; seg002,seg026,seg121
 extern signed short g_text_file_index;			//ds:0x26bd; seg026-seg065
 extern signed short g_tx_file_index;			//ds:0x26bf; seg026-seg107
 extern signed short g_fig_discard;			//ds:0x26c1; seg030-seg117
+extern Bit8u g_palette_allblack2[3 * 32];		//ds:0x26c3; seg025,seg029,seg049,seg066,seg120
+extern Bit8u g_palette_unknown1[32][3];			//ds:0x2723; seg120
+extern Bit8u g_palette_fight1[32][3];			//ds:0x2783; seg032
+extern Bit8u g_palette_special[32][3];			//ds:0x27e3; seg029, seg093
 
 extern signed short g_timers_disabled;			//ds:0x2c99; seg002-seg050
 extern unsigned char g_always_zero4;			//ds:0x2cce; seg032
@@ -109,6 +113,9 @@ extern Bit8s  gs_always_one2;			//ds:0x35f3; seg078
 extern Bit8s  gs_dng07_poison_flag;		//ds:0x3cb5; seg082
 extern Bit32s gs_dng07_poison_timer;		//ds:0x3cb6; seg002, seg082
 
+extern Bit8u  gs_palette_floor[3 * 32];		//ds:0x3e53; seg002
+extern Bit8u  gs_palette_buildings[3 * 32];	//ds:0x3eb3; seg002, seg028, seg066
+extern Bit8u  gs_palette_sky[3 * 32];		//ds:0x3f13; seg002, seg028, seg066, seg075
 extern Bit8u  gs_need_letter;			//ds:0x3f73; seg068, seg069
 extern Bit8u  gs_gremob_invited;		//ds:0x3f74; seg070, seg071
 extern Bit8u  gs_harlot_date;			//ds:0x3f75; seg070
@@ -130,6 +137,8 @@ extern signed char g_travel_herokeeping;	//ds:0x4497; seg002, seg063
 extern signed char g_special_screen;		//ds:0x45b8; seg002-seg109
 
 extern char g_game_version[6];			//ds:0x46ec; seg002
+extern Bit8u g_wallclock_palette_day[3][3];	//ds:0x4af1; seg004;
+extern Bit8u g_wallclock_palette_night[3][3];	//ds:0x4afa; seg004;
 extern signed short g_delay_factor;		//ds:0x4b66; seg005, seg025
 extern void (*g_location_handlers[19])(void);	//ds:0x4c3b; seg025
 
