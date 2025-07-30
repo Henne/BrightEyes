@@ -197,7 +197,7 @@ void talk_tavern(void)
 			} else if (txt_id == 39) {
 
 				sprintf(answer2_buffer, format,
-					!ds_readb(INFORMER_FLAGS + get_town_lookup_entry()) ?
+					!gs_informer_flags[get_town_lookup_entry()] ?
 						(Bit8u*)(get_drinkmate()) :
 						(Bit8u*)(get_informer_name2()));
 
@@ -291,7 +291,7 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 9) {
 
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(INFORMER_FLAGS + get_town_lookup_entry()) != 0 ? 10 : 11);
+		ds_writew(DIALOG_NEXT_STATE, gs_informer_flags[get_town_lookup_entry()] != 0 ? 10 : 11);
 
 	} else if (old_state == 12 || old_state == 19 || old_state == 21) {
 
@@ -417,7 +417,7 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 46) {
 
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(INFORMER_FLAGS + get_town_lookup_entry()) != 0 ? 47 : 48);
+		ds_writew(DIALOG_NEXT_STATE, gs_informer_flags[get_town_lookup_entry()] != 0 ? 47 : 48);
 
 	} else if (old_state == 49) {
 
@@ -441,7 +441,7 @@ void TLK_tavern(signed short answer)
 
 		add_party_money(10);
 
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(INFORMER_FLAGS + get_town_lookup_entry()) != 0 ? 59 : 60);
+		ds_writew(DIALOG_NEXT_STATE, gs_informer_flags[get_town_lookup_entry()] != 0 ? 59 : 60);
 
 	} else if (old_state == 61) {
 
@@ -470,7 +470,7 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 79) {
 
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(INFORMER_FLAGS + get_town_lookup_entry()) != 0 ? 153 : 154);
+		ds_writew(DIALOG_NEXT_STATE, gs_informer_flags[get_town_lookup_entry()] != 0 ? 153 : 154);
 
 	} else if (old_state == 80) {
 
@@ -500,7 +500,7 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 93) {
 
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(INFORMER_FLAGS + get_town_lookup_entry()) != 0 ? 94 : 95);
+		ds_writew(DIALOG_NEXT_STATE, gs_informer_flags[get_town_lookup_entry()] != 0 ? 94 : 95);
 
 	} else if (old_state == 98) {
 
@@ -508,7 +508,7 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 99) {
 
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(INFORMER_FLAGS + get_town_lookup_entry()) != 0 ? 100 : 101);
+		ds_writew(DIALOG_NEXT_STATE, gs_informer_flags[get_town_lookup_entry()] != 0 ? 100 : 101);
 
 	} else if (old_state == 103) {
 

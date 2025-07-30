@@ -283,7 +283,7 @@
 //#define DAYS_TO_CENS                    (0x335e)    /* signed short */
 //#define DEBT_DAYS                       (0x3360)    /* signed short */
 //#define IN_ACADEMY                      (0x3362)    /* unsigned short; {0,99} */
-#define INFORMER_FLAGS                  (0x3364)    /* unsigned char[15]; {0,1,2} */
+//#define INFORMER_FLAGS                  (0x3364)    /* unsigned char[15]; {0,1,2} */
 // ?1
 #define TAV_KICKED_FLAGS                (0x3374)    /* signed char[88]; {0,1} */
 #define TOWN_OUTLAWED_FLAGS             (0x33cc)    /* signed char[52]; {0,1} */
@@ -317,7 +317,7 @@
 #define UNICORN_HERO_POS                (0x3464)    /* unsigned char; {0-6} */
 #define UNICORN_GET_MAP                 (0x3465)    /* char */
 #define UNICORN_TIMER                   (0x3466)    /* char */
-#define ALGRID_TREBORNS_HINT            (0x3467)    /* unsigned char; {0,1} */
+//#define ALGRID_TREBORNS_HINT            (0x3467)    /* unsigned char; {0,1} */
 #define TIOMAR_DRINKMATE                (0x3468)    /* unsigned char; {0-6} */
 #define TIOMAR_AWAITS_LETTER            (0x3469)    /* unsigned char; {0,1} */
 #define UNICORN_HERO_PTR                (0x346a)    /* Bit8u* */
@@ -1535,7 +1535,7 @@
 #define LAST_SAVE_TIME                  (0xe2d6)    /* signed long */
 #define SAVEGAME_NAMES                  (0xe2da)    /* char[45] */
 // ?1
-#define DIALOG_TITLE                    (0xe308)    /* Bit8u* */
+//#define DIALOG_TITLE                    (0xe308)    /* Bit8u* */
 #define DIALOG_INFORMER                 (0xe30c)    /* signed short */
 #define DIALOG_NEXT_STATE               (0xe30e)    /* signed short */
 #define DIALOG_DONE                     (0xe310)    /* signed short; {0,1} */
@@ -1601,7 +1601,7 @@
 #define TEX_HOUSE3                      (0xe424)    /* Bit8u* */
 #define TEX_HOUSE4                      (0xe428)    /* Bit8u* */
 #define COMBO_MODE                      (0xe42c)    /* signed short; {0,1,2} */
-#define STR_BEORN_HJALL                 (0xe42e)    /* char[20] */
+//#define STR_BEORN_HJALL                 (0xe42e)    /* char[20] */
 #define AUTOMAP_BUF                     (0xe442)    /* unsigned char[64] */
 #define DNG_REFRESH_DIRECTION           (0xe482)    /* unsigned short */
 #define DNG_REFRESH_Y_TARGET            (0xe484)    /* unsigned short */

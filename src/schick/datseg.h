@@ -99,7 +99,9 @@ extern Bit16s gs_bank_deposit;			//ds:0x335c; seg002, seg055, seg068
 extern Bit16s gs_days_to_cens;			//ds:0x335e; seg002, seg068
 extern Bit16s gs_debt_days;			//ds:0x3360; seg002, seg055, seg068
 extern Bit16s gs_in_academy;			//ds:0x3362; seg068, seg099
-extern Bit8s  gs_informer_flags[16];		//ds:0x3364;
+extern Bit8u  gs_informer_flags[16];		//ds:0x3364; seg030-seg116
+
+extern Bit8u gs_algrid_treborns_hint;		//ds:0x3467; seg072
 
 extern Bit8s  gs_always_one2;			//ds:0x35f3; seg078
 
@@ -146,6 +148,9 @@ extern unsigned char g_event_ani_busy;	// ds:0xe5d2; seg002, seg109-seg118
 extern unsigned char *g_itemuser;	// ds:0xe5ce; seg107
 extern unsigned char *g_spelluser;	// ds:0xe5bc; seg068, seg098, seg102, seg107
 extern unsigned char *g_spelltarget;	// ds:0xe5b8; seg098-seg102
+
+extern char g_str_beorn_hjall[20];	// ds:0xe42e; seg072
+extern char *g_dialog_title;		// ds:0xe308; seg030, seg072
 
 extern unsigned char g_good_camp_place;		// ds:0xe4c8; seg051, seg094, seg109
 extern unsigned char *g_dungeon_doors_buf; 	// ds:0xe49c; seg028,seg076,seg098,seg120

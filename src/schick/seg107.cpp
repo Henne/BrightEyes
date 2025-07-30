@@ -230,7 +230,7 @@ void item_debtbook(void)
 		add_hero_ap_all(15);
 
 		/* mark informer Hjore as known */
-		ds_writeb_z(INFORMER_FLAGS + INFORMER_HJORE, 1);
+		update_informer_cond(INFORMER_HJORE);
 	}
 
 	GUI_output(get_ttx(642));

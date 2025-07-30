@@ -2068,7 +2068,7 @@ Bit16s gs_bank_deposit = 0;	 // ds:0x335c
 Bit16s gs_days_to_cens = 0;	 // ds:0x335e
 Bit16s gs_debt_days = 0;	 // ds:0x3360
 Bit16s gs_in_academy = 0;	 // ds:0x3362
-Bit8s  gs_informer_flags[16] = {0}; // ds:0x3364
+Bit8u  gs_informer_flags[16] = {0}; // ds:0x3364
 signed char g_tav_kicked_flags[88] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; // ds:0x3374
 signed char g_town_outlawed_flags[52] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; // ds:0x33cc
 signed char g_herberg_kicked_flags[74] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; // ds:0x3400
@@ -2101,7 +2101,7 @@ unsigned char g_treborn_date = 0; // ds:0x3463
 unsigned char g_unicorn_hero_pos = 0; // ds:0x3464, {0-6}
 char g_unicorn_get_map = 0; // ds:0x3465
 char g_unicorn_timer = 0; // ds:0x3466
-unsigned char g_algrid_treborns_hint = 0; // ds:0x3467
+Bit8u  gs_algrid_treborns_hint = 0; // ds:0x3467
 unsigned char g_tiomar_drinkmate = 0; // ds:0x3468, {0-6}
 unsigned char g_tiomar_awaits_letter = 0; // ds:0x3469
 long g_unicorn_hero_ptr = 0; // ds:0x346a; Bit8u*
@@ -6299,7 +6299,7 @@ signed short g_dialog_state; // ds:0xe312
 signed short g_dialog_done; // ds:0xe310
 signed short g_dialog_next_state; // ds:0xe30e
 signed short g_dialog_informer; // ds:0xe30c
-void *g_dialog_title; // ds:0xe308
+char *g_dialog_title; // ds:0xe308
 unsigned char g_unkn_085[1]; // ds:0xe307
 char g_savegame_names[45]; // ds:0xe2da
 signed long g_last_save_time; // ds:0xe2d6

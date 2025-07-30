@@ -329,17 +329,17 @@ static inline Bit16s ds_and_ws(unsigned short offs, unsigned short val) {
 }
 
 /**
- *	ds_writeb_z() -	write only if target is 0
- *	@addr:	address in datasegment
- *	@val:	value which should be written
+ * \brief mark informer only as known iff unknown
+ * \param informer the index of the informer
  *
- *	A often occuring Original-Bug resets some informants
- *	to older states. This helper writes only that value
- *	if the informer is unknown (0).
+ * \note A often occuring Original-Bug resets some informers to older states.
+ * 	This helper marks the informer only as known iff the informer is unknown (0).
  */
-static inline void ds_writeb_z(Bit16u addr, char val) {
-	if (ds_readb(addr) == 0)
-		ds_writeb(addr, val);
+static inline void update_informer_cond(const int informer)
+{
+	if ((0 <= informer) && (informer < 15) && (gs_informer_flags[informer] == 0)) {
+		gs_informer_flags[informer] = 1;
+	}
 }
 
 static inline unsigned char *get_hero(signed short index) {
@@ -1216,9 +1216,9 @@ static inline char* get_itemname(unsigned short item)
 #define get_hero(no) ((unsigned char*)g_heroes + SIZEOF_HERO * (no))
 
 #ifdef M302de_ORIGINAL_BUGFIX
-#define ds_writeb_z(addr, val) (if (ds_readb(addr) == 0) ds_writeb(addr, val))
+#define update_informer_cond(informer) (if (gs_informer_flags[informer] == 0) gs_informer_flags[informer] = 1)
 #else
-#define ds_writeb_z(addr, val) (ds_writeb(addr, val))
+#define update_informer_cond(informer) (gs_informer_flags[informer] = 1)
 #endif
 
 #define host_readb(p) (*(Bit8u*)(p))

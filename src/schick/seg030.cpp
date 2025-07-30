@@ -32,62 +32,71 @@
 namespace M302de {
 #endif
 
-/* get random known informer */
-Bit8u* seg030_0000(signed short arg0)
+/* NOTE: here's a inconvenience in start counting from 0 (computer science) and from 1 (math) */
+
+/**
+ * \brief  get random known informer
+ * \param informer_math number of the informer starting from 1 => (INFORMER_JURGE == 1, ...)
+ * \return pointer to the name of an unknown informer
+ * */
+char* get_random_known_informer_name(const int informer_math)
 {
 	signed short i;
 	signed short counter;
 
 	for (i = counter = 0; i < 15; i++) {
-		if ((ds_readb(INFORMER_FLAGS + i) != 0)
-			&& (arg0 - 1 != i)
-			&& (i != 9)
-			&& (i != 11)
-			&& (i != 12)) {
+
+		if ((gs_informer_flags[i] != 0) && (informer_math - 1 != i)
+			&& (i != INFORMER_OLVIR) && (i != INFORMER_TREBORN) && (i != INFORMER_UNICORN)) {
 
 			counter++;
 		}
 	}
 
 	if (counter == 0) {
-		return seg030_008d(arg0);
+		return get_random_unknown_informer_name(informer_math);
 	} else {
 
 		do {
 			i = random_schick(15);
-		} while (i == 10 || i == 12 || i == 13 || !ds_readb((INFORMER_FLAGS - 1) + i)|| i == arg0);
+			/* TODO: i is in {1, 15} but {0, 14} would be more readable */
 
-		return (Bit8u*)get_ttx(657 + i);
+		} while ((i == (INFORMER_OLVIR+1)) || (i == (INFORMER_TREBORN+1)) || (i == (INFORMER_UNICORN+1))
+				|| !gs_informer_flags[i - 1] || (i == informer_math));
+
+		return get_ttx(656 + 1 + i);
 	}
 }
 
 /* get random unknown informer */
-Bit8u* seg030_008d(signed short arg0)
+char* get_random_unknown_informer_name(const int informer_math)
 {
 	signed short i;
-	signed short v2;
+	signed short counter;
 
-	for (i = v2 = 0; i < 15; i++) {
-		if (!(ds_readb(INFORMER_FLAGS + i))
-			&& (arg0 - 1 != i)
-			&& (i != 9)
-			&& (i != 11)
-			&& (i != 12)) {
+	for (i = counter = 0; i < 15; i++) {
 
-			v2++;
+		if (!gs_informer_flags[i] && (informer_math - 1 != i)
+			&& (i != INFORMER_OLVIR) && (i != INFORMER_TREBORN) && (i != INFORMER_UNICORN)) {
+
+			counter++;
 		}
 	}
 
-	if (v2 == 0) {
-		return seg030_0000(arg0);
+	if (counter == 0) {
+		return get_random_known_informer_name(informer_math);
 	} else {
 
 		do {
 			i = random_schick(15);
-		} while (i == 10 || i == 12 || i == 13 || ds_readb((INFORMER_FLAGS - 1) + i)|| i == arg0);
-		ds_writeb((INFORMER_FLAGS - 1) + i, 1);
+			/* TODO: i is in {1, 15} but {0, 14} would be more readable */
 
-		return (Bit8u*)get_ttx(657 + i);
+		} while ((i == (INFORMER_OLVIR+1)) || (i == (INFORMER_TREBORN+1)) || (i == (INFORMER_UNICORN+1))
+			       || gs_informer_flags[i - 1] || i == informer_math);
+
+		gs_informer_flags[i - 1] = 1;
+
+		return get_ttx(656 + 1 + i);
 	}
 }
 
@@ -125,7 +134,7 @@ void prepare_date_str(void)
 	if (gs_special_day) {
 
 		sprintf((char*)g_text_output_buf, get_ttx(357), get_ttx(357 + gs_special_day));
-		strcat((char*)g_dtp2, g_text_output_buf);
+		strcat((char*)g_dtp2, (const char*)g_text_output_buf);
 	}
 }
 
@@ -166,10 +175,10 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 	partners_tab = ((Bit8u*)p_datseg + DIALOG_PARTNERS);
 	states_tab = (Bit8u*)(host_readd((Bit8u*)(partners_tab) + 38 * tlk_informer));
 	txt_offset = host_readws((Bit8u*)(partners_tab) + 38 * tlk_informer + 4);
-	ds_writed(DIALOG_TITLE, (Bit32u)(tlk_informer * 38 + partners_tab + 6));
+	g_dialog_title = (tlk_informer * 38 + (char*)partners_tab + 6);
 
 	load_in_head(host_readws((Bit8u*)(partners_tab) + 38 * tlk_informer + 0x24));
-	dst = g_dtp2 + 0x400;
+	dst = (char*)(g_dtp2 + 0x400);
 
 	do {
 		answer = optioncount = 0;
@@ -275,11 +284,11 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 					if (txt_id == 19) {
 
-						sprintf(dst, fmt, (Bit8u*)(seg030_0000(5)));
+						sprintf(dst, fmt, get_random_known_informer_name(INFORMER_ISLEIF+1));
 
 					} else if (txt_id == 20) {
 
-						sprintf(dst, fmt, (Bit8u*)(seg030_008d(5)));
+						sprintf(dst, fmt, get_random_known_informer_name(INFORMER_ISLEIF+1));
 
 					} else {
 
@@ -291,11 +300,11 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 					if (txt_id == 35 || txt_id == 36) {
 
-						sprintf(dst, fmt, (Bit8u*)(seg030_008d(1)));
+						sprintf(dst, fmt, get_random_unknown_informer_name(INFORMER_JURGE+1));
 
 					} else if (txt_id == 34) {
 
-						sprintf(dst, fmt, (Bit8u*)(seg030_0000(1)));
+						sprintf(dst, fmt, get_random_known_informer_name(INFORMER_JURGE+1));
 
 					} else {
 
@@ -393,11 +402,11 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 					if (txt_id == 18) {
 
-						sprintf(dst, fmt, (Bit8u*)(seg030_008d(10)));
+						sprintf(dst, fmt, get_random_unknown_informer_name(INFORMER_OLVIR+1));
 
 					} else if (txt_id == 29) {
 
-						sprintf(dst, fmt, (Bit8u*)(seg030_0000(10)));
+						sprintf(dst, fmt, get_random_known_informer_name(INFORMER_OLVIR+1));
 
 					} else {
 
@@ -484,7 +493,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 				}
 			}
 
-			answer = GUI_dialogbox((unsigned char*)g_dtp2, (char*)ds_readd(DIALOG_TITLE), (char*)dst, optioncount,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, g_dialog_title, (char*)dst, optioncount,
 					get_tx2(host_readb(state_ptr + 2) + txt_offset),
 					get_tx2(host_readb(state_ptr + 3) + txt_offset),
 					get_tx2(host_readb(state_ptr + 4) + txt_offset));

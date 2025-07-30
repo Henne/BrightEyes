@@ -42,9 +42,9 @@ unsigned short get_tavern_gossip(void)
 	/* Thorwal */
 	case (TOWNS_THORWAL - 1): {
 		if (r_si == 6)
-			ds_writeb_z(INFORMER_FLAGS + INFORMER_ELIANE, 1);	/* Eliane Windenbeck */
+			update_informer_cond(INFORMER_ELIANE);	/* Eliane Windenbeck */
 		else if (r_si == 7)
-			ds_writeb_z(INFORMER_FLAGS + INFORMER_ASGRIMM, 1);	/* Asgrimm Thurboldsson */
+			update_informer_cond(INFORMER_ASGRIMM);	/* Asgrimm Thurboldsson */
 
 		break;
 	}
@@ -55,9 +55,9 @@ unsigned short get_tavern_gossip(void)
 		else if (r_si == 2)
 			ds_writeb(TEVENT004_FLAG, 1);
 		else if (r_si == 9)
-			ds_writeb_z(INFORMER_FLAGS + INFORMER_ELIANE, 1);	/* Eliane Windenbeck */
+			update_informer_cond(INFORMER_ELIANE);	/* Eliane Windenbeck */
 		else if (r_si == 10)
-			ds_writeb_z(INFORMER_FLAGS + INFORMER_ASGRIMM, 1);	/* Asgrimm Thurboldsson */
+			update_informer_cond(INFORMER_ASGRIMM);	/* Asgrimm Thurboldsson */
 
 		break;
 	}
@@ -139,9 +139,9 @@ unsigned short get_tavern_gossip(void)
 		else if (r_si == 3)
 			ds_writeb(TEVENT120_FLAG, 1);
 		else if (r_si == 11)
-			ds_writeb_z(INFORMER_FLAGS + INFORMER_ELIANE, 1);	/* Eliane Windenbeck */
+			update_informer_cond(INFORMER_ELIANE);	/* Eliane Windenbeck */
 		else if (r_si == 12)
-			ds_writeb_z(INFORMER_FLAGS + INFORMER_ASGRIMM, 1);	/* Asgrimm Thurboldsson */
+			update_informer_cond(INFORMER_ASGRIMM);	/* Asgrimm Thurboldsson */
 
 		break;
 	}
@@ -150,9 +150,9 @@ unsigned short get_tavern_gossip(void)
 		if (r_si == 2)
 			ds_writeb(TEVENT008_FLAG, 1);	/* Restplaces */
 		else if (r_si == 7)
-			ds_writeb_z(INFORMER_FLAGS + INFORMER_ELIANE, 1);	/* Eliane Windenbeck */
+			update_informer_cond(INFORMER_ELIANE);	/* Eliane Windenbeck */
 		else if (r_si == 8)
-			ds_writeb_z(INFORMER_FLAGS + INFORMER_ASGRIMM, 1);	/* Asgrimm Thurboldsson */
+			update_informer_cond(INFORMER_ASGRIMM);	/* Asgrimm Thurboldsson */
 
 		break;
 	}
@@ -399,18 +399,18 @@ unsigned short get_tavern_gossip(void)
 			ds_writeb(TEVENTU02_FLAG, ds_writeb(TEVENT040_FLAG, 1));
 		}
 		else if (r_si == 9)
-			ds_writeb_z(INFORMER_FLAGS + INFORMER_ELIANE, 1);	/* Eliane Windenbeck */
+			update_informer_cond(INFORMER_ELIANE);	/* Eliane Windenbeck */
 		else if (r_si == 10)
-			ds_writeb_z(INFORMER_FLAGS + INFORMER_ASGRIMM, 1);	/* Asgrimm Thurboldsson */
+			update_informer_cond(INFORMER_ASGRIMM);	/* Asgrimm Thurboldsson */
 
 		break;
 	}
 	/* Vaermhag */
 	case (TOWNS_VAERMHAG - 1): {
 		if (r_si == 7)
-			ds_writeb_z(INFORMER_FLAGS + INFORMER_ELIANE, 1);	/* Eliane Windenbeck */
+			update_informer_cond(INFORMER_ELIANE);	/* Eliane Windenbeck */
 		else if (r_si == 8)
-			ds_writeb_z(INFORMER_FLAGS + INFORMER_ASGRIMM, 1);	/* Asgrimm Thurboldsson */
+			update_informer_cond(INFORMER_ASGRIMM);	/* Asgrimm Thurboldsson */
 
 		break;
 	}
@@ -508,8 +508,8 @@ signed short tavern_quest_infos(void)
 
 	} else if ((ds_readbs(CURRENT_TOWN) == TOWNS_SKJAL) &&
 			(ds_readws(CURRENT_TYPEINDEX) == 69) &&
-			(ds_readb(INFORMER_FLAGS + INFORMER_JURGE) != 2) &&
-			(ds_readb(INFORMER_FLAGS + INFORMER_JURGE) != 0) &&
+			(gs_informer_flags[INFORMER_JURGE] != 2) &&
+			(gs_informer_flags[INFORMER_JURGE] != 0) &&
 			!(ds_readb(JURGE_AWAITS_LETTER)))
 	{
 		/* meet Informer Jurge */
@@ -520,8 +520,8 @@ signed short tavern_quest_infos(void)
 
 	} else if ((ds_readbs(CURRENT_TOWN) == TOWNS_VIDSAND) &&
 			(ds_readws(CURRENT_TYPEINDEX) == 84) &&
-			(ds_readb(INFORMER_FLAGS + INFORMER_RAGNA) != 2) &&
-			(ds_readb(INFORMER_FLAGS + INFORMER_RAGNA) != 0))
+			(gs_informer_flags[INFORMER_RAGNA] != 2) &&
+			(gs_informer_flags[INFORMER_RAGNA] != 0))
 	{
 		/* meet Informer Ragna */
 
@@ -531,8 +531,8 @@ signed short tavern_quest_infos(void)
 
 	} else if ((ds_readbs(CURRENT_TOWN) == TOWNS_ANGBODIRTAL) &&
 			((ds_readws(CURRENT_TYPEINDEX) == 27) || (ds_readws(CURRENT_TYPEINDEX) == 28)) &&
-			(ds_readb(INFORMER_FLAGS + INFORMER_BEORN) != 2) &&
-			(ds_readb(INFORMER_FLAGS + INFORMER_BEORN) != 0))
+			(gs_informer_flags[INFORMER_BEORN] != 2) &&
+			(gs_informer_flags[INFORMER_BEORN] != 0))
 	{
 		/* meet Informer Beorn */
 
@@ -545,8 +545,8 @@ signed short tavern_quest_infos(void)
 
 	} else if ((ds_readbs(CURRENT_TOWN) == TOWNS_BREIDA) &&
 			((ds_readws(CURRENT_TYPEINDEX) == 14) || (ds_readws(CURRENT_TYPEINDEX) == 15)) &&
-			(ds_readb(INFORMER_FLAGS + INFORMER_ASGRIMM) != 2) &&
-			(ds_readb(INFORMER_FLAGS + INFORMER_ASGRIMM) != 0) &&
+			(gs_informer_flags[INFORMER_ASGRIMM] != 2) &&
+			(gs_informer_flags[INFORMER_ASGRIMM] != 0) &&
 			(gs_got_main_quest != 0))
 	{
 		/* meet Informer Asgrimm */
@@ -557,8 +557,8 @@ signed short tavern_quest_infos(void)
 
 	} else if ((ds_readbs(CURRENT_TOWN) == TOWNS_HJALSINGOR) &&
 			((ds_readws(CURRENT_TYPEINDEX) == 61) || (ds_readws(CURRENT_TYPEINDEX) == 62)) &&
-			(ds_readb(INFORMER_FLAGS + INFORMER_ALGRID) != 2) &&
-			(ds_readb(INFORMER_FLAGS + INFORMER_ALGRID) != 0))
+			(gs_informer_flags[INFORMER_ALGRID] != 2) &&
+			(gs_informer_flags[INFORMER_ALGRID] != 0))
 	{
 		/* meet Informer Algrid */
 

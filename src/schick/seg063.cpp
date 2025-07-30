@@ -125,7 +125,7 @@ void do_harbor(void)
 				if (
 					gs_quested_months > 2 &&
 					!ds_readbs((TREASURE_MAPS + 6)) &&
-					ds_readb(INFORMER_FLAGS + INFORMER_SWAFNILD) &&
+					gs_informer_flags[INFORMER_SWAFNILD] &&
 					random_schick(100) <= gs_quested_months + 4
 				) {
 					/* meet SWAFNILD */

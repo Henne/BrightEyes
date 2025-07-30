@@ -702,9 +702,8 @@ void tevent_065(void)
 		if (answer == 2) {
 			/* Make Umbrik Siebenstein known */
 
-			/* Original-Bug: if Umbrik is done the value 2
-					is overwritten with 1 */
-			ds_writeb_z(INFORMER_FLAGS + INFORMER_UMBRIK, 1);
+			/* Original-Bug: if Umbrik is done the value 2 is overwritten with 1 */
+			update_informer_cond(INFORMER_UMBRIK);
 		}
 	}
 }

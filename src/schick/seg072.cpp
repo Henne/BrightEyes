@@ -40,13 +40,13 @@ void INF_jurge_hjore(signed short informer, signed short state)
 		/* JURGE TORFINSSON */
 
 		if (!state) {
-			ds_writew(DIALOG_NEXT_STATE, (ds_readb(INFORMER_FLAGS + INFORMER_JURGE) == 1 || ds_readb(TLK_TAV_FOLLOWINFORMER) != 0) ? 44 : 43);
+			ds_writew(DIALOG_NEXT_STATE, (gs_informer_flags[INFORMER_JURGE] == 1 || ds_readb(TLK_TAV_FOLLOWINFORMER) != 0) ? 44 : 43);
 		} else if (state == 11) {
 			ds_writew(DIALOG_NEXT_STATE, has_intro_letter() ? 36 : 37);
 		} else if (state == 14) {
 			ds_writew(DIALOG_NEXT_STATE, has_intro_letter() ? 39 : 40);
 		} else if (state == 19) {
-			ds_writew(DIALOG_NEXT_STATE, ds_readb(TLK_TAV_FOLLOWINFORMER) != 0 ? 1 : (!ds_readb(TLK_TAV_FOLLOWINFORMER) && ds_readb(INFORMER_FLAGS + INFORMER_JURGE) != 0 ? 2 : 3));
+			ds_writew(DIALOG_NEXT_STATE, ds_readb(TLK_TAV_FOLLOWINFORMER) != 0 ? 1 : (!ds_readb(TLK_TAV_FOLLOWINFORMER) && gs_informer_flags[INFORMER_JURGE] != 0 ? 2 : 3));
 		} else if (state == 20) {
 			ds_writew(DIALOG_NEXT_STATE, has_intro_letter() ? 21 : 22);
 		} else if (state == 27) {
@@ -63,31 +63,31 @@ void INF_jurge_hjore(signed short informer, signed short state)
 		} else if (state == 29 || state == 30) {
 			show_treasure_map();
 		} else if (state == 35) {
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_YASMA)) ds_writeb(INFORMER_FLAGS + INFORMER_YASMA, 1);
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_RAGNA)) ds_writeb(INFORMER_FLAGS + INFORMER_RAGNA, 1);
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_SWAFNILD)) ds_writeb(INFORMER_FLAGS + INFORMER_SWAFNILD, 1);
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_ALGRID)) ds_writeb(INFORMER_FLAGS + INFORMER_ALGRID, 1);
+			if (!gs_informer_flags[INFORMER_YASMA]) gs_informer_flags[INFORMER_YASMA] = 1;
+			if (!gs_informer_flags[INFORMER_RAGNA]) gs_informer_flags[INFORMER_RAGNA] = 1;
+			if (!gs_informer_flags[INFORMER_SWAFNILD]) gs_informer_flags[INFORMER_SWAFNILD] = 1;
+			if (!gs_informer_flags[INFORMER_ALGRID]) gs_informer_flags[INFORMER_ALGRID] = 1;
 		} else if (state == 40 || state == 41) {
 			/* need introduction letter ? */
 			ds_writeb(JURGE_AWAITS_LETTER, 1);
 		} else if (state == 42) {
-			ds_writeb(INFORMER_FLAGS + INFORMER_JURGE, 2);
+			gs_informer_flags[INFORMER_JURGE] = 2;
 		} else if (state == 44) {
 			ds_writew(DIALOG_NEXT_STATE, ds_readb(JURGE_AWAITS_LETTER) != 0 ? 20 : 19);
 		} else if (state == 45) {
-			ds_writew(DIALOG_NEXT_STATE, !ds_readb(INFORMER_FLAGS + INFORMER_JURGE) ? 6 : 5);
+			ds_writew(DIALOG_NEXT_STATE, !gs_informer_flags[INFORMER_JURGE] ? 6 : 5);
 		}
 	} else if (informer == 1) {
 		/* HJORE AHRENSSON */
 
 		if (!state) {
-			ds_writew(DIALOG_NEXT_STATE, !ds_readb(INFORMER_FLAGS + INFORMER_HJORE) ? 16 : (ds_readb(INFORMER_FLAGS + INFORMER_HJORE) == 2 ? 1 : 5));
+			ds_writew(DIALOG_NEXT_STATE, !gs_informer_flags[INFORMER_HJORE] ? 16 : (gs_informer_flags[INFORMER_HJORE] == 2 ? 1 : 5));
 		} else if (state == 5) {
 			ds_writew(DIALOG_NEXT_STATE, get_first_hero_with_item(ITEM_SCHULDBUCH) != -1 ? 6 : 7);
 		} else if (state == 8 || state == 9 || state == 12) {
-			ds_writeb(INFORMER_FLAGS + INFORMER_HJORE, 2);
+			gs_informer_flags[INFORMER_HJORE] = 2;
 		} else if (state == 10) {
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_BEORN)) ds_writeb(INFORMER_FLAGS + INFORMER_BEORN, 1);
+			if (!gs_informer_flags[INFORMER_BEORN]) gs_informer_flags[INFORMER_BEORN] = 1;
 		} else if (state == 13) {
 			/* get the false map part ?*/
 			if (ds_readb(TREASURE_MAPS + 9) == 2) {
@@ -100,9 +100,9 @@ void INF_jurge_hjore(signed short informer, signed short state)
 
 			show_treasure_map();
 		} else if (state == 14) {
-			ds_writeb(INFORMER_FLAGS + INFORMER_HJORE, 2);
+			gs_informer_flags[INFORMER_HJORE] = 2;
 
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_YASMA)) ds_writeb(INFORMER_FLAGS + INFORMER_YASMA, 1);
+			if (!gs_informer_flags[INFORMER_YASMA]) gs_informer_flags[INFORMER_YASMA] = 1;
 		}
 	}
 }
@@ -121,29 +121,29 @@ void INF_yasma_umbrik_isleif(signed short informer, signed short state)
 		/* YASMA THINMARSDOTTER */
 
 		if (!state) {
-			ds_writew(DIALOG_NEXT_STATE, ds_readb(INFORMER_FLAGS + INFORMER_YASMA) == 2 ? 1 : 2);
+			ds_writew(DIALOG_NEXT_STATE, gs_informer_flags[INFORMER_YASMA] == 2 ? 1 : 2);
 		} else if (state == 15) {
 			ds_writeb(TEVENT100_FLAG, 1);
 		} else if (state == 22) {
 			/* make HJORE AHRENSSON known */
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_HJORE)) ds_writeb(INFORMER_FLAGS + INFORMER_HJORE, 1);
+			if (!gs_informer_flags[INFORMER_HJORE]) gs_informer_flags[INFORMER_HJORE] = 1;
 
 			/* make UMBRIK SIEBENSTEIN known */
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_UMBRIK)) ds_writeb(INFORMER_FLAGS + INFORMER_UMBRIK, 1);
+			if (!gs_informer_flags[INFORMER_UMBRIK]) gs_informer_flags[INFORMER_UMBRIK] = 1;
 
 			/* mark YASMA THINMARSDOTTER as done */
-			ds_writeb(INFORMER_FLAGS + INFORMER_YASMA, 2);
+			gs_informer_flags[INFORMER_YASMA] = 2;
 		}
 	} else if (informer == 1) {
 		/* UMBRIK SIEBENSTEIN */
 
 		if (!state) {
-			ds_writew(DIALOG_NEXT_STATE, ds_readb(INFORMER_FLAGS + INFORMER_UMBRIK) == 2 ? 1 : 2);
+			ds_writew(DIALOG_NEXT_STATE, gs_informer_flags[INFORMER_UMBRIK] == 2 ? 1 : 2);
 		} else if (state == 2) {
-			ds_writew(DIALOG_NEXT_STATE, ds_readb(UMBRIK_QUEST_GORAH) != 0 ? 15 : (!ds_readb(INFORMER_FLAGS + INFORMER_UMBRIK) ? 24 : 3));
+			ds_writew(DIALOG_NEXT_STATE, ds_readb(UMBRIK_QUEST_GORAH) != 0 ? 15 : (!gs_informer_flags[INFORMER_UMBRIK] ? 24 : 3));
 		} else if (state == 11 || state == 13) {
 			/* mark UMBRIK SIEBENSTEIN as done */
-			ds_writeb(INFORMER_FLAGS + INFORMER_UMBRIK, 2);
+			gs_informer_flags[INFORMER_UMBRIK] = 2;
 		} else if (state == 14) {
 			/* the heroes now know of GORAH */
 			ds_writeb(UMBRIK_QUEST_GORAH, 1);
@@ -156,28 +156,28 @@ void INF_yasma_umbrik_isleif(signed short informer, signed short state)
 			drop_item(hero, get_item_pos(hero, ITEM_BONE_WITH_RUNE), 1);
 		} else if (state == 23) {
 			/* mark UMBRIK SIEBENSTEIN as done */
-			ds_writeb(INFORMER_FLAGS + INFORMER_UMBRIK, 2);
+			gs_informer_flags[INFORMER_UMBRIK] = 2;
 
 			/* get EMPFEHLUNGSSCHREIBEN / LETTER OF INTRODUCTION */
 			get_item(ITEM_WRITING_OF_SIEBENSTEIN, 1, 1);
 
 			/* make BEORN HJALLASSON known */
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_BEORN)) ds_writeb(INFORMER_FLAGS + INFORMER_BEORN, 1);
+			if (!gs_informer_flags[INFORMER_BEORN]) gs_informer_flags[INFORMER_BEORN] = 1;
 
 			/* make TIOMAR SWAFNILDSSON known */
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_TIOMAR)) ds_writeb(INFORMER_FLAGS + INFORMER_TIOMAR, 1);
+			if (!gs_informer_flags[INFORMER_TIOMAR]) gs_informer_flags[INFORMER_TIOMAR] = 1;
 		}
 
 	} else if (informer == 2) {
 		/* ISLEIF OLGARDSSON */
 
 		if (!state) {
-			ds_writew(DIALOG_NEXT_STATE, ds_readb(INFORMER_FLAGS + INFORMER_ISLEIF) == 2 ? 1 : 2);
+			ds_writew(DIALOG_NEXT_STATE, gs_informer_flags[INFORMER_ISLEIF] == 2 ? 1 : 2);
 		} else if (state == 2) {
 			ds_writew(DIALOG_NEXT_STATE, ds_readb(ISLEIF_JANDAS_REGARDS) != 0 ? 3 : 4);
 		} else if (state == 8 || state == 23 || state == 25 || state == 27) {
 			/* mark ISLEIF OLGARDSSON as done */
-			ds_writeb(INFORMER_FLAGS + INFORMER_ISLEIF, 2);
+			gs_informer_flags[INFORMER_ISLEIF] = 2;
 		} else if (state == 9) {
 			ds_writew(DIALOG_NEXT_STATE, ds_readb(ISLEIF_JANDAS_REGARDS) != 0 ? 10 : 11);
 		} else if (state == 15 || state == 19) {
@@ -222,12 +222,12 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 		/* RAGNA FIRUNJASDOTTER */
 
 		if (!state) {
-			ds_writew(DIALOG_NEXT_STATE, ds_readb(INFORMER_FLAGS + INFORMER_RAGNA) == 2 ? 1 : 3);
+			ds_writew(DIALOG_NEXT_STATE, gs_informer_flags[INFORMER_RAGNA] == 2 ? 1 : 3);
 		} else if (state == 4) {
 			ds_writew(DIALOG_NEXT_STATE, count_map_parts() ? 9 : 10);
 		} else if (state == 8 || state == 25) {
 			/* mark RAGNA FIRUNJASDOTTER as done */
-			ds_writeb(INFORMER_FLAGS + INFORMER_RAGNA, 2);
+			gs_informer_flags[INFORMER_RAGNA] = 2;
 		} else if (state == 12) {
 			/* directly asking for map gets a brush-off ("don't know what you
 			   are talking about") and is silently noted by ragna!
@@ -235,13 +235,13 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 			ds_writeb(RAGNA_ASKED_MAP, 1);
 		} else if (state == 14) {
 			/* mark ISLEIF OLGARDSSON as known */
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_ISLEIF)) ds_writeb(INFORMER_FLAGS + INFORMER_ISLEIF, 1);
+			if (!gs_informer_flags[INFORMER_ISLEIF]) gs_informer_flags[INFORMER_ISLEIF] = 1;
 			/* mark SWAFNILD EGILSDOTTER as known */
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_SWAFNILD)) ds_writeb(INFORMER_FLAGS + INFORMER_SWAFNILD, 1);
+			if (!gs_informer_flags[INFORMER_SWAFNILD]) gs_informer_flags[INFORMER_SWAFNILD] = 1;
 		} else if (state == 16) {
 			/* mark JURGE TORFINSSON as known */
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_JURGE))
-			    ds_writeb(INFORMER_FLAGS + INFORMER_JURGE, 1);
+			if (!gs_informer_flags[INFORMER_JURGE])
+			    gs_informer_flags[INFORMER_JURGE] = 1;
 		} else if (state == 17) {
 			/* see state 12 */
 			ds_writew(DIALOG_NEXT_STATE, ds_readb(RAGNA_ASKED_MAP) != 0 ? 18 : 19);
@@ -282,7 +282,7 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 			/* BEORN HJALLASSON */
 
 			if (!state) {
-				ds_writew(DIALOG_NEXT_STATE, ds_readb(INFORMER_FLAGS + INFORMER_BEORN) == 2 ? 1 : 2);
+				ds_writew(DIALOG_NEXT_STATE, gs_informer_flags[INFORMER_BEORN] == 2 ? 1 : 2);
 			} else if (state == 2) {
 				/* is ERWO in the group ? */
 				ds_writew(DIALOG_NEXT_STATE,
@@ -290,9 +290,9 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 			} else if (state == 6) {
 
 				/* copy the name */
-				strcpy((char*)(p_datseg + STR_BEORN_HJALL), (char*)(get_hero(6) + HERO_NAME2));
+				strcpy(g_str_beorn_hjall, (char*)(get_hero(6) + HERO_NAME2));
 				/* set a pointer */
-				ds_writed(DIALOG_TITLE, (Bit32u)(p_datseg + STR_BEORN_HJALL));
+				g_dialog_title = g_str_beorn_hjall;
 				/* copy the picture of the NPC */
 				memcpy(g_dtp2, get_hero(6) + HERO_PORTRAIT, 0x400);
 				/* remove the NPC from the group */
@@ -313,14 +313,14 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 				show_treasure_map();
 			} else if (state == 12 || state == 29) {
 				/* mark BEORN HJALLASSON as done */
-				ds_writeb(INFORMER_FLAGS + INFORMER_BEORN, 2);
+				gs_informer_flags[INFORMER_BEORN] = 2;
 			} else if (state == 13 || state == 22) {
 				/* make HJORE AHRENSSON known */
-				if (!ds_readb(INFORMER_FLAGS + INFORMER_HJORE)) ds_writeb(INFORMER_FLAGS + INFORMER_HJORE, 1);
+				if (!gs_informer_flags[INFORMER_HJORE]) gs_informer_flags[INFORMER_HJORE] = 1;
 				/* mark RAGNA FIRUNJASDOTTER as known */
-				if (!ds_readb(INFORMER_FLAGS + INFORMER_RAGNA)) ds_writeb(INFORMER_FLAGS + INFORMER_RAGNA, 1);
+				if (!gs_informer_flags[INFORMER_RAGNA]) gs_informer_flags[INFORMER_RAGNA] = 1;
 				/* mark SWAFNILD EGILSDOTTER as known */
-				if (!ds_readb(INFORMER_FLAGS + INFORMER_SWAFNILD)) ds_writeb(INFORMER_FLAGS + INFORMER_SWAFNILD, 1);
+				if (!gs_informer_flags[INFORMER_SWAFNILD]) gs_informer_flags[INFORMER_SWAFNILD] = 1;
 			} else if (state == 18) {
 				/* after "NUN, IHR SEID DOCH MIT HYGGELIK VERWANDT..." */
 				ds_writeb(BEORN_LITT_BOLD, 1);
@@ -364,22 +364,22 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 		/* ALGRID TRONDESDOTTER */
 
 		if (!state) {
-			ds_writew(DIALOG_NEXT_STATE, ds_readb(TLK_TAV_FOLLOWINFORMER) ? 23 : (ds_readb(INFORMER_FLAGS + INFORMER_ALGRID) == 2 ? 1 : 22));
+			ds_writew(DIALOG_NEXT_STATE, ds_readb(TLK_TAV_FOLLOWINFORMER) ? 23 : (gs_informer_flags[INFORMER_ALGRID] == 2 ? 1 : 22));
 		} else if (state == 2) {
 			/* mark ALGRID TRONDESDOTTER as done */
-			ds_writeb(INFORMER_FLAGS + INFORMER_ALGRID, 2);
+			gs_informer_flags[INFORMER_ALGRID] = 2;
 
-			ds_writew(DIALOG_NEXT_STATE, ds_readb(INFORMER_FLAGS + INFORMER_JURGE) == 2 ? 3 : 4);
+			ds_writew(DIALOG_NEXT_STATE, gs_informer_flags[INFORMER_JURGE] == 2 ? 3 : 4);
 		} else if (state == 3) {
-			ds_writew(DIALOG_NEXT_STATE, ds_readb(ALGRID_TREBORNS_HINT) ? 5 : 6);
+			ds_writew(DIALOG_NEXT_STATE, gs_algrid_treborns_hint ? 5 : 6);
 		} else if (state == 4) {
-			ds_writew(DIALOG_NEXT_STATE, ds_readb(ALGRID_TREBORNS_HINT) ? 7 : 8);
+			ds_writew(DIALOG_NEXT_STATE, gs_algrid_treborns_hint ? 7 : 8);
 		} else if (state == 14) {
 			/* make TIOMAR SWAFNILDSSON known */
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_TIOMAR)) ds_writeb(INFORMER_FLAGS + INFORMER_TIOMAR, 1);
+			if (!gs_informer_flags[INFORMER_TIOMAR]) gs_informer_flags[INFORMER_TIOMAR] = 1;
 
 			/* make TREBORN KOLBERG known */
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_TREBORN)) ds_writeb(INFORMER_FLAGS + INFORMER_TREBORN, 1);
+			if (!gs_informer_flags[INFORMER_TREBORN]) gs_informer_flags[INFORMER_TREBORN] = 1;
 		}
 	}
 }
@@ -398,7 +398,7 @@ void INF_eliane_tiomar(signed short informer, signed short state)
 		if (!state) {
 			ds_writew(DIALOG_NEXT_STATE, ds_readb(ELIANE_QUEST_NAMELESS) || gs_got_main_quest == 0 ? 1 : 6);
 		} else if (state == 1) {
-			ds_writew(DIALOG_NEXT_STATE, ds_readb(QUEST_NAMELESS_DONE) && ds_readb(INFORMER_FLAGS + INFORMER_ELIANE) != 2 ? 2 : 3);
+			ds_writew(DIALOG_NEXT_STATE, ds_readb(QUEST_NAMELESS_DONE) && gs_informer_flags[INFORMER_ELIANE] != 2 ? 2 : 3);
 		} else if (state == 5 || state == 27) {
 				/* check if the party already has this map piece */
 				if (ds_readb(TREASURE_MAPS + 5) == 2) ds_writeb(TMAP_DOUBLE2, 1);
@@ -410,17 +410,17 @@ void INF_eliane_tiomar(signed short informer, signed short state)
 				show_treasure_map();
 
 				/* mark ELIANE WINDENBECK as done */
-				ds_writeb(INFORMER_FLAGS + INFORMER_ELIANE, 2);
+				gs_informer_flags[INFORMER_ELIANE] = 2;
 		} else if (state == 19) {
 			ds_writew(DIALOG_NEXT_STATE, ds_readb(QUEST_NAMELESS_DONE) ? 20 : 30);
 			ds_writeb(ELIANE_QUEST_NAMELESS, 1);
 		} else if (state == 16) {
 			/* mark YASMA THINMARSDOTTER as known */
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_YASMA)) ds_writeb(INFORMER_FLAGS + INFORMER_YASMA, 1);
+			if (!gs_informer_flags[INFORMER_YASMA]) gs_informer_flags[INFORMER_YASMA] = 1;
 			/* mark SWAFNILD EGILSDOTTER as known */
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_SWAFNILD)) ds_writeb(INFORMER_FLAGS + INFORMER_SWAFNILD, 1);
+			if (!gs_informer_flags[INFORMER_SWAFNILD]) gs_informer_flags[INFORMER_SWAFNILD] = 1;
 			/* mark ASGRIMM THURBOLDSSON as known */
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_ASGRIMM)) ds_writeb(INFORMER_FLAGS + INFORMER_ASGRIMM, 1);
+			if (!gs_informer_flags[INFORMER_ASGRIMM]) gs_informer_flags[INFORMER_ASGRIMM] = 1;
 		} else if (state == 24) {
 			/* the group has the SCHWARZE STATUETTE/BLACK FIGURINE */
 			ds_writew(DIALOG_NEXT_STATE, get_first_hero_with_item(ITEM_BLACK_FIGURINE) != -1 ? 27 : 28);
@@ -431,8 +431,8 @@ void INF_eliane_tiomar(signed short informer, signed short state)
 		if (!state) {
 			ds_writew(DIALOG_NEXT_STATE,
 			    ds_readb(TLK_TAV_FOLLOWINFORMER) != 0 ? 44
-                : (!ds_readb(INFORMER_FLAGS + INFORMER_TIOMAR)
-                    || ds_readb(INFORMER_FLAGS + INFORMER_TIOMAR) == 2 ? 2 : 1));
+                : (!gs_informer_flags[INFORMER_TIOMAR]
+                    || gs_informer_flags[INFORMER_TIOMAR] == 2 ? 2 : 1));
 		} else if (state == 1) {
 			ds_writew(DIALOG_NEXT_STATE, ds_readb(TIOMAR_AWAITS_LETTER) != 0 ? 36 : 3);
 		} else if (state == 4) {
@@ -448,12 +448,12 @@ void INF_eliane_tiomar(signed short informer, signed short state)
 				show_treasure_map();
 
 				/* mark TIOMAR SWAFNILDSSON as done */
-				ds_writeb(INFORMER_FLAGS + INFORMER_TIOMAR, 2);
+				gs_informer_flags[INFORMER_TIOMAR] = 2;
 		} else if (state == 17) {
 			/* mark JURGE TORFINSSON as known */
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_JURGE)) ds_writeb(INFORMER_FLAGS + INFORMER_JURGE, 1);
+			if (!gs_informer_flags[INFORMER_JURGE]) gs_informer_flags[INFORMER_JURGE] = 1;
 			/* mark ISLEIF OLGARDSSON as known */
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_ISLEIF)) ds_writeb(INFORMER_FLAGS + INFORMER_ISLEIF, 1);
+			if (!gs_informer_flags[INFORMER_ISLEIF]) gs_informer_flags[INFORMER_ISLEIF] = 1;
 		} else if (state == 20) {
 			/* drink with TIOMAR */
 			timewarp(HOURS(1));
@@ -465,17 +465,17 @@ void INF_eliane_tiomar(signed short informer, signed short state)
 			hero_get_drunken(get_hero(ds_readb(TIOMAR_DRINKMATE)));
 		} else if (state == 31) {
 			/* mark JURGE TORFINSSON as known */
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_JURGE)) ds_writeb(INFORMER_FLAGS + INFORMER_JURGE, 1);
+			if (!gs_informer_flags[INFORMER_JURGE]) gs_informer_flags[INFORMER_JURGE] = 1;
 			/* mark ISLEIF OLGARDSSON as known */
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_ISLEIF)) ds_writeb(INFORMER_FLAGS + INFORMER_ISLEIF, 1);
+			if (!gs_informer_flags[INFORMER_ISLEIF]) gs_informer_flags[INFORMER_ISLEIF] = 1;
 			/* mark UMBRIK SIEBENSTEIN as known */
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_UMBRIK)) ds_writeb(INFORMER_FLAGS + INFORMER_UMBRIK, 1);
+			if (!gs_informer_flags[INFORMER_UMBRIK]) gs_informer_flags[INFORMER_UMBRIK] = 1;
 		} else if (state == 34) {
 			ds_writeb(TIOMAR_AWAITS_LETTER, 1);
 		} else if (state == 36) {
 			ds_writew(DIALOG_NEXT_STATE, get_first_hero_with_item(ITEM_WRITING_OF_SIEBENSTEIN) != -1 ? 37 : 2);
 		} else if (state == 45) {
-			ds_writew(DIALOG_NEXT_STATE, ds_readb(INFORMER_FLAGS + INFORMER_UMBRIK) == 2 ? 46 : 47);
+			ds_writew(DIALOG_NEXT_STATE, gs_informer_flags[INFORMER_UMBRIK] == 2 ? 46 : 47);
 		}
 
 	}
@@ -495,10 +495,10 @@ void INF_olvir_asgrimm(signed short informer, signed short state)
 		/* OLVIR GUNDRIDSSON */
 
 		if (!state) {
-			ds_writew(DIALOG_NEXT_STATE, ds_readb(INFORMER_FLAGS + INFORMER_OLVIR) == 2 ? 1 : 2);
+			ds_writew(DIALOG_NEXT_STATE, gs_informer_flags[INFORMER_OLVIR] == 2 ? 1 : 2);
 		} else if (state == 2) {
 			/* mark OLVIR GUNDRIDSSON as done */
-			ds_writeb(INFORMER_FLAGS + INFORMER_OLVIR, 2);
+			gs_informer_flags[INFORMER_OLVIR] = 2;
 		} else if (state == 8) {
 			ds_writeb(OLVIR_START_HETMANN, ds_writeb(OLVIR_SINGING_HETMANN, 1));
 		} else if (state == 9) {
@@ -550,10 +550,10 @@ void INF_olvir_asgrimm(signed short informer, signed short state)
 		/* ASGRIMM THURBOLDSSON */
 
 		if (!state) {
-			ds_writew(DIALOG_NEXT_STATE, ds_readb(TLK_TAV_FOLLOWINFORMER) != 0 ? 22 : (gs_got_main_quest == 0|| ds_readb(INFORMER_FLAGS + INFORMER_ASGRIMM) == 2 ? 1 : 2));
+			ds_writew(DIALOG_NEXT_STATE, ds_readb(TLK_TAV_FOLLOWINFORMER) != 0 ? 22 : (gs_got_main_quest == 0|| gs_informer_flags[INFORMER_ASGRIMM] == 2 ? 1 : 2));
 		} else if (state == 2) {
 			/* mark ASGRIMM THURBOLDSSON as done */
-			ds_writeb(INFORMER_FLAGS + INFORMER_ASGRIMM, 2);
+			gs_informer_flags[INFORMER_ASGRIMM] = 2;
 		} else if (state == 7) {
 			signed short i;
 			/* ASGRIMM takes a meal with the heroes */
@@ -570,9 +570,9 @@ void INF_olvir_asgrimm(signed short informer, signed short state)
 			}
 		} else if (state == 16) {
 			/* make HJORE AHRENSSON known */
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_HJORE)) ds_writeb(INFORMER_FLAGS + INFORMER_HJORE, 1);
+			if (!gs_informer_flags[INFORMER_HJORE]) gs_informer_flags[INFORMER_HJORE] = 1;
 			/* mark RAGNA FIRUNJASDOTTER as known */
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_RAGNA)) ds_writeb(INFORMER_FLAGS + INFORMER_RAGNA, 1);
+			if (!gs_informer_flags[INFORMER_RAGNA]) gs_informer_flags[INFORMER_RAGNA] = 1;
 		}
 	}
 }
@@ -596,10 +596,10 @@ void INF_treborn_unicorn(signed short informer, signed short state)
 		enough_money = money >= 6000 ? 1 : 0;
 
 		if (!state) {
-			ds_writew(DIALOG_NEXT_STATE, ds_readb(INFORMER_FLAGS + INFORMER_TREBORN) != 0 ? -1 : 1);
+			ds_writew(DIALOG_NEXT_STATE, gs_informer_flags[INFORMER_TREBORN] != 0 ? -1 : 1);
 		} else if (state == 1) {
 			/* mark TREBORN KOLBERG as met */
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_TREBORN)) ds_writeb(INFORMER_FLAGS + INFORMER_TREBORN, 1);
+			if (!gs_informer_flags[INFORMER_TREBORN]) gs_informer_flags[INFORMER_TREBORN] = 1;
 		} else if (state == 5) {
 			ds_writew(DIALOG_NEXT_STATE, enough_money ? 7 : 8);
 		} else if (state == 9) {
@@ -617,13 +617,13 @@ void INF_treborn_unicorn(signed short informer, signed short state)
 
 			/* mark ALGRID TRONDESDOTTER as known */
 			/* Original-BUG: this would reactivate algrid */
-			ds_writeb(INFORMER_FLAGS + INFORMER_ALGRID, ds_writeb(ALGRID_TREBORNS_HINT, 1));
+			gs_informer_flags[INFORMER_ALGRID] = gs_algrid_treborns_hint = 1;
 
 			show_treasure_map();
 
 		} else if (state == 11) {
 			/* mark JURGE TORFINSSON as known */
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_JURGE)) ds_writeb(INFORMER_FLAGS + INFORMER_JURGE, 1);
+			if (!gs_informer_flags[INFORMER_JURGE]) gs_informer_flags[INFORMER_JURGE] = 1;
 		} else if (state == 13) {
 			ds_writew(DIALOG_NEXT_STATE, enough_money ? 14 : 15);
 		} else if (state == 17) {
@@ -662,19 +662,20 @@ void INF_treborn_unicorn(signed short informer, signed short state)
 
 			/* mark ALGRID TRONDESDOTTER as known */
 			/* Original-BUG: this would reactivate algrid */
-			ds_writeb(INFORMER_FLAGS + INFORMER_ALGRID, ds_writeb(ALGRID_TREBORNS_HINT, 1));
+			gs_informer_flags[INFORMER_ALGRID] = gs_algrid_treborns_hint = 1;
 
 			show_treasure_map();
+
 		} else if (state == 14) {
 			/* mark JURGE TORFINSSON as known */
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_JURGE)) ds_writeb(INFORMER_FLAGS + INFORMER_JURGE, 1);
+			if (!gs_informer_flags[INFORMER_JURGE]) gs_informer_flags[INFORMER_JURGE] = 1;
 		}
 
 	} else if (informer == 2) {
 		/* EINHORN / UNICORN (first meeting) */
 
 		if (!state) {
-			ds_writew(DIALOG_NEXT_STATE, ds_readb(INFORMER_FLAGS + INFORMER_UNICORN) == 2 ? 1 : 2);
+			ds_writew(DIALOG_NEXT_STATE, gs_informer_flags[INFORMER_UNICORN] == 2 ? 1 : 2);
 		} else if (state == 2) {
 			/* select the hero with the highest CH value */
 			/* REMARK: what if the NPC is choosen ? */
@@ -686,10 +687,10 @@ void INF_treborn_unicorn(signed short informer, signed short state)
 		} else if (state == 8) {
 			timewarp(HOURS(1));
 			/* mark UNICORN as done */
-			ds_writeb(INFORMER_FLAGS + INFORMER_UNICORN, 2);
+			gs_informer_flags[INFORMER_UNICORN] = 2;
 		} else if (state == 9) {
 			/* mark UNICORN as done */
-			ds_writeb(INFORMER_FLAGS + INFORMER_UNICORN, 2);
+			gs_informer_flags[INFORMER_UNICORN] = 2;
 		} else if (state == 10) {
 			/* test FF+2 */
 			ds_writew(DIALOG_NEXT_STATE, test_attrib((Bit8u*)ds_readd(UNICORN_HERO_PTR), ATTRIB_GE, 2) > 0 ? 11 : 14);
@@ -734,7 +735,7 @@ void INF_swafnild_unicorn(signed short informer, signed short state)
 		/* SWAFNILD EGILSDOTTER */
 
 		if (state == 1) {
-			ds_writew(DIALOG_NEXT_STATE, ds_readb(INFORMER_FLAGS + INFORMER_SWAFNILD) == 2 ? 3 : 7);
+			ds_writew(DIALOG_NEXT_STATE, gs_informer_flags[INFORMER_SWAFNILD] == 2 ? 3 : 7);
 		} else if (state == 4) {
 			ds_writew(DIALOG_NEXT_STATE, ds_readb(SWAFNILD_NOMAP) != 0 ? 38 : 39);
 		} else if (state == 7) {
@@ -760,24 +761,24 @@ void INF_swafnild_unicorn(signed short informer, signed short state)
 			}
 		} else if (state == 17) {
 			/* mark RAGNA FIRUNJASDOTTER as known */
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_RAGNA)) ds_writeb(INFORMER_FLAGS + INFORMER_RAGNA, 1);
+			if (!gs_informer_flags[INFORMER_RAGNA]) gs_informer_flags[INFORMER_RAGNA] = 1;
 			/* make BEORN HJALLASSON known */
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_BEORN)) ds_writeb(INFORMER_FLAGS + INFORMER_BEORN, 1);
+			if (!gs_informer_flags[INFORMER_BEORN]) gs_informer_flags[INFORMER_BEORN] = 1;
 			/* make TIOMAR SWAFNILDSSON known */
-			if (!ds_readb(INFORMER_FLAGS + INFORMER_TIOMAR)) ds_writeb(INFORMER_FLAGS + INFORMER_TIOMAR, 1);
+			if (!gs_informer_flags[INFORMER_TIOMAR]) gs_informer_flags[INFORMER_TIOMAR] = 1;
 		} else if (state == 18) {
 			/* test CH+5 */
 			ds_writew(DIALOG_NEXT_STATE, test_attrib(get_hero(0), ATTRIB_CH, 5) > 0 ? 19 : 20);
 		} else if (state == 21) {
 			/* mark SWAFNILD EGILSDOTTER as done */
-			ds_writeb(INFORMER_FLAGS + INFORMER_SWAFNILD, 2);
+			gs_informer_flags[INFORMER_SWAFNILD] = 2;
 			ds_writeb(SWAFNILD_NOMAP, 1);
 		} else if (state == 22) {
 			/* test CH+3 */
 			ds_writew(DIALOG_NEXT_STATE, test_attrib(get_hero(0), ATTRIB_CH, 3) > 0 ? 24 : 23);
 		} else if (state == 24 || state == 41) {
 			/* mark SWAFNILD EGILSDOTTER as done */
-			ds_writeb(INFORMER_FLAGS + INFORMER_SWAFNILD, 2);
+			gs_informer_flags[INFORMER_SWAFNILD] = 2;
 		} else if (state == 32) {
 				/* check if the party already has this map piece */
 				if (ds_readb(TREASURE_MAPS + 6) == 2) ds_writeb(TMAP_DOUBLE2, 1);
