@@ -285,7 +285,7 @@
 //#define IN_ACADEMY                      (0x3362)    /* unsigned short; {0,99} */
 //#define INFORMER_FLAGS                  (0x3364)    /* unsigned char[15]; {0,1,2} */
 // ?1
-#define TAV_KICKED_FLAGS                (0x3374)    /* signed char[88]; {0,1} */
+//#define TAV_KICKED_FLAGS                (0x3374)    /* signed char[88]; {0,1} */
 #define TOWN_OUTLAWED_FLAGS             (0x33cc)    /* signed char[52]; {0,1} */
 #define HERBERG_KICKED_FLAGS            (0x3400)    /* signed char[74]; {0,1} */
 #define GOT_LETTER_HET                  (0x344a)    /* unsigned char; {0,1} */

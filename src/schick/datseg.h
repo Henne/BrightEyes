@@ -109,6 +109,7 @@ extern Bit16s gs_days_to_cens;			//ds:0x335e; seg002, seg068
 extern Bit16s gs_debt_days;			//ds:0x3360; seg002, seg055, seg068
 extern Bit16s gs_in_academy;			//ds:0x3362; seg068, seg099
 extern Bit8u  gs_informer_flags[16];		//ds:0x3364; seg030-seg116
+extern Bit8u  gs_tav_kicked_flags[88];		//ds:0x3374; seg060;
 
 extern Bit8u gs_algrid_treborns_hint;		//ds:0x3467; seg072
 
