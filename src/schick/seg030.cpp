@@ -546,7 +546,7 @@ void talk_switch(void)
 		/* DASPOTA1.TLK */
 
 		if (g_dialog_informer == 0) {
-			if ((state == 1 || state == 2 || state == 3) && !ds_readb((DASPOTA_FIGHTFLAGS + 1))) {
+			if ((state == 1 || state == 2 || state == 3) && !gs_daspota_fightflags[1]) {
 
 				g_fig_discard = 1;
 
@@ -556,7 +556,7 @@ void talk_switch(void)
 						g_fig_discard = 0;
 
 						if (!do_fight(FIGHTS_DASP1B)) {
-							ds_writeb((DASPOTA_FIGHTFLAGS + 1), 1);
+							gs_daspota_fightflags[1] = 1;
 						}
 					}
 				}
@@ -567,60 +567,60 @@ void talk_switch(void)
 
 		if (g_dialog_informer == 1) {
 
-			if (state == 1 && !ds_readb((DASPOTA_FIGHTFLAGS + 2))) {
+			if (state == 1 && !gs_daspota_fightflags[2]) {
 
 				if (!do_fight(FIGHTS_DASP2)) {
-					ds_writeb((DASPOTA_FIGHTFLAGS + 2), 1);
+					gs_daspota_fightflags[2] = 1;
 				}
 			}
 		}
 
 		if (g_dialog_informer == 2) {
 
-			if ((state == 4 || state == 6) && !ds_readb((DASPOTA_FIGHTFLAGS + 3))) {
+			if ((state == 4 || state == 6) && !gs_daspota_fightflags[3]) {
 
 				if (!do_fight(FIGHTS_DASP3)) {
-					ds_writeb((DASPOTA_FIGHTFLAGS + 3), 1);
+					gs_daspota_fightflags[3] = 1;
 				}
 			}
 		}
 
 		if (g_dialog_informer == 3) {
 
-			if (state == 4 && !ds_readb((DASPOTA_FIGHTFLAGS + 4))) {
+			if (state == 4 && !gs_daspota_fightflags[4]) {
 
 				if (!do_fight(FIGHTS_DASP4)) {
-					ds_writeb((DASPOTA_FIGHTFLAGS + 4), 1);
+					gs_daspota_fightflags[4] = 1;
 				}
 			}
 		}
 
 		if (g_dialog_informer == 4) {
 
-			if ((state == 1 || state == 4 || state == 7) && !ds_readb((DASPOTA_FIGHTFLAGS + 5))) {
+			if ((state == 1 || state == 4 || state == 7) && !gs_daspota_fightflags[5]) {
 
 				if (!do_fight(FIGHTS_DASP5)) {
-					ds_writeb((DASPOTA_FIGHTFLAGS + 5), 1);
+					gs_daspota_fightflags[5] = 1;
 				}
 			}
 		}
 
 		if (g_dialog_informer == 5) {
 
-			if ((state == 4 || state == 5) && !ds_readb((DASPOTA_FIGHTFLAGS + 6))) {
+			if ((state == 4 || state == 5) && !gs_daspota_fightflags[6]) {
 
 				if (!do_fight(FIGHTS_DASP6A)) {
-					ds_writeb((DASPOTA_FIGHTFLAGS + 6), 1);
+					gs_daspota_fightflags[6] = 1;
 				}
 			}
 		}
 
 		if (g_dialog_informer == 6) {
 
-			if ((state == 1 || state == 4 || state == 7) && !ds_readb((DASPOTA_FIGHTFLAGS + 7))) {
+			if ((state == 1 || state == 4 || state == 7) && !gs_daspota_fightflags[7]) {
 
 				if (!do_fight(FIGHTS_DASP7)) {
-					ds_writeb((DASPOTA_FIGHTFLAGS + 7), 1);
+					gs_daspota_fightflags[7] = 1;
 				}
 			}
 		}
@@ -630,70 +630,70 @@ void talk_switch(void)
 
 		if (g_dialog_informer == 0) {
 
-			if (state == 4 && !ds_readb((DASPOTA_FIGHTFLAGS + 8))) {
+			if (state == 4 && !gs_daspota_fightflags[8]) {
 
 				if (!do_fight(FIGHTS_DASP8)) {
-					ds_writeb((DASPOTA_FIGHTFLAGS + 8), 1);
+					gs_daspota_fightflags[8] = 1;
 				}
 			}
 		}
 
 		if (g_dialog_informer == 1) {
 
-			if (state == 1 && !ds_readb((DASPOTA_FIGHTFLAGS + 9))) {
+			if (state == 1 && !gs_daspota_fightflags[9]) {
 
 				if (!do_fight(FIGHTS_DASP9)) {
-					ds_writeb((DASPOTA_FIGHTFLAGS + 9), 1);
+					gs_daspota_fightflags[9] = 1;
 				}
 			}
 		}
 
 		if (g_dialog_informer == 2) {
 
-			if (state == 1 && !ds_readb((DASPOTA_FIGHTFLAGS + 10))) {
+			if (state == 1 && !gs_daspota_fightflags[10]) {
 
 				if (!do_fight(FIGHTS_DASP10)) {
-					ds_writeb((DASPOTA_FIGHTFLAGS + 10), 1);
+					gs_daspota_fightflags[10] = 1;
 				}
 			}
 		}
 
 		if (g_dialog_informer == 3) {
 
-			if (state == 4 && !ds_readb((DASPOTA_FIGHTFLAGS + 11))) {
+			if (state == 4 && !gs_daspota_fightflags[11]) {
 
 				if (!do_fight(FIGHTS_DASP11)) {
-					ds_writeb((DASPOTA_FIGHTFLAGS + 11), 1);
+					gs_daspota_fightflags[11] = 1;
 				}
 			}
 		}
 
 		if (g_dialog_informer == 4) {
 
-			if (state == 1 && !ds_readb((DASPOTA_FIGHTFLAGS + 12))) {
+			if (state == 1 && !gs_daspota_fightflags[12]) {
 
 				if (!do_fight(FIGHTS_DASP12A)) {
-					ds_writeb((DASPOTA_FIGHTFLAGS + 12), 1);
+					gs_daspota_fightflags[12] = 1;
 				}
 			}
 		}
 
 		if (g_dialog_informer == 5) {
 
-			if (state == 5 && !ds_readb((DASPOTA_FIGHTFLAGS + 13))) {
+			if (state == 5 && !gs_daspota_fightflags[13]) {
 
 				if (!do_fight(FIGHTS_DASP13)) {
-					ds_writeb((DASPOTA_FIGHTFLAGS + 13), 1);
+					gs_daspota_fightflags[13] = 1;
 				}
 			}
 		}
 
 		if (g_dialog_informer == 6) {
 
-			if (state == 1 && !ds_readb((DASPOTA_FIGHTFLAGS + 14))) {
+			if (state == 1 && !gs_daspota_fightflags[14]) {
 
 				if (!do_fight(FIGHTS_DASP14)) {
-					ds_writeb((DASPOTA_FIGHTFLAGS + 14), 1);
+					gs_daspota_fightflags[14] = 1;
 				}
 			}
 		}
@@ -703,30 +703,30 @@ void talk_switch(void)
 
 		if (g_dialog_informer == 0) {
 
-			if ((state == 4 || state == 6) && !ds_readb((DASPOTA_FIGHTFLAGS + 16))) {
+			if ((state == 4 || state == 6) && !gs_daspota_fightflags[16]) {
 
 				if (!do_fight(FIGHTS_DASP16)) {
-					ds_writeb((DASPOTA_FIGHTFLAGS + 16), 1);
+					gs_daspota_fightflags[16] = 1;
 				}
 			}
 		}
 
 		if (g_dialog_informer == 1) {
 
-			if ((state == 4 || state == 5 || state == 6) && !ds_readb((DASPOTA_FIGHTFLAGS + 17))) {
+			if ((state == 4 || state == 5 || state == 6) && !gs_daspota_fightflags[17]) {
 
 				if (!do_fight(FIGHTS_DASP17)) {
-					ds_writeb((DASPOTA_FIGHTFLAGS + 17), 1);
+					gs_daspota_fightflags[17] = 1;
 				}
 			}
 		}
 
 		if (g_dialog_informer == 2) {
 
-			if ((state == 6 || state == 7) && !ds_readb((DASPOTA_FIGHTFLAGS + 18))) {
+			if ((state == 6 || state == 7) && !gs_daspota_fightflags[18]) {
 
 				if (!do_fight(FIGHTS_DASP18)) {
-					ds_writeb((DASPOTA_FIGHTFLAGS + 18), 1);
+					gs_daspota_fightflags[18] = 1;
 				}
 			}
 		}

@@ -193,7 +193,7 @@ unsigned short get_passage_travel_hours(signed short distance, signed short base
 	/* reminder: WEATHER1 = random([1..6]), WEATHER2 = random([1..7]) */
 	/* adjust speed to between 80.5% (when WEATHER1 = WEATHER2 = 1) and 247% (when WEATHER1 = 6 and WEATHER2 = 7). */
 	/* unit: [100m per hour] */
-	ds_writew(SEA_TRAVEL_PASSAGE_SPEED2, ROUNDED_DIVISION(base_speed * (ds_readw(WEATHER2) + 6) * (ds_readw(WEATHER1) * 15 + 100), 1000L));
+	ds_writew(SEA_TRAVEL_PASSAGE_SPEED2, ROUNDED_DIVISION(base_speed * (gs_weather2 + 6) * (gs_weather1 * 15 + 100), 1000L));
 		/* possible values for SEA_TRAVEL_PASSAGE_SPEED2:
 		 * ## high seas routes ##
 		 * Schnellsegler (base_speed 150): {* 50, 56, 57, 63, 64^^2, 69, 71, 72, 73, 76, 78, 79, 81^^2, 82, 86, 87, 89^^2, 90, 93, 94, 97, 98, 99^^2, 105, 106, 108^^2, 109, 117, 118, 119^^2, 129, 130^^2, 141^^2, 153 *}

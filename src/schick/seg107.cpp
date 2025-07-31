@@ -221,10 +221,10 @@ void item_flimflam(void)
 void item_debtbook(void)
 {
 	/* DEBTBOOK, ID 176 */
-	if (ds_readbs(DEBTBOOK_READ_FLAG) != 0) {
+	if (gs_debtbook_read_flag) {
 
-		/* mark this event */
-		ds_writeb(DEBTBOOK_READ_FLAG, 0);
+		/* mark this event (1 = unread, 0 = read) */
+		gs_debtbook_read_flag = 0;
 
 		/* 15 AP */
 		add_hero_ap_all(15);
@@ -242,11 +242,12 @@ void item_orcdocument(void)
 	/* ORCDOCUMENT, ID 179 */
 
 	/* Languages + 4, or already read successful */
-	if ((test_skill(get_itemuser(), TA_SPRACHEN, 4) > 0) || (ds_readb(ORCDOCUMENT_READ_FLAG) != 0)) {
+	if ((test_skill(get_itemuser(), TA_SPRACHEN, 4) > 0) || gs_orcdocument_read_flag) {
 
-		if (!ds_readbs(ORCDOCUMENT_READ_FLAG)) {
+		if (!gs_orcdocument_read_flag) {
+
 			add_group_ap(20);
-			ds_writeb(ORCDOCUMENT_READ_FLAG, 1);
+			gs_orcdocument_read_flag = 1;
 		}
 
 		GUI_output(get_ttx(644));

@@ -258,13 +258,13 @@
 // ?1
 #define DNG01_KEY_TAKEN                 (0x3319)    /* signed char; {0,1} */
 #define DNG01_CORPSE_LOOTED             (0x331a)    /* signed char; {0,1} */
-#define WEATHER1                        (0x331b)    /* signed short; random(6) */
-#define WEATHER2                        (0x331d)    /* signed short; random(7) */
-#define DASPOTA_FIGHTFLAGS              (0x331f)    /* signed char[19] */
-#define TREASURE_MAPS                   (0x3332)    /* signed char[10] */
-#define DEBTBOOK_READ_FLAG              (0x333c)    /* unsigned char; {0,1} */
-#define ORCDOCUMENT_READ_FLAG           (0x333d)    /* unsigned char; {0,1} */
-#define GARDANIUM_USED_AE               (0x333e)    /* unsigned short */
+//#define WEATHER1                        (0x331b)    /* signed short; random(6) */
+//#define WEATHER2                        (0x331d)    /* signed short; random(7) */
+//#define DASPOTA_FIGHTFLAGS              (0x331f)    /* signed char[19] */
+//#define TREASURE_MAPS                   (0x3332)    /* signed char[10] */
+//#define DEBTBOOK_READ_FLAG              (0x333c)    /* unsigned char; {0,1} */
+//#define ORCDOCUMENT_READ_FLAG           (0x333d)    /* unsigned char; {0,1} */
+//#define GARDANIUM_USED_AE               (0x333e)    /* unsigned short */
 //#define MIN_MAP_PARTS                   (0x3340)    /* signed short; {0} */
 //#define SUBVENTION                      (0x3342)    /* short; {0-4} */
 //#define OTTA_WINDRIDERS                 (0x3344)    /* unsigned short */

@@ -264,7 +264,7 @@ void tevent_135(void)
 								GUI_dialog_na(0, (char*)((char*)(g_dtp2 + 0x400)));
 
 								for (tmp2 = count = 0; tmp2 < 9; tmp2++) {
-									if (ds_readb(TREASURE_MAPS + tmp2) != 0) {
+									if (gs_treasure_maps[tmp2] != 0) {
 										count++;
 									}
 								}
@@ -562,7 +562,7 @@ void tevent_144(void)
 		if ((gs_year == 17) && (gs_month == 10) && (gs_day_of_month >= 10)) {
 			right_time_flag = 1;
 		} else {
-			if (ds_readb(ORCDOCUMENT_READ_FLAG) != 0 && GUI_bool(get_tx2(46))) {
+			if (gs_orcdocument_read_flag && GUI_bool(get_tx2(46))) {
 			/* the heroes are too early and they know about it since they have read the orc document.
 			 * they decided to wait...forward time  */
 

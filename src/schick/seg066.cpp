@@ -125,11 +125,11 @@ signed short enter_location_daspota(void)
 
 				GUI_print_loc_line(get_tx(host_readw(locations_list_ptr + LOCATION_LOCDATA)));
 
-				if (!ds_readb(DASPOTA_FIGHTFLAGS + host_readw(locations_list_ptr + LOCATION_LOCDATA))) {
+				if (!gs_daspota_fightflags[host_readw(locations_list_ptr + LOCATION_LOCDATA)]) {
 
 					do_talk(host_readbs(locations_list_ptr + LOCATION_LOCTYPE), host_readb(locations_list_ptr + LOCATION_TYPEINDEX) - 1);
 
-					if (!ds_readb(DASPOTA_FIGHTFLAGS + host_readw(locations_list_ptr + LOCATION_LOCDATA))) {
+					if (!gs_daspota_fightflags[host_readw(locations_list_ptr + LOCATION_LOCDATA)]) {
 						leave_location();
 						return 1;
 					}

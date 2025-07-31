@@ -2467,11 +2467,11 @@ void do_timers(void)
 		passages_recalc();
 
 		/* roll out the weather, used for passages */
-		ds_writew(WEATHER1, random_schick(6));
-		ds_writew(WEATHER2, random_schick(7));
+		gs_weather1 = random_schick(6);
+		gs_weather2 = random_schick(7);
 #ifndef __BORLANDC__
-		i = (ds_readw(WEATHER2) + 6) * (ds_readw(WEATHER1) * 15 + 100); /* between 805 and 2470 */
-		D1_INFO_VERBOSE("WEATHER1=%d, WEATHER2=%d -> ",ds_readw(WEATHER1), ds_readw(WEATHER2));
+		i = (gs_weather2 + 6) * (gs_weather1 * 15 + 100); /* between 805 and 2470 */
+		D1_INFO_VERBOSE("WEATHER1=%d, WEATHER2=%d -> ",gs_weather1, gs_weather2);
 		D1_INFO("Heutige Wetter-Anpassung der Schiffs-Geschwindigkeiten: %d,%d%%.\n",i/10,i%10);
 #endif
 

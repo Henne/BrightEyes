@@ -70,8 +70,7 @@ void spell_gardanium(void)
 	signed short answer;
 
 	/* prepare a question */
-	sprintf((char*)g_dtp2,
-		get_tx(2), (char*)(get_spelluser() + HERO_NAME2));
+	sprintf((char*)g_dtp2, get_tx(2), (char*)(get_spelluser() + HERO_NAME2));
 
 	/* ask and get the answer */
 	answer = GUI_input((char*)g_dtp2, 2);
@@ -85,16 +84,15 @@ void spell_gardanium(void)
 			/* enough AE */
 
 			/* TODO: this adds the AE to a variable no one reads */
-			add_ds_ws(GARDANIUM_USED_AE, answer);
+
+			gs_gardanium_used_ae += answer;
 			/* set AE costs */
 			ds_writew(SPELL_SPECIAL_AECOST, answer);
 			/* prepare the message */
-			strcpy((char*)g_dtp2,
-				get_tx(7));
+			strcpy((char*)g_dtp2, get_tx(7));
 		} else {
 			/* not enough AE */
-			sprintf((char*)g_dtp2,
-				get_ttx(607), (char*)get_spelluser() + HERO_NAME2);
+			sprintf((char*)g_dtp2, get_ttx(607), (char*)get_spelluser() + HERO_NAME2);
 			/* set AE costs */
 			ds_writew(SPELL_SPECIAL_AECOST, 0);
 		}

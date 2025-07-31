@@ -90,6 +90,14 @@ extern Bit8s  gs_special_day;			//ds:0x2dc3; seg002, seg030
 extern Bit32s gs_ingame_timers[26];		//ds:0x2dc4; seg002, seg042-seg103
 extern Bit32s gs_gods_estimation[15];		//ds:0x314e; seg003-seg114
 extern Bit8s  gs_tav_cheated_flags[88];		//ds:0x318a; seg059, seg103
+
+extern Bit16u gs_weather1;			//ds:0x331b; seg002, seg064
+extern Bit16u gs_weather2;			//ds:0x331d; seg002, seg064
+extern Bit8u  gs_daspota_fightflags[19];	//ds:0x331f; seg030, seg066
+extern Bit8s  gs_treasure_maps[10];		//ds:0x3332; seg025-seg116
+extern Bit8s  gs_debtbook_read_flag;		//ds:0x333c; seg107
+extern Bit8s  gs_orcdocument_read_flag;		//ds:0x333d; seg107, seg116
+extern Bit16s gs_gardanium_used_ae;		//ds:0x333e; seg099;
 extern Bit16s gs_min_map_parts;			//ds:0x3340; seg069
 extern Bit16s gs_subvention;			//ds:0x3342; seg068
 extern Bit16s gs_otta_windriders;		//ds:0x3344; seg069

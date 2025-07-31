@@ -254,7 +254,7 @@ void show_treasure_map(void)
 
 	/* count the collected treasure map parts */
 	for (l_si = count = 0; l_si < 9; l_si++) {
-		if (ds_readbs(TREASURE_MAPS + l_si) != 0) {
+		if (gs_treasure_maps[l_si]) {
 			count++;
 		}
 	}
@@ -288,8 +288,7 @@ void show_treasure_map(void)
 
 		for (l_si = 0; l_si < 10; l_si++) {
 
-			if (ds_readbs(TREASURE_MAPS + l_si) != 0 &&
-				(l_si != 9 || (l_si == 9 && !ds_readbs(TREASURE_MAPS + 6))))
+			if (gs_treasure_maps[l_si] && (l_si != 9 || (l_si == 9 && !gs_treasure_maps[6])))
 			{
 				/* decompress picture */
 				nvf.dst = (Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, 30000));

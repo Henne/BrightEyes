@@ -36,7 +36,7 @@ void THO_hetmann(void)
 
 		/* count already collected parts of the map */
 		for (i = map_parts = 0; i < 9; i++) {
-			if (ds_readb(TREASURE_MAPS + i) != 0) {
+			if (gs_treasure_maps[i] != 0) {
 				map_parts++;
 			}
 		}

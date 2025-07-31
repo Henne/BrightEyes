@@ -154,7 +154,7 @@ signed short DNG07_handler(void)
 			DNG_inc_level();
 		}
 
-	} else if (target_pos == DNG_POS(1,12,3) && target_pos != ds_readws(DNG_HANDLED_POS) && ds_readb((TREASURE_MAPS + 1)) != 1)
+	} else if (target_pos == DNG_POS(1,12,3) && target_pos != ds_readws(DNG_HANDLED_POS) && gs_treasure_maps[1] != 1)
 	{
 		GUI_output(get_tx(1));
 
@@ -219,12 +219,12 @@ signed short DNG07_handler(void)
 	{
 		if (!do_fight(FIGHTS_F100_13))
 		{
-			if (ds_readb((TREASURE_MAPS + 1)) == 2)
+			if (gs_treasure_maps[1] == 2)
 			{
 				ds_writeb(TMAP_DOUBLE2, 1);
 			}
 
-			ds_writeb((TREASURE_MAPS + 1), 1);
+			gs_treasure_maps[1] = 1;
 
 			add_hero_ap_all(10L);
 
