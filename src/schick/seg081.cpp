@@ -49,7 +49,7 @@ signed short DNG06_handler(void)
 
 	target_pos = DNG_POS(ds_readbs(DUNGEON_LEVEL), ds_readws(X_TARGET), ds_readws(Y_TARGET));
 
-	if (target_pos == DNG_POS(0,14,5) && target_pos != ds_readws(DNG_HANDLED_POS) && !ds_readb(DNG06_BOOK_FLAG))
+	if (target_pos == DNG_POS(0,14,5) && target_pos != gs_dng_handled_pos && !ds_readb(DNG06_BOOK_FLAG))
 	{
 		if (GUI_bool(get_tx(1)) && get_item(ITEM_BOOK_2, 1, 1))
 		{
@@ -58,11 +58,11 @@ signed short DNG06_handler(void)
 
 	}
 
-	if (target_pos == DNG_POS(0,9,9) && target_pos != ds_readws(DNG_HANDLED_POS))
+	if (target_pos == DNG_POS(0,9,9) && target_pos != gs_dng_handled_pos)
 	{
 		GUI_output(get_tx(35));
 
-	} else if (target_pos == DNG_POS(0,4,13) && target_pos != ds_readws(DNG_HANDLED_POS))
+	} else if (target_pos == DNG_POS(0,4,13) && target_pos != gs_dng_handled_pos)
 	{
 		if (GUI_bool(get_tx(2)))
 		{
@@ -89,7 +89,7 @@ signed short DNG06_handler(void)
 			GUI_output((char*)g_dtp2);
 		}
 
-	} else if (target_pos == DNG_POS(0,5,3) && target_pos != ds_readws(DNG_HANDLED_POS) && !ds_readb(DNG06_PROVIANT_FLAG))
+	} else if (target_pos == DNG_POS(0,5,3) && target_pos != gs_dng_handled_pos && !ds_readb(DNG06_PROVIANT_FLAG))
 	{
 		if (GUI_bool(get_tx(5)))
 		{
@@ -97,7 +97,7 @@ signed short DNG06_handler(void)
 			ds_writeb(DNG06_PROVIANT_FLAG, 1);
 		}
 
-	} else if (target_pos == DNG_POS(0,2,1) && target_pos != ds_readws(DNG_HANDLED_POS))
+	} else if (target_pos == DNG_POS(0,2,1) && target_pos != gs_dng_handled_pos)
 	{
 		hero = get_hero(0);
 		for (i = l3 = 0; i < 2; i++, hero += SIZEOF_HERO)
@@ -131,7 +131,7 @@ signed short DNG06_handler(void)
 			sub_hero_le(hero_second, random_schick(6));
 		}
 
-	} else if (target_pos == DNG_POS(0,9,7) && target_pos != ds_readws(DNG_HANDLED_POS) && !ds_readb(DNG06_PITDOOR_FLAG))
+	} else if (target_pos == DNG_POS(0,9,7) && target_pos != gs_dng_handled_pos && !ds_readb(DNG06_PITDOOR_FLAG))
 	{
 		hero = get_hero(0);
 		for (i = l3 = 0; i <= 6; i++, hero += SIZEOF_HERO)
@@ -189,7 +189,7 @@ signed short DNG06_handler(void)
 			}
 		}
 
-	} else if (target_pos == DNG_POS(0,8,7) && target_pos != ds_readws(DNG_HANDLED_POS) && ds_readb(DNG06_GOLDKEY_FLAG) != 2)
+	} else if (target_pos == DNG_POS(0,8,7) && target_pos != gs_dng_handled_pos && ds_readb(DNG06_GOLDKEY_FLAG) != 2)
 	{
 		hero = get_hero(0);
 		for (i = l3 = 0; i <= 6; i++, hero += SIZEOF_HERO)
@@ -220,7 +220,7 @@ signed short DNG06_handler(void)
 			}
 		}
 
-	} else if (target_pos == DNG_POS(0,11,6) && target_pos != ds_readws(DNG_HANDLED_POS) && ds_readb(DNG06_COUNTDOWN_FLAG) != 0)
+	} else if (target_pos == DNG_POS(0,11,6) && target_pos != gs_dng_handled_pos && ds_readb(DNG06_COUNTDOWN_FLAG) != 0)
 	{
 		if (div16(host_readb(amap_ptr + MAP_POS(11,1))) != DNG_TILE_CLOSED_DOOR ||
 			div16(host_readb(amap_ptr + MAP_POS(2,6))) != DNG_TILE_CLOSED_DOOR ||
@@ -241,7 +241,7 @@ signed short DNG06_handler(void)
 			sub_hero_le(hero, dice_roll(l3, 6, 0));
 		}
 
-	} else if (target_pos == DNG_POS(1,13,5) && target_pos != ds_readws(DNG_HANDLED_POS))
+	} else if (target_pos == DNG_POS(1,13,5) && target_pos != gs_dng_handled_pos)
 	{
 		do {
 			i = GUI_radio(get_tx(14), 3,
@@ -288,7 +288,7 @@ signed short DNG06_handler(void)
 			}
 		}
 
-	} else if (target_pos == DNG_POS(1,1,2) && target_pos != ds_readws(DNG_HANDLED_POS))
+	} else if (target_pos == DNG_POS(1,1,2) && target_pos != gs_dng_handled_pos)
 	{
 		/* Hole in the wall: want to reach into it? want to move the lever? */
 		if (GUI_bool(get_tx(21)) && GUI_bool(get_tx(22)))
@@ -332,7 +332,7 @@ signed short DNG06_handler(void)
 			}
 		}
 
-	} else if (target_pos == DNG_POS(1,3,6) && target_pos != ds_readws(DNG_HANDLED_POS))
+	} else if (target_pos == DNG_POS(1,3,6) && target_pos != gs_dng_handled_pos)
 	{
 		/* Hole in the wall: want to reach into it? want to move the lever? */
 		if (GUI_bool(get_tx(21)) && GUI_bool(get_tx(22)))
@@ -376,7 +376,7 @@ signed short DNG06_handler(void)
 			}
 		}
 
-	} else if (target_pos == DNG_POS(1,5,8) && target_pos != ds_readws(DNG_HANDLED_POS) && !ds_readb(DNG06_LEVER_FLAG))
+	} else if (target_pos == DNG_POS(1,5,8) && target_pos != gs_dng_handled_pos && !ds_readb(DNG06_LEVER_FLAG))
 	{
 		hero = (Bit8u*)get_first_hero_available_in_group();
 
@@ -407,7 +407,7 @@ signed short DNG06_handler(void)
 			sub_hero_le(hero, dice_roll(3, 6, 0));
 		}
 
-	} else if (target_pos == DNG_POS(1,7,13) && target_pos != ds_readws(DNG_HANDLED_POS) && !ds_readb(DNG06_FIGHT19_FLAG))
+	} else if (target_pos == DNG_POS(1,7,13) && target_pos != gs_dng_handled_pos && !ds_readb(DNG06_FIGHT19_FLAG))
 	{
 		if (GUI_bool(get_tx(28)))
 		{
@@ -424,7 +424,7 @@ signed short DNG06_handler(void)
 			sub_hero_le(hero, 2);
 		}
 
-	} else if (target_pos == DNG_POS(1,6,11) && target_pos != ds_readws(DNG_HANDLED_POS) && !ds_readb(DNG06_DASPTREAS_FOUND))
+	} else if (target_pos == DNG_POS(1,6,11) && target_pos != gs_dng_handled_pos && !ds_readb(DNG06_DASPTREAS_FOUND))
 	{
 		/* treasure of Daspota found */
 		GUI_output(get_tx(36));
@@ -439,7 +439,7 @@ signed short DNG06_handler(void)
 
 		add_hero_ap_all(30);
 
-	} else if (target_pos == DNG_POS(1,8,14) && target_pos != ds_readws(DNG_HANDLED_POS))
+	} else if (target_pos == DNG_POS(1,8,14) && target_pos != gs_dng_handled_pos)
 	{
 		ds_writew(FIG_FLEE_POSITION, ds_writew((FIG_FLEE_POSITION + 6), DNG_POS_DIR(1,6,14,WEST)));
 		ds_writew((FIG_FLEE_POSITION + 4), ds_writew((FIG_FLEE_POSITION + 2), DNG_POS_DIR(1,13,13,NORTH)));
@@ -449,7 +449,7 @@ signed short DNG06_handler(void)
 			ds_writeb(DNG06_FIGHT19_FLAG, 1);
 		}
 
-	} else if (target_pos == DNG_POS(0,13,15) && target_pos != ds_readws(DNG_HANDLED_POS))
+	} else if (target_pos == DNG_POS(0,13,15) && target_pos != gs_dng_handled_pos)
 	{
 		leave_dungeon();
 
@@ -471,7 +471,7 @@ signed short DNG06_handler(void)
 	}
 
 	g_textbox_width = tw_bak;
-	ds_writew(DNG_HANDLED_POS, target_pos);
+	gs_dng_handled_pos = target_pos;
 
 	return 0;
 }

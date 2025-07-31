@@ -91,6 +91,15 @@ extern Bit32s gs_ingame_timers[26];		//ds:0x2dc4; seg002, seg042-seg103
 extern Bit32s gs_gods_estimation[15];		//ds:0x314e; seg003-seg114
 extern Bit8s  gs_tav_cheated_flags[88];		//ds:0x318a; seg059, seg103
 
+extern Bit16s gs_dng_handled_pos;		//ds:0x330e; seg077-seg091
+extern Bit16s gs_deathtrap_steps;		//ds:0x3310; seg075, seg077, seg079
+extern Bit16s gs_deathtrap;			//ds:0x3312; seg025, seg075, seg077, seg079
+extern Bit8s  gs_dng01_amulet_taken;		//ds:0x3314; seg077
+extern Bit8s  gs_dng01_sabre_taken;		//ds:0x3315; seg077
+extern Bit8s  gs_dng01_crossbow_taken;		//ds:0x3316; seg077
+extern Bit8s  gs_dng01_ardora_freed;		//ds:0x3317; seg077, seg095
+extern Bit8s  gs_dng01_key_taken;		//ds:0x3319; seg077
+extern Bit8s  gs_dng01_corpse_looted;		//ds:0x331a; seg077
 extern Bit16u gs_weather1;			//ds:0x331b; seg002, seg064
 extern Bit16u gs_weather2;			//ds:0x331d; seg002, seg064
 extern Bit8u  gs_daspota_fightflags[19];	//ds:0x331f; seg030, seg066

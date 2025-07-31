@@ -772,7 +772,7 @@ void leave_dungeon(void)
 	set_palette(g_renderbuf_ptr, 0 , 0x20);
 
 	/* disable the deathtrap */
-	ds_writew(DEATHTRAP, 0);
+	gs_deathtrap = 0;
 }
 
 /**

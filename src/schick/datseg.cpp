@@ -2002,16 +2002,16 @@ struct{short unkn1; long unkn2;} g_smith_repairitems[50] = {
 	{ 0x0000, 0x00000000 },
 	{ 0x0000, 0x00000000 }
 }; // ds:0x31e2
-unsigned short g_dng_handled_pos = 0; // ds:0x330e
-signed short g_deathtrap_steps = 0; // ds:0x3310 // for activated deathtrap: number of remaining steps in dungeon
-signed short g_deathtrap = 0; // ds:0x3312 // 0: no death trap activated. 1: death trap on Totenschiff activated. 2: death trap in Spinnenhoehle activated
-signed char g_dng01_amulet_taken = 0; // ds:0x3314
-signed char g_dng01_sabre_taken = 0; // ds:0x3315
-signed char g_dng01_crossbow_taken = 0; // ds:0x3316
-signed char g_dng01_ardora_freed = 0; // ds:0x3317
+Bit16s gs_dng_handled_pos = 0; // ds:0x330e
+Bit16s gs_deathtrap_steps = 0; // ds:0x3310 // for activated deathtrap: number of remaining steps in dungeon
+Bit16s gs_deathtrap = 0; // ds:0x3312 // 0: no death trap activated. 1: death trap on Totenschiff activated. 2: death trap in Spinnenhoehle activated
+Bit8s  gs_dng01_amulet_taken = 0; // ds:0x3314
+Bit8s  gs_dng01_sabre_taken = 0; // ds:0x3315
+Bit8s  gs_dng01_crossbow_taken = 0; // ds:0x3316
+Bit8s  gs_dng01_ardora_freed = 0; // ds:0x3317
 unsigned char g_unkn_013[1] = { 0x00 }; // ds:0x3318
-signed char g_dng01_key_taken = 0; // ds:0x3319
-signed char g_dng01_corpse_looted = 0; // ds:0x331a
+Bit8s  gs_dng01_key_taken = 0; // ds:0x3319
+Bit8s  gs_dng01_corpse_looted = 0; // ds:0x331a
 Bit16u gs_weather1 = 0; // ds:0x331b, random(6)
 Bit16u gs_weather2 = 0; // ds:0x331d, random(7)
 Bit8u  gs_daspota_fightflags[19] = {0}; // ds:0x331f

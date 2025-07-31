@@ -53,7 +53,7 @@ signed short DNG12_handler(void)
 		if (ds_readbs(DNG12_TUNNEL4) > 0) dec_ds_bs(DNG12_TUNNEL4);
 	}
 
-	if (target_pos == DNG_POS(1,6,8) && target_pos != ds_readws(DNG_HANDLED_POS) && ds_readbs(DIRECTION) == EAST && ds_readbs(DNG12_WATERTRAP_WATER_RUNS) != 0) {
+	if (target_pos == DNG_POS(1,6,8) && target_pos != gs_dng_handled_pos && ds_readbs(DIRECTION) == EAST && ds_readbs(DNG12_WATERTRAP_WATER_RUNS) != 0) {
 		/* secret door from water trap */
 #if !defined(__BORLANDC__)
 		D1_INFO("Geheimtuere\n");
@@ -152,19 +152,19 @@ signed short DNG12_handler(void)
 		}
 	}
 
-	if (target_pos == DNG_POS(0,13,9) && target_pos != ds_readws(DNG_HANDLED_POS) && !ds_readbs(DNG12_TUNNEL1)) {
+	if (target_pos == DNG_POS(0,13,9) && target_pos != gs_dng_handled_pos && !ds_readbs(DNG12_TUNNEL1)) {
 		/* 1. tunnel block */
 		DNG_clear_corridor(p_datseg + DNG12_TUNNEL1);
-	} else if (target_pos == DNG_POS(0,14,8) && target_pos != ds_readws(DNG_HANDLED_POS) && !ds_readbs(DNG12_TUNNEL2)) {
+	} else if (target_pos == DNG_POS(0,14,8) && target_pos != gs_dng_handled_pos && !ds_readbs(DNG12_TUNNEL2)) {
 		/* 2. tunnel block */
 		DNG_clear_corridor(p_datseg + DNG12_TUNNEL2);
-	} else if (target_pos == DNG_POS(0,13,7) && target_pos != ds_readws(DNG_HANDLED_POS) && !ds_readbs(DNG12_TUNNEL3)) {
+	} else if (target_pos == DNG_POS(0,13,7) && target_pos != gs_dng_handled_pos && !ds_readbs(DNG12_TUNNEL3)) {
 		/* 3. tunnel block */
 		DNG_clear_corridor(p_datseg + DNG12_TUNNEL3);
-	} else if (target_pos == DNG_POS(0,14,5) && target_pos != ds_readws(DNG_HANDLED_POS) && !ds_readbs(DNG12_TUNNEL4)) {
+	} else if (target_pos == DNG_POS(0,14,5) && target_pos != gs_dng_handled_pos && !ds_readbs(DNG12_TUNNEL4)) {
 		/* 4. tunnel block */
 		DNG_clear_corridor(p_datseg + DNG12_TUNNEL4);
-	} else if (target_pos == DNG_POS(0,8,4) && target_pos != ds_readws(DNG_HANDLED_POS)) {
+	} else if (target_pos == DNG_POS(0,8,4) && target_pos != gs_dng_handled_pos) {
 
 		/* upper Ingerimm idol */
 		GUI_output(get_tx(3));
@@ -210,21 +210,21 @@ signed short DNG12_handler(void)
 #endif
 			}
 		}
-	} else if (target_pos == DNG_POS(0,5,3) && target_pos != ds_readws(DNG_HANDLED_POS)) {
+	} else if (target_pos == DNG_POS(0,5,3) && target_pos != gs_dng_handled_pos) {
 		/* trap door */
 		GUI_output(get_tx(11));
 		DNG_fallpit(6);
-	} else if (target_pos == DNG_POS(0,4,6) && target_pos != ds_readws(DNG_HANDLED_POS)) {
+	} else if (target_pos == DNG_POS(0,4,6) && target_pos != gs_dng_handled_pos) {
 		/* trap door */
 		GUI_output(get_tx(11));
 		ds_writews(X_TARGET, 1);
 		ds_writews(Y_TARGET, 3);
 		DNG_inc_level();
-	} else if (target_pos == DNG_POS(0,6,13) && target_pos != ds_readws(DNG_HANDLED_POS)) {
+	} else if (target_pos == DNG_POS(0,6,13) && target_pos != gs_dng_handled_pos) {
 		/* bolt trap */
 		print_msg_with_first_hero(get_tx(13));
 		sub_hero_le(hero, random_schick(6));
-	} else if (target_pos == DNG_POS(1,2,14) && target_pos != ds_readws(DNG_HANDLED_POS) && !ds_readb(DNG12_INGERIMM_HINT))
+	} else if (target_pos == DNG_POS(1,2,14) && target_pos != gs_dng_handled_pos && !ds_readb(DNG12_INGERIMM_HINT))
 	{
 		/* lower Ingerimm idol */
 #if !defined(__BORLANDC__)
@@ -243,7 +243,7 @@ signed short DNG12_handler(void)
 			ds_writeb(DNG12_INGERIMM_SACRIFICE, 0);
 			GUI_output(get_tx(15));
 		}
-	} else if (target_pos == DNG_POS(1,3,10) && target_pos != ds_readws(DNG_HANDLED_POS)) {
+	} else if (target_pos == DNG_POS(1,3,10) && target_pos != gs_dng_handled_pos) {
 #if !defined(__BORLANDC__)
 		D1_INFO("In Wasserfalle gefangen\n");
 #endif
@@ -251,7 +251,7 @@ signed short DNG12_handler(void)
 			and_ptr_bs(ptr + MAP_POS(3,11), 0xf);
 			or_ptr_bs(ptr + MAP_POS(3,11), DNG_TILE_CLOSED_DOOR << 4);
 		}
-	} else if (target_pos == DNG_POS(1,3,7) && target_pos != ds_readws(DNG_HANDLED_POS)) {
+	} else if (target_pos == DNG_POS(1,3,7) && target_pos != gs_dng_handled_pos) {
 #if !defined(__BORLANDC__)
 		D1_INFO("In Wasserfalle gefangen\n");
 #endif
@@ -259,13 +259,13 @@ signed short DNG12_handler(void)
 			and_ptr_bs(ptr + MAP_POS(3,6), 0xf);
 			or_ptr_bs(ptr + MAP_POS(3,6), DNG_TILE_CLOSED_DOOR << 4);
 		}
-	} else if (target_pos == DNG_POS(1,1,8) && target_pos != ds_readws(DNG_HANDLED_POS) && ds_readbs(DIRECTION) == WEST) {
+	} else if (target_pos == DNG_POS(1,1,8) && target_pos != gs_dng_handled_pos && ds_readbs(DIRECTION) == WEST) {
 		/* water source */
 
 		if (GUI_bool(get_tx(16))) {
 			GUI_output(get_tx(17));
 		}
-	} else if (target_pos == DNG_POS(1,3,2) && target_pos != ds_readws(DNG_HANDLED_POS) && ds_readbs(DIRECTION) == SOUTH) {
+	} else if (target_pos == DNG_POS(1,3,2) && target_pos != gs_dng_handled_pos && ds_readbs(DIRECTION) == SOUTH) {
 #if !defined(__BORLANDC__)
 		D1_INFO("Rueckwaerts gehen\n");
 #endif
@@ -274,7 +274,7 @@ signed short DNG12_handler(void)
 		ds_writew(Y_TARGET, 3);
 		ds_writeb(DIRECTION, WEST);
 		DNG_update_pos();
-	} else if (target_pos == DNG_POS(1,2,3) && target_pos != ds_readws(DNG_HANDLED_POS) && ds_readbs(DIRECTION) == EAST) {
+	} else if (target_pos == DNG_POS(1,2,3) && target_pos != gs_dng_handled_pos && ds_readbs(DIRECTION) == EAST) {
 #if !defined(__BORLANDC__)
 		D1_INFO("Rueckwaerts gehen\n");
 #endif
@@ -283,7 +283,7 @@ signed short DNG12_handler(void)
 		ds_writew(Y_TARGET, 3);
 		ds_writeb(DIRECTION, EAST);
 		DNG_update_pos();
-	} else if (target_pos == DNG_POS(1,4,3) && target_pos != ds_readws(DNG_HANDLED_POS) && ds_readbs(DIRECTION) == WEST) {
+	} else if (target_pos == DNG_POS(1,4,3) && target_pos != gs_dng_handled_pos && ds_readbs(DIRECTION) == WEST) {
 #if !defined(__BORLANDC__)
 		D1_INFO("Rueckwaerts gehen\n");
 #endif
@@ -292,7 +292,7 @@ signed short DNG12_handler(void)
 		ds_writew(Y_TARGET, 1);
 		ds_writeb(DIRECTION, NORTH);
 		DNG_update_pos();
-	} else if (target_pos == DNG_POS(1,11,6) && target_pos != ds_readws(DNG_HANDLED_POS)) {
+	} else if (target_pos == DNG_POS(1,11,6) && target_pos != gs_dng_handled_pos) {
 #if !defined(__BORLANDC__)
 		D1_INFO("Illusionswand und Grube\n");
 #endif
@@ -439,7 +439,7 @@ signed short DNG12_handler(void)
 			ds_writew(X_TARGET, ds_readw(X_TARGET_BAK));
 			ds_writew(Y_TARGET, ds_readw(Y_TARGET_BAK));
 		}
-	} else if (target_pos == DNG_POS(1,14,3) && target_pos != ds_readws(DNG_HANDLED_POS) && ds_readb(DNG12_SPEARTRAP_ACTIVE) != 0) {
+	} else if (target_pos == DNG_POS(1,14,3) && target_pos != gs_dng_handled_pos && ds_readb(DNG12_SPEARTRAP_ACTIVE) != 0) {
 		/* spear trap */
 
 		if (test_skill(hero, TA_SINNESSCHAERFE, 2) > 0) {
@@ -469,7 +469,7 @@ signed short DNG12_handler(void)
 			GUI_output(get_tx(27));
 			sub_group_le(dice_roll(3, 6, 0));
 		}
-	} else if (target_pos == DNG_POS(0,13,15) && target_pos != ds_readws(DNG_HANDLED_POS)) {
+	} else if (target_pos == DNG_POS(0,13,15) && target_pos != gs_dng_handled_pos) {
 		/* exit mine */
 		leave_dungeon();
 		ds_writew(X_TARGET, 1);
@@ -478,7 +478,7 @@ signed short DNG12_handler(void)
 	}
 
 	g_textbox_width = tw_bak;
-	ds_writews(DNG_HANDLED_POS, target_pos);
+	gs_dng_handled_pos = target_pos;
 
 	return 0;
 }

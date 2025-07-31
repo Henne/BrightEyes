@@ -56,7 +56,7 @@ signed short DNG13_handler(void)
 		sub_hero_le(hero, 2);
 	}
 
-	if (pos == DNG_POS(0,9,13) && pos != ds_readws(DNG_HANDLED_POS) && !ds_readb(DNG13_LANTERN_FLAG))
+	if (pos == DNG_POS(0,9,13) && pos != gs_dng_handled_pos && !ds_readb(DNG13_LANTERN_FLAG))
 	{
 		if (GUI_bool(get_tx(1)))
 		{
@@ -66,71 +66,71 @@ signed short DNG13_handler(void)
 		}
 
 	} else if ((pos == DNG_POS(0,1,12) || pos == DNG_POS(0,14,6) || pos == DNG_POS(0,14,13) || pos == DNG_POS(0,3,1)) &&
-			pos != ds_readws(DNG_HANDLED_POS))
+			pos != gs_dng_handled_pos)
 	{
 		GUI_output(get_tx(2));
 
-	} else if (pos == DNG_POS(0,2,13) && pos != ds_readws(DNG_HANDLED_POS))
+	} else if (pos == DNG_POS(0,2,13) && pos != gs_dng_handled_pos)
 	{
 		GUI_dialog_na(60, get_tx(3));
 
-	} else if (pos == DNG_POS(0,3,12) && pos != ds_readws(DNG_HANDLED_POS))
+	} else if (pos == DNG_POS(0,3,12) && pos != gs_dng_handled_pos)
 	{
 		DNG13_unblock_passage(get_tx(4), p_datseg + DNG13_PASSAGE1_FLAG);
 
 	} else if (pos == DNG_POS(0,4,9) &&
-			 (pos != ds_readws(DNG_HANDLED_POS) || ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK)) &&
+			 (pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK)) &&
 			ds_readbs(DIRECTION) == WEST)
 	{
 		GUI_output(get_tx(6));
 		ds_writeb(DIRECTION_BAK, ds_readbs(DIRECTION));
 
 	} else if (pos == DNG_POS(0,10,2) &&
-			 (pos != ds_readws(DNG_HANDLED_POS) || ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK)) &&
+			 (pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK)) &&
 			ds_readbs(DIRECTION) == EAST)
 	{
 		GUI_output(get_tx(6));
 		ds_writeb(DIRECTION_BAK, ds_readbs(DIRECTION));
 
-	} else if (pos == DNG_POS(0,5,9) && pos != ds_readws(DNG_HANDLED_POS))
+	} else if (pos == DNG_POS(0,5,9) && pos != gs_dng_handled_pos)
 	{
 		DNG13_unblock_passage(get_tx(7), p_datseg + DNG13_PASSAGE2_FLAG);
 
-	} else if (pos == DNG_POS(0,2,9) && pos != ds_readws(DNG_HANDLED_POS))
+	} else if (pos == DNG_POS(0,2,9) && pos != gs_dng_handled_pos)
 	{
 		loot_multi_chest(p_datseg + DNG13_CHEST_EQUIPS, get_tx(8));
 
-	} else if (pos == DNG_POS(0,10,6) && pos != ds_readws(DNG_HANDLED_POS))
+	} else if (pos == DNG_POS(0,10,6) && pos != gs_dng_handled_pos)
 	{
 		DNG13_unblock_passage(get_tx(7), p_datseg + DNG13_PASSAGE3_FLAG);
 
-	} else if (pos == DNG_POS(0,11,5) && pos != ds_readws(DNG_HANDLED_POS))
+	} else if (pos == DNG_POS(0,11,5) && pos != gs_dng_handled_pos)
 	{
 		seg092_06b4(0);
 
-	} else if (pos == DNG_POS(0,10,10) && pos != ds_readws(DNG_HANDLED_POS))
+	} else if (pos == DNG_POS(0,10,10) && pos != gs_dng_handled_pos)
 	{
 		GUI_output(get_tx(12));
 
-	} else if (pos == DNG_POS(0,14,9) && pos != ds_readws(DNG_HANDLED_POS))
+	} else if (pos == DNG_POS(0,14,9) && pos != gs_dng_handled_pos)
 	{
 		DNG13_unblock_passage(get_tx(7), p_datseg + DNG13_PASSAGE4_FLAG);
 
-	} else if (pos == DNG_POS(0,7,3) && pos != ds_readws(DNG_HANDLED_POS))
+	} else if (pos == DNG_POS(0,7,3) && pos != gs_dng_handled_pos)
 	{
 		DNG13_unblock_passage(get_tx(7), p_datseg + DNG13_PASSAGE5_FLAG);
 
-	} else if (pos == DNG_POS(0,4,1) && pos != ds_readws(DNG_HANDLED_POS))
+	} else if (pos == DNG_POS(0,4,1) && pos != gs_dng_handled_pos)
 	{
 		seg092_06b4(0);
 
-	} else if (pos == DNG_POS(0,5,5) && pos != ds_readws(DNG_HANDLED_POS))
+	} else if (pos == DNG_POS(0,5,5) && pos != gs_dng_handled_pos)
 	{
 		GUI_output(get_tx(15));
 
 		GUI_output(get_tx(16));
 
-	} else if (pos == DNG_POS(0,4,7) && pos != ds_readws(DNG_HANDLED_POS) && !ds_readb(DNG13_MONEY_FLAG))
+	} else if (pos == DNG_POS(0,4,7) && pos != gs_dng_handled_pos && !ds_readb(DNG13_MONEY_FLAG))
 	{
 		GUI_output(get_tx(17));
 
@@ -141,15 +141,15 @@ signed short DNG13_handler(void)
 		set_party_money(p_money);
 
 	} else if ((pos == DNG_POS(0,7,14) || pos == DNG_POS(0,5,12) || pos == DNG_POS(0,1,8) || pos == DNG_POS(0,4,3) || pos == DNG_POS(0,7,5) || pos == DNG_POS(0,14,1) || pos == DNG_POS(0,8,8)) &&
-			pos != ds_readws(DNG_HANDLED_POS))
+			pos != gs_dng_handled_pos)
 	{
 		DNG13_collapsing_ceiling();
 
-	} else if ((pos == DNG_POS(0,14,12) || pos == DNG_POS(0,7,1)) && pos != ds_readws(DNG_HANDLED_POS))
+	} else if ((pos == DNG_POS(0,14,12) || pos == DNG_POS(0,7,1)) && pos != gs_dng_handled_pos)
 	{
 		DNG13_collapsing_ceiling_easy();
 
-	} else if (pos == DNG_POS(0,7,15) && pos != ds_readws(DNG_HANDLED_POS))
+	} else if (pos == DNG_POS(0,7,15) && pos != gs_dng_handled_pos)
 	{
 		/* leave dungeon */
 		/* AP bonus for each collapsed ceiling tile, 8 AP if no hero lost, 5 AP otherwise */
@@ -163,7 +163,7 @@ signed short DNG13_handler(void)
 	}
 
 	g_textbox_width = tw_bak;
-	ds_writew(DNG_HANDLED_POS, pos);
+	gs_dng_handled_pos = pos;
 
 	return 0;
 }

@@ -248,16 +248,16 @@
 //#define GODS_ESTIMATION                 (0x314e)    /* signed long[15] */
 //#define TAV_CHEATED_FLAGS               (0x318a)    /* unsigned char[88] */
 #define SMITH_REPAIRITEMS               (0x31e2)    /* struct(6)[50]; struct{short unkn1; long unkn2;} */
-#define DNG_HANDLED_POS                 (0x330e)    /* unsigned short */
-#define DEATHTRAP_STEPS                 (0x3310)    /* signed short; for activated deathtrap: number of remaining steps in dungeon */
-#define DEATHTRAP                       (0x3312)    /* signed short; 0: no death trap activated. 1: death trap on Totenschiff activated. 2: death trap in Spinnenhoehle activated. */
-#define DNG01_AMULET_TAKEN              (0x3314)    /* signed char; {0,1} */
-#define DNG01_SABRE_TAKEN               (0x3315)    /* signed char; {0,1} */
-#define DNG01_CROSSBOW_TAKEN            (0x3316)    /* signed char; {0,1} */
-#define DNG01_ARDORA_FREED              (0x3317)    /* signed char; {0,1} */
+//#define DNG_HANDLED_POS                 (0x330e)    /* unsigned short */
+//#define DEATHTRAP_STEPS                 (0x3310)    /* signed short; for activated deathtrap: number of remaining steps in dungeon */
+//#define DEATHTRAP                       (0x3312)    /* signed short; 0: no death trap activated. 1: death trap on Totenschiff activated. 2: death trap in Spinnenhoehle activated. */
+//#define DNG01_AMULET_TAKEN              (0x3314)    /* signed char; {0,1} */
+//#define DNG01_SABRE_TAKEN               (0x3315)    /* signed char; {0,1} */
+//#define DNG01_CROSSBOW_TAKEN            (0x3316)    /* signed char; {0,1} */
+//#define DNG01_ARDORA_FREED              (0x3317)    /* signed char; {0,1} */
 // ?1
-#define DNG01_KEY_TAKEN                 (0x3319)    /* signed char; {0,1} */
-#define DNG01_CORPSE_LOOTED             (0x331a)    /* signed char; {0,1} */
+//#define DNG01_KEY_TAKEN                 (0x3319)    /* signed char; {0,1} */
+//#define DNG01_CORPSE_LOOTED             (0x331a)    /* signed char; {0,1} */
 //#define WEATHER1                        (0x331b)    /* signed short; random(6) */
 //#define WEATHER2                        (0x331d)    /* signed short; random(7) */
 //#define DASPOTA_FIGHTFLAGS              (0x331f)    /* signed char[19] */

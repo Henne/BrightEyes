@@ -45,14 +45,14 @@ signed short DNG03_handler(void)
 	target_pos = DNG_POS(ds_readbs(DUNGEON_LEVEL), ds_readws(X_TARGET), ds_readws(Y_TARGET));
 
 	if ((target_pos == DNG_POS(0,4,7) || target_pos == DNG_POS(0,4,9) || target_pos == DNG_POS(0,6,8)) &&
-		target_pos != ds_readws(DNG_HANDLED_POS))
+		target_pos != gs_dng_handled_pos)
 	{
 		GUI_output(get_tx(1));
 
 		ds_writew(X_TARGET, ds_writew(Y_TARGET, 1));
 		DNG_inc_level();
 
-	} else if (target_pos == DNG_POS(0,3,4) && target_pos != ds_readws(DNG_HANDLED_POS) && ds_readbs(DIRECTION) == NORTH)
+	} else if (target_pos == DNG_POS(0,3,4) && target_pos != gs_dng_handled_pos && ds_readbs(DIRECTION) == NORTH)
 	{
 		GUI_input(get_tx(2), 15);
 
@@ -79,7 +79,7 @@ signed short DNG03_handler(void)
 			}
 		}
 
-	} else if (target_pos == DNG_POS(0,11,6) && target_pos != ds_readws(DNG_HANDLED_POS))
+	} else if (target_pos == DNG_POS(0,11,6) && target_pos != gs_dng_handled_pos)
 	{
 		GUI_output(get_tx(4));
 
@@ -104,7 +104,7 @@ signed short DNG03_handler(void)
 		}
 
 	} else if ((target_pos == DNG_POS(0,6,10) || target_pos == DNG_POS(0,7,9)) &&
-			(target_pos != ds_readws(DNG_HANDLED_POS) || ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK)))
+			(target_pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK)))
 	{
 		if ((target_pos == DNG_POS(0,6,10) && ds_readbs(DIRECTION) == EAST) ||
 			(target_pos == DNG_POS(0,7,9) && ds_readbs(DIRECTION) == SOUTH))
@@ -117,7 +117,7 @@ signed short DNG03_handler(void)
 
 	} else if ((target_pos == DNG_POS(0,10,9) || target_pos == DNG_POS(0,9,14)) &&
 			ds_readb(DNG03_LEVER_TRAP) != 0 &&
-			target_pos != ds_readws(DNG_HANDLED_POS))
+			target_pos != gs_dng_handled_pos)
 	{
 		GUI_output(get_tx(5));
 
@@ -174,7 +174,7 @@ signed short DNG03_handler(void)
 
 	} else if (target_pos == DNG_POS(0,9,11) &&
 			ds_readbs(DIRECTION) == WEST &&
-			target_pos != ds_readws(DNG_HANDLED_POS) &&
+			target_pos != gs_dng_handled_pos &&
 			ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK))
 	{
 		/* LEVER: */
@@ -186,7 +186,7 @@ signed short DNG03_handler(void)
 
 	} else if (target_pos == DNG_POS(1,3,11) &&
 			ds_readbs(DIRECTION) == EAST &&
-			(target_pos != ds_readws(DNG_HANDLED_POS) ||
+			(target_pos != gs_dng_handled_pos ||
 			ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK)))
 	{
 		if (GUI_bool(get_tx(8)))
@@ -196,7 +196,7 @@ signed short DNG03_handler(void)
 		}
 
 	} else if ((target_pos == DNG_POS(1,14,13) || target_pos == DNG_POS(1,13,4) || target_pos == DNG_POS(1,11,2)) &&
-		target_pos != ds_readws(DNG_HANDLED_POS))
+		target_pos != gs_dng_handled_pos)
 	{
 		j = 0;
 
@@ -275,7 +275,7 @@ signed short DNG03_handler(void)
 		}
 
 	} else if ((target_pos == DNG_POS(1,2,10) || target_pos == DNG_POS(1,3,13)) &&
-		target_pos != ds_readws(DNG_HANDLED_POS))
+		target_pos != gs_dng_handled_pos)
 	{
 		ds_writews((FIG_FLEE_POSITION + 0), ds_writews((FIG_FLEE_POSITION + 6), DNG_POS_DIR(1,2,8,NORTH)));
 		ds_writews((FIG_FLEE_POSITION + 2), ds_writews((FIG_FLEE_POSITION + 4), DNG_POS_DIR(1,5,13,NORTH)));
@@ -288,7 +288,7 @@ signed short DNG03_handler(void)
 		do_fight(ds_readb(DNG03_HIGHPRIEST_KILLED) == 14 ? 224 : 225);
 
 	} else if ((target_pos == DNG_POS(1,2,4) || target_pos == DNG_POS(1,5,2)) &&
-		target_pos != ds_readws(DNG_HANDLED_POS))
+		target_pos != gs_dng_handled_pos)
 	{
 		ds_writews((FIG_FLEE_POSITION + 0), ds_writews((FIG_FLEE_POSITION + 2), DNG_POS_DIR(1,7,2,NORTH)));
 		ds_writews((FIG_FLEE_POSITION + 4), ds_writews((FIG_FLEE_POSITION + 6), DNG_POS_DIR(1,2,6,NORTH)));
@@ -301,7 +301,7 @@ signed short DNG03_handler(void)
 		do_fight(ds_readb(DNG03_HIGHPRIEST_KILLED) == 16 ? 222 : 223);
 
 	} else if (target_pos == DNG_POS(1,1,12) &&
-			target_pos != ds_readws(DNG_HANDLED_POS) &&
+			target_pos != gs_dng_handled_pos &&
 			!ds_readb(DNG03_SANCTUM_SMASHED))
 	{
 
@@ -344,17 +344,16 @@ signed short DNG03_handler(void)
 		}
 
 	} else if (target_pos == DNG_POS(1,1,1) &&
-			target_pos != ds_readws(DNG_HANDLED_POS) &&
+			target_pos != gs_dng_handled_pos &&
 			!ds_readb(DNG03_SPIDEREGGS_BURNED))
 	{
 		do {
-			j = GUI_radio(get_tx(19), 2,
-					get_tx(20),
-					get_tx(21));
+			j = GUI_radio(get_tx(19), 2, get_tx(20), get_tx(21));
+
 		} while (j == -1);
 
-		if (j == 1)
-		{
+		if (j == 1) {
+
 			GUI_output(get_tx(22));
 
 			add_hero_ap_all(50);
@@ -362,15 +361,15 @@ signed short DNG03_handler(void)
 			ds_writeb(DNG03_SPIDEREGGS_BURNED, 1);
 
 			/* activate DEATHTRAP #2 with 15 steps */
-			ds_writew(DEATHTRAP_STEPS, 15);
-			ds_writew(DEATHTRAP, 2);
+			gs_deathtrap_steps = 15;
+			gs_deathtrap = 2;
 		}
 
-	} else if (target_pos == DNG_POS(1,10,4) && target_pos != ds_readws(DNG_HANDLED_POS))
+	} else if (target_pos == DNG_POS(1,10,4) && target_pos != gs_dng_handled_pos)
 	{
 		GUI_output(get_tx(24));
 
-	} else if (target_pos == DNG_POS(1,10,8) && target_pos != ds_readws(DNG_HANDLED_POS))
+	} else if (target_pos == DNG_POS(1,10,8) && target_pos != gs_dng_handled_pos)
 	{
 		GUI_output(get_tx(4));
 		ds_writew(X_TARGET, 5);
@@ -392,7 +391,7 @@ signed short DNG03_handler(void)
 			}
 		}
 
-	} else if ((target_pos == DNG_POS(1,2,1) && target_pos != ds_readws(DNG_HANDLED_POS) && GUI_bool(get_tx(23))) ||
+	} else if ((target_pos == DNG_POS(1,2,1) && target_pos != gs_dng_handled_pos && GUI_bool(get_tx(23))) ||
 			target_pos == DNG_POS(0,0,8))
 	{
 		leave_dungeon();
@@ -414,7 +413,7 @@ signed short DNG03_handler(void)
 	}
 
 	g_textbox_width = tw_bak;
-	ds_writew(DNG_HANDLED_POS, target_pos);
+	gs_dng_handled_pos = target_pos;
 
 	return 0;
 }

@@ -63,7 +63,7 @@ unsigned short npc_meetings(unsigned short type_index)
 		if (ds_readb(CURRENT_TOWN) == TOWNS_THORWAL &&
 			ds_readw(CURRENT_TYPEINDEX) == 0x6 &&
 			!ds_readb(NPC_TIMERS + NPC_ARDORA) &&
-			ds_readb(DNG01_ARDORA_FREED) != 0) {
+			gs_dng01_ardora_freed) {
 
 			npc_ardora();
 		} else

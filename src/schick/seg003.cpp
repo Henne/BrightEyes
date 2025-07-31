@@ -190,13 +190,13 @@ void door_frame(signed short no, signed short x, signed short y, signed short fr
  * \param   text        output text
  * \param   flag        to mark this chest as done
  */
-void loot_corpse(Bit8u* chest_ptr, char *text, Bit8u *flag)
+void loot_corpse(Bit8u* chest_ptr, char *text, Bit8s *flag)
 {
 	signed short answer;
 
 	sprintf((char*)g_text_output_buf, (char*)(!host_readbs(flag) ? get_ttx(523) : get_ttx(527)), text);
 
-	if (!host_readbs(flag)) {
+	if (!(*flag)) {
 
 		g_textbox_width = 7;
 
@@ -212,10 +212,10 @@ void loot_corpse(Bit8u* chest_ptr, char *text, Bit8u *flag)
 			((void(*)(Bit8u*))(Bit8u*)host_readd(chest_ptr + 0xb))(chest_ptr);
 #endif
 
-			if (!host_readbs(flag))	{
+			if (!(*flag))	{
 
 				/* mark this corpse as done */
-				host_writeb(flag, 1);
+				*flag = 1;
 				/* Boron - 20 */
 				gs_gods_estimation[GOD_BORON] -= 20L;
 			}
@@ -223,9 +223,9 @@ void loot_corpse(Bit8u* chest_ptr, char *text, Bit8u *flag)
 		} else if (answer == 1) {
 
 			/* Borons Blessing */
-			if (!host_readbs(flag)) {
+			if (!(*flag)) {
 				/* mark this corpse as done */
-				host_writeb(flag, 1);
+				*flag = 1;
 				/* Boron + 20 */
 				gs_gods_estimation[GOD_BORON] += 20L;
 			}

@@ -600,10 +600,10 @@ void DNG_timestep(signed short forward)
 
 	timewarp(MINUTES(1));
 
-	if ((ds_readws(DEATHTRAP) != 0) && !(dec_ds_ws(DEATHTRAP_STEPS))) {
+	if (gs_deathtrap && !(--gs_deathtrap_steps)) {
 		/* oh oh: death trap is activated and there are no remaining steps in the dungeon... */
 
-		if (ds_readws(DEATHTRAP) == 1) {
+		if (gs_deathtrap == 1) {
 			/* It is the death trap on the Totenschiff. -> it sinks...  */
 
 			load_ani(18);
