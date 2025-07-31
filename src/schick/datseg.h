@@ -93,11 +93,10 @@ extern Bit8s  gs_month;				//ds:0x2dc1; seg002, seg024, seg025, seg030, seg068, 
 extern Bit8s  gs_year;				//ds:0x2dc2; seg002, seg024, seg025, seg030, seg068, seg116, seg120
 extern Bit8s  gs_special_day;			//ds:0x2dc3; seg002, seg030
 extern Bit32s gs_ingame_timers[26];		//ds:0x2dc4; seg002, seg042-seg103
+
 extern Bit32s gs_gods_estimation[15];		//ds:0x314e; seg003-seg114
 extern Bit8s  gs_tav_cheated_flags[88];		//ds:0x318a; seg059, seg103
-
 extern struct struct_smith_repairitems gs_smith_repairitems[50]; //ds:0x31e2; seg002, seg058
-
 extern Bit16s gs_dng_handled_pos;		//ds:0x330e; seg077-seg091
 extern Bit16s gs_deathtrap_steps;		//ds:0x3310; seg075, seg077, seg079
 extern Bit16s gs_deathtrap;			//ds:0x3312; seg025, seg075, seg077, seg079
@@ -141,6 +140,11 @@ extern Bit8u  gs_jurge_awaits_letter;		//ds:0x344c; seg069, seg072, seg073
 extern Bit8u  gs_umbrik_quest_gorah;		//ds:0x344d; seg072, seg111
 
 extern Bit8u gs_algrid_treborns_hint;		//ds:0x3467; seg072
+
+extern Bit16s gs_npc_meet_tavern;		//ds:0x346e; seg060, seg095
+extern Bit16s gs_npc_months;			//ds:0x3470; seg002-seg116
+extern Bit8s  gs_smith_kicked_flags[50];	//ds:0x3472; seg058
+extern Bit8s  gs_smith_flogged_flags[50];	//ds:0x34a4; seg058
 
 extern Bit8s  gs_always_one2;			//ds:0x35f3; seg078
 

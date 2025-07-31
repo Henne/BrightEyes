@@ -505,8 +505,8 @@ void do_smith(void)
 		return;
 	}
 
-	if (ds_readbs(SMITH_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ||
-		ds_readbs(SMITH_FLOGGED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ||
+	if (gs_smith_kicked_flags[ds_readws(CURRENT_TYPEINDEX)] ||
+		gs_smith_flogged_flags[ds_readws(CURRENT_TYPEINDEX)] ||
 		(ds_readws(CURRENT_TYPEINDEX) == 1 && ds_readb(DNG14_CELLAREXIT_FLAG))) {
 
 		talk_smith();
@@ -559,8 +559,8 @@ void do_smith(void)
 			talk_smith();
 			ds_writew(REQUEST_REFRESH, 1);
 
-			if (ds_readbs(SMITH_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ||
-				ds_readbs(SMITH_FLOGGED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ||
+			if (gs_smith_kicked_flags[ds_readws(CURRENT_TYPEINDEX)] ||
+				gs_smith_flogged_flags[ds_readws(CURRENT_TYPEINDEX)] ||
 				ds_readbs(DUNGEON_INDEX) != DUNGEONS_NONE)
 			{
 				done = 1;
@@ -582,18 +582,18 @@ void talk_smith(void)
 void TLK_schmied(signed short state)
 {
 	if (!state) {
-		g_dialog_next_state = (ds_readb(SMITH_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ? 1 :
+		g_dialog_next_state = (gs_smith_kicked_flags[ds_readws(CURRENT_TYPEINDEX)] ? 1 :
 					(ds_readws(CURRENT_TYPEINDEX) == 17 ? 27 :
 					(ds_readws(CURRENT_TYPEINDEX) == 1 && ds_readb(DNG14_CELLAREXIT_FLAG) != 0 ? 28 : 4)));
 	} else if (state == 1) {
-		g_dialog_next_state = (ds_readb(SMITH_FLOGGED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ? 2 : 3);
+		g_dialog_next_state = (gs_smith_flogged_flags[ds_readws(CURRENT_TYPEINDEX)] ? 2 : 3);
 	} else if (state == 3) {
-		ds_writeb(SMITH_FLOGGED_FLAGS + ds_readws(CURRENT_TYPEINDEX), 1);
+		gs_smith_flogged_flags[ds_readws(CURRENT_TYPEINDEX)] = 1;
 	} else if (state == 6 || state == 26) {
 		tumult();
-		ds_writeb(SMITH_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX), ds_writeb(SMITH_FLOGGED_FLAGS + ds_readws(CURRENT_TYPEINDEX), 1));
+		gs_smith_kicked_flags[ds_readws(CURRENT_TYPEINDEX)] = gs_smith_flogged_flags[ds_readws(CURRENT_TYPEINDEX)] = 1;
 	} else if (state == 11 || state == 14 || state == 16 || state == 23) {
-		ds_writeb(SMITH_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX), 1);
+		gs_smith_kicked_flags[ds_readws(CURRENT_TYPEINDEX)] = 1;
 	} else if (state == 19 || state == 31) {
 		ds_writew(PRICE_MODIFICATOR, 3);
 	} else if (state == 30) {

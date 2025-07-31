@@ -243,7 +243,7 @@ void talk_tavern(void)
 
 	} while (g_dialog_done == 0);
 
-	ds_writews(NPC_MEET_TAVERN, 0);
+	gs_npc_meet_tavern = 0;
 	g_textbox_width = 3;
 	g_text_file_index = -1;
 	load_tx(g_tx_file_index);

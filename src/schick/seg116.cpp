@@ -635,7 +635,7 @@ void tevent_144(void)
 				add_hero_ap_all(500);
 
 				gs_current_loctype = LOCTYPE_NONE;
-				ds_writews(NPC_MONTHS, 200);
+				gs_npc_months = 200;
 			} else {
 				/* you lost the final fight */
 				GUI_output(get_tx2(18));

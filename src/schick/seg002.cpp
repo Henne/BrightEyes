@@ -1835,10 +1835,10 @@ void game_loop(void)
 
 		if ((host_readbs(get_hero(6) + HERO_TYPE) != HERO_TYPE_NONE) &&
 			((ds_readbs(CURRENT_TOWN) != TOWNS_NONE) || (ds_readws(GAME_STATE) == GAME_STATE_VICTORY)) &&
-			(ds_readws(NPC_MONTHS) >= 1) &&	(g_npc_last_farewellcheck != ds_readws(NPC_MONTHS)))
+			(gs_npc_months >= 1) &&	(g_npc_last_farewellcheck != gs_npc_months))
 		{
 			npc_farewell();
-			g_npc_last_farewellcheck = ds_readws(NPC_MONTHS);
+			g_npc_last_farewellcheck = gs_npc_months;
 		}
 
 		if (!g_in_fight &&
@@ -2431,7 +2431,7 @@ void do_timers(void)
 
 			/* increment the months the NPC is in the group */
 			if (host_readb(get_hero(6) + HERO_TYPE) != HERO_TYPE_NONE) {
-				inc_ds_ws(NPC_MONTHS);
+				gs_npc_months++;
 			}
 
 			do_census();
@@ -2528,7 +2528,7 @@ void sub_mod_timers(Bit32s val)
 #else
 	Bit8u huge *mp;
 #endif
-	unsigned char target;
+	signed char target;
 	unsigned char reset_target;
 	Bit8u *sp;
 
@@ -2592,7 +2592,7 @@ void sub_mod_timers(Bit32s val)
 					/* reset target if no other slots of target */
 					reset_target = 1;
 					for (j = 0; j < 100; j++) {
-						if (ds_readb((MODIFICATION_TIMERS+6) + j * 8) == target) {
+						if (ds_readbs((MODIFICATION_TIMERS+6) + j * 8) == target) {
 							reset_target = 0;
 							break;
 						}
@@ -2608,7 +2608,7 @@ void sub_mod_timers(Bit32s val)
 
 					/* reset all slots of invalid target */
 					for (j = 0; j < 100; j++) {
-						if (ds_readb((MODIFICATION_TIMERS+6) + j * 8) == target) {
+						if (ds_readbs((MODIFICATION_TIMERS+6) + j * 8) == target) {
 							host_writeb(sp + 6, host_writebs(sp + 7, 0));
 							host_writew(sp + 4, 0);
 						}

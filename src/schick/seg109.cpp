@@ -752,8 +752,7 @@ void TRV_barrier(signed short text_start)
 
 				} while (l_di && ds_readbs(TRAVEL_EVENT_AXES + i) != -1);
 
-				if
-					(l_di || get_first_hero_with_item(ITEM_HAMMER) == -1)
+				if (l_di || get_first_hero_with_item(ITEM_HAMMER) == -1)
 				{
 
 					GUI_dialog_na(0, get_tx2(text_start + 4));

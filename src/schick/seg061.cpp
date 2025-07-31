@@ -312,7 +312,7 @@ void char_letgo(signed short temple_id)
 
 				if (hero_pos == 6) {
 					/* let go an NPC */
-					ds_writew(NPC_MONTHS, 99);
+					gs_npc_months = 99;
 					npc_farewell();
 				} else {
 					/* let go a hero */

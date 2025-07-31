@@ -212,21 +212,21 @@ void do_informer(void)
 {
 	signed short no = ds_readws(CURRENT_TYPEINDEX) - 1;
 
-	if (!no) do_talk(6, 0);
-	else if (no == 1) do_talk(6, 1);
-	else if (no == 2) do_talk(7, 0);
-	else if (no == 3) do_talk(7, 1);
-	else if (no == 4) do_talk(7, 2);
-	else if (no == 5) do_talk(8, 0);
-	else if (no == 6) do_talk(8, 1);
-	else if (no == 7) do_talk(10, 1);
-	else if (no == 8) do_talk(9, 0);
-	else if (no == 9) do_talk(10, 0);
-	else if (no == 10) do_talk(12, 0);
-	else if (no == 11) do_talk(11, 0);
-	else if (no == 12) do_talk(11, 2);
-	else if (no == 13) do_talk(8, 2);
-	else if (no == 14) do_talk(9, 1);
+	if (no == INFORMER_JURGE)	do_talk(6, 0); else
+	if (no == INFORMER_HJORE)	do_talk(6, 1); else
+	if (no == INFORMER_YASMA)	do_talk(7, 0); else
+	if (no == INFORMER_UMBRIK)	do_talk(7, 1); else
+	if (no == INFORMER_ISLEIF)	do_talk(7, 2); else
+	if (no == INFORMER_RAGNA)	do_talk(8, 0); else
+	if (no == INFORMER_BEORN)	do_talk(8, 1); else
+	if (no == INFORMER_ASGRIMM)	do_talk(10, 1); else
+	if (no == INFORMER_ELIANE)	do_talk(9, 0); else
+	if (no == INFORMER_OLVIR)	do_talk(10, 0); else
+	if (no == INFORMER_SWAFNILD)	do_talk(12, 0); else
+	if (no == INFORMER_TREBORN)	do_talk(11, 0); else
+	if (no == INFORMER_UNICORN)	do_talk(11, 2); else
+	if (no == INFORMER_ALGRID)	do_talk(8, 2); else
+	if (no == INFORMER_TIOMAR)	do_talk(9, 1);
 
 	leave_location();
 }
@@ -830,8 +830,6 @@ void fade_into(void)
 
 		set_palette(ptr, 0, 0x20);
 	}
-
-
 }
 
 void copy_palette(void)

@@ -30,10 +30,9 @@ unsigned short npc_meetings(unsigned short type_index)
 
 	/* check if an NPC is in the party and if we
 		already had an NPC conversation here */
-	if (!host_readbs(get_hero(6) + HERO_TYPE) &&
-		(type_index != ds_readw(NPC_MEET_TAVERN))) {
+	if (!host_readbs(get_hero(6) + HERO_TYPE) && (type_index != gs_npc_meet_tavern)) {
 
-		ds_writew(NPC_MEET_TAVERN, type_index);
+		gs_npc_meet_tavern = type_index;
 
 		/* Nariell */
 		if (ds_readb(CURRENT_TOWN) == TOWNS_CLANEGH &&
@@ -107,7 +106,7 @@ void npc_farewell(void)
 		return;
 
 	/* Unconscious or dead NPCs cannot be removed automatically (99 means manual). */
-	if (check_hero(get_hero(6)) == 0 && ds_readws(NPC_MONTHS) < 99)
+	if (check_hero(get_hero(6)) == 0 && gs_npc_months < 99)
 		return;
 
 	tmp = g_tx_file_index;
@@ -115,13 +114,13 @@ void npc_farewell(void)
 
 	switch (host_readbs(get_hero(6) + HERO_NPC_ID)) {
 		case NPC_NARIELL: {
-			if (ds_readws(NPC_MONTHS) >= 2)
+			if (gs_npc_months >= 2)
 				remove_npc(0x14, 0x1f, 0xe2, get_ttx(753), get_tx(9));
 			break;
 		}
 		case NPC_HARIKA: {
-			if (ds_readws(NPC_MONTHS) >= 2) {
-				if (ds_readws(NPC_MONTHS) >= 99 ||
+			if (gs_npc_months >= 2) {
+				if (gs_npc_months >= 99 ||
 					ds_readb(CURRENT_TOWN) == TOWNS_THORWAL ||
 					ds_readb(CURRENT_TOWN) == TOWNS_PHEXCAER ||
 					ds_readb(CURRENT_TOWN) == TOWNS_PREM ||
@@ -158,22 +157,22 @@ void npc_farewell(void)
 			break;
 		}
 		case NPC_CURIAN: {
-			if (ds_readws(NPC_MONTHS) >= 6)
+			if (gs_npc_months >= 6)
 				remove_npc(0x19, 0x40, 0xe4, get_ttx(755), get_tx(29));
 			break;
 		}
 		case NPC_ARDORA: {
-			if (ds_readws(NPC_MONTHS) >= 1)
+			if (gs_npc_months >= 1)
 				remove_npc(0x15, 0x1f, 0xe5, get_ttx(756), get_tx(43));
 			break;
 		}
 		case NPC_GARSVIK: {
-			if (ds_readws(NPC_MONTHS) >= 2)
+			if (gs_npc_months >= 2)
 				remove_npc(0x17, 0x1f, 0xe6, get_ttx(757), get_tx(53));
 			break;
 		}
 		case NPC_ERWO: {
-			if (ds_readws(NPC_MONTHS) >= 2)
+			if (gs_npc_months >= 2)
 				remove_npc(0x18, 0x1f, 0xe7, get_ttx(758), get_tx(63));
 			break;
 		}
@@ -544,7 +543,7 @@ void add_npc(signed short index)
 	gs_total_hero_counter++;
 
 	/* reset the months the NPC is in the group */
-	ds_writew(NPC_MONTHS, 0);
+	gs_npc_months = 0;
 
 	/* set a number to deciede between the NPCs (1-6) */
 	host_writeb(get_hero(6) + HERO_NPC_ID, index - 0xe1);

@@ -500,7 +500,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 		}
 
 
-		g_dialog_next_state = (-1);
+		g_dialog_next_state = -1;
 
 		if (host_readws(state_ptr) & 0x8000 || host_readws(state_ptr) == -1) {
 			talk_switch();

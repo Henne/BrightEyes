@@ -321,10 +321,10 @@
 #define TIOMAR_DRINKMATE                (0x3468)    /* unsigned char; {0-6} */
 #define TIOMAR_AWAITS_LETTER            (0x3469)    /* unsigned char; {0,1} */
 #define UNICORN_HERO_PTR                (0x346a)    /* Bit8u* */
-#define NPC_MEET_TAVERN                 (0x346e)    /* signed short */
-#define NPC_MONTHS                      (0x3470)    /* signed short */
-#define SMITH_KICKED_FLAGS              (0x3472)    /* signed char[50]; {0,1} */
-#define SMITH_FLOGGED_FLAGS             (0x34a4)    /* signed char[50]; {0,1} */
+//#define NPC_MEET_TAVERN                 (0x346e)    /* signed short */
+//#define NPC_MONTHS                      (0x3470)    /* signed short */
+//#define SMITH_KICKED_FLAGS              (0x3472)    /* signed char[50]; {0,1} */
+//#define SMITH_FLOGGED_FLAGS             (0x34a4)    /* signed char[50]; {0,1} */
 #define MERCHANT_KICKED_FLAGS           (0x34d6)    /* signed char[74]; {0,1} */
 #define NPC_UNKNOWN_FLAGS               (0x3520)    /* unsigned char[20] */
 #define MERCHANT_KICKED2_FLAGS          (0x3534)    /* unsigned char[94]; {0,1} */
