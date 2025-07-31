@@ -247,7 +247,7 @@
 // ?2
 //#define GODS_ESTIMATION                 (0x314e)    /* signed long[15] */
 //#define TAV_CHEATED_FLAGS               (0x318a)    /* unsigned char[88] */
-#define SMITH_REPAIRITEMS               (0x31e2)    /* struct(6)[50]; struct{short unkn1; long unkn2;} */
+//#define SMITH_REPAIRITEMS               (0x31e2)    /* struct(6)[50]; struct{short unkn1; long unkn2;} */
 //#define DNG_HANDLED_POS                 (0x330e)    /* unsigned short */
 //#define DEATHTRAP_STEPS                 (0x3310)    /* signed short; for activated deathtrap: number of remaining steps in dungeon */
 //#define DEATHTRAP                       (0x3312)    /* signed short; 0: no death trap activated. 1: death trap on Totenschiff activated. 2: death trap in Spinnenhoehle activated. */

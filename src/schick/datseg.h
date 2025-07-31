@@ -7,6 +7,11 @@
 extern char ds[1];
 #endif
 
+struct struct_smith_repairitems {
+	Bit16s item_id;
+	Bit32s pickup_time;
+};
+
 /* seg001 */
 extern unsigned short g_cd_init_successful;
 extern Bit32u g_cd_skipmagic;
@@ -90,6 +95,8 @@ extern Bit8s  gs_special_day;			//ds:0x2dc3; seg002, seg030
 extern Bit32s gs_ingame_timers[26];		//ds:0x2dc4; seg002, seg042-seg103
 extern Bit32s gs_gods_estimation[15];		//ds:0x314e; seg003-seg114
 extern Bit8s  gs_tav_cheated_flags[88];		//ds:0x318a; seg059, seg103
+
+extern struct struct_smith_repairitems gs_smith_repairitems[50]; //ds:0x31e2; seg002, seg058
 
 extern Bit16s gs_dng_handled_pos;		//ds:0x330e; seg077-seg091
 extern Bit16s gs_deathtrap_steps;		//ds:0x3310; seg075, seg077, seg079

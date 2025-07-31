@@ -1910,9 +1910,9 @@ void timers_daily(void)
 	/* Smith / items to repair */
 	for (i = 0; i < 50; i++) {
 
-		if (ds_readw(SMITH_REPAIRITEMS + i * 6) != 0) {
+		if (gs_smith_repairitems[i].item_id) {
 			/* set time to 6:00 am */
-			ds_writed((SMITH_REPAIRITEMS + 2) + i * 6, 32400L);
+			gs_smith_repairitems[i].pickup_time = HOURS(6);
 		}
 	}
 
@@ -2262,8 +2262,7 @@ void do_timers(void)
 			/* What about herokeeping()? Original-Bug? */
 
 			/* decrement unicorn timer */
-			if (ds_readb(UNICORN_GET_MAP) != 0 &&
-				ds_readb(UNICORN_TIMER) != 0)
+			if (ds_readb(UNICORN_GET_MAP) != 0 && ds_readb(UNICORN_TIMER) != 0)
 			{
 				dec_ds_bs_post(UNICORN_TIMER);
 			}
@@ -2345,18 +2344,17 @@ void do_timers(void)
 					di = host_readbs(ptr + HERO_GROUP_NO);
 
 					/* hero is in group and in mage dungeon */
-					if ((gs_current_group == di) &&
-						(ds_readb(DUNGEON_INDEX) == DUNGEONS_RUINE_DES_SCHWARZMAGIERS))
+					if ((gs_current_group == di) && (ds_readb(DUNGEON_INDEX) == DUNGEONS_RUINE_DES_SCHWARZMAGIERS))
 					{
 
 						if (ds_readbs(DUNGEON_LEVEL) == 1) {
+
 							/* 1W6-1 */
-							sub_hero_le(ptr,
-								dice_roll(1, 6,	-1));
+							sub_hero_le(ptr, dice_roll(1, 6, -1));
+
 						} else if (ds_readbs(DUNGEON_LEVEL) == 2) {
 							/* 1W6+1 */
-							sub_hero_le(ptr,
-								dice_roll(1, 6, 1));
+							sub_hero_le(ptr, dice_roll(1, 6, 1));
 						}
 
 					} else {
@@ -2403,8 +2401,7 @@ void do_timers(void)
 		/* decrement NPC timers */
 		for (i = 1; i < 7; i++) {
 
-			if ((ds_readbs(NPC_TIMERS + i) != 0) &&
-				(ds_readbs(NPC_TIMERS + i) != -1))
+			if ((ds_readbs(NPC_TIMERS + i) != 0) && (ds_readbs(NPC_TIMERS + i) != -1))
 			{
 				dec_ds_bs_post(NPC_TIMERS + i);
 			}

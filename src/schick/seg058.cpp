@@ -160,22 +160,22 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 	struct nvf_desc nvf;
 
 	/* check if this smith has an item in repair */
-	if (ds_readws(SMITH_REPAIRITEMS + 6 * smith_id) != 0) {
+	if (gs_smith_repairitems[smith_id].item_id) {
 
-		if (ds_readds(SMITH_REPAIRITEMS + 2 + 6 * smith_id) > gs_day_timer) {
+		if (gs_smith_repairitems[smith_id].pickup_time > gs_day_timer) {
+
 			/* not ready yet */
 			GUI_output(get_ttx(485));
 
-		} else if (get_item(ds_readws(SMITH_REPAIRITEMS + 6 * smith_id), 1, 1)) {
+		} else if (get_item(gs_smith_repairitems[smith_id].item_id, 1, 1)) {
 
-			sprintf((char*)g_dtp2,
-				get_ttx(486),
-				(char*)(GUI_names_grammar((signed short)0x8002, ds_readws(SMITH_REPAIRITEMS + 6 * smith_id), 0)));
+			sprintf((char*)g_dtp2, get_ttx(486),
+				(char*)GUI_names_grammar((signed short)0x8002, gs_smith_repairitems[smith_id].item_id, 0));
 
 			GUI_output((char*)g_dtp2);
 
-			ds_writed(SMITH_REPAIRITEMS + 2 + 6 * smith_id, 0);
-			ds_writew(SMITH_REPAIRITEMS + 6 * smith_id, 0);
+			gs_smith_repairitems[smith_id].item_id = 0;
+			gs_smith_repairitems[smith_id].pickup_time = 0;
 		}
 	} else {
 
@@ -430,13 +430,14 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 									GUI_output(get_ttx(492));
 								}
 
-								ds_writew(SMITH_REPAIRITEMS + 6 * smith_id, item_id);
+								gs_smith_repairitems[smith_id].item_id = item_id;
 
 								if (gs_day_timer > HOURS(14)) {
-									ds_writed(SMITH_REPAIRITEMS + 2 + 6 * smith_id, HOURS(23));
+
+									gs_smith_repairitems[smith_id].pickup_time = HOURS(23);
 									GUI_output(get_ttx(490));
 								} else {
-									ds_writed(SMITH_REPAIRITEMS + 2 + 6 * smith_id, gs_day_timer + HOURS(6));
+									gs_smith_repairitems[smith_id].pickup_time = gs_day_timer + HOURS(6);
 									GUI_output(get_ttx(491));
 								}
 
