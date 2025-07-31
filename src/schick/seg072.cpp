@@ -71,11 +71,11 @@ void INF_jurge_hjore(signed short informer, signed short state)
 			if (!gs_informer_flags[INFORMER_ALGRID]) gs_informer_flags[INFORMER_ALGRID] = 1;
 		} else if (state == 40 || state == 41) {
 			/* need introduction letter ? */
-			ds_writeb(JURGE_AWAITS_LETTER, 1);
+			gs_jurge_awaits_letter = 1;
 		} else if (state == 42) {
 			gs_informer_flags[INFORMER_JURGE] = 2;
 		} else if (state == 44) {
-			g_dialog_next_state = (ds_readb(JURGE_AWAITS_LETTER) != 0 ? 20 : 19);
+			g_dialog_next_state = (gs_jurge_awaits_letter ? 20 : 19);
 		} else if (state == 45) {
 			g_dialog_next_state = (!gs_informer_flags[INFORMER_JURGE] ? 6 : 5);
 		}
@@ -145,13 +145,13 @@ void INF_yasma_umbrik_isleif(signed short informer, signed short state)
 		if (!state) {
 			g_dialog_next_state = (gs_informer_flags[INFORMER_UMBRIK] == 2 ? 1 : 2);
 		} else if (state == 2) {
-			g_dialog_next_state = (ds_readb(UMBRIK_QUEST_GORAH) != 0 ? 15 : (!gs_informer_flags[INFORMER_UMBRIK] ? 24 : 3));
+			g_dialog_next_state = (gs_umbrik_quest_gorah ? 15 : (!gs_informer_flags[INFORMER_UMBRIK] ? 24 : 3));
 		} else if (state == 11 || state == 13) {
 			/* mark UMBRIK SIEBENSTEIN as done */
 			gs_informer_flags[INFORMER_UMBRIK] = 2;
 		} else if (state == 14) {
 			/* the heroes now know of GORAH */
-			ds_writeb(UMBRIK_QUEST_GORAH, 1);
+			gs_umbrik_quest_gorah = 1;
 		} else if (state == 15) {
 			/* check if the heroes have the RUNENKNOCHEN / BONE WITH RUNE */
 			g_dialog_next_state = (get_first_hero_with_item(ITEM_BONE_WITH_RUNE) != -1 ? 16 : 17);

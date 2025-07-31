@@ -510,7 +510,7 @@ signed short tavern_quest_infos(void)
 			(ds_readws(CURRENT_TYPEINDEX) == 69) &&
 			(gs_informer_flags[INFORMER_JURGE] != 2) &&
 			(gs_informer_flags[INFORMER_JURGE] != 0) &&
-			!(ds_readb(JURGE_AWAITS_LETTER)))
+			!gs_jurge_awaits_letter)
 	{
 		/* meet Informer Jurge */
 

@@ -31,9 +31,7 @@ void THO_hetmann(void)
 
 	load_in_head(66);
 
-	if (!ds_readb(GOT_LETTER_HET) &&
-		gs_got_main_quest != 0 &&
-		(ds_readb(JURGE_AWAITS_LETTER) != 0 || gs_need_letter))
+	if (!gs_got_letter_het && gs_got_main_quest && (gs_jurge_awaits_letter || gs_need_letter))
 	{
 
 		/* count already collected parts of the map */
@@ -59,7 +57,7 @@ void THO_hetmann(void)
 
 		GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(85), get_tx(86), 0);
 
-		ds_writeb(GOT_LETTER_HET, 1);
+		gs_got_letter_het = 1;
 		get_item(ITEM_WRITING_OF_HETMAN, 1, 1);
 
 	} else if (!gs_heard_announce || gs_got_main_quest != 0) {
@@ -126,7 +124,7 @@ void THO_hetmann(void)
 			gs_informer_flags[INFORMER_ISLEIF] = 1;
 			gs_got_main_quest = 1;
 			gs_quested_months = 0;
-			ds_writeb(GOT_LETTER_HET, 1);
+			gs_got_letter_het = 1;
 			get_item(ITEM_WRITING_OF_HETMAN, 1, 1);
 
 		} else if (answer == 3) {

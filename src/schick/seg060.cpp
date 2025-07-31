@@ -368,7 +368,7 @@ void TLK_tavern(signed short answer)
 		gs_tav_kicked_flags[ds_readws(CURRENT_TYPEINDEX)] = 1;
 
 		if (ds_readb(TLK_TAV_FULLNESS) == 3) {
-			ds_writeb(TOWN_OUTLAWED_FLAGS + ds_readws(CURRENT_TYPEINDEX), 1);
+			gs_town_outlawed_flags[ds_readws(CURRENT_TYPEINDEX)] = 1;
 		}
 
 	} else if (old_state == 33) {
@@ -378,7 +378,7 @@ void TLK_tavern(signed short answer)
 		gs_tav_kicked_flags[ds_readws(CURRENT_TYPEINDEX)] = 1;
 
 		if (ds_readb(TLK_TAV_FULLNESS) == 3) {
-			ds_writeb(TOWN_OUTLAWED_FLAGS + ds_readws(CURRENT_TYPEINDEX), 1);
+			gs_town_outlawed_flags[ds_readws(CURRENT_TYPEINDEX)] = 1;
 		}
 
 	} else if (old_state == 34) {

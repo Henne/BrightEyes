@@ -637,13 +637,13 @@ void TLK_herberg(signed short state)
 	Bit8u *hero = (Bit8u*)get_first_hero_available_in_group();
 
 	if (!state) {
-		g_dialog_next_state = (ds_readb(HERBERG_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ? 1 : 2);
+		g_dialog_next_state = (gs_herberg_kicked_flags[ds_readws(CURRENT_TYPEINDEX)] ? 1 : 2);
 	} else if (state == 1 || state == 14) {
-		ds_writeb(HERBERG_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX), 1);
+		gs_herberg_kicked_flags[ds_readws(CURRENT_TYPEINDEX)] = 1;
 	} else if (state == 11) {
 		tumult();
-		ds_writeb(TOWN_OUTLAWED_FLAGS + ds_readbs(CURRENT_TOWN), 1);
-		ds_writeb(HERBERG_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX), 1);
+		gs_town_outlawed_flags[ds_readbs(CURRENT_TOWN)] = 1;
+		gs_herberg_kicked_flags[ds_readws(CURRENT_TYPEINDEX)] = 1;
 	} else if (state == 12) {
 		/* CH + 5 */
 		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 5) > 0 ? 14 : 11);
