@@ -644,8 +644,7 @@ void DNG09_pitfall(void)
 			{
 				host_writeb((Bit8u*)g_dtp2, 0);
 
-				if (i)
-				{
+				if (i) {
 					sprintf((char*)g_dtp2, get_ttx(768), (char*)get_hero(i - 1) + HERO_NAME2);
 				}
 
@@ -653,10 +652,9 @@ void DNG09_pitfall(void)
 
 				GUI_output((char*)g_dtp2);
 
-				for (i = 0; i < 6; i++)
-				{
-					if (ds_readbs(GROUPS_DNG_INDEX + i) == 9 && gs_groups_dng_level[i] == 2)
-					{
+				for (i = 0; i < 6; i++)	{
+
+					if (gs_groups_dng_index[i] == 9 && gs_groups_dng_level[i] == 2) {
 						gs_groups_dng_level[i] = 1;
 					}
 				}

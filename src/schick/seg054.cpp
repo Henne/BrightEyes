@@ -297,7 +297,7 @@ void do_inn(void)
 					ds_writew(GROUPS_Y_TARGET + group_nr * 2,0);
 					gs_groups_y_target[group_nr] = 0;
 					ds_writebs(GROUPS_TOWN + group_nr,0);
-					ds_writeb(GROUPS_DNG_INDEX + group_nr,0);
+					gs_groups_dng_index[group_nr] = 0;
 					gs_groups_dng_level[group_nr] = 0;
 					gs_groups_direction_bak[group_nr] = 0;
 					gs_groups_x_target_bak[group_nr] = 0;

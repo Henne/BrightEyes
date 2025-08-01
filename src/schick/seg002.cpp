@@ -2359,7 +2359,7 @@ void do_timers(void)
 						}
 
 					} else {
-						if (ds_readb(GROUPS_DNG_INDEX + di) == 7) {
+						if (gs_groups_dng_index[di] == 7) {
 
 							if (gs_groups_dng_level[di] == 1) {
 								/* 1W6-1 */
@@ -4085,7 +4085,7 @@ signed short can_merge_group(void)
 				/* check currentTown */
 				(ds_readb(GROUPS_TOWN + i) == ds_readb(CURRENT_TOWN)) &&
 				/* check DungeonIndex */
-				(ds_readb(GROUPS_DNG_INDEX + i) == ds_readb(DUNGEON_INDEX)) &&
+				(gs_groups_dng_index[i] == ds_readb(DUNGEON_INDEX)) &&
 				/* check DungeonLevel */
 				(gs_groups_dng_level[i] == gs_dungeon_level))
 			{
