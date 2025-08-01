@@ -118,8 +118,8 @@ signed short DNG10_handler(void)
 		sub_hero_le(hero, answer);
 
 	} else if (target_pos == DNG_POS(0,3,10) &&
-			(target_pos != gs_dng_handled_pos || ds_readb(DIRECTION) != gs_direction_bak) &&
-			ds_readbs(DIRECTION) == WEST)
+			(target_pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&
+			gs_direction == WEST)
 	{
 		/* TRAP: a loose stone in a wall */
 		if (ds_readb(DNG10_HOLE_STATE) != 0 || test_skill(hero, TA_SINNESSCHAERFE, 5) > 0)
@@ -156,7 +156,7 @@ signed short DNG10_handler(void)
 					}
 				}
 
-				gs_direction_bak = (ds_readbs(DIRECTION));
+				gs_direction_bak = (gs_direction);
 
 			} else {
 			}
@@ -216,7 +216,7 @@ signed short DNG10_handler(void)
 			}
 		}
 
-	} else if (target_pos == DNG_POS(0,6,12) && target_pos != gs_dng_handled_pos && ds_readbs(DIRECTION) == SOUTH)
+	} else if (target_pos == DNG_POS(0,6,12) && target_pos != gs_dng_handled_pos && gs_direction == SOUTH)
 	{
 		/* INFO: an empty room */
 		GUI_output(get_tx(21));
@@ -239,7 +239,7 @@ signed short DNG10_handler(void)
 
 			gs_x_target = (1);
 			gs_y_target = (3);
-			ds_writeb(DIRECTION, WEST);
+			gs_direction = (WEST);
 			DNG_update_pos();
 		}
 
@@ -287,7 +287,7 @@ signed short DNG10_handler(void)
 		g_fig_discard = 1;
 		do_fight(FIGHTS_F129_21);
 
-	} else if (target_pos == DNG_POS(1,1,12) && target_pos != gs_dng_handled_pos && ds_readbs(DIRECTION) == SOUTH)
+	} else if (target_pos == DNG_POS(1,1,12) && target_pos != gs_dng_handled_pos && gs_direction == SOUTH)
 	{
 		/* INFO: glowing walls */
 		GUI_output(get_tx(27));
@@ -421,7 +421,7 @@ signed short DNG10_handler(void)
 		gs_x_target = (ds_readws(TRAVEL_DESTINATION_X));
 		gs_y_target = (ds_readws(TRAVEL_DESTINATION_Y));
 		gs_current_loctype = LOCTYPE_NONE;
-		ds_writeb(DIRECTION, (ds_readbs(TRAVEL_DESTINATION_VIEWDIR) + 2) & 0x03);
+		gs_direction = ((ds_readbs(TRAVEL_DESTINATION_VIEWDIR) + 2) & 0x03);
 
 		sprintf((char*)g_dtp2,
 			get_tx(40),

@@ -299,7 +299,7 @@ void do_citycamp(void)
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* The rotation is performed in the function leave_location().
 	 * We fix the bug in a hacky way by simply correcting the rotation afterwards. */
-	ds_writeb(DIRECTION, (ds_readbs(DIRECTION) + 2) % 4); /* rotate by 180 degrees */
+	gs_direction = ((gs_direction + 2) % 4); /* rotate by 180 degrees */
 #endif
 
 }

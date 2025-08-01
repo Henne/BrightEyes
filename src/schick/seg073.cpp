@@ -586,34 +586,34 @@ void tavern_follow_informer(void)
 		do_talk(6, 0);
 		gs_x_target_bak = (8);
 		gs_y_target_bak = (6);
-		ds_writeb(DIRECTION, 3);
+		gs_direction = (3);
 		break;
 	}
 	case 6: {
 		do_talk(8, 0);
 		gs_x_target_bak = (5);
 		gs_y_target_bak = (4);
-		ds_writeb(DIRECTION, 3);
+		gs_direction = (3);
 		break;
 	}
 	case 7: {
 		do_talk(8, 1);
 		gs_x_target_bak = (12);
 		gs_y_target_bak = (10);
-		ds_writeb(DIRECTION, 1);
+		gs_direction = (1);
 		break;
 	}
 	case 8: {
 		do_talk(10, 1);
 		gs_x_target_bak = (gs_y_target_bak = (7));
-		ds_writeb(DIRECTION, 1);
+		gs_direction = (1);
 		break;
 	}
 	case 14: {
 		do_talk(8, 2);
 		gs_x_target_bak = (5);
 		gs_y_target_bak = (8);
-		ds_writeb(DIRECTION, 0);
+		gs_direction = (0);
 		break;
 	}
 	}

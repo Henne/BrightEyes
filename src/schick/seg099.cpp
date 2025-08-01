@@ -714,7 +714,7 @@ void spell_foramen(void)
 	x = gs_x_target;
 	y = gs_y_target;
 
-	switch (ds_readbs(DIRECTION)) {
+	switch (gs_direction) {
 		case 0:	y--; break;
 		case 1:	x++; break;
 		case 2: y++; break;

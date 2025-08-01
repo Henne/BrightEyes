@@ -52,7 +52,7 @@ signed short DNG15_handler(void)
 
 	target_pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
-	dir = ds_readbs(DIRECTION);
+	dir = gs_direction;
 
 	hero = (Bit8u*)get_first_hero_available_in_group();
 
@@ -133,7 +133,7 @@ signed short DNG15_handler(void)
 		if (GUI_bool(get_tx(17))) {
 
 			DNG_dec_level();
-			ds_writeb(DIRECTION, WEST);
+			gs_direction = (WEST);
 			gs_x_target--;
 		}
 
@@ -454,7 +454,7 @@ signed short DNG15_handler(void)
 			gs_x_target = (ds_readws(TRAVEL_DESTINATION_X));
 			gs_y_target = (ds_readws(TRAVEL_DESTINATION_Y));
 			gs_current_loctype = LOCTYPE_NONE;
-			ds_writeb(DIRECTION, (ds_readbs(TRAVEL_DESTINATION_VIEWDIR) + 2) & 0x03);
+			gs_direction = ((ds_readbs(TRAVEL_DESTINATION_VIEWDIR) + 2) & 0x03);
 
 			sprintf((char*)g_dtp2, get_tx(55), get_ttx(ds_readw(TRV_DESTINATION) + 0xeb));
 			GUI_output((char*)g_dtp2);
@@ -525,7 +525,7 @@ void DNG15_debris(signed short ladder)
 
 			if (GUI_bool(get_tx(13)))
 			{
-				ds_writeb(DIRECTION, WEST);
+				gs_direction = (WEST);
 				gs_x_target--;
 				DNG_inc_level();
 			}

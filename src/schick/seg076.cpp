@@ -111,7 +111,7 @@ void DNG_door(signed short action)
 	x = gs_x_target;
 	y = gs_y_target;
 
-	switch (ds_readbs(DIRECTION))
+	switch (gs_direction)
 	{
 		case NORTH: y--; break;
 		case EAST:  x++; break;
@@ -460,7 +460,7 @@ signed short DNG_step(void)
 		ds_writew(REDRAW_MENUICONS, 0);
 	}
 
-	if (ds_readbs(DIRECTION) != ds_readws(DNG_REFRESH_DIRECTION) ||
+	if (gs_direction != ds_readws(DNG_REFRESH_DIRECTION) ||
 		gs_x_target != ds_readws(DNG_REFRESH_X_TARGET) ||
 		gs_y_target != ds_readws(DNG_REFRESH_Y_TARGET))
 	{
@@ -479,7 +479,7 @@ signed short DNG_step(void)
 
 	gs_x_target_bak = (gs_x_target);
 	gs_y_target_bak = (gs_y_target);
-	gs_direction_bak = (ds_readbs(DIRECTION));
+	gs_direction_bak = (gs_direction);
 
 	handle_gui_input();
 
@@ -585,7 +585,7 @@ signed short DNG_step(void)
 	{
 		if ((l_si = div16(ds_readb(STEPTARGET_FRONT))) == DNG_TILE_SEMIPERMEABLE_WALL)
 		{
-			l_si = 1 << ds_readbs(DIRECTION);
+			l_si = 1 << gs_direction;
 
 			if (ds_readb(STEPTARGET_FRONT) & l_si & 0x0f)
 				/* can only be entered if flag no. <direction> is set. */
@@ -633,7 +633,7 @@ signed short DNG_step(void)
 				x = gs_x_target;
 				y = gs_y_target;
 
-				switch (ds_readbs(DIRECTION))
+				switch (gs_direction)
 				{
 					case NORTH: y--; break;
 					case EAST:  x++; break;
@@ -698,7 +698,7 @@ void DNG_see_stairs(void)
 			/* found the current stairs */
 			gs_x_target = (host_readbs((Bit8u*)stair_ptr + 2) & 0x0f);
 			gs_y_target = (host_readbs((Bit8u*)stair_ptr + 3) & 0x0f);
-			ds_writeb(DIRECTION, host_readbs((Bit8u*)stair_ptr + 3) >> 4);
+			gs_direction = (host_readbs((Bit8u*)stair_ptr + 3) >> 4);
 
 			if (host_readbs((Bit8u*)stair_ptr + 2) & 0x80)
 			{

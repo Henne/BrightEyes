@@ -37,9 +37,9 @@ static const char no_way_msg[][41] = {
 signed short update_direction(unsigned char mod)
 {
 	/* save old direction */
-	gs_direction_bak = (ds_readb(DIRECTION));
+	gs_direction_bak = (gs_direction);
 	/* set new direction */
-	ds_writeb(DIRECTION, (ds_readb(DIRECTION) + mod) & 0x3);
+	gs_direction = ((gs_direction + mod) & 0x3);
 	/* set bogus variable to 1 */
 	ds_writeb(DIRECTION_UNKN, 0x1);
 
@@ -63,9 +63,9 @@ void move(void)
 
 	/* direction */
 #if defined(__BORLANDC__)
-	p_vis_field = (Bit8u*)MK_FP(datseg, ((ds_readb(DIRECTION) == 0) ? VISUAL_FIELD_DIR0 :
-				((ds_readb(DIRECTION) == 1) ? VISUAL_FIELD_DIR1 :
-				((ds_readb(DIRECTION) == 2) ? VISUAL_FIELD_DIR2 : VISUAL_FIELD_DIR3))));
+	p_vis_field = (Bit8u*)MK_FP(datseg, ((gs_direction == 0) ? VISUAL_FIELD_DIR0 :
+				((gs_direction == 1) ? VISUAL_FIELD_DIR1 :
+				((gs_direction == 2) ? VISUAL_FIELD_DIR2 : VISUAL_FIELD_DIR3))));
 #endif
 
 	for (i = 0; i < 29; i++, p_vis_field += 2) {

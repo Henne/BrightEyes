@@ -724,7 +724,7 @@ void leave_location(void)
 	gs_y_target = (gs_y_target_bak);
 
 	/* rotate party by 180 degrees */
-	ds_writeb(DIRECTION, (ds_readbs(DIRECTION) + 2) % 4);
+	gs_direction = ((gs_direction + 2) % 4);
 
 	set_to_ff();
 

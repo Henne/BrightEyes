@@ -1810,7 +1810,7 @@ Bit8s gs_datseg_status_start = 0; // ds:0x2d34, 99 = game finished, area of the 
 Bit8s  gs_current_group = 0; // ds:0x2d35
 signed char g_group_member_counts[6] = { 0, 0, 0, 0, 0, 0 }; // ds:0x2d36, members per group
 Bit8s  gs_total_hero_counter = 0; // ds:0x2d3c
-unsigned char g_direction = 0; // ds:0x2d3d
+Bit8s  gs_direction = 0; // ds:0x2d3d
 unsigned char g_groups_direction[6] = { 0, 0, 0, 0, 0, 0 }; // ds:0x2d3e
 Bit16s gs_x_target = 0; // ds:0x2d44
 Bit16s gs_y_target = 0; // ds:0x2d46

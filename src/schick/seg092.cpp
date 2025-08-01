@@ -383,7 +383,7 @@ void seg092_06b4(signed short a1)
 	y = gs_y_target;
 
 	if (a1 != 0) {
-		switch(ds_readbs(DIRECTION)) {
+		switch(gs_direction) {
 			case NORTH: y--; break;
 			case EAST: x++; break;
 			case SOUTH: y++; break;

@@ -281,7 +281,7 @@ void render_automap(signed short x_off)
 	if (((gs_x_target - x_off) >= 0) && ((gs_x_target - x_off) <= 16)) { /* shouldn't this always be true? */
 
 		draw_automap_square(gs_x_target - x_off, gs_y_target,
-					MAP_TILE_YELLOW_ARROW, ds_readbs(DIRECTION));
+					MAP_TILE_YELLOW_ARROW, gs_direction);
 	}
 #endif
 
@@ -312,7 +312,7 @@ void render_automap(signed short x_off)
 	if (((gs_x_target - x_off) >= 0) && ((gs_x_target - x_off) <= 16)) { /* shouldn't this always be true? */
 
 		draw_automap_square(gs_x_target - x_off, gs_y_target,
-					MAP_TILE_YELLOW_ARROW, ds_readbs(DIRECTION));
+					MAP_TILE_YELLOW_ARROW, gs_direction);
 	}
 #endif
 

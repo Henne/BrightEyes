@@ -235,13 +235,13 @@ signed short DNG07_handler(void)
 	{
 		gs_x_target = 7;
 
-		ds_writeb(DIRECTION, (ds_readbs(DIRECTION) + 2) & 3);
+		gs_direction = ((gs_direction + 2) & 3);
 
 	} else if (target_pos == DNG_POS(2,8,13) && target_pos != gs_dng_handled_pos)
 	{
 		gs_x_target = 13;
 
-		ds_writeb(DIRECTION, (ds_readbs(DIRECTION) + 2) & 3);
+		gs_direction = ((gs_direction + 2) & 3);
 
 	} else if (target_pos == DNG_POS(2,1,2) && target_pos != gs_dng_handled_pos && !gs_dng07_poison_flag)
 	{
@@ -275,7 +275,7 @@ signed short DNG07_handler(void)
 			gs_x_target = (ds_readws(TRAVEL_DESTINATION_X));
 			gs_y_target = (ds_readws(TRAVEL_DESTINATION_Y));
 			gs_current_loctype = LOCTYPE_NONE;
-			ds_writeb(DIRECTION, (ds_readb(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
+			gs_direction = ((ds_readb(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
 
 			sprintf((char*)g_dtp2, get_tx(14), get_ttx(ds_readws(TRV_DESTINATION) + 0xeb));
 

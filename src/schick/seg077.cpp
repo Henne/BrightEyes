@@ -194,7 +194,7 @@ signed short DNG01_handler(void)
 			gs_x_target = (ds_readws(TRAVEL_DESTINATION_X));
 			gs_y_target = (ds_readws(TRAVEL_DESTINATION_Y));
 			gs_current_loctype = LOCTYPE_NONE;
-			ds_writeb(DIRECTION, (ds_readws(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
+			gs_direction = ((ds_readws(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
 
 			GUI_output(get_tx(15));
 

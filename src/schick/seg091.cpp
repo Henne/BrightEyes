@@ -79,18 +79,18 @@ signed short DNG13_handler(void)
 		DNG13_unblock_passage(get_tx(4), p_datseg + DNG13_PASSAGE1_FLAG);
 
 	} else if (pos == DNG_POS(0,4,9) &&
-			 (pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != gs_direction_bak) &&
-			ds_readbs(DIRECTION) == WEST)
+			 (pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&
+			gs_direction == WEST)
 	{
 		GUI_output(get_tx(6));
-		gs_direction_bak = (ds_readbs(DIRECTION));
+		gs_direction_bak = (gs_direction);
 
 	} else if (pos == DNG_POS(0,10,2) &&
-			 (pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != gs_direction_bak) &&
-			ds_readbs(DIRECTION) == EAST)
+			 (pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&
+			gs_direction == EAST)
 	{
 		GUI_output(get_tx(6));
-		gs_direction_bak = (ds_readbs(DIRECTION));
+		gs_direction_bak = (gs_direction);
 
 	} else if (pos == DNG_POS(0,5,9) && pos != gs_dng_handled_pos)
 	{
@@ -159,7 +159,7 @@ signed short DNG13_handler(void)
 
 		gs_x_target = (9);
 		gs_y_target = (1);
-		ds_writeb(DIRECTION, EAST);
+		gs_direction = (EAST);
 	}
 
 	g_textbox_width = tw_bak;

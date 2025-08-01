@@ -396,7 +396,7 @@ void do_harbor(void)
 					gs_current_town = ((signed char)ds_readws(TRAVEL_DESTINATION_TOWN_ID));
 					gs_x_target_bak = (ds_readw(TRAVEL_DESTINATION_X));
 					gs_y_target_bak = (ds_readw(TRAVEL_DESTINATION_Y));
-					ds_writeb(DIRECTION, (ds_readws(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
+					gs_direction = ((ds_readws(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
 
 				} else {
 					done = 1;

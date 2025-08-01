@@ -82,6 +82,7 @@ extern signed char g_mr_modificators[13];		//ds:0x2d27; seg050
 extern Bit8s  gs_datseg_status_start;		//ds:0x2d34; seg002, seg026, seg065
 extern Bit8s  gs_current_group;			//ds:0x2d35; seg002-seg120
 extern Bit8s  gs_total_hero_counter;		//ds:0x2d3c; seg002-seg113
+extern Bit8s  gs_direction;			//ds:0x2d3d; seg002-seg120
 
 extern Bit16s gs_x_target;			//ds:0x2d44; seg002-seg120
 extern Bit16s gs_y_target;			//ds:0x2d46; seg002-seg120

@@ -88,7 +88,7 @@ signed short enter_location(signed short town_id)
 		gs_current_loctype_bak = LOCTYPE_NONE;
 		gs_current_locdata = (ds_readb((TOWNS_CITYINDEX_TABLE-1) + town_id));
 
-		if (!((ds_readbs(DIRECTION) + gs_x_target + gs_y_target) & 1)) {
+		if (!((gs_direction + gs_x_target + gs_y_target) & 1)) {
 			gs_current_loctype = LOCTYPE_CITIZEN;
 		} else {
 			gs_current_loctype = LOCTYPE_HOUSE;
@@ -576,7 +576,7 @@ signed short get_border_index(unsigned char val)
 		i++;
 	}
 
-	ds_writew(ENTRANCE_ANGLE, (((val & 3) + 4) - ds_readbs(DIRECTION)) & 3);
+	ds_writew(ENTRANCE_ANGLE, (((val & 3) + 4) - gs_direction) & 3);
 
 	if (i == 0)
 		i = 1;
@@ -852,7 +852,7 @@ void seg066_10c8(void)
 	seg066_0692();
 	ds_writews(CITY_REFRESH_X_TARGET, gs_x_target);
 	ds_writews(CITY_REFRESH_Y_TARGET, gs_y_target);
-	ds_writews(CITY_REFRESH_DIRECTION, ds_readbs(DIRECTION));
+	ds_writews(CITY_REFRESH_DIRECTION, gs_direction);
 }
 
 signed short city_step(void)
@@ -891,7 +891,7 @@ signed short city_step(void)
 	}
 
 	/* check if position or direction has changed */
-	if (ds_readbs(DIRECTION) != ds_readws(CITY_REFRESH_DIRECTION) ||
+	if (gs_direction != ds_readws(CITY_REFRESH_DIRECTION) ||
 		gs_x_target != ds_readws(CITY_REFRESH_X_TARGET) ||
 		gs_y_target != ds_readws(CITY_REFRESH_Y_TARGET))
 	{
@@ -1050,7 +1050,7 @@ void seg066_14dd(signed short forward)
 
 	timewarp(MINUTES(2));
 
-	dir = ds_readbs(DIRECTION);
+	dir = gs_direction;
 
 	if (forward == 1) {
 

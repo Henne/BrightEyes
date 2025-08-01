@@ -53,7 +53,7 @@ signed short DNG12_handler(void)
 		if (ds_readbs(DNG12_TUNNEL4) > 0) dec_ds_bs(DNG12_TUNNEL4);
 	}
 
-	if (target_pos == DNG_POS(1,6,8) && target_pos != gs_dng_handled_pos && ds_readbs(DIRECTION) == EAST && ds_readbs(DNG12_WATERTRAP_WATER_RUNS) != 0) {
+	if (target_pos == DNG_POS(1,6,8) && target_pos != gs_dng_handled_pos && gs_direction == EAST && ds_readbs(DNG12_WATERTRAP_WATER_RUNS) != 0) {
 		/* secret door from water trap */
 #if !defined(__BORLANDC__)
 		D1_INFO("Geheimtuere\n");
@@ -254,38 +254,38 @@ signed short DNG12_handler(void)
 			and_ptr_bs(ptr + MAP_POS(3,6), 0xf);
 			or_ptr_bs(ptr + MAP_POS(3,6), DNG_TILE_CLOSED_DOOR << 4);
 		}
-	} else if (target_pos == DNG_POS(1,1,8) && target_pos != gs_dng_handled_pos && ds_readbs(DIRECTION) == WEST) {
+	} else if (target_pos == DNG_POS(1,1,8) && target_pos != gs_dng_handled_pos && gs_direction == WEST) {
 		/* water source */
 
 		if (GUI_bool(get_tx(16))) {
 			GUI_output(get_tx(17));
 		}
-	} else if (target_pos == DNG_POS(1,3,2) && target_pos != gs_dng_handled_pos && ds_readbs(DIRECTION) == SOUTH) {
+	} else if (target_pos == DNG_POS(1,3,2) && target_pos != gs_dng_handled_pos && gs_direction == SOUTH) {
 #if !defined(__BORLANDC__)
 		D1_INFO("Rueckwaerts gehen\n");
 #endif
 		GUI_output(get_tx(23));
 		gs_x_target = (1);
 		gs_y_target = (3);
-		ds_writeb(DIRECTION, WEST);
+		gs_direction = (WEST);
 		DNG_update_pos();
-	} else if (target_pos == DNG_POS(1,2,3) && target_pos != gs_dng_handled_pos && ds_readbs(DIRECTION) == EAST) {
+	} else if (target_pos == DNG_POS(1,2,3) && target_pos != gs_dng_handled_pos && gs_direction == EAST) {
 #if !defined(__BORLANDC__)
 		D1_INFO("Rueckwaerts gehen\n");
 #endif
 		GUI_output(get_tx(23));
 		gs_x_target = (5);
 		gs_y_target = (3);
-		ds_writeb(DIRECTION, EAST);
+		gs_direction = (EAST);
 		DNG_update_pos();
-	} else if (target_pos == DNG_POS(1,4,3) && target_pos != gs_dng_handled_pos && ds_readbs(DIRECTION) == WEST) {
+	} else if (target_pos == DNG_POS(1,4,3) && target_pos != gs_dng_handled_pos && gs_direction == WEST) {
 #if !defined(__BORLANDC__)
 		D1_INFO("Rueckwaerts gehen\n");
 #endif
 		GUI_output(get_tx(23));
 		gs_x_target = (3);
 		gs_y_target = (1);
-		ds_writeb(DIRECTION, NORTH);
+		gs_direction = (NORTH);
 		DNG_update_pos();
 	} else if (target_pos == DNG_POS(1,11,6) && target_pos != gs_dng_handled_pos) {
 #if !defined(__BORLANDC__)
@@ -469,7 +469,7 @@ signed short DNG12_handler(void)
 		leave_dungeon();
 		gs_x_target = (1);
 		gs_y_target = (6);
-		ds_writeb(DIRECTION, NORTH);
+		gs_direction = (NORTH);
 	}
 
 	g_textbox_width = tw_bak;

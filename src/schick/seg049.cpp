@@ -137,7 +137,7 @@ void GRP_save_pos(signed short group)
 
 	GRP_sort_heroes();
 
-	ds_writeb(GROUPS_DIRECTION + group, ds_readbs(DIRECTION));
+	ds_writeb(GROUPS_DIRECTION + group, gs_direction);
 
 	gs_groups_x_target[group] = gs_x_target;
 	gs_groups_y_target[group] = gs_y_target;
@@ -350,7 +350,7 @@ void GRP_switch_to_next(signed short mode)
 		}
 
 		/* save positions from the old group */
-		ds_writeb(GROUPS_DIRECTION + gs_current_group, ds_readbs(DIRECTION));
+		ds_writeb(GROUPS_DIRECTION + gs_current_group, gs_direction);
 		gs_groups_x_target[gs_current_group] = gs_x_target;
 		gs_groups_y_target[gs_current_group] = gs_y_target;
 		gs_groups_current_loctype[gs_current_group] = gs_current_loctype;
@@ -367,7 +367,7 @@ void GRP_switch_to_next(signed short mode)
 
 		/* set positions for the new group */
 		gs_current_group = (signed char)group;
-		ds_writeb(DIRECTION, ds_readb(GROUPS_DIRECTION + group));
+		gs_direction = (ds_readb(GROUPS_DIRECTION + group));
 		gs_x_target = (gs_groups_x_target[group]);
 		gs_y_target = (gs_groups_y_target[group]);
 		gs_current_loctype = gs_groups_current_loctype[group];

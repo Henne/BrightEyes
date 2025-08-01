@@ -145,7 +145,7 @@ signed short do_travel_mode(void)
 					if (i - 1 == answer || answer == -2)
 					{
 						ds_writeb(SHOW_TRAVEL_MAP, 0);
-						ds_writeb(DIRECTION, (ds_readb(DIRECTION) + 2) & 3);
+						gs_direction = ((gs_direction + 2) & 3);
 						break;
 					}
 
@@ -190,7 +190,7 @@ signed short do_travel_mode(void)
 						gs_current_town = ((signed char)ds_readw(TRAVEL_DESTINATION_TOWN_ID));
 						gs_x_target_bak = (ds_readw(TRAVEL_DESTINATION_X));
 						gs_y_target_bak = (ds_readw(TRAVEL_DESTINATION_Y));
-						ds_writeb(DIRECTION, (ds_readb(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
+						gs_direction = ((ds_readb(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
 
 					} else if (ds_readw(GAME_STATE) == GAME_STATE_MAIN && ds_readb(TRAVEL_DETOUR) != 99)
 					{

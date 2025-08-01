@@ -54,7 +54,7 @@ void DNG_floor_ceil(void)
 	/* Load ceiling */
 	nvf.dst = ((Bit8u*)g_renderbuf_ptr) + 0x4030;
 	nvf.src = (Bit8u*)g_buffer9_ptr3;
-	nvf.no = (!(ds_readbs(DIRECTION)&1)) ? 1 : 2;
+	nvf.no = (!(gs_direction&1)) ? 1 : 2;
 	nvf.type = (!ds_readbs(DNG_FLOOR_TEX)) ? 3 : 5;
 	nvf.width = (unsigned char*)&width;
 	nvf.height = (unsigned char*)&height;
@@ -459,7 +459,7 @@ void DNG_stub4(void)
 			if ((j = host_readws(ptr + 4)) != -1) {
 
 				if ((j & 0x4000) &&
-					((((l5 & 3) + 2) & 3) != ds_readbs(DIRECTION)))
+					((((l5 & 3) + 2) & 3) != gs_direction))
 				{
 				} else {
 					DNG_draw_walls(l1 + host_readws(ptr), l2 + host_readws(ptr + 2), j);
@@ -469,7 +469,7 @@ void DNG_stub4(void)
 			if ((j = host_readws(ptr + 0xa)) != -1) {
 
 				if ((j & 0x4000) &&
-					((((l5 & 3) + 2) & 3) != ds_readbs(DIRECTION)))
+					((((l5 & 3) + 2) & 3) != gs_direction))
 				{
 				} else {
 					DNG_draw_walls(l1 + host_readws(ptr + 6), l2 + host_readws(ptr + 8), j);
@@ -479,7 +479,7 @@ void DNG_stub4(void)
 			if ((j = host_readws(ptr + 0x10)) != -1) {
 
 				if ((j & 0x4000) &&
-					((((l5 & 3) + 2) & 3) != ds_readbs(DIRECTION)))
+					((((l5 & 3) + 2) & 3) != gs_direction))
 				{
 				} else {
 					DNG_draw_walls(l1 + host_readws(ptr + 0x0c), l2 + host_readws(ptr + 0x0e), j);
@@ -620,7 +620,7 @@ void DNG_timestep(signed short forward)
 
 	if (ds_readw(GAME_STATE) == GAME_STATE_MAIN) {
 
-		dir = ds_readbs(DIRECTION);
+		dir = gs_direction;
 
 		if (forward == 1) {
 
@@ -670,7 +670,7 @@ void DNG_update_pos(void)
 
 	ds_writew(DNG_REFRESH_X_TARGET, gs_x_target);
 	ds_writew(DNG_REFRESH_Y_TARGET, gs_y_target);
-	ds_writew(DNG_REFRESH_DIRECTION, ds_readbs(DIRECTION));
+	ds_writew(DNG_REFRESH_DIRECTION, gs_direction);
 
 }
 
@@ -1039,7 +1039,7 @@ mark2:			   goto mark1;
 
 	gs_x_target = (x_pos);
 	gs_y_target = (y_pos);
-	ds_writeb(DIRECTION, (signed char)dir);
+	gs_direction = ((signed char)dir);
 	gs_dungeon_level = level;
 	gs_dungeon_index = dungeon_id;
 	gs_current_loctype_bak = gs_current_loctype;

@@ -812,7 +812,7 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 				y = gs_y_target;
 				ptr_doors = g_dungeon_doors_buf;
 
-				switch (ds_readbs(DIRECTION))
+				switch (gs_direction)
 				{
 					case NORTH: y--; break;
 					case EAST:  x++; break;

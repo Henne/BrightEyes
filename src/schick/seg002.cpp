@@ -4036,7 +4036,7 @@ void draw_compass(void)
 		/* set dst */
 		n.src = g_buffer6_ptr;
 		/* set no */
-		n.no = ds_readbs(DIRECTION);
+		n.no = gs_direction;
 		/* set type*/
 		n.type = 0;
 

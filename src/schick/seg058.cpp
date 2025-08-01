@@ -602,7 +602,7 @@ void TLK_schmied(signed short state)
 		gs_dungeon_level = 3;
 		gs_x_target_bak = (gs_x_target = (11));
 		gs_y_target_bak = (gs_y_target = (2));
-		ds_writeb(DIRECTION, 2);
+		gs_direction = (2);
 	}
 }
 
