@@ -646,10 +646,10 @@ void spell_brenne(void)
 
 	ds_writew(SPELL_SPECIAL_AECOST, 0);
 
-	if (ds_readw(LIGHT_TYPE) == LIGHTING_TORCH) {
+	if (g_light_type == LIGHTING_TORCH) {
 		torch_pos = get_item_pos(get_spelluser(), ITEM_TORCH_OFF);
 	} else {
-		if (ds_readw(LIGHT_TYPE) == LIGHTING_LANTERN) {
+		if (g_light_type == LIGHTING_LANTERN) {
 		} else {
 			torch_pos = get_item_pos(get_spelluser(), ITEM_TORCH_OFF);
 		}

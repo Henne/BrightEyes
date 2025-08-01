@@ -457,19 +457,20 @@ void item_brenne(void)
 
 		if (get_item_pos(get_itemuser(), ITEM_TINDERBOX) == -1) {
 			/* No tinderbox */
-			/* prepare message */
 			sprintf((char*)g_dtp2, get_tx(122), (char*)get_itemuser() + HERO_NAME2);
 		} else {
 
 			if (ds_readws(USED_ITEM_ID) == ITEM_TORCH_OFF) {
-				/* TORCH */
-				ds_writew(LIGHT_TYPE, 1);
+
+				g_light_type = LIGHTING_TORCH;
 
 			} else if (ds_readws(USED_ITEM_ID) == ITEM_LANTERN_OFF) {
-				/* LANTERN */
-				ds_writew(LIGHT_TYPE, 2);
+
+				g_light_type = LIGHTING_LANTERN;
+
 			} else {
-				ds_writew(LIGHT_TYPE, 0);
+
+				g_light_type = LIGHTING_DARK;
 			}
 
 			g_spelluser = get_itemuser();
