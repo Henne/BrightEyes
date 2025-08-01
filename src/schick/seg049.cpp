@@ -139,8 +139,8 @@ void GRP_save_pos(signed short group)
 
 	ds_writeb(GROUPS_DIRECTION + group, ds_readbs(DIRECTION));
 
-	gs_groups_x_target[group] = ds_readws(X_TARGET);
-	gs_groups_y_target[group] = ds_readws(Y_TARGET);
+	gs_groups_x_target[group] = gs_x_target;
+	gs_groups_y_target[group] = gs_y_target;
 
 	gs_groups_current_loctype[group] = gs_current_loctype;
 	gs_groups_town[group] = gs_current_town;
@@ -351,8 +351,8 @@ void GRP_switch_to_next(signed short mode)
 
 		/* save positions from the old group */
 		ds_writeb(GROUPS_DIRECTION + gs_current_group, ds_readbs(DIRECTION));
-		gs_groups_x_target[gs_current_group] = ds_readws(X_TARGET);
-		gs_groups_y_target[gs_current_group] = ds_readws(Y_TARGET);
+		gs_groups_x_target[gs_current_group] = gs_x_target;
+		gs_groups_y_target[gs_current_group] = gs_y_target;
 		gs_groups_current_loctype[gs_current_group] = gs_current_loctype;
 		gs_groups_town[gs_current_group] = gs_current_town;
 		gs_groups_dng_index[gs_current_group] = gs_dungeon_index;
@@ -368,8 +368,8 @@ void GRP_switch_to_next(signed short mode)
 		/* set positions for the new group */
 		gs_current_group = (signed char)group;
 		ds_writeb(DIRECTION, ds_readb(GROUPS_DIRECTION + group));
-		ds_writew(X_TARGET, gs_groups_x_target[group]);
-		ds_writew(Y_TARGET, gs_groups_y_target[group]);
+		gs_x_target = (gs_groups_x_target[group]);
+		gs_y_target = (gs_groups_y_target[group]);
 		gs_current_loctype = gs_groups_current_loctype[group];
 		gs_current_town = (gs_groups_town[group]);
 		gs_dungeon_index = gs_groups_dng_index[group];

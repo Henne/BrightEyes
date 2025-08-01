@@ -55,8 +55,8 @@ void city_event_switch(void)
 	load_tx(gs_current_town + 77);
 
 	/* update the current position / make the step */
-	ds_writews(X_TARGET, gs_x_target_bak);
-	ds_writews(Y_TARGET, gs_y_target_bak);
+	gs_x_target = (gs_x_target_bak);
+	gs_y_target = (gs_y_target_bak);
 }
 
 /**

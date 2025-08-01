@@ -53,8 +53,8 @@ void show_automap(void)
 		g_textbox_width = 3;
 
 		l_si = (ds_readb(DNG_MAP_SIZE) == 16) ? 0 :
-				((ds_readws(X_TARGET) - 8 < 0) ? 0 :
-				((ds_readws(X_TARGET) - 8 > 15) ? 16 : ds_readws(X_TARGET) - 8));
+				((gs_x_target - 8 < 0) ? 0 :
+				((gs_x_target - 8 > 15) ? 16 : gs_x_target - 8));
 
 		gs_current_town = ((signed char)town);
 		gs_dungeon_index = dungeon;
@@ -278,9 +278,9 @@ void render_automap(signed short x_off)
 
 	/* Original-Bug 31: If there is another group on the same map square as the active group, the automap will mark that square by a purple arrow (for the other group) instead of a yellow one (for the active group).
 	 * The reason is that the yellow arrow will be overdrawn by the purple ones, which are drawn later. */
-	if (((ds_readws(X_TARGET) - x_off) >= 0) && ((ds_readws(X_TARGET) - x_off) <= 16)) { /* shouldn't this always be true? */
+	if (((gs_x_target - x_off) >= 0) && ((gs_x_target - x_off) <= 16)) { /* shouldn't this always be true? */
 
-		draw_automap_square(ds_readws(X_TARGET) - x_off, ds_readws(Y_TARGET),
+		draw_automap_square(gs_x_target - x_off, gs_y_target,
 					MAP_TILE_YELLOW_ARROW, ds_readbs(DIRECTION));
 	}
 #endif
@@ -309,9 +309,9 @@ void render_automap(signed short x_off)
 
 	/* Original-Bug 31: see above.
 	 * Fix: Move the code block drawing the yellow arrow after the one drawing the purple arrows. */
-	if (((ds_readws(X_TARGET) - x_off) >= 0) && ((ds_readws(X_TARGET) - x_off) <= 16)) { /* shouldn't this always be true? */
+	if (((gs_x_target - x_off) >= 0) && ((gs_x_target - x_off) <= 16)) { /* shouldn't this always be true? */
 
-		draw_automap_square(ds_readws(X_TARGET) - x_off, ds_readws(Y_TARGET),
+		draw_automap_square(gs_x_target - x_off, gs_y_target,
 					MAP_TILE_YELLOW_ARROW, ds_readbs(DIRECTION));
 	}
 #endif
@@ -504,11 +504,11 @@ signed short select_teleport_dest(void)
 	gs_current_town = ((gs_dungeon_index = 0));
 
 	l_si = ((ds_readb(DNG_MAP_SIZE) == 16) ? 0 :
-			((ds_readws(X_TARGET) - 8 < 0) ? 0 :
-			((ds_readws(X_TARGET) - 8 > 15) ? 16 : ds_readws(X_TARGET) - 8)));
+			((gs_x_target - 8 < 0) ? 0 :
+			((gs_x_target - 8 > 15) ? 16 : gs_x_target - 8)));
 
-	ds_writew(AUTOMAP_SELX, ds_readws(X_TARGET));
-	ds_writew(AUTOMAP_SELY, ds_readws(Y_TARGET));
+	ds_writew(AUTOMAP_SELX, gs_x_target);
+	ds_writew(AUTOMAP_SELY, gs_y_target);
 	gs_dungeon_index = dungeon;
 	gs_current_town = ((signed char)town);
 	tw_bak = g_textbox_width;
@@ -616,8 +616,8 @@ signed short select_teleport_dest(void)
 
 	ae_costs = 0;
 
-	if ((ds_readws(AUTOMAP_SELX) == ds_readws(X_TARGET)) &&
-		(ds_readws(AUTOMAP_SELY) == ds_readws(Y_TARGET)))
+	if ((ds_readws(AUTOMAP_SELX) == gs_x_target) &&
+		(ds_readws(AUTOMAP_SELY) == gs_y_target))
 	{
 		ae_costs = 0;
 		host_writeb((Bit8u*)g_dtp2, 0);

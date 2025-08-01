@@ -202,8 +202,8 @@ void do_house(void)
 
 	} else {
 		gs_current_loctype = gs_current_loctype_bak;
-		ds_writew(X_TARGET, gs_x_target_bak);
-		ds_writew(Y_TARGET, gs_y_target_bak);
+		gs_x_target = (gs_x_target_bak);
+		gs_y_target = (gs_y_target_bak);
 	}
 
 }
@@ -720,8 +720,8 @@ void leave_location(void)
 	gs_current_loctype = gs_current_loctype_bak;
 
 	/* set target  coordinates*/
-	ds_writew(X_TARGET, gs_x_target_bak);
-	ds_writew(Y_TARGET, gs_y_target_bak);
+	gs_x_target = (gs_x_target_bak);
+	gs_y_target = (gs_y_target_bak);
 
 	/* rotate party by 180 degrees */
 	ds_writeb(DIRECTION, (ds_readbs(DIRECTION) + 2) % 4);

@@ -47,7 +47,7 @@ signed short DNG06_handler(void)
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 
-	target_pos = DNG_POS(gs_dungeon_level, ds_readws(X_TARGET), ds_readws(Y_TARGET));
+	target_pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
 	if (target_pos == DNG_POS(0,14,5) && target_pos != gs_dng_handled_pos && !ds_readb(DNG06_BOOK_FLAG))
 	{
@@ -450,8 +450,8 @@ signed short DNG06_handler(void)
 		leave_dungeon();
 
 		gs_current_town = (ds_readbs(TRAVEL_DESTINATION_TOWN_ID));
-		ds_writew(X_TARGET, ds_readws(TRAVEL_DESTINATION_X));
-		ds_writew(Y_TARGET, ds_readws(TRAVEL_DESTINATION_Y));
+		gs_x_target = (ds_readws(TRAVEL_DESTINATION_X));
+		gs_y_target = (ds_readws(TRAVEL_DESTINATION_Y));
 		gs_current_loctype = LOCTYPE_NONE;
 		ds_writeb(DIRECTION, (ds_readb(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
 

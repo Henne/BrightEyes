@@ -70,8 +70,8 @@ void move(void)
 
 	for (i = 0; i < 29; i++, p_vis_field += 2) {
 		boundary_flag = 0;
-		x = ds_readws(X_TARGET) + host_readbs(p_vis_field);
-		y = ds_readw(Y_TARGET) + host_readbs(p_vis_field + 1);
+		x = gs_x_target + host_readbs(p_vis_field);
+		y = gs_y_target + host_readbs(p_vis_field + 1);
 
 		if (x < 0) {
 			x = 0;
@@ -109,21 +109,21 @@ void move(void)
 	if (ds_readb(DNG_MAP_SIZE) == 0x10) {
 		/* dungeon mode */
 		ds_writeb(STEPTARGET_FRONT, host_readb(p_map_small +
-			((ds_readw(Y_TARGET) + host_readbs(p_vis_field + 1)) << 4) +
-			ds_readw(X_TARGET) + host_readbs(p_vis_field)));
+			((gs_y_target + host_readbs(p_vis_field + 1)) << 4) +
+			gs_x_target + host_readbs(p_vis_field)));
 
 		ds_writeb(STEPTARGET_BACK, host_readb(p_map_small +
-			((ds_readw(Y_TARGET) + host_readbs(p_vis_field + 3)) << 4) +
-			ds_readw(X_TARGET) + host_readbs(p_vis_field + 2)));
+			((gs_y_target + host_readbs(p_vis_field + 3)) << 4) +
+			gs_x_target + host_readbs(p_vis_field + 2)));
 	} else {
 		/* city mode */
 		ds_writeb(STEPTARGET_FRONT, host_readb(p_map_large +
-			((ds_readw(Y_TARGET) + host_readbs(p_vis_field + 1)) << 5) +
-			 ds_readw(X_TARGET) + host_readbs(p_vis_field)));
+			((gs_y_target + host_readbs(p_vis_field + 1)) << 5) +
+			 gs_x_target + host_readbs(p_vis_field)));
 
 		ds_writeb(STEPTARGET_BACK, host_readb(p_map_large +
-			((ds_readw(Y_TARGET) + host_readbs(p_vis_field + 3)) << 5) +
-			ds_readw(X_TARGET) + host_readbs(p_vis_field + 2)));
+			((gs_y_target + host_readbs(p_vis_field + 3)) << 5) +
+			gs_x_target + host_readbs(p_vis_field + 2)));
 	}
 }
 

@@ -42,14 +42,14 @@ signed short DNG03_handler(void)
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 
-	target_pos = DNG_POS(gs_dungeon_level, ds_readws(X_TARGET), ds_readws(Y_TARGET));
+	target_pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
 	if ((target_pos == DNG_POS(0,4,7) || target_pos == DNG_POS(0,4,9) || target_pos == DNG_POS(0,6,8)) &&
 		target_pos != gs_dng_handled_pos)
 	{
 		GUI_output(get_tx(1));
 
-		ds_writew(X_TARGET, ds_writew(Y_TARGET, 1));
+		gs_x_target = (gs_y_target = (1));
 		DNG_inc_level();
 
 	} else if (target_pos == DNG_POS(0,3,4) && target_pos != gs_dng_handled_pos && ds_readbs(DIRECTION) == NORTH)
@@ -60,8 +60,8 @@ signed short DNG03_handler(void)
 		{
 			GUI_output(get_tx(4));
 
-			ds_writew(X_TARGET, 9);
-			ds_writew(Y_TARGET, 8);
+			gs_x_target = (9);
+			gs_y_target = (8);
 			DNG_inc_level();
 
 			hero = get_hero(0);
@@ -83,8 +83,8 @@ signed short DNG03_handler(void)
 	{
 		GUI_output(get_tx(4));
 
-		ds_writew(X_TARGET, 1);
-		ds_writew(Y_TARGET, 8);
+		gs_x_target = (1);
+		gs_y_target = (8);
 		ds_writeb(DIRECTION, WEST);
 
 		DNG_update_pos();
@@ -150,8 +150,8 @@ signed short DNG03_handler(void)
 		{
 			GUI_output(get_tx(4));
 
-			ds_writew(X_TARGET, 3);
-			ds_writew(Y_TARGET, 4);
+			gs_x_target = (3);
+			gs_y_target = (4);
 			ds_writeb(DIRECTION, SOUTH);
 			DNG_update_pos();
 
@@ -370,8 +370,8 @@ signed short DNG03_handler(void)
 	} else if (target_pos == DNG_POS(1,10,8) && target_pos != gs_dng_handled_pos)
 	{
 		GUI_output(get_tx(4));
-		ds_writew(X_TARGET, 5);
-		ds_writew(Y_TARGET, 14);
+		gs_x_target = (5);
+		gs_y_target = (14);
 		DNG_dec_level();
 		ds_writeb(DIRECTION, NORTH);
 
@@ -394,8 +394,8 @@ signed short DNG03_handler(void)
 	{
 		leave_dungeon();
 		gs_current_town = ((signed char)ds_readws(TRAVEL_DESTINATION_TOWN_ID));
-		ds_writews(X_TARGET, ds_readws(TRAVEL_DESTINATION_X));
-		ds_writews(Y_TARGET, ds_readws(TRAVEL_DESTINATION_Y));
+		gs_x_target = (ds_readws(TRAVEL_DESTINATION_X));
+		gs_y_target = (ds_readws(TRAVEL_DESTINATION_Y));
 		gs_current_loctype = LOCTYPE_NONE;
 		ds_writeb(DIRECTION, (ds_readws(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
 
@@ -477,8 +477,8 @@ void DNG03_chest05_func3(Bit8u*)
 
 	if (answer == 1)
 	{
-		ds_writew(X_TARGET, 10);
-		ds_writew(Y_TARGET, 12);
+		gs_x_target = (10);
+		gs_y_target = (12);
 		DNG_inc_level();
 	}
 }

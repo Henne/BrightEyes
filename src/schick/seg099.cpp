@@ -711,8 +711,8 @@ void spell_foramen(void)
 		return;
 	}
 
-	x = ds_readws(X_TARGET);
-	y = ds_readws(Y_TARGET);
+	x = gs_x_target;
+	y = gs_y_target;
 
 	switch (ds_readbs(DIRECTION)) {
 		case 0:	y--; break;
@@ -770,8 +770,8 @@ void spell_transversalis(void)
 				play_voc(ARCHIVE_FILE_FX16_VOC);
 
 				/* set new coordinates */
-				ds_writew(X_TARGET, ds_readws(AUTOMAP_SELX));
-				ds_writew(Y_TARGET, ds_readws(AUTOMAP_SELY));
+				gs_x_target = (ds_readws(AUTOMAP_SELX));
+				gs_y_target = (ds_readws(AUTOMAP_SELY));
 			}
 		}
 	}

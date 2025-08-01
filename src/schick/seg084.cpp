@@ -47,7 +47,7 @@ signed short DNG09_handler(void)
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 
-	target_pos = DNG_POS(gs_dungeon_level, ds_readws(X_TARGET), ds_readws(Y_TARGET));
+	target_pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
 	/* TODO: not the leader ? */
 	hero = get_hero(0);
@@ -115,7 +115,7 @@ signed short DNG09_handler(void)
 		{
 			GUI_output(get_tx(15));
 
-			add_ds_ws(X_TARGET, 2);
+			gs_x_target += 2;
 			ds_writebs(DIRECTION, EAST);
 			DNG_inc_level();
 		}
@@ -197,8 +197,8 @@ signed short DNG09_handler(void)
 		} else {
 			GUI_output(get_tx(19));
 
-			dec_ds_ws_post(X_TARGET);
-			add_ds_ws(Y_TARGET, 2);
+			gs_x_target--;
+			gs_y_target += 2;
 			DNG_inc_level();
 		}
 
@@ -260,33 +260,26 @@ signed short DNG09_handler(void)
 
 	} else if ((target_pos == DNG_POS(1,6,7) || target_pos == DNG_POS(1,4,1) ||
 			target_pos == DNG_POS(1,4,3)) &&
-			target_pos != gs_dng_handled_pos)
-	{
+			target_pos != gs_dng_handled_pos) {
 		DNG09_statues(20, 50);
 
-	} else if (target_pos == DNG_POS(1,3,12) && target_pos != gs_dng_handled_pos)
-	{
+	} else if (target_pos == DNG_POS(1,3,12) && target_pos != gs_dng_handled_pos) {
+
 		DNG09_pitfall();
 
-	} else if (target_pos == DNG_POS(1,2,8) && target_pos != gs_dng_handled_pos)
-	{
-		if (GUI_bool(get_tx(38)))
-		{
-			dec_ds_ws_post(X_TARGET);
-			inc_ds_ws_post(Y_TARGET);
+	} else if (target_pos == DNG_POS(1,2,8) && target_pos != gs_dng_handled_pos) {
+		if (GUI_bool(get_tx(38))) {
+			gs_x_target--;
+			gs_y_target++;
 			ds_writeb(DIRECTION, SOUTH);
 			DNG_dec_level();
 		}
 
-	} else if (target_pos == DNG_POS(1,7,13) && target_pos != gs_dng_handled_pos &&
-			!ds_readb(DNG09_LEVER_FAST))
-	{
+	} else if (target_pos == DNG_POS(1,7,13) && target_pos != gs_dng_handled_pos &&	!ds_readb(DNG09_LEVER_FAST)) {
 		/* lever, removes wall at (4,5), level 2 */
 		do {
-			i = GUI_radio(get_tx(39), 3,
-					get_tx(40),
-					get_tx(41),
-					get_tx(42));
+			i = GUI_radio(get_tx(39), 3, get_tx(40), get_tx(41), get_tx(42));
+
 		} while (i == -1);
 
 		if (i == 2)
@@ -468,8 +461,8 @@ signed short DNG09_handler(void)
 	{
 		leave_dungeon();
 		gs_current_town = ((signed char)ds_readws(TRAVEL_DESTINATION_TOWN_ID));
-		ds_writews(X_TARGET, ds_readws(TRAVEL_DESTINATION_X));
-		ds_writews(Y_TARGET, ds_readws(TRAVEL_DESTINATION_Y));
+		gs_x_target = (ds_readws(TRAVEL_DESTINATION_X));
+		gs_y_target = (ds_readws(TRAVEL_DESTINATION_Y));
 		gs_current_loctype = LOCTYPE_NONE;
 		ds_writeb(DIRECTION, (ds_readws(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
 

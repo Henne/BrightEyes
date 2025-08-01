@@ -40,7 +40,7 @@ signed short DNG12_handler(void)
 	ptr = p_datseg + DNG_MAP;
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
-	target_pos = DNG_POS(gs_dungeon_level,ds_readws(X_TARGET),ds_readws(Y_TARGET));
+	target_pos = DNG_POS(gs_dungeon_level,gs_x_target,gs_y_target);
 
 	hero = (Bit8u*)get_first_hero_available_in_group();
 
@@ -112,25 +112,20 @@ signed short DNG12_handler(void)
 					if (is_hero_available_in_group(get_hero(6))) {
 
 						/* prepare a message with the name of the NPC */
-						sprintf((char*)g_dtp2,
-								get_tx(22),
-								(char*)get_hero(6) + HERO_NAME2);
-
+						sprintf((char*)g_dtp2, get_tx(22), (char*)get_hero(6) + HERO_NAME2);
 						GUI_output((char*)g_dtp2);
 
-						while (ds_readws(X_TARGET) != 6) {
+						while (gs_x_target != 6) {
 
-							add_ds_ws(X_TARGET,
-								ds_readws(X_TARGET) > 6 ? -1 : 1);
+							gs_x_target += (gs_x_target > 6 ? -1 : 1);
 
 							DNG_update_pos();
 						}
 
 
-						while (ds_readws(Y_TARGET) != 8) {
+						while (gs_y_target != 8) {
 
-							add_ds_ws(Y_TARGET,
-								ds_readws(Y_TARGET) > 8 ? -1 : 1);
+							gs_y_target += (gs_y_target > 8 ? -1 : 1);
 
 							DNG_update_pos();
 						}
@@ -217,8 +212,8 @@ signed short DNG12_handler(void)
 	} else if (target_pos == DNG_POS(0,4,6) && target_pos != gs_dng_handled_pos) {
 		/* trap door */
 		GUI_output(get_tx(11));
-		ds_writews(X_TARGET, 1);
-		ds_writews(Y_TARGET, 3);
+		gs_x_target = (1);
+		gs_y_target = (3);
 		DNG_inc_level();
 	} else if (target_pos == DNG_POS(0,6,13) && target_pos != gs_dng_handled_pos) {
 		/* bolt trap */
@@ -270,8 +265,8 @@ signed short DNG12_handler(void)
 		D1_INFO("Rueckwaerts gehen\n");
 #endif
 		GUI_output(get_tx(23));
-		ds_writew(X_TARGET, 1);
-		ds_writew(Y_TARGET, 3);
+		gs_x_target = (1);
+		gs_y_target = (3);
 		ds_writeb(DIRECTION, WEST);
 		DNG_update_pos();
 	} else if (target_pos == DNG_POS(1,2,3) && target_pos != gs_dng_handled_pos && ds_readbs(DIRECTION) == EAST) {
@@ -279,8 +274,8 @@ signed short DNG12_handler(void)
 		D1_INFO("Rueckwaerts gehen\n");
 #endif
 		GUI_output(get_tx(23));
-		ds_writew(X_TARGET, 5);
-		ds_writew(Y_TARGET, 3);
+		gs_x_target = (5);
+		gs_y_target = (3);
 		ds_writeb(DIRECTION, EAST);
 		DNG_update_pos();
 	} else if (target_pos == DNG_POS(1,4,3) && target_pos != gs_dng_handled_pos && ds_readbs(DIRECTION) == WEST) {
@@ -288,8 +283,8 @@ signed short DNG12_handler(void)
 		D1_INFO("Rueckwaerts gehen\n");
 #endif
 		GUI_output(get_tx(23));
-		ds_writew(X_TARGET, 3);
-		ds_writew(Y_TARGET, 1);
+		gs_x_target = (3);
+		gs_y_target = (1);
 		ds_writeb(DIRECTION, NORTH);
 		DNG_update_pos();
 	} else if (target_pos == DNG_POS(1,11,6) && target_pos != gs_dng_handled_pos) {
@@ -429,15 +424,15 @@ signed short DNG12_handler(void)
 				GUI_output((char*)g_dtp2);
 
 				sub_hero_le(hero, random_schick(4));
-				ds_writew(X_TARGET, gs_x_target_bak);
-				ds_writew(Y_TARGET, gs_y_target_bak);
+				gs_x_target = (gs_x_target_bak);
+				gs_y_target = (gs_y_target_bak);
 			} else {
 				/* pass */
 				GUI_output(get_tx(26));
 			}
 		} else {
-			ds_writew(X_TARGET, gs_x_target_bak);
-			ds_writew(Y_TARGET, gs_y_target_bak);
+			gs_x_target = (gs_x_target_bak);
+			gs_y_target = (gs_y_target_bak);
 		}
 	} else if (target_pos == DNG_POS(1,14,3) && target_pos != gs_dng_handled_pos && ds_readb(DNG12_SPEARTRAP_ACTIVE) != 0) {
 		/* spear trap */
@@ -472,8 +467,8 @@ signed short DNG12_handler(void)
 	} else if (target_pos == DNG_POS(0,13,15) && target_pos != gs_dng_handled_pos) {
 		/* exit mine */
 		leave_dungeon();
-		ds_writew(X_TARGET, 1);
-		ds_writew(Y_TARGET, 6);
+		gs_x_target = (1);
+		gs_y_target = (6);
 		ds_writeb(DIRECTION, NORTH);
 	}
 
@@ -496,8 +491,8 @@ void DNG_clear_corridor(Bit8u *ptr)
 
 		host_writebs(ptr, -1);
 	} else {
-		ds_writew(X_TARGET, gs_x_target_bak);
-		ds_writew(Y_TARGET, gs_y_target_bak);
+		gs_x_target = (gs_x_target_bak);
+		gs_y_target = (gs_y_target_bak);
 	}
 }
 

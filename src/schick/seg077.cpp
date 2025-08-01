@@ -47,7 +47,7 @@ signed short DNG01_handler(void)
 	Bit8u *hero;
 
 
-	target_pos = DNG_POS(gs_dungeon_level, ds_readws(X_TARGET), ds_readws(Y_TARGET));
+	target_pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
 	if (target_pos == DNG_POS(0,1,8))
 	{
@@ -55,12 +55,12 @@ signed short DNG01_handler(void)
 
 	} else if (target_pos == DNG_POS(1,3,9))
 	{
-		dec_ds_ws_post(X_TARGET);
+		gs_x_target--;
 		DNG_fallpit_test(6);
 
 	} else if (target_pos == DNG_POS(1,14,5))
 	{
-		inc_ds_ws_post(Y_TARGET);
+		gs_y_target++;
 		DNG_fallpit_test(6);
 
 	} else if (target_pos == DNG_POS(2,7,6) || target_pos == DNG_POS(2,7,9))
@@ -74,7 +74,7 @@ signed short DNG01_handler(void)
 	} else if (target_pos == DNG_POS(4,7,6))
 	{
 		DNG_fallpit_test(6);
-		inc_ds_ws_post(Y_TARGET);
+		gs_y_target++;
 
 	} else if (target_pos == DNG_POS(1,13,5) && target_pos != gs_dng_handled_pos && !gs_dng01_sabre_taken)
 	{
@@ -174,11 +174,11 @@ signed short DNG01_handler(void)
 				if (test_skill(get_hero(0), TA_KLETTERN, 0) > 0)
 				{
 					/* Original-Bug: '32 * ' should probably be '16 *'. */
-					ds_writeb(DNG_MAP + 32 * ds_readws(Y_TARGET) + ds_readws(X_TARGET), DNG_TILE_PIT_IN_CEILING << 4);
+					ds_writeb(DNG_MAP + 32 * gs_y_target + gs_x_target, DNG_TILE_PIT_IN_CEILING << 4);
 					DNG_dec_level();
 					/* Original-Bug: '32 * ' should probably be '16 *'. */
-					ds_writeb(DNG_MAP + 32 * ds_readws(Y_TARGET) + ds_readws(X_TARGET), DNG_TILE_PIT << 4);
-					inc_ds_ws_post(Y_TARGET);
+					ds_writeb(DNG_MAP + 32 * gs_y_target + gs_x_target, DNG_TILE_PIT << 4);
+					gs_y_target++;
 				}
 			} else {
 				GUI_output(get_ttx(529));
@@ -191,8 +191,8 @@ signed short DNG01_handler(void)
 		{
 			leave_dungeon();
 			gs_current_town = ((signed char)ds_readws(TRAVEL_DESTINATION_TOWN_ID));
-			ds_writew(X_TARGET, ds_readws(TRAVEL_DESTINATION_X));
-			ds_writew(Y_TARGET, ds_readws(TRAVEL_DESTINATION_Y));
+			gs_x_target = (ds_readws(TRAVEL_DESTINATION_X));
+			gs_y_target = (ds_readws(TRAVEL_DESTINATION_Y));
 			gs_current_loctype = LOCTYPE_NONE;
 			ds_writeb(DIRECTION, (ds_readws(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
 

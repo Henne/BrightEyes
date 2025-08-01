@@ -62,7 +62,7 @@ void DNG14_dive(signed short diver_pos, signed char mod, signed short dest_x)
 		}
 	}
 
-	ds_writew(X_TARGET, dest_x);
+	gs_x_target = (dest_x);
 	ds_writews(DNG_REFRESH_DIRECTION, -1);
 
 }
@@ -191,7 +191,7 @@ void DNG15_riddle(void)
 
 	ptr = p_datseg + DNG_MAP;
 
-	pos = (gs_dungeon_level << 12) + (ds_readws(X_TARGET) << 8) + ds_readws(Y_TARGET);
+	pos = (gs_dungeon_level << 12) + (gs_x_target << 8) + gs_y_target;
 
 	/* check if the other group is in position */
 	for (i = l_di = 0; i < 6; i++) {
@@ -226,9 +226,9 @@ void DNG15_riddle(void)
 			/* pull on the other side */
 
 			/* set the corresponding lever */
-			if (ds_readws(Y_TARGET) == 1) {
+			if (gs_y_target == 1) {
 				ds_writeb(DNG15_LEVER_SOUTH, 1);
-			} else if (ds_readws(Y_TARGET) == 5) {
+			} else if (gs_y_target == 5) {
 				ds_writeb(DNG15_LEVER_NORTH, 1);
 			}
 

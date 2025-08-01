@@ -44,7 +44,7 @@ signed short DNG02_handler(void)
 	Bit8u *amap_ptr;
 	signed char flag;
 
-	target_pos = DNG_POS(gs_dungeon_level, ds_readws(X_TARGET), ds_readws(Y_TARGET));
+	target_pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
 	amap_ptr = p_datseg + DNG_MAP;
 
@@ -544,8 +544,8 @@ signed short DNG02_handler(void)
 	{
 		leave_dungeon();
 		gs_current_town = ((signed char)ds_readws(TRAVEL_DESTINATION_TOWN_ID));
-		ds_writews(X_TARGET, ds_readws(TRAVEL_DESTINATION_X));
-		ds_writews(Y_TARGET, ds_readws(TRAVEL_DESTINATION_Y));
+		gs_x_target = (ds_readws(TRAVEL_DESTINATION_X));
+		gs_y_target = (ds_readws(TRAVEL_DESTINATION_Y));
 		gs_current_loctype = LOCTYPE_NONE;
 		ds_writeb(DIRECTION, (ds_readws(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
 

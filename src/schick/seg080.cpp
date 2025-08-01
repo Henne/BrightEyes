@@ -43,7 +43,7 @@ signed short DNG04_handler(void)
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 
-        pos = (gs_dungeon_level << 12) + (ds_readws(X_TARGET) << 8) + ds_readws(Y_TARGET);
+        pos = (gs_dungeon_level << 12) + (gs_x_target << 8) + gs_y_target;
 
 	if (pos == DNG_POS(0,6,7) && pos != gs_dng_handled_pos && !ds_readb(DNG04_CORPSE0_FLAG))
 	{
@@ -279,8 +279,8 @@ signed short DNG04_handler(void)
 		leave_dungeon();
 
 		gs_current_town = (ds_readb(TRAVEL_DESTINATION_TOWN_ID));
-		ds_writew(X_TARGET, ds_readws(TRAVEL_DESTINATION_X));
-		ds_writew(Y_TARGET, ds_readws(TRAVEL_DESTINATION_Y));
+		gs_x_target = (ds_readws(TRAVEL_DESTINATION_X));
+		gs_y_target = (ds_readws(TRAVEL_DESTINATION_Y));
 		gs_current_loctype = LOCTYPE_NONE;
 		ds_writeb(DIRECTION, (ds_readb(TRAVEL_DESTINATION_VIEWDIR) + 2) & 0x03);
 
@@ -365,7 +365,7 @@ signed short DNG05_handler(void)
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 
-	pos = (gs_dungeon_level << 12) + (ds_readws(X_TARGET) << 8) + ds_readws(Y_TARGET);
+	pos = (gs_dungeon_level << 12) + (gs_x_target << 8) + gs_y_target;
 
 	if (pos == DNG_POS(0,7,14) && pos != gs_dng_handled_pos && ds_readw(DNG05_TRASH_FLAG) == 0)
 	{
@@ -459,7 +459,7 @@ signed short DNG05_handler(void)
 
 		set_var_to_zero();
 
-		ds_writew(X_TARGET, 5);
+		gs_x_target = (5);
 		ds_writew(AREA_PREPARED, -1);
 
 	} else if (pos == DNG_POS(0,6,15) && pos != gs_dng_handled_pos)
@@ -468,8 +468,8 @@ signed short DNG05_handler(void)
 		leave_dungeon();
 
 		gs_current_town = (ds_readb(TRAVEL_DESTINATION_TOWN_ID));
-		ds_writew(X_TARGET, ds_readws(TRAVEL_DESTINATION_X));
-		ds_writew(Y_TARGET, ds_readws(TRAVEL_DESTINATION_Y));
+		gs_x_target = (ds_readws(TRAVEL_DESTINATION_X));
+		gs_y_target = (ds_readws(TRAVEL_DESTINATION_Y));
 		gs_current_loctype = LOCTYPE_NONE;
 		ds_writeb(DIRECTION, (ds_readb(TRAVEL_DESTINATION_VIEWDIR) + 2) & 0x03);
 

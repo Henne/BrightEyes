@@ -628,16 +628,16 @@ void DNG_timestep(signed short forward)
 
 			if (!dir) {
 				/* north */
-				dec_ds_ws(Y_TARGET);
+				gs_y_target--;
 			} else if (dir == EAST) {
 				/* east */
-				inc_ds_ws(X_TARGET);
+				gs_x_target++;
 			} else if (dir == SOUTH) {
 				/* south */
-				inc_ds_ws(Y_TARGET);
+				gs_y_target++;
 			} else {
 				/* west */
-				dec_ds_ws(X_TARGET);
+				gs_x_target--;
 			}
 		} else {
 
@@ -645,16 +645,16 @@ void DNG_timestep(signed short forward)
 
 			if (!dir) {
 				/* north */
-				inc_ds_ws(Y_TARGET);
+				gs_y_target++;
 			} else if (dir == EAST) {
 				/* east */
-				dec_ds_ws(X_TARGET);
+				gs_x_target--;
 			} else if (dir == SOUTH) {
 				/* south */
-				dec_ds_ws(Y_TARGET);
+				gs_y_target--;
 			} else {
 				/* west */
-				inc_ds_ws(X_TARGET);
+				gs_x_target++;
 			}
 		}
 
@@ -668,8 +668,8 @@ void DNG_update_pos(void)
 
 	DNG_stub1();
 
-	ds_writew(DNG_REFRESH_X_TARGET, ds_readw(X_TARGET));
-	ds_writew(DNG_REFRESH_Y_TARGET, ds_readw(Y_TARGET));
+	ds_writew(DNG_REFRESH_X_TARGET, gs_x_target);
+	ds_writew(DNG_REFRESH_Y_TARGET, gs_y_target);
 	ds_writew(DNG_REFRESH_DIRECTION, ds_readbs(DIRECTION));
 
 }
@@ -797,8 +797,8 @@ void DNG_stub6(void)
 	if (ds_readb(DUNGEON_LIGHT) != 0) {
 
 		if (DNG_fallpit(6)) {
-			ds_writew(X_TARGET, gs_x_target_bak);
-			ds_writew(Y_TARGET, gs_y_target_bak);
+			gs_x_target = (gs_x_target_bak);
+			gs_y_target = (gs_y_target_bak);
 		}
 	} else {
 
@@ -1037,8 +1037,8 @@ mark2:			   goto mark1;
 		case DUNGEONS_HYGGELIKS_RUINE:  x_pos = 1;  y_pos = 11;   dir = EAST;  level = 0;  break;
 	}
 
-	ds_writew(X_TARGET, x_pos);
-	ds_writew(Y_TARGET, y_pos);
+	gs_x_target = (x_pos);
+	gs_y_target = (y_pos);
 	ds_writeb(DIRECTION, (signed char)dir);
 	gs_dungeon_level = level;
 	gs_dungeon_index = dungeon_id;

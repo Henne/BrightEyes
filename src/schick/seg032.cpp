@@ -1198,13 +1198,13 @@ signed short do_fight(signed short fight_id)
 					}
 
 					group_size = ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group);
-					x_target_bak = ds_readws(X_TARGET);
-					y_target_bak = ds_readws(Y_TARGET);
+					x_target_bak = gs_x_target;
+					y_target_bak = gs_y_target;
 					direction_bak = ds_readbs(DIRECTION);
 					dungeon_level_bak = gs_dungeon_level;
 
-					ds_writew(X_TARGET, (escape_positions[i] >> 8) & 0x0f); /* bits 8..11 */
-					ds_writew(Y_TARGET, escape_positions[i] & 0x0f); /* bits 0..3 */
+					gs_x_target = ((escape_positions[i] >> 8) & 0x0f); /* bits 8..11 */
+					gs_y_target = (escape_positions[i] & 0x0f); /* bits 0..3 */
 					ds_writeb(DIRECTION, (escape_positions[i] & 0xf0) >> 4); /* bits 4..7 */
 					gs_dungeon_level = (escape_positions[i] >> 12); /* bits 12..15 */
 
@@ -1222,8 +1222,8 @@ signed short do_fight(signed short fight_id)
 					}
 
 					GRP_save_pos(group_nr | 0x8000);
-					ds_writews(X_TARGET, x_target_bak);
-					ds_writews(Y_TARGET, y_target_bak);
+					gs_x_target = (x_target_bak);
+					gs_y_target = (y_target_bak);
 					ds_writebs(DIRECTION, (signed char)direction_bak);
 					gs_dungeon_level = dungeon_level_bak;
 				}
@@ -1234,8 +1234,8 @@ signed short do_fight(signed short fight_id)
 					host_writews(get_hero(j) + HERO_ESCAPE_POSITION, 0);
 				}
 
-				ds_writew(X_TARGET, (escape_positions[i] >> 8) & 0x0f);
-				ds_writew(Y_TARGET, escape_positions[i] & 0x0f);
+				gs_x_target = ((escape_positions[i] >> 8) & 0x0f);
+				gs_y_target = (escape_positions[i] & 0x0f);
 				ds_writeb(DIRECTION, (escape_positions[i] & 0xf0) >> 4);
 
 				gs_dungeon_level_bak = gs_dungeon_level;

@@ -48,7 +48,7 @@ signed short DNG10_handler(void)
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 
-	target_pos = DNG_POS(gs_dungeon_level, ds_readws(X_TARGET), ds_readws(Y_TARGET));
+	target_pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
 	hero = (Bit8u*)get_first_hero_available_in_group();
 
@@ -237,8 +237,8 @@ signed short DNG10_handler(void)
 			GUI_output(get_tx(23));
 			sub_group_le(random_schick(6));
 
-			ds_writew(X_TARGET, 1);
-			ds_writew(Y_TARGET, 3);
+			gs_x_target = (1);
+			gs_y_target = (3);
 			ds_writeb(DIRECTION, WEST);
 			DNG_update_pos();
 		}
@@ -377,7 +377,7 @@ signed short DNG10_handler(void)
 
 			load_in_head(58);
 
-			ds_writew(X_TARGET, ds_writew(Y_TARGET, 12));
+			gs_x_target = (gs_y_target = (12));
 
 			if ((answer = get_first_hero_with_item(ITEM_KEY_PLATIN)) != -1)
 			{
@@ -418,8 +418,8 @@ signed short DNG10_handler(void)
 		leave_dungeon();
 
 		gs_current_town = (ds_readbs(TRAVEL_DESTINATION_TOWN_ID));
-		ds_writew(X_TARGET, ds_readws(TRAVEL_DESTINATION_X));
-		ds_writew(Y_TARGET, ds_readws(TRAVEL_DESTINATION_Y));
+		gs_x_target = (ds_readws(TRAVEL_DESTINATION_X));
+		gs_y_target = (ds_readws(TRAVEL_DESTINATION_Y));
 		gs_current_loctype = LOCTYPE_NONE;
 		ds_writeb(DIRECTION, (ds_readbs(TRAVEL_DESTINATION_VIEWDIR) + 2) & 0x03);
 

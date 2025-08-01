@@ -399,8 +399,8 @@ void init_game_state(void)
 	gs_current_typeindex = 1;
 	gs_x_target_bak = (9);
 	gs_y_target_bak = (9);
-	ds_writew(X_TARGET, 9);
-	ds_writew(Y_TARGET, 8);
+	gs_x_target = (9);
+	gs_y_target = (8);
 	gs_direction_bak = (0);
 	ds_writeb(DIRECTION, 0);
 	gs_dungeon_index = DUNGEONS_NONE;

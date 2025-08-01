@@ -83,6 +83,8 @@ extern Bit8s  gs_datseg_status_start;		//ds:0x2d34; seg002, seg026, seg065
 extern Bit8s  gs_current_group;			//ds:0x2d35; seg002-seg120
 extern Bit8s  gs_total_hero_counter;		//ds:0x2d3c; seg002-seg113
 
+extern Bit16s gs_x_target;			//ds:0x2d44; seg002-seg120
+extern Bit16s gs_y_target;			//ds:0x2d46; seg002-seg120
 extern Bit16s gs_groups_x_target[6];		//ds:0x2d48; seg002-seg089
 extern Bit16s gs_groups_y_target[6];		//ds:0x2d54; seg002-seg089
 extern Bit8s  gs_current_loctype;		//ds:0x2d60; seg002-seg120

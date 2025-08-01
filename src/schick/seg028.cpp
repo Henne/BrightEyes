@@ -100,7 +100,7 @@ void prepare_dungeon_area(void)
 
 	ds_writeb(DNG_AREA_LOADED, gs_dungeon_index);
 	ds_writeb(CITY_AREA_LOADED, -1);
-	set_automap_tiles(ds_readws(X_TARGET), ds_readws(Y_TARGET));
+	set_automap_tiles(gs_x_target, gs_y_target);
 }
 
 void load_dungeon_ddt(void)
@@ -201,7 +201,7 @@ void seg028_0224(void)
 	ds_writeb(CITY_AREA_LOADED, gs_current_town);
 	ds_writeb(DNG_AREA_LOADED, -1);
 
-	set_automap_tiles(ds_readw(X_TARGET), ds_readw(Y_TARGET));
+	set_automap_tiles(gs_x_target, gs_y_target);
 }
 
 Bit8u* seg028_0444(signed short index, signed short firstcol, signed short colors, signed short ref)

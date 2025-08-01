@@ -108,8 +108,8 @@ void DNG_door(signed short action)
 	signed short lockpick_result;
 
 	ptr_doors = (struct dummy5*)g_dungeon_doors_buf;
-	x = ds_readws(X_TARGET);
-	y = ds_readws(Y_TARGET);
+	x = gs_x_target;
+	y = gs_y_target;
 
 	switch (ds_readbs(DIRECTION))
 	{
@@ -360,8 +360,8 @@ void DNG_fallpit_test(signed short max_damage)
 
 	play_voc(ARCHIVE_FILE_FX18_VOC);
 
-	and_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(ds_readws(X_TARGET), ds_readws(Y_TARGET)), 0x0f); /* clear higher 4 bits */
-	or_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(ds_readws(X_TARGET), ds_readws(Y_TARGET)), DNG_TILE_PIT << 4);
+	and_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(gs_x_target, gs_y_target), 0x0f); /* clear higher 4 bits */
+	or_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(gs_x_target, gs_y_target), DNG_TILE_PIT << 4);
 
 	if (ds_readb(DUNGEON_LIGHT) != 0)
 	{
@@ -371,8 +371,8 @@ void DNG_fallpit_test(signed short max_damage)
 		/* drop one level down */
 		DNG_inc_level();
 
-		and_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(ds_readws(X_TARGET), ds_readws(Y_TARGET)), 0x0f); /* clear higher 4 bits */
-		or_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(ds_readws(X_TARGET), ds_readws(Y_TARGET)), DNG_TILE_PIT_IN_CEILING << 4);
+		and_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(gs_x_target, gs_y_target), 0x0f); /* clear higher 4 bits */
+		or_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(gs_x_target, gs_y_target), DNG_TILE_PIT_IN_CEILING << 4);
 		/* effect: 0101.... */
 
 		/* damage the heroes */
@@ -394,21 +394,21 @@ void DNG_fallpit_test(signed short max_damage)
 			gs_dungeon_level++;
 			load_area_description(1);
 
-			and_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(ds_readws(X_TARGET), ds_readws(Y_TARGET)), 0x0f); /* clear higher 4 bits */
-			or_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(ds_readws(X_TARGET), ds_readws(Y_TARGET)), DNG_TILE_PIT_IN_CEILING << 4);
+			and_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(gs_x_target, gs_y_target), 0x0f); /* clear higher 4 bits */
+			or_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(gs_x_target, gs_y_target), DNG_TILE_PIT_IN_CEILING << 4);
 
 			/* move one level up. */
 			gs_dungeon_level--;
 
-			ds_writews(X_TARGET, gs_x_target_bak);
-			ds_writews(Y_TARGET, gs_y_target_bak);
+			gs_x_target = (gs_x_target_bak);
+			gs_y_target = (gs_y_target_bak);
 
 			load_area_description(1);
 
 			DNG_update_pos();
 		} else {
-			and_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(ds_readws(X_TARGET), ds_readws(Y_TARGET)), 0x0f); /* clear higher 4 bits */
-			or_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(ds_readws(X_TARGET), ds_readws(Y_TARGET)), DNG_TILE_PIT_IN_CEILING << 4);
+			and_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(gs_x_target, gs_y_target), 0x0f); /* clear higher 4 bits */
+			or_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(gs_x_target, gs_y_target), DNG_TILE_PIT_IN_CEILING << 4);
 			/* effect: 0101.... */
 		}
 	}
@@ -461,24 +461,24 @@ signed short DNG_step(void)
 	}
 
 	if (ds_readbs(DIRECTION) != ds_readws(DNG_REFRESH_DIRECTION) ||
-		ds_readws(X_TARGET) != ds_readws(DNG_REFRESH_X_TARGET) ||
-		ds_readws(Y_TARGET) != ds_readws(DNG_REFRESH_Y_TARGET))
+		gs_x_target != ds_readws(DNG_REFRESH_X_TARGET) ||
+		gs_y_target != ds_readws(DNG_REFRESH_Y_TARGET))
 	{
 		DNG_update_pos();
-		set_automap_tiles(ds_readws(X_TARGET), ds_readws(Y_TARGET));
+		set_automap_tiles(gs_x_target, gs_y_target);
 		DNG_fight();
 	}
 
-	if (ds_readws(X_TARGET) != gs_x_target_bak ||
-		ds_readws(Y_TARGET) != gs_y_target_bak ||
+	if (gs_x_target != gs_x_target_bak ||
+		gs_y_target != gs_y_target_bak ||
 		ds_readbs(DNG_LEVEL_CHANGED) != 0)
 	{
 		ds_writeb(CAN_MERGE_GROUP, (unsigned char)can_merge_group());
 		ds_writew(LOCKPICK_TRY_COUNTER, 0);
 	}
 
-	gs_x_target_bak = (ds_readws(X_TARGET));
-	gs_y_target_bak = (ds_readws(Y_TARGET));
+	gs_x_target_bak = (gs_x_target);
+	gs_y_target_bak = (gs_y_target);
 	gs_direction_bak = (ds_readbs(DIRECTION));
 
 	handle_gui_input();
@@ -529,7 +529,7 @@ signed short DNG_step(void)
 	} else if (ds_readws(ACTION) == ACTION_ID_ICON_2)
 	{
 		/* merge groups or reach hands through the mirror */
-		pos = DNG_POS(gs_dungeon_level, ds_readws(X_TARGET), ds_readws(Y_TARGET));
+		pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
 		if ((gs_dungeon_index == DUNGEONS_HYGGELIKS_RUINE && pos == DNG_POS(1,8,1)) || pos == DNG_POS(1,8,5))
 		{
@@ -630,8 +630,8 @@ signed short DNG_step(void)
 
 			if (ds_readw(GET_EXTRA_LOOT) != 0)
 			{
-				x = ds_readws(X_TARGET);
-				y = ds_readws(Y_TARGET);
+				x = gs_x_target;
+				y = gs_y_target;
 
 				switch (ds_readbs(DIRECTION))
 				{
@@ -682,7 +682,7 @@ void DNG_see_stairs(void)
 	stair_struct *stair_ptr;
 	stair_ptr = (stair_struct*)g_dungeon_stairs_buf;
 
-	target_pos = DNG_POS(gs_dungeon_level, ds_readws(X_TARGET), ds_readws(Y_TARGET));
+	target_pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
 #if !defined(__BORLANDC__)
 	if (sizeof(stair_struct) != 4)
@@ -696,8 +696,8 @@ void DNG_see_stairs(void)
 		if (host_readws((Bit8u*)stair_ptr) == target_pos)
 		{
 			/* found the current stairs */
-			ds_writew(X_TARGET, host_readbs((Bit8u*)stair_ptr + 2) & 0x0f);
-			ds_writew(Y_TARGET, host_readbs((Bit8u*)stair_ptr + 3) & 0x0f);
+			gs_x_target = (host_readbs((Bit8u*)stair_ptr + 2) & 0x0f);
+			gs_y_target = (host_readbs((Bit8u*)stair_ptr + 3) & 0x0f);
 			ds_writeb(DIRECTION, host_readbs((Bit8u*)stair_ptr + 3) >> 4);
 
 			if (host_readbs((Bit8u*)stair_ptr + 2) & 0x80)
@@ -720,7 +720,7 @@ void DNG_see_stairs(void)
 				DNG_dec_level();
 			}
 
-			set_automap_tiles(ds_readws(X_TARGET), ds_readws(Y_TARGET));
+			set_automap_tiles(gs_x_target, gs_y_target);
 
 			break;
 		}
@@ -831,7 +831,7 @@ void DNG_fight(void)
 
 	fight_ptr = (struct fight_struct*)g_dungeon_fights_buf;
 
-	target_pos = DNG_POS(gs_dungeon_level, ds_readws(X_TARGET), ds_readws(Y_TARGET));
+	target_pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
 #if !defined(__BORLANDC__)
 	if (sizeof(fight_struct) != 14)
@@ -1009,7 +1009,7 @@ void DNG_see_lever(void)
 {
 	signed short target_pos;
 
-	target_pos = DNG_POS(gs_dungeon_level, ds_readws(X_TARGET), ds_readws(Y_TARGET));
+	target_pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
 	if (gs_dungeon_index == DUNGEONS_HYGGELIKS_RUINE &&
 		(target_pos == DNG_POS(1,8,1) || target_pos == DNG_POS(1,8,5)) &&

@@ -46,7 +46,7 @@ signed short DNG14_handler(void)
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 
-	pos = (gs_dungeon_level << 12) + (ds_readws(X_TARGET) << 8) + ds_readws(Y_TARGET);
+	pos = (gs_dungeon_level << 12) + (gs_x_target << 8) + gs_y_target;
 
 	hero = (Bit8u*)get_first_hero_available_in_group();
 
@@ -239,7 +239,7 @@ signed short DNG14_handler(void)
 
 			GUI_output(get_tx(14));
 
-			inc_ds_ws(Y_TARGET);
+			gs_y_target++;
 			ds_writebs(DIRECTION, SOUTH);
 			DNG_update_pos();
 		}
@@ -420,7 +420,7 @@ signed short DNG14_handler(void)
 				}
 
 				/* drop down to level 4 */
-				dec_ds_ws(Y_TARGET);
+				gs_y_target--;
 				DNG_inc_level();
 
 			} else if (hero_pos == 1) {
@@ -445,7 +445,7 @@ signed short DNG14_handler(void)
 				}
 
 				/* drop down to level 4 */
-				dec_ds_ws(Y_TARGET);
+				gs_y_target--;
 				DNG_inc_level();
 			}
 		}
@@ -498,8 +498,8 @@ signed short DNG14_handler(void)
 			GUI_output(get_tx(32));
 		}
 
-		ds_writews(X_TARGET, gs_x_target_bak);
-		ds_writews(Y_TARGET, gs_y_target_bak);
+		gs_x_target = (gs_x_target_bak);
+		gs_y_target = (gs_y_target_bak);
 
 	} else if (pos == DNG_POS(2,7,7) && pos != gs_dng_handled_pos) {
 
@@ -580,7 +580,7 @@ signed short DNG14_handler(void)
 						/* 1W6 damage */
 						sub_hero_le(hero, random_schick(6));
 
-						ds_writews(X_TARGET, (pos == DNG_POS(3,10,10) ? 9 : 13));
+						gs_x_target = ((pos == DNG_POS(3,10,10) ? 9 : 13));
 
 						if (hero_dead(hero)) {
 
@@ -673,8 +673,8 @@ signed short DNG14_handler(void)
 			}
 
 			leave_dungeon();
-			ds_writews(X_TARGET, 22);
-			ds_writews(Y_TARGET, 5);
+			gs_x_target = (22);
+			gs_y_target = (5);
 			gs_current_loctype = LOCTYPE_NONE;
 			ds_writeb(DIRECTION, SOUTH);
 		}
@@ -696,8 +696,8 @@ signed short DNG14_handler(void)
 
 		if (!GUI_bool(get_tx(59))) {
 
-			ds_writew(X_TARGET, gs_x_target_bak);
-			ds_writew(Y_TARGET, gs_y_target_bak);
+			gs_x_target = (gs_x_target_bak);
+			gs_y_target = (gs_y_target_bak);
 
 			GUI_output(get_tx(60));
 		}
@@ -705,8 +705,8 @@ signed short DNG14_handler(void)
 	} else if (pos == DNG_POS(0,0,14) && pos != gs_dng_handled_pos) {
 		/* regular exit */
 		leave_dungeon();
-		ds_writews(X_TARGET, 2);
-		ds_writews(Y_TARGET, 13);
+		gs_x_target = (2);
+		gs_y_target = (13);
 		gs_current_loctype = LOCTYPE_NONE;
 		ds_writeb(DIRECTION, NORTH);
 	}

@@ -379,8 +379,8 @@ void seg092_06b4(signed short a1)
 	chest_ptr = (Bit8u*)ds_readd(DNG_SPECIALCHEST_INDEX + 4 * gs_dungeon_index);
 	ptr = p_datseg + DNG_MAP;
 	ds_writew(GET_EXTRA_LOOT, 0);
-	x = ds_readws(X_TARGET);
-	y = ds_readws(Y_TARGET);
+	x = gs_x_target;
+	y = gs_y_target;
 
 	if (a1 != 0) {
 		switch(ds_readbs(DIRECTION)) {

@@ -50,7 +50,7 @@ signed short DNG15_handler(void)
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 
-	target_pos = DNG_POS(gs_dungeon_level, ds_readws(X_TARGET), ds_readws(Y_TARGET));
+	target_pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
 	dir = ds_readbs(DIRECTION);
 
@@ -130,11 +130,11 @@ signed short DNG15_handler(void)
 	} else if (target_pos == DNG_POS(1,14,2) && target_pos != gs_dng_handled_pos)
 	{
 		/* LADDER: upwards */
-		if (GUI_bool(get_tx(17)))
-		{
+		if (GUI_bool(get_tx(17))) {
+
 			DNG_dec_level();
 			ds_writeb(DIRECTION, WEST);
-			dec_ds_ws_post(X_TARGET);
+			gs_x_target--;
 		}
 
 	} else if (target_pos == DNG_POS(1,8,1) &&
@@ -200,12 +200,12 @@ signed short DNG15_handler(void)
 		if (tmp == 0) {
 			/* go through the mirror */
 			GUI_output(get_tx(26));
-			ds_writew(Y_TARGET, 5);
+			gs_y_target = (5);
 			DNG_update_pos();
 		} else {
 			/* stay here */
 			GUI_output(get_tx(27));
-			ds_writew(Y_TARGET, gs_y_target_bak);
+			gs_y_target = (gs_y_target_bak);
 		}
 
 	} else if (target_pos == DNG_POS(1,8,4) && target_pos != gs_dng_handled_pos)
@@ -224,12 +224,12 @@ signed short DNG15_handler(void)
 		{
 			/* go through the mirror */
 			GUI_output(get_tx(26));
-			ds_writew(Y_TARGET, 1);
+			gs_y_target = (1);
 			DNG_update_pos();
 		} else {
 			/* stay here */
 			GUI_output(get_tx(27));
-			ds_writew(Y_TARGET, gs_y_target_bak);
+			gs_y_target = (gs_y_target_bak);
 		}
 
 	} else if (target_pos == DNG_POS(1,1,14) && target_pos != gs_dng_handled_pos)
@@ -445,14 +445,14 @@ signed short DNG15_handler(void)
 		{
 			GUI_output(get_tx(6));
 
-			ds_writew(X_TARGET, gs_x_target_bak);
-			ds_writew(Y_TARGET, gs_y_target_bak);
+			gs_x_target = (gs_x_target_bak);
+			gs_y_target = (gs_y_target_bak);
 		} else {
 			leave_dungeon();
 
 			gs_current_town = (ds_readbs(TRAVEL_DESTINATION_TOWN_ID));
-			ds_writew(X_TARGET, ds_readws(TRAVEL_DESTINATION_X));
-			ds_writew(Y_TARGET, ds_readws(TRAVEL_DESTINATION_Y));
+			gs_x_target = (ds_readws(TRAVEL_DESTINATION_X));
+			gs_y_target = (ds_readws(TRAVEL_DESTINATION_Y));
 			gs_current_loctype = LOCTYPE_NONE;
 			ds_writeb(DIRECTION, (ds_readbs(TRAVEL_DESTINATION_VIEWDIR) + 2) & 0x03);
 
@@ -526,7 +526,7 @@ void DNG15_debris(signed short ladder)
 			if (GUI_bool(get_tx(13)))
 			{
 				ds_writeb(DIRECTION, WEST);
-				dec_ds_ws(X_TARGET);
+				gs_x_target--;
 				DNG_inc_level();
 			}
 		}
@@ -656,8 +656,8 @@ void DNG15_collapsing_ceiling(Bit8u* ptr)
 			}
 
 			/* way is blocked */
-			ds_writew(X_TARGET, gs_x_target_bak);
-			ds_writew(Y_TARGET, gs_y_target_bak);
+			gs_x_target = (gs_x_target_bak);
+			gs_y_target = (gs_y_target_bak);
 			break;
 		}
 		case 4:
@@ -722,8 +722,8 @@ void DNG15_clear_way(Bit8u* ptr)
 			}
 		}
 
-		ds_writew(X_TARGET, gs_x_target_bak);
-		ds_writew(Y_TARGET, gs_y_target_bak);
+		gs_x_target = (gs_x_target_bak);
+		gs_y_target = (gs_y_target_bak);
 	} else {
 		inc_ptr_bs(ptr);
 		GUI_output(get_tx(47));

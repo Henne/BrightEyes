@@ -4077,9 +4077,9 @@ signed short can_merge_group(void)
 			if ((i != gs_current_group) &&
 				(0 != ds_readb(i + GROUP_MEMBER_COUNTS)) &&
 				/* check XTarget */
-				(gs_groups_x_target[i] == ds_readws(X_TARGET)) &&
+				(gs_groups_x_target[i] == gs_x_target) &&
 				/* check YTarget */
-				(gs_groups_y_target[i] == ds_readws(Y_TARGET)) &&
+				(gs_groups_y_target[i] == gs_y_target) &&
 				/* check Location */
 				(gs_groups_current_loctype[i] == gs_current_loctype) &&
 				/* check currentTown */

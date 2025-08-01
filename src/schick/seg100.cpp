@@ -180,9 +180,9 @@ void spell_penetrizzel(void)
 
 	for (y = -2;  y <= 2; y++) {
 		for (x = -2;  x <= 2; x++) {
-			if ((ds_readws(Y_TARGET) + y >= 0) && (ds_readws(X_TARGET) + x >= 0)) {
-				if ((ds_readb(DNG_MAP_SIZE) - 1 >= ds_readws(X_TARGET) + x) && (ds_readws(Y_TARGET) + y <= 15)) {
-					set_automap_tile(ds_readws(X_TARGET) + x, ds_readws(Y_TARGET) + y);
+			if ((gs_y_target + y >= 0) && (gs_x_target + x >= 0)) {
+				if ((ds_readb(DNG_MAP_SIZE) - 1 >= gs_x_target + x) && (gs_y_target + y <= 15)) {
+					set_automap_tile(gs_x_target + x, gs_y_target + y);
 				}
 			}
 		}

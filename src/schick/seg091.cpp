@@ -37,7 +37,7 @@ signed short DNG13_handler(void)
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 
-	pos = DNG_POS(gs_dungeon_level, ds_readws(X_TARGET), ds_readws(Y_TARGET));
+	pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
 	hero = (Bit8u*)get_first_hero_available_in_group();
 
@@ -157,8 +157,8 @@ signed short DNG13_handler(void)
 
 		leave_dungeon();
 
-		ds_writew(X_TARGET, 9);
-		ds_writew(Y_TARGET, 1);
+		gs_x_target = (9);
+		gs_y_target = (1);
 		ds_writeb(DIRECTION, EAST);
 	}
 
@@ -208,8 +208,8 @@ void DNG13_unblock_passage(char* text, Bit8u* flag)
 
 		} else {
 
-			ds_writew(X_TARGET, gs_x_target_bak);
-			ds_writew(Y_TARGET, gs_y_target_bak);
+			gs_x_target = (gs_x_target_bak);
+			gs_y_target = (gs_y_target_bak);
 		}
 	}
 }
