@@ -177,9 +177,7 @@ void buy_screen(void)
 
 			p_money = get_party_money();
 			make_valuta_str((char*)g_dtp2, p_money);
-			GUI_print_string(g_dtp2,
-				104 - GUI_get_space_for_string(g_dtp2, 0),
-				26);
+			GUI_print_string((char*)g_dtp2, 104 - GUI_get_space_for_string((char*)g_dtp2, 0), 26);
 
 			l8 = 1;
 			ds_writew(REQUEST_REFRESH, 0);
@@ -192,7 +190,7 @@ void buy_screen(void)
 			do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 135, 26, 214, 33, 0);
 
 			make_valuta_str((char*)g_dtp2, price);
-			GUI_print_string(g_dtp2, 135, 26);
+			GUI_print_string((char*)g_dtp2, 135, 26);
 
 			do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 29, 34, 214, 133, 0);
 
@@ -230,7 +228,7 @@ void buy_screen(void)
 								(host_readws((Bit8u*)ds_readd(BUYITEMS) + 4 + 7 * l3) == 10 ? fmt_s.a : fmt_d.a),
 							host_readws((Bit8u*)ds_readd(BUYITEMS) + 2 + 7 * l3));
 
-						GUI_print_string(g_dtp2, array3.a[items_x] + 20, array5.a[l_di] + 5);
+						GUI_print_string((char*)g_dtp2, array3.a[items_x] + 20, array5.a[l_di] + 5);
 					}
 				}
 			}
@@ -288,18 +286,14 @@ void buy_screen(void)
 				}
 			}
 
-			sprintf((char*)g_dtp2,
-				(char*)fmt_d_s.a,
-				l4,
+			sprintf((char*)g_dtp2, (char*)fmt_d_s.a, l4,
 				(char*)(GUI_names_grammar(0x4000 +  (l4 > 1 || l4 == 0 ? 4 : 0), item_id, 0)));
 
 			if (item_weapon(get_itemsdat(item_id))) {
 
-				strcat((char*)g_dtp2,
-					(char*)p_datseg + BUY_SCREEN_STR_COMMA_SPACE);
+				strcat((char*)g_dtp2, (char*)p_datseg + BUY_SCREEN_STR_COMMA_SPACE);
 
-				strcat((char*)g_dtp2,
-					get_ttx(48 + host_readbs(get_itemsdat(item_id) + ITEM_STATS_SUBTYPE)));
+				strcat((char*)g_dtp2, get_ttx(48 + host_readbs(get_itemsdat(item_id) + ITEM_STATS_SUBTYPE)));
 			}
 
 			GUI_print_loc_line((char*)g_dtp2);
@@ -315,7 +309,7 @@ void buy_screen(void)
 						197, 0);
 
 				if (host_readbs(hero1 + HERO_TYPE) != HERO_TYPE_NONE) {
-					copy_forename(g_dtp2, (char*)(hero1 + HERO_NAME2));
+					copy_forename((char*)g_dtp2, (char*)(hero1 + HERO_NAME2));
 					set_textcolor(255, 0);
 
 					if (host_readbs(hero1 + HERO_GROUP_NO) != gs_current_group) {
@@ -327,9 +321,7 @@ void buy_screen(void)
 						}
 					}
 
-					GUI_print_string(g_dtp2,
-						GUI_get_first_pos_centered(g_dtp2, ds_readws(HERO_PIC_POSX + 2 * l_di), 43, 0),
-						190);
+					GUI_print_string((char*)g_dtp2, GUI_get_first_pos_centered((char*)g_dtp2, ds_readws(HERO_PIC_POSX + 2 * l_di), 43, 0),	190);
 
 					set_textcolor(255, 0);
 				}
@@ -443,12 +435,11 @@ void buy_screen(void)
 							}
 						}
 
-						do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR),
-								135, 26, 214, 33, 0);
+						do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 135, 26, 214, 33, 0);
 
 						make_valuta_str((char*)g_dtp2, price);
 
-						GUI_print_string(g_dtp2, 135, 26);
+						GUI_print_string((char*)g_dtp2, 135, 26);
 					}
 
 					l15 = 1;
@@ -490,7 +481,7 @@ void buy_screen(void)
 
 							make_valuta_str((char*)g_dtp2, price);
 
-							GUI_print_string(g_dtp2, 135, 26);
+							GUI_print_string((char*)g_dtp2, 135, 26);
 						}
 
 						l15 = 1;
