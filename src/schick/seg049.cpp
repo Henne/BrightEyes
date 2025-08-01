@@ -145,7 +145,7 @@ void GRP_save_pos(signed short group)
 	gs_groups_current_loctype[group] = gs_current_loctype;
 	ds_writeb(GROUPS_TOWN + group, ds_readbs(CURRENT_TOWN));
 	ds_writeb(GROUPS_DNG_INDEX + group, ds_readbs(DUNGEON_INDEX));
-	ds_writeb(GROUPS_DNG_LEVEL + group, ds_readbs(DUNGEON_LEVEL));
+	gs_groups_dng_level[group] = ds_readbs(DUNGEON_LEVEL);
 	gs_groups_direction_bak[group] = gs_direction_bak;
 
 	gs_groups_x_target_bak[group] = gs_x_target_bak;
@@ -235,15 +235,15 @@ void GRP_merge(void)
 				ds_writew(GROUPS_Y_TARGET + answer * 2,
 				ds_writebs(GROUPS_TOWN + answer,
 				ds_writeb(GROUPS_DNG_INDEX + answer,
-				ds_writeb(GROUPS_DNG_LEVEL + answer,
-				(gs_groups_direction_bak[answer]
+				gs_groups_dng_level[answer]
+				= gs_groups_direction_bak[answer]
 				= gs_groups_x_target_bak[answer]
 				= gs_groups_y_target_bak[answer]
 				= gs_groups_current_loctype_bak[answer]
 				= gs_groups_town_bak[answer]
 				= gs_groups_dng_index_bak[answer]
 				= gs_groups_dng_level_bak[answer]
-				= 0))))))));
+				= 0))))));
 
 			ds_writeb(GROUP_MEMBER_COUNTS + answer, 0);
 
@@ -356,7 +356,7 @@ void GRP_switch_to_next(signed short mode)
 		gs_groups_current_loctype[gs_current_group] = gs_current_loctype;
 		ds_writeb(GROUPS_TOWN + gs_current_group, ds_readbs(CURRENT_TOWN));
 		ds_writeb(GROUPS_DNG_INDEX + gs_current_group, ds_readbs(DUNGEON_INDEX));
-		ds_writeb(GROUPS_DNG_LEVEL + gs_current_group, ds_readbs(DUNGEON_LEVEL));
+		gs_groups_dng_level[gs_current_group] = ds_readbs(DUNGEON_LEVEL);
 		gs_groups_direction_bak[gs_current_group] = gs_direction_bak;
 		gs_groups_x_target_bak[gs_current_group] = gs_x_target_bak;
 		gs_groups_y_target_bak[gs_current_group] = gs_y_target_bak;
@@ -374,7 +374,7 @@ void GRP_switch_to_next(signed short mode)
 		ds_writeb(CURRENT_TOWN, ds_readb(GROUPS_TOWN + group));
 		ds_writeb(DUNGEON_INDEX, ds_readb(GROUPS_DNG_INDEX + group));
 		dng_level = ds_readbs(DUNGEON_LEVEL);
-		ds_writeb(DUNGEON_LEVEL, ds_readbs(GROUPS_DNG_LEVEL + group));
+		ds_writeb(DUNGEON_LEVEL, gs_groups_dng_level[group]);
 
 		if (dng_level != ds_readbs(DUNGEON_LEVEL)) {
 			load_area_description(1);

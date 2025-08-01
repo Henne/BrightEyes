@@ -599,7 +599,7 @@ void DNG09_pitfall(void)
 
 				GRP_save_pos(l3);
 
-				ds_writeb(GROUPS_DNG_LEVEL + l3, ds_readbs(DUNGEON_LEVEL) + 1);
+				gs_groups_dng_level[l3] = ds_readbs(DUNGEON_LEVEL) + 1;
 
 				ds_writeb(DNG09_PIT_FLAG, 2);
 			} else {
@@ -627,7 +627,7 @@ void DNG09_pitfall(void)
 
 				GRP_save_pos(l3);
 
-				ds_writeb(GROUPS_DNG_LEVEL + l3, ds_readbs(DUNGEON_LEVEL) + 1);
+				gs_groups_dng_level[l3] = ds_readbs(DUNGEON_LEVEL) + 1;
 
 				ds_writeb(DNG09_PIT_FLAG, 1);
 			}
@@ -655,9 +655,9 @@ void DNG09_pitfall(void)
 
 				for (i = 0; i < 6; i++)
 				{
-					if (ds_readbs(GROUPS_DNG_INDEX + i) == 9 && ds_readbs(GROUPS_DNG_LEVEL + i) == 2)
+					if (ds_readbs(GROUPS_DNG_INDEX + i) == 9 && gs_groups_dng_level[i] == 2)
 					{
-						ds_writeb(GROUPS_DNG_LEVEL + i, 1);
+						gs_groups_dng_level[i] = 1;
 					}
 				}
 

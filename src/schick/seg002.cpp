@@ -2361,14 +2361,13 @@ void do_timers(void)
 					} else {
 						if (ds_readb(GROUPS_DNG_INDEX + di) == 7) {
 
-							if (ds_readbs(GROUPS_DNG_LEVEL + di) == 1) {
+							if (gs_groups_dng_level[di] == 1) {
 								/* 1W6-1 */
-								sub_hero_le(ptr,
-									dice_roll(1, 6, -1));
-							} else if (ds_readbs(GROUPS_DNG_LEVEL + di) == 2) {
+								sub_hero_le(ptr, dice_roll(1, 6, -1));
+
+							} else if (gs_groups_dng_level[di] == 2) {
 								/* 1W6+1 */
-								sub_hero_le(ptr,
-									dice_roll(1, 6, 1));
+								sub_hero_le(ptr, dice_roll(1, 6, 1));
 							}
 						}
 					}
@@ -4088,7 +4087,7 @@ signed short can_merge_group(void)
 				/* check DungeonIndex */
 				(ds_readb(GROUPS_DNG_INDEX + i) == ds_readb(DUNGEON_INDEX)) &&
 				/* check DungeonLevel */
-				(ds_readb(GROUPS_DNG_LEVEL + i) == ds_readb(DUNGEON_LEVEL)))
+				(gs_groups_dng_level[i] == ds_readb(DUNGEON_LEVEL)))
 			{
 				retval = i;
 			}

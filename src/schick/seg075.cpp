@@ -950,7 +950,7 @@ signed short DNG_fallpit(signed short max_damage)
 		}
 
 		GRP_save_pos(new_group);
-		ds_writeb(GROUPS_DNG_LEVEL + new_group, ds_readbs(DUNGEON_LEVEL) + 1);
+		gs_groups_dng_level[new_group] = ds_readbs(DUNGEON_LEVEL) + 1;
 
 		retval = 1;
 

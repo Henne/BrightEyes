@@ -159,7 +159,7 @@ signed short DNG02_handler(void)
 		{
 			if (ds_readws(GROUPS_X_TARGET + 2 * i) == 10 &&
 				ds_readws(GROUPS_Y_TARGET + 2 * i) == 11 &&
-				ds_readbs(GROUPS_DNG_LEVEL + i) == ds_readbs(DUNGEON_LEVEL) &&
+				gs_groups_dng_level[i] == ds_readbs(DUNGEON_LEVEL) &&
 				ds_readbs(GROUPS_DNG_INDEX + i) == ds_readbs(DUNGEON_INDEX))
 			{
 				weight_sum = 0L;
@@ -260,7 +260,7 @@ signed short DNG02_handler(void)
 
 			if (ds_readws(GROUPS_X_TARGET + 2 * i) == 11 &&
 				ds_readws(GROUPS_Y_TARGET + 2 * i) == 6 &&
-				ds_readbs(GROUPS_DNG_LEVEL + i) == ds_readbs(DUNGEON_LEVEL) &&
+				gs_groups_dng_level[i] == ds_readbs(DUNGEON_LEVEL) &&
 				ds_readbs(GROUPS_DNG_INDEX + i) == ds_readbs(DUNGEON_INDEX))
 			{
 				hero = get_hero(0);
@@ -277,7 +277,7 @@ signed short DNG02_handler(void)
 
 			} else if (ds_readws(GROUPS_X_TARGET + 2 * i) == 11 &&
 					ds_readws(GROUPS_Y_TARGET + 2 * i) == 8 &&
-					ds_readbs(GROUPS_DNG_LEVEL + i) == ds_readbs(DUNGEON_LEVEL) &&
+					gs_groups_dng_level[i] == ds_readbs(DUNGEON_LEVEL) &&
 					ds_readbs(GROUPS_DNG_INDEX + i) == ds_readbs(DUNGEON_INDEX))
 			{
 				weight_sum = 5000L;

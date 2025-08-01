@@ -344,7 +344,7 @@ signed short DNG09_handler(void)
 		{
 			if (ds_readws(GROUPS_X_TARGET + 2 * i) == 7 &&
 				ds_readws(GROUPS_Y_TARGET + 2 * i) == 13 &&
-				ds_readbs(GROUPS_DNG_LEVEL + i) == 1 &&
+				gs_groups_dng_level[i] == 1 &&
 				gs_current_group != i)
 			{
 				l3 = 1;

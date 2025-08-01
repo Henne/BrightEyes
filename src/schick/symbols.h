@@ -221,7 +221,7 @@
 #define DUNGEON_INDEX                   (0x2d6e)    /* signed char */
 #define GROUPS_DNG_INDEX                (0x2d6f)    /* signed char[6] */
 #define DUNGEON_LEVEL                   (0x2d75)    /* signed char */
-#define GROUPS_DNG_LEVEL                (0x2d76)    /* signed char[6] */
+//#define GROUPS_DNG_LEVEL                (0x2d76)    /* signed char[6] */
 //#define DIRECTION_BAK                   (0x2d7c)    /* unsigned char */
 //#define GROUPS_DIRECTION_BAK            (0x2d7d)    /* unsigned char[6] */
 //#define X_TARGET_BAK                    (0x2d83)    /* signed short */
