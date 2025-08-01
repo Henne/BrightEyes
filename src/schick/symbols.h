@@ -1250,9 +1250,9 @@
 // ?1
 #define HERO_STARTUP_ITEMS              (0xae48)    /* struct(8)[12] */
 #define HERO_STARTUP_ITEMS_ALL          (0xaea8)    /* signed short[4] */
-#define USE_SPECIAL_ITEM_HANDLERS       (0xaeb0)    /* long[14] */
+//#define USE_SPECIAL_ITEM_HANDLERS       (0xaeb0)    /* long[14] */
 //#define LIGHT_TYPE                      (0xaee8)    /* unsigned short; 0 = none, 1 = torch, 2 = lantern */
-#define TRAVEL_EVENT_HANDLERS           (0xaeea)    /* long[146]; function pointers, */
+//#define TRAVEL_EVENT_HANDLERS           (0xaeea)    /* long[146]; function pointers, */
 #define TRAVEL_EVENT_ACTIVE             (0xb132)    /* signed char; {0,1} */
 #define TRAVEL_EVENT_TX2                (0xb133)    /* signed short */
 #define TRAVEL_EVENT_AXES               (0xb135)    /* signed char[6] */
