@@ -300,7 +300,7 @@ void render_automap(signed short x_off)
 			draw_automap_square(gs_groups_x_target[group_i] - x_off,
 					gs_groups_y_target[group_i],
 					MAP_TILE_PURPLE_ARROW,
-					ds_readbs(GROUPS_DIRECTION + group_i));
+					gs_groups_direction[group_i]);
 		}
 	}
 

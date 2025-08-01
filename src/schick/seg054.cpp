@@ -292,7 +292,7 @@ void do_inn(void)
 					*/
 
 					/* the following lines are taken (& adjusted) from function GRP_merge (seg049.cpp) */
-					ds_writeb(GROUPS_DIRECTION + group_nr, 0);
+					gs_groups_direction[group_nr] = 0;
 					gs_groups_x_target[group_nr] = 0;
 					gs_groups_y_target[group_nr] = 0; /* TODO: remove one of them */
 					gs_groups_y_target[group_nr] = 0;

@@ -137,7 +137,7 @@ void GRP_save_pos(signed short group)
 
 	GRP_sort_heroes();
 
-	ds_writeb(GROUPS_DIRECTION + group, gs_direction);
+	gs_groups_direction[group] = gs_direction;
 
 	gs_groups_x_target[group] = gs_x_target;
 	gs_groups_y_target[group] = gs_y_target;
@@ -230,20 +230,13 @@ void GRP_merge(void)
 
 		do {
 
-			ds_writeb(GROUPS_DIRECTION + answer, (signed char)
-				(gs_groups_x_target[answer]
-				= gs_groups_y_target[answer]
-				= gs_groups_town[answer]
-				= gs_groups_dng_index[answer]
-				= gs_groups_dng_level[answer]
-				= gs_groups_direction_bak[answer]
-				= gs_groups_x_target_bak[answer]
-				= gs_groups_y_target_bak[answer]
-				= gs_groups_current_loctype_bak[answer]
-				= gs_groups_town_bak[answer]
-				= gs_groups_dng_index_bak[answer]
-				= gs_groups_dng_level_bak[answer]
-				= 0));
+			gs_groups_direction[answer] = gs_groups_x_target[answer]
+				= gs_groups_y_target[answer] = gs_groups_town[answer]
+				= gs_groups_dng_index[answer] = gs_groups_dng_level[answer]
+				= gs_groups_direction_bak[answer] = gs_groups_x_target_bak[answer]
+				= gs_groups_y_target_bak[answer] = gs_groups_current_loctype_bak[answer]
+				= gs_groups_town_bak[answer] = gs_groups_dng_index_bak[answer]
+				= gs_groups_dng_level_bak[answer] = 0;
 
 			ds_writeb(GROUP_MEMBER_COUNTS + answer, 0);
 
@@ -350,7 +343,7 @@ void GRP_switch_to_next(signed short mode)
 		}
 
 		/* save positions from the old group */
-		ds_writeb(GROUPS_DIRECTION + gs_current_group, gs_direction);
+		gs_groups_direction[gs_current_group] = gs_direction;
 		gs_groups_x_target[gs_current_group] = gs_x_target;
 		gs_groups_y_target[gs_current_group] = gs_y_target;
 		gs_groups_current_loctype[gs_current_group] = gs_current_loctype;
@@ -366,12 +359,12 @@ void GRP_switch_to_next(signed short mode)
 		gs_groups_dng_level_bak[gs_current_group] = gs_dungeon_level_bak;
 
 		/* set positions for the new group */
-		gs_current_group = (signed char)group;
-		gs_direction = (ds_readb(GROUPS_DIRECTION + group));
-		gs_x_target = (gs_groups_x_target[group]);
-		gs_y_target = (gs_groups_y_target[group]);
+		gs_current_group = group;
+		gs_direction = gs_groups_direction[group];
+		gs_x_target = gs_groups_x_target[group];
+		gs_y_target = gs_groups_y_target[group];
 		gs_current_loctype = gs_groups_current_loctype[group];
-		gs_current_town = (gs_groups_town[group]);
+		gs_current_town = gs_groups_town[group];
 		gs_dungeon_index = gs_groups_dng_index[group];
 		dng_level = gs_dungeon_level;
 		gs_dungeon_level = gs_groups_dng_level[group];

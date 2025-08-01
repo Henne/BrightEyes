@@ -209,7 +209,7 @@
 #define GROUP_MEMBER_COUNTS             (0x2d36)    /* signed char[6]; members per group */
 //#define TOTAL_HERO_COUNTER              (0x2d3c)    /* signed char */
 //#define DIRECTION                       (0x2d3d)    /* unsigned char */
-#define GROUPS_DIRECTION                (0x2d3e)    /* unsigned char[6] */
+//#define GROUPS_DIRECTION                (0x2d3e)    /* unsigned char[6] */
 //#define X_TARGET                        (0x2d44)    /* unsigned short */
 //#define Y_TARGET                        (0x2d46)    /* unsigned short */
 //#define GROUPS_X_TARGET                 (0x2d48)    /* unsigned short[6] */
