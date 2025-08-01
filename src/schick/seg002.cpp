@@ -2935,12 +2935,12 @@ void herokeeping(void)
 							/* search for another Lunchpack */
 							/* print last ration message */
 							if (get_item_pos(hero, ITEM_FOOD_PACKAGE) == -1) {
-								ds_writeb(FOOD_MESSAGE + i, 6);
+								gs_food_message[i] = 6;
 							}
 						} else {
 							/* print ration warning */
 							if (host_readbs(hero + HERO_HUNGER) < 100) {
-								ds_writeb(FOOD_MESSAGE + i, 4);
+								gs_food_message[i] = 4;
 							}
 						}
 
@@ -3011,13 +3011,13 @@ void herokeeping(void)
 								/* nothing to drink message */
 								if ((get_item_pos(hero, ITEM_BEER) == -1)
 									&& (get_full_waterskin_pos(hero) == -1)) {
-									ds_writeb(FOOD_MESSAGE + i, 5);
+									gs_food_message[i] = 5;
 								}
 
 							} else {
 								/* hero has nothing to drink */
 								if (host_readbs(hero + HERO_THIRST) < 100) {
-									ds_writeb(FOOD_MESSAGE + i, 3);
+									gs_food_message[i] = 3;
 								}
 							}
 
@@ -3058,28 +3058,23 @@ void herokeeping(void)
 		}
 
 		/* print hero message */
-		if ((ds_readb(FOOD_MESSAGE + i) != 0) &&
-			!ds_readbs(DIALOGBOX_LOCK) &&
-			!g_in_fight &&
-			!ds_readbs(FREEZE_TIMERS))
+		if (gs_food_message[i] && !ds_readbs(DIALOGBOX_LOCK) &&	!g_in_fight && !ds_readbs(FREEZE_TIMERS))
 		{
 
 			if ((host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
 				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 				!hero_dead(hero) &&
-				(!ds_readb(SHOW_TRAVEL_MAP) || (g_food_message_shown[i] != ds_readb(FOOD_MESSAGE + i)))) {
+				(!ds_readb(SHOW_TRAVEL_MAP) || (g_food_message_shown[i] != gs_food_message[i]))) {
 
-					sprintf(buffer,
-						(ds_readb(FOOD_MESSAGE + i) == 1) ? get_ttx(224):
-							((ds_readb(FOOD_MESSAGE + i) == 2) ? get_ttx(223) :
-							((ds_readb(FOOD_MESSAGE + i) == 3) ? get_ttx(797) :
-							((ds_readb(FOOD_MESSAGE + i) == 4) ? get_ttx(798) :
-							((ds_readb(FOOD_MESSAGE + i) == 5) ? get_ttx(799) :
+					sprintf(buffer,	 (gs_food_message[i] == 1) ? get_ttx(224):
+							((gs_food_message[i] == 2) ? get_ttx(223) :
+							((gs_food_message[i] == 3) ? get_ttx(797) :
+							((gs_food_message[i] == 4) ? get_ttx(798) :
+							((gs_food_message[i] == 5) ? get_ttx(799) :
 							get_ttx(800))))),
+							(char*)hero + HERO_NAME2, (char*)GUI_get_ptr(host_readbs(hero + HERO_SEX), 1));
 
-						(char*)hero + HERO_NAME2, (char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
-
-					g_food_message_shown[i] = ds_readb(FOOD_MESSAGE + i);
+					g_food_message_shown[i] = gs_food_message[i];
 
 					GUI_output(buffer);
 
@@ -3088,20 +3083,19 @@ void herokeeping(void)
 					}
 			}
 
-			ds_writeb(FOOD_MESSAGE + i, 0);
+			gs_food_message[i] = 0;
 		}
 
 
 		/* print unconscious message */
-		if ((ds_readb(UNCONSCIOUS_MESSAGE + i) != 0) && !ds_readbs(DIALOGBOX_LOCK)) {
+		if (gs_unconscious_message[i] && !ds_readbs(DIALOGBOX_LOCK)) {
 
 			if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 				!hero_dead(hero)) {
 
 					/* prepare output */
-					sprintf(buffer, get_ttx(789),
-						(char*)hero + HERO_NAME2);
+					sprintf(buffer, get_ttx(789), (char*)hero + HERO_NAME2);
 
 					/* print output */
 					GUI_output(buffer);
@@ -3112,7 +3106,7 @@ void herokeeping(void)
 			}
 
 			/* reset condition */
-			ds_writeb(UNCONSCIOUS_MESSAGE + i, 0);
+			gs_unconscious_message[i] = 0;
 		}
 	}
 
@@ -4483,7 +4477,7 @@ void sub_hero_le(Bit8u *hero, signed short le)
 			/* mark hero as dead */
 			or_ptr_bs(hero + HERO_FLAGS1, 1); /* set 'dead' flag */
 
-			ds_writeb(UNCONSCIOUS_MESSAGE + get_hero_index(hero), 0);
+			gs_unconscious_message[get_hero_index(hero)] = 0;
 
 			/* unknown */
 			host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_UNKNOWN2);
@@ -4540,7 +4534,7 @@ void sub_hero_le(Bit8u *hero, signed short le)
 				host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_WAIT);
 
 				/* unknown yet */
-				ds_writeb(UNCONSCIOUS_MESSAGE + get_hero_index(hero), 1);
+				gs_unconscious_message[get_hero_index(hero)] = 1;
 
 				/* in fight mode */
 				if (g_in_fight) {
@@ -4670,14 +4664,14 @@ void do_starve_damage(Bit8u *hero, signed short index, signed short type)
 	if (!hero_dead(hero)) {
 
 		/* save this value locally */
-		signed short bak = ds_readw(UPDATE_STATUSLINE);
+		const int sl_bak = ds_readw(UPDATE_STATUSLINE);
 		ds_writew(UPDATE_STATUSLINE, 0);
 
 		/* decrement LE of the hero */
 		dec_ptr_ws(hero + HERO_LE);
 
 		/* set the critical message type for the hero */
-		ds_writeb(FOOD_MESSAGE + index, type != 0 ? 1 : 2);
+		gs_food_message[index] = (type != 0 ? 1 : 2);
 
 		if (host_readws(hero + HERO_LE) <= 0) {
 
@@ -4692,7 +4686,7 @@ void do_starve_damage(Bit8u *hero, signed short index, signed short type)
 		}
 
 		/* restore the locally save value */
-		ds_writew(UPDATE_STATUSLINE, bak);
+		ds_writew(UPDATE_STATUSLINE, sl_bak);
 	}
 }
 

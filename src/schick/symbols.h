@@ -718,8 +718,8 @@
 #define DNG01_CHEST3_CONTENT            (0x41fe)    /* unsigned char[2] */
 #define DNG01_CHEST5_CONTENT            (0x4200)    /* unsigned char[13] */
 #define DNG01_CHEST7_CONTENT            (0x420d)    /* unsigned char[5] */
-#define UNCONSCIOUS_MESSAGE             (0x4212)    /* unsigned char[7] */
-#define FOOD_MESSAGE                    (0x4219)    /* unsigned char[7] */
+//#define UNCONSCIOUS_MESSAGE             (0x4212)    /* unsigned char[7] */
+//#define FOOD_MESSAGE                    (0x4219)    /* unsigned char[7] */
 // ?2
 //#define CURRENT_LOCDATA                 (0x4222)    /* short */
 //#define CURRENT_TYPEINDEX               (0x4224)    /* short */

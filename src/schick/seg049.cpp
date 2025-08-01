@@ -390,7 +390,7 @@ void GRP_switch_to_next(signed short mode)
 		GRP_sort_heroes();
 
 		for (group = 0; group <= 6; group++) {
-			ds_writeb(FOOD_MESSAGE + group, ds_writeb(UNCONSCIOUS_MESSAGE + group, 0));
+			gs_food_message[group] = gs_unconscious_message[group] = 0;
 		}
 
 		ds_writew(REQUEST_REFRESH, 1);

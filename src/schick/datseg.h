@@ -167,6 +167,8 @@ extern Bit8u  gs_alrik_derondan_insulted;	//ds:0x3d79; seg071
 
 extern Bit32s gs_dng12_watertrap_timer;		//ds:0x3fa2; seg002, seg090
 
+extern Bit8s  gs_unconscious_message[7];	//ds:0x4212; seg002, seg049
+extern Bit8s  gs_food_message[7];		//ds:0x4212; seg002, seg049, seg059
 extern Bit16s gs_current_locdata;		//ds:0x4222; seg025-seg109
 extern Bit16s gs_current_typeindex;		//ds:0x4224; seg025-seg120
 
