@@ -244,7 +244,7 @@ signed short DNG08_handler(void)
 		GUI_output(get_tx(12));
 
 	} else if (target_pos == DNG_POS(0,11,11) &&
-			 (target_pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK)) &&
+			 (target_pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != gs_direction_bak) &&
 			ds_readbs(DIRECTION) == WEST)
 	{
 		/* lever, opens door at (8,13)  */
@@ -275,7 +275,7 @@ signed short DNG08_handler(void)
 
 			if (ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group) > 1)
 			{
-				ds_writeb(DIRECTION_BAK, ds_readbs(DIRECTION));
+				gs_direction_bak = (ds_readbs(DIRECTION));
 
 				for (tmp = 0; ds_readbs(GROUP_MEMBER_COUNTS + tmp) != 0; tmp++); /* find empty group */
 
@@ -287,7 +287,7 @@ signed short DNG08_handler(void)
 			}
 
 		} else {
-			ds_writeb(DIRECTION_BAK, ds_readbs(DIRECTION));
+			gs_direction_bak = (ds_readbs(DIRECTION));
 		}
 
 	} else if ((target_pos == DNG_POS(0,11,10) || target_pos == DNG_POS(0,11,12)) && target_pos != gs_dng_handled_pos)
@@ -335,7 +335,7 @@ signed short DNG08_handler(void)
 		}
 
 	} else if (target_pos == DNG_POS(0,5,8) && target_pos != gs_dng_handled_pos &&
-			ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK) &&
+			ds_readbs(DIRECTION) != gs_direction_bak &&
 			ds_readbs(DIRECTION) == WEST &&
 			ds_readbs(DNG08_SECRET_DOOR) != 2)
 	{
@@ -365,7 +365,7 @@ signed short DNG08_handler(void)
 				DNG_update_pos();
 			}
 
-			ds_writeb(DIRECTION_BAK, ds_readbs(DIRECTION));
+			gs_direction_bak = (ds_readbs(DIRECTION));
 		}
 
 	} else if (target_pos == DNG_POS(0,5,7) && target_pos != gs_dng_handled_pos)

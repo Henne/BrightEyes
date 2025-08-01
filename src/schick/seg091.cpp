@@ -79,18 +79,18 @@ signed short DNG13_handler(void)
 		DNG13_unblock_passage(get_tx(4), p_datseg + DNG13_PASSAGE1_FLAG);
 
 	} else if (pos == DNG_POS(0,4,9) &&
-			 (pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK)) &&
+			 (pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != gs_direction_bak) &&
 			ds_readbs(DIRECTION) == WEST)
 	{
 		GUI_output(get_tx(6));
-		ds_writeb(DIRECTION_BAK, ds_readbs(DIRECTION));
+		gs_direction_bak = (ds_readbs(DIRECTION));
 
 	} else if (pos == DNG_POS(0,10,2) &&
-			 (pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK)) &&
+			 (pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != gs_direction_bak) &&
 			ds_readbs(DIRECTION) == EAST)
 	{
 		GUI_output(get_tx(6));
-		ds_writeb(DIRECTION_BAK, ds_readbs(DIRECTION));
+		gs_direction_bak = (ds_readbs(DIRECTION));
 
 	} else if (pos == DNG_POS(0,5,9) && pos != gs_dng_handled_pos)
 	{

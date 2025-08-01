@@ -44,7 +44,7 @@ void do_market(void)
 
 	done = 0;
 	ds_writew(REQUEST_REFRESH, 1);
-	bak1 = ds_readbs(DIRECTION_BAK);
+	bak1 = gs_direction_bak;
 	dir_bak = ds_readbs(DIRECTION);
 
 	do {
@@ -80,7 +80,7 @@ void do_market(void)
 
 			/* clean up */
 			gs_current_typeindex = type_bak;
-			ds_writeb(DIRECTION_BAK, (signed char)bak1);
+			gs_direction_bak = ((signed char)bak1);
 			ds_writeb(DIRECTION, (signed char)dir_bak); /* by this line, the party will *not* be rotated after leaving the market */
 			ds_writeb(SHOP_DESCR_TABLE + 90 * 9 + 0, 0);
 			ds_writeb(SHOP_DESCR_TABLE + 90 * 9 + 2, 0);

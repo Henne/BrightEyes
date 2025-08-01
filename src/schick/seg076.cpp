@@ -479,7 +479,7 @@ signed short DNG_step(void)
 
 	gs_x_target_bak = (ds_readws(X_TARGET));
 	gs_y_target_bak = (ds_readws(Y_TARGET));
-	ds_writeb(DIRECTION_BAK, ds_readbs(DIRECTION));
+	gs_direction_bak = (ds_readbs(DIRECTION));
 
 	handle_gui_input();
 

@@ -118,7 +118,7 @@ signed short DNG10_handler(void)
 		sub_hero_le(hero, answer);
 
 	} else if (target_pos == DNG_POS(0,3,10) &&
-			(target_pos != gs_dng_handled_pos || ds_readb(DIRECTION) != ds_readb(DIRECTION_BAK)) &&
+			(target_pos != gs_dng_handled_pos || ds_readb(DIRECTION) != gs_direction_bak) &&
 			ds_readbs(DIRECTION) == WEST)
 	{
 		/* TRAP: a loose stone in a wall */
@@ -156,7 +156,7 @@ signed short DNG10_handler(void)
 					}
 				}
 
-				ds_writeb(DIRECTION_BAK, ds_readbs(DIRECTION));
+				gs_direction_bak = (ds_readbs(DIRECTION));
 
 			} else {
 			}

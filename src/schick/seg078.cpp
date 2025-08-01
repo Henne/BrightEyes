@@ -287,16 +287,16 @@ signed short DNG02_handler(void)
 		host_writeb(amap_ptr + MAP_POS(11,8), (weight_sum >= 4000L ? (DNG_TILE_CORRIDOR << 4) : (DNG_TILE_WALL << 4)));
 
 	} else if (target_pos == DNG_POS(1,12,5) && ds_readbs(DIRECTION) == NORTH &&
-			 (target_pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK)))
+			 (target_pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != gs_direction_bak))
 	{
-		ds_writeb(DIRECTION_BAK, ds_readbs(DIRECTION));
+		gs_direction_bak = (ds_readbs(DIRECTION));
 
 		GUI_output(get_tx(16));
 
 	} else if (target_pos == DNG_POS(1,4,5) && ds_readbs(DIRECTION) == SOUTH &&
-			 (target_pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK)))
+			 (target_pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != gs_direction_bak))
 	{
-		ds_writeb(DIRECTION_BAK, ds_readbs(DIRECTION));
+		gs_direction_bak = (ds_readbs(DIRECTION));
 
 		GUI_output(get_tx(17));
 
@@ -426,7 +426,7 @@ signed short DNG02_handler(void)
 		GUI_output(get_tx(35));
 
 	} else if (target_pos == DNG_POS(0,1,8) &&
-			(target_pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK)) &&
+			(target_pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != gs_direction_bak) &&
 			ds_readbs(DIRECTION) == SOUTH &&
 			ds_readb(DNG02_SECRET_DOOR1) != 2)
 	{
@@ -458,11 +458,11 @@ signed short DNG02_handler(void)
 				DNG_update_pos();
 			}
 
-			ds_writeb(DIRECTION_BAK, ds_readbs(DIRECTION));
+			gs_direction_bak = (ds_readbs(DIRECTION));
 		}
 
 	} else if (target_pos == DNG_POS(0,4,8) &&
-			(target_pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK)) &&
+			(target_pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != gs_direction_bak) &&
 			ds_readbs(DIRECTION) == SOUTH &&
 			ds_readb(DNG02_SECRET_DOOR2) != 2)
 	{
@@ -493,12 +493,12 @@ signed short DNG02_handler(void)
 				DNG_update_pos();
 			}
 
-			ds_writeb(DIRECTION_BAK, ds_readbs(DIRECTION));
+			gs_direction_bak = (ds_readbs(DIRECTION));
 		}
 
 	} else if (((target_pos == DNG_POS(1,4,9) && ds_readbs(DIRECTION) == EAST) ||
 			(target_pos == DNG_POS(1,6,9) && ds_readbs(DIRECTION) == WEST)) &&
-			(target_pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK)) &&
+			(target_pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != gs_direction_bak) &&
 			ds_readb(DNG02_SECRET_DOOR3) != 2)
 	{
 		hero = (Bit8u*)get_first_hero_available_in_group();
@@ -539,7 +539,7 @@ signed short DNG02_handler(void)
 
 			sub_hero_le(hero, i);
 
-			ds_writeb(DIRECTION_BAK, ds_readbs(DIRECTION));
+			gs_direction_bak = (ds_readbs(DIRECTION));
 		}
 
 	} else if (target_pos == DNG_POS(0,1,0) && target_pos != gs_dng_handled_pos)

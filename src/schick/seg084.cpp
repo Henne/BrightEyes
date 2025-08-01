@@ -311,7 +311,7 @@ signed short DNG09_handler(void)
 
 				if (ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group) > 1)
 				{
-					ds_writeb(DIRECTION_BAK, ds_readbs(DIRECTION));
+					gs_direction_bak = (ds_readbs(DIRECTION));
 					l3 = 0;
 					while (ds_readb(GROUP_MEMBER_COUNTS + l3) != 0)
 					{
@@ -326,11 +326,11 @@ signed short DNG09_handler(void)
 				}
 			} else
 			{
-				ds_writeb(DIRECTION_BAK, ds_readbs(DIRECTION));
+				gs_direction_bak = (ds_readbs(DIRECTION));
 			}
 		} else
 		{
-			ds_writeb(DIRECTION_BAK, ds_readbs(DIRECTION));
+			gs_direction_bak = (ds_readbs(DIRECTION));
 		}
 
 	} else if ((target_pos == DNG_POS(1,8,13) || target_pos == DNG_POS(1,7,14)) &&
@@ -397,7 +397,7 @@ signed short DNG09_handler(void)
 		ds_writews(AREA_PREPARED, -1);
 
 	} else if (target_pos == DNG_POS(1,4,2) &&
-			(target_pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK)) &&
+			(target_pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != gs_direction_bak) &&
 			ds_readbs(DIRECTION) == WEST && ds_readbs(DNG09_SECRETDOOR1) != 2)
 	{
 		if (ds_readb(DNG09_SECRETDOOR1) != 0 || test_skill((hero = (Bit8u*)get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 6) > 0)
@@ -431,10 +431,10 @@ signed short DNG09_handler(void)
 				sub_hero_le(hero, dice_roll(2, 6, 0));
 			}
 
-			ds_writeb(DIRECTION_BAK, ds_readbs(DIRECTION));
+			gs_direction_bak = (ds_readbs(DIRECTION));
 		}
 	} else if (target_pos == DNG_POS(1,5,11)  &&
-			(target_pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK)) &&
+			(target_pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != gs_direction_bak) &&
 			ds_readbs(DIRECTION) == EAST && ds_readbs(DNG09_SECRETDOOR2) != 2)
 	{
 		if (ds_readb(DNG09_SECRETDOOR2) != 0 || test_skill((hero = (Bit8u*)get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 8) > 0)
@@ -463,7 +463,7 @@ signed short DNG09_handler(void)
 				DNG_update_pos();
 			}
 
-			ds_writeb(DIRECTION_BAK, ds_readbs(DIRECTION));
+			gs_direction_bak = (ds_readbs(DIRECTION));
 		}
 
 	} else if (target_pos == DNG_POS(0,7,15) && target_pos != gs_dng_handled_pos)

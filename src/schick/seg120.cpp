@@ -401,7 +401,7 @@ void init_game_state(void)
 	gs_y_target_bak = (9);
 	ds_writew(X_TARGET, 9);
 	ds_writew(Y_TARGET, 8);
-	ds_writeb(DIRECTION_BAK, 0);
+	gs_direction_bak = (0);
 	ds_writeb(DIRECTION, 0);
 	ds_writeb(DUNGEON_INDEX, DUNGEONS_NONE);
 

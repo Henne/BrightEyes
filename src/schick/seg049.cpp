@@ -146,7 +146,7 @@ void GRP_save_pos(signed short group)
 	ds_writeb(GROUPS_TOWN + group, ds_readbs(CURRENT_TOWN));
 	ds_writeb(GROUPS_DNG_INDEX + group, ds_readbs(DUNGEON_INDEX));
 	ds_writeb(GROUPS_DNG_LEVEL + group, ds_readbs(DUNGEON_LEVEL));
-	gs_groups_direction_bak[group] = ds_readbs(DIRECTION_BAK);
+	gs_groups_direction_bak[group] = gs_direction_bak;
 
 	gs_groups_x_target_bak[group] = gs_x_target_bak;
 	gs_groups_y_target_bak[group] = gs_y_target_bak;
@@ -357,7 +357,7 @@ void GRP_switch_to_next(signed short mode)
 		ds_writeb(GROUPS_TOWN + gs_current_group, ds_readbs(CURRENT_TOWN));
 		ds_writeb(GROUPS_DNG_INDEX + gs_current_group, ds_readbs(DUNGEON_INDEX));
 		ds_writeb(GROUPS_DNG_LEVEL + gs_current_group, ds_readbs(DUNGEON_LEVEL));
-		gs_groups_direction_bak[gs_current_group] = ds_readbs(DIRECTION_BAK);
+		gs_groups_direction_bak[gs_current_group] = gs_direction_bak;
 		gs_groups_x_target_bak[gs_current_group] = gs_x_target_bak;
 		gs_groups_y_target_bak[gs_current_group] = gs_y_target_bak;
 		gs_groups_current_loctype_bak[gs_current_group] = gs_current_loctype_bak;
@@ -380,7 +380,7 @@ void GRP_switch_to_next(signed short mode)
 			load_area_description(1);
 		}
 
-		ds_writeb(DIRECTION_BAK, gs_groups_direction_bak[group]);
+		gs_direction_bak = (gs_groups_direction_bak[group]);
 		gs_x_target_bak = (gs_groups_x_target_bak[group]);
 		gs_y_target_bak = (gs_groups_y_target_bak[group]);
 		gs_current_loctype_bak = gs_groups_current_loctype_bak[group];

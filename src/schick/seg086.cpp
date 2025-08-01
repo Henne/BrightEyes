@@ -188,7 +188,7 @@ signed short DNG11_handler(void)
 	} else if (target_pos == DNG_POS(0,8,12) &&
 			// possibly a bug. position (8,12) might indeed be (8,11)
 			// see https://www.crystals-dsa-foren.de/showthread.php?tid=1373&pid=96541#pid96541
-			(target_pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK)) &&
+			(target_pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != gs_direction_bak) &&
 			ds_readbs(DIRECTION) == NORTH &&
 			ds_readb(DNG11_SECRETDOOR1_FLAG) != 2)
 	{
@@ -217,11 +217,11 @@ signed short DNG11_handler(void)
 				DNG_update_pos();
 			}
 
-			ds_writeb(DIRECTION_BAK, ds_readbs(DIRECTION));
+			gs_direction_bak = (ds_readbs(DIRECTION));
 		}
 
 	} else if (target_pos == DNG_POS(0,4,7) &&
-			(target_pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK)) &&
+			(target_pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != gs_direction_bak) &&
 			ds_readbs(DIRECTION) == EAST &&
 			ds_readb(DNG11_SECRETDOOR2_FLAG) != 2)
 	{
@@ -250,11 +250,11 @@ signed short DNG11_handler(void)
 				DNG_update_pos();
 			}
 
-			ds_writeb(DIRECTION_BAK, ds_readbs(DIRECTION));
+			gs_direction_bak = (ds_readbs(DIRECTION));
 		}
 
 	} else if (target_pos == DNG_POS(0,9,8) &&
-			(target_pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK)) &&
+			(target_pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != gs_direction_bak) &&
 			ds_readbs(DIRECTION) == EAST &&
 			ds_readb(DNG11_SECRETDOOR3_FLAG) != 2)
 	{
@@ -283,7 +283,7 @@ signed short DNG11_handler(void)
 				DNG_update_pos();
 			}
 
-			ds_writeb(DIRECTION_BAK, ds_readbs(DIRECTION));
+			gs_direction_bak = (ds_readbs(DIRECTION));
 		}
 
 	} else if (target_pos == DNG_POS(0,8,15) && target_pos != gs_dng_handled_pos)

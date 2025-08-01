@@ -104,7 +104,7 @@ signed short DNG03_handler(void)
 		}
 
 	} else if ((target_pos == DNG_POS(0,6,10) || target_pos == DNG_POS(0,7,9)) &&
-			(target_pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK)))
+			(target_pos != gs_dng_handled_pos || ds_readbs(DIRECTION) != gs_direction_bak))
 	{
 		if ((target_pos == DNG_POS(0,6,10) && ds_readbs(DIRECTION) == EAST) ||
 			(target_pos == DNG_POS(0,7,9) && ds_readbs(DIRECTION) == SOUTH))
@@ -112,7 +112,7 @@ signed short DNG03_handler(void)
 			DNG_update_pos();
 			GUI_output(get_tx(3));
 
-			ds_writeb(DIRECTION_BAK, ds_readbs(DIRECTION));
+			gs_direction_bak = (ds_readbs(DIRECTION));
 		}
 
 	} else if ((target_pos == DNG_POS(0,10,9) || target_pos == DNG_POS(0,9,14)) &&
@@ -141,7 +141,7 @@ signed short DNG03_handler(void)
 		}
 
 	} else if (target_pos == DNG_POS(0,5,14) &&
-			ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK) &&
+			ds_readbs(DIRECTION) != gs_direction_bak &&
 			ds_readbs(DIRECTION) == SOUTH)
 	{
 		GUI_input(get_tx(7), 15);
@@ -175,7 +175,7 @@ signed short DNG03_handler(void)
 	} else if (target_pos == DNG_POS(0,9,11) &&
 			ds_readbs(DIRECTION) == WEST &&
 			target_pos != gs_dng_handled_pos &&
-			ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK))
+			ds_readbs(DIRECTION) != gs_direction_bak)
 	{
 		/* LEVER: */
 		if (GUI_bool(get_tx(8)))
@@ -187,7 +187,7 @@ signed short DNG03_handler(void)
 	} else if (target_pos == DNG_POS(1,3,11) &&
 			ds_readbs(DIRECTION) == EAST &&
 			(target_pos != gs_dng_handled_pos ||
-			ds_readbs(DIRECTION) != ds_readbs(DIRECTION_BAK)))
+			ds_readbs(DIRECTION) != gs_direction_bak))
 	{
 		if (GUI_bool(get_tx(8)))
 		{
