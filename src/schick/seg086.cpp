@@ -181,8 +181,8 @@ signed short DNG11_handler(void)
 			set_var_to_zero();
 
 		} else {
-			ds_writew(X_TARGET, ds_readws(X_TARGET_BAK));
-			ds_writew(Y_TARGET, ds_readws(Y_TARGET_BAK));
+			ds_writew(X_TARGET, gs_x_target_bak);
+			ds_writew(Y_TARGET, gs_y_target_bak);
 		}
 
 	} else if (target_pos == DNG_POS(0,8,12) &&

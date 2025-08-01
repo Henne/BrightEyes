@@ -934,7 +934,7 @@ void copy_from_archive_to_temp(unsigned short index, char* fname)
 	}
 }
 
-void copy_file_to_temp(Bit8u* src_file, char* fname)
+void copy_file_to_temp(char* src_file, char* fname)
 {
 	signed short handle1;
 	signed short handle2;

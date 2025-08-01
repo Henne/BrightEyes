@@ -442,8 +442,8 @@ void THO_ugdalf(void)
 		/* enter the dungeon */
 		DNG_enter_dungeon(DUNGEONS_ZWINGFESTE);
 
-		ds_writews(X_TARGET_BAK, ds_readw(X_TARGET));
-		ds_writews(Y_TARGET_BAK, ds_readw(Y_TARGET));
+		gs_x_target_bak = (ds_readw(X_TARGET));
+		gs_y_target_bak = (ds_readw(Y_TARGET));
 
 		if (gs_quest_ugdalf == 1) {
 			add_party_money(2000L);
@@ -480,8 +480,8 @@ void THO_ugdalf(void)
 		/* enter the dungeon */
 		DNG_enter_dungeon(DUNGEONS_ZWINGFESTE);
 
-		ds_writews(X_TARGET_BAK, ds_readw(X_TARGET));
-		ds_writews(Y_TARGET_BAK, ds_readw(Y_TARGET));
+		gs_x_target_bak = (ds_readw(X_TARGET));
+		gs_y_target_bak = (ds_readw(Y_TARGET));
 	}
 }
 

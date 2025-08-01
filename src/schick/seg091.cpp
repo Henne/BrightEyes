@@ -208,8 +208,8 @@ void DNG13_unblock_passage(char* text, Bit8u* flag)
 
 		} else {
 
-			ds_writew(X_TARGET, ds_readws(X_TARGET_BAK));
-			ds_writew(Y_TARGET, ds_readws(Y_TARGET_BAK));
+			ds_writew(X_TARGET, gs_x_target_bak);
+			ds_writew(Y_TARGET, gs_y_target_bak);
 		}
 	}
 }

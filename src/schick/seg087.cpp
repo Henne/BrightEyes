@@ -498,8 +498,8 @@ signed short DNG14_handler(void)
 			GUI_output(get_tx(32));
 		}
 
-		ds_writews(X_TARGET, ds_readws(X_TARGET_BAK));
-		ds_writews(Y_TARGET, ds_readws(Y_TARGET_BAK));
+		ds_writews(X_TARGET, gs_x_target_bak);
+		ds_writews(Y_TARGET, gs_y_target_bak);
 
 	} else if (pos == DNG_POS(2,7,7) && pos != gs_dng_handled_pos) {
 
@@ -696,8 +696,8 @@ signed short DNG14_handler(void)
 
 		if (!GUI_bool(get_tx(59))) {
 
-			ds_writew(X_TARGET, ds_readws(X_TARGET_BAK));
-			ds_writew(Y_TARGET, ds_readws(Y_TARGET_BAK));
+			ds_writew(X_TARGET, gs_x_target_bak);
+			ds_writew(Y_TARGET, gs_y_target_bak);
 
 			GUI_output(get_tx(60));
 		}

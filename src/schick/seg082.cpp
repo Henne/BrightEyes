@@ -144,8 +144,8 @@ signed short DNG07_handler(void)
 				}
 			}
 
-			ds_writew(X_TARGET, ds_readws(X_TARGET_BAK));
-			ds_writew(Y_TARGET, ds_readws(Y_TARGET_BAK));
+			ds_writew(X_TARGET, gs_x_target_bak);
+			ds_writew(Y_TARGET, gs_y_target_bak);
 			ds_writew(DNG_REFRESH_DIRECTION, -1);
 
 		} else {
@@ -288,8 +288,8 @@ signed short DNG07_handler(void)
 			g_fading_state = 3;
 		} else
 		{
-			ds_writew(Y_TARGET, ds_readws(Y_TARGET_BAK));
-			ds_writew(X_TARGET, ds_readws(X_TARGET_BAK));
+			ds_writew(Y_TARGET, gs_y_target_bak);
+			ds_writew(X_TARGET, gs_x_target_bak);
 		}
 
 	}

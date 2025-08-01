@@ -898,15 +898,15 @@ signed short city_step(void)
 		seg066_10c8();
 	}
 
-	if (ds_readws(X_TARGET) != ds_readws(X_TARGET_BAK) ||
-		ds_readws(Y_TARGET) != ds_readws(Y_TARGET_BAK))
+	if (ds_readws(X_TARGET) != gs_x_target_bak ||
+		ds_readws(Y_TARGET) != gs_y_target_bak)
 	{
 		ds_writebs(CAN_MERGE_GROUP, (signed char)can_merge_group());
 		set_automap_tiles(ds_readws(X_TARGET), ds_readws(Y_TARGET));
 	}
 
-	ds_writew(X_TARGET_BAK, ds_readws(X_TARGET));
-	ds_writew(Y_TARGET_BAK, ds_readws(Y_TARGET));
+	gs_x_target_bak = (ds_readws(X_TARGET));
+	gs_y_target_bak = (ds_readws(Y_TARGET));
 
 	handle_gui_input();
 
@@ -1007,8 +1007,8 @@ signed short city_step(void)
 
 		/* random city event? */
 		/* check if the party has moved to another square */
-		if ((ds_readws(Y_TARGET) != ds_readws(Y_TARGET_BAK) ||
-			(ds_readws(X_TARGET) != ds_readws(X_TARGET_BAK))) &&
+		if ((ds_readws(Y_TARGET) != gs_y_target_bak ||
+			(ds_readws(X_TARGET) != gs_x_target_bak)) &&
 
 			/* only in big town */
 			(ds_readb(CURRENT_TOWN) == TOWNS_THORWAL || ds_readb(CURRENT_TOWN) == TOWNS_PREM ||

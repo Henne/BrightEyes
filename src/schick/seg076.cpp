@@ -400,8 +400,8 @@ void DNG_fallpit_test(signed short max_damage)
 			/* move one level up. */
 			dec_ds_bs_post(DUNGEON_LEVEL);
 
-			ds_writews(X_TARGET, ds_readws(X_TARGET_BAK));
-			ds_writews(Y_TARGET, ds_readws(Y_TARGET_BAK));
+			ds_writews(X_TARGET, gs_x_target_bak);
+			ds_writews(Y_TARGET, gs_y_target_bak);
 
 			load_area_description(1);
 
@@ -469,16 +469,16 @@ signed short DNG_step(void)
 		DNG_fight();
 	}
 
-	if (ds_readws(X_TARGET) != ds_readws(X_TARGET_BAK) ||
-		ds_readws(Y_TARGET) != ds_readws(Y_TARGET_BAK) ||
+	if (ds_readws(X_TARGET) != gs_x_target_bak ||
+		ds_readws(Y_TARGET) != gs_y_target_bak ||
 		ds_readbs(DNG_LEVEL_CHANGED) != 0)
 	{
 		ds_writeb(CAN_MERGE_GROUP, (unsigned char)can_merge_group());
 		ds_writew(LOCKPICK_TRY_COUNTER, 0);
 	}
 
-	ds_writew(X_TARGET_BAK, ds_readws(X_TARGET));
-	ds_writew(Y_TARGET_BAK, ds_readws(Y_TARGET));
+	gs_x_target_bak = (ds_readws(X_TARGET));
+	gs_y_target_bak = (ds_readws(Y_TARGET));
 	ds_writeb(DIRECTION_BAK, ds_readbs(DIRECTION));
 
 	handle_gui_input();

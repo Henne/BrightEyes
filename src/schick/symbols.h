@@ -223,9 +223,9 @@
 #define DUNGEON_LEVEL                   (0x2d75)    /* signed char */
 #define GROUPS_DNG_LEVEL                (0x2d76)    /* signed char[6] */
 #define DIRECTION_BAK                   (0x2d7c)    /* unsigned char */
-#define GROUPS_DIRECTION_BAK            (0x2d7d)    /* unsigned char[6] */
-#define X_TARGET_BAK                    (0x2d83)    /* signed short */
-#define Y_TARGET_BAK                    (0x2d85)    /* signed short */
+//#define GROUPS_DIRECTION_BAK            (0x2d7d)    /* unsigned char[6] */
+//#define X_TARGET_BAK                    (0x2d83)    /* signed short */
+//#define Y_TARGET_BAK                    (0x2d85)    /* signed short */
 //#define GROUPS_X_TARGET_BAK             (0x2d87)    /* signed short[6] */
 //#define GROUPS_Y_TARGET_BAK             (0x2d93)    /* signed short[6] */
 //#define CURRENT_LOCTYPE_BAK             (0x2d9f)    /* signed char */

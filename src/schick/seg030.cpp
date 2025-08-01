@@ -343,8 +343,8 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 							ds_writebs(CURRENT_TOWN, ds_readbs(SWAFNILD_TP4));
 
-							ds_writews(X_TARGET_BAK, ds_readbs(SWAFNILD_TP4) == 35 ? 10 : (ds_readbs(SWAFNILD_TP4) == 32 ? 2 : 7));
-							ds_writews(Y_TARGET_BAK, ds_readbs(SWAFNILD_TP4) == 35 ? 2 : (ds_readbs(SWAFNILD_TP4) == 32 ? 14 : 3));
+							gs_x_target_bak = (ds_readbs(SWAFNILD_TP4) == 35 ? 10 : (ds_readbs(SWAFNILD_TP4) == 32 ? 2 : 7));
+							gs_y_target_bak = (ds_readbs(SWAFNILD_TP4) == 35 ? 2 : (ds_readbs(SWAFNILD_TP4) == 32 ? 14 : 3));
 
 						} else if (txt_id == 52) {
 

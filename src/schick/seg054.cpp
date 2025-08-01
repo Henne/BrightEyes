@@ -299,7 +299,7 @@ void do_inn(void)
 					ds_writebs(GROUPS_TOWN + group_nr,0);
 					ds_writeb(GROUPS_DNG_INDEX + group_nr,0);
 					ds_writeb(GROUPS_DNG_LEVEL + group_nr,0);
-					ds_writeb(GROUPS_DIRECTION_BAK + group_nr,0);
+					gs_groups_direction_bak[group_nr] = 0;
 					gs_groups_x_target_bak[group_nr] = 0;
 					gs_groups_y_target_bak[group_nr] = 0;
 					gs_groups_current_loctype_bak[group_nr] = LOCTYPE_NONE;

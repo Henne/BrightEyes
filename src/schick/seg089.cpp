@@ -217,7 +217,7 @@ signed short DNG15_handler(void)
 		} else {
 			/* stay here */
 			GUI_output(get_tx(27));
-			ds_writew(Y_TARGET, ds_readw(Y_TARGET_BAK));
+			ds_writew(Y_TARGET, gs_y_target_bak);
 		}
 
 	} else if (target_pos == DNG_POS(1,8,4) && target_pos != gs_dng_handled_pos)
@@ -243,7 +243,7 @@ signed short DNG15_handler(void)
 		} else {
 			/* stay here */
 			GUI_output(get_tx(27));
-			ds_writew(Y_TARGET, ds_readw(Y_TARGET_BAK));
+			ds_writew(Y_TARGET, gs_y_target_bak);
 		}
 
 	} else if (target_pos == DNG_POS(1,1,14) && target_pos != gs_dng_handled_pos)
@@ -459,8 +459,8 @@ signed short DNG15_handler(void)
 		{
 			GUI_output(get_tx(6));
 
-			ds_writew(X_TARGET, ds_readws(X_TARGET_BAK));
-			ds_writew(Y_TARGET, ds_readws(Y_TARGET_BAK));
+			ds_writew(X_TARGET, gs_x_target_bak);
+			ds_writew(Y_TARGET, gs_y_target_bak);
 		} else {
 			leave_dungeon();
 
@@ -670,8 +670,8 @@ void DNG15_collapsing_ceiling(Bit8u* ptr)
 			}
 
 			/* way is blocked */
-			ds_writew(X_TARGET, ds_readws(X_TARGET_BAK));
-			ds_writew(Y_TARGET, ds_readws(Y_TARGET_BAK));
+			ds_writew(X_TARGET, gs_x_target_bak);
+			ds_writew(Y_TARGET, gs_y_target_bak);
 			break;
 		}
 		case 4:
@@ -736,8 +736,8 @@ void DNG15_clear_way(Bit8u* ptr)
 			}
 		}
 
-		ds_writew(X_TARGET, ds_readws(X_TARGET_BAK));
-		ds_writew(Y_TARGET, ds_readws(Y_TARGET_BAK));
+		ds_writew(X_TARGET, gs_x_target_bak);
+		ds_writew(Y_TARGET, gs_y_target_bak);
 	} else {
 		inc_ptr_bs(ptr);
 		GUI_output(get_tx(47));

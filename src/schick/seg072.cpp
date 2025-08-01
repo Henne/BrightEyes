@@ -797,12 +797,12 @@ void INF_swafnild_unicorn(signed short informer, signed short state)
 						(ds_readb(SWAFNILD_DESTINATION) == 2 ? ds_readb(SWAFNILD_TP2) : ds_readb(SWAFNILD_TP3)));
 
 			switch (ds_readbs(CURRENT_TOWN)) {
-				case TOWNS_PREM: ds_writew(X_TARGET_BAK, 22); ds_writew(Y_TARGET_BAK,  8); break;
-				case TOWNS_KORD: ds_writew(X_TARGET_BAK,  4); ds_writew(Y_TARGET_BAK,  3); break;
-				case TOWNS_OTTARJE: ds_writew(X_TARGET_BAK,  9); ds_writew(Y_TARGET_BAK, 10); break;
-				case TOWNS_SKJAL: ds_writew(X_TARGET_BAK, 11); ds_writew(Y_TARGET_BAK, 11); break;
-				case TOWNS_TREBAN: ds_writew(X_TARGET_BAK,  4); ds_writew(Y_TARGET_BAK, 12); break;
-				case TOWNS_RUNINSHAVEN: ds_writew(X_TARGET_BAK,  6); ds_writew(Y_TARGET_BAK,  6); break;
+				case TOWNS_PREM: gs_x_target_bak = (22); gs_y_target_bak = ( 8); break;
+				case TOWNS_KORD: gs_x_target_bak = ( 4); gs_y_target_bak = ( 3); break;
+				case TOWNS_OTTARJE: gs_x_target_bak = ( 9); gs_y_target_bak = (10); break;
+				case TOWNS_SKJAL: gs_x_target_bak = (11); gs_y_target_bak = (11); break;
+				case TOWNS_TREBAN: gs_x_target_bak = ( 4); gs_y_target_bak = (12); break;
+				case TOWNS_RUNINSHAVEN: gs_x_target_bak = ( 6); gs_y_target_bak = ( 6); break;
 			}
 
 			gs_current_loctype_bak = LOCTYPE_NONE;

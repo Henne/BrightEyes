@@ -797,8 +797,8 @@ void DNG_stub6(void)
 	if (ds_readb(DUNGEON_LIGHT) != 0) {
 
 		if (DNG_fallpit(6)) {
-			ds_writew(X_TARGET, ds_readw(X_TARGET_BAK));
-			ds_writew(Y_TARGET, ds_readw(Y_TARGET_BAK));
+			ds_writew(X_TARGET, gs_x_target_bak);
+			ds_writew(Y_TARGET, gs_y_target_bak);
 		}
 	} else {
 

@@ -600,8 +600,8 @@ void TLK_schmied(signed short state)
 
 		DNG_enter_dungeon(DUNGEONS_ZWINGFESTE);
 		ds_writeb(DUNGEON_LEVEL, 3);
-		ds_writews(X_TARGET_BAK, ds_writews(X_TARGET, 11));
-		ds_writews(Y_TARGET_BAK, ds_writews(Y_TARGET, 2));
+		gs_x_target_bak = (ds_writews(X_TARGET, 11));
+		gs_y_target_bak = (ds_writews(Y_TARGET, 2));
 		ds_writeb(DIRECTION, 2);
 	}
 }

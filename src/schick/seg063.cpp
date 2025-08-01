@@ -394,8 +394,8 @@ void do_harbor(void)
 				if (!ds_readb(TRAVEL_DETOUR)) {
 
 					ds_writebs(CURRENT_TOWN, (signed char)ds_readws(TRAVEL_DESTINATION_TOWN_ID));
-					ds_writew(X_TARGET_BAK, ds_readw(TRAVEL_DESTINATION_X));
-					ds_writew(Y_TARGET_BAK, ds_readw(TRAVEL_DESTINATION_Y));
+					gs_x_target_bak = (ds_readw(TRAVEL_DESTINATION_X));
+					gs_y_target_bak = (ds_readw(TRAVEL_DESTINATION_Y));
 					ds_writeb(DIRECTION, (ds_readws(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
 
 				} else {

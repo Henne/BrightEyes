@@ -429,15 +429,15 @@ signed short DNG12_handler(void)
 				GUI_output((char*)g_dtp2);
 
 				sub_hero_le(hero, random_schick(4));
-				ds_writew(X_TARGET, ds_readw(X_TARGET_BAK));
-				ds_writew(Y_TARGET, ds_readw(Y_TARGET_BAK));
+				ds_writew(X_TARGET, gs_x_target_bak);
+				ds_writew(Y_TARGET, gs_y_target_bak);
 			} else {
 				/* pass */
 				GUI_output(get_tx(26));
 			}
 		} else {
-			ds_writew(X_TARGET, ds_readw(X_TARGET_BAK));
-			ds_writew(Y_TARGET, ds_readw(Y_TARGET_BAK));
+			ds_writew(X_TARGET, gs_x_target_bak);
+			ds_writew(Y_TARGET, gs_y_target_bak);
 		}
 	} else if (target_pos == DNG_POS(1,14,3) && target_pos != gs_dng_handled_pos && ds_readb(DNG12_SPEARTRAP_ACTIVE) != 0) {
 		/* spear trap */
@@ -496,8 +496,8 @@ void DNG_clear_corridor(Bit8u *ptr)
 
 		host_writebs(ptr, -1);
 	} else {
-		ds_writew(X_TARGET, ds_readws(X_TARGET_BAK));
-		ds_writew(Y_TARGET, ds_readws(Y_TARGET_BAK));
+		ds_writew(X_TARGET, gs_x_target_bak);
+		ds_writew(Y_TARGET, gs_y_target_bak);
 	}
 }
 
