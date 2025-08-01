@@ -291,7 +291,7 @@ void render_automap(signed short x_off)
 		if ((gs_current_group != group_i) &&
 			(ds_readbs(GROUP_MEMBER_COUNTS + group_i) > 0) &&
 			(gs_groups_dng_level[group_i] == gs_dungeon_level) &&
-			(ds_readb(GROUPS_TOWN + group_i) == ds_readbs(CURRENT_TOWN)) &&
+			(gs_groups_town[group_i] == ds_readbs(CURRENT_TOWN)) &&
 			(gs_groups_dng_index[group_i] == gs_dungeon_index) &&
 			!is_group_in_prison(group_i) &&
 			(ds_readws(GROUPS_X_TARGET + 2 * group_i) - x_off >= 0) &&

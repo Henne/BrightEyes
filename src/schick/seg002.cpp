@@ -2983,8 +2983,8 @@ void herokeeping(void)
 			if ((get_first_hero_with_item_in_group(ITEM_MAGIC_WATERSKIN, host_readbs(hero + HERO_GROUP_NO)) == -1) &&
 				((host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				(!ds_readbs(CURRENT_TOWN) || (ds_readbs(CURRENT_TOWN) != TOWNS_NONE && ds_readb(SHOW_TRAVEL_MAP) != 0))) ||
-				((host_readbs(hero + HERO_GROUP_NO) != gs_current_group &&
-				!ds_readbs(GROUPS_TOWN + host_readbs(hero + HERO_GROUP_NO)))))) {
+				(host_readbs(hero + HERO_GROUP_NO) != gs_current_group &&
+				!gs_groups_town[host_readbs(hero + HERO_GROUP_NO)]))) {
 
 					/* check for food amulett */
 					if (get_item_pos(hero, ITEM_TRAVIA_AMULET) == -1) {
@@ -4083,7 +4083,7 @@ signed short can_merge_group(void)
 				/* check Location */
 				(gs_groups_current_loctype[i] == gs_current_loctype) &&
 				/* check currentTown */
-				(ds_readb(GROUPS_TOWN + i) == ds_readb(CURRENT_TOWN)) &&
+				(gs_groups_town[i] == ds_readb(CURRENT_TOWN)) &&
 				/* check DungeonIndex */
 				(gs_groups_dng_index[i] == gs_dungeon_index) &&
 				/* check DungeonLevel */

@@ -85,6 +85,7 @@ extern Bit8s  gs_total_hero_counter;		//ds:0x2d3c; seg002-seg113
 extern Bit8s  gs_current_loctype;		//ds:0x2d60; seg002-seg120
 extern Bit8s  gs_groups_current_loctype[6];	//ds:0x2d61; seg002, seg049
 
+extern Bit8s  gs_groups_town[6];		//ds:0x2d68; seg002-seg074
 extern Bit8s  gs_dungeon_index;			//ds:0x2d6e; seg002-seg120
 extern Bit8s  gs_groups_dng_index[6];		//ds:0x2d6f1; seg002, seg049
 extern Bit8s  gs_dungeon_level;			//ds:0x2d75; seg002-seg107

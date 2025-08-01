@@ -143,7 +143,7 @@ void GRP_save_pos(signed short group)
 	ds_writew(GROUPS_Y_TARGET + group * 2, ds_readws(Y_TARGET));
 
 	gs_groups_current_loctype[group] = gs_current_loctype;
-	ds_writeb(GROUPS_TOWN + group, ds_readbs(CURRENT_TOWN));
+	gs_groups_town[group] = ds_readbs(CURRENT_TOWN);
 	gs_groups_dng_index[group] = gs_dungeon_index;
 	gs_groups_dng_level[group] = gs_dungeon_level;
 	gs_groups_direction_bak[group] = gs_direction_bak;
@@ -233,8 +233,8 @@ void GRP_merge(void)
 			ds_writeb(GROUPS_DIRECTION + answer, (signed char)
 				(ds_writew(GROUPS_X_TARGET + answer * 2,
 				ds_writew(GROUPS_Y_TARGET + answer * 2,
-				ds_writebs(GROUPS_TOWN + answer,
-				gs_groups_dng_index[answer]
+				gs_groups_town[answer]
+				= gs_groups_dng_index[answer]
 				= gs_groups_dng_level[answer]
 				= gs_groups_direction_bak[answer]
 				= gs_groups_x_target_bak[answer]
@@ -243,7 +243,7 @@ void GRP_merge(void)
 				= gs_groups_town_bak[answer]
 				= gs_groups_dng_index_bak[answer]
 				= gs_groups_dng_level_bak[answer]
-				= 0)))));
+				= 0))));
 
 			ds_writeb(GROUP_MEMBER_COUNTS + answer, 0);
 
@@ -329,8 +329,8 @@ void GRP_switch_to_next(signed short mode)
 
 	if (gs_current_group != group) {
 
-		if ( ( (ds_readbs(CURRENT_TOWN) != TOWNS_NONE) && !ds_readbs(GROUPS_TOWN + group)) ||
-			(!ds_readbs(CURRENT_TOWN) && (ds_readbs(GROUPS_TOWN + group) != TOWNS_NONE)))
+		if ( ((ds_readbs(CURRENT_TOWN) != TOWNS_NONE) && !gs_groups_town[group]) ||
+			(!ds_readbs(CURRENT_TOWN) && (gs_groups_town[group] != TOWNS_NONE)))
 		{
 			set_palette(g_palette_allblack2, 0x00, 0x20);
 			set_palette(g_palette_allblack2, 0x80, 0x20);
@@ -343,7 +343,7 @@ void GRP_switch_to_next(signed short mode)
 			ds_writew(AREA_PREPARED, -1);
 		}
 
-		if ((ds_readbs(GROUPS_TOWN + group)) && (ds_readbs(GROUPS_TOWN + group) != ds_readbs(CURRENT_TOWN)))
+		if (gs_groups_town[group] && (gs_groups_town[group] != ds_readbs(CURRENT_TOWN)))
 		{
 			ds_writeb(CITY_AREA_LOADED, -1);
 			ds_writew(AREA_PREPARED, -1);
@@ -354,7 +354,7 @@ void GRP_switch_to_next(signed short mode)
 		ds_writew(GROUPS_X_TARGET + gs_current_group * 2, ds_readw(X_TARGET));
 		ds_writew(GROUPS_Y_TARGET + gs_current_group * 2, ds_readw(Y_TARGET));
 		gs_groups_current_loctype[gs_current_group] = gs_current_loctype;
-		ds_writeb(GROUPS_TOWN + gs_current_group, ds_readbs(CURRENT_TOWN));
+		gs_groups_town[gs_current_group] = ds_readbs(CURRENT_TOWN);
 		gs_groups_dng_index[gs_current_group] = gs_dungeon_index;
 		gs_groups_dng_level[gs_current_group] = gs_dungeon_level;
 		gs_groups_direction_bak[gs_current_group] = gs_direction_bak;
@@ -371,7 +371,7 @@ void GRP_switch_to_next(signed short mode)
 		ds_writew(X_TARGET, ds_readw(GROUPS_X_TARGET + group * 2));
 		ds_writew(Y_TARGET, ds_readw(GROUPS_Y_TARGET + group * 2));
 		gs_current_loctype = gs_groups_current_loctype[group];
-		ds_writeb(CURRENT_TOWN, ds_readb(GROUPS_TOWN + group));
+		ds_writeb(CURRENT_TOWN, gs_groups_town[group]);
 		gs_dungeon_index = gs_groups_dng_index[group];
 		dng_level = gs_dungeon_level;
 		gs_dungeon_level = gs_groups_dng_level[group];
