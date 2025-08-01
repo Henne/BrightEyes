@@ -2305,11 +2305,11 @@ void do_timers(void)
 				gs_groups_current_loctype[host_readbs(hero_i + HERO_GROUP_NO)] =
 					gs_groups_current_loctype_bak[host_readbs(hero_i + HERO_GROUP_NO)];
 
-				ds_writew(GROUPS_X_TARGET + host_readbs(hero_i + HERO_GROUP_NO) * 2,
-					gs_groups_x_target_bak[host_readbs(hero_i + HERO_GROUP_NO)]);
+				gs_groups_x_target[host_readbs(hero_i + HERO_GROUP_NO)] =
+					gs_groups_x_target_bak[host_readbs(hero_i + HERO_GROUP_NO)];
 
-				ds_writew(GROUPS_Y_TARGET + host_readbs(hero_i + HERO_GROUP_NO) * 2,
-					gs_groups_y_target_bak[host_readbs(hero_i + HERO_GROUP_NO)]);
+				gs_groups_y_target[host_readbs(hero_i + HERO_GROUP_NO)] =
+					gs_groups_y_target_bak[host_readbs(hero_i + HERO_GROUP_NO)];
 			}
 		}
 	}
@@ -4077,9 +4077,9 @@ signed short can_merge_group(void)
 			if ((i != gs_current_group) &&
 				(0 != ds_readb(i + GROUP_MEMBER_COUNTS)) &&
 				/* check XTarget */
-				(ds_readw(i * 2 + GROUPS_X_TARGET) == ds_readw(X_TARGET)) &&
+				(gs_groups_x_target[i] == ds_readws(X_TARGET)) &&
 				/* check YTarget */
-				(ds_readw(i * 2 + GROUPS_Y_TARGET) == ds_readw(Y_TARGET)) &&
+				(gs_groups_y_target[i] == ds_readws(Y_TARGET)) &&
 				/* check Location */
 				(gs_groups_current_loctype[i] == gs_current_loctype) &&
 				/* check currentTown */

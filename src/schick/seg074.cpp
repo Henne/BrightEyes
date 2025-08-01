@@ -294,11 +294,11 @@ void render_automap(signed short x_off)
 			(gs_groups_town[group_i] == gs_current_town) &&
 			(gs_groups_dng_index[group_i] == gs_dungeon_index) &&
 			!is_group_in_prison(group_i) &&
-			(ds_readws(GROUPS_X_TARGET + 2 * group_i) - x_off >= 0) &&
-			(ds_readws(GROUPS_X_TARGET + 2 * group_i) - x_off <= 16))
+			(gs_groups_x_target[group_i] - x_off >= 0) &&
+			(gs_groups_x_target[group_i] - x_off <= 16))
 		{
-			draw_automap_square(ds_readws(GROUPS_X_TARGET + 2 * group_i) - x_off,
-					ds_readws(GROUPS_Y_TARGET + 2 * group_i),
+			draw_automap_square(gs_groups_x_target[group_i] - x_off,
+					gs_groups_y_target[group_i],
 					MAP_TILE_PURPLE_ARROW,
 					ds_readbs(GROUPS_DIRECTION + group_i));
 		}

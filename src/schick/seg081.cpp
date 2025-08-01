@@ -295,8 +295,7 @@ signed short DNG06_handler(void)
 		{
 			for (i = l3 = 0; i < 6; i++)
 			{
-				if (ds_readws(GROUPS_X_TARGET + 2 * i) == 3 &&
-					ds_readws(GROUPS_Y_TARGET + 2 * i) == 6 &&
+				if (gs_groups_x_target[i] == 3 && gs_groups_y_target[i] == 6 &&
 					gs_current_group != i)
 				{
 					hero = get_hero(0);
@@ -322,9 +321,7 @@ signed short DNG06_handler(void)
 				/* liquid from ceiling causes damage */
 				hero = (Bit8u*)get_first_hero_available_in_group();
 
-				sprintf((char*)g_dtp2,
-					get_tx(23),
-					(char*)hero + HERO_NAME2);
+				sprintf((char*)g_dtp2, get_tx(23), (char*)hero + HERO_NAME2);
 
 				GUI_output((char*)g_dtp2);
 
@@ -339,8 +336,7 @@ signed short DNG06_handler(void)
 		{
 			for (i = l3 = 0; i < 6; i++)
 			{
-				if (ds_readws(GROUPS_X_TARGET + 2 * i) == 1 &&
-					ds_readws(GROUPS_Y_TARGET + 2 * i) == 2 &&
+				if (gs_groups_x_target[i] == 1 && gs_groups_y_target[i] == 2 &&
 					gs_current_group != i)
 				{
 					hero = get_hero(0);

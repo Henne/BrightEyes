@@ -342,10 +342,8 @@ signed short DNG09_handler(void)
 		/* check if there is still another group on the square of the lever */
 		for (i = l3 = 0; i < 6; i++)
 		{
-			if (ds_readws(GROUPS_X_TARGET + 2 * i) == 7 &&
-				ds_readws(GROUPS_Y_TARGET + 2 * i) == 13 &&
-				gs_groups_dng_level[i] == 1 &&
-				gs_current_group != i)
+			if (gs_groups_x_target[i] == 7 && gs_groups_y_target[i] == 13 &&
+				gs_groups_dng_level[i] == 1 && gs_current_group != i)
 			{
 				l3 = 1;
 			}

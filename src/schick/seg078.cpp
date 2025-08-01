@@ -157,8 +157,7 @@ signed short DNG02_handler(void)
 
 		for (i = 0; i < 6; i++) {
 
-			if (ds_readws(GROUPS_X_TARGET + 2 * i) == 10 &&
-				ds_readws(GROUPS_Y_TARGET + 2 * i) == 11 &&
+			if (gs_groups_x_target[i] == 10 && gs_groups_y_target[i] == 11 &&
 				gs_groups_dng_level[i] == gs_dungeon_level &&
 				gs_groups_dng_index[i] == gs_dungeon_index)
 			{
@@ -258,8 +257,7 @@ signed short DNG02_handler(void)
 		{
 			weight_sum = 0;
 
-			if (ds_readws(GROUPS_X_TARGET + 2 * i) == 11 &&
-				ds_readws(GROUPS_Y_TARGET + 2 * i) == 6 &&
+			if (gs_groups_x_target[i] == 11 && gs_groups_y_target[i] == 6 &&
 				gs_groups_dng_level[i] == gs_dungeon_level &&
 				gs_groups_dng_index[i] == gs_dungeon_index)
 			{
@@ -275,8 +273,8 @@ signed short DNG02_handler(void)
 
 				break;
 
-			} else if (ds_readws(GROUPS_X_TARGET + 2 * i) == 11 &&
-					ds_readws(GROUPS_Y_TARGET + 2 * i) == 8 &&
+			} else if (gs_groups_x_target[i] == 11 &&
+					gs_groups_y_target[i] == 8 &&
 					gs_groups_dng_level[i] == gs_dungeon_level &&
 					gs_groups_dng_index[i] == gs_dungeon_index)
 			{

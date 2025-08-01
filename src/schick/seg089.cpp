@@ -143,25 +143,20 @@ signed short DNG15_handler(void)
 	{
 		tmp = dir;
 
-		sprintf((char*)g_dtp2,
-			get_tx(23),
+		sprintf((char*)g_dtp2, get_tx(23),
 			(char*)(tmp == 0 ? get_tx(22) :
 				(tmp == 2 ? get_tx(21) :
 				(tmp == 3 ? get_tx(20) : get_tx(19)))));
 
 		for (i = tmp = 0; i < 6; i++)
 		{
-			if (ds_readw(GROUPS_X_TARGET + 2 * i) == 8 &&
-				ds_readw(GROUPS_Y_TARGET + 2 * i) == 5 &&
-				gs_current_group != i)
+			if (gs_groups_x_target[i] == 8 && gs_groups_y_target[i] == 5 && gs_current_group != i)
 			{
 				tmp = 1;
 			}
 		}
 
-		strcat((char*)g_dtp2,
-			(char*)(tmp == 0 ? get_tx(24) : get_tx(25)));
-
+		strcat((char*)g_dtp2, (char*)(tmp == 0 ? get_tx(24) : get_tx(25)));
 		GUI_output((char*)g_dtp2);
 
 		gs_direction_bak = ((signed char)dir);
@@ -172,24 +167,20 @@ signed short DNG15_handler(void)
 	{
 		tmp = dir;
 
-		sprintf((char*)g_dtp2,
-			get_tx(23),
+		sprintf((char*)g_dtp2, get_tx(23),
 			(char*)(tmp == 0 ? get_tx(21) :
 				(tmp == 2 ? get_tx(22) :
 				(tmp == 3 ? get_tx(19) : get_tx(20)))));
 
 		for (i = tmp = 0; i < 6; i++)
 		{
-			if (ds_readw(GROUPS_X_TARGET + 2 * i) == 8 &&
-				ds_readw(GROUPS_Y_TARGET + 2 * i) == 1 &&
-				gs_current_group != i)
+			if (gs_groups_x_target[i] == 8 && gs_groups_y_target[i] == 1 && gs_current_group != i)
 			{
 				tmp = 1;
 			}
 		}
 
-		strcat((char*)g_dtp2,
-			(char*)(tmp == 0 ? get_tx(24) : get_tx(25)));
+		strcat((char*)g_dtp2, (char*)(tmp == 0 ? get_tx(24) : get_tx(25)));
 
 		GUI_output((char*)g_dtp2);
 
@@ -200,16 +191,13 @@ signed short DNG15_handler(void)
 		/* check if another group stands on the other side */
 		for (i = tmp = 0; i < 6; i++)
 		{
-			if (ds_readw(GROUPS_X_TARGET + 2 * i) == 8 &&
-				ds_readw(GROUPS_Y_TARGET + 2 * i) == 5 &&
-				gs_current_group != i)
+			if (gs_groups_x_target[i] == 8 && gs_groups_y_target[i] == 5 && gs_current_group != i)
 			{
 				tmp = 1;
 			}
 		}
 
-		if (tmp == 0)
-		{
+		if (tmp == 0) {
 			/* go through the mirror */
 			GUI_output(get_tx(26));
 			ds_writew(Y_TARGET, 5);
@@ -226,9 +214,7 @@ signed short DNG15_handler(void)
 		/* check if another group stands on the other side */
 		for (i = tmp = 0; i < 6; i++)
 		{
-			if (ds_readw(GROUPS_X_TARGET + 2 * i) == 8 &&
-				ds_readw(GROUPS_Y_TARGET + 2 * i) == 1 &&
-				gs_current_group != i)
+			if (gs_groups_x_target[i] == 8 && gs_groups_y_target[i] == 1 && gs_current_group != i)
 			{
 				tmp = 1;
 			}

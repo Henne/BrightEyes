@@ -139,8 +139,8 @@ void GRP_save_pos(signed short group)
 
 	ds_writeb(GROUPS_DIRECTION + group, ds_readbs(DIRECTION));
 
-	ds_writew(GROUPS_X_TARGET + group * 2, ds_readws(X_TARGET));
-	ds_writew(GROUPS_Y_TARGET + group * 2, ds_readws(Y_TARGET));
+	gs_groups_x_target[group] = ds_readws(X_TARGET);
+	gs_groups_y_target[group] = ds_readws(Y_TARGET);
 
 	gs_groups_current_loctype[group] = gs_current_loctype;
 	gs_groups_town[group] = gs_current_town;
@@ -231,9 +231,9 @@ void GRP_merge(void)
 		do {
 
 			ds_writeb(GROUPS_DIRECTION + answer, (signed char)
-				(ds_writew(GROUPS_X_TARGET + answer * 2,
-				ds_writew(GROUPS_Y_TARGET + answer * 2,
-				gs_groups_town[answer]
+				(gs_groups_x_target[answer]
+				= gs_groups_y_target[answer]
+				= gs_groups_town[answer]
 				= gs_groups_dng_index[answer]
 				= gs_groups_dng_level[answer]
 				= gs_groups_direction_bak[answer]
@@ -243,7 +243,7 @@ void GRP_merge(void)
 				= gs_groups_town_bak[answer]
 				= gs_groups_dng_index_bak[answer]
 				= gs_groups_dng_level_bak[answer]
-				= 0))));
+				= 0));
 
 			ds_writeb(GROUP_MEMBER_COUNTS + answer, 0);
 
@@ -351,8 +351,8 @@ void GRP_switch_to_next(signed short mode)
 
 		/* save positions from the old group */
 		ds_writeb(GROUPS_DIRECTION + gs_current_group, ds_readbs(DIRECTION));
-		ds_writew(GROUPS_X_TARGET + gs_current_group * 2, ds_readw(X_TARGET));
-		ds_writew(GROUPS_Y_TARGET + gs_current_group * 2, ds_readw(Y_TARGET));
+		gs_groups_x_target[gs_current_group] = ds_readws(X_TARGET);
+		gs_groups_y_target[gs_current_group] = ds_readws(Y_TARGET);
 		gs_groups_current_loctype[gs_current_group] = gs_current_loctype;
 		gs_groups_town[gs_current_group] = gs_current_town;
 		gs_groups_dng_index[gs_current_group] = gs_dungeon_index;
@@ -368,8 +368,8 @@ void GRP_switch_to_next(signed short mode)
 		/* set positions for the new group */
 		gs_current_group = (signed char)group;
 		ds_writeb(DIRECTION, ds_readb(GROUPS_DIRECTION + group));
-		ds_writew(X_TARGET, ds_readw(GROUPS_X_TARGET + group * 2));
-		ds_writew(Y_TARGET, ds_readw(GROUPS_Y_TARGET + group * 2));
+		ds_writew(X_TARGET, gs_groups_x_target[group]);
+		ds_writew(Y_TARGET, gs_groups_y_target[group]);
 		gs_current_loctype = gs_groups_current_loctype[group];
 		gs_current_town = (gs_groups_town[group]);
 		gs_dungeon_index = gs_groups_dng_index[group];

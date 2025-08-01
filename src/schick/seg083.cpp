@@ -298,8 +298,7 @@ signed short DNG08_handler(void)
 		/* check if there is still another group on the square of the lever */
 		for (i = tmp = 0; i < 6; i++)
 		{
-			if (ds_readws(GROUPS_X_TARGET + 2 * i) == 11 &&
-				ds_readws(GROUPS_Y_TARGET + 2 * i) == 11 &&
+			if (gs_groups_x_target[i] == 11 && gs_groups_y_target[i] == 11 &&
 				gs_current_group != i)
 			{
 				tmp = 1;

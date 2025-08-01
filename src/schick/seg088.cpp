@@ -196,14 +196,14 @@ void DNG15_riddle(void)
 	/* check if the other group is in position */
 	for (i = l_di = 0; i < 6; i++) {
 
-		if (pos == DNG_POS(1,8,1) && ds_readws(GROUPS_X_TARGET + 2 * i) == 8 &&
-			ds_readws(GROUPS_Y_TARGET + 2 * i) == 5 && gs_current_group != i)
+		if (pos == DNG_POS(1,8,1) && gs_groups_x_target[i] == 8 &&
+			gs_groups_y_target[i] == 5 && gs_current_group != i)
 		{
 			l_di = 1;
 		}
 
-		if (pos == DNG_POS(1,8,5) && ds_readws(GROUPS_X_TARGET + 2 * i) == 8 &&
-			ds_readws(GROUPS_Y_TARGET + 2 * i) == 1 && gs_current_group != i)
+		if (pos == DNG_POS(1,8,5) && gs_groups_x_target[i] == 8 &&
+			gs_groups_y_target[i] == 1 && gs_current_group != i)
 		{
 			l_di = 1;
 		}
