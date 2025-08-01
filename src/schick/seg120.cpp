@@ -396,7 +396,7 @@ void init_game_state(void)
 	gs_current_loctype_bak = LOCTYPE_NONE;
 	/* Travia Temple in Thorwal */
 	gs_current_loctype = LOCTYPE_TEMPLE;
-	ds_writew(CURRENT_TYPEINDEX, 1);
+	gs_current_typeindex = 1;
 	ds_writew(X_TARGET_BAK, 9);
 	ds_writew(Y_TARGET_BAK, 9);
 	ds_writew(X_TARGET, 9);

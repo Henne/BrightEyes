@@ -44,7 +44,7 @@ void do_tavern(void)
 	time_t timeval;
 
 	done = 0;
-	tav_ptr = p_datseg + TAVERN_DESCR_TABLE + 4 * ds_readws(CURRENT_TYPEINDEX);
+	tav_ptr = p_datseg + TAVERN_DESCR_TABLE + 4 * gs_current_typeindex;
 
 	GUI_print_loc_line(get_tx(ds_readws(CURRENT_LOCDATA)));
 
@@ -83,7 +83,7 @@ void do_tavern(void)
 
 		handle_gui_input();
 
-		if (gs_tav_cheated_flags[ds_readws(CURRENT_TYPEINDEX)]) {
+		if (gs_tav_cheated_flags[gs_current_typeindex]) {
 
 			GUI_output(get_ttx(472));
 			done = 1;
@@ -188,7 +188,7 @@ void do_tavern(void)
 
 					GUI_output(get_ttx(474));
 
-					gs_tav_cheated_flags[ds_readws(CURRENT_TYPEINDEX)] = 1;
+					gs_tav_cheated_flags[gs_current_typeindex] = 1;
 					done = 1;
 					ds_writew(COMBO_MODE, 0);
 

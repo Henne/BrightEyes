@@ -292,14 +292,14 @@ void city_event_6(void)
 	/* Original-Bug 24:
 	 * When entering a building in Thorwal, Prem, Phexcaer or Oberorken between 8:00 and 20:00 o'clock, the street merchant (random city event) shows up with a chance 1:900. Selecting the third answer in the text box, the shop screen appears. After leaving the street merchant, the entered building is corrupted. For example, an entered temple will be a Praios temple (which otherwise does not exist in the game), or an entered tavern may offer negative food prices.
 	 */
-			type_bak = ds_readw(CURRENT_TYPEINDEX);
+			type_bak = gs_current_typeindex;
 #endif
-			ds_writew(CURRENT_TYPEINDEX, 93);
+			gs_current_typeindex = 93;
 			do_merchant();
 			gs_current_loctype = loc_bak;
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 24 */
-			ds_writew(CURRENT_TYPEINDEX, type_bak);
+			gs_current_typeindex = type_bak;
 #endif
 	/* Original-Bug 27: After leaving the street merchant (random city event), the party is rotated by 180 degrees. This doesn't make too much sense, and it is inconsistent to the similar situation of visiting a merchant at a market, where no rotation is performed. If moreover the street merchant happens to appear when the party is about to enter some building, after leaving the street merchant and then leaving the building the party will *not* be rotated. */
 #ifdef M302de_ORIGINAL_BUGFIX

@@ -66,7 +66,7 @@ signed short enter_location(signed short town_id)
 			/* found the location */
 			gs_current_loctype_bak = LOCTYPE_NONE;
 			gs_current_loctype = host_readbs(locations_list_ptr + LOCATION_LOCTYPE);
-			ds_writew(CURRENT_TYPEINDEX, host_readb(locations_list_ptr + LOCATION_TYPEINDEX));
+			gs_current_typeindex = host_readb(locations_list_ptr + LOCATION_TYPEINDEX);
 			ds_writew(CURRENT_LOCDATA, host_readw(locations_list_ptr + LOCATION_LOCDATA));
 
 			if (gs_current_loctype == LOCTYPE_MARKET) {
@@ -119,7 +119,7 @@ signed short enter_location_daspota(void)
 
 		if (host_readws(locations_list_ptr + LOCATION_XY) == map_pos) {
 
-			ds_writew(CURRENT_TYPEINDEX, host_readb(locations_list_ptr + LOCATION_TYPEINDEX));
+			gs_current_typeindex = host_readb(locations_list_ptr + LOCATION_TYPEINDEX);
 
 			if (host_readb(locations_list_ptr + LOCATION_LOCTYPE) != LOCTYPE_SIGNPOST) {
 
@@ -198,7 +198,7 @@ void do_special_buildings(void)
 	signed short tw_bak;
 
 	tw_bak = g_textbox_width;
-	type = ds_readws(CURRENT_TYPEINDEX);
+	type = gs_current_typeindex;
 
 	if (ds_readb(CURRENT_TOWN) == TOWNS_THORWAL) {
 
@@ -1026,7 +1026,7 @@ signed short city_step(void)
 
 		if (ds_readb(LOCATION_MARKET_FLAG) != 0 && ds_readb((NEW_MENU_ICONS + 7)) != MENU_ICON_MARKET) {
 
-			if (((i = ds_readws((MARKET_DESCR_TABLE + 4) + 8 * ds_readws(CURRENT_TYPEINDEX))) == -1 ||
+			if (((i = ds_readws((MARKET_DESCR_TABLE + 4) + 8 * gs_current_typeindex)) == -1 ||
 				gs_day_of_week == i) &&
 				gs_day_timer >= HOURS(6) &&
 				gs_day_timer <= HOURS(16))

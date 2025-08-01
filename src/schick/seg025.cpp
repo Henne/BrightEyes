@@ -61,7 +61,7 @@ void show_entrance(void)
 	if (GUI_bool(get_ttx(760))) {
 
 		init_ani_busy_loop(2);
-		DNG_enter_dungeon(ds_readws(CURRENT_TYPEINDEX));
+		DNG_enter_dungeon(gs_current_typeindex);
 	} else {
 
 		leave_location();
@@ -210,7 +210,7 @@ void do_house(void)
 
 void do_informer(void)
 {
-	signed short no = ds_readws(CURRENT_TYPEINDEX) - 1;
+	signed short no = gs_current_typeindex - 1;
 
 	if (no == INFORMER_JURGE)	do_talk(6, 0); else
 	if (no == INFORMER_HJORE)	do_talk(6, 1); else
@@ -233,9 +233,9 @@ void do_informer(void)
 
 void enter_map(void)
 {
-	ds_writew(CURRENT_SIGNPOST, ds_readw(CURRENT_TYPEINDEX));
+	ds_writew(CURRENT_SIGNPOST, gs_current_typeindex);
 
-	ds_writew(CURRENT_TYPEINDEX, ds_readbs(CURRENT_TOWN));
+	gs_current_typeindex = ds_readbs(CURRENT_TOWN);
 
 	gs_current_loctype = ds_writeb(CURRENT_TOWN, TOWNS_NONE);
 	ds_writeb(SHOW_TRAVEL_MAP, 1);

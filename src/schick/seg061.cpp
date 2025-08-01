@@ -58,7 +58,7 @@ void do_temple(void)
 			/* search which god owns this temple */
 			ds_writew(TEMPLE_GOD, 1);
 			for (l_si = 1; l_si < 15; l_si++) {
-				if (is_in_byte_array((signed char)ds_readws(CURRENT_TYPEINDEX), (Bit8u*)ds_readd(GOD_TEMPLES_INDEX + 4 * l_si)))
+				if (is_in_byte_array((signed char)gs_current_typeindex, (Bit8u*)ds_readd(GOD_TEMPLES_INDEX + 4 * l_si)))
 				{
 					ds_writew(TEMPLE_GOD, l_si);
 					break;
@@ -87,7 +87,7 @@ void do_temple(void)
 			sprintf((char*)g_dtp2,
 				get_ttx(235),
 				get_ttx(ds_readws(TEMPLE_GOD) + 21),	/* name of the god */
-				(char*)(ds_readws(CURRENT_TYPEINDEX) != 58 ? get_ttx(ds_readbs(CURRENT_TOWN) + 235): get_ttx(622)));
+				(char*)(gs_current_typeindex != 58 ? get_ttx(ds_readbs(CURRENT_TOWN) + 235): get_ttx(622)));
 
 			GUI_print_loc_line((char*)g_dtp2);
 
@@ -124,18 +124,18 @@ void do_temple(void)
 			}
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_1) {
 			/* add character */
-			char_add(ds_readws(CURRENT_TYPEINDEX));
+			char_add(gs_current_typeindex);
 			draw_status_line();
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_2) {
 			/* let go character */
-			char_letgo(ds_readws(CURRENT_TYPEINDEX));
+			char_letgo(gs_current_typeindex);
 			draw_status_line();
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_3) {
 			/* erase character */
 			char_erase();
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_4) {
 			/* load game */
-			if (ds_readws(CURRENT_TYPEINDEX) != 58) {
+			if (gs_current_typeindex != 58) {
 
 				do {
 					game_state = load_game_state();
@@ -158,7 +158,7 @@ void do_temple(void)
 			}
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_5) {
 			/* save game */
-			if (ds_readws(CURRENT_TYPEINDEX) != 58) {
+			if (gs_current_typeindex != 58) {
 				if (!ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group)) {
 					GUI_output(get_ttx(232));
 				} else {

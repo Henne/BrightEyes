@@ -632,7 +632,7 @@ void INF_treborn_unicorn(signed short informer, signed short state)
 			g_dialog_next_state = (enough_money ? 19 : 20);
 		} else if (state == 18) {
 			/* visit the shop of Treborn Kolberg */
-			ds_writew(CURRENT_TYPEINDEX, 91);
+			gs_current_typeindex = 91;
 			do_merchant();
 		} else if (state == 21) {
 			ds_writeb(TREBORN_DATE, 1);

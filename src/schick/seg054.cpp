@@ -56,7 +56,7 @@ Bit8u* get_first_brewing_hero(void)
 		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 			host_readbs(hero + HERO_GROUP_NO) != gs_current_group &&
 			hero_brewing(hero) &&
-			host_readbs(hero + HERO_ALCHEMY_INN_ID) == ds_readws(CURRENT_TYPEINDEX))
+			host_readbs(hero + HERO_ALCHEMY_INN_ID) == gs_current_typeindex)
 		{
 			return hero;
 		}
@@ -246,7 +246,7 @@ void do_inn(void)
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 					host_readbs(hero + HERO_GROUP_NO) != gs_current_group &&
 					hero_brewing(hero) &&
-					host_readbs(hero + HERO_ALCHEMY_INN_ID) == ds_readws(CURRENT_TYPEINDEX))
+					host_readbs(hero + HERO_ALCHEMY_INN_ID) == gs_current_typeindex)
 			{
 				draw_status_line();
 
@@ -358,7 +358,7 @@ void do_inn(void)
 			refresh = 0;
 		}
 
-		inn_ptr = p_datseg + INN_DESCR_TABLE + SIZEOF_INN_STATS * ds_readws(CURRENT_TYPEINDEX);
+		inn_ptr = p_datseg + INN_DESCR_TABLE + SIZEOF_INN_STATS * gs_current_typeindex;
 
 		handle_gui_input();
 
@@ -602,7 +602,7 @@ void do_inn(void)
 
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_8 && ds_readws(COMBO_MODE) != 0) {
 
-			tavern_ptr = p_datseg + TAVERN_DESCR_TABLE + 4 * ds_readws(CURRENT_TYPEINDEX);
+			tavern_ptr = p_datseg + TAVERN_DESCR_TABLE + 4 * gs_current_typeindex;
 
 			if (host_readws(tavern_ptr) >= 6 && host_readws(tavern_ptr) <= 13 &&
 				gs_day_timer < HOURS(11) && gs_day_timer > HOURS(3)) {
@@ -637,13 +637,13 @@ void TLK_herberg(signed short state)
 	Bit8u *hero = (Bit8u*)get_first_hero_available_in_group();
 
 	if (!state) {
-		g_dialog_next_state = (gs_herberg_kicked_flags[ds_readws(CURRENT_TYPEINDEX)] ? 1 : 2);
+		g_dialog_next_state = (gs_herberg_kicked_flags[gs_current_typeindex] ? 1 : 2);
 	} else if (state == 1 || state == 14) {
-		gs_herberg_kicked_flags[ds_readws(CURRENT_TYPEINDEX)] = 1;
+		gs_herberg_kicked_flags[gs_current_typeindex] = 1;
 	} else if (state == 11) {
 		tumult();
 		gs_town_outlawed_flags[ds_readbs(CURRENT_TOWN)] = 1;
-		gs_herberg_kicked_flags[ds_readws(CURRENT_TYPEINDEX)] = 1;
+		gs_herberg_kicked_flags[gs_current_typeindex] = 1;
 	} else if (state == 12) {
 		/* CH + 5 */
 		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 5) > 0 ? 14 : 11);

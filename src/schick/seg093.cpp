@@ -46,7 +46,7 @@ signed short do_travel_mode(void)
 
 	bak1 = g_wallclock_update;
 	ds_writeb(ROUTE59_FLAG, (unsigned char)(g_wallclock_update = (unsigned short)ds_writeb(TRAVEL_DETOUR, 0)));
-	ds_writeb(CURRENT_TOWN, ds_readbs(CURRENT_TYPEINDEX));
+	ds_writeb(CURRENT_TOWN, gs_current_typeindex);
 
 	update_mouse_cursor();
 

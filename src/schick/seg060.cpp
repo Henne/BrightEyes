@@ -129,7 +129,7 @@ void talk_tavern(void)
 
 			} else if (txt_id == 114) {
 
-				food_quality = ds_readws(TAVERN_DESCR_TABLE + 4 * ds_readws(CURRENT_TYPEINDEX) + 0);
+				food_quality = ds_readws(TAVERN_DESCR_TABLE + 4 * gs_current_typeindex + 0);
 
 				/* print quality [-1, 2..20]  2 = best, 20 = worse */
 				sprintf(text_buffer, format,
@@ -263,13 +263,13 @@ void TLK_tavern(signed short answer)
 
 	if (!old_state) {
 
-		if (gs_tav_kicked_flags[ds_readws(CURRENT_TYPEINDEX)]) {
+		if (gs_tav_kicked_flags[gs_current_typeindex]) {
 
 			hero_pos = get_hero_CH_best();
 
 			g_dialog_next_state = (test_attrib(get_hero(hero_pos), ATTRIB_CH, 0) <= 0 ? 112 : 113);
 
-			gs_tav_kicked_flags[ds_readws(CURRENT_TYPEINDEX)] = 0;
+			gs_tav_kicked_flags[gs_current_typeindex] = 0;
 
 		} else {
 			g_dialog_next_state = (113);
@@ -365,20 +365,20 @@ void TLK_tavern(signed short answer)
 
 		sub_group_le(ds_readb(TLK_TAV_FULLNESS));
 
-		gs_tav_kicked_flags[ds_readws(CURRENT_TYPEINDEX)] = 1;
+		gs_tav_kicked_flags[gs_current_typeindex] = 1;
 
 		if (ds_readb(TLK_TAV_FULLNESS) == 3) {
-			gs_town_outlawed_flags[ds_readws(CURRENT_TYPEINDEX)] = 1;
+			gs_town_outlawed_flags[gs_current_typeindex] = 1;
 		}
 
 	} else if (old_state == 33) {
 
 		sub_group_le(2 * ds_readb(TLK_TAV_FULLNESS));
 
-		gs_tav_kicked_flags[ds_readws(CURRENT_TYPEINDEX)] = 1;
+		gs_tav_kicked_flags[gs_current_typeindex] = 1;
 
 		if (ds_readb(TLK_TAV_FULLNESS) == 3) {
-			gs_town_outlawed_flags[ds_readws(CURRENT_TYPEINDEX)] = 1;
+			gs_town_outlawed_flags[gs_current_typeindex] = 1;
 		}
 
 	} else if (old_state == 34) {
@@ -425,13 +425,13 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 54) {
 
-		gs_tav_kicked_flags[ds_readws(CURRENT_TYPEINDEX)] = 1;
+		gs_tav_kicked_flags[gs_current_typeindex] = 1;
 
 	} else if (old_state == 55) {
 
 		sub_group_le(1);
 
-		gs_tav_kicked_flags[ds_readws(CURRENT_TYPEINDEX)] = 1;
+		gs_tav_kicked_flags[gs_current_typeindex] = 1;
 
 	} else if (old_state == 56) {
 
@@ -592,8 +592,8 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 130) {
 
-		tmp = count_heroes_in_group() * (6 - ds_readws(TAVERN_DESCR_TABLE + 4 * ds_readws(CURRENT_TYPEINDEX)) / 4);
-		tmp += (tmp * ds_readws(TAVERN_DESCR_TABLE + 2 + 4 * ds_readws(CURRENT_TYPEINDEX))) / 100;
+		tmp = count_heroes_in_group() * (6 - ds_readws(TAVERN_DESCR_TABLE + 4 * gs_current_typeindex) / 4);
+		tmp += (tmp * ds_readws(TAVERN_DESCR_TABLE + 2 + 4 * gs_current_typeindex)) / 100;
 		p_money = get_party_money();
 		p_money -= tmp;
 		set_party_money(p_money);
@@ -619,7 +619,7 @@ void TLK_tavern(signed short answer)
 
 	if (old_state == 132) {
 
-		g_dialog_next_state = (npc_meetings(ds_readws(CURRENT_TYPEINDEX)) ? 144 : (!tavern_quest_infos() ? 133 : 144));
+		g_dialog_next_state = (npc_meetings(gs_current_typeindex) ? 144 : (!tavern_quest_infos() ? 133 : 144));
 
 	} else if (old_state == 133) {
 

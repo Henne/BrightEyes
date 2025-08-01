@@ -194,18 +194,15 @@ void THO_tav_inn_combi(void)
 	load_ani(4);
 	init_ani(0);
 
-	answer = GUI_radio(get_ttx(673), 3,
-				get_ttx(674),
-				get_ttx(675),
-				get_ttx(347));
+	answer = GUI_radio(get_ttx(673), 3, get_ttx(674), get_ttx(675), get_ttx(347));
 
 	/* save the combo typeindex */
-	type_bak = ds_readw(CURRENT_TYPEINDEX);
+	type_bak = gs_current_typeindex;
 
 	do {
 
 		/* restore the combo typeindex */
-		ds_writew(CURRENT_TYPEINDEX, type_bak);
+		gs_current_typeindex = type_bak;
 
 		if (answer == 1) {
 
@@ -215,10 +212,8 @@ void THO_tav_inn_combi(void)
 			ds_writew(COMBO_MODE, 1);
 
 			/* set the typeindex of the corresponding tavern */
-			answer = ds_readw(CURRENT_TYPEINDEX);
-			ds_writew(CURRENT_TYPEINDEX, answer == 11 ? 0 : (
-					answer == 14 ? 1 : (
-					answer == 17 ? 2 : 6)));
+			answer = gs_current_typeindex;
+			gs_current_typeindex = (answer == 11 ? 0 : (answer == 14 ? 1 : (answer == 17 ? 2 : 6)));
 
 			g_textbox_width = 3;
 
@@ -239,10 +234,8 @@ void THO_tav_inn_combi(void)
 			ds_writew(COMBO_MODE, 1);
 
 			/* set the typeindex of the corresponding inn */
-			answer = ds_readw(CURRENT_TYPEINDEX);
-			ds_writew(CURRENT_TYPEINDEX, answer == 11 ? 70 : (
-					answer == 14 ? 71 : (
-					answer == 17 ? 72 : 73)));
+			answer = gs_current_typeindex;
+			gs_current_typeindex = (answer == 11 ? 70 : (answer == 14 ? 71 : (answer == 17 ? 72 : 73)));
 
 			g_textbox_width = 3;
 

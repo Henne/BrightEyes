@@ -627,7 +627,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 			} else {
 				GUI_output(get_tx(39));
 
-				gs_tav_cheated_flags[ds_readws(CURRENT_TYPEINDEX)] = 1;
+				gs_tav_cheated_flags[gs_current_typeindex] = 1;
 
 				l_si = -1;
 			}

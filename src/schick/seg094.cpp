@@ -317,7 +317,7 @@ void TM_func1(signed short route_no, signed short backwards)
 
 		} else if (ds_readw(ROUTE_INFORMER_FLAG) != 0 && ds_readws(ROUTE_DAYPROGRESS) >= ds_readws(ROUTE_INFORMER_TIME) && ds_readws(GAME_STATE) == GAME_STATE_MAIN)
 		{
-			ds_writew(CURRENT_TYPEINDEX, random_schick(100) <= 50 ? 10 : 12);
+			gs_current_typeindex = (random_schick(100) <= 50 ? 10 : 12);
 			bak1 = ds_readws(BASEPOS_X);
 			bak2 = ds_readws(BASEPOS_Y);
 			ds_writew(BASEPOS_X, ds_writew(BASEPOS_Y, 0));

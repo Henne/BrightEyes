@@ -167,6 +167,8 @@ extern Bit8u  gs_alrik_derondan_insulted;	//ds:0x3d79; seg071
 
 extern Bit32s gs_dng12_watertrap_timer;		//ds:0x3fa2; seg002, seg090
 
+extern Bit16s gs_current_typeindex;		//ds:0x4224; seg025-seg120
+
 extern Bit16s gs_arsenal_money;			//ds:0x43a3; seg068
 /* GameState written directly into SaveGame file ends at 0x4474 */
 

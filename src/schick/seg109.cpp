@@ -282,7 +282,7 @@ void TRV_found_inn(signed short town_id, signed short type)
 
 	if (GUI_bool(get_tx(23))) {
 		ds_writew(CURRENT_LOCDATA, town_id);
-		ds_writew(CURRENT_TYPEINDEX, type);
+		gs_current_typeindex = type;
 		gs_current_loctype = LOCTYPE_INN;
 
 		do_location();

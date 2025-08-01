@@ -67,7 +67,7 @@ void do_merchant(void)
 
 #if !defined(__BORLANDC__)
 	/* Print merchant values */
-	const Bit8u typi = ds_readb(CURRENT_TYPEINDEX);
+	const Bit8u typi = gs_current_typeindex;
 	const Bit8s price = ds_readbs(SHOP_DESCR_TABLE + 9 * typi);
 	const Bit8s h_type = ds_readbs(SHOP_DESCR_TABLE + 1 + 9 * typi);
 	const Bit8s sortiment = ds_readbs(SHOP_DESCR_TABLE + 2 + 9 * typi);
@@ -94,13 +94,13 @@ void do_merchant(void)
 		return;
 	}
 
-	if (gs_merchant_kicked_flags[ds_readws(CURRENT_TYPEINDEX)]) {
-		if (ds_readbs((SHOP_DESCR_TABLE + 1) + 9 * ds_readws(CURRENT_TYPEINDEX)) != 3) {
+	if (gs_merchant_kicked_flags[gs_current_typeindex]) {
+		if (ds_readbs((SHOP_DESCR_TABLE + 1) + 9 * gs_current_typeindex) != 3) {
 			talk_merchant();
 			leave_location();
 			return;
 		}
-	} else if (gs_merchant_offended_flags[ds_readws(CURRENT_TYPEINDEX)]) {
+	} else if (gs_merchant_offended_flags[gs_current_typeindex]) {
 		GUI_output(get_ttx(507));
 		leave_location();
 		return;
@@ -112,7 +112,7 @@ void do_merchant(void)
 	ds_writed(BUYITEMS, (Bit32u)g_fig_figure1_buf);
 	memset((Bit8u*)ds_readd(BUYITEMS), 0, 3500);
 	ds_writew(PRICE_MODIFICATOR, 4);
-	shop_p = p_datseg + SHOP_DESCR_TABLE + 9 * ds_readws(CURRENT_TYPEINDEX);
+	shop_p = p_datseg + SHOP_DESCR_TABLE + 9 * gs_current_typeindex;
 
 	for (l_si = 0; l_si < 100; l_si++) {
 		host_writews((Bit8u*)ds_readd(BUYITEMS) + 7 * l_si, 0);
@@ -179,7 +179,7 @@ void do_merchant(void)
 		qsort((Bit8u*)ds_readd(BUYITEMS), item_pos, 7, shop_compar);
 	}
 
-	while (done == 0 && !gs_merchant_offended_flags[ds_readws(CURRENT_TYPEINDEX)]) {
+	while (done == 0 && !gs_merchant_offended_flags[gs_current_typeindex]) {
 
 		if (ds_readws(REQUEST_REFRESH) != 0) {
 
@@ -195,7 +195,7 @@ void do_merchant(void)
 
 			set_audio_track(ARCHIVE_FILE_TERMS_XMI);
 
-			GUI_print_loc_line(gs_current_loctype == LOCTYPE_MARKET ? get_ttx(679) : (ds_readws(CURRENT_TYPEINDEX) == 93 ?  get_ttx(46) : get_tx(ds_readws(CURRENT_LOCDATA))));
+			GUI_print_loc_line(gs_current_loctype == LOCTYPE_MARKET ? get_ttx(679) : (gs_current_typeindex == 93 ?  get_ttx(46) : get_tx(ds_readws(CURRENT_LOCDATA))));
 			// CURRENT_TYPEINDEX 93 is the merchant from random city event 6.
 
 			ds_writew(REQUEST_REFRESH, refresh = 0);
@@ -281,7 +281,7 @@ void do_merchant(void)
 
 			talk_merchant();
 
-			if (gs_merchant_kicked_flags[ds_readws(CURRENT_TYPEINDEX)]) {
+			if (gs_merchant_kicked_flags[gs_current_typeindex]) {
 				done = 1;
 			}
 		}
@@ -296,7 +296,7 @@ void talk_merchant(void)
 {
 	signed short tlk_id;
 
-	switch (ds_readbs(SHOP_DESCR_TABLE + 9 * ds_readws(CURRENT_TYPEINDEX) + 1)) {
+	switch (ds_readbs(SHOP_DESCR_TABLE + 9 * gs_current_typeindex + 1)) {
 		case 1: tlk_id = 16; break;
 		case 2: tlk_id = 15; break;
 		case 3: tlk_id = 14; break;
@@ -308,12 +308,12 @@ void talk_merchant(void)
 void TLK_ghandel(signed short state)
 {
 	if (!state) {
-		g_dialog_next_state = (gs_merchant_kicked_flags[ds_readws(CURRENT_TYPEINDEX)] ? 1 : 4);
+		g_dialog_next_state = (gs_merchant_kicked_flags[gs_current_typeindex] ? 1 : 4);
 	} else if (state == 1) {
 		/* REMARK: gs_merchant_kicked2_flags[0] is always zero */
-		g_dialog_next_state = (gs_merchant_kicked2_flags[ds_readws(CURRENT_TYPEINDEX)] ? 2 : 3);
-	} else if (state == 6 && ds_readws(CURRENT_TYPEINDEX) != 90) {
-		gs_merchant_kicked_flags[ds_readws(CURRENT_TYPEINDEX)] = 1;
+		g_dialog_next_state = (gs_merchant_kicked2_flags[gs_current_typeindex] ? 2 : 3);
+	} else if (state == 6 && gs_current_typeindex != 90) {
+		gs_merchant_kicked_flags[gs_current_typeindex] = 1;
 	} else if (state == 10) {
 		/* test CH+0 */
 		g_dialog_next_state = (test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0 ? 11 : 12);
@@ -323,15 +323,15 @@ void TLK_ghandel(signed short state)
 void TLK_khandel(signed short state)
 {
 	if (!state) {
-		g_dialog_next_state = (gs_merchant_kicked_flags[ds_readws(CURRENT_TYPEINDEX)] ? 1 : 2);
+		g_dialog_next_state = (gs_merchant_kicked_flags[gs_current_typeindex] ? 1 : 2);
 	} else if (state == 5) {
 		tumult();
-		if (ds_readws(CURRENT_TYPEINDEX) != 90) {
-			gs_merchant_kicked_flags[ds_readws(CURRENT_TYPEINDEX)] = 1;
+		if (gs_current_typeindex != 90) {
+			gs_merchant_kicked_flags[gs_current_typeindex] = 1;
 		}
 
-	} else if (state == 7 && ds_readws(CURRENT_TYPEINDEX) != 90) {
-		gs_merchant_kicked_flags[ds_readws(CURRENT_TYPEINDEX)] = 1;
+	} else if (state == 7 && gs_current_typeindex != 90) {
+		gs_merchant_kicked_flags[gs_current_typeindex] = 1;
 	} else if (state == 8) {
 		g_dialog_next_state = (random_schick(20) <= 3 ? 9 : -1);
 	} else if (state == 11) {
@@ -345,15 +345,15 @@ void TLK_khandel(signed short state)
 void TLK_whandel(signed short state)
 {
 	if (!state) {
-		g_dialog_next_state = (gs_merchant_kicked_flags[ds_readws(CURRENT_TYPEINDEX)] ? 26 : 1);
+		g_dialog_next_state = (gs_merchant_kicked_flags[gs_current_typeindex] ? 26 : 1);
 	} else if (state == 7 || state == 13) {
 		tumult();
-		if (ds_readws(CURRENT_TYPEINDEX) != 90) {
-			gs_merchant_kicked_flags[ds_readws(CURRENT_TYPEINDEX)] = 1;
+		if (gs_current_typeindex != 90) {
+			gs_merchant_kicked_flags[gs_current_typeindex] = 1;
 		}
 
-	} else if ((state == 8 || state == 16) && ds_readws(CURRENT_TYPEINDEX) != 90) {
-		gs_merchant_kicked_flags[ds_readws(CURRENT_TYPEINDEX)] = 1;
+	} else if ((state == 8 || state == 16) && gs_current_typeindex != 90) {
+		gs_merchant_kicked_flags[gs_current_typeindex] = 1;
 	} else if (state == 18) {
 		/* test CH+0 */
 		g_dialog_next_state = (test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0 ? 19 : -1);

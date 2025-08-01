@@ -498,7 +498,7 @@ signed short tavern_quest_infos(void)
 
 	} else if ((ds_readbs(CURRENT_TOWN) == TOWNS_THORWAL) &&
 			!(ds_readb(QUEST_DEADSHIP)) &&
-			(ds_readws(CURRENT_TYPEINDEX) == 6))
+			(gs_current_typeindex == 6))
 	{
 		/* print the message about a ghost ship */
 		GUI_output(get_tx(209));
@@ -507,7 +507,7 @@ signed short tavern_quest_infos(void)
 		ds_writeb(QUEST_DEADSHIP, (unsigned char)(l_si = 1));
 
 	} else if ((ds_readbs(CURRENT_TOWN) == TOWNS_SKJAL) &&
-			(ds_readws(CURRENT_TYPEINDEX) == 69) &&
+			(gs_current_typeindex == 69) &&
 			(gs_informer_flags[INFORMER_JURGE] != 2) &&
 			(gs_informer_flags[INFORMER_JURGE] != 0) &&
 			!gs_jurge_awaits_letter)
@@ -519,7 +519,7 @@ signed short tavern_quest_infos(void)
 		}
 
 	} else if ((ds_readbs(CURRENT_TOWN) == TOWNS_VIDSAND) &&
-			(ds_readws(CURRENT_TYPEINDEX) == 84) &&
+			(gs_current_typeindex == 84) &&
 			(gs_informer_flags[INFORMER_RAGNA] != 2) &&
 			(gs_informer_flags[INFORMER_RAGNA] != 0))
 	{
@@ -530,21 +530,21 @@ signed short tavern_quest_infos(void)
 		}
 
 	} else if ((ds_readbs(CURRENT_TOWN) == TOWNS_ANGBODIRTAL) &&
-			((ds_readws(CURRENT_TYPEINDEX) == 27) || (ds_readws(CURRENT_TYPEINDEX) == 28)) &&
+			((gs_current_typeindex == 27) || (gs_current_typeindex == 28)) &&
 			(gs_informer_flags[INFORMER_BEORN] != 2) &&
 			(gs_informer_flags[INFORMER_BEORN] != 0))
 	{
 		/* meet Informer Beorn */
 
-		if (((ds_readws(CURRENT_TYPEINDEX) == 27) && (random_schick(100) <= 50)) ||
-			((ds_readws(CURRENT_TYPEINDEX) == 28) && (random_schick(100) <= 20)))
+		if (((gs_current_typeindex == 27) && (random_schick(100) <= 50)) ||
+			((gs_current_typeindex == 28) && (random_schick(100) <= 20)))
 		{
 			ds_writeb(CURRENT_INFORMER, (unsigned char)(l_si = 7));
 		}
 
 
 	} else if ((ds_readbs(CURRENT_TOWN) == TOWNS_BREIDA) &&
-			((ds_readws(CURRENT_TYPEINDEX) == 14) || (ds_readws(CURRENT_TYPEINDEX) == 15)) &&
+			((gs_current_typeindex == 14) || (gs_current_typeindex == 15)) &&
 			(gs_informer_flags[INFORMER_ASGRIMM] != 2) &&
 			(gs_informer_flags[INFORMER_ASGRIMM] != 0) &&
 			(gs_got_main_quest != 0))
@@ -556,14 +556,14 @@ signed short tavern_quest_infos(void)
 		}
 
 	} else if ((ds_readbs(CURRENT_TOWN) == TOWNS_HJALSINGOR) &&
-			((ds_readws(CURRENT_TYPEINDEX) == 61) || (ds_readws(CURRENT_TYPEINDEX) == 62)) &&
+			((gs_current_typeindex == 61) || (gs_current_typeindex == 62)) &&
 			(gs_informer_flags[INFORMER_ALGRID] != 2) &&
 			(gs_informer_flags[INFORMER_ALGRID] != 0))
 	{
 		/* meet Informer Algrid */
 
-		if (((ds_readws(CURRENT_TYPEINDEX) == 61) && (random_schick(100) <= 50)) ||
-			((ds_readws(CURRENT_TYPEINDEX) == 62) && (random_schick(100) <= 20)))
+		if (((gs_current_typeindex == 61) && (random_schick(100) <= 50)) ||
+			((gs_current_typeindex == 62) && (random_schick(100) <= 20)))
 		{
 			ds_writeb(CURRENT_INFORMER, (unsigned char)(l_si = 14));
 		}

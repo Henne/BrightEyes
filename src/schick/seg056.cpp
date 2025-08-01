@@ -603,7 +603,7 @@ void buy_screen(void)
 
 					if (j == 2) {
 						GUI_output(get_ttx(445));
-						gs_merchant_offended_flags[ds_readw(CURRENT_TYPEINDEX)] = 1;
+						gs_merchant_offended_flags[gs_current_typeindex] = 1;
 						done = 1;
 					} else {
 						GUI_output(get_ttx(443));

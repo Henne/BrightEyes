@@ -61,7 +61,7 @@ void do_healer(void)
 	leave_healer = 0;
 
 #if !defined(__BORLANDC__)
-	const Bit8u typi = ds_readb(CURRENT_TYPEINDEX);
+	const Bit8u typi = gs_current_typeindex;
 	const Bit8s h_price = ds_readb(HEALER_DESCR_TABLE + 2 * typi);
 	const Bit8u h_qual = ds_readb(HEALER_DESCR_TABLE + 1 + 2 * typi);
 
@@ -71,7 +71,7 @@ void do_healer(void)
 #endif
 
 	request_refresh = ds_writew(REQUEST_REFRESH, 1);
-	healer_stats_ptr = p_datseg + HEALER_DESCR_TABLE + ds_readw(CURRENT_TYPEINDEX) * SIZEOF_HEALER_STATS;
+	healer_stats_ptr = p_datseg + HEALER_DESCR_TABLE + gs_current_typeindex * SIZEOF_HEALER_STATS;
 	draw_loc_icons(4, MENU_ICON_HEAL_WOUNDS, MENU_ICON_HEAL_DISEASE, MENU_ICON_HEAL_POISON, MENU_ICON_LEAVE);
 
 	while (leave_healer == 0) {
