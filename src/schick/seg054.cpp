@@ -346,14 +346,14 @@ void do_inn(void)
 
 			init_ani(0);
 
-			GUI_print_loc_line(get_tx(ds_readws(CURRENT_LOCDATA)));
+			GUI_print_loc_line(get_tx(gs_current_locdata));
 
 			ds_writews(REQUEST_REFRESH, refresh = 0);
 		}
 
 		if (refresh != 0) {
 
-			GUI_print_loc_line(get_tx(ds_readws(CURRENT_LOCDATA)));
+			GUI_print_loc_line(get_tx(gs_current_locdata));
 
 			refresh = 0;
 		}

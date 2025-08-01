@@ -82,7 +82,7 @@ void do_healer(void)
 			load_ani(23);
 			init_ani(0);
 
-			GUI_print_loc_line(get_tx(ds_readw(CURRENT_LOCDATA)));
+			GUI_print_loc_line(get_tx(gs_current_locdata));
 
 			set_audio_track(ARCHIVE_FILE_HEALER_XMI);
 
@@ -101,7 +101,7 @@ void do_healer(void)
 		}
 
 		if (request_refresh != 0) {
-			GUI_print_loc_line(get_tx(ds_readw(CURRENT_LOCDATA)));
+			GUI_print_loc_line(get_tx(gs_current_locdata));
 			request_refresh = 0;
 		}
 

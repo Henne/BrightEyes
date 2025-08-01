@@ -85,7 +85,7 @@ void show_citizen(void)
 			load_ani(20);
 			init_ani(ds_writew(REQUEST_REFRESH, 0));
 
-			strcpy(g_text_output_buf, get_tx(ds_readw(CURRENT_LOCDATA)));
+			strcpy(g_text_output_buf, get_tx(gs_current_locdata));
 
 			if ((gs_year == 15) && (gs_month == 1) && (random_schick(100) <= 20)) {
 
@@ -120,7 +120,7 @@ void do_house(void)
 	Bit8u *hero;
 
 	/* prepare the question */
-	strcpy((char*)g_dtp2, get_tx(ds_readws(CURRENT_LOCDATA)));
+	strcpy((char*)g_dtp2, get_tx(gs_current_locdata));
 
 	strcat((char*)g_dtp2, get_ttx(623));
 

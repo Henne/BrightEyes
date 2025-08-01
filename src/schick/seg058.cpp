@@ -528,7 +528,7 @@ void do_smith(void)
 			set_var_to_zero();
 			load_ani(5);
 			init_ani(0);
-			GUI_print_loc_line(get_tx(ds_readws(CURRENT_LOCDATA)));
+			GUI_print_loc_line(get_tx(gs_current_locdata));
 			set_audio_track(ARCHIVE_FILE_SMITH_XMI);
 			ds_writew(REQUEST_REFRESH, 0);
 		}

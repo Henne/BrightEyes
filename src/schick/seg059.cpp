@@ -46,7 +46,7 @@ void do_tavern(void)
 	done = 0;
 	tav_ptr = p_datseg + TAVERN_DESCR_TABLE + 4 * gs_current_typeindex;
 
-	GUI_print_loc_line(get_tx(ds_readws(CURRENT_LOCDATA)));
+	GUI_print_loc_line(get_tx(gs_current_locdata));
 
 	ds_writew(REQUEST_REFRESH, 1);
 
@@ -76,7 +76,7 @@ void do_tavern(void)
 			set_var_to_zero();
 			load_ani(27);
 			init_ani(0);
-			GUI_print_loc_line(get_tx(ds_readws(CURRENT_LOCDATA)));
+			GUI_print_loc_line(get_tx(gs_current_locdata));
 			set_audio_track(ARCHIVE_FILE_INN_XMI);
 			ds_writew(REQUEST_REFRESH, 0);
 		}

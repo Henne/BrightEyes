@@ -478,7 +478,7 @@ void PHX_healer(void)
 
 			/* enter the healer */
 			gs_current_typeindex = 13;
-			ds_writew(CURRENT_LOCDATA, 15);
+			gs_current_locdata = (15);
 
 			do_healer();
 

@@ -195,7 +195,7 @@ void do_merchant(void)
 
 			set_audio_track(ARCHIVE_FILE_TERMS_XMI);
 
-			GUI_print_loc_line(gs_current_loctype == LOCTYPE_MARKET ? get_ttx(679) : (gs_current_typeindex == 93 ?  get_ttx(46) : get_tx(ds_readws(CURRENT_LOCDATA))));
+			GUI_print_loc_line(gs_current_loctype == LOCTYPE_MARKET ? get_ttx(679) : (gs_current_typeindex == 93 ?  get_ttx(46) : get_tx(gs_current_locdata)));
 			// CURRENT_TYPEINDEX 93 is the merchant from random city event 6.
 
 			ds_writew(REQUEST_REFRESH, refresh = 0);
@@ -203,7 +203,7 @@ void do_merchant(void)
 		}
 
 		if (refresh != 0) {
-			GUI_print_loc_line(get_tx(ds_readws(CURRENT_LOCDATA)));
+			GUI_print_loc_line(get_tx(gs_current_locdata));
 			refresh = 0;
 		}
 
