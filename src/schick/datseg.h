@@ -223,6 +223,11 @@ extern signed int g_fig_dropped_counter;	//ds:0x5f12; seg032, seg041
 extern signed int g_fig_all_heroes_withdrawn;	//ds:0x5f14; seg032
 extern signed int g_max_enemies;		//ds:0x5f16; seg032, seg080, seg117
 
+extern signed char  g_anitab_spell_nvfno[2];	//ds:0x634c; seg045
+extern signed short g_anitab_spell_ox[2];	//ds:0x633e; seg045
+extern signed short g_anitab_spell_oy[2];	//ds:0x6342; seg045
+extern signed char* g_anitab_spell_index[2];	//ds:0x6366; seg045
+
 extern signed char g_hero_sel_exclude;		//ds:0x64a2; seg047, seg049, seg103, seg120
 
 extern unsigned char *g_hexenknoten_gfx_buf;	// ds:0xacc8; seg100

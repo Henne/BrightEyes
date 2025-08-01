@@ -166,9 +166,9 @@ void seg045_0273(signed short x, signed short y, signed short spell_ani_id)
 	unsigned short width;
 
 	/* TODO: some kind of initialized structure */
-	struct dummy2 a = *(struct dummy2*)(p_datseg + ANITAB_SPELL_NVFNO);
-	struct dummy4 b = *(struct dummy4*)(p_datseg + ANITAB_SPELL_OX);
-	struct dummy4 c = *(struct dummy4*)(p_datseg + ANITAB_SPELL_OY);
+	struct dummy2 a = *(struct dummy2*)&g_anitab_spell_nvfno;
+	struct dummy4 b = *(struct dummy4*)&g_anitab_spell_ox;
+	struct dummy4 c = *(struct dummy4*)&g_anitab_spell_oy;
 
 	struct nvf_desc nvf;
 
@@ -239,7 +239,7 @@ void seg045_0394(signed short a1, Bit8u *hero, signed short spell_ani_id)
 	ds_writeb((FIG_ANISHEETS + 242) + a1 * 0xf3, -1);
 
 	/* copy the ani sequence and terminate it */
-	ptr += FIG_copy_it(ptr, (Bit8u*)(ds_readd((ANITAB_SPELL_INDEX - 4) + spell_ani_id * 4)), -1);
+	ptr += FIG_copy_it(ptr, (Bit8u*)g_anitab_spell_index[spell_ani_id - 1], -1);
 	host_writeb(ptr, -1);
 
 	seg045_0273(x, y, spell_ani_id);
@@ -266,7 +266,7 @@ void seg045_041b(signed short a1, Bit8u *enemy, signed short spell_ani_id)
 	ds_writeb((FIG_ANISHEETS + 242) + a1 * 0xf3, -1);
 
 	/* copy the ani sequence and terminate it */
-	ptr += FIG_copy_it(ptr, (Bit8u*)(ds_readd((ANITAB_SPELL_INDEX - 4) + spell_ani_id * 4)), -1);
+	ptr += FIG_copy_it(ptr, (Bit8u*)g_anitab_spell_index[spell_ani_id - 1], -1);
 	host_writeb(ptr, -1);
 
 	seg045_0273(x, y, spell_ani_id);

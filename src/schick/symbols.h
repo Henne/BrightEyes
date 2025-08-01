@@ -978,11 +978,11 @@
 #define ANITAB_SHOTBOLT_DATA            (0x621c)    /* char[168]; arrays, each terminated by -1 */
 #define ANITAB_SHOTBOLT_INDEX2          (0x62c4)    /* Bit8u*[24]; 6 Bit8u* arrays of length 4 (viewdir) */
 #define ANITAB_SHOTBOLT_INDEX           (0x6324)    /* Bit8u*[6] */
-#define ANITAB_SPELL_NVFNO              (0x633c)    /* signed char[2]; { 9, 27 } */
-#define ANITAB_SPELL_OX                 (0x633e)    /* signed short[2]; { 0, 0 } */
-#define ANITAB_SPELL_OY                 (0x6342)    /* signed short[2]; { 0, 0 } */
-#define ANITAB_SPELL_DATA               (0x6346)    /* char[32]; 2 arrays, each terminated by -1 */
-#define ANITAB_SPELL_INDEX              (0x6366)    /* Bit8u*[2] */
+//#define ANITAB_SPELL_NVFNO              (0x633c)    /* signed char[2]; { 9, 27 } */
+//#define ANITAB_SPELL_OX                 (0x633e)    /* signed short[2]; { 0, 0 } */
+//#define ANITAB_SPELL_OY                 (0x6342)    /* signed short[2]; { 0, 0 } */
+//#define ANITAB_SPELL_DATA               (0x6346)    /* char[32]; 2 arrays, each terminated by -1 */
+//#define ANITAB_SPELL_INDEX              (0x6366)    /* Bit8u*[2] */
 #define STATUSPAGE_SELITEM1_NO          (0x636e)    /* unsigned char */
 #define STATUSPAGE_SELITEM2_NO          (0x636f)    /* unsigned char */
 #define STATUSPAGE_SELITEM3_NO          (0x6370)    /* unsigned char */
