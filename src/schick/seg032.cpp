@@ -923,8 +923,7 @@ signed short do_fight(signed short fight_id)
 	signed short tw_bak;
 	signed short escape_positions[6];
 
-	if ((ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group) == 1)
-		&& (host_readbs(get_hero(0) + HERO_INVISIBLE) != 0))
+	if ((gs_group_member_counts[gs_current_group] == 1) && (host_readbs(get_hero(0) + HERO_INVISIBLE) != 0))
 	{
 		/* group consists of a single hero with an active Visibili spell */
 		/* TODO: potential Original-Bug: what about groups with >= 2 heroes where all have an active Visibili? */
@@ -1168,7 +1167,7 @@ signed short do_fight(signed short fight_id)
 
 			nr_escape_positions = 0;
 
-			for (i = 0; ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group) > i; i++) {
+			for (i = 0; gs_group_member_counts[gs_current_group] > i; i++) {
 
 				hero = get_hero(i);
 
@@ -1193,11 +1192,11 @@ signed short do_fight(signed short fight_id)
 				for (i = 0; nr_escape_positions - 1 > i; i++) {
 
 					group_nr = 0;
-					while (ds_readb(GROUP_MEMBER_COUNTS + group_nr) != 0) {
+					while (gs_group_member_counts[group_nr] != 0) {
 						group_nr++;
 					}
 
-					group_size = ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group);
+					group_size = gs_group_member_counts[gs_current_group];
 					x_target_bak = gs_x_target;
 					y_target_bak = gs_y_target;
 					direction_bak = gs_direction;
@@ -1216,8 +1215,8 @@ signed short do_fight(signed short fight_id)
 
 							host_writeb(hero + HERO_GROUP_NO, (signed char)group_nr);
 							host_writew(hero + HERO_ESCAPE_POSITION, 0);
-							inc_ds_bs_post(GROUP_MEMBER_COUNTS + group_nr);
-							dec_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
+							gs_group_member_counts[group_nr]++;
+							gs_group_member_counts[gs_current_group]--;
 						}
 					}
 
@@ -1228,7 +1227,7 @@ signed short do_fight(signed short fight_id)
 					gs_dungeon_level = dungeon_level_bak;
 				}
 
-				group_size = ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group);
+				group_size = gs_group_member_counts[gs_current_group];
 
 				for (j = 0; j < group_size; j++) {
 					host_writews(get_hero(j) + HERO_ESCAPE_POSITION, 0);

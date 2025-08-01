@@ -107,7 +107,7 @@ void do_inn(void)
 	 * a textbox is shown with the possibility to interrupt the brewing process.
 	 * However, this textbox is not shown if a single hero enters the inn. */
 
-	if (ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group) == 1) {
+	if (gs_group_member_counts[gs_current_group] == 1) {
 		/* current group consists only of a single hero */
 
 		hero = get_first_hero_available_in_group();
@@ -208,7 +208,7 @@ void do_inn(void)
 		/* situation: 'switch groups' just switched to a group consisting of a single hero which has been separated for brewing a long recipe in an inn */
 		/* ASSERT */
 		/*
-		if ((host_readbs(GROUP_MEMBER_COUNTS + gs_current_group)) != 1) {
+		if (gs_group_member_counts[gs_current_group] != 1) {
 			D1_INFO("FEHLER: Gruppengroesse eines brauenden Helden ist nicht 1.");
 		}
 		*/
@@ -286,7 +286,7 @@ void do_inn(void)
 
 					/* ASSERT */
 					/*
-					if ((host_readbs(GROUP_MEMBER_COUNTS + group_nr)) != 1) {
+					if (gs_group_member_counts[group_nr] != 1) {
 						D1_INFO("FEHLER: Gruppengroesse eines brauenden Helden ist nicht 1.");
 					}
 					*/
@@ -306,9 +306,9 @@ void do_inn(void)
 					gs_groups_town_bak[group_nr] = 0;
 					gs_groups_dng_index_bak[group_nr] = 0;
 					gs_groups_dng_level_bak[group_nr] = 0;
-					ds_writeb(GROUP_MEMBER_COUNTS + group_nr, 0);
+					gs_group_member_counts[group_nr] = 0;
 
-					inc_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
+					gs_group_member_counts[gs_current_group]++;
 					host_writeb(hero + HERO_GROUP_NO, gs_current_group);
 
 					GRP_sort_heroes();

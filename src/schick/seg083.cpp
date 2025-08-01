@@ -273,15 +273,15 @@ signed short DNG08_handler(void)
 			and_ptr_bs(amap_ptr + MAP_POS(8,13), 0x0f);
 			or_ptr_bs(amap_ptr + MAP_POS(8,13), DNG_TILE_OPEN_DOOR << 4);
 
-			if (ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group) > 1)
-			{
+			if (gs_group_member_counts[gs_current_group] > 1) {
+
 				gs_direction_bak = (gs_direction);
 
-				for (tmp = 0; ds_readbs(GROUP_MEMBER_COUNTS + tmp) != 0; tmp++); /* find empty group */
+				for (tmp = 0; gs_group_member_counts[tmp] != 0; tmp++); /* find empty group */
 
 				host_writebs(hero + HERO_GROUP_NO, (signed char)tmp);
-				inc_ds_bs_post(GROUP_MEMBER_COUNTS + tmp);
-				dec_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
+				gs_group_member_counts[tmp]++;
+				gs_group_member_counts[gs_current_group]--;
 
 				GRP_save_pos(tmp);
 			}

@@ -77,7 +77,7 @@ void ask_miracle(void)
 				case GOD_PRAIOS: {
 					l5 = 1;
 
-					for (i = 0; ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group) > i; i++) {
+					for (i = 0; gs_group_member_counts[gs_current_group] > i; i++) {
 						if (host_readbs(get_hero(i) + HERO_TYPE) >= HERO_TYPE_WITCH) {
 							l5 = 1;
 						}

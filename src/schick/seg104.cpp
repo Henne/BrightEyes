@@ -301,11 +301,11 @@ signed short plan_alchemy(Bit8u *hero)
 
 								/* find an empty group */
 								/* Original-Bug: only 6 groups, but 7 heroes might cause an 'out of boundary' here */
-								for (l5 = 0; ds_readbs(GROUP_MEMBER_COUNTS + l5) != 0; l5++);
+								for (l5 = 0; gs_group_member_counts[l5] != 0; l5++);
 
 								host_writebs(hero + HERO_GROUP_NO, (signed char)l5);
-								inc_ds_bs_post(GROUP_MEMBER_COUNTS + l5);
-								dec_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
+								gs_group_member_counts[l5]++;
+								gs_group_member_counts[gs_current_group]--;
 
 								host_writeb(hero + HERO_RECIPE_TIMER,
 									ds_readbs((ALCHEMY_RECIPES + RECIPE_DURATION) + recipe_index * SIZEOF_RECIPE) / 24);
@@ -324,19 +324,13 @@ signed short plan_alchemy(Bit8u *hero)
 					}
 				} else {
 					/* not all ingrendients */
-					sprintf((char*)g_dtp2,
-						get_tx(49),
-						(GUI_name_singular(get_itemname(ds_readws(ALCHEMY_MISSING_ITEM)))));
-
+					sprintf((char*)g_dtp2, get_tx(49), GUI_name_singular(get_itemname(ds_readws(ALCHEMY_MISSING_ITEM))));
 					GUI_output((char*)g_dtp2);
 				}
 			}
 		} else {
 			/* no recipes */
-			sprintf((char*)g_dtp2,
-				get_tx(50),
-				(char*)hero + HERO_NAME2);
-
+			sprintf((char*)g_dtp2, get_tx(50), (char*)hero + HERO_NAME2);
 			GUI_output((char*)g_dtp2);
 		}
 	}

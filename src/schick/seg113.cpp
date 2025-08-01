@@ -414,7 +414,7 @@ void hero_disappear(Bit8u *hero, unsigned short pos, signed short temple_id)
 	}
 
 	/* decrement group counter */
-	dec_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
+	gs_group_member_counts[gs_current_group]--;
 
 	/* write temple_id to character sheet */
 	host_writeb(hero + HERO_TEMPLE_ID, (signed char)temple_id);

@@ -206,7 +206,7 @@
 
 //#define DATSEG_STATUS_START             (0x2d34)    /* unsigned char; 99 = game finished, area of the datseg that is stored one to one in savegame files */
 //#define CURRENT_GROUP                   (0x2d35)    /* signed char */
-#define GROUP_MEMBER_COUNTS             (0x2d36)    /* signed char[6]; members per group */
+//#define GROUP_MEMBER_COUNTS             (0x2d36)    /* signed char[6]; members per group */
 //#define TOTAL_HERO_COUNTER              (0x2d3c)    /* signed char */
 //#define DIRECTION                       (0x2d3d)    /* unsigned char */
 //#define GROUPS_DIRECTION                (0x2d3e)    /* unsigned char[6] */

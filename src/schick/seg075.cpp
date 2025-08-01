@@ -917,20 +917,20 @@ signed short DNG_fallpit(signed short max_damage)
 	retval = 0;
 
 	ds_writew(DNG_LEVEL_CHANGED, 1);
-	nr_fallen_heroes = random_schick(ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group));
+	nr_fallen_heroes = random_schick(gs_group_member_counts[gs_current_group]);
 
 	/* If the result was rolled that all but one hero of the active group should fall down, all heroes will fall down.
 	 * Reason probably: Avoid that the NPC gets separated into a single group (as he might be the single hero not falling down) */
 
-	if (ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group) - 1 == nr_fallen_heroes) {
-		nr_fallen_heroes = ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group);
+	if (gs_group_member_counts[gs_current_group] - 1 == nr_fallen_heroes) {
+		nr_fallen_heroes = gs_group_member_counts[gs_current_group];
 	}
 
-	if (ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group) != nr_fallen_heroes) {
+	if (gs_group_member_counts[gs_current_group] != nr_fallen_heroes) {
 		/* only a part of the heroes of the active group falls down */
 
 		/* find empty group */
-		while (ds_readbs(GROUP_MEMBER_COUNTS + new_group)) {
+		while (gs_group_member_counts[new_group]) {
 			new_group++;
 		}
 
@@ -944,8 +944,8 @@ signed short DNG_fallpit(signed short max_damage)
 					((nr_fallen_heroes == 1) && (hero_id == 6))); /* avoid that the NPC gets separated into a single group */
 
 			host_writeb(get_hero(hero_id) + HERO_GROUP_NO, (unsigned char)new_group);
-			inc_ds_bs_post(GROUP_MEMBER_COUNTS + new_group);
-			dec_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
+			gs_group_member_counts[new_group]++;
+			gs_group_member_counts[gs_current_group]--;
 			sub_hero_le(get_hero(hero_id), random_schick(max_damage));
 		}
 

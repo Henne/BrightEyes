@@ -567,16 +567,12 @@ void DNG09_pitfall(void)
 			hero_first = (Bit8u*)get_first_hero_available_in_group();
 			hero_second = (Bit8u*)get_second_hero_available_in_group();
 
-			if (ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group) >= 2)
+			if (gs_group_member_counts[gs_current_group] >= 2)
 			{
 				/* the current group has at least two heroes */
 
 				/* print message */
-				sprintf((char*)g_dtp2,
-					get_tx(30),
-					(char*)hero_first + HERO_NAME2,
-					(char*)hero_second + HERO_NAME2);
-
+				sprintf((char*)g_dtp2, get_tx(30), (char*)hero_first + HERO_NAME2, (char*)hero_second + HERO_NAME2);
 				GUI_output((char*)g_dtp2);
 
 				/* each of these two heroes looses 3W6+3 LE */
@@ -585,13 +581,13 @@ void DNG09_pitfall(void)
 
 				/* find an empty group */
 				l3 = 0;
-				while (ds_readb(GROUP_MEMBER_COUNTS + l3) != 0) l3++;
+				while (gs_group_member_counts[l3] != 0) l3++;
 
 				/* put these heroes in empty group */
 				host_writeb(hero_first + HERO_GROUP_NO, (signed char)l3);
 				host_writeb(hero_second + HERO_GROUP_NO, (signed char)l3);
-				add_ds_bs(GROUP_MEMBER_COUNTS + l3, 2);
-				sub_ds_bs(GROUP_MEMBER_COUNTS + gs_current_group, 2);
+				gs_group_member_counts[l3] += 2;
+				gs_group_member_counts[gs_current_group] -= 2;
 
 				GRP_save_pos(l3);
 
@@ -602,11 +598,7 @@ void DNG09_pitfall(void)
 				/* the current group has only one hero */
 
 				/* print message */
-				sprintf((char*)g_dtp2,
-					get_tx(31),
-					(char*)hero_first + HERO_NAME2,
-					(char*)(GUI_get_ptr(host_readbs(hero_first + HERO_SEX), 0)));
-
+				sprintf((char*)g_dtp2, get_tx(31), (char*)hero_first + HERO_NAME2, (char*)(GUI_get_ptr(host_readbs(hero_first + HERO_SEX), 0)));
 				GUI_output((char*)g_dtp2);
 
 				/* this hero looses 3W6+3 LE */
@@ -614,12 +606,12 @@ void DNG09_pitfall(void)
 
 				/* find an empty group */
 				l3 = 0;
-				while (ds_readb(GROUP_MEMBER_COUNTS + l3) != 0) l3++;
+				while (gs_group_member_counts[l3] != 0) l3++;
 
 				/* put this hero in an empty group */
 				host_writeb(hero_first + HERO_GROUP_NO, (signed char)l3);
-				inc_ds_bs_post(GROUP_MEMBER_COUNTS + l3);
-				dec_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
+				gs_group_member_counts[l3]++;
+				gs_group_member_counts[gs_current_group]--;
 
 				GRP_save_pos(l3);
 

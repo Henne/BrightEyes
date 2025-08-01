@@ -292,42 +292,37 @@ signed short DNG09_handler(void)
 			{
 				hero = get_hero(i);
 
-				sprintf((char*)g_dtp2,
-					get_tx(45),
-					(char*)hero + HERO_NAME2);
-
+				sprintf((char*)g_dtp2, get_tx(45), (char*)hero + HERO_NAME2);
 				GUI_output((char*)g_dtp2);
 
 				/* remove wall at (4,5), lvl 2 */
 				and_ptr_bs(amap_ptr + MAP_POS(4,5), (DNG_TILE_CORRIDOR << 4) + MAP_POS(15,0));
 				or_ptr_bs(amap_ptr + MAP_POS(3,5), 0xf0); /* clear flags */
 
-				if (ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group) > 1)
+				if (gs_group_member_counts[gs_current_group] > 1)
 				{
 					gs_direction_bak = (gs_direction);
 					l3 = 0;
-					while (ds_readb(GROUP_MEMBER_COUNTS + l3) != 0)
+					while (gs_group_member_counts[l3])
 					{
 						l3++;
 					}
 
 					host_writeb(hero + HERO_GROUP_NO, (signed char)l3);
-					inc_ds_bs_post(GROUP_MEMBER_COUNTS + l3);
-					dec_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
+					gs_group_member_counts[l3]++;
+					gs_group_member_counts[gs_current_group]--;
 					GRP_save_pos(l3);
 					ds_writeb(DNG09_LEVER_FAST, 1);
 				}
-			} else
-			{
-				gs_direction_bak = (gs_direction);
+			} else {
+				gs_direction_bak = gs_direction;
 			}
 		} else
 		{
-			gs_direction_bak = (gs_direction);
+			gs_direction_bak = gs_direction;
 		}
 
-	} else if ((target_pos == DNG_POS(1,8,13) || target_pos == DNG_POS(1,7,14)) &&
-			target_pos != gs_dng_handled_pos)
+	} else if ((target_pos == DNG_POS(1,8,13) || target_pos == DNG_POS(1,7,14)) && target_pos != gs_dng_handled_pos)
 	{
 		/* squares next to lever: check if group at the lever moved away and the wall must be closed */
 		/* TODO: potential Original-Bug: What if the group at the lever to use Transversalis to teleport away? I guess the wall is still open */

@@ -183,7 +183,7 @@ void GRP_split(void)
 		not_empty = 0;
 		new_group_id = 0;
 
-		while (ds_readbs(GROUP_MEMBER_COUNTS + new_group_id) != 0) {
+		while (gs_group_member_counts[new_group_id] != 0) {
 			new_group_id++;
 		}
 
@@ -197,8 +197,8 @@ void GRP_split(void)
 
 				not_empty = 1;
 				host_writeb(get_hero(answer) + HERO_GROUP_NO, (signed char)new_group_id);
-				inc_ds_bs_post(GROUP_MEMBER_COUNTS + new_group_id);
-				dec_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
+				gs_group_member_counts[new_group_id]++;
+				gs_group_member_counts[gs_current_group]--;
 			}
 
 		}
@@ -238,7 +238,7 @@ void GRP_merge(void)
 				= gs_groups_town_bak[answer] = gs_groups_dng_index_bak[answer]
 				= gs_groups_dng_level_bak[answer] = 0;
 
-			ds_writeb(GROUP_MEMBER_COUNTS + answer, 0);
+			gs_group_member_counts[answer] = 0;
 
 			for (i = 0; i <= 6; i++) {
 
@@ -246,11 +246,13 @@ void GRP_merge(void)
 					host_readbs(get_hero(i) + HERO_GROUP_NO) == answer)
 				{
 					host_writeb(get_hero(i) + HERO_GROUP_NO, gs_current_group);
-					inc_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
+					gs_group_member_counts[gs_current_group]++;
 				}
 			}
+
 			GRP_sort_heroes();
 			answer = can_merge_group();
+
 		} while (answer != -1);
 
 		draw_status_line();
@@ -276,7 +278,7 @@ void GRP_switch_to_next(signed short mode)
 			group = 0;
 		}
 
-		if (ds_readbs(GROUP_MEMBER_COUNTS + group) != 0) {
+		if (gs_group_member_counts[group] != 0) {
 
 			state = 0;
 
@@ -406,7 +408,7 @@ void GRP_swap_heroes(void)
 	signed char i;
 	signed char tmp[SIZEOF_HERO];
 
-	if ((ds_readw(HEROSWAP_ALLOWED) == 0) || !ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group)) {
+	if ((ds_readw(HEROSWAP_ALLOWED) == 0) || !gs_group_member_counts[gs_current_group]) {
 		return;
 	}
 

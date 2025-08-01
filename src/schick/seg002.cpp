@@ -4066,7 +4066,7 @@ signed short can_merge_group(void)
 	signed short i;
 	signed short retval = -1;
 
-	if (ds_readbs(gs_current_group + GROUP_MEMBER_COUNTS) == gs_total_hero_counter) {
+	if (gs_group_member_counts[gs_current_group] == gs_total_hero_counter) {
 
 		retval = -1;
 
@@ -4075,7 +4075,7 @@ signed short can_merge_group(void)
 		for (i = 0; i < 6; i++)	{
 
 			if ((i != gs_current_group) &&
-				(0 != ds_readb(i + GROUP_MEMBER_COUNTS)) &&
+				(0 != gs_group_member_counts[i]) &&
 				/* check XTarget */
 				(gs_groups_x_target[i] == gs_x_target) &&
 				/* check YTarget */
@@ -4946,7 +4946,7 @@ signed short get_random_hero(void)
 
 	do {
 		/* get number of current group */
-		cur_hero = random_schick(ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group)) - 1;
+		cur_hero = random_schick(gs_group_member_counts[gs_current_group]) - 1;
 
 #ifdef M302de_ORIGINAL_BUGFIX
 		signed short pos = 0;

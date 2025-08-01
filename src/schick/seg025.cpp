@@ -167,7 +167,7 @@ void do_house(void)
 						}
 					}
 
-					if ((ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group) < gs_total_hero_counter) && l_di)
+					if ((gs_group_member_counts[gs_current_group] < gs_total_hero_counter) && l_di)
 					{
 						i = 0;
 

@@ -117,7 +117,7 @@ void do_temple(void)
 
 		if (ds_readws(ACTION) == ACTION_ID_ICON_9) {
 			/* leave temple */
-			if (!ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group)) {
+			if (!gs_group_member_counts[gs_current_group]) {
 				GUI_output(get_ttx(232));
 			} else {
 				done = 1;
@@ -159,7 +159,7 @@ void do_temple(void)
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_5) {
 			/* save game */
 			if (gs_current_typeindex != 58) {
-				if (!ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group)) {
+				if (!gs_group_member_counts[gs_current_group]) {
 					GUI_output(get_ttx(232));
 				} else {
 					save_game_state();
@@ -180,7 +180,7 @@ void do_temple(void)
 
 		if (ds_readws(ACTION) == ACTION_ID_ICON_7) {
 			/* ask for a miracle */
-			if (!ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group)) {
+			if (!gs_group_member_counts[gs_current_group]) {
 				GUI_output(get_ttx(232));
 			} else {
 				ask_miracle();
@@ -189,7 +189,7 @@ void do_temple(void)
 
 		if (ds_readws(ACTION) == ACTION_ID_ICON_8) {
 			/* make a donation */
-			if (!ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group)) {
+			if (!gs_group_member_counts[gs_current_group]) {
 				GUI_output(get_ttx(232));
 			} else {
 
@@ -270,7 +270,7 @@ void char_add(signed short temple_id)
 
 							if (read_chr_temp(g_dtp2, i, gs_current_group)) {
 								gs_total_hero_counter++;
-								inc_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
+								gs_group_member_counts[gs_current_group]++;
 								host_writebs(hero + HERO_GROUP_POS, i + 1);
 								write_chr_temp(i);
 							}
@@ -300,7 +300,7 @@ void char_letgo(signed short temple_id)
 	signed short hero_pos;
 	Bit8u *hero;
 
-	if (!gs_total_hero_counter || !ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group)) {
+	if (!gs_total_hero_counter || !gs_group_member_counts[gs_current_group]) {
 		GUI_output(get_ttx(232));
 	} else {
 
@@ -318,7 +318,7 @@ void char_letgo(signed short temple_id)
 					/* let go a hero */
 					hero = get_hero(hero_pos);
 					gs_total_hero_counter--;
-					dec_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
+					gs_group_member_counts[gs_current_group]--;
 
 					host_writeb(hero + HERO_TEMPLE_ID, (signed char)temple_id);
 					host_writeb(hero + HERO_GROUP_POS, 0);
@@ -339,7 +339,7 @@ void char_letgo(signed short temple_id)
 				}
 			}
 
-		} while ((hero_pos != -1) && (ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group) > (host_readbs(get_hero(6) + HERO_TYPE) ? 1 : 0)));
+		} while ((hero_pos != -1) && (gs_group_member_counts[gs_current_group] > (host_readbs(get_hero(6) + HERO_TYPE) ? 1 : 0)));
 	}
 }
 

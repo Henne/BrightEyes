@@ -289,7 +289,7 @@ void render_automap(signed short x_off)
 	for (group_i = 0; group_i < 6; group_i++) {
 
 		if ((gs_current_group != group_i) &&
-			(ds_readbs(GROUP_MEMBER_COUNTS + group_i) > 0) &&
+			(gs_group_member_counts[group_i] > 0) &&
 			(gs_groups_dng_level[group_i] == gs_dungeon_level) &&
 			(gs_groups_town[group_i] == gs_current_town) &&
 			(gs_groups_dng_index[group_i] == gs_dungeon_index) &&

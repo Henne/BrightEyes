@@ -81,6 +81,7 @@ extern signed char g_mr_modificators[13];		//ds:0x2d27; seg050
 /* GameState written directly into SaveGame file starts at 0x2d34 */
 extern Bit8s  gs_datseg_status_start;		//ds:0x2d34; seg002, seg026, seg065
 extern Bit8s  gs_current_group;			//ds:0x2d35; seg002-seg120
+extern Bit8s  gs_group_member_counts[6];	//ds:0x2d36; seg002-seg118
 extern Bit8s  gs_total_hero_counter;		//ds:0x2d3c; seg002-seg113
 extern Bit8s  gs_direction;			//ds:0x2d3d; seg002-seg120
 extern Bit8s  gs_groups_direction[6];		//ds:0x2d3e; seg049, seg054, seg074

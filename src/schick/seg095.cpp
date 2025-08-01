@@ -512,7 +512,7 @@ void remove_npc(signed short head_index, signed char days,
 	memset(get_hero(6), 0, SIZEOF_HERO);
 
 	/* dec group counter */
-	dec_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
+	gs_group_member_counts[gs_current_group]--;
 
 	/* dec global hero counter */
 	gs_total_hero_counter--;
@@ -537,7 +537,7 @@ void add_npc(signed short index)
 	memcpy(get_hero(6) + HERO_PORTRAIT, (char*)g_dtp2, 0x400);
 
 	/* increment heroes in that group */
-	inc_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);
+	gs_group_member_counts[gs_current_group]++;
 
 	/* increment heroes */
 	gs_total_hero_counter++;
