@@ -1238,10 +1238,10 @@ signed short do_fight(signed short fight_id)
 				ds_writew(Y_TARGET, escape_positions[i] & 0x0f);
 				ds_writeb(DIRECTION, (escape_positions[i] & 0xf0) >> 4);
 
-				ds_writebs(DUNGEON_LEVEL_BAK, ds_readbs(DUNGEON_LEVEL));
+				gs_dungeon_level_bak = ds_readbs(DUNGEON_LEVEL);
 				ds_writeb(DUNGEON_LEVEL, escape_positions[i] >> 12);
 
-				if (ds_readbs(DUNGEON_LEVEL) != ds_readbs(DUNGEON_LEVEL_BAK)) {
+				if (ds_readbs(DUNGEON_LEVEL) != gs_dungeon_level_bak) {
 					load_area_description(1);
 				}
 			}

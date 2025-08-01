@@ -1043,7 +1043,7 @@ mark2:			   goto mark1;
 	ds_writeb(DUNGEON_LEVEL, (signed char)level);
 	ds_writeb(DUNGEON_INDEX, (signed char)dungeon_id);
 	gs_current_loctype_bak = gs_current_loctype;
-	ds_writeb(CURRENT_TOWN_BAK, ds_readb(CURRENT_TOWN));
+	gs_current_town_bak = ds_readb(CURRENT_TOWN);
 	gs_current_loctype = ds_writeb(CURRENT_TOWN, TOWNS_NONE);
 	ds_writeb(DNG_AREA_LOADED, ds_writeb(CITY_AREA_LOADED, -1));
 

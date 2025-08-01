@@ -2306,9 +2306,10 @@ void do_timers(void)
 					gs_groups_current_loctype_bak[host_readbs(hero_i + HERO_GROUP_NO)];
 
 				ds_writew(GROUPS_X_TARGET + host_readbs(hero_i + HERO_GROUP_NO) * 2,
-					ds_readw(GROUPS_X_TARGET_BAK + host_readbs(hero_i + HERO_GROUP_NO) * 2));
+					gs_groups_x_target_bak[host_readbs(hero_i + HERO_GROUP_NO)]);
+
 				ds_writew(GROUPS_Y_TARGET + host_readbs(hero_i + HERO_GROUP_NO) * 2,
-					ds_readw(GROUPS_Y_TARGET_BAK + host_readbs(hero_i + HERO_GROUP_NO) * 2));
+					gs_groups_y_target_bak[host_readbs(hero_i + HERO_GROUP_NO)]);
 			}
 		}
 	}

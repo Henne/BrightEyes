@@ -319,8 +319,7 @@ void TLK_eremit(signed short state)
 
 void do_town(void)
 {
-	if (ds_readbs(CITY_AREA_LOADED) != ds_readbs(CURRENT_TOWN) ||
-		ds_readws(AREA_PREPARED) != 1)
+	if ((ds_readbs(CITY_AREA_LOADED) != ds_readbs(CURRENT_TOWN)) ||	(ds_readws(AREA_PREPARED) != 1))
 	{
 		seg028_0555(1);
 
@@ -333,7 +332,7 @@ void do_town(void)
 
 	g_current_ani = -1;
 
-	ds_writebs(CURRENT_TOWN_BAK, ds_readbs(CURRENT_TOWN));
+	gs_current_town_bak = ds_readbs(CURRENT_TOWN);
 
 	city_step();
 }

@@ -148,13 +148,13 @@ void GRP_save_pos(signed short group)
 	ds_writeb(GROUPS_DNG_LEVEL + group, ds_readbs(DUNGEON_LEVEL));
 	ds_writeb(GROUPS_DIRECTION_BAK + group, ds_readbs(DIRECTION_BAK));
 
-	ds_writew(GROUPS_X_TARGET_BAK + group * 2, ds_readws(X_TARGET_BAK));
-	ds_writew(GROUPS_Y_TARGET_BAK + group * 2, ds_readws(Y_TARGET_BAK));
+	gs_groups_x_target_bak[group] = ds_readws(X_TARGET_BAK);
+	gs_groups_y_target_bak[group] = ds_readws(Y_TARGET_BAK);
 
 	gs_groups_current_loctype_bak[group] = gs_current_loctype_bak;
-	ds_writeb(GROUPS_TOWN_BAK + group, ds_readbs(CURRENT_TOWN_BAK));
-	ds_writeb(GROUPS_DNG_INDEX_BAK + group, ds_readbs(DUNGEON_INDEX_BAK));
-	ds_writeb(GROUPS_DNG_LEVEL_BAK + group, ds_readbs(DUNGEON_LEVEL_BAK));
+	gs_groups_town_bak[group] = gs_current_town_bak;
+	gs_groups_dng_index_bak[group] = gs_dungeon_index_bak;
+	gs_groups_dng_level_bak[group] = gs_dungeon_level_bak;
 
 	if (!refresh) {
 		draw_status_line();
@@ -237,12 +237,13 @@ void GRP_merge(void)
 				ds_writeb(GROUPS_DNG_INDEX + answer,
 				ds_writeb(GROUPS_DNG_LEVEL + answer,
 				ds_writeb(GROUPS_DIRECTION_BAK + answer, (signed char)
-				(ds_writew(GROUPS_X_TARGET_BAK + answer * 2,
-				ds_writew(GROUPS_Y_TARGET_BAK + answer * 2,
-				(gs_groups_current_loctype_bak[answer] =
-				ds_writeb(GROUPS_TOWN_BAK + answer,
-				ds_writeb(GROUPS_DNG_INDEX_BAK + answer,
-				ds_writeb(GROUPS_DNG_LEVEL_BAK + answer, 0)))))))))))))));
+				(gs_groups_x_target_bak[answer]
+				= gs_groups_y_target_bak[answer]
+				= gs_groups_current_loctype_bak[answer]
+				= gs_groups_town_bak[answer]
+				= gs_groups_dng_index_bak[answer]
+				= gs_groups_dng_level_bak[answer]
+				= 0)))))))));
 
 			ds_writeb(GROUP_MEMBER_COUNTS + answer, 0);
 
@@ -357,12 +358,12 @@ void GRP_switch_to_next(signed short mode)
 		ds_writeb(GROUPS_DNG_INDEX + gs_current_group, ds_readbs(DUNGEON_INDEX));
 		ds_writeb(GROUPS_DNG_LEVEL + gs_current_group, ds_readbs(DUNGEON_LEVEL));
 		ds_writeb(GROUPS_DIRECTION_BAK + gs_current_group, ds_readbs(DIRECTION_BAK));
-		ds_writew(GROUPS_X_TARGET_BAK + gs_current_group * 2, ds_readw(X_TARGET_BAK));
-		ds_writew(GROUPS_Y_TARGET_BAK + gs_current_group * 2, ds_readw(Y_TARGET_BAK));
+		gs_groups_x_target_bak[gs_current_group] = ds_readw(X_TARGET_BAK);
+		gs_groups_y_target_bak[gs_current_group] = ds_readw(Y_TARGET_BAK);
 		gs_groups_current_loctype_bak[gs_current_group] = gs_current_loctype_bak;
-		ds_writeb(GROUPS_TOWN_BAK + gs_current_group, ds_readbs(CURRENT_TOWN_BAK));
-		ds_writeb(GROUPS_DNG_INDEX_BAK + gs_current_group, ds_readbs(DUNGEON_INDEX_BAK));
-		ds_writeb(GROUPS_DNG_LEVEL_BAK + gs_current_group, ds_readbs(DUNGEON_LEVEL_BAK));
+		gs_groups_town_bak[gs_current_group] = gs_current_town_bak;
+		gs_groups_dng_index_bak[gs_current_group] = gs_dungeon_index_bak;
+		gs_groups_dng_level_bak[gs_current_group] = gs_dungeon_level_bak;
 
 		/* set positions for the new group */
 		gs_current_group = (signed char)group;
@@ -380,12 +381,12 @@ void GRP_switch_to_next(signed short mode)
 		}
 
 		ds_writeb(DIRECTION_BAK, ds_readb(GROUPS_DIRECTION_BAK + group));
-		ds_writew(X_TARGET_BAK, ds_readw(GROUPS_X_TARGET_BAK + group * 2));
-		ds_writew(Y_TARGET_BAK, ds_readw(GROUPS_Y_TARGET_BAK + group * 2));
+		ds_writew(X_TARGET_BAK, gs_groups_x_target_bak[group]);
+		ds_writew(Y_TARGET_BAK, gs_groups_y_target_bak[group]);
 		gs_current_loctype_bak = gs_groups_current_loctype_bak[group];
-		ds_writeb(CURRENT_TOWN_BAK, ds_readb(GROUPS_TOWN_BAK + group));
-		ds_writeb(DUNGEON_INDEX_BAK, ds_readb(GROUPS_DNG_INDEX_BAK + group));
-		ds_writeb(DUNGEON_LEVEL_BAK, ds_readb(GROUPS_DNG_LEVEL_BAK + group));
+		gs_current_town_bak = gs_groups_town_bak[group];
+		gs_dungeon_index_bak = gs_groups_dng_index_bak[group];
+		gs_dungeon_level_bak = gs_groups_dng_level_bak[group];
 
 		GRP_sort_heroes();
 

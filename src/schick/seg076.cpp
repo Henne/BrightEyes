@@ -805,7 +805,7 @@ void do_dungeon(void)
 
 	g_current_ani = -1;
 
-	ds_writeb(DUNGEON_INDEX_BAK, ds_readbs(DUNGEON_INDEX));
+	gs_dungeon_index_bak = ds_readbs(DUNGEON_INDEX);
 
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;

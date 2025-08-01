@@ -84,8 +84,17 @@ extern Bit8s  gs_current_group;			//ds:0x2d35; seg002-seg120
 extern Bit8s  gs_total_hero_counter;		//ds:0x2d3c; seg002-seg113
 extern Bit8s  gs_current_loctype;		//ds:0x2d60; seg002-seg120
 extern Bit8s  gs_groups_current_loctype[6];	//ds:0x2d61; seg002, seg049
+
+extern Bit16s gs_groups_x_target_bak[6];	//ds:0x2d87; seg002, seg049, seg054
+extern Bit16s gs_groups_y_target_bak[6];	//ds:0x2d93; seg002, seg049, seg054
 extern Bit8s  gs_current_loctype_bak;		//ds:0x2d9f; seg002-seg120
 extern Bit8s  gs_groups_current_loctype_bak[6];	//ds:0x2da0; seg002, seg049, seg054
+extern Bit8s  gs_current_town_bak;		//ds:0x2da6; seg025, seg049, seg066, seg075, seg120
+extern Bit8s  gs_groups_town_bak[6];		//ds:0x2da7; seg049, seg054
+extern Bit8s  gs_dungeon_index_bak;		//ds:0x2dad; seg025, seg049, seg076
+extern Bit8s  gs_groups_dng_index_bak[6];	//ds:0x2dae; seg049, seg054
+extern Bit8s  gs_dungeon_level_bak;		//ds:0x2db4; seg032, seg049
+extern Bit8s  gs_groups_dng_level_bak[6];	//ds:0x2db5; seg049, seg054
 extern Bit32s gs_day_timer;			//ds:0x2dbb; seg002-seg120
 extern Bit8s  gs_day_of_week;			//ds:0x2dbf; seg002, seg030, seg066, seg068, seg120
 extern Bit8s  gs_day_of_month;			//ds:0x2dc0; seg002, seg024, seg030, seg073, seg116, seg120

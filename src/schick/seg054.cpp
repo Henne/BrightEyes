@@ -295,16 +295,17 @@ void do_inn(void)
 					ds_writeb(GROUPS_DIRECTION + group_nr, 0);
 					ds_writew(GROUPS_X_TARGET + group_nr * 2,0);
 					ds_writew(GROUPS_Y_TARGET + group_nr * 2,0);
+					gs_groups_y_target[group_nr] = 0;
 					ds_writebs(GROUPS_TOWN + group_nr,0);
 					ds_writeb(GROUPS_DNG_INDEX + group_nr,0);
 					ds_writeb(GROUPS_DNG_LEVEL + group_nr,0);
 					ds_writeb(GROUPS_DIRECTION_BAK + group_nr,0);
-					ds_writew(GROUPS_X_TARGET_BAK + group_nr * 2,0);
-					ds_writew(GROUPS_Y_TARGET_BAK + group_nr * 2,0);
+					gs_groups_x_target_bak[group_nr] = 0;
+					gs_groups_y_target_bak[group_nr] = 0;
 					gs_groups_current_loctype_bak[group_nr] = LOCTYPE_NONE;
-					ds_writeb(GROUPS_TOWN_BAK + group_nr,0);
-					ds_writeb(GROUPS_DNG_INDEX_BAK + group_nr,0);
-					ds_writeb(GROUPS_DNG_LEVEL_BAK + group_nr, 0);
+					gs_groups_town_bak[group_nr] = 0;
+					gs_groups_dng_index_bak[group_nr] = 0;
+					gs_groups_dng_level_bak[group_nr] = 0;
 					ds_writeb(GROUP_MEMBER_COUNTS + group_nr, 0);
 
 					inc_ds_bs_post(GROUP_MEMBER_COUNTS + gs_current_group);

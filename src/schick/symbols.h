@@ -226,16 +226,16 @@
 #define GROUPS_DIRECTION_BAK            (0x2d7d)    /* unsigned char[6] */
 #define X_TARGET_BAK                    (0x2d83)    /* signed short */
 #define Y_TARGET_BAK                    (0x2d85)    /* signed short */
-#define GROUPS_X_TARGET_BAK             (0x2d87)    /* signed short[6] */
-#define GROUPS_Y_TARGET_BAK             (0x2d93)    /* signed short[6] */
+//#define GROUPS_X_TARGET_BAK             (0x2d87)    /* signed short[6] */
+//#define GROUPS_Y_TARGET_BAK             (0x2d93)    /* signed short[6] */
 //#define CURRENT_LOCTYPE_BAK             (0x2d9f)    /* signed char */
 //#define GROUPS_CURRENT_LOCTYPE_BAK      (0x2da0)    /* signed char[6] */
-#define CURRENT_TOWN_BAK                (0x2da6)    /* signed char */
-#define GROUPS_TOWN_BAK                 (0x2da7)    /* signed char[6] */
-#define DUNGEON_INDEX_BAK               (0x2dad)    /* signed char */
-#define GROUPS_DNG_INDEX_BAK            (0x2dae)    /* signed char[6] */
-#define DUNGEON_LEVEL_BAK               (0x2db4)    /* signed char */
-#define GROUPS_DNG_LEVEL_BAK            (0x2db5)    /* signed char[6] */
+//#define CURRENT_TOWN_BAK                (0x2da6)    /* signed char */
+//#define GROUPS_TOWN_BAK                 (0x2da7)    /* signed char[6] */
+//#define DUNGEON_INDEX_BAK               (0x2dad)    /* signed char */
+//#define GROUPS_DNG_INDEX_BAK            (0x2dae)    /* signed char[6] */
+//#define DUNGEON_LEVEL_BAK               (0x2db4)    /* signed char */
+//#define GROUPS_DNG_LEVEL_BAK            (0x2db5)    /* signed char[6] */
 //#define DAY_TIMER                       (0x2dbb)    /* long */
 //#define DAY_OF_WEEK                     (0x2dbf)    /* char */
 //#define DAY_OF_MONTH                    (0x2dc0)    /* char */
