@@ -160,7 +160,7 @@ signed short DNG02_handler(void)
 			if (ds_readws(GROUPS_X_TARGET + 2 * i) == 10 &&
 				ds_readws(GROUPS_Y_TARGET + 2 * i) == 11 &&
 				gs_groups_dng_level[i] == gs_dungeon_level &&
-				gs_groups_dng_index[i] == ds_readbs(DUNGEON_INDEX))
+				gs_groups_dng_index[i] == gs_dungeon_index)
 			{
 				weight_sum = 0L;
 			}
@@ -261,7 +261,7 @@ signed short DNG02_handler(void)
 			if (ds_readws(GROUPS_X_TARGET + 2 * i) == 11 &&
 				ds_readws(GROUPS_Y_TARGET + 2 * i) == 6 &&
 				gs_groups_dng_level[i] == gs_dungeon_level &&
-				gs_groups_dng_index[i] == ds_readbs(DUNGEON_INDEX))
+				gs_groups_dng_index[i] == gs_dungeon_index)
 			{
 				hero = get_hero(0);
 				for (mod_slot = 0; mod_slot <= 6; mod_slot++, hero += SIZEOF_HERO)
@@ -278,7 +278,7 @@ signed short DNG02_handler(void)
 			} else if (ds_readws(GROUPS_X_TARGET + 2 * i) == 11 &&
 					ds_readws(GROUPS_Y_TARGET + 2 * i) == 8 &&
 					gs_groups_dng_level[i] == gs_dungeon_level &&
-					gs_groups_dng_index[i] == ds_readbs(DUNGEON_INDEX))
+					gs_groups_dng_index[i] == gs_dungeon_index)
 			{
 				weight_sum = 5000L;
 			}

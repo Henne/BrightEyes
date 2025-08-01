@@ -1174,7 +1174,7 @@ void interrupt mouse_isr(void)
 			ds_writew(MOUSE2_EVENT, 1);
 		}
 
-		if (((ds_readb(DUNGEON_INDEX) != DUNGEONS_NONE) || (ds_readb(CURRENT_TOWN) != TOWNS_NONE)) &&
+		if (((gs_dungeon_index != DUNGEONS_NONE) || (ds_readb(CURRENT_TOWN) != TOWNS_NONE)) &&
 				!gs_current_loctype &&
 				!ds_readbs(DIALOGBOX_LOCK) &&
 				(ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK))
@@ -1796,7 +1796,7 @@ void game_loop(void)
 			do_location();
 		} else if (ds_readbs(CURRENT_TOWN) != TOWNS_NONE) {
 			do_town();
-		} else if (ds_readbs(DUNGEON_INDEX) != DUNGEONS_NONE) {
+		} else if (gs_dungeon_index != DUNGEONS_NONE) {
 			do_dungeon();
 		} else if (ds_readbs(SHOW_TRAVEL_MAP) != 0) {
 			do_travel_mode();
@@ -2072,7 +2072,7 @@ void dawning(void)
 		/* in a town */
 		if (ds_readbs(CURRENT_TOWN) &&
 			/* not in a dungeon */
-			!ds_readbs(DUNGEON_INDEX) &&
+			!gs_dungeon_index &&
 			/* not in a location */
 			!gs_current_loctype &&
 			/* not in a travel mode */
@@ -2113,7 +2113,7 @@ void nightfall(void)
 		/* in a town */
 		if (ds_readbs(CURRENT_TOWN) &&
 			/* not in a dungeon */
-			!ds_readbs(DUNGEON_INDEX) &&
+			!gs_dungeon_index &&
 			/* not in a location */
 			!gs_current_loctype &&
 			/* not in a travel mode */
@@ -2345,7 +2345,7 @@ void do_timers(void)
 					di = host_readbs(ptr + HERO_GROUP_NO);
 
 					/* hero is in group and in mage dungeon */
-					if ((gs_current_group == di) && (ds_readb(DUNGEON_INDEX) == DUNGEONS_RUINE_DES_SCHWARZMAGIERS))
+					if ((gs_current_group == di) && (gs_dungeon_index == DUNGEONS_RUINE_DES_SCHWARZMAGIERS))
 					{
 
 						if (gs_dungeon_level == 1) {
@@ -4026,7 +4026,7 @@ void draw_compass(void)
 		/* Has something to do with traveling */
 		!ds_readbs(TRAVEL_EVENT_ACTIVE) &&
 		/* Not in town or dungeon */
-		((ds_readbs(DUNGEON_INDEX) != DUNGEONS_NONE) || (ds_readbs(CURRENT_TOWN) != TOWNS_NONE)) &&
+		((gs_dungeon_index != DUNGEONS_NONE) || (ds_readbs(CURRENT_TOWN) != TOWNS_NONE)) &&
 		/* I have no clue */
 		(g_fading_state != 2))
 	{
@@ -4085,7 +4085,7 @@ signed short can_merge_group(void)
 				/* check currentTown */
 				(ds_readb(GROUPS_TOWN + i) == ds_readb(CURRENT_TOWN)) &&
 				/* check DungeonIndex */
-				(gs_groups_dng_index[i] == ds_readb(DUNGEON_INDEX)) &&
+				(gs_groups_dng_index[i] == gs_dungeon_index) &&
 				/* check DungeonLevel */
 				(gs_groups_dng_level[i] == gs_dungeon_level))
 			{

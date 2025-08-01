@@ -403,7 +403,7 @@ void init_game_state(void)
 	ds_writew(Y_TARGET, 8);
 	gs_direction_bak = (0);
 	ds_writeb(DIRECTION, 0);
-	ds_writeb(DUNGEON_INDEX, DUNGEONS_NONE);
+	gs_dungeon_index = DUNGEONS_NONE;
 
 	gs_current_town_bak = ds_writeb(CURRENT_TOWN, TOWNS_THORWAL);
 

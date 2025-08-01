@@ -44,9 +44,9 @@ void prepare_dungeon_area(void)
 	signed short l_si;
 	signed short handle;
 
-	index = ds_readbs(DUNGEON_INDEX) + ARCHIVE_FILE_DNGS_DTX;
+	index = gs_dungeon_index + ARCHIVE_FILE_DNGS_DTX;
 
-	if (ds_readbs(DNG_AREA_LOADED) != ds_readbs(DUNGEON_INDEX)) {
+	if (ds_readbs(DNG_AREA_LOADED) != gs_dungeon_index) {
 
 		load_area_description(1);
 		ds_writeb(CITY_AREA_LOADED, -1);
@@ -60,15 +60,15 @@ void prepare_dungeon_area(void)
 		set_var_to_zero();
 		g_current_ani = -1;
 
-		l_si = (ds_readbs(DUNGEON_INDEX) == DUNGEONS_TOTENSCHIFF) ? ARCHIVE_FILE_SHIPSL_NVF :
-			(((ds_readbs(DUNGEON_INDEX) == DUNGEONS_VERFALLENE_HERBERGE) ||
-				(ds_readbs(DUNGEON_INDEX) == DUNGEONS_RUINE_DES_SCHWARZMAGIERS) ||
-				(ds_readbs(DUNGEON_INDEX) == DUNGEONS_KULTSTAETTE_DES_NAMENLOSEN) ||
-				(ds_readbs(DUNGEON_INDEX) == DUNGEONS_PIRATENHOEHLE) ||
-				(ds_readbs(DUNGEON_INDEX) == DUNGEONS_ZWERGENFESTE) ||
-				(ds_readbs(DUNGEON_INDEX) == DUNGEONS_VERLASSENE_MINE) ||
-				(ds_readbs(DUNGEON_INDEX) == DUNGEONS_ZWINGFESTE) ||
-				(ds_readbs(DUNGEON_INDEX) == DUNGEONS_HYGGELIKS_RUINE)) ? ARCHIVE_FILE_MARBLESL_NVF : ARCHIVE_FILE_STONESL_NVF);
+		l_si = (gs_dungeon_index == DUNGEONS_TOTENSCHIFF) ? ARCHIVE_FILE_SHIPSL_NVF :
+			(((gs_dungeon_index == DUNGEONS_VERFALLENE_HERBERGE) ||
+				(gs_dungeon_index == DUNGEONS_RUINE_DES_SCHWARZMAGIERS) ||
+				(gs_dungeon_index == DUNGEONS_KULTSTAETTE_DES_NAMENLOSEN) ||
+				(gs_dungeon_index == DUNGEONS_PIRATENHOEHLE) ||
+				(gs_dungeon_index == DUNGEONS_ZWERGENFESTE) ||
+				(gs_dungeon_index == DUNGEONS_VERLASSENE_MINE) ||
+				(gs_dungeon_index == DUNGEONS_ZWINGFESTE) ||
+				(gs_dungeon_index == DUNGEONS_HYGGELIKS_RUINE)) ? ARCHIVE_FILE_MARBLESL_NVF : ARCHIVE_FILE_STONESL_NVF);
 
 		ds_writeb(DUNGEON_GFX_STYLE, (l_si == ARCHIVE_FILE_SHIPSL_NVF) ? 0 : ((l_si == ARCHIVE_FILE_MARBLESL_NVF) ? 1 : 2));
 
@@ -95,10 +95,10 @@ void prepare_dungeon_area(void)
 
 		g_buffer11_ptr = (((HugePt)g_buffer9_ptr) + v2) - 0xc0L;
 
-		ds_writew(AREA_PREPARED, !ds_readbs(DUNGEON_INDEX));
+		ds_writew(AREA_PREPARED, !gs_dungeon_index);
 	}
 
-	ds_writeb(DNG_AREA_LOADED, ds_readbs(DUNGEON_INDEX));
+	ds_writeb(DNG_AREA_LOADED, gs_dungeon_index);
 	ds_writeb(CITY_AREA_LOADED, -1);
 	set_automap_tiles(ds_readws(X_TARGET), ds_readws(Y_TARGET));
 }
@@ -110,7 +110,7 @@ void load_dungeon_ddt(void)
 	signed short high;
 	signed short handle;
 
-	index = ds_readbs(DUNGEON_INDEX) + ARCHIVE_FILE_DNGS_DDT;
+	index = gs_dungeon_index + ARCHIVE_FILE_DNGS_DDT;
 	handle = load_archive_file(index);
 	read_archive_file(handle, (Bit8u*)&low, 2);
 	read_archive_file(handle, (Bit8u*)&high, 2);
@@ -306,9 +306,9 @@ void load_area_description(signed short type)
 	if (type != 0) {
 
 		/* calc archive file index */
-		if (ds_readbs(DUNGEON_INDEX) != 0) {
+		if (gs_dungeon_index != 0) {
 			/* dungeon */
-			ds_writew(AREADESCR_FILEID, f_index = ds_readbs(DUNGEON_INDEX) + (ARCHIVE_FILE_DNGS-1));
+			ds_writew(AREADESCR_FILEID, f_index = gs_dungeon_index + (ARCHIVE_FILE_DNGS-1));
 		} else {
 			/* city */
 			ds_writew(AREADESCR_FILEID, f_index = ds_readbs(CURRENT_TOWN) + (ARCHIVE_FILE_CITY_DAT-1));
@@ -318,12 +318,12 @@ void load_area_description(signed short type)
 		ds_writew(AREADESCR_DNG_LEVEL, gs_dungeon_level);
 
 		/* save if we are in a dungeon */
-		ds_writew(AREADESCR_DNG_FLAG, ds_readbs(DUNGEON_INDEX) != 0 ? 1 : 0);
+		ds_writew(AREADESCR_DNG_FLAG, gs_dungeon_index != 0 ? 1 : 0);
 
 		/* load DAT or DNG file */
 		fd = load_archive_file(f_index + 0x8000);
 
-		if (!ds_readbs(DUNGEON_INDEX) &&
+		if (!gs_dungeon_index &&
 			(ds_readb(CURRENT_TOWN) == TOWNS_THORWAL
 				|| ds_readb(CURRENT_TOWN) == TOWNS_PREM
 				|| ds_readb(CURRENT_TOWN) == TOWNS_PHEXCAER))
@@ -348,7 +348,7 @@ void load_area_description(signed short type)
 			_read(fd, p_datseg + AUTOMAP_BUF, 0x40);
 			ds_writew(LOCATIONS_LIST_SIZE, 0);
 
-			if (!ds_readbs(DUNGEON_INDEX)) {
+			if (!gs_dungeon_index) {
 				/* TODO: is that neccessary ? */
 				memset(p_datseg + LOCATIONS_LIST, -1, 900);
 				ds_writew(LOCATIONS_LIST_SIZE, _read(fd, p_datseg + LOCATIONS_LIST, 1000));

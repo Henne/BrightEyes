@@ -218,7 +218,7 @@
 //#define GROUPS_CURRENT_LOCTYPE          (0x2d61)    /* signed char[6] */
 #define CURRENT_TOWN                    (0x2d67)    /* signed char */
 #define GROUPS_TOWN                     (0x2d68)    /* signed char[6] */
-#define DUNGEON_INDEX                   (0x2d6e)    /* signed char */
+//#define DUNGEON_INDEX                   (0x2d6e)    /* signed char */
 //#define GROUPS_DNG_INDEX                (0x2d6f)    /* signed char[6] */
 //#define DUNGEON_LEVEL                   (0x2d75)    /* signed char */
 //#define GROUPS_DNG_LEVEL                (0x2d76)    /* signed char[6] */

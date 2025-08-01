@@ -1163,7 +1163,7 @@ signed short do_fight(signed short fight_id)
 			write_fight_lst();
 		}
 
-		if ((retval == 1) && (ds_readbs(DUNGEON_INDEX) != DUNGEONS_NONE)) {
+		if ((retval == 1) && (gs_dungeon_index != DUNGEONS_NONE)) {
 			/* heroes escaped and fight was in a dungeon => distribute escaped heroes and split group */
 
 			nr_escape_positions = 0;
@@ -1277,7 +1277,7 @@ signed short do_fight(signed short fight_id)
 	g_gui_buffer_unkn = g_renderbuf_ptr;
 
 	if (!ds_readb(SHOW_TRAVEL_MAP)) {
-		seg028_0555(ds_readbs(DUNGEON_INDEX) != DUNGEONS_NONE ? 0 : 1);
+		seg028_0555(gs_dungeon_index != DUNGEONS_NONE ? 0 : 1);
 	}
 
 	load_wallclock_nvf();

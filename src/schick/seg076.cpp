@@ -138,17 +138,17 @@ void DNG_door(signed short action)
 				if (ds_readws(DNG_MENU_MODE) != DNG_MENU_MODE_UNLOCK_DOOR) {
 					/* either 'open door' or 'close door' */
 
-					if (ds_readb(DUNGEON_INDEX) == DUNGEONS_HYGGELIKS_RUINE && pos == DNG_POS(1,9,3) && ds_readb(DNG15_UNKNOWN_FLAG) != 0)
+					if (gs_dungeon_index == DUNGEONS_HYGGELIKS_RUINE && pos == DNG_POS(1,9,3) && ds_readb(DNG15_UNKNOWN_FLAG) != 0)
 					{
 						GUI_output(get_tx(18));
 
-					} else if (!(ds_readb(DUNGEON_INDEX) == DUNGEONS_PIRATENHOEHLE && pos == DNG_POS(0,12,8) && ds_readb(DNG11_LEVER_FLAG) != 4) &&
-							!(ds_readb(DUNGEON_INDEX) == DUNGEONS_DASPOTASCHATZ && pos == DNG_POS(0,11,1) && ds_readb(DNG06_PITDOOR_FLAG)) &&
-							!(ds_readb(DUNGEON_INDEX) == DUNGEONS_ZWERGENFESTE && ds_readb(DNG12_WATERTRAP_WATER_RUNS)))
+					} else if (!(gs_dungeon_index == DUNGEONS_PIRATENHOEHLE && pos == DNG_POS(0,12,8) && ds_readb(DNG11_LEVER_FLAG) != 4) &&
+							!(gs_dungeon_index == DUNGEONS_DASPOTASCHATZ && pos == DNG_POS(0,11,1) && ds_readb(DNG06_PITDOOR_FLAG)) &&
+							!(gs_dungeon_index == DUNGEONS_ZWERGENFESTE && ds_readb(DNG12_WATERTRAP_WATER_RUNS)))
 					{
 						/* for this door works an IRON KEY [first type] */
 						/* BEWARE: there are two types of IRON KEYs in the game */
-						if (ds_readb(DUNGEON_INDEX) == DUNGEONS_PIRATENHOEHLE && pos == DNG_POS(0,12,8) && get_first_hero_with_item(ITEM_KEY_IRON_1) != -1)
+						if (gs_dungeon_index == DUNGEONS_PIRATENHOEHLE && pos == DNG_POS(0,12,8) && get_first_hero_with_item(ITEM_KEY_IRON_1) != -1)
 						{
 							or_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(x,y), 0x02); /* effect: ......1. i.e. door is unlocked */
 						}
@@ -531,7 +531,7 @@ signed short DNG_step(void)
 		/* merge groups or reach hands through the mirror */
 		pos = DNG_POS(gs_dungeon_level, ds_readws(X_TARGET), ds_readws(Y_TARGET));
 
-		if ((ds_readb(DUNGEON_INDEX) == DUNGEONS_HYGGELIKS_RUINE && pos == DNG_POS(1,8,1)) || pos == DNG_POS(1,8,5))
+		if ((gs_dungeon_index == DUNGEONS_HYGGELIKS_RUINE && pos == DNG_POS(1,8,1)) || pos == DNG_POS(1,8,5))
 		{
 			GUI_output(get_tx(33));
 
@@ -650,7 +650,7 @@ signed short DNG_step(void)
 		}
 	}
 
-	if (ds_readb(DUNGEON_INDEX) != DUNGEONS_NONE &&
+	if (gs_dungeon_index != DUNGEONS_NONE &&
 		ds_readbs(DNG_AREA_LOADED) != -1 &&
 		!l_di)
 	{
@@ -660,9 +660,9 @@ signed short DNG_step(void)
 		DNG_see_lever();
 
 #if defined(__BORLANDC__)
-		dungeon_handler = (signed short (*)(void))ds_readd((DNG_HANDLERS-4) + 4 * ds_readbs(DUNGEON_INDEX));
+		dungeon_handler = (signed short (*)(void))ds_readd((DNG_HANDLERS-4) + 4 * gs_dungeon_index);
 #else
-		dungeon_handler = DNG_handler[ds_readbs(DUNGEON_INDEX)];
+		dungeon_handler = DNG_handler[gs_dungeon_index];
 #endif
 		retval = dungeon_handler();
 	}
@@ -785,7 +785,7 @@ void do_dungeon(void)
 {
 	signed short tw_bak;
 
-	if (ds_readbs(DNG_AREA_LOADED) != ds_readbs(DUNGEON_INDEX) || ds_readws(AREA_PREPARED) != 0 || ds_readws(DNG_INIT_FLAG) != 0)
+	if (ds_readbs(DNG_AREA_LOADED) != gs_dungeon_index || ds_readws(AREA_PREPARED) != 0 || ds_readws(DNG_INIT_FLAG) != 0)
 	{
 		ds_writed(DNG_MAP_PTR, (Bit32u)(((Bit8u*)p_datseg) + DNG_MAP));
 
@@ -804,7 +804,7 @@ void do_dungeon(void)
 
 	g_current_ani = -1;
 
-	gs_dungeon_index_bak = ds_readbs(DUNGEON_INDEX);
+	gs_dungeon_index_bak = gs_dungeon_index;
 
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
@@ -1011,7 +1011,7 @@ void DNG_see_lever(void)
 
 	target_pos = DNG_POS(gs_dungeon_level, ds_readws(X_TARGET), ds_readws(Y_TARGET));
 
-	if (ds_readbs(DUNGEON_INDEX) == DUNGEONS_HYGGELIKS_RUINE &&
+	if (gs_dungeon_index == DUNGEONS_HYGGELIKS_RUINE &&
 		(target_pos == DNG_POS(1,8,1) || target_pos == DNG_POS(1,8,5)) &&
 		(!ds_readb(DNG15_LEVER_SOUTH) || !ds_readb(DNG15_LEVER_NORTH)))
 	{

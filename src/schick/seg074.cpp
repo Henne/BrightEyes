@@ -44,10 +44,10 @@ void show_automap(void)
 
 		g_special_screen = 1;
 
-		dungeon = ds_readbs(DUNGEON_INDEX);
+		dungeon = gs_dungeon_index;
 		town = ds_readbs(CURRENT_TOWN);
 
-		ds_writeb(CURRENT_TOWN, ds_writeb(DUNGEON_INDEX, 0));
+		ds_writeb(CURRENT_TOWN, gs_dungeon_index = 0);
 
 		tw_bak = g_textbox_width;
 		g_textbox_width = 3;
@@ -57,7 +57,7 @@ void show_automap(void)
 				((ds_readws(X_TARGET) - 8 > 15) ? 16 : ds_readws(X_TARGET) - 8));
 
 		ds_writeb(CURRENT_TOWN, (signed char)town);
-		ds_writeb(DUNGEON_INDEX, (signed char)dungeon);
+		gs_dungeon_index = dungeon;
 
 		ds_writew(REQUEST_REFRESH, 1);
 
@@ -223,7 +223,7 @@ void render_automap(signed short x_off)
 		for (x = 0; x < 16; x++) {
 			if (is_discovered(x + x_off, y)) {
 
-				if (ds_readbs(DUNGEON_INDEX) != DUNGEONS_NONE) {
+				if (gs_dungeon_index != DUNGEONS_NONE) {
 					/* in dungeon */
 
 					tile_type = div16(get_mapval_small(x, y));
@@ -292,7 +292,7 @@ void render_automap(signed short x_off)
 			(ds_readbs(GROUP_MEMBER_COUNTS + group_i) > 0) &&
 			(gs_groups_dng_level[group_i] == gs_dungeon_level) &&
 			(ds_readb(GROUPS_TOWN + group_i) == ds_readbs(CURRENT_TOWN)) &&
-			(gs_groups_dng_index[group_i] == ds_readbs(DUNGEON_INDEX)) &&
+			(gs_groups_dng_index[group_i] == gs_dungeon_index) &&
 			!is_group_in_prison(group_i) &&
 			(ds_readws(GROUPS_X_TARGET + 2 * group_i) - x_off >= 0) &&
 			(ds_readws(GROUPS_X_TARGET + 2 * group_i) - x_off <= 16))
@@ -499,9 +499,9 @@ signed short select_teleport_dest(void)
 
 	draw_main_screen();
 
-	dungeon = ds_readbs(DUNGEON_INDEX);
+	dungeon = gs_dungeon_index;
 	town = ds_readbs(CURRENT_TOWN);
-	ds_writeb(CURRENT_TOWN, ds_writeb(DUNGEON_INDEX, 0));
+	ds_writeb(CURRENT_TOWN, (gs_dungeon_index = 0));
 
 	l_si = ((ds_readb(DNG_MAP_SIZE) == 16) ? 0 :
 			((ds_readws(X_TARGET) - 8 < 0) ? 0 :
@@ -509,7 +509,7 @@ signed short select_teleport_dest(void)
 
 	ds_writew(AUTOMAP_SELX, ds_readws(X_TARGET));
 	ds_writew(AUTOMAP_SELY, ds_readws(Y_TARGET));
-	ds_writeb(DUNGEON_INDEX, (signed char)dungeon);
+	gs_dungeon_index = dungeon;
 	ds_writeb(CURRENT_TOWN, (signed char)town);
 	tw_bak = g_textbox_width;
 	g_textbox_width = 3;
@@ -622,7 +622,7 @@ signed short select_teleport_dest(void)
 		ae_costs = 0;
 		host_writeb((Bit8u*)g_dtp2, 0);
 
-	} else if (((ds_readbs(DUNGEON_INDEX) != 0) && (l_di == 15)) ||
+	} else if (((gs_dungeon_index != 0) && (l_di == 15)) ||
 			((ds_readbs(CURRENT_TOWN) != TOWNS_NONE) && (((l_di >= 2) && (l_di <= 5)) ||
 			(l_di == 6))))
 	{

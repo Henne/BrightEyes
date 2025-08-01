@@ -494,7 +494,7 @@ void item_bag(void)
 
 	Bit8u *ptr;
 
-	if ((ds_readbs(DUNGEON_INDEX) == DUNGEONS_RUINE_DES_SCHWARZMAGIERS) && (gs_dungeon_level == 0)) {
+	if ((gs_dungeon_index == DUNGEONS_RUINE_DES_SCHWARZMAGIERS) && (gs_dungeon_level == 0)) {
 		/* set ptr to the map */
 		ptr = p_datseg + DNG_MAP;
 

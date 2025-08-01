@@ -612,7 +612,7 @@ void DNG_timestep(signed short forward)
 			GUI_output(get_tx(23));
 		}
 
-		ds_writeb(DUNGEON_INDEX, DUNGEONS_NONE);
+		gs_dungeon_index = DUNGEONS_NONE;
 
 		/* exit game */
 		ds_writew(GAME_STATE, GAME_STATE_DEAD);
@@ -1041,7 +1041,7 @@ mark2:			   goto mark1;
 	ds_writew(Y_TARGET, y_pos);
 	ds_writeb(DIRECTION, (signed char)dir);
 	gs_dungeon_level = level;
-	ds_writeb(DUNGEON_INDEX, (signed char)dungeon_id);
+	gs_dungeon_index = dungeon_id;
 	gs_current_loctype_bak = gs_current_loctype;
 	gs_current_town_bak = ds_readb(CURRENT_TOWN);
 	gs_current_loctype = ds_writeb(CURRENT_TOWN, TOWNS_NONE);

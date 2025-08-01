@@ -561,7 +561,7 @@ void do_smith(void)
 
 			if (gs_smith_kicked_flags[gs_current_typeindex] ||
 				gs_smith_flogged_flags[gs_current_typeindex] ||
-				ds_readbs(DUNGEON_INDEX) != DUNGEONS_NONE)
+				gs_dungeon_index != DUNGEONS_NONE)
 			{
 				done = 1;
 			}
