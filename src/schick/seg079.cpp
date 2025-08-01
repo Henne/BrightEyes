@@ -589,10 +589,7 @@ void DNG03_chest11_func3(Bit8u*)
 				{
 					counter++;
 
-					sprintf((char*)g_dtp2,
-						get_tx(27),
-						(char*)hero + HERO_NAME2);
-
+					sprintf((char*)g_dtp2, get_tx(27), (char*)hero + HERO_NAME2);
 					GUI_output((char*)g_dtp2);
 
 					sub_hero_le(hero, dice_roll(2, 6, 4));
@@ -616,9 +613,9 @@ void DNG03_chest11_func3(Bit8u*)
 
 void DNG03_chest12_func2(void)
 {
-	if (ds_readb(DNG03_CHEST12_LOADS) != 0)
-	{
-		dec_ds_bs_post(DNG03_CHEST12_LOADS);
+	if (gs_dng03_chest12_loads) {
+
+		gs_dng03_chest12_loads--;
 
 		chest_poisoned2();
 	}
