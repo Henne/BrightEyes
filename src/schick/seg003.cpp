@@ -27,7 +27,6 @@ namespace M302de {
 #endif
 
 #if 0
-/* DS:NOWAY_STRING */
 static const char no_way_msg[][41] = {
 	"IN DIESE RICHTUNG GEHT ES NICHT WEITER.",
 	"YOU CAN GO NO FURTHER IN THIS DIRECTION."
@@ -37,7 +36,7 @@ static const char no_way_msg[][41] = {
 signed short update_direction(unsigned char mod)
 {
 	/* save old direction */
-	gs_direction_bak = (gs_direction);
+	gs_direction_bak = gs_direction;
 	/* set new direction */
 	gs_direction = ((gs_direction + mod) & 0x3);
 	/* set bogus variable to 1 */
@@ -194,13 +193,13 @@ void loot_corpse(Bit8u* chest_ptr, char *text, Bit8s *flag)
 {
 	signed short answer;
 
-	sprintf((char*)g_text_output_buf, (char*)(!host_readbs(flag) ? get_ttx(523) : get_ttx(527)), text);
+	sprintf((char*)g_text_output_buf, (char*)(!(*flag) ? get_ttx(523) : get_ttx(527)), text);
 
 	if (!(*flag)) {
 
 		g_textbox_width = 7;
 
-		answer = GUI_radio(g_text_output_buf, 3, get_ttx(524), get_ttx(525), get_ttx(526)) - 1;
+		answer = GUI_radio((char*)g_text_output_buf, 3, get_ttx(524), get_ttx(525), get_ttx(526)) - 1;
 
 		g_textbox_width = 3;
 
@@ -231,13 +230,13 @@ void loot_corpse(Bit8u* chest_ptr, char *text, Bit8s *flag)
 			}
 		}
 	} else {
-		GUI_output(g_text_output_buf);
+		GUI_output((char*)g_text_output_buf);
 	}
 }
 
 void no_way(void)
 {
-	GUI_output(p_datseg + NOWAY_STRING);
+	GUI_output(g_noway_string);
 }
 
 #if !defined(__BORLANDC__)

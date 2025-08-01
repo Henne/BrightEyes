@@ -214,6 +214,9 @@ extern signed char g_travel_herokeeping;	//ds:0x4497; seg002, seg063
 extern signed char g_special_screen;		//ds:0x45b8; seg002-seg109
 
 extern char g_game_version[6];			//ds:0x46ec; seg002
+
+extern char g_noway_string[40];			//ds:0x4a68; seg003
+
 extern Bit8u g_wallclock_palette_day[3][3];	//ds:0x4af1; seg004;
 extern Bit8u g_wallclock_palette_night[3][3];	//ds:0x4afa; seg004;
 extern signed short g_delay_factor;		//ds:0x4b66; seg005, seg025
@@ -274,6 +277,7 @@ extern Bit32s g_fightobj_buf_freespace;	// ds:0xe370; seg032-seg100
 extern time_t g_last_save_time;		// ds:0xe2d6; seg026, seg059
 extern unsigned char *g_saved_files_buf;// ds:0xe2d2; seg026;
 extern signed short g_delay_timer;	// ds:0xe2d0; seg004, seg005
+extern unsigned char* g_fig_gfxbuffers[8];	// ds:0xe278; seg005
 extern Bit32s g_gfx_spinlock;		// ds:0xe234; seg004
 extern char **g_itemsname;		// ds:0xe22f; seg026, seg120
 extern unsigned char *g_itemsdat;	// ds:0xe22b; seg002, seg027, seg105, seg107, seg120
