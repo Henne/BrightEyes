@@ -143,8 +143,11 @@ extern Bit8u gs_algrid_treborns_hint;		//ds:0x3467; seg072
 
 extern Bit16s gs_npc_meet_tavern;		//ds:0x346e; seg060, seg095
 extern Bit16s gs_npc_months;			//ds:0x3470; seg002-seg116
-extern Bit8s  gs_smith_kicked_flags[50];	//ds:0x3472; seg058
-extern Bit8s  gs_smith_flogged_flags[50];	//ds:0x34a4; seg058
+extern Bit8u  gs_smith_kicked_flags[50];	//ds:0x3472; seg058
+extern Bit8u  gs_smith_flogged_flags[50];	//ds:0x34a4; seg058
+extern Bit8u  gs_merchant_kicked_flags[94];	//ds:0x34d6; seg055, seg068
+extern Bit8u  gs_merchant_kicked2_flags[94];	//ds:0x3534; seg055
+extern Bit8u  gs_merchant_offended_flags[94];	//ds:0x3592; seg002, seg055-seg057
 
 extern Bit8s  gs_always_one2;			//ds:0x35f3; seg078
 

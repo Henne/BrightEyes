@@ -522,9 +522,9 @@ void remove_npc(signed short head_index, signed char days,
 	/* TODO:	check_hero() will now, after memset() return 0,
 			so the parameter days is useless */
 	if (check_hero(get_hero(6)) != 0)
-		ds_writeb(NPC_UNKNOWN_FLAGS + index, days);
+		ds_writeb((NPC_TIMERS - 0xe1) + index, days);
 	else
-		ds_writeb(NPC_UNKNOWN_FLAGS + index, -1);
+		ds_writeb((NPC_TIMERS - 0xe1) + index, -1);
 
 }
 

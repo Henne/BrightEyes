@@ -1916,9 +1916,9 @@ void timers_daily(void)
 		}
 	}
 
-	/* reset insulted merchants */
+	/* reset offended merchants */
 	for (i = 0; i < 94; i++) {
-		ds_writeb(MERCHANT_OFFENDED_FLAGS + i, 0);
+		gs_merchant_offended_flags[i] = 0;
 	}
 
 	hero_i = get_hero(0);

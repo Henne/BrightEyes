@@ -264,7 +264,7 @@ void THO_arsenal(void)
 
 		GUI_output(get_ttx(482));
 
-	} else if (ds_readb(MERCHANT_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0) {
+	} else if (gs_merchant_kicked_flags[ds_readws(CURRENT_TYPEINDEX)]) {
 
 			talk_merchant();
 

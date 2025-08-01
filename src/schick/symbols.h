@@ -325,10 +325,9 @@
 //#define NPC_MONTHS                      (0x3470)    /* signed short */
 //#define SMITH_KICKED_FLAGS              (0x3472)    /* signed char[50]; {0,1} */
 //#define SMITH_FLOGGED_FLAGS             (0x34a4)    /* signed char[50]; {0,1} */
-#define MERCHANT_KICKED_FLAGS           (0x34d6)    /* signed char[74]; {0,1} */
-#define NPC_UNKNOWN_FLAGS               (0x3520)    /* unsigned char[20] */
-#define MERCHANT_KICKED2_FLAGS          (0x3534)    /* unsigned char[94]; {0,1} */
-#define MERCHANT_OFFENDED_FLAGS         (0x3592)    /* unsigned char[94]; {0,1} */
+//#define MERCHANT_KICKED_FLAGS           (0x34d6)    /* signed char[74]; {0,1} */
+//#define MERCHANT_KICKED2_FLAGS          (0x3534)    /* unsigned char[94]; {0,1} */
+//#define MERCHANT_OFFENDED_FLAGS         (0x3592)    /* unsigned char[94]; {0,1} */
 #define QUEST_DEADSHIP                  (0x35f0)    /* unsigned char; {0,1} */
 // ?1
 #define QUEST_DEADSHIP_DONE             (0x35f2)    /* unsigned char; {0,1} */

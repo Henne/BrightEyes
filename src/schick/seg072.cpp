@@ -304,7 +304,7 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 				/* copy the picture of the NPC */
 				memcpy(g_dtp2, get_hero(6) + HERO_PORTRAIT, 0x400);
 				/* remove the NPC from the group */
-				remove_npc(24, 31, 231, get_ttx(758), NULL);
+				remove_npc(24, 31, 0xe7, get_ttx(758), NULL);
 
 				ds_writew(REQUEST_REFRESH, 1);
 
