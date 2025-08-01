@@ -636,11 +636,11 @@ void tevent_047(void)
 
 						if (answer == 1)
 						{
-							ds_writeb(CURRENT_TOWN, TOWNS_LJASDAHL);
+							gs_current_town = (TOWNS_LJASDAHL);
 							ds_writew(X_TARGET, 7);
 							ds_writew(Y_TARGET, 3);
 						} else {
-							ds_writeb(CURRENT_TOWN, TOWNS_OTTARJE);
+							gs_current_town = (TOWNS_OTTARJE);
 							ds_writew(X_TARGET, 9);
 							ds_writew(Y_TARGET, 10);
 						}
@@ -662,7 +662,7 @@ void tevent_047(void)
 						GUI_dialog_na(0, get_tx2(23));
 						GUI_dialog_na(0, get_tx2(25));
 
-						ds_writeb(CURRENT_TOWN, TOWNS_VARNHEIM);
+						gs_current_town = (TOWNS_VARNHEIM);
 						ds_writew(X_TARGET, 4);
 						ds_writew(Y_TARGET, 10);
 						ds_writeb(TRAVEL_DETOUR, 99);

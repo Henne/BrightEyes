@@ -45,9 +45,9 @@ void show_automap(void)
 		g_special_screen = 1;
 
 		dungeon = gs_dungeon_index;
-		town = ds_readbs(CURRENT_TOWN);
+		town = gs_current_town;
 
-		ds_writeb(CURRENT_TOWN, gs_dungeon_index = 0);
+		gs_current_town = (gs_dungeon_index = 0);
 
 		tw_bak = g_textbox_width;
 		g_textbox_width = 3;
@@ -56,7 +56,7 @@ void show_automap(void)
 				((ds_readws(X_TARGET) - 8 < 0) ? 0 :
 				((ds_readws(X_TARGET) - 8 > 15) ? 16 : ds_readws(X_TARGET) - 8));
 
-		ds_writeb(CURRENT_TOWN, (signed char)town);
+		gs_current_town = ((signed char)town);
 		gs_dungeon_index = dungeon;
 
 		ds_writew(REQUEST_REFRESH, 1);
@@ -291,7 +291,7 @@ void render_automap(signed short x_off)
 		if ((gs_current_group != group_i) &&
 			(ds_readbs(GROUP_MEMBER_COUNTS + group_i) > 0) &&
 			(gs_groups_dng_level[group_i] == gs_dungeon_level) &&
-			(gs_groups_town[group_i] == ds_readbs(CURRENT_TOWN)) &&
+			(gs_groups_town[group_i] == gs_current_town) &&
 			(gs_groups_dng_index[group_i] == gs_dungeon_index) &&
 			!is_group_in_prison(group_i) &&
 			(ds_readws(GROUPS_X_TARGET + 2 * group_i) - x_off >= 0) &&
@@ -500,8 +500,8 @@ signed short select_teleport_dest(void)
 	draw_main_screen();
 
 	dungeon = gs_dungeon_index;
-	town = ds_readbs(CURRENT_TOWN);
-	ds_writeb(CURRENT_TOWN, (gs_dungeon_index = 0));
+	town = gs_current_town;
+	gs_current_town = ((gs_dungeon_index = 0));
 
 	l_si = ((ds_readb(DNG_MAP_SIZE) == 16) ? 0 :
 			((ds_readws(X_TARGET) - 8 < 0) ? 0 :
@@ -510,7 +510,7 @@ signed short select_teleport_dest(void)
 	ds_writew(AUTOMAP_SELX, ds_readws(X_TARGET));
 	ds_writew(AUTOMAP_SELY, ds_readws(Y_TARGET));
 	gs_dungeon_index = dungeon;
-	ds_writeb(CURRENT_TOWN, (signed char)town);
+	gs_current_town = ((signed char)town);
 	tw_bak = g_textbox_width;
 	g_textbox_width = 3;
 
@@ -608,7 +608,7 @@ signed short select_teleport_dest(void)
 		get_mapval_small(ds_readws(AUTOMAP_SELX), ds_readws(AUTOMAP_SELY)) :
 		get_mapval_large(ds_readws(AUTOMAP_SELX), ds_readws(AUTOMAP_SELY));
 
-	if (ds_readbs(CURRENT_TOWN) != TOWNS_NONE) {
+	if (gs_current_town != TOWNS_NONE) {
 		l_di = get_border_index(l_di);
 	} else {
 		l_di = div16(l_di);
@@ -623,7 +623,7 @@ signed short select_teleport_dest(void)
 		host_writeb((Bit8u*)g_dtp2, 0);
 
 	} else if (((gs_dungeon_index != 0) && (l_di == 15)) ||
-			((ds_readbs(CURRENT_TOWN) != TOWNS_NONE) && (((l_di >= 2) && (l_di <= 5)) ||
+			((gs_current_town != TOWNS_NONE) && (((l_di >= 2) && (l_di <= 5)) ||
 			(l_di == 6))))
 	{
 		strcpy((char*)g_dtp2, get_ttx(611));
@@ -652,7 +652,7 @@ signed short get_maploc(signed short x, signed short y)
 	unsigned short pos_xy = TOWN_POS(x,y);
 
 	// Wow. Original game has these hard-coded manipulation of the data.
-	if (ds_readbs(CURRENT_TOWN) == TOWNS_THORWAL) {
+	if (gs_current_town == TOWNS_THORWAL) {
 
 		if (pos_xy == TOWN_POS(4,13)) {
 			// schwarzer Finger
@@ -667,12 +667,12 @@ signed short get_maploc(signed short x, signed short y)
 		{
 			return TOWN_TILE_INN_OR_TAVERN;
 		}
-	} else if (ds_readbs(CURRENT_TOWN) == TOWNS_PREM) {
+	} else if (gs_current_town == TOWNS_PREM) {
 		if (pos_xy == TOWN_POS(28,9)) {
 			// Inn "Zur Trutz". Why is this a special case here?
 			return TOWN_TILE_INN_OR_TAVERN;
 		}
-	} else if (ds_readbs(CURRENT_TOWN) == TOWNS_GUDDASUNDEN) {
+	} else if (gs_current_town == TOWNS_GUDDASUNDEN) {
 		if (pos_xy == TOWN_POS(1,14)) {
 			// Harbor, which is located in a building (not a signpost).
 			return TOWN_TILE_SIGNPOST;

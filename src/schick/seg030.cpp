@@ -341,7 +341,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 							sprintf(dst, fmt, get_ttx(235 + ds_readb(SWAFNILD_TP4)));
 
-							ds_writebs(CURRENT_TOWN, ds_readbs(SWAFNILD_TP4));
+							gs_current_town = (ds_readbs(SWAFNILD_TP4));
 
 							gs_x_target_bak = (ds_readbs(SWAFNILD_TP4) == 35 ? 10 : (ds_readbs(SWAFNILD_TP4) == 32 ? 2 : 7));
 							gs_y_target_bak = (ds_readbs(SWAFNILD_TP4) == 35 ? 2 : (ds_readbs(SWAFNILD_TP4) == 32 ? 14 : 3));

@@ -35,7 +35,7 @@ unsigned short npc_meetings(unsigned short type_index)
 		gs_npc_meet_tavern = type_index;
 
 		/* Nariell */
-		if (ds_readb(CURRENT_TOWN) == TOWNS_CLANEGH &&
+		if (gs_current_town == TOWNS_CLANEGH &&
 			gs_current_typeindex == 0x30 &&
 			!ds_readb(NPC_TIMERS + NPC_NARIELL)) {
 
@@ -43,7 +43,7 @@ unsigned short npc_meetings(unsigned short type_index)
 		} else
 
 		/* Harika */
-		if (ds_readb(CURRENT_TOWN) == TOWNS_PHEXCAER &&
+		if (gs_current_town == TOWNS_PHEXCAER &&
 			gs_current_typeindex == 0x28 &&
 			!ds_readb(NPC_TIMERS + NPC_HARIKA)) {
 
@@ -51,7 +51,7 @@ unsigned short npc_meetings(unsigned short type_index)
 		} else
 
 		/* Curian */
-		if (ds_readb(CURRENT_TOWN) == TOWNS_OVERTHORN &&
+		if (gs_current_town == TOWNS_OVERTHORN &&
 			gs_current_typeindex == 0x3c &&
 			!ds_readb(NPC_TIMERS + NPC_CURIAN)) {
 
@@ -59,7 +59,7 @@ unsigned short npc_meetings(unsigned short type_index)
 		} else
 
 		/* Ardora */
-		if (ds_readb(CURRENT_TOWN) == TOWNS_THORWAL &&
+		if (gs_current_town == TOWNS_THORWAL &&
 			gs_current_typeindex == 0x6 &&
 			!ds_readb(NPC_TIMERS + NPC_ARDORA) &&
 			gs_dng01_ardora_freed) {
@@ -68,7 +68,7 @@ unsigned short npc_meetings(unsigned short type_index)
 		} else
 
 		/* Garsvik */
-		if (ds_readb(CURRENT_TOWN) == TOWNS_PREM &&
+		if (gs_current_town == TOWNS_PREM &&
 			gs_current_typeindex == 0x4a &&
 			!ds_readb(NPC_TIMERS + NPC_GARSVIK)) {
 
@@ -76,7 +76,7 @@ unsigned short npc_meetings(unsigned short type_index)
 		} else
 
 		/* Erwo */
-		if (ds_readb(CURRENT_TOWN) == TOWNS_MANRIN &&
+		if (gs_current_town == TOWNS_MANRIN &&
 			gs_current_typeindex == 0x57 &&
 			!ds_readb(NPC_TIMERS + NPC_ERWO)) {
 
@@ -121,10 +121,10 @@ void npc_farewell(void)
 		case NPC_HARIKA: {
 			if (gs_npc_months >= 2) {
 				if (gs_npc_months >= 99 ||
-					ds_readb(CURRENT_TOWN) == TOWNS_THORWAL ||
-					ds_readb(CURRENT_TOWN) == TOWNS_PHEXCAER ||
-					ds_readb(CURRENT_TOWN) == TOWNS_PREM ||
-					ds_readb(CURRENT_TOWN) == TOWNS_OBERORKEN) {
+					gs_current_town == TOWNS_THORWAL ||
+					gs_current_town == TOWNS_PHEXCAER ||
+					gs_current_town == TOWNS_PREM ||
+					gs_current_town == TOWNS_OBERORKEN) {
 
 					remove_npc(0x16, 0x1f, 0xe3, get_ttx(754), get_tx(19));
 

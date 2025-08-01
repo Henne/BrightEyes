@@ -290,7 +290,7 @@ signed short DNG11_handler(void)
 	{
 		leave_dungeon();
 
-		ds_writeb(CURRENT_TOWN, ds_readbs(TRAVEL_DESTINATION_TOWN_ID));
+		gs_current_town = (ds_readbs(TRAVEL_DESTINATION_TOWN_ID));
 		ds_writew(X_TARGET, ds_readws(TRAVEL_DESTINATION_X));
 		ds_writew(Y_TARGET, ds_readws(TRAVEL_DESTINATION_Y));
 		gs_current_loctype = LOCTYPE_NONE;

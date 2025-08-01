@@ -749,7 +749,7 @@ void spell_spurlos(void)
 
 void spell_transversalis(void)
 {
-	if (!gs_dungeon_index && !ds_readbs(CURRENT_TOWN)) {
+	if (!gs_dungeon_index && !gs_current_town) {
 		/* cannot be used outside of a dungeon or a town */
 
 		/* prepare message */

@@ -221,7 +221,7 @@ char* get_informer_forename(void)
 
 	for (i = 0; i < 15; i++, p_info += 4) {
 
-		if (host_readbs(p_info + 2) == ds_readbs(CURRENT_TOWN)) {
+		if (host_readbs(p_info + 2) == gs_current_town) {
 
 			i = 0;
 			informer_name = get_ttx(host_readws(p_info));
@@ -254,7 +254,7 @@ signed short get_town_lookup_entry(void)
 
 	ptr = p_datseg + INFORMER_TAB;
 	for (i = 0; i < 15; i++, ptr += 4) {
-		if (host_readb(ptr + 2) == ds_readb(CURRENT_TOWN)) {
+		if (host_readb(ptr + 2) == gs_current_town) {
 			return i;
 		}
 	}
@@ -277,7 +277,7 @@ Bit8u* get_informer_hint(void)
 
 	ptr = p_datseg + INFORMER_TAB;
 	for (i = 0; i < 15; i++, ptr += 4) {
-		if (host_readb(ptr + 2) == ds_readb(CURRENT_TOWN)) {
+		if (host_readb(ptr + 2) == gs_current_town) {
 			return (Bit8u*)get_ttx(i + 715);
 		}
 	}
@@ -316,7 +316,7 @@ Bit8u* load_current_town_gossip(void)
 	Bit8u *ptr;
 
 	/* load TOWN.LTX */
-	load_ltx(ds_readbs(CURRENT_TOWN) + ARCHIVE_FILE_CITY_LTX);
+	load_ltx(gs_current_town + ARCHIVE_FILE_CITY_LTX);
 
 	/* mark some buffers invalid */
 	ds_writews(AREA_PREPARED, g_current_ani = -1);
@@ -344,7 +344,7 @@ char* get_random_tavern_message(void)
 
 	} else if (randval == 3) {
 
-		sprintf((char*)g_text_output_buf, ptr, get_ttx(ds_readbs(CURRENT_TOWN) + 235));
+		sprintf((char*)g_text_output_buf, ptr, get_ttx(gs_current_town + 235));
 
 		return (char*)g_text_output_buf;
 

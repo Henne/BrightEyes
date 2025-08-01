@@ -190,7 +190,7 @@ signed short DNG01_handler(void)
 		if (GUI_bool(get_tx(24)))
 		{
 			leave_dungeon();
-			ds_writebs(CURRENT_TOWN, (signed char)ds_readws(TRAVEL_DESTINATION_TOWN_ID));
+			gs_current_town = ((signed char)ds_readws(TRAVEL_DESTINATION_TOWN_ID));
 			ds_writew(X_TARGET, ds_readws(TRAVEL_DESTINATION_X));
 			ds_writew(Y_TARGET, ds_readws(TRAVEL_DESTINATION_Y));
 			gs_current_loctype = LOCTYPE_NONE;

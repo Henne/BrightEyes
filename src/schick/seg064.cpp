@@ -73,8 +73,8 @@ unsigned short prepare_passages(void)
 	for (i = prepared = 0; i < NR_SEA_ROUTES; ent += SIZEOF_SEA_ROUTE, i++) {
 		if (
 			!host_readbs((Bit8u*)(ent) + SEA_ROUTE_PASSAGE_TIMER) && /* passage is available today */
-			(host_readb((Bit8u*)(ent) + SEA_ROUTE_TOWN_1) == ds_readb(CURRENT_TOWN) ||
-			(host_readb((Bit8u*)(ent) + SEA_ROUTE_TOWN_2) == ds_readb(CURRENT_TOWN)))
+			(host_readb((Bit8u*)(ent) + SEA_ROUTE_TOWN_1) == gs_current_town ||
+			(host_readb((Bit8u*)(ent) + SEA_ROUTE_TOWN_2) == gs_current_town))
 		) {
 			/* ship is leaving today */
 
@@ -102,7 +102,7 @@ unsigned short prepare_passages(void)
 #endif
 
 			ds_writeb((HARBOR_OPTIONS + HARBOR_OPTION_DESTINATION) + prepared * SIZEOF_HARBOR_OPTION,
-				host_readb((Bit8u*)(ent) + SEA_ROUTE_TOWN_1) == ds_readb(CURRENT_TOWN) ?
+				host_readb((Bit8u*)(ent) + SEA_ROUTE_TOWN_1) == gs_current_town ?
 					host_readb((Bit8u*)(ent) + SEA_ROUTE_TOWN_2) :
 					host_readb((Bit8u*)(ent) + SEA_ROUTE_TOWN_1)
 			); /* store the other town of the connection */
@@ -111,8 +111,8 @@ unsigned short prepare_passages(void)
 			if (
 				((signed long)gs_day_timer > HOURS(14))
 				&& (host_readb((Bit8u*)(ent) + SEA_ROUTE_PASSAGE_TIMER) == 1)
-				&& ((host_readb((Bit8u*)(ent) + SEA_ROUTE_TOWN_1) == ds_readb(CURRENT_TOWN))
-				|| (host_readb((Bit8u*)(ent) + SEA_ROUTE_TOWN_2) == ds_readb(CURRENT_TOWN)))
+				&& ((host_readb((Bit8u*)(ent) + SEA_ROUTE_TOWN_1) == gs_current_town)
+				|| (host_readb((Bit8u*)(ent) + SEA_ROUTE_TOWN_2) == gs_current_town))
 			) {
 				/* ship is leaving tomorrow and it is later than 14:00 */
 
@@ -133,7 +133,7 @@ unsigned short prepare_passages(void)
 #endif
 
 				ds_writeb((HARBOR_OPTIONS + HARBOR_OPTION_DESTINATION) + prepared * SIZEOF_HARBOR_OPTION ,
-					host_readb((Bit8u*)(ent) + SEA_ROUTE_TOWN_1) == ds_readb(CURRENT_TOWN) ?
+					host_readb((Bit8u*)(ent) + SEA_ROUTE_TOWN_1) == gs_current_town ?
 						host_readb((Bit8u*)(ent) + SEA_ROUTE_TOWN_2) :
 						host_readb((Bit8u*)(ent) + SEA_ROUTE_TOWN_1)
 				);
@@ -257,17 +257,17 @@ unsigned short get_next_passages(unsigned short type)
 			/* check passages in the next two days */
 			if (host_readb(entry + SEA_ROUTE_PASSAGE_TIMER) == 1 || host_readb(entry + SEA_ROUTE_PASSAGE_TIMER) == 2) {
 				/* compare town */
-				if (host_readb(entry + SEA_ROUTE_TOWN_1) == ds_readb(CURRENT_TOWN) ||
-					host_readb(entry + SEA_ROUTE_TOWN_2) == ds_readb(CURRENT_TOWN))
+				if (host_readb(entry + SEA_ROUTE_TOWN_1) == gs_current_town ||
+					host_readb(entry + SEA_ROUTE_TOWN_2) == gs_current_town)
 				{
 #if !defined(__BORLANDC__)
 					ds_writeb(HARBOR_OPTIONS + 10 + destinations * SIZEOF_HARBOR_OPTION,
-						host_readb(entry + SEA_ROUTE_TOWN_1) == ds_readb(CURRENT_TOWN) ?
+						host_readb(entry + SEA_ROUTE_TOWN_1) == gs_current_town ?
 							host_readb(entry + SEA_ROUTE_TOWN_2):
 							host_readb(entry + SEA_ROUTE_TOWN_1));
 #else
 					((struct passages*)(p_datseg + HARBOR_OPTIONS))[destinations].town =
-						host_readb(entry + SEA_ROUTE_TOWN_1) == ds_readb(CURRENT_TOWN) ?
+						host_readb(entry + SEA_ROUTE_TOWN_1) == gs_current_town ?
 							host_readb(entry + SEA_ROUTE_TOWN_2):
 							host_readb(entry + SEA_ROUTE_TOWN_1);
 #endif
@@ -276,17 +276,17 @@ unsigned short get_next_passages(unsigned short type)
 			}
 		} else {
 			/* compare town */
-			if (host_readb(entry + SEA_ROUTE_TOWN_1) == ds_readb(CURRENT_TOWN) ||
-				host_readb(entry + SEA_ROUTE_TOWN_2) == ds_readb(CURRENT_TOWN))
+			if (host_readb(entry + SEA_ROUTE_TOWN_1) == gs_current_town ||
+				host_readb(entry + SEA_ROUTE_TOWN_2) == gs_current_town)
 			{
 #if !defined(__BORLANDC__)
 				ds_writeb(HARBOR_OPTIONS + 10 + destinations * SIZEOF_HARBOR_OPTION,
-					host_readb(entry) == ds_readb(CURRENT_TOWN) ?
+					host_readb(entry) == gs_current_town ?
 						host_readb(entry + SEA_ROUTE_TOWN_2):
 						host_readb(entry + SEA_ROUTE_TOWN_1));
 #else
 					((struct passages*)(p_datseg + HARBOR_OPTIONS))[destinations].town =
-						host_readb(entry + SEA_ROUTE_TOWN_1) == ds_readb(CURRENT_TOWN) ?
+						host_readb(entry + SEA_ROUTE_TOWN_1) == gs_current_town ?
 							host_readb(entry + SEA_ROUTE_TOWN_2):
 							host_readb(entry + SEA_ROUTE_TOWN_1);
 #endif
@@ -316,7 +316,7 @@ unsigned short passage_arrival(void)
 	   Code is a bit unorthodox: Within the if-condition, the id of TOWN_1 is written to TRAVEL_DESTINATION_TOWN_ID
 	   Then the condition is evaluated: If this is the initial town, then TRAVEL_DESTINATION_TOWN_ID is overwritten by the id of TOWN_2,
 	   which in this case must be the destination town. */
-	if ((ds_writew(TRAVEL_DESTINATION_TOWN_ID, host_readb(p_sea_route + SEA_ROUTE_TOWN_1))) == ds_readbs(CURRENT_TOWN))
+	if ((ds_writew(TRAVEL_DESTINATION_TOWN_ID, host_readb(p_sea_route + SEA_ROUTE_TOWN_1))) == gs_current_town)
 		ds_writew(TRAVEL_DESTINATION_TOWN_ID, host_readb(p_sea_route + SEA_ROUTE_TOWN_2));
 
 	/* find the harbor of the destination town. */
@@ -327,8 +327,8 @@ unsigned short passage_arrival(void)
 			do {
 				/* tmp ranges over the IDs of the linked sea routes, diminished by 1. */
 				tmp = host_readb((Bit8u*)(host_readd(harbor_ptr + HARBOR_SEA_ROUTES)) + si) - 1;
-				if (host_readb(p_datseg + SEA_ROUTES + tmp * SIZEOF_SEA_ROUTE + SEA_ROUTE_TOWN_1) == ds_readb(CURRENT_TOWN) ||
-					host_readb(p_datseg + SEA_ROUTES + tmp * SIZEOF_SEA_ROUTE + SEA_ROUTE_TOWN_2) == ds_readb(CURRENT_TOWN)) {
+				if (host_readb(p_datseg + SEA_ROUTES + tmp * SIZEOF_SEA_ROUTE + SEA_ROUTE_TOWN_1) == gs_current_town ||
+					host_readb(p_datseg + SEA_ROUTES + tmp * SIZEOF_SEA_ROUTE + SEA_ROUTE_TOWN_2) == gs_current_town) {
 					harbor_typeindex = (unsigned char)host_readb(harbor_ptr + HARBOR_TYPEINDEX);
 					break;
 				}
@@ -342,9 +342,9 @@ unsigned short passage_arrival(void)
 	if (harbor_typeindex != 0) {
 
 		/* save the old town in tmp */
-		tmp = (signed char)ds_readb(CURRENT_TOWN);
+		tmp = (signed char)gs_current_town;
 		/* set the new town in current_town */
-		ds_writeb(CURRENT_TOWN, ds_readb(TRAVEL_DESTINATION_TOWN_ID));
+		gs_current_town = (ds_readb(TRAVEL_DESTINATION_TOWN_ID));
 
 		/* load the area of the new town */
 		call_load_area(1);
@@ -363,7 +363,7 @@ unsigned short passage_arrival(void)
 		ds_writew(TRAVEL_DESTINATION_VIEWDIR, (si >> 4) & 0x0f);
 
 		/* restore the old town area / TODO: a bit bogus */
-		ds_writeb(CURRENT_TOWN, (unsigned char)tmp);
+		gs_current_town = ((unsigned char)tmp);
 		call_load_area(1);
 	}
 

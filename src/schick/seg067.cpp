@@ -52,7 +52,7 @@ void city_event_switch(void)
 	ds_writeb(C_EVENT_ACTIVE, 0);
 
 	/* load the LTX-file of the current town */
-	load_tx(ds_readbs(CURRENT_TOWN) + 77);
+	load_tx(gs_current_town + 77);
 
 	/* update the current position / make the step */
 	ds_writews(X_TARGET, gs_x_target_bak);

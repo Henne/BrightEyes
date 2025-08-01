@@ -200,7 +200,7 @@ void do_special_buildings(void)
 	tw_bak = g_textbox_width;
 	type = gs_current_typeindex;
 
-	if (ds_readb(CURRENT_TOWN) == TOWNS_THORWAL) {
+	if (gs_current_town == TOWNS_THORWAL) {
 
 		load_tx2(type < 41 ? ARCHIVE_FILE_THORWAL1_LTX : ARCHIVE_FILE_THORWAL2_LTX);
 		g_textbox_width = 9;
@@ -247,7 +247,7 @@ void do_special_buildings(void)
 			THO_tav_inn_combi();
 		}
 
-	} else if (ds_readb(CURRENT_TOWN) == TOWNS_PHEXCAER) {
+	} else if (gs_current_town == TOWNS_PHEXCAER) {
 
 		load_tx2(type <= 3 ? ARCHIVE_FILE_PHEX2_LTX : ARCHIVE_FILE_PHEX1_LTX);
 		g_textbox_width = 9;
@@ -273,7 +273,7 @@ void do_special_buildings(void)
 		}
 
 
-	} else if (ds_readb(CURRENT_TOWN) == TOWNS_EINSIEDLERSEE) {
+	} else if (gs_current_town == TOWNS_EINSIEDLERSEE) {
 		/*  HERMITS LAKE / EINSIEDLERSEE */
 
 		if (type == 1) {
@@ -319,7 +319,7 @@ void TLK_eremit(signed short state)
 
 void do_town(void)
 {
-	if ((ds_readbs(CITY_AREA_LOADED) != ds_readbs(CURRENT_TOWN)) ||	(ds_readws(AREA_PREPARED) != 1))
+	if ((ds_readbs(CITY_AREA_LOADED) != gs_current_town) ||	(ds_readws(AREA_PREPARED) != 1))
 	{
 		seg028_0555(1);
 
@@ -332,7 +332,7 @@ void do_town(void)
 
 	g_current_ani = -1;
 
-	gs_current_town_bak = ds_readbs(CURRENT_TOWN);
+	gs_current_town_bak = gs_current_town;
 
 	city_step();
 }
@@ -999,10 +999,10 @@ signed short city_step(void)
 		}
 	}
 
-	if (ds_readb(CURRENT_TOWN) != TOWNS_NONE && ds_readbs(CITY_AREA_LOADED) != -1) {
+	if (gs_current_town != TOWNS_NONE && ds_readbs(CITY_AREA_LOADED) != -1) {
 
 		if (!i) {
-			options = enter_location(ds_readbs(CURRENT_TOWN));
+			options = enter_location(gs_current_town);
 		}
 
 		/* random city event? */
@@ -1011,8 +1011,8 @@ signed short city_step(void)
 			(ds_readws(X_TARGET) != gs_x_target_bak)) &&
 
 			/* only in big town */
-			(ds_readb(CURRENT_TOWN) == TOWNS_THORWAL || ds_readb(CURRENT_TOWN) == TOWNS_PREM ||
-			ds_readb(CURRENT_TOWN) == TOWNS_PHEXCAER || ds_readb(CURRENT_TOWN) == TOWNS_OBERORKEN))
+			(gs_current_town == TOWNS_THORWAL || gs_current_town == TOWNS_PREM ||
+			gs_current_town == TOWNS_PHEXCAER || gs_current_town == TOWNS_OBERORKEN))
 		{
 
 			if (random_schick(100) <= 1 && /* 1% chance */

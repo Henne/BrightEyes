@@ -388,7 +388,7 @@ signed short DNG08_handler(void)
 	{
 		leave_dungeon();
 
-		ds_writebs(CURRENT_TOWN, (signed char)ds_readws(TRAVEL_DESTINATION_TOWN_ID));
+		gs_current_town = ((signed char)ds_readws(TRAVEL_DESTINATION_TOWN_ID));
 		ds_writews(X_TARGET, ds_readws(TRAVEL_DESTINATION_X));
 		ds_writews(Y_TARGET, ds_readws(TRAVEL_DESTINATION_Y));
 		gs_current_loctype = LOCTYPE_NONE;

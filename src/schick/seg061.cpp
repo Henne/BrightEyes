@@ -87,7 +87,7 @@ void do_temple(void)
 			sprintf((char*)g_dtp2,
 				get_ttx(235),
 				get_ttx(ds_readws(TEMPLE_GOD) + 21),	/* name of the god */
-				(char*)(gs_current_typeindex != 58 ? get_ttx(ds_readbs(CURRENT_TOWN) + 235): get_ttx(622)));
+				(char*)(gs_current_typeindex != 58 ? get_ttx(gs_current_town + 235): get_ttx(622)));
 
 			GUI_print_loc_line((char*)g_dtp2);
 
@@ -145,7 +145,7 @@ void do_temple(void)
 				sprintf((char*)g_dtp2,
 					get_ttx(235),
 					get_ttx(ds_readws(TEMPLE_GOD) + 21),	/* name of the god */
-					get_ttx(ds_readbs(CURRENT_TOWN) + 235));
+					get_ttx(gs_current_town + 235));
 				GUI_print_loc_line((char*)g_dtp2);
 
 				draw_status_line();
@@ -284,7 +284,7 @@ void char_add(signed short temple_id)
 					/* location string */
 					sprintf((char*)g_dtp2, get_ttx(235),
 						get_ttx(ds_readws(TEMPLE_GOD) + 21),
-						get_ttx(ds_readbs(CURRENT_TOWN) + 235));
+						get_ttx(gs_current_town + 235));
 
 					GUI_print_loc_line((char*)g_dtp2);
 				}
@@ -334,7 +334,7 @@ void char_letgo(signed short temple_id)
 					sprintf((char*)g_dtp2,
 						get_ttx(235),
 						get_ttx(ds_readws(TEMPLE_GOD) + 21),	/* name of the god */
-						get_ttx(ds_readbs(CURRENT_TOWN) + 235));
+						get_ttx(gs_current_town + 235));
 					GUI_print_loc_line((char*)g_dtp2);
 				}
 			}

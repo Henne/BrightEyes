@@ -1174,7 +1174,7 @@ void interrupt mouse_isr(void)
 			ds_writew(MOUSE2_EVENT, 1);
 		}
 
-		if (((gs_dungeon_index != DUNGEONS_NONE) || (ds_readb(CURRENT_TOWN) != TOWNS_NONE)) &&
+		if (((gs_dungeon_index != DUNGEONS_NONE) || (gs_current_town != TOWNS_NONE)) &&
 				!gs_current_loctype &&
 				!ds_readbs(DIALOGBOX_LOCK) &&
 				(ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK))
@@ -1794,7 +1794,7 @@ void game_loop(void)
 
 		if (gs_current_loctype != LOCTYPE_NONE) {
 			do_location();
-		} else if (ds_readbs(CURRENT_TOWN) != TOWNS_NONE) {
+		} else if (gs_current_town != TOWNS_NONE) {
 			do_town();
 		} else if (gs_dungeon_index != DUNGEONS_NONE) {
 			do_dungeon();
@@ -1834,7 +1834,7 @@ void game_loop(void)
 		}
 
 		if ((host_readbs(get_hero(6) + HERO_TYPE) != HERO_TYPE_NONE) &&
-			((ds_readbs(CURRENT_TOWN) != TOWNS_NONE) || (ds_readws(GAME_STATE) == GAME_STATE_VICTORY)) &&
+			((gs_current_town != TOWNS_NONE) || (ds_readws(GAME_STATE) == GAME_STATE_VICTORY)) &&
 			(gs_npc_months >= 1) &&	(g_npc_last_farewellcheck != gs_npc_months))
 		{
 			npc_farewell();
@@ -2070,7 +2070,7 @@ void dawning(void)
 		pal_fade(gs_palette_sky, g_townpal_buf + 0xc0);
 
 		/* in a town */
-		if (ds_readbs(CURRENT_TOWN) &&
+		if (gs_current_town &&
 			/* not in a dungeon */
 			!gs_dungeon_index &&
 			/* not in a location */
@@ -2111,7 +2111,7 @@ void nightfall(void)
 		pal_fade(gs_palette_sky, (Bit8u*)g_sky_fade_palette);
 
 		/* in a town */
-		if (ds_readbs(CURRENT_TOWN) &&
+		if (gs_current_town &&
 			/* not in a dungeon */
 			!gs_dungeon_index &&
 			/* not in a location */
@@ -2982,7 +2982,7 @@ void herokeeping(void)
 			/* check for magic waterskin in group */
 			if ((get_first_hero_with_item_in_group(ITEM_MAGIC_WATERSKIN, host_readbs(hero + HERO_GROUP_NO)) == -1) &&
 				((host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-				(!ds_readbs(CURRENT_TOWN) || (ds_readbs(CURRENT_TOWN) != TOWNS_NONE && ds_readb(SHOW_TRAVEL_MAP) != 0))) ||
+				(!gs_current_town || (gs_current_town != TOWNS_NONE && ds_readb(SHOW_TRAVEL_MAP) != 0))) ||
 				(host_readbs(hero + HERO_GROUP_NO) != gs_current_group &&
 				!gs_groups_town[host_readbs(hero + HERO_GROUP_NO)]))) {
 
@@ -4026,7 +4026,7 @@ void draw_compass(void)
 		/* Has something to do with traveling */
 		!ds_readbs(TRAVEL_EVENT_ACTIVE) &&
 		/* Not in town or dungeon */
-		((gs_dungeon_index != DUNGEONS_NONE) || (ds_readbs(CURRENT_TOWN) != TOWNS_NONE)) &&
+		((gs_dungeon_index != DUNGEONS_NONE) || (gs_current_town != TOWNS_NONE)) &&
 		/* I have no clue */
 		(g_fading_state != 2))
 	{
@@ -4083,7 +4083,7 @@ signed short can_merge_group(void)
 				/* check Location */
 				(gs_groups_current_loctype[i] == gs_current_loctype) &&
 				/* check currentTown */
-				(gs_groups_town[i] == ds_readb(CURRENT_TOWN)) &&
+				(gs_groups_town[i] == gs_current_town) &&
 				/* check DungeonIndex */
 				(gs_groups_dng_index[i] == gs_dungeon_index) &&
 				/* check DungeonLevel */

@@ -1043,8 +1043,8 @@ mark2:			   goto mark1;
 	gs_dungeon_level = level;
 	gs_dungeon_index = dungeon_id;
 	gs_current_loctype_bak = gs_current_loctype;
-	gs_current_town_bak = ds_readb(CURRENT_TOWN);
-	gs_current_loctype = ds_writeb(CURRENT_TOWN, TOWNS_NONE);
+	gs_current_town_bak = gs_current_town;
+	gs_current_loctype = gs_current_town = (TOWNS_NONE);
 	ds_writeb(DNG_AREA_LOADED, ds_writeb(CITY_AREA_LOADED, -1));
 
 	if (dungeon_id == DUNGEONS_ZWINGFESTE) {

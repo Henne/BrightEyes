@@ -405,7 +405,7 @@ void init_game_state(void)
 	ds_writeb(DIRECTION, 0);
 	gs_dungeon_index = DUNGEONS_NONE;
 
-	gs_current_town_bak = ds_writeb(CURRENT_TOWN, TOWNS_THORWAL);
+	gs_current_town_bak = gs_current_town = (TOWNS_THORWAL);
 
 	g_textbox_width = 3;
 

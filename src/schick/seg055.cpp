@@ -209,10 +209,10 @@ void do_merchant(void)
 
 		handle_gui_input();
 
-		if (ds_readb(CURRENT_TOWN) == TOWNS_THORWAL ||
-			ds_readb(CURRENT_TOWN) == TOWNS_PREM ||
-			ds_readb(CURRENT_TOWN) == TOWNS_PHEXCAER ||
-			ds_readb(CURRENT_TOWN) == TOWNS_OBERORKEN)
+		if (gs_current_town == TOWNS_THORWAL ||
+			gs_current_town == TOWNS_PREM ||
+			gs_current_town == TOWNS_PHEXCAER ||
+			gs_current_town == TOWNS_OBERORKEN)
 		{
 
 			/* debt logic in shops */

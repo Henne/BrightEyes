@@ -582,11 +582,11 @@ void tevent_145(void)
 		if (answer == 1)
 		{
 			ds_writew(TRV_DESTINATION, TOWNS_KRAVIK);
-			ds_writeb(CURRENT_TOWN, TOWNS_SKELELLEN);
+			gs_current_town = (TOWNS_SKELELLEN);
 
 		} else {
 			ds_writew(TRV_DESTINATION, TOWNS_SKELELLEN);
-			ds_writeb(CURRENT_TOWN, TOWNS_KRAVIK);
+			gs_current_town = (TOWNS_KRAVIK);
 		}
 
 	} else {
@@ -598,11 +598,11 @@ void tevent_145(void)
 		if (answer == 1) {
 
 			ds_writew(TRV_DESTINATION, TOWNS_PEILINEN);
-			ds_writeb(CURRENT_TOWN, TOWNS_ROVAMUND);
+			gs_current_town = (TOWNS_ROVAMUND);
 
 		} else {
 			ds_writew(TRV_DESTINATION, TOWNS_ROVAMUND);
-			ds_writeb(CURRENT_TOWN, TOWNS_PEILINEN);
+			gs_current_town = (TOWNS_PEILINEN);
 		}
 	}
 

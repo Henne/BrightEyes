@@ -120,7 +120,7 @@ void diary_new_entry(void)
 	ptr = p_datseg + (DIARY_ENTRIES-8) + ds_readw(DIARY_ENTRY_COUNTER) * 8;
 
 	/* avoid double entries for the same town */
-	if (ds_readbs(CURRENT_TOWN) != host_readw(ptr + 6)) {
+	if (gs_current_town != host_readw(ptr + 6)) {
 
 		/* make a pointer to the current entry */
 		ptr = p_datseg + DIARY_ENTRIES + ds_readw(DIARY_ENTRY_COUNTER) * 8;
@@ -135,7 +135,7 @@ void diary_new_entry(void)
 		/* Write year */
 		host_writew(ptr + 4, gs_year);
 		/* Write city */
-		host_writew(ptr + 6, ds_readbs(CURRENT_TOWN));
+		host_writew(ptr + 6, gs_current_town);
 	}
 }
 

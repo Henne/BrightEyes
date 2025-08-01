@@ -375,7 +375,7 @@ void do_harbor(void)
 
 				set_palette((Bit8u*)ds_readd(TRAVEL_MAP_PTR) + 64002, 0, 0x20);
 
-				mod_clock_pos(ds_readbs(CURRENT_TOWN));
+				mod_clock_pos(gs_current_town);
 
 				set_audio_track(ARCHIVE_FILE_TERMS_XMI);
 
@@ -383,7 +383,7 @@ void do_harbor(void)
 				ds_writew(WALLCLOCK_Y, ds_readws(BASEPOS_Y) + 87);
 				g_wallclock_update = 1;
 
-				sea_travel(ds_readb(CURRENT_SEA_ROUTE_ID), ds_readbs(SEA_ROUTES + SIZEOF_SEA_ROUTE * ds_readb(CURRENT_SEA_ROUTE_ID)) == ds_readbs(CURRENT_TOWN) ? 0 : 1);
+				sea_travel(ds_readb(CURRENT_SEA_ROUTE_ID), ds_readbs(SEA_ROUTES + SIZEOF_SEA_ROUTE * ds_readb(CURRENT_SEA_ROUTE_ID)) == gs_current_town ? 0 : 1);
 				passage_arrival();
 
 				g_wallclock_update = ds_writew(BASEPOS_X, ds_writew(BASEPOS_Y, ds_writeb(SEA_TRAVEL_PSGBOOKED_FLAG, 0)));
@@ -393,7 +393,7 @@ void do_harbor(void)
 
 				if (!ds_readb(TRAVEL_DETOUR)) {
 
-					ds_writebs(CURRENT_TOWN, (signed char)ds_readws(TRAVEL_DESTINATION_TOWN_ID));
+					gs_current_town = ((signed char)ds_readws(TRAVEL_DESTINATION_TOWN_ID));
 					gs_x_target_bak = (ds_readw(TRAVEL_DESTINATION_X));
 					gs_y_target_bak = (ds_readw(TRAVEL_DESTINATION_Y));
 					ds_writeb(DIRECTION, (ds_readws(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
@@ -423,7 +423,7 @@ void do_harbor(void)
 
 	} else {
 
-		ds_writeb(CURRENT_TOWN, TOWNS_NONE);
+		gs_current_town = (TOWNS_NONE);
 	}
 }
 

@@ -144,7 +144,7 @@ void TRV_a_path(void)
 	if (answer == 1)
 	{
 		/* follow the path */
-		ds_writeb(ROUTE59_FLAG, (ds_readb(CURRENT_TOWN) == TOWNS_PEILINEN ? 2 : 4));
+		ds_writeb(ROUTE59_FLAG, (gs_current_town == TOWNS_PEILINEN ? 2 : 4));
 
 		/* Original-Glitch:
 		 * TRAVEL_DETOUR == 1 is indicating a detour to DNG_TOTENSCHIFF (which has the ID 1).
@@ -265,7 +265,7 @@ void tevent_020(void)
 			if (answer == 1)
 			{
 			    /* TODO: Original-Bug: CURRENT_TOWN is either Kravik or Skelellen. */
-				ds_writeb(ROUTE59_FLAG, (ds_readb(CURRENT_TOWN) == TOWNS_PEILINEN ? 1 : 3));
+				ds_writeb(ROUTE59_FLAG, (gs_current_town == TOWNS_PEILINEN ? 1 : 3));
 
 				/* Original-Glitch:
 				 * TRAVEL_DETOUR == 1 is indicating a detour to DNG_TOTENSCHIFF (which had the ID 1).

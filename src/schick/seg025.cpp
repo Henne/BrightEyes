@@ -148,7 +148,7 @@ void do_house(void)
 			{
 				/* every hero must pass a sneak -2 test */
 
-				i = ds_readbs(CURRENT_TOWN);
+				i = gs_current_town;
 
 				if ((i == TOWNS_THORWAL) || (i == TOWNS_PREM) || (i == TOWNS_PHEXCAER) || (i == TOWNS_OBERORKEN)) {
 
@@ -235,9 +235,9 @@ void enter_map(void)
 {
 	ds_writew(CURRENT_SIGNPOST, gs_current_typeindex);
 
-	gs_current_typeindex = ds_readbs(CURRENT_TOWN);
+	gs_current_typeindex = gs_current_town;
 
-	gs_current_loctype = ds_writeb(CURRENT_TOWN, TOWNS_NONE);
+	gs_current_loctype = gs_current_town = (TOWNS_NONE);
 	ds_writeb(SHOW_TRAVEL_MAP, 1);
 }
 
@@ -445,13 +445,13 @@ signed short game_options(void)
 
 	memset((Bit8u*)g_buffer9_ptr, 0, 28000);
 
-	if (ds_readbs(CURRENT_TOWN) != TOWNS_NONE) {
+	if (gs_current_town != TOWNS_NONE) {
 		/* if the party is in a town */
 		load_tx(ARCHIVE_FILE_MAPTEXT_LTX);
 
-		GUI_print_header(get_tx(ds_readbs(CURRENT_TOWN) - 1));
+		GUI_print_header(get_tx(gs_current_town - 1));
 
-		load_tx(ds_readbs(CURRENT_TOWN) + (ARCHIVE_FILE_CITY_DAT-1));
+		load_tx(gs_current_town + (ARCHIVE_FILE_CITY_DAT-1));
 
 		ds_writew(PIC_COPY_X1, 0);
 		ds_writew(PIC_COPY_Y1, 0);
@@ -586,7 +586,7 @@ signed short game_options(void)
 	ds_writew(REQUEST_REFRESH, 1);
 	g_special_screen = 0;
 
-	if (ds_readbs(CURRENT_TOWN) != TOWNS_NONE) {
+	if (gs_current_town != TOWNS_NONE) {
 		g_fading_state = 3;
 	}
 
@@ -750,7 +750,7 @@ void leave_dungeon(void)
 	}
 
 	gs_current_loctype = gs_current_loctype_bak = LOCTYPE_NONE;
-	ds_writeb(CURRENT_TOWN, gs_current_town_bak);
+	gs_current_town = (gs_current_town_bak);
 	gs_dungeon_index_bak = gs_dungeon_index;
 	gs_dungeon_index = gs_dungeon_level = ds_writeb(DUNGEON_LIGHT, 0);
 	ds_writebs(CITY_AREA_LOADED, -1);
@@ -793,10 +793,10 @@ void tumult(void)
 
 	/* the guards or a mob */
 	sprintf((char*)g_dtp2, get_ttx(765),
-		((ds_readb(CURRENT_TOWN) == TOWNS_PREM ||
-			ds_readb(CURRENT_TOWN) == TOWNS_PHEXCAER ||
-			ds_readb(CURRENT_TOWN) == TOWNS_THORWAL ||
-			ds_readb(CURRENT_TOWN) == TOWNS_OBERORKEN)
+		((gs_current_town == TOWNS_PREM ||
+			gs_current_town == TOWNS_PHEXCAER ||
+			gs_current_town == TOWNS_THORWAL ||
+			gs_current_town == TOWNS_OBERORKEN)
 				? get_ttx(766) : get_ttx(767)));
 
 	GUI_output((char*)g_dtp2);

@@ -839,7 +839,7 @@ void status_menu(signed short hero_pos)
 	g_textbox_width = tw_bak;
 	g_timers_disabled--;
 
-	if (ds_readbs(CURRENT_TOWN) != TOWNS_NONE) {
+	if (gs_current_town != TOWNS_NONE) {
 		g_fading_state = 3;
 	}
 }

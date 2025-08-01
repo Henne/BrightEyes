@@ -742,15 +742,15 @@ void INF_swafnild_unicorn(signed short informer, signed short state)
 			g_dialog_next_state = (ds_readb(SWAFNILD_NOMAP) != 0 ? 38 : 39);
 		} else if (state == 7) {
 
-			if ((ds_readbs(CURRENT_TOWN) >= TOWNS_THORWAL && ds_readbs(CURRENT_TOWN) <= TOWNS_EFFERDUN) ||
-				(ds_readbs(CURRENT_TOWN) >= TOWNS_DASPOTA && ds_readbs(CURRENT_TOWN) <= TOWNS_VAERMHAG))
+			if ((gs_current_town >= TOWNS_THORWAL && gs_current_town <= TOWNS_EFFERDUN) ||
+				(gs_current_town >= TOWNS_DASPOTA && gs_current_town <= TOWNS_VAERMHAG))
 			{
 				ds_writeb(SWAFNILD_TP1, TOWNS_PREM);
 				ds_writeb(SWAFNILD_TP2, TOWNS_SKJAL);
 				ds_writeb(SWAFNILD_TP3, TOWNS_OTTARJE);
 				ds_writeb(SWAFNILD_TP4, TOWNS_ARYN);
 
-			} else if (ds_readbs(CURRENT_TOWN) >= TOWNS_ROVIK && ds_readbs(CURRENT_TOWN) <= TOWNS_TREBAN) {
+			} else if (gs_current_town >= TOWNS_ROVIK && gs_current_town <= TOWNS_TREBAN) {
 				ds_writeb(SWAFNILD_TP1, TOWNS_OTTARJE);
 				ds_writeb(SWAFNILD_TP2, TOWNS_SKJAL);
 				ds_writeb(SWAFNILD_TP3, TOWNS_PREM);
@@ -793,10 +793,10 @@ void INF_swafnild_unicorn(signed short informer, signed short state)
 
 		} else if (state == 37) {
 
-			ds_writeb(CURRENT_TOWN, ds_readb(SWAFNILD_DESTINATION) == 1 ? ds_readb(SWAFNILD_TP1) :
+			gs_current_town = (ds_readb(SWAFNILD_DESTINATION) == 1 ? ds_readb(SWAFNILD_TP1) :
 						(ds_readb(SWAFNILD_DESTINATION) == 2 ? ds_readb(SWAFNILD_TP2) : ds_readb(SWAFNILD_TP3)));
 
-			switch (ds_readbs(CURRENT_TOWN)) {
+			switch (gs_current_town) {
 				case TOWNS_PREM: gs_x_target_bak = (22); gs_y_target_bak = ( 8); break;
 				case TOWNS_KORD: gs_x_target_bak = ( 4); gs_y_target_bak = ( 3); break;
 				case TOWNS_OTTARJE: gs_x_target_bak = ( 9); gs_y_target_bak = (10); break;

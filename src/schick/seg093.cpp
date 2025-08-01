@@ -46,7 +46,7 @@ signed short do_travel_mode(void)
 
 	bak1 = g_wallclock_update;
 	ds_writeb(ROUTE59_FLAG, (unsigned char)(g_wallclock_update = (unsigned short)ds_writeb(TRAVEL_DETOUR, 0)));
-	ds_writeb(CURRENT_TOWN, gs_current_typeindex);
+	gs_current_town = (gs_current_typeindex);
 
 	update_mouse_cursor();
 
@@ -100,7 +100,7 @@ signed short do_travel_mode(void)
 			ds_writew(REQUEST_REFRESH, 0);
 		}
 
-		if (host_readbs(signpost_ptr + SIGNPOST_TOWN) == ds_readbs(CURRENT_TOWN) && host_readb(signpost_ptr + SIGNPOST_TYPEINDEX) == ds_readw(CURRENT_SIGNPOST))
+		if (host_readbs(signpost_ptr + SIGNPOST_TOWN) == gs_current_town && host_readb(signpost_ptr + SIGNPOST_TYPEINDEX) == ds_readw(CURRENT_SIGNPOST))
 		{
 			while (1) {
 				handle_input();
@@ -111,19 +111,19 @@ signed short do_travel_mode(void)
 					while ((l_di = host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + i)) != 255)
 					{
 						destinations_tab[i] = get_ttx(235 + ds_writebs(TRV_MENU_TOWNS + i,
-						    (answer = ds_readb((LAND_ROUTES - SIZEOF_LAND_ROUTE + LAND_ROUTE_TOWN_1) + SIZEOF_LAND_ROUTE * l_di)) != ds_readbs(CURRENT_TOWN) ?
+						    (answer = ds_readb((LAND_ROUTES - SIZEOF_LAND_ROUTE + LAND_ROUTE_TOWN_1) + SIZEOF_LAND_ROUTE * l_di)) != gs_current_town ?
 						    (signed char) answer : ds_readbs((LAND_ROUTES - SIZEOF_LAND_ROUTE + LAND_ROUTE_TOWN_2) + SIZEOF_LAND_ROUTE * l_di)));
 
 						i++;
 					}
 
-					ds_writeb(TRV_MENU_TOWNS + i, ds_readbs(CURRENT_TOWN));
+					ds_writeb(TRV_MENU_TOWNS + i, gs_current_town);
 					destinations_tab[i] = get_ttx(613);
 					i++;
 
 					sprintf((char*)g_text_output_buf,
 						get_ttx(545),
-						get_ttx(235 + ds_readbs(CURRENT_TOWN)));
+						get_ttx(235 + gs_current_town));
 
 					tw_bak = g_textbox_width;
 					g_textbox_width = 4;
@@ -166,7 +166,7 @@ signed short do_travel_mode(void)
 					g_wallclock_update = 1;
 
 					TM_func1(host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + answer),
-						(ds_readbs((LAND_ROUTES - SIZEOF_LAND_ROUTE) + SIZEOF_LAND_ROUTE * host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + answer)) == ds_readbs(CURRENT_TOWN) ? 0 : 1));
+						(ds_readbs((LAND_ROUTES - SIZEOF_LAND_ROUTE) + SIZEOF_LAND_ROUTE * host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + answer)) == gs_current_town ? 0 : 1));
 					g_wallclock_update = 0;
 
 					if (ds_readb(ROUTE59_FLAG) != 0)
@@ -187,7 +187,7 @@ signed short do_travel_mode(void)
 
 					if (!ds_readb(TRAVEL_DETOUR) && ds_readw(GAME_STATE) == GAME_STATE_MAIN)
 					{
-						ds_writeb(CURRENT_TOWN, (signed char)ds_readw(TRAVEL_DESTINATION_TOWN_ID));
+						gs_current_town = ((signed char)ds_readw(TRAVEL_DESTINATION_TOWN_ID));
 						gs_x_target_bak = (ds_readw(TRAVEL_DESTINATION_X));
 						gs_y_target_bak = (ds_readw(TRAVEL_DESTINATION_Y));
 						ds_writeb(DIRECTION, (ds_readb(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
@@ -262,7 +262,7 @@ signed short do_travel_mode(void)
 
 	} else if (ds_readb(TRAVEL_DETOUR) != 99)
 	{
-		ds_writeb(CURRENT_TOWN, TOWNS_NONE);
+		gs_current_town = (TOWNS_NONE);
 	}
 
 	if (ds_readb(PP20_INDEX) == 5)

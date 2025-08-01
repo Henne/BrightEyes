@@ -58,7 +58,7 @@ void prepare_map_marker(void)
 		process_nvf(&nvf);
 	}
 
-	set_textbox_positions(ds_readbs(CURRENT_TOWN));
+	set_textbox_positions(gs_current_town);
 }
 
 void set_textbox_positions(signed short town_id)
@@ -518,7 +518,7 @@ signed short TM_unused1(Bit8u* signpost_ptr, signed short old_route_no)
 	char *destinations_tab[7];
 
 	old_route_id = host_readb((Bit8u*)(host_readd((Bit8u*)(signpost_ptr) + SIGNPOST_LAND_ROUTES)) + old_route_no) - 1;
-	ds_writeb(CURRENT_TOWN, (signed char)(town = ds_readws(TRV_DESTINATION)));
+	gs_current_town = ((signed char)(town = ds_readws(TRV_DESTINATION)));
 	signpost_ptr = ((Bit8u*)p_datseg + SIGNPOSTS);
 
 	do {
@@ -536,7 +536,7 @@ signed short TM_unused1(Bit8u* signpost_ptr, signed short old_route_no)
 						if (route_no2 != route_no1)
 						{
 							destinations_tab[town_i++] = get_ttx(235 + ds_writebs(TRV_MENU_TOWNS + town_i,
-                                ((answer = ds_readb((LAND_ROUTES - SIZEOF_LAND_ROUTE + LAND_ROUTE_TOWN_1) + SIZEOF_LAND_ROUTE * route_id)) != ds_readbs(CURRENT_TOWN) ?
+                                ((answer = ds_readb((LAND_ROUTES - SIZEOF_LAND_ROUTE + LAND_ROUTE_TOWN_1) + SIZEOF_LAND_ROUTE * route_id)) != gs_current_town ?
                                     (unsigned char)answer : ds_readb((LAND_ROUTES - SIZEOF_LAND_ROUTE + LAND_ROUTE_TOWN_2) + SIZEOF_LAND_ROUTE * route_id))
                             ));
 						}
@@ -615,7 +615,7 @@ signed short TM_enter_target_town(void)
 				do {
 					tmp2 = host_readb((Bit8u*)(host_readd(signpost_ptr + 2)) + tmp) - 1;
 
-					if (ds_readbs(LAND_ROUTES + 9 * tmp2) == ds_readbs(CURRENT_TOWN) || ds_readbs((LAND_ROUTES + 1) + 9 * tmp2) == ds_readbs(CURRENT_TOWN))
+					if (ds_readbs(LAND_ROUTES + 9 * tmp2) == gs_current_town || ds_readbs((LAND_ROUTES + 1) + 9 * tmp2) == gs_current_town)
 					{
 						signpost_id = host_readb(signpost_ptr + 1);
 						break;
@@ -633,8 +633,8 @@ signed short TM_enter_target_town(void)
 		if (signpost_id)
 		{
 			/* set the target town as current town */
-			tmp2 = ds_readbs(CURRENT_TOWN);
-			ds_writeb(CURRENT_TOWN, (signed char)ds_readws(TRAVEL_DESTINATION_TOWN_ID));
+			tmp2 = gs_current_town;
+			gs_current_town = ((signed char)ds_readws(TRAVEL_DESTINATION_TOWN_ID));
 
 			/* load the map */
 			call_load_area(1);
@@ -650,7 +650,7 @@ signed short TM_enter_target_town(void)
 			ds_writew(TRAVEL_DESTINATION_Y, tmp & 0xf);
 			ds_writew(TRAVEL_DESTINATION_VIEWDIR, TM_enter_target_town_viewdir(host_readws(locations_list_ptr)));
 
-			ds_writeb(CURRENT_TOWN, (signed char)tmp2);
+			gs_current_town = ((signed char)tmp2);
 
 			/* load the map */
 			call_load_area(1);
@@ -729,14 +729,14 @@ void TM_func8(signed short a1)
 {
 	if (!(ds_readb(ROUTE59_FLAG) & 1))
 	{
-		if (ds_readbs(CURRENT_TOWN) == TOWNS_PEILINEN)
+		if (gs_current_town == TOWNS_PEILINEN)
 		{
 			TM_draw_track(11, 9, 0, a1);
 		} else {
 			TM_draw_track(11, 17, 1, a1);
 		}
 	} else {
-		if (ds_readbs(CURRENT_TOWN) == TOWNS_KRAVIK)
+		if (gs_current_town == TOWNS_KRAVIK)
 		{
 			TM_draw_track(14, 8, 0, a1);
 		} else {

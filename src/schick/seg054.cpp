@@ -643,7 +643,7 @@ void TLK_herberg(signed short state)
 		gs_herberg_kicked_flags[gs_current_typeindex] = 1;
 	} else if (state == 11) {
 		tumult();
-		gs_town_outlawed_flags[ds_readbs(CURRENT_TOWN)] = 1;
+		gs_town_outlawed_flags[gs_current_town] = 1;
 		gs_herberg_kicked_flags[gs_current_typeindex] = 1;
 	} else if (state == 12) {
 		/* CH + 5 */
