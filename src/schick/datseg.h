@@ -173,6 +173,9 @@ extern Bit16s gs_current_locdata;		//ds:0x4222; seg025-seg109
 extern Bit16s gs_current_typeindex;		//ds:0x4224; seg025-seg120
 extern Bit8u  gs_dng03_highpriest_killed;	//ds:0x4226; seg079
 extern Bit8s  gs_dng03_chest12_loads;		//ds:0x4227; seg079
+extern Bit16s gs_trv_i;				//ds:0x4228; seg063, seg094
+extern Bit16s gs_route_stepcount;		//ds:0x422a; seg063, seg094
+extern Bit16s gs_forcedmarch_le_cost;		//ds:0x422c; seg094
 
 extern Bit16s gs_arsenal_money;			//ds:0x43a3; seg068
 /* GameState written directly into SaveGame file ends at 0x4474 */

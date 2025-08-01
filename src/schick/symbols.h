@@ -725,9 +725,9 @@
 //#define CURRENT_TYPEINDEX               (0x4224)    /* short */
 //#define DNG03_HIGHPRIEST_KILLED         (0x4226)    /* unsigned char; {0, 14 = in fight 224, 16 = in fight 222} */
 //#define DNG03_CHEST12_LOADS             (0x4227)    /* unsigned char; {0,1,...,6} */
-#define TRV_I                           (0x4228)    /* unsigned short */
-#define ROUTE_STEPCOUNT                 (0x422a)    /* unsigned short */
-#define FORCEDMARCH_LE_COST             (0x422c)    /* unsigned short */
+//#define TRV_I                           (0x4228)    /* unsigned short */
+//#define ROUTE_STEPCOUNT                 (0x422a)    /* unsigned short */
+//#define FORCEDMARCH_LE_COST             (0x422c)    /* unsigned short */
 #define ROUTE_TOTAL_STEPS               (0x422e)    /* unsigned short */
 #define ROUTE_LENGTH                    (0x4230)    /* unsigned short */
 #define ROUTE_DURATION                  (0x4232)    /* unsigned short */

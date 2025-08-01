@@ -544,7 +544,7 @@ void sea_travel(signed short passage, signed short dir)
 #endif
 	}
 
-	ds_writew(ROUTE_STEPCOUNT, ds_writew(ROUTE_PROGRESS, ds_writew(ROUTE_DAYPROGRESS, ds_writeb(TRAVEL_DETOUR, 0))));
+	gs_route_stepcount = ds_writew(ROUTE_PROGRESS, ds_writew(ROUTE_DAYPROGRESS, ds_writeb(TRAVEL_DETOUR, 0)));
 	g_travel_herokeeping = 1;
 
 	while (host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2 * ds_writew(ROUTE_MOUSEHOVER, 0)) != -1 && !ds_readb(TRAVEL_DETOUR))
@@ -559,10 +559,10 @@ void sea_travel(signed short passage, signed short dir)
 			ds_writew(ROUTE_MOUSEHOVER, 1);
 		}
 
-		g_trv_track_pixel_bak[ds_readws(ROUTE_STEPCOUNT)] =
+		g_trv_track_pixel_bak[gs_route_stepcount] =
 			*(ptr + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2) * 320 + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR)));
 
-		inc_ds_ws(ROUTE_STEPCOUNT);
+		gs_route_stepcount++;
 
 		*(ptr + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2) * 320 + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR))) = 0x1f;
 
@@ -572,7 +572,7 @@ void sea_travel(signed short passage, signed short dir)
 
 		/* the following loop will be executed Floor(ROUTE_TIMEDELTA / 2) times.
 		 * therefore, 2 * Floor(ROUTE_TIMEDELTA / 2) minutes ingame times will pass. */
-		for (ds_writew(TRV_I, 0); ds_readws(ROUTE_TIMEDELTA) / 2 > ds_readws(TRV_I); inc_ds_ws(TRV_I)) {
+		for (gs_trv_i = 0; ds_readws(ROUTE_TIMEDELTA) / 2 > gs_trv_i; gs_trv_i++) {
 
 			handle_input();
 
@@ -651,10 +651,10 @@ void sea_travel(signed short passage, signed short dir)
 
 			set_audio_track(ARCHIVE_FILE_TERMS_XMI);
 
-			ds_writew(TRV_I, 0);
+			gs_trv_i = 0;
 #if defined(__BORLANDC__)
 			for (ds_writed(ROUTE_COURSE_PTR2, ds_readd(ROUTE_COURSE_START));
-				g_trv_track_pixel_bak[inc_ds_ws_post(TRV_I)] != 0xaa;
+				g_trv_track_pixel_bak[gs_trv_i++] != 0xaa;
 				add_ds_fp(ROUTE_COURSE_PTR2, 2 * (!dir ? 2 : -2)))
 			{
 				*(ptr + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR2) + 2) * 320 + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR2))) = 0x1f;
@@ -688,10 +688,10 @@ void sea_travel(signed short passage, signed short dir)
 				add_ds_fp(ROUTE_COURSE_PTR, 4);
 			}
 #endif
-			dec_ds_ws(ROUTE_STEPCOUNT);
+			gs_route_stepcount--;
 
 			*(ptr + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2) * 320 + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR))) =
-				g_trv_track_pixel_bak[ds_readws(ROUTE_STEPCOUNT)];
+				g_trv_track_pixel_bak[gs_route_stepcount];
 
 		} while (host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR)) != -1);
 
