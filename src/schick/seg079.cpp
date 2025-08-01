@@ -280,12 +280,12 @@ signed short DNG03_handler(void)
 		ds_writews((FIG_FLEE_POSITION + 0), ds_writews((FIG_FLEE_POSITION + 6), DNG_POS_DIR(1,2,8,NORTH)));
 		ds_writews((FIG_FLEE_POSITION + 2), ds_writews((FIG_FLEE_POSITION + 4), DNG_POS_DIR(1,5,13,NORTH)));
 
-		if (!ds_readb(DNG03_HIGHPRIEST_KILLED))
+		if (!gs_dng03_highpriest_killed)
 		{
-			ds_writeb(DNG03_HIGHPRIEST_KILLED, 14);
+			gs_dng03_highpriest_killed = 14;
 		}
 
-		do_fight(ds_readb(DNG03_HIGHPRIEST_KILLED) == 14 ? 224 : 225);
+		do_fight(gs_dng03_highpriest_killed == 14 ? 224 : 225);
 
 	} else if ((target_pos == DNG_POS(1,2,4) || target_pos == DNG_POS(1,5,2)) &&
 		target_pos != gs_dng_handled_pos)
@@ -293,16 +293,14 @@ signed short DNG03_handler(void)
 		ds_writews((FIG_FLEE_POSITION + 0), ds_writews((FIG_FLEE_POSITION + 2), DNG_POS_DIR(1,7,2,NORTH)));
 		ds_writews((FIG_FLEE_POSITION + 4), ds_writews((FIG_FLEE_POSITION + 6), DNG_POS_DIR(1,2,6,NORTH)));
 
-		if (!ds_readb(DNG03_HIGHPRIEST_KILLED))
+		if (!gs_dng03_highpriest_killed)
 		{
-			ds_writeb(DNG03_HIGHPRIEST_KILLED, 16);
+			gs_dng03_highpriest_killed = 16;
 		}
 
-		do_fight(ds_readb(DNG03_HIGHPRIEST_KILLED) == 16 ? 222 : 223);
+		do_fight(gs_dng03_highpriest_killed == 16 ? 222 : 223);
 
-	} else if (target_pos == DNG_POS(1,1,12) &&
-			target_pos != gs_dng_handled_pos &&
-			!ds_readb(DNG03_SANCTUM_SMASHED))
+	} else if (target_pos == DNG_POS(1,1,12) && target_pos != gs_dng_handled_pos &&	!ds_readb(DNG03_SANCTUM_SMASHED))
 	{
 
 		/* check if a hero in this group has crystals */

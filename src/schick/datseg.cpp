@@ -2598,7 +2598,7 @@ Bit8s  gs_food_message[7] = {0};	// ds:0x4219
 unsigned char g_unkn_026[2] = { 0x00, 0x00 }; // ds:0x4220
 Bit16s gs_current_locdata = 0; // ds:0x4222
 Bit16s gs_current_typeindex = 0; // ds:0x4224
-unsigned char g_dng03_highpriest_killed = 0; // ds:0x4226, {0, 14 = in fight 224, 16 = in fight 222}
+Bit8u  gs_dng03_highpriest_killed = 0; // ds:0x4226, {0, 14 = in fight 224, 16 = in fight 222}
 unsigned char g_dng03_chest12_loads = 6; // ds:0x4227, {0,1,...,6}
 unsigned short g_trv_i = 0; // ds:0x4228
 unsigned short g_route_stepcount = 0; // ds:0x422a

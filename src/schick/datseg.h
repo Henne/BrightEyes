@@ -171,6 +171,7 @@ extern Bit8s  gs_unconscious_message[7];	//ds:0x4212; seg002, seg049
 extern Bit8s  gs_food_message[7];		//ds:0x4212; seg002, seg049, seg059
 extern Bit16s gs_current_locdata;		//ds:0x4222; seg025-seg109
 extern Bit16s gs_current_typeindex;		//ds:0x4224; seg025-seg120
+extern Bit8u  gs_dng03_highpriest_killed;	//ds:0x4226; seg079
 
 extern Bit16s gs_arsenal_money;			//ds:0x43a3; seg068
 /* GameState written directly into SaveGame file ends at 0x4474 */
