@@ -148,7 +148,8 @@ extern Bit8u  gs_smith_flogged_flags[50];	//ds:0x34a4; seg058
 extern Bit8u  gs_merchant_kicked_flags[94];	//ds:0x34d6; seg055, seg068
 extern Bit8u  gs_merchant_kicked2_flags[94];	//ds:0x3534; seg055
 extern Bit8u  gs_merchant_offended_flags[94];	//ds:0x3592; seg002, seg055-seg057
-
+extern Bit8u  gs_quest_deadship;		//ds:0x35f0; seg063, seg073
+extern Bit8u  gs_quest_deadship_done;		//ds:0x35f2; seg063, seg077
 extern Bit8s  gs_always_one2;			//ds:0x35f3; seg078
 
 extern Bit8s  gs_dng07_poison_flag;		//ds:0x3cb5; seg082

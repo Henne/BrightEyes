@@ -496,15 +496,13 @@ signed short tavern_quest_infos(void)
 		}
 		/* Original-Bug: which return value here? */
 
-	} else if ((ds_readbs(CURRENT_TOWN) == TOWNS_THORWAL) &&
-			!(ds_readb(QUEST_DEADSHIP)) &&
-			(gs_current_typeindex == 6))
+	} else if ((ds_readbs(CURRENT_TOWN) == TOWNS_THORWAL) && !gs_quest_deadship && (gs_current_typeindex == 6))
 	{
 		/* print the message about a ghost ship */
 		GUI_output(get_tx(209));
 
 		/* remember that */
-		ds_writeb(QUEST_DEADSHIP, (unsigned char)(l_si = 1));
+		gs_quest_deadship = l_si = 1;
 
 	} else if ((ds_readbs(CURRENT_TOWN) == TOWNS_SKJAL) &&
 			(gs_current_typeindex == 69) &&

@@ -328,9 +328,9 @@
 //#define MERCHANT_KICKED_FLAGS           (0x34d6)    /* signed char[74]; {0,1} */
 //#define MERCHANT_KICKED2_FLAGS          (0x3534)    /* unsigned char[94]; {0,1} */
 //#define MERCHANT_OFFENDED_FLAGS         (0x3592)    /* unsigned char[94]; {0,1} */
-#define QUEST_DEADSHIP                  (0x35f0)    /* unsigned char; {0,1} */
+//#define QUEST_DEADSHIP                  (0x35f0)    /* unsigned char; {0,1} */
 // ?1
-#define QUEST_DEADSHIP_DONE             (0x35f2)    /* unsigned char; {0,1} */
+//#define QUEST_DEADSHIP_DONE             (0x35f2)    /* unsigned char; {0,1} */
 //#define ALWAYS_ONE2                     (0x35f3)    /* unsigned char;  writeonly (1) */
 #define DNG03_SPIDEREGGS_BURNED         (0x35f4)    /* unsigned char; {0,1} */
 // ?2

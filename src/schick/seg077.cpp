@@ -210,7 +210,7 @@ signed short DNG01_handler(void)
 
 				(gs_deathtrap == 1 && gs_deathtrap_steps != 0)
 #else
-				(ds_readws(QUEST_DEADSHIP_DONE) == 1)
+				(gs_quest_deadship_done == 1)
 #endif
 			{
 				load_ani(18);
@@ -378,7 +378,7 @@ void DNG01_chest0_x1(Bit8u* chest)
 		}
 
 		/* this quest is done */
-		ds_writeb(QUEST_DEADSHIP_DONE, 1);
+		gs_quest_deadship_done = 1;
 	}
 }
 

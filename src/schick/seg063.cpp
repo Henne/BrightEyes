@@ -515,7 +515,7 @@ void sea_travel(signed short passage, signed short dir)
 	/* this is 19.8h * TRAVEL_SPEED, which is the distance [unit: 10m] the ship travels in 19.8 h.
 	 * It is used as upper bound for the position of the random encounters. */
 
-	if (passage <= 6 && ds_readb(QUEST_DEADSHIP) != 0 && !ds_readb(QUEST_DEADSHIP_DONE)) {
+	if (passage <= 6 && gs_quest_deadship && !gs_quest_deadship_done) {
 		/* only on high seas routes */
 
 		if (ds_writews(PASSAGE_DEADSHIP_FLAG, random_schick(100) <= 20 ? 1 : 0)) {
@@ -588,7 +588,7 @@ void sea_travel(signed short passage, signed short dir)
 		D1_LOG("%d0 Schritt zurueckgelegt.\n",ds_readws(ROUTE_DAYPROGRESS));
 #endif
 
-		if (ds_readws(PASSAGE_DEADSHIP_FLAG) != 0 && ds_readws(ROUTE_DAYPROGRESS) >= ds_readws(PASSAGE_DEADSHIP_POSITION) && !ds_readb(QUEST_DEADSHIP_DONE)) {
+		if (ds_readws(PASSAGE_DEADSHIP_FLAG) != 0 && ds_readws(ROUTE_DAYPROGRESS) >= ds_readws(PASSAGE_DEADSHIP_POSITION) && !gs_quest_deadship_done) {
 			prolog_ghostship();
 			/* within the call prolog_ghostship(), the party can decide if they enter the Totenschiff.
 			 * In that case, TRAVEL_DETOUR is set to DUNGEONS_TOTENSCHIFF (instead of 0) */
