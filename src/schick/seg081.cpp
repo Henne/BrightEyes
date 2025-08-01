@@ -47,7 +47,7 @@ signed short DNG06_handler(void)
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 
-	target_pos = DNG_POS(ds_readbs(DUNGEON_LEVEL), ds_readws(X_TARGET), ds_readws(Y_TARGET));
+	target_pos = DNG_POS(gs_dungeon_level, ds_readws(X_TARGET), ds_readws(Y_TARGET));
 
 	if (target_pos == DNG_POS(0,14,5) && target_pos != gs_dng_handled_pos && !ds_readb(DNG06_BOOK_FLAG))
 	{
@@ -599,7 +599,7 @@ void DNG09_pitfall(void)
 
 				GRP_save_pos(l3);
 
-				gs_groups_dng_level[l3] = ds_readbs(DUNGEON_LEVEL) + 1;
+				gs_groups_dng_level[l3] = gs_dungeon_level + 1;
 
 				ds_writeb(DNG09_PIT_FLAG, 2);
 			} else {
@@ -627,7 +627,7 @@ void DNG09_pitfall(void)
 
 				GRP_save_pos(l3);
 
-				gs_groups_dng_level[l3] = ds_readbs(DUNGEON_LEVEL) + 1;
+				gs_groups_dng_level[l3] = gs_dungeon_level + 1;
 
 				ds_writeb(DNG09_PIT_FLAG, 1);
 			}

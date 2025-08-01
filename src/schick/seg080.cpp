@@ -43,7 +43,7 @@ signed short DNG04_handler(void)
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 
-        pos = (ds_readbs(DUNGEON_LEVEL) << 12) + (ds_readws(X_TARGET) << 8) + ds_readws(Y_TARGET);
+        pos = (gs_dungeon_level << 12) + (ds_readws(X_TARGET) << 8) + ds_readws(Y_TARGET);
 
 	if (pos == DNG_POS(0,6,7) && pos != gs_dng_handled_pos && !ds_readb(DNG04_CORPSE0_FLAG))
 	{
@@ -365,7 +365,7 @@ signed short DNG05_handler(void)
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 
-	pos = (ds_readbs(DUNGEON_LEVEL) << 12) + (ds_readws(X_TARGET) << 8) + ds_readws(Y_TARGET);
+	pos = (gs_dungeon_level << 12) + (ds_readws(X_TARGET) << 8) + ds_readws(Y_TARGET);
 
 	if (pos == DNG_POS(0,7,14) && pos != gs_dng_handled_pos && ds_readw(DNG05_TRASH_FLAG) == 0)
 	{

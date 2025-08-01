@@ -42,7 +42,7 @@ signed short DNG03_handler(void)
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 
-	target_pos = DNG_POS(ds_readbs(DUNGEON_LEVEL), ds_readws(X_TARGET), ds_readws(Y_TARGET));
+	target_pos = DNG_POS(gs_dungeon_level, ds_readws(X_TARGET), ds_readws(Y_TARGET));
 
 	if ((target_pos == DNG_POS(0,4,7) || target_pos == DNG_POS(0,4,9) || target_pos == DNG_POS(0,6,8)) &&
 		target_pos != gs_dng_handled_pos)

@@ -315,7 +315,7 @@ void load_area_description(signed short type)
 		}
 
 		/* save dungeon level */
-		ds_writew(AREADESCR_DNG_LEVEL, ds_readbs(DUNGEON_LEVEL));
+		ds_writew(AREADESCR_DNG_LEVEL, gs_dungeon_level);
 
 		/* save if we are in a dungeon */
 		ds_writew(AREADESCR_DNG_FLAG, ds_readbs(DUNGEON_INDEX) != 0 ? 1 : 0);
@@ -341,7 +341,7 @@ void load_area_description(signed short type)
 			ds_writeb(DNG_MAP_SIZE, 0x20);
 		} else {
 			/* Seek to Dungeon Level * 320 */
-			lseek(fd, ds_readbs(DUNGEON_LEVEL) * 320, 0);
+			lseek(fd, gs_dungeon_level * 320, 0);
 			_read(fd, p_datseg + DNG_MAP, 0x100);
 
 			/* read automap tiles */

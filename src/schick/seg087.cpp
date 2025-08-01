@@ -46,7 +46,7 @@ signed short DNG14_handler(void)
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 
-	pos = (ds_readbs(DUNGEON_LEVEL) << 12) + (ds_readws(X_TARGET) << 8) + ds_readws(Y_TARGET);
+	pos = (gs_dungeon_level << 12) + (ds_readws(X_TARGET) << 8) + ds_readws(Y_TARGET);
 
 	hero = (Bit8u*)get_first_hero_available_in_group();
 

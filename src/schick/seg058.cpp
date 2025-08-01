@@ -599,7 +599,7 @@ void TLK_schmied(signed short state)
 	} else if (state == 30) {
 
 		DNG_enter_dungeon(DUNGEONS_ZWINGFESTE);
-		ds_writeb(DUNGEON_LEVEL, 3);
+		gs_dungeon_level = 3;
 		gs_x_target_bak = (ds_writews(X_TARGET, 11));
 		gs_y_target_bak = (ds_writews(Y_TARGET, 2));
 		ds_writeb(DIRECTION, 2);

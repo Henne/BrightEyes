@@ -752,7 +752,7 @@ void leave_dungeon(void)
 	gs_current_loctype = gs_current_loctype_bak = LOCTYPE_NONE;
 	ds_writeb(CURRENT_TOWN, gs_current_town_bak);
 	gs_dungeon_index_bak = ds_readb(DUNGEON_INDEX);
-	ds_writeb(DUNGEON_INDEX, ds_writeb(DUNGEON_LEVEL, ds_writeb(DUNGEON_LIGHT, 0)));
+	ds_writeb(DUNGEON_INDEX, (gs_dungeon_level = ds_writeb(DUNGEON_LIGHT, 0)));
 	ds_writebs(CITY_AREA_LOADED, -1);
 	g_fading_state = ds_writew(REQUEST_REFRESH, 1);
 

@@ -677,7 +677,7 @@ void DNG_update_pos(void)
 void DNG_inc_level(void)
 {
 	ds_writew(DNG_LEVEL_CHANGED, 1);
-	inc_ds_bs_post(DUNGEON_LEVEL);
+	gs_dungeon_level++;
 	load_area_description(1);
 	DNG_update_pos();
 
@@ -686,7 +686,7 @@ void DNG_inc_level(void)
 void DNG_dec_level(void)
 {
 	ds_writew(DNG_LEVEL_CHANGED, 1);
-	dec_ds_bs_post(DUNGEON_LEVEL);
+	gs_dungeon_level--;
 	load_area_description(1);
 	DNG_update_pos();
 
@@ -950,7 +950,7 @@ signed short DNG_fallpit(signed short max_damage)
 		}
 
 		GRP_save_pos(new_group);
-		gs_groups_dng_level[new_group] = ds_readbs(DUNGEON_LEVEL) + 1;
+		gs_groups_dng_level[new_group] = gs_dungeon_level + 1;
 
 		retval = 1;
 
@@ -1040,7 +1040,7 @@ mark2:			   goto mark1;
 	ds_writew(X_TARGET, x_pos);
 	ds_writew(Y_TARGET, y_pos);
 	ds_writeb(DIRECTION, (signed char)dir);
-	ds_writeb(DUNGEON_LEVEL, (signed char)level);
+	gs_dungeon_level = level;
 	ds_writeb(DUNGEON_INDEX, (signed char)dungeon_id);
 	gs_current_loctype_bak = gs_current_loctype;
 	gs_current_town_bak = ds_readb(CURRENT_TOWN);

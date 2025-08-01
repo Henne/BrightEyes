@@ -590,7 +590,7 @@ unsigned short drop_item(Bit8u *hero, signed short pos, signed short no)
 		/* check for the mine in Oberorken to bring Ingerimm a gift */
 		if (item_pleasing_ingerimm(item) && ds_readb(DUNGEON_INDEX) == DUNGEONS_ZWERGENFESTE &&
 			ds_readw(X_TARGET) == 2 && ds_readw(Y_TARGET) == 14 &&
-			ds_readb(DUNGEON_LEVEL) == 1)
+			gs_dungeon_level == 1)
 		{
 			ds_writeb(DNG12_INGERIMM_SACRIFICE, 1);
 		}

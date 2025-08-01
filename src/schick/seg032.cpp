@@ -1201,12 +1201,12 @@ signed short do_fight(signed short fight_id)
 					x_target_bak = ds_readws(X_TARGET);
 					y_target_bak = ds_readws(Y_TARGET);
 					direction_bak = ds_readbs(DIRECTION);
-					dungeon_level_bak = ds_readbs(DUNGEON_LEVEL);
+					dungeon_level_bak = gs_dungeon_level;
 
 					ds_writew(X_TARGET, (escape_positions[i] >> 8) & 0x0f); /* bits 8..11 */
 					ds_writew(Y_TARGET, escape_positions[i] & 0x0f); /* bits 0..3 */
 					ds_writeb(DIRECTION, (escape_positions[i] & 0xf0) >> 4); /* bits 4..7 */
-					ds_writeb(DUNGEON_LEVEL, escape_positions[i] >> 12); /* bits 12..15 */
+					gs_dungeon_level = (escape_positions[i] >> 12); /* bits 12..15 */
 
 					for (j = 0; j < group_size; j++) {
 
@@ -1225,7 +1225,7 @@ signed short do_fight(signed short fight_id)
 					ds_writews(X_TARGET, x_target_bak);
 					ds_writews(Y_TARGET, y_target_bak);
 					ds_writebs(DIRECTION, (signed char)direction_bak);
-					ds_writebs(DUNGEON_LEVEL, (signed char)dungeon_level_bak);
+					gs_dungeon_level = dungeon_level_bak;
 				}
 
 				group_size = ds_readbs(GROUP_MEMBER_COUNTS + gs_current_group);
@@ -1238,10 +1238,10 @@ signed short do_fight(signed short fight_id)
 				ds_writew(Y_TARGET, escape_positions[i] & 0x0f);
 				ds_writeb(DIRECTION, (escape_positions[i] & 0xf0) >> 4);
 
-				gs_dungeon_level_bak = ds_readbs(DUNGEON_LEVEL);
-				ds_writeb(DUNGEON_LEVEL, escape_positions[i] >> 12);
+				gs_dungeon_level_bak = gs_dungeon_level;
+				gs_dungeon_level = (escape_positions[i] >> 12);
 
-				if (ds_readbs(DUNGEON_LEVEL) != gs_dungeon_level_bak) {
+				if (gs_dungeon_level != gs_dungeon_level_bak) {
 					load_area_description(1);
 				}
 			}

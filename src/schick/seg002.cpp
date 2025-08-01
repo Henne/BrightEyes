@@ -2348,12 +2348,12 @@ void do_timers(void)
 					if ((gs_current_group == di) && (ds_readb(DUNGEON_INDEX) == DUNGEONS_RUINE_DES_SCHWARZMAGIERS))
 					{
 
-						if (ds_readbs(DUNGEON_LEVEL) == 1) {
+						if (gs_dungeon_level == 1) {
 
 							/* 1W6-1 */
 							sub_hero_le(ptr, dice_roll(1, 6, -1));
 
-						} else if (ds_readbs(DUNGEON_LEVEL) == 2) {
+						} else if (gs_dungeon_level == 2) {
 							/* 1W6+1 */
 							sub_hero_le(ptr, dice_roll(1, 6, 1));
 						}
@@ -4087,7 +4087,7 @@ signed short can_merge_group(void)
 				/* check DungeonIndex */
 				(ds_readb(GROUPS_DNG_INDEX + i) == ds_readb(DUNGEON_INDEX)) &&
 				/* check DungeonLevel */
-				(gs_groups_dng_level[i] == ds_readb(DUNGEON_LEVEL)))
+				(gs_groups_dng_level[i] == gs_dungeon_level))
 			{
 				retval = i;
 			}

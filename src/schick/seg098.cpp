@@ -820,7 +820,7 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 					case WEST:  x--; break;
 				}
 
-				pos = DNG_POS(ds_readbs(DUNGEON_LEVEL), x, y);
+				pos = DNG_POS(gs_dungeon_level, x, y);
 
 				if ((host_readb((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(x,y)) & 0x02) == 0) {
 					/* flag 1 'unlocked' is not set -> door is locked  */

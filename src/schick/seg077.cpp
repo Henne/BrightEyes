@@ -47,7 +47,7 @@ signed short DNG01_handler(void)
 	Bit8u *hero;
 
 
-	target_pos = DNG_POS(ds_readbs(DUNGEON_LEVEL), ds_readws(X_TARGET), ds_readws(Y_TARGET));
+	target_pos = DNG_POS(gs_dungeon_level, ds_readws(X_TARGET), ds_readws(Y_TARGET));
 
 	if (target_pos == DNG_POS(0,1,8))
 	{

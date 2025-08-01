@@ -47,7 +47,7 @@ signed short DNG09_handler(void)
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 
-	target_pos = DNG_POS(ds_readbs(DUNGEON_LEVEL), ds_readws(X_TARGET), ds_readws(Y_TARGET));
+	target_pos = DNG_POS(gs_dungeon_level, ds_readws(X_TARGET), ds_readws(Y_TARGET));
 
 	/* TODO: not the leader ? */
 	hero = get_hero(0);

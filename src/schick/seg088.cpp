@@ -191,7 +191,7 @@ void DNG15_riddle(void)
 
 	ptr = p_datseg + DNG_MAP;
 
-	pos = (ds_readbs(DUNGEON_LEVEL) << 12) + (ds_readws(X_TARGET) << 8) + ds_readws(Y_TARGET);
+	pos = (gs_dungeon_level << 12) + (ds_readws(X_TARGET) << 8) + ds_readws(Y_TARGET);
 
 	/* check if the other group is in position */
 	for (i = l_di = 0; i < 6; i++) {
