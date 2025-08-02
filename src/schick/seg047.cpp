@@ -443,9 +443,9 @@ signed short select_hero_from_group(char *title)
 
 	if (cnt != 0) {
 		bak_2 = ds_readw(BASEPOS_X);
-		bak_3 = ds_readw(BASEPOS_Y);
+		bak_3 = g_basepos_y;
 
-		ds_writew(BASEPOS_X, ds_writew(BASEPOS_Y, 0));
+		ds_writew(BASEPOS_X, g_basepos_y = 0);
 
 		answer = GUI_radio(title, (signed char)cnt,
 				(char*)(ds_readd(RADIO_NAME_LIST)),
@@ -457,7 +457,7 @@ signed short select_hero_from_group(char *title)
 				(char*)(ds_readd((RADIO_NAME_LIST + 6 * 4)))) - 1;
 
 		ds_writew(BASEPOS_X, bak_2);
-		ds_writew(BASEPOS_Y, bak_3);
+		g_basepos_y = bak_3;
 		g_textbox_width = tw_bak;
 
 		if (answer != -2)
@@ -518,9 +518,9 @@ signed short select_hero_ok(char *title)
 
 	if (cnt != 0) {
 		bak_2 = ds_readw(BASEPOS_X);
-		bak_3 = ds_readw(BASEPOS_Y);
+		bak_3 = g_basepos_y;
 
-		ds_writew(BASEPOS_X, ds_writew(BASEPOS_Y, 0));
+		ds_writew(BASEPOS_X, g_basepos_y = 0);
 
 		answer = GUI_radio(title, (signed char)cnt,
 				(char*)(ds_readd(RADIO_NAME_LIST)),
@@ -532,7 +532,7 @@ signed short select_hero_ok(char *title)
 				(char*)(ds_readd((RADIO_NAME_LIST + 6 * 4)))) - 1;
 
 		ds_writew(BASEPOS_X, bak_2);
-		ds_writew(BASEPOS_Y, bak_3);
+		g_basepos_y = bak_3;
 		g_textbox_width = tw_bak;
 		g_skilled_hero_pos = -1;
 
@@ -597,9 +597,9 @@ signed short select_hero_ok_forced(char *title)
 	if (cnt != 0) {
 		do {
 			bak_2 = ds_readw(BASEPOS_X);
-			bak_3 = ds_readw(BASEPOS_Y);
+			bak_3 = g_basepos_y;
 
-			ds_writew(BASEPOS_X, ds_writew(BASEPOS_Y, 0));
+			ds_writew(BASEPOS_X, g_basepos_y = 0);
 
 			answer = GUI_radio(title, (signed char)cnt,
 				(char*)(ds_readd(RADIO_NAME_LIST)),
@@ -611,7 +611,7 @@ signed short select_hero_ok_forced(char *title)
 				(char*)(ds_readd((RADIO_NAME_LIST + 6 * 4)))) - 1;
 
 			ds_writew(BASEPOS_X, bak_2);
-			ds_writew(BASEPOS_Y, bak_3);
+			g_basepos_y = bak_3;
 
 		} while (answer == -2);
 

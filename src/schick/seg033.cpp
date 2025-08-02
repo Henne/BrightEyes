@@ -104,12 +104,10 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 			selected = -1;
 			do {
 				ds_writew(BASEPOS_X, (x + y < 15) ? 90 : -90);
-				ds_writew(BASEPOS_Y, (x + y < 15) ? -30 : 30);
+				g_basepos_y = ((x + y < 15) ? -30 : 30);
 
 				/* prepare question with BP */
-				sprintf((char*)g_dtp2,
-					get_tx(18),
-					host_readbs(hero + HERO_BP_LEFT));
+				sprintf((char*)g_dtp2, get_tx(18), host_readbs(hero + HERO_BP_LEFT));
 
 				txt_tabpos_bak = ds_readws(TXT_TABPOS1);
 				ds_writews(TXT_TABPOS1, ds_readws(BASEPOS_X) + 204);
@@ -158,7 +156,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 				update_mouse_cursor();
 				ds_writew(TXT_TABPOS1, txt_tabpos_bak);
 				ds_writew(BASEPOS_X, 0);
-				ds_writew(BASEPOS_Y, 0);
+				g_basepos_y = 0;
 
 			} while (selected == -1);
 

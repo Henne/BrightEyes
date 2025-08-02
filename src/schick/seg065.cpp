@@ -396,18 +396,18 @@ void show_times_up(void)
 
 	tw_bak = g_textbox_width;
 	bak1 = ds_readws(BASEPOS_X);
-	bak2 = ds_readws(BASEPOS_Y);
+	bak2 = g_basepos_y;
 
 	g_textbox_width = 7;
 	ds_writew(BASEPOS_X, 0);
-	ds_writew(BASEPOS_Y, 55);
+	g_basepos_y = 55;
 
 	GUI_output(get_tx2(55));
 	GUI_output(get_tx2(56));
 	GUI_output(get_tx2(57));
 
 	ds_writew(BASEPOS_X, bak1);
-	ds_writew(BASEPOS_Y, bak2);
+	g_basepos_y = bak2;
 	g_textbox_width = tw_bak;
 
 	/* restore text file except for CHARTEXT.LTX, TAVERN.TLK and except for dialogs */
@@ -432,7 +432,7 @@ void show_outro(void)
 
 	g_textbox_width = 7;
 	ds_writew(BASEPOS_X, 0);
-	ds_writew(BASEPOS_Y, 60);
+	g_basepos_y = 60;
 
 	load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
 	set_audio_track(ARCHIVE_FILE_VICTORY_XMI);
@@ -633,7 +633,7 @@ void show_outro(void)
 	gs_datseg_status_start = 99;
 
 	ds_writew(BASEPOS_X, 0);
-	ds_writew(BASEPOS_Y, 0);
+	g_basepos_y = 0;
 
 	/* save the game */
 	save_game_state();

@@ -366,7 +366,7 @@ signed short GUI_input(char *str, unsigned short num)
 
 	l2 = (l_si + 2) * 8;
 
-	ds_writew(TEXTBOX_POS_Y, ((signed short)(200u - l2) >> 1) + ds_readw(BASEPOS_Y));
+	ds_writew(TEXTBOX_POS_Y, ((signed short)(200u - l2) >> 1) + g_basepos_y);
 	ds_writew(TEXTLINE_POSY, ds_readw(TEXTBOX_POS_Y) + 7);
 
 	get_textcolor(&fg_bak, &bg_bak);
@@ -749,7 +749,7 @@ signed short GUI_radio(char *text, signed char options, ...)
 	l_di = GUI_count_lines(text);
 	l5 = l_di + options;
 	l6 = (l5 + 2) * 8;
-	ds_writew(TEXTBOX_POS_Y, ((200 - l6 + 2) >> 1) + ds_readw(BASEPOS_Y));
+	ds_writew(TEXTBOX_POS_Y, ((200 - l6 + 2) >> 1) + g_basepos_y);
 	ds_writew(TEXTLINE_POSY, ds_readw(TEXTBOX_POS_Y) + 7);
 
 	update_mouse_cursor();

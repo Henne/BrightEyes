@@ -155,7 +155,7 @@ signed short do_travel_mode(void)
 					}
 
 					ds_writew(WALLCLOCK_X, ds_readws(BASEPOS_X) + 120);
-					ds_writew(WALLCLOCK_Y, ds_readws(BASEPOS_Y) + 87);
+					ds_writew(WALLCLOCK_Y, g_basepos_y + 87);
 
 					g_wallclock_update = 1;
 
@@ -218,8 +218,8 @@ signed short do_travel_mode(void)
 						answer = ds_readws(CURRENT_TOWN_ANIX);
 						ds_writew(CURRENT_TOWN_ANIX, 0);
 						l6 = ds_readws(BASEPOS_X);
-						l7 = ds_readws(BASEPOS_Y);
-						ds_writew(BASEPOS_Y, 0);
+						l7 = g_basepos_y;
+						g_basepos_y = 0;
 						ds_writew(BASEPOS_X, (ds_readws(MOUSE_POSX) >= 0 && ds_readws(MOUSE_POSX) <= 159 ? 80 : -80));
 
 						set_and_spin_lock();
@@ -227,7 +227,7 @@ signed short do_travel_mode(void)
 						GUI_input(get_tx(l4), 0);
 
 						ds_writew(BASEPOS_X, l6);
-						ds_writew(BASEPOS_Y, l7);
+						g_basepos_y = l7;
 						ds_writew(CURRENT_TOWN_ANIX, answer);
 					}
 
@@ -247,7 +247,7 @@ signed short do_travel_mode(void)
 	read_archive_file(i, g_buffer6_ptr, 5000);
 	close(i);
 
-	ds_writeb(SHOW_TRAVEL_MAP, (signed char)ds_writew(BASEPOS_X, ds_writew(BASEPOS_Y, ds_writew(CURRENT_TOWN_OVER, ds_writew(TRV_MENU_SELECTION, 0)))));
+	ds_writeb(SHOW_TRAVEL_MAP, (signed char)ds_writews(BASEPOS_X, (g_basepos_y = ds_writew(CURRENT_TOWN_OVER, ds_writew(TRV_MENU_SELECTION, 0)))));
 
 	if (!ds_readb(TRAVEL_DETOUR))
 	{

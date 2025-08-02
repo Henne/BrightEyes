@@ -255,9 +255,9 @@ void prolog_ghostship(void)
 
 	tw_bak = g_textbox_width;
 	bak1 = ds_readws(BASEPOS_X);
-	bak2 = ds_readws(BASEPOS_Y);
+	bak2 = g_basepos_y;
 	g_textbox_width = 7;
-	ds_writews(BASEPOS_X, ds_writews(BASEPOS_Y, 0));
+	ds_writews(BASEPOS_X, g_basepos_y = 0);
 
 	load_ani(17);
 	draw_main_screen();
@@ -283,7 +283,7 @@ void prolog_ghostship(void)
 	set_var_to_zero();
 	g_textbox_width = tw_bak;
 	ds_writews(BASEPOS_X, bak1);
-	ds_writews(BASEPOS_Y, bak2);
+	g_basepos_y = bak2;
 }
 
 #if !defined(__BORLANDC__)

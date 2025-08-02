@@ -74,12 +74,10 @@ void set_textbox_positions(signed short town_id)
 	x = ds_writews(CURRENT_TOWN_ANIX, ds_readws((TOWN_POSITIONS-4) + 4 * town_id));
 	y = ds_writews(CURRENT_TOWN_ANIY, ds_readws((TOWN_POSITIONS-4) + 4 * town_id + 2));
 
-	r_dx = (x >= 0 && x <= 159) ?
-			(y >= 0 && y <= 99 ? 3 : 1) :
-			(y >= 0 && y <= 99 ? 2 : 0);
+	r_dx = (x >= 0 && x <= 159) ? (y >= 0 && y <= 99 ? 3 : 1) : (y >= 0 && y <= 99 ? 2 : 0);
 
 	ds_writew(BASEPOS_X, !r_dx || r_dx == 2 ? -80 : 80);
-	ds_writew(BASEPOS_Y, !r_dx || r_dx == 1 ? -40 : 40);
+	g_basepos_y = ((!r_dx || r_dx == 1) ? -40 : 40);
 }
 
 /**
@@ -319,11 +317,11 @@ void TM_func1(signed short route_no, signed short backwards)
 		{
 			gs_current_typeindex = (random_schick(100) <= 50 ? 10 : 12);
 			bak1 = ds_readws(BASEPOS_X);
-			bak2 = ds_readws(BASEPOS_Y);
-			ds_writew(BASEPOS_X, ds_writew(BASEPOS_Y, 0));
+			bak2 = g_basepos_y;
+			ds_writew(BASEPOS_X, g_basepos_y = 0);
 			do_informer();
 			ds_writew(BASEPOS_X, bak1);
-			ds_writew(BASEPOS_Y, bak2);
+			g_basepos_y = bak2;
 
 		}
 
@@ -464,7 +462,7 @@ void TM_func1(signed short route_no, signed short backwards)
 				}
 			}
 			ds_writew(WALLCLOCK_X, ds_readws(BASEPOS_X) + 120);
-			ds_writew(WALLCLOCK_Y, ds_readws(BASEPOS_Y) + 87);
+			ds_writew(WALLCLOCK_Y, g_basepos_y + 87);
 			g_wallclock_update = 1;
 			ds_writew(REQUEST_REFRESH, 0);
 		}
