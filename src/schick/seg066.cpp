@@ -319,7 +319,7 @@ void TLK_eremit(signed short state)
 
 void do_town(void)
 {
-	if ((ds_readbs(CITY_AREA_LOADED) != gs_current_town) ||	(g_area_prepared != 1))
+	if ((g_city_area_loaded != gs_current_town) ||	(g_area_prepared != 1))
 	{
 		seg028_0555(1);
 
@@ -999,7 +999,7 @@ signed short city_step(void)
 		}
 	}
 
-	if (gs_current_town != TOWNS_NONE && ds_readbs(CITY_AREA_LOADED) != -1) {
+	if (gs_current_town != TOWNS_NONE && g_city_area_loaded != -1) {
 
 		if (!i) {
 			options = enter_location(gs_current_town);

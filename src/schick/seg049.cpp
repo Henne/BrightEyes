@@ -340,7 +340,7 @@ void GRP_switch_to_next(signed short mode)
 
 		if (gs_groups_town[group] && (gs_groups_town[group] != gs_current_town))
 		{
-			ds_writeb(CITY_AREA_LOADED, -1);
+			g_city_area_loaded = -1;
 			g_area_prepared = -1;
 		}
 

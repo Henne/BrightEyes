@@ -89,7 +89,7 @@ signed short do_travel_mode(void)
 			wait_for_vsync();
 
 			/* TODO: update window */
-			memmove((void*)(g_vga_memstart), (void*)((Bit8u*)ds_readd(TRAVEL_MAP_PTR)), 320 * 200);
+			memmove((void*)g_vga_memstart, (void*)((Bit8u*)ds_readd(TRAVEL_MAP_PTR)), 320 * 200);
 
 			wait_for_vsync();
 
@@ -283,7 +283,7 @@ signed short do_travel_mode(void)
 		do_fill_rect(g_vga_memstart, 0, 0, 319, 199, 0);
 	}
 
-	g_current_ani = ds_writebs(CITY_AREA_LOADED, ds_writebs(PP20_INDEX, -1));
+	g_current_ani = g_city_area_loaded = ds_writebs(PP20_INDEX, -1);
 	ds_writew(REQUEST_REFRESH, (unsigned short)(g_fading_state = 1));
 	g_wallclock_update = bak1;
 

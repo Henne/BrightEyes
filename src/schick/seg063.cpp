@@ -387,15 +387,15 @@ void do_harbor(void)
 				passage_arrival();
 
 				g_wallclock_update = ds_writew(BASEPOS_X, ds_writew(BASEPOS_Y, ds_writeb(SEA_TRAVEL_PSGBOOKED_FLAG, 0)));
-				g_current_ani = ds_writebs(CITY_AREA_LOADED, ds_writebs(PP20_INDEX, (signed char)0xff));
+				g_current_ani = g_city_area_loaded = ds_writebs(PP20_INDEX, -1);
 				ds_writew(REQUEST_REFRESH, 1);
 				ds_writeb(SHOW_TRAVEL_MAP, 0);
 
 				if (!ds_readb(TRAVEL_DETOUR)) {
 
-					gs_current_town = ((signed char)ds_readws(TRAVEL_DESTINATION_TOWN_ID));
-					gs_x_target_bak = (ds_readw(TRAVEL_DESTINATION_X));
-					gs_y_target_bak = (ds_readw(TRAVEL_DESTINATION_Y));
+					gs_current_town = (signed char)ds_readws(TRAVEL_DESTINATION_TOWN_ID);
+					gs_x_target_bak = ds_readw(TRAVEL_DESTINATION_X);
+					gs_y_target_bak = ds_readw(TRAVEL_DESTINATION_Y);
 					gs_direction = ((ds_readws(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
 
 				} else {
