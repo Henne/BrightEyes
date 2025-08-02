@@ -882,7 +882,7 @@ void spell_klarum_purum(void)
 	}
 
 	/* AE-cost = poison cost */
-	ds_writew(SPELL_SPECIAL_AECOST, ds_readws(POISON_PRICES + poison * 2));
+	ds_writew(SPELL_SPECIAL_AECOST, g_poison_prices[poison]);
 
 	if (host_readws(get_spelluser() + HERO_AE) < ds_readws(SPELL_SPECIAL_AECOST)) {
 		/* not enough AE */

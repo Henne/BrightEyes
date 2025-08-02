@@ -415,7 +415,7 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 			} else {
 				/* the following line is the source for the totally excessive and unbalanced poison damage */
 
-				damage += 10 * ds_readws(POISON_PRICES + 2 * host_readbs(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_POISON_TYPE));
+				damage += 10 * g_poison_prices[host_readbs(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_POISON_TYPE)];
 			}
 
 			dec_ptr_bs(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_NR_POISON_CHARGES);

@@ -345,17 +345,17 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 					poison = hero_is_poisoned(patient);
 
 					if (poison == 0) {
+
 						/* patient is not poisoned */
-						sprintf(g_dtp2,
-							get_ttx(463),
-							(char*)patient + HERO_NAME2);
+						sprintf(g_dtp2,	get_ttx(463), (char*)patient + HERO_NAME2);
 						GUI_output(g_dtp2);
+
 					} else if (host_readds(patient + HERO_HEAL_TIMER) > 0) {
+
 						/* patient timer is not zero */
-						sprintf(g_dtp2,
-							get_ttx(697),
-							(char*)patient + HERO_NAME2);
+						sprintf(g_dtp2,	get_ttx(697), (char*)patient + HERO_NAME2);
 						GUI_output(g_dtp2);
+
 					} else {
 						/* set patient timer */
 						host_writed(patient + HERO_HEAL_TIMER, HOURS(4)); /* 4 hours */
@@ -364,22 +364,15 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 							timewarp(MINUTES(20));
 
-							if (test_skill(hero, TA_HEILEN_GIFT, ds_readbs(POISON_PRICES + 2 * poison) + handicap) > 0) {
+							if (test_skill(hero, TA_HEILEN_GIFT, g_poison_prices[poison] + handicap) > 0) {
 								/* success */
-								sprintf(g_dtp2,
-									get_ttx(690),
-									(char*)hero + HERO_NAME2,
-									(char*)patient + HERO_NAME2);
-
+								sprintf(g_dtp2, get_ttx(690), (char*)hero + HERO_NAME2,	(char*)patient + HERO_NAME2);
 								GUI_output(g_dtp2);
 
 								host_writeb(patient + (HERO_POISON + 1) + 5 * poison, 0);
 								host_writeb(patient + HERO_POISON + 5 * poison, 1);
 
-								sprintf(g_dtp2,
-									get_ttx(692),
-									(char*)hero + HERO_NAME2,
-									(char*)patient + HERO_NAME2);
+								sprintf(g_dtp2,	get_ttx(692), (char*)hero + HERO_NAME2,	(char*)patient + HERO_NAME2);
 
 								if (GUI_bool(g_dtp2)) {
 
@@ -389,11 +382,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 									if ((l_si = test_skill(hero, TA_HEILEN_GIFT, le + handicap)) > 0) {
 
-										sprintf(g_dtp2,
-											get_ttx(691),
-											(char*)hero + HERO_NAME2,
-											(char*)patient + HERO_NAME2,
-											le);
+										sprintf(g_dtp2,	get_ttx(691), (char*)hero + HERO_NAME2,	(char*)patient + HERO_NAME2, le);
 
 										add_hero_le(patient, le);
 
@@ -409,11 +398,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 										sub_hero_le(patient, le_damage);
 
-										sprintf(g_dtp2,
-											get_ttx(694),
-											(char*)patient + HERO_NAME2,
-											le_damage);
-
+										sprintf(g_dtp2,	get_ttx(694), (char*)patient + HERO_NAME2, le_damage);
 										GUI_output(g_dtp2);
 
 										l_si = 0;
@@ -421,20 +406,12 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 								}
 							} else {
 								/* healing failed */
-								sprintf(g_dtp2,
-									get_ttx(689),
-									(char*)hero + HERO_NAME2,
-									(char*)patient + HERO_NAME2);
-
+								sprintf(g_dtp2,	get_ttx(689), (char*)hero + HERO_NAME2, (char*)patient + HERO_NAME2);
 								GUI_output(g_dtp2);
 							}
 						} else {
 							/* recognizing the poison failed */
-							sprintf(g_dtp2,
-								get_ttx(688),
-								(char*)hero + HERO_NAME2,
-								(char*)patient + HERO_NAME2);
-
+							sprintf(g_dtp2,	get_ttx(688), (char*)hero + HERO_NAME2,	(char*)patient + HERO_NAME2);
 							GUI_output(g_dtp2);
 						}
 					}

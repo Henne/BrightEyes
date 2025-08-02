@@ -281,7 +281,7 @@ void do_healer(void)
 						GUI_output(g_dtp2);
 					} else {
 						/* calculate price */
-						price = ds_readws(POISON_PRICES + poison * 2) * 20;
+						price = g_poison_prices[poison] * 20;
 						price += (host_readbs(healer_stats_ptr + HEALER_STATS_PRICE_MOD) * price) / 100;
 						if (motivation == 2)
 							price *= 2;
@@ -300,7 +300,7 @@ void do_healer(void)
 							} else {
 								timewarp(HOURS(1));
 
-								if (random_schick(100) <= (120 - host_readbs(healer_stats_ptr + HEALER_STATS_QUALITY) * 5) + ds_readws(POISON_DELAYS + poison * 2)) {
+								if (random_schick(100) <= (120 - host_readbs(healer_stats_ptr + HEALER_STATS_QUALITY) * 5) + g_poison_delays[poison]) {
 									/* cure the poison */
 									host_writeb(hero + (HERO_POISON + 1) + poison * SIZEOF_HERO_POISON, 0);
 									host_writeb(hero + (HERO_POISON) + poison * SIZEOF_HERO_POISON, 1);
