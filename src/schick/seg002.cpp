@@ -1459,14 +1459,14 @@ void refresh_screen_size1(void)
 			/* get lock */
 			ds_writew(MOUSE_LOCKED, 1);
 
-			if (ds_readws(MOUSE_POSX) < ds_readws(MOUSE_POINTER_OFFSETX))
-				ds_writew(MOUSE_POSX, ds_readw(MOUSE_POINTER_OFFSETX));
+			if (ds_readws(MOUSE_POSX) < g_mouse_pointer_offsetx)
+				ds_writew(MOUSE_POSX, g_mouse_pointer_offsetx);
 
 			if (ds_readws(MOUSE_POSX) > 315)
 				ds_writew(MOUSE_POSX, 315);
 
-			if (ds_readws(MOUSE_POSY) < ds_readws(MOUSE_POINTER_OFFSETY))
-				ds_writew(MOUSE_POSY, ds_readw(MOUSE_POINTER_OFFSETY));
+			if (ds_readws(MOUSE_POSY) < g_mouse_pointer_offsety)
+				ds_writew(MOUSE_POSY, g_mouse_pointer_offsety);
 
 			if (ds_readws(MOUSE_POSY) > 195)
 				ds_writew(MOUSE_POSY, 195);
@@ -1474,8 +1474,8 @@ void refresh_screen_size1(void)
 			save_mouse_bg();
 			ds_writew(MOUSE_POSX_BAK, ds_readw(MOUSE_POSX));
 			ds_writew(MOUSE_POSY_BAK, ds_readw(MOUSE_POSY));
-			ds_writew(MOUSE_POINTER_OFFSETX_BAK, ds_readw(MOUSE_POINTER_OFFSETX));
-			ds_writew(MOUSE_POINTER_OFFSETY_BAK, ds_readw(MOUSE_POINTER_OFFSETY));
+			g_mouse_pointer_offsetx_bak = g_mouse_pointer_offsetx;
+			g_mouse_pointer_offsety_bak = g_mouse_pointer_offsety;
 			draw_mouse_cursor();
 
 			/* put lock */
@@ -1495,10 +1495,10 @@ void mouse_19dc(void)
 		/* check if the new cursor is the default cursor */
 		if ((Bit8u*)ds_readd(CURRENT_CURSOR) == p_datseg + DEFAULT_MOUSE_CURSOR) {
 			/* set cursor size 0x0 */
-			ds_writew(MOUSE_POINTER_OFFSETX, ds_writew(MOUSE_POINTER_OFFSETY, 0));
+			g_mouse_pointer_offsetx = g_mouse_pointer_offsety = 0;
 		} else {
 			/* set cursor size 8x8 */
-			ds_writew(MOUSE_POINTER_OFFSETX, ds_writew(MOUSE_POINTER_OFFSETY, 8));
+			g_mouse_pointer_offsetx = g_mouse_pointer_offsety = 8;
 		}
 
 		/* reset mouse was moved */

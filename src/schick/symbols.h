@@ -150,10 +150,10 @@
 #define MOUSE_POSX_BAK                  (0x29a0)    /* unsigned short */
 #define MOUSE_POSY_BAK                  (0x29a2)    /* unsigned short */
 #define MOUSE_MOVED                     (0x29a4)    /* unsigned short; {0,1} */
-#define MOUSE_POINTER_OFFSETX           (0x29a6)    /* unsigned short */
-#define MOUSE_POINTER_OFFSETY           (0x29a8)    /* unsigned short */
-#define MOUSE_POINTER_OFFSETX_BAK       (0x29aa)    /* unsigned short */
-#define MOUSE_POINTER_OFFSETY_BAK       (0x29ac)    /* unsigned short */
+//#define MOUSE_POINTER_OFFSETX           (0x29a6)    /* unsigned short */
+//#define MOUSE_POINTER_OFFSETY           (0x29a8)    /* unsigned short */
+//#define MOUSE_POINTER_OFFSETX_BAK       (0x29aa)    /* unsigned short */
+//#define MOUSE_POINTER_OFFSETY_BAK       (0x29ac)    /* unsigned short */
 //#define ANI_ENABLED                     (0x29ae)    /* unsigned short; {0,1} */
 // ?2
 //#define STATUSMENU_ALLOWED              (0x29b2)    /* unsigned short; {0,1}, readonly */

@@ -82,6 +82,11 @@ extern Bit8u g_palette_unknown1[32][3];			//ds:0x2723; seg120
 extern Bit8u g_palette_fight1[32][3];			//ds:0x2783; seg032
 extern Bit8u g_palette_special[32][3];			//ds:0x27e3; seg029, seg093
 
+
+extern signed short g_mouse_pointer_offsetx;		//ds:0x29a6; seg002, seg004
+extern signed short g_mouse_pointer_offsety;		//ds:0x29a8; seg002, seg004
+extern signed short g_mouse_pointer_offsetx_bak;	//ds:0x29aa; seg002, seg004
+extern signed short g_mouse_pointer_offsety_bak;	//ds:0x29ac; seg002, seg004
 extern signed short g_ani_enabled;			//ds:0x29ae; seg004, seg026, seg027, seg097
 extern signed short g_statusmenu_allowed;		//ds:0x29b4; seg048
 extern signed short g_heroswap_allowed;			//ds:0x29b4; seg002, seg049, seg057
