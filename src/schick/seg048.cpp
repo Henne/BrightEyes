@@ -31,7 +31,7 @@ namespace M302de {
 /* Borlandified and identical */
 void reset_item_selector(void)
 {
-	if (ds_readws(STATUS_PAGE_MODE) < 3) {
+	if (g_status_page_mode < 3) {
 
 		/* remove the previous border */
 		do_border(g_vga_memstart,
@@ -105,7 +105,7 @@ void status_menu(signed short hero_pos)
 
 	ds_writew(REQUEST_REFRESH, 1);
 	ds_writew(ACTION, 0);
-	ds_writew(STATUS_PAGE_MODE, 1);
+	g_status_page_mode = 1;
 
 	while (flag1 == 0) {
 
@@ -121,7 +121,7 @@ void status_menu(signed short hero_pos)
 
 			update_status_bars();
 
-			if (ds_readws(STATUS_PAGE_MODE) < 3) {
+			if (g_status_page_mode < 3) {
 
 				if (hero1 == hero2) {
 					/* set the new red border */
@@ -180,7 +180,7 @@ void status_menu(signed short hero_pos)
 
 			} while (!host_readbs(get_hero(hero_pos) + HERO_TYPE) ||
 					host_readbs(get_hero(hero_pos) + HERO_GROUP_NO) != gs_current_group ||
-					(host_readbs(get_hero(hero_pos) + HERO_TYPE) < HERO_TYPE_WITCH && ds_readws(STATUS_PAGE_MODE) > 3));
+					(host_readbs(get_hero(hero_pos) + HERO_TYPE) < HERO_TYPE_WITCH && g_status_page_mode > 3));
 
 
 			if (ds_readbs(STATUSPAGE_SELITEM4_NO) != -1) {
@@ -212,7 +212,7 @@ void status_menu(signed short hero_pos)
 				if (hero_pos < 0) hero_pos = 6;
 			} while (!host_readbs(get_hero(hero_pos) + HERO_TYPE) ||
 					host_readbs(get_hero(hero_pos) + HERO_GROUP_NO) != gs_current_group ||
-					(host_readbs(get_hero(hero_pos) + HERO_TYPE) < HERO_TYPE_WITCH && ds_readws(STATUS_PAGE_MODE) > 3));
+					(host_readbs(get_hero(hero_pos) + HERO_TYPE) < HERO_TYPE_WITCH && g_status_page_mode > 3));
 
 
 			if (ds_readbs(STATUSPAGE_SELITEM4_NO) != -1) {
@@ -234,7 +234,7 @@ void status_menu(signed short hero_pos)
 			ds_writew(REQUEST_REFRESH, 1);
 		}
 
-		if (ds_readws(STATUS_PAGE_MODE) < 3) {
+		if (g_status_page_mode < 3) {
 
 			/* UP_KEY */
 			if (ds_readws(ACTION) == ACTION_ID_UP) {
@@ -445,7 +445,7 @@ void status_menu(signed short hero_pos)
 		}
 
 		/* check if the hero is diseased and print a message */
-		if (ds_readws(STATUS_PAGE_MODE) == 1 &&
+		if (g_status_page_mode == 1 &&
 			ds_readws(ACTION) == ACTION_ID_240 &&
 			hero_is_diseased(hero2))
 		{
@@ -461,7 +461,7 @@ void status_menu(signed short hero_pos)
 			ds_writed(CURRENT_CURSOR_BAK, ds_readd(CURRENT_CURSOR));
 			ds_writed(CURRENT_CURSOR, (Bit32u)(p_datseg + DEFAULT_MOUSE_CURSOR));
 
-			switch (ds_readws(STATUS_PAGE_MODE)) {
+			switch (g_status_page_mode) {
 			case 1: {
 				/* from start-page */
 
@@ -571,7 +571,7 @@ void status_menu(signed short hero_pos)
 
 								GUI_output((char*)g_dtp2);
 						} else {
-							ds_writew(STATUS_PAGE_MODE, 2);
+							g_status_page_mode = 2;
 							ds_writew(REQUEST_REFRESH, 1);
 						}
 						break;
@@ -583,7 +583,7 @@ void status_menu(signed short hero_pos)
 							reset_item_selector();
 						} else {
 							reset_item_selector();
-							ds_writew(STATUS_PAGE_MODE, 3);
+							g_status_page_mode = 3;
 							ds_writew(REQUEST_REFRESH, 1);
 						}
 						break;
@@ -595,7 +595,7 @@ void status_menu(signed short hero_pos)
 							GUI_output(get_ttx(215));
 						} else {
 							reset_item_selector();
-							ds_writew(STATUS_PAGE_MODE, 4);
+							g_status_page_mode = 4;
 							ds_writew(REQUEST_REFRESH, 1);
 						}
 						break;
@@ -678,13 +678,13 @@ void status_menu(signed short hero_pos)
 					}
 					case 5: {
 						/* TODO: different code is generated here */
-						ds_writew(STATUS_PAGE_MODE, 1);
+						g_status_page_mode = 1;
 						ds_writew(REQUEST_REFRESH, 1);
 						break;
 					}
 					case 6: {
 						reset_item_selector();
-						ds_writew(STATUS_PAGE_MODE, 3);
+						g_status_page_mode = 3;
 						ds_writew(REQUEST_REFRESH, 1);
 						break;
 					}
@@ -694,7 +694,7 @@ void status_menu(signed short hero_pos)
 							GUI_output(get_ttx(215));
 						} else {
 							reset_item_selector();
-							ds_writew(STATUS_PAGE_MODE, 4);
+							g_status_page_mode = 4;
 							ds_writew(REQUEST_REFRESH, 1);
 						}
 						break;
@@ -732,12 +732,12 @@ void status_menu(signed short hero_pos)
 						break;
 					}
 					case 2: {
-						ds_writew(STATUS_PAGE_MODE, 1);
+						g_status_page_mode = 1;
 						ds_writew(REQUEST_REFRESH, 1);
 						break;
 					}
 					case 3: {
-						ds_writew(STATUS_PAGE_MODE, 2);
+						g_status_page_mode = 2;
 						ds_writew(REQUEST_REFRESH, 1);
 						break;
 					}
@@ -746,7 +746,7 @@ void status_menu(signed short hero_pos)
 							/* not a spellcaster */
 							GUI_output(get_ttx(215));
 						} else {
-							ds_writew(STATUS_PAGE_MODE, 4);
+							g_status_page_mode = 4;
 							ds_writew(REQUEST_REFRESH, 1);
 						}
 						break;
@@ -789,25 +789,25 @@ void status_menu(signed short hero_pos)
 						break;
 					}
 					case 2: {
-						ds_writew(STATUS_PAGE_MODE, 1);
+						g_status_page_mode = 1;
 						ds_writew(REQUEST_REFRESH, 1);
 						break;
 					}
 					case 3: {
-						ds_writew(STATUS_PAGE_MODE, 2);
+						g_status_page_mode = 2;
 						ds_writew(REQUEST_REFRESH, 1);
 						break;
 					}
 					case 4: {
-						ds_writew(STATUS_PAGE_MODE, 3);
+						g_status_page_mode = 3;
 						ds_writew(REQUEST_REFRESH, 1);
 						break;
 					}
 					case 5: {
-						if (ds_readws(STATUS_PAGE_MODE) == 4)
-							ds_writew(STATUS_PAGE_MODE, 5);
+						if (g_status_page_mode == 4)
+							g_status_page_mode = 5;
 						else
-							ds_writew(STATUS_PAGE_MODE, 4);
+							g_status_page_mode = 4;
 						ds_writew(REQUEST_REFRESH, 1);
 						break;
 					}

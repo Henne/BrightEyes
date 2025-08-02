@@ -221,7 +221,7 @@ void status_show(Bit16u index)
 	g_pic_copy.dst = g_vga_memstart;
 
 	/* print inventory and silouette values */
-	if (ds_readws(STATUS_PAGE_MODE) < 3) {
+	if (g_status_page_mode < 3) {
 
 		nvf.src = g_buffer10_ptr;
 		nvf.type = 0;
@@ -338,7 +338,7 @@ void status_show(Bit16u index)
 
 
 	/* print page content */
-	switch (ds_readw(STATUS_PAGE_MODE)) {
+	switch (g_status_page_mode) {
 		/* base values */
 		case 1: {
 
@@ -699,7 +699,7 @@ void status_show(Bit16u index)
 
 	ds_writew(UPDATE_STATUSLINE, 1);
 
-	if (ds_readws(STATUS_PAGE_MODE) >= 3) {
+	if (g_status_page_mode >= 3) {
 		do_v_line(g_vga_memstart, 107, 54, 195, 0);
 		do_v_line(g_vga_memstart, 212, 54, 195, 0);
 	}

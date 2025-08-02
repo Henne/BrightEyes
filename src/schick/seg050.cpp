@@ -445,7 +445,7 @@ void level_up(signed short hero_pos)
 	GUI_output((char*)g_dtp2);
 
 	ds_writew(ACTION, 0);
-	ds_writew(STATUS_PAGE_MODE, 1);
+	g_status_page_mode = 1;
 
 	for (i = 0; i < 86; i++) {
 		host_writeb((Bit8u*)ds_readd(INC_SPELLS_COUNTER) + 2 * i,
