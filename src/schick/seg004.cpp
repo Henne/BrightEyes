@@ -322,7 +322,7 @@ void update_status_bars(void)
 		if (ds_readbs(PP20_INDEX) == ARCHIVE_FILE_ZUSTA_UK) {
 			/* in the status menu */
 
-			hero = get_hero(ds_readws(STATUS_PAGE_HERO));
+			hero = get_hero(g_status_page_hero);
 
 			/* adjust hunger to 100% */
 			if (host_readbs(hero + HERO_HUNGER) >= 100) {

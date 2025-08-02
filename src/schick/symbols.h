@@ -176,7 +176,7 @@
 #define DIALOGBOX_LOCK                  (0x2c98)    /* unsigned char; {0,1} */
 //#define TIMERS_DISABLED                 (0x2c99)    /* short */
 #define STATUS_PAGE_MODE                (0x2c9b)    /* signed short; one of 1,2,3,4,5 */
-#define STATUS_PAGE_HERO                (0x2c9d)    /* signed short */
+//#define STATUS_PAGE_HERO                (0x2c9d)    /* signed short */
 //#define STATUS_PAGE_HUNGER              (0x2c9f)    /* signed char */
 //#define STATUS_PAGE_THIRST              (0x2ca0)    /* signed char */
 //#define MISSING_FILE_GUILOCK            (0x2ca1)    /* unsigned char; writeonly (0,1) */

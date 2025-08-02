@@ -84,6 +84,7 @@ extern Bit8u g_palette_special[32][3];			//ds:0x27e3; seg029, seg093
 
 extern signed short g_timers_disabled;			//ds:0x2c99; seg002-seg050
 
+extern signed short g_status_page_hero;			//ds:0x2c9d; seg004, seg048, seg050
 extern signed char  g_status_page_hunger;		//ds:0x2c9f; seg004, seg048, seg050
 extern signed char  g_status_page_thirst;		//ds:0x2ca0; seg004, seg048, seg050
 extern signed char  g_missing_file_guilock;		//ds:0x2ca1; seg002

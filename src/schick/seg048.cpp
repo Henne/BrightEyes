@@ -111,7 +111,7 @@ void status_menu(signed short hero_pos)
 
 		if (ds_readw(REQUEST_REFRESH) != 0 || flag2 != 0) {
 
-			ds_writew(STATUS_PAGE_HERO, hero_pos);
+			g_status_page_hero = hero_pos;
 
 			update_mouse_cursor();
 

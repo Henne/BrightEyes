@@ -462,7 +462,7 @@ void level_up(signed short hero_pos)
 	/* increment level */
 	inc_ptr_bs(hero + HERO_LEVEL);
 
-	ds_writew(STATUS_PAGE_HERO, hero_pos);
+	g_status_page_hero = hero_pos;
 
 	status_show(hero_pos);
 
