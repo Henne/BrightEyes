@@ -46,7 +46,7 @@ void do_temple(void)
 	Bit32s donation;
 	signed short game_state;
 
-	ds_writew(INTEMPLE, ds_writew(INTEMPLE2, 0));
+	g_intemple = g_intemple2 = 0;
 	ds_writew(REQUEST_REFRESH, 1);
 
 	draw_loc_icons(9, MENU_ICON_HIRE_HERO, MENU_ICON_DISMISS_HERO, MENU_ICON_DELETE_HERO, MENU_ICON_LOAD_GAME, MENU_ICON_SAVE_GAME, MENU_ICON_QUIT_GAME, MENU_ICON_PRAY, MENU_ICON_SACRIFICE, MENU_ICON_LEAVE);
@@ -228,7 +228,7 @@ void do_temple(void)
 	copy_palette();
 	leave_location();
 
-	ds_writew(INTEMPLE, ds_writew(INTEMPLE2, 1));
+	g_intemple = g_intemple2 = 1;
 }
 
 void char_add(signed short temple_id)

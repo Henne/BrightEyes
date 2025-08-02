@@ -158,9 +158,9 @@
 // ?2
 #define STATUSMENU_ALLOWED              (0x29b2)    /* unsigned short; {0,1}, readonly */
 #define HEROSWAP_ALLOWED                (0x29b4)    /* unsigned short; {0,1} */
-#define INTEMPLE                        (0x29b6)    /* unsigned short; writeonly (0,1), 0 while in temple */
-#define INTEMPLE2                       (0x29b8)    /* unsigned short; {0,1}, copy of INTEMPLE */
-#define ALWAYS_ZERO3                    (0x29ba)    /* unsigned short; writeonly (0) */
+//#define INTEMPLE                        (0x29b6)    /* unsigned short; writeonly (0,1), 0 while in temple */
+//#define INTEMPLE2                       (0x29b8)    /* unsigned short; {0,1}, copy of INTEMPLE */
+//#define ALWAYS_ZERO3                    (0x29ba)    /* unsigned short; writeonly (0) */
 // ?16
 #define ACTION_TABLE_MENU               (0x29cc)    /* struct(10)[2]; struct{signed short x1, x2, y1, y2; unsigned short action;} */
 #define ACTION_TABLE_PRIMARY            (0x29e0)    /* Bit8u*; to ACTION_TABLE_MENU */

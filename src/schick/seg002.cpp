@@ -1537,7 +1537,7 @@ void handle_gui_input(void)
 
 	if (ds_readw(MOUSE1_EVENT2) == 0) {
 
-		ds_writew(ALWAYS_ZERO3, 0);
+		g_always_zero3 = 0;
 
 		if (ds_readw(HAVE_MOUSE) == 0) {
 		}

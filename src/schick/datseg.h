@@ -82,6 +82,8 @@ extern Bit8u g_palette_unknown1[32][3];			//ds:0x2723; seg120
 extern Bit8u g_palette_fight1[32][3];			//ds:0x2783; seg032
 extern Bit8u g_palette_special[32][3];			//ds:0x27e3; seg029, seg093
 
+extern signed short g_intemple;				//ds:0x29b6; seg061
+extern signed short g_intemple2;			//ds:0x29b8; seg061
 extern signed short g_always_zero3;			//ds:0x29ba; seg002
 
 extern signed short g_disease_prices[8];		//ds:0x2c50; seg053, seg104
