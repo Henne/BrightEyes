@@ -144,7 +144,7 @@ void draw_status_line(void)
 	for (i = 0; i < 7; i++) {
 
 		/* Clear name field */
-		do_fill_rect(g_vga_memstart, ds_readw(HERO_PIC_POSX + i * 2), 190, ds_readw(HERO_PIC_POSX + i * 2) + 41, 197, 0);
+		do_fill_rect(g_vga_memstart, g_hero_pic_posx[i], 190, g_hero_pic_posx[i] + 41, 197, 0);
 
 		if (host_readb(get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE) {
 
@@ -159,7 +159,7 @@ void draw_status_line(void)
 			}
 
 			/* print the name */
-			GUI_print_string((char*)g_dtp2, GUI_get_first_pos_centered((char*)g_dtp2, ds_readw(HERO_PIC_POSX + i * 2), 43, 0), 190);
+			GUI_print_string((char*)g_dtp2, GUI_get_first_pos_centered((char*)g_dtp2, g_hero_pic_posx[i], 43, 0), 190);
 		}
 
 		wait_for_vsync();
@@ -172,9 +172,9 @@ void draw_status_line(void)
 		} else {
 			if (host_readb(get_hero(i) + HERO_GROUP_NO) == gs_current_group) {
 
-				g_pic_copy.x1 = ds_readw(HERO_PIC_POSX + 2 * i);
+				g_pic_copy.x1 = g_hero_pic_posx[i];
 				g_pic_copy.y1 = 157;
-				g_pic_copy.x2 = ds_readw(HERO_PIC_POSX + 2 * i) + 31;
+				g_pic_copy.x2 = g_hero_pic_posx[i] + 31;
 				g_pic_copy.y2 = 188;
 
 				head_bak = -1;
@@ -213,9 +213,9 @@ void draw_status_line(void)
 				for (j = 0; j < 1024; src++, dst++, j++)
 					*dst = *src + 0x40;
 
-				g_pic_copy.x1 = ds_readw(HERO_PIC_POSX + 2 * i);
+				g_pic_copy.x1 = g_hero_pic_posx[i];
 				g_pic_copy.y1 = 157;
-				g_pic_copy.x2 = ds_readw(HERO_PIC_POSX + 2 * i) + 31;
+				g_pic_copy.x2 = g_hero_pic_posx[i] + 31;
 				g_pic_copy.y2 = 188;
 				g_pic_copy.src = g_renderbuf_ptr;
 
@@ -248,12 +248,12 @@ void clear_hero_icon(unsigned short pos)
 {
 
 	/* fill icon area black */
-	do_fill_rect(g_vga_memstart, ds_readw(HERO_PIC_POSX + pos * 2), 157, ds_readw(HERO_PIC_POSX + pos * 2) + 31, 188, 0);
+	do_fill_rect(g_vga_memstart, g_hero_pic_posx[pos], 157, g_hero_pic_posx[pos] + 31, 188, 0);
 
 	if (!host_readbs(get_hero(pos) + HERO_TYPE)) {
 
 		/* fill bars area black */
-		do_fill_rect(g_vga_memstart, ds_readw(HERO_PIC_POSX + pos * 2) + 33, 157, ds_readw(HERO_PIC_POSX + pos * 2) + 39, 188, 0);
+		do_fill_rect(g_vga_memstart, g_hero_pic_posx[pos] + 33, 157, g_hero_pic_posx[pos] + 39, 188, 0);
 	}
 }
 
@@ -361,10 +361,10 @@ void select_hero_icon(unsigned short pos) {
 	signed short fg_bak, bg_bak;
 
 	/* paint a blue border for the pic and bars */
-	do_border(g_vga_memstart, ds_readw(HERO_PIC_POSX + pos * 2) - 1, 156, ds_readw(HERO_PIC_POSX + pos * 2) + 42, 189, (signed char)0xfc);
+	do_border(g_vga_memstart, g_hero_pic_posx[pos] - 1, 156, g_hero_pic_posx[pos] + 42, 189, (signed char)0xfc);
 
 	/* paint a blue border for the name */
-	do_border(g_vga_memstart, ds_readw(HERO_PIC_POSX + pos * 2) - 1, 189, ds_readw(HERO_PIC_POSX + pos * 2) + 42, 198, (signed char)0xfc);
+	do_border(g_vga_memstart, g_hero_pic_posx[pos] - 1, 189, g_hero_pic_posx[pos] + 42, 198, (signed char)0xfc);
 
 	/* save the textcolors */
 	get_textcolor(&fg_bak, &bg_bak);
@@ -376,7 +376,7 @@ void select_hero_icon(unsigned short pos) {
 	set_textcolor(0xfc, 0);
 
 	/* print forename */
-	GUI_print_string((char*)g_dtp2, GUI_get_first_pos_centered((char*)g_dtp2, ds_readw(HERO_PIC_POSX + pos * 2), 43, 0), 190);
+	GUI_print_string((char*)g_dtp2, GUI_get_first_pos_centered((char*)g_dtp2, g_hero_pic_posx[pos], 43, 0), 190);
 
 	/* restore textcolors */
 	set_textcolor(fg_bak, bg_bak);
@@ -395,10 +395,10 @@ void deselect_hero_icon(unsigned short pos) {
 	signed short fg_bak, bg_bak;
 
 	/* paint a gray border for the pic and bars */
-	do_border(g_vga_memstart, ds_readw(HERO_PIC_POSX + pos * 2) - 1, 156, ds_readw(HERO_PIC_POSX + pos * 2) + 42, 189, (signed char)0xe6);
+	do_border(g_vga_memstart, g_hero_pic_posx[pos] - 1, 156, g_hero_pic_posx[pos] + 42, 189, (signed char)0xe6);
 
 	/* paint a gray border for the name */
-	do_border(g_vga_memstart, ds_readw(HERO_PIC_POSX + pos * 2) - 1, 189, ds_readw(HERO_PIC_POSX + pos * 2) + 42, 198, (signed char)0xe6);
+	do_border(g_vga_memstart, g_hero_pic_posx[pos] - 1, 189, g_hero_pic_posx[pos] + 42, 198, (signed char)0xe6);
 
 	/* save the textcolors */
 	get_textcolor(&fg_bak, &bg_bak);
@@ -410,7 +410,7 @@ void deselect_hero_icon(unsigned short pos) {
 	set_textcolor(0xff, 0);
 
 	/* print forename */
-	GUI_print_string((char*)g_dtp2, GUI_get_first_pos_centered((char*)g_dtp2, ds_readw(HERO_PIC_POSX + pos * 2), 43, 0), 190);
+	GUI_print_string((char*)g_dtp2, GUI_get_first_pos_centered((char*)g_dtp2, g_hero_pic_posx[pos], 43, 0), 190);
 
 	/* restore textcolors */
 	set_textcolor(fg_bak, bg_bak);

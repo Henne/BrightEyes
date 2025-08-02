@@ -490,7 +490,7 @@ void GRP_move_hero(signed short src_pos)
 		ds_writew(MOUSE_LOCKED, 1);
 		ds_writew(MOUSE_POSY, 157);
 
-		ds_writew(MOUSE_POSX, ds_readw(HERO_PIC_POSX + 2 * src_pos));
+		ds_writew(MOUSE_POSX, g_hero_pic_posx[src_pos]);
 		g_pic_copy.x1 = ds_readw(MOUSE_POSX);
 		g_pic_copy.y1 = ds_readw(MOUSE_POSY);
 		g_pic_copy.x2 = ds_readw(MOUSE_POSX) + 31;
@@ -505,9 +505,9 @@ void GRP_move_hero(signed short src_pos)
 
 		ds_writew(MOUSE_LOCKED, 1);
 
-		g_pic_copy.x1 = ds_readw(HERO_PIC_POSX + 2 * src_pos);
+		g_pic_copy.x1 = g_hero_pic_posx[src_pos];
 		g_pic_copy.y1 = 157;
-		g_pic_copy.x2 = ds_readw(HERO_PIC_POSX + 2 * src_pos) + 31;
+		g_pic_copy.x2 = g_hero_pic_posx[src_pos] + 31;
 		g_pic_copy.y2 = 188;
 		g_pic_copy.src = g_renderbuf_ptr;
 
@@ -567,7 +567,7 @@ void GRP_move_hero(signed short src_pos)
 		do_pic_copy(0);
 
 		dst_pos = 6;
-		while (ds_readws(HERO_PIC_POSX + --dst_pos * 2) > ds_readws(MOUSE_POSX))
+		while (g_hero_pic_posx[--dst_pos] > ds_readws(MOUSE_POSX))
 		{
 			;
 		}

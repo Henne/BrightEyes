@@ -1799,7 +1799,7 @@ struct{unsigned short x,y;} g_gui_buttons_pos[9] = {
 	{ 0x010c, 0x006f },
 	{ 0x0127, 0x006f }
 }; // ds:0x2cdd
-unsigned short g_hero_pic_posx[7] = { 0x0003, 0x002e, 0x0059, 0x0084, 0x00af, 0x00da, 0x0113 }; // ds:0x2d01
+const signed int g_hero_pic_posx[7] = { 3, 46, 89, 132, 175, 218, 275 }; // ds:0x2d01
 signed char g_levelup_ta_rise[12] = { 0x14, 0x14, 0x14, 0x14, 0x14, 0x14, 0x14, 0x14, 0x0f, 0x14, 0x14, 0x14 }; // ds:0x2d0f
 signed char g_levelup_sp_rise[6] = { 0x19, 0x19, 0x28, 0x14, 0x14, 0x14 }; // ds:0x2d1b
 signed char g_levelup_spta_conv[6] = { 5, 5, 5, 0, 0, 0 }; // ds:0x2d21
@@ -6324,20 +6324,7 @@ char **g_tx_index; // ds:0xc3b1, to index table of primary text file
 char **g_tx2_index; // ds:0xc3ad, to index table of secondary text file
 unsigned char *g_buffer8_ptr; // ds:0xc3a9, to buffer of size 12008
 struct{short pos; char loc, type; short id;} g_locations_tab[150]; // ds:0xc025
-#if 0
-unsigned short g_pic_copy_v4; // ds:0xc023
-unsigned short g_pic_copy_v3; // ds:0xc021
-unsigned short g_pic_copy_v2; // ds:0xc01f
-unsigned short g_pic_copy_v1; // ds:0xc01d
-void *g_pic_copy_src; // ds:0xc019
-signed short g_pic_copy_y2; // ds:0xc017
-signed short g_pic_copy_x2; // ds:0xc015
-signed short g_pic_copy_y1; // ds:0xc013
-signed short g_pic_copy_x1; // ds:0xc011
-unsigned char *g_pic_copy_dst; // ds:0xc00d
-#else
 struct struct_pic_copy g_pic_copy;	// ds:0xc00d
-#endif
 void *g_buyitems; // ds:0xc009, merchant's assortment
 void *g_sellitems; // ds:0xc005, also used for repair items
 signed short g_game_mode; // ds:0xc003, {-1 = Input error, 1 = Beginner, 2 = Advanced }

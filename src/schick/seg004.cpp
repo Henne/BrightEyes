@@ -480,7 +480,7 @@ void draw_bar(unsigned short type, signed short hero, signed short pts_cur, sign
 		update_mouse_cursor();
 
 	if (mode == 0) {
-		x = ds_readw(HERO_PIC_POSX + hero * 2) + type * 4 + 34;
+		x = g_hero_pic_posx[hero] + type * 4 + 34;
 		y_min = 188;
 		dst = g_vga_memstart;
 	} else {

@@ -198,7 +198,7 @@
 // ?2
 //#define SKILLED_HERO_POS                (0x2cdb)    /* signed short; {-1, 0..6} */
 #define GUI_BUTTONS_POS                 (0x2cdd)    /* struct(4)[9]; struct{unsigned short x,y;} */
-#define HERO_PIC_POSX                   (0x2d01)    /* unsigned short[7]; { 3, 46, 89, 132, 175, 218, 275 } */
+//#define HERO_PIC_POSX                   (0x2d01)    /* unsigned short[7]; { 3, 46, 89, 132, 175, 218, 275 } */
 //#define LEVELUP_TA_RISE                 (0x2d0f)    /* signed char[12] */
 //#define LEVELUP_SP_RISE                 (0x2d1b)    /* signed char[6] */
 //#define LEVELUP_SPTA_CONV               (0x2d21)    /* signed char[6]; { 5, 5, 5, 0, 0, 0 } */

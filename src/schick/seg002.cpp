@@ -3625,7 +3625,7 @@ void dec_splash(void)
 			/* check if hero is dead */
 			!hero_dead(get_hero(i))
 		) {
-			restore_rect(g_vga_memstart, get_hero(i) + HERO_PORTRAIT, ds_readw(HERO_PIC_POSX + i * 2), 157, 32, 32);
+			restore_rect(g_vga_memstart, get_hero(i) + HERO_PORTRAIT, g_hero_pic_posx[i], 157, 32, 32);
 		}
 	}
 }
@@ -3644,7 +3644,7 @@ void draw_splash(signed short hero_pos, signed short type)
 
 		Bit8u *splash = (type == 0 ? g_splash_le : g_splash_ae);
 
-		restore_rect_rle(g_vga_memstart, splash, ds_readw(HERO_PIC_POSX + 2 * hero_pos), 157, 32, 32, 2);
+		restore_rect_rle(g_vga_memstart, splash, g_hero_pic_posx[hero_pos], 157, 32, 32, 2);
 
 		/* how long the splash should be displayed */
 		ds_writeb(HERO_SPLASH_TIMER + hero_pos, 10);

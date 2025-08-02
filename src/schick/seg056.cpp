@@ -302,11 +302,8 @@ void buy_screen(void)
 
 			for (l_di = 0; l_di < 7; l_di++, hero1 += SIZEOF_HERO) {
 
-				do_fill_rect(g_vga_memstart,
-						ds_readws(HERO_PIC_POSX + 2 * l_di),
-						190,
-						ds_readws(HERO_PIC_POSX + 2 * l_di) + 41,
-						197, 0);
+				do_fill_rect(g_vga_memstart, g_hero_pic_posx[l_di], 190,
+						g_hero_pic_posx[l_di] + 41, 197, 0);
 
 				if (host_readbs(hero1 + HERO_TYPE) != HERO_TYPE_NONE) {
 					copy_forename((char*)g_dtp2, (char*)(hero1 + HERO_NAME2));
@@ -321,7 +318,7 @@ void buy_screen(void)
 						}
 					}
 
-					GUI_print_string((char*)g_dtp2, GUI_get_first_pos_centered((char*)g_dtp2, ds_readws(HERO_PIC_POSX + 2 * l_di), 43, 0),	190);
+					GUI_print_string((char*)g_dtp2, GUI_get_first_pos_centered((char*)g_dtp2, g_hero_pic_posx[l_di], 43, 0), 190);
 
 					set_textcolor(255, 0);
 				}

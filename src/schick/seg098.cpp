@@ -88,9 +88,9 @@ void magic_heal_ani(Bit8u *hero)
 		do_pic_copy(2);
 
 		/* copy buffer content to screen */
-		g_pic_copy.x1 = ds_readw(HERO_PIC_POSX + 2 * target_no);
+		g_pic_copy.x1 = g_hero_pic_posx[target_no];
 		g_pic_copy.y1 = 157;
-		g_pic_copy.x2 = ds_readw(HERO_PIC_POSX + 2 * target_no) + 31;
+		g_pic_copy.x2 = g_hero_pic_posx[target_no] + 31;
 		g_pic_copy.y2 = 188;
 		g_pic_copy.src = g_renderbuf_ptr;
 		g_pic_copy.dst = g_vga_memstart;
