@@ -243,15 +243,11 @@ signed short load_game_state(void)
 		l1 = ds_readws(UPDATE_STATUSLINE);
 		ds_writew(UPDATE_STATUSLINE, 0);
 
-		l4 = ds_readws(ANI_ENABLED);
-		ds_writew(ANI_ENABLED, 0);
+		l4 = g_ani_enabled;
+		g_ani_enabled = 0;
 
-		/* delete every file in TEMP */
-		sprintf(g_text_output_buf,
-			/* "TEMP\\%s" */
-			(char*)ds_readd(STR_TEMP_XX_PTR2),
-			/* "*.*" */
-			(char*)p_datseg + ALL_FILES_WILDCARD);
+		/* delete every file TEMP\\*.* */
+		sprintf(g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), (char*)p_datseg + ALL_FILES_WILDCARD);
 
 #if defined(__BORLANDC__)
 		l2 = findfirst(g_text_output_buf, &blk, 0);
@@ -259,10 +255,7 @@ signed short load_game_state(void)
 		if (l2 == 0) {
 
 			do {
-				sprintf(g_text_output_buf,
-					(char*)ds_readd(STR_TEMP_XX_PTR2),
-					((char*)(&blk))+ 30);
-
+				sprintf(g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), ((char*)(&blk))+ 30);
 				unlink(g_text_output_buf);
 
 				l2 = findnext(&blk);
@@ -404,7 +397,7 @@ signed short load_game_state(void)
 		load_area_description(2);
 
 		ds_writews(UPDATE_STATUSLINE, l1);
-		ds_writews(ANI_ENABLED, l4);
+		g_ani_enabled = l4;
 
 		refresh_screen_size();
 	}

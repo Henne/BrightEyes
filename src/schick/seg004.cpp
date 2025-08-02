@@ -102,7 +102,7 @@ void init_ani(Bit16u v1)
 
 	if ((v1 & 0x7f) != 1) {
 		wait_for_vsync();
-		ds_writew(ANI_ENABLED, 1);
+		g_ani_enabled = 1;
 	}
 
 	wait_for_vsync();
@@ -110,7 +110,7 @@ void init_ani(Bit16u v1)
 
 void set_var_to_zero(void)
 {
-	ds_writew(ANI_ENABLED, 0);
+	g_ani_enabled = 0;
 }
 
 void init_ani_busy_loop(unsigned short v1)
@@ -206,7 +206,7 @@ void interrupt timer_isr(void)
 	update_wallclock();
 	dec_splash();
 
-	if (ds_readws(ANI_ENABLED) != 0) {
+	if (g_ani_enabled) {
 
 		/* disable interrupts */
 		asm { cli; }
@@ -221,7 +221,7 @@ void interrupt timer_isr(void)
 
 		if (!l_di && (ds_readw(ANI_BUSY))) {
 
-			ds_writew(ANI_ENABLED, 0);
+			g_ani_enabled = 0;
 			ds_writew(ANI_BUSY, 0);
 		}
 
@@ -246,7 +246,7 @@ void interrupt timer_isr(void)
 						}
 
 						if (ds_readws(ANI_BUSY) != 0) {
-							ds_writew(ANI_ENABLED, 0);
+							g_ani_enabled = 0;
 							ds_writew(ANI_BUSY, 0);
 							break;
 						}

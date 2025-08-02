@@ -486,7 +486,7 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
 	signed short l11, l12, l13;
 	signed short l_si, l_di;
 
-	l13 = ds_readw(ANI_ENABLED);
+	l13 = g_ani_enabled;
 	l12 = ds_readw(UPDATE_STATUSLINE);
 	ds_writew(UPDATE_STATUSLINE, 0);
 

@@ -325,7 +325,7 @@ void load_ani(const signed short no)
 	if (no == g_current_ani)
 		return;
 
-	ds_writew(ANI_ENABLED, 0);
+	g_ani_enabled = 0;
 	/* set the new ani no*/
 	g_current_ani = no;
 	/* clear the old ani */
