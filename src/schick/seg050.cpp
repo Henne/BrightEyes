@@ -466,7 +466,7 @@ void level_up(signed short hero_pos)
 
 	status_show(hero_pos);
 
-	ds_writebs(STATUS_PAGE_HUNGER, ds_writebs(STATUS_PAGE_THIRST, -1));
+	g_status_page_hunger = g_status_page_thirst = -1;
 
 	update_status_bars();
 
@@ -508,7 +508,7 @@ void level_up(signed short hero_pos)
 
 		status_show(hero_pos);
 
-		ds_writebs(STATUS_PAGE_HUNGER, ds_writebs(STATUS_PAGE_THIRST, -1));
+		g_status_page_hunger = g_status_page_thirst = -1;
 
 		update_status_bars();
 	}
@@ -561,7 +561,7 @@ void level_up(signed short hero_pos)
 
 			status_show(hero_pos);
 
-			ds_writebs(STATUS_PAGE_HUNGER, ds_writebs(STATUS_PAGE_THIRST, -1));
+			g_status_page_hunger = g_status_page_thirst = -1;
 
 			update_status_bars();
 		} else {
@@ -600,7 +600,7 @@ void level_up(signed short hero_pos)
 		status_show(hero_pos);
 
 		/* update_the bars of the hero */
-		ds_writebs(STATUS_PAGE_HUNGER, ds_writebs(STATUS_PAGE_THIRST, -1));
+		g_status_page_hunger = g_status_page_thirst = -1;
 
 		update_status_bars();
 	}
@@ -667,7 +667,7 @@ void level_up(signed short hero_pos)
 	status_show(hero_pos);
 
 	/* update_the bars of the hero */
-	ds_writebs(STATUS_PAGE_HUNGER, ds_writebs(STATUS_PAGE_THIRST, -1));
+	g_status_page_hunger = g_status_page_thirst = -1;
 
 	update_status_bars();
 

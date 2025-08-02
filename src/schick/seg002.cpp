@@ -866,9 +866,9 @@ signed short load_regular_file(Bit16u index)
 
 		sprintf((char*)g_dtp2, g_str_file_missing_ptr, (char*)ds_readd(FNAMES + index * 4));
 
-		ds_writeb(MISSING_FILE_GUILOCK, 1);
+		g_missing_file_guilock = 1;
 		GUI_output((char*)g_dtp2);
-		ds_writeb(MISSING_FILE_GUILOCK, 0);
+		g_missing_file_guilock = 0;
 	}
 
 	return handle;

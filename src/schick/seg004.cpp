@@ -326,16 +326,16 @@ void update_status_bars(void)
 
 			/* adjust hunger to 100% */
 			if (host_readbs(hero + HERO_HUNGER) >= 100) {
-				host_writeb(hero + HERO_HUNGER, ds_writeb(STATUS_PAGE_HUNGER, 100));
+				host_writebs(hero + HERO_HUNGER, g_status_page_hunger = 100);
 			}
 
 			/* adjust thirst to 100% */
 			if (host_readbs(hero + HERO_THIRST) >= 100) {
-				host_writeb(hero + HERO_THIRST, ds_writeb(STATUS_PAGE_THIRST, 100));
+				host_writeb(hero + HERO_THIRST, g_status_page_thirst = 100);
 			}
 
 			/* hunger and thirst are at 100% */
-			if ((ds_readbs(STATUS_PAGE_HUNGER) == 100) && (ds_readbs(STATUS_PAGE_THIRST) == 100)) {
+			if ((g_status_page_hunger == 100) && (g_status_page_thirst == 100)) {
 				ds_writeb(STATUS_PAGE_HUNGER_MAX_COUNTER, ds_readbs(STATUS_PAGE_THIRST_MAX_COUNTER));
 				ds_writeb(STATUS_PAGE_HUNGER_MAX_COLOR, ds_readbs(STATUS_PAGE_THIRST_MAX_COLOR));
 			}
@@ -346,7 +346,7 @@ void update_status_bars(void)
 			asm { cli };
 #endif
 
-			if (ds_readbs(STATUS_PAGE_HUNGER) == 100) {
+			if (g_status_page_hunger == 100) {
 
 				if (inc_ds_bs_post(STATUS_PAGE_HUNGER_MAX_COUNTER) == 25) {
 
@@ -363,21 +363,21 @@ void update_status_bars(void)
 					ds_writeb(STATUS_PAGE_HUNGER_MAX_COUNTER, 0);
 				}
 
-			} else if (host_readbs(hero + HERO_HUNGER) != ds_readbs(STATUS_PAGE_HUNGER)) {
+			} else if (host_readbs(hero + HERO_HUNGER) != g_status_page_hunger) {
 
-				ds_writeb(STATUS_PAGE_HUNGER, host_readbs(hero + HERO_HUNGER));
+				g_status_page_hunger = host_readbs(hero + HERO_HUNGER);
 
 				update_mouse_cursor();
 
 				for (i = 0; i < 6; i++) {
-						do_h_line(g_vga_memstart, 260, ds_readbs(STATUS_PAGE_HUNGER) / 2 + 260, i + 36, 9);
-						do_h_line(g_vga_memstart, ds_readbs(STATUS_PAGE_HUNGER) / 2 + 260, 310, i + 36, 10);
+						do_h_line(g_vga_memstart, 260, g_status_page_hunger / 2 + 260, i + 36, 9);
+						do_h_line(g_vga_memstart, g_status_page_hunger / 2 + 260, 310, i + 36, 10);
 				}
 
 				refresh_screen_size();
 			}
 
-			if (ds_readbs(STATUS_PAGE_THIRST) == 100) {
+			if (g_status_page_thirst == 100) {
 
 				if (inc_ds_bs_post(STATUS_PAGE_THIRST_MAX_COUNTER) == 25) {
 
@@ -394,15 +394,15 @@ void update_status_bars(void)
 					ds_writeb(STATUS_PAGE_THIRST_MAX_COUNTER, 0);
 				}
 
-			} else if (host_readbs(hero + HERO_THIRST) != ds_readbs(STATUS_PAGE_THIRST)) {
+			} else if (host_readbs(hero + HERO_THIRST) != g_status_page_thirst) {
 
-				ds_writeb(STATUS_PAGE_THIRST, host_readbs(hero + HERO_THIRST));
+				g_status_page_thirst = host_readbs(hero + HERO_THIRST);
 
 				update_mouse_cursor();
 
 				for (i = 0; i < 6; i++) {
-						do_h_line(g_vga_memstart, 260, ds_readbs(STATUS_PAGE_THIRST) / 2 + 260, i + 43, 11);
-						do_h_line(g_vga_memstart, ds_readbs(STATUS_PAGE_THIRST) / 2 + 260, 310, i + 43, 12);
+						do_h_line(g_vga_memstart, 260, g_status_page_thirst / 2 + 260, i + 43, 11);
+						do_h_line(g_vga_memstart, g_status_page_thirst / 2 + 260, 310, i + 43, 12);
 				}
 
 				refresh_screen_size();
