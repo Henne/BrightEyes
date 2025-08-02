@@ -1620,7 +1620,7 @@ void handle_gui_input(void)
 				}
 			} else {
 				/* swap heroes by click - move mouse - click */
-				if ((ds_readws(HEROSWAP_ALLOWED) != 0) &&
+				if (g_heroswap_allowed &&
 					(host_readbs(get_hero(l_si - 241) + HERO_TYPE) != HERO_TYPE_NONE) &&
 						host_readbs(get_hero(l_si - 241) + HERO_GROUP_NO) == gs_current_group)
 				{

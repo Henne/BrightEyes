@@ -94,7 +94,7 @@ void sell_screen(Bit8u *shop_ptr)
 	signed short tmp[7][23];
 
 
-	ds_writew(HEROSWAP_ALLOWED, 0);
+	g_heroswap_allowed = 0;
 	l8 = ds_writews(REQUEST_REFRESH, 1);
 	ds_writed(SELLITEMS, (Bit32u)(g_fig_figure1_buf + 2100));
 
@@ -555,7 +555,7 @@ void sell_screen(Bit8u *shop_ptr)
 	set_textcolor(fg_bak, bg_bak);
 	ds_writew(REQUEST_REFRESH, 1);
 	ds_writeb(PP20_INDEX, 0xff);
-	ds_writew(HEROSWAP_ALLOWED, 1);
+	g_heroswap_allowed = 1;
 }
 
 #if !defined(__BORLANDC__)

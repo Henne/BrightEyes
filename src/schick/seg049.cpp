@@ -408,7 +408,7 @@ void GRP_swap_heroes(void)
 	signed char i;
 	signed char tmp[SIZEOF_HERO];
 
-	if ((ds_readw(HEROSWAP_ALLOWED) == 0) || !gs_group_member_counts[gs_current_group]) {
+	if (!g_heroswap_allowed || !gs_group_member_counts[gs_current_group]) {
 		return;
 	}
 
