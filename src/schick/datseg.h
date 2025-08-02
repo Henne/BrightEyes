@@ -84,6 +84,7 @@ extern Bit8u g_palette_special[32][3];			//ds:0x27e3; seg029, seg093
 
 extern signed short g_timers_disabled;			//ds:0x2c99; seg002-seg050
 
+extern signed char g_ani_unknown_flag;			//ds:0x2cca; seg004 WRITEONLY
 extern signed short g_area_prepared;			//ds:0x2ccb; seg024-seg089
 extern unsigned char g_always_zero4;			//ds:0x2cce; seg032
 extern signed short g_current_ani;			//ds:0x2ccf; seg004-seg120

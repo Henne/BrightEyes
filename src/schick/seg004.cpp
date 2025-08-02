@@ -67,9 +67,9 @@ void init_ani(Bit16u v1)
 		}
 
 		if (v1 & 0x80)
-			ds_writeb(ANI_UNKNOWN_FLAG, 0);
+			g_ani_unknown_flag = 0;
 		else
-			ds_writeb(ANI_UNKNOWN_FLAG, 1);
+			g_ani_unknown_flag = 1;
 
 		update_mouse_cursor();
 
