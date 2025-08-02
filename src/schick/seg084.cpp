@@ -380,7 +380,7 @@ signed short DNG09_handler(void)
 		}
 
 		set_var_to_zero();
-		ds_writews(AREA_PREPARED, -1);
+		g_area_prepared = -1;
 
 	} else if (target_pos == DNG_POS(1,4,2) &&
 			(target_pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&

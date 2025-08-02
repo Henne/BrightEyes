@@ -187,7 +187,7 @@
 #define TRAVEL_MAP_LOADED               (0x2ca8)    /* signed char */
 // ?33
 #define ANI_UNKNOWN_FLAG                (0x2cca)    /* unsigned char; writeonly (0,1) */
-#define AREA_PREPARED                   (0x2ccb)    /* signed short; -1 = unprepared, 0 = dungeon, 1 = town */
+//#define AREA_PREPARED                   (0x2ccb)    /* signed short; -1 = unprepared, 0 = dungeon, 1 = town */
 // ?1
 //#define ALWAYS_ZERO4                    (0x2cce)    /* char; writeonly (0) */
 //#define CURRENT_ANI                     (0x2ccf)    /* short */

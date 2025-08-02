@@ -785,7 +785,7 @@ void do_dungeon(void)
 {
 	signed short tw_bak;
 
-	if (ds_readbs(DNG_AREA_LOADED) != gs_dungeon_index || ds_readws(AREA_PREPARED) != 0 || ds_readws(DNG_INIT_FLAG) != 0)
+	if (ds_readbs(DNG_AREA_LOADED) != gs_dungeon_index || g_area_prepared || ds_readws(DNG_INIT_FLAG) != 0)
 	{
 		ds_writed(DNG_MAP_PTR, (Bit32u)(((Bit8u*)p_datseg) + DNG_MAP));
 

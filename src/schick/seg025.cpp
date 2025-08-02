@@ -387,7 +387,7 @@ void show_treasure_map(void)
 		} else {
 			g_current_ani = -1;
 			ds_writew(REQUEST_REFRESH, 1);
-			ds_writew(AREA_PREPARED, -1);
+			g_area_prepared = -1;
 			g_special_screen = 0;
 			draw_main_screen();
 		}
@@ -412,7 +412,7 @@ signed short game_options(void)
 	g_textbox_width = 3;
 	g_special_screen = 1;
 	g_wallclock_update = 0;
-	ds_writew(AREA_PREPARED, -1);
+	g_area_prepared = -1;
 	ds_writed(CURRENT_CURSOR, (Bit32u)(p_datseg + DEFAULT_MOUSE_CURSOR));
 
 	load_pp20(ARCHIVE_FILE_BUCH_DAT);

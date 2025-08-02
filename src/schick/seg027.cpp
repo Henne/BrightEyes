@@ -515,7 +515,7 @@ void load_ani(const signed short no)
 	ani_len = ani_end_ptr - (Bit8u*)g_buffer9_ptr;
 	/* this is always true */
 	if (ani_len > g_ani_unknown4) {
-		ds_writew(AREA_PREPARED, 0xffff);
+		g_area_prepared = -1;
 	}
 }
 

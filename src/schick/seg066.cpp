@@ -319,7 +319,7 @@ void TLK_eremit(signed short state)
 
 void do_town(void)
 {
-	if ((ds_readbs(CITY_AREA_LOADED) != gs_current_town) ||	(ds_readws(AREA_PREPARED) != 1))
+	if ((ds_readbs(CITY_AREA_LOADED) != gs_current_town) ||	(g_area_prepared != 1))
 	{
 		seg028_0555(1);
 

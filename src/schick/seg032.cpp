@@ -1258,7 +1258,7 @@ signed short do_fight(signed short fight_id)
 	g_in_fight = 0;
 	ds_writew(REQUEST_REFRESH, 1);
 	g_current_ani = -1;
-	ds_writew(AREA_PREPARED, -1);
+	g_area_prepared = -1;
 	g_timers_disabled = 0;
 	g_autofight = 0;
 	g_check_party = 1;

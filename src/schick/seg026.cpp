@@ -102,7 +102,7 @@ void load_ltx(unsigned short index)
 	signed short fd;
 
 	fd = load_archive_file(index);
-	ds_writew(AREA_PREPARED, 0xffff);
+	g_area_prepared = -1;
 	len = (signed short)read_archive_file(fd, ((Bit8u*)g_buffer9_ptr3) + 1000, 64000);
 	close(fd);
 
@@ -137,7 +137,7 @@ void load_ggsts_nvf(void)
 	/* close it */
 	close(fd);
 
-	ds_writew(AREA_PREPARED, 0xffff);
+	g_area_prepared = -1;
 }
 
 void prepare_chr_name(char *dst, char *src)
@@ -391,7 +391,7 @@ signed short load_game_state(void)
 			}
 		}
 
-		ds_writew(AREA_PREPARED, -1);
+		g_area_prepared = -1;
 		ds_writew(REQUEST_REFRESH, retval = 1);
 		g_check_disease = 0;
 		g_check_poison = 0;

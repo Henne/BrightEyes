@@ -460,7 +460,7 @@ signed short DNG05_handler(void)
 		set_var_to_zero();
 
 		gs_x_target = (5);
-		ds_writew(AREA_PREPARED, -1);
+		g_area_prepared = -1;
 
 	} else if (pos == DNG_POS(0,6,15) && pos != gs_dng_handled_pos)
 	{

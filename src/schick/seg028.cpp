@@ -55,7 +55,7 @@ void prepare_dungeon_area(void)
 
 	load_tx(index);
 
-	if ((ds_readws(AREA_PREPARED) == -1) || (ds_readws(AREA_PREPARED) == 1)) {
+	if ((g_area_prepared == -1) || (g_area_prepared == 1)) {
 
 		set_var_to_zero();
 		g_current_ani = -1;
@@ -95,7 +95,7 @@ void prepare_dungeon_area(void)
 
 		g_buffer11_ptr = (((HugePt)g_buffer9_ptr) + v2) - 0xc0L;
 
-		ds_writew(AREA_PREPARED, !gs_dungeon_index);
+		g_area_prepared = !gs_dungeon_index;
 	}
 
 	ds_writeb(DNG_AREA_LOADED, gs_dungeon_index);
@@ -144,7 +144,7 @@ void seg028_0224(void)
 
 	load_tx(l1);
 
-	if ((ds_readws(AREA_PREPARED) == -1) || (ds_readws(AREA_PREPARED) == 0)) {
+	if ((g_area_prepared == -1) || (g_area_prepared == 0)) {
 
 		set_var_to_zero();
 
@@ -195,7 +195,7 @@ void seg028_0224(void)
 			memcpy(gs_palette_floor, g_buffer11_ptr, 0x60);
 		}
 
-		ds_writew(AREA_PREPARED, 1);
+		g_area_prepared = 1;
 	}
 
 	ds_writeb(CITY_AREA_LOADED, gs_current_town);
@@ -432,7 +432,7 @@ void load_map(void)
 	wallclock_update_bak = g_wallclock_update;
 	g_wallclock_update = 0;
 
-	ds_writew(AREA_PREPARED, 0xffff);
+	g_area_prepared = -1;
 	/* set current_ani to -1 */
 	g_current_ani = -1;
 

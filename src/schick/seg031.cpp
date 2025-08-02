@@ -319,7 +319,7 @@ Bit8u* load_current_town_gossip(void)
 	load_ltx(gs_current_town + ARCHIVE_FILE_CITY_LTX);
 
 	/* mark some buffers invalid */
-	ds_writews(AREA_PREPARED, g_current_ani = -1);
+	g_area_prepared = g_current_ani = -1;
 
 	/* get the pointer to the ltx buffer */
 	ptr = (Bit8u*)g_buffer9_ptr3;
