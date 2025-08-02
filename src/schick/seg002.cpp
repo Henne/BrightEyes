@@ -1176,7 +1176,7 @@ void interrupt mouse_isr(void)
 
 		if (((gs_dungeon_index != DUNGEONS_NONE) || (gs_current_town != TOWNS_NONE)) &&
 				!gs_current_loctype &&
-				!ds_readbs(DIALOGBOX_LOCK) &&
+				!g_dialogbox_lock &&
 				(ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK))
 		{
 			ds_writed(CURRENT_CURSOR, (Bit32u) (is_mouse_in_rect(68, 4, 171, 51) ? (p_datseg + CURSOR_ARROW_UP):
@@ -1186,7 +1186,7 @@ void interrupt mouse_isr(void)
 							(!is_mouse_in_rect(16, 4, 223, 138) ? (p_datseg + DEFAULT_MOUSE_CURSOR) :
 								(void*)ds_readd(CURRENT_CURSOR)))))));
 		} else {
-			if (ds_readbs(DIALOGBOX_LOCK) != 0) {
+			if (g_dialogbox_lock != 0) {
 				ds_writed(CURRENT_CURSOR, (Bit32u) (p_datseg + DEFAULT_MOUSE_CURSOR));
 			}
 		}
@@ -1555,14 +1555,14 @@ void handle_gui_input(void)
 		}
 
 		/* Ctrl + S -> sound menu */
-		if ((ds_readw(BIOSKEY_EVENT) == 0x13) && !ds_readbs(DIALOGBOX_LOCK)) {
+		if ((ds_readw(BIOSKEY_EVENT) == 0x13) && !g_dialogbox_lock) {
 			sound_menu();
 		}
 
 		/* Ctrl + P -> pause game */
 		if ((ds_readw(BIOSKEY_EVENT) == 0x10) &&
 			(ds_readws(BIOSKEY_EVENT10) == 0) &&
-			!ds_readbs(DIALOGBOX_LOCK) &&
+			!g_dialogbox_lock &&
 			(ds_readws(PREGAME_STATE) == 0))
 		{
 			ds_writew(BIOSKEY_EVENT10, 1);
@@ -1722,7 +1722,7 @@ void handle_input(void)
 		}
 
 		/* Ctrl + S -> sound menu */
-		if ((ds_readw(BIOSKEY_EVENT) == 0x13) && !ds_readbs(DIALOGBOX_LOCK)) {
+		if ((ds_readw(BIOSKEY_EVENT) == 0x13) && !g_dialogbox_lock) {
 			sound_menu();
 		}
 
@@ -1730,7 +1730,7 @@ void handle_input(void)
 		/* TODO: use tw_bak here */
 		if ((ds_readw(BIOSKEY_EVENT) == 0x10) &&
 			(ds_readws(BIOSKEY_EVENT10) == 0) &&
-			!ds_readbs(DIALOGBOX_LOCK) &&
+			!g_dialogbox_lock &&
 			(ds_readws(PREGAME_STATE) == 0))
 		{
 			g_timers_disabled++;
@@ -3058,7 +3058,7 @@ void herokeeping(void)
 		}
 
 		/* print hero message */
-		if (gs_food_message[i] && !ds_readbs(DIALOGBOX_LOCK) &&	!g_in_fight && !ds_readbs(FREEZE_TIMERS))
+		if (gs_food_message[i] && !g_dialogbox_lock &&	!g_in_fight && !ds_readbs(FREEZE_TIMERS))
 		{
 
 			if ((host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
@@ -3088,7 +3088,7 @@ void herokeeping(void)
 
 
 		/* print unconscious message */
-		if (gs_unconscious_message[i] && !ds_readbs(DIALOGBOX_LOCK)) {
+		if (gs_unconscious_message[i] && !g_dialogbox_lock) {
 
 			if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
@@ -3614,7 +3614,7 @@ void dec_splash(void)
 
 		/* I have no clue */
 		if (
-			!ds_readbs(DIALOGBOX_LOCK) &&
+			!g_dialogbox_lock &&
 			/* Check if splash timer is 0 */
 			(ds_readbs(HERO_SPLASH_TIMER + i) != 0) &&
 			!add_ds_bu(HERO_SPLASH_TIMER + i, -1) &&

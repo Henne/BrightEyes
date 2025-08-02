@@ -81,7 +81,7 @@ void TRV_event(signed short travel_event)
 	g_basepos_y = 0;
 	ds_writeb(SHOW_TRAVEL_MAP, 0);
 	g_textbox_width = 9;
-	ds_writeb(DIALOGBOX_LOCK, 1);
+	g_dialogbox_lock = 1;
 	ds_writeb(TRAVEL_EVENT_ACTIVE, 1);
 
 #if !defined(__BORLANDC__)
@@ -95,7 +95,7 @@ void TRV_event(signed short travel_event)
 	g_basepos_x = bak1;
 	g_basepos_y = bak2;
 	g_textbox_width = tw_bak;
-	ds_writeb(DIALOGBOX_LOCK, 0);
+	g_dialogbox_lock = 0;
 	load_tx(ARCHIVE_FILE_MAPTEXT_LTX);
 	g_wallclock_update = 1;
 }

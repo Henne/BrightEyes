@@ -737,7 +737,7 @@ void update_wallclock(void)
 
 	if ((g_wallclock_update != 0) &&
 		((ds_readb(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) || (ds_readb(PP20_INDEX) == ARCHIVE_FILE_KARTE_DAT)) &&
-		!ds_readbs(DIALOGBOX_LOCK))
+		!g_dialogbox_lock)
 	{
 
 		if ((gs_day_timer >= HOURS(7)) && (gs_day_timer <= HOURS(19))) {

@@ -173,7 +173,7 @@
 #define DISEASE_DELAYS                  (0x2c60)    /* signed short[8] */
 #define POISON_PRICES                   (0x2c70)    /* signed short[10] */
 #define POISON_DELAYS                   (0x2c84)    /* signed short[10] */
-#define DIALOGBOX_LOCK                  (0x2c98)    /* unsigned char; {0,1} */
+//#define DIALOGBOX_LOCK                  (0x2c98)    /* unsigned char; {0,1} */
 //#define TIMERS_DISABLED                 (0x2c99)    /* short */
 //#define STATUS_PAGE_MODE                (0x2c9b)    /* signed short; one of 1,2,3,4,5 */
 //#define STATUS_PAGE_HERO                (0x2c9d)    /* signed short */

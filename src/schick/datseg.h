@@ -82,6 +82,7 @@ extern Bit8u g_palette_unknown1[32][3];			//ds:0x2723; seg120
 extern Bit8u g_palette_fight1[32][3];			//ds:0x2783; seg032
 extern Bit8u g_palette_special[32][3];			//ds:0x27e3; seg029, seg093
 
+extern signed char  g_dialogbox_lock;			//ds:0x2c98; seg002, seg004, seg097, seg109
 extern signed short g_timers_disabled;			//ds:0x2c99; seg002-seg050
 extern signed short g_status_page_mode;			//ds:0x2c9b; seg046, seg048, seg050
 extern signed short g_status_page_hero;			//ds:0x2c9d; seg004, seg048, seg050

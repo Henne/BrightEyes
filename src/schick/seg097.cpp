@@ -346,7 +346,7 @@ signed short GUI_input(char *str, unsigned short num)
 
 	l6 = g_wallclock_update;
 	g_wallclock_update = 0;
-	ds_writeb(DIALOGBOX_LOCK, 1);
+	g_dialogbox_lock = 1;
 	ds_writew(GUI_TEXT_CENTERED, 1);
 
 	l3 = ds_readw(TEXTLINE_POSX);
@@ -414,7 +414,7 @@ signed short GUI_input(char *str, unsigned short num)
 	ds_writew(TEXTLINE_MAXLEN, l5);
 
 	ds_writew(ACTION, 0);
-	ds_writeb(DIALOGBOX_LOCK, 0);
+	g_dialogbox_lock = 0;
 
 	g_wallclock_update = l6;
 	ds_writew(GUI_TEXT_CENTERED, 0);
@@ -494,7 +494,7 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
 
 	l11 = g_wallclock_update;
 	g_wallclock_update = 0;
-	ds_writeb(DIALOGBOX_LOCK, 1);
+	g_dialogbox_lock = 1;
 	l7 = ds_readw(TEXTLINE_POSX);
 	l8 = ds_readw(TEXTLINE_POSY);
 	l9 = ds_readw(TEXTLINE_MAXLEN);
@@ -593,7 +593,7 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
 
 	g_wallclock_update = l11;
 
-	ds_writew(ACTION, ds_writebs(DIALOGBOX_LOCK, 0));
+	ds_writew(ACTION, g_dialogbox_lock = 0);
 
 	ds_writew(UPDATE_STATUSLINE, l12);
 
@@ -733,7 +733,7 @@ signed short GUI_radio(char *text, signed char options, ...)
 	}
 
 
-	ds_writeb(DIALOGBOX_LOCK, 1);
+	g_dialogbox_lock = 1;
 	l7 = ds_readw(TEXTLINE_POSX);
 	l8 = ds_readw(TEXTLINE_POSY);
 	l9 = ds_readw(TEXTLINE_MAXLEN);
@@ -787,7 +787,7 @@ signed short GUI_radio(char *text, signed char options, ...)
 	ds_writew(TEXTLINE_POSY, l8);
 	ds_writew(TEXTLINE_MAXLEN, l9);
 	ds_writew(TXT_TABPOS1, l10);
-	ds_writew(ACTION, ds_writebs(DIALOGBOX_LOCK, 0));
+	ds_writew(ACTION, g_dialogbox_lock = 0);
 	ds_writew(UPDATE_STATUSLINE, l12);
 
 	return retval;
