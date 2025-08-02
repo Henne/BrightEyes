@@ -182,8 +182,7 @@ void sell_screen(Bit8u *shop_ptr)
 				do_fill_rect(g_vga_memstart, 26, 26, 105, 33, 0);
 
 				make_valuta_str((char*)g_dtp2, p_money);
-				GUI_print_string(g_dtp2,
-					104 - GUI_get_space_for_string(g_dtp2, 0), 26);
+				GUI_print_string((char*)g_dtp2, 104 - GUI_get_space_for_string((char*)g_dtp2, 0), 26);
 			}
 
 			update_mouse_cursor();
@@ -225,8 +224,8 @@ void sell_screen(Bit8u *shop_ptr)
 							{
 								my_itoa(nice, (char*)g_dtp2, 10);
 
-								GUI_print_string(g_dtp2,
-									array3.a[items_x] + 16 - GUI_get_space_for_string(g_dtp2, 0),
+								GUI_print_string((char*)g_dtp2,
+									array3.a[items_x] + 16 - GUI_get_space_for_string((char*)g_dtp2, 0),
 									array5.a[l_di] + 9);
 
 								if (tmp[hero_pos][host_readbs((Bit8u*)ds_readd(SELLITEMS) + 7 * answer + 6)] != 0)
@@ -234,8 +233,8 @@ void sell_screen(Bit8u *shop_ptr)
 									set_textcolor(201, 0);
 									my_itoa(tmp[hero_pos][host_readbs((Bit8u*)ds_readd(SELLITEMS) + 7 * answer + 6)], (char*)g_dtp2, 10);
 
-									GUI_print_string(g_dtp2,
-										array3.a[items_x] + 16 - GUI_get_space_for_string(g_dtp2, 0),
+									GUI_print_string((char*)g_dtp2,
+										array3.a[items_x] + 16 - GUI_get_space_for_string((char*)g_dtp2, 0),
 										array5.a[l_di] + 1);
 
 									set_textcolor(255, 0);
@@ -252,7 +251,7 @@ void sell_screen(Bit8u *shop_ptr)
 							set_textcolor(201, 0);
 						}
 
-						GUI_print_string(g_dtp2, array3.a[items_x] + 20, array5.a[l_di] + 5);
+						GUI_print_string((char*)g_dtp2, array3.a[items_x] + 20, array5.a[l_di] + 5);
 						set_textcolor(255, 0);
 					}
 				}
@@ -261,7 +260,7 @@ void sell_screen(Bit8u *shop_ptr)
 			do_fill_rect(g_vga_memstart, 135, 26, 214, 33, 0);
 
 			make_valuta_str((char*)g_dtp2, price);
-			GUI_print_string(g_dtp2, 135, 26);
+			GUI_print_string((char*)g_dtp2, 135, 26);
 
 			l5 = -1;
 

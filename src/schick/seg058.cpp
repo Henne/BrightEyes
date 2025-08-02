@@ -246,8 +246,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 					do_fill_rect(g_vga_memstart, 26, 26, 105, 33, 0);
 
 					make_valuta_str((char*)g_dtp2, host_readds(hero2 + HERO_MONEY));
-					GUI_print_string(g_dtp2,
-						104 - GUI_get_space_for_string(g_dtp2, 0), 26);
+					GUI_print_string((char*)g_dtp2, 104 - GUI_get_space_for_string((char*)g_dtp2, 0), 26);
 				}
 
 				update_mouse_cursor();
@@ -289,8 +288,8 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 								{
 									my_itoa(val, (char*)g_dtp2, 10);
 
-									GUI_print_string(g_dtp2,
-										array3.a[items_x] + 16 - GUI_get_space_for_string(g_dtp2, 0),
+									GUI_print_string((char*)g_dtp2,
+										array3.a[items_x] + 16 - GUI_get_space_for_string((char*)g_dtp2, 0),
 										array5.a[l_si] + 9);
 
 								}
@@ -302,7 +301,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 								host_readws((Bit8u*)ds_readd(SELLITEMS) + 2 + 7 * answer));
 
 
-							GUI_print_string(g_dtp2, array3.a[items_x] + 20, array5.a[l_si] + 5);
+							GUI_print_string((char*)g_dtp2, array3.a[items_x] + 20, array5.a[l_si] + 5);
 						}
 					}
 				}
@@ -392,9 +391,8 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 						make_valuta_str((char*)g_text_output_buf, price);
 
-						sprintf((char*)g_dtp2,
-							get_ttx(488),
-							(char*)(GUI_names_grammar((signed short)0x8002, item_id, 0)),
+						sprintf((char*)g_dtp2, get_ttx(488),
+							(char*)GUI_names_grammar((signed short)0x8002, item_id, 0),
 							g_text_output_buf);
 
 

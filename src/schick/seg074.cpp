@@ -390,7 +390,7 @@ void draw_automap_square(signed short x, signed short y, signed short color, sig
 	}
 
 	g_pic_copy.dst = p_img_tile;
-	g_pic_copy.src = tile;
+	g_pic_copy.src = (Bit8u*)tile;
 
 	do_pic_copy(0);
 }

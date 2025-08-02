@@ -265,9 +265,9 @@ void char_add(signed short temple_id)
 
 						if (!host_readbs(hero + HERO_TYPE)) {
 
-							prepare_chr_name(g_dtp2, (char*)(ptr + 32 * l_si));
+							prepare_chr_name((char*)g_dtp2, (char*)(ptr + 32 * l_si));
 
-							if (read_chr_temp(g_dtp2, i, gs_current_group)) {
+							if (read_chr_temp((char*)g_dtp2, i, gs_current_group)) {
 								gs_total_hero_counter++;
 								gs_group_member_counts[gs_current_group]++;
 								host_writebs(hero + HERO_GROUP_POS, i + 1);
@@ -369,11 +369,11 @@ signed short char_erase(void)
 
 				sprintf((char*)g_text_output_buf, get_ttx(295),	g_dtp2);
 
-				if (GUI_bool(g_text_output_buf)) {
+				if (GUI_bool((char*)g_text_output_buf)) {
 
-					prepare_chr_name(g_text_output_buf, g_dtp2);
+					prepare_chr_name((char*)g_text_output_buf, (char*)g_dtp2);
 
-					unlink_ret = unlink(g_text_output_buf);
+					unlink_ret = unlink((char*)g_text_output_buf);
 
 					if (unlink_ret != 0) {
 						GUI_output(get_ttx(294));
@@ -381,7 +381,7 @@ signed short char_erase(void)
 					}
 
 					sprintf((char*)g_dtp2, (char*)p_datseg + STR_TEMP_FILE_WILDCARD, g_text_output_buf);
-					unlink(g_dtp2);
+					unlink((char*)g_dtp2);
 				}
 
 				l_di = copy_chr_names(ptr, -1);
@@ -439,10 +439,10 @@ void miracle_heal_hero(signed short le_in, char *str)
 		add_hero_le(get_hero(hero_pos), le_in);
 
 		/* prepare a message */
-		strcpy(g_text_output_buf, get_ttx(392));
+		strcpy((char*)g_text_output_buf, get_ttx(392));
 
 		if (le_in > 1) {
-			strcat(g_text_output_buf, get_ttx(393));
+			strcat((char*)g_text_output_buf, get_ttx(393));
 		}
 
 		sprintf((char*)g_dtp2, (char*)str, (char*)get_hero(hero_pos) + HERO_NAME2, le_in, g_text_output_buf);
