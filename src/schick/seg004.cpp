@@ -79,15 +79,15 @@ void init_ani(Bit16u v1)
 		ds_writew(PIC_COPY_FLAG, 1);
 
 		/* set upper left coordinates */
-		ds_writew(PIC_COPY_X1, ds_readw(ANI_POSX));
-		ds_writew(PIC_COPY_Y1, ds_readw(ANI_POSY));
+		g_pic_copy.x1 = ds_readw(ANI_POSX);
+		g_pic_copy.y1 = ds_readw(ANI_POSY);
 
 		/* set lower right coordinates */
-		ds_writew(PIC_COPY_X2, ds_readw(ANI_POSX) + ds_readw(ANI_WIDTH) - 1);
-		ds_writew(PIC_COPY_Y2, ds_readw(ANI_POSY) + ds_readb(ANI_HEIGHT) - 1);
+		g_pic_copy.x2 = ds_readw(ANI_POSX) + ds_readw(ANI_WIDTH) - 1;
+		g_pic_copy.y2 = ds_readw(ANI_POSY) + ds_readb(ANI_HEIGHT) - 1;
 
 		/* copy pointer */
-		ds_writed(PIC_COPY_SRC, (Bit32u)g_ani_main_ptr);
+		g_pic_copy.src = g_ani_main_ptr;
 
 		/* copy the main ani picture */
 		do_pic_copy(1);
@@ -272,16 +272,11 @@ void interrupt timer_isr(void)
 					}
 
 					/* set screen coordinates */
-					ds_writew(PIC_COPY_X1,
-						ds_readws(ANI_POSX) + host_readw(ptr + ANI_AREA_X));
-					ds_writew(PIC_COPY_Y1,
-						ds_readws(ANI_POSY) + host_readb(ptr + ANI_AREA_Y));
-					ds_writew(PIC_COPY_X2,
-						ds_readws(ANI_POSX) + host_readw(ptr + ANI_AREA_X) + host_readw(ptr + ANI_AREA_WIDTH) - 1);
-					ds_writew(PIC_COPY_Y2,
-						ds_readws(ANI_POSY) + host_readb(ptr + ANI_AREA_Y) + host_readb(ptr + ANI_AREA_HEIGHT) - 1);
-					ds_writed(PIC_COPY_SRC,
-						host_readd(ptr + ANI_AREA_PICS_TAB + 4 *(host_readws(ptr + ANI_AREA_CHANGES_TB + 4 * ds_readw(ANI_AREA_STATUS + 2 * i)) -1)));
+					g_pic_copy.x1 = ds_readws(ANI_POSX) + host_readw(ptr + ANI_AREA_X);
+					g_pic_copy.y1 =	ds_readws(ANI_POSY) + host_readb(ptr + ANI_AREA_Y);
+					g_pic_copy.x2 = ds_readws(ANI_POSX) + host_readw(ptr + ANI_AREA_X) + host_readw(ptr + ANI_AREA_WIDTH) - 1;
+					g_pic_copy.y2 = ds_readws(ANI_POSY) + host_readb(ptr + ANI_AREA_Y) + host_readb(ptr + ANI_AREA_HEIGHT) - 1;
+					g_pic_copy.src = (Bit8u*)host_readd(ptr + ANI_AREA_PICS_TAB + 4 * (host_readws(ptr + ANI_AREA_CHANGES_TB + 4 * ds_readw(ANI_AREA_STATUS + 2 * i)) - 1));
 
 					do_pic_copy(1);
 
@@ -793,8 +788,7 @@ void draw_wallclock(signed short pos, signed short night)
 	fullscreen_bak = *(struct dummy2*)(p_datseg + PIC_COPY_DS_RECT);
 
 	/* set pointer */
-	ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
-
+	g_pic_copy.dst = g_vga_memstart;
 
 	/* calculate y value */
 	/* Original-Bug: off-by-one with pos > 80 */
@@ -823,33 +817,33 @@ void draw_wallclock(signed short pos, signed short night)
 	}
 
 	/* set coordinates */
-	ds_writew(PIC_COPY_X1, ds_readws(WALLCLOCK_X));
-	ds_writew(PIC_COPY_Y1, ds_readws(WALLCLOCK_Y));
-	ds_writew(PIC_COPY_X2, ds_readws(WALLCLOCK_X) + 78);
-	ds_writew(PIC_COPY_Y2, ds_readws(WALLCLOCK_Y) + 20);
-	ds_writed(PIC_COPY_SRC, (Bit32u)g_objects_nvf_buf);
+	g_pic_copy.x1 = ds_readws(WALLCLOCK_X);
+	g_pic_copy.y1 = ds_readws(WALLCLOCK_Y);
+	g_pic_copy.x2 = ds_readws(WALLCLOCK_X) + 78;
+	g_pic_copy.y2 = ds_readws(WALLCLOCK_Y) + 20;
+	g_pic_copy.src = g_objects_nvf_buf;
 
 	/* draw backgroud */
 	do_pic_copy(2);
 
 
 	/* set coordinates */
-	ds_writew(PIC_COPY_X1, pos);
-	ds_writew(PIC_COPY_Y1, y);
-	ds_writew(PIC_COPY_X2, pos + 7);
-	ds_writew(PIC_COPY_Y2, y + 6);
-	ds_writed(PIC_COPY_SRC, (Bit32u)(!night ? (g_objects_nvf_buf + 0xcaf) : (g_objects_nvf_buf + 0xcef)));
+	g_pic_copy.x1 = pos;
+	g_pic_copy.y1 = y;
+	g_pic_copy.x2 = pos + 7;
+	g_pic_copy.y2 = y + 6;
+	g_pic_copy.src = (!night ? (g_objects_nvf_buf + 0xcaf) : (g_objects_nvf_buf + 0xcef));
 
 	/* draw sun/moon */
 	do_pic_copy(2);
 
 
 	/* set coordinates */
-	ds_writew(PIC_COPY_X1, ds_readws(WALLCLOCK_X));
-	ds_writew(PIC_COPY_Y1, ds_readws(WALLCLOCK_Y) + 3);
-	ds_writew(PIC_COPY_X2, ds_readws(WALLCLOCK_X) + 78);
-	ds_writew(PIC_COPY_Y2, ds_readws(WALLCLOCK_Y) + 22);
-	ds_writed(PIC_COPY_SRC, (Bit32u)(g_objects_nvf_buf + 0x683));
+	g_pic_copy.x1 = ds_readws(WALLCLOCK_X);
+	g_pic_copy.y1 = ds_readws(WALLCLOCK_Y) + 3;
+	g_pic_copy.x2 = ds_readws(WALLCLOCK_X) + 78;
+	g_pic_copy.y2 = ds_readws(WALLCLOCK_Y) + 22;
+	g_pic_copy.src = g_objects_nvf_buf + 0x683;
 
 	/* draw backgroud */
 	do_pic_copy(2);
@@ -861,11 +855,11 @@ void draw_wallclock(signed short pos, signed short night)
 	if (ds_readb(PP20_INDEX) == ARCHIVE_FILE_KARTE_DAT) {
 
 		/* set coordinates */
-		ds_writew(PIC_COPY_X1, ds_readws(WALLCLOCK_X) - 5);
-		ds_writew(PIC_COPY_Y1, ds_readws(WALLCLOCK_Y) - 4);
-		ds_writew(PIC_COPY_X2, ds_readws(WALLCLOCK_X) + 85);
-		ds_writew(PIC_COPY_Y2, ds_readws(WALLCLOCK_Y) + 28);
-		ds_writed(PIC_COPY_SRC, (Bit32u)(g_buffer9_ptr + 0x4650L));
+		g_pic_copy.x1 = ds_readws(WALLCLOCK_X) - 5;
+		g_pic_copy.y1 = ds_readws(WALLCLOCK_Y) - 4;
+		g_pic_copy.x2 = ds_readws(WALLCLOCK_X) + 85;
+		g_pic_copy.y2 = ds_readws(WALLCLOCK_Y) + 28;
+		g_pic_copy.src = g_buffer9_ptr + 0x4650L;
 
 		/* draw backgroud */
 		do_pic_copy(2);
@@ -1042,21 +1036,21 @@ void do_pic_copy(unsigned short mode)
 	Bit8u *src;
 	Bit8u* dst;
 
-	x1 = ds_readw(PIC_COPY_X1);
-	y1 = ds_readw(PIC_COPY_Y1);
-	x2 = ds_readw(PIC_COPY_X2);
-	y2 = ds_readw(PIC_COPY_Y2);
+	x1 = g_pic_copy.x1;
+	y1 = g_pic_copy.y1;
+	x2 = g_pic_copy.x2;
+	y2 = g_pic_copy.y2;
 
-	v1 = ds_readw(PIC_COPY_V1);
-	v2 = ds_readw(PIC_COPY_V2);
-	v3 = ds_readw(PIC_COPY_V3);
-	v4 = ds_readw(PIC_COPY_V4);
+	v1 = g_pic_copy.v1;
+	v2 = g_pic_copy.v2;
+	v3 = g_pic_copy.v3;
+	v4 = g_pic_copy.v4;
 
 	width = x2 - x1 + 1;
 	height = y2 - y1 + 1;
 
-	src = (Bit8u*)ds_readd(PIC_COPY_SRC);
-	dst = (Bit8u*)ds_readd(PIC_COPY_DST);
+	src = g_pic_copy.src;
+	dst = g_pic_copy.dst;
 
 	pic_copy(dst, x1, y1, x2, y2, v1, v2, v3, v4, width, height, src, mode);
 }
@@ -1069,14 +1063,14 @@ void do_save_rect(void)
 	Bit8u* src;
 	Bit8u* dst;
 
-	x1 = ds_readw(PIC_COPY_X1);
-	y1 = ds_readw(PIC_COPY_Y1);
+	x1 = g_pic_copy.x1;
+	y1 = g_pic_copy.y1;
 
-	x2 = ds_readw(PIC_COPY_X2);
-	y2 = ds_readw(PIC_COPY_Y2);
+	x2 = g_pic_copy.x2;
+	y2 = g_pic_copy.y2;
 
-	src = (Bit8u*)ds_readd(PIC_COPY_SRC);
-	dst = (Bit8u*)ds_readd(PIC_COPY_DST);
+	src = g_pic_copy.src;
+	dst = g_pic_copy.dst;
 
 	dst += y1 * 320 + x1;
 	width = x2 - x1 + 1;

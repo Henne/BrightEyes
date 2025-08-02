@@ -881,16 +881,16 @@ void FIG_load_ship_sprites(void)
 			l4 += ds_readws(GFXTAB_OBJ_OFFSET_Y + 2 * l_si);
 
 			/* set screen coordinates */
-			ds_writew(PIC_COPY_X1, l3);
-			ds_writew(PIC_COPY_Y1, l4);
-			ds_writew(PIC_COPY_X2, l3 + host_readws((Bit8u*)ds_readd(FIGOBJ_GFXWIDTH_TABLE) + 2 * l_si) - 1);
-			ds_writew(PIC_COPY_Y2, l4 + host_readws((Bit8u*)ds_readd(FIGOBJ_GFXHEIGHT_TABLE) + 2 * l_si) - 1);
-			ds_writed(PIC_COPY_SRC, host_readd((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + 4 * l_si));
-			ds_writed(PIC_COPY_DST, (Bit32u)g_buffer8_ptr);
+			g_pic_copy.x1 = l3;
+			g_pic_copy.y1 = l4;
+			g_pic_copy.x2 = l3 + host_readws((Bit8u*)ds_readd(FIGOBJ_GFXWIDTH_TABLE) + 2 * l_si) - 1;
+			g_pic_copy.y2 = l4 + host_readws((Bit8u*)ds_readd(FIGOBJ_GFXHEIGHT_TABLE) + 2 * l_si) - 1;
+			g_pic_copy.src = (Bit8u*)host_readd((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + 4 * l_si);
+			g_pic_copy.dst = g_buffer8_ptr;
 
 			do_pic_copy(2);
 
-			ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
+			g_pic_copy.dst = g_vga_memstart;
 
 			}
 		}

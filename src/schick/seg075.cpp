@@ -493,11 +493,11 @@ void DNG_stub5(void)
 {
 	draw_compass();
 
-	ds_writew(PIC_COPY_X1, ds_readw(ANI_POSX));
-	ds_writew(PIC_COPY_Y1, ds_readw(ANI_POSY));
-	ds_writew(PIC_COPY_X2, ds_readw(ANI_POSX) + 207);
-	ds_writew(PIC_COPY_Y2, ds_readw(ANI_POSY) + 134);
-	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
+	g_pic_copy.x1 = ds_readw(ANI_POSX);
+	g_pic_copy.y1 = ds_readw(ANI_POSY);
+	g_pic_copy.x2 = ds_readw(ANI_POSX) + 207;
+	g_pic_copy.y2 = ds_readw(ANI_POSY) + 134;
+	g_pic_copy.src = g_renderbuf_ptr;
 
 	update_mouse_cursor();
 
@@ -1066,11 +1066,11 @@ mark2:			   goto mark1;
 		}
 
 		do_fill_rect(((Bit8u*)g_renderbuf_ptr), 0, 0, 319, 199, 0);
-		ds_writew(PIC_COPY_X1, 0);
-		ds_writew(PIC_COPY_Y1, 0);
-		ds_writew(PIC_COPY_X2, 240);
-		ds_writew(PIC_COPY_Y2, 136);
-		ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
+		g_pic_copy.x1 = 0;
+		g_pic_copy.y1 = 0;
+		g_pic_copy.x2 = 240;
+		g_pic_copy.y2 = 136;
+		g_pic_copy.src = g_renderbuf_ptr;
 		update_mouse_cursor();
 		do_pic_copy(1);
 		refresh_screen_size();

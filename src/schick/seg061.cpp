@@ -72,20 +72,19 @@ void do_temple(void)
 			set_audio_track(ARCHIVE_FILE_TEMPLE_XMI);
 
 			/* draw temple icon */
-			ds_writew(PIC_COPY_X1, ds_writew(PIC_COPY_Y1, 0));
-			ds_writew(PIC_COPY_X2, 40);
-			ds_writew(PIC_COPY_Y2, 22);
-			ds_writed(PIC_COPY_DST, (Bit32u)(g_vga_memstart + 28259));
-			ds_writed(PIC_COPY_SRC, (Bit32u)(g_buffer8_ptr + 7000));
+			g_pic_copy.x1 = g_pic_copy.y1 = (0);
+			g_pic_copy.x2 = 40;
+			g_pic_copy.y2 = 22;
+			g_pic_copy.dst = g_vga_memstart + 28259;
+			g_pic_copy.src = g_buffer8_ptr + 7000;
 
 			update_mouse_cursor();
 			do_pic_copy(0);
 			refresh_screen_size();
-			ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
+			g_pic_copy.dst = g_vga_memstart;
 
 			/* location string */
-			sprintf((char*)g_dtp2,
-				get_ttx(235),
+			sprintf((char*)g_dtp2, get_ttx(235),
 				get_ttx(ds_readws(TEMPLE_GOD) + 21),	/* name of the god */
 				(char*)(gs_current_typeindex != 58 ? get_ttx(gs_current_town + 235): get_ttx(622)));
 

@@ -712,11 +712,11 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 				seg041_8c8();
 
 				if (g_autofight != 0) {
-					ds_writew(PIC_COPY_X1, ds_writew(PIC_COPY_V1, 0));
-					ds_writew(PIC_COPY_Y1, ds_writew(PIC_COPY_V2, 194));
-					ds_writew(PIC_COPY_X2, 318);
-					ds_writew(PIC_COPY_Y2, 199);
-					ds_writed(PIC_COPY_SRC, (Bit32u)g_buffer8_ptr);
+					g_pic_copy.x1 = g_pic_copy.v1 = 0;
+					g_pic_copy.y1 = g_pic_copy.v2 = 194;
+					g_pic_copy.x2 = 318;
+					g_pic_copy.y2 = 199;
+					g_pic_copy.src = g_buffer8_ptr;
 
 					do_pic_copy(3);
 

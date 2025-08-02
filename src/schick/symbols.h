@@ -1367,15 +1367,15 @@
 #define SELLITEMS                       (0xc005)    /* Bit8u*; also used for repair items */
 #define BUYITEMS                        (0xc009)    /* Bit8u*; merchant's assortment */
 #define PIC_COPY_DST                    (0xc00d)    /* Bit8u* */
-#define PIC_COPY_X1                     (0xc011)    /* signed short */
-#define PIC_COPY_Y1                     (0xc013)    /* signed short */
-#define PIC_COPY_X2                     (0xc015)    /* signed short */
-#define PIC_COPY_Y2                     (0xc017)    /* signed short */
+//#define PIC_COPY_X1                     (0xc011)    /* signed short */
+//#define PIC_COPY_Y1                     (0xc013)    /* signed short */
+//#define PIC_COPY_X2                     (0xc015)    /* signed short */
+//#define PIC_COPY_Y2                     (0xc017)    /* signed short */
 #define PIC_COPY_SRC                    (0xc019)    /* Bit8u* */
-#define PIC_COPY_V1                     (0xc01d)    /* unsigned short */
-#define PIC_COPY_V2                     (0xc01f)    /* unsigned short */
-#define PIC_COPY_V3                     (0xc021)    /* unsigned short */
-#define PIC_COPY_V4                     (0xc023)    /* unsigned short */
+//#define PIC_COPY_V1                     (0xc01d)    /* unsigned short */
+//#define PIC_COPY_V2                     (0xc01f)    /* unsigned short */
+//#define PIC_COPY_V3                     (0xc021)    /* unsigned short */
+//#define PIC_COPY_V4                     (0xc023)    /* unsigned short */
 #define LOCATIONS_LIST                  (0xc025)    /* struct(6)[150]; struct{short pos; char loc, type; short id;} */
 //#define BUFFER8_PTR                     (0xc3a9)    /* Bit8u*; to buffer of size 12008 */
 #define TX2_INDEX                       (0xc3ad)    /* Bit8u*; to index table of secondary text file */

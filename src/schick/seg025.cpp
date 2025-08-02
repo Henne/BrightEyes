@@ -291,7 +291,7 @@ void show_treasure_map(void)
 			if (gs_treasure_maps[l_si] && (l_si != 9 || (l_si == 9 && !gs_treasure_maps[6])))
 			{
 				/* decompress picture */
-				nvf.dst = (Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, 30000));
+				nvf.dst = (Bit8u*)(((HugePt)g_buffer9_ptr) + 30000L);
 				nvf.src = (Bit8u*)g_buffer9_ptr;
 				nvf.no = l_si;
 				nvf.type = 0;
@@ -307,12 +307,12 @@ void show_treasure_map(void)
 				#endif
 
 				/* copy to screen */
-				ds_writew(PIC_COPY_X1, ds_readws(TMAP_X + 2 * l_si));
-				ds_writew(PIC_COPY_Y1, ds_readws(TMAP_Y + 2 * l_si));
-				ds_writew(PIC_COPY_X2, ds_readws(TMAP_X + 2 * l_si) + width - 1);
-				ds_writew(PIC_COPY_Y2, ds_readws(TMAP_Y + 2 * l_si) + height - 1);
-				ds_writed(PIC_COPY_SRC, (Bit32u)F_PADD((Bit8u*)g_buffer9_ptr, 30000));
-				ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
+				g_pic_copy.x1 = ds_readws(TMAP_X + 2 * l_si);
+				g_pic_copy.y1 = ds_readws(TMAP_Y + 2 * l_si);
+				g_pic_copy.x2 = ds_readws(TMAP_X + 2 * l_si) + width - 1;
+				g_pic_copy.y2 = ds_readws(TMAP_Y + 2 * l_si) + height - 1;
+				g_pic_copy.src = ((HugePt)g_buffer9_ptr) + 30000L;
+				g_pic_copy.dst = g_vga_memstart;
 				do_pic_copy(0);
 			}
 		}
@@ -365,12 +365,12 @@ void show_treasure_map(void)
 
 		if (ds_readb(RENDERBUF_IN_USE_FLAG) != 0) {
 			/* copy to screen */
-			ds_writew(PIC_COPY_X1, 0);
-			ds_writew(PIC_COPY_Y1, 0);
-			ds_writew(PIC_COPY_X2, 319);
-			ds_writew(PIC_COPY_Y2, 199);
-			ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
-			ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
+			g_pic_copy.x1 = 0;
+			g_pic_copy.y1 = 0;
+			g_pic_copy.x2 = 319;
+			g_pic_copy.y2 = 199;
+			g_pic_copy.src = g_renderbuf_ptr;
+			g_pic_copy.dst = g_vga_memstart;
 
 			update_mouse_cursor();
 			wait_for_vsync();
@@ -435,12 +435,12 @@ signed short game_options(void)
 
 	GUI_print_header(g_dtp2);
 
-	ds_writew(PIC_COPY_X1, 0);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, 319);
-	ds_writew(PIC_COPY_Y2, 61);
-	ds_writed(PIC_COPY_SRC, (Bit32u)g_buffer9_ptr);
-	ds_writed(PIC_COPY_DST, (Bit32u)(g_renderbuf_ptr + 9600));
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = 319;
+	g_pic_copy.y2 = 61;
+	g_pic_copy.src = g_buffer9_ptr;
+	g_pic_copy.dst = g_renderbuf_ptr + 9600;
 	do_pic_copy(2);
 
 	memset((Bit8u*)g_buffer9_ptr, 0, 28000);
@@ -453,12 +453,12 @@ signed short game_options(void)
 
 		load_tx(gs_current_town + (ARCHIVE_FILE_CITY_DAT-1));
 
-		ds_writew(PIC_COPY_X1, 0);
-		ds_writew(PIC_COPY_Y1, 0);
-		ds_writew(PIC_COPY_X2, 319);
-		ds_writew(PIC_COPY_Y2, 86);
-		ds_writed(PIC_COPY_SRC, (Bit32u)g_buffer9_ptr);
-		ds_writed(PIC_COPY_DST, (Bit32u)(g_renderbuf_ptr + 22400));
+		g_pic_copy.x1 = 0;
+		g_pic_copy.y1 = 0;
+		g_pic_copy.x2 = 319;
+		g_pic_copy.y2 = 86;
+		g_pic_copy.src = g_buffer9_ptr;
+		g_pic_copy.dst = g_renderbuf_ptr + 22400;
 		do_pic_copy(2);
 	}
 
@@ -473,12 +473,12 @@ signed short game_options(void)
 	draw_icon(MENU_ICON_SOUND, 190, 170);
 	draw_icon(MENU_ICON_QUIT_GAME, 236, 170);
 
-	ds_writew(PIC_COPY_X1, 0);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, 319);
-	ds_writew(PIC_COPY_Y2, 199);
-	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
-	ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = 319;
+	g_pic_copy.y2 = 199;
+	g_pic_copy.src = g_renderbuf_ptr;
+	g_pic_copy.dst = g_vga_memstart;
 
 	update_mouse_cursor();
 	wait_for_vsync();
@@ -490,7 +490,7 @@ signed short game_options(void)
 
 	set_textcolor(fg_bak, bg_bak);
 
-	ds_writed(PIC_COPY_DST, (Bit32u)(g_vga_backbuffer = g_vga_memstart));
+	g_pic_copy.dst = g_vga_backbuffer = g_vga_memstart;
 
 	ds_writew(TEXTLINE_POSX, bak2);
 	ds_writew(TEXTLINE_MAXLEN, bak1);
@@ -598,7 +598,7 @@ signed short game_options(void)
 void draw_icon(signed short id, signed short x, signed short y)
 {
 	signed short handle;
-	Bit8u* ptr_bak;
+	Bit8u* dst_bak;
 
 	handle = load_archive_file(ARCHIVE_FILE_ICONS);
 
@@ -608,17 +608,17 @@ void draw_icon(signed short id, signed short x, signed short y)
 
 	close(handle);
 
-	ptr_bak = (Bit8u*)ds_readd(PIC_COPY_DST);
+	dst_bak = g_pic_copy.dst;
 
-	ds_writed(PIC_COPY_SRC, (Bit32u)g_icon);
-	ds_writew(PIC_COPY_X1, x);
-	ds_writew(PIC_COPY_Y1, y);
-	ds_writew(PIC_COPY_X2, x + 23);
-	ds_writew(PIC_COPY_Y2, y + 23);
-	ds_writed(PIC_COPY_DST, (Bit32u)g_renderbuf_ptr);
+	g_pic_copy.src = g_icon;
+	g_pic_copy.x1 = x;
+	g_pic_copy.y1 = y;
+	g_pic_copy.x2 = x + 23;
+	g_pic_copy.y2 = y + 23;
+	g_pic_copy.dst = g_renderbuf_ptr;
 	do_pic_copy(2);
 
-	ds_writed(PIC_COPY_DST, (Bit32u)ptr_bak);
+	g_pic_copy.dst = dst_bak;
 }
 
 /* 0xd54 */
@@ -758,11 +758,11 @@ void leave_dungeon(void)
 
 	do_fill_rect(g_renderbuf_ptr, 0, 0, 319, 199, 0);
 
-	ds_writew(PIC_COPY_X1, 0);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, 240);
-	ds_writew(PIC_COPY_Y2, 136);
-	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = 240;
+	g_pic_copy.y2 = 136;
+	g_pic_copy.src = g_renderbuf_ptr;
 
 	update_mouse_cursor();
 

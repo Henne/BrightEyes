@@ -422,7 +422,7 @@ void init_game_state(void)
 	gs_month = 1;
 	gs_year = 15;
 
-	ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
+	g_pic_copy.dst = (g_vga_memstart);
 
 	load_wallclock_nvf();
 	passages_init();

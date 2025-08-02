@@ -143,12 +143,12 @@ void final_intro(void)
 	nvf.height = (Bit8u*)&height;
 	process_nvf(&nvf);
 
-	ds_writew(PIC_COPY_X1, 0);
-	ds_writew(PIC_COPY_Y1, 20);
-	ds_writew(PIC_COPY_X2, 319);
-	ds_writew(PIC_COPY_Y2, 39);
-	ds_writed(PIC_COPY_SRC, (Bit32u)ptr2);
-	ds_writed(PIC_COPY_DST, (Bit32u)g_renderbuf_ptr);
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 20;
+	g_pic_copy.x2 = 319;
+	g_pic_copy.y2 = 39;
+	g_pic_copy.src = ptr2;
+	g_pic_copy.dst = g_renderbuf_ptr;
 
 	do_pic_copy(2);
 
@@ -156,7 +156,7 @@ void final_intro(void)
 
 	map_effect(g_renderbuf_ptr);
 
-	ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
+	g_pic_copy.dst = (g_vga_memstart);
 
 	delay_or_keypress(250);
 
@@ -208,13 +208,14 @@ static
 #endif
 void hyg_ani_2(Bit8u *ptr, signed short x, signed short y)
 {
-	ds_writew(PIC_COPY_X1, x);
-	ds_writew(PIC_COPY_Y1, y);
-	ds_writew(PIC_COPY_X2, x + host_readws(ptr + 4) - 1);
-	ds_writew(PIC_COPY_Y2, y + host_readws(ptr + 6) - 1);
+	g_pic_copy.x1 = x;
+	g_pic_copy.y1 = y;
+	g_pic_copy.x2 = x + host_readws(ptr + 4) - 1;
+	g_pic_copy.y2 = y + host_readws(ptr + 6) - 1;
 
-	ds_writed(PIC_COPY_SRC, host_readd(ptr));
-	ds_writed(PIC_COPY_DST, (Bit32u)g_renderbuf_ptr);
+	//ds_writed(PIC_COPY_SRC, host_readd(ptr));
+	g_pic_copy.src = (unsigned char*)(*((unsigned char*)ptr));
+	g_pic_copy.dst = g_renderbuf_ptr;
 
 	do_pic_copy(2);
 }
@@ -224,12 +225,12 @@ static
 #endif
 void hyg_ani_3(void)
 {
-	ds_writew(PIC_COPY_X1, 0);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, 319);
-	ds_writew(PIC_COPY_Y2, 199);
-	ds_writed(PIC_COPY_SRC, (Bit32u)F_PADD((Bit8u*)g_buffer9_ptr, 0x1fbd0));
-	ds_writed(PIC_COPY_DST, (Bit32u)g_renderbuf_ptr);
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = 319;
+	g_pic_copy.y2 = 199;
+	g_pic_copy.src = (F_PADD((Bit8u*)g_buffer9_ptr, 0x1fbd0));
+	g_pic_copy.dst = g_renderbuf_ptr;
 
 	do_pic_copy(0);
 }
@@ -239,12 +240,12 @@ static
 #endif
 void hyg_ani_4(void)
 {
-	ds_writew(PIC_COPY_X1, 0);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, 319);
-	ds_writew(PIC_COPY_Y2, 199);
-	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
-	ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = 319;
+	g_pic_copy.y2 = 199;
+	g_pic_copy.src = g_renderbuf_ptr;
+	g_pic_copy.dst = g_vga_memstart;
 
 	do_pic_copy(0);
 }
@@ -357,7 +358,7 @@ void show_hyggelik_ani(void)
 	do_fill_rect(g_renderbuf_ptr, 0, 0, 319, 199, 0);
 
 	hyg_ani_2(array + 25 * 8, 100, 0);
-	ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
+	g_pic_copy.dst = (g_vga_memstart);
 	map_effect(g_renderbuf_ptr);
 	delay_or_keypress(500);
 
@@ -460,11 +461,11 @@ void show_outro(void)
 	height = host_readws((Bit8u*)&height);
 #endif
 
-	ds_writew(PIC_COPY_X1, (320 - width) / 2);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, (320 - width) / 2 + width - 1);
-	ds_writew(PIC_COPY_Y2, height - 1);
-	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
+	g_pic_copy.x1 = (320 - width) / 2;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = (320 - width) / 2 + width - 1;
+	g_pic_copy.y2 = height - 1;
+	g_pic_copy.src = g_renderbuf_ptr;
 	do_pic_copy(0);
 
 	delay_or_keypress(200);
@@ -494,11 +495,11 @@ void show_outro(void)
 	height = host_readws((Bit8u*)&height);
 #endif
 
-	ds_writew(PIC_COPY_X1, (320 - width) / 2);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, (320 - width) / 2 + width - 1);
-	ds_writew(PIC_COPY_Y2, height - 1);
-	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
+	g_pic_copy.x1 = (320 - width) / 2;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = (320 - width) / 2 + width - 1;
+	g_pic_copy.y2 = height - 1;
+	g_pic_copy.src = g_renderbuf_ptr;
 	do_pic_copy(0);
 
 	delay_or_keypress(200);
@@ -528,11 +529,11 @@ void show_outro(void)
 	height = host_readws((Bit8u*)&height);
 #endif
 
-	ds_writew(PIC_COPY_X1, (320 - width) / 2);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, (320 - width) / 2 + width - 1);
-	ds_writew(PIC_COPY_Y2, height - 1);
-	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
+	g_pic_copy.x1 = (320 - width) / 2;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = (320 - width) / 2 + width - 1;
+	g_pic_copy.y2 = height - 1;
+	g_pic_copy.src = g_renderbuf_ptr;
 	do_pic_copy(0);
 
 	delay_or_keypress(200);

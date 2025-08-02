@@ -3172,13 +3172,13 @@ void seg002_37c4(void)
 		ds_writew(SELECTED_TOWN_ANIY,
 				ds_readws((TOWN_POSITIONS-4) + 2 + 4 * ds_readbs((TRV_MENU_TOWNS - 1) + ds_readws(TRV_MENU_SELECTION))));
 
-		ds_writew(PIC_COPY_X1, ds_readws(SELECTED_TOWN_ANIX) - 4);
-		ds_writew(PIC_COPY_Y1, ds_readws(SELECTED_TOWN_ANIY) - 4);
-		ds_writew(PIC_COPY_X2, ds_readws(SELECTED_TOWN_ANIX) + 4);
-		ds_writew(PIC_COPY_Y2, ds_readws(SELECTED_TOWN_ANIY) + 4);
-		ds_writed(PIC_COPY_SRC, (Bit32u)p1);
+		g_pic_copy.x1 = ds_readws(SELECTED_TOWN_ANIX) - 4;
+		g_pic_copy.y1 = ds_readws(SELECTED_TOWN_ANIY) - 4;
+		g_pic_copy.x2 = ds_readws(SELECTED_TOWN_ANIX) + 4;
+		g_pic_copy.y2 = ds_readws(SELECTED_TOWN_ANIY) + 4;
+		g_pic_copy.src = p1;
 
-		if (is_mouse_in_rect(ds_readws(PIC_COPY_X1) - 16, ds_readws(PIC_COPY_Y1) - 16, ds_readws(PIC_COPY_X2) + 16, ds_readws(PIC_COPY_Y2) + 16))
+		if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
 		{
 			update_mouse_cursor();
 			l_si = 1;
@@ -3195,13 +3195,13 @@ void seg002_37c4(void)
 
 	if (ds_readws(CURRENT_TOWN_OVER) != 0) {
 
-		ds_writew(PIC_COPY_X1, ds_readws(CURRENT_TOWN_OVERX) - 4);
-		ds_writew(PIC_COPY_Y1, ds_readws(CURRENT_TOWN_OVERY) - 4);
-		ds_writew(PIC_COPY_X2, ds_readws(CURRENT_TOWN_OVERX) + 4);
-		ds_writew(PIC_COPY_Y2, ds_readws(CURRENT_TOWN_OVERY) + 4);
-		ds_writed(PIC_COPY_SRC, (Bit32u)p2);
+		g_pic_copy.x1 = ds_readws(CURRENT_TOWN_OVERX) - 4;
+		g_pic_copy.y1 = ds_readws(CURRENT_TOWN_OVERY) - 4;
+		g_pic_copy.x2 = ds_readws(CURRENT_TOWN_OVERX) + 4;
+		g_pic_copy.y2 = ds_readws(CURRENT_TOWN_OVERY) + 4;
+		g_pic_copy.src = p2;
 
-		if (is_mouse_in_rect(ds_readws(PIC_COPY_X1) - 16, ds_readws(PIC_COPY_Y1) - 16, ds_readws(PIC_COPY_X2) + 16, ds_readws(PIC_COPY_Y2) + 16))
+		if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
 		{
 			update_mouse_cursor();
 			l_si = 1;
@@ -3220,13 +3220,13 @@ void seg002_37c4(void)
 
 	if (ds_readws(CURRENT_TOWN_ANIX) != 0) {
 
-		ds_writew(PIC_COPY_X1, ds_readws(CURRENT_TOWN_ANIX) - 4);
-		ds_writew(PIC_COPY_Y1, ds_readws(CURRENT_TOWN_ANIY) - 4);
-		ds_writew(PIC_COPY_X2, ds_readws(CURRENT_TOWN_ANIX) + 4);
-		ds_writew(PIC_COPY_Y2, ds_readws(CURRENT_TOWN_ANIY) + 4);
-		ds_writed(PIC_COPY_SRC, (Bit32u)p2);
+		g_pic_copy.x1 = ds_readws(CURRENT_TOWN_ANIX) - 4;
+		g_pic_copy.y1 = ds_readws(CURRENT_TOWN_ANIY) - 4;
+		g_pic_copy.x2 = ds_readws(CURRENT_TOWN_ANIX) + 4;
+		g_pic_copy.y2 = ds_readws(CURRENT_TOWN_ANIY) + 4;
+		g_pic_copy.src = p2;
 
-		if (is_mouse_in_rect(ds_readws(PIC_COPY_X1) - 16, ds_readws(PIC_COPY_Y1) - 16, ds_readws(PIC_COPY_X2) + 16, ds_readws(PIC_COPY_Y2) + 16))
+		if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
 		{
 			update_mouse_cursor();
 			l_si = 1;
@@ -3250,20 +3250,20 @@ void seg002_37c4(void)
 			ds_writew(SELECTED_TOWN_ANIY,
 					ds_readws((TOWN_POSITIONS-4) + 2 + 4 * ds_readbs((TRV_MENU_TOWNS - 1) + ds_readws(MENU_SELECTED))));
 
-			ds_writew(PIC_COPY_X1, ds_readws(SELECTED_TOWN_ANIX) - 4);
-			ds_writew(PIC_COPY_Y1, ds_readws(SELECTED_TOWN_ANIY) - 4);
-			ds_writew(PIC_COPY_X2, ds_readws(SELECTED_TOWN_ANIX) + 4);
-			ds_writew(PIC_COPY_Y2, ds_readws(SELECTED_TOWN_ANIY) + 4);
-			ds_writed(PIC_COPY_SRC, (Bit32u)p1);
+			g_pic_copy.x1 = ds_readws(SELECTED_TOWN_ANIX) - 4;
+			g_pic_copy.y1 = ds_readws(SELECTED_TOWN_ANIY) - 4;
+			g_pic_copy.x2 = ds_readws(SELECTED_TOWN_ANIX) + 4;
+			g_pic_copy.y2 = ds_readws(SELECTED_TOWN_ANIY) + 4;
+			g_pic_copy.src = p1;
 
-			if (is_mouse_in_rect(ds_readws(PIC_COPY_X1) - 16, ds_readws(PIC_COPY_Y1) - 16, ds_readws(PIC_COPY_X2) + 16, ds_readws(PIC_COPY_Y2) + 16))
+			if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
 			{
 				update_mouse_cursor();
 				l_si = 1;
 			}
 
 			do_save_rect();
-			ds_writed(PIC_COPY_SRC, (Bit32u)(p3 + 100 * g_map_townmark_state));
+			g_pic_copy.src = p3 + 100 * g_map_townmark_state;
 			do_pic_copy(2);
 
 			if (l_si) {
@@ -3274,13 +3274,13 @@ void seg002_37c4(void)
 			l_si = 0;
 		}
 
-		ds_writew(PIC_COPY_X1, ds_readws(CURRENT_TOWN_ANIX) - 4);
-		ds_writew(PIC_COPY_Y1, ds_readws(CURRENT_TOWN_ANIY) - 4);
-		ds_writew(PIC_COPY_X2, ds_readws(CURRENT_TOWN_ANIX) + 4);
-		ds_writew(PIC_COPY_Y2, ds_readws(CURRENT_TOWN_ANIY) + 4);
-		ds_writed(PIC_COPY_SRC, (Bit32u)(p3 + 100 * (g_map_townmark_state + 5)));
+		g_pic_copy.x1 = ds_readws(CURRENT_TOWN_ANIX) - 4;
+		g_pic_copy.y1 = ds_readws(CURRENT_TOWN_ANIY) - 4;
+		g_pic_copy.x2 = ds_readws(CURRENT_TOWN_ANIX) + 4;
+		g_pic_copy.y2 = ds_readws(CURRENT_TOWN_ANIY) + 4;
+		g_pic_copy.src = p3 + 100 * (g_map_townmark_state + 5);
 
-		if (is_mouse_in_rect(ds_readws(PIC_COPY_X1) - 16, ds_readws(PIC_COPY_Y1) - 16, ds_readws(PIC_COPY_X2) + 16, ds_readws(PIC_COPY_Y2) + 16))
+		if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
 		{
 			update_mouse_cursor();
 			l_si = 1;
@@ -4042,13 +4042,13 @@ void draw_compass(void)
 		process_nvf(&n);
 
 		/* set x and y values */
-		ds_writew(PIC_COPY_X1, 94);
-		ds_writew(PIC_COPY_Y1, 115);
-		ds_writew(PIC_COPY_X2, 145);
-		ds_writew(PIC_COPY_Y2, 136);
+		g_pic_copy.x1 = 94;
+		g_pic_copy.y1 = 115;
+		g_pic_copy.x2 = 145;
+		g_pic_copy.y2 = 136;
 
 		/* set source */
-		ds_writed(PIC_COPY_SRC, (Bit32u)g_icon);
+		g_pic_copy.src = g_icon;
 
 		update_mouse_cursor();
 		do_pic_copy(2);
@@ -4233,15 +4233,15 @@ void seg002_47e2(void)
 	struct struct_pic_copy pic_copy_bak = g_pic_copy;
 
 	/* set range 0,0 - 7,7 */
-	ds_writew(PIC_COPY_X1, 0);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, 7);
-	ds_writew(PIC_COPY_Y2, 7);
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = 7;
+	g_pic_copy.y2 = 7;
 
 	/* set destination */
-	ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
+	g_pic_copy.dst = g_vga_memstart;
 	/* set source */
-	ds_writed(PIC_COPY_SRC, (Bit32u)g_gfxbuf_wait_keypress);
+	g_pic_copy.src = g_gfxbuf_wait_keypress;
 
 	do_save_rect();
 
@@ -4259,15 +4259,15 @@ void seg002_484f(void)
 	struct struct_pic_copy pic_copy_bak = g_pic_copy;
 
 	/* set range 0,0 - 7,7 */
-	ds_writew(PIC_COPY_X1, 0);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, 7);
-	ds_writew(PIC_COPY_Y2, 7);
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = 7;
+	g_pic_copy.y2 = 7;
 
 	/* set destination */
-	ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
+	g_pic_copy.dst = g_vga_memstart;
 	/* set source */
-	ds_writed(PIC_COPY_SRC, (Bit32u)g_gfxbuf_wait_keypress);
+	g_pic_copy.src = g_gfxbuf_wait_keypress;
 
 	do_pic_copy(0);
 

@@ -206,16 +206,16 @@ unsigned short fight_printer(void)
 
 			FIG_set_star_color(g_fig_star_gfx, 3724, ds_readb((FIG_STAR_COLORS-1) + f_action));
 
-			ds_writew(PIC_COPY_X1, 0);
-			ds_writew(PIC_COPY_Y1, 150);
-			ds_writew(PIC_COPY_X2, 75);
-			ds_writew(PIC_COPY_Y2, 198);
-			ds_writed(PIC_COPY_SRC, (Bit32u)g_fig_star_gfx);
-			ds_writed(PIC_COPY_DST, (Bit32u)g_renderbuf_ptr);
-			gfx_dst_bak = (Bit8u*)ds_readd(PIC_COPY_DST);
+			g_pic_copy.x1 = 0;
+			g_pic_copy.y1 = 150;
+			g_pic_copy.x2 = 75;
+			g_pic_copy.y2 = 198;
+			g_pic_copy.src = g_fig_star_gfx;
+			g_pic_copy.dst = g_renderbuf_ptr;
+			gfx_dst_bak = g_pic_copy.dst;
 			do_pic_copy(2);
 
-			ds_writed(PIC_COPY_DST, (Bit32u)gfx_dst_bak);
+			g_pic_copy.dst = gfx_dst_bak;
 
 			/* print number into the star */
 			if (ds_readw((FIG_MSG_DATA + 2) + ds_readbs(FIG_STAR_COUNTER) * 4) != 0) {
@@ -229,11 +229,11 @@ unsigned short fight_printer(void)
 
 			/* Generate textmessage */
 			if (ds_readw(((FIG_MSG_DTPS-2)) + f_action * 2) != 0) {
-				ds_writew(PIC_COPY_X1, ds_writew(PIC_COPY_V1, 0));
-				ds_writew(PIC_COPY_Y1, ds_writew(PIC_COPY_V2, 194));
-				ds_writew(PIC_COPY_X2, 318);
-				ds_writew(PIC_COPY_Y2, 199);
-				ds_writed(PIC_COPY_SRC, (Bit32u)g_buffer8_ptr);
+				g_pic_copy.x1 = g_pic_copy.v1 = 0;
+				g_pic_copy.y1 = g_pic_copy.v2 = 194;
+				g_pic_copy.x2 = 318;
+				g_pic_copy.y2 = 199;
+				g_pic_copy.src = g_buffer8_ptr;
 				do_pic_copy(3);
 
 				set_textcolor(0xff, 0);
@@ -413,7 +413,7 @@ void draw_fight_screen(Bit16u val)
 
 		set_delay_timer();
 
-		ds_writed(PIC_COPY_DST, (Bit32u)(g_vga_backbuffer = g_renderbuf_ptr));
+		g_pic_copy.dst = g_vga_backbuffer = g_renderbuf_ptr;
 
 
 		for (list_i = (Bit8u*)ds_readd(FIG_LIST_HEAD); list_i; list_i = (Bit8u*)host_readd(list_i + FIGHTER_NEXT)) {
@@ -427,18 +427,18 @@ void draw_fight_screen(Bit16u val)
 		}
 
 		coord_bak = *(struct dummy_w4*)(p_datseg + PIC_COPY_DS_RECT);
-		ds_writew(PIC_COPY_X1, ds_writew(PIC_COPY_V1, 0));
-		ds_writew(PIC_COPY_Y1, ds_writew(PIC_COPY_V2, 0));
-		ds_writew(PIC_COPY_X2, 318);
-		ds_writew(PIC_COPY_Y2, 149);
-		ds_writed(PIC_COPY_SRC, (Bit32u)g_buffer8_ptr);
+		g_pic_copy.x1 = g_pic_copy.v1 = 0;
+		g_pic_copy.y1 = g_pic_copy.v2 = 0;
+		g_pic_copy.x2 = 318;
+		g_pic_copy.y2 = 149;
+		g_pic_copy.src = g_buffer8_ptr;
 		do_pic_copy(3);
 
-		ds_writew(PIC_COPY_X1, ds_writew(PIC_COPY_V1, 80));
-		ds_writew(PIC_COPY_Y1, ds_writew(PIC_COPY_V2, 150));
-		ds_writew(PIC_COPY_X2, 318);
-		ds_writew(PIC_COPY_Y2, 193);
-		ds_writed(PIC_COPY_SRC, (Bit32u)g_buffer8_ptr);
+		g_pic_copy.x1 = g_pic_copy.v1 = 80;
+		g_pic_copy.y1 = g_pic_copy.v2 = 150;
+		g_pic_copy.x2 = 318;
+		g_pic_copy.y2 = 193;
+		g_pic_copy.src = g_buffer8_ptr;
 		do_pic_copy(3);
 
 		list_i = (Bit8u*)ds_readd(FIG_LIST_HEAD);
@@ -888,11 +888,11 @@ void draw_fight_screen(Bit16u val)
 					if (ds_readws((PIC_COPY_DS_RECT + 6)) > 318)
 						ds_writew((PIC_COPY_DS_RECT + 6), 318);
 
-					ds_writew(PIC_COPY_X1, obj_x);
-					ds_writew(PIC_COPY_Y1, obj_y);
-					ds_writew(PIC_COPY_X2, obj_x + host_readbs(list_i + FIGHTER_WIDTH) - 1);
-					ds_writew(PIC_COPY_Y2, obj_y + host_readbs(list_i + FIGHTER_HEIGHT) - 1);
-					ds_writed(PIC_COPY_SRC, (Bit32u)p_figure_gfx);
+					g_pic_copy.x1 = obj_x;
+					g_pic_copy.y1 = obj_y;
+					g_pic_copy.x2 = obj_x + host_readbs(list_i + FIGHTER_WIDTH) - 1;
+					g_pic_copy.y2 = obj_y + host_readbs(list_i + FIGHTER_HEIGHT) - 1;
+					g_pic_copy.src = p_figure_gfx;
 
 					do_pic_copy(2);	/* Critical */
 				}
@@ -901,12 +901,12 @@ void draw_fight_screen(Bit16u val)
 				/* NULL check on Bit8u* */
 				if (p_weapon_gfx != 0)  {
 
-					ds_writew(PIC_COPY_X1, current_x1);
-					ds_writew(PIC_COPY_Y1, current_y1);
-					ds_writew(PIC_COPY_X2, current_x1 + 13);
-					ds_writew(PIC_COPY_Y2, current_y1 + 13);
+					g_pic_copy.x1 = current_x1;
+					g_pic_copy.y1 = current_y1;
+					g_pic_copy.x2 = current_x1 + 13;
+					g_pic_copy.y2 = current_y1 + 13;
 
-					ds_writed(PIC_COPY_SRC, (Bit32u)p_weapon_gfx);
+					g_pic_copy.src = p_weapon_gfx;
 
 					do_pic_copy(2);
 				}
@@ -948,19 +948,19 @@ void draw_fight_screen(Bit16u val)
 
 		fight_printer();
 
-		ds_writew(PIC_COPY_X1, 0);
-		ds_writew(PIC_COPY_Y1, 0);
-		ds_writew(PIC_COPY_X2, 319);
-		ds_writew(PIC_COPY_Y2, 199);
+		g_pic_copy.x1 = 0;
+		g_pic_copy.y1 = 0;
+		g_pic_copy.x2 = 319;
+		g_pic_copy.y2 = 199;
 
-		ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
-		ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
+		g_pic_copy.src = g_renderbuf_ptr;
+		g_pic_copy.dst = g_vga_memstart;
 
 		fight_delay();
 
 		do_pic_copy(0);
 
-		ds_writed(PIC_COPY_DST, (Bit32u)g_renderbuf_ptr);
+		g_pic_copy.dst = g_renderbuf_ptr;
 	}
 
 	for (list_i = (Bit8u*)ds_readd(FIG_LIST_HEAD); list_i; list_i = (Bit8u*)host_readd(list_i + FIGHTER_NEXT)) {
@@ -975,13 +975,13 @@ void draw_fight_screen(Bit16u val)
 		FIG_draw_pic();
 		FIG_draw_figures();
 
-		ds_writew(PIC_COPY_X1, 0);
-		ds_writew(PIC_COPY_Y1, 0);
-		ds_writew(PIC_COPY_X2, 319);
-		ds_writew(PIC_COPY_Y2, 199);
+		g_pic_copy.x1 = 0;
+		g_pic_copy.y1 = 0;
+		g_pic_copy.x2 = 319;
+		g_pic_copy.y2 = 199;
 
-		ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
-		ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
+		g_pic_copy.src = g_renderbuf_ptr;
+		g_pic_copy.dst = g_vga_memstart;
 
 		do_pic_copy(0);
 
@@ -996,13 +996,13 @@ to the DOSBox-CPU and may run the timer.
 			wait_for_vsync();
 #endif
 			if (fight_printer()) {
-				ds_writew(PIC_COPY_X1, 0);
-				ds_writew(PIC_COPY_Y1, 0);
-				ds_writew(PIC_COPY_X2, 319);
-				ds_writew(PIC_COPY_Y2, 199);
+				g_pic_copy.x1 = 0;
+				g_pic_copy.y1 = 0;
+				g_pic_copy.x2 = 319;
+				g_pic_copy.y2 = 199;
 
-				ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
-				ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
+				g_pic_copy.src = g_renderbuf_ptr;
+				g_pic_copy.dst = g_vga_memstart;
 
 				do_pic_copy(0);
 			}
@@ -1018,7 +1018,7 @@ to the DOSBox-CPU and may run the timer.
 	_read(handle, g_buffer8_ptr, 64000);
 	close(handle);
 
-	ds_writed(PIC_COPY_DST, (Bit32u)(g_vga_backbuffer = g_vga_memstart));
+	g_pic_copy.dst = g_vga_backbuffer = g_vga_memstart;
 }
 
 //static

@@ -78,12 +78,12 @@ void diary_show(void)
 		i = diary_print_entry(i);
 	} while (i < ds_readws(DIARY_ENTRY_COUNTER));
 
-	ds_writew(PIC_COPY_X1, 0);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, 319);
-	ds_writew(PIC_COPY_Y2, 199);
-	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
-	ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = 319;
+	g_pic_copy.y2 = 199;
+	g_pic_copy.src = g_renderbuf_ptr;
+	g_pic_copy.dst = g_vga_memstart;
 
 	update_mouse_cursor();
 
@@ -95,7 +95,7 @@ void diary_show(void)
 
 	set_textcolor(fg_bak, bg_bak);
 
-	ds_writed(PIC_COPY_DST, (Bit32u)(g_vga_backbuffer = g_vga_memstart));
+	g_pic_copy.dst = ((g_vga_backbuffer = g_vga_memstart));
 
 	ds_writew(TEXTLINE_POSX, bak2);
 	ds_writew(TEXTLINE_MAXLEN, bak1);
@@ -205,13 +205,13 @@ Bit16u diary_print_entry(Bit16u line)
 
 	} while ((host_readws(ptr) == day) && (host_readws(ptr + 2) == month));
 
-	ds_writew(PIC_COPY_X1, 0);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, 319);
-	ds_writew(PIC_COPY_Y2, line * 7);
-	ds_writed(PIC_COPY_SRC, (Bit32u)g_buffer9_ptr);
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = 319;
+	g_pic_copy.y2 = line * 7;
+	g_pic_copy.src = g_buffer9_ptr;
 #if !defined(__BORLANDC__)
-	ds_writed(PIC_COPY_DST, (Bit32u)((g_renderbuf_ptr + startline * 2240) + 9600));
+	g_pic_copy.dst = g_renderbuf_ptr + startline * 2240 + 9600;
 #else
 #define RENDERBUF_PTR (0xd303)
 /* TODO: ugly hack, BASM does not like 16bit immediate values with imul */

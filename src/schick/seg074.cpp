@@ -211,10 +211,10 @@ void render_automap(signed short x_off)
 	signed short y;
 	signed short entrance_dir;
 
-	ds_writew(PIC_COPY_X1, 0);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, 6);
-	ds_writew(PIC_COPY_Y2, 6);
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = 6;
+	g_pic_copy.y2 = 6;
 
 	/* set buffer to 0 */
 	memset(g_renderbuf_ptr, 0, 64000);
@@ -389,13 +389,10 @@ void draw_automap_square(signed short x, signed short y, signed short color, sig
 		}
 	}
 
-	ds_writed(PIC_COPY_DST, (Bit32u)p_img_tile);
+	g_pic_copy.dst = p_img_tile;
+	g_pic_copy.src = tile;
 
-	ds_writed(PIC_COPY_SRC, (Bit32u)&tile);
-
-	/* */
 	do_pic_copy(0);
-
 }
 
 /**
@@ -457,14 +454,14 @@ void draw_automap_to_screen(void)
 	ds_writew((PIC_COPY_DS_RECT + 6), ds_readw(ANI_POSX) + 208);
 	ds_writew((PIC_COPY_DS_RECT + 4), ds_readw(ANI_POSY) + 135);
 
-	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
+	g_pic_copy.src = g_renderbuf_ptr;
 
-	ds_writew(PIC_COPY_X1, 0);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, 319);
-	ds_writew(PIC_COPY_Y2, 134);
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = 319;
+	g_pic_copy.y2 = 134;
 
-	ds_writed(PIC_COPY_DST, (Bit32u)(g_vga_memstart + ds_readws(ANI_POSX) + 320 * ds_readws(ANI_POSY)));
+	g_pic_copy.dst = g_vga_memstart + ds_readws(ANI_POSX) + 320 * ds_readws(ANI_POSY);
 
 	update_mouse_cursor();
 
@@ -474,7 +471,7 @@ void draw_automap_to_screen(void)
 
 	refresh_screen_size();
 
-	ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
+	g_pic_copy.dst = g_vga_memstart;
 
 	/* restore screen coordinates */
 	*(struct dummy*)(p_datseg + PIC_COPY_DS_RECT) = bak;

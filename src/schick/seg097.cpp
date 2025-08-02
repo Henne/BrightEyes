@@ -279,13 +279,13 @@ void GUI_draw_radio_bg(signed short header, signed short options, signed short w
 	signed short i;
 
 	/* set upper left coordinates */
-	ds_writew(PIC_COPY_X1, ds_readw(TEXTBOX_POS_X));
-	ds_writew(PIC_COPY_Y1, ds_readw(TEXTBOX_POS_Y));
+	g_pic_copy.x1 = ds_readw(TEXTBOX_POS_X);
+	g_pic_copy.y1 = ds_readw(TEXTBOX_POS_Y);
 	/* set lower righti coordinates */
-	ds_writew(PIC_COPY_X2, ds_readw(TEXTBOX_POS_X) + width - 1);
-	ds_writew(PIC_COPY_Y2, ds_readw(TEXTBOX_POS_Y) + height - 1);
+	g_pic_copy.x2 = ds_readw(TEXTBOX_POS_X) + width - 1;
+	g_pic_copy.y2 = ds_readw(TEXTBOX_POS_Y) + height - 1;
 	/* set pointer */
-	ds_writed(PIC_COPY_SRC, (Bit32u)g_gui_buffer_unkn);
+	g_pic_copy.src = g_gui_buffer_unkn;
 	do_save_rect();
 
 	/* play FX3.VOC */
@@ -309,11 +309,11 @@ void GUI_draw_radio_bg(signed short header, signed short options, signed short w
 
 void GUI_copy_smth(unsigned short width, unsigned short height)
 {
-	ds_writew(PIC_COPY_X1, ds_readw(TEXTBOX_POS_X));
-	ds_writew(PIC_COPY_Y1, ds_readw(TEXTBOX_POS_Y));
-	ds_writew(PIC_COPY_X2, ds_readw(TEXTBOX_POS_X) + width - 1);
-	ds_writew(PIC_COPY_Y2, ds_readw(TEXTBOX_POS_Y) + height - 1);
-	ds_writed(PIC_COPY_SRC, (Bit32u)g_gui_buffer_unkn);
+	g_pic_copy.x1 = ds_readw(TEXTBOX_POS_X);
+	g_pic_copy.y1 = ds_readw(TEXTBOX_POS_Y);
+	g_pic_copy.x2 = ds_readw(TEXTBOX_POS_X) + width - 1;
+	g_pic_copy.y2 = ds_readw(TEXTBOX_POS_Y) + height - 1;
+	g_pic_copy.src = g_gui_buffer_unkn;
 	do_pic_copy(0);
 }
 
@@ -536,11 +536,11 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
 				(signed char)0xff);
 
 		/* set the coordinates */
-		ds_writew(PIC_COPY_X1, ds_readw(TEXTBOX_POS_X) + 6);
-		ds_writew(PIC_COPY_Y1, ds_readw(TEXTBOX_POS_Y) + 7);
-		ds_writew(PIC_COPY_X2, ds_readw(TEXTBOX_POS_X) + 37);
-		ds_writew(PIC_COPY_Y2, ds_readw(TEXTBOX_POS_Y) + 38);
-		ds_writed(PIC_COPY_SRC, (Bit32u)picture);
+		g_pic_copy.x1 = ds_readw(TEXTBOX_POS_X) + 6;
+		g_pic_copy.y1 = ds_readw(TEXTBOX_POS_Y) + 7;
+		g_pic_copy.x2 = ds_readw(TEXTBOX_POS_X) + 37;
+		g_pic_copy.y2 = ds_readw(TEXTBOX_POS_Y) + 38;
+		g_pic_copy.src = picture;
 
 		do_pic_copy(0);
 	}

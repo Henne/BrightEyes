@@ -209,16 +209,16 @@ void status_show(Bit16u index)
 	load_pp20(ARCHIVE_FILE_ZUSTA_UK);
 
 	/* draw the picture of the hero */
-	ds_writew(PIC_COPY_X1, 16);
-	ds_writew(PIC_COPY_Y1, 9);
-	ds_writew(PIC_COPY_X2, 47);
-	ds_writew(PIC_COPY_Y2, 40);
-	ds_writed(PIC_COPY_DST, (Bit32u)g_renderbuf_ptr);
+	g_pic_copy.x1 = 16;
+	g_pic_copy.y1 = 9;
+	g_pic_copy.x2 = 47;
+	g_pic_copy.y2 = 40;
+	g_pic_copy.dst = g_renderbuf_ptr;
 	/* the source must be passed here as Bit8u* */
-	ds_writed(PIC_COPY_SRC, (Bit32u)(hero + HERO_PORTRAIT));
+	g_pic_copy.src = hero + HERO_PORTRAIT;
 	do_pic_copy(0);
 
-	ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
+	g_pic_copy.dst = g_vga_memstart;
 
 	/* print inventory and silouette values */
 	if (ds_readws(STATUS_PAGE_MODE) < 3) {
@@ -241,15 +241,15 @@ void status_show(Bit16u index)
 			process_nvf(&nvf);
 
 			/* draw the item icon */
-			ds_writew(PIC_COPY_X1, ds_readw(INVSLOT_ICONXY_TABLE + i * 4));
-			ds_writew(PIC_COPY_Y1, ds_readw(INVSLOT_ICONXY_TABLE + i * 4 + 2));
-			ds_writew(PIC_COPY_X2, ds_readw(INVSLOT_ICONXY_TABLE + i * 4) + 15);
-			ds_writew(PIC_COPY_Y2, ds_readw(INVSLOT_ICONXY_TABLE + i * 4 + 2) + 15);
-			ds_writed(PIC_COPY_DST, (Bit32u)g_renderbuf_ptr);
-			ds_writed(PIC_COPY_SRC, (Bit32u)g_icon);
+			g_pic_copy.x1 = ds_readw(INVSLOT_ICONXY_TABLE + i * 4);
+			g_pic_copy.y1 = ds_readw(INVSLOT_ICONXY_TABLE + i * 4 + 2);
+			g_pic_copy.x2 = ds_readw(INVSLOT_ICONXY_TABLE + i * 4) + 15;
+			g_pic_copy.y2 = ds_readw(INVSLOT_ICONXY_TABLE + i * 4 + 2) + 15;
+			g_pic_copy.dst = g_renderbuf_ptr;
+			g_pic_copy.src = g_icon;
 			do_pic_copy(0);
 
-			ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
+			g_pic_copy.dst = g_vga_memstart;
 
 			/* check if stackable */
 			if (item_stackable(get_itemsdat(host_readw(hero + i * SIZEOF_INVENTORY + HERO_INVENTORY)))) {
@@ -690,11 +690,11 @@ void status_show(Bit16u index)
 		}
 	}
 
-	ds_writew(PIC_COPY_X1, 0);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, 319);
-	ds_writew(PIC_COPY_Y2, 199);
-	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = 319;
+	g_pic_copy.y2 = 199;
+	g_pic_copy.src = g_renderbuf_ptr;
 	do_pic_copy(0);
 
 	ds_writew(UPDATE_STATUSLINE, 1);

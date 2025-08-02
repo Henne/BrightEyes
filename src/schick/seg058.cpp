@@ -191,11 +191,11 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 		read_archive_file(l_si, g_icon, 576L);
 		close(l_si);
 
-		ds_writew(PIC_COPY_X1, 108);
-		ds_writew(PIC_COPY_Y1, 5);
-		ds_writew(PIC_COPY_X2, 131);
-		ds_writew(PIC_COPY_Y2, 28);
-		ds_writed(PIC_COPY_SRC, (Bit32u)g_icon);
+		g_pic_copy.x1 = 108;
+		g_pic_copy.y1 = 5;
+		g_pic_copy.x2 = 131;
+		g_pic_copy.y2 = 28;
+		g_pic_copy.src = g_icon;
 		do_pic_copy(0);
 
 		ds_writed(SELLITEMS, (Bit32u)g_fig_figure1_buf);
@@ -271,11 +271,11 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 						if ((j = host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * answer))) {
 
-							ds_writew(PIC_COPY_X1, array3.a[items_x]);
-							ds_writew(PIC_COPY_Y1, array5.a[l_si]);
-							ds_writew(PIC_COPY_X2, array3.a[items_x] + 15);
-							ds_writew(PIC_COPY_Y2, array5.a[l_si] + 15);
-							ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
+							g_pic_copy.x1 = array3.a[items_x];
+							g_pic_copy.y1 = array5.a[l_si];
+							g_pic_copy.x2 = array3.a[items_x] + 15;
+							g_pic_copy.y2 = array5.a[l_si] + 15;
+							g_pic_copy.src = g_renderbuf_ptr;
 
 							nvf.no = host_readws(get_itemsdat(j));
 

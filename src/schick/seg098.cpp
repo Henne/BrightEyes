@@ -67,33 +67,33 @@ void magic_heal_ani(Bit8u *hero)
 	target_no = host_readbs(hero + HERO_ENEMY_ID) - 1;
 	target = get_hero(target_no);
 
-	ds_writew(PIC_COPY_V1, 0);
-	ds_writew(PIC_COPY_V2, 0);
-	ds_writew(PIC_COPY_V3, 31);
-	ds_writew(PIC_COPY_V4, 31);
+	g_pic_copy.v1 = 0;
+	g_pic_copy.v2 = 0;
+	g_pic_copy.v3 = 31;
+	g_pic_copy.v4 = 31;
 
 	for (i = 0; i < 5; i++) {
 
 		/* copy hero picture into buffer */
-		ds_writew(PIC_COPY_X1, 0);
-		ds_writew(PIC_COPY_Y1, 0);
-		ds_writew(PIC_COPY_X2, 31);
-		ds_writew(PIC_COPY_Y2, 31);
-		ds_writed(PIC_COPY_DST, (Bit32u)g_renderbuf_ptr);
-		ds_writed(PIC_COPY_SRC, (Bit32u)(target + HERO_PORTRAIT));
+		g_pic_copy.x1 = 0;
+		g_pic_copy.y1 = 0;
+		g_pic_copy.x2 = 31;
+		g_pic_copy.y2 = 31;
+		g_pic_copy.dst = g_renderbuf_ptr;
+		g_pic_copy.src = target + HERO_PORTRAIT;
 		do_pic_copy(0);
 
 		/* copy stars over it */
-		ds_writed(PIC_COPY_SRC, (Bit32u)(g_buffer8_ptr + (a.a[i] * 1024)));
+		g_pic_copy.src = g_buffer8_ptr + (a.a[i] * 1024);
 		do_pic_copy(2);
 
 		/* copy buffer content to screen */
-		ds_writew(PIC_COPY_X1, ds_readw(HERO_PIC_POSX + 2 * target_no));
-		ds_writew(PIC_COPY_Y1, 157);
-		ds_writew(PIC_COPY_X2, ds_readw(HERO_PIC_POSX + 2 * target_no) + 31);
-		ds_writew(PIC_COPY_Y2, 188);
-		ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
-		ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
+		g_pic_copy.x1 = ds_readw(HERO_PIC_POSX + 2 * target_no);
+		g_pic_copy.y1 = 157;
+		g_pic_copy.x2 = ds_readw(HERO_PIC_POSX + 2 * target_no) + 31;
+		g_pic_copy.y2 = 188;
+		g_pic_copy.src = g_renderbuf_ptr;
+		g_pic_copy.dst = g_vga_memstart;
 		do_pic_copy(3);
 
 		delay_or_keypress(10);

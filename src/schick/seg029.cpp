@@ -64,11 +64,11 @@ void draw_playmask(void)
 
 	update_mouse_cursor();
 
-	ds_writew(PIC_COPY_X1, 0);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, 319);
-	ds_writew(PIC_COPY_Y2, 199);
-	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = 319;
+	g_pic_copy.y2 = 199;
+	g_pic_copy.src = g_renderbuf_ptr;
 
 	do_pic_copy(0);
 
@@ -172,10 +172,10 @@ void draw_status_line(void)
 		} else {
 			if (host_readb(get_hero(i) + HERO_GROUP_NO) == gs_current_group) {
 
-				ds_writew(PIC_COPY_X1, ds_readw(HERO_PIC_POSX + 2 * i));
-				ds_writew(PIC_COPY_Y1, 157);
-				ds_writew(PIC_COPY_X2, ds_readw(HERO_PIC_POSX + 2 * i) + 31);
-				ds_writew(PIC_COPY_Y2, 188);
+				g_pic_copy.x1 = ds_readw(HERO_PIC_POSX + 2 * i);
+				g_pic_copy.y1 = 157;
+				g_pic_copy.x2 = ds_readw(HERO_PIC_POSX + 2 * i) + 31;
+				g_pic_copy.y2 = 188;
 
 				head_bak = -1;
 
@@ -186,7 +186,7 @@ void draw_status_line(void)
 				}
 
 				/* set the src pointer of the head */
-				ds_writed(PIC_COPY_SRC, (Bit32u)(hero_dead(get_hero(i)) ? (Bit8u*)g_dtp2 : (Bit8u*)(get_hero(i) + HERO_PORTRAIT)));
+				g_pic_copy.src = ((hero_dead(get_hero(i)) ? (Bit8u*)g_dtp2 : (Bit8u*)(get_hero(i) + HERO_PORTRAIT)));
 
 				do_pic_copy(0);
 
@@ -213,11 +213,11 @@ void draw_status_line(void)
 				for (j = 0; j < 1024; src++, dst++, j++)
 					*dst = *src + 0x40;
 
-				ds_writew(PIC_COPY_X1, ds_readw(HERO_PIC_POSX + 2 * i));
-				ds_writew(PIC_COPY_Y1, 157);
-				ds_writew(PIC_COPY_X2, ds_readw(HERO_PIC_POSX + 2 * i) + 31);
-				ds_writew(PIC_COPY_Y2, 188);
-				ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
+				g_pic_copy.x1 = ds_readw(HERO_PIC_POSX + 2 * i);
+				g_pic_copy.y1 = 157;
+				g_pic_copy.x2 = ds_readw(HERO_PIC_POSX + 2 * i) + 31;
+				g_pic_copy.y2 = 188;
+				g_pic_copy.src = g_renderbuf_ptr;
 
 				do_pic_copy(0);
 
@@ -295,11 +295,11 @@ void draw_icons(void)
 
 	for (i = 0; i < 9; i++) {
 
-		ds_writew(PIC_COPY_X1, ds_readw(GUI_BUTTONS_POS + i * 4));
-		ds_writew(PIC_COPY_Y1, ds_readw(GUI_BUTTONS_POS + i * 4 + 2));
-		ds_writew(PIC_COPY_X2, ds_readw(GUI_BUTTONS_POS + i * 4) + 23);
-		ds_writew(PIC_COPY_Y2, ds_readw(GUI_BUTTONS_POS + i * 4 + 2) + 23);
-		ds_writed(PIC_COPY_SRC, (Bit32u)g_buf_icon + i * 576);
+		g_pic_copy.x1 = ds_readw(GUI_BUTTONS_POS + i * 4);
+		g_pic_copy.y1 = ds_readw(GUI_BUTTONS_POS + i * 4 + 2);
+		g_pic_copy.x2 = ds_readw(GUI_BUTTONS_POS + i * 4) + 23;
+		g_pic_copy.y2 = ds_readw(GUI_BUTTONS_POS + i * 4 + 2) + 23;
+		g_pic_copy.src = g_buf_icon + i * 576;
 
 		if (ds_readbs(NEW_MENU_ICONS + i) != MENU_ICON_NONE) {
 			if (ds_readbs(LOADED_MENU_ICONS + i) != ds_readbs(NEW_MENU_ICONS + i))
