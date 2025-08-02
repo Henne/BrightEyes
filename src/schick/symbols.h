@@ -180,7 +180,7 @@
 #define STATUS_PAGE_HUNGER              (0x2c9f)    /* signed char */
 #define STATUS_PAGE_THIRST              (0x2ca0)    /* signed char */
 #define MISSING_FILE_GUILOCK            (0x2ca1)    /* unsigned char; writeonly (0,1) */
-#define BASEPOS_X                       (0x2ca2)    /* signed short */
+//#define BASEPOS_X                       (0x2ca2)    /* signed short */
 //#define BASEPOS_Y                       (0x2ca4)    /* signed short */
 //#define DNG_AREA_LOADED                 (0x2ca6)    /* unsigned char */
 //#define CITY_AREA_LOADED                (0x2ca7)    /* unsigned char */

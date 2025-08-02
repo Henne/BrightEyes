@@ -395,18 +395,18 @@ void show_times_up(void)
 	delay_or_keypress(200);
 
 	tw_bak = g_textbox_width;
-	bak1 = ds_readws(BASEPOS_X);
+	bak1 = g_basepos_x;
 	bak2 = g_basepos_y;
 
 	g_textbox_width = 7;
-	ds_writew(BASEPOS_X, 0);
+	g_basepos_x = 0;
 	g_basepos_y = 55;
 
 	GUI_output(get_tx2(55));
 	GUI_output(get_tx2(56));
 	GUI_output(get_tx2(57));
 
-	ds_writew(BASEPOS_X, bak1);
+	g_basepos_x = bak1;
 	g_basepos_y = bak2;
 	g_textbox_width = tw_bak;
 
@@ -431,7 +431,7 @@ void show_outro(void)
 	struct nvf_desc nvf;
 
 	g_textbox_width = 7;
-	ds_writew(BASEPOS_X, 0);
+	g_basepos_x = 0;
 	g_basepos_y = 60;
 
 	load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
@@ -632,7 +632,7 @@ void show_outro(void)
 	/* mark the game as done */
 	gs_datseg_status_start = 99;
 
-	ds_writew(BASEPOS_X, 0);
+	g_basepos_x = 0;
 	g_basepos_y = 0;
 
 	/* save the game */

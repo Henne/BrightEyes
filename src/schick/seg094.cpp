@@ -76,7 +76,7 @@ void set_textbox_positions(signed short town_id)
 
 	r_dx = (x >= 0 && x <= 159) ? (y >= 0 && y <= 99 ? 3 : 1) : (y >= 0 && y <= 99 ? 2 : 0);
 
-	ds_writew(BASEPOS_X, !r_dx || r_dx == 2 ? -80 : 80);
+	g_basepos_x = ((!r_dx || r_dx == 2) ? -80 : 80);
 	g_basepos_y = ((!r_dx || r_dx == 1) ? -40 : 40);
 }
 
@@ -316,11 +316,11 @@ void TM_func1(signed short route_no, signed short backwards)
 		} else if (ds_readw(ROUTE_INFORMER_FLAG) != 0 && ds_readws(ROUTE_DAYPROGRESS) >= ds_readws(ROUTE_INFORMER_TIME) && ds_readws(GAME_STATE) == GAME_STATE_MAIN)
 		{
 			gs_current_typeindex = (random_schick(100) <= 50 ? 10 : 12);
-			bak1 = ds_readws(BASEPOS_X);
+			bak1 = g_basepos_x;
 			bak2 = g_basepos_y;
-			ds_writew(BASEPOS_X, g_basepos_y = 0);
+			g_basepos_x = g_basepos_y = 0;
 			do_informer();
-			ds_writew(BASEPOS_X, bak1);
+			g_basepos_x = bak1;
 			g_basepos_y = bak2;
 
 		}
@@ -461,7 +461,7 @@ void TM_func1(signed short route_no, signed short backwards)
 					}
 				}
 			}
-			ds_writew(WALLCLOCK_X, ds_readws(BASEPOS_X) + 120);
+			ds_writew(WALLCLOCK_X, g_basepos_x + 120);
 			ds_writew(WALLCLOCK_Y, g_basepos_y + 87);
 			g_wallclock_update = 1;
 			ds_writew(REQUEST_REFRESH, 0);

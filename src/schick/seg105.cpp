@@ -807,10 +807,10 @@ signed short select_item_to_drop(Bit8u *hero)
 			i = v6;
 		}
 		tw_bak = g_textbox_width;
-		bak2 = ds_readw(BASEPOS_X);
+		bak2 = g_basepos_x;
 		bak3 = g_basepos_y;
 		g_textbox_width = 6;
-		ds_writew(BASEPOS_X, g_basepos_y = 0);
+		g_basepos_x = g_basepos_y = 0;
 		v4 = GUI_radio((char*)get_ttx(752), (signed char)i,
 			(char*)(ds_readd(RADIO_NAME_LIST + 0x00 + di * 4)),
 			(char*)(ds_readd(RADIO_NAME_LIST + 0x04 + di * 4)),
@@ -826,7 +826,7 @@ signed short select_item_to_drop(Bit8u *hero)
 			(char*)(ds_readd(RADIO_NAME_LIST + 0x2c + di * 4)),
 			(char*)(ds_readd(RADIO_NAME_LIST + 0x30 + di * 4)));
 		g_textbox_width = tw_bak;
-		ds_writew(BASEPOS_X, bak2);
+		g_basepos_x = bak2;
 		g_basepos_y = bak3;
 
 		if (va != -1) {

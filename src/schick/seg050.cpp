@@ -485,7 +485,7 @@ void level_up(signed short hero_pos)
 
 		do {
 
-			ds_writew(BASEPOS_X, -30);
+			g_basepos_x = -30;
 
 			l_si = GUI_radio(get_tx2(35), 7,
 						get_ttx(412),
@@ -957,7 +957,7 @@ void level_up(signed short hero_pos)
 		}
 	}
 
-	ds_writew(BASEPOS_X, 0);
+	g_basepos_x = 0;
 	ds_writew(REQUEST_REFRESH, 1);
 	g_timers_disabled = 0;
 

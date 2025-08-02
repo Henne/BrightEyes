@@ -354,7 +354,7 @@ signed short GUI_input(char *str, unsigned short num)
 	l5 = ds_readw(TEXTLINE_MAXLEN);
 
 	l_di = (g_textbox_width * 32) + 32;
-	ds_writew(TEXTBOX_POS_X, ((signed short)(320u - l_di) >> 1) + ds_readws(BASEPOS_X));
+	ds_writew(TEXTBOX_POS_X, ((signed short)(320u - l_di) >> 1) + g_basepos_x);
 
 	ds_writew(TEXTLINE_POSX, ds_readw(TEXTBOX_POS_X) + 5);
 	ds_writew(TEXTLINE_MAXLEN, l_di - 8);
@@ -502,7 +502,7 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
 	g_textbox_width = 9;
 
 	l_di = g_textbox_width * 32 + 32;
-	ds_writew(TEXTBOX_POS_X, ((signed short)(320 - l_di) >> 1) + ds_readw(BASEPOS_X));
+	ds_writew(TEXTBOX_POS_X, ((signed short)(320 - l_di) >> 1) + g_basepos_x);
 	ds_writew(TEXTLINE_POSX, ds_readw(TEXTBOX_POS_X) + 5);
 	ds_writew(TEXTLINE_MAXLEN, l_di - 8);
 	l10 = ds_readw(TXT_TABPOS1);
@@ -739,7 +739,7 @@ signed short GUI_radio(char *text, signed char options, ...)
 	l9 = ds_readw(TEXTLINE_MAXLEN);
 
 	l11 = g_textbox_width * 32 + 32;
-	ds_writew(TEXTBOX_POS_X, ((320 - l11) >> 1) + ds_readw(BASEPOS_X));
+	ds_writew(TEXTBOX_POS_X, ((320 - l11) >> 1) + g_basepos_x);
 	ds_writew(TEXTLINE_POSX, ds_readw(TEXTBOX_POS_X) + 5);
 	ds_writew(TEXTLINE_MAXLEN, l11 - 8);
 

@@ -52,7 +52,7 @@ void pause_traveling(signed short ani_no)
 
 	load_tx2(ARCHIVE_FILE_WILD_LTX);
 
-	g_basepos_x_bak = ds_readw(BASEPOS_X);
+	g_basepos_x_bak = g_basepos_x;
 	g_basepos_y_bak = g_basepos_y;
 
 	g_textbox_width_bak = g_textbox_width;
@@ -61,7 +61,7 @@ void pause_traveling(signed short ani_no)
 	ds_writeb(TRAVEL_EVENT_ACTIVE, 1);
 
 	/* c = b = a = 0 */
-	ds_writeb(SHOW_TRAVEL_MAP, (unsigned char)ds_writew(BASEPOS_X, g_wallclock_update = 0));
+	ds_writeb(SHOW_TRAVEL_MAP, (unsigned char)(g_basepos_x = g_wallclock_update = 0));
 
 	g_basepos_y = (ani_no == 21 ? 60: 70);
 	g_textbox_width = 9;
@@ -72,7 +72,7 @@ static
 #endif
 void resume_traveling(void)
 {
-	ds_writew(BASEPOS_X, g_basepos_x_bak);
+	g_basepos_x = g_basepos_x_bak;
 	g_basepos_y = g_basepos_y_bak;
 
 	g_textbox_width = g_textbox_width_bak;
@@ -477,7 +477,7 @@ void octopus_attack(void)
 	add_hero_ap_all(5);
 	GUI_output(get_tx2(32));
 
-	ds_writew(BASEPOS_X, g_basepos_y = 0);
+	g_basepos_x = g_basepos_y = 0;
 	status_menu(get_hero_index((Bit8u*)get_first_hero_available_in_group()));
 	resume_traveling();
 }
@@ -552,7 +552,7 @@ void pirates_attack(void)
 
 	do_fight(FIGHTS_S001);
 
-	ds_writew(BASEPOS_X, g_basepos_y = 0);
+	g_basepos_x = g_basepos_y = 0;
 
 	status_menu(get_hero_index((Bit8u*)get_first_hero_available_in_group()));
 
@@ -564,10 +564,10 @@ void do_wild8_fight(void)
 	signed short bak1;
 	signed short bak2;
 
-	bak1 = ds_readws(BASEPOS_X);
+	bak1 = g_basepos_x;
 	bak2 = g_basepos_y;
 	g_wallclock_update_bak = g_wallclock_update;
-	ds_writew(BASEPOS_X, 0);
+	g_basepos_x = 0;
 	g_basepos_y = 0;
 	ds_writeb(SHOW_TRAVEL_MAP, 0);
 
@@ -578,7 +578,7 @@ void do_wild8_fight(void)
 
 	ds_writew(ROUTE_FIGHT_FLAG, 0);
 	ds_writeb(SHOW_TRAVEL_MAP, 1);
-	ds_writew(BASEPOS_X, bak1);
+	g_basepos_x = bak1;
 	g_basepos_y = bak2;
 }
 
@@ -597,10 +597,10 @@ void random_encounter(signed short arg)
 		l_si = 1;
 	}
 
-	bak1 = ds_readws(BASEPOS_X);
+	bak1 = g_basepos_x;
 	bak2 = g_basepos_y;
 	wallclock_update_bak = g_wallclock_update;
-	ds_writew(BASEPOS_X, 0);
+	g_basepos_x = 0;
 	g_basepos_y = 0;
 
 	arg = ds_readb((RANDOM_ENCOUNTER_INDEX-1) + arg);
@@ -705,7 +705,7 @@ void random_encounter(signed short arg)
 		}
 	}
 
-	ds_writew(BASEPOS_X, bak1);
+	g_basepos_x = bak1;
 	g_basepos_y = bak2;
 	g_wallclock_update = wallclock_update_bak;
 	load_tx(ARCHIVE_FILE_MAPTEXT_LTX);

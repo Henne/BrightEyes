@@ -682,10 +682,10 @@ void do_location(void)
 
 	tm_bak = ds_readb(SHOW_TRAVEL_MAP);
 	tw_bak = g_textbox_width;
-	bak1 = ds_readws(BASEPOS_X);
+	bak1 = g_basepos_x;
 	bak2 = g_basepos_y;
 
-	ds_writew(BASEPOS_X, 0);
+	g_basepos_x = 0;
 	g_basepos_y = 0;
 	ds_writeb(SHOW_TRAVEL_MAP, 0);
 	g_textbox_width = 3;
@@ -698,7 +698,7 @@ void do_location(void)
 		func();
 	}
 
-	ds_writew(BASEPOS_X, bak1);
+	g_basepos_x = bak1;
 	g_basepos_y = bak2;
 	g_textbox_width = tw_bak;
 

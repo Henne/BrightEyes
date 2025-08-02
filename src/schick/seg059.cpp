@@ -254,10 +254,10 @@ void prolog_ghostship(void)
 	signed short bak2;
 
 	tw_bak = g_textbox_width;
-	bak1 = ds_readws(BASEPOS_X);
+	bak1 = g_basepos_x;
 	bak2 = g_basepos_y;
 	g_textbox_width = 7;
-	ds_writews(BASEPOS_X, g_basepos_y = 0);
+	g_basepos_x = g_basepos_y = 0;
 
 	load_ani(17);
 	draw_main_screen();
@@ -282,7 +282,7 @@ void prolog_ghostship(void)
 
 	set_var_to_zero();
 	g_textbox_width = tw_bak;
-	ds_writews(BASEPOS_X, bak1);
+	g_basepos_x = bak1;
 	g_basepos_y = bak2;
 }
 
