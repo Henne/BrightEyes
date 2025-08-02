@@ -184,7 +184,7 @@
 #define BASEPOS_Y                       (0x2ca4)    /* signed short */
 #define DNG_AREA_LOADED                 (0x2ca6)    /* unsigned char */
 #define CITY_AREA_LOADED                (0x2ca7)    /* unsigned char */
-#define TRAVEL_MAP_LOADED               (0x2ca8)    /* signed char */
+//#define TRAVEL_MAP_LOADED               (0x2ca8)    /* signed char */
 // ?33
 //#define ANI_UNKNOWN_FLAG                (0x2cca)    /* unsigned char; writeonly (0,1) */
 //#define AREA_PREPARED                   (0x2ccb)    /* signed short; -1 = unprepared, 0 = dungeon, 1 = town */

@@ -55,7 +55,7 @@ signed short do_travel_mode(void)
 		g_food_message_shown[i] = 0;
 	}
 
-	if (ds_readb(TRAVEL_MAP_LOADED) != ds_readb(SHOW_TRAVEL_MAP))
+	if (g_travel_map_loaded != ds_readbs(SHOW_TRAVEL_MAP))
 	{
 		load_map();
 	}
@@ -81,7 +81,7 @@ signed short do_travel_mode(void)
 		{
 			update_mouse_cursor();
 
-			if (ds_readb(TRAVEL_MAP_LOADED) != ds_readb(SHOW_TRAVEL_MAP))
+			if (g_travel_map_loaded != ds_readbs(SHOW_TRAVEL_MAP))
 			{
 				load_map();
 			}

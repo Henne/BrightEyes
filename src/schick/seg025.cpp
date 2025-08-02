@@ -706,7 +706,7 @@ void do_location(void)
 		ds_writeb(SHOW_TRAVEL_MAP, tm_bak);
 	}
 
-	ds_writebs(TRAVEL_MAP_LOADED, -1);
+	g_travel_map_loaded = -1;
 }
 
 /**
