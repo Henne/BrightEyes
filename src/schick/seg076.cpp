@@ -650,9 +650,7 @@ signed short DNG_step(void)
 		}
 	}
 
-	if (gs_dungeon_index != DUNGEONS_NONE &&
-		ds_readbs(DNG_AREA_LOADED) != -1 &&
-		!l_di)
+	if ((gs_dungeon_index != DUNGEONS_NONE) && (g_dng_area_loaded != -1) && !l_di)
 	{
 		DNG_see_stairs();
 		DNG_see_door();
@@ -785,7 +783,7 @@ void do_dungeon(void)
 {
 	signed short tw_bak;
 
-	if (ds_readbs(DNG_AREA_LOADED) != gs_dungeon_index || g_area_prepared || ds_readws(DNG_INIT_FLAG) != 0)
+	if ((g_dng_area_loaded != gs_dungeon_index) || g_area_prepared || (ds_readws(DNG_INIT_FLAG) != 0))
 	{
 		ds_writed(DNG_MAP_PTR, (Bit32u)(((Bit8u*)p_datseg) + DNG_MAP));
 

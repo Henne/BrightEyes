@@ -430,7 +430,7 @@ signed short DNG15_handler(void)
 
 				add_hero_ap_all(50);
 
-				ds_writebs(DNG_AREA_LOADED, g_area_prepared = -1);
+				g_dng_area_loaded = g_area_prepared = -1;
 				ds_writeb(PP20_INDEX, -2);
 
 				draw_main_screen();

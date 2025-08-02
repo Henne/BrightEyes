@@ -738,8 +738,7 @@ void equip_belt_ani(void)
 	handle = load_archive_file(ARCHIVE_FILE_GUERTEL_NVF);
 
 	/* read NVF part 1 */
-	nvf_length = read_archive_file(handle,
-			(Bit8u*)g_buffer9_ptr, 64000);
+	nvf_length = read_archive_file(handle, (Bit8u*)g_buffer9_ptr, 64000);
 	/* read NVF part 2 */
 	nvf_length += read_archive_file(handle, (Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, 64000)), 64000);
 
@@ -821,7 +820,7 @@ void equip_belt_ani(void)
 		refresh_screen_size();
 	}
 
-	g_current_ani = ds_writebs(DNG_AREA_LOADED, g_city_area_loaded = -1);
+	g_current_ani = g_dng_area_loaded = g_city_area_loaded = -1;
 }
 
 /**

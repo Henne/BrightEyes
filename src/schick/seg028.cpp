@@ -46,7 +46,7 @@ void prepare_dungeon_area(void)
 
 	index = gs_dungeon_index + ARCHIVE_FILE_DNGS_DTX;
 
-	if (ds_readbs(DNG_AREA_LOADED) != gs_dungeon_index) {
+	if (g_dng_area_loaded != gs_dungeon_index) {
 
 		load_area_description(1);
 		g_city_area_loaded = -1;
@@ -98,7 +98,7 @@ void prepare_dungeon_area(void)
 		g_area_prepared = !gs_dungeon_index;
 	}
 
-	ds_writeb(DNG_AREA_LOADED, gs_dungeon_index);
+	g_dng_area_loaded = gs_dungeon_index;
 	g_city_area_loaded = -1;
 	set_automap_tiles(gs_x_target, gs_y_target);
 }
@@ -139,7 +139,7 @@ void seg028_0224(void)
 
 	if (g_city_area_loaded != gs_current_town) {
 		load_area_description(1);
-		ds_writeb(DNG_AREA_LOADED, -1);
+		g_dng_area_loaded = -1;
 	}
 
 	load_tx(l1);
@@ -199,7 +199,7 @@ void seg028_0224(void)
 	}
 
 	g_city_area_loaded = gs_current_town;
-	ds_writeb(DNG_AREA_LOADED, -1);
+	g_dng_area_loaded = -1;
 
 	set_automap_tiles(gs_x_target, gs_y_target);
 }

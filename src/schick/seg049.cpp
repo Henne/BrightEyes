@@ -334,7 +334,7 @@ void GRP_switch_to_next(signed short mode)
 
 		if (gs_groups_dng_index[group] && (gs_groups_dng_index[group] != gs_dungeon_index))
 		{
-			ds_writeb(DNG_AREA_LOADED, -1);
+			g_dng_area_loaded = -1;
 			g_area_prepared = -1;
 		}
 

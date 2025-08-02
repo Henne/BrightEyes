@@ -1037,15 +1037,15 @@ mark2:			   goto mark1;
 		case DUNGEONS_HYGGELIKS_RUINE:  x_pos = 1;  y_pos = 11;   dir = EAST;  level = 0;  break;
 	}
 
-	gs_x_target = (x_pos);
-	gs_y_target = (y_pos);
-	gs_direction = ((signed char)dir);
+	gs_x_target = x_pos;
+	gs_y_target = y_pos;
+	gs_direction = dir;
 	gs_dungeon_level = level;
 	gs_dungeon_index = dungeon_id;
 	gs_current_loctype_bak = gs_current_loctype;
 	gs_current_town_bak = gs_current_town;
-	gs_current_loctype = gs_current_town = (TOWNS_NONE);
-	ds_writeb(DNG_AREA_LOADED, g_city_area_loaded = -1);
+	gs_current_loctype = gs_current_town = TOWNS_NONE;
+	g_dng_area_loaded = g_city_area_loaded = -1;
 
 	if (dungeon_id == DUNGEONS_ZWINGFESTE) {
 
