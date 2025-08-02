@@ -20,6 +20,11 @@ struct struct_pic_copy {
 	int v4;
 };
 
+struct struct_point {
+	int x;
+	int y;
+};
+
 struct struct_smith_repairitems {
 	Bit16s item_id;
 	Bit32s pickup_time;
@@ -85,7 +90,7 @@ extern signed short g_fig_figure2;			//ds:0x2cd3; seg025, seg027, seg032
 extern signed short g_in_fight;				//ds:0x2cd5; seg002-seg107
 extern signed short g_fight_round;			//ds:0x2cd7; seg032, seg036, seg037
 extern signed short g_skilled_hero_pos;			//ds:0x2cdb; seg047, seg051, seg056, seg057, seg097, seg103
-
+extern const struct struct_point g_gui_buttons_pos[9];	//ds:0x2cdd; seg029
 extern const signed int g_hero_pic_posx[7];		//ds:0x2d01; seg002-seg098
 extern signed char g_levelup_ta_rise[12];		//ds:0x2d0f; seg050
 extern signed char g_levelup_sp_rise[6];		//ds:0x2d1b; seg050

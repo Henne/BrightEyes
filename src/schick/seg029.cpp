@@ -295,10 +295,10 @@ void draw_icons(void)
 
 	for (i = 0; i < 9; i++) {
 
-		g_pic_copy.x1 = ds_readw(GUI_BUTTONS_POS + i * 4);
-		g_pic_copy.y1 = ds_readw(GUI_BUTTONS_POS + i * 4 + 2);
-		g_pic_copy.x2 = ds_readw(GUI_BUTTONS_POS + i * 4) + 23;
-		g_pic_copy.y2 = ds_readw(GUI_BUTTONS_POS + i * 4 + 2) + 23;
+		g_pic_copy.x1 = g_gui_buttons_pos[i].x;
+		g_pic_copy.y1 = g_gui_buttons_pos[i].y;
+		g_pic_copy.x2 = g_gui_buttons_pos[i].x + 23;
+		g_pic_copy.y2 = g_gui_buttons_pos[i].y + 23;
 		g_pic_copy.src = g_buf_icon + i * 576;
 
 		if (ds_readbs(NEW_MENU_ICONS + i) != MENU_ICON_NONE) {

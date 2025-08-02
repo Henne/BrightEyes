@@ -197,7 +197,7 @@
 //#define FIGHT_ROUND                     (0x2cd7)    /* short */
 // ?2
 //#define SKILLED_HERO_POS                (0x2cdb)    /* signed short; {-1, 0..6} */
-#define GUI_BUTTONS_POS                 (0x2cdd)    /* struct(4)[9]; struct{unsigned short x,y;} */
+//#define GUI_BUTTONS_POS                 (0x2cdd)    /* struct(4)[9]; struct{unsigned short x,y;} */
 //#define HERO_PIC_POSX                   (0x2d01)    /* unsigned short[7]; { 3, 46, 89, 132, 175, 218, 275 } */
 //#define LEVELUP_TA_RISE                 (0x2d0f)    /* signed char[12] */
 //#define LEVELUP_SP_RISE                 (0x2d1b)    /* signed char[6] */

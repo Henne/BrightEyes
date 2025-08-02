@@ -1788,7 +1788,7 @@ signed short g_in_fight = 0; // ds:0x2cd5
 signed short g_fight_round = 0; // ds:0x2cd7
 unsigned char g_unkn_011[2] = { 0x00, 0x00 }; // ds:0x2cd9
 signed short g_skilled_hero_pos = -1; // ds:0x2cdb, {-1, 0..6}
-struct{unsigned short x,y;} g_gui_buttons_pos[9] = {
+const struct struct_point g_gui_buttons_pos[9] = {
 	{ 0x00f1, 0x0039 },
 	{ 0x010c, 0x0039 },
 	{ 0x0127, 0x0039 },
