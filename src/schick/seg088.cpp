@@ -40,24 +40,24 @@ void DNG14_dive(signed short diver_pos, signed char mod, signed short dest_x)
 
 			if (test_skill(hero, TA_SCHWIMMEN, mod) <= 0) {
 				/* swimming failed */
-				sprintf((char*)g_dtp2,
+				sprintf(g_dtp2,
 					get_tx(42),
 					(char*)hero + HERO_NAME2,
 					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
 					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-				GUI_output((char*)g_dtp2);
+				GUI_output(g_dtp2);
 
 				/* loose 2W6 LE */
 				sub_hero_le(hero, dice_roll(2, 6, 0));
 			} else {
 				/* swimming succeeded */
 
-				sprintf((char*)g_dtp2,
+				sprintf(g_dtp2,
 					get_tx(43),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output((char*)g_dtp2);
+				GUI_output(g_dtp2);
 			}
 		}
 	}

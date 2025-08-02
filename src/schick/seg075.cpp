@@ -811,7 +811,7 @@ void DNG_stub6(void)
 
 			if (l_si) {
 
-				sprintf((char*)g_dtp2, get_ttx(768), get_hero(l_si - 1) + HERO_NAME2);
+				sprintf(g_dtp2, get_ttx(768), get_hero(l_si - 1) + HERO_NAME2);
 			}
 
 			if (l_di == 2) {
@@ -820,21 +820,21 @@ void DNG_stub6(void)
 
 				hero2 = (Bit8u*)get_second_hero_available_in_group();
 
-				sprintf((char*)g_text_output_buf,
+				sprintf(g_text_output_buf,
 					get_ttx(769),
 					hero1 + HERO_NAME2,
 					hero2 + HERO_NAME2);
 
-				strcat((char*)g_dtp2, (char*)g_text_output_buf);
+				strcat(g_dtp2, g_text_output_buf);
 
 				if (test_attrib(hero1, ATTRIB_GE, 2) <= 0) {
 
-					sprintf((char*)g_text_output_buf, get_ttx(770),
+					sprintf(g_text_output_buf, get_ttx(770),
 						hero1 + HERO_NAME2,
 						hero2 + HERO_NAME2,
 						l_si = random_schick(3) + 1);
 
-					strcat((char*)g_dtp2, (char*)g_text_output_buf);
+					strcat(g_dtp2, g_text_output_buf);
 
 					sub_hero_le(hero2, l_si);
 				}
@@ -852,24 +852,24 @@ void DNG_stub6(void)
 						l_si++;
 					}
 
-					strcat((char*)g_dtp2, (char*)(get_hero(l_si++) + HERO_NAME2));
+					strcat(g_dtp2, (char*)(get_hero(l_si++) + HERO_NAME2));
 
 					if (--l_di) {
 
-						strcat((char*)g_dtp2,
+						strcat(g_dtp2,
 							(char*)((l_di >= 2) ? p_datseg + DNG_STUB6_STR_COMMA : p_datseg+ DNG_STUB6_STR_AND));
 					}
 
 				} while (l_di);
 
-				sprintf((char*)g_text_output_buf, get_ttx(771), hero_auto + HERO_NAME2,
+				sprintf(g_text_output_buf, get_ttx(771), hero_auto + HERO_NAME2,
 					GUI_get_ptr(host_readbs(hero_auto + HERO_SEX), 0),
 					GUI_get_ptr(host_readbs(hero_auto + HERO_SEX), 2));
 
-				strcat((char*)g_dtp2, (char*)g_text_output_buf);
+				strcat(g_dtp2, g_text_output_buf);
 			}
 
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 		} else {
 
 			sub_group_le(random_schick(5));

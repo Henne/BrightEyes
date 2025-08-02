@@ -263,11 +263,11 @@ signed short DNG08_handler(void)
 		{
 			hero = get_hero(select_hero_ok_forced(get_tx(18)));
 
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				get_tx(19),
 				(char*)hero + HERO_NAME2);
 
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 
 			/* open door at (8,13) */
 			and_ptr_bs(amap_ptr + MAP_POS(8,13), 0x0f);
@@ -323,11 +323,11 @@ signed short DNG08_handler(void)
 				!hero_dead(hero) &&
 				test_skill(hero, TA_KLETTERN, 2) <= 0)
 			{
-				sprintf((char*)g_dtp2,
+				sprintf(g_dtp2,
 					get_tx(21),
 					(char*)hero + HERO_NAME2,
 					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
-				GUI_output((char*)g_dtp2);
+				GUI_output(g_dtp2);
 
 				sub_hero_le(hero, dice_roll(1, 6, 4));
 			}
@@ -343,18 +343,18 @@ signed short DNG08_handler(void)
 		{
 			ds_writeb(DNG08_SECRET_DOOR, 1);
 
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				get_tx(29),
 				(char*)hero + HERO_NAME2);
 
-			sprintf((char*)g_text_output_buf,
+			sprintf(g_text_output_buf,
 				(char*)((tmp = test_skill(hero, TA_SCHLOESSER, 2)) > 0 ? get_tx(30): get_tx(31)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			strcat((char*)g_dtp2,
+			strcat(g_dtp2,
 				g_text_output_buf);
 
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 
 			if (tmp > 0)
 			{
@@ -369,19 +369,19 @@ signed short DNG08_handler(void)
 
 	} else if (target_pos == DNG_POS(0,5,7) && target_pos != gs_dng_handled_pos)
 	{
-		sprintf((char*)g_dtp2,
+		sprintf(g_dtp2,
 			get_tx(22),
 			(char*)(test_skill(hero, TA_GOETTER_KULTE, 4) <= 0 ? get_tx(23) : get_tx(24)));
 
-		GUI_output((char*)g_dtp2);
+		GUI_output(g_dtp2);
 
 	} else if (target_pos == DNG_POS(0,5,9) && target_pos != gs_dng_handled_pos)
 	{
-		sprintf((char*)g_dtp2,
+		sprintf(g_dtp2,
 			get_tx(22),
 			(char*)(test_skill(hero, TA_GOETTER_KULTE, 6) <= 0 ? get_tx(23) : get_tx(25)));
 
-		GUI_output((char*)g_dtp2);
+		GUI_output(g_dtp2);
 
 	} else if (target_pos == DNG_POS(0,0,14) && target_pos != gs_dng_handled_pos)
 	{
@@ -393,11 +393,11 @@ signed short DNG08_handler(void)
 		gs_current_loctype = LOCTYPE_NONE;
 		gs_direction = ((ds_readws(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
 
-		sprintf((char*)g_dtp2,
+		sprintf(g_dtp2,
 			get_tx(33),
 			get_ttx(ds_readws(TRV_DESTINATION) + 0xeb));
 
-		GUI_output((char*)g_dtp2);
+		GUI_output(g_dtp2);
 
 		timewarp(HOURS(3));
 
@@ -431,7 +431,7 @@ void DNG08_search_bed(void)
 
 	if (random_schick(100) <= 10)
 	{
-		sprintf((char*)g_dtp2,
+		sprintf(g_dtp2,
 			get_tx(3),
 			(char*)hero + HERO_NAME2,
 			(char*)(GUI_names_grammar(2, 92, 0)));
@@ -439,14 +439,14 @@ void DNG08_search_bed(void)
 		/* a BRANDY BOTTLE */
 		get_item(ITEM_BRANDY, 1, 1);
 
-		GUI_output((char*)g_dtp2);
+		GUI_output(g_dtp2);
 
 		counter++;
 	}
 
 	if (random_schick(100) <= 10)
 	{
-		sprintf((char*)g_dtp2,
+		sprintf(g_dtp2,
 			get_tx(3),
 			(char*)hero + HERO_NAME2,
 			(char*)(GUI_names_grammar(2, 14, 0)));
@@ -454,7 +454,7 @@ void DNG08_search_bed(void)
 		/* a DAGGER */
 		get_item(ITEM_DAGGER, 1, 1);
 
-		GUI_output((char*)g_dtp2);
+		GUI_output(g_dtp2);
 
 		counter++;
 	}
@@ -463,16 +463,16 @@ void DNG08_search_bed(void)
 	{
 		money = random_schick(6);
 
-		sprintf((char*)g_text_output_buf,
+		sprintf(g_text_output_buf,
 			get_tx(4),
 			money);
 
-		sprintf((char*)g_dtp2,
+		sprintf(g_dtp2,
 			get_tx(3),
 			(char*)hero + HERO_NAME2,
 			g_text_output_buf);
 
-		GUI_output((char*)g_dtp2);
+		GUI_output(g_dtp2);
 
 		add_party_money(money);
 
@@ -491,12 +491,12 @@ void DNG08_chest1_func2(Bit8u*)
 
 	hero = (Bit8u*)get_first_hero_available_in_group();
 
-	sprintf((char*)g_dtp2,
+	sprintf(g_dtp2,
 		get_tx(11),
 		(char*)hero + HERO_NAME2,
 		(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
 
-	GUI_output((char*)g_dtp2);
+	GUI_output(g_dtp2);
 
 	/* 3W6 damage */
 	sub_hero_le(hero, dice_roll(3, 6, 0));

@@ -135,7 +135,7 @@ void status_menu(signed short hero_pos)
 
 				if (host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO)) != ITEM_NONE) {
 
-					sprintf((char*)g_dtp2,
+					sprintf(g_dtp2,
 						/* "%s %s " */
 						(char*)(p_datseg + EXTRASPACE_SEPARATED_STRINGS),
 						(char*)GUI_name_singular(get_itemname(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO)))),
@@ -144,7 +144,7 @@ void status_menu(signed short hero_pos)
 						    g_wearable_items_index[host_readbs(hero2 + HERO_TYPE) - 1]) ? ((char*)p_datseg + EMPTY_STRING8) : get_tx2(66));
 
 					if (item_weapon(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))))) {
-						strcat((char*)g_dtp2,
+						strcat(g_dtp2,
 							get_ttx(48 + host_readbs(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))) + 3)));
 					}
 
@@ -318,7 +318,7 @@ void status_menu(signed short hero_pos)
 				GUI_print_string(g_dtp2, 16, 192);
 
 				if (host_readws(hero2 + HERO_INVENTORY + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))) {
-					sprintf((char*)g_dtp2,
+					sprintf(g_dtp2,
 						/* "%s %s " */
 						(char*)(p_datseg + EXTRASPACE_SEPARATED_STRINGS2),
 						(char*)GUI_name_singular(get_itemname(host_readws(hero2 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO)))),
@@ -327,7 +327,7 @@ void status_menu(signed short hero_pos)
 						    g_wearable_items_index[host_readbs(hero2 + HERO_TYPE) - 1]) ? ((char*)p_datseg + EMPTY_STRING9) : get_tx2(66));
 
 					if (item_weapon(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))))) {
-						strcat((char*)g_dtp2,
+						strcat(g_dtp2,
 							get_ttx(48 + host_readbs(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))) + 3)));
 					}
 
@@ -449,10 +449,10 @@ void status_menu(signed short hero_pos)
 			ds_readws(ACTION) == ACTION_ID_240 &&
 			hero_is_diseased(hero2))
 		{
-			sprintf((char*)g_dtp2, get_tx2(25 + hero_is_diseased(hero2)), (char*)(hero2 + HERO_NAME2),
+			sprintf(g_dtp2, get_tx2(25 + hero_is_diseased(hero2)), (char*)(hero2 + HERO_NAME2),
 				GUI_get_ptr(host_readbs(hero2 + HERO_SEX), 1));
 
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 
 		}
 
@@ -566,10 +566,10 @@ void status_menu(signed short hero_pos)
 							reset_item_selector();
 						} else if (l1 == 7) {
 
-							sprintf((char*)g_dtp2, get_tx2(25 + flag3),
+							sprintf(g_dtp2, get_tx2(25 + flag3),
 								(char*)(hero2 + HERO_NAME2), GUI_get_ptr(host_readbs(hero2 + HERO_SEX), 1));
 
-								GUI_output((char*)g_dtp2);
+								GUI_output(g_dtp2);
 						} else {
 							g_status_page_mode = 2;
 							ds_writew(REQUEST_REFRESH, 1);
@@ -603,10 +603,10 @@ void status_menu(signed short hero_pos)
 					case 9: {
 						if (flag3) {
 
-							sprintf((char*)g_dtp2, get_tx2(25 + flag3),
+							sprintf(g_dtp2, get_tx2(25 + flag3),
 								(char*)(hero2 + HERO_NAME2), GUI_get_ptr(host_readbs(hero2 + HERO_SEX), 1));
 
-							GUI_output((char*)g_dtp2);
+							GUI_output(g_dtp2);
 							break;
 						}
 					}

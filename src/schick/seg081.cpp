@@ -66,7 +66,7 @@ signed short DNG06_handler(void)
 	{
 		if (GUI_bool(get_tx(2)))
 		{
-			strcpy((char*)g_dtp2, get_tx(3));
+			strcpy(g_dtp2, get_tx(3));
 
 			if (!ds_readb(DNG06_MONEY_FLAG))
 			{
@@ -78,15 +78,15 @@ signed short DNG06_handler(void)
 
 				add_party_money(100L * i);
 
-				sprintf((char*)g_text_output_buf,
+				sprintf(g_text_output_buf,
 					get_tx(4),
 					(char*)hero + HERO_NAME2,
 					i);
 
-				strcat((char*)g_dtp2, g_text_output_buf);
+				strcat(g_dtp2, g_text_output_buf);
 			}
 
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 		}
 
 	} else if (target_pos == DNG_POS(0,5,3) && target_pos != gs_dng_handled_pos && !ds_readb(DNG06_PROVIANT_FLAG))
@@ -116,14 +116,14 @@ signed short DNG06_handler(void)
 			hero_second = (Bit8u*)get_second_hero_available_in_group();
 		}
 
-		sprintf((char*)g_dtp2,
+		sprintf(g_dtp2,
 			(char*)(l3 == 1 ? p_datseg + STR_S_WAR : p_datseg + STR_S_UND_S_WAREN),
 			(char*)hero_first + HERO_NAME2,
 			(char*)hero_second + HERO_NAME2);
 
-		strcat((char*)g_dtp2, get_tx(6));
+		strcat(g_dtp2, get_tx(6));
 
-		GUI_output((char*)g_dtp2);
+		GUI_output(g_dtp2);
 
 		sub_hero_le(hero_first, random_schick(6));
 		if (l3 > 1)
@@ -232,11 +232,11 @@ signed short DNG06_handler(void)
 
 			hero = (Bit8u*)get_first_hero_available_in_group();
 
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				(char*)(l3 == 1 ? get_tx(12) : get_tx(13)),
 				(char*)hero + HERO_NAME2);
 
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 
 			sub_hero_le(hero, dice_roll(l3, 6, 0));
 		}
@@ -254,7 +254,7 @@ signed short DNG06_handler(void)
 
 		if (i == 1 || i == 3)
 		{
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				(char*)(i == 1 ? get_tx(18) : get_tx(19)),
 				(char*)hero + HERO_NAME2,
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
@@ -262,7 +262,7 @@ signed short DNG06_handler(void)
 				(char*)hero + HERO_NAME2,
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
 
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 
 			sub_hero_le(hero, dice_roll(3, 6, 0));
 		} else {
@@ -275,13 +275,13 @@ signed short DNG06_handler(void)
 					!hero_dead(hero) &&
 					test_skill(hero, TA_KOERPERBEHERRSCHUNG, host_readbs(hero + HERO_RS_BONUS1)) <= 0)
 				{
-					sprintf((char*)g_dtp2,
+					sprintf(g_dtp2,
 						get_tx(20),
 						(char*)hero + HERO_NAME2,
 						(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
 						(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
-					GUI_output((char*)g_dtp2);
+					GUI_output(g_dtp2);
 
 					sub_hero_le(hero, dice_roll(3, 6, 0));
 				}
@@ -321,9 +321,9 @@ signed short DNG06_handler(void)
 				/* liquid from ceiling causes damage */
 				hero = (Bit8u*)get_first_hero_available_in_group();
 
-				sprintf((char*)g_dtp2, get_tx(23), (char*)hero + HERO_NAME2);
+				sprintf(g_dtp2, get_tx(23), (char*)hero + HERO_NAME2);
 
-				GUI_output((char*)g_dtp2);
+				GUI_output(g_dtp2);
 
 				sub_hero_le(hero, 2);
 			}
@@ -362,11 +362,11 @@ signed short DNG06_handler(void)
 				/* liquid from ceiling causes damage */
 				hero = (Bit8u*)get_first_hero_available_in_group();
 
-				sprintf((char*)g_dtp2,
+				sprintf(g_dtp2,
 					get_tx(23),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output((char*)g_dtp2);
+				GUI_output(g_dtp2);
 
 				sub_hero_le(hero, 2);
 			}
@@ -377,28 +377,28 @@ signed short DNG06_handler(void)
 		hero = (Bit8u*)get_first_hero_available_in_group();
 
 		/* large disk comes down from ceiling */
-		sprintf((char*)g_dtp2,
+		sprintf(g_dtp2,
 			get_tx(25),
 			(char*)hero + HERO_NAME2);
 
-		GUI_output((char*)g_dtp2);
+		GUI_output(g_dtp2);
 
 		if (test_skill(hero, TA_KOERPERBEHERRSCHUNG, 0) > 0 && test_skill(hero, TA_GEFAHRENSINN, 0) > 0)
 		{
 			/* evasion succeeds */
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				get_tx(26),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 
 		} else {
 			/* disk causes heavy damage */
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				get_tx(27),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 
 			sub_hero_le(hero, dice_roll(3, 6, 0));
 		}
@@ -409,13 +409,13 @@ signed short DNG06_handler(void)
 		{
 			hero = (Bit8u*)get_first_hero_available_in_group();
 
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				get_tx(29),
 				(char*)hero + HERO_NAME2,
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 
 			sub_hero_le(hero, 2);
 		}
@@ -455,11 +455,11 @@ signed short DNG06_handler(void)
 		gs_current_loctype = LOCTYPE_NONE;
 		gs_direction = ((ds_readb(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
 
-		sprintf((char*)g_dtp2,
+		sprintf(g_dtp2,
 			get_tx(38),
 			get_ttx(ds_readws(TRV_DESTINATION) + 0xeb));
 
-		GUI_output((char*)g_dtp2);
+		GUI_output(g_dtp2);
 
 		timewarp(HOURS(2));
 
@@ -483,11 +483,11 @@ void DNG06_fight_intro(signed short fight_id)
 	if (fight_id == FIGHTS_F094_22)
 	{
 		/* this is true all the time */
-		sprintf((char*)g_dtp2,
+		sprintf(g_dtp2,
 			get_tx(30),
 			(char*)(!ds_readb(ESTORIK_KNOWN) ? get_tx(32) : get_tx(31)));
 
-		GUI_output((char*)g_dtp2);
+		GUI_output(g_dtp2);
 	}
 }
 
@@ -508,7 +508,7 @@ void DNG06_chest2(Bit8u* chest)
 	signed short i;
 	Bit8u *hero;
 
-	sprintf((char*)g_dtp2,
+	sprintf(g_dtp2,
 		get_tx(33));
 
 	hero = get_hero(0);
@@ -519,12 +519,12 @@ void DNG06_chest2(Bit8u* chest)
 			!hero_dead(hero) &&
 			test_skill(hero, TA_LESEN, 0) > 0)
 		{
-			strcat((char*)g_dtp2, get_tx(34));
+			strcat(g_dtp2, get_tx(34));
 			break;
 		}
 	}
 
-	GUI_output((char*)g_dtp2);
+	GUI_output(g_dtp2);
 }
 
 /**
@@ -572,8 +572,8 @@ void DNG09_pitfall(void)
 				/* the current group has at least two heroes */
 
 				/* print message */
-				sprintf((char*)g_dtp2, get_tx(30), (char*)hero_first + HERO_NAME2, (char*)hero_second + HERO_NAME2);
-				GUI_output((char*)g_dtp2);
+				sprintf(g_dtp2, get_tx(30), (char*)hero_first + HERO_NAME2, (char*)hero_second + HERO_NAME2);
+				GUI_output(g_dtp2);
 
 				/* each of these two heroes looses 3W6+3 LE */
 				sub_hero_le(hero_first, dice_roll(3, 6, 3));
@@ -598,8 +598,8 @@ void DNG09_pitfall(void)
 				/* the current group has only one hero */
 
 				/* print message */
-				sprintf((char*)g_dtp2, get_tx(31), (char*)hero_first + HERO_NAME2, (char*)(GUI_get_ptr(host_readbs(hero_first + HERO_SEX), 0)));
-				GUI_output((char*)g_dtp2);
+				sprintf(g_dtp2, get_tx(31), (char*)hero_first + HERO_NAME2, (char*)(GUI_get_ptr(host_readbs(hero_first + HERO_SEX), 0)));
+				GUI_output(g_dtp2);
 
 				/* this hero looses 3W6+3 LE */
 				sub_hero_le(hero_first, dice_roll(3, 6, 3));
@@ -633,12 +633,12 @@ void DNG09_pitfall(void)
 				host_writeb((Bit8u*)g_dtp2, 0);
 
 				if (i) {
-					sprintf((char*)g_dtp2, get_ttx(768), (char*)get_hero(i - 1) + HERO_NAME2);
+					sprintf(g_dtp2, get_ttx(768), (char*)get_hero(i - 1) + HERO_NAME2);
 				}
 
-				strcat((char*)g_dtp2, (char*)(ds_readbs(DNG09_PIT_FLAG) == 2 ? get_tx(36) : get_tx(37)));
+				strcat(g_dtp2, (char*)(ds_readbs(DNG09_PIT_FLAG) == 2 ? get_tx(36) : get_tx(37)));
 
-				GUI_output((char*)g_dtp2);
+				GUI_output(g_dtp2);
 
 				for (i = 0; i < 6; i++)	{
 

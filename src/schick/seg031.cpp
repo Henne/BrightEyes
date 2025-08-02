@@ -232,14 +232,14 @@ char* get_informer_forename(void)
 				i++;
 			} while (tmp != ' ');
 
-			strncpy((char*)g_text_output_buf, get_ttx(host_readws(p_info)), i);
+			strncpy(g_text_output_buf, get_ttx(host_readws(p_info)), i);
 #ifdef M302de_ORIGINAL_BUGFIX
 			break;
 #endif
 		}
 	}
 
-	return (char*)g_text_output_buf;
+	return g_text_output_buf;
 }
 
 /**
@@ -338,15 +338,15 @@ char* get_random_tavern_message(void)
 
 	if (!randval || randval == 19) {
 
-		sprintf((char*)g_text_output_buf, ptr, (char*)load_current_town_gossip());
+		sprintf(g_text_output_buf, ptr, (char*)load_current_town_gossip());
 
-		return (char*)g_text_output_buf;
+		return g_text_output_buf;
 
 	} else if (randval == 3) {
 
-		sprintf((char*)g_text_output_buf, ptr, get_ttx(gs_current_town + 235));
+		sprintf(g_text_output_buf, ptr, get_ttx(gs_current_town + 235));
 
-		return (char*)g_text_output_buf;
+		return g_text_output_buf;
 
 	} else {
 		return ptr;

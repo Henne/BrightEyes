@@ -183,7 +183,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					add_hero_le(consumer, 2);
 
 					/* prepare output */
-					strcpy((char*)g_dtp2, get_ttx(501));
+					strcpy(g_dtp2, get_ttx(501));
 					break;
 				}
 				case ITEM_EINBEERE: {
@@ -197,7 +197,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					add_hero_le(consumer, l_di);
 
 					/* prepare output */
-					sprintf((char*)g_dtp2, get_ttx(502), l_di);
+					sprintf(g_dtp2, get_ttx(502), l_di);
 
 					break;
 				}
@@ -216,7 +216,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					set_mod_slot(l_di, DAYS(1), consumer + HERO_HERBS, 1, (signed char)consumer_idx);
 
 					/* prepare output */
-					sprintf((char*)g_dtp2, get_ttx(503), (char*)consumer + HERO_NAME2);
+					sprintf(g_dtp2, get_ttx(503), (char*)consumer + HERO_NAME2);
 					break;
 				}
 				case ITEM_MENCHAL: {
@@ -233,7 +233,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					set_mod_slot(l_di, DAYS(1), consumer + HERO_HERBS, 2, (signed char)consumer_idx);
 
 					/* prepare output */
-					sprintf((char*)g_dtp2, get_ttx(503), (char*)consumer + HERO_NAME2);
+					sprintf(g_dtp2, get_ttx(503), (char*)consumer + HERO_NAME2);
 					break;
 				}
 				case ITEM_ATMONBLUETE: {
@@ -245,7 +245,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					}
 
 					/* prepare output */
-					sprintf((char*)g_dtp2, get_ttx(504), (char*)consumer + HERO_NAME2);
+					sprintf(g_dtp2, get_ttx(504), (char*)consumer + HERO_NAME2);
 					break;
 				}
 				case ITEM_WHIRLWEED: {
@@ -258,7 +258,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					add_hero_le(consumer, l_di);
 					/* prepare output */
 
-					sprintf((char*)g_dtp2, get_ttx(505), l_di);
+					sprintf(g_dtp2, get_ttx(505), l_di);
 					break;
 				}
 				case ITEM_TARNELE: {
@@ -269,7 +269,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 				}
 
 				/* print the output */
-				GUI_output((char*)g_dtp2);
+				GUI_output(g_dtp2);
 			}
 		} else {
 
@@ -291,10 +291,10 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 				set_mod_slot(l_di, HOURS(1), consumer + HERO_ATTRIB + (l_si - 1) * 3, 5, (signed char)consumer_idx);
 
 				/* prepare output */
-				sprintf((char*)g_dtp2, get_ttx(509), (char*)consumer + HERO_NAME2, get_ttx(411 + l_si), 5);
+				sprintf(g_dtp2, get_ttx(509), (char*)consumer + HERO_NAME2, get_ttx(411 + l_si), 5);
 
 				/* print output */
-				GUI_output((char*)g_dtp2);
+				GUI_output(g_dtp2);
 
 			} else if (id_bad_elex != 0) {
 				/* handle bad elexires */
@@ -310,10 +310,10 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 				set_mod_slot(l_di, HOURS(1), consumer + HERO_ATTRIB + (id_bad_elex - 1) * 3, -7, (signed char)consumer_idx);
 
 				/* prepare output */
-				sprintf((char*)g_dtp2, get_ttx(656), (char*)consumer + HERO_NAME2, get_ttx(411 + id_bad_elex), 7);
+				sprintf(g_dtp2, get_ttx(656), (char*)consumer + HERO_NAME2, get_ttx(411 + id_bad_elex), 7);
 
 				/* print output */
-				GUI_output((char*)g_dtp2);
+				GUI_output(g_dtp2);
 
 			} else {
 				/* everything else */
@@ -330,11 +330,11 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 						l_si = 10;
 
 					/* singular POINT/ PUNKT */
-					strcpy((char*)g_text_output_buf, get_ttx(392));
+					strcpy(g_text_output_buf, get_ttx(392));
 
 					if (l_si > 1) {
 						/* make plural POINTS/PUNKTE */
-						strcat((char*)g_text_output_buf, get_ttx(393));
+						strcat(g_text_output_buf, get_ttx(393));
 					}
 
 					/* add LE */
@@ -344,7 +344,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
 
 					/* prepare output */
-					sprintf((char*)g_dtp2, get_ttx(510), (char*)consumer + HERO_NAME2, l_si, g_text_output_buf);
+					sprintf(g_dtp2, get_ttx(510), (char*)consumer + HERO_NAME2, l_si, g_text_output_buf);
 					break;
 				}
 				case 0x92 : {
@@ -362,15 +362,15 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					give_hero_new_item(owner, ITEM_FLASK_BRONZE, 2, 1);
 
 					/* singular POINT/ PUNKT */
-					strcpy((char*)g_text_output_buf, get_ttx(392));
+					strcpy(g_text_output_buf, get_ttx(392));
 
 					if (l_si > 1) {
 						/* make plural POINTS/PUNKTE */
-						strcat((char*)g_text_output_buf, get_ttx(393));
+						strcat(g_text_output_buf, get_ttx(393));
 					}
 
 					/* prepare output */
-					sprintf((char*)g_dtp2, get_ttx(510), (char*)consumer + HERO_NAME2, l_si, g_text_output_buf);
+					sprintf(g_dtp2, get_ttx(510), (char*)consumer + HERO_NAME2, l_si, g_text_output_buf);
 					break;
 				}
 				case 0xec: {
@@ -406,7 +406,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
 
 					/* prepare output */
-					sprintf((char*)g_dtp2, get_ttx(511), (char*)consumer + HERO_NAME2, (char*)(GUI_get_ptr(host_readbs(consumer + HERO_SEX), 0)));
+					sprintf(g_dtp2, get_ttx(511), (char*)consumer + HERO_NAME2, (char*)(GUI_get_ptr(host_readbs(consumer + HERO_SEX), 0)));
 
 					break;
 				}
@@ -420,7 +420,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
 
 					/* prepare output */
-					sprintf((char*)g_dtp2, get_ttx(738), (char*)consumer + HERO_NAME2);
+					sprintf(g_dtp2, get_ttx(738), (char*)consumer + HERO_NAME2);
 					break;
 				}
 				case 0x9a: {
@@ -441,17 +441,17 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 						give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
 
 						/* prepare output */
-						strcpy((char*)g_text_output_buf, get_ttx(392));
+						strcpy(g_text_output_buf, get_ttx(392));
 
 						if (l_si > 1) {
-							strcat((char*)g_text_output_buf, get_ttx(393));
+							strcat(g_text_output_buf, get_ttx(393));
 						}
 
-						sprintf((char*)g_dtp2, get_ttx(512), l_si, g_text_output_buf, (char*)consumer + HERO_NAME2);
+						sprintf(g_dtp2, get_ttx(512), l_si, g_text_output_buf, (char*)consumer + HERO_NAME2);
 					} else {
 						/* Not a magicuser */
 
-						strcpy((char*)g_dtp2, get_ttx(804));
+						strcpy(g_dtp2, get_ttx(804));
 
 						/* give owner a glassbottle */
 						give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
@@ -478,19 +478,19 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 
 						/* prepare output */
 						if (host_readws(consumer + HERO_AE) >= host_readws(consumer + HERO_AE_ORIG)) {
-							sprintf((char*)g_dtp2, get_ttx(513), (char*)consumer + HERO_NAME2);
+							sprintf(g_dtp2, get_ttx(513), (char*)consumer + HERO_NAME2);
 						} else {
-							strcpy((char*)g_text_output_buf, get_ttx(392));
+							strcpy(g_text_output_buf, get_ttx(392));
 
 							if (l_si > 1) {
-								strcat((char*)g_text_output_buf, get_ttx(393));
+								strcat(g_text_output_buf, get_ttx(393));
 							}
 
-							sprintf((char*)g_dtp2, get_ttx(512), l_si, g_text_output_buf, (char*)consumer + HERO_NAME2);
+							sprintf(g_dtp2, get_ttx(512), l_si, g_text_output_buf, (char*)consumer + HERO_NAME2);
 						}
 					} else {
 						/* Not a magicuser */
-						strcpy((char*)g_dtp2, get_ttx(804));
+						strcpy(g_dtp2, get_ttx(804));
 
 						/* give owner a glassbottle */
 						give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
@@ -510,7 +510,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					/* give owner a glassbottle */
 					give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
 
-					sprintf((char*)g_dtp2, get_ttx(467), (char*)consumer + HERO_NAME2);
+					sprintf(g_dtp2, get_ttx(467), (char*)consumer + HERO_NAME2);
 					break;
 				}
 				case 0xdf: {
@@ -524,7 +524,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					/* give owner a glassbottle */
 					give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
 
-					sprintf((char*)g_dtp2, get_ttx(467), (char*)consumer + HERO_NAME2);
+					sprintf(g_dtp2, get_ttx(467), (char*)consumer + HERO_NAME2);
 					break;
 
 				}
@@ -533,7 +533,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 				/* print output: maybe garbage - string not set to 0 */
 				tw_bak = g_textbox_width;
 				g_textbox_width = 5;
-				GUI_output((char*)g_dtp2);
+				GUI_output(g_dtp2);
 				g_textbox_width = tw_bak;
 			}
 		}

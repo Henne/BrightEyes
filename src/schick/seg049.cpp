@@ -643,11 +643,11 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 		if ((ds_readbs(TRAVEL_BY_SHIP) != 0) && (random_schick(100) < 10)) {
 			/* chance of motion sickness is 9% */
 
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				get_ttx(796),
 				hero + HERO_NAME2);
 
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 
 		} else {
 
@@ -696,20 +696,20 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 
 						add_hero_le(hero, le_regen);
 
-						strcpy((char*)g_text_output_buf, get_ttx(392));
+						strcpy(g_text_output_buf, get_ttx(392));
 
 						if (le_regen > 1) {
-							strcat((char*)g_text_output_buf, get_ttx(393));
+							strcat(g_text_output_buf, get_ttx(393));
 						}
 
-						sprintf((char*)g_dtp2, get_ttx(319), hero + HERO_NAME2, le_regen, g_text_output_buf);
+						sprintf(g_dtp2, get_ttx(319), hero + HERO_NAME2, le_regen, g_text_output_buf);
 
 						if (ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) {
-							GUI_print_loc_line((char*)g_dtp2);
+							GUI_print_loc_line(g_dtp2);
 							delay_or_keypress(200);
 						} else {
 							if (ds_readbs(TRAVEL_BY_SHIP) != 0) {
-								GUI_output((char*)g_dtp2);
+								GUI_output(g_dtp2);
 							}
 						}
 
@@ -727,20 +727,20 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 
 							add_hero_ae(hero, ae_regen);
 
-							strcpy((char*)g_text_output_buf, get_ttx(392));
+							strcpy(g_text_output_buf, get_ttx(392));
 
 							if (ae_regen > 1) {
-								strcat((char*)g_text_output_buf, get_ttx(393));
+								strcat(g_text_output_buf, get_ttx(393));
 							}
 
-							sprintf((char*)g_dtp2, get_ttx(320), hero + HERO_NAME2,	ae_regen, g_text_output_buf);
+							sprintf(g_dtp2, get_ttx(320), hero + HERO_NAME2,	ae_regen, g_text_output_buf);
 
 							if (ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) {
-								GUI_print_loc_line((char*)g_dtp2);
+								GUI_print_loc_line(g_dtp2);
 								delay_or_keypress(200);
 							} else {
 								if (ds_readbs(TRAVEL_BY_SHIP) != 0) {
-									GUI_output((char*)g_dtp2);
+									GUI_output(g_dtp2);
 								}
 							}
 						}
@@ -751,11 +751,11 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 					do_alchemy(hero, host_readbs(hero + HERO_RECIPE_ID), 0);
 				}
 			} else {
-				sprintf((char*)g_dtp2,
+				sprintf(g_dtp2,
 					get_ttx(558),
 					hero + HERO_NAME2);
 
-				GUI_output((char*)g_dtp2);
+				GUI_output(g_dtp2);
 			}
 		}
 	}

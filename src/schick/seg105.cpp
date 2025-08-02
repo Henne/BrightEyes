@@ -325,10 +325,10 @@ signed short give_hero_new_item(Bit8u *hero, signed short item, signed short mod
 		(host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 100 <= host_readws(hero + HERO_LOAD))) {
 
 		if (mode != 0) {
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				get_ttx(779),
 				(char*)(hero + HERO_NAME2));
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 		}
 	} else {
 		item_p = get_itemsdat(item);
@@ -504,22 +504,22 @@ unsigned short drop_item(Bit8u *hero, signed short pos, signed short no)
 		if (item_undropable(p_item)) {
 			/* this item is not droppable */
 
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				get_ttx(454),
 				(char*)(GUI_names_grammar((signed short)0x8002, item, 0)));
 
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 		} else {
 			/* this item is droppable */
 
 			if (item_stackable(p_item)) {
 				if (no == -1) {
-					sprintf((char*)g_dtp2,
+					sprintf(g_dtp2,
 						get_ttx(219),
 						(char*)(GUI_names_grammar(6, item, 0)));
 
 					do {
-						answer = GUI_input((char*)g_dtp2, 2);
+						answer = GUI_input(g_dtp2, 2);
 					} while (answer < 0);
 
 					no = answer;
@@ -641,11 +641,11 @@ signed short get_item(signed short id, signed short unused, signed short no)
 			autofight_bak = g_autofight;
 			g_autofight = 0;
 
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				get_ttx(549),
 				(char*)(GUI_names_grammar(((no > 1) ? 4 : 0) + 2, id, 0)));
 
-			if (GUI_bool((char*)g_dtp2)) {
+			if (GUI_bool(g_dtp2)) {
 
 				dropper = select_hero_ok(get_ttx(550));
 
@@ -745,7 +745,7 @@ void loose_random_item(Bit8u *hero, signed short percent, char *text)
 			/* drop 1 item */
 			drop_item(hero, pos, 1);
 
-			sprintf((char*)g_text_output_buf,
+			sprintf(g_text_output_buf,
 				(char*)text, hero + HERO_NAME2,
 				(Bit8u*)(GUI_names_grammar(0, item, 0)));
 
@@ -781,10 +781,10 @@ signed short select_item_to_drop(Bit8u *hero)
 	}
 
 	if (v6 == 0) {
-		sprintf((char*)g_dtp2,
+		sprintf(g_dtp2,
 			get_ttx(750),
 			(char*)(hero + HERO_NAME2));
-		GUI_output((char*)g_dtp2);
+		GUI_output(g_dtp2);
 		return -1;
 	}
 	di = 0;

@@ -572,7 +572,7 @@ signed short count_fight_enemies(signed short fight_id)
 
 	enemy_count = 0;
 
-	fight_lst_buf = g_dtp2;
+	fight_lst_buf = (Bit8u*)g_dtp2;
 
 	/* load FIGHT.LST from TEMP dir */
 	fight_lst_handle = load_archive_file(0x8000 | ARCHIVE_FILE_FIGHT_LST);

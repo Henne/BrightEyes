@@ -331,9 +331,9 @@ extern unsigned char *g_renderbuf_ptr;	// ds:0xd303; seg002-seg120
 extern unsigned char *g_vga_memstart;	// ds:0xd2ff; seg002-seg120 aka FRAMEBUF_PTR
 extern unsigned char *g_vga_backbuffer;	// ds:0xd2fb; seg002-seg120 aka PRINT_STRING_BUFFER
 extern unsigned char *g_icon;		// ds:0xd2f7; seg002-seg058
-extern signed char *g_dtp2;		// ds:0xd2f3: seg002-seg121
-extern signed char *g_text_input_buf;	// ds:0xd2ef: seg002-seg120
-extern signed char *g_text_output_buf;	// ds:0xd2eb: seg002-seg120
+extern char *g_dtp2;			// ds:0xd2f3: seg002-seg121
+extern char *g_text_input_buf;		// ds:0xd2ef: seg002-seg120
+extern char *g_text_output_buf;		// ds:0xd2eb: seg002-seg120
 extern unsigned char *g_buf_icon;	// ds:0xd2e7; seg029, seg120
 extern unsigned char *g_objects_nvf_buf;// ds:0xd2e3; seg004, seg032, seg040, seg120
 extern unsigned char *g_fig_figure1_buf;// ds:0xd2df; seg027, seg055, seg056, seg057, seg058, seg120

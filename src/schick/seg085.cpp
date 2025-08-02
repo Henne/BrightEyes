@@ -57,11 +57,11 @@ signed short DNG10_handler(void)
 		/* TRAP: a hole in a wall; leader gets 2 LE damage */
 		if (GUI_bool(get_tx(1)))
 		{
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				get_tx(2),
 				(char*)hero + HERO_NAME2);
 
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 
 			sub_hero_le(hero, 2);
 		}
@@ -98,22 +98,22 @@ signed short DNG10_handler(void)
 
 		answer = dice_roll(3, 6, 4);
 
-		sprintf((char*)g_dtp2,
+		sprintf(g_dtp2,
 			get_tx(9),
 			(char*)hero + HERO_NAME2);
 
 		/* check if the hero will survive */
 		if (host_readws(hero + HERO_LE) > answer)
 		{
-			sprintf((char*)g_text_output_buf,
+			sprintf(g_text_output_buf,
 				get_tx(10),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			strcat((char*)g_dtp2,
+			strcat(g_dtp2,
 				g_text_output_buf);
 		}
 
-		GUI_output((char*)g_dtp2);
+		GUI_output(g_dtp2);
 
 		sub_hero_le(hero, answer);
 
@@ -131,17 +131,17 @@ signed short DNG10_handler(void)
 			{
 				ds_writeb(DNG10_HOLE_STATE, 2);
 
-				sprintf((char*)g_dtp2,
+				sprintf(g_dtp2,
 					get_tx(11),
 					(char*)hero + HERO_NAME2);
 
-				if (GUI_bool((char*)g_dtp2))
+				if (GUI_bool(g_dtp2))
 				{
-					sprintf((char*)g_dtp2,
+					sprintf(g_dtp2,
 						get_tx(12),
 						(char*)hero + HERO_NAME2);
 
-					GUI_output((char*)g_dtp2);
+					GUI_output(g_dtp2);
 
 					result = random_schick(6);
 
@@ -178,7 +178,7 @@ signed short DNG10_handler(void)
 				if (ds_readb(DNG10_FLOORPLATE_LOADS) != 0)
 				{
 
-					sprintf((char*)g_dtp2,
+					sprintf(g_dtp2,
 						get_tx(14),
 						(char*)hero + HERO_NAME2);
 
@@ -186,11 +186,11 @@ signed short DNG10_handler(void)
 
 					sub_hero_le(hero, dice_roll(3, 6, 0));
 				} else {
-					strcpy((char*)g_dtp2,
+					strcpy(g_dtp2,
 						get_tx(15));
 				}
 
-				GUI_output((char*)g_dtp2);
+				GUI_output(g_dtp2);
 			}
 		}
 
@@ -270,11 +270,11 @@ signed short DNG10_handler(void)
 		{
 			xor_ds_bs(DNG10_MUMMY_LEVER, 1);
 
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				get_tx(26),
 				(char*)hero + HERO_NAME2);
 
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 
 			sub_hero_le(hero, 2);
 		}
@@ -423,11 +423,11 @@ signed short DNG10_handler(void)
 		gs_current_loctype = LOCTYPE_NONE;
 		gs_direction = ((ds_readbs(TRAVEL_DESTINATION_VIEWDIR) + 2) & 0x03);
 
-		sprintf((char*)g_dtp2,
+		sprintf(g_dtp2,
 			get_tx(40),
 			get_ttx(ds_readw(TRV_DESTINATION) + 0xeb));
 
-		GUI_output((char*)g_dtp2);
+		GUI_output(g_dtp2);
 
 		timewarp(HOURS(3));
 

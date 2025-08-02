@@ -196,17 +196,17 @@ signed short DNG11_handler(void)
 		{
 			ds_writeb(DNG11_SECRETDOOR1_FLAG, 1);
 
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				get_tx(26),
 				(char*)hero + HERO_NAME2);
 
-			sprintf((char*)g_text_output_buf,
+			sprintf(g_text_output_buf,
 				(char*)((ds_readb(DNG11_LEVER_FLAG) == 2 || ds_readb(DNG11_LEVER_FLAG) == 3) && (test_result = test_skill(hero, TA_SCHLOESSER, 5)) > 0 ? get_tx(27) : get_tx(28)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
-			strcat((char*)g_dtp2, g_text_output_buf);
+			strcat(g_dtp2, g_text_output_buf);
 
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 
 			if (test_result > 0)
 			{
@@ -229,17 +229,17 @@ signed short DNG11_handler(void)
 		{
 			ds_writeb(DNG11_SECRETDOOR2_FLAG, 1);
 
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				get_tx(26),
 				(char*)hero + HERO_NAME2);
 
-			sprintf((char*)g_text_output_buf,
+			sprintf(g_text_output_buf,
 				(char*)((ds_readb(DNG11_LEVER_FLAG) == 1 || ds_readb(DNG11_LEVER_FLAG) == 3) && (test_result = test_skill(hero, TA_SCHLOESSER, 3)) > 0 ? get_tx(27) : get_tx(28)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
-			strcat((char*)g_dtp2, g_text_output_buf);
+			strcat(g_dtp2, g_text_output_buf);
 
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 
 			if (test_result > 0)
 			{
@@ -262,17 +262,17 @@ signed short DNG11_handler(void)
 		{
 			ds_writeb(DNG11_SECRETDOOR3_FLAG, 1);
 
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				get_tx(26),
 				(char*)hero + HERO_NAME2);
 
-			sprintf((char*)g_text_output_buf,
+			sprintf(g_text_output_buf,
 				(char*)((ds_readb(DNG11_LEVER_FLAG) == 5 || ds_readb(DNG11_LEVER_FLAG) == 3) && (test_result = test_skill(hero, TA_SCHLOESSER, 5)) > 0 ? get_tx(27) : get_tx(28)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
-			strcat((char*)g_dtp2, g_text_output_buf);
+			strcat(g_dtp2, g_text_output_buf);
 
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 
 			if (test_result > 0)
 			{
@@ -296,11 +296,11 @@ signed short DNG11_handler(void)
 		gs_current_loctype = LOCTYPE_NONE;
 		gs_direction = ((ds_readbs(TRAVEL_DESTINATION_VIEWDIR) + 2) & 0x03);
 
-		sprintf((char*)g_dtp2,
+		sprintf(g_dtp2,
 			get_tx(29),
 			get_ttx(ds_readw(TRV_DESTINATION) + 0xeb));
 
-		GUI_output((char*)g_dtp2);
+		GUI_output(g_dtp2);
 
 		timewarp(HOURS(3));
 

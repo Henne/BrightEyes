@@ -148,7 +148,7 @@ void draw_status_line(void)
 
 		if (host_readb(get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE) {
 
-			copy_forename((char*)g_dtp2, (char*)(get_hero(i) + HERO_NAME2));
+			copy_forename(g_dtp2, (char*)(get_hero(i) + HERO_NAME2));
 
 			set_textcolor(0xff, 0);
 
@@ -159,7 +159,7 @@ void draw_status_line(void)
 			}
 
 			/* print the name */
-			GUI_print_string((char*)g_dtp2, GUI_get_first_pos_centered((char*)g_dtp2, g_hero_pic_posx[i], 43, 0), 190);
+			GUI_print_string(g_dtp2, GUI_get_first_pos_centered(g_dtp2, g_hero_pic_posx[i], 43, 0), 190);
 		}
 
 		wait_for_vsync();
@@ -370,13 +370,13 @@ void select_hero_icon(unsigned short pos) {
 	get_textcolor(&fg_bak, &bg_bak);
 
 	/* copy the heroes forename */
-	copy_forename((char*)g_dtp2, (char*)(get_hero(pos) + HERO_NAME2));
+	copy_forename(g_dtp2, (char*)(get_hero(pos) + HERO_NAME2));
 
 	/* set the textcolors */
 	set_textcolor(0xfc, 0);
 
 	/* print forename */
-	GUI_print_string((char*)g_dtp2, GUI_get_first_pos_centered((char*)g_dtp2, g_hero_pic_posx[pos], 43, 0), 190);
+	GUI_print_string(g_dtp2, GUI_get_first_pos_centered(g_dtp2, g_hero_pic_posx[pos], 43, 0), 190);
 
 	/* restore textcolors */
 	set_textcolor(fg_bak, bg_bak);
@@ -404,13 +404,13 @@ void deselect_hero_icon(unsigned short pos) {
 	get_textcolor(&fg_bak, &bg_bak);
 
 	/* copy the heroes forename */
-	copy_forename((char*)g_dtp2, (char*)(get_hero(pos) + HERO_NAME2));
+	copy_forename(g_dtp2, (char*)(get_hero(pos) + HERO_NAME2));
 
 	/* set the textcolors */
 	set_textcolor(0xff, 0);
 
 	/* print forename */
-	GUI_print_string((char*)g_dtp2, GUI_get_first_pos_centered((char*)g_dtp2, g_hero_pic_posx[pos], 43, 0), 190);
+	GUI_print_string(g_dtp2, GUI_get_first_pos_centered(g_dtp2, g_hero_pic_posx[pos], 43, 0), 190);
 
 	/* restore textcolors */
 	set_textcolor(fg_bak, bg_bak);

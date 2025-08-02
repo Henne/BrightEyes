@@ -84,11 +84,11 @@ signed short DNG15_handler(void)
 			{
 				tmp = random_schick(3);
 
-				sprintf((char*)g_dtp2,
+				sprintf(g_dtp2,
 					(char*)(tmp == 3 ? get_tx(3) : (tmp == 2 ? get_tx(4) : get_tx(5))),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output((char*)g_dtp2);
+				GUI_output(g_dtp2);
 
 				sub_hero_le(hero, 1);
 			}
@@ -143,7 +143,7 @@ signed short DNG15_handler(void)
 	{
 		tmp = dir;
 
-		sprintf((char*)g_dtp2, get_tx(23),
+		sprintf(g_dtp2, get_tx(23),
 			(char*)(tmp == 0 ? get_tx(22) :
 				(tmp == 2 ? get_tx(21) :
 				(tmp == 3 ? get_tx(20) : get_tx(19)))));
@@ -156,8 +156,8 @@ signed short DNG15_handler(void)
 			}
 		}
 
-		strcat((char*)g_dtp2, (char*)(tmp == 0 ? get_tx(24) : get_tx(25)));
-		GUI_output((char*)g_dtp2);
+		strcat(g_dtp2, (char*)(tmp == 0 ? get_tx(24) : get_tx(25)));
+		GUI_output(g_dtp2);
 
 		gs_direction_bak = ((signed char)dir);
 
@@ -167,7 +167,7 @@ signed short DNG15_handler(void)
 	{
 		tmp = dir;
 
-		sprintf((char*)g_dtp2, get_tx(23),
+		sprintf(g_dtp2, get_tx(23),
 			(char*)(tmp == 0 ? get_tx(21) :
 				(tmp == 2 ? get_tx(22) :
 				(tmp == 3 ? get_tx(19) : get_tx(20)))));
@@ -180,9 +180,9 @@ signed short DNG15_handler(void)
 			}
 		}
 
-		strcat((char*)g_dtp2, (char*)(tmp == 0 ? get_tx(24) : get_tx(25)));
+		strcat(g_dtp2, (char*)(tmp == 0 ? get_tx(24) : get_tx(25)));
 
-		GUI_output((char*)g_dtp2);
+		GUI_output(g_dtp2);
 
 		gs_direction_bak = ((signed char)dir);
 
@@ -456,8 +456,8 @@ signed short DNG15_handler(void)
 			gs_current_loctype = LOCTYPE_NONE;
 			gs_direction = ((ds_readbs(TRAVEL_DESTINATION_VIEWDIR) + 2) & 0x03);
 
-			sprintf((char*)g_dtp2, get_tx(55), get_ttx(ds_readw(TRV_DESTINATION) + 0xeb));
-			GUI_output((char*)g_dtp2);
+			sprintf(g_dtp2, get_tx(55), get_ttx(ds_readw(TRV_DESTINATION) + 0xeb));
+			GUI_output(g_dtp2);
 
 			timewarp(HOURS(2));
 
@@ -494,12 +494,12 @@ void DNG15_small_wounds(void)
 		{
 			randval = random_schick(3);
 
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				(char*)(randval == 3 ? get_tx(3) :
 						(randval == 2 ? get_tx(7) : get_tx(8))),
 				(char*)hero + HERO_NAME2);
 
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 
 			sub_hero_le(hero, 1);
 		}
@@ -550,10 +550,10 @@ void DNG15_smelling_chest(Bit8u* chest)
 	{
 		hero = get_hero(get_random_hero());
 
-		sprintf((char*)g_dtp2,
+		sprintf(g_dtp2,
 			get_tx(36),
 			(char*)hero + HERO_NAME2);
-		GUI_output((char*)g_dtp2);
+		GUI_output(g_dtp2);
 
 		sub_hero_le(hero, 4);
 	}
@@ -644,12 +644,12 @@ void DNG15_collapsing_ceiling(Bit8u* ptr)
 					!hero_dead(hero) &&
 					test_attrib(hero, ATTRIB_GE, 0) <= 0)
 				{
-					sprintf((char*)g_dtp2,
+					sprintf(g_dtp2,
 						get_tx(44),
 						(char*)hero + HERO_NAME2,
 						(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-					GUI_output((char*)g_dtp2);
+					GUI_output(g_dtp2);
 
 					sub_hero_le(hero, random_schick(6));
 				}
@@ -711,12 +711,12 @@ void DNG15_clear_way(Bit8u* ptr)
 				!hero_dead(hero) &&
 				test_attrib(hero, ATTRIB_GE, 0) <= 0)
 			{
-				sprintf((char*)g_dtp2,
+				sprintf(g_dtp2,
 					get_tx(44),
 					(char*)hero + HERO_NAME2,
 					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-				GUI_output((char*)g_dtp2);
+				GUI_output(g_dtp2);
 
 				sub_hero_le(hero, random_schick(6));
 			}

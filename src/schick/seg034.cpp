@@ -854,7 +854,7 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 			set_textcolor(255, 0);
 
 			if (!problem) {
-				sprintf((char*)g_dtp2,
+				sprintf(g_dtp2,
 					get_tx(12), bp_cost); /* Target: %d BP */
 			}
 
@@ -863,7 +863,7 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 						(problem == 3 ? get_tx(30) : /* Target: blocked */
 						(problem == 2 ? get_tx(32) : /* Target: too far */
 						(problem == 4 ? get_tx(48) : /* Target: no way */
-						(char*)g_dtp2))), /* Target: %d BP */
+						g_dtp2))), /* Target: %d BP */
 					 5, 190);
 
 			set_textcolor(fg_bak, bg_bak);

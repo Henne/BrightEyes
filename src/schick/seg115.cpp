@@ -104,7 +104,7 @@ void tevent_016(void)
 							/* success */
 							timewarp(MINUTES(15));
 
-							sprintf((char*)g_dtp2 + 0x400,
+							sprintf(g_dtp2 + 0x400,
 								get_tx2(35),
 								(char*)hero + HERO_NAME2,
 								(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
@@ -114,7 +114,7 @@ void tevent_016(void)
 							GUI_dialog_na(0, get_tx2(36));
 						} else {
 							/* fail */
-							sprintf((char*)g_dtp2 + 0x400,
+							sprintf(g_dtp2 + 0x400,
 								get_tx2(34),
 								(char*)hero + HERO_NAME2,
 								(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
@@ -126,7 +126,7 @@ void tevent_016(void)
 
 							timewarp(HOURS(1));
 
-							sprintf((char*)g_dtp2 + 0x400,
+							sprintf(g_dtp2 + 0x400,
 								get_tx2(37),
 								(char*)hero + HERO_NAME2,
 								(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
@@ -254,11 +254,11 @@ void tevent_095(void)
 				{
 					timewarp(MINUTES(30));
 
-					sprintf((char*)g_dtp2,
+					sprintf(g_dtp2,
 						get_tx2(8),
 						(char*)hero + HERO_NAME2);
 
-					GUI_output((char*)g_dtp2);
+					GUI_output(g_dtp2);
 
 					counter_failed++;
 				}
@@ -351,11 +351,11 @@ void tevent_095(void)
 							/* spell failed unluckily */
 
 							/* TODO: this gets output, but no spell costst ??? */
-							sprintf((char*)g_dtp2,
+							sprintf(g_dtp2,
 								get_ttx(607),
 								(char*)hero + HERO_NAME2);
 
-							GUI_output((char*)g_dtp2);
+							GUI_output(g_dtp2);
 						}
 
 						timewarp(MINUTES(30));
@@ -729,13 +729,13 @@ void tevent_100(void)
 					timewarp(MINUTES(15));
 
 
-					sprintf((char*)g_dtp2,
+					sprintf(g_dtp2,
 						get_tx2(69),
 						(char*)hero + HERO_NAME2,
 						(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
 						(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-					GUI_output((char*)g_dtp2);
+					GUI_output(g_dtp2);
 				}
 
 				GUI_output(get_tx2(70));

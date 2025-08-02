@@ -45,13 +45,13 @@ void tevent_011(void)
 	{
 		ds_writeb(TEVENT011_FLAG, 1);
 
-		sprintf((char*)g_dtp2,
+		sprintf(g_dtp2,
 			get_tx2(24),
 			(char*)hero + HERO_NAME2,
 			(char*)hero + HERO_NAME2);
 
 		do {
-			answer = GUI_radio((char*)g_dtp2, 2,
+			answer = GUI_radio(g_dtp2, 2,
 						get_tx2(25),
 						get_tx2(26));
 		} while (answer == -1);
@@ -107,15 +107,15 @@ void TRV_swim2(signed char mod, signed short percent)
 			if (test_skill(hero, TA_SCHWIMMEN, (signed char)mod) > 0)
 			{
 				/* skill test succeeded */
-				sprintf((char*)g_dtp2, get_tx2(31), (char*)hero + HERO_NAME2);
-				GUI_output((char*)g_dtp2);
+				sprintf(g_dtp2, get_tx2(31), (char*)hero + HERO_NAME2);
+				GUI_output(g_dtp2);
 
 			} else {
 				/* skill test failed */
-				sprintf((char*)g_dtp2, get_tx2(32), (char*)hero + HERO_NAME2,
+				sprintf(g_dtp2, get_tx2(32), (char*)hero + HERO_NAME2,
 					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-				GUI_output((char*)g_dtp2);
+				GUI_output(g_dtp2);
 
 				hero_disease_test(hero, 2, 20 - (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK))));
 
@@ -243,12 +243,12 @@ void tevent_020(void)
 	{
 		ds_writeb(TEVENT020_FLAG, 1);
 
-		sprintf((char*)g_dtp2,
+		sprintf(g_dtp2,
 			get_tx2(49),
 			(char*)hero + HERO_NAME2);
 
 		do {
-			answer = GUI_radio((char*)g_dtp2, 2,
+			answer = GUI_radio(g_dtp2, 2,
 						get_tx2(50),
 						get_tx2(51));
 		} while (answer == -1);
@@ -724,13 +724,13 @@ void tevent_046(void)
 
 		if (test_skill(hero, TA_SINNESSCHAERFE, 0) > 0)
 		{
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				get_tx2(45),
 				(char*)hero + HERO_NAME2,
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 			do {
-				answer = GUI_radio((char*)g_dtp2, 2,
+				answer = GUI_radio(g_dtp2, 2,
 							get_tx2(46),
 							get_tx2(47));
 			} while (answer == -1);
@@ -744,11 +744,11 @@ void tevent_046(void)
 
 		if (!enter_inn)
 		{
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				get_tx2(48),
 				(char*)hero + HERO_NAME2);
 
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 
 			g_fig_discard = 1;
 

@@ -129,12 +129,12 @@ signed short DNG03_handler(void)
 				!hero_dead(hero) &&
 				test_skill(hero, TA_KLETTERN, 2) <= 0)
 			{
-				sprintf((char*)g_dtp2,
+				sprintf(g_dtp2,
 					get_tx(6),
 					(char*)hero + HERO_NAME2,
 					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-				GUI_output((char*)g_dtp2);
+				GUI_output(g_dtp2);
 
 				sub_hero_le(hero, dice_roll(1, 6, 3));
 			}
@@ -218,12 +218,12 @@ signed short DNG03_handler(void)
 
 		if (j != 0 || test_attrib(hero, ATTRIB_GE, 2) <= 0)
 		{
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				get_tx(13),
 				(char*)hero + HERO_NAME2,
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 
 			sub_hero_le(hero, dice_roll(2, 6, 0));
 
@@ -250,12 +250,12 @@ signed short DNG03_handler(void)
 			test_attrib(hero, ATTRIB_GE, 2) <= 0)))
 		{
 
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				get_tx(13),
 				(char*)hero + HERO_NAME2,
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 
 			sub_hero_le(hero, dice_roll(2, 6, 0));
 
@@ -399,11 +399,11 @@ signed short DNG03_handler(void)
 		gs_current_loctype = LOCTYPE_NONE;
 		gs_direction = ((ds_readws(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
 
-		sprintf((char*)g_dtp2,
+		sprintf(g_dtp2,
 			get_tx(30),
 			get_ttx(ds_readws(TRV_DESTINATION) + 0xeb));
 
-		GUI_output((char*)g_dtp2);
+		GUI_output(g_dtp2);
 
 		timewarp(HOURS(3));
 
@@ -589,8 +589,8 @@ void DNG03_chest11_func3(Bit8u*)
 				{
 					counter++;
 
-					sprintf((char*)g_dtp2, get_tx(27), (char*)hero + HERO_NAME2);
-					GUI_output((char*)g_dtp2);
+					sprintf(g_dtp2, get_tx(27), (char*)hero + HERO_NAME2);
+					GUI_output(g_dtp2);
 
 					sub_hero_le(hero, dice_roll(2, 6, 4));
 				}

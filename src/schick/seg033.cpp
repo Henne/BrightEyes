@@ -107,7 +107,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 				g_basepos_y = ((x + y < 15) ? -30 : 30);
 
 				/* prepare question with BP */
-				sprintf((char*)g_dtp2, get_tx(18), host_readbs(hero + HERO_BP_LEFT));
+				sprintf(g_dtp2, get_tx(18), host_readbs(hero + HERO_BP_LEFT));
 
 				txt_tabpos_bak = ds_readws(TXT_TABPOS1);
 				ds_writews(TXT_TABPOS1, g_basepos_x + 204);
@@ -119,7 +119,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 				//if (!item_weapon(get_itemsdat(weapon_id)) || (item_weapon(get_itemsdat(weapon_id)) && test_bit0(hero + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_FLAGS)))) { /* test 'broken' flag */
 				if (!item_weapon(get_itemsdat(weapon_id)) || (item_weapon(get_itemsdat(weapon_id)) && inventory_broken(hero + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY)))) { /* test 'broken' flag */
 					/* no weapon or weapon broken, use red color for "change weapon" */
-					sprintf((char*)g_text_output_buf,
+					sprintf(g_text_output_buf,
 						(char*)p_datseg + RED_STRING1,
 						get_tx(24));
 				} else {
@@ -129,7 +129,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 
 				if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 110 <= host_readws(hero + HERO_LOAD)) {
 					/* too much weight, use red color for "drop item" */
-					sprintf((char*)g_text_output_buf + 50,
+					sprintf(g_text_output_buf + 50,
 						(char*)p_datseg + RED_STRING2,
 						get_tx(46));
 				} else {
@@ -138,7 +138,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 				}
 
 				/* show radion menu */
-				selected = GUI_radio((char*)g_dtp2, l1 != 0 ? 13 : 12,
+				selected = GUI_radio(g_dtp2, l1 != 0 ? 13 : 12,
 							get_tx(19),
 							get_tx(20),
 							get_tx(21),
@@ -207,17 +207,17 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 
 					} else {
 						/* no BP left */
-						sprintf((char*)g_dtp2,
+						sprintf(g_dtp2,
 							get_tx(17),
 							(char*)hero + HERO_NAME2);
-						GUI_output((char*)g_dtp2);
+						GUI_output(g_dtp2);
 					}
 
 				} else {
-					sprintf((char*)g_dtp2,
+					sprintf(g_dtp2,
 						get_tx(7),
 						(char*)hero + HERO_NAME2);
-					GUI_output((char*)g_dtp2);
+					GUI_output(g_dtp2);
 				}
 			} else if (selected == FIG_ACTION_MELEE_ATTACK) {
 				/* ATTACK / ANGRIFF */
@@ -323,10 +323,10 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 					}
 				} else {
 					/* no BP left */
-					sprintf((char*)g_dtp2,
+					sprintf(g_dtp2,
 						get_tx(17),
 						(char*)hero + HERO_NAME2);
-					GUI_output((char*)g_dtp2);
+					GUI_output(g_dtp2);
 				}
 			} else if (selected == FIG_ACTION_GUARD) {
 				/* GUARD / SICHERN */
@@ -341,10 +341,10 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 					done = 1;
 				} else {
 					/* no BP left */
-					sprintf((char*)g_dtp2,
+					sprintf(g_dtp2,
 						get_tx(17),
 						(char*)hero + HERO_NAME2);
-					GUI_output((char*)g_dtp2);
+					GUI_output(g_dtp2);
 				}
 
 			} else if (selected == FIG_ACTION_SPELL) {
@@ -444,10 +444,10 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						}
 					} else {
 						/* no BP left */
-						sprintf((char*)g_dtp2,
+						sprintf(g_dtp2,
 							get_tx(17),
 							(char*)hero + HERO_NAME2);
-						GUI_output((char*)g_dtp2);
+						GUI_output(g_dtp2);
 					}
 				}
 			} else if (selected == FIG_ACTION_USE_ITEM) {
@@ -489,10 +489,10 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						}
 					} else {
 						/* no BP left */
-						sprintf((char*)g_dtp2,
+						sprintf(g_dtp2,
 							get_tx(17),
 							(char*)hero + HERO_NAME2);
-						GUI_output((char*)g_dtp2);
+						GUI_output(g_dtp2);
 					}
 			} else if (selected == FIG_ACTION_EXCHANGE_ITEM) {
 				/* EXCHANGE ITEM / GGST. WECHSELN */
@@ -519,17 +519,17 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						}
 
 						if (radio_i == 0) {
-							sprintf((char*)g_dtp2,
+							sprintf(g_dtp2,
 								get_ttx(750),
 								(char*)hero + HERO_NAME2);
-							GUI_output((char*)g_dtp2);
+							GUI_output(g_dtp2);
 						} else {
 							if (host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_LEFT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID) == ITEM_NONE) {
-								sprintf((char*)g_text_output_buf,
+								sprintf(g_text_output_buf,
 									get_tx(60),
 									(char*)hero + HERO_NAME2);
 							} else {
-								sprintf((char*)g_text_output_buf,
+								sprintf(g_text_output_buf,
 									get_tx(31),
 									(char*)hero + HERO_NAME2,
 									(char*)(GUI_names_grammar((signed short)0x8002, host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_LEFT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID), 0)));
@@ -570,10 +570,10 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						}
 					} else {
 						/* no BP left */
-						sprintf((char*)g_dtp2,
+						sprintf(g_dtp2,
 							get_tx(17),
 							(char*)hero + HERO_NAME2);
-						GUI_output((char*)g_dtp2);
+						GUI_output(g_dtp2);
 					}
 			} else if (selected == FIG_ACTION_EXCHANGE_WEAPON) {
 				/* CHANGE WEAPON / WAFFE WECHSELN */
@@ -602,12 +602,12 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						}
 
 						if (radio_i == 0) {
-							sprintf((char*)g_dtp2,
+							sprintf(g_dtp2,
 								get_tx(1),
 								(char*)hero + HERO_NAME2);
-							GUI_output((char*)g_dtp2);
+							GUI_output(g_dtp2);
 						} else {
-							sprintf((char*)g_text_output_buf,
+							sprintf(g_text_output_buf,
 								get_tx(2),
 								(char*)hero + HERO_NAME2,
 								(char*)(GUI_names_grammar((signed short)0x8002, host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID), 0)));
@@ -668,10 +668,10 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						}
 					} else {
 						/* no BP left */
-						sprintf((char*)g_dtp2,
+						sprintf(g_dtp2,
 							get_tx(17),
 							(char*)hero + HERO_NAME2);
-						GUI_output((char*)g_dtp2);
+						GUI_output(g_dtp2);
 					}
 			} else if (selected == FIG_ACTION_CHECK_VALUES) {
 				/* CHECK VALUES / WERTE PRUEFEN */
@@ -762,7 +762,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 					pa = 0;
 				}
 
-				sprintf((char*)g_dtp2,
+				sprintf(g_dtp2,
 					get_tx(0),
 					/* name */
 					(char*)hero + HERO_NAME2,
@@ -787,7 +787,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 					/* renegade */
 					hero_renegade(hero) == 1 ? get_tx(38) : p_datseg + EMPTY_STRING5);
 
-				GUI_output((char*)g_dtp2);
+				GUI_output(g_dtp2);
 
 			} else if (selected == FIG_ACTION_WAIT) {
 				/* WAIT / ABWARTEN */
@@ -839,12 +839,12 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 					}
 
 					if (radio_i == 0) {
-						sprintf((char*)g_dtp2,
+						sprintf(g_dtp2,
 							get_ttx(750),
 							(char*)hero + HERO_NAME2);
-						GUI_output((char*)g_dtp2);
+						GUI_output(g_dtp2);
 					} else {
-						sprintf((char*)g_text_output_buf,
+						sprintf(g_text_output_buf,
 							get_tx(47),
 							(char*)hero + HERO_NAME2);
 
@@ -884,10 +884,10 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 					}
 				} else {
 					/* no BP left */
-					sprintf((char*)g_dtp2,
+					sprintf(g_dtp2,
 						get_tx(17),
 						(char*)hero + HERO_NAME2);
-					GUI_output((char*)g_dtp2);
+					GUI_output(g_dtp2);
 				}
 
 			} else if (selected == FIG_ACTION_QUIT_AND_LOAD) {

@@ -173,10 +173,10 @@ void FIG_find_path_to_target_backtrack(Bit8u *dist_table_ptr, signed short targe
 	lowest_nr_dir_changes = 99;
 
 	memset(g_text_output_buf, 0, 80);
-	path_table[0] = g_text_output_buf;
-	path_table[1] = g_text_output_buf + 20;
-	path_table[2] = g_text_output_buf + 40;
-	path_table[3] = g_text_output_buf + 60;
+	path_table[0] = (Bit8u*)g_text_output_buf;
+	path_table[1] = (Bit8u*)g_text_output_buf + 20;
+	path_table[2] = (Bit8u*)g_text_output_buf + 40;
+	path_table[3] = (Bit8u*)g_text_output_buf + 60;
 
 	cb_or_dist_entry = get_cb_val(target_x, target_y); /* possibly reads out of the boundary of the chessboard. not critical, as the following condition is always true for coordinates (target_x, target_y) out of the map. */
 
@@ -406,7 +406,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 		}
 	}
 
-	dist_table_ptr = g_dtp2;
+	dist_table_ptr = (Bit8u*)g_dtp2;
 	ds_writed(CHESSBOARD_CPY, (Bit32u)(g_dtp2 + 600));
 	new_squares_reached = 1;
 	memset(dist_table_ptr, -1, 600);

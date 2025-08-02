@@ -534,7 +534,7 @@ void add_npc(signed short index)
 	load_npc(index);
 
 	/* overwrite the picture of the NPC with one from IN_HEAD.NVF */
-	memcpy(get_hero(6) + HERO_PORTRAIT, (char*)g_dtp2, 0x400);
+	memcpy(get_hero(6) + HERO_PORTRAIT, g_dtp2, 0x400);
 
 	/* increment heroes in that group */
 	gs_group_member_counts[gs_current_group]++;

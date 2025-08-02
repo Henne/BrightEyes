@@ -50,7 +50,7 @@ void status_show_spell(Bit8u *hero, unsigned short spell, unsigned short fsig,
 	my_itoa(host_readbs(hero + HERO_SPELLS + spell), str, 10);
 
 	/* print value */
-	GUI_print_string(str, x2 - GUI_get_space_for_string((Bit8u*)str, 0), gy + group * 7);
+	GUI_print_string(str, x2 - GUI_get_space_for_string(str, 0), gy + group * 7);
 }
 
 /**
@@ -78,7 +78,7 @@ void status_show_skill(Bit8u *hero, unsigned short skill, unsigned short ftig,
 	my_itoa(host_readbs(hero + HERO_TALENTS + skill) , str, 10);
 
 	/* print value */
-	GUI_print_string(str, x2 - GUI_get_space_for_string((Bit8u*)str, 0), gy + group * 7);
+	GUI_print_string(str, x2 - GUI_get_space_for_string(str, 0), gy + group * 7);
 }
 
 /**
@@ -267,11 +267,11 @@ void status_show(Bit16u index)
 		}
 
 		/* print height */
-		sprintf((char*)g_dtp2, get_tx2(33), host_readb(hero + HERO_HEIGHT));
+		sprintf(g_dtp2, get_tx2(33), host_readb(hero + HERO_HEIGHT));
 		GUI_print_string(g_dtp2, 158, 116);
 
 		/* print weight */
-		sprintf((char*)g_dtp2, get_tx2(34), host_readw(hero + HERO_WEIGHT));
+		sprintf(g_dtp2, get_tx2(34), host_readw(hero + HERO_WEIGHT));
 		GUI_print_string(g_dtp2, 59, 179);
 
 	} else {
@@ -291,17 +291,17 @@ void status_show(Bit16u index)
 
 
 	/* show AP */
-	sprintf((char*)g_dtp2, get_ttx(619), host_readd(hero + HERO_AP));
+	sprintf(g_dtp2, get_ttx(619), host_readd(hero + HERO_AP));
 	GUI_print_string(g_dtp2, 59, 26);
 
 	/* print level */
-	sprintf((char*)g_dtp2, get_tx2(7), host_readbs(hero + HERO_LEVEL));
+	sprintf(g_dtp2, get_tx2(7), host_readbs(hero + HERO_LEVEL));
 	GUI_print_string(g_dtp2, 59, 33);
 
 	/* print money */
-	make_valuta_str((char*)g_text_output_buf, host_readd(hero + HERO_MONEY));
+	make_valuta_str(g_text_output_buf, host_readd(hero + HERO_MONEY));
 
-	sprintf((char*)g_dtp2, get_ttx(300), g_text_output_buf);
+	sprintf(g_dtp2, get_ttx(300), g_text_output_buf);
 	GUI_print_string(g_dtp2, 59, 43);
 
 	/* dead, unconscious or drunk */
@@ -345,7 +345,7 @@ void status_show(Bit16u index)
 			/* print god */
 			ds_writew(TXT_TABPOS1, 265);
 
-			sprintf((char*)g_dtp2, get_tx2(10), get_ttx(host_readbs(hero + HERO_GOD) + 21));
+			sprintf(g_dtp2, get_tx2(10), get_ttx(host_readbs(hero + HERO_GOD) + 21));
 			GUI_print_string(g_dtp2, 200, 55);
 
 			/* show attributes */
@@ -357,7 +357,7 @@ void status_show(Bit16u index)
 
 				val = host_readbs(hero + i * 3 + HERO_ATTRIB) + host_readbs(hero + i * 3 + HERO_ATTRIB_MOD);
 
-				sprintf((char*)g_text_output_buf + i * 10,
+				sprintf(g_text_output_buf + i * 10,
 					get_tx2(51),
 					host_readbs(hero + i * 3 + 0x34) != val ?
 						get_tx2(49) :
@@ -369,7 +369,7 @@ void status_show(Bit16u index)
 					host_readbs(hero + i * 3 + 0x34));
 
 			}
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				get_tx2(12),
 				g_text_output_buf,
 				g_text_output_buf + 70,
@@ -420,7 +420,7 @@ void status_show(Bit16u index)
 					sprintf(le_fix, "%d", host_readw(hero + HERO_LE_ORIG));
 				}
 
-				sprintf((char*)g_dtp2,
+				sprintf(g_dtp2,
 					get_tx2(13),
 					host_readw(hero + HERO_LE), le_fix,			/* LE */
 					host_readw(hero + HERO_AE), host_readw(hero + HERO_AE_ORIG),	/* AE */
@@ -435,7 +435,7 @@ void status_show(Bit16u index)
 #else
 
 				/* Original Behavior: print max LE in black */
-				sprintf((char*)g_dtp2,
+				sprintf(g_dtp2,
 					get_tx2(13),
 					host_readw(hero + HERO_LE), host_readw(hero + HERO_LE_ORIG),	/* LE */
 					host_readw(hero + HERO_AE), host_readw(hero + HERO_AE_ORIG),	/* AE */
@@ -496,7 +496,7 @@ void status_show(Bit16u index)
 				}
 
 
-				sprintf((char*)g_dtp2,
+				sprintf(g_dtp2,
 					get_tx2(52),
 					host_readw(hero + HERO_LE), le_fix,			/* LE */
 					host_readw(hero + HERO_AE), host_readw(hero + HERO_AE_ORIG),	/* AE */
@@ -511,7 +511,7 @@ void status_show(Bit16u index)
 				reset_status_string(get_tx2(52));
 				/* Original-Bugfix end */
 #else
-				sprintf((char*)g_dtp2,
+				sprintf(g_dtp2,
 					get_tx2(52),
 					host_readw(hero + HERO_LE), host_readw(hero + HERO_LE_ORIG),	/* LE */
 					host_readw(hero + HERO_AE), host_readw(hero + HERO_AE_ORIG),	/* AE */
@@ -567,7 +567,7 @@ void status_show(Bit16u index)
 			if (pa < 0)
 				pa = 0;
 
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				get_tx2(5),
 				host_readbs(hero + HERO_ATPA_BASIS),
 				get_ttx(48),

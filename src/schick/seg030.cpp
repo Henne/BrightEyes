@@ -108,7 +108,7 @@ void print_date(void)
 	prepare_date_str();
 	tw_bak = g_textbox_width;
 	g_textbox_width = 3;
-	GUI_input((char*)g_dtp2, 0);
+	GUI_input(g_dtp2, 0);
 	g_textbox_width = tw_bak;
 }
 
@@ -124,17 +124,17 @@ void prepare_date_str(void)
 	if (gs_day_of_month < 0) {
 
 		/* Days of the nameless */
-		sprintf((char*)g_dtp2, get_ttx(391), get_ttx(349 + gs_day_of_week), gs_year, hour);
+		sprintf(g_dtp2, get_ttx(391), get_ttx(349 + gs_day_of_week), gs_year, hour);
 	} else {
 		/* Normal day */
-		sprintf((char*)g_dtp2, get_ttx(356), get_ttx(349 + gs_day_of_week), gs_day_of_month,
+		sprintf(g_dtp2, get_ttx(356), get_ttx(349 + gs_day_of_week), gs_day_of_month,
 			get_ttx(21 + gs_month), get_ttx(551 + get_current_season()), gs_year, hour);
 	}
 
 	if (gs_special_day) {
 
-		sprintf((char*)g_text_output_buf, get_ttx(357), get_ttx(357 + gs_special_day));
-		strcat((char*)g_dtp2, (const char*)g_text_output_buf);
+		sprintf(g_text_output_buf, get_ttx(357), get_ttx(357 + gs_special_day));
+		strcat(g_dtp2, (const char*)g_text_output_buf);
 	}
 }
 

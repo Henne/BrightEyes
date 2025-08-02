@@ -864,10 +864,10 @@ signed short load_regular_file(Bit16u index)
 
 	if ( (handle = open((char*)ds_readd(FNAMES + index * 4), O_BINARY | O_RDWR)) == -1) {
 
-		sprintf((char*)g_dtp2, g_str_file_missing_ptr, (char*)ds_readd(FNAMES + index * 4));
+		sprintf(g_dtp2, g_str_file_missing_ptr, (char*)ds_readd(FNAMES + index * 4));
 
 		g_missing_file_guilock = 1;
-		GUI_output((char*)g_dtp2);
+		GUI_output(g_dtp2);
 		g_missing_file_guilock = 0;
 	}
 
@@ -1649,7 +1649,7 @@ void handle_gui_input(void)
 			g_textbox_width = 5;
 			ds_writew(GUI_TEXT_CENTERED, 1);
 			prepare_date_str();
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 			ds_writew(GUI_TEXT_CENTERED, 0);
 			g_textbox_width = tw_bak;
 
@@ -5578,8 +5578,8 @@ int schick_main(int argc, char** argv)
 
 			if (l3 < 0) {
 
-				sprintf((char*)g_dtp2, get_ttx(807), -l3);
-				GUI_output((char*)g_dtp2);
+				sprintf(g_dtp2, get_ttx(807), -l3);
+				GUI_output(g_dtp2);
 				cleanup_game();
 
 			} else {
@@ -5661,7 +5661,7 @@ signed short copy_protection(void)
 			randval = random_schick(10) - 1;
 
 			/* prepare the string */
-			sprintf((char*)g_dtp2, get_tx(39),
+			sprintf(g_dtp2, get_tx(39),
 				ds_readbs((QUESTIONS_HANDBOOK + 3) + 19 * randval),
 				ds_readbs((QUESTIONS_HANDBOOK + 2) + 19 * randval),
 				ds_readbs((QUESTIONS_HANDBOOK + 1) + 19 * randval),
@@ -5671,7 +5671,7 @@ signed short copy_protection(void)
 			GUI_print_string(g_game_version, 290, 190);
 
 			/* ask the question */
-			GUI_input((char*)g_dtp2, 20);
+			GUI_input(g_dtp2, 20);
 
 			len = strlen(g_text_input_buf);
 
@@ -5690,7 +5690,7 @@ signed short copy_protection(void)
 			randval = random_schick(10) - 1;
 
 			/* prepare the string */
-			sprintf((char*)g_dtp2, get_tx(40),
+			sprintf(g_dtp2, get_tx(40),
 				get_tx(41 + ds_readbs((QUESTIONS_MAP + 0) + 3 * randval)),
 				get_ttx(235 + ds_readbs((QUESTIONS_MAP + 1) + 3 * randval)));
 
@@ -5698,7 +5698,7 @@ signed short copy_protection(void)
 			GUI_print_string(g_game_version, 290, 190);
 
 			/* ask the question */
-			GUI_input((char*)g_dtp2, 20);
+			GUI_input(g_dtp2, 20);
 
 			len = strlen(g_text_input_buf);
 

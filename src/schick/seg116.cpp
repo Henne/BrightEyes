@@ -170,11 +170,11 @@ void tevent_133(void)
 
 					timewarp(HOURS(1));
 
-					sprintf((char*)g_dtp2, get_tx2(39), (char*)hero + HERO_NAME2,
+					sprintf(g_dtp2, get_tx2(39), (char*)hero + HERO_NAME2,
 						(char*)GUI_get_ptr(host_readbs(hero + HERO_SEX), 3),
 						(char*)GUI_get_ptr(host_readbs(hero + HERO_SEX), 2));
 
-					GUI_output((char*)g_dtp2);
+					GUI_output(g_dtp2);
 
 					sub_hero_le(hero, random_schick(8));
 
@@ -250,14 +250,14 @@ void tevent_135(void)
 
 								GUI_output(get_tx2(50));
 
-								sprintf((char*)g_dtp2, get_tx2(54),
+								sprintf(g_dtp2, get_tx2(54),
 									(char*)hero + HERO_NAME2,
 									(char*)GUI_get_ptr(host_readbs(hero + HERO_SEX), 3));
-								GUI_output((char*)g_dtp2);
+								GUI_output(g_dtp2);
 
 								load_in_head(45);
 
-								sprintf((char*)g_dtp2 + 0x400, get_tx2(55),
+								sprintf(g_dtp2 + 0x400, get_tx2(55),
 									(char*)GUI_get_ptr(host_readbs(hero + HERO_SEX), 0),
 									(char*)GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
 
@@ -270,10 +270,10 @@ void tevent_135(void)
 								}
 
 								if (count < 5) {
-									sprintf((char*)g_dtp2 + 0x400, get_tx2(56),
+									sprintf(g_dtp2 + 0x400, get_tx2(56),
 										(char*)hero + HERO_NAME2, get_tx2(57));
 								} else {
-									sprintf((char*)g_dtp2 + 0x400, get_tx2(56),
+									sprintf(g_dtp2 + 0x400, get_tx2(56),
 										(char*)hero + HERO_NAME2, get_tx(random_interval(54, 67)));
 								}
 
@@ -286,7 +286,7 @@ void tevent_135(void)
 									inc_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_IN));
 								}
 
-								sprintf((char*)g_dtp2 + 0x400, get_tx2(58),
+								sprintf(g_dtp2 + 0x400, get_tx2(58),
 									(char*)hero + HERO_NAME2, (char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 								GUI_dialog_na(0, (char*)((char*)(g_dtp2 + 0x400)));
 
@@ -300,8 +300,8 @@ void tevent_135(void)
 
 			if (tmp) {
 
-				sprintf((char*)g_dtp2, get_tx2(51), (char*)hero + HERO_NAME2);
-				GUI_output((char*)g_dtp2);
+				sprintf(g_dtp2, get_tx2(51), (char*)hero + HERO_NAME2);
+				GUI_output(g_dtp2);
 
 				/* depending on fall height stored in tmp: damage in the interval [1..5], [4..13], [7..21], [10..32], [15..40] */
 				tmp2 = random_interval(ds_readb(TEVENT135_CLIMB_DAMAGE + 2 * tmp), host_readb((p_datseg + TEVENT135_CLIMB_DAMAGE + 1) + (2 * tmp)));
@@ -312,8 +312,8 @@ void tevent_135(void)
 				sub_hero_le(hero, tmp2);
 
 				if (tmp <= 0) {
-					sprintf((char*)g_dtp2, (char*)(!tmp ? get_tx2(53) : get_tx2(52)), (char*)hero + HERO_NAME2);
-					GUI_output((char*)g_dtp2);
+					sprintf(g_dtp2, (char*)(!tmp ? get_tx2(53) : get_tx2(52)), (char*)hero + HERO_NAME2);
+					GUI_output(g_dtp2);
 				}
 
 				if (count_heroes_available_in_group()) { /* potential Original-Bug: Does this make sense if there is only the NPC left? (Can it happen?) */
@@ -585,23 +585,23 @@ void tevent_144(void)
 		if (right_time_flag) {
 
 			load_in_head(44);
-			memmove(g_buffer10_ptr, (char*)g_dtp2, 0x400);
+			memmove(g_buffer10_ptr, g_dtp2, 0x400);
 
 			hero = get_hero(grimring_hero_pos);
 
-			sprintf((char*)g_dtp2, get_tx2(10), (char*)hero + HERO_NAME2);
+			sprintf(g_dtp2, get_tx2(10), (char*)hero + HERO_NAME2);
 
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 
-			sprintf((char*)g_dtp2, get_tx2(11), (char*)hero + HERO_NAME2);
+			sprintf(g_dtp2, get_tx2(11), (char*)hero + HERO_NAME2);
 
-			GUI_dialogbox(g_buffer10_ptr, NULL, (char*)g_dtp2, 0);
+			GUI_dialogbox(g_buffer10_ptr, NULL, g_dtp2, 0);
 			GUI_dialogbox(g_buffer10_ptr, NULL, get_tx2(12), 0);
 			GUI_dialogbox(g_buffer10_ptr, NULL, get_tx2(13), 0);
 
-			sprintf((char*)g_dtp2, get_tx2(14), (char*)hero + HERO_NAME2);
+			sprintf(g_dtp2, get_tx2(14), (char*)hero + HERO_NAME2);
 
-			GUI_dialogbox(g_buffer10_ptr, NULL, (char*)g_dtp2, 0);
+			GUI_dialogbox(g_buffer10_ptr, NULL, g_dtp2, 0);
 			GUI_dialogbox(g_buffer10_ptr, NULL, get_tx2(15), 0);
 
 			do {
@@ -615,10 +615,10 @@ void tevent_144(void)
 
 				if (grimring_hero_pos == 6) {
 
-					sprintf((char*)g_dtp2, get_tx2(38), (char*)get_hero(6) + HERO_NAME2);
+					sprintf(g_dtp2, get_tx2(38), (char*)get_hero(6) + HERO_NAME2);
 
 					GUI_dialogbox((unsigned char*)get_hero(6) + HERO_PORTRAIT, (char*)get_hero(6) + HERO_NAME2,
-							(char*)g_dtp2, 0);
+							g_dtp2, 0);
 				}
 
 			} while (grimring_hero_pos == 6);

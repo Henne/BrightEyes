@@ -120,9 +120,9 @@ void do_tavern(void)
 
 			if (p_money_before != p_money_after) {
 
-				make_valuta_str((char*)g_text_output_buf, p_money_before - p_money_after);
-				sprintf((char*)g_dtp2, get_ttx(825), g_text_output_buf);
-				GUI_output((char*)g_dtp2);
+				make_valuta_str(g_text_output_buf, p_money_before - p_money_after);
+				sprintf(g_dtp2, get_ttx(825), g_text_output_buf);
+				GUI_output(g_dtp2);
 			}
 
 			if (ds_readb(TLK_TAV_FOLLOWINFORMER) != 0) {
@@ -139,9 +139,9 @@ void do_tavern(void)
 			p_money_after = count_heroes_in_group() * (6 - host_readws(tav_ptr) / 4);
 
 			p_money_after += host_readws(tav_ptr + 2) * p_money_after / 100;
-			sprintf((char*)g_dtp2, get_ttx(473), (signed short)p_money_after);
+			sprintf(g_dtp2, get_ttx(473), (signed short)p_money_after);
 
-			if (GUI_bool((char*)g_dtp2)) {
+			if (GUI_bool(g_dtp2)) {
 
 				GUI_output(host_readws(tav_ptr) < 5 ? get_ttx(475) : (
 						host_readws(tav_ptr) < 15 ? get_ttx(476) : get_ttx(477)));

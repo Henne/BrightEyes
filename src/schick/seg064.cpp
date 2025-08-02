@@ -163,7 +163,7 @@ char* print_passage_price(signed short price, Bit8u *route_ptr)
 		price = ROUNDED_DIVISION(di,100);
 
 		/* generate a price string "%d^HELLER" */
-		sprintf((char*)g_text_output_buf, (char*)p_datseg + SEA_TRAVEL_STR_HELLER, price);
+		sprintf(g_text_output_buf, (char*)p_datseg + SEA_TRAVEL_STR_HELLER, price);
 	} else {
 		/* "NICHTS" */
 		strcpy(g_text_output_buf, (char*)p_datseg + SEA_TRAVEL_STR_NOTHING);

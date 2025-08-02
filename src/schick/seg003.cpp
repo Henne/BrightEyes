@@ -193,13 +193,13 @@ void loot_corpse(Bit8u* chest_ptr, char *text, Bit8s *flag)
 {
 	signed short answer;
 
-	sprintf((char*)g_text_output_buf, (char*)(!(*flag) ? get_ttx(523) : get_ttx(527)), text);
+	sprintf(g_text_output_buf, (char*)(!(*flag) ? get_ttx(523) : get_ttx(527)), text);
 
 	if (!(*flag)) {
 
 		g_textbox_width = 7;
 
-		answer = GUI_radio((char*)g_text_output_buf, 3, get_ttx(524), get_ttx(525), get_ttx(526)) - 1;
+		answer = GUI_radio(g_text_output_buf, 3, get_ttx(524), get_ttx(525), get_ttx(526)) - 1;
 
 		g_textbox_width = 3;
 
@@ -230,7 +230,7 @@ void loot_corpse(Bit8u* chest_ptr, char *text, Bit8s *flag)
 			}
 		}
 	} else {
-		GUI_output((char*)g_text_output_buf);
+		GUI_output(g_text_output_buf);
 	}
 }
 

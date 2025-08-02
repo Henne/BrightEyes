@@ -47,11 +47,11 @@ signed short DNG13_handler(void)
 	{
 		hero = get_hero(get_random_hero());
 
-		sprintf((char*)g_dtp2,
+		sprintf(g_dtp2,
 			get_tx(18),
 			(char*)hero + HERO_NAME2);
 
-		GUI_output((char*)g_dtp2);
+		GUI_output(g_dtp2);
 
 		sub_hero_le(hero, 2);
 	}

@@ -64,13 +64,13 @@ signed short DNG02_handler(void)
 
 	} else if (target_pos == DNG_POS(0,3,6) && target_pos != gs_dng_handled_pos && gs_direction == SOUTH)
 	{
-		strcpy((char*)g_dtp2,
+		strcpy(g_dtp2,
 			get_tx(4));
 
-		strcat((char*)g_dtp2,
+		strcat(g_dtp2,
 			 (char*)((test_spell_group(SP_ODEM_ARCANUM, 0) == 0) ? get_tx(5) : get_tx(6)));
 
-		GUI_output((char*)g_dtp2);
+		GUI_output(g_dtp2);
 
 	} else if (target_pos == DNG_POS(0,4,10) && target_pos != gs_dng_handled_pos && gs_direction == SOUTH)
 	{
@@ -83,12 +83,12 @@ signed short DNG02_handler(void)
 			GUI_output(get_tx(8));
 
 		} else {
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				get_tx(9),
 				(char*)hero + HERO_NAME2,
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 
 			flag = 0;
 
@@ -97,12 +97,12 @@ signed short DNG02_handler(void)
 				/* KK+4 */
 				if (test_attrib(hero, ATTRIB_KK, 4) <= 0)
 				{
-					sprintf((char*)g_dtp2,
+					sprintf(g_dtp2,
 						get_tx(10),
 						(char*)hero + HERO_NAME2,
 						(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-					GUI_output((char*)g_dtp2);
+					GUI_output(g_dtp2);
 
 					sub_hero_le(hero, 1);
 
@@ -113,11 +113,11 @@ signed short DNG02_handler(void)
 
 			if (!flag)
 			{
-				sprintf((char*)g_dtp2,
+				sprintf(g_dtp2,
 					get_tx(11),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output((char*)g_dtp2);
+				GUI_output(g_dtp2);
 
 				sub_hero_le(hero, (host_readws(hero + HERO_LE) > 6 ? random_schick(6) : host_readws(hero + HERO_LE) - 1));
 
@@ -333,7 +333,7 @@ signed short DNG02_handler(void)
 			{
 				or_ptr_bs(hero + HERO_FLAGS1, 0x04); /* set 'petrified' flag */
 
-				sprintf((char*)g_dtp2,
+				sprintf(g_dtp2,
 					get_tx(42),
 					(char*)hero + HERO_NAME2,
 					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
@@ -341,7 +341,7 @@ signed short DNG02_handler(void)
 					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output((char*)g_dtp2);
+				GUI_output(g_dtp2);
 			}
 		}
 
@@ -435,18 +435,18 @@ signed short DNG02_handler(void)
 		{
 			ds_writeb(DNG02_SECRET_DOOR1, 1);
 
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				get_tx(37),
 				(char*)hero + HERO_NAME2);
 
-			sprintf((char*)g_text_output_buf,
+			sprintf(g_text_output_buf,
 				(char*)((i = test_skill(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(39) : get_tx(38)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			strcat((char*)g_dtp2,
+			strcat(g_dtp2,
 				g_text_output_buf);
 
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 
 			if (i > 0)
 			{
@@ -471,18 +471,18 @@ signed short DNG02_handler(void)
 		{
 			ds_writeb(DNG02_SECRET_DOOR2, 1);
 
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				get_tx(37),
 				(char*)hero + HERO_NAME2);
 
-			sprintf((char*)g_text_output_buf,
+			sprintf(g_text_output_buf,
 				(char*)((i = test_skill(hero, TA_SCHLOESSER, 2)) > 0 ? get_tx(39) : get_tx(38)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			strcat((char*)g_dtp2,
+			strcat(g_dtp2,
 				g_text_output_buf);
 
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 
 			if (i > 0)
 			{
@@ -505,15 +505,15 @@ signed short DNG02_handler(void)
 		{
 			ds_writeb(DNG02_SECRET_DOOR3, 1);
 
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				get_tx(37),
 				(char*)hero + HERO_NAME2);
 
-			sprintf((char*)g_text_output_buf,
+			sprintf(g_text_output_buf,
 				(char*)((i = test_skill(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(39) : get_tx(38)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			strcat((char*)g_dtp2,
+			strcat(g_dtp2,
 				g_text_output_buf);
 
 			if (i > 0)
@@ -525,15 +525,15 @@ signed short DNG02_handler(void)
 
 			i = random_schick(6) + 4;
 
-			sprintf((char*)g_text_output_buf,
+			sprintf(g_text_output_buf,
 				get_tx(40),
 				(char*)hero + HERO_NAME2,
 				i);
 
-			strcat((char*)g_dtp2,
+			strcat(g_dtp2,
 				g_text_output_buf);
 
-			GUI_output((char*)g_dtp2);
+			GUI_output(g_dtp2);
 
 			sub_hero_le(hero, i);
 
@@ -549,11 +549,11 @@ signed short DNG02_handler(void)
 		gs_current_loctype = LOCTYPE_NONE;
 		gs_direction = ((ds_readws(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
 
-		sprintf((char*)g_dtp2,
+		sprintf(g_dtp2,
 			get_tx(44),
 			get_ttx(ds_readws(TRV_DESTINATION) + 0xeb));
 
-		GUI_output((char*)g_dtp2);
+		GUI_output(g_dtp2);
 
 		timewarp(HOURS(3));
 

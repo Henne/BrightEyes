@@ -87,19 +87,19 @@ void rabies(Bit8u* hero, signed short hero_pos)
 
 		if (count_heroes_available_in_group() > 1) {
 
-			sprintf((char*)g_dtp2, get_ttx(741), (char*)hero + HERO_NAME2,
+			sprintf(g_dtp2, get_ttx(741), (char*)hero + HERO_NAME2,
 				(char*)GUI_get_ptr(host_readbs(hero + HERO_SEX), 2),
 				(char*)GUI_get_ptr(host_readbs(hero + HERO_SEX), 2));
 
-			sprintf((char*)g_dtp2 + 500, get_ttx(742), (char*)hero + HERO_NAME2);
+			sprintf(g_dtp2 + 500, get_ttx(742), (char*)hero + HERO_NAME2);
 
-			sprintf((char*)g_dtp2 + 600, get_ttx(743), (char*)hero + HERO_NAME2);
+			sprintf(g_dtp2 + 600, get_ttx(743), (char*)hero + HERO_NAME2);
 
 			tw_bak = g_textbox_width;
 			g_textbox_width = 6;
 
 			answer = GUI_dialogbox(hero + HERO_PORTRAIT, (char*)hero + HERO_NAME2,
-						(char*)g_dtp2, 3, g_dtp2 + 500, (char*)g_dtp2 + 600, get_ttx(744));
+						g_dtp2, 3, g_dtp2 + 500, g_dtp2 + 600, get_ttx(744));
 
 			g_textbox_width = tw_bak;
 
@@ -108,9 +108,9 @@ void rabies(Bit8u* hero, signed short hero_pos)
 
 				sub_hero_le(hero, host_readws(hero + HERO_LE) / 2);
 
-				sprintf((char*)g_dtp2, get_ttx(745), (char*)hero + HERO_NAME2);
+				sprintf(g_dtp2, get_ttx(745), (char*)hero + HERO_NAME2);
 
-				GUI_output((char*)g_dtp2);
+				GUI_output(g_dtp2);
 
 				g_hero_sel_exclude = (signed char)hero_pos;
 
@@ -135,9 +135,9 @@ void rabies(Bit8u* hero, signed short hero_pos)
 						 * (found by siebenstreich 2021-08-15) */
 					{
 						done = 1;
-						sprintf((char*)g_dtp2, get_ttx(746), (char*)hero + HERO_NAME2);
+						sprintf(g_dtp2, get_ttx(746), (char*)hero + HERO_NAME2);
 
-						GUI_output((char*)g_dtp2);
+						GUI_output(g_dtp2);
 
 						g_hero_sel_exclude = (signed char)hero_pos;
 
@@ -173,9 +173,9 @@ void rabies(Bit8u* hero, signed short hero_pos)
 
 								sub_ae_splash(hero2, 15);
 
-								sprintf((char*)g_dtp2, get_ttx(746), (char*)hero + HERO_NAME2);
+								sprintf(g_dtp2, get_ttx(746), (char*)hero + HERO_NAME2);
 
-								GUI_output((char*)g_dtp2);
+								GUI_output(g_dtp2);
 
 								g_hero_sel_exclude = (signed char)hero_pos;
 
@@ -186,8 +186,8 @@ void rabies(Bit8u* hero, signed short hero_pos)
 								}
 							}
 						} else {
-							sprintf((char*)g_dtp2, get_ttx(607), (char*)hero2 + HERO_NAME2);
-							GUI_output((char*)g_dtp2);
+							sprintf(g_dtp2, get_ttx(607), (char*)hero2 + HERO_NAME2);
+							GUI_output(g_dtp2);
 						}
 					}
 				}
@@ -195,8 +195,8 @@ void rabies(Bit8u* hero, signed short hero_pos)
 		} else {
 
 			/* Hero has rabies / Tollwut */
-			sprintf((char*)g_dtp2, get_ttx(747), (char*)hero + HERO_NAME2);
-			GUI_output((char*)g_dtp2);
+			sprintf(g_dtp2, get_ttx(747), (char*)hero + HERO_NAME2);
+			GUI_output(g_dtp2);
 
 			done = 1;
 		}
@@ -216,8 +216,8 @@ void rabies(Bit8u* hero, signed short hero_pos)
 			}
 
 			/* hero has berserker fury / Berserkerwut */
-			sprintf((char*)g_dtp2, get_ttx(791), (char*)hero + HERO_NAME2);
-			GUI_output((char*)g_dtp2);
+			sprintf(g_dtp2, get_ttx(791), (char*)hero + HERO_NAME2);
+			GUI_output(g_dtp2);
 
 			done = 1;
 		}
@@ -246,9 +246,9 @@ void init_global_buffer(void)
 	g_tx2_index = g_text_ltx_index + 3960;
 
 	g_objects_nvf_buf = (((HugePt)g_text_ltx_index) + 4760L);
-	g_dtp2 = (signed char*)(((HugePt)g_objects_nvf_buf) + 3400L);
-	g_text_input_buf = (signed char*)(g_dtp2 + 1500);
-	g_text_output_buf = (signed char*)(((HugePt)g_dtp2) + 1524L);
+	g_dtp2 = (char*)(((HugePt)g_objects_nvf_buf) + 3400L);
+	g_text_input_buf = (char*)(g_dtp2 + 1500);
+	g_text_output_buf = (char*)(((HugePt)g_dtp2) + 1524L);
 	g_buffer5_ptr = (char*)(((HugePt)g_text_output_buf) + 300L);
 	g_buffer6_ptr = (unsigned char*)(((HugePt)g_buffer5_ptr) + 3880L);
 	g_buffer7_ptr = (char*)(((HugePt)g_buffer6_ptr) + 2200L);
@@ -510,14 +510,14 @@ void prepare_dirs(void)
 	}
 
 	/* delete *.* in TEMP-dir */
-	sprintf((char*)g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), (char*)p_datseg + ALL_FILES_WILDCARD2);
+	sprintf(g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), (char*)p_datseg + ALL_FILES_WILDCARD2);
 
 	l_si = findfirst(g_text_output_buf, &blk, 0);
 
 	if (!l_si) {
 
 		do {
-			sprintf((char*)g_text_output_buf,
+			sprintf(g_text_output_buf,
 				(char*)ds_readd(STR_TEMP_XX_PTR2),
 				((char*)(&blk)) + 30);			/* contains a filename */
 
@@ -540,7 +540,7 @@ void prepare_dirs(void)
 
 		close(l_di);
 
-		sprintf((char*)g_text_output_buf,
+		sprintf(g_text_output_buf,
 			(char*)ds_readd(STR_TEMP_XX_PTR2),
 			((char*)(&blk)) + 30);			/* contains a filename */
 
@@ -622,7 +622,7 @@ void cleanup_game(void)
 
 	/* delete all files in TEMP */
 
-	sprintf((char*)g_text_output_buf,
+	sprintf(g_text_output_buf,
 		(char*)ds_readd(STR_TEMP_XX_PTR2),	/* contains "TEMP\\%s" */
 		(char*)p_datseg + ALL_FILES_WILDCARD3);		/* contains "*.*" */
 
@@ -632,7 +632,7 @@ void cleanup_game(void)
 
 		do {
 			/* delete each found file */
-			sprintf((char*)g_text_output_buf,
+			sprintf(g_text_output_buf,
 				(char*)ds_readd(STR_TEMP_XX_PTR2),	/* contains "TEMP\\%s" */
 				((char*)(&blk)) + 30);			/* contains a filename */
 

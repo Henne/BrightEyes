@@ -247,7 +247,7 @@ signed short load_game_state(void)
 		ds_writew(ANI_ENABLED, 0);
 
 		/* delete every file in TEMP */
-		sprintf((char*)g_text_output_buf,
+		sprintf(g_text_output_buf,
 			/* "TEMP\\%s" */
 			(char*)ds_readd(STR_TEMP_XX_PTR2),
 			/* "*.*" */
@@ -259,7 +259,7 @@ signed short load_game_state(void)
 		if (l2 == 0) {
 
 			do {
-				sprintf((char*)g_text_output_buf,
+				sprintf(g_text_output_buf,
 					(char*)ds_readd(STR_TEMP_XX_PTR2),
 					((char*)(&blk))+ 30);
 
@@ -303,7 +303,7 @@ signed short load_game_state(void)
 			if (host_readd(g_saved_files_buf + 4 * i)) {
 
 				/* write file content to TEMP */
-				sprintf((char*)g_text_output_buf,
+				sprintf(g_text_output_buf,
 					(char*)ds_readd(STR_TEMP_XX_PTR2),
 					(char*)(ds_readd(FNAMES + 4 * i)));
 
@@ -332,7 +332,7 @@ signed short load_game_state(void)
 				prepare_chr_name(name, (char*)hero_i);
 
 				/* write file content to TEMP */
-				sprintf((char*)g_text_output_buf,
+				sprintf(g_text_output_buf,
 					(char*)ds_readd(STR_TEMP_XX_PTR2),
 					name);
 
@@ -359,7 +359,7 @@ signed short load_game_state(void)
 
 		while (l2 == 0) {
 
-			sprintf((char*)g_text_output_buf,
+			sprintf(g_text_output_buf,
 				(char*)ds_readd(STR_TEMP_XX_PTR2),
 				((char*)(&blk)) + 30);
 
@@ -455,20 +455,20 @@ signed short save_game_state(void)
 
 			/* create savegame not in a temple */
 
-			sprintf((char*)g_dtp2,
+			sprintf(g_dtp2,
 				get_ttx(813), /* "Dabei verliert jeder Held in der Gruppe einen Abenteuerpunkt" */
 				1,
 				get_ttx(392),
 				p_datseg + EMPTY_STRING1);
 
-			sprintf((char*)g_text_output_buf,
+			sprintf(g_text_output_buf,
 				get_ttx(1), /* "Welchen Spielstand wollen Sie abspeichern ?" */
 				g_dtp2);
 		} else {
 #endif
 
 			/* create savegame inside a temple */
-			sprintf((char*)g_text_output_buf,
+			sprintf(g_text_output_buf,
 				get_ttx(1), /* "Welchen Spielstand wollen Sie abspeichern ?" */
 				(char*)p_datseg + EMPTY_STRING2);
 #ifndef M302de_FEATURE_MOD
@@ -610,7 +610,7 @@ signed short save_game_state(void)
 		/* save all changed files from SCHICK.DAT */
 		for (tw_bak = 0; tw_bak < 286; tw_bak++) {
 
-			sprintf((char*)g_text_output_buf,
+			sprintf(g_text_output_buf,
 				(char*)ds_readd(STR_TEMP_XX_PTR2),
 				(char*)(ds_readd(FNAMES + 4 * tw_bak)));
 
@@ -645,14 +645,14 @@ signed short save_game_state(void)
 
 		/* append all CHR files */
 		lseek(l_di, filepos, 0);
-		sprintf((char*)g_text_output_buf,
+		sprintf(g_text_output_buf,
 			(char*)ds_readd(STR_TEMP_XX_PTR2),
 			(char*)p_datseg + ALL_CHR_WILDCARD2);
 
 		l1 = findfirst(g_text_output_buf, &blk, 0);
 		do {
 			/* create the CHR filename */
-			sprintf((char*)g_text_output_buf,
+			sprintf(g_text_output_buf,
 				(char*)ds_readd(STR_TEMP_XX_PTR2),
 				((char*)(&blk)) + 30);
 
@@ -703,7 +703,7 @@ signed short read_chr_temp(char *fname, signed short hero_pos, signed short a2)
 	signed short hero_size = SIZEOF_HERO;
 	Bit8u *hero;
 
-	sprintf((char*)g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), (char*)fname);
+	sprintf(g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), (char*)fname);
 
 	if ((handle = open(g_text_output_buf, O_BINARY | O_RDWR)) == -1) {
 		copy_file_to_temp((char*)fname, g_text_output_buf);
@@ -764,12 +764,12 @@ void write_chr_temp(unsigned short hero_pos)
 
 	prepare_chr_name(fname, (char*)get_hero(hero_pos));
 
-	sprintf((char*)g_text_output_buf,
+	sprintf(g_text_output_buf,
 		(char*)ds_readd(STR_TEMP_XX_PTR2),		/* "TEMP\\%s" */
 		fname);
 
 	/* TODO: should be O_BINARY | O_WRONLY */
-	fd = _creat((char*)g_text_output_buf, 0);
+	fd = _creat(g_text_output_buf, 0);
 	write(fd, get_hero(hero_pos), SIZEOF_HERO);
 	close(fd);
 }
@@ -791,7 +791,7 @@ signed short copy_chr_names(Bit8u *ptr, signed short temple_id)
 	struct ffblk blk;
 
 	buf = g_renderbuf_ptr + 60000;
-	sprintf((char*)g_text_output_buf,
+	sprintf(g_text_output_buf,
 		(char*)ds_readd(STR_TEMP_XX_PTR2),
 		(char*)p_datseg + ALL_CHR_WILDCARD3);
 
@@ -801,7 +801,7 @@ signed short copy_chr_names(Bit8u *ptr, signed short temple_id)
 
 		do {
 			/* create the CHR filename */
-			sprintf((char*)g_text_output_buf,
+			sprintf(g_text_output_buf,
 				(char*)ds_readd(STR_TEMP_XX_PTR2),
 				((char*)(&blk)) + 30);
 

@@ -97,8 +97,8 @@ void tevent_037(void)
 
 				if (hours >= 4)
 				{
-					sprintf((char*)g_dtp2, get_tx2(36), hours);
-					GUI_output((char*)g_dtp2);
+					sprintf(g_dtp2, get_tx2(36), hours);
+					GUI_output(g_dtp2);
 
 					done = 1;
 
@@ -133,10 +133,10 @@ void tevent_037(void)
 					/* select a hero randomly */
 					hero = get_hero(answer = get_random_hero());
 
-					sprintf((char*)g_dtp2, get_tx2(45), (char*)hero + HERO_NAME2,
+					sprintf(g_dtp2, get_tx2(45), (char*)hero + HERO_NAME2,
 						(char*)GUI_get_ptr(host_readbs(hero + HERO_SEX), 2));
 
-					GUI_output((char*)g_dtp2);
+					GUI_output(g_dtp2);
 
 					add_hero_ap(hero, 20);
 
@@ -147,23 +147,23 @@ void tevent_037(void)
 					GUI_input(get_tx2(47), 10);
 
 					/* check if the answer is "RAD" 1st */
-					if (strcmp((char*)g_text_input_buf, (char*)p_datseg + STR_RAD1))
+					if (strcmp(g_text_input_buf, (char*)p_datseg + STR_RAD1))
 					{
 						GUI_input(get_tx2(48), 10);
 
 						/* check if the answer is "RAD" 2nd */
-						if (strcmp((char*)g_text_input_buf, (char*)p_datseg + STR_RAD2))
+						if (strcmp(g_text_input_buf, (char*)p_datseg + STR_RAD2))
 						{
 							GUI_input(get_tx2(49), 10);
 
 							/* check if the answer is "RAD" 3rd */
-							if (strcmp((char*)g_text_input_buf, (char*)p_datseg + STR_RAD3))
+							if (strcmp(g_text_input_buf, (char*)p_datseg + STR_RAD3))
 							{
-								sprintf((char*)g_dtp2, get_tx2(50),
+								sprintf(g_dtp2, get_tx2(50),
 									(char*)hero + HERO_NAME2, (char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
 									(char*)hero + HERO_NAME2, (char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 
-								GUI_output((char*)g_dtp2);
+								GUI_output(g_dtp2);
 
 								/* the hero is now lost completely */
 								hero_disappear(hero, answer, -1);
@@ -209,8 +209,8 @@ void tevent_037(void)
 
 						timewarp(HOURS(1));
 
-						sprintf((char*)g_dtp2, get_tx2(44), (char*)hero + HERO_NAME2);
-						GUI_output((char*)g_dtp2);
+						sprintf(g_dtp2, get_tx2(44), (char*)hero + HERO_NAME2);
+						GUI_output(g_dtp2);
 					}
 				}
 			}
@@ -524,16 +524,16 @@ void tevent_124(void)
 #endif
 				{
 					/* fatal */
-					sprintf((char*)g_dtp2, get_tx2(56), (char*)hero + HERO_NAME2,
+					sprintf(g_dtp2, get_tx2(56), (char*)hero + HERO_NAME2,
 						(char*)GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
-					GUI_output((char*)g_dtp2);
+					GUI_output(g_dtp2);
 
 					hero_disappear(hero, i, -1);
 
 				} else {
 
-					sprintf((char*)g_dtp2, get_tx2(55), (char*)hero + HERO_NAME2);
-					GUI_output((char*)g_dtp2);
+					sprintf(g_dtp2, get_tx2(55), (char*)hero + HERO_NAME2);
+					GUI_output(g_dtp2);
 
 					sub_hero_le(hero, random_schick(5));
 				}
@@ -606,8 +606,8 @@ void tevent_145(void)
 		}
 	}
 
-	sprintf((char*)g_dtp2, get_tx2(45), get_ttx(ds_readws(TRV_DESTINATION) + 0xeb));
-	GUI_output((char*)g_dtp2);
+	sprintf(g_dtp2, get_tx2(45), get_ttx(ds_readws(TRV_DESTINATION) + 0xeb));
+	GUI_output(g_dtp2);
 }
 
 #if !defined(__BORLANDC__)

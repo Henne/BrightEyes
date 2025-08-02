@@ -120,13 +120,13 @@ void do_house(void)
 	Bit8u *hero;
 
 	/* prepare the question */
-	strcpy((char*)g_dtp2, get_tx(gs_current_locdata));
+	strcpy(g_dtp2, get_tx(gs_current_locdata));
 
-	strcat((char*)g_dtp2, get_ttx(623));
+	strcat(g_dtp2, get_ttx(623));
 
 	ds_writew(MENU_DEFAULT_SELECT, 1);
 
-	if (GUI_bool((char*)g_dtp2)) {
+	if (GUI_bool(g_dtp2)) {
 
 		/* break into the house */
 
@@ -353,7 +353,7 @@ void show_treasure_map(void)
 			g_textbox_width = 3;
 
 			/* */
-			sprintf((char*)g_text_output_buf, get_ttx(727),	(char*)get_hero(get_random_hero()) + HERO_NAME2);
+			sprintf(g_text_output_buf, get_ttx(727),	(char*)get_hero(get_random_hero()) + HERO_NAME2);
 			GUI_output(g_text_output_buf);
 
 			g_textbox_width = tw_bak;
@@ -554,9 +554,9 @@ signed short game_options(void)
 			done = 1;
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_6) {
 
-			sprintf((char*)g_dtp2, get_ttx(827), g_delay_factor);
+			sprintf(g_dtp2, get_ttx(827), g_delay_factor);
 
-			new_delay = GUI_input((char*)g_dtp2, 2);
+			new_delay = GUI_input(g_dtp2, 2);
 
 			if (new_delay != -1) {
 				g_delay_factor = new_delay;
@@ -792,14 +792,14 @@ void tumult(void)
 	sub_group_le(random_schick(6));
 
 	/* the guards or a mob */
-	sprintf((char*)g_dtp2, get_ttx(765),
+	sprintf(g_dtp2, get_ttx(765),
 		((gs_current_town == TOWNS_PREM ||
 			gs_current_town == TOWNS_PHEXCAER ||
 			gs_current_town == TOWNS_THORWAL ||
 			gs_current_town == TOWNS_OBERORKEN)
 				? get_ttx(766) : get_ttx(767)));
 
-	GUI_output((char*)g_dtp2);
+	GUI_output(g_dtp2);
 
 	g_textbox_width = tw_bak;
 }
