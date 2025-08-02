@@ -164,7 +164,7 @@ signed short DNG14_handler(void)
 				(char*)((l_di = test_skill(hero, TA_SCHLOESSER, -6)) > 0 ? get_tx(8): get_tx(9)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			strcat((char*)g_dtp2, g_text_output_buf);
+			strcat((char*)g_dtp2, (char*)g_text_output_buf);
 
 			GUI_output((char*)g_dtp2);
 
@@ -187,15 +187,13 @@ signed short DNG14_handler(void)
 
 			ds_writeb(DNG14_SECRETDOOR2, 1);
 
-			sprintf((char*)g_dtp2,
-				get_tx(7),
-				(char*)hero + HERO_NAME2);
+			sprintf((char*)g_dtp2, get_tx(7), (char*)hero + HERO_NAME2);
 
 			sprintf((char*)g_text_output_buf,
 				(char*)((l_di = test_skill(hero, TA_SCHLOESSER, 6)) > 0 ? get_tx(8): get_tx(9)),
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+				(char*)GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
 
-			strcat((char*)g_dtp2, g_text_output_buf);
+			strcat((char*)g_dtp2, (char*)g_text_output_buf);
 
 			GUI_output((char*)g_dtp2);
 
@@ -310,15 +308,13 @@ signed short DNG14_handler(void)
 			/* acticate trap */
 			ds_writeb(DNG14_SECRETDOOR3, 1);
 
-			sprintf((char*)g_dtp2,
-				get_tx(7),
-				(char*)hero + HERO_NAME2);
+			sprintf((char*)g_dtp2, get_tx(7), (char*)hero + HERO_NAME2);
 
 			sprintf((char*)g_text_output_buf,
 				(char*)((l_di = test_skill(hero, TA_SCHLOESSER, -6)) > 0 ? get_tx(8) : get_tx(9)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			strcat((char*)g_dtp2, g_text_output_buf);
+			strcat((char*)g_dtp2, (char*)g_text_output_buf);
 
 			GUI_output((char*)g_dtp2);
 
@@ -342,15 +338,13 @@ signed short DNG14_handler(void)
 			/* acticate trap */
 			ds_writeb(DNG14_SECRETDOOR4, 1);
 
-			sprintf((char*)g_dtp2,
-				get_tx(7),
-				(char*)hero + HERO_NAME2);
+			sprintf((char*)g_dtp2, get_tx(7), (char*)hero + HERO_NAME2);
 
 			sprintf((char*)g_text_output_buf,
 				(char*)((l_di = test_skill(hero, TA_SCHLOESSER, 7)) > 0 ? get_tx(8) : get_tx(9)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			strcat((char*)g_dtp2, g_text_output_buf);
+			strcat((char*)g_dtp2, (char*)g_text_output_buf);
 
 			GUI_output((char*)g_dtp2);
 
@@ -536,7 +530,7 @@ signed short DNG14_handler(void)
 				(char*)((l_di = test_skill(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(8) : get_tx(9)),
 				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			strcat((char*)g_dtp2, g_text_output_buf);
+			strcat((char*)g_dtp2, (char*)g_text_output_buf);
 
 			GUI_output((char*)g_dtp2);
 

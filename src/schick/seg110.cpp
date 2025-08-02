@@ -197,10 +197,9 @@ void tevent_014(void)
 		load_in_head(55);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
-						get_tx2(43), 2,
-						get_tx2(44),
-						get_tx2(45));
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(43),
+						2, get_tx2(44),	get_tx2(45));
+
 		} while (answer == -1);
 
 		if (answer == 1)
@@ -596,9 +595,8 @@ void tevent_041(void)
 	{
 		do {
 			/* Spuren von Karenen */
-			answer = GUI_radio(get_tx2(20), 2,
-						get_tx2(21),
-						get_tx2(22));
+			answer = GUI_radio(get_tx2(20), 2, get_tx2(21), get_tx2(22));
+
 		} while (answer == -1);
 
 		if (answer == 1)
@@ -646,10 +644,10 @@ void tevent_044(void)
 
 		hero = (Bit8u*)get_first_hero_available_in_group();
 
-		sprintf((char*)g_dtp2 + 0x400, get_tx2(33), (char*)hero + HERO_NAME2, (char*)GUI_get_ptr(host_readbs(hero + HERO_SEX), 3));
+		sprintf((char*)(g_dtp2 + 0x400), get_tx2(33), (char*)hero + HERO_NAME2, (char*)GUI_get_ptr(host_readbs(hero + HERO_SEX), 3));
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, g_dtp2 + 0x400, 2, get_tx2(34), get_tx2(35));
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, (char*)(g_dtp2 + 0x400), 2, get_tx2(34), get_tx2(35));
 
 		} while (answer == -1);
 

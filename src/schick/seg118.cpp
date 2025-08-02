@@ -147,17 +147,17 @@ void tevent_037(void)
 					GUI_input(get_tx2(47), 10);
 
 					/* check if the answer is "RAD" 1st */
-					if (strcmp(g_text_input_buf, (char*)p_datseg + STR_RAD1))
+					if (strcmp((char*)g_text_input_buf, (char*)p_datseg + STR_RAD1))
 					{
 						GUI_input(get_tx2(48), 10);
 
 						/* check if the answer is "RAD" 2nd */
-						if (strcmp(g_text_input_buf, (char*)p_datseg + STR_RAD2))
+						if (strcmp((char*)g_text_input_buf, (char*)p_datseg + STR_RAD2))
 						{
 							GUI_input(get_tx2(49), 10);
 
 							/* check if the answer is "RAD" 3rd */
-							if (strcmp(g_text_input_buf, (char*)p_datseg + STR_RAD3))
+							if (strcmp((char*)g_text_input_buf, (char*)p_datseg + STR_RAD3))
 							{
 								sprintf((char*)g_dtp2, get_tx2(50),
 									(char*)hero + HERO_NAME2, (char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),

@@ -99,7 +99,7 @@ void rabies(Bit8u* hero, signed short hero_pos)
 			g_textbox_width = 6;
 
 			answer = GUI_dialogbox(hero + HERO_PORTRAIT, (char*)hero + HERO_NAME2,
-						g_dtp2,	3, g_dtp2 + 500, g_dtp2 + 600, get_ttx(744));
+						(char*)g_dtp2, 3, g_dtp2 + 500, (char*)g_dtp2 + 600, get_ttx(744));
 
 			g_textbox_width = tw_bak;
 

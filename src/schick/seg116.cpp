@@ -618,7 +618,7 @@ void tevent_144(void)
 					sprintf((char*)g_dtp2, get_tx2(38), (char*)get_hero(6) + HERO_NAME2);
 
 					GUI_dialogbox((unsigned char*)get_hero(6) + HERO_PORTRAIT, (char*)get_hero(6) + HERO_NAME2,
-							g_dtp2, 0);
+							(char*)g_dtp2, 0);
 				}
 
 			} while (grimring_hero_pos == 6);

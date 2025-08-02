@@ -501,12 +501,8 @@ void tevent_074(void)
 
 				hero = get_hero(answer);
 
-				sprintf((char*)g_dtp2 + 0x400,
-					get_tx2(54),
-					(char*)hero + HERO_NAME2);
-
-				GUI_dialogbox((unsigned char*)g_dtp2, get_tx(49),
-						g_dtp2 + 0x400, 0);
+				sprintf((char*)(g_dtp2 + 0x400), get_tx2(54), (char*)hero + HERO_NAME2);
+				GUI_dialogbox((unsigned char*)g_dtp2, get_tx(49), (char*)(g_dtp2 + 0x400), 0);
 
 				/* this hero gets a damage of 2W6+4 */
 				sub_hero_le(hero, dice_roll(2, 6, 4));
@@ -742,12 +738,8 @@ void tevent_077(void)
 
 				hero = get_hero(answer);
 
-				sprintf((char*)g_dtp2 + 0x400,
-					get_tx2(54),
-					(char*)hero + HERO_NAME2);
-
-				GUI_dialogbox((unsigned char*)g_dtp2, get_tx(50),
-						g_dtp2 + 0x400, 0);
+				sprintf((char*)(g_dtp2 + 0x400), get_tx2(54), (char*)hero + HERO_NAME2);
+				GUI_dialogbox((unsigned char*)g_dtp2, get_tx(50), (char*)(g_dtp2 + 0x400), 0);
 
 				/* the last hero looses between 6 and 16 LE */
 				sub_hero_le(hero, random_schick(11) + 5);
