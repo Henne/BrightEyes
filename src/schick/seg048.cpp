@@ -84,7 +84,7 @@ void status_menu(signed short hero_pos)
 
 	hero1 = hero2 = get_hero(hero_pos);
 
-	if (!host_readbs(hero2 + HERO_TYPE) || ds_readw(STATUSMENU_ALLOWED) == 0) {
+	if (!host_readbs(hero2 + HERO_TYPE) || !g_statusmenu_allowed) {
 		return;
 	}
 
@@ -847,7 +847,7 @@ void status_menu(signed short hero_pos)
 void status_select_hero(void)
 {
 
-	if (ds_readws(STATUSMENU_ALLOWED) == 0 || !gs_group_member_counts[gs_current_group]) {
+	if (!g_statusmenu_allowed || !gs_group_member_counts[gs_current_group]) {
 		/* Yes, it was written that way! */
 	} else {
 		signed short hero_pos = select_hero_from_group(get_ttx(301));

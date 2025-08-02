@@ -156,7 +156,7 @@
 #define MOUSE_POINTER_OFFSETY_BAK       (0x29ac)    /* unsigned short */
 #define ANI_ENABLED                     (0x29ae)    /* unsigned short; {0,1} */
 // ?2
-#define STATUSMENU_ALLOWED              (0x29b2)    /* unsigned short; {0,1}, readonly */
+//#define STATUSMENU_ALLOWED              (0x29b2)    /* unsigned short; {0,1}, readonly */
 //#define HEROSWAP_ALLOWED                (0x29b4)    /* unsigned short; {0,1} */
 //#define INTEMPLE                        (0x29b6)    /* unsigned short; writeonly (0,1), 0 while in temple */
 //#define INTEMPLE2                       (0x29b8)    /* unsigned short; {0,1}, copy of INTEMPLE */
