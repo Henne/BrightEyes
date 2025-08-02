@@ -199,9 +199,9 @@ unsigned short fight_printer(void)
 		f_action = ds_readw(FIG_MSG_DATA + ds_readbs(FIG_STAR_COUNTER) * 4);
 		if (f_action != 0) {
 
-			gfx_pos_bak = (Bit8u*)ds_readd(PRINT_STRING_BUFFER);
+			gfx_pos_bak = (Bit8u*)ds_readd(VGA_BACKBUFFER);
 
-			ds_writed(PRINT_STRING_BUFFER, (Bit32u)g_renderbuf_ptr);
+			ds_writed(VGA_BACKBUFFER, (Bit32u)g_renderbuf_ptr);
 			get_textcolor(&fg_bak, &bg_bak);
 
 			FIG_set_star_color(g_fig_star_gfx, 3724, ds_readb((FIG_STAR_COLORS-1) + f_action));
@@ -270,7 +270,7 @@ unsigned short fight_printer(void)
 
 				GUI_print_string(g_text_output_buf, 1, 194);
 			}
-			ds_writed(PRINT_STRING_BUFFER, (Bit32u)gfx_pos_bak);
+			ds_writed(VGA_BACKBUFFER, (Bit32u)gfx_pos_bak);
 			set_textcolor(fg_bak, bg_bak);
 		}
 		ds_writeb(FIG_STAR_LAST_COUNT, ds_readbs(FIG_STAR_COUNTER));
@@ -412,7 +412,7 @@ void draw_fight_screen(Bit16u val)
 
 		set_delay_timer();
 
-		ds_writed(PIC_COPY_DST, ds_writed(PRINT_STRING_BUFFER, (Bit32u)g_renderbuf_ptr));
+		ds_writed(PIC_COPY_DST, ds_writed(VGA_BACKBUFFER, (Bit32u)g_renderbuf_ptr));
 
 
 		for (list_i = (Bit8u*)ds_readd(FIG_LIST_HEAD); list_i; list_i = (Bit8u*)host_readd(list_i + FIGHTER_NEXT)) {
@@ -953,7 +953,7 @@ void draw_fight_screen(Bit16u val)
 		ds_writew(PIC_COPY_Y2, 199);
 
 		ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
-		ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
+		ds_writed(PIC_COPY_DST, ds_readd(VGA_MEMSTART));
 
 		fight_delay();
 
@@ -980,7 +980,7 @@ void draw_fight_screen(Bit16u val)
 		ds_writew(PIC_COPY_Y2, 199);
 
 		ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
-		ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
+		ds_writed(PIC_COPY_DST, ds_readd(VGA_MEMSTART));
 
 		do_pic_copy(0);
 
@@ -1001,7 +1001,7 @@ to the DOSBox-CPU and may run the timer.
 				ds_writew(PIC_COPY_Y2, 199);
 
 				ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
-				ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
+				ds_writed(PIC_COPY_DST, ds_readd(VGA_MEMSTART));
 
 				do_pic_copy(0);
 			}
@@ -1017,7 +1017,7 @@ to the DOSBox-CPU and may run the timer.
 	_read(handle, g_buffer8_ptr, 64000);
 	close(handle);
 
-	ds_writed(PIC_COPY_DST, ds_writed(PRINT_STRING_BUFFER, ds_readd(FRAMEBUF_PTR)));
+	ds_writed(PIC_COPY_DST, ds_writed(VGA_BACKBUFFER, ds_readd(VGA_MEMSTART)));
 }
 
 //static

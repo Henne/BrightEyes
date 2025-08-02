@@ -464,7 +464,7 @@ void draw_automap_to_screen(void)
 	ds_writew(PIC_COPY_X2, 319);
 	ds_writew(PIC_COPY_Y2, 134);
 
-	ds_writed(PIC_COPY_DST, (Bit32u)((Bit8u*)ds_readd(FRAMEBUF_PTR) + ds_readws(ANI_POSX) + 320 * ds_readws(ANI_POSY)));
+	ds_writed(PIC_COPY_DST, (Bit32u)((Bit8u*)ds_readd(VGA_MEMSTART) + ds_readws(ANI_POSX) + 320 * ds_readws(ANI_POSY)));
 
 	update_mouse_cursor();
 
@@ -474,7 +474,7 @@ void draw_automap_to_screen(void)
 
 	refresh_screen_size();
 
-	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
+	ds_writed(PIC_COPY_DST, ds_readd(VGA_MEMSTART));
 
 	/* restore screen coordinates */
 	*(struct dummy*)(p_datseg + PIC_COPY_DS_RECT) = bak;

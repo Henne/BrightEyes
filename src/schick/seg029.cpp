@@ -143,7 +143,7 @@ void draw_status_line(void)
 
 	for (i = 0; i < 7; i++) {
 		/* Clear name field */
-		do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR),
+		do_fill_rect((Bit8u*)ds_readd(VGA_MEMSTART),
 			ds_readw(HERO_PIC_POSX + i * 2), 190,
 			ds_readw(HERO_PIC_POSX + i * 2) + 41, 197, 0);
 
@@ -241,12 +241,12 @@ void clear_hero_icon(unsigned short pos)
 {
 
 	/* fill icon area black */
-	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), ds_readw(HERO_PIC_POSX + pos * 2), 157,
+	do_fill_rect((Bit8u*)ds_readd(VGA_MEMSTART), ds_readw(HERO_PIC_POSX + pos * 2), 157,
 		ds_readw(HERO_PIC_POSX + pos * 2) + 31, 188, 0);
 
 	if (!host_readbs(get_hero(pos) + HERO_TYPE))
 		/* fill bars area black */
-		do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), ds_readw(HERO_PIC_POSX + pos * 2) + 33, 157,
+		do_fill_rect((Bit8u*)ds_readd(VGA_MEMSTART), ds_readw(HERO_PIC_POSX + pos * 2) + 33, 157,
 			ds_readw(HERO_PIC_POSX + pos * 2) + 39, 188, 0);
 }
 
@@ -338,7 +338,7 @@ void draw_main_screen(void)
 void clear_loc_line(void)
 {
 	update_mouse_cursor();
-	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 3, 140, 316, 153, 0);
+	do_fill_rect((Bit8u*)ds_readd(VGA_MEMSTART), 3, 140, 316, 153, 0);
 	refresh_screen_size();
 }
 
@@ -354,12 +354,12 @@ void select_hero_icon(unsigned short pos) {
 	signed short fg_bak, bg_bak;
 
 	/* paint a blue border for the pic and bars */
-	do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
+	do_border((Bit8u*)ds_readd(VGA_MEMSTART),
 		ds_readw(HERO_PIC_POSX + pos * 2) - 1, 156,
 		ds_readw(HERO_PIC_POSX + pos * 2) + 42, 189, (signed char)0xfc);
 
 	/* paint a blue border for the name */
-	do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
+	do_border((Bit8u*)ds_readd(VGA_MEMSTART),
 		ds_readw(HERO_PIC_POSX + pos * 2) - 1, 189,
 		ds_readw(HERO_PIC_POSX + pos * 2) + 42, 198, (signed char)0xfc);
 
@@ -395,12 +395,12 @@ void deselect_hero_icon(unsigned short pos) {
 	signed short fg_bak, bg_bak;
 
 	/* paint a gray border for the pic and bars */
-	do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
+	do_border((Bit8u*)ds_readd(VGA_MEMSTART),
 		ds_readw(HERO_PIC_POSX + pos * 2) - 1, 156,
 		ds_readw(HERO_PIC_POSX + pos * 2) + 42, 189, (signed char)0xe6);
 
 	/* paint a gray border for the name */
-	do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
+	do_border((Bit8u*)ds_readd(VGA_MEMSTART),
 		ds_readw(HERO_PIC_POSX + pos * 2) - 1, 189,
 		ds_readw(HERO_PIC_POSX + pos * 2) + 42, 198, (signed char)0xe6);
 

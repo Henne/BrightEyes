@@ -366,7 +366,7 @@ void update_status_bars(void)
 					update_mouse_cursor();
 
 					for (i = 0; i < 6; i++) {
-						do_h_line((Bit8u*)ds_readd(FRAMEBUF_PTR), 260, 310, i + 36, ds_readb(STATUS_PAGE_HUNGER_MAX_COLOR) ? 9 : 10);
+						do_h_line((Bit8u*)ds_readd(VGA_MEMSTART), 260, 310, i + 36, ds_readb(STATUS_PAGE_HUNGER_MAX_COLOR) ? 9 : 10);
 					}
 
 					refresh_screen_size();
@@ -381,8 +381,8 @@ void update_status_bars(void)
 				update_mouse_cursor();
 
 				for (i = 0; i < 6; i++) {
-						do_h_line((Bit8u*)ds_readd(FRAMEBUF_PTR), 260, ds_readbs(STATUS_PAGE_HUNGER) / 2 + 260, i + 36, 9);
-						do_h_line((Bit8u*)ds_readd(FRAMEBUF_PTR), ds_readbs(STATUS_PAGE_HUNGER) / 2 + 260, 310, i + 36, 10);
+						do_h_line((Bit8u*)ds_readd(VGA_MEMSTART), 260, ds_readbs(STATUS_PAGE_HUNGER) / 2 + 260, i + 36, 9);
+						do_h_line((Bit8u*)ds_readd(VGA_MEMSTART), ds_readbs(STATUS_PAGE_HUNGER) / 2 + 260, 310, i + 36, 10);
 				}
 
 				refresh_screen_size();
@@ -397,7 +397,7 @@ void update_status_bars(void)
 					update_mouse_cursor();
 
 					for (i = 0; i < 6; i++) {
-						do_h_line((Bit8u*)ds_readd(FRAMEBUF_PTR), 260, 310, i + 43, ds_readb(STATUS_PAGE_THIRST_MAX_COLOR) ? 11 : 12);
+						do_h_line((Bit8u*)ds_readd(VGA_MEMSTART), 260, 310, i + 43, ds_readb(STATUS_PAGE_THIRST_MAX_COLOR) ? 11 : 12);
 					}
 
 					refresh_screen_size();
@@ -412,8 +412,8 @@ void update_status_bars(void)
 				update_mouse_cursor();
 
 				for (i = 0; i < 6; i++) {
-						do_h_line((Bit8u*)ds_readd(FRAMEBUF_PTR), 260, ds_readbs(STATUS_PAGE_THIRST) / 2 + 260, i + 43, 11);
-						do_h_line((Bit8u*)ds_readd(FRAMEBUF_PTR), ds_readbs(STATUS_PAGE_THIRST) / 2 + 260, 310, i + 43, 12);
+						do_h_line((Bit8u*)ds_readd(VGA_MEMSTART), 260, ds_readbs(STATUS_PAGE_THIRST) / 2 + 260, i + 43, 11);
+						do_h_line((Bit8u*)ds_readd(VGA_MEMSTART), ds_readbs(STATUS_PAGE_THIRST) / 2 + 260, 310, i + 43, 12);
 				}
 
 				refresh_screen_size();
@@ -493,7 +493,7 @@ void draw_bar(unsigned short type, signed short hero, signed short pts_cur, sign
 	if (mode == 0) {
 		x = ds_readw(HERO_PIC_POSX + hero * 2) + type * 4 + 34;
 		y_min = 188;
-		dst = (Bit8u*)ds_readd(FRAMEBUF_PTR);
+		dst = (Bit8u*)ds_readd(VGA_MEMSTART);
 	} else {
 		x = type * 4 + 36;
 		y_min = 42;
@@ -610,7 +610,7 @@ void draw_mouse_cursor(void)
 	signed short width;
 	signed short height;
 
-	dst = (Bit8u*)ds_readd(FRAMEBUF_PTR);
+	dst = (Bit8u*)ds_readd(VGA_MEMSTART);
 	mouse_cursor = (short*)((Bit8u*)ds_readd(CURRENT_CURSOR) + 32);
 
 	x = ds_readw(MOUSE_POSX) - ds_readw(MOUSE_POINTER_OFFSETX);
@@ -646,7 +646,7 @@ void save_mouse_bg(void)
 	signed short delta_y;
 	signed short delta_x;
 
-	src = (Bit8u*)ds_readd(FRAMEBUF_PTR);
+	src = (Bit8u*)ds_readd(VGA_MEMSTART);
 
 	realpos_x = ds_readw(MOUSE_POSX) - ds_readw(MOUSE_POINTER_OFFSETX);
 	realpos_y = ds_readw(MOUSE_POSY) - ds_readw(MOUSE_POINTER_OFFSETY);
@@ -683,7 +683,7 @@ void restore_mouse_bg(void)
 
 
 	/* gfx memory */
-	dst = (Bit8u*)ds_readd(FRAMEBUF_PTR);
+	dst = (Bit8u*)ds_readd(VGA_MEMSTART);
 	realpos_x = ds_readw(MOUSE_POSX_BAK) - ds_readw(MOUSE_POINTER_OFFSETX_BAK);
 	realpos_y = ds_readw(MOUSE_POSY_BAK) - ds_readw(MOUSE_POINTER_OFFSETY_BAK);
 	realwidth = realheight = 16;
@@ -799,7 +799,7 @@ void draw_wallclock(signed short pos, signed short night)
 	fullscreen_bak = *(struct dummy2*)(p_datseg + PIC_COPY_DS_RECT);
 
 	/* set pointer */
-	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
+	ds_writed(PIC_COPY_DST, ds_readd(VGA_MEMSTART));
 
 
 	/* calculate y value */
@@ -1163,7 +1163,7 @@ void map_effect(Bit8u *src)
 		} while (si >= 64000);
 
 
-		*((Bit8u*)ds_readd(FRAMEBUF_PTR) + si) = *(src + si);
+		*((Bit8u*)ds_readd(VGA_MEMSTART) + si) = *(src + si);
 
 #ifdef M302de_SPEEDFIX
 		/* this too fast,  we slow it down a bit */

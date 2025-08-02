@@ -459,7 +459,7 @@ void GUI_fill_radio_button(signed short old_pos, unsigned short new_pos,
 
 		/* clear the old button */
 		for (i = 0; i < 4; i++)
-			do_v_line((Bit8u*)ds_readd(FRAMEBUF_PTR), y + i, x, x + 3,
+			do_v_line((Bit8u*)ds_readd(VGA_MEMSTART), y + i, x, x + 3,
 				(signed char)0xd8);
 	}
 
@@ -467,7 +467,7 @@ void GUI_fill_radio_button(signed short old_pos, unsigned short new_pos,
 
 	/* fill the new button */
 	for (i = 0; i < 4; i++)
-		do_v_line((Bit8u*)ds_readd(FRAMEBUF_PTR), y + i, x, x + 3,
+		do_v_line((Bit8u*)ds_readd(VGA_MEMSTART), y + i, x, x + 3,
 			(signed char)0xd9);
 
 	refresh_screen_size();
@@ -530,7 +530,7 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
 
 	if (picture != 0) {
 		/* draw a frame */
-		do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
+		do_border((Bit8u*)ds_readd(VGA_MEMSTART),
 			ds_readw(TEXTBOX_POS_X) + 5, ds_readw(TEXTBOX_POS_Y) + 6,
 			ds_readw(TEXTBOX_POS_X) + 38, ds_readw(TEXTBOX_POS_Y) + 39,
 				(signed char)0xff);

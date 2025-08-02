@@ -117,7 +117,7 @@ void final_intro(void)
 
 	ptr1 = (Bit8u*)(F_PADD(F_PADD((Bit8u*)g_buffer9_ptr, len), -(96 * 3)));
 
-	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
+	do_fill_rect((Bit8u*)ds_readd(VGA_MEMSTART), 0, 0, 319, 199, 0);
 
 	wait_for_vsync();
 
@@ -156,7 +156,7 @@ void final_intro(void)
 
 	map_effect(g_renderbuf_ptr);
 
-	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
+	ds_writed(PIC_COPY_DST, ds_readd(VGA_MEMSTART));
 
 	delay_or_keypress(250);
 
@@ -174,7 +174,7 @@ void final_intro(void)
 	}
 
 	/* TODO: update window */
-	memset((void*)((Bit8u*)ds_readd(FRAMEBUF_PTR)), 0, 320 * 200);
+	memset((void*)((Bit8u*)ds_readd(VGA_MEMSTART)), 0, 320 * 200);
 
 	refresh_colors();
 	refresh_screen_size();
@@ -244,7 +244,7 @@ void hyg_ani_4(void)
 	ds_writew(PIC_COPY_X2, 319);
 	ds_writew(PIC_COPY_Y2, 199);
 	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
-	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
+	ds_writed(PIC_COPY_DST, ds_readd(VGA_MEMSTART));
 
 	do_pic_copy(0);
 }
@@ -268,7 +268,7 @@ void show_hyggelik_ani(void)
 	close(handle);
 	src = &(g_renderbuf_ptr[filelen - 0xc0]);
 
-	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
+	do_fill_rect((Bit8u*)ds_readd(VGA_MEMSTART), 0, 0, 319, 199, 0);
 	memcpy((void*)g_dtp2, src, 192);
 	src = (Bit8u*)g_dtp2;
 
@@ -357,7 +357,7 @@ void show_hyggelik_ani(void)
 	do_fill_rect(g_renderbuf_ptr, 0, 0, 319, 199, 0);
 
 	hyg_ani_2(array + 25 * 8, 100, 0);
-	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
+	ds_writed(PIC_COPY_DST, ds_readd(VGA_MEMSTART));
 	map_effect(g_renderbuf_ptr);
 	delay_or_keypress(500);
 
@@ -372,7 +372,7 @@ void show_hyggelik_ani(void)
 
 	refresh_screen_size();
 	/* TODO: update window */
-	memset((void*)((Bit8u*)ds_readd(FRAMEBUF_PTR)), 0, 320 * 200);
+	memset((void*)((Bit8u*)ds_readd(VGA_MEMSTART)), 0, 320 * 200);
 	refresh_colors();
 }
 
@@ -443,7 +443,7 @@ void show_outro(void)
 	close(handle);
 
 	pal_ptr = (Bit8u*)(F_PADD(F_PADD((Bit8u*)g_buffer9_ptr, len), - 0xc0));
-	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
+	do_fill_rect((Bit8u*)ds_readd(VGA_MEMSTART), 0, 0, 319, 199, 0);
 	wait_for_vsync();
 	set_palette(pal_ptr, 0, 0x40);
 
@@ -477,7 +477,7 @@ void show_outro(void)
 	close(handle);
 
 	pal_ptr = (Bit8u*)(F_PADD(F_PADD((Bit8u*)g_buffer9_ptr, len), - 0xc0));
-	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
+	do_fill_rect((Bit8u*)ds_readd(VGA_MEMSTART), 0, 0, 319, 199, 0);
 	wait_for_vsync();
 	set_palette(pal_ptr, 0, 0x40);
 
@@ -511,7 +511,7 @@ void show_outro(void)
 	close(handle);
 
 	pal_ptr = (Bit8u*)(F_PADD(F_PADD((Bit8u*)g_buffer9_ptr, len), - 0xc0));
-	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
+	do_fill_rect((Bit8u*)ds_readd(VGA_MEMSTART), 0, 0, 319, 199, 0);
 	wait_for_vsync();
 	set_palette(pal_ptr, 0, 0x40);
 

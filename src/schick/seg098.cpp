@@ -93,7 +93,7 @@ void magic_heal_ani(Bit8u *hero)
 		ds_writew(PIC_COPY_X2, ds_readw(HERO_PIC_POSX + 2 * target_no) + 31);
 		ds_writew(PIC_COPY_Y2, 188);
 		ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
-		ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
+		ds_writed(PIC_COPY_DST, ds_readd(VGA_MEMSTART));
 		do_pic_copy(3);
 
 		delay_or_keypress(10);

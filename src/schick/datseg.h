@@ -297,6 +297,8 @@ extern signed short g_gather_herbs_mod;	// ds:0xd32f; seg051, seg109
 extern signed short g_wildcamp_sleep_quality;	// ds:0xd32f; seg051, seg094, seg109, seg114, seg118
 extern unsigned char *g_townpal_buf;	// ds:0xd312; seg002, seg027, seg120
 extern unsigned char *g_renderbuf_ptr;	// ds:0xd303; seg002-seg120
+extern unsigned char *g_vga_memstart;	// ds:0xd2ff; seg002-seg120 aka FRAMEBUF_PTR
+extern unsigned char *g_vga_backbuffer;	// ds:0xd2fb; seg002-seg120 aka PRINT_STRING_BUFFER
 extern unsigned char *g_icon;		// ds:0xd2f7; seg002-seg058
 extern signed char *g_dtp2;		// ds:0xd2f3: seg002-seg121
 extern signed char *g_text_input_buf;	// ds:0xd2ef: seg002-seg120

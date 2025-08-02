@@ -101,7 +101,7 @@ void TM_func1(signed short route_no, signed short backwards)
 	ds_writeb(TRAVELING, 1);
 	last_tevent_no = -1;
 	ds_writed(ROUTE_COURSE_PTR, (Bit32u)(F_PADD(F_PADD((Bit8u*)g_buffer9_ptr, host_readws((Bit8u*)g_buffer9_ptr + 4 * (route_no - 1))), 0xec)));
-	fb_start = (Bit8u*)ds_readd(FRAMEBUF_PTR);
+	fb_start = (Bit8u*)ds_readd(VGA_MEMSTART);
 #if defined(__BORLANDC__)
 	add_ds_fp(ROUTE_COURSE_PTR, 4);
 #endif
@@ -425,7 +425,7 @@ void TM_func1(signed short route_no, signed short backwards)
 			update_mouse_cursor();
 			load_map();
 			/* TODO: update window */
-			memmove((void*)((Bit8u*)ds_readd(FRAMEBUF_PTR)), (void*)((Bit8u*)ds_readd(TRAVEL_MAP_PTR)), 320 * 200);
+			memmove((void*)((Bit8u*)ds_readd(VGA_MEMSTART)), (void*)((Bit8u*)ds_readd(TRAVEL_MAP_PTR)), 320 * 200);
 
 			wait_for_vsync();
 			set_palette((Bit8u*)ds_readd(TRAVEL_MAP_PTR) + 64000 + 2, 0, 0x20);
@@ -682,7 +682,7 @@ void TM_draw_track(signed short a1, signed short length, signed short direction,
 	Bit8u *ptr;
 	Bit8u* fb_start;
 
-	fb_start = (Bit8u*)ds_readd(FRAMEBUF_PTR);
+	fb_start = (Bit8u*)ds_readd(VGA_MEMSTART);
 	ptr = (Bit8u*)(F_PADD(F_PADD((Bit8u*)g_buffer9_ptr, host_readws((Bit8u*)g_buffer9_ptr + 4 * (a1 - 1))), 0xec));
 	ptr += 4;
 

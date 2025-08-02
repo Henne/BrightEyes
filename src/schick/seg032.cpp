@@ -87,7 +87,7 @@ void draw_fight_screen_pal(signed short mode)
 
 		/* clear framebuffer */
 		/* TODO: add update */
-		memset((void*)((Bit8u*)ds_readd(FRAMEBUF_PTR)), 0, 320 * 200);
+		memset((void*)((Bit8u*)ds_readd(VGA_MEMSTART)), 0, 320 * 200);
 
 		/* set palettes */
 		set_palette((Bit8u*)g_palette_fight1, 0x00, 0x20);
@@ -890,7 +890,7 @@ void FIG_load_ship_sprites(void)
 
 			do_pic_copy(2);
 
-			ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
+			ds_writed(PIC_COPY_DST, ds_readd(VGA_MEMSTART));
 
 			}
 		}
@@ -1269,7 +1269,7 @@ signed short do_fight(signed short fight_id)
 
 	/* clear the screen */
 	/* TODO: add update */
-	memset((void*)((Bit8u*)ds_readd(FRAMEBUF_PTR)), 0, 320 * 200);
+	memset((void*)((Bit8u*)ds_readd(VGA_MEMSTART)), 0, 320 * 200);
 
 	refresh_colors();
 

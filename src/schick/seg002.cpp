@@ -3630,7 +3630,7 @@ void dec_splash(void)
 			/* check if hero is dead */
 			!hero_dead(get_hero(i))
 		) {
-			restore_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), get_hero(i) + HERO_PORTRAIT, ds_readw(HERO_PIC_POSX + i * 2), 157, 32, 32);
+			restore_rect((Bit8u*)ds_readd(VGA_MEMSTART), get_hero(i) + HERO_PORTRAIT, ds_readw(HERO_PIC_POSX + i * 2), 157, 32, 32);
 		}
 	}
 }
@@ -3649,7 +3649,7 @@ void draw_splash(signed short hero_pos, signed short type)
 
 		Bit8u *splash = (type == 0 ? g_splash_le : g_splash_ae);
 
-		restore_rect_rle((Bit8u*)ds_readd(FRAMEBUF_PTR), splash, ds_readw(HERO_PIC_POSX + 2 * hero_pos), 157, 32, 32, 2);
+		restore_rect_rle((Bit8u*)ds_readd(VGA_MEMSTART), splash, ds_readw(HERO_PIC_POSX + 2 * hero_pos), 157, 32, 32, 2);
 
 		/* how long the splash should be displayed */
 		ds_writeb(HERO_SPLASH_TIMER + hero_pos, 10);
@@ -4244,7 +4244,7 @@ void seg002_47e2(void)
 	ds_writew(PIC_COPY_Y2, 7);
 
 	/* set destination */
-	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
+	ds_writed(PIC_COPY_DST, ds_readd(VGA_MEMSTART));
 	/* set source */
 	ds_writed(PIC_COPY_SRC, (Bit32u)g_gfxbuf_wait_keypress);
 
@@ -4270,7 +4270,7 @@ void seg002_484f(void)
 	ds_writew(PIC_COPY_Y2, 7);
 
 	/* set destination */
-	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
+	ds_writed(PIC_COPY_DST, ds_readd(VGA_MEMSTART));
 	/* set source */
 	ds_writed(PIC_COPY_SRC, (Bit32u)g_gfxbuf_wait_keypress);
 
