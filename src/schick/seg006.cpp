@@ -146,7 +146,7 @@ void FIG_set_gfx(void)
 	ds_writew(PIC_COPY_X2, 319);
 	ds_writew(PIC_COPY_Y2, 199);
 	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
-	ds_writed(PIC_COPY_DST, ds_readd(VGA_MEMSTART));
+	ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
 	update_mouse_cursor();
 	do_pic_copy(0);
 	refresh_screen_size();
@@ -497,7 +497,7 @@ void FIG_draw_char_pic(signed short loc, signed short hero_pos)
 	set_textcolor(0xff, 0);
 
 	ds_writed(PIC_COPY_DST, (Bit32u)g_renderbuf_ptr);
-	ds_writed(VGA_BACKBUFFER, (Bit32u)g_renderbuf_ptr);
+	g_vga_backbuffer = g_renderbuf_ptr;
 
 	if (loc == 0) {
 
@@ -521,8 +521,8 @@ void FIG_draw_char_pic(signed short loc, signed short hero_pos)
 	}
 
 	do_pic_copy(0);
-	ds_writed(PIC_COPY_DST, ds_readd(VGA_MEMSTART));
-	ds_writed(VGA_BACKBUFFER, ds_readd(VGA_MEMSTART));
+	ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
+	g_vga_backbuffer = g_vga_memstart;
 	set_textcolor(fg_bak, bg_bak);
 }
 
@@ -566,7 +566,7 @@ void FIG_draw_enemy_pic(signed short loc, signed short id)
 
 	/* set gfx address */
 	ds_writed(PIC_COPY_DST, (Bit32u)g_renderbuf_ptr);
-	ds_writed(VGA_BACKBUFFER, (Bit32u)g_renderbuf_ptr);
+	g_vga_backbuffer = g_renderbuf_ptr;
 
 	if (loc == 0) {
 		do_border(g_renderbuf_ptr, 1, 9, 34, 50, 0x1d);
@@ -588,8 +588,8 @@ void FIG_draw_enemy_pic(signed short loc, signed short id)
 		GUI_print_string((GUI_name_singular(get_monname(host_readbs(p_enemy)))), 1, 193);
 	}
 
-	ds_writed(PIC_COPY_DST, ds_readd(VGA_MEMSTART));
-	ds_writed(VGA_BACKBUFFER, ds_readd(VGA_MEMSTART));
+	ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
+	g_vga_backbuffer = g_vga_memstart;
 
 	set_textcolor(fg_bak, bg_bak);
 }

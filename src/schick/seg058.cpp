@@ -243,7 +243,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 					l7 = item = l12 = 0;
 					percent_old = 100;
 
-					do_fill_rect((Bit8u*)ds_readd(VGA_MEMSTART), 26, 26, 105, 33, 0);
+					do_fill_rect(g_vga_memstart, 26, 26, 105, 33, 0);
 
 					make_valuta_str((char*)g_dtp2, host_readds(hero2 + HERO_MONEY));
 					GUI_print_string(g_dtp2,
@@ -252,10 +252,10 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 				update_mouse_cursor();
 
-				do_fill_rect((Bit8u*)ds_readd(VGA_MEMSTART), 29, 34, 214, 133, 0);
+				do_fill_rect(g_vga_memstart, 29, 34, 214, 133, 0);
 
-				do_v_line((Bit8u*)ds_readd(VGA_MEMSTART), 87, 35, 131, -1);
-				do_v_line((Bit8u*)ds_readd(VGA_MEMSTART), 152, 35, 131, -1);
+				do_v_line(g_vga_memstart, 87, 35, 131, -1);
+				do_v_line(g_vga_memstart, 152, 35, 131, -1);
 
 				nvf.dst = g_renderbuf_ptr;
 				nvf.src = g_buffer10_ptr;
@@ -326,14 +326,14 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 			if (l6 != l7) {
 
-				do_border((Bit8u*)ds_readd(VGA_MEMSTART),
+				do_border(g_vga_memstart,
 					array3.a[l6 / 5] - 1,
 					array5.a[l6 % 5] - 1,
 					array3.a[l6 / 5] + 16,
 					array5.a[l6 % 5] + 16,
 					0);
 
-				do_border((Bit8u*)ds_readd(VGA_MEMSTART),
+				do_border(g_vga_memstart,
 					array3.a[l7 / 5] - 1,
 					array5.a[l7 % 5] - 1,
 					array3.a[l7 / 5] + 16,

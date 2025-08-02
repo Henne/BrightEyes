@@ -75,13 +75,13 @@ void do_temple(void)
 			ds_writew(PIC_COPY_X1, ds_writew(PIC_COPY_Y1, 0));
 			ds_writew(PIC_COPY_X2, 40);
 			ds_writew(PIC_COPY_Y2, 22);
-			ds_writed(PIC_COPY_DST, (Bit32u)((Bit8u*)ds_readd(VGA_MEMSTART) + 28259));
+			ds_writed(PIC_COPY_DST, (Bit32u)(g_vga_memstart + 28259));
 			ds_writed(PIC_COPY_SRC, (Bit32u)(g_buffer8_ptr + 7000));
 
 			update_mouse_cursor();
 			do_pic_copy(0);
 			refresh_screen_size();
-			ds_writed(PIC_COPY_DST, ds_readd(VGA_MEMSTART));
+			ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
 
 			/* location string */
 			sprintf((char*)g_dtp2,

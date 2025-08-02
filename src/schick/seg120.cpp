@@ -276,7 +276,7 @@ signed short init_memory(void)
 	}
 
 	/* set the pointer for the framebuffer */
-	ds_writed(VGA_BACKBUFFER, ds_writed(VGA_MEMSTART, (Bit32u)MK_FP(0x0a000, 0x0000)));
+	g_vga_backbuffer = g_vga_memstart = (unsigned char*)MK_FP(0x0a000, 0x0000);
 #else
 	g_vga_memstart = (unsigned char*)calloc(320 * 200, sizeof(unsigned char));
 	g_vga_backbuffer = g_vga_memstart;
@@ -422,7 +422,7 @@ void init_game_state(void)
 	gs_month = 1;
 	gs_year = 15;
 
-	ds_writed(PIC_COPY_DST, ds_readd(VGA_MEMSTART));
+	ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
 
 	load_wallclock_nvf();
 	passages_init();
@@ -690,14 +690,14 @@ void game_over_screen(void)
 	set_palette(g_palette_allblack2, 0x00, 0x20);
 	set_palette(g_palette_allblack2, 0x20, 0x20);
 
-	memcpy((void*)((Bit8u*)ds_readd(VGA_MEMSTART)), (void*)g_renderbuf_ptr, 320 * 200);
+	memcpy((void*)(g_vga_memstart), (void*)g_renderbuf_ptr, 320 * 200);
 
 	set_palette((Bit8u*)g_renderbuf_ptr + 64002L, 0x00, 0x40);
 
 	wait_for_keypress();
 
 	/* TODO: update window */
-	memset((void*)((Bit8u*)ds_readd(VGA_MEMSTART)), 0, 320 * 200);
+	memset((void*)(g_vga_memstart), 0, 320 * 200);
 
 	wait_for_vsync();
 

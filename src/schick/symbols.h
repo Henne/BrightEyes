@@ -1456,8 +1456,8 @@
 //#define TEXT_INPUT_BUF                  (0xd2ef)    /* Bit8u*; to buffer of size 24 */
 //#define DTP2                            (0xd2f3)    /* long */
 //#define ICON                            (0xd2f7)    /* Bit8u* */
-#define VGA_BACKBUFFER             (0xd2fb)    /* Bit8u* */
-#define VGA_MEMSTART                    (0xd2ff)    /* Bit8u* */
+//#define VGA_BACKBUFFER                  (0xd2fb)    /* Bit8u* */
+//#define VGA_MEMSTART                    (0xd2ff)    /* Bit8u* */
 //#define RENDERBUF_PTR                   (0xd303)    /* Bit8u*; to buffer of size 65000 */
 // ?2
 #define GAMEINIT_FLAG                   (0xd309)    /* unsigned short; writeonly (1) */

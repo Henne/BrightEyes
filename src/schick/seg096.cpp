@@ -528,7 +528,7 @@ void GUI_font_to_buf(Bit8u *fc)
 void GUI_write_char_to_screen_xy(unsigned short x, unsigned short y, unsigned short char_height, unsigned short char_width)
 {
 	/* screen_start */
-	Bit8u* dst = ((Bit8u*)ds_readd(VGA_BACKBUFFER)) + y * 320 + x;
+	Bit8u* dst = g_vga_backbuffer + y * 320 + x;
 
 	GUI_write_char_to_screen(dst, char_height, char_width);
 }

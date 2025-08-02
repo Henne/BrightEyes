@@ -282,7 +282,7 @@ void show_treasure_map(void)
 
 		set_palette(g_palette_allblack2, 0, 0x20);
 
-		do_fill_rect((Bit8u*)ds_readd(VGA_MEMSTART), 0, 0, 319, 199, 0);
+		do_fill_rect(g_vga_memstart, 0, 0, 319, 199, 0);
 
 		update_mouse_cursor();
 
@@ -312,7 +312,7 @@ void show_treasure_map(void)
 				ds_writew(PIC_COPY_X2, ds_readws(TMAP_X + 2 * l_si) + width - 1);
 				ds_writew(PIC_COPY_Y2, ds_readws(TMAP_Y + 2 * l_si) + height - 1);
 				ds_writed(PIC_COPY_SRC, (Bit32u)F_PADD((Bit8u*)g_buffer9_ptr, 30000));
-				ds_writed(PIC_COPY_DST, ds_readd(VGA_MEMSTART));
+				ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
 				do_pic_copy(0);
 			}
 		}
@@ -370,7 +370,7 @@ void show_treasure_map(void)
 			ds_writew(PIC_COPY_X2, 319);
 			ds_writew(PIC_COPY_Y2, 199);
 			ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
-			ds_writed(PIC_COPY_DST, ds_readd(VGA_MEMSTART));
+			ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
 
 			update_mouse_cursor();
 			wait_for_vsync();
@@ -420,7 +420,7 @@ signed short game_options(void)
 
 	get_textcolor(&fg_bak, &bg_bak);
 
-	ds_writed(VGA_BACKBUFFER, (Bit32u)g_buffer9_ptr);
+	g_vga_backbuffer = (Bit8u*)g_buffer9_ptr;
 
 	bak1 = ds_readws(TEXTLINE_MAXLEN);
 	bak2 = ds_readws(TEXTLINE_POSX);
@@ -478,7 +478,7 @@ signed short game_options(void)
 	ds_writew(PIC_COPY_X2, 319);
 	ds_writew(PIC_COPY_Y2, 199);
 	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
-	ds_writed(PIC_COPY_DST, ds_readd(VGA_MEMSTART));
+	ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
 
 	update_mouse_cursor();
 	wait_for_vsync();
@@ -490,7 +490,7 @@ signed short game_options(void)
 
 	set_textcolor(fg_bak, bg_bak);
 
-	ds_writed(PIC_COPY_DST, ds_writed(VGA_BACKBUFFER, ds_readd(VGA_MEMSTART)));
+	ds_writed(PIC_COPY_DST, (Bit32u)(g_vga_backbuffer = g_vga_memstart));
 
 	ds_writew(TEXTLINE_POSX, bak2);
 	ds_writew(TEXTLINE_MAXLEN, bak1);

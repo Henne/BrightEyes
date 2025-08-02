@@ -89,7 +89,7 @@ signed short do_travel_mode(void)
 			wait_for_vsync();
 
 			/* TODO: update window */
-			memmove((void*)((Bit8u*)ds_readd(VGA_MEMSTART)), (void*)((Bit8u*)ds_readd(TRAVEL_MAP_PTR)), 320 * 200);
+			memmove((void*)(g_vga_memstart), (void*)((Bit8u*)ds_readd(TRAVEL_MAP_PTR)), 320 * 200);
 
 			wait_for_vsync();
 
@@ -280,7 +280,7 @@ signed short do_travel_mode(void)
 		set_palette((Bit8u*)g_dtp2, 0x80, 0x40);
 		set_palette((Bit8u*)g_dtp2, 0x00, 0x20);
 
-		do_fill_rect((Bit8u*)ds_readd(VGA_MEMSTART), 0, 0, 319, 199, 0);
+		do_fill_rect(g_vga_memstart, 0, 0, 319, 199, 0);
 	}
 
 	g_current_ani = ds_writebs(CITY_AREA_LOADED, ds_writebs(PP20_INDEX, -1));

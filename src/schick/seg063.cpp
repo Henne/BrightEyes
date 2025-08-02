@@ -475,7 +475,7 @@ void sea_travel(signed short passage, signed short dir)
 
 	off = host_readd((Bit8u*)ds_readd(SEA_TRAVEL_COURSES) + 4 * ds_readw(SEA_TRAVEL_PASSAGE_NO));
 	ds_writed(ROUTE_COURSE_PTR, (Bit32u)((Bit8u*)ds_readd(SEA_TRAVEL_COURSES) + off + 4 * ds_readws(ROUTE_MOUSEHOVER)));
-	ptr = (Bit8u*)ds_readd(VGA_MEMSTART);
+	ptr = g_vga_memstart;
 
 #if defined(__BORLANDC__)
 	add_ds_fp(ROUTE_COURSE_PTR, 4);
@@ -643,7 +643,7 @@ void sea_travel(signed short passage, signed short dir)
 			load_map();
 
 			/* TODO: update window */
-			memmove((void*)((Bit8u*)ds_readd(VGA_MEMSTART)), (void*)((Bit8u*)ds_readd(TRAVEL_MAP_PTR)), 320 * 200);
+			memmove((void*)(g_vga_memstart), (void*)((Bit8u*)ds_readd(TRAVEL_MAP_PTR)), 320 * 200);
 
 			wait_for_vsync();
 

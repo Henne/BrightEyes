@@ -90,9 +90,9 @@ void draw_playmask(void)
 
 	ds_writew(TXT_TABPOS1, 205);
 #if !defined(__BORLANDC__)
-	ds_writed(ACTION_TABLE_PRIMARY, (long)(p_datseg + ACTION_TABLE_PLAYMASK));
+	ds_writed(ACTION_TABLE_PRIMARY, (Bit32u)(p_datseg + ACTION_TABLE_PLAYMASK));
 #else
-	ds_writed(ACTION_TABLE_PRIMARY, (long)MK_FP(datseg, ACTION_TABLE_PLAYMASK));
+	ds_writed(ACTION_TABLE_PRIMARY, (Bit32u)MK_FP(datseg, ACTION_TABLE_PLAYMASK));
 #endif
 	ds_writed(ACTION_TABLE_SECONDARY, 0);
 
@@ -142,33 +142,36 @@ void draw_status_line(void)
 	get_textcolor(&fg_bak, &bg_bak);
 
 	for (i = 0; i < 7; i++) {
+
 		/* Clear name field */
-		do_fill_rect((Bit8u*)ds_readd(VGA_MEMSTART),
-			ds_readw(HERO_PIC_POSX + i * 2), 190,
-			ds_readw(HERO_PIC_POSX + i * 2) + 41, 197, 0);
+		do_fill_rect(g_vga_memstart, ds_readw(HERO_PIC_POSX + i * 2), 190, ds_readw(HERO_PIC_POSX + i * 2) + 41, 197, 0);
 
 		if (host_readb(get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE) {
 
-			copy_forename(g_dtp2, (char*)(get_hero(i) + HERO_NAME2));
+			copy_forename((char*)g_dtp2, (char*)(get_hero(i) + HERO_NAME2));
 
 			set_textcolor(0xff, 0);
 
 			/* Gray the names of heroes in another group */
-			if (host_readb(get_hero(i) + HERO_GROUP_NO) != gs_current_group)
+			if (host_readb(get_hero(i) + HERO_GROUP_NO) != gs_current_group) {
+
 				set_textcolor(0x6f, 0);
+			}
 
 			/* print the name */
-			GUI_print_string(g_dtp2,
-				GUI_get_first_pos_centered(g_dtp2,	ds_readw(HERO_PIC_POSX + i * 2), 43, 0), 190);
+			GUI_print_string((char*)g_dtp2, GUI_get_first_pos_centered((char*)g_dtp2, ds_readw(HERO_PIC_POSX + i * 2), 43, 0), 190);
 		}
 
 		wait_for_vsync();
 		update_mouse_cursor();
 
 		if (!host_readbs(get_hero(i) + HERO_TYPE)) {
+
 			clear_hero_icon(i);
+
 		} else {
 			if (host_readb(get_hero(i) + HERO_GROUP_NO) == gs_current_group) {
+
 				ds_writew(PIC_COPY_X1, ds_readw(HERO_PIC_POSX + 2 * i));
 				ds_writew(PIC_COPY_Y1, 157);
 				ds_writew(PIC_COPY_X2, ds_readw(HERO_PIC_POSX + 2 * i) + 31);
@@ -183,12 +186,14 @@ void draw_status_line(void)
 				}
 
 				/* set the src pointer of the head */
-				ds_writed(PIC_COPY_SRC, (hero_dead(get_hero(i)) ? (Bit32u)g_dtp2 : (Bit32u)get_hero(i) + HERO_PORTRAIT));
+				ds_writed(PIC_COPY_SRC, (Bit32u)(hero_dead(get_hero(i)) ? (Bit8u*)g_dtp2 : (Bit8u*)(get_hero(i) + HERO_PORTRAIT)));
 
 				do_pic_copy(0);
 
-				if (head_bak != -1)
+				if (head_bak != -1) {
+
 					load_in_head(head_bak);
+				}
 			} else {
 
 				dst = g_renderbuf_ptr;
@@ -202,7 +207,7 @@ void draw_status_line(void)
 
 				/* set the src pointer of the head */
 				/* TODO: expression to complicated ? */
-				src = (hero_dead(get_hero(i))) ? g_dtp2 : (get_hero(i) + HERO_PORTRAIT);
+				src = (hero_dead(get_hero(i))) ? (Bit8u*)g_dtp2 : (Bit8u*)(get_hero(i) + HERO_PORTRAIT);
 
 				/* Gray out picture */
 				for (j = 0; j < 1024; src++, dst++, j++)
@@ -216,8 +221,10 @@ void draw_status_line(void)
 
 				do_pic_copy(0);
 
-				if (head_bak != -1)
+				if (head_bak != -1) {
+
 					load_in_head(head_bak);
+				}
 			}
 
 			for (j = 0; j < 6; j++)
@@ -241,13 +248,13 @@ void clear_hero_icon(unsigned short pos)
 {
 
 	/* fill icon area black */
-	do_fill_rect((Bit8u*)ds_readd(VGA_MEMSTART), ds_readw(HERO_PIC_POSX + pos * 2), 157,
-		ds_readw(HERO_PIC_POSX + pos * 2) + 31, 188, 0);
+	do_fill_rect(g_vga_memstart, ds_readw(HERO_PIC_POSX + pos * 2), 157, ds_readw(HERO_PIC_POSX + pos * 2) + 31, 188, 0);
 
-	if (!host_readbs(get_hero(pos) + HERO_TYPE))
+	if (!host_readbs(get_hero(pos) + HERO_TYPE)) {
+
 		/* fill bars area black */
-		do_fill_rect((Bit8u*)ds_readd(VGA_MEMSTART), ds_readw(HERO_PIC_POSX + pos * 2) + 33, 157,
-			ds_readw(HERO_PIC_POSX + pos * 2) + 39, 188, 0);
+		do_fill_rect(g_vga_memstart, ds_readw(HERO_PIC_POSX + pos * 2) + 33, 157, ds_readw(HERO_PIC_POSX + pos * 2) + 39, 188, 0);
+	}
 }
 
 /**
@@ -338,7 +345,7 @@ void draw_main_screen(void)
 void clear_loc_line(void)
 {
 	update_mouse_cursor();
-	do_fill_rect((Bit8u*)ds_readd(VGA_MEMSTART), 3, 140, 316, 153, 0);
+	do_fill_rect(g_vga_memstart, 3, 140, 316, 153, 0);
 	refresh_screen_size();
 }
 
@@ -354,29 +361,22 @@ void select_hero_icon(unsigned short pos) {
 	signed short fg_bak, bg_bak;
 
 	/* paint a blue border for the pic and bars */
-	do_border((Bit8u*)ds_readd(VGA_MEMSTART),
-		ds_readw(HERO_PIC_POSX + pos * 2) - 1, 156,
-		ds_readw(HERO_PIC_POSX + pos * 2) + 42, 189, (signed char)0xfc);
+	do_border(g_vga_memstart, ds_readw(HERO_PIC_POSX + pos * 2) - 1, 156, ds_readw(HERO_PIC_POSX + pos * 2) + 42, 189, (signed char)0xfc);
 
 	/* paint a blue border for the name */
-	do_border((Bit8u*)ds_readd(VGA_MEMSTART),
-		ds_readw(HERO_PIC_POSX + pos * 2) - 1, 189,
-		ds_readw(HERO_PIC_POSX + pos * 2) + 42, 198, (signed char)0xfc);
+	do_border(g_vga_memstart, ds_readw(HERO_PIC_POSX + pos * 2) - 1, 189, ds_readw(HERO_PIC_POSX + pos * 2) + 42, 198, (signed char)0xfc);
 
 	/* save the textcolors */
 	get_textcolor(&fg_bak, &bg_bak);
 
 	/* copy the heroes forename */
-	copy_forename(g_dtp2, (char*)(get_hero(pos) + HERO_NAME2));
+	copy_forename((char*)g_dtp2, (char*)(get_hero(pos) + HERO_NAME2));
 
 	/* set the textcolors */
 	set_textcolor(0xfc, 0);
 
 	/* print forename */
-	GUI_print_string(g_dtp2,
-		GUI_get_first_pos_centered(g_dtp2,
-			ds_readw(HERO_PIC_POSX + pos * 2), 43, 0), 190);
-
+	GUI_print_string((char*)g_dtp2, GUI_get_first_pos_centered((char*)g_dtp2, ds_readw(HERO_PIC_POSX + pos * 2), 43, 0), 190);
 
 	/* restore textcolors */
 	set_textcolor(fg_bak, bg_bak);
@@ -395,29 +395,22 @@ void deselect_hero_icon(unsigned short pos) {
 	signed short fg_bak, bg_bak;
 
 	/* paint a gray border for the pic and bars */
-	do_border((Bit8u*)ds_readd(VGA_MEMSTART),
-		ds_readw(HERO_PIC_POSX + pos * 2) - 1, 156,
-		ds_readw(HERO_PIC_POSX + pos * 2) + 42, 189, (signed char)0xe6);
+	do_border(g_vga_memstart, ds_readw(HERO_PIC_POSX + pos * 2) - 1, 156, ds_readw(HERO_PIC_POSX + pos * 2) + 42, 189, (signed char)0xe6);
 
 	/* paint a gray border for the name */
-	do_border((Bit8u*)ds_readd(VGA_MEMSTART),
-		ds_readw(HERO_PIC_POSX + pos * 2) - 1, 189,
-		ds_readw(HERO_PIC_POSX + pos * 2) + 42, 198, (signed char)0xe6);
+	do_border(g_vga_memstart, ds_readw(HERO_PIC_POSX + pos * 2) - 1, 189, ds_readw(HERO_PIC_POSX + pos * 2) + 42, 198, (signed char)0xe6);
 
 	/* save the textcolors */
 	get_textcolor(&fg_bak, &bg_bak);
 
 	/* copy the heroes forename */
-	copy_forename(g_dtp2, (char*)(get_hero(pos) + HERO_NAME2));
+	copy_forename((char*)g_dtp2, (char*)(get_hero(pos) + HERO_NAME2));
 
 	/* set the textcolors */
 	set_textcolor(0xff, 0);
 
 	/* print forename */
-	GUI_print_string(g_dtp2,
-		GUI_get_first_pos_centered(g_dtp2,
-			ds_readw(HERO_PIC_POSX + pos * 2), 43, 0), 190);
-
+	GUI_print_string((char*)g_dtp2, GUI_get_first_pos_centered((char*)g_dtp2, ds_readw(HERO_PIC_POSX + pos * 2), 43, 0), 190);
 
 	/* restore textcolors */
 	set_textcolor(fg_bak, bg_bak);

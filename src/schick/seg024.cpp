@@ -60,7 +60,7 @@ void diary_show(void)
 
 	get_textcolor(&fg_bak, &bg_bak);
 
-	ds_writed(VGA_BACKBUFFER, (Bit32u)g_buffer9_ptr);
+	g_vga_backbuffer = g_buffer9_ptr;
 	bak1 = ds_readw(TEXTLINE_MAXLEN);
 	bak2 = ds_readw(TEXTLINE_POSX);
 	txt_tabpos1_bak = ds_readw(TXT_TABPOS1);
@@ -83,7 +83,7 @@ void diary_show(void)
 	ds_writew(PIC_COPY_X2, 319);
 	ds_writew(PIC_COPY_Y2, 199);
 	ds_writed(PIC_COPY_SRC, (Bit32u)g_renderbuf_ptr);
-	ds_writed(PIC_COPY_DST, ds_readd(VGA_MEMSTART));
+	ds_writed(PIC_COPY_DST, (Bit32u)g_vga_memstart);
 
 	update_mouse_cursor();
 
@@ -95,7 +95,7 @@ void diary_show(void)
 
 	set_textcolor(fg_bak, bg_bak);
 
-	ds_writed(PIC_COPY_DST, ds_writed(VGA_BACKBUFFER, ds_readd(VGA_MEMSTART)));
+	ds_writed(PIC_COPY_DST, (Bit32u)(g_vga_backbuffer = g_vga_memstart));
 
 	ds_writew(TEXTLINE_POSX, bak2);
 	ds_writew(TEXTLINE_MAXLEN, bak1);
