@@ -3153,17 +3153,13 @@ void check_level_up(void)
 	} while (not_done);
 }
 
-struct dummy {
-	char a[24];
-};
-
 void seg002_37c4(void)
 {
 	signed short l_si = 0;
 	Bit8u* p1;
 	Bit8u* p2;
 	Bit8u* p3;
-	struct dummy a = *(struct dummy*)(p_datseg + PIC_COPY_DST);
+	struct struct_pic_copy pic_copy_bak = g_pic_copy;
 
 	p1 = g_buffer6_ptr + 2000;
 	p2 = g_buffer6_ptr + 2100;
@@ -3299,12 +3295,11 @@ void seg002_37c4(void)
 		ds_writew(CURRENT_TOWN_OVER, 1);
 	}
 
-
 	ds_writew(SPINLOCK_FLAG, 0);
 	g_map_townmark_state++;
 	g_map_townmark_state %= 5;
 
-	*(struct dummy*)(p_datseg + PIC_COPY_DST) = a;
+	g_pic_copy = pic_copy_bak;
 }
 
 void set_and_spin_lock(void)
@@ -4235,7 +4230,7 @@ void set_automap_tiles(signed short x, signed short y)
 void seg002_47e2(void)
 {
 	/* save gfx settings to stack */
-	struct dummy a = *(struct dummy*)(p_datseg + PIC_COPY_DST);
+	struct struct_pic_copy pic_copy_bak = g_pic_copy;
 
 	/* set range 0,0 - 7,7 */
 	ds_writew(PIC_COPY_X1, 0);
@@ -4253,7 +4248,7 @@ void seg002_47e2(void)
 	GUI_print_char('P', 0, 0);
 
 	/* restore gfx settings from stack */
-	*(struct dummy*)(p_datseg + PIC_COPY_DST) = a;
+	g_pic_copy = pic_copy_bak;
 }
 
 /**
@@ -4261,7 +4256,7 @@ void seg002_47e2(void)
 void seg002_484f(void)
 {
 	/* save gfx settings to stack */
-	struct dummy a = *(struct dummy*)(p_datseg + PIC_COPY_DST);
+	struct struct_pic_copy pic_copy_bak = g_pic_copy;
 
 	/* set range 0,0 - 7,7 */
 	ds_writew(PIC_COPY_X1, 0);
@@ -4277,7 +4272,7 @@ void seg002_484f(void)
 	do_pic_copy(0);
 
 	/* restore gfx settings from stack */
-	*(struct dummy*)(p_datseg + PIC_COPY_DST) = a;
+	g_pic_copy = pic_copy_bak;
 }
 
 /**

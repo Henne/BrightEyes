@@ -6324,6 +6324,7 @@ char **g_tx_index; // ds:0xc3b1, to index table of primary text file
 char **g_tx2_index; // ds:0xc3ad, to index table of secondary text file
 unsigned char *g_buffer8_ptr; // ds:0xc3a9, to buffer of size 12008
 struct{short pos; char loc, type; short id;} g_locations_tab[150]; // ds:0xc025
+#if 0
 unsigned short g_pic_copy_v4; // ds:0xc023
 unsigned short g_pic_copy_v3; // ds:0xc021
 unsigned short g_pic_copy_v2; // ds:0xc01f
@@ -6333,7 +6334,10 @@ signed short g_pic_copy_y2; // ds:0xc017
 signed short g_pic_copy_x2; // ds:0xc015
 signed short g_pic_copy_y1; // ds:0xc013
 signed short g_pic_copy_x1; // ds:0xc011
-void *g_pic_copy_dst; // ds:0xc00d
+unsigned char *g_pic_copy_dst; // ds:0xc00d
+#else
+struct struct_pic_copy g_pic_copy;	// ds:0xc00d
+#endif
 void *g_buyitems; // ds:0xc009, merchant's assortment
 void *g_sellitems; // ds:0xc005, also used for repair items
 signed short g_game_mode; // ds:0xc003, {-1 = Input error, 1 = Beginner, 2 = Advanced }

@@ -7,6 +7,19 @@
 extern char ds[1];
 #endif
 
+struct struct_pic_copy {
+	unsigned char *dst;
+	int x1;
+	int y1;
+	int x2;
+	int y2;
+	unsigned char *src;
+	int v1;
+	int v2;
+	int v3;
+	int v4;
+};
+
 struct struct_smith_repairitems {
 	Bit16s item_id;
 	Bit32s pickup_time;
@@ -328,6 +341,8 @@ extern char **g_text_ltx_index;		// ds:0xc3b5;
 extern char **g_tx_index;		// ds:0xc3b1; seg026, seg028, seg031, seg064, seg120
 extern char **g_tx2_index;		// ds:0xc3ad; seg
 extern unsigned char *g_buffer8_ptr;	// ds:0xc3a9; seg005, seg026, seg028, seg032, seg042, seg050, seg061, seg098, seg120
+
+extern struct_pic_copy g_pic_copy;	// ds:0xc00d; seg002-seg120
 
 extern signed short g_textbox_width;	// ds:0xbffd; seg002-seg120
 extern unsigned char *g_gui_buffer_unkn;// ds:0xbff9; seg025, seg032, seg097, seg120

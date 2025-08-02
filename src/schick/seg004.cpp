@@ -160,10 +160,6 @@ void clear_ani(void)
 	 }
 }
 
-struct dummy {
-	char a[24];
-};
-
 #if defined(__BORLANDC__)
 void interrupt timer_isr(void)
 {
@@ -171,7 +167,7 @@ void interrupt timer_isr(void)
 	signed short l_di;
 	signed char flag;
 	Bit8u *ptr;
-	struct dummy a;
+	struct struct_pic_copy pic_copy_bak;
 
 	/* TODO: unused feature */
 	g_gfx_spinlock += 1;
@@ -196,9 +192,7 @@ void interrupt timer_isr(void)
 	}
 
 	/* another timer used in fights */
-	if ((ds_readws(FIG_STAR_TIMER) > 0) &&
-		(g_fig_continue_print) &&
-		(ds_readbs(FIG_STAR_PRINTED) != 0))
+	if ((ds_readws(FIG_STAR_TIMER) > 0) && g_fig_continue_print && (ds_readbs(FIG_STAR_PRINTED) != 0))
 	{
 		dec_ds_ws(FIG_STAR_TIMER);
 	}
@@ -221,7 +215,7 @@ void interrupt timer_isr(void)
 		ds_writew((PIC_COPY_DS_RECT + 2), ds_readw(ANI_POSX));
 		ds_writew((PIC_COPY_DS_RECT + 4), ds_readw(ANI_POSY) + 135);
 		ds_writew((PIC_COPY_DS_RECT + 6), ds_readw(ANI_POSX) + 208);
-		a = *(struct dummy*)(p_datseg + PIC_COPY_DST);
+		pic_copy_bak = g_pic_copy;
 
 		l_di = ds_readbs(ANI_AREACOUNT);
 
@@ -299,7 +293,7 @@ void interrupt timer_isr(void)
 			}
 		}
 
-		*(struct dummy*)(p_datseg + PIC_COPY_DST) = a;
+		g_pic_copy = pic_copy_bak;
 		ds_writew((PIC_COPY_DS_RECT + 0), 0);
 		ds_writew((PIC_COPY_DS_RECT + 2), 0);
 		ds_writew((PIC_COPY_DS_RECT + 4), 199);
@@ -790,12 +784,12 @@ void draw_wallclock(signed short pos, signed short night)
 	signed short y;
 	signed short mouse_updated;
 	struct dummy2 fullscreen_bak;
-	struct dummy gfx_bak;
+	struct struct_pic_copy pic_copy_bak;
 
 	mouse_updated = 0;
 
 	/* make backups */
-	gfx_bak = *(struct dummy*)(p_datseg + PIC_COPY_DST);
+	pic_copy_bak = g_pic_copy;
 	fullscreen_bak = *(struct dummy2*)(p_datseg + PIC_COPY_DS_RECT);
 
 	/* set pointer */
@@ -882,7 +876,7 @@ void draw_wallclock(signed short pos, signed short night)
 	}
 
 	/* restore gfx */
-	*(struct dummy*)(p_datseg + PIC_COPY_DST) = gfx_bak;
+	g_pic_copy = pic_copy_bak;
 }
 
 /**
