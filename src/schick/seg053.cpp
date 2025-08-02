@@ -216,7 +216,7 @@ void do_healer(void)
 						GUI_output(g_dtp2);
 					} else {
 						/* calculate price */
-						price = ds_readws(DISEASE_PRICES + disease * 2) * 10;
+						price = g_disease_prices[disease] * 10;
 
 						price += (host_readbs(healer_stats_ptr + HEALER_STATS_PRICE_MOD) * price) / 100;
 
@@ -238,7 +238,7 @@ void do_healer(void)
 							} else {
 								timewarp(HOURS(1));
 
-								if (random_schick(100) <= (120 - host_readbs(healer_stats_ptr + HEALER_STATS_QUALITY) * 10) + ds_readws(DISEASE_DELAYS + disease * 2)) {
+								if (random_schick(100) <= (120 - host_readbs(healer_stats_ptr + HEALER_STATS_QUALITY) * 10) + g_disease_delays[disease]) {
 									/* heal the disease */
 									host_writeb(hero + (HERO_ILLNESS) + disease * SIZEOF_HERO_ILLNESS, 1);
 									host_writeb(hero + (HERO_ILLNESS + 1) + disease * SIZEOF_HERO_ILLNESS, 0);

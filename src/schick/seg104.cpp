@@ -437,7 +437,7 @@ signed short skill_cure_disease(Bit8u *healer, Bit8u *patient, signed short hand
 
 			if ((flag != 0) || (test_skill(healer, TA_HEILEN_KRANKHEITEN, (signed char)handycap) > 0)) {
 
-				if (((retval = test_skill(healer, TA_HEILEN_KRANKHEITEN, ds_readbs(DISEASE_PRICES + 2 * disease) + handycap)) > 0) &&
+				if (((retval = test_skill(healer, TA_HEILEN_KRANKHEITEN, g_disease_prices[disease] + handycap)) > 0) &&
 					(disease != ILLNESS_TYPE_WUNDFIEBER) && (disease != ILLNESS_TYPE_BLAUE_KEUCHE))
 				{
 

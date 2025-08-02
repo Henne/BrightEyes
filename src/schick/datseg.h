@@ -82,6 +82,10 @@ extern Bit8u g_palette_unknown1[32][3];			//ds:0x2723; seg120
 extern Bit8u g_palette_fight1[32][3];			//ds:0x2783; seg032
 extern Bit8u g_palette_special[32][3];			//ds:0x27e3; seg029, seg093
 
+extern signed short g_always_zero3;			//ds:0x29ba; seg002
+
+extern signed short g_disease_prices[8];		//ds:0x2c50; seg053, seg104
+extern signed short g_disease_delays[8];		//ds:0x2c60; seg053
 extern signed short g_poison_prices[10];		//ds:0x2c70; seg041, seg053, seg099, seg103
 extern signed short g_poison_delays[10];		//ds:0x2c84; seg053;
 extern signed char  g_dialogbox_lock;			//ds:0x2c98; seg002, seg004, seg097, seg109
