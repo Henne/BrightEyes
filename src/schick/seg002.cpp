@@ -110,11 +110,9 @@ void sound_menu(void)
 {
 	signed short answer;
 
-	answer = GUI_radio((char*)p_datseg + SND_MENU_QUESTION, 4,
-				p_datseg + SND_MENU_RADIO1,
-				p_datseg + SND_MENU_RADIO2,
-				p_datseg + SND_MENU_RADIO3,
-				p_datseg + SND_MENU_RADIO4);
+	answer = GUI_radio(g_snd_menu_title, 4,
+				g_snd_menu_radio1, g_snd_menu_radio2,
+				g_snd_menu_radio3, g_snd_menu_radio4);
 
 	switch (answer - 1) {
 		case 0: {

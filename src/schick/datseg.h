@@ -283,6 +283,11 @@ extern signed char g_special_screen;		//ds:0x45b8; seg002-seg109
 
 extern char g_game_version[6];			//ds:0x46ec; seg002
 
+extern char g_snd_menu_title[17];		//ds:0x47d8; seg002
+extern char g_snd_menu_radio1[12];		//ds:0x479e; seg002
+extern char g_snd_menu_radio2[10];		//ds:0x47f5; seg002
+extern char g_snd_menu_radio3[12];		//ds:0x47ff; seg002
+extern char g_snd_menu_radio4[18];		//ds:0x480b; seg002
 extern char g_fname_sound_cfg[10];		//ds:0x481d; seg002
 extern char g_fname_sound_adv2[10];		//ds:0x4827; seg002
 extern char g_fname_digi_adv[9];		//ds:0x4831; seg002

@@ -2929,7 +2929,7 @@ struct{unsigned char unkn[3];} g_questions_map[10] = {
 	{ 0x00, 0x18, 0x2e },
 	{ 0x03, 0x19, 0x1a }
 }; // ds:0x47ba
-char g_snd_menu_question[17] = "BITTE AUSW\x8eHLEN:"; // ds:0x47d8
+char g_snd_menu_title[17] = "BITTE AUSW\x8eHLEN:"; // ds:0x47d8
 char g_snd_menu_radio1[12] = "KEINE MUSIK"; // ds:0x47e9
 char g_snd_menu_radio2[10] = "NUR MUSIK"; // ds:0x47f5
 char g_snd_menu_radio3[12] = "NUR EFFEKTE"; // ds:0x47ff

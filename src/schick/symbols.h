@@ -834,11 +834,11 @@
 #define VERSION_TOKEN4                  (0x46fb)    /* unsigned char; = 1 */
 #define QUESTIONS_HANDBOOK              (0x46fc)    /* struct(19)[10] */
 #define QUESTIONS_MAP                   (0x47ba)    /* struct(3)[10] */
-#define SND_MENU_QUESTION               (0x47d8)    /* char[17]; "BITTE AUSW\x8eHLEN:" */
-#define SND_MENU_RADIO1                 (0x47e9)    /* char[12]; "KEINE MUSIK" */
-#define SND_MENU_RADIO2                 (0x47f5)    /* char[10]; "NUR MUSIK" */
-#define SND_MENU_RADIO3                 (0x47ff)    /* char[12]; "NUR EFFEKTE" */
-#define SND_MENU_RADIO4                 (0x480b)    /* char[18]; "MUSIK UND EFFEKTE" */
+//#define SND_MENU_TITLE                  (0x47d8)    /* char[17]; "BITTE AUSW\x8eHLEN:" */
+//#define SND_MENU_RADIO1                 (0x47e9)    /* char[12]; "KEINE MUSIK" */
+//#define SND_MENU_RADIO2                 (0x47f5)    /* char[10]; "NUR MUSIK" */
+//#define SND_MENU_RADIO3                 (0x47ff)    /* char[12]; "NUR EFFEKTE" */
+//#define SND_MENU_RADIO4                 (0x480b)    /* char[18]; "MUSIK UND EFFEKTE" */
 //#define FNAME_SOUND_CFG                 (0x481d)    /* char[10]; "SOUND.CFG" */
 //#define FNAME_SOUND_ADV2                (0x4827)    /* char[10]; "SOUND.ADV" */
 //#define FNAME_DIGI_ADV                  (0x4831)    /* char[9]; "DIGI.ADV" */
