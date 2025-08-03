@@ -283,6 +283,23 @@ extern signed char g_special_screen;		//ds:0x45b8; seg002-seg109
 
 extern char g_game_version[6];			//ds:0x46ec; seg002
 
+extern char g_fname_sound_cfg[10];		//ds:0x481d; seg002
+extern char g_fname_sound_adv2[10];		//ds:0x4827; seg002
+extern char g_fname_digi_adv[9];		//ds:0x4831; seg002
+extern char g_snd_txt_disable_mem[51];		//ds:0x483a; seg002
+extern char g_snd_txt_hw_not_found[31];		//ds:0x486d; seg002
+extern char g_fname_sound_adv[10];		//ds:0x488c; seg002
+extern char g_snd_txt_hw_not_found2[31];	//ds:0x4896; seg002
+extern char g_fname_schick_dat[11];		//ds:0x48ca; seg002
+extern char g_snd_txt_disabled_mem2[43];	//ds:0x48d5; seg002
+extern char g_diary_string1[14];		//ds:0x4900; seg024
+extern char g_diary_string2[17];		//ds:0x490e; seg024
+extern char g_diary_string3[27];		//ds:0x491f; seg024
+extern char g_diary_string4[6];			//ds:0x493a; seg024
+extern char g_diary_string5[9];			//ds:0x4940; seg024
+extern char g_diary_string6[19];		//ds:0x4949; seg024
+extern char g_diary_string7[19];		//ds:0x495c; seg024
+
 extern char   g_noway_string[40];		//ds:0x4a68; seg003
 extern Bit16s g_ani_busy;			//ds:0x4a90; seg004
 extern Bit16s g_pic_copy_flag;			//ds:0x4a92; seg004, seg008, seg074

@@ -168,7 +168,7 @@ void read_sound_cfg(void)
 	signed short handle;
 
 	/* try to open SOUND.CFG */
-	if ( (handle = open((char*)(p_datseg + FNAME_SOUND_CFG), O_BINARY | O_RDONLY)) != -1) {
+	if ( (handle = open(g_fname_sound_cfg, O_BINARY | O_RDONLY)) != -1) {
 
 		_read(handle, (Bit8u*)&midi_port, 2);
 		_read(handle, (Bit8u*)&dummy, 2);
@@ -222,7 +222,7 @@ void read_sound_cfg(void)
 #endif
 		{
 			if (midi_port != 0) {
-				load_music_driver(((Bit8u*)p_datseg + FNAME_SOUND_ADV2), 3, midi_port);
+				load_music_driver(g_fname_sound_adv2, 3, midi_port);
 			} else {
 
 				/* music was disabled in SOUND.CFG */
@@ -238,13 +238,13 @@ void read_sound_cfg(void)
 
 			if (g_snd_voc_enabled != 0) {
 
-				if (!load_digi_driver(((Bit8u*)p_datseg + FNAME_DIGI_ADV), 2, digi_port, digi_irq))
+				if (!load_digi_driver(g_fname_digi_adv, 2, digi_port, digi_irq))
 				{
 					g_snd_voc_enabled = 0;
 				}
 			} else {
 				/* print that sound effects are disabled */
-				GUI_output((char*)p_datseg + SND_TXT_DISABLED_MEM);
+				GUI_output(g_snd_txt_disable_mem);
 				g_snd_voc_enabled = 0;
 			}
 		} else {
@@ -468,7 +468,7 @@ signed short load_music_driver(Bit8u* fname, signed short type, signed short por
 			} else {
 
 				/* no sound hardware found */
-				GUI_output((char*)p_datseg + SND_TXT_HW_NOT_FOUND);
+				GUI_output(g_snd_txt_hw_not_found);
 				exit_AIL();
 			}
 		}
@@ -551,7 +551,7 @@ signed short have_mem_for_sound(void)
 	signed short retval;
 	struct ffblk blk;
 
-	if (!findfirst((char*)(p_datseg + FNAME_SOUND_ADV), &blk, 0)) {
+	if (!findfirst(g_fname_sound_adv, &blk, 0)) {
 		/* SOUND.ADV was found */
 		size = host_readd((Bit8u*)(&blk) + 26);
 		size += 4000L;
@@ -730,7 +730,7 @@ signed short load_digi_driver(Bit8u* fname, signed short type, signed short io, 
 				return 1;
 			} else {
 				/* no sound hardware found */
-				GUI_output((char*)p_datseg + SND_TXT_HW_NOT_FOUND2);
+				GUI_output(g_snd_txt_hw_not_found2);
 				free_voc_buffer();
 			}
 		}
@@ -778,7 +778,7 @@ signed short open_and_seek_dat(unsigned short fileindex)
 	signed short fd;
 
 	/* open SCHICK.DAT */
-	if ( (fd = open((char*)(p_datseg + FNAME_SCHICK_DAT), O_BINARY | O_RDONLY)) != -1) {
+	if ( (fd = open(g_fname_schick_dat, O_BINARY | O_RDONLY)) != -1) {
 
 		/* seek to the fileindex position in the offset table */
 		lseek(fd, fileindex * 4, SEEK_SET);
@@ -5546,7 +5546,7 @@ int schick_main(int argc, char** argv)
 		} else {
 			/* disable sound */
 			exit_AIL();
-			GUI_output((char*)p_datseg + SND_TXT_DISABLED_MEM2);
+			GUI_output(g_snd_txt_disabled_mem2);
 		}
 
 		CD_init();

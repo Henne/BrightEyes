@@ -2940,7 +2940,7 @@ char g_fname_digi_adv[9] = "DIGI.ADV"; // ds:0x4831
 char g_snd_txt_disabled_mem[51] = "SOUND EFFEKTE ABGESCHALTET - NICHT GENUG SPEICHER!"; // ds:0x483a
 char g_snd_txt_hw_not_found[31] = "SOUND HARDWARE NICHT GEFUNDEN!"; // ds:0x486d
 char g_fname_sound_adv[10] = "SOUND.ADV"; // ds:0x488c
-char g_snd_txt_hw_not_found2[31] = { 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x20, 0x48, 0x41, 0x52, 0x44, 0x57, 0x41, 0x52, 0x45, 0x20, 0x4e, 0x49, 0x43, 0x48, 0x54, 0x20, 0x47, 0x45, 0x46, 0x55, 0x4e, 0x44, 0x45, 0x4e, 0x21, 0x00 }; // ds:0x4896, == SND_TXT_HW_NOT_FOUND
+char g_snd_txt_hw_not_found2[31] = "SOUND HARDWARE NICHT GEFUNDEN!"; // ds:0x4896, == SND_TXT_HW_NOT_FOUND
 char g_str_file_missing[20] = "FILE %s IS MISSING!"; // ds:0x48b5
 unsigned char g_unkn_033[1] = { 0x00 }; // ds:0x48c9
 char g_fname_schick_dat[11] = "SCHICK.DAT"; // ds:0x48ca

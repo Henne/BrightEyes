@@ -839,24 +839,24 @@
 #define SND_MENU_RADIO2                 (0x47f5)    /* char[10]; "NUR MUSIK" */
 #define SND_MENU_RADIO3                 (0x47ff)    /* char[12]; "NUR EFFEKTE" */
 #define SND_MENU_RADIO4                 (0x480b)    /* char[18]; "MUSIK UND EFFEKTE" */
-#define FNAME_SOUND_CFG                 (0x481d)    /* char[10]; "SOUND.CFG" */
-#define FNAME_SOUND_ADV2                (0x4827)    /* char[10]; "SOUND.ADV" */
-#define FNAME_DIGI_ADV                  (0x4831)    /* char[9]; "DIGI.ADV" */
-#define SND_TXT_DISABLED_MEM            (0x483a)    /* char[51]; "SOUND EFFEKTE ABGESCHALTET - NICHT GENUG SPEICHER!" */
-#define SND_TXT_HW_NOT_FOUND            (0x486d)    /* char[31]; "SOUND HARDWARE NICHT GEFUNDEN!" */
-#define FNAME_SOUND_ADV                 (0x488c)    /* char[10]; "SOUND.ADV" */
-#define SND_TXT_HW_NOT_FOUND2           (0x4896)    /* char[31]; == SND_TXT_HW_NOT_FOUND */
+//#define FNAME_SOUND_CFG                 (0x481d)    /* char[10]; "SOUND.CFG" */
+//#define FNAME_SOUND_ADV2                (0x4827)    /* char[10]; "SOUND.ADV" */
+//#define FNAME_DIGI_ADV                  (0x4831)    /* char[9]; "DIGI.ADV" */
+//#define SND_TXT_DISABLED_MEM            (0x483a)    /* char[51]; "SOUND EFFEKTE ABGESCHALTET - NICHT GENUG SPEICHER!" */
+//#define SND_TXT_HW_NOT_FOUND            (0x486d)    /* char[31]; "SOUND HARDWARE NICHT GEFUNDEN!" */
+//#define FNAME_SOUND_ADV                 (0x488c)    /* char[10]; "SOUND.ADV" */
+//#define SND_TXT_HW_NOT_FOUND2           (0x4896)    /* char[31]; == SND_TXT_HW_NOT_FOUND */
 //#define STR_FILE_MISSING                (0x48b5)    /* char[20]; "FILE %s IS MISSING!" */
 // ?1
-#define FNAME_SCHICK_DAT                (0x48ca)    /* char[11]; "SCHICK.DAT" */
-#define SND_TXT_DISABLED_MEM2           (0x48d5)    /* char[43]; "MUSIK ABGESCHALTET - NICHT GENUG SPEICHER!" */
-#define DIARY_STRING1                   (0x4900)    /* char[14]; "%2d.~%-8s~%s." */
-#define DIARY_STRING2                   (0x490e)    /* char[17]; "%2d.~%-8s~IN %s." */
-#define DIARY_STRING3                   (0x491f)    /* char[27]; "%2d.~%-8s~BESUCHEN VON %s." */
-#define DIARY_STRING4                   (0x493a)    /* char[6]; "~~%s." */
-#define DIARY_STRING5                   (0x4940)    /* char[9]; "~~IN %s." */
-#define DIARY_STRING6                   (0x4949)    /* char[19]; "~~ABENTEUER IN %s." */
-#define DIARY_STRING7                   (0x495c)    /* char[19]; "~~RUMH\x8eNGEN IN %s." */
+//#define FNAME_SCHICK_DAT                (0x48ca)    /* char[11]; "SCHICK.DAT" */
+//#define SND_TXT_DISABLED_MEM2           (0x48d5)    /* char[43]; "MUSIK ABGESCHALTET - NICHT GENUG SPEICHER!" */
+//#define DIARY_STRING1                   (0x4900)    /* char[14]; "%2d.~%-8s~%s." */
+//#define DIARY_STRING2                   (0x490e)    /* char[17]; "%2d.~%-8s~IN %s." */
+//#define DIARY_STRING3                   (0x491f)    /* char[27]; "%2d.~%-8s~BESUCHEN VON %s." */
+//#define DIARY_STRING4                   (0x493a)    /* char[6]; "~~%s." */
+//#define DIARY_STRING5                   (0x4940)    /* char[9]; "~~IN %s." */
+//#define DIARY_STRING6                   (0x4949)    /* char[19]; "~~ABENTEUER IN %s." */
+//#define DIARY_STRING7                   (0x495c)    /* char[19]; "~~RUMH\x8eNGEN IN %s." */
 // ?1
 #define VISUAL_FIELD_DIR0               (0x4970)    /* struct(2)[31]; struct{signed char x,y;} */
 #define VISUAL_FIELD_DIR1               (0x49ae)    /* struct(2)[31]; struct{signed char x,y;} */
