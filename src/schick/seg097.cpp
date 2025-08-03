@@ -628,11 +628,11 @@ signed short GUI_menu_input(signed short positions, signed short h_lines,
 
 		mouse_move_cursor(g_mouse_posx, g_mouse_posy);
 
-		ds_writew(MOUSE_POSX_MAX, ds_readws(TEXTBOX_POS_X) + width - 16);
-		ds_writew(MOUSE_POSX_MIN, ds_readws(TEXTBOX_POS_X));
-		ds_writew(MOUSE_POSY_MIN, ds_readws(TEXTBOX_POS_Y) + l6);
+		g_mouse_posx_max = ds_readws(TEXTBOX_POS_X) + width - 16;
+		g_mouse_posx_min = ds_readws(TEXTBOX_POS_X);
+		g_mouse_posy_min = ds_readws(TEXTBOX_POS_Y) + l6;
 
-		ds_writew(MOUSE_POSY_MAX, l6 + ds_readws(TEXTBOX_POS_Y) - 1 + positions * 8);
+		g_mouse_posy_max = l6 + ds_readws(TEXTBOX_POS_Y) - 1 + positions * 8;
 		refresh_screen_size();
 
 		ds_writew(MOUSE1_EVENT2, ds_writew(MOUSE1_EVENT1, ds_writew(MOUSE2_EVENT, 0)));
@@ -692,16 +692,17 @@ signed short GUI_menu_input(signed short positions, signed short h_lines,
 
 		g_mouse_posx_bak = g_mouse_posx = l3;
 		g_mouse_posy_bak = g_mouse_posy = l4;
-		ds_writew(MOUSE_POSX_MAX, 319);
-		ds_writew(MOUSE_POSX_MIN, 0);
-		ds_writew(MOUSE_POSY_MIN, 0);
-		ds_writew(MOUSE_POSY_MAX, 199);
+		g_mouse_posx_max = 319;
+		g_mouse_posx_min = 0;
+		g_mouse_posy_min = 0;
+		g_mouse_posy_max = 199;
 
 		mouse_move_cursor(g_mouse_posx, g_mouse_posy);
 
 	} else {
 		do {
 			delay_or_keypress(10000);
+
 		} while (ds_readw(ACTION) == 0);
 
 		retval = -1;

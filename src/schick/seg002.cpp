@@ -1201,17 +1201,17 @@ void interrupt mouse_isr(void)
 			g_mouse_posx = l4;
 			g_mouse_posy = l5;
 
-			if (g_mouse_posx > ds_readws(MOUSE_POSX_MAX)) {
-				g_mouse_posx = ds_readws(MOUSE_POSX_MAX);
+			if (g_mouse_posx > g_mouse_posx_max) {
+				g_mouse_posx = g_mouse_posx_max;
 			}
-			if (g_mouse_posx < ds_readws(MOUSE_POSX_MIN)) {
-				g_mouse_posx = ds_readws(MOUSE_POSX_MIN);
+			if (g_mouse_posx < g_mouse_posx_min) {
+				g_mouse_posx = g_mouse_posx_min;
 			}
-			if (g_mouse_posy < ds_readws(MOUSE_POSY_MIN)) {
-				g_mouse_posy = ds_readws(MOUSE_POSY_MIN);
+			if (g_mouse_posy < g_mouse_posy_min) {
+				g_mouse_posy = g_mouse_posy_min;
 			}
-			if (g_mouse_posy > ds_readws(MOUSE_POSY_MAX)) {
-				g_mouse_posy = ds_readws(MOUSE_POSY_MAX);
+			if (g_mouse_posy > g_mouse_posy_max) {
+				g_mouse_posy = g_mouse_posy_max;
 			}
 
 			l1 = 4;

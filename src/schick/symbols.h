@@ -138,10 +138,10 @@
 #define CURSOR_ARROW_DOWN               (0x28c8)    /* struct(64); struct{char unkn[32]; unsigned short mask[16];} */
 #define CURSOR_ARROW_LEFT               (0x2908)    /* struct(64); struct{char unkn[32]; unsigned short mask[16];} */
 #define CURSOR_ARROW_RIGHT              (0x2948)    /* struct(64); struct{char unkn[32]; unsigned short mask[16];} */
-#define MOUSE_POSY_MIN                  (0x2988)    /* unsigned short */
-#define MOUSE_POSX_MIN                  (0x298a)    /* unsigned short */
-#define MOUSE_POSY_MAX                  (0x298c)    /* unsigned short */
-#define MOUSE_POSX_MAX                  (0x298e)    /* unsigned short */
+//#define MOUSE_POSY_MIN                  (0x2988)    /* unsigned short */
+//#define MOUSE_POSX_MIN                  (0x298a)    /* unsigned short */
+//#define MOUSE_POSY_MAX                  (0x298c)    /* unsigned short */
+//#define MOUSE_POSX_MAX                  (0x298e)    /* unsigned short */
 #define PIC_COPY_DS_RECT                (0x2990)    /* struct(8); struct screen_rect */
 //#define MOUSE_LOCKED                    (0x2998)    /* unsigned short */
 //#define MOUSE_REFRESH_FLAG              (0x299a)    /* signed short */

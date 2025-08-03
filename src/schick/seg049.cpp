@@ -480,10 +480,10 @@ void GRP_move_hero(signed short src_pos)
 	/* don't move NPC */
 	if (src_pos != 6) {
 
-		ds_writew(MOUSE_POSY_MIN, 157);
-		ds_writew(MOUSE_POSY_MAX, 157);
-		ds_writew(MOUSE_POSX_MIN, 1);
-		ds_writew(MOUSE_POSX_MAX, 260);
+		g_mouse_posy_min = 157;
+		g_mouse_posy_max = 157;
+		g_mouse_posx_min = 1;
+		g_mouse_posx_max = 260;
 
 		update_mouse_cursor();
 
@@ -618,10 +618,10 @@ void GRP_move_hero(signed short src_pos)
 		}
 
 		ds_writew(MOUSE1_EVENT2, 0);
-		ds_writew(MOUSE_POSY_MIN, 0);
-		ds_writew(MOUSE_POSY_MAX, 199);
-		ds_writew(MOUSE_POSX_MIN, 0);
-		ds_writew(MOUSE_POSX_MAX, 319);
+		g_mouse_posy_min = 0;
+		g_mouse_posy_max = 200 - 1;
+		g_mouse_posx_min = 0;
+		g_mouse_posx_max = 320 - 1;
 
 		refresh_screen_size();
 		draw_status_line();
