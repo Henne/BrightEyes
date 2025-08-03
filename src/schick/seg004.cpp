@@ -76,7 +76,7 @@ void init_ani(Bit16u v1)
 		clear_ani_pal();
 
 		/* set flag for pic_copy() */
-		ds_writew(PIC_COPY_FLAG, 1);
+		g_pic_copy_flag = 1;
 
 		/* set upper left coordinates */
 		g_pic_copy.x1 = ds_readw(ANI_POSX);
@@ -95,7 +95,7 @@ void init_ani(Bit16u v1)
 		set_ani_pal((Bit8u*)ds_readd(ANI_PALETTE));
 
 		/* reset flag for pic_copy() */
-		ds_writew(PIC_COPY_FLAG, 0);
+		g_pic_copy_flag = 0;
 
 		refresh_screen_size();
 	}

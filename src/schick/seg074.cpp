@@ -455,9 +455,9 @@ void draw_automap_to_screen(void)
 
 	update_mouse_cursor();
 
-	ds_writew(PIC_COPY_FLAG, 1);
+	g_pic_copy_flag = 1;
 	do_pic_copy(1);
-	ds_writew(PIC_COPY_FLAG, 0);
+	g_pic_copy_flag = 0;
 
 	refresh_screen_size();
 

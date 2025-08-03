@@ -134,7 +134,7 @@ void pic_copy(Bit8u *dst, short x1, short y1, short x2, short y2,
 		bx = 320 - cur_width;
 		do {
 			cols = cur_width;
-			if (ds_readw(PIC_COPY_FLAG)) {
+			if (g_pic_copy_flag) {
 				do {
 					if (lines >= 40 || cols <= 75 || cols >= 150)
 						if (*dst >= 0xc8)
