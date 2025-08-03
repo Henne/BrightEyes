@@ -283,7 +283,8 @@ extern signed char g_special_screen;		//ds:0x45b8; seg002-seg109
 
 extern char g_game_version[6];			//ds:0x46ec; seg002
 
-extern char g_noway_string[40];			//ds:0x4a68; seg003
+extern char   g_noway_string[40];		//ds:0x4a68; seg003
+extern Bit16s g_ani_busy;			//ds:0x4a90; seg004
 
 extern Bit16s g_wallclock_pos;			//ds:0x4a9e; seg004;
 extern Bit8s  g_wallclock_pos_y[81];		//ds:0x4aa0; seg004;

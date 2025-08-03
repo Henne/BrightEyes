@@ -3086,7 +3086,7 @@ struct{signed char x,y;} g_visual_field_dir3[31] = {
 	{ 0x01, 0x00 }
 }; // ds:0x4a2a
 char g_noway_string[40] = "IN DIESE RICHTUNG GEHT ES NICHT WEITER."; // ds:0x4a68
-unsigned short g_ani_busy = 0; // ds:0x4a90
+Bit16s g_ani_busy = 0; // ds:0x4a90
 unsigned short g_pic_copy_flag = 0; // ds:0x4a92
 char g_status_bar_colors[4] = { -0x10, 0x00, -0x07, 0x00 }; // ds:0x4a94, {le_color, 0, ae_color, 0}
 unsigned char g_unkn_035[2] = { 0x00, 0x00 }; // ds:0x4a98

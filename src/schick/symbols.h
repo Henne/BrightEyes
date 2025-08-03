@@ -863,7 +863,7 @@
 #define VISUAL_FIELD_DIR2               (0x49ec)    /* struct(2)[31]; struct{signed char x,y;} */
 #define VISUAL_FIELD_DIR3               (0x4a2a)    /* struct(2)[31]; struct{signed char x,y;} */
 //#define NOWAY_STRING                    (0x4a68)    /* char[40]; "IN DIESE RICHTUNG GEHT ES NICHT WEITER." */
-#define ANI_BUSY                        (0x4a90)    /* unsigned short; {0,1} */
+//#define ANI_BUSY                        (0x4a90)    /* unsigned short; {0,1} */
 #define PIC_COPY_FLAG                   (0x4a92)    /* unsigned short; {0,1} */
 #define STATUS_BAR_COLORS               (0x4a94)    /* char[4]; {le_color, 0, ae_color, 0} */
 // ?2

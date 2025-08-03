@@ -116,11 +116,11 @@ void set_var_to_zero(void)
 void init_ani_busy_loop(unsigned short v1)
 {
 	/* set lock */
-	ds_writew(ANI_BUSY, 1);
+	g_ani_busy = 1;
 
 	init_ani(v1);
 
-	 while (ds_readw(ANI_BUSY) != 0) {
+	 while (g_ani_busy) {
 #ifdef M302de_SPEEDFIX
 		/*	enter emulation mode frequently,
 			that the timer can reset this variable */
@@ -219,10 +219,10 @@ void interrupt timer_isr(void)
 
 		l_di = ds_readbs(ANI_AREACOUNT);
 
-		if (!l_di && (ds_readw(ANI_BUSY))) {
+		if (!l_di && g_ani_busy) {
 
 			g_ani_enabled = 0;
-			ds_writew(ANI_BUSY, 0);
+			g_ani_busy = 0;
 		}
 
 		for (i = 0; i < l_di; i++) {
@@ -245,9 +245,9 @@ void interrupt timer_isr(void)
 							ds_writew(ANI_AREA_STATUS + 2 * i, 0);
 						}
 
-						if (ds_readws(ANI_BUSY) != 0) {
+						if (g_ani_busy) {
 							g_ani_enabled = 0;
-							ds_writew(ANI_BUSY, 0);
+							g_ani_busy = 0;
 							break;
 						}
 					}
