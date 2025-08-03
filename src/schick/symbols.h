@@ -825,13 +825,13 @@
 #define MERCHANT_ITEMS_POSX             (0x46a3)    /* signed short[15] */
 #define MERCHANT_ITEMS_POSY             (0x46c1)    /* signed short[15] */
 #define REFRESH_STATUS_LINE             (0x46df)    /* signed char; {0,1} */
-#define DSA_VERSION_STRING              (0x46e0)    /* char[12]; "DSA VERSION" */
+//#define DSA_VERSION_STRING              (0x46e0)    /* char[12]; "DSA VERSION" */
 //#define GAME_VERSION                    (0x46ec)    /* char[6]; "V3.02" */
 // ?6
-#define VERSION_TOKEN1                  (0x46f8)    /* unsigned char; = 3 */
-#define VERSION_TOKEN2                  (0x46f9)    /* unsigned char; = 1 */
-#define VERSION_TOKEN3                  (0x46fa)    /* unsigned char; = 1 */
-#define VERSION_TOKEN4                  (0x46fb)    /* unsigned char; = 1 */
+//#define VERSION_TOKEN1                  (0x46f8)    /* unsigned char; = 3 */
+//#define VERSION_TOKEN2                  (0x46f9)    /* unsigned char; = 1 */
+//#define VERSION_TOKEN3                  (0x46fa)    /* unsigned char; = 1 */
+//#define VERSION_TOKEN4                  (0x46fb)    /* unsigned char; = 1 */
 #define QUESTIONS_HANDBOOK              (0x46fc)    /* struct(19)[10] */
 #define QUESTIONS_MAP                   (0x47ba)    /* struct(3)[10] */
 //#define SND_MENU_TITLE                  (0x47d8)    /* char[17]; "BITTE AUSW\x8eHLEN:" */

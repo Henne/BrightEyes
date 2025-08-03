@@ -444,7 +444,7 @@ signed short save_game_state(void)
 #ifndef M302de_FEATURE_MOD
 		/* Feature mod 4: In the original game, when creating a savegame while not being in a temple, the AP of all heroes is decreased by 1. This feature mod stops the AP decrease.
 		 * Here, the warning message "Dabei verliert jeder Held in der Gruppe einen Abenteuerpunkt" is displayed. */
-		if (gs_current_loctype != LOCTYPE_TEMPLE && ds_readws(GAME_STATE) != GAME_STATE_VICTORY) {
+		if ((gs_current_loctype != LOCTYPE_TEMPLE) && (ds_readws(GAME_STATE) != GAME_STATE_VICTORY)) {
 
 			/* create savegame not in a temple */
 
@@ -570,11 +570,11 @@ signed short save_game_state(void)
 		filepos = 0;
 
 		/* write version identifier 16 bytes */
-		filepos += write(l_di, p_datseg + DSA_VERSION_STRING, 12);
-		filepos += write(l_di, p_datseg + VERSION_TOKEN4, 1);
-		filepos += write(l_di, p_datseg + VERSION_TOKEN3, 1);
-		filepos += write(l_di, p_datseg + VERSION_TOKEN1, 1);
-		filepos += write(l_di, p_datseg + VERSION_TOKEN2, 1);
+		filepos += write(l_di, &g_dsa_version_string, 12);
+		filepos += write(l_di, &g_version_token4, 1);
+		filepos += write(l_di, &g_version_token3, 1);
+		filepos += write(l_di, &g_version_token1, 1);
+		filepos += write(l_di, &g_version_token2, 1);
 
 		/* write fileposition 4 bytes */
 		/* this will be updated later to find the data of the CHR files */

@@ -281,7 +281,12 @@ extern signed char g_travel_herokeeping;	//ds:0x4497; seg002, seg063
 
 extern signed char g_special_screen;		//ds:0x45b8; seg002-seg109
 
+extern char g_dsa_version_string[12];		//ds:0x46e0; seg026
 extern char g_game_version[6];			//ds:0x46ec; seg002
+extern char g_version_token1;			//ds:0x46f8; seg026
+extern char g_version_token2;			//ds:0x46f9; seg026
+extern char g_version_token3;			//ds:0x46fa; seg026
+extern char g_version_token4;			//ds:0x46fb; seg026
 
 extern char g_snd_menu_title[17];		//ds:0x47d8; seg002
 extern char g_snd_menu_radio1[12];		//ds:0x479e; seg002
