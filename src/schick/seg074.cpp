@@ -434,32 +434,22 @@ void draw_automap_entrance(signed short x, signed short y, signed short dir)
 	host_writeb(p_img_tile + skipsize + skipsize, 0);
 }
 
-struct coords {
-	signed short x, y;
-};
-
-struct dummy {
-	struct coords a[2];
-};
-
 void draw_automap_to_screen(void)
 {
-	struct dummy bak;
-
 	/* save screen coordinates */
-	bak = *(struct dummy*)(p_datseg + PIC_COPY_DS_RECT);
+	struct struct_rect rect_bak = g_pic_copy_rect;
 
 	/* set the screen coordinates */
-	ds_writew((PIC_COPY_DS_RECT + 2), ds_writew(PIC_COPY_DS_RECT, 0));
-	ds_writew((PIC_COPY_DS_RECT + 6), ds_readw(ANI_POSX) + 208);
-	ds_writew((PIC_COPY_DS_RECT + 4), ds_readw(ANI_POSY) + 135);
+	g_pic_copy_rect.x1 = g_pic_copy_rect.y1 = 0;
+	g_pic_copy_rect.x2 = ds_readws(ANI_POSX) + 208;
+	g_pic_copy_rect.y2 = ds_readws(ANI_POSY) + 135;
 
 	g_pic_copy.src = g_renderbuf_ptr;
 
 	g_pic_copy.x1 = 0;
 	g_pic_copy.y1 = 0;
-	g_pic_copy.x2 = 319;
-	g_pic_copy.y2 = 134;
+	g_pic_copy.x2 = 320 - 1;
+	g_pic_copy.y2 = 135 - 1;
 
 	g_pic_copy.dst = g_vga_memstart + ds_readws(ANI_POSX) + 320 * ds_readws(ANI_POSY);
 
@@ -474,7 +464,7 @@ void draw_automap_to_screen(void)
 	g_pic_copy.dst = g_vga_memstart;
 
 	/* restore screen coordinates */
-	*(struct dummy*)(p_datseg + PIC_COPY_DS_RECT) = bak;
+	g_pic_copy_rect = rect_bak;
 }
 
 /**

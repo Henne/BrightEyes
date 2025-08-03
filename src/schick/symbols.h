@@ -142,7 +142,7 @@
 //#define MOUSE_POSX_MIN                  (0x298a)    /* unsigned short */
 //#define MOUSE_POSY_MAX                  (0x298c)    /* unsigned short */
 //#define MOUSE_POSX_MAX                  (0x298e)    /* unsigned short */
-#define PIC_COPY_DS_RECT                (0x2990)    /* struct(8); struct screen_rect */
+//#define PIC_COPY_DS_RECT                (0x2990)    /* struct(8); struct screen_rect */
 //#define MOUSE_LOCKED                    (0x2998)    /* unsigned short */
 //#define MOUSE_REFRESH_FLAG              (0x299a)    /* signed short */
 //#define MOUSE_POSX                      (0x299c)    /* unsigned short */

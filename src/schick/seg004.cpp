@@ -211,10 +211,10 @@ void interrupt timer_isr(void)
 		/* disable interrupts */
 		asm { cli; }
 
-		ds_writew((PIC_COPY_DS_RECT + 0), ds_readw(ANI_POSY));
-		ds_writew((PIC_COPY_DS_RECT + 2), ds_readw(ANI_POSX));
-		ds_writew((PIC_COPY_DS_RECT + 4), ds_readw(ANI_POSY) + 135);
-		ds_writew((PIC_COPY_DS_RECT + 6), ds_readw(ANI_POSX) + 208);
+		g_pic_copy_rect.y1 = ds_readws(ANI_POSY);
+		g_pic_copy_rect.x1 = ds_readws(ANI_POSX);
+		g_pic_copy_rect.y2 = ds_readws(ANI_POSY) + 135;
+		g_pic_copy_rect.x2 = ds_readws(ANI_POSX) + 208;
 		pic_copy_bak = g_pic_copy;
 
 		l_di = ds_readbs(ANI_AREACOUNT);
@@ -289,10 +289,10 @@ void interrupt timer_isr(void)
 		}
 
 		g_pic_copy = pic_copy_bak;
-		ds_writew((PIC_COPY_DS_RECT + 0), 0);
-		ds_writew((PIC_COPY_DS_RECT + 2), 0);
-		ds_writew((PIC_COPY_DS_RECT + 4), 199);
-		ds_writew((PIC_COPY_DS_RECT + 6), 319);
+		g_pic_copy_rect.y1 = 0;
+		g_pic_copy_rect.x1 = 0;
+		g_pic_copy_rect.y2 = (199 - 1);
+		g_pic_copy_rect.x2 = (320 - 1);
 
 		/* enable interrupts */
 		asm {sti; }
@@ -778,14 +778,14 @@ void draw_wallclock(signed short pos, signed short night)
 {
 	signed short y;
 	signed short mouse_updated;
-	struct dummy2 fullscreen_bak;
+	struct struct_rect rect_bak;
 	struct struct_pic_copy pic_copy_bak;
 
 	mouse_updated = 0;
 
 	/* make backups */
 	pic_copy_bak = g_pic_copy;
-	fullscreen_bak = *(struct dummy2*)(p_datseg + PIC_COPY_DS_RECT);
+	rect_bak = g_pic_copy_rect;
 
 	/* set pointer */
 	g_pic_copy.dst = g_vga_memstart;
@@ -798,10 +798,10 @@ void draw_wallclock(signed short pos, signed short night)
 	pos += ds_readws(WALLCLOCK_X) - 2;
 
 	/* set window */
-	ds_writew(PIC_COPY_DS_RECT, ds_readws(WALLCLOCK_Y));
-	ds_writew((PIC_COPY_DS_RECT + 2), ds_readws(WALLCLOCK_X));
-	ds_writew((PIC_COPY_DS_RECT + 4), ds_readws(WALLCLOCK_Y) + 22);
-	ds_writew((PIC_COPY_DS_RECT + 6), ds_readws(WALLCLOCK_X) + 78);
+	g_pic_copy_rect.y1 = ds_readws(WALLCLOCK_Y);
+	g_pic_copy_rect.x1 = ds_readws(WALLCLOCK_X);
+	g_pic_copy_rect.y2 = ds_readws(WALLCLOCK_Y) + 22;
+	g_pic_copy_rect.x2 = ds_readws(WALLCLOCK_X) + 78;
 
 	/* set palette (night/day) */
 	set_palette((!night ? (p_datseg + WALLCLOCK_PALETTE_DAY) : (p_datseg + WALLCLOCK_PALETTE_NIGHT)), 0xfa, 3);
@@ -826,7 +826,6 @@ void draw_wallclock(signed short pos, signed short night)
 	/* draw backgroud */
 	do_pic_copy(2);
 
-
 	/* set coordinates */
 	g_pic_copy.x1 = pos;
 	g_pic_copy.y1 = y;
@@ -848,8 +847,8 @@ void draw_wallclock(signed short pos, signed short night)
 	/* draw backgroud */
 	do_pic_copy(2);
 
-	/* restore fullscreen */
-	*(struct dummy2*)(p_datseg + PIC_COPY_DS_RECT) = fullscreen_bak;
+	/* restore structure */
+	g_pic_copy_rect = rect_bak;
 
 	/* happens in travel mode */
 	if (g_pp20_index == ARCHIVE_FILE_KARTE_DAT) {

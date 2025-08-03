@@ -70,7 +70,7 @@ void FIG_draw_figures(void)
 {
 	signed short l1, l2;
 	Bit8u *list_i;
-	struct screen_rect screen_mode;
+	struct struct_rect rect_bak;
 	Bit8u* gfx_dst_bak;
 	signed short l_si, l_di;
 
@@ -82,7 +82,7 @@ void FIG_draw_figures(void)
 	g_pic_copy.dst = g_renderbuf_ptr;
 
 	/* backup a structure */
-	screen_mode = *((struct screen_rect*)(p_datseg + PIC_COPY_DS_RECT));
+	rect_bak = g_pic_copy_rect;
 
 	list_i = (Bit8u*)ds_readd(FIG_LIST_HEAD);
 
@@ -105,30 +105,25 @@ void FIG_draw_figures(void)
 			/* set gfx_src */
 			g_pic_copy.src = (Bit8u*)host_readd(list_i + FIGHTER_GFXBUF);
 
-			ds_writew(PIC_COPY_DS_RECT, l_di + host_readbs(list_i + FIGHTER_Y1));
-			if (ds_readws(PIC_COPY_DS_RECT) < 0)
-				ds_writew(PIC_COPY_DS_RECT, 0);
+			g_pic_copy_rect.y1 = l_di + host_readbs(list_i + FIGHTER_Y1);
+			if (g_pic_copy_rect.y1 < 0) g_pic_copy_rect.y1 = 0;
 
-			ds_writew((PIC_COPY_DS_RECT + 2), l_si + host_readbs(list_i + 9));
-			if (ds_readws((PIC_COPY_DS_RECT + 2)) < 0)
-				ds_writew((PIC_COPY_DS_RECT + 2), 0);
+			g_pic_copy_rect.x1 = l_si + host_readbs(list_i + FIGHTER_X1);
+			if (g_pic_copy_rect.x1 < 0) g_pic_copy_rect.x1 = 0;
 
-			ds_writew((PIC_COPY_DS_RECT + 4), l_di + host_readbs(list_i + FIGHTER_Y2));
-			if (ds_readws((PIC_COPY_DS_RECT + 4)) > 199)
-				ds_writew((PIC_COPY_DS_RECT + 4), 199);
+			g_pic_copy_rect.y2 = l_di + host_readbs(list_i + FIGHTER_Y2);
+			if (g_pic_copy_rect.y2 > (200 - 1)) g_pic_copy_rect.y2 = (200 - 1);
 
-			ds_writew((PIC_COPY_DS_RECT + 6), l_si + host_readbs(list_i + FIGHTER_X2));
-			if (ds_readws((PIC_COPY_DS_RECT + 6)) > 319)
-				ds_writew((PIC_COPY_DS_RECT + 6), 319);
+			g_pic_copy_rect.x2 = l_si + host_readbs(list_i + FIGHTER_X2);
+			if (g_pic_copy_rect.x2 > (320 - 1)) g_pic_copy_rect.x2 = (320 - 1);
 
 			do_pic_copy(2);
 		}
 
 	} while (list_i = (Bit8u*)((Bit8u*)host_readd(list_i + FIGHTER_NEXT)));
 
-	/* restore a structure */
-	//struct_copy(p_datseg + PIC_COPY_DS_RECT, screen_mode, 8);
-	*((struct screen_rect*)(p_datseg + PIC_COPY_DS_RECT)) = screen_mode;
+	/* restore two structures */
+	g_pic_copy_rect = rect_bak;
 	g_pic_copy.dst = gfx_dst_bak;
 }
 
@@ -563,8 +558,8 @@ void FIG_draw_enemy_pic(signed short loc, signed short id)
 	get_textcolor(&fg_bak, &bg_bak);
 	set_textcolor(0xff, 0);
 
-	/* set gfx address */
-	g_pic_copy.dst = (g_renderbuf_ptr);
+	/* set gfx pointers */
+	g_pic_copy.dst = g_renderbuf_ptr;
 	g_vga_backbuffer = g_renderbuf_ptr;
 
 	if (loc == 0) {

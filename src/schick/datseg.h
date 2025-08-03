@@ -25,6 +25,13 @@ struct struct_point {
 	int y;
 };
 
+struct struct_rect {
+	int y1;
+	int x1;
+	int y2;
+	int x2;
+};
+
 struct struct_smith_repairitems {
 	Bit16s item_id;
 	Bit32s pickup_time;
@@ -88,7 +95,7 @@ extern signed short g_mouse_posy_min;			//ds:0x2988; seg002, seg049, seg097
 extern signed short g_mouse_posx_min;			//ds:0x298a; seg002, seg049, seg097
 extern signed short g_mouse_posy_max;			//ds:0x298c; seg002, seg049, seg097
 extern signed short g_mouse_posx_max;			//ds:0x298e; seg002, seg049, seg097
-
+extern struct struct_rect g_pic_copy_rect;		//ds:0x2990; seg004-seg008, seg074
 extern signed short g_mouse_locked;			//ds:0x2998; seg002, seg049
 extern signed short g_mouse_refresh_flag;		//ds:0x299a; seg002, seg032
 extern signed short g_mouse_posx;			//ds:0x299c; seg002-seg097

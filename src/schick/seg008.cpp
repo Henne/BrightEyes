@@ -120,9 +120,10 @@ void pic_copy(Bit8u *dst, short x1, short y1, short x2, short y2,
 	unsigned short src_width, unsigned short src_height,
 	Bit8u *src, unsigned short mode) {
 
-	signed short ds_3, ds_1, ds_2, ds_4;
-	short cur_height, cur_width;
-	signed short lv1, lv2, lv3, lv4, lv5;
+	signed int r_y2, r_y1, r_x1, r_x2;
+	signed int cur_height;
+	signed int cur_width;
+	signed int lv1, lv2, lv3, lv4, lv5;
 
 	cur_width = src_width;
 	cur_height = src_height;
@@ -132,31 +133,31 @@ void pic_copy(Bit8u *dst, short x1, short y1, short x2, short y2,
 	lv3 = 0;
 	lv4 = 0;
 
-	ds_1 = ds_readw(PIC_COPY_DS_RECT);
-	ds_2 = ds_readw((PIC_COPY_DS_RECT + 2));
-	ds_3 = ds_readw((PIC_COPY_DS_RECT + 4));
-	ds_4 = ds_readw((PIC_COPY_DS_RECT + 6));
+	r_y1 = g_pic_copy_rect.y1;
+	r_x1 = g_pic_copy_rect.x1;
+	r_y2 = g_pic_copy_rect.y2;
+	r_x2 = g_pic_copy_rect.x2;
 
-	if (y1 < ds_1) {
-		lv3 = ds_1 - y1;
+	if (y1 < r_y1) {
+		lv3 = r_y1 - y1;
 		cur_height -= lv3;
 		src += lv3 * src_width;
 	}
 
-	if (y2 > ds_3) {
-		lv4 = y2 - ds_3;
+	if (y2 > r_y2) {
+		lv4 = y2 - r_y2;
 		cur_height -= lv4;
 	}
 
-	if (x1 < ds_2) {
-		lv1 = ds_2 - x1;
+	if (x1 < r_x1) {
+		lv1 = r_x1 - x1;
 		cur_width -= lv1;
 		src += lv1;
 	}
 
 
-	if (x2 > ds_4) {
-		lv2 = x2 - ds_4;
+	if (x2 > r_x2) {
+		lv2 = x2 - r_x2;
 		cur_width -= lv2;
 	}
 
@@ -166,13 +167,13 @@ void pic_copy(Bit8u *dst, short x1, short y1, short x2, short y2,
 	if (cur_width <= 0)
 		return;
 
-	dst += ds_1 * 320 + ds_2;
+	dst += r_y1 * 320 + r_x1;
 
-	if (y1 > ds_1)
-		dst += (y1 - ds_1) * 320;
+	if (y1 > r_y1)
+		dst += (y1 - r_y1) * 320;
 
-	if (x1 > ds_2)
-		dst += x1 - ds_2;
+	if (x1 > r_x1)
+		dst += x1 - r_x1;
 
 	lv5 = 0;
 	lv5 = src_width - cur_width;

@@ -310,7 +310,7 @@ void draw_fight_screen(Bit16u val)
 	Bit8u* p_weapon_gfx;
 	Bit8u *list_i;
 
-	struct dummy_w4 coord_bak;
+	struct struct_rect rect_bak;
 	Bit8u *hero;
 	Bit8u *p_enemy_sheet;
 
@@ -426,7 +426,7 @@ void draw_fight_screen(Bit16u val)
 			figlist_remove[i] = -1;
 		}
 
-		coord_bak = *(struct dummy_w4*)(p_datseg + PIC_COPY_DS_RECT);
+		rect_bak = g_pic_copy_rect;
 		g_pic_copy.x1 = g_pic_copy.v1 = 0;
 		g_pic_copy.y1 = g_pic_copy.v2 = 0;
 		g_pic_copy.x2 = 318;
@@ -869,24 +869,20 @@ void draw_fight_screen(Bit16u val)
 					}
 
 					/* set Y1 */
-					ds_writew(PIC_COPY_DS_RECT, obj_y + host_readbs(list_i + FIGHTER_Y1));
-					if (ds_readws(PIC_COPY_DS_RECT) < 0)
-						ds_writew(PIC_COPY_DS_RECT, 0);
+					g_pic_copy_rect.y1 = obj_y + host_readbs(list_i + FIGHTER_Y1);
+					if (g_pic_copy_rect.y1 < 0) g_pic_copy_rect.y1 = 0;
 
 					/* set X1 */
-					ds_writew((PIC_COPY_DS_RECT + 2), obj_x + host_readbs(list_i + FIGHTER_X1));
-					if (ds_readws((PIC_COPY_DS_RECT + 2)) < 0)
-						ds_writew((PIC_COPY_DS_RECT + 2), 0);
+					g_pic_copy_rect.x1 = obj_x + host_readbs(list_i + FIGHTER_X1);
+					if (g_pic_copy_rect.x1 < 0) g_pic_copy_rect.x1 = 0;
 
 					/* set Y2 */
-					ds_writew((PIC_COPY_DS_RECT + 4), obj_y + host_readbs(list_i + FIGHTER_Y2));
-					if (ds_readws((PIC_COPY_DS_RECT + 4)) > 199)
-						ds_writew((PIC_COPY_DS_RECT + 4), 199);
+					g_pic_copy_rect.y2 = obj_y + host_readbs(list_i + FIGHTER_Y2);
+					if (g_pic_copy_rect.y2 > (200 - 1)) g_pic_copy_rect.y2 = (200 - 1);
 
 					/* set X2 */
-					ds_writew((PIC_COPY_DS_RECT + 6), obj_x + host_readbs(list_i + FIGHTER_X2));
-					if (ds_readws((PIC_COPY_DS_RECT + 6)) > 318)
-						ds_writew((PIC_COPY_DS_RECT + 6), 318);
+					g_pic_copy_rect.x2 = obj_x + host_readbs(list_i + FIGHTER_X2);
+					if (g_pic_copy_rect.x2 > (320 - 2)) g_pic_copy_rect.x2 = (320 - 2);
 
 					g_pic_copy.x1 = obj_x;
 					g_pic_copy.y1 = obj_y;
@@ -914,7 +910,7 @@ void draw_fight_screen(Bit16u val)
 
 		} while (list_i = (Bit8u*)host_readd(list_i + FIGHTER_NEXT));
 
-		*(struct dummy_w4*)(p_datseg + PIC_COPY_DS_RECT) = coord_bak;
+		g_pic_copy_rect = rect_bak;
 		ds_writew(FIGOBJ_UNKN_X2_BAK , ds_readw(FIGOBJ_UNKN_X2));
 		ds_writew(FIGOBJ_UNKN_X2, -1);
 		ds_writew(FIGOBJ_UNKN_X1_BAK , ds_readw(FIGOBJ_UNKN_X1));
