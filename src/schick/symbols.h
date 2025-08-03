@@ -867,10 +867,10 @@
 //#define PIC_COPY_FLAG                   (0x4a92)    /* unsigned short; {0,1} */
 //#define STATUS_BAR_COLORS               (0x4a94)    /* char[4]; {le_color, 0, ae_color, 0} */
 // ?2
-#define STATUS_PAGE_HUNGER_MAX_COUNTER  (0x4a9a)    /* signed char */
-#define STATUS_PAGE_HUNGER_MAX_COLOR    (0x4a9b)    /* signed char */
-#define STATUS_PAGE_THIRST_MAX_COUNTER  (0x4a9c)    /* signed char */
-#define STATUS_PAGE_THIRST_MAX_COLOR    (0x4a9d)    /* signed char */
+//#define STATUS_PAGE_HUNGER_MAX_COUNTER  (0x4a9a)    /* signed char */
+//#define STATUS_PAGE_HUNGER_MAX_COLOR    (0x4a9b)    /* signed char */
+//#define STATUS_PAGE_THIRST_MAX_COUNTER  (0x4a9c)    /* signed char */
+//#define STATUS_PAGE_THIRST_MAX_COLOR    (0x4a9d)    /* signed char */
 //#define WALLCLOCK_POS                   (0x4a9e)    /* signed short; position of sun/moon */
 //#define WALLCLOCK_POS_Y                 (0x4aa0)    /* signed char[81] */
 #define WALLCLOCK_PALETTE_DAY           (0x4af1)    /* struct(3)[3]; struct{unsigned char r,g,b;} */

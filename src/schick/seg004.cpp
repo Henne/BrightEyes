@@ -336,8 +336,8 @@ void update_status_bars(void)
 
 			/* hunger and thirst are at 100% */
 			if ((g_status_page_hunger == 100) && (g_status_page_thirst == 100)) {
-				ds_writeb(STATUS_PAGE_HUNGER_MAX_COUNTER, ds_readbs(STATUS_PAGE_THIRST_MAX_COUNTER));
-				ds_writeb(STATUS_PAGE_HUNGER_MAX_COLOR, ds_readbs(STATUS_PAGE_THIRST_MAX_COLOR));
+				g_status_page_hunger_max_counter = g_status_page_thirst_max_counter;
+				g_status_page_hunger_max_color = g_status_page_thirst_max_color;
 			}
 
 #if !defined(__BORLANDC__)
@@ -348,19 +348,19 @@ void update_status_bars(void)
 
 			if (g_status_page_hunger == 100) {
 
-				if (inc_ds_bs_post(STATUS_PAGE_HUNGER_MAX_COUNTER) == 25) {
+				if (g_status_page_hunger_max_counter++ == 25) {
 
-					xor_ds_bs(STATUS_PAGE_HUNGER_MAX_COLOR, 1);
+					g_status_page_hunger_max_color ^= 1;
 
 					update_mouse_cursor();
 
 					for (i = 0; i < 6; i++) {
-						do_h_line(g_vga_memstart, 260, 310, i + 36, ds_readb(STATUS_PAGE_HUNGER_MAX_COLOR) ? 9 : 10);
+						do_h_line(g_vga_memstart, 260, 310, i + 36, g_status_page_hunger_max_color ? 9 : 10);
 					}
 
 					refresh_screen_size();
 
-					ds_writeb(STATUS_PAGE_HUNGER_MAX_COUNTER, 0);
+					g_status_page_hunger_max_counter = 0;
 				}
 
 			} else if (host_readbs(hero + HERO_HUNGER) != g_status_page_hunger) {
@@ -379,19 +379,19 @@ void update_status_bars(void)
 
 			if (g_status_page_thirst == 100) {
 
-				if (inc_ds_bs_post(STATUS_PAGE_THIRST_MAX_COUNTER) == 25) {
+				if (g_status_page_thirst_max_counter++ == 25) {
 
-					xor_ds_bs(STATUS_PAGE_THIRST_MAX_COLOR, 1);
+					g_status_page_thirst_max_color ^= 1;
 
 					update_mouse_cursor();
 
 					for (i = 0; i < 6; i++) {
-						do_h_line(g_vga_memstart, 260, 310, i + 43, ds_readb(STATUS_PAGE_THIRST_MAX_COLOR) ? 11 : 12);
+						do_h_line(g_vga_memstart, 260, 310, i + 43, g_status_page_thirst_max_color ? 11 : 12);
 					}
 
 					refresh_screen_size();
 
-					ds_writeb(STATUS_PAGE_THIRST_MAX_COUNTER, 0);
+					g_status_page_thirst_max_counter = 0;
 				}
 
 			} else if (host_readbs(hero + HERO_THIRST) != g_status_page_thirst) {
