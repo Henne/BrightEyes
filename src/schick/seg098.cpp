@@ -895,7 +895,7 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 
 						if ((host_readbs(hero + HERO_ENEMY_ID) < 10) &&
 							(host_readbs(hero + HERO_ENEMY_ID) > 0) &&
-							(ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK))
+							(g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
 						{
 							magic_heal_ani(hero);
 						}

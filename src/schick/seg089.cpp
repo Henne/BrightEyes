@@ -431,28 +431,28 @@ signed short DNG15_handler(void)
 				add_hero_ap_all(50);
 
 				g_dng_area_loaded = g_area_prepared = -1;
-				ds_writeb(PP20_INDEX, -2);
+				g_pp20_index = -2;
 
 				draw_main_screen();
 				refresh_screen_size();
 			}
 		}
 
-	} else if (target_pos == DNG_POS(0,0,11) && target_pos != gs_dng_handled_pos)
-	{
+	} else if (target_pos == DNG_POS(0,0,11) && target_pos != gs_dng_handled_pos) {
+
 		/* EXIT: may be blocked if cursed money has been taken */
 		if (ds_readb(DNG15_TOOK_CURSED_MONEY) != 0)
 		{
 			GUI_output(get_tx(6));
 
-			gs_x_target = (gs_x_target_bak);
-			gs_y_target = (gs_y_target_bak);
+			gs_x_target = gs_x_target_bak;
+			gs_y_target = gs_y_target_bak;
 		} else {
 			leave_dungeon();
 
-			gs_current_town = (ds_readbs(TRAVEL_DESTINATION_TOWN_ID));
-			gs_x_target = (ds_readws(TRAVEL_DESTINATION_X));
-			gs_y_target = (ds_readws(TRAVEL_DESTINATION_Y));
+			gs_current_town = ds_readbs(TRAVEL_DESTINATION_TOWN_ID);
+			gs_x_target = ds_readws(TRAVEL_DESTINATION_X);
+			gs_y_target = ds_readws(TRAVEL_DESTINATION_Y);
 			gs_current_loctype = LOCTYPE_NONE;
 			gs_direction = ((ds_readbs(TRAVEL_DESTINATION_VIEWDIR) + 2) & 0x03);
 

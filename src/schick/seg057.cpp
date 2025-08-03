@@ -103,7 +103,7 @@ void sell_screen(Bit8u *shop_ptr)
 		if (ds_readws(REQUEST_REFRESH) != 0) {
 
 			set_var_to_zero();
-			ds_writeb(PP20_INDEX, 0xff);
+			g_pp20_index = -1;
 			memset((Bit8u*)ds_readd(SELLITEMS), 0, 2100);
 
 			for (items_x = 0; items_x <= 6; items_x++) {
@@ -554,7 +554,7 @@ void sell_screen(Bit8u *shop_ptr)
 
 	set_textcolor(fg_bak, bg_bak);
 	ds_writew(REQUEST_REFRESH, 1);
-	ds_writeb(PP20_INDEX, 0xff);
+	g_pp20_index = -1;
 	g_heroswap_allowed = 1;
 }
 

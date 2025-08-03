@@ -259,7 +259,7 @@ signed short do_travel_mode(void)
 		gs_current_town = (TOWNS_NONE);
 	}
 
-	if (ds_readb(PP20_INDEX) == 5)
+	if (g_pp20_index == 5)
 	{
 		memset((void*)g_dtp2, 0, 0xc0);
 
@@ -283,7 +283,7 @@ signed short do_travel_mode(void)
 		do_fill_rect(g_vga_memstart, 0, 0, 319, 199, 0);
 	}
 
-	g_current_ani = g_city_area_loaded = ds_writebs(PP20_INDEX, -1);
+	g_current_ani = g_city_area_loaded = g_pp20_index = -1;
 	ds_writew(REQUEST_REFRESH, (unsigned short)(g_fading_state = 1));
 	g_wallclock_update = bak1;
 

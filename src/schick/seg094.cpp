@@ -428,7 +428,7 @@ void TM_func1(signed short route_no, signed short backwards)
 			wait_for_vsync();
 			set_palette((Bit8u*)ds_readd(TRAVEL_MAP_PTR) + 64000 + 2, 0, 0x20);
 
-			ds_writeb(PP20_INDEX, 5);
+			g_pp20_index = 5;
 			gs_trv_i = 0;
 			ds_writed(ROUTE_COURSE_PTR2, ds_readd(ROUTE_COURSE_START));
 

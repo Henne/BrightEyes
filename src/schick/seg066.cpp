@@ -885,7 +885,7 @@ signed short city_step(void)
 		ds_writews(CITY_REFRESH_X_TARGET, -1);
 	}
 
-	if (ds_readw(REDRAW_MENUICONS) != 0 && ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) {
+	if (ds_readw(REDRAW_MENUICONS) != 0 && g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 		draw_icons();
 		ds_writews(REDRAW_MENUICONS, 0);
 	}

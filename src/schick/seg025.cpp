@@ -264,8 +264,8 @@ void show_treasure_map(void)
 		GUI_output(get_ttx(609));
 	} else {
 		g_special_screen = 1;
-		pp20_index_bak = ds_readbs(PP20_INDEX);
-		ds_writeb(PP20_INDEX, 0xff);
+		pp20_index_bak = g_pp20_index;
+		g_pp20_index = -1;
 		set_var_to_zero();
 
 		/* load SKARTE.NVF */
@@ -383,7 +383,7 @@ void show_treasure_map(void)
 
 			ds_writeb(RENDERBUF_IN_USE_FLAG, 0);
 			g_special_screen = 0;
-			ds_writeb(PP20_INDEX, pp20_index_bak);
+			g_pp20_index = pp20_index_bak;
 		} else {
 			g_current_ani = -1;
 			ds_writew(REQUEST_REFRESH, 1);
@@ -416,7 +416,7 @@ signed short game_options(void)
 	ds_writed(CURRENT_CURSOR, (Bit32u)(p_datseg + DEFAULT_MOUSE_CURSOR));
 
 	load_pp20(ARCHIVE_FILE_BUCH_DAT);
-	ds_writeb(PP20_INDEX, ARCHIVE_FILE_BUCH_DAT);
+	g_pp20_index = ARCHIVE_FILE_BUCH_DAT;
 
 	get_textcolor(&fg_bak, &bg_bak);
 
@@ -582,7 +582,7 @@ signed short game_options(void)
 
 	g_gui_buffer_unkn = g_renderbuf_ptr;
 
-	g_fig_figure1 = g_fig_figure2 = g_current_ani = ds_writebs(PP20_INDEX, -1);
+	g_fig_figure1 = g_fig_figure2 = g_current_ani = g_pp20_index = -1;
 	ds_writew(REQUEST_REFRESH, 1);
 	g_special_screen = 0;
 

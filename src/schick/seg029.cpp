@@ -56,7 +56,7 @@ void draw_playmask(void)
 	else
 		load_pp20(ARCHIVE_FILE_PLAYM_UK);
 
-	ds_writeb(PP20_INDEX, ARCHIVE_FILE_PLAYM_UK);
+	g_pp20_index = ARCHIVE_FILE_PLAYM_UK;
 
 	wait_for_vsync();
 
@@ -288,7 +288,7 @@ void draw_icons(void)
 {
 	signed short i;
 
-	if (ds_readb(PP20_INDEX) != ARCHIVE_FILE_PLAYM_UK)
+	if (g_pp20_index != ARCHIVE_FILE_PLAYM_UK)
 		return;
 
 	update_mouse_cursor();
@@ -326,7 +326,7 @@ void draw_main_screen(void)
 
 	set_var_to_zero();
 
-	if (ds_readb(PP20_INDEX))
+	if (g_pp20_index)
 		draw_playmask();
 
 	clear_loc_line();

@@ -81,7 +81,7 @@ void draw_fight_screen_pal(signed short mode)
 	FIG_draw_pic();
 
 	/* check for palette update */
-	if (ds_readb(PP20_INDEX) != 0xff) {
+	if (g_pp20_index != 0xff) {
 
 		update_mouse_cursor();
 
@@ -94,7 +94,7 @@ void draw_fight_screen_pal(signed short mode)
 		set_palette(p_datseg + PALETTE_FIGHT2, 0x80, 0x14);
 		set_palette(g_buffer8_ptr + 0xfa02, 0x60, 0x20);
 
-		ds_writeb(PP20_INDEX, 0xff);
+		g_pp20_index = -1;
 
 		refresh_screen_size();
 	}
@@ -1263,7 +1263,7 @@ signed short do_fight(signed short fight_id)
 	g_autofight = 0;
 	g_check_party = 1;
 	g_textbox_width = tw_bak;
-	ds_writeb(PP20_INDEX, (ARCHIVE_FILE_DNGS + 12));
+	g_pp20_index = (ARCHIVE_FILE_DNGS + 12);
 
 	update_mouse_cursor();
 

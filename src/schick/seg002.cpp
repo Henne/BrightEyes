@@ -1177,7 +1177,7 @@ void interrupt mouse_isr(void)
 		if (((gs_dungeon_index != DUNGEONS_NONE) || (gs_current_town != TOWNS_NONE)) &&
 				!gs_current_loctype &&
 				!g_dialogbox_lock &&
-				(ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK))
+				(g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
 		{
 			ds_writed(CURRENT_CURSOR, (Bit32u) (is_mouse_in_rect(68, 4, 171, 51) ? (p_datseg + CURSOR_ARROW_UP):
 							(is_mouse_in_rect(68, 89, 171, 136) ? (p_datseg + CURSOR_ARROW_DOWN) :
@@ -1848,7 +1848,7 @@ void game_loop(void)
 
 			ds_writeb(REFRESH_STATUS_LINE, 0);
 
-			if (ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) {
+			if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 				draw_status_line();
 			}
 		}
@@ -2078,7 +2078,7 @@ void dawning(void)
 			/* unknown */
 			!g_special_screen &&
 			/* unknown */
-			(ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK))
+			(g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
 		{
 			wait_for_vsync();
 
@@ -2119,7 +2119,7 @@ void nightfall(void)
 			/* unknown */
 			!g_special_screen &&
 			/* unknown */
-			(ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK))
+			(g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
 		{
 			wait_for_vsync();
 
@@ -2578,7 +2578,7 @@ void sub_mod_timers(Bit32s val)
 					/* subtract the mod */
 					sub_ptr_bs(mp, host_readbs(sp + 7));
 
-					if (ds_readb(PP20_INDEX) == ARCHIVE_FILE_ZUSTA_UK) {
+					if (g_pp20_index == ARCHIVE_FILE_ZUSTA_UK) {
 						ds_writew(REQUEST_REFRESH, 1);
 					}
 
@@ -3074,7 +3074,7 @@ void herokeeping(void)
 
 					GUI_output(buffer);
 
-					if (ds_readb(PP20_INDEX) == ARCHIVE_FILE_ZUSTA_UK) {
+					if (g_pp20_index == ARCHIVE_FILE_ZUSTA_UK) {
 						ds_writew(REQUEST_REFRESH, 1);
 					}
 			}
@@ -3096,7 +3096,7 @@ void herokeeping(void)
 					/* print output */
 					GUI_output(buffer);
 
-					if (ds_readb(PP20_INDEX) == ARCHIVE_FILE_ZUSTA_UK) {
+					if (g_pp20_index == ARCHIVE_FILE_ZUSTA_UK) {
 						ds_writew(REQUEST_REFRESH, 1);
 					}
 			}
@@ -3617,7 +3617,7 @@ void dec_splash(void)
 			/* Check splash timer again if 0 */
 			/* I have no clue */
 			/* Could be in fight */
-			(ds_readb(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) &&
+			(g_pp20_index == ARCHIVE_FILE_PLAYM_UK) &&
 			/* check if hero is dead */
 			!hero_dead(get_hero(i))
 		) {
@@ -3636,7 +3636,7 @@ void dec_splash(void)
 void draw_splash(signed short hero_pos, signed short type)
 {
 	/* Could be in fight */
-	if (ds_readb(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) {
+	if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 
 		Bit8u *splash = (type == 0 ? g_splash_le : g_splash_ae);
 
@@ -3996,7 +3996,7 @@ void draw_loc_icons(signed short icons, ...)
 	if (icons_bak[i] != -1)
 		changed = 1;
 
-	if (changed && ds_readb(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) {
+	if (changed && g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 		draw_icons();
 	}
 }
@@ -4473,7 +4473,7 @@ void sub_hero_le(Bit8u *hero, signed short le)
 			/* unknown */
 			host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_UNKNOWN2);
 
-			if (ds_readb(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) {
+			if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 				ds_writeb(REFRESH_STATUS_LINE, 1);
 			}
 

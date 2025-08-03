@@ -56,7 +56,7 @@ void diary_show(void)
 	ds_writed(CURRENT_CURSOR, (Bit32u)(p_datseg + DEFAULT_MOUSE_CURSOR));
 
 	load_pp20(ARCHIVE_FILE_BUCH_DAT);
-	ds_writeb(PP20_INDEX, ARCHIVE_FILE_BUCH_DAT);
+	g_pp20_index = ARCHIVE_FILE_BUCH_DAT;
 
 	get_textcolor(&fg_bak, &bg_bak);
 
@@ -76,6 +76,7 @@ void diary_show(void)
 	i = 0;
 	do {
 		i = diary_print_entry(i);
+
 	} while (i < ds_readws(DIARY_ENTRY_COUNTER));
 
 	g_pic_copy.x1 = 0;

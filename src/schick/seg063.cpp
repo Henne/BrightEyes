@@ -387,7 +387,7 @@ void do_harbor(void)
 				passage_arrival();
 
 				g_wallclock_update = g_basepos_x = g_basepos_y = ds_writeb(SEA_TRAVEL_PSGBOOKED_FLAG, 0);
-				g_current_ani = g_city_area_loaded = ds_writebs(PP20_INDEX, -1);
+				g_current_ani = g_city_area_loaded = g_pp20_index = -1;
 				ds_writew(REQUEST_REFRESH, 1);
 				ds_writeb(SHOW_TRAVEL_MAP, 0);
 

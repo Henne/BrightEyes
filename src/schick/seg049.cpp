@@ -704,7 +704,7 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 
 						sprintf(g_dtp2, get_ttx(319), hero + HERO_NAME2, le_regen, g_text_output_buf);
 
-						if (ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) {
+						if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 							GUI_print_loc_line(g_dtp2);
 							delay_or_keypress(200);
 						} else {
@@ -735,7 +735,7 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 
 							sprintf(g_dtp2, get_ttx(320), hero + HERO_NAME2,	ae_regen, g_text_output_buf);
 
-							if (ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) {
+							if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 								GUI_print_loc_line(g_dtp2);
 								delay_or_keypress(200);
 							} else {

@@ -684,7 +684,7 @@ void hero_get_drunken(Bit8u *hero)
 		add_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_JZ), 1);
 
 		/* do a burp FX2.VOC */
-		if (ds_readb(PP20_INDEX) == ARCHIVE_FILE_ZUSTA_UK) {
+		if (g_pp20_index == ARCHIVE_FILE_ZUSTA_UK) {
 			ds_writew(REQUEST_REFRESH, 1);
 		}
 
@@ -728,7 +728,7 @@ void hero_get_sober(Bit8u *hero) {
 	sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_NG), 1);
 	sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_JZ), 1);
 
-	if (ds_readb(PP20_INDEX) == ARCHIVE_FILE_ZUSTA_UK)
+	if (g_pp20_index == ARCHIVE_FILE_ZUSTA_UK)
 		ds_writew(REQUEST_REFRESH, 1);
 }
 

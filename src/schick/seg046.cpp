@@ -192,9 +192,9 @@ void status_show(Bit16u index)
 	set_var_to_zero();
 	update_mouse_cursor();
 
-	if (ds_readb(PP20_INDEX) != ARCHIVE_FILE_ZUSTA_UK) {
+	if (g_pp20_index != ARCHIVE_FILE_ZUSTA_UK) {
 		ds_writew(UPDATE_STATUSLINE, 0);
-		ds_writeb(PP20_INDEX, ARCHIVE_FILE_ZUSTA_UK);
+		g_pp20_index = ARCHIVE_FILE_ZUSTA_UK;
 		do_fill_rect(g_vga_memstart, 0, 0, 319, 199, 0);
 		wait_for_vsync();
 		set_palette(p_datseg + STATUSPAGE_PALETTE, 0, 0x20);

@@ -153,7 +153,7 @@ void buy_screen(void)
 
 			set_var_to_zero();
 
-			ds_writeb(PP20_INDEX, 0xff);
+			g_pp20_index = -1;
 			draw_loc_icons(4, MENU_ICON_BARGAIN, MENU_ICON_SCROLL_RIGHT, MENU_ICON_SCROLL_LEFT, MENU_ICON_LEAVE);
 			draw_main_screen();
 
@@ -610,7 +610,7 @@ void buy_screen(void)
 
 	set_textcolor(fg_bak, bg_bak);
 	ds_writew(REQUEST_REFRESH, 1);
-	ds_writeb(PP20_INDEX, 0xff);
+	g_pp20_index = -1;
 }
 
 /**

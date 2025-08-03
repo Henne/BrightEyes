@@ -453,7 +453,7 @@ void load_map(void)
 
 	array_add((Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, 18000)), 3003, 0xe0, 2);
 
-	ds_writeb(PP20_INDEX, ARCHIVE_FILE_KARTE_DAT);
+	g_pp20_index = ARCHIVE_FILE_KARTE_DAT;
 
 	/* if the ems_map_hanlder exists */
 	if (ds_readw(EMS_TRAVEL_MAP) != 0) {

@@ -81,6 +81,7 @@ extern Bit8u g_palette_allblack2[3 * 32];		//ds:0x26c3; seg025,seg029,seg049,seg
 extern Bit8u g_palette_unknown1[32][3];			//ds:0x2723; seg120
 extern Bit8u g_palette_fight1[32][3];			//ds:0x2783; seg032
 extern Bit8u g_palette_special[32][3];			//ds:0x27e3; seg029, seg093
+extern signed char g_pp20_index;			//ds:0x2845; seg004-seg120
 
 
 extern signed short g_mouse_posy_min;			//ds:0x2988; seg002, seg049, seg097

@@ -454,7 +454,7 @@ signed short DNG_step(void)
 		ds_writew(DNG_REFRESH_X_TARGET, -1);
 	}
 
-	if (ds_readw(REDRAW_MENUICONS) != 0 && ds_readb(PP20_INDEX) == 0)
+	if (ds_readw(REDRAW_MENUICONS) != 0 && g_pp20_index == 0)
 	{
 		draw_icons();
 		ds_writew(REDRAW_MENUICONS, 0);

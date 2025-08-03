@@ -161,7 +161,7 @@ void add_equip_boni(Bit8u *owner, Bit8u *equipper, signed short item, signed sho
 			host_writeb(equipper + (HERO_ATTRIB + 3 * ATTRIB_TA),
 				host_readbs(equipper + (HERO_ATTRIB + 3 * ATTRIB_TA)) - 4);
 
-			if (ds_readb(PP20_INDEX) == ARCHIVE_FILE_ZUSTA_UK) {
+			if (g_pp20_index == ARCHIVE_FILE_ZUSTA_UK) {
 				equip_belt_ani();
 			}
 		}

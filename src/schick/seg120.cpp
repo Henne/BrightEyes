@@ -79,7 +79,7 @@ void rabies(Bit8u* hero, signed short hero_pos)
 	hero = get_hero(hero_pos);
 	host_writeb(hero + HERO_SEX, sex_bak);
 
-	if (ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) {
+	if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 		draw_status_line();
 	}
 
@@ -228,7 +228,7 @@ void rabies(Bit8u* hero, signed short hero_pos)
 		GRP_switch_to_next(1);
 	}
 
-	if (ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) {
+	if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 		draw_status_line();
 	}
 }
@@ -706,7 +706,7 @@ void game_over_screen(void)
 
 	refresh_screen_size();
 
-	ds_writeb(PP20_INDEX, 0xff);
+	g_pp20_index = -1;
 }
 
 /* Borlandified and identical */

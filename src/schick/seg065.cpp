@@ -104,7 +104,7 @@ void final_intro(void)
 	Bit8u* ptr2;
 	struct nvf_desc nvf;
 
-	ds_writebs(PP20_INDEX, (signed char)(ARCHIVE_FILE_DNGS + 12));
+	g_pp20_index = (ARCHIVE_FILE_DNGS + 12);
 
 	update_mouse_cursor();
 
