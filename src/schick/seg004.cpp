@@ -498,8 +498,7 @@ void draw_bar(unsigned short type, signed short hero, signed short pts_cur, sign
 		if (pts_cur == pts_max) {
 			/* draw 4 full lines in the color of the type */
 			for (i = 0; i < 3; i++) {
-				do_v_line(dst, x + i, y_min - 30, y_min,
-					ds_readb(STATUS_BAR_COLORS + type * 2));
+				do_v_line(dst, x + i, y_min - 30, y_min, g_status_bar_colors[type]);
 			}
 		} else {
 			lost = 30;
@@ -512,14 +511,12 @@ void draw_bar(unsigned short type, signed short hero, signed short pts_cur, sign
 
 			/* draw visible part */
 			for (i = 0; i < 3; i++) {
-				do_v_line(dst, x + i, y_min - lost, y_min,
-					ds_readb(STATUS_BAR_COLORS + type * 2));
+				do_v_line(dst, x + i, y_min - lost, y_min, g_status_bar_colors[type]);
 			}
 
 			/* draw black part */
 			for (i = 0; i < 3; i++) {
-				do_v_line(dst, x + i, y_min - 30,
-					y_min - lost - 1, 0);
+				do_v_line(dst, x + i, y_min - 30, y_min - lost - 1, 0);
 			}
 		}
 	}

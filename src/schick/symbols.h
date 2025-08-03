@@ -865,7 +865,7 @@
 //#define NOWAY_STRING                    (0x4a68)    /* char[40]; "IN DIESE RICHTUNG GEHT ES NICHT WEITER." */
 //#define ANI_BUSY                        (0x4a90)    /* unsigned short; {0,1} */
 //#define PIC_COPY_FLAG                   (0x4a92)    /* unsigned short; {0,1} */
-#define STATUS_BAR_COLORS               (0x4a94)    /* char[4]; {le_color, 0, ae_color, 0} */
+//#define STATUS_BAR_COLORS               (0x4a94)    /* char[4]; {le_color, 0, ae_color, 0} */
 // ?2
 #define STATUS_PAGE_HUNGER_MAX_COUNTER  (0x4a9a)    /* signed char */
 #define STATUS_PAGE_HUNGER_MAX_COLOR    (0x4a9b)    /* signed char */
