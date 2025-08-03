@@ -43,18 +43,18 @@ void do_market(void)
 	signed short bak1;
 
 	done = 0;
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 	bak1 = gs_direction_bak;
 	dir_bak = gs_direction;
 
 	do {
 
-		if (ds_readw(REQUEST_REFRESH) != 0) {
+		if (g_request_refresh != 0) {
 			draw_main_screen();
 			set_var_to_zero();
 			load_ani(16);
 			init_ani(0);
-			ds_writew(REQUEST_REFRESH, 0);
+			g_request_refresh = 0;
 		}
 
 		answer = GUI_radio(get_ttx(680), 4,

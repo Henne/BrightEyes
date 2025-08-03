@@ -103,17 +103,17 @@ void do_harbor(void)
 	ds_writew(CURRENT_SIGNPOST, gs_current_typeindex);
 
 	draw_loc_icons(4, MENU_ICON_BOOK_SHIP_PASSAGE, MENU_ICON_HARBOR_MASTER, MENU_ICON_BOARD_SHIP, MENU_ICON_LEAVE);
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 	ds_writeb(TRAVEL_DETOUR, 0);
 
 	do {
-		if (ds_readw(REQUEST_REFRESH) != 0) {
+		if (g_request_refresh != 0) {
 
 			draw_main_screen();
 			set_var_to_zero();
 			load_ani(6);
 			init_ani(0);
-			ds_writew(REQUEST_REFRESH, 0);
+			g_request_refresh = 0;
 
 			load_tx(ARCHIVE_FILE_HAFEN_LTX);
 
@@ -388,7 +388,7 @@ void do_harbor(void)
 
 				g_wallclock_update = g_basepos_x = g_basepos_y = ds_writeb(SEA_TRAVEL_PSGBOOKED_FLAG, 0);
 				g_current_ani = g_city_area_loaded = g_pp20_index = -1;
-				ds_writew(REQUEST_REFRESH, 1);
+				g_request_refresh = 1;
 				ds_writeb(SHOW_TRAVEL_MAP, 0);
 
 				if (!ds_readb(TRAVEL_DETOUR)) {
@@ -636,7 +636,7 @@ void sea_travel(signed short passage, signed short dir)
 			ds_writeb(TRAVEL_BY_SHIP, 0);
 		}
 
-		if (ds_readws(REQUEST_REFRESH) != 0 && !ds_readb(TRAVEL_DETOUR)) {
+		if (g_request_refresh != 0 && !ds_readb(TRAVEL_DETOUR)) {
 
 			update_mouse_cursor();
 
@@ -666,7 +666,7 @@ void sea_travel(signed short passage, signed short dir)
 			ds_writew(WALLCLOCK_X, g_basepos_x + 120);
 			ds_writew(WALLCLOCK_Y, g_basepos_y + 87);
 			g_wallclock_update = 1;
-			ds_writew(REQUEST_REFRESH, 0);
+			g_request_refresh = 0;
 		}
 
 #if defined(__BORLANDC__)

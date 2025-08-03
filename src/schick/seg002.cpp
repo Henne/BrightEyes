@@ -2579,7 +2579,7 @@ void sub_mod_timers(Bit32s val)
 					sub_ptr_bs(mp, host_readbs(sp + 7));
 
 					if (g_pp20_index == ARCHIVE_FILE_ZUSTA_UK) {
-						ds_writew(REQUEST_REFRESH, 1);
+						g_request_refresh = 1;
 					}
 
 					/* reset target */
@@ -3075,7 +3075,7 @@ void herokeeping(void)
 					GUI_output(buffer);
 
 					if (g_pp20_index == ARCHIVE_FILE_ZUSTA_UK) {
-						ds_writew(REQUEST_REFRESH, 1);
+						g_request_refresh = 1;
 					}
 			}
 
@@ -3097,7 +3097,7 @@ void herokeeping(void)
 					GUI_output(buffer);
 
 					if (g_pp20_index == ARCHIVE_FILE_ZUSTA_UK) {
-						ds_writew(REQUEST_REFRESH, 1);
+						g_request_refresh = 1;
 					}
 			}
 

@@ -741,7 +741,7 @@ void tevent_100(void)
 				GUI_output(get_tx2(70));
 			}
 
-			ds_writew(REQUEST_REFRESH, 1);
+			g_request_refresh = 1;
 
 		} else if (answer == 3)
 		{

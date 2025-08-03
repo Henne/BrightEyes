@@ -171,7 +171,7 @@ void TRV_inside_herb_place(void)
 	}
 
 	set_var_to_zero();
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 }
 
 signed short TRV_found_camp_place(signed short a0)
@@ -210,7 +210,7 @@ signed short TRV_found_camp_place(signed short a0)
 		TRV_load_textfile(-1);
 
 		g_wildcamp_sleep_quality = ds_writews(REPLENISH_STOCKS_MOD, g_gather_herbs_mod = 0);
-		ds_writew(REQUEST_REFRESH, 2);
+		g_request_refresh = 2;
 
 		return 1;
 	}
@@ -268,7 +268,7 @@ void TRV_found_replenish_place(signed short a0)
 
 		set_var_to_zero();
 
-		ds_writew(REQUEST_REFRESH, 1);
+		g_request_refresh = 1;
 	}
 }
 
@@ -293,7 +293,7 @@ void TRV_found_inn(signed short town_id, signed short type)
 	}
 
 	set_var_to_zero();
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 }
 
 /**
@@ -312,7 +312,7 @@ signed short TRV_enter_hut_question(void)
 	answer = GUI_bool(get_tx(24));
 
 	set_var_to_zero();
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 
 	return answer;
 }
@@ -376,7 +376,7 @@ signed short TRV_cross_a_ford(char *msg, signed short time, signed short mod)
 
 	set_var_to_zero();
 	g_event_ani_busy = 0;
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 	return 1;
 }
 
@@ -664,7 +664,7 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 
 	set_var_to_zero();
 	g_event_ani_busy = 0;
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 }
 
 void tevent_005(void)

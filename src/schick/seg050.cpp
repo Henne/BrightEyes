@@ -958,7 +958,7 @@ void level_up(signed short hero_pos)
 	}
 
 	g_basepos_x = 0;
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 	g_timers_disabled = 0;
 
 	g_current_ani = -1;

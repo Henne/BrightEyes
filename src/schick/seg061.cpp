@@ -47,13 +47,13 @@ void do_temple(void)
 	signed short game_state;
 
 	g_intemple = g_intemple2 = 0;
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 
 	draw_loc_icons(9, MENU_ICON_HIRE_HERO, MENU_ICON_DISMISS_HERO, MENU_ICON_DELETE_HERO, MENU_ICON_LOAD_GAME, MENU_ICON_SAVE_GAME, MENU_ICON_QUIT_GAME, MENU_ICON_PRAY, MENU_ICON_SACRIFICE, MENU_ICON_LEAVE);
 
 	while (!done) {
 
-		if (ds_readws(REQUEST_REFRESH) != 0) {
+		if (g_request_refresh != 0) {
 
 			/* search which god owns this temple */
 			ds_writew(TEMPLE_GOD, 1);
@@ -90,7 +90,7 @@ void do_temple(void)
 
 			GUI_print_loc_line(g_dtp2);
 
-			ds_writew(REQUEST_REFRESH, 0);
+			g_request_refresh = 0;
 		}
 
 		handle_gui_input();

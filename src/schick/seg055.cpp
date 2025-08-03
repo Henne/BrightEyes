@@ -107,7 +107,7 @@ void do_merchant(void)
 	}
 
 	load_ggsts_nvf();
-	refresh = ds_writews(REQUEST_REFRESH, 1);
+	refresh = g_request_refresh = 1;
 
 	ds_writed(BUYITEMS, (Bit32u)g_fig_figure1_buf);
 	memset((Bit8u*)ds_readd(BUYITEMS), 0, 3500);
@@ -181,7 +181,7 @@ void do_merchant(void)
 
 	while (done == 0 && !gs_merchant_offended_flags[gs_current_typeindex]) {
 
-		if (ds_readws(REQUEST_REFRESH) != 0) {
+		if (g_request_refresh) {
 
 			draw_loc_icons(4, MENU_ICON_BUY, MENU_ICON_SELL, MENU_ICON_TALK, MENU_ICON_LEAVE);
 
@@ -198,8 +198,7 @@ void do_merchant(void)
 			GUI_print_loc_line(gs_current_loctype == LOCTYPE_MARKET ? get_ttx(679) : (gs_current_typeindex == 93 ?  get_ttx(46) : get_tx(gs_current_locdata)));
 			// CURRENT_TYPEINDEX 93 is the merchant from random city event 6.
 
-			ds_writew(REQUEST_REFRESH, refresh = 0);
-
+			g_request_refresh = refresh = 0;
 		}
 
 		if (refresh != 0) {

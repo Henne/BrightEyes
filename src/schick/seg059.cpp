@@ -48,7 +48,7 @@ void do_tavern(void)
 
 	GUI_print_loc_line(get_tx(gs_current_locdata));
 
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 
 	if (host_readws(tav_ptr) >= 6 && host_readws(tav_ptr) <= 13) {
 
@@ -70,7 +70,7 @@ void do_tavern(void)
 
 	while (!done) {
 
-		if (ds_readw(REQUEST_REFRESH) != 0) {
+		if (g_request_refresh != 0) {
 
 			draw_main_screen();
 			set_var_to_zero();
@@ -78,7 +78,7 @@ void do_tavern(void)
 			init_ani(0);
 			GUI_print_loc_line(get_tx(gs_current_locdata));
 			set_audio_track(ARCHIVE_FILE_INN_XMI);
-			ds_writew(REQUEST_REFRESH, 0);
+			g_request_refresh = 0;
 		}
 
 		handle_gui_input();
@@ -130,7 +130,7 @@ void do_tavern(void)
 				tavern_follow_informer();
 			}
 
-			ds_writew(REQUEST_REFRESH, done = 1);
+			g_request_refresh = done = 1;
 			ds_writew(COMBO_MODE, 0);
 
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_2) {
@@ -237,13 +237,13 @@ void do_tavern(void)
 void octopus_attack_wrapper(void)
 {
 	octopus_attack();
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 }
 
 void pirates_attack_wrapper(void)
 {
 	pirates_attack();
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 }
 
 void prolog_ghostship(void)
@@ -274,10 +274,10 @@ void prolog_ghostship(void)
 	} while (answer == -1);
 
 	if (answer == 1) {
-		ds_writew(REQUEST_REFRESH, 0);
+		g_request_refresh = 0;
 		ds_writeb(TRAVEL_DETOUR, DUNGEONS_TOTENSCHIFF);
 	} else {
-		ds_writew(REQUEST_REFRESH, 1);
+		g_request_refresh = 1;
 	}
 
 	set_var_to_zero();

@@ -439,7 +439,7 @@ void hero_disappear(Bit8u *hero, unsigned short pos, signed short temple_id)
 	if (temple_id != -2) {
 		draw_main_screen();
 		init_ani(2);
-		ds_writew(REQUEST_REFRESH, 1);
+		g_request_refresh = 1;
 	}
 
 	/* set flag to check all heroes */
@@ -857,7 +857,7 @@ void tevent_107(void)
 	}
 
 	set_var_to_zero();
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 }
 
 /* Phexcaer <-> Skelellen: entrance to the dungeon 'orc cave' */

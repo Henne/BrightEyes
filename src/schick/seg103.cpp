@@ -542,7 +542,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 					gs_ingame_timers[INGAME_TIMER_AKROBATIK] = HOURS(8);
 
-					ds_writew(REQUEST_REFRESH, 1);
+					g_request_refresh = 1;
 				} else {
 					GUI_output(get_tx(36));
 
@@ -575,7 +575,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 					gs_ingame_timers[INGAME_TIMER_MUSIZIEREN] = HOURS(8);
 
-					ds_writew(REQUEST_REFRESH, 1);
+					g_request_refresh = 1;
 				} else {
 					GUI_output(get_tx(36));
 
@@ -600,7 +600,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 				add_party_money(money);
 
-				ds_writew(REQUEST_REFRESH, 1);
+				g_request_refresh = 1;
 			} else {
 				GUI_output(get_tx(39));
 
@@ -628,7 +628,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 				add_party_money(money);
 
-				ds_writew(REQUEST_REFRESH, 1);
+				g_request_refresh = 1;
 			} else {
 				sprintf(g_dtp2,
 					get_tx(41),
@@ -638,7 +638,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 				set_party_money(0);
 
-				ds_writew(REQUEST_REFRESH, 1);
+				g_request_refresh = 1;
 
 				l_si = -1;
 			}

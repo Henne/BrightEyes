@@ -77,7 +77,7 @@ signed short do_travel_mode(void)
 	signpost_ptr = p_datseg + SIGNPOSTS;
 
 	do {
-		if (ds_readws(REQUEST_REFRESH) != 0)
+		if (g_request_refresh != 0)
 		{
 			update_mouse_cursor();
 
@@ -97,7 +97,7 @@ signed short do_travel_mode(void)
 
 			refresh_screen_size();
 
-			ds_writew(REQUEST_REFRESH, 0);
+			g_request_refresh = 0;
 		}
 
 		if (host_readbs(signpost_ptr + SIGNPOST_TOWN) == gs_current_town && host_readb(signpost_ptr + SIGNPOST_TYPEINDEX) == ds_readw(CURRENT_SIGNPOST))
@@ -284,7 +284,7 @@ signed short do_travel_mode(void)
 	}
 
 	g_current_ani = g_city_area_loaded = g_pp20_index = -1;
-	ds_writew(REQUEST_REFRESH, (unsigned short)(g_fading_state = 1));
+	g_request_refresh = g_fading_state = 1;
 	g_wallclock_update = bak1;
 
 	return 0;

@@ -300,7 +300,7 @@ void TM_func1(signed short route_no, signed short backwards)
 
 				g_good_camp_place = gs_current_loctype = g_wildcamp_sleep_quality = 0;
 				g_wallclock_update = 0;
-				ds_writew(REQUEST_REFRESH, 2);
+				g_request_refresh = 2;
 			}
 		}
 
@@ -350,7 +350,7 @@ void TM_func1(signed short route_no, signed short backwards)
 							ds_writeb(ROUTE_TEVENT_FLAGS + gs_trv_i, 0);
 						}
 
-						if (ds_readws(REQUEST_REFRESH) != 0 && !ds_readb(TRAVEL_DETOUR))
+						if (g_request_refresh != 0 && !ds_readb(TRAVEL_DETOUR))
 						{
 							g_wallclock_update = 0;
 						}
@@ -368,7 +368,7 @@ void TM_func1(signed short route_no, signed short backwards)
 		{
 			g_wallclock_update = 0;
 
-			if (ds_readws(REQUEST_REFRESH) != 0)
+			if (g_request_refresh != 0)
 			{
 				load_map();
 			}
@@ -379,7 +379,7 @@ void TM_func1(signed short route_no, signed short backwards)
 			do_location();
 			gs_current_loctype = LOCTYPE_NONE;
 
-			ds_writew(REQUEST_REFRESH, 2);
+			g_request_refresh = 2;
 			g_wallclock_update = 0;
 
 			if (ds_readws(GAME_STATE) == GAME_STATE_MAIN)
@@ -418,7 +418,7 @@ void TM_func1(signed short route_no, signed short backwards)
 			disease_effect();
 		}
 
-		if (ds_readw(REQUEST_REFRESH) != 0 && !ds_readb(TRAVEL_DETOUR) && ds_readw(GAME_STATE) == GAME_STATE_MAIN)
+		if (g_request_refresh != 0 && !ds_readb(TRAVEL_DETOUR) && ds_readw(GAME_STATE) == GAME_STATE_MAIN)
 		{
 			update_mouse_cursor();
 			load_map();
@@ -448,7 +448,7 @@ void TM_func1(signed short route_no, signed short backwards)
 
 			refresh_screen_size();
 
-			if (ds_readws(REQUEST_REFRESH) == 2 && route_no != 59)
+			if (g_request_refresh == 2 && route_no != 59)
 			{
 			    /* Return or continue? */
 				if (GUI_radio(get_tx(71), 2, get_tx(72), get_tx(73)) == 2)
@@ -464,7 +464,7 @@ void TM_func1(signed short route_no, signed short backwards)
 			ds_writew(WALLCLOCK_X, g_basepos_x + 120);
 			ds_writew(WALLCLOCK_Y, g_basepos_y + 87);
 			g_wallclock_update = 1;
-			ds_writew(REQUEST_REFRESH, 0);
+			g_request_refresh = 0;
 		}
 
 #if defined(__BORLANDC__)

@@ -70,13 +70,13 @@ void do_healer(void)
 	D1_INFO("\tQualitaet: %2d [1,15]\n", h_qual);
 #endif
 
-	request_refresh = ds_writew(REQUEST_REFRESH, 1);
+	request_refresh = g_request_refresh = 1;
 	healer_stats_ptr = p_datseg + HEALER_DESCR_TABLE + gs_current_typeindex * SIZEOF_HEALER_STATS;
 	draw_loc_icons(4, MENU_ICON_HEAL_WOUNDS, MENU_ICON_HEAL_DISEASE, MENU_ICON_HEAL_POISON, MENU_ICON_LEAVE);
 
 	while (leave_healer == 0) {
 
-		if (ds_readw(REQUEST_REFRESH) != 0) {
+		if (g_request_refresh != 0) {
 			draw_main_screen();
 			set_var_to_zero();
 			load_ani(23);
@@ -86,7 +86,7 @@ void do_healer(void)
 
 			set_audio_track(ARCHIVE_FILE_HEALER_XMI);
 
-			ds_writew(REQUEST_REFRESH, request_refresh = 0);
+			g_request_refresh = request_refresh = 0;
 
 			if (!motivation) {
 

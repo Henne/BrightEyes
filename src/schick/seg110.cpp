@@ -770,7 +770,7 @@ void tevent_046(void)
 	set_var_to_zero();
 	/* resume traveling */
 	g_event_ani_busy = 0;
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 }
 
 /* Daspota <-> Ottarje: alte Feuerstelle. idealer Rastplatz. */

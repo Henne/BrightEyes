@@ -59,11 +59,11 @@ void show_automap(void)
 		gs_current_town = ((signed char)town);
 		gs_dungeon_index = dungeon;
 
-		ds_writew(REQUEST_REFRESH, 1);
+		g_request_refresh = 1;
 
 		do {
 
-			if (ds_readw(REQUEST_REFRESH) != 0) {
+			if (g_request_refresh != 0) {
 
 				loc_bak = gs_current_loctype;
 				gs_current_loctype = LOCTYPE_UNKN1;
@@ -82,7 +82,7 @@ void show_automap(void)
 				clear_ani_pal();
 				draw_automap_to_screen();
 				set_ani_pal(p_datseg + PALETTE_FIGHT2);
-				ds_writew(REQUEST_REFRESH, 0);
+				g_request_refresh = 0;
 			}
 
 			done = 0;
@@ -133,7 +133,7 @@ void show_automap(void)
 		} while (done == 0);
 
 		g_textbox_width = tw_bak;
-		ds_writew(REQUEST_REFRESH, 1);
+		g_request_refresh = 1;
 
 		clear_ani_pal();
 
@@ -631,7 +631,7 @@ signed short select_teleport_dest(void)
 	}
 
 	g_textbox_width = tw_bak;
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 
 	return ae_costs;
 }

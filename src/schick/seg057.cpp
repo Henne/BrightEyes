@@ -95,12 +95,12 @@ void sell_screen(Bit8u *shop_ptr)
 
 
 	g_heroswap_allowed = 0;
-	l8 = ds_writews(REQUEST_REFRESH, 1);
+	l8 = g_request_refresh = 1;
 	ds_writed(SELLITEMS, (Bit32u)(g_fig_figure1_buf + 2100));
 
 	while (done == 0) {
 
-		if (ds_readws(REQUEST_REFRESH) != 0) {
+		if (g_request_refresh != 0) {
 
 			set_var_to_zero();
 			g_pp20_index = -1;
@@ -135,7 +135,7 @@ void sell_screen(Bit8u *shop_ptr)
 			l5 = -1;
 			l6 = 0;
 			l10 = 1;
-			ds_writew(REQUEST_REFRESH, 0);
+			g_request_refresh = 0;
 		}
 
 		if (l8 != 0 || l10 != 0 || l11 != 0) {
@@ -553,7 +553,7 @@ void sell_screen(Bit8u *shop_ptr)
 	}
 
 	set_textcolor(fg_bak, bg_bak);
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 	g_pp20_index = -1;
 	g_heroswap_allowed = 1;
 }

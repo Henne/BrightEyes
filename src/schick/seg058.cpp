@@ -482,7 +482,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 		}
 
 		set_textcolor(fg_bak, bg_bak);
-		ds_writew(REQUEST_REFRESH, 1);
+		g_request_refresh = 1;
 		g_pp20_index = -1;
 	}
 }
@@ -513,13 +513,13 @@ void do_smith(void)
 	}
 
 	load_ggsts_nvf();
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 	smith_ptr = p_datseg + SMITH_DESCR_TABLE + SIZEOF_SMITH_STATS * gs_current_typeindex;
 	ds_writew(PRICE_MODIFICATOR, 4);
 
 	while (!done) {
 
-		if (ds_readws(REQUEST_REFRESH) != 0) {
+		if (g_request_refresh != 0) {
 
 			draw_loc_icons(3, MENU_ICON_TALK, MENU_ICON_REPAIR, MENU_ICON_LEAVE);
 			draw_main_screen();
@@ -528,7 +528,7 @@ void do_smith(void)
 			init_ani(0);
 			GUI_print_loc_line(get_tx(gs_current_locdata));
 			set_audio_track(ARCHIVE_FILE_SMITH_XMI);
-			ds_writew(REQUEST_REFRESH, 0);
+			g_request_refresh = 0;
 		}
 
 		handle_gui_input();
@@ -555,7 +555,7 @@ void do_smith(void)
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_1) {
 
 			talk_smith();
-			ds_writew(REQUEST_REFRESH, 1);
+			g_request_refresh = 1;
 
 			if (gs_smith_kicked_flags[gs_current_typeindex] ||
 				gs_smith_flogged_flags[gs_current_typeindex] ||

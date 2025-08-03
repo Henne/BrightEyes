@@ -130,11 +130,11 @@ void buy_screen(void)
 	ds_writed(BUY_SHOPPING_CART, (Bit32u)(g_fig_figure1_buf + 2800));
 	memset((Bit8u*)ds_readd(BUY_SHOPPING_CART), 0, 250);
 
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 
 	while (done == 0) {
 
-		if (ds_readws(REQUEST_REFRESH) != 0) {
+		if (g_request_refresh != 0) {
 
 			free_slots = 0;
 			hero2 = get_hero(0);
@@ -180,7 +180,7 @@ void buy_screen(void)
 			GUI_print_string(g_dtp2, 104 - GUI_get_space_for_string(g_dtp2, 0), 26);
 
 			l8 = 1;
-			ds_writew(REQUEST_REFRESH, 0);
+			g_request_refresh = 0;
 		}
 
 		if (l8 != 0) {
@@ -609,7 +609,7 @@ void buy_screen(void)
 	}
 
 	set_textcolor(fg_bak, bg_bak);
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 	g_pp20_index = -1;
 }
 

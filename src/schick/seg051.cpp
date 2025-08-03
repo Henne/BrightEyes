@@ -54,7 +54,7 @@ void do_wildcamp(void)
 	done = 0;
 	stock_tries = 0;
 	herb_tries = 0;
-	l_di = ds_writews(REQUEST_REFRESH, 1);
+	l_di = g_request_refresh = 1;
 
 	for (i = 0; i <= 6; i++) {
 		ds_writebs(WILDCAMP_HERBSTATUS + i, ds_writebs(WILDCAMP_REPLSTATUS + i, ds_writebs(WILDCAMP_MAGICSTATUS + i , ds_writeb(WILDCAMP_GUARDSTATUS + i, 0))));
@@ -69,14 +69,14 @@ void do_wildcamp(void)
 
 	while (done == 0) {
 
-		if (ds_readws(REQUEST_REFRESH) != 0) {
+		if (g_request_refresh != 0) {
 			draw_main_screen();
 			set_var_to_zero();
 			load_ani(2);
 			init_ani(0);
 			GUI_print_loc_line(get_ttx(306));
 			set_audio_track(ARCHIVE_FILE_CAMP_XMI);
-			ds_writew(REQUEST_REFRESH, l_di = 0);
+			g_request_refresh = l_di = 0;
 		}
 
 		if (l_di) {
@@ -351,7 +351,7 @@ void do_wildcamp(void)
 						GUI_print_loc_line(get_ttx(306));
 						set_audio_track(ARCHIVE_FILE_CAMP_XMI);
 
-						ds_writew(REQUEST_REFRESH, l_di = 0);
+						g_request_refresh = l_di = 0;
 
 						if (l6 > 0) {
 							g_food_mod = 1;
@@ -560,7 +560,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 						/* the group may get three food packages */
 						if (!get_item(ITEM_FOOD_PACKAGE, 1, 3)) {
 							strcpy(g_dtp2, get_ttx(306));
-							ds_writew(REQUEST_REFRESH, 1);
+							g_request_refresh = 1;
 						} else {
 							sprintf(g_dtp2,
 								get_ttx(325),

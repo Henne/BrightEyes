@@ -151,7 +151,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 			}
 		}
 
-		ds_writew(REQUEST_REFRESH, 1);
+		g_request_refresh = 1;
 
 	} else if (item_herb_potion(item_p)) {
 
@@ -538,7 +538,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 			}
 		}
 
-		ds_writew(REQUEST_REFRESH, 1);
+		g_request_refresh = 1;
 	} else {
 		/* this item cannot be consumed */
 		GUI_output(get_ttx(206));

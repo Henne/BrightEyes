@@ -320,7 +320,7 @@ void do_inn(void)
 
 	if (done == 0) {
 
-		refresh = ds_writews(REQUEST_REFRESH, 1);
+		refresh = g_request_refresh = 1;
 
 		draw_loc_icons(ds_readws(COMBO_MODE) == 0 ? 7 : 8, MENU_ICON_TALK, MENU_ICON_ORDER_FOOD, MENU_ICON_BOOK_BED, MENU_ICON_APPLY_SKILL, MENU_ICON_MAGIC, MENU_ICON_SLEEP, MENU_ICON_LEAVE, MENU_ICON_TAVERN);
 
@@ -337,7 +337,7 @@ void do_inn(void)
 
 	while (done == 0) {
 
-		if (ds_readws(REQUEST_REFRESH) != 0) {
+		if (g_request_refresh != 0) {
 
 			draw_main_screen();
 
@@ -349,7 +349,7 @@ void do_inn(void)
 
 			GUI_print_loc_line(get_tx(gs_current_locdata));
 
-			ds_writews(REQUEST_REFRESH, refresh = 0);
+			g_request_refresh = refresh = 0;
 		}
 
 		if (refresh != 0) {
@@ -378,7 +378,7 @@ void do_inn(void)
 
 		if (ds_readws(ACTION) == ACTION_ID_ICON_1) {
 			talk_inn();
-			ds_writews(REQUEST_REFRESH, 1);
+			g_request_refresh = 1;
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_2) { /* order food */
 
 			price = count_heroes_in_group() * (6L - host_readws(inn_ptr + INN_STATS_QUALITY) / 4L); /* higher food quality -> higher price */

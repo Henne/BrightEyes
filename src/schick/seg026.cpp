@@ -385,7 +385,7 @@ signed short load_game_state(void)
 		}
 
 		g_area_prepared = -1;
-		ds_writew(REQUEST_REFRESH, retval = 1);
+		g_request_refresh = retval = 1;
 		g_check_disease = 0;
 		g_check_poison = 0;
 		g_fading_state = 3;

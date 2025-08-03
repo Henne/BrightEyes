@@ -389,7 +389,7 @@ void GRP_switch_to_next(signed short mode)
 			gs_food_message[group] = gs_unconscious_message[group] = 0;
 		}
 
-		ds_writew(REQUEST_REFRESH, 1);
+		g_request_refresh = 1;
 	}
 }
 

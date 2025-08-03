@@ -446,11 +446,11 @@ signed short DNG_step(void)
 		ds_writew(REDRAW_MENUICONS, 1);
 	}
 
-	if (ds_readw(REQUEST_REFRESH) != 0)
+	if (g_request_refresh != 0)
 	{
 		draw_main_screen();
 		GUI_print_loc_line(get_tx(0));
-		ds_writew(REQUEST_REFRESH, ds_writew(REDRAW_MENUICONS, 0));
+		g_request_refresh = ds_writew(REDRAW_MENUICONS, 0);
 		ds_writew(DNG_REFRESH_X_TARGET, -1);
 	}
 
@@ -797,7 +797,7 @@ void do_dungeon(void)
 #endif
 
 		ds_writew(DNG_INIT_FLAG, 0);
-		ds_writew(REQUEST_REFRESH, 1);
+		g_request_refresh = 1;
 	}
 
 	g_current_ani = -1;

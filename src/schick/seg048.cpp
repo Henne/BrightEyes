@@ -103,13 +103,13 @@ void status_menu(signed short hero_pos)
 
 	load_ggsts_nvf();
 
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 	ds_writew(ACTION, 0);
 	g_status_page_mode = 1;
 
 	while (flag1 == 0) {
 
-		if (ds_readw(REQUEST_REFRESH) != 0 || flag2 != 0) {
+		if (g_request_refresh != 0 || flag2 != 0) {
 
 			g_status_page_hero = hero_pos;
 
@@ -164,7 +164,7 @@ void status_menu(signed short hero_pos)
 
 			refresh_screen_size();
 
-			ds_writew(REQUEST_REFRESH, flag2 = 0);
+			g_request_refresh = flag2 = 0;
 		}
 
 		handle_input();
@@ -199,7 +199,7 @@ void status_menu(signed short hero_pos)
 				reset_item_selector();
 			}
 
-			ds_writew(REQUEST_REFRESH, 1);
+			g_request_refresh = 1;
 		}
 
 		/* LEFT_KEY */
@@ -231,7 +231,7 @@ void status_menu(signed short hero_pos)
 				reset_item_selector();
 			}
 
-			ds_writew(REQUEST_REFRESH, 1);
+			g_request_refresh = 1;
 		}
 
 		if (g_status_page_mode < 3) {
@@ -375,7 +375,7 @@ void status_menu(signed short hero_pos)
 
 						if (ds_readbs(STATUSPAGE_SELITEM4_NO) < 23) {
 							pass_item(hero1, ds_readbs(STATUSPAGE_SELITEM3_NO), hero2, ds_readbs(STATUSPAGE_SELITEM4_NO));
-							ds_writew(REQUEST_REFRESH, 1);
+							g_request_refresh = 1;
 						} else if (ds_readbs(STATUSPAGE_SELITEM4_NO) == 23) { /* eye icon */
 							print_item_description(hero1, ds_readbs(STATUSPAGE_SELITEM3_NO));
 						} else if (ds_readbs(STATUSPAGE_SELITEM4_NO) == 24) { /* mouth icon */
@@ -396,7 +396,7 @@ void status_menu(signed short hero_pos)
 					} else {
 						if (ds_readbs(STATUSPAGE_SELITEM4_NO) < 23) {
 							move_item(ds_readbs(STATUSPAGE_SELITEM3_NO), ds_readbs(STATUSPAGE_SELITEM4_NO), hero2);
-							ds_writew(REQUEST_REFRESH, 1);
+							g_request_refresh = 1;
 						} else if (ds_readbs(STATUSPAGE_SELITEM4_NO) == 23) { /* eye icon */
 							print_item_description(hero2, ds_readbs(STATUSPAGE_SELITEM3_NO));
 						} else if (ds_readbs(STATUSPAGE_SELITEM4_NO) == 24) { /* mouth icon */
@@ -513,7 +513,7 @@ void status_menu(signed short hero_pos)
 						} else {
 							GUI_input(get_tx2(70), 15);
 							strcpy((char*)hero2 + HERO_NAME2, g_text_input_buf);
-							ds_writew(REQUEST_REFRESH, 1);
+							g_request_refresh = 1;
 						}
 						break;
 					}
@@ -524,7 +524,7 @@ void status_menu(signed short hero_pos)
 						} else {
 							use_item(ds_readbs(STATUSPAGE_SELITEM3_NO), hero_pos);
 							reset_item_selector();
-							ds_writew(REQUEST_REFRESH, 1);
+							g_request_refresh = 1;
 						}
 						break;
 					}
@@ -535,7 +535,7 @@ void status_menu(signed short hero_pos)
 						} else {
 							drop_item(hero2, ds_readbs(STATUSPAGE_SELITEM3_NO), -1);
 							reset_item_selector();
-							ds_writew(REQUEST_REFRESH, 1);
+							g_request_refresh = 1;
 						}
 						break;
 					}
@@ -556,7 +556,7 @@ void status_menu(signed short hero_pos)
 							load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
 							reset_item_selector();
 						}
-						ds_writew(REQUEST_REFRESH, 1);
+						g_request_refresh = 1;
 						break;
 					}
 					case 6: {
@@ -572,7 +572,7 @@ void status_menu(signed short hero_pos)
 								GUI_output(g_dtp2);
 						} else {
 							g_status_page_mode = 2;
-							ds_writew(REQUEST_REFRESH, 1);
+							g_request_refresh = 1;
 						}
 						break;
 					}
@@ -584,7 +584,7 @@ void status_menu(signed short hero_pos)
 						} else {
 							reset_item_selector();
 							g_status_page_mode = 3;
-							ds_writew(REQUEST_REFRESH, 1);
+							g_request_refresh = 1;
 						}
 						break;
 					}
@@ -596,7 +596,7 @@ void status_menu(signed short hero_pos)
 						} else {
 							reset_item_selector();
 							g_status_page_mode = 4;
-							ds_writew(REQUEST_REFRESH, 1);
+							g_request_refresh = 1;
 						}
 						break;
 					}
@@ -652,7 +652,7 @@ void status_menu(signed short hero_pos)
 						} else {
 							drop_item(hero2, ds_readbs(STATUSPAGE_SELITEM3_NO), -1);
 							reset_item_selector();
-							ds_writew(REQUEST_REFRESH, 1);
+							g_request_refresh = 1;
 						}
 						break;
 					}
@@ -672,20 +672,20 @@ void status_menu(signed short hero_pos)
 						if (select_magic_user() != -2) {
 							load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
 							reset_item_selector();
-							ds_writew(REQUEST_REFRESH, 1);
+							g_request_refresh = 1;
 						}
 						break;
 					}
 					case 5: {
 						/* TODO: different code is generated here */
 						g_status_page_mode = 1;
-						ds_writew(REQUEST_REFRESH, 1);
+						g_request_refresh = 1;
 						break;
 					}
 					case 6: {
 						reset_item_selector();
 						g_status_page_mode = 3;
-						ds_writew(REQUEST_REFRESH, 1);
+						g_request_refresh = 1;
 						break;
 					}
 					case 7: {
@@ -695,7 +695,7 @@ void status_menu(signed short hero_pos)
 						} else {
 							reset_item_selector();
 							g_status_page_mode = 4;
-							ds_writew(REQUEST_REFRESH, 1);
+							g_request_refresh = 1;
 						}
 						break;
 					}
@@ -733,12 +733,12 @@ void status_menu(signed short hero_pos)
 					}
 					case 2: {
 						g_status_page_mode = 1;
-						ds_writew(REQUEST_REFRESH, 1);
+						g_request_refresh = 1;
 						break;
 					}
 					case 3: {
 						g_status_page_mode = 2;
-						ds_writew(REQUEST_REFRESH, 1);
+						g_request_refresh = 1;
 						break;
 					}
 					case 4: {
@@ -747,7 +747,7 @@ void status_menu(signed short hero_pos)
 							GUI_output(get_ttx(215));
 						} else {
 							g_status_page_mode = 4;
-							ds_writew(REQUEST_REFRESH, 1);
+							g_request_refresh = 1;
 						}
 						break;
 					}
@@ -755,7 +755,7 @@ void status_menu(signed short hero_pos)
 						/* cast spell */
 						if (select_magic_user() != -2) {
 							load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
-							ds_writew(REQUEST_REFRESH, 1);
+							g_request_refresh = 1;
 						}
 						break;
 					}
@@ -784,23 +784,23 @@ void status_menu(signed short hero_pos)
 						/* cast spell */
 						if (select_magic_user() != -2) {
 							load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
-							ds_writew(REQUEST_REFRESH, 1);
+							g_request_refresh = 1;
 						}
 						break;
 					}
 					case 2: {
 						g_status_page_mode = 1;
-						ds_writew(REQUEST_REFRESH, 1);
+						g_request_refresh = 1;
 						break;
 					}
 					case 3: {
 						g_status_page_mode = 2;
-						ds_writew(REQUEST_REFRESH, 1);
+						g_request_refresh = 1;
 						break;
 					}
 					case 4: {
 						g_status_page_mode = 3;
-						ds_writew(REQUEST_REFRESH, 1);
+						g_request_refresh = 1;
 						break;
 					}
 					case 5: {
@@ -808,7 +808,7 @@ void status_menu(signed short hero_pos)
 							g_status_page_mode = 5;
 						else
 							g_status_page_mode = 4;
-						ds_writew(REQUEST_REFRESH, 1);
+						g_request_refresh = 1;
 						break;
 					}
 					case 6: {
@@ -834,7 +834,7 @@ void status_menu(signed short hero_pos)
 		load_tx2(file_bak);
 	}
 
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 	g_textbox_width = tw_bak;
 	g_timers_disabled--;
 

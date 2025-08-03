@@ -80,7 +80,7 @@ void resume_traveling(void)
 
 	set_var_to_zero();
 
-	ds_writew(REQUEST_REFRESH, ds_writeb(SHOW_TRAVEL_MAP, 1));
+	g_request_refresh = ds_writeb(SHOW_TRAVEL_MAP, 1);
 
 	g_event_ani_busy = 0;
 	ds_writeb(TRAVEL_EVENT_ACTIVE, 0);
@@ -824,7 +824,7 @@ void TLK_way_to_ruin(signed short state)
 		draw_main_screen();
 		init_ani(0);
 		timewarp(MINUTES(90));
-		ds_writew(REQUEST_REFRESH, 1);
+		g_request_refresh = 1;
 	} else if (state == 42 || state == 60) {
 		timewarp(MINUTES(150));
 	} else if (state == 67 || state == 44) {

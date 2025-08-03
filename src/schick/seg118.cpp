@@ -220,7 +220,7 @@ void tevent_037(void)
 		set_var_to_zero();
 
 		g_event_ani_busy = 0;
-		ds_writew(REQUEST_REFRESH, 1);
+		g_request_refresh = 1;
 	}
 }
 

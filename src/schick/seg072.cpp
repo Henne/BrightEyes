@@ -306,7 +306,7 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 				/* remove the NPC from the group */
 				remove_npc(24, 31, 0xe7, get_ttx(758), NULL);
 
-				ds_writew(REQUEST_REFRESH, 1);
+				g_request_refresh = 1;
 
 			} else if (state == 7 || state == 8 || state == 9 || state == 10) {
 				timewarp(MINUTES(30));

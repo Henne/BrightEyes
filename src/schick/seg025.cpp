@@ -73,17 +73,17 @@ void show_entrance(void)
  */
 void show_citizen(void)
 {
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 
 	do {
 		handle_gui_input();
 
-		if (ds_readw(REQUEST_REFRESH) != 0) {
+		if (g_request_refresh != 0) {
 
 			draw_main_screen();
 			set_var_to_zero();
 			load_ani(20);
-			init_ani(ds_writew(REQUEST_REFRESH, 0));
+			init_ani(g_request_refresh = 0);
 
 			strcpy(g_text_output_buf, get_tx(gs_current_locdata));
 
@@ -386,7 +386,7 @@ void show_treasure_map(void)
 			g_pp20_index = pp20_index_bak;
 		} else {
 			g_current_ani = -1;
-			ds_writew(REQUEST_REFRESH, 1);
+			g_request_refresh = 1;
 			g_area_prepared = -1;
 			g_special_screen = 0;
 			draw_main_screen();
@@ -583,7 +583,7 @@ signed short game_options(void)
 	g_gui_buffer_unkn = g_renderbuf_ptr;
 
 	g_fig_figure1 = g_fig_figure2 = g_current_ani = g_pp20_index = -1;
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 	g_special_screen = 0;
 
 	if (gs_current_town != TOWNS_NONE) {
@@ -728,7 +728,7 @@ void leave_location(void)
 
 	set_to_ff();
 
-	ds_writew(REQUEST_REFRESH, g_special_screen = 1);
+	g_request_refresh = g_special_screen = 1;
 }
 
 void leave_dungeon(void)
@@ -754,7 +754,7 @@ void leave_dungeon(void)
 	gs_dungeon_index_bak = gs_dungeon_index;
 	gs_dungeon_index = gs_dungeon_level = ds_writeb(DUNGEON_LIGHT, 0);
 	g_city_area_loaded = -1;
-	g_fading_state = ds_writew(REQUEST_REFRESH, 1);
+	g_fading_state = g_request_refresh = 1;
 
 	do_fill_rect(g_renderbuf_ptr, 0, 0, 319, 199, 0);
 

@@ -975,7 +975,7 @@ signed short do_fight(signed short fight_id)
 	g_fig_figure1 = g_fig_figure2 = -1;
 	ds_writew(FIGHT_FIGS_INDEX, -1);
 
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 
 	ds_writed(ACTION_TABLE_PRIMARY, (Bit32u)(p_datseg + ACTION_TABLE_MENU));
 
@@ -1043,9 +1043,9 @@ signed short do_fight(signed short fight_id)
 	/* the fight happens in this loop */
 	while (g_in_fight) {
 
-		if (ds_readws(REQUEST_REFRESH) != 0) {
+		if (g_request_refresh != 0) {
 			draw_fight_screen_pal(0);
-			ds_writew(REQUEST_REFRESH, 0);
+			g_request_refresh = 0;
 		}
 
 		/* TODO: isnt that bogus? */
@@ -1256,7 +1256,7 @@ signed short do_fight(signed short fight_id)
 	g_fig_discard = 0;
 	g_max_enemies = 0;
 	g_in_fight = 0;
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 	g_current_ani = -1;
 	g_area_prepared = -1;
 	g_timers_disabled = 0;

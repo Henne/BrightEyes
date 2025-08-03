@@ -281,7 +281,7 @@ void tevent_111(void)
 		}
 
 		set_var_to_zero();
-		ds_writew(REQUEST_REFRESH, 1);
+		g_request_refresh = 1;
 	}
 
 	g_event_ani_busy = 0;
@@ -347,7 +347,7 @@ void tevent_113(void)
 		gs_current_loctype = LOCTYPE_NONE;
 
 		g_textbox_width = 9;
-		ds_writew(REQUEST_REFRESH, 2);
+		g_request_refresh = 2;
 	}
 }
 
