@@ -13,12 +13,6 @@
  *
  */
 
-#if !defined(__BORLANDC__)
-#include "paging.h"
-#include "../../ints/int10.h"
-#include "callback.h"
-#endif
-
 #include "v302de.h"
 
 
@@ -26,75 +20,29 @@
 namespace M302de {
 #endif
 
-unsigned short swap_u16(unsigned short val) {
+unsigned short swap_u16(unsigned short val)
+{
 	return (val << 8) | (val >> 8);
 }
 
-void set_video_mode(signed short mode) {
-	INT10_SetVideoMode(mode);
+void set_video_mode(signed short mode)
+{
 }
 
-void set_video_page(signed short page) {
-	INT10_SetActivePage(page);
+void set_video_page(signed short page)
+{
 }
 
-void save_display_stat(Bit8u* p) {
-
-	/* save some registers that may change on the stack,
-		because we call an interrupt */
-	CPU_Push16(SegValue(ds));
-	CPU_Push16(SegValue(es));
-	CPU_Push16(reg_si);
-	CPU_Push16(reg_di);
-	CPU_Push16(reg_bp);
-
-	reg_ah = 0x0f;
-	CALLBACK_RunRealInt(0x10);
-
-	reg_dx = reg_ax;
-	reg_ax = 0;
-
-	/* write the current active display mode */
-	reg_al = reg_bh;
-	host_writew((Bit8u*)(p), reg_ax);
-	p += 2;
-
-	/* write the current video mode */
-	reg_al = reg_dl;
-	host_writew((Bit8u*)(p), reg_ax);
-	p += 2;
-
-	/* write the number of columns in text mode */
-	reg_al = reg_dh;
-	host_writew((Bit8u*)(p), reg_ax);
-	p += 2;
-
-	reg_ax = 0x1130;
-	reg_bh = 0x02;
-	CALLBACK_RunRealInt(0x10);
-
-	/* write the number of lines in text mode */
-	reg_dh = 0;
-	reg_dx++;
-	host_writew((Bit8u*)(p), reg_dx);
-
-	/* restore some registers from the stack */
-	reg_bp = CPU_Pop16();
-	reg_di = CPU_Pop16();
-	reg_si = CPU_Pop16();
-	SegSet16(es, CPU_Pop16());
-	SegSet16(ds, CPU_Pop16());
+void save_display_stat(Bit8u* p)
+{
 }
 
-void set_color(Bit8u *ptr, unsigned char color){
-	INT10_SetSingleDacRegister(color, ptr[0], ptr[1], ptr[2]);
+void set_color(Bit8u *ptr, unsigned char color)
+{
 }
 
-void set_palette(Bit8u *ptr, unsigned short first_color, unsigned short colors){
-	unsigned short i;
-	for (i = 0; i < colors; i++)
-		INT10_SetSingleDacRegister(first_color + i,
-			ptr[i*3], ptr[i*3+1], ptr[i*3+2]);
+void set_palette(Bit8u *ptr, unsigned short first_color, unsigned short colors)
+{
 }
 
 void draw_h_line(Bit8u *ptr, unsigned short count, signed short color) {
@@ -261,7 +209,9 @@ void pic_copy(Bit8u *dst, short x1, short y1, short x2, short y2,
 void save_rect(Bit16u seg, Bit16u off, Bit8u *dst, unsigned short width, unsigned short height)
 {
 	for (; height; height--) {
+#if defined(__BORLANDC__)
 		memcpy((void*)dst, MK_FP(seg, off), width);
+#endif
 		off += 320;
 		dst += width;
 	}
@@ -273,7 +223,9 @@ void fill_rect(Bit16u seg, Bit16u off, signed short color, signed short width, s
 
 	for (; height; height--) {
 		for (x = 0; x < width; x++) {
+#if defined(__BORLANDC__)
 			*MK_FP(seg, off++) = color;
+#endif
 		}
 
 		off += 320 - width;
