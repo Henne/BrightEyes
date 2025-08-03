@@ -327,7 +327,7 @@ void buy_screen(void)
 			l15 = 0;
 		}
 
-		if ((ds_readws(MOUSE2_EVENT) != 0) && get_mouse_action(ds_readws(MOUSE_POSX), ds_readws(MOUSE_POSY), p_datseg + ACTION_TABLE_MERCHANT)) {
+		if ((ds_readws(MOUSE2_EVENT) != 0) && get_mouse_action(g_mouse_posx, g_mouse_posy, p_datseg + ACTION_TABLE_MERCHANT)) {
 			ds_writew(ACTION, ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK);
 		}
 

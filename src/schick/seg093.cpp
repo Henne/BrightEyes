@@ -208,7 +208,7 @@ signed short do_travel_mode(void)
 						}
 					}
 
-					if (l4 == -1 && (l_di = get_mouse_action(ds_readws(MOUSE_POSX), ds_readws(MOUSE_POSY), p_datseg + ACTION_TABLE_TRAVELMAP)))
+					if (l4 == -1 && (l_di = get_mouse_action(g_mouse_posx, g_mouse_posy, p_datseg + ACTION_TABLE_TRAVELMAP)))
 					{
 						l4 = l_di + 51;
 					}
@@ -220,7 +220,7 @@ signed short do_travel_mode(void)
 						l6 = g_basepos_x;
 						l7 = g_basepos_y;
 						g_basepos_y = 0;
-						g_basepos_x = (ds_readws(MOUSE_POSX) >= 0 && ds_readws(MOUSE_POSX) <= 159 ? 80 : -80);
+						g_basepos_x = (g_mouse_posx >= 0 && g_mouse_posx <= 159 ? 80 : -80);
 
 						set_and_spin_lock();
 

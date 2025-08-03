@@ -143,13 +143,13 @@
 #define MOUSE_POSY_MAX                  (0x298c)    /* unsigned short */
 #define MOUSE_POSX_MAX                  (0x298e)    /* unsigned short */
 #define PIC_COPY_DS_RECT                (0x2990)    /* struct(8); struct screen_rect */
-#define MOUSE_LOCKED                    (0x2998)    /* unsigned short */
-#define MOUSE_REFRESH_FLAG              (0x299a)    /* signed short */
-#define MOUSE_POSX                      (0x299c)    /* unsigned short */
-#define MOUSE_POSY                      (0x299e)    /* unsigned short */
-#define MOUSE_POSX_BAK                  (0x29a0)    /* unsigned short */
-#define MOUSE_POSY_BAK                  (0x29a2)    /* unsigned short */
-#define MOUSE_MOVED                     (0x29a4)    /* unsigned short; {0,1} */
+//#define MOUSE_LOCKED                    (0x2998)    /* unsigned short */
+//#define MOUSE_REFRESH_FLAG              (0x299a)    /* signed short */
+//#define MOUSE_POSX                      (0x299c)    /* unsigned short */
+//#define MOUSE_POSY                      (0x299e)    /* unsigned short */
+//#define MOUSE_POSX_BAK                  (0x29a0)    /* unsigned short */
+//#define MOUSE_POSY_BAK                  (0x29a2)    /* unsigned short */
+//#define MOUSE_MOVED                     (0x29a4)    /* unsigned short; {0,1} */
 //#define MOUSE_POINTER_OFFSETX           (0x29a6)    /* unsigned short */
 //#define MOUSE_POINTER_OFFSETY           (0x29a8)    /* unsigned short */
 //#define MOUSE_POINTER_OFFSETX_BAK       (0x29aa)    /* unsigned short */

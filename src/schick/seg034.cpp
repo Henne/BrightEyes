@@ -165,11 +165,11 @@ signed char FIG_cb_select_target(Bit8u *px, Bit8u *py, const signed short max_ra
 
 	update_mouse_cursor();
 
-	ds_writew(MOUSE_POSX_BAK, ds_writew(MOUSE_POSX, x_screen = cb_base_x + 10 * (host_readws(px) + host_readws(py))));
+	g_mouse_posx_bak = g_mouse_posx = x_screen = cb_base_x + 10 * (host_readws(px) + host_readws(py));
+	g_mouse_posy_bak = g_mouse_posy = y_screen = cb_base_y + 5 * (host_readws(px) + host_readws(py));
 
-	ds_writew(MOUSE_POSY_BAK, ds_writew(MOUSE_POSY, y_screen = cb_base_y + 5 * (host_readws(px) - host_readws(py))));
 
-	mouse_move_cursor(ds_readws(MOUSE_POSX), ds_readws(MOUSE_POSY));
+	mouse_move_cursor(g_mouse_posx, g_mouse_posy);
 
 	refresh_screen_size();
 
@@ -235,8 +235,8 @@ signed char FIG_cb_select_target(Bit8u *px, Bit8u *py, const signed short max_ra
 			from_kbd = 1;
 		} else {
 
-			x_diff = ds_readws(MOUSE_POSX) - x_screen;
-			y_diff = ds_readws(MOUSE_POSY) - y_screen;
+			x_diff = g_mouse_posx - x_screen;
+			y_diff = g_mouse_posy - y_screen;
 
 			if (((y_diff > 0) && (x_diff <= -10)) ||
 				((x_diff < 0) && (y_diff >= 5)))
@@ -292,10 +292,10 @@ signed char FIG_cb_select_target(Bit8u *px, Bit8u *py, const signed short max_ra
 			y_screen = cb_base_y + 5 * (host_readws(px) - host_readws(py));
 
 			if (from_kbd != 0) {
-				ds_writew(MOUSE_POSX_BAK, ds_writew(MOUSE_POSX, x_screen));
-				ds_writew(MOUSE_POSY_BAK, ds_writew(MOUSE_POSY, y_screen));
+				g_mouse_posx_bak = g_mouse_posx = x_screen;
+				g_mouse_posy_bak = g_mouse_posy = y_screen;
 
-				mouse_move_cursor(ds_readws(MOUSE_POSX), ds_readws(MOUSE_POSY));
+				mouse_move_cursor(g_mouse_posx, g_mouse_posy);
 			}
 
 			refresh_screen_size();
@@ -571,11 +571,11 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 
 	update_mouse_cursor();
 
-	ds_writew(MOUSE_POSX_BAK, ds_writew(MOUSE_POSX, x_screen = base_x + 10 * (host_readws(px) + host_readws(py))));
+	g_mouse_posx_bak = g_mouse_posx = x_screen = base_x + 10 * (host_readws(px) + host_readws(py));
 
-	ds_writew(MOUSE_POSY_BAK, ds_writew(MOUSE_POSY, y_screen = base_y + 5 * (host_readws(px) - host_readws(py))));
+	g_mouse_posy_bak = g_mouse_posy = y_screen = base_y + 5 * (host_readws(px) - host_readws(py));
 
-	mouse_move_cursor(ds_readws(MOUSE_POSX), ds_readws(MOUSE_POSY));
+	mouse_move_cursor(g_mouse_posx, g_mouse_posy);
 
 	refresh_screen_size();
 
@@ -631,8 +631,8 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 			from_kbd = 1;
 		} else {
 
-			mouse_cb_x = ((ds_readws(MOUSE_POSX) - base_x) / 10 + (ds_readws(MOUSE_POSY) - base_y) / 5) / 2;
-			mouse_cb_y = -((ds_readws(MOUSE_POSY) - base_y) / 5 - mouse_cb_x);
+			mouse_cb_x = ((g_mouse_posx - base_x) / 10 + (g_mouse_posy - base_y) / 5) / 2;
+			mouse_cb_y = -((g_mouse_posy - base_y) / 5 - mouse_cb_x);
 
 			if ((mouse_cb_x != sel_x) || (mouse_cb_y != sel_y)) {
 
@@ -676,11 +676,10 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 			y_screen = base_y + 5 * (sel_x - sel_y);
 
 			if (from_kbd != 0) {
-				ds_writew(MOUSE_POSX_BAK, ds_writew(MOUSE_POSX, x_screen));
+				g_mouse_posx_bak = g_mouse_posx = x_screen;
+				g_mouse_posy_bak = g_mouse_posy = y_screen;
 
-				ds_writew(MOUSE_POSY_BAK, ds_writew(MOUSE_POSY, y_screen));
-
-				mouse_move_cursor(ds_readws(MOUSE_POSX), ds_readws(MOUSE_POSY));
+				mouse_move_cursor(g_mouse_posx, g_mouse_posy);
 			}
 
 			refresh_screen_size();

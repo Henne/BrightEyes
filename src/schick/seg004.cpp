@@ -262,10 +262,10 @@ void interrupt timer_isr(void)
 
 					flag = 0;
 
-					if ((ds_readws(MOUSE_POSX) >= ds_readws(ANI_POSX)) &&
-						(ds_readws(ANI_POSX) + ds_readws(ANI_WIDTH) >= ds_readws(MOUSE_POSX)) &&
-						(ds_readws(MOUSE_POSY) >= ds_readws(ANI_POSY)) &&
-						(ds_readws(ANI_POSY) + ds_readb(ANI_HEIGHT) >= ds_readws(MOUSE_POSY) ))
+					if ((g_mouse_posx >= ds_readws(ANI_POSX)) &&
+						(ds_readws(ANI_POSX) + ds_readws(ANI_WIDTH) >= g_mouse_posx) &&
+						(g_mouse_posy >= ds_readws(ANI_POSY)) &&
+						(ds_readws(ANI_POSY) + ds_readb(ANI_HEIGHT) >= g_mouse_posy))
 					{
 						flag = 1;
 						update_mouse_cursor();
@@ -602,8 +602,8 @@ void draw_mouse_cursor(void)
 	dst = g_vga_memstart;
 	mouse_cursor = (short*)((Bit8u*)ds_readd(CURRENT_CURSOR) + 32);
 
-	x = ds_readw(MOUSE_POSX) - g_mouse_pointer_offsetx;
-	y = ds_readw(MOUSE_POSY) - g_mouse_pointer_offsety;
+	x = g_mouse_posx - g_mouse_pointer_offsetx;
+	y = g_mouse_posy - g_mouse_pointer_offsety;
 
 	width = height = 16;
 
@@ -637,8 +637,8 @@ void save_mouse_bg(void)
 
 	src = g_vga_memstart;
 
-	realpos_x = ds_readw(MOUSE_POSX) - g_mouse_pointer_offsetx;
-	realpos_y = ds_readw(MOUSE_POSY) - g_mouse_pointer_offsety;
+	realpos_x = g_mouse_posx - g_mouse_pointer_offsetx;
+	realpos_y = g_mouse_posy - g_mouse_pointer_offsety;
 
 	realwidth = realheight = 16;
 
@@ -673,8 +673,8 @@ void restore_mouse_bg(void)
 
 	/* gfx memory */
 	dst = g_vga_memstart;
-	realpos_x = ds_readw(MOUSE_POSX_BAK) - g_mouse_pointer_offsetx_bak;
-	realpos_y = ds_readw(MOUSE_POSY_BAK) - g_mouse_pointer_offsety_bak;
+	realpos_x = g_mouse_posx_bak - g_mouse_pointer_offsetx_bak;
+	realpos_y = g_mouse_posy_bak - g_mouse_pointer_offsety_bak;
 	realwidth = realheight = 16;
 
 	if (realpos_x > 320 - 16)

@@ -1072,7 +1072,7 @@ signed short do_fight(signed short fight_id)
 
 	if (ds_readws(HAVE_MOUSE) == 2) {
 
-		while (ds_readws(MOUSE_REFRESH_FLAG) < 0) {
+		while (g_mouse_refresh_flag < 0) {
 			refresh_screen_size();
 		}
 	}

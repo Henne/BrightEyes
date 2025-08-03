@@ -487,23 +487,23 @@ void GRP_move_hero(signed short src_pos)
 
 		update_mouse_cursor();
 
-		ds_writew(MOUSE_LOCKED, 1);
-		ds_writew(MOUSE_POSY, 157);
+		g_mouse_locked = 1;
+		g_mouse_posy = 157;
 
-		ds_writew(MOUSE_POSX, g_hero_pic_posx[src_pos]);
-		g_pic_copy.x1 = ds_readw(MOUSE_POSX);
-		g_pic_copy.y1 = ds_readw(MOUSE_POSY);
-		g_pic_copy.x2 = ds_readw(MOUSE_POSX) + 31;
-		g_pic_copy.y2 = ds_readw(MOUSE_POSY) + 31;
+		g_mouse_posx = g_hero_pic_posx[src_pos];
+		g_pic_copy.x1 = g_mouse_posx;
+		g_pic_copy.y1 = g_mouse_posy;
+		g_pic_copy.x2 = g_mouse_posx + 31;
+		g_pic_copy.y2 = g_mouse_posy + 31;
 		g_pic_copy.src = g_icon;
 
 		do_save_rect();
 
-		ds_writew(MOUSE_LOCKED, 0);
+		g_mouse_locked = 0;
 
 		refresh_screen_size();
 
-		ds_writew(MOUSE_LOCKED, 1);
+		g_mouse_locked = 1;
 
 		g_pic_copy.x1 = g_hero_pic_posx[src_pos];
 		g_pic_copy.y1 = 157;
@@ -513,61 +513,61 @@ void GRP_move_hero(signed short src_pos)
 
 		do_save_rect();
 
-		ds_writew(MOUSE_LOCKED, 0);
+		g_mouse_locked = 0;
 
 		update_mouse_cursor();
 
-		ds_writew(MOUSE_POSX_BAK, ds_readw(MOUSE_POSX));
-		ds_writew(MOUSE_POSY_BAK, ds_readw(MOUSE_POSY));
+		g_mouse_posx_bak = g_mouse_posx;
+		g_mouse_posy_bak = g_mouse_posy;
 
 		while (ds_readw(MOUSE1_EVENT2) == 0) {
 #if !defined(__BORLANDC__)
 			/* call DOSBOX to handle mouse ISR */
 			wait_for_vsync();
 #endif
-			if (ds_readw(MOUSE_MOVED) != 0) {
+			if (g_mouse_moved) {
 
-				ds_writew(MOUSE_LOCKED, 1);
+				g_mouse_locked = 1;
 
 				wait_for_vsync();
 
-				g_pic_copy.x1 = ds_readw(MOUSE_POSX_BAK);
-				g_pic_copy.y1 = ds_readw(MOUSE_POSY_BAK);
-				g_pic_copy.x2 = ds_readw(MOUSE_POSX_BAK) + 31;
-				g_pic_copy.y2 = ds_readw(MOUSE_POSY_BAK) + 31;
+				g_pic_copy.x1 = g_mouse_posx_bak;
+				g_pic_copy.y1 = g_mouse_posy_bak;
+				g_pic_copy.x2 = g_mouse_posx_bak + 31;
+				g_pic_copy.y2 = g_mouse_posy_bak + 31;
 				g_pic_copy.src = g_icon;
 
 				do_pic_copy(0);
 
-				g_pic_copy.x1 = ds_readw(MOUSE_POSX);
-				g_pic_copy.y1 = ds_readw(MOUSE_POSY);
-				g_pic_copy.x2 = ds_readw(MOUSE_POSX) + 31;
-				g_pic_copy.y2 = ds_readw(MOUSE_POSY) + 31;
+				g_pic_copy.x1 = g_mouse_posx;
+				g_pic_copy.y1 = g_mouse_posy;
+				g_pic_copy.x2 = g_mouse_posx + 31;
+				g_pic_copy.y2 = g_mouse_posy + 31;
 				g_pic_copy.src = g_icon;
 
 				do_save_rect();
 
-				g_pic_copy.src = (g_renderbuf_ptr);
+				g_pic_copy.src = g_renderbuf_ptr;
 
 				do_pic_copy(0);
 
-				ds_writew(MOUSE_POSX_BAK, ds_readw(MOUSE_POSX));
-				ds_writew(MOUSE_POSY_BAK, ds_readw(MOUSE_POSY));
-				ds_writew(MOUSE_MOVED, 0);
-				ds_writew(MOUSE_LOCKED, 0);
+				g_mouse_posx_bak = g_mouse_posx;
+				g_mouse_posy_bak = g_mouse_posy;
+				g_mouse_moved = 0;
+				g_mouse_locked = 0;
 			}
 		}
 
-		g_pic_copy.x1 = ds_readw(MOUSE_POSX_BAK);
-		g_pic_copy.y1 = ds_readw(MOUSE_POSY_BAK);
-		g_pic_copy.x2 = ds_readw(MOUSE_POSX_BAK) + 31;
-		g_pic_copy.y2 = ds_readw(MOUSE_POSY_BAK) + 31;
+		g_pic_copy.x1 = g_mouse_posx_bak;
+		g_pic_copy.y1 = g_mouse_posy_bak;
+		g_pic_copy.x2 = g_mouse_posx_bak + 31;
+		g_pic_copy.y2 = g_mouse_posy_bak + 31;
 		g_pic_copy.src = g_icon;
 
 		do_pic_copy(0);
 
 		dst_pos = 6;
-		while (g_hero_pic_posx[--dst_pos] > ds_readws(MOUSE_POSX))
+		while (g_hero_pic_posx[--dst_pos] > g_mouse_posx)
 		{
 			;
 		}

@@ -619,14 +619,14 @@ signed short GUI_menu_input(signed short positions, signed short h_lines,
 
 	if (positions != 0) {
 		l6 = h_lines * 8;
-		l3 = ds_readw(MOUSE_POSX);
-		l4 = ds_readw(MOUSE_POSY);
-		ds_writew(MOUSE_POSX_BAK, ds_writew(MOUSE_POSX, ds_readw(TEXTBOX_POS_X) + 90));
+		l3 = g_mouse_posx;
+		l4 = g_mouse_posy;
+		g_mouse_posx_bak = g_mouse_posx = ds_readws(TEXTBOX_POS_X) + 90;
 		l1 = ds_readws(TEXTBOX_POS_Y) + l6;
 
-		ds_writew(MOUSE_POSY_BAK, ds_writew(MOUSE_POSY, (l2 = l1 + ds_readws(MENU_DEFAULT_SELECT) * 8)));
+		g_mouse_posy_bak = g_mouse_posy = (l2 = l1 + ds_readws(MENU_DEFAULT_SELECT) * 8);
 
-		mouse_move_cursor(ds_readw(MOUSE_POSX), ds_readw(MOUSE_POSY));
+		mouse_move_cursor(g_mouse_posx, g_mouse_posy);
 
 		ds_writew(MOUSE_POSX_MAX, ds_readws(TEXTBOX_POS_X) + width - 16);
 		ds_writew(MOUSE_POSX_MIN, ds_readws(TEXTBOX_POS_X));
@@ -672,8 +672,8 @@ signed short GUI_menu_input(signed short positions, signed short h_lines,
 					ds_writew(MENU_SELECTED, 1);
 			}
 
-			if (ds_readw(MOUSE_POSY) != l2) {
-				l2 = ds_readw(MOUSE_POSY);
+			if (g_mouse_posy != l2) {
+				l2 = g_mouse_posy;
 				ds_writew(MENU_SELECTED, ((l2 - l1) >> 3) + 1);
 			}
 
@@ -690,14 +690,14 @@ signed short GUI_menu_input(signed short positions, signed short h_lines,
 
 		update_mouse_cursor();
 
-		ds_writew(MOUSE_POSX_BAK, ds_writew(MOUSE_POSX, l3));
-		ds_writew(MOUSE_POSY_BAK, ds_writew(MOUSE_POSY, l4));
+		g_mouse_posx_bak = g_mouse_posx = l3;
+		g_mouse_posy_bak = g_mouse_posy = l4;
 		ds_writew(MOUSE_POSX_MAX, 319);
 		ds_writew(MOUSE_POSX_MIN, 0);
 		ds_writew(MOUSE_POSY_MIN, 0);
 		ds_writew(MOUSE_POSY_MAX, 199);
 
-		mouse_move_cursor(ds_readw(MOUSE_POSX), ds_readw(MOUSE_POSY));
+		mouse_move_cursor(g_mouse_posx, g_mouse_posy);
 
 	} else {
 		do {

@@ -1163,7 +1163,7 @@ void interrupt mouse_isr(void)
 	signed short l5;
 	signed short l6;
 
-	if (ds_readws(MOUSE_LOCKED) == 0) {
+	if (!g_mouse_locked) {
 
 		if (l_si & 0x2) {
 			ds_writew(MOUSE1_EVENT2, 1);
@@ -1193,34 +1193,34 @@ void interrupt mouse_isr(void)
 
 		if (l_si & 1) {
 			l1 = 3;
-			l4 = ds_readws(MOUSE_POSX);
-			l5 = ds_readws(MOUSE_POSY);
+			l4 = g_mouse_posx;
+			l5 = g_mouse_posy;
 
 			mouse_action((Bit8u*)&l1, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5, (Bit8u*)&l6);
 
-			ds_writew(MOUSE_POSX, l4);
-			ds_writew(MOUSE_POSY, l5);
+			g_mouse_posx = l4;
+			g_mouse_posy = l5;
 
-			if (ds_readws(MOUSE_POSX) > ds_readws(MOUSE_POSX_MAX)) {
-				ds_writew(MOUSE_POSX, ds_readws(MOUSE_POSX_MAX));
+			if (g_mouse_posx > ds_readws(MOUSE_POSX_MAX)) {
+				g_mouse_posx = ds_readws(MOUSE_POSX_MAX);
 			}
-			if (ds_readws(MOUSE_POSX) < ds_readws(MOUSE_POSX_MIN)) {
-				ds_writew(MOUSE_POSX, ds_readws(MOUSE_POSX_MIN));
+			if (g_mouse_posx < ds_readws(MOUSE_POSX_MIN)) {
+				g_mouse_posx = ds_readws(MOUSE_POSX_MIN);
 			}
-			if (ds_readws(MOUSE_POSY) < ds_readws(MOUSE_POSY_MIN)) {
-				ds_writew(MOUSE_POSY, ds_readws(MOUSE_POSY_MIN));
+			if (g_mouse_posy < ds_readws(MOUSE_POSY_MIN)) {
+				g_mouse_posy = ds_readws(MOUSE_POSY_MIN);
 			}
-			if (ds_readws(MOUSE_POSY) > ds_readws(MOUSE_POSY_MAX)) {
-				ds_writew(MOUSE_POSY, ds_readws(MOUSE_POSY_MAX));
+			if (g_mouse_posy > ds_readws(MOUSE_POSY_MAX)) {
+				g_mouse_posy = ds_readws(MOUSE_POSY_MAX);
 			}
 
 			l1 = 4;
-			l4 = ds_readws(MOUSE_POSX);
-			l5 = ds_readws(MOUSE_POSY);
+			l4 = g_mouse_posx;
+			l5 = g_mouse_posy;
 
 			mouse_action((Bit8u*)&l1, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5, (Bit8u*)&l6);
 
-			ds_writew(MOUSE_MOVED, 1);
+			g_mouse_moved = 1;
 		}
 	}
 }
@@ -1241,8 +1241,8 @@ signed short is_mouse_in_rect(signed short x1, signed short y1,
 	signed short m_x;
 	signed short m_y;
 
-	m_x = ds_readws(MOUSE_POSX);
-	m_y = ds_readws(MOUSE_POSY);
+	m_x = g_mouse_posx;
+	m_y = g_mouse_posy;
 
 	return ((m_x >= x1) && (m_x <= x2) && (m_y >= y1) && (m_y <= y2)) ? 1 : 0;
 }
@@ -1268,8 +1268,8 @@ void mouse_init(void)
 		if (ds_readw(HAVE_MOUSE) == 2) {
 
 			p1 = 4;
-			p3 = ds_readws(MOUSE_POSX);
-			p4 = ds_readws(MOUSE_POSY);
+			p3 = g_mouse_posx;
+			p4 = g_mouse_posy;
 
 			mouse_action((Bit8u*)&p1, (Bit8u*)&p2, (Bit8u*)&p3, (Bit8u*)&p4, (Bit8u*)&p5);
 
@@ -1435,51 +1435,51 @@ void refresh_screen_size(void)
 
 void update_mouse_cursor1(void)
 {
-	if (ds_readw(MOUSE_LOCKED) == 0) {
+	if (!g_mouse_locked) {
 
-		if  (ds_readw(MOUSE_REFRESH_FLAG) == 0) {
-			ds_writew(MOUSE_LOCKED, 1);
+		if  (!g_mouse_refresh_flag) {
+			g_mouse_locked = 1;
 			restore_mouse_bg();
-			ds_writew(MOUSE_LOCKED, 0);
+			g_mouse_locked = 0;
 		}
 
-		dec_ds_ws(MOUSE_REFRESH_FLAG);
+		g_mouse_refresh_flag--;
 	}
 }
 
 void refresh_screen_size1(void)
 {
 	/* check lock */
-	if (ds_readw(MOUSE_LOCKED) == 0) {
+	if (!g_mouse_locked) {
 
-		inc_ds_ws(MOUSE_REFRESH_FLAG);
+		g_mouse_refresh_flag++;
 
-		if (ds_readw(MOUSE_REFRESH_FLAG) == 0) {
+		if (!g_mouse_refresh_flag) {
 
 			/* get lock */
-			ds_writew(MOUSE_LOCKED, 1);
+			g_mouse_locked = 1;
 
-			if (ds_readws(MOUSE_POSX) < g_mouse_pointer_offsetx)
-				ds_writew(MOUSE_POSX, g_mouse_pointer_offsetx);
+			if (g_mouse_posx < g_mouse_pointer_offsetx)
+				g_mouse_posx = g_mouse_pointer_offsetx;
 
-			if (ds_readws(MOUSE_POSX) > 315)
-				ds_writew(MOUSE_POSX, 315);
+			if (g_mouse_posx > 315)
+				g_mouse_posx = 315;
 
-			if (ds_readws(MOUSE_POSY) < g_mouse_pointer_offsety)
-				ds_writew(MOUSE_POSY, g_mouse_pointer_offsety);
+			if (g_mouse_posy < g_mouse_pointer_offsety)
+				g_mouse_posy = g_mouse_pointer_offsety;
 
-			if (ds_readws(MOUSE_POSY) > 195)
-				ds_writew(MOUSE_POSY, 195);
+			if (g_mouse_posy > 195)
+				g_mouse_posy = 195;
 
 			save_mouse_bg();
-			ds_writew(MOUSE_POSX_BAK, ds_readw(MOUSE_POSX));
-			ds_writew(MOUSE_POSY_BAK, ds_readw(MOUSE_POSY));
+			g_mouse_posx_bak = g_mouse_posx;
+			g_mouse_posy_bak = g_mouse_posy;
 			g_mouse_pointer_offsetx_bak = g_mouse_pointer_offsetx;
 			g_mouse_pointer_offsety_bak = g_mouse_pointer_offsety;
 			draw_mouse_cursor();
 
 			/* put lock */
-			ds_writew(MOUSE_LOCKED, 0);
+			g_mouse_locked = 0;
 		}
 	}
 }
@@ -1487,7 +1487,7 @@ void refresh_screen_size1(void)
 void mouse_19dc(void)
 {
 	/* return if mouse was not moved and the cursor remains */
-	if ((ds_readw(MOUSE_MOVED) != 0) || (ds_readd(LAST_CURSOR) != ds_readd(CURRENT_CURSOR))) {
+	if (g_mouse_moved || (ds_readd(LAST_CURSOR) != ds_readd(CURRENT_CURSOR))) {
 
 		/* set new cursor */
 		ds_writed(LAST_CURSOR, ds_readd(CURRENT_CURSOR));
@@ -1502,7 +1502,7 @@ void mouse_19dc(void)
 		}
 
 		/* reset mouse was moved */
-		ds_writew(MOUSE_MOVED, 0);
+		g_mouse_moved = 0;
 		update_mouse_cursor1();
 		refresh_screen_size1();
 	}
@@ -1582,14 +1582,12 @@ void handle_gui_input(void)
 		l_si = 0;
 
 		if (((Bit8u*)ds_readd(ACTION_TABLE_SECONDARY))) {
-			l_si = get_mouse_action(ds_readw(MOUSE_POSX),
-					ds_readw(MOUSE_POSY),
+			l_si = get_mouse_action(g_mouse_posx, g_mouse_posy,
 					(Bit8u*)ds_readd(ACTION_TABLE_SECONDARY));
 		}
 
 		if (!l_si && ((Bit8u*)ds_readd(ACTION_TABLE_PRIMARY))) {
-			l_si = get_mouse_action(ds_readw(MOUSE_POSX),
-					ds_readw(MOUSE_POSY),
+			l_si = get_mouse_action(g_mouse_posx, g_mouse_posy,
 					(Bit8u*)ds_readd(ACTION_TABLE_PRIMARY));
 		}
 
@@ -1750,13 +1748,11 @@ void handle_input(void)
 		l_si = 0;
 
 		if (((Bit8u*)ds_readd(ACTION_TABLE_SECONDARY))) {
-			l_si = get_mouse_action(ds_readw(MOUSE_POSX), ds_readw(MOUSE_POSY),
-					(Bit8u*)ds_readd(ACTION_TABLE_SECONDARY));
+			l_si = get_mouse_action(g_mouse_posx, g_mouse_posy, (Bit8u*)ds_readd(ACTION_TABLE_SECONDARY));
 		}
 
 		if (!l_si && ((Bit8u*)ds_readd(ACTION_TABLE_PRIMARY))) {
-			l_si = get_mouse_action(ds_readw(MOUSE_POSX), ds_readw(MOUSE_POSY),
-					(Bit8u*)ds_readd(ACTION_TABLE_PRIMARY));
+			l_si = get_mouse_action(g_mouse_posx, g_mouse_posy, (Bit8u*)ds_readd(ACTION_TABLE_PRIMARY));
 		}
 
 		if (ds_readw(HAVE_MOUSE) == 2) {
@@ -4107,10 +4103,10 @@ void select_with_mouse(Bit8u *p1, Bit8u *p2)
 	}
 
 	for (i = 0; i < 15; i++) {
-		if ((ds_readws(MERCHANT_ITEMS_POSX + i * 2) <= ds_readws(MOUSE_POSX)) &&
-			(ds_readws(MERCHANT_ITEMS_POSX + i * 2) + 50 >= ds_readws(MOUSE_POSX)) &&
-			(ds_readws(MERCHANT_ITEMS_POSY + i * 2) <= ds_readws(MOUSE_POSY)) &&
-			(ds_readws(MERCHANT_ITEMS_POSY + i * 2) + 17 >= ds_readws(MOUSE_POSY)) &&
+		if ((ds_readws(MERCHANT_ITEMS_POSX + i * 2) <= g_mouse_posx) &&
+			(ds_readws(MERCHANT_ITEMS_POSX + i * 2) + 50 >= g_mouse_posx) &&
+			(ds_readws(MERCHANT_ITEMS_POSY + i * 2) <= g_mouse_posy) &&
+			(ds_readws(MERCHANT_ITEMS_POSY + i * 2) + 17 >= g_mouse_posy) &&
 			(host_readws(p2 + i * 7) != 0))
 		{
 			host_writew(p1, i);
@@ -5509,7 +5505,7 @@ int schick_main(int argc, char** argv)
 		mouse_init();
 
 		if (ds_readw(HAVE_MOUSE) == 0) {
-			ds_writew(MOUSE_REFRESH_FLAG, -10);
+			g_mouse_refresh_flag = -10;
 		}
 
 		init_game_state();

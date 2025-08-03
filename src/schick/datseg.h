@@ -83,6 +83,13 @@ extern Bit8u g_palette_fight1[32][3];			//ds:0x2783; seg032
 extern Bit8u g_palette_special[32][3];			//ds:0x27e3; seg029, seg093
 
 
+extern signed short g_mouse_locked;			//ds:0x2998; seg002, seg049
+extern signed short g_mouse_refresh_flag;		//ds:0x299a; seg002, seg032
+extern signed short g_mouse_posx;			//ds:0x299c; seg002-seg097
+extern signed short g_mouse_posy;			//ds:0x299e; seg002-seg097
+extern signed short g_mouse_posx_bak;			//ds:0x29a0; seg002, seg004, seg049
+extern signed short g_mouse_posy_bak;			//ds:0x29a2; seg002, seg004, seg049
+extern signed short g_mouse_moved;			//ds:0x29a4; seg002, seg049
 extern signed short g_mouse_pointer_offsetx;		//ds:0x29a6; seg002, seg004
 extern signed short g_mouse_pointer_offsety;		//ds:0x29a8; seg002, seg004
 extern signed short g_mouse_pointer_offsetx_bak;	//ds:0x29aa; seg002, seg004
