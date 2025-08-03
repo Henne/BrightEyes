@@ -27,7 +27,7 @@ namespace M302de {
 #if defined(__BORLANDC__)
 /* static prototype */
 void interrupt timer_isr(void);
-#endif:
+#endif
 
 void save_and_set_timer(void)
 {
@@ -341,7 +341,7 @@ void update_status_bars(void)
 			}
 
 #if !defined(__BORLANDC__)
-			CPU_CLI();
+			//CPU_CLI();
 #else
 			asm { cli };
 #endif
@@ -409,7 +409,7 @@ void update_status_bars(void)
 			}
 
 #if !defined(__BORLANDC__)
-			CPU_STI();
+			//CPU_STI();
 #else
 			asm { sti };
 #endif
@@ -753,12 +753,12 @@ void update_wallclock(void)
 			}
 		}
 
-		if (((d % 771) != ds_readws(WALLCLOCK_POS)) || (ds_readw(WALLCLOCK_REDRAW) != 0)) {
+		if (((d % 771) != g_wallclock_pos) || (ds_readw(WALLCLOCK_REDRAW) != 0)) {
 
 			ds_writew(WALLCLOCK_REDRAW, 0);
 			night = ((gs_day_timer >= HOURS(7)) && (gs_day_timer <= HOURS(19))) ? 0 : 1;
 			draw_wallclock((signed short)(d / 771), night);
-			ds_writew(WALLCLOCK_POS, (signed short)(d / 771));
+			g_wallclock_pos = d / 771;
 		}
 	}
 }
@@ -792,7 +792,7 @@ void draw_wallclock(signed short pos, signed short night)
 
 	/* calculate y value */
 	/* Original-Bug: off-by-one with pos > 80 */
-	y = ds_readws(WALLCLOCK_Y) + ds_readbs(WALLCLOCK_POS_Y + pos);
+	y = ds_readws(WALLCLOCK_Y) + g_wallclock_pos_y[pos];
 
 	/* calculate x value */
 	pos += ds_readws(WALLCLOCK_X) - 2;
@@ -804,7 +804,7 @@ void draw_wallclock(signed short pos, signed short night)
 	g_pic_copy_rect.x2 = ds_readws(WALLCLOCK_X) + 78;
 
 	/* set palette (night/day) */
-	set_palette((!night ? (p_datseg + WALLCLOCK_PALETTE_DAY) : (p_datseg + WALLCLOCK_PALETTE_NIGHT)), 0xfa, 3);
+	set_palette((!night ? (p_datseg + WALLCLOCK_PALETTE_DAY) : &g_wallclock_palette_night[0][0]), 0xfa, 3);
 
 	/* check if mouse is in that window */
 	if (is_mouse_in_rect(ds_readws(WALLCLOCK_X) - 6,

@@ -285,9 +285,13 @@ extern char g_game_version[6];			//ds:0x46ec; seg002
 
 extern char g_noway_string[40];			//ds:0x4a68; seg003
 
-extern Bit8u g_wallclock_palette_day[3][3];	//ds:0x4af1; seg004;
-extern Bit8u g_wallclock_palette_night[3][3];	//ds:0x4afa; seg004;
+extern Bit16s g_wallclock_pos;			//ds:0x4a9e; seg004;
+extern Bit8s  g_wallclock_pos_y[81];		//ds:0x4aa0; seg004;
+extern Bit8u  g_wallclock_palette_day[3][3];	//ds:0x4af1; seg004;
+extern Bit8u  g_wallclock_palette_night[3][3];	//ds:0x4afa; seg004;
+
 extern signed short g_delay_factor;		//ds:0x4b66; seg005, seg025
+
 extern void (*g_location_handlers[19])(void);	//ds:0x4c3b; seg025
 
 extern signed int g_fig_dropped_counter;	//ds:0x5f12; seg032, seg041
