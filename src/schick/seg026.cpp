@@ -214,18 +214,15 @@ signed short load_game_state(void)
 	retval = 0;
 
 	/* select a game state */
-	answer = GUI_radio(get_ttx(0), 6,
-			p_datseg + (SAVEGAME_NAMES + 0),
-			p_datseg + (SAVEGAME_NAMES + 9),
-			p_datseg + (SAVEGAME_NAMES + 18),
-			p_datseg + (SAVEGAME_NAMES + 27),
-			p_datseg + (SAVEGAME_NAMES + 36),
-			get_ttx(737)) -1;
+	answer = GUI_radio(get_ttx(0), 6, g_savegame_names[0],
+			g_savegame_names[1], g_savegame_names[2],
+			g_savegame_names[3], g_savegame_names[4],
+			get_ttx(737)) - 1;
 
 	/* sanity check if answer is in range */
 	if (answer != -2 && answer != 5) {
 
-		prepare_sg_name(g_text_output_buf, (char*)p_datseg + SAVEGAME_NAMES + 9 * answer);
+		prepare_sg_name(g_text_output_buf, g_savegame_names[answer]);
 		/* concat with ".gam" */
 		strcat(g_text_output_buf, (char*)p_datseg + SAVEGAME_SUFFIX);
 
@@ -471,13 +468,9 @@ signed short save_game_state(void)
 	}
 
 	/* get the slot number */
-	slot = GUI_radio(g_text_output_buf, 6,
-			p_datseg + (SAVEGAME_NAMES + 9 * 0),
-			p_datseg + (SAVEGAME_NAMES + 9 * 1),
-			p_datseg + (SAVEGAME_NAMES + 9 * 2),
-			p_datseg + (SAVEGAME_NAMES + 9 * 3),
-			p_datseg + (SAVEGAME_NAMES + 9 * 4),
-			get_ttx(737)) - 1;
+	slot = GUI_radio(g_text_output_buf, 6, g_savegame_names[0], g_savegame_names[1],
+					g_savegame_names[2], g_savegame_names[3],
+					g_savegame_names[4], get_ttx(737)) - 1;
 
 	g_textbox_width = tw_bak;
 
@@ -489,7 +482,7 @@ signed short save_game_state(void)
 		do {
 			/* ask for filename */
 			g_gui_entering_savegame = 1;
-			strcpy(g_text_input_buf, (char*)p_datseg + SAVEGAME_NAMES + 9 * slot);
+			strcpy(g_text_input_buf, g_savegame_names[slot]);
 			GUI_input(get_ttx(634), 8);
 			g_gui_entering_savegame = 0;
 
@@ -503,9 +496,9 @@ signed short save_game_state(void)
 
 			for (tw_bak = 0; tw_bak < 5; tw_bak++) {
 
-				prepare_sg_name(g_text_output_buf + 50, (char*)p_datseg + SAVEGAME_NAMES + 9 * tw_bak);
+				prepare_sg_name(g_text_output_buf + 50, g_savegame_names[tw_bak]);
 
-				if (slot != tw_bak && !strcmp(g_text_output_buf, g_text_output_buf + 50)) {
+				if ((slot != tw_bak) && !strcmp(g_text_output_buf, g_text_output_buf + 50)) {
 
 					GUI_output(get_ttx(806));
 					flag = 1;
@@ -514,10 +507,10 @@ signed short save_game_state(void)
 		} while (flag != 0);
 
 		/* delete the previous file of that slot */
-		prepare_sg_name(g_text_output_buf, (char*)p_datseg + SAVEGAME_NAMES + 9 * slot);
+		prepare_sg_name(g_text_output_buf, g_savegame_names[slot]);
 		strcat(g_text_output_buf, (char*)p_datseg + SAVEGAME_SUFFIX2);
 		unlink(g_text_output_buf);
-		strcpy((char*)p_datseg + SAVEGAME_NAMES + 9 * slot, g_text_input_buf);
+		strcpy(g_savegame_names[slot], g_text_input_buf);
 
 		/* create a CHR-file for each hero in TEMP */
 		for (tw_bak = 0; tw_bak < 6; tw_bak++) {
@@ -556,7 +549,7 @@ signed short save_game_state(void)
 		p_status_end = (HugePt)(p_datseg + DATSEG_STATUS_END);
 		status_len = (signed short)(p_status_end - p_status_start);
 
-		prepare_sg_name(g_text_output_buf, (char*)p_datseg + SAVEGAME_NAMES + 9 * slot);
+		prepare_sg_name(g_text_output_buf, g_savegame_names[slot]);
 		strcat(g_text_output_buf, (char*)p_datseg + SAVEGAME_SUFFIX3);
 
 		/* TODO: should be O_BINARY | O_RWONLY */
@@ -671,7 +664,7 @@ signed short save_game_state(void)
 
 		/* rewrite GAMES.NAM */
 		l_di = _creat((char*)ds_readd(FNAMES + 0x33c), 0);
-		write(l_di, p_datseg + SAVEGAME_NAMES, 45);
+		write(l_di, &g_savegame_names[0][0], 45);
 		close(l_di);
 
 		return 1;

@@ -6166,7 +6166,7 @@ signed int g_dialog_informer;	// ds:0xe30c
 char *g_dialog_title;		// ds:0xe308
 
 unsigned char g_unkn_085[1]; // ds:0xe307
-char g_savegame_names[45]; // ds:0xe2da
+char g_savegame_names[5][9]; // ds:0xe2da
 time_t g_last_save_time; // ds:0xe2d6
 unsigned char *g_saved_files_buf; // ds:0xe2d2
 signed short g_delay_timer; // ds:0xe2d0

@@ -381,9 +381,11 @@ extern unsigned char *g_buffer11_ptr;		// ds:0xe404; seg028, seg075
 
 extern HugePt g_buffer9_ptr4;		// ds:0xe3fc; seg028
 extern Bit32s g_fightobj_buf_freespace;	// ds:0xe370; seg032-seg100
+extern char g_savegame_names[5][9];	// ds:0xe2da; seg026, seg027
 extern time_t g_last_save_time;		// ds:0xe2d6; seg026, seg059
 extern unsigned char *g_saved_files_buf;// ds:0xe2d2; seg026;
 extern signed short g_delay_timer;	// ds:0xe2d0; seg004, seg005
+
 extern unsigned char* g_fig_gfxbuffers[8];	// ds:0xe278; seg005
 extern Bit32s g_gfx_spinlock;		// ds:0xe234; seg004
 extern char **g_itemsname;		// ds:0xe22f; seg026, seg120

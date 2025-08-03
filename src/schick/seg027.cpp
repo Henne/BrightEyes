@@ -724,7 +724,7 @@ void init_common_buffers(void)
 	close(fd);
 
 	fd = load_regular_file(ARCHIVE_FILE_GAMES_NAM);
-	_read(fd, p_datseg + SAVEGAME_NAMES, 45);
+	_read(fd, &g_savegame_names[0][0], 45);
 	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_TOWNPAL_DAT);
