@@ -638,7 +638,7 @@ void city_water_and_grass(void)
 			if (bi == 6 || bi == 7) {
 				/* water or grass */
 
-				ptr = 4 * c1 + p_datseg + VISUAL_FIELD_OFFSETS_GRASS;
+				ptr = (Bit8u*)&g_visual_fields_offsets_grass[c1];
 
 				x = host_readws(ptr);
 				y = host_readws(ptr + 2);
@@ -690,14 +690,14 @@ void city_building_textures(void)
 			if (bi != 7 && bi != 6) {
 			    /* if not grass or water */
 
-				ptr = p_datseg + VISUAL_FIELD_OFFSETS_STD + 4 * c1;
+				ptr = (Bit8u*)&g_visual_fields_offsets_std[c1];
 
 				if (bi == 8) {
-				    /* direction sign */
-					ptr = p_datseg + VISUAL_FIELD_OFFSETS_SIGN + 4 * c1;
+					/* direction sign */
+					ptr = (Bit8u*)&g_visual_fields_offsets_sign[c1];
 				} else if (bi == 9 || bi == 10) {
-				    /* tavern/inn or shop */
-					ptr = p_datseg + VISUAL_FIELD_OFFSETS_INN + 4 * c1;
+					/* tavern/inn or shop */
+					ptr = (Bit8u*)&g_visual_fields_offsets_inn[c1];
 				}
 
 				x = host_readws(ptr);
@@ -746,8 +746,7 @@ void city_building_textures(void)
 							l4 = 188;
 						}
 
-						if (ds_readws(ENTRANCE_ANGLE) == 1 &&
-							!(nvf_no & 0x8000) &&
+						if (ds_readws(ENTRANCE_ANGLE) == 1 && !(nvf_no & 0x8000) &&
 							bi >= 1 && bi <= 5)
 						{
 							nvf_no -= 10;
@@ -905,8 +904,8 @@ signed short city_step(void)
 		set_automap_tiles(gs_x_target, gs_y_target);
 	}
 
-	gs_x_target_bak = (gs_x_target);
-	gs_y_target_bak = (gs_y_target);
+	gs_x_target_bak = gs_x_target;
+	gs_y_target_bak = gs_y_target;
 
 	handle_gui_input();
 

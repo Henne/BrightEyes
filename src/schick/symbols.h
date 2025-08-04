@@ -1100,10 +1100,10 @@
 #define SEG066_0BAD_UNKN5               (0x72e3)    /* signed char[29] */
 #define SEG066_0BAD_UNKN6               (0x7300)    /* signed char[29] */
 #define SEG066_0BAD_UNKN7               (0x731d)    /* signed char[29] */
-#define VISUAL_FIELD_OFFSETS_STD        (0x733a)    /* struct(4)[29]; struct{signed short x,y;} */
-#define VISUAL_FIELD_OFFSETS_SIGN       (0x73ae)    /* struct(4)[29]; struct{signed short x,y;} */
-#define VISUAL_FIELD_OFFSETS_INN        (0x7422)    /* struct(4)[29]; struct{signed short x,y;} */
-#define VISUAL_FIELD_OFFSETS_GRASS      (0x7496)    /* struct(4)[29]; struct{signed short x,y;} */
+//#define VISUAL_FIELD_OFFSETS_STD        (0x733a)    /* struct(4)[29]; struct{signed short x,y;} */
+//#define VISUAL_FIELD_OFFSETS_SIGN       (0x73ae)    /* struct(4)[29]; struct{signed short x,y;} */
+//#define VISUAL_FIELD_OFFSETS_INN        (0x7422)    /* struct(4)[29]; struct{signed short x,y;} */
+//#define VISUAL_FIELD_OFFSETS_GRASS      (0x7496)    /* struct(4)[29]; struct{signed short x,y;} */
 //#define TEX_DESCR_TABLE                 (0x750a)    /* struct(18)[101] */
 //#define VISUAL_FIELD_DRAW_ORDER         (0x7c24)    /* signed char[29] */
 //#define CAN_MERGE_GROUP                 (0x7c41)    /* signed char; {-1,1} */
