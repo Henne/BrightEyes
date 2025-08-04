@@ -345,6 +345,8 @@ extern signed short g_anitab_spell_oy[2];	//ds:0x6342; seg045
 extern signed char  g_anitab_spell_nvfno[2];	//ds:0x634c; seg045
 extern signed char* g_anitab_spell_index[2];	//ds:0x6366; seg045
 
+extern const struct struct_point g_invslotxy_table[23];	//ds:0x63d2; seg046
+
 extern signed char g_hero_sel_exclude;		//ds:0x64a2; seg047, seg049, seg103, seg120
 
 extern const struct struct_point g_visual_fields_offsets_std[29];	//ds:0x733a; seg066

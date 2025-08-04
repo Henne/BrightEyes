@@ -169,7 +169,7 @@ void status_show(Bit16u index)
 	char le_fix[10];
 #endif
 	unsigned char *hero;
-	Bit16u txt_tabpos1_bak, txt_tabpos2_bak, txt_tabpos3_bak, txt_tabpos4_bak;
+	Bit16s txt_tabpos1_bak, txt_tabpos2_bak, txt_tabpos3_bak, txt_tabpos4_bak;
 	Bit8s val;
 	signed short width;
 	signed short height;
@@ -182,10 +182,10 @@ void status_show(Bit16u index)
 
 	struct nvf_desc nvf;
 
-	txt_tabpos1_bak = ds_readw(TXT_TABPOS1);
-	txt_tabpos2_bak = ds_readw(TXT_TABPOS2);
-	txt_tabpos3_bak = ds_readw(TXT_TABPOS3);
-	txt_tabpos4_bak = ds_readw(TXT_TABPOS4);
+	txt_tabpos1_bak = ds_readws(TXT_TABPOS1);
+	txt_tabpos2_bak = ds_readws(TXT_TABPOS2);
+	txt_tabpos3_bak = ds_readws(TXT_TABPOS3);
+	txt_tabpos4_bak = ds_readws(TXT_TABPOS4);
 
 	hero = get_hero(index);
 
@@ -241,10 +241,10 @@ void status_show(Bit16u index)
 			process_nvf(&nvf);
 
 			/* draw the item icon */
-			g_pic_copy.x1 = ds_readw(INVSLOT_ICONXY_TABLE + i * 4);
-			g_pic_copy.y1 = ds_readw(INVSLOT_ICONXY_TABLE + i * 4 + 2);
-			g_pic_copy.x2 = ds_readw(INVSLOT_ICONXY_TABLE + i * 4) + 15;
-			g_pic_copy.y2 = ds_readw(INVSLOT_ICONXY_TABLE + i * 4 + 2) + 15;
+			g_pic_copy.x1 = g_invslotxy_table[i].x;
+			g_pic_copy.y1 = g_invslotxy_table[i].y;
+			g_pic_copy.x2 = g_invslotxy_table[i].x + 15;
+			g_pic_copy.y2 = g_invslotxy_table[i].y + 15;
 			g_pic_copy.dst = g_renderbuf_ptr;
 			g_pic_copy.src = g_icon;
 			do_pic_copy(0);
@@ -259,8 +259,8 @@ void status_show(Bit16u index)
 					g_dtp2, 10);
 
 				GUI_print_string(g_dtp2,
-					ds_readw(INVSLOT_ICONXY_TABLE + i * 4) + 16 - GUI_get_space_for_string(g_dtp2, 0),
-					ds_readw(INVSLOT_ICONXY_TABLE + i * 4 + 2) + 9);
+					g_invslotxy_table[i].x + 16 - GUI_get_space_for_string(g_dtp2, 0),
+					g_invslotxy_table[i].y + 9);
 
 				set_textcolor(0, 2);
 			}
@@ -287,11 +287,11 @@ void status_show(Bit16u index)
 	/* print typus */
 	set_textcolor(0, 2);
 
-	GUI_print_string(get_ttx(((host_readb(hero + HERO_SEX)) ? 0x251 : 0x9) + host_readbs(hero + HERO_TYPE)), 59, 16);
+	GUI_print_string(get_ttx(((host_readbs(hero + HERO_SEX)) ? 0x251 : 0x9) + host_readbs(hero + HERO_TYPE)), 59, 16);
 
 
 	/* show AP */
-	sprintf(g_dtp2, get_ttx(619), host_readd(hero + HERO_AP));
+	sprintf(g_dtp2, get_ttx(619), host_readds(hero + HERO_AP));
 	GUI_print_string(g_dtp2, 59, 26);
 
 	/* print level */

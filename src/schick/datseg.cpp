@@ -3403,7 +3403,7 @@ struct{unsigned char r,g,b;} g_statuspage_palette[32] = {
 	{ 0x08, 0x08, 0x08 },
 	{ 0x3f, 0x3f, 0x3f }
 }; // ds:0x6372
-struct{unsigned short x,y;} g_invslot_iconxy_table[23] = {
+const struct struct_point g_invslot_iconxy_table[23] = {
 	{ 0x0045, 0x0038 },
 	{ 0x003b, 0x0051 },
 	{ 0x0092, 0x0051 },

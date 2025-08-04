@@ -988,7 +988,7 @@
 #define STATUSPAGE_SELITEM3_NO          (0x6370)    /* unsigned char */
 #define STATUSPAGE_SELITEM4_NO          (0x6371)    /* unsigned char */
 #define STATUSPAGE_PALETTE              (0x6372)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
-#define INVSLOT_ICONXY_TABLE            (0x63d2)    /* struct(4)[23]; struct{unsigned short x,y;} */
+//#define INVSLOT_ICONXY_TABLE            (0x63d2)    /* struct(4)[23]; struct{unsigned short x,y;} */
 #define STATUSPAGE_SPELLS_XY            (0x642e)    /* struct(6)[8]; struct{unsigned short x_name,x_val,y;} */
 #define STATUSPAGE_SPELLS2_XY           (0x645e)    /* struct(6)[4]; struct{unsigned short x_name,x_val,y;} */
 #define STATUSPAGE_SKILLS_XY            (0x6476)    /* struct(6)[7]; struct{unsigned short x_name,x_val,y;} */
