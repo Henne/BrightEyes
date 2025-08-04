@@ -469,9 +469,8 @@ signed short DNG_step(void)
 		DNG_fight();
 	}
 
-	if (gs_x_target != gs_x_target_bak ||
-		gs_y_target != gs_y_target_bak ||
-		ds_readbs(DNG_LEVEL_CHANGED) != 0)
+	/* TODO: potential bug: g_dng_level_changed is set to 1, but never back to 0 */
+	if ((gs_x_target != gs_x_target_bak) || (gs_y_target != gs_y_target_bak) || g_dng_level_changed)
 	{
 		ds_writeb(CAN_MERGE_GROUP, (unsigned char)can_merge_group());
 		ds_writew(LOCKPICK_TRY_COUNTER, 0);

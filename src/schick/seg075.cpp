@@ -676,7 +676,7 @@ void DNG_update_pos(void)
 
 void DNG_inc_level(void)
 {
-	ds_writew(DNG_LEVEL_CHANGED, 1);
+	g_dng_level_changed = 1;
 	gs_dungeon_level++;
 	load_area_description(1);
 	DNG_update_pos();
@@ -685,7 +685,7 @@ void DNG_inc_level(void)
 
 void DNG_dec_level(void)
 {
-	ds_writew(DNG_LEVEL_CHANGED, 1);
+	g_dng_level_changed = 1;
 	gs_dungeon_level--;
 	load_area_description(1);
 	DNG_update_pos();
@@ -916,7 +916,7 @@ signed short DNG_fallpit(signed short max_damage)
 	new_group = 0;
 	retval = 0;
 
-	ds_writew(DNG_LEVEL_CHANGED, 1);
+	g_dng_level_changed = 1;
 	nr_fallen_heroes = random_schick(gs_group_member_counts[gs_current_group]);
 
 	/* If the result was rolled that all but one hero of the active group should fall down, all heroes will fall down.
