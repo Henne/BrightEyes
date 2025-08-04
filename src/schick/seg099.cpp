@@ -747,13 +747,13 @@ void spell_transversalis(void)
 				play_voc(ARCHIVE_FILE_FX16_VOC);
 
 				/* set new coordinates */
-				gs_x_target = (ds_readws(AUTOMAP_SELX));
-				gs_y_target = (ds_readws(AUTOMAP_SELY));
+				gs_x_target = g_automap_selx;
+				gs_y_target = g_automap_sely;
 			}
 		}
 	}
 
-	ds_writew(AUTOMAP_SELX, ds_writew(AUTOMAP_SELY, -1));
+	g_automap_selx = g_automap_sely = -1;
 }
 
 void spell_ueber_eis(void)

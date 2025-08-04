@@ -1124,8 +1124,8 @@
 #define AUTOMAP_TILE_ARROWUP            (0x7d52)    /* unsigned char[49]; {0,1} */
 #define AUTOMAP_TILE_ARROWRIGHT         (0x7d83)    /* unsigned char[49]; {0,1} */
 #define AUTOMAP_TILE_CROSS              (0x7db4)    /* unsigned char[49]; {0,1} */
-#define AUTOMAP_SELX                    (0x7de5)    /* signed short */
-#define AUTOMAP_SELY                    (0x7de7)    /* signed short */
+//#define AUTOMAP_SELX                    (0x7de5)    /* signed short */
+//#define AUTOMAP_SELY                    (0x7de7)    /* signed short */
 // ?1
 #define DNG_GFXTAB_WOOD                 (0x7dea)    /* struct(18)[88] */
 #define DNG_GFXTAB_STONE                (0x841a)    /* struct(18)[88] */

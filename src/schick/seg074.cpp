@@ -317,9 +317,9 @@ void render_automap(signed short x_off)
 #endif
 
 	/* In the target selector screen of the Transversalis spell, mark the target with a cross */
-	if (((ds_readws(AUTOMAP_SELX) - x_off) >= 0) && ((ds_readws(AUTOMAP_SELX) - x_off) <= 16)) {
+	if (((g_automap_selx - x_off) >= 0) && ((g_automap_selx - x_off) <= 16)) {
 
-		draw_automap_square(ds_readws(AUTOMAP_SELX) - x_off,	ds_readws(AUTOMAP_SELY), MAP_TILE_CROSS, -1);
+		draw_automap_square(g_automap_selx - x_off,	g_automap_sely, MAP_TILE_CROSS, -1);
 	}
 }
 
@@ -488,16 +488,16 @@ signed short select_teleport_dest(void)
 
 	dungeon = gs_dungeon_index;
 	town = gs_current_town;
-	gs_current_town = ((gs_dungeon_index = 0));
+	gs_current_town = gs_dungeon_index = 0;
 
 	l_si = ((ds_readb(DNG_MAP_SIZE) == 16) ? 0 :
 			((gs_x_target - 8 < 0) ? 0 :
 			((gs_x_target - 8 > 15) ? 16 : gs_x_target - 8)));
 
-	ds_writew(AUTOMAP_SELX, gs_x_target);
-	ds_writew(AUTOMAP_SELY, gs_y_target);
+	g_automap_selx = gs_x_target;
+	g_automap_sely = gs_y_target;
 	gs_dungeon_index = dungeon;
-	gs_current_town = ((signed char)town);
+	gs_current_town = (signed char)town;
 	tw_bak = g_textbox_width;
 	g_textbox_width = 3;
 
@@ -537,34 +537,34 @@ signed short select_teleport_dest(void)
 		}
 
 		if ((ds_readw(ACTION) == ACTION_ID_LEFT) &&
-			(ds_readws(AUTOMAP_SELX) > 0) &&
-			is_discovered(ds_readws(AUTOMAP_SELX) - 1, ds_readws(AUTOMAP_SELY)))
+			(g_automap_selx > 0) &&
+			is_discovered(g_automap_selx - 1, g_automap_sely))
 		{
-			dec_ds_ws(AUTOMAP_SELX);
+			g_automap_selx--;
 			render_automap(l_si);
 			draw_automap_to_screen();
 
 		} else if ((ds_readw(ACTION) == ACTION_ID_UP) &&
-			(ds_readws(AUTOMAP_SELY) > 0) &&
-			is_discovered(ds_readws(AUTOMAP_SELX), ds_readws(AUTOMAP_SELY) - 1))
+			(g_automap_sely > 0) &&
+			is_discovered(g_automap_selx, g_automap_sely - 1))
 		{
-			dec_ds_ws(AUTOMAP_SELY);
+			g_automap_sely--;
 			render_automap(l_si);
 			draw_automap_to_screen();
 
 		} else if ((ds_readw(ACTION) == ACTION_ID_RIGHT) &&
-			(ds_readb(DNG_MAP_SIZE) - 1 > ds_readws(AUTOMAP_SELX)) &&
-			is_discovered(ds_readws(AUTOMAP_SELX) + 1, ds_readws(AUTOMAP_SELY)))
+			(ds_readb(DNG_MAP_SIZE) - 1 > g_automap_selx) &&
+			is_discovered(g_automap_selx + 1, g_automap_sely))
 		{
-			inc_ds_ws(AUTOMAP_SELX);
+			g_automap_selx++;
 			render_automap(l_si);
 			draw_automap_to_screen();
 
 		} else if ((ds_readw(ACTION) == ACTION_ID_DOWN) &&
-			(ds_readws(AUTOMAP_SELY) < 16) &&
-			is_discovered(ds_readws(AUTOMAP_SELX), ds_readws(AUTOMAP_SELY) + 1))
+			(g_automap_sely < 16) &&
+			is_discovered(g_automap_selx, g_automap_sely + 1))
 		{
-			inc_ds_ws(AUTOMAP_SELY);
+			g_automap_sely++;
 			render_automap(l_si);
 			draw_automap_to_screen();
 		}
@@ -592,8 +592,8 @@ signed short select_teleport_dest(void)
 	} while (done == 0);
 
 	l_di = (ds_readb(DNG_MAP_SIZE) == 16) ?
-		get_mapval_small(ds_readws(AUTOMAP_SELX), ds_readws(AUTOMAP_SELY)) :
-		get_mapval_large(ds_readws(AUTOMAP_SELX), ds_readws(AUTOMAP_SELY));
+		get_mapval_small(g_automap_selx, g_automap_sely) :
+		get_mapval_large(g_automap_selx, g_automap_sely);
 
 	if (gs_current_town != TOWNS_NONE) {
 		l_di = get_border_index(l_di);
@@ -603,8 +603,8 @@ signed short select_teleport_dest(void)
 
 	ae_costs = 0;
 
-	if ((ds_readws(AUTOMAP_SELX) == gs_x_target) &&
-		(ds_readws(AUTOMAP_SELY) == gs_y_target))
+	if ((g_automap_selx == gs_x_target) &&
+		(g_automap_sely == gs_y_target))
 	{
 		ae_costs = 0;
 		host_writeb((Bit8u*)g_dtp2, 0);

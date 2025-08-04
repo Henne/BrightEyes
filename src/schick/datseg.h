@@ -338,6 +338,9 @@ extern signed char* g_anitab_spell_index[2];	//ds:0x6366; seg045
 
 extern signed char g_hero_sel_exclude;		//ds:0x64a2; seg047, seg049, seg103, seg120
 
+extern signed short g_automap_selx;		//ds:0x7de5; seg074, seg099
+extern signed short g_automap_sely;		//ds:0x7de7; seg074, seg099
+
 extern signed short g_dng_level_changed;	//ds:0x9312; seg075, seg076
 
 extern const char g_dng01_str_marbo[6];		//ds:0x93d7; seg077
