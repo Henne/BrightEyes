@@ -162,7 +162,7 @@ extern Bit8s  gs_groups_current_loctype[6];	//ds:0x2d61; seg002, seg049
 extern Bit8s  gs_current_town;			//ds:0x2d67; seg002-seg120
 extern Bit8s  gs_groups_town[6];		//ds:0x2d68; seg002-seg074
 extern Bit8s  gs_dungeon_index;			//ds:0x2d6e; seg002-seg120
-extern Bit8s  gs_groups_dng_index[6];		//ds:0x2d6f1; seg002, seg049
+extern Bit8s  gs_groups_dng_index[6];		//ds:0x2d6f; seg002, seg049
 extern Bit8s  gs_dungeon_level;			//ds:0x2d75; seg002-seg107
 extern Bit8s  gs_groups_dng_level[6];		//ds:0x2d76; seg002-seg084
 extern Bit8s  gs_direction_bak;			//ds:0x2d7c; seg03-seg120
@@ -255,9 +255,9 @@ extern Bit8u  gs_need_letter;			//ds:0x3f73; seg068, seg069
 extern Bit8u  gs_gremob_invited;		//ds:0x3f74; seg070, seg071
 extern Bit8u  gs_harlot_date;			//ds:0x3f75; seg070
 extern Bit8u  gs_drug_timer;			//ds:0x3f76; seg002, seg071
-extern Bit8u  gs_ptemple_closed;		//ds:0x3d77; seg071
-extern Bit8u  gs_alrik_derondan;		//ds:0x3d78; seg070, seg071, seg073
-extern Bit8u  gs_alrik_derondan_insulted;	//ds:0x3d79; seg071
+extern Bit8u  gs_ptemple_closed;		//ds:0x3f77; seg071
+extern Bit8u  gs_alrik_derondan;		//ds:0x3f78; seg070, seg071, seg073
+extern Bit8u  gs_alrik_derondan_insulted;	//ds:0x3f79; seg071
 
 extern Bit32s gs_dng12_watertrap_timer;		//ds:0x3fa2; seg002, seg090
 
@@ -331,13 +331,18 @@ extern signed int g_fig_dropped_counter;	//ds:0x5f12; seg032, seg041
 extern signed int g_fig_all_heroes_withdrawn;	//ds:0x5f14; seg032
 extern signed int g_max_enemies;		//ds:0x5f16; seg032, seg080, seg117
 
-extern signed char  g_anitab_spell_nvfno[2];	//ds:0x634c; seg045
 extern signed short g_anitab_spell_ox[2];	//ds:0x633e; seg045
 extern signed short g_anitab_spell_oy[2];	//ds:0x6342; seg045
+extern signed char  g_anitab_spell_nvfno[2];	//ds:0x634c; seg045
 extern signed char* g_anitab_spell_index[2];	//ds:0x6366; seg045
 
 extern signed char g_hero_sel_exclude;		//ds:0x64a2; seg047, seg049, seg103, seg120
 
+extern const struct struct_point g_visual_fields_offsets_std[29];	//ds:0x733a; seg066
+extern const struct struct_point g_visual_fields_offsets_sign[29];	//ds:0x73ae; seg066
+extern const struct struct_point g_visual_fields_offsets_inn[29];	//ds:0x7422; seg066
+extern const struct struct_point g_visual_fields_offsets_grass[29];	//ds:0x7496; seg066
+extern unsigned char g_tex_descr_table[101][18];	//ds:0x750a; seg066
 extern const signed char g_visual_field_draw_order[29];//ds:0x7c24; seg066
 extern signed char g_can_merge_group;		//ds:0x7c41; seg066, seg076
 extern signed char g_c_event_active;		//ds:0x7c42; seg002, seg067
@@ -350,11 +355,6 @@ extern unsigned char g_towns_gossip_max[52];	//ds:0x7c9d; seg073
 extern unsigned char g_towns_gossip_off[52];	//ds:0x7cd1; seg073
 extern const char g_gossip_str_triple_wildcard[8];	//ds:0x7d06;
 
-extern const struct struct_point g_visual_fields_offsets_std[29];	//ds:0x733a; seg066
-extern const struct struct_point g_visual_fields_offsets_sign[29];	//ds:0x73ae; seg066
-extern const struct struct_point g_visual_fields_offsets_inn[29];	//ds:0x7422; seg066
-extern const struct struct_point g_visual_fields_offsets_grass[29];	//ds:0x7496; seg066
-extern unsigned char g_tex_descr_table[101][18];	//ds:0x750a; seg066
 extern const unsigned char g_automap_bitmask[8];	//ds:0x7d4a; seg002, seg074
 extern const unsigned char g_automap_tile_arrowup[49];	//ds:0x7d52; seg074
 extern const unsigned char g_automap_tile_arrowright[49];	//ds:0x7d83; seg074
