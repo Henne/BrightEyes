@@ -221,7 +221,7 @@ signed short DNG07_handler(void)
 		{
 			if (gs_treasure_maps[1] == 2)
 			{
-				ds_writeb(TMAP_DOUBLE2, 1);
+				g_tmap_double2 = 1;
 			}
 
 			gs_treasure_maps[1] = 1;

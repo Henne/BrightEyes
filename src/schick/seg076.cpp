@@ -428,7 +428,7 @@ signed short DNG_step(void)
 
 	ds_writeb((NEW_MENU_ICONS + 0), MENU_ICON_SPLIT_GROUP);
 	old_value = ds_readbs((NEW_MENU_ICONS + 1));
-	ds_writeb((NEW_MENU_ICONS + 1), ds_readbs(CAN_MERGE_GROUP) == -1 ? MENU_ICON_MERGE_GROUP_GRAYED : MENU_ICON_MERGE_GROUP);
+	ds_writeb((NEW_MENU_ICONS + 1), g_can_merge_group == -1 ? MENU_ICON_MERGE_GROUP_GRAYED : MENU_ICON_MERGE_GROUP);
 
 	if (ds_readbs((NEW_MENU_ICONS + 1)) != old_value)
 	{
@@ -472,7 +472,7 @@ signed short DNG_step(void)
 	/* TODO: potential bug: g_dng_level_changed is set to 1, but never back to 0 */
 	if ((gs_x_target != gs_x_target_bak) || (gs_y_target != gs_y_target_bak) || g_dng_level_changed)
 	{
-		ds_writeb(CAN_MERGE_GROUP, (unsigned char)can_merge_group());
+		g_can_merge_group = can_merge_group();
 		ds_writew(LOCKPICK_TRY_COUNTER, 0);
 	}
 
@@ -523,7 +523,7 @@ signed short DNG_step(void)
 	if (ds_readws(ACTION) == ACTION_ID_ICON_1)
 	{
 		GRP_split();
-		ds_writeb(CAN_MERGE_GROUP, (unsigned char)can_merge_group());
+		g_can_merge_group = can_merge_group();
 
 	} else if (ds_readws(ACTION) == ACTION_ID_ICON_2)
 	{
@@ -540,7 +540,7 @@ signed short DNG_step(void)
 #ifdef M302de_ORIGINAL_BUGFIX
 			/* Original-Bug 19: After merging groups in a dungeon, the icon "merge groups" is not grayed.
 			 * Compare to the corresponding code in city_step() in seg066.cpp, where the following line is present. */
-			ds_writeb(CAN_MERGE_GROUP, -1);
+			g_can_merge_group = -1;
 #endif
 			/* TODO: if a "dark" group was merged with a "lighted" group, make group "lighted". */
 		}

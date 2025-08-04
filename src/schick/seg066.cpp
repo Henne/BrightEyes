@@ -628,7 +628,7 @@ void city_water_and_grass(void)
 
 	for (i = 0; i < 29; i++) {
 
-		c1 = ds_readbs(VISUAL_FIELD_DRAW_ORDER + i);
+		c1 = g_visual_field_draw_order[i];
 		c2 = ds_readb(VISUAL_FIELD_VALS + c1);
 
 		if (c2 != 0) {
@@ -680,7 +680,7 @@ void city_building_textures(void)
 
 	for (i = 0; i < 29; i++) {
 
-		c1 = ds_readbs(VISUAL_FIELD_DRAW_ORDER + i);
+		c1 = g_visual_field_draw_order[i];
 		c2 = ds_readb(VISUAL_FIELD_VALS + c1);
 
 		if (c2 != 0) {
@@ -864,7 +864,7 @@ signed short city_step(void)
 
 	ds_writebs((NEW_MENU_ICONS + 0), MENU_ICON_SPLIT_GROUP);
 	l4 = ds_readbs((NEW_MENU_ICONS + 1));
-	ds_writebs((NEW_MENU_ICONS + 1), ds_readbs(CAN_MERGE_GROUP) == -1 ? MENU_ICON_MERGE_GROUP_GRAYED : MENU_ICON_MERGE_GROUP);
+	ds_writebs((NEW_MENU_ICONS + 1), g_can_merge_group == -1 ? MENU_ICON_MERGE_GROUP_GRAYED : MENU_ICON_MERGE_GROUP);
 
 	if (ds_readbs((NEW_MENU_ICONS + 1)) != l4) {
 		ds_writew(REDRAW_MENUICONS, 1);
@@ -901,7 +901,7 @@ signed short city_step(void)
 	if (gs_x_target != gs_x_target_bak ||
 		gs_y_target != gs_y_target_bak)
 	{
-		ds_writebs(CAN_MERGE_GROUP, (signed char)can_merge_group());
+		g_can_merge_group = can_merge_group();
 		set_automap_tiles(gs_x_target, gs_y_target);
 	}
 
@@ -933,12 +933,12 @@ signed short city_step(void)
 	if (ds_readws(ACTION) == ACTION_ID_ICON_1) {
 
 		GRP_split();
-		ds_writebs(CAN_MERGE_GROUP, (signed char)can_merge_group());
+		g_can_merge_group = can_merge_group();
 
 	} else if (ds_readws(ACTION) == ACTION_ID_ICON_2) {
 
 		GRP_merge();
-		ds_writebs(CAN_MERGE_GROUP, -1);
+		g_can_merge_group = -1;
 
 	} else if (ds_readws(ACTION) == ACTION_ID_ICON_3) {
 

@@ -55,7 +55,7 @@ void INF_jurge_hjore(signed short informer, signed short state)
 			g_dialog_next_state = (count_map_parts() ? 29 : 30);
 
 			if (gs_treasure_maps[0] == 2) {
-				ds_writeb(TMAP_DOUBLE2, 1);
+				g_tmap_double2 = 1;
 			}
 
 			gs_treasure_maps[0] = 1;
@@ -95,7 +95,7 @@ void INF_jurge_hjore(signed short informer, signed short state)
 
 			/* get the false map part ?*/
 			if (gs_treasure_maps[9] == 2) {
-				ds_writeb(TMAP_DOUBLE2, 1);
+				g_tmap_double2 = 1;
 			}
 
 			gs_treasure_maps[9] = 1;
@@ -192,7 +192,7 @@ void INF_yasma_umbrik_isleif(signed short informer, signed short state)
 		} else if (state == 17 || state == 26) {
 
 			/* check if the heroes already have the map */
-			if (gs_treasure_maps[2] == 2) ds_writeb(TMAP_DOUBLE2, 1);
+			if (gs_treasure_maps[2] == 2) g_tmap_double2 = 1;
 
 			/* the heroes get the map */
 			gs_treasure_maps[2] = 1;
@@ -252,7 +252,7 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 		} else if (state == 21) {
 
 			/* check if the party already has this map piece */
-			if (gs_treasure_maps[3] == 2) ds_writeb(TMAP_DOUBLE2, 1);
+			if (gs_treasure_maps[3] == 2) g_tmap_double2 = 1;
 			/* get the map piece */
 			gs_treasure_maps[3] = 1;
 			/* each of the heroes gets 10 AP */
@@ -263,7 +263,7 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 			/* test the group leader on KL+5, to get the map */
 			if (test_attrib(get_hero(0), ATTRIB_KL, 5) > 0) {
 				/* check if the party already has this map piece */
-				if (gs_treasure_maps[3] == 2) ds_writeb(TMAP_DOUBLE2, 1);
+				if (gs_treasure_maps[3] == 2) g_tmap_double2 = 1;
 				/* get the map piece */
 				gs_treasure_maps[3] = 1;
 				/* each of the heroes gets 10 AP */
@@ -277,7 +277,7 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 			tmp = gs_treasure_maps[3];
 
 			/* check if the party already has this map piece */
-			if (gs_treasure_maps[3] == 2) ds_writeb(TMAP_DOUBLE2, 1);
+			if (gs_treasure_maps[3] == 2) g_tmap_double2 = 1;
 
 			/* get the map piece */
 			gs_treasure_maps[3] = 1;
@@ -312,7 +312,7 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 				timewarp(MINUTES(30));
 			} else if (state == 11 || state == 26) {
 				/* check if the party already has this map piece */
-				if (gs_treasure_maps[4] == 2) ds_writeb(TMAP_DOUBLE2, 1);
+				if (gs_treasure_maps[4] == 2) g_tmap_double2 = 1;
 				/* get the map piece */
 				gs_treasure_maps[4] = 1;
 				/* each of the heroes gets 10 AP */
@@ -409,7 +409,7 @@ void INF_eliane_tiomar(signed short informer, signed short state)
 			g_dialog_next_state = (ds_readb(QUEST_NAMELESS_DONE) && gs_informer_flags[INFORMER_ELIANE] != 2 ? 2 : 3);
 		} else if (state == 5 || state == 27) {
 				/* check if the party already has this map piece */
-				if (gs_treasure_maps[5] == 2) ds_writeb(TMAP_DOUBLE2, 1);
+				if (gs_treasure_maps[5] == 2) g_tmap_double2 = 1;
 				/* get the map piece */
 				gs_treasure_maps[5] = 1;
 				/* each of the heroes gets 10 AP */
@@ -445,7 +445,7 @@ void INF_eliane_tiomar(signed short informer, signed short state)
 			g_dialog_next_state = (get_first_hero_with_item(ITEM_WRITING_OF_SIEBENSTEIN) != -1 ? 6 : 7);
 		} else if (state == 12 || state == 42) {
 				/* check if the party already has this map piece */
-				if (gs_treasure_maps[8] == 2) ds_writeb(TMAP_DOUBLE2, 1);
+				if (gs_treasure_maps[8] == 2) g_tmap_double2 = 1;
 				/* get the map piece */
 				gs_treasure_maps[8] = 1;
 				/* each of the heroes gets 10 AP */
@@ -611,7 +611,7 @@ void INF_treborn_unicorn(signed short informer, signed short state)
 			set_party_money(money);
 
 			/* check if the party already has this map piece */
-			if (gs_treasure_maps[7] == 2) ds_writeb(TMAP_DOUBLE2, 1);
+			if (gs_treasure_maps[7] == 2) g_tmap_double2 = 1;
 			/* get the map piece */
 			gs_treasure_maps[7] = 1;
 			/* each of the heroes gets 10 AP */
@@ -656,7 +656,7 @@ void INF_treborn_unicorn(signed short informer, signed short state)
 			set_party_money(money);
 
 			/* check if the party already has this map piece */
-			if (gs_treasure_maps[7] == 2) ds_writeb(TMAP_DOUBLE2, 1);
+			if (gs_treasure_maps[7] == 2) g_tmap_double2 = 1;
 			/* get the map piece */
 			gs_treasure_maps[7] = 1;
 			/* each of the heroes gets 10 AP */
@@ -783,7 +783,7 @@ void INF_swafnild_unicorn(signed short informer, signed short state)
 			gs_informer_flags[INFORMER_SWAFNILD] = 2;
 		} else if (state == 32) {
 				/* check if the party already has this map piece */
-				if (gs_treasure_maps[6] == 2) ds_writeb(TMAP_DOUBLE2, 1);
+				if (gs_treasure_maps[6] == 2) g_tmap_double2 = 1;
 				/* get the map piece */
 				gs_treasure_maps[6] = 1;
 				/* each of the heroes gets 10 AP */
@@ -797,16 +797,16 @@ void INF_swafnild_unicorn(signed short informer, signed short state)
 						(ds_readb(SWAFNILD_DESTINATION) == 2 ? ds_readb(SWAFNILD_TP2) : ds_readb(SWAFNILD_TP3)));
 
 			switch (gs_current_town) {
-				case TOWNS_PREM: gs_x_target_bak = (22); gs_y_target_bak = ( 8); break;
-				case TOWNS_KORD: gs_x_target_bak = ( 4); gs_y_target_bak = ( 3); break;
-				case TOWNS_OTTARJE: gs_x_target_bak = ( 9); gs_y_target_bak = (10); break;
-				case TOWNS_SKJAL: gs_x_target_bak = (11); gs_y_target_bak = (11); break;
-				case TOWNS_TREBAN: gs_x_target_bak = ( 4); gs_y_target_bak = (12); break;
-				case TOWNS_RUNINSHAVEN: gs_x_target_bak = ( 6); gs_y_target_bak = ( 6); break;
+				case TOWNS_PREM: gs_x_target_bak        = 22; gs_y_target_bak =  8; break;
+				case TOWNS_KORD: gs_x_target_bak        =  4; gs_y_target_bak =  3; break;
+				case TOWNS_OTTARJE: gs_x_target_bak     =  9; gs_y_target_bak = 10; break;
+				case TOWNS_SKJAL: gs_x_target_bak       = 11; gs_y_target_bak = 11; break;
+				case TOWNS_TREBAN: gs_x_target_bak      =  4; gs_y_target_bak = 12; break;
+				case TOWNS_RUNINSHAVEN: gs_x_target_bak =  6; gs_y_target_bak =  6; break;
 			}
 
 			gs_current_loctype_bak = LOCTYPE_NONE;
-			ds_writeb(SWAFNILD_TRAVELED, 1);
+			g_swafnild_traveled = 1;
 
 			timewarp_until_midnight();
 		} else if (state == 42) {
@@ -834,7 +834,7 @@ void INF_swafnild_unicorn(signed short informer, signed short state)
 
 			/* check if the group had all map parts */
 			if (i != 99) {
-				ds_writeb(TMAP_DOUBLE1, 1);
+				g_tmap_double1 = 1;
 			}
 
 			show_treasure_map();

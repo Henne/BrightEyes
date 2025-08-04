@@ -4,7 +4,7 @@
  *
  *	Borlandified and identical
  *	Compiler:	Borland C++ 3.1
- *	Call:		BCC.EXE -mlarge -O- -c -1 -Yo seg058.cpp
+ *	Call:		BCC.EXE -mlarge -O- -c -1 -Yo seg068.cpp
  */
 #include <stdio.h>
 #include <string.h>
@@ -205,7 +205,7 @@ void THO_bank(void)
 			if (gs_bank_deposit >= 30000) {
 
 				/* prevent overflow  at 32767 */
-				GUI_output((char*)(p_datseg + STR_BANK_DEPOSIT_TO_BIG));
+				GUI_output((char*)g_str_bank_deposit_to_big);
 
 			} else {
 
@@ -317,7 +317,7 @@ void THO_arsenal(void)
 
 	} else {
 
-		GUI_output((char*)(p_datseg + STR_OBVIOUSLY_CLOSED));
+		GUI_output((char*)g_str_obviously_closed);
 	}
 }
 

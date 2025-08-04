@@ -1105,20 +1105,20 @@
 #define VISUAL_FIELD_OFFSETS_INN        (0x7422)    /* struct(4)[29]; struct{signed short x,y;} */
 #define VISUAL_FIELD_OFFSETS_GRASS      (0x7496)    /* struct(4)[29]; struct{signed short x,y;} */
 #define TEX_DESCR_TABLE                 (0x750a)    /* struct(18)[101] */
-#define VISUAL_FIELD_DRAW_ORDER         (0x7c24)    /* signed char[29] */
-#define CAN_MERGE_GROUP                 (0x7c41)    /* signed char; {-1,1} */
-#define C_EVENT_ACTIVE                  (0x7c42)    /* unsigned char; 0 = default, 1 = city event active */
+//#define VISUAL_FIELD_DRAW_ORDER         (0x7c24)    /* signed char[29] */
+//#define CAN_MERGE_GROUP                 (0x7c41)    /* signed char; {-1,1} */
+//#define C_EVENT_ACTIVE                  (0x7c42)    /* unsigned char; 0 = default, 1 = city event active */
 // ?1
-#define STR_BANK_DEPOSIT_TO_BIG         (0x7c44)    /* char[57]; "TUT MIR LEID, ICH AKZEPTIERE MAXIMAL 30000 SILBERM\x9aNZEN!" */
-#define STR_OBVIOUSLY_CLOSED            (0x7c7d)    /* char[28]; "OFFENSICHTLICH GESCHLOSSEN!" */
+//#define STR_BANK_DEPOSIT_TO_BIG         (0x7c44)    /* char[57]; "TUT MIR LEID, ICH AKZEPTIERE MAXIMAL 30000 SILBERM\x9aNZEN!" */
+//#define STR_OBVIOUSLY_CLOSED            (0x7c7d)    /* char[28]; "OFFENSICHTLICH GESCHLOSSEN!" */
 // ?1
-#define TMAP_DOUBLE1                    (0x7c9a)    /* unsigned char; 1 = unicorn brought a piece you already have */
-#define TMAP_DOUBLE2                    (0x7c9b)    /* unsigned char; 1 = you got a piece you already have from the unicorn */
-#define SWAFNILD_TRAVELED               (0x7c9c)    /* unsigned char; {0,1} */
-#define TOWNS_GOSSIP_MAX                (0x7c9d)    /* unsigned char[52] */
-#define TOWNS_GOSSIP_OFF                (0x7cd1)    /* unsigned char[52] */
+//#define TMAP_DOUBLE1                    (0x7c9a)    /* unsigned char; 1 = unicorn brought a piece you already have */
+//#define TMAP_DOUBLE2                    (0x7c9b)    /* unsigned char; 1 = you got a piece you already have from the unicorn */
+//#define SWAFNILD_TRAVELED               (0x7c9c)    /* unsigned char; {0,1} */
+//#define TOWNS_GOSSIP_MAX                (0x7c9d)    /* unsigned char[52] */
+//#define TOWNS_GOSSIP_OFF                (0x7cd1)    /* unsigned char[52] */
 // ?1
-#define GOSSIP_STR_TRIPLE_WILDCARD      (0x7d06)    /* char[8]; "%s %s%s" */
+//#define GOSSIP_STR_TRIPLE_WILDCARD      (0x7d06)    /* char[8]; "%s %s%s" */
 #define PALETTE_FIGHT2                  (0x7d0e)    /* struct(3)[20]; struct{unsigned char r,g,b;} */
 //#define AUTOMAP_BITMASK                 (0x7d4a)    /* unsigned char[8]; */
 //#define AUTOMAP_TILE_ARROWUP            (0x7d52)    /* unsigned char[49]; {0,1} */

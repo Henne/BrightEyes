@@ -34,7 +34,7 @@ unsigned short get_tavern_gossip(void)
 	unsigned short r_si;
 	unsigned short r_di;
 
-	r_di = ds_readb(TOWNS_GOSSIP_MAX + gs_current_town);
+	r_di = g_towns_gossip_max[gs_current_town];
 
 	r_si = r_di = random_schick(r_di) - 1;
 
@@ -439,7 +439,7 @@ unsigned short get_tavern_gossip(void)
 	}
 	}
 
-	return r_di + ds_readb(TOWNS_GOSSIP_OFF + gs_current_town);
+	return r_di + g_towns_gossip_off[gs_current_town];
 
 }
 
@@ -459,10 +459,7 @@ char* get_drinkmate(void)
 	surname = (surname == 0 ? 0xa7 : 0xbb);
 	surname += random_schick(20) - 1;
 
-	sprintf(g_text_output_buf,
-		(char*)p_datseg + GOSSIP_STR_TRIPLE_WILDCARD, /* "%s %s%s" */
-		get_tx(name),
-		get_tx(surname),
+	sprintf(g_text_output_buf, g_gossip_str_triple_wildcard, get_tx(name), get_tx(surname),
 		get_tx((ds_readb(TLK_TAV_INFORMERSEX) - 1) == 0 ? 207 : 208));
 
 	return g_text_output_buf;

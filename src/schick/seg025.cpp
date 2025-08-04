@@ -323,7 +323,7 @@ void show_treasure_map(void)
 
 		refresh_screen_size();
 
-		if (ds_readb(TMAP_DOUBLE1) != 0) {
+		if (g_tmap_double1) {
 
 			/* unicorn brought a piece you already have */
 			tw_bak = g_textbox_width;
@@ -332,10 +332,10 @@ void show_treasure_map(void)
 			GUI_output(get_ttx(808));
 
 			g_textbox_width = tw_bak;
-			ds_writeb(TMAP_DOUBLE1, 0);
+			g_tmap_double1 = 0;
 		}
 
-		if (ds_readb(TMAP_DOUBLE2) != 0) {
+		if (g_tmap_double2) {
 			/* you got a piece you already have from the unicorn */
 			tw_bak = g_textbox_width;
 			g_textbox_width = 3;
@@ -343,7 +343,7 @@ void show_treasure_map(void)
 			GUI_output(get_ttx(809));
 
 			g_textbox_width = tw_bak;
-			ds_writeb(TMAP_DOUBLE2, 0);
+			g_tmap_double2 = 0;
 		}
 
 		if (count >= 7 && !ds_readb(FIND_HYGGELIK)) {
@@ -353,7 +353,7 @@ void show_treasure_map(void)
 			g_textbox_width = 3;
 
 			/* */
-			sprintf(g_text_output_buf, get_ttx(727),	(char*)get_hero(get_random_hero()) + HERO_NAME2);
+			sprintf(g_text_output_buf, get_ttx(727), (char*)get_hero(get_random_hero()) + HERO_NAME2);
 			GUI_output(g_text_output_buf);
 
 			g_textbox_width = tw_bak;

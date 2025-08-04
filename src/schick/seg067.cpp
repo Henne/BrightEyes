@@ -34,7 +34,7 @@ void city_event_switch(void)
 	load_tx(ARCHIVE_FILE_STRASSE_LTX);
 
 	/* set city flag */
-	ds_writeb(C_EVENT_ACTIVE, 1);
+	g_c_event_active = 1;
 
 	switch (random_schick(9)) {
 		case 1: city_event_1(); break;
@@ -49,14 +49,14 @@ void city_event_switch(void)
 	}
 
 	/* reset city flag */
-	ds_writeb(C_EVENT_ACTIVE, 0);
+	g_c_event_active = 0;
 
 	/* load the LTX-file of the current town */
 	load_tx(gs_current_town + 77);
 
 	/* update the current position / make the step */
-	gs_x_target = (gs_x_target_bak);
-	gs_y_target = (gs_y_target_bak);
+	gs_x_target = gs_x_target_bak;
+	gs_y_target = gs_y_target_bak;
 }
 
 /**

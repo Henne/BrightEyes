@@ -127,9 +127,9 @@ void do_harbor(void)
 					/* meet SWAFNILD */
 					do_talk(12, 0);
 
-					if (ds_readb(SWAFNILD_TRAVELED) != 0) {
+					if (g_swafnild_traveled) {
 
-						ds_writeb(SWAFNILD_TRAVELED, 0);
+						g_swafnild_traveled = 0;
 
 						leave_location();
 

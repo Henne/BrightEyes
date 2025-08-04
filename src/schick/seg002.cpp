@@ -3754,7 +3754,7 @@ void delay_or_keypress(signed short duration)
 		handle_input();
 		ds_writeb(DELAY_OR_KEYPRESS_FLAG, 0);
 
-		if (ds_readb(C_EVENT_ACTIVE) != 0) {
+		if (g_c_event_active) {
 
 			if (ds_readw(ACTION) != 0) {
 
