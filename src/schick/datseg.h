@@ -340,6 +340,8 @@ extern signed char g_hero_sel_exclude;		//ds:0x64a2; seg047, seg049, seg103, seg
 
 extern signed short g_dng_level_changed;	//ds:0x9312; seg075, seg076
 
+extern const char g_dng01_str_marbo[6];		//ds:0x93d7; seg077
+
 extern unsigned char *g_hexenknoten_gfx_buf;	// ds:0xacc8; seg100
 extern signed short g_monster_spell_ae_cost;	// ds:0xaccc; seg102
 extern char g_select_skill_lvlup[6]; 		// ds:0xacce; seg103

@@ -1151,7 +1151,7 @@
 #define DNG_HANDLERS                    (0x92d6)    /* Bit8u*[15] */
 //#define DNG_LEVEL_CHANGED               (0x9312)    /* unsigned short; {1,0} */
 #define DNG01_SPECIALCHESTS             (0x9314)    /* struct(21)[9] */
-#define DNG01_STR_MARBO                 (0x93d1)    /* char[6] */
+//#define DNG01_STR_MARBO                 (0x93d1)    /* char[6] */
 // ?1
 #define DNG02_SPECIALCHESTS             (0x93d8)    /* struct(21)[8] */
 #define DNG03_SPECIALCHESTS             (0x9480)    /* struct(21)[14] */

@@ -332,7 +332,7 @@ void DNG01_chest6_x1(Bit8u* chest)
 		GUI_input(get_tx(2), 10);
 
 		/* compare if the user wrote MARBO */
-		if (!strcmp(g_text_input_buf, (char*)p_datseg + DNG01_STR_MARBO))
+		if (!strcmp(g_text_input_buf, g_dng01_str_marbo))
 		{
 			// correct answer
 #if defined(__BORLANDC__)
