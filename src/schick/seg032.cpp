@@ -868,7 +868,7 @@ void FIG_load_ship_sprites(void)
 
 				/* check for memory allocation error */
 				if (g_fightobj_buf_freespace < 0L) {
-					GUI_input((char*)p_datseg + STR_ERROR_ON_OBJ_MALLOC, 0);
+					GUI_input((char*)g_str_error_on_obj_malloc, 0);
 				}
 			}
 

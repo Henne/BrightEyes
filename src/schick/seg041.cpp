@@ -197,9 +197,7 @@ void FIG_damage_enemy(Bit8u *enemy, Bit16s damage, signed short preserve_renegad
 			/* set a flag in the status area */
 			ds_writeb(DNG09_CULTIST_FLAG, 0);
 
-		} else if ((g_current_fight_no == FIGHTS_F144) &&
-				(host_readb(enemy) == 0x48) &&
-				!ds_readbs(FINALFIGHT_TUMULT))
+		} else if ((g_current_fight_no == FIGHTS_F144) && (host_readb(enemy) == 0x48) && !g_finalfight_tumult)
 		{
 			/* slaying the orc champion, ends the fight */
 				g_in_fight = 0;

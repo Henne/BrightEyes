@@ -928,17 +928,17 @@
 #define INFORMER_TAB                    (0x5ed6)    /* struct(4)[15]; struct{short name_id; char town, unkn;} */
 //#define FIG_DROPPED_COUNTER             (0x5f12)    /* signed short */
 //#define FIG_ALL_HEROES_WITHDRAWN        (0x5f14)    /* unsigned short; {0,1} */
-#define MAX_ENEMIES                     (0x5f16)    /* signed short; an upper bound for the number of enemies */
-#define STR_ERROR_ON_OBJ_MALLOC         (0x5f18)    /* char[23]; "ERROR ON OBJECT MALLOC" */
+//#define MAX_ENEMIES                     (0x5f16)    /* signed short; an upper bound for the number of enemies */
+//#define STR_ERROR_ON_OBJ_MALLOC         (0x5f18)    /* char[23]; "ERROR ON OBJECT MALLOC" */
 // ?1
-#define FINALFIGHT_TUMULT               (0x5f30)    /* unsigned char; {0,1} */
-#define AUTOFIGHT_MAGIC                 (0x5f31)    /* unsigned char */
-#define RED_STRING1                     (0x5f32)    /* char[5]; "\xf1%s\xf0" */
-#define RED_STRING2                     (0x5f37)    /* char[5]; "\xf1%s\xf0" */
-#define SPACE_SEPARATED_STRINGS         (0x5f3c)    /* char[6]; "%s %s" */
-#define EMPTY_STRING3                   (0x5f42)    /* char; "" */
-#define EMPTY_STRING4                   (0x5f43)    /* char; "" */
-#define EMPTY_STRING5                   (0x5f44)    /* char; "" */
+//#define FINALFIGHT_TUMULT               (0x5f30)    /* unsigned char; {0,1} */
+//#define AUTOFIGHT_MAGIC                 (0x5f31)    /* unsigned char */
+//#define RED_STRING1                     (0x5f32)    /* char[5]; "\xf1%s\xf0" */
+//#define RED_STRING2                     (0x5f37)    /* char[5]; "\xf1%s\xf0" */
+//#define SPACE_SEPARATED_STRINGS         (0x5f3c)    /* char[6]; "%s %s" */
+//#define EMPTY_STRING3                   (0x5f42)    /* char; "" */
+//#define EMPTY_STRING4                   (0x5f43)    /* char; "" */
+//#define EMPTY_STRING5                   (0x5f44)    /* char; "" */
 // ?1
 #define CB_OBJ_NONOBSTACLE              (0x5f46)    /* signed short[27]; { 23,24,25,26,27,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,-1 } */
 #define VIEWDIR_OFFSETS1                (0x5f7c)    /* struct(4)[4]; struct{signed short x, y;}; { {1,0}, {0,-1}, {-1,0}, {0,1} } */

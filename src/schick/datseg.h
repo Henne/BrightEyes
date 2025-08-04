@@ -330,6 +330,15 @@ extern void (*g_location_handlers[19])(void);	//ds:0x4c3b; seg025
 extern signed int g_fig_dropped_counter;	//ds:0x5f12; seg032, seg041
 extern signed int g_fig_all_heroes_withdrawn;	//ds:0x5f14; seg032
 extern signed int g_max_enemies;		//ds:0x5f16; seg032, seg080, seg117
+extern const char g_str_error_on_obj_malloc[23];//ds:0x5f18; seg032
+extern signed char g_finalfight_tumult;		//ds:0x5f30; seg033, seg041
+extern signed char g_autofight_magic;		//ds:0x5f31; seg033, seg036
+extern const char g_red_string1[5];		//ds:0x5f32; seg033
+extern const char g_red_string2[5];		//ds:0x5f37; seg033
+extern const char g_space_separated_strings[6];	//ds:0x5f3c; seg033
+extern const char g_empty_string3[1];		//ds:0x5f42; seg033
+extern const char g_empty_string4[1];		//ds:0x5f43; seg033
+extern const char g_empty_string5[1];		//ds:0x5f44; seg033
 
 extern signed short g_anitab_spell_ox[2];	//ds:0x633e; seg045
 extern signed short g_anitab_spell_oy[2];	//ds:0x6342; seg045

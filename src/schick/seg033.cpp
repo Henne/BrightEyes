@@ -93,7 +93,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 
 			host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_WAIT);
 
-			if (((g_current_fight_no != FIGHTS_F144) || (ds_readbs(FINALFIGHT_TUMULT) != 0)) &&
+			if (((g_current_fight_no != FIGHTS_F144) || (g_finalfight_tumult)) &&
 				(host_readbs(hero + HERO_BP_LEFT) >= 3))
 			{
 				KI_hero(hero, hero_pos, x, y);
@@ -119,9 +119,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 				//if (!item_weapon(get_itemsdat(weapon_id)) || (item_weapon(get_itemsdat(weapon_id)) && test_bit0(hero + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_FLAGS)))) { /* test 'broken' flag */
 				if (!item_weapon(get_itemsdat(weapon_id)) || (item_weapon(get_itemsdat(weapon_id)) && inventory_broken(hero + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY)))) { /* test 'broken' flag */
 					/* no weapon or weapon broken, use red color for "change weapon" */
-					sprintf(g_text_output_buf,
-						(char*)p_datseg + RED_STRING1,
-						get_tx(24));
+					sprintf(g_text_output_buf, (char*)g_red_string1, get_tx(24));
 				} else {
 					/* good weapon, no special color */
 					strcpy(g_text_output_buf, get_tx(24));
@@ -129,9 +127,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 
 				if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 110 <= host_readws(hero + HERO_LOAD)) {
 					/* too much weight, use red color for "drop item" */
-					sprintf(g_text_output_buf + 50,
-						(char*)p_datseg + RED_STRING2,
-						get_tx(46));
+					sprintf(g_text_output_buf + 50, (char*)g_red_string2, get_tx(46));
 				} else {
 					/* weight ok, no special color */
 					strcpy(g_text_output_buf + 50, get_tx(46));
@@ -207,16 +203,12 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 
 					} else {
 						/* no BP left */
-						sprintf(g_dtp2,
-							get_tx(17),
-							(char*)hero + HERO_NAME2);
+						sprintf(g_dtp2, get_tx(17), (char*)hero + HERO_NAME2);
 						GUI_output(g_dtp2);
 					}
 
 				} else {
-					sprintf(g_dtp2,
-						get_tx(7),
-						(char*)hero + HERO_NAME2);
+					sprintf(g_dtp2,	get_tx(7), (char*)hero + HERO_NAME2);
 					GUI_output(g_dtp2);
 				}
 			} else if (selected == FIG_ACTION_MELEE_ATTACK) {
@@ -308,6 +300,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 											get_ttx(586),
 											get_ttx(587));
 									update_mouse_cursor();
+
 								} while (selected == -1);
 
 								host_writeb(hero + HERO_ATTACK_TYPE, selected == 1 ? 2 : (selected == 2) ? 0 : -2);
@@ -323,9 +316,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 					}
 				} else {
 					/* no BP left */
-					sprintf(g_dtp2,
-						get_tx(17),
-						(char*)hero + HERO_NAME2);
+					sprintf(g_dtp2,	get_tx(17), (char*)hero + HERO_NAME2);
 					GUI_output(g_dtp2);
 				}
 			} else if (selected == FIG_ACTION_GUARD) {
@@ -341,9 +332,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 					done = 1;
 				} else {
 					/* no BP left */
-					sprintf(g_dtp2,
-						get_tx(17),
-						(char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_tx(17), (char*)hero + HERO_NAME2);
 					GUI_output(g_dtp2);
 				}
 
@@ -444,9 +433,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						}
 					} else {
 						/* no BP left */
-						sprintf(g_dtp2,
-							get_tx(17),
-							(char*)hero + HERO_NAME2);
+						sprintf(g_dtp2, get_tx(17), (char*)hero + HERO_NAME2);
 						GUI_output(g_dtp2);
 					}
 				}
@@ -489,9 +476,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						}
 					} else {
 						/* no BP left */
-						sprintf(g_dtp2,
-							get_tx(17),
-							(char*)hero + HERO_NAME2);
+						sprintf(g_dtp2,	get_tx(17), (char*)hero + HERO_NAME2);
 						GUI_output(g_dtp2);
 					}
 			} else if (selected == FIG_ACTION_EXCHANGE_ITEM) {
@@ -519,20 +504,15 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						}
 
 						if (radio_i == 0) {
-							sprintf(g_dtp2,
-								get_ttx(750),
-								(char*)hero + HERO_NAME2);
+							sprintf(g_dtp2,	get_ttx(750), (char*)hero + HERO_NAME2);
 							GUI_output(g_dtp2);
 						} else {
 							if (host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_LEFT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID) == ITEM_NONE) {
-								sprintf(g_text_output_buf,
-									get_tx(60),
-									(char*)hero + HERO_NAME2);
+								sprintf(g_text_output_buf, get_tx(60), (char*)hero + HERO_NAME2);
 							} else {
-								sprintf(g_text_output_buf,
-									get_tx(31),
+								sprintf(g_text_output_buf, get_tx(31),
 									(char*)hero + HERO_NAME2,
-									(char*)(GUI_names_grammar((signed short)0x8002, host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_LEFT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID), 0)));
+									(char*)GUI_names_grammar((signed short)0x8002, host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_LEFT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID), 0));
 							}
 
 							refresh_screen_size();
@@ -570,9 +550,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						}
 					} else {
 						/* no BP left */
-						sprintf(g_dtp2,
-							get_tx(17),
-							(char*)hero + HERO_NAME2);
+						sprintf(g_dtp2,	get_tx(17), (char*)hero + HERO_NAME2);
 						GUI_output(g_dtp2);
 					}
 			} else if (selected == FIG_ACTION_EXCHANGE_WEAPON) {
@@ -592,25 +570,22 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 								ds_writed(RADIO_NAME_LIST + 4 * radio_i,
 									(Bit32u)(g_dtp2 + 40 * radio_i));
 
-								sprintf((char*)(char*)(ds_readd(RADIO_NAME_LIST + 4 * radio_i)),
-									(char*)p_datseg + SPACE_SEPARATED_STRINGS, /* "%s %s" */
-									(GUI_name_singular(get_itemname(weapon_id))),
-									inventory_broken(hero + HERO_INVENTORY + SIZEOF_INVENTORY * slot_no) ? get_ttx(478) : p_datseg + EMPTY_STRING3);
+								sprintf((char*)(ds_readd(RADIO_NAME_LIST + 4 * radio_i)),
+									(char*)g_space_separated_strings, /* "%s %s" */
+									GUI_name_singular(get_itemname(weapon_id)),
+									inventory_broken(hero + HERO_INVENTORY + SIZEOF_INVENTORY * slot_no) ? get_ttx(478) : (char*)g_empty_string3);
 
 								radio_i++;
 							}
 						}
 
 						if (radio_i == 0) {
-							sprintf(g_dtp2,
-								get_tx(1),
-								(char*)hero + HERO_NAME2);
+							sprintf(g_dtp2,	get_tx(1), (char*)hero + HERO_NAME2);
 							GUI_output(g_dtp2);
 						} else {
-							sprintf(g_text_output_buf,
-								get_tx(2),
+							sprintf(g_text_output_buf, get_tx(2),
 								(char*)hero + HERO_NAME2,
-								(char*)(GUI_names_grammar((signed short)0x8002, host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID), 0)));
+								(char*)GUI_names_grammar((signed short)0x8002, host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID), 0));
 
 							refresh_screen_size();
 							tw_bak = g_textbox_width;
@@ -762,10 +737,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 					pa = 0;
 				}
 
-				sprintf(g_dtp2,
-					get_tx(0),
-					/* name */
-					(char*)hero + HERO_NAME2,
+				sprintf(g_dtp2,	get_tx(0), (char*)hero + HERO_NAME2,
 					/* typus */
 					get_ttx((host_readbs(hero + HERO_SEX) != 0 ? 0x251 : 9) + host_readbs(hero + HERO_TYPE)),
 					/* level */
@@ -783,9 +755,9 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 					/* AE */
 					host_readws(hero + HERO_AE), host_readws(hero + HERO_AE_ORIG),
 					/* poison */
-					hero_is_poisoned(hero) ? get_tx(36) : p_datseg + EMPTY_STRING4,
+					hero_is_poisoned(hero) ? get_tx(36) : (char*)g_empty_string4,
 					/* renegade */
-					hero_renegade(hero) == 1 ? get_tx(38) : p_datseg + EMPTY_STRING5);
+					hero_renegade(hero) == 1 ? get_tx(38) : (char*)g_empty_string5);
 
 				GUI_output(g_dtp2);
 
@@ -807,7 +779,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 					refresh_screen_size();
 
 					/* use magic in autofight */
-					ds_writeb(AUTOFIGHT_MAGIC, GUI_bool(get_tx(53)));
+					g_autofight_magic = GUI_bool(get_tx(53));
 
 					update_mouse_cursor();
 
@@ -815,6 +787,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 				}
 
 			} else if (selected == FIG_ACTION_DROP_ITEM) {
+
 				/* DROP ITEM / GGST. WEGWERFEN */
 				if (host_readbs(hero + HERO_BP_LEFT) >= 1) {
 
@@ -831,22 +804,18 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 							ds_writed(RADIO_NAME_LIST + 4 * radio_i,
 								(Bit32u)(g_dtp2 + 30 * radio_i));
 
-							strcpy((char*)(char*)(ds_readd(RADIO_NAME_LIST + 4 * radio_i)),
-								(GUI_name_singular(get_itemname(weapon_id))));
+							strcpy((char*)(ds_readd(RADIO_NAME_LIST + 4 * radio_i)),
+								GUI_name_singular(get_itemname(weapon_id)));
 
 							radio_i++;
 						}
 					}
 
 					if (radio_i == 0) {
-						sprintf(g_dtp2,
-							get_ttx(750),
-							(char*)hero + HERO_NAME2);
+						sprintf(g_dtp2,	get_ttx(750), (char*)hero + HERO_NAME2);
 						GUI_output(g_dtp2);
 					} else {
-						sprintf(g_text_output_buf,
-							get_tx(47),
-							(char*)hero + HERO_NAME2);
+						sprintf(g_text_output_buf, get_tx(47), (char*)hero + HERO_NAME2);
 
 						refresh_screen_size();
 						tw_bak = g_textbox_width;
@@ -884,9 +853,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 					}
 				} else {
 					/* no BP left */
-					sprintf(g_dtp2,
-						get_tx(17),
-						(char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_tx(17), (char*)hero + HERO_NAME2);
 					GUI_output(g_dtp2);
 				}
 
@@ -960,7 +927,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 			and_ds_bs((ENEMY_SHEETS + ENEMY_SHEET_FLAGS1) + SIZEOF_ENEMY_SHEET * slot_no, (signed char)0xdf); /* unset 'tied' flag */
 		}
 
-		ds_writeb(FINALFIGHT_TUMULT, 1);
+		g_finalfight_tumult = 1;
 	}
 }
 
