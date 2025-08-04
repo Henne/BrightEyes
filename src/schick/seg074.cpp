@@ -342,7 +342,7 @@ void draw_automap_square(signed short x, signed short y, signed short color, sig
 	offset_y <<= 3;
 	offset_y *= 320;
 
-	p_img_tile = ((Bit8u*)g_renderbuf_ptr) + offset_y + 8 * x + 0xca8;
+	p_img_tile = (Bit8u*)g_renderbuf_ptr + offset_y + 8 * x + 0xca8;
 
 	for (i = 0; i < 49; i++) {
 		tile[i] = (signed char)color;
@@ -352,27 +352,27 @@ void draw_automap_square(signed short x, signed short y, signed short color, sig
 
 		if (dir == 0) {
 
-			memcpy(g_text_output_buf, p_datseg + AUTOMAP_TILE_ARROWUP, 49);
+			memcpy(g_text_output_buf, g_automap_tile_arrowup, 49);
 
 		} else if (dir == 2) {
 
 			for (i = 0; i < 49; i++) {
-				host_writeb((Bit8u*)g_text_output_buf + i, ds_readb(AUTOMAP_TILE_ARROWUP + (48 - i)));
+				g_text_output_buf[i] = g_automap_tile_arrowup[48 - i];
 			}
 
 		} else if (dir == 1) {
 
-			memcpy(g_text_output_buf, (char*)(p_datseg + AUTOMAP_TILE_ARROWRIGHT), 49);
+			memcpy(g_text_output_buf, g_automap_tile_arrowright, 49);
 
 		} else {
 
 			for (i = 0; i < 49; i++) {
-				host_writeb((Bit8u*)g_text_output_buf + i, ds_readb(AUTOMAP_TILE_ARROWRIGHT + (48 - i)));
+				g_text_output_buf[i] = g_automap_tile_arrowright[48 - i];
 			}
 		}
 
 		for (i = 0; i < 49; i++) {
-			if (!host_readbs((Bit8u*)g_text_output_buf + i)) {
+			if (!g_text_output_buf[i]) {
 				tile[i] = 0;
 			}
 		}
@@ -381,7 +381,7 @@ void draw_automap_square(signed short x, signed short y, signed short color, sig
 	if (color == 7) {
 
 		for (i = 0; i < 49; i++) {
-			if (!ds_readb(AUTOMAP_TILE_CROSS + i)) {
+			if (!g_automap_tile_cross[i]) {
 				tile[i] = 0;
 			} else {
 				tile[i] = (signed char)color;
