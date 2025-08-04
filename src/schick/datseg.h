@@ -339,6 +339,7 @@ extern signed char* g_anitab_spell_index[2];	//ds:0x6366; seg045
 extern signed char g_hero_sel_exclude;		//ds:0x64a2; seg047, seg049, seg103, seg120
 
 
+extern const unsigned char g_automap_bitmask[8];	//ds:0x7d4a; seg002, seg074
 extern const unsigned char g_automap_tile_arrowup[49];	//ds:0x7d52; seg074
 extern const unsigned char g_automap_tile_arrowright[49];	//ds:0x7d83; seg074
 extern const unsigned char g_automap_tile_cross[49];	//ds:0x7d4b; seg074

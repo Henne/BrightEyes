@@ -4331,7 +4331,7 @@ struct{unsigned char r,g,b;} g_palette_fight2[20] = {
 	{ 0x00, 0x30, 0x00 },
 	{ 0x0a, 0x0a, 0x0a }
 }; // ds:0x7d0e
- unsigned char g_automap_bitmask[8] = { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 }; // ds:0x7d4a, { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 }
+const unsigned char g_automap_bitmask[8] = { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 }; // ds:0x7d4a
 const unsigned char g_automap_tile_arrowup[49] = { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1 }; // ds:0x7d52
 const unsigned char g_automap_tile_arrowright[49] = { 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 }; // ds:0x7d83
 const unsigned char g_automap_tile_cross[49] = { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 }; // ds:0x7db4

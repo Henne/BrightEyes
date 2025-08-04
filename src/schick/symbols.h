@@ -1120,7 +1120,7 @@
 // ?1
 #define GOSSIP_STR_TRIPLE_WILDCARD      (0x7d06)    /* char[8]; "%s %s%s" */
 #define PALETTE_FIGHT2                  (0x7d0e)    /* struct(3)[20]; struct{unsigned char r,g,b;} */
-#define AUTOMAP_BITMASK                 (0x7d4a)    /* unsigned char[8]; { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 } */
+//#define AUTOMAP_BITMASK                 (0x7d4a)    /* unsigned char[8]; */
 //#define AUTOMAP_TILE_ARROWUP            (0x7d52)    /* unsigned char[49]; {0,1} */
 //#define AUTOMAP_TILE_ARROWRIGHT         (0x7d83)    /* unsigned char[49]; {0,1} */
 //#define AUTOMAP_TILE_CROSS              (0x7db4)    /* unsigned char[49]; {0,1} */
