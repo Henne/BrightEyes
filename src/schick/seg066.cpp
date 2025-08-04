@@ -647,7 +647,7 @@ void city_water_and_grass(void)
 
 				if (c1 != -1) {
 
-					ptr = c1 * 18 + p_datseg + (TEX_DESCR_TABLE - 18);
+					ptr = &g_tex_descr_table[c1 - 1][0];
 
 					if ((nvf_no = host_readws(ptr + 4)) != -1) {
 
@@ -707,7 +707,7 @@ void city_building_textures(void)
 
 				if (c1 != -1) {
 
-					ptr = 18 * c1 + p_datseg + (TEX_DESCR_TABLE - 18);
+					ptr = &g_tex_descr_table[c1 - 1][0];
 
 					l4 =	bi == 2 ? 186 : (
 						bi == 3 ? 187 : (

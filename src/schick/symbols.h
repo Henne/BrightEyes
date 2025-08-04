@@ -1104,7 +1104,7 @@
 #define VISUAL_FIELD_OFFSETS_SIGN       (0x73ae)    /* struct(4)[29]; struct{signed short x,y;} */
 #define VISUAL_FIELD_OFFSETS_INN        (0x7422)    /* struct(4)[29]; struct{signed short x,y;} */
 #define VISUAL_FIELD_OFFSETS_GRASS      (0x7496)    /* struct(4)[29]; struct{signed short x,y;} */
-#define TEX_DESCR_TABLE                 (0x750a)    /* struct(18)[101] */
+//#define TEX_DESCR_TABLE                 (0x750a)    /* struct(18)[101] */
 //#define VISUAL_FIELD_DRAW_ORDER         (0x7c24)    /* signed char[29] */
 //#define CAN_MERGE_GROUP                 (0x7c41)    /* signed char; {-1,1} */
 //#define C_EVENT_ACTIVE                  (0x7c42)    /* unsigned char; 0 = default, 1 = city event active */

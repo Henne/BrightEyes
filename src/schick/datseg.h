@@ -350,6 +350,7 @@ extern unsigned char g_towns_gossip_max[52];	//ds:0x7c9d; seg073
 extern unsigned char g_towns_gossip_off[52];	//ds:0x7cd1; seg073
 extern const char g_gossip_str_triple_wildcard[8];	//ds:0x7d06;
 
+extern unsigned char g_tex_descr_table[101][18];	//ds:0x750a; seg066
 extern const unsigned char g_automap_bitmask[8];	//ds:0x7d4a; seg002, seg074
 extern const unsigned char g_automap_tile_arrowup[49];	//ds:0x7d52; seg074
 extern const unsigned char g_automap_tile_arrowright[49];	//ds:0x7d83; seg074
