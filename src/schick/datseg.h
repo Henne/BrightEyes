@@ -430,6 +430,14 @@ extern const char g_dng01_str_marbo[6];		//ds:0x93d7; seg077
 
 extern struct mouse_action g_action_table_travelmap[35];	//ds:0xa50f; seg093
 
+extern char g_grammar_article_der[4];		//ds:0xa8d4; seg096
+extern char g_grammar_article_die[4];		//ds:0xa8d8; seg096
+extern char g_grammar_article_des[4];		//ds:0xa8e0; seg096
+extern char g_grammar_article_den[4];		//ds:0xa8e4; seg096
+extern char g_grammar_article_dem[4];		//ds:0xa8e8; seg096
+
+extern char *g_grammar_articles_index[15];	//ds:0xa917; seg096
+
 extern unsigned char *g_hexenknoten_gfx_buf;	// ds:0xacc8; seg100
 extern signed short g_monster_spell_ae_cost;	// ds:0xaccc; seg102
 extern char g_select_skill_lvlup[6]; 		// ds:0xacce; seg103

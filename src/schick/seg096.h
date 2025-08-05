@@ -14,8 +14,10 @@ char* GUI_name_singular(char*);
 Bit8u* GUI_2f2(signed short, signed short, signed short);
 //39
 char* GUI_get_ptr(const int, const int);
+#if defined(__BORLANDC__)
 //3e
-Bit8u* GUI_get_ptr2(signed short, signed short);
+char* GUI_get_ptr2(signed short, signed short);
+#endif
 //43
 void GUI_print_string(char*, signed short, signed short);
 //48

@@ -80,7 +80,7 @@ Bit8u* GUI_names_grammar(signed short flag, signed short index, signed short typ
 
 	sprintf((char*)p_datseg + (GRAMMAR_BUFS+40) + ds_readw(GRAMMAR_BUF_NO) * 40,
 		(l2 == 0) ? (char*)ds_readd(STR_S_S_PTR) : (char*)ds_readd(STR_VON_S_S_PTR),
-		(char*)ds_readd(GRAMMAR_ARTICLES_INDEX + 4 * host_readws((Bit8u*)lp1 + 2 * (((flag & 0x3000) - 1) >> 12))),
+		g_grammar_articles_index[host_readws((Bit8u*)lp1 + 2 * (((flag & 0x3000) - 1) >> 12))],
 		(char*)GUI_name_plural(flag, p_name));
 
 	p_name = (char*)(p_datseg + ds_readw(GRAMMAR_BUF_NO) * 40 + (GRAMMAR_BUFS+40));
@@ -189,23 +189,23 @@ char* GUI_get_ptr(const int genus, const int causus)
 	}
 }
 
+#if defined(__BORLANDC__)
 //394
 /**
  */
-Bit8u* GUI_get_ptr2(signed short genus, signed short causus)
+char* GUI_get_ptr2(signed short genus, signed short causus)
 {
 	if (genus == 0) {
-		return (causus == 0) ? ((Bit8u*)p_datseg + GRAMMAR_ARTICLE_DER) :
-				((causus == 1) ? ((Bit8u*)p_datseg + GRAMMAR_ARTICLE_DES) :
-				((causus == 3) ? ((Bit8u*)p_datseg + GRAMMAR_ARTICLE_DEM) :
-					((Bit8u*)p_datseg + GRAMMAR_ARTICLE_DEN)));
+		return (causus == 0) ? (g_grammar_article_der) :
+			((causus == 1) ? (g_grammar_article_des) :
+			((causus == 3) ? (g_grammar_article_dem) : (g_grammar_article_den)));
 	} else {
-		return (causus == 0) ? ((Bit8u*)p_datseg + GRAMMAR_ARTICLE_DIE) :
-				((causus == 1) ? ((Bit8u*)p_datseg + GRAMMAR_ARTICLE_DER) :
-				((causus == 3) ? ((Bit8u*)p_datseg + GRAMMAR_ARTICLE_DER) :
-					((Bit8u*)p_datseg + GRAMMAR_ARTICLE_DIE)));
+		return (causus == 0) ? (g_grammar_article_die) :
+			((causus == 1) ? (g_grammar_article_der) :
+			((causus == 3) ? (g_grammar_article_der) : (g_grammar_article_die)));
 	}
 }
+#endif
 
 //3f8
 void GUI_write_char_to_screen(Bit8u *dst, signed short char_width, signed short char_height)

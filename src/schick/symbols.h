@@ -1193,22 +1193,22 @@
 // ?4
 #define TRAVELING                       (0xa842)    /* unsigned char; {0,1} */
 #define TEVENTS_REPEATABLE              (0xa843)    /* unsigned char[145]; {0,1} */
-#define GRAMMAR_ARTICLE_DER             (0xa8d4)    /* char[4]; "DER" */
-#define GRAMMAR_ARTICLE_DIE             (0xa8d8)    /* char[4]; "DIE" */
-#define GRAMMAR_ARTICLE_DAS             (0xa8dc)    /* char[4]; "DAS" */
-#define GRAMMAR_ARTICLE_DES             (0xa8e0)    /* char[4]; "DES" */
-#define GRAMMAR_ARTICLE_DEN             (0xa8e4)    /* char[4]; "DEN" */
-#define GRAMMAR_ARTICLE_DEM             (0xa8e8)    /* char[4]; "DEM" */
-#define GRAMMAR_ARTICLE_EIN             (0xa8ec)    /* char[4]; "EIN" */
-#define GRAMMAR_ARTICLE_EINE            (0xa8f0)    /* char[5]; "EINE" */
-#define GRAMMAR_ARTICLE_EINES           (0xa8f5)    /* char[6]; "EINES" */
-#define GRAMMAR_ARTICLE_EINER           (0xa8fb)    /* char[6]; "EINER" */
-#define GRAMMAR_ARTICLE_EINEN           (0xa901)    /* char[6]; "EINEN" */
-#define GRAMMAR_ARTICLE_EINE2           (0xa907)    /* char[5]; "EINE" */
-#define GRAMMAR_ARTICLE_EINEM           (0xa90c)    /* char[6]; "EINEM" */
-#define GRAMMAR_ARTICLE_0               (0xa912)    /* char[1]; "" */
-#define GRAMMAR_ARTICLE_VON             (0xa913)    /* char[4]; "VON" */
-#define GRAMMAR_ARTICLES_INDEX          (0xa917)    /* Bit8u*[15] */
+//#define GRAMMAR_ARTICLE_DER             (0xa8d4)    /* char[4]; "DER" */
+//#define GRAMMAR_ARTICLE_DIE             (0xa8d8)    /* char[4]; "DIE" */
+//#define GRAMMAR_ARTICLE_DAS             (0xa8dc)    /* char[4]; "DAS" */
+//#define GRAMMAR_ARTICLE_DES             (0xa8e0)    /* char[4]; "DES" */
+//#define GRAMMAR_ARTICLE_DEN             (0xa8e4)    /* char[4]; "DEN" */
+//#define GRAMMAR_ARTICLE_DEM             (0xa8e8)    /* char[4]; "DEM" */
+//#define GRAMMAR_ARTICLE_EIN             (0xa8ec)    /* char[4]; "EIN" */
+//#define GRAMMAR_ARTICLE_EINE            (0xa8f0)    /* char[5]; "EINE" */
+//#define GRAMMAR_ARTICLE_EINES           (0xa8f5)    /* char[6]; "EINES" */
+//#define GRAMMAR_ARTICLE_EINER           (0xa8fb)    /* char[6]; "EINER" */
+//#define GRAMMAR_ARTICLE_EINEN           (0xa901)    /* char[6]; "EINEN" */
+//#define GRAMMAR_ARTICLE_EINE2           (0xa907)    /* char[5]; "EINE" */
+//#define GRAMMAR_ARTICLE_EINEM           (0xa90c)    /* char[6]; "EINEM" */
+//#define GRAMMAR_ARTICLE_0               (0xa912)    /* char[1]; "" */
+//#define GRAMMAR_ARTICLE_VON             (0xa913)    /* char[4]; "VON" */
+//#define GRAMMAR_ARTICLES_INDEX          (0xa917)    /* Bit8u*[15] */
 #define GRAMMAR_DEF_TABLE               (0xa953)    /* short[24]; [8], by case, then by gender */
 #define GRAMMAR_INDEF_TABLE             (0xa983)    /* short[24]; [8], by case, then by gender */
 #define GRAMMAR_NOARTICLE_TABLE         (0xa9b3)    /* short[24]; [8], by case, then by gender */

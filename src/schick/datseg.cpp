@@ -5430,7 +5430,23 @@ char g_grammar_article_eine2[5] = "EINE"; // ds:0xa907
 char g_grammar_article_einem[6] = "EINEM"; // ds:0xa90c
 char g_grammar_article_0[1] = ""; // ds:0xa912
 char g_grammar_article_von[4] = "VON"; // ds:0xa913
-long g_grammar_articles_index[15] = { 0x14fca8d4, 0x14fca8d8, 0x14fca8dc, 0x14fca8e0, 0x14fca8e4, 0x14fca8e8, 0x14fca8ec, 0x14fca8f0, 0x14fca8f5, 0x14fca8fb, 0x14fca901, 0x14fca907, 0x14fca90c, 0x14fca912, 0x14fca913 }; // ds:0xa917; Bit8u*
+char* g_grammar_articles_index[15] = {
+	g_grammar_article_der,
+	g_grammar_article_die,
+	g_grammar_article_das,
+	g_grammar_article_des,
+	g_grammar_article_den,
+	g_grammar_article_dem,
+	g_grammar_article_ein,
+	g_grammar_article_eine,
+	g_grammar_article_eines,
+	g_grammar_article_einer,
+	g_grammar_article_einen,
+	g_grammar_article_eine2,
+	g_grammar_article_einem,
+	g_grammar_article_0,
+	g_grammar_article_von
+}; // ds:0xa917; Bit8u*
 short g_grammar_def_table[24] = { 0, 1, 2, 3, 0, 3, 4, 1, 2, 5, 0, 5, 1, 1, 1, 0, 0, 0, 1, 1, 1, 4, 4, 4 }; // ds:0xa953, [8], by case, then by gender
 short g_grammar_indef_table[24] = { 0x0006, 0x0007, 0x0006, 0x0008, 0x0009, 0x0008, 0x000a, 0x000b, 0x0006, 0x000c, 0x0009, 0x000c, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d }; // ds:0xa983, [8], by case, then by gender
 short g_grammar_noarticle_table[24] = { 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d }; // ds:0xa9b3, [8], by case, then by gender
