@@ -6,6 +6,11 @@
  *	Compiler:	Borland C++ 3.1
  *	Call:		BCC.EXE -mlarge -O- -c -1 -Yo seg029.cpp
  */
+
+#if !defined(__BORLANDC__)
+#include <unistd.h>
+#endif
+
 #include "v302de.h"
 #include "common.h"
 
@@ -117,14 +122,14 @@ void copy_forename(char *dst, char *name)
 
 	for (i = 0; i < 7; i++) {
 		if (name[i] == 0x20) {
-			host_writeb(dst + i, 0);
+			dst[i] = 0;
 			break;
 		} else {
-			dst[i] = host_readb(name + i);
+			dst[i] = name[i];
 		}
 	}
 
-	host_writeb(dst + 7, 0);
+	dst[7] = 0;
 }
 
 /**

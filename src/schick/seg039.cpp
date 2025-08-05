@@ -93,7 +93,7 @@ void fill_enemy_sheet(unsigned short sheet_no, signed char enemy_id, unsigned ch
 	signed short i;
 
 	/* calculate the pointers */
-	monster = (Bit8u*)ds_readd(MONSTER_DAT_BUF) + enemy_id * SIZEOF_MONSTER;
+	monster = g_monster_dat_buf + enemy_id * SIZEOF_MONSTER;
 	sheet = p_datseg + ENEMY_SHEETS + sheet_no * SIZEOF_ENEMY_SHEET;
 
 	/* erease the sheet */

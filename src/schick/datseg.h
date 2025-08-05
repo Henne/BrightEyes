@@ -465,6 +465,7 @@ extern char **g_itemsname;		// ds:0xe22f; seg026, seg120
 extern unsigned char *g_itemsdat;	// ds:0xe22b; seg002, seg027, seg105, seg107, seg120
 extern signed char g_market_itemsaldo_table[254]; // ds:0xe12d; seg056, seg057, seg120
 extern char **g_monnames_index;		// ds:0xe129; seg026, seg120
+extern unsigned char *g_monster_dat_buf;// ds:0xe125; seg032, seg039
 extern unsigned char *g_mem_slots_anis;	// ds:0xe121; seg027, seg120
 extern unsigned char *g_mem_slots_mfig;	// ds:0xe11d; seg027, seg120
 extern unsigned char *g_mem_slots_wfig;	// ds:0xe119; seg027, seg120

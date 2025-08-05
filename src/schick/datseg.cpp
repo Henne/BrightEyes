@@ -6212,7 +6212,7 @@ char **g_itemsname; // ds:0xe22f
 unsigned char* g_itemsdat; // ds:0xe22b
 signed char g_market_itemsaldo_table[254]; // ds:0xe12d
 char **g_monnames_index; // ds:0xe129
-void *g_monster_dat_buf; // ds:0xe125
+unsigned char *g_monster_dat_buf; // ds:0xe125
 unsigned char *g_mem_slots_anis; // ds:0xe121, to ()[36]
 unsigned char *g_mem_slots_mfig; // ds:0xe11d
 unsigned char *g_mem_slots_wfig; // ds:0xe119
