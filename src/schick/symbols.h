@@ -940,7 +940,7 @@
 //#define EMPTY_STRING4                   (0x5f43)    /* char; "" */
 //#define EMPTY_STRING5                   (0x5f44)    /* char; "" */
 // ?1
-#define CB_OBJ_NONOBSTACLE              (0x5f46)    /* signed short[27]; { 23,24,25,26,27,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,-1 } */
+//#define CB_OBJ_NONOBSTACLE              (0x5f46)    /* signed short[27]; { 23,24,25,26,27,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,-1 } */
 #define VIEWDIR_OFFSETS1                (0x5f7c)    /* struct(4)[4]; struct{signed short x, y;}; { {1,0}, {0,-1}, {-1,0}, {0,1} } */
 #define VIEWDIR_OFFSETS2                (0x5f8c)    /* struct(4)[4]; struct{signed short x, y;}; { {1,0}, {0,-1}, {-1,0}, {0,1} } */
 #define STRING_14SPACES                 (0x5f9c)    /* char[15]; "              " */

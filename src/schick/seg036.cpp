@@ -350,7 +350,7 @@ signed short KI_search_spell_target(signed short x, signed short y,
 			} else if ( (obj_id != 0) && (((obj_id >= 10) && (obj_id < 30) &&
 					!enemy_dead(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + obj_id * SIZEOF_ENEMY_SHEET)
 					) || ((obj_id >= 50) &&
-						!is_in_word_array(obj_id - 50, (signed short*)(p_datseg + CB_OBJ_NONOBSTACLE)))
+						!is_in_word_array(obj_id - 50, g_cb_obj_nonobstacle))
 					))
 				{
 					done = 1;
@@ -373,7 +373,7 @@ signed short KI_search_spell_target(signed short x, signed short y,
 						!hero_unconscious(get_hero(obj_id - 1))
 						) || (
 							(obj_id >= 50) &&
-							!is_in_word_array(obj_id - 50, (signed short*)(p_datseg + CB_OBJ_NONOBSTACLE))
+							!is_in_word_array(obj_id - 50, g_cb_obj_nonobstacle)
 						))
 					)
 				)

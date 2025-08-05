@@ -55,7 +55,7 @@ signed short seg034_000(signed short x_hero, signed short y_hero,
 
 		if ((x_hero == x) && (y_hero == y)) {
 
-			if ((fighter_id_target < 50) || ((fighter_id_target >= 50) && is_in_word_array(fighter_id_target - 50, (signed short*)(p_datseg + CB_OBJ_NONOBSTACLE))))
+			if ((fighter_id_target < 50) || ((fighter_id_target >= 50) && is_in_word_array(fighter_id_target - 50, g_cb_obj_nonobstacle)))
 			{
 				return 1;
 			} else {
@@ -68,7 +68,7 @@ signed short seg034_000(signed short x_hero, signed short y_hero,
 				((fighter_id < 10) && hero_dead(get_hero(fighter_id - 1))))
 				&&
 				((fighter_id_target >= 0) &&
-				 ((fighter_id_target < 50) || ((fighter_id_target >= 50) && is_in_word_array(fighter_id_target - 50, (signed short*)(p_datseg + CB_OBJ_NONOBSTACLE))))))
+				 ((fighter_id_target < 50) || ((fighter_id_target >= 50) && is_in_word_array(fighter_id_target - 50, g_cb_obj_nonobstacle)))))
 			{
 
 				if (((((x_diff == 1) || (x_diff == -1)) && (y_hero != y))) ||
@@ -86,7 +86,7 @@ signed short seg034_000(signed short x_hero, signed short y_hero,
 
 	if (x_diff == 1) {
 		if ((fighter_id_target >= 0) &&
-			((fighter_id_target < 50) || ((fighter_id_target >= 50) && is_in_word_array(fighter_id_target - 50, (signed short*)(p_datseg + CB_OBJ_NONOBSTACLE))))
+			((fighter_id_target < 50) || ((fighter_id_target >= 50) && is_in_word_array(fighter_id_target - 50, g_cb_obj_nonobstacle)))
 			&& ((x < 23) && (y == y_hero) && (calc_beeline(x_hero, y_hero, x + 1, y) <= max_range)))
 		{
 			return 1;
@@ -99,7 +99,7 @@ signed short seg034_000(signed short x_hero, signed short y_hero,
 
 	if (x_diff == -1) {
 		if ((fighter_id_target >= 0) &&
-			((fighter_id_target < 50) || ((fighter_id_target >= 50) && is_in_word_array(fighter_id_target - 50, (signed short*)(p_datseg + CB_OBJ_NONOBSTACLE))))
+			((fighter_id_target < 50) || ((fighter_id_target >= 50) && is_in_word_array(fighter_id_target - 50, g_cb_obj_nonobstacle)))
 			&& ((x > 0) && (y == y_hero) && (calc_beeline(x_hero, y_hero, x - 1, y) <= max_range)))
 		{
 			return 1;
@@ -113,7 +113,7 @@ signed short seg034_000(signed short x_hero, signed short y_hero,
 
 	if (y_diff == 1) {
 		if ((fighter_id_target >= 0) &&
-			((fighter_id_target < 50) || ((fighter_id_target >= 50) && is_in_word_array(fighter_id_target - 50, (signed short*)(p_datseg + CB_OBJ_NONOBSTACLE))))
+			((fighter_id_target < 50) || ((fighter_id_target >= 50) && is_in_word_array(fighter_id_target - 50, g_cb_obj_nonobstacle)))
 			&& ((y < 23) && (x == x_hero) && (calc_beeline(x_hero, y_hero, x, y + 1) <= max_range)))
 		{
 			return 1;
@@ -127,7 +127,7 @@ signed short seg034_000(signed short x_hero, signed short y_hero,
 
 	if (y_diff == -1) {
 		if ((fighter_id_target >= 0) &&
-			((fighter_id_target < 50) || ((fighter_id_target >= 50) && is_in_word_array(fighter_id_target - 50, (signed short*)(p_datseg + CB_OBJ_NONOBSTACLE))))
+			((fighter_id_target < 50) || ((fighter_id_target >= 50) && is_in_word_array(fighter_id_target - 50, g_cb_obj_nonobstacle)))
 			&& ((y > 0) && (x == x_hero) && (calc_beeline(x_hero, y_hero, x, y - 1) <= max_range)))
 		{
 			return 1;

@@ -366,6 +366,7 @@ extern const char g_space_separated_strings[6];	//ds:0x5f3c; seg033
 extern const char g_empty_string3[1];		//ds:0x5f42; seg033
 extern const char g_empty_string4[1];		//ds:0x5f43; seg033
 extern const char g_empty_string5[1];		//ds:0x5f44; seg033
+extern signed short g_cb_obj_nonobstacle[27];	//ds:0x5f46; seg034, seg036, seg037
 
 extern signed short g_anitab_spell_ox[2];	//ds:0x633e; seg045
 extern signed short g_anitab_spell_oy[2];	//ds:0x6342; seg045
