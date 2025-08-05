@@ -379,8 +379,8 @@ void do_harbor(void)
 
 				set_audio_track(ARCHIVE_FILE_TERMS_XMI);
 
-				ds_writew(WALLCLOCK_X, g_basepos_x + 120);
-				ds_writew(WALLCLOCK_Y, g_basepos_y + 87);
+				g_wallclock_x = (g_basepos_x + 120);
+				g_wallclock_y = (g_basepos_y + 87);
 				g_wallclock_update = 1;
 
 				sea_travel(ds_readb(CURRENT_SEA_ROUTE_ID), ds_readbs(SEA_ROUTES + SIZEOF_SEA_ROUTE * ds_readb(CURRENT_SEA_ROUTE_ID)) == gs_current_town ? 0 : 1);
@@ -663,8 +663,8 @@ void sea_travel(signed short passage, signed short dir)
 
 			refresh_screen_size();
 
-			ds_writew(WALLCLOCK_X, g_basepos_x + 120);
-			ds_writew(WALLCLOCK_Y, g_basepos_y + 87);
+			g_wallclock_x = (g_basepos_x + 120);
+			g_wallclock_y = (g_basepos_y + 87);
 			g_wallclock_update = 1;
 			g_request_refresh = 0;
 		}

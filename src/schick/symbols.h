@@ -1496,9 +1496,9 @@
 #define FIG_LIST_ARRAY                  (0xe089)    /* unsigned char[127]; list of flags (0 or 1) indicating if the corresponding FIGHTER_ID is in use. more precisely: FIG_LIST_ARRAY[i] is 1 (otherwise 0) if the index i is the FIGHTER_ID of a fighter object. */
 #define FIG_LIST_HEAD                   (0xe108)    /* Bit8u*; to a list */
 #define LOCATION_MARKET_FLAG            (0xe10c)    /* unsigned char; {0,1} */
-#define WALLCLOCK_REDRAW                (0xe10d)    /* unsigned short; {0,1} */
-#define WALLCLOCK_Y                     (0xe10f)    /* short */
-#define WALLCLOCK_X                     (0xe111)    /* short */
+//#define WALLCLOCK_REDRAW                (0xe10d)    /* unsigned short; {0,1} */
+//#define WALLCLOCK_Y                     (0xe10f)    /* short */
+//#define WALLCLOCK_X                     (0xe111)    /* short */
 //#define WALLCLOCK_UPDATE                (0xe113)    /* unsigned short; 0 = don't update the wallclock */
 //#define MEM_SLOTS_MON                   (0xe115)    /* long */
 //#define MEM_SLOTS_WFIG                  (0xe119)    /* long */

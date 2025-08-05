@@ -6218,9 +6218,9 @@ unsigned char *g_mem_slots_mfig; // ds:0xe11d
 unsigned char *g_mem_slots_wfig; // ds:0xe119
 unsigned char *g_mem_slots_mon; // ds:0xe115
 signed short g_wallclock_update; // ds:0xe113, 0 = don't update the wallclock
-short g_wallclock_x; // ds:0xe111
-short g_wallclock_y; // ds:0xe10f
-unsigned short g_wallclock_redraw; // ds:0xe10d
+signed short g_wallclock_x; // ds:0xe111
+signed short g_wallclock_y; // ds:0xe10f
+signed short g_wallclock_redraw; // ds:0xe10d
 unsigned char g_location_market_flag; // ds:0xe10c
 void *g_fig_list_head; // ds:0xe108, to a list
 unsigned char g_fig_list_array[127]; // ds:0xe089

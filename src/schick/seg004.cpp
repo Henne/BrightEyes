@@ -750,9 +750,9 @@ void update_wallclock(void)
 			}
 		}
 
-		if (((d % 771) != g_wallclock_pos) || (ds_readw(WALLCLOCK_REDRAW) != 0)) {
+		if (((d % 771) != g_wallclock_pos) || g_wallclock_redraw) {
 
-			ds_writew(WALLCLOCK_REDRAW, 0);
+			g_wallclock_redraw = 0;
 			night = ((gs_day_timer >= HOURS(7)) && (gs_day_timer <= HOURS(19))) ? 0 : 1;
 			draw_wallclock((signed short)(d / 771), night);
 			g_wallclock_pos = d / 771;
@@ -789,35 +789,35 @@ void draw_wallclock(signed short pos, signed short night)
 
 	/* calculate y value */
 	/* Original-Bug: off-by-one with pos > 80 */
-	y = ds_readws(WALLCLOCK_Y) + g_wallclock_pos_y[pos];
+	y = g_wallclock_y + g_wallclock_pos_y[pos];
 
 	/* calculate x value */
-	pos += ds_readws(WALLCLOCK_X) - 2;
+	pos += g_wallclock_x - 2;
 
 	/* set window */
-	g_pic_copy_rect.y1 = ds_readws(WALLCLOCK_Y);
-	g_pic_copy_rect.x1 = ds_readws(WALLCLOCK_X);
-	g_pic_copy_rect.y2 = ds_readws(WALLCLOCK_Y) + 22;
-	g_pic_copy_rect.x2 = ds_readws(WALLCLOCK_X) + 78;
+	g_pic_copy_rect.y1 = g_wallclock_y;
+	g_pic_copy_rect.x1 = g_wallclock_x;
+	g_pic_copy_rect.y2 = g_wallclock_y + 22;
+	g_pic_copy_rect.x2 = g_wallclock_x + 78;
 
 	/* set palette (night/day) */
 	set_palette((!night ? (p_datseg + WALLCLOCK_PALETTE_DAY) : &g_wallclock_palette_night[0][0]), 0xfa, 3);
 
 	/* check if mouse is in that window */
-	if (is_mouse_in_rect(ds_readws(WALLCLOCK_X) - 6,
-				ds_readws(WALLCLOCK_Y) - 6,
-				ds_readws(WALLCLOCK_X) + 85,
-				ds_readws(WALLCLOCK_Y) + 28)) {
+	if (is_mouse_in_rect(g_wallclock_x - 6,
+				g_wallclock_y - 6,
+				g_wallclock_x + 85,
+				g_wallclock_y + 28)) {
 
 			update_mouse_cursor();
 			mouse_updated = 1;
 	}
 
 	/* set coordinates */
-	g_pic_copy.x1 = ds_readws(WALLCLOCK_X);
-	g_pic_copy.y1 = ds_readws(WALLCLOCK_Y);
-	g_pic_copy.x2 = ds_readws(WALLCLOCK_X) + 78;
-	g_pic_copy.y2 = ds_readws(WALLCLOCK_Y) + 20;
+	g_pic_copy.x1 = g_wallclock_x;
+	g_pic_copy.y1 = g_wallclock_y;
+	g_pic_copy.x2 = g_wallclock_x + 78;
+	g_pic_copy.y2 = g_wallclock_y + 20;
 	g_pic_copy.src = g_objects_nvf_buf;
 
 	/* draw backgroud */
@@ -835,10 +835,10 @@ void draw_wallclock(signed short pos, signed short night)
 
 
 	/* set coordinates */
-	g_pic_copy.x1 = ds_readws(WALLCLOCK_X);
-	g_pic_copy.y1 = ds_readws(WALLCLOCK_Y) + 3;
-	g_pic_copy.x2 = ds_readws(WALLCLOCK_X) + 78;
-	g_pic_copy.y2 = ds_readws(WALLCLOCK_Y) + 22;
+	g_pic_copy.x1 = g_wallclock_x;
+	g_pic_copy.y1 = g_wallclock_y + 3;
+	g_pic_copy.x2 = g_wallclock_x + 78;
+	g_pic_copy.y2 = g_wallclock_y + 22;
 	g_pic_copy.src = g_objects_nvf_buf + 0x683;
 
 	/* draw backgroud */
@@ -851,10 +851,10 @@ void draw_wallclock(signed short pos, signed short night)
 	if (g_pp20_index == ARCHIVE_FILE_KARTE_DAT) {
 
 		/* set coordinates */
-		g_pic_copy.x1 = ds_readws(WALLCLOCK_X) - 5;
-		g_pic_copy.y1 = ds_readws(WALLCLOCK_Y) - 4;
-		g_pic_copy.x2 = ds_readws(WALLCLOCK_X) + 85;
-		g_pic_copy.y2 = ds_readws(WALLCLOCK_Y) + 28;
+		g_pic_copy.x1 = g_wallclock_x - 5;
+		g_pic_copy.y1 = g_wallclock_y - 4;
+		g_pic_copy.x2 = g_wallclock_x + 85;
+		g_pic_copy.y2 = g_wallclock_y + 28;
 		g_pic_copy.src = g_buffer9_ptr + 0x4650L;
 
 		/* draw backgroud */

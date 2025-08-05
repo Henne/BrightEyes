@@ -325,8 +325,8 @@ void draw_icons(void)
  */
 void draw_main_screen(void)
 {
-	ds_writew(WALLCLOCK_X, 0xf1);
-	ds_writew(WALLCLOCK_Y, 0x1f);
+	g_wallclock_x = 241;
+	g_wallclock_y = 31;
 	g_wallclock_update = 0;
 
 	set_var_to_zero();
@@ -342,7 +342,7 @@ void draw_main_screen(void)
 
 	draw_compass();
 
-	g_wallclock_update = ds_writew(WALLCLOCK_REDRAW, 1);
+	g_wallclock_update = g_wallclock_redraw = 1;
 
 	set_textcolor(0x1f, 0x1b);
 }

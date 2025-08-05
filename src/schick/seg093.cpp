@@ -154,8 +154,8 @@ signed short do_travel_mode(void)
 						break;
 					}
 
-					ds_writew(WALLCLOCK_X, g_basepos_x + 120);
-					ds_writew(WALLCLOCK_Y, g_basepos_y + 87);
+					g_wallclock_x = (g_basepos_x + 120);
+					g_wallclock_y = (g_basepos_y + 87);
 
 					g_wallclock_update = 1;
 
