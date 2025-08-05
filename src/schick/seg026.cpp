@@ -159,7 +159,7 @@ void prepare_chr_name(char *dst, char *src)
 
 	strncpy(dst, tmp_str, 8);
 	dst[8] = '\0';
-	strcat(dst, (char*)p_datseg + CHR_FILE_SUFFIX);
+	strcat(dst, g_chr_file_suffix);
 }
 
 void prepare_sg_name(char *dst, char *src)
@@ -224,7 +224,7 @@ signed short load_game_state(void)
 
 		prepare_sg_name(g_text_output_buf, g_savegame_names[answer]);
 		/* concat with ".gam" */
-		strcat(g_text_output_buf, (char*)p_datseg + SAVEGAME_SUFFIX);
+		strcat(g_text_output_buf, g_savegame_suffix);
 
 		/* open the game state file */
 		if ((handle_gs = open(g_text_output_buf, O_BINARY | O_RDONLY)) == -1)
@@ -244,7 +244,7 @@ signed short load_game_state(void)
 		g_ani_enabled = 0;
 
 		/* delete every file TEMP\\*.* */
-		sprintf(g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), (char*)p_datseg + ALL_FILES_WILDCARD);
+		sprintf(g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), g_all_files_wildcard);
 
 #if defined(__BORLANDC__)
 		l2 = findfirst(g_text_output_buf, &blk, 0);
@@ -345,13 +345,11 @@ signed short load_game_state(void)
 
 #if defined(__BORLANDC__)
 		/* search for "*.CHR" */
-		l2 = findfirst((char*)(p_datseg + ALL_CHR_WILDCARD), &blk, 0);
+		l2 = findfirst(g_all_chr_wildcard, &blk, 0);
 
 		while (l2 == 0) {
 
-			sprintf(g_text_output_buf,
-				(char*)ds_readd(STR_TEMP_XX_PTR2),
-				((char*)(&blk)) + 30);
+			sprintf(g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), ((char*)(&blk)) + 30);
 
 			if ((handle_gs = open(g_text_output_buf, O_BINARY | O_RDWR)) == -1) {
 				handle = open((char*)(&blk) + 30, O_BINARY | O_RDWR);
@@ -447,9 +445,7 @@ signed short save_game_state(void)
 
 			sprintf(g_dtp2,
 				get_ttx(813), /* "Dabei verliert jeder Held in der Gruppe einen Abenteuerpunkt" */
-				1,
-				get_ttx(392),
-				p_datseg + EMPTY_STRING1);
+				1, get_ttx(392), g_empty_string1);
 
 			sprintf(g_text_output_buf,
 				get_ttx(1), /* "Welchen Spielstand wollen Sie abspeichern ?" */
@@ -460,7 +456,7 @@ signed short save_game_state(void)
 			/* create savegame inside a temple */
 			sprintf(g_text_output_buf,
 				get_ttx(1), /* "Welchen Spielstand wollen Sie abspeichern ?" */
-				(char*)p_datseg + EMPTY_STRING2);
+				g_empty_string2);
 #ifndef M302de_FEATURE_MOD
 		/* Feature mod 4: In the original game, when creating a savegame while not being in a temple, the AP of all heroes is decreased by 1. This mod stops the AP decrease. */
 		}
@@ -508,7 +504,7 @@ signed short save_game_state(void)
 
 		/* delete the previous file of that slot */
 		prepare_sg_name(g_text_output_buf, g_savegame_names[slot]);
-		strcat(g_text_output_buf, (char*)p_datseg + SAVEGAME_SUFFIX2);
+		strcat(g_text_output_buf, g_savegame_suffix2);
 		unlink(g_text_output_buf);
 		strcpy(g_savegame_names[slot], g_text_input_buf);
 
@@ -550,7 +546,7 @@ signed short save_game_state(void)
 		status_len = (signed short)(p_status_end - p_status_start);
 
 		prepare_sg_name(g_text_output_buf, g_savegame_names[slot]);
-		strcat(g_text_output_buf, (char*)p_datseg + SAVEGAME_SUFFIX3);
+		strcat(g_text_output_buf, g_savegame_suffix3);
 
 		/* TODO: should be O_BINARY | O_RWONLY */
 		while ((l_di = _creat(g_text_output_buf, 0)) == -1) {
@@ -631,9 +627,7 @@ signed short save_game_state(void)
 
 		/* append all CHR files */
 		lseek(l_di, filepos, 0);
-		sprintf(g_text_output_buf,
-			(char*)ds_readd(STR_TEMP_XX_PTR2),
-			(char*)p_datseg + ALL_CHR_WILDCARD2);
+		sprintf(g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), g_all_chr_wildcard2);
 
 		l1 = findfirst(g_text_output_buf, &blk, 0);
 		do {
@@ -777,9 +771,7 @@ signed short copy_chr_names(Bit8u *ptr, signed short temple_id)
 	struct ffblk blk;
 
 	buf = g_renderbuf_ptr + 60000;
-	sprintf(g_text_output_buf,
-		(char*)ds_readd(STR_TEMP_XX_PTR2),
-		(char*)p_datseg + ALL_CHR_WILDCARD3);
+	sprintf(g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), g_all_chr_wildcard3);
 
 	l_di = findfirst(g_text_output_buf, &blk, 0);
 

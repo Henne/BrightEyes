@@ -902,24 +902,24 @@
 #define LOADED_HEAD_ID                  (0x515c)    /* unsigned short */
 #define STR_TEMP_XX2                    (0x515e)    /* char[8]; "TEMP\%s" */
 #define SCHICK_DAT_FNAMES               (0x5166)    /* char[3288]; names of files in SCHICK.DAT */
-#define CHR_FILE_SUFFIX                 (0x5e3e)    /* char[5]; ".CHR" */
-#define SAVEGAME_SUFFIX                 (0x5e43)    /* char[5]; ".gam" */
-#define ALL_FILES_WILDCARD              (0x5e48)    /* char[4]; "*.*" */
-#define ALL_CHR_WILDCARD                (0x5e4c)    /* char[6]; "*.CHR" */
-#define EMPTY_STRING1                   (0x5e52)    /* char; "" */
-#define EMPTY_STRING2                   (0x5e53)    /* char; "" */
-#define SAVEGAME_SUFFIX2                (0x5e54)    /* char[5]; ".gam" */
-#define SAVEGAME_SUFFIX3                (0x5e59)    /* char[5]; ".gam" */
-#define ALL_CHR_WILDCARD2               (0x5e5e)    /* char[6]; "*.CHR" */
-#define ALL_CHR_WILDCARD3               (0x5e64)    /* char[6]; "*.CHR" */
+//#define CHR_FILE_SUFFIX                 (0x5e3e)    /* char[5]; ".CHR" */
+//#define SAVEGAME_SUFFIX                 (0x5e43)    /* char[5]; ".gam" */
+//#define ALL_FILES_WILDCARD              (0x5e48)    /* char[4]; "*.*" */
+//#define ALL_CHR_WILDCARD                (0x5e4c)    /* char[6]; "*.CHR" */
+//#define EMPTY_STRING1                   (0x5e52)    /* char; "" */
+//#define EMPTY_STRING2                   (0x5e53)    /* char; "" */
+//#define SAVEGAME_SUFFIX2                (0x5e54)    /* char[5]; ".gam" */
+//#define SAVEGAME_SUFFIX3                (0x5e59)    /* char[5]; ".gam" */
+//#define ALL_CHR_WILDCARD2               (0x5e5e)    /* char[6]; "*.CHR" */
+//#define ALL_CHR_WILDCARD3               (0x5e64)    /* char[6]; "*.CHR" */
 #define PP20_BUFFERS                    (0x5e6a)    /* Bit8u*[9] */
-#define PP20_BUFFER_LENGTHS             (0x5e8e)    /* unsigned long[9] */
-#define CURRENT_FIGHT_ID                (0x5eb2)    /* unsigned short */
+//#define PP20_BUFFER_LENGTHS             (0x5e8e)    /* unsigned long[9] */
+//#define CURRENT_FIGHT_ID                (0x5eb2)    /* unsigned short */
 // ?4
-#define LOCATIONS_LIST_SIZE             (0x5eb8)    /* unsigned short */
-#define AREADESCR_DNG_LEVEL             (0x5eba)    /* unsigned short */
-#define AREADESCR_FILEID                (0x5ebc)    /* unsigned short */
-#define AREADESCR_DNG_FLAG              (0x5ebe)    /* unsigned short; {0,1} */
+//#define LOCATIONS_LIST_SIZE             (0x5eb8)    /* unsigned short */
+//#define AREADESCR_DNG_LEVEL             (0x5eba)    /* unsigned short */
+//#define AREADESCR_FILEID                (0x5ebc)    /* unsigned short */
+//#define AREADESCR_DNG_FLAG              (0x5ebe)    /* unsigned short; {0,1} */
 //#define EMS_UNUSED_LPAGE                (0x5ec0)    /* signed short */
 //#define EMS_UNUSED_OFFSET               (0x5ec2)    /* signed short */
 // ?8

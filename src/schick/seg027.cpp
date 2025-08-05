@@ -47,17 +47,19 @@ void load_pp20(signed short index)
 		if (index == ARCHIVE_FILE_ZUSTA_US)
 			bi = 8;
 
-		if (ds_readd(PP20_BUFFERS + bi * 4)) {
+		if (g_pp20_buffers[bi]) {
 
 			/* already buffered, just decomp */
-			decomp_pp20((Bit8u*)(ds_readd(PP20_BUFFERS + bi * 4)), g_renderbuf_ptr,
+			decomp_pp20(g_pp20_buffers[bi], g_renderbuf_ptr,
+				/* TODO: check this out */
 #if !defined(__BORLANDC__)
-				(Bit8u*)(ds_readd(PP20_BUFFERS) + 4 + bi) + 4,
+				//(Bit8u*)(ds_readd(PP20_BUFFERS) + 4 + bi) + 4,
+				g_pp20_buffers[bi] + 4,
 #else
 				ds_readw(PP20_BUFFERS + 4 * bi) + 4,
 				ds_readw((PP20_BUFFERS + 2) + 4 * bi),
 #endif
-				ds_readd(PP20_BUFFER_LENGTHS + bi * 4));
+				g_pp20_buffer_lengths[bi]);
 
 		} else {
 			fd = load_archive_file(index);
@@ -66,12 +68,12 @@ void load_pp20(signed short index)
 				/* successful allocation */
 
 				/* save pointer */
-				ds_writed(PP20_BUFFERS + bi * 4, (Bit32u)buffer_ptr);
+				g_pp20_buffers[bi] = buffer_ptr;
 				/* save length */
-				ds_writed(PP20_BUFFER_LENGTHS + bi * 4, get_readlength2(fd));
+				g_pp20_buffer_lengths[bi] = get_readlength2(fd);
 
 				/* read pic */
-				read_archive_file(fd, (Bit8u*)(ds_readd(PP20_BUFFERS + bi * 4)), ds_readw(PP20_BUFFER_LENGTHS + bi * 4));
+				read_archive_file(fd, (Bit8u*)(ds_readd(PP20_BUFFERS + bi * 4)), g_pp20_buffer_lengths[bi]);
 
 				/* decompress */
 				decomp_pp20((Bit8u*)(ds_readd(PP20_BUFFERS + bi * 4)), g_renderbuf_ptr,
@@ -81,7 +83,7 @@ void load_pp20(signed short index)
 					ds_readw((PP20_BUFFERS + 0) + bi * 4) + 4,
 					ds_readw((PP20_BUFFERS + 2) + bi * 4),
 #endif
-					ds_readd(PP20_BUFFER_LENGTHS + bi * 4));
+					g_pp20_buffer_lengths[bi]);
 
 				close(fd);
 			} else {
@@ -636,7 +638,7 @@ void read_fight_lst(signed short fight_id)
 		fight_id = 0;
 
 	/* write the fight number to a global var */
-	ds_writew(CURRENT_FIGHT_ID, fight_id);
+	g_current_fight_id = fight_id;
 
 	/* seek to file position */
 	lseek(fight_lst_handle, (long)SIZEOF_FIGHT * fight_id + 2, SEEK_SET);
@@ -665,7 +667,7 @@ void write_fight_lst(void)
 	signed short fight_id;
 	unsigned short fight_lst_handle;
 
-	fight_id = ds_readw(CURRENT_FIGHT_ID);
+	fight_id = g_current_fight_id;
 
 	/* load FIGHT.LST from TEMP dir */
 	fight_lst_handle = load_archive_file(0x8000 | ARCHIVE_FILE_FIGHT_LST);

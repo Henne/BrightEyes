@@ -333,6 +333,23 @@ extern signed short g_delay_factor;		//ds:0x4b66; seg005, seg025
 
 extern void (*g_location_handlers[19])(void);	//ds:0x4c3b; seg025
 
+extern char g_chr_file_suffix[5];		//ds:0x5e3e; seg026
+extern char g_savegame_suffix[5];		//ds:0x5e43; seg026
+extern char g_all_files_wildcard[4];		//ds:0x5e48; seg026
+extern char g_all_chr_wildcard[6];		//ds:0x5e4c; seg026
+extern char g_empty_string1[1];			//ds:0x5e52; seg026
+extern char g_empty_string2[1];			//ds:0x5e53; seg026
+extern char g_savegame_suffix2[5];		//ds:0x5e54; seg026
+extern char g_savegame_suffix3[5];		//ds:0x5e59; seg026
+extern char g_all_chr_wildcard2[6];		//ds:0x5e5e; seg026
+extern char g_all_chr_wildcard3[6];		//ds:0x5e64; seg026
+extern Bit8u *g_pp20_buffers[9];		//ds:0x5e6a; seg027
+extern signed long g_pp20_buffer_lengths[9];	//ds:0x5e8e; seg027
+extern signed short g_current_fight_id;		//ds:0x5eb2; seg027
+extern signed short g_locations_tab_size;	//ds:0x5eb8; seg028
+extern signed short g_areadescr_dng_level;	//ds:0x5ebc; seg028
+extern signed short g_areadescr_fileid;		//ds:0x5ebc; seg028
+extern signed short g_areadescr_dng_flag;	//ds:0x5ebe; seg028
 extern unsigned short g_ems_unused_lpage;	//ds:0x5ec0; seg028
 extern signed short g_ems_unused_offset;	//ds:0x5ec2; seg028
 extern signed char g_loaded_menu_icons[9];	//ds:0x5ecc; seg029

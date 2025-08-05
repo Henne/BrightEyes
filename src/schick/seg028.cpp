@@ -282,24 +282,24 @@ void load_area_description(signed short type)
 	signed short f_index;
 	signed short fd;
 
-	if (ds_readw(AREADESCR_FILEID) != 0) {
+	if (g_areadescr_fileid) {
 		if (type != 2) {
-			fd = load_archive_file(ds_readw(AREADESCR_FILEID) + 0x8000);
+			fd = load_archive_file(g_areadescr_fileid + 0x8000);
 
-			if ((ds_readw(AREADESCR_DNG_FLAG) == 0) && (ds_readb(DNG_MAP_SIZE) == 0x20)) {
+			if (!g_areadescr_dng_flag && (ds_readb(DNG_MAP_SIZE) == 0x20)) {
 				write(fd, (void*)MK_FP(datseg, DNG_MAP), 0x200);
 			} else {
-				lseek(fd, ds_readws(AREADESCR_DNG_LEVEL) * 0x140, 0);
+				lseek(fd, g_areadescr_dng_level * 0x140, 0);
 				write(fd, (void*)MK_FP(datseg, DNG_MAP), 0x100);
 			}
 			/* write automap tiles */
 			write(fd, (void*)MK_FP(datseg, AUTOMAP_BUF), 64);
 			/* write location information */
-			write(fd, (void*)MK_FP(datseg, LOCATIONS_LIST), ds_readw(LOCATIONS_LIST_SIZE));
+			write(fd, (void*)MK_FP(datseg, LOCATIONS_LIST), g_locations_tab_size);
 
 			close(fd);
 
-			ds_writew(AREADESCR_FILEID, ds_writew(AREADESCR_DNG_LEVEL, ds_writew(LOCATIONS_LIST_SIZE, ds_writew(AREADESCR_DNG_FLAG, 0))));
+			g_areadescr_fileid = g_areadescr_dng_level = g_locations_tab_size = g_areadescr_dng_flag = 0;
 		}
 	}
 
@@ -308,25 +308,22 @@ void load_area_description(signed short type)
 		/* calc archive file index */
 		if (gs_dungeon_index != 0) {
 			/* dungeon */
-			ds_writew(AREADESCR_FILEID, f_index = gs_dungeon_index + (ARCHIVE_FILE_DNGS-1));
+			g_areadescr_fileid = f_index = gs_dungeon_index + (ARCHIVE_FILE_DNGS-1);
 		} else {
 			/* city */
-			ds_writew(AREADESCR_FILEID, f_index = gs_current_town + (ARCHIVE_FILE_CITY_DAT-1));
+			g_areadescr_fileid = f_index = gs_current_town + (ARCHIVE_FILE_CITY_DAT-1);
 		}
 
 		/* save dungeon level */
-		ds_writew(AREADESCR_DNG_LEVEL, gs_dungeon_level);
+		g_areadescr_dng_level = gs_dungeon_level;
 
 		/* save if we are in a dungeon */
-		ds_writew(AREADESCR_DNG_FLAG, gs_dungeon_index != 0 ? 1 : 0);
+		g_areadescr_dng_flag = (gs_dungeon_index != 0 ? 1 : 0);
 
 		/* load DAT or DNG file */
 		fd = load_archive_file(f_index + 0x8000);
 
-		if (!gs_dungeon_index &&
-			(gs_current_town == TOWNS_THORWAL
-				|| gs_current_town == TOWNS_PREM
-				|| gs_current_town == TOWNS_PHEXCAER))
+		if (!gs_dungeon_index && (gs_current_town == TOWNS_THORWAL || gs_current_town == TOWNS_PREM || gs_current_town == TOWNS_PHEXCAER))
 		{
 			/* path taken in THORWAL PREM and PHEXCAER */
 			_read(fd, p_datseg + DNG_MAP, 0x200);
@@ -336,7 +333,7 @@ void load_area_description(signed short type)
 			/* TODO: is that neccessary ? */
 			memset(p_datseg + LOCATIONS_LIST, -1, 900);
 
-			ds_writew(LOCATIONS_LIST_SIZE, _read(fd, p_datseg + LOCATIONS_LIST, 1000));
+			g_locations_tab_size = _read(fd, p_datseg + LOCATIONS_LIST, 1000);
 
 			ds_writeb(DNG_MAP_SIZE, 0x20);
 		} else {
@@ -346,12 +343,12 @@ void load_area_description(signed short type)
 
 			/* read automap tiles */
 			_read(fd, p_datseg + AUTOMAP_BUF, 0x40);
-			ds_writew(LOCATIONS_LIST_SIZE, 0);
+			g_locations_tab_size = 0;
 
 			if (!gs_dungeon_index) {
 				/* TODO: is that neccessary ? */
 				memset(p_datseg + LOCATIONS_LIST, -1, 900);
-				ds_writew(LOCATIONS_LIST_SIZE, _read(fd, p_datseg + LOCATIONS_LIST, 1000));
+				g_locations_tab_size = _read(fd, p_datseg + LOCATIONS_LIST, 1000);
 			}
 
 			ds_writeb(DNG_MAP_SIZE, 0x10);
