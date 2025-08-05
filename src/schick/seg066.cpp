@@ -959,7 +959,7 @@ signed short city_step(void)
 	} else if (ds_readws(ACTION) == ACTION_ID_ICON_7) {
 
 		gs_current_loctype = LOCTYPE_CITYCAMP;
-		ds_writeb(CITYCAMP_CITY, 1); /* CITYCAMP takes place in a town */
+		g_citycamp_city = 1; /* CITYCAMP takes place in a town */
 		i = 1;
 
 	} else if (ds_readws(ACTION) == ACTION_ID_ICON_8 && ds_readbs((NEW_MENU_ICONS + 7)) != MENU_ICON_NONE) {

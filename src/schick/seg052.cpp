@@ -238,7 +238,7 @@ void do_citycamp(void)
 
 						ds_writew(CAMP_INCIDENT, -1);
 
-						if (ds_readb(CITYCAMP_CITY) == 0) {
+						if (g_citycamp_city == 0) {
 							/* in a dungeon */
 
 							g_fig_initiative = 1;
