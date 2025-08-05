@@ -130,7 +130,7 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 			} else if (g_tlk_id == 1) {
 
 				if (g_dialog_state == 16) {
-					sprintf(dst, fmt, (char*)(load_current_town_gossip()));
+					sprintf(dst, fmt, load_current_town_gossip());
 				} else {
 					strcpy(dst, fmt);
 				}
@@ -310,7 +310,7 @@ char* get_informer_name2(void)
  *
  * \return              a pointer to the message.
  */
-Bit8u* load_current_town_gossip(void)
+char* load_current_town_gossip(void)
 {
 	signed short gossip_id;
 	Bit8u *ptr;
@@ -328,7 +328,7 @@ Bit8u* load_current_town_gossip(void)
 	gossip_id = get_tavern_gossip();
 
 	/* return the pointer to the gossip (pointers are stored in the first 1000 bytes) */
-	return (Bit8u*)host_readd(ptr + 4 * gossip_id);
+	return (char*)host_readd(ptr + 4 * gossip_id);
 }
 
 char* get_random_tavern_message(void)
@@ -338,7 +338,7 @@ char* get_random_tavern_message(void)
 
 	if (!randval || randval == 19) {
 
-		sprintf(g_text_output_buf, ptr, (char*)load_current_town_gossip());
+		sprintf(g_text_output_buf, ptr, load_current_town_gossip());
 
 		return g_text_output_buf;
 

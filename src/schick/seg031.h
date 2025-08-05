@@ -3,7 +3,7 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-Bit8u* load_current_town_gossip(void);
+char* load_current_town_gossip(void);
 /* 0x25 */
 void do_random_talk(signed short, signed short);
 /* 0x2a */

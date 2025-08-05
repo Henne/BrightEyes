@@ -132,7 +132,7 @@ signed short DNG03_handler(void)
 				sprintf(g_dtp2,
 					get_tx(6),
 					(char*)hero + HERO_NAME2,
-					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+					(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 				GUI_output(g_dtp2);
 
@@ -221,7 +221,7 @@ signed short DNG03_handler(void)
 			sprintf(g_dtp2,
 				get_tx(13),
 				(char*)hero + HERO_NAME2,
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
 			GUI_output(g_dtp2);
 
@@ -253,7 +253,7 @@ signed short DNG03_handler(void)
 			sprintf(g_dtp2,
 				get_tx(13),
 				(char*)hero + HERO_NAME2,
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
 			GUI_output(g_dtp2);
 

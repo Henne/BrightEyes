@@ -406,7 +406,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
 
 					/* prepare output */
-					sprintf(g_dtp2, get_ttx(511), (char*)consumer + HERO_NAME2, (char*)(GUI_get_ptr(host_readbs(consumer + HERO_SEX), 0)));
+					sprintf(g_dtp2, get_ttx(511), (char*)consumer + HERO_NAME2, (GUI_get_ptr(host_readbs(consumer + HERO_SEX), 0)));
 
 					break;
 				}

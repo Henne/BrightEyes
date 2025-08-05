@@ -88,8 +88,8 @@ void rabies(Bit8u* hero, signed short hero_pos)
 		if (count_heroes_available_in_group() > 1) {
 
 			sprintf(g_dtp2, get_ttx(741), (char*)hero + HERO_NAME2,
-				(char*)GUI_get_ptr(host_readbs(hero + HERO_SEX), 2),
-				(char*)GUI_get_ptr(host_readbs(hero + HERO_SEX), 2));
+				GUI_get_ptr(host_readbs(hero + HERO_SEX), 2),
+				GUI_get_ptr(host_readbs(hero + HERO_SEX), 2));
 
 			sprintf(g_dtp2 + 500, get_ttx(742), (char*)hero + HERO_NAME2);
 

@@ -355,7 +355,7 @@ void disease_effect(void)
 							sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK), 5);
 
 							sprintf(g_dtp2, get_ttx(581), (char*)hero + HERO_NAME2,
-								(char*)GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
+								GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
 							GUI_output(g_dtp2);
 						}
 

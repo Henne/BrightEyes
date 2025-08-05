@@ -438,6 +438,15 @@ extern char g_grammar_article_dem[4];		//ds:0xa8e8; seg096
 
 extern char *g_grammar_articles_index[15];	//ds:0xa917; seg096
 
+extern char g_grammar_pronouns_er[3];		//ds:0xa9f3; seg096
+extern char g_grammar_pronouns_sie[4];		//ds:0xa9f6; seg096
+extern char g_grammar_pronouns_sein[5];		//ds:0xa9fd; seg096
+extern char g_grammar_pronouns_ihr[4];		//ds:0xaa02; seg096
+extern char g_grammar_pronouns_ihn[4];		//ds:0xaa06; seg096
+extern char g_grammar_pronouns_ihm[4];		//ds:0xaa0a; seg096
+
+extern char *g_grammar_pronouns_index[7];	//ds:0xaa14; seg096
+
 extern unsigned char *g_hexenknoten_gfx_buf;	// ds:0xacc8; seg100
 extern signed short g_monster_spell_ae_cost;	// ds:0xaccc; seg102
 extern char g_select_skill_lvlup[6]; 		// ds:0xacce; seg103

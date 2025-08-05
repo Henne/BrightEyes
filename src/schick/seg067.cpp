@@ -94,7 +94,7 @@ void city_event_1(void)
 		sprintf(g_dtp2,
 			get_tx(random_schick(4) + 3),
 			(char*)hero + HERO_NAME2,
-			(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
+			(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
 
 		answer = GUI_dialogbox(hero + HERO_PORTRAIT, (char*)(hero + HERO_NAME2), g_dtp2, 3,
 				get_tx(random_schick(4) + 7),
@@ -337,7 +337,7 @@ void city_event_7(void)
 
 		GUI_dialogbox((unsigned char*)g_dtp2, NULL, (char*)((char*)(g_dtp2 + 0x400)), 0);
 
-		sprintf(g_dtp2 + 0x400, get_tx(125), (char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
+		sprintf(g_dtp2 + 0x400, get_tx(125), (GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
 		GUI_dialogbox((unsigned char*)g_dtp2, NULL, (char*)((char*)(g_dtp2 + 0x400)), 0);
 

@@ -113,7 +113,7 @@ void TRV_swim2(signed char mod, signed short percent)
 			} else {
 				/* skill test failed */
 				sprintf(g_dtp2, get_tx2(32), (char*)hero + HERO_NAME2,
-					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+					(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 				GUI_output(g_dtp2);
 
@@ -644,7 +644,7 @@ void tevent_044(void)
 
 		hero = (Bit8u*)get_first_hero_available_in_group();
 
-		sprintf((char*)(g_dtp2 + 0x400), get_tx2(33), (char*)hero + HERO_NAME2, (char*)GUI_get_ptr(host_readbs(hero + HERO_SEX), 3));
+		sprintf((char*)(g_dtp2 + 0x400), get_tx2(33), (char*)hero + HERO_NAME2, GUI_get_ptr(host_readbs(hero + HERO_SEX), 3));
 
 		do {
 			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, (char*)(g_dtp2 + 0x400), 2, get_tx2(34), get_tx2(35));
@@ -727,7 +727,7 @@ void tevent_046(void)
 			sprintf(g_dtp2,
 				get_tx2(45),
 				(char*)hero + HERO_NAME2,
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 			do {
 				answer = GUI_radio(g_dtp2, 2,

@@ -202,7 +202,7 @@ signed short DNG11_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((ds_readb(DNG11_LEVER_FLAG) == 2 || ds_readb(DNG11_LEVER_FLAG) == 3) && (test_result = test_skill(hero, TA_SCHLOESSER, 5)) > 0 ? get_tx(27) : get_tx(28)),
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -235,7 +235,7 @@ signed short DNG11_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((ds_readb(DNG11_LEVER_FLAG) == 1 || ds_readb(DNG11_LEVER_FLAG) == 3) && (test_result = test_skill(hero, TA_SCHLOESSER, 3)) > 0 ? get_tx(27) : get_tx(28)),
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -268,7 +268,7 @@ signed short DNG11_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((ds_readb(DNG11_LEVER_FLAG) == 5 || ds_readb(DNG11_LEVER_FLAG) == 3) && (test_result = test_skill(hero, TA_SCHLOESSER, 5)) > 0 ? get_tx(27) : get_tx(28)),
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
 			strcat(g_dtp2, g_text_output_buf);
 

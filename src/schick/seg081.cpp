@@ -257,10 +257,10 @@ signed short DNG06_handler(void)
 			sprintf(g_dtp2,
 				(char*)(i == 1 ? get_tx(18) : get_tx(19)),
 				(char*)hero + HERO_NAME2,
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
 				(char*)hero + HERO_NAME2,
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
 
 			GUI_output(g_dtp2);
 
@@ -278,8 +278,8 @@ signed short DNG06_handler(void)
 					sprintf(g_dtp2,
 						get_tx(20),
 						(char*)hero + HERO_NAME2,
-						(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-						(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
+						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
 					GUI_output(g_dtp2);
 
@@ -388,7 +388,7 @@ signed short DNG06_handler(void)
 			/* evasion succeeds */
 			sprintf(g_dtp2,
 				get_tx(26),
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 			GUI_output(g_dtp2);
 
@@ -396,7 +396,7 @@ signed short DNG06_handler(void)
 			/* disk causes heavy damage */
 			sprintf(g_dtp2,
 				get_tx(27),
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 
 			GUI_output(g_dtp2);
 
@@ -412,8 +412,8 @@ signed short DNG06_handler(void)
 			sprintf(g_dtp2,
 				get_tx(29),
 				(char*)hero + HERO_NAME2,
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 			GUI_output(g_dtp2);
 
@@ -598,7 +598,7 @@ void DNG09_pitfall(void)
 				/* the current group has only one hero */
 
 				/* print message */
-				sprintf(g_dtp2, get_tx(31), (char*)hero_first + HERO_NAME2, (char*)(GUI_get_ptr(host_readbs(hero_first + HERO_SEX), 0)));
+				sprintf(g_dtp2, get_tx(31), (char*)hero_first + HERO_NAME2, (GUI_get_ptr(host_readbs(hero_first + HERO_SEX), 0)));
 				GUI_output(g_dtp2);
 
 				/* this hero looses 3W6+3 LE */

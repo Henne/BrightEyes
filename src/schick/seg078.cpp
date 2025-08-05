@@ -86,7 +86,7 @@ signed short DNG02_handler(void)
 			sprintf(g_dtp2,
 				get_tx(9),
 				(char*)hero + HERO_NAME2,
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 			GUI_output(g_dtp2);
 
@@ -100,7 +100,7 @@ signed short DNG02_handler(void)
 					sprintf(g_dtp2,
 						get_tx(10),
 						(char*)hero + HERO_NAME2,
-						(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 					GUI_output(g_dtp2);
 
@@ -336,9 +336,9 @@ signed short DNG02_handler(void)
 				sprintf(g_dtp2,
 					get_tx(42),
 					(char*)hero + HERO_NAME2,
-					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+					(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+					(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+					(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
 					(char*)hero + HERO_NAME2);
 
 				GUI_output(g_dtp2);
@@ -441,7 +441,7 @@ signed short DNG02_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((i = test_skill(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(39) : get_tx(38)),
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 			strcat(g_dtp2,
 				g_text_output_buf);
@@ -477,7 +477,7 @@ signed short DNG02_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((i = test_skill(hero, TA_SCHLOESSER, 2)) > 0 ? get_tx(39) : get_tx(38)),
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 			strcat(g_dtp2,
 				g_text_output_buf);
@@ -511,7 +511,7 @@ signed short DNG02_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((i = test_skill(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(39) : get_tx(38)),
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 			strcat(g_dtp2,
 				g_text_output_buf);

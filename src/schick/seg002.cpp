@@ -3061,7 +3061,7 @@ void herokeeping(void)
 							((gs_food_message[i] == 4) ? get_ttx(798) :
 							((gs_food_message[i] == 5) ? get_ttx(799) :
 							get_ttx(800))))),
-							(char*)hero + HERO_NAME2, (char*)GUI_get_ptr(host_readbs(hero + HERO_SEX), 1));
+							(char*)hero + HERO_NAME2, GUI_get_ptr(host_readbs(hero + HERO_SEX), 1));
 
 					g_food_message_shown[i] = gs_food_message[i];
 

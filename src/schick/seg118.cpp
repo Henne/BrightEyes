@@ -134,7 +134,7 @@ void tevent_037(void)
 					hero = get_hero(answer = get_random_hero());
 
 					sprintf(g_dtp2, get_tx2(45), (char*)hero + HERO_NAME2,
-						(char*)GUI_get_ptr(host_readbs(hero + HERO_SEX), 2));
+						GUI_get_ptr(host_readbs(hero + HERO_SEX), 2));
 
 					GUI_output(g_dtp2);
 
@@ -160,8 +160,8 @@ void tevent_037(void)
 							if (strcmp(g_text_input_buf, (char*)p_datseg + STR_RAD3))
 							{
 								sprintf(g_dtp2, get_tx2(50),
-									(char*)hero + HERO_NAME2, (char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-									(char*)hero + HERO_NAME2, (char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
+									(char*)hero + HERO_NAME2, (GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+									(char*)hero + HERO_NAME2, (GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 
 								GUI_output(g_dtp2);
 
@@ -525,7 +525,7 @@ void tevent_124(void)
 				{
 					/* fatal */
 					sprintf(g_dtp2, get_tx2(56), (char*)hero + HERO_NAME2,
-						(char*)GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
+						GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
 					GUI_output(g_dtp2);
 
 					hero_disappear(hero, i, -1);

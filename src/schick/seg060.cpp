@@ -50,7 +50,7 @@ void talk_tavern(void)
 
 	answer = 0;
 
-	text_buffer =(char*) g_dtp2;
+	text_buffer = (char*)g_dtp2;
 	answer1_buffer = text_buffer + 1000;
 	answer2_buffer = answer1_buffer + 60;
 	answer3_buffer = answer2_buffer + 60;
@@ -98,10 +98,9 @@ void talk_tavern(void)
 
 				hero = get_hero(ds_readb(TLK_TAV_TESTDRUNK) - 1);
 
-				sprintf(text_buffer, format,
-					(char*)hero + HERO_NAME2,
-					(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)),
-					(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
+				sprintf(text_buffer, format, (char*)hero + HERO_NAME2,
+					GUI_get_ptr(host_readbs(hero + HERO_SEX), 3),
+					GUI_get_ptr(host_readbs(hero + HERO_SEX), 1));
 ;
 			} else if (txt_id == 18 || txt_id == 31) {
 
@@ -154,19 +153,19 @@ void talk_tavern(void)
 			} else if (txt_id == 122 || txt_id == 126 || txt_id == 127 || txt_id == 132) {
 
 				sprintf(text_buffer, format,
-					(GUI_get_ptr(ds_readb(TLK_TAV_INFORMERSEX) - 1, 0)),
-					(GUI_get_ptr(ds_readb(TLK_TAV_INFORMERSEX) - 1, 0)));
+					GUI_get_ptr(ds_readb(TLK_TAV_INFORMERSEX) - 1, 0),
+					GUI_get_ptr(ds_readb(TLK_TAV_INFORMERSEX) - 1, 0));
 
 			} else if (txt_id == 128) {
 
-				sprintf(text_buffer, format,
-					!ds_readb(CURRENT_INFORMER) ? (char*)(get_drinkmate()) : get_informer_name());
+				sprintf(text_buffer, format, !ds_readb(CURRENT_INFORMER) ? get_drinkmate() : get_informer_name());
+
 			} else if (txt_id == 131) {
 
 				sprintf(text_buffer, format,
-					(GUI_get_ptr(ds_readb(TLK_TAV_INFORMERSEX) - 1, 0)),
-					(GUI_get_ptr(ds_readb(TLK_TAV_INFORMERSEX) - 1, 0)),
-					(Bit8u*)(load_current_town_gossip()));
+					GUI_get_ptr(ds_readb(TLK_TAV_INFORMERSEX) - 1, 0),
+					GUI_get_ptr(ds_readb(TLK_TAV_INFORMERSEX) - 1, 0),
+					(Bit8u*)load_current_town_gossip());
 
 			} else {
 
@@ -197,9 +196,7 @@ void talk_tavern(void)
 			} else if (txt_id == 39) {
 
 				sprintf(answer2_buffer, format,
-					!gs_informer_flags[get_town_lookup_entry()] ?
-						(char*)(get_drinkmate()) :
-						get_informer_name2());
+					!gs_informer_flags[get_town_lookup_entry()] ? get_drinkmate() :	get_informer_name2());
 
 			} else {
 				strcpy(answer2_buffer, format);

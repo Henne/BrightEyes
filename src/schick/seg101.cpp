@@ -598,7 +598,7 @@ void spell_visibili(void)
 		set_mod_slot(slot, (Bit32s)rounds * MINUTES(5), get_spelluser() + HERO_INVISIBLE, 1, (signed char)pos);
 
 		sprintf(g_dtp2,	get_tx(106), (char*)get_spelluser() + HERO_NAME2,
-			(char*)(GUI_get_ptr(host_readbs(get_spelluser() + HERO_SEX), 0)));
+			(GUI_get_ptr(host_readbs(get_spelluser() + HERO_SEX), 0)));
 	} else {
 		sprintf(g_dtp2,	get_ttx(607), (char*)get_spelluser() + HERO_NAME2);
 

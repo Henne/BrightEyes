@@ -273,7 +273,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 						sprintf(dst, fmt,
 							(char*)hero + HERO_NAME2,
-							(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+							(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 					} else {
 
@@ -427,22 +427,22 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 						sprintf(dst, fmt,
 							(char*)hero + HERO_NAME2,
-							(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-							(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+							(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+							(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 					} else if (txt_id == 14 || txt_id == 15 || txt_id == 76) {
 
 						sprintf(dst, fmt,
 							(char*)ds_readd(RUIN_HERO) + HERO_NAME2,
-							(char*)(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(RUIN_HERO) + 0x22), 0)));
+							(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(RUIN_HERO) + 0x22), 0)));
 
 					} else if (txt_id == 26 || txt_id == 65) {
 
 						sprintf(dst, fmt,
 							(char*)hero + HERO_NAME2,
-							(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-							(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),
-							(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
+							(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+							(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),
+							(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
 
 					} else {
 
@@ -456,8 +456,8 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 						sprintf(dst, fmt,
 							(char*)ds_readd(RANDOM_TLK_HERO) + HERO_NAME2,
-							(char*)(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(RANDOM_TLK_HERO) + 0x22), 0)),
-							(char*)(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(RANDOM_TLK_HERO) + 0x22), 2)));
+							(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(RANDOM_TLK_HERO) + 0x22), 0)),
+							(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(RANDOM_TLK_HERO) + 0x22), 2)));
 					} else {
 
 						strcpy(dst, fmt);

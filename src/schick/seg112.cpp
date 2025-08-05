@@ -200,8 +200,8 @@ void tevent_071(void)
 			sprintf(g_dtp2,
 				get_tx2(13),
 				(char*)hero + HERO_NAME2,
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
 
 			do {
@@ -353,8 +353,8 @@ void tevent_unused01(void)
 		sprintf(g_dtp2,
 			get_tx2(29),
 			(char*)hero + HERO_NAME2,
-			(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-			(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
+			(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+			(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
 
 		do {

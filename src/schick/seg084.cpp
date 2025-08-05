@@ -396,9 +396,9 @@ signed short DNG09_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)(((l3 = test_skill(hero, TA_SCHLOESSER, 4)) > 0) ? get_tx(52) : get_tx(54)),
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)),
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)),
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 
 			strcat(g_dtp2,
 				g_text_output_buf);
@@ -433,7 +433,7 @@ signed short DNG09_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)(((l3 = test_skill(hero, TA_SCHLOESSER, 6)) > 0) ? get_tx(52) : get_tx(53)),
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
 			strcat(g_dtp2,
 				g_text_output_buf);

@@ -412,7 +412,7 @@ void tevent_114(void)
 						sprintf(g_dtp2,
 							get_tx2(23),
 							(char*)hero + HERO_NAME2,
-							(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
+							(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 
 						GUI_output(g_dtp2);
 

@@ -164,7 +164,7 @@ Bit8u* GUI_2f2(signed short v1, signed short word_id, signed short type)
 
 	genus = (type == 0) ? g_items_genders[word_id] : g_monname_genders[word_id];
 
-	return (Bit8u*)ds_readd(GRAMMAR_PRONOUNS_INDEX + 4 * ds_readbs(GRAMMAR_PRONOUNS_TABLE2 + v1 * 3 + genus));
+	return (Bit8u*)g_grammar_pronouns_index[ds_readbs(GRAMMAR_PRONOUNS_TABLE2 + v1 * 3 + genus)];
 }
 
 //330
@@ -177,15 +177,13 @@ Bit8u* GUI_2f2(signed short v1, signed short word_id, signed short type)
 char* GUI_get_ptr(const int genus, const int causus)
 {
 	if (genus == 0) {
-		return (causus == 0) ? ((char*)p_datseg + GRAMMAR_PRONOUNS_ER) :
-				((causus == 1) ? ((char*)p_datseg + GRAMMAR_PRONOUNS_SEIN) :
-				((causus == 3) ? ((char*)p_datseg + GRAMMAR_PRONOUNS_IHM) :
-					((char*)p_datseg + GRAMMAR_PRONOUNS_IHN)));
+		return (causus == 0) ? g_grammar_pronouns_er :
+			((causus == 1) ? g_grammar_pronouns_sein :
+			((causus == 3) ? g_grammar_pronouns_ihm : g_grammar_pronouns_ihn));
 	} else {
-		return (causus == 0) ? ((char*)p_datseg + GRAMMAR_PRONOUNS_SIE) :
-				((causus == 1) ? ((char*)p_datseg + GRAMMAR_PRONOUNS_IHR) :
-				((causus == 3) ? ((char*)p_datseg + GRAMMAR_PRONOUNS_IHR) :
-					((char*)p_datseg + GRAMMAR_PRONOUNS_SIE)));
+		return (causus == 0) ? g_grammar_pronouns_sie :
+			((causus == 1) ? g_grammar_pronouns_ihr :
+			((causus == 3) ? g_grammar_pronouns_ihr : g_grammar_pronouns_sie));
 	}
 }
 

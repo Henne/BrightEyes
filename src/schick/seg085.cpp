@@ -107,7 +107,7 @@ signed short DNG10_handler(void)
 		{
 			sprintf(g_text_output_buf,
 				get_tx(10),
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 			strcat(g_dtp2,
 				g_text_output_buf);

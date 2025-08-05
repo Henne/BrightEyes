@@ -1216,15 +1216,15 @@
 #define STR_VON_S_S_PTR                 (0xa9e7)    /* Bit8u*; to STR_VON_S_S */
 #define GRAMMAR_BUF_NO                  (0xa9eb)    /* unsigned short */
 #define GRAMMAR_GENDER_BITMASKS         (0xa9ed)    /* signed short[3]; {0x1000, 0x2000, 0x3000} */
-#define GRAMMAR_PRONOUNS_ER             (0xa9f3)    /* char[3]; "ER" */
-#define GRAMMAR_PRONOUNS_SIE            (0xa9f6)    /* char[4]; "SIE" */
-#define GRAMMAR_PRONOUNS_ES             (0xa9fa)    /* char[3]; "ES" */
-#define GRAMMAR_PRONOUNS_SEIN           (0xa9fd)    /* char[5]; "SEIN" */
-#define GRAMMAR_PRONOUNS_IHR            (0xaa02)    /* char[4]; "IHR" */
-#define GRAMMAR_PRONOUNS_IHN            (0xaa06)    /* char[4]; "IHN" */
-#define GRAMMAR_PRONOUNS_IHM            (0xaa0a)    /* char[4]; "IHM" */
-#define GRAMMAR_PRONOUNS_IHNEN          (0xaa0e)    /* char[6]; "IHNEN" */
-#define GRAMMAR_PRONOUNS_INDEX          (0xaa14)    /* Bit8u*[7] */
+//#define GRAMMAR_PRONOUNS_ER             (0xa9f3)    /* char[3]; "ER" */
+//#define GRAMMAR_PRONOUNS_SIE            (0xa9f6)    /* char[4]; "SIE" */
+//#define GRAMMAR_PRONOUNS_ES             (0xa9fa)    /* char[3]; "ES" */
+//#define GRAMMAR_PRONOUNS_SEIN           (0xa9fd)    /* char[5]; "SEIN" */
+//#define GRAMMAR_PRONOUNS_IHR            (0xaa02)    /* char[4]; "IHR" */
+//#define GRAMMAR_PRONOUNS_IHN            (0xaa06)    /* char[4]; "IHN" */
+//#define GRAMMAR_PRONOUNS_IHM            (0xaa0a)    /* char[4]; "IHM" */
+//#define GRAMMAR_PRONOUNS_IHNEN          (0xaa0e)    /* char[6]; "IHNEN" */
+//#define GRAMMAR_PRONOUNS_INDEX          (0xaa14)    /* Bit8u*[7] */
 #define GRAMMAR_PRONOUNS_TABLE2         (0xaa30)    /* unsigned char[33]; by gender and ?? */
 #define GUI_CHAR_WIDTH                  (0xaa51)    /* struct(3)[75]; struct{char c, font_id, width;} */
 #define STR_S_S                         (0xab32)    /* char[6]; "%s %s" */

@@ -162,7 +162,7 @@ signed short DNG14_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((l_di = test_skill(hero, TA_SCHLOESSER, -6)) > 0 ? get_tx(8): get_tx(9)),
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -191,7 +191,7 @@ signed short DNG14_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((l_di = test_skill(hero, TA_SCHLOESSER, 6)) > 0 ? get_tx(8): get_tx(9)),
-				(char*)GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
+				GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -312,7 +312,7 @@ signed short DNG14_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((l_di = test_skill(hero, TA_SCHLOESSER, -6)) > 0 ? get_tx(8) : get_tx(9)),
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -342,7 +342,7 @@ signed short DNG14_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((l_di = test_skill(hero, TA_SCHLOESSER, 7)) > 0 ? get_tx(8) : get_tx(9)),
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -404,7 +404,7 @@ signed short DNG14_handler(void)
 						sprintf(g_dtp2,
 							get_tx(26),
 							(char*)hero + HERO_NAME2,
-							(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
+							(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 
 						GUI_output(g_dtp2);
 
@@ -528,7 +528,7 @@ signed short DNG14_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((l_di = test_skill(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(8) : get_tx(9)),
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -567,7 +567,7 @@ signed short DNG14_handler(void)
 						sprintf(g_dtp2,
 							get_tx(40),
 							(char*)hero + HERO_NAME2,
-							(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+							(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 						GUI_output(g_dtp2);
 
@@ -590,7 +590,7 @@ signed short DNG14_handler(void)
 						sprintf(g_dtp2,
 							get_tx(41),
 							(char*)hero + HERO_NAME2,
-							(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+							(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
 						GUI_output(g_dtp2);
 
