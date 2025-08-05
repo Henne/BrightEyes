@@ -824,17 +824,17 @@ void FIG_load_ship_sprites(void)
 
 		for (l_di = 0; l_di < 24; l_di++) {
 
-			l_si = host_readbs((Bit8u*)ds_readd(SCENARIO_BUF) + 0x15 + 25 * i + l_di);
+			l_si =*(g_scenario_buf + 0x15 + 25 * i + l_di);
 
 			if ((l_si >= 108) && (l_si <= 111)) {
 
 				l_si -= 50;
 
-			if (((Bit8u*)(host_readd((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + 4 * l_si)))) {
+			if ((Bit8u*)host_readd((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + 4 * l_si)) {
 
 				/* this sprite has already been buffered */
 
-				ptr = (Bit8u*)(host_readd((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + 4 * l_si));
+				ptr = (Bit8u*)host_readd((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + 4 * l_si);
 
 			} else {
 				/* this sprite has not been used yet */
@@ -946,8 +946,8 @@ signed short do_fight(signed short fight_id)
 	g_textbox_width = 3;
 
 	/* set some pointers */
-	ds_writed(SCENARIO_BUF, (Bit32u)(((HugePt)g_buffer8_ptr) + 64100L));
-	ds_writed(MONSTER_DAT_BUF, (Bit32u)F_PADD(ds_readd(SCENARIO_BUF), 621));
+	g_scenario_buf = (signed char*)(((HugePt)g_buffer8_ptr) + 64100L);
+	ds_writed(MONSTER_DAT_BUF, (Bit32u)(((HugePt)g_scenario_buf) + 621L));
 	ds_writed(CURRENT_FIGHT, (Bit32u)F_PADD(ds_readd(MONSTER_DAT_BUF), 3476));
 
 	read_fight_lst(fight_id);
@@ -1011,13 +1011,13 @@ signed short do_fight(signed short fight_id)
 	set_var_to_zero();
 	update_mouse_cursor();
 
-	if (host_readbs((Bit8u*)ds_readd(SCENARIO_BUF) + 0x14) > 3) {
+	if (g_scenario_buf[0x14] > 3) {
 
-		load_fightbg(host_readbs((Bit8u*)ds_readd(SCENARIO_BUF) + 0x14) + 197);
+		load_fightbg(g_scenario_buf[0x14] + 197);
 
 	} else {
 
-		load_fightbg(host_readbs((Bit8u*)ds_readd(SCENARIO_BUF) + 0x14) + 1);
+		load_fightbg(g_scenario_buf[0x14] + 1);
 
 	}
 

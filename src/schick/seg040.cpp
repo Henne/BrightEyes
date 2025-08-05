@@ -38,7 +38,7 @@ void FIG_chessboard_init(void)
 
 		for (cb_x = 0; cb_x < 24; cb_x++) {
 
-			obj_id = host_readbs((Bit8u*)ds_readd(SCENARIO_BUF) + cb_y * 25 + cb_x + 0x15);
+			obj_id = *(g_scenario_buf + cb_y * 25 + cb_x + 0x15);
 
 			if (obj_id < 0) {
 
@@ -71,7 +71,7 @@ void FIG_chessboard_init(void)
 
 	i = 0;
 
-	if (host_readbs((Bit8u*)ds_readd(SCENARIO_BUF) + 0x14) <= 3) {
+	if (g_scenario_buf[0x14] <= 3) {
 
 		while (ds_readbs(CB_REAR_BORDER + i * 2) != -1) {
 
@@ -209,7 +209,7 @@ void FIG_draw_scenario(void)
 	for (cb_x = 0; cb_x < 24; cb_x++) {
 		for (cb_y = 0; cb_y < 24; cb_y++) {
 
-			obj_id = host_readbs((Bit8u*)ds_readd(SCENARIO_BUF) + cb_y * 25 + cb_x + 0x15);
+			obj_id = *(g_scenario_buf + cb_y * 25 + cb_x + 0x15);
 
 			if (obj_id >= 0x32) {
 				if (obj_id < 0x6c || obj_id > 0x6f) {
@@ -223,7 +223,7 @@ void FIG_draw_scenario(void)
 						ptr = g_fightobj_buf_seek_ptr;
 
 						nvf.dst = ptr;
-						nvf.src = (Bit8u*)ds_readd(FIGHTOBJ_BUF);
+						nvf.src = g_fightobj_buf;
 						nvf.no = obj_id;
 						nvf.type = 0;
 						nvf.width = (Bit8u*)&width;

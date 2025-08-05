@@ -705,8 +705,8 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 							}
 						} else {
 							if (((mode == 4) || (mode == 5)) && /* actor is fleeing */
-								((host_readbs((Bit8u*)ds_readd(SCENARIO_BUF) + 0x14) > 3) ||
-									((host_readbs((Bit8u*)ds_readd(SCENARIO_BUF) + 0x14) <= 3) && ((new_x > 23) || (new_y > 23) || (new_y < 0)))))
+								((g_scenario_buf[0x14] > 3) ||
+									((g_scenario_buf[0x14] <= 3) && ((new_x > 23) || (new_y > 23) || (new_y < 0)))))
 							{
 								/* it is not tested if there is space for the tail of a two-squares monster! */
 								unused[nr_targets_reached] = 1;

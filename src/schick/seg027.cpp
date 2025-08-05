@@ -522,13 +522,13 @@ void load_ani(const signed short no)
 }
 
 /**
- * \brief   reads an entry in SCENARIO.LST and stores it in SCENARIO_BUF
+ * \brief   reads an entry in SCENARIO.LST and stores it in g_scenario_buf
  *
  * \param   scenario_id number of the scenario in SCENARIO.LST
  */
 void load_scenario(signed short scenario_id)
 {
-	unsigned short scenario_lst_handle;
+	signed short scenario_lst_handle;
 	signed short scenario_lst_buf;
 
 	/* load SCENARIO.LST */
@@ -550,7 +550,7 @@ void load_scenario(signed short scenario_id)
 	seek_archive_file(scenario_lst_handle, 621L * (scenario_id - 1) + 2, 0);
 
 	/* read scenario */
-	read_archive_file(scenario_lst_handle, (Bit8u*)ds_readd(SCENARIO_BUF), 621);
+	read_archive_file(scenario_lst_handle, (Bit8u*)g_scenario_buf, 621);
 
 	/* close archive */
 	close(scenario_lst_handle);

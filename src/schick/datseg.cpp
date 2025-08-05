@@ -6367,7 +6367,7 @@ unsigned char g_unkn_073[12]; // ds:0xbd41
 signed char g_new_menu_icons[9]; // ds:0xbd38
 unsigned char *g_heroes; // ds:0xbd34
 unsigned char *g_fightobj_buf; // ds:0xbd30
-long g_scenario_buf; // ds:0xbd2c
+signed char *g_scenario_buf; // ds:0xbd2c
 void *g_current_fight; // ds:0xbd28
 unsigned char g_citycamp_city; // ds:0xbd27, {0 = camp in dungeon, 1}
 unsigned short g_pregame_state; // ds:0xbd25
