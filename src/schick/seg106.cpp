@@ -627,14 +627,8 @@ void startup_equipment(Bit8u *hero)
 {
 	signed short i;
 	struct items_all all;
-#if !defined(__BORLANDC__)
-	all.a[0] = ITEM_WATERSKIN;
-	all.a[1] = ITEM_FOOD_PACKAGE;
-	all.a[2] = ITEM_FOOD_PACKAGE;
-	all.a[3] = ITEM_TROUSERS;
-#else
-	*(struct items_all*)&all = *(struct items_all*)(p_datseg + HERO_STARTUP_ITEMS_ALL);
-#endif
+
+	*(struct items_all*)&all = *(struct items_all*)g_hero_startup_items_all;
 
 	for (i = 0; i < 4; i++) {
 		give_hero_new_item(hero, all.a[i], 1, 1);

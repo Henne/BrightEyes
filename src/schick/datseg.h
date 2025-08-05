@@ -453,6 +453,7 @@ extern signed short g_monster_spell_ae_cost;	// ds:0xaccc; seg102
 extern char g_select_skill_lvlup[6]; 		// ds:0xacce; seg103
 extern signed char g_select_skill_defaults[6];	// ds:0xacd4; seg103
 
+extern signed short g_hero_startup_items_all[4];	// ds:0xaea8; seg106
 extern void (*g_use_special_item_handlers[14])(void);	//ds:0xaeb0; seg107
 extern int g_light_type;			// ds:0xaee8; seg101, seg107
 extern void (*g_travel_event_handlers[146])(void);	//ds:0xaeea; seg109

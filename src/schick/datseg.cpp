@@ -5761,7 +5761,9 @@ struct{unsigned char unkn[8];} g_hero_startup_items[12] = {
 	{ ITEM_ROBBENTOETER, 0, ITEM_SPEAR, 0, ITEM_FLUTE, 0, 0xff, 0xff }, /* Firnelf */
 	{ ITEM_LONGBOW, 0, ITEM_KNIFE, 0, ITEM_FLUTE, 0, 0xff, 0xff } /* Waldelf */
 }; // ds:0xae48
-signed short g_hero_startup_items_all[4] = { 0x001e, 0x002d, 0x002d, 0x0031 }; // ds:0xaea8
+signed short g_hero_startup_items_all[4] = {
+	ITEM_WATERSKIN, ITEM_FOOD_PACKAGE, ITEM_FOOD_PACKAGE, ITEM_TROUSERS
+}; // ds:0xaea8
 
 void (*g_use_special_item_handlers[14])(void) = {
 	NULL,
