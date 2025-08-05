@@ -94,12 +94,9 @@ void draw_playmask(void)
 	ds_writew(TEXTLINE_MAXLEN, 113);
 
 	ds_writew(TXT_TABPOS1, 205);
-#if !defined(__BORLANDC__)
-	ds_writed(ACTION_TABLE_PRIMARY, (Bit32u)(p_datseg + ACTION_TABLE_PLAYMASK));
-#else
-	ds_writed(ACTION_TABLE_PRIMARY, (Bit32u)MK_FP(datseg, ACTION_TABLE_PLAYMASK));
-#endif
-	ds_writed(ACTION_TABLE_SECONDARY, 0);
+
+	g_action_table_primary = &g_action_table_playmask[0];
+	g_action_table_secondary = NULL;
 
 	ds_writew(UPDATE_STATUSLINE, 1);
 

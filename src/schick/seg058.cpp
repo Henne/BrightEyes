@@ -313,9 +313,9 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 			}
 
-			ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)(p_datseg + ACTION_TABLE_MERCHANT));
+			g_action_table_secondary = &g_action_table_merchant[0];
 			handle_input();
-			ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)0L);
+			g_action_table_secondary = NULL;
 
 			if (ds_readws(HAVE_MOUSE) == 2) {
 				select_with_mouse((Bit8u*)&l7, (Bit8u*)ds_readd(SELLITEMS) + 7 * item);

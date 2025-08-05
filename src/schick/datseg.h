@@ -7,6 +7,14 @@
 extern char ds[1];
 #endif
 
+struct mouse_action {
+	int x1;
+	int y1;
+	int x2;
+	int y2;
+	int action;
+};
+
 struct struct_pic_copy {
 	unsigned char *dst;
 	int x1;
@@ -119,6 +127,13 @@ extern signed short g_heroswap_allowed;			//ds:0x29b4; seg002, seg049, seg057
 extern signed short g_intemple;				//ds:0x29b6; seg061
 extern signed short g_intemple2;			//ds:0x29b8; seg061
 extern signed short g_always_zero3;			//ds:0x29ba; seg002
+extern struct mouse_action g_action_table_menu[2];	//ds:0x29cc; seg032, seg097
+extern struct mouse_action *g_action_table_primary;	//ds:0x29e0; seg002, seg029, seg032, seg046
+extern struct mouse_action *g_action_table_secondary;	//ds:0x29e4; seg002, seg025, seg029-seg097
+extern struct mouse_action g_action_table_playmask[24];	//ds:0x29e8; seg029
+extern struct mouse_action g_action_table_status[30];	//ds:0x2ad8; seg046
+extern struct mouse_action g_action_table_merchant[2];	//ds:0x2c04; seg056, seg057, seg058
+
 
 extern signed short g_disease_prices[8];		//ds:0x2c50; seg053, seg104
 extern signed short g_disease_delays[8];		//ds:0x2c60; seg053
@@ -331,6 +346,8 @@ extern Bit8u  g_wallclock_palette_night[3][3];	//ds:0x4afa; seg004;
 
 extern signed short g_delay_factor;		//ds:0x4b66; seg005, seg025
 
+extern struct mouse_action g_action_table_options[10];	//ds:0x4bae; seg025
+
 extern void (*g_location_handlers[19])(void);	//ds:0x4c3b; seg025
 
 extern char g_chr_file_suffix[5];		//ds:0x5e3e; seg026
@@ -410,6 +427,8 @@ extern signed short g_automap_sely;		//ds:0x7de7; seg074, seg099
 extern signed short g_dng_level_changed;	//ds:0x9312; seg075, seg076
 
 extern const char g_dng01_str_marbo[6];		//ds:0x93d7; seg077
+
+extern struct mouse_action g_action_table_travelmap[35];	//ds:0xa50f; seg093
 
 extern unsigned char *g_hexenknoten_gfx_buf;	// ds:0xacc8; seg100
 extern signed short g_monster_spell_ae_cost;	// ds:0xaccc; seg102

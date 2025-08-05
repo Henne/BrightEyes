@@ -250,25 +250,17 @@ void buy_screen(void)
 		l7 = host_readws((Bit8u*)&l7);
 #endif
 
-		ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)(p_datseg + ACTION_TABLE_MERCHANT));
+		g_action_table_secondary = &g_action_table_merchant[0];
 		handle_gui_input();
-		ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)0L);
+		g_action_table_secondary = NULL;
 
 		if (l6 != l7 || l15 != 0) {
 
-			do_border(g_vga_memstart,
-				array3.a[l6 / 5] - 1,
-				array5.a[l6 % 5] - 1,
-				array3.a[l6 / 5] + 16,
-				array5.a[l6 % 5] + 16,
-				0);
+			do_border(g_vga_memstart, array3.a[l6 / 5] - 1, array5.a[l6 % 5] - 1, array3.a[l6 / 5] + 16,
+					array5.a[l6 % 5] + 16, 0);
 
-			do_border(g_vga_memstart,
-				array3.a[l7 / 5] - 1,
-				array5.a[l7 % 5] - 1,
-				array3.a[l7 / 5] + 16,
-				array5.a[l7 % 5] + 16,
-				-1);
+			do_border(g_vga_memstart, array3.a[l7 / 5] - 1, array5.a[l7 % 5] - 1, array3.a[l7 / 5] + 16,
+					array5.a[l7 % 5] + 16, -1);
 
 			l6 = l7;
 
@@ -327,7 +319,7 @@ void buy_screen(void)
 			l15 = 0;
 		}
 
-		if ((ds_readws(MOUSE2_EVENT) != 0) && get_mouse_action(g_mouse_posx, g_mouse_posy, p_datseg + ACTION_TABLE_MERCHANT)) {
+		if ((ds_readws(MOUSE2_EVENT) != 0) && get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_merchant)) {
 			ds_writew(ACTION, ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK);
 		}
 

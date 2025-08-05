@@ -497,9 +497,9 @@ signed short game_options(void)
 	g_gui_buffer_unkn = (unsigned char*)g_buffer9_ptr;
 
 	do {
-		ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)(p_datseg + ACTION_TABLE_OPTIONS));
+		g_action_table_secondary = &g_action_table_options[0];
 		handle_input();
-		ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)0);
+		g_action_table_secondary = NULL;
 
 		if (ds_readw(MOUSE2_EVENT) != 0 || ds_readws(ACTION) == ACTION_ID_PAGE_UP) {
 

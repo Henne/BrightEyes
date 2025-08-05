@@ -1579,14 +1579,12 @@ void handle_gui_input(void)
 		ds_writew(MOUSE1_EVENT2, 0);
 		l_si = 0;
 
-		if (((Bit8u*)ds_readd(ACTION_TABLE_SECONDARY))) {
-			l_si = get_mouse_action(g_mouse_posx, g_mouse_posy,
-					(Bit8u*)ds_readd(ACTION_TABLE_SECONDARY));
+		if (g_action_table_secondary) {
+			l_si = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_secondary);
 		}
 
-		if (!l_si && ((Bit8u*)ds_readd(ACTION_TABLE_PRIMARY))) {
-			l_si = get_mouse_action(g_mouse_posx, g_mouse_posy,
-					(Bit8u*)ds_readd(ACTION_TABLE_PRIMARY));
+		if (!l_si && (g_action_table_primary)) {
+			l_si = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_primary);
 		}
 
 		if (ds_readw(HAVE_MOUSE) == 2) {
@@ -1667,18 +1665,15 @@ void handle_gui_input(void)
  * \return  if (x,y) is in one of the rectangles, return the return value of the first fitting rectangle.
  *          otherwise, return 0.
  */
-signed short get_mouse_action(signed short x, signed short y, Bit8u *rectangles)
+signed short get_mouse_action(signed short x, signed short y, struct mouse_action *act)
 {
 	signed short i;
 
-	for (i = 0; host_readws(rectangles + i * 10) != -1; i++) {
+	for (i = 0; act[i].x1 != -1; i++) {
 
-		if ((host_readws(rectangles + i * 10) <= x) &&
-			(host_readws(rectangles + i * 10 + 4) >= x) &&
-			(host_readws(rectangles + i * 10 + 2) <= y) &&
-			(host_readws(rectangles + i * 10 + 6) >= y))
+		if ((act[i].x1 <= x) && (act[i].x2 >= x) && (act[i].y1 <= y) && (act[i].y2 >= y))
 		{
-			return host_readw(rectangles + i * 10 + 8);
+			return act[i].action;
 		}
 
 	}
@@ -1745,12 +1740,12 @@ void handle_input(void)
 		ds_writew(MOUSE1_EVENT2, 0);
 		l_si = 0;
 
-		if (((Bit8u*)ds_readd(ACTION_TABLE_SECONDARY))) {
-			l_si = get_mouse_action(g_mouse_posx, g_mouse_posy, (Bit8u*)ds_readd(ACTION_TABLE_SECONDARY));
+		if (g_action_table_secondary) {
+			l_si = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_secondary);
 		}
 
-		if (!l_si && ((Bit8u*)ds_readd(ACTION_TABLE_PRIMARY))) {
-			l_si = get_mouse_action(g_mouse_posx, g_mouse_posy, (Bit8u*)ds_readd(ACTION_TABLE_PRIMARY));
+		if (!l_si && g_action_table_primary) {
+			l_si = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_primary);
 		}
 
 		if (ds_readw(HAVE_MOUSE) == 2) {

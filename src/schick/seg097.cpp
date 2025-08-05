@@ -389,7 +389,7 @@ signed short GUI_input(char *str, unsigned short num)
 		}
 	} else {
 		/* set action table */
-		ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)(p_datseg + ACTION_TABLE_MENU));
+		g_action_table_secondary = &g_action_table_menu[0];
 
 		if (ds_readw(BIOSKEY_EVENT10) != 0) {
 			wait_for_keypress();
@@ -398,7 +398,7 @@ signed short GUI_input(char *str, unsigned short num)
 		}
 
 		/* delete action table */
-		ds_writed(ACTION_TABLE_SECONDARY, 0);
+		g_action_table_secondary = NULL;
 	}
 
 	set_textcolor(fg_bak, bg_bak);
@@ -638,13 +638,12 @@ signed short GUI_menu_input(signed short positions, signed short h_lines,
 		ds_writew(MOUSE1_EVENT2, ds_writew(MOUSE1_EVENT1, ds_writew(MOUSE2_EVENT, 0)));
 
 		while (!done) {
-			ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)(p_datseg + ACTION_TABLE_MENU));
+			g_action_table_secondary = &g_action_table_menu[0];
 			handle_input();
-			ds_writed(ACTION_TABLE_SECONDARY, 0);
+			g_action_table_secondary = NULL;
 
 			if (l5 != ds_readw(MENU_SELECTED)) {
-				GUI_fill_radio_button(l5, ds_readw(MENU_SELECTED),
-					h_lines - 1);
+				GUI_fill_radio_button(l5, ds_readw(MENU_SELECTED), h_lines - 1);
 				l5 = ds_readw(MENU_SELECTED);
 			}
 

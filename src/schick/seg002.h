@@ -2,6 +2,8 @@
 namespace M302de {
 #endif
 
+#include "datseg.h"
+
 void play_music_file(signed short);
 void set_audio_track(Bit16u);
 void sound_menu(void);
@@ -85,7 +87,7 @@ void refresh_screen_size1(void);
 //static
 void mouse_19dc(void);
 void handle_gui_input(void);
-signed short get_mouse_action(signed short, signed short, Bit8u*);
+signed short get_mouse_action(signed short, signed short, struct mouse_action*);
 void handle_input(void);
 void wait_for_keyboard1(void);
 /* static */

@@ -977,7 +977,7 @@ signed short do_fight(signed short fight_id)
 
 	g_request_refresh = 1;
 
-	ds_writed(ACTION_TABLE_PRIMARY, (Bit32u)(p_datseg + ACTION_TABLE_MENU));
+	g_action_table_primary = &g_action_table_menu[0];
 
 	g_wallclock_update = 0;
 

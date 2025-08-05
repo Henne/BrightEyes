@@ -162,12 +162,12 @@
 //#define INTEMPLE2                       (0x29b8)    /* unsigned short; {0,1}, copy of INTEMPLE */
 //#define ALWAYS_ZERO3                    (0x29ba)    /* unsigned short; writeonly (0) */
 // ?16
-#define ACTION_TABLE_MENU               (0x29cc)    /* struct(10)[2]; struct{signed short x1, x2, y1, y2; unsigned short action;} */
-#define ACTION_TABLE_PRIMARY            (0x29e0)    /* Bit8u*; to ACTION_TABLE_MENU */
-#define ACTION_TABLE_SECONDARY          (0x29e4)    /* Bit8u* */
-#define ACTION_TABLE_PLAYMASK           (0x29e8)    /* struct(10)[24]; struct{signed short x1, x2, y1, y2; unsigned short action;} */
-#define ACTION_TABLE_STATUS             (0x2ad8)    /* struct(10)[30]; struct{signed short x1, x2, y1, y2; unsigned short action;} */
-#define ACTION_TABLE_MERCHANT           (0x2c04)    /* struct(10)[2]; struct{signed short x1, x2, y1, y2; unsigned short action;} */
+//#define ACTION_TABLE_MENU               (0x29cc)    /* struct(10)[2]; struct{signed short x1, x2, y1, y2; unsigned short action;} */
+//#define ACTION_TABLE_PRIMARY            (0x29e0)    /* Bit8u*; to ACTION_TABLE_MENU */
+//#define ACTION_TABLE_SECONDARY          (0x29e4)    /* Bit8u* */
+//#define ACTION_TABLE_PLAYMASK           (0x29e8)    /* struct(10)[24]; struct{signed short x1, x2, y1, y2; unsigned short action;} */
+//#define ACTION_TABLE_STATUS             (0x2ad8)    /* struct(10)[30]; struct{signed short x1, x2, y1, y2; unsigned short action;} */
+//#define ACTION_TABLE_MERCHANT           (0x2c04)    /* struct(10)[2]; struct{signed short x1, x2, y1, y2; unsigned short action;} */
 #define CHAR_STATUS_BARS                (0x2c18)    /* struct(8)[7]; struct{signed short LE_ORIG, LE, AE_ORIG, AE;} */
 //#define DISEASE_PRICES                  (0x2c50)    /* signed short[8] */
 //#define DISEASE_DELAYS                  (0x2c60)    /* signed short[8] */
@@ -891,7 +891,7 @@
 #define RANDOM_SCHICK_SEED              (0x4ba0)    /* unsigned short */
 #define EMM_SIG                         (0x4ba2)    /* char[8] */
 #define EMS_FRAME_PTR                   (0x4baa)    /* Bit8u* */
-#define ACTION_TABLE_OPTIONS            (0x4bae)    /* struct(10)[10]; struct{signed short x1, x2, y1, y2; unsigned short action;} */
+//#define ACTION_TABLE_OPTIONS            (0x4bae)    /* struct(10)[10]; struct{signed short x1, x2, y1, y2; unsigned short action;} */
 #define TMAP_X                          (0x4c12)    /* signed short[10] */
 #define TMAP_Y                          (0x4c26)    /* signed short[10] */
 #define RENDERBUF_IN_USE_FLAG           (0x4c3a)    /* unsigned char; {0,1} */
@@ -1188,7 +1188,7 @@
 #define HARBORS_LINKED_SEA_ROUTES       (0xa330)    /* char[115]; 25 arrays, each terminated by -1 */
 #define HARBORS                         (0xa3a3)    /* struct(6)[26]; struct{char town, typeindex; Bit8u* sea_routes;} */
 #define TOWN_POSITIONS                  (0xa43f)    /* struct(4)[52]; struct{signed short x, y;} */
-#define ACTION_TABLE_TRAVELMAP          (0xa50f)    /* struct(10)[35] */
+//#define ACTION_TABLE_TRAVELMAP          (0xa50f)    /* struct(10)[35] */
 #define TEVENTS_TAB                     (0xa66d)    /* struct(3)[155]; struct{char route_id, place, tevent_id;} */
 // ?4
 #define TRAVELING                       (0xa842)    /* unsigned char; {0,1} */

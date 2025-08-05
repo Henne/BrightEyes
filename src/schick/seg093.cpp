@@ -198,8 +198,7 @@ signed short do_travel_mode(void)
 
 					for (i = 0, l4 = -1; i < 52; i++)
 					{
-						if (is_mouse_in_rect(l_di - 4,
-									answer - 4,
+						if (is_mouse_in_rect(l_di - 4, answer - 4,
 							    (l_di = ds_readws(TOWN_POSITIONS + 4 * i)) + 4,
 							    (answer = ds_readws((TOWN_POSITIONS + 2) + 4 * i)) + 4))
 						{
@@ -208,7 +207,7 @@ signed short do_travel_mode(void)
 						}
 					}
 
-					if (l4 == -1 && (l_di = get_mouse_action(g_mouse_posx, g_mouse_posy, p_datseg + ACTION_TABLE_TRAVELMAP)))
+					if (l4 == -1 && (l_di = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_travelmap)))
 					{
 						l4 = l_di + 51;
 					}
