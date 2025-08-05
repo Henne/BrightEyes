@@ -5747,19 +5747,19 @@ struct{unsigned char unkn[28];} g_alchemy_recipes[13] = {
 }; // ds:0xacda
 unsigned char g_prevent_drop_equipped_items = 0; // ds:0xae46
 unsigned char g_unkn_067[1] = { 0x00 }; // ds:0xae47
-struct{unsigned char unkn[8];} g_hero_startup_items[12] = {
-	{ ITEM_DAGGER, 0, ITEM_THROWING_KNIFE, 0, ITEM_THROWING_KNIFE, 0, 0xff, 0xff }, /* Gaukler */
-	{ ITEM_LONGBOW, 0, ITEM_DAGGER, 0, 0xff, 0xff, 0xff, 0xff }, /* Jaeger */
-	{ ITEM_SWORD, 0, ITEM_DAGGER, 0, ITEM_LEATHER_ARMOR, 0, 0xff, 0xff }, /* Krieger */
-	{ ITEM_RAPIER, 0, ITEM_DAGGER, 0, ITEM_PICKLOCKS, 0, 0xff, 0xff }, /* Streuner */
-	{ ITEM_SKRAJA, 0, ITEM_SABER, 0, ITEM_BRANDY, 0, 0xff, 0xff }, /* Thorwaler */
-	{ ITEM_MACE, 0, ITEM_CROWBAR, 0, ITEM_HAMMER, 0, 0xff, 0xff }, /* Zwerg */
-	{ ITEM_WITCHES_BROOM, 0, ITEM_EINBEERE, 0, ITEM_EINBEERE, 0, 0xff, 0xff }, /* Hexe */
-	{ ITEM_VOLCANIC_GLASS_DAGGER, 0, ITEM_WHIRLWEED, 0, ITEM_JORUGA_ROOT, 0, 0xff, 0xff }, /* Druide */
-	{ ITEM_MAGIC_WAND, 0, ITEM_DAGGER, 0, ITEM_SCHREIBZEUG, 0, ITEM_ROBE_GREEN, 0 }, /* Magier */
-	{ ITEM_LONGBOW, 0, ITEM_RAPIER, 0, ITEM_HARP, 0, 0xff, 0xff }, /* Auelf */
-	{ ITEM_ROBBENTOETER, 0, ITEM_SPEAR, 0, ITEM_FLUTE, 0, 0xff, 0xff }, /* Firnelf */
-	{ ITEM_LONGBOW, 0, ITEM_KNIFE, 0, ITEM_FLUTE, 0, 0xff, 0xff } /* Waldelf */
+signed short g_hero_startup_items[12][4] = {
+	{ ITEM_DAGGER, ITEM_THROWING_KNIFE, ITEM_THROWING_KNIFE, -1 }, /* Gaukler */
+	{ ITEM_LONGBOW, ITEM_DAGGER, -1, -1 }, /* Jaeger */
+	{ ITEM_SWORD, ITEM_DAGGER, ITEM_LEATHER_ARMOR, -1 }, /* Krieger */
+	{ ITEM_RAPIER, ITEM_DAGGER, ITEM_PICKLOCKS, -1 }, /* Streuner */
+	{ ITEM_SKRAJA, ITEM_SABER, ITEM_BRANDY, -1 }, /* Thorwaler */
+	{ ITEM_MACE, ITEM_CROWBAR, ITEM_HAMMER, -1 }, /* Zwerg */
+	{ ITEM_WITCHES_BROOM, ITEM_EINBEERE, ITEM_EINBEERE, -1 }, /* Hexe */
+	{ ITEM_VOLCANIC_GLASS_DAGGER, ITEM_WHIRLWEED, ITEM_JORUGA_ROOT, -1 }, /* Druide */
+	{ ITEM_MAGIC_WAND, ITEM_DAGGER, ITEM_SCHREIBZEUG, ITEM_ROBE_GREEN }, /* Magier */
+	{ ITEM_LONGBOW, ITEM_RAPIER, ITEM_HARP, -1 }, /* Auelf */
+	{ ITEM_ROBBENTOETER, ITEM_SPEAR, ITEM_FLUTE, -1 }, /* Firnelf */
+	{ ITEM_LONGBOW, ITEM_KNIFE, ITEM_FLUTE, -1 } /* Waldelf */
 }; // ds:0xae48
 signed short g_hero_startup_items_all[4] = {
 	ITEM_WATERSKIN, ITEM_FOOD_PACKAGE, ITEM_FOOD_PACKAGE, ITEM_TROUSERS

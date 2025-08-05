@@ -1248,7 +1248,7 @@
 #define ALCHEMY_RECIPES                 (0xacda)    /* struct(28)[13] */
 #define PREVENT_DROP_EQUIPPED_ITEMS     (0xae46)    /* unsigned char; {0,1} */
 // ?1
-#define HERO_STARTUP_ITEMS              (0xae48)    /* struct(8)[12] */
+//#define HERO_STARTUP_ITEMS              (0xae48)    /* struct(8)[12] */
 //#define HERO_STARTUP_ITEMS_ALL          (0xaea8)    /* signed short[4] */
 //#define USE_SPECIAL_ITEM_HANDLERS       (0xaeb0)    /* long[14] */
 //#define LIGHT_TYPE                      (0xaee8)    /* unsigned short; 0 = none, 1 = torch, 2 = lantern */
