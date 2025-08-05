@@ -446,6 +446,7 @@ extern char g_grammar_pronouns_ihn[4];		//ds:0xaa06; seg096
 extern char g_grammar_pronouns_ihm[4];		//ds:0xaa0a; seg096
 
 extern char *g_grammar_pronouns_index[7];	//ds:0xaa14; seg096
+extern signed char g_grammar_pronouns_table2[33];	//ds:0xaa30; seg096
 
 extern unsigned char *g_hexenknoten_gfx_buf;	// ds:0xacc8; seg100
 extern signed short g_monster_spell_ae_cost;	// ds:0xaccc; seg102

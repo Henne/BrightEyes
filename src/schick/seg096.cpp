@@ -164,7 +164,7 @@ Bit8u* GUI_2f2(signed short v1, signed short word_id, signed short type)
 
 	genus = (type == 0) ? g_items_genders[word_id] : g_monname_genders[word_id];
 
-	return (Bit8u*)g_grammar_pronouns_index[ds_readbs(GRAMMAR_PRONOUNS_TABLE2 + v1 * 3 + genus)];
+	return (Bit8u*)g_grammar_pronouns_index[g_grammar_pronouns_table2[v1 * 3 + genus]];
 }
 
 //330

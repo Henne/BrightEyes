@@ -1225,7 +1225,7 @@
 //#define GRAMMAR_PRONOUNS_IHM            (0xaa0a)    /* char[4]; "IHM" */
 //#define GRAMMAR_PRONOUNS_IHNEN          (0xaa0e)    /* char[6]; "IHNEN" */
 //#define GRAMMAR_PRONOUNS_INDEX          (0xaa14)    /* Bit8u*[7] */
-#define GRAMMAR_PRONOUNS_TABLE2         (0xaa30)    /* unsigned char[33]; by gender and ?? */
+//#define GRAMMAR_PRONOUNS_TABLE2         (0xaa30)    /* unsigned char[33]; by gender and ?? */
 #define GUI_CHAR_WIDTH                  (0xaa51)    /* struct(3)[75]; struct{char c, font_id, width;} */
 #define STR_S_S                         (0xab32)    /* char[6]; "%s %s" */
 #define STR_VON_S_S                     (0xab38)    /* char[9]; "VON%s %s" */
