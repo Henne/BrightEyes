@@ -972,7 +972,7 @@ enum {
 	FIGHT_HELLER			= 0xD6
 };
 
-#define SIZEOF_FIGHT (216)
+#define SIZEOF_FIGHT (216L)
 #define SIZEOF_FIGHT_MONSTER (5)
 #define SIZEOF_FIGHT_PLAYER (4)
 

@@ -51,21 +51,21 @@ void FIG_tidy_monsters(void)
 			(enemy_dead(((Bit8u*)p_datseg + (ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * i))) ||
 			enemy_mushroom(((Bit8u*)p_datseg + (ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * i))) ||
 			enemy_petrified(((Bit8u*)p_datseg + (ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * i))) ||
-			((host_readbs((Bit8u*)ds_readd(CURRENT_FIGHT) + SIZEOF_FIGHT_MONSTER * i + FIGHT_MONSTERS_ROUND_APPEAR) != 0) && (monsters == 0))))
+			((host_readbs(g_current_fight + SIZEOF_FIGHT_MONSTER * i + FIGHT_MONSTERS_ROUND_APPEAR) != 0) && (monsters == 0))))
 		{
 
 			if (i == 19) {
 				/* just clear the last one */
-				memset((Bit8u*)ds_readd(CURRENT_FIGHT) + SIZEOF_FIGHT_MONSTER * i + FIGHT_MONSTERS_ID, 0, 5);
+				memset(g_current_fight + SIZEOF_FIGHT_MONSTER * i + FIGHT_MONSTERS_ID, 0, 5);
 				break;
 			} else {
 				/* move the next monsters one position to the front */
 				for (j = i; j < 19; j++) {
 
-					*(struct dummy5*)((Bit8u*)ds_readd(CURRENT_FIGHT) + SIZEOF_FIGHT_MONSTER * j + FIGHT_MONSTERS_ID) =
-						*(struct dummy5*)((Bit8u*)ds_readd(CURRENT_FIGHT) + SIZEOF_FIGHT_MONSTER * (j + 1) + FIGHT_MONSTERS_ID);
+					*(struct dummy5*)(g_current_fight + SIZEOF_FIGHT_MONSTER * j + FIGHT_MONSTERS_ID) =
+						*(struct dummy5*)(g_current_fight + SIZEOF_FIGHT_MONSTER * (j + 1) + FIGHT_MONSTERS_ID);
 
-					memset((Bit8u*)ds_readd(CURRENT_FIGHT) + SIZEOF_FIGHT_MONSTER * (j + 1) + FIGHT_MONSTERS_ID, 0, SIZEOF_FIGHT_MONSTER);
+					memset(g_current_fight + SIZEOF_FIGHT_MONSTER * (j + 1) + FIGHT_MONSTERS_ID, 0, SIZEOF_FIGHT_MONSTER);
 
 					*(struct dummy62*)(p_datseg + ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * j) =
 						*(struct dummy62*)(p_datseg + ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * (j + 1));
@@ -110,7 +110,7 @@ void FIG_loot_monsters(void)
 
 		l_di = l3 = 0;
 
-		while (((l1 = host_readws((Bit8u*)ds_readd(CURRENT_FIGHT) + 2 * l_di + FIGHT_LOOT)) != 0) &&
+		while (((l1 = host_readws(g_current_fight + 2 * l_di + FIGHT_LOOT)) != 0) &&
 			(l_di < 30) && (l1 != ITEM_BONE_WITH_RUNE))
 			/* Apparently a quick "fix" for an unwanted bone with runes in fight THOR8,
 			 * see https://www.crystals-dsa-foren.de/showthread.php?tid=453&pid=172221#pid172221 */
@@ -159,18 +159,18 @@ void FIG_loot_monsters(void)
 
 			if ((l4 != -2) && ((l5 == 0) || ((l5 != 0) && (l6 - 1 != l4)))) {
 
-				if (!get_item(host_readws((Bit8u*)ds_readd(CURRENT_FIGHT) + 2 * (l4 + l_si) + FIGHT_LOOT), 1, 1))
+				if (!get_item(host_readws(g_current_fight + 2 * (l4 + l_si) + FIGHT_LOOT), 1, 1))
 				{
 					l4 = -2;
 				} else {
-					host_writew((Bit8u*)ds_readd(CURRENT_FIGHT) + 2 * (l4 + l_si) + FIGHT_LOOT, 0);
+					host_writew(g_current_fight + 2 * (l4 + l_si) + FIGHT_LOOT, 0);
 
 					for (l_di = l4 + l_si; l_di < 29; l_di++) {
 
-						host_writew((Bit8u*)ds_readd(CURRENT_FIGHT) + 2 * (l_di) + FIGHT_LOOT,
-							host_readws((Bit8u*)ds_readd(CURRENT_FIGHT) + 2 * (l_di + 1) + FIGHT_LOOT));
+						host_writew(g_current_fight + 2 * (l_di) + FIGHT_LOOT,
+							host_readws(g_current_fight + 2 * (l_di + 1) + FIGHT_LOOT));
 
-						host_writew((Bit8u*)ds_readd(CURRENT_FIGHT) + 2 * (l_di + 1) + FIGHT_LOOT, 0);
+						host_writew(g_current_fight + 2 * (l_di + 1) + FIGHT_LOOT, 0);
 					}
 				}
 			}
@@ -180,9 +180,9 @@ void FIG_loot_monsters(void)
 		}
 	} while (l4 != -2);
 
-	money = host_readws((Bit8u*)ds_readd(CURRENT_FIGHT) + FIGHT_DUCATS) * 100;
-	money += host_readws((Bit8u*)ds_readd(CURRENT_FIGHT) + FIGHT_SILVER) * 10;
-	money += host_readws((Bit8u*)ds_readd(CURRENT_FIGHT) + FIGHT_HELLER);
+	money = host_readws(g_current_fight + FIGHT_DUCATS) * 100;
+	money += host_readws(g_current_fight + FIGHT_SILVER) * 10;
+	money += host_readws(g_current_fight + FIGHT_HELLER);
 
 	if (money > 0) {
 

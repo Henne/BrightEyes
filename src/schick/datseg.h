@@ -516,6 +516,7 @@ extern unsigned char *g_gui_buffer_unkn;// ds:0xbff9; seg025, seg032, seg097, se
 extern unsigned char *g_heroes;		// ds:0xbd34
 extern unsigned char *g_fightobj_buf;	// ds:0xbd30; seg032, seg040
 extern signed char *g_scenario_buf;	// ds:0xbd2c; seg027, seg032, seg034, seg038, seg040
+extern unsigned char *g_current_fight;	// ds:0xbd28; seg027, seg032, seg043, seg035, seg039, seg040, seg100
 extern Bit32s g_archive_file_remaining;	// ds:0xbce3; seg002
 extern signed short g_map_townmark_state;	// ds:0xbcd8; seg002
 extern unsigned char *g_splash_le;	// ds:0xbccb; seg002, seg028

@@ -101,7 +101,7 @@ void FIG_preload_gfx(void)
 		ds_writeb(FIG_LIST_ARRAY + i, 0);
 	}
 
-	ds_writed(WEAPONS_NVF_BUF, (Bit32u)(F_PADD((HugePt)ds_readd(CURRENT_FIGHT), SIZEOF_FIGHT)));
+	ds_writed(WEAPONS_NVF_BUF, (Bit32u)(((HugePt)g_current_fight) + SIZEOF_FIGHT));
 	ds_writed(SPELLOBJ_NVF_BUF, (Bit32u)((Bit8u*)ds_readd(WEAPONS_NVF_BUF) + 0x1953));
 	ds_writed(FIGOBJ_GFXBUF_TABLE, (Bit32u)(F_PADD((HugePt)ds_readd(SPELLOBJ_NVF_BUF), 0xf5f)));
 	ds_writed(FIGOBJ_GFXWIDTH_TABLE, (Bit32u)(F_PADD((HugePt)ds_readd(FIGOBJ_GFXBUF_TABLE), 0xfc)));

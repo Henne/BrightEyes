@@ -614,7 +614,7 @@ signed short count_fight_enemies(signed short fight_id)
 }
 
 /**
- * \brief   reads an entry in FIGHT.LST and stores it in CURRENT_FIGHT
+ * \brief   reads an entry in FIGHT.LST and stores it in g_current_fight
  *
  * \param   fight_id    number of the fight in FIGHT.LST
  */
@@ -644,12 +644,12 @@ void read_fight_lst(signed short fight_id)
 	lseek(fight_lst_handle, (long)SIZEOF_FIGHT * fight_id + 2, SEEK_SET);
 
 	/* read the fight entry */
-	_read(fight_lst_handle, (void*)ds_readd(CURRENT_FIGHT), SIZEOF_FIGHT);
+	_read(fight_lst_handle, g_current_fight, SIZEOF_FIGHT);
 
 #if !defined(__BORLANDC__)
 	char fight_name[21];
 	/* Improvement */
-	strncpy(fight_name, (char*)ds_readd(CURRENT_FIGHT), 20);
+	strncpy(fight_name, g_current_fight, 20);
 	fight_name[20] = '\0';
 	D1_INFO("Lade Kampf fight_id %3d\t Name \"%s\"\n", fight_id, fight_name);
 	/* Improvement end */
@@ -660,12 +660,12 @@ void read_fight_lst(signed short fight_id)
 }
 
 /**
- * \brief   writes the data in CURRENT_FIGHT to FIGHT.LST
+ * \brief   writes the data from g_current_fight to FIGHT.LST
  */
 void write_fight_lst(void)
 {
 	signed short fight_id;
-	unsigned short fight_lst_handle;
+	signed short fight_lst_handle;
 
 	fight_id = g_current_fight_id;
 
@@ -673,10 +673,10 @@ void write_fight_lst(void)
 	fight_lst_handle = load_archive_file(0x8000 | ARCHIVE_FILE_FIGHT_LST);
 
 	/* seek to the entry */
-	lseek(fight_lst_handle, (long)SIZEOF_FIGHT * fight_id + 2, SEEK_SET);
+	lseek(fight_lst_handle, SIZEOF_FIGHT * fight_id + 2, SEEK_SET);
 
 	/* write it */
-	write(fight_lst_handle, (void*)ds_readd(CURRENT_FIGHT), SIZEOF_FIGHT);
+	write(fight_lst_handle, g_current_fight, SIZEOF_FIGHT);
 
 	/* close the file */
 	close(fight_lst_handle);
