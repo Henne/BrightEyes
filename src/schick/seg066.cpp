@@ -638,7 +638,7 @@ void city_water_and_grass(void)
 			if (bi == 6 || bi == 7) {
 				/* water or grass */
 
-				ptr = (Bit8u*)&g_visual_fields_offsets_grass[c1];
+				ptr = (Bit8u*)&g_visual_field_offsets_grass[c1];
 
 				x = host_readws(ptr);
 				y = host_readws(ptr + 2);
@@ -690,14 +690,14 @@ void city_building_textures(void)
 			if (bi != 7 && bi != 6) {
 			    /* if not grass or water */
 
-				ptr = (Bit8u*)&g_visual_fields_offsets_std[c1];
+				ptr = (Bit8u*)&g_visual_field_offsets_std[c1];
 
 				if (bi == 8) {
 					/* direction sign */
-					ptr = (Bit8u*)&g_visual_fields_offsets_sign[c1];
+					ptr = (Bit8u*)&g_visual_field_offsets_sign[c1];
 				} else if (bi == 9 || bi == 10) {
 					/* tavern/inn or shop */
-					ptr = (Bit8u*)&g_visual_fields_offsets_inn[c1];
+					ptr = (Bit8u*)&g_visual_field_offsets_inn[c1];
 				}
 
 				x = host_readws(ptr);

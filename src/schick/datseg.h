@@ -302,7 +302,7 @@ extern char g_snd_menu_radio4[18];		//ds:0x480b; seg002
 extern char g_fname_sound_cfg[10];		//ds:0x481d; seg002
 extern char g_fname_sound_adv2[10];		//ds:0x4827; seg002
 extern char g_fname_digi_adv[9];		//ds:0x4831; seg002
-extern char g_snd_txt_disable_mem[51];		//ds:0x483a; seg002
+extern char g_snd_txt_disabled_mem[51];		//ds:0x483a; seg002
 extern char g_snd_txt_hw_not_found[31];		//ds:0x486d; seg002
 extern char g_fname_sound_adv[10];		//ds:0x488c; seg002
 extern char g_snd_txt_hw_not_found2[31];	//ds:0x4896; seg002
@@ -379,14 +379,14 @@ extern signed short g_anitab_spell_oy[2];	//ds:0x6342; seg045
 extern signed char  g_anitab_spell_nvfno[2];	//ds:0x634c; seg045
 extern signed char* g_anitab_spell_index[2];	//ds:0x6366; seg045
 
-extern const struct struct_point g_invslotxy_table[23];	//ds:0x63d2; seg046
+extern const struct struct_point g_invslot_iconxy_table[23];	//ds:0x63d2; seg046
 
 extern signed char g_hero_sel_exclude;		//ds:0x64a2; seg047, seg049, seg103, seg120
 
-extern const struct struct_point g_visual_fields_offsets_std[29];	//ds:0x733a; seg066
-extern const struct struct_point g_visual_fields_offsets_sign[29];	//ds:0x73ae; seg066
-extern const struct struct_point g_visual_fields_offsets_inn[29];	//ds:0x7422; seg066
-extern const struct struct_point g_visual_fields_offsets_grass[29];	//ds:0x7496; seg066
+extern const struct struct_point g_visual_field_offsets_std[29];	//ds:0x733a; seg066
+extern const struct struct_point g_visual_field_offsets_sign[29];	//ds:0x73ae; seg066
+extern const struct struct_point g_visual_field_offsets_inn[29];	//ds:0x7422; seg066
+extern const struct struct_point g_visual_field_offsets_grass[29];	//ds:0x7496; seg066
 extern unsigned char g_tex_descr_table[101][18];	//ds:0x750a; seg066
 extern const signed char g_visual_field_draw_order[29];//ds:0x7c24; seg066
 extern signed char g_can_merge_group;		//ds:0x7c41; seg066, seg076

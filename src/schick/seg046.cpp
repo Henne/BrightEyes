@@ -241,10 +241,10 @@ void status_show(Bit16u index)
 			process_nvf(&nvf);
 
 			/* draw the item icon */
-			g_pic_copy.x1 = g_invslotxy_table[i].x;
-			g_pic_copy.y1 = g_invslotxy_table[i].y;
-			g_pic_copy.x2 = g_invslotxy_table[i].x + 15;
-			g_pic_copy.y2 = g_invslotxy_table[i].y + 15;
+			g_pic_copy.x1 = g_invslot_iconxy_table[i].x;
+			g_pic_copy.y1 = g_invslot_iconxy_table[i].y;
+			g_pic_copy.x2 = g_invslot_iconxy_table[i].x + 15;
+			g_pic_copy.y2 = g_invslot_iconxy_table[i].y + 15;
 			g_pic_copy.dst = g_renderbuf_ptr;
 			g_pic_copy.src = g_icon;
 			do_pic_copy(0);
@@ -259,8 +259,8 @@ void status_show(Bit16u index)
 					g_dtp2, 10);
 
 				GUI_print_string(g_dtp2,
-					g_invslotxy_table[i].x + 16 - GUI_get_space_for_string(g_dtp2, 0),
-					g_invslotxy_table[i].y + 9);
+					g_invslot_iconxy_table[i].x + 16 - GUI_get_space_for_string(g_dtp2, 0),
+					g_invslot_iconxy_table[i].y + 9);
 
 				set_textcolor(0, 2);
 			}

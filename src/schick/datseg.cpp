@@ -4178,7 +4178,7 @@ const struct struct_point g_visual_field_offsets_inn[29] = {
 	{ 0x009c, 0x000e },
 	{ 0x00be, 0x000e }
 }; // ds:0x7422
-struct struct_point g_visual_field_offsets_grass[29] = {
+const struct struct_point g_visual_field_offsets_grass[29] = {
 	{ 0x0000, 0x007a },
 	{ 0x0000, 0x007a },
 	{ 0x00bd, 0x007a },

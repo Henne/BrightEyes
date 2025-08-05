@@ -242,7 +242,7 @@ void read_sound_cfg(void)
 				}
 			} else {
 				/* print that sound effects are disabled */
-				GUI_output(g_snd_txt_disable_mem);
+				GUI_output(g_snd_txt_disabled_mem);
 				g_snd_voc_enabled = 0;
 			}
 		} else {
