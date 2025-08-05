@@ -920,8 +920,8 @@
 #define AREADESCR_DNG_LEVEL             (0x5eba)    /* unsigned short */
 #define AREADESCR_FILEID                (0x5ebc)    /* unsigned short */
 #define AREADESCR_DNG_FLAG              (0x5ebe)    /* unsigned short; {0,1} */
-#define EMS_UNUSED_LPAGE                (0x5ec0)    /* signed short */
-#define EMS_UNUSED_OFFSET               (0x5ec2)    /* signed short */
+//#define EMS_UNUSED_LPAGE                (0x5ec0)    /* signed short */
+//#define EMS_UNUSED_OFFSET               (0x5ec2)    /* signed short */
 // ?8
 //#define LOADED_MENU_ICONS               (0x5ecc)    /* signed char[9]; { -2, -2, -2, -2, -2, -2, -2, -2, -2 } */
 // ?1

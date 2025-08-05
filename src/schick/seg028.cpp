@@ -387,25 +387,25 @@ void unused_store(signed short no)
 	height = host_readws((Bit8u*)&height);
 #endif
 
-	EMS_map_memory(ds_readws(EMS_UNUSED_HANDLE), ds_readws(EMS_UNUSED_LPAGE), 0);
-	EMS_map_memory(ds_readws(EMS_UNUSED_HANDLE), ds_readws(EMS_UNUSED_LPAGE) + 1, 1);
-	EMS_map_memory(ds_readws(EMS_UNUSED_HANDLE), ds_readws(EMS_UNUSED_LPAGE) + 2, 2);
+	EMS_map_memory(ds_readws(EMS_UNUSED_HANDLE), g_ems_unused_lpage, 0);
+	EMS_map_memory(ds_readws(EMS_UNUSED_HANDLE), g_ems_unused_lpage + 1, 1);
+	EMS_map_memory(ds_readws(EMS_UNUSED_HANDLE), g_ems_unused_lpage + 2, 2);
 	EMS_map_memory(ds_readws(EMS_UNUSED_HANDLE), 0, 3);
 
 	size = width * height;
-	memmove((Bit8u*)((Bit8u*)ds_readd(EMS_FRAME_PTR) + ds_readws(EMS_UNUSED_OFFSET)),
+	memmove((Bit8u*)((Bit8u*)ds_readd(EMS_FRAME_PTR) + g_ems_unused_offset),
 			(Bit8u*)(g_renderbuf_ptr + 0x7530),
 			size);
 
 	ptr = no * 5 + (Bit8u*)ds_readd(EMS_UNUSED_TAB);
 
-	host_writeb(ptr, (signed char)ds_readws(EMS_UNUSED_LPAGE));
-	host_writeb(ptr + 1, ds_readws(EMS_UNUSED_OFFSET) >> 8);
+	host_writebs(ptr, (signed char)g_ems_unused_lpage);
+	host_writeb(ptr + 1, g_ems_unused_offset >> 8);
 	host_writew(ptr + 2, width);
 	host_writeb(ptr + 4, (signed char)height);
 
-	ds_writew(EMS_UNUSED_LPAGE, (ds_readw(0x5ec0) + ((ds_readw(EMS_UNUSED_OFFSET) + size) >> 14)));
-	ds_writew(EMS_UNUSED_OFFSET, ((((ds_readw(0x5ec2) + size) & 0x3fff) + 0x100) & 0xff00));
+	g_ems_unused_lpage = (g_ems_unused_lpage + (g_ems_unused_offset + size) >> 14);
+	g_ems_unused_offset = ((((g_ems_unused_offset + size) & 0x3fff) + 0x100) & 0xff00);
 }
 
 Bit8u* unused_load(signed short no)

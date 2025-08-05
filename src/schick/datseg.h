@@ -333,6 +333,8 @@ extern signed short g_delay_factor;		//ds:0x4b66; seg005, seg025
 
 extern void (*g_location_handlers[19])(void);	//ds:0x4c3b; seg025
 
+extern unsigned short g_ems_unused_lpage;	//ds:0x5ec0; seg028
+extern signed short g_ems_unused_offset;	//ds:0x5ec2; seg028
 extern signed char g_loaded_menu_icons[9];	//ds:0x5ecc; seg029
 extern struct_informer_tab g_informer_tab[15];	//ds:0x5ed6; seg031
 extern signed int g_fig_dropped_counter;	//ds:0x5f12; seg032, seg041
