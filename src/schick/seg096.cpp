@@ -212,7 +212,7 @@ void GUI_write_char_to_screen(Bit8u *dst, signed short char_width, signed short 
 	signed short y;
 	signed short x;
 
-	ptr = p_datseg + GUI_TEXT_BUFFER;
+	ptr = &g_gui_text_buffer[0];
 
 	for (y = 0; y < char_width; ptr += 8 - char_height, dst += 320, y++) {
 		for (x = 0; x < char_height; x++)
@@ -490,7 +490,7 @@ void GUI_write_fonti_to_screen(unsigned short font_index, unsigned short char_wi
  */
 void GUI_blank_char(void)
 {
-	Bit8u *ptr = (Bit8u*)MK_FP(datseg, GUI_TEXT_BUFFER);
+	Bit8u *ptr = &g_gui_text_buffer[0];
 	signed short i;
 	signed short j;
 
@@ -503,13 +503,13 @@ void GUI_blank_char(void)
 //8f8
 void GUI_font_to_buf(Bit8u *fc)
 {
-	Bit8u * p;
+	Bit8u *p;
 	char c;
 	short i;
 	short j;
 
 	/* current text position */
-	p = p_datseg + GUI_TEXT_BUFFER;
+	p = &g_gui_text_buffer[0];
 
 	if (ds_readb(GUI_PRINT_CHAR) == 0x3a)
 		fc++;

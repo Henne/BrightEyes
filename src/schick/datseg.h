@@ -542,6 +542,7 @@ extern unsigned char *g_trv_track_pixel_bak;	// ds:0xd299; seg063, seg094, seg12
 extern HugePt g_buffer9_ptr3;		// ds:0xd019; seg003-seg120
 extern unsigned char *g_buffer9_ptr2;	// ds:0xd015; seg120
 
+extern unsigned char g_gui_text_buffer[64];	// ds:0xce87; seg096
 extern Bit32s g_ani_unknown4;		// ds:0xce43; seg027, seg120
 extern unsigned char *g_ani_main_ptr;	// ds:0xce36; seg004, seg027
 extern HugePt g_buffer9_ptr;		// ds:0xc3db; seg004-seg120

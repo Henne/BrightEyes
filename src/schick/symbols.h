@@ -1412,7 +1412,7 @@
 #define ANI_POSX                        (0xce41)    /* signed short */
 //#define ANI_UNKNOWN4                    (0xce43)    /* unsigned long; writeonly (0) */
 // ?64
-#define GUI_TEXT_BUFFER                 (0xce87)    /* unsigned char[64] */
+//#define GUI_TEXT_BUFFER                 (0xce87)    /* unsigned char[64] */
 #define LAST_CURSOR                     (0xcec7)    /* Bit8u* */
 #define CURRENT_CURSOR                  (0xcecb)    /* Bit8u* */
 #define GGST_CURSOR                     (0xcecf)    /* struct(64); struct{char unkn[32]; unsigned short mask[16];} */
