@@ -368,6 +368,12 @@ extern const char g_empty_string4[1];		//ds:0x5f43; seg033
 extern const char g_empty_string5[1];		//ds:0x5f44; seg033
 extern signed short g_cb_obj_nonobstacle[27];	//ds:0x5f46; seg034, seg036, seg037
 
+extern signed short g_fightobj_count;		//ds:0x605e; seg040
+extern const signed short g_gfxtab_obj_offset_x[63];	//ds:0x6060; seg032, seg040
+extern const signed short g_gfxtab_obj_offset_y[63];	//ds:0x6060; seg032, seg040
+extern signed short g_force_weapons[9];		//ds:0x615c; seg041
+extern signed short g_knive_weapons[5];		//ds:0x616e; seg041
+
 extern signed short g_anitab_spell_ox[2];	//ds:0x633e; seg045
 extern signed short g_anitab_spell_oy[2];	//ds:0x6342; seg045
 extern signed char  g_anitab_spell_nvfno[2];	//ds:0x634c; seg045

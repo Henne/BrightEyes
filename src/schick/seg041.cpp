@@ -591,9 +591,9 @@ signed short weapon_check(Bit8u *hero)
 	{
 		l_di = -1;
 	} else {
-		if (is_in_word_array(item, (signed short*)(p_datseg + FORCE_WEAPONS))) {
+		if (is_in_word_array(item, g_force_weapons)) {
 			l_di = 1;
-		} else if (is_in_word_array(item, (signed short*)(p_datseg + KNIVE_WEAPONS))) {
+		} else if (is_in_word_array(item, g_knive_weapons)) {
 			l_di = 0;
 		} else {
 			l_di = 2;

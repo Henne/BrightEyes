@@ -877,8 +877,8 @@ void FIG_load_ship_sprites(void)
 			l3 = const1 - host_readws((Bit8u*)ds_readd(FIGOBJ_GFXWIDTH_TABLE) + 2 * l_si) / 2 + 10 * (l_di + i);
 			l4 = const2 - host_readws((Bit8u*)ds_readd(FIGOBJ_GFXHEIGHT_TABLE) + 2 * l_si) + 5 * (l_di - i);
 
-			l3 += ds_readws(GFXTAB_OBJ_OFFSET_X + 2 * l_si);
-			l4 += ds_readws(GFXTAB_OBJ_OFFSET_Y + 2 * l_si);
+			l3 += g_gfxtab_obj_offset_x[l_si];
+			l4 += g_gfxtab_obj_offset_y[l_si];
 
 			/* set screen coordinates */
 			g_pic_copy.x1 = l3;

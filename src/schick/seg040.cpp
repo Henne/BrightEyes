@@ -191,7 +191,7 @@ void FIG_preload_gfx(void)
 	/* TODO: check if pointer arithmetics works with other pointer types: NO! */
 	g_fightobj_buf_freespace = (Bit32s)((HugePt)g_fightobj_buf - (Bit8u*)g_fightobj_buf_seek_ptr);
 
-	ds_writew(FIGHTOBJ_COUNT, 0);
+	g_fightobj_count = 0;
 	ds_writeb(FIG_TWOFIELDED_COUNT, 0);
 }
 
@@ -249,8 +249,8 @@ void FIG_draw_scenario(void)
 					ds_writeb((FIG_LIST_ELEM+FIGHTER_NVF_NO), (signed char)obj_id);
 					ds_writeb((FIG_LIST_ELEM+FIGHTER_CBX), (signed char)cb_x);
 					ds_writeb((FIG_LIST_ELEM+FIGHTER_CBY), (signed char)cb_y);
-					ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETX), ds_readb(GFXTAB_OBJ_OFFSET_X + obj_id * 2));
-					ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETY), ds_readb(GFXTAB_OBJ_OFFSET_Y + obj_id * 2));
+					ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETX), g_gfxtab_obj_offset_x[obj_id]);
+					ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETY), g_gfxtab_obj_offset_y[obj_id]);
 					ds_writeb((FIG_LIST_ELEM+FIGHTER_HEIGHT), host_readb((Bit8u*)ds_readd(FIGOBJ_GFXHEIGHT_TABLE) + obj_id * 2));
 					ds_writeb((FIG_LIST_ELEM+FIGHTER_WIDTH), host_readb((Bit8u*)ds_readd(FIGOBJ_GFXWIDTH_TABLE) + obj_id * 2));
 					ds_writeb((FIG_LIST_ELEM+FIGHTER_X1), 0);
@@ -267,8 +267,8 @@ void FIG_draw_scenario(void)
 					ds_writeb((FIG_LIST_ELEM+FIGHTER_Z), obj_id >= 58 && obj_id <= 61 ? -1 : 50);
 					ds_writeb((FIG_LIST_ELEM+FIGHTER_VISIBLE), 1);
 					ds_writeb((FIG_LIST_ELEM+FIGHTER_TWOFIELDED), -1);
-					ds_writeb(FIGHTOBJ_LIST + ds_readw(FIGHTOBJ_COUNT), FIG_add_to_list(-1));
-					inc_ds_ws(FIGHTOBJ_COUNT);
+					ds_writeb(FIGHTOBJ_LIST + g_fightobj_count, FIG_add_to_list(-1));
+					g_fightobj_count++;
 #if !defined(__BORLANDC__)
 					place_obj_on_cb(cb_x, cb_y, obj_id + 50, (signed char)obj_id, 0);
 #else
