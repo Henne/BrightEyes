@@ -37,6 +37,12 @@ struct struct_smith_repairitems {
 	Bit32s pickup_time;
 };
 
+struct struct_informer_tab {
+	Bit16s name_id;
+	Bit8s town;
+	Bit8s unkn;
+};
+
 /* seg001 */
 extern unsigned short g_cd_init_successful;
 extern Bit32u g_cd_skipmagic;
@@ -327,6 +333,8 @@ extern signed short g_delay_factor;		//ds:0x4b66; seg005, seg025
 
 extern void (*g_location_handlers[19])(void);	//ds:0x4c3b; seg025
 
+extern signed char g_loaded_menu_icons[9];	//ds:0x5ecc; seg029
+extern struct_informer_tab g_informer_tab[15];	//ds:0x5ed6; seg031
 extern signed int g_fig_dropped_counter;	//ds:0x5f12; seg032, seg041
 extern signed int g_fig_all_heroes_withdrawn;	//ds:0x5f14; seg032
 extern signed int g_max_enemies;		//ds:0x5f16; seg032, seg080, seg117

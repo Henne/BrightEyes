@@ -167,7 +167,7 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 				}
 			}
 
-			answer = GUI_dialogbox((unsigned char*)g_dtp2, dialog_title, (char*)dst, optioncount,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, dialog_title, dst, optioncount,
 					get_tx(options[0].txt),
 					get_tx(options[1].txt),
 					get_tx(options[2].txt));
@@ -214,25 +214,25 @@ char* get_informer_forename(void)
 {
 	signed short i;
 	char tmp;
-	Bit8u *p_info;
+	struct struct_informer_tab *p_info;
 	char *informer_name;
 
-	p_info = p_datseg + INFORMER_TAB;
+	p_info = &g_informer_tab[0];
 
-	for (i = 0; i < 15; i++, p_info += 4) {
+	for (i = 0; i < 15; i++, p_info += 1) {
 
-		if (host_readbs(p_info + 2) == gs_current_town) {
+		if (p_info->town == gs_current_town) {
 
 			i = 0;
-			informer_name = get_ttx(host_readws(p_info));
+			informer_name = get_ttx(p_info->name_id);
 
 			do {
-				tmp = host_readbs((Bit8u*)informer_name);
+				tmp = *informer_name;
 				informer_name++;
-				i++;
+				i++;	// TODO: setting i to 0 in a for loop is not a good idea
 			} while (tmp != ' ');
 
-			strncpy(g_text_output_buf, get_ttx(host_readws(p_info)), i);
+			strncpy(g_text_output_buf, get_ttx(p_info->name_id), i);
 #ifdef M302de_ORIGINAL_BUGFIX
 			break;
 #endif
@@ -249,12 +249,12 @@ char* get_informer_forename(void)
  */
 signed short get_town_lookup_entry(void)
 {
-	Bit8u *ptr;
+	struct struct_informer_tab *p_info;
 	signed short i;
 
-	ptr = p_datseg + INFORMER_TAB;
-	for (i = 0; i < 15; i++, ptr += 4) {
-		if (host_readb(ptr + 2) == gs_current_town) {
+	p_info = &g_informer_tab[0];
+	for (i = 0; i < 15; i++, p_info++) {
+		if (p_info->town == gs_current_town) {
 			return i;
 		}
 	}
@@ -266,23 +266,23 @@ signed short get_town_lookup_entry(void)
  * \brief   gives a hint where a informer lives
  *
  *          Game Info: You can ask in some towns where informers live.
- *          This function returns a pointer to the answer or to an empty string.
+ *          This function returns a pointer to the answer or an empty string.
  *
  * \return              a pointer to the string.
  */
-Bit8u* get_informer_hint(void)
+char* get_informer_hint(void)
 {
 	signed short i;
-	Bit8u *ptr;
+	struct struct_informer_tab *p_info;
 
-	ptr = p_datseg + INFORMER_TAB;
-	for (i = 0; i < 15; i++, ptr += 4) {
-		if (host_readb(ptr + 2) == gs_current_town) {
-			return (Bit8u*)get_ttx(i + 715);
+	p_info = &g_informer_tab[0];
+	for (i = 0; i < 15; i++, p_info++) {
+		if (p_info->town == gs_current_town) {
+			return get_ttx(i + 715);
 		}
 	}
 
-	return (Bit8u*)get_ttx(725);
+	return get_ttx(725);
 }
 
 /**
@@ -290,9 +290,9 @@ Bit8u* get_informer_hint(void)
  *
  * \return  a pointer to the name of the informer
  */
-Bit8u* get_informer_name(void)
+char* get_informer_name(void)
 {
-	return (Bit8u*)get_ttx(ds_readw(INFORMER_TAB - 4 + ds_readb(CURRENT_INFORMER) * 4));
+	return get_ttx(g_informer_tab[ds_readb(CURRENT_INFORMER) - 1].name_id);
 }
 
 /**
@@ -300,9 +300,9 @@ Bit8u* get_informer_name(void)
  *
  * \return a pointer to the name of the informer
  */
-Bit8u* get_informer_name2(void)
+char* get_informer_name2(void)
 {
-	return (Bit8u*)get_ttx(ds_readw(INFORMER_TAB + get_town_lookup_entry() * 4));
+	return get_ttx(g_informer_tab[get_town_lookup_entry()].name_id);
 }
 
 /**

@@ -11,11 +11,11 @@ char* get_informer_forename(void);
 /* 0x2f */
 signed short get_town_lookup_entry(void);
 /* 0x34 */
-Bit8u* get_informer_hint(void);
+char* get_informer_hint(void);
 /* 0x39 */
-Bit8u* get_informer_name(void);
+char* get_informer_name(void);
 /* 0x3e */
-Bit8u* get_informer_name2(void);
+char* get_informer_name2(void);
 /* 0x43 */
 char* get_random_tavern_message(void);
 /* 0x48 */

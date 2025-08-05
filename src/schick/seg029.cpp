@@ -278,7 +278,7 @@ void load_icon(Bit16u fileindex, Bit16s icon, Bit16s pos)
 	close(fd);
 
 	/* set a real or blank icon */
-	ds_writeb(LOADED_MENU_ICONS + pos, (fileindex == ARCHIVE_FILE_ICONS) ? icon : -1);
+	g_loaded_menu_icons[pos] = (fileindex == ARCHIVE_FILE_ICONS ? icon : -1);
 }
 
 /**
@@ -302,10 +302,10 @@ void draw_icons(void)
 		g_pic_copy.src = g_buf_icon + i * 576;
 
 		if (ds_readbs(NEW_MENU_ICONS + i) != MENU_ICON_NONE) {
-			if (ds_readbs(LOADED_MENU_ICONS + i) != ds_readbs(NEW_MENU_ICONS + i))
+			if (g_loaded_menu_icons[i] != ds_readbs(NEW_MENU_ICONS + i))
 				load_icon(ARCHIVE_FILE_ICONS, ds_readbs(NEW_MENU_ICONS + i), i);
 		} else {
-			if (ds_readbs(LOADED_MENU_ICONS + i) != -1)
+			if (g_loaded_menu_icons[i] != -1)
 				load_icon(ARCHIVE_FILE_BICONS, i, i);
 		}
 

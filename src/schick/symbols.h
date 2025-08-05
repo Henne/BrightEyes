@@ -923,9 +923,9 @@
 #define EMS_UNUSED_LPAGE                (0x5ec0)    /* signed short */
 #define EMS_UNUSED_OFFSET               (0x5ec2)    /* signed short */
 // ?8
-#define LOADED_MENU_ICONS               (0x5ecc)    /* signed char[9]; { -2, -2, -2, -2, -2, -2, -2, -2, -2 } */
+//#define LOADED_MENU_ICONS               (0x5ecc)    /* signed char[9]; { -2, -2, -2, -2, -2, -2, -2, -2, -2 } */
 // ?1
-#define INFORMER_TAB                    (0x5ed6)    /* struct(4)[15]; struct{short name_id; char town, unkn;} */
+//#define INFORMER_TAB                    (0x5ed6)    /* struct(4)[15]; struct{short name_id; char town, unkn;} */
 //#define FIG_DROPPED_COUNTER             (0x5f12)    /* signed short */
 //#define FIG_ALL_HEROES_WITHDRAWN        (0x5f14)    /* unsigned short; {0,1} */
 //#define MAX_ENEMIES                     (0x5f16)    /* signed short; an upper bound for the number of enemies */

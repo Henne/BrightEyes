@@ -119,7 +119,7 @@ void talk_tavern(void)
 
 			} else if (txt_id == 66) {
 
-				sprintf(text_buffer, format, (Bit8u*)(get_informer_hint()));
+				sprintf(text_buffer, format, get_informer_hint());
 
 			} else if (txt_id == 105) {
 
@@ -160,7 +160,7 @@ void talk_tavern(void)
 			} else if (txt_id == 128) {
 
 				sprintf(text_buffer, format,
-					!ds_readb(CURRENT_INFORMER) ? (Bit8u*)(get_drinkmate()) : (Bit8u*)(get_informer_name()));
+					!ds_readb(CURRENT_INFORMER) ? (char*)(get_drinkmate()) : get_informer_name());
 			} else if (txt_id == 131) {
 
 				sprintf(text_buffer, format,
@@ -198,8 +198,8 @@ void talk_tavern(void)
 
 				sprintf(answer2_buffer, format,
 					!gs_informer_flags[get_town_lookup_entry()] ?
-						(Bit8u*)(get_drinkmate()) :
-						(Bit8u*)(get_informer_name2()));
+						(char*)(get_drinkmate()) :
+						get_informer_name2());
 
 			} else {
 				strcpy(answer2_buffer, format);
