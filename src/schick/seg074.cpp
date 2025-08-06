@@ -52,7 +52,7 @@ void show_automap(void)
 		tw_bak = g_textbox_width;
 		g_textbox_width = 3;
 
-		l_si = (ds_readb(DNG_MAP_SIZE) == 16) ? 0 :
+		l_si = (g_dng_map_size == 16) ? 0 :
 				((gs_x_target - 8 < 0) ? 0 :
 				((gs_x_target - 8 > 15) ? 16 : gs_x_target - 8));
 
@@ -72,7 +72,7 @@ void show_automap(void)
 
 				gs_current_loctype = loc_bak;
 
-				if (ds_readb(DNG_MAP_SIZE) == 16) {
+				if (g_dng_map_size == 16) {
 					draw_loc_icons(1, MENU_ICON_LEAVE);
 				} else {
 					draw_loc_icons(3, MENU_ICON_SCROLL_LEFT, MENU_ICON_SCROLL_RIGHT, MENU_ICON_LEAVE);
@@ -91,7 +91,7 @@ void show_automap(void)
 
 			if ((ds_readw(MOUSE2_EVENT) != 0) || (ds_readw(ACTION) == ACTION_ID_PAGE_UP)) {
 
-				if (ds_readb(DNG_MAP_SIZE) == 16) {
+				if (g_dng_map_size == 16) {
 					l_di = GUI_radio(get_ttx(612), 1, get_ttx(613)) - 1;
 				} else {
 					ds_writew(MENU_DEFAULT_SELECT, 2);
@@ -106,7 +106,7 @@ void show_automap(void)
 				}
 			}
 
-			if (ds_readb(DNG_MAP_SIZE) != 16) {
+			if (g_dng_map_size != 16) {
 
 				if ((ds_readws(ACTION) == ACTION_ID_ICON_1) || (ds_readws(ACTION) == ACTION_ID_LEFT)) {
 
@@ -125,8 +125,8 @@ void show_automap(void)
 				}
 			}
 
-			if (((ds_readws(ACTION) == ACTION_ID_ICON_1) && (ds_readb(DNG_MAP_SIZE) == 16)) ||
-				((ds_readws(ACTION) == ACTION_ID_ICON_3) && (ds_readb(DNG_MAP_SIZE) != 16)))
+			if (((ds_readws(ACTION) == ACTION_ID_ICON_1) && (g_dng_map_size == 16)) ||
+				((ds_readws(ACTION) == ACTION_ID_ICON_3) && (g_dng_map_size != 16)))
 			{
 				done = 1;
 			}
@@ -156,7 +156,7 @@ unsigned short is_discovered(signed short x, signed short y)
  */
 unsigned short get_mapval_small(signed short x, signed short y)
 {
-	Bit8u *map = p_datseg + DNG_MAP;
+	Bit8u *map = g_dng_map;
 
 	return host_readb(map + 16 * y + x);
 }
@@ -170,7 +170,7 @@ unsigned short get_mapval_small(signed short x, signed short y)
  */
 unsigned short get_mapval_large(signed short x, signed short y)
 {
-	Bit8u *map = p_datseg + DNG_MAP;
+	Bit8u *map = g_dng_map;
 
 	return host_readb(map + 32 * y + x);
 }
@@ -241,7 +241,7 @@ void render_automap(signed short x_off)
 					/* in a town */
 
 					if (!(tile_type = get_maploc(x + x_off, y))) {
-						tile_type = get_border_index((ds_readb(DNG_MAP_SIZE) == 16) ?
+						tile_type = get_border_index((g_dng_map_size == 16) ?
 										get_mapval_small(x, y) :
 										get_mapval_large(x + x_off, y));
 					}
@@ -261,7 +261,7 @@ void render_automap(signed short x_off)
 
 					if ((tile_type != TOWN_TILE_STREET) && (tile_type != TOWN_TILE_GRASS) && (tile_type != TOWN_TILE_WATER) && (tile_type != TOWN_TILE_SIGNPOST)) {
 
-						entrance_dir = (ds_readb(DNG_MAP_SIZE) == 16) ?
+						entrance_dir = (g_dng_map_size == 16) ?
 										get_mapval_small(x, y) :
 										get_mapval_large(x + x_off, y);
 
@@ -490,7 +490,7 @@ signed short select_teleport_dest(void)
 	town = gs_current_town;
 	gs_current_town = gs_dungeon_index = 0;
 
-	l_si = ((ds_readb(DNG_MAP_SIZE) == 16) ? 0 :
+	l_si = ((g_dng_map_size == 16) ? 0 :
 			((gs_x_target - 8 < 0) ? 0 :
 			((gs_x_target - 8 > 15) ? 16 : gs_x_target - 8)));
 
@@ -509,7 +509,7 @@ signed short select_teleport_dest(void)
 
 	set_ani_pal(p_datseg + PALETTE_FIGHT2);
 
-	if (ds_readb(DNG_MAP_SIZE) == 16) {
+	if (g_dng_map_size == 16) {
 		draw_loc_icons(1, MENU_ICON_MAGIC);
 	} else {
 		draw_loc_icons(3, MENU_ICON_SCROLL_LEFT, MENU_ICON_SCROLL_RIGHT, MENU_ICON_MAGIC);
@@ -522,7 +522,7 @@ signed short select_teleport_dest(void)
 
 		if ((ds_readw(MOUSE2_EVENT) != 0) || (ds_readw(ACTION) == ACTION_ID_PAGE_UP)) {
 
-			if (ds_readb(DNG_MAP_SIZE) == 16) {
+			if (g_dng_map_size == 16) {
 				answer = GUI_radio(get_ttx(616), 1, get_ttx(617)) - 1;
 			} else {
 				answer = GUI_radio(get_ttx(616), 3,
@@ -553,7 +553,7 @@ signed short select_teleport_dest(void)
 			draw_automap_to_screen();
 
 		} else if ((ds_readw(ACTION) == ACTION_ID_RIGHT) &&
-			(ds_readb(DNG_MAP_SIZE) - 1 > g_automap_selx) &&
+			(g_dng_map_size - 1 > g_automap_selx) &&
 			is_discovered(g_automap_selx + 1, g_automap_sely))
 		{
 			g_automap_selx++;
@@ -569,7 +569,7 @@ signed short select_teleport_dest(void)
 			draw_automap_to_screen();
 		}
 
-		if (ds_readb(DNG_MAP_SIZE) != 16) {
+		if (g_dng_map_size != 16) {
 
 			if ((ds_readw(ACTION) == ACTION_ID_ICON_1) && (l_si > 0)) {
 				render_automap(--l_si);
@@ -582,8 +582,8 @@ signed short select_teleport_dest(void)
 			}
 		}
 
-		if (((ds_readw(ACTION) == ACTION_ID_ICON_1) && (ds_readb(DNG_MAP_SIZE) == 16)) ||
-			((ds_readw(ACTION) == ACTION_ID_ICON_3) && (ds_readb(DNG_MAP_SIZE) != 16)))
+		if (((ds_readw(ACTION) == ACTION_ID_ICON_1) && (g_dng_map_size == 16)) ||
+			((ds_readw(ACTION) == ACTION_ID_ICON_3) && (g_dng_map_size != 16)))
 		{
 			done = 1;
 		}
@@ -591,7 +591,7 @@ signed short select_teleport_dest(void)
 
 	} while (done == 0);
 
-	l_di = (ds_readb(DNG_MAP_SIZE) == 16) ?
+	l_di = (g_dng_map_size == 16) ?
 		get_mapval_small(g_automap_selx, g_automap_sely) :
 		get_mapval_large(g_automap_selx, g_automap_sely);
 

@@ -497,7 +497,7 @@ void item_bag(void)
 
 	if ((gs_dungeon_index == DUNGEONS_RUINE_DES_SCHWARZMAGIERS) && (gs_dungeon_level == 0)) {
 		/* set ptr to the map */
-		ptr = p_datseg + DNG_MAP;
+		ptr = g_dng_map;
 
 		/* remove the wall there */
 		host_writeb(ptr + MAP_POS(10,3), DNG_TILE_CORRIDOR + 0x01); /* set flag 0, is there a reason? */

@@ -37,7 +37,7 @@ signed short DNG12_handler(void)
 	Bit8u *hero;
 	Bit8u *ptr;
 
-	ptr = p_datseg + DNG_MAP;
+	ptr = g_dng_map;
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 	target_pos = DNG_POS(gs_dungeon_level,gs_x_target,gs_y_target);

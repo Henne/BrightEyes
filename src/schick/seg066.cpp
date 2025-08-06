@@ -1081,9 +1081,9 @@ void seg066_14dd(signed short forward)
 		gs_x_target = (0);
 		no_way();
 
-	} else if (ds_readb(DNG_MAP_SIZE) - 1 < gs_x_target) {
+	} else if (g_dng_map_size - 1 < gs_x_target) {
 
-		gs_x_target = (ds_readb(DNG_MAP_SIZE) - 1);
+		gs_x_target = (g_dng_map_size - 1);
 		no_way();
 
 	}
@@ -1173,11 +1173,11 @@ void seg066_172b(void)
 {
 	signed short l_si;
 	signed short l_di;
-	Bit8u *ptr = p_datseg + DNG_MAP;
+	Bit8u *ptr = g_dng_map;
 
 	ds_writeb(CITY_HOUSE_COUNT, ds_writeb((CITY_HOUSE_COUNT+1), ds_writeb((CITY_HOUSE_COUNT+2), ds_writeb((CITY_HOUSE_COUNT+3), 0))));
 
-	for (l_di = 0; ds_readb(DNG_MAP_SIZE) * 16 > l_di; l_di++) {
+	for (l_di = 0; g_dng_map_size * 16 > l_di; l_di++) {
 
 		l_si = get_border_index(host_readb(ptr + l_di));
 

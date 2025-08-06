@@ -46,7 +46,7 @@ signed short DNG02_handler(void)
 
 	target_pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
-	amap_ptr = p_datseg + DNG_MAP;
+	amap_ptr = g_dng_map;
 
 	if ((target_pos == DNG_POS(0,1,2) || target_pos == DNG_POS(0,2,1)))
 	{

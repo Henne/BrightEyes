@@ -178,7 +178,7 @@ void spell_penetrizzel(void)
 	for (y = -2;  y <= 2; y++) {
 		for (x = -2;  x <= 2; x++) {
 			if ((gs_y_target + y >= 0) && (gs_x_target + x >= 0)) {
-				if ((ds_readb(DNG_MAP_SIZE) - 1 >= gs_x_target + x) && (gs_y_target + y <= 15)) {
+				if ((g_dng_map_size - 1 >= gs_x_target + x) && (gs_y_target + y <= 15)) {
 					set_automap_tile(gs_x_target + x, gs_y_target + y);
 				}
 			}

@@ -286,11 +286,11 @@ void load_area_description(signed short type)
 		if (type != 2) {
 			fd = load_archive_file(g_areadescr_fileid + 0x8000);
 
-			if (!g_areadescr_dng_flag && (ds_readb(DNG_MAP_SIZE) == 0x20)) {
-				write(fd, (void*)MK_FP(datseg, DNG_MAP), 0x200);
+			if (!g_areadescr_dng_flag && (g_dng_map_size == 0x20)) {
+				write(fd, (void*)g_dng_map, 512);
 			} else {
 				lseek(fd, g_areadescr_dng_level * 0x140, 0);
-				write(fd, (void*)MK_FP(datseg, DNG_MAP), 0x100);
+				write(fd, (void*)g_dng_map, 256);
 			}
 			/* write automap tiles */
 			write(fd, (void*)MK_FP(datseg, AUTOMAP_BUF), 64);
@@ -326,7 +326,7 @@ void load_area_description(signed short type)
 		if (!gs_dungeon_index && (gs_current_town == TOWNS_THORWAL || gs_current_town == TOWNS_PREM || gs_current_town == TOWNS_PHEXCAER))
 		{
 			/* path taken in THORWAL PREM and PHEXCAER */
-			_read(fd, p_datseg + DNG_MAP, 0x200);
+			_read(fd, g_dng_map, 512);
 			/* read automap tiles */
 			_read(fd, p_datseg + AUTOMAP_BUF, 0x40);
 
@@ -335,11 +335,11 @@ void load_area_description(signed short type)
 
 			g_locations_tab_size = _read(fd, p_datseg + LOCATIONS_LIST, 1000);
 
-			ds_writeb(DNG_MAP_SIZE, 0x20);
+			g_dng_map_size = 32;
 		} else {
 			/* Seek to Dungeon Level * 320 */
 			lseek(fd, gs_dungeon_level * 320, 0);
-			_read(fd, p_datseg + DNG_MAP, 0x100);
+			_read(fd, g_dng_map, 256);
 
 			/* read automap tiles */
 			_read(fd, p_datseg + AUTOMAP_BUF, 0x40);
@@ -351,7 +351,7 @@ void load_area_description(signed short type)
 				g_locations_tab_size = _read(fd, p_datseg + LOCATIONS_LIST, 1000);
 			}
 
-			ds_writeb(DNG_MAP_SIZE, 0x10);
+			g_dng_map_size = 16;
 		}
 		close(fd);
 	}

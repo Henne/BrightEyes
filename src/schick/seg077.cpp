@@ -76,19 +76,18 @@ signed short DNG01_handler(void)
 		DNG_fallpit_test(6);
 		gs_y_target++;
 
-	} else if (target_pos == DNG_POS(1,13,5) && target_pos != gs_dng_handled_pos && !gs_dng01_sabre_taken)
+	} else if ((target_pos == DNG_POS(1,13,5)) && (target_pos != gs_dng_handled_pos) && !gs_dng01_sabre_taken)
 	{
-		sprintf(g_text_output_buf, get_ttx(528),	(char*)GUI_names_grammar(0, 3, 0),
-			(char*)GUI_2f2(2, 3, 0));
+		sprintf(g_text_output_buf, get_ttx(528), (char*)GUI_names_grammar(0, 3, 0), (char*)GUI_2f2(2, 3, 0));
 
 		/* ITEM: get a SABRE */
 		if (GUI_bool(g_text_output_buf) && get_item(ITEM_SABER, 1, 1)) {
 			gs_dng01_sabre_taken = 1;
 		}
 
-	} else if (target_pos == DNG_POS(3,2,9) && target_pos != gs_dng_handled_pos && !gs_dng01_crossbow_taken)
+	} else if ((target_pos == DNG_POS(3,2,9)) && (target_pos != gs_dng_handled_pos) && !gs_dng01_crossbow_taken)
 	{
-		sprintf(g_text_output_buf, get_ttx(528),	(char*)GUI_names_grammar(0, 12, 0), (char*)GUI_2f2(2, 12, 0));
+		sprintf(g_text_output_buf, get_ttx(528), (char*)GUI_names_grammar(0, 12, 0), (char*)GUI_2f2(2, 12, 0));
 
 		/* ITEM: get a CROSSBOW */
 		if (GUI_bool(g_text_output_buf) && get_item(ITEM_CROSSBOW, 1, 1)) {
@@ -96,7 +95,7 @@ signed short DNG01_handler(void)
 			gs_dng01_crossbow_taken = 1;
 		}
 
-	} else if (target_pos == DNG_POS(4,2,9) && target_pos != gs_dng_handled_pos && !gs_dng01_amulet_taken)
+	} else if ((target_pos == DNG_POS(4,2,9)) && (target_pos != gs_dng_handled_pos) && !gs_dng01_amulet_taken)
 	{
 		/* ITEM: a magic AMULET */
 		if (GUI_bool(get_tx(7)) && get_item(ITEM_AMULET_GREEN, 1, 1))
@@ -105,7 +104,7 @@ signed short DNG01_handler(void)
 			gs_gods_estimation[GOD_BORON] -= 100L;
 		}
 
-	} else if (target_pos == DNG_POS(4,13,6) && target_pos != gs_dng_handled_pos)
+	} else if ((target_pos == DNG_POS(4,13,6)) && (target_pos != gs_dng_handled_pos))
 	{
 		seg092_06b4(0);
 
@@ -161,23 +160,25 @@ signed short DNG01_handler(void)
 
 		add_hero_ap_all(20);
 
-	} else if (target_pos == DNG_POS(5,14,7) && target_pos != gs_dng_handled_pos)
+	} else if ((target_pos == DNG_POS(5,14,7)) && (target_pos != gs_dng_handled_pos))
 	{
 		if (GUI_bool(get_tx(11)))
 		{
 			/* check if a ROPE LADDER or a ROPE is available */
 			/* Original-Bug: Why not check for a mage with staffspell level >= 3? */
-			if (get_first_hero_with_item(ITEM_ROPE) != -1 ||
-				get_first_hero_with_item(ITEM_ROPE_LADDER) != -1)
+			if (get_first_hero_with_item(ITEM_ROPE) != -1 || get_first_hero_with_item(ITEM_ROPE_LADDER) != -1)
 			{
 				/* Original-Bug: better get_first_hero_available_in_group() */
 				if (test_skill(get_hero(0), TA_KLETTERN, 0) > 0)
 				{
 					/* Original-Bug: '32 * ' should probably be '16 *'. */
-					ds_writeb(DNG_MAP + 32 * gs_y_target + gs_x_target, DNG_TILE_PIT_IN_CEILING << 4);
+					g_dng_map[32 * gs_y_target + gs_x_target] = DNG_TILE_PIT_IN_CEILING << 4;
+
 					DNG_dec_level();
+
 					/* Original-Bug: '32 * ' should probably be '16 *'. */
-					ds_writeb(DNG_MAP + 32 * gs_y_target + gs_x_target, DNG_TILE_PIT << 4);
+					g_dng_map[32 * gs_y_target + gs_x_target] = DNG_TILE_PIT << 4;
+
 					gs_y_target++;
 				}
 			} else {
@@ -185,14 +186,14 @@ signed short DNG01_handler(void)
 			}
 		}
 
-	} else if (target_pos == DNG_POS(2,8,11) && target_pos != gs_dng_handled_pos)
+	} else if ((target_pos == DNG_POS(2,8,11)) && (target_pos != gs_dng_handled_pos))
 	{
 		if (GUI_bool(get_tx(24)))
 		{
 			leave_dungeon();
 			gs_current_town = ((signed char)ds_readws(TRAVEL_DESTINATION_TOWN_ID));
-			gs_x_target = (ds_readws(TRAVEL_DESTINATION_X));
-			gs_y_target = (ds_readws(TRAVEL_DESTINATION_Y));
+			gs_x_target = ds_readws(TRAVEL_DESTINATION_X);
+			gs_y_target = ds_readws(TRAVEL_DESTINATION_Y);
 			gs_current_loctype = LOCTYPE_NONE;
 			gs_direction = ((ds_readws(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
 

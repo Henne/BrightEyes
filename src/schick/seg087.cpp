@@ -41,7 +41,7 @@ signed short DNG14_handler(void)
 	Bit8u *hero;
 	Bit8u *amap_ptr;
 
-	amap_ptr = p_datseg + DNG_MAP;
+	amap_ptr = g_dng_map;
 
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;

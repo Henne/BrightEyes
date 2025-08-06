@@ -189,7 +189,7 @@ void DNG15_riddle(void)
 	tw_bak = g_textbox_width;
 	g_textbox_width = 8;
 
-	ptr = p_datseg + DNG_MAP;
+	ptr = g_dng_map;
 
 	pos = (gs_dungeon_level << 12) + (gs_x_target << 8) + gs_y_target;
 

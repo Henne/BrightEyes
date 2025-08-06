@@ -39,7 +39,7 @@ signed short DNG07_handler(void)
 	signed short lockpick_pos;
 	signed short skill_result;
 
-	amap_ptr = p_datseg + DNG_MAP;
+	amap_ptr = g_dng_map;
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 
@@ -307,7 +307,7 @@ void DNG09_statues(signed short prob, signed short bonus)
 
 	hero = (Bit8u*)get_first_hero_available_in_group();
 
-	amap_ptr = p_datseg + DNG_MAP;
+	amap_ptr = g_dng_map;
 
 	if (host_readbs(amap_ptr + MAP_POS(gs_x_target, gs_y_target)) == 4)
 	{

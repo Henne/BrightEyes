@@ -568,6 +568,8 @@ extern struct_pic_copy g_pic_copy;	// ds:0xc00d; seg002-seg120
 extern signed short g_textbox_width;	// ds:0xbffd; seg002-seg120
 extern unsigned char *g_gui_buffer_unkn;// ds:0xbff9; seg025, seg032, seg097, seg120
 extern char *g_radio_name_list[25];	// ds:0xbf95; seg033, seg047, seg048, seg098, seg103, seg104, seg105
+extern unsigned char g_dng_map[512];	// ds:0xbd95; seg002-seg107
+extern unsigned char g_dng_map_size;	// ds:0xbd94; seg002, seg003, seg028, seg066, seg074, seg100
 
 extern unsigned char *g_heroes;		// ds:0xbd34
 extern unsigned char *g_fightobj_buf;	// ds:0xbd30; seg032, seg040

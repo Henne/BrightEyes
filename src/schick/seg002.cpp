@@ -4184,7 +4184,7 @@ void set_automap_tiles(signed short x, signed short y)
 
 		set_automap_tile(x, y - 1);
 
-		if (ds_readb(DNG_MAP_SIZE) - 1 > x) {
+		if (g_dng_map_size - 1 > x) {
 			set_automap_tile(x + 1, y - 1);
 		}
 	}
@@ -4196,7 +4196,7 @@ void set_automap_tiles(signed short x, signed short y)
 
 	set_automap_tile(x, y);
 
-	if (ds_readb(DNG_MAP_SIZE) - 1 > x) {
+	if (g_dng_map_size - 1 > x) {
 		set_automap_tile(x + 1, y);
 	}
 
@@ -4208,7 +4208,7 @@ void set_automap_tiles(signed short x, signed short y)
 
 		set_automap_tile(x, y + 1);
 
-		if (ds_readb(DNG_MAP_SIZE) - 1 > x) {
+		if (g_dng_map_size - 1 > x) {
 			set_automap_tile(x + 1, y + 1);
 		}
 	}

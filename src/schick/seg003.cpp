@@ -58,7 +58,7 @@ void move(void)
 	signed short y;
 
 
-	p_map_small = p_map_large = p_datseg + DNG_MAP;
+	p_map_small = p_map_large = g_dng_map;
 
 	/* direction */
 #if defined(__BORLANDC__)
@@ -76,8 +76,8 @@ void move(void)
 			x = 0;
 			boundary_flag = 1;
 		} else {
-			if (ds_readb(DNG_MAP_SIZE) - 1 < x) {
-				x = ds_readb(DNG_MAP_SIZE) - 1;
+			if (g_dng_map_size - 1 < x) {
+				x = g_dng_map_size - 1;
 				boundary_flag = 1;
 			}
 		}
@@ -92,7 +92,7 @@ void move(void)
 			}
 		}
 
-		mapval = (ds_readb(DNG_MAP_SIZE) == 0x10) ?
+		mapval = (g_dng_map_size == 0x10) ?
 			/* dungeon */
 			host_readb(p_map_small + (y << 4) + x) :
 			/* city */
@@ -105,7 +105,7 @@ void move(void)
 		}
 	}
 
-	if (ds_readb(DNG_MAP_SIZE) == 0x10) {
+	if (g_dng_map_size == 0x10) {
 		/* dungeon mode */
 		ds_writeb(STEPTARGET_FRONT, host_readb(p_map_small +
 			((gs_y_target + host_readbs(p_vis_field + 1)) << 4) +
