@@ -99,7 +99,7 @@ void do_inn(void)
 
 	done = 0;
 	stay = 0;
-	ds_writebs(SLEEP_QUALITY, -1);
+	g_sleep_quality = -1;
 
 #ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 8:
@@ -377,16 +377,17 @@ void do_inn(void)
 		}
 
 		if (ds_readws(ACTION) == ACTION_ID_ICON_1) {
+
 			talk_inn();
 			g_request_refresh = 1;
+
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_2) { /* order food */
 
-			price = count_heroes_in_group() * (6L - host_readws(inn_ptr + INN_STATS_QUALITY) / 4L); /* higher food quality -> higher price */
+			price = count_heroes_in_group() * (6L - host_readws(inn_ptr + INN_STATS_QUALITY) / 4L);
+			/* higher food quality -> higher price */
 			price += (price * host_readws(inn_ptr + INN_STATS_PRICE_MOD)) / 100L;
 
-			sprintf(g_dtp2,
-				get_ttx(473),
-				(signed short)price);
+			sprintf(g_dtp2,	get_ttx(473), (signed short)price);
 
 			if (GUI_bool(g_dtp2)) {
 
@@ -439,7 +440,7 @@ void do_inn(void)
 				}
 			}
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_3 && ds_readbs(SLEEP_QUALITY) == -1) {
+		} else if (ds_readws(ACTION) == ACTION_ID_ICON_3 && g_sleep_quality == -1) {
 
 			price_schlafsaal = 5;
 			price_einzelzimmer = 30;
@@ -451,34 +452,25 @@ void do_inn(void)
 			tw_bak = g_textbox_width;
 			g_textbox_width = 5;
 
-			sprintf(g_dtp2,
-				get_ttx(397),
-				(signed short)price_schlafsaal);
+			sprintf(g_dtp2,	get_ttx(397), (signed short)price_schlafsaal);
 
-			sprintf(g_dtp2 + 50,
-				get_ttx(398),
-				(signed short)price_einzelzimmer);
+			sprintf(g_dtp2 + 50, get_ttx(398), (signed short)price_einzelzimmer);
 
-			sprintf(g_dtp2 + 100,
-				get_ttx(399),
-				(signed short)price_suite);
+			sprintf(g_dtp2 + 100, get_ttx(399), (signed short)price_suite);
 
-			ds_writebs(SLEEP_QUALITY, (signed char)GUI_radio(get_ttx(396), 3,
-							g_dtp2,
-							g_dtp2 + 50,
-							g_dtp2 + 100));
+			g_sleep_quality = GUI_radio(get_ttx(396), 3, g_dtp2, g_dtp2 + 50, g_dtp2 + 100);
 
-			if (ds_readbs(SLEEP_QUALITY) != -1) {
-				ds_writebs(BOOKED_INN_DAYS, (signed char)GUI_input(get_ttx(826), 2));
+			if (g_sleep_quality != -1) {
+				ds_writebs(BOOKED_INN_DAYS, GUI_input(get_ttx(826), 2));
 			}
 
 			if (ds_readbs(BOOKED_INN_DAYS) <= 0) {
-				ds_writebs(SLEEP_QUALITY, -1);
+				g_sleep_quality = -1;
 			}
 
 			g_textbox_width = tw_bak;
 
-			if (ds_readbs(SLEEP_QUALITY) != -1) {
+			if (g_sleep_quality != -1) {
 
 				nr_heroes = count_heroes_in_group();
 
@@ -487,7 +479,7 @@ void do_inn(void)
 				price_suite *= nr_heroes;
 				party_money = get_party_money();
 
-				price = ds_readbs(SLEEP_QUALITY) == 1 ? price_schlafsaal : (ds_readbs(SLEEP_QUALITY) == 2 ? price_einzelzimmer : price_suite);
+				price = g_sleep_quality == 1 ? price_schlafsaal : (g_sleep_quality == 2 ? price_einzelzimmer : price_suite);
 
 				price *= ds_readbs(BOOKED_INN_DAYS);
 
@@ -497,7 +489,7 @@ void do_inn(void)
 
 				if (party_money < price) {
 					GUI_output(get_ttx(401));
-					ds_writebs(SLEEP_QUALITY, -1);
+					g_sleep_quality = -1;
 				} else {
 					party_money -= price;
 					set_party_money(party_money);
@@ -507,7 +499,7 @@ void do_inn(void)
 
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_4) {
 
-			if (ds_readbs(SLEEP_QUALITY) != -1) {
+			if (g_sleep_quality != -1) {
 				GUI_use_skill2(0, get_ttx(395));
 				refresh = 1;
 			} else {
@@ -516,7 +508,7 @@ void do_inn(void)
 
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_5) {
 
-			if (ds_readbs(SLEEP_QUALITY) != -1) {
+			if (g_sleep_quality != -1) {
 
 				answer = select_hero_ok(get_ttx(317));
 
@@ -541,15 +533,19 @@ void do_inn(void)
 
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_6) {
 
-			if (ds_readbs(SLEEP_QUALITY) != -1 && ds_readbs(BOOKED_INN_DAYS) > 0) {
+			if (g_sleep_quality != -1 && ds_readbs(BOOKED_INN_DAYS) > 0) {
 
 				if (GUI_bool(get_ttx(318))) {
+
 					booked_days = ds_readbs(BOOKED_INN_DAYS);
 
 					if (host_readws(inn_ptr + INN_STATS_QUALITY) < 8) {
-						inc_ds_bs_post(SLEEP_QUALITY);
+
+						g_sleep_quality++;
+
 					} else if (host_readws(inn_ptr + INN_STATS_QUALITY) > 15) {
-						dec_ds_bs_post(SLEEP_QUALITY);
+
+						g_sleep_quality--;
 					}
 
 					done = 1;
@@ -558,6 +554,7 @@ void do_inn(void)
 
 					do {
 						timewarp_until_time_of_day(HOURS(8));
+
 					} while (dec_ds_bs(BOOKED_INN_DAYS));
 
 					g_food_mod = 0;
@@ -579,7 +576,7 @@ void do_inn(void)
 
 								for (rested_days = 0; rested_days < booked_days; rested_days++)
 								{
-									GRP_hero_sleep(hero, ds_readbs(SLEEP_QUALITY));
+									GRP_hero_sleep(hero, g_sleep_quality);
 								}
 							}
 						}
@@ -590,7 +587,7 @@ void do_inn(void)
 			}
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_7) {
 
-			if (ds_readbs(SLEEP_QUALITY) != -1) {
+			if (g_sleep_quality != -1) {
 
 				if (GUI_bool(get_ttx(400))) {
 					done = 1;
@@ -611,7 +608,7 @@ void do_inn(void)
 			} else if ((host_readws(tavern_ptr) < 6 || host_readws(tavern_ptr) > 13) &&
 				gs_day_timer < HOURS(16) && gs_day_timer > HOURS(3)) {
 				GUI_output(get_ttx(481));
-			} else if (ds_readbs(SLEEP_QUALITY) != -1) {
+			} else if (g_sleep_quality != -1) {
 
 				if (GUI_bool(get_ttx(400))) {
 					done = 1;

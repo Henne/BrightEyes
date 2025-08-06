@@ -202,7 +202,7 @@ signed short plan_alchemy(Bit8u *hero)
 					} else {
 						/* AE sufficient */
 
-						if ((gs_current_loctype == LOCTYPE_INN) && (ds_readbs(SLEEP_QUALITY) == -1)) {
+						if ((gs_current_loctype == LOCTYPE_INN) && (g_sleep_quality == -1)) {
 
 							/* no room booked => brewing not possible */
 							GUI_output(get_ttx(346));
@@ -260,7 +260,7 @@ signed short plan_alchemy(Bit8u *hero)
 										if ((host_readbs(hero_p + HERO_TYPE) != HERO_TYPE_NONE) &&
 											(host_readbs(hero_p + HERO_GROUP_NO) == gs_current_group))
 										{
-											GRP_hero_sleep(hero_p, ds_readbs(SLEEP_QUALITY));
+											GRP_hero_sleep(hero_p, g_sleep_quality);
 										}
 									}
 								} else {
@@ -269,7 +269,7 @@ signed short plan_alchemy(Bit8u *hero)
 
 								retval = do_alchemy(hero, recipe_index, 0);
 
-								ds_writeb(SLEEP_QUALITY, -1);
+								g_sleep_quality = -1;
 
 							} else if (decision == 2) {
 								/* split group */
