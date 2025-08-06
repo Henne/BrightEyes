@@ -422,32 +422,32 @@ void GRP_swap_heroes(void)
 
 			for (i = 0; i < 3; i++) {
 
-				if (ds_readbs(WILDCAMP_GUARDS + i) == hero1_no) {
-					ds_writebs(WILDCAMP_GUARDS + i, (signed char)hero2_no);
+				if (g_wildcamp_guards[i] == hero1_no) {
+					g_wildcamp_guards[i] = (signed char)hero2_no;
 				}
 			}
 
 			/* save hero1 in tmp */
 			*((struct dummy*)&tmp) = *((struct dummy*)get_hero(hero1_no));
 
-			l2 = ds_readbs(WILDCAMP_GUARDSTATUS + hero1_no);
-			l3 = ds_readbs(WILDCAMP_MAGICSTATUS + hero1_no);
-			l4 = ds_readbs(WILDCAMP_REPLSTATUS + hero1_no);
-			l5 = ds_readbs(WILDCAMP_HERBSTATUS + hero1_no);
+			l2 = g_wildcamp_guardstatus[hero1_no];
+			l3 = g_wildcamp_magicstatus[hero1_no];
+			l4 = g_wildcamp_replstatus[hero1_no];
+			l5 = g_wildcamp_herbstatus[hero1_no];
 
 			*((struct dummy*)get_hero(hero1_no)) = *((struct dummy*)get_hero(hero2_no));
 
-			ds_writebs(WILDCAMP_GUARDSTATUS + hero1_no, ds_readbs(WILDCAMP_GUARDSTATUS + hero2_no));
-			ds_writebs(WILDCAMP_MAGICSTATUS + hero1_no, ds_readbs(WILDCAMP_MAGICSTATUS + hero2_no));
-			ds_writebs(WILDCAMP_REPLSTATUS + hero1_no, ds_readbs(WILDCAMP_REPLSTATUS + hero2_no));
-			ds_writebs(WILDCAMP_HERBSTATUS + hero1_no, ds_readbs(WILDCAMP_HERBSTATUS + hero2_no));
+			g_wildcamp_guardstatus[hero1_no] = g_wildcamp_guardstatus[hero2_no];
+			g_wildcamp_magicstatus[hero1_no] = g_wildcamp_magicstatus[hero2_no];
+			g_wildcamp_replstatus[hero1_no] = g_wildcamp_magicstatus[hero2_no];
+			g_wildcamp_herbstatus[hero1_no] = g_wildcamp_herbstatus[hero2_no];
 
 			*((struct dummy*)get_hero(hero2_no)) = *((struct dummy*)&tmp);
 
-			ds_writebs(WILDCAMP_GUARDSTATUS + hero2_no, l2);
-			ds_writebs(WILDCAMP_MAGICSTATUS + hero2_no, l3);
-			ds_writebs(WILDCAMP_REPLSTATUS + hero2_no, l4);
-			ds_writebs(WILDCAMP_HERBSTATUS + hero2_no, l5);
+			g_wildcamp_guardstatus[hero2_no] = l2;
+			g_wildcamp_magicstatus[hero2_no] = l3;
+			g_wildcamp_replstatus[hero2_no] = l4;
+			g_wildcamp_herbstatus[hero2_no] = l5;
 
 			if (host_readbs(get_hero(hero1_no) + HERO_TYPE)) {
 				host_writebs(get_hero(hero1_no) + HERO_ACTION_ID, FIG_ACTION_UNKNOWN2);
@@ -584,31 +584,31 @@ void GRP_move_hero(signed short src_pos)
 			if (!host_readbs(dst + 0x21) || (host_readbs(dst + 0x87) == gs_current_group)) {
 
 				for (i = 0; i < 3; i++) {
-					if (ds_readbs(WILDCAMP_GUARDS + i) == src_pos) {
-						ds_writebs(WILDCAMP_GUARDS + i, (signed char)dst_pos);
+					if (g_wildcamp_guards[i] == src_pos) {
+						g_wildcamp_guards[i] = dst_pos;
 					}
 				}
 
 				memcpy(g_renderbuf_ptr, src, SIZEOF_HERO);
 
-				src_guardstatus = ds_readbs(WILDCAMP_GUARDSTATUS + src_pos);
-				src_magicstatus = ds_readbs(WILDCAMP_MAGICSTATUS + src_pos);
-				src_replstatus = ds_readbs(WILDCAMP_REPLSTATUS + src_pos);
-				src_herbstatus = ds_readbs(WILDCAMP_HERBSTATUS + src_pos);
+				src_guardstatus = g_wildcamp_guardstatus[src_pos];
+				src_magicstatus = g_wildcamp_magicstatus[src_pos];
+				src_replstatus = g_wildcamp_replstatus[src_pos];
+				src_herbstatus = g_wildcamp_herbstatus[src_pos];
 
 				*((struct dummy*)src) = *((struct dummy*)dst);
 
-				ds_writeb(WILDCAMP_GUARDSTATUS + src_pos, ds_readbs(WILDCAMP_GUARDSTATUS + dst_pos));
-				ds_writeb(WILDCAMP_MAGICSTATUS + src_pos, ds_readbs(WILDCAMP_MAGICSTATUS + dst_pos));
-				ds_writeb(WILDCAMP_REPLSTATUS + src_pos, ds_readbs(WILDCAMP_REPLSTATUS + dst_pos));
-				ds_writeb(WILDCAMP_HERBSTATUS + src_pos, ds_readbs(WILDCAMP_HERBSTATUS + dst_pos));
+				g_wildcamp_guardstatus[src_pos] = g_wildcamp_guardstatus[dst_pos];
+				g_wildcamp_magicstatus[src_pos] = g_wildcamp_magicstatus[dst_pos];
+				g_wildcamp_replstatus[src_pos] = g_wildcamp_replstatus[dst_pos];
+				g_wildcamp_herbstatus[src_pos] = g_wildcamp_herbstatus[dst_pos];
 
 				memcpy(dst, g_renderbuf_ptr, SIZEOF_HERO);
 
-				ds_writeb(WILDCAMP_GUARDSTATUS + dst_pos, src_guardstatus);
-				ds_writeb(WILDCAMP_MAGICSTATUS + dst_pos, src_magicstatus);
-				ds_writeb(WILDCAMP_REPLSTATUS + dst_pos, src_replstatus);
-				ds_writeb(WILDCAMP_HERBSTATUS + dst_pos, src_herbstatus);
+				g_wildcamp_guardstatus[dst_pos] = src_guardstatus;
+				g_wildcamp_magicstatus[dst_pos] = src_magicstatus;
+				g_wildcamp_replstatus[dst_pos] = src_replstatus;
+				g_wildcamp_herbstatus[dst_pos] = src_herbstatus;
 
 				host_writeb(src + 0x84, 100);
 				host_writeb(dst + 0x84, 100);
@@ -635,18 +635,14 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 	signed short diff;
 	signed short tmp;
 
-	if (!hero_dead(hero) &&
-		(host_readd(hero + HERO_STAFFSPELL_TIMER) == 0) &&
+	if (!hero_dead(hero) && (host_readd(hero + HERO_STAFFSPELL_TIMER) == 0) &&
 		(host_readbs(hero + HERO_RECIPE_TIMER) == 0))
 	{
 
 		if ((ds_readbs(TRAVEL_BY_SHIP) != 0) && (random_schick(100) < 10)) {
 			/* chance of motion sickness is 9% */
 
-			sprintf(g_dtp2,
-				get_ttx(796),
-				hero + HERO_NAME2);
-
+			sprintf(g_dtp2,	get_ttx(796), hero + HERO_NAME2);
 			GUI_output(g_dtp2);
 
 		} else {

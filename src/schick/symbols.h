@@ -1568,11 +1568,11 @@
 #define INC_SPELLS_COUNTER              (0xe3b2)    /* Bit8u* */
 #define INC_SKILLS_COUNTER              (0xe3b6)    /* Bit8u* */
 #define SKILLS_BUFFER                   (0xe3ba)    /* Bit8u* */
-#define WILDCAMP_GUARDS                 (0xe3be)    /* signed char[3] */
-#define WILDCAMP_HERBSTATUS             (0xe3c1)    /* signed char[7] */
-#define WILDCAMP_REPLSTATUS             (0xe3c8)    /* signed char[7] */
-#define WILDCAMP_MAGICSTATUS            (0xe3cf)    /* signed char[7] */
-#define WILDCAMP_GUARDSTATUS            (0xe3d6)    /* signed char[7] */
+//#define WILDCAMP_GUARDS                 (0xe3be)    /* signed char[3] */
+//#define WILDCAMP_HERBSTATUS             (0xe3c1)    /* signed char[7] */
+//#define WILDCAMP_REPLSTATUS             (0xe3c8)    /* signed char[7] */
+//#define WILDCAMP_MAGICSTATUS            (0xe3cf)    /* signed char[7] */
+//#define WILDCAMP_GUARDSTATUS            (0xe3d6)    /* signed char[7] */
 // ?1
 //#define CITYCAMP_GUARDS                 (0xe3de)    /* signed char[3] */
 //#define CITYCAMP_MAGICSTATUS            (0xe3e1)    /* signed char[7] */

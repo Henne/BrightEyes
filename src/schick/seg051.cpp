@@ -57,11 +57,13 @@ void do_wildcamp(void)
 	l_di = g_request_refresh = 1;
 
 	for (i = 0; i <= 6; i++) {
-		ds_writebs(WILDCAMP_HERBSTATUS + i, ds_writebs(WILDCAMP_REPLSTATUS + i, ds_writebs(WILDCAMP_MAGICSTATUS + i , ds_writeb(WILDCAMP_GUARDSTATUS + i, 0))));
+
+		g_wildcamp_herbstatus[i] = g_wildcamp_replstatus[i] =
+			g_wildcamp_magicstatus[i] = g_wildcamp_guardstatus[i] = 0;
 	}
 
 	for (i = 0; i < 3; i++) {
-		ds_writebs(WILDCAMP_GUARDS + i, -1);
+		g_wildcamp_guards[i] = -1;
 	}
 
 	i = !g_good_camp_place ? 6 : 7;
@@ -69,7 +71,7 @@ void do_wildcamp(void)
 
 	while (done == 0) {
 
-		if (g_request_refresh != 0) {
+		if (g_request_refresh) {
 			draw_main_screen();
 			set_var_to_zero();
 			load_ani(2);
@@ -107,10 +109,10 @@ void do_wildcamp(void)
 
 			for (i = 0; i <= 6; i++) {
 
-				if (!ds_readbs(WILDCAMP_MAGICSTATUS + i) && !ds_readbs(WILDCAMP_HERBSTATUS + i) &&
-					!ds_readbs(WILDCAMP_REPLSTATUS + i) && is_hero_available_in_group(get_hero(i)))
+				if (!g_wildcamp_magicstatus[i] && !g_wildcamp_herbstatus[i] &&
+					!g_wildcamp_replstatus[i] && is_hero_available_in_group(get_hero(i)))
 				{
-					ds_writeb(WILDCAMP_GUARDSTATUS + i, 0);
+					g_wildcamp_guardstatus[i] = 0;
 					answer = 0;
 				}
 			}
@@ -127,9 +129,10 @@ void do_wildcamp(void)
 						answer = select_hero_ok(g_dtp2);
 
 						/* Original-Bug: not checked answer for following options */
-						if ((answer != -1 && ds_readbs(WILDCAMP_MAGICSTATUS + answer) != 0) ||
-							ds_readbs(WILDCAMP_HERBSTATUS + answer) != 0 ||
-							ds_readbs(WILDCAMP_REPLSTATUS + answer) != 0)
+						if ((answer != -1 &&
+							g_wildcamp_magicstatus[answer] != 0) ||
+							g_wildcamp_herbstatus[answer] != 0 ||
+							g_wildcamp_replstatus[answer] != 0)
 						{
 							GUI_output(get_ttx(331));
 							answer = -1;
@@ -144,8 +147,8 @@ void do_wildcamp(void)
 
 					} while (answer == -1);
 
-					inc_ds_bs_post(WILDCAMP_GUARDSTATUS + answer);
-					ds_writebs(WILDCAMP_GUARDS + i, (signed char)answer);
+					g_wildcamp_guardstatus[answer]++;
+					g_wildcamp_guards[i] = answer;
 				}
 			}
 
@@ -170,6 +173,7 @@ void do_wildcamp(void)
 			answer = select_hero_ok(get_ttx(317));
 
 			if (answer != -1) {
+
 				if (hero_brewing(get_hero(answer))) {
 					GUI_output(get_ttx(730));
 					answer = -1;
@@ -182,18 +186,20 @@ void do_wildcamp(void)
 
 				if (host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH) {
 
-					if (ds_readbs(WILDCAMP_GUARDSTATUS + answer) != 0 ||
-						ds_readbs(WILDCAMP_HERBSTATUS + answer) != 0 ||
-						ds_readbs(WILDCAMP_REPLSTATUS + answer) != 0)
+					if (g_wildcamp_guardstatus[answer] != 0 ||
+						g_wildcamp_herbstatus[answer] != 0 ||
+						g_wildcamp_replstatus[answer] != 0)
 					{
 						GUI_output(get_ttx(331));
 
 					} else {
 
-						if (ds_readbs(WILDCAMP_MAGICSTATUS + answer) != 0) {
+						if (g_wildcamp_magicstatus[answer] != 0) {
+
 							GUI_output(get_ttx(334));
+
 						} else {
-							ds_writebs(WILDCAMP_MAGICSTATUS + answer, (signed char)use_magic(hero));
+							g_wildcamp_magicstatus[answer] = use_magic(hero);
 						}
 					}
 				} else {
@@ -215,18 +221,15 @@ void do_wildcamp(void)
 
 			if (answer != -1) {
 
-				if (ds_readbs(WILDCAMP_HERBSTATUS + answer) != 0)
+				if (g_wildcamp_replstatus[answer])
 				{
 
-					sprintf(g_dtp2,
-						get_ttx(803),
-						(char*)get_hero(answer) + HERO_NAME2);
-
+					sprintf(g_dtp2,	get_ttx(803), (char*)get_hero(answer) + HERO_NAME2);
 					GUI_output(g_dtp2);
 
-				} else if (ds_readbs(WILDCAMP_GUARDSTATUS + answer) != 0 ||
-						ds_readbs(WILDCAMP_REPLSTATUS + answer) != 0 ||
-						ds_readbs(WILDCAMP_MAGICSTATUS + answer) != 0)
+				} else if (g_wildcamp_guardstatus[answer] != 0 ||
+						g_wildcamp_replstatus[answer] != 0 ||
+						g_wildcamp_magicstatus[answer] != 0)
 				{
 					GUI_output(get_ttx(331));
 
@@ -240,7 +243,7 @@ void do_wildcamp(void)
 
 						if (herb_hours > 0)
 						{
-							ds_writebs(WILDCAMP_HERBSTATUS + answer, herb_tries = (signed char)(l_di = 1));
+							g_wildcamp_herbstatus[answer] = herb_tries = (signed char)(l_di = 1);
 
 							if (g_good_camp_place == 99) {
 								gather_herbs(hero, herb_hours - 1, g_gather_herbs_mod + 99);
@@ -269,7 +272,7 @@ void do_wildcamp(void)
 
 				if (ds_readws(CAMP_INCIDENT) == -1) {
 
-					if (((ds_readbs(WILDCAMP_GUARDS) == -1 ? 60 : 10) > random_schick(100)) && !gs_ingame_timers[INGAME_TIMER_TRAVIA_SAFE_REST])
+					if (((g_wildcamp_guards[0] == -1 ? 60 : 10) > random_schick(100)) && !gs_ingame_timers[INGAME_TIMER_TRAVIA_SAFE_REST])
 					{
 						ds_writews(CAMP_INCIDENT, random_schick(3) - 1);
 					}
@@ -280,11 +283,10 @@ void do_wildcamp(void)
 				l8 = 0;
 				l6 = l3;
 
-				if (ds_readbs(WILDCAMP_GUARDS + l_si) != -1) {
+				if (g_wildcamp_guards[l_si] != -1) {
 
-					sprintf(g_dtp2,
-						get_ttx(774),
-						(char*)get_hero(ds_readbs(WILDCAMP_GUARDS + l_si)) + HERO_NAME2);
+					sprintf(g_dtp2, get_ttx(774),
+						(char*)get_hero(g_wildcamp_guards[l_si]) + HERO_NAME2);
 
 					GUI_print_loc_line(g_dtp2);
 				}
@@ -307,12 +309,10 @@ void do_wildcamp(void)
 						l5 = l4;
 						l_si++;
 
-						if (ds_readbs(WILDCAMP_GUARDS + l_si) != -1) {
+						if (g_wildcamp_guards[l_si] != -1) {
 
-							sprintf(g_dtp2,
-								get_ttx(774),
-								(char*)get_hero(ds_readbs(WILDCAMP_GUARDS + l_si)) + HERO_NAME2);
-
+							sprintf(g_dtp2,	get_ttx(774),
+								(char*)get_hero(g_wildcamp_guards[l_si]) + HERO_NAME2);
 							GUI_print_loc_line(g_dtp2);
 						}
 					}
@@ -326,8 +326,8 @@ void do_wildcamp(void)
 					for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 						if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 							host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-							ds_readbs(WILDCAMP_GUARDSTATUS + i) < 2 &&
-							ds_readbs(WILDCAMP_MAGICSTATUS + i) != 1)
+							g_wildcamp_guardstatus[i] < 2 &&
+							g_wildcamp_magicstatus[i] != 1)
 						{
 							GRP_hero_sleep(hero, g_wildcamp_sleep_quality);
 						}
@@ -360,7 +360,7 @@ void do_wildcamp(void)
 						}
 					}
 				} else {
-					ds_writews(CAMP_INCIDENT, ds_readbs(WILDCAMP_GUARDS + ds_readws(CAMP_INCIDENT)));
+					ds_writews(CAMP_INCIDENT, g_wildcamp_guards[ds_readws(CAMP_INCIDENT)]);
 				}
 
 				done = 1;
@@ -371,7 +371,7 @@ void do_wildcamp(void)
 	}
 
 	for (i = 0; i <= 6; i++) {
-		ds_writeb(WILDCAMP_HERBSTATUS + i, ds_writeb(WILDCAMP_REPLSTATUS + i, 0));
+		g_wildcamp_herbstatus[i] = g_wildcamp_replstatus[i] = 0;
 	}
 
 	leave_location();
@@ -490,16 +490,16 @@ signed short replenish_stocks(signed short mod, signed short tries)
 
 	if (hero_pos != -1) {
 
-		if (ds_readb(WILDCAMP_REPLSTATUS + hero_pos) != 0) {
+		if (g_wildcamp_replstatus[hero_pos] != 0) {
 
 			sprintf(g_dtp2, get_ttx(802), (char*)get_hero(hero_pos) + HERO_NAME2);
 			GUI_output(g_dtp2);
 
 		} else {
 
-			if (ds_readb(WILDCAMP_HERBSTATUS + hero_pos) != 0 ||
-				ds_readb(WILDCAMP_MAGICSTATUS + hero_pos) != 0 ||
-				ds_readb(WILDCAMP_GUARDSTATUS + hero_pos) != 0)
+			if (g_wildcamp_replstatus[hero_pos] != 0 ||
+				g_wildcamp_magicstatus[hero_pos] != 0 ||
+				g_wildcamp_guardstatus[hero_pos] != 0)
 			{
 				GUI_output(get_ttx(331));
 
@@ -509,7 +509,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 
 					timewarp(HOURS(1));
 					ds_writed(MAIN_ACTING_HERO, (Bit32u)(hero = get_hero(hero_pos)));
-					ds_writeb(WILDCAMP_REPLSTATUS + hero_pos, 1);
+					g_wildcamp_replstatus[hero_pos] = 1;
 					retval = 1;
 
 					/* search for water */

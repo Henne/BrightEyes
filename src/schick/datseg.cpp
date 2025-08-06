@@ -6163,8 +6163,7 @@ signed char g_booked_inn_days; // ds:0xe3f0
 signed char g_citycamp_guardstatus[8]; // ds:0xe3e8
 signed char g_citycamp_magicstatus[7]; // ds:0xe3e1
 signed char g_citycamp_guards[3]; // ds:0xe3de
-unsigned char g_unkn_087[1]; // ds:0xe3dd
-signed char g_wildcamp_guardstatus[7]; // ds:0xe3d6
+signed char g_wildcamp_guardstatus[8]; // ds:0xe3d6
 signed char g_wildcamp_magicstatus[7]; // ds:0xe3cf
 signed char g_wildcamp_replstatus[7]; // ds:0xe3c8
 signed char g_wildcamp_herbstatus[7]; // ds:0xe3c1

@@ -519,6 +519,11 @@ extern signed char g_booked_inn_days;		// ds:0xe3f0; seg054
 extern signed char g_citycamp_guardstatus[8];	// ds:0xe3e8; seg052
 extern signed char g_citycamp_magicstatus[7];	// ds:0xe3e1; seg052
 extern signed char g_citycamp_guards[3];	// ds:0xe3de; seg052
+extern signed char g_wildcamp_guardstatus[8];	// ds:0xe3d6; seg049, seg051, seg109
+extern signed char g_wildcamp_magicstatus[7];	// ds:0xe3cf; seg049, seg051, seg109
+extern signed char g_wildcamp_replstatus[7];	// ds:0xe3c8; seg052
+extern signed char g_wildcamp_herbstatus[7];	// ds:0xe3c1; seg052
+extern signed char g_wildcamp_guards[3];		// ds:0xe3be; seg052
 
 extern Bit32s g_fightobj_buf_freespace;	// ds:0xe370; seg032-seg100
 
