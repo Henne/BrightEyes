@@ -626,8 +626,7 @@ signed short get_item(signed short id, signed short unused, signed short no)
 	do {
 		hero_i = get_hero(0);
 		for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
-			if (host_readb(hero_i + HERO_TYPE) &&
-				host_readb(hero_i + HERO_GROUP_NO) == gs_current_group)
+			if (host_readb(hero_i + HERO_TYPE) && host_readb(hero_i + HERO_GROUP_NO) == gs_current_group)
 			{
 
 				while ((no > 0) && (v6 = give_hero_new_item(hero_i, id, 0, no)) > 0) {
@@ -641,9 +640,7 @@ signed short get_item(signed short id, signed short unused, signed short no)
 			autofight_bak = g_autofight;
 			g_autofight = 0;
 
-			sprintf(g_dtp2,
-				get_ttx(549),
-				(char*)(GUI_names_grammar(((no > 1) ? 4 : 0) + 2, id, 0)));
+			sprintf(g_dtp2,	get_ttx(549), (char*)GUI_names_grammar(((no > 1) ? 4 : 0) + 2, id, 0));
 
 			if (GUI_bool(g_dtp2)) {
 
@@ -651,9 +648,9 @@ signed short get_item(signed short id, signed short unused, signed short no)
 
 				if (dropper != -1) {
 					hero_i = get_hero(dropper);
-					ds_writeb(PREVENT_DROP_EQUIPPED_ITEMS, 1);
+					g_prevent_drop_equipped_items = 1;
 					vc = select_item_to_drop(hero_i);
-					ds_writeb(PREVENT_DROP_EQUIPPED_ITEMS, 0);
+					g_prevent_drop_equipped_items = 0;
 
 					if (vc != -1) {
 						drop_item(hero_i, vc, -1);
@@ -769,21 +766,18 @@ signed short select_item_to_drop(Bit8u *hero)
 	signed short di;
 
 	/* check if we drop equipped items or not */
-	i = (ds_readb(PREVENT_DROP_EQUIPPED_ITEMS) != 0) ? HERO_INVENTORY_SLOT_KNAPSACK_1 : 0;
+	i = g_prevent_drop_equipped_items ? HERO_INVENTORY_SLOT_KNAPSACK_1 : 0;
 	for (; i < NR_HERO_INVENTORY_SLOTS; i++) {
 		if ((item = host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + i * SIZEOF_INVENTORY))) {
 			str[v6] = i;
 			ds_writed(RADIO_NAME_LIST + v6 * 4 , (Bit32u)(g_dtp2 + v6 * 30));
-			strcpy((char*)(char*)(ds_readd(RADIO_NAME_LIST + v6 * 4)),
-				(GUI_name_singular(get_itemname(item))));
+			strcpy((char*)(ds_readd(RADIO_NAME_LIST + v6 * 4)), GUI_name_singular(get_itemname(item)));
 			v6++;
 		}
 	}
 
 	if (v6 == 0) {
-		sprintf(g_dtp2,
-			get_ttx(750),
-			(char*)(hero + HERO_NAME2));
+		sprintf(g_dtp2, get_ttx(750), (char*)(hero + HERO_NAME2));
 		GUI_output(g_dtp2);
 		return -1;
 	}

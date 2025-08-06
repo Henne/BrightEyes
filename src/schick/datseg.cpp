@@ -5745,7 +5745,7 @@ struct{unsigned char unkn[28];} g_alchemy_recipes[13] = {
 		0, 0, 5, 8
 	}
 }; // ds:0xacda
-unsigned char g_prevent_drop_equipped_items = 0; // ds:0xae46
+signed char g_prevent_drop_equipped_items = 0; // ds:0xae46
 unsigned char g_unkn_067[1] = { 0x00 }; // ds:0xae47
 signed short g_hero_startup_items[12][4] = {
 	{ ITEM_DAGGER, ITEM_THROWING_KNIFE, ITEM_THROWING_KNIFE, -1 }, /* Gaukler */
