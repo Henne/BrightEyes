@@ -6145,8 +6145,8 @@ char g_str_beorn_hjall[20]; // ds:0xe42e
 signed short g_combo_mode; // ds:0xe42c
 unsigned char *g_tex_floor[6]; // ds:0xe414
 signed short g_entrance_angle; // ds:0xe412
-unsigned short g_always_zero2; // ds:0xe410, writeonly (0)
-unsigned short g_always_zero1; // ds:0xe40e, writeonly (0)
+signed short g_always_zero2; // ds:0xe410, writeonly (0)
+signed short g_always_zero1; // ds:0xe40e, writeonly (0)
 signed short g_city_refresh_x_target; // ds:0xe40c
 signed short g_city_refresh_y_target; // ds:0xe40a
 signed short g_city_refresh_direction; // ds:0xe408

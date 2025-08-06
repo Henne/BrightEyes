@@ -1591,9 +1591,9 @@
 #define CITY_REFRESH_DIRECTION          (0xe408)    /* signed short */
 #define CITY_REFRESH_Y_TARGET           (0xe40a)    /* signed short */
 #define CITY_REFRESH_X_TARGET           (0xe40c)    /* signed short */
-#define ALWAYS_ZERO1                    (0xe40e)    /* unsigned short; writeonly (0) */
-#define ALWAYS_ZERO2                    (0xe410)    /* unsigned short; writeonly (0) */
-#define ENTRANCE_ANGLE                  (0xe412)    /* signed short */
+//#define ALWAYS_ZERO1                    (0xe40e)    /* unsigned short; writeonly (0) */
+//#define ALWAYS_ZERO2                    (0xe410)    /* unsigned short; writeonly (0) */
+//#define ENTRANCE_ANGLE                  (0xe412)    /* signed short */
 //#define TEX_FLOOR                       (0xe414)    /* Bit8u* */
 //#define TEX_SKY                         (0xe418)    /* Bit8u* */
 //#define TEX_HOUSE1                      (0xe41c)    /* Bit8u* */

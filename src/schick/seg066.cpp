@@ -379,7 +379,7 @@ void seg066_0692(void)
 	seg066_0bad();
 
 	/* TODO: these are write only variables */
-	ds_writew(ALWAYS_ZERO2, ds_writew(ALWAYS_ZERO1, 0));
+	g_always_zero2 = g_always_zero1 = 0;
 
 	city_water_and_grass();
 	city_building_textures();
@@ -576,7 +576,7 @@ signed short get_border_index(unsigned char val)
 		i++;
 	}
 
-	ds_writew(ENTRANCE_ANGLE, (((val & 3) + 4) - gs_direction) & 3);
+	g_entrance_angle = ((((val & 3) + 4) - gs_direction) & 3);
 
 	if (i == 0)
 		i = 1;
@@ -719,7 +719,7 @@ void city_building_textures(void)
 
 					if ((nvf_no = host_readws(ptr + 4)) != -1) {
 
-						if (ds_readws(ENTRANCE_ANGLE) == 2 && bi >= 1 && bi <= 5) {
+						if (g_entrance_angle == 2 && bi >= 1 && bi <= 5) {
 
 							if (bi == 1) {
 								nvf_no -= 5;
@@ -746,12 +746,12 @@ void city_building_textures(void)
 							l4 = 188;
 						}
 
-						if (ds_readws(ENTRANCE_ANGLE) == 1 && !(nvf_no & 0x8000) &&
+						if (g_entrance_angle == 1 && !(nvf_no & 0x8000) &&
 							bi >= 1 && bi <= 5)
 						{
 							nvf_no -= 10;
 
-						} else if (ds_readws(ENTRANCE_ANGLE) == 3 && (nvf_no & 0x8000))
+						} else if (g_entrance_angle == 3 && (nvf_no & 0x8000))
 						{
 							nvf_no = ((unsigned short)(nvf_no & 0x7fff) - 10) | 0x8000;
 						}
@@ -981,7 +981,7 @@ signed short city_step(void)
 
 		if (!bi || bi == 7 || bi == 8) {
 			seg066_14dd(1);
-		} else if (bi >= 1 && bi <= 5 && ds_readw(ENTRANCE_ANGLE) == 2) {
+		} else if (bi >= 1 && bi <= 5 && g_entrance_angle == 2) {
 			seg066_14dd(1);
 		} else {
 			no_way();

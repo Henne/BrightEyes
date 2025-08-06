@@ -496,6 +496,9 @@ extern unsigned char g_automap_buf[64];		// ds:0xe442; seg002, seg028, seg074
 extern char g_str_beorn_hjall[20];		// ds:0xe42e; seg072
 extern signed short g_combo_mode;		// ds:0xe42c; seg054, seg059, seg069
 extern unsigned char *g_tex_floor[6];		// ds:0xe414; seg028, seg066
+extern signed short g_entrance_angle;		// ds:0xe412; seg066
+extern signed short g_always_zero2;		// ds:0xe410; seg066
+extern signed short g_always_zero1;		// ds:0xe40e; seg066
 
 extern unsigned char *g_buffer11_ptr;		// ds:0xe404; seg028, seg075
 
