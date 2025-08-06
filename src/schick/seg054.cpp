@@ -134,7 +134,7 @@ void do_inn(void)
 					do_alchemy(hero, host_readbs(hero + HERO_RECIPE_ID), 1);
 				} else {
 					done = 1;
-					ds_writew(COMBO_MODE, 0);
+					g_combo_mode = 0;
 					stay = 1;
 				}
 			} else {
@@ -233,7 +233,7 @@ void do_inn(void)
 				do_alchemy(hero, host_readbs(hero + HERO_RECIPE_ID), 1);
 			} else {
 				done = 1;
-				ds_writew(COMBO_MODE, 0);
+				g_combo_mode = 0;
 				stay = 1;
 			}
 		} else {
@@ -322,7 +322,7 @@ void do_inn(void)
 
 		refresh = g_request_refresh = 1;
 
-		draw_loc_icons(ds_readws(COMBO_MODE) == 0 ? 7 : 8, MENU_ICON_TALK, MENU_ICON_ORDER_FOOD, MENU_ICON_BOOK_BED, MENU_ICON_APPLY_SKILL, MENU_ICON_MAGIC, MENU_ICON_SLEEP, MENU_ICON_LEAVE, MENU_ICON_TAVERN);
+		draw_loc_icons(g_combo_mode == 0 ? 7 : 8, MENU_ICON_TALK, MENU_ICON_ORDER_FOOD, MENU_ICON_BOOK_BED, MENU_ICON_APPLY_SKILL, MENU_ICON_MAGIC, MENU_ICON_SLEEP, MENU_ICON_LEAVE, MENU_ICON_TAVERN);
 
 # ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 7: NPC Curian cannot do magic actions in an inn. */
@@ -365,7 +365,7 @@ void do_inn(void)
 
 		if (ds_readws(MOUSE2_EVENT) != 0 || ds_readws(ACTION) == ACTION_ID_PAGE_UP) {
 
-			answer = GUI_radio(get_ttx(345), ds_readws(COMBO_MODE) == 0 ? 7 : 8,
+			answer = GUI_radio(get_ttx(345), g_combo_mode == 0 ? 7 : 8,
 						get_ttx(343), get_ttx(470),
 						get_ttx(344), get_ttx(212),
 						get_ttx(310), get_ttx(316),
@@ -553,7 +553,7 @@ void do_inn(void)
 					}
 
 					done = 1;
-					ds_writews(COMBO_MODE, 0);
+					g_combo_mode = 0;
 					g_food_mod = 1;
 
 					do {
@@ -594,14 +594,14 @@ void do_inn(void)
 
 				if (GUI_bool(get_ttx(400))) {
 					done = 1;
-					ds_writews(COMBO_MODE, 0);
+					g_combo_mode = 0;
 				}
 			} else {
 				done = 1;
-				ds_writews(COMBO_MODE, 0);
+				g_combo_mode = 0;
 			}
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_8 && ds_readws(COMBO_MODE) != 0) {
+		} else if (ds_readws(ACTION) == ACTION_ID_ICON_8 && g_combo_mode != 0) {
 
 			tavern_ptr = p_datseg + TAVERN_DESCR_TABLE + 4 * gs_current_typeindex;
 
@@ -615,11 +615,11 @@ void do_inn(void)
 
 				if (GUI_bool(get_ttx(400))) {
 					done = 1;
-					ds_writews(COMBO_MODE, 2);
+					g_combo_mode = 2;
 				}
 			} else {
 				done = 1;
-				ds_writews(COMBO_MODE, 2);
+				g_combo_mode = 2;
 			}
 		}
 	}

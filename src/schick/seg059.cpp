@@ -66,7 +66,7 @@ void do_tavern(void)
 			return;
 	}
 
-	draw_loc_icons(ds_readws(COMBO_MODE) == 0 ? 4 : 5, MENU_ICON_TALK, MENU_ICON_ORDER_FOOD, MENU_ICON_APPLY_SKILL, MENU_ICON_LEAVE, MENU_ICON_INN);
+	draw_loc_icons(g_combo_mode == 0 ? 4 : 5, MENU_ICON_TALK, MENU_ICON_ORDER_FOOD, MENU_ICON_APPLY_SKILL, MENU_ICON_LEAVE, MENU_ICON_INN);
 
 	while (!done) {
 
@@ -99,7 +99,7 @@ void do_tavern(void)
 
 		if (ds_readw(MOUSE2_EVENT) != 0 || ds_readws(ACTION) == ACTION_ID_PAGE_UP) {
 
-			answer = GUI_radio(get_ttx(469), ds_readw(COMBO_MODE) == 0 ? 4 : 5,
+			answer = GUI_radio(get_ttx(469), g_combo_mode == 0 ? 4 : 5,
 						get_ttx(343),
 						get_ttx(470),
 						get_ttx(212),
@@ -131,7 +131,7 @@ void do_tavern(void)
 			}
 
 			g_request_refresh = done = 1;
-			ds_writew(COMBO_MODE, 0);
+			g_combo_mode = 0;
 
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_2) {
 			/* EAT AND DRINK */
@@ -190,7 +190,7 @@ void do_tavern(void)
 
 					gs_tav_cheated_flags[gs_current_typeindex] = 1;
 					done = 1;
-					ds_writew(COMBO_MODE, 0);
+					g_combo_mode = 0;
 
 				} else {
 
@@ -210,22 +210,22 @@ void do_tavern(void)
 
 			if (GUI_use_skill2(bonus, get_ttx(395)) == -1) {
 				done = 1;
-				ds_writew(COMBO_MODE, 0);
+				g_combo_mode = 0;
 			}
 
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_4) {
 			/* LEAVE */
 
 			done = 1;
-			ds_writew(COMBO_MODE, 0);
+			g_combo_mode = 0;
 
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_5) {
 			/* VISIT INN */
 
-			if (ds_readws(COMBO_MODE) != 0) {
+			if (g_combo_mode != 0) {
 
 				done = 1;
-				ds_writew(COMBO_MODE, 2);
+				g_combo_mode = 2;
 			}
 		}
 	}

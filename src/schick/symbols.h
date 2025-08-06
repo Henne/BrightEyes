@@ -1600,7 +1600,7 @@
 #define TEX_HOUSE2                      (0xe420)    /* Bit8u* */
 #define TEX_HOUSE3                      (0xe424)    /* Bit8u* */
 #define TEX_HOUSE4                      (0xe428)    /* Bit8u* */
-#define COMBO_MODE                      (0xe42c)    /* signed short; {0,1,2} */
+//#define COMBO_MODE                      (0xe42c)    /* signed short; {0,1,2} */
 //#define STR_BEORN_HJALL                 (0xe42e)    /* char[20] */
 //#define AUTOMAP_BUF                     (0xe442)    /* unsigned char[64] */
 //#define DNG_REFRESH_DIRECTION           (0xe482)    /* signed short */

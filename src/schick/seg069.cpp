@@ -209,7 +209,7 @@ void THO_tav_inn_combi(void)
 			/* enter TAVERN */
 
 			/* set combo_mode active */
-			ds_writew(COMBO_MODE, 1);
+			g_combo_mode = 1;
 
 			/* set the typeindex of the corresponding tavern */
 			answer = gs_current_typeindex;
@@ -222,7 +222,7 @@ void THO_tav_inn_combi(void)
 
 			/* leave the loop or enter the inn in the next iteration */
 			answer = 0;
-			if (ds_readw(COMBO_MODE) == 2) {
+			if (g_combo_mode == 2) {
 				answer = 2;
 			}
 
@@ -231,7 +231,7 @@ void THO_tav_inn_combi(void)
 			/* enter INN */
 
 			/* set combo_mode active */
-			ds_writew(COMBO_MODE, 1);
+			g_combo_mode = 1;
 
 			/* set the typeindex of the corresponding inn */
 			answer = gs_current_typeindex;
@@ -244,7 +244,7 @@ void THO_tav_inn_combi(void)
 
 			/* leave the loop or enter the tavern in the next iteration */
 			answer = 0;
-			if (ds_readw(COMBO_MODE) == 2) {
+			if (g_combo_mode == 2) {
 				answer = 1;
 			}
 
