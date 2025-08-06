@@ -11,6 +11,8 @@
 
 #if defined(__BORLANDC__)
 #include <DOS.H>
+#else
+#include <unistd.h>
 #endif
 
 #include "v302de.h"
