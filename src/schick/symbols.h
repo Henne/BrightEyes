@@ -1357,7 +1357,7 @@
 #define EMS_UNUSED_HANDLE               (0xbd92)    /* unsigned short */
 #define DNG_MAP_SIZE                    (0xbd94)    /* unsigned char; {16, 32} */
 #define DNG_MAP                         (0xbd95)    /* unsigned char[512]; 1 byte for each square of the current dungeon level. higher nybble: ID of the tile on the square. lower nybble: 4 flags */
-#define RADIO_NAME_LIST                 (0xbf95)    /* Bit8u*[15]; used for items, heroes, spells, skills, recipes */
+//#define RADIO_NAME_LIST                 (0xbf95)    /* Bit8u*[15]; used for items, heroes, spells, skills, recipes */
 // ?40
 //#define GUI_BUFFER_UNKN                 (0xbff9)    /* Bit8u* */
 //#define TEXTBOX_WIDTH                   (0xbffd)    /* signed short */

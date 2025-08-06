@@ -478,29 +478,20 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 
 		for (l_di = 0; l_di < 12; l_di++) {
 
-			ds_writed(RADIO_NAME_LIST + 4 * l_di,
-				(Bit32u)(g_dtp2 + 50 * (l_di + 1)));
+			g_radio_name_list[l_di] = (g_dtp2 + 50 * (l_di + 1));
 
 			ones.a[l_di] = (signed char)can_use_spellclass(hero, l_di);
 
-			sprintf((char*)(char*)(ds_readd(RADIO_NAME_LIST + 4 * l_di)),
-				(ones.a[l_di] != 0) ? str.a : col_str.a,
-				get_ttx(l_di + 192));
+			sprintf(g_radio_name_list[l_di], (ones.a[l_di] != 0) ? str.a : col_str.a, get_ttx(l_di + 192));
 		}
 
 		answer1 = GUI_radio(g_dtp2, 12,
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x00))),
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x04))),
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x08))),
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x0c))),
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x10))),
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x14))),
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x18))),
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x1c))),
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x20))),
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x24))),
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x28))),
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x2c)))) - 1;
+					g_radio_name_list[0], g_radio_name_list[1],
+					g_radio_name_list[2], g_radio_name_list[3],
+					g_radio_name_list[4], g_radio_name_list[5],
+					g_radio_name_list[6], g_radio_name_list[7],
+					g_radio_name_list[8], g_radio_name_list[9],
+					g_radio_name_list[10], g_radio_name_list[11]) - 1;
 	}
 
 	if (answer1 != -2) {
@@ -519,12 +510,11 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 
 			for (l_di = 0; l_di < ds_readbs((SPELLS_INDEX + 1) + 2 * answer1); l_di++) {
 
-				ds_writed(RADIO_NAME_LIST + 4 * l_di, (Bit32u)(g_dtp2 + 50 * (l_di)));
+				g_radio_name_list[l_di] = (g_dtp2 + 50 * (l_di));
 
 				if (show_vals == 1) {
 
-					sprintf((char*)(char*)(ds_readd(RADIO_NAME_LIST + 4 * l_di)),
-						(char*)str_val.a,
+					sprintf(g_radio_name_list[l_di], (char*)str_val.a,
 						get_ttx(first_spell + l_di + 106),
 						host_readbs(hero + HERO_SPELLS + first_spell + l_di));
 				} else if (
@@ -534,44 +524,31 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 				{
 
 					if (show_vals == 2) {
-						sprintf((char*)(char*)(ds_readd(RADIO_NAME_LIST + 4 * l_di)),
-							(char*)str_val.a,
+						sprintf(g_radio_name_list[l_di], (char*)str_val.a,
 							get_ttx(first_spell + l_di + 106),
 							host_readbs(hero + HERO_SPELLS + first_spell + l_di));
 					} else {
-						sprintf((char*)(char*)(ds_readd(RADIO_NAME_LIST + 4 * l_di)),
-							(char*)str.a,
-							get_ttx(first_spell + l_di + 106));
+						sprintf(g_radio_name_list[l_di], (char*)str.a, get_ttx(first_spell + l_di + 106));
 					}
 				} else if (show_vals == 2) {
-					sprintf((char*)(char*)(ds_readd(RADIO_NAME_LIST + 4 * l_di)),
-						(char*)col_str_val.a,
+
+					sprintf(g_radio_name_list[l_di], (char*)col_str_val.a,
 						get_ttx(first_spell + l_di + 106),
 						host_readbs(hero + HERO_SPELLS + first_spell + l_di));
 				} else {
-					sprintf((char*)(char*)(ds_readd(RADIO_NAME_LIST + 4 * l_di)),
-						(char*)col_str.a,
-						get_ttx(first_spell + l_di + 106));
+					sprintf(g_radio_name_list[l_di], (char*)col_str.a, get_ttx(first_spell + l_di + 106));
 				}
 			}
 
 			retval = GUI_radio(get_ttx(217), ds_readbs((SPELLS_INDEX + 1) + 2 * answer1),
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x00))),
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x04))),
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x08))),
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x0c))),
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x10))),
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x14))),
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x18))),
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x1c))),
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x20))),
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x24))),
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x28))),
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x2c))),
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x30))),
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x34))),
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x38))),
-					(char*)(ds_readd((RADIO_NAME_LIST + 0x3c))));
+					g_radio_name_list[0], g_radio_name_list[1],
+					g_radio_name_list[2], g_radio_name_list[3],
+					g_radio_name_list[5], g_radio_name_list[6],
+					g_radio_name_list[7], g_radio_name_list[8],
+					g_radio_name_list[9], g_radio_name_list[10],
+					g_radio_name_list[11], g_radio_name_list[12],
+					g_radio_name_list[13], g_radio_name_list[14],
+					g_radio_name_list[15], g_radio_name_list[16]);
 
 			if (retval != -1) {
 				if ((host_readbs((retval + first_spell) + hero + HERO_TA_RISE) < -5) &&

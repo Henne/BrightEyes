@@ -6377,8 +6377,7 @@ signed short g_textbox_pos_y; // ds:0xc001, coordinate of upper left corner
 signed short g_textbox_pos_x; // ds:0xbfff, coordinate of upper left corner
 signed short g_textbox_width; // ds:0xbffd
 unsigned char *g_gui_buffer_unkn; // ds:0xbff9
-unsigned char g_unkn_076[40]; // ds:0xbfd1
-void *g_radio_name_list[15]; // ds:0xbf95, used for items, heroes, spells, skills, recipes
+char *g_radio_name_list[25]; // ds:0xbf95, used for items, heroes, spells, skills, recipes
 unsigned char g_dng_map[512]; // ds:0xbd95
 unsigned char g_dng_map_size; // ds:0xbd94
 unsigned short g_ems_unused_handle; // ds:0xbd92

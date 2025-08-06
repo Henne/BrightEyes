@@ -351,29 +351,22 @@ signed short menu_enter_delete(Bit8u* ptr, signed short entries, signed short mo
 
 		/* fill a pointer array with the pointer to the names */
 		for (i = 0; i < i_max; i++) {
-			ds_writed(RADIO_NAME_LIST + 4 * i, (Bit32u)((i + i_min) * 32 + ptr + 0x10));
+			g_radio_name_list[i] = ((i + i_min) * 32 + ptr + 0x10);
 		}
 
 		i = i_max;
 		if (entries > 10) {
-			ds_writed(RADIO_NAME_LIST + 4 * i, (Bit32u)get_ttx(291));
+			g_radio_name_list[i] = get_ttx(291);
 			i++;
 		}
 
-		answer = GUI_radio( (mode == -1) ? get_ttx(567) : get_ttx(292),
-				(signed char)i,
-				(char*)(ds_readd(RADIO_NAME_LIST)),
-				(char*)(ds_readd((RADIO_NAME_LIST + 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 2 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 3 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 4 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 5 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 6 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 7 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 8 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 9 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 10 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 11 * 4))));
+		answer = GUI_radio( (mode == -1) ? get_ttx(567) : get_ttx(292), (signed char)i,
+				g_radio_name_list[0], g_radio_name_list[1],
+				g_radio_name_list[2], g_radio_name_list[3],
+				g_radio_name_list[4], g_radio_name_list[5],
+				g_radio_name_list[6], g_radio_name_list[7],
+				g_radio_name_list[8], g_radio_name_list[9],
+				g_radio_name_list[10], g_radio_name_list[11]);
 
 		if ((entries > 10) && (answer == i)) {
 			i_min += 10;
@@ -432,7 +425,7 @@ signed short select_hero_from_group(char *title)
 				g_hero_sel_exclude != i) {
 
 			/* save pointer to the name of the hero */
-			ds_writed(RADIO_NAME_LIST + cnt * 4, (Bit32u)(hero + HERO_NAME2));
+			g_radio_name_list[cnt] = (char*)(hero + HERO_NAME2);
 			dst.v[cnt] = i;
 			cnt++;
 		}
@@ -448,13 +441,10 @@ signed short select_hero_from_group(char *title)
 		g_basepos_x = g_basepos_y = 0;
 
 		answer = GUI_radio(title, (signed char)cnt,
-				(char*)(ds_readd(RADIO_NAME_LIST)),
-				(char*)(ds_readd((RADIO_NAME_LIST + 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 2 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 3 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 4 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 5 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 6 * 4)))) - 1;
+				g_radio_name_list[0], g_radio_name_list[1],
+				g_radio_name_list[2], g_radio_name_list[3],
+				g_radio_name_list[4], g_radio_name_list[5],
+				g_radio_name_list[6]) - 1;
 
 		g_basepos_x = bak_2;
 		g_basepos_y = bak_3;
@@ -508,7 +498,7 @@ signed short select_hero_ok(char *title)
 				g_hero_sel_exclude != i) {
 
 			/* save pointer to the name of the hero */
-			ds_writed(RADIO_NAME_LIST + cnt * 4, (Bit32u)(hero + HERO_NAME2));
+			g_radio_name_list[cnt] = (char*)(hero + HERO_NAME2);
 			dst.v[cnt] = i;
 			cnt++;
 		}
@@ -523,13 +513,10 @@ signed short select_hero_ok(char *title)
 		g_basepos_x = g_basepos_y = 0;
 
 		answer = GUI_radio(title, (signed char)cnt,
-				(char*)(ds_readd(RADIO_NAME_LIST)),
-				(char*)(ds_readd((RADIO_NAME_LIST + 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 2 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 3 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 4 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 5 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 6 * 4)))) - 1;
+				g_radio_name_list[0], g_radio_name_list[1],
+				g_radio_name_list[2], g_radio_name_list[3],
+				g_radio_name_list[4], g_radio_name_list[5],
+				g_radio_name_list[6]) - 1;
 
 		g_basepos_x = bak_2;
 		g_basepos_y = bak_3;
@@ -586,7 +573,7 @@ signed short select_hero_ok_forced(char *title)
 				g_hero_sel_exclude != i) {
 
 			/* save pointer to the name of the hero */
-			ds_writed(RADIO_NAME_LIST + cnt * 4, (Bit32u)(hero + HERO_NAME2));
+			g_radio_name_list[cnt] = (char*)(hero + HERO_NAME2);
 			dst.v[cnt] = i;
 			cnt++;
 		}
@@ -602,13 +589,10 @@ signed short select_hero_ok_forced(char *title)
 			g_basepos_x = g_basepos_y = 0;
 
 			answer = GUI_radio(title, (signed char)cnt,
-				(char*)(ds_readd(RADIO_NAME_LIST)),
-				(char*)(ds_readd((RADIO_NAME_LIST + 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 2 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 3 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 4 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 5 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 6 * 4)))) - 1;
+					g_radio_name_list[0], g_radio_name_list[1],
+					g_radio_name_list[2], g_radio_name_list[3],
+					g_radio_name_list[4], g_radio_name_list[5],
+					g_radio_name_list[6]) - 1;
 
 			g_basepos_x = bak_2;
 			g_basepos_y = bak_3;

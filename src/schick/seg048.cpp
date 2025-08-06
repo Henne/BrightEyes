@@ -466,43 +466,36 @@ void status_menu(signed short hero_pos)
 				/* from start-page */
 
 				if (ds_readws(GAME_MODE) == GAME_MODE_ADVANCED) {
-					ds_writed((RADIO_NAME_LIST + 4 * 0), (Bit32u)get_tx2(19));
-					ds_writed((RADIO_NAME_LIST + 4 * 1), (Bit32u)get_tx2(20));
-					ds_writed((RADIO_NAME_LIST + 4 * 2), (Bit32u)get_tx2(21));
+					g_radio_name_list[0] = get_tx2(19);
+					g_radio_name_list[1] = get_tx2(20);
+					g_radio_name_list[2] = get_tx2(21);
 
 					flag3 = hero_is_diseased(hero2);
 
 					if (flag3 != 0) {
-						ds_writed((RADIO_NAME_LIST + 4 * 3), (Bit32u)get_tx2(25));
-						ds_writed((RADIO_NAME_LIST + 4 * 4), (Bit32u)get_tx2(15));
+						g_radio_name_list[3] = get_tx2(25);
+						g_radio_name_list[4] = get_tx2(15);
 						l1 = 10;
 					} else {
-						ds_writed((RADIO_NAME_LIST + 4 * 3), (Bit32u)get_tx2(15));
+						g_radio_name_list[3] = get_tx2(15);
 						l1 = 9;
 					}
 				} else {
 
 					if ((flag3 = hero_is_diseased(hero2))) {
-						ds_writed((RADIO_NAME_LIST + 4 * 0), (Bit32u)get_tx2(25));
-						ds_writed((RADIO_NAME_LIST + 4 * 1), (Bit32u)get_tx2(15));
+						g_radio_name_list[0] = get_tx2(25);
+						g_radio_name_list[1] = get_tx2(15);
 						l1 = 7;
 					} else {
-						ds_writed((RADIO_NAME_LIST + 4 * 0), (Bit32u)get_tx2(15));
+						g_radio_name_list[0] = get_tx2(15);
 						l1 = 6;
 					}
 				}
 
 				l_di = GUI_radio(NULL, (signed char)l1,
-						get_tx2(69),
-						get_tx2(16),
-						get_tx2(17),
-						get_ttx(212),
-						get_ttx(213),
-						(char*)ds_readd((RADIO_NAME_LIST + 4 * 0)),
-						(char*)ds_readd((RADIO_NAME_LIST + 4 * 1)),
-						(char*)ds_readd((RADIO_NAME_LIST + 4 * 2)),
-						(char*)ds_readd((RADIO_NAME_LIST + 4 * 3)),
-						(char*)ds_readd((RADIO_NAME_LIST + 4 * 4)));
+						get_tx2(69), get_tx2(16), get_tx2(17), get_ttx(212), get_ttx(213),
+						g_radio_name_list[0], g_radio_name_list[1], g_radio_name_list[2],
+						g_radio_name_list[3], g_radio_name_list[4]);
 
 				if (l_di != -1) {
 					switch (l_di) {

@@ -164,7 +164,7 @@ signed short plan_alchemy(Bit8u *hero)
 
 				strcpy(g_dtp2 + recipes * 50, GUI_name_singular(get_itemname(g_alchemy_recipes[i].outcome)));
 
-				ds_writed(RADIO_NAME_LIST + recipes * 4, (Bit32u)(g_dtp2 + recipes * 50));
+				g_radio_name_list[recipes] = (g_dtp2 + recipes * 50);
 				array[recipes] = (signed char)i;
 				recipes++;
 			}
@@ -176,20 +176,13 @@ signed short plan_alchemy(Bit8u *hero)
 			g_textbox_width = 7;
 
 			answer = GUI_radio(get_tx(43), (signed char)recipes,
-						(char*)(ds_readd(RADIO_NAME_LIST)),
-						(char*)(ds_readd((RADIO_NAME_LIST + 4))),
-						(char*)(ds_readd((RADIO_NAME_LIST + 2 * 4))),
-						(char*)(ds_readd((RADIO_NAME_LIST + 3 * 4))),
-						(char*)(ds_readd((RADIO_NAME_LIST + 4 * 4))),
-						(char*)(ds_readd((RADIO_NAME_LIST + 5 * 4))),
-						(char*)(ds_readd((RADIO_NAME_LIST + 6 * 4))),
-						(char*)(ds_readd((RADIO_NAME_LIST + 7 * 4))),
-						(char*)(ds_readd((RADIO_NAME_LIST + 8 * 4))),
-						(char*)(ds_readd((RADIO_NAME_LIST + 9 * 4))),
-						(char*)(ds_readd((RADIO_NAME_LIST + 10 * 4))),
-						(char*)(ds_readd((RADIO_NAME_LIST + 11 * 4))),
-						(char*)(ds_readd((RADIO_NAME_LIST + 12 * 4))),
-						(char*)(ds_readd((RADIO_NAME_LIST + 13 * 4))));
+						g_radio_name_list[0], g_radio_name_list[1],
+						g_radio_name_list[2], g_radio_name_list[3],
+						g_radio_name_list[4], g_radio_name_list[5],
+						g_radio_name_list[6], g_radio_name_list[7],
+						g_radio_name_list[8], g_radio_name_list[9],
+						g_radio_name_list[10], g_radio_name_list[11],
+						g_radio_name_list[12], g_radio_name_list[13]);
 
 			g_textbox_width = tw_bak;
 

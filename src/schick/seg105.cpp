@@ -761,7 +761,7 @@ signed short select_item_to_drop(Bit8u *hero)
 	signed short item;
 	signed short va;
 	signed short tw_bak, bak2, bak3;
-	Bit8u* ptr;
+	char *ptr;
 	signed short str[23];
 	signed short di;
 
@@ -770,8 +770,8 @@ signed short select_item_to_drop(Bit8u *hero)
 	for (; i < NR_HERO_INVENTORY_SLOTS; i++) {
 		if ((item = host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + i * SIZEOF_INVENTORY))) {
 			str[v6] = i;
-			ds_writed(RADIO_NAME_LIST + v6 * 4 , (Bit32u)(g_dtp2 + v6 * 30));
-			strcpy((char*)(ds_readd(RADIO_NAME_LIST + v6 * 4)), GUI_name_singular(get_itemname(item)));
+			g_radio_name_list[v6] = (g_dtp2 + v6 * 30);
+			strcpy(g_radio_name_list[v6], GUI_name_singular(get_itemname(item)));
 			v6++;
 		}
 	}
@@ -788,13 +788,13 @@ signed short select_item_to_drop(Bit8u *hero)
 			if (!di) {
 				i = 13;
 				va = i - 1;
-				ptr = (Bit8u*)ds_readd(RADIO_NAME_LIST + 4 * va);
-				ds_writed(RADIO_NAME_LIST + 4 * va, (Bit32u)get_ttx(751));
+				ptr = g_radio_name_list[va];
+				g_radio_name_list[va] = get_ttx(751);
 			} else {
 				i = v6 + 1;
 				va = i - 1;
-				ptr = (Bit8u*)ds_readd(RADIO_NAME_LIST + 4 * va);
-				ds_writed(RADIO_NAME_LIST + 4 * va, (Bit32u)get_ttx(751));
+				ptr = g_radio_name_list[va];
+				g_radio_name_list[va] = get_ttx(751);
 				i -= di;
 			}
 		} else {
@@ -805,26 +805,22 @@ signed short select_item_to_drop(Bit8u *hero)
 		bak3 = g_basepos_y;
 		g_textbox_width = 6;
 		g_basepos_x = g_basepos_y = 0;
-		v4 = GUI_radio((char*)get_ttx(752), (signed char)i,
-			(char*)(ds_readd(RADIO_NAME_LIST + 0x00 + di * 4)),
-			(char*)(ds_readd(RADIO_NAME_LIST + 0x04 + di * 4)),
-			(char*)(ds_readd(RADIO_NAME_LIST + 0x08 + di * 4)),
-			(char*)(ds_readd(RADIO_NAME_LIST + 0x0c + di * 4)),
-			(char*)(ds_readd(RADIO_NAME_LIST + 0x10 + di * 4)),
-			(char*)(ds_readd(RADIO_NAME_LIST + 0x14 + di * 4)),
-			(char*)(ds_readd(RADIO_NAME_LIST + 0x18 + di * 4)),
-			(char*)(ds_readd(RADIO_NAME_LIST + 0x1c + di * 4)),
-			(char*)(ds_readd(RADIO_NAME_LIST + 0x20 + di * 4)),
-			(char*)(ds_readd(RADIO_NAME_LIST + 0x24 + di * 4)),
-			(char*)(ds_readd(RADIO_NAME_LIST + 0x28 + di * 4)),
-			(char*)(ds_readd(RADIO_NAME_LIST + 0x2c + di * 4)),
-			(char*)(ds_readd(RADIO_NAME_LIST + 0x30 + di * 4)));
+
+		v4 = GUI_radio(get_ttx(752), (signed char)i,
+				g_radio_name_list[di + 0], g_radio_name_list[di + 1],
+				g_radio_name_list[di + 2], g_radio_name_list[di + 3],
+				g_radio_name_list[di + 4], g_radio_name_list[di + 5],
+				g_radio_name_list[di + 6], g_radio_name_list[di + 7],
+				g_radio_name_list[di + 8], g_radio_name_list[di + 9],
+				g_radio_name_list[di + 10], g_radio_name_list[di + 11],
+				g_radio_name_list[di + 12]);
+
 		g_textbox_width = tw_bak;
 		g_basepos_x = bak2;
 		g_basepos_y = bak3;
 
 		if (va != -1) {
-			ds_writed(RADIO_NAME_LIST + 0x00 + va * 4, (Bit32u)ptr);
+			g_radio_name_list[va] = ptr;
 		}
 		if ((v6 > 12) && (v4 == i)) {
 			di += 12;

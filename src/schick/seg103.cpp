@@ -75,37 +75,26 @@ signed short LVL_select_skill(Bit8u *hero, signed short show_values)
 
 			for (i = 0; ds_readbs((SKILLS_INDEX + 1) + 2 * answer) > i; i++) {
 
-				sprintf(g_dtp2 + 50 * i,
-					format_str.a,
-					get_ttx(l1 + i + 48),
-					host_readbs(hero + l1 + i + HERO_TALENTS));
+				sprintf(g_dtp2 + 50 * i, format_str.a, get_ttx(l1 + i + 48), host_readbs(hero + l1 + i + HERO_TALENTS));
 
-				ds_writed(RADIO_NAME_LIST + 4 * i, (Bit32u)(g_dtp2 + 50 * i));
+				g_radio_name_list[i] = (g_dtp2 + 50 * i);
 			}
 		} else {
 
 			for (i = 0; ds_readbs((SKILLS_INDEX + 1) + 2 * answer) > i; i++) {
-				ds_writed(RADIO_NAME_LIST + 4 * i, (Bit32u)get_ttx(l1 + i + 48));
+				g_radio_name_list[i] = get_ttx(l1 + i + 48);
 			}
 		}
 
 		retval = GUI_radio(get_ttx(218), ds_readbs((SKILLS_INDEX + 1) + 2 * answer),
-				(char*)(ds_readd(RADIO_NAME_LIST)),
-				(char*)(ds_readd((RADIO_NAME_LIST + 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 2 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 3 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 4 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 5 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 6 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 7 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 8 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 9 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 10 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 11 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 12 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 13 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 14 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 15 * 4))));
+				g_radio_name_list[0], g_radio_name_list[1],
+				g_radio_name_list[2], g_radio_name_list[3],
+				g_radio_name_list[4], g_radio_name_list[5],
+				g_radio_name_list[6], g_radio_name_list[7],
+				g_radio_name_list[8], g_radio_name_list[9],
+				g_radio_name_list[10], g_radio_name_list[11],
+				g_radio_name_list[12], g_radio_name_list[13],
+				g_radio_name_list[14], g_radio_name_list[15]);
 
 		if (retval != -1) {
 			retval += l1 - 1;
@@ -441,18 +430,15 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 				if (is_hero_healable(patient)) {
 
 					if (host_readws(patient + HERO_LE) >= host_readws(patient + HERO_LE_ORIG)) {
+
 						/* no need to heal */
-						sprintf(g_dtp2,
-							get_ttx(461),
-							(char*)patient + HERO_NAME2);
-
+						sprintf(g_dtp2, get_ttx(461), (char*)patient + HERO_NAME2);
 						GUI_output(g_dtp2);
-					} else if (host_readds(patient + HERO_HEAL_TIMER) > 0) {
-						/* timer is still running */
-						sprintf(g_dtp2,
-							get_ttx(697),
-							(char*)patient + HERO_NAME2);
 
+					} else if (host_readds(patient + HERO_HEAL_TIMER) > 0) {
+
+						/* timer is still running */
+						sprintf(g_dtp2, get_ttx(697), (char*)patient + HERO_NAME2);
 						GUI_output(g_dtp2);
 
 					} else {

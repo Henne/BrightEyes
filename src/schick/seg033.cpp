@@ -493,11 +493,9 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 
 								slots[radio_i] = slot_no;
 
-								ds_writed(RADIO_NAME_LIST + 4 * radio_i,
-									(Bit32u)(g_dtp2 + 30 * radio_i));
+								g_radio_name_list[radio_i] = (g_dtp2 + 30 * radio_i);
 
-								strcpy((char*)(char*)(ds_readd(RADIO_NAME_LIST + 4 * radio_i)),
-									(GUI_name_singular(get_itemname(weapon_id))));
+								strcpy(g_radio_name_list[radio_i], GUI_name_singular(get_itemname(weapon_id)));
 
 								radio_i++;
 							}
@@ -520,22 +518,14 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 							g_textbox_width = 6;
 
 							selected = GUI_radio(g_text_output_buf, radio_i,
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x00))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x04))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x08))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x0c))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x10))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x14))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x18))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x1c))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x20))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x24))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x28))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x2c))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x30))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x34))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x38))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x3c))));
+									g_radio_name_list[0], g_radio_name_list[1],
+									g_radio_name_list[2], g_radio_name_list[3],
+									g_radio_name_list[4], g_radio_name_list[5],
+									g_radio_name_list[6], g_radio_name_list[7],
+									g_radio_name_list[8], g_radio_name_list[9],
+									g_radio_name_list[10], g_radio_name_list[11],
+									g_radio_name_list[12], g_radio_name_list[13],
+									g_radio_name_list[14], g_radio_name_list[15]);
 
 							g_textbox_width = tw_bak;
 
@@ -567,13 +557,12 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 
 								slots[radio_i] = slot_no;
 
-								ds_writed(RADIO_NAME_LIST + 4 * radio_i,
-									(Bit32u)(g_dtp2 + 40 * radio_i));
+								g_radio_name_list[radio_i] = (g_dtp2 + 40 * radio_i);
 
-								sprintf((char*)(ds_readd(RADIO_NAME_LIST + 4 * radio_i)),
-									(char*)g_space_separated_strings, /* "%s %s" */
+								sprintf(g_radio_name_list[radio_i],
+									g_space_separated_strings, /* "%s %s" */
 									GUI_name_singular(get_itemname(weapon_id)),
-									inventory_broken(hero + HERO_INVENTORY + SIZEOF_INVENTORY * slot_no) ? get_ttx(478) : (char*)g_empty_string3);
+									inventory_broken(hero + HERO_INVENTORY + SIZEOF_INVENTORY * slot_no) ? get_ttx(478) : g_empty_string3);
 
 								radio_i++;
 							}
@@ -583,8 +572,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 							sprintf(g_dtp2,	get_tx(1), (char*)hero + HERO_NAME2);
 							GUI_output(g_dtp2);
 						} else {
-							sprintf(g_text_output_buf, get_tx(2),
-								(char*)hero + HERO_NAME2,
+							sprintf(g_text_output_buf, get_tx(2), (char*)hero + HERO_NAME2,
 								(char*)GUI_names_grammar((signed short)0x8002, host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID), 0));
 
 							refresh_screen_size();
@@ -592,22 +580,14 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 							g_textbox_width = 6;
 
 							selected = GUI_radio(g_text_output_buf, radio_i,
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x00))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x04))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x08))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x0c))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x10))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x14))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x18))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x1c))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x20))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x24))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x28))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x2c))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x30))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x34))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x38))),
-									(char*)(ds_readd((RADIO_NAME_LIST + 0x3c))));
+									g_radio_name_list[0], g_radio_name_list[1],
+									g_radio_name_list[2], g_radio_name_list[3],
+									g_radio_name_list[4], g_radio_name_list[5],
+									g_radio_name_list[6], g_radio_name_list[7],
+									g_radio_name_list[8], g_radio_name_list[9],
+									g_radio_name_list[10], g_radio_name_list[11],
+									g_radio_name_list[12], g_radio_name_list[13],
+									g_radio_name_list[14], g_radio_name_list[15]);
 
 							g_textbox_width = tw_bak;
 
@@ -643,9 +623,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						}
 					} else {
 						/* no BP left */
-						sprintf(g_dtp2,
-							get_tx(17),
-							(char*)hero + HERO_NAME2);
+						sprintf(g_dtp2, get_tx(17), (char*)hero + HERO_NAME2);
 						GUI_output(g_dtp2);
 					}
 			} else if (selected == FIG_ACTION_CHECK_VALUES) {
@@ -801,11 +779,9 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 
 							slots[radio_i] = slot_no;
 
-							ds_writed(RADIO_NAME_LIST + 4 * radio_i,
-								(Bit32u)(g_dtp2 + 30 * radio_i));
+							g_radio_name_list[radio_i] = (g_dtp2 + 30 * radio_i);
 
-							strcpy((char*)(ds_readd(RADIO_NAME_LIST + 4 * radio_i)),
-								GUI_name_singular(get_itemname(weapon_id)));
+							strcpy(g_radio_name_list[radio_i], GUI_name_singular(get_itemname(weapon_id)));
 
 							radio_i++;
 						}
@@ -822,22 +798,14 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						g_textbox_width = 6;
 
 						selected = GUI_radio(g_text_output_buf, radio_i,
-								(char*)(ds_readd((RADIO_NAME_LIST + 0x00))),
-								(char*)(ds_readd((RADIO_NAME_LIST + 0x04))),
-								(char*)(ds_readd((RADIO_NAME_LIST + 0x08))),
-								(char*)(ds_readd((RADIO_NAME_LIST + 0x0c))),
-								(char*)(ds_readd((RADIO_NAME_LIST + 0x10))),
-								(char*)(ds_readd((RADIO_NAME_LIST + 0x14))),
-								(char*)(ds_readd((RADIO_NAME_LIST + 0x18))),
-								(char*)(ds_readd((RADIO_NAME_LIST + 0x1c))),
-								(char*)(ds_readd((RADIO_NAME_LIST + 0x20))),
-								(char*)(ds_readd((RADIO_NAME_LIST + 0x24))),
-								(char*)(ds_readd((RADIO_NAME_LIST + 0x28))),
-								(char*)(ds_readd((RADIO_NAME_LIST + 0x2c))),
-								(char*)(ds_readd((RADIO_NAME_LIST + 0x30))),
-								(char*)(ds_readd((RADIO_NAME_LIST + 0x34))),
-								(char*)(ds_readd((RADIO_NAME_LIST + 0x38))),
-								(char*)(ds_readd((RADIO_NAME_LIST + 0x3c))));
+								g_radio_name_list[0], g_radio_name_list[1],
+								g_radio_name_list[2], g_radio_name_list[3],
+								g_radio_name_list[4], g_radio_name_list[5],
+								g_radio_name_list[6], g_radio_name_list[7],
+								g_radio_name_list[8], g_radio_name_list[9],
+								g_radio_name_list[10], g_radio_name_list[11],
+								g_radio_name_list[12], g_radio_name_list[13],
+								g_radio_name_list[14], g_radio_name_list[15]);
 
 						g_textbox_width = tw_bak;
 
