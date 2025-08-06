@@ -514,8 +514,6 @@ static inline char* my_itoa(int value, char *string, int radix)
 	return string;
 }
 
-
-
 /**
  * test_bit0() -	check if bit0 ist set
  * @p:			pointer

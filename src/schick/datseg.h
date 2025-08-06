@@ -483,7 +483,16 @@ extern unsigned char *g_itemuser;	// ds:0xe5ce; seg107
 extern unsigned char *g_spelluser;	// ds:0xe5bc; seg068, seg098, seg102, seg107
 extern unsigned char *g_spelltarget;	// ds:0xe5b8; seg098-seg102
 
-extern char g_str_beorn_hjall[20];	// ds:0xe42e; seg072
+extern unsigned char g_good_camp_place;		// ds:0xe4c8; seg051, seg094, seg109
+extern unsigned char *g_dungeon_doors_buf; 	// ds:0xe49c; seg028,seg076,seg098,seg120
+extern unsigned char *g_dungeon_stairs_buf; 	// ds:0xe498; seg028,seg076,seg098,seg120
+extern unsigned char *g_dungeon_fights_buf; 	// ds:0xe494; seg028,seg076,seg098,seg120
+
+extern unsigned char *g_dng_map_ptr;		// ds:0xe488; seg076, seg098, seg099
+
+extern char g_str_beorn_hjall[20];		// ds:0xe42e; seg072
+
+extern unsigned char *g_buffer11_ptr;		// ds:0xe404; seg028, seg075
 
 extern signed int g_fig_dropped_weapons[30];	// ds:0xe31a; seg032, seg041
 extern signed int g_autofight;		// ds:0xe318; seg004-seg105
@@ -495,14 +504,6 @@ extern signed int g_dialog_next_state;	// ds:0xe30e; seg030-seg117
 extern signed int g_dialog_informer;	// ds:0xe30c; seg030, seg031
 extern char *g_dialog_title;		// ds:0xe308; seg030, seg072
 
-extern unsigned char g_good_camp_place;		// ds:0xe4c8; seg051, seg094, seg109
-extern unsigned char *g_dungeon_doors_buf; 	// ds:0xe49c; seg028,seg076,seg098,seg120
-extern unsigned char *g_dungeon_stairs_buf; 	// ds:0xe498; seg028,seg076,seg098,seg120
-extern unsigned char *g_dungeon_fights_buf; 	// ds:0xe494; seg028,seg076,seg098,seg120
-
-extern unsigned char *g_dng_map_ptr;		// ds:0xe488; seg076, seg098, seg099
-
-extern unsigned char *g_buffer11_ptr;		// ds:0xe404; seg028, seg075
 
 extern HugePt g_buffer9_ptr4;		// ds:0xe3fc; seg028
 extern Bit32s g_fightobj_buf_freespace;	// ds:0xe370; seg032-seg100
