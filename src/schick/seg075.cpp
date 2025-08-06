@@ -670,8 +670,7 @@ void DNG_update_pos(void)
 
 	ds_writew(DNG_REFRESH_X_TARGET, gs_x_target);
 	ds_writew(DNG_REFRESH_Y_TARGET, gs_y_target);
-	ds_writew(DNG_REFRESH_DIRECTION, gs_direction);
-
+	g_dng_refresh_direction = gs_direction;
 }
 
 void DNG_inc_level(void)
@@ -680,7 +679,6 @@ void DNG_inc_level(void)
 	gs_dungeon_level++;
 	load_area_description(1);
 	DNG_update_pos();
-
 }
 
 void DNG_dec_level(void)
@@ -689,7 +687,6 @@ void DNG_dec_level(void)
 	gs_dungeon_level--;
 	load_area_description(1);
 	DNG_update_pos();
-
 }
 
 void DNG_open_door(void)

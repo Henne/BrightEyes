@@ -40,11 +40,9 @@ void DNG14_dive(signed short diver_pos, signed char mod, signed short dest_x)
 
 			if (test_skill(hero, TA_SCHWIMMEN, mod) <= 0) {
 				/* swimming failed */
-				sprintf(g_dtp2,
-					get_tx(42),
-					(char*)hero + HERO_NAME2,
-					(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-					(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+				sprintf(g_dtp2,	get_tx(42), (char*)hero + HERO_NAME2,
+					GUI_get_ptr(host_readbs(hero + HERO_SEX), 0),
+					GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
 
 				GUI_output(g_dtp2);
 
@@ -53,17 +51,14 @@ void DNG14_dive(signed short diver_pos, signed char mod, signed short dest_x)
 			} else {
 				/* swimming succeeded */
 
-				sprintf(g_dtp2,
-					get_tx(43),
-					(char*)hero + HERO_NAME2);
-
+				sprintf(g_dtp2, get_tx(43), (char*)hero + HERO_NAME2);
 				GUI_output(g_dtp2);
 			}
 		}
 	}
 
-	gs_x_target = (dest_x);
-	ds_writews(DNG_REFRESH_DIRECTION, -1);
+	gs_x_target = dest_x;
+	g_dng_refresh_direction = -1;
 
 }
 

@@ -218,7 +218,7 @@ void DNG_door(signed short action)
 						*(g_dng_map_ptr + MAP_POS(x,y)) |= DNG_TILE_SMASHED_DOOR << 4;
 
 						ds_writeb(STEPTARGET_FRONT, *(g_dng_map_ptr + MAP_POS(x,y)));
-						ds_writew(DNG_REFRESH_DIRECTION, -1);
+						g_dng_refresh_direction = -1;
 					}
 
 					sub_hero_le((Bit8u*)get_first_hero_available_in_group(), 1);
@@ -466,7 +466,7 @@ signed short DNG_step(void)
 		ds_writew(REDRAW_MENUICONS, 0);
 	}
 
-	if (gs_direction != ds_readws(DNG_REFRESH_DIRECTION) ||
+	if (gs_direction != g_dng_refresh_direction ||
 		gs_x_target != ds_readws(DNG_REFRESH_X_TARGET) ||
 		gs_y_target != ds_readws(DNG_REFRESH_Y_TARGET))
 	{
@@ -567,7 +567,7 @@ signed short DNG_step(void)
 	{
 		if (select_magic_user() > 0)
 		{
-			ds_writew(DNG_REFRESH_DIRECTION, -1);
+			g_dng_refresh_direction = -1;
 		}
 
 	} else if (ds_readws(ACTION) == ACTION_ID_ICON_7 && ds_readw(DNG_MENU_MODE) == DNG_MENU_MODE_PLAIN)

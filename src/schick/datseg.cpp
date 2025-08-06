@@ -6139,7 +6139,7 @@ unsigned char g_dng_floor_tex; // ds:0xe48c, changing every timestep
 unsigned char *g_dng_map_ptr; // ds:0xe488, to DNG_MAP
 unsigned short g_dng_refresh_x_target; // ds:0xe486
 unsigned short g_dng_refresh_y_target; // ds:0xe484
-unsigned short g_dng_refresh_direction; // ds:0xe482
+signed short g_dng_refresh_direction; // ds:0xe482
 unsigned char g_automap_buf[64]; // ds:0xe442
 char g_str_beorn_hjall[20]; // ds:0xe42e
 signed short g_combo_mode; // ds:0xe42c

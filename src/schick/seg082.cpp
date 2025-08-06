@@ -146,7 +146,7 @@ signed short DNG07_handler(void)
 
 			gs_x_target = gs_x_target_bak;
 			gs_y_target = gs_y_target_bak;
-			ds_writew(DNG_REFRESH_DIRECTION, -1);
+			g_dng_refresh_direction = -1;
 
 		} else {
 
