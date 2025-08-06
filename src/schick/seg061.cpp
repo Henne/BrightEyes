@@ -56,18 +56,18 @@ void do_temple(void)
 		if (g_request_refresh != 0) {
 
 			/* search which god owns this temple */
-			ds_writew(TEMPLE_GOD, 1);
+			g_temple_god = 1;
 			for (l_si = 1; l_si < 15; l_si++) {
 				if (is_in_byte_array((signed char)gs_current_typeindex, (Bit8u*)ds_readd(GOD_TEMPLES_INDEX + 4 * l_si)))
 				{
-					ds_writew(TEMPLE_GOD, l_si);
+					g_temple_god = l_si;
 					break;
 				}
 			}
 
 			draw_main_screen();
 			load_ani(3);
-			load_tempicon(ds_readws(TEMPLE_GOD) - 1);
+			load_tempicon(g_temple_god - 1);
 			init_ani(0);
 			set_audio_track(ARCHIVE_FILE_TEMPLE_XMI);
 
@@ -85,7 +85,7 @@ void do_temple(void)
 
 			/* location string */
 			sprintf(g_dtp2, get_ttx(235),
-				get_ttx(ds_readws(TEMPLE_GOD) + 21),	/* name of the god */
+				get_ttx(g_temple_god + 21),	/* name of the god */
 				(char*)(gs_current_typeindex != 58 ? get_ttx(gs_current_town + 235): get_ttx(622)));
 
 			GUI_print_loc_line(g_dtp2);
@@ -143,7 +143,7 @@ void do_temple(void)
 				/* location string */
 				sprintf(g_dtp2,
 					get_ttx(235),
-					get_ttx(ds_readws(TEMPLE_GOD) + 21),	/* name of the god */
+					get_ttx(g_temple_god + 21),	/* name of the god */
 					get_ttx(gs_current_town + 235));
 				GUI_print_loc_line(g_dtp2);
 
@@ -210,10 +210,10 @@ void do_temple(void)
 
 						if (10 * donation >= money) {
 							/* donate all money */
-							gs_gods_estimation[ds_readws(TEMPLE_GOD)] += money / 10L;
+							gs_gods_estimation[g_temple_god] += money / 10L;
 							money = 0;
 						} else {
-							gs_gods_estimation[ds_readws(TEMPLE_GOD)] += donation;
+							gs_gods_estimation[g_temple_god] += donation;
 							money -= 10 * donation;
 						}
 
@@ -282,7 +282,7 @@ void char_add(signed short temple_id)
 
 					/* location string */
 					sprintf(g_dtp2, get_ttx(235),
-						get_ttx(ds_readws(TEMPLE_GOD) + 21),
+						get_ttx(g_temple_god + 21),
 						get_ttx(gs_current_town + 235));
 
 					GUI_print_loc_line(g_dtp2);
@@ -332,7 +332,7 @@ void char_letgo(signed short temple_id)
 					/* location string */
 					sprintf(g_dtp2,
 						get_ttx(235),
-						get_ttx(ds_readws(TEMPLE_GOD) + 21),	/* name of the god */
+						get_ttx(g_temple_god + 21),	/* name of the god */
 						get_ttx(gs_current_town + 235));
 					GUI_print_loc_line(g_dtp2);
 				}

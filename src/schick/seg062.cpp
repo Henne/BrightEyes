@@ -56,24 +56,24 @@ void ask_miracle(void)
 	strcpy(g_dtp2, get_tx2(0)); /* "Eure Bitten werden nicht erhoert" */
 
 	/* check gods estimation */
-	if (gs_gods_estimation[ds_readws(TEMPLE_GOD)] >= 100) {
+	if (gs_gods_estimation[g_temple_god] >= 100) {
 
-		bonus = (signed short)((ga1.a[ds_readws(TEMPLE_GOD)] * (gs_gods_estimation[ds_readws(TEMPLE_GOD)] / 100) / 10) - l3);
+		bonus = (signed short)((ga1.a[g_temple_god] * (gs_gods_estimation[g_temple_god] / 100) / 10) - l3);
 
 		if (gs_current_town == TOWNS_CLANEGH) {
 			bonus += 2;
 		}
 
-		gs_gods_estimation[ds_readws(TEMPLE_GOD)] -= 10L;
+		gs_gods_estimation[g_temple_god] -= 10L;
 
-		if (random_schick(100) <= god_dice.a[ds_readws(TEMPLE_GOD)] + bonus) {
+		if (random_schick(100) <= god_dice.a[g_temple_god] + bonus) {
 
-			l_si = random_schick(god_dice.a[ds_readws(TEMPLE_GOD)]);
+			l_si = random_schick(god_dice.a[g_temple_god]);
 
-			if (god_dice.a[ds_readws(TEMPLE_GOD)] == l_si) {
+			if (god_dice.a[g_temple_god] == l_si) {
 				miracle_resurrect(get_tx2(35));
 			} else {
-				switch (ds_readws(TEMPLE_GOD)) {
+				switch (g_temple_god) {
 				case GOD_PRAIOS: {
 					l5 = 1;
 
@@ -346,7 +346,7 @@ void ask_miracle(void)
 				}
 				case GOD_PHEX: {
 					/* PHEX wants a bit more estimation */
-					if (gs_gods_estimation[ds_readws(TEMPLE_GOD)] > 500L) {
+					if (gs_gods_estimation[g_temple_god] > 500L) {
 
 						if (l_si <= 5) {
 							if (!gs_ingame_timers[INGAME_TIMER_PHEX_THIEF]) {
