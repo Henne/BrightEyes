@@ -372,19 +372,19 @@ void sell_screen(Bit8u *shop_ptr)
 
 							price -= ((Bit32s)host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 *(l6 + item) + 2) *
 									(Bit32s)host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l6 + item) + 4) *
-									tmp[hero_pos][l15] * ds_readws(PRICE_MODIFICATOR)) / 4L;
+									tmp[hero_pos][l15] * g_price_modificator) / 4L;
 
 							tmp[hero_pos][l15] = nice;
 
 							price += ((Bit32s)host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 *(l6 + item) + 2) *
 									(Bit32s)host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l6 + item) + 4) *
-									tmp[hero_pos][l15] * ds_readws(PRICE_MODIFICATOR)) / 4L;
+									tmp[hero_pos][l15] * g_price_modificator) / 4L;
 						} else {
 							tmp[hero_pos][l15] = 0;
 
 							price -= ((Bit32s)host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 *(l6 + item) + 2) *
 									(Bit32s)host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l6 + item) + 4) *
-									nice * ds_readws(PRICE_MODIFICATOR)) / 4L;
+									nice * g_price_modificator) / 4L;
 						}
 					} else {
 						if (item_stackable(get_itemsdat(item_id)) && host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + SIZEOF_INVENTORY * l15) > 1) {
@@ -405,18 +405,18 @@ void sell_screen(Bit8u *shop_ptr)
 
 							price -= ((Bit32s)host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 *(l6 + item) + 2) *
 									(Bit32s)host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l6 + item) + 4) *
-									tmp[hero_pos][l15] * ds_readws(PRICE_MODIFICATOR)) / 4L;
+									tmp[hero_pos][l15] * g_price_modificator) / 4L;
 
 							tmp[hero_pos][l15] = nice;
 
 							price += ((Bit32s)host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 *(l6 + item) + 2) *
 									(Bit32s)host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l6 + item) + 4) *
-									tmp[hero_pos][l15] * ds_readws(PRICE_MODIFICATOR)) / 4L;
+									tmp[hero_pos][l15] * g_price_modificator) / 4L;
 						} else {
 							tmp[hero_pos][l15] = 1;
 							price += ((Bit32s)host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 *(l6 + item) + 2) *
 									(Bit32s)host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l6 + item) + 4) *
-									nice * ds_readws(PRICE_MODIFICATOR)) / 4L;
+									nice * g_price_modificator) / 4L;
 						}
 					}
 				}

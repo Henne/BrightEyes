@@ -387,7 +387,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 
 						price = (host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l7 + item) + 2)
-							* host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l7 + item) + 4)) * ds_readws(PRICE_MODIFICATOR) / 4;
+							* host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l7 + item) + 4)) * g_price_modificator / 4;
 
 						make_valuta_str(g_text_output_buf, price);
 
@@ -515,7 +515,7 @@ void do_smith(void)
 	load_ggsts_nvf();
 	g_request_refresh = 1;
 	smith_ptr = p_datseg + SMITH_DESCR_TABLE + SIZEOF_SMITH_STATS * gs_current_typeindex;
-	ds_writew(PRICE_MODIFICATOR, 4);
+	g_price_modificator = 4;
 
 	while (!done) {
 
@@ -593,7 +593,7 @@ void TLK_schmied(signed short state)
 	} else if (state == 11 || state == 14 || state == 16 || state == 23) {
 		gs_smith_kicked_flags[gs_current_typeindex] = 1;
 	} else if (state == 19 || state == 31) {
-		ds_writew(PRICE_MODIFICATOR, 3);
+		g_price_modificator = 3;
 	} else if (state == 30) {
 
 		DNG_enter_dungeon(DUNGEONS_ZWINGFESTE);

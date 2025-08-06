@@ -111,7 +111,7 @@ void do_merchant(void)
 
 	ds_writed(BUYITEMS, (Bit32u)g_fig_figure1_buf);
 	memset((Bit8u*)ds_readd(BUYITEMS), 0, 3500);
-	ds_writew(PRICE_MODIFICATOR, 4);
+	g_price_modificator = 4;
 	shop_p = p_datseg + SHOP_DESCR_TABLE + 9 * gs_current_typeindex;
 
 	for (l_si = 0; l_si < 100; l_si++) {
@@ -334,7 +334,7 @@ void TLK_khandel(signed short state)
 	} else if (state == 8) {
 		g_dialog_next_state = (random_schick(20) <= 3 ? 9 : -1);
 	} else if (state == 11) {
-		ds_writew(PRICE_MODIFICATOR, 3);
+		g_price_modificator = 3;
 	} else if (state == 12) {
 		/* test CH+4 */
 		g_dialog_next_state = (test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 4) > 0 ? 13 : 10);
@@ -360,7 +360,7 @@ void TLK_whandel(signed short state)
 
 		if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_FEILSCHEN, 0) > 0) {
 			g_dialog_next_state = (23);
-			ds_writew(PRICE_MODIFICATOR, 3);
+			g_price_modificator = 3;
 		} else {
 			g_dialog_next_state = (24);
 		}
