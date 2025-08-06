@@ -218,7 +218,7 @@ void do_harbor(void)
 
 						} else {
 
-							ds_writeb(SEA_TRAVEL_SLEEP_QUALITY, ds_readb(SHIP_TABLE + SHIP_TABLE_PASSAGE_TYPE + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE)));
+							g_sea_travel_sleep_quality = ds_readb(SHIP_TABLE + SHIP_TABLE_PASSAGE_TYPE + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE));
 							money -= ds_readws(SEA_TRAVEL_PASSAGE_PRICE);
 							set_party_money(money);
 
@@ -349,7 +349,7 @@ void do_harbor(void)
 						if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 							host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 						{
-							GRP_hero_sleep(hero, a.a[ds_readbs(SEA_TRAVEL_SLEEP_QUALITY)]);
+							GRP_hero_sleep(hero, a.a[g_sea_travel_sleep_quality]);
 
 							host_writebs(hero + HERO_HUNGER, host_writebs(hero + HERO_THIRST, 0));
 							/* on the ship, food and drinks are served. */
@@ -628,7 +628,7 @@ void sea_travel(signed short passage, signed short dir)
 				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 					host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 				{
-					GRP_hero_sleep(hero, a.a[ds_readbs(SEA_TRAVEL_SLEEP_QUALITY)]);
+					GRP_hero_sleep(hero, a.a[g_sea_travel_sleep_quality]);
 					host_writeb(hero + HERO_HUNGER, host_writebs(hero + HERO_THIRST, 0));
 				}
 			}

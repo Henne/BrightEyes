@@ -1583,7 +1583,7 @@
 #define BUY_SHOPPING_CART               (0xe3f2)    /* Bit8u*; to buffer of size 250, each item has 4 bytes */
 #define PRICE_MODIFICATOR               (0xe3f6)    /* signed short; price modificator for smith and sell */
 #define TEMPLE_GOD                      (0xe3f8)    /* signed short; id of current temple's god */
-#define SEA_TRAVEL_SLEEP_QUALITY        (0xe3fa)    /* unsigned char */
+//#define SEA_TRAVEL_SLEEP_QUALITY        (0xe3fa)    /* unsigned char */
 // ?1
 //#define BUFFER9_PTR4                    (0xe3fc)    /* Bit8u*; copy of BUFFER9_PTR */
 //#define CITY_HOUSE_COUNT                (0xe400)    /* unsigned char[4]; counts of the four different kinds of houses on the current map */

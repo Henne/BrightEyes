@@ -6154,7 +6154,7 @@ unsigned char *g_buffer11_ptr; // ds:0xe404, to buffer of size 192, used for pal
 unsigned char g_city_house_count[4]; // ds:0xe400, counts of the four different kinds of houses on the current map
 HugePt g_buffer9_ptr4; // ds:0xe3fc, copy of BUFFER9_PTR
 unsigned char g_unkn_089[1]; // ds:0xe3fb
-unsigned char g_sea_travel_sleep_quality; // ds:0xe3fa
+signed char g_sea_travel_sleep_quality; // ds:0xe3fa
 signed short g_temple_god; // ds:0xe3f8, id of current temple's god
 signed short g_price_modificator; // ds:0xe3f6, price modificator for smith and sell
 void *g_buy_shopping_cart; // ds:0xe3f2, to buffer of size 250, each item has 4 bytes

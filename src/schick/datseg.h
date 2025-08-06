@@ -504,7 +504,8 @@ extern signed short g_city_refresh_y_target;	// ds:0xe40a; seg066
 extern signed short g_city_refresh_direction;	// ds:0xe408; seg066
 extern unsigned char *g_buffer11_ptr;		// ds:0xe404; seg028, seg075
 extern unsigned char g_city_house_count[4];	// ds:0xe400; seg028, seg066
-extern HugePt g_buffer9_ptr4;		// ds:0xe3fc; seg028
+extern HugePt g_buffer9_ptr4;			// ds:0xe3fc; seg028
+extern signed char g_sea_travel_sleep_quality;	// ds:0xe3fa; seg063
 
 extern Bit32s g_fightobj_buf_freespace;	// ds:0xe370; seg032-seg100
 
