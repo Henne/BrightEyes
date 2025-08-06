@@ -1602,7 +1602,7 @@
 #define TEX_HOUSE4                      (0xe428)    /* Bit8u* */
 #define COMBO_MODE                      (0xe42c)    /* signed short; {0,1,2} */
 //#define STR_BEORN_HJALL                 (0xe42e)    /* char[20] */
-#define AUTOMAP_BUF                     (0xe442)    /* unsigned char[64] */
+//#define AUTOMAP_BUF                     (0xe442)    /* unsigned char[64] */
 #define DNG_REFRESH_DIRECTION           (0xe482)    /* unsigned short */
 #define DNG_REFRESH_Y_TARGET            (0xe484)    /* unsigned short */
 #define DNG_REFRESH_X_TARGET            (0xe486)    /* unsigned short */

@@ -490,6 +490,7 @@ extern unsigned char *g_dungeon_fights_buf; 	// ds:0xe494; seg028,seg076,seg098,
 
 extern unsigned char *g_dng_map_ptr;		// ds:0xe488; seg076, seg098, seg099
 
+extern unsigned char g_automap_buf[64];		// ds:0xe442; seg002, seg028, seg074
 extern char g_str_beorn_hjall[20];		// ds:0xe42e; seg072
 
 extern unsigned char *g_buffer11_ptr;		// ds:0xe404; seg028, seg075

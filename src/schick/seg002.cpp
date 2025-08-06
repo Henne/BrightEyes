@@ -4164,7 +4164,7 @@ void select_with_keyboard(Bit8u *p1, Bit8u *p2)
  */
 void set_automap_tile(signed short x, signed short y)
 {
-	or_ds_bs(AUTOMAP_BUF + (4 * y + (x >> 3)), g_automap_bitmask[(x & 0x7)]);
+	g_automap_buf[4 * y + (x >> 3)] |= g_automap_bitmask[x & 0x07];
 }
 
 /**

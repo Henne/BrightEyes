@@ -144,7 +144,7 @@ void show_automap(void)
 
 unsigned short is_discovered(signed short x, signed short y)
 {
-	return ds_readb(AUTOMAP_BUF + (4 * y) + (x >> 3)) & g_automap_bitmask[(x & 7)];
+	return g_automap_buf[(4 * y) + (x >> 3)] & g_automap_bitmask[(x & 7)];
 }
 
 /**

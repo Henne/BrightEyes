@@ -293,7 +293,7 @@ void load_area_description(signed short type)
 				write(fd, (void*)g_dng_map, 256);
 			}
 			/* write automap tiles */
-			write(fd, (void*)MK_FP(datseg, AUTOMAP_BUF), 64);
+			write(fd, (void*)g_automap_buf, 64);
 			/* write location information */
 			write(fd, (void*)MK_FP(datseg, LOCATIONS_LIST), g_locations_tab_size);
 
@@ -328,7 +328,7 @@ void load_area_description(signed short type)
 			/* path taken in THORWAL PREM and PHEXCAER */
 			_read(fd, g_dng_map, 512);
 			/* read automap tiles */
-			_read(fd, p_datseg + AUTOMAP_BUF, 0x40);
+			_read(fd, g_automap_buf, 64);
 
 			/* TODO: is that neccessary ? */
 			memset(p_datseg + LOCATIONS_LIST, -1, 900);
@@ -342,7 +342,7 @@ void load_area_description(signed short type)
 			_read(fd, g_dng_map, 256);
 
 			/* read automap tiles */
-			_read(fd, p_datseg + AUTOMAP_BUF, 0x40);
+			_read(fd, g_automap_buf, 64);
 			g_locations_tab_size = 0;
 
 			if (!gs_dungeon_index) {
