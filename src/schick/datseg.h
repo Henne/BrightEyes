@@ -51,6 +51,15 @@ struct struct_informer_tab {
 	Bit8s unkn;
 };
 
+struct struct_recipe {
+	signed short item_id;		/* item id of the recipe */
+	signed short ingredients[10];	/* list of ingredients (item_ids), terminated by -1 */
+	signed short outcome;		/* item id of the outcome of the recipe */
+	signed short ae_cost;		/* AE needed */
+	signed char  handicap;		/* handicap for the alchemy skill test */
+	signed char  duration;		/* time needed to brew the recipe in hours */
+};
+
 /* seg001 */
 extern unsigned short g_cd_init_successful;
 extern Bit32u g_cd_skipmagic;
@@ -452,7 +461,7 @@ extern unsigned char *g_hexenknoten_gfx_buf;	// ds:0xacc8; seg100
 extern signed short g_monster_spell_ae_cost;	// ds:0xaccc; seg102
 extern char g_select_skill_lvlup[6]; 		// ds:0xacce; seg103
 extern signed char g_select_skill_defaults[6];	// ds:0xacd4; seg103
-
+extern struct_recipe g_alchemy_recipes[13];	//ds:0xacda; seg104
 extern signed char g_prevent_drop_equipped_items;	// ds:0xae46; seg106
 extern signed short g_hero_startup_items[12][4];	// ds:0xae48; seg106
 extern signed short g_hero_startup_items_all[4];	// ds:0xaea8; seg106
