@@ -503,7 +503,10 @@ extern signed short g_city_refresh_x_target;	// ds:0xe40c; seg066
 extern signed short g_city_refresh_y_target;	// ds:0xe40a; seg066
 extern signed short g_city_refresh_direction;	// ds:0xe408; seg066
 extern unsigned char *g_buffer11_ptr;		// ds:0xe404; seg028, seg075
+extern unsigned char g_city_house_count[4];	// ds:0xe400; seg028, seg066
+extern HugePt g_buffer9_ptr4;		// ds:0xe3fc; seg028
 
+extern Bit32s g_fightobj_buf_freespace;	// ds:0xe370; seg032-seg100
 
 extern signed int g_fig_dropped_weapons[30];	// ds:0xe31a; seg032, seg041
 extern signed int g_autofight;		// ds:0xe318; seg004-seg105
@@ -515,9 +518,6 @@ extern signed int g_dialog_next_state;	// ds:0xe30e; seg030-seg117
 extern signed int g_dialog_informer;	// ds:0xe30c; seg030, seg031
 extern char *g_dialog_title;		// ds:0xe308; seg030, seg072
 
-
-extern HugePt g_buffer9_ptr4;		// ds:0xe3fc; seg028
-extern Bit32s g_fightobj_buf_freespace;	// ds:0xe370; seg032-seg100
 extern char g_savegame_names[5][9];	// ds:0xe2da; seg026, seg027
 extern time_t g_last_save_time;		// ds:0xe2d6; seg026, seg059
 extern unsigned char *g_saved_files_buf;// ds:0xe2d2; seg026;

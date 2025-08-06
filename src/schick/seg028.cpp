@@ -156,7 +156,7 @@ void seg028_0224(void)
 
 		for (l_si = 0; l_si < 4; l_si++) {
 
-			if (ds_readb(CITY_HOUSE_COUNT + l_si) != 0) {
+			if (g_city_house_count[l_si]) {
 
 				arr[l_si] = seg028_0444(!l_si ? ARCHIVE_FILE_HOUSE1_NVF :
 				    (l_si == 1 ? ARCHIVE_FILE_HOUSE2_NVF :
@@ -168,7 +168,7 @@ void seg028_0224(void)
 		}
 
 		for (l_si = 0; l_si < 4; l_si++) {
-			if (!ds_readb(CITY_HOUSE_COUNT + l_si)) {
+			if (!g_city_house_count[l_si]) {
 
 				arr[l_si] = (!l_si ? arr[l_si + 1] : arr[l_si - 1]);
 			}

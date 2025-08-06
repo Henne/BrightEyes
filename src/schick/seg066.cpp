@@ -1175,7 +1175,8 @@ void seg066_172b(void)
 	signed short l_di;
 	Bit8u *ptr = g_dng_map;
 
-	ds_writeb(CITY_HOUSE_COUNT, ds_writeb((CITY_HOUSE_COUNT+1), ds_writeb((CITY_HOUSE_COUNT+2), ds_writeb((CITY_HOUSE_COUNT+3), 0))));
+	g_city_house_count[0] = g_city_house_count[1]
+				= g_city_house_count[2] = g_city_house_count[3] = 0;
 
 	for (l_di = 0; g_dng_map_size * 16 > l_di; l_di++) {
 
@@ -1183,13 +1184,13 @@ void seg066_172b(void)
 
 		/* count number of houses of certain kind */
 		if (l_si == 2) {
-			inc_ds_bs_post(CITY_HOUSE_COUNT);
+			g_city_house_count[0]++;
 		} else if (l_si == 3) {
-			inc_ds_bs_post((CITY_HOUSE_COUNT+1));
+			g_city_house_count[1]++;
 		} else if ((l_si == 4) || (l_si == 1)) {
-			inc_ds_bs_post((CITY_HOUSE_COUNT+2));
+			g_city_house_count[2]++;
 		} else if (l_si == 5) {
-			inc_ds_bs_post((CITY_HOUSE_COUNT+3));
+			g_city_house_count[3]++;
 		}
 	}
 
@@ -1197,25 +1198,25 @@ void seg066_172b(void)
 	l_si = 2000;
 
 	/* find house with lowest count on current map */
-	if (ds_readb(CITY_HOUSE_COUNT) < l_si) {
-		l_si = ds_readb(CITY_HOUSE_COUNT + (l_di = 0));
+	if (g_city_house_count[0] < l_si) {
+		l_si = g_city_house_count[(l_di = 0)];
 	}
 
-	if (ds_readb((CITY_HOUSE_COUNT+1)) < l_si) {
-		l_si = ds_readb(CITY_HOUSE_COUNT + (l_di = 1));
+	if (g_city_house_count[1] < l_si) {
+		l_si = g_city_house_count[(l_di = 1)];
 	}
 
-	if (ds_readb((CITY_HOUSE_COUNT+2)) < l_si) {
-		l_si = ds_readb(CITY_HOUSE_COUNT + (l_di = 2));
+	if (g_city_house_count[2] < l_si) {
+		l_si = g_city_house_count[(l_di = 2)];
 	}
 
-	if (ds_readb((CITY_HOUSE_COUNT+3)) < l_si) {
-		l_si = ds_readb(CITY_HOUSE_COUNT + (l_di = 3));
+	if (g_city_house_count[3] < l_si) {
+		l_si = g_city_house_count[(l_di = 3)];
 	}
 
 	/* the kind of house with lowest count is deactivated, i.e. it's texture is
 	 * not loaded and replaced by another texture in seg028_0224 */
-	ds_writeb(CITY_HOUSE_COUNT + l_di, 0);
+	g_city_house_count[l_di] = 0;
 }
 
 #if !defined(__BORLANDC__)
