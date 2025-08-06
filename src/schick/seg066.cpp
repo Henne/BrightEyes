@@ -347,7 +347,7 @@ void refresh_floor_and_sky(void)
 	struct nvf_desc nvf;
 
 	nvf.dst = g_renderbuf_ptr;
-	nvf.src = (Bit8u*)ds_readd(TEX_SKY);
+	nvf.src = g_tex_floor[1]; // tex_sky
 	nvf.no = 0;
 	nvf.type = 3;
 	nvf.width = (Bit8u*)&width;
@@ -362,7 +362,7 @@ void refresh_floor_and_sky(void)
 #endif
 
 	nvf.dst = ((Bit8u*)g_renderbuf_ptr) + 208 * height;
-	nvf.src = (Bit8u*)ds_readd(TEX_FLOOR);
+	nvf.src = g_tex_floor[0];
 	nvf.no = 0;
 	nvf.type = 3;
 	nvf.width = (Bit8u*)&width;
@@ -785,13 +785,13 @@ void load_city_texture(signed short v1, signed short v2, signed short nvf_no,
 
 	v4 -= 184;
 
-	nvf.dst = src = ((Bit8u*)g_renderbuf_ptr) + 30000;
+	nvf.dst = src = g_renderbuf_ptr + 30000;
 
 	/*
 	 * the following line accesses memory outside of the
 	 * texture array if v4 is 48 or 49!?
 	 */
-	nvf.src = (Bit8u*)ds_readd(TEX_FLOOR + v4 * 4);
+	nvf.src = g_tex_floor[v4];
 
 	if (v4 == 48 || v4 == 49) {
 		nvf.src = (Bit8u*)g_buffer7_ptr;

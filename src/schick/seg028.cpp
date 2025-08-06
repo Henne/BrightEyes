@@ -174,21 +174,22 @@ void seg028_0224(void)
 			}
 		}
 
-		ds_writed(TEX_HOUSE1, (Bit32u)arr[0]);
-		ds_writed(TEX_HOUSE2, (Bit32u)arr[1]);
-		ds_writed(TEX_HOUSE3, (Bit32u)arr[2]);
-		ds_writed(TEX_HOUSE4, (Bit32u)arr[3]);
+		g_tex_floor[2] = arr[0]; // tex_house1
+		g_tex_floor[3] = arr[1]; // tex_house2
+		g_tex_floor[4] = arr[2]; // tex_house3
+		g_tex_floor[5] = arr[3]; // tex_house4
 
+		/* load tex_sky */
 		if ((gs_day_timer >= HOURS(7)) && (gs_day_timer <= HOURS(20)))
 		{
-			ds_writed(TEX_SKY, (Bit32u) seg028_0444(ARCHIVE_FILE_TDIVERSE_NVF, 0x80, 0x40, 0));
+			g_tex_floor[1] = seg028_0444(ARCHIVE_FILE_TDIVERSE_NVF, 0x80, 0x40, 0);
 
 			memcpy(gs_palette_buildings, g_buffer11_ptr, 0xc0);
 		} else {
-			ds_writed(TEX_SKY, (Bit32u) seg028_0444(ARCHIVE_FILE_TDIVERSE_NVF, 0x80, 0x40, 0));
+			g_tex_floor[1] = seg028_0444(ARCHIVE_FILE_TDIVERSE_NVF, 0x80, 0x40, 0);
 		}
 
-		ds_writed(TEX_FLOOR, (Bit32u) seg028_0444(!g_large_buf ? ARCHIVE_FILE_TFLOOR1_NVF : ARCHIVE_FILE_TFLOOR2_NVF, 0, 0x20, 0));
+		g_tex_floor[0] = seg028_0444(!g_large_buf ? ARCHIVE_FILE_TFLOOR1_NVF : ARCHIVE_FILE_TFLOOR2_NVF, 0, 0x20, 0);
 
 		if ((gs_day_timer >= HOURS(7)) && (gs_day_timer <= HOURS(20)))
 		{

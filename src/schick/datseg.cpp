@@ -6143,12 +6143,7 @@ signed short g_dng_refresh_direction; // ds:0xe482
 unsigned char g_automap_buf[64]; // ds:0xe442
 char g_str_beorn_hjall[20]; // ds:0xe42e
 signed short g_combo_mode; // ds:0xe42c
-void *g_tex_house4; // ds:0xe428
-void *g_tex_house3; // ds:0xe424
-void *g_tex_house2; // ds:0xe420
-void *g_tex_house1; // ds:0xe41c
-void *g_tex_sky; // ds:0xe418
-void *g_tex_floor; // ds:0xe414
+unsigned char *g_tex_floor[6]; // ds:0xe414
 signed short g_entrance_angle; // ds:0xe412
 unsigned short g_always_zero2; // ds:0xe410, writeonly (0)
 unsigned short g_always_zero1; // ds:0xe40e, writeonly (0)

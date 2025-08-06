@@ -1594,12 +1594,12 @@
 #define ALWAYS_ZERO1                    (0xe40e)    /* unsigned short; writeonly (0) */
 #define ALWAYS_ZERO2                    (0xe410)    /* unsigned short; writeonly (0) */
 #define ENTRANCE_ANGLE                  (0xe412)    /* signed short */
-#define TEX_FLOOR                       (0xe414)    /* Bit8u* */
-#define TEX_SKY                         (0xe418)    /* Bit8u* */
-#define TEX_HOUSE1                      (0xe41c)    /* Bit8u* */
-#define TEX_HOUSE2                      (0xe420)    /* Bit8u* */
-#define TEX_HOUSE3                      (0xe424)    /* Bit8u* */
-#define TEX_HOUSE4                      (0xe428)    /* Bit8u* */
+//#define TEX_FLOOR                       (0xe414)    /* Bit8u* */
+//#define TEX_SKY                         (0xe418)    /* Bit8u* */
+//#define TEX_HOUSE1                      (0xe41c)    /* Bit8u* */
+//#define TEX_HOUSE2                      (0xe420)    /* Bit8u* */
+//#define TEX_HOUSE3                      (0xe424)    /* Bit8u* */
+//#define TEX_HOUSE4                      (0xe428)    /* Bit8u* */
 //#define COMBO_MODE                      (0xe42c)    /* signed short; {0,1,2} */
 //#define STR_BEORN_HJALL                 (0xe42e)    /* char[20] */
 //#define AUTOMAP_BUF                     (0xe442)    /* unsigned char[64] */
