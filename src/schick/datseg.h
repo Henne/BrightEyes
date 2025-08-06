@@ -515,6 +515,7 @@ extern signed short g_temple_god;		// ds:0xe3f8; seg061, seg062
 extern signed short g_price_modificator;	// ds:0xe3f6; seg055, seg057, seg058
 extern struct struct_shopping_cart *g_buy_shopping_cart;	//ds:0xe3f2; seg056
 extern signed char g_sleep_quality;		// ds:0xe3f1; seg054, seg104
+extern signed char g_booked_inn_days;		// ds:0xe3f0; seg054
 
 extern Bit32s g_fightobj_buf_freespace;	// ds:0xe370; seg032-seg100
 

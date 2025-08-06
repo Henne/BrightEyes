@@ -117,9 +117,7 @@ void do_inn(void)
 
 			if (host_readbs(hero + HERO_RECIPE_TIMER) != 0) {
 
-				sprintf(g_dtp2,
-					get_ttx(733),
-					(char*)hero + HERO_NAME2,
+				sprintf(g_dtp2, get_ttx(733), (char*)hero + HERO_NAME2,
 					host_readbs(hero + HERO_RECIPE_TIMER),
 					(char*)(host_readbs(hero + HERO_RECIPE_TIMER) < 2 ? get_ttx(735) : get_ttx(736)));
 
@@ -461,10 +459,10 @@ void do_inn(void)
 			g_sleep_quality = GUI_radio(get_ttx(396), 3, g_dtp2, g_dtp2 + 50, g_dtp2 + 100);
 
 			if (g_sleep_quality != -1) {
-				ds_writebs(BOOKED_INN_DAYS, GUI_input(get_ttx(826), 2));
+				g_booked_inn_days = GUI_input(get_ttx(826), 2);
 			}
 
-			if (ds_readbs(BOOKED_INN_DAYS) <= 0) {
+			if (g_booked_inn_days <= 0) {
 				g_sleep_quality = -1;
 			}
 
@@ -481,7 +479,7 @@ void do_inn(void)
 
 				price = g_sleep_quality == 1 ? price_schlafsaal : (g_sleep_quality == 2 ? price_einzelzimmer : price_suite);
 
-				price *= ds_readbs(BOOKED_INN_DAYS);
+				price *= g_booked_inn_days;
 
 				if (price < 0) {
 					price = 1;
@@ -533,11 +531,11 @@ void do_inn(void)
 
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_6) {
 
-			if (g_sleep_quality != -1 && ds_readbs(BOOKED_INN_DAYS) > 0) {
+			if (g_sleep_quality != -1 && g_booked_inn_days > 0) {
 
 				if (GUI_bool(get_ttx(318))) {
 
-					booked_days = ds_readbs(BOOKED_INN_DAYS);
+					booked_days = g_booked_inn_days;
 
 					if (host_readws(inn_ptr + INN_STATS_QUALITY) < 8) {
 
@@ -555,7 +553,7 @@ void do_inn(void)
 					do {
 						timewarp_until_time_of_day(HOURS(8));
 
-					} while (dec_ds_bs(BOOKED_INN_DAYS));
+					} while (--g_booked_inn_days);
 
 					g_food_mod = 0;
 

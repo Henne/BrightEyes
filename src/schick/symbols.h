@@ -1578,7 +1578,7 @@
 #define CITYCAMP_MAGICSTATUS            (0xe3e1)    /* signed char[7] */
 #define CITYCAMP_GUARDSTATUS            (0xe3e8)    /* signed char[7] */
 // ?1
-#define BOOKED_INN_DAYS                 (0xe3f0)    /* signed char */
+//#define BOOKED_INN_DAYS                 (0xe3f0)    /* signed char */
 //#define SLEEP_QUALITY                   (0xe3f1)    /* signed char */
 //#define BUY_SHOPPING_CART               (0xe3f2)    /* Bit8u*; to buffer of size 250, each item has 4 bytes */
 //#define PRICE_MODIFICATOR               (0xe3f6)    /* signed short; price modificator for smith and sell */
