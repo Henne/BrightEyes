@@ -6157,7 +6157,7 @@ unsigned char g_unkn_089[1]; // ds:0xe3fb
 signed char g_sea_travel_sleep_quality; // ds:0xe3fa
 signed short g_temple_god; // ds:0xe3f8, id of current temple's god
 signed short g_price_modificator; // ds:0xe3f6, price modificator for smith and sell
-void *g_buy_shopping_cart; // ds:0xe3f2, to buffer of size 250, each item has 4 bytes
+struct struct_shopping_cart *g_buy_shopping_cart; // ds:0xe3f2, to buffer of size 250, each item has 4 bytes
 signed char g_sleep_quality; // ds:0xe3f1
 signed char g_booked_inn_days; // ds:0xe3f0
 unsigned char g_unkn_088[1]; // ds:0xe3ef

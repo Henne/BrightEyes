@@ -127,8 +127,9 @@ void buy_screen(void)
 	signed short l17;
 	struct nvf_desc nvf;
 
-	ds_writed(BUY_SHOPPING_CART, (Bit32u)(g_fig_figure1_buf + 2800));
-	memset((Bit8u*)ds_readd(BUY_SHOPPING_CART), 0, 250);
+	/* TODO: The shopping cart has space for 62.5 items ? Grollo in thorwal sells 69 items. */
+	g_buy_shopping_cart = (struct struct_shopping_cart*)(g_fig_figure1_buf + 2800);
+	memset((Bit8u*)g_buy_shopping_cart, 0, 250);
 
 	g_request_refresh = 1;
 
@@ -272,14 +273,13 @@ void buy_screen(void)
 
 			for (l_di = 0; l_di < nice; l_di++) {
 
-				if (host_readws((Bit8u*)ds_readd(BUY_SHOPPING_CART) + 4 * l_di) == item_id) {
-					l4 = host_readws((Bit8u*)ds_readd(BUY_SHOPPING_CART) + 4 * l_di + 2);
+				if (g_buy_shopping_cart[l_di].item_id == item_id) {
+					l4 = g_buy_shopping_cart[l_di].quantity;
 					break;
 				}
 			}
 
-			sprintf(g_dtp2, (char*)fmt_d_s.a, l4,
-				(char*)(GUI_names_grammar(0x4000 +  (l4 > 1 || l4 == 0 ? 4 : 0), item_id, 0)));
+			sprintf(g_dtp2, (char*)fmt_d_s.a, l4, (char*)GUI_names_grammar(0x4000 +  (l4 > 1 || l4 == 0 ? 4 : 0), item_id, 0));
 
 			if (item_weapon(get_itemsdat(item_id))) {
 
@@ -298,11 +298,14 @@ void buy_screen(void)
 						g_hero_pic_posx[l_di] + 41, 197, 0);
 
 				if (host_readbs(hero1 + HERO_TYPE) != HERO_TYPE_NONE) {
+
 					copy_forename(g_dtp2, (char*)(hero1 + HERO_NAME2));
 					set_textcolor(255, 0);
 
 					if (host_readbs(hero1 + HERO_GROUP_NO) != gs_current_group) {
+
 						set_textcolor(111, 0);
+
 					} else {
 
 						if (!is_in_word_array(item_id, g_wearable_items_index[host_readbs(hero1 + HERO_TYPE) - 1])) {
@@ -325,11 +328,7 @@ void buy_screen(void)
 
 		if ((ds_readws(MOUSE2_EVENT) != 0 && ds_readws(ACTION) != ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK) || ds_readws(ACTION) == ACTION_ID_PAGE_UP) {
 
-			l3 = GUI_radio(NULL, 4,
-					get_ttx(433),
-					get_ttx(435),
-					get_ttx(436),
-					get_ttx(437)) - 1;
+			l3 = GUI_radio(NULL, 4,	get_ttx(433), get_ttx(435), get_ttx(436), get_ttx(437)) - 1;
 
 			if (l3 != -2) {
 				ds_writew(ACTION, l3 + ACTION_ID_ICON_1);
@@ -358,13 +357,13 @@ void buy_screen(void)
 
 			for (l_di = 0; l_di < nice; l_di++) {
 
-				if (host_readws((Bit8u*)ds_readd(BUY_SHOPPING_CART) + 4 * l_di) == item_id) {
+				if (g_buy_shopping_cart[l_di].item_id == item_id) {
 					l16 = l_di;
 				}
 
-				l17 += (host_readws((Bit8u*)ds_readd(BUY_SHOPPING_CART) + 4 * l_di) != 0) && item_stackable(get_itemsdat(item_id)) ?
-						host_readws((Bit8u*)ds_readd(BUY_SHOPPING_CART) + 4 * l_di + 2) / 100 + 1 :
-						host_readws((Bit8u*)ds_readd(BUY_SHOPPING_CART) + 4 * l_di + 2);
+				l17 += (g_buy_shopping_cart[l_di].item_id != 0) && item_stackable(get_itemsdat(item_id)) ?
+						g_buy_shopping_cart[l_di].quantity / 100 + 1 :
+						g_buy_shopping_cart[l_di].quantity;
 			}
 
 			if (l16 != -1) {
@@ -375,18 +374,14 @@ void buy_screen(void)
 
 					if (l3 == 2) {
 
-						if (host_readws((Bit8u*)ds_readd(BUY_SHOPPING_CART) + 4 * l16 + 2) > 1) {
+						if (g_buy_shopping_cart[l16].quantity > 1) {
 
-							sprintf(g_dtp2,
-								get_ttx(818),
-								(char*)(GUI_names_grammar(4, item_id, 0)));
+							sprintf(g_dtp2,	get_ttx(818), (char*)GUI_names_grammar(4, item_id, 0));
 
 							l4 = GUI_input(g_dtp2, 2);
 						}
 					} else {
-						sprintf(g_dtp2,
-							get_ttx(441),
-							(char*)(GUI_names_grammar(4, item_id, 0)));
+						sprintf(g_dtp2,	get_ttx(441), (char*)GUI_names_grammar(4, item_id, 0));
 
 						l4 = GUI_input(g_dtp2, 2);
 					}
@@ -394,12 +389,12 @@ void buy_screen(void)
 
 				if (l4 > 0) {
 
-					if (host_readws((Bit8u*)ds_readd(BUY_SHOPPING_CART) + 4 * l16 + 2) < l4 && l3 == 2) {
-						l4 = host_readws((Bit8u*)ds_readd(BUY_SHOPPING_CART) + 4 * l16 + 2);
+					if (g_buy_shopping_cart[l16].quantity < l4 && l3 == 2) {
+						l4 = g_buy_shopping_cart[l16].quantity;
 					}
 
-					l9 = (Bit32s)host_readws((Bit8u*)ds_readd(BUYITEMS) + 7 *(l7 + item) + 2) *
-						(Bit32s)host_readws((Bit8u*)ds_readd(BUYITEMS) + 7 *(l7 + item) + 4) * l4;
+					l9 = (Bit32s)host_readws((Bit8u*)ds_readd(BUYITEMS) + 7 * (l7 + item) + 2) *
+						(Bit32s)host_readws((Bit8u*)ds_readd(BUYITEMS) + 7 * (l7 + item) + 4) * l4;
 
 					if (l3 == 1 && price + l9 > p_money) {
 						GUI_output(get_ttx(401));
@@ -409,16 +404,15 @@ void buy_screen(void)
 
 						if (l3 == 1) {
 							price += l9;
-							add_ptr_ws((Bit8u*)ds_readd(BUY_SHOPPING_CART) + 4 * l16 + 2, l4);
+							g_buy_shopping_cart[l16].quantity += l4;
 						} else {
 							price -= l9;
-							sub_ptr_ws((Bit8u*)ds_readd(BUY_SHOPPING_CART) + 4 * l16 + 2, l4);
+							g_buy_shopping_cart[l16].quantity -= l4;
 
-							if (host_readws((Bit8u*)ds_readd(BUY_SHOPPING_CART) + 4 * l16 + 2) == 0) {
+							if (g_buy_shopping_cart[l16].quantity == 0) {
 
-								memmove((Bit8u*)ds_readd(BUY_SHOPPING_CART) + 4 * l16,
-									(Bit8u*)ds_readd(BUY_SHOPPING_CART) + 4 * (l16 + 1),
-									248 - 2 * l16);
+								/* TODO: check that */
+								memmove(&g_buy_shopping_cart[l16], &g_buy_shopping_cart[l16 + 1],	248 - 2 * l16);
 
 								nice--;
 							}
@@ -459,10 +453,10 @@ void buy_screen(void)
 						} else {
 							price += l9;
 
-							host_writews((Bit8u*)ds_readd(BUY_SHOPPING_CART) + 4 * nice,
-								host_readws((Bit8u*)ds_readd(BUYITEMS) + 7 * (l7 + item)));
+							g_buy_shopping_cart[nice].item_id =
+								host_readws((Bit8u*)ds_readd(BUYITEMS) + 7 * (l7 + item));
 
-							host_writews((Bit8u*)ds_readd(BUY_SHOPPING_CART) + 4 * nice + 2, l4);
+							g_buy_shopping_cart[nice].quantity = l4;
 
 							nice++;
 
@@ -495,10 +489,7 @@ void buy_screen(void)
 			while (offended == 0 && j < 3) {
 
 				make_valuta_str(g_text_output_buf, price);
-				sprintf(g_dtp2,
-					get_ttx(439),
-					g_text_output_buf);
-
+				sprintf(g_dtp2, get_ttx(439), g_text_output_buf);
 
 				do {
 					percent = GUI_input(g_dtp2, 2);
@@ -536,8 +527,8 @@ void buy_screen(void)
 
 					for (l_di = 0; l_di < nice; l_di++) {
 
-						item_id = host_readws((Bit8u*)ds_readd(BUY_SHOPPING_CART) + 4 * l_di);
-						given_items = get_item(item_id, 1, host_readws((Bit8u*)ds_readd(BUY_SHOPPING_CART) + 4 * l_di + 2));
+						item_id = g_buy_shopping_cart[l_di].item_id;
+						given_items = get_item(item_id, 1, g_buy_shopping_cart[l_di].quantity);
 
 						g_market_itemsaldo_table[item_id] = g_market_itemsaldo_table[item_id] + given_items;
 
@@ -552,7 +543,7 @@ void buy_screen(void)
 							l12 = 1;
 						}
 
-						if (host_readws((Bit8u*)ds_readd(BUY_SHOPPING_CART) + 4 * l_di + 2) > given_items) {
+						if (g_buy_shopping_cart[l_di].quantity > given_items) {
 							l13 = 1;
 							break;
 						}
@@ -567,9 +558,7 @@ void buy_screen(void)
 
 						make_valuta_str(g_text_output_buf, price);
 
-						sprintf(g_dtp2,
-							get_ttx(819),
-							g_text_output_buf);
+						sprintf(g_dtp2,	get_ttx(819), g_text_output_buf);
 
 						GUI_output(g_dtp2);
 					}

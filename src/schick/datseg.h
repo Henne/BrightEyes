@@ -51,6 +51,11 @@ struct struct_informer_tab {
 	Bit8s unkn;
 };
 
+struct struct_shopping_cart {
+	int item_id;
+	int quantity;
+};
+
 struct struct_recipe {
 	signed short item_id;		/* item id of the recipe */
 	signed short ingredients[10];	/* list of ingredients (item_ids), terminated by -1 */
@@ -508,6 +513,7 @@ extern HugePt g_buffer9_ptr4;			// ds:0xe3fc; seg028
 extern signed char g_sea_travel_sleep_quality;	// ds:0xe3fa; seg063
 extern signed short g_temple_god;		// ds:0xe3f8; seg061, seg062
 extern signed short g_price_modificator;	// ds:0xe3f6; seg055, seg057, seg058
+extern struct struct_shopping_cart *g_buy_shopping_cart;	//ds:0xe3f2; seg056
 
 extern Bit32s g_fightobj_buf_freespace;	// ds:0xe370; seg032-seg100
 
