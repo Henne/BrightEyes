@@ -150,10 +150,11 @@ void DNG_door(signed short action)
 						/* BEWARE: there are two types of IRON KEYs in the game */
 						if (gs_dungeon_index == DUNGEONS_PIRATENHOEHLE && pos == DNG_POS(0,12,8) && get_first_hero_with_item(ITEM_KEY_IRON_1) != -1)
 						{
-							or_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(x,y), 0x02); /* effect: ......1. i.e. door is unlocked */
+							*(g_dng_map_ptr + MAP_POS(x, y)) |= 0x02;
+							/* effect: ......1. i.e. door is unlocked */
 						}
 
-						if (div16(host_readb((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(x,y))) == DNG_TILE_CLOSED_DOOR) /* if 0001.... door is closed */
+						if (div16(*(g_dng_map_ptr + MAP_POS(x,y))) == DNG_TILE_CLOSED_DOOR) /* if 0001.... door is closed */
 						{
 							/* ASSERT */
 							/*
@@ -161,15 +162,16 @@ void DNG_door(signed short action)
 								D1_INFO("FEHLER: DNG_MENU_MODE sollte DNG_MENU_MODE_OPEN_DOOR sein, stimmt aber nicht.\n");
 							}
 							*/
-							l4 = host_readb((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(x,y)) & 0x02; /* read bit 1: is door unlocked? */
+							l4 = *(g_dng_map_ptr + MAP_POS(x,y)) & 0x02; /* read bit 1: is door unlocked? */
 
 							if (l4 != 0 || !host_readbs((Bit8u*)ptr_doors + DUNGEON_DOOR_SMASH_HANDICAP))
 							{
 								/* door closed and unlocked -> open it */
 
-								and_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(x,y), 0x0f); /* clear higher 4 bits */
-								or_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(x,y), DNG_TILE_OPEN_DOOR << 4);
-								ds_writeb(STEPTARGET_FRONT, host_readb((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(x,y)));
+								/* clear higher 4 bits */
+								*(g_dng_map_ptr + MAP_POS(x,y)) &= 0x0f;
+								*(g_dng_map_ptr + MAP_POS(x,y)) |= DNG_TILE_OPEN_DOOR << 4;
+								ds_writeb(STEPTARGET_FRONT, *(g_dng_map_ptr + MAP_POS(x,y)));
 								DNG_open_door();
 
 								ds_writebs((NEW_MENU_ICONS + 6), ds_writebs((NEW_MENU_ICONS + 7), ds_writebs((NEW_MENU_ICONS + 8), MENU_ICON_NONE)));
@@ -184,7 +186,7 @@ void DNG_door(signed short action)
 								ds_writew(DNG_MENU_MODE, DNG_MENU_MODE_UNLOCK_DOOR);
 							}
 
-						} else if (div16(host_readbs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(x,y))) == DNG_TILE_OPEN_DOOR) /* 0010.... i.e. door is open */
+						} else if (div16(*(g_dng_map_ptr + MAP_POS(x,y))) == DNG_TILE_OPEN_DOOR) /* 0010.... i.e. door is open */
 						{
 							/* ASSERT */
 							/*
@@ -196,10 +198,12 @@ void DNG_door(signed short action)
 							/* the door is open -> close it */
 							DNG_close_door();
 
-							and_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(x,y), 0x0f); /* clear higher 4 bits */
-							or_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(x,y), (DNG_TILE_CLOSED_DOOR << 4) + 0x02); /* +0x02: set bit 1 'unlocked' */
+							/* clear higher 4 bits */
+							*(g_dng_map_ptr + MAP_POS(x, y)) &= 0x0f;
+							/* +0x02: set bit 1 'unlocked' */
+							*(g_dng_map_ptr + MAP_POS(x, y)) |= (DNG_TILE_CLOSED_DOOR << 4) + 0x02;
 
-							ds_writeb(STEPTARGET_FRONT, host_readb((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(x,y)));
+							ds_writeb(STEPTARGET_FRONT, *(g_dng_map_ptr + MAP_POS(x,y)));
 							ds_writew(DNG_MENU_MODE, DNG_MENU_MODE_OPEN_DOOR);
 						}
 					}
@@ -209,10 +213,11 @@ void DNG_door(signed short action)
 
 					if (check_heroes_KK(host_readbs((Bit8u*)ptr_doors + DUNGEON_DOOR_SMASH_HANDICAP)))
 					{
-						and_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(x,y), 0x0f); /* clear higher 4 bits */
-						or_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(x,y), DNG_TILE_SMASHED_DOOR << 4);
+						/* clear higher 4 bits */
+						*(g_dng_map_ptr + MAP_POS(x,y)) &= 0x0f;
+						*(g_dng_map_ptr + MAP_POS(x,y)) |= DNG_TILE_SMASHED_DOOR << 4;
 
-						ds_writeb(STEPTARGET_FRONT, host_readb((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(x,y)));
+						ds_writeb(STEPTARGET_FRONT, *(g_dng_map_ptr + MAP_POS(x,y)));
 						ds_writew(DNG_REFRESH_DIRECTION, -1);
 					}
 
@@ -259,10 +264,13 @@ void DNG_door(signed short action)
 
 						} else {
 							/* success => the door opens */
-							and_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(x,y), 0x0f); /* clear higher 4 bits */
-							or_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(x,y), DNG_TILE_OPEN_DOOR << 4);
+
+							/* clear higher 4 bits */
+							*(g_dng_map_ptr + MAP_POS(x,y)) &= 0x0f;
+
 							/* note that the 'unlocked' flag ......1. is not explicitly set. It will be set if the party closes the door. */
-							ds_writeb(STEPTARGET_FRONT, host_readb((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(x,y)));
+							*(g_dng_map_ptr + MAP_POS(x,y)) |= DNG_TILE_OPEN_DOOR << 4;
+							ds_writeb(STEPTARGET_FRONT, *(g_dng_map_ptr + MAP_POS(x,y)));
 							DNG_open_door();
 
 							add_hero_ap(hero, 1L); /* hero gets 1 AP for successful lock pick */
@@ -300,11 +308,9 @@ void DNG_door(signed short action)
 						if (spell_result == -99)
 						{
 							/* unlucky => just print a message */
-							sprintf(g_dtp2,
-								get_ttx(607),
-								(char*)hero + HERO_NAME2);
-
+							sprintf(g_dtp2, get_ttx(607), (char*)hero + HERO_NAME2);
 							GUI_output(g_dtp2);
+
 						} else if (spell_result <= 0)
 						{
 							/* failed => half AE costs */
@@ -317,10 +323,10 @@ void DNG_door(signed short action)
 							sub_ae_splash(hero, get_spell_cost(SP_FORAMEN_FORAMINOR, 0));
 
 							/* success => the door opens */
-							and_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(x,y), 0x0f); /* clear higher 4 bits */
-							or_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(x,y), DNG_TILE_OPEN_DOOR << 4);
+							*(g_dng_map_ptr + MAP_POS(x,y)) = 0x0f; /* clear higher 4 bits */
+							*(g_dng_map_ptr + MAP_POS(x,y)) |= (DNG_TILE_OPEN_DOOR << 4);
 							/* note that the 'unlocked' flag ......1. is not explicitly set. It will be set if the party closes the door. */
-							ds_writeb(STEPTARGET_FRONT, host_readb((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(x,y)));
+							ds_writeb(STEPTARGET_FRONT, *(g_dng_map_ptr + MAP_POS(x,y)));
 							DNG_open_door();
 
 							add_hero_ap(hero, 1L); /* hero gets 1 AP for successful lock pick */
@@ -360,8 +366,8 @@ void DNG_fallpit_test(signed short max_damage)
 
 	play_voc(ARCHIVE_FILE_FX18_VOC);
 
-	and_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(gs_x_target, gs_y_target), 0x0f); /* clear higher 4 bits */
-	or_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(gs_x_target, gs_y_target), DNG_TILE_PIT << 4);
+	*(g_dng_map_ptr + MAP_POS(gs_x_target, gs_y_target)) &= 0x0f; /* clear higher 4 bits */
+	*(g_dng_map_ptr + MAP_POS(gs_x_target, gs_y_target)) |= (DNG_TILE_PIT << 4);
 
 	if (ds_readb(DUNGEON_LIGHT) != 0)
 	{
@@ -371,8 +377,8 @@ void DNG_fallpit_test(signed short max_damage)
 		/* drop one level down */
 		DNG_inc_level();
 
-		and_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(gs_x_target, gs_y_target), 0x0f); /* clear higher 4 bits */
-		or_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(gs_x_target, gs_y_target), DNG_TILE_PIT_IN_CEILING << 4);
+		*(g_dng_map_ptr + MAP_POS(gs_x_target, gs_y_target)) &= 0x0f; /* clear higher 4 bits */
+		*(g_dng_map_ptr + MAP_POS(gs_x_target, gs_y_target)) |= (DNG_TILE_PIT_IN_CEILING << 4);
 		/* effect: 0101.... */
 
 		/* damage the heroes */
@@ -394,8 +400,8 @@ void DNG_fallpit_test(signed short max_damage)
 			gs_dungeon_level++;
 			load_area_description(1);
 
-			and_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(gs_x_target, gs_y_target), 0x0f); /* clear higher 4 bits */
-			or_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(gs_x_target, gs_y_target), DNG_TILE_PIT_IN_CEILING << 4);
+			*(g_dng_map_ptr + MAP_POS(gs_x_target, gs_y_target)) &= 0x0f; /* clear higher 4 bits */
+			*(g_dng_map_ptr + MAP_POS(gs_x_target, gs_y_target)) |= (DNG_TILE_PIT_IN_CEILING << 4);
 
 			/* move one level up. */
 			gs_dungeon_level--;
@@ -407,8 +413,8 @@ void DNG_fallpit_test(signed short max_damage)
 
 			DNG_update_pos();
 		} else {
-			and_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(gs_x_target, gs_y_target), 0x0f); /* clear higher 4 bits */
-			or_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(gs_x_target, gs_y_target), DNG_TILE_PIT_IN_CEILING << 4);
+			*(g_dng_map_ptr + MAP_POS(gs_x_target, gs_y_target)) &= 0x0f; /* clear higher 4 bits */
+			*(g_dng_map_ptr + MAP_POS(gs_x_target, gs_y_target)) |= (DNG_TILE_PIT_IN_CEILING << 4);
 			/* effect: 0101.... */
 		}
 	}
@@ -640,7 +646,7 @@ signed short DNG_step(void)
 					case WEST:  x--; break;
 				}
 
-				or_ptr_bs((Bit8u*)ds_readd(DNG_MAP_PTR) + MAP_POS(x,y), 0x02);
+				*(g_dng_map_ptr + MAP_POS(x,y)) |= (0x02);
 				/* set bit 1 'unlocked' */
 			}
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_7 && (!ds_readb(DNG15_LEVER_SOUTH) || !ds_readb(DNG15_LEVER_NORTH)))
@@ -784,7 +790,7 @@ void do_dungeon(void)
 
 	if ((g_dng_area_loaded != gs_dungeon_index) || g_area_prepared || (ds_readws(DNG_INIT_FLAG) != 0))
 	{
-		ds_writed(DNG_MAP_PTR, (Bit32u)g_dng_map);
+		g_dng_map_ptr = g_dng_map;
 
 		seg028_0555(0);
 

@@ -499,6 +499,9 @@ extern unsigned char g_good_camp_place;		// ds:0xe4c8; seg051, seg094, seg109
 extern unsigned char *g_dungeon_doors_buf; 	// ds:0xe49c; seg028,seg076,seg098,seg120
 extern unsigned char *g_dungeon_stairs_buf; 	// ds:0xe498; seg028,seg076,seg098,seg120
 extern unsigned char *g_dungeon_fights_buf; 	// ds:0xe494; seg028,seg076,seg098,seg120
+
+extern unsigned char *g_dng_map_ptr;		// ds:0xe488; seg076, seg098, seg099
+
 extern unsigned char *g_buffer11_ptr;		// ds:0xe404; seg028, seg075
 
 extern HugePt g_buffer9_ptr4;		// ds:0xe3fc; seg028
