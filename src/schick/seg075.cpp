@@ -668,8 +668,8 @@ void DNG_update_pos(void)
 
 	DNG_stub1();
 
-	ds_writew(DNG_REFRESH_X_TARGET, gs_x_target);
-	ds_writew(DNG_REFRESH_Y_TARGET, gs_y_target);
+	g_dng_refresh_x_target = gs_x_target;
+	g_dng_refresh_y_target = gs_y_target;
 	g_dng_refresh_direction = gs_direction;
 }
 

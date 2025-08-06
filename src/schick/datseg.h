@@ -489,7 +489,8 @@ extern unsigned char *g_dungeon_stairs_buf; 	// ds:0xe498; seg028,seg076,seg098,
 extern unsigned char *g_dungeon_fights_buf; 	// ds:0xe494; seg028,seg076,seg098,seg120
 
 extern unsigned char *g_dng_map_ptr;		// ds:0xe488; seg076, seg098, seg099
-
+extern signed short g_dng_refresh_x_target;	// ds:0xe486; seg075, seg076
+extern signed short g_dng_refresh_y_target;	// ds:0xe484; seg075, seg076
 extern signed short g_dng_refresh_direction;	// ds:0xe482; seg075, seg076, seg082, seg088
 extern unsigned char g_automap_buf[64];		// ds:0xe442; seg002, seg028, seg074
 extern char g_str_beorn_hjall[20];		// ds:0xe42e; seg072

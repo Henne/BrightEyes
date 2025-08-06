@@ -1604,8 +1604,8 @@
 //#define STR_BEORN_HJALL                 (0xe42e)    /* char[20] */
 //#define AUTOMAP_BUF                     (0xe442)    /* unsigned char[64] */
 //#define DNG_REFRESH_DIRECTION           (0xe482)    /* signed short */
-#define DNG_REFRESH_Y_TARGET            (0xe484)    /* unsigned short */
-#define DNG_REFRESH_X_TARGET            (0xe486)    /* unsigned short */
+//#define DNG_REFRESH_Y_TARGET            (0xe484)    /* unsigned short */
+//#define DNG_REFRESH_X_TARGET            (0xe486)    /* unsigned short */
 //#define DNG_MAP_PTR                     (0xe488)    /* Bit8u*; to DNG_MAP */
 #define DNG_FLOOR_TEX                   (0xe48c)    /* unsigned char; {0,1}, changing every timestep */
 #define DNG_GFXTAB                      (0xe48d)    /* Bit8u*; to GFXTAB(_SHIPS|_STONES|_MARBLES) */

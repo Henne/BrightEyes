@@ -457,7 +457,7 @@ signed short DNG_step(void)
 		draw_main_screen();
 		GUI_print_loc_line(get_tx(0));
 		g_request_refresh = ds_writew(REDRAW_MENUICONS, 0);
-		ds_writew(DNG_REFRESH_X_TARGET, -1);
+		g_dng_refresh_x_target = -1;
 	}
 
 	if (ds_readw(REDRAW_MENUICONS) != 0 && g_pp20_index == 0)
@@ -466,9 +466,7 @@ signed short DNG_step(void)
 		ds_writew(REDRAW_MENUICONS, 0);
 	}
 
-	if (gs_direction != g_dng_refresh_direction ||
-		gs_x_target != ds_readws(DNG_REFRESH_X_TARGET) ||
-		gs_y_target != ds_readws(DNG_REFRESH_Y_TARGET))
+	if (gs_direction != g_dng_refresh_direction || gs_x_target != g_dng_refresh_x_target || gs_y_target != g_dng_refresh_y_target)
 	{
 		DNG_update_pos();
 		set_automap_tiles(gs_x_target, gs_y_target);
