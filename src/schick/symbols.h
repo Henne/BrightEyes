@@ -1565,9 +1565,9 @@
 #define DEFENDER_ATTACKS                (0xe3aa)    /* unsigned short; {0,1} */
 #define ATTACKER_ATTACKS_AGAIN          (0xe3ac)    /* unsigned short; {0,1} */
 #define CURRENT_CURSOR_BAK              (0xe3ae)    /* Bit8u* */
-#define INC_SPELLS_COUNTER              (0xe3b2)    /* Bit8u* */
-#define INC_SKILLS_COUNTER              (0xe3b6)    /* Bit8u* */
-#define SKILLS_BUFFER                   (0xe3ba)    /* Bit8u* */
+//#define INC_SPELLS_COUNTER              (0xe3b2)    /* Bit8u* */
+//#define INC_SKILLS_COUNTER              (0xe3b6)    /* Bit8u* */
+//#define SKILLS_BUFFER                   (0xe3ba)    /* Bit8u* */
 //#define WILDCAMP_GUARDS                 (0xe3be)    /* signed char[3] */
 //#define WILDCAMP_HERBSTATUS             (0xe3c1)    /* signed char[7] */
 //#define WILDCAMP_REPLSTATUS             (0xe3c8)    /* signed char[7] */

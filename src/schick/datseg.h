@@ -523,7 +523,10 @@ extern signed char g_wildcamp_guardstatus[8];	// ds:0xe3d6; seg049, seg051, seg1
 extern signed char g_wildcamp_magicstatus[7];	// ds:0xe3cf; seg049, seg051, seg109
 extern signed char g_wildcamp_replstatus[7];	// ds:0xe3c8; seg052
 extern signed char g_wildcamp_herbstatus[7];	// ds:0xe3c1; seg052
-extern signed char g_wildcamp_guards[3];		// ds:0xe3be; seg052
+extern signed char g_wildcamp_guards[3];	// ds:0xe3be; seg052
+extern unsigned char *g_skills_buffer;		// ds:0xe3ba; seg050
+extern unsigned char *g_inc_skills_counter;	// ds:0xe3b6; seg050
+extern unsigned char *g_inc_spells_counter;	// ds:0xe3b2; seg050
 
 extern Bit32s g_fightobj_buf_freespace;	// ds:0xe370; seg032-seg100
 

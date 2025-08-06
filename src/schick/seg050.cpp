@@ -93,13 +93,13 @@ void inc_spell_advanced(Bit8u *hero, signed short spell)
 		}
 	}
 
-	if (host_readbs((Bit8u*)ds_readd(INC_SPELLS_COUNTER) + 2 * spell + 1) >= max_incs) {
+	if (host_readbs(g_inc_spells_counter + 2 * spell + 1) >= max_incs) {
 
 		/* no increase is possible */
 
 		GUI_output(get_tx2(43));
 
-	} else if (host_readbs((Bit8u*)ds_readd(INC_SPELLS_COUNTER) + 2 * spell) == 3) {
+	} else if (host_readbs(g_inc_spells_counter + 2 * spell) == 3) {
 
 		/* 3 increase failures -> no further increase try allowed */
 
@@ -135,15 +135,15 @@ void inc_spell_advanced(Bit8u *hero, signed short spell)
 			inc_ptr_bs(hero + spell + HERO_SPELLS);
 
 			/* set the try counter to 0 */
-			host_writebs((Bit8u*)ds_readd(INC_SPELLS_COUNTER) + 2 * spell, 0);
+			host_writebs(g_inc_spells_counter + 2 * spell, 0);
 			/* increment the increase counter */
-			inc_ptr_bs((Bit8u*)ds_readd(INC_SPELLS_COUNTER) + 2 * spell + 1);
+			inc_ptr_bs(g_inc_spells_counter + 2 * spell + 1);
 		} else {
 			/* fail */
 			GUI_output(get_ttx(338));
 
 			/* increment the try counter */
-			inc_ptr_bs((Bit8u*)ds_readd(INC_SPELLS_COUNTER) + 2 * spell);
+			inc_ptr_bs(g_inc_spells_counter + 2 * spell);
 		}
 	}
 }
@@ -161,21 +161,19 @@ void inc_skill_advanced(Bit8u *hero, signed short skill)
 
 	max_incs = ds_readbs(SKILL_DESCRIPTIONS + 4 * skill + 3);
 
-
-	if (host_readbs((Bit8u*)ds_readd(INC_SKILLS_COUNTER) + 2 * skill + 1) >= max_incs) {
+	if (host_readbs(g_inc_skills_counter + 2 * skill + 1) >= max_incs) {
 
 		/* no increase is possible */
-
 		GUI_output(get_tx2(43));
 
-	} else if (host_readbs((Bit8u*)ds_readd(INC_SKILLS_COUNTER) + 2 * skill) == 3) {
+	} else if (host_readbs(g_inc_skills_counter + 2 * skill) == 3) {
 
 		/* used up legal increase */
-
 		GUI_output(get_tx2(44));
-	} else {
-		/* try to increase */
 
+	} else {
+
+		/* try to increase */
 		dec_ptr_bs(hero + HERO_TA_RISE);
 
 #ifndef M302de_FEATURE_MOD
@@ -204,9 +202,9 @@ void inc_skill_advanced(Bit8u *hero, signed short skill)
 			inc_ptr_bs(hero + skill + HERO_TALENTS);
 
 			/* set the try counter to 0 */
-			host_writebs((Bit8u*)ds_readd(INC_SKILLS_COUNTER) + 2 * skill, 0);
+			host_writebs(g_inc_skills_counter + 2 * skill, 0);
 			/* increment the increase counter */
-			inc_ptr_bs((Bit8u*)ds_readd(INC_SKILLS_COUNTER) + 2 * skill + 1);
+			inc_ptr_bs(g_inc_skills_counter + 2 * skill + 1);
 
 			if (skill <= 6) {
 				/* increment a melee weapon skill */
@@ -242,7 +240,7 @@ void inc_skill_advanced(Bit8u *hero, signed short skill)
 			GUI_output(get_ttx(338));
 
 			/* increment the try counter */
-			inc_ptr_bs((Bit8u*)ds_readd(INC_SKILLS_COUNTER) + 2 * skill);
+			inc_ptr_bs(g_inc_skills_counter + 2 * skill);
 		}
 	}
 }
@@ -267,7 +265,7 @@ void inc_skill_novice(Bit8u *hero, signed short skill)
 	while (!done) {
 
 		/* leave the loop if 3 incs failes or the skill value is 18 */
-		if ((host_readbs((Bit8u*)ds_readd(INC_SKILLS_COUNTER) + skill * 2) == 3) ||
+		if ((host_readbs(g_inc_skills_counter + skill * 2) == 3) ||
 			(host_readbs(hero + HERO_TALENTS + skill) == 18)) {
 			done = 1;
 #if !defined(__BORLANDC__)
@@ -307,7 +305,7 @@ void inc_skill_novice(Bit8u *hero, signed short skill)
 				inc_ptr_bs(hero + HERO_TALENTS + skill);
 
 				/* reset failed counter */
-				host_writeb((Bit8u*)ds_readd(INC_SKILLS_COUNTER) + 2 * skill, 0);
+				host_writeb(g_inc_skills_counter + 2 * skill, 0);
 
 				done = 1;
 
@@ -322,7 +320,7 @@ void inc_skill_novice(Bit8u *hero, signed short skill)
 
 			} else {
 				/* inc failed counter */
-				inc_ptr_bs((Bit8u*)ds_readd(INC_SKILLS_COUNTER) + 2 * skill);
+				inc_ptr_bs(g_inc_skills_counter + 2 * skill);
 			}
 		}
 	}
@@ -347,7 +345,7 @@ void inc_spell_novice(Bit8u *hero, signed short spell)
 
 	while (!done) {
 		/* leave the loop if 3 tries to increase have failed or if the spell is already at the max value 18 */
-		if ((host_readb((Bit8u*)ds_readd(INC_SPELLS_COUNTER) + 2 * spell) == 3) ||
+		if ((host_readb(g_inc_spells_counter + 2 * spell) == 3) ||
 			(host_readbs(hero + HERO_SPELLS + spell) == 18)) {
 			done = 1;
 #if !defined(__BORLANDC__)
@@ -387,13 +385,13 @@ void inc_spell_novice(Bit8u *hero, signed short spell)
 				inc_ptr_bs(hero + HERO_SPELLS + spell);
 
 				/* reset failed counter */
-				host_writeb((Bit8u*)ds_readd(INC_SPELLS_COUNTER) + 2 * spell, 0);
+				host_writeb(g_inc_spells_counter + 2 * spell, 0);
 
 				done = 1;
 
 			} else {
 				/* inc failed counter */
-				inc_ptr_bs((Bit8u*)ds_readd(INC_SPELLS_COUNTER) + 2 * spell);
+				inc_ptr_bs(g_inc_spells_counter + 2 * spell);
 			}
 		}
 	}
@@ -427,34 +425,29 @@ void level_up(signed short hero_pos)
 
 	load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
 
-	ds_writed(INC_SKILLS_COUNTER, (Bit32u)(g_buffer8_ptr + 4500));
-	ds_writed(INC_SPELLS_COUNTER, (Bit32u)((Bit8u*)ds_readd(INC_SKILLS_COUNTER) + 208));
-	ds_writed(SKILLS_BUFFER, (Bit32u)g_buffer9_ptr);
+	g_inc_skills_counter = (unsigned char*)(g_buffer8_ptr + 4500);
+	g_inc_spells_counter = (unsigned char*)(g_inc_skills_counter + 208);
+	g_skills_buffer = (unsigned char*)g_buffer9_ptr;
 
 	l_si = load_archive_file(ARCHIVE_FILE_BSKILLS_DAT);
 
-	read_archive_file(l_si, (Bit8u*)ds_readd(SKILLS_BUFFER), 1300);
+	read_archive_file(l_si, g_skills_buffer, 1300);
 
 	close(l_si);
 
 
-	sprintf(g_dtp2,
-		get_ttx(411),
-		(char*)hero + HERO_NAME2);
-
+	sprintf(g_dtp2, get_ttx(411), (char*)hero + HERO_NAME2);
 	GUI_output(g_dtp2);
 
 	ds_writew(ACTION, 0);
 	g_status_page_mode = 1;
 
 	for (i = 0; i < 86; i++) {
-		host_writeb((Bit8u*)ds_readd(INC_SPELLS_COUNTER) + 2 * i,
-			host_writebs((Bit8u*)ds_readd(INC_SPELLS_COUNTER) + 2 * i + 1, 0));
+		host_writeb(g_inc_spells_counter + 2 * i, host_writebs(g_inc_spells_counter + 2 * i + 1, 0));
 	}
 
 	for (i = 0; i < 52; i++) {
-		host_writeb((Bit8u*)ds_readd(INC_SKILLS_COUNTER) + 2 * i,
-			host_writebs((Bit8u*)ds_readd(INC_SKILLS_COUNTER) + 2 * i + 1, 0));
+		host_writeb(g_inc_skills_counter + 2 * i, host_writebs(g_inc_skills_counter + 2 * i + 1, 0));
 	}
 
 	load_ggsts_nvf();
@@ -679,9 +672,9 @@ void level_up(signed short hero_pos)
 
 		while (host_readbs(hero + HERO_TA_RISE) > 0) {
 
-			l_si = host_readws((Bit8u*)ds_readd(SKILLS_BUFFER) + 100 * host_readbs(hero + HERO_TYPE) + 4 * i);
+			l_si = host_readws(g_skills_buffer + 100 * host_readbs(hero + HERO_TYPE) + 4 * i);
 
-			if (host_readbs(hero + HERO_TALENTS + l_si) < host_readws((Bit8u*)ds_readd(SKILLS_BUFFER) + 100 * host_readbs(hero + HERO_TYPE) + 4 * i + 2))
+			if (host_readbs(hero + HERO_TALENTS + l_si) < host_readws(g_skills_buffer + 100 * host_readbs(hero + HERO_TYPE) + 4 * i + 2))
 			{
 				inc_skill_novice(hero, l_si);
 			}

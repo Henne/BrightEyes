@@ -6168,9 +6168,9 @@ signed char g_wildcamp_magicstatus[7]; // ds:0xe3cf
 signed char g_wildcamp_replstatus[7]; // ds:0xe3c8
 signed char g_wildcamp_herbstatus[7]; // ds:0xe3c1
 signed char g_wildcamp_guards[3]; // ds:0xe3be
-void *g_skills_buffer; // ds:0xe3ba
-void *g_inc_skills_counter; // ds:0xe3b6
-void *g_inc_spells_counter; // ds:0xe3b2
+unsigned char *g_skills_buffer; // ds:0xe3ba
+unsigned char *g_inc_skills_counter; // ds:0xe3b6
+unsigned char *g_inc_spells_counter; // ds:0xe3b2
 void *g_current_cursor_bak; // ds:0xe3ae
 unsigned short g_attacker_attacks_again; // ds:0xe3ac
 unsigned short g_defender_attacks; // ds:0xe3aa
