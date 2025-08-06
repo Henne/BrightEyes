@@ -6160,8 +6160,7 @@ signed short g_price_modificator; // ds:0xe3f6, price modificator for smith and 
 struct struct_shopping_cart *g_buy_shopping_cart; // ds:0xe3f2, to buffer of size 250, each item has 4 bytes
 signed char g_sleep_quality; // ds:0xe3f1
 signed char g_booked_inn_days; // ds:0xe3f0
-unsigned char g_unkn_088[1]; // ds:0xe3ef
-signed char g_citycamp_guardstatus[7]; // ds:0xe3e8
+signed char g_citycamp_guardstatus[8]; // ds:0xe3e8
 signed char g_citycamp_magicstatus[7]; // ds:0xe3e1
 signed char g_citycamp_guards[3]; // ds:0xe3de
 unsigned char g_unkn_087[1]; // ds:0xe3dd

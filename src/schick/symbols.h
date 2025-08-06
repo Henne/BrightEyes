@@ -1574,9 +1574,9 @@
 #define WILDCAMP_MAGICSTATUS            (0xe3cf)    /* signed char[7] */
 #define WILDCAMP_GUARDSTATUS            (0xe3d6)    /* signed char[7] */
 // ?1
-#define CITYCAMP_GUARDS                 (0xe3de)    /* signed char[3] */
-#define CITYCAMP_MAGICSTATUS            (0xe3e1)    /* signed char[7] */
-#define CITYCAMP_GUARDSTATUS            (0xe3e8)    /* signed char[7] */
+//#define CITYCAMP_GUARDS                 (0xe3de)    /* signed char[3] */
+//#define CITYCAMP_MAGICSTATUS            (0xe3e1)    /* signed char[7] */
+//#define CITYCAMP_GUARDSTATUS            (0xe3e8)    /* signed char[7] */
 // ?1
 //#define BOOKED_INN_DAYS                 (0xe3f0)    /* signed char */
 //#define SLEEP_QUALITY                   (0xe3f1)    /* signed char */

@@ -52,11 +52,11 @@ void do_citycamp(void)
 	l3 = g_request_refresh = 1;
 
 	for (l_si = 0; l_si <= 6; l_si++) {
-		ds_writeb(CITYCAMP_MAGICSTATUS + l_si, ds_writeb(CITYCAMP_GUARDSTATUS + l_si, 0));
+		g_citycamp_magicstatus[l_si] = g_citycamp_guardstatus[l_si] = 0;
 	}
 
 	for (l_si = 0; l_si < 3; l_si++) {
-		ds_writeb(CITYCAMP_GUARDS + l_si, -1);
+		g_citycamp_guards[l_si] = -1;
 	}
 
 	draw_loc_icons(5, MENU_ICON_GUARDS, MENU_ICON_APPLY_SKILL, MENU_ICON_MAGIC, MENU_ICON_SLEEP, MENU_ICON_LEAVE);
@@ -102,8 +102,8 @@ void do_citycamp(void)
 
 			for (l_si = 0; l_si <= 6; l_si++) {
 
-				if (!ds_readbs(CITYCAMP_MAGICSTATUS + l_si) && check_hero(get_hero(l_si))) {
-					ds_writeb(CITYCAMP_GUARDSTATUS + l_si, 0);
+				if (!g_citycamp_magicstatus[l_si] && check_hero(get_hero(l_si))) {
+					g_citycamp_guardstatus[l_si] = 0;
 					answer = 0;
 				}
 			}
@@ -114,15 +114,13 @@ void do_citycamp(void)
 
 				for (l_si = 0; l_si < 3; l_si++) {
 
-					sprintf(g_dtp2,
-						get_ttx(321),
-						l_si + 1);
+					sprintf(g_dtp2,	get_ttx(321), l_si + 1);
 
 					do {
 
 						answer = select_hero_ok(g_dtp2);
 
-						if (answer != -1 && ds_readbs(CITYCAMP_MAGICSTATUS + answer) != 0) {
+						if (answer != -1 && g_citycamp_magicstatus[answer] != 0) {
 							GUI_output(get_ttx(331));
 							answer = -1;
 						}
@@ -134,8 +132,8 @@ void do_citycamp(void)
 
 					} while (answer == -1);
 
-					inc_ds_bs_post(CITYCAMP_GUARDSTATUS + answer);
-					ds_writebs(CITYCAMP_GUARDS + l_si, (signed char)answer);
+					g_citycamp_guardstatus[answer]++;
+					g_citycamp_guards[l_si] = answer;
 				}
 			}
 
@@ -158,13 +156,17 @@ void do_citycamp(void)
 
 				if (host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH) {
 
-					if (ds_readb(CITYCAMP_GUARDSTATUS + answer) != 0) {
+					if (g_citycamp_guardstatus[answer]) {
+
 						GUI_output(get_ttx(331));
+
 					} else {
-						if (ds_readb(CITYCAMP_MAGICSTATUS + answer) != 0) {
+						if (g_citycamp_magicstatus[answer]) {
+
 							GUI_output(get_ttx(334));
+
 						} else {
-							ds_writebs(CITYCAMP_MAGICSTATUS + answer, (signed char)use_magic(hero));
+							g_citycamp_magicstatus[answer] = use_magic(hero);
 						}
 					}
 				} else {
@@ -187,7 +189,7 @@ void do_citycamp(void)
 						/* without guards: (4*hours - 1) % chance for an incident */
 						/* For a 1 hour rest with guards this will be 0% chance! */
 						/* TODO: maybe change it to random_schick(100) - 1 to fix that */
-						if ((ds_readbs(CITYCAMP_GUARDS) == -1 ? 4 * hours : hours) > random_schick(100)) {
+						if ((g_citycamp_guards[0] == -1 ? 4 * hours : hours) > random_schick(100)) {
 							ds_writews(CAMP_INCIDENT, random_schick(3) - 1);
 						}
 					}
@@ -195,11 +197,10 @@ void do_citycamp(void)
 					l8 = 0;
 					l7 = hours;
 
-					if (ds_readbs(CITYCAMP_GUARDS + l_di) != -1) {
+					if (g_citycamp_guards[l_di] != -1) {
 
-						sprintf(g_dtp2,
-							get_ttx(774),
-							(char*)get_hero(ds_readbs(CITYCAMP_GUARDS + l_di)) + 0x10);
+						sprintf(g_dtp2,	get_ttx(774),
+							(char*)get_hero(g_citycamp_guards[l_di]) + 0x10);
 
 						GUI_print_loc_line(g_dtp2);
 					}
@@ -222,11 +223,10 @@ void do_citycamp(void)
 							l6 = l5;
 							l_di++;
 
-							if (ds_readbs(CITYCAMP_GUARDS + l_di) != -1) {
+							if (g_citycamp_guards[l_di] != -1) {
 
-								sprintf(g_dtp2,
-									get_ttx(774),
-									(char*)get_hero(ds_readbs(CITYCAMP_GUARDS + l_di)) + 0x10);
+								sprintf(g_dtp2,	get_ttx(774),
+									(char*)get_hero(g_citycamp_guards[l_di]) + 0x10);
 
 								GUI_print_loc_line(g_dtp2);
 							}
@@ -276,8 +276,8 @@ void do_citycamp(void)
 
 							if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 								host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-								ds_readbs(CITYCAMP_GUARDSTATUS + l_si) < 2 &&
-								ds_readbs(CITYCAMP_MAGICSTATUS + l_si) != 1)
+								(g_citycamp_guardstatus[l_si] < 2) &&
+								(g_citycamp_magicstatus[l_si] != 1))
 							{
 								GRP_hero_sleep(hero, hours - 10);
 							}
