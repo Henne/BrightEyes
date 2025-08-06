@@ -849,9 +849,9 @@ void seg066_10c8(void)
 {
 	set_var_to_zero();
 	seg066_0692();
-	ds_writews(CITY_REFRESH_X_TARGET, gs_x_target);
-	ds_writews(CITY_REFRESH_Y_TARGET, gs_y_target);
-	ds_writews(CITY_REFRESH_DIRECTION, gs_direction);
+	g_city_refresh_x_target = gs_x_target;
+	g_city_refresh_y_target = gs_y_target;
+	g_city_refresh_direction = gs_direction;
 }
 
 signed short city_step(void)
@@ -881,7 +881,7 @@ signed short city_step(void)
 		GUI_print_loc_line(get_tx(0));
 
 		g_request_refresh = ds_writews(REDRAW_MENUICONS, 0);
-		ds_writews(CITY_REFRESH_X_TARGET, -1);
+		g_city_refresh_x_target = -1;
 	}
 
 	if (ds_readw(REDRAW_MENUICONS) != 0 && g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
@@ -890,9 +890,9 @@ signed short city_step(void)
 	}
 
 	/* check if position or direction has changed */
-	if (gs_direction != ds_readws(CITY_REFRESH_DIRECTION) ||
-		gs_x_target != ds_readws(CITY_REFRESH_X_TARGET) ||
-		gs_y_target != ds_readws(CITY_REFRESH_Y_TARGET))
+	if (gs_direction != g_city_refresh_direction ||
+		gs_x_target != g_city_refresh_x_target ||
+		gs_y_target != g_city_refresh_y_target)
 	{
 		seg066_10c8();
 	}

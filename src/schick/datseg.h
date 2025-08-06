@@ -499,8 +499,11 @@ extern unsigned char *g_tex_floor[6];		// ds:0xe414; seg028, seg066
 extern signed short g_entrance_angle;		// ds:0xe412; seg066
 extern signed short g_always_zero2;		// ds:0xe410; seg066
 extern signed short g_always_zero1;		// ds:0xe40e; seg066
-
+extern signed short g_city_refresh_x_target;	// ds:0xe40c; seg066
+extern signed short g_city_refresh_y_target;	// ds:0xe40a; seg066
+extern signed short g_city_refresh_direction;	// ds:0xe408; seg066
 extern unsigned char *g_buffer11_ptr;		// ds:0xe404; seg028, seg075
+
 
 extern signed int g_fig_dropped_weapons[30];	// ds:0xe31a; seg032, seg041
 extern signed int g_autofight;		// ds:0xe318; seg004-seg105

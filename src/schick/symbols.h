@@ -1588,9 +1588,9 @@
 //#define BUFFER9_PTR4                    (0xe3fc)    /* Bit8u*; copy of BUFFER9_PTR */
 #define CITY_HOUSE_COUNT                (0xe400)    /* unsigned char[4]; counts of the four different kinds of houses on the current map */
 //#define BUFFER11_PTR                    (0xe404)    /* Bit8u*; to buffer of size 192, used for palettes */
-#define CITY_REFRESH_DIRECTION          (0xe408)    /* signed short */
-#define CITY_REFRESH_Y_TARGET           (0xe40a)    /* signed short */
-#define CITY_REFRESH_X_TARGET           (0xe40c)    /* signed short */
+//#define CITY_REFRESH_DIRECTION          (0xe408)    /* signed short */
+//#define CITY_REFRESH_Y_TARGET           (0xe40a)    /* signed short */
+//#define CITY_REFRESH_X_TARGET           (0xe40c)    /* signed short */
 //#define ALWAYS_ZERO1                    (0xe40e)    /* unsigned short; writeonly (0) */
 //#define ALWAYS_ZERO2                    (0xe410)    /* unsigned short; writeonly (0) */
 //#define ENTRANCE_ANGLE                  (0xe412)    /* signed short */
