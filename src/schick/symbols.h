@@ -1554,7 +1554,7 @@
 #define FIGOBJ_GFXHEIGHT_TABLE          (0xe380)    /* Bit8u*; to signed short[63] */
 #define FIGOBJ_GFXWIDTH_TABLE           (0xe384)    /* Bit8u*; to signed short[63] */
 #define FIGOBJ_GFXBUF_TABLE             (0xe388)    /* Bit8u*; to Bit8u*[63] */
-#define FIG_SPELLGFX_ID                 (0xe38c)    /* unsigned char */
+//#define FIG_SPELLGFX_ID                 (0xe38c)    /* unsigned char */
 //#define FIG_SHOT_BOLT_ID                (0xe38d)    /* unsigned char */
 //#define FIG_CB_MARKER_ID                (0xe38e)    /* unsigned char */
 //#define FIG_CB_SELECTOR_ID              (0xe38f)    /* unsigned char[20] */

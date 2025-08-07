@@ -209,13 +209,13 @@ void seg045_0273(signed short x, signed short y, signed short spell_ani_id)
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_Z), 99);
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_VISIBLE), 0);
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_TWOFIELDED), -1);
-	ds_writeb(FIG_SPELLGFX_ID, FIG_add_to_list(-1));
+	g_fig_spellgfx_id = FIG_add_to_list(-1);
 }
 
 void FIG_remove_smth2(void)
 {
-	FIG_remove_from_list(ds_readb(FIG_SPELLGFX_ID), 0);
-	ds_writeb(FIG_SPELLGFX_ID, 0xff);
+	FIG_remove_from_list(g_fig_spellgfx_id, 0);
+	g_fig_spellgfx_id = -1;
 }
 
 void seg045_0394(signed short a1, Bit8u *hero, signed short spell_ani_id)

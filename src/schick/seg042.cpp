@@ -814,7 +814,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 						if (l6 > 0) {
 
 							if (l6 != 4) {
-								FIG_set_sheet(ds_readbs(FIG_SPELLGFX_ID), 6);
+								FIG_set_sheet(g_fig_spellgfx_id, 6);
 							} else {
 
 								FIG_call_draw_pic();

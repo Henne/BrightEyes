@@ -696,7 +696,7 @@ void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 						}
 
 						if (l14 > 0) {
-							FIG_set_sheet(ds_readbs(FIG_SPELLGFX_ID), 6);
+							FIG_set_sheet(g_fig_spellgfx_id, 6);
 						}
 
 						if (!target_is_hero) {
@@ -929,7 +929,7 @@ void FIG_use_item(Bit8u *hero, Bit8u *target_monster, Bit8u *target_hero, signed
 
 		if (hylailic != 0) {
 
-			FIG_set_sheet(ds_readbs(FIG_SPELLGFX_ID), 6);
+			FIG_set_sheet(g_fig_spellgfx_id, 6);
 
 			l3 = 1;
 

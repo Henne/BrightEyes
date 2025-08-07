@@ -136,7 +136,7 @@ void FIG_preload_gfx(void)
 	}
 
 	g_fig_shot_bolt_id = -1;
-	ds_writeb(FIG_SPELLGFX_ID, -1);
+	g_fig_spellgfx_id = -1;
 
 	/* load ANI.DAT */
 	ds_writed(BUFFER_ANIDAT, (Bit32u)g_fightobj_buf_seek_ptr);
