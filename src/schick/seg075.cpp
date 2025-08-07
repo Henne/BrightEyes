@@ -454,7 +454,7 @@ void DNG_stub4(void)
 
 		if (l3 != -1) {
 
-			ptr = (Bit8u*)ds_readd(DNG_GFXTAB) + (l3 - 1) * 18;
+			ptr = g_dng_gfxtab + (l3 - 1) * 18;
 
 			if ((j = host_readws(ptr + 4)) != -1) {
 
