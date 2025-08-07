@@ -1610,7 +1610,7 @@
 //#define DNG_FLOOR_TEX                   (0xe48c)    /* unsigned char; {0,1}, changing every timestep */
 #define DNG_GFXTAB                      (0xe48d)    /* Bit8u*; to GFXTAB(_SHIPS|_STONES|_MARBLES) */
 // ?1
-#define LOCKPICK_TRY_COUNTER            (0xe492)    /* signed short; {0..4} */
+//#define LOCKPICK_TRY_COUNTER            (0xe492)    /* signed short; {0..4} */
 //#define DUNGEON_FIGHTS_BUF              (0xe494)    /* Bit8u*; to buffer of size 630 */
 //#define DUNGEON_STAIRS_BUF              (0xe498)    /* Bit8u*; to buffer of size 80 */
 //#define DUNGEON_DOORS_BUF               (0xe49c)    /* Bit8u*; to buffer of size 225 = 45 * 5; each 5-byte entry consists of [pos (2 bytes), smash-handicap, lockpick-handicap, foramen-handicap] */

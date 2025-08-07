@@ -244,10 +244,10 @@ void DNG_door(signed short action)
 
 						play_voc(ARCHIVE_FILE_FX11_VOC);
 
-						inc_ds_ws(LOCKPICK_TRY_COUNTER);
+						g_lockpick_try_counter++;
 						/* Original-Bug: Why is this a global variable? Should be related to the door. */
 
-						if (lockpick_result == -99 || ds_readws(LOCKPICK_TRY_COUNTER) > 3)
+						if (lockpick_result == -99 || g_lockpick_try_counter > 3)
 						{
 							/* LOCKPICK breaks if the test was unlucky,
 								or when tried three times without moving */
@@ -255,7 +255,7 @@ void DNG_door(signed short action)
 
 							or_ptr_bs(hero + SIZEOF_INVENTORY * lockpick_pos + (HERO_INVENTORY + INVENTORY_FLAGS), 1); /* set 'broken' flag */
 
-							ds_writew(LOCKPICK_TRY_COUNTER, 0);
+							g_lockpick_try_counter = 0;
 
 						} else if (lockpick_result <= 0) {
 
@@ -477,7 +477,7 @@ signed short DNG_step(void)
 	if ((gs_x_target != gs_x_target_bak) || (gs_y_target != gs_y_target_bak) || g_dng_level_changed)
 	{
 		g_can_merge_group = can_merge_group();
-		ds_writew(LOCKPICK_TRY_COUNTER, 0);
+		g_lockpick_try_counter = 0;
 	}
 
 	gs_x_target_bak = (gs_x_target);

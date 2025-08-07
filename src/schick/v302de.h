@@ -371,11 +371,6 @@ static inline Bit32s sub_ds_ds(Bit16u off, Bit32s val)
 
 /* Increment and Decrement on Bit8s variables in the datasegment */
 
-static inline Bit8s inc_ds_bs(Bit16u off)
-{
-	return ds_writeb(off, ds_readbs(off) + 1);
-}
-
 static inline Bit8s dec_ds_bs(Bit16u off)
 {
 	return ds_writeb(off, ds_readbs(off) - 1);
@@ -1157,7 +1152,6 @@ static inline char* get_itemname(unsigned short item)
 #define ds_writew(p, d)		(*(Bit16u*)(ds + p) = (d))
 #define ds_writed(p, d)		(*(Bit32u*)(ds + p) = (d))
 
-#define inc_ds_bs(o)		(++(*(Bit8s*)(ds + (o))))
 #define dec_ds_bs(o)		(--(*(Bit8s*)(ds + (o))))
 #define inc_ds_bs_post(o)	((*(Bit8s*)(ds + (o)))++)
 #define dec_ds_bs_post(o)	((*(Bit8s*)(ds + (o)))--)
