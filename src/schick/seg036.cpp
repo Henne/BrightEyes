@@ -48,11 +48,11 @@ signed short KI_copy_ani_sequence(Bit8u *dst, signed short ani_no, signed short 
 
 
 	/* set the right buffer */
-	p_datbuffer = (Bit8u*)ds_readd(BUFFER_ANIDAT);
+	p_datbuffer = g_buffer_anidat;
 
 	/* This function is never calld with mode == 3 */
 	if (mode == 3)
-		p_datbuffer = (Bit8u*)ds_readd(BUFFER_WEAPANIDAT);
+		p_datbuffer = g_buffer_weapanidat;
 
 	/* read how many ani sequences are in the file */
 	ani_max_no = host_readw(p_datbuffer);

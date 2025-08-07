@@ -41,11 +41,11 @@ Bit16s copy_ani_seq(Bit8u *dst, Bit16s ani, Bit16u type)
 	signed char length;
 
 	/* get pointer from ANI.DAT */
-	p_start = (Bit8u*)ds_readd(BUFFER_ANIDAT);
+	p_start = g_buffer_anidat;
 
 	/* check if we must use WEAPANI.DAT */
 	if (type == 3)
-		p_start = (Bit8u*)ds_readd(BUFFER_WEAPANIDAT);
+		p_start = g_buffer_weapanidat;
 
 	/* get number of animation sequences */
 	nr_anis = host_readws(p_start);
@@ -101,7 +101,7 @@ Bit8s get_seq_header(Bit16s ani)
 	Bit16s i;
 
 	/* get pointer from ANI.DAT */
-	p_start = (Bit8u*)ds_readd(BUFFER_ANIDAT);
+	p_start = g_buffer_anidat;
 
 	/* get number of ani seqences in ANI.DAT */
 	nr_anis = host_readws(p_start);

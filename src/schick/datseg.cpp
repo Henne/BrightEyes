@@ -6185,8 +6185,8 @@ unsigned char **g_figobj_gfxbuf_table; // ds:0xe388, to long[63]; Bit8u*
 signed short *g_figobj_gfxwidth_table; // ds:0xe384, to signed short[63]
 signed short *g_figobj_gfxheight_table; // ds:0xe380, to signed short[63]
 unsigned char *g_fig_list_buffer; // ds:0xe37c, to buffer of size 4445, initial value of FIG_LIST_HEAD
-void *g_buffer_anidat; // ds:0xe378, pointer to ANI.DAT buffer
-void *g_buffer_weapanidat; // ds:0xe374, pointer to WEAPANI.DAT
+unsigned char *g_buffer_anidat; // ds:0xe378, pointer to ANI.DAT buffer
+unsigned char *g_buffer_weapanidat; // ds:0xe374, pointer to WEAPANI.DAT
 Bit32s g_fightobj_buf_freespace; // ds:0xe370
 signed char g_fig_twofielded_count; // ds:0xe36f
 signed char g_fig_twofielded_table[21]; // ds:0xe35a

@@ -541,6 +541,8 @@ extern unsigned char **g_figobj_gfxbuf_table;	// ds:0xe388; seg032, seg040
 extern signed short *g_figobj_gfxheight_table;	// ds:0xe384; seg032, seg040
 extern signed short *g_figobj_gfxwidth_table;	// ds:0xe380; seg032, seg040
 extern unsigned char *g_fig_list_buffer;	// ds:0xe37c; seg006, seg040
+extern unsigned char *g_buffer_anidat;		// ds:0xe378; seg036, seg037, seg040, seg044
+extern unsigned char *g_buffer_weapanidat;	// ds:0xe374; seg036, seg037, seg040, seg044
 
 extern Bit32s g_fightobj_buf_freespace;	// ds:0xe370; seg032-seg100
 

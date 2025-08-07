@@ -138,17 +138,17 @@ void FIG_preload_gfx(void)
 	g_fig_spellgfx_id = -1;
 
 	/* load ANI.DAT */
-	ds_writed(BUFFER_ANIDAT, (Bit32u)g_fightobj_buf_seek_ptr);
+	g_buffer_anidat = g_fightobj_buf_seek_ptr;
 	g_fightobj_buf_seek_ptr += 9851;
 	handle = load_archive_file(ARCHIVE_FILE_ANI_DAT);
-	read_archive_file(handle, (Bit8u*)ds_readd(BUFFER_ANIDAT), 9851);
+	read_archive_file(handle, g_buffer_anidat, 9851);
 	close(handle);
 
 	/* load WEAPANI.DAT */
-	ds_writed(BUFFER_WEAPANIDAT, (Bit32u)g_fightobj_buf_seek_ptr);
+	g_buffer_weapanidat = g_fightobj_buf_seek_ptr;
 	g_fightobj_buf_seek_ptr += 1370;
 	handle = load_archive_file(ARCHIVE_FILE_WEAPANI_DAT);
-	read_archive_file(handle, (Bit8u*)ds_readd(BUFFER_WEAPANIDAT), 1370);
+	read_archive_file(handle, g_buffer_weapanidat, 1370);
 	close(handle);
 
 	/* process NVFs */

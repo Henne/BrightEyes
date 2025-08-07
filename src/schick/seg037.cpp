@@ -41,11 +41,11 @@ signed short copy_ani_stuff(Bit8u *dst, signed short no, signed short mode)
 	signed short max_no;
 
 	/* ANI.DAT */
-	buffer = (Bit8u*)ds_readd(BUFFER_ANIDAT);
+	buffer = g_buffer_anidat;
 
 	/* WEAPANI.DAT */
 	if (mode == 3)
-		buffer = (Bit8u*)ds_readd(BUFFER_WEAPANIDAT);
+		buffer = g_buffer_weapanidat;
 
 	max_no = host_readw(buffer);
 

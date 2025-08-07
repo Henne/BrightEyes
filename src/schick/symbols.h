@@ -1548,8 +1548,8 @@
 #define FIG_TWOFIELDED_TABLE            (0xe35a)    /* signed char[21]; table containing the fighter-ids of the head parts of the twofielded enemies */
 #define FIG_TWOFIELDED_COUNT            (0xe36f)    /* signed char */
 //#define FIGHTOBJ_BUF_FREESPACE          (0xe370)    /* signed long */
-#define BUFFER_WEAPANIDAT               (0xe374)    /* Bit8u*; pointer to WEAPANI.DAT */
-#define BUFFER_ANIDAT                   (0xe378)    /* Bit8u*; pointer to ANI.DAT buffer */
+//#define BUFFER_WEAPANIDAT               (0xe374)    /* Bit8u*; pointer to WEAPANI.DAT */
+//#define BUFFER_ANIDAT                   (0xe378)    /* Bit8u*; pointer to ANI.DAT buffer */
 //#define FIG_LIST_BUFFER                 (0xe37c)    /* Bit8u*; to buffer of size 4445, initial value of FIG_LIST_HEAD. A figther entry is of size 35, so the list can store up to 127 entries */
 //#define FIGOBJ_GFXHEIGHT_TABLE          (0xe380)    /* Bit8u*; to signed short[63] */
 //#define FIGOBJ_GFXWIDTH_TABLE           (0xe384)    /* Bit8u*; to signed short[63] */
