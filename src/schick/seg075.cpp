@@ -45,7 +45,7 @@ void DNG_floor_ceil(void)
 	nvf.dst = g_renderbuf_ptr;
 	nvf.src = (Bit8u*)g_buffer9_ptr3;
 	nvf.no = 0;
-	nvf.type = (!ds_readbs(DNG_FLOOR_TEX)) ? 3 : 5;
+	nvf.type = !g_dng_floor_tex ? 3 : 5;
 	nvf.width = (unsigned char*)&width;
 	nvf.height = (unsigned char*)&height;
 	process_nvf(&nvf);
@@ -55,7 +55,7 @@ void DNG_floor_ceil(void)
 	nvf.dst = ((Bit8u*)g_renderbuf_ptr) + 0x4030;
 	nvf.src = (Bit8u*)g_buffer9_ptr3;
 	nvf.no = (!(gs_direction&1)) ? 1 : 2;
-	nvf.type = (!ds_readbs(DNG_FLOOR_TEX)) ? 3 : 5;
+	nvf.type = !g_dng_floor_tex ? 3 : 5;
 	nvf.width = (unsigned char*)&width;
 	nvf.height = (unsigned char*)&height;
 	process_nvf(&nvf);
@@ -365,10 +365,10 @@ void DNG_draw_walls(signed short a1, signed short a2, signed short a3)
 	flag = (a3 & 0x8000) ? 1 : 0;
 	a3 &= 0x3fff;
 
-	if ((a3 >= 8) && (a3 <= 13) && !ds_readbs(DNG_FLOOR_TEX)) {
+	if ((a3 >= 8) && (a3 <= 13) && !g_dng_floor_tex) {
 		a3 += 6;
 	} else {
-		if ((a3 >= 14) && (a3 <= 19) && !ds_readbs(DNG_FLOOR_TEX)) {
+		if ((a3 >= 14) && (a3 <= 19) && !g_dng_floor_tex) {
 			a3 -= 6;
 		}
 	}
@@ -658,7 +658,7 @@ void DNG_timestep(signed short forward)
 			}
 		}
 
-		xor_ds_bs(DNG_FLOOR_TEX, 1);
+		g_dng_floor_tex ^= 1;
 	}
 }
 

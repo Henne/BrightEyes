@@ -6135,7 +6135,7 @@ unsigned char *g_dungeon_fights_buf; // ds:0xe494, to buffer of size 630
 signed short g_lockpick_try_counter; // ds:0xe492, {0..4}
 unsigned char g_unkn_090[1]; // ds:0xe491
 void *g_dng_gfxtab; // ds:0xe48d, to GFXTAB(_WOOD|_STONE|_MARBLE)
-unsigned char g_dng_floor_tex; // ds:0xe48c, changing every timestep
+signed char g_dng_floor_tex; // ds:0xe48c, changing every timestep
 unsigned char *g_dng_map_ptr; // ds:0xe488, to DNG_MAP
 signed short g_dng_refresh_x_target; // ds:0xe486
 signed short g_dng_refresh_y_target; // ds:0xe484

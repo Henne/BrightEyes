@@ -1607,7 +1607,7 @@
 //#define DNG_REFRESH_Y_TARGET            (0xe484)    /* unsigned short */
 //#define DNG_REFRESH_X_TARGET            (0xe486)    /* unsigned short */
 //#define DNG_MAP_PTR                     (0xe488)    /* Bit8u*; to DNG_MAP */
-#define DNG_FLOOR_TEX                   (0xe48c)    /* unsigned char; {0,1}, changing every timestep */
+//#define DNG_FLOOR_TEX                   (0xe48c)    /* unsigned char; {0,1}, changing every timestep */
 #define DNG_GFXTAB                      (0xe48d)    /* Bit8u*; to GFXTAB(_SHIPS|_STONES|_MARBLES) */
 // ?1
 #define LOCKPICK_TRY_COUNTER            (0xe492)    /* signed short; {0..4} */
