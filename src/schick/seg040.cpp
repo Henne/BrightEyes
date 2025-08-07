@@ -191,7 +191,7 @@ void FIG_preload_gfx(void)
 	g_fightobj_buf_freespace = (Bit32s)((HugePt)g_fightobj_buf - (Bit8u*)g_fightobj_buf_seek_ptr);
 
 	g_fightobj_count = 0;
-	ds_writeb(FIG_TWOFIELDED_COUNT, 0);
+	g_fig_twofielded_count = 0;
 }
 
 void FIG_draw_scenario(void)

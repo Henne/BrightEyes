@@ -287,7 +287,7 @@ void FIG_load_enemy_sprites(Bit8u *ptr, signed short x, signed short y)
 		ds_writeb((FIG_LIST_ELEM+FIGHTER_X2), ds_readbs(GFXTAB_TWOFIELDED_X2 + host_readbs(ptr + ENEMY_SHEET_VIEWDIR)));
 
 		/* TODO: b = ++a; */
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_TWOFIELDED), ds_writeb(FIG_TWOFIELDED_COUNT, ds_readb(FIG_TWOFIELDED_COUNT) + 1));
+		ds_writeb((FIG_LIST_ELEM+FIGHTER_TWOFIELDED), (g_fig_twofielded_count = g_fig_twofielded_count + 1));
 	} else {
 		/* sprite uses one field */
 		ds_writeb((FIG_LIST_ELEM+FIGHTER_X1), 0);
@@ -343,8 +343,8 @@ void FIG_load_enemy_sprites(Bit8u *ptr, signed short x, signed short y)
 		ds_writeb((FIG_LIST_ELEM+FIGHTER_Y2), 0x27);
 		ds_writeb((FIG_LIST_ELEM+FIGHTER_IS_ENEMY), 1);
 		ds_writeb((FIG_LIST_ELEM+FIGHTER_Z), 10);
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_TWOFIELDED), ds_readb(FIG_TWOFIELDED_COUNT) + 20);
-		ds_writeb(FIG_TWOFIELDED_TABLE + ds_readbs(FIG_TWOFIELDED_COUNT), FIG_add_to_list(-1));
+		ds_writeb((FIG_LIST_ELEM+FIGHTER_TWOFIELDED), g_fig_twofielded_count + 20);
+		ds_writeb(FIG_TWOFIELDED_TABLE + g_fig_twofielded_count, FIG_add_to_list(-1));
 	}
 }
 

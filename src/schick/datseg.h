@@ -543,8 +543,8 @@ extern signed short *g_figobj_gfxwidth_table;	// ds:0xe380; seg032, seg040
 extern unsigned char *g_fig_list_buffer;	// ds:0xe37c; seg006, seg040
 extern unsigned char *g_buffer_anidat;		// ds:0xe378; seg036, seg037, seg040, seg044
 extern unsigned char *g_buffer_weapanidat;	// ds:0xe374; seg036, seg037, seg040, seg044
-
-extern Bit32s g_fightobj_buf_freespace;	// ds:0xe370; seg032-seg100
+extern Bit32s g_fightobj_buf_freespace;		// ds:0xe370; seg032-seg100
+extern signed char g_fig_twofielded_count;	// ds:0xe356; seg039, seg040
 
 extern signed int g_fig_dropped_weapons[30];	// ds:0xe31a; seg032, seg041
 extern signed int g_autofight;		// ds:0xe318; seg004-seg105
