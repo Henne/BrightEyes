@@ -307,11 +307,11 @@
 //#define OLVIR_SINGING_HETMANN           (0x345a)    /* unsigned char; {0,1} */
 //#define OLVIR_SINGING_HYGGELIK          (0x345b)    /* unsigned char; {0,1} */
 //#define OLVIR_SINGING_HASGAR            (0x345c)    /* unsigned char; {0,1} */
-#define SWAFNILD_TP1                    (0x345d)    /* unsigned char */
-#define SWAFNILD_TP2                    (0x345e)    /* unsigned char */
-#define SWAFNILD_TP3                    (0x345f)    /* unsigned char */
-#define SWAFNILD_TP4                    (0x3460)    /* unsigned char */
-#define SWAFNILD_DESTINATION            (0x3461)    /* unsigned char; {1,2,3} */
+//#define SWAFNILD_TP1                    (0x345d)    /* unsigned char */
+//#define SWAFNILD_TP2                    (0x345e)    /* unsigned char */
+//#define SWAFNILD_TP3                    (0x345f)    /* unsigned char */
+//#define SWAFNILD_TP4                    (0x3460)    /* unsigned char */
+//#define SWAFNILD_DESTINATION            (0x3461)    /* unsigned char; {1,2,3} */
 #define SWAFNILD_NOMAP                  (0x3462)    /* unsigned char; {0,1} */
 #define TREBORN_DATE                    (0x3463)    /* unsigned char; {0,1} */
 #define UNICORN_HERO_POS                (0x3464)    /* unsigned char; {0-6} */

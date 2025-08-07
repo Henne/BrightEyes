@@ -335,32 +335,29 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 						} else if (txt_id == 38) {
 
-							sprintf(dst, fmt, get_ttx(235 + ds_readb(SWAFNILD_TP4)));
+							sprintf(dst, fmt, get_ttx(235 + gs_swafnild_tp4));
 
 						} else if (txt_id == 49) {
 
-							sprintf(dst, fmt, get_ttx(235 + ds_readb(SWAFNILD_TP4)));
+							sprintf(dst, fmt, get_ttx(235 + gs_swafnild_tp4));
 
-							gs_current_town = (ds_readbs(SWAFNILD_TP4));
+							gs_current_town = gs_swafnild_tp4;
 
-							gs_x_target_bak = (ds_readbs(SWAFNILD_TP4) == 35 ? 10 : (ds_readbs(SWAFNILD_TP4) == 32 ? 2 : 7));
-							gs_y_target_bak = (ds_readbs(SWAFNILD_TP4) == 35 ? 2 : (ds_readbs(SWAFNILD_TP4) == 32 ? 14 : 3));
+							gs_x_target_bak = (gs_swafnild_tp4 == 35 ? 10 : (gs_swafnild_tp4 == 32 ? 2 : 7));
+							gs_y_target_bak = (gs_swafnild_tp4 == 35 ? 2 : (gs_swafnild_tp4 == 32 ? 14 : 3));
 
 						} else if (txt_id == 52) {
 
 							sprintf(dst, fmt,
-								get_ttx(235 + ds_readb(SWAFNILD_TP1)),
-								get_ttx(235 + ds_readb(SWAFNILD_TP2)),
-								get_ttx(235 + ds_readb(SWAFNILD_TP3)));
+								get_ttx(235 + gs_swafnild_tp1),
+								get_ttx(235 + gs_swafnild_tp2),
+								get_ttx(235 + gs_swafnild_tp3));
 
 						} else if (txt_id == 59) {
 
 							sprintf(dst, fmt, get_ttx(235 + (
-							    ds_readb(SWAFNILD_DESTINATION) == 1 ?
-                                    ds_readb(SWAFNILD_TP1)
-                                : (ds_readb(SWAFNILD_DESTINATION) == 2 ?
-                                    ds_readb(SWAFNILD_TP2)
-                                : ds_readb(SWAFNILD_TP3)))));
+							    gs_swafnild_destination == 1 ? gs_swafnild_tp1 :
+							    (gs_swafnild_destination == 2 ? gs_swafnild_tp2 : gs_swafnild_tp3))));
 
 						} else {
 							strcpy(dst, fmt);

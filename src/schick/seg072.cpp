@@ -746,21 +746,21 @@ void INF_swafnild_unicorn(signed short informer, signed short state)
 			if ((gs_current_town >= TOWNS_THORWAL && gs_current_town <= TOWNS_EFFERDUN) ||
 				(gs_current_town >= TOWNS_DASPOTA && gs_current_town <= TOWNS_VAERMHAG))
 			{
-				ds_writeb(SWAFNILD_TP1, TOWNS_PREM);
-				ds_writeb(SWAFNILD_TP2, TOWNS_SKJAL);
-				ds_writeb(SWAFNILD_TP3, TOWNS_OTTARJE);
-				ds_writeb(SWAFNILD_TP4, TOWNS_ARYN);
+				gs_swafnild_tp1 = (TOWNS_PREM);
+				gs_swafnild_tp2 = (TOWNS_SKJAL);
+				gs_swafnild_tp3 = (TOWNS_OTTARJE);
+				gs_swafnild_tp4 = (TOWNS_ARYN);
 
 			} else if (gs_current_town >= TOWNS_ROVIK && gs_current_town <= TOWNS_TREBAN) {
-				ds_writeb(SWAFNILD_TP1, TOWNS_OTTARJE);
-				ds_writeb(SWAFNILD_TP2, TOWNS_SKJAL);
-				ds_writeb(SWAFNILD_TP3, TOWNS_PREM);
-				ds_writeb(SWAFNILD_TP4, TOWNS_LJASDAHL);
+				gs_swafnild_tp1 = (TOWNS_OTTARJE);
+				gs_swafnild_tp2 = (TOWNS_SKJAL);
+				gs_swafnild_tp3 = (TOWNS_PREM);
+				gs_swafnild_tp4 = (TOWNS_LJASDAHL);
 			} else {
-				ds_writeb(SWAFNILD_TP1, TOWNS_KORD);
-				ds_writeb(SWAFNILD_TP2, TOWNS_TREBAN);
-				ds_writeb(SWAFNILD_TP3, TOWNS_RUNINSHAVEN);
-				ds_writeb(SWAFNILD_TP4, TOWNS_GUDDASUNDEN);
+				gs_swafnild_tp1 = (TOWNS_KORD);
+				gs_swafnild_tp2 = (TOWNS_TREBAN);
+				gs_swafnild_tp3 = (TOWNS_RUNINSHAVEN);
+				gs_swafnild_tp4 = (TOWNS_GUDDASUNDEN);
 			}
 		} else if (state == 17) {
 			/* mark RAGNA FIRUNJASDOTTER as known */
@@ -794,8 +794,8 @@ void INF_swafnild_unicorn(signed short informer, signed short state)
 
 		} else if (state == 37) {
 
-			gs_current_town = (ds_readb(SWAFNILD_DESTINATION) == 1 ? ds_readb(SWAFNILD_TP1) :
-						(ds_readb(SWAFNILD_DESTINATION) == 2 ? ds_readb(SWAFNILD_TP2) : ds_readb(SWAFNILD_TP3)));
+			gs_current_town = (gs_swafnild_destination == 1 ? gs_swafnild_tp1 :
+						(gs_swafnild_destination == 2 ? gs_swafnild_tp2 : gs_swafnild_tp3));
 
 			switch (gs_current_town) {
 				case TOWNS_PREM: gs_x_target_bak        = 22; gs_y_target_bak =  8; break;
@@ -811,11 +811,11 @@ void INF_swafnild_unicorn(signed short informer, signed short state)
 
 			timewarp_until_midnight();
 		} else if (state == 42) {
-			ds_writeb(SWAFNILD_DESTINATION, 1);
+			gs_swafnild_destination = 1;
 		} else if (state == 43) {
-			ds_writeb(SWAFNILD_DESTINATION, 2);
+			gs_swafnild_destination = 2;
 		} else if (state == 44) {
-			ds_writeb(SWAFNILD_DESTINATION, 3);
+			gs_swafnild_destination = 3;
 		}
 
 	} else if (informer == 1) {

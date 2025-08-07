@@ -280,6 +280,11 @@ extern Bit8u  gs_olvir_interrupted;		//ds:0x3459; seg072
 extern Bit8u  gs_olvir_singing_hetmann;		//ds:0x345a; seg072
 extern Bit8u  gs_olvir_singing_hyggelik;	//ds:0x345b; seg072
 extern Bit8u  gs_olvir_singing_hasgar;		//ds:0x345c; seg072
+extern Bit8u  gs_swafnild_tp1;			//ds:0x345d; seg030, seg072
+extern Bit8u  gs_swafnild_tp2;			//ds:0x345e; seg030, seg072
+extern Bit8u  gs_swafnild_tp3;			//ds:0x345f; seg030, seg072
+extern Bit8u  gs_swafnild_tp4;			//ds:0x3460; seg030, seg072
+extern Bit8u  gs_swafnild_destination;		//ds:0x3461; seg030, seg072
 
 extern Bit8u  gs_algrid_treborns_hint;		//ds:0x3467; seg072
 
