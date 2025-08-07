@@ -6190,8 +6190,7 @@ unsigned char *g_buffer_weapanidat; // ds:0xe374, pointer to WEAPANI.DAT
 Bit32s g_fightobj_buf_freespace; // ds:0xe370
 signed char g_fig_twofielded_count; // ds:0xe36f
 signed char g_fig_twofielded_table[21]; // ds:0xe35a
-void *g_chessboard_cpy; // ds:0xe356
-
+signed char *g_chessboard_cpy; // ds:0xe356
 signed int g_fig_dropped_weapons[30]; // ds:0xe31a
 signed int g_autofight;		// ds:0xe318
 signed int g_current_fight_no;	// ds:0xe316
