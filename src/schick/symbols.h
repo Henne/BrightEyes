@@ -1564,7 +1564,7 @@
 #define ATTACKER_DEAD                   (0xe3a8)    /* signed short; {0,1} */
 #define DEFENDER_ATTACKS                (0xe3aa)    /* unsigned short; {0,1} */
 #define ATTACKER_ATTACKS_AGAIN          (0xe3ac)    /* unsigned short; {0,1} */
-#define CURRENT_CURSOR_BAK              (0xe3ae)    /* Bit8u* */
+//#define CURRENT_CURSOR_BAK              (0xe3ae)    /* Bit8u* */
 //#define INC_SPELLS_COUNTER              (0xe3b2)    /* Bit8u* */
 //#define INC_SKILLS_COUNTER              (0xe3b6)    /* Bit8u* */
 //#define SKILLS_BUFFER                   (0xe3ba)    /* Bit8u* */

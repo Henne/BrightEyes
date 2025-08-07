@@ -434,10 +434,8 @@ void buy_screen(void)
 
 					if (item_stackable(get_itemsdat(host_readws((Bit8u*)ds_readd(BUYITEMS) + 7 * (l7 + item))))) {
 
-						sprintf(g_dtp2,
-							get_ttx(441),
-							(char*)(GUI_names_grammar(4, host_readws((Bit8u*)ds_readd(BUYITEMS) + 7 * (l7 + item)), 0)));
-
+						sprintf(g_dtp2,	get_ttx(441),
+							(char*)GUI_names_grammar(4, host_readws((Bit8u*)ds_readd(BUYITEMS) + 7 * (l7 + item)), 0));
 						l4 = GUI_input(g_dtp2, 2);
 					}
 
@@ -447,9 +445,13 @@ void buy_screen(void)
 							(Bit32s)host_readws((Bit8u*)ds_readd(BUYITEMS) + 7 * (l7 + item) + 4) * l4;
 
 						if (price + l9 > p_money) {
+
 							GUI_output(get_ttx(401));
+
 						} else if (free_slots < l17) {
+
 							GUI_output(get_ttx(438));
+
 						} else {
 							price += l9;
 
@@ -497,12 +499,18 @@ void buy_screen(void)
 				} while (percent > 50);
 
 				if (percent == 0) {
+
 					GUI_output(get_ttx(440));
 					offended = 2;
+
 				} else if (percent >= percent_old) {
+
 					j = 2;
+
 				} else if (percent < 0) {
+
 					break;
+
 				} else {
 					g_skilled_hero_pos = get_skilled_hero_pos(TA_FEILSCHEN);
 
@@ -611,16 +619,21 @@ void insert_sell_items(Bit8u *shop_ptr, Bit8u *hero, signed short item_pos, sign
 	host_writew((Bit8u*)ds_readd(SELLITEMS) + 7 * shop_pos, item_id);
 
 	if (item_armor(get_itemsdat(item_id)) || item_weapon(get_itemsdat(item_id))) {
+
 		/* WEAPON SHOP */
 		if (host_readbs(shop_ptr + 1) == 1) {
 			sellable = 1;
 		}
+
 	} else if (item_herb_potion(get_itemsdat(item_id))) {
+
 		/* HERB SHOP */
 		if (host_readbs(shop_ptr + 1) == 2) {
 			sellable = 1;
 		}
+
 	} else {
+
 		/* CHANDLER SHOP */
 		if (host_readbs(shop_ptr + 1) == 3) {
 			sellable = 1;
@@ -628,6 +641,7 @@ void insert_sell_items(Bit8u *shop_ptr, Bit8u *hero, signed short item_pos, sign
 	}
 
 	if (!sellable) {
+
 		/* this item cannot be sold here */
 		host_writew((Bit8u*)ds_readd(SELLITEMS) + 7 * shop_pos + 2, 0);
 		host_writew((Bit8u*)ds_readd(SELLITEMS) + 7 * shop_pos + 4, 1);

@@ -56,7 +56,7 @@ void reset_item_selector(void)
 		ds_writebs(STATUSPAGE_SELITEM2_NO, 23);
 	}
 
-	ds_writed(CURRENT_CURSOR, ds_writed(CURRENT_CURSOR_BAK, (Bit32u)(p_datseg + DEFAULT_MOUSE_CURSOR)));
+	ds_writed(CURRENT_CURSOR, (Bit32u)(g_current_cursor_bak = (p_datseg + DEFAULT_MOUSE_CURSOR)));
 }
 
 /* nearly identical, same length */
@@ -458,7 +458,7 @@ void status_menu(signed short hero_pos)
 
 		if (ds_readws(MOUSE2_EVENT) != 0 || ds_readws(ACTION) == ACTION_ID_PAGE_UP) {
 
-			ds_writed(CURRENT_CURSOR_BAK, ds_readd(CURRENT_CURSOR));
+			g_current_cursor_bak =  (Bit8u*)ds_readd(CURRENT_CURSOR);
 			ds_writed(CURRENT_CURSOR, (Bit32u)(p_datseg + DEFAULT_MOUSE_CURSOR));
 
 			switch (g_status_page_mode) {
@@ -814,7 +814,7 @@ void status_menu(signed short hero_pos)
 			}
 			}
 
-			ds_writed(CURRENT_CURSOR, ds_readd(CURRENT_CURSOR_BAK));
+			ds_writed(CURRENT_CURSOR, (Bit32u)g_current_cursor_bak);
 		}
 	}
 
