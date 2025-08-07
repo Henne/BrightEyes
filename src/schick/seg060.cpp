@@ -55,14 +55,15 @@ void talk_tavern(void)
 	answer2_buffer = answer1_buffer + 60;
 	answer3_buffer = answer2_buffer + 60;
 	g_textbox_width = 9;
-	ds_writeb(TLK_TAV_FULLNESS, ds_writeb(TLK_TAV_TESTDRUNK, ds_writeb(CURRENT_INFORMER, ds_writeb(TLK_TAV_FOLLOWINFORMER, 0))));
-	ds_writeb(TLK_TAV_DRINKCOUNT, 0);
+	gs_tlk_tav_fullness = gs_tlk_tav_testdrunk = gs_current_informer
+		= gs_tlk_tav_followinformer = 0;
+	gs_tlk_tav_drinkcount = 0;
 
 	set_var_to_zero();
 	load_ani(13);
 	init_ani(0);
 	load_tlk(ARCHIVE_FILE_TAVERN_TLK);
-	g_dialog_state = (g_dialog_done = 0);
+	g_dialog_state = g_dialog_done = 0;
 	states_tab = p_datseg + DIALOG_STATES;
 
 	do {
@@ -96,7 +97,7 @@ void talk_tavern(void)
 
 			} else if (txt_id == 95) {
 
-				hero = get_hero(ds_readb(TLK_TAV_TESTDRUNK) - 1);
+				hero = get_hero(gs_tlk_tav_testdrunk - 1);
 
 				sprintf(text_buffer, format, (char*)hero + HERO_NAME2,
 					GUI_get_ptr(host_readbs(hero + HERO_SEX), 3),
@@ -104,7 +105,7 @@ void talk_tavern(void)
 ;
 			} else if (txt_id == 18 || txt_id == 31) {
 
-				sprintf(text_buffer, format, 20 * ds_readb(TLK_TAV_FULLNESS));
+				sprintf(text_buffer, format, 20 * gs_tlk_tav_fullness);
 
 			} else if (txt_id == 40 || txt_id == 46) {
 
@@ -141,10 +142,10 @@ void talk_tavern(void)
 
 			} else if (txt_id == 115) {
 
-				ds_writeb(TLK_TAV_INFORMERSEX, random_schick(2));
+				gs_tlk_tav_informersex = random_schick(2);
 
 				sprintf(text_buffer, format,
-					ds_readb(TLK_TAV_INFORMERSEX) == 1 ? get_tx(143) : get_tx(144));
+					gs_tlk_tav_informersex == 1 ? get_tx(143) : get_tx(144));
 
 			} else if (txt_id == 119) {
 
@@ -153,18 +154,18 @@ void talk_tavern(void)
 			} else if (txt_id == 122 || txt_id == 126 || txt_id == 127 || txt_id == 132) {
 
 				sprintf(text_buffer, format,
-					GUI_get_ptr(ds_readb(TLK_TAV_INFORMERSEX) - 1, 0),
-					GUI_get_ptr(ds_readb(TLK_TAV_INFORMERSEX) - 1, 0));
+					GUI_get_ptr(gs_tlk_tav_informersex - 1, 0),
+					GUI_get_ptr(gs_tlk_tav_informersex - 1, 0));
 
 			} else if (txt_id == 128) {
 
-				sprintf(text_buffer, format, !ds_readb(CURRENT_INFORMER) ? get_drinkmate() : get_informer_name());
+				sprintf(text_buffer, format, (!gs_current_informer ? get_drinkmate() : get_informer_name()));
 
 			} else if (txt_id == 131) {
 
 				sprintf(text_buffer, format,
-					GUI_get_ptr(ds_readb(TLK_TAV_INFORMERSEX) - 1, 0),
-					GUI_get_ptr(ds_readb(TLK_TAV_INFORMERSEX) - 1, 0),
+					GUI_get_ptr(gs_tlk_tav_informersex - 1, 0),
+					GUI_get_ptr(gs_tlk_tav_informersex - 1, 0),
 					(Bit8u*)load_current_town_gossip());
 
 			} else {
@@ -274,9 +275,9 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 2) {
 
-		if ((ds_readb(TLK_TAV_FULLNESS) == 1 || ds_readb(TLK_TAV_FULLNESS) == 2) && answer == 1) {
+		if ((gs_tlk_tav_fullness == 1 || gs_tlk_tav_fullness == 2) && answer == 1) {
 			g_dialog_next_state = (3);
-		} else if ((ds_readb(TLK_TAV_FULLNESS) == 1 || ds_readb(TLK_TAV_FULLNESS) == 2) && answer == 2) {
+		} else if ((gs_tlk_tav_fullness == 1 || gs_tlk_tav_fullness == 2) && answer == 2) {
 			g_dialog_next_state = (5);
 		} else {
 			g_dialog_next_state = (4);
@@ -292,19 +293,19 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 12 || old_state == 19 || old_state == 21) {
 
-		ds_writeb(TLK_TAV_FIRSTINFO, 1);
+		gs_tlk_tav_firstinfo = 1;
 
 	} else if (old_state == 14) {
 
 		if (test_attrib(hero, ATTRIB_CH, 0) > 0) {
-			g_dialog_next_state = (ds_readb(TLK_TAV_FULLNESS) == 1 ? 16 : 17);
+			g_dialog_next_state = (gs_tlk_tav_fullness == 1 ? 16 : 17);
 		} else {
 			g_dialog_next_state = (15);
 		}
 
 	} else if (old_state == 17 || old_state == 39 || old_state == 57) {
 
-		ds_writeb(TLK_TAV_INFOPROMISE, 1);
+		gs_tlk_tav_infopromise = 1;
 
 	} else if (old_state == 18) {
 
@@ -314,7 +315,7 @@ void TLK_tavern(signed short answer)
 
 		drink_while_drinking(10);
 
-		tmp = 20 * ds_readb(TLK_TAV_FULLNESS);
+		tmp = 20 * gs_tlk_tav_fullness;
 
 		p_money = get_party_money();
 
@@ -322,11 +323,11 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 27) {
 
-		ds_writeb(TLK_TAV_ROUND, 1);
+		gs_tlk_tav_round = 1;
 
 		drink_while_drinking(10);
 
-		tmp = 20 * ds_readb(TLK_TAV_FULLNESS);
+		tmp = 20 * gs_tlk_tav_fullness;
 
 		p_money = get_party_money();
 
@@ -336,11 +337,11 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 28) {
 
-		ds_writeb(TLK_TAV_ROUND, 1);
+		gs_tlk_tav_round = 1;
 
 		drink_while_drinking(10);
 
-		tmp = 20 * ds_readb(TLK_TAV_FULLNESS);
+		tmp = 20 * gs_tlk_tav_fullness;
 
 		p_money = get_party_money();
 
@@ -352,7 +353,7 @@ void TLK_tavern(signed short answer)
 
 		drink_while_drinking(10);
 
-		tmp = 20 * ds_readb(TLK_TAV_FULLNESS);
+		tmp = 20 * gs_tlk_tav_fullness;
 
 		p_money = get_party_money();
 
@@ -360,21 +361,21 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 32) {
 
-		sub_group_le(ds_readb(TLK_TAV_FULLNESS));
+		sub_group_le(gs_tlk_tav_fullness);
 
 		gs_tav_kicked_flags[gs_current_typeindex] = 1;
 
-		if (ds_readb(TLK_TAV_FULLNESS) == 3) {
+		if (gs_tlk_tav_fullness == 3) {
 			gs_town_outlawed_flags[gs_current_typeindex] = 1;
 		}
 
 	} else if (old_state == 33) {
 
-		sub_group_le(2 * ds_readb(TLK_TAV_FULLNESS));
+		sub_group_le(2 * gs_tlk_tav_fullness);
 
 		gs_tav_kicked_flags[gs_current_typeindex] = 1;
 
-		if (ds_readb(TLK_TAV_FULLNESS) == 3) {
+		if (gs_tlk_tav_fullness == 3) {
 			gs_town_outlawed_flags[gs_current_typeindex] = 1;
 		}
 
@@ -382,7 +383,7 @@ void TLK_tavern(signed short answer)
 
 		drink_while_drinking(10);
 
-		tmp = 20 * ds_readb(TLK_TAV_FULLNESS);
+		tmp = 20 * gs_tlk_tav_fullness;
 
 		p_money = get_party_money();
 
@@ -394,7 +395,7 @@ void TLK_tavern(signed short answer)
 
 		drink_while_drinking(10);
 
-		tmp = 20 * ds_readb(TLK_TAV_FULLNESS);
+		tmp = 20 * gs_tlk_tav_fullness;
 
 		p_money = get_party_money();
 
@@ -402,7 +403,7 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 43) {
 
-		if (test_attrib(hero, ATTRIB_CH, 4) > 0 && (ds_readb(TLK_TAV_FULLNESS) == 1 || ds_readb(TLK_TAV_FULLNESS) == 2)) {
+		if (test_attrib(hero, ATTRIB_CH, 4) > 0 && (gs_tlk_tav_fullness == 1 || gs_tlk_tav_fullness == 2)) {
 			g_dialog_next_state = (56);
 		} else {
 			g_dialog_next_state = (44);
@@ -410,7 +411,7 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 45) {
 
-		g_dialog_next_state = (ds_readb(TLK_TAV_FULLNESS) == 3 ? 57 : 46);
+		g_dialog_next_state = (gs_tlk_tav_fullness == 3 ? 57 : 46);
 
 	} else if (old_state == 46) {
 
@@ -432,7 +433,7 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 56) {
 
-		ds_writeb(TLK_TAV_FREEBEER, 1);
+		gs_tlk_tav_freebeer = 1;
 
 	} else if (old_state == 58) {
 
@@ -442,28 +443,28 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 61) {
 
-		g_dialog_next_state = (ds_readb(TLK_TAV_FULLNESS) == 3 ? 63 : 77);
+		g_dialog_next_state = (gs_tlk_tav_fullness == 3 ? 63 : 77);
 
 	} else if (old_state == 63) {
 
-		g_dialog_next_state = (ds_readb(TLK_TAV_INFOPROMISE) != 0 ? 64 : 65);
+		g_dialog_next_state = (gs_tlk_tav_infopromise ? 64 : 65);
 
 	} else if (old_state == 68) {
 
-		g_dialog_next_state = (ds_readb(TLK_TAV_INFOPROMISE) != 0 ? 69 : 36);
+		g_dialog_next_state = (gs_tlk_tav_infopromise ? 69 : 36);
 
 	} else if (old_state == 71) {
 
-		ds_writeb(TLK_TAV_INFOPROMISE, 0);
-		ds_writeb(TLK_TAV_FIRSTINFO, 1);
+		gs_tlk_tav_infopromise = 0;
+		gs_tlk_tav_firstinfo = 1;
 
 	} else if (old_state == 73) {
 
-		g_dialog_next_state = (ds_readb(TLK_TAV_FIRSTINFO) != 0 ? 74 : 4);
+		g_dialog_next_state = (gs_tlk_tav_firstinfo ? 74 : 4);
 
 	} else if (old_state == 77) {
 
-		g_dialog_next_state = (ds_readb(TLK_TAV_INFOPROMISE) != 0 ? 78 : 82);
+		g_dialog_next_state = (gs_tlk_tav_infopromise ? 78 : 82);
 
 	} else if (old_state == 79) {
 
@@ -471,29 +472,29 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 80) {
 
-		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 0) <= 0 && ds_readb(TLK_TAV_ROUND) != 0 ? 20 : 19);
+		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 0) <= 0 && gs_tlk_tav_round ? 20 : 19);
 
 	} else if (old_state == 85) {
 
-		g_dialog_next_state = (ds_readb(TLK_TAV_FIRSTINFO) != 0 ? 88 : 7);
+		g_dialog_next_state = (gs_tlk_tav_firstinfo ? 88 : 7);
 
 	} else if (old_state == 86) {
 
 		tmp = test_attrib(hero, ATTRIB_CH, 0);
 
-		g_dialog_next_state = (ds_readb(TLK_TAV_FIRSTINFO) != 0 || (!ds_readb(TLK_TAV_FIRSTINFO) && !ds_readb(TLK_TAV_ROUND) && tmp <= 0) ? 84 : 81);
+		g_dialog_next_state = (gs_tlk_tav_firstinfo || (!gs_tlk_tav_firstinfo && !gs_tlk_tav_round && tmp <= 0) ? 84 : 81);
 
 	} else if (old_state == 87) {
 
-		g_dialog_next_state = (ds_readb(TLK_TAV_FIRSTINFO) != 0 ? 88 : 89);
+		g_dialog_next_state = (gs_tlk_tav_firstinfo ? 88 : 89);
 
 	} else if (old_state == 88) {
 
-		g_dialog_next_state = (ds_readb(TLK_TAV_ROUND) != 0 ? 92 : 97);
+		g_dialog_next_state = (gs_tlk_tav_round ? 92 : 97);
 
 	} else if (old_state == 89) {
 
-		g_dialog_next_state = (ds_readb(TLK_TAV_ROUND) != 0 ? 90 : 91);
+		g_dialog_next_state = (gs_tlk_tav_round ? 90 : 91);
 
 	} else if (old_state == 93) {
 
@@ -509,41 +510,42 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 103) {
 
-		g_dialog_next_state = (ds_readb(TLK_TAV_FULLNESS) == 3 ? 131 : 132);
+		g_dialog_next_state = (gs_tlk_tav_fullness == 3 ? 131 : 132);
 
 	} else if (old_state == 104) {
 
-		g_dialog_next_state = (gs_day_timer >= HOURS(22) && ds_readb(TLK_TAV_FULLNESS) != 3 ? 117 : 119);
+		g_dialog_next_state = (gs_day_timer >= HOURS(22) && gs_tlk_tav_fullness != 3 ? 117 : 119);
 
 	} else if (old_state == 106) {
 
-		g_dialog_next_state = (ds_readb(TLK_TAV_ROUND) != 0 ? 107 : 108);
+		g_dialog_next_state = (gs_tlk_tav_round ? 107 : 108);
 
 	} else if (old_state == 108) {
 
-		if (ds_readb(TLK_TAV_TESTDRUNK) < count_heroes_in_group()) {
+		if (gs_tlk_tav_testdrunk < count_heroes_in_group()) {
 			g_dialog_next_state = (109);
 		} else {
 			g_dialog_next_state = (111);
-			ds_writeb(TLK_TAV_TESTDRUNK, 0);
+			gs_tlk_tav_testdrunk = 0;
 		}
 
 	} else if (old_state == 109) {
 
 		g_dialog_next_state = (108);
 
-		if ((host_readbs(get_hero(ds_readb(TLK_TAV_TESTDRUNK)) + 0x21) != 0) &&
-			!hero_dead(get_hero(ds_readb(TLK_TAV_TESTDRUNK))) &&
-			ds_readb(TLK_TAV_DRINKCOUNT) != 0)
+		if ((host_readbs(get_hero(gs_tlk_tav_testdrunk) + HERO_TYPE)) &&
+			!hero_dead(get_hero(gs_tlk_tav_testdrunk)) &&
+			gs_tlk_tav_drinkcount)
 		{
-			g_dialog_next_state = (test_skill(get_hero(ds_readb(TLK_TAV_TESTDRUNK)), TA_ZECHEN, ds_readbs(TLK_TAV_DRINKCOUNT) - 8) > 0 ? 108 : 110);
+			g_dialog_next_state = (test_skill(get_hero(gs_tlk_tav_testdrunk), TA_ZECHEN, gs_tlk_tav_drinkcount - 8) > 0 ? 108 : 110);
 		}
 
-		inc_ds_bs_post(TLK_TAV_TESTDRUNK);	/* TODO: this variable is unsigned */
+		/* TODO: this variable is unsigned */
+		gs_tlk_tav_testdrunk++;
 
 	} else if (old_state == 110) {
 
-		hero_get_drunken(get_hero(ds_readb(TLK_TAV_TESTDRUNK) - 1));
+		hero_get_drunken(get_hero(gs_tlk_tav_testdrunk - 1));
 
 	} else if (old_state == 112) {
 
@@ -551,9 +553,9 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 113) {
 
-		ds_writeb(TLK_TAV_FULLNESS, random_schick(3));
+		gs_tlk_tav_fullness = random_schick(3);
 
-		g_dialog_next_state = (ds_readb(TLK_TAV_FULLNESS) == 1 ? 114 : (ds_readb(TLK_TAV_FULLNESS) == 2 ? 115 : 116));
+		g_dialog_next_state = (gs_tlk_tav_fullness == 1 ? 114 : (gs_tlk_tav_fullness == 2 ? 115 : 116));
 
 	} else if (old_state == 119) {
 
@@ -577,15 +579,15 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 124 || old_state == 128) {
 
-		ds_writeb(TLK_TAV_FULLNESS, 2);
+		gs_tlk_tav_fullness = 2;
 
 	} else if (old_state == 125) {
 
-		ds_writeb(TLK_TAV_FULLNESS, 1);
+		gs_tlk_tav_fullness = 1;
 
 	} else if (old_state == 127) {
 
-		ds_writeb(TLK_TAV_FULLNESS, 3);
+		gs_tlk_tav_fullness = 3;
 
 	} else if (old_state == 130) {
 
@@ -603,7 +605,7 @@ void TLK_tavern(signed short answer)
 	} else if (old_state == 131) {
 
 		timewarp(MINUTES(45));
-		inc_ds_bs_post(TLK_TAV_DRINKCOUNT);
+		gs_tlk_tav_drinkcount++;
 
 		p_money = get_party_money();
 		p_money -= 10;
@@ -624,7 +626,7 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 134) {
 
-		ds_writeb(TLK_TAV_INFORMERSEX, 1);
+		gs_tlk_tav_informersex = 1;
 
 	} else if (old_state == 138) {
 
@@ -640,17 +642,17 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 146) {
 
-		if (!ds_readb(CURRENT_INFORMER)) {
+		if (!gs_current_informer) {
 			get_drinkmate();
 		} else {
 			get_informer_name();
 		}
 
-		g_dialog_next_state = (!ds_readb(CURRENT_INFORMER) ? 148 : 147);
+		g_dialog_next_state = (!gs_current_informer ? 148 : 147);
 
 	} else if (old_state == 151) {
 
-		ds_writeb(TLK_TAV_FOLLOWINFORMER, 1);
+		gs_tlk_tav_followinformer = 1;
 
 	} else if (old_state == 152) {
 

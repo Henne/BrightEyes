@@ -2046,17 +2046,17 @@ unsigned char g_unkn_020[4] = { 0x00, 0x00, 0x00, 0x00 }; // ds:0x35fb
 unsigned char g_dng14_ugdalf_done = 0; // ds:0x35ff
 unsigned char g_got_grimring = 0; // ds:0x3600
 unsigned char g_npc_timers[7] = { 0, 0, 0, 0, 0, 0, 0 }; // ds:0x3601
-unsigned char g_tlk_tav_firstinfo = 0; // ds:0x3608
-unsigned char g_tlk_tav_infopromise = 0; // ds:0x3609
-unsigned char g_tlk_tav_round = 0; // ds:0x360a
-unsigned char g_tlk_tav_freebeer = 0; // ds:0x360b
-unsigned char g_tlk_tav_drinkcount = 0; // ds:0x360c
-unsigned char g_tlk_tav_informersex = 0; // ds:0x360d, {1 = male,2 = female}
+Bit8u  gs_tlk_tav_firstinfo = 0; // ds:0x3608
+Bit8u  gs_tlk_tav_infopromise = 0; // ds:0x3609
+Bit8u  gs_tlk_tav_round = 0; // ds:0x360a
+Bit8u  gs_tlk_tav_freebeer = 0; // ds:0x360b
+Bit8u  gs_tlk_tav_drinkcount = 0; // ds:0x360c
+Bit8u  gs_tlk_tav_informersex = 0; // ds:0x360d, {1 = male,2 = female}
 unsigned char g_unkn_021[1] = { 0x00 }; // ds:0x360e
-unsigned char g_tlk_tav_followinformer = 0; // ds:0x360f
-unsigned char g_tlk_tav_fullness = 0; // ds:0x3610
-unsigned char g_tlk_tav_testdrunk = 0; // ds:0x3611
-unsigned char g_current_informer = 0; // ds:0x3612
+Bit8u  gs_tlk_tav_followinformer = 0; // ds:0x360f
+Bit8u  gs_tlk_tav_fullness = 0; // ds:0x3610
+Bit8u  gs_tlk_tav_testdrunk = 0; // ds:0x3611
+Bit8u  gs_current_informer = 0; // ds:0x3612
 Bit8u  gs_dungeon_light = 0; // ds:0x3613, 0 = light is on, 1, 2 = light is off
 Bit8u  gs_show_travel_map = 0; // ds:0x3614
 Bit8u  gs_hermit_visited = 0; // ds:0x3615

@@ -125,7 +125,7 @@ void do_tavern(void)
 				GUI_output(g_dtp2);
 			}
 
-			if (ds_readb(TLK_TAV_FOLLOWINFORMER) != 0) {
+			if (gs_tlk_tav_followinformer) {
 
 				tavern_follow_informer();
 			}

@@ -451,7 +451,7 @@ char* get_drinkmate(void)
 	signed short name;
 	signed short surname;
 
-	name = ((ds_readb(TLK_TAV_INFORMERSEX) - 1) == 0 ? 0xa7 : 0xbb);
+	name = ((gs_tlk_tav_informersex - 1) == 0 ? 0xa7 : 0xbb);
 	name += random_schick(20) - 1;
 
 	surname = random_schick(2) - 1;
@@ -460,7 +460,7 @@ char* get_drinkmate(void)
 	surname += random_schick(20) - 1;
 
 	sprintf(g_text_output_buf, g_gossip_str_triple_wildcard, get_tx(name), get_tx(surname),
-		get_tx((ds_readb(TLK_TAV_INFORMERSEX) - 1) == 0 ? 207 : 208));
+		get_tx((gs_tlk_tav_informersex - 1) == 0 ? 207 : 208));
 
 	return g_text_output_buf;
 }
@@ -472,11 +472,11 @@ char* get_drinkmate(void)
  */
 signed short tavern_quest_infos(void)
 {
-	signed short l_si;
+	signed short l_si; /* TODO: should be initialized with 0 */
 
 	if (!gs_heard_announce) {
 
-		/* print the announcement from the hetman */
+		/* print the announcement from the hetmann */
 		GUI_output(get_tx(210));
 
 		/* remember you heard the announcement */
@@ -501,45 +501,38 @@ signed short tavern_quest_infos(void)
 		/* remember that */
 		gs_quest_deadship = l_si = 1;
 
-	} else if ((gs_current_town == TOWNS_SKJAL) &&
-			(gs_current_typeindex == 69) &&
-			(gs_informer_flags[INFORMER_JURGE] != 2) &&
-			(gs_informer_flags[INFORMER_JURGE] != 0) &&
+	} else if ((gs_current_town == TOWNS_SKJAL) &&	(gs_current_typeindex == 69) &&
+			(gs_informer_flags[INFORMER_JURGE] != 2) && (gs_informer_flags[INFORMER_JURGE] != 0) &&
 			!gs_jurge_awaits_letter)
 	{
 		/* meet Informer Jurge */
 
 		if (random_schick(100) <= 30) {
-			ds_writeb(CURRENT_INFORMER, (unsigned char)(l_si = 1));
+			gs_current_informer = l_si = 1;
 		}
 
-	} else if ((gs_current_town == TOWNS_VIDSAND) &&
-			(gs_current_typeindex == 84) &&
-			(gs_informer_flags[INFORMER_RAGNA] != 2) &&
-			(gs_informer_flags[INFORMER_RAGNA] != 0))
+	} else if ((gs_current_town == TOWNS_VIDSAND) && (gs_current_typeindex == 84) &&
+			(gs_informer_flags[INFORMER_RAGNA] != 2) && (gs_informer_flags[INFORMER_RAGNA] != 0))
 	{
 		/* meet Informer Ragna */
 
 		if (random_schick(100) <= 30) {
-			ds_writeb(CURRENT_INFORMER, (unsigned char)(l_si = 6));
+			gs_current_informer = l_si = 6;
 		}
 
-	} else if ((gs_current_town == TOWNS_ANGBODIRTAL) &&
-			((gs_current_typeindex == 27) || (gs_current_typeindex == 28)) &&
-			(gs_informer_flags[INFORMER_BEORN] != 2) &&
-			(gs_informer_flags[INFORMER_BEORN] != 0))
+	} else if ((gs_current_town == TOWNS_ANGBODIRTAL) && ((gs_current_typeindex == 27) || (gs_current_typeindex == 28)) &&
+			(gs_informer_flags[INFORMER_BEORN] != 2) && (gs_informer_flags[INFORMER_BEORN] != 0))
 	{
 		/* meet Informer Beorn */
 
 		if (((gs_current_typeindex == 27) && (random_schick(100) <= 50)) ||
 			((gs_current_typeindex == 28) && (random_schick(100) <= 20)))
 		{
-			ds_writeb(CURRENT_INFORMER, (unsigned char)(l_si = 7));
+			gs_current_informer = l_si = 7;
 		}
 
 
-	} else if ((gs_current_town == TOWNS_BREIDA) &&
-			((gs_current_typeindex == 14) || (gs_current_typeindex == 15)) &&
+	} else if ((gs_current_town == TOWNS_BREIDA) && ((gs_current_typeindex == 14) || (gs_current_typeindex == 15)) &&
 			(gs_informer_flags[INFORMER_ASGRIMM] != 2) &&
 			(gs_informer_flags[INFORMER_ASGRIMM] != 0) &&
 			(gs_got_main_quest != 0))
@@ -547,7 +540,7 @@ signed short tavern_quest_infos(void)
 		/* meet Informer Asgrimm */
 
 		if (random_schick(100) <= 50) {
-			ds_writeb(CURRENT_INFORMER, (unsigned char)(l_si = 8));
+			gs_current_informer = l_si = 8;
 		}
 
 	} else if ((gs_current_town == TOWNS_HJALSINGOR) &&
@@ -560,13 +553,15 @@ signed short tavern_quest_infos(void)
 		if (((gs_current_typeindex == 61) && (random_schick(100) <= 50)) ||
 			((gs_current_typeindex == 62) && (random_schick(100) <= 20)))
 		{
-			ds_writeb(CURRENT_INFORMER, (unsigned char)(l_si = 14));
+			gs_current_informer = l_si = 14;
 		}
 
 	} else if ((gs_current_town == TOWNS_PHEXCAER) && gs_alrik_derondan) {
 
 		/* meet Alrik Derondan */
 		PHX_alrik_derondan();
+
+		/* Original-Bug: which return value here? */
 	}
 
 	return l_si ? 1 : 0;

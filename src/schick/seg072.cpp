@@ -40,13 +40,13 @@ void INF_jurge_hjore(signed short informer, signed short state)
 		/* JURGE TORFINSSON */
 
 		if (!state) {
-			g_dialog_next_state = ((gs_informer_flags[INFORMER_JURGE] == 1 || ds_readb(TLK_TAV_FOLLOWINFORMER) != 0) ? 44 : 43);
+			g_dialog_next_state = ((gs_informer_flags[INFORMER_JURGE] == 1 || gs_tlk_tav_followinformer) ? 44 : 43);
 		} else if (state == 11) {
 			g_dialog_next_state = (has_intro_letter() ? 36 : 37);
 		} else if (state == 14) {
 			g_dialog_next_state = (has_intro_letter() ? 39 : 40);
 		} else if (state == 19) {
-			g_dialog_next_state = (ds_readb(TLK_TAV_FOLLOWINFORMER) != 0 ? 1 : (!ds_readb(TLK_TAV_FOLLOWINFORMER) && gs_informer_flags[INFORMER_JURGE] != 0 ? 2 : 3));
+			g_dialog_next_state = (gs_tlk_tav_followinformer ? 1 : (!gs_tlk_tav_followinformer && gs_informer_flags[INFORMER_JURGE] != 0 ? 2 : 3));
 		} else if (state == 20) {
 			g_dialog_next_state = (has_intro_letter() ? 21 : 22);
 		} else if (state == 27) {
@@ -373,7 +373,7 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 		/* ALGRID TRONDESDOTTER */
 
 		if (!state) {
-			g_dialog_next_state = (ds_readb(TLK_TAV_FOLLOWINFORMER) ? 23 : (gs_informer_flags[INFORMER_ALGRID] == 2 ? 1 : 22));
+			g_dialog_next_state = (gs_tlk_tav_followinformer ? 23 : (gs_informer_flags[INFORMER_ALGRID] == 2 ? 1 : 22));
 		} else if (state == 2) {
 			/* mark ALGRID TRONDESDOTTER as done */
 			gs_informer_flags[INFORMER_ALGRID] = 2;
@@ -438,7 +438,7 @@ void INF_eliane_tiomar(signed short informer, signed short state)
 		/* TIOMAR SWAFNILDSSON */
 
 		if (!state) {
-			g_dialog_next_state = ((ds_readb(TLK_TAV_FOLLOWINFORMER) != 0 ? 44
+			g_dialog_next_state = ((gs_tlk_tav_followinformer ? 44
 		                : (!gs_informer_flags[INFORMER_TIOMAR] || gs_informer_flags[INFORMER_TIOMAR] == 2 ? 2 : 1)));
 		} else if (state == 1) {
 			g_dialog_next_state = (gs_tiomar_awaits_letter ? 36 : 3);
@@ -553,7 +553,7 @@ void INF_olvir_asgrimm(signed short informer, signed short state)
 		/* ASGRIMM THURBOLDSSON */
 
 		if (!state) {
-			g_dialog_next_state = (ds_readb(TLK_TAV_FOLLOWINFORMER) != 0 ? 22 : (gs_got_main_quest == 0 || gs_informer_flags[INFORMER_ASGRIMM] == 2 ? 1 : 2));
+			g_dialog_next_state = (gs_tlk_tav_followinformer ? 22 : (gs_got_main_quest == 0 || gs_informer_flags[INFORMER_ASGRIMM] == 2 ? 1 : 2));
 		} else if (state == 2) {
 			/* mark ASGRIMM THURBOLDSSON as done */
 			gs_informer_flags[INFORMER_ASGRIMM] = 2;

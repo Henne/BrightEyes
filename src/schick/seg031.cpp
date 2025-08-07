@@ -292,7 +292,7 @@ char* get_informer_hint(void)
  */
 char* get_informer_name(void)
 {
-	return get_ttx(g_informer_tab[ds_readb(CURRENT_INFORMER) - 1].name_id);
+	return get_ttx(g_informer_tab[gs_current_informer - 1].name_id);
 }
 
 /**

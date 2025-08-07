@@ -305,6 +305,16 @@ extern Bit8u  gs_quest_deadship;		//ds:0x35f0; seg063, seg073
 extern Bit8u  gs_quest_deadship_done;		//ds:0x35f2; seg063, seg077
 extern Bit8s  gs_always_one2;			//ds:0x35f3; seg078
 
+extern Bit8u  gs_tlk_tav_firstinfo;		//ds:0x3608; seg060
+extern Bit8u  gs_tlk_tav_infopromise;		//ds:0x3609; seg060
+extern Bit8u  gs_tlk_tav_round;			//ds:0x360a; seg060
+extern Bit8u  gs_tlk_tav_freebeer;		//ds:0x360b; seg060
+extern Bit8u  gs_tlk_tav_drinkcount;		//ds:0x360c; seg060
+extern Bit8u  gs_tlk_tav_informersex;		//ds:0x360d; seg060, seg073
+extern Bit8u  gs_tlk_tav_followinformer;	//ds:0x360f; seg059, seg060, seg072
+extern Bit8u  gs_tlk_tav_fullness;		//ds:0x3611; seg060
+extern Bit8u  gs_tlk_tav_testdrunk;		//ds:0x3611; seg060
+extern Bit8u  gs_current_informer;		//ds:0x3612; seg031, seg060, seg073
 extern Bit8u  gs_dungeon_light;			//ds:0x3613; seg025, seg074, seg075, seg076
 extern Bit8u  gs_show_travel_map;		//ds:0x3614; seg002, seg025, seg032, seg063, seg093, seg109, seg117
 extern Bit8u  gs_hermit_visited;		//ds:0x3615; seg066

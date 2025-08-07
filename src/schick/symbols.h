@@ -341,18 +341,18 @@
 #define DNG14_UGDALF_DONE               (0x35ff)    /* unsigned char; {0,1} */
 #define GOT_GRIMRING                    (0x3600)    /* unsigned char; {0,1} */
 #define NPC_TIMERS                      (0x3601)    /* unsigned char[7] */
-#define TLK_TAV_FIRSTINFO               (0x3608)    /* unsigned char; {0,1} */
-#define TLK_TAV_INFOPROMISE             (0x3609)    /* unsigned char; {0,1} */
-#define TLK_TAV_ROUND                   (0x360a)    /* unsigned char; {0,1} */
-#define TLK_TAV_FREEBEER                (0x360b)    /* unsigned char; {0,1} */
-#define TLK_TAV_DRINKCOUNT              (0x360c)    /* unsigned char */
-#define TLK_TAV_INFORMERSEX             (0x360d)    /* unsigned char; {1 = male,2 = female} */
+//#define TLK_TAV_FIRSTINFO               (0x3608)    /* unsigned char; {0,1} */
+//#define TLK_TAV_INFOPROMISE             (0x3609)    /* unsigned char; {0,1} */
+//#define TLK_TAV_ROUND                   (0x360a)    /* unsigned char; {0,1} */
+//#define TLK_TAV_FREEBEER                (0x360b)    /* unsigned char; {0,1} */
+//#define TLK_TAV_DRINKCOUNT              (0x360c)    /* unsigned char */
+//#define TLK_TAV_INFORMERSEX             (0x360d)    /* unsigned char; {1 = male,2 = female} */
 // ?1
-#define TLK_TAV_FOLLOWINFORMER          (0x360f)    /* unsigned char; {0,1} */
-#define TLK_TAV_FULLNESS                (0x3610)    /* unsigned char */
-#define TLK_TAV_TESTDRUNK               (0x3611)    /* unsigned char */
-#define CURRENT_INFORMER                (0x3612)    /* unsigned char; {0,1,6,7,8,14} */
-#define DUNGEON_LIGHT                   (0x3613)    /* unsigned char; 0 = light is on, 1, 2 = light is off */
+//#define TLK_TAV_FOLLOWINFORMER          (0x360f)    /* unsigned char; {0,1} */
+//#define TLK_TAV_FULLNESS                (0x3610)    /* unsigned char */
+//#define TLK_TAV_TESTDRUNK               (0x3611)    /* unsigned char */
+//#define CURRENT_INFORMER                (0x3612)    /* unsigned char; {0,1,6,7,8,14} */
+//#define DUNGEON_LIGHT                   (0x3613)    /* unsigned char; 0 = light is on, 1, 2 = light is off */
 //#define SHOW_TRAVEL_MAP                 (0x3614)    /* unsigned char; {0,1} */
 //#define HERMIT_VISITED                  (0x3615)    /* unsigned char; {0,1} */
 //#define DUNGEON_GFX_STYLE               (0x3616)    /* unsigned char; { 0 = wood, 1 = marble, 2 = stone } */
