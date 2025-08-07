@@ -93,7 +93,8 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 		FIG_clear_msgs();
 
-		l5 = ds_writews(ATTACKER_ATTACKS_AGAIN, ds_writews(DEFENDER_ATTACKS, ds_writews(SPELL_ILLUSIONEN, ds_writews(ATTACKER_DEAD, ds_writews(DEFENDER_DEAD, 0)))));
+		l5 = g_attacker_attacks_again = g_defender_attacks =
+			g_spell_illusionen = g_attacker_dead = g_defender_dead = 0;
 
 		weapon_type = weapon_type_target = -1;
 
@@ -290,7 +291,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 				} else if ((two_w_6 >= 3) && (two_w_6 <= 8) && (l16 == 0)) {
 					/* defender gets a free attack */
 
-					ds_writew(DEFENDER_ATTACKS, 1);
+					g_defender_attacks = 1;
 
 					if (target_is_hero != 0) {
 
@@ -320,7 +321,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 					}
 
 					if (hero_dead(hero)) {
-						ds_writew(ATTACKER_DEAD, 1);
+						g_attacker_dead = 1;
 					}
 
 				} else if ((two_w_6 >= 9) && (two_w_6 <= 11)) {
@@ -335,7 +336,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 					*(struct msg*)(p_datseg + FIG_TARGET_GRAMMAR_TYPE) = *(struct msg*)(p_datseg + FIG_ACTOR_GRAMMAR_TYPE);
 
 					if (hero_dead(hero)) {
-						ds_writew(ATTACKER_DEAD, 1);
+						g_attacker_dead = 1;
 					}
 				}
 
@@ -402,7 +403,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 						if ((two_w_6 >= 3) && (two_w_6 <= 8)) {
 
-							ds_writew(DEFENDER_ATTACKS, 1);
+							g_defender_attacks = 1;
 
 							if (random_schick(20) <= atpa) {
 
@@ -417,7 +418,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 										FIG_add_msg(8, damage);
 
 										if (hero_dead(target_hero)) {
-											ds_writew(DEFENDER_DEAD, 1);
+											g_defender_dead = 1;
 										}
 									}
 								} else {
@@ -431,7 +432,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 										FIG_add_msg(11, damage);
 
 										if (enemy_dead(target_monster)) {
-											ds_writew(DEFENDER_DEAD, 1);
+											g_defender_dead = 1;
 										}
 									}
 								}
@@ -447,7 +448,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 								FIG_add_msg(8, damage);
 
 								if (hero_dead(target_hero)) {
-									ds_writew(DEFENDER_DEAD, 1);
+									g_defender_dead = 1;
 								}
 							} else {
 								FIG_damage_enemy(target_monster, damage, 1);
@@ -455,7 +456,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 								FIG_add_msg(11, damage);
 
 								if (enemy_dead(target_monster)) {
-									ds_writew(DEFENDER_DEAD, 1);
+									g_defender_dead = 1;
 								}
 							}
 						}
@@ -516,7 +517,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 							FIG_add_msg(8, damage);
 
 							if (hero_dead(target_hero)) {
-								ds_writew(DEFENDER_DEAD, 1);
+								g_defender_dead = 1;
 							}
 						}
 					} else {
@@ -530,7 +531,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 							FIG_add_msg(11, damage);
 
 							if (enemy_dead(target_monster)) {
-								ds_writew(DEFENDER_DEAD, 1);
+								g_defender_dead = 1;
 							}
 						}
 					}
@@ -545,7 +546,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 			if (target_is_hero != 0) {
 
-				if (check_hero(target_hero) || (ds_readws(DEFENDER_DEAD) != 0)) {
+				if (check_hero(target_hero) || (g_defender_dead != 0)) {
 
 					FIG_prepare_hero_fight_ani(1, target_hero, weapon_type_target,
 								100, host_readbs(hero + HERO_ENEMY_ID), hero_pos + 1, 1);
@@ -555,7 +556,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 				if (l16 == 0) {
 					FIG_prepare_enemy_fight_ani(1, target_monster, 100, host_readbs(hero + HERO_ENEMY_ID), hero_pos + 1, 1);
 				} else {
-					if (ds_readws(DEFENDER_DEAD) != 0) {
+					if (g_defender_dead != 0) {
 						FIG_prepare_enemy_fight_ani(1, target_monster, 0, host_readbs(hero + HERO_ENEMY_ID), hero_pos + 1, 1);
 					}
 				}
@@ -607,7 +608,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 							FIG_add_msg(8, damage);
 
 							if (hero_dead(target_hero)) {
-								ds_writew(DEFENDER_DEAD, 1);
+								g_defender_dead = 1;
 							}
 						}
 					} else {
@@ -630,7 +631,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 							FIG_add_msg(11, damage);
 
 							if (enemy_dead(target_monster)) {
-								ds_writew(DEFENDER_DEAD, 1);
+								g_defender_dead = 1;
 							}
 						}
 					}
@@ -666,14 +667,14 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 						FIG_set_sheet(ds_readbs(FIG_SHOT_BOLT_ID), 7);
 
-						draw_fight_screen(l13 == 0 && ds_readws(DEFENDER_DEAD) == 0 ? 0 : 1);
+						draw_fight_screen(l13 == 0 && g_defender_dead == 0 ? 0 : 1);
 
 						FIG_make_invisible(ds_readbs(FIG_SHOT_BOLT_ID));
 					}
 
 					g_fig_continue_print = 1;
 
-					if (ds_readws(DEFENDER_DEAD) != 0) {
+					if (g_defender_dead != 0) {
 
 						if (target_is_hero != 0) {
 							FIG_prepare_hero_fight_ani(1, target_hero, -1, 0,
@@ -700,7 +701,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 					sub_hero_le(hero, host_readws(hero + HERO_LE) + 1);
 
-					ds_writew(ATTACKER_DEAD, 1);
+					g_attacker_dead = 1;
 				}
 
 				l6 = ds_readbs((SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_UNKN6) + SIZEOF_SPELL_DESCRIPTIONS * host_readbs(hero + HERO_SPELL_ID));
@@ -774,7 +775,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 											hero_pos + 1, 1);
 								} else {
 
-									if (check_hero(target_hero) || (ds_readws(DEFENDER_DEAD) != 0)) {
+									if (check_hero(target_hero) || (g_defender_dead != 0)) {
 
 										seg044_002a(1, target_hero, 99, host_readbs(hero + HERO_ENEMY_ID), 0 , -1, 1);
 									}
@@ -878,7 +879,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 							FIG_make_invisible(ds_readbs(FIG_SHOT_BOLT_ID));
 						}
 
-						if (ds_readws(SPELL_ILLUSIONEN) != 0) {
+						if (g_spell_illusionen) {
 
 							if (host_readbs(hero + HERO_ENEMY_ID) >= 10) {
 

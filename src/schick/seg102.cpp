@@ -43,7 +43,7 @@ void MON_do_spell_damage(signed short damage)
 
 			/* check if someone died */
 			if (hero_dead(get_spelltarget())) {
-				ds_writew(DEFENDER_DEAD, 1);
+				g_defender_dead = 1;
 			}
 
 		} else {
@@ -61,7 +61,7 @@ void MON_do_spell_damage(signed short damage)
 
 			/* check if someone died */
 			if (enemy_dead(get_spelltarget_e())) {
-				ds_writew(DEFENDER_DEAD, 1);
+				g_defender_dead = 1;
 			}
 		}
 	}

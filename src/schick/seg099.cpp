@@ -127,7 +127,7 @@ void spell_illusionen(void)
 			ds_writew(SPELL_SPECIAL_AECOST, -2);
 		} else {
 			/* YES: spell has effect */
-			ds_writew(SPELL_ILLUSIONEN, 1);
+			g_spell_illusionen = 1;
 			/* kill enemy */
 			or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS1, 1); /* set 'dead' flag */
 		}

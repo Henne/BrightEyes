@@ -6172,8 +6172,8 @@ unsigned char *g_skills_buffer; // ds:0xe3ba
 unsigned char *g_inc_skills_counter; // ds:0xe3b6
 unsigned char *g_inc_spells_counter; // ds:0xe3b2
 unsigned char *g_current_cursor_bak; // ds:0xe3ae
-unsigned short g_attacker_attacks_again; // ds:0xe3ac
-unsigned short g_defender_attacks; // ds:0xe3aa
+signed short g_attacker_attacks_again; // ds:0xe3ac
+signed short g_defender_attacks; // ds:0xe3aa
 signed short g_attacker_dead; // ds:0xe3a8
 signed short g_defender_dead; // ds:0xe3a6
 signed short g_spell_illusionen; // ds:0xe3a4, 1 = spell has effect

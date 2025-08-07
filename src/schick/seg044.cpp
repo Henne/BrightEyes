@@ -214,8 +214,8 @@ void FIG_prepare_hero_fight_ani(signed short a1, Bit8u *hero, signed short weapo
 
 		((f_action == FIG_ACTION_MELEE_ATTACK) || (f_action == FIG_ACTION_RANGE_ATTACK) || (f_action == FIG_ACTION_UNKNOWN4) ||
 			((f_action == FIG_ACTION_UNKNOWN2) && !ds_readbs((HERO_IS_TARGET-1) + (signed char)fid_attacker)) ||
-			((ds_readws(ATTACKER_ATTACKS_AGAIN) != 0) && (a7 == 0)) ||
-			((ds_readws(DEFENDER_ATTACKS) != 0) && (a7 == 1))))
+			((g_attacker_attacks_again != 0) && (a7 == 0)) ||
+			((g_defender_attacks != 0) && (a7 == 1))))
 	{
 
 			ds_writeb(FIG_ANISHEETS + a1 * 0xf3, 0);
@@ -291,8 +291,8 @@ void FIG_prepare_hero_fight_ani(signed short a1, Bit8u *hero, signed short weapo
 		}
 	}
 
-	if ((check_hero(hero) && ds_readw(ATTACKER_ATTACKS_AGAIN) != 0 && a7 == 0) ||
-		((ds_readw(DEFENDER_ATTACKS) != 0) && (a7 == 1))) {
+	if ((check_hero(hero) && g_attacker_attacks_again != 0 && a7 == 0) ||
+		((g_defender_attacks != 0) && (a7 == 1))) {
 
 			p1 += copy_ani_seq(p1, host_readws(p3 + l1 * 2), 2);
 
@@ -307,8 +307,8 @@ void FIG_prepare_hero_fight_ani(signed short a1, Bit8u *hero, signed short weapo
 			}
 	}
 
-	if ( ((ds_readw(ATTACKER_DEAD) != 0) && (a7 == 0)) ||
-		((ds_readw(DEFENDER_DEAD) != 0) && (a7 == 1)))
+	if ( ((g_attacker_dead != 0) && (a7 == 0)) ||
+		((g_defender_dead != 0) && (a7 == 1)))
 	{
 		host_writeb(p1++, 0xfc);
 		host_writeb(p1++, get_seq_header(host_readws(p3 + 0x28)));
@@ -318,8 +318,8 @@ void FIG_prepare_hero_fight_ani(signed short a1, Bit8u *hero, signed short weapo
 	}
 
 	if (check_hero(hero) ||
-		((ds_readw(ATTACKER_DEAD) != 0) && (a7 == 0)) ||
-		((ds_readw(DEFENDER_DEAD) != 0) && (a7 == 1)))
+		((g_attacker_dead != 0) && (a7 == 0)) ||
+		((g_defender_dead != 0) && (a7 == 1)))
 	{
 		FIG_set_sheet(host_readb(hero + HERO_FIGHTER_ID), (signed char)a1);
 		host_writebs(p1, -1);
@@ -435,8 +435,8 @@ void FIG_prepare_enemy_fight_ani(signed short a1, Bit8u *enemy, signed short f_a
 	if ((host_readbs(enemy + ENEMY_SHEET_VIEWDIR) != dir) &&
 		(	((f_action == FIG_ACTION_MELEE_ATTACK) || (f_action == FIG_ACTION_RANGE_ATTACK) ||
 			((f_action == FIG_ACTION_UNKNOWN2) && !ds_readbs(FIG_ACTORS_UNKN + (signed char)fid_attacker))) ||
-			((ds_readw(ATTACKER_ATTACKS_AGAIN) != 0) && (a7 == 0)) ||
-			((ds_readw(DEFENDER_ATTACKS) != 0) && (a7 == 1))))
+			((g_attacker_attacks_again != 0) && (a7 == 0)) ||
+			((g_defender_attacks != 0) && (a7 == 1))))
 		{
 
 		ds_writeb(FIG_ANISHEETS + a1 * 0xf3, 0);
@@ -523,8 +523,8 @@ void FIG_prepare_enemy_fight_ani(signed short a1, Bit8u *enemy, signed short f_a
 		}
 	}
 
-	if (((ds_readws(ATTACKER_ATTACKS_AGAIN) != 0) && (a7 == 0)) ||
-		((ds_readws(DEFENDER_ATTACKS) != 0) && (a7 == 1))) {
+	if (((g_attacker_attacks_again != 0) && (a7 == 0)) ||
+		((g_defender_attacks != 0) && (a7 == 1))) {
 
 			p1 += copy_ani_seq(p1, host_readws(p4 + l1 * 2), 1);
 
@@ -538,8 +538,8 @@ void FIG_prepare_enemy_fight_ani(signed short a1, Bit8u *enemy, signed short f_a
 			}
 	}
 
-	if ( ((ds_readws(ATTACKER_DEAD) != 0) && (a7 == 0)) ||
-		((ds_readws(DEFENDER_DEAD) != 0) && (a7 == 1)))
+	if ( ((g_attacker_dead != 0) && (a7 == 0)) ||
+		((g_defender_dead != 0) && (a7 == 1)))
 	{
 		host_writeb(p1++, 0xfc);
 		host_writeb(p1++, get_seq_header(host_readws(p4 + 0x28)));
@@ -689,14 +689,14 @@ void seg044_002a(Bit16u v1, Bit8u *hero, Bit16u v2, Bit16s obj1, Bit16s obj2,
 	}
 
 	if ((v2 == 4) || check_hero(hero) ||
-		((ds_readw(ATTACKER_DEAD) != 0) && (v6 == 0)) ||
-		((ds_readw(DEFENDER_DEAD) != 0) && (v6 == 1))) {
+		((g_attacker_dead != 0) && (v6 == 0)) ||
+		((g_defender_dead != 0) && (v6 == 1))) {
 
 		lp1 += copy_ani_seq(lp1, host_readws(lp2 + l_di * 2), 2);
 	}
 
-	if (((ds_readw(ATTACKER_DEAD) != 0) && (v6 == 0)) ||
-		((ds_readw(DEFENDER_DEAD) != 0) && (v6 == 1))) {
+	if (((g_attacker_dead != 0) && (v6 == 0)) ||
+		((g_defender_dead != 0) && (v6 == 1))) {
 
 		host_writeb(lp1, 0xfc);
 		lp1++;
@@ -823,8 +823,8 @@ void seg044_002f(signed short v1, Bit8u *p, signed short v2, signed short target
 
 	lp1 += copy_ani_seq(lp1, host_readws(lp2 + l1 * 2), 1);
 
-	if (((ds_readw(ATTACKER_DEAD) != 0) && (v5 == 0)) ||
-		((ds_readw(DEFENDER_DEAD) != 0) && (v5 == 1))) {
+	if (((g_attacker_dead != 0) && (v5 == 0)) ||
+		((g_defender_dead != 0) && (v5 == 1))) {
 
 		host_writeb(lp1, 0xfc);
 		lp1++;
