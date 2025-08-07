@@ -375,14 +375,14 @@ signed char FIG_add_to_list(signed char fighter_id)
 	Bit8u* p2;
 	signed short x, y;
 
-	p1 = (Bit8u*)ds_readd(FIG_LIST_BUFFER);
+	p1 = g_fig_list_buffer;
 	x = ds_readbs((FIG_LIST_ELEM+FIGHTER_CBX));
 	y = ds_readbs((FIG_LIST_ELEM+FIGHTER_CBY));
 
 	/* FIG_list_start == NULL */
 	if (ds_readd(FIG_LIST_HEAD) == 0) {
 
-		ds_writed(FIG_LIST_HEAD, ds_readd(FIG_LIST_BUFFER));
+		ds_writed(FIG_LIST_HEAD, (Bit32u)g_fig_list_buffer);
 
 //		struct_copy((Bit8u*)ds_readd(FIG_LIST_HEAD), p_datseg + FIG_LIST_ELEM, SIZEOF_FIGHTER);
 		*((struct dummy*)((Bit8u*)ds_readd(FIG_LIST_HEAD))) = *((struct dummy*)(p_datseg + FIG_LIST_ELEM));

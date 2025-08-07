@@ -90,10 +90,10 @@ void FIG_preload_gfx(void)
 
 	ds_writed(FIG_LIST_HEAD, 0);
 
-	ds_writed(FIG_LIST_BUFFER, (Bit32u)(((HugePt)g_fig_figure2_buf) - 0x115d));
+	g_fig_list_buffer = (Bit8u*)(((HugePt)g_fig_figure2_buf) - 0x115d);
 
-	memset((Bit8u*)ds_readd(FIG_LIST_BUFFER), 0, 0x115d);
-	p1 = (Bit8u*)ds_readd(FIG_LIST_BUFFER);
+	memset(g_fig_list_buffer, 0, 0x115d);
+	p1 = g_fig_list_buffer;
 
 	for (i = 0; i < 127; i++) {
 		host_writeb(p1 + 0x10, -1);
@@ -107,7 +107,7 @@ void FIG_preload_gfx(void)
 	g_figobj_gfxwidth_table = (signed short*)(((HugePt)g_figobj_gfxbuf_table) + 0xfcL);
 	g_figobj_gfxheight_table = (signed short*)(((HugePt)g_figobj_gfxwidth_table) + 0x7eL);
 	g_fightobj_buf_seek_ptr = (unsigned char*)(((HugePt)g_figobj_gfxheight_table) + 0x7eL);
-	g_fightobj_buf = (unsigned char*)(F_PADD((HugePt)ds_readd(FIG_LIST_BUFFER), -0x4217));
+	g_fightobj_buf = (unsigned char*)(((HugePt)g_fig_list_buffer) - 0x4217L);
 
 	/* set something in the hero charactersheet to -1 */
 	for (i = 0; i <= 6; i++) {
