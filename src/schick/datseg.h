@@ -305,6 +305,12 @@ extern Bit8u  gs_quest_deadship;		//ds:0x35f0; seg063, seg073
 extern Bit8u  gs_quest_deadship_done;		//ds:0x35f2; seg063, seg077
 extern Bit8s  gs_always_one2;			//ds:0x35f3; seg078
 
+extern Bit8u  gs_dungeon_light;			//ds:0x3613; seg025, seg074, seg075, seg076
+extern Bit8u  gs_show_travel_map;		//ds:0x3614; seg002, seg025, seg032, seg063, seg093, seg109, seg117
+extern Bit8u  gs_hermit_visited;		//ds:0x3615; seg066
+extern Bit8u  gs_dungeon_gfx_style;		//ds:0x3616; seg028, seg075, seg076
+extern Bit8u  gs_estorik_known;			//ds:0x3617; seg081
+
 extern Bit8s  gs_dng07_poison_flag;		//ds:0x3cb5; seg082
 extern Bit32s gs_dng07_poison_timer;		//ds:0x3cb6; seg002, seg082
 

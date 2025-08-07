@@ -369,7 +369,7 @@ void DNG_fallpit_test(signed short max_damage)
 	*(g_dng_map_ptr + MAP_POS(gs_x_target, gs_y_target)) &= 0x0f; /* clear higher 4 bits */
 	*(g_dng_map_ptr + MAP_POS(gs_x_target, gs_y_target)) |= (DNG_TILE_PIT << 4);
 
-	if (ds_readb(DUNGEON_LIGHT) != 0)
+	if (gs_dungeon_light != 0)
 	{
 		/* light is on */
 		GUI_output(get_ttx(517));
@@ -794,9 +794,9 @@ void do_dungeon(void)
 
 		set_audio_track(ARCHIVE_FILE_DUNGEON_XMI);
 #if defined(__BORLANDC__)
-		g_dng_gfxtab = (unsigned char*)(MK_FP(datseg, (!ds_readb(DUNGEON_GFX_STYLE) ? DNG_GFXTAB_WOOD : (ds_readb(DUNGEON_GFX_STYLE) == 1 ? DNG_GFXTAB_MARBLE : DNG_GFXTAB_STONE))));
+		g_dng_gfxtab = (unsigned char*)(MK_FP(datseg, (!gs_dungeon_gfx_style ? DNG_GFXTAB_WOOD : (gs_dungeon_gfx_style == 1 ? DNG_GFXTAB_MARBLE : DNG_GFXTAB_STONE))));
 #else
-//		g_dng_gfxtab = (unsigned char*)RealMake(datseg, (!ds_readb(DUNGEON_GFX_STYLE) ? DNG_GFXTAB_WOOD : (ds_readb(DUNGEON_GFX_STYLE) == 1 ? DNG_GFXTAB_MARBLE : DNG_GFXTAB_STONE))));
+//		g_dng_gfxtab = (unsigned char*)RealMake(datseg, (!gs_dungeon_gfx_style ? DNG_GFXTAB_WOOD : (gs_dungeon_gfx_style == 1 ? DNG_GFXTAB_MARBLE : DNG_GFXTAB_STONE))));
 #endif
 
 		ds_writew(DNG_INIT_FLAG, 0);

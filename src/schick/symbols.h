@@ -353,10 +353,10 @@
 #define TLK_TAV_TESTDRUNK               (0x3611)    /* unsigned char */
 #define CURRENT_INFORMER                (0x3612)    /* unsigned char; {0,1,6,7,8,14} */
 #define DUNGEON_LIGHT                   (0x3613)    /* unsigned char; 0 = light is on, 1, 2 = light is off */
-#define SHOW_TRAVEL_MAP                 (0x3614)    /* unsigned char; {0,1} */
-#define HERMIT_VISITED                  (0x3615)    /* unsigned char; {0,1} */
-#define DUNGEON_GFX_STYLE               (0x3616)    /* unsigned char; { 0 = wood, 1 = marble, 2 = stone } */
-#define ESTORIK_KNOWN                   (0x3617)    /* unsigned char; {0,1} */
+//#define SHOW_TRAVEL_MAP                 (0x3614)    /* unsigned char; {0,1} */
+//#define HERMIT_VISITED                  (0x3615)    /* unsigned char; {0,1} */
+//#define DUNGEON_GFX_STYLE               (0x3616)    /* unsigned char; { 0 = wood, 1 = marble, 2 = stone } */
+//#define ESTORIK_KNOWN                   (0x3617)    /* unsigned char; {0,1} */
 #define DIALOG_PARTNERS                 (0x3618)    /* struct(38)[10] */
 #define DIALOG_STATES                   (0x3794)    /* struct(8)[160] */
 #define DNG02_SPHERE_KNOWN              (0x3c94)    /* unsigned char; {0,1} */

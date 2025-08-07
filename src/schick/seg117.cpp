@@ -61,7 +61,7 @@ void pause_traveling(signed short ani_no)
 	ds_writeb(TRAVEL_EVENT_ACTIVE, 1);
 
 	/* c = b = a = 0 */
-	ds_writeb(SHOW_TRAVEL_MAP, (unsigned char)(g_basepos_x = g_wallclock_update = 0));
+	gs_show_travel_map = g_basepos_x = g_wallclock_update = 0;
 
 	g_basepos_y = (ani_no == 21 ? 60: 70);
 	g_textbox_width = 9;
@@ -80,7 +80,7 @@ void resume_traveling(void)
 
 	set_var_to_zero();
 
-	g_request_refresh = ds_writeb(SHOW_TRAVEL_MAP, 1);
+	g_request_refresh = gs_show_travel_map = 1;
 
 	g_event_ani_busy = 0;
 	ds_writeb(TRAVEL_EVENT_ACTIVE, 0);
@@ -569,7 +569,7 @@ void do_wild8_fight(void)
 	g_wallclock_update_bak = g_wallclock_update;
 	g_basepos_x = 0;
 	g_basepos_y = 0;
-	ds_writeb(SHOW_TRAVEL_MAP, 0);
+	gs_show_travel_map = 0;
 
 	g_max_enemies = random_interval(5, 10);
 	g_fig_discard = 1;
@@ -577,7 +577,7 @@ void do_wild8_fight(void)
 	do_fight(FIGHTS_WILD8);
 
 	ds_writew(ROUTE_FIGHT_FLAG, 0);
-	ds_writeb(SHOW_TRAVEL_MAP, 1);
+	gs_show_travel_map = 1;
 	g_basepos_x = bak1;
 	g_basepos_y = bak2;
 }
@@ -611,7 +611,7 @@ void random_encounter(signed short arg)
 
 		if ((ds_readb(RANDOM_ENCOUNTER_DESCR + 7 * i + arg) <= randval) && (ds_readb(RANDOM_ENCOUNTER_DESCR + 7 * i + arg) != 0)) {
 
-			ds_writeb(SHOW_TRAVEL_MAP, (signed char)g_wallclock_update = 0);
+			gs_show_travel_map = g_wallclock_update = 0;
 			ds_writeb(TRAVEL_EVENT_ACTIVE, 1);
 			g_fig_discard = 1;
 
@@ -699,7 +699,7 @@ void random_encounter(signed short arg)
 			}
 
 			g_fig_discard = 0;
-			ds_writeb(SHOW_TRAVEL_MAP, 1);
+			gs_show_travel_map = 1;
 			ds_writeb(TRAVEL_EVENT_ACTIVE, 0);
 			break;
 		}

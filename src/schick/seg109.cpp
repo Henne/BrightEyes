@@ -76,10 +76,10 @@ void TRV_event(signed short travel_event)
 	tw_bak = g_textbox_width;
 	bak1 = g_basepos_x;
 	bak2 = g_basepos_y;
-	traveling_bak = ds_readb(SHOW_TRAVEL_MAP);
+	traveling_bak = gs_show_travel_map;
 	g_basepos_x = 0;
 	g_basepos_y = 0;
-	ds_writeb(SHOW_TRAVEL_MAP, 0);
+	gs_show_travel_map = 0;
 	g_textbox_width = 9;
 	g_dialogbox_lock = 1;
 	ds_writeb(TRAVEL_EVENT_ACTIVE, 1);
@@ -91,7 +91,7 @@ void TRV_event(signed short travel_event)
 	if (event_handler) event_handler();
 
 	ds_writeb(TRAVEL_EVENT_ACTIVE, 0);
-	ds_writeb(SHOW_TRAVEL_MAP, (signed char)traveling_bak);
+	gs_show_travel_map = traveling_bak;
 	g_basepos_x = bak1;
 	g_basepos_y = bak2;
 	g_textbox_width = tw_bak;

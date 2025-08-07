@@ -294,7 +294,7 @@ void TLK_eremit(signed short state)
 	Bit8u *hero;
 
 	if (!state) {
-		g_dialog_next_state = (ds_readb(HERMIT_VISITED) != 0 ? 1 : 2);
+		g_dialog_next_state = (gs_hermit_visited ? 1 : 2);
 	} else if (state == 6) {
 
 		hero = get_hero(0);
@@ -311,7 +311,7 @@ void TLK_eremit(signed short state)
 		/* group learns about two places to rest */
 		ds_writeb(TEVENT137_FLAG, ds_writeb(TEVENT134_FLAG, 1));
 	} else if (state == 13) {
-		ds_writeb(HERMIT_VISITED, 1);
+		gs_hermit_visited = 1;
 	} else if (state == 14) {
 		timewarp(MINUTES(30));
 	}

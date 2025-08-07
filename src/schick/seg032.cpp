@@ -1275,14 +1275,14 @@ signed short do_fight(signed short fight_id)
 
 	g_gui_buffer_unkn = g_renderbuf_ptr;
 
-	if (!ds_readb(SHOW_TRAVEL_MAP)) {
+	if (!gs_show_travel_map) {
 		seg028_0555(gs_dungeon_index != DUNGEONS_NONE ? 0 : 1);
 	}
 
 	load_wallclock_nvf();
 	refresh_screen_size();
 
-	if ((gs_current_town != TOWNS_NONE) && !ds_readb(SHOW_TRAVEL_MAP)) {
+	if ((gs_current_town != TOWNS_NONE) && !gs_show_travel_map) {
 		g_fading_state = 3;
 	}
 

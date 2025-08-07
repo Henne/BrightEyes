@@ -55,7 +55,7 @@ signed short do_travel_mode(void)
 		g_food_message_shown[i] = 0;
 	}
 
-	if (g_travel_map_loaded != ds_readbs(SHOW_TRAVEL_MAP))
+	if (g_travel_map_loaded != gs_show_travel_map)
 	{
 		load_map();
 	}
@@ -81,7 +81,7 @@ signed short do_travel_mode(void)
 		{
 			update_mouse_cursor();
 
-			if (g_travel_map_loaded != ds_readbs(SHOW_TRAVEL_MAP))
+			if (g_travel_map_loaded != gs_show_travel_map)
 			{
 				load_map();
 			}
@@ -138,7 +138,7 @@ signed short do_travel_mode(void)
 
 					if (i - 1 == answer || answer == -2)
 					{
-						ds_writeb(SHOW_TRAVEL_MAP, 0);
+						gs_show_travel_map = 0;
 						gs_direction = ((gs_direction + 2) & 3);
 						break;
 					}
@@ -246,7 +246,7 @@ signed short do_travel_mode(void)
 	read_archive_file(i, g_buffer6_ptr, 5000);
 	close(i);
 
-	ds_writeb(SHOW_TRAVEL_MAP, (signed char)(g_basepos_x = g_basepos_y = ds_writew(CURRENT_TOWN_OVER, ds_writew(TRV_MENU_SELECTION, 0))));
+	gs_show_travel_map = g_basepos_x = g_basepos_y = ds_writew(CURRENT_TOWN_OVER, ds_writew(TRV_MENU_SELECTION, 0));
 
 	if (!ds_readb(TRAVEL_DETOUR))
 	{

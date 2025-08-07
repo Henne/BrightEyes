@@ -70,7 +70,7 @@ void prepare_dungeon_area(void)
 				(gs_dungeon_index == DUNGEONS_ZWINGFESTE) ||
 				(gs_dungeon_index == DUNGEONS_HYGGELIKS_RUINE)) ? ARCHIVE_FILE_MARBLESL_NVF : ARCHIVE_FILE_STONESL_NVF);
 
-		ds_writeb(DUNGEON_GFX_STYLE, (l_si == ARCHIVE_FILE_SHIPSL_NVF) ? 0 : ((l_si == ARCHIVE_FILE_MARBLESL_NVF) ? 1 : 2));
+		gs_dungeon_gfx_style = (l_si == ARCHIVE_FILE_SHIPSL_NVF) ? 0 : ((l_si == ARCHIVE_FILE_MARBLESL_NVF) ? 1 : 2);
 
 		handle = load_archive_file(l_si);
 		v1 = v2 = 0;

@@ -389,7 +389,7 @@ void do_harbor(void)
 				g_wallclock_update = g_basepos_x = g_basepos_y = ds_writeb(SEA_TRAVEL_PSGBOOKED_FLAG, 0);
 				g_current_ani = g_city_area_loaded = g_pp20_index = -1;
 				g_request_refresh = 1;
-				ds_writeb(SHOW_TRAVEL_MAP, 0);
+				gs_show_travel_map = 0;
 
 				if (!ds_readb(TRAVEL_DETOUR)) {
 

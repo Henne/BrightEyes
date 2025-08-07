@@ -1787,7 +1787,7 @@ void game_loop(void)
 			do_town();
 		} else if (gs_dungeon_index != DUNGEONS_NONE) {
 			do_dungeon();
-		} else if (ds_readbs(SHOW_TRAVEL_MAP) != 0) {
+		} else if (gs_show_travel_map != 0) {
 			do_travel_mode();
 		}
 
@@ -2065,7 +2065,7 @@ void dawning(void)
 			/* not in a location */
 			!gs_current_loctype &&
 			/* not in a travel mode */
-			!ds_readb(SHOW_TRAVEL_MAP) &&
+			!gs_show_travel_map &&
 			/* no event animation */
 			!g_event_ani_busy &&
 			/* unknown */
@@ -2106,7 +2106,7 @@ void nightfall(void)
 			/* not in a location */
 			!gs_current_loctype &&
 			/* not in a travel mode */
-			!ds_readb(SHOW_TRAVEL_MAP) &&
+			!gs_show_travel_map &&
 			/* no event animation */
 			!g_event_ani_busy &&
 			/* unknown */
@@ -2850,7 +2850,7 @@ void magical_chainmail_damage(void)
 		return;
 	}
 
-	ds_writeb(HEROKEEPING_FLAG, (ds_readb(SHOW_TRAVEL_MAP) != 0) ? 1 : 2);
+	ds_writeb(HEROKEEPING_FLAG, (gs_show_travel_map != 0) ? 1 : 2);
 
 	for (i = 0; i <= 6; i++) {
 
@@ -2971,7 +2971,7 @@ void herokeeping(void)
 			/* check for magic waterskin in group */
 			if ((get_first_hero_with_item_in_group(ITEM_MAGIC_WATERSKIN, host_readbs(hero + HERO_GROUP_NO)) == -1) &&
 				((host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-				(!gs_current_town || (gs_current_town != TOWNS_NONE && ds_readb(SHOW_TRAVEL_MAP) != 0))) ||
+				(!gs_current_town || (gs_current_town != TOWNS_NONE && gs_show_travel_map != 0))) ||
 				(host_readbs(hero + HERO_GROUP_NO) != gs_current_group &&
 				!gs_groups_town[host_readbs(hero + HERO_GROUP_NO)]))) {
 
@@ -3053,7 +3053,7 @@ void herokeeping(void)
 			if ((host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
 				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 				!hero_dead(hero) &&
-				(!ds_readb(SHOW_TRAVEL_MAP) || (g_food_message_shown[i] != gs_food_message[i]))) {
+				(!gs_show_travel_map || (g_food_message_shown[i] != gs_food_message[i]))) {
 
 					sprintf(buffer,	 (gs_food_message[i] == 1) ? get_ttx(224):
 							((gs_food_message[i] == 2) ? get_ttx(223) :
@@ -3154,7 +3154,7 @@ void seg002_37c4(void)
 	p2 = g_buffer6_ptr + 2100;
 	p3 = g_buffer6_ptr + 1000;
 
-	if ((ds_readws(TRV_MENU_SELECTION) != 0) && (ds_readb(SHOW_TRAVEL_MAP))) {
+	if ((ds_readws(TRV_MENU_SELECTION) != 0) && (gs_show_travel_map)) {
 
 		ds_writew(SELECTED_TOWN_ANIX,
 				ds_readws((TOWN_POSITIONS-4) + 4 * ds_readbs((TRV_MENU_TOWNS - 1) + ds_readws(TRV_MENU_SELECTION))));
@@ -3232,7 +3232,7 @@ void seg002_37c4(void)
 		ds_writew(CURRENT_TOWN_OVERY, ds_readw(CURRENT_TOWN_ANIY));
 		l_si = 0;
 
-		if ((ds_readws(MENU_INPUT_BUSY) != 0) && (ds_readb(SHOW_TRAVEL_MAP))) {
+		if ((ds_readws(MENU_INPUT_BUSY) != 0) && (gs_show_travel_map)) {
 
 			ds_writew(SELECTED_TOWN_ANIX,
 					ds_readws((TOWN_POSITIONS-4) + 4 * ds_readbs((TRV_MENU_TOWNS - 1) + ds_readws(MENU_SELECTED))));

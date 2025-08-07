@@ -238,7 +238,7 @@ void enter_map(void)
 	gs_current_typeindex = gs_current_town;
 
 	gs_current_loctype = gs_current_town = (TOWNS_NONE);
-	ds_writeb(SHOW_TRAVEL_MAP, 1);
+	gs_show_travel_map = 1;
 }
 
 void show_treasure_map(void)
@@ -680,14 +680,14 @@ void do_location(void)
 	signed short tm_bak;
 	void (*func)(void);
 
-	tm_bak = ds_readb(SHOW_TRAVEL_MAP);
+	tm_bak = gs_show_travel_map;
 	tw_bak = g_textbox_width;
 	bak1 = g_basepos_x;
 	bak2 = g_basepos_y;
 
 	g_basepos_x = 0;
 	g_basepos_y = 0;
-	ds_writeb(SHOW_TRAVEL_MAP, 0);
+	gs_show_travel_map = 0;
 	g_textbox_width = 3;
 
 	func = g_location_handlers[gs_current_loctype];
@@ -702,8 +702,8 @@ void do_location(void)
 	g_basepos_y = bak2;
 	g_textbox_width = tw_bak;
 
-	if (!ds_readb(SHOW_TRAVEL_MAP)) {
-		ds_writeb(SHOW_TRAVEL_MAP, tm_bak);
+	if (!gs_show_travel_map) {
+		gs_show_travel_map = tm_bak;
 	}
 
 	g_travel_map_loaded = -1;
@@ -750,9 +750,9 @@ void leave_dungeon(void)
 	}
 
 	gs_current_loctype = gs_current_loctype_bak = LOCTYPE_NONE;
-	gs_current_town = (gs_current_town_bak);
+	gs_current_town = gs_current_town_bak;
 	gs_dungeon_index_bak = gs_dungeon_index;
-	gs_dungeon_index = gs_dungeon_level = ds_writeb(DUNGEON_LIGHT, 0);
+	gs_dungeon_index = gs_dungeon_level = gs_dungeon_light = 0;
 	g_city_area_loaded = -1;
 	g_fading_state = g_request_refresh = 1;
 

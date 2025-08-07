@@ -319,9 +319,7 @@ void DNG_stub2(void)
 	if ((tmp == 2) || (tmp == 9)) {
 
 		if (div16(ds_readb((VISUAL_FIELD_VALS + 5))) == 15) {
-			DNG_draw_walls( ((ds_readb(DUNGEON_GFX_STYLE) == 1) ? 0x4e :
-						((ds_readb(DUNGEON_GFX_STYLE) == 2) ? 0x28 : 0x3e)),
-					0, 0x36);
+			DNG_draw_walls( ((gs_dungeon_gfx_style == 1) ? 0x4e : ((gs_dungeon_gfx_style == 2) ? 0x28 : 0x3e)), 0, 0x36);
 		}
 	}
 }
@@ -570,7 +568,7 @@ void DNG_lights(void)
 			}
 		}
 
-		ds_writeb(DUNGEON_LIGHT, (l1 == 9) ? 1 : (l1 == 10) ? 2 : 0);
+		gs_dungeon_light = ((l1 == 9) ? 1 : (l1 == 10) ? 2 : 0);
 		l1 *= 3;
 
 		for (i = 0; i < 0xc0; i++) {
@@ -705,11 +703,11 @@ void DNG_open_door(void)
 
 	memmove(((Bit8u*)g_renderbuf_ptr) + 0x7530, g_renderbuf_ptr, 0x6db0);
 
-	if (!ds_readb(DUNGEON_GFX_STYLE)) {
+	if (!gs_dungeon_gfx_style) {
 		x = 45;
 		y = 38;
 		iters = 19;
-	} else if (ds_readb(DUNGEON_GFX_STYLE) == 1) {
+	} else if (gs_dungeon_gfx_style == 1) {
 		x = 47;
 		y = 30;
 		iters = 20;
@@ -750,11 +748,11 @@ void DNG_close_door(void)
 
 	memmove(((Bit8u*)g_renderbuf_ptr) + 0x7530, g_renderbuf_ptr, 0x6db0);
 
-	if (!ds_readb(DUNGEON_GFX_STYLE)) { /* dungeon graphics: wood */
+	if (!gs_dungeon_gfx_style) { /* dungeon graphics: wood */
 		x = 45;
 		y = 38;
 		iters = 18;
-	} else if (ds_readb(DUNGEON_GFX_STYLE) == 1) { /* dungeon graphics: marble */
+	} else if (gs_dungeon_gfx_style == 1) { /* dungeon graphics: marble */
 		x = 47;
 		y = 30;
 		iters = 19;
@@ -791,7 +789,7 @@ void DNG_stub6(void)
 
 	play_voc(ARCHIVE_FILE_FX18_VOC);
 
-	if (ds_readb(DUNGEON_LIGHT) != 0) {
+	if (gs_dungeon_light != 0) {
 
 		if (DNG_fallpit(6)) {
 			gs_x_target = (gs_x_target_bak);
