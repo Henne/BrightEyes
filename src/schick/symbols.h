@@ -312,14 +312,14 @@
 //#define SWAFNILD_TP3                    (0x345f)    /* unsigned char */
 //#define SWAFNILD_TP4                    (0x3460)    /* unsigned char */
 //#define SWAFNILD_DESTINATION            (0x3461)    /* unsigned char; {1,2,3} */
-#define SWAFNILD_NOMAP                  (0x3462)    /* unsigned char; {0,1} */
-#define TREBORN_DATE                    (0x3463)    /* unsigned char; {0,1} */
-#define UNICORN_HERO_POS                (0x3464)    /* unsigned char; {0-6} */
-#define UNICORN_GET_MAP                 (0x3465)    /* char */
-#define UNICORN_TIMER                   (0x3466)    /* char */
+//#define SWAFNILD_NOMAP                  (0x3462)    /* unsigned char; {0,1} */
+//#define TREBORN_DATE                    (0x3463)    /* unsigned char; {0,1} */
+//#define UNICORN_HERO_POS                (0x3464)    /* unsigned char; {0-6} */
+//#define UNICORN_GET_MAP                 (0x3465)    /* char */
+//#define UNICORN_TIMER                   (0x3466)    /* char */
 //#define ALGRID_TREBORNS_HINT            (0x3467)    /* unsigned char; {0,1} */
-#define TIOMAR_DRINKMATE                (0x3468)    /* unsigned char; {0-6} */
-#define TIOMAR_AWAITS_LETTER            (0x3469)    /* unsigned char; {0,1} */
+//#define TIOMAR_DRINKMATE                (0x3468)    /* unsigned char; {0-6} */
+//#define TIOMAR_AWAITS_LETTER            (0x3469)    /* unsigned char; {0,1} */
 #define UNICORN_HERO_PTR                (0x346a)    /* Bit8u* */
 //#define NPC_MEET_TAVERN                 (0x346e)    /* signed short */
 //#define NPC_MONTHS                      (0x3470)    /* signed short */

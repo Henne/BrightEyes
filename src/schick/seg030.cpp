@@ -269,11 +269,10 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 					} else if (txt_id == 29) {
 
-						hero = get_hero(ds_readb(TIOMAR_DRINKMATE));
+						hero = get_hero(gs_tiomar_drinkmate);
 
-						sprintf(dst, fmt,
-							(char*)hero + HERO_NAME2,
-							(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+						sprintf(dst, fmt, (char*)hero + HERO_NAME2,
+							GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
 
 					} else {
 

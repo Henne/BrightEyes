@@ -2251,9 +2251,9 @@ void do_timers(void)
 			/* What about herokeeping()? Original-Bug? */
 
 			/* decrement unicorn timer */
-			if (ds_readb(UNICORN_GET_MAP) != 0 && ds_readb(UNICORN_TIMER) != 0)
+			if (gs_unicorn_get_map != 0 && gs_unicorn_timer != 0)
 			{
-				dec_ds_bs_post(UNICORN_TIMER);
+				gs_unicorn_timer--;
 			}
 
 			/* handle sphere timer */
@@ -3485,10 +3485,9 @@ void timewarp(Bit32s time)
 
 		/* fix Original-Bug 39. add missing timers. */
 		/* timer for 2nd encounter of the unicorn */
-		if (ds_readb(UNICORN_GET_MAP) != 0 &&
-			ds_readb(UNICORN_TIMER) != 0)
+		if (gs_unicorn_get_map && gs_unicorn_timer != 0)
 		{
-			dec_ds_bs_post(UNICORN_TIMER);
+			gs_unicorn_timer--;
 		}
 
 		/* timer for Sphaerenriss in verfallene Herberge */

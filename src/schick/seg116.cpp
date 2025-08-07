@@ -710,11 +710,11 @@ void TLK_old_woman(signed short state)
 
 void tevent_136(void)
 {
-	if (ds_readb(MET_UNICORN_FLAG) && gs_got_main_quest && ds_readb(UNICORN_GET_MAP) && !ds_readb(UNICORN_TIMER)) {
+	if (ds_readb(MET_UNICORN_FLAG) && gs_got_main_quest && gs_unicorn_get_map && !gs_unicorn_timer) {
 
 		do_talk(12, 1);
 		ds_writeb(MET_UNICORN_FLAG, 1);
-		ds_writeb(UNICORN_GET_MAP, 0);
+		gs_unicorn_get_map = 0;
 	}
 }
 

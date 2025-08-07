@@ -441,7 +441,7 @@ void INF_eliane_tiomar(signed short informer, signed short state)
 			g_dialog_next_state = ((ds_readb(TLK_TAV_FOLLOWINFORMER) != 0 ? 44
 		                : (!gs_informer_flags[INFORMER_TIOMAR] || gs_informer_flags[INFORMER_TIOMAR] == 2 ? 2 : 1)));
 		} else if (state == 1) {
-			g_dialog_next_state = (ds_readb(TIOMAR_AWAITS_LETTER) != 0 ? 36 : 3);
+			g_dialog_next_state = (gs_tiomar_awaits_letter ? 36 : 3);
 		} else if (state == 4) {
 			g_dialog_next_state = (get_first_hero_with_item(ITEM_WRITING_OF_SIEBENSTEIN) != -1 ? 6 : 7);
 		} else if (state == 12 || state == 42) {
@@ -464,10 +464,10 @@ void INF_eliane_tiomar(signed short informer, signed short state)
 		} else if (state == 20) {
 			/* drink with TIOMAR */
 			timewarp(HOURS(1));
-			g_dialog_next_state = (test_skill(get_hero(ds_writeb(TIOMAR_DRINKMATE, (unsigned char)get_random_hero())), TA_ZECHEN, 0) > 0 ? 21 : 22);
+			g_dialog_next_state = (test_skill(get_hero((gs_tiomar_drinkmate = (unsigned char)get_random_hero())), TA_ZECHEN, 0) > 0 ? 21 : 22);
 		} else if (state == 22) {
 			/* TIOMARS drinkmate gets drunken */
-			hero_get_drunken(get_hero(ds_readb(TIOMAR_DRINKMATE)));
+			hero_get_drunken(get_hero(gs_tiomar_drinkmate));
 		} else if (state == 31) {
 			/* mark JURGE TORFINSSON as known */
 			if (!gs_informer_flags[INFORMER_JURGE]) gs_informer_flags[INFORMER_JURGE] = 1;
@@ -476,7 +476,7 @@ void INF_eliane_tiomar(signed short informer, signed short state)
 			/* mark UMBRIK SIEBENSTEIN as known */
 			if (!gs_informer_flags[INFORMER_UMBRIK]) gs_informer_flags[INFORMER_UMBRIK] = 1;
 		} else if (state == 34) {
-			ds_writeb(TIOMAR_AWAITS_LETTER, 1);
+			gs_tiomar_awaits_letter = 1;
 		} else if (state == 36) {
 			g_dialog_next_state = (get_first_hero_with_item(ITEM_WRITING_OF_SIEBENSTEIN) != -1 ? 37 : 2);
 		} else if (state == 45) {
@@ -636,7 +636,7 @@ void INF_treborn_unicorn(signed short informer, signed short state)
 			gs_current_typeindex = 91;
 			do_merchant();
 		} else if (state == 21) {
-			ds_writeb(TREBORN_DATE, 1);
+			gs_treborn_date = 1;
 		} else if (state == 23) {
 			g_dialog_next_state = (enough_money ? 25 : 24);
 		}
@@ -646,7 +646,7 @@ void INF_treborn_unicorn(signed short informer, signed short state)
 		enough_money = money >= 7500 ? 1 : 0;
 
 		if (!state) {
-			g_dialog_next_state = (!ds_readb(TREBORN_DATE) ? -1 : 1);
+			g_dialog_next_state = (!gs_treborn_date ? -1 : 1);
 		} else if (state == 2) {
 			g_dialog_next_state = (enough_money ? 3 : 4);
 		} else if (state == 5) {
@@ -684,7 +684,7 @@ void INF_treborn_unicorn(signed short informer, signed short state)
 			/* REMARK: what if the NPC is choosen ? */
 			/* REMARK: what if the positions are changed ? */
 			/* REMARK: what if the game is saved and the heroes are at another mem location ? */
-			ds_writed(UNICORN_HERO_PTR, (Bit32u)get_hero(ds_writeb(UNICORN_HERO_POS, (unsigned char)get_hero_CH_best())));
+			ds_writed(UNICORN_HERO_PTR, (Bit32u)get_hero((gs_unicorn_hero_pos = (unsigned char)get_hero_CH_best())));
 		} else if (state == 7) {
 			timewarp(HOURS(1));
 		} else if (state == 8) {
@@ -704,7 +704,7 @@ void INF_treborn_unicorn(signed short informer, signed short state)
 			g_dialog_next_state = (random_schick(100) <= 50 ? 16 : 17);
 		} else if (state == 16) {
 			/* the hero disappears */
-			hero_disappear((Bit8u*)ds_readd(UNICORN_HERO_PTR), ds_readb(UNICORN_HERO_POS), -1);
+			hero_disappear((Bit8u*)ds_readd(UNICORN_HERO_PTR), gs_unicorn_hero_pos, -1);
 		} else if (state == 17) {
 			/* the hero gets heavily wounded, 1 LE left */
 			sub_hero_le((Bit8u*)ds_readd(UNICORN_HERO_PTR), host_readws((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_LE) - 1);
@@ -715,13 +715,13 @@ void INF_treborn_unicorn(signed short informer, signed short state)
 			timewarp(HOURS(2));
 		} else if (state == 25) {
 			/* the UNICORN will get the map */
-			ds_writeb(UNICORN_GET_MAP, 1);
+			gs_unicorn_get_map = 1;
 
 			/* the hero gets 100 AP */
 			add_hero_ap((Bit8u*)ds_readd(UNICORN_HERO_PTR), 100);
 
 			/* set the unicorn timer (in days) */
-			ds_writeb(UNICORN_TIMER, random_schick(24) + 36);
+			gs_unicorn_timer = random_schick(24) + 36;
 		}
 	}
 }
@@ -740,7 +740,7 @@ void INF_swafnild_unicorn(signed short informer, signed short state)
 		if (state == 1) {
 			g_dialog_next_state = (gs_informer_flags[INFORMER_SWAFNILD] == 2 ? 3 : 7);
 		} else if (state == 4) {
-			g_dialog_next_state = (ds_readb(SWAFNILD_NOMAP) != 0 ? 38 : 39);
+			g_dialog_next_state = (gs_swafnild_nomap ? 38 : 39);
 		} else if (state == 7) {
 
 			if ((gs_current_town >= TOWNS_THORWAL && gs_current_town <= TOWNS_EFFERDUN) ||
@@ -775,7 +775,7 @@ void INF_swafnild_unicorn(signed short informer, signed short state)
 		} else if (state == 21) {
 			/* mark SWAFNILD EGILSDOTTER as done */
 			gs_informer_flags[INFORMER_SWAFNILD] = 2;
-			ds_writeb(SWAFNILD_NOMAP, 1);
+			gs_swafnild_nomap = 1;
 		} else if (state == 22) {
 			/* test CH+3 */
 			g_dialog_next_state = (test_attrib(get_hero(0), ATTRIB_CH, 3) > 0 ? 24 : 23);

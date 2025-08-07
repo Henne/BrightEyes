@@ -285,8 +285,14 @@ extern Bit8u  gs_swafnild_tp2;			//ds:0x345e; seg030, seg072
 extern Bit8u  gs_swafnild_tp3;			//ds:0x345f; seg030, seg072
 extern Bit8u  gs_swafnild_tp4;			//ds:0x3460; seg030, seg072
 extern Bit8u  gs_swafnild_destination;		//ds:0x3461; seg030, seg072
-
+extern Bit8u  gs_swafnild_nomap;		//ds:0x3462; seg072
+extern Bit8u  gs_treborn_date;			//ds:0x3463; seg072
+extern Bit8u  gs_unicorn_hero_pos;		//ds:0x3464; seg072
+extern Bit8u  gs_unicorn_get_map;		//ds:0x3465; seg002, seg072, seg116
+extern Bit8u  gs_unicorn_timer;			//ds:0x3466; seg002, seg072, seg116
 extern Bit8u  gs_algrid_treborns_hint;		//ds:0x3467; seg072
+extern Bit8u  gs_tiomar_drinkmate;		//ds:0x3468; seg030, seg072
+extern Bit8u  gs_tiomar_awaits_letter;		//ds:0x3469; seg072
 
 extern Bit16s gs_npc_meet_tavern;		//ds:0x346e; seg060, seg095
 extern Bit16s gs_npc_months;			//ds:0x3470; seg002-seg116
