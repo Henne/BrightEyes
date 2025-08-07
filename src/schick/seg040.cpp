@@ -103,10 +103,10 @@ void FIG_preload_gfx(void)
 
 	ds_writed(WEAPONS_NVF_BUF, (Bit32u)(((HugePt)g_current_fight) + SIZEOF_FIGHT));
 	ds_writed(SPELLOBJ_NVF_BUF, (Bit32u)((Bit8u*)ds_readd(WEAPONS_NVF_BUF) + 0x1953));
-	ds_writed(FIGOBJ_GFXBUF_TABLE, (Bit32u)(F_PADD((HugePt)ds_readd(SPELLOBJ_NVF_BUF), 0xf5f)));
-	ds_writed(FIGOBJ_GFXWIDTH_TABLE, (Bit32u)(F_PADD((HugePt)ds_readd(FIGOBJ_GFXBUF_TABLE), 0xfc)));
-	ds_writed(FIGOBJ_GFXHEIGHT_TABLE, (Bit32u)(F_PADD((HugePt)ds_readd(FIGOBJ_GFXWIDTH_TABLE), 0x7e)));
-	g_fightobj_buf_seek_ptr = (unsigned char*)(F_PADD((HugePt)ds_readd(FIGOBJ_GFXHEIGHT_TABLE), 0x7e));
+	g_figobj_gfxbuf_table = (unsigned char**)(((HugePt)ds_readd(SPELLOBJ_NVF_BUF)) + 0xf5fL);
+	g_figobj_gfxwidth_table = (signed short*)(((HugePt)g_figobj_gfxbuf_table) + 0xfcL);
+	g_figobj_gfxheight_table = (signed short*)(((HugePt)g_figobj_gfxwidth_table) + 0x7eL);
+	g_fightobj_buf_seek_ptr = (unsigned char*)(((HugePt)g_figobj_gfxheight_table) + 0x7eL);
 	g_fightobj_buf = (unsigned char*)(F_PADD((HugePt)ds_readd(FIG_LIST_BUFFER), -0x4217));
 
 	/* set something in the hero charactersheet to -1 */
@@ -124,9 +124,8 @@ void FIG_preload_gfx(void)
 	}
 
 	for (i = 0; i <= 62; i++) {
-		host_writed((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + i * 4, 0);
-		host_writews((Bit8u*)ds_readd(FIGOBJ_GFXWIDTH_TABLE) + i * 2,
-			host_writews((Bit8u*)ds_readd(FIGOBJ_GFXHEIGHT_TABLE) + i * 2, 0));
+		g_figobj_gfxbuf_table[i] = NULL;
+		g_figobj_gfxwidth_table[i] = g_figobj_gfxheight_table[i] = 0;
 	}
 
 	g_fig_cb_marker_id = -1;
@@ -217,8 +216,8 @@ void FIG_draw_scenario(void)
 					obj_id -= 50;
 
 					/* NULL check */
-					if (host_readd((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + obj_id * 4)) {
-						ptr = (Bit8u*)host_readd((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + obj_id * 4);
+					if (g_figobj_gfxbuf_table[obj_id]) {
+						ptr = g_figobj_gfxbuf_table[obj_id];
 					} else {
 						ptr = g_fightobj_buf_seek_ptr;
 
@@ -236,9 +235,9 @@ void FIG_draw_scenario(void)
 #endif
 
 						/* save sprite info */
-						host_writed((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + obj_id * 4, (Bit32u)g_fightobj_buf_seek_ptr);
-						host_writew((Bit8u*)ds_readd(FIGOBJ_GFXWIDTH_TABLE) + obj_id * 2, width);
-						host_writew((Bit8u*)ds_readd(FIGOBJ_GFXHEIGHT_TABLE) + obj_id * 2, height);
+						g_figobj_gfxbuf_table[obj_id] = g_fightobj_buf_seek_ptr;
+						g_figobj_gfxwidth_table[obj_id] = width;
+						g_figobj_gfxheight_table[obj_id] = height;
 
 						/* adjust pointer */
 						g_fightobj_buf_seek_ptr += width * height + 8;
@@ -251,14 +250,12 @@ void FIG_draw_scenario(void)
 					ds_writeb((FIG_LIST_ELEM+FIGHTER_CBY), (signed char)cb_y);
 					ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETX), g_gfxtab_obj_offset_x[obj_id]);
 					ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETY), g_gfxtab_obj_offset_y[obj_id]);
-					ds_writeb((FIG_LIST_ELEM+FIGHTER_HEIGHT), host_readb((Bit8u*)ds_readd(FIGOBJ_GFXHEIGHT_TABLE) + obj_id * 2));
-					ds_writeb((FIG_LIST_ELEM+FIGHTER_WIDTH), host_readb((Bit8u*)ds_readd(FIGOBJ_GFXWIDTH_TABLE) + obj_id * 2));
+					ds_writeb((FIG_LIST_ELEM+FIGHTER_HEIGHT), g_figobj_gfxheight_table[obj_id]);
+					ds_writeb((FIG_LIST_ELEM+FIGHTER_WIDTH), g_figobj_gfxwidth_table[obj_id]);
 					ds_writeb((FIG_LIST_ELEM+FIGHTER_X1), 0);
 					ds_writeb((FIG_LIST_ELEM+FIGHTER_Y1), 0);
-					ds_writebs((FIG_LIST_ELEM+FIGHTER_X2),
-						host_readbs((Bit8u*)ds_readd(FIGOBJ_GFXWIDTH_TABLE) + obj_id * 2) - 1);
-					ds_writebs((FIG_LIST_ELEM+FIGHTER_Y2),
-						host_readbs((Bit8u*)ds_readd(FIGOBJ_GFXHEIGHT_TABLE) + obj_id * 2) - 1);
+					ds_writebs((FIG_LIST_ELEM+FIGHTER_X2), (g_figobj_gfxwidth_table[obj_id] - 1));
+					ds_writebs((FIG_LIST_ELEM+FIGHTER_Y2), (g_figobj_gfxheight_table[obj_id] - 1));
 					ds_writeb((FIG_LIST_ELEM+FIGHTER_IS_ENEMY), 0);
 					ds_writeb((FIG_LIST_ELEM+FIGHTER_RELOAD), 0);
 					ds_writeb((FIG_LIST_ELEM+FIGHTER_WSHEET), -1);

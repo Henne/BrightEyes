@@ -830,11 +830,11 @@ void FIG_load_ship_sprites(void)
 
 				l_si -= 50;
 
-			if ((Bit8u*)host_readd((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + 4 * l_si)) {
+			if (g_figobj_gfxbuf_table[l_si]) {
 
 				/* this sprite has already been buffered */
 
-				ptr = (Bit8u*)host_readd((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + 4 * l_si);
+				ptr = g_figobj_gfxbuf_table[l_si];
 
 			} else {
 				/* this sprite has not been used yet */
@@ -856,9 +856,9 @@ void FIG_load_ship_sprites(void)
 #endif
 
 				/* buffer this picture */
-				host_writed((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + 4 * l_si, (Bit32u)g_fightobj_buf_seek_ptr);
-				host_writew((Bit8u*)ds_readd(FIGOBJ_GFXWIDTH_TABLE) + 2 * l_si, width);
-				host_writew((Bit8u*)ds_readd(FIGOBJ_GFXHEIGHT_TABLE) + 2 * l_si, height);
+				g_figobj_gfxbuf_table[l_si] = g_fightobj_buf_seek_ptr;
+				g_figobj_gfxwidth_table[l_si] = width;
+				g_figobj_gfxheight_table[l_si] = height;
 
 				/* adjust the pointer */
 				g_fightobj_buf_seek_ptr +=  width * height + 8;
@@ -874,8 +874,8 @@ void FIG_load_ship_sprites(void)
 
 
 			/* calculate screen coordinates */
-			l3 = const1 - host_readws((Bit8u*)ds_readd(FIGOBJ_GFXWIDTH_TABLE) + 2 * l_si) / 2 + 10 * (l_di + i);
-			l4 = const2 - host_readws((Bit8u*)ds_readd(FIGOBJ_GFXHEIGHT_TABLE) + 2 * l_si) + 5 * (l_di - i);
+			l3 = const1 - g_figobj_gfxwidth_table[l_si] / 2 + 10 * (l_di + i);
+			l4 = const2 - g_figobj_gfxheight_table[l_si] + 5 * (l_di - i);
 
 			l3 += g_gfxtab_obj_offset_x[l_si];
 			l4 += g_gfxtab_obj_offset_y[l_si];
@@ -883,9 +883,9 @@ void FIG_load_ship_sprites(void)
 			/* set screen coordinates */
 			g_pic_copy.x1 = l3;
 			g_pic_copy.y1 = l4;
-			g_pic_copy.x2 = l3 + host_readws((Bit8u*)ds_readd(FIGOBJ_GFXWIDTH_TABLE) + 2 * l_si) - 1;
-			g_pic_copy.y2 = l4 + host_readws((Bit8u*)ds_readd(FIGOBJ_GFXHEIGHT_TABLE) + 2 * l_si) - 1;
-			g_pic_copy.src = (Bit8u*)host_readd((Bit8u*)ds_readd(FIGOBJ_GFXBUF_TABLE) + 4 * l_si);
+			g_pic_copy.x2 = l3 + g_figobj_gfxwidth_table[l_si] - 1;
+			g_pic_copy.y2 = l4 + g_figobj_gfxheight_table[l_si] - 1;
+			g_pic_copy.src = g_figobj_gfxbuf_table[l_si];
 			g_pic_copy.dst = g_buffer8_ptr;
 
 			do_pic_copy(2);

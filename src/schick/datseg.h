@@ -537,6 +537,9 @@ extern signed char g_fig_cb_selector_id[21];	// ds:0xe38f; seg032, seg034, seg04
 extern signed char g_fig_cb_marker_id;		// ds:0xe38e; seg032, seg033, seg036, seg037, seg038, seg040
 extern signed char g_fig_shot_bolt_id;		// ds:0xe38d; seg040, seg042, seg043, seg045
 extern signed char g_fig_spellgfx_id;		// ds:0xe38c; seg040, seg042, seg043, seg045
+extern unsigned char **g_figobj_gfxbuf_table;	// ds:0xe388; seg032, seg040
+extern signed short *g_figobj_gfxheight_table;	// ds:0xe384; seg032, seg040
+extern signed short *g_figobj_gfxwidth_table;	// ds:0xe380; seg032, seg040
 
 extern Bit32s g_fightobj_buf_freespace;	// ds:0xe370; seg032-seg100
 
