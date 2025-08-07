@@ -344,7 +344,7 @@ void FIG_load_enemy_sprites(Bit8u *ptr, signed short x, signed short y)
 		ds_writeb((FIG_LIST_ELEM+FIGHTER_IS_ENEMY), 1);
 		ds_writeb((FIG_LIST_ELEM+FIGHTER_Z), 10);
 		ds_writeb((FIG_LIST_ELEM+FIGHTER_TWOFIELDED), g_fig_twofielded_count + 20);
-		ds_writeb(FIG_TWOFIELDED_TABLE + g_fig_twofielded_count, FIG_add_to_list(-1));
+		g_fig_twofielded_table[g_fig_twofielded_count] = FIG_add_to_list(-1);
 	}
 }
 

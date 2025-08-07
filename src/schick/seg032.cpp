@@ -617,10 +617,10 @@ void FIG_do_round(void)
 #endif
 
 
-									fighter_ptr = (Bit8u*)(FIG_get_ptr(host_readbs(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FIGHTER_ID) + SIZEOF_ENEMY_SHEET * host_readbs(hero + HERO_ENEMY_ID))));
+									fighter_ptr = (Bit8u*)FIG_get_ptr(host_readbs(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FIGHTER_ID) + SIZEOF_ENEMY_SHEET * host_readbs(hero + HERO_ENEMY_ID)));
 									/* intermediate: fighter_ptr points to the FIGHTER entry of the enemy */
 
-									fighter_ptr = (Bit8u*)(FIG_get_ptr(ds_readbs(FIG_TWOFIELDED_TABLE + host_readbs(fighter_ptr + FIGHTER_TWOFIELDED))));
+									fighter_ptr = (Bit8u*)FIG_get_ptr(g_fig_twofielded_table[host_readbs(fighter_ptr + FIGHTER_TWOFIELDED)]);
 									/* fighter_ptr now points the FIGHTER entry of the tail part of the enemy */
 									/* should be true: (host_readbs(fighter_ptr + FIGHTER_CBX) == x) and (host_readbs(fighter_ptr + FIGHTER_CBY) == y) */
 
@@ -715,7 +715,7 @@ void FIG_do_round(void)
 									fighter_ptr = (Bit8u*)(FIG_get_ptr(host_readbs(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FIGHTER_ID) + SIZEOF_ENEMY_SHEET * host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_ENEMY_ID))));
 									/* intermediate: fighter_ptr points to the FIGHTER entry of the killed enemy */
 
-									fighter_ptr = (Bit8u*)(FIG_get_ptr(ds_readbs(FIG_TWOFIELDED_TABLE + host_readbs(fighter_ptr + FIGHTER_TWOFIELDED))));
+									fighter_ptr = (Bit8u*)(FIG_get_ptr(g_fig_twofielded_table[host_readbs(fighter_ptr + FIGHTER_TWOFIELDED)]));
 									/* fighter_ptr now points the FIGHTER entry of the tail part of the killed enemy */
 									/* should be true: (host_readbs(fighter_ptr + FIGHTER_CBX) == x) and (host_readbs(fighter_ptr + FIGHTER_CBY) == y) */
 
@@ -754,10 +754,10 @@ void FIG_do_round(void)
 								/* attacking dead enemy is two-squares */
 								/* goal: remove tail part */
 
-								fighter_ptr = (Bit8u*)(FIG_get_ptr(host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_FIGHTER_ID)));
+								fighter_ptr = (Bit8u*)FIG_get_ptr(host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_FIGHTER_ID));
 								/* intermediate: fighter_ptr points to the FIGHTER entry of the enemy */
 
-								fighter_ptr = (Bit8u*)(FIG_get_ptr(ds_readbs(FIG_TWOFIELDED_TABLE + host_readbs(fighter_ptr + FIGHTER_TWOFIELDED))));
+								fighter_ptr = (Bit8u*)FIG_get_ptr(g_fig_twofielded_table[host_readbs(fighter_ptr + FIGHTER_TWOFIELDED)]);
 								/* fighter_ptr now points the FIGHTER entry of the tail part of the enemy */
 								/* should be true: (host_readbs(fighter_ptr + FIGHTER_CBX) == x) and (host_readbs(fighter_ptr + FIGHTER_CBY) == y) */
 

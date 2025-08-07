@@ -174,7 +174,7 @@ void seg037_00ae(Bit8u *enemy, signed short enemy_no)
 
 		p2 = (Bit8u*)(FIG_get_ptr(host_readbs(enemy + ENEMY_SHEET_FIGHTER_ID)));
 
-		FIG_set_sheet(ds_readbs(FIG_TWOFIELDED_TABLE + host_readbs(p2 + FIGHTER_TWOFIELDED)), 3);
+		FIG_set_sheet(g_fig_twofielded_table[host_readbs(p2 + FIGHTER_TWOFIELDED)], 3);
 	}
 
 	/* draw_fight_screen */

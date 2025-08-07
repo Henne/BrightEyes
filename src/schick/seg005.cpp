@@ -727,10 +727,10 @@ void draw_fight_screen(Bit16u val)
 													/* Original-Bug 4:
 													 * remove tail of the escaped two-fielded enemy from the chessboard
 													 * For more on this bug, see Original-Bug 3 at seg032.cpp */
-													p_fighter_tmp = (Bit8u*)FIG_get_ptr(ds_readbs(FIG_TWOFIELDED_TABLE + host_readbs(list_i + FIGHTER_TWOFIELDED)));
+													p_fighter_tmp = (Bit8u*)FIG_get_ptr(g_twofielded_table[host_readbs(list_i + FIGHTER_TWOFIELDED)]);
 													FIG_set_cb_field(host_readbs(p_fighter_tmp + FIGHTER_CBY), host_readbs(p_fighter_tmp + FIGHTER_CBX), host_readbs(p_fighter_tmp + FIGHTER_OBJ_ID));
 #endif
-													figlist_remove[2 + host_readbs(list_i + FIGHTER_SHEET)] = ds_readbs(FIG_TWOFIELDED_TABLE + host_readbs(list_i + FIGHTER_TWOFIELDED));
+													figlist_remove[2 + host_readbs(list_i + FIGHTER_SHEET)] = g_fig_twofielded_table[host_readbs(list_i + FIGHTER_TWOFIELDED)];
 												}
 											}
 										} else {

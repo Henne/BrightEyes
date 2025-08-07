@@ -555,7 +555,7 @@ void spell_skelettarius(void)
 		y = host_readbs(fighter + FIGHTER_CBY);
 
 		if (host_readbs(fighter + FIGHTER_TWOFIELDED) != -1) {
-			FIG_remove_from_list(ds_readbs(FIG_TWOFIELDED_TABLE + host_readbs(fighter + FIGHTER_TWOFIELDED)), 0);
+			FIG_remove_from_list(g_fig_twofielded_table[host_readbs(fighter + FIGHTER_TWOFIELDED)], 0);
 		}
 #ifdef M302de_ORIGINAL_BUGFIX
 		/* Original-Bug 1:

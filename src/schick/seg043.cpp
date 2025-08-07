@@ -708,7 +708,7 @@ void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 
 								l16 = (Bit8u*)(FIG_get_ptr(host_readbs(mon + ENEMY_SHEET_FIGHTER_ID)));
 
-								FIG_set_sheet(ds_readbs(FIG_TWOFIELDED_TABLE + host_readbs(l16 + FIGHTER_TWOFIELDED)), 3);
+								FIG_set_sheet(g_fig_twofielded_table[host_readbs(l16 + FIGHTER_TWOFIELDED)], 3);
 							}
 						} else {
 
@@ -768,7 +768,7 @@ void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 
 									l16 = (Bit8u*)(FIG_get_ptr(host_readbs(mon + ENEMY_SHEET_FIGHTER_ID)));
 
-									FIG_make_invisible(ds_readbs(FIG_TWOFIELDED_TABLE + host_readbs(l16 + FIGHTER_TWOFIELDED)));
+									FIG_make_invisible(g_fig_twofielded_table[host_readbs(l16 + FIGHTER_TWOFIELDED)]);
 								}
 							} else {
 

@@ -243,7 +243,7 @@ void FIG_make_invisible(signed char fighter_id)
 
 		ptr2 = (Bit8u*)ds_readd(FIG_LIST_HEAD);
 
-		while (ds_readb(FIG_TWOFIELDED_TABLE + host_readbs(ptr1 + FIGHTER_TWOFIELDED)) != host_readb(ptr2 + FIGHTER_ID)) {
+		while (g_fig_twofielded_table[host_readbs(ptr1 + FIGHTER_TWOFIELDED)] != host_readb(ptr2 + FIGHTER_ID)) {
 			ptr2 = (Bit8u*)(host_readd(ptr2 + FIGHTER_NEXT));
 		}
 		host_writeb(ptr2 + FIGHTER_VISIBLE, 0);
@@ -276,7 +276,7 @@ void FIG_make_visible(signed short fighter_id)
 
 		ptr2 = (Bit8u*)ds_readd(FIG_LIST_HEAD);
 
-		while (ds_readb(FIG_TWOFIELDED_TABLE + host_readbs(ptr1 + FIGHTER_TWOFIELDED)) != host_readb(ptr2 + FIGHTER_ID)) {
+		while (g_fig_twofielded_table[host_readbs(ptr1 + FIGHTER_TWOFIELDED)] != host_readb(ptr2 + FIGHTER_ID)) {
 
 			ptr2 = (Bit8u*)(host_readd(ptr2 + FIGHTER_NEXT));
 

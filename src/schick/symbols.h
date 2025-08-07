@@ -1545,7 +1545,7 @@
 //#define AUTOFIGHT                       (0xe318)    /* signed short */
 //#define FIG_DROPPED_WEAPONS             (0xe31a)    /* signed short[30] */
 #define CHESSBOARD_CPY                  (0xe356)    /* Bit8u* */
-#define FIG_TWOFIELDED_TABLE            (0xe35a)    /* signed char[21]; table containing the fighter-ids of the head parts of the twofielded enemies */
+//#define FIG_TWOFIELDED_TABLE            (0xe35a)    /* signed char[21]; table containing the fighter-ids of the head parts of the twofielded enemies */
 //#define FIG_TWOFIELDED_COUNT            (0xe36f)    /* signed char */
 //#define FIGHTOBJ_BUF_FREESPACE          (0xe370)    /* signed long */
 //#define BUFFER_WEAPANIDAT               (0xe374)    /* Bit8u*; pointer to WEAPANI.DAT */

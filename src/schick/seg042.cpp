@@ -859,7 +859,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 								{
 									p3 = (Bit8u*)(FIG_get_ptr(host_readbs(target_monster + ENEMY_SHEET_FIGHTER_ID)));
 
-									FIG_set_sheet(ds_readbs(FIG_TWOFIELDED_TABLE + host_readbs(p3 + FIGHTER_TWOFIELDED)), 3);
+									FIG_set_sheet(g_fig_twofielded_table[host_readbs(p3 + FIGHTER_TWOFIELDED)], 3);
 								}
 
 							} else {
@@ -889,7 +889,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 								{
 									p3 = (Bit8u*)(FIG_get_ptr(host_readbs(target_monster + ENEMY_SHEET_FIGHTER_ID)));
 
-									FIG_make_invisible(ds_readbs(FIG_TWOFIELDED_TABLE + host_readbs(p3 + FIGHTER_TWOFIELDED)));
+									FIG_make_invisible(g_fig_twofielded_table[host_readbs(p3 + FIGHTER_TWOFIELDED)]);
 								}
 							} else {
 								if (host_readbs(hero + HERO_ENEMY_ID) > 0) {
