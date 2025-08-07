@@ -93,7 +93,7 @@ void FIG_init_list_elem(signed short obj)
 	ds_writeb((FIG_LIST_ELEM + FIGHTER_VISIBLE), 1);
 	ds_writeb((FIG_LIST_ELEM + FIGHTER_TWOFIELDED), -1);
 
-	ds_writeb(FIG_CB_MAKRER_ID, FIG_add_to_list(-1));
+	g_fig_cb_marker_id = FIG_add_to_list(-1);
 }
 
 void FIG_unused(signed short a1, signed short a2,  Bit8u *p1, Bit8u *p2)

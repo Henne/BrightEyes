@@ -162,9 +162,9 @@ void seg037_00ae(Bit8u *enemy, signed short enemy_no)
 
 	FIG_call_draw_pic();
 
-	FIG_remove_from_list(ds_readbs(FIG_CB_MAKRER_ID), 0);
+	FIG_remove_from_list(g_fig_cb_marker_id, 0);
 
-	ds_writeb(FIG_CB_MAKRER_ID, -1);
+	g_fig_cb_marker_id = -1;
 
 	FIG_set_sheet(host_readbs(enemy + ENEMY_SHEET_FIGHTER_ID), 1);
 
@@ -750,9 +750,9 @@ void enemy_turn(Bit8u *enemy, signed short enemy_no, signed short x, signed shor
 
 	while ( (done == 0) && (host_readbs(enemy + ENEMY_SHEET_BP) > 0)) {
 
-		if (ds_readbs(FIG_CB_MAKRER_ID) != -1) {
-			FIG_remove_from_list(ds_readbs(FIG_CB_MAKRER_ID), 0);
-			ds_writebs(FIG_CB_MAKRER_ID, -1);
+		if (g_fig_cb_marker_id != -1) {
+			FIG_remove_from_list(g_fig_cb_marker_id, 0);
+			g_fig_cb_marker_id = -1;
 		}
 
 		FIG_init_list_elem(enemy_no + 10);

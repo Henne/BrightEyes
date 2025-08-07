@@ -71,9 +71,9 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 
 	while ((done == 0) && (host_readbs(hero + HERO_BP_LEFT) > 0)) {
 
-		if (ds_readbs(FIG_CB_MAKRER_ID) != -1) {
-			FIG_remove_from_list(ds_readbs(FIG_CB_MAKRER_ID), 0);
-			ds_writeb(FIG_CB_MAKRER_ID, -1);
+		if (g_fig_cb_marker_id != -1) {
+			FIG_remove_from_list(g_fig_cb_marker_id, 0);
+			g_fig_cb_marker_id = -1;
 		}
 
 		FIG_init_list_elem(hero_pos + 1);

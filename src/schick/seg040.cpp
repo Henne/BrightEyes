@@ -129,7 +129,7 @@ void FIG_preload_gfx(void)
 			host_writews((Bit8u*)ds_readd(FIGOBJ_GFXHEIGHT_TABLE) + i * 2, 0));
 	}
 
-	ds_writeb(FIG_CB_MAKRER_ID, -1);
+	g_fig_cb_marker_id = -1;
 
 	for (i = 0; i < 20; i++) {
 		g_fig_cb_selector_id[i] = -1;

@@ -1556,7 +1556,7 @@
 #define FIGOBJ_GFXBUF_TABLE             (0xe388)    /* Bit8u*; to Bit8u*[63] */
 #define FIG_SPELLGFX_ID                 (0xe38c)    /* unsigned char */
 #define FIG_SHOT_BOLT_ID                (0xe38d)    /* unsigned char */
-#define FIG_CB_MAKRER_ID                (0xe38e)    /* unsigned char */
+//#define FIG_CB_MARKER_ID                (0xe38e)    /* unsigned char */
 //#define FIG_CB_SELECTOR_ID              (0xe38f)    /* unsigned char[20] */
 // ?1
 //#define SPELL_ILLUSIONEN                (0xe3a4)    /* signed short; 1 = spell has effect */

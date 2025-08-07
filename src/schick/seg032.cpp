@@ -783,10 +783,10 @@ void FIG_do_round(void)
 
 		nr_action_phases_left_in_turn--;
 
-		if (ds_readbs(FIG_CB_MAKRER_ID) != -1) {
+		if (g_fig_cb_marker_id != -1) {
 
-			FIG_remove_from_list(ds_readbs(FIG_CB_MAKRER_ID), 0);
-			ds_writeb(FIG_CB_MAKRER_ID, -1);
+			FIG_remove_from_list(g_fig_cb_marker_id, 0);
+			g_fig_cb_marker_id = -1;
 		}
 
 		if (g_fig_cb_selector_id[0] != -1) {

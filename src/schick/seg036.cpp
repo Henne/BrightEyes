@@ -161,8 +161,8 @@ void seg036_00ae(Bit8u *hero, signed short hero_pos)
 
 	host_writeb(ptr1, -1);
 	FIG_call_draw_pic();
-	FIG_remove_from_list(ds_readbs(FIG_CB_MAKRER_ID), 0);
-	ds_writeb(FIG_CB_MAKRER_ID, -1);
+	FIG_remove_from_list(g_fig_cb_marker_id, 0);
+	g_fig_cb_marker_id = -1;
 	FIG_set_sheet(host_readbs(hero + HERO_FIGHTER_ID), 0);
 	draw_fight_screen(0);
 	memset(p_datseg + FIG_ANISHEETS, -1, 0xf3);
