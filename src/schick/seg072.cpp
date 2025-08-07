@@ -179,12 +179,12 @@ void INF_yasma_umbrik_isleif(signed short informer, signed short state)
 		if (!state) {
 			g_dialog_next_state = (gs_informer_flags[INFORMER_ISLEIF] == 2 ? 1 : 2);
 		} else if (state == 2) {
-			g_dialog_next_state = (ds_readb(ISLEIF_JANDAS_REGARDS) != 0 ? 3 : 4);
+			g_dialog_next_state = (gs_isleif_jandas_regards ? 3 : 4);
 		} else if (state == 8 || state == 23 || state == 25 || state == 27) {
 			/* mark ISLEIF OLGARDSSON as done */
 			gs_informer_flags[INFORMER_ISLEIF] = 2;
 		} else if (state == 9) {
-			g_dialog_next_state = (ds_readb(ISLEIF_JANDAS_REGARDS) != 0 ? 10 : 11);
+			g_dialog_next_state = (gs_isleif_jandas_regards ? 10 : 11);
 		} else if (state == 15 || state == 19) {
 			/* TODO: check what happens here */
 		} else if (state == 16 || state == 20) {
@@ -203,11 +203,11 @@ void INF_yasma_umbrik_isleif(signed short informer, signed short state)
 			show_treasure_map();
 
 			/* TODO: what does that mean ? */
-			if (state == 17) ds_writeb(ISLEIF_MAP_GIVEN, 1);
+			if (state == 17) gs_isleif_map_given = 1;
 
 		} else if (state == 24) {
 			/* TODO: what does that mean ? */
-			g_dialog_next_state = (ds_readb(ISLEIF_MAP_GIVEN) != 0 ? 25 : 26);
+			g_dialog_next_state = (gs_isleif_map_given ? 25 : 26);
 		}
 	}
 }
@@ -237,7 +237,8 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 			/* directly asking for map gets a brush-off ("don't know what you
 			   are talking about") and is silently noted by ragna!
 			   it's not possible to get to see the map after that (see state 17) */
-			ds_writeb(RAGNA_ASKED_MAP, 1);
+			gs_ragna_asked_map = 1;
+
 		} else if (state == 14) {
 			/* mark ISLEIF OLGARDSSON as known */
 			if (!gs_informer_flags[INFORMER_ISLEIF]) gs_informer_flags[INFORMER_ISLEIF] = 1;
@@ -248,7 +249,7 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 			if (!gs_informer_flags[INFORMER_JURGE]) gs_informer_flags[INFORMER_JURGE] = 1;
 		} else if (state == 17) {
 			/* see state 12 */
-			g_dialog_next_state = (ds_readb(RAGNA_ASKED_MAP) != 0 ? 18 : 19);
+			g_dialog_next_state = (gs_ragna_asked_map ? 18 : 19);
 		} else if (state == 21) {
 
 			/* check if the party already has this map piece */
@@ -331,16 +332,16 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 				if (!gs_informer_flags[INFORMER_SWAFNILD]) gs_informer_flags[INFORMER_SWAFNILD] = 1;
 			} else if (state == 18) {
 				/* after "NUN, IHR SEID DOCH MIT HYGGELIK VERWANDT..." */
-				ds_writeb(BEORN_LITT_BOLD, 1);
+				gs_beorn_litt_bold = 1;
 			} else if (state == 23) {
 				/* after "NA, DAS WAR JA NICHT BESONDERS VIEL!" */
-				ds_writeb(BEORN_VERY_BOLD, 1);
+				gs_beorn_very_bold = 1;
 			} else if (state == 24) {
 			    /* after 22 (new contacts), extremely bold heroes get the map now */
-				g_dialog_next_state = (ds_readb(BEORN_LITT_BOLD) != 0 && ds_readb(BEORN_MEDI_BOLD) != 0 && ds_readb(BEORN_VERY_BOLD) != 0 ? 26 : 27);
+				g_dialog_next_state = (gs_beorn_litt_bold != 0 && gs_beorn_medi_bold != 0 && gs_beorn_very_bold != 0 ? 26 : 27);
 			} else if (state == 25) {
 				/* if asked "WISST IHR VIELLEICHT AUCH ETWAS?" */
-				ds_writeb(BEORN_MEDI_BOLD, 1);
+				gs_beorn_medi_bold = 1;
 			} else if (state == 27) {
 			    /* if not extremely bold, the hero is tested for CHARISMA with
 			       malus as follows:
@@ -352,17 +353,17 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 
 				beorn_ch_malus = 10;
 
-				if (ds_readb(BEORN_VERY_BOLD) && !ds_readb(BEORN_MEDI_BOLD) && !ds_readb(BEORN_LITT_BOLD)) {
+				if (gs_beorn_very_bold && !gs_beorn_medi_bold && !gs_beorn_litt_bold) {
 					beorn_ch_malus = 4;
-				} else if (ds_readb(BEORN_VERY_BOLD) && ds_readb(BEORN_MEDI_BOLD) && !ds_readb(BEORN_LITT_BOLD)) {
+				} else if (gs_beorn_very_bold && gs_beorn_medi_bold && !gs_beorn_litt_bold) {
 					beorn_ch_malus = -2;
-				} else if (ds_readb(BEORN_VERY_BOLD) && !ds_readb(BEORN_MEDI_BOLD) && ds_readb(BEORN_LITT_BOLD)) {
+				} else if (gs_beorn_very_bold && !gs_beorn_medi_bold && gs_beorn_litt_bold) {
 					beorn_ch_malus = -2;
-				} else if (!ds_readb(BEORN_VERY_BOLD) && ds_readb(BEORN_MEDI_BOLD) && !ds_readb(BEORN_LITT_BOLD)) {
+				} else if (!gs_beorn_very_bold && gs_beorn_medi_bold && !gs_beorn_litt_bold) {
 					beorn_ch_malus = 6;
-				} else if (!ds_readb(BEORN_VERY_BOLD) && !ds_readb(BEORN_MEDI_BOLD) && ds_readb(BEORN_LITT_BOLD)) {
+				} else if (!gs_beorn_very_bold && !gs_beorn_medi_bold && gs_beorn_litt_bold) {
 					beorn_ch_malus = 6;
-				} else if (ds_readb(BEORN_LITT_BOLD) && ds_readb(BEORN_MEDI_BOLD)) {
+				} else if (gs_beorn_litt_bold && gs_beorn_medi_bold) {
 					beorn_ch_malus = 0;
 				}
 
@@ -404,7 +405,7 @@ void INF_eliane_tiomar(signed short informer, signed short state)
 		/* ELIANE WINDENBECK */
 
 		if (!state) {
-			g_dialog_next_state = (ds_readb(ELIANE_QUEST_NAMELESS) || gs_got_main_quest == 0 ? 1 : 6);
+			g_dialog_next_state = (gs_eliane_quest_nameless || gs_got_main_quest == 0 ? 1 : 6);
 		} else if (state == 1) {
 			g_dialog_next_state = (ds_readb(QUEST_NAMELESS_DONE) && gs_informer_flags[INFORMER_ELIANE] != 2 ? 2 : 3);
 		} else if (state == 5 || state == 27) {
@@ -421,7 +422,7 @@ void INF_eliane_tiomar(signed short informer, signed short state)
 				gs_informer_flags[INFORMER_ELIANE] = 2;
 		} else if (state == 19) {
 			g_dialog_next_state = (ds_readb(QUEST_NAMELESS_DONE) ? 20 : 30);
-			ds_writeb(ELIANE_QUEST_NAMELESS, 1);
+			gs_eliane_quest_nameless = 1;
 		} else if (state == 16) {
 			/* mark YASMA THINMARSDOTTER as known */
 			if (!gs_informer_flags[INFORMER_YASMA]) gs_informer_flags[INFORMER_YASMA] = 1;
@@ -504,49 +505,49 @@ void INF_olvir_asgrimm(signed short informer, signed short state)
 			/* mark OLVIR GUNDRIDSSON as done */
 			gs_informer_flags[INFORMER_OLVIR] = 2;
 		} else if (state == 8) {
-			ds_writeb(OLVIR_START_HETMANN, ds_writeb(OLVIR_SINGING_HETMANN, 1));
+			gs_olvir_start_hetmann = gs_olvir_singing_hetmann = 1;
 		} else if (state == 9) {
-			ds_writeb(OLVIR_START_HYGGELIK, ds_writeb(OLVIR_SINGING_HYGGELIK, 1));
+			gs_olvir_start_hyggelik = gs_olvir_singing_hyggelik = 1;
 		} else if (state == 10) {
-			ds_writeb(OLVIR_START_HASGAR, ds_writeb(OLVIR_SINGING_HASGAR, 1));
+			gs_olvir_start_hasgar = gs_olvir_singing_hasgar = 1;
 		} else if (state == 12 || state == 13 || state == 23 || state == 24 || state == 29 || state == 30) {
 			timewarp(MINUTES(30));
 		} else if (state == 14 || state == 15 || state == 21 || state == 22 || state == 28) {
 			timewarp(HOURS(1));
 		} else if (state == 16) {
-			g_dialog_next_state = (ds_readb(OLVIR_INTERRUPTED) != 0 ? 19 : 13);
-			ds_writeb(OLVIR_INTERRUPTED, 1);
+			g_dialog_next_state = (gs_olvir_interrupted ? 19 : 13);
+			gs_olvir_interrupted = 1;
 		} else if (state == 17) {
-			g_dialog_next_state = (ds_readb(OLVIR_INTERRUPTED) != 0 ? 19 : 14);
-			ds_writeb(OLVIR_INTERRUPTED, 1);
+			g_dialog_next_state = (gs_olvir_interrupted ? 19 : 14);
+			gs_olvir_interrupted = 1;
 		} else if (state == 18) {
-			g_dialog_next_state = (ds_readb(OLVIR_INTERRUPTED) != 0 ? 19 : 15);
-			ds_writeb(OLVIR_INTERRUPTED, 1);
+			g_dialog_next_state = (gs_olvir_interrupted ? 19 : 15);
+			gs_olvir_interrupted = 1;
 		} else if (state == 26) {
-			g_dialog_next_state = (ds_readb(OLVIR_INTERRUPTED) != 0 ? 19 : 22);
-			ds_writeb(OLVIR_INTERRUPTED, 1);
+			g_dialog_next_state = (gs_olvir_interrupted ? 19 : 22);
+			gs_olvir_interrupted = 1;
 		} else if (state == 27) {
-			g_dialog_next_state = (ds_readb(OLVIR_INTERRUPTED) != 0 ? 19 : 23);
-			ds_writeb(OLVIR_INTERRUPTED, 1);
+			g_dialog_next_state = (gs_olvir_interrupted ? 19 : 23);
+			gs_olvir_interrupted = 1;
 		} else if (state == 31) {
-			g_dialog_next_state = (ds_readb(OLVIR_INTERRUPTED) != 0 ? 19 : 29);
-			ds_writeb(OLVIR_INTERRUPTED, 1);
+			g_dialog_next_state = (gs_olvir_interrupted ? 19 : 29);
+			gs_olvir_interrupted = 1;
 		} else if (state == 32) {
-			g_dialog_next_state = (ds_readb(OLVIR_INTERRUPTED) != 0 ? 19 : 30);
-			ds_writeb(OLVIR_INTERRUPTED, 1);
+			g_dialog_next_state = (gs_olvir_interrupted ? 19 : 30);
+			gs_olvir_interrupted = 1;
 		} else if (state == 33) {
 		        /* whenever one of the songs is over, the name of an informer is given */
-			g_dialog_next_state = (ds_readb(OLVIR_SINGING_HETMANN) != 0 ? 11 : (ds_readb(OLVIR_SINGING_HYGGELIK) != 0 ? 35 : 36));
+			g_dialog_next_state = (gs_olvir_singing_hetmann ? 11 : (gs_olvir_singing_hyggelik ? 35 : 36));
 		} else if (state == 34) {
-			ds_writeb(OLVIR_SINGING_HETMANN, 0);
-			ds_writeb(OLVIR_SINGING_HYGGELIK, 1);
+			gs_olvir_singing_hetmann = 0;
+			gs_olvir_singing_hyggelik = 1;
 		} else if (state == 35) {
-			ds_writeb(OLVIR_SINGING_HYGGELIK, 0);
-			ds_writeb(OLVIR_SINGING_HASGAR, 1);
+			gs_olvir_singing_hyggelik = 0;
+			gs_olvir_singing_hasgar = 1;
 		} else if (state == 37) {
-			g_dialog_next_state = (ds_readb(OLVIR_START_HYGGELIK) != 0 ? 39 : 40);
+			g_dialog_next_state = (gs_olvir_start_hyggelik ? 39 : 40);
 		} else if (state == 39) {
-			g_dialog_next_state = (ds_readb(OLVIR_START_HETMANN) != 0 ? 42 : 41);
+			g_dialog_next_state = (gs_olvir_start_hetmann ? 42 : 41);
 		}
 	} else if (informer == 1) {
 		/* ASGRIMM THURBOLDSSON */

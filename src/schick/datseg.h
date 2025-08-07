@@ -266,8 +266,22 @@ extern Bit8u  gs_herberg_kicked_flags[74];	//ds:0x3400; seg060
 extern Bit8u  gs_got_letter_het;		//ds:0x344a; seg069
 extern Bit8u  gs_jurge_awaits_letter;		//ds:0x344c; seg069, seg072, seg073
 extern Bit8u  gs_umbrik_quest_gorah;		//ds:0x344d; seg072, seg111
+extern Bit8u  gs_isleif_jandas_regards;		//ds:0x344f; seg072, seg116
+extern Bit8u  gs_isleif_map_given;		//ds:0x3450; seg072
+extern Bit8u  gs_ragna_asked_map;		//ds:0x3451; seg072
+extern Bit8u  gs_beorn_litt_bold;		//ds:0x3452; seg072
+extern Bit8u  gs_beorn_medi_bold;		//ds:0x3453; seg072
+extern Bit8u  gs_beorn_very_bold;		//ds:0x3454; seg072
+extern Bit8u  gs_eliane_quest_nameless;		//ds:0x3455; seg072
+extern Bit8u  gs_olvir_start_hetmann;		//ds:0x3456; seg072
+extern Bit8u  gs_olvir_start_hyggelik;		//ds:0x3457; seg072
+extern Bit8u  gs_olvir_start_hasgar;		//ds:0x3458; seg072
+extern Bit8u  gs_olvir_interrupted;		//ds:0x3459; seg072
+extern Bit8u  gs_olvir_singing_hetmann;		//ds:0x345a; seg072
+extern Bit8u  gs_olvir_singing_hyggelik;	//ds:0x345b; seg072
+extern Bit8u  gs_olvir_singing_hasgar;		//ds:0x345c; seg072
 
-extern Bit8u gs_algrid_treborns_hint;		//ds:0x3467; seg072
+extern Bit8u  gs_algrid_treborns_hint;		//ds:0x3467; seg072
 
 extern Bit16s gs_npc_meet_tavern;		//ds:0x346e; seg060, seg095
 extern Bit16s gs_npc_months;			//ds:0x3470; seg002-seg116

@@ -293,20 +293,20 @@
 //#define JURGE_AWAITS_LETTER             (0x344c)    /* unsigned char; {0,1} */
 //#define UMBRIK_QUEST_GORAH              (0x344d)    /* unsigned char; {0,1} */
 // ?1
-#define ISLEIF_JANDAS_REGARDS           (0x344f)    /* unsigned char; {0,1} */
-#define ISLEIF_MAP_GIVEN                (0x3450)    /* unsigned char; {0,1} */
-#define RAGNA_ASKED_MAP                 (0x3451)    /* unsigned char; {0,1} */
-#define BEORN_LITT_BOLD                 (0x3452)    /* unsigned char; {0,1} */
-#define BEORN_MEDI_BOLD                 (0x3453)    /* unsigned char; {0,1} */
-#define BEORN_VERY_BOLD                 (0x3454)    /* unsigned char; {0,1} */
-#define ELIANE_QUEST_NAMELESS           (0x3455)    /* unsigned char; {0,1} */
-#define OLVIR_START_HETMANN             (0x3456)    /* unsigned char; {0,1} */
-#define OLVIR_START_HYGGELIK            (0x3457)    /* unsigned char; {0,1} */
-#define OLVIR_START_HASGAR              (0x3458)    /* unsigned char; {0,1} */
-#define OLVIR_INTERRUPTED               (0x3459)    /* unsigned char; {0,1} */
-#define OLVIR_SINGING_HETMANN           (0x345a)    /* unsigned char; {0,1} */
-#define OLVIR_SINGING_HYGGELIK          (0x345b)    /* unsigned char; {0,1} */
-#define OLVIR_SINGING_HASGAR            (0x345c)    /* unsigned char; {0,1} */
+//#define ISLEIF_JANDAS_REGARDS           (0x344f)    /* unsigned char; {0,1} */
+//#define ISLEIF_MAP_GIVEN                (0x3450)    /* unsigned char; {0,1} */
+//#define RAGNA_ASKED_MAP                 (0x3451)    /* unsigned char; {0,1} */
+//#define BEORN_LITT_BOLD                 (0x3452)    /* unsigned char; {0,1} */
+//#define BEORN_MEDI_BOLD                 (0x3453)    /* unsigned char; {0,1} */
+//#define BEORN_VERY_BOLD                 (0x3454)    /* unsigned char; {0,1} */
+//#define ELIANE_QUEST_NAMELESS           (0x3455)    /* unsigned char; {0,1} */
+//#define OLVIR_START_HETMANN             (0x3456)    /* unsigned char; {0,1} */
+//#define OLVIR_START_HYGGELIK            (0x3457)    /* unsigned char; {0,1} */
+//#define OLVIR_START_HASGAR              (0x3458)    /* unsigned char; {0,1} */
+//#define OLVIR_INTERRUPTED               (0x3459)    /* unsigned char; {0,1} */
+//#define OLVIR_SINGING_HETMANN           (0x345a)    /* unsigned char; {0,1} */
+//#define OLVIR_SINGING_HYGGELIK          (0x345b)    /* unsigned char; {0,1} */
+//#define OLVIR_SINGING_HASGAR            (0x345c)    /* unsigned char; {0,1} */
 #define SWAFNILD_TP1                    (0x345d)    /* unsigned char */
 #define SWAFNILD_TP2                    (0x345e)    /* unsigned char */
 #define SWAFNILD_TP3                    (0x345f)    /* unsigned char */

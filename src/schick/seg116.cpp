@@ -704,7 +704,7 @@ void TLK_old_woman(signed short state)
 	} else if (state == 38) {
 		timewarp(HOURS(1));
 	} else if (state == 41) {
-		ds_writeb(TEVENT093_FLAG, ds_writeb(TEVENT091_FLAG, (gs_informer_flags[INFORMER_ISLEIF] =  ds_writeb(ISLEIF_JANDAS_REGARDS, 1))));
+		ds_writeb(TEVENT093_FLAG, ds_writeb(TEVENT091_FLAG, (gs_informer_flags[INFORMER_ISLEIF] = gs_isleif_jandas_regards = 1)));
 	}
 }
 
