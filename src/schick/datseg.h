@@ -533,6 +533,7 @@ extern signed short g_defender_attacks;		// ds:0xe3aa; seg042, seg043, seg044
 extern signed short g_attacker_dead;		// ds:0xe3a8; seg042, seg043, seg044
 extern signed short g_defender_dead;		// ds:0xe3a6; seg042, seg043, seg044, seg098, seg102
 extern signed short g_spell_illusionen;		// ds:0xe3a4; seg042, seg043, seg099
+extern signed char g_fig_cb_selector_id[21];	// ds:0xe38f; seg032, seg034, seg040
 
 extern Bit32s g_fightobj_buf_freespace;	// ds:0xe370; seg032-seg100
 

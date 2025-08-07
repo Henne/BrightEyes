@@ -176,9 +176,9 @@ signed char FIG_cb_select_target(Bit8u *px, Bit8u *py, const signed short max_ra
 	x = host_readws(px);
 	y = host_readws(py);
 
-	if (ds_readbs(FIG_CB_SELECTOR_ID) != -1) {
-		FIG_remove_from_list(ds_readbs(FIG_CB_SELECTOR_ID), 0);
-		ds_writebs(FIG_CB_SELECTOR_ID, -1);
+	if (g_fig_cb_selector_id[0] != -1) {
+		FIG_remove_from_list(g_fig_cb_selector_id[0], 0);
+		g_fig_cb_selector_id[0] = -1;
 	}
 
 	ds_writew(FIG_LIST_ELEM, 0);
@@ -202,7 +202,7 @@ signed char FIG_cb_select_target(Bit8u *px, Bit8u *py, const signed short max_ra
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_VISIBLE), 1);
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_TWOFIELDED), -1);
 
-	ds_writeb(FIG_CB_SELECTOR_ID, FIG_add_to_list(-1));
+	g_fig_cb_selector_id[0] = FIG_add_to_list(-1);
 
 	draw_fight_screen_pal(0);
 
@@ -216,9 +216,9 @@ signed char FIG_cb_select_target(Bit8u *px, Bit8u *py, const signed short max_ra
 
 			ds_writew(MOUSE2_EVENT, 0);
 
-			FIG_remove_from_list(ds_readbs(FIG_CB_SELECTOR_ID), 0);
+			FIG_remove_from_list(g_fig_cb_selector_id[0], 0);
 
-			ds_writeb(FIG_CB_SELECTOR_ID, -1);
+			g_fig_cb_selector_id[0] = -1;
 
 			draw_fight_screen_pal(0);
 
@@ -316,21 +316,21 @@ signed char FIG_cb_select_target(Bit8u *px, Bit8u *py, const signed short max_ra
 				}
 			}
 
-			FIG_remove_from_list(ds_readbs(FIG_CB_SELECTOR_ID), 1);
+			FIG_remove_from_list(g_fig_cb_selector_id[0], 1);
 
 			ds_writeb((FIG_LIST_ELEM+FIGHTER_CBX), (signed char)host_readws(px));
 			ds_writeb((FIG_LIST_ELEM+FIGHTER_CBY), (signed char)host_readws(py));
 
-			FIG_add_to_list(ds_readbs(FIG_CB_SELECTOR_ID));
+			FIG_add_to_list(g_fig_cb_selector_id[0]);
 			FIG_draw_figures();
 			FIG_set_gfx();
 		}
 
 	} while (ds_readws(ACTION) != ACTION_ID_RETURN);
 
-	FIG_remove_from_list(ds_readbs(FIG_CB_SELECTOR_ID), 0);
+	FIG_remove_from_list(g_fig_cb_selector_id[0], 0);
 
-	ds_writeb(FIG_CB_SELECTOR_ID, -1);
+	g_fig_cb_selector_id[0] = -1;
 
 	draw_fight_screen_pal(0);
 
@@ -586,9 +586,9 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 	curr_x = sel_x;
 	curr_y = sel_y;
 
-	if (ds_readbs(FIG_CB_SELECTOR_ID) != -1) {
-		FIG_remove_from_list(ds_readbs(FIG_CB_SELECTOR_ID), 0);
-		ds_writebs(FIG_CB_SELECTOR_ID, -1);
+	if (g_fig_cb_selector_id[0] != -1) {
+		FIG_remove_from_list(g_fig_cb_selector_id[0], 0);
+		g_fig_cb_selector_id[0] = -1;
 	}
 
 	ds_writew(FIG_LIST_ELEM, 0);
@@ -612,7 +612,7 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_VISIBLE), 1);
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_TWOFIELDED), -1);
 
-	ds_writeb(FIG_CB_SELECTOR_ID, FIG_add_to_list(-1));
+	g_fig_cb_selector_id[0] = FIG_add_to_list(-1);
 
 	draw_fight_screen_pal(0);
 
@@ -686,13 +686,13 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 
 			FIG_call_draw_pic();
 
-			FIG_remove_from_list(ds_readbs(FIG_CB_SELECTOR_ID), 0);
+			FIG_remove_from_list(g_fig_cb_selector_id[0], 0);
 
 			ds_writeb((FIG_LIST_ELEM+FIGHTER_CBX), (signed char)sel_x);
 			ds_writeb((FIG_LIST_ELEM+FIGHTER_CBY), (signed char)sel_y);
 			ds_writed((FIG_LIST_ELEM+FIGHTER_GFXBUF), ds_readd(FIG_CB_SELECTOR_BUF));
 			ds_writeb((FIG_LIST_ELEM+FIGHTER_TWOFIELDED), -1);
-			ds_writeb(FIG_CB_SELECTOR_ID, FIG_add_to_list(-1));
+			g_fig_cb_selector_id[0] = FIG_add_to_list(-1);
 
 			FIG_draw_figures();
 			FIG_set_gfx();
@@ -891,15 +891,15 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 					host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_FLEE);
 					problem = 0;
 				} else {
-					FIG_remove_from_list(ds_readbs(FIG_CB_SELECTOR_ID), 0);
-					ds_writeb(FIG_CB_SELECTOR_ID, -1);
+					FIG_remove_from_list(g_fig_cb_selector_id[0], 0);
+					g_fig_cb_selector_id[0] = -1;
 				}
 			}
 
 			if (!problem || (problem == 2)) {
 
-				FIG_remove_from_list(ds_readbs(FIG_CB_SELECTOR_ID), 0);
-				ds_writeb(FIG_CB_SELECTOR_ID, -1);
+				FIG_remove_from_list(g_fig_cb_selector_id[0], 0);
+				g_fig_cb_selector_id[0] = -1;
 
 				seg036_00ae(hero, hero_pos);
 
@@ -917,9 +917,9 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 		}
 	}
 
-	if (ds_readbs(FIG_CB_SELECTOR_ID) != -1) {
-		FIG_remove_from_list(ds_readbs(FIG_CB_SELECTOR_ID), 0);
-		ds_writebs(FIG_CB_SELECTOR_ID, -1);
+	if (g_fig_cb_selector_id[0] != -1) {
+		FIG_remove_from_list(g_fig_cb_selector_id[0], 0);
+		g_fig_cb_selector_id[0] = -1;
 	}
 }
 

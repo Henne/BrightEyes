@@ -132,7 +132,7 @@ void FIG_preload_gfx(void)
 	ds_writeb(FIG_CB_MAKRER_ID, -1);
 
 	for (i = 0; i < 20; i++) {
-		ds_writeb(FIG_CB_SELECTOR_ID + i, -1);
+		g_fig_cb_selector_id[i] = -1;
 	}
 
 	ds_writeb(FIG_SHOT_BOLT_ID, -1);

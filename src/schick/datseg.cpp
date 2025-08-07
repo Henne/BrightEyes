@@ -6177,8 +6177,7 @@ signed short g_defender_attacks; // ds:0xe3aa
 signed short g_attacker_dead; // ds:0xe3a8
 signed short g_defender_dead; // ds:0xe3a6
 signed short g_spell_illusionen; // ds:0xe3a4, 1 = spell has effect
-unsigned char g_unkn_086[1]; // ds:0xe3a3
-unsigned char g_fig_cb_selector_id[20]; // ds:0xe38f
+signed char g_fig_cb_selector_id[21]; // ds:0xe38f
 unsigned char g_fig_cb_makrer_id; // ds:0xe38e
 unsigned char g_fig_shot_bolt_id; // ds:0xe38d
 unsigned char g_fig_spellgfx_id; // ds:0xe38c
