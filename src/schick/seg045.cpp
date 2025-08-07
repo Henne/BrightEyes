@@ -73,13 +73,13 @@ void seg045_0000(signed short fighter_id, signed short type, signed short a3)
 
 	process_nvf(&nvf);
 
-	ds_writeb(FIG_SHOT_BOLT_ID, FIG_add_to_list(-1));
+	g_fig_shot_bolt_id = FIG_add_to_list(-1);
 }
 
 void FIG_remove_smth(void)
 {
-	FIG_remove_from_list(ds_readb(FIG_SHOT_BOLT_ID), 0);
-	ds_writeb(FIG_SHOT_BOLT_ID, 0xff);
+	FIG_remove_from_list(g_fig_shot_bolt_id, 0);
+	g_fig_shot_bolt_id = -1;
 }
 
 /**

@@ -6179,7 +6179,7 @@ signed short g_defender_dead; // ds:0xe3a6
 signed short g_spell_illusionen; // ds:0xe3a4, 1 = spell has effect
 signed char g_fig_cb_selector_id[21]; // ds:0xe38f
 signed char g_fig_cb_marker_id; // ds:0xe38e
-unsigned char g_fig_shot_bolt_id; // ds:0xe38d
+signed char g_fig_shot_bolt_id; // ds:0xe38d
 unsigned char g_fig_spellgfx_id; // ds:0xe38c
 void *g_figobj_gfxbuf_table; // ds:0xe388, to long[63]; Bit8u*
 void *g_figobj_gfxwidth_table; // ds:0xe384, to signed short[63]

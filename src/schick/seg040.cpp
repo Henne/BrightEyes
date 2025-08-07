@@ -135,7 +135,7 @@ void FIG_preload_gfx(void)
 		g_fig_cb_selector_id[i] = -1;
 	}
 
-	ds_writeb(FIG_SHOT_BOLT_ID, -1);
+	g_fig_shot_bolt_id = -1;
 	ds_writeb(FIG_SPELLGFX_ID, -1);
 
 	/* load ANI.DAT */

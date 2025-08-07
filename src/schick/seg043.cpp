@@ -591,11 +591,11 @@ void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 
 				if (l12 != 0) {
 
-					FIG_set_sheet(ds_readbs(FIG_SHOT_BOLT_ID), 7);
+					FIG_set_sheet(g_fig_shot_bolt_id, 7);
 
 					draw_fight_screen((l12 == 0) && (g_defender_dead == 0) ? 0 : 1);
 
-					FIG_make_invisible(ds_readbs(FIG_SHOT_BOLT_ID));
+					FIG_make_invisible(g_fig_shot_bolt_id);
 				}
 
 				g_fig_continue_print = 1;
@@ -688,11 +688,11 @@ void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 
 						if (l12 != 0) {
 
-							FIG_set_sheet(ds_readbs(FIG_SHOT_BOLT_ID), 7);
+							FIG_set_sheet(g_fig_shot_bolt_id, 7);
 
 							draw_fight_screen(1);
 
-							FIG_make_invisible(ds_readbs(FIG_SHOT_BOLT_ID));
+							FIG_make_invisible(g_fig_shot_bolt_id);
 						}
 
 						if (l14 > 0) {
@@ -723,7 +723,7 @@ void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 						draw_fight_screen(1);
 
 						if (l14 > 0) {
-							FIG_make_invisible(ds_readbs(FIG_SHOT_BOLT_ID));
+							FIG_make_invisible(g_fig_shot_bolt_id);
 						}
 
 						if (ds_readw(MSPELL_AWAKE_FLAG) != 0) {

@@ -665,11 +665,11 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 					if (l13 != 0) {
 
-						FIG_set_sheet(ds_readbs(FIG_SHOT_BOLT_ID), 7);
+						FIG_set_sheet(g_fig_shot_bolt_id, 7);
 
 						draw_fight_screen(l13 == 0 && g_defender_dead == 0 ? 0 : 1);
 
-						FIG_make_invisible(ds_readbs(FIG_SHOT_BOLT_ID));
+						FIG_make_invisible(g_fig_shot_bolt_id);
 					}
 
 					g_fig_continue_print = 1;
@@ -804,11 +804,11 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 						if (l13 != 0) {
 
-							FIG_set_sheet(ds_readbs(FIG_SHOT_BOLT_ID), 7);
+							FIG_set_sheet(g_fig_shot_bolt_id, 7);
 
 							draw_fight_screen(1);
 
-							FIG_make_invisible(ds_readbs(FIG_SHOT_BOLT_ID));
+							FIG_make_invisible(g_fig_shot_bolt_id);
 						}
 
 						if (l6 > 0) {
@@ -876,7 +876,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 						draw_fight_screen(1);
 
 						if (l6 > 0) {
-							FIG_make_invisible(ds_readbs(FIG_SHOT_BOLT_ID));
+							FIG_make_invisible(g_fig_shot_bolt_id);
 						}
 
 						if (g_spell_illusionen) {
