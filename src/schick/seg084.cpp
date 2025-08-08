@@ -362,7 +362,7 @@ signed short DNG09_handler(void)
 			}
 
 			/* mark quest as done */
-			ds_writeb(QUEST_NAMELESS_DONE, 1);
+			gs_quest_nameless_done = 1;
 
 			do {
 				i = GUI_radio(get_tx(47), 2, get_tx(48), get_tx(49));

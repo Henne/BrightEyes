@@ -391,7 +391,7 @@ signed short DNG06_handler(void)
 			sub_hero_le(hero, 2);
 		}
 
-	} else if (target_pos == DNG_POS(1,6,11) && target_pos != gs_dng_handled_pos && !ds_readb(DNG06_DASPTREAS_FOUND))
+	} else if (target_pos == DNG_POS(1,6,11) && target_pos != gs_dng_handled_pos && !gs_dng06_dasptreas_found)
 	{
 		/* treasure of Daspota found */
 		GUI_output(get_tx(36));
@@ -402,7 +402,7 @@ signed short DNG06_handler(void)
 
 		loot_multi_chest(p_datseg + DNG06_CHEST_DASPTREAS, get_tx(37));
 
-		ds_writeb(DNG06_DASPTREAS_FOUND, 1);
+		gs_dng06_dasptreas_found = 1;
 
 		add_hero_ap_all(30);
 

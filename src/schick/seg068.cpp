@@ -435,22 +435,22 @@ void THO_ugdalf(void)
 				dramosch_says(get_tx2(34));
 			}
 		}
-	} else if (gs_quest_ugdalf == 1 || !ds_readb(DNG14_UGDALF_DONE)) {
+	} else if (gs_quest_ugdalf == 1 || !gs_dng14_ugdalf_done) {
 
 		dramosch_says(get_tx2(35));
 
 		/* enter the dungeon */
 		DNG_enter_dungeon(DUNGEONS_ZWINGFESTE);
 
-		gs_x_target_bak = (gs_x_target);
-		gs_y_target_bak = (gs_y_target);
+		gs_x_target_bak = gs_x_target;
+		gs_y_target_bak = gs_y_target;
 
 		if (gs_quest_ugdalf == 1) {
 			add_party_money(2000L);
 
 		/* Original-Bug:	Everytime the heroes enter the dungeon they get 20D.
 					Why this fix works is not seen that easy.
-					As long as ds_readb(DNG14_UGDALF_DONE) is 0 this block is executed.
+					As long as gs_dng14_ugdalf_done is 0 this block is executed.
 		 */
 #ifdef M302de_ORIGINAL_BUGFIX
 			gs_quest_ugdalf = 2;

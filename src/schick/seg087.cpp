@@ -290,11 +290,11 @@ signed short DNG14_handler(void)
 
 		GUI_output(get_tx(18));
 
-	} else if (pos == DNG_POS(1,13,10) && pos != gs_dng_handled_pos && !ds_readb(DNG14_UGDALF_DONE)) {
+	} else if (pos == DNG_POS(1,13,10) && pos != gs_dng_handled_pos && !gs_dng14_ugdalf_done) {
 
 		GUI_output(get_tx(19));
 
-		ds_writeb(DNG14_UGDALF_DONE, 1);
+		gs_dng14_ugdalf_done = 1;
 
 		gs_quest_ugdalf = 3;
 
@@ -312,7 +312,7 @@ signed short DNG14_handler(void)
 
 			sprintf(g_text_output_buf,
 				(char*)((l_di = test_skill(hero, TA_SCHLOESSER, -6)) > 0 ? get_tx(8) : get_tx(9)),
-				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+				GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
 
 			strcat(g_dtp2, g_text_output_buf);
 

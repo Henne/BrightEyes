@@ -332,14 +332,14 @@
 // ?1
 //#define QUEST_DEADSHIP_DONE             (0x35f2)    /* unsigned char; {0,1} */
 //#define ALWAYS_ONE2                     (0x35f3)    /* unsigned char;  writeonly (1) */
-#define DNG03_SPIDEREGGS_BURNED         (0x35f4)    /* unsigned char; {0,1} */
+//#define DNG03_SPIDEREGGS_BURNED         (0x35f4)    /* unsigned char; {0,1} */
 // ?2
-#define DNG06_DASPTREAS_FOUND           (0x35f7)    /* unsigned char; {0,1} */
+//#define DNG06_DASPTREAS_FOUND           (0x35f7)    /* unsigned char; {0,1} */
 // ?2
-#define QUEST_NAMELESS_DONE             (0x35fa)    /* unsigned char; {0,1} */
+//#define QUEST_NAMELESS_DONE             (0x35fa)    /* unsigned char; {0,1} */
 // ?4
-#define DNG14_UGDALF_DONE               (0x35ff)    /* unsigned char; {0,1} */
-#define GOT_GRIMRING                    (0x3600)    /* unsigned char; {0,1} */
+//#define DNG14_UGDALF_DONE               (0x35ff)    /* unsigned char; {0,1} */
+//#define GOT_GRIMRING                    (0x3600)    /* unsigned char; {0,1} */
 #define NPC_TIMERS                      (0x3601)    /* unsigned char[7] */
 //#define TLK_TAV_FIRSTINFO               (0x3608)    /* unsigned char; {0,1} */
 //#define TLK_TAV_INFOPROMISE             (0x3609)    /* unsigned char; {0,1} */

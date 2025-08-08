@@ -343,7 +343,7 @@ signed short DNG03_handler(void)
 
 	} else if (target_pos == DNG_POS(1,1,1) &&
 			target_pos != gs_dng_handled_pos &&
-			!ds_readb(DNG03_SPIDEREGGS_BURNED))
+			!gs_dng03_spidereggs_burned)
 	{
 		do {
 			j = GUI_radio(get_tx(19), 2, get_tx(20), get_tx(21));
@@ -356,7 +356,7 @@ signed short DNG03_handler(void)
 
 			add_hero_ap_all(50);
 
-			ds_writeb(DNG03_SPIDEREGGS_BURNED, 1);
+			gs_dng03_spidereggs_burned = 1;
 
 			/* activate DEATHTRAP #2 with 15 steps */
 			gs_deathtrap_steps = 15;

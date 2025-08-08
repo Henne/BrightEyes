@@ -304,6 +304,11 @@ extern Bit8u  gs_merchant_offended_flags[94];	//ds:0x3592; seg002, seg055-seg057
 extern Bit8u  gs_quest_deadship;		//ds:0x35f0; seg063, seg073
 extern Bit8u  gs_quest_deadship_done;		//ds:0x35f2; seg063, seg077
 extern Bit8s  gs_always_one2;			//ds:0x35f3; seg078
+extern Bit8u  gs_dng03_spidereggs_burned;	//ds:0x35f4; seg079
+extern Bit8u  gs_dng06_dasptreas_found;		//ds:0x35f7; seg081
+extern Bit8u  gs_quest_nameless_done;		//ds:0x35fa; seg072, seg084
+extern Bit8u  gs_dng14_ugdalf_done;		//ds:0x35ff; seg068, seg087
+extern Bit8u  gs_got_grimring;			//ds:0x3600; seg089
 
 extern Bit8u  gs_tlk_tav_firstinfo;		//ds:0x3608; seg060
 extern Bit8u  gs_tlk_tav_infopromise;		//ds:0x3609; seg060

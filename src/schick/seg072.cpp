@@ -407,7 +407,7 @@ void INF_eliane_tiomar(signed short informer, signed short state)
 		if (!state) {
 			g_dialog_next_state = (gs_eliane_quest_nameless || gs_got_main_quest == 0 ? 1 : 6);
 		} else if (state == 1) {
-			g_dialog_next_state = (ds_readb(QUEST_NAMELESS_DONE) && gs_informer_flags[INFORMER_ELIANE] != 2 ? 2 : 3);
+			g_dialog_next_state = (gs_quest_nameless_done && gs_informer_flags[INFORMER_ELIANE] != 2 ? 2 : 3);
 		} else if (state == 5 || state == 27) {
 				/* check if the party already has this map piece */
 				if (gs_treasure_maps[5] == 2) g_tmap_double2 = 1;
@@ -421,7 +421,7 @@ void INF_eliane_tiomar(signed short informer, signed short state)
 				/* mark ELIANE WINDENBECK as done */
 				gs_informer_flags[INFORMER_ELIANE] = 2;
 		} else if (state == 19) {
-			g_dialog_next_state = (ds_readb(QUEST_NAMELESS_DONE) ? 20 : 30);
+			g_dialog_next_state = (gs_quest_nameless_done ? 20 : 30);
 			gs_eliane_quest_nameless = 1;
 		} else if (state == 16) {
 			/* mark YASMA THINMARSDOTTER as known */

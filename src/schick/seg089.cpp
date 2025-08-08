@@ -399,12 +399,12 @@ signed short DNG15_handler(void)
 			target_pos != gs_dng_handled_pos)
 	{
 		/* QUEST: hyggelik */
-		if (ds_readb(DNG15_TOOK_CURSED_MONEY) != 0)
+		if (ds_readb(DNG15_TOOK_CURSED_MONEY))
 		{
 			/* you are cursed */
 			do_talk(19, 1);
 
-		} else if (!ds_readb(GOT_GRIMRING)) {
+		} else if (!gs_got_grimring) {
 
 			/* fight the zombies */
 			ds_writew((FIG_FLEE_POSITION + 0),
@@ -426,7 +426,7 @@ signed short DNG15_handler(void)
 				/* group gets GRIMRING */
 				do { ; } while (!get_item(ITEM_GRIMRING, 1, 1));
 
-				ds_writeb(GOT_GRIMRING, 1);
+				gs_got_grimring = 1;
 
 				add_hero_ap_all(50);
 
