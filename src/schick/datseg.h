@@ -688,10 +688,15 @@ extern unsigned char *g_buffer9_ptr2;	// ds:0xd015; seg120
 
 extern unsigned char g_gui_text_buffer[64];	// ds:0xce87; seg096
 extern Bit32s g_ani_unknown4;		// ds:0xce43; seg027, seg120
-
+extern signed int g_ani_posx;		// ds:0xce41; seg004, seg029, seg066, seg074, seg075
+extern signed int g_ani_posy;		// ds:0xce41; seg004, seg029, seg066, seg074, seg075
 extern HugePt g_ani_palette;		// ds:0xce3b; seg004, seg025, seg027
+extern unsigned char g_ani_palette_size;	// ds:0xce3a; seg027
+extern unsigned char g_ani_compr_flag;		// ds:0xce39; seg027
+extern unsigned char *g_ani_main_ptr;	// ds:0xce35; seg004, seg027
 
-extern unsigned char *g_ani_main_ptr;	// ds:0xce36; seg004, seg027
+
+
 extern HugePt g_buffer9_ptr;		// ds:0xc3db; seg004-seg120
 extern char **g_text_ltx_index;		// ds:0xc3b5;
 extern char **g_tx_index;		// ds:0xc3b1; seg026, seg028, seg031, seg064, seg120

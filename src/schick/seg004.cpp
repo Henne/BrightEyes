@@ -81,12 +81,12 @@ void init_ani(Bit16u v1)
 		g_pic_copy_flag = 1;
 
 		/* set upper left coordinates */
-		g_pic_copy.x1 = ds_readw(ANI_POSX);
-		g_pic_copy.y1 = ds_readw(ANI_POSY);
+		g_pic_copy.x1 = g_ani_posx;
+		g_pic_copy.y1 = g_ani_posy;
 
 		/* set lower right coordinates */
-		g_pic_copy.x2 = ds_readw(ANI_POSX) + ds_readw(ANI_WIDTH) - 1;
-		g_pic_copy.y2 = ds_readw(ANI_POSY) + ds_readb(ANI_HEIGHT) - 1;
+		g_pic_copy.x2 = g_ani_posx + ds_readw(ANI_WIDTH) - 1;
+		g_pic_copy.y2 = g_ani_posy + ds_readb(ANI_HEIGHT) - 1;
 
 		/* copy pointer */
 		g_pic_copy.src = g_ani_main_ptr;
@@ -212,10 +212,10 @@ void interrupt timer_isr(void)
 		/* disable interrupts */
 		asm { cli; }
 
-		g_pic_copy_rect.y1 = ds_readws(ANI_POSY);
-		g_pic_copy_rect.x1 = ds_readws(ANI_POSX);
-		g_pic_copy_rect.y2 = ds_readws(ANI_POSY) + 135;
-		g_pic_copy_rect.x2 = ds_readws(ANI_POSX) + 208;
+		g_pic_copy_rect.y1 = g_ani_posy;
+		g_pic_copy_rect.x1 = g_ani_posx;
+		g_pic_copy_rect.y2 = g_ani_posy + 135;
+		g_pic_copy_rect.x2 = g_ani_posx + 208;
 		pic_copy_bak = g_pic_copy;
 
 		l_di = ds_readbs(ANI_AREACOUNT);
@@ -263,20 +263,20 @@ void interrupt timer_isr(void)
 
 					flag = 0;
 
-					if ((g_mouse_posx >= ds_readws(ANI_POSX)) &&
-						(ds_readws(ANI_POSX) + ds_readws(ANI_WIDTH) >= g_mouse_posx) &&
-						(g_mouse_posy >= ds_readws(ANI_POSY)) &&
-						(ds_readws(ANI_POSY) + ds_readb(ANI_HEIGHT) >= g_mouse_posy))
+					if ((g_mouse_posx >= g_ani_posx) &&
+						(g_ani_posx + ds_readws(ANI_WIDTH) >= g_mouse_posx) &&
+						(g_mouse_posy >= g_ani_posy) &&
+						(g_ani_posy + ds_readb(ANI_HEIGHT) >= g_mouse_posy))
 					{
 						flag = 1;
 						update_mouse_cursor();
 					}
 
 					/* set screen coordinates */
-					g_pic_copy.x1 = ds_readws(ANI_POSX) + host_readw(ptr + ANI_AREA_X);
-					g_pic_copy.y1 =	ds_readws(ANI_POSY) + host_readb(ptr + ANI_AREA_Y);
-					g_pic_copy.x2 = ds_readws(ANI_POSX) + host_readw(ptr + ANI_AREA_X) + host_readw(ptr + ANI_AREA_WIDTH) - 1;
-					g_pic_copy.y2 = ds_readws(ANI_POSY) + host_readb(ptr + ANI_AREA_Y) + host_readb(ptr + ANI_AREA_HEIGHT) - 1;
+					g_pic_copy.x1 = g_ani_posx + host_readw(ptr + ANI_AREA_X);
+					g_pic_copy.y1 =	g_ani_posy + host_readb(ptr + ANI_AREA_Y);
+					g_pic_copy.x2 = g_ani_posx + host_readw(ptr + ANI_AREA_X) + host_readw(ptr + ANI_AREA_WIDTH) - 1;
+					g_pic_copy.y2 = g_ani_posy + host_readb(ptr + ANI_AREA_Y) + host_readb(ptr + ANI_AREA_HEIGHT) - 1;
 					g_pic_copy.src = (Bit8u*)host_readd(ptr + ANI_AREA_PICS_TAB + 4 * (host_readws(ptr + ANI_AREA_CHANGES_TB + 4 * ds_readw(ANI_AREA_STATUS + 2 * i)) - 1));
 
 					do_pic_copy(1);

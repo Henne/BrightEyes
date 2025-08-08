@@ -387,10 +387,10 @@ void load_ani(const signed short no)
 	ds_writew(ANI_UNKNOWN1,	host_readw(g_ani_palette - 6L));
 	ds_writew(ANI_UNKNOWN2,	host_readw(g_ani_palette - 4L));
 	/* compression type */
-	ds_writeb(ANI_COMPR_FLAG, host_readb(g_ani_palette - 1L));
-	ds_writeb(ANI_PALETTE_SIZE, host_readb(g_ani_palette - 2L));
+	g_ani_compr_flag = host_readb(g_ani_palette - 1L);
+	g_ani_palette_size = host_readb(g_ani_palette - 2L);
 
-	ani_end_ptr = g_ani_palette + 3 * ds_readb(ANI_PALETTE_SIZE);
+	ani_end_ptr = g_ani_palette + 3 * g_ani_palette_size;
 
 	/* set picture size */
 	ds_writew(ANI_WIDTH, host_readw(g_buffer9_ptr + 8L));
@@ -399,7 +399,8 @@ void load_ani(const signed short no)
 	ds_writeb(ANI_AREACOUNT, host_readb(g_buffer9_ptr + 11L));
 
 	/* Process Main Picture */
-	if (ds_readb(ANI_COMPR_FLAG) != 0) {
+	if (g_ani_compr_flag) {
+
 		plen = host_readd((Bit8u*)g_ani_main_ptr);
 		unplen_ptr = (Bit8u*)g_ani_main_ptr;
 
@@ -446,7 +447,7 @@ void load_ani(const signed short no)
 
 		host_writeb(p_area2 + ANI_AREA_PICS, (signed char)(area_pics = host_readbs(p_area + 0x0b)));
 
-		if (ds_readb(ANI_COMPR_FLAG) != 0) {
+		if (g_ani_compr_flag) {
 
 			area_data_offset = host_readd(p_area + 0xc);
 			area_data_offset += packed_delta;
@@ -457,8 +458,7 @@ void load_ani(const signed short no)
 			area_size = host_readd(unplen_ptr);
 			area_size = swap_u32(area_size) >> 8;
 
-			decomp_pp20(g_buffer9_ptr + area_data_offset,
-				g_renderbuf_ptr,
+			decomp_pp20(g_buffer9_ptr + area_data_offset, g_renderbuf_ptr,
 #if !defined(__BORLANDC__)
 				(Bit8u*)g_buffer9_ptr + area_data_offset + 4,
 #else

@@ -6356,8 +6356,8 @@ void *g_last_cursor; // ds:0xcec7
 unsigned char g_gui_text_buffer[64]; // ds:0xce87
 unsigned char g_unkn_081[64]; // ds:0xce47
 Bit32s g_ani_unknown4; // ds:0xce43, writeonly (0)
-signed short g_ani_posx; // ds:0xce41
-signed short g_ani_posy; // ds:0xce3f
+signed int g_ani_posx; // ds:0xce41
+signed int g_ani_posy; // ds:0xce3f
 HugePt g_ani_palette; // ds:0xce3b
 unsigned char g_ani_palette_size; // ds:0xce3a
 unsigned char g_ani_compr_flag; // ds:0xce39, {0,1 = compressed}

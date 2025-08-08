@@ -1405,11 +1405,11 @@
 #define ANI_AREACOUNT                   (0xc3ee)    /* unsigned char */
 #define ANI_AREA_TABLE                  (0xc3ef)    /* struct(263)[10] */
 //#define ANI_MAIN_PTR                    (0xce35)    /* Bit8u* */
-#define ANI_COMPR_FLAG                  (0xce39)    /* unsigned char; {0,1 = compressed} */
-#define ANI_PALETTE_SIZE                (0xce3a)    /* unsigned char */
-#define ANI_PALETTE                     (0xce3b)    /* Bit8u* */
-#define ANI_POSY                        (0xce3f)    /* signed short */
-#define ANI_POSX                        (0xce41)    /* signed short */
+//#define ANI_COMPR_FLAG                  (0xce39)    /* unsigned char; {0,1 = compressed} */
+//#define ANI_PALETTE_SIZE                (0xce3a)    /* unsigned char */
+//#define ANI_PALETTE                     (0xce3b)    /* Bit8u* */
+//#define ANI_POSY                        (0xce3f)    /* signed short */
+//#define ANI_POSX                        (0xce41)    /* signed short */
 //#define ANI_UNKNOWN4                    (0xce43)    /* unsigned long; writeonly (0) */
 // ?64
 //#define GUI_TEXT_BUFFER                 (0xce87)    /* unsigned char[64] */

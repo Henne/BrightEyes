@@ -441,8 +441,8 @@ void draw_automap_to_screen(void)
 
 	/* set the screen coordinates */
 	g_pic_copy_rect.x1 = g_pic_copy_rect.y1 = 0;
-	g_pic_copy_rect.x2 = ds_readws(ANI_POSX) + 208;
-	g_pic_copy_rect.y2 = ds_readws(ANI_POSY) + 135;
+	g_pic_copy_rect.x2 = g_ani_posx + 208;
+	g_pic_copy_rect.y2 = g_ani_posy + 135;
 
 	g_pic_copy.src = g_renderbuf_ptr;
 
@@ -451,7 +451,7 @@ void draw_automap_to_screen(void)
 	g_pic_copy.x2 = 320 - 1;
 	g_pic_copy.y2 = 135 - 1;
 
-	g_pic_copy.dst = g_vga_memstart + ds_readws(ANI_POSX) + 320 * ds_readws(ANI_POSY);
+	g_pic_copy.dst = g_vga_memstart + g_ani_posx + 320 * g_ani_posy;
 
 	update_mouse_cursor();
 

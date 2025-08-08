@@ -83,8 +83,8 @@ void draw_playmask(void)
 
 	set_palette((Bit8u*)g_palette_special, 0xe0, 0x20);
 
-	ds_writew(ANI_POSX, 16);
-	ds_writew(ANI_POSY, 2);
+	g_ani_posx = 16;
+	g_ani_posy = 2;
 
 	set_textcolor(0x1f, 0x1b);
 

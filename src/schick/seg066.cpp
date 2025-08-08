@@ -1124,10 +1124,10 @@ void city_fade_and_colors(void)
 
 	draw_compass();
 
-	g_pic_copy.x1 = ds_readws(ANI_POSX);
-	g_pic_copy.y1 = ds_readws(ANI_POSY);
-	g_pic_copy.x2 = ds_readws(ANI_POSX) + 207;
-	g_pic_copy.y2 = ds_readws(ANI_POSY) + 134;
+	g_pic_copy.x1 = g_ani_posx;
+	g_pic_copy.y1 = g_ani_posy;
+	g_pic_copy.x2 = g_ani_posx + 207;
+	g_pic_copy.y2 = g_ani_posy + 134;
 	g_pic_copy.src = g_renderbuf_ptr;
 
 	g_special_screen = 0;
