@@ -351,6 +351,10 @@ extern Bit8u  gs_dng13_money_flag;		//ds:0x3f82; seg091
 extern Bit8u  gs_dng13_chest_equips[13];	//ds:0x3f83; seg091
 extern Bit8u  gs_dng13_chest0_content[6];	//ds:0x3f90; seg091
 extern Bit8u  gs_dng13_chest1_content[5];	//ds:0x3f96; seg091
+extern Bit8s  gs_dng12_tunnel1;			//ds:0x3f9b; seg090
+extern Bit8s  gs_dng12_tunnel2;			//ds:0x3f9c; seg090
+extern Bit8s  gs_dng12_tunnel3;			//ds:0x3f9d; seg090
+extern Bit8s  gs_dng12_tunnel4;			//ds:0x3f9e; seg090
 
 extern Bit32s gs_dng12_watertrap_timer;		//ds:0x3fa2; seg002, seg090
 

@@ -47,10 +47,10 @@ signed short DNG12_handler(void)
 	if (gs_day_timer % MINUTES(5) == 0) {
 		/* TODO: buggy timer for cave in */
 
-		if (ds_readbs(DNG12_TUNNEL1) > 0) dec_ds_bs(DNG12_TUNNEL1);
-		if (ds_readbs(DNG12_TUNNEL2) > 0) dec_ds_bs(DNG12_TUNNEL2);
-		if (ds_readbs(DNG12_TUNNEL3) > 0) dec_ds_bs(DNG12_TUNNEL3);
-		if (ds_readbs(DNG12_TUNNEL4) > 0) dec_ds_bs(DNG12_TUNNEL4);
+		if (gs_dng12_tunnel1 > 0) --gs_dng12_tunnel1;
+		if (gs_dng12_tunnel2 > 0) --gs_dng12_tunnel2;
+		if (gs_dng12_tunnel3 > 0) --gs_dng12_tunnel3;
+		if (gs_dng12_tunnel4 > 0) --gs_dng12_tunnel4;
 	}
 
 	if (target_pos == DNG_POS(1,6,8) && target_pos != gs_dng_handled_pos && gs_direction == EAST && ds_readbs(DNG12_WATERTRAP_WATER_RUNS) != 0) {
@@ -147,18 +147,22 @@ signed short DNG12_handler(void)
 		}
 	}
 
-	if (target_pos == DNG_POS(0,13,9) && target_pos != gs_dng_handled_pos && !ds_readbs(DNG12_TUNNEL1)) {
+	if (target_pos == DNG_POS(0,13,9) && target_pos != gs_dng_handled_pos && !gs_dng12_tunnel1) {
 		/* 1. tunnel block */
-		DNG_clear_corridor(p_datseg + DNG12_TUNNEL1);
-	} else if (target_pos == DNG_POS(0,14,8) && target_pos != gs_dng_handled_pos && !ds_readbs(DNG12_TUNNEL2)) {
+		DNG_clear_corridor(&gs_dng12_tunnel1);
+
+	} else if (target_pos == DNG_POS(0,14,8) && target_pos != gs_dng_handled_pos && !gs_dng12_tunnel2) {
 		/* 2. tunnel block */
-		DNG_clear_corridor(p_datseg + DNG12_TUNNEL2);
-	} else if (target_pos == DNG_POS(0,13,7) && target_pos != gs_dng_handled_pos && !ds_readbs(DNG12_TUNNEL3)) {
+		DNG_clear_corridor(&gs_dng12_tunnel2);
+
+	} else if (target_pos == DNG_POS(0,13,7) && target_pos != gs_dng_handled_pos && !gs_dng12_tunnel3) {
 		/* 3. tunnel block */
-		DNG_clear_corridor(p_datseg + DNG12_TUNNEL3);
-	} else if (target_pos == DNG_POS(0,14,5) && target_pos != gs_dng_handled_pos && !ds_readbs(DNG12_TUNNEL4)) {
+		DNG_clear_corridor(&gs_dng12_tunnel3);
+
+	} else if (target_pos == DNG_POS(0,14,5) && target_pos != gs_dng_handled_pos && !gs_dng12_tunnel4) {
 		/* 4. tunnel block */
-		DNG_clear_corridor(p_datseg + DNG12_TUNNEL4);
+		DNG_clear_corridor(&gs_dng12_tunnel4);
+
 	} else if (target_pos == DNG_POS(0,8,4) && target_pos != gs_dng_handled_pos) {
 
 		/* upper Ingerimm idol */
@@ -167,8 +171,7 @@ signed short DNG12_handler(void)
 		if (GUI_bool(get_tx(4))) {
 
 			do {
-				i = GUI_radio(get_tx(5), 3,
-						get_tx(6), get_tx(7), get_tx(8));
+				i = GUI_radio(get_tx(5), 3, get_tx(6), get_tx(7), get_tx(8));
 			} while (i == -1);
 
 			if (i == 1) {
@@ -185,13 +188,14 @@ signed short DNG12_handler(void)
 
 				GUI_output(get_tx(9));
 
-				if (ds_readbs(DNG12_TUNNEL1) > 0) ds_writeb(DNG12_TUNNEL1, -1);
-				if (ds_readbs(DNG12_TUNNEL2) > 0) ds_writeb(DNG12_TUNNEL2, -1);
-				if (ds_readbs(DNG12_TUNNEL3) > 0) ds_writeb(DNG12_TUNNEL3, -1);
-				if (ds_readbs(DNG12_TUNNEL4) > 0) ds_writeb(DNG12_TUNNEL4, -1);
-			} else if (i == 3) {
-				/* sacrifice gold */
+				if (gs_dng12_tunnel1 > 0) gs_dng12_tunnel1 = -1;
+				if (gs_dng12_tunnel2 > 0) gs_dng12_tunnel2 = -1;
+				if (gs_dng12_tunnel3 > 0) gs_dng12_tunnel3 = -1;
+				if (gs_dng12_tunnel4 > 0) gs_dng12_tunnel4 = -1;
 
+			} else if (i == 3) {
+
+				/* sacrifice gold */
 				GUI_output(get_tx(10));
 
 				money = get_party_money();
@@ -478,21 +482,20 @@ signed short DNG12_handler(void)
 	return 0;
 }
 
-void DNG_clear_corridor(Bit8u *ptr)
+void DNG_clear_corridor(Bit8s *flag)
 {
 	/* ask if the corridor should be cleared */
 	if (GUI_bool(get_tx(1))) {
 
 		/* clear the corridor */
-
 		GUI_output(get_tx(2));
 
 		timewarp(DAYS(1));
 
-		host_writebs(ptr, -1);
+		*flag = -1;
 	} else {
-		gs_x_target = (gs_x_target_bak);
-		gs_y_target = (gs_y_target_bak);
+		gs_x_target = gs_x_target_bak;
+		gs_y_target = gs_y_target_bak;
 	}
 }
 

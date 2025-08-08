@@ -3,7 +3,7 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-void DNG_clear_corridor(Bit8u*);
+void DNG_clear_corridor(Bit8s*);
 /* 0x25 */
 void DNG_oberorken_chest(Bit8u*);
 /* 0x2a */

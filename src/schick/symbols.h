@@ -575,10 +575,10 @@
 //#define DNG13_CHEST_EQUIPS              (0x3f83)    /* unsigned char[13] */
 //#define DNG13_CHEST0_CONTENT            (0x3f90)    /* unsigned char[6] */
 //#define DNG13_CHEST1_CONTENT            (0x3f96)    /* unsigned char[5] */
-#define DNG12_TUNNEL1                   (0x3f9b)    /* signed char; {0,1} */
-#define DNG12_TUNNEL2                   (0x3f9c)    /* signed char; {0,1} */
-#define DNG12_TUNNEL3                   (0x3f9d)    /* signed char; {0,1} */
-#define DNG12_TUNNEL4                   (0x3f9e)    /* signed char; {0,1} */
+//#define DNG12_TUNNEL1                   (0x3f9b)    /* signed char; {0,1} */
+//#define DNG12_TUNNEL2                   (0x3f9c)    /* signed char; {0,1} */
+//#define DNG12_TUNNEL3                   (0x3f9d)    /* signed char; {0,1} */
+//#define DNG12_TUNNEL4                   (0x3f9e)    /* signed char; {0,1} */
 #define DNG12_INGERIMM_SACRIFICE        (0x3f9f)    /* unsigned char; {0,1} */
 #define DNG12_INGERIMM_HINT             (0x3fa0)    /* unsigned char; {0,1} */
 #define DNG12_WATERTRAP_WATER_RUNS      (0x3fa1)    /* signed char; {0,1} */

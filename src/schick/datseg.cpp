@@ -2463,10 +2463,10 @@ Bit8u  gs_dng13_chest0_content[6] = {
 	ITEM_DAGGER, ITEM_TINDERBOX, ITEM_TORCH_OFF, ITEM_TORCH_OFF, ITEM_ROPE, 0xff }; // ds:0x3f90
 Bit8u  gs_dng13_chest1_content[5] = {
 	ITEM_DAGGER, ITEM_SWORD, ITEM_TORCH_OFF, ITEM_TINDERBOX, 0xff }; // ds:0x3f96
-signed char g_dng12_tunnel1 = 0x2d; // ds:0x3f9b
-signed char g_dng12_tunnel2 = 0x28; // ds:0x3f9c
-signed char g_dng12_tunnel3 = 0x23; // ds:0x3f9d
-signed char g_dng12_tunnel4 = 0x1e; // ds:0x3f9e
+Bit8s  gs_dng12_tunnel1 = 45; // ds:0x3f9b
+Bit8s  gs_dng12_tunnel2 = 40; // ds:0x3f9c
+Bit8s  gs_dng12_tunnel3 = 35; // ds:0x3f9d
+Bit8s  gs_dng12_tunnel4 = 30; // ds:0x3f9e
 unsigned char g_dng12_ingerimm_sacrifice = 0; // ds:0x3f9f
 unsigned char g_dng12_ingerimm_hint = 0; // ds:0x3fa0
 signed char g_dng12_watertrap_water_runs = 0; // ds:0x3fa1
