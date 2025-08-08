@@ -3167,18 +3167,19 @@ struct{unsigned char r,g,b;} g_palette_allblack[32] = {
 	{ 0x00, 0x00, 0x00 }
 }; // ds:0x4b06
 signed short g_delay_factor = 4; // ds:0x4b66
-long g_str_temp_xx_ptr = 0x14fc4b95; // ds:0x4b68, to STR_TEMP_XX; Bit8u*
+extern char g_str_temp_xx[8];
+char *g_str_temp_xx_ptr = (char*)&g_str_temp_xx[0]; // ds:0x4b68, to STR_TEMP_XX; Bit8u*
 signed char g_fig_star_colors[12] = { 0x03, 0x03, 0x0c, 0x0c, 0x04, 0x0b, 0x0d, 0x01, 0x07, 0x0e, 0x02, 0x07 }; // ds:0x4b6c
 signed char g_fig_star_counter = 0; // ds:0x4b78
 signed short g_fig_star_timer = 0; // ds:0x4b79
-unsigned char g_fig_star_last_count = 0xff; // ds:0x4b7b
-signed short g_fig_msg_dtps[12] = { 0x0036, 0x0037, 0x0036, 0x0037, 0x0038, 0x0039, 0x003a, 0x003b, 0x0000, 0x0000, 0x003b, 0x0000 }; // ds:0x4b7c
+signed char g_fig_star_last_count = -1; // ds:0x4b7b
+signed short g_fig_msg_dtps[12] = { 0x36, 0x37, 0x36, 0x37, 0x38, 0x39, 0x3a, 0x3b, 0x00, 0x00, 0x3b, 0x00 }; // ds:0x4b7c
 signed char g_fig_star_printed = 0; // ds:0x4b94
 char g_str_temp_xx[8] = "TEMP\\XX"; // ds:0x4b95
 unsigned char g_unkn_036[1] = { 0x00 }; // ds:0x4b9d
 signed short g_fight_figs_index = -1; // ds:0x4b9e
 unsigned short g_random_schick_seed = 0x327b; // ds:0x4ba0
-char g_emm_sig[8] = { 0x45, 0x4d, 0x4d, 0x58, 0x58, 0x58, 0x58, 0x30 }; // ds:0x4ba2
+char g_emm_sig[8] = "EMMXXXX0"; // ds:0x4ba2
 long g_ems_frame_ptr = 0; // ds:0x4baa; Bit8u*
 struct mouse_action g_action_table_options[10] = {
 	{ 0x0005, 0x001e, 0x001c, 0x0035, 0x0081 },

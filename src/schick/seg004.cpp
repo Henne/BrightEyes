@@ -179,9 +179,8 @@ void interrupt timer_isr(void)
 		ds_writew(RANDOM_SCHICK_SEED2, 0);
 	}
 
-	if ((g_autofight != 0) &&
-		(bioskey(1) || (ds_readw(MOUSE1_EVENT2) != 0)))
-	{
+	if (g_autofight && (bioskey(1) || ds_readw(MOUSE1_EVENT2))) {
+
 		g_autofight = 2;
 		ds_writew(MOUSE1_EVENT2, 0);
 	}
@@ -193,9 +192,9 @@ void interrupt timer_isr(void)
 	}
 
 	/* another timer used in fights */
-	if ((ds_readws(FIG_STAR_TIMER) > 0) && g_fig_continue_print && (ds_readbs(FIG_STAR_PRINTED) != 0))
+	if ((g_fig_star_timer > 0) && g_fig_continue_print && g_fig_star_printed)
 	{
-		dec_ds_ws(FIG_STAR_TIMER);
+		--g_fig_star_timer;
 	}
 
 	if (!ds_readbs(FREEZE_TIMERS)) {

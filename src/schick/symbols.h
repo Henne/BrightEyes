@@ -879,13 +879,13 @@
 #define PALETTE_ALLBLACK                (0x4b06)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
 //#define DELAY_FACTOR                    (0x4b66)    /* short */
 #define STR_TEMP_XX_PTR                 (0x4b68)    /* Bit8u*; to STR_TEMP_XX */
-#define FIG_STAR_COLORS                 (0x4b6c)    /* signed char[12] */
-#define FIG_STAR_COUNTER                (0x4b78)    /* signed char */
-#define FIG_STAR_TIMER                  (0x4b79)    /* signed short */
-#define FIG_STAR_LAST_COUNT             (0x4b7b)    /* unsigned char */
-#define FIG_MSG_DTPS                    (0x4b7c)    /* signed short[12] */
-#define FIG_STAR_PRINTED                (0x4b94)    /* signed char; {0,1} */
-#define STR_TEMP_XX                     (0x4b95)    /* char[8]; "TEMP\XX" */
+//#define FIG_STAR_COLORS                 (0x4b6c)    /* signed char[12] */
+//#define FIG_STAR_COUNTER                (0x4b78)    /* signed char */
+//#define FIG_STAR_TIMER                  (0x4b79)    /* signed short */
+//#define FIG_STAR_LAST_COUNT             (0x4b7b)    /* unsigned char */
+//#define FIG_MSG_DTPS                    (0x4b7c)    /* signed short[12] */
+//#define FIG_STAR_PRINTED                (0x4b94)    /* signed char; {0,1} */
+//#define STR_TEMP_XX                     (0x4b95)    /* char[8]; "TEMP\XX" */
 // ?1
 #define FIGHT_FIGS_INDEX                (0x4b9e)    /* signed short */
 #define RANDOM_SCHICK_SEED              (0x4ba0)    /* unsigned short */

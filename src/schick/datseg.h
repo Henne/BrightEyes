@@ -429,6 +429,14 @@ extern Bit8u  g_wallclock_palette_night[3][3];	//ds:0x4afa; seg004;
 
 extern signed short g_delay_factor;		//ds:0x4b66; seg005, seg025
 
+extern signed char g_fig_star_colors[12];	//ds:0x4b6c; seg005
+extern signed char g_fig_star_counter;		//ds:0x4b78; seg005
+extern signed short g_fig_star_timer;		//ds:0x4b79; seg004, seg005
+extern signed char g_fig_star_last_count;	//ds:0x4b7b; seg005
+extern signed short g_fig_msg_dtps[12];		//ds:0x4b7c; seg005
+extern char g_str_temp_xx[8];			//ds:0x4b95; seg005
+extern signed char g_fig_star_printed;		//ds:0x4b94; seg004, seg005
+
 extern struct mouse_action g_action_table_options[10];	//ds:0x4bae; seg025
 
 extern void (*g_location_handlers[19])(void);	//ds:0x4c3b; seg025

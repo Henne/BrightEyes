@@ -36,6 +36,10 @@
 namespace M302de {
 #endif
 
+/* static prototypes */
+static void set_delay_timer(void);
+static void fight_delay(void);
+
 
 /**
  *
@@ -107,9 +111,7 @@ void FIG_set_star_color(Bit8u *ptr, unsigned short count, unsigned char color)
 	color += 0x80;
 
 	for (p = ptr; count--; p++) {
-		if (host_readb(p)) {
-			host_writeb(p, color);
-		}
+		if (*p) *p = color;
 	}
 }
 
@@ -120,13 +122,12 @@ void FIG_set_star_color(Bit8u *ptr, unsigned short count, unsigned char color)
  * \param   pos         position
  * \return              "einem Magier" if the enemy is a "Magier".
  */
-//static
-Bit8u* FIG_name_3rd_case(unsigned short type, volatile unsigned short pos)
+static char* FIG_name_3rd_case(unsigned short type, volatile unsigned short pos)
 {
 	if (type == 2) {
-		return get_hero(pos) + HERO_NAME2;
+		return (char*)get_hero(pos) + HERO_NAME2;
 	} else {
-		return GUI_names_grammar(3, pos, 1);
+		return (char*)GUI_names_grammar(3, pos, 1);
 	}
 }
 
@@ -137,14 +138,13 @@ Bit8u* FIG_name_3rd_case(unsigned short type, volatile unsigned short pos)
  * \param   pos         position
  * \return              "einen Magier" if the enemy is a "Magier".
  */
-//static
-Bit8u* FIG_name_4th_case(unsigned short type, volatile unsigned short pos)
+static char* FIG_name_4th_case(unsigned short type, volatile unsigned short pos)
 {
 
 	if (type == 2)
-		return get_hero(pos) + HERO_NAME2;
+		return (char*)get_hero(pos) + HERO_NAME2;
 	else
-		return GUI_names_grammar(2, pos, 1);
+		return (char*)GUI_names_grammar(2, pos, 1);
 }
 
 /**
@@ -154,17 +154,16 @@ Bit8u* FIG_name_4th_case(unsigned short type, volatile unsigned short pos)
  * \param   pos         position
  * \return              "ein Magier" if the enemy is a "Magier".
  */
-//static
-Bit8u* FIG_name_1st_case(unsigned short type, volatile unsigned short pos)
+static char *FIG_name_1st_case(unsigned short type, volatile unsigned short pos)
 {
 
 	if (type == 2)
-		return get_hero(pos) + HERO_NAME2;
+		return (char*)get_hero(pos) + HERO_NAME2;
 	else
-		return GUI_names_grammar(0, pos, 1);
+		return (char*)GUI_names_grammar(0, pos, 1);
 }
 
-#define idx (ds_readw(((FIG_MSG_DTPS-2)) + ds_readw(FIG_MSG_DATA + ds_readbs(FIG_STAR_COUNTER) * 4) * 2))
+#define idx (g_fig_msg_dtps[ds_readws(FIG_MSG_DATA + 4 * g_fig_star_counter) - 1])
 
 unsigned short fight_printer(void)
 {
@@ -180,31 +179,35 @@ unsigned short fight_printer(void)
 	if (ds_readw(FIG_MSG_DATA) == 0)
 		g_fig_continue_print = 0;
 
-	if (ds_readw(FIG_STAR_TIMER) == 0 && ds_readb(FIG_STAR_PRINTED) != 0) {
-		inc_ds_bs_post(FIG_STAR_COUNTER);
-		ds_writeb(FIG_STAR_PRINTED, 0);
+	if (!g_fig_star_timer && g_fig_star_printed) {
 
-		ds_writew(FIG_STAR_TIMER, g_autofight ? 10 : g_delay_factor * 6);
+		g_fig_star_counter++;
 
-		if (ds_readw(FIG_MSG_DATA + ds_readbs(FIG_STAR_COUNTER) * 4) == 0)
+		g_fig_star_printed = 0;
+
+		g_fig_star_timer = g_autofight ? 10 : g_delay_factor * 6;
+
+		if (!ds_readw(FIG_MSG_DATA + g_fig_star_counter * 4))
 			g_fig_continue_print = 0;
 	}
 
 	if (g_fig_continue_print) {
 
-		if (ds_readb(FIG_STAR_COUNTER) != ds_readb(FIG_STAR_LAST_COUNT)) {
+		if (g_fig_star_counter != g_fig_star_last_count) {
 
-		ds_writeb(FIG_STAR_PRINTED, 1);
+			g_fig_star_printed = 1;
 
-		f_action = ds_readw(FIG_MSG_DATA + ds_readbs(FIG_STAR_COUNTER) * 4);
-		if (f_action != 0) {
+			f_action = ds_readw(FIG_MSG_DATA + g_fig_star_counter * 4);
+
+		if (f_action) {
 
 			gfx_pos_bak = g_vga_backbuffer;
 
 			g_vga_backbuffer = g_renderbuf_ptr;
+
 			get_textcolor(&fg_bak, &bg_bak);
 
-			FIG_set_star_color(g_fig_star_gfx, 3724, ds_readb((FIG_STAR_COLORS-1) + f_action));
+			FIG_set_star_color(g_fig_star_gfx, 3724, g_fig_star_colors[f_action - 1]);
 
 			g_pic_copy.x1 = 0;
 			g_pic_copy.y1 = 150;
@@ -218,17 +221,19 @@ unsigned short fight_printer(void)
 			g_pic_copy.dst = gfx_dst_bak;
 
 			/* print number into the star */
-			if (ds_readw((FIG_MSG_DATA + 2) + ds_readbs(FIG_STAR_COUNTER) * 4) != 0) {
-				set_textcolor(0xff, ds_readbs((FIG_STAR_COLORS-1) + f_action) + 0x80);
+			if (ds_readw((FIG_MSG_DATA + 2) + g_fig_star_counter * 4)) {
 
-				my_itoa(ds_readws((FIG_MSG_DATA + 2) + ds_readbs(FIG_STAR_COUNTER) * 4), str, 10);
+				set_textcolor(0xff, g_fig_star_colors[f_action - 1] + 0x80);
+
+				my_itoa(ds_readws((FIG_MSG_DATA + 2) + g_fig_star_counter * 4), str, 10);
 
 				x = GUI_get_first_pos_centered(str, 30, 20, 0);
 				GUI_print_string(str, x, 170);
 			}
 
 			/* Generate textmessage */
-			if (ds_readw(((FIG_MSG_DTPS-2)) + f_action * 2) != 0) {
+			if (g_fig_msg_dtps[f_action - 1]) {
+
 				g_pic_copy.x1 = g_pic_copy.v1 = 0;
 				g_pic_copy.y1 = g_pic_copy.v2 = 194;
 				g_pic_copy.x2 = 318;
@@ -243,7 +248,7 @@ unsigned short fight_printer(void)
 //					case 3: /* enemy attack fails */
 
 					sprintf(g_text_output_buf, get_tx(idx),
-						(char*)FIG_name_3rd_case(ds_readw(FIG_ACTOR_GRAMMAR_TYPE), ds_readw(FIG_ACTOR_GRAMMAR_ID)));
+						FIG_name_3rd_case(ds_readw(FIG_ACTOR_GRAMMAR_TYPE), ds_readw(FIG_ACTOR_GRAMMAR_ID)));
 
 				} else if (f_action == 2 || f_action == 4 || f_action == 7) {
 //					case 2: /* hero parade fails */
@@ -251,7 +256,7 @@ unsigned short fight_printer(void)
 //					case 7:	/* hero get unconscious */
 
 					sprintf(g_text_output_buf, get_tx(idx),
-						(char*)FIG_name_3rd_case(ds_readw(FIG_TARGET_GRAMMAR_TYPE), ds_readw(FIG_TARGET_GRAMMAR_ID)));
+						FIG_name_3rd_case(ds_readw(FIG_TARGET_GRAMMAR_TYPE), ds_readw(FIG_TARGET_GRAMMAR_ID)));
 
 
 
@@ -260,8 +265,8 @@ unsigned short fight_printer(void)
 //					case 11:	/* hero hits enemy */
 
 					sprintf(g_text_output_buf, get_tx(idx),
-						(char*)FIG_name_1st_case(ds_readw(FIG_ACTOR_GRAMMAR_TYPE), ds_readw(FIG_ACTOR_GRAMMAR_ID)),
-						(char*)FIG_name_4th_case(ds_readw(FIG_TARGET_GRAMMAR_TYPE), ds_readw(FIG_TARGET_GRAMMAR_ID)));
+						FIG_name_1st_case(ds_readw(FIG_ACTOR_GRAMMAR_TYPE), ds_readw(FIG_ACTOR_GRAMMAR_ID)),
+						FIG_name_4th_case(ds_readw(FIG_TARGET_GRAMMAR_TYPE), ds_readw(FIG_TARGET_GRAMMAR_ID)));
 				} else {
 					/* case 5: hero successful parade */
 					/* case 6: weapon broke */
@@ -274,26 +279,26 @@ unsigned short fight_printer(void)
 			g_vga_backbuffer = gfx_pos_bak;
 			set_textcolor(fg_bak, bg_bak);
 		}
-		ds_writeb(FIG_STAR_LAST_COUNT, ds_readbs(FIG_STAR_COUNTER));
-		return 1;
+
+
+			g_fig_star_last_count = g_fig_star_counter;
+
+			return 1;
 		} else {
 			return 0;
 		}
 	} else {
-		ds_writeb(FIG_STAR_COUNTER, 0);
+		g_fig_star_counter = 0;
 
-		ds_writew(FIG_STAR_TIMER, g_autofight ? 10 : g_delay_factor * 6);
+		g_fig_star_timer = g_autofight ? 10 : g_delay_factor * 6;
 
-		ds_writeb(FIG_STAR_LAST_COUNT, 0xff);
+		g_fig_star_last_count = -1;
 
 		return 0;
 	}
 
 }
 #undef idx
-struct dummy_w4 {
-	signed short a[4];
-};
 
 void draw_fight_screen(Bit16u val)
 {
@@ -373,7 +378,7 @@ void draw_fight_screen(Bit16u val)
 		if (host_readbs(list_i + FIGHTER_SHEET) != -1) {
 			/* Has a sheet id */
 
-			if (host_readb(list_i + FIGHTER_VISIBLE) != 0) {
+			if (host_readb(list_i + FIGHTER_VISIBLE)) {
 				host_writeb(list_i + FIGHTER_VISIBLE, 3);
 			}
 
@@ -414,7 +419,6 @@ void draw_fight_screen(Bit16u val)
 		set_delay_timer();
 
 		g_pic_copy.dst = g_vga_backbuffer = g_renderbuf_ptr;
-
 
 		for (list_i = (Bit8u*)ds_readd(FIG_LIST_HEAD); list_i; list_i = (Bit8u*)host_readd(list_i + FIGHTER_NEXT)) {
 			if (host_readb(list_i + FIGHTER_VISIBLE) == 2)
@@ -727,7 +731,7 @@ void draw_fight_screen(Bit16u val)
 													/* Original-Bug 4:
 													 * remove tail of the escaped two-fielded enemy from the chessboard
 													 * For more on this bug, see Original-Bug 3 at seg032.cpp */
-													p_fighter_tmp = (Bit8u*)FIG_get_ptr(g_twofielded_table[host_readbs(list_i + FIGHTER_TWOFIELDED)]);
+													p_fighter_tmp = (Bit8u*)FIG_get_ptr(g_fig_twofielded_table[host_readbs(list_i + FIGHTER_TWOFIELDED)]);
 													FIG_set_cb_field(host_readbs(p_fighter_tmp + FIGHTER_CBY), host_readbs(p_fighter_tmp + FIGHTER_CBX), host_readbs(p_fighter_tmp + FIGHTER_OBJ_ID));
 #endif
 													figlist_remove[2 + host_readbs(list_i + FIGHTER_SHEET)] = g_fig_twofielded_table[host_readbs(list_i + FIGHTER_TWOFIELDED)];
@@ -940,7 +944,7 @@ void draw_fight_screen(Bit16u val)
 			}
 		}
 
-		ds_writeb(FIG_STAR_LAST_COUNT, -1);
+		g_fig_star_last_count = -1;
 
 		fight_printer();
 
@@ -966,7 +970,7 @@ void draw_fight_screen(Bit16u val)
 
 	refresh_screen_size();
 
-	if (val == 0) {
+	if (!val) {
 
 		FIG_draw_pic();
 		FIG_draw_figures();
@@ -1017,15 +1021,13 @@ to the DOSBox-CPU and may run the timer.
 	g_pic_copy.dst = g_vga_backbuffer = g_vga_memstart;
 }
 
-//static
-void set_delay_timer(void)
+static void set_delay_timer(void)
 {
 	/* set delay_timer to delay_factor */
 	g_delay_timer = g_delay_factor;
 }
 
-//static
-void fight_delay(void)
+static void fight_delay(void)
 {
 	seg001_02c4();
 
