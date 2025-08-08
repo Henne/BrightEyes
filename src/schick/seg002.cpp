@@ -2390,9 +2390,9 @@ void do_timers(void)
 		/* decrement NPC timers */
 		for (i = 1; i < 7; i++) {
 
-			if ((ds_readbs(NPC_TIMERS + i) != 0) && (ds_readbs(NPC_TIMERS + i) != -1))
+			if (gs_npc_timers[i] && (gs_npc_timers[i] != -1))
 			{
-				dec_ds_bs_post(NPC_TIMERS + i);
+				gs_npc_timers[i]--;
 			}
 		}
 

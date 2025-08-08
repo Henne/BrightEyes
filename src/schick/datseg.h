@@ -309,7 +309,7 @@ extern Bit8u  gs_dng06_dasptreas_found;		//ds:0x35f7; seg081
 extern Bit8u  gs_quest_nameless_done;		//ds:0x35fa; seg072, seg084
 extern Bit8u  gs_dng14_ugdalf_done;		//ds:0x35ff; seg068, seg087
 extern Bit8u  gs_got_grimring;			//ds:0x3600; seg089
-
+extern Bit8s  gs_npc_timers[7];			//ds:0x3601; seg002, seg095, seg113
 extern Bit8u  gs_tlk_tav_firstinfo;		//ds:0x3608; seg060
 extern Bit8u  gs_tlk_tav_infopromise;		//ds:0x3609; seg060
 extern Bit8u  gs_tlk_tav_round;			//ds:0x360a; seg060

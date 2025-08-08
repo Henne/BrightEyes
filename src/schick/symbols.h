@@ -340,7 +340,7 @@
 // ?4
 //#define DNG14_UGDALF_DONE               (0x35ff)    /* unsigned char; {0,1} */
 //#define GOT_GRIMRING                    (0x3600)    /* unsigned char; {0,1} */
-#define NPC_TIMERS                      (0x3601)    /* unsigned char[7] */
+//#define NPC_TIMERS                      (0x3601)    /* unsigned char[7] */
 //#define TLK_TAV_FIRSTINFO               (0x3608)    /* unsigned char; {0,1} */
 //#define TLK_TAV_INFOPROMISE             (0x3609)    /* unsigned char; {0,1} */
 //#define TLK_TAV_ROUND                   (0x360a)    /* unsigned char; {0,1} */
