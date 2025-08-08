@@ -94,7 +94,7 @@ void init_ani(Bit16u v1)
 		/* copy the main ani picture */
 		do_pic_copy(1);
 
-		set_ani_pal((Bit8u*)ds_readd(ANI_PALETTE));
+		set_ani_pal((Bit8u*)g_ani_palette);
 
 		/* reset flag for pic_copy() */
 		g_pic_copy_flag = 0;
@@ -139,8 +139,7 @@ void clear_ani(void)
 	ds_writeb(ANI_HEIGHT, 0);
 	ds_writeb(ANI_AREACOUNT, 0);
 	g_ani_main_ptr = NULL;
-	ds_writew((ANI_PALETTE+2), 0);
-	ds_writew(ANI_PALETTE, 0);
+	g_ani_palette = NULL;
 
 	for (i = 0; i < 10; i++) {
 		ds_writew((ANI_AREA_TABLE + ANI_AREA_X) + i * SIZEOF_ANI_AREA, 0);

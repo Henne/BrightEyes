@@ -496,8 +496,6 @@ static inline int __abs__(int j)
 	return abs(j);
 }
 
-static inline Bit8u* F_PADD(Bit8u* ptr, Bit32s o)	{ return ptr + o; }
-
 static inline char* my_itoa(int value, char *string, int radix)
 {
 	sprintf(string, "%d", value);
@@ -1125,8 +1123,6 @@ static inline char* get_itemname(unsigned short item)
 
 /* helper, use only when neccessary */
 #define struct_copy memcpy
-
-#define F_PADD(p, o) ((HugePt)(p) + o)
 
 #define my_itoa itoa
 

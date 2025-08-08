@@ -355,7 +355,7 @@ void draw_fight_screen(Bit16u val)
 
 	for (i = 1; i < 8; i++) {
 		/* copy a pointer to the next position */
-		ds_writed(FIG_GFXBUFFERS + i * 4, (Bit32u)F_PADD((Bit8u*)ds_readd((FIG_GFXBUFFERS - 4) + i * 4), 0x508));
+		ds_writed(FIG_GFXBUFFERS + i * 4, (Bit32u)(((HugePt)ds_readd((FIG_GFXBUFFERS - 4) + i * 4) + 0x508)));
 		ds_writew(FIG_ANI_STATE + i * 2, -1);
 	}
 

@@ -834,7 +834,7 @@ void fade_into(void)
 
 void copy_palette(void)
 {
-	memcpy(g_renderbuf_ptr + 0xfa00, (Bit8u*)ds_readd(ANI_PALETTE), 0x60);
+	memcpy(g_renderbuf_ptr + 0xfa00, (Bit8u*)g_ani_palette, 0x60);
 	g_fading_state = 2;
 }
 

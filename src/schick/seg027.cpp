@@ -290,10 +290,11 @@ void load_ani(const signed short no)
 	signed short i;
 	Bit8u *p_area;
 	unsigned short ems_handle;
-	Bit8u* ani_buffer;
 #if !defined(__BORLANDC__)
+	Bit8u* ani_buffer;
 	Bit8u *unplen_ptr;
 #else
+	Bit8u huge *ani_buffer;
 	Bit8u huge *unplen_ptr;
 #endif
 	Bit8u *area_changes_ptr;
@@ -375,22 +376,21 @@ void load_ani(const signed short no)
 		close(fd);
 	}
 
-	ani_buffer = (Bit8u*)g_buffer9_ptr;
+	ani_buffer = g_buffer9_ptr;
 
 	/* set start of picture data */
-	g_ani_main_ptr = (Bit8u*)(F_PADD(ani_buffer, host_readd((Bit8u*)g_buffer9_ptr)));
+	g_ani_main_ptr = ani_buffer + host_readd(g_buffer9_ptr);
 	/* set start of palette */
-	ds_writed(ANI_PALETTE, (Bit32u)(F_PADD(F_PADD(ani_buffer, host_readd((Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, 4L)))), 6L)));
-	//	(Bit32u)(host_readd((Bit8u*)g_buffer9_ptr + 4) + ani_buffer + 6));
+	g_ani_palette = (ani_buffer + host_readd(g_buffer9_ptr + 4L)) + 6L;
 
 	/* read some bytes between data and palette */
-	ds_writew(ANI_UNKNOWN1,	host_readw((Bit8u*)(F_PADD(ds_readd(ANI_PALETTE), -6))));
-	ds_writew(ANI_UNKNOWN2,	host_readw((Bit8u*)(F_PADD(ds_readd(ANI_PALETTE), -4))));
+	ds_writew(ANI_UNKNOWN1,	host_readw(g_ani_palette - 6L));
+	ds_writew(ANI_UNKNOWN2,	host_readw(g_ani_palette - 4L));
 	/* compression type */
-	ds_writeb(ANI_COMPR_FLAG, host_readb((Bit8u*)(F_PADD(ds_readd(ANI_PALETTE), -1))));
-	ds_writeb(ANI_PALETTE_SIZE, host_readb((Bit8u*)(F_PADD(ds_readd(ANI_PALETTE), -2))));
+	ds_writeb(ANI_COMPR_FLAG, host_readb(g_ani_palette - 1L));
+	ds_writeb(ANI_PALETTE_SIZE, host_readb(g_ani_palette - 2L));
 
-	ani_end_ptr = (Bit8u*)(F_PADD(ds_readd(ANI_PALETTE), 3 * ds_readb(ANI_PALETTE_SIZE)));
+	ani_end_ptr = g_ani_palette + 3 * ds_readb(ANI_PALETTE_SIZE);
 
 	/* set picture size */
 	ds_writew(ANI_WIDTH, host_readw(g_buffer9_ptr + 8L));
@@ -427,19 +427,14 @@ void load_ani(const signed short no)
 		ani_residue_ptr += packed_delta;
 		memcpy(ani_residue_ptr, ani_end_ptr + packed_delta, ani_residue_len);
 
-#if !defined(__BORLANDC__)
-		ds_writed(ANI_PALETTE, ds_readd(ANI_PALETTE) + packed_delta);
-#else
-		*(HugePt*)(p_datseg + ANI_PALETTE) += packed_delta;
-#endif
-
+		g_ani_palette += packed_delta;
 		ani_end_ptr += packed_delta;
 	}
 
 	/* Process the Areas */
 	for (i_area = 0; ds_readbs(ANI_AREACOUNT) > i_area; i_area++) {
-		p_area2 = (Bit8u*)((p_datseg + ANI_AREA_TABLE + i_area * SIZEOF_ANI_AREA));
-		area_offset = host_readd((Bit8u*)(F_PADD(F_PADD((Bit8u*)g_buffer9_ptr, 4 * i_area), 0xc)));
+		p_area2 = (Bit8u*)(p_datseg + ANI_AREA_TABLE + i_area * SIZEOF_ANI_AREA);
+		area_offset = host_readd((g_buffer9_ptr + 4 * i_area) + 0xc);
 		p_area = g_buffer9_ptr + area_offset;
 		strncpy((char*)p_area2 + ANI_AREA_NAME, (char*)p_area, 4);
 
@@ -484,23 +479,21 @@ void load_ani(const signed short no)
 			memcpy(g_buffer9_ptr + area_data_offset, g_renderbuf_ptr, (unsigned short)area_size);
 			ani_residue_ptr += packed_delta2;
 			memcpy(ani_residue_ptr, ani_end_ptr + packed_delta2, (unsigned short)ani_residue_len);
-#if !defined(__BORLANDC__)
-		ds_writed(ANI_PALETTE, ds_readd(ANI_PALETTE) + packed_delta2);
-#else
-		*(HugePt*)(p_datseg + ANI_PALETTE) += packed_delta2;
-#endif
+
+			g_ani_palette += packed_delta2;
 			ani_end_ptr += packed_delta2;
+
 			area_size = (unsigned char)host_readb(p_area2 + ANI_AREA_HEIGHT)
 				* (signed short)host_readw(p_area2 + ANI_AREA_WIDTH);
 
 			for (j = 0; j < area_pics; j++) {
 				host_writed(p_area2 + j * 4 + ANI_AREA_PICS_TAB,
-					(Bit32u)(F_PADD(F_PADD((Bit8u*)g_buffer9_ptr, area_data_offset), j * area_size)));
+					(Bit32u)((g_buffer9_ptr + area_data_offset) + j * area_size));
 			}
 		} else {
 			for (j = 0; j < area_pics; j++) {
 				area_data_offset = host_readd(p_area + j * 4 + 0xc);
-				host_writed(p_area2 + j * 4 + ANI_AREA_PICS_TAB, (Bit32u)(F_PADD((Bit8u*)g_buffer9_ptr, area_data_offset)));
+				host_writed(p_area2 + j * 4 + ANI_AREA_PICS_TAB, (Bit32u)(g_buffer9_ptr + area_data_offset));
 			}
 		}
 
