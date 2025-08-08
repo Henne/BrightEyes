@@ -186,8 +186,7 @@ void move_item(signed short pos1, signed short pos2, Bit8u *hero)
 				add_inventory_quantity(pos1, pos2, hero);
 
 				/* delete item at pos2 */
-				memset(hero + HERO_INVENTORY + pos2 * SIZEOF_INVENTORY,
-							0, SIZEOF_INVENTORY);
+				memset(hero + HERO_INVENTORY + pos2 * SIZEOF_INVENTORY,	0, SIZEOF_INVENTORY);
 #ifdef M302de_ORIGINAL_BUGFIX
 				/* Decrement the item counter */
 				dec_ptr_bs(hero + HERO_NR_INVENTORY_SLOTS_FILLED);
@@ -293,6 +292,7 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 	/* check if item1 is an item */
 	if (item1 == 0) {
+
 		GUI_output(get_ttx(209));
 		return;
 	}
@@ -304,9 +304,7 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 	if (item_undropable(item1_desc)) {
 
-		sprintf(g_dtp2,
-			get_ttx(454),
-			(char*)(GUI_names_grammar((signed short)0x8002, item1, 0)));
+		sprintf(g_dtp2, get_ttx(454), (char*)GUI_names_grammar((signed short)0x8002, item1, 0));
 
 		GUI_output(g_dtp2);
 		return;
@@ -314,10 +312,7 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 	if (item_undropable(item2_desc)) {
 
-		sprintf(g_dtp2,
-			get_ttx(454),
-			(char*)(GUI_names_grammar((signed short)0x8002, item2, 0)));
-
+		sprintf(g_dtp2, get_ttx(454), (char*)GUI_names_grammar((signed short)0x8002, item2, 0));
 		GUI_output(g_dtp2);
 		return;
 
@@ -327,11 +322,9 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 	if (pos2 < 7) {
 		if (!can_hero_use_item(hero2, item1)) {
 
-			sprintf(g_dtp2,
-				get_ttx(221),
-				(char*)(hero2 + HERO_NAME2),
+			sprintf(g_dtp2,	get_ttx(221), (char*)(hero2 + HERO_NAME2),
 				get_ttx((host_readbs(hero2 + HERO_SEX) ? 593 : 9) + host_readbs(hero2 + HERO_TYPE)),
-				(char*)(GUI_names_grammar(2, item1, 0)));
+				(char*)GUI_names_grammar(2, item1, 0));
 
 			GUI_output(g_dtp2);
 			return;
@@ -340,11 +333,9 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 			if (is_in_word_array(item1, g_items_pluralwords)) {
 
-				sprintf(g_dtp2, get_ttx(222),
-					(char*)GUI_names_grammar(0x4000, item1, 0), get_ttx(557));
+				sprintf(g_dtp2, get_ttx(222), (char*)GUI_names_grammar(0x4000, item1, 0), get_ttx(557));
 			} else {
-				sprintf(g_dtp2, get_ttx(222),
-					(char*)GUI_names_grammar(0, item1, 0), get_ttx(556));
+				sprintf(g_dtp2, get_ttx(222), (char*)GUI_names_grammar(0, item1, 0), get_ttx(556));
 			}
 
 			GUI_output(g_dtp2);
@@ -368,9 +359,8 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 	if ((item2 != 0) && (pos1 < 7)) {
 
 		if (!can_hero_use_item(hero1, item2)) {
-			sprintf(g_dtp2,
-				get_ttx(221),
-				(char*)(hero1 + HERO_NAME2),
+
+			sprintf(g_dtp2,	get_ttx(221), (char*)(hero1 + HERO_NAME2),
 				get_ttx((host_readbs(hero1 + HERO_SEX) ? 593 : 9) + host_readbs(hero1 + HERO_TYPE)),
 				(char*)(GUI_names_grammar(2, item2, 0)));
 
@@ -385,11 +375,9 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 			if (is_in_word_array(item2, g_items_pluralwords)) {
 
-				sprintf(g_dtp2, get_ttx(222),
-					(char*)GUI_names_grammar(0x4000, item2, 0), get_ttx(557));
+				sprintf(g_dtp2, get_ttx(222), (char*)GUI_names_grammar(0x4000, item2, 0), get_ttx(557));
 			} else {
-				sprintf(g_dtp2, get_ttx(222),
-					(char*)GUI_names_grammar(0, item2, 0), get_ttx(556));
+				sprintf(g_dtp2, get_ttx(222), (char*)GUI_names_grammar(0, item2, 0), get_ttx(556));
 			}
 
 			GUI_output(g_dtp2);
@@ -410,8 +398,7 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 			if (host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + pos1 * SIZEOF_INVENTORY) > 1) {
 
-				sprintf(g_dtp2,
-					get_ttx(210),
+				sprintf(g_dtp2,	get_ttx(210),
 					host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + pos1 * SIZEOF_INVENTORY),
 					(char*)(GUI_names_grammar(6, item1, 0)),
 					(char*)hero2 + HERO_NAME2);
@@ -439,9 +426,7 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 					add_ptr_ws(hero2 + (HERO_INVENTORY + INVENTORY_QUANTITY) + pos2 * SIZEOF_INVENTORY, l_di);
 					drop_item(hero1, pos1, l_di);
 				} else {
-					sprintf(g_dtp2,
-						get_ttx(779),
-						(char*)hero2 + HERO_NAME2);
+					sprintf(g_dtp2,	get_ttx(779), (char*)hero2 + HERO_NAME2);
 					GUI_output(g_dtp2);
 				}
 			}
@@ -459,11 +444,9 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 			if (host_readbs(hero2 + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 100 <= host_readws(hero2 + HERO_LOAD) + desc1_5 - desc2_5) {
 
-				sprintf(g_dtp2,
-					get_ttx(779),
-					(char*)hero2 + HERO_NAME2);
-
+				sprintf(g_dtp2,	get_ttx(779), (char*)hero2 + HERO_NAME2);
 				GUI_output(g_dtp2);
+
 			} else {
 				if (pos1 < 7) {
 					unequip(hero1, item1, pos1);
@@ -497,9 +480,7 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 				sub_ptr_ws(hero1 + HERO_LOAD, desc1_5);
 
 #if !defined(__BORLANDC__)
-				struct_copy(hero1 + HERO_INVENTORY + pos1 * SIZEOF_INVENTORY,
-						(Bit8u*)&tmp,
-						SIZEOF_INVENTORY);
+				struct_copy(hero1 + HERO_INVENTORY + pos1 * SIZEOF_INVENTORY, (Bit8u*)&tmp, SIZEOF_INVENTORY);
 #else
 				*(struct inventory*)(hero1 + HERO_INVENTORY + pos1 * SIZEOF_INVENTORY) = tmp;
 #endif
@@ -535,11 +516,9 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 		if (host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + pos1 * SIZEOF_INVENTORY) > 1) {
 
-			sprintf(g_dtp2,
-				get_ttx(210),
+			sprintf(g_dtp2,	get_ttx(210),
 				host_readws(hero1+ (HERO_INVENTORY + INVENTORY_QUANTITY) + pos1 * SIZEOF_INVENTORY),
-				(char*)(GUI_names_grammar(6, item1, 0)),
-				(char*)hero2 + HERO_NAME2);
+				(char*)(GUI_names_grammar(6, item1, 0)), (char*)hero2 + HERO_NAME2);
 
 
 			l_di = GUI_input(g_dtp2, 2);
@@ -566,16 +545,15 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 			drop_item(hero1, pos1, l_di);
 
 		} else {
-			sprintf(g_dtp2,
-				get_ttx(779),
-				(char*)hero2 + HERO_NAME2);
+			sprintf(g_dtp2,	get_ttx(779), (char*)hero2 + HERO_NAME2);
 			GUI_output(g_dtp2);
 		}
+
 	} else if (host_readbs(hero2 + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 100 <= host_readws(hero2 + HERO_LOAD) + host_readws(item1_desc + 5)) {
-		sprintf(g_dtp2,
-			get_ttx(779),
-			(char*)hero2 + HERO_NAME2);
+
+		sprintf(g_dtp2,	get_ttx(779), (char*)hero2 + HERO_NAME2);
 		GUI_output(g_dtp2);
+
 	} else {
 
 		/* do the change */
@@ -734,12 +712,12 @@ void equip_belt_ani(void)
 	/* read NVF part 1 */
 	nvf_length = read_archive_file(handle, (Bit8u*)g_buffer9_ptr, 64000);
 	/* read NVF part 2 */
-	nvf_length += read_archive_file(handle, (Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, 64000)), 64000);
+	nvf_length += read_archive_file(handle, (Bit8u*)(g_buffer9_ptr + 64000L), 64000);
 
 	close(handle);
 
 	/* calculate palette pointer */
-	p_pal = (Bit8u*)(F_PADD(F_PADD((Bit8u*)g_buffer9_ptr, nvf_length), -0x60));
+	p_pal = (Bit8u*)((g_buffer9_ptr + nvf_length) -0x60L);
 
 	wait_for_vsync();
 
