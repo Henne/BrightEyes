@@ -6129,10 +6129,10 @@ signed short g_textbox_width_bak; // ds:0xe5d5
 signed short g_wallclock_update_bak; // ds:0xe5d3
 unsigned char g_event_ani_busy; // ds:0xe5d2
 unsigned char *g_itemuser; // ds:0xe5ce, pointer to hero
-signed short g_used_item_pos; // ds:0xe5cc, used_item position
-signed short g_used_item_id; // ds:0xe5ca, used_item ID
-void *g_used_item_desc; // ds:0xe5c6, pointer to the item description
-short g_alchemy_missing_item; // ds:0xe5c4
+signed int g_used_item_pos; // ds:0xe5cc, used_item position
+signed int g_used_item_id; // ds:0xe5ca, used_item ID
+unsigned char *g_used_item_desc; // ds:0xe5c6, pointer to the item description
+signed int g_alchemy_missing_item; // ds:0xe5c4
 unsigned char *g_spelluser_e; // ds:0xe5c0
 unsigned char *g_spelluser; // ds:0xe5bc
 unsigned char *g_spelltarget; // ds:0xe5b8

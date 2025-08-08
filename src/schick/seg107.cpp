@@ -34,41 +34,41 @@ void use_item(signed short item_pos, signed short hero_pos)
 	void (*func)(void);
 
 	/* set global variables for item usage */
-	ds_writew(USED_ITEM_POS, item_pos);
+	g_used_item_pos = item_pos;
 
 	g_itemuser = get_hero(hero_pos);
 
-	ds_writew(USED_ITEM_ID, host_readws(get_itemuser() + ds_readws(USED_ITEM_POS) * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID));
+	g_used_item_id = host_readws(get_itemuser() + g_used_item_pos * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID);
 
-	ds_writed(USED_ITEM_DESC, (Bit32u)(g_itemsdat + ds_readws(USED_ITEM_ID) * SIZEOF_ITEM_STATS));
+	g_used_item_desc = g_itemsdat + g_used_item_id * SIZEOF_ITEM_STATS;
 
 	if (check_hero(get_itemuser())) {
 
-			if (!item_useable((Bit8u*)ds_readd(USED_ITEM_DESC))) {
+			if (!item_useable(g_used_item_desc)) {
 				/* item is not usable */
 
-				if (is_in_word_array(ds_readws(USED_ITEM_ID), g_items_pluralwords))
+				if (is_in_word_array(g_used_item_id, g_items_pluralwords))
 				{
 					/* german grammar, singular and plural are the same */
-					sprintf(g_dtp2, get_ttx(792), GUI_name_singular(get_itemname(ds_readws(USED_ITEM_ID))));
+					sprintf(g_dtp2, get_ttx(792), GUI_name_singular(get_itemname(g_used_item_id)));
 				} else {
-					sprintf(g_dtp2, get_ttx(571), (char*)GUI_names_grammar(0, ds_readws(USED_ITEM_ID), 0));
+					sprintf(g_dtp2, get_ttx(571), (char*)GUI_names_grammar(0, g_used_item_id, 0));
 				}
 
 				GUI_output(g_dtp2);
 
-			} else if ((item_herb_potion((Bit8u*)ds_readd(USED_ITEM_DESC))) &&
-					!is_in_word_array(ds_readws(USED_ITEM_ID), g_poison_potions))
+			} else if ((item_herb_potion(g_used_item_desc)) &&
+					!is_in_word_array(g_used_item_id, g_poison_potions))
 			{
 				/* don't consume poison */
 				consume(get_itemuser(), get_itemuser(), item_pos);
 
-			} else if ((host_readws(get_itemuser() + SIZEOF_INVENTORY * ds_readws(USED_ITEM_POS) + (HERO_INVENTORY + INVENTORY_QUANTITY))) <= 0) {
+			} else if ((host_readws(get_itemuser() + SIZEOF_INVENTORY * g_used_item_pos + (HERO_INVENTORY + INVENTORY_QUANTITY))) <= 0) {
 				/* magic item is used up */
 				GUI_output(get_ttx(638));
 			} else {
 				/* special item */
-				func = g_use_special_item_handlers[ds_readbs((SPECIALITEMS_TABLE + 2) + 3 * host_readbs((Bit8u*)ds_readd(USED_ITEM_DESC) + 4))];
+				func = g_use_special_item_handlers[ds_readbs((SPECIALITEMS_TABLE + 2) + 3 * host_readbs(g_used_item_desc + 4))];
 				func();
 			}
 	}
@@ -95,7 +95,7 @@ void item_arcano(void)
 		/* use it */
 		spell_arcano();
 		/* decrement usage counter */
-		dec_ptr_ws(get_itemuser() + (HERO_INVENTORY + INVENTORY_QUANTITY) + ds_readws(USED_ITEM_POS) * SIZEOF_INVENTORY);
+		dec_ptr_ws(get_itemuser() + (HERO_INVENTORY + INVENTORY_QUANTITY) + g_used_item_pos * SIZEOF_INVENTORY);
 	}
 
 	if ((tx_index_bak != -1) && (tx_index_bak != ARCHIVE_FILE_SPELLTXT_LTX)) {
@@ -110,7 +110,7 @@ void item_read_recipe(void)
 	char *str;
 
 	/* TODO: replace magic numbers */
-	switch (ds_readws(USED_ITEM_ID)) {
+	switch (g_used_item_id) {
 	case 0xa7: str = get_ttx(639); break;
 	case 0xa9: str = get_ttx(640); break;
 	case 0xca: str = get_ttx(649); break;
@@ -139,7 +139,7 @@ void item_read_document(void)
 	signed short tw_bak;
 
 	/* TODO: replace magic numbers */
-	switch (ds_readws(USED_ITEM_ID)) {
+	switch (g_used_item_id) {
 	case 0xaa: str = get_ttx(641); break;
 	case 0xbb: str = get_ttx(645); break;
 	case 0xbd: str = get_ttx(646); break;
@@ -178,7 +178,7 @@ void item_armatrutz(void)
 		/* use it */
 		spell_armatrutz();
 		/* decrement usage counter */
-		dec_ptr_ws(get_itemuser() + (HERO_INVENTORY + INVENTORY_QUANTITY) + ds_readws(USED_ITEM_POS) * SIZEOF_INVENTORY);
+		dec_ptr_ws(get_itemuser() + (HERO_INVENTORY + INVENTORY_QUANTITY) + g_used_item_pos * SIZEOF_INVENTORY);
 
 		GUI_output(g_dtp2);
 	}
@@ -206,7 +206,7 @@ void item_flimflam(void)
 	spell_flimflam();
 
 	/* decrement usage counter */
-	dec_ptr_ws(get_itemuser() + (HERO_INVENTORY + INVENTORY_QUANTITY) + ds_readws(USED_ITEM_POS) * SIZEOF_INVENTORY);
+	dec_ptr_ws(get_itemuser() + (HERO_INVENTORY + INVENTORY_QUANTITY) + g_used_item_pos * SIZEOF_INVENTORY);
 
 	if ((tx_index_bak != -1) && (tx_index_bak != 0xde)) {
 		/* need to reload buffer1 */
@@ -271,7 +271,7 @@ void item_weapon_poison(void)
 		/* TODO: potential Original-Bug: What about sling? */
 	{
 
-		switch (ds_readws(USED_ITEM_ID)) {
+		switch (g_used_item_id) {
 		case ITEM_VOMICUM : {
 			/* VOMICUM */
 			or_ptr_bs(get_itemuser() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_FLAGS), 0x40); /* set 'poison_vomicum' flag */
@@ -422,7 +422,7 @@ void item_brenne(void)
 	/* load SPELLTXT*/
 	load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 
-	if (ds_readws(USED_ITEM_ID) == ITEM_LANTERN_ON) {
+	if (g_used_item_id == ITEM_LANTERN_ON) {
 		/* refill burning lantern */
 
 #ifdef M302de_ORIGINAL_BUGFIX
@@ -460,11 +460,11 @@ void item_brenne(void)
 			sprintf(g_dtp2, get_tx(122), (char*)get_itemuser() + HERO_NAME2);
 		} else {
 
-			if (ds_readws(USED_ITEM_ID) == ITEM_TORCH_OFF) {
+			if (g_used_item_id == ITEM_TORCH_OFF) {
 
 				g_light_type = LIGHTING_TORCH;
 
-			} else if (ds_readws(USED_ITEM_ID) == ITEM_LANTERN_OFF) {
+			} else if (g_used_item_id == ITEM_LANTERN_OFF) {
 
 				g_light_type = LIGHTING_LANTERN;
 

@@ -39,9 +39,12 @@ signed short hero_has_ingrendients(Bit8u *hero, signed short recipe_index)
 		item_pos = get_item_pos(hero, r_ptr->ingredients[i]);
 
 		if (item_pos == -1) {
+
 			/* needed item missing */
 			retval = 0;
-			ds_writew(ALCHEMY_MISSING_ITEM, r_ptr->ingredients[i]);
+
+			/* TODO: g_alchemy_missing_item should not be a globvar */
+			g_alchemy_missing_item = r_ptr->ingredients[i];
 		} else {
 			/* drop all needed items */
 			drop_item(hero, item_pos, 1);
@@ -298,7 +301,7 @@ signed short plan_alchemy(Bit8u *hero)
 					}
 				} else {
 					/* not all ingrendients */
-					sprintf(g_dtp2, get_tx(49), GUI_name_singular(get_itemname(ds_readws(ALCHEMY_MISSING_ITEM))));
+					sprintf(g_dtp2, get_tx(49), GUI_name_singular(get_itemname(g_alchemy_missing_item)));
 					GUI_output(g_dtp2);
 				}
 			}

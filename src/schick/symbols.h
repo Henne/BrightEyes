@@ -1641,10 +1641,10 @@
 //#define SPELLTARGET                     (0xe5b8)    /* long */
 //#define SPELLUSER                       (0xe5bc)    /* long */
 //#define SPELLUSER_E                     (0xe5c0)    /* long */
-#define ALCHEMY_MISSING_ITEM            (0xe5c4)    /* short */
-#define USED_ITEM_DESC                  (0xe5c6)    /* Bit8u*; pointer to the item description */
-#define USED_ITEM_ID                    (0xe5ca)    /* signed short; used_item ID */
-#define USED_ITEM_POS                   (0xe5cc)    /* signed short; used_item position */
+//#define ALCHEMY_MISSING_ITEM            (0xe5c4)    /* short */
+//#define USED_ITEM_DESC                  (0xe5c6)    /* Bit8u*; pointer to the item description */
+//#define USED_ITEM_ID                    (0xe5ca)    /* signed short; used_item ID */
+//#define USED_ITEM_POS                   (0xe5cc)    /* signed short; used_item position */
 //#define ITEMUSER                        (0xe5ce)    /* Bit8u*; pointer to hero */
 //#define EVENT_ANI_BUSY                  (0xe5d2)    /* unsigned char; {0,1} */
 //#define WALLCLOCK_UPDATE_BAK            (0xe5d3)    /* unsigned short; {0,1} */
