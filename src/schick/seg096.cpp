@@ -121,14 +121,14 @@ char* GUI_name_plural(signed short v1, char *s)
 		while ((tmp = *s++) && (tmp != 0x2e));
 
 	while ((tmp = *s) && (tmp != 0x2e))
-		host_writeb(p++, *s++);
+		*p++ = *s++;
 
 	if ((v1 & 0x0f) == 1 && (v1 & 0x3000) != 0x2000) {
-		if (host_readb(p-1) == 'B' || host_readb(p-1) == 'D')
-			host_writeb(p++, 'E');
-		host_writeb(p++, 'S');
+		if (*(p-1) == 'B' || *(p-1) == 'D')
+			*p++ = 'E';
+		*p++ = 'S';
 	} else {
-		if (((v1 & 0x0f) == 7) && (host_readb(p-1) != 'N') && (host_readb(p-1) != 'S'))
+		if (((v1 & 0x0f) == 7) && (*(p-1) != 'N') && (*(p-1) != 'S'))
 				*p++ = 'N';
 	}
 

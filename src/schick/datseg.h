@@ -548,12 +548,12 @@ extern void (*g_travel_event_handlers[146])(void);	//ds:0xaeea; seg109
 extern signed char g_large_buf;		// ds:0xe5e4; seg120, seg028
 extern HugePt g_global_buffer_ptr;	// ds:0xe5e0; seg120
 extern Bit32u g_buffersize;		// ds:0xe5dc; seg120
-
 extern signed short g_basepos_x_bak;	// ds:0xe5d9; seg117
 extern signed short g_basepos_y_bak;	// ds:0xe5d7; seg117
 extern signed short g_textbox_width_bak; // ds:0xe5d5; seg117
 extern signed short g_wallclock_update_bak; // ds:0xe5d3; seg117
 extern unsigned char g_event_ani_busy;	// ds:0xe5d2; seg002, seg109-seg118
+
 extern unsigned char *g_itemuser;	// ds:0xe5ce; seg107
 extern signed int g_used_item_pos;	// ds:0xe5cc; seg107
 extern signed int g_used_item_id;	// ds:0xe5ca; seg107

@@ -175,7 +175,7 @@ void spell_verwandlung(void)
 
 #ifdef M302de_ORIGINAL_BUGFIX
 			/* Broken format string, %S must be %s */
-			host_writeb(get_tx(5) + 5, 's');
+			get_tx(5)[5] = 's';
 #endif
 
 			sprintf(g_dtp2,	get_tx(5), (char*)get_spelltarget() + HERO_NAME2);

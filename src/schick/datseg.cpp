@@ -6121,7 +6121,6 @@ signed char g_large_buf; // ds:0xe5e4
 HugePt g_global_buffer_ptr; // ds:0xe5e0, points to the start of the global buffer
 Bit32u g_buffersize; // ds:0xe5dc, size of the global buffer
 unsigned char g_unkn_093[1]; // ds:0xe5db
-unsigned char g_route59_flag; // ds:0xe4a2, {0, 1 = from Kravik, 2 = from Peilinen, 3 = from Skelellen, 4 = from Rovamund}
 unsigned short g_sample_ad_length; // ds:0xbc5a
 signed short g_basepos_x_bak; // ds:0xe5d9
 signed short g_basepos_y_bak; // ds:0xe5d7
@@ -6158,6 +6157,7 @@ unsigned short g_current_town_overx; // ds:0xe4a9
 unsigned short g_current_town_overy; // ds:0xe4a7
 unsigned short g_current_town_over; // ds:0xe4a5
 unsigned short g_trv_menu_selection; // ds:0xe4a3
+unsigned char g_route59_flag; // ds:0xe4a2, {0, 1 = from Kravik, 2 = from Peilinen, 3 = from Skelellen, 4 = from Rovamund}
 signed short g_get_extra_loot; // ds:0xe4a0
 unsigned char *g_dungeon_doors_buf; // ds:0xe49c, to buffer of size 225
 unsigned char *g_dungeon_stairs_buf; // ds:0xe498, to buffer of size 80
