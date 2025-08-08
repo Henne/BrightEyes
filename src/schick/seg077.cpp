@@ -78,7 +78,7 @@ signed short DNG01_handler(void)
 
 	} else if ((target_pos == DNG_POS(1,13,5)) && (target_pos != gs_dng_handled_pos) && !gs_dng01_sabre_taken)
 	{
-		sprintf(g_text_output_buf, get_ttx(528), (char*)GUI_names_grammar(0, 3, 0), (char*)GUI_2f2(2, 3, 0));
+		sprintf(g_text_output_buf, get_ttx(528), GUI_names_grammar(0, 3, 0), (char*)GUI_2f2(2, 3, 0));
 
 		/* ITEM: get a SABRE */
 		if (GUI_bool(g_text_output_buf) && get_item(ITEM_SABER, 1, 1)) {
@@ -87,7 +87,7 @@ signed short DNG01_handler(void)
 
 	} else if ((target_pos == DNG_POS(3,2,9)) && (target_pos != gs_dng_handled_pos) && !gs_dng01_crossbow_taken)
 	{
-		sprintf(g_text_output_buf, get_ttx(528), (char*)GUI_names_grammar(0, 12, 0), (char*)GUI_2f2(2, 12, 0));
+		sprintf(g_text_output_buf, get_ttx(528), GUI_names_grammar(0, 12, 0), (char*)GUI_2f2(2, 12, 0));
 
 		/* ITEM: get a CROSSBOW */
 		if (GUI_bool(g_text_output_buf) && get_item(ITEM_CROSSBOW, 1, 1)) {

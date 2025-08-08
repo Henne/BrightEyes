@@ -133,7 +133,7 @@ void spell_illusionen(void)
 	} else {
 		/* print a failure message */
 		sprintf(g_dtp2,	get_tx(3),
-			(char*)GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1));
+			GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1));
 
 		/* costs 2 AE */
 		ds_writew(SPELL_SPECIAL_AECOST, 2);

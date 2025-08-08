@@ -138,7 +138,7 @@ void move_item(signed short pos1, signed short pos2, Bit8u *hero)
 
 							sprintf(g_dtp2, get_ttx(221), (char*)hero + HERO_NAME2,
 								get_ttx((host_readbs(hero + HERO_SEX) != 0 ? 593 : 9) + host_readbs(hero + HERO_TYPE)),
-								(char*)GUI_names_grammar(2, item2, 0));
+								GUI_names_grammar(2, item2, 0));
 
 							GUI_output(g_dtp2);
 
@@ -147,10 +147,10 @@ void move_item(signed short pos1, signed short pos2, Bit8u *hero)
 								if (is_in_word_array(item2, g_items_pluralwords))
 
 									sprintf(g_dtp2, get_ttx(222),
-										(char*)GUI_names_grammar(0x4000, item2, 0), get_ttx(557));
+										GUI_names_grammar(0x4000, item2, 0), get_ttx(557));
 								else
 									sprintf(g_dtp2, get_ttx(222),
-										(char*)GUI_names_grammar(0, item2, 0), get_ttx(556));
+										GUI_names_grammar(0, item2, 0), get_ttx(556));
 
 								GUI_output(g_dtp2);
 							} else {
@@ -304,7 +304,7 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 	if (item_undropable(item1_desc)) {
 
-		sprintf(g_dtp2, get_ttx(454), (char*)GUI_names_grammar((signed short)0x8002, item1, 0));
+		sprintf(g_dtp2, get_ttx(454), GUI_names_grammar((signed short)0x8002, item1, 0));
 
 		GUI_output(g_dtp2);
 		return;
@@ -312,7 +312,7 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 	if (item_undropable(item2_desc)) {
 
-		sprintf(g_dtp2, get_ttx(454), (char*)GUI_names_grammar((signed short)0x8002, item2, 0));
+		sprintf(g_dtp2, get_ttx(454), GUI_names_grammar((signed short)0x8002, item2, 0));
 		GUI_output(g_dtp2);
 		return;
 
@@ -324,7 +324,7 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 			sprintf(g_dtp2,	get_ttx(221), (char*)(hero2 + HERO_NAME2),
 				get_ttx((host_readbs(hero2 + HERO_SEX) ? 593 : 9) + host_readbs(hero2 + HERO_TYPE)),
-				(char*)GUI_names_grammar(2, item1, 0));
+				GUI_names_grammar(2, item1, 0));
 
 			GUI_output(g_dtp2);
 			return;
@@ -333,9 +333,9 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 			if (is_in_word_array(item1, g_items_pluralwords)) {
 
-				sprintf(g_dtp2, get_ttx(222), (char*)GUI_names_grammar(0x4000, item1, 0), get_ttx(557));
+				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0x4000, item1, 0), get_ttx(557));
 			} else {
-				sprintf(g_dtp2, get_ttx(222), (char*)GUI_names_grammar(0, item1, 0), get_ttx(556));
+				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0, item1, 0), get_ttx(556));
 			}
 
 			GUI_output(g_dtp2);
@@ -375,9 +375,9 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 			if (is_in_word_array(item2, g_items_pluralwords)) {
 
-				sprintf(g_dtp2, get_ttx(222), (char*)GUI_names_grammar(0x4000, item2, 0), get_ttx(557));
+				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0x4000, item2, 0), get_ttx(557));
 			} else {
-				sprintf(g_dtp2, get_ttx(222), (char*)GUI_names_grammar(0, item2, 0), get_ttx(556));
+				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0, item2, 0), get_ttx(556));
 			}
 
 			GUI_output(g_dtp2);

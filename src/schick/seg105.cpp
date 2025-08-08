@@ -640,7 +640,7 @@ signed short get_item(signed short id, signed short unused, signed short no)
 			autofight_bak = g_autofight;
 			g_autofight = 0;
 
-			sprintf(g_dtp2,	get_ttx(549), (char*)GUI_names_grammar(((no > 1) ? 4 : 0) + 2, id, 0));
+			sprintf(g_dtp2,	get_ttx(549), GUI_names_grammar(((no > 1) ? 4 : 0) + 2, id, 0));
 
 			if (GUI_bool(g_dtp2)) {
 

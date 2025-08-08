@@ -170,7 +170,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 		} else if (get_item(gs_smith_repairitems[smith_id].item_id, 1, 1)) {
 
 			sprintf(g_dtp2, get_ttx(486),
-				(char*)GUI_names_grammar((signed short)0x8002, gs_smith_repairitems[smith_id].item_id, 0));
+				GUI_names_grammar((signed short)0x8002, gs_smith_repairitems[smith_id].item_id, 0));
 
 			GUI_output(g_dtp2);
 
@@ -392,7 +392,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 						make_valuta_str(g_text_output_buf, price);
 
 						sprintf(g_dtp2, get_ttx(488),
-							(char*)GUI_names_grammar((signed short)0x8002, item_id, 0),
+							GUI_names_grammar((signed short)0x8002, item_id, 0),
 							g_text_output_buf);
 
 

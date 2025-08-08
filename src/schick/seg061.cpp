@@ -545,7 +545,7 @@ void miracle_weapon(char *str, signed short mode)
 							or_ptr_bs(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * i, 0x80); /* set 'magic_revealed' flag */
 
 							sprintf(g_dtp2, (char*)str,
-								(char*)GUI_names_grammar((signed short)0x8000, item_id, 0),
+								GUI_names_grammar((signed short)0x8000, item_id, 0),
 								(char*)hero + HERO_NAME2);
 
 							done = 1;
@@ -558,7 +558,7 @@ void miracle_weapon(char *str, signed short mode)
 							and_ptr_bs(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * i, 0xfe); /* unset 'broken' flag */
 
 							sprintf(g_dtp2, (char*)str,
-								(char*)GUI_names_grammar((signed short)0x8000, item_id, 0),
+								GUI_names_grammar((signed short)0x8000, item_id, 0),
 								(char*)hero + HERO_NAME2);
 
 							done = 1;

@@ -279,7 +279,7 @@ void buy_screen(void)
 				}
 			}
 
-			sprintf(g_dtp2, (char*)fmt_d_s.a, l4, (char*)GUI_names_grammar(0x4000 +  (l4 > 1 || l4 == 0 ? 4 : 0), item_id, 0));
+			sprintf(g_dtp2, (char*)fmt_d_s.a, l4, GUI_names_grammar(0x4000 +  (l4 > 1 || l4 == 0 ? 4 : 0), item_id, 0));
 
 			if (item_weapon(get_itemsdat(item_id))) {
 
@@ -376,12 +376,12 @@ void buy_screen(void)
 
 						if (g_buy_shopping_cart[l16].quantity > 1) {
 
-							sprintf(g_dtp2,	get_ttx(818), (char*)GUI_names_grammar(4, item_id, 0));
+							sprintf(g_dtp2,	get_ttx(818), GUI_names_grammar(4, item_id, 0));
 
 							l4 = GUI_input(g_dtp2, 2);
 						}
 					} else {
-						sprintf(g_dtp2,	get_ttx(441), (char*)GUI_names_grammar(4, item_id, 0));
+						sprintf(g_dtp2,	get_ttx(441), GUI_names_grammar(4, item_id, 0));
 
 						l4 = GUI_input(g_dtp2, 2);
 					}
@@ -435,7 +435,7 @@ void buy_screen(void)
 					if (item_stackable(get_itemsdat(host_readws((Bit8u*)ds_readd(BUYITEMS) + 7 * (l7 + item))))) {
 
 						sprintf(g_dtp2,	get_ttx(441),
-							(char*)GUI_names_grammar(4, host_readws((Bit8u*)ds_readd(BUYITEMS) + 7 * (l7 + item)), 0));
+							GUI_names_grammar(4, host_readws((Bit8u*)ds_readd(BUYITEMS) + 7 * (l7 + item)), 0));
 						l4 = GUI_input(g_dtp2, 2);
 					}
 

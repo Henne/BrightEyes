@@ -52,7 +52,7 @@ void use_item(signed short item_pos, signed short hero_pos)
 					/* german grammar, singular and plural are the same */
 					sprintf(g_dtp2, get_ttx(792), GUI_name_singular(get_itemname(g_used_item_id)));
 				} else {
-					sprintf(g_dtp2, get_ttx(571), (char*)GUI_names_grammar(0, g_used_item_id, 0));
+					sprintf(g_dtp2, get_ttx(571), GUI_names_grammar(0, g_used_item_id, 0));
 				}
 
 				GUI_output(g_dtp2);
