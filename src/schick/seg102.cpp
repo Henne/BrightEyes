@@ -322,7 +322,7 @@ signed short MON_cast_spell(Bit8u* monster, signed char handicap)
 
 		} else {
 
-			ds_writed(SPELLUSER_E, (Bit32u)monster);
+			g_spelluser_e = monster;
 
 			g_monster_spell_ae_cost = -1;
 

@@ -1040,7 +1040,7 @@ static inline Bit8u *get_spelluser(void) {
 }
 
 static inline Bit8u *get_spelluser_e(void) {
-	return (Bit8u*)ds_readd(SPELLUSER_E);
+	return (Bit8u*)g_spelluser_e;
 }
 
 static inline Bit8u *get_itemuser(void) {
@@ -1289,7 +1289,7 @@ struct bittest {
 #define get_spelltarget_e()	((Bit8u*)g_spelltarget_e)
 #define get_spelltarget()	((unsigned char*)g_spelltarget)
 #define get_spelluser()		((unsigned char*)g_spelluser)
-#define get_spelluser_e()	((Bit8u*)ds_readd(SPELLUSER_E))
+#define get_spelluser_e()	((Bit8u*)g_spelluser_e)
 
 #define get_itemuser() ((unsigned char*)g_itemuser)
 

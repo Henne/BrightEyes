@@ -1640,7 +1640,7 @@
 //#define SPELLTARGET_E                   (0xe5b4)    /* Bit8u*; Pointer to enemy */
 //#define SPELLTARGET                     (0xe5b8)    /* long */
 //#define SPELLUSER                       (0xe5bc)    /* long */
-#define SPELLUSER_E                     (0xe5c0)    /* long */
+//#define SPELLUSER_E                     (0xe5c0)    /* long */
 #define ALCHEMY_MISSING_ITEM            (0xe5c4)    /* short */
 #define USED_ITEM_DESC                  (0xe5c6)    /* Bit8u*; pointer to the item description */
 #define USED_ITEM_ID                    (0xe5ca)    /* signed short; used_item ID */

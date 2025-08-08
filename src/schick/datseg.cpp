@@ -6133,7 +6133,7 @@ signed short g_used_item_pos; // ds:0xe5cc, used_item position
 signed short g_used_item_id; // ds:0xe5ca, used_item ID
 void *g_used_item_desc; // ds:0xe5c6, pointer to the item description
 short g_alchemy_missing_item; // ds:0xe5c4
-long g_spelluser_e; // ds:0xe5c0
+unsigned char *g_spelluser_e; // ds:0xe5c0
 unsigned char *g_spelluser; // ds:0xe5bc
 unsigned char *g_spelltarget; // ds:0xe5b8
 unsigned char *g_spelltarget_e; // ds:0xe5b4, Pointer to enemy

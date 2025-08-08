@@ -554,6 +554,9 @@ extern signed short g_textbox_width_bak; // ds:0xe5d5; seg117
 extern signed short g_wallclock_update_bak; // ds:0xe5d3; seg117
 extern unsigned char g_event_ani_busy;	// ds:0xe5d2; seg002, seg109-seg118
 extern unsigned char *g_itemuser;	// ds:0xe5ce; seg107
+
+
+extern unsigned char *g_spelluser_e;	// ds:0xe5c0; seg102
 extern unsigned char *g_spelluser;	// ds:0xe5bc; seg068, seg098, seg102, seg107
 extern unsigned char *g_spelltarget;	// ds:0xe5b8; seg098-seg102
 extern unsigned char *g_spelltarget_e;	// ds:0xe5b4; seg098-seg102
