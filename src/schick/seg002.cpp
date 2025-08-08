@@ -979,7 +979,7 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 	va = nvf_type & 0x80;
 	nvf_type &= 0x7f;
 
-	pics = host_readws(F_PADD(nvf->src, 1L));
+	pics = host_readws(nvf->src + 1L);
 
 	if (nvf->no < 0)
 		nvf->no = 0;
@@ -990,49 +990,49 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 	switch (nvf_type) {
 
 	case 0x00:
-		width = host_readws(F_PADD(nvf->src, 3));
-		height = host_readws(F_PADD(nvf->src, 5));
+		width = host_readws(nvf->src + 3L);
+		height = host_readws(nvf->src + 5L);
 		p_size = width * height;
-		src =  F_PADD(nvf->src, nvf->no * p_size + 7);
+		src =  nvf->src + nvf->no * p_size + 7L;
 		break;
 
 	case 0x01:
 		offs = pics * 4 + 3L;
 		for (i = 0; i < nvf->no; i++) {
 #if !defined(__BORLANDC__)
-			width = host_readw(nvf->src + i * 4 + 3);
-			height = host_readw(nvf->src + i * 4 + 5);
+			width = host_readw(nvf->src + i * 4 + 3L);
+			height = host_readw(nvf->src + i * 4 + 5L);
 #endif
 			offs += width * height;
 		}
 
-		width = host_readw(F_PADD(nvf->src, nvf->no * 4 + 3));
-		height = host_readw(F_PADD(nvf->src, nvf->no * 4 + 5));
+		width = host_readw(nvf->src + nvf->no * 4 + 3L);
+		height = host_readw(nvf->src + nvf->no * 4 + 5L);
 		p_size = width * height;
-		src = F_PADD(nvf->src, offs);
+		src = nvf->src + offs;
 		break;
 
 	case 0x02: case 0x04:
-		width = host_readw(F_PADD(nvf->src, 3L));
-		height = host_readw(F_PADD(nvf->src, 5));
+		width = host_readw(nvf->src + 3L);
+		height = host_readw(nvf->src + 5L);
 		offs = pics * 4 + 7L;
 		for (i = 0; i < nvf->no; i++) {
-			offs += host_readd(F_PADD(nvf->src, (i * 4) + 7));
+			offs += host_readd(nvf->src + (i * 4) + 7L);
 		}
 
-		p_size = host_readd(F_PADD(nvf->src, nvf->no * 4 + 7));
-		src = F_PADD(nvf->src, offs);
+		p_size = host_readd(nvf->src + nvf->no * 4 + 7L);
+		src = nvf->src + offs;
 		break;
 
 	case 0x03: case 0x05:
 		offs = pics * 8 + 3L;
 		for (i = 0; i < nvf->no; i++)
-			offs += host_readd(F_PADD(nvf->src, (i * 8) + 7));
+			offs += host_readd(nvf->src + (i * 8) + 7L);
 
-		width = host_readw(F_PADD(nvf->src, nvf->no * 8 + 3));
-		height = host_readw(F_PADD(nvf->src, nvf->no * 8 + 5));
-		p_size = host_readd(F_PADD(nvf->src, i * 8 + 7));
-		src = F_PADD(nvf->src, offs);
+		width = host_readw(nvf->src + nvf->no * 8 + 3L);
+		height = host_readw(nvf->src +  nvf->no * 8 + 5L);
+		p_size = host_readd(nvf->src + i * 8 + 7L);
+		src = nvf->src + offs;
 		break;
 	}
 
@@ -3904,7 +3904,7 @@ void from_EMS(Bit8u* dst, signed short handle, Bit32s bytes)
 
 	do {
 		EMS_map_memory(handle, v1++, 0);
-		ptr = (Bit8u*)F_PADD(dst, (((Bit32s)si) << 0x0e));
+		ptr = (Bit8u*)((HugePt)dst + (((Bit32s)si) << 0x0e));
 		si++;
 
 		len = (bytes - 0x4000 > 0) ? 0x4000 : (signed short)bytes;
@@ -3931,7 +3931,7 @@ void to_EMS(signed short handle, Bit8u* src, Bit32s bytes)
 
 	do {
 		EMS_map_memory(handle, v1++, 0);
-		ptr = (Bit8u*)F_PADD(src, ((((Bit32s)si) << 0x0e)));
+		ptr = (Bit8u*)((HugePt)src + (((Bit32s)si) << 0x0e));
 		si++;
 
 		len = (bytes - 0x4000 > 0) ? 0x4000 : (signed short)bytes;

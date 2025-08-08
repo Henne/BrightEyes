@@ -393,10 +393,10 @@ void load_ani(const signed short no)
 	ani_end_ptr = (Bit8u*)(F_PADD(ds_readd(ANI_PALETTE), 3 * ds_readb(ANI_PALETTE_SIZE)));
 
 	/* set picture size */
-	ds_writew(ANI_WIDTH, host_readw((Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, 8))));
-	ds_writeb(ANI_HEIGHT, host_readb((Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, 10))));
+	ds_writew(ANI_WIDTH, host_readw(g_buffer9_ptr + 8L));
+	ds_writeb(ANI_HEIGHT, host_readb(g_buffer9_ptr + 10L));
 	/* set number of areas */
-	ds_writeb(ANI_AREACOUNT, host_readb((Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, 11))));
+	ds_writeb(ANI_AREACOUNT, host_readb(g_buffer9_ptr + 11L));
 
 	/* Process Main Picture */
 	if (ds_readb(ANI_COMPR_FLAG) != 0) {
@@ -440,7 +440,7 @@ void load_ani(const signed short no)
 	for (i_area = 0; ds_readbs(ANI_AREACOUNT) > i_area; i_area++) {
 		p_area2 = (Bit8u*)((p_datseg + ANI_AREA_TABLE + i_area * SIZEOF_ANI_AREA));
 		area_offset = host_readd((Bit8u*)(F_PADD(F_PADD((Bit8u*)g_buffer9_ptr, 4 * i_area), 0xc)));
-		p_area = (Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, area_offset));
+		p_area = g_buffer9_ptr + area_offset;
 		strncpy((char*)p_area2 + ANI_AREA_NAME, (char*)p_area, 4);
 
 		host_writew(p_area2 + ANI_AREA_X, host_readw(p_area + 4));
@@ -455,20 +455,20 @@ void load_ani(const signed short no)
 
 			area_data_offset = host_readd(p_area + 0xc);
 			area_data_offset += packed_delta;
-			unplen_ptr = (Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, area_data_offset));
+			unplen_ptr = g_buffer9_ptr + area_data_offset;
 
 			plen = host_readd(unplen_ptr);
 			unplen_ptr += (plen - 4);
 			area_size = host_readd(unplen_ptr);
 			area_size = swap_u32(area_size) >> 8;
 
-			decomp_pp20((Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, area_data_offset)),
+			decomp_pp20(g_buffer9_ptr + area_data_offset,
 				g_renderbuf_ptr,
 #if !defined(__BORLANDC__)
 				(Bit8u*)g_buffer9_ptr + area_data_offset + 4,
 #else
-				FP_OFF(F_PADD((Bit8u*)g_buffer9_ptr, area_data_offset)) + 4,
-				FP_SEG(F_PADD((Bit8u*)g_buffer9_ptr, area_data_offset)),
+				FP_OFF(g_buffer9_ptr + area_data_offset) + 4,
+				FP_SEG(g_buffer9_ptr + area_data_offset),
 #endif
 				plen);
 
@@ -481,8 +481,7 @@ void load_ani(const signed short no)
 			ani_residue_len = ani_end_ptr - ani_residue_ptr;
 			memcpy(ani_end_ptr + packed_delta2, ani_residue_ptr, (unsigned short)ani_residue_len);
 
-			memcpy((Bit8u*)(F_PADD((Bit8u*)g_buffer9_ptr, area_data_offset)),
-				g_renderbuf_ptr, (unsigned short)area_size);
+			memcpy(g_buffer9_ptr + area_data_offset, g_renderbuf_ptr, (unsigned short)area_size);
 			ani_residue_ptr += packed_delta2;
 			memcpy(ani_residue_ptr, ani_end_ptr + packed_delta2, (unsigned short)ani_residue_len);
 #if !defined(__BORLANDC__)
