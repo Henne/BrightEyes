@@ -349,8 +349,8 @@ signed short char_erase(void)
 	signed short unlink_ret;
 	Bit8u *ptr;
 
-	if (ds_readbs(RENDERBUF_IN_USE_FLAG)) {
-		ptr = (Bit8u*)(g_buffer9_ptr + 30000L);
+	if (g_renderbuf_in_use_flag) {
+		ptr = g_buffer9_ptr + 30000L;
 	} else {
 		ptr = g_renderbuf_ptr + 50000;
 	}

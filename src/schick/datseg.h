@@ -439,6 +439,9 @@ extern signed char g_fig_star_printed;		//ds:0x4b94; seg004, seg005
 
 extern struct mouse_action g_action_table_options[10];	//ds:0x4bae; seg025
 
+extern signed short g_tmap_x[10];		//ds:0x4c12; seg025
+extern signed short g_tmap_y[10];		//ds:0x4c26; seg025
+extern unsigned char g_renderbuf_in_use_flag;	//ds:0x4c3a; seg025, seg061
 extern void (*g_location_handlers[19])(void);	//ds:0x4c3b; seg025
 
 extern char g_chr_file_suffix[5];		//ds:0x5e3e; seg026

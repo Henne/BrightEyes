@@ -307,11 +307,11 @@ void show_treasure_map(void)
 				#endif
 
 				/* copy to screen */
-				g_pic_copy.x1 = ds_readws(TMAP_X + 2 * l_si);
-				g_pic_copy.y1 = ds_readws(TMAP_Y + 2 * l_si);
-				g_pic_copy.x2 = ds_readws(TMAP_X + 2 * l_si) + width - 1;
-				g_pic_copy.y2 = ds_readws(TMAP_Y + 2 * l_si) + height - 1;
-				g_pic_copy.src = ((HugePt)g_buffer9_ptr) + 30000L;
+				g_pic_copy.x1 = g_tmap_x[l_si];
+				g_pic_copy.y1 = g_tmap_y[l_si];
+				g_pic_copy.x2 = g_tmap_x[l_si] + width - 1;
+				g_pic_copy.y2 = g_tmap_y[l_si] + height - 1;
+				g_pic_copy.src = g_buffer9_ptr + 30000L;
 				g_pic_copy.dst = g_vga_memstart;
 				do_pic_copy(0);
 			}
@@ -319,7 +319,7 @@ void show_treasure_map(void)
 
 		wait_for_vsync();
 
-		set_palette((Bit8u*)(((g_buffer9_ptr + length) -0x60L)), 0, 0x20);
+		set_palette((Bit8u*)((g_buffer9_ptr + length) -0x60L), 0, 0x20);
 
 		refresh_screen_size();
 
@@ -363,7 +363,8 @@ void show_treasure_map(void)
 
 		delay_or_keypress(1000);
 
-		if (ds_readb(RENDERBUF_IN_USE_FLAG) != 0) {
+		if (g_renderbuf_in_use_flag) {
+
 			/* copy to screen */
 			g_pic_copy.x1 = 0;
 			g_pic_copy.y1 = 0;
@@ -381,7 +382,8 @@ void show_treasure_map(void)
 
 			refresh_screen_size();
 
-			ds_writeb(RENDERBUF_IN_USE_FLAG, 0);
+			g_renderbuf_in_use_flag = 0;
+
 			g_special_screen = 0;
 			g_pp20_index = pp20_index_bak;
 		} else {
@@ -538,13 +540,13 @@ signed short game_options(void)
 
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_3) {
 
-			ds_writeb(RENDERBUF_IN_USE_FLAG, 1);
+			g_renderbuf_in_use_flag = 1;
 			char_erase();
-			ds_writeb(RENDERBUF_IN_USE_FLAG, 0);
+			g_renderbuf_in_use_flag = 0;
 
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_4) {
 
-			ds_writeb(RENDERBUF_IN_USE_FLAG, 1);
+			g_renderbuf_in_use_flag = 1;
 			show_treasure_map();
 			g_special_screen = 1;
 

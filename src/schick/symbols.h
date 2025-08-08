@@ -892,9 +892,9 @@
 #define EMM_SIG                         (0x4ba2)    /* char[8] */
 #define EMS_FRAME_PTR                   (0x4baa)    /* Bit8u* */
 //#define ACTION_TABLE_OPTIONS            (0x4bae)    /* struct(10)[10]; struct{signed short x1, x2, y1, y2; unsigned short action;} */
-#define TMAP_X                          (0x4c12)    /* signed short[10] */
-#define TMAP_Y                          (0x4c26)    /* signed short[10] */
-#define RENDERBUF_IN_USE_FLAG           (0x4c3a)    /* unsigned char; {0,1} */
+//#define TMAP_X                          (0x4c12)    /* signed short[10] */
+//#define TMAP_Y                          (0x4c26)    /* signed short[10] */
+//#define RENDERBUF_IN_USE_FLAG           (0x4c3a)    /* unsigned char; {0,1} */
 #define LOCATION_HANDLERS               (0x4c3b)    /* Bit8u*[19]; (void (*)(void))[19] */
 // ?1
 #define STR_TEMP_XX_PTR2                (0x4c88)    /* Bit8u*; to STR_TEMP_XX2 */
