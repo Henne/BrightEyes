@@ -197,8 +197,7 @@ Bit8u* hyg_ani_1(signed short nvf_no, Bit8u *ptr)
 
 	process_nvf(&nvf);
 
-	retval = F_PADD((Bit8u*)host_readd(ptr),
-			host_readws(ptr + 4) * host_readws(ptr + 6));
+	retval = ((HugePt)host_readd(ptr) + host_readws(ptr + 4) * host_readws(ptr + 6));
 
 	return (Bit8u*)retval;
 }

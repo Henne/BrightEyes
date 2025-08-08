@@ -319,7 +319,7 @@ void show_treasure_map(void)
 
 		wait_for_vsync();
 
-		set_palette((Bit8u*)(F_PADD(F_PADD((Bit8u*)g_buffer9_ptr, length), -0x60)), 0, 0x20);
+		set_palette((Bit8u*)(((g_buffer9_ptr + length) -0x60L)), 0, 0x20);
 
 		refresh_screen_size();
 
