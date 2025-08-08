@@ -47,20 +47,17 @@ signed short DNG13_handler(void)
 	{
 		hero = get_hero(get_random_hero());
 
-		sprintf(g_dtp2,
-			get_tx(18),
-			(char*)hero + HERO_NAME2);
-
+		sprintf(g_dtp2,	get_tx(18), (char*)hero + HERO_NAME2);
 		GUI_output(g_dtp2);
 
 		sub_hero_le(hero, 2);
 	}
 
-	if (pos == DNG_POS(0,9,13) && pos != gs_dng_handled_pos && !ds_readb(DNG13_LANTERN_FLAG))
+	if (pos == DNG_POS(0,9,13) && pos != gs_dng_handled_pos && !gs_dng13_lantern_flag)
 	{
 		if (GUI_bool(get_tx(1)))
 		{
-			ds_writeb(DNG13_LANTERN_FLAG, 1);
+			gs_dng13_lantern_flag = 1;
 
 			get_item(ITEM_LANTERN_OFF, 1, 1);
 		}
@@ -76,33 +73,33 @@ signed short DNG13_handler(void)
 
 	} else if (pos == DNG_POS(0,3,12) && pos != gs_dng_handled_pos)
 	{
-		DNG13_unblock_passage(get_tx(4), p_datseg + DNG13_PASSAGE1_FLAG);
+		DNG13_unblock_passage(get_tx(4), &gs_dng13_passage1_flag);
 
 	} else if (pos == DNG_POS(0,4,9) &&
 			 (pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&
 			gs_direction == WEST)
 	{
 		GUI_output(get_tx(6));
-		gs_direction_bak = (gs_direction);
+		gs_direction_bak = gs_direction;
 
 	} else if (pos == DNG_POS(0,10,2) &&
 			 (pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&
 			gs_direction == EAST)
 	{
 		GUI_output(get_tx(6));
-		gs_direction_bak = (gs_direction);
+		gs_direction_bak = gs_direction;
 
 	} else if (pos == DNG_POS(0,5,9) && pos != gs_dng_handled_pos)
 	{
-		DNG13_unblock_passage(get_tx(7), p_datseg + DNG13_PASSAGE2_FLAG);
+		DNG13_unblock_passage(get_tx(7), &gs_dng13_passage2_flag);
 
 	} else if (pos == DNG_POS(0,2,9) && pos != gs_dng_handled_pos)
 	{
-		loot_multi_chest(p_datseg + DNG13_CHEST_EQUIPS, get_tx(8));
+		loot_multi_chest((Bit8u*)&gs_dng13_chest_equips, get_tx(8));
 
 	} else if (pos == DNG_POS(0,10,6) && pos != gs_dng_handled_pos)
 	{
-		DNG13_unblock_passage(get_tx(7), p_datseg + DNG13_PASSAGE3_FLAG);
+		DNG13_unblock_passage(get_tx(7), &gs_dng13_passage3_flag);
 
 	} else if (pos == DNG_POS(0,11,5) && pos != gs_dng_handled_pos)
 	{
@@ -114,11 +111,11 @@ signed short DNG13_handler(void)
 
 	} else if (pos == DNG_POS(0,14,9) && pos != gs_dng_handled_pos)
 	{
-		DNG13_unblock_passage(get_tx(7), p_datseg + DNG13_PASSAGE4_FLAG);
+		DNG13_unblock_passage(get_tx(7), &gs_dng13_passage4_flag);
 
 	} else if (pos == DNG_POS(0,7,3) && pos != gs_dng_handled_pos)
 	{
-		DNG13_unblock_passage(get_tx(7), p_datseg + DNG13_PASSAGE5_FLAG);
+		DNG13_unblock_passage(get_tx(7), &gs_dng13_passage5_flag);
 
 	} else if (pos == DNG_POS(0,4,1) && pos != gs_dng_handled_pos)
 	{
@@ -130,11 +127,11 @@ signed short DNG13_handler(void)
 
 		GUI_output(get_tx(16));
 
-	} else if (pos == DNG_POS(0,4,7) && pos != gs_dng_handled_pos && !ds_readb(DNG13_MONEY_FLAG))
+	} else if (pos == DNG_POS(0,4,7) && pos != gs_dng_handled_pos && !gs_dng13_money_flag)
 	{
 		GUI_output(get_tx(17));
 
-		ds_writeb(DNG13_MONEY_FLAG, 1);
+		gs_dng13_money_flag = 1;
 
 		p_money = get_party_money();
 		p_money += 41L;
@@ -157,9 +154,9 @@ signed short DNG13_handler(void)
 
 		leave_dungeon();
 
-		gs_x_target = (9);
-		gs_y_target = (1);
-		gs_direction = (EAST);
+		gs_x_target = 9;
+		gs_y_target = 1;
+		gs_direction = EAST;
 	}
 
 	g_textbox_width = tw_bak;
@@ -179,7 +176,7 @@ void DNG13_unblock_passage(char* text, Bit8u* flag)
 	signed short has_items;
 
 	/* check if passage is blocked */
-	if (!host_readb(flag))
+	if (!(*flag))
 	{
 		/* ask if the heroes want to try */
 		if (GUI_bool(text))
@@ -204,19 +201,19 @@ void DNG13_unblock_passage(char* text, Bit8u* flag)
 			GUI_output(get_tx(5));
 
 			/* mark this passage as free */
-			host_writeb(flag, 1);
+			*flag = 1;
 
 		} else {
 
-			gs_x_target = (gs_x_target_bak);
-			gs_y_target = (gs_y_target_bak);
+			gs_x_target = gs_x_target_bak;
+			gs_y_target = gs_y_target_bak;
 		}
 	}
 }
 
 void DNG13_corpse0(Bit8u* ptr)
 {
-	loot_corpse(ptr, get_tx(9), p_datseg + DNG13_CORPSE0_FLAG);
+	loot_corpse(ptr, get_tx(9), &gs_dng13_corpse0_flag);
 }
 
 void DNG13_chest0(Bit8u* chest)
@@ -224,7 +221,7 @@ void DNG13_chest0(Bit8u* chest)
 	Bit8u* bak;
 
 	bak = (Bit8u*)host_readd((Bit8u*)(chest) + 0xb);
-	host_writed((Bit8u*)(chest) + 0xb, (Bit32u)(p_datseg + DNG13_CHEST0_CONTENT));
+	host_writed((Bit8u*)(chest) + 0xb, (Bit32u)&gs_dng13_chest0_content);
 
 	loot_chest((Bit8u*)(chest), get_tx(10), get_tx(11));
 
@@ -233,7 +230,7 @@ void DNG13_chest0(Bit8u* chest)
 
 void DNG13_corpse1(Bit8u* ptr)
 {
-	loot_corpse(ptr, get_tx(14), p_datseg + DNG13_CORPSE1_FLAG);
+	loot_corpse(ptr, get_tx(14), &gs_dng13_corpse1_flag);
 }
 
 void DNG13_chest1(Bit8u* chest)
@@ -241,7 +238,7 @@ void DNG13_chest1(Bit8u* chest)
 	Bit8u* bak;
 
 	bak = (Bit8u*)host_readd((Bit8u*)(chest) + 0xb);
-	host_writed((Bit8u*)(chest) + 0xb, (Bit32u)(p_datseg + DNG13_CHEST1_CONTENT));
+	host_writed((Bit8u*)(chest) + 0xb, (Bit32u)&gs_dng13_chest1_content);
 
 	loot_chest((Bit8u*)(chest), get_tx(10), get_tx(11));
 

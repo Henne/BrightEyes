@@ -339,6 +339,18 @@ extern Bit8u  gs_drug_timer;			//ds:0x3f76; seg002, seg071
 extern Bit8u  gs_ptemple_closed;		//ds:0x3f77; seg071
 extern Bit8u  gs_alrik_derondan;		//ds:0x3f78; seg070, seg071, seg073
 extern Bit8u  gs_alrik_derondan_insulted;	//ds:0x3f79; seg071
+extern Bit8u  gs_dng13_lantern_flag;		//ds:0x3f7a; seg091
+extern Bit8s  gs_dng13_corpse0_flag;		//ds:0x3f7b; seg091
+extern Bit8s  gs_dng13_corpse1_flag;		//ds:0x3f7c; seg091
+extern Bit8u  gs_dng13_passage1_flag;		//ds:0x3f7d; seg091
+extern Bit8u  gs_dng13_passage2_flag;		//ds:0x3f7e; seg091
+extern Bit8u  gs_dng13_passage3_flag;		//ds:0x3f7f; seg091
+extern Bit8u  gs_dng13_passage4_flag;		//ds:0x3f80; seg091
+extern Bit8u  gs_dng13_passage5_flag;		//ds:0x3f81; seg091
+extern Bit8u  gs_dng13_money_flag;		//ds:0x3f82; seg091
+extern Bit8u  gs_dng13_chest_equips[13];	//ds:0x3f83; seg091
+extern Bit8u  gs_dng13_chest0_content[6];	//ds:0x3f90; seg091
+extern Bit8u  gs_dng13_chest1_content[5];	//ds:0x3f96; seg091
 
 extern Bit32s gs_dng12_watertrap_timer;		//ds:0x3fa2; seg002, seg090
 

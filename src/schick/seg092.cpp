@@ -577,6 +577,16 @@ void use_key_on_chest(Bit8u* chest_ptr)
 	}
 }
 
+/**
+ * \brief loot a chest with stacked items (item_id, no of items)
+ * \param chest pointer to the chest
+ * \param msg header of the radio box
+ *
+ * \note: These type of chests have a content of the following format:
+ *  ( (item_1, no_1), (item_2, no_2), ... , (item_n, no_n), 0xff).
+ *  These informations are stored in an array of type Bit8u[2*n+1]
+ *  and are contained in the game state.
+ */
 void loot_multi_chest(Bit8u *chest, char *msg)
 {
 	unsigned short item_cnt;
@@ -593,7 +603,7 @@ void loot_multi_chest(Bit8u *chest, char *msg)
 	do {
 
 		item_no = 0;
-		while ((i = host_readb((item_no + item_no) + chest)) != 255) {
+		while ((i = host_readb((item_no + item_no) + chest)) != 0xff) {
 
 			names[item_no][0] = '\0';
 
@@ -634,7 +644,7 @@ void loot_multi_chest(Bit8u *chest, char *msg)
 
 				if (i != 0) {
 
-					if (chest[item_no] == 250) {
+					if (chest[item_no] == ITEM_DUCATS) {
 						add_party_money(i * 100L);
 					} else {
 						i = get_item(chest[item_no], 1, i);

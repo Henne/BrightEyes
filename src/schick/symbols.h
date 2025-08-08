@@ -563,18 +563,18 @@
 //#define PTEMPLE_CLOSED                  (0x3f77)    /* unsigned char; {0,1} */
 //#define ALRIK_DERONDAN                  (0x3f78)    /* unsigned char; {0,1} */
 //#define ALRIK_DERONDAN_INSULTED         (0x3f79)    /* unsigned char; {0,1} */
-#define DNG13_LANTERN_FLAG              (0x3f7a)    /* unsigned char; {0,1} */
-#define DNG13_CORPSE0_FLAG              (0x3f7b)    /* unsigned char; {0,1} */
-#define DNG13_CORPSE1_FLAG              (0x3f7c)    /* unsigned char; {0,1} */
-#define DNG13_PASSAGE1_FLAG             (0x3f7d)    /* unsigned char; {0,1} */
-#define DNG13_PASSAGE2_FLAG             (0x3f7e)    /* unsigned char; {0,1} */
-#define DNG13_PASSAGE3_FLAG             (0x3f7f)    /* unsigned char; {0,1} */
-#define DNG13_PASSAGE4_FLAG             (0x3f80)    /* unsigned char; {0,1} */
-#define DNG13_PASSAGE5_FLAG             (0x3f81)    /* unsigned char; {0,1} */
-#define DNG13_MONEY_FLAG                (0x3f82)    /* unsigned char; {0,1} */
-#define DNG13_CHEST_EQUIPS              (0x3f83)    /* unsigned char[13] */
-#define DNG13_CHEST0_CONTENT            (0x3f90)    /* unsigned char[6] */
-#define DNG13_CHEST1_CONTENT            (0x3f96)    /* unsigned char[5] */
+//#define DNG13_LANTERN_FLAG              (0x3f7a)    /* unsigned char; {0,1} */
+//#define DNG13_CORPSE0_FLAG              (0x3f7b)    /* unsigned char; {0,1} */
+//#define DNG13_CORPSE1_FLAG              (0x3f7c)    /* unsigned char; {0,1} */
+//#define DNG13_PASSAGE1_FLAG             (0x3f7d)    /* unsigned char; {0,1} */
+//#define DNG13_PASSAGE2_FLAG             (0x3f7e)    /* unsigned char; {0,1} */
+//#define DNG13_PASSAGE3_FLAG             (0x3f7f)    /* unsigned char; {0,1} */
+//#define DNG13_PASSAGE4_FLAG             (0x3f80)    /* unsigned char; {0,1} */
+//#define DNG13_PASSAGE5_FLAG             (0x3f81)    /* unsigned char; {0,1} */
+//#define DNG13_MONEY_FLAG                (0x3f82)    /* unsigned char; {0,1} */
+//#define DNG13_CHEST_EQUIPS              (0x3f83)    /* unsigned char[13] */
+//#define DNG13_CHEST0_CONTENT            (0x3f90)    /* unsigned char[6] */
+//#define DNG13_CHEST1_CONTENT            (0x3f96)    /* unsigned char[5] */
 #define DNG12_TUNNEL1                   (0x3f9b)    /* signed char; {0,1} */
 #define DNG12_TUNNEL2                   (0x3f9c)    /* signed char; {0,1} */
 #define DNG12_TUNNEL3                   (0x3f9d)    /* signed char; {0,1} */
