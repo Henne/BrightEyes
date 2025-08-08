@@ -1637,7 +1637,7 @@
 #define MENU_INPUT_BUSY                 (0xe5ae)    /* unsigned short */
 #define MENU_SELECTED                   (0xe5b0)    /* unsigned short */
 #define SPELLTEST_RESULT                (0xe5b2)    /* signed short */
-#define SPELLTARGET_E                   (0xe5b4)    /* Bit8u*; Pointer to enemy */
+//#define SPELLTARGET_E                   (0xe5b4)    /* Bit8u*; Pointer to enemy */
 //#define SPELLTARGET                     (0xe5b8)    /* long */
 //#define SPELLUSER                       (0xe5bc)    /* long */
 #define SPELLUSER_E                     (0xe5c0)    /* long */

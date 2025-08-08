@@ -1028,7 +1028,7 @@ static inline unsigned short item_undropable(Bit8u *item) {
 }
 
 static inline Bit8u *get_spelltarget_e(void) {
-	return (Bit8u*)ds_readd(SPELLTARGET_E);
+	return (Bit8u*)g_spelltarget_e;
 }
 
 static inline Bit8u *get_spelltarget(void) {
@@ -1286,7 +1286,7 @@ struct bittest {
 #define item_herb_potion(item)	((*(struct item_flags*)(item + ITEM_STATS_FLAGS)).herb_potion)
 #define item_undropable(item)	((*(struct item_flags*)(item + ITEM_STATS_FLAGS)).undropable)
 
-#define get_spelltarget_e()	((Bit8u*)ds_readd(SPELLTARGET_E))
+#define get_spelltarget_e()	((Bit8u*)g_spelltarget_e)
 #define get_spelltarget()	((unsigned char*)g_spelltarget)
 #define get_spelluser()		((unsigned char*)g_spelluser)
 #define get_spelluser_e()	((Bit8u*)ds_readd(SPELLUSER_E))

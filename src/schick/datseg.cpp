@@ -6136,7 +6136,7 @@ short g_alchemy_missing_item; // ds:0xe5c4
 long g_spelluser_e; // ds:0xe5c0
 unsigned char *g_spelluser; // ds:0xe5bc
 unsigned char *g_spelltarget; // ds:0xe5b8
-void *g_spelltarget_e; // ds:0xe5b4, Pointer to enemy
+unsigned char *g_spelltarget_e; // ds:0xe5b4, Pointer to enemy
 signed short g_spelltest_result; // ds:0xe5b2
 unsigned short g_menu_selected; // ds:0xe5b0
 unsigned short g_menu_input_busy; // ds:0xe5ae

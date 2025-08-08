@@ -478,14 +478,12 @@ void spell_paralue(void)
 		/* cast an enemy */
 
 		/* BC-TODO: calculation of ptr could be better */
-		ds_writed(SPELLTARGET_E,
-			(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+		g_spelltarget_e = (unsigned char*)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET);
 
 		/* set the enemy to petrified */
 		or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS1, 0x04); /* set 'petrified' flag */
 
-		sprintf(g_dtp2,
-			get_tx(103),
+		sprintf(g_dtp2,	get_tx(103),
 			(char*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
 	} else {
 		/* cast a hero */
@@ -527,7 +525,7 @@ void spell_salander(void)
 
 	/* BC-TODO: calculation of ptr could be better */
 	/* set a pointer */
-	ds_writed(SPELLTARGET_E, (Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+	g_spelltarget_e = (unsigned char*)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET);
 
 	/* read a value from that struct */
 	ae_cost = host_readbs(get_spelltarget_e() + ENEMY_SHEET_MR) * 3;

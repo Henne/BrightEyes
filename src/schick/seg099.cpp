@@ -106,8 +106,7 @@ void spell_gardanium(void)
 void spell_illusionen(void)
 {
 	/* Set pointer to enemy target */
-	ds_writed(SPELLTARGET_E,
-		(Bit32u)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET)));
+	g_spelltarget_e = (unsigned char*)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET));
 
 	/* check if enemy is an illusion */
 	if (enemy_illusion(get_spelltarget_e())) {
@@ -199,8 +198,7 @@ void spell_band(void)
 		/* cast enemy */
 
 		/* Set pointer to enemy target */
-		ds_writed(SPELLTARGET_E,
-			(Bit32u)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET)));
+		g_spelltarget_e = (unsigned char*)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET));
 
 		if (host_readbs(get_spelltarget_e() + ENEMY_SHEET_GFX_ID) == 0x1c) {
 			/* does not work on skeletons */
@@ -241,8 +239,7 @@ void spell_bannbaladin(void)
 {
 
 	/* Set pointer to enemy target */
-	ds_writed(SPELLTARGET_E,
-		(Bit32u)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET)));
+	g_spelltarget_e = (unsigned char*)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET));
 
 	if (host_readbs(get_spelltarget_e() + ENEMY_SHEET_IS_ANIMAL) != 0) {
 		/* spell does not work on animals */
@@ -271,8 +268,7 @@ void spell_bannbaladin(void)
 void spell_boeser_blick(void)
 {
 	/* set attacked foe */
-	ds_writed(SPELLTARGET_E,
-		(Bit32u)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET)));
+	g_spelltarget_e = (unsigned char*)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET));
 
 	/* this spell does not work on all kind of skeletons */
 	if (host_readb(get_spelltarget_e() + ENEMY_SHEET_GFX_ID) == 0x1c) {
@@ -299,8 +295,7 @@ void spell_grosse_gier(void)
 
 void spell_grosse_ver(void)
 {
-	ds_writed(SPELLTARGET_E,
-		(Bit32u)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET)));
+	g_spelltarget_e = (unsigned char*)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET));
 
 	/* this spell does not work on all kind of skeletons */
 	if (host_readb(get_spelltarget_e() + ENEMY_SHEET_GFX_ID) == 0x1c) {
@@ -325,8 +320,7 @@ void spell_herrdertiere(void)
 {
 
 	/* Set pointer to enemy target */
-	ds_writed(SPELLTARGET_E,
-		(Bit32u)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET)));
+	g_spelltarget_e = (unsigned char*)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET));
 
 	if (!host_readbs(get_spelltarget_e() + ENEMY_SHEET_IS_ANIMAL)) {
 		/* spell does not work on animals */
@@ -357,8 +351,7 @@ void spell_horriphobus(void)
 {
 
 	/* Set pointer to enemy target */
-	ds_writed(SPELLTARGET_E,
-		(Bit32u)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET)));
+	g_spelltarget_e = (unsigned char*)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET));
 
 	/* this spell does not work on all kind of skeletons */
 	if (host_readb(get_spelltarget_e() + ENEMY_SHEET_GFX_ID) == 0x1c) {
@@ -399,8 +392,7 @@ void spell_somnigravis(void)
 		/* cast an enemy */
 
 		/* Set pointer to enemy target */
-		ds_writed(SPELLTARGET_E,
-			(Bit32u)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET)));
+		g_spelltarget_e = (unsigned char*)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET));
 
 		/* this spell does not work on all kind of skeletons */
 		if (host_readb(get_spelltarget_e() + ENEMY_SHEET_GFX_ID) == 0x1c) {
@@ -442,8 +434,7 @@ void spell_somnigravis(void)
 void spell_zwingtanz(void)
 {
 	/* Set pointer to enemy target */
-	ds_writed(SPELLTARGET_E,
-		(Bit32u)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET)));
+	g_spelltarget_e = (unsigned char*)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET));
 
 	/* this spell does not work on all kind of skeletons */
 	if (host_readb(get_spelltarget_e() + ENEMY_SHEET_GFX_ID) == 0x1c) {
@@ -529,8 +520,7 @@ void spell_skelettarius(void)
 	signed char unk;
 
 	/* Set pointer to enemy target */
-	ds_writed(SPELLTARGET_E,
-		(Bit32u)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET)));
+	g_spelltarget_e = (unsigned char*)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET));
 
 	/* check if the enemy is dead */
 	if (!enemy_dead(get_spelltarget_e())) {
