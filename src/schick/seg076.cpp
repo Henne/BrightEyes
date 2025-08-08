@@ -144,7 +144,7 @@ void DNG_door(signed short action)
 
 					} else if (!(gs_dungeon_index == DUNGEONS_PIRATENHOEHLE && pos == DNG_POS(0,12,8) && ds_readb(DNG11_LEVER_FLAG) != 4) &&
 							!(gs_dungeon_index == DUNGEONS_DASPOTASCHATZ && pos == DNG_POS(0,11,1) && ds_readb(DNG06_PITDOOR_FLAG)) &&
-							!(gs_dungeon_index == DUNGEONS_ZWERGENFESTE && ds_readb(DNG12_WATERTRAP_WATER_RUNS)))
+							!(gs_dungeon_index == DUNGEONS_ZWERGENFESTE && gs_dng12_watertrap_water_runs))
 					{
 						/* for this door works an IRON KEY [first type] */
 						/* BEWARE: there are two types of IRON KEYs in the game */

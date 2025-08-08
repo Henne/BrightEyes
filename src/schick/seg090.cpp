@@ -53,7 +53,7 @@ signed short DNG12_handler(void)
 		if (gs_dng12_tunnel4 > 0) --gs_dng12_tunnel4;
 	}
 
-	if (target_pos == DNG_POS(1,6,8) && target_pos != gs_dng_handled_pos && gs_direction == EAST && ds_readbs(DNG12_WATERTRAP_WATER_RUNS) != 0) {
+	if (target_pos == DNG_POS(1,6,8) && target_pos != gs_dng_handled_pos && gs_direction == EAST && gs_dng12_watertrap_water_runs) {
 		/* secret door from water trap */
 #if !defined(__BORLANDC__)
 		D1_INFO("Geheimtuere\n");
@@ -65,8 +65,8 @@ signed short DNG12_handler(void)
 			and_ptr_bs(ptr + MAP_POS(7,8), (DNG_TILE_CORRIDOR << 4) + 0x0f);
 
 			/* turn off water trap */
-			ds_writeb(DNG12_WATERTRAP_ACTIVE, 0);
-			ds_writeb(DNG12_WATERTRAP_WATER_RUNS, 0);
+			gs_dng12_watertrap_active = 0;
+			gs_dng12_watertrap_water_runs = 0;
 
 		} else {
 			/* door not detected */
@@ -80,10 +80,10 @@ signed short DNG12_handler(void)
 			target_pos == DNG_POS(1,4,8) || target_pos == DNG_POS(1,5,8) || target_pos == DNG_POS(1,6,8) ||
 			target_pos == DNG_POS(1,1,9) || target_pos == DNG_POS(1,2,9) || target_pos == DNG_POS(1,3,9) ||
 			target_pos == DNG_POS(1,4,9) || target_pos == DNG_POS(1,5,9) || target_pos == DNG_POS(1,6,9) )
-			&& ds_readbs(DNG12_WATERTRAP_ACTIVE) != 0)
+			&& gs_dng12_watertrap_active)
 		{
 			/* water trap room, activate */
-			ds_writeb(DNG12_WATERTRAP_WATER_RUNS, 1);
+			gs_dng12_watertrap_water_runs = 1;
 
 			if (gs_dng12_watertrap_timer / MINUTES(5) != ds_readws(DNG12_WATERTRAP_BAK))
 			{
@@ -133,21 +133,23 @@ signed short DNG12_handler(void)
 						and_ptr_bs(ptr + MAP_POS(7,8), (DNG_TILE_CORRIDOR << 4) + 0x0f);
 
 						/* turn off water trap */
-						ds_writeb(DNG12_WATERTRAP_ACTIVE, 0);
-						ds_writeb(DNG12_WATERTRAP_WATER_RUNS, 0);
+						gs_dng12_watertrap_active = 0;
+						gs_dng12_watertrap_water_runs = 0;
 						DNG_update_pos();
 					}
 				}
 			}
 		} else {
 			/* clear water */
-			ds_writeb(DNG12_WATERTRAP_WATER_RUNS, 0);
+			gs_dng12_watertrap_water_runs = 0;
+
 			/* reset countdown */
 			gs_dng12_watertrap_timer = MINUTES(50) + 5;
 		}
 	}
 
 	if (target_pos == DNG_POS(0,13,9) && target_pos != gs_dng_handled_pos && !gs_dng12_tunnel1) {
+
 		/* 1. tunnel block */
 		DNG_clear_corridor(&gs_dng12_tunnel1);
 
@@ -172,6 +174,7 @@ signed short DNG12_handler(void)
 
 			do {
 				i = GUI_radio(get_tx(5), 3, get_tx(6), get_tx(7), get_tx(8));
+
 			} while (i == -1);
 
 			if (i == 1) {
@@ -209,6 +212,7 @@ signed short DNG12_handler(void)
 #endif
 			}
 		}
+
 	} else if (target_pos == DNG_POS(0,5,3) && target_pos != gs_dng_handled_pos) {
 		/* trap door */
 		GUI_output(get_tx(11));
@@ -216,18 +220,18 @@ signed short DNG12_handler(void)
 	} else if (target_pos == DNG_POS(0,4,6) && target_pos != gs_dng_handled_pos) {
 		/* trap door */
 		GUI_output(get_tx(11));
-		gs_x_target = (1);
-		gs_y_target = (3);
+		gs_x_target = 1;
+		gs_y_target = 3;
 		DNG_inc_level();
 	} else if (target_pos == DNG_POS(0,6,13) && target_pos != gs_dng_handled_pos) {
 		/* bolt trap */
 		print_msg_with_first_hero(get_tx(13));
 		sub_hero_le(hero, random_schick(6));
-	} else if (target_pos == DNG_POS(1,2,14) && target_pos != gs_dng_handled_pos && !ds_readb(DNG12_INGERIMM_HINT))
+	} else if (target_pos == DNG_POS(1,2,14) && target_pos != gs_dng_handled_pos && !gs_dng12_ingerimm_hint)
 	{
 		/* lower Ingerimm idol */
 #if !defined(__BORLANDC__)
-		D1_INFO("Untere Ingerimstatue\n");
+		D1_INFO("Untere Ingerimmstatue\n");
 #endif
 		GUI_output(get_tx(14));
 
@@ -235,11 +239,11 @@ signed short DNG12_handler(void)
 #if !defined(__BORLANDC__)
 		D1_INFO("Test auf Ingerimm-Opfer\n");
 #endif
-		if (ds_readb(DNG12_INGERIMM_SACRIFICE) != 0 && !ds_readb(DNG12_INGERIMM_HINT))
+		if (gs_dng12_ingerimm_sacrifice && !gs_dng12_ingerimm_hint)
 		{
 			/* hint to secret door */
-			ds_writeb(DNG12_INGERIMM_HINT, 1);
-			ds_writeb(DNG12_INGERIMM_SACRIFICE, 0);
+			gs_dng12_ingerimm_hint = 1;
+			gs_dng12_ingerimm_sacrifice = 0;
 			GUI_output(get_tx(15));
 		}
 	} else if (target_pos == DNG_POS(1,3,10) && target_pos != gs_dng_handled_pos) {
@@ -298,7 +302,7 @@ signed short DNG12_handler(void)
 
 		if (GUI_bool(get_tx(24)))
 		{
-			if (ds_readb(DNG12_OBSTACLE_ACTIVE) != 0)
+			if (gs_dng12_obstacle_active)
 			{
 
 				/* TODO: Original-Bug: this counter is not in the savegame */
@@ -372,17 +376,15 @@ signed short DNG12_handler(void)
 				}
 
 				/* try to break through */
-				sub_ds_bs(DNG12_OBSTACLE_HP, dice_roll(4, 6, 2));
+				gs_dng12_obstacle_hp -= dice_roll(4, 6, 2);
 
-				if (ds_readbs(DNG12_OBSTACLE_HP) < 0)
+				if (gs_dng12_obstacle_hp < 0)
 				{
 					/* obstacle broken */
-					ds_writebs(DNG12_OBSTACLE_ACTIVE, 0);
+					gs_dng12_obstacle_active = 0;
 
 #ifndef M302de_FEATURE_MOD
-					sprintf(g_dtp2,
-						get_tx(32),
-						(char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_tx(32), (char*)hero + HERO_NAME2);
 #else
 					/* Feature Mod 7: The following is a translation of a text block in OBER.DTX
 					 * of the English version, which has not been present in the German one.
@@ -438,36 +440,38 @@ signed short DNG12_handler(void)
 			gs_x_target = (gs_x_target_bak);
 			gs_y_target = (gs_y_target_bak);
 		}
-	} else if (target_pos == DNG_POS(1,14,3) && target_pos != gs_dng_handled_pos && ds_readb(DNG12_SPEARTRAP_ACTIVE) != 0) {
+	} else if (target_pos == DNG_POS(1,14,3) && target_pos != gs_dng_handled_pos && gs_dng12_speartrap_active) {
 		/* spear trap */
 
 		if (test_skill(hero, TA_SINNESSCHAERFE, 2) > 0) {
 
 			if (GUI_bool(get_tx(28))) {
-				if (test_skill(hero, TA_SCHLOESSER, 0) <= 0) {
-					/* defusing trap failed */
-					sprintf(g_dtp2,
-						get_tx(29),
-						(char*)hero + HERO_NAME2);
-					sub_hero_le(hero , dice_roll(3, 6, 0));
-				} else {
-					/* trap defused */
-					sprintf(g_dtp2,
-						get_tx(30),
-						(char*)hero + HERO_NAME2,
-						(char*)hero + HERO_NAME2);
 
-					ds_writeb(DNG12_SPEARTRAP_ACTIVE, 0);
+				if (test_skill(hero, TA_SCHLOESSER, 0) <= 0) {
+
+					/* defusing trap failed */
+					sprintf(g_dtp2,	get_tx(29), (char*)hero + HERO_NAME2);
+					sub_hero_le(hero , dice_roll(3, 6, 0));
+
+				} else {
+
+					/* trap defused */
+					sprintf(g_dtp2, get_tx(30), (char*)hero + HERO_NAME2, (char*)hero + HERO_NAME2);
+
+					gs_dng12_speartrap_active = 0;
 
 					add_hero_ap(hero, 10);
 				}
+
 				GUI_output(g_dtp2);
 			}
 		} else {
+
 			/* sprung trap */
 			GUI_output(get_tx(27));
 			sub_group_le(dice_roll(3, 6, 0));
 		}
+
 	} else if (target_pos == DNG_POS(0,13,15) && target_pos != gs_dng_handled_pos) {
 		/* exit mine */
 		leave_dungeon();
@@ -505,7 +509,7 @@ void DNG_oberorken_chest(Bit8u* chest)
 
 	ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 0x0b);
 
-	host_writed((Bit8u*)(chest) + 0x0b, (Bit32u)(p_datseg + DNG12_CHEST1_CONTENT));
+	host_writed((Bit8u*)(chest) + 0x0b, (Bit32u)&gs_dng12_chest1_content);
 
 	loot_simple_chest((Bit8u*)(chest));
 

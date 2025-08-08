@@ -355,8 +355,15 @@ extern Bit8s  gs_dng12_tunnel1;			//ds:0x3f9b; seg090
 extern Bit8s  gs_dng12_tunnel2;			//ds:0x3f9c; seg090
 extern Bit8s  gs_dng12_tunnel3;			//ds:0x3f9d; seg090
 extern Bit8s  gs_dng12_tunnel4;			//ds:0x3f9e; seg090
-
+extern Bit8u  gs_dng12_ingerimm_sacrifice;	//ds:0x3f9f; seg090, seg105
+extern Bit8u  gs_dng12_ingerimm_hint;		//ds:0x3fa0; seg090
+extern Bit8s  gs_dng12_watertrap_water_runs;	//ds:0x3fa1; seg090
 extern Bit32s gs_dng12_watertrap_timer;		//ds:0x3fa2; seg002, seg090
+extern Bit8u  gs_dng12_watertrap_active;	//ds:0x3fa6; seg090
+extern Bit8s  gs_dng12_obstacle_hp;		//ds:0x3fa7; seg090
+extern Bit8u  gs_dng12_obstacle_active;		//ds:0x3fa8; seg090
+extern Bit8u  gs_dng12_speartrap_active;	//ds:0x3fa9; seg090
+extern Bit8u  gs_dng12_chest1_content[12];	//ds:0x3faa; seg090
 
 extern Bit8s  gs_unconscious_message[7];	//ds:0x4212; seg002, seg049
 extern Bit8s  gs_food_message[7];		//ds:0x4212; seg002, seg049, seg059

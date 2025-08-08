@@ -579,15 +579,15 @@
 //#define DNG12_TUNNEL2                   (0x3f9c)    /* signed char; {0,1} */
 //#define DNG12_TUNNEL3                   (0x3f9d)    /* signed char; {0,1} */
 //#define DNG12_TUNNEL4                   (0x3f9e)    /* signed char; {0,1} */
-#define DNG12_INGERIMM_SACRIFICE        (0x3f9f)    /* unsigned char; {0,1} */
-#define DNG12_INGERIMM_HINT             (0x3fa0)    /* unsigned char; {0,1} */
-#define DNG12_WATERTRAP_WATER_RUNS      (0x3fa1)    /* signed char; {0,1} */
+//#define DNG12_INGERIMM_SACRIFICE        (0x3f9f)    /* unsigned char; {0,1} */
+//#define DNG12_INGERIMM_HINT             (0x3fa0)    /* unsigned char; {0,1} */
+//#define DNG12_WATERTRAP_WATER_RUNS      (0x3fa1)    /* signed char; {0,1} */
 //#define DNG12_WATERTRAP_TIMER           (0x3fa2)    /* signed long */
-#define DNG12_WATERTRAP_ACTIVE          (0x3fa6)    /* signed char; {0,1} */
-#define DNG12_OBSTACLE_HP               (0x3fa7)    /* signed char; {-25,...,40} */
-#define DNG12_OBSTACLE_ACTIVE           (0x3fa8)    /* signed char; {0,1} */
-#define DNG12_SPEARTRAP_ACTIVE          (0x3fa9)    /* signed char; {0,1} */
-#define DNG12_CHEST1_CONTENT            (0x3faa)    /* signed char[12] */
+//#define DNG12_WATERTRAP_ACTIVE          (0x3fa6)    /* signed char; {0,1} */
+//#define DNG12_OBSTACLE_HP               (0x3fa7)    /* signed char; {-25,...,40} */
+//#define DNG12_OBSTACLE_ACTIVE           (0x3fa8)    /* signed char; {0,1} */
+//#define DNG12_SPEARTRAP_ACTIVE          (0x3fa9)    /* signed char; {0,1} */
+//#define DNG12_CHEST1_CONTENT            (0x3faa)    /* signed char[12] */
 #define DNG14_MONEY_FLAG                (0x3fb6)    /* unsigned char; {0,1} */
 #define DNG14_ALARM_FLAG                (0x3fb7)    /* unsigned char; {0,1} */
 #define DNG14_SECRETDOOR1               (0x3fb8)    /* unsigned char; {0, 1 = found, 2 = unlocked} */

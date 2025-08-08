@@ -592,7 +592,7 @@ unsigned short drop_item(Bit8u *hero, signed short pos, signed short no)
 			gs_x_target == 2 && gs_y_target == 14 &&
 			gs_dungeon_level == 1)
 		{
-			ds_writeb(DNG12_INGERIMM_SACRIFICE, 1);
+			gs_dng12_ingerimm_sacrifice = 1;
 		}
 	}
 

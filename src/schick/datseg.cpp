@@ -2467,15 +2467,27 @@ Bit8s  gs_dng12_tunnel1 = 45; // ds:0x3f9b
 Bit8s  gs_dng12_tunnel2 = 40; // ds:0x3f9c
 Bit8s  gs_dng12_tunnel3 = 35; // ds:0x3f9d
 Bit8s  gs_dng12_tunnel4 = 30; // ds:0x3f9e
-unsigned char g_dng12_ingerimm_sacrifice = 0; // ds:0x3f9f
-unsigned char g_dng12_ingerimm_hint = 0; // ds:0x3fa0
-signed char g_dng12_watertrap_water_runs = 0; // ds:0x3fa1
-Bit32s gs_dng12_watertrap_timer = 0x00001194; // ds:0x3fa2
-signed char g_dng12_watertrap_active = 1; // ds:0x3fa6
-signed char g_dng12_obstacle_hp = 0x28; // ds:0x3fa7, {-25,...,40}
-signed char g_dng12_obstacle_active = 1; // ds:0x3fa8
-signed char g_dng12_speartrap_active = 1; // ds:0x3fa9
-signed char g_dng12_chest1_content[12] = { 0x50, 0x50, -0x79, -0x79, 0x06, 0x06, 0x06, 0x4e, 0x4e, -0x6f, -0x66, -1 }; // ds:0x3faa
+Bit8u  gs_dng12_ingerimm_sacrifice = 0; // ds:0x3f9f
+Bit8u  gs_dng12_ingerimm_hint = 0; // ds:0x3fa0
+Bit8s  gs_dng12_watertrap_water_runs = 0; // ds:0x3fa1
+Bit32s gs_dng12_watertrap_timer = MINUTES(50); // ds:0x3fa2
+Bit8u  gs_dng12_watertrap_active = 1; // ds:0x3fa6
+Bit8s  gs_dng12_obstacle_hp = 40; // ds:0x3fa7, {-25,...,40}
+Bit8u  gs_dng12_obstacle_active = 1; // ds:0x3fa8
+Bit8u  gs_dng12_speartrap_active = 1; // ds:0x3fa9
+Bit8u  gs_dng12_chest1_content[12] = {
+	ITEM_CHAIN_MAIL,
+	ITEM_CHAIN_MAIL,
+	ITEM_KRIEGSBEIL,
+	ITEM_KRIEGSBEIL,
+	ITEM_SHORT_SWORD,
+	ITEM_SHORT_SWORD,
+	ITEM_SHORT_SWORD,
+	ITEM_LEATHER_HELMET,
+	ITEM_LEATHER_HELMET,
+	ITEM_LE_POTION,
+	ITEM_AE_POTION,
+	0xff }; // ds:0x3faa
 unsigned char g_dng14_money_flag = 0; // ds:0x3fb6
 unsigned char g_dng14_alarm_flag = 0; // ds:0x3fb7
 unsigned char g_dng14_secretdoor1 = 0; // ds:0x3fb8, {0, 1 = found, 2 = unlocked}
