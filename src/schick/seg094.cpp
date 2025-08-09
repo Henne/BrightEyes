@@ -504,6 +504,7 @@ void TM_func1(signed short route_no, signed short backwards)
 	ds_writeb(TRAVELING, 0);
 }
 
+#if defined(__BORLANDC__)
 /* continue travel after arrival while still on map */
 signed short TM_unused1(Bit8u* signpost_ptr, signed short old_route_no)
 {
@@ -545,8 +546,10 @@ signed short TM_unused1(Bit8u* signpost_ptr, signed short old_route_no)
 					gs_trv_menu_towns[town_i] = (signed char)town;
 					destinations_tab[town_i] = get_ttx(547);
 					town_i++;
-					ds_writed(TM_UNUSED1_PTR, (Bit32u)signpost_ptr);
 
+#if defined(__BORLANDC__)
+					gs_tm_unused1_ptr = signpost_ptr;
+#endif
 					set_textbox_positions(town);
 					answer = GUI_radio(get_ttx(546), (signed char)town_i,
 								destinations_tab[0],
@@ -575,6 +578,7 @@ signed short TM_unused1(Bit8u* signpost_ptr, signed short old_route_no)
 
 	return -1;
 }
+#endif
 
 signed short TM_get_track_length(Bit8u *track)
 {
@@ -719,10 +723,12 @@ void TM_draw_track(signed short a1, signed short length, signed short direction,
 	}
 }
 
+#if defined(__BORLANDC__)
 void TM_unused2(void)
 {
 
 }
+#endif
 
 void TM_func8(signed short a1)
 {

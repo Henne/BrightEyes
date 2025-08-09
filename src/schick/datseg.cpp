@@ -2708,7 +2708,13 @@ unsigned short g_travel_destination_town_id = 0; // ds:0x4338
 unsigned short g_travel_destination_x = 0; // ds:0x433a
 unsigned short g_travel_destination_y = 0; // ds:0x433c
 signed short g_travel_destination_viewdir = 0; // ds:0x433e
-long g_tm_unused1_ptr = 0; // ds:0x4340; Bit8u*
+
+#if defined(__BORLANDC__)
+Bit8u *gs_tm_unused1_ptr = NULL;	// ds:0x4340;
+#else
+Bit32u gs_tm_unused1_ptr = 0;		// ds:0x4340;
+#endif
+
 Bit8s  gs_trv_menu_towns[6] = { 0, 0, 0, 0, 0, 0 }; // ds:0x4344
 Bit16s gs_trv_destination = 0; // ds:0x434a
 Bit8u  gs_dng08_waterbarrel = 0; // ds:0x434c
