@@ -517,7 +517,7 @@ signed short TM_unused1(Bit8u* signpost_ptr, signed short old_route_no)
 	char *destinations_tab[7];
 
 	old_route_id = host_readb((Bit8u*)(host_readd((Bit8u*)(signpost_ptr) + SIGNPOST_LAND_ROUTES)) + old_route_no) - 1;
-	gs_current_town = ((signed char)(town = ds_readws(TRV_DESTINATION)));
+	gs_current_town = ((signed char)(town = gs_trv_destination));
 	signpost_ptr = ((Bit8u*)p_datseg + SIGNPOSTS);
 
 	do {
@@ -561,7 +561,7 @@ signed short TM_unused1(Bit8u* signpost_ptr, signed short old_route_no)
 						answer = town_i;
 					}
 
-					ds_writew(TRV_DESTINATION, ds_readbs((TRV_MENU_TOWNS - 1) + answer));
+					gs_trv_destination = (ds_readbs((TRV_MENU_TOWNS - 1) + answer));
 					return answer;
 				}
 
@@ -599,7 +599,7 @@ signed short TM_enter_target_town(void)
 	Bit8u *locations_list_ptr;
 
 	signpost_id = 0;
-	ds_writew(TRAVEL_DESTINATION_TOWN_ID, ds_readw(TRV_DESTINATION));
+	ds_writew(TRAVEL_DESTINATION_TOWN_ID, gs_trv_destination);
 	signpost_id = 1;
 
 	if (signpost_id)

@@ -668,7 +668,7 @@ void tevent_045(void)
 {
 	signed short answer;
 
-	if (ds_readw(TRV_DESTINATION) == TOWNS_DASPOTA)
+	if (gs_trv_destination == TOWNS_DASPOTA)
 	{
 		load_in_head(11);
 

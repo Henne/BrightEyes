@@ -144,7 +144,7 @@ signed short do_travel_mode(void)
 					}
 
 					route_id = host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + answer);
-					ds_writew(TRV_DESTINATION, ds_readbs(TRV_MENU_TOWNS + answer));
+					gs_trv_destination = (ds_readbs(TRV_MENU_TOWNS + answer));
 
 					if (!get_current_season() &&
 						(route_id == 31 || route_id == 41 || route_id == 47 || route_id == 48 || route_id == 49))

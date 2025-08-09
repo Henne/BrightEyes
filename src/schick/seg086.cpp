@@ -298,7 +298,7 @@ signed short DNG11_handler(void)
 
 		sprintf(g_dtp2,
 			get_tx(29),
-			get_ttx(ds_readw(TRV_DESTINATION) + 0xeb));
+			get_ttx(gs_trv_destination + 0xeb));
 
 		GUI_output(g_dtp2);
 

@@ -286,7 +286,7 @@ signed short DNG04_handler(void)
 
 		sprintf(g_dtp2,
 			get_tx(26),
-			get_ttx(ds_readws(TRV_DESTINATION) + 0xeb));
+			get_ttx(gs_trv_destination + 0xeb));
 
 		GUI_output(g_dtp2);
 
@@ -475,7 +475,7 @@ signed short DNG05_handler(void)
 
 		sprintf(g_dtp2,
 			get_tx(17),
-			get_ttx(ds_readws(TRV_DESTINATION) + 0xeb));
+			get_ttx(gs_trv_destination + 0xeb));
 
 		GUI_output(g_dtp2);
 

@@ -775,7 +775,7 @@
 #define TRAVEL_DESTINATION_VIEWDIR      (0x433e)    /* signed short */
 #define TM_UNUSED1_PTR                  (0x4340)    /* Bit8u* */
 #define TRV_MENU_TOWNS                  (0x4344)    /* unsigned char[6] */
-#define TRV_DESTINATION                 (0x434a)    /* unsigned short */
+//#define TRV_DESTINATION                 (0x434a)    /* unsigned short */
 //#define DNG08_WATERBARREL               (0x434c)    /* signed char; {0,1} */
 //#define DNG13_COLLAPSECOUNT             (0x434d)    /* unsigned char */
 //#define DNG13_HEROCOUNT                 (0x434e)    /* unsigned char */

@@ -426,7 +426,7 @@ signed short DNG06_handler(void)
 		gs_current_loctype = LOCTYPE_NONE;
 		gs_direction = ((ds_readb(TRAVEL_DESTINATION_VIEWDIR) + 2) & 3);
 
-		sprintf(g_dtp2,	get_tx(38), get_ttx(ds_readws(TRV_DESTINATION) + 0xeb));
+		sprintf(g_dtp2,	get_tx(38), get_ttx(gs_trv_destination + 0xeb));
 		GUI_output(g_dtp2);
 
 		timewarp(HOURS(2));

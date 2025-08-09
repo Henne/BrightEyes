@@ -386,6 +386,7 @@ extern Bit16s gs_trv_i;				//ds:0x4228; seg063, seg094
 extern Bit16s gs_route_stepcount;		//ds:0x422a; seg063, seg094
 extern Bit16s gs_forcedmarch_le_cost;		//ds:0x422c; seg094
 
+extern Bit16s gs_trv_destination;		//ds:0x434a; seg078-seg118
 extern Bit8u  gs_dng08_waterbarrel;		//ds:0x434c; seg083
 extern Bit8u  gs_dng13_collapsecount;		//ds:0x434d; seg075, seg091
 extern Bit8u  gs_dng13_herocount;		//ds:0x434d; seg075, seg091
