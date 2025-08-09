@@ -1628,9 +1628,9 @@
 #define TRV_DETOUR_PIXEL_BAK            (0xe4b4)    /* unsigned char[20] */
 #define GOOD_CAMP_PLACE                 (0xe4c8)    /* unsigned char */
 #define ROUTE_TEVENT_FLAGS              (0xe4c9)    /* unsigned char[15] */
-#define GUI_PRINT_CHAR                  (0xe4d8)    /* unsigned char */
-#define DIALOGBOX_INDENT_HEIGHT         (0xe4d9)    /* unsigned short */
-#define DIALOGBOX_INDENT_WIDTH          (0xe4db)    /* signed short */
+//#define GUI_PRINT_CHAR                  (0xe4d8)    /* unsigned char */
+//#define DIALOGBOX_INDENT_HEIGHT         (0xe4d9)    /* unsigned short */
+//#define DIALOGBOX_INDENT_WIDTH          (0xe4db)    /* signed short */
 // ?6
 //#define GRAMMAR_BUFS                    (0xe4e3)    /* char[201] */
 //#define MENU_DEFAULT_SELECT             (0xe5ac)    /* unsigned short */

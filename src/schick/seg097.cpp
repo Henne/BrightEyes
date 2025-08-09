@@ -507,16 +507,16 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
 	ds_writew(TEXTLINE_MAXLEN, l_di - 8);
 	l10 = ds_readw(TXT_TABPOS1);
 	ds_writew(TXT_TABPOS1, ds_readws(TEXTLINE_POSX) + ds_readws(TEXTLINE_MAXLEN) - 24);
-	ds_writew(DIALOGBOX_INDENT_WIDTH, 40);
-	ds_writew(DIALOGBOX_INDENT_HEIGHT, 5);
+	g_dialogbox_indent_width = 40;
+	g_dialogbox_indent_height = 5;
 
 	l_si = GUI_count_lines(text) - 1;
 
 	if (name)
 		l_si += 2;
 
-	if (l_si < ds_readws(DIALOGBOX_INDENT_HEIGHT))
-		l_si = ds_readw(DIALOGBOX_INDENT_HEIGHT) - 1;
+	if (l_si < g_dialogbox_indent_height)
+		l_si = g_dialogbox_indent_height - 1;
 
 	l4 = l_si + (signed char)options;
 	l5 = (l4 + 2) * 8;
@@ -555,16 +555,17 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
 		ds_writew(TEXTCOLOR, 0);
 
 		add_ds_ws(TEXTLINE_POSY, 14);
-		sub_ds_ws(DIALOGBOX_INDENT_HEIGHT, 2);
+		g_dialogbox_indent_height -= 2;
 	}
 
 	if (l_si != 0) {
 		GUI_print_header(text);
 	}
 
-	ds_writew(DIALOGBOX_INDENT_WIDTH, ds_writew(DIALOGBOX_INDENT_HEIGHT, 0));
+	g_dialogbox_indent_width = g_dialogbox_indent_height = 0;
 
 	if ((signed char)options != 0) {
+
 		l2 = ds_readw(TEXTLINE_POSX) + 8;
 		l3 = ds_readws(TEXTBOX_POS_Y) + (l_si + 1) * 8;
 
@@ -833,7 +834,7 @@ void GUI_print_fight_intro_msg(signed short fight_id)
 }
 
 /**
- * \brief   print a Dialog windows without answers
+ * \brief   print a dialog window without answer options
  *
  * \param   head_index  the number of a head, if another should be loaded
  * \param   text        the text

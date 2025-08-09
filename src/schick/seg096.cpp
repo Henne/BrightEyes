@@ -247,8 +247,8 @@ unsigned short GUI_count_lines(char *str)
 	current_pos = last_ws = always_zero = 0;
 	max_line_width = ds_readw(TEXTLINE_MAXLEN);
 
-	if (ds_readw(DIALOGBOX_INDENT_WIDTH) != 0)
-		sub_ds_ws(TEXTLINE_MAXLEN, ds_readws(DIALOGBOX_INDENT_WIDTH));
+	if (g_dialogbox_indent_width)
+		sub_ds_ws(TEXTLINE_MAXLEN, g_dialogbox_indent_width);
 
 	width_line = 0;
 
@@ -275,8 +275,8 @@ unsigned short GUI_count_lines(char *str)
 				str_loc = &str_loc[current_pos + 1];
 			}
 
-			if (++lines == ds_readw(DIALOGBOX_INDENT_HEIGHT))
-				add_ds_ws(TEXTLINE_MAXLEN, ds_readws(DIALOGBOX_INDENT_WIDTH));
+			if (++lines == g_dialogbox_indent_height)
+				add_ds_ws(TEXTLINE_MAXLEN, g_dialogbox_indent_width);
 
 			/* reset variables */
 			always_zero = current_pos = last_ws = width_line = 0;
@@ -291,8 +291,8 @@ unsigned short GUI_count_lines(char *str)
 			str_loc = &str_loc[current_pos + 1];
 			current_pos = -1;
 			always_zero = last_ws = width_line = 0;
-			if (++lines == ds_readw(DIALOGBOX_INDENT_HEIGHT))
-				add_ds_ws(TEXTLINE_MAXLEN, ds_readws(DIALOGBOX_INDENT_WIDTH));
+			if (++lines == g_dialogbox_indent_height)
+				add_ds_ws(TEXTLINE_MAXLEN, g_dialogbox_indent_width);
 		}
 	}
 
@@ -302,8 +302,8 @@ unsigned short GUI_count_lines(char *str)
 			str_loc[current_pos - 1] = 0;
 		else {
 			str_loc[last_ws] = 0x0d;
-			if (++lines == ds_readw(DIALOGBOX_INDENT_HEIGHT))
-				add_ds_ws(TEXTLINE_MAXLEN, ds_readws(DIALOGBOX_INDENT_WIDTH));
+			if (++lines == g_dialogbox_indent_height)
+				add_ds_ws(TEXTLINE_MAXLEN, g_dialogbox_indent_width);
 		}
 	}
 
@@ -370,8 +370,8 @@ void GUI_print_string(char *str, signed short x, signed short y)
 	if (ds_readws(GUI_TEXT_CENTERED) == 1) {
 		x = GUI_get_first_pos_centered(str, x, ds_readws(TEXTLINE_MAXLEN), 0);
 	} else
-		if (ds_readws(DIALOGBOX_INDENT_WIDTH))
-			x += ds_readws(DIALOGBOX_INDENT_WIDTH);
+		if (g_dialogbox_indent_width)
+			x += g_dialogbox_indent_width;
 	l3 = x;
 
 	while ((l4 = str[l2++])) {
@@ -379,9 +379,9 @@ void GUI_print_string(char *str, signed short x, signed short y)
 		/* handle line breaks */
 		if ((l4 == 0x0d) || (l4 == 0x40)) {
 
-			if (++l1 == ds_readws(DIALOGBOX_INDENT_HEIGHT)) {
-				add_ds_ws(TEXTLINE_MAXLEN, ds_readws(DIALOGBOX_INDENT_WIDTH));
-				l3 -= ds_readws(DIALOGBOX_INDENT_WIDTH);
+			if (++l1 == g_dialogbox_indent_height) {
+				add_ds_ws(TEXTLINE_MAXLEN, g_dialogbox_indent_width);
+				l3 -= g_dialogbox_indent_width;
 			}
 
 			y += 7;
@@ -431,7 +431,8 @@ signed short GUI_print_char(unsigned char c, unsigned short x, unsigned short y)
 	signed short char_width;
 	signed short font_index;
 
-	ds_writeb(GUI_PRINT_CHAR, c);
+	g_gui_print_char = c;
+
 	font_index = GUI_lookup_char_width(c, &char_width);
 
 	GUI_write_fonti_to_screen(font_index, char_width, x, y);
@@ -502,7 +503,7 @@ void GUI_font_to_buf(Bit8u *fc)
 	/* current text position */
 	p = &g_gui_text_buffer[0];
 
-	if (ds_readb(GUI_PRINT_CHAR) == 0x3a)
+	if (g_gui_print_char == 0x3a)
 		fc++;
 
 	for (i = 0; i < 8; p += 8, i++) {

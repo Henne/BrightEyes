@@ -6143,9 +6143,9 @@ signed int g_menu_input_busy; // ds:0xe5ae
 signed int g_menu_default_select; // ds:0xe5ac
 char g_grammar_bufs[5][40]; // ds:0xe4e3
 unsigned char g_unkn_092[7]; // ds:0xe4dd
-signed short g_dialogbox_indent_width; // ds:0xe4db
-unsigned short g_dialogbox_indent_height; // ds:0xe4d9
-unsigned char g_gui_print_char; // ds:0xe4d8
+signed int g_dialogbox_indent_width; // ds:0xe4db
+signed int g_dialogbox_indent_height; // ds:0xe4d9
+char g_gui_print_char; // ds:0xe4d8
 unsigned char g_route_tevent_flags[15]; // ds:0xe4c9
 unsigned char g_good_camp_place; // ds:0xe4c8
 unsigned char g_trv_detour_pixel_bak[20]; // ds:0xe4b4
