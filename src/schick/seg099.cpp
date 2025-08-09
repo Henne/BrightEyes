@@ -957,7 +957,7 @@ char* spell_analues(void)
 
 	/* set analyzation capabilities */
 	if (gs_in_academy == 99) {
-		ds_writew(SPELLTEST_RESULT, 99);
+		g_spelltest_result = (99);
 	}
 
 	item_pos = select_item_to_drop(get_spelluser());
@@ -983,12 +983,12 @@ char* spell_analues(void)
 
 				/* The following is pretty hacky. The Analues spell was already performed, before calling this function,
 				 * without knowing the exact handicap. The handicap is considered only now, via comparing to the
-				 * SPELLTEST_RESULT global variable.
+				 * g_spelltest_result global variable.
 				 * This a posteriori adjustment is only possible since not the original DSA 2/3 spell test logic is used,
 				 * but a lighter "pool version".
 				 * Also, it results in the Original-Bug that, in the case that the +0 spell test was successful, but with handicap it is not,
 				 * the full AE cost has to be payed. (Normally, you get a 1/2 reduction for a failed attempt.) */
-				if (ds_readws((ANALUES_ITEMS + ANALUES_ITEM_HANDICAP) + i * SIZEOF_ANALUES_ITEM) <= ds_readws(SPELLTEST_RESULT)) {
+				if (ds_readws((ANALUES_ITEMS + ANALUES_ITEM_HANDICAP) + i * SIZEOF_ANALUES_ITEM) <= g_spelltest_result) {
 
 					/* copy the matching result string */
 					strcpy(g_text_output_buf, get_tx(ds_readbs((ANALUES_ITEMS + ANALUES_ITEM_DTP) + i * SIZEOF_ANALUES_ITEM)));

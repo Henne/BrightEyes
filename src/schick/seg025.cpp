@@ -124,7 +124,7 @@ void do_house(void)
 
 	strcat(g_dtp2, get_ttx(623));
 
-	ds_writew(MENU_DEFAULT_SELECT, 1);
+	g_menu_default_select = 1;
 
 	if (GUI_bool(g_dtp2)) {
 

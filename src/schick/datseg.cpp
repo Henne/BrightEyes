@@ -6137,10 +6137,10 @@ unsigned char *g_spelluser_e; // ds:0xe5c0
 unsigned char *g_spelluser; // ds:0xe5bc
 unsigned char *g_spelltarget; // ds:0xe5b8
 unsigned char *g_spelltarget_e; // ds:0xe5b4, Pointer to enemy
-signed short g_spelltest_result; // ds:0xe5b2
-unsigned short g_menu_selected; // ds:0xe5b0
-unsigned short g_menu_input_busy; // ds:0xe5ae
-unsigned short g_menu_default_select; // ds:0xe5ac
+signed int g_spelltest_result; // ds:0xe5b2
+signed int g_menu_selected; // ds:0xe5b0
+signed int g_menu_input_busy; // ds:0xe5ae
+signed int g_menu_default_select; // ds:0xe5ac
 char g_grammar_bufs[201]; // ds:0xe4e3
 unsigned char g_unkn_092[6]; // ds:0xe4dd
 signed short g_dialogbox_indent_width; // ds:0xe4db

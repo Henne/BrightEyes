@@ -3232,12 +3232,12 @@ void seg002_37c4(void)
 		ds_writew(CURRENT_TOWN_OVERY, ds_readw(CURRENT_TOWN_ANIY));
 		l_si = 0;
 
-		if ((ds_readws(MENU_INPUT_BUSY) != 0) && (gs_show_travel_map)) {
+		if (g_menu_input_busy && gs_show_travel_map) {
 
 			ds_writew(SELECTED_TOWN_ANIX,
-					ds_readws((TOWN_POSITIONS-4) + 4 * ds_readbs((TRV_MENU_TOWNS - 1) + ds_readws(MENU_SELECTED))));
+					ds_readws((TOWN_POSITIONS-4) + 4 * ds_readbs((TRV_MENU_TOWNS - 1) + g_menu_selected)));
 			ds_writew(SELECTED_TOWN_ANIY,
-					ds_readws((TOWN_POSITIONS-4) + 2 + 4 * ds_readbs((TRV_MENU_TOWNS - 1) + ds_readws(MENU_SELECTED))));
+					ds_readws((TOWN_POSITIONS-4) + 2 + 4 * ds_readbs((TRV_MENU_TOWNS - 1) + g_menu_selected)));
 
 			g_pic_copy.x1 = ds_readws(SELECTED_TOWN_ANIX) - 4;
 			g_pic_copy.y1 = ds_readws(SELECTED_TOWN_ANIY) - 4;
@@ -3259,7 +3259,7 @@ void seg002_37c4(void)
 				refresh_screen_size();
 			}
 
-			ds_writew(TRV_MENU_SELECTION, ds_readws(MENU_SELECTED));
+			ds_writew(TRV_MENU_SELECTION, g_menu_selected);
 			l_si = 0;
 		}
 

@@ -92,13 +92,13 @@ void show_automap(void)
 			if ((ds_readw(MOUSE2_EVENT) != 0) || (ds_readw(ACTION) == ACTION_ID_PAGE_UP)) {
 
 				if (g_dng_map_size == 16) {
+
 					l_di = GUI_radio(get_ttx(612), 1, get_ttx(613)) - 1;
+
 				} else {
-					ds_writew(MENU_DEFAULT_SELECT, 2);
-					l_di = GUI_radio(get_ttx(612), 3,
-								 get_ttx(614),
-								 get_ttx(615),
-								 get_ttx(613)) - 1;
+					g_menu_default_select = 2;
+
+					l_di = GUI_radio(get_ttx(612), 3, get_ttx(614), get_ttx(615), get_ttx(613)) - 1;
 				}
 
 				if (l_di != -2) {

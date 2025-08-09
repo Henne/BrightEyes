@@ -604,8 +604,7 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
 }
 
 //static
-signed short GUI_menu_input(signed short positions, signed short h_lines,
-			signed short width)
+signed short GUI_menu_input(signed short positions, signed short h_lines, signed short width)
 {
 	volatile signed short l1, l2, l3, l4, l5, l6;
 	signed short done;
@@ -614,8 +613,8 @@ signed short GUI_menu_input(signed short positions, signed short h_lines,
 	l5 = -1;
 	done = 0;
 
-	ds_writew(MENU_SELECTED, ds_writew(MENU_INPUT_BUSY, 1));
-	add_ds_ws(MENU_SELECTED, ds_readws(MENU_DEFAULT_SELECT));
+	g_menu_selected = g_menu_input_busy = 1;
+	g_menu_selected += g_menu_default_select;
 
 	if (positions != 0) {
 		l6 = h_lines * 8;
@@ -624,7 +623,7 @@ signed short GUI_menu_input(signed short positions, signed short h_lines,
 		g_mouse_posx_bak = g_mouse_posx = ds_readws(TEXTBOX_POS_X) + 90;
 		l1 = ds_readws(TEXTBOX_POS_Y) + l6;
 
-		g_mouse_posy_bak = g_mouse_posy = (l2 = l1 + ds_readws(MENU_DEFAULT_SELECT) * 8);
+		g_mouse_posy_bak = g_mouse_posy = l2 = l1 + 8 * g_menu_default_select;
 
 		mouse_move_cursor(g_mouse_posx, g_mouse_posy);
 
@@ -642,9 +641,9 @@ signed short GUI_menu_input(signed short positions, signed short h_lines,
 			handle_input();
 			g_action_table_secondary = NULL;
 
-			if (l5 != ds_readw(MENU_SELECTED)) {
-				GUI_fill_radio_button(l5, ds_readw(MENU_SELECTED), h_lines - 1);
-				l5 = ds_readw(MENU_SELECTED);
+			if (l5 != g_menu_selected) {
+				GUI_fill_radio_button(l5, g_menu_selected, h_lines - 1);
+				l5 = g_menu_selected;
 			}
 
 			if (ds_readw(MOUSE2_EVENT) != 0 ||
@@ -658,22 +657,24 @@ signed short GUI_menu_input(signed short positions, signed short h_lines,
 			}
 
 			if (ds_readw(ACTION) == ACTION_ID_RETURN) {
-				retval = ds_readw(MENU_SELECTED);
+				retval = g_menu_selected;
 				done = 1;
 			}
 
+			/* TODO: ... */
 			if (ds_readw(ACTION) == ACTION_ID_UP) {
-				if (dec_ds_ws_post(MENU_SELECTED) == 1)
-					ds_writew(MENU_SELECTED, positions);
+				if (g_menu_selected-- == 1)
+					g_menu_selected = positions;
 			}
+
 			if (ds_readw(ACTION) == ACTION_ID_DOWN) {
-				if (inc_ds_ws_post(MENU_SELECTED) == positions)
-					ds_writew(MENU_SELECTED, 1);
+				if (g_menu_selected++ == positions)
+					g_menu_selected = 1;
 			}
 
 			if (g_mouse_posy != l2) {
 				l2 = g_mouse_posy;
-				ds_writew(MENU_SELECTED, ((l2 - l1) >> 3) + 1);
+				g_menu_selected = ((l2 - l1) >> 3) + 1;
 			}
 
 			if (ds_readw(GUI_BOOL_FLAG) != 0) {
@@ -707,7 +708,7 @@ signed short GUI_menu_input(signed short positions, signed short h_lines,
 		retval = -1;
 	}
 
-	ds_writew(MENU_DEFAULT_SELECT, ds_writew(MENU_INPUT_BUSY, 0));
+	g_menu_default_select = g_menu_input_busy = 0;
 
 	return retval;
 }

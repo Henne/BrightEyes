@@ -574,6 +574,10 @@ extern unsigned char *g_spelluser_e;	// ds:0xe5c0; seg102
 extern unsigned char *g_spelluser;	// ds:0xe5bc; seg068, seg098, seg102, seg107
 extern unsigned char *g_spelltarget;	// ds:0xe5b8; seg098-seg102
 extern unsigned char *g_spelltarget_e;	// ds:0xe5b4; seg098-seg102
+extern signed int g_spelltest_result;	// ds:0xe5b2; seg098, seg099, seg102
+extern signed int g_menu_selected;	// ds:0xe5b0; seg002, seg097
+extern signed int g_menu_input_busy;	// ds:0xe5ae; seg002, seg097
+extern signed int g_menu_default_select;	// ds:0xe5ac; seg025, seg074, seg097
 
 extern unsigned char g_good_camp_place;		// ds:0xe4c8; seg051, seg094, seg109
 extern unsigned char *g_dungeon_doors_buf; 	// ds:0xe49c; seg028,seg076,seg098,seg120

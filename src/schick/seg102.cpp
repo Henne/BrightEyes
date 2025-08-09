@@ -311,9 +311,9 @@ signed short MON_cast_spell(Bit8u* monster, signed char handicap)
 			return -1;
 		}
 
-		ds_writew(SPELLTEST_RESULT, MON_test_skill((Bit8u*)(monster), l_si, handicap));
+		g_spelltest_result = (MON_test_skill((Bit8u*)(monster), l_si, handicap));
 
-		if ((ds_readws(SPELLTEST_RESULT) <= 0) || (gs_ingame_timers[INGAME_TIMER_RONDRA_NO_SPELLS] > 0)) {
+		if ((g_spelltest_result <= 0) || (gs_ingame_timers[INGAME_TIMER_RONDRA_NO_SPELLS] > 0)) {
 
 			/* spell failed */
 			MON_sub_ae((Bit8u*)(monster), MON_get_spell_cost(l_si, 1));

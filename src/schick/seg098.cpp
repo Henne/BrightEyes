@@ -801,9 +801,9 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 			}
 #endif
 
-			ds_writew(SPELLTEST_RESULT, test_spell(hero, spell_id, handicap));
+			g_spelltest_result = (test_spell(hero, spell_id, handicap));
 
-			if (ds_readws(SPELLTEST_RESULT) == -99) {
+			if (g_spelltest_result == -99) {
 
 				/* prepare output */
 				sprintf(g_dtp2, get_ttx(607), (char*)hero + HERO_NAME2);
@@ -814,7 +814,7 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 
 				retval = -1;
 
-			} else if ((ds_readws(SPELLTEST_RESULT) <= 0) || (gs_ingame_timers[INGAME_TIMER_RONDRA_NO_SPELLS] > 0)) {
+			} else if ((g_spelltest_result <= 0) || (gs_ingame_timers[INGAME_TIMER_RONDRA_NO_SPELLS] > 0)) {
 
 				strcpy(g_dtp2, get_ttx(606));
 
