@@ -1632,7 +1632,7 @@
 #define DIALOGBOX_INDENT_HEIGHT         (0xe4d9)    /* unsigned short */
 #define DIALOGBOX_INDENT_WIDTH          (0xe4db)    /* signed short */
 // ?6
-#define GRAMMAR_BUFS                    (0xe4e3)    /* char[201] */
+//#define GRAMMAR_BUFS                    (0xe4e3)    /* char[201] */
 //#define MENU_DEFAULT_SELECT             (0xe5ac)    /* unsigned short */
 //#define MENU_INPUT_BUSY                 (0xe5ae)    /* unsigned short */
 //#define MENU_SELECTED                   (0xe5b0)    /* unsigned short */

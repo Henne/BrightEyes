@@ -578,6 +578,7 @@ extern signed int g_spelltest_result;	// ds:0xe5b2; seg098, seg099, seg102
 extern signed int g_menu_selected;	// ds:0xe5b0; seg002, seg097
 extern signed int g_menu_input_busy;	// ds:0xe5ae; seg002, seg097
 extern signed int g_menu_default_select;	// ds:0xe5ac; seg025, seg074, seg097
+extern char g_grammar_bufs[5][40];	// ds:0xe4e3; seg096
 
 extern unsigned char g_good_camp_place;		// ds:0xe4c8; seg051, seg094, seg109
 extern unsigned char *g_dungeon_doors_buf; 	// ds:0xe49c; seg028,seg076,seg098,seg120

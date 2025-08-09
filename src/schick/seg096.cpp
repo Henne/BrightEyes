@@ -28,10 +28,6 @@ struct dummy {
 	signed short a[3];
 };
 
-struct dummy2 {
-	char a[40];
-};
-
 //000
 /**
  * \brief   makes a grammatical wordgroup
@@ -78,12 +74,12 @@ Bit8u* GUI_names_grammar(signed short flag, signed short index, signed short typ
 				(signed short*)(p_datseg + GRAMMAR_INDEF_TABLE + (flag & 0xf) * 6));
 
 
-	sprintf((char*)p_datseg + (GRAMMAR_BUFS+40) + ds_readw(GRAMMAR_BUF_NO) * 40,
-		(l2 == 0) ? (char*)ds_readd(STR_S_S_PTR) : (char*)ds_readd(STR_VON_S_S_PTR),
+	sprintf(g_grammar_bufs[ds_readw(GRAMMAR_BUF_NO)],
+		(l2 == 0 ? (char*)ds_readd(STR_S_S_PTR) : (char*)ds_readd(STR_VON_S_S_PTR)),
 		g_grammar_articles_index[host_readws((Bit8u*)lp1 + 2 * (((flag & 0x3000) - 1) >> 12))],
 		(char*)GUI_name_plural(flag, p_name));
 
-	p_name = (char*)(p_datseg + ds_readw(GRAMMAR_BUF_NO) * 40 + (GRAMMAR_BUFS+40));
+	p_name = g_grammar_bufs[ds_readw(GRAMMAR_BUF_NO)];
 
 	if (*p_name == 0x20) {
 		do {
@@ -98,19 +94,13 @@ Bit8u* GUI_names_grammar(signed short flag, signed short index, signed short typ
 	if (inc_ds_ws(GRAMMAR_BUF_NO) == 4)
 		ds_writew(GRAMMAR_BUF_NO, 0);
 
-#if !defined(__BORLANDC__)
-	return ((Bit8u*)p_datseg + (GRAMMAR_BUFS+40) + (l4 * 40));
-#else
-	/* TODO: Sorry dear ! */
-	return (Bit8u*) (&((struct dummy2*)(p_datseg + (GRAMMAR_BUFS+40)))[l4]);
-#endif
-
+	return (Bit8u*)g_grammar_bufs[l4];
 }
 
 //1a7
 char* GUI_name_plural(signed short v1, char *s)
 {
-	char *p = (char*)(p_datseg + GRAMMAR_BUFS);
+	char *p = g_grammar_bufs[0];
 	char tmp;
 
 	while ((tmp = *s++) && (tmp != 0x2e)) {
@@ -133,13 +123,14 @@ char* GUI_name_plural(signed short v1, char *s)
 	}
 
 	*p = 0;
-	return (char*)p_datseg + GRAMMAR_BUFS;
+
+	return g_grammar_bufs[0];
 }
 
 //290
 char* GUI_name_singular(char *s)
 {
-	Bit8u *p = p_datseg + GRAMMAR_BUFS;
+	char *p = g_grammar_bufs[0];
 	char tmp;
 
 	while ((tmp = *s++) && (tmp != 0x2e)) {
@@ -151,7 +142,7 @@ char* GUI_name_singular(char *s)
 	}
 
 	*p = 0;
-	return (char*)p_datseg + GRAMMAR_BUFS;
+	return g_grammar_bufs[0];
 }
 
 //2f2
