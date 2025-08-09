@@ -881,19 +881,19 @@ void DNG_waterbarrel(Bit8u *unit_ptr)
 
 	done = 0;
 
-	/* TODO: check the value of unit_ptr first and skip if *unit_ptr <= 0*/
+	/* TODO: check the value of unit_ptr first and skip if unit_ptr <= 0*/
 
 	do {
-		sprintf(g_dtp2,	get_ttx(781), host_readb(unit_ptr));
+		sprintf(g_dtp2,	get_ttx(781), *unit_ptr);
 
 		answer = GUI_radio(g_dtp2, 3, get_ttx(782), get_ttx(783), get_ttx(784));
 
-		if (answer == 1)
-		{
+		if (answer == 1) {
+
 			/* drink */
 			hero = get_hero(0);
-			for (l_di = 0; l_di <= 6; l_di++, hero += SIZEOF_HERO)
-			{
+			for (l_di = 0; l_di <= 6; l_di++, hero += SIZEOF_HERO) {
+
 				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 					!hero_dead(hero))
@@ -903,31 +903,31 @@ void DNG_waterbarrel(Bit8u *unit_ptr)
 					units_needed = (host_readbs(hero + HERO_THIRST) + 9) / 10;
 					/* +9 means: round up */
 
-					if (host_readb(unit_ptr) <= units_needed)
+					if (*unit_ptr <= units_needed)
 					{
 						/* not enough units in the barrel for this hero */
-						sub_ptr_bs(hero + HERO_THIRST, host_readb(unit_ptr) * 10);
+						sub_ptr_bs(hero + HERO_THIRST, *unit_ptr * 10);
 
 						if (host_readbs(hero + HERO_THIRST) < 0)
 						{
 							host_writeb(hero + HERO_THIRST, 0);
 						}
 
-						host_writeb(unit_ptr, 0);
+						*unit_ptr = 0;
 
 						GUI_output(get_ttx(785));
 
 						break;
 					} else {
 						/* this hero quenches his/her thirst completely */
-						sub_ptr_bs(unit_ptr, (unsigned char)units_needed);
+						*unit_ptr -= units_needed;
 						host_writeb(hero + HERO_THIRST, 0);
 					}
 				}
 			}
 
-		} else	if (answer == 2)
-		{
+		} else	if (answer == 2) {
+
 			/* replenish WATERSKINS */
 			hero = get_hero(0);
 			for (hero_refilled_counter = l_di = 0; l_di <= 6; l_di++, hero += SIZEOF_HERO)
@@ -964,30 +964,29 @@ void DNG_waterbarrel(Bit8u *unit_ptr)
 									(*(struct inventory_flags*)(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * item_pos)).empty = 0;
 #endif
 
-								if (host_readb(unit_ptr) <= units_needed)
-								{
+								if (*unit_ptr <= units_needed) {
+
 									/* empty the barrel completely */
 									GUI_output(get_ttx(785));
-									host_writeb(unit_ptr, 0);
+
+									*unit_ptr = 0;
 
 								} else {
 									/* remove units from the barrel */
-									sub_ptr_bs(unit_ptr, (unsigned char)units_needed);
+									*unit_ptr -= units_needed;
 								}
 							}
 						}
 					}
 
-					if (hero_refilled != 0)
-					{
+					if (hero_refilled) {
 						hero_refilled_counter++;
 					}
 				}
 			}
 
 			/* print a message if no hero used the barrel */
-			if (hero_refilled_counter == 0)
-			{
+			if (!hero_refilled_counter) {
 				GUI_output(get_ttx(786));
 			}
 
@@ -998,7 +997,6 @@ void DNG_waterbarrel(Bit8u *unit_ptr)
 		}
 
 	} while (!done);
-
 }
 
 void DNG_see_lever(void)

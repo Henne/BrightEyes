@@ -677,8 +677,8 @@
 #define DNG10_CHEST2_CONTENT            (0x4154)    /* char[4] */
 #define DNG10_CHEST3_CONTENT            (0x4158)    /* char[3] */
 #define DNG10_CHEST4_CONTENT            (0x415b)    /* char[2] */
-#define DNG11_WATERBARREL1              (0x415d)    /* unsigned char; {0,1} */
-#define DNG11_WATERBARREL2              (0x415e)    /* unsigned char; {0,1} */
+//#define DNG11_WATERBARREL1              (0x415d)    /* unsigned char; {0,1} */
+//#define DNG11_WATERBARREL2              (0x415e)    /* unsigned char; {0,1} */
 #define DNG11_EFFERD_SACRIFICE          (0x415f)    /* unsigned char; {0,1} */
 #define DNG11_EFFERD_HINT               (0x4160)    /* unsigned char; {0,1} */
 #define DNG11_UNKNOWN1_FLAG             (0x4161)    /* unsigned char; {0,1} */
@@ -776,7 +776,7 @@
 #define TM_UNUSED1_PTR                  (0x4340)    /* Bit8u* */
 #define TRV_MENU_TOWNS                  (0x4344)    /* unsigned char[6] */
 #define TRV_DESTINATION                 (0x434a)    /* unsigned short */
-#define DNG08_WATERBARREL               (0x434c)    /* signed char; {0,1} */
+//#define DNG08_WATERBARREL               (0x434c)    /* signed char; {0,1} */
 //#define DNG13_COLLAPSECOUNT             (0x434d)    /* unsigned char */
 //#define DNG13_HEROCOUNT                 (0x434e)    /* unsigned char */
 //#define CAMP_INCIDENT                   (0x434f)    /* signed short; -1 = not determined or will not happen, 0,1,2 = guard that will be affected */

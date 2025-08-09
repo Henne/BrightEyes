@@ -372,6 +372,10 @@ extern Bit8u  gs_dng12_obstacle_active;		//ds:0x3fa8; seg090
 extern Bit8u  gs_dng12_speartrap_active;	//ds:0x3fa9; seg090
 extern Bit8u  gs_dng12_chest1_content[12];	//ds:0x3faa; seg090
 
+
+extern Bit8u  gs_dng11_waterbarrel1;		//ds:0x415d; seg086
+extern Bit8u  gs_dng11_waterbarrel2;		//ds:0x415e; seg086
+
 extern Bit8s  gs_unconscious_message[7];	//ds:0x4212; seg002, seg049
 extern Bit8s  gs_food_message[7];		//ds:0x4212; seg002, seg049, seg059
 extern Bit16s gs_current_locdata;		//ds:0x4222; seg025-seg109
@@ -382,6 +386,7 @@ extern Bit16s gs_trv_i;				//ds:0x4228; seg063, seg094
 extern Bit16s gs_route_stepcount;		//ds:0x422a; seg063, seg094
 extern Bit16s gs_forcedmarch_le_cost;		//ds:0x422c; seg094
 
+extern Bit8u  gs_dng08_waterbarrel;		//ds:0x434c; seg083
 extern Bit8u  gs_dng13_collapsecount;		//ds:0x434d; seg075, seg091
 extern Bit8u  gs_dng13_herocount;		//ds:0x434d; seg075, seg091
 extern Bit16s gs_camp_incident;			//ds:0x434f; seg051, seg052, seg11, seg111, seg116

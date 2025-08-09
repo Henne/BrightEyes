@@ -149,9 +149,9 @@ signed short DNG08_handler(void)
 			DNG08_search_bed();
 		}
 
-	} else 	if (target_pos == DNG_POS(0,8,5) && target_pos != gs_dng_handled_pos && ds_readb(DNG08_WATERBARREL))
+	} else 	if (target_pos == DNG_POS(0,8,5) && target_pos != gs_dng_handled_pos && gs_dng08_waterbarrel)
 	{
-		DNG_waterbarrel(p_datseg + DNG08_WATERBARREL);
+		DNG_waterbarrel(&gs_dng08_waterbarrel);
 
 	} else 	if (target_pos == DNG_POS(0,3,6) && target_pos != gs_dng_handled_pos && !ds_readb(DNG08_TIMER1))
 	{

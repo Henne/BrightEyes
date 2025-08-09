@@ -65,11 +65,11 @@ signed short DNG11_handler(void)
 
 	} else if (target_pos == DNG_POS(0,11,14) && target_pos != gs_dng_handled_pos)
 	{
-		DNG_waterbarrel(p_datseg + DNG11_WATERBARREL1);
+		DNG_waterbarrel(&gs_dng11_waterbarrel1);
 
 	} else if (target_pos == DNG_POS(0,12,14) && target_pos != gs_dng_handled_pos)
 	{
-		DNG_waterbarrel(p_datseg + DNG11_WATERBARREL2);
+		DNG_waterbarrel(&gs_dng11_waterbarrel2);
 
 	} else if (target_pos == DNG_POS(0,6,9) && target_pos != gs_dng_handled_pos)
 	{
