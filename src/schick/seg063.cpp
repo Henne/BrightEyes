@@ -368,12 +368,12 @@ void do_harbor(void)
 				g_current_ani = -1;
 				g_wallclock_update = 0;
 
-				memmove(g_renderbuf_ptr, (Bit8u*)ds_readd(TRAVEL_MAP_PTR), 64000);
+				memmove(g_renderbuf_ptr, gs_travel_map_ptr, 64000);
 				map_effect(g_renderbuf_ptr);
 
 				wait_for_vsync();
 
-				set_palette((Bit8u*)ds_readd(TRAVEL_MAP_PTR) + 64002, 0, 0x20);
+				set_palette(gs_travel_map_ptr + 64002, 0, 0x20);
 
 				mod_clock_pos(gs_current_town);
 
@@ -643,11 +643,11 @@ void sea_travel(signed short passage, signed short dir)
 			load_map();
 
 			/* TODO: update window */
-			memmove((void*)(g_vga_memstart), (void*)((Bit8u*)ds_readd(TRAVEL_MAP_PTR)), 320 * 200);
+			memmove((void*)(g_vga_memstart), (void*)gs_travel_map_ptr, 320 * 200);
 
 			wait_for_vsync();
 
-			set_palette((Bit8u*)ds_readd(TRAVEL_MAP_PTR) + 64002, 0, 0x20);
+			set_palette(gs_travel_map_ptr + 64002, 0, 0x20);
 
 			set_audio_track(ARCHIVE_FILE_TERMS_XMI);
 

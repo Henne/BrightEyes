@@ -60,13 +60,13 @@ signed short do_travel_mode(void)
 		load_map();
 	}
 
-	memmove((void*)g_renderbuf_ptr, (void*)ds_readd(TRAVEL_MAP_PTR), 64000);
+	memmove((void*)g_renderbuf_ptr, (void*)gs_travel_map_ptr, 64000);
 
 	map_effect((Bit8u*)g_renderbuf_ptr);
 
 	wait_for_vsync();
 
-	set_palette((Bit8u*)ds_readd(TRAVEL_MAP_PTR) + 64000 + 2, 0, 0x20);
+	set_palette(gs_travel_map_ptr + 64000 + 2, 0, 0x20);
 
 	refresh_screen_size();
 
@@ -89,11 +89,11 @@ signed short do_travel_mode(void)
 			wait_for_vsync();
 
 			/* TODO: update window */
-			memmove((void*)g_vga_memstart, (void*)((Bit8u*)ds_readd(TRAVEL_MAP_PTR)), 320 * 200);
+			memmove((void*)g_vga_memstart, (void*)gs_travel_map_ptr, 320 * 200);
 
 			wait_for_vsync();
 
-			set_palette((Bit8u*)ds_readd(TRAVEL_MAP_PTR) + 64000 + 2, 0, 0x20);
+			set_palette(gs_travel_map_ptr + 64000 + 2, 0, 0x20);
 
 			refresh_screen_size();
 
@@ -262,7 +262,7 @@ signed short do_travel_mode(void)
 	{
 		memset((void*)g_dtp2, 0, 0xc0);
 
-		memcpy((void*)(g_dtp2 + 0xc0), (void*)((Bit8u*)ds_readd(TRAVEL_MAP_PTR) + 64000 + 2), 0x60);
+		memcpy((void*)(g_dtp2 + 0xc0), (void*)(gs_travel_map_ptr + 64000 + 2), 0x60);
 
 		memcpy((void*)(g_dtp2 + 0x120),	(void*)g_palette_special, 0x60);
 

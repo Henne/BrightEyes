@@ -2699,7 +2699,13 @@ struct{unsigned char unkn[12];} g_harbor_options[10] = {
 }; // ds:0x42b2
 signed short g_sea_travel_passage_price = 0; // ds:0x432a
 signed short g_sea_travel_passage_speed2 = 0; // ds:0x432c // shouldn't this be _unsigned_ ?
-long g_travel_map_ptr = 0; // ds:0x432e; Bit8u*
+
+#if defined(__BORLANDC__)
+Bit8u  *gs_travel_map_ptr = 0; 		// ds:0x432e; Bit8u*
+#else
+Bit32u gs_travel_map_ptr_obsolete = 0;	// ds:0x432e; This is a dummy now!
+#endif
+
 Bit8u  gs_forcedmarch_timer = 0; // ds:0x4332
 Bit8u  gs_travel_detour = 0; // ds:0x4333
 Bit16s gs_current_signpost = 0; // ds:0x4334
@@ -6101,6 +6107,10 @@ char g_str_gen_1[2] = "1"; // ds:0xb4d3
 char g_str_gen_generation[11] = "Generation"; // ds:0xb4d5
 
 /* start of the BSS section */
+
+#if !defined(__BORLANDC__)
+Bit8u  *gs_travel_map_ptr; 		// ds:0x432e; Bit8u*
+#endif
 
 signed char g_large_buf; // ds:0xe5e4
 HugePt g_global_buffer_ptr; // ds:0xe5e0, points to the start of the global buffer

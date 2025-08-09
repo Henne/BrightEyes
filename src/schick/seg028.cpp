@@ -458,12 +458,12 @@ void load_map(void)
 		EMS_map_memory(ds_readw(EMS_TRAVEL_MAP), 2, 2);
 		EMS_map_memory(ds_readw(EMS_TRAVEL_MAP), 3, 3);
 		/* set map pointer to EMS */
-		ds_writed(TRAVEL_MAP_PTR, ds_readd(EMS_FRAME_PTR));
+		gs_travel_map_ptr = (Bit8u*)ds_readd(EMS_FRAME_PTR);
 	} else {
 		/* or read KARTE.DAT from file */
 		fd = load_archive_file(ARCHIVE_FILE_KARTE_DAT);
 
-		read_archive_file(fd, (Bit8u*)(ds_writed(TRAVEL_MAP_PTR, (Bit32u)g_renderbuf_ptr)), 64098);
+		read_archive_file(fd, (gs_travel_map_ptr = g_renderbuf_ptr), 64098);
 		close(fd);
 
 		if (g_ems_enabled != 0) {

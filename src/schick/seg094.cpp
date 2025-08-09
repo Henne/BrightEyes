@@ -424,10 +424,10 @@ void TM_func1(signed short route_no, signed short backwards)
 			update_mouse_cursor();
 			load_map();
 			/* TODO: update window */
-			memmove((void*)(g_vga_memstart), (void*)((Bit8u*)ds_readd(TRAVEL_MAP_PTR)), 320 * 200);
+			memmove((void*)g_vga_memstart, (void*)gs_travel_map_ptr, 320 * 200);
 
 			wait_for_vsync();
-			set_palette((Bit8u*)ds_readd(TRAVEL_MAP_PTR) + 64000 + 2, 0, 0x20);
+			set_palette(gs_travel_map_ptr + 64000 + 2, 0, 0x20);
 
 			g_pp20_index = 5;
 			gs_trv_i = 0;
