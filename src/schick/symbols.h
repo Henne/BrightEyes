@@ -1614,20 +1614,20 @@
 //#define DUNGEON_FIGHTS_BUF              (0xe494)    /* Bit8u*; to buffer of size 630 */
 //#define DUNGEON_STAIRS_BUF              (0xe498)    /* Bit8u*; to buffer of size 80 */
 //#define DUNGEON_DOORS_BUF               (0xe49c)    /* Bit8u*; to buffer of size 225 = 45 * 5; each 5-byte entry consists of [pos (2 bytes), smash-handicap, lockpick-handicap, foramen-handicap] */
-#define GET_EXTRA_LOOT                  (0xe4a0)    /* signed short; {0,1} */
-#define ROUTE59_FLAG                    (0xe4a2)    /* unsigned char; {0, 1 = from Kravik, 2 = from Peilinen, 3 = from Skelellen, 4 = from Rovamund} */
-#define TRV_MENU_SELECTION              (0xe4a3)    /* unsigned short */
-#define CURRENT_TOWN_OVER               (0xe4a5)    /* unsigned short; {0,1} */
-#define CURRENT_TOWN_OVERY              (0xe4a7)    /* unsigned short */
-#define CURRENT_TOWN_OVERX              (0xe4a9)    /* unsigned short */
-#define SELECTED_TOWN_ANIY              (0xe4ab)    /* unsigned short */
-#define SELECTED_TOWN_ANIX              (0xe4ad)    /* unsigned short */
-#define CURRENT_TOWN_ANIY               (0xe4af)    /* unsigned short */
-#define CURRENT_TOWN_ANIX               (0xe4b1)    /* unsigned short */
+//#define GET_EXTRA_LOOT                  (0xe4a0)    /* signed short; {0,1} */
+//#define ROUTE59_FLAG                    (0xe4a2)    /* unsigned char; {0, 1 = from Kravik, 2 = from Peilinen, 3 = from Skelellen, 4 = from Rovamund} */
+//#define TRV_MENU_SELECTION              (0xe4a3)    /* unsigned short */
+//#define CURRENT_TOWN_OVER               (0xe4a5)    /* unsigned short; {0,1} */
+//#define CURRENT_TOWN_OVERY              (0xe4a7)    /* unsigned short */
+//#define CURRENT_TOWN_OVERX              (0xe4a9)    /* unsigned short */
+//#define SELECTED_TOWN_ANIY              (0xe4ab)    /* unsigned short */
+//#define SELECTED_TOWN_ANIX              (0xe4ad)    /* unsigned short */
+//#define CURRENT_TOWN_ANIY               (0xe4af)    /* unsigned short */
+//#define CURRENT_TOWN_ANIX               (0xe4b1)    /* unsigned short */
 // ?1
-#define TRV_DETOUR_PIXEL_BAK            (0xe4b4)    /* unsigned char[20] */
-#define GOOD_CAMP_PLACE                 (0xe4c8)    /* unsigned char */
-#define ROUTE_TEVENT_FLAGS              (0xe4c9)    /* unsigned char[15] */
+//#define TRV_DETOUR_PIXEL_BAK            (0xe4b4)    /* unsigned char[20] */
+//#define GOOD_CAMP_PLACE                 (0xe4c8)    /* unsigned char */
+//#define ROUTE_TEVENT_FLAGS              (0xe4c9)    /* unsigned char[15] */
 //#define GUI_PRINT_CHAR                  (0xe4d8)    /* unsigned char */
 //#define DIALOGBOX_INDENT_HEIGHT         (0xe4d9)    /* unsigned short */
 //#define DIALOGBOX_INDENT_WIDTH          (0xe4db)    /* signed short */

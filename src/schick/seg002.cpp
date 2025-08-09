@@ -3154,17 +3154,17 @@ void seg002_37c4(void)
 	p2 = g_buffer6_ptr + 2100;
 	p3 = g_buffer6_ptr + 1000;
 
-	if ((ds_readws(TRV_MENU_SELECTION) != 0) && (gs_show_travel_map)) {
+	if (g_trv_menu_selection && gs_show_travel_map) {
 
-		ds_writew(SELECTED_TOWN_ANIX,
-				ds_readws((TOWN_POSITIONS-4) + 4 * ds_readbs((TRV_MENU_TOWNS - 1) + ds_readws(TRV_MENU_SELECTION))));
-		ds_writew(SELECTED_TOWN_ANIY,
-				ds_readws((TOWN_POSITIONS-4) + 2 + 4 * ds_readbs((TRV_MENU_TOWNS - 1) + ds_readws(TRV_MENU_SELECTION))));
+		g_selected_town_anix =
+				ds_readws((TOWN_POSITIONS-4) + 4 * ds_readbs((TRV_MENU_TOWNS - 1) + g_trv_menu_selection));
+		g_selected_town_aniy =
+				ds_readws((TOWN_POSITIONS-4) + 2 + 4 * ds_readbs((TRV_MENU_TOWNS - 1) + g_trv_menu_selection));
 
-		g_pic_copy.x1 = ds_readws(SELECTED_TOWN_ANIX) - 4;
-		g_pic_copy.y1 = ds_readws(SELECTED_TOWN_ANIY) - 4;
-		g_pic_copy.x2 = ds_readws(SELECTED_TOWN_ANIX) + 4;
-		g_pic_copy.y2 = ds_readws(SELECTED_TOWN_ANIY) + 4;
+		g_pic_copy.x1 = g_selected_town_anix - 4;
+		g_pic_copy.y1 = g_selected_town_aniy - 4;
+		g_pic_copy.x2 = g_selected_town_anix + 4;
+		g_pic_copy.y2 = g_selected_town_aniy + 4;
 		g_pic_copy.src = p1;
 
 		if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
@@ -3179,15 +3179,15 @@ void seg002_37c4(void)
 			refresh_screen_size();
 		}
 
-		ds_writew(TRV_MENU_SELECTION, l_si = 0);
+		g_trv_menu_selection = l_si = 0;
 	}
 
-	if (ds_readws(CURRENT_TOWN_OVER) != 0) {
+	if (g_current_town_over) {
 
-		g_pic_copy.x1 = ds_readws(CURRENT_TOWN_OVERX) - 4;
-		g_pic_copy.y1 = ds_readws(CURRENT_TOWN_OVERY) - 4;
-		g_pic_copy.x2 = ds_readws(CURRENT_TOWN_OVERX) + 4;
-		g_pic_copy.y2 = ds_readws(CURRENT_TOWN_OVERY) + 4;
+		g_pic_copy.x1 = g_current_town_overx - 4;
+		g_pic_copy.y1 = g_current_town_overy - 4;
+		g_pic_copy.x2 = g_current_town_overx + 4;
+		g_pic_copy.y2 = g_current_town_overy + 4;
 		g_pic_copy.src = p2;
 
 		if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
@@ -3196,7 +3196,7 @@ void seg002_37c4(void)
 			l_si = 1;
 		}
 
-		if (ds_readws(CURRENT_TOWN_OVER) != 0) {
+		if (g_current_town_over) {
 			do_pic_copy(0);
 		}
 
@@ -3204,15 +3204,15 @@ void seg002_37c4(void)
 			refresh_screen_size();
 		}
 
-		l_si = ds_writew(CURRENT_TOWN_OVER, 0);
+		l_si = g_current_town_over = 0;
 	}
 
-	if (ds_readws(CURRENT_TOWN_ANIX) != 0) {
+	if (g_current_town_anix) {
 
-		g_pic_copy.x1 = ds_readws(CURRENT_TOWN_ANIX) - 4;
-		g_pic_copy.y1 = ds_readws(CURRENT_TOWN_ANIY) - 4;
-		g_pic_copy.x2 = ds_readws(CURRENT_TOWN_ANIX) + 4;
-		g_pic_copy.y2 = ds_readws(CURRENT_TOWN_ANIY) + 4;
+		g_pic_copy.x1 = g_current_town_anix - 4;
+		g_pic_copy.y1 = g_current_town_aniy - 4;
+		g_pic_copy.x2 = g_current_town_anix + 4;
+		g_pic_copy.y2 = g_current_town_aniy + 4;
 		g_pic_copy.src = p2;
 
 		if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
@@ -3227,22 +3227,22 @@ void seg002_37c4(void)
 			refresh_screen_size();
 		}
 
-		ds_writew(CURRENT_TOWN_OVER, 1);
-		ds_writew(CURRENT_TOWN_OVERX, ds_readw(CURRENT_TOWN_ANIX));
-		ds_writew(CURRENT_TOWN_OVERY, ds_readw(CURRENT_TOWN_ANIY));
+		g_current_town_over = 1;
+		g_current_town_overx = g_current_town_anix;
+		g_current_town_overy = g_current_town_aniy;
 		l_si = 0;
 
 		if (g_menu_input_busy && gs_show_travel_map) {
 
-			ds_writew(SELECTED_TOWN_ANIX,
-					ds_readws((TOWN_POSITIONS-4) + 4 * ds_readbs((TRV_MENU_TOWNS - 1) + g_menu_selected)));
-			ds_writew(SELECTED_TOWN_ANIY,
-					ds_readws((TOWN_POSITIONS-4) + 2 + 4 * ds_readbs((TRV_MENU_TOWNS - 1) + g_menu_selected)));
+			g_selected_town_anix =
+					ds_readws((TOWN_POSITIONS-4) + 4 * ds_readbs((TRV_MENU_TOWNS - 1) + g_menu_selected));
+			g_selected_town_aniy =
+					ds_readws((TOWN_POSITIONS-4) + 2 + 4 * ds_readbs((TRV_MENU_TOWNS - 1) + g_menu_selected));
 
-			g_pic_copy.x1 = ds_readws(SELECTED_TOWN_ANIX) - 4;
-			g_pic_copy.y1 = ds_readws(SELECTED_TOWN_ANIY) - 4;
-			g_pic_copy.x2 = ds_readws(SELECTED_TOWN_ANIX) + 4;
-			g_pic_copy.y2 = ds_readws(SELECTED_TOWN_ANIY) + 4;
+			g_pic_copy.x1 = g_selected_town_anix - 4;
+			g_pic_copy.y1 = g_selected_town_aniy - 4;
+			g_pic_copy.x2 = g_selected_town_anix + 4;
+			g_pic_copy.y2 = g_selected_town_aniy + 4;
 			g_pic_copy.src = p1;
 
 			if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
@@ -3259,14 +3259,15 @@ void seg002_37c4(void)
 				refresh_screen_size();
 			}
 
-			ds_writew(TRV_MENU_SELECTION, g_menu_selected);
+			g_trv_menu_selection = g_menu_selected;
+
 			l_si = 0;
 		}
 
-		g_pic_copy.x1 = ds_readws(CURRENT_TOWN_ANIX) - 4;
-		g_pic_copy.y1 = ds_readws(CURRENT_TOWN_ANIY) - 4;
-		g_pic_copy.x2 = ds_readws(CURRENT_TOWN_ANIX) + 4;
-		g_pic_copy.y2 = ds_readws(CURRENT_TOWN_ANIY) + 4;
+		g_pic_copy.x1 = g_current_town_anix - 4;
+		g_pic_copy.y1 = g_current_town_aniy - 4;
+		g_pic_copy.x2 = g_current_town_anix + 4;
+		g_pic_copy.y2 = g_current_town_aniy + 4;
 		g_pic_copy.src = p3 + 100 * (g_map_townmark_state + 5);
 
 		if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
@@ -3281,7 +3282,7 @@ void seg002_37c4(void)
 			refresh_screen_size();
 		}
 
-		ds_writew(CURRENT_TOWN_OVER, 1);
+		g_current_town_over = 1;
 	}
 
 	ds_writew(SPINLOCK_FLAG, 0);

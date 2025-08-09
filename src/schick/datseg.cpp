@@ -3179,7 +3179,7 @@ char g_str_temp_xx[8] = "TEMP\\XX"; // ds:0x4b95
 unsigned char g_unkn_036[1] = { 0x00 }; // ds:0x4b9d
 signed short g_fight_figs_index = -1; // ds:0x4b9e
 unsigned short g_random_schick_seed = 0x327b; // ds:0x4ba0
-char g_emm_sig[8] = "EMMXXXX0"; // ds:0x4ba2
+char g_emm_sig[8] = { 'E', 'M', 'M', 'X', 'X', 'X', 'X', '0'}; // ds:0x4ba2
 long g_ems_frame_ptr = 0; // ds:0x4baa; Bit8u*
 struct mouse_action g_action_table_options[10] = {
 	{ 0x05, 0x1e, 0x001c, 0x35, 0x81 },
@@ -6150,16 +6150,16 @@ unsigned char g_route_tevent_flags[15]; // ds:0xe4c9
 unsigned char g_good_camp_place; // ds:0xe4c8
 unsigned char g_trv_detour_pixel_bak[20]; // ds:0xe4b4
 unsigned char g_unkn_091[1]; // ds:0xe4b3
-unsigned short g_current_town_anix; // ds:0xe4b1
-unsigned short g_current_town_aniy; // ds:0xe4af
-unsigned short g_selected_town_anix; // ds:0xe4ad
-unsigned short g_selected_town_aniy; // ds:0xe4ab
-unsigned short g_current_town_overx; // ds:0xe4a9
-unsigned short g_current_town_overy; // ds:0xe4a7
-unsigned short g_current_town_over; // ds:0xe4a5
-unsigned short g_trv_menu_selection; // ds:0xe4a3
+signed int g_current_town_anix; // ds:0xe4b1
+signed int g_current_town_aniy; // ds:0xe4af
+signed int g_selected_town_anix; // ds:0xe4ad
+signed int g_selected_town_aniy; // ds:0xe4ab
+signed int g_current_town_overx; // ds:0xe4a9
+signed int g_current_town_overy; // ds:0xe4a7
+signed int g_current_town_over; // ds:0xe4a5
+signed int g_trv_menu_selection; // ds:0xe4a3
 unsigned char g_route59_flag; // ds:0xe4a2, {0, 1 = from Kravik, 2 = from Peilinen, 3 = from Skelellen, 4 = from Rovamund}
-signed short g_get_extra_loot; // ds:0xe4a0
+signed int g_get_extra_loot; // ds:0xe4a0
 unsigned char *g_dungeon_doors_buf; // ds:0xe49c, to buffer of size 225
 unsigned char *g_dungeon_stairs_buf; // ds:0xe498, to buffer of size 80
 unsigned char *g_dungeon_fights_buf; // ds:0xe494, to buffer of size 630

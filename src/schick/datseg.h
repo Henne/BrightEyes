@@ -582,8 +582,19 @@ extern char g_grammar_bufs[5][40];	// ds:0xe4e3; seg096
 extern signed int g_dialogbox_indent_width;	// ds:0xe4db; seg096, seg097
 extern signed int g_dialogbox_indent_height;	// ds:0xe4d9; seg096, seg097
 extern char g_gui_print_char;			// ds:0xe4d8; seg096
-
+extern unsigned char g_route_tevent_flags[15];	// ds:0xe4c9; seg094
 extern unsigned char g_good_camp_place;		// ds:0xe4c8; seg051, seg094, seg109
+extern unsigned char g_trv_detour_pixel_bak[20];	// ds:0xe4b4; seg094
+extern signed int g_current_town_anix;		// ds:0xe4b1; seg002, seg093, seg094
+extern signed int g_current_town_aniy;		// ds:0xe4af; seg002, seg093, seg094
+extern signed int g_selected_town_anix;		// ds:0xe4ad; seg002, seg093, seg094
+extern signed int g_selected_town_aniy;		// ds:0xe4ab; seg002, seg093, seg094
+extern signed int g_current_town_overx;		// ds:0xe4a9; seg002
+extern signed int g_current_town_overy;		// ds:0xe4a7; seg002
+extern signed int g_current_town_over;		// ds:0xe4a5; seg002, seg093, seg094
+extern signed int g_trv_menu_selection;		// ds:0xe4a3; seg002, seg093, seg094
+extern unsigned char g_route59_flag;		// ds:0xe4a2; seg093, seg094, seg110
+extern signed int g_get_extra_loot;		// ds:0xe4a0; seg076, seg077, seg092
 extern unsigned char *g_dungeon_doors_buf; 	// ds:0xe49c; seg028,seg076,seg098,seg120
 extern unsigned char *g_dungeon_stairs_buf; 	// ds:0xe498; seg028,seg076,seg098,seg120
 extern unsigned char *g_dungeon_fights_buf; 	// ds:0xe494; seg028,seg076,seg098,seg120

@@ -572,8 +572,9 @@ void tevent_145(void)
 
 	load_area_description(0);
 
-	if (!(cast_u16(ds_readb(ROUTE59_FLAG)) & 1))
+	if (!(g_route59_flag & 1))
 	{
+		/* g_route_flag in {0, 2} */
 		do {
 			answer = GUI_radio(get_tx2(42), 2, get_tx2(43), get_tx2(44));
 
@@ -582,14 +583,15 @@ void tevent_145(void)
 		if (answer == 1)
 		{
 			ds_writew(TRV_DESTINATION, TOWNS_KRAVIK);
-			gs_current_town = (TOWNS_SKELELLEN);
+			gs_current_town = TOWNS_SKELELLEN;
 
 		} else {
 			ds_writew(TRV_DESTINATION, TOWNS_SKELELLEN);
-			gs_current_town = (TOWNS_KRAVIK);
+			gs_current_town = TOWNS_KRAVIK;
 		}
 
 	} else {
+		/* g_route_flag in {1, 3} */
 		do {
 			answer = GUI_radio(get_tx2(39), 2, get_tx2(40),	get_tx2(41));
 
@@ -598,11 +600,11 @@ void tevent_145(void)
 		if (answer == 1) {
 
 			ds_writew(TRV_DESTINATION, TOWNS_PEILINEN);
-			gs_current_town = (TOWNS_ROVAMUND);
+			gs_current_town = TOWNS_ROVAMUND;
 
 		} else {
 			ds_writew(TRV_DESTINATION, TOWNS_ROVAMUND);
-			gs_current_town = (TOWNS_PEILINEN);
+			gs_current_town = TOWNS_PEILINEN;
 		}
 	}
 

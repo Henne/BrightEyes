@@ -68,11 +68,11 @@ void set_textbox_positions(signed short town_id)
 	signed short y;
 
 	/* zero some global variables */
-	ds_writew(CURRENT_TOWN_OVER, ds_writew(TRV_MENU_SELECTION, ds_writew(SELECTED_TOWN_ANIX, ds_writew(SELECTED_TOWN_ANIY, 0))));
+	g_current_town_over = g_trv_menu_selection = g_selected_town_anix = g_selected_town_aniy = 0;
 
 
-	x = ds_writews(CURRENT_TOWN_ANIX, ds_readws((TOWN_POSITIONS-4) + 4 * town_id));
-	y = ds_writews(CURRENT_TOWN_ANIY, ds_readws((TOWN_POSITIONS-4) + 4 * town_id + 2));
+	x = g_current_town_anix = ds_readws((TOWN_POSITIONS-4) + 4 * town_id);
+	y = g_current_town_aniy = ds_readws((TOWN_POSITIONS-4) + 4 * town_id + 2);
 
 	r_dx = (x >= 0 && x <= 159) ? (y >= 0 && y <= 99 ? 3 : 1) : (y >= 0 && y <= 99 ? 2 : 0);
 
@@ -132,7 +132,7 @@ void TM_func1(signed short route_no, signed short backwards)
 #endif
 
 	memset((void*)(p_datseg + ROUTE_TEVENTS), (gs_route_stepcount = 0), 60);
-	memset((void*)(p_datseg + ROUTE_TEVENT_FLAGS), 0, 15);
+	memset(g_route_tevent_flags, 0, 15);
 
 	ds_writed(TEVENTS_TAB_PTR, (Bit32u)(p_datseg + TEVENTS_TAB));
 #if defined(__BORLANDC__)
@@ -331,10 +331,10 @@ void TM_func1(signed short route_no, signed short backwards)
 			{
 				if ((ds_readws(ROUTE_TEVENTS + 4 * gs_trv_i) <= ds_readws(ROUTE_PROGRESS) &&
 					ds_readws(TRV_RETURN) == 0 &&
-					!ds_readb(ROUTE_TEVENT_FLAGS + gs_trv_i)) ||
+					!g_route_tevent_flags[gs_trv_i]) ||
 					(ds_readws(ROUTE_TEVENTS + 4 * gs_trv_i) >= ds_readws(ROUTE_PROGRESS) &&
 					ds_readws(TRV_RETURN) == 2 &&
-					ds_readbs(ROUTE_TEVENT_FLAGS + gs_trv_i) == 2))
+					g_route_tevent_flags[gs_trv_i] == 2))
 				{
 					if (ds_readws((ROUTE_TEVENTS + 2) + 4 * gs_trv_i) != 0)
 					{
@@ -342,12 +342,13 @@ void TM_func1(signed short route_no, signed short backwards)
 
 						if (!ds_readbs((TEVENTS_REPEATABLE-1) + ds_readws((ROUTE_TEVENTS + 2) + 4 * gs_trv_i)))
 						{
-							ds_writeb(ROUTE_TEVENT_FLAGS + gs_trv_i, 1);
+							g_route_tevent_flags[gs_trv_i] = 1;
+
 						} else if (ds_readws(TRV_RETURN) == 0)
 						{
-							ds_writeb(ROUTE_TEVENT_FLAGS + gs_trv_i, 2);
+							g_route_tevent_flags[gs_trv_i] = 2;
 						} else {
-							ds_writeb(ROUTE_TEVENT_FLAGS + gs_trv_i, 0);
+							g_route_tevent_flags[gs_trv_i] = 0;
 						}
 
 						if (g_request_refresh != 0 && !ds_readb(TRAVEL_DETOUR))
@@ -457,12 +458,12 @@ void TM_func1(signed short route_no, signed short backwards)
 
 					if (last_tevent_no != -1)
 					{
-						ds_writeb(ROUTE_TEVENT_FLAGS + last_tevent_no, ds_readws(TRV_RETURN) == 1 ? 0 : 2);
+						g_route_tevent_flags[last_tevent_no] = (ds_readws(TRV_RETURN) == 1 ? 0 : 2);
 					}
 				}
 			}
-			g_wallclock_x = (g_basepos_x + 120);
-			g_wallclock_y = (g_basepos_y + 87);
+			g_wallclock_x = g_basepos_x + 120;
+			g_wallclock_y = g_basepos_y + 87;
 			g_wallclock_update = 1;
 			g_request_refresh = 0;
 		}
@@ -700,20 +701,20 @@ void TM_draw_track(signed short a1, signed short length, signed short direction,
 		if (restore == 0)
 		{
 			/* save the old pixel from the map */
-			ds_writeb(TRV_DETOUR_PIXEL_BAK + i,
-				*(fb_start + host_readws(ptr + 2) * 320 + host_readws(ptr)));
+			g_trv_detour_pixel_bak[i] =
+				*(fb_start + host_readws(ptr + 2) * 320 + host_readws(ptr));
 
 			/* write a new one */
 			*(fb_start + host_readws(ptr + 2) * 320 + host_readws(ptr)) = 0x1c;
 
 			/* move the pointer */
-			ptr += 2 * ((!direction ? 2 : -2));
+			ptr += 2 * (!direction ? 2 : -2);
 		} else {
 			/* move the pointer */
-			ptr += 2 * ((!direction ? 2 : -2));
+			ptr += 2 * (!direction ? 2 : -2);
 
 			/* restore the pixel from the map */
-			*(fb_start + host_readws(ptr + 2) * 320 + host_readws(ptr)) = ds_readb(TRV_DETOUR_PIXEL_BAK + i);
+			*(fb_start + host_readws(ptr + 2) * 320 + host_readws(ptr)) = g_trv_detour_pixel_bak[i];
 		}
 	}
 }
@@ -725,7 +726,7 @@ void TM_unused2(void)
 
 void TM_func8(signed short a1)
 {
-	if (!(ds_readb(ROUTE59_FLAG) & 1))
+	if (!(g_route59_flag & 1))
 	{
 		if (gs_current_town == TOWNS_PEILINEN)
 		{
@@ -745,7 +746,7 @@ void TM_func8(signed short a1)
 
 void TM_func9(void)
 {
-	TM_func1(59, ds_readb(ROUTE59_FLAG) & 1);
+	TM_func1(59, g_route59_flag & 1);
 
 	TRV_event(145);
 }

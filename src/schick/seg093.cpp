@@ -45,7 +45,7 @@ signed short do_travel_mode(void)
 	char *destinations_tab[6];
 
 	bak1 = g_wallclock_update;
-	ds_writeb(ROUTE59_FLAG, (unsigned char)(g_wallclock_update = (unsigned short)ds_writeb(TRAVEL_DETOUR, 0)));
+	g_route59_flag = g_wallclock_update = (unsigned short)ds_writeb(TRAVEL_DETOUR, 0);
 	gs_current_town = (gs_current_typeindex);
 
 	update_mouse_cursor();
@@ -132,7 +132,7 @@ signed short do_travel_mode(void)
 
 					g_textbox_width = tw_bak;
 
-					ds_writew(CURRENT_TOWN_ANIX, 0);
+					g_current_town_anix = (0);
 
 					set_and_spin_lock();
 
@@ -163,7 +163,7 @@ signed short do_travel_mode(void)
 						(ds_readbs((LAND_ROUTES - SIZEOF_LAND_ROUTE) + SIZEOF_LAND_ROUTE * host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + answer)) == gs_current_town ? 0 : 1));
 					g_wallclock_update = 0;
 
-					if (ds_readb(ROUTE59_FLAG) != 0)
+					if (g_route59_flag)
 					{
 						TM_func9();
 					}
@@ -214,8 +214,8 @@ signed short do_travel_mode(void)
 
 					if (l4 != -1)
 					{
-						answer = ds_readws(CURRENT_TOWN_ANIX);
-						ds_writew(CURRENT_TOWN_ANIX, 0);
+						answer = g_current_town_anix;
+						g_current_town_anix = (0);
 						l6 = g_basepos_x;
 						l7 = g_basepos_y;
 						g_basepos_y = 0;
@@ -227,7 +227,7 @@ signed short do_travel_mode(void)
 
 						g_basepos_x = l6;
 						g_basepos_y = l7;
-						ds_writew(CURRENT_TOWN_ANIX, answer);
+						g_current_town_anix = (answer);
 					}
 
 					ds_writew(MOUSE1_EVENT1, 0);
@@ -240,13 +240,13 @@ signed short do_travel_mode(void)
 
 	} while (host_readb(signpost_ptr) != 255);
 
-	ds_writew(CURRENT_TOWN_ANIX, ds_writew(CURRENT_TOWN_ANIY, ds_writew(SELECTED_TOWN_ANIX, ds_writew(SELECTED_TOWN_ANIY, 0))));
+	g_current_town_anix = g_current_town_aniy = g_selected_town_anix = g_selected_town_aniy = 0;
 
 	i = load_archive_file(ARCHIVE_FILE_COMPASS);
 	read_archive_file(i, g_buffer6_ptr, 5000);
 	close(i);
 
-	gs_show_travel_map = g_basepos_x = g_basepos_y = ds_writew(CURRENT_TOWN_OVER, ds_writew(TRV_MENU_SELECTION, 0));
+	gs_show_travel_map = g_basepos_x = g_basepos_y = g_current_town_over = g_trv_menu_selection = 0;
 
 	if (!ds_readb(TRAVEL_DETOUR))
 	{

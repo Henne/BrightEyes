@@ -631,7 +631,7 @@ signed short DNG_step(void)
 		{
 			seg092_06b4(1);
 
-			if (ds_readw(GET_EXTRA_LOOT) != 0)
+			if (g_get_extra_loot)
 			{
 				x = gs_x_target;
 				y = gs_y_target;

@@ -378,7 +378,7 @@ void seg092_06b4(signed short a1)
 
 	chest_ptr = (Bit8u*)ds_readd(DNG_SPECIALCHEST_INDEX + 4 * gs_dungeon_index);
 	ptr = g_dng_map;
-	ds_writew(GET_EXTRA_LOOT, 0);
+	g_get_extra_loot = 0;
 	x = gs_x_target;
 	y = gs_y_target;
 
@@ -424,9 +424,11 @@ void seg092_06b4(signed short a1)
 #else
 				(t_map(chest_ptr, 11)(chest_ptr));
 #endif
-				ds_writew(GET_EXTRA_LOOT, 1);
+				g_get_extra_loot = 1;
+
 			} else if (host_readws(chest_ptr + 17) != 0) {
-				ds_writew(GET_EXTRA_LOOT, 1);
+
+				g_get_extra_loot = 1;
 			}
 
 			break;
@@ -439,9 +441,10 @@ void seg092_06b4(signed short a1)
 	} while (host_readws((Bit8u*)((struct chest*)chest_ptr)++) != -1);
 #endif
 
-	if (l4 == 0 && ds_readws(GET_EXTRA_LOOT) != 0) {
+	if (l4 == 0 && g_get_extra_loot) {
 
 		if (host_readws(chest_ptr + 15) != 0) {
+
 			/* There are AP in the chest */
 			add_hero_ap_all(host_readws(chest_ptr + 15));
 		}
@@ -535,7 +538,7 @@ void use_lockpicks_on_chest(Bit8u* chest_ptr)
 				}
 #endif
 
-				ds_writew(GET_EXTRA_LOOT, 1);
+				g_get_extra_loot = 1;
 			}
 
 		} else {
@@ -566,7 +569,7 @@ void use_key_on_chest(Bit8u* chest_ptr)
 			t_map(chest_ptr, 11)(chest_ptr);
 #endif
 
-			ds_writew(GET_EXTRA_LOOT, 1);
+			g_get_extra_loot = 1;
 		}
 	} else {
 #if defined(__BORLANDC__)

@@ -344,7 +344,7 @@ void DNG01_chest6_x1(Bit8u* chest)
 
 			// Original-Bug: enable the extra loot, here 10 AP
 #ifdef M302de_ORIGINAL_BUGFIX
-			ds_writew(GET_EXTRA_LOOT, 1);
+			g_get_extra_loot = 1;
 #endif
 		} else if ((Bit8u*)host_readd((Bit8u*)(chest) + 7) != 0){
 #if defined(__BORLANDC__)
