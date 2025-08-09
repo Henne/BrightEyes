@@ -421,7 +421,7 @@ signed short DNG10_handler(void)
 		gs_x_target = (ds_readws(TRAVEL_DESTINATION_X));
 		gs_y_target = (ds_readws(TRAVEL_DESTINATION_Y));
 		gs_current_loctype = LOCTYPE_NONE;
-		gs_direction = ((ds_readbs(TRAVEL_DESTINATION_VIEWDIR) + 2) & 0x03);
+		gs_direction = ((gs_travel_destination_viewdir + 2) & 0x03);
 
 		sprintf(g_dtp2,
 			get_tx(40),

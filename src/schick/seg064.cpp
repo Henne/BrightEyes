@@ -344,7 +344,7 @@ unsigned short passage_arrival(void)
 		/* save the old town in tmp */
 		tmp = (signed char)gs_current_town;
 		/* set the new town in current_town */
-		gs_current_town = (ds_readb(TRAVEL_DESTINATION_TOWN_ID));
+		gs_current_town = ds_readb(TRAVEL_DESTINATION_TOWN_ID);
 
 		/* load the area of the new town */
 		call_load_area(1);
@@ -360,10 +360,10 @@ unsigned short passage_arrival(void)
 		si = host_readw(locations_list_ptr + LOCATION_LOCDATA);
 		ds_writew(TRAVEL_DESTINATION_X, (si >> 8) & 0xff);
 		ds_writew(TRAVEL_DESTINATION_Y, si & 0x0f);
-		ds_writew(TRAVEL_DESTINATION_VIEWDIR, (si >> 4) & 0x0f);
+		gs_travel_destination_viewdir = (si >> 4) & 0x0f; /* = (si / 16) % 15 */
 
 		/* restore the old town area / TODO: a bit bogus */
-		gs_current_town = ((unsigned char)tmp);
+		gs_current_town = (unsigned char)tmp;
 		call_load_area(1);
 	}
 

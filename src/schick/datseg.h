@@ -386,6 +386,8 @@ extern Bit16s gs_trv_i;				//ds:0x4228; seg063, seg094
 extern Bit16s gs_route_stepcount;		//ds:0x422a; seg063, seg094
 extern Bit16s gs_forcedmarch_le_cost;		//ds:0x422c; seg094
 
+extern Bit16s gs_travel_destination_viewdir;	//ds:0x433e; seg063-seg094
+
 #if defined(__BORLANDC__)
 extern Bit8u *gs_tm_unused1_ptr;		//ds:0x4340; seg094
 #else

@@ -637,7 +637,7 @@ signed short TM_enter_target_town(void)
 		{
 			/* set the target town as current town */
 			tmp2 = gs_current_town;
-			gs_current_town = ((signed char)ds_readws(TRAVEL_DESTINATION_TOWN_ID));
+			gs_current_town = (signed char)ds_readws(TRAVEL_DESTINATION_TOWN_ID);
 
 			/* load the map */
 			call_load_area(1);
@@ -651,9 +651,9 @@ signed short TM_enter_target_town(void)
 			tmp = host_readws(locations_list_ptr + LOCATION_LOCDATA);
 			ds_writew(TRAVEL_DESTINATION_X, (tmp >> 8) & 0xff);
 			ds_writew(TRAVEL_DESTINATION_Y, tmp & 0xf);
-			ds_writew(TRAVEL_DESTINATION_VIEWDIR, TM_enter_target_town_viewdir(host_readws(locations_list_ptr)));
+			gs_travel_destination_viewdir = TM_enter_target_town_viewdir(host_readws(locations_list_ptr));
 
-			gs_current_town = ((signed char)tmp2);
+			gs_current_town = (signed char)tmp2;
 
 			/* load the map */
 			call_load_area(1);

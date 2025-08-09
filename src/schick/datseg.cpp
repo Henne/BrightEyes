@@ -2707,7 +2707,7 @@ signed short g_trv_return = 0; // ds:0x4336, {-1, 0, 1, 2} + ?
 unsigned short g_travel_destination_town_id = 0; // ds:0x4338
 unsigned short g_travel_destination_x = 0; // ds:0x433a
 unsigned short g_travel_destination_y = 0; // ds:0x433c
-signed short g_travel_destination_viewdir = 0; // ds:0x433e
+Bit16s gs_travel_destination_viewdir = 0; // ds:0x433e
 
 #if defined(__BORLANDC__)
 Bit8u *gs_tm_unused1_ptr = NULL;	// ds:0x4340;
