@@ -628,7 +628,7 @@ void draw_icon(signed short id, signed short x, signed short y)
  * \brief   show storytexts
  *
  * \return              1 if dialog was shown / 0 if had already been shown
- * These were introduced in V3.00 (de and en) to find better into the story.
+ * These were introduced in V3.00 (de and en) to find a better way into the story.
  */
 /* static */
 signed short show_storytext(void)
@@ -665,9 +665,12 @@ signed short show_storytext(void)
 
 	}
 
-	if (!ds_readbs(KNOWN_PERSONS + person)) {
+	if (!gs_known_persons[person]) {
+
 		GUI_dialog_na(icon, ptr);
-		ds_writeb(KNOWN_PERSONS + person, 1);
+
+		gs_known_persons[person] = 1;
+
 		return 1;
 	} else {
 		return 0;

@@ -60,7 +60,7 @@ void diary_show(void)
 
 	get_textcolor(&fg_bak, &bg_bak);
 
-	g_vga_backbuffer = g_buffer9_ptr;
+	g_vga_backbuffer = (Bit8u*)g_buffer9_ptr;
 	bak1 = ds_readw(TEXTLINE_MAXLEN);
 	bak2 = ds_readw(TEXTLINE_POSX);
 	txt_tabpos1_bak = ds_readw(TXT_TABPOS1);
@@ -77,7 +77,7 @@ void diary_show(void)
 	do {
 		i = diary_print_entry(i);
 
-	} while (i < ds_readws(DIARY_ENTRY_COUNTER));
+	} while (i < gs_diary_entry_counter);
 
 	g_pic_copy.x1 = 0;
 	g_pic_copy.y1 = 0;
@@ -96,7 +96,7 @@ void diary_show(void)
 
 	set_textcolor(fg_bak, bg_bak);
 
-	g_pic_copy.dst = ((g_vga_backbuffer = g_vga_memstart));
+	g_pic_copy.dst = g_vga_backbuffer = g_vga_memstart;
 
 	ds_writew(TEXTLINE_POSX, bak2);
 	ds_writew(TEXTLINE_MAXLEN, bak1);
@@ -109,34 +109,34 @@ void diary_show(void)
 
 void diary_new_entry(void)
 {
-	Bit8u *ptr;
+	struct struct_diary_entry *entry;
 
-	/* move all entries if the list is full */
-	if (ds_readw(DIARY_ENTRY_COUNTER) == 23) {
-		memcpy(p_datseg + DIARY_ENTRIES, p_datseg + DIARY_ENTRIES+8, (22*8));
-		dec_ds_ws(DIARY_ENTRY_COUNTER);
+	/* if all entries are occupied, move all entries one slot forward to have the last slot free */
+	if (gs_diary_entry_counter == 23) {
+		memcpy(&gs_diary_entries[0], &gs_diary_entries[1], (22 * sizeof(struct_diary_entry)));
+		gs_diary_entry_counter--;
 	}
 
 	/* make a pointer to the last entry */
-	ptr = p_datseg + (DIARY_ENTRIES-8) + ds_readw(DIARY_ENTRY_COUNTER) * 8;
+	entry = &gs_diary_entries[gs_diary_entry_counter];
 
 	/* avoid double entries for the same town */
-	if (gs_current_town != host_readw(ptr + 6)) {
+	if (gs_current_town != entry->year) {
 
 		/* make a pointer to the current entry */
-		ptr = p_datseg + DIARY_ENTRIES + ds_readw(DIARY_ENTRY_COUNTER) * 8;
+		entry = &gs_diary_entries[gs_diary_entry_counter];
 
-		/* deccrement entry counter */
-		inc_ds_ws(DIARY_ENTRY_COUNTER);
+		/* increment entry counter */
+		gs_diary_entry_counter++;
 
 		/* Write day of month */
-		host_writew(ptr, gs_day_of_month);
+		entry->day = gs_day_of_month;
 		/* Write month */
-		host_writew(ptr + 2, gs_month);
+		entry->month = gs_month;
 		/* Write year */
-		host_writew(ptr + 4, gs_year);
+		entry->year = gs_year;
 		/* Write city */
-		host_writew(ptr + 6, gs_current_town);
+		entry->town = gs_current_town;
 	}
 }
 
@@ -150,64 +150,64 @@ Bit16u diary_print_entry(Bit16u line)
 	signed short day;
 	signed short month;
 	signed short startline;
-	Bit8u *ptr;
-	char *city_name;
+	struct struct_diary_entry *entry;
+	char *town_name;
 	signed short di = 0;
 
 	memset((Bit8u*)g_buffer9_ptr, 0, 64000);
 
-	ptr = p_datseg + DIARY_ENTRIES + line * 8;
+	entry = &gs_diary_entries[line];
 
 	startline = line;
 
 	do {
-		day = host_readw(ptr);
-		month = host_readw(ptr + 2);
-		city_name = get_ttx(host_readw(ptr + 6) + 0xeb);
+		day = entry->day;
+		month = entry->month;
+		town_name = get_ttx(entry->town + 0xeb);
 
 		if (di == 0) {
-			if ((signed short)strlen(city_name) > 24) {
+			if ((signed short)strlen(town_name) > 24) {
 
-				sprintf(g_dtp2, g_diary_string1, host_readw(ptr), get_ttx(host_readw(ptr + 2) + 0x15), city_name);
+				sprintf(g_dtp2, g_diary_string1, entry->day, get_ttx(entry->month + 0x15), town_name);
 
-			} else if ((signed short)strlen(city_name) > 15 ) {
+			} else if ((signed short)strlen(town_name) > 15) {
 
-				sprintf(g_dtp2, g_diary_string2, host_readw(ptr), get_ttx(host_readw(ptr + 2) + 0x15), city_name);
+				sprintf(g_dtp2, g_diary_string2, entry->day, get_ttx(entry->month + 0x15), town_name);
 
 			} else {
-				sprintf(g_dtp2, g_diary_string3, host_readw(ptr), get_ttx(host_readw(ptr + 2) + 0x15), city_name);
+				sprintf(g_dtp2, g_diary_string3, entry->day, get_ttx(entry->month + 0x15), town_name);
 			}
 		} else {
-			if ((signed short)strlen(city_name) > 24) {
+			if ((signed short)strlen(town_name) > 24) {
 
-				sprintf(g_dtp2, g_diary_string4, city_name);
+				sprintf(g_dtp2, g_diary_string4, town_name);
 
-			} else if ((signed short)strlen(city_name) > 15) {
+			} else if ((signed short)strlen(town_name) > 15) {
 
-				sprintf(g_dtp2, g_diary_string5, city_name);
+				sprintf(g_dtp2, g_diary_string5, town_name);
 
-			} else if ((signed short)strlen(city_name) > 6) {
+			} else if ((signed short)strlen(town_name) > 6) {
 
-				sprintf(g_dtp2, g_diary_string6, city_name);
+				sprintf(g_dtp2, g_diary_string6, town_name);
 
 			} else {
 
-				sprintf(g_dtp2, g_diary_string7, city_name);
+				sprintf(g_dtp2, g_diary_string7, town_name);
 			}
 		}
 
 		GUI_print_string(g_dtp2, 65, (line - startline) * 7);
-		ptr += 8;
+		entry++;
 		line++;
 		di++;
 
-	} while ((host_readws(ptr) == day) && (host_readws(ptr + 2) == month));
+	} while ((entry->day == day) && (entry->month == month));
 
 	g_pic_copy.x1 = 0;
 	g_pic_copy.y1 = 0;
 	g_pic_copy.x2 = 319;
 	g_pic_copy.y2 = line * 7;
-	g_pic_copy.src = g_buffer9_ptr;
+	g_pic_copy.src = (Bit8u*)g_buffer9_ptr;
 #if !defined(__BORLANDC__)
 	g_pic_copy.dst = g_renderbuf_ptr + startline * 2240 + 9600;
 #else

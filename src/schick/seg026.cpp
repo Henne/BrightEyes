@@ -277,7 +277,7 @@ signed short load_game_state(void)
 		/* read game status */
 		/* TODO: check pointer arithmetics work with other pointers */
 		p_status_start = (HugePt)&gs_datseg_status_start;
-		p_status_end = (HugePt)(p_datseg + DATSEG_STATUS_END);
+		p_status_end = (HugePt)&gs_datseg_status_end;
 		status_length = (signed short)(p_status_end - p_status_start);
 
 		_read(handle_gs, &gs_datseg_status_start, status_length);
@@ -542,7 +542,7 @@ signed short save_game_state(void)
 
 		/* TODO: check if pointer arithmetics work with other pointers */
 		p_status_start = (HugePt)&gs_datseg_status_start;
-		p_status_end = (HugePt)(p_datseg + DATSEG_STATUS_END);
+		p_status_end = (HugePt)&gs_datseg_status_end;
 		status_len = (signed short)(p_status_end - p_status_start);
 
 		prepare_sg_name(g_text_output_buf, g_savegame_names[slot]);

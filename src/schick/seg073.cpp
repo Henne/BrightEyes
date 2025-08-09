@@ -485,12 +485,13 @@ signed short tavern_quest_infos(void)
 		/* calculate the day in a week */
 		/* not used in the game */
 		/* TODO: Does this work with the nameless days ? */
-		ds_writeb(ANNOUNCE_DAY, gs_day_of_month + 7);
+		gs_announce_day = gs_day_of_month + 7;
 
-		if (ds_readbs(ANNOUNCE_DAY) > 30) {
+		if (gs_announce_day > 30) {
 
-			sub_ds_bs(ANNOUNCE_DAY, 30);
+			gs_announce_day -= 30;
 		}
+
 		/* Original-Bug: which return value here? */
 
 	} else if ((gs_current_town == TOWNS_THORWAL) && !gs_quest_deadship && (gs_current_typeindex == 6))

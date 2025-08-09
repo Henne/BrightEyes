@@ -786,12 +786,12 @@
 #define DNG09_LEVER_FAST                (0x43a1)    /* unsigned char; {0,1} */
 #define DNG11_SOUP_SUPPLY               (0x43a2)    /* unsigned char */
 //#define ARSENAL_MONEY                   (0x43a3)    /* signed short; {-1, 0 - 60 } */
-#define ANNOUNCE_DAY                    (0x43a5)    /* signed char; UNUSED */
-#define KNOWN_PERSONS                   (0x43a6)    /* char[17] */
+//#define ANNOUNCE_DAY                    (0x43a5)    /* signed char; UNUSED */
+//#define KNOWN_PERSONS                   (0x43a6)    /* char[17] */
 // ?3
-#define DIARY_ENTRY_COUNTER             (0x43ba)    /* signed short */
-#define DIARY_ENTRIES                   (0x43bc)    /* struct(8)[23]; struct{short day, month, year, town;} */
-#define DATSEG_STATUS_END               (0x4474)    /* char */
+//#define DIARY_ENTRY_COUNTER             (0x43ba)    /* signed short */
+//#define DIARY_ENTRIES                   (0x43bc)    /* struct(8)[23]; struct{short day, month, year, town;} */
+//#define DATSEG_STATUS_END               (0x4474)    /* char */
 
 //#define FADING_STATE                    (0x4475)    /* unsigned char; {0,1,2,3} */
 //#define MUSIC_ENABLED                   (0x4476)    /* unsigned char; {0,1} */

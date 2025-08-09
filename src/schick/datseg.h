@@ -40,6 +40,13 @@ struct struct_rect {
 	int x2;
 };
 
+struct struct_diary_entry {
+	Bit16s day;
+	Bit16s month;
+	Bit16s year;
+	Bit16s town;
+};
+
 struct struct_smith_repairitems {
 	Bit16s item_id;
 	Bit32s pickup_time;
@@ -376,6 +383,13 @@ extern Bit16s gs_route_stepcount;		//ds:0x422a; seg063, seg094
 extern Bit16s gs_forcedmarch_le_cost;		//ds:0x422c; seg094
 
 extern Bit16s gs_arsenal_money;			//ds:0x43a3; seg068
+extern Bit8s  gs_announce_day;			//ds:0x43a5; seg073
+
+extern Bit8s  gs_known_persons[20];		//ds:0x43a6; seg025
+extern Bit16s gs_diary_entry_counter;		//ds:0x43ba; seg024
+extern struct struct_diary_entry gs_diary_entries[23];	//ds:0x43bc; seg024
+
+extern Bit8u  gs_datseg_status_end;		//ds:0x4474; seg026
 /* GameState written directly into SaveGame file ends at 0x4474 */
 
 extern unsigned char g_fading_state;		//ds:0x4475; seg002-seg095
