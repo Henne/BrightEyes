@@ -534,7 +534,7 @@ signed short TM_unused1(Bit8u* signpost_ptr, signed short old_route_no)
 					{
 						if (route_no2 != route_no1)
 						{
-							destinations_tab[town_i++] = get_ttx(235 + ds_writebs(TRV_MENU_TOWNS + town_i,
+							destinations_tab[town_i++] = get_ttx(235 + (gs_trv_menu_towns[town_i] =
                                 ((answer = ds_readb((LAND_ROUTES - SIZEOF_LAND_ROUTE + LAND_ROUTE_TOWN_1) + SIZEOF_LAND_ROUTE * route_id)) != gs_current_town ?
                                     (unsigned char)answer : ds_readb((LAND_ROUTES - SIZEOF_LAND_ROUTE + LAND_ROUTE_TOWN_2) + SIZEOF_LAND_ROUTE * route_id))
                             ));
@@ -542,7 +542,7 @@ signed short TM_unused1(Bit8u* signpost_ptr, signed short old_route_no)
 						route_no2++;
 					}
 
-					ds_writeb(TRV_MENU_TOWNS + town_i, (signed char)town);
+					gs_trv_menu_towns[town_i] = (signed char)town;
 					destinations_tab[town_i] = get_ttx(547);
 					town_i++;
 					ds_writed(TM_UNUSED1_PTR, (Bit32u)signpost_ptr);
@@ -561,7 +561,7 @@ signed short TM_unused1(Bit8u* signpost_ptr, signed short old_route_no)
 						answer = town_i;
 					}
 
-					gs_trv_destination = (ds_readbs((TRV_MENU_TOWNS - 1) + answer));
+					gs_trv_destination = gs_trv_menu_towns[answer - 1];
 					return answer;
 				}
 

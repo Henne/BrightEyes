@@ -110,14 +110,14 @@ signed short do_travel_mode(void)
 					i = 0;
 					while ((l_di = host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + i)) != 255)
 					{
-						destinations_tab[i] = get_ttx(235 + ds_writebs(TRV_MENU_TOWNS + i,
-						    (answer = ds_readb((LAND_ROUTES - SIZEOF_LAND_ROUTE + LAND_ROUTE_TOWN_1) + SIZEOF_LAND_ROUTE * l_di)) != gs_current_town ?
-						    (signed char) answer : ds_readbs((LAND_ROUTES - SIZEOF_LAND_ROUTE + LAND_ROUTE_TOWN_2) + SIZEOF_LAND_ROUTE * l_di)));
+						destinations_tab[i] = get_ttx(235 + (gs_trv_menu_towns[i] =
+						    ((answer = ds_readb((LAND_ROUTES - SIZEOF_LAND_ROUTE + LAND_ROUTE_TOWN_1) + SIZEOF_LAND_ROUTE * l_di)) != gs_current_town ?
+						    (signed char) answer : ds_readbs((LAND_ROUTES - SIZEOF_LAND_ROUTE + LAND_ROUTE_TOWN_2) + SIZEOF_LAND_ROUTE * l_di))));
 
 						i++;
 					}
 
-					ds_writeb(TRV_MENU_TOWNS + i, gs_current_town);
+					gs_trv_menu_towns[i] = gs_current_town;
 					destinations_tab[i] = get_ttx(613);
 					i++;
 
@@ -144,7 +144,7 @@ signed short do_travel_mode(void)
 					}
 
 					route_id = host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + answer);
-					gs_trv_destination = (ds_readbs(TRV_MENU_TOWNS + answer));
+					gs_trv_destination = gs_trv_menu_towns[answer];
 
 					if (!get_current_season() &&
 						(route_id == 31 || route_id == 41 || route_id == 47 || route_id == 48 || route_id == 49))
