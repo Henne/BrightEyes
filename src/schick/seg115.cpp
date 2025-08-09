@@ -219,7 +219,7 @@ void tevent_094(void)
 
 		if (answer == 1) {
 			/* enter Daspota dungeon */
-			ds_writeb(TRAVEL_DETOUR, DUNGEONS_DASPOTASCHATZ);
+			gs_travel_detour = (DUNGEONS_DASPOTASCHATZ);
 		}
 	}
 }
@@ -289,7 +289,7 @@ void tevent_095(void)
 
 				TRV_load_textfile(-1);
 			} else {
-				ds_writew(TRV_RETURN, done = 1);
+				gs_trv_return = (done = 1);
 			}
 		} else {
 			/* at least one hero failed HA-test */
@@ -467,7 +467,7 @@ void tevent_126(void)
 
 		if (answer == 1)
 		{
-			ds_writeb(TRAVEL_DETOUR, DUNGEONS_KULTSTAETTE_DES_NAMENLOSEN);
+			gs_travel_detour = (DUNGEONS_KULTSTAETTE_DES_NAMENLOSEN);
 		}
 	}
 }
@@ -531,7 +531,7 @@ void tevent_129(void)
 		} while (answer == -1);
 
 		if (answer == 1) {
-			ds_writeb(TRAVEL_DETOUR, DUNGEONS_DRACHENHORT);
+			gs_travel_detour = (DUNGEONS_DRACHENHORT);
 		}
 
 	} else if (ds_readb(TEVENT129_FLAG) != 0) {
@@ -545,7 +545,7 @@ void tevent_129(void)
 		} while (answer == -1);
 
 		if (answer == 1) {
-			ds_writeb(TRAVEL_DETOUR, DUNGEONS_DRACHENHORT);
+			gs_travel_detour = (DUNGEONS_DRACHENHORT);
 		}
 	}
 }
@@ -645,7 +645,7 @@ void tevent_047(void)
 							gs_y_target = (10);
 						}
 
-						ds_writeb(TRAVEL_DETOUR, 99);
+						gs_travel_detour = (99);
 					}
 				} else {
 					do {
@@ -665,7 +665,7 @@ void tevent_047(void)
 						gs_current_town = (TOWNS_VARNHEIM);
 						gs_x_target = (4);
 						gs_y_target = (10);
-						ds_writeb(TRAVEL_DETOUR, 99);
+						gs_travel_detour = (99);
 					}
 				}
 			}
@@ -707,7 +707,7 @@ void tevent_100(void)
 
 			if (answer == 1)
 			{
-				ds_writeb(TRAVEL_DETOUR, DUNGEONS_RUINE_DES_SCHWARZMAGIERS);
+				gs_travel_detour = (DUNGEONS_RUINE_DES_SCHWARZMAGIERS);
 			} else {
 
 				GUI_output(get_tx2(67));
@@ -745,7 +745,7 @@ void tevent_100(void)
 
 		} else if (answer == 3)
 		{
-			ds_writew(TRV_RETURN, 1);
+			gs_trv_return = (1);
 		}
 	}
 

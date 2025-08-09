@@ -666,7 +666,7 @@ void tevent_076(void)
 			} while (answer == -1);
 
 			if (answer == 1) {
-				ds_writeb(TRAVEL_DETOUR, DUNGEONS_GOBLINHOEHLE);
+				gs_travel_detour = (DUNGEONS_GOBLINHOEHLE);
 			}
 		}
 
@@ -682,7 +682,7 @@ void tevent_076(void)
 		} while (answer == -1);
 
 		if (answer == 1) {
-			ds_writeb(TRAVEL_DETOUR, DUNGEONS_GOBLINHOEHLE);
+			gs_travel_detour = (DUNGEONS_GOBLINHOEHLE);
 		}
 	}
 }

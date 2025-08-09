@@ -388,7 +388,7 @@ void tevent_051(void)
 
 			if (answer == 1)
 			{
-				ds_writeb(TRAVEL_DETOUR, DUNGEONS_SPINNENHOEHLE);
+				gs_travel_detour = (DUNGEONS_SPINNENHOEHLE);
 			}
 		}
 
@@ -403,7 +403,7 @@ void tevent_051(void)
 
 		if (answer == 1)
 		{
-			ds_writeb(TRAVEL_DETOUR, DUNGEONS_SPINNENHOEHLE);
+			gs_travel_detour = (DUNGEONS_SPINNENHOEHLE);
 		}
 	}
 }
@@ -501,7 +501,7 @@ void tevent_124(void)
 
 	if (answer == 2)
 	{
-		ds_writew(TRV_RETURN, 1);
+		gs_trv_return = (1);
 
 	} else {
 

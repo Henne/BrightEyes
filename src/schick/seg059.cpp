@@ -275,7 +275,7 @@ void prolog_ghostship(void)
 
 	if (answer == 1) {
 		g_request_refresh = 0;
-		ds_writeb(TRAVEL_DETOUR, DUNGEONS_TOTENSCHIFF);
+		gs_travel_detour = (DUNGEONS_TOTENSCHIFF);
 	} else {
 		g_request_refresh = 1;
 	}

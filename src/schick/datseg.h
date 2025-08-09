@@ -386,6 +386,10 @@ extern Bit16s gs_trv_i;				//ds:0x4228; seg063, seg094
 extern Bit16s gs_route_stepcount;		//ds:0x422a; seg063, seg094
 extern Bit16s gs_forcedmarch_le_cost;		//ds:0x422c; seg094
 
+extern Bit8u  gs_forcedmarch_timer;		//ds:0x4332; seg002, seg094
+extern Bit8u  gs_travel_detour;			//ds:0x4333; seg002-seg118
+extern Bit16s gs_current_signpost;		//ds:0x4334; seg025, seg063, seg093
+extern Bit16s gs_trv_return;			//ds:0x4336; seg093-seg116
 extern Bit16s gs_travel_destination_town_id;	//ds:0x4338; seg063-seg094
 extern Bit16s gs_travel_destination_x;		//ds:0x433a; seg063-seg094
 extern Bit16s gs_travel_destination_y;		//ds:0x433c; seg063-seg094

@@ -143,7 +143,7 @@ void TM_func1(signed short route_no, signed short backwards)
 	}
 #endif
 
-	ds_writew(TRV_RETURN, 0);
+	gs_trv_return = (0);
 	ds_writed(ROUTE_COURSE_START, ds_readd(ROUTE_COURSE_PTR));
 	ds_writew(ROUTE_DAYPROGRESS, (
 	    ds_readws(TRAVEL_SPEED) + host_readbs((Bit8u*)ds_readd(TRAVEL_ROUTE_PTR) + LAND_ROUTE_SPEED_MOD) * ds_readws(TRAVEL_SPEED) / 10
@@ -191,10 +191,10 @@ void TM_func1(signed short route_no, signed short backwards)
 		gs_route_stepcount++;
 	}
 
-	gs_route_stepcount = ds_writew(ROUTE_PROGRESS, ds_writeb(TRAVEL_DETOUR, 0));
+	gs_route_stepcount = ds_writew(ROUTE_PROGRESS, gs_travel_detour = (0));
 
 	while (host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2 * ds_writew(ROUTE_MOUSEHOVER, 0)) != -1 &&
-		!ds_readb(TRAVEL_DETOUR) &&
+		!gs_travel_detour &&
 		ds_readw(GAME_STATE) == GAME_STATE_MAIN)
 	{
 		if (is_mouse_in_rect(host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR)) - 16,
@@ -206,7 +206,7 @@ void TM_func1(signed short route_no, signed short backwards)
 			ds_writew(ROUTE_MOUSEHOVER, 1);
 		}
 
-		if (ds_readws(TRV_RETURN) == 2)
+		if (gs_trv_return == 2)
 		{
 			gs_route_stepcount--;
 
@@ -246,12 +246,12 @@ void TM_func1(signed short route_no, signed short backwards)
 			gs_trv_i++;
 		}
 
-		add_ds_ws(ROUTE_PROGRESS, (ds_readws(TRV_RETURN) == 2 ? -ds_readws(ROUTE_STEPSIZE) : ds_readws(ROUTE_STEPSIZE)));
+		add_ds_ws(ROUTE_PROGRESS, (gs_trv_return == 2 ? -ds_readws(ROUTE_STEPSIZE) : ds_readws(ROUTE_STEPSIZE)));
 		add_ds_ws(ROUTE_DAYPROGRESS, ds_readws(ROUTE_STEPSIZE));
 
 		if (ds_readws(MOUSE2_EVENT) != 0 || ds_readws(ACTION) == ACTION_ID_PAGE_UP)
 		{
-			if (!ds_readb(FORCEDMARCH_TIMER))
+			if (!gs_forcedmarch_timer)
 			{
 				answer = GUI_radio(get_ttx(815), 3,
 							get_tx(74),
@@ -263,12 +263,12 @@ void TM_func1(signed short route_no, signed short backwards)
 							get_ttx(613));
 			}
 
-			if (answer == 1 && !ds_readb(FORCEDMARCH_TIMER)) /* Gewaltmarsch */
+			if (answer == 1 && !gs_forcedmarch_timer) /* Gewaltmarsch */
 			{
 			    /* do forced march for 2 days */
 				gs_forcedmarch_le_cost = random_schick(10);
 				ds_writew(TRAVEL_SPEED, gs_route_stepcount + 197);
-				ds_writeb(FORCEDMARCH_TIMER, 2);
+				gs_forcedmarch_timer = 2;
 				ds_writew(ROUTE_DURATION, ds_readws(ROUTE_LENGTH) / (
 				    ds_readws(TRAVEL_SPEED) + (host_readbs((Bit8u*)ds_readd(TRAVEL_ROUTE_PTR) + LAND_ROUTE_SPEED_MOD) * ds_readws(TRAVEL_SPEED)) / 10
                 ) * 60);
@@ -287,9 +287,9 @@ void TM_func1(signed short route_no, signed short backwards)
 					}
 				}
 
-			} else if ((answer == 1 && ds_readb(FORCEDMARCH_TIMER) != 0) ||
-					(answer == 2 && !ds_readb(FORCEDMARCH_TIMER))) /* Kampieren */
-				// Depending on FORCEDMARCH_TIMER, the "Kampieren" answer is on position 1 or 2.
+			} else if ((answer == 1 && gs_forcedmarch_timer != 0) ||
+					(answer == 2 && !gs_forcedmarch_timer)) /* Kampieren */
+				// Depending on gs_forcedmarch_timer, the "Kampieren" answer is on position 1 or 2.
 			{
 				/* make gather_herbs and replenish_stocks practically impossible */
 				g_wildcamp_sleep_quality = -3;
@@ -330,10 +330,10 @@ void TM_func1(signed short route_no, signed short backwards)
 			for (gs_trv_i = 0; gs_trv_i < 15; gs_trv_i++)
 			{
 				if ((ds_readws(ROUTE_TEVENTS + 4 * gs_trv_i) <= ds_readws(ROUTE_PROGRESS) &&
-					ds_readws(TRV_RETURN) == 0 &&
+					gs_trv_return == 0 &&
 					!g_route_tevent_flags[gs_trv_i]) ||
 					(ds_readws(ROUTE_TEVENTS + 4 * gs_trv_i) >= ds_readws(ROUTE_PROGRESS) &&
-					ds_readws(TRV_RETURN) == 2 &&
+					gs_trv_return == 2 &&
 					g_route_tevent_flags[gs_trv_i] == 2))
 				{
 					if (ds_readws((ROUTE_TEVENTS + 2) + 4 * gs_trv_i) != 0)
@@ -344,14 +344,14 @@ void TM_func1(signed short route_no, signed short backwards)
 						{
 							g_route_tevent_flags[gs_trv_i] = 1;
 
-						} else if (ds_readws(TRV_RETURN) == 0)
+						} else if (gs_trv_return == 0)
 						{
 							g_route_tevent_flags[gs_trv_i] = 2;
 						} else {
 							g_route_tevent_flags[gs_trv_i] = 0;
 						}
 
-						if (g_request_refresh != 0 && !ds_readb(TRAVEL_DETOUR))
+						if (g_request_refresh != 0 && !gs_travel_detour)
 						{
 							g_wallclock_update = 0;
 						}
@@ -362,7 +362,7 @@ void TM_func1(signed short route_no, signed short backwards)
 
         /* night camp */
 		if (gs_day_timer >= HOURS(20) &&
-			!ds_readb(TRAVEL_DETOUR) &&
+			!gs_travel_detour &&
 			ds_readws(GAME_STATE) == GAME_STATE_MAIN &&
 			2 * ds_readws(ROUTE_STEPSIZE) < ds_readws(ROUTE_PROGRESS) &&
 			ds_readws(ROUTE_LENGTH) - 2 * ds_readws(ROUTE_STEPSIZE) > ds_readws(ROUTE_PROGRESS))
@@ -414,12 +414,12 @@ void TM_func1(signed short route_no, signed short backwards)
 			}
 		}
 
-		if (g_check_disease && !ds_readb(TRAVEL_DETOUR) && ds_readw(GAME_STATE) == GAME_STATE_MAIN)
+		if (g_check_disease && !gs_travel_detour && ds_readw(GAME_STATE) == GAME_STATE_MAIN)
 		{
 			disease_effect();
 		}
 
-		if (g_request_refresh != 0 && !ds_readb(TRAVEL_DETOUR) && ds_readw(GAME_STATE) == GAME_STATE_MAIN)
+		if (g_request_refresh != 0 && !gs_travel_detour && ds_readw(GAME_STATE) == GAME_STATE_MAIN)
 		{
 			update_mouse_cursor();
 			load_map();
@@ -454,11 +454,11 @@ void TM_func1(signed short route_no, signed short backwards)
 			    /* Return or continue? */
 				if (GUI_radio(get_tx(71), 2, get_tx(72), get_tx(73)) == 2)
 				{
-					ds_writew(TRV_RETURN, ds_readws(TRV_RETURN) == 0 ? 1 : -1);
+					gs_trv_return = (gs_trv_return == 0 ? 1 : -1);
 
 					if (last_tevent_no != -1)
 					{
-						g_route_tevent_flags[last_tevent_no] = (ds_readws(TRV_RETURN) == 1 ? 0 : 2);
+						g_route_tevent_flags[last_tevent_no] = (gs_trv_return == 1 ? 0 : 2);
 					}
 				}
 			}
@@ -469,18 +469,18 @@ void TM_func1(signed short route_no, signed short backwards)
 		}
 
 #if defined(__BORLANDC__)
-		if (ds_readws(TRV_RETURN) == 1 || ds_readws(TRV_RETURN) == -1)
+		if (gs_trv_return == 1 || gs_trv_return == -1)
 		{
-			ds_writew(TRV_RETURN, ds_readws(TRV_RETURN) == 1 ? 2: 0);
+			gs_trv_return = (gs_trv_return == 1 ? 2: 0);
 
-			add_ds_fp(ROUTE_COURSE_PTR, 2 * ((!backwards && ds_readws(TRV_RETURN) == 0) || (backwards && ds_readws(TRV_RETURN) != 0) ? -2 : 2));
+			add_ds_fp(ROUTE_COURSE_PTR, 2 * ((!backwards && gs_trv_return == 0) || (backwards && gs_trv_return != 0) ? -2 : 2));
 		}
 
-		add_ds_fp(ROUTE_COURSE_PTR, 2 * ((!backwards && ds_readws(TRV_RETURN) == 0) || (backwards && ds_readws(TRV_RETURN) != 0) ? 2 : -2));
+		add_ds_fp(ROUTE_COURSE_PTR, 2 * ((!backwards && gs_trv_return == 0) || (backwards && gs_trv_return != 0) ? 2 : -2));
 #endif
 	}
 
-	if (ds_readw(GAME_STATE) == GAME_STATE_MAIN && !ds_readb(TRAVEL_DETOUR) && ds_readw(TRV_RETURN) != 2)
+	if (ds_readw(GAME_STATE) == GAME_STATE_MAIN && !gs_travel_detour && gs_trv_return != 2)
 	{
 		update_mouse_cursor();
 #if defined(__BORLANDC__)

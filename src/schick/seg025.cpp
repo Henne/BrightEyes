@@ -233,11 +233,12 @@ void do_informer(void)
 
 void enter_map(void)
 {
-	ds_writew(CURRENT_SIGNPOST, gs_current_typeindex);
+	gs_current_signpost = gs_current_typeindex;
 
 	gs_current_typeindex = gs_current_town;
 
-	gs_current_loctype = gs_current_town = (TOWNS_NONE);
+	gs_current_loctype = gs_current_town = TOWNS_NONE;
+
 	gs_show_travel_map = 1;
 }
 

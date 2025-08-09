@@ -389,7 +389,7 @@ void tevent_061(void)
 			} while (answer == -1);
 
 			if (answer == 1) {
-				ds_writeb(TRAVEL_DETOUR, DUNGEONS_WOLFSHOEHLE);
+				gs_travel_detour = (DUNGEONS_WOLFSHOEHLE);
 			}
 		}
 
@@ -404,7 +404,7 @@ void tevent_061(void)
 		} while (answer == -1);
 
 		if (answer == 1) {
-			ds_writeb(TRAVEL_DETOUR, DUNGEONS_WOLFSHOEHLE);
+			gs_travel_detour = (DUNGEONS_WOLFSHOEHLE);
 		}
 	}
 }
@@ -605,7 +605,7 @@ void tevent_064(void)
 
 			GUI_output(get_tx2(70));
 
-			ds_writews(TRV_RETURN, ds_readws(TRV_RETURN) == 0 ? 1 : -1);
+			gs_trv_return = (gs_trv_return == 0 ? 1 : -1);
 		}
 
 	} else if (ds_readb(TEVENT064_FLAG) != 0) {

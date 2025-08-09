@@ -100,11 +100,11 @@ void do_harbor(void)
 #endif
 	flag = 1;
 
-	ds_writew(CURRENT_SIGNPOST, gs_current_typeindex);
+	gs_current_signpost = gs_current_typeindex;
 
 	draw_loc_icons(4, MENU_ICON_BOOK_SHIP_PASSAGE, MENU_ICON_HARBOR_MASTER, MENU_ICON_BOARD_SHIP, MENU_ICON_LEAVE);
 	g_request_refresh = 1;
-	ds_writeb(TRAVEL_DETOUR, 0);
+	gs_travel_detour = (0);
 
 	do {
 		if (g_request_refresh != 0) {
@@ -391,7 +391,7 @@ void do_harbor(void)
 				g_request_refresh = 1;
 				gs_show_travel_map = 0;
 
-				if (!ds_readb(TRAVEL_DETOUR)) {
+				if (!gs_travel_detour) {
 
 					gs_current_town = (signed char)gs_travel_destination_town_id;
 					gs_x_target_bak = gs_travel_destination_x;
@@ -416,7 +416,7 @@ void do_harbor(void)
 
 	set_var_to_zero();
 
-	if (!ds_readb(TRAVEL_DETOUR)) {
+	if (!gs_travel_detour) {
 
 		copy_palette();
 		leave_location();
@@ -544,10 +544,10 @@ void sea_travel(signed short passage, signed short dir)
 #endif
 	}
 
-	gs_route_stepcount = ds_writew(ROUTE_PROGRESS, ds_writew(ROUTE_DAYPROGRESS, ds_writeb(TRAVEL_DETOUR, 0)));
+	gs_route_stepcount = ds_writew(ROUTE_PROGRESS, ds_writew(ROUTE_DAYPROGRESS, gs_travel_detour = (0)));
 	g_travel_herokeeping = 1;
 
-	while (host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2 * ds_writew(ROUTE_MOUSEHOVER, 0)) != -1 && !ds_readb(TRAVEL_DETOUR))
+	while (host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2 * ds_writew(ROUTE_MOUSEHOVER, 0)) != -1 && !gs_travel_detour)
 	{
 
 		if (is_mouse_in_rect(host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR)) - 16,
@@ -591,7 +591,7 @@ void sea_travel(signed short passage, signed short dir)
 		if (ds_readws(PASSAGE_DEADSHIP_FLAG) != 0 && ds_readws(ROUTE_DAYPROGRESS) >= ds_readws(PASSAGE_DEADSHIP_POSITION) && !gs_quest_deadship_done) {
 			prolog_ghostship();
 			/* within the call prolog_ghostship(), the party can decide if they enter the Totenschiff.
-			 * In that case, TRAVEL_DETOUR is set to DUNGEONS_TOTENSCHIFF (instead of 0) */
+			 * In that case, gs_travel_detour is set to DUNGEONS_TOTENSCHIFF (instead of 0) */
 
 			ds_writew(PASSAGE_DEADSHIP_FLAG, 0);
 		} else if (ds_readws(PASSAGE_OCTOPUS_FLAG) != 0 && ds_readws(ROUTE_DAYPROGRESS) >= ds_readws(PASSAGE_OCTOPUS_POSITION) && !gs_ingame_timers[INGAME_TIMER_EFFERD_SAFE_PASSAGE]) {
@@ -636,7 +636,7 @@ void sea_travel(signed short passage, signed short dir)
 			ds_writeb(TRAVEL_BY_SHIP, 0);
 		}
 
-		if (g_request_refresh != 0 && !ds_readb(TRAVEL_DETOUR)) {
+		if (g_request_refresh != 0 && !gs_travel_detour) {
 
 			update_mouse_cursor();
 
@@ -676,7 +676,7 @@ void sea_travel(signed short passage, signed short dir)
 
 	g_travel_herokeeping = 0;
 
-	if (!ds_readb(TRAVEL_DETOUR)) {
+	if (!gs_travel_detour) {
 
 		update_mouse_cursor();
 

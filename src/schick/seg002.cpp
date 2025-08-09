@@ -2402,8 +2402,8 @@ void do_timers(void)
 		}
 
 		/* unknown timer */
-		if (ds_readb(FORCEDMARCH_TIMER) != 0) {
-			dec_ds_bs_post(FORCEDMARCH_TIMER);
+		if (gs_forcedmarch_timer) {
+			gs_forcedmarch_timer--;
 		}
 
 		/* calendar */
@@ -4492,7 +4492,7 @@ void sub_hero_le(Bit8u *hero, signed short le)
 			{
 				/* if traveling, not in a fight, and no hero in the group (except possibly the NPC) is available. */
 
-				ds_writeb(TRAVEL_DETOUR, 99);
+				gs_travel_detour = (99);
 
 				hero_i = get_hero(0);
 				for (i = 0; i <=6; i++, hero_i += SIZEOF_HERO) {

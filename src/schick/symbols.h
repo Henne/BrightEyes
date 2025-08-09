@@ -765,10 +765,10 @@
 #define SEA_TRAVEL_PASSAGE_PRICE        (0x432a)    /* signed short */
 #define SEA_TRAVEL_PASSAGE_SPEED2       (0x432c)    /* unsigned short; basically, the same purpose as SEA_TRAVEL_PASSAGE_SPEED1. The variables could be merged. */
 #define TRAVEL_MAP_PTR                  (0x432e)    /* Bit8u* */
-#define FORCEDMARCH_TIMER               (0x4332)    /* unsigned char */
-#define TRAVEL_DETOUR                   (0x4333)    /* unsigned char; indicates a detour from traveling, mostly to a dungeon (if it holds a DUNGEONS_... ID, which is a value in [1..15]). further possible values: 0, 99, and an extra usage of 1 in seg110.cpp */
-#define CURRENT_SIGNPOST                (0x4334)    /* unsigned short */
-#define TRV_RETURN                      (0x4336)    /* signed short; {-1, 0, 1, 2} + ? */
+//#define FORCEDMARCH_TIMER               (0x4332)    /* unsigned char */
+//#define TRAVEL_DETOUR                   (0x4333)    /* unsigned char; indicates a detour from traveling, mostly to a dungeon (if it holds a DUNGEONS_... ID, which is a value in [1..15]). further possible values: 0, 99, and an extra usage of 1 in seg110.cpp */
+//#define CURRENT_SIGNPOST                (0x4334)    /* unsigned short */
+//#define TRV_RETURN                      (0x4336)    /* signed short; {-1, 0, 1, 2} + ? */
 //#define TRAVEL_DESTINATION_TOWN_ID      (0x4338)    /* unsigned short */
 //#define TRAVEL_DESTINATION_X            (0x433a)    /* unsigned short */
 //#define TRAVEL_DESTINATION_Y            (0x433c)    /* unsigned short */

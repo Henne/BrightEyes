@@ -45,8 +45,8 @@ signed short do_travel_mode(void)
 	char *destinations_tab[6];
 
 	bak1 = g_wallclock_update;
-	g_route59_flag = g_wallclock_update = (unsigned short)ds_writeb(TRAVEL_DETOUR, 0);
-	gs_current_town = (gs_current_typeindex);
+	g_route59_flag = g_wallclock_update = gs_travel_detour = 0;
+	gs_current_town = gs_current_typeindex;
 
 	update_mouse_cursor();
 
@@ -60,7 +60,7 @@ signed short do_travel_mode(void)
 		load_map();
 	}
 
-	memmove((void*)g_renderbuf_ptr, (void*)(Bit8u*)ds_readd(TRAVEL_MAP_PTR), 64000);
+	memmove((void*)g_renderbuf_ptr, (void*)ds_readd(TRAVEL_MAP_PTR), 64000);
 
 	map_effect((Bit8u*)g_renderbuf_ptr);
 
@@ -100,7 +100,7 @@ signed short do_travel_mode(void)
 			g_request_refresh = 0;
 		}
 
-		if (host_readbs(signpost_ptr + SIGNPOST_TOWN) == gs_current_town && host_readb(signpost_ptr + SIGNPOST_TYPEINDEX) == ds_readw(CURRENT_SIGNPOST))
+		if (host_readbs(signpost_ptr + SIGNPOST_TOWN) == gs_current_town && host_readb(signpost_ptr + SIGNPOST_TYPEINDEX) == gs_current_signpost)
 		{
 			while (1) {
 				handle_input();
@@ -168,27 +168,27 @@ signed short do_travel_mode(void)
 						TM_func9();
 					}
 
-					if (ds_readw(TRV_RETURN) == 2)
+					if (gs_trv_return == 2)
 					{
-						if (ds_readb(TRAVEL_DETOUR) != 0 && ds_readb(TRAVEL_DETOUR) != 99)
+						if (gs_travel_detour && gs_travel_detour != 99)
 						{
-							DNG_enter_dungeon(ds_readb(TRAVEL_DETOUR));
+							DNG_enter_dungeon(gs_travel_detour);
 						}
 						break;
 					}
 
 					TM_enter_target_town();
 
-					if (!ds_readb(TRAVEL_DETOUR) && ds_readw(GAME_STATE) == GAME_STATE_MAIN)
+					if (!gs_travel_detour && ds_readw(GAME_STATE) == GAME_STATE_MAIN)
 					{
 						gs_current_town = ((signed char)gs_travel_destination_town_id);
-						gs_x_target_bak = (gs_travel_destination_x);
-						gs_y_target_bak = (gs_travel_destination_y);
+						gs_x_target_bak = gs_travel_destination_x;
+						gs_y_target_bak = gs_travel_destination_y;
 						gs_direction = ((gs_travel_destination_viewdir + 2) & 3);
 
-					} else if (ds_readw(GAME_STATE) == GAME_STATE_MAIN && ds_readb(TRAVEL_DETOUR) != 99)
+					} else if (ds_readw(GAME_STATE) == GAME_STATE_MAIN && gs_travel_detour != 99)
 					{
-						DNG_enter_dungeon(ds_readb(TRAVEL_DETOUR));
+						DNG_enter_dungeon(gs_travel_detour);
 					}
 
 					break;
@@ -248,12 +248,12 @@ signed short do_travel_mode(void)
 
 	gs_show_travel_map = g_basepos_x = g_basepos_y = g_current_town_over = g_trv_menu_selection = 0;
 
-	if (!ds_readb(TRAVEL_DETOUR))
+	if (!gs_travel_detour)
 	{
 		g_wallclock_update = 0;
 		leave_location();
 
-	} else if (ds_readb(TRAVEL_DETOUR) != 99)
+	} else if (gs_travel_detour != 99)
 	{
 		gs_current_town = (TOWNS_NONE);
 	}

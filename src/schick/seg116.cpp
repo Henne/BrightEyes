@@ -97,7 +97,7 @@ void tevent_131(void)
 		} while (answer == -1);
 
 		if (answer == 1) {
-			ds_writeb(TRAVEL_DETOUR, DUNGEONS_PIRATENHOEHLE);
+			gs_travel_detour = (DUNGEONS_PIRATENHOEHLE);
 		}
 
 	} else {
@@ -111,7 +111,7 @@ void tevent_131(void)
 			} while (answer == -1);
 
 			if (answer == 1) {
-				ds_writeb(TRAVEL_DETOUR, DUNGEONS_PIRATENHOEHLE);
+				gs_travel_detour = (DUNGEONS_PIRATENHOEHLE);
 			}
 		}
 	}
@@ -150,7 +150,7 @@ void tevent_133(void)
 
 	if (answer == 1) {
 
-		ds_writews(TRV_RETURN, 1);
+		gs_trv_return = (1);
 
 	} else {
 

@@ -1109,7 +1109,7 @@ signed short do_fight(signed short fight_id)
 
 				if (ds_readbs(TRAVELING) != 0) {
 
-					ds_writeb(TRAVEL_DETOUR, 99);
+					gs_travel_detour = (99);
 					ptr = get_hero(0);
 					for (j = 0; j <=6; j++, ptr += SIZEOF_HERO) {
 
@@ -1248,7 +1248,7 @@ signed short do_fight(signed short fight_id)
 
 	} else {
 		/* GAME_STATE == GAME_STATE_FIGQUIT */
-		ds_writeb(TRAVEL_DETOUR, 99);
+		gs_travel_detour = (99);
 		retval = 4;
 	}
 

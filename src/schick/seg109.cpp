@@ -372,7 +372,7 @@ signed short TRV_cross_a_ford(char *msg, signed short time, signed short mod)
 			answer = GUI_bool(get_tx(39));
 
 			if (answer == 1) {
-				done = ds_writew(TRV_RETURN, 1);
+				done = gs_trv_return = (1);
 			}
 		}
 
@@ -490,7 +490,7 @@ signed short TRV_ferry(char *msg, signed short price)
 		} else {
 
 			if (GUI_bool(get_tx(33))) {
-				ds_writew(TRV_RETURN, done = 1);
+				gs_trv_return = (done = 1);
 			}
 		}
 
