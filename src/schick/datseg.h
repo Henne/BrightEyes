@@ -386,6 +386,9 @@ extern Bit16s gs_trv_i;				//ds:0x4228; seg063, seg094
 extern Bit16s gs_route_stepcount;		//ds:0x422a; seg063, seg094
 extern Bit16s gs_forcedmarch_le_cost;		//ds:0x422c; seg094
 
+extern Bit16s gs_travel_destination_town_id;	//ds:0x4338; seg063-seg094
+extern Bit16s gs_travel_destination_x;		//ds:0x433a; seg063-seg094
+extern Bit16s gs_travel_destination_y;		//ds:0x433c; seg063-seg094
 extern Bit16s gs_travel_destination_viewdir;	//ds:0x433e; seg063-seg094
 
 #if defined(__BORLANDC__)

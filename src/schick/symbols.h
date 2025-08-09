@@ -769,9 +769,9 @@
 #define TRAVEL_DETOUR                   (0x4333)    /* unsigned char; indicates a detour from traveling, mostly to a dungeon (if it holds a DUNGEONS_... ID, which is a value in [1..15]). further possible values: 0, 99, and an extra usage of 1 in seg110.cpp */
 #define CURRENT_SIGNPOST                (0x4334)    /* unsigned short */
 #define TRV_RETURN                      (0x4336)    /* signed short; {-1, 0, 1, 2} + ? */
-#define TRAVEL_DESTINATION_TOWN_ID      (0x4338)    /* unsigned short */
-#define TRAVEL_DESTINATION_X            (0x433a)    /* unsigned short */
-#define TRAVEL_DESTINATION_Y            (0x433c)    /* unsigned short */
+//#define TRAVEL_DESTINATION_TOWN_ID      (0x4338)    /* unsigned short */
+//#define TRAVEL_DESTINATION_X            (0x433a)    /* unsigned short */
+//#define TRAVEL_DESTINATION_Y            (0x433c)    /* unsigned short */
 //#define TRAVEL_DESTINATION_VIEWDIR      (0x433e)    /* signed short */
 //#define TM_UNUSED1_PTR                  (0x4340)    /* Bit8u* */
 //#define TRV_MENU_TOWNS                  (0x4344)    /* unsigned char[6] */

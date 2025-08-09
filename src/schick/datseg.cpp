@@ -2704,9 +2704,9 @@ unsigned char g_forcedmarch_timer = 0; // ds:0x4332
 unsigned char g_travel_detour = 0; // ds:0x4333
 unsigned short g_current_signpost = 0; // ds:0x4334
 signed short g_trv_return = 0; // ds:0x4336, {-1, 0, 1, 2} + ?
-unsigned short g_travel_destination_town_id = 0; // ds:0x4338
-unsigned short g_travel_destination_x = 0; // ds:0x433a
-unsigned short g_travel_destination_y = 0; // ds:0x433c
+Bit16s gs_travel_destination_town_id = 0; // ds:0x4338
+Bit16s gs_travel_destination_x = 0; // ds:0x433a
+Bit16s gs_travel_destination_y = 0; // ds:0x433c
 Bit16s gs_travel_destination_viewdir = 0; // ds:0x433e
 
 #if defined(__BORLANDC__)

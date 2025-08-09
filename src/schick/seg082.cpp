@@ -271,9 +271,9 @@ signed short DNG07_handler(void)
 
 			leave_dungeon();
 
-			gs_current_town = (ds_readbs(TRAVEL_DESTINATION_TOWN_ID));
-			gs_x_target = (ds_readws(TRAVEL_DESTINATION_X));
-			gs_y_target = (ds_readws(TRAVEL_DESTINATION_Y));
+			gs_current_town = (gs_travel_destination_town_id);
+			gs_x_target = (gs_travel_destination_x);
+			gs_y_target = (gs_travel_destination_y);
 			gs_current_loctype = LOCTYPE_NONE;
 			gs_direction = ((gs_travel_destination_viewdir + 2) & 3);
 

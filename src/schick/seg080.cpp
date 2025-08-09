@@ -278,9 +278,9 @@ signed short DNG04_handler(void)
 		/* the exit of this dungeon */
 		leave_dungeon();
 
-		gs_current_town = (ds_readb(TRAVEL_DESTINATION_TOWN_ID));
-		gs_x_target = (ds_readws(TRAVEL_DESTINATION_X));
-		gs_y_target = (ds_readws(TRAVEL_DESTINATION_Y));
+		gs_current_town = (gs_travel_destination_town_id);
+		gs_x_target = (gs_travel_destination_x);
+		gs_y_target = (gs_travel_destination_y);
 		gs_current_loctype = LOCTYPE_NONE;
 		gs_direction = ((gs_travel_destination_viewdir + 2) & 0x03);
 
@@ -467,9 +467,9 @@ signed short DNG05_handler(void)
 		/* the exit of this dungeon */
 		leave_dungeon();
 
-		gs_current_town = (ds_readb(TRAVEL_DESTINATION_TOWN_ID));
-		gs_x_target = (ds_readws(TRAVEL_DESTINATION_X));
-		gs_y_target = (ds_readws(TRAVEL_DESTINATION_Y));
+		gs_current_town = (gs_travel_destination_town_id);
+		gs_x_target = (gs_travel_destination_x);
+		gs_y_target = (gs_travel_destination_y);
 		gs_current_loctype = LOCTYPE_NONE;
 		gs_direction = ((gs_travel_destination_viewdir + 2) & 0x03);
 

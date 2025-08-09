@@ -452,9 +452,9 @@ signed short DNG09_handler(void)
 	} else if (target_pos == DNG_POS(0,7,15) && target_pos != gs_dng_handled_pos)
 	{
 		leave_dungeon();
-		gs_current_town = ((signed char)ds_readws(TRAVEL_DESTINATION_TOWN_ID));
-		gs_x_target = (ds_readws(TRAVEL_DESTINATION_X));
-		gs_y_target = (ds_readws(TRAVEL_DESTINATION_Y));
+		gs_current_town = ((signed char)gs_travel_destination_town_id);
+		gs_x_target = (gs_travel_destination_x);
+		gs_y_target = (gs_travel_destination_y);
 		gs_current_loctype = LOCTYPE_NONE;
 		gs_direction = ((gs_travel_destination_viewdir + 2) & 3);
 

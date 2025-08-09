@@ -603,7 +603,7 @@ signed short TM_enter_target_town(void)
 	Bit8u *locations_list_ptr;
 
 	signpost_id = 0;
-	ds_writew(TRAVEL_DESTINATION_TOWN_ID, gs_trv_destination);
+	gs_travel_destination_town_id = gs_trv_destination;
 	signpost_id = 1;
 
 	if (signpost_id)
@@ -611,12 +611,12 @@ signed short TM_enter_target_town(void)
 		signpost_ptr = p_datseg + SIGNPOSTS;
 		signpost_id = 0;
 		do {
-			if (host_readb(signpost_ptr) == ds_readw(TRAVEL_DESTINATION_TOWN_ID))
+			if (host_readb(signpost_ptr) == gs_travel_destination_town_id)
 			{
 				tmp = 0;
 
 				do {
-					tmp2 = host_readb((Bit8u*)(host_readd(signpost_ptr + 2)) + tmp) - 1;
+					tmp2 = host_readb((Bit8u*)host_readd(signpost_ptr + 2) + tmp) - 1;
 
 					if (ds_readbs(LAND_ROUTES + 9 * tmp2) == gs_current_town || ds_readbs((LAND_ROUTES + 1) + 9 * tmp2) == gs_current_town)
 					{
@@ -626,7 +626,7 @@ signed short TM_enter_target_town(void)
 
 					tmp++;
 
-				} while (host_readb((Bit8u*)(host_readd(signpost_ptr + 2)) + tmp) != 255);
+				} while (host_readb((Bit8u*)host_readd(signpost_ptr + 2) + tmp) != 255);
 			}
 
 			signpost_ptr += 6;
@@ -637,7 +637,7 @@ signed short TM_enter_target_town(void)
 		{
 			/* set the target town as current town */
 			tmp2 = gs_current_town;
-			gs_current_town = (signed char)ds_readws(TRAVEL_DESTINATION_TOWN_ID);
+			gs_current_town = (signed char)gs_travel_destination_town_id;
 
 			/* load the map */
 			call_load_area(1);
@@ -649,8 +649,8 @@ signed short TM_enter_target_town(void)
 			}
 
 			tmp = host_readws(locations_list_ptr + LOCATION_LOCDATA);
-			ds_writew(TRAVEL_DESTINATION_X, (tmp >> 8) & 0xff);
-			ds_writew(TRAVEL_DESTINATION_Y, tmp & 0xf);
+			gs_travel_destination_x = (tmp >> 8) & 0xff;
+			gs_travel_destination_y = tmp & 0x0f;
 			gs_travel_destination_viewdir = TM_enter_target_town_viewdir(host_readws(locations_list_ptr));
 
 			gs_current_town = (signed char)tmp2;
@@ -672,9 +672,9 @@ signed short TM_enter_target_town_viewdir(signed short coordinates)
 	x = (coordinates >> 8) & 0xff;
 	y = coordinates & 0xf;
 
-	retval = (ds_readws(TRAVEL_DESTINATION_X) < x ? EAST :
-			(ds_readws(TRAVEL_DESTINATION_X) > x ? WEST :
-			(ds_readws(TRAVEL_DESTINATION_Y) < y ? SOUTH : NORTH)));
+	retval = (gs_travel_destination_x < x ? EAST :
+			(gs_travel_destination_x > x ? WEST :
+			(gs_travel_destination_y < y ? SOUTH : NORTH)));
 
 	return retval;
 }
