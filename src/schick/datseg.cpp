@@ -5989,7 +5989,7 @@ struct{unsigned char unkn[7];} g_random_encounter_descr[14] = {
 	{ 0x00, 0x00, 0x00, 0x00, 0x64, 0x5f, 0x00 },
 	{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x64, 0x64 }
 }; // ds:0xb1b9
-signed short g_tlk_ruin_hero_counter = 0; // ds:0xb21b
+signed int g_tlk_ruin_hero_counter = 0; // ds:0xb21b
 unsigned char g_unkn_068[1] = { 0x00 }; // ds:0xb21d
 char g_str_rad1[4] = "RAD"; // ds:0xb21e
 char g_str_rad2[4] = "RAD"; // ds:0xb222

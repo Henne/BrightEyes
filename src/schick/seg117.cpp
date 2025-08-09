@@ -735,8 +735,10 @@ void TLK_way_to_ruin(signed short state)
 	hero2 = (Bit8u*)get_first_hero_available_in_group();
 
 	if (!state) {
+
 		g_dialog_next_state = (ds_readb(TEVENT115_FLAG) != 0 ? 45 : 66);
-		ds_writew(TLK_RUIN_HERO_COUNTER, 0);
+		g_tlk_ruin_hero_counter = 0;
+
 	} else if (state == 66 || state == 45) {
 		show_treasure_map();
 	} else if (state == 4 || state == 7) {
@@ -750,8 +752,8 @@ void TLK_way_to_ruin(signed short state)
 	} else if (state == 9) {
 
 		do {
-			hero = get_hero(ds_readws(TLK_RUIN_HERO_COUNTER));
-			inc_ds_ws(TLK_RUIN_HERO_COUNTER);
+			hero = get_hero(g_tlk_ruin_hero_counter);
+			g_tlk_ruin_hero_counter++;
 
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
@@ -761,10 +763,12 @@ void TLK_way_to_ruin(signed short state)
 				break;
 			}
 
-		} while (ds_readws(TLK_RUIN_HERO_COUNTER) != 7);
+		} while (g_tlk_ruin_hero_counter != 7);
 
-		g_dialog_next_state = (ds_readws(TLK_RUIN_HERO_COUNTER) == 7 ? 13 : 10);
+		g_dialog_next_state = (g_tlk_ruin_hero_counter == 7 ? 13 : 10);
+
 	} else if (state == 10) {
+
 		g_dialog_next_state = (test_skill((Bit8u*)ds_readd(RUIN_HERO), TA_SCHWIMMEN, 5) > 0 ? 11 : 12);
 	} else if (state == 12) {
 		sub_hero_le((Bit8u*)ds_readd(RUIN_HERO), random_schick(4) + 1);
@@ -805,18 +809,18 @@ void TLK_way_to_ruin(signed short state)
 
 		hero = get_hero(0);
 
-		for (i = ds_writews(TLK_RUIN_HERO_COUNTER, 0); i <= 6; i++, hero += SIZEOF_HERO) {
+		for (i = g_tlk_ruin_hero_counter = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_skill(hero, TA_ORIENTIERUNG, 0) > 0) {
 
-					inc_ds_ws(TLK_RUIN_HERO_COUNTER);
+					g_tlk_ruin_hero_counter++;
 			}
 		}
 
-		g_dialog_next_state = ((count_heroes_in_group() >> 1) < ds_readws(TLK_RUIN_HERO_COUNTER) ? 29 : 30);
+		g_dialog_next_state = ((count_heroes_in_group() >> 1) < g_tlk_ruin_hero_counter ? 29 : 30);
 
 	} else if (state == 41) {
 		g_event_ani_busy = 1;
@@ -834,18 +838,18 @@ void TLK_way_to_ruin(signed short state)
 
 		hero = get_hero(0);
 
-		for (i = ds_writews(TLK_RUIN_HERO_COUNTER, 0); i <= 6; i++, hero += SIZEOF_HERO) {
+		for (i = g_tlk_ruin_hero_counter = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_skill(hero, TA_ORIENTIERUNG, 0) > 0) {
 
-					inc_ds_ws(TLK_RUIN_HERO_COUNTER);
+					g_tlk_ruin_hero_counter++;
 			}
 		}
 
-		g_dialog_next_state = ((count_heroes_in_group() >> 1) < ds_readws(TLK_RUIN_HERO_COUNTER) ? 49 : 50);
+		g_dialog_next_state = ((count_heroes_in_group() >> 1) < g_tlk_ruin_hero_counter ? 49 : 50);
 	}
 
 	g_event_ani_busy = 0;

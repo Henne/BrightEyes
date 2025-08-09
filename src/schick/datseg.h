@@ -568,6 +568,7 @@ extern void (*g_use_special_item_handlers[14])(void);	//ds:0xaeb0; seg107
 extern int g_light_type;			// ds:0xaee8; seg101, seg107
 extern void (*g_travel_event_handlers[146])(void);	//ds:0xaeea; seg109
 
+extern signed int g_tlk_ruin_hero_counter;	//ds:0xb21b; seg117
 /* BSS starts at 0xbc38, variables in reverse/decreasing order */
 
 extern signed char g_large_buf;		// ds:0xe5e4; seg120, seg028

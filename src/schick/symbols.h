@@ -1265,7 +1265,7 @@
 #define TEVENT135_CLIMB_DAMAGE          (0xb172)    /* struct(2)[6]; struct{unsigned char damage_min,damage_max;}; { {0xff,0}, {1,5}, {4,13}, {7,21}, {10,32}, {15,40} } */
 #define RANDOM_ENCOUNTER_INDEX          (0xb17e)    /* unsigned char[59] */
 #define RANDOM_ENCOUNTER_DESCR          (0xb1b9)    /* struct(7)[14] */
-#define TLK_RUIN_HERO_COUNTER           (0xb21b)    /* signed short */
+//#define TLK_RUIN_HERO_COUNTER           (0xb21b)    /* signed short */
 // ?1
 #define STR_RAD1                        (0xb21e)    /* char[4]; "RAD" */
 #define STR_RAD2                        (0xb222)    /* char[4]; "RAD" */
