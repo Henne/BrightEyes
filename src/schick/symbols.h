@@ -777,14 +777,14 @@
 #define TRV_MENU_TOWNS                  (0x4344)    /* unsigned char[6] */
 #define TRV_DESTINATION                 (0x434a)    /* unsigned short */
 #define DNG08_WATERBARREL               (0x434c)    /* signed char; {0,1} */
-#define DNG13_COLLAPSECOUNT             (0x434d)    /* unsigned char */
-#define DNG13_HEROCOUNT                 (0x434e)    /* unsigned char */
-#define CAMP_INCIDENT                   (0x434f)    /* signed short; -1 = not determined or will not happen, 0,1,2 = guard that will be affected */
-#define KNOWN_MONSTERS                  (0x4351)    /* char[78] */
-#define NAMELESS_DESTROYED              (0x439f)    /* unsigned char; {0,1} */
-#define DEADSHIP_FINAL                  (0x43a0)    /* unsigned char; {0,1} */
-#define DNG09_LEVER_FAST                (0x43a1)    /* unsigned char; {0,1} */
-#define DNG11_SOUP_SUPPLY               (0x43a2)    /* unsigned char */
+//#define DNG13_COLLAPSECOUNT             (0x434d)    /* unsigned char */
+//#define DNG13_HEROCOUNT                 (0x434e)    /* unsigned char */
+//#define CAMP_INCIDENT                   (0x434f)    /* signed short; -1 = not determined or will not happen, 0,1,2 = guard that will be affected */
+//#define KNOWN_MONSTERS                  (0x4351)    /* char[78] */
+//#define NAMELESS_DESTROYED              (0x439f)    /* unsigned char; {0,1} */
+//#define DEADSHIP_FINAL                  (0x43a0)    /* unsigned char; {0,1} */
+//#define DNG09_LEVER_FAST                (0x43a1)    /* unsigned char; {0,1} */
+//#define DNG11_SOUP_SUPPLY               (0x43a2)    /* unsigned char */
 //#define ARSENAL_MONEY                   (0x43a3)    /* signed short; {-1, 0 - 60 } */
 //#define ANNOUNCE_DAY                    (0x43a5)    /* signed char; UNUSED */
 //#define KNOWN_PERSONS                   (0x43a6)    /* char[17] */

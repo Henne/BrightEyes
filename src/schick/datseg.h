@@ -382,6 +382,14 @@ extern Bit16s gs_trv_i;				//ds:0x4228; seg063, seg094
 extern Bit16s gs_route_stepcount;		//ds:0x422a; seg063, seg094
 extern Bit16s gs_forcedmarch_le_cost;		//ds:0x422c; seg094
 
+extern Bit8u  gs_dng13_collapsecount;		//ds:0x434d; seg075, seg091
+extern Bit8u  gs_dng13_herocount;		//ds:0x434d; seg075, seg091
+extern Bit16s gs_camp_incident;			//ds:0x434f; seg051, seg052, seg11, seg111, seg116
+extern Bit8s  gs_known_monsters[78];		//ds:0x434f; seg035
+extern Bit8u  gs_nameless_destroyed;		//ds:0x439f; seg082
+extern Bit8u  gs_deadship_final;		//ds:0x43a0; seg077
+extern Bit8u  gs_dng09_lever_fast;		//ds:0x43a1; seg084
+extern Bit8u  gs_dng11_soup_supply;		//ds:0x43a2; seg086
 extern Bit16s gs_arsenal_money;			//ds:0x43a3; seg068
 extern Bit8s  gs_announce_day;			//ds:0x43a5; seg073
 

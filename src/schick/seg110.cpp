@@ -713,26 +713,23 @@ void tevent_046(void)
 	if (answer == 1)
 	{
 		/* make a camp */
-		ds_writew(CAMP_INCIDENT, 1);
+		gs_camp_incident = 1;
 		gs_current_loctype = LOCTYPE_WILDCAMP;
 		do_location();
 		gs_current_loctype = LOCTYPE_NONE;
 		TRV_load_textfile(-1);
 
-		hero = (ds_readws(CAMP_INCIDENT) != -1 ? get_hero(ds_readw(CAMP_INCIDENT)) : (Bit8u*)get_first_hero_available_in_group());
-		ds_writew(CAMP_INCIDENT, -1);
+		hero = (gs_camp_incident != -1 ? get_hero(gs_camp_incident) : (Bit8u*)get_first_hero_available_in_group());
+		gs_camp_incident = -1;
 
 		if (test_skill(hero, TA_SINNESSCHAERFE, 0) > 0)
 		{
-			sprintf(g_dtp2,
-				get_tx2(45),
-				(char*)hero + HERO_NAME2,
-				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+			sprintf(g_dtp2,	get_tx2(45), (char*)hero + HERO_NAME2,
+				GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
 
 			do {
-				answer = GUI_radio(g_dtp2, 2,
-							get_tx2(46),
-							get_tx2(47));
+				answer = GUI_radio(g_dtp2, 2, get_tx2(46), get_tx2(47));
+
 			} while (answer == -1);
 
 			if (answer == 1)
@@ -744,9 +741,7 @@ void tevent_046(void)
 
 		if (!enter_inn)
 		{
-			sprintf(g_dtp2,
-				get_tx2(48),
-				(char*)hero + HERO_NAME2);
+			sprintf(g_dtp2, get_tx2(48), (char*)hero + HERO_NAME2);
 
 			GUI_output(g_dtp2);
 
@@ -755,9 +750,8 @@ void tevent_046(void)
 			TRV_fight_event(FIGHTS_F046, 46);
 
 			do {
-				answer = GUI_radio(get_tx2(49), 2,
-							get_tx2(50),
-							get_tx2(51));
+				answer = GUI_radio(get_tx2(49), 2, get_tx2(50), get_tx2(51));
+
 			} while (answer == -1);
 
 			if (answer == 1)

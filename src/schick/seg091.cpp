@@ -150,7 +150,7 @@ signed short DNG13_handler(void)
 	{
 		/* leave dungeon */
 		/* AP bonus for each collapsed ceiling tile, 8 AP if no hero lost, 5 AP otherwise */
-		add_hero_ap_all(ds_readb(DNG13_COLLAPSECOUNT) * (ds_readb(DNG13_HEROCOUNT) == count_heroes_in_group() ? 8 : 5));
+		add_hero_ap_all(gs_dng13_collapsecount * (gs_dng13_herocount == count_heroes_in_group() ? 8 : 5));
 
 		leave_dungeon();
 
@@ -265,7 +265,7 @@ void DNG13_collapsing_ceiling(void)
 	signed short has_items;
 	Bit8u *hero;
 
-	inc_ds_bs_post(DNG13_COLLAPSECOUNT);
+	gs_dng13_collapsecount++;
 
 	hero = get_hero(0);
 	for (i = fails = 0; i <= 6; i++, hero += SIZEOF_HERO)
@@ -314,7 +314,7 @@ void DNG13_collapsing_ceiling_easy(void)
 	signed short has_items;
 	Bit8u *hero;
 
-	inc_ds_bs_post(DNG13_COLLAPSECOUNT);
+	gs_dng13_collapsecount++;
 
 	hero = get_hero(0);
 	for (i = fails = 0; i <= 6; i++, hero += SIZEOF_HERO)

@@ -322,9 +322,7 @@ void DNG09_statues(signed short prob, signed short bonus)
 			/* praise the nameless god */
 			if (random_schick(100) <= prob)
 			{
-				if (random_schick(100) < 50 &&
-					!hero_gods_pissed(hero) &&
-					!ds_readb(NAMELESS_DESTROYED))
+				if (random_schick(100) < 50 &&	!hero_gods_pissed(hero) && !gs_nameless_destroyed)
 				{
 					/* increase one attribute of the leader permanently */
 					randval = random_schick(7) - 1;
@@ -335,19 +333,14 @@ void DNG09_statues(signed short prob, signed short bonus)
 					/* ... but the twelve won't grant miracles any more */
 					or_ptr_bs(hero + HERO_FLAGS2, 0x20); /* set 'gods_pissed' flag */
 
-					sprintf(g_dtp2,
-						get_tx(8),
-						(char*)hero + HERO_NAME2);
-
+					sprintf(g_dtp2, get_tx(8), (char*)hero + HERO_NAME2);
 					GUI_output(g_dtp2);
+
 				} else {
 					/* loose 1W6 LE */
 					sub_hero_le(hero, random_schick(6));
 
-					sprintf(g_dtp2,
-						get_tx(9),
-						(char*)hero + HERO_NAME2);
-
+					sprintf(g_dtp2,	get_tx(9), (char*)hero + HERO_NAME2);
 					GUI_output(g_dtp2);
 				}
 			}
@@ -379,7 +372,7 @@ void DNG09_statues(signed short prob, signed short bonus)
 			}
 
 			/* no statue can be praised any longer */
-			ds_writeb(NAMELESS_DESTROYED, 1);
+			gs_nameless_destroyed = 1;
 		}
 	}
 }

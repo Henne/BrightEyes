@@ -101,10 +101,7 @@ signed short DNG09_handler(void)
 				/* failed FF+4 test */
 				sub_hero_le(hero, dice_roll(2, 6, 4));
 
-				sprintf(g_dtp2,
-					get_tx(12),
-					(char*)hero + HERO_NAME2);
-
+				sprintf(g_dtp2, get_tx(12), (char*)hero + HERO_NAME2);
 				GUI_output(g_dtp2);
 			}
 		}
@@ -275,7 +272,7 @@ signed short DNG09_handler(void)
 			DNG_dec_level();
 		}
 
-	} else if (target_pos == DNG_POS(1,7,13) && target_pos != gs_dng_handled_pos &&	!ds_readb(DNG09_LEVER_FAST)) {
+	} else if (target_pos == DNG_POS(1,7,13) && target_pos != gs_dng_handled_pos &&	!gs_dng09_lever_fast) {
 		/* lever, removes wall at (4,5), level 2 */
 		do {
 			i = GUI_radio(get_tx(39), 3, get_tx(40), get_tx(41), get_tx(42));
@@ -312,7 +309,7 @@ signed short DNG09_handler(void)
 					gs_group_member_counts[l3]++;
 					gs_group_member_counts[gs_current_group]--;
 					GRP_save_pos(l3);
-					ds_writeb(DNG09_LEVER_FAST, 1);
+					gs_dng09_lever_fast = 1;
 				}
 			} else {
 				gs_direction_bak = gs_direction;
@@ -342,7 +339,7 @@ signed short DNG09_handler(void)
 		{
 			or_ptr_bs(amap_ptr + MAP_POS(4,5), 0xf0); /* clear flags */
 			and_ptr_bs(amap_ptr + MAP_POS(3,5), (DNG_TILE_CORRIDOR << 4) + 0x0f);
-			ds_writeb(DNG09_LEVER_FAST, 0);
+			gs_dng09_lever_fast = 0;
 		}
 
 	} else if (target_pos == DNG_POS(1,5,2) && target_pos != gs_dng_handled_pos && !ds_readb(DNG09_ALTAR_FLAG))

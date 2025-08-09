@@ -884,14 +884,9 @@ void DNG_waterbarrel(Bit8u *unit_ptr)
 	/* TODO: check the value of unit_ptr first and skip if *unit_ptr <= 0*/
 
 	do {
-		sprintf(g_dtp2,
-			get_ttx(781),
-			host_readb(unit_ptr));
+		sprintf(g_dtp2,	get_ttx(781), host_readb(unit_ptr));
 
-		answer = GUI_radio(g_dtp2, 3,
-						get_ttx(782),
-						get_ttx(783),
-						get_ttx(784));
+		answer = GUI_radio(g_dtp2, 3, get_ttx(782), get_ttx(783), get_ttx(784));
 
 		if (answer == 1)
 		{

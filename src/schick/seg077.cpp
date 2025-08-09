@@ -362,9 +362,9 @@ void DNG01_chest6_x1(Bit8u* chest)
 
 void DNG01_chest0_x1(Bit8u* chest)
 {
-	if (!ds_readb(DEADSHIP_FINAL) && GUI_bool(get_tx(1)))
+	if (!gs_deadship_final && GUI_bool(get_tx(1)))
 	{
-		ds_writeb(DEADSHIP_FINAL, 1);
+		gs_deadship_final = 1;
 
 		/* enable deathtrap. the ship begins to sink... */
 		gs_deathtrap_steps = 30;

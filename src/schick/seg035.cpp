@@ -218,7 +218,7 @@ void FIG_split_ap(void)
 
 		if (ds_readbs(ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * l_si + ENEMY_SHEET_MON_ID) != 0) {
 
-			if (ds_readbs(KNOWN_MONSTERS + ds_readbs(ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * l_si)) != 0) {
+			if (gs_known_monsters[ds_readbs(ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * l_si)]) {
 
 				/* monster is already known */
 				known_ap = ds_readbs((ENEMY_SHEETS + ENEMY_SHEET_FIRSTAP) + SIZEOF_ENEMY_SHEET * l_si) / 10;
@@ -235,7 +235,7 @@ void FIG_split_ap(void)
 
 		if (ds_readbs(ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * l_si + ENEMY_SHEET_MON_ID) != 0) {
 
-			ds_writeb(KNOWN_MONSTERS + ds_readbs(ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * l_si), 1);
+			gs_known_monsters[ds_readbs(ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * l_si)] = 1;
 		}
 	}
 

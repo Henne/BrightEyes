@@ -184,13 +184,13 @@ void do_citycamp(void)
 					l6 = l5;
 					l_di = 0;
 
-					if (ds_readws(CAMP_INCIDENT) == -1) {
+					if (gs_camp_incident == -1) {
 						/* with guards: (hours - 1) % chance for an incident */
 						/* without guards: (4*hours - 1) % chance for an incident */
 						/* For a 1 hour rest with guards this will be 0% chance! */
 						/* TODO: maybe change it to random_schick(100) - 1 to fix that */
 						if ((g_citycamp_guards[0] == -1 ? 4 * hours : hours) > random_schick(100)) {
-							ds_writews(CAMP_INCIDENT, random_schick(3) - 1);
+							gs_camp_incident = random_schick(3) - 1;
 						}
 					}
 
@@ -214,7 +214,7 @@ void do_citycamp(void)
 						l8++;
 						l7--;
 
-						if (l_di == ds_readws(CAMP_INCIDENT) && (l5 / 2) >= l6) {
+						if (l_di == gs_camp_incident && (l5 / 2) >= l6) {
 							done = 1;
 						}
 
@@ -236,7 +236,7 @@ void do_citycamp(void)
 
 					if (done != 0) {
 
-						ds_writew(CAMP_INCIDENT, -1);
+						gs_camp_incident = -1;
 
 						if (g_citycamp_city == 0) {
 							/* in a dungeon */

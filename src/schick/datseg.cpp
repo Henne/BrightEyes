@@ -2712,14 +2712,14 @@ long g_tm_unused1_ptr = 0; // ds:0x4340; Bit8u*
 unsigned char g_trv_menu_towns[6] = { 0, 0, 0, 0, 0, 0 }; // ds:0x4344
 unsigned short g_trv_destination = 0; // ds:0x434a
 signed char g_dng08_waterbarrel = 0; // ds:0x434c
-unsigned char g_dng13_collapsecount = 0; // ds:0x434d
-unsigned char g_dng13_herocount = 0; // ds:0x434e
-signed short g_camp_incident = -1; // ds:0x434f, -1 = not determined or will not happen, 0,1,2 = guard that will be affected
-char g_known_monsters[78] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; // ds:0x4351
-unsigned char g_nameless_destroyed = 0; // ds:0x439f
-unsigned char g_deadship_final = 0; // ds:0x43a0
-unsigned char g_dng09_lever_fast = 0; // ds:0x43a1
-unsigned char g_dng11_soup_supply = 0x0a; // ds:0x43a2
+Bit8u  gs_dng13_collapsecount = 0; // ds:0x434d
+Bit8u  gs_dng13_herocount = 0; // ds:0x434e
+Bit16s gs_camp_incident = -1; // ds:0x434f, -1 = not determined or will not happen, 0,1,2 = guard that will be affected
+Bit8s  gs_known_monsters[78] = { 0 }; // ds:0x4351
+Bit8u  gs_nameless_destroyed = 0; // ds:0x439f
+Bit8u  gs_deadship_final = 0; // ds:0x43a0
+Bit8u  gs_dng09_lever_fast = 0; // ds:0x43a1
+Bit8u  gs_dng11_soup_supply = 10; // ds:0x43a2
 Bit16s gs_arsenal_money = -1; // ds:0x43a3, {-1, 0 - 60 }
 Bit8s  gs_announce_day = 0; // ds:0x43a5
 

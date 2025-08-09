@@ -44,14 +44,14 @@ void tevent_130(void)
 
 	if (TRV_enter_hut_question()) {
 
-		ds_writews(CAMP_INCIDENT, 0);
+		gs_camp_incident = 0;
 
 		gs_current_loctype = LOCTYPE_WILDCAMP;
 		do_location();
 		gs_current_loctype = LOCTYPE_NONE;
 
 		TRV_load_textfile(-1);
-		ds_writews(CAMP_INCIDENT, -1);
+		gs_camp_incident = -1;
 
 		load_in_head(10);
 

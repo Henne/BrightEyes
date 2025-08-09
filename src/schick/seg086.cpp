@@ -48,13 +48,13 @@ signed short DNG11_handler(void)
 
 	hero = (Bit8u*)get_first_hero_available_in_group();
 
-	if (target_pos == DNG_POS(0,6,12) && target_pos != gs_dng_handled_pos && ds_readb(DNG11_SOUP_SUPPLY) != 0)
+	if (target_pos == DNG_POS(0,6,12) && target_pos != gs_dng_handled_pos && gs_dng11_soup_supply)
 	{
 		if (GUI_radio(get_tx(1), 2, get_tx(2), get_tx(3)) == 1)
 		{
 			add_group_le(1);
 
-			dec_ds_bs_post(DNG11_SOUP_SUPPLY);
+			gs_dng11_soup_supply--;
 
 			if (random_schick(100) <= 50)
 			{

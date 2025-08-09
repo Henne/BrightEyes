@@ -270,11 +270,11 @@ void do_wildcamp(void)
 				l_si = 0;
 				have_guards = 0;
 
-				if (ds_readws(CAMP_INCIDENT) == -1) {
+				if (gs_camp_incident == -1) {
 
 					if (((g_wildcamp_guards[0] == -1 ? 60 : 10) > random_schick(100)) && !gs_ingame_timers[INGAME_TIMER_TRAVIA_SAFE_REST])
 					{
-						ds_writews(CAMP_INCIDENT, random_schick(3) - 1);
+						gs_camp_incident = random_schick(3) - 1;
 					}
 				} else {
 					have_guards = 1;
@@ -300,7 +300,7 @@ void do_wildcamp(void)
 					l8++;
 					l6--;
 
-					if (l_si == ds_readws(CAMP_INCIDENT) && l4 / 2 >= l5) {
+					if (l_si == gs_camp_incident && l4 / 2 >= l5) {
 						done = 1;
 					}
 
@@ -335,7 +335,7 @@ void do_wildcamp(void)
 
 				} else if (!have_guards) {
 
-					ds_writews(CAMP_INCIDENT, -1);
+					gs_camp_incident = -1;
 					g_fig_initiative = 1;
 					g_fig_discard = 1;
 
@@ -360,7 +360,7 @@ void do_wildcamp(void)
 						}
 					}
 				} else {
-					ds_writews(CAMP_INCIDENT, g_wildcamp_guards[ds_readws(CAMP_INCIDENT)]);
+					gs_camp_incident = g_wildcamp_guards[gs_camp_incident];
 				}
 
 				done = 1;

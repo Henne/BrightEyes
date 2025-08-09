@@ -1018,8 +1018,8 @@ mark2:			   goto mark1;
 			dir = NORTH;
 			level = 0;
 
-			ds_writeb(DNG13_COLLAPSECOUNT, 0);
-			ds_writeb(DNG13_HEROCOUNT, (signed char)count_heroes_in_group());
+			gs_dng13_collapsecount = 0;
+			gs_dng13_herocount = count_heroes_in_group();
 			break;
 		}
 		case DUNGEONS_ZWINGFESTE: {
