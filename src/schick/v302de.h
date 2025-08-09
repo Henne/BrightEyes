@@ -1150,20 +1150,19 @@ static inline char* get_itemname(unsigned short item)
 #define sub_ds_bs(o, val)	((*(Bit8s*)(ds + (o)))-= (val))
 #define add_ds_bu(o, val)	((*(Bit8u*)(ds + (o)))+= (val))
 
-#define inc_ds_ws(o)		(++(*(Bit16s*)(ds + (o))))
-#define dec_ds_ws(o)		(--(*(Bit16s*)(ds + (o))))
-
-#define inc_ds_ws_post(o)	((*(Bit16s*)(ds + o))++)
-#define dec_ds_ws_post(o)	((*(Bit16s*)(ds + o))--)
-
 #define and_ds_bs(o, v)		(*(Bit8s*)(ds + o) &= (v))
 #define or_ds_bs(o, v)		(*(Bit8s*)(ds + o) |= (v))
-#define or_ds_ws(o, v)		(*(Bit16s*)(ds + o) |= (v))
 #define xor_ds_bs(o, v)		(*(Bit8s*)(ds + o) ^= (v))
+
+#define inc_ds_ws(o)		(++(*(Bit16s*)(ds + (o))))
+#define dec_ds_ws(o)		(--(*(Bit16s*)(ds + (o))))
+#define inc_ds_ws_post(o)	((*(Bit16s*)(ds + o))++)
+#define dec_ds_ws_post(o)	((*(Bit16s*)(ds + o))--)
 
 #define add_ds_ws(o, v)		(*(Bit16s*)(ds + o) += (v))
 #define sub_ds_ws(o, v)		(*(Bit16s*)(ds + (o)) -= (v))
 #define and_ds_ws(o, v)		(*(Bit16s*)(ds + (o)) &= (v))
+#define or_ds_ws(o, v)		(*(Bit16s*)(ds + o) |= (v))
 
 #define sub_ds_ds(o, v)		(*(Bit32s*)(ds + (o)) -= (v))
 
