@@ -762,8 +762,8 @@
 #define SEA_TRAVEL_PASSAGE_SPEED1       (0x42b0)    /* signed char */
 #define CURRENT_SEA_ROUTE_ID            (0x42b1)    /* signed char */
 #define HARBOR_OPTIONS                  (0x42b2)    /* struct(12)[10]; buffering passage data for building the menu in a harbor where a sea passage can be selected */
-#define SEA_TRAVEL_PASSAGE_PRICE        (0x432a)    /* signed short */
-#define SEA_TRAVEL_PASSAGE_SPEED2       (0x432c)    /* unsigned short; basically, the same purpose as SEA_TRAVEL_PASSAGE_SPEED1. The variables could be merged. */
+//#define SEA_TRAVEL_PASSAGE_PRICE        (0x432a)    /* signed short */
+//#define SEA_TRAVEL_PASSAGE_SPEED2       (0x432c)    /* unsigned short; basically, the same purpose as SEA_TRAVEL_PASSAGE_SPEED1. The variables could be merged. */
 //#define TRAVEL_MAP_PTR                  (0x432e)    /* Bit8u* */
 //#define FORCEDMARCH_TIMER               (0x4332)    /* unsigned char */
 //#define TRAVEL_DETOUR                   (0x4333)    /* unsigned char; indicates a detour from traveling, mostly to a dungeon (if it holds a DUNGEONS_... ID, which is a value in [1..15]). further possible values: 0, 99, and an extra usage of 1 in seg110.cpp */

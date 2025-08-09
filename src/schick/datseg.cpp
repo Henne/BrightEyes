@@ -2697,8 +2697,8 @@ struct{unsigned char unkn[12];} g_harbor_options[10] = {
 	{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
 	{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
 }; // ds:0x42b2
-signed short g_sea_travel_passage_price = 0; // ds:0x432a
-signed short g_sea_travel_passage_speed2 = 0; // ds:0x432c // shouldn't this be _unsigned_ ?
+Bit16s gs_sea_travel_passage_price = 0; // ds:0x432a
+Bit16s gs_sea_travel_passage_speed2 = 0; // ds:0x432c // shouldn't this be _unsigned_ ?
 
 #if defined(__BORLANDC__)
 Bit8u  *gs_travel_map_ptr = 0; 		// ds:0x432e; Bit8u*

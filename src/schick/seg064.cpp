@@ -169,7 +169,7 @@ char* print_passage_price(signed short price, Bit8u *route_ptr)
 		strcpy(g_text_output_buf, (char*)p_datseg + SEA_TRAVEL_STR_NOTHING);
 	}
 
-	ds_writew(SEA_TRAVEL_PASSAGE_PRICE, price);
+	gs_sea_travel_passage_price = price;
 
 	return g_text_output_buf;
 }
@@ -193,8 +193,8 @@ unsigned short get_passage_travel_hours(signed short distance, signed short base
 	/* reminder: WEATHER1 = random([1..6]), WEATHER2 = random([1..7]) */
 	/* adjust speed to between 80.5% (when WEATHER1 = WEATHER2 = 1) and 247% (when WEATHER1 = 6 and WEATHER2 = 7). */
 	/* unit: [100m per hour] */
-	ds_writew(SEA_TRAVEL_PASSAGE_SPEED2, ROUNDED_DIVISION(base_speed * (gs_weather2 + 6) * (gs_weather1 * 15 + 100), 1000L));
-		/* possible values for SEA_TRAVEL_PASSAGE_SPEED2:
+	gs_sea_travel_passage_speed2 = ROUNDED_DIVISION(base_speed * (gs_weather2 + 6) * (gs_weather1 * 15 + 100), 1000L);
+		/* possible values for gs_sea_travel_passage_speed2:
 		 * ## high seas routes ##
 		 * Schnellsegler (base_speed 150): {* 50, 56, 57, 63, 64^^2, 69, 71, 72, 73, 76, 78, 79, 81^^2, 82, 86, 87, 89^^2, 90, 93, 94, 97, 98, 99^^2, 105, 106, 108^^2, 109, 117, 118, 119^^2, 129, 130^^2, 141^^2, 153 *}
 		 * Langschiff (base_speed 120): {* 40, 45, 46, 51, 52^^2, 56, 57, 58^^2, 61, 63, 64, 65^^2, 66, 69, 70, 71, 72^^2, 75, 76, 78, 79, 80^^2, 84, 85, 87^^2, 88, 94, 95, 96^^2, 104^^2, 105, 114^^2, 123 *}
@@ -211,7 +211,7 @@ unsigned short get_passage_travel_hours(signed short distance, signed short base
 	 * For example, the predicted number of hours for Prem-Hjalsingor will be one of 14, 15, 16, 17, 19, 21, 23, 26, 30, 35, 42, 52, 70, 105, 210.
 	 * The reason is that a bad conversion severly reduces the computational precision. */
 
-	tmp = ROUNDED_DIVISION(ds_readws(SEA_TRAVEL_PASSAGE_SPEED2), 10); /* the speed of the ship [unit: km per hour] */
+	tmp = ROUNDED_DIVISION(gs_sea_travel_passage_speed2, 10); /* the speed of the ship [unit: km per hour] */
 
 	/* possible values for tmp at this point:
 	 * ## high seas routes ##
@@ -231,7 +231,7 @@ unsigned short get_passage_travel_hours(signed short distance, signed short base
 	tmp = distance / tmp; /* now 'tmp' is the number of traveling hours */
 #else
 	/* first multiply, then divide for higher precision */
-	tmp = ROUNDED_DIVISION(10 * distance, ds_readws(SEA_TRAVEL_PASSAGE_SPEED2));
+	tmp = ROUNDED_DIVISION(10 * distance, gs_sea_travel_passage_speed2);
 #endif
 
 	return (unsigned short)tmp;

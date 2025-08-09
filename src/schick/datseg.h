@@ -386,6 +386,8 @@ extern Bit16s gs_trv_i;				//ds:0x4228; seg063, seg094
 extern Bit16s gs_route_stepcount;		//ds:0x422a; seg063, seg094
 extern Bit16s gs_forcedmarch_le_cost;		//ds:0x422c; seg094
 
+extern Bit16s gs_sea_travel_passage_price;	//ds:0x432a; seg063, seg064
+extern Bit16s gs_sea_travel_passage_speed2;	//ds:0x432c; seg063, seg064
 extern Bit8u *gs_travel_map_ptr;		//ds:0x432e; seg028, seg063, seg093, seg094
 extern Bit8u  gs_forcedmarch_timer;		//ds:0x4332; seg002, seg094
 extern Bit8u  gs_travel_detour;			//ds:0x4333; seg002-seg118

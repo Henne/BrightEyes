@@ -211,7 +211,7 @@ void do_harbor(void)
 
 						money = get_party_money();
 
-						if (ds_readws(SEA_TRAVEL_PASSAGE_PRICE) > money) {
+						if (gs_sea_travel_passage_price > money) {
 							/* party does not have enough money to pay the ship passage */
 
 							GUI_output(get_ttx(401));
@@ -219,13 +219,13 @@ void do_harbor(void)
 						} else {
 
 							g_sea_travel_sleep_quality = ds_readb(SHIP_TABLE + SHIP_TABLE_PASSAGE_TYPE + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE));
-							money -= ds_readws(SEA_TRAVEL_PASSAGE_PRICE);
+							money -= gs_sea_travel_passage_price;
 							set_party_money(money);
 
 							ds_writeb(SEA_TRAVEL_PSGBOOKED_TIMER, host_readb(psg_ptr + HARBOR_OPTION_SHIP_TIMER));
 							ds_writeb(SEA_TRAVEL_PSGBOOKED_FLAG, 0xaa);
 
-							ds_writeb(SEA_TRAVEL_PASSAGE_SPEED1, ds_readb(SEA_TRAVEL_PASSAGE_SPEED2)); /* speed in [100m per hour] */
+							ds_writeb(SEA_TRAVEL_PASSAGE_SPEED1, gs_sea_travel_passage_speed2); /* speed in [100m per hour] */
 							/* Now ..._SPEED1 is the lower byte of ..._SPEED2 */
 							/* not clear why two variables ..._SPEED1 and ..._SPEED2 are used. */
 							/* In my opinion, a single variable would be enough (and then there would not be the need to copy the value around) */
