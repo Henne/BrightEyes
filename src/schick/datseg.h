@@ -63,6 +63,11 @@ struct struct_shopping_cart {
 	int quantity;
 };
 
+struct struct_route_tevent {
+	Bit16s place;
+	Bit16s tevent_id;
+};
+
 struct struct_recipe {
 	signed short item_id;		/* item id of the recipe */
 	signed short ingredients[10];	/* list of ingredients (item_ids), terminated by -1 */
@@ -386,7 +391,7 @@ extern Bit16s gs_trv_i;				//ds:0x4228; seg063, seg094
 extern Bit16s gs_route_stepcount;		//ds:0x422a; seg063, seg094
 extern Bit16s gs_forcedmarch_le_cost;		//ds:0x422c; seg094
 
-
+extern struct struct_route_tevent gs_route_tevents[15]; //ds:0x4272; seg094
 extern Bit8u  gs_sea_travel_psgbooked_flag;	//ds:0x42ae; seg002, seg063
 extern Bit8u  gs_sea_travel_psgbooked_timer;	//ds:0x42af; seg002, seg063
 extern Bit8s  gs_sea_travel_passage_speed1;	//ds:0x42b0; seg063

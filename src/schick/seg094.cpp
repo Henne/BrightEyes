@@ -90,7 +90,7 @@ void TM_func1(signed short route_no, signed short backwards)
 {
 	Bit8u* fb_start;
 	Bit8u *hero;
-	Bit8u *tevent_ptr;
+	struct struct_route_tevent *tevent_ptr;
 	signed short bak1;
 	signed short bak2;
 	signed short last_tevent_no;
@@ -131,7 +131,7 @@ void TM_func1(signed short route_no, signed short backwards)
 	}
 #endif
 
-	memset((void*)(p_datseg + ROUTE_TEVENTS), (gs_route_stepcount = 0), 60);
+	memset((void*)gs_route_tevents, (gs_route_stepcount = 0), 15 * sizeof(struct_route_tevent));
 	memset(g_route_tevent_flags, 0, 15);
 
 	ds_writed(TEVENTS_TAB_PTR, (Bit32u)(p_datseg + TEVENTS_TAB));
@@ -175,16 +175,16 @@ void TM_func1(signed short route_no, signed short backwards)
 
 	while (host_readbs((Bit8u*)ds_readd(TEVENTS_TAB_PTR)) != -1 && host_readb((Bit8u*)ds_readd(TEVENTS_TAB_PTR)) == route_no)
 	{
-		tevent_ptr = p_datseg + ROUTE_TEVENTS + 4 * gs_route_stepcount;
-		host_writew(tevent_ptr, host_readb((Bit8u*)ds_readd(TEVENTS_TAB_PTR) + 1));
-		host_writew(tevent_ptr + 2, host_readb((Bit8u*)ds_readd(TEVENTS_TAB_PTR) + 2));
+		tevent_ptr = &gs_route_tevents[gs_route_stepcount];
+		tevent_ptr->place = host_readb((Bit8u*)ds_readd(TEVENTS_TAB_PTR) + 1);
+		tevent_ptr->tevent_id =  host_readb((Bit8u*)ds_readd(TEVENTS_TAB_PTR) + 2);
 
 		if (backwards)
 		{
-			host_writew(tevent_ptr, host_readb((Bit8u*)ds_readd(TRAVEL_ROUTE_PTR) + LAND_ROUTE_DISTANCE) - host_readws(tevent_ptr));
+			tevent_ptr->place = host_readb((Bit8u*)ds_readd(TRAVEL_ROUTE_PTR) + LAND_ROUTE_DISTANCE) - tevent_ptr->place;
 		}
 
-		mul_ptr_ws(tevent_ptr, 100);
+		tevent_ptr->place *= 100;
 #if defined(__BORLANDC__)
 		add_ds_fp(TEVENTS_TAB_PTR, 3);
 #endif
@@ -329,18 +329,18 @@ void TM_func1(signed short route_no, signed short backwards)
 		{
 			for (gs_trv_i = 0; gs_trv_i < 15; gs_trv_i++)
 			{
-				if ((ds_readws(ROUTE_TEVENTS + 4 * gs_trv_i) <= ds_readws(ROUTE_PROGRESS) &&
-					gs_trv_return == 0 &&
+				if (((gs_route_tevents[gs_trv_i].place <= ds_readws(ROUTE_PROGRESS)) &&
+					(gs_trv_return == 0) &&
 					!g_route_tevent_flags[gs_trv_i]) ||
-					(ds_readws(ROUTE_TEVENTS + 4 * gs_trv_i) >= ds_readws(ROUTE_PROGRESS) &&
-					gs_trv_return == 2 &&
-					g_route_tevent_flags[gs_trv_i] == 2))
+					((gs_route_tevents[gs_trv_i].place >= ds_readws(ROUTE_PROGRESS)) &&
+					(gs_trv_return == 2) &&
+					(g_route_tevent_flags[gs_trv_i] == 2)))
 				{
-					if (ds_readws((ROUTE_TEVENTS + 2) + 4 * gs_trv_i) != 0)
+					if (gs_route_tevents[gs_trv_i].tevent_id)
 					{
-						TRV_event(ds_readws((ROUTE_TEVENTS + 2) + 4 * (last_tevent_no = gs_trv_i)));
+						TRV_event(gs_route_tevents[(last_tevent_no = gs_trv_i)].tevent_id);
 
-						if (!ds_readbs((TEVENTS_REPEATABLE-1) + ds_readws((ROUTE_TEVENTS + 2) + 4 * gs_trv_i)))
+						if (!ds_readbs((TEVENTS_REPEATABLE-1) + gs_route_tevents[gs_trv_i].tevent_id))
 						{
 							g_route_tevent_flags[gs_trv_i] = 1;
 

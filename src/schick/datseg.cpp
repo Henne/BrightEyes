@@ -2664,7 +2664,7 @@ long g_route_course_ptr2 = 0; // ds:0x4262; Bit8u*
 long g_sea_travel_courses = 0; // ds:0x4266; Bit8u*
 unsigned long g_tevents_tab_ptr = 0; // ds:0x426a
 unsigned long g_travel_route_ptr = 0; // ds:0x426e
-struct{short place, event_id;} g_route_tevents[15] = {
+struct struct_route_tevent gs_route_tevents[15] = {
 	{ 0x0000, 0x0000 },
 	{ 0x0000, 0x0000 },
 	{ 0x0000, 0x0000 },
