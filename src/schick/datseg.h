@@ -81,6 +81,12 @@ struct struct_land_route {
 	unsigned char unkn3;		/* unused */
 };
 
+struct struct_tevent {
+	Bit8s route_id;
+	Bit8u place;
+	Bit8u tevent_id;
+};
+
 struct struct_recipe {
 	signed short item_id;		/* item id of the recipe */
 	signed short ingredients[10];	/* list of ingredients (item_ids), terminated by -1 */
@@ -406,6 +412,7 @@ extern Bit16s gs_trv_i;				//ds:0x4228; seg063, seg094
 extern Bit16s gs_route_stepcount;		//ds:0x422a; seg063, seg094
 extern Bit16s gs_forcedmarch_le_cost;		//ds:0x422c; seg094
 
+extern struct struct_tevent *gs_tevents_tab_ptr;	//ds:0x426a; seg094
 extern struct struct_land_route *gs_travel_route_ptr;	//ds:0x426e; seg094
 extern struct struct_route_tevent gs_route_tevents[15]; //ds:0x4272; seg094
 extern Bit8u  gs_sea_travel_psgbooked_flag;	//ds:0x42ae; seg002, seg063
@@ -599,6 +606,8 @@ extern const char g_dng01_str_marbo[6];		//ds:0x93d7; seg077
 extern struct struct_land_route g_land_routes[59];	//ds:0x9dc6; seg093, seg094
 
 extern struct mouse_action g_action_table_travelmap[35];	//ds:0xa50f; seg093
+
+extern struct struct_tevent g_tevents_tab[156]; //ds:0xa66d; seg094
 
 extern char g_grammar_article_der[4];		//ds:0xa8d4; seg096
 extern char g_grammar_article_die[4];		//ds:0xa8d8; seg096

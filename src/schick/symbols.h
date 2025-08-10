@@ -754,7 +754,7 @@
 #define ROUTE_COURSE_START              (0x425e)    /* Bit8u* */
 #define ROUTE_COURSE_PTR2               (0x4262)    /* Bit8u* */
 #define SEA_TRAVEL_COURSES              (0x4266)    /* Bit8u* */
-#define TEVENTS_TAB_PTR                 (0x426a)    /* unsigned long */
+//#define TEVENTS_TAB_PTR                 (0x426a)    /* unsigned long */
 //#define TRAVEL_ROUTE_PTR                (0x426e)    /* unsigned long */
 //#define ROUTE_TEVENTS                   (0x4272)    /* struct(4)[15]; struct{short place, event_id;} */
 //#define SEA_TRAVEL_PSGBOOKED_FLAG       (0x42ae)    /* signed char; 0 = passage is not booked; 0xaa = passage is booked */ /* why 0xaa instead of simply 1 ?? */
@@ -1189,7 +1189,7 @@
 #define HARBORS                         (0xa3a3)    /* struct(6)[26]; struct{char town, typeindex; Bit8u* sea_routes;} */
 #define TOWN_POSITIONS                  (0xa43f)    /* struct(4)[52]; struct{signed short x, y;} */
 //#define ACTION_TABLE_TRAVELMAP          (0xa50f)    /* struct(10)[35] */
-#define TEVENTS_TAB                     (0xa66d)    /* struct(3)[155]; struct{char route_id, place, tevent_id;} */
+//#define TEVENTS_TAB                     (0xa66d)    /* struct(3)[155]; struct{char route_id, place, tevent_id;} */
 // ?4
 #define TRAVELING                       (0xa842)    /* unsigned char; {0,1} */
 #define TEVENTS_REPEATABLE              (0xa843)    /* unsigned char[145]; {0,1} */

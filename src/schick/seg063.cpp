@@ -297,8 +297,7 @@ void do_harbor(void)
 
 						} while (answer != 0);
 
-						strcat(g_dtp2,
-							get_tx(25));
+						strcat(g_dtp2, get_tx(25));
 
 						GUI_output(g_dtp2);
 
@@ -380,8 +379,8 @@ void do_harbor(void)
 
 				set_audio_track(ARCHIVE_FILE_TERMS_XMI);
 
-				g_wallclock_x = (g_basepos_x + 120);
-				g_wallclock_y = (g_basepos_y + 87);
+				g_wallclock_x = g_basepos_x + 120;
+				g_wallclock_y = g_basepos_y + 87;
 				g_wallclock_update = 1;
 
 				sea_travel(gs_current_sea_route_id, ds_readbs(SEA_ROUTES + SIZEOF_SEA_ROUTE * gs_current_sea_route_id + SEA_ROUTE_TOWN_1) == gs_current_town ? 0 : 1);
@@ -424,7 +423,7 @@ void do_harbor(void)
 
 	} else {
 
-		gs_current_town = (TOWNS_NONE);
+		gs_current_town = TOWNS_NONE;
 	}
 }
 

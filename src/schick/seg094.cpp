@@ -134,14 +134,14 @@ void TM_func1(signed short route_no, signed short backwards)
 	memset((void*)gs_route_tevents, (gs_route_stepcount = 0), 15 * sizeof(struct_route_tevent));
 	memset(g_route_tevent_flags, 0, 15);
 
-	ds_writed(TEVENTS_TAB_PTR, (Bit32u)(p_datseg + TEVENTS_TAB));
-#if defined(__BORLANDC__)
+	/* TODO: move this pointer out of the game state, verify if that works correctly.
+	 * 		Can be replaced by a locvar! */
+	gs_tevents_tab_ptr = &g_tevents_tab[0];
 	/* Forward pointer to entries associated with current route. */
-	while (host_readb((Bit8u*)ds_readd(TEVENTS_TAB_PTR)) != route_no && host_readbs((Bit8u*)ds_readd(TEVENTS_TAB_PTR)) != -1)
+	while (((unsigned char)gs_tevents_tab_ptr->route_id != route_no) && (gs_tevents_tab_ptr->route_id != -1))
 	{
-		add_ds_fp(TEVENTS_TAB_PTR, 3);
+		gs_tevents_tab_ptr++;
 	}
-#endif
 
 	gs_trv_return = 0;
 	ds_writed(ROUTE_COURSE_START, ds_readd(ROUTE_COURSE_PTR));
@@ -171,11 +171,11 @@ void TM_func1(signed short route_no, signed short backwards)
 	ds_writew(ROUTE_DAYPROGRESS, 0);
 	/* random section ends */
 
-	while (host_readbs((Bit8u*)ds_readd(TEVENTS_TAB_PTR)) != -1 && host_readb((Bit8u*)ds_readd(TEVENTS_TAB_PTR)) == route_no)
+	while ((gs_tevents_tab_ptr->route_id != -1) && ((unsigned char)gs_tevents_tab_ptr->route_id == route_no))
 	{
 		tevent_ptr = &gs_route_tevents[gs_route_stepcount];
-		tevent_ptr->place = host_readb((Bit8u*)ds_readd(TEVENTS_TAB_PTR) + 1);
-		tevent_ptr->tevent_id =  host_readb((Bit8u*)ds_readd(TEVENTS_TAB_PTR) + 2);
+		tevent_ptr->place = gs_tevents_tab_ptr->place;
+		tevent_ptr->tevent_id = gs_tevents_tab_ptr->tevent_id;
 
 		if (backwards)
 		{
@@ -183,9 +183,7 @@ void TM_func1(signed short route_no, signed short backwards)
 		}
 
 		tevent_ptr->place *= 100;
-#if defined(__BORLANDC__)
-		add_ds_fp(TEVENTS_TAB_PTR, 3);
-#endif
+		gs_tevents_tab_ptr++;
 		gs_route_stepcount++;
 	}
 
