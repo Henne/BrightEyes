@@ -105,13 +105,13 @@ void TM_func1(signed short route_no, signed short backwards)
 #endif
 
 	memset((void*)g_trv_track_pixel_bak, 0xaa, 500);
-	ds_writed(TRAVEL_ROUTE_PTR, (Bit32u)&g_land_routes[route_no - 1]);
+	/* TODO: move this pointer out of the game state, verify if that works correctly.
+	 * 		Can be replaced by a locvar! */
+	gs_travel_route_ptr = &g_land_routes[route_no - 1];
 	ds_writew(TRAVEL_SPEED, 166);
 	ds_writew(ROUTE_TOTAL_STEPS, TM_get_track_length((Bit8u*)ds_readd(ROUTE_COURSE_PTR)));
-	ds_writew(ROUTE_LENGTH, host_readb((Bit8u*)ds_readd(TRAVEL_ROUTE_PTR) + LAND_ROUTE_DISTANCE) * 100);
-	ds_writew(ROUTE_DURATION, ds_readws(ROUTE_LENGTH) / (
-        ds_readws(TRAVEL_SPEED) + host_readbs((Bit8u*)ds_readd(TRAVEL_ROUTE_PTR) + LAND_ROUTE_SPEED_MOD) * ds_readws(TRAVEL_SPEED) / 10
-    ) * 60);
+	ds_writew(ROUTE_LENGTH, gs_travel_route_ptr->distance * 100);
+	ds_writew(ROUTE_DURATION, ds_readws(ROUTE_LENGTH) / (ds_readws(TRAVEL_SPEED) + gs_travel_route_ptr->speed_mod * ds_readws(TRAVEL_SPEED) / 10) * 60);
 	ds_writew(ROUTE_TIMEDELTA, ds_readws(ROUTE_DURATION) / ds_readws(ROUTE_TOTAL_STEPS));
 	ds_writew(ROUTE_STEPSIZE, ds_readws(ROUTE_LENGTH) / ds_readws(ROUTE_TOTAL_STEPS));
 
@@ -143,16 +143,14 @@ void TM_func1(signed short route_no, signed short backwards)
 	}
 #endif
 
-	gs_trv_return = (0);
+	gs_trv_return = 0;
 	ds_writed(ROUTE_COURSE_START, ds_readd(ROUTE_COURSE_PTR));
-	ds_writew(ROUTE_DAYPROGRESS, (
-	    ds_readws(TRAVEL_SPEED) + host_readbs((Bit8u*)ds_readd(TRAVEL_ROUTE_PTR) + LAND_ROUTE_SPEED_MOD) * ds_readws(TRAVEL_SPEED) / 10
-    ) * 18);
+	ds_writew(ROUTE_DAYPROGRESS, (ds_readws(TRAVEL_SPEED) + gs_travel_route_ptr->speed_mod * ds_readws(TRAVEL_SPEED) / 10) * 18);
 
 	/* random section starts */
 	if (gs_quested_months > 3)
 	{
-		if ((ds_writew(ROUTE_INFORMER_FLAG, (random_schick(100) <= 2 ? 1 : 0))) != 0)
+		if (ds_writew(ROUTE_INFORMER_FLAG, (random_schick(100) <= 2 ? 1 : 0)))
 		{
 			ds_writew(ROUTE_INFORMER_TIME, random_schick(ds_readws(ROUTE_DAYPROGRESS)));
 		}
@@ -160,12 +158,12 @@ void TM_func1(signed short route_no, signed short backwards)
 		ds_writew(ROUTE_INFORMER_FLAG, 0);
 	}
 
-	if ((ds_writew(ROUTE_ENCOUNTER_FLAG, (random_schick(100) <= host_readb((Bit8u*)ds_readd(TRAVEL_ROUTE_PTR) + LAND_ROUTE_ENCOUNTERS) ? 1 : 0))) != 0)
+	if (ds_writew(ROUTE_ENCOUNTER_FLAG, (random_schick(100) <= gs_travel_route_ptr->encounters ? 1 : 0)))
 	{
 		ds_writew(ROUTE_ENCOUNTER_TIME, random_schick(ds_readws(ROUTE_DAYPROGRESS)));
 	}
 
-	if ((ds_writew(ROUTE_FIGHT_FLAG, (random_schick(100) <= host_readb((Bit8u*)ds_readd(TRAVEL_ROUTE_PTR) + LAND_ROUTE_FIGHTS) / 3 ? 1 : 0))) != 0)
+	if (ds_writew(ROUTE_FIGHT_FLAG, (random_schick(100) <= gs_travel_route_ptr->fights / 3 ? 1 : 0)))
 	{
 		ds_writew(ROUTE_FIGHT_TIME, random_schick(ds_readws(ROUTE_DAYPROGRESS)));
 	}
@@ -181,7 +179,7 @@ void TM_func1(signed short route_no, signed short backwards)
 
 		if (backwards)
 		{
-			tevent_ptr->place = host_readb((Bit8u*)ds_readd(TRAVEL_ROUTE_PTR) + LAND_ROUTE_DISTANCE) - tevent_ptr->place;
+			tevent_ptr->place = gs_travel_route_ptr->distance - tevent_ptr->place;
 		}
 
 		tevent_ptr->place *= 100;
@@ -253,25 +251,18 @@ void TM_func1(signed short route_no, signed short backwards)
 		{
 			if (!gs_forcedmarch_timer)
 			{
-				answer = GUI_radio(get_ttx(815), 3,
-							get_tx(74),
-							get_ttx(816),
-							get_ttx(613));
+				answer = GUI_radio(get_ttx(815), 3, get_tx(74), get_ttx(816), get_ttx(613));
 			} else {
-				answer = GUI_radio(get_ttx(815), 2,
-							get_ttx(816),
-							get_ttx(613));
+				answer = GUI_radio(get_ttx(815), 2, get_ttx(816), get_ttx(613));
 			}
 
 			if (answer == 1 && !gs_forcedmarch_timer) /* Gewaltmarsch */
 			{
-			    /* do forced march for 2 days */
+				/* do forced march for 2 days */
 				gs_forcedmarch_le_cost = random_schick(10);
 				ds_writew(TRAVEL_SPEED, gs_route_stepcount + 197);
 				gs_forcedmarch_timer = 2;
-				ds_writew(ROUTE_DURATION, ds_readws(ROUTE_LENGTH) / (
-				    ds_readws(TRAVEL_SPEED) + (host_readbs((Bit8u*)ds_readd(TRAVEL_ROUTE_PTR) + LAND_ROUTE_SPEED_MOD) * ds_readws(TRAVEL_SPEED)) / 10
-                ) * 60);
+				ds_writew(ROUTE_DURATION, ds_readws(ROUTE_LENGTH) / (ds_readws(TRAVEL_SPEED) + (gs_travel_route_ptr->speed_mod * ds_readws(TRAVEL_SPEED)) / 10) * 60);
 				ds_writew(ROUTE_TIMEDELTA, ds_readws(ROUTE_DURATION) / ds_readws(ROUTE_TOTAL_STEPS));
 				/* Remark: gs_forcedmarch_le_cost = gs_forcedmarch_le_cost / 2; */
 				gs_forcedmarch_le_cost >>= 1;
@@ -360,10 +351,8 @@ void TM_func1(signed short route_no, signed short backwards)
 			}
 		}
 
-        /* night camp */
-		if (gs_day_timer >= HOURS(20) &&
-			!gs_travel_detour &&
-			ds_readws(GAME_STATE) == GAME_STATE_MAIN &&
+	        /* night camp */
+		if (gs_day_timer >= HOURS(20) && !gs_travel_detour && ds_readws(GAME_STATE) == GAME_STATE_MAIN &&
 			2 * ds_readws(ROUTE_STEPSIZE) < ds_readws(ROUTE_PROGRESS) &&
 			ds_readws(ROUTE_LENGTH) - 2 * ds_readws(ROUTE_STEPSIZE) > ds_readws(ROUTE_PROGRESS))
 		{
@@ -385,17 +374,15 @@ void TM_func1(signed short route_no, signed short backwards)
 
 			if (ds_readws(GAME_STATE) == GAME_STATE_MAIN)
 			{
-			    /* figure out encounters etc. for next day */
-				ds_writew(ROUTE_DAYPROGRESS, (
-				    ds_readws(TRAVEL_SPEED) + (host_readbs((Bit8u*)ds_readd(TRAVEL_ROUTE_PTR) + LAND_ROUTE_SPEED_MOD) * ds_readws(TRAVEL_SPEED) / 10)
-                ) * 18);
+				/* figure out encounters etc. for next day */
+				ds_writew(ROUTE_DAYPROGRESS, (ds_readws(TRAVEL_SPEED) + (gs_travel_route_ptr->speed_mod * ds_readws(TRAVEL_SPEED) / 10)) * 18);
 
-				if ((ds_writew(ROUTE_ENCOUNTER_FLAG, random_schick(100) <= host_readb((Bit8u*)ds_readd(TRAVEL_ROUTE_PTR) + LAND_ROUTE_ENCOUNTERS) ? 1 : 0)) != 0)
+				if ((ds_writew(ROUTE_ENCOUNTER_FLAG, (random_schick(100) <= gs_travel_route_ptr->encounters ? 1 : 0))))
 				{
 					ds_writew(ROUTE_ENCOUNTER_TIME, random_schick(ds_readws(ROUTE_DAYPROGRESS)));
 				}
 
-				if ((ds_writew(ROUTE_FIGHT_FLAG, random_schick(100) <= host_readb((Bit8u*)ds_readd(TRAVEL_ROUTE_PTR) + LAND_ROUTE_FIGHTS) / 3 ? 1 : 0)) != 0)
+				if ((ds_writew(ROUTE_FIGHT_FLAG, random_schick(100) <= gs_travel_route_ptr->fights / 3 ? 1 : 0)) != 0)
 				{
 					ds_writew(ROUTE_FIGHT_TIME, random_schick(ds_readws(ROUTE_DAYPROGRESS)));
 				}
@@ -451,7 +438,7 @@ void TM_func1(signed short route_no, signed short backwards)
 
 			if (g_request_refresh == 2 && route_no != 59)
 			{
-			    /* Return or continue? */
+				/* Return or continue? */
 				if (GUI_radio(get_tx(71), 2, get_tx(72), get_tx(73)) == 2)
 				{
 					gs_trv_return = (gs_trv_return == 0 ? 1 : -1);

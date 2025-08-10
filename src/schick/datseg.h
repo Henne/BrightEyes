@@ -69,15 +69,16 @@ struct struct_route_tevent {
 };
 
 struct struct_land_route {
-	unsigned char town1_id;
-	unsigned char town2_id;
-	unsigned char distance;
-	signed char speed_mod;
-	unsigned char encounters;
-	unsigned char unkn1;
-	unsigned char unkn2;
-	unsigned char fights;
-	unsigned char unkn3;
+	/* Note: routes are undirected */
+	Bit8u town1_id;
+	Bit8u town2_id;
+	Bit8u distance;
+	Bit8s speed_mod;		/* {-4, ..., 7} */
+	Bit8u encounters;
+	unsigned char unkn1;		/* unused */
+	unsigned char unkn2;		/* unused */
+	Bit8u fights;
+	unsigned char unkn3;		/* unused */
 };
 
 struct struct_recipe {
@@ -403,6 +404,7 @@ extern Bit16s gs_trv_i;				//ds:0x4228; seg063, seg094
 extern Bit16s gs_route_stepcount;		//ds:0x422a; seg063, seg094
 extern Bit16s gs_forcedmarch_le_cost;		//ds:0x422c; seg094
 
+extern struct struct_land_route *gs_travel_route_ptr;	//ds:0x426e; seg094
 extern struct struct_route_tevent gs_route_tevents[15]; //ds:0x4272; seg094
 extern Bit8u  gs_sea_travel_psgbooked_flag;	//ds:0x42ae; seg002, seg063
 extern Bit8u  gs_sea_travel_psgbooked_timer;	//ds:0x42af; seg002, seg063

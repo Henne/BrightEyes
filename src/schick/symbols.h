@@ -755,7 +755,7 @@
 #define ROUTE_COURSE_PTR2               (0x4262)    /* Bit8u* */
 #define SEA_TRAVEL_COURSES              (0x4266)    /* Bit8u* */
 #define TEVENTS_TAB_PTR                 (0x426a)    /* unsigned long */
-#define TRAVEL_ROUTE_PTR                (0x426e)    /* unsigned long */
+//#define TRAVEL_ROUTE_PTR                (0x426e)    /* unsigned long */
 //#define ROUTE_TEVENTS                   (0x4272)    /* struct(4)[15]; struct{short place, event_id;} */
 //#define SEA_TRAVEL_PSGBOOKED_FLAG       (0x42ae)    /* signed char; 0 = passage is not booked; 0xaa = passage is booked */ /* why 0xaa instead of simply 1 ?? */
 //#define SEA_TRAVEL_PSGBOOKED_TIMER      (0x42af)    /* signed char; 0 = ship leaves today at 9 o'clock; 1 = ship leaves tomorrow at 9 o'clock */

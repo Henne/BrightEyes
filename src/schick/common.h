@@ -1849,19 +1849,6 @@ enum {
 	SIZEOF_RECIPE		= 28
 };
 
-enum {
-	LAND_ROUTE_TOWN_1 = 0, /* one byte */ /* ID of the first town of the route. Note that the routes are undirected; i.e. both endpoint towns are treated equal. */
-	LAND_ROUTE_TOWN_2 = 1, /* one byte */ /* ID of the second town of the route. */
-	LAND_ROUTE_DISTANCE = 2, /* one byte */
-	LAND_ROUTE_SPEED_MOD = 3, /* one byte */ /* a number between -4 and +7 */
-	LAND_ROUTE_ENCOUNTERS = 4, /* one byte */
-	LAND_ROUTE_UNKN1 = 5, /* one byte */
-	LAND_ROUTE_UNKN2 = 6, /* one byte */
-	LAND_ROUTE_FIGHTS = 7, /* one byte */
-	LAND_ROUTE_UNKN3 = 8, /* one byte */
-	SIZEOF_LAND_ROUTE = 9
-};
-
 #define NR_SEA_ROUTES (45)
 
 enum {
