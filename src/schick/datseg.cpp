@@ -4840,7 +4840,7 @@ struct{unsigned char unkn[21];} g_dng13_specialchests[2] = {
 unsigned char g_unkn_063[18] = { 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }; // ds:0x9d72
 long g_dng_specialchest_index[16] = { 0x00000000, 0x14fc9314, 0x14fc93d8, 0x14fc9480, 0x14fc95ba, 0x00000000, 0x14fc9610, 0x14fc9668, 0x14fc9692, 0x14fc972e, 0x14fc97d6, 0x14fc9854, 0x14fc9d04, 0x14fc9d48, 0x14fc9990, 0x14fc9a4e }; // ds:0x9d84; Bit8u*
 char g_str_single_space[2] = " "; // ds:0x9dc4
-struct{unsigned char from, to, distance; signed char speed_mod; unsigned char encounters, unkn1, unkn2, fights, unkn3;} g_land_route[59] = {
+struct struct_land_route g_land_routes[59] = {
 	{ TOWNS_THORWAL            , TOWNS_VAERMHAG           ,  34,  1, 10,  25,  0, 10, 100 }, //  1
 	{ TOWNS_VAERMHAG           , TOWNS_VARNHEIM           ,  40,  1, 10,  20,  0, 10, 100 }, //  2
 	{ TOWNS_VARNHEIM           , TOWNS_DASPOTA            ,  21,  1, 10,   5,  0, 10, 100 }, //  3

@@ -105,7 +105,7 @@ void TM_func1(signed short route_no, signed short backwards)
 #endif
 
 	memset((void*)g_trv_track_pixel_bak, 0xaa, 500);
-	ds_writed(TRAVEL_ROUTE_PTR, (Bit32u)(p_datseg + (LAND_ROUTES - SIZEOF_LAND_ROUTE) + SIZEOF_LAND_ROUTE * route_no));
+	ds_writed(TRAVEL_ROUTE_PTR, (Bit32u)&g_land_routes[route_no - 1]);
 	ds_writew(TRAVEL_SPEED, 166);
 	ds_writew(ROUTE_TOTAL_STEPS, TM_get_track_length((Bit8u*)ds_readd(ROUTE_COURSE_PTR)));
 	ds_writew(ROUTE_LENGTH, host_readb((Bit8u*)ds_readd(TRAVEL_ROUTE_PTR) + LAND_ROUTE_DISTANCE) * 100);
@@ -518,26 +518,26 @@ signed short TM_unused1(Bit8u* signpost_ptr, signed short old_route_no)
 	char *destinations_tab[7];
 
 	old_route_id = host_readb((Bit8u*)(host_readd((Bit8u*)(signpost_ptr) + SIGNPOST_LAND_ROUTES)) + old_route_no) - 1;
-	gs_current_town = ((signed char)(town = gs_trv_destination));
+	gs_current_town = town = gs_trv_destination;
 	signpost_ptr = ((Bit8u*)p_datseg + SIGNPOSTS);
 
 	do {
-		if (host_readb((Bit8u*)(signpost_ptr) + SIGNPOST_TOWN) == town)
+		if (host_readb(signpost_ptr + SIGNPOST_TOWN) == town)
 		{
 			route_no1 = 0;
-			while (host_readbs((Bit8u*)(host_readd((Bit8u*)(signpost_ptr) + SIGNPOST_LAND_ROUTES)) + route_no1) != -1)
+			while (host_readbs((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + route_no1) != -1)
 			{
-				if (host_readb((Bit8u*)(host_readd((Bit8u*)(signpost_ptr) + SIGNPOST_LAND_ROUTES)) + route_no1) - 1 == old_route_id &&
-					(route_no1 || host_readb((Bit8u*)(host_readd((Bit8u*)(signpost_ptr) + SIGNPOST_LAND_ROUTES)) + (route_no1 + 1)) != 255))
+				if (host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + route_no1) - 1 == old_route_id &&
+					(route_no1 || host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + (route_no1 + 1)) != 255))
 				{
 					town_i = route_no2 = 0;
-					while ((route_id = host_readb((Bit8u*)(host_readd((Bit8u*)(signpost_ptr) + SIGNPOST_LAND_ROUTES)) + route_no2)) != 255)
+					while ((route_id = host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + route_no2)) != 255)
 					{
 						if (route_no2 != route_no1)
 						{
 							destinations_tab[town_i++] = get_ttx(235 + (gs_trv_menu_towns[town_i] =
-                                ((answer = ds_readb((LAND_ROUTES - SIZEOF_LAND_ROUTE + LAND_ROUTE_TOWN_1) + SIZEOF_LAND_ROUTE * route_id)) != gs_current_town ?
-                                    (unsigned char)answer : ds_readb((LAND_ROUTES - SIZEOF_LAND_ROUTE + LAND_ROUTE_TOWN_2) + SIZEOF_LAND_ROUTE * route_id))
+								((answer = g_land_routes[route_id - 1].town1_id) != gs_current_town ?
+									(signed char)answer : g_land_routes[route_id - 1].town2_id)
                             ));
 						}
 						route_no2++;
@@ -618,7 +618,7 @@ signed short TM_enter_target_town(void)
 				do {
 					tmp2 = host_readb((Bit8u*)host_readd(signpost_ptr + 2) + tmp) - 1;
 
-					if (ds_readbs(LAND_ROUTES + 9 * tmp2) == gs_current_town || ds_readbs((LAND_ROUTES + 1) + 9 * tmp2) == gs_current_town)
+					if ((g_land_routes[tmp2].town1_id == gs_current_town) || (g_land_routes[tmp2].town2_id == gs_current_town))
 					{
 						signpost_id = host_readb(signpost_ptr + 1);
 						break;

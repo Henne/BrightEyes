@@ -110,9 +110,9 @@ signed short do_travel_mode(void)
 					i = 0;
 					while ((l_di = host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + i)) != 255)
 					{
-						destinations_tab[i] = get_ttx(235 + (gs_trv_menu_towns[i] =
-						    ((answer = ds_readb((LAND_ROUTES - SIZEOF_LAND_ROUTE + LAND_ROUTE_TOWN_1) + SIZEOF_LAND_ROUTE * l_di)) != gs_current_town ?
-						    (signed char) answer : ds_readbs((LAND_ROUTES - SIZEOF_LAND_ROUTE + LAND_ROUTE_TOWN_2) + SIZEOF_LAND_ROUTE * l_di))));
+						destinations_tab[i] = get_ttx(235 + (gs_trv_menu_towns[i] = (
+							(answer = g_land_routes[l_di - 1].town1_id) != gs_current_town ?
+							(signed char) answer : g_land_routes[l_di - 1].town2_id)));
 
 						i++;
 					}
@@ -154,13 +154,13 @@ signed short do_travel_mode(void)
 						break;
 					}
 
-					g_wallclock_x = (g_basepos_x + 120);
-					g_wallclock_y = (g_basepos_y + 87);
+					g_wallclock_x = g_basepos_x + 120;
+					g_wallclock_y = g_basepos_y + 87;
 
 					g_wallclock_update = 1;
 
 					TM_func1(host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + answer),
-						(ds_readbs((LAND_ROUTES - SIZEOF_LAND_ROUTE) + SIZEOF_LAND_ROUTE * host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + answer)) == gs_current_town ? 0 : 1));
+						(g_land_routes[host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + answer)].town1_id == gs_current_town ? 0 : 1));
 					g_wallclock_update = 0;
 
 					if (g_route59_flag)

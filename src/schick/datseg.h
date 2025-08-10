@@ -68,6 +68,18 @@ struct struct_route_tevent {
 	Bit16s tevent_id;
 };
 
+struct struct_land_route {
+	unsigned char town1_id;
+	unsigned char town2_id;
+	unsigned char distance;
+	signed char speed_mod;
+	unsigned char encounters;
+	unsigned char unkn1;
+	unsigned char unkn2;
+	unsigned char fights;
+	unsigned char unkn3;
+};
+
 struct struct_recipe {
 	signed short item_id;		/* item id of the recipe */
 	signed short ingredients[10];	/* list of ingredients (item_ids), terminated by -1 */
@@ -579,6 +591,8 @@ extern signed short g_automap_sely;		//ds:0x7de7; seg074, seg099
 extern signed short g_dng_level_changed;	//ds:0x9312; seg075, seg076
 
 extern const char g_dng01_str_marbo[6];		//ds:0x93d7; seg077
+
+extern struct struct_land_route g_land_routes[59];	//ds:0x9dc6; seg093, seg094
 
 extern struct mouse_action g_action_table_travelmap[35];	//ds:0xa50f; seg093
 
