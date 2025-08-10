@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-Og -g -fno-asm -fopenmp -Wall -Wextra
+CFLAGS=-Og -g -fno-asm -fopenmp -Wall -Wextra -fsanitize=address -fno-omit-frame-pointer
 #CC=clang
 #CFLAGS=-O0 -g -fno-asm -fopenmp=libgomp
 

@@ -744,12 +744,12 @@
 #define ROUTE_FIGHT_FLAG                (0x4248)    /* unsigned short; {0,1} */
 #define ROUTE_FIGHT_TIME                (0x424a)    /* unsigned short */
 #define TRAVEL_SPEED                    (0x424c)    /* unsigned short */
-#define PASSAGE_DEADSHIP_FLAG           (0x424e)    /* unsigned short; {0,1} */
-#define PASSAGE_DEADSHIP_POSITION       (0x4250)    /* unsigned short */
-#define PASSAGE_OCTOPUS_FLAG            (0x4252)    /* unsigned short; {0,1} */
-#define PASSAGE_OCTOPUS_POSITION        (0x4254)    /* unsigned short */
-#define PASSAGE_PIRATES_FLAG            (0x4256)    /* unsigned short; {0,1} */
-#define PASSAGE_PIRATES_POSITION        (0x4258)    /* unsigned short */
+//#define PASSAGE_DEADSHIP_FLAG           (0x424e)    /* unsigned short; {0,1} */
+//#define PASSAGE_DEADSHIP_POSITION       (0x4250)    /* unsigned short */
+//#define PASSAGE_OCTOPUS_FLAG            (0x4252)    /* unsigned short; {0,1} */
+//#define PASSAGE_OCTOPUS_POSITION        (0x4254)    /* unsigned short */
+//#define PASSAGE_PIRATES_FLAG            (0x4256)    /* unsigned short; {0,1} */
+//#define PASSAGE_PIRATES_POSITION        (0x4258)    /* unsigned short */
 //#define ROUTE_COURSE_PTR                (0x425a)    /* Bit8u* */
 //#define ROUTE_COURSE_START              (0x425e)    /* Bit8u* */
 //#define ROUTE_COURSE_PTR2               (0x4262)    /* Bit8u* */

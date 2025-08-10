@@ -514,29 +514,29 @@ void sea_travel(signed short passage, signed short dir)
 	if (passage <= 6 && gs_quest_deadship && !gs_quest_deadship_done) {
 		/* only on high seas routes */
 
-		if (ds_writews(PASSAGE_DEADSHIP_FLAG, random_schick(100) <= 20 ? 1 : 0)) {
-			ds_writews(PASSAGE_DEADSHIP_POSITION, random_schick(ds_readws(ROUTE_DAYPROGRESS)));
+		if ((gs_passage_deadship_flag = random_schick(100) <= 20 ? 1 : 0)) {
+			gs_passage_deadship_position = random_schick(ds_readws(ROUTE_DAYPROGRESS));
 #if !defined(__BORLANDC__)
-			D1_INFO("Totenschiff wurde bei %o0 Schritt aktiviert!\n", ds_readws(PASSAGE_DEADSHIP_POSITION));
+			D1_INFO("Totenschiff wurde bei %o0 Schritt aktiviert!\n", gs_passage_deadship_position);
 #endif
 		}
 	} else {
-		ds_writew(PASSAGE_DEADSHIP_FLAG, 0);
+		gs_passage_deadship_flag = 0;
 	}
 
-	if (ds_writews(PASSAGE_OCTOPUS_FLAG, random_schick(100) <= 5 ? 1 : 0)) {
+	if ((gs_passage_octopus_flag = random_schick(100) <= 5 ? 1 : 0)) {
 
-		ds_writews(PASSAGE_OCTOPUS_POSITION, random_schick(ds_readws(ROUTE_DAYPROGRESS)));
+		gs_passage_octopus_position = random_schick(ds_readws(ROUTE_DAYPROGRESS));
 #if !defined(__BORLANDC__)
-		D1_INFO("Krakenmolch wurde bei %o0 Schritt aktiviert!\n", ds_readws(PASSAGE_OCTOPUS_POSITION));
+		D1_INFO("Krakenmolch wurde bei %o0 Schritt aktiviert!\n", gs_passage_octopus_position);
 #endif
 	}
 
-	if (ds_writews(PASSAGE_PIRATES_FLAG, random_schick(100) <= 10 ? 1 : 0)) {
+	if ((gs_passage_pirates_flag = random_schick(100) <= 10 ? 1 : 0)) {
 
-		ds_writews(PASSAGE_PIRATES_POSITION, random_schick(ds_readws(ROUTE_DAYPROGRESS)));
+		gs_passage_pirates_position = random_schick(ds_readws(ROUTE_DAYPROGRESS));
 #if !defined(__BORLANDC__)
-		D1_INFO("Piratenangriff wurde bei %o0 Schritt aktiviert!\n", ds_readws(PASSAGE_PIRATES_POSITION));
+		D1_INFO("Piratenangriff wurde bei %o0 Schritt aktiviert!\n", gs_passage_pirates_position);
 #endif
 	}
 
@@ -584,27 +584,30 @@ void sea_travel(signed short passage, signed short dir)
 		D1_LOG("%d0 Schritt zurueckgelegt.\n",ds_readws(ROUTE_DAYPROGRESS));
 #endif
 
-		if (ds_readws(PASSAGE_DEADSHIP_FLAG) != 0 && ds_readws(ROUTE_DAYPROGRESS) >= ds_readws(PASSAGE_DEADSHIP_POSITION) && !gs_quest_deadship_done) {
-			prolog_ghostship();
+		if (gs_passage_deadship_flag != 0 && ds_readws(ROUTE_DAYPROGRESS) >= gs_passage_deadship_position && !gs_quest_deadship_done) {
+
 			/* within the call prolog_ghostship(), the party can decide if they enter the Totenschiff.
 			 * In that case, gs_travel_detour is set to DUNGEONS_TOTENSCHIFF (instead of 0) */
+			prolog_ghostship();
+			gs_passage_deadship_flag = 0;
 
-			ds_writew(PASSAGE_DEADSHIP_FLAG, 0);
-		} else if (ds_readws(PASSAGE_OCTOPUS_FLAG) != 0 && ds_readws(ROUTE_DAYPROGRESS) >= ds_readws(PASSAGE_OCTOPUS_POSITION) && !gs_ingame_timers[INGAME_TIMER_EFFERD_SAFE_PASSAGE]) {
+		} else if (gs_passage_octopus_flag != 0 && ds_readws(ROUTE_DAYPROGRESS) >= gs_passage_octopus_position && !gs_ingame_timers[INGAME_TIMER_EFFERD_SAFE_PASSAGE]) {
+
 			octopus_attack_wrapper();
-			ds_writew(PASSAGE_OCTOPUS_FLAG, 0);
+			gs_passage_octopus_flag = 0;
+
 		} else if
 #ifndef M302de_ORIGINAL_BUGFIX
 			/* Original-Bug 34:
 			 * There is an Efferd miracle with the text "Efferd gewaehrt euch seinen Schutz auf Wasser.".
 			 * For sea traveling, it prevents octopus encounters. However, pirate encounters are still possible, which feels wrong. */
-			(ds_readws(PASSAGE_PIRATES_FLAG) != 0 && ds_readws(ROUTE_DAYPROGRESS) >= ds_readws(PASSAGE_PIRATES_POSITION))
+			(gs_passage_pirates_flag != 0 && ds_readws(ROUTE_DAYPROGRESS) >= gs_passage_pirates_position)
 #else
-			(ds_readws(PASSAGE_PIRATES_FLAG) != 0 && ds_readws(ROUTE_DAYPROGRESS) >= ds_readws(PASSAGE_PIRATES_POSITION) && !gs_ingame_timers[INGAME_TIMER_EFFERD_SAFE_PASSAGE])
+			(gs_passage_pirates_flag != 0 && ds_readws(ROUTE_DAYPROGRESS) >= gs_passage_pirates_position && !gs_ingame_timers[INGAME_TIMER_EFFERD_SAFE_PASSAGE])
 #endif
 		{
 			pirates_attack_wrapper();
-			ds_writew(PASSAGE_PIRATES_FLAG, 0);
+			gs_passage_pirates_flag = 0;
 		}
 
 		/* This looks dirty.

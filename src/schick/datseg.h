@@ -412,6 +412,12 @@ extern Bit16s gs_trv_i;				//ds:0x4228; seg063, seg094
 extern Bit16s gs_route_stepcount;		//ds:0x422a; seg063, seg094
 extern Bit16s gs_forcedmarch_le_cost;		//ds:0x422c; seg094
 
+extern Bit16s gs_passage_deadship_flag;			//ds:0x424e; seg063
+extern Bit16s gs_passage_deadship_position;		//ds:0x4250; seg063
+extern Bit16s gs_passage_octopus_flag;			//ds:0x4252; seg063
+extern Bit16s gs_passage_octopus_position;		//ds:0x4254; seg063
+extern Bit16s gs_passage_pirates_flag;			//ds:0x4256; seg063
+extern Bit16s gs_passage_pirates_position;		//ds:0x4258; seg063
 extern Bit8u *gs_route_course_ptr;			//ds:0x425a; seg063, seg094
 extern Bit8u *gs_route_course_start;			//ds:0x425e; seg063, seg094
 extern Bit8u *gs_route_course_ptr2;			//ds:0x4262; seg063, seg094
