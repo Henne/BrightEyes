@@ -386,6 +386,12 @@ extern Bit16s gs_trv_i;				//ds:0x4228; seg063, seg094
 extern Bit16s gs_route_stepcount;		//ds:0x422a; seg063, seg094
 extern Bit16s gs_forcedmarch_le_cost;		//ds:0x422c; seg094
 
+
+extern Bit8u  gs_sea_travel_psgbooked_flag;	//ds:0x42ae; seg002, seg063
+extern Bit8u  gs_sea_travel_psgbooked_timer;	//ds:0x42af; seg002, seg063
+extern Bit8s  gs_sea_travel_passage_speed1;	//ds:0x42b0; seg063
+extern Bit8u  gs_current_sea_route_id;		//ds:0x42b1; seg063, seg064
+// TODO: HORBOUR OPTIONS: contains pointers
 extern Bit16s gs_sea_travel_passage_price;	//ds:0x432a; seg063, seg064
 extern Bit16s gs_sea_travel_passage_speed2;	//ds:0x432c; seg063, seg064
 extern Bit8u *gs_travel_map_ptr;		//ds:0x432e; seg028, seg063, seg093, seg094

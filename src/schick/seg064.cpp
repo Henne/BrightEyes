@@ -310,7 +310,7 @@ unsigned short passage_arrival(void)
 	harbor_typeindex = 0;
 	harbor_ptr = p_datseg + HARBORS;
 
-	p_sea_route = p_datseg + SEA_ROUTES + ds_readb(CURRENT_SEA_ROUTE_ID) * SIZEOF_SEA_ROUTE;
+	p_sea_route = p_datseg + SEA_ROUTES + gs_current_sea_route_id * SIZEOF_SEA_ROUTE;
 
 	/* write the id of the destination town to the global variable gs_travel_destination_town_id
 	   Code is a bit unorthodox: Within the if-condition, the id of TOWN_1 is written to gs_travel_destination_town_id

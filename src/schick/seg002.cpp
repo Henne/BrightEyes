@@ -3361,8 +3361,8 @@ void passages_recalc(void)
 	}
 
 	/* If a passage is hired decrement Passage days timer */
-	if (ds_readb(SEA_TRAVEL_PSGBOOKED_FLAG) == 0xaa) {
-		dec_ds_bs_post(SEA_TRAVEL_PSGBOOKED_TIMER);
+	if (gs_sea_travel_psgbooked_flag == 0xaa) {
+		gs_sea_travel_psgbooked_timer--;
 	}
 }
 
@@ -3388,8 +3388,8 @@ void passages_reset(void)
 
 	/* If a passage is booked and the timer is zero, the ship leaves the harbor.
 	 * Therefore, reset the flag for the passage (i.e., unbook the passage) */
-	if ((ds_readb(SEA_TRAVEL_PSGBOOKED_FLAG) == 0xaa) && !ds_readb(SEA_TRAVEL_PSGBOOKED_TIMER)) {
-		ds_writeb(SEA_TRAVEL_PSGBOOKED_FLAG, 0);
+	if ((gs_sea_travel_psgbooked_flag == 0xaa) && !gs_sea_travel_psgbooked_timer) {
+		gs_sea_travel_psgbooked_flag = 0;
 	}
 }
 

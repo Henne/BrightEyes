@@ -222,15 +222,15 @@ void do_harbor(void)
 							money -= gs_sea_travel_passage_price;
 							set_party_money(money);
 
-							ds_writeb(SEA_TRAVEL_PSGBOOKED_TIMER, host_readb(psg_ptr + HARBOR_OPTION_SHIP_TIMER));
-							ds_writeb(SEA_TRAVEL_PSGBOOKED_FLAG, 0xaa);
+							gs_sea_travel_psgbooked_timer = host_readb(psg_ptr + HARBOR_OPTION_SHIP_TIMER);
+							gs_sea_travel_psgbooked_flag = 0xaa;
 
-							ds_writeb(SEA_TRAVEL_PASSAGE_SPEED1, gs_sea_travel_passage_speed2); /* speed in [100m per hour] */
+							gs_sea_travel_passage_speed1 = gs_sea_travel_passage_speed2; /* speed in [100m per hour] */
 							/* Now ..._SPEED1 is the lower byte of ..._SPEED2 */
 							/* not clear why two variables ..._SPEED1 and ..._SPEED2 are used. */
 							/* In my opinion, a single variable would be enough (and then there would not be the need to copy the value around) */
 
-							ds_writeb(CURRENT_SEA_ROUTE_ID, host_readb(psg_ptr + HARBOR_OPTION_ROUTE_ID));
+							gs_current_sea_route_id = host_readb(psg_ptr + HARBOR_OPTION_ROUTE_ID);
 
 							GUI_output(host_readb(psg_ptr + HARBOR_OPTION_SHIP_TIMER) != 0 ? get_tx(18) : get_tx(17));
 							/* ship leaving tomorrow or today */
@@ -313,14 +313,15 @@ void do_harbor(void)
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_3) {
 			/* enter booked ship */
 
-			if (ds_readb(SEA_TRAVEL_PSGBOOKED_FLAG) != 0xaa) {
+			if (gs_sea_travel_psgbooked_flag != 0xaa) {
 				/* no ship booked... */
 
 				GUI_output(get_tx(19));
 
-			} else if (ds_readb(SEA_TRAVEL_PSGBOOKED_TIMER) != 0) {
+			} else if (gs_sea_travel_psgbooked_timer) {
 
-				GUI_output(ds_readbs(SEA_TRAVEL_PSGBOOKED_TIMER) == -1 ?
+				/* REMARK: cast is important, since var is Bit8u */
+				GUI_output((signed char)gs_sea_travel_psgbooked_timer == -1 ?
 					get_tx(27) : /* SEA_TRAVEL_PSGBOOKED_TIMER == -1 -> "Zu spaet! Das Schiff, fuer das ihr gebucht wart ist leider ohne euch losgefahren!" */
 					get_tx(20)   /* SEA_TRAVEL_PSGBOOKED_TIMER == +1 -> "Die Matrosen lassen euch das Schiff noch nicht besteigen. Kommt morgen wieder..." */
 				);
@@ -383,10 +384,10 @@ void do_harbor(void)
 				g_wallclock_y = (g_basepos_y + 87);
 				g_wallclock_update = 1;
 
-				sea_travel(ds_readb(CURRENT_SEA_ROUTE_ID), ds_readbs(SEA_ROUTES + SIZEOF_SEA_ROUTE * ds_readb(CURRENT_SEA_ROUTE_ID)) == gs_current_town ? 0 : 1);
+				sea_travel(gs_current_sea_route_id, ds_readbs(SEA_ROUTES + SIZEOF_SEA_ROUTE * gs_current_sea_route_id + SEA_ROUTE_TOWN_1) == gs_current_town ? 0 : 1);
 				passage_arrival();
 
-				g_wallclock_update = g_basepos_x = g_basepos_y = ds_writeb(SEA_TRAVEL_PSGBOOKED_FLAG, 0);
+				g_wallclock_update = g_basepos_x = g_basepos_y = gs_sea_travel_psgbooked_flag = 0;
 				g_current_ani = g_city_area_loaded = g_pp20_index = -1;
 				g_request_refresh = 1;
 				gs_show_travel_map = 0;
@@ -482,7 +483,7 @@ void sea_travel(signed short passage, signed short dir)
 #endif
 
 	memset(g_trv_track_pixel_bak, 0xaa, 500);
-	ds_writew(TRAVEL_SPEED, 10 * ds_readbs(SEA_TRAVEL_PASSAGE_SPEED1)); /* speed [unit: 10m per hour] */
+	ds_writew(TRAVEL_SPEED, 10 * gs_sea_travel_passage_speed1); /* speed [unit: 10m per hour] */
 	ds_writew(ROUTE_TOTAL_STEPS, get_srout_len((Bit8u*)ds_readd(ROUTE_COURSE_PTR))); /* a step for each pixel on the map. */
 	ds_writew(ROUTE_LENGTH, 100 * ds_readb(SEA_ROUTES + SEA_ROUTE_DISTANCE + SIZEOF_SEA_ROUTE * passage)); /* length of sea route [unit: 10m] */
 	ds_writew(ROUTE_DURATION, ds_readws(ROUTE_LENGTH) / ds_readws(TRAVEL_SPEED) * 60); /* duration [unit: minutes] */
