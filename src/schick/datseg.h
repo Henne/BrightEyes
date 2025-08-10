@@ -412,6 +412,7 @@ extern Bit16s gs_trv_i;				//ds:0x4228; seg063, seg094
 extern Bit16s gs_route_stepcount;		//ds:0x422a; seg063, seg094
 extern Bit16s gs_forcedmarch_le_cost;		//ds:0x422c; seg094
 
+extern Bit8u *gs_sea_travel_courses;			//ds:0x4266; seg063
 extern struct struct_tevent *gs_tevents_tab_ptr;	//ds:0x426a; seg094
 extern struct struct_land_route *gs_travel_route_ptr;	//ds:0x426e; seg094
 extern struct struct_route_tevent gs_route_tevents[15]; //ds:0x4272; seg094

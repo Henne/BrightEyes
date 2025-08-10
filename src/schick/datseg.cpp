@@ -2661,12 +2661,12 @@ unsigned short g_passage_pirates_position = 0; // ds:0x4258
 long g_route_course_ptr = 0; // ds:0x425a; Bit8u*
 long g_route_course_start = 0; // ds:0x425e; Bit8u*
 long g_route_course_ptr2 = 0; // ds:0x4262; Bit8u*
-long g_sea_travel_courses = 0; // ds:0x4266; Bit8u*
 #if defined (__BORLANDC__)
-Bit32s *gs_sea_travel_courses = NULL;			// ds:0x4266
+Bit8u  *gs_sea_travel_courses = NULL;			// ds:0x4266
 struct struct_tevent *gs_tevents_tab_ptr = NULL;	// ds:0x426a
 struct struct_land_route *gs_travel_route_ptr = NULL;	// ds:0x426e
 #else
+Bit32u gs_sea_travel_courses_obsolete = 0;	// ds:0x4266; This is a dummy now!
 Bit32u gs_tevents_tab_ptr_obsolete = 0;		// ds:0x426a; This is a dummy now!
 Bit32u gs_travel_route_ptr_obsolete = 0;	// ds:0x426e; This is a dummy now!
 #endif
@@ -6118,6 +6118,7 @@ char g_str_gen_generation[11] = "Generation"; // ds:0xb4d5
 /* start of the BSS section */
 
 #if !defined(__BORLANDC__)
+Bit8u *gs_sea_travel_courses;				// ds:0x4266
 struct struct_tevent *gs_tevents_tab_ptr;		// ds:0x426a
 struct struct_land_route *gs_travel_route_ptr;		// ds:0x426e
 Bit8u  *gs_travel_map_ptr; 				// ds:0x432e; Bit8u*

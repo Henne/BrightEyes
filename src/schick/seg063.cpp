@@ -192,7 +192,7 @@ void do_harbor(void)
 						get_passage_travel_hours(host_readb((Bit8u*)(host_readd(psg_ptr + HARBOR_OPTION_ROUTE_PTR)) + SEA_ROUTE_DISTANCE), ds_readbs(SHIP_TABLE + SHIP_TABLE_BASE_SPEED + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE))),
 #else
 						/* when compiled with gcc, occasionally passage times of 0 hours do show up. (which does not happen in the original game!!)
-						 * I observed that within the function get_prassage_travel_hours(..), computations with negative numbers might happen and lead to this bug.
+						 * I observed that within the function get_passage_travel_hours(..), computations with negative numbers might happen and lead to this bug.
 						 * The following line fixes this. However, it will lead to incompatible binaries when compiled with the original 1992 BCC compiler
 						 * This incompatibility of the behavior gcc vs. BCC is a bit scary.
 						 * A better understanding is urgently needed... */
@@ -462,7 +462,7 @@ void sea_travel(signed short passage, signed short dir)
 
 	ds_writeb(TRAVELING, 1);
 
-	ds_writed(SEA_TRAVEL_COURSES, (Bit32u)(passage < 7 ? (g_buffer9_ptr + 7600L) : (g_buffer9_ptr + 11400L)));
+	gs_sea_travel_courses = (Bit8u*)(passage < 7 ? (g_buffer9_ptr + 7600L) : (g_buffer9_ptr + 11400L));
 
 	/* high seas routes have id 0..6, costal routes id 7..44 */
 
@@ -473,8 +473,8 @@ void sea_travel(signed short passage, signed short dir)
 	/* convert costal route ids to range 0..37 */
 	ds_writew(SEA_TRAVEL_PASSAGE_NO, passage < 7 ? passage : passage - 7);
 
-	off = host_readd((Bit8u*)ds_readd(SEA_TRAVEL_COURSES) + 4 * ds_readw(SEA_TRAVEL_PASSAGE_NO));
-	ds_writed(ROUTE_COURSE_PTR, (Bit32u)((Bit8u*)ds_readd(SEA_TRAVEL_COURSES) + off + 4 * ds_readws(ROUTE_MOUSEHOVER)));
+	off = host_readd(gs_sea_travel_courses + 4 * ds_readw(SEA_TRAVEL_PASSAGE_NO));
+	ds_writed(ROUTE_COURSE_PTR, (Bit32u)(gs_sea_travel_courses + off + 4 * ds_readws(ROUTE_MOUSEHOVER)));
 	ptr = g_vga_memstart;
 
 #if defined(__BORLANDC__)
