@@ -416,19 +416,9 @@ static inline signed short inc_ds_ws(Bit16u off)
 	return ds_writew(off, ds_readws(off) + 1);
 }
 
-static inline signed short inc_ds_ws_post(Bit16u off)
-{
-	return ds_writew(off, ds_readws(off) + 1) - 1;
-}
-
 static inline Bit16s dec_ds_ws(Bit16u off)
 {
 	return ds_writew(off, ds_readws(off) - 1);
-}
-
-static inline Bit16s dec_ds_ws_post(Bit16u off)
-{
-	return ds_writew(off, ds_readws(off) - 1) + 1;
 }
 
 static inline void dec_ptr_ws(Bit8u *p)
@@ -1144,8 +1134,6 @@ static inline char* get_itemname(unsigned short item)
 
 #define inc_ds_ws(o)		(++(*(Bit16s*)(ds + (o))))
 #define dec_ds_ws(o)		(--(*(Bit16s*)(ds + (o))))
-#define inc_ds_ws_post(o)	((*(Bit16s*)(ds + o))++)
-#define dec_ds_ws_post(o)	((*(Bit16s*)(ds + o))--)
 
 #define add_ds_ws(o, v)		(*(Bit16s*)(ds + o) += (v))
 #define sub_ds_ws(o, v)		(*(Bit16s*)(ds + (o)) -= (v))
@@ -1153,9 +1141,6 @@ static inline char* get_itemname(unsigned short item)
 #define or_ds_ws(o, v)		(*(Bit16s*)(ds + o) |= (v))
 
 #define sub_ds_ds(o, v)		(*(Bit32s*)(ds + (o)) -= (v))
-
-#define add_ds_fp(o, v)		(*(Bit8u**)(ds + (o)) += (v))
-#define sub_ds_fp(o, v)		(*(Bit8u**)(ds + (o)) -= (v))
 
 #define inc_ptr_bs(p)		((*(Bit8s*)(p))++)
 #define dec_ptr_bs(p)		((*(Bit8s*)(p))--)
