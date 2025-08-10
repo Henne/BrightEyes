@@ -735,15 +735,15 @@
 #define ROUTE_MOUSEHOVER                (0x4236)    /* unsigned short; {0,1} */
 #define ROUTE_PROGRESS                  (0x4238)    /* unsigned short */
 #define ROUTE_STEPSIZE                  (0x423a)    /* unsigned short */
-#define ROUTE_DAYPROGRESS               (0x423c)    /* unsigned short */
-#define SEA_TRAVEL_PASSAGE_NO           (0x423e)    /* unsigned short */
-#define ROUTE_ENCOUNTER_FLAG            (0x4240)    /* unsigned short; {0,1} */
-#define ROUTE_ENCOUNTER_TIME            (0x4242)    /* unsigned short */
-#define ROUTE_INFORMER_FLAG             (0x4244)    /* unsigned short; {0,1} */
-#define ROUTE_INFORMER_TIME             (0x4246)    /* unsigned short */
-#define ROUTE_FIGHT_FLAG                (0x4248)    /* unsigned short; {0,1} */
-#define ROUTE_FIGHT_TIME                (0x424a)    /* unsigned short */
-#define TRAVEL_SPEED                    (0x424c)    /* unsigned short */
+//#define ROUTE_DAYPROGRESS               (0x423c)    /* unsigned short */
+//#define SEA_TRAVEL_PASSAGE_NO           (0x423e)    /* unsigned short */
+//#define ROUTE_ENCOUNTER_FLAG            (0x4240)    /* unsigned short; {0,1} */
+//#define ROUTE_ENCOUNTER_TIME            (0x4242)    /* unsigned short */
+//#define ROUTE_INFORMER_FLAG             (0x4244)    /* unsigned short; {0,1} */
+//#define ROUTE_INFORMER_TIME             (0x4246)    /* unsigned short */
+//#define ROUTE_FIGHT_FLAG                (0x4248)    /* unsigned short; {0,1} */
+//#define ROUTE_FIGHT_TIME                (0x424a)    /* unsigned short */
+//#define TRAVEL_SPEED                    (0x424c)    /* unsigned short */
 //#define PASSAGE_DEADSHIP_FLAG           (0x424e)    /* unsigned short; {0,1} */
 //#define PASSAGE_DEADSHIP_POSITION       (0x4250)    /* unsigned short */
 //#define PASSAGE_OCTOPUS_FLAG            (0x4252)    /* unsigned short; {0,1} */

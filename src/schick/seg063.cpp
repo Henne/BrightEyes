@@ -471,19 +471,19 @@ void sea_travel(signed short passage, signed short dir)
 	ds_writew(ROUTE_MOUSEHOVER, passage < 7 ? 7 : 38);
 
 	/* convert costal route ids to range 0..37 */
-	ds_writew(SEA_TRAVEL_PASSAGE_NO, passage < 7 ? passage : passage - 7);
+	gs_sea_travel_passage_no = passage < 7 ? passage : passage - 7;
 
-	off = host_readd(gs_sea_travel_courses + 4 * ds_readw(SEA_TRAVEL_PASSAGE_NO));
+	off = host_readd(gs_sea_travel_courses + 4 * gs_sea_travel_passage_no);
 	gs_route_course_ptr = gs_sea_travel_courses + off + 4 * ds_readws(ROUTE_MOUSEHOVER);
 	ptr = g_vga_memstart;
 
 	gs_route_course_ptr += 4;
 
 	memset(g_trv_track_pixel_bak, 0xaa, 500);
-	ds_writew(TRAVEL_SPEED, 10 * gs_sea_travel_passage_speed1); /* speed [unit: 10m per hour] */
+	gs_travel_speed = 10 * gs_sea_travel_passage_speed1; /* speed [unit: 10m per hour] */
 	ds_writew(ROUTE_TOTAL_STEPS, get_srout_len(gs_route_course_ptr)); /* a step for each pixel on the map. */
 	ds_writew(ROUTE_LENGTH, 100 * ds_readb(SEA_ROUTES + SEA_ROUTE_DISTANCE + SIZEOF_SEA_ROUTE * passage)); /* length of sea route [unit: 10m] */
-	ds_writew(ROUTE_DURATION, ds_readws(ROUTE_LENGTH) / ds_readws(TRAVEL_SPEED) * 60); /* duration [unit: minutes] */
+	ds_writew(ROUTE_DURATION, ds_readws(ROUTE_LENGTH) / gs_travel_speed * 60); /* duration [unit: minutes] */
 	ds_writew(ROUTE_TIMEDELTA, ds_readws(ROUTE_DURATION) / ds_readws(ROUTE_TOTAL_STEPS)); /* duration of each step [unit: minutes] */
 	ds_writew(ROUTE_STEPSIZE, ds_readws(ROUTE_LENGTH) / ds_readws(ROUTE_TOTAL_STEPS)); /* length of a single step [unit: 10m] */
 
@@ -491,7 +491,7 @@ void sea_travel(signed short passage, signed short dir)
 		ds_writew(ROUTE_STEPSIZE, 1);
 	}
 #if !defined(__BORLANDC__)
-	D1_INFO("Schiffspassage gestartet. Entfernung: %d0 Schritt. Geschwindigkeit: %d0 Schritt/h. Dauer (lt. Hafen): %d min. Dauer (real): %d min.\n", ds_readw(ROUTE_LENGTH), ds_readw(TRAVEL_SPEED), ds_readw(ROUTE_DURATION),ds_readws(ROUTE_TOTAL_STEPS)*2*(ds_readw(ROUTE_TIMEDELTA)/2));
+	D1_INFO("Schiffspassage gestartet. Entfernung: %d0 Schritt. Geschwindigkeit: %d0 Schritt/h. Dauer (lt. Hafen): %d min. Dauer (real): %d min.\n", ds_readw(ROUTE_LENGTH), gs_travel_speed, ds_readw(ROUTE_DURATION),ds_readws(ROUTE_TOTAL_STEPS)*2*(ds_readw(ROUTE_TIMEDELTA)/2));
 	D1_INFO_VERBOSE("#Pixel = %d, Entfernung/Pixel: %d0 Schritt, Dauer/Pixel: %d min\n", ds_readw(ROUTE_TOTAL_STEPS), ds_readw(ROUTE_STEPSIZE), ds_readw(ROUTE_TIMEDELTA));
 #endif
 
@@ -507,15 +507,15 @@ void sea_travel(signed short passage, signed short dir)
 
 	gs_route_course_start = gs_route_course_ptr;
 
-	ds_writew(ROUTE_DAYPROGRESS, 18 * (ds_readws(TRAVEL_SPEED) + ds_readws(TRAVEL_SPEED) / 10));
-	/* this is 19.8h * TRAVEL_SPEED, which is the distance [unit: 10m] the ship travels in 19.8 h.
+	gs_route_dayprogress = (18 * (gs_travel_speed + gs_travel_speed / 10));
+	/* this is 19.8h * gs_travel_speed, which is the distance [unit: 10m] the ship travels in 19.8 h.
 	 * It is used as upper bound for the position of the random encounters. */
 
 	if (passage <= 6 && gs_quest_deadship && !gs_quest_deadship_done) {
 		/* only on high seas routes */
 
 		if ((gs_passage_deadship_flag = random_schick(100) <= 20 ? 1 : 0)) {
-			gs_passage_deadship_position = random_schick(ds_readws(ROUTE_DAYPROGRESS));
+			gs_passage_deadship_position = random_schick(gs_route_dayprogress);
 #if !defined(__BORLANDC__)
 			D1_INFO("Totenschiff wurde bei %o0 Schritt aktiviert!\n", gs_passage_deadship_position);
 #endif
@@ -526,7 +526,7 @@ void sea_travel(signed short passage, signed short dir)
 
 	if ((gs_passage_octopus_flag = random_schick(100) <= 5 ? 1 : 0)) {
 
-		gs_passage_octopus_position = random_schick(ds_readws(ROUTE_DAYPROGRESS));
+		gs_passage_octopus_position = random_schick(gs_route_dayprogress);
 #if !defined(__BORLANDC__)
 		D1_INFO("Krakenmolch wurde bei %o0 Schritt aktiviert!\n", gs_passage_octopus_position);
 #endif
@@ -534,13 +534,13 @@ void sea_travel(signed short passage, signed short dir)
 
 	if ((gs_passage_pirates_flag = random_schick(100) <= 10 ? 1 : 0)) {
 
-		gs_passage_pirates_position = random_schick(ds_readws(ROUTE_DAYPROGRESS));
+		gs_passage_pirates_position = random_schick(gs_route_dayprogress);
 #if !defined(__BORLANDC__)
 		D1_INFO("Piratenangriff wurde bei %o0 Schritt aktiviert!\n", gs_passage_pirates_position);
 #endif
 	}
 
-	gs_route_stepcount = ds_writew(ROUTE_PROGRESS, ds_writew(ROUTE_DAYPROGRESS, gs_travel_detour = (0)));
+	gs_route_stepcount = ds_writew(ROUTE_PROGRESS, gs_route_dayprogress = (gs_travel_detour = (0)));
 	g_travel_herokeeping = 1;
 
 	while (host_readws(gs_route_course_ptr + 2 * ds_writew(ROUTE_MOUSEHOVER, 0)) != -1 && !gs_travel_detour)
@@ -578,20 +578,20 @@ void sea_travel(signed short passage, signed short dir)
 		}
 
 		add_ds_ws(ROUTE_PROGRESS, ds_readws(ROUTE_STEPSIZE));
-		add_ds_ws(ROUTE_DAYPROGRESS, ds_readws(ROUTE_STEPSIZE));
+		gs_route_dayprogress += ds_readws(ROUTE_STEPSIZE);
 
 #if !defined(__BORLANDC__)
-		D1_LOG("%d0 Schritt zurueckgelegt.\n",ds_readws(ROUTE_DAYPROGRESS));
+		D1_LOG("%d0 Schritt zurueckgelegt.\n",gs_route_dayprogress);
 #endif
 
-		if (gs_passage_deadship_flag != 0 && ds_readws(ROUTE_DAYPROGRESS) >= gs_passage_deadship_position && !gs_quest_deadship_done) {
+		if (gs_passage_deadship_flag != 0 && gs_route_dayprogress >= gs_passage_deadship_position && !gs_quest_deadship_done) {
 
 			/* within the call prolog_ghostship(), the party can decide if they enter the Totenschiff.
 			 * In that case, gs_travel_detour is set to DUNGEONS_TOTENSCHIFF (instead of 0) */
 			prolog_ghostship();
 			gs_passage_deadship_flag = 0;
 
-		} else if (gs_passage_octopus_flag != 0 && ds_readws(ROUTE_DAYPROGRESS) >= gs_passage_octopus_position && !gs_ingame_timers[INGAME_TIMER_EFFERD_SAFE_PASSAGE]) {
+		} else if (gs_passage_octopus_flag != 0 && gs_route_dayprogress >= gs_passage_octopus_position && !gs_ingame_timers[INGAME_TIMER_EFFERD_SAFE_PASSAGE]) {
 
 			octopus_attack_wrapper();
 			gs_passage_octopus_flag = 0;
@@ -601,9 +601,9 @@ void sea_travel(signed short passage, signed short dir)
 			/* Original-Bug 34:
 			 * There is an Efferd miracle with the text "Efferd gewaehrt euch seinen Schutz auf Wasser.".
 			 * For sea traveling, it prevents octopus encounters. However, pirate encounters are still possible, which feels wrong. */
-			(gs_passage_pirates_flag != 0 && ds_readws(ROUTE_DAYPROGRESS) >= gs_passage_pirates_position)
+			(gs_passage_pirates_flag != 0 && gs_route_dayprogress >= gs_passage_pirates_position)
 #else
-			(gs_passage_pirates_flag != 0 && ds_readws(ROUTE_DAYPROGRESS) >= gs_passage_pirates_position && !gs_ingame_timers[INGAME_TIMER_EFFERD_SAFE_PASSAGE])
+			(gs_passage_pirates_flag != 0 && gs_route_dayprogress >= gs_passage_pirates_position && !gs_ingame_timers[INGAME_TIMER_EFFERD_SAFE_PASSAGE])
 #endif
 		{
 			pirates_attack_wrapper();

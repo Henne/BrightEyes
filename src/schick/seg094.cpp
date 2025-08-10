@@ -106,10 +106,10 @@ void TM_func1(signed short route_no, signed short backwards)
 	/* TODO: move this pointer out of the game state, verify if that works correctly.
 	 * 		Can be replaced by a locvar! */
 	gs_travel_route_ptr = &g_land_routes[route_no - 1];
-	ds_writew(TRAVEL_SPEED, 166);
+	gs_travel_speed = 166;
 	ds_writew(ROUTE_TOTAL_STEPS, TM_get_track_length(gs_route_course_ptr));
 	ds_writew(ROUTE_LENGTH, gs_travel_route_ptr->distance * 100);
-	ds_writew(ROUTE_DURATION, ds_readws(ROUTE_LENGTH) / (ds_readws(TRAVEL_SPEED) + gs_travel_route_ptr->speed_mod * ds_readws(TRAVEL_SPEED) / 10) * 60);
+	ds_writew(ROUTE_DURATION, ds_readws(ROUTE_LENGTH) / (gs_travel_speed + gs_travel_route_ptr->speed_mod * gs_travel_speed / 10) * 60);
 	ds_writew(ROUTE_TIMEDELTA, ds_readws(ROUTE_DURATION) / ds_readws(ROUTE_TOTAL_STEPS));
 	ds_writew(ROUTE_STEPSIZE, ds_readws(ROUTE_LENGTH) / ds_readws(ROUTE_TOTAL_STEPS));
 
@@ -141,30 +141,30 @@ void TM_func1(signed short route_no, signed short backwards)
 
 	gs_trv_return = 0;
 	gs_route_course_start = gs_route_course_ptr;
-	ds_writew(ROUTE_DAYPROGRESS, (ds_readws(TRAVEL_SPEED) + gs_travel_route_ptr->speed_mod * ds_readws(TRAVEL_SPEED) / 10) * 18);
+	gs_route_dayprogress = (gs_travel_speed + gs_travel_route_ptr->speed_mod * gs_travel_speed / 10) * 18;
 
 	/* random section starts */
 	if (gs_quested_months > 3)
 	{
-		if (ds_writew(ROUTE_INFORMER_FLAG, (random_schick(100) <= 2 ? 1 : 0)))
+		if ((gs_route_informer_flag = (random_schick(100) <= 2) ? 1 : 0))
 		{
-			ds_writew(ROUTE_INFORMER_TIME, random_schick(ds_readws(ROUTE_DAYPROGRESS)));
+			gs_route_informer_time = random_schick(gs_route_dayprogress);
 		}
 	} else {
-		ds_writew(ROUTE_INFORMER_FLAG, 0);
+		gs_route_informer_flag = 0;
 	}
 
-	if (ds_writew(ROUTE_ENCOUNTER_FLAG, (random_schick(100) <= gs_travel_route_ptr->encounters ? 1 : 0)))
+	if ((gs_route_encounter_flag = random_schick(100) <= gs_travel_route_ptr->encounters ? 1 : 0))
 	{
-		ds_writew(ROUTE_ENCOUNTER_TIME, random_schick(ds_readws(ROUTE_DAYPROGRESS)));
+		gs_route_encounter_time = random_schick(gs_route_dayprogress);
 	}
 
-	if (ds_writew(ROUTE_FIGHT_FLAG, (random_schick(100) <= gs_travel_route_ptr->fights / 3 ? 1 : 0)))
+	if ((gs_route_fight_flag = (random_schick(100) <= gs_travel_route_ptr->fights / 3 ? 1 : 0)))
 	{
-		ds_writew(ROUTE_FIGHT_TIME, random_schick(ds_readws(ROUTE_DAYPROGRESS)));
+		gs_route_fight_time = random_schick(gs_route_dayprogress);
 	}
 
-	ds_writew(ROUTE_DAYPROGRESS, 0);
+	gs_route_dayprogress = 0;
 	/* random section ends */
 
 	while ((gs_tevents_tab_ptr->route_id != -1) && ((unsigned char)gs_tevents_tab_ptr->route_id == route_no))
@@ -239,7 +239,7 @@ void TM_func1(signed short route_no, signed short backwards)
 		}
 
 		add_ds_ws(ROUTE_PROGRESS, (gs_trv_return == 2 ? -ds_readws(ROUTE_STEPSIZE) : ds_readws(ROUTE_STEPSIZE)));
-		add_ds_ws(ROUTE_DAYPROGRESS, ds_readws(ROUTE_STEPSIZE));
+		gs_route_dayprogress += ds_readws(ROUTE_STEPSIZE);
 
 		if (ds_readws(MOUSE2_EVENT) != 0 || ds_readws(ACTION) == ACTION_ID_PAGE_UP)
 		{
@@ -254,9 +254,9 @@ void TM_func1(signed short route_no, signed short backwards)
 			{
 				/* do forced march for 2 days */
 				gs_forcedmarch_le_cost = random_schick(10);
-				ds_writew(TRAVEL_SPEED, gs_route_stepcount + 197);
+				gs_travel_speed = gs_route_stepcount + 197;
 				gs_forcedmarch_timer = 2;
-				ds_writew(ROUTE_DURATION, ds_readws(ROUTE_LENGTH) / (ds_readws(TRAVEL_SPEED) + (gs_travel_route_ptr->speed_mod * ds_readws(TRAVEL_SPEED)) / 10) * 60);
+				ds_writew(ROUTE_DURATION, ds_readws(ROUTE_LENGTH) / (gs_travel_speed + (gs_travel_route_ptr->speed_mod * gs_travel_speed) / 10) * 60);
 				ds_writew(ROUTE_TIMEDELTA, ds_readws(ROUTE_DURATION) / ds_readws(ROUTE_TOTAL_STEPS));
 				/* Remark: gs_forcedmarch_le_cost = gs_forcedmarch_le_cost / 2; */
 				gs_forcedmarch_le_cost >>= 1;
@@ -289,16 +289,16 @@ void TM_func1(signed short route_no, signed short backwards)
 			}
 		}
 
-		if (ds_readw(ROUTE_ENCOUNTER_FLAG) != 0 && ds_readws(ROUTE_DAYPROGRESS) >= ds_readws(ROUTE_ENCOUNTER_TIME) && ds_readws(GAME_STATE) == GAME_STATE_MAIN)
+		if (gs_route_encounter_flag && gs_route_dayprogress >= gs_route_encounter_time && ds_readws(GAME_STATE) == GAME_STATE_MAIN)
 		{
 			random_encounter(route_no);
-			ds_writew(ROUTE_ENCOUNTER_FLAG, 0);
+			gs_route_encounter_flag = 0;
 
-		} else if (ds_readw(ROUTE_FIGHT_FLAG) != 0 && ds_readws(ROUTE_DAYPROGRESS) >= ds_readws(ROUTE_FIGHT_TIME) && ds_readws(GAME_STATE) == GAME_STATE_MAIN)
+		} else if (gs_route_fight_flag && gs_route_dayprogress >= gs_route_fight_time && ds_readws(GAME_STATE) == GAME_STATE_MAIN)
 		{
 			do_wild8_fight();
 
-		} else if (ds_readw(ROUTE_INFORMER_FLAG) != 0 && ds_readws(ROUTE_DAYPROGRESS) >= ds_readws(ROUTE_INFORMER_TIME) && ds_readws(GAME_STATE) == GAME_STATE_MAIN)
+		} else if (gs_route_informer_flag && gs_route_dayprogress >= gs_route_informer_time && ds_readws(GAME_STATE) == GAME_STATE_MAIN)
 		{
 			gs_current_typeindex = (random_schick(100) <= 50 ? 10 : 12);
 			bak1 = g_basepos_x;
@@ -369,29 +369,29 @@ void TM_func1(signed short route_no, signed short backwards)
 			if (ds_readws(GAME_STATE) == GAME_STATE_MAIN)
 			{
 				/* figure out encounters etc. for next day */
-				ds_writew(ROUTE_DAYPROGRESS, (ds_readws(TRAVEL_SPEED) + (gs_travel_route_ptr->speed_mod * ds_readws(TRAVEL_SPEED) / 10)) * 18);
+				gs_route_dayprogress = ((gs_travel_speed + (gs_travel_route_ptr->speed_mod * gs_travel_speed / 10)) * 18);
 
-				if ((ds_writew(ROUTE_ENCOUNTER_FLAG, (random_schick(100) <= gs_travel_route_ptr->encounters ? 1 : 0))))
+				if ((gs_route_encounter_flag = (random_schick(100) <= gs_travel_route_ptr->encounters ? 1 : 0)))
 				{
-					ds_writew(ROUTE_ENCOUNTER_TIME, random_schick(ds_readws(ROUTE_DAYPROGRESS)));
+					gs_route_encounter_time = random_schick(gs_route_dayprogress);
 				}
 
-				if ((ds_writew(ROUTE_FIGHT_FLAG, random_schick(100) <= gs_travel_route_ptr->fights / 3 ? 1 : 0)) != 0)
+				if ((gs_route_fight_flag = random_schick(100) <= gs_travel_route_ptr->fights / 3 ? 1 : 0) != 0)
 				{
-					ds_writew(ROUTE_FIGHT_TIME, random_schick(ds_readws(ROUTE_DAYPROGRESS)));
+					gs_route_fight_time = random_schick(gs_route_dayprogress);
 				}
 
 				if (gs_quested_months > 3)
 				{
-					if ((ds_writew(ROUTE_INFORMER_FLAG, random_schick(100) <= 2 ? 1 : 0)) != 0)
+					if ((gs_route_informer_flag = random_schick(100) <= 2 ? 1 : 0) != 0)
 					{
-						ds_writew(ROUTE_INFORMER_TIME, random_schick(ds_readws(ROUTE_DAYPROGRESS)));
+						gs_route_informer_time = random_schick(gs_route_dayprogress);
 					}
 				} else {
-					ds_writew(ROUTE_INFORMER_FLAG, 0);
+					gs_route_informer_flag = 0;
 				}
 
-				ds_writew(ROUTE_DAYPROGRESS, 0);
+				gs_route_dayprogress = 0;
 			}
 		}
 

@@ -2643,15 +2643,15 @@ unsigned short g_route_timedelta = 0; // ds:0x4234
 unsigned short g_route_mousehover = 0; // ds:0x4236
 unsigned short g_route_progress = 0; // ds:0x4238
 unsigned short g_route_stepsize = 0; // ds:0x423a
-unsigned short g_route_dayprogress = 0; // ds:0x423c
-unsigned short g_sea_travel_passage_no = 0; // ds:0x423e
-unsigned short g_route_encounter_flag = 0; // ds:0x4240
-unsigned short g_route_encounter_time = 0; // ds:0x4242
-unsigned short g_route_informer_flag = 0; // ds:0x4244
-unsigned short g_route_informer_time = 0; // ds:0x4246
-unsigned short g_route_fight_flag = 0; // ds:0x4248
-unsigned short g_route_fight_time = 0; // ds:0x424a
-unsigned short g_travel_speed = 0; // ds:0x424c
+Bit16s gs_route_dayprogress = 0; // ds:0x423c
+Bit16s gs_sea_travel_passage_no = 0; // ds:0x423e
+Bit16s gs_route_encounter_flag = 0; // ds:0x4240
+Bit16s gs_route_encounter_time = 0; // ds:0x4242
+Bit16s gs_route_informer_flag = 0; // ds:0x4244
+Bit16s gs_route_informer_time = 0; // ds:0x4246
+Bit16s gs_route_fight_flag = 0; // ds:0x4248
+Bit16s gs_route_fight_time = 0; // ds:0x424a
+Bit16s gs_travel_speed = 0; // ds:0x424c
 Bit16s gs_passage_deadship_flag = 0; // ds:0x424e
 Bit16s gs_passage_deadship_position = 0; // ds:0x4250
 Bit16s gs_passage_octopus_flag = 0; // ds:0x4252
@@ -2749,7 +2749,7 @@ Bit8s  gs_announce_day = 0; // ds:0x43a5
 /* REMARK: Maybe from this point Game State infomation is V3.XX only */
 Bit8s  gs_known_persons[20] = {0}; // ds:0x43a6
 Bit16s gs_diary_entry_counter = 0; // ds:0x43ba
-struct struct_diary_entry g_diary_entries[23] = { {0} }; // ds:0x43bc
+struct struct_diary_entry gs_diary_entries[23] = { {0} }; // ds:0x43bc
 
 Bit8u gs_datseg_status_end = 0; // ds:0x4474
 
