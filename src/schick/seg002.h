@@ -125,8 +125,6 @@ void passages_reset();
 void timewarp(Bit32s);
 void timewarp_until_time_of_day(Bit32s);
 void dec_splash(void);
-//static
-void draw_splash(signed short, signed short);
 void timewarp_until_midnight(void);
 void wait_for_keyboard2(void);
 void wait_for_keypress(void);

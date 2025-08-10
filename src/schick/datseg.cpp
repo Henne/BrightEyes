@@ -6446,7 +6446,7 @@ unsigned long g_mouse_handler_bak; // ds:0xbcdb
 unsigned char g_freeze_timers; // ds:0xbcda
 signed short g_map_townmark_state; // ds:0xbcd8
 unsigned short g_spinlock_flag; // ds:0xbcd6
-signed char g_hero_splash_timer[7]; // ds:0xbccf
+Bit8u g_hero_splash_timer[7]; // ds:0xbccf
 unsigned char *g_splash_le; // ds:0xbccb
 unsigned char *g_splash_ae; // ds:0xbcc7
 unsigned char g_gfxbuf_wait_keypress[100]; // ds:0xbc63

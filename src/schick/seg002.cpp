@@ -3589,27 +3589,17 @@ void timewarp_until_time_of_day(Bit32s time)
 }
 
 /**
- * \brief   decrements splash timer and restores picture
+ * \brief   decrements splash timer and restores pictures
  */
 void dec_splash(void)
 {
-	signed short i;
+	signed int i;
 
 	for (i = 0; i <= 6; i++) {
 
-		/* I have no clue */
-		if (
-			!g_dialogbox_lock &&
-			/* Check if splash timer is 0 */
-			(ds_readbs(HERO_SPLASH_TIMER + i) != 0) &&
-			!add_ds_bu(HERO_SPLASH_TIMER + i, -1) &&	/* = !(--var) */
-			/* Check splash timer again if 0 */
-			/* I have no clue */
-			/* Could be in fight */
-			(g_pp20_index == ARCHIVE_FILE_PLAYM_UK) &&
-			/* check if hero is dead */
-			!hero_dead(get_hero(i))
-		) {
+		if (!g_dialogbox_lock && (g_hero_splash_timer[i]) && !(--g_hero_splash_timer[i]) &&
+			(g_pp20_index == ARCHIVE_FILE_PLAYM_UK) && !hero_dead(get_hero(i))) {
+
 			restore_rect(g_vga_memstart, get_hero(i) + HERO_PORTRAIT, g_hero_pic_posx[i], 157, 32, 32);
 		}
 	}
@@ -3621,10 +3611,8 @@ void dec_splash(void)
  * \param   hero_pos    on which slot the splash is drawn
  * \param   type        kind of damage (0 = red,LE / !0 = yellow,AE)
  */
-/* static */
-void draw_splash(signed short hero_pos, signed short type)
+static void draw_splash(signed short hero_pos, signed short type)
 {
-	/* Could be in fight */
 	if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 
 		Bit8u *splash = (type == 0 ? g_splash_le : g_splash_ae);
@@ -3632,7 +3620,7 @@ void draw_splash(signed short hero_pos, signed short type)
 		restore_rect_rle(g_vga_memstart, splash, g_hero_pic_posx[hero_pos], 157, 32, 32, 2);
 
 		/* how long the splash should be displayed */
-		ds_writeb(HERO_SPLASH_TIMER + hero_pos, 10);
+		g_hero_splash_timer[hero_pos] = 10;
 	}
 }
 

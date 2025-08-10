@@ -825,6 +825,7 @@ extern unsigned char *g_current_fight;	// ds:0xbd28; seg027, seg032, seg043, seg
 extern signed char g_citycamp_city;	// ds:0xbd27; seg052, seg066, seg076
 extern Bit32s g_archive_file_remaining;	// ds:0xbce3; seg002
 extern signed short g_map_townmark_state;	// ds:0xbcd8; seg002
+extern Bit8u  g_hero_splash_timer[7];	// ds:0xbccf; seg002
 extern unsigned char *g_splash_le;	// ds:0xbccb; seg002, seg028
 extern unsigned char *g_splash_ae;	// ds:0xbcc7; seg002, seg028
 extern unsigned char g_gfx_wait_keypress[100];	// ds:0xbc63; seg002
