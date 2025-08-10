@@ -750,9 +750,9 @@
 #define PASSAGE_OCTOPUS_POSITION        (0x4254)    /* unsigned short */
 #define PASSAGE_PIRATES_FLAG            (0x4256)    /* unsigned short; {0,1} */
 #define PASSAGE_PIRATES_POSITION        (0x4258)    /* unsigned short */
-#define ROUTE_COURSE_PTR                (0x425a)    /* Bit8u* */
-#define ROUTE_COURSE_START              (0x425e)    /* Bit8u* */
-#define ROUTE_COURSE_PTR2               (0x4262)    /* Bit8u* */
+//#define ROUTE_COURSE_PTR                (0x425a)    /* Bit8u* */
+//#define ROUTE_COURSE_START              (0x425e)    /* Bit8u* */
+//#define ROUTE_COURSE_PTR2               (0x4262)    /* Bit8u* */
 //#define SEA_TRAVEL_COURSES              (0x4266)    /* Bit8u* */
 //#define TEVENTS_TAB_PTR                 (0x426a)    /* unsigned long */
 //#define TRAVEL_ROUTE_PTR                (0x426e)    /* unsigned long */

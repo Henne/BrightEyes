@@ -474,16 +474,14 @@ void sea_travel(signed short passage, signed short dir)
 	ds_writew(SEA_TRAVEL_PASSAGE_NO, passage < 7 ? passage : passage - 7);
 
 	off = host_readd(gs_sea_travel_courses + 4 * ds_readw(SEA_TRAVEL_PASSAGE_NO));
-	ds_writed(ROUTE_COURSE_PTR, (Bit32u)(gs_sea_travel_courses + off + 4 * ds_readws(ROUTE_MOUSEHOVER)));
+	gs_route_course_ptr = gs_sea_travel_courses + off + 4 * ds_readws(ROUTE_MOUSEHOVER);
 	ptr = g_vga_memstart;
 
-#if defined(__BORLANDC__)
-	add_ds_fp(ROUTE_COURSE_PTR, 4);
-#endif
+	gs_route_course_ptr += 4;
 
 	memset(g_trv_track_pixel_bak, 0xaa, 500);
 	ds_writew(TRAVEL_SPEED, 10 * gs_sea_travel_passage_speed1); /* speed [unit: 10m per hour] */
-	ds_writew(ROUTE_TOTAL_STEPS, get_srout_len((Bit8u*)ds_readd(ROUTE_COURSE_PTR))); /* a step for each pixel on the map. */
+	ds_writew(ROUTE_TOTAL_STEPS, get_srout_len(gs_route_course_ptr)); /* a step for each pixel on the map. */
 	ds_writew(ROUTE_LENGTH, 100 * ds_readb(SEA_ROUTES + SEA_ROUTE_DISTANCE + SIZEOF_SEA_ROUTE * passage)); /* length of sea route [unit: 10m] */
 	ds_writew(ROUTE_DURATION, ds_readws(ROUTE_LENGTH) / ds_readws(TRAVEL_SPEED) * 60); /* duration [unit: minutes] */
 	ds_writew(ROUTE_TIMEDELTA, ds_readws(ROUTE_DURATION) / ds_readws(ROUTE_TOTAL_STEPS)); /* duration of each step [unit: minutes] */
@@ -497,19 +495,17 @@ void sea_travel(signed short passage, signed short dir)
 	D1_INFO_VERBOSE("#Pixel = %d, Entfernung/Pixel: %d0 Schritt, Dauer/Pixel: %d min\n", ds_readw(ROUTE_TOTAL_STEPS), ds_readw(ROUTE_STEPSIZE), ds_readw(ROUTE_TIMEDELTA));
 #endif
 
-#if defined(__BORLANDC__)
 	if (dir) {
-		/* for reverse direction, point ROUTE_COURSE_PTR to end of route */
+		/* for reverse direction, point gs_route_course_ptr to end of route */
 
-		while (host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR)) != -1) {
-			add_ds_fp(ROUTE_COURSE_PTR, 4);
+		while (host_readws(gs_route_course_ptr) != -1) {
+			gs_route_course_ptr += 4;
 		}
 
-		sub_ds_fp(ROUTE_COURSE_PTR, 4);
+		gs_route_course_ptr -= 4;
 	}
-#endif
 
-	ds_writed(ROUTE_COURSE_START, ds_readd(ROUTE_COURSE_PTR));
+	gs_route_course_start = gs_route_course_ptr;
 
 	ds_writew(ROUTE_DAYPROGRESS, 18 * (ds_readws(TRAVEL_SPEED) + ds_readws(TRAVEL_SPEED) / 10));
 	/* this is 19.8h * TRAVEL_SPEED, which is the distance [unit: 10m] the ship travels in 19.8 h.
@@ -547,24 +543,24 @@ void sea_travel(signed short passage, signed short dir)
 	gs_route_stepcount = ds_writew(ROUTE_PROGRESS, ds_writew(ROUTE_DAYPROGRESS, gs_travel_detour = (0)));
 	g_travel_herokeeping = 1;
 
-	while (host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2 * ds_writew(ROUTE_MOUSEHOVER, 0)) != -1 && !gs_travel_detour)
+	while (host_readws(gs_route_course_ptr + 2 * ds_writew(ROUTE_MOUSEHOVER, 0)) != -1 && !gs_travel_detour)
 	{
 
-		if (is_mouse_in_rect(host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR)) - 16,
-					host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2) - 16,
-					host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR)) + 16,
-					host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2) + 16))
+		if (is_mouse_in_rect(host_readws(gs_route_course_ptr) - 16,
+					host_readws(gs_route_course_ptr + 2) - 16,
+					host_readws(gs_route_course_ptr) + 16,
+					host_readws(gs_route_course_ptr + 2) + 16))
 		{
 			update_mouse_cursor();
 			ds_writew(ROUTE_MOUSEHOVER, 1);
 		}
 
 		g_trv_track_pixel_bak[gs_route_stepcount] =
-			*(ptr + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2) * 320 + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR)));
+			*(ptr + host_readws(gs_route_course_ptr + 2) * 320 + host_readws(gs_route_course_ptr));
 
 		gs_route_stepcount++;
 
-		*(ptr + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2) * 320 + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR))) = 0x1f;
+		*(ptr + host_readws(gs_route_course_ptr + 2) * 320 + host_readws(gs_route_course_ptr)) = 0x1f;
 
 		if (ds_readws(ROUTE_MOUSEHOVER) != 0) {
 			refresh_screen_size();
@@ -643,7 +639,7 @@ void sea_travel(signed short passage, signed short dir)
 			load_map();
 
 			/* TODO: update window */
-			memmove((void*)(g_vga_memstart), (void*)gs_travel_map_ptr, 320 * 200);
+			memmove((void*)g_vga_memstart, (void*)gs_travel_map_ptr, 320 * 200);
 
 			wait_for_vsync();
 
@@ -652,26 +648,23 @@ void sea_travel(signed short passage, signed short dir)
 			set_audio_track(ARCHIVE_FILE_TERMS_XMI);
 
 			gs_trv_i = 0;
-#if defined(__BORLANDC__)
-			for (ds_writed(ROUTE_COURSE_PTR2, ds_readd(ROUTE_COURSE_START));
-				g_trv_track_pixel_bak[gs_trv_i++] != 0xaa;
-				add_ds_fp(ROUTE_COURSE_PTR2, 2 * (!dir ? 2 : -2)))
+
+			for (gs_route_course_ptr2 = gs_route_course_start;
+					g_trv_track_pixel_bak[gs_trv_i++] != 0xaa;
+					gs_route_course_ptr += 2 * (!dir ? 2 : -2))
 			{
-				*(ptr + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR2) + 2) * 320 + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR2))) = 0x1f;
+				*(ptr + host_readws(gs_route_course_ptr2 + 2) * 320 + host_readws(gs_route_course_ptr2)) = 0x1f;
 			}
-#endif
 
 			refresh_screen_size();
 
-			g_wallclock_x = (g_basepos_x + 120);
-			g_wallclock_y = (g_basepos_y + 87);
+			g_wallclock_x = g_basepos_x + 120;
+			g_wallclock_y = g_basepos_y + 87;
 			g_wallclock_update = 1;
 			g_request_refresh = 0;
 		}
 
-#if defined(__BORLANDC__)
-		add_ds_fp(ROUTE_COURSE_PTR, 2 * (!dir ? 2 : -2));
-#endif
+		gs_route_course_ptr += 2 * (!dir ? 2 : -2);
 	}
 
 	g_travel_herokeeping = 0;
@@ -681,19 +674,17 @@ void sea_travel(signed short passage, signed short dir)
 		update_mouse_cursor();
 
 		do {
-#if defined(__BORLANDC__)
 			if (!dir) {
-				sub_ds_fp(ROUTE_COURSE_PTR, 4);
+				gs_route_course_ptr -= 4;
 			} else {
-				add_ds_fp(ROUTE_COURSE_PTR, 4);
+				gs_route_course_ptr += 4;
 			}
-#endif
 			gs_route_stepcount--;
 
-			*(ptr + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR) + 2) * 320 + host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR))) =
+			*(ptr + host_readws(gs_route_course_ptr + 2) * 320 + host_readws(gs_route_course_ptr)) =
 				g_trv_track_pixel_bak[gs_route_stepcount];
 
-		} while (host_readws((Bit8u*)ds_readd(ROUTE_COURSE_PTR)) != -1);
+		} while (host_readws(gs_route_course_ptr) != -1);
 
 		refresh_screen_size();
 	}
