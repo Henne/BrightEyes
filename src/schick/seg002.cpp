@@ -2257,9 +2257,9 @@ void do_timers(void)
 			}
 
 			/* handle sphere timer */
-			if (ds_readb(DNG02_SPHERE_TIMER) != 0) {
+			if (gs_dng02_sphere_timer) {
 
-				if (!add_ds_bu(DNG02_SPHERE_TIMER, -1)) {
+				if (!(--gs_dng02_sphere_timer)) {
 					ds_writeb(DNG02_SPHERE_ACTIVE, 1);
 				}
 			}
@@ -3488,9 +3488,9 @@ void timewarp(Bit32s time)
 		}
 
 		/* timer for Sphaerenriss in verfallene Herberge */
-		if (ds_readb(DNG02_SPHERE_TIMER) != 0) {
+		if (gs_dng02_sphere_timer) {
 
-			if (!add_ds_bu(DNG02_SPHERE_TIMER, -1)) {
+			if (!(--gs_dng02_sphere_timer)) {
 				ds_writeb(DNG02_SPHERE_ACTIVE, 1);
 			}
 		}
@@ -3577,7 +3577,7 @@ void timewarp_until_time_of_day(Bit32s time)
 	}
 
 	/* Original-Bug:
-	 * forgotten hourly timers: UNICORN_TIMER, DNG02_SPHERE_TIMER,DNG08_TIMER1, DNG08_TIMER2
+	 * forgotten hourly timers: UNICORN_TIMER, gs_dng02_sphere_timer, DNG08_TIMER1, DNG08_TIMER2
 	 * see do_timers(..).
 	 * For a bugfix either add code here (and in timewarp(..)), or modify do_timers(..)
 	 * */
@@ -3602,7 +3602,7 @@ void dec_splash(void)
 			!g_dialogbox_lock &&
 			/* Check if splash timer is 0 */
 			(ds_readbs(HERO_SPLASH_TIMER + i) != 0) &&
-			!add_ds_bu(HERO_SPLASH_TIMER + i, -1) &&
+			!add_ds_bu(HERO_SPLASH_TIMER + i, -1) &&	/* = !(--var) */
 			/* Check splash timer again if 0 */
 			/* I have no clue */
 			/* Could be in fight */

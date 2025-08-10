@@ -351,6 +351,8 @@ extern Bit8u  gs_hermit_visited;		//ds:0x3615; seg066
 extern Bit8u  gs_dungeon_gfx_style;		//ds:0x3616; seg028, seg075, seg076
 extern Bit8u  gs_estorik_known;			//ds:0x3617; seg081
 
+extern Bit8u  gs_dng02_sphere_timer;		//ds:0x3c97; seg002, seg078
+
 extern Bit8s  gs_dng07_poison_flag;		//ds:0x3cb5; seg082
 extern Bit32s gs_dng07_poison_timer;		//ds:0x3cb6; seg002, seg082
 
