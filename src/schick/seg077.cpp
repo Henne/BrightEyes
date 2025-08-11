@@ -238,7 +238,7 @@ void DNG01_chest1_x1(Bit8u* chest)
 	Bit8u* ptr_bak;
 
 	ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG01_CHEST1_CONTENT));
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)(&gs_dng01_chest1_content));
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
@@ -248,7 +248,7 @@ void DNG01_chest2_x1(Bit8u* chest)
 	Bit8u* ptr_bak;
 
 	ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG01_CHEST2_CONTENT));
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)(&gs_dng01_chest2_content));
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
@@ -258,7 +258,7 @@ void DNG01_chest3_x1(Bit8u* chest)
 	Bit8u* ptr_bak;
 
 	ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG01_CHEST3_CONTENT));
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)(&gs_dng01_chest3_content));
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
@@ -268,7 +268,7 @@ void DNG01_chest5_x1(Bit8u* chest)
 	Bit8u* ptr_bak;
 
 	ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG01_CHEST5_CONTENT));
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)(&gs_dng01_chest5_content));
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
@@ -283,7 +283,7 @@ void DNG01_chest7_x2(Bit8u* chest)
 	Bit8u* ptr_bak;
 
 	ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG01_CHEST7_CONTENT));
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)(&gs_dng01_chest7_content));
 	loot_chest((Bit8u*)(chest), get_tx(5), get_tx(6));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }

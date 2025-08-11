@@ -713,11 +713,11 @@
 #define DNG15_CURSED_MONEY_A            (0x41de)    /* unsigned char[6]; {0,1} */
 #define DNG15_UNDEAD_FIGHT              (0x41e4)    /* unsigned char; {0,1} */
 #define DNG15_CHEST_EQUIPS              (0x41e5)    /* unsigned char[7] */
-#define DNG01_CHEST1_CONTENT            (0x41ec)    /* unsigned char[8] */
-#define DNG01_CHEST2_CONTENT            (0x41f4)    /* unsigned char[10] */
-#define DNG01_CHEST3_CONTENT            (0x41fe)    /* unsigned char[2] */
-#define DNG01_CHEST5_CONTENT            (0x4200)    /* unsigned char[13] */
-#define DNG01_CHEST7_CONTENT            (0x420d)    /* unsigned char[5] */
+//#define DNG01_CHEST1_CONTENT            (0x41ec)    /* unsigned char[8] */
+//#define DNG01_CHEST2_CONTENT            (0x41f4)    /* unsigned char[10] */
+//#define DNG01_CHEST3_CONTENT            (0x41fe)    /* unsigned char[2] */
+//#define DNG01_CHEST5_CONTENT            (0x4200)    /* unsigned char[13] */
+//#define DNG01_CHEST7_CONTENT            (0x420d)    /* unsigned char[5] */
 //#define UNCONSCIOUS_MESSAGE             (0x4212)    /* unsigned char[7] */
 //#define FOOD_MESSAGE                    (0x4219)    /* unsigned char[7] */
 // ?2

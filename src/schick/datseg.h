@@ -402,6 +402,11 @@ extern Bit8u  gs_dng12_chest1_content[12];	//ds:0x3faa; seg090
 extern Bit8u  gs_dng11_waterbarrel1;		//ds:0x415d; seg086
 extern Bit8u  gs_dng11_waterbarrel2;		//ds:0x415e; seg086
 
+extern Bit8u  gs_dng01_chest1_content[8];	//ds:0x41e5; seg077
+extern Bit8u  gs_dng01_chest2_content[10];	//ds:0x41ec; seg077
+extern Bit8u  gs_dng01_chest3_content[2];	//ds:0x41fe; seg077
+extern Bit8u  gs_dng01_chest5_content[13];	//ds:0x4200; seg077
+extern Bit8u  gs_dng01_chest7_content[5];	//ds:0x420d; seg077
 extern Bit8s  gs_unconscious_message[7];	//ds:0x4212; seg002, seg049
 extern Bit8s  gs_food_message[7];		//ds:0x4212; seg002, seg049, seg059
 extern Bit16s gs_current_locdata;		//ds:0x4222; seg025-seg109
