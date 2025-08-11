@@ -2426,11 +2426,12 @@ unsigned char g_tevent077_fight_flag = 0xff; // ds:0x3e17
 
 #if defined(__BORLANDC__)
 Bit8u *gs_random_tlk_hero = NULL;	// ds:0x3e18;
+Bit8u *gs_ruin_hero = NULL;		// ds:0x3e1c;
 #else
 Bit32u gs_random_tlk_hero_obsolete = 0; // ds:0x3e18; This is a dummy now!
+Bit32u gs_ruin_hero_obsolete = 0;	// ds:0x3e1c; This is a dummy now!
 #endif
 
-long g_ruin_hero = 0; // ds:0x3e1c; Bit8u*
 long g_main_acting_hero = 0; // ds:0x3e20; Bit8u*
 unsigned char g_tevent073_corpse[3] = { 0xaa, 0x01, 0xff }; // ds:0x3e24
 unsigned char g_tevent014_chest[4] = { 0x01, 0x6e, 0xa2, 0xff }; // ds:0x3e27
@@ -6127,6 +6128,7 @@ char g_str_gen_generation[11] = "Generation"; // ds:0xb4d5
 /* start of the BSS section */
 
 #if !defined(__BORLANDC__)
+Bit8u  *gs_ruin_hero;					// ds:0x3e1c;
 Bit8u  *gs_route_course_ptr;				// ds:0x425a;
 Bit8u  *gs_route_course_start;				// ds:0x425e;
 Bit8u  *gs_route_course_ptr2;				// ds:0x4262;
