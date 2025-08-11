@@ -356,7 +356,7 @@ extern Bit8u  gs_show_travel_map;		//ds:0x3614; seg002, seg025, seg032, seg063, 
 extern Bit8u  gs_hermit_visited;		//ds:0x3615; seg066
 extern Bit8u  gs_dungeon_gfx_style;		//ds:0x3616; seg028, seg075, seg076
 extern Bit8u  gs_estorik_known;			//ds:0x3617; seg081
-
+extern Bit8u  gs_dng02_sphere_known;		//ds:0x3c94; seg087
 extern Bit8u  gs_dng02_corpse_flag;		//ds:0x3c95; seg078
 
 extern Bit8u  gs_dng02_sphere_timer;		//ds:0x3c97; seg002, seg078

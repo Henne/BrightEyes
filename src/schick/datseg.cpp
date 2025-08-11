@@ -2236,7 +2236,7 @@ struct{unsigned char unkn[8];} g_dialog_states[160] = {
 	{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
 	{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
 }; // ds:0x3794
-unsigned char g_dng02_sphere_known = 0; // ds:0x3c94
+Bit8u  gs_dng02_sphere_known = 0; // ds:0x3c94
 Bit8u  gs_dng02_corpse_flag = 0; // ds:0x3c95
 unsigned char g_dng02_apparature_destroyed = 0; // ds:0x3c96
 Bit8u  gs_dng02_sphere_timer = 0; // ds:0x3c97, {0,...,7}

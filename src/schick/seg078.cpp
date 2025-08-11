@@ -298,14 +298,14 @@ signed short DNG02_handler(void)
 
 		GUI_output(get_tx(17));
 
-	} else if (target_pos == DNG_POS(1,7,1) && !ds_readb(DNG02_SPHERE_KNOWN))
+	} else if (target_pos == DNG_POS(1,7,1) && !gs_dng02_sphere_known)
 	{
 		load_in_head(43);
 
 		GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx(18), 0);
 
 		gs_dng02_sphere_timer = 7;
-		ds_writeb(DNG02_SPHERE_KNOWN, 1);
+		gs_dng02_sphere_known = 1;
 
 	} else if ((target_pos == DNG_POS(1,1,11) || target_pos == DNG_POS(1,1,8)) && target_pos != gs_dng_handled_pos)
 	{
