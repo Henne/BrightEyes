@@ -546,7 +546,7 @@
 #define TEVENT114_OLIMONE_FLAG          (0x3e15)    /* unsigned char; {0,1} */
 #define TEVENT074_FIGHT_FLAG            (0x3e16)    /* unsigned char; {0,1} */
 #define TEVENT077_FIGHT_FLAG            (0x3e17)    /* unsigned char; {0,1} */
-#define RANDOM_TLK_HERO                 (0x3e18)    /* Bit8u* */
+//#define RANDOM_TLK_HERO                 (0x3e18)    /* Bit8u* */
 #define RUIN_HERO                       (0x3e1c)    /* Bit8u* */
 #define MAIN_ACTING_HERO                (0x3e20)    /* Bit8u* */
 #define TEVENT073_CORPSE                (0x3e24)    /* unsigned char[3] */

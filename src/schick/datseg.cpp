@@ -2423,7 +2423,13 @@ unsigned char g_teventu13_flag = 0; // ds:0x3e14
 unsigned char g_tevent114_olimone_flag = 0; // ds:0x3e15
 unsigned char g_tevent074_fight_flag = 0xff; // ds:0x3e16
 unsigned char g_tevent077_fight_flag = 0xff; // ds:0x3e17
-long g_random_tlk_hero = 0; // ds:0x3e18; Bit8u*
+
+#if defined(__BORLANDC__)
+Bit8u *gs_random_tlk_hero = NULL;	// ds:0x3e18;
+#else
+Bit32u gs_random_tlk_hero_obsolete = 0; // ds:0x3e18; This is a dummy now!
+#endif
+
 long g_ruin_hero = 0; // ds:0x3e1c; Bit8u*
 long g_main_acting_hero = 0; // ds:0x3e20; Bit8u*
 unsigned char g_tevent073_corpse[3] = { 0xaa, 0x01, 0xff }; // ds:0x3e24

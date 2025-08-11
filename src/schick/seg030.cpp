@@ -160,6 +160,9 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 	signed short i;
 	signed short tmp1;
 	signed short tmp2;
+#if !defined(__BORLANDC__)
+	Bit8u *gs_random_tlk_hero;	/* REMARK: scope has changed drastically! */
+#endif
 
 	struct tlk_option options[3];
 
@@ -453,9 +456,9 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 						gs_random_tlk_hero = get_hero(get_random_hero());
 #endif
 
-						sprintf(dst, fmt, (char*)ds_readd(RANDOM_TLK_HERO) + HERO_NAME2,
-							GUI_get_ptr(host_readbs((Bit8u*)ds_readd(RANDOM_TLK_HERO) + HERO_SEX), 0),
-							GUI_get_ptr(host_readbs((Bit8u*)ds_readd(RANDOM_TLK_HERO) + HERO_SEX), 2));
+						sprintf(dst, fmt, (char*)gs_random_tlk_hero + HERO_NAME2,
+							GUI_get_ptr(host_readbs(gs_random_tlk_hero + HERO_SEX), 0),
+							GUI_get_ptr(host_readbs(gs_random_tlk_hero + HERO_SEX), 2));
 					} else {
 
 						strcpy(dst, fmt);

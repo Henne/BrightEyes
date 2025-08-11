@@ -686,8 +686,9 @@ void TLK_old_woman(signed short state)
 				counter++;
 			}
 		}
-
-		ds_writed(RANDOM_TLK_HERO, (Bit32u)get_hero(get_random_hero()));
+#if defined(__BORLANDC__)
+		gs_random_tlk_hero = get_hero(get_random_hero());
+#endif
 
 		g_dialog_next_state = (count_heroes_in_group() == counter ? 24 : 25);
 
