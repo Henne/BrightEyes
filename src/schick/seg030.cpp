@@ -166,16 +166,16 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 	answer = 0;
 
 	g_dialog_informer = tlk_informer;
-	g_tlk_id = (talk_id);
+	g_tlk_id = talk_id;
 
 	load_informer_tlk(talk_id + ARCHIVE_FILE_DIALOGS_TLK);
 
-	g_dialog_state = (g_dialog_done = 0);
+	g_dialog_state = g_dialog_done = 0;
 
-	partners_tab = ((Bit8u*)p_datseg + DIALOG_PARTNERS);
+	partners_tab = (Bit8u*)p_datseg + DIALOG_PARTNERS;
 	states_tab = (Bit8u*)(host_readd((Bit8u*)(partners_tab) + 38 * tlk_informer));
 	txt_offset = host_readws((Bit8u*)(partners_tab) + 38 * tlk_informer + 4);
-	g_dialog_title = (tlk_informer * 38 + (char*)partners_tab + 6);
+	g_dialog_title = tlk_informer * 38 + (char*)partners_tab + 6;
 
 	load_in_head(host_readws((Bit8u*)(partners_tab) + 38 * tlk_informer + 0x24));
 	dst = (char*)(g_dtp2 + 0x400);
@@ -204,8 +204,8 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 					{
 						sprintf(dst, fmt,
 							(Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_NAME2,
-							(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 0)),
-							(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 1)));
+							GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 0),
+							GUI_get_ptr(host_readbs((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_SEX), 1));
 
 					} else if (txt_id == 19) {
 
@@ -449,11 +449,13 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 				} else if (g_tlk_id == 0) {
 
 					if (txt_id == 40 || txt_id == 41 || txt_id == 43) {
+#if !defined(__BORLANDC__)
+						gs_random_tlk_hero = get_hero(get_random_hero());
+#endif
 
-						sprintf(dst, fmt,
-							(char*)ds_readd(RANDOM_TLK_HERO) + HERO_NAME2,
-							(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(RANDOM_TLK_HERO) + 0x22), 0)),
-							(GUI_get_ptr(host_readbs((Bit8u*)ds_readd(RANDOM_TLK_HERO) + 0x22), 2)));
+						sprintf(dst, fmt, (char*)ds_readd(RANDOM_TLK_HERO) + HERO_NAME2,
+							GUI_get_ptr(host_readbs((Bit8u*)ds_readd(RANDOM_TLK_HERO) + HERO_SEX), 0),
+							GUI_get_ptr(host_readbs((Bit8u*)ds_readd(RANDOM_TLK_HERO) + HERO_SEX), 2));
 					} else {
 
 						strcpy(dst, fmt);

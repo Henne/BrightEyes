@@ -3204,10 +3204,10 @@ void (*g_location_handlers[19])(void) = {
 	do_location1, /* empty function */
 	do_temple,
 	do_tavern,
-	do_healer,
+	do_healer,	/* TODO: should be 0x1362:0x20 but is 0x1362:0x25*/
 	do_merchant,
 	do_wildcamp,
-	do_inn,
+	do_inn,		/* TODO: */
 	do_smith,
 	do_market,
 	show_citizen,
@@ -3217,7 +3217,7 @@ void (*g_location_handlers[19])(void) = {
 	show_entrance,
 	NULL,
 	do_house,
-	do_special_buildings,
+	do_special_buildings, /* TODO: 0x1392:0x20 should be 0x1392:0x2f */
 	do_citycamp,
 };  // ds:0x4c3b, (void (*)(void))[19];
 
