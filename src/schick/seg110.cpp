@@ -192,20 +192,19 @@ void tevent_014(void)
 {
 	signed short answer;
 
-	if (!ds_readb(TEVENT014_FLAG))
+	if (!gs_tevent014_flag)
 	{
 		load_in_head(55);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(43),
-						2, get_tx2(44),	get_tx2(45));
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(43), 2, get_tx2(44), get_tx2(45));
 
 		} while (answer == -1);
 
 		if (answer == 1)
 		{
 			/* examine the corpse */
-			loot_corpse(((Bit8u*)p_datseg + TEVENT014_CORPSE), get_tx2(46), p_datseg + TEVENT014_FLAG);
+			loot_corpse(((Bit8u*)p_datseg + TEVENT014_CORPSE), get_tx2(46), (Bit8s*)&gs_tevent014_flag);
 		}
 	}
 }

@@ -442,7 +442,7 @@ signed short DNG10_handler(void)
 
 void DNG10_chest0_x1(Bit8u* ptr)
 {
-	loot_corpse(ptr, get_tx(3), p_datseg + DNG10_CORPSE_LOOTED);
+	loot_corpse(ptr, get_tx(3), (Bit8s*)&gs_dng10_corpse_flag);
 }
 
 void DNG10_chest0_x2(Bit8u* chest)

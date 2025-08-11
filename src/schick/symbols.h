@@ -360,7 +360,7 @@
 #define DIALOG_PARTNERS                 (0x3618)    /* struct(38)[10] */
 #define DIALOG_STATES                   (0x3794)    /* struct(8)[160] */
 #define DNG02_SPHERE_KNOWN              (0x3c94)    /* unsigned char; {0,1} */
-#define DNG02_CORPSE                    (0x3c95)    /* unsigned char; {0,1} */
+//#define DNG02_CORPSE                    (0x3c95)    /* unsigned char; {0,1} */
 #define DNG02_APPARATURE_DESTROYED      (0x3c96)    /* unsigned char; {0,1} */
 #define DNG02_SPHERE_TIMER              (0x3c97)    /* unsigned char; {0,...,7} */
 #define DNG02_SPHERE_ACTIVE             (0x3c98)    /* unsigned char; {0,1} */
@@ -371,9 +371,9 @@
 #define DNG03_LEVER_TRAP                (0x3c9d)    /* unsigned char; {0,1} */
 #define DNG03_LEVER_CHEST11             (0x3c9e)    /* unsigned char; {0,1} */
 #define DNG03_SANCTUM_SMASHED           (0x3c9f)    /* unsigned char; {0,1} */
-#define DNG04_CORPSE0_FLAG              (0x3ca0)    /* unsigned char; {0,1} */
-#define DNG04_CORPSE1_FLAG              (0x3ca1)    /* unsigned char; {0,1} */
-#define DNG04_CORPSE2_FLAG              (0x3ca2)    /* unsigned char; {0,1} */
+//#define DNG04_CORPSE0_FLAG              (0x3ca0)    /* unsigned char; {0,1} */
+//#define DNG04_CORPSE1_FLAG              (0x3ca1)    /* unsigned char; {0,1} */
+//#define DNG04_CORPSE2_FLAG              (0x3ca2)    /* unsigned char; {0,1} */
 #define DNG04_GAP_FLAG                  (0x3ca3)    /* unsigned char; {0,1} */
 #define DNG04_HELMET_FLAG               (0x3ca4)    /* unsigned char; {0,1} */
 #define DNG04_LANTERN_FLAG              (0x3ca5)    /* unsigned char; {0,1} */
@@ -434,7 +434,7 @@
 #define TEVENT009_FLAG                  (0x3da5)    /* unsigned char; {0,1} */
 #define TEVENT011_FLAG                  (0x3da6)    /* unsigned char; {0,1} */
 #define TEVENT013_FLAG                  (0x3da7)    /* unsigned char; {0,1} */
-#define TEVENT014_FLAG                  (0x3da8)    /* unsigned char; {0,1} */
+//#define TEVENT014_FLAG                  (0x3da8)    /* unsigned char; {0,1} */
 #define TEVENT016_FLAG                  (0x3da9)    /* unsigned char; {0,1} */
 #define TEVENT017_FLAG                  (0x3daa)    /* unsigned char; {0,1} */
 #define TEVENT020_FLAG                  (0x3dab)    /* unsigned char; {0,1} */
@@ -661,7 +661,7 @@
 #define DNG09_CHEST3                    (0x4120)    /* unsigned char[21] */
 #define DNG09_CHEST5                    (0x4135)    /* unsigned char[4] */
 #define DNG09_CHEST6                    (0x4139)    /* unsigned char[7] */
-#define DNG10_CORPSE_LOOTED             (0x4140)    /* char; unsgiend {0,1} */
+//#define DNG10_CORPSE_LOOTED             (0x4140)    /* char; unsgiend {0,1} */
 #define DNG10_LEVER_FOUND               (0x4141)    /* unsigned char; {0, 1, 3} ; default = 0 */
 #define DNG10_HOLE_STATE                (0x4142)    /* unsigned char; {0, 1, 2} ; default = 0 */
 #define DNG10_LEVER_STATE               (0x4143)    /* unsigned char; {0,1} ; default = 0 */

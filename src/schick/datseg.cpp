@@ -2237,7 +2237,7 @@ struct{unsigned char unkn[8];} g_dialog_states[160] = {
 	{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
 }; // ds:0x3794
 unsigned char g_dng02_sphere_known = 0; // ds:0x3c94
-unsigned char g_dng02_corpse = 0; // ds:0x3c95
+Bit8u  gs_dng02_corpse_flag = 0; // ds:0x3c95
 unsigned char g_dng02_apparature_destroyed = 0; // ds:0x3c96
 Bit8u  gs_dng02_sphere_timer = 0; // ds:0x3c97, {0,...,7}
 unsigned char g_dng02_sphere_active = 0; // ds:0x3c98
@@ -2248,9 +2248,9 @@ unsigned char g_dng02_secret_door3 = 0; // ds:0x3c9c
 unsigned char g_dng03_lever_trap = 1; // ds:0x3c9d
 unsigned char g_dng03_lever_chest11 = 1; // ds:0x3c9e
 unsigned char g_dng03_sanctum_smashed = 0; // ds:0x3c9f
-unsigned char g_dng04_corpse0_flag = 0; // ds:0x3ca0
-unsigned char g_dng04_corpse1_flag = 0; // ds:0x3ca1
-unsigned char g_dng04_corpse2_flag = 0; // ds:0x3ca2
+Bit8u  gs_dng04_corpse0_flag = 0; // ds:0x3ca0
+Bit8u  gs_dng04_corpse1_flag = 0; // ds:0x3ca1
+Bit8u  gs_dng04_corpse2_flag = 0; // ds:0x3ca2
 unsigned char g_dng04_gap_flag = 0; // ds:0x3ca3
 unsigned char g_dng04_helmet_flag = 0; // ds:0x3ca4
 unsigned char g_dng04_lantern_flag = 0; // ds:0x3ca5
@@ -2569,7 +2569,7 @@ unsigned char g_dng09_chest2[8] = { 0x4a, 0x4a, 0x27, 0x27, 0x27, 0xea, 0x9a, 0x
 unsigned char g_dng09_chest3[21] = { 0x4b, 0x4b, 0x4b, 0x30, 0x30, 0x30, 0x31, 0x31, 0x31, 0x0e, 0x0e, 0x0e, 0x01, 0x5b, 0x17, 0xff, 0x01, 0x0e, 0x4a, 0x23, 0xff }; // ds:0x4120
 unsigned char g_dng09_chest5[4] = { 0xbd, 0xbe, 0x4c, 0xff }; // ds:0x4135
 unsigned char g_dng09_chest6[7] = { 0x4a, 0x4a, 0x27, 0x27, 0x27, 0xd9, 0xff }; // ds:0x4139
-char g_dng10_corpse_looted = 0; // ds:0x4140, unsgiend
+Bit8u  gs_dng10_corpse_flag = 0; // ds:0x4140, unsgiend
 unsigned char g_dng10_lever_found = 0; // ds:0x4141, ; default = 0
 unsigned char g_dng10_hole_state = 0; // ds:0x4142, ; default = 0
 unsigned char g_dng10_lever_state = 0; // ds:0x4143, ; default = 0

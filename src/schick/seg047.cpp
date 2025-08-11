@@ -351,7 +351,7 @@ signed short menu_enter_delete(Bit8u* ptr, signed short entries, signed short mo
 
 		/* fill a pointer array with the pointer to the names */
 		for (i = 0; i < i_max; i++) {
-			g_radio_name_list[i] = ((i + i_min) * 32 + ptr + 0x10);
+			g_radio_name_list[i] = (char*)((i + i_min) * 32 + ptr + 0x10);
 		}
 
 		i = i_max;

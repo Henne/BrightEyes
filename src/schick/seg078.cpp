@@ -659,7 +659,7 @@ void DNG02_chest05_func3(Bit8u* chest)
 
 void DNG02_chest06_func1(Bit8u* chest)
 {
-	loot_corpse(chest, get_tx(19), p_datseg + DNG02_CORPSE);
+	loot_corpse(chest, get_tx(19), (Bit8s*)&gs_dng02_corpse_flag);
 }
 
 void DNG02_chest06_func3(Bit8u* chest)

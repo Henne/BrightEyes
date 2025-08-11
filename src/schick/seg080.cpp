@@ -45,7 +45,7 @@ signed short DNG04_handler(void)
 
         pos = (gs_dungeon_level << 12) + (gs_x_target << 8) + gs_y_target;
 
-	if (pos == DNG_POS(0,6,7) && pos != gs_dng_handled_pos && !ds_readb(DNG04_CORPSE0_FLAG))
+	if (pos == DNG_POS(0,6,7) && pos != gs_dng_handled_pos && !gs_dng04_corpse0_flag)
 	{
 		/* DNG04_corpse0 */
 		seg092_06b4(0);
@@ -54,19 +54,15 @@ signed short DNG04_handler(void)
 	{
 		/* do you want to grab into the gap ? */
 		do {
-			i = GUI_radio(get_tx(2), 2,
-						get_tx(3),
-						get_tx(4));
+			i = GUI_radio(get_tx(2), 2, get_tx(3), get_tx(4));
+
 		} while (i == -1);
 
 		if (i == 2)
 		{
 			hero = (Bit8u*)get_first_hero_available_in_group();
 
-			sprintf(g_dtp2,
-				get_tx(5),
-				(char*)hero + HERO_NAME2);
-
+			sprintf(g_dtp2,	get_tx(5), (char*)hero + HERO_NAME2);
 			GUI_output(g_dtp2);
 
 			sub_hero_le(hero, 2);
@@ -108,10 +104,7 @@ signed short DNG04_handler(void)
 				!hero_dead(hero) &&
 				test_skill(hero, TA_SCHLEICHEN, 2) <= 0)
 			{
-				sprintf(g_dtp2,
-					get_tx(10),
-					(char*)hero + HERO_NAME2);
-
+				sprintf(g_dtp2,	get_tx(10), (char*)hero + HERO_NAME2);
 				GUI_output(g_dtp2);
 
 				sub_group_le(dice_roll(2, 6, 0));
@@ -155,10 +148,7 @@ signed short DNG04_handler(void)
 				!hero_dead(hero) &&
 				test_skill(hero, TA_SCHLEICHEN, 4) <= 0)
 			{
-				sprintf(g_dtp2,
-					get_tx(10),
-					(char*)hero + HERO_NAME2);
-
+				sprintf(g_dtp2, get_tx(10), (char*)hero + HERO_NAME2);
 				GUI_output(g_dtp2);
 
 				sub_group_le(dice_roll(1, 6, 2));
@@ -197,22 +187,16 @@ signed short DNG04_handler(void)
 		{
 			if (test_attrib(hero, ATTRIB_GE, 0) > 0)
 			{
-				sprintf(g_dtp2,
-					get_tx(18),
-					(char*)hero + HERO_NAME2,
-					(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)),
-					(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
-
+				sprintf(g_dtp2,	get_tx(18), (char*)hero + HERO_NAME2,
+					GUI_get_ptr(host_readbs(hero + HERO_SEX), 3),
+					GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
 				GUI_output(g_dtp2);
 
 			} else {
 
-				sprintf(g_dtp2,
-					get_tx(19),
-					(char*)hero + HERO_NAME2,
-					(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+				sprintf(g_dtp2,	get_tx(19), (char*)hero + HERO_NAME2,
+					GUI_get_ptr(host_readbs(hero + HERO_SEX), 0),
 					(char*)hero + HERO_NAME2);
-
 				GUI_output(g_dtp2);
 
 				hero_disappear(hero, 0, -1);
@@ -220,7 +204,7 @@ signed short DNG04_handler(void)
 		}
 	}
 
-	if (pos == DNG_POS(0,6,1) && pos != gs_dng_handled_pos && !ds_readb(DNG04_CORPSE2_FLAG))
+	if (pos == DNG_POS(0,6,1) && pos != gs_dng_handled_pos && !gs_dng04_corpse2_flag)
 	{
 		/* DNG04_corpse2 */
 		seg092_06b4(0);
@@ -240,10 +224,7 @@ signed short DNG04_handler(void)
 				{
 					sub_hero_le(hero, 2);
 
-					sprintf(g_text_output_buf,
-						get_tx(21),
-						(char*)hero + HERO_NAME2);
-
+					sprintf(g_text_output_buf, get_tx(21), (char*)hero + HERO_NAME2);
 					GUI_output(g_text_output_buf);
 				}
 			}
@@ -264,10 +245,7 @@ signed short DNG04_handler(void)
 				{
 					sub_hero_le(hero, 2);
 
-					sprintf(g_text_output_buf,
-						get_tx(25),
-						(char*)hero + HERO_NAME2);
-
+					sprintf(g_text_output_buf, get_tx(25), (char*)hero + HERO_NAME2);
 					GUI_output(g_text_output_buf);
 				}
 			}
@@ -278,16 +256,13 @@ signed short DNG04_handler(void)
 		/* the exit of this dungeon */
 		leave_dungeon();
 
-		gs_current_town = (gs_travel_destination_town_id);
-		gs_x_target = (gs_travel_destination_x);
-		gs_y_target = (gs_travel_destination_y);
+		gs_current_town = gs_travel_destination_town_id;
+		gs_x_target = gs_travel_destination_x;
+		gs_y_target = gs_travel_destination_y;
 		gs_current_loctype = LOCTYPE_NONE;
 		gs_direction = ((gs_travel_destination_viewdir + 2) & 0x03);
 
-		sprintf(g_dtp2,
-			get_tx(26),
-			get_ttx(gs_trv_destination + 0xeb));
-
+		sprintf(g_dtp2, get_tx(26), get_ttx(gs_trv_destination + 0xeb));
 		GUI_output(g_dtp2);
 
 		timewarp(HOURS(2));
@@ -303,17 +278,17 @@ signed short DNG04_handler(void)
 
 void DNG04_corpse0(Bit8u* ptr)
 {
-	loot_corpse(ptr, get_tx(1), p_datseg + DNG04_CORPSE0_FLAG);
+	loot_corpse(ptr, get_tx(1), (Bit8s*)&gs_dng04_corpse0_flag);
 }
 
 void DNG04_corpse1(Bit8u* ptr)
 {
-	loot_corpse(ptr, get_tx(8), p_datseg + DNG04_CORPSE1_FLAG);
+	loot_corpse(ptr, get_tx(1), (Bit8s*)&gs_dng04_corpse1_flag);
 }
 
 void DNG04_corpse2(Bit8u* ptr)
 {
-	loot_corpse(ptr, get_tx(20), p_datseg + DNG04_CORPSE2_FLAG);
+	loot_corpse(ptr, get_tx(1), (Bit8s*)&gs_dng04_corpse2_flag);
 }
 
 void DNG04_corpse0_chest(Bit8u* chest)
@@ -439,10 +414,7 @@ signed short DNG05_handler(void)
 		{
 			hero = (Bit8u*)get_first_hero_available_in_group();
 
-			sprintf(g_dtp2,
-				get_tx(13),
-				(char*)hero + HERO_NAME2);
-
+			sprintf(g_dtp2,	get_tx(13), (char*)hero + HERO_NAME2);
 			GUI_output(g_dtp2);
 
 			sub_hero_le(hero, dice_roll(1, 3, 2));
@@ -459,7 +431,7 @@ signed short DNG05_handler(void)
 
 		set_var_to_zero();
 
-		gs_x_target = (5);
+		gs_x_target = 5;
 		g_area_prepared = -1;
 
 	} else if (pos == DNG_POS(0,6,15) && pos != gs_dng_handled_pos)
@@ -467,16 +439,13 @@ signed short DNG05_handler(void)
 		/* the exit of this dungeon */
 		leave_dungeon();
 
-		gs_current_town = (gs_travel_destination_town_id);
-		gs_x_target = (gs_travel_destination_x);
-		gs_y_target = (gs_travel_destination_y);
+		gs_current_town = gs_travel_destination_town_id;
+		gs_x_target = gs_travel_destination_x;
+		gs_y_target = gs_travel_destination_y;
 		gs_current_loctype = LOCTYPE_NONE;
 		gs_direction = ((gs_travel_destination_viewdir + 2) & 0x03);
 
-		sprintf(g_dtp2,
-			get_tx(17),
-			get_ttx(gs_trv_destination + 0xeb));
-
+		sprintf(g_dtp2, get_tx(17), get_ttx(gs_trv_destination + 0xeb));
 		GUI_output(g_dtp2);
 
 		timewarp(HOURS(2));

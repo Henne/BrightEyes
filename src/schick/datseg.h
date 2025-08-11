@@ -357,10 +357,18 @@ extern Bit8u  gs_hermit_visited;		//ds:0x3615; seg066
 extern Bit8u  gs_dungeon_gfx_style;		//ds:0x3616; seg028, seg075, seg076
 extern Bit8u  gs_estorik_known;			//ds:0x3617; seg081
 
+extern Bit8u  gs_dng02_corpse_flag;		//ds:0x3c95; seg078
+
 extern Bit8u  gs_dng02_sphere_timer;		//ds:0x3c97; seg002, seg078
+
+extern Bit8u  gs_dng04_corpse0_flag;		//ds:0x3ca0; seg080
+extern Bit8u  gs_dng04_corpse1_flag;		//ds:0x3ca1; seg080
+extern Bit8u  gs_dng04_corpse2_flag;		//ds:0x3ca2; seg080
 
 extern Bit8s  gs_dng07_poison_flag;		//ds:0x3cb5; seg082
 extern Bit32s gs_dng07_poison_timer;		//ds:0x3cb6; seg002, seg082
+
+extern Bit8u  gs_tevent014_flag;		//ds:0x3da8; seg110
 
 extern Bit8u  gs_palette_floor[3 * 32];		//ds:0x3e53; seg002
 extern Bit8u  gs_palette_buildings[3 * 32];	//ds:0x3eb3; seg002, seg028, seg066
@@ -398,6 +406,7 @@ extern Bit8u  gs_dng12_obstacle_active;		//ds:0x3fa8; seg090
 extern Bit8u  gs_dng12_speartrap_active;	//ds:0x3fa9; seg090
 extern Bit8u  gs_dng12_chest1_content[12];	//ds:0x3faa; seg090
 
+extern Bit8u  gs_dng10_corpse_flag;		//ds:0x4140; seg078
 
 extern Bit8u  gs_dng11_waterbarrel1;		//ds:0x415d; seg086
 extern Bit8u  gs_dng11_waterbarrel2;		//ds:0x415e; seg086
