@@ -107,15 +107,15 @@ void TM_func1(signed short route_no, signed short backwards)
 	 * 		Can be replaced by a locvar! */
 	gs_travel_route_ptr = &g_land_routes[route_no - 1];
 	gs_travel_speed = 166;
-	ds_writew(ROUTE_TOTAL_STEPS, TM_get_track_length(gs_route_course_ptr));
-	ds_writew(ROUTE_LENGTH, gs_travel_route_ptr->distance * 100);
-	ds_writew(ROUTE_DURATION, ds_readws(ROUTE_LENGTH) / (gs_travel_speed + gs_travel_route_ptr->speed_mod * gs_travel_speed / 10) * 60);
-	ds_writew(ROUTE_TIMEDELTA, ds_readws(ROUTE_DURATION) / ds_readws(ROUTE_TOTAL_STEPS));
-	ds_writew(ROUTE_STEPSIZE, ds_readws(ROUTE_LENGTH) / ds_readws(ROUTE_TOTAL_STEPS));
+	gs_route_total_steps = (TM_get_track_length(gs_route_course_ptr));
+	gs_route_length = (gs_travel_route_ptr->distance * 100);
+	gs_route_duration = (gs_route_length / (gs_travel_speed + gs_travel_route_ptr->speed_mod * gs_travel_speed / 10) * 60);
+	gs_route_timedelta = (gs_route_duration / gs_route_total_steps);
+	gs_route_stepsize = gs_route_length / gs_route_total_steps;
 
-	if (ds_readws(ROUTE_STEPSIZE) == 0)
+	if (gs_route_stepsize == 0)
 	{
-		ds_writew(ROUTE_STEPSIZE, 1);
+		gs_route_stepsize = 1;
 	}
 
 	if (backwards)
@@ -183,9 +183,9 @@ void TM_func1(signed short route_no, signed short backwards)
 		gs_route_stepcount++;
 	}
 
-	gs_route_stepcount = ds_writew(ROUTE_PROGRESS, gs_travel_detour = (0));
+	gs_route_stepcount = gs_route_progress = gs_travel_detour = 0;
 
-	while (host_readws(gs_route_course_ptr + 2 * ds_writew(ROUTE_MOUSEHOVER, 0)) != -1 &&
+	while (host_readws(gs_route_course_ptr + 2 * (gs_route_mousehover = 0)) != -1 &&
 		!gs_travel_detour &&
 		ds_readw(GAME_STATE) == GAME_STATE_MAIN)
 	{
@@ -195,7 +195,7 @@ void TM_func1(signed short route_no, signed short backwards)
 					host_readws(gs_route_course_ptr + 2) + 16))
 		{
 			update_mouse_cursor();
-			ds_writew(ROUTE_MOUSEHOVER, 1);
+			gs_route_mousehover = 1;
 		}
 
 		if (gs_trv_return == 2)
@@ -219,12 +219,12 @@ void TM_func1(signed short route_no, signed short backwards)
 			*(fb_start + host_readws(gs_route_course_ptr + 2) * 320 + host_readws(gs_route_course_ptr)) = 0x1c;
 		}
 
-		if (ds_readw(ROUTE_MOUSEHOVER) != 0) {
+		if (gs_route_mousehover) {
 			refresh_screen_size();
 		}
 
 		gs_trv_i = 0;
-		while (ds_readws(ROUTE_TIMEDELTA) / 2 > gs_trv_i)
+		while (gs_route_timedelta / 2 > gs_trv_i)
 		{
 			handle_input();
 
@@ -238,8 +238,8 @@ void TM_func1(signed short route_no, signed short backwards)
 			gs_trv_i++;
 		}
 
-		add_ds_ws(ROUTE_PROGRESS, (gs_trv_return == 2 ? -ds_readws(ROUTE_STEPSIZE) : ds_readws(ROUTE_STEPSIZE)));
-		gs_route_dayprogress += ds_readws(ROUTE_STEPSIZE);
+		gs_route_progress += (gs_trv_return == 2 ? -gs_route_stepsize : gs_route_stepsize);
+		gs_route_dayprogress += gs_route_stepsize;
 
 		if (ds_readws(MOUSE2_EVENT) != 0 || ds_readws(ACTION) == ACTION_ID_PAGE_UP)
 		{
@@ -256,8 +256,8 @@ void TM_func1(signed short route_no, signed short backwards)
 				gs_forcedmarch_le_cost = random_schick(10);
 				gs_travel_speed = gs_route_stepcount + 197;
 				gs_forcedmarch_timer = 2;
-				ds_writew(ROUTE_DURATION, ds_readws(ROUTE_LENGTH) / (gs_travel_speed + (gs_travel_route_ptr->speed_mod * gs_travel_speed) / 10) * 60);
-				ds_writew(ROUTE_TIMEDELTA, ds_readws(ROUTE_DURATION) / ds_readws(ROUTE_TOTAL_STEPS));
+				gs_route_duration = (gs_route_length / (gs_travel_speed + (gs_travel_route_ptr->speed_mod * gs_travel_speed) / 10) * 60);
+				gs_route_timedelta = (gs_route_duration / gs_route_total_steps);
 				/* Remark: gs_forcedmarch_le_cost = gs_forcedmarch_le_cost / 2; */
 				gs_forcedmarch_le_cost >>= 1;
 
@@ -314,10 +314,10 @@ void TM_func1(signed short route_no, signed short backwards)
 		{
 			for (gs_trv_i = 0; gs_trv_i < 15; gs_trv_i++)
 			{
-				if (((gs_route_tevents[gs_trv_i].place <= ds_readws(ROUTE_PROGRESS)) &&
+				if (((gs_route_tevents[gs_trv_i].place <= gs_route_progress) &&
 					(gs_trv_return == 0) &&
 					!g_route_tevent_flags[gs_trv_i]) ||
-					((gs_route_tevents[gs_trv_i].place >= ds_readws(ROUTE_PROGRESS)) &&
+					((gs_route_tevents[gs_trv_i].place >= gs_route_progress) &&
 					(gs_trv_return == 2) &&
 					(g_route_tevent_flags[gs_trv_i] == 2)))
 				{
@@ -347,8 +347,8 @@ void TM_func1(signed short route_no, signed short backwards)
 
 	        /* night camp */
 		if (gs_day_timer >= HOURS(20) && !gs_travel_detour && ds_readws(GAME_STATE) == GAME_STATE_MAIN &&
-			2 * ds_readws(ROUTE_STEPSIZE) < ds_readws(ROUTE_PROGRESS) &&
-			ds_readws(ROUTE_LENGTH) - 2 * ds_readws(ROUTE_STEPSIZE) > ds_readws(ROUTE_PROGRESS))
+			2 * gs_route_stepsize < gs_route_progress &&
+			gs_route_length - 2 * gs_route_stepsize > gs_route_progress)
 		{
 			g_wallclock_update = 0;
 

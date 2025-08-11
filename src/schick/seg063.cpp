@@ -104,10 +104,10 @@ void do_harbor(void)
 
 	draw_loc_icons(4, MENU_ICON_BOOK_SHIP_PASSAGE, MENU_ICON_HARBOR_MASTER, MENU_ICON_BOARD_SHIP, MENU_ICON_LEAVE);
 	g_request_refresh = 1;
-	gs_travel_detour = (0);
+	gs_travel_detour = 0;
 
 	do {
-		if (g_request_refresh != 0) {
+		if (g_request_refresh) {
 
 			draw_main_screen();
 			set_var_to_zero();
@@ -468,31 +468,31 @@ void sea_travel(signed short passage, signed short dir)
 
 	/* if high seas route, write 7 (total number of high seas routes)
 	 * if costal route, write 38 (total number of costal routes) */
-	ds_writew(ROUTE_MOUSEHOVER, passage < 7 ? 7 : 38);
+	gs_route_mousehover = (passage < 7 ? 7 : 38);
 
 	/* convert costal route ids to range 0..37 */
 	gs_sea_travel_passage_no = passage < 7 ? passage : passage - 7;
 
 	off = host_readd(gs_sea_travel_courses + 4 * gs_sea_travel_passage_no);
-	gs_route_course_ptr = gs_sea_travel_courses + off + 4 * ds_readws(ROUTE_MOUSEHOVER);
+	gs_route_course_ptr = gs_sea_travel_courses + off + 4 * gs_route_mousehover;
 	ptr = g_vga_memstart;
 
 	gs_route_course_ptr += 4;
 
 	memset(g_trv_track_pixel_bak, 0xaa, 500);
 	gs_travel_speed = 10 * gs_sea_travel_passage_speed1; /* speed [unit: 10m per hour] */
-	ds_writew(ROUTE_TOTAL_STEPS, get_srout_len(gs_route_course_ptr)); /* a step for each pixel on the map. */
-	ds_writew(ROUTE_LENGTH, 100 * ds_readb(SEA_ROUTES + SEA_ROUTE_DISTANCE + SIZEOF_SEA_ROUTE * passage)); /* length of sea route [unit: 10m] */
-	ds_writew(ROUTE_DURATION, ds_readws(ROUTE_LENGTH) / gs_travel_speed * 60); /* duration [unit: minutes] */
-	ds_writew(ROUTE_TIMEDELTA, ds_readws(ROUTE_DURATION) / ds_readws(ROUTE_TOTAL_STEPS)); /* duration of each step [unit: minutes] */
-	ds_writew(ROUTE_STEPSIZE, ds_readws(ROUTE_LENGTH) / ds_readws(ROUTE_TOTAL_STEPS)); /* length of a single step [unit: 10m] */
+	gs_route_total_steps = (get_srout_len(gs_route_course_ptr)); /* a step for each pixel on the map. */
+	gs_route_length = (100 * ds_readb(SEA_ROUTES + SEA_ROUTE_DISTANCE + SIZEOF_SEA_ROUTE * passage)); /* length of sea route [unit: 10m] */
+	gs_route_duration = (gs_route_length / gs_travel_speed * 60); /* duration [unit: minutes] */
+	gs_route_timedelta = (gs_route_duration / gs_route_total_steps); /* duration of each step [unit: minutes] */
+	gs_route_stepsize = gs_route_length / gs_route_total_steps; /* length of a single step [unit: 10m] */
 
-	if (ds_readw(ROUTE_STEPSIZE) == 0) {
-		ds_writew(ROUTE_STEPSIZE, 1);
+	if (gs_route_stepsize == 0) {
+		gs_route_stepsize = 1;
 	}
 #if !defined(__BORLANDC__)
-	D1_INFO("Schiffspassage gestartet. Entfernung: %d0 Schritt. Geschwindigkeit: %d0 Schritt/h. Dauer (lt. Hafen): %d min. Dauer (real): %d min.\n", ds_readw(ROUTE_LENGTH), gs_travel_speed, ds_readw(ROUTE_DURATION),ds_readws(ROUTE_TOTAL_STEPS)*2*(ds_readw(ROUTE_TIMEDELTA)/2));
-	D1_INFO_VERBOSE("#Pixel = %d, Entfernung/Pixel: %d0 Schritt, Dauer/Pixel: %d min\n", ds_readw(ROUTE_TOTAL_STEPS), ds_readw(ROUTE_STEPSIZE), ds_readw(ROUTE_TIMEDELTA));
+	D1_INFO("Schiffspassage gestartet. Entfernung: %d0 Schritt. Geschwindigkeit: %d0 Schritt/h. Dauer (lt. Hafen): %d min. Dauer (real): %d min.\n", gs_route_length, gs_travel_speed, gs_route_duration,gs_route_total_steps*2*(gs_route_timedelta/2));
+	D1_INFO_VERBOSE("#Pixel = %d, Entfernung/Pixel: %d0 Schritt, Dauer/Pixel: %d min\n", gs_route_total_steps, gs_route_stepsize, gs_route_timedelta);
 #endif
 
 	if (dir) {
@@ -540,10 +540,10 @@ void sea_travel(signed short passage, signed short dir)
 #endif
 	}
 
-	gs_route_stepcount = ds_writew(ROUTE_PROGRESS, gs_route_dayprogress = (gs_travel_detour = (0)));
+	gs_route_stepcount = gs_route_progress = gs_route_dayprogress = gs_travel_detour = 0;
 	g_travel_herokeeping = 1;
 
-	while (host_readws(gs_route_course_ptr + 2 * ds_writew(ROUTE_MOUSEHOVER, 0)) != -1 && !gs_travel_detour)
+	while (host_readws(gs_route_course_ptr + 2 * (gs_route_mousehover = 0)) != -1 && !gs_travel_detour)
 	{
 
 		if (is_mouse_in_rect(host_readws(gs_route_course_ptr) - 16,
@@ -552,7 +552,7 @@ void sea_travel(signed short passage, signed short dir)
 					host_readws(gs_route_course_ptr + 2) + 16))
 		{
 			update_mouse_cursor();
-			ds_writew(ROUTE_MOUSEHOVER, 1);
+			gs_route_mousehover = 1;
 		}
 
 		g_trv_track_pixel_bak[gs_route_stepcount] =
@@ -562,13 +562,13 @@ void sea_travel(signed short passage, signed short dir)
 
 		*(ptr + host_readws(gs_route_course_ptr + 2) * 320 + host_readws(gs_route_course_ptr)) = 0x1f;
 
-		if (ds_readws(ROUTE_MOUSEHOVER) != 0) {
+		if (gs_route_mousehover) {
 			refresh_screen_size();
 		}
 
-		/* the following loop will be executed Floor(ROUTE_TIMEDELTA / 2) times.
-		 * therefore, 2 * Floor(ROUTE_TIMEDELTA / 2) minutes ingame times will pass. */
-		for (gs_trv_i = 0; ds_readws(ROUTE_TIMEDELTA) / 2 > gs_trv_i; gs_trv_i++) {
+		/* the following loop will be executed Floor(gs_route_timedelta / 2) times.
+		 * therefore, 2 * Floor(gs_route_timedelta / 2) minutes ingame times will pass. */
+		for (gs_trv_i = 0; gs_route_timedelta / 2 > gs_trv_i; gs_trv_i++) {
 
 			handle_input();
 
@@ -577,8 +577,8 @@ void sea_travel(signed short passage, signed short dir)
 			timewarp(MINUTES(2));
 		}
 
-		add_ds_ws(ROUTE_PROGRESS, ds_readws(ROUTE_STEPSIZE));
-		gs_route_dayprogress += ds_readws(ROUTE_STEPSIZE);
+		gs_route_progress += gs_route_stepsize;
+		gs_route_dayprogress += gs_route_stepsize;
 
 #if !defined(__BORLANDC__)
 		D1_LOG("%d0 Schritt zurueckgelegt.\n",gs_route_dayprogress);

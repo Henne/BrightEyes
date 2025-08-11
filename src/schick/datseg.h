@@ -411,7 +411,13 @@ extern Bit8s  gs_dng03_chest12_loads;		//ds:0x4227; seg079
 extern Bit16s gs_trv_i;				//ds:0x4228; seg063, seg094
 extern Bit16s gs_route_stepcount;		//ds:0x422a; seg063, seg094
 extern Bit16s gs_forcedmarch_le_cost;		//ds:0x422c; seg094
-
+extern Bit16s gs_route_total_steps;			//ds:0x422e; seg063, seg094
+extern Bit16s gs_route_length;				//ds:0x4230; seg063, seg094
+extern Bit16s gs_route_duration;			//ds:0x4232; seg063, seg094
+extern Bit16s gs_route_timedelta;			//ds:0x4234; seg063, seg094
+extern Bit16s gs_route_mousehover;			//ds:0x4236; seg063, seg094
+extern Bit16s gs_route_progress;			//ds:0x4238; seg063, seg094
+extern Bit16s gs_route_stepsize;			//ds:0x423a; seg063, seg094
 extern Bit16s gs_route_dayprogress;			//ds:0x423c; seg094
 extern Bit16s gs_sea_travel_passage_no;			//ds:0x423e; seg063
 extern Bit16s gs_route_encounter_flag;			//ds:0x4240; seg094

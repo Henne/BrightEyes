@@ -728,13 +728,13 @@
 //#define TRV_I                           (0x4228)    /* unsigned short */
 //#define ROUTE_STEPCOUNT                 (0x422a)    /* unsigned short */
 //#define FORCEDMARCH_LE_COST             (0x422c)    /* unsigned short */
-#define ROUTE_TOTAL_STEPS               (0x422e)    /* unsigned short */
-#define ROUTE_LENGTH                    (0x4230)    /* unsigned short */
-#define ROUTE_DURATION                  (0x4232)    /* unsigned short */
-#define ROUTE_TIMEDELTA                 (0x4234)    /* unsigned short */
-#define ROUTE_MOUSEHOVER                (0x4236)    /* unsigned short; {0,1} */
-#define ROUTE_PROGRESS                  (0x4238)    /* unsigned short */
-#define ROUTE_STEPSIZE                  (0x423a)    /* unsigned short */
+//#define ROUTE_TOTAL_STEPS               (0x422e)    /* unsigned short */
+//#define ROUTE_LENGTH                    (0x4230)    /* unsigned short */
+//#define ROUTE_DURATION                  (0x4232)    /* unsigned short */
+//#define ROUTE_TIMEDELTA                 (0x4234)    /* unsigned short */
+//#define ROUTE_MOUSEHOVER                (0x4236)    /* unsigned short; {0,1} */
+//#define ROUTE_PROGRESS                  (0x4238)    /* unsigned short */
+//#define ROUTE_STEPSIZE                  (0x423a)    /* unsigned short */
 //#define ROUTE_DAYPROGRESS               (0x423c)    /* unsigned short */
 //#define SEA_TRAVEL_PASSAGE_NO           (0x423e)    /* unsigned short */
 //#define ROUTE_ENCOUNTER_FLAG            (0x4240)    /* unsigned short; {0,1} */
