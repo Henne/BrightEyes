@@ -50,7 +50,7 @@ signed short DNG04_handler(void)
 		/* DNG04_corpse0 */
 		seg092_06b4(0);
 
-	} else if (pos == DNG_POS(0,8,8) && pos != gs_dng_handled_pos && !ds_readb(DNG04_GAP_FLAG))
+	} else if (pos == DNG_POS(0,8,8) && pos != gs_dng_handled_pos && !gs_dng04_gap_flag)
 	{
 		/* do you want to grab into the gap ? */
 		do {
@@ -70,10 +70,10 @@ signed short DNG04_handler(void)
 			/* get a magic AMULET */
 			get_item(ITEM_TRAVIA_AMULET, 1, 1);
 
-			ds_writeb(DNG04_GAP_FLAG, 1);
+			gs_dng04_gap_flag = 1;
 		}
 
-	} else if (pos == DNG_POS(0,5,11) && pos != gs_dng_handled_pos && !ds_readb(DNG04_HELMET_FLAG))
+	} else if (pos == DNG_POS(0,5,11) && pos != gs_dng_handled_pos && !gs_dng04_helmet_flag)
 	{
 		/* do you want the SILVER HELMET? */
 		if (GUI_bool(get_tx(7)))
@@ -82,7 +82,7 @@ signed short DNG04_handler(void)
 			if (get_item(ITEM_SILVER_HELMET, 1, 1))
 			{
 				/* mark SILVER HELMET as taken */
-				ds_writeb(DNG04_HELMET_FLAG, 1);
+				gs_dng04_helmet_flag = 1;
 			}
 		}
 
@@ -157,7 +157,7 @@ signed short DNG04_handler(void)
 			}
 		}
 
-	} else if (pos == DNG_POS(0,10,6) && pos != gs_dng_handled_pos && !ds_readb(DNG04_LANTERN_FLAG))
+	} else if (pos == DNG_POS(0,10,6) && pos != gs_dng_handled_pos && !gs_dng04_lantern_flag)
 	{
 		/* do you want a LANTERN? */
 		if (GUI_bool(get_tx(16)))
@@ -166,7 +166,7 @@ signed short DNG04_handler(void)
 			if (get_item(ITEM_LANTERN_OFF, 1, 1))
 			{
 				/* mark LANTERN as taken */
-				ds_writeb(DNG04_LANTERN_FLAG, 1);
+				gs_dng04_lantern_flag = 1;
 			}
 		}
 
@@ -176,9 +176,9 @@ signed short DNG04_handler(void)
 		i = 1;
 		hero = (Bit8u*)get_first_hero_available_in_group();
 
-		if (!ds_readb(DNG04_DEEPGAP_FLAG) || test_attrib(hero, ATTRIB_GE, 0) > 0)
+		if (!gs_dng04_deepgap_flag || test_attrib(hero, ATTRIB_GE, 0) > 0)
 		{
-			ds_writeb(DNG04_DEEPGAP_FLAG, 1);
+			gs_dng04_deepgap_flag = 1;
 
 			i = GUI_bool(get_tx(17));
 		}

@@ -358,12 +358,23 @@ extern Bit8u  gs_dungeon_gfx_style;		//ds:0x3616; seg028, seg075, seg076
 extern Bit8u  gs_estorik_known;			//ds:0x3617; seg081
 extern Bit8u  gs_dng02_sphere_known;		//ds:0x3c94; seg087
 extern Bit8u  gs_dng02_corpse_flag;		//ds:0x3c95; seg078
-
+extern Bit8u  gs_dng02_apparature_destroyed;	//ds:0x3c96; seg078
 extern Bit8u  gs_dng02_sphere_timer;		//ds:0x3c97; seg002, seg078
-
+extern Bit8u  gs_dng02_sphere_active;		//ds:0x3c98; seg078
+extern Bit8u  gs_dng02_raven_destroyed;		//ds:0x3c99; seg078
+extern Bit8u  gs_dng02_secret_door1;		//ds:0x3c9a; seg078
+extern Bit8u  gs_dng02_secret_door2;		//ds:0x3c9b; seg078
+extern Bit8u  gs_dng02_secret_door3;		//ds:0x3c9c; seg078
+extern Bit8u  gs_dng03_lever_trap;		//ds:0x3c9d; seg079
+extern Bit8u  gs_dng03_lever_chest11;		//ds:0x3c9e; seg079
+extern Bit8u  gs_dng03_sanctum_smashed;		//ds:0x3c9f; seg079
 extern Bit8u  gs_dng04_corpse0_flag;		//ds:0x3ca0; seg080
 extern Bit8u  gs_dng04_corpse1_flag;		//ds:0x3ca1; seg080
 extern Bit8u  gs_dng04_corpse2_flag;		//ds:0x3ca2; seg080
+extern Bit8u  gs_dng04_gap_flag;		//ds:0x3ca3; seg080
+extern Bit8u  gs_dng04_helmet_flag;		//ds:0x3ca4; seg080
+extern Bit8u  gs_dng04_lantern_flag;		//ds:0x3ca5; seg080
+extern Bit8u  gs_dng04_deepgap_flag;		//ds:0x3ca6; seg080
 
 extern Bit8s  gs_dng07_poison_flag;		//ds:0x3cb5; seg082
 extern Bit32s gs_dng07_poison_timer;		//ds:0x3cb6; seg002, seg082

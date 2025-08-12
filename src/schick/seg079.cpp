@@ -116,7 +116,7 @@ signed short DNG03_handler(void)
 		}
 
 	} else if ((target_pos == DNG_POS(0,10,9) || target_pos == DNG_POS(0,9,14)) &&
-			ds_readb(DNG03_LEVER_TRAP) != 0 &&
+			gs_dng03_lever_trap &&
 			target_pos != gs_dng_handled_pos)
 	{
 		GUI_output(get_tx(5));
@@ -180,7 +180,7 @@ signed short DNG03_handler(void)
 		/* LEVER: */
 		if (GUI_bool(get_tx(8)))
 		{
-			xor_ds_bs(DNG03_LEVER_CHEST11, 1);
+			gs_dng03_lever_chest11 ^= 1;
 			GUI_output(get_tx(9));
 		}
 
@@ -191,7 +191,7 @@ signed short DNG03_handler(void)
 	{
 		if (GUI_bool(get_tx(8)))
 		{
-			xor_ds_bs(DNG03_LEVER_TRAP, 1);
+			gs_dng03_lever_trap ^= 1;
 			GUI_output(get_tx(9));
 		}
 
@@ -300,22 +300,21 @@ signed short DNG03_handler(void)
 
 		do_fight(gs_dng03_highpriest_killed == 16 ? 222 : 223);
 
-	} else if (target_pos == DNG_POS(1,1,12) && target_pos != gs_dng_handled_pos &&	!ds_readb(DNG03_SANCTUM_SMASHED))
+	} else if (target_pos == DNG_POS(1,1,12) && (target_pos != gs_dng_handled_pos) && !gs_dng03_sanctum_smashed)
 	{
 
 		/* check if a hero in this group has crystals */
 		i = get_first_hero_with_item(ITEM_CRYSTAL) != -1 ? 0 : 1;
 
 		do {
-			j = GUI_radio(get_tx(14), 2,
-					get_tx(15),
-					!i ? get_tx(16) : get_tx(29));
+			j = GUI_radio(get_tx(14), 2, get_tx(15), !i ? get_tx(16) : get_tx(29));
+
 		} while (j == -1);
 
 		if (j == 1)
 		{
 			GUI_output(get_tx(18));
-			ds_writeb(DNG03_SANCTUM_SMASHED, 1);
+			gs_dng03_sanctum_smashed = 1;
 
 		} else if (j == 2 && !i)
 		{
@@ -370,8 +369,8 @@ signed short DNG03_handler(void)
 	} else if (target_pos == DNG_POS(1,10,8) && target_pos != gs_dng_handled_pos)
 	{
 		GUI_output(get_tx(4));
-		gs_x_target = (5);
-		gs_y_target = (14);
+		gs_x_target = 5;
+		gs_y_target = 14;
 		DNG_dec_level();
 		gs_direction = (NORTH);
 
@@ -569,7 +568,7 @@ void DNG03_chest11_func3(Bit8u*)
 	signed short mod;
 	Bit8u *hero;
 
-	if (!ds_readb(DNG03_LEVER_CHEST11))
+	if (!gs_dng03_lever_chest11)
 	{
 		GUI_output(get_tx(25));
 

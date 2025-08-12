@@ -2260,7 +2260,7 @@ void do_timers(void)
 			if (gs_dng02_sphere_timer) {
 
 				if (!(--gs_dng02_sphere_timer)) {
-					ds_writeb(DNG02_SPHERE_ACTIVE, 1);
+					gs_dng02_sphere_active = 1;
 				}
 			}
 
@@ -3491,7 +3491,7 @@ void timewarp(Bit32s time)
 		if (gs_dng02_sphere_timer) {
 
 			if (!(--gs_dng02_sphere_timer)) {
-				ds_writeb(DNG02_SPHERE_ACTIVE, 1);
+				gs_dng02_sphere_active = 1;
 			}
 		}
 

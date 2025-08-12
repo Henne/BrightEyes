@@ -179,7 +179,7 @@ signed short DNG02_handler(void)
 
 	} else if ((target_pos == DNG_POS(0,7,6) || target_pos == DNG_POS(0,8,6) || target_pos == DNG_POS(0,8,8)))
 	{
-		if (ds_readb(DNG02_SPHERE_ACTIVE) != 0)
+		if (gs_dng02_sphere_active)
 		{
 			/* Sphaerenriss */
 			GUI_output(get_tx(41));
@@ -218,12 +218,12 @@ signed short DNG02_handler(void)
 			}
 		}
 
-	} else if (target_pos == DNG_POS(0,7,1) && !ds_readb(DNG02_RAVEN_DESTROYED) && target_pos != gs_dng_handled_pos)
+	} else if (target_pos == DNG_POS(0,7,1) && !gs_dng02_raven_destroyed && target_pos != gs_dng_handled_pos)
 	{
 		if (GUI_bool(get_tx(13)))
 		{
 			/* destroy the raven */
-			ds_writeb(DNG02_RAVEN_DESTROYED, 1);
+			gs_dng02_raven_destroyed = 1;
 
 			sub_group_le(random_schick(20));
 
@@ -318,7 +318,7 @@ signed short DNG02_handler(void)
 			GUI_output(get_tx(24));
 		}
 
-	} else if (target_pos == DNG_POS(1,8,9) && target_pos != gs_dng_handled_pos && !ds_readb(DNG02_APPARATURE_DESTROYED))
+	} else if (target_pos == DNG_POS(1,8,9) && target_pos != gs_dng_handled_pos && !gs_dng02_apparature_destroyed)
 	{
 		/* petrification trap */
 		GUI_output(get_tx(25));
@@ -425,26 +425,23 @@ signed short DNG02_handler(void)
 
 	} else if (target_pos == DNG_POS(0,1,8) &&
 			(target_pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&
-			gs_direction == SOUTH &&
-			ds_readb(DNG02_SECRET_DOOR1) != 2)
+			(gs_direction == SOUTH) &&
+			(gs_dng02_secret_door1 != 2))
 	{
 		/* Original-Bug: this should be the leader, not hero no 0 */
 		hero = get_hero(0);
 
-		if (ds_readb(DNG02_SECRET_DOOR1) != 0 || test_skill(hero, TA_SINNESSCHAERFE, 6) > 0)
+		if (gs_dng02_secret_door1 || test_skill(hero, TA_SINNESSCHAERFE, 6) > 0)
 		{
-			ds_writeb(DNG02_SECRET_DOOR1, 1);
+			gs_dng02_secret_door1 = 1;
 
-			sprintf(g_dtp2,
-				get_tx(37),
-				(char*)hero + HERO_NAME2);
+			sprintf(g_dtp2, get_tx(37), (char*)hero + HERO_NAME2);
 
 			sprintf(g_text_output_buf,
 				(char*)((i = test_skill(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(39) : get_tx(38)),
 				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			strcat(g_dtp2,
-				g_text_output_buf);
+			strcat(g_dtp2, g_text_output_buf);
 
 			GUI_output(g_dtp2);
 
@@ -452,42 +449,39 @@ signed short DNG02_handler(void)
 			{
 				/* unlike other similar code positions, the lower 4 bits of the map entry are preserved here. Is there a reason? */
 				and_ptr_bs(amap_ptr + MAP_POS(1,9), (DNG_TILE_CORRIDOR << 4) + 0x0f);
-				ds_writeb(DNG02_SECRET_DOOR1, 2);
+				gs_dng02_secret_door1 = 2;
 				DNG_update_pos();
 			}
 
-			gs_direction_bak = (gs_direction);
+			gs_direction_bak = gs_direction;
 		}
 
 	} else if (target_pos == DNG_POS(0,4,8) &&
 			(target_pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&
-			gs_direction == SOUTH &&
-			ds_readb(DNG02_SECRET_DOOR2) != 2)
+			(gs_direction == SOUTH) &&
+			(gs_dng02_secret_door2 != 2))
 	{
 		/* Original-Bug: this should be the leader, not hero no 0 */
 		hero = get_hero(0);
 
-		if (ds_readb(DNG02_SECRET_DOOR2) != 0 || test_skill(hero, TA_SINNESSCHAERFE, 2) > 0)
+		if (gs_dng02_secret_door2 || test_skill(hero, TA_SINNESSCHAERFE, 2) > 0)
 		{
-			ds_writeb(DNG02_SECRET_DOOR2, 1);
+			gs_dng02_secret_door2 = 1;
 
-			sprintf(g_dtp2,
-				get_tx(37),
-				(char*)hero + HERO_NAME2);
+			sprintf(g_dtp2,	get_tx(37), (char*)hero + HERO_NAME2);
 
 			sprintf(g_text_output_buf,
 				(char*)((i = test_skill(hero, TA_SCHLOESSER, 2)) > 0 ? get_tx(39) : get_tx(38)),
 				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			strcat(g_dtp2,
-				g_text_output_buf);
+			strcat(g_dtp2, g_text_output_buf);
 
 			GUI_output(g_dtp2);
 
 			if (i > 0)
 			{
 				host_writeb(amap_ptr + MAP_POS(4,9), DNG_TILE_CORRIDOR << 4);
-				ds_writeb(DNG02_SECRET_DOOR2, 2);
+				gs_dng02_secret_door2 = 2;
 				DNG_update_pos();
 			}
 
@@ -497,47 +491,40 @@ signed short DNG02_handler(void)
 	} else if (((target_pos == DNG_POS(1,4,9) && gs_direction == EAST) ||
 			(target_pos == DNG_POS(1,6,9) && gs_direction == WEST)) &&
 			(target_pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&
-			ds_readb(DNG02_SECRET_DOOR3) != 2)
+			(gs_dng02_secret_door3 != 2))
 	{
 		hero = (Bit8u*)get_first_hero_available_in_group();
 
-		if (ds_readb(DNG02_SECRET_DOOR3) != 0 || test_skill(hero, TA_SINNESSCHAERFE, 5) > 0)
+		if (gs_dng02_secret_door3 || (test_skill(hero, TA_SINNESSCHAERFE, 5) > 0))
 		{
-			ds_writeb(DNG02_SECRET_DOOR3, 1);
+			gs_dng02_secret_door3 = 1;
 
-			sprintf(g_dtp2,
-				get_tx(37),
-				(char*)hero + HERO_NAME2);
+			sprintf(g_dtp2,	get_tx(37), (char*)hero + HERO_NAME2);
 
 			sprintf(g_text_output_buf,
 				(char*)((i = test_skill(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(39) : get_tx(38)),
-				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+				GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
 
-			strcat(g_dtp2,
-				g_text_output_buf);
+			strcat(g_dtp2, g_text_output_buf);
 
 			if (i > 0)
 			{
 				host_writeb(amap_ptr + MAP_POS(5,9), DNG_TILE_CORRIDOR << 4);
-				ds_writeb(DNG02_SECRET_DOOR3, 2);
+				gs_dng02_secret_door3 = 2;
 				DNG_update_pos();
 			}
 
 			i = random_schick(6) + 4;
 
-			sprintf(g_text_output_buf,
-				get_tx(40),
-				(char*)hero + HERO_NAME2,
-				i);
+			sprintf(g_text_output_buf, get_tx(40), (char*)hero + HERO_NAME2, i);
 
-			strcat(g_dtp2,
-				g_text_output_buf);
+			strcat(g_dtp2, g_text_output_buf);
 
 			GUI_output(g_dtp2);
 
 			sub_hero_le(hero, i);
 
-			gs_direction_bak = (gs_direction);
+			gs_direction_bak = gs_direction;
 		}
 
 	} else if (target_pos == DNG_POS(0,1,0) && target_pos != gs_dng_handled_pos)
@@ -616,19 +603,19 @@ void DNG02_chest04_func3(Bit8u*)
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 
-	if (!ds_readb(DNG02_APPARATURE_DESTROYED))
+	if (!gs_dng02_apparature_destroyed)
 	{
 		do {
-			answer = GUI_radio(get_tx(1), 2,
-						get_tx(2),
-						get_tx(3));
+			answer = GUI_radio(get_tx(1), 2, get_tx(2), get_tx(3));
+
 		} while (answer == -1);
 
 		if (answer == 1)
 		{
 			chest_petrified();
 		} else {
-			ds_writeb(DNG02_APPARATURE_DESTROYED, 1);
+
+			gs_dng02_apparature_destroyed = 1;
 
 			hero = get_hero(0);
 			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
