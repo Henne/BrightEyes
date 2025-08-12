@@ -49,11 +49,11 @@ signed short DNG06_handler(void)
 
 	target_pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
-	if (target_pos == DNG_POS(0,14,5) && target_pos != gs_dng_handled_pos && !ds_readb(DNG06_BOOK_FLAG))
+	if (target_pos == DNG_POS(0,14,5) && target_pos != gs_dng_handled_pos && !gs_dng06_book_flag)
 	{
 		if (GUI_bool(get_tx(1)) && get_item(ITEM_BOOK_2, 1, 1))
 		{
-			ds_writeb(DNG06_BOOK_FLAG, 1);
+			gs_dng06_book_flag = 1;
 		}
 
 	}
@@ -68,9 +68,9 @@ signed short DNG06_handler(void)
 		{
 			strcpy(g_dtp2, get_tx(3));
 
-			if (!ds_readb(DNG06_MONEY_FLAG))
+			if (!gs_dng06_money_flag)
 			{
-				ds_writeb(DNG06_MONEY_FLAG, 1);
+				gs_dng06_money_flag = 1;
 
 				hero = (Bit8u*)get_first_hero_available_in_group();
 
@@ -86,12 +86,12 @@ signed short DNG06_handler(void)
 			GUI_output(g_dtp2);
 		}
 
-	} else if (target_pos == DNG_POS(0,5,3) && target_pos != gs_dng_handled_pos && !ds_readb(DNG06_PROVIANT_FLAG))
+	} else if (target_pos == DNG_POS(0,5,3) && target_pos != gs_dng_handled_pos && !gs_dng06_proviant_flag)
 	{
 		if (GUI_bool(get_tx(5)))
 		{
 			get_item(ITEM_FOOD_PACKAGE, 1, 40);
-			ds_writeb(DNG06_PROVIANT_FLAG, 1);
+			gs_dng06_proviant_flag = 1;
 		}
 
 	} else if (target_pos == DNG_POS(0,2,1) && target_pos != gs_dng_handled_pos)
@@ -126,7 +126,7 @@ signed short DNG06_handler(void)
 			sub_hero_le(hero_second, random_schick(6));
 		}
 
-	} else if (target_pos == DNG_POS(0,9,7) && target_pos != gs_dng_handled_pos && !ds_readb(DNG06_PITDOOR_FLAG))
+	} else if (target_pos == DNG_POS(0,9,7) && target_pos != gs_dng_handled_pos && !gs_dng06_pitdoor_flag)
 	{
 		hero = get_hero(0);
 		for (i = l3 = 0; i <= 6; i++, hero += SIZEOF_HERO)
@@ -162,29 +162,29 @@ signed short DNG06_handler(void)
 
 				if (l3 != 0 && GUI_bool(get_tx(9)))
 				{
-					ds_writeb(DNG06_PITDOOR_FLAG, 1);
+					gs_dng06_pitdoor_flag = 1;
 
 					GUI_output(get_tx(10));
 				}
 
-				if (!ds_readb(DNG06_PITDOOR_FLAG))
+				if (!gs_dng06_pitdoor_flag)
 				{
 					DNG_fallpit_test(6);
 				}
 			} else {
-				if (!ds_readb(DNG06_PITDOOR_FLAG))
+				if (!gs_dng06_pitdoor_flag)
 				{
 					DNG_fallpit_test(6);
 				}
 			}
 		} else {
-			if (!ds_readb(DNG06_PITDOOR_FLAG))
+			if (!gs_dng06_pitdoor_flag)
 			{
 				DNG_fallpit_test(6);
 			}
 		}
 
-	} else if (target_pos == DNG_POS(0,8,7) && target_pos != gs_dng_handled_pos && ds_readb(DNG06_GOLDKEY_FLAG) != 2)
+	} else if (target_pos == DNG_POS(0,8,7) && target_pos != gs_dng_handled_pos && gs_dng06_goldkey_flag != 2)
 	{
 		hero = get_hero(0);
 		for (i = l3 = 0; i <= 6; i++, hero += SIZEOF_HERO)
@@ -198,13 +198,13 @@ signed short DNG06_handler(void)
 			}
 		}
 
-		if (ds_readb(DNG06_GOLDKEY_FLAG) != 0 || l3 != 0)
+		if (gs_dng06_goldkey_flag || l3 != 0)
 		{
-			ds_writeb(DNG06_GOLDKEY_FLAG, 1);
+			gs_dng06_goldkey_flag = 1;
 
 			if (GUI_bool(get_tx(11)))
 			{
-				ds_writeb(DNG06_GOLDKEY_FLAG, 2);
+				gs_dng06_goldkey_flag = 2;
 
 				get_item(ITEM_KEY_GOLDEN_1, 1, 1);
 
@@ -215,13 +215,13 @@ signed short DNG06_handler(void)
 			}
 		}
 
-	} else if (target_pos == DNG_POS(0,11,6) && target_pos != gs_dng_handled_pos && ds_readb(DNG06_COUNTDOWN_FLAG) != 0)
+	} else if (target_pos == DNG_POS(0,11,6) && target_pos != gs_dng_handled_pos && gs_dng06_countdown_timer)
 	{
 		if (div16(host_readb(amap_ptr + MAP_POS(11,1))) != DNG_TILE_CLOSED_DOOR ||
 			div16(host_readb(amap_ptr + MAP_POS(2,6))) != DNG_TILE_CLOSED_DOOR ||
 			div16(host_readb(amap_ptr + MAP_POS(11,4))) != DNG_TILE_CLOSED_DOOR)
 		{
-			dec_ds_bs_post(DNG06_COUNTDOWN_FLAG);
+			gs_dng06_countdown_timer--;
 
 			l3 = random_schick(5);
 
@@ -302,7 +302,7 @@ signed short DNG06_handler(void)
 				/* some heroes are in the right position: hear gentle click */
 				GUI_output(get_tx(24));
 
-				ds_writeb(DNG06_LEVER_FLAG, 1);
+				gs_dng06_lever_flag = 1;
 			} else {
 				/* liquid from ceiling causes damage */
 				hero = (Bit8u*)get_first_hero_available_in_group();
@@ -342,7 +342,7 @@ signed short DNG06_handler(void)
 				/* some heroes are in the right position: hear gentle click */
 				GUI_output(get_tx(24));
 
-				ds_writeb(DNG06_LEVER_FLAG, 1);
+				gs_dng06_lever_flag = 1;
 			} else {
 				/* liquid from ceiling causes damage */
 				hero = (Bit8u*)get_first_hero_available_in_group();
@@ -354,7 +354,7 @@ signed short DNG06_handler(void)
 			}
 		}
 
-	} else if (target_pos == DNG_POS(1,5,8) && target_pos != gs_dng_handled_pos && !ds_readb(DNG06_LEVER_FLAG))
+	} else if (target_pos == DNG_POS(1,5,8) && target_pos != gs_dng_handled_pos && !gs_dng06_lever_flag)
 	{
 		hero = (Bit8u*)get_first_hero_available_in_group();
 
@@ -376,7 +376,7 @@ signed short DNG06_handler(void)
 			sub_hero_le(hero, dice_roll(3, 6, 0));
 		}
 
-	} else if (target_pos == DNG_POS(1,7,13) && target_pos != gs_dng_handled_pos && !ds_readb(DNG06_FIGHT19_FLAG))
+	} else if (target_pos == DNG_POS(1,7,13) && target_pos != gs_dng_handled_pos && !gs_dng06_fight19_flag)
 	{
 		if (GUI_bool(get_tx(28)))
 		{
@@ -413,7 +413,7 @@ signed short DNG06_handler(void)
 
 		if (!do_fight(FIGHTS_F094_19))
 		{
-			ds_writeb(DNG06_FIGHT19_FLAG, 1);
+			gs_dng06_fight19_flag = 1;
 		}
 
 	} else if (target_pos == DNG_POS(0,13,15) && target_pos != gs_dng_handled_pos)

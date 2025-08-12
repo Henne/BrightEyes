@@ -375,6 +375,14 @@ extern Bit8u  gs_dng04_gap_flag;		//ds:0x3ca3; seg080
 extern Bit8u  gs_dng04_helmet_flag;		//ds:0x3ca4; seg080
 extern Bit8u  gs_dng04_lantern_flag;		//ds:0x3ca5; seg080
 extern Bit8u  gs_dng04_deepgap_flag;		//ds:0x3ca6; seg080
+extern Bit8u  gs_dng06_pitdoor_flag;		//ds:0x3ca7; seg076, seg081
+extern Bit8u  gs_dng06_proviant_flag;		//ds:0x3ca8; seg081
+extern Bit8u  gs_dng06_money_flag;		//ds:0x3ca9; seg081
+extern Bit8u  gs_dng06_goldkey_flag;		//ds:0x3caa; seg081
+extern Bit8s  gs_dng06_countdown_timer;		//ds:0x3cab; seg081
+extern Bit8u  gs_dng06_lever_flag;		//ds:0x3cac; seg081
+extern Bit8u  gs_dng06_book_flag;		//ds:0x3cad; seg081
+extern Bit8u  gs_dng06_fight19_flag;		//ds:0x3cae; seg081
 
 extern Bit8s  gs_dng07_poison_flag;		//ds:0x3cb5; seg082
 extern Bit32s gs_dng07_poison_timer;		//ds:0x3cb6; seg002, seg082
