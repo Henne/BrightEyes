@@ -165,11 +165,11 @@ signed short DNG07_handler(void)
 
 		DNG_dec_level();
 
-	} else if (target_pos == DNG_POS(1,6,1) && target_pos != gs_dng_handled_pos && ds_readb(DNG07_MUELIXIER_FLAG) != 2)
+	} else if (target_pos == DNG_POS(1,6,1) && target_pos != gs_dng_handled_pos && (gs_dng07_muelexir_flag != 2))
 	{
-		if (!ds_readb(DNG07_MUELIXIER_FLAG))
+		if (!gs_dng07_muelexir_flag)
 		{
-			ds_writeb(DNG07_MUELIXIER_FLAG, 1);
+			gs_dng07_muelexir_flag = 1;
 
 			GUI_output(get_tx(2));
 
@@ -177,7 +177,7 @@ signed short DNG07_handler(void)
 			{
 				get_item(ITEM_MU_ELIXIR, 1, 1);
 
-				ds_writeb(DNG07_MUELIXIER_FLAG, 2);
+				gs_dng07_muelexir_flag = 2;
 			}
 
 			/* ORIGINAL-BUG: forgot to set hero */
@@ -196,23 +196,23 @@ signed short DNG07_handler(void)
 			{
 				get_item(ITEM_MU_ELIXIR, 1, 1);
 
-				ds_writeb(DNG07_MUELIXIER_FLAG, 2);
+				gs_dng07_muelexir_flag = 2;
 			}
 		}
 
-	} else if ((target_pos == DNG_POS(2,3,13) || target_pos == DNG_POS(2,2,13)) && target_pos != gs_dng_handled_pos && !ds_readb(DNG07_FLICKER_FLAG))
+	} else if ((target_pos == DNG_POS(2,3,13) || target_pos == DNG_POS(2,2,13)) && target_pos != gs_dng_handled_pos && !gs_dng07_flicker_flag)
 	{
-		ds_writeb(DNG07_FLICKER_FLAG, 1);
+		gs_dng07_flicker_flag = 1;
 
 		GUI_output(get_tx(4));
 
-	} else if (target_pos == DNG_POS(2,1,11) && target_pos != gs_dng_handled_pos && !ds_readb(DNG07_ANTIMUELIXIER_FLAG))
+	} else if (target_pos == DNG_POS(2,1,11) && target_pos != gs_dng_handled_pos && !gs_dng07_antimuelexir_flag)
 	{
 		if (GUI_bool(get_tx(5)))
 		{
 			get_item(ITEM_MU_ELIXIR_BAD, 1, 1);
 
-			ds_writeb(DNG07_ANTIMUELIXIER_FLAG, 1);
+			gs_dng07_antimuelexir_flag = 1;
 		}
 
 	} else if (target_pos == DNG_POS(2,10,1) && target_pos != gs_dng_handled_pos)

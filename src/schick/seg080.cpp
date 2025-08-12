@@ -358,7 +358,7 @@ signed short DNG05_handler(void)
 			add_party_money(20L);
 		}
 
-	} else if (pos == DNG_POS(0,5,12) && pos != gs_dng_handled_pos && !ds_readb(DNG05_PROVIANT_FLAG))
+	} else if (pos == DNG_POS(0,5,12) && pos != gs_dng_handled_pos && !gs_dng05_proviant_flag)
 	{
 		if (GUI_bool(get_tx(2)))
 		{
@@ -366,19 +366,19 @@ signed short DNG05_handler(void)
 
 			get_item(ITEM_FOOD_PACKAGE, 1, 10);
 
-			ds_writeb(DNG05_PROVIANT_FLAG, 1);
+			gs_dng05_proviant_flag = 1;
 		}
 
-	} else if (pos == DNG_POS(0,9,7) && pos != gs_dng_handled_pos && !ds_readb(DNG05_BATS_FLAG))
+	} else if (pos == DNG_POS(0,9,7) && pos != gs_dng_handled_pos && !gs_dng05_bats_flag)
 	{
 		if (GUI_bool(get_tx(4)))
 		{
 			GUI_output(get_tx(5));
 
-			ds_writeb(DNG05_BATS_FLAG, 1);
+			gs_dng05_bats_flag = 1;
 		}
 
-	} else if (pos == DNG_POS(0,3,9) && pos != gs_dng_handled_pos && !ds_readb(DNG05_GOD_FLAG))
+	} else if (pos == DNG_POS(0,3,9) && pos != gs_dng_handled_pos && !gs_dng05_god_flag)
 	{
 		do {
 			tmp = GUI_radio(get_tx(6), 2, get_tx(7), get_tx(8));
@@ -389,7 +389,7 @@ signed short DNG05_handler(void)
 
 		GUI_output(get_tx(9));
 
-		ds_writeb(DNG05_GOD_FLAG, 1);
+		gs_dng05_god_flag = 1;
 
 	} else if (pos == DNG_POS(0,8,5) && pos != gs_dng_handled_pos)
 	{

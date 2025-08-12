@@ -386,12 +386,12 @@
 //#define DNG06_LEVER_FLAG                (0x3cac)    /* unsigned char; {0,1} */
 //#define DNG06_BOOK_FLAG                 (0x3cad)    /* unsigned char; {0,1} */
 //#define DNG06_FIGHT19_FLAG              (0x3cae)    /* unsigned char; {0,1} */
-#define DNG05_PROVIANT_FLAG             (0x3caf)    /* unsigned char; {0,1} */
-#define DNG05_BATS_FLAG                 (0x3cb0)    /* unsigned char; {0,1} */
-#define DNG05_GOD_FLAG                  (0x3cb1)    /* unsigned char; {0,1} */
-#define DNG07_MUELIXIER_FLAG            (0x3cb2)    /* unsigned char; {0,1,2} */
-#define DNG07_ANTIMUELIXIER_FLAG        (0x3cb3)    /* unsigned char; {0,1} */
-#define DNG07_FLICKER_FLAG              (0x3cb4)    /* unsigned char; {0,1} */
+//#define DNG05_PROVIANT_FLAG             (0x3caf)    /* unsigned char; {0,1} */
+//#define DNG05_BATS_FLAG                 (0x3cb0)    /* unsigned char; {0,1} */
+//#define DNG05_GOD_FLAG                  (0x3cb1)    /* unsigned char; {0,1} */
+//#define DNG07_MUELIXIER_FLAG            (0x3cb2)    /* unsigned char; {0,1,2} */
+//#define DNG07_ANTIMUELIXIER_FLAG        (0x3cb3)    /* unsigned char; {0,1} */
+//#define DNG07_FLICKER_FLAG              (0x3cb4)    /* unsigned char; {0,1} */
 //#define DNG07_POISON_FLAG               (0x3cb5)    /* unsigned char; {0,1} */
 //#define DNG07_POISON_TIMER              (0x3cb6)    /* unsigned long */
 #define DNG08_BED_00                    (0x3cba)    /* unsigned char; {0,1} */
