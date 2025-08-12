@@ -2251,7 +2251,7 @@ void do_timers(void)
 			/* What about herokeeping()? Original-Bug? */
 
 			/* decrement unicorn timer */
-			if (gs_unicorn_get_map != 0 && gs_unicorn_timer != 0)
+			if (gs_unicorn_get_map && gs_unicorn_timer)
 			{
 				gs_unicorn_timer--;
 			}
@@ -2265,11 +2265,11 @@ void do_timers(void)
 			}
 
 			/* barrels with orc muck in the orc dungeon */
-			if (ds_readbs(DNG08_TIMER1) != 0) {
-				dec_ds_bs_post(DNG08_TIMER1);
+			if (gs_dng08_timer1) {
+				gs_dng08_timer1--;
 			}
-			if (ds_readbs(DNG08_TIMER2) != 0) {
-				dec_ds_bs_post(DNG08_TIMER2);
+			if (gs_dng08_timer2) {
+				gs_dng08_timer2--;
 			}
 		}
 
@@ -3496,11 +3496,11 @@ void timewarp(Bit32s time)
 		}
 
 		/* timer for barrels with orc muck in the orc dungeon */
-		if (ds_readbs(DNG08_TIMER1) != 0) {
-			dec_ds_bs_post(DNG08_TIMER1);
+		if (gs_dng08_timer1) {
+			gs_dng08_timer1--;
 		}
-		if (ds_readbs(DNG08_TIMER2) != 0) {
-			dec_ds_bs_post(DNG08_TIMER2);
+		if (gs_dng08_timer2) {
+			gs_dng08_timer2--;
 		}
 	}
 #endif
@@ -3577,7 +3577,7 @@ void timewarp_until_time_of_day(Bit32s time)
 	}
 
 	/* Original-Bug:
-	 * forgotten hourly timers: UNICORN_TIMER, gs_dng02_sphere_timer, DNG08_TIMER1, DNG08_TIMER2
+	 * forgotten hourly timers: UNICORN_TIMER, gs_dng02_sphere_timer, gs_dng08_timer1, gd_dng08_timer2
 	 * see do_timers(..).
 	 * For a bugfix either add code here (and in timewarp(..)), or modify do_timers(..)
 	 * */

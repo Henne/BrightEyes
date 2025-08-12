@@ -391,6 +391,26 @@ extern Bit8u  gs_dng07_antimuelexir_flag;	//ds:0x3cb3; seg082
 extern Bit8u  gs_dng07_flicker_flag;		//ds:0x3cb4; seg082
 extern Bit8s  gs_dng07_poison_flag;		//ds:0x3cb5; seg082
 extern Bit32s gs_dng07_poison_timer;		//ds:0x3cb6; seg002, seg082
+extern Bit8u  gs_dng08_bed_00;			//ds:0x3cba; seg083
+extern Bit8u  gs_dng08_bed_01;			//ds:0x3cbb; seg083
+extern Bit8u  gs_dng08_bed_02;			//ds:0x3cbc; seg083
+extern Bit8u  gs_dng08_bed_03;			//ds:0x3cbd; seg083
+extern Bit8u  gs_dng08_bed_04;			//ds:0x3cbe; seg083
+extern Bit8u  gs_dng08_bed_05;			//ds:0x3cbf; seg083
+extern Bit8u  gs_dng08_bed_06;			//ds:0x3cc0; seg083
+extern Bit8u  gs_dng08_bed_07;			//ds:0x3cc1; seg083
+extern Bit8u  gs_dng08_bed_08;			//ds:0x3cc2; seg083
+extern Bit8u  gs_dng08_bed_09;			//ds:0x3cc3; seg083
+extern Bit8u  gs_dng08_bed_10;			//ds:0x3cc4; seg083
+extern Bit8u  gs_dng08_bed_11;			//ds:0x3cc5; seg083
+extern Bit8u  gs_dng08_timer1;			//ds:0x3cc6; seg002, seg083
+extern Bit8u  gs_dng08_timer2;			//ds:0x3cc7; seg002, seg083
+extern Bit8u  gs_dng08_bundles_done;		//ds:0x3cc8; seg083
+extern Bit8u  gs_dng08_ballista_done;		//ds:0x3cc9; seg083
+extern Bit8u  gs_dng08_chest2_looted;		//ds:0x3cca; seg083
+extern Bit8u  gs_dng08_secret_door;		//ds:0x3ccb; seg083
+extern Bit8u  gs_dng08_chest0_looted;		//ds:0x3ccc; seg083
+extern Bit8u  gs_dng08_chest35_looted;		//ds:0x3ccd; seg083
 
 extern Bit8u  gs_tevent014_flag;		//ds:0x3da8; seg110
 

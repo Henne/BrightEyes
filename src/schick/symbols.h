@@ -394,26 +394,26 @@
 //#define DNG07_FLICKER_FLAG              (0x3cb4)    /* unsigned char; {0,1} */
 //#define DNG07_POISON_FLAG               (0x3cb5)    /* unsigned char; {0,1} */
 //#define DNG07_POISON_TIMER              (0x3cb6)    /* unsigned long */
-#define DNG08_BED_00                    (0x3cba)    /* unsigned char; {0,1} */
-#define DNG08_BED_01                    (0x3cbb)    /* unsigned char; {0,1} */
-#define DNG08_BED_02                    (0x3cbc)    /* unsigned char; {0,1} */
-#define DNG08_BED_03                    (0x3cbd)    /* unsigned char; {0,1} */
-#define DNG08_BED_04                    (0x3cbe)    /* unsigned char; {0,1} */
-#define DNG08_BED_05                    (0x3cbf)    /* unsigned char; {0,1} */
-#define DNG08_BED_06                    (0x3cc0)    /* unsigned char; {0,1} */
-#define DNG08_BED_07                    (0x3cc1)    /* unsigned char; {0,1} */
-#define DNG08_BED_08                    (0x3cc2)    /* unsigned char; {0,1} */
-#define DNG08_BED_09                    (0x3cc3)    /* unsigned char; {0,1} */
-#define DNG08_BED_10                    (0x3cc4)    /* unsigned char; {0,1} */
-#define DNG08_BED_11                    (0x3cc5)    /* unsigned char; {0,1} */
-#define DNG08_TIMER1                    (0x3cc6)    /* unsigned char; {0, 1, ..., 24} */
-#define DNG08_TIMER2                    (0x3cc7)    /* unsigned char; {0, 1, ..., 24} */
-#define DNG08_BUNDLES_DONE              (0x3cc8)    /* unsigned char; {0,1} */
-#define DNG08_BALLISTA_DONE             (0x3cc9)    /* unsigned char; {0,1} */
-#define DNG08_CHEST2_LOOTED             (0x3cca)    /* unsigned char; {0,1} */
-#define DNG08_SECRET_DOOR               (0x3ccb)    /* signed char; {0,1 = found,2 = opened} */
-#define DNG08_CHEST0_LOOTED             (0x3ccc)    /* unsigned char; {0,1} */
-#define DNG08_CHEST35_LOOTED            (0x3ccd)    /* unsigned char; {0,1,2,3} */
+//#define DNG08_BED_00                    (0x3cba)    /* unsigned char; {0,1} */
+//#define DNG08_BED_01                    (0x3cbb)    /* unsigned char; {0,1} */
+//#define DNG08_BED_02                    (0x3cbc)    /* unsigned char; {0,1} */
+//#define DNG08_BED_03                    (0x3cbd)    /* unsigned char; {0,1} */
+//#define DNG08_BED_04                    (0x3cbe)    /* unsigned char; {0,1} */
+//#define DNG08_BED_05                    (0x3cbf)    /* unsigned char; {0,1} */
+//#define DNG08_BED_06                    (0x3cc0)    /* unsigned char; {0,1} */
+//#define DNG08_BED_07                    (0x3cc1)    /* unsigned char; {0,1} */
+//#define DNG08_BED_08                    (0x3cc2)    /* unsigned char; {0,1} */
+//#define DNG08_BED_09                    (0x3cc3)    /* unsigned char; {0,1} */
+//#define DNG08_BED_10                    (0x3cc4)    /* unsigned char; {0,1} */
+//#define DNG08_BED_11                    (0x3cc5)    /* unsigned char; {0,1} */
+//#define DNG08_TIMER1                    (0x3cc6)    /* unsigned char; {0, 1, ..., 24} */
+//#define DNG08_TIMER2                    (0x3cc7)    /* unsigned char; {0, 1, ..., 24} */
+//#define DNG08_BUNDLES_DONE              (0x3cc8)    /* unsigned char; {0,1} */
+//#define DNG08_BALLISTA_DONE             (0x3cc9)    /* unsigned char; {0,1} */
+//#define DNG08_CHEST2_LOOTED             (0x3cca)    /* unsigned char; {0,1} */
+//#define DNG08_SECRET_DOOR               (0x3ccb)    /* signed char; {0,1 = found,2 = opened} */
+//#define DNG08_CHEST0_LOOTED             (0x3ccc)    /* unsigned char; {0,1} */
+//#define DNG08_CHEST35_LOOTED            (0x3ccd)    /* unsigned char; {0,1,2,3} */
 #define DASPOTA_LOCATION01_LOOT         (0x3cce)    /* char[29] */
 #define DASPOTA_LOCATION02_LOOT         (0x3ceb)    /* char[15] */
 #define DASPOTA_LOCATION03_LOOT         (0x3cfa)    /* char[15] */
