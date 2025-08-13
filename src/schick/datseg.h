@@ -714,6 +714,9 @@ extern signed short g_dng_level_changed;	//ds:0x9312; seg075, seg076
 
 extern const char g_dng01_str_marbo[6];		//ds:0x93d7; seg077
 
+extern signed int g_dng12_obstacle_tries;	//ds:0x9d43; seg090 SHOULD BE IN GAME STATE
+extern signed int g_dng12_watertrap_bak;	//ds:0x9d45; seg090 SHOULD BE IN GAME STATE
+
 extern struct struct_land_route g_land_routes[59];	//ds:0x9dc6; seg093, seg094
 
 extern struct mouse_action g_action_table_travelmap[35];	//ds:0xa50f; seg093

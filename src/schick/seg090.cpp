@@ -85,10 +85,9 @@ signed short DNG12_handler(void)
 			/* water trap room, activate */
 			gs_dng12_watertrap_water_runs = 1;
 
-			if (gs_dng12_watertrap_timer / MINUTES(5) != ds_readws(DNG12_WATERTRAP_BAK))
+			if (gs_dng12_watertrap_timer / MINUTES(5) != g_dng12_watertrap_bak)
 			{
-
-				ds_writews(DNG12_WATERTRAP_BAK, (signed short)(gs_dng12_watertrap_timer / MINUTES(5)));
+				g_dng12_watertrap_bak = gs_dng12_watertrap_timer / MINUTES(5);
 
 				/* warning according to water level */
 				GUI_output(gs_dng12_watertrap_timer == MINUTES(0) ? get_tx(20) :
@@ -306,24 +305,20 @@ signed short DNG12_handler(void)
 			{
 
 				/* TODO: Original-Bug: this counter is not in the savegame */
-				if (inc_ds_ws(DNG12_OBSTACLE_TRIES) < 3)
+				if (++g_dng12_obstacle_tries < 3)
 				{
 					/* the hero must at least fall three times into pit */
-					sprintf(g_dtp2,
-						get_tx(25),
-						(char*)hero + HERO_NAME2,
-						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
+					sprintf(g_dtp2,	get_tx(25), (char*)hero + HERO_NAME2,
+						GUI_get_ptr(host_readbs(hero + HERO_SEX), 0),
+						GUI_get_ptr(host_readbs(hero + HERO_SEX), 2));
 				} else {
 					/* the hero falls again into the pit */
 #ifndef M302de_FEATURE_MOD
-					sprintf(g_dtp2,
-						get_tx(31),
-						(char*)hero + HERO_NAME2,
-						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),
-						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
+					sprintf(g_dtp2,	get_tx(31), (char*)hero + HERO_NAME2,
+						GUI_get_ptr(host_readbs(hero + HERO_SEX), 0),
+						GUI_get_ptr(host_readbs(hero + HERO_SEX), 2),
+						GUI_get_ptr(host_readbs(hero + HERO_SEX), 0),
+						GUI_get_ptr(host_readbs(hero + HERO_SEX), 2));
 #else
 					/* Feature Mod 7: The following is a translation of a text block in OBER.DTX
 					 * of the English version, which has not been present in the German one.

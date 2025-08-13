@@ -4853,8 +4853,8 @@ struct struct_chest g_dng12_specialchests[3] = {
 	{ 0x1e07, 0, NULL, NULL, NULL, 0, 40000, 0 },
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x9d04
-signed short g_dng12_obstacle_tries = 0; // ds:0x9d43
-signed short g_dng12_watertrap_bak = 0; // ds:0x9d45
+signed int g_dng12_obstacle_tries = 0; // ds:0x9d43
+signed int g_dng12_watertrap_bak = 0; // ds:0x9d45
 unsigned char g_unkn_062[1] = { 0x00 }; // ds:0x9d47
 struct struct_chest g_dng13_specialchests[3] = {
 	{ 0x0b05, 1, DNG13_corpse0, NULL, DNG13_chest0, 0, 0, 0 },

@@ -1170,15 +1170,15 @@
 #define DNG10_SPECIALCHESTS             (0x97d6)    /* struct(21)[6] */
 #define DNG11_SPECIALCHESTS             (0x9854)    /* struct(21)[15] */
 // ?1
-#define DNG14_SPECIALCHESTS             (0x9990)    /* struct(21)[9] */
+//#define DNG14_SPECIALCHESTS             (0x9990)    /* struct(21)[9] */
 // ?1
-#define DNG15_SPECIALCHESTS             (0x9a4e)    /* struct(21)[33] */
+//#define DNG15_SPECIALCHESTS             (0x9a4e)    /* struct(21)[33] */
 // ?1
-#define DNG12_SPECIALCHESTS             (0x9d04)    /* struct(21)[3] */
-#define DNG12_OBSTACLE_TRIES            (0x9d43)    /* signed short */
-#define DNG12_WATERTRAP_BAK             (0x9d45)    /* signed short */
+//#define DNG12_SPECIALCHESTS             (0x9d04)    /* struct(21)[3] */
+//#define DNG12_OBSTACLE_TRIES            (0x9d43)    /* signed short */
+//#define DNG12_WATERTRAP_BAK             (0x9d45)    /* signed short */
 // ?1
-#define DNG13_SPECIALCHESTS             (0x9d48)    /* struct(21)[2] */
+//#define DNG13_SPECIALCHESTS             (0x9d48)    /* struct(21)[2] */
 // ?18
 #define DNG_SPECIALCHEST_INDEX          (0x9d84)    /* Bit8u*[16] */
 #define STR_SINGLE_SPACE                (0x9dc4)    /* char[2]; " " */
