@@ -63,6 +63,17 @@ struct struct_shopping_cart {
 	int quantity;
 };
 
+struct struct_chest {
+	signed int pos;
+	signed char mod;
+	void (*func1)(Bit8u*);
+	void (*func2)(void);
+	void (*func3)(Bit8u*);
+	signed int ap;
+	signed int money;
+	signed int food;
+};
+
 struct struct_route_tevent {
 	Bit16s place;
 	Bit16s tevent_id;

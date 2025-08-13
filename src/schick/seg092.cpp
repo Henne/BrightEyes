@@ -369,19 +369,6 @@ signed short hero_has_lockpicks(Bit8u *hero)
 	return retval;
 }
 
-void (*func)(Bit8u*);
-
-struct chest {
-	signed short pos;
-	signed char mod;
-	void (*func1)(Bit8u*);
-	void (*func2)(void);
-	void (*func3)(Bit8u*);
-	unsigned short ap;
-	unsigned short money;
-	signed short food;
-};
-
 /* handle special chest */
 void seg092_06b4(signed short a1)
 {
@@ -454,7 +441,7 @@ void seg092_06b4(signed short a1)
 		chest_ptr += 21;
 	} while (host_readws(chest_ptr) != -1);
 #else
-	} while (host_readws((Bit8u*)((struct chest*)chest_ptr)++) != -1);
+	} while (host_readws((Bit8u*)((struct struct_chest*)chest_ptr)++) != -1);
 #endif
 
 	if (l4 == 0 && g_get_extra_loot) {
