@@ -623,7 +623,7 @@ void tevent_144(void)
 
 			} while (grimring_hero_pos == 6);
 
-			ds_writed(MAIN_ACTING_HERO, (Bit32u)get_hero(grimring_hero_pos));
+			gs_main_acting_hero = get_hero(grimring_hero_pos);
 
 			final_intro();
 			if (!TRV_fight_event(FIGHTS_F144, 144)) {
@@ -641,6 +641,10 @@ void tevent_144(void)
 				GUI_output(get_tx2(18));
 				ds_writews(GAME_STATE, GAME_STATE_DEAD);
 			}
+
+#if !defined(__BORLANDC__)
+			gs_main_acting_hero = NULL;
+#endif
 		}
 	}
 }

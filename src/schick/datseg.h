@@ -417,7 +417,8 @@ extern Bit8u  gs_tevent014_flag;		//ds:0x3da8; seg110
 #if defined(__BORLANDC__)
 extern Bit8u *gs_random_tlk_hero;		//ds:0xe318; seg0030, seg116
 #endif
-extern Bit8u *gs_ruin_hero;			//ds:0xe31c; seg0030, seg117
+extern Bit8u *gs_ruin_hero;			//ds:0xe31c; seg030, seg117
+extern Bit8u *gs_main_acting_hero;		//ds:0xe320; seg002, seg033, seg039, seg051, seg092, seg113, seg116
 
 extern Bit8u  gs_palette_floor[3 * 32];		//ds:0x3e53; seg002
 extern Bit8u  gs_palette_buildings[3 * 32];	//ds:0x3eb3; seg002, seg028, seg066

@@ -61,10 +61,14 @@ void chest_poisoned1(void)
 	print_msg_with_first_hero(get_ttx(520));
 
 	/* the first hero gets wounded with 2W6 */
-	sub_hero_le((Bit8u*)ds_writed(MAIN_ACTING_HERO, (Bit32u)get_first_hero_available_in_group()), dice_roll(2, 6, 0));
+	sub_hero_le((Bit8u*)(gs_main_acting_hero = get_first_hero_available_in_group()), dice_roll(2, 6, 0));
 
 	/* and gets poisoned */
-	hero_gets_poisoned((Bit8u*)ds_readd(MAIN_ACTING_HERO), 1);
+	hero_gets_poisoned((Bit8u*)gs_main_acting_hero, 1);
+
+#if !defined(__BORLANDC__)
+	gs_main_acting_hero = NULL;
+#endif
 }
 
 void chest_poisoned2(void)
@@ -73,10 +77,14 @@ void chest_poisoned2(void)
 	print_msg_with_first_hero(get_ttx(520));
 
 	/* the first hero gets wounded with 2W6 */
-	sub_hero_le((Bit8u*)ds_writed(MAIN_ACTING_HERO, (Bit32u)get_first_hero_available_in_group()), dice_roll(2, 6, 0));
+	sub_hero_le((Bit8u*)(gs_main_acting_hero = get_first_hero_available_in_group()), dice_roll(2, 6, 0));
 
 	/* and gets poisoned */
-	hero_gets_poisoned((Bit8u*)ds_readd(MAIN_ACTING_HERO), 2);
+	hero_gets_poisoned((Bit8u*)gs_main_acting_hero, 2);
+
+#if !defined(__BORLANDC__)
+	gs_main_acting_hero = NULL;
+#endif
 }
 
 void chest_poisoned3(void)
@@ -85,10 +93,14 @@ void chest_poisoned3(void)
 	print_msg_with_first_hero(get_ttx(520));
 
 	/* the first hero gets wounded with 1W6 */
-	sub_hero_le((Bit8u*)ds_writed(MAIN_ACTING_HERO, (Bit32u)get_first_hero_available_in_group()), dice_roll(1, 6, 0));
+	sub_hero_le((Bit8u*)(gs_main_acting_hero = get_first_hero_available_in_group()), dice_roll(1, 6, 0));
 
 	/* and gets poisoned */
-	hero_gets_poisoned((Bit8u*)ds_readd(MAIN_ACTING_HERO), 8);
+	hero_gets_poisoned((Bit8u*)gs_main_acting_hero, 8);
+
+#if !defined(__BORLANDC__)
+	gs_main_acting_hero = NULL;
+#endif
 }
 
 void chest_protected_brutal(void)
@@ -106,10 +118,14 @@ void chest_petrified(void)
 	print_msg_with_first_hero(get_ttx(776));
 
 	/* save pointer of the first hero */
-	ds_writed(MAIN_ACTING_HERO, (Bit32u)get_first_hero_available_in_group());
+	gs_main_acting_hero = get_first_hero_available_in_group();
 
 	/* and make him petrified */
-	or_ptr_bs((Bit8u*)ds_readd(MAIN_ACTING_HERO) + HERO_FLAGS1, 0x04); /* set 'petrified' flag */
+	or_ptr_bs((Bit8u*)gs_main_acting_hero + HERO_FLAGS1, 0x04); /* set 'petrified' flag */
+
+#if !defined(__BORLANDC__)
+	gs_main_acting_hero = NULL;
+#endif
 }
 
 void chest_ignifax_normal(void)

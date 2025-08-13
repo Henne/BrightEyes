@@ -548,7 +548,7 @@
 #define TEVENT077_FIGHT_FLAG            (0x3e17)    /* unsigned char; {0,1} */
 //#define RANDOM_TLK_HERO                 (0x3e18)    /* Bit8u* */
 //#define RUIN_HERO                       (0x3e1c)    /* Bit8u* */
-#define MAIN_ACTING_HERO                (0x3e20)    /* Bit8u* */
+//#define MAIN_ACTING_HERO                (0x3e20)    /* Bit8u* */
 #define TEVENT073_CORPSE                (0x3e24)    /* unsigned char[3] */
 #define TEVENT014_CHEST                 (0x3e27)    /* unsigned char[4] */
 #define TEVENT064_HUT_CONTENT           (0x3e2b)    /* unsigned char[19] */

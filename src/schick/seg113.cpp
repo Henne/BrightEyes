@@ -45,11 +45,11 @@ void tevent_080(void)
 			ds_readb(TEVENT080_FLAG) != 0)
 	{
 		ds_writeb(TEVENT080_FLAG, 1);
-		ds_writed(MAIN_ACTING_HERO, 0);
+		gs_main_acting_hero = NULL;
 
 		TRV_found_replenish_place(0);
 
-		hero = (Bit8u*)ds_readd(MAIN_ACTING_HERO);
+		hero = (Bit8u*)gs_main_acting_hero;
 
 		if ((hero && !ds_readb(TEVENT080_TATZELWURM) && test_skill(hero, TA_FAEHRTENSUCHEN, 5) > 0) ||
 			ds_readb(TEVENT080_TATZELWURM) == 1)

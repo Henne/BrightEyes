@@ -508,7 +508,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 				if (tries < 2) {
 
 					timewarp(HOURS(1));
-					ds_writed(MAIN_ACTING_HERO, (Bit32u)(hero = get_hero(hero_pos)));
+					gs_main_acting_hero = hero = get_hero(hero_pos);
 					g_wildcamp_replstatus[hero_pos] = 1;
 					retval = 1;
 
