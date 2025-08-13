@@ -4862,8 +4862,24 @@ struct struct_chest g_dng13_specialchests[3] = {
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0}
 }; // ds:0x9d48
 unsigned char g_unkn_063[1] = { 0x00 }; // ds:0x9d57
-long g_dng_specialchest_index[15] = { 0x14fc9314, 0x14fc93d8, 0x14fc9480, 0x14fc95ba, 0x00000000, 0x14fc9610, 0x14fc9668, 0x14fc9692, 0x14fc972e, 0x14fc97d6, 0x14fc9854, 0x14fc9d04, 0x14fc9d48, 0x14fc9990, 0x14fc9a4e }; // ds:0x9d84; Bit8u*
-char g_str_single_space[2] = " "; // ds:0x9dc4
+Bit8u *g_dng_specialchest_index[15] = {
+	(Bit8u*)0x14fc9314,
+	(Bit8u*)0x14fc93d8,
+	(Bit8u*)0x14fc9480,
+	(Bit8u*)0x14fc95ba,
+	NULL,
+	(Bit8u*)0x14fc9610,
+	(Bit8u*)0x14fc9668,
+	(Bit8u*)0x14fc9692,
+	(Bit8u*)0x14fc972e,
+	(Bit8u*)0x14fc97d6,
+	(Bit8u*)0x14fc9854,
+	(Bit8u*)g_dng12_specialchests,
+	(Bit8u*)g_dng13_specialchests,
+	(Bit8u*)g_dng14_specialchests,
+	(Bit8u*)g_dng15_specialchests
+}; // ds:0x9d84; Bit8u*
+const char g_str_single_space[2] = " "; // ds:0x9dc4
 struct struct_land_route g_land_routes[59] = {
 	{ TOWNS_THORWAL            , TOWNS_VAERMHAG           ,  34,  1, 10,  25,  0, 10, 100 }, //  1
 	{ TOWNS_VAERMHAG           , TOWNS_VARNHEIM           ,  40,  1, 10,  20,  0, 10, 100 }, //  2

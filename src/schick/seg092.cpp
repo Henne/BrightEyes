@@ -379,14 +379,14 @@ void seg092_06b4(signed short a1)
 	Bit8u* chest_ptr;
 	Bit8u *ptr;
 
-	chest_ptr = (Bit8u*)ds_readd(DNG_SPECIALCHEST_INDEX + 4 * gs_dungeon_index);
+	chest_ptr = g_dng_specialchest_index[gs_dungeon_index - 1];
 	ptr = g_dng_map;
 	g_get_extra_loot = 0;
 	x = gs_x_target;
 	y = gs_y_target;
 
 	if (a1 != 0) {
-		switch(gs_direction) {
+		switch (gs_direction) {
 			case NORTH: y--; break;
 			case EAST: x++; break;
 			case SOUTH: y++; break;
@@ -617,7 +617,7 @@ void loot_multi_chest(Bit8u *chest, char *msg)
 			{
 				my_itoa(item_cnt, names[item_no], 10);
 
-				strcat(names[item_no], (char*)p_datseg + STR_SINGLE_SPACE);
+				strcat(names[item_no], g_str_single_space);
 			}
 
 			strcat(names[item_no++], GUI_name_plural( ((signed short)(item_cnt > 1 ? (unsigned short)1 : (unsigned short)0)) ? 4 : 0, get_itemname(i)));

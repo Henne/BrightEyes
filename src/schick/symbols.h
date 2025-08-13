@@ -1180,8 +1180,8 @@
 // ?1
 //#define DNG13_SPECIALCHESTS             (0x9d48)    /* struct(21)[2] */
 // ?18
-#define DNG_SPECIALCHEST_INDEX          (0x9d84)    /* Bit8u*[16] */
-#define STR_SINGLE_SPACE                (0x9dc4)    /* char[2]; " " */
+//#define DNG_SPECIALCHEST_INDEX          (0x9d84)    /* Bit8u*[16] */
+//#define STR_SINGLE_SPACE                (0x9dc4)    /* char[2]; " " */
 //#define LAND_ROUTES                     (0x9dc6)    /* struct(9)[59]; struct{char from, to, distance, speed_mod, encounters, u1, u2, fights, u3;} */
 #define SIGNPOSTS_LINKED_LAND_ROUTES    (0x9fd9)    /* char[219]; 105 arrays, each terminated by -1 */
 #define SIGNPOSTS                       (0xa0b4)    /* struct(6)[106]; struct{char town, typeindex; Bit8u* land_routes;} */
