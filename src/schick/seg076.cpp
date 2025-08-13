@@ -138,7 +138,7 @@ void DNG_door(signed short action)
 				if (ds_readws(DNG_MENU_MODE) != DNG_MENU_MODE_UNLOCK_DOOR) {
 					/* either 'open door' or 'close door' */
 
-					if (gs_dungeon_index == DUNGEONS_HYGGELIKS_RUINE && pos == DNG_POS(1,9,3) && ds_readb(DNG15_UNKNOWN_FLAG) != 0)
+					if (gs_dungeon_index == DUNGEONS_HYGGELIKS_RUINE && pos == DNG_POS(1,9,3) && gs_dng15_unknown_flag)
 					{
 						GUI_output(get_tx(18));
 
@@ -538,7 +538,7 @@ signed short DNG_step(void)
 		{
 			GUI_output(get_tx(33));
 
-			ds_writeb(DNG15_REACHED_HANDS, 1);
+			gs_dng15_reached_hands = 1;
 		} else {
 			GRP_merge();
 #ifdef M302de_ORIGINAL_BUGFIX
@@ -647,7 +647,7 @@ signed short DNG_step(void)
 				*(g_dng_map_ptr + MAP_POS(x,y)) |= (0x02);
 				/* set bit 1 'unlocked' */
 			}
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_7 && (!ds_readb(DNG15_LEVER_SOUTH) || !ds_readb(DNG15_LEVER_NORTH)))
+		} else if (ds_readws(ACTION) == ACTION_ID_ICON_7 && (!gs_dng15_lever_south || !gs_dng15_lever_north))
 		{
 			DNG15_riddle();
 		}
@@ -1007,7 +1007,7 @@ void DNG_see_lever(void)
 
 	if (gs_dungeon_index == DUNGEONS_HYGGELIKS_RUINE &&
 		(target_pos == DNG_POS(1,8,1) || target_pos == DNG_POS(1,8,5)) &&
-		(!ds_readb(DNG15_LEVER_SOUTH) || !ds_readb(DNG15_LEVER_NORTH)))
+		(!gs_dng15_lever_south || !gs_dng15_lever_north))
 	{
 		if (ds_readbs((NEW_MENU_ICONS + 6)) == MENU_ICON_NONE)
 		{

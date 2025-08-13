@@ -703,16 +703,16 @@
 #define DNG11_CHEST12                   (0x41ad)    /* unsigned char[13] */
 #define DNG11_CHEST13                   (0x41ba)    /* unsigned char[6] */
 #define DNG11_CHEST14                   (0x41c0)    /* unsigned char[6] */
-#define DNG15_TOOK_CURSED_MONEY         (0x41c6)    /* unsigned char; {0,1} */
-#define DNG15_UNKNOWN_FLAG              (0x41c7)    /* unsigned char; {0,1} */
-#define DNG15_REACHED_HANDS             (0x41c8)    /* unsigned char; {0,1} */
-#define DNG15_LEVER_SOUTH               (0x41c9)    /* unsigned char; {0,1} */
-#define DNG15_LEVER_NORTH               (0x41ca)    /* unsigned char; {0,1} */
-#define DNG15_TOOK_HOE                  (0x41cb)    /* unsigned char; {0,1} */
-#define DNG15_CEILINGS_A                (0x41cc)    /* unsigned char[18]; {0, 1, 2, 3, 4} */
-#define DNG15_CURSED_MONEY_A            (0x41de)    /* unsigned char[6]; {0,1} */
-#define DNG15_UNDEAD_FIGHT              (0x41e4)    /* unsigned char; {0,1} */
-#define DNG15_CHEST_EQUIPS              (0x41e5)    /* unsigned char[7] */
+//#define DNG15_TOOK_CURSED_MONEY         (0x41c6)    /* unsigned char; {0,1} */
+//#define DNG15_UNKNOWN_FLAG              (0x41c7)    /* unsigned char; {0,1} */
+//#define DNG15_REACHED_HANDS             (0x41c8)    /* unsigned char; {0,1} */
+//#define DNG15_LEVER_SOUTH               (0x41c9)    /* unsigned char; {0,1} */
+//#define DNG15_LEVER_NORTH               (0x41ca)    /* unsigned char; {0,1} */
+//#define DNG15_TOOK_HOE                  (0x41cb)    /* unsigned char; {0,1} */
+//#define DNG15_CEILINGS_A                (0x41cc)    /* unsigned char[18]; {0, 1, 2, 3, 4} */
+//#define DNG15_CURSED_MONEY_A            (0x41de)    /* unsigned char[6]; {0,1} */
+//#define DNG15_UNDEAD_FIGHT              (0x41e4)    /* unsigned char; {0,1} */
+//#define DNG15_CHEST_EQUIPS              (0x41e5)    /* unsigned char[7] */
 //#define DNG01_CHEST1_CONTENT            (0x41ec)    /* unsigned char[8] */
 //#define DNG01_CHEST2_CONTENT            (0x41f4)    /* unsigned char[10] */
 //#define DNG01_CHEST3_CONTENT            (0x41fe)    /* unsigned char[2] */

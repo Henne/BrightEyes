@@ -461,8 +461,18 @@ extern Bit8u  gs_dng10_corpse_flag;		//ds:0x4140; seg078
 extern Bit8u  gs_dng11_waterbarrel1;		//ds:0x415d; seg086
 extern Bit8u  gs_dng11_waterbarrel2;		//ds:0x415e; seg086
 
-extern Bit8u  gs_dng01_chest1_content[8];	//ds:0x41e5; seg077
-extern Bit8u  gs_dng01_chest2_content[10];	//ds:0x41ec; seg077
+extern Bit8u  gs_dng15_took_cursed_money;	//ds:0x41c6; seg032, seg089
+extern Bit8u  gs_dng15_unknown_flag;		//ds:0x41c8; seg076, seg088
+extern Bit8u  gs_dng15_reached_hands;		//ds:0x41c8; seg076, seg088
+extern Bit8u  gs_dng15_lever_south;		//ds:0x41c9; seg076, seg088, seg089
+extern Bit8u  gs_dng15_lever_north;		//ds:0x41ca; seg076, seg088, seg089
+extern Bit8u  gs_dng15_took_hoe;		//ds:0x41cb; seg089
+extern Bit8u  gs_dng15_ceilings[18];		//ds:0x41cc; seg089
+extern Bit8u  gs_dng15_cursed_money[6];		//ds:0x41de; seg089
+extern Bit8u  gs_dng15_undead_fight;		//ds:0x41e4; seg089
+extern Bit8u  gs_dng15_chest_equips[7];		//ds:0x41e5; seg089
+extern Bit8u  gs_dng01_chest1_content[8];	//ds:0x41ec; seg077
+extern Bit8u  gs_dng01_chest2_content[10];	//ds:0x41f4; seg077
 extern Bit8u  gs_dng01_chest3_content[2];	//ds:0x41fe; seg077
 extern Bit8u  gs_dng01_chest5_content[13];	//ds:0x4200; seg077
 extern Bit8u  gs_dng01_chest7_content[5];	//ds:0x420d; seg077

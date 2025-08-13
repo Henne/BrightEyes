@@ -930,7 +930,7 @@ signed short do_fight(signed short fight_id)
 		return 3;
 	}
 
-	if (ds_readb(DNG15_TOOK_CURSED_MONEY) != 0) {
+	if (gs_dng15_took_cursed_money) {
 		return 0;
 	}
 
