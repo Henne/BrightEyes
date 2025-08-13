@@ -21,7 +21,7 @@ void DNG01_chest0_x1(Bit8u*);
 /* 0x48 */
 void DNG01_chest6_x1(Bit8u*);
 /* 0x4d */
-void DNG01_chest6_x2(Bit8u*);
+void DNG01_chest6_x2(void);
 /* 0x52 */
 void DNG01_chest6_x3(Bit8u*);
 

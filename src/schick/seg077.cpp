@@ -321,7 +321,7 @@ void DNG01_chest6_x3(Bit8u* chest)
 #endif
 }
 
-void DNG01_chest6_x2(Bit8u* chest)
+void DNG01_chest6_x2(void)
 {
 	GUI_output(get_tx(3));
 }
