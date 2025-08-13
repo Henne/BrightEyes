@@ -397,8 +397,8 @@ extern Bit8u  gs_dng06_fight19_flag;		//ds:0x3cae; seg081
 extern Bit8u  gs_dng05_proviant_flag;		//ds:0x3caf; seg080
 extern Bit8u  gs_dng05_bats_flag;		//ds:0x3cb0; seg080
 extern Bit8u  gs_dng05_god_flag;		//ds:0x3cb1; seg080
-extern Bit8u  gs_dng07_muelexir_flag;		//ds:0x3cb2; seg082
-extern Bit8u  gs_dng07_antimuelexir_flag;	//ds:0x3cb3; seg082
+extern Bit8u  gs_dng07_muelixier_flag;		//ds:0x3cb2; seg082
+extern Bit8u  gs_dng07_antimuelixier_flag;	//ds:0x3cb3; seg082
 extern Bit8u  gs_dng07_flicker_flag;		//ds:0x3cb4; seg082
 extern Bit8s  gs_dng07_poison_flag;		//ds:0x3cb5; seg082
 extern Bit32s gs_dng07_poison_timer;		//ds:0x3cb6; seg002, seg082

@@ -165,11 +165,11 @@ signed short DNG07_handler(void)
 
 		DNG_dec_level();
 
-	} else if (target_pos == DNG_POS(1,6,1) && target_pos != gs_dng_handled_pos && (gs_dng07_muelexir_flag != 2))
+	} else if (target_pos == DNG_POS(1,6,1) && target_pos != gs_dng_handled_pos && (gs_dng07_muelixier_flag != 2))
 	{
-		if (!gs_dng07_muelexir_flag)
+		if (!gs_dng07_muelixier_flag)
 		{
-			gs_dng07_muelexir_flag = 1;
+			gs_dng07_muelixier_flag = 1;
 
 			GUI_output(get_tx(2));
 
@@ -177,7 +177,7 @@ signed short DNG07_handler(void)
 			{
 				get_item(ITEM_MU_ELIXIR, 1, 1);
 
-				gs_dng07_muelexir_flag = 2;
+				gs_dng07_muelixier_flag = 2;
 			}
 
 			/* ORIGINAL-BUG: forgot to set hero */
@@ -196,7 +196,7 @@ signed short DNG07_handler(void)
 			{
 				get_item(ITEM_MU_ELIXIR, 1, 1);
 
-				gs_dng07_muelexir_flag = 2;
+				gs_dng07_muelixier_flag = 2;
 			}
 		}
 
@@ -206,13 +206,13 @@ signed short DNG07_handler(void)
 
 		GUI_output(get_tx(4));
 
-	} else if (target_pos == DNG_POS(2,1,11) && target_pos != gs_dng_handled_pos && !gs_dng07_antimuelexir_flag)
+	} else if (target_pos == DNG_POS(2,1,11) && target_pos != gs_dng_handled_pos && !gs_dng07_antimuelixier_flag)
 	{
 		if (GUI_bool(get_tx(5)))
 		{
 			get_item(ITEM_MU_ELIXIR_BAD, 1, 1);
 
-			gs_dng07_antimuelexir_flag = 1;
+			gs_dng07_antimuelixier_flag = 1;
 		}
 
 	} else if (target_pos == DNG_POS(2,10,1) && target_pos != gs_dng_handled_pos)
