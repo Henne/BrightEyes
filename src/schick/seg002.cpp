@@ -3896,7 +3896,7 @@ void from_EMS(Bit8u* dst, signed short handle, Bit32s bytes)
 
 		bytes -= 0x4000;
 
-		memmove((void*)EMS_norm_ptr(ptr), (void*)ds_readd(EMS_FRAME_PTR), len);
+		memmove((void*)EMS_norm_ptr(ptr), (void*)g_ems_frame_ptr, len);
 
 	} while (--di != 0);
 #endif
@@ -3923,7 +3923,7 @@ void to_EMS(signed short handle, Bit8u* src, Bit32s bytes)
 
 		bytes -= 0x4000;
 
-		memmove((void*)ds_readd(EMS_FRAME_PTR), (void*)EMS_norm_ptr(ptr), len);
+		memmove((void*)g_ems_frame_ptr, (void*)EMS_norm_ptr(ptr), len);
 
 	} while (--di != 0);
 #endif

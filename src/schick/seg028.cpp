@@ -388,9 +388,7 @@ void unused_store(signed short no)
 	EMS_map_memory(ds_readws(EMS_UNUSED_HANDLE), 0, 3);
 
 	size = width * height;
-	memmove((Bit8u*)((Bit8u*)ds_readd(EMS_FRAME_PTR) + g_ems_unused_offset),
-			(Bit8u*)(g_renderbuf_ptr + 0x7530),
-			size);
+	memmove((Bit8u*)(g_ems_frame_ptr + g_ems_unused_offset), (g_renderbuf_ptr + 0x7530), size);
 
 	ptr = no * 5 + (Bit8u*)ds_readd(EMS_UNUSED_TAB);
 
@@ -415,7 +413,7 @@ Bit8u* unused_load(signed short no)
 	EMS_map_memory(ds_readws(EMS_UNUSED_HANDLE), l_si + 1, 1);
 	EMS_map_memory(ds_readws(EMS_UNUSED_HANDLE), l_si + 2, 2);
 
-	return (Bit8u*)ds_readd(EMS_FRAME_PTR) + 256 * host_readb((Bit8u*)ds_readd(EMS_UNUSED_TAB) + 5 * no + 1);
+	return (Bit8u*)g_ems_frame_ptr + 256 * host_readb((Bit8u*)ds_readd(EMS_UNUSED_TAB) + 5 * no + 1);
 }
 
 void load_map(void)
@@ -450,23 +448,26 @@ void load_map(void)
 
 	g_pp20_index = ARCHIVE_FILE_KARTE_DAT;
 
-	/* if the ems_map_hanlder exists */
-	if (ds_readw(EMS_TRAVEL_MAP) != 0) {
+#if defined(__BORLANDC__)
+	/* if the ems_map_handler exists */
+	if (ds_readw(EMS_TRAVEL_MAP)) {
 		/* get data from EMS */
 		EMS_map_memory(ds_readw(EMS_TRAVEL_MAP), 0, 0);
 		EMS_map_memory(ds_readw(EMS_TRAVEL_MAP), 1, 1);
 		EMS_map_memory(ds_readw(EMS_TRAVEL_MAP), 2, 2);
 		EMS_map_memory(ds_readw(EMS_TRAVEL_MAP), 3, 3);
 		/* set map pointer to EMS */
-		gs_travel_map_ptr = (Bit8u*)ds_readd(EMS_FRAME_PTR);
+		gs_travel_map_ptr = (Bit8u*)g_ems_frame_ptr;
 	} else {
+#endif
 		/* or read KARTE.DAT from file */
 		fd = load_archive_file(ARCHIVE_FILE_KARTE_DAT);
 
 		read_archive_file(fd, (gs_travel_map_ptr = g_renderbuf_ptr), 64098);
 		close(fd);
 
-		if (g_ems_enabled != 0) {
+#if defined(__BORLANDC__)
+		if (g_ems_enabled) {
 
 			if ((ds_writew(EMS_TRAVEL_MAP, alloc_EMS(64100)))) {
 				/* map the map into EMS */
@@ -476,11 +477,11 @@ void load_map(void)
 				EMS_map_memory(ds_readw(EMS_TRAVEL_MAP), 3, 3);
 
 				/* TODO: update window */
-				memmove((void*)((Bit8u*)ds_readd(EMS_FRAME_PTR)),
-					(void*)g_renderbuf_ptr, 320 * 200 + 98);
+				memmove((void*)g_ems_frame_ptr,	(void*)g_renderbuf_ptr, 320 * 200 + 98);
 			}
 		}
 	}
+#endif
 
 	/* load LROUT.DAT */
 	fd = load_archive_file(ARCHIVE_FILE_LROUT_DAT);

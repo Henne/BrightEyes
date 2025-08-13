@@ -607,6 +607,7 @@ extern signed short g_fig_msg_dtps[12];		//ds:0x4b7c; seg005
 extern char g_str_temp_xx[8];			//ds:0x4b95; seg005
 extern signed char g_fig_star_printed;		//ds:0x4b94; seg004, seg005
 
+extern Bit8u* g_ems_frame_ptr;			//ds:0x4baa; seg002, seg010, seg028
 extern struct mouse_action g_action_table_options[10];	//ds:0x4bae; seg025
 
 extern signed short g_tmap_x[10];		//ds:0x4c12; seg025

@@ -3189,7 +3189,7 @@ unsigned char g_unkn_036[1] = { 0x00 }; // ds:0x4b9d
 signed short g_fight_figs_index = -1; // ds:0x4b9e
 unsigned short g_random_schick_seed = 0x327b; // ds:0x4ba0
 char g_emm_sig[8] = { 'E', 'M', 'M', 'X', 'X', 'X', 'X', '0'}; // ds:0x4ba2
-long g_ems_frame_ptr = 0; // ds:0x4baa; Bit8u*
+Bit8u *g_ems_frame_ptr = NULL; // ds:0x4baa; Bit8u*
 struct mouse_action g_action_table_options[10] = {
 	{ 0x05, 0x1e, 0x001c, 0x35, 0x81 },
 	{ 0x05, 0x3c, 0x001c, 0x53, 0x82 },

@@ -890,7 +890,7 @@
 #define FIGHT_FIGS_INDEX                (0x4b9e)    /* signed short */
 #define RANDOM_SCHICK_SEED              (0x4ba0)    /* unsigned short */
 #define EMM_SIG                         (0x4ba2)    /* char[8] */
-#define EMS_FRAME_PTR                   (0x4baa)    /* Bit8u* */
+//#define EMS_FRAME_PTR                   (0x4baa)    /* Bit8u* */
 //#define ACTION_TABLE_OPTIONS            (0x4bae)    /* struct(10)[10]; struct{signed short x1, x2, y1, y2; unsigned short action;} */
 //#define TMAP_X                          (0x4c12)    /* signed short[10] */
 //#define TMAP_Y                          (0x4c26)    /* signed short[10] */
