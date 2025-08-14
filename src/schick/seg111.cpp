@@ -589,7 +589,7 @@ void tevent_064(void)
 
 				if (answer == 1) {
 
-					loot_multi_chest(p_datseg + TEVENT064_HUT_CONTENT, get_tx2(71));
+					loot_multi_chest((Bit8u*)&gs_tevent064_hut_content, get_tx2(71));
 
 					do {
 						answer = GUI_radio(get_tx2(67), 2, get_tx2(68),	get_tx2(69));
@@ -618,9 +618,9 @@ void tevent_064(void)
 
 			if (answer == 1) {
 
-				loot_multi_chest(p_datseg + TEVENT064_HUT_CONTENT, get_tx2(71));
+				loot_multi_chest((Bit8u*)&gs_tevent064_hut_content, get_tx2(71));
 
-				if (ds_readbs(TEVENT064_CHEST) != -1) {
+				if ((signed char)gs_tevent064_chest[0] != -1) {
 
 					do {
 						answer = GUI_radio(get_tx2(67), 2, get_tx2(68),	get_ttx(814));
@@ -634,13 +634,12 @@ void tevent_064(void)
 			}
 
 		} while (answer != 2);
-
 	}
 }
 
 void tevent_064_chest(void)
 {
-	loot_multi_chest(p_datseg + TEVENT064_CHEST, get_tx2(74));
+	loot_multi_chest((Bit8u*)&gs_tevent064_chest, get_tx2(74));
 }
 
 /* Orvil <-> Ala: rider */

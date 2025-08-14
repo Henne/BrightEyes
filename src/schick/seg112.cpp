@@ -442,7 +442,7 @@ void tevent_073(void)
 
 			GUI_dialog_na(0, get_tx2(45));
 
-			loot_multi_chest(p_datseg + TEVENT073_CORPSE, get_tx2(105));
+			loot_multi_chest((Bit8u*)&gs_tevent073_corpse, get_tx2(105));
 
 			ds_writeb(TEVENT073_FLAG, 1);
 		}

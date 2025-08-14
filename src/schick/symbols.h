@@ -549,10 +549,10 @@
 //#define RANDOM_TLK_HERO                 (0x3e18)    /* Bit8u* */
 //#define RUIN_HERO                       (0x3e1c)    /* Bit8u* */
 //#define MAIN_ACTING_HERO                (0x3e20)    /* Bit8u* */
-#define TEVENT073_CORPSE                (0x3e24)    /* unsigned char[3] */
-#define TEVENT014_CHEST                 (0x3e27)    /* unsigned char[4] */
-#define TEVENT064_HUT_CONTENT           (0x3e2b)    /* unsigned char[19] */
-#define TEVENT064_CHEST                 (0x3e3e)    /* unsigned char[21] */
+//#define TEVENT073_CORPSE                (0x3e24)    /* unsigned char[3] */
+//#define TEVENT014_CHEST                 (0x3e27)    /* unsigned char[4] */
+//#define TEVENT064_HUT_CONTENT           (0x3e2b)    /* unsigned char[19] */
+//#define TEVENT064_CHEST                 (0x3e3e)    /* unsigned char[21] */
 //#define PALETTE_FLOOR                   (0x3e53)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
 //#define PALETTE_BUILDINGS               (0x3eb3)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
 //#define PALETTE_SKY                     (0x3f13)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
