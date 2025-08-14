@@ -181,8 +181,8 @@ signed short DNG11_handler(void)
 			set_var_to_zero();
 
 		} else {
-			gs_x_target = (gs_x_target_bak);
-			gs_y_target = (gs_y_target_bak);
+			gs_x_target = gs_x_target_bak;
+			gs_y_target = gs_y_target_bak;
 		}
 
 	} else if (target_pos == DNG_POS(0,8,12) &&
@@ -196,16 +196,13 @@ signed short DNG11_handler(void)
 		{
 			ds_writeb(DNG11_SECRETDOOR1_FLAG, 1);
 
-			sprintf(g_dtp2,
-				get_tx(26),
-				(char*)hero + HERO_NAME2);
+			sprintf(g_dtp2,	get_tx(26), (char*)hero + HERO_NAME2);
 
 			sprintf(g_text_output_buf,
 				(char*)((ds_readb(DNG11_LEVER_FLAG) == 2 || ds_readb(DNG11_LEVER_FLAG) == 3) && (test_result = test_skill(hero, TA_SCHLOESSER, 5)) > 0 ? get_tx(27) : get_tx(28)),
-				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
+				GUI_get_ptr(host_readbs(hero + HERO_SEX), 3));
 
 			strcat(g_dtp2, g_text_output_buf);
-
 			GUI_output(g_dtp2);
 
 			if (test_result > 0)
@@ -217,7 +214,7 @@ signed short DNG11_handler(void)
 				DNG_update_pos();
 			}
 
-			gs_direction_bak = (gs_direction);
+			gs_direction_bak = gs_direction;
 		}
 
 	} else if (target_pos == DNG_POS(0,4,7) &&
@@ -229,13 +226,11 @@ signed short DNG11_handler(void)
 		{
 			ds_writeb(DNG11_SECRETDOOR2_FLAG, 1);
 
-			sprintf(g_dtp2,
-				get_tx(26),
-				(char*)hero + HERO_NAME2);
+			sprintf(g_dtp2, get_tx(26), (char*)hero + HERO_NAME2);
 
 			sprintf(g_text_output_buf,
 				(char*)((ds_readb(DNG11_LEVER_FLAG) == 1 || ds_readb(DNG11_LEVER_FLAG) == 3) && (test_result = test_skill(hero, TA_SCHLOESSER, 3)) > 0 ? get_tx(27) : get_tx(28)),
-				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
+				GUI_get_ptr(host_readbs(hero + HERO_SEX), 3));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -250,7 +245,7 @@ signed short DNG11_handler(void)
 				DNG_update_pos();
 			}
 
-			gs_direction_bak = (gs_direction);
+			gs_direction_bak = gs_direction;
 		}
 
 	} else if (target_pos == DNG_POS(0,9,8) &&
@@ -262,9 +257,7 @@ signed short DNG11_handler(void)
 		{
 			ds_writeb(DNG11_SECRETDOOR3_FLAG, 1);
 
-			sprintf(g_dtp2,
-				get_tx(26),
-				(char*)hero + HERO_NAME2);
+			sprintf(g_dtp2,	get_tx(26), (char*)hero + HERO_NAME2);
 
 			sprintf(g_text_output_buf,
 				(char*)((ds_readb(DNG11_LEVER_FLAG) == 5 || ds_readb(DNG11_LEVER_FLAG) == 3) && (test_result = test_skill(hero, TA_SCHLOESSER, 5)) > 0 ? get_tx(27) : get_tx(28)),
@@ -283,23 +276,20 @@ signed short DNG11_handler(void)
 				DNG_update_pos();
 			}
 
-			gs_direction_bak = (gs_direction);
+			gs_direction_bak = gs_direction;
 		}
 
 	} else if (target_pos == DNG_POS(0,8,15) && target_pos != gs_dng_handled_pos)
 	{
 		leave_dungeon();
 
-		gs_current_town = (gs_travel_destination_town_id);
-		gs_x_target = (gs_travel_destination_x);
-		gs_y_target = (gs_travel_destination_y);
+		gs_current_town = gs_travel_destination_town_id;
+		gs_x_target = gs_travel_destination_x;
+		gs_y_target = gs_travel_destination_y;
 		gs_current_loctype = LOCTYPE_NONE;
 		gs_direction = ((gs_travel_destination_viewdir + 2) & 0x03);
 
-		sprintf(g_dtp2,
-			get_tx(29),
-			get_ttx(gs_trv_destination + 0xeb));
-
+		sprintf(g_dtp2, get_tx(29), get_ttx(gs_trv_destination + 0xeb));
 		GUI_output(g_dtp2);
 
 		timewarp(HOURS(3));
@@ -313,7 +303,7 @@ signed short DNG11_handler(void)
 	return 0;
 }
 
-void DNG11_chest1(void)
+void DNG11_chest1(Bit8u*)
 {
 	if (!ds_readb(DNG11_PROVIANT1_FLAG))
 	{
@@ -329,7 +319,7 @@ void DNG11_chest1(void)
 	}
 }
 
-void DNG11_chest2(void)
+void DNG11_chest2(Bit8u*)
 {
 	if (!ds_readb(DNG11_PROVIANT2_FLAG))
 	{

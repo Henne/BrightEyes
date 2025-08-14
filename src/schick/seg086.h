@@ -3,14 +3,14 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-void DNG11_chest1(void);
+void DNG11_chest1(Bit8u*);
 /* 0x25 */
-void DNG11_chest2(void);
+void DNG11_chest2(Bit8u*);
 /* 0x2a */
 void DNG11_chest3(Bit8u*);
 /* 0x2a */
 void DNG11_chest4(Bit8u*);
-/* 0xe4 */
+/* 0x34 */
 void DNG11_chest5(Bit8u*);
 /* 0x39 */
 void DNG11_chest6(Bit8u*);
