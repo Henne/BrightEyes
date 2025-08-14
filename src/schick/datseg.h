@@ -475,7 +475,30 @@ extern Bit8u  gs_dng10_corpse_flag;		//ds:0x4140; seg078
 
 extern Bit8u  gs_dng11_waterbarrel1;		//ds:0x415d; seg086
 extern Bit8u  gs_dng11_waterbarrel2;		//ds:0x415e; seg086
-
+extern Bit8u  gs_dng11_efferd_sacrifice;	//ds:0x415f; seg086
+extern Bit8u  gs_dng11_efferd_hint;		//ds:0x4160; seg086
+extern Bit8u  gs_dng11_unknown1_flag;		//ds:0x4161; seg086
+extern Bit8u  gs_dng11_firetrap1_flag;		//ds:0x4162; seg086
+extern Bit8u  gs_dng11_unknown2_flag;		//ds:0x4163; seg086
+extern Bit8u  gs_dng11_firetrap2_flag;		//ds:0x4164; seg086
+extern Bit8u  gs_dng11_secretdoor1_flag;	//ds:0x4165; seg086
+extern Bit8u  gs_dng11_secretdoor2_flag;	//ds:0x4166; seg086
+extern Bit8u  gs_dng11_secretdoor3_flag;	//ds:0x4167; seg086
+extern Bit8u  gs_dng11_lever_flag;		//ds:0x4168; seg076, seg086
+extern Bit8u  gs_dng11_proviant1_flag;		//ds:0x4169; seg086
+extern Bit8u  gs_dng11_proviant2_flag;		//ds:0x416a; seg086
+extern Bit8u  gs_dng11_chest3[15];		//ds:0x416b; seg086
+extern Bit8u  gs_dng11_chest4[11];		//ds:0x417a; seg086
+extern Bit8u  gs_dng11_chest5[5];		//ds:0x4185; seg086
+extern Bit8u  gs_dng11_chest6[7];		//ds:0x418a; seg086
+extern Bit8u  gs_dng11_chest7;			//ds:0x4191; seg086
+extern Bit8u  gs_dng11_chest8[6];		//ds:0x4192; seg086
+extern Bit8u  gs_dng11_chest9[6];		//ds:0x4198; seg086
+extern Bit8u  gs_dng11_chest10[11];		//ds:0x419e; seg086
+extern Bit8u  gs_dng11_chest11[4];		//ds:0x41a9; seg086
+extern Bit8u  gs_dng11_chest12[13];		//ds:0x41ad; seg086
+extern Bit8u  gs_dng11_chest13[6];		//ds:0x41ba; seg086
+extern Bit8u  gs_dng11_chest14[6];		//ds:0x41c0; seg086
 extern Bit8u  gs_dng15_took_cursed_money;	//ds:0x41c6; seg032, seg089
 extern Bit8u  gs_dng15_unknown_flag;		//ds:0x41c8; seg076, seg088
 extern Bit8u  gs_dng15_reached_hands;		//ds:0x41c8; seg076, seg088

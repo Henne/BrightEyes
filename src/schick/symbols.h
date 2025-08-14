@@ -679,30 +679,30 @@
 #define DNG10_CHEST4_CONTENT            (0x415b)    /* char[2] */
 //#define DNG11_WATERBARREL1              (0x415d)    /* unsigned char; {0,1} */
 //#define DNG11_WATERBARREL2              (0x415e)    /* unsigned char; {0,1} */
-#define DNG11_EFFERD_SACRIFICE          (0x415f)    /* unsigned char; {0,1} */
-#define DNG11_EFFERD_HINT               (0x4160)    /* unsigned char; {0,1} */
-#define DNG11_UNKNOWN1_FLAG             (0x4161)    /* unsigned char; {0,1} */
-#define DNG11_FIRETRAP1_FLAG            (0x4162)    /* unsigned char; {0,1} */
-#define DNG11_UNKNOWN2_FLAG             (0x4163)    /* unsigned char; {0,1} */
-#define DNG11_FIRETRAP2_FLAG            (0x4164)    /* unsigned char; {0,1} */
-#define DNG11_SECRETDOOR1_FLAG          (0x4165)    /* unsigned char; {0,1} */
-#define DNG11_SECRETDOOR2_FLAG          (0x4166)    /* unsigned char; {0,1} */
-#define DNG11_SECRETDOOR3_FLAG          (0x4167)    /* unsigned char; {0,1} */
-#define DNG11_LEVER_FLAG                (0x4168)    /* unsigned char; {0-5} */
-#define DNG11_PROVIANT1_FLAG            (0x4169)    /* unsigned char; {0,1} */
-#define DNG11_PROVIANT2_FLAG            (0x416a)    /* unsigned char; {0,1} */
-#define DNG11_CHEST3                    (0x416b)    /* unsigned char[15] */
-#define DNG11_CHEST4                    (0x417a)    /* unsigned char[11] */
-#define DNG11_CHEST5                    (0x4185)    /* unsigned char[5] */
-#define DNG11_CHEST6                    (0x418a)    /* unsigned char[7] */
-#define DNG11_CHEST7                    (0x4191)    /* unsigned char */
-#define DNG11_CHEST8                    (0x4192)    /* unsigned char[6] */
-#define DNG11_CHEST9                    (0x4198)    /* unsigned char[6] */
-#define DNG11_CHEST10                   (0x419e)    /* unsigned char[11] */
-#define DNG11_CHEST11                   (0x41a9)    /* unsigned char[4] */
-#define DNG11_CHEST12                   (0x41ad)    /* unsigned char[13] */
-#define DNG11_CHEST13                   (0x41ba)    /* unsigned char[6] */
-#define DNG11_CHEST14                   (0x41c0)    /* unsigned char[6] */
+//#define DNG11_EFFERD_SACRIFICE          (0x415f)    /* unsigned char; {0,1} */
+//#define DNG11_EFFERD_HINT               (0x4160)    /* unsigned char; {0,1} */
+//#define DNG11_UNKNOWN1_FLAG             (0x4161)    /* unsigned char; {0,1} */
+//#define DNG11_FIRETRAP1_FLAG            (0x4162)    /* unsigned char; {0,1} */
+//#define DNG11_UNKNOWN2_FLAG             (0x4163)    /* unsigned char; {0,1} */
+//#define DNG11_FIRETRAP2_FLAG            (0x4164)    /* unsigned char; {0,1} */
+//#define DNG11_SECRETDOOR1_FLAG          (0x4165)    /* unsigned char; {0,1} */
+//#define DNG11_SECRETDOOR2_FLAG          (0x4166)    /* unsigned char; {0,1} */
+//#define DNG11_SECRETDOOR3_FLAG          (0x4167)    /* unsigned char; {0,1} */
+//#define DNG11_LEVER_FLAG                (0x4168)    /* unsigned char; {0-5} */
+//#define DNG11_PROVIANT1_FLAG            (0x4169)    /* unsigned char; {0,1} */
+//#define DNG11_PROVIANT2_FLAG            (0x416a)    /* unsigned char; {0,1} */
+//#define DNG11_CHEST3                    (0x416b)    /* unsigned char[15] */
+//#define DNG11_CHEST4                    (0x417a)    /* unsigned char[11] */
+//#define DNG11_CHEST5                    (0x4185)    /* unsigned char[5] */
+//#define DNG11_CHEST6                    (0x418a)    /* unsigned char[7] */
+//#define DNG11_CHEST7                    (0x4191)    /* unsigned char */
+//#define DNG11_CHEST8                    (0x4192)    /* unsigned char[6] */
+//#define DNG11_CHEST9                    (0x4198)    /* unsigned char[6] */
+//#define DNG11_CHEST10                   (0x419e)    /* unsigned char[11] */
+//#define DNG11_CHEST11                   (0x41a9)    /* unsigned char[4] */
+//#define DNG11_CHEST12                   (0x41ad)    /* unsigned char[13] */
+//#define DNG11_CHEST13                   (0x41ba)    /* unsigned char[6] */
+//#define DNG11_CHEST14                   (0x41c0)    /* unsigned char[6] */
 //#define DNG15_TOOK_CURSED_MONEY         (0x41c6)    /* unsigned char; {0,1} */
 //#define DNG15_UNKNOWN_FLAG              (0x41c7)    /* unsigned char; {0,1} */
 //#define DNG15_REACHED_HANDS             (0x41c8)    /* unsigned char; {0,1} */

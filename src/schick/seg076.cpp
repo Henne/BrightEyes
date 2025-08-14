@@ -142,7 +142,7 @@ void DNG_door(signed short action)
 					{
 						GUI_output(get_tx(18));
 
-					} else if (!(gs_dungeon_index == DUNGEONS_PIRATENHOEHLE && pos == DNG_POS(0,12,8) && ds_readb(DNG11_LEVER_FLAG) != 4) &&
+					} else if (!(gs_dungeon_index == DUNGEONS_PIRATENHOEHLE && pos == DNG_POS(0,12,8) && gs_dng11_lever_flag != 4) &&
 							!(gs_dungeon_index == DUNGEONS_DASPOTASCHATZ && pos == DNG_POS(0,11,1) && gs_dng06_pitdoor_flag) &&
 							!(gs_dungeon_index == DUNGEONS_ZWERGENFESTE && gs_dng12_watertrap_water_runs))
 					{

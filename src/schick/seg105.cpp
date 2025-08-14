@@ -584,7 +584,7 @@ unsigned short drop_item(Bit8u *hero, signed short pos, signed short no)
 		if ((item == ITEM_TRIDENT || item == ITEM_NET) && gs_dungeon_index == DUNGEONS_PIRATENHOEHLE &&
 			gs_x_target == 9 && gs_y_target == 9)
 		{
-			ds_writeb(DNG11_EFFERD_SACRIFICE, 1);
+			gs_dng11_efferd_sacrifice = 1;
 		}
 
 		/* check for the mine in Oberorken to bring Ingerimm a gift */
