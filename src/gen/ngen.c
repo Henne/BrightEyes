@@ -10,6 +10,14 @@
 #include <wtypes.h>
 #endif
 
+#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 202311L
+#define IS_UNUSED [[maybe_unused]]
+#elif !defined(_MSC_VER)
+#define IS_UNUSED __attribute__((unused))
+#else
+#define IS_UNUSED
+#endif
+
 #if defined(__BORLANDC__)
 #include <IO.H>		// lseek, _read, _close, open, write
 #include <DOS.H>
@@ -23,7 +31,12 @@
 #else
 #include <SDL.h>
 #include <SDL_mixer.h>
-#include <unistd.h> // lseek(), close(), read(), write()
+// lseek(), close(), read(), write()
+#if defined(_MSC_VER)
+#include <io.h>
+#else
+#include <unistd.h>
+#endif
 
 #include "ail_stub.h"
 #endif
@@ -4521,7 +4534,7 @@ static void interrupt timer_isr(void)
 	((void interrupt far (*)(void))g_timer_isr_bak)();
 }
 #else
-static Uint32 gen_timer_isr(Uint32 interval, __attribute__((unused)) void* param)
+static Uint32 gen_timer_isr(Uint32 interval, IS_UNUSED void* param)
 {
 	if (SDL_LockMutex(g_sdl_timer_mutex) == 0) {
 
@@ -7650,21 +7663,8 @@ static void intro(void)
 	g_in_intro = 0;
 }
 
-#if defined(_WIN32)
-int WinMain(__attribute__((unused)) HINSTANCE hInstance,
-		__attribute__((unused)) HINSTANCE hPrevInstance,
-		__attribute__((unused)) LPSTR lpCmdLine,
-		__attribute__((unused)) int ShowCmd)
-#else
-#define main_gen main
-int main_gen(int argc, char **argv)
-#endif
+int main(int argc, char** argv)
 {
-#if defined(_WIN32)
-	int argc;
-	LPWSTR cmdline = GetCommandLineW();
-	LPWSTR *argv = CommandLineToArgvW(cmdline, &argc);
-#endif
 	int l_level = -1;
 	char param_level;
 
