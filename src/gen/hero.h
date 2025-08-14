@@ -1,18 +1,31 @@
-#ifdef _MSC_VER
-#pragma pack (1)
+#ifndef HERO_H
+#define HERO_H
+
+#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
+  #include <assert.h>
+#define STATIC_ASSERT(expr, msg) static_assert(expr, #msg)
+#else
+  #define STATIC_ASSERT(expr, msg) typedef char static_assert_##msg[(expr) ? 1 : -1]
 #endif
+
+#if defined(__BORLANDC__) || defined(__WATCOMC__)
+typedef signed long int32_t;
+#else
+typedef signed int int32_t;
+#endif
+
+STATIC_ASSERT(sizeof(int32_t) == 4, int32_needs_to_be_4_bytes);
+
+#pragma pack(1)
 
 struct struct_attribs {
 	signed char normal;
 	signed char current;
 	signed char mod;
-}
-#if __GNUC__
-__attribute__ ((packed))
-#endif
-;
+};
 
-#pragma pack ( 1 )
+STATIC_ASSERT(sizeof(struct struct_attribs) == 3, struct_attribs_needs_to_be_3_bytes);
+
 struct struct_hero {
 	/* Offset 0x00 */
 	char name[16];
@@ -26,13 +39,8 @@ struct struct_hero {
 	signed short weight;
 	signed char god;
 	signed char level;
-#if defined(__BORLANDC__)
-	signed long ap;
-	signed long money;
-#else
-	signed int ap;
-	signed int money;
-#endif
+	int32_t ap;
+	int32_t money;
 	/* Offset 0x30 */
 	signed char rs1;
 	signed char rs2;
@@ -69,13 +77,8 @@ struct struct_hero {
 	signed char unkn12;
 	signed char position;
 	/* Offset 0x8b */
-#if defined(__BORLANDC__)
-	signed long unkn6;
-	signed long unkn7;
-#else
-	signed int unkn6;
-	signed int unkn7;
-#endif
+	int32_t unkn6;
+	int32_t unkn7;
 	signed char unkn8[3];
 	signed char rounds_blinded;
 	signed char rounds_eclipt;
@@ -106,12 +109,9 @@ struct struct_hero {
 	signed short load;
 
 	unsigned char pic[1024];
-}
-#if __GNUC__
-__attribute__ ((packed))
-#endif
-;
+};
 
-#ifdef _MSC_VER
+STATIC_ASSERT(sizeof(struct struct_hero) == 1754, struct_hero_needs_to_be_1754_bytes);
+
 #pragma pack ()
 #endif
