@@ -660,11 +660,8 @@ signed short DNG_step(void)
 		DNG_see_chest();
 		DNG_see_lever();
 
-#if defined(__BORLANDC__)
-		dungeon_handler = (signed short (*)(void))ds_readd((DNG_HANDLERS-4) + 4 * gs_dungeon_index);
-#else
-		dungeon_handler = DNG_handler[gs_dungeon_index];
-#endif
+		dungeon_handler = g_dng_handlers[gs_dungeon_index - 1];
+
 		retval = dungeon_handler();
 	}
 

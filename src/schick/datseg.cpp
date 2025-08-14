@@ -19,7 +19,16 @@
 #include "seg066.h"
 
 #include "seg077.h"
+#include "seg078.h"
+#include "seg079.h"
+#include "seg080.h"
+#include "seg081.h"
+#include "seg082.h"
+#include "seg083.h"
+#include "seg084.h"
+#include "seg085.h"
 #include "seg086.h"
+#include "seg087.h"
 #include "seg088.h"
 #include "seg089.h"
 #include "seg090.h"
@@ -4694,7 +4703,24 @@ signed char g_dng_stub4_unkn4[22] = { 0x0f, 0x10, 0x15, 0x14, 0x11, 0x13, 0x12, 
 char g_dng_stub6_str_comma[3] = ", "; // ds:0x92cc
 char g_dng_stub6_str_and[6] = " UND "; // ds:0x92cf
 unsigned char g_unkn_056[1] = { 0x00 }; // ds:0x92d5
-long g_dng_handlers[15] = { 0x13d10020, 0x13d70048, 0x13dd0066, 0x13e4003e, 0x13e40043, 0x13e9002a, 0x13ed0020, 0x13f00057, 0x13f60048, 0x13fc003e, 0x14010066, 0x1417002a, 0x141b0043, 0x14080020, 0x1411003e }; // ds:0x92d6; Bit8u*
+const signed short (*g_dng_handlers[15])(void) = {
+	DNG01_handler,
+	DNG02_handler,
+	DNG03_handler,
+	DNG04_handler,
+	DNG05_handler,
+	DNG06_handler,
+	DNG07_handler,
+	DNG08_handler,
+	DNG09_handler,
+	DNG10_handler,
+	DNG11_handler,
+	DNG12_handler,
+	DNG13_handler,
+	DNG14_handler,
+	DNG15_handler
+}; // ds:0x92d6
+//long g_dng_handlers[15] = { 0x13d10020, 0x13d70048, 0x13dd0066, 0x13e4003e, 0x13e40043, 0x13e9002a, 0x13ed0020, 0x13f00057, 0x13f60048, 0x13fc003e, 0x14010066, 0x1417002a, 0x141b0043, 0x14080020, 0x1411003e }; // ds:0x92d6; Bit8u*
 signed short g_dng_level_changed = 0; // ds:0x9312
 struct struct_chest g_dng01_specialchests[9] = {
 	{ 0x0c09, 0xdb, use_key_on_chest, chest_protected_normal, DNG01_chest0_x1, 0, 0, 0 },
