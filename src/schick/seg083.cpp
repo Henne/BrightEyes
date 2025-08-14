@@ -475,17 +475,12 @@ void DNG08_search_bed(void)
 	}
 }
 
-void DNG08_chest1_func2(Bit8u*)
+void DNG08_chest1_func2(void)
 {
-	Bit8u *hero;
+	Bit8u *hero = (Bit8u*)get_first_hero_available_in_group();
 
-	hero = (Bit8u*)get_first_hero_available_in_group();
-
-	sprintf(g_dtp2,
-		get_tx(11),
-		(char*)hero + HERO_NAME2,
-		(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
-
+	sprintf(g_dtp2, get_tx(11), (char*)hero + HERO_NAME2,
+		GUI_get_ptr(host_readbs(hero + HERO_SEX), 1));
 	GUI_output(g_dtp2);
 
 	/* 3W6 damage */

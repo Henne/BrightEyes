@@ -476,7 +476,7 @@ void DNG06_chest2(Bit8u* chest)
 	sprintf(g_dtp2, get_tx(33));
 
 	hero = get_hero(0);
-	for (i = 0; i <=6; i++, hero += SIZEOF_HERO)
+	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 	{
 		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&

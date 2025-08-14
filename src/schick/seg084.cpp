@@ -628,7 +628,7 @@ void DNG09_chest6_x1(Bit8u* chest)
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG09_chest4_x2(Bit8u* chest)
+void DNG09_chest4_x2(void)
 {
 	ds_writew((FIG_FLEE_POSITION + 0),
 		ds_writew((FIG_FLEE_POSITION + 2),

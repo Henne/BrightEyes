@@ -376,7 +376,7 @@ void seg092_06b4(signed short a1)
 	signed short y;
 	signed short pos;
 	signed short l4;
-	Bit8u* chest_ptr;
+	struct struct_chest *chest_ptr;
 	Bit8u *ptr;
 
 	chest_ptr = g_dng_specialchest_index[gs_dungeon_index - 1];
@@ -401,35 +401,26 @@ void seg092_06b4(signed short a1)
 
 	do {
 
-		if (host_readws(chest_ptr) == pos) {
+		if (chest_ptr->pos == pos) {
 
-			if (l4 != 0 && host_readd(chest_ptr + 11)) {
-#if defined(__BORLANDC__)
-				((void (*)(Bit8u*))((Bit8u*)host_readd(chest_ptr + 11)))(chest_ptr);
-#else
-				(t_map(chest_ptr, 11)(chest_ptr));
-#endif
-			} else if (host_readbs(chest_ptr + 2) != 0) {
-#if defined(__BORLANDC__)
-				((void (*)(Bit8u*))((Bit8u*)host_readd(chest_ptr + 3)))(chest_ptr);
-#else
-				(t_map(chest_ptr, 3)(chest_ptr));
-#endif
-			} else if ((Bit8u*)host_readd(chest_ptr + 3)) {
-#if defined(__BORLANDC__)
-				((void (*)(Bit8u*))((Bit8u*)host_readd(chest_ptr + 3)))(chest_ptr);
-#else
-				(t_map(chest_ptr, 3)(chest_ptr));
-#endif
-			} else if ((Bit8u*)host_readd(chest_ptr + 11)) {
-#if defined(__BORLANDC__)
-				((void (*)(Bit8u*))((Bit8u*)host_readd(chest_ptr + 11)))(chest_ptr);
-#else
-				(t_map(chest_ptr, 11)(chest_ptr));
-#endif
+			if (l4 != 0 && chest_ptr->loot) {
+
+				chest_ptr->loot((Bit8u*)chest_ptr);
+
+			} else if (chest_ptr->mod) {
+
+				chest_ptr->open((Bit8u*)chest_ptr);
+
+			} else if (chest_ptr->open) {
+
+				chest_ptr->open((Bit8u*)chest_ptr);
+
+			} else if (chest_ptr->loot) {
+
+				chest_ptr->loot((Bit8u*)chest_ptr);
 				g_get_extra_loot = 1;
 
-			} else if (host_readws(chest_ptr + 17) != 0) {
+			} else if (chest_ptr->money) {
 
 				g_get_extra_loot = 1;
 			}
@@ -437,35 +428,32 @@ void seg092_06b4(signed short a1)
 			break;
 		}
 
-#if !defined(__BORLANDC__)
-		chest_ptr += 21;
-	} while (host_readws(chest_ptr) != -1);
-#else
-	} while (host_readws((Bit8u*)((struct struct_chest*)chest_ptr)++) != -1);
-#endif
+		chest_ptr++;
+
+	} while (chest_ptr->pos != -1);
 
 	if (l4 == 0 && g_get_extra_loot) {
 
-		if (host_readws(chest_ptr + 15) != 0) {
+		if (chest_ptr->ap) {
 
 			/* There are AP in the chest */
-			add_hero_ap_all(host_readws(chest_ptr + 15));
+			add_hero_ap_all(chest_ptr->ap);
 		}
 
-		if (host_readws(chest_ptr + 17) != 0) {
+		if (chest_ptr->money) {
 
 			/* There is money in the chest */
-			make_valuta_str(g_text_output_buf, host_readw(chest_ptr + 17));
+			make_valuta_str(g_text_output_buf, chest_ptr->money);
 
 			sprintf(g_dtp2, get_ttx(793), g_text_output_buf);
 			GUI_output(g_dtp2);
 
-			set_party_money(get_party_money() + host_readw(chest_ptr + 17));
+			set_party_money(get_party_money() + chest_ptr->money);
 		}
 
-		if (host_readws(chest_ptr + 19) != 0) {
+		if (chest_ptr->food) {
 			/* There are FOOD PACKAGES in the chest */
-			get_item(ITEM_FOOD_PACKAGE, 1, host_readws(chest_ptr + 19));
+			get_item(ITEM_FOOD_PACKAGE, 1, chest_ptr->food);
 		}
 	}
 }

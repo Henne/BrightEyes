@@ -1150,25 +1150,25 @@
 // ?1
 //#define DNG_HANDLERS                    (0x92d6)    /* Bit8u*[15] */
 //#define DNG_LEVEL_CHANGED               (0x9312)    /* unsigned short; {1,0} */
-#define DNG01_SPECIALCHESTS             (0x9314)    /* struct(21)[9] */
+//#define DNG01_SPECIALCHESTS             (0x9314)    /* struct(21)[9] */
 //#define DNG01_STR_MARBO                 (0x93d1)    /* char[6] */
 // ?1
-#define DNG02_SPECIALCHESTS             (0x93d8)    /* struct(21)[8] */
-#define DNG03_SPECIALCHESTS             (0x9480)    /* struct(21)[14] */
+//#define DNG02_SPECIALCHESTS             (0x93d8)    /* struct(21)[8] */
+//#define DNG03_SPECIALCHESTS             (0x9480)    /* struct(21)[14] */
 #define DNG03_STR_SPINNENNETZ           (0x95a6)    /* char[12]; "SPINNENNETZ" */
 #define DNG03_STR_MACTANS               (0x95b2)    /* char[8]; "MACTANS" */
-#define DNG04_SPECIALCHESTS             (0x95ba)    /* struct(21)[4] */
+//#define DNG04_SPECIALCHESTS             (0x95ba)    /* struct(21)[4] */
 #define DNG05_TRASH_FLAG                (0x960e)    /* short; {0,1} */
-#define DNG06_SPECIALCHESTS             (0x9610)    /* struct(21)[3] */
+//#define DNG06_SPECIALCHESTS             (0x9610)    /* struct(21)[3] */
 #define STR_S_WAR                       (0x964f)    /* char[8]; "%s WAR " */
 #define STR_S_UND_S_WAREN               (0x9657)    /* char[17]; "%s UND %s WAREN " */
-#define DNG07_SPECIALCHESTS             (0x9668)    /* struct(21)[2] */
-#define DNG08_SPECIALCHESTS             (0x9692)    /* struct(21)[7] */
+//#define DNG07_SPECIALCHESTS             (0x9668)    /* struct(21)[2] */
+//#define DNG08_SPECIALCHESTS             (0x9692)    /* struct(21)[7] */
 #define DNG08_STR_TAIRACH               (0x9725)    /* char[8]; "TAIRACH" */
 // ?1
-#define DNG09_SPECIALCHESTS             (0x972e)    /* struct(21)[8] */
-#define DNG10_SPECIALCHESTS             (0x97d6)    /* struct(21)[6] */
-#define DNG11_SPECIALCHESTS             (0x9854)    /* struct(21)[15] */
+//#define DNG09_SPECIALCHESTS             (0x972e)    /* struct(21)[8] */
+//#define DNG10_SPECIALCHESTS             (0x97d6)    /* struct(21)[6] */
+//#define DNG11_SPECIALCHESTS             (0x9854)    /* struct(21)[15] */
 // ?1
 //#define DNG14_SPECIALCHESTS             (0x9990)    /* struct(21)[9] */
 // ?1
