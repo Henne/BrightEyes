@@ -461,10 +461,9 @@ void tevent_052(void)
 
 void tevent_120(void)
 {
-	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !ds_readb(TEVENT120_FLAG)) ||
-		ds_readb(TEVENT120_FLAG) != 0)
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !gs_tevent120_flag) || gs_tevent120_flag)
 	{
-		ds_writeb(TEVENT120_FLAG, 1);
+		gs_tevent120_flag = 1;
 		TRV_found_camp_place(1);
 	}
 }

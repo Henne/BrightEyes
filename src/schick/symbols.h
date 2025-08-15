@@ -514,15 +514,15 @@
 #define TEVENT106_FLAG                  (0x3df5)    /* unsigned char; {0,1} */
 #define TEVENT108_FLAG                  (0x3df6)    /* unsigned char; {0,1} */
 #define TEVENT109_FLAG                  (0x3df7)    /* unsigned char; {0,1} */
-#define TEVENT111_FLAG                  (0x3df8)    /* unsigned char; {0,1} */
-#define TEVENT112_FLAG                  (0x3df9)    /* unsigned char; {0,1} */
-#define TEVENT112_HERB_FLAG             (0x3dfa)    /* unsigned char; {0,1} */
-#define TEVENT115_FLAG                  (0x3dfb)    /* unsigned char; {0,1} */
-#define TEVENT116_FLAG                  (0x3dfc)    /* unsigned char; {0,1} */
-#define TEVENT118_FLAG                  (0x3dfd)    /* unsigned char; {0,1} */
-#define TEVENT119_FLAG                  (0x3dfe)    /* unsigned char; {0,1} */
-#define TEVENT120_FLAG                  (0x3dff)    /* unsigned char; {0,1} */
-#define TEVENT122_FLAG                  (0x3e00)    /* unsigned char; {0,1} */
+//#define TEVENT111_FLAG                  (0x3df8)    /* unsigned char; {0,1} */
+//#define TEVENT112_FLAG                  (0x3df9)    /* unsigned char; {0,1} */
+//#define TEVENT112_HERB_FLAG             (0x3dfa)    /* unsigned char; {0,1} */
+//#define TEVENT115_FLAG                  (0x3dfb)    /* unsigned char; {0,1} */
+//#define TEVENT116_FLAG                  (0x3dfc)    /* unsigned char; {0,1} */
+//#define TEVENT118_FLAG                  (0x3dfd)    /* unsigned char; {0,1} */
+//#define TEVENT119_FLAG                  (0x3dfe)    /* unsigned char; {0,1} */
+//#define TEVENT120_FLAG                  (0x3dff)    /* unsigned char; {0,1} */
+//#define TEVENT122_FLAG                  (0x3e00)    /* unsigned char; {0,1} */
 // ?1
 //#define TEVENT128_FLAG                  (0x3e02)    /* unsigned char; {0,1} */
 //#define TEVENT128_REPLEN_FLAG           (0x3e03)    /* unsigned char; {0,1} */

@@ -720,7 +720,7 @@ void search_ruin1(void)
 void tevent_115(void)
 {
 	if (ds_readb(FIND_HYGGELIK) != 0) {
-		ds_writeb(TEVENT115_FLAG, 1);
+		gs_tevent115_flag = 1;
 		do_talk(17, 0);
 		set_var_to_zero();
 	}
@@ -736,7 +736,7 @@ void TLK_way_to_ruin(signed short state)
 
 	if (!state) {
 
-		g_dialog_next_state = (ds_readb(TEVENT115_FLAG) != 0 ? 45 : 66);
+		g_dialog_next_state = (gs_tevent115_flag ? 45 : 66);
 		g_tlk_ruin_hero_counter = 0;
 
 	} else if (state == 66 || state == 45) {

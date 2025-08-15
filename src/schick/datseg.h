@@ -425,6 +425,15 @@ extern Bit8u  gs_dng08_chest35_looted;		//ds:0x3ccd; seg083
 
 extern Bit8u  gs_tevent014_flag;		//ds:0x3da8; seg110
 
+extern Bit8u  gs_tevent111_flag;		//ds:0x3df8; seg114
+extern Bit8u  gs_tevent112_flag;		//ds:0x3df9; seg073, seg114
+extern Bit8u  gs_tevent112_herb_flag;		//ds:0x3dfa; seg073, seg114
+extern Bit8u  gs_tevent115_flag;		//ds:0x3dfb; seg117
+extern Bit8u  gs_tevent116_flag;		//ds:0x3dfc; seg073, seg114
+extern Bit8u  gs_tevent118_flag;		//ds:0x3dfd; seg073, seg114
+extern Bit8u  gs_tevent119_flag;		//ds:0x3dfe; seg073, seg114
+extern Bit8u  gs_tevent120_flag;		//ds:0x3dff; seg073, seg118,
+extern Bit8u  gs_tevent122_flag;		//ds:0x3e00; seg114
 extern Bit8u  gs_tevent128_flag;		//ds:0x3e02; seg073, seg115
 extern Bit8u  gs_tevent128_replen_flag;		//ds:0x3e03; seg115
 extern Bit8u  gs_tevent129_flag;		//ds:0x3e04; seg115

@@ -90,9 +90,9 @@ unsigned short get_tavern_gossip(void)
 		else if (r_si == 3)
 			ds_writeb(TEVENT011_FLAG, 1);
 		else if (r_si == 4)
-			ds_writeb(TEVENT119_FLAG, 1);
+			gs_tevent119_flag = 1;
 		else if (r_si == 5)
-			ds_writeb(TEVENT120_FLAG, 1);
+			gs_tevent120_flag = 1;
 
 		break;
 	}
@@ -125,7 +125,7 @@ unsigned short get_tavern_gossip(void)
 		else if (r_si == 3)
 			ds_writeb(TEVENT106_FLAG, 1);
 		else if (r_si == 4) {
-			ds_writeb(TEVENT112_FLAG, ds_writeb(TEVENT112_HERB_FLAG, 1));
+			gs_tevent112_flag = gs_tevent112_herb_flag = 1;
 		}
 
 		break;
@@ -133,11 +133,11 @@ unsigned short get_tavern_gossip(void)
 	/* Merske (has no tavern) */
 	case (TOWNS_MERSKE - 1): {
 		if (r_si == 1)
-			ds_writeb(TEVENT118_FLAG, 1);	/* Restplaces */
+			gs_tevent118_flag = 1;
 		else if (r_si == 2)
-			ds_writeb(TEVENT119_FLAG, 1);
+			gs_tevent119_flag = 1;
 		else if (r_si == 3)
-			ds_writeb(TEVENT120_FLAG, 1);
+			gs_tevent120_flag = 1;
 		else if (r_si == 11)
 			update_informer_cond(INFORMER_ELIANE);	/* Eliane Windenbeck */
 		else if (r_si == 12)
@@ -243,7 +243,7 @@ unsigned short get_tavern_gossip(void)
 		else if (r_si == 6)
 			ds_writeb(TEVENTU07_FLAG, 1);
 		else if (r_si == 7)
-			ds_writeb(TEVENT116_FLAG, 1);
+			gs_tevent116_flag = 1;
 
 		break;
 	}
