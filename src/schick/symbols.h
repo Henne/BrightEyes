@@ -414,20 +414,20 @@
 //#define DNG08_SECRET_DOOR               (0x3ccb)    /* signed char; {0,1 = found,2 = opened} */
 //#define DNG08_CHEST0_LOOTED             (0x3ccc)    /* unsigned char; {0,1} */
 //#define DNG08_CHEST35_LOOTED            (0x3ccd)    /* unsigned char; {0,1,2,3} */
-#define DASPOTA_LOCATION01_LOOT         (0x3cce)    /* char[29] */
-#define DASPOTA_LOCATION02_LOOT         (0x3ceb)    /* char[15] */
-#define DASPOTA_LOCATION03_LOOT         (0x3cfa)    /* char[15] */
-#define DASPOTA_LOCATION04_LOOT         (0x3d09)    /* char[9] */
-#define DASPOTA_LOCATION05_LOOT         (0x3d12)    /* char[31] */
-#define DASPOTA_LOCATION06_LOOT         (0x3d31)    /* char[25] */
-#define DASPOTA_LOCATION07_LOOT         (0x3d4a)    /* char[7] */
-#define DASPOTA_LOCATION08_LOOT         (0x3d51)    /* char[15] */
-#define DASPOTA_LOCATION10_LOOT         (0x3d60)    /* char[7] */
-#define DASPOTA_LOCATION12_LOOT         (0x3d67)    /* char[21] */
-#define DASPOTA_LOCATION13_LOOT         (0x3d7c)    /* char[9] */
-#define DASPOTA_LOCATION14_LOOT         (0x3d85)    /* char[5] */
-#define DASPOTA_LOCATION16_LOOT         (0x3d8a)    /* char[5] */
-#define DASPOTA_LOCATION18_LOOT         (0x3d8f)    /* char[19] */
+//#define DASPOTA_LOCATION01_LOOT         (0x3cce)    /* char[29] */
+//#define DASPOTA_LOCATION02_LOOT         (0x3ceb)    /* char[15] */
+//#define DASPOTA_LOCATION03_LOOT         (0x3cfa)    /* char[15] */
+//#define DASPOTA_LOCATION04_LOOT         (0x3d09)    /* char[9] */
+//#define DASPOTA_LOCATION05_LOOT         (0x3d12)    /* char[31] */
+//#define DASPOTA_LOCATION06_LOOT         (0x3d31)    /* char[25] */
+//#define DASPOTA_LOCATION07_LOOT         (0x3d4a)    /* char[7] */
+//#define DASPOTA_LOCATION08_LOOT         (0x3d51)    /* char[15] */
+//#define DASPOTA_LOCATION10_LOOT         (0x3d60)    /* char[7] */
+//#define DASPOTA_LOCATION12_LOOT         (0x3d67)    /* char[21] */
+//#define DASPOTA_LOCATION13_LOOT         (0x3d7c)    /* char[9] */
+//#define DASPOTA_LOCATION14_LOOT         (0x3d85)    /* char[5] */
+//#define DASPOTA_LOCATION16_LOOT         (0x3d8a)    /* char[5] */
+//#define DASPOTA_LOCATION18_LOOT         (0x3d8f)    /* char[19] */
 #define TEVENT004_FLAG                  (0x3da2)    /* unsigned char; {0,1} */
 #define TEVENT005_FLAG                  (0x3da3)    /* unsigned char; {0,1} */
 #define TEVENT008_FLAG                  (0x3da4)    /* unsigned char; {0,1} */
@@ -1090,7 +1090,7 @@
 #define HYG_ANI_X7                      (0x71c4)    /* unsigned char[3] */
 #define HYG_ANI_X9                      (0x71c7)    /* unsigned char[3] */
 #define TOWNS_CITYINDEX_TABLE           (0x71ca)    /* unsigned char[52] */
-#define DASPOTA_LOCLOOT_INDEX           (0x71fe)    /* Bit8u*[18] */
+//#define DASPOTA_LOCLOOT_INDEX           (0x71fe)    /* Bit8u*[18] */
 #define MAPVAL_TO_LOCTYPE               (0x7246)    /* unsigned char[12]; { 0, 15, 31, 63, 95, 127, 159, 175, 191, 207, 223, 239 } */
 #define SEG066_0BAD_UNKN0               (0x7252)    /* signed char[29] */
 #define SEG066_0BAD_UNKN1               (0x726f)    /* signed char[29] */

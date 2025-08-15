@@ -422,6 +422,20 @@ extern Bit8u  gs_dng08_chest2_looted;		//ds:0x3cca; seg083
 extern Bit8u  gs_dng08_secret_door;		//ds:0x3ccb; seg083
 extern Bit8u  gs_dng08_chest0_looted;		//ds:0x3ccc; seg083
 extern Bit8u  gs_dng08_chest35_looted;		//ds:0x3ccd; seg083
+extern Bit8u  gs_daspota_location01_loot[29];	//ds:0x3cce; seg???
+extern Bit8u  gs_daspota_location02_loot[15];	//ds:0x3ceb; seg???
+extern Bit8u  gs_daspota_location03_loot[15];	//ds:0x3cfa; seg???
+extern Bit8u  gs_daspota_location04_loot[9];	//ds:0x3d09; seg???
+extern Bit8u  gs_daspota_location05_loot[31];	//ds:0x3d12; seg???
+extern Bit8u  gs_daspota_location06_loot[25];	//ds:0x3d31; seg???
+extern Bit8u  gs_daspota_location07_loot[7];	//ds:0x3d4a; seg???
+extern Bit8u  gs_daspota_location08_loot[15];	//ds:0x3d51; seg???
+extern Bit8u  gs_daspota_location10_loot[7];	//ds:0x3d60; seg???
+extern Bit8u  gs_daspota_location12_loot[21];	//ds:0x3d67; seg???
+extern Bit8u  gs_daspota_location13_loot[9];	//ds:0x3d7c; seg???
+extern Bit8u  gs_daspota_location14_loot[5];	//ds:0x3d85; seg???
+extern Bit8u  gs_daspota_location16_loot[5];	//ds:0x3d8a; seg???
+extern Bit8u  gs_daspota_location18_loot[19];	//ds:0x3d8f; seg???
 
 extern Bit8u  gs_tevent014_flag;		//ds:0x3da8; seg110
 
@@ -744,6 +758,8 @@ extern signed char* g_anitab_spell_index[2];	//ds:0x6366; seg045
 extern const struct struct_point g_invslot_iconxy_table[23];	//ds:0x63d2; seg046
 
 extern signed char g_hero_sel_exclude;		//ds:0x64a2; seg047, seg049, seg103, seg120
+
+extern Bit8u* g_daspota_locloot_index[18];	//ds:0x71fe; seg066
 
 extern const struct struct_point g_visual_field_offsets_std[29];	//ds:0x733a; seg066
 extern const struct struct_point g_visual_field_offsets_sign[29];	//ds:0x73ae; seg066

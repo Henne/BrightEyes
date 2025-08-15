@@ -123,13 +123,13 @@ signed short enter_location_daspota(void)
 
 			if (host_readb(locations_list_ptr + LOCATION_LOCTYPE) != LOCTYPE_SIGNPOST) {
 
-				GUI_print_loc_line(get_tx(host_readw(locations_list_ptr + LOCATION_LOCDATA)));
+				GUI_print_loc_line(get_tx(host_readws(locations_list_ptr + LOCATION_LOCDATA)));
 
-				if (!gs_daspota_fightflags[host_readw(locations_list_ptr + LOCATION_LOCDATA)]) {
+				if (!gs_daspota_fightflags[host_readws(locations_list_ptr + LOCATION_LOCDATA)]) {
 
 					do_talk(host_readbs(locations_list_ptr + LOCATION_LOCTYPE), host_readb(locations_list_ptr + LOCATION_TYPEINDEX) - 1);
 
-					if (!gs_daspota_fightflags[host_readw(locations_list_ptr + LOCATION_LOCDATA)]) {
+					if (!gs_daspota_fightflags[host_readws(locations_list_ptr + LOCATION_LOCDATA)]) {
 						leave_location();
 						return 1;
 					}
@@ -139,12 +139,12 @@ signed short enter_location_daspota(void)
 				set_var_to_zero();
 
 				load_ani(10);
-				GUI_print_loc_line(get_tx(host_readw(locations_list_ptr + LOCATION_LOCDATA)));
+				GUI_print_loc_line(get_tx(host_readws(locations_list_ptr + LOCATION_LOCDATA)));
 				init_ani(0);
 
-				if (ds_readd((DASPOTA_LOCLOOT_INDEX - 4) + 4 * host_readw(locations_list_ptr + LOCATION_LOCDATA))) {
+				if (g_daspota_locloot_index[host_readws(locations_list_ptr + LOCATION_LOCDATA) - 1]) {
 
-					loot_multi_chest((Bit8u*)ds_readd((DASPOTA_LOCLOOT_INDEX - 4) + 4 * host_readw(locations_list_ptr + LOCATION_LOCDATA)), get_tx(21));
+					loot_multi_chest(g_daspota_locloot_index[host_readws(locations_list_ptr + LOCATION_LOCDATA) - 1], get_tx(21));
 
 				} else {
 
