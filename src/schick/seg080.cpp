@@ -342,11 +342,11 @@ signed short DNG05_handler(void)
 
 	pos = (gs_dungeon_level << 12) + (gs_x_target << 8) + gs_y_target;
 
-	if (pos == DNG_POS(0,7,14) && pos != gs_dng_handled_pos && ds_readw(DNG05_TRASH_FLAG) == 0)
+	if (pos == DNG_POS(0,7,14) && pos != gs_dng_handled_pos && !g_dng05_trash_flag)
 	{
 		if (GUI_bool(get_tx(1)) && GUI_bool(get_tx(15)))
 		{
-			ds_writew(DNG05_TRASH_FLAG, 1);
+			g_dng05_trash_flag = 1;
 
 			hero = (Bit8u*)get_first_hero_available_in_group();
 

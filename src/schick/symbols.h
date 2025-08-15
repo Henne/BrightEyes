@@ -1158,7 +1158,7 @@
 //#define DNG03_STR_SPINNENNETZ           (0x95a6)    /* char[12]; "SPINNENNETZ" */
 //#define DNG03_STR_MACTANS               (0x95b2)    /* char[8]; "MACTANS" */
 //#define DNG04_SPECIALCHESTS             (0x95ba)    /* struct(21)[4] */
-#define DNG05_TRASH_FLAG                (0x960e)    /* short; {0,1} */
+//#define DNG05_TRASH_FLAG                (0x960e)    /* short; {0,1} */
 //#define DNG06_SPECIALCHESTS             (0x9610)    /* struct(21)[3] */
 #define STR_S_WAR                       (0x964f)    /* char[8]; "%s WAR " */
 #define STR_S_UND_S_WAREN               (0x9657)    /* char[17]; "%s UND %s WAREN " */

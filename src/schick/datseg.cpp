@@ -4790,7 +4790,7 @@ struct struct_chest g_dng04_specialchests[4] = {
 	{ 0x0601, 1, DNG04_corpse2, NULL, DNG04_corpse2_chest, 0, 0, 0 },
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x95ba
-short g_dng05_trash_flag = 0; // ds:0x960e
+Bit16s g_dng05_trash_flag = 0; // ds:0x960e
 struct struct_chest g_dng06_specialchests[3] = {
 	{ 0x0703, 0, NULL, NULL, DNG06_chest1, 0, 0, 40, }, //TODO: DNG06_chest1
 	{ 0x1904, 0, use_lockpicks_on_chest, chest_poisoned1, DNG06_chest2, 0, 0, 0 },

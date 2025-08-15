@@ -791,6 +791,7 @@ extern signed short g_dng_level_changed;	//ds:0x9312; seg075, seg076
 extern const char g_dng01_str_marbo[6];		//ds:0x93d7; seg077
 extern const char g_dng03_str_spinnennetz[12];	//ds:0x95a6; seg079
 extern const char g_dng03_str_mactans[8];	//ds:0x95b2; seg079
+extern Bit16s g_dng05_trash_flag;		//ds:0x960e; seg080 SHOULD BE IN GAME STATE
 
 extern signed int g_dng12_obstacle_tries;	//ds:0x9d43; seg090 SHOULD BE IN GAME STATE
 extern signed int g_dng12_watertrap_bak;	//ds:0x9d45; seg090 SHOULD BE IN GAME STATE
