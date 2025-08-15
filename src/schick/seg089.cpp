@@ -335,7 +335,7 @@ signed short DNG15_handler(void)
 	{
 		DNG15_collapsing_ceiling(&gs_dng15_ceilings[10]);
 
-	} else if (target_pos == TEVENT128_FLAG && target_pos != gs_dng_handled_pos && !gs_dng15_cursed_money[3])
+	} else if (target_pos == 0x3e02 && target_pos != gs_dng_handled_pos && !gs_dng15_cursed_money[3])
 	{
 		DNG15_cursed_money(&gs_dng15_cursed_money[3]);
 

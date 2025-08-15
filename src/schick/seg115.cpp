@@ -494,15 +494,15 @@ void tevent_127(void)
 
 void tevent_128(void)
 {
-	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !ds_readb(TEVENT128_FLAG)) ||
-		ds_readb(TEVENT128_FLAG) != 0)
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent128_flag) ||
+		gs_tevent128_flag)
 	{
-		ds_writeb(TEVENT128_FLAG, 1);
+		gs_tevent128_flag = 1;
 
-		if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 && !ds_readb(TEVENT128_REPLEN_FLAG)) ||
-			ds_readb(TEVENT128_REPLEN_FLAG) != 0)
+		if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 && !gs_tevent128_replen_flag) ||
+			gs_tevent128_replen_flag)
 		{
-			ds_writeb(TEVENT128_REPLEN_FLAG, 1);
+			gs_tevent128_replen_flag = 1;
 			TRV_found_replenish_place(1);
 		} else {
 			TRV_found_replenish_place(0);
@@ -515,26 +515,24 @@ void tevent_129(void)
 {
 	signed short answer;
 
-	if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 4) > 0 && !ds_readb(TEVENT129_FLAG))
+	if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 4) > 0 && !gs_tevent129_flag)
 	{
-		ds_writeb(TEVENT129_FLAG, 1);
+		gs_tevent129_flag = 1;
 
 		GUI_output(get_tx2(12));
 
 		load_in_head(53);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2,
-					NULL, get_tx2(13), 2,
-					get_tx2(14), get_tx2(15));
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(13), 2, get_tx2(14), get_tx2(15));
 
 		} while (answer == -1);
 
 		if (answer == 1) {
-			gs_travel_detour = (DUNGEONS_DRACHENHORT);
+			gs_travel_detour = DUNGEONS_DRACHENHORT;
 		}
 
-	} else if (ds_readb(TEVENT129_FLAG) != 0) {
+	} else if (gs_tevent129_flag) {
 
 		load_in_head(53);
 

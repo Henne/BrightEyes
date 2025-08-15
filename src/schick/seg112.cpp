@@ -473,7 +473,7 @@ void tevent_074(void)
 		if (answer == 1) {
 
 			/* fight */
-			ds_writeb(TEVENT074_FIGHT_FLAG, (signed char)TRV_fight_event(FIGHTS_F074, 74));
+			gs_tevent074_fight_flag = TRV_fight_event(FIGHTS_F074, 74);
 
 		} else if (answer == 2) {
 
@@ -483,7 +483,7 @@ void tevent_074(void)
 			{
 				/* failed, so fight */
 				g_fig_initiative = 1;
-				ds_writeb(TEVENT074_FIGHT_FLAG, (signed char)TRV_fight_event(FIGHTS_F074, 74));
+				gs_tevent074_fight_flag = TRV_fight_event(FIGHTS_F074, 74);
 
 			} else {
 
@@ -523,7 +523,7 @@ void tevent_074(void)
 
 				if (p_money < 1500) {
 					/* not enough money, so fight */
-					ds_writeb(TEVENT074_FIGHT_FLAG, (signed char)TRV_fight_event(FIGHTS_F074, 74));
+					gs_tevent074_fight_flag = TRV_fight_event(FIGHTS_F074, 74);
 				} else {
 					/* pay 1500 */
 					p_money -= 1500;
@@ -533,7 +533,7 @@ void tevent_074(void)
 			} else if (answer == 2) {
 
 				/* fight */
-				ds_writeb(TEVENT074_FIGHT_FLAG, (signed char)TRV_fight_event(FIGHTS_F074, 74));
+				gs_tevent074_fight_flag = TRV_fight_event(FIGHTS_F074, 74);
 
 			} else {
 
@@ -544,7 +544,7 @@ void tevent_074(void)
 				{
 					/* fight */
 					g_fig_initiative = 1;
-					ds_writeb(TEVENT074_FIGHT_FLAG, (signed char)TRV_fight_event(FIGHTS_F074, 74));
+					gs_tevent074_fight_flag = TRV_fight_event(FIGHTS_F074, 74);
 				}
 			}
 		}
@@ -563,18 +563,15 @@ void tevent_075(void)
 	if (!ds_readb(TEVENT075_FLAG)) {
 
 		do {
-			answer = GUI_radio(get_tx2(55), 2,
-						get_tx2(56),
-						get_tx2(57));
+			answer = GUI_radio(get_tx2(55), 2, get_tx2(56), get_tx2(57));
+
 		} while (answer == -1);
 
 		if (answer == 1) {
 
 			do {
-				answer = GUI_radio(get_tx2(58), 3,
-							get_tx2(59),
-							get_tx2(60),
-							get_tx2(61));
+				answer = GUI_radio(get_tx2(58), 3, get_tx2(59),	get_tx2(60), get_tx2(61));
+
 			} while (answer == -1);
 
 			if (answer == 1) {
@@ -587,11 +584,11 @@ void tevent_075(void)
 
 				i = FIGHTS_F075_B;
 
-				if (!ds_readb(TEVENT074_FIGHT_FLAG) && !ds_readb(TEVENT077_FIGHT_FLAG)) {
+				if (!gs_tevent074_fight_flag && !gs_tevent077_fight_flag) {
 
 					i = FIGHTS_F075_A;
 
-				} else if (ds_readb(TEVENT074_FIGHT_FLAG) != 0 && ds_readb(TEVENT077_FIGHT_FLAG) != 0) {
+				} else if (gs_tevent074_fight_flag && gs_tevent077_fight_flag) {
 
 					i = FIGHTS_F075_C;
 				}
@@ -620,11 +617,11 @@ void tevent_075(void)
 
 					i = FIGHTS_F075_B;
 
-					if (!ds_readb(TEVENT074_FIGHT_FLAG) && !ds_readb(TEVENT077_FIGHT_FLAG)) {
+					if (!gs_tevent074_fight_flag && !gs_tevent077_fight_flag) {
 
 						i = FIGHTS_F075_A;
 
-					} else if (ds_readb(TEVENT074_FIGHT_FLAG) != 0 && ds_readb(TEVENT077_FIGHT_FLAG) != 0) {
+					} else if (gs_tevent074_fight_flag != 0 && gs_tevent077_fight_flag != 0) {
 
 						i = FIGHTS_F075_C;
 					}
@@ -682,7 +679,7 @@ void tevent_076(void)
 		} while (answer == -1);
 
 		if (answer == 1) {
-			gs_travel_detour = (DUNGEONS_GOBLINHOEHLE);
+			gs_travel_detour = DUNGEONS_GOBLINHOEHLE;
 		}
 	}
 }
@@ -712,7 +709,7 @@ void tevent_077(void)
 		if (answer == 1) {
 
 			/* fight */
-			ds_writeb(TEVENT077_FIGHT_FLAG, (signed char)TRV_fight_event(186, 77));
+			gs_tevent077_fight_flag = TRV_fight_event(186, 77);
 
 		} else if (answer == 2) {
 
@@ -720,7 +717,7 @@ void tevent_077(void)
 
 				/* test failed, so fight */
 				g_fig_initiative = 1;
-				ds_writeb(TEVENT077_FIGHT_FLAG, (signed char)TRV_fight_event(FIGHTS_F077, 77));
+				gs_tevent077_fight_flag = TRV_fight_event(FIGHTS_F077, 77);
 
 			} else {
 
@@ -761,7 +758,7 @@ void tevent_077(void)
 
 				if (p_money < 1500) {
 					/* not enough money, so fight */
-					ds_writeb(TEVENT077_FIGHT_FLAG, (signed char)TRV_fight_event(FIGHTS_F077, 77));
+					gs_tevent077_fight_flag = TRV_fight_event(FIGHTS_F077, 77);
 				} else {
 					/* pay 1500 */
 					p_money -= 1500;
@@ -771,7 +768,7 @@ void tevent_077(void)
 			} else if (answer == 2) {
 
 				/* fight */
-				ds_writeb(TEVENT077_FIGHT_FLAG, (signed char)TRV_fight_event(FIGHTS_F077, 77));
+				gs_tevent077_fight_flag = TRV_fight_event(FIGHTS_F077, 77);
 
 			} else {
 
@@ -782,7 +779,7 @@ void tevent_077(void)
 				{
 					/* fight */
 					g_fig_initiative = 1;
-					ds_writeb(TEVENT077_FIGHT_FLAG, (signed char)TRV_fight_event(FIGHTS_F077, 77));
+					gs_tevent077_fight_flag = TRV_fight_event(FIGHTS_F077, 77);
 				}
 			}
 		}

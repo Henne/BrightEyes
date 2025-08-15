@@ -67,7 +67,7 @@ signed short DNG01_handler(void)
 	{
 		DNG_stub6();
 
-	} else if (target_pos == TEVENT132_HERB_FLAG)
+	} else if (target_pos == 0x3e07)
 	{
 		DNG_fallpit_test(6);
 

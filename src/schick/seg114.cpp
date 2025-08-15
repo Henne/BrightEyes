@@ -425,7 +425,7 @@ void tevent_114(void)
 				}
 			}
 
-			if (!ds_readb(TEVENT114_OLIMONE_FLAG))
+			if (!gs_tevent114_olimone_flag)
 			{
 				/* meet OLIMONE */
 				GUI_output(get_tx2(24));
@@ -441,10 +441,7 @@ void tevent_114(void)
 				/* TODO: ORIGINAL-BUG: this item could have been not taken => get_hero(-1) => SEGFAULT */
 				hero = get_hero(get_first_hero_with_item(ITEM_RECIPE_STRONG_LE_POTION));
 
-				sprintf(g_dtp2,
-					get_tx2(27),
-					(char*)hero + HERO_NAME2);
-
+				sprintf(g_dtp2,	get_tx2(27), (char*)hero + HERO_NAME2);
 				GUI_output(g_dtp2);
 
 				timewarp(HOURS(8));
@@ -459,7 +456,7 @@ void tevent_114(void)
 					}
 				}
 
-				ds_writeb(TEVENT114_OLIMONE_FLAG, (signed char)(done = 1));
+				gs_tevent114_olimone_flag = done = 1;
 
 			} else {
 				GUI_output(get_tx2(64));

@@ -537,7 +537,7 @@ signed short DNG14_handler(void)
 
 		GUI_output(get_tx(35));
 
-	} else if (((pos == DNG_POS(3,10,10) && gs_direction == EAST) || (pos == TEVENT138_FLAG && gs_direction == WEST)) &&
+	} else if (((pos == DNG_POS(3,10,10) && gs_direction == EAST) || (pos == 0x3e0a && gs_direction == WEST)) &&
 			pos != gs_dng_handled_pos)
 	{
 		if (GUI_bool(get_tx(38))) {

@@ -425,6 +425,29 @@ extern Bit8u  gs_dng08_chest35_looted;		//ds:0x3ccd; seg083
 
 extern Bit8u  gs_tevent014_flag;		//ds:0x3da8; seg110
 
+extern Bit8u  gs_tevent128_flag;		//ds:0x3e02; seg073, seg115
+extern Bit8u  gs_tevent128_replen_flag;		//ds:0x3e03; seg115
+extern Bit8u  gs_tevent129_flag;		//ds:0x3e04; seg115
+extern Bit8u  gs_tevent131_flag;		//ds:0x3e05; seg116
+extern Bit8u  gs_tevent132_flag;		//ds:0x3e06; seg073, seg116
+extern Bit8u  gs_tevent132_herb_flag;		//ds:0x3e07; seg073, seg116
+extern Bit8u  gs_tevent134_flag;		//ds:0x3e08; seg066, seg116
+extern Bit8u  gs_tevent137_flag;		//ds:0x3e09; seg066, seg116
+extern Bit8u  gs_tevent138_flag;		//ds:0x3e0a; seg087, seg116
+extern Bit8u  gs_teventu09_flag;		//ds:0x3e0b; seg073
+extern Bit8u  gs_tevent140_flag;		//ds:0x3e0c; seg116
+extern Bit8u  gs_tevent140_herb_flag;		//ds:0x3e0d; seg116
+extern Bit8u  gs_tevent141_flag;		//ds:0x3e0e; seg116
+extern Bit8u  gs_tevent142_flag;		//ds:0x3e0f; seg116
+
+extern Bit8u  gs_teventu10_flag;		//ds:0x3e11; seg073
+extern Bit8u  gs_teventu11_flag;		//ds:0x3e12; seg073
+extern Bit8u  gs_teventu12_flag;		//ds:0x3e13; seg073
+extern Bit8u  gs_teventu13_flag;		//ds:0x3e14; seg073
+extern Bit8u  gs_tevent114_olimone_flag;	//ds:0x3e15; seg114
+extern Bit8u  gs_tevent074_fight_flag;		//ds:0x3e16; seg112
+extern Bit8u  gs_tevent077_fight_flag;		//ds:0x3e17; seg112
+
 #if defined(__BORLANDC__)
 extern Bit8u *gs_random_tlk_hero;		//ds:0xe318; seg0030, seg116
 #endif

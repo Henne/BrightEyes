@@ -309,17 +309,17 @@ unsigned short get_tavern_gossip(void)
 			ds_writeb(TEVENT066_TRACK_FLAG, 1);
 		else if (r_si == 3) {
 			/* Restplaces */
-			ds_writeb(TEVENTU10_FLAG, ds_writeb(TEVENTU11_FLAG, 1));
+			gs_teventu10_flag = gs_teventu11_flag = 1;
 		}
 		else if (r_si == 4)
-			ds_writeb(TEVENTU12_FLAG, 1);
+			gs_teventu12_flag = 1;
 
 		break;
 	}
 	/* Rovik */
 	case (TOWNS_ROVIK - 1): {
 		if (r_si == 1)
-			ds_writeb(TEVENTU12_FLAG, 1);	/* Restplaces */
+			gs_teventu12_flag = 1; /* Restplaces */
 
 		break;
 	}
@@ -334,7 +334,7 @@ unsigned short get_tavern_gossip(void)
 	case (TOWNS_RUNINSHAVEN - 1): {
 		if (r_si == 1) {
 			/* Restplaces */
-			ds_writeb(TEVENT128_FLAG, ds_writeb(TEVENTU09_FLAG, 1));
+			gs_tevent128_flag = gs_teventu09_flag = 1;
 		}
 
 		break;
@@ -369,7 +369,7 @@ unsigned short get_tavern_gossip(void)
 		else if (r_si == 3)
 			ds_writeb(TEVENTU06_FLAG, 1);
 		else if (r_si == 4) {
-			ds_writeb(TEVENTU10_FLAG, ds_writeb(TEVENTU11_FLAG, 1));
+			gs_teventu10_flag = gs_teventu11_flag = 1;
 		}
 
 		break;
@@ -424,16 +424,16 @@ unsigned short get_tavern_gossip(void)
 	/* Brendhil */
 	case (TOWNS_BRENDHIL - 1): {
 		if (r_si == 1)
-			ds_writeb(TEVENTU13_FLAG, 1);	/* Restplaces */
+			gs_teventu13_flag = 1;	/* Restplaces */
 
 		break;
 	}
 	/* Manrin */
 	case (TOWNS_MANRIN - 1): {
 		if (r_si == 1)
-			ds_writeb(TEVENTU13_FLAG, 1);	/* Restplaces */
+			gs_teventu13_flag = 1;	/* Restplaces */
 		else if (r_si == 2)
-			ds_writeb(TEVENT132_HERB_FLAG, 1);
+			gs_tevent132_herb_flag = 1;
 
 		break;
 	}
