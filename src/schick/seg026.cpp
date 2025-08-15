@@ -429,7 +429,7 @@ signed short save_game_state(void)
 	g_textbox_width = 5;
 
 	/* prepare the header for the radio box */
-	if (ds_readws(GAME_STATE) == GAME_STATE_VICTORY) {
+	if (g_game_state == GAME_STATE_VICTORY) {
 
 		/* game won. creating savegame for import in DSA2 */
 		strcpy(g_text_output_buf, get_ttx(810)); /* "Welcher Spielstand soll fuer die Fortsetzung abgespeichert werden?" */
@@ -439,7 +439,7 @@ signed short save_game_state(void)
 #ifndef M302de_FEATURE_MOD
 		/* Feature mod 4: In the original game, when creating a savegame while not being in a temple, the AP of all heroes is decreased by 1. This feature mod stops the AP decrease.
 		 * Here, the warning message "Dabei verliert jeder Held in der Gruppe einen Abenteuerpunkt" is displayed. */
-		if ((gs_current_loctype != LOCTYPE_TEMPLE) && (ds_readws(GAME_STATE) != GAME_STATE_VICTORY)) {
+		if ((gs_current_loctype != LOCTYPE_TEMPLE) && (g_game_state != GAME_STATE_VICTORY)) {
 
 			/* create savegame not in a temple */
 
@@ -519,7 +519,7 @@ signed short save_game_state(void)
 #ifndef M302de_FEATURE_MOD
 				/* Feature mod 4: In the original game, when creating a savegame while not being in a temple, the AP of all heroes is decrease by 1. This feature mod stops the AP decrease.
 				 * Here, the actual decrease is executed */
-				if (ds_readws(GAME_STATE) != GAME_STATE_VICTORY &&
+				if (g_game_state != GAME_STATE_VICTORY &&
 					gs_current_loctype != LOCTYPE_TEMPLE &&
 					host_readds(get_hero(tw_bak) + HERO_AP) > 0)
 				{

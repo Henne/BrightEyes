@@ -187,7 +187,7 @@ void TM_func1(signed short route_no, signed short backwards)
 
 	while (host_readws(gs_route_course_ptr + 2 * (gs_route_mousehover = 0)) != -1 &&
 		!gs_travel_detour &&
-		ds_readw(GAME_STATE) == GAME_STATE_MAIN)
+		g_game_state == GAME_STATE_MAIN)
 	{
 		if (is_mouse_in_rect(host_readws(gs_route_course_ptr) - 16,
 					host_readws(gs_route_course_ptr + 2) - 16,
@@ -289,16 +289,16 @@ void TM_func1(signed short route_no, signed short backwards)
 			}
 		}
 
-		if (gs_route_encounter_flag && gs_route_dayprogress >= gs_route_encounter_time && ds_readws(GAME_STATE) == GAME_STATE_MAIN)
+		if (gs_route_encounter_flag && gs_route_dayprogress >= gs_route_encounter_time && g_game_state == GAME_STATE_MAIN)
 		{
 			random_encounter(route_no);
 			gs_route_encounter_flag = 0;
 
-		} else if (gs_route_fight_flag && gs_route_dayprogress >= gs_route_fight_time && ds_readws(GAME_STATE) == GAME_STATE_MAIN)
+		} else if (gs_route_fight_flag && gs_route_dayprogress >= gs_route_fight_time && g_game_state == GAME_STATE_MAIN)
 		{
 			do_wild8_fight();
 
-		} else if (gs_route_informer_flag && gs_route_dayprogress >= gs_route_informer_time && ds_readws(GAME_STATE) == GAME_STATE_MAIN)
+		} else if (gs_route_informer_flag && gs_route_dayprogress >= gs_route_informer_time && g_game_state == GAME_STATE_MAIN)
 		{
 			gs_current_typeindex = (random_schick(100) <= 50 ? 10 : 12);
 			bak1 = g_basepos_x;
@@ -310,7 +310,7 @@ void TM_func1(signed short route_no, signed short backwards)
 
 		}
 
-		if (ds_readws(GAME_STATE) == GAME_STATE_MAIN)
+		if (g_game_state == GAME_STATE_MAIN)
 		{
 			for (gs_trv_i = 0; gs_trv_i < 15; gs_trv_i++)
 			{
@@ -346,7 +346,7 @@ void TM_func1(signed short route_no, signed short backwards)
 		}
 
 	        /* night camp */
-		if (gs_day_timer >= HOURS(20) && !gs_travel_detour && ds_readws(GAME_STATE) == GAME_STATE_MAIN &&
+		if (gs_day_timer >= HOURS(20) && !gs_travel_detour && g_game_state == GAME_STATE_MAIN &&
 			2 * gs_route_stepsize < gs_route_progress &&
 			gs_route_length - 2 * gs_route_stepsize > gs_route_progress)
 		{
@@ -366,7 +366,7 @@ void TM_func1(signed short route_no, signed short backwards)
 			g_request_refresh = 2;
 			g_wallclock_update = 0;
 
-			if (ds_readws(GAME_STATE) == GAME_STATE_MAIN)
+			if (g_game_state == GAME_STATE_MAIN)
 			{
 				/* figure out encounters etc. for next day */
 				gs_route_dayprogress = ((gs_travel_speed + (gs_travel_route_ptr->speed_mod * gs_travel_speed / 10)) * 18);
@@ -395,12 +395,12 @@ void TM_func1(signed short route_no, signed short backwards)
 			}
 		}
 
-		if (g_check_disease && !gs_travel_detour && ds_readw(GAME_STATE) == GAME_STATE_MAIN)
+		if (g_check_disease && !gs_travel_detour && g_game_state == GAME_STATE_MAIN)
 		{
 			disease_effect();
 		}
 
-		if (g_request_refresh != 0 && !gs_travel_detour && ds_readw(GAME_STATE) == GAME_STATE_MAIN)
+		if (g_request_refresh != 0 && !gs_travel_detour && g_game_state == GAME_STATE_MAIN)
 		{
 			update_mouse_cursor();
 			load_map();
@@ -457,7 +457,7 @@ void TM_func1(signed short route_no, signed short backwards)
 		gs_route_course_ptr += 2 * ((!backwards && gs_trv_return == 0) || (backwards && gs_trv_return != 0) ? 2 : -2);
 	}
 
-	if (ds_readw(GAME_STATE) == GAME_STATE_MAIN && !gs_travel_detour && gs_trv_return != 2)
+	if (g_game_state == GAME_STATE_MAIN && !gs_travel_detour && gs_trv_return != 2)
 	{
 		update_mouse_cursor();
 

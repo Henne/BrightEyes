@@ -613,10 +613,10 @@ void DNG_timestep(signed short forward)
 		gs_dungeon_index = DUNGEONS_NONE;
 
 		/* exit game */
-		ds_writew(GAME_STATE, GAME_STATE_DEAD);
+		g_game_state = (GAME_STATE_DEAD);
 	}
 
-	if (ds_readw(GAME_STATE) == GAME_STATE_MAIN) {
+	if (g_game_state == GAME_STATE_MAIN) {
 
 		dir = gs_direction;
 

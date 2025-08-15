@@ -365,7 +365,7 @@ unsigned short FIG_fight_continues(void)
 	}
 
 	if (FIG_get_first_active_hero() == -1) {
-		ds_writew(GAME_STATE, GAME_STATE_DEAD);
+		g_game_state = (GAME_STATE_DEAD);
 		return 0;
 	}
 
@@ -1070,7 +1070,7 @@ signed short do_fight(signed short fight_id)
 
 	refresh_screen_size();
 
-	if (ds_readws(HAVE_MOUSE) == 2) {
+	if (g_have_mouse == 2) {
 
 		while (g_mouse_refresh_flag < 0) {
 			refresh_screen_size();
@@ -1079,7 +1079,7 @@ signed short do_fight(signed short fight_id)
 
 	/* aftermath */
 
-	if (ds_readws(GAME_STATE) != GAME_STATE_FIGQUIT) {
+	if (g_game_state != GAME_STATE_FIGQUIT) {
 
 		hero = get_hero(0);
 		for (i = 0; i <=6; i++, hero += SIZEOF_HERO) {
@@ -1100,12 +1100,12 @@ signed short do_fight(signed short fight_id)
 			}
 		}
 
-		if (ds_readws(GAME_STATE) != GAME_STATE_MAIN) {
+		if (g_game_state != GAME_STATE_MAIN) {
 			/* GAME_STATE is neither GAME_STATE_FIGQUIT nor GAME_STATE_MAIN. Does that mean that the fight is lost?? */
 
 			if ((fight_id != 192) && count_heroes_available()) {
 
-				ds_writew(GAME_STATE, GAME_STATE_MAIN);
+				g_game_state = (GAME_STATE_MAIN);
 
 				if (ds_readbs(TRAVELING) != 0) {
 

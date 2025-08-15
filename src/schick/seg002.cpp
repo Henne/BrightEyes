@@ -1247,7 +1247,7 @@ signed short is_mouse_in_rect(signed short x1, signed short y1,
 
 void mouse_init(void)
 {
-	if (ds_readw(HAVE_MOUSE) == 2) {
+	if (g_have_mouse == 2) {
 
 #if defined(__BORLANDC__)
 		unsigned short p1, p2, p3, p4, p5;
@@ -1257,13 +1257,13 @@ void mouse_init(void)
 		mouse_action((Bit8u*)&p1, (Bit8u*)&p2, (Bit8u*)&p3, (Bit8u*)&p4, (Bit8u*)&p5);
 
 		if (p1 == 0) {
-			ds_writew(HAVE_MOUSE, 0);
+			g_have_mouse = 0;
 		}
 
 		ds_writed(CURRENT_CURSOR, (Bit32u)(p_datseg + DEFAULT_MOUSE_CURSOR));
 		ds_writed(LAST_CURSOR, (Bit32u)(p_datseg + DEFAULT_MOUSE_CURSOR));
 
-		if (ds_readw(HAVE_MOUSE) == 2) {
+		if (g_have_mouse == 2) {
 
 			p1 = 4;
 			p3 = g_mouse_posx;
@@ -1279,7 +1279,7 @@ void mouse_init(void)
 
 void disable_mouse(void)
 {
-	if (ds_readw(HAVE_MOUSE) == 2) {
+	if (g_have_mouse == 2) {
 		mouse_reset_ehandler();
 	}
 }
@@ -1537,7 +1537,7 @@ void handle_gui_input(void)
 
 		g_always_zero3 = 0;
 
-		if (ds_readw(HAVE_MOUSE) == 0) {
+		if (g_have_mouse == 0) {
 		}
 
 		/* Ctrl + E */
@@ -1559,11 +1559,11 @@ void handle_gui_input(void)
 
 		/* Ctrl + P -> pause game */
 		if ((ds_readw(BIOSKEY_EVENT) == 0x10) &&
-			(ds_readws(BIOSKEY_EVENT10) == 0) &&
+			(g_bioskey_event10 == 0) &&
 			!g_dialogbox_lock &&
 			(ds_readws(PREGAME_STATE) == 0))
 		{
-			ds_writew(BIOSKEY_EVENT10, 1);
+			g_bioskey_event10 = 1;
 			g_timers_disabled++;
 			ds_writew(GUI_TEXT_CENTERED, 1);
 			tw_bak = g_textbox_width;
@@ -1571,7 +1571,7 @@ void handle_gui_input(void)
 			GUI_output(g_pause_string);		/* P A U S E */
 			g_textbox_width = tw_bak;
 			ds_writew(GUI_TEXT_CENTERED, 0);
-			ds_writew(BIOSKEY_EVENT10, l_si = ds_writew(BIOSKEY_EVENT, 0));
+			g_bioskey_event10 = l_si = ds_writew(BIOSKEY_EVENT, 0);
 			g_timers_disabled--;
 		}
 	} else {
@@ -1587,7 +1587,7 @@ void handle_gui_input(void)
 			l_si = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_primary);
 		}
 
-		if (ds_readw(HAVE_MOUSE) == 2) {
+		if (g_have_mouse == 2) {
 
 			for (l1 = 0; l1 < 15; l1++) {
 				wait_for_vsync();
@@ -1709,7 +1709,7 @@ void handle_input(void)
 
 	if (ds_readw(MOUSE1_EVENT2) == 0) {
 
-		if (ds_readw(HAVE_MOUSE) == 0) {
+		if (g_have_mouse == 0) {
 		}
 
 		/* Ctrl + S -> sound menu */
@@ -1720,12 +1720,12 @@ void handle_input(void)
 		/* Ctrl + P -> pause game */
 		/* TODO: use tw_bak here */
 		if ((ds_readw(BIOSKEY_EVENT) == 0x10) &&
-			(ds_readws(BIOSKEY_EVENT10) == 0) &&
+			(g_bioskey_event10 == 0) &&
 			!g_dialogbox_lock &&
 			(ds_readws(PREGAME_STATE) == 0))
 		{
 			g_timers_disabled++;
-			ds_writew(BIOSKEY_EVENT10, 1);
+			g_bioskey_event10 = 1;
 			ds_writew(GUI_TEXT_CENTERED, 1);
 			g_textbox_width = 2;
 			GUI_output(g_pause_string);		/* P A U S E */
@@ -1733,7 +1733,7 @@ void handle_input(void)
 			ds_writew(GUI_TEXT_CENTERED, 0);
 			g_timers_disabled--;
 
-			ds_writew(BIOSKEY_EVENT10, l_si = ds_writew(BIOSKEY_EVENT, 0));
+			g_bioskey_event10 = l_si = ds_writew(BIOSKEY_EVENT, 0);
 		}
 	} else {
 		play_voc(ARCHIVE_FILE_FX1_VOC);
@@ -1748,7 +1748,7 @@ void handle_input(void)
 			l_si = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_primary);
 		}
 
-		if (ds_readw(HAVE_MOUSE) == 2) {
+		if (g_have_mouse == 2) {
 
 			for (l_di = 0; l_di < 25; l_di++) {
 
@@ -1779,7 +1779,7 @@ void game_loop(void)
 {
 	signed short answer;
 
-	while (ds_readw(GAME_STATE) == GAME_STATE_MAIN) {
+	while (g_game_state == GAME_STATE_MAIN) {
 
 		if (gs_current_loctype != LOCTYPE_NONE) {
 			do_location();
@@ -1792,7 +1792,7 @@ void game_loop(void)
 		}
 
 		if (gs_datseg_status_start == 99) {
-			ds_writew(GAME_STATE, GAME_STATE_OUTRO);
+			g_game_state = (GAME_STATE_OUTRO);
 		}
 
 		if (g_check_disease) {
@@ -1812,7 +1812,7 @@ void game_loop(void)
 			if (!count_heroes_available() || ((count_heroes_available() == 1) && check_hero(get_hero(6)))) // count_heroes_available_ignore_npc() == 0
 			{
 				/* no heroes or only the NPC can act => GAME OVER */
-				ds_writew(GAME_STATE, GAME_STATE_DEAD);
+				g_game_state = (GAME_STATE_DEAD);
 
 			} else if (!count_heroes_available_in_group() || ((count_heroes_available_in_group() == 1) && is_hero_available_in_group(get_hero(6)))) // count_heroes_available_in_group_ignore_npc() == 0
 			{
@@ -1823,7 +1823,7 @@ void game_loop(void)
 		}
 
 		if ((host_readbs(get_hero(6) + HERO_TYPE) != HERO_TYPE_NONE) &&
-			((gs_current_town != TOWNS_NONE) || (ds_readws(GAME_STATE) == GAME_STATE_VICTORY)) &&
+			((gs_current_town != TOWNS_NONE) || (g_game_state == GAME_STATE_VICTORY)) &&
 			(gs_npc_months >= 1) &&	(g_npc_last_farewellcheck != gs_npc_months))
 		{
 			npc_farewell();
@@ -1831,7 +1831,7 @@ void game_loop(void)
 		}
 
 		if (!g_in_fight &&
-			((ds_readws(GAME_STATE) == GAME_STATE_MAIN) || (ds_readws(GAME_STATE) == GAME_STATE_VICTORY)) &&
+			((g_game_state == GAME_STATE_MAIN) || (g_game_state == GAME_STATE_VICTORY)) &&
 			!gs_current_loctype)
 		{
 			check_level_up();
@@ -1846,23 +1846,23 @@ void game_loop(void)
 			}
 		}
 
-		if ((ds_readws(GAME_STATE) != GAME_STATE_MAIN) && (g_fading_state != 0)) {
+		if ((g_game_state != GAME_STATE_MAIN) && (g_fading_state != 0)) {
 			refresh_colors();
 		}
 
-		if (ds_readws(GAME_STATE) == GAME_STATE_DEAD) {
+		if (g_game_state == GAME_STATE_DEAD) {
 			game_over_screen();
 		}
 
-		if (ds_readws(GAME_STATE) == GAME_STATE_TIMEUP) {
+		if (g_game_state == GAME_STATE_TIMEUP) {
 			show_times_up();
 		}
 
-		if ((ds_readws(GAME_STATE) == GAME_STATE_DEAD) ||
-			ds_readws(GAME_STATE) == GAME_STATE_UNKNOWN ||
-			ds_readws(GAME_STATE) == GAME_STATE_TIMEUP ||
-			ds_readws(GAME_STATE) == GAME_STATE_OUTRO ||
-			ds_readws(GAME_STATE) == GAME_STATE_FIGQUIT)
+		if ((g_game_state == GAME_STATE_DEAD) ||
+			g_game_state == GAME_STATE_UNKNOWN ||
+			g_game_state == GAME_STATE_TIMEUP ||
+			g_game_state == GAME_STATE_OUTRO ||
+			g_game_state == GAME_STATE_FIGQUIT)
 		{
 			gs_current_loctype = LOCTYPE_NONE;
 
@@ -1872,12 +1872,12 @@ void game_loop(void)
 			} while (answer == -1);
 
 			if (answer) {
-				ds_writew(GAME_STATE, GAME_STATE_MAIN);
+				g_game_state = (GAME_STATE_MAIN);
 				refresh_colors();
 			}
 		}
 
-		if (ds_readw(GAME_STATE) == GAME_STATE_VICTORY) {
+		if (g_game_state == GAME_STATE_VICTORY) {
 			show_outro();
 			cleanup_game();
 
@@ -2463,7 +2463,7 @@ void do_timers(void)
 
 		/* check if times up */
 		if ((gs_year == 17) && (gs_month >= 10) && (gs_day_of_month >= 17)) {
-			ds_writew(GAME_STATE, GAME_STATE_TIMEUP);
+			g_game_state = (GAME_STATE_TIMEUP);
 		}
 	}
 
@@ -2880,7 +2880,7 @@ void herokeeping(void)
 	Bit8u *hero;
 	char buffer[100];
 
-	if (ds_readw(GAME_STATE) != GAME_STATE_MAIN)
+	if (g_game_state != GAME_STATE_MAIN)
 		return;
 
 	/* The actual food consumption is done only if HEROKEEPING_FLAG is set.
@@ -3697,7 +3697,7 @@ void wait_for_keypress(void)
 			si = bioskey(0);
 
 			if (((si & 0xff) == 0x20) &&
-				(ds_readw(BIOSKEY_EVENT10) == 0))
+				(g_bioskey_event10 == 0))
 			{
 
 				seg002_47e2();
@@ -3808,9 +3808,9 @@ void unused_delay(signed short no)
 /* unused */
 void unused_spinlock(void)
 {
-	ds_writew(UNUSED_SPINLOCK_FLAG, 1);
+	g_unused_spinlock_flag = 1;
 
-	while (ds_readw(UNUSED_SPINLOCK_FLAG) != 0) {
+	while (g_unused_spinlock_flag) {
 	}
 }
 
@@ -4075,7 +4075,7 @@ void select_with_mouse(Bit8u *p1, Bit8u *p2)
 {
 	signed short i;
 
-	if (ds_readw(HAVE_MOUSE) != 2) {
+	if (g_have_mouse != 2) {
 		return;
 	}
 
@@ -4469,7 +4469,7 @@ void sub_hero_le(Bit8u *hero, signed short le)
 			/* FINAL FIGHT */
 			if (g_current_fight_no == FIGHTS_F144) {
 				if (hero == (Bit8u*)gs_main_acting_hero) {
-					ds_writew(GAME_STATE, GAME_STATE_DEAD);
+					g_game_state = (GAME_STATE_DEAD);
 					g_in_fight = 0;
 				}
 			}
@@ -4526,7 +4526,7 @@ void sub_hero_le(Bit8u *hero, signed short le)
 					/* FINAL FIGHT */
 					if (g_current_fight_no == FIGHTS_F144) {
 						if (hero == (Bit8u*)gs_main_acting_hero) {
-							ds_writew(GAME_STATE, GAME_STATE_DEAD);
+							g_game_state = (GAME_STATE_DEAD);
 							g_in_fight = 0;
 						}
 					}
@@ -5437,7 +5437,7 @@ void check_group(void)
 #endif
 	{
 		/* game over */
-		ds_writew(GAME_STATE, GAME_STATE_DEAD);
+		g_game_state = (GAME_STATE_DEAD);
 
 	} else if
 #ifndef M302de_ORIGINAL_BUGFIX
@@ -5477,11 +5477,11 @@ int schick_main(int argc, char** argv)
 
 		schick_set_video();
 
-		ds_writew(HAVE_MOUSE, 2);
+		g_have_mouse = 2;
 
 		mouse_init();
 
-		if (ds_readw(HAVE_MOUSE) == 0) {
+		if (g_have_mouse == 0) {
 			g_mouse_refresh_flag = -10;
 		}
 

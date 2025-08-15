@@ -246,7 +246,7 @@ void do_citycamp(void)
 
 							do_fight(ds_readws((DCAMPFIGHTS-2) + 2 * random_schick(4)));
 
-							if (ds_readws(GAME_STATE) == GAME_STATE_MAIN) {
+							if (g_game_state == GAME_STATE_MAIN) {
 								draw_main_screen();
 								set_var_to_zero();
 								load_ani(36);

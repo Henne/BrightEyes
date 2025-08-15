@@ -627,7 +627,7 @@ void tevent_144(void)
 				/* you won the final fight */
 				GUI_output(get_tx2(17));
 
-				ds_writews(GAME_STATE, GAME_STATE_VICTORY);
+				g_game_state = (GAME_STATE_VICTORY);
 
 				add_hero_ap_all(500);
 
@@ -636,7 +636,7 @@ void tevent_144(void)
 			} else {
 				/* you lost the final fight */
 				GUI_output(get_tx2(18));
-				ds_writews(GAME_STATE, GAME_STATE_DEAD);
+				g_game_state = (GAME_STATE_DEAD);
 			}
 
 #if !defined(__BORLANDC__)

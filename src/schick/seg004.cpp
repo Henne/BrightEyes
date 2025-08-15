@@ -173,10 +173,10 @@ void interrupt timer_isr(void)
 	/* TODO: unused feature */
 	g_gfx_spinlock += 1;
 
-	inc_ds_ws(RANDOM_SCHICK_SEED2);
+	g_random_schick_seed2++;
 
-	if (ds_readws(RANDOM_SCHICK_SEED2) < 0) {
-		ds_writew(RANDOM_SCHICK_SEED2, 0);
+	if (g_random_schick_seed2 < 0) {
+		g_random_schick_seed2 = 0;
 	}
 
 	if (g_autofight && (bioskey(1) || ds_readw(MOUSE1_EVENT2))) {
@@ -315,7 +315,7 @@ void update_status_bars(void)
 	signed short i;
 	Bit8u *hero;
 
-	ds_writew(UNUSED_SPINLOCK_FLAG, 0);
+	g_unused_spinlock_flag = 0;
 
 	if (ds_readw(UPDATE_STATUSLINE) != 0) {
 

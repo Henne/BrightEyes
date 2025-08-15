@@ -179,14 +179,14 @@ signed short do_travel_mode(void)
 
 					TM_enter_target_town();
 
-					if (!gs_travel_detour && ds_readw(GAME_STATE) == GAME_STATE_MAIN)
+					if (!gs_travel_detour && g_game_state == GAME_STATE_MAIN)
 					{
 						gs_current_town = ((signed char)gs_travel_destination_town_id);
 						gs_x_target_bak = gs_travel_destination_x;
 						gs_y_target_bak = gs_travel_destination_y;
 						gs_direction = ((gs_travel_destination_viewdir + 2) & 3);
 
-					} else if (ds_readw(GAME_STATE) == GAME_STATE_MAIN && gs_travel_detour != 99)
+					} else if (g_game_state == GAME_STATE_MAIN && gs_travel_detour != 99)
 					{
 						DNG_enter_dungeon(gs_travel_detour);
 					}

@@ -173,7 +173,7 @@ void do_temple(void)
 			if (GUI_bool(get_ttx(299))) {
 
 				done = 1;
-				ds_writews(GAME_STATE, GAME_STATE_QUIT);
+				g_game_state = (GAME_STATE_QUIT);
 			}
 		}
 

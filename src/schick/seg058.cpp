@@ -317,7 +317,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 			handle_input();
 			g_action_table_secondary = NULL;
 
-			if (ds_readws(HAVE_MOUSE) == 2) {
+			if (g_have_mouse == 2) {
 				select_with_mouse((Bit8u*)&l7, (Bit8u*)g_sellitems + 7 * item);
 			} else {
 				select_with_keyboard((Bit8u*)&l7, (Bit8u*)g_sellitems + 7 * item);

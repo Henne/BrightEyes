@@ -1382,12 +1382,12 @@
 //#define TX_INDEX                        (0xc3b1)    /* Bit8u*; to index table of primary text file */
 //#define TEXT_LTX_INDEX                  (0xc3b5)    /* Bit8u*; to index table of TEXT.LTX */
 // ?6
-#define RANDOM_SCHICK_SEED2             (0xc3bf)    /* signed short */
-#define GAME_STATE                      (0xc3c1)    /* signed short; see enum GAME_STATE_* */
+//#define RANDOM_SCHICK_SEED2             (0xc3bf)    /* signed short */
+//#define GAME_STATE                      (0xc3c1)    /* signed short; see enum GAME_STATE_* */
 // ?2
-#define BIOSKEY_EVENT10                 (0xc3c5)    /* unsigned short; {0,1} */
-#define HAVE_MOUSE                      (0xc3c7)    /* unsigned short; {0,2} */
-#define UNUSED_SPINLOCK_FLAG            (0xc3c9)    /* unsigned short; {0,1} */
+//#define BIOSKEY_EVENT10                 (0xc3c5)    /* unsigned short; {0,1} */
+//#define HAVE_MOUSE                      (0xc3c7)    /* unsigned short; {0,2} */
+//#define UNUSED_SPINLOCK_FLAG            (0xc3c9)    /* unsigned short; {0,1} */
 #define UPDATE_STATUSLINE               (0xc3cb)    /* unsigned short; {0,1} */
 // ?2
 #define MOUSE1_DOUBLECLICK              (0xc3cf)    /* unsigned short; {0,1} */

@@ -1008,6 +1008,12 @@ extern unsigned char *g_ani_main_ptr;	// ds:0xce35; seg004, seg027
 
 
 extern HugePt g_buffer9_ptr;		// ds:0xc3db; seg004-seg120
+
+extern signed short g_unused_spinlock_flag;	// ds:0xc3cb; seg002, seg004
+extern signed short g_have_mouse;	// ds:0xc3c7; seg002-seg058
+extern signed short g_bioskey_event10;	// ds:0xc3c5; seg002, seg097
+extern signed short g_game_state;	// ds:0xc3c1; seg002-seg116
+extern signed short g_random_schick_seed2;	// ds:0xc3bf; seg004, seg007
 extern char **g_text_ltx_index;		// ds:0xc3b5;
 extern char **g_tx_index;		// ds:0xc3b1; seg026, seg028, seg031, seg064, seg120
 extern char **g_tx2_index;		// ds:0xc3ad; seg

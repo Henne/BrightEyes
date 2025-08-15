@@ -586,7 +586,7 @@ void DNG03_chest11_func3(Bit8u*)
 			/* end of game */
 			GUI_output(get_tx(26));
 
-			ds_writew(GAME_STATE, GAME_STATE_DEAD);
+			g_game_state = (GAME_STATE_DEAD);
 		} else {
 			timewarp(HOURS(1));
 

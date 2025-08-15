@@ -391,7 +391,7 @@ signed short GUI_input(char *str, unsigned short num)
 		/* set action table */
 		g_action_table_secondary = &g_action_table_menu[0];
 
-		if (ds_readw(BIOSKEY_EVENT10) != 0) {
+		if (g_bioskey_event10 != 0) {
 			wait_for_keypress();
 		} else {
 			delay_or_keypress(l_si * g_textbox_width * 50);

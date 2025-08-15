@@ -6473,9 +6473,9 @@ unsigned short g_mouse1_event1; // ds:0xc3d1
 unsigned short g_mouse1_doubleclick; // ds:0xc3cf
 unsigned char g_unkn_079[2]; // ds:0xc3cd
 unsigned short g_update_statusline; // ds:0xc3cb
-unsigned short g_unused_spinlock_flag; // ds:0xc3c9
-unsigned short g_have_mouse; // ds:0xc3c7
-unsigned short g_bioskey_event10; // ds:0xc3c5
+signed short g_unused_spinlock_flag; // ds:0xc3c9
+signed short g_have_mouse; // ds:0xc3c7
+signed short g_bioskey_event10; // ds:0xc3c5
 unsigned char g_unkn_078[2]; // ds:0xc3c3
 signed short g_game_state; // ds:0xc3c1, see enum GAME_STATE_*
 signed short g_random_schick_seed2; // ds:0xc3bf

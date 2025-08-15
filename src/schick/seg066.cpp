@@ -107,7 +107,7 @@ signed short enter_location_daspota(void)
 	signed short b_index;
 	Bit8u *locations_list_ptr;
 
-	if (ds_readws(GAME_STATE) == GAME_STATE_FIGQUIT) {
+	if (g_game_state == GAME_STATE_FIGQUIT) {
 		return 1;
 	}
 

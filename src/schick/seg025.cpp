@@ -574,7 +574,7 @@ signed short game_options(void)
 			if (GUI_bool(get_ttx(299))) {
 
 				done = -1;
-				ds_writew(GAME_STATE, GAME_STATE_QUIT);
+				g_game_state = (GAME_STATE_QUIT);
 			}
 
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_9) {
