@@ -405,7 +405,7 @@ void status_show(Bit16u index)
 			}
 #endif
 
-			if (ds_readw(GAME_MODE) == GAME_MODE_ADVANCED) {
+			if (g_game_mode == GAME_MODE_ADVANCED) {
 				/* advanded mode */
 
 #ifdef M302de_ORIGINAL_BUGFIX

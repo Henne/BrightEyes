@@ -6486,8 +6486,8 @@ char **g_tx2_index; // ds:0xc3ad, to index table of secondary text file
 unsigned char *g_buffer8_ptr; // ds:0xc3a9, to buffer of size 12008
 struct{short pos; char loc, type; short id;} g_locations_tab[150]; // ds:0xc025
 struct struct_pic_copy g_pic_copy;	// ds:0xc00d
-void *g_buyitems; // ds:0xc009, merchant's assortment
-void *g_sellitems; // ds:0xc005, also used for repair items
+Bit8u *g_buyitems; // ds:0xc009, merchant's assortment
+Bit8u *g_sellitems; // ds:0xc005, also used for repair items
 signed short g_game_mode; // ds:0xc003, {-1 = Input error, 1 = Beginner, 2 = Advanced }
 signed short g_textbox_pos_y; // ds:0xc001, coordinate of upper left corner
 signed short g_textbox_pos_x; // ds:0xbfff, coordinate of upper left corner

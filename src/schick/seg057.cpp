@@ -96,7 +96,7 @@ void sell_screen(Bit8u *shop_ptr)
 
 	g_heroswap_allowed = 0;
 	l8 = g_request_refresh = 1;
-	ds_writed(SELLITEMS, (Bit32u)(g_fig_figure1_buf + 2100));
+	g_sellitems = (g_fig_figure1_buf + 2100);
 
 	while (done == 0) {
 
@@ -104,7 +104,7 @@ void sell_screen(Bit8u *shop_ptr)
 
 			set_var_to_zero();
 			g_pp20_index = -1;
-			memset((Bit8u*)ds_readd(SELLITEMS), 0, 2100);
+			memset((Bit8u*)g_sellitems, 0, 2100);
 
 			for (items_x = 0; items_x <= 6; items_x++) {
 				for (l_di = 0; l_di < 23; l_di++) {
@@ -170,7 +170,7 @@ void sell_screen(Bit8u *shop_ptr)
 				}
 
 				for (l_di = l20; l_di < 23; l_di++) {
-					host_writew((Bit8u*)ds_readd(SELLITEMS) + 7 * l_di, 0);
+					host_writew((Bit8u*)g_sellitems + 7 * l_di, 0);
 				}
 
 				l11 = 0;
@@ -204,7 +204,7 @@ void sell_screen(Bit8u *shop_ptr)
 
 					answer = 5 * items_x + l_di + item;
 
-					if ((j = host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * answer))) {
+					if ((j = host_readws((Bit8u*)g_sellitems + 7 * answer))) {
 
 						g_pic_copy.x1 = array3.a[items_x];
 						g_pic_copy.y1 = array5.a[l_di];
@@ -220,7 +220,7 @@ void sell_screen(Bit8u *shop_ptr)
 
 						if (item_stackable(get_itemsdat(j))) {
 
-							if ((nice = host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + SIZEOF_INVENTORY * host_readbs((Bit8u*)ds_readd(SELLITEMS) + 7 * answer + 6))) > 1)
+							if ((nice = host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + SIZEOF_INVENTORY * host_readbs((Bit8u*)g_sellitems + 7 * answer + 6))) > 1)
 							{
 								my_itoa(nice, g_dtp2, 10);
 
@@ -228,10 +228,10 @@ void sell_screen(Bit8u *shop_ptr)
 									array3.a[items_x] + 16 - GUI_get_space_for_string(g_dtp2, 0),
 									array5.a[l_di] + 9);
 
-								if (tmp[hero_pos][host_readbs((Bit8u*)ds_readd(SELLITEMS) + 7 * answer + 6)] != 0)
+								if (tmp[hero_pos][host_readbs((Bit8u*)g_sellitems + 7 * answer + 6)] != 0)
 								{
 									set_textcolor(201, 0);
-									my_itoa(tmp[hero_pos][host_readbs((Bit8u*)ds_readd(SELLITEMS) + 7 * answer + 6)], g_dtp2, 10);
+									my_itoa(tmp[hero_pos][host_readbs((Bit8u*)g_sellitems + 7 * answer + 6)], g_dtp2, 10);
 
 									GUI_print_string(g_dtp2,
 										array3.a[items_x] + 16 - GUI_get_space_for_string(g_dtp2, 0),
@@ -243,11 +243,11 @@ void sell_screen(Bit8u *shop_ptr)
 						}
 
 						sprintf(g_dtp2,
-							host_readws((Bit8u*)ds_readd(SELLITEMS) + 4 + 7 * answer) == 1 ? fmt_h.a :
-								(host_readws((Bit8u*)ds_readd(SELLITEMS) + 4 + 7 * answer) == 10 ? fmt_s.a : fmt_d.a),
-							host_readws((Bit8u*)ds_readd(SELLITEMS) + 2 + 7 * answer));
+							host_readws((Bit8u*)g_sellitems + 4 + 7 * answer) == 1 ? fmt_h.a :
+								(host_readws((Bit8u*)g_sellitems + 4 + 7 * answer) == 10 ? fmt_s.a : fmt_d.a),
+							host_readws((Bit8u*)g_sellitems + 2 + 7 * answer));
 
-						if (tmp[hero_pos][host_readbs((Bit8u*)ds_readd(SELLITEMS) + 7 * answer + 6)]) {
+						if (tmp[hero_pos][host_readbs((Bit8u*)g_sellitems + 7 * answer + 6)]) {
 							set_textcolor(201, 0);
 						}
 
@@ -269,9 +269,9 @@ void sell_screen(Bit8u *shop_ptr)
 		}
 
 		if (ds_readws(HAVE_MOUSE) == 2) {
-			select_with_mouse((Bit8u*)&l6, (Bit8u*)ds_readd(SELLITEMS) + 7 * item);
+			select_with_mouse((Bit8u*)&l6, (Bit8u*)g_sellitems + 7 * item);
 		} else {
-			select_with_keyboard((Bit8u*)&l6, (Bit8u*)ds_readd(SELLITEMS) + 7 * item);
+			select_with_keyboard((Bit8u*)&l6, (Bit8u*)g_sellitems + 7 * item);
 		}
 
 #if !defined(__BORLANDC__)
@@ -306,7 +306,7 @@ void sell_screen(Bit8u *shop_ptr)
 			clear_loc_line();
 
 
-			GUI_print_loc_line((GUI_name_singular(get_itemname(host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l6 + item))))));
+			GUI_print_loc_line((GUI_name_singular(get_itemname(host_readws((Bit8u*)g_sellitems + 7 * (l6 + item))))));
 		}
 
 		if (ds_readws(MOUSE2_EVENT) != 0  || ds_readws(ACTION) == ACTION_ID_PAGE_UP) {
@@ -326,7 +326,7 @@ void sell_screen(Bit8u *shop_ptr)
 		if (ds_readws(ACTION) == ACTION_ID_ICON_3 && item != 0) {
 			l8 = 1;
 			item -= 15;
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_2 && host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (item + 15))) {
+		} else if (ds_readws(ACTION) == ACTION_ID_ICON_2 && host_readws((Bit8u*)g_sellitems + 7 * (item + 15))) {
 			l8 = 1;
 			item += 15;
 		}
@@ -336,9 +336,9 @@ void sell_screen(Bit8u *shop_ptr)
 			 * ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK can be written to ACTION in buy_screen(), but where should it show up in sell_screen()?? */
 
 
-			item_id = host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l6 + item));
+			item_id = host_readws((Bit8u*)g_sellitems + 7 * (l6 + item));
 
-			if (host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l6 + item) + 2) == 0) {
+			if (host_readws((Bit8u*)g_sellitems + 7 * (l6 + item) + 2) == 0) {
 				GUI_output(get_ttx(452));
 			} else {
 
@@ -350,7 +350,7 @@ void sell_screen(Bit8u *shop_ptr)
 				} else {
 
 					nice = 1;
-					l15 = host_readbs((Bit8u*)ds_readd(SELLITEMS) + 7 * (l6 + item) + 6);
+					l15 = host_readbs((Bit8u*)g_sellitems + 7 * (l6 + item) + 6);
 
 					if (tmp[hero_pos][l15] != 0) {
 
@@ -370,20 +370,20 @@ void sell_screen(Bit8u *shop_ptr)
 								nice = host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + SIZEOF_INVENTORY * l15);
 							}
 
-							price -= ((Bit32s)host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 *(l6 + item) + 2) *
-									(Bit32s)host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l6 + item) + 4) *
+							price -= ((Bit32s)host_readws((Bit8u*)g_sellitems + 7 *(l6 + item) + 2) *
+									(Bit32s)host_readws((Bit8u*)g_sellitems + 7 * (l6 + item) + 4) *
 									tmp[hero_pos][l15] * g_price_modificator) / 4L;
 
 							tmp[hero_pos][l15] = nice;
 
-							price += ((Bit32s)host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 *(l6 + item) + 2) *
-									(Bit32s)host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l6 + item) + 4) *
+							price += ((Bit32s)host_readws((Bit8u*)g_sellitems + 7 *(l6 + item) + 2) *
+									(Bit32s)host_readws((Bit8u*)g_sellitems + 7 * (l6 + item) + 4) *
 									tmp[hero_pos][l15] * g_price_modificator) / 4L;
 						} else {
 							tmp[hero_pos][l15] = 0;
 
-							price -= ((Bit32s)host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 *(l6 + item) + 2) *
-									(Bit32s)host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l6 + item) + 4) *
+							price -= ((Bit32s)host_readws((Bit8u*)g_sellitems + 7 *(l6 + item) + 2) *
+									(Bit32s)host_readws((Bit8u*)g_sellitems + 7 * (l6 + item) + 4) *
 									nice * g_price_modificator) / 4L;
 						}
 					} else {
@@ -403,19 +403,19 @@ void sell_screen(Bit8u *shop_ptr)
 								nice = host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + SIZEOF_INVENTORY * l15);
 							}
 
-							price -= ((Bit32s)host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 *(l6 + item) + 2) *
-									(Bit32s)host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l6 + item) + 4) *
+							price -= ((Bit32s)host_readws((Bit8u*)g_sellitems + 7 *(l6 + item) + 2) *
+									(Bit32s)host_readws((Bit8u*)g_sellitems + 7 * (l6 + item) + 4) *
 									tmp[hero_pos][l15] * g_price_modificator) / 4L;
 
 							tmp[hero_pos][l15] = nice;
 
-							price += ((Bit32s)host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 *(l6 + item) + 2) *
-									(Bit32s)host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l6 + item) + 4) *
+							price += ((Bit32s)host_readws((Bit8u*)g_sellitems + 7 *(l6 + item) + 2) *
+									(Bit32s)host_readws((Bit8u*)g_sellitems + 7 * (l6 + item) + 4) *
 									tmp[hero_pos][l15] * g_price_modificator) / 4L;
 						} else {
 							tmp[hero_pos][l15] = 1;
-							price += ((Bit32s)host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 *(l6 + item) + 2) *
-									(Bit32s)host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l6 + item) + 4) *
+							price += ((Bit32s)host_readws((Bit8u*)g_sellitems + 7 *(l6 + item) + 2) *
+									(Bit32s)host_readws((Bit8u*)g_sellitems + 7 * (l6 + item) + 4) *
 									nice * g_price_modificator) / 4L;
 						}
 					}

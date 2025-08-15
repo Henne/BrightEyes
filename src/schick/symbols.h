@@ -1361,17 +1361,17 @@
 // ?40
 //#define GUI_BUFFER_UNKN                 (0xbff9)    /* Bit8u* */
 //#define TEXTBOX_WIDTH                   (0xbffd)    /* signed short */
-#define TEXTBOX_POS_X                   (0xbfff)    /* signed short; coordinate of upper left corner */
-#define TEXTBOX_POS_Y                   (0xc001)    /* signed short; coordinate of upper left corner */
-#define GAME_MODE                       (0xc003)    /* signed short; {-1 = unspecified, 1 = beginner, 2 = advanced } */
-#define SELLITEMS                       (0xc005)    /* Bit8u*; also used for repair items */
-#define BUYITEMS                        (0xc009)    /* Bit8u*; merchant's assortment */
-#define PIC_COPY_DST                    (0xc00d)    /* Bit8u* */
+//#define TEXTBOX_POS_X                   (0xbfff)    /* signed short; coordinate of upper left corner */
+//#define TEXTBOX_POS_Y                   (0xc001)    /* signed short; coordinate of upper left corner */
+//#define GAME_MODE                       (0xc003)    /* signed short; {-1 = unspecified, 1 = beginner, 2 = advanced } */
+//#define SELLITEMS                       (0xc005)    /* Bit8u*; also used for repair items */
+//#define BUYITEMS                        (0xc009)    /* Bit8u*; merchant's assortment */
+//#define PIC_COPY_DST                    (0xc00d)    /* Bit8u* */
 //#define PIC_COPY_X1                     (0xc011)    /* signed short */
 //#define PIC_COPY_Y1                     (0xc013)    /* signed short */
 //#define PIC_COPY_X2                     (0xc015)    /* signed short */
 //#define PIC_COPY_Y2                     (0xc017)    /* signed short */
-#define PIC_COPY_SRC                    (0xc019)    /* Bit8u* */
+//#define PIC_COPY_SRC                    (0xc019)    /* Bit8u* */
 //#define PIC_COPY_V1                     (0xc01d)    /* unsigned short */
 //#define PIC_COPY_V2                     (0xc01f)    /* unsigned short */
 //#define PIC_COPY_V3                     (0xc021)    /* unsigned short */

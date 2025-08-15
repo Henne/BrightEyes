@@ -444,7 +444,7 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 	struct dummy8 col_str_val = *(struct dummy8*)(p_datseg + SPELL_SELECT_STR_KEYVAL_COLOR);
 	struct dummy12 ones = *(struct dummy12*)(p_datseg + SPELL_SELECT_ONES);
 
-	if ((show_vals == 0) && (ds_readws(GAME_MODE) == GAME_MODE_ADVANCED)) {
+	if ((show_vals == 0) && (g_game_mode == GAME_MODE_ADVANCED)) {
 		show_vals = 2;
 	}
 

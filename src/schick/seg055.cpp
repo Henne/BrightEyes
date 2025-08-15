@@ -39,12 +39,12 @@ namespace M302de {
  */
 void add_item_to_shop(Bit8u *shop_ptr, signed short item_id, signed short pos)
 {
-	host_writews((Bit8u*)ds_readd(BUYITEMS) + 7 * pos, item_id);
+	host_writews((Bit8u*)g_buyitems + 7 * pos, item_id);
 
-	host_writews((Bit8u*)ds_readd(BUYITEMS) + 7 * pos + 2,
+	host_writews((Bit8u*)g_buyitems + 7 * pos + 2,
 		host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) + host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * host_readbs(shop_ptr) / 100);
 
-	host_writews((Bit8u*)ds_readd(BUYITEMS) + 7 * pos + 4,
+	host_writews((Bit8u*)g_buyitems + 7 * pos + 4,
 			host_readbs(get_itemsdat(item_id) + ITEM_STATS_PRICE_UNIT));
 }
 
@@ -109,13 +109,13 @@ void do_merchant(void)
 	load_ggsts_nvf();
 	refresh = g_request_refresh = 1;
 
-	ds_writed(BUYITEMS, (Bit32u)g_fig_figure1_buf);
-	memset((Bit8u*)ds_readd(BUYITEMS), 0, 3500);
+	g_buyitems = g_fig_figure1_buf;
+	memset((Bit8u*)g_buyitems, 0, 3500);
 	g_price_modificator = 4;
 	shop_p = p_datseg + SHOP_DESCR_TABLE + 9 * gs_current_typeindex;
 
 	for (l_si = 0; l_si < 100; l_si++) {
-		host_writews((Bit8u*)ds_readd(BUYITEMS) + 7 * l_si, 0);
+		host_writews((Bit8u*)g_buyitems + 7 * l_si, 0);
 	}
 
 	l_si = 1;
@@ -161,22 +161,22 @@ void do_merchant(void)
 
 	if (host_readbs(shop_p + 1) == 1) {
 
-		qsort((Bit8u*)ds_readd(BUYITEMS), item_pos, 7, shop_compar);
-		qsort((Bit8u*)ds_readd(BUYITEMS) + 7 * 70, armor_pos - 70, 7, shop_compar);
+		qsort((Bit8u*)g_buyitems, item_pos, 7, shop_compar);
+		qsort((Bit8u*)g_buyitems + 7 * 70, armor_pos - 70, 7, shop_compar);
 
 		/* copy the rest */
 		for (l_si = 0; armor_pos - 70 > l_si; l_si++) {
 
-			*(struct dummy7*)((Bit8u*)ds_readd(BUYITEMS) + 7 * (item_pos + l_si)) =
-				*(struct dummy7*)((Bit8u*)ds_readd(BUYITEMS) + 7 * (l_si + 70));
+			*(struct dummy7*)((Bit8u*)g_buyitems + 7 * (item_pos + l_si)) =
+				*(struct dummy7*)((Bit8u*)g_buyitems + 7 * (l_si + 70));
 		}
 		/* cleanup */
 		for (l_si = item_pos + armor_pos - 70; l_si < 100; l_si++) {
-			host_writews((Bit8u*)ds_readd(BUYITEMS) + 7 * l_si, 0);
+			host_writews((Bit8u*)g_buyitems + 7 * l_si, 0);
 		}
 
 	} else {
-		qsort((Bit8u*)ds_readd(BUYITEMS), item_pos, 7, shop_compar);
+		qsort((Bit8u*)g_buyitems, item_pos, 7, shop_compar);
 	}
 
 	while (done == 0 && !gs_merchant_offended_flags[gs_current_typeindex]) {

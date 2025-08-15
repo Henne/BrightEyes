@@ -5537,10 +5537,10 @@ int schick_main(int argc, char** argv)
 
 
 		/* select game mode */
-		ds_writew(GAME_MODE, GAME_MODE_UNSPECIFIED);
+		g_game_mode = GAME_MODE_UNSPECIFIED;
 
-		while (ds_readws(GAME_MODE) == GAME_MODE_UNSPECIFIED) {
-			ds_writew(GAME_MODE, GUI_radio(get_ttx(5), 2, get_ttx(6), get_ttx(7)));
+		while (g_game_mode == GAME_MODE_UNSPECIFIED) {
+			g_game_mode = GUI_radio(get_ttx(5), 2, get_ttx(6), get_ttx(7));
 		}
 
 		if (copy_protection()) {

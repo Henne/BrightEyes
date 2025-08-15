@@ -465,7 +465,7 @@ void status_menu(signed short hero_pos)
 			case 1: {
 				/* from start-page */
 
-				if (ds_readws(GAME_MODE) == GAME_MODE_ADVANCED) {
+				if (g_game_mode == GAME_MODE_ADVANCED) {
 					g_radio_name_list[0] = get_tx2(19);
 					g_radio_name_list[1] = get_tx2(20);
 					g_radio_name_list[2] = get_tx2(21);

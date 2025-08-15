@@ -634,7 +634,7 @@ void level_up(signed short hero_pos)
 		add_hero_ae(hero, i - l_si);
 
 		/* change skill increasements into AE */
-		if (host_readbs(hero + HERO_TYPE) == HERO_TYPE_MAGE && ds_readws(GAME_MODE) == GAME_MODE_ADVANCED) {
+		if (host_readbs(hero + HERO_TYPE) == HERO_TYPE_MAGE && g_game_mode == GAME_MODE_ADVANCED) {
 
 			if (GUI_bool(get_tx2(40))) {
 				/* trade 10 skill increasements into 1W6+2 AE */
@@ -666,7 +666,7 @@ void level_up(signed short hero_pos)
 
 	update_atpa(hero);
 
-	if (ds_readws(GAME_MODE) == GAME_MODE_BEGINNER) {
+	if (g_game_mode == GAME_MODE_BEGINNER) {
 
 		i = v2 = 0;
 

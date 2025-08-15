@@ -646,8 +646,8 @@ void GUI_draw_popup_line(signed short line, signed short type)
 			break;
 	}
 
-	x = ds_readws(TEXTBOX_POS_X);
-	y = ds_readws(TEXTBOX_POS_Y) + (line * 8);
+	x = g_textbox_pos_x;
+	y = g_textbox_pos_y + (line * 8);
 	g_pic_copy.x1 = x;
 	g_pic_copy.y1 = y;
 	g_pic_copy.x2 = x + 15;

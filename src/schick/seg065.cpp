@@ -212,7 +212,7 @@ void hyg_ani_2(Bit8u *ptr, signed short x, signed short y)
 	g_pic_copy.x2 = x + host_readws(ptr + 4) - 1;
 	g_pic_copy.y2 = y + host_readws(ptr + 6) - 1;
 
-	//ds_writed(PIC_COPY_SRC, host_readd(ptr));
+	//g_pic_copy.src = host_readd(ptr);
 	g_pic_copy.src = (unsigned char*)(*((unsigned char*)ptr));
 	g_pic_copy.dst = g_renderbuf_ptr;
 

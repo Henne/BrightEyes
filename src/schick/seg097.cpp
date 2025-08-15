@@ -279,11 +279,11 @@ void GUI_draw_radio_bg(signed short header, signed short options, signed short w
 	signed short i;
 
 	/* set upper left coordinates */
-	g_pic_copy.x1 = ds_readw(TEXTBOX_POS_X);
-	g_pic_copy.y1 = ds_readw(TEXTBOX_POS_Y);
+	g_pic_copy.x1 = g_textbox_pos_x;
+	g_pic_copy.y1 = g_textbox_pos_y;
 	/* set lower righti coordinates */
-	g_pic_copy.x2 = ds_readw(TEXTBOX_POS_X) + width - 1;
-	g_pic_copy.y2 = ds_readw(TEXTBOX_POS_Y) + height - 1;
+	g_pic_copy.x2 = g_textbox_pos_x + width - 1;
+	g_pic_copy.y2 = g_textbox_pos_y + height - 1;
 	/* set pointer */
 	g_pic_copy.src = g_gui_buffer_unkn;
 	do_save_rect();
@@ -309,10 +309,10 @@ void GUI_draw_radio_bg(signed short header, signed short options, signed short w
 
 void GUI_copy_smth(unsigned short width, unsigned short height)
 {
-	g_pic_copy.x1 = ds_readw(TEXTBOX_POS_X);
-	g_pic_copy.y1 = ds_readw(TEXTBOX_POS_Y);
-	g_pic_copy.x2 = ds_readw(TEXTBOX_POS_X) + width - 1;
-	g_pic_copy.y2 = ds_readw(TEXTBOX_POS_Y) + height - 1;
+	g_pic_copy.x1 = g_textbox_pos_x;
+	g_pic_copy.y1 = g_textbox_pos_y;
+	g_pic_copy.x2 = g_textbox_pos_x + width - 1;
+	g_pic_copy.y2 = g_textbox_pos_y + height - 1;
 	g_pic_copy.src = g_gui_buffer_unkn;
 	do_pic_copy(0);
 }
@@ -354,9 +354,9 @@ signed short GUI_input(char *str, unsigned short num)
 	l5 = ds_readw(TEXTLINE_MAXLEN);
 
 	l_di = (g_textbox_width * 32) + 32;
-	ds_writew(TEXTBOX_POS_X, ((signed short)(320u - l_di) >> 1) + g_basepos_x);
+	g_textbox_pos_x = ((signed short)(320u - l_di) >> 1) + g_basepos_x;
 
-	ds_writew(TEXTLINE_POSX, ds_readw(TEXTBOX_POS_X) + 5);
+	ds_writew(TEXTLINE_POSX, g_textbox_pos_x + 5);
 	ds_writew(TEXTLINE_MAXLEN, l_di - 8);
 
 	l_si = GUI_count_lines(str);
@@ -366,8 +366,8 @@ signed short GUI_input(char *str, unsigned short num)
 
 	l2 = (l_si + 2) * 8;
 
-	ds_writew(TEXTBOX_POS_Y, ((signed short)(200u - l2) >> 1) + g_basepos_y);
-	ds_writew(TEXTLINE_POSY, ds_readw(TEXTBOX_POS_Y) + 7);
+	g_textbox_pos_y = ((signed short)(200u - l2) >> 1) + g_basepos_y;
+	ds_writew(TEXTLINE_POSY, g_textbox_pos_y + 7);
 
 	get_textcolor(&fg_bak, &bg_bak);
 
@@ -382,7 +382,7 @@ signed short GUI_input(char *str, unsigned short num)
 	refresh_screen_size();
 
 	if (num != 0) {
-		if (GUI_enter_text(g_text_input_buf, ds_readws(TEXTBOX_POS_X) + ((signed short)(l_di - num * 6) >> 1), ds_readws(TEXTBOX_POS_Y) + l_si * 8 -2, num, 0) != -1) {
+		if (GUI_enter_text(g_text_input_buf, g_textbox_pos_x + ((signed short)(l_di - num * 6) >> 1), g_textbox_pos_y + l_si * 8 -2, num, 0) != -1) {
 			retval = (signed short)atol(g_text_input_buf);
 		} else {
 			retval = -1;
@@ -451,11 +451,11 @@ void GUI_fill_radio_button(signed short old_pos, unsigned short new_pos,
 
 	update_mouse_cursor();
 
-	y = ds_readw(TEXTBOX_POS_X) + 6;
+	y = g_textbox_pos_x + 6;
 
 	if (old_pos != -1) {
 
-		x = ds_readws(TEXTBOX_POS_Y) + (offset + old_pos) * 8 + 2;
+		x = g_textbox_pos_y + (offset + old_pos) * 8 + 2;
 
 		/* clear the old button */
 		for (i = 0; i < 4; i++)
@@ -463,7 +463,7 @@ void GUI_fill_radio_button(signed short old_pos, unsigned short new_pos,
 				(signed char)0xd8);
 	}
 
-	x = ds_readws(TEXTBOX_POS_Y) + (offset + new_pos) * 8 + 2;
+	x = g_textbox_pos_y + (offset + new_pos) * 8 + 2;
 
 	/* fill the new button */
 	for (i = 0; i < 4; i++)
@@ -502,8 +502,8 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
 	g_textbox_width = 9;
 
 	l_di = g_textbox_width * 32 + 32;
-	ds_writew(TEXTBOX_POS_X, ((signed short)(320 - l_di) >> 1) + g_basepos_x);
-	ds_writew(TEXTLINE_POSX, ds_readw(TEXTBOX_POS_X) + 5);
+	g_textbox_pos_x = ((signed short)(320 - l_di) >> 1) + g_basepos_x;
+	ds_writew(TEXTLINE_POSX, g_textbox_pos_x + 5);
 	ds_writew(TEXTLINE_MAXLEN, l_di - 8);
 	l10 = ds_readw(TXT_TABPOS1);
 	ds_writew(TXT_TABPOS1, ds_readws(TEXTLINE_POSX) + ds_readws(TEXTLINE_MAXLEN) - 24);
@@ -520,8 +520,8 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
 
 	l4 = l_si + (signed char)options;
 	l5 = (l4 + 2) * 8;
-	ds_writew(TEXTBOX_POS_Y, (200 - (l5 + 2)) >> 1);
-	ds_writew(TEXTLINE_POSY, ds_readw(TEXTBOX_POS_Y) + 5);
+	g_textbox_pos_y = (200 - (l5 + 2)) >> 1;
+	ds_writew(TEXTLINE_POSY, g_textbox_pos_y + 5);
 
 	update_mouse_cursor();
 	get_textcolor(&fg_bak, &bg_bak);
@@ -531,15 +531,15 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
 	if (picture != 0) {
 		/* draw a frame */
 		do_border(g_vga_memstart,
-			ds_readw(TEXTBOX_POS_X) + 5, ds_readw(TEXTBOX_POS_Y) + 6,
-			ds_readw(TEXTBOX_POS_X) + 38, ds_readw(TEXTBOX_POS_Y) + 39,
+			g_textbox_pos_x + 5, g_textbox_pos_y + 6,
+			g_textbox_pos_x + 38, g_textbox_pos_y + 39,
 				(signed char)0xff);
 
 		/* set the coordinates */
-		g_pic_copy.x1 = ds_readw(TEXTBOX_POS_X) + 6;
-		g_pic_copy.y1 = ds_readw(TEXTBOX_POS_Y) + 7;
-		g_pic_copy.x2 = ds_readw(TEXTBOX_POS_X) + 37;
-		g_pic_copy.y2 = ds_readw(TEXTBOX_POS_Y) + 38;
+		g_pic_copy.x1 = g_textbox_pos_x + 6;
+		g_pic_copy.y1 = g_textbox_pos_y + 7;
+		g_pic_copy.x2 = g_textbox_pos_x + 37;
+		g_pic_copy.y2 = g_textbox_pos_y + 38;
 		g_pic_copy.src = picture;
 
 		do_pic_copy(0);
@@ -567,7 +567,7 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
 	if ((signed char)options != 0) {
 
 		l2 = ds_readw(TEXTLINE_POSX) + 8;
-		l3 = ds_readws(TEXTBOX_POS_Y) + (l_si + 1) * 8;
+		l3 = g_textbox_pos_y + (l_si + 1) * 8;
 
 		va_start(arguments, options);
 		for (i = 0; i < (signed char)options; l3 += 8, i++) {
@@ -621,18 +621,18 @@ signed short GUI_menu_input(signed short positions, signed short h_lines, signed
 		l6 = h_lines * 8;
 		l3 = g_mouse_posx;
 		l4 = g_mouse_posy;
-		g_mouse_posx_bak = g_mouse_posx = ds_readws(TEXTBOX_POS_X) + 90;
-		l1 = ds_readws(TEXTBOX_POS_Y) + l6;
+		g_mouse_posx_bak = g_mouse_posx = g_textbox_pos_x + 90;
+		l1 = g_textbox_pos_y + l6;
 
 		g_mouse_posy_bak = g_mouse_posy = l2 = l1 + 8 * g_menu_default_select;
 
 		mouse_move_cursor(g_mouse_posx, g_mouse_posy);
 
-		g_mouse_posx_max = ds_readws(TEXTBOX_POS_X) + width - 16;
-		g_mouse_posx_min = ds_readws(TEXTBOX_POS_X);
-		g_mouse_posy_min = ds_readws(TEXTBOX_POS_Y) + l6;
+		g_mouse_posx_max = g_textbox_pos_x + width - 16;
+		g_mouse_posx_min = g_textbox_pos_x;
+		g_mouse_posy_min = g_textbox_pos_y + l6;
 
-		g_mouse_posy_max = l6 + ds_readws(TEXTBOX_POS_Y) - 1 + positions * 8;
+		g_mouse_posy_max = l6 + g_textbox_pos_y - 1 + positions * 8;
 		refresh_screen_size();
 
 		ds_writew(MOUSE1_EVENT2, ds_writew(MOUSE1_EVENT1, ds_writew(MOUSE2_EVENT, 0)));
@@ -741,8 +741,8 @@ signed short GUI_radio(char *text, signed char options, ...)
 	l9 = ds_readw(TEXTLINE_MAXLEN);
 
 	l11 = g_textbox_width * 32 + 32;
-	ds_writew(TEXTBOX_POS_X, ((320 - l11) >> 1) + g_basepos_x);
-	ds_writew(TEXTLINE_POSX, ds_readw(TEXTBOX_POS_X) + 5);
+	g_textbox_pos_x = ((320 - l11) >> 1) + g_basepos_x;
+	ds_writew(TEXTLINE_POSX, g_textbox_pos_x + 5);
 	ds_writew(TEXTLINE_MAXLEN, l11 - 8);
 
 	l10 = ds_readw(TXT_TABPOS1);
@@ -751,8 +751,8 @@ signed short GUI_radio(char *text, signed char options, ...)
 	l_di = GUI_count_lines(text);
 	l5 = l_di + options;
 	l6 = (l5 + 2) * 8;
-	ds_writew(TEXTBOX_POS_Y, ((200 - l6 + 2) >> 1) + g_basepos_y);
-	ds_writew(TEXTLINE_POSY, ds_readw(TEXTBOX_POS_Y) + 7);
+	g_textbox_pos_y = ((200 - l6 + 2) >> 1) + g_basepos_y;
+	ds_writew(TEXTLINE_POSY, g_textbox_pos_y + 7);
 
 	update_mouse_cursor();
 	get_textcolor(&fg_bak, &bg_bak);
@@ -763,19 +763,19 @@ signed short GUI_radio(char *text, signed char options, ...)
 		GUI_print_header(text);
 
 	l3 = ds_readw(TEXTLINE_POSX) + 8;
-	l4 = ds_readws(TEXTBOX_POS_Y) + (l_di + 1) * 8;
+	l4 = g_textbox_pos_y + (l_di + 1) * 8;
 
 	va_start(arguments, options);
 	for (i = 0; i < options; l4 += 8, i++) {
 
 		/* highlight special option */
-		if ((ds_readw(GAME_MODE) == GAME_MODE_BEGINNER) && (g_skilled_hero_pos == i))
+		if ((g_game_mode == GAME_MODE_BEGINNER) && (g_skilled_hero_pos == i))
 			set_textcolor(0xc9, 0xdf);
 
 		GUI_print_string((char*)va_arg(arguments, char*), l3, l4);
 
 		/* reset highlight special option */
-		if ((ds_readw(GAME_MODE) == GAME_MODE_BEGINNER) && (g_skilled_hero_pos == i))
+		if ((g_game_mode == GAME_MODE_BEGINNER) && (g_skilled_hero_pos == i))
 			set_textcolor(0xff, 0xdf);
 	}
 
