@@ -813,18 +813,18 @@
 //#define SKY_FADE_PALETTE                (0x4558)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
 //#define SPECIAL_SCREEN                  (0x45b8)    /* unsigned char; {0,1}, e.g. diary, treasure map, game options, automap */
 //#define SPECIAL_DAYS                    (0x45b9)    /* struct(3)[43]; struct{char month, day, id;} */
-#define MONTHS_SPRING                   (0x463a)    /* char[4] */
-#define MONTHS_WINTER                   (0x463e)    /* char[4] */
-#define MONTHS_SUMMER                   (0x4642)    /* char[4] */
-#define BANK_HELLER                     (0x4646)    /* signed short */
-#define CONSUME_QUIET                   (0x4648)    /* char */
-#define HEROKEEPING_FLAG                (0x4649)    /* unsigned char; {0,1,2} */
+//#define MONTHS_SPRING                   (0x463a)    /* char[4] */
+//#define MONTHS_WINTER                   (0x463e)    /* char[4] */
+//#define MONTHS_SUMMER                   (0x4642)    /* char[4] */
+//#define BANK_HELLER                     (0x4646)    /* signed short */
+//#define CONSUME_QUIET                   (0x4648)    /* char */
+//#define HEROKEEPING_FLAG                (0x4649)    /* unsigned char; {0,1,2} */
 // ?4
 //#define LEVEL_AP_TAB                    (0x464e)    /* signed long[21] */
-#define DELAY_OR_KEYPRESS_FLAG          (0x46a2)    /* unsigned char; writeonly (0,1) */
-#define MERCHANT_ITEMS_POSX             (0x46a3)    /* signed short[15] */
-#define MERCHANT_ITEMS_POSY             (0x46c1)    /* signed short[15] */
-#define REFRESH_STATUS_LINE             (0x46df)    /* signed char; {0,1} */
+//#define DELAY_OR_KEYPRESS_FLAG          (0x46a2)    /* unsigned char; writeonly (0,1) */
+//#define MERCHANT_ITEMS_POSX             (0x46a3)    /* signed short[15] */
+//#define MERCHANT_ITEMS_POSY             (0x46c1)    /* signed short[15] */
+//#define REFRESH_STATUS_LINE             (0x46df)    /* signed char; {0,1} */
 //#define DSA_VERSION_STRING              (0x46e0)    /* char[12]; "DSA VERSION" */
 //#define GAME_VERSION                    (0x46ec)    /* char[6]; "V3.02" */
 // ?6

@@ -84,7 +84,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 			}
 
 			/* consume quietly */
-			if (!ds_readbs(CONSUME_QUIET)) {
+			if (!g_consume_quiet) {
 				GUI_output(get_ttx(207));
 			}
 
@@ -115,7 +115,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 				}
 
 				/* consume quietly */
-				if (!ds_readbs(CONSUME_QUIET)) {
+				if (!g_consume_quiet) {
 					GUI_output(get_ttx(208));
 				}
 

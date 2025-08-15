@@ -1837,9 +1837,9 @@ void game_loop(void)
 			check_level_up();
 		}
 
-		if (ds_readbs(REFRESH_STATUS_LINE) != 0) {
+		if (g_refresh_status_line) {
 
-			ds_writeb(REFRESH_STATUS_LINE, 0);
+			g_refresh_status_line = 0;
 
 			if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 				draw_status_line();
@@ -2129,11 +2129,11 @@ void nightfall(void)
  */
 signed short get_current_season(void)
 {
-	if (is_in_byte_array(gs_month, p_datseg + MONTHS_WINTER)) {
+	if (is_in_byte_array(gs_month, g_months_winter)) {
 		return SEASON_WINTER;
-	} else if (is_in_byte_array(gs_month, p_datseg + MONTHS_SUMMER)) {
+	} else if (is_in_byte_array(gs_month, g_months_summer)) {
 		return SEASON_SUMMER;
-	} else if (is_in_byte_array(gs_month, p_datseg + MONTHS_SPRING)) {
+	} else if (is_in_byte_array(gs_month, g_months_spring)) {
 		return SEASON_SPRING;
 	} else {
 		return SEASON_AUTUMN;
@@ -2166,7 +2166,7 @@ void do_census(void)
 
 	/* convert to heller */
 	val = gs_bank_deposit * 10L;
-	val += ds_readws(BANK_HELLER);
+	val += g_bank_heller;
 
 	if (val < 0) {
 		/* 15% Interest for borrowed money */
@@ -2177,10 +2177,10 @@ void do_census(void)
 	}
 
 	/* remember the heller */
-	ds_writew(BANK_HELLER, val % 10);
+	g_bank_heller = val % 10;
 
 	if (val < 0) {
-		ds_writew(BANK_HELLER, -__abs__(ds_readws(BANK_HELLER)));
+		g_bank_heller = -__abs__(g_bank_heller);
 	}
 
 	/* save the new deposit */
@@ -2850,7 +2850,7 @@ void magical_chainmail_damage(void)
 		return;
 	}
 
-	ds_writeb(HEROKEEPING_FLAG, (gs_show_travel_map != 0) ? 1 : 2);
+	g_herokeeping_flag = (gs_show_travel_map ? 1 : 2);
 
 	for (i = 0; i <= 6; i++) {
 
@@ -2883,7 +2883,7 @@ void herokeeping(void)
 	if (g_game_state != GAME_STATE_MAIN)
 		return;
 
-	/* The actual food consumption is done only if HEROKEEPING_FLAG is set.
+	/* The actual food consumption is done only if g_herokeeping_flag is set.
 	 * This happens hourly in magical_chainmail_damage()
 	 * The flag is reset at the end of this function. */
 
@@ -2893,7 +2893,7 @@ void herokeeping(void)
 
 		/* consume food and set messages */
 		if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			ds_readb(HEROKEEPING_FLAG) != 0 &&
+			g_herokeeping_flag &&
 			check_hero_no3(hero) &&			/* must be vital */
 			!host_readbs(hero + HERO_JAIL) &&
 			!g_travel_herokeeping)
@@ -2914,12 +2914,12 @@ void herokeeping(void)
 
 						if (pos != -1) {
 							/* Lunchpack found, consume quiet */
-							ds_writeb(CONSUME_QUIET, 1);
+							g_consume_quiet = 1;
 							consume(hero, hero, pos);
 #if !defined(__BORLANDC__)
 							D1_INFO("%s isst etwas\n", (char*)hero + HERO_NAME2);
 #endif
-							ds_writeb(CONSUME_QUIET, 0);
+							g_consume_quiet = 0;
 
 							/* search for another Lunchpack */
 							/* print last ration message */
@@ -2981,7 +2981,7 @@ void herokeeping(void)
 						/* hero should drink something */
 						if (host_readbs(hero + HERO_THIRST) > 90) {
 
-							ds_writeb(CONSUME_QUIET, 1);
+							g_consume_quiet = 1;
 
 							/* first check for beer :) */
 							pos = get_item_pos(hero, ITEM_BEER);
@@ -3010,7 +3010,7 @@ void herokeeping(void)
 								}
 							}
 
-							ds_writeb(CONSUME_QUIET, 0);
+							g_consume_quiet = 0;
 						}
 
 						if (host_readbs(hero + HERO_THIRST) < 100) {
@@ -3099,7 +3099,7 @@ void herokeeping(void)
 		}
 	}
 
-	ds_writeb(HEROKEEPING_FLAG, 0);
+	g_herokeeping_flag = 0;
 }
 
 void check_level_up(void)
@@ -3729,9 +3729,9 @@ void delay_or_keypress(signed short duration)
 
 	while (counter < duration) {
 
-		ds_writeb(DELAY_OR_KEYPRESS_FLAG, 1);
+		g_delay_or_keypress_flag = 1;
 		handle_input();
-		ds_writeb(DELAY_OR_KEYPRESS_FLAG, 0);
+		g_delay_or_keypress_flag = 0;
 
 		if (g_c_event_active) {
 
@@ -4080,10 +4080,10 @@ void select_with_mouse(Bit8u *p1, Bit8u *p2)
 	}
 
 	for (i = 0; i < 15; i++) {
-		if ((ds_readws(MERCHANT_ITEMS_POSX + i * 2) <= g_mouse_posx) &&
-			(ds_readws(MERCHANT_ITEMS_POSX + i * 2) + 50 >= g_mouse_posx) &&
-			(ds_readws(MERCHANT_ITEMS_POSY + i * 2) <= g_mouse_posy) &&
-			(ds_readws(MERCHANT_ITEMS_POSY + i * 2) + 17 >= g_mouse_posy) &&
+		if ((g_merchant_items_posx[i] <= g_mouse_posx) &&
+			(g_merchant_items_posx[i] + 50 >= g_mouse_posx) &&
+			(g_merchant_items_posy[i] <= g_mouse_posy) &&
+			(g_merchant_items_posy[i] + 17 >= g_mouse_posy) &&
 			(host_readws(p2 + i * 7) != 0))
 		{
 			host_writew(p1, i);
@@ -4451,7 +4451,7 @@ void sub_hero_le(Bit8u *hero, signed short le)
 			host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_UNKNOWN2);
 
 			if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
-				ds_writeb(REFRESH_STATUS_LINE, 1);
+				g_refresh_status_line = 1;
 			}
 
 			/* reset sickness */

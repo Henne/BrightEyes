@@ -649,6 +649,16 @@ extern signed char g_travel_herokeeping;	//ds:0x4497; seg002, seg063
 
 extern signed char g_special_screen;		//ds:0x45b8; seg002-seg109
 
+extern signed char g_months_spring[4];		//ds:0x463a; seg002
+extern signed char g_months_winter[4];		//ds:0x463e; seg002
+extern signed char g_months_summer[4];		//ds:0x4642; seg002
+extern signed short g_bank_heller;		//ds:0x4646; seg002
+extern signed char g_consume_quiet;		//ds:0x4648; seg002, seg108
+extern unsigned char g_herokeeping_flag;	//ds:0x4649; seg002
+extern unsigned char g_delay_or_keypress_flag;	//ds:0x46a2; seg002
+extern const signed short g_merchant_items_posx[15];	//ds:0x46a3; seg002
+extern const signed short g_merchant_items_posy[15];	//ds:0x46c1; seg002
+extern signed char g_refresh_status_line;	//ds:0x46df; seg002, seg095
 extern char g_dsa_version_string[12];		//ds:0x46e0; seg026
 extern char g_game_version[6];			//ds:0x46ec; seg002
 extern char g_version_token1;			//ds:0x46f8; seg026

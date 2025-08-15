@@ -2943,19 +2943,19 @@ struct{signed char month, day; unsigned char id;} g_special_days[43] = {
 	{ 0x0c, 0x1e, 0x21 },
 	{ -0x01, 0x00, 0x00 }
 }; // ds:0x45b9
-char g_months_spring[4] = { 0x0a, 0x0b, 0x0c, -1 }; // ds:0x463a
-char g_months_winter[4] = { 7, 8, 9, -1 }; // ds:0x463e
-char g_months_summer[4] = { 1, 2, 3, -1 }; // ds:0x4642
+signed char g_months_spring[4] = { 10, 11, 12, -1 }; // ds:0x463a
+signed char g_months_winter[4] = { 7, 8, 9, -1 }; // ds:0x463e
+signed char g_months_summer[4] = { 1, 2, 3, -1 }; // ds:0x4642
 signed short g_bank_heller = 0; // ds:0x4646
-char g_consume_quiet = 0; // ds:0x4648
+signed char g_consume_quiet = 0; // ds:0x4648
 unsigned char g_herokeeping_flag = 0; // ds:0x4649
 unsigned char g_unkn_031[4] = { 0x00, 0x00, 0x00, 0x00 }; // ds:0x464a
 
 // for the following there is an easy formula: g_level_ap_tab[i] = 50 * i * (i+1). therefore, these 84 bytes could be easily freed and reused */
 signed long g_level_ap_tab[21] = { 0, 100, 300, 600, 1000, 1500, 2100, 2800, 3600, 4500, 5500, 6600, 7800, 9100, 10500, 12000, 13600, 15300, 17100, 19000, 21000 }; // ds:0x464e
 unsigned char g_delay_or_keypress_flag = 0; // ds:0x46a2, writeonly (0,1)
-signed short g_merchant_items_posx[15] = { 0x001e, 0x001e, 0x001e, 0x001e, 0x001e, 0x005f, 0x005f, 0x005f, 0x005f, 0x005f, 0x00a0, 0x00a0, 0x00a0, 0x00a0, 0x00a0 }; // ds:0x46a3
-signed short g_merchant_items_posy[15] = { 0x0023, 0x0037, 0x004b, 0x005f, 0x0073, 0x0023, 0x0037, 0x004b, 0x005f, 0x0073, 0x0023, 0x0037, 0x004b, 0x005f, 0x0073 }; // ds:0x46c1
+const signed short g_merchant_items_posx[15] = { 0x001e, 0x001e, 0x001e, 0x001e, 0x001e, 0x005f, 0x005f, 0x005f, 0x005f, 0x005f, 0x00a0, 0x00a0, 0x00a0, 0x00a0, 0x00a0 }; // ds:0x46a3
+const signed short g_merchant_items_posy[15] = { 0x0023, 0x0037, 0x004b, 0x005f, 0x0073, 0x0023, 0x0037, 0x004b, 0x005f, 0x0073, 0x0023, 0x0037, 0x004b, 0x005f, 0x0073 }; // ds:0x46c1
 signed char g_refresh_status_line = 0; // ds:0x46df
 char g_dsa_version_string[12] = "DSA VERSION"; // ds:0x46e0
 char g_game_version[6] = "V3.02"; // ds:0x46ec

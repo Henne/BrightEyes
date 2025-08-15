@@ -499,7 +499,7 @@ void remove_npc(signed short head_index, signed char days,
 	/* dec global hero counter */
 	gs_total_hero_counter--;
 
-	ds_writeb(REFRESH_STATUS_LINE, 1);
+	g_refresh_status_line = 1;
 
 	/* TODO:	check_hero() will now, after memset() return 0,
 			so the parameter days is useless */
