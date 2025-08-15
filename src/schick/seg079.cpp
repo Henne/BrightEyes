@@ -56,12 +56,12 @@ signed short DNG03_handler(void)
 	{
 		GUI_input(get_tx(2), 15);
 
-		if (!strcmp(g_text_input_buf, (char*)p_datseg + DNG03_STR_SPINNENNETZ))
+		if (!strcmp(g_text_input_buf, g_dng03_str_spinnennetz))
 		{
 			GUI_output(get_tx(4));
 
-			gs_x_target = (9);
-			gs_y_target = (8);
+			gs_x_target = 9;
+			gs_y_target = 8;
 			DNG_inc_level();
 
 			hero = get_hero(0);
@@ -83,9 +83,9 @@ signed short DNG03_handler(void)
 	{
 		GUI_output(get_tx(4));
 
-		gs_x_target = (1);
-		gs_y_target = (8);
-		gs_direction = (WEST);
+		gs_x_target = 1;
+		gs_y_target = 8;
+		gs_direction = WEST;
 
 		DNG_update_pos();
 
@@ -112,7 +112,7 @@ signed short DNG03_handler(void)
 			DNG_update_pos();
 			GUI_output(get_tx(3));
 
-			gs_direction_bak = (gs_direction);
+			gs_direction_bak = gs_direction;
 		}
 
 	} else if ((target_pos == DNG_POS(0,10,9) || target_pos == DNG_POS(0,9,14)) &&
@@ -129,11 +129,8 @@ signed short DNG03_handler(void)
 				!hero_dead(hero) &&
 				test_skill(hero, TA_KLETTERN, 2) <= 0)
 			{
-				sprintf(g_dtp2,
-					get_tx(6),
-					(char*)hero + HERO_NAME2,
-					(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
-
+				sprintf(g_dtp2,	get_tx(6), (char*)hero + HERO_NAME2,
+					GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
 				GUI_output(g_dtp2);
 
 				sub_hero_le(hero, dice_roll(1, 6, 3));
@@ -146,13 +143,13 @@ signed short DNG03_handler(void)
 	{
 		GUI_input(get_tx(7), 15);
 
-		if (!strcmp(g_text_input_buf, (char*)p_datseg + DNG03_STR_MACTANS))
+		if (!strcmp(g_text_input_buf, g_dng03_str_mactans))
 		{
 			GUI_output(get_tx(4));
 
-			gs_x_target = (3);
-			gs_y_target = (4);
-			gs_direction = (SOUTH);
+			gs_x_target = 3;
+			gs_y_target = 4;
+			gs_direction = SOUTH;
 			DNG_update_pos();
 
 			hero = get_hero(0);
@@ -169,13 +166,11 @@ signed short DNG03_handler(void)
 				}
 			}
 		} else {
-			gs_direction = (WEST);
+			gs_direction = WEST;
 		}
 
-	} else if (target_pos == DNG_POS(0,9,11) &&
-			gs_direction == WEST &&
-			target_pos != gs_dng_handled_pos &&
-			gs_direction != gs_direction_bak)
+	} else if (target_pos == DNG_POS(0,9,11) && gs_direction == WEST &&
+			target_pos != gs_dng_handled_pos && gs_direction != gs_direction_bak)
 	{
 		/* LEVER: */
 		if (GUI_bool(get_tx(8)))
@@ -184,10 +179,8 @@ signed short DNG03_handler(void)
 			GUI_output(get_tx(9));
 		}
 
-	} else if (target_pos == DNG_POS(1,3,11) &&
-			gs_direction == EAST &&
-			(target_pos != gs_dng_handled_pos ||
-			gs_direction != gs_direction_bak))
+	} else if (target_pos == DNG_POS(1,3,11) && gs_direction == EAST &&
+			(target_pos != gs_dng_handled_pos || gs_direction != gs_direction_bak))
 	{
 		if (GUI_bool(get_tx(8)))
 		{
@@ -218,10 +211,8 @@ signed short DNG03_handler(void)
 
 		if (j != 0 || test_attrib(hero, ATTRIB_GE, 2) <= 0)
 		{
-			sprintf(g_dtp2,
-				get_tx(13),
-				(char*)hero + HERO_NAME2,
-				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
+			sprintf(g_dtp2,	get_tx(13), (char*)hero + HERO_NAME2,
+				GUI_get_ptr(host_readbs(hero + HERO_SEX), 3));
 
 			GUI_output(g_dtp2);
 
@@ -250,11 +241,8 @@ signed short DNG03_handler(void)
 			test_attrib(hero, ATTRIB_GE, 2) <= 0)))
 		{
 
-			sprintf(g_dtp2,
-				get_tx(13),
-				(char*)hero + HERO_NAME2,
-				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
-
+			sprintf(g_dtp2,	get_tx(13), (char*)hero + HERO_NAME2,
+				GUI_get_ptr(host_readbs(hero + HERO_SEX), 3));
 			GUI_output(g_dtp2);
 
 			sub_hero_le(hero, dice_roll(2, 6, 0));
@@ -340,8 +328,7 @@ signed short DNG03_handler(void)
 			do_fight(FIGHTS_F051_14C);
 		}
 
-	} else if (target_pos == DNG_POS(1,1,1) &&
-			target_pos != gs_dng_handled_pos &&
+	} else if (target_pos == DNG_POS(1,1,1) && target_pos != gs_dng_handled_pos &&
 			!gs_dng03_spidereggs_burned)
 	{
 		do {
@@ -372,7 +359,7 @@ signed short DNG03_handler(void)
 		gs_x_target = 5;
 		gs_y_target = 14;
 		DNG_dec_level();
-		gs_direction = (NORTH);
+		gs_direction = NORTH;
 
 		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
@@ -393,14 +380,12 @@ signed short DNG03_handler(void)
 	{
 		leave_dungeon();
 		gs_current_town = ((signed char)gs_travel_destination_town_id);
-		gs_x_target = (gs_travel_destination_x);
-		gs_y_target = (gs_travel_destination_y);
+		gs_x_target = gs_travel_destination_x;
+		gs_y_target = gs_travel_destination_y;
 		gs_current_loctype = LOCTYPE_NONE;
 		gs_direction = ((gs_travel_destination_viewdir + 2) & 3);
 
-		sprintf(g_dtp2,
-			get_tx(30),
-			get_ttx(gs_trv_destination + 0xeb));
+		sprintf(g_dtp2, get_tx(30), get_ttx(gs_trv_destination + 0xeb));
 
 		GUI_output(g_dtp2);
 
@@ -468,16 +453,16 @@ void DNG03_chest04_func3(Bit8u* chest)
 void DNG03_chest05_func3(Bit8u*)
 {
 	signed short answer;
+
 	do {
-		answer = GUI_radio(get_tx(10), 2,
-					get_tx(11),
-					get_tx(12));
+		answer = GUI_radio(get_tx(10), 2, get_tx(11), get_tx(12));
+
 	} while (answer == -1);
 
-	if (answer == 1)
-	{
-		gs_x_target = (10);
-		gs_y_target = (12);
+	if (answer == 1) {
+
+		gs_x_target = 10;
+		gs_y_target = 12;
 		DNG_inc_level();
 	}
 }
@@ -584,8 +569,8 @@ void DNG03_chest11_func3(Bit8u*)
 
 				mod = l_si < 2 ? 6 : (l_si < 4 ? 2 : -2);
 
-				if (test_attrib(hero, ATTRIB_GE, mod) <= 0)
-				{
+				if (test_attrib(hero, ATTRIB_GE, mod) <= 0) {
+
 					counter++;
 
 					sprintf(g_dtp2, get_tx(27), (char*)hero + HERO_NAME2);

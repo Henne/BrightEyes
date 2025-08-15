@@ -1155,8 +1155,8 @@
 // ?1
 //#define DNG02_SPECIALCHESTS             (0x93d8)    /* struct(21)[8] */
 //#define DNG03_SPECIALCHESTS             (0x9480)    /* struct(21)[14] */
-#define DNG03_STR_SPINNENNETZ           (0x95a6)    /* char[12]; "SPINNENNETZ" */
-#define DNG03_STR_MACTANS               (0x95b2)    /* char[8]; "MACTANS" */
+//#define DNG03_STR_SPINNENNETZ           (0x95a6)    /* char[12]; "SPINNENNETZ" */
+//#define DNG03_STR_MACTANS               (0x95b2)    /* char[8]; "MACTANS" */
 //#define DNG04_SPECIALCHESTS             (0x95ba)    /* struct(21)[4] */
 #define DNG05_TRASH_FLAG                (0x960e)    /* short; {0,1} */
 //#define DNG06_SPECIALCHESTS             (0x9610)    /* struct(21)[3] */

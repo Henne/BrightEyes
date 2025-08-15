@@ -4782,8 +4782,8 @@ struct struct_chest g_dng03_specialchests[14] = {
 	{ 0x1a07, 6, use_lockpicks_on_chest, DNG03_chest12_func2, DNG03_chest12_func3, 0, 0, 0 },
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x9480
-char g_dng03_str_spinnennetz[12] = "SPINNENNETZ"; // ds:0x95a6
-char g_dng03_str_mactans[8] = "MACTANS"; // ds:0x95b2
+const char g_dng03_str_spinnennetz[12] = "SPINNENNETZ"; // ds:0x95a6
+const char g_dng03_str_mactans[8] = "MACTANS"; // ds:0x95b2
 struct struct_chest g_dng04_specialchests[4] = {
 	{ 0x0607, 1, DNG04_corpse0, NULL, DNG04_corpse0_chest, 0, 0, 0 },
 	{ 0x010c, 1, DNG04_corpse1, NULL, DNG04_corpse1_chest, 0, 0, 0 },
