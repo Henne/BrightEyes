@@ -232,7 +232,7 @@ void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 				}
 			} else {
 				/* TODO */
-				if (ds_readbs(FIG_ACTORS_UNKN + host_readbs((Bit8u*)(monster) + ENEMY_SHEET_ENEMY_ID)) == 1) {
+				if (g_fig_actors_unkn[host_readbs((Bit8u*)(monster) + ENEMY_SHEET_ENEMY_ID)] == 1) {
 					attacker_at += 2;
 				}
 			}
@@ -321,7 +321,7 @@ void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 				if (randval <= attacker_at) {
 
 					if ((target_is_hero && !g_hero_is_target[host_readbs((Bit8u*)(monster) + ENEMY_SHEET_ENEMY_ID) - 1] && check_hero(hero)) ||
-						(!target_is_hero && (!ds_readbs(FIG_ACTORS_UNKN + host_readbs((Bit8u*)(monster) + ENEMY_SHEET_ENEMY_ID)))))
+						(!target_is_hero && !g_fig_actors_unkn[host_readbs((Bit8u*)(monster) + ENEMY_SHEET_ENEMY_ID)]))
 					{
 
 						randval2 = random_schick(20);

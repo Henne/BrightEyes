@@ -430,9 +430,9 @@ void FIG_prepare_enemy_fight_ani(signed short a1, Bit8u *enemy, signed short f_a
 	/* first the enemy may turn */
 	if ((host_readbs(enemy + ENEMY_SHEET_VIEWDIR) != dir) &&
 		(	((f_action == FIG_ACTION_MELEE_ATTACK) || (f_action == FIG_ACTION_RANGE_ATTACK) ||
-			((f_action == FIG_ACTION_UNKNOWN2) && !ds_readbs(FIG_ACTORS_UNKN + (signed char)fid_attacker))) ||
-			((g_attacker_attacks_again != 0) && (a7 == 0)) ||
-			((g_defender_attacks != 0) && (a7 == 1))))
+			((f_action == FIG_ACTION_UNKNOWN2) && !g_fig_actors_unkn[(signed char)fid_attacker])) ||
+			(g_attacker_attacks_again && !a7) ||
+			(g_defender_attacks && (a7 == 1))))
 		{
 
 		ds_writeb(FIG_ANISHEETS + a1 * 0xf3, 0);
@@ -495,7 +495,7 @@ void FIG_prepare_enemy_fight_ani(signed short a1, Bit8u *enemy, signed short f_a
 	}
 
 	if ((f_action == FIG_ACTION_MELEE_ATTACK) || (f_action == FIG_ACTION_RANGE_ATTACK) ||
-		((f_action == FIG_ACTION_UNKNOWN2) && !ds_readbs(FIG_ACTORS_UNKN + (signed char)fid_attacker)))
+		((f_action == FIG_ACTION_UNKNOWN2) && !g_fig_actors_unkn[(signed char)fid_attacker]))
 	{
 		p1 += copy_ani_seq(p1, host_readws(p4 + l1 *2), 1);
 
@@ -565,7 +565,7 @@ void FIG_prepare_enemy_fight_ani(signed short a1, Bit8u *enemy, signed short f_a
 	}
 
 	if (f_action == FIG_ACTION_UNKNOWN2) {
-		ds_writeb(FIG_ACTORS_UNKN + (signed char)fid_attacker, 1);
+		g_fig_actors_unkn[(signed char)fid_attacker] = 1;
 	}
 }
 
