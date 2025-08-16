@@ -5635,10 +5635,10 @@ signed short copy_protection(void)
 
 			/* prepare the string */
 			sprintf(g_dtp2, get_tx(39),
-				ds_readbs((QUESTIONS_HANDBOOK + 3) + 19 * randval),
-				ds_readbs((QUESTIONS_HANDBOOK + 2) + 19 * randval),
-				ds_readbs((QUESTIONS_HANDBOOK + 1) + 19 * randval),
-				ds_readbs((QUESTIONS_HANDBOOK + 0) + 19 * randval));
+				g_questions_handbook[randval][3],
+				g_questions_handbook[randval][2],
+				g_questions_handbook[randval][1],
+				g_questions_handbook[randval][0]);
 
 			/* print version number */
 			GUI_print_string(g_game_version, 290, 190);
@@ -5653,7 +5653,7 @@ signed short copy_protection(void)
 				g_text_input_buf[i] = ~toupper(g_text_input_buf[i]);
 			}
 
-			if (!strcmp((char*)(p_datseg + (QUESTIONS_HANDBOOK + 4)) + 19 * randval, g_text_input_buf)) {
+			if (!strcmp((char*)&g_questions_handbook[randval][4], g_text_input_buf)) {
 				return 1;
 			}
 		} else {
@@ -5664,8 +5664,8 @@ signed short copy_protection(void)
 
 			/* prepare the string */
 			sprintf(g_dtp2, get_tx(40),
-				get_tx(41 + ds_readbs((QUESTIONS_MAP + 0) + 3 * randval)),
-				get_ttx(235 + ds_readbs((QUESTIONS_MAP + 1) + 3 * randval)));
+				get_tx(41 + g_questions_map[randval][0]),
+				get_ttx(235 + g_questions_map[randval][1]));
 
 			/* print version number */
 			GUI_print_string(g_game_version, 290, 190);
@@ -5680,7 +5680,7 @@ signed short copy_protection(void)
 				g_text_input_buf[i] = toupper(g_text_input_buf[i]);
 			}
 
-			if (!strcmp(get_ttx(235 + ds_readbs((QUESTIONS_MAP + 2) + 3 * randval)), g_text_input_buf)) {
+			if (!strcmp(get_ttx(235 + g_questions_map[randval][2]), g_text_input_buf)) {
 				return 1;
 			}
 		}

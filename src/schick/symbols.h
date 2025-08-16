@@ -832,8 +832,8 @@
 //#define VERSION_TOKEN2                  (0x46f9)    /* unsigned char; = 1 */
 //#define VERSION_TOKEN3                  (0x46fa)    /* unsigned char; = 1 */
 //#define VERSION_TOKEN4                  (0x46fb)    /* unsigned char; = 1 */
-#define QUESTIONS_HANDBOOK              (0x46fc)    /* struct(19)[10] */
-#define QUESTIONS_MAP                   (0x47ba)    /* struct(3)[10] */
+//#define QUESTIONS_HANDBOOK              (0x46fc)    /* struct(19)[10] */
+//#define QUESTIONS_MAP                   (0x47ba)    /* struct(3)[10] */
 //#define SND_MENU_TITLE                  (0x47d8)    /* char[17]; "BITTE AUSW\x8eHLEN:" */
 //#define SND_MENU_RADIO1                 (0x47e9)    /* char[12]; "KEINE MUSIK" */
 //#define SND_MENU_RADIO2                 (0x47f5)    /* char[10]; "NUR MUSIK" */

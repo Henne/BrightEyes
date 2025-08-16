@@ -646,9 +646,7 @@ extern unsigned char g_fading_state;		//ds:0x4475; seg002-seg095
 extern signed char g_check_party;		//ds:0x4495; seg002, seg032, seg063, seg113
 extern signed char g_food_mod;			//ds:0x4496; seg002, seg051, seg052, seg054
 extern signed char g_travel_herokeeping;	//ds:0x4497; seg002, seg063
-
 extern signed char g_special_screen;		//ds:0x45b8; seg002-seg109
-
 extern signed char g_months_spring[4];		//ds:0x463a; seg002
 extern signed char g_months_winter[4];		//ds:0x463e; seg002
 extern signed char g_months_summer[4];		//ds:0x4642; seg002
@@ -665,7 +663,8 @@ extern char g_version_token1;			//ds:0x46f8; seg026
 extern char g_version_token2;			//ds:0x46f9; seg026
 extern char g_version_token3;			//ds:0x46fa; seg026
 extern char g_version_token4;			//ds:0x46fb; seg026
-
+extern const char g_questions_handbook[10][19];	//ds:0x46fc; seg002
+extern const signed char g_questions_map[10][3];	//ds:0x47ba; seg002
 extern char g_snd_menu_title[17];		//ds:0x47d8; seg002
 extern char g_snd_menu_radio1[12];		//ds:0x479e; seg002
 extern char g_snd_menu_radio2[10];		//ds:0x47f5; seg002
