@@ -4724,7 +4724,7 @@ signed char g_dng_stub4_unkn4[22] = { 0x0f, 0x10, 0x15, 0x14, 0x11, 0x13, 0x12, 
 char g_dng_stub6_str_comma[3] = ", "; // ds:0x92cc
 char g_dng_stub6_str_and[6] = " UND "; // ds:0x92cf
 unsigned char g_unkn_056[1] = { 0x00 }; // ds:0x92d5
-const signed short (*g_dng_handlers[15])(void) = {
+signed short (*g_dng_handlers[15])(void) = {
 	DNG01_handler,
 	DNG02_handler,
 	DNG03_handler,

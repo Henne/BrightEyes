@@ -794,7 +794,7 @@ extern const unsigned char g_automap_tile_cross[49];	//ds:0x7d4b; seg074
 extern signed short g_automap_selx;		//ds:0x7de5; seg074, seg099
 extern signed short g_automap_sely;		//ds:0x7de7; seg074, seg099
 
-extern const signed short (*g_dng_handlers[15])(void);	//ds:0x92d6; seg076
+extern signed short (*g_dng_handlers[15])(void);	//ds:0x92d6; seg076
 extern signed short g_dng_level_changed;	//ds:0x9312; seg075, seg076
 
 extern const char g_dng01_str_marbo[6];		//ds:0x93d7; seg077
