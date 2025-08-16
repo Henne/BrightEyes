@@ -37,10 +37,6 @@ struct dummy {
 	struct coords a[4];
 };
 
-struct msg {
-	signed short pos, type;
-};
-
 /**
  * \brief   execute the fight action of a monster
  *
@@ -77,7 +73,7 @@ void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 	signed short target_y;
 	signed short dir;
 	struct dummy dst = *(struct dummy*)(p_datseg + VIEWDIR_INVOFFSETS3);
-	struct msg tmp;
+	struct struct_msg tmp;
 
 	update_mouse_cursor();
 
@@ -88,16 +84,16 @@ void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 		defender_gets_hit = g_attacker_attacks_again =
 			g_defender_attacks = g_attacker_dead = g_defender_dead = 0;
 
-		ds_writew(FIG_ACTOR_GRAMMAR_TYPE, 1);
-		ds_writew(FIG_ACTOR_GRAMMAR_ID, host_readbs((Bit8u*)(monster)));
+		g_fig_actor_grammar.type = 1;
+		g_fig_actor_grammar.id = host_readbs((Bit8u*)monster);
 
 		if (host_readbs((Bit8u*)(monster) + ENEMY_SHEET_ENEMY_ID) < 10) {
 
 			/* monster attacks hero */
 			hero = get_hero(host_readbs((Bit8u*)(monster) + ENEMY_SHEET_ENEMY_ID) - 1);
 
-			ds_writew(FIG_TARGET_GRAMMAR_TYPE, 2);
-			ds_writew(FIG_TARGET_GRAMMAR_ID, host_readbs((Bit8u*)(monster) + ENEMY_SHEET_ENEMY_ID) - 1);
+			g_fig_target_grammar.type = 2;
+			g_fig_target_grammar.id = host_readbs((Bit8u*)monster + ENEMY_SHEET_ENEMY_ID) - 1;
 
 			if (hero_dead(hero) || !host_readbs(hero + HERO_TYPE)) {
 				return;
@@ -109,8 +105,8 @@ void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 
 			mon = p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + SIZEOF_ENEMY_SHEET * host_readbs((Bit8u*)(monster) + ENEMY_SHEET_ENEMY_ID);
 
-			ds_writew(FIG_TARGET_GRAMMAR_TYPE, 1);
-			ds_writew(FIG_TARGET_GRAMMAR_ID, host_readbs(mon));
+			g_fig_target_grammar.type = 1;
+			g_fig_target_grammar.id = host_readbs(mon);
 
 			if (enemy_dead(mon) || !host_readbs(mon)) {
 				return;
@@ -283,11 +279,11 @@ void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 								FIG_add_msg(11, damage);
 
 								/* swap msg struct */
-								tmp = *(struct msg*)(p_datseg + FIG_TARGET_GRAMMAR_TYPE);
-								*(struct msg*)(p_datseg + FIG_TARGET_GRAMMAR_TYPE) = *(struct msg*)(p_datseg + FIG_ACTOR_GRAMMAR_TYPE);
-								*(struct msg*)(p_datseg + FIG_ACTOR_GRAMMAR_TYPE) = tmp;
+								tmp = g_fig_target_grammar;
+								g_fig_target_grammar = g_fig_actor_grammar;
+								g_fig_actor_grammar = tmp;
 
-								if (enemy_dead((Bit8u*)(monster))) {
+								if (enemy_dead((Bit8u*)monster)) {
 									g_attacker_dead = 1;
 								}
 							}
@@ -304,9 +300,9 @@ void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 
 						FIG_add_msg(11, damage);
 
-						*(struct msg*)(p_datseg + FIG_TARGET_GRAMMAR_TYPE) = *(struct msg*)(p_datseg + FIG_ACTOR_GRAMMAR_TYPE);
+						g_fig_target_grammar = g_fig_actor_grammar;
 
-						if (enemy_dead((Bit8u*)(monster))) {
+						if (enemy_dead((Bit8u*)monster)) {
 							g_attacker_dead = 1;
 						}
 					} else if (two_w_6 == 12) {

@@ -38,10 +38,6 @@ struct dummy {
 	struct coords a[4];
 };
 
-struct msg {
-	signed short pos, type;
-};
-
 /**
  * \brief   executes the fight action of hero
  *
@@ -82,7 +78,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 	signed short target_y;
 	signed short dir;
 	Bit8u *p_fighter;
-	struct msg tmp;
+	struct struct_msg tmp;
 	signed short fg_bak;
 	signed short bg_bak;
 	struct nvf_desc nvf;
@@ -98,8 +94,8 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 		weapon_type = weapon_type_target = -1;
 
-		ds_writew(FIG_ACTOR_GRAMMAR_TYPE, 2);
-		ds_writew(FIG_ACTOR_GRAMMAR_ID, hero_pos);
+		g_fig_actor_grammar.type = 2;
+		g_fig_actor_grammar.id = hero_pos;
 
 		if (host_readbs(hero + HERO_ENEMY_ID) >= 10) {
 
@@ -116,8 +112,8 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 			/* attacked enemy won't be renegade any more */
 			and_ptr_bs(target_monster + ENEMY_SHEET_FLAGS1, 0xfd); /* unset 'renegade' flag */
 
-			ds_writew(FIG_TARGET_GRAMMAR_TYPE, 1);
-			ds_writew(FIG_TARGET_GRAMMAR_ID, host_readbs(target_monster));
+			g_fig_target_grammar.type = 1;
+			g_fig_target_grammar.id = host_readbs(target_monster);
 
 			if (!host_readbs(target_monster) ||
 				(enemy_dead(target_monster)
@@ -178,8 +174,8 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 				/* hero attacks another hero */
 				target_hero = get_hero(host_readbs(hero + HERO_ENEMY_ID) - 1);
 
-				ds_writew(FIG_TARGET_GRAMMAR_TYPE, 2);
-				ds_writew(FIG_TARGET_GRAMMAR_ID, host_readbs(hero + HERO_ENEMY_ID) - 1);
+				g_fig_target_grammar.type = 2;
+				g_fig_target_grammar.id = host_readbs(hero + HERO_ENEMY_ID) - 1;
 
 				if (hero_asleep(target_hero)) {
 
@@ -314,10 +310,9 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 						FIG_add_msg(8, damage);
 
 						/* swap msg struct */
-						tmp = *(struct msg*)(p_datseg + FIG_TARGET_GRAMMAR_TYPE);
-						*(struct msg*)(p_datseg + FIG_TARGET_GRAMMAR_TYPE) = *(struct msg*)(p_datseg + FIG_ACTOR_GRAMMAR_TYPE);
-						*(struct msg*)(p_datseg + FIG_ACTOR_GRAMMAR_TYPE) = tmp;
-
+						tmp = g_fig_target_grammar;
+						g_fig_target_grammar = g_fig_actor_grammar;
+						g_fig_actor_grammar = tmp;
 					}
 
 					if (hero_dead(hero)) {
@@ -333,7 +328,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 					FIG_add_msg(8, damage);
 
-					*(struct msg*)(p_datseg + FIG_TARGET_GRAMMAR_TYPE) = *(struct msg*)(p_datseg + FIG_ACTOR_GRAMMAR_TYPE);
+					g_fig_target_grammar = g_fig_actor_grammar;
 
 					if (hero_dead(hero)) {
 						g_attacker_dead = 1;

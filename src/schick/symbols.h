@@ -1518,10 +1518,10 @@
 //#define FIG_GFXBUFFERS                  (0xe278)    /* Bit8u*[8]; 0x508 byte segments in FIGHTOBJ_BUF */
 //#define FIG_FIGLIST_READD               (0xe298)    /* signed short[8] */
 //#define FIG_ANI_STATE                   (0xe2a8)    /* unsigned short[8] */
-#define FIG_ACTOR_GRAMMAR_TYPE          (0xe2b8)    /* unsigned short; 2 = hero, 1 = monster */
-#define FIG_ACTOR_GRAMMAR_ID            (0xe2ba)    /* unsigned short */
-#define FIG_TARGET_GRAMMAR_TYPE         (0xe2bc)    /* unsigned short; 2 = hero, 1 = monster */
-#define FIG_TARGET_GRAMMAR_ID           (0xe2be)    /* unsigned short */
+//#define FIG_ACTOR_GRAMMAR_TYPE          (0xe2b8)    /* unsigned short; 2 = hero, 1 = monster */
+//#define FIG_ACTOR_GRAMMAR_ID            (0xe2ba)    /* unsigned short */
+//#define FIG_TARGET_GRAMMAR_TYPE         (0xe2bc)    /* unsigned short; 2 = hero, 1 = monster */
+//#define FIG_TARGET_GRAMMAR_ID           (0xe2be)    /* unsigned short */
 #define FIGOBJ_UNKN_Y1                  (0xe2c0)    /* unsigned short */
 #define FIGOBJ_UNKN_Y1_BAK              (0xe2c2)    /* unsigned short */
 #define FIGOBJ_UNKN_X1                  (0xe2c4)    /* unsigned short */
