@@ -88,7 +88,7 @@ void FIG_preload_gfx(void)
 	struct nvf_desc nvf;
 	signed short handle;
 
-	ds_writed(FIG_LIST_HEAD, 0);
+	g_fig_list_head = NULL;
 
 	g_fig_list_buffer = (Bit8u*)(((HugePt)g_fig_figure2_buf) - 0x115d);
 
@@ -98,7 +98,7 @@ void FIG_preload_gfx(void)
 	for (i = 0; i < 127; i++) {
 		host_writeb(p1 + 0x10, -1);
 		p1 += SIZEOF_FIGHTER;
-		ds_writeb(FIG_LIST_ARRAY + i, 0);
+		g_fig_list_array[i] = 0;
 	}
 
 	ds_writed(WEAPONS_NVF_BUF, (Bit32u)(((HugePt)g_current_fight) + SIZEOF_FIGHT));

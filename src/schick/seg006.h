@@ -4,9 +4,6 @@ namespace M302de {
 
 Bit8u* FIG_get_ptr(signed char);
 
-/* static */
-signed char FIG_set_array(void);
-
 void FIG_draw_figures(void);
 
 void FIG_set_gfx(void);

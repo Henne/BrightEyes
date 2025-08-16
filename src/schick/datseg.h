@@ -996,6 +996,9 @@ extern signed short g_wallclock_update;	// ds:0xe113; seg004-seg117, seg120
 extern signed short g_wallclock_x;	// ds:0xe111; seg004, seg029, seg063, seg094
 extern signed short g_wallclock_y;	// ds:0xe10f; seg004, seg029, seg063, seg094
 extern signed short g_wallclock_redraw;	// ds:0xe10e; seg004, seg029
+extern signed char  g_location_market_flag;	// ds:0xe10c; seg066
+extern Bit8u *g_fig_list_head;		// ds:0xe108; seg005, seg006, seg040
+extern signed char g_fig_list_array[127];	// ds:0xe089; seg006, seg040
 
 extern unsigned char *g_fightobj_buf_seek_ptr; // ds:0xd86e; seg005-seg100
 extern signed char *g_chessboard;	// ds:0xd852;

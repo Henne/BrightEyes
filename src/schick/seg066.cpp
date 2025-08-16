@@ -58,7 +58,7 @@ signed short enter_location(signed short town_id)
 
 	map_pos = 256 * gs_x_target + gs_y_target;
 	locations_list_ptr = p_datseg + LOCATIONS_LIST;
-	ds_writeb(LOCATION_MARKET_FLAG, 0);
+	g_location_market_flag = 0;
 
 	do {
 		if (host_readws(locations_list_ptr + LOCATION_XY) == map_pos) {
@@ -71,7 +71,7 @@ signed short enter_location(signed short town_id)
 
 			if (gs_current_loctype == LOCTYPE_MARKET) {
 				gs_current_loctype = LOCTYPE_NONE;
-				ds_writeb(LOCATION_MARKET_FLAG, 1);
+				g_location_market_flag = 1;
 			}
 
 			return 1;
@@ -113,7 +113,7 @@ signed short enter_location_daspota(void)
 
 	map_pos = 256 * gs_x_target + gs_y_target;
 	locations_list_ptr = p_datseg + LOCATIONS_LIST;
-	ds_writeb(LOCATION_MARKET_FLAG, 0);
+	g_location_market_flag = 0;
 
 	do {
 
@@ -169,7 +169,7 @@ signed short enter_location_daspota(void)
 			} else {
 				gs_current_loctype_bak = LOCTYPE_NONE;
 				gs_current_loctype = host_readbs(locations_list_ptr + LOCATION_LOCTYPE);
-				gs_current_locdata = (host_readw(locations_list_ptr + LOCATION_LOCDATA));
+				gs_current_locdata = host_readw(locations_list_ptr + LOCATION_LOCDATA);
 			}
 
 			return 1;
@@ -185,7 +185,7 @@ signed short enter_location_daspota(void)
 
 		gs_current_loctype_bak = LOCTYPE_NONE;
 		gs_current_loctype = LOCTYPE_CITIZEN;
-		gs_current_locdata = (19);
+		gs_current_locdata = 19;
 		return 1;
 	}
 
@@ -1029,7 +1029,7 @@ signed short city_step(void)
 			}
 		}
 
-		if (ds_readb(LOCATION_MARKET_FLAG) != 0 && ds_readb((NEW_MENU_ICONS + 7)) != MENU_ICON_MARKET) {
+		if (g_location_market_flag && ds_readb((NEW_MENU_ICONS + 7)) != MENU_ICON_MARKET) {
 
 			if (((i = ds_readws((MARKET_DESCR_TABLE + 4) + 8 * gs_current_typeindex)) == -1 ||
 				gs_day_of_week == i) &&
@@ -1040,7 +1040,7 @@ signed short city_step(void)
 				draw_icons();
 			}
 
-		} else if (!ds_readbs(LOCATION_MARKET_FLAG) && ds_readbs((NEW_MENU_ICONS + 7)) == MENU_ICON_MARKET) {
+		} else if (!g_location_market_flag && ds_readbs((NEW_MENU_ICONS + 7)) == MENU_ICON_MARKET) {
 
 			ds_writebs((NEW_MENU_ICONS + 7), MENU_ICON_NONE);
 			draw_icons();

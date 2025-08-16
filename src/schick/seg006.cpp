@@ -31,14 +31,14 @@ namespace M302de {
  */
 Bit8u* FIG_get_ptr(signed char fighter_id)
 {
-	Bit8u* fighter_ptr = (Bit8u*)ds_readd(FIG_LIST_HEAD);
+	Bit8u* fighter_ptr = g_fig_list_head;
 
 	while (host_readbs((Bit8u*)(fighter_ptr) + FIGHTER_ID) != fighter_id) {
 
 		/* check if its the last element */
 		if (host_readd((Bit8u*)(fighter_ptr) + FIGHTER_NEXT) == 0) {
 			/* return list head */
-			return (Bit8u*)ds_readd(FIG_LIST_HEAD);
+			return g_fig_list_head;
 		}
 
 		/* set fighter_ptr to the next element */
@@ -48,19 +48,18 @@ Bit8u* FIG_get_ptr(signed char fighter_id)
 	return fighter_ptr;
 }
 
-/* static */
-signed char FIG_set_array(void)
+static signed char FIG_set_array(void)
 {
 	signed char i = 0;
 
 	/* find first element that is zero */
-	while (ds_readb(FIG_LIST_ARRAY + i) != 0) {
+	while (g_fig_list_array[i]) {
 
 		i++;
 	}
 
 	/* make it 1 */
-	ds_writeb(FIG_LIST_ARRAY + i, 1);
+	g_fig_list_array[i] = 1;
 
 	/* return the number of the index */
 	return i;
@@ -84,7 +83,7 @@ void FIG_draw_figures(void)
 	/* backup a structure */
 	rect_bak = g_pic_copy_rect;
 
-	list_i = (Bit8u*)ds_readd(FIG_LIST_HEAD);
+	list_i = g_fig_list_head;
 
 	do {
 
@@ -198,7 +197,7 @@ Bit8u* FIG_get_enemy_sheet(signed short fighter_id)
 
 void FIG_set_sheet(signed char fighter_id, signed char val)
 {
-	Bit8u *ptr = (Bit8u*)ds_readd(FIG_LIST_HEAD);
+	Bit8u *ptr = g_fig_list_head;
 
 	while (host_readbs(ptr + FIGHTER_ID) != fighter_id) {
 
@@ -226,7 +225,7 @@ void FIG_make_invisible(signed char fighter_id)
 {
 	Bit8u *ptr1, *ptr2;
 
-	ptr1 = (Bit8u*)ds_readd(FIG_LIST_HEAD);
+	ptr1 = g_fig_list_head;
 
 	while (host_readb(ptr1 + FIGHTER_ID) != fighter_id) {
 
@@ -241,7 +240,7 @@ void FIG_make_invisible(signed char fighter_id)
 
 	if (host_readbs(ptr1 + FIGHTER_TWOFIELDED) != -1) {
 
-		ptr2 = (Bit8u*)ds_readd(FIG_LIST_HEAD);
+		ptr2 = g_fig_list_head;
 
 		while (g_fig_twofielded_table[host_readbs(ptr1 + FIGHTER_TWOFIELDED)] != host_readb(ptr2 + FIGHTER_ID)) {
 			ptr2 = (Bit8u*)(host_readd(ptr2 + FIGHTER_NEXT));
@@ -259,7 +258,7 @@ void FIG_make_visible(signed short fighter_id)
 {
 	Bit8u *ptr1, *ptr2;
 
-	ptr1 = (Bit8u*)ds_readd(FIG_LIST_HEAD);
+	ptr1 = g_fig_list_head;
 
 	while (host_readb(ptr1 + FIGHTER_ID) != (signed char)fighter_id) {
 
@@ -274,7 +273,7 @@ void FIG_make_visible(signed short fighter_id)
 
 	if (host_readbs(ptr1 + FIGHTER_TWOFIELDED) != -1) {
 
-		ptr2 = (Bit8u*)ds_readd(FIG_LIST_HEAD);
+		ptr2 = g_fig_list_head;
 
 		while (g_fig_twofielded_table[host_readbs(ptr1 + FIGHTER_TWOFIELDED)] != host_readb(ptr2 + FIGHTER_ID)) {
 
@@ -288,7 +287,7 @@ void FIG_make_visible(signed short fighter_id)
 
 void FIG_set_weapon_sheet(signed char fighter_id, signed char val)
 {
-	Bit8u *ptr = (Bit8u*)ds_readd(FIG_LIST_HEAD);
+	Bit8u *ptr = g_fig_list_head;
 
 	while (host_readb(ptr + FIGHTER_ID) != fighter_id) {
 
@@ -314,7 +313,7 @@ struct dummy {
  */
 void FIG_remove_from_list(signed char fighter_id, signed char keep_in_memory)
 {
-	Bit8u* p = (Bit8u*)ds_readd(FIG_LIST_HEAD);
+	Bit8u* p = g_fig_list_head;
 
 	/* NULL check */
 	if (!p)	return;
@@ -327,23 +326,25 @@ void FIG_remove_from_list(signed char fighter_id, signed char keep_in_memory)
 		}
 
 		/* ptr = ptr->next; */
-		p = (Bit8u*)(host_readd(p + FIGHTER_NEXT));
+		p = (Bit8u*)host_readd(p + FIGHTER_NEXT);
 	}
 
 	if (!keep_in_memory) {
-		ds_writeb(FIG_LIST_ARRAY + fighter_id, 0);
+		g_fig_list_array[fighter_id] = 0;
 	} else {
 //		struct_copy(p_datseg + FIG_LIST_ELEM, p, SIZEOF_FIGHTER);
 		*((struct dummy*)(p_datseg + FIG_LIST_ELEM)) = *((struct dummy*)(p));
 	}
 
 	/* check if p == HEAD */
-	if (p == (Bit8u*)ds_readd(FIG_LIST_HEAD)) {
+	if (p == g_fig_list_head) {
 		/* Set HEAD: head = p->next;*/
-		ds_writed(FIG_LIST_HEAD, host_readd(p + FIGHTER_NEXT));
-		if (ds_readd(FIG_LIST_HEAD) != 0)
+		g_fig_list_head = (Bit8u*)host_readd(p + FIGHTER_NEXT);
+
+		if (g_fig_list_head) {
 			/* head->prev = NULL */
-			host_writed((Bit8u*)ds_readd(FIG_LIST_HEAD) + FIGHTER_PREV, 0);
+			host_writed(g_fig_list_head + FIGHTER_PREV, 0);
+		}
 	} else {
 		/* check if p == tail */
 		if (host_readd(p + FIGHTER_NEXT) == 0) {
@@ -367,7 +368,7 @@ void FIG_remove_from_list(signed char fighter_id, signed char keep_in_memory)
  * \brief   adds FIG_LIST_ELEM to FIG_LIST
  *
  * \param   fighter_id  id to assign to the new element (-1 = assign a new id)
- * \return              the new element's fighter_id (position in FIG_LIST_ARRAY)
+ * \return              the new element's fighter_id (position in g_fig_list_array)
  */
 signed char FIG_add_to_list(signed char fighter_id)
 {
@@ -379,27 +380,25 @@ signed char FIG_add_to_list(signed char fighter_id)
 	x = ds_readbs((FIG_LIST_ELEM+FIGHTER_CBX));
 	y = ds_readbs((FIG_LIST_ELEM+FIGHTER_CBY));
 
-	/* FIG_list_start == NULL */
-	if (ds_readd(FIG_LIST_HEAD) == 0) {
+	if (g_fig_list_head == NULL) {
 
-		ds_writed(FIG_LIST_HEAD, (Bit32u)g_fig_list_buffer);
+		g_fig_list_head = g_fig_list_buffer;
 
-//		struct_copy((Bit8u*)ds_readd(FIG_LIST_HEAD), p_datseg + FIG_LIST_ELEM, SIZEOF_FIGHTER);
-		*((struct dummy*)((Bit8u*)ds_readd(FIG_LIST_HEAD))) = *((struct dummy*)(p_datseg + FIG_LIST_ELEM));
+//		struct_copy(g_fig_list_head, p_datseg + FIG_LIST_ELEM, SIZEOF_FIGHTER);
+		*((struct dummy*)g_fig_list_head) = *((struct dummy*)(p_datseg + FIG_LIST_ELEM));
 
 		if (fighter_id == -1) {
-			host_writeb((Bit8u*)ds_readd(FIG_LIST_HEAD) + FIGHTER_ID,
-				FIG_set_array());
+			host_writeb(g_fig_list_head + FIGHTER_ID, FIG_set_array());
 		}
 
-		host_writed((Bit8u*)ds_readd(FIG_LIST_HEAD) + FIGHTER_PREV, 0);
-		host_writed((Bit8u*)ds_readd(FIG_LIST_HEAD) + FIGHTER_NEXT, 0);
+		host_writed(g_fig_list_head + FIGHTER_PREV, 0);
+		host_writed(g_fig_list_head + FIGHTER_NEXT, 0);
 
 #if !defined(__BORLANDC__)
 		D1_LOG("\tlist created x = %d, y = %d\n", x, y);
 #endif
 
-		return host_readbs((Bit8u*)ds_readd(FIG_LIST_HEAD) + FIGHTER_ID);
+		return host_readbs(g_fig_list_head + FIGHTER_ID);
 	}
 
 	while (host_readbs((Bit8u*)(p1) + FIGHTER_ID) != -1) {
@@ -407,7 +406,7 @@ signed char FIG_add_to_list(signed char fighter_id)
 	}
 
 //	struct_copy((Bit8u*)(p1), p_datseg + FIG_LIST_ELEM, SIZEOF_FIGHTER);
-	*((struct dummy*)((Bit8u*)(p1))) =	*((struct dummy*)(p_datseg + FIG_LIST_ELEM));
+	*((struct dummy*)((Bit8u*)(p1))) = *((struct dummy*)(p_datseg + FIG_LIST_ELEM));
 
 	if (fighter_id == -1) {
 		host_writeb((Bit8u*)(p1) + FIGHTER_ID, FIG_set_array());
@@ -415,7 +414,7 @@ signed char FIG_add_to_list(signed char fighter_id)
 		host_writeb((Bit8u*)(p1) + FIGHTER_ID, fighter_id);
 	}
 
-	p2 = (Bit8u*)ds_readd(FIG_LIST_HEAD);
+	p2 = g_fig_list_head;
 
 	/* The list is filled in the order of rendering, i.e. from rear to front:
 	 * (x1,y1) is rendered before (x2,y2) if (x1 < x2) || (x1 == x2 && y1 > y2)
@@ -461,7 +460,7 @@ signed char FIG_add_to_list(signed char fighter_id)
 		host_writed((Bit8u*)(host_readd((Bit8u*)(p2) + FIGHTER_PREV)) + FIGHTER_NEXT, (Bit32u)p1);
 	else
 		/* FIG_list_start = p1 */
-		ds_writed(FIG_LIST_HEAD, (Bit32u)p1);
+		g_fig_list_head = p1;
 
 	/* p2->prev = p1 */
 	host_writed((Bit8u*)(p2) + FIGHTER_PREV, (Bit32u)p1);
@@ -485,12 +484,12 @@ void FIG_draw_char_pic(signed short loc, signed short hero_pos)
 	signed short fg_bak, bg_bak;
 
 	hero = get_hero(hero_pos - 1);
-	g_pic_copy.src = ((hero + HERO_PORTRAIT));
+	g_pic_copy.src = hero + HERO_PORTRAIT;
 
 	get_textcolor(&fg_bak, &bg_bak);
 	set_textcolor(0xff, 0);
 
-	g_pic_copy.dst = (g_renderbuf_ptr);
+	g_pic_copy.dst = g_renderbuf_ptr;
 	g_vga_backbuffer = g_renderbuf_ptr;
 
 	if (loc == 0) {
@@ -515,8 +514,10 @@ void FIG_draw_char_pic(signed short loc, signed short hero_pos)
 	}
 
 	do_pic_copy(0);
+
 	g_pic_copy.dst = g_vga_memstart;
 	g_vga_backbuffer = g_vga_memstart;
+
 	set_textcolor(fg_bak, bg_bak);
 }
 
@@ -535,14 +536,14 @@ void FIG_draw_enemy_pic(signed short loc, signed short id)
 	Bit8u* p1;
 	struct nvf_desc nvf;
 
-	p1 = (((HugePt)g_buffer8_ptr) - 1288L);
+	p1 = ((HugePt)g_buffer8_ptr) - 1288L;
 
 	p_enemy = p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + id * SIZEOF_ENEMY_SHEET;
 
 	if (ds_readbs(GFXTAB_FIGURES_MAIN + host_readbs(p_enemy + ENEMY_SHEET_GFX_ID) * 5) != ds_readws(FIGHT_FIGS_INDEX)) {
 
 		nvf.src = (Bit8u*)(load_fight_figs(ds_readbs(GFXTAB_FIGURES_MAIN + host_readbs(p_enemy + ENEMY_SHEET_GFX_ID) * 5)));
-		nvf.dst = (Bit8u*)(p1);
+		nvf.dst = (Bit8u*)p1;
 		nvf.no = 1;
 		nvf.type = 0;
 		nvf.width = (Bit8u*)&height_width;

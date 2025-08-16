@@ -6365,9 +6365,9 @@ signed short g_wallclock_update; // ds:0xe113, 0 = don't update the wallclock
 signed short g_wallclock_x; // ds:0xe111
 signed short g_wallclock_y; // ds:0xe10f
 signed short g_wallclock_redraw; // ds:0xe10d
-unsigned char g_location_market_flag; // ds:0xe10c
-void *g_fig_list_head; // ds:0xe108, to a list
-unsigned char g_fig_list_array[127]; // ds:0xe089
+signed char g_location_market_flag; // ds:0xe10c
+Bit8u *g_fig_list_head; // ds:0xe108, to a list
+signed char g_fig_list_array[127]; // ds:0xe089
 struct{unsigned char unkn[35];} g_fig_list_elem; // ds:0xe066
 struct{unsigned char unkn[243];} g_fig_anisheets[8]; // ds:0xd8ce
 unsigned char g_fightobj_list[90]; // ds:0xd874

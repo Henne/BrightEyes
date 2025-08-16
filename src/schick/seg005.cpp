@@ -62,7 +62,7 @@ unsigned short FIG_obj_needs_refresh(Bit8u *p, signed short x, signed short y)
 
 		/* i = i->next; */
 		/* check if given object overlaps with any of the objects behind it */
-		for (i = (Bit8u*)ds_readd(FIG_LIST_HEAD); i != p; i = (Bit8u*)host_readd(i + FIGHTER_NEXT))
+		for (i = g_fig_list_head; i != p; i = (Bit8u*)host_readd(i + FIGHTER_NEXT))
 		{
 			/* Ignore invisible objects or objects, that are not refreshed */
 			if (host_readbs(i + FIGHTER_VISIBLE) >= 2) {
@@ -333,7 +333,7 @@ void draw_fight_screen(Bit16u val)
 
 	update_mouse_cursor();
 
-	list_i = (Bit8u*)ds_readd(FIG_LIST_HEAD);
+	list_i = g_fig_list_head;
 
 	do {
 		/* Check for each list entry if a sprite is needed */
@@ -364,7 +364,7 @@ void draw_fight_screen(Bit16u val)
 		g_fig_ani_state[i] = -1;
 	}
 
-	list_i = (Bit8u*)ds_readd(FIG_LIST_HEAD);
+	list_i = g_fig_list_head;
 	flag = 0;
 
 	do {
@@ -421,7 +421,7 @@ void draw_fight_screen(Bit16u val)
 
 		g_pic_copy.dst = g_vga_backbuffer = g_renderbuf_ptr;
 
-		for (list_i = (Bit8u*)ds_readd(FIG_LIST_HEAD); list_i; list_i = (Bit8u*)host_readd(list_i + FIGHTER_NEXT)) {
+		for (list_i = g_fig_list_head; list_i; list_i = (Bit8u*)host_readd(list_i + FIGHTER_NEXT)) {
 			if (host_readb(list_i + FIGHTER_VISIBLE) == 2)
 				host_writeb(list_i + FIGHTER_VISIBLE, 1);
 		}
@@ -446,7 +446,7 @@ void draw_fight_screen(Bit16u val)
 		g_pic_copy.src = g_buffer8_ptr;
 		do_pic_copy(3);
 
-		list_i = (Bit8u*)ds_readd(FIG_LIST_HEAD);
+		list_i = g_fig_list_head;
 
 		do {
 			p_weapon_gfx = 0;	/* NULL */
@@ -962,7 +962,7 @@ void draw_fight_screen(Bit16u val)
 		g_pic_copy.dst = g_renderbuf_ptr;
 	}
 
-	for (list_i = (Bit8u*)ds_readd(FIG_LIST_HEAD); list_i; list_i = (Bit8u*)host_readd(list_i + FIGHTER_NEXT)) {
+	for (list_i = g_fig_list_head; list_i; list_i = (Bit8u*)host_readd(list_i + FIGHTER_NEXT)) {
 		if (host_readb(list_i + FIGHTER_VISIBLE) != 0)
 			host_writeb(list_i + FIGHTER_VISIBLE, 1);
 	}
