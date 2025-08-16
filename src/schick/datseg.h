@@ -959,6 +959,8 @@ extern time_t g_last_save_time;		// ds:0xe2d6; seg026, seg059
 extern unsigned char *g_saved_files_buf;// ds:0xe2d2; seg026;
 extern signed short g_delay_timer;	// ds:0xe2d0; seg004, seg005
 
+extern signed short g_fig_ani_state[8];		// ds:0xe2a8; seg005
+extern signed short g_fig_figlist_readd[8];	// ds:0xe298; seg005
 extern unsigned char* g_fig_gfxbuffers[8];	// ds:0xe278; seg005
 #if defined(__BORLANDC__)
 extern void interrupt far(*g_bc_timer)(...);		// ds:0xe274; seg004

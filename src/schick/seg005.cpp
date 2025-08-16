@@ -355,13 +355,13 @@ void draw_fight_screen(Bit16u val)
 	} while (list_i = (Bit8u*)host_readd(list_i + FIGHTER_NEXT));
 
 	/* set elements array[0] of array[9] */
-	ds_writed(FIG_GFXBUFFERS, (Bit32u)g_fightobj_buf_seek_ptr);
-	ds_writew(FIG_ANI_STATE, -1);
+	g_fig_gfxbuffers[0] = g_fightobj_buf_seek_ptr;
+	g_fig_ani_state[0] = -1;
 
 	for (i = 1; i < 8; i++) {
 		/* copy a pointer to the next position */
-		ds_writed(FIG_GFXBUFFERS + i * 4, (Bit32u)(((HugePt)ds_readd((FIG_GFXBUFFERS - 4) + i * 4) + 0x508)));
-		ds_writew(FIG_ANI_STATE + i * 2, -1);
+		g_fig_gfxbuffers[i] = (HugePt)g_fig_gfxbuffers[i - 1] + 0x508L;
+		g_fig_ani_state[i] = -1;
 	}
 
 	list_i = (Bit8u*)ds_readd(FIG_LIST_HEAD);
@@ -384,15 +384,15 @@ void draw_fight_screen(Bit16u val)
 
 			flag = 1;
 
-			ds_writew(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2, 0);
+			g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)] = 0;
 
-			memcpy((Bit8u*)ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_SHEET) * 4),
+			memcpy((Bit8u*)g_fig_gfxbuffers[host_readbs(list_i + FIGHTER_SHEET)],
 				(Bit8u*)host_readd(list_i + FIGHTER_GFXBUF),
 				host_readbs(list_i + FIGHTER_WIDTH) * host_readbs(list_i + FIGHTER_HEIGHT));
 		}
 
 		if (host_readbs(list_i + FIGHTER_WSHEET) != -1) {
-			memset((Bit8u*)ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_WSHEET) * 4), 0, 0x508);
+			memset((Bit8u*)g_fig_gfxbuffers[host_readbs(list_i + FIGHTER_WSHEET)], 0, 0x508);
 		}
 
 
@@ -426,7 +426,7 @@ void draw_fight_screen(Bit16u val)
 		}
 
 		for (i = 0; i < 8; i++) {
-			ds_writew(FIG_FIGLIST_READD + i * 2, -1);
+			g_fig_figlist_readd[i] = -1;
 			figlist_remove[i] = -1;
 		}
 
@@ -461,74 +461,70 @@ void draw_fight_screen(Bit16u val)
 			p_figure_gfx = (Bit8u*)host_readd(list_i + FIGHTER_GFXBUF);
 
 			if ((host_readbs(list_i + FIGHTER_SHEET) != -1) &&
-				(ds_readws(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2) != -1)) {
+				(g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)] != -1)) {
 
 				sheet = p_datseg + FIG_ANISHEETS + host_readbs(list_i + FIGHTER_SHEET) * 0xf3;
 
-				if (host_readbs(sheet + 1 + ds_readw(FIG_ANI_STATE +  host_readbs(list_i + FIGHTER_SHEET) * 2) * 3) == -1) {
+				if (host_readbs(sheet + 1 + 3 * g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)]) == -1) {
 
-					p_figure_gfx = (Bit8u*)ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_SHEET) * 4);
-					ds_writew(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2, -1);
+					p_figure_gfx = (Bit8u*)g_fig_gfxbuffers[host_readbs(list_i + FIGHTER_SHEET)];
+					g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)] = -1;
 					host_writeb(list_i + FIGHTER_SHEET, host_writebs(list_i + FIGHTER_WSHEET, -1));
 
 				} else {
 
-					if (host_readbs(sheet + (ds_readw(FIG_ANI_STATE +  host_readbs(list_i + FIGHTER_SHEET) * 2) * 3) + 1) == -7)
+					if (host_readbs(sheet + 1 + 3 * g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)]) == -7)
 					{
 						host_writeb(list_i + FIGHTER_Z,
-							host_readbs(sheet + 2 + ds_readws(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2) * 3));
+							host_readbs(sheet + 2 + g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)] * 3));
 
-						inc_ds_ws(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2);
+						g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)]++;
 
-						ds_writew(FIG_FIGLIST_READD + host_readbs(list_i + FIGHTER_SHEET) * 2,
-							host_readbs(list_i + FIGHTER_ID));
+						g_fig_figlist_readd[host_readbs(list_i + FIGHTER_SHEET)] = host_readbs(list_i + FIGHTER_ID);
 					}
 
-					if (host_readbs(sheet + (ds_readw(FIG_ANI_STATE +  host_readbs(list_i + FIGHTER_SHEET) * 2) * 3) + 1) == -9)
+					if (host_readbs(sheet + 1 + 3 * g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)]) == -9)
 					{
-						play_voc(0xc8 + host_readbs(sheet + 2 + ds_readws(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2) * 3));
-						inc_ds_ws(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2);
+						play_voc(0xc8 + host_readbs(sheet + 2 + 3 * g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)]));
+						g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)]++;
 					}
 
 
-					if (host_readbs(sheet + (ds_readw(FIG_ANI_STATE +  host_readbs(list_i + FIGHTER_SHEET) * 2) * 3) + 1) == -5) {
+					if (host_readbs(sheet + 1 + 3 * g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)]) == -5) {
 
-						if (host_readbs(list_i + FIGHTER_WSHEET) != - 1) {
+						if (host_readbs(list_i + FIGHTER_WSHEET) != -1) {
 
 							p_weapon_anisheet = p_datseg + FIG_ANISHEETS + host_readbs(list_i + FIGHTER_WSHEET) * 0xf3;
 
-							if (host_readbs(p_weapon_anisheet + 1 + ds_readw(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2) * 3) == -9)
+							if (host_readbs(p_weapon_anisheet + 1 + 3 * g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)]) == -9)
 							{
-								play_voc(0xc8 + host_readbs(p_weapon_anisheet + 2 + ds_readw(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET)  * 2) * 3));
+								play_voc(0xc8 + host_readbs(p_weapon_anisheet + 2 + 3 * g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)]));
 							}
 						}
 
-						inc_ds_ws(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2);
+						g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)]++;
 
-					} else if (host_readbs(sheet + (ds_readw(FIG_ANI_STATE +  host_readbs(list_i + FIGHTER_SHEET) * 2) * 3) + 1) == -4) {
+					} else if (host_readbs(sheet + 1 + 3 * g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)]) == -4) {
 
-						host_writeb(sheet,
-							host_readb(sheet + 2 + ds_readw(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2) * 3));
+						host_writeb(sheet, host_readb(sheet + 2 + 3 * g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)]));
 
-						inc_ds_ws(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2);
+						g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)]++;
 
-					} else if ((host_readbs(sheet + (ds_readw(FIG_ANI_STATE +  host_readbs(list_i + FIGHTER_SHEET) * 2) * 3) + 1) == -3) ||
-							(host_readbs(sheet + (ds_readw(FIG_ANI_STATE +  host_readbs(list_i + FIGHTER_SHEET) * 2) * 3) + 1) == -6)) {
+					} else if ((host_readbs(sheet + 1 + 3 * g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)]) == -3) ||
+							(host_readbs(sheet + 1 + 3 * g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)]) == -6)) {
 
 						/* get nvf no */
 						viewdir_before = host_readbs(list_i + FIGHTER_NVF_NO);
 
-						if (host_readbs(sheet + 1 + (ds_readw(FIG_ANI_STATE +  host_readbs(list_i + FIGHTER_SHEET) * 2) * 3)) == -3) {
+						if (host_readbs(sheet + 1 + 3 * g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)]) == -3) {
 
 							add_ptr_bs(list_i + FIGHTER_NVF_NO,
-								host_readbs(sheet + (ds_readw(FIG_ANI_STATE +  host_readbs(list_i + FIGHTER_SHEET) * 2) * 3) + 3));
+								host_readbs(sheet + 3 + 3 * g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)]));
 						} else {
 
 							host_writews(list_i,
-
-								ds_readbs(GFXTAB_FIGURES_MAIN +  host_readbs(list_i + FIGHTER_SPRITE_NO) * 5 + host_readbs(sheet + 2 + (ds_readws(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2) * 3))));
-							host_writebs(list_i + FIGHTER_NVF_NO,
-								host_readbs(sheet + 3 + ds_readws(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2) * 3));
+								ds_readbs(GFXTAB_FIGURES_MAIN + host_readbs(list_i + FIGHTER_SPRITE_NO) * 5 + host_readbs(sheet + 2 + 3 * g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)])));
+							host_writebs(list_i + FIGHTER_NVF_NO, host_readbs(sheet + 3 + 3 * g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)]));
 						}
 
 						if (host_readws(list_i + FIGHTER_FIGURE) >= 88) {
@@ -599,7 +595,7 @@ void draw_fight_screen(Bit16u val)
 
 						process_nvf(&nvf);
 
-						inc_ds_ws(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2);
+						g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)]++;
 
 						p_figure_gfx = (Bit8u*)host_readd(list_i + FIGHTER_GFXBUF);
 
@@ -660,7 +656,7 @@ void draw_fight_screen(Bit16u val)
 					} else {
 
 						/* move a hero/enemy */
-						if (host_readbs(sheet + (ds_readw(FIG_ANI_STATE +  host_readbs(list_i + FIGHTER_SHEET) * 2) * 3) + 1) == -2) {
+						if (host_readbs(sheet + 1 + 3 * g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)]) == -2) {
 
 							if (host_readbs(list_i + FIGHTER_SHEET) < 6) {
 
@@ -671,11 +667,11 @@ void draw_fight_screen(Bit16u val)
 									host_readbs(list_i + FIGHTER_CBX),
 									host_readbs(list_i + FIGHTER_OBJ_ID));
 
-								host_writeb(list_i + FIGHTER_CBX,	host_readbs(list_i + FIGHTER_CBX) +
-									host_readbs(sheet + 2 + ds_readw(FIG_ANI_STATE + (host_readbs(list_i + FIGHTER_SHEET) * 2)) * 3));
+								host_writeb(list_i + FIGHTER_CBX, host_readbs(list_i + FIGHTER_CBX) +
+									host_readbs(sheet + 2 + 3 * g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)]));
 
-								host_writeb(list_i + FIGHTER_CBY,	host_readbs(list_i + FIGHTER_CBY) +
-									host_readbs(sheet + 3 + ds_readw(FIG_ANI_STATE + (host_readbs(list_i + FIGHTER_SHEET) * 2)) * 3));
+								host_writeb(list_i + FIGHTER_CBY, host_readbs(list_i + FIGHTER_CBY) +
+									host_readbs(sheet + 3 + 3 * g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)]));
 
 								twofielded_move_tail_first = 0;
 
@@ -756,11 +752,14 @@ void draw_fight_screen(Bit16u val)
 										}
 
 										host_writebs(list_i + FIGHTER_OBJ_ID, 0);
-										host_writebs(sheet + 1 + 3 * (ds_readws(FIG_ANI_STATE + 2 * host_readbs(list_i + FIGHTER_SHEET)) + 1), -1);
+										host_writebs(sheet + 1 + 3 * (1 + g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)]), -1);
 
 										if (host_readbs(list_i + FIGHTER_TWOFIELDED) != -1) {
-											ds_writeb((FIG_ANISHEETS + 4 + 2*0xf3) + (host_readbs(list_i + FIGHTER_SHEET) * 0xf3 + ds_readws((FIG_ANI_STATE + 4) + host_readbs(list_i + FIGHTER_SHEET) * 2) * 3), -1);
-											ds_writew((FIG_ANI_STATE + 4) + host_readbs(list_i + FIGHTER_SHEET) * 2, -1);
+											ds_writeb((FIG_ANISHEETS + 4 + 2*0xf3) +
+													(host_readbs(list_i + FIGHTER_SHEET) * 0xf3 +
+													3 * g_fig_ani_state[2 + host_readbs(list_i + FIGHTER_SHEET)]), -1);
+
+											g_fig_ani_state[2 + host_readbs(list_i + FIGHTER_SHEET)] = -1;
 										}
 
 								} else {
@@ -770,22 +769,21 @@ void draw_fight_screen(Bit16u val)
 								}
 							} else {
 								host_writeb(list_i + FIGHTER_CBX, host_readbs(list_i + FIGHTER_CBX) +
-									host_readbs(sheet + ds_readw(FIG_ANI_STATE + (host_readbs(list_i + FIGHTER_SHEET) * 2)) * 3 + 2));
+									host_readbs(sheet + g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)] * 3 + 2));
 
 								host_writeb(list_i + FIGHTER_CBY, host_readbs(list_i + FIGHTER_CBY) +
-									host_readbs(sheet + ds_readw(FIG_ANI_STATE + (host_readbs(list_i + FIGHTER_SHEET) * 2)) * 3 + 3));
+									host_readbs(sheet + g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)] * 3 + 3));
 							}
 
-							ds_writew(FIG_FIGLIST_READD + host_readbs(list_i + FIGHTER_SHEET) * 2,
-								host_readbs(list_i + FIGHTER_ID));
+							g_fig_figlist_readd[host_readbs(list_i + FIGHTER_SHEET)] = host_readbs(list_i + FIGHTER_ID);
 
-							inc_ds_ws(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2);
+							g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)]++;
 						}
 
-						if (host_readbs(sheet + 1 + (ds_readw(FIG_ANI_STATE +  host_readbs(list_i + FIGHTER_SHEET) * 2) * 3)) == -1) {
+						if (host_readbs(sheet + 1 + (g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)] * 3)) == -1) {
 
-							p_figure_gfx = (Bit8u*)ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_SHEET) * 4);
-							ds_writew(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2, -1);
+							p_figure_gfx = (Bit8u*)g_fig_gfxbuffers[host_readbs(list_i + FIGHTER_SHEET)];
+							g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)] = -1;
 							host_writeb(list_i + FIGHTER_SHEET, host_writebs(list_i + FIGHTER_WSHEET, -1));
 
 						} else {
@@ -798,9 +796,9 @@ void draw_fight_screen(Bit16u val)
 
 							obj_y += host_readbs(list_i + FIGHTER_OFFSETY);
 
-							obj_x += host_readbs(sheet + 2 + ds_readw(FIG_ANI_STATE +  host_readbs(list_i + FIGHTER_SHEET) * 2) * 3);
+							obj_x += host_readbs(sheet + 2 + g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)] * 3);
 
-							obj_y -= host_readbs(sheet + 3 + ds_readw(FIG_ANI_STATE +  host_readbs(list_i + FIGHTER_SHEET) * 2) * 3);
+							obj_y -= host_readbs(sheet + 3 + g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)] * 3);
 
 							i = ds_readbs(GFXTAB_FIGURES_MAIN + (host_readbs(list_i + FIGHTER_SPRITE_NO) * 5) + host_readbs(sheet));
 
@@ -810,8 +808,8 @@ void draw_fight_screen(Bit16u val)
 								nvf.src = (Bit8u*)ds_readd(SPELLOBJ_NVF_BUF);
 							}
 
-							nvf.dst = (Bit8u*)ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_SHEET) * 4);
-							nvf.no = host_readbs(sheet + 1 + ds_readw(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2) * 3);
+							nvf.dst = (Bit8u*)g_fig_gfxbuffers[host_readbs(list_i + FIGHTER_SHEET)];
+							nvf.no = host_readbs(sheet + 1 + g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)] * 3);
 							nvf.type = 0;
 							nvf.width = (Bit8u*)&width;
 							nvf.height = (Bit8u*)&obj_id;
@@ -822,19 +820,19 @@ void draw_fight_screen(Bit16u val)
 
 								p_weapon_anisheet = p_datseg + FIG_ANISHEETS + host_readbs(list_i + FIGHTER_WSHEET) * 0xf3;
 
-								if (host_readbs(p_weapon_anisheet + 1 + ds_readws(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2) * 3) == -1)
+								if (host_readbs(p_weapon_anisheet + 1 + g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)] * 3) == -1)
 								{
 									host_writeb(list_i + FIGHTER_WSHEET, -1);
 								} else {
 									current_x1 = obj_x;
 									current_y1 = obj_y;
 
-									p_weapon_gfx = (Bit8u*)ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_WSHEET) * 4);
+									p_weapon_gfx = (Bit8u*)g_fig_gfxbuffers[host_readbs(list_i + FIGHTER_WSHEET)];
 
-									if (host_readbs(p_weapon_anisheet + 1 + 3 * (ds_readws(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2))) != -5) {
-										nvf.dst = (Bit8u*)ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_WSHEET) * 4);
+									if (host_readbs(p_weapon_anisheet + 1 + 3 * (g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)])) != -5) {
+										nvf.dst = (Bit8u*)g_fig_gfxbuffers[host_readbs(list_i + FIGHTER_WSHEET)];
 										nvf.src = (Bit8u*)ds_readd(WEAPONS_NVF_BUF);
-										nvf.no = host_readb(p_weapon_anisheet + 1 + ds_readw(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2) * 3);
+										nvf.no = host_readb(p_weapon_anisheet + 1 + g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)] * 3);
 										nvf.type = 0;
 										nvf.width = (Bit8u*)&width;
 										nvf.height = (Bit8u*)&obj_id;
@@ -842,17 +840,17 @@ void draw_fight_screen(Bit16u val)
 										process_nvf(&nvf);
 
 										current_x1 += host_readbs(list_i + FIGHTER_WIDTH) - 14;
-										current_x1 += host_readbs(p_weapon_anisheet + 2 + ds_readws(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2) * 3);
-										current_y1 -= host_readbs(p_weapon_anisheet + 3 + ds_readws(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2) * 3);
+										current_x1 += host_readbs(p_weapon_anisheet + 2 + g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)] * 3);
+										current_y1 -= host_readbs(p_weapon_anisheet + 3 + g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)] * 3);
 									}
 								}
 							}
 
-							inc_ds_ws(FIG_ANI_STATE + host_readbs(list_i + FIGHTER_SHEET) * 2);
+							g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)]++;
 						}
 
 						if (host_readbs(list_i + FIGHTER_SHEET) != -1) {
-							p_figure_gfx = (Bit8u*)ds_readd(FIG_GFXBUFFERS + host_readbs(list_i + FIGHTER_SHEET) * 4);
+							p_figure_gfx = (Bit8u*)g_fig_gfxbuffers[host_readbs(list_i + FIGHTER_SHEET)];
 						}
 					}
 				}
@@ -925,9 +923,9 @@ void draw_fight_screen(Bit16u val)
 		ds_writew(FIGOBJ_UNKN_Y1, -1);
 
 		for (i = 0; i < 8; i++) {
-			if (ds_readws(FIG_FIGLIST_READD + i * 2) != -1) {
-				FIG_remove_from_list(ds_readbs(FIG_FIGLIST_READD + i * 2), 1);
-				FIG_add_to_list(ds_readbs(FIG_FIGLIST_READD + i * 2));
+			if (g_fig_figlist_readd[i] != -1) {
+				FIG_remove_from_list(g_fig_figlist_readd[i], 1);
+				FIG_add_to_list(g_fig_figlist_readd[i]);
 			}
 
 			if (figlist_remove[i] != -1) {
@@ -938,7 +936,7 @@ void draw_fight_screen(Bit16u val)
 		flag = 0;
 
 		for (i = 0; i < 8; i++) {
-			if (ds_readws(FIG_ANI_STATE + i * 2) != -1) {
+			if (g_fig_ani_state[i] != -1) {
 				flag = 1;
 				break;
 			}

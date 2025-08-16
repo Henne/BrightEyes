@@ -6343,7 +6343,7 @@ unsigned short g_fig_target_grammar_id; // ds:0xe2be
 unsigned short g_fig_target_grammar_type; // ds:0xe2bc, 2 = hero, 1 = monster
 unsigned short g_fig_actor_grammar_id; // ds:0xe2ba
 unsigned short g_fig_actor_grammar_type; // ds:0xe2b8, 2 = hero, 1 = monster
-unsigned short g_fig_ani_state[8]; // ds:0xe2a8
+signed short g_fig_ani_state[8]; // ds:0xe2a8
 signed short g_fig_figlist_readd[8]; // ds:0xe298
 unsigned char* g_fig_gfxbuffers[8]; // ds:0xe278, 0x508 byte segments in FIGHTOBJ_BUF
 #if defined(__BORLANDC__)
