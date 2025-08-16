@@ -366,8 +366,7 @@ void FIG_init_enemies(void)
 		or_ds_bs((ENEMY_SHEETS + ENEMY_SHEET_FLAGS1) + i * SIZEOF_ENEMY_SHEET, 1); /* set 'dead' flag */
 	}
 
-	ds_writew(NR_OF_ENEMIES, 0);
-
+	g_nr_of_enemies = 0;
 
 	/* Fill the tables with new values */
 	for (i = 0; i < 20; i++) {
@@ -378,12 +377,12 @@ void FIG_init_enemies(void)
 				host_readb(g_current_fight + i * SIZEOF_FIGHT_MONSTER + FIGHT_MONSTERS_ID),
 				host_readb(g_current_fight + i * SIZEOF_FIGHT_MONSTER + FIGHT_MONSTERS_ROUND_APPEAR));
 
-			inc_ds_ws(NR_OF_ENEMIES);
+			g_nr_of_enemies++;
 		}
 	}
 
 	/* place the enemies on the chessboard */
-	for (i = 0; i < ds_readws(NR_OF_ENEMIES); i++) {
+	for (i = 0; i < g_nr_of_enemies; i++) {
 
 		x = host_readbs(g_current_fight + i * SIZEOF_FIGHT_MONSTER + FIGHT_MONSTERS_X);
 		y = host_readbs(g_current_fight + i * SIZEOF_FIGHT_MONSTER + FIGHT_MONSTERS_Y);

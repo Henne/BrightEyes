@@ -195,7 +195,7 @@ signed short FIG_choose_next_enemy(void)
 
 	do {
 
-		retval = random_schick(ds_readw(NR_OF_ENEMIES)) - 1;
+		retval = random_schick(g_nr_of_enemies) - 1;
 
 #if !defined(__BORLANDC__)
 		tries[retval]++;
@@ -217,7 +217,7 @@ signed short FIG_choose_next_enemy(void)
 			 * interesting bits
 			 */
 			enemy = p_datseg + ENEMY_SHEETS;
-			for (i = 0; i < ds_readw(NR_OF_ENEMIES); i++, enemy += SIZEOF_ENEMY_SHEET) {
+			for (i = 0; i < g_nr_of_enemies; i++, enemy += SIZEOF_ENEMY_SHEET) {
 				D1_ERR("Enemy %02d %x %x\n",
 					i, host_readb(enemy),
 					host_readb(enemy + ENEMY_SHEET_ATTACKS_LEFT));
@@ -466,7 +466,7 @@ void FIG_do_round(void)
 
 	nr_enemy_action_phases_left_in_round = 0;
 
-	for (i = 0; i < ds_readws(NR_OF_ENEMIES); i++) {
+	for (i = 0; i < g_nr_of_enemies; i++) {
 
 		/* set #phases */
 		ds_writeb((ENEMY_SHEETS + ENEMY_SHEET_ATTACKS_LEFT) + SIZEOF_ENEMY_SHEET * i, ds_readbs((ENEMY_SHEETS + ENEMY_SHEET_ATTACKS) + SIZEOF_ENEMY_SHEET * i));
@@ -1027,12 +1027,12 @@ signed short do_fight(signed short fight_id)
 
 	/* open WEAPONS.NVF */
 	fd = load_archive_file(ARCHIVE_FILE_WEAPONS_NVF);
-	read_archive_file(fd, (Bit8u*)ds_readd(WEAPONS_NVF_BUF), 6483);
+	read_archive_file(fd, g_weapons_nvf_buf, 6483);
 	close(fd);
 
 	/* open SPELLOBJ.NVF */
 	fd = load_archive_file(ARCHIVE_FILE_SPELLOBJ_NVF);
-	read_archive_file(fd, (Bit8u*)ds_readd(SPELLOBJ_NVF_BUF), 3935);
+	read_archive_file(fd, g_spellobj_nvf_buf, 3935);
 	close(fd);
 
 	FIG_init_enemies();

@@ -6370,15 +6370,15 @@ Bit8u *g_fig_list_head; // ds:0xe108, to a list
 signed char g_fig_list_array[127]; // ds:0xe089
 struct{unsigned char unkn[35];} g_fig_list_elem; // ds:0xe066
 struct{unsigned char unkn[243];} g_fig_anisheets[8]; // ds:0xd8ce
-unsigned char g_fightobj_list[90]; // ds:0xd874
-short g_nr_of_enemies; // ds:0xd872, ?
+signed char g_fightobj_list[90]; // ds:0xd874
+signed int g_nr_of_enemies; // ds:0xd872, ?
 unsigned char *g_fightobj_buf_seek_ptr; // ds:0xd86e, points to end of FIGHTOBJ buffer
-void *g_weapons_nvf_buf; // ds:0xd86a, to buffer of size 0x1953
-void *g_spellobj_nvf_buf; // ds:0xd866, to buffer of size 0xf5f
-void *g_fig_cb_marker_buf; // ds:0xd862
-void *g_fig_cb_selector_buf; // ds:0xd85e
-void *g_fig_shot_bolt_buf; // ds:0xd85a
-void *g_fig_spellgfx_buf; // ds:0xd856
+Bit8u *g_weapons_nvf_buf; // ds:0xd86a, to buffer of size 0x1953
+Bit8u *g_spellobj_nvf_buf; // ds:0xd866, to buffer of size 0xf5f
+Bit8u *g_fig_cb_marker_buf; // ds:0xd862
+Bit8u *g_fig_cb_selector_buf; // ds:0xd85e
+Bit8u *g_fig_shot_bolt_buf; // ds:0xd85a
+Bit8u *g_fig_spellgfx_buf; // ds:0xd856
 signed char *g_chessboard;// ds:0xd852
 signed char g_hero_is_target[7]; // ds:0xd84b
 signed char g_fig_actors_unkn[30]; // ds:0xd82d, see FIG_ACTION_UNKNOWN2

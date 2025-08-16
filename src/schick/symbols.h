@@ -1482,15 +1482,15 @@
 #define FIG_ACTORS_UNKN                 (0xd82d)    /* signed char[30]; see FIG_ACTION_UNKNOWN2 */
 #define HERO_IS_TARGET                  (0xd84b)    /* signed char[7] */
 //#define CHESSBOARD                      (0xd852)    /* Bit8u* */
-#define FIG_SPELLGFX_BUF                (0xd856)    /* Bit8u* */
-#define FIG_SHOT_BOLT_BUF               (0xd85a)    /* Bit8u* */
-#define FIG_CB_SELECTOR_BUF             (0xd85e)    /* Bit8u* */
-#define FIG_CB_MARKER_BUF               (0xd862)    /* Bit8u* */
-#define SPELLOBJ_NVF_BUF                (0xd866)    /* Bit8u*; to buffer of size 0xf5f */
-#define WEAPONS_NVF_BUF                 (0xd86a)    /* Bit8u*; to buffer of size 0x1953 */
+//#define FIG_SPELLGFX_BUF                (0xd856)    /* Bit8u* */
+//#define FIG_SHOT_BOLT_BUF               (0xd85a)    /* Bit8u* */
+//#define FIG_CB_SELECTOR_BUF             (0xd85e)    /* Bit8u* */
+//#define FIG_CB_MARKER_BUF               (0xd862)    /* Bit8u* */
+//#define SPELLOBJ_NVF_BUF                (0xd866)    /* Bit8u*; to buffer of size 0xf5f */
+//#define WEAPONS_NVF_BUF                 (0xd86a)    /* Bit8u*; to buffer of size 0x1953 */
 //#define FIGHTOBJ_BUF_SEEK_PTR           (0xd86e)    /* Bit8u*; points to end of FIGHTOBJ buffer */
-#define NR_OF_ENEMIES                   (0xd872)    /* short; ? */
-#define FIGHTOBJ_LIST                   (0xd874)    /* unsigned char[90] */
+//#define NR_OF_ENEMIES                   (0xd872)    /* short; ? */
+//#define FIGHTOBJ_LIST                   (0xd874)    /* unsigned char[90] */
 #define FIG_ANISHEETS                   (0xd8ce)    /* struct(243)[8] */
 #define FIG_LIST_ELEM                   (0xe066)    /* struct(35) */
 //#define FIG_LIST_ARRAY                  (0xe089)    /* unsigned char[127]; list of flags (0 or 1) indicating if the corresponding FIGHTER_ID is in use. more precisely: FIG_LIST_ARRAY[i] is 1 (otherwise 0) if the index i is the FIGHTER_ID of a fighter object. */

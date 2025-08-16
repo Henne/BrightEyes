@@ -1000,7 +1000,15 @@ extern signed char  g_location_market_flag;	// ds:0xe10c; seg066
 extern Bit8u *g_fig_list_head;		// ds:0xe108; seg005, seg006, seg040
 extern signed char g_fig_list_array[127];	// ds:0xe089; seg006, seg040
 
+extern signed char g_fightobj_list[90];	// ds:0xd874; seg040
+extern signed int g_nr_of_enemies;	// ds:0xd872; seg032, seg034, seg039, seg100
 extern unsigned char *g_fightobj_buf_seek_ptr; // ds:0xd86e; seg005-seg100
+extern Bit8u* g_weapons_nvf_buf;	// ds:0xd86a; seg005, seg032, seg040
+extern Bit8u* g_spellobj_nvf_buf;	// ds:0xd868; seg005, seg032, seg040, seg045, seg100
+extern Bit8u* g_fig_cb_marker_buf;	// ds:0xd862; seg038, seg040
+extern Bit8u* g_fig_cb_selector_buf;	// ds:0xd85e; seg034, seg040
+extern Bit8u* g_fig_shot_bolt_buf;	// ds:0xd85a; seg040, seg045
+extern Bit8u* g_fig_spellgfx_buf;	// ds:0xd856; seg040, seg045
 extern signed char *g_chessboard;	// ds:0xd852;
 extern signed short g_gather_herbs_mod;	// ds:0xd32f; seg051, seg109
 extern signed short g_wildcamp_sleep_quality;	// ds:0xd32f; seg051, seg094, seg109, seg114, seg118

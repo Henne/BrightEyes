@@ -818,10 +818,10 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 
 								nvf.dst = (Bit8u*)(ds_readd((FIG_LIST_ELEM + FIGHTER_GFXBUF)));
-								nvf.src = (Bit8u*)ds_readd(SPELLOBJ_NVF_BUF);
+								nvf.src = g_spellobj_nvf_buf;
 								nvf.no = 26;
 								nvf.type = 0;
-								nvf.width =(Bit8u*) &width;
+								nvf.width =(Bit8u*)&width;
 								nvf.height = (Bit8u*)&height;
 
 								process_nvf(&nvf);

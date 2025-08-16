@@ -73,7 +73,7 @@ void spell_exposami(void)
 
 	count = 0;
 
-	for (i = 0; i < ds_readws(NR_OF_ENEMIES); i++) {
+	for (i = 0; i < g_nr_of_enemies; i++) {
 
 		if (host_readbs(g_current_fight + SIZEOF_FIGHT_MONSTER * i + FIGHT_MONSTERS_ROUND_APPEAR) != 0) {
 
@@ -266,7 +266,7 @@ void spell_hexenknoten(void)
 	} else {
 		rp = g_fightobj_buf_seek_ptr;
 		nvf.dst = rp;
-		nvf.src = (Bit8u*)ds_readd(SPELLOBJ_NVF_BUF);
+		nvf.src = g_spellobj_nvf_buf;
 		nvf.no = no;
 		nvf.type = 0;
 		nvf.width = (Bit8u*)&width;

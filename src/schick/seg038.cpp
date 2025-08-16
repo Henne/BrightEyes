@@ -88,7 +88,7 @@ void FIG_init_list_elem(signed short obj)
 	ds_writeb((FIG_LIST_ELEM + FIGHTER_WSHEET), -1);
 	ds_writeb((FIG_LIST_ELEM + FIGHTER_SHEET), -1);
 
-	ds_writed((FIG_LIST_ELEM + FIGHTER_GFXBUF), ds_readd(FIG_CB_MARKER_BUF));
+	ds_writed((FIG_LIST_ELEM + FIGHTER_GFXBUF), (Bit32u)g_fig_cb_marker_buf);
 	ds_writeb((FIG_LIST_ELEM + FIGHTER_Z), 0);
 	ds_writeb((FIG_LIST_ELEM + FIGHTER_VISIBLE), 1);
 	ds_writeb((FIG_LIST_ELEM + FIGHTER_TWOFIELDED), -1);

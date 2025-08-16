@@ -197,7 +197,7 @@ signed char FIG_cb_select_target(Bit8u *px, Bit8u *py, const signed short max_ra
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_RELOAD), 0);
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_WSHEET), -1);
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_SHEET), -1);
-	ds_writed((FIG_LIST_ELEM+FIGHTER_GFXBUF), ds_readd(FIG_CB_SELECTOR_BUF));
+	ds_writed((FIG_LIST_ELEM+FIGHTER_GFXBUF), (Bit32u)g_fig_cb_selector_buf);
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_Z), 1);
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_VISIBLE), 1);
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_TWOFIELDED), -1);
@@ -446,7 +446,7 @@ void FIG_latecomers(void)
 #endif
 
 	/* for all enemies in this fight */
-	for (i = 0; i < ds_readws(NR_OF_ENEMIES); i++) {
+	for (i = 0; i < g_nr_of_enemies; i++) {
 
 		p_mon = p_datseg + ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * i;
 
@@ -607,7 +607,7 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_RELOAD), 0);
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_WSHEET), -1);
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_SHEET), -1);
-	ds_writed((FIG_LIST_ELEM+FIGHTER_GFXBUF), ds_readd(FIG_CB_SELECTOR_BUF));
+	ds_writed((FIG_LIST_ELEM+FIGHTER_GFXBUF), (Bit32u)g_fig_cb_selector_buf);
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_Z), 1);
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_VISIBLE), 1);
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_TWOFIELDED), -1);
@@ -690,7 +690,7 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 
 			ds_writeb((FIG_LIST_ELEM+FIGHTER_CBX), (signed char)sel_x);
 			ds_writeb((FIG_LIST_ELEM+FIGHTER_CBY), (signed char)sel_y);
-			ds_writed((FIG_LIST_ELEM+FIGHTER_GFXBUF), ds_readd(FIG_CB_SELECTOR_BUF));
+			ds_writed((FIG_LIST_ELEM+FIGHTER_GFXBUF), (Bit32u)g_fig_cb_selector_buf);
 			ds_writeb((FIG_LIST_ELEM+FIGHTER_TWOFIELDED), -1);
 			g_fig_cb_selector_id[0] = FIG_add_to_list(-1);
 

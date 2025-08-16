@@ -585,7 +585,7 @@ void draw_fight_screen(Bit16u val)
 						if ((host_readbs(list_i + FIGHTER_SHEET) < 6) && (host_readbs(sheet + 0xf2) >= 0)) {
 							nvf.src = (Bit8u*)load_fight_figs(host_readw(list_i + FIGHTER_FIGURE));
 						} else {
-							nvf.src = (Bit8u*)ds_readd(SPELLOBJ_NVF_BUF);
+							nvf.src = g_spellobj_nvf_buf;
 						}
 
 						nvf.dst = (Bit8u*)host_readd(list_i + FIGHTER_GFXBUF);
@@ -806,7 +806,7 @@ void draw_fight_screen(Bit16u val)
 							if ((host_readbs(list_i + FIGHTER_SHEET) < 6) && (host_readbs(sheet + 0xf2) >= 0)) {
 								nvf.src = (Bit8u*)load_fight_figs(i);
 							} else {
-								nvf.src = (Bit8u*)ds_readd(SPELLOBJ_NVF_BUF);
+								nvf.src = g_spellobj_nvf_buf;
 							}
 
 							nvf.dst = (Bit8u*)g_fig_gfxbuffers[host_readbs(list_i + FIGHTER_SHEET)];
@@ -832,7 +832,7 @@ void draw_fight_screen(Bit16u val)
 
 									if (host_readbs(p_weapon_anisheet + 1 + 3 * (g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)])) != -5) {
 										nvf.dst = (Bit8u*)g_fig_gfxbuffers[host_readbs(list_i + FIGHTER_WSHEET)];
-										nvf.src = (Bit8u*)ds_readd(WEAPONS_NVF_BUF);
+										nvf.src = g_weapons_nvf_buf;
 										nvf.no = host_readb(p_weapon_anisheet + 1 + g_fig_ani_state[host_readbs(list_i + FIGHTER_SHEET)] * 3);
 										nvf.type = 0;
 										nvf.width = (Bit8u*)&width;

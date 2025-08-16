@@ -59,13 +59,13 @@ void seg045_0000(signed short fighter_id, signed short type, signed short a3)
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_RELOAD), 0);
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_WSHEET), -1);
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_SHEET), -1);
-	ds_writed((FIG_LIST_ELEM+FIGHTER_GFXBUF), ds_readd(FIG_SHOT_BOLT_BUF));
+	ds_writed((FIG_LIST_ELEM+FIGHTER_GFXBUF), (Bit32u)g_fig_shot_bolt_buf);
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_Z), 100);
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_VISIBLE), 0);
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_TWOFIELDED), -1);
 
-	nvf.dst = (Bit8u*)ds_readd(FIG_SHOT_BOLT_BUF);
-	nvf.src = (Bit8u*)ds_readd(SPELLOBJ_NVF_BUF);
+	nvf.dst = g_fig_shot_bolt_buf;
+	nvf.src = g_spellobj_nvf_buf;
 	nvf.no = ds_readbs((FIG_LIST_ELEM+FIGHTER_NVF_NO));
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&obj_x;
@@ -172,8 +172,8 @@ void seg045_0273(signed short x, signed short y, signed short spell_ani_id)
 
 	struct nvf_desc nvf;
 
-	nvf.dst = (Bit8u*)ds_readd(FIG_SPELLGFX_BUF);
-	nvf.src = (Bit8u*)ds_readd(SPELLOBJ_NVF_BUF);
+	nvf.dst = g_fig_spellgfx_buf;
+	nvf.src = g_spellobj_nvf_buf;
 
 	nvf.no = a.a[spell_ani_id - 1];
 	nvf.type = 0;
@@ -205,7 +205,7 @@ void seg045_0273(signed short x, signed short y, signed short spell_ani_id)
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_RELOAD), 0);
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_WSHEET), -1);
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_SHEET), -1);
-	ds_writed((FIG_LIST_ELEM+FIGHTER_GFXBUF), ds_readd(FIG_SPELLGFX_BUF));
+	ds_writed((FIG_LIST_ELEM+FIGHTER_GFXBUF), (Bit32u)g_fig_spellgfx_buf);
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_Z), 99);
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_VISIBLE), 0);
 	ds_writeb((FIG_LIST_ELEM+FIGHTER_TWOFIELDED), -1);
