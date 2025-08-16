@@ -1010,6 +1010,8 @@ extern Bit8u* g_fig_cb_selector_buf;	// ds:0xd85e; seg034, seg040
 extern Bit8u* g_fig_shot_bolt_buf;	// ds:0xd85a; seg040, seg045
 extern Bit8u* g_fig_spellgfx_buf;	// ds:0xd856; seg040, seg045
 extern signed char *g_chessboard;	// ds:0xd852;
+extern signed char g_hero_is_target[7];	// ds:0xd84b; seg032, seg042, seg043, seg044
+
 extern signed short g_gather_herbs_mod;	// ds:0xd32f; seg051, seg109
 extern signed short g_wildcamp_sleep_quality;	// ds:0xd32f; seg051, seg094, seg109, seg114, seg118
 extern unsigned char *g_townpal_buf;	// ds:0xd312; seg002, seg027, seg120

@@ -257,7 +257,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 					l11 -= 4;
 				}
 
-				if (ds_readbs((HERO_IS_TARGET-1) + host_readbs(hero + HERO_ENEMY_ID)) == 1) {
+				if (g_hero_is_target[host_readbs(hero + HERO_ENEMY_ID) - 1] == 1) {
 					atpa += 2;
 				}
 
@@ -338,7 +338,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 			} else if (randval1 <= atpa) {
 
 				if (((target_is_hero == 0) && !ds_readbs(FIG_ACTORS_UNKN + host_readbs(hero + HERO_ENEMY_ID)) && (l16 == 0)) ||
-					((target_is_hero != 0) && !ds_readbs((HERO_IS_TARGET-1) + host_readbs(hero + HERO_ENEMY_ID))))
+					((target_is_hero != 0) && !g_hero_is_target[host_readbs(hero + HERO_ENEMY_ID) - 1]))
 				{
 
 					if (target_is_hero != 0) {

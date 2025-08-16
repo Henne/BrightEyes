@@ -1480,7 +1480,7 @@
 #define ENEMY_SHEETS                    (0xd34b)    /* struct(62)[20]; struct enemy[20] */
 #define FIG_MOVE_PATHDIR                (0xd823)    /* signed char[10] */
 #define FIG_ACTORS_UNKN                 (0xd82d)    /* signed char[30]; see FIG_ACTION_UNKNOWN2 */
-#define HERO_IS_TARGET                  (0xd84b)    /* signed char[7] */
+//#define HERO_IS_TARGET                  (0xd84b)    /* signed char[7] */
 //#define CHESSBOARD                      (0xd852)    /* Bit8u* */
 //#define FIG_SPELLGFX_BUF                (0xd856)    /* Bit8u* */
 //#define FIG_SHOT_BOLT_BUF               (0xd85a)    /* Bit8u* */

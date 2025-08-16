@@ -214,10 +214,10 @@ void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 				attacker_at -= 4;
 			}
 
-			if (target_is_hero != 0) {
+			if (target_is_hero) {
 
 				/* TODO */
-				if (ds_readbs((HERO_IS_TARGET-1) + host_readbs((Bit8u*)(monster) + ENEMY_SHEET_ENEMY_ID)) == 1) {
+				if (g_hero_is_target[host_readbs((Bit8u*)(monster) + ENEMY_SHEET_ENEMY_ID) - 1] == 1) {
 					attacker_at += 2;
 				}
 
@@ -320,7 +320,7 @@ void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 
 				if (randval <= attacker_at) {
 
-					if (((target_is_hero != 0) && !ds_readbs((HERO_IS_TARGET-1) + host_readbs((Bit8u*)(monster) + ENEMY_SHEET_ENEMY_ID)) && check_hero(hero)) ||
+					if ((target_is_hero && !g_hero_is_target[host_readbs((Bit8u*)(monster) + ENEMY_SHEET_ENEMY_ID) - 1] && check_hero(hero)) ||
 						(!target_is_hero && (!ds_readbs(FIG_ACTORS_UNKN + host_readbs((Bit8u*)(monster) + ENEMY_SHEET_ENEMY_ID)))))
 					{
 

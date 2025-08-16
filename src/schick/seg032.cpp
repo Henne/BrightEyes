@@ -413,7 +413,7 @@ void FIG_do_round(void)
 	nr_hero_action_phases_left_in_round = 0;
 
 	/* initialize heroes' #action phases and BP */
-	for (i = 0; i <= 6; ds_writeb(HERO_IS_TARGET + i, 0), i++) {
+	for (i = 0; i <= 6; (g_hero_is_target[i] = 0), i++) {
 
 		hero = get_hero(i);
 

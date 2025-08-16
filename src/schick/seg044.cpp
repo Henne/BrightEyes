@@ -188,13 +188,13 @@ void FIG_prepare_hero_fight_ani(signed short a1, Bit8u *hero, signed short weapo
 
 	if ((weapon_type == -1) || ((host_readbs(hero + HERO_TYPE) == HERO_TYPE_MAGE) && (weapon == ITEM_MAGIC_WAND))) {
 
-		l1 = (f_action == FIG_ACTION_MELEE_ATTACK) ? 45 :			/* melee attack */
+		l1 = (f_action == FIG_ACTION_MELEE_ATTACK) ? 45 :		/* melee attack */
 			(f_action == FIG_ACTION_UNKNOWN3) ? 41 :		/* drink potion */
 			(f_action == FIG_ACTION_UNKNOWN4) ? 53 :		/* cast spell */
 			49;
 
 	} else {
-		l1 = (f_action == FIG_ACTION_MELEE_ATTACK) ?  21:			/* melee attack */
+		l1 = (f_action == FIG_ACTION_MELEE_ATTACK) ?  21:		/* melee attack */
 			(f_action == FIG_ACTION_UNKNOWN3) ? 41 :		/* drink potion */
 			(f_action == FIG_ACTION_UNKNOWN4) ? 53 :		/* cast spell */
 			(f_action != FIG_ACTION_RANGE_ATTACK) ? 25 :
@@ -213,7 +213,7 @@ void FIG_prepare_hero_fight_ani(signed short a1, Bit8u *hero, signed short weapo
 	if (check_hero(hero) && (host_readbs(hero + HERO_VIEWDIR) != dir) &&
 
 		((f_action == FIG_ACTION_MELEE_ATTACK) || (f_action == FIG_ACTION_RANGE_ATTACK) || (f_action == FIG_ACTION_UNKNOWN4) ||
-			((f_action == FIG_ACTION_UNKNOWN2) && !ds_readbs((HERO_IS_TARGET-1) + (signed char)fid_attacker)) ||
+			((f_action == FIG_ACTION_UNKNOWN2) && !g_hero_is_target[(signed char)fid_attacker - 1]) ||
 			((g_attacker_attacks_again != 0) && (a7 == 0)) ||
 			((g_defender_attacks != 0) && (a7 == 1))))
 	{
@@ -270,7 +270,7 @@ void FIG_prepare_hero_fight_ani(signed short a1, Bit8u *hero, signed short weapo
 
 	if ((check_hero(hero) && (f_action == FIG_ACTION_MELEE_ATTACK)) ||
 		((f_action == FIG_ACTION_RANGE_ATTACK) || (f_action == FIG_ACTION_UNKNOWN3) || (f_action == FIG_ACTION_UNKNOWN4) ||
-			((f_action == FIG_ACTION_UNKNOWN2) && !ds_readbs((HERO_IS_TARGET-1) + (signed char)fid_attacker))))
+			((f_action == FIG_ACTION_UNKNOWN2) && !g_hero_is_target[(signed char)fid_attacker - 1])))
 	{
 		p1 += copy_ani_seq(p1, host_readws(p3 + l1 *2), 2);
 
@@ -291,8 +291,7 @@ void FIG_prepare_hero_fight_ani(signed short a1, Bit8u *hero, signed short weapo
 		}
 	}
 
-	if ((check_hero(hero) && g_attacker_attacks_again != 0 && a7 == 0) ||
-		((g_defender_attacks != 0) && (a7 == 1))) {
+	if ((check_hero(hero) && g_attacker_attacks_again && !a7) || (g_defender_attacks && (a7 == 1))) {
 
 			p1 += copy_ani_seq(p1, host_readws(p3 + l1 * 2), 2);
 
@@ -307,8 +306,7 @@ void FIG_prepare_hero_fight_ani(signed short a1, Bit8u *hero, signed short weapo
 			}
 	}
 
-	if ( ((g_attacker_dead != 0) && (a7 == 0)) ||
-		((g_defender_dead != 0) && (a7 == 1)))
+	if ((g_attacker_dead && !a7) || (g_defender_dead && (a7 == 1)))
 	{
 		host_writeb(p1++, 0xfc);
 		host_writeb(p1++, get_seq_header(host_readws(p3 + 0x28)));
@@ -317,9 +315,7 @@ void FIG_prepare_hero_fight_ani(signed short a1, Bit8u *hero, signed short weapo
 		p1 += copy_ani_seq(p1, host_readws(p3 + 0x28), 2);
 	}
 
-	if (check_hero(hero) ||
-		((g_attacker_dead != 0) && (a7 == 0)) ||
-		((g_defender_dead != 0) && (a7 == 1)))
+	if (check_hero(hero) ||	(!g_attacker_dead && !a7) || (g_defender_dead && (a7 == 1)))
 	{
 		FIG_set_sheet(host_readb(hero + HERO_FIGHTER_ID), (signed char)a1);
 		host_writebs(p1, -1);
@@ -335,7 +331,7 @@ void FIG_prepare_hero_fight_ani(signed short a1, Bit8u *hero, signed short weapo
 
 	host_writeb(p1, 0xff);
 	if (f_action == FIG_ACTION_UNKNOWN2) {
-		ds_writeb((HERO_IS_TARGET-1) + (signed char)fid_attacker, 1);
+		g_hero_is_target[(signed char)fid_attacker - 1] = 1;
 	}
 }
 
