@@ -61,12 +61,12 @@ void diary_show(void)
 	get_textcolor(&fg_bak, &bg_bak);
 
 	g_vga_backbuffer = (Bit8u*)g_buffer9_ptr;
-	bak1 = ds_readw(TEXTLINE_MAXLEN);
-	bak2 = ds_readw(TEXTLINE_POSX);
+	bak1 = g_textline_maxlen;
+	bak2 = g_textline_posx;
 	txt_tabpos1_bak = ds_readw(TXT_TABPOS1);
 	txt_tabpos2_bak = ds_readw(TXT_TABPOS2);
-	ds_writew(TEXTLINE_MAXLEN, 200);
-	ds_writew(TEXTLINE_POSX, 65);
+	g_textline_maxlen = (200);
+	g_textline_posx = (65);
 	ds_writew(TXT_TABPOS1, 83);
 	ds_writew(TXT_TABPOS2, 130);
 
@@ -98,8 +98,8 @@ void diary_show(void)
 
 	g_pic_copy.dst = g_vga_backbuffer = g_vga_memstart;
 
-	ds_writew(TEXTLINE_POSX, bak2);
-	ds_writew(TEXTLINE_MAXLEN, bak1);
+	g_textline_posx = (bak2);
+	g_textline_maxlen = (bak1);
 	ds_writew(TXT_TABPOS1, txt_tabpos1_bak);
 	ds_writew(TXT_TABPOS2, txt_tabpos2_bak);
 	g_textbox_width = tw_bak;

@@ -1565,12 +1565,12 @@ void handle_gui_input(void)
 		{
 			g_bioskey_event10 = 1;
 			g_timers_disabled++;
-			ds_writew(GUI_TEXT_CENTERED, 1);
+			g_gui_text_centered = 1;
 			tw_bak = g_textbox_width;
 			g_textbox_width = 2;
 			GUI_output(g_pause_string);		/* P A U S E */
 			g_textbox_width = tw_bak;
-			ds_writew(GUI_TEXT_CENTERED, 0);
+			g_gui_text_centered = 0;
 			g_bioskey_event10 = l_si = ds_writew(BIOSKEY_EVENT, 0);
 			g_timers_disabled--;
 		}
@@ -1631,9 +1631,9 @@ void handle_gui_input(void)
 			l_si = 0;
 			tw_bak = g_textbox_width;
 			g_textbox_width = 5;
-			ds_writew(GUI_TEXT_CENTERED, 1);
+			g_gui_text_centered = 1;
 			GUI_output(get_ttx(394));
-			ds_writew(GUI_TEXT_CENTERED, 0);
+			g_gui_text_centered = 0;
 			g_textbox_width = tw_bak;
 
 		} else if (l_si == 0xfc) {
@@ -1641,10 +1641,10 @@ void handle_gui_input(void)
 			l_si = 0;
 			tw_bak = g_textbox_width;
 			g_textbox_width = 5;
-			ds_writew(GUI_TEXT_CENTERED, 1);
+			g_gui_text_centered = 1;
 			prepare_date_str();
 			GUI_output(g_dtp2);
-			ds_writew(GUI_TEXT_CENTERED, 0);
+			g_gui_text_centered = 0;
 			g_textbox_width = tw_bak;
 
 		}
@@ -1726,11 +1726,11 @@ void handle_input(void)
 		{
 			g_timers_disabled++;
 			g_bioskey_event10 = 1;
-			ds_writew(GUI_TEXT_CENTERED, 1);
+			g_gui_text_centered = 1;
 			g_textbox_width = 2;
 			GUI_output(g_pause_string);		/* P A U S E */
 			g_textbox_width = 3;
-			ds_writew(GUI_TEXT_CENTERED, 0);
+			g_gui_text_centered = 0;
 			g_timers_disabled--;
 
 			g_bioskey_event10 = l_si = ds_writew(BIOSKEY_EVENT, 0);

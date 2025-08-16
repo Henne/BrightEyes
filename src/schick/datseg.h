@@ -991,6 +991,14 @@ extern unsigned char *g_buf_icon;	// ds:0xd2e7; seg029, seg120
 extern unsigned char *g_objects_nvf_buf;// ds:0xd2e3; seg004, seg032, seg040, seg120
 extern unsigned char *g_fig_figure1_buf;// ds:0xd2df; seg027, seg055, seg056, seg057, seg058, seg120
 extern unsigned char *g_fig_figure2_buf;// ds:0xd2db; seg027, seg040, seg120
+extern signed short g_textline_posx;	// ds:0xd2d9; seg024, seg025, seg029, seg096, seg097
+extern signed short g_textline_posy;	// ds:0xd2d7; seg024, seg025, seg029, seg096, seg097
+extern signed short g_textline_maxlen;	// ds:0xd2d5; seg024, seg025, seg029, seg096, seg097
+extern signed short g_textline_unknown;	// ds:0xd2d3; seg029
+extern signed short g_gui_text_centered;// ds:0xd2d1; seg002, seg096, seg097
+extern signed short g_textcolor_fg[4];	// ds:0xd2c9; seg096, seg120
+extern signed short g_textcolor_bg;	// ds:0xd2c7; seg096
+extern signed short g_textcolor_index;	// ds:0xd2c5; seg096, seg097
 extern unsigned char *g_buf_font6;	// ds:0xd2c1; seg026, seg096, seg120
 extern unsigned char *g_splash_buffer;	// ds:0xd2bd; seg002, seg028, seg097, seg120
 extern char *g_text_ltx_buffer;		// ds:0xd2b9; seg026, seg120

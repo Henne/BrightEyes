@@ -50,8 +50,8 @@ void GUI_unused1(Bit8u *a1, signed short a2, signed short a3)
 
 	update_mouse_cursor();
 
-	if (ds_readws(GUI_TEXT_CENTERED) == 1) {
-		a2 = GUI_get_first_pos_centered(a1, a2, ds_readws(TEXTLINE_MAXLEN), 1);
+	if (g_gui_text_centered == 1) {
+		a2 = GUI_get_first_pos_centered(a1, a2, g_textline_maxlen, 1);
 	}
 
 	l2 = a2;
@@ -61,8 +61,8 @@ void GUI_unused1(Bit8u *a1, signed short a2, signed short a3)
 		if ((c == 0x0d) || (c == 0x40)) {
 			a3 += 10;
 
-			a2 = (ds_readws(GUI_TEXT_CENTERED) == 1) ?
-				GUI_get_first_pos_centered(a1 + l1, ds_readws(TEXTLINE_POSX), ds_readws(TEXTLINE_MAXLEN), 1) : l2;
+			a2 = (g_gui_text_centered == 1) ?
+				GUI_get_first_pos_centered(a1 + l1, g_textline_posx, g_textline_maxlen, 1) : l2;
 
 		} else if (c == '~') {
 			if (a2 < ds_readws(TXT_TABPOS1)) {
@@ -81,7 +81,7 @@ void GUI_unused1(Bit8u *a1, signed short a2, signed short a3)
 				a2 = ds_readws(TXT_TABPOS7);
 			}
 		} else if ((c == (signed char)0xf0) || (c == (signed char)0xf1) || (c == (signed char)0xf2) || (c == (signed char)0xf3)) {
-			ds_writew(TEXTCOLOR, (unsigned char)c + 0xff10);
+			g_textcolor_index = (unsigned char)c + 0xff10;
 		} else {
 			a2 += GUI_unused2(c, (Bit8u*)MK_FP(a3, a2));
 		}
@@ -347,17 +347,17 @@ signed short GUI_input(char *str, unsigned short num)
 	l6 = g_wallclock_update;
 	g_wallclock_update = 0;
 	g_dialogbox_lock = 1;
-	ds_writew(GUI_TEXT_CENTERED, 1);
+	g_gui_text_centered = 1;
 
-	l3 = ds_readw(TEXTLINE_POSX);
-	l4 = ds_readw(TEXTLINE_POSY);
-	l5 = ds_readw(TEXTLINE_MAXLEN);
+	l3 = g_textline_posx;
+	l4 = g_textline_posy;
+	l5 = g_textline_maxlen;
 
 	l_di = (g_textbox_width * 32) + 32;
 	g_textbox_pos_x = ((signed short)(320u - l_di) >> 1) + g_basepos_x;
 
-	ds_writew(TEXTLINE_POSX, g_textbox_pos_x + 5);
-	ds_writew(TEXTLINE_MAXLEN, l_di - 8);
+	g_textline_posx = (g_textbox_pos_x + 5);
+	g_textline_maxlen = (l_di - 8);
 
 	l_si = GUI_count_lines(str);
 
@@ -367,7 +367,7 @@ signed short GUI_input(char *str, unsigned short num)
 	l2 = (l_si + 2) * 8;
 
 	g_textbox_pos_y = ((signed short)(200u - l2) >> 1) + g_basepos_y;
-	ds_writew(TEXTLINE_POSY, g_textbox_pos_y + 7);
+	g_textline_posy = (g_textbox_pos_y + 7);
 
 	get_textcolor(&fg_bak, &bg_bak);
 
@@ -409,15 +409,15 @@ signed short GUI_input(char *str, unsigned short num)
 
 	refresh_screen_size();
 
-	ds_writew(TEXTLINE_POSX, l3);
-	ds_writew(TEXTLINE_POSY, l4);
-	ds_writew(TEXTLINE_MAXLEN, l5);
+	g_textline_posx = (l3);
+	g_textline_posy = (l4);
+	g_textline_maxlen = (l5);
 
 	ds_writew(ACTION, 0);
 	g_dialogbox_lock = 0;
 
 	g_wallclock_update = l6;
-	ds_writew(GUI_TEXT_CENTERED, 0);
+	g_gui_text_centered = 0;
 	ds_writew(UPDATE_STATUSLINE, l7);
 
 	return retval;
@@ -495,18 +495,18 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
 	l11 = g_wallclock_update;
 	g_wallclock_update = 0;
 	g_dialogbox_lock = 1;
-	l7 = ds_readw(TEXTLINE_POSX);
-	l8 = ds_readw(TEXTLINE_POSY);
-	l9 = ds_readw(TEXTLINE_MAXLEN);
+	l7 = g_textline_posx;
+	l8 = g_textline_posy;
+	l9 = g_textline_maxlen;
 	tw_bak = g_textbox_width;
 	g_textbox_width = 9;
 
 	l_di = g_textbox_width * 32 + 32;
 	g_textbox_pos_x = ((signed short)(320 - l_di) >> 1) + g_basepos_x;
-	ds_writew(TEXTLINE_POSX, g_textbox_pos_x + 5);
-	ds_writew(TEXTLINE_MAXLEN, l_di - 8);
+	g_textline_posx = (g_textbox_pos_x + 5);
+	g_textline_maxlen = (l_di - 8);
 	l10 = ds_readw(TXT_TABPOS1);
-	ds_writew(TXT_TABPOS1, ds_readws(TEXTLINE_POSX) + ds_readws(TEXTLINE_MAXLEN) - 24);
+	ds_writew(TXT_TABPOS1, g_textline_posx + g_textline_maxlen - 24);
 	g_dialogbox_indent_width = 40;
 	g_dialogbox_indent_height = 5;
 
@@ -521,7 +521,7 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
 	l4 = l_si + (signed char)options;
 	l5 = (l4 + 2) * 8;
 	g_textbox_pos_y = (200 - (l5 + 2)) >> 1;
-	ds_writew(TEXTLINE_POSY, g_textbox_pos_y + 5);
+	g_textline_posy = (g_textbox_pos_y + 5);
 
 	update_mouse_cursor();
 	get_textcolor(&fg_bak, &bg_bak);
@@ -547,14 +547,14 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
 
 	if (name) {
 		/* set text color */
-		ds_writew(TEXTCOLOR, 1);
+		g_textcolor_index = 1;
 
-		GUI_print_string(name, ds_readw(TEXTLINE_POSX), ds_readw(TEXTLINE_POSY));
+		GUI_print_string(name, g_textline_posx, g_textline_posy);
 
 		/* set text color */
-		ds_writew(TEXTCOLOR, 0);
+		g_textcolor_index = 1;
 
-		add_ds_ws(TEXTLINE_POSY, 14);
+		g_textline_posy += 14;
 		g_dialogbox_indent_height -= 2;
 	}
 
@@ -566,7 +566,7 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
 
 	if ((signed char)options != 0) {
 
-		l2 = ds_readw(TEXTLINE_POSX) + 8;
+		l2 = g_textline_posx + 8;
 		l3 = g_textbox_pos_y + (l_si + 1) * 8;
 
 		va_start(arguments, options);
@@ -584,9 +584,9 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
 	refresh_screen_size();
 	set_textcolor(fg_bak, bg_bak);
 
-	ds_writew(TEXTLINE_POSX, l7);
-	ds_writew(TEXTLINE_POSY, l8);
-	ds_writew(TEXTLINE_MAXLEN, l9);
+	g_textline_posx = (l7);
+	g_textline_posy = (l8);
+	g_textline_maxlen = (l9);
 
 	g_textbox_width = tw_bak;
 
@@ -736,23 +736,23 @@ signed short GUI_radio(char *text, signed char options, ...)
 
 
 	g_dialogbox_lock = 1;
-	l7 = ds_readw(TEXTLINE_POSX);
-	l8 = ds_readw(TEXTLINE_POSY);
-	l9 = ds_readw(TEXTLINE_MAXLEN);
+	l7 = g_textline_posx;
+	l8 = g_textline_posy;
+	l9 = g_textline_maxlen;
 
 	l11 = g_textbox_width * 32 + 32;
 	g_textbox_pos_x = ((320 - l11) >> 1) + g_basepos_x;
-	ds_writew(TEXTLINE_POSX, g_textbox_pos_x + 5);
-	ds_writew(TEXTLINE_MAXLEN, l11 - 8);
+	g_textline_posx = (g_textbox_pos_x + 5);
+	g_textline_maxlen = (l11 - 8);
 
 	l10 = ds_readw(TXT_TABPOS1);
-	ds_writew(TXT_TABPOS1, ds_readws(TEXTLINE_POSX) + ds_readws(TEXTLINE_MAXLEN) - 24);
+	ds_writew(TXT_TABPOS1, g_textline_posx + g_textline_maxlen - 24);
 
 	l_di = GUI_count_lines(text);
 	l5 = l_di + options;
 	l6 = (l5 + 2) * 8;
 	g_textbox_pos_y = ((200 - l6 + 2) >> 1) + g_basepos_y;
-	ds_writew(TEXTLINE_POSY, g_textbox_pos_y + 7);
+	g_textline_posy = (g_textbox_pos_y + 7);
 
 	update_mouse_cursor();
 	get_textcolor(&fg_bak, &bg_bak);
@@ -762,7 +762,7 @@ signed short GUI_radio(char *text, signed char options, ...)
 	if (l_di != 0)
 		GUI_print_header(text);
 
-	l3 = ds_readw(TEXTLINE_POSX) + 8;
+	l3 = g_textline_posx + 8;
 	l4 = g_textbox_pos_y + (l_di + 1) * 8;
 
 	va_start(arguments, options);
@@ -785,9 +785,9 @@ signed short GUI_radio(char *text, signed char options, ...)
 	refresh_screen_size();
 	set_textcolor(fg_bak, bg_bak);
 
-	ds_writew(TEXTLINE_POSX, l7);
-	ds_writew(TEXTLINE_POSY, l8);
-	ds_writew(TEXTLINE_MAXLEN, l9);
+	g_textline_posx = (l7);
+	g_textline_posy = (l8);
+	g_textline_maxlen = (l9);
 	ds_writew(TXT_TABPOS1, l10);
 	ds_writew(ACTION, g_dialogbox_lock = 0);
 	ds_writew(UPDATE_STATUSLINE, l12);

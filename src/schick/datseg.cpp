@@ -6413,17 +6413,14 @@ unsigned char *g_buf_icon; // ds:0xd2e7
 unsigned char *g_objects_nvf_buf; // ds:0xd2e3, to buffer of size 3400
 unsigned char *g_fig_figure1_buf; // ds:0xd2df
 unsigned char *g_fig_figure2_buf; // ds:0xd2db, to buffer of size 20000
-unsigned short g_textline_posx; // ds:0xd2d9
-unsigned short g_textline_posy; // ds:0xd2d7
-unsigned short g_textline_maxlen; // ds:0xd2d5
-unsigned short g_textline_unknown; // ds:0xd2d3, writeonly (103)
+signed short g_textline_posx; // ds:0xd2d9
+signed short g_textline_posy; // ds:0xd2d7
+signed short g_textline_maxlen; // ds:0xd2d5
+signed short g_textline_unknown; // ds:0xd2d3, writeonly (103)
 signed short g_gui_text_centered; // ds:0xd2d1
-unsigned short g_init_color3; // ds:0xd2cf, writeonly (0xca)
-unsigned short g_init_color2; // ds:0xd2cd, writeonly (0xc9)
-unsigned short g_init_color1; // ds:0xd2cb, writeonly (0xc8)
-short g_textcolor_fg; // ds:0xd2c9
-short g_textcolor_bg; // ds:0xd2c7
-short g_textcolor; // ds:0xd2c5
+signed short g_textcolor_fg[4]; // ds:0xd2c9
+signed short g_textcolor_bg; // ds:0xd2c7
+signed short g_textcolor_index; // ds:0xd2c5
 unsigned char *g_buf_font6; // ds:0xd2c1
 unsigned char *g_splash_buffer; // ds:0xd2bd, to buffer of size 1000, used for Splashes
 char *g_text_ltx_buffer; // ds:0xd2b9, to buffer of size 30500

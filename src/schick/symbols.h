@@ -1437,17 +1437,17 @@
 //#define TEXT_LTX_BUFFER                 (0xd2b9)    /* Bit8u*; to buffer of size 30500 */
 //#define SPLASH_BUFFER                   (0xd2bd)    /* Bit8u*; to buffer of size 1000, used for Splashes */
 //#define BUF_FONT6                       (0xd2c1)    /* Bit8u* */
-#define TEXTCOLOR                       (0xd2c5)    /* short */
-#define TEXTCOLOR_BG                    (0xd2c7)    /* short */
-#define TEXTCOLOR_FG                    (0xd2c9)    /* short */
-#define INIT_COLOR1                     (0xd2cb)    /* unsigned short; writeonly (0xc8) */
-#define INIT_COLOR2                     (0xd2cd)    /* unsigned short; writeonly (0xc9) */
-#define INIT_COLOR3                     (0xd2cf)    /* unsigned short; writeonly (0xca) */
-#define GUI_TEXT_CENTERED               (0xd2d1)    /* signed short; {0,1} */
-#define TEXTLINE_UNKNOWN                (0xd2d3)    /* unsigned short; writeonly (103) */
-#define TEXTLINE_MAXLEN                 (0xd2d5)    /* unsigned short */
-#define TEXTLINE_POSY                   (0xd2d7)    /* unsigned short */
-#define TEXTLINE_POSX                   (0xd2d9)    /* unsigned short */
+//#define TEXTCOLOR_INDEX                 (0xd2c5)    /* short */
+//#define TEXTCOLOR_BG                    (0xd2c7)    /* short */
+//#define TEXTCOLOR_FG                    (0xd2c9)    /* short */
+//#define INIT_COLOR1                     (0xd2cb)    /* unsigned short; writeonly (0xc8) */
+//#define INIT_COLOR2                     (0xd2cd)    /* unsigned short; writeonly (0xc9) */
+//#define INIT_COLOR3                     (0xd2cf)    /* unsigned short; writeonly (0xca) */
+//#define GUI_TEXT_CENTERED               (0xd2d1)    /* signed short; {0,1} */
+//#define TEXTLINE_UNKNOWN                (0xd2d3)    /* unsigned short; writeonly (103) */
+//#define TEXTLINE_MAXLEN                 (0xd2d5)    /* unsigned short */
+//#define TEXTLINE_POSY                   (0xd2d7)    /* unsigned short */
+//#define TEXTLINE_POSX                   (0xd2d9)    /* unsigned short */
 //#define FIG_FIGURE2_BUF                 (0xd2db)    /* Bit8u*; to buffer of size 20000 */
 //#define FIG_FIGURE1_BUF                 (0xd2df)    /* Bit8u* */
 //#define OBJECTS_NVF_BUF                 (0xd2e3)    /* Bit8u*; to buffer of size 3400 */

@@ -245,10 +245,10 @@ unsigned short GUI_count_lines(char *str)
 
 	str_loc = str;
 	current_pos = last_ws = always_zero = 0;
-	max_line_width = ds_readw(TEXTLINE_MAXLEN);
+	max_line_width = g_textline_maxlen;
 
 	if (g_dialogbox_indent_width)
-		sub_ds_ws(TEXTLINE_MAXLEN, g_dialogbox_indent_width);
+		g_textline_maxlen -= g_dialogbox_indent_width;
 
 	width_line = 0;
 
@@ -262,7 +262,7 @@ unsigned short GUI_count_lines(char *str)
 		width_line += width_char;
 
 		/* check if the input string str is to long for the line */
-		if (width_line >=  ds_readws(TEXTLINE_MAXLEN)) {
+		if (width_line >=  g_textline_maxlen) {
 			if (last_ws != always_zero) {
 				/* 	if a whitespace existed on the current line,
 					do a linebreak there */
@@ -276,7 +276,7 @@ unsigned short GUI_count_lines(char *str)
 			}
 
 			if (++lines == g_dialogbox_indent_height)
-				add_ds_ws(TEXTLINE_MAXLEN, g_dialogbox_indent_width);
+				g_textline_maxlen += g_dialogbox_indent_width;
 
 			/* reset variables */
 			always_zero = current_pos = last_ws = width_line = 0;
@@ -292,22 +292,22 @@ unsigned short GUI_count_lines(char *str)
 			current_pos = -1;
 			always_zero = last_ws = width_line = 0;
 			if (++lines == g_dialogbox_indent_height)
-				add_ds_ws(TEXTLINE_MAXLEN, g_dialogbox_indent_width);
+				g_textline_maxlen += g_dialogbox_indent_width;
 		}
 	}
 
-	if (width_line >= ds_readws(TEXTLINE_MAXLEN)) {
+	if (width_line >= g_textline_maxlen) {
 
 		if (always_zero == last_ws)
 			str_loc[current_pos - 1] = 0;
 		else {
 			str_loc[last_ws] = 0x0d;
 			if (++lines == g_dialogbox_indent_height)
-				add_ds_ws(TEXTLINE_MAXLEN, g_dialogbox_indent_width);
+				g_textline_maxlen += g_dialogbox_indent_width;
 		}
 	}
 
-	ds_writew(TEXTLINE_MAXLEN, max_line_width);
+	g_textline_maxlen = (max_line_width);
 	return ++lines;
 }
 
@@ -318,7 +318,7 @@ signed short GUI_print_header(char *str)
 
 	update_mouse_cursor();
 	retval = GUI_count_lines(str);
-	GUI_print_string(str, ds_readws(TEXTLINE_POSX), ds_readws(TEXTLINE_POSY));
+	GUI_print_string(str, g_textline_posx, g_textline_posy);
 	refresh_screen_size();
 
 	return retval;
@@ -336,20 +336,20 @@ void GUI_print_loc_line(char *str)
 	get_textcolor(&tmp1, &tmp2);
 	set_textcolor(0xff, 0);
 
-	l1 = ds_readws(TEXTLINE_POSX);
-	l2 = ds_readws(TEXTLINE_POSY);
-	l3 = ds_readws(TEXTLINE_MAXLEN);
+	l1 = g_textline_posx;
+	l2 = g_textline_posy;
+	l3 = g_textline_maxlen;
 
-	ds_writew(TEXTLINE_POSX, 6);
-	ds_writew(TEXTLINE_POSY, 143);
-	ds_writew(TEXTLINE_MAXLEN, 307);
+	g_textline_posx = (6);
+	g_textline_posy = (143);
+	g_textline_maxlen = (307);
 
 	clear_loc_line();
 	GUI_print_header(str);
 
-	ds_writew(TEXTLINE_POSX, l1);
-	ds_writew(TEXTLINE_POSY, l2);
-	ds_writew(TEXTLINE_MAXLEN, l3);
+	g_textline_posx = (l1);
+	g_textline_posy = (l2);
+	g_textline_maxlen = (l3);
 
 	set_textcolor(tmp1, tmp2);
 }
@@ -367,8 +367,8 @@ void GUI_print_string(char *str, signed short x, signed short y)
 
 	update_mouse_cursor();
 
-	if (ds_readws(GUI_TEXT_CENTERED) == 1) {
-		x = GUI_get_first_pos_centered(str, x, ds_readws(TEXTLINE_MAXLEN), 0);
+	if (g_gui_text_centered == 1) {
+		x = GUI_get_first_pos_centered(str, x, g_textline_maxlen, 0);
 	} else
 		if (g_dialogbox_indent_width)
 			x += g_dialogbox_indent_width;
@@ -380,13 +380,13 @@ void GUI_print_string(char *str, signed short x, signed short y)
 		if ((l4 == 0x0d) || (l4 == 0x40)) {
 
 			if (++l1 == g_dialogbox_indent_height) {
-				add_ds_ws(TEXTLINE_MAXLEN, g_dialogbox_indent_width);
+				g_textline_maxlen += g_dialogbox_indent_width;
 				l3 -= g_dialogbox_indent_width;
 			}
 
 			y += 7;
-			x = (ds_readw(GUI_TEXT_CENTERED) == 1) ?
-				GUI_get_first_pos_centered(str + l2, ds_readws(TEXTLINE_POSX), ds_readws(TEXTLINE_MAXLEN), 0) : l3;
+			x = (g_gui_text_centered == 1) ?
+				GUI_get_first_pos_centered(str + l2, g_textline_posx, g_textline_maxlen, 0) : l3;
 
 		} else	if (l4 == '~') {
 
@@ -411,7 +411,7 @@ void GUI_print_string(char *str, signed short x, signed short y)
 				l4 == (unsigned char)0xf3)
 		{
 			/* changes of the text color are only control bytes */
-			ds_writew(TEXTCOLOR, l4 - 0xf0);
+			g_textcolor_index = l4 - 0xf0;
 		} else	{
 
 			if (l4 == 0x3c) {
@@ -488,7 +488,7 @@ void GUI_blank_char(void)
 
 	for (i = 0; i < 8; ptr += 8, i++) {
 		for (j = 0; j < 8; j++)
-			*(ptr + j) = ds_readbs(TEXTCOLOR_BG);
+			*(ptr + j) = g_textcolor_bg;
 	}
 }
 
@@ -510,7 +510,7 @@ void GUI_font_to_buf(Bit8u *fc)
 		c = *fc++;
 		for (j = 0; j < 8; j++)
 			if ((0x80 >> j) & c)
-				 p[j] = ds_readb(TEXTCOLOR_FG + ds_readw(TEXTCOLOR) * 2);
+				 p[j] = g_textcolor_fg[g_textcolor_index];
 	}
 }
 
@@ -531,8 +531,8 @@ void GUI_write_char_to_screen_xy(unsigned short x, unsigned short y, unsigned sh
  */
 void set_textcolor(signed short fg, signed short bg)
 {
-	ds_writew(TEXTCOLOR_FG, fg);
-	ds_writew(TEXTCOLOR_BG, bg);
+	g_textcolor_fg[0] = fg;
+	g_textcolor_bg = bg;
 }
 
 /**
@@ -543,8 +543,8 @@ void set_textcolor(signed short fg, signed short bg)
  */
 void get_textcolor(signed short *fg, signed short *bg)
 {
-	host_writew((Bit8u*)fg, ds_readw(TEXTCOLOR_FG));
-	host_writew((Bit8u*)bg, ds_readw(TEXTCOLOR_BG));
+	host_writew((Bit8u*)fg, g_textcolor_fg[0]);
+	host_writew((Bit8u*)bg, g_textcolor_bg);
 }
 
 unsigned short GUI_unused(Bit8u *str)

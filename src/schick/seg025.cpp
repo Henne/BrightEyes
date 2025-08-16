@@ -425,10 +425,10 @@ signed short game_options(void)
 
 	g_vga_backbuffer = (Bit8u*)g_buffer9_ptr;
 
-	bak1 = ds_readws(TEXTLINE_MAXLEN);
-	bak2 = ds_readws(TEXTLINE_POSX);
-	ds_writew(TEXTLINE_MAXLEN, 200);
-	ds_writew(TEXTLINE_POSX, 70);
+	bak1 = g_textline_maxlen;
+	bak2 = g_textline_posx;
+	g_textline_maxlen = (200);
+	g_textline_posx = (70);
 
 	set_textcolor(4, 0);
 
@@ -495,8 +495,8 @@ signed short game_options(void)
 
 	g_pic_copy.dst = g_vga_backbuffer = g_vga_memstart;
 
-	ds_writew(TEXTLINE_POSX, bak2);
-	ds_writew(TEXTLINE_MAXLEN, bak1);
+	g_textline_posx = (bak2);
+	g_textline_maxlen = (bak1);
 	g_gui_buffer_unkn = (unsigned char*)g_buffer9_ptr;
 
 	do {

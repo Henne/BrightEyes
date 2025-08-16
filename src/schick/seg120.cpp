@@ -387,9 +387,9 @@ void init_game_state(void)
 
 	refresh_colors();
 
-	ds_writew(INIT_COLOR1, 0xc8);
-	ds_writew(INIT_COLOR2, 0xc9);
-	ds_writew(INIT_COLOR3, 0xca);
+	g_textcolor_fg[1] = 0xc8;
+	g_textcolor_fg[2] = 0xc9;
+	g_textcolor_fg[3] = 0xca;
 
 	set_to_ff();
 
@@ -401,15 +401,15 @@ void init_game_state(void)
 	/* Travia Temple in Thorwal */
 	gs_current_loctype = LOCTYPE_TEMPLE;
 	gs_current_typeindex = 1;
-	gs_x_target_bak = (9);
-	gs_y_target_bak = (9);
-	gs_x_target = (9);
-	gs_y_target = (8);
-	gs_direction_bak = (0);
-	gs_direction = (0);
+	gs_x_target_bak = 9;
+	gs_y_target_bak = 9;
+	gs_x_target = 9;
+	gs_y_target = 8;
+	gs_direction_bak = 0;
+	gs_direction = 0;
 	gs_dungeon_index = DUNGEONS_NONE;
 
-	gs_current_town_bak = gs_current_town = (TOWNS_THORWAL);
+	gs_current_town_bak = gs_current_town = TOWNS_THORWAL;
 
 	g_textbox_width = 3;
 
@@ -422,7 +422,7 @@ void init_game_state(void)
 	gs_month = 1;
 	gs_year = 15;
 
-	g_pic_copy.dst = (g_vga_memstart);
+	g_pic_copy.dst = g_vga_memstart;
 
 	load_wallclock_nvf();
 	passages_init();

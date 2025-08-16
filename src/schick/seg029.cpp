@@ -88,10 +88,10 @@ void draw_playmask(void)
 
 	set_textcolor(0x1f, 0x1b);
 
-	ds_writew(TEXTLINE_POSX, 196);
-	ds_writew(TEXTLINE_POSY, 12);
-	ds_writew(TEXTLINE_UNKNOWN, 103);
-	ds_writew(TEXTLINE_MAXLEN, 113);
+	g_textline_posx = (196);
+	g_textline_posy = (12);
+	g_textline_unknown = 103;
+	g_textline_maxlen = (113);
 
 	ds_writew(TXT_TABPOS1, 205);
 
