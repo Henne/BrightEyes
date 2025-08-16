@@ -6331,18 +6331,16 @@ char g_savegame_names[5][9]; // ds:0xe2da
 time_t g_last_save_time; // ds:0xe2d6
 unsigned char *g_saved_files_buf; // ds:0xe2d2
 signed short g_delay_timer; // ds:0xe2d0
-unsigned short g_figobj_unkn_x2_bak; // ds:0xe2ce
-unsigned short g_figobj_unkn_x2; // ds:0xe2cc
-unsigned short g_figobj_unkn_y2_bak; // ds:0xe2ca
-unsigned short g_figobj_unkn_y2; // ds:0xe2c8
-unsigned short g_figobj_unkn_x1_bak; // ds:0xe2c6
-unsigned short g_figobj_unkn_x1; // ds:0xe2c4
-unsigned short g_figobj_unkn_y1_bak; // ds:0xe2c2
-unsigned short g_figobj_unkn_y1; // ds:0xe2c0
-unsigned short g_fig_target_grammar_id; // ds:0xe2be
-unsigned short g_fig_target_grammar_type; // ds:0xe2bc, 2 = hero, 1 = monster
-unsigned short g_fig_actor_grammar_id; // ds:0xe2ba
-unsigned short g_fig_actor_grammar_type; // ds:0xe2b8, 2 = hero, 1 = monster
+signed short g_figobj_unkn_x2_bak; // ds:0xe2ce
+signed short g_figobj_unkn_x2; // ds:0xe2cc
+signed short g_figobj_unkn_y2_bak; // ds:0xe2ca
+signed short g_figobj_unkn_y2; // ds:0xe2c8
+signed short g_figobj_unkn_x1_bak; // ds:0xe2c6
+signed short g_figobj_unkn_x1; // ds:0xe2c4
+signed short g_figobj_unkn_y1_bak; // ds:0xe2c2
+signed short g_figobj_unkn_y1; // ds:0xe2c0
+struct_msg g_fig_target_grammar;	// ds:0xe2be
+struct_msg g_fig_actor_grammar;		// ds:0xe2ba
 signed short g_fig_ani_state[8]; // ds:0xe2a8
 signed short g_fig_figlist_readd[8]; // ds:0xe298
 unsigned char* g_fig_gfxbuffers[8]; // ds:0xe278, 0x508 byte segments in FIGHTOBJ_BUF

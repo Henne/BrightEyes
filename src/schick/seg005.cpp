@@ -405,7 +405,8 @@ void draw_fight_screen(Bit16u val)
 	close(handle);
 
 	if (flag != 0) {
-		ds_writew(FIGOBJ_UNKN_X2_BAK, ds_writew(FIGOBJ_UNKN_X1_BAK, -1));
+
+		g_figobj_unkn_x2_bak = g_figobj_unkn_x1_bak = -1;
 
 		FIG_draw_pic();
 
@@ -863,11 +864,11 @@ void draw_fight_screen(Bit16u val)
 
 					if (host_readbs(list_i + FIGHTER_SHEET) != -1) {
 
-						ds_writew(FIGOBJ_UNKN_X1, ds_readw(FIGOBJ_UNKN_X2));
-						ds_writew(FIGOBJ_UNKN_Y1, ds_readw(FIGOBJ_UNKN_Y2));
+						g_figobj_unkn_x1 = g_figobj_unkn_x2;
+						g_figobj_unkn_y1 = g_figobj_unkn_y2;
 
-						ds_writew(FIGOBJ_UNKN_X2, obj_x - 8);
-						ds_writew(FIGOBJ_UNKN_Y2, obj_y - 8);
+						g_figobj_unkn_x2 = obj_x - 8;
+						g_figobj_unkn_y2 = obj_y - 8;
 					}
 
 					/* set Y1 */
@@ -913,14 +914,14 @@ void draw_fight_screen(Bit16u val)
 		} while (list_i = (Bit8u*)host_readd(list_i + FIGHTER_NEXT));
 
 		g_pic_copy_rect = rect_bak;
-		ds_writew(FIGOBJ_UNKN_X2_BAK , ds_readw(FIGOBJ_UNKN_X2));
-		ds_writew(FIGOBJ_UNKN_X2, -1);
-		ds_writew(FIGOBJ_UNKN_X1_BAK , ds_readw(FIGOBJ_UNKN_X1));
-		ds_writew(FIGOBJ_UNKN_X1, -1);
-		ds_writew(FIGOBJ_UNKN_Y2_BAK , ds_readw(FIGOBJ_UNKN_Y2));
-		ds_writew(FIGOBJ_UNKN_Y2, -1);
-		ds_writew(FIGOBJ_UNKN_Y1_BAK , ds_readw(FIGOBJ_UNKN_Y1));
-		ds_writew(FIGOBJ_UNKN_Y1, -1);
+		g_figobj_unkn_x2_bak = g_figobj_unkn_x2;
+		g_figobj_unkn_x2 = -1;
+		g_figobj_unkn_x1_bak = g_figobj_unkn_x1;
+		g_figobj_unkn_x1 = -1;
+		g_figobj_unkn_y2_bak = g_figobj_unkn_y2;
+		g_figobj_unkn_y2 = -1;
+		g_figobj_unkn_y1_bak = g_figobj_unkn_y1;
+		g_figobj_unkn_y1 = -1;
 
 		for (i = 0; i < 8; i++) {
 			if (g_fig_figlist_readd[i] != -1) {

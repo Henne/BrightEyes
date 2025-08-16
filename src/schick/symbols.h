@@ -1522,14 +1522,14 @@
 //#define FIG_ACTOR_GRAMMAR_ID            (0xe2ba)    /* unsigned short */
 //#define FIG_TARGET_GRAMMAR_TYPE         (0xe2bc)    /* unsigned short; 2 = hero, 1 = monster */
 //#define FIG_TARGET_GRAMMAR_ID           (0xe2be)    /* unsigned short */
-#define FIGOBJ_UNKN_Y1                  (0xe2c0)    /* unsigned short */
-#define FIGOBJ_UNKN_Y1_BAK              (0xe2c2)    /* unsigned short */
-#define FIGOBJ_UNKN_X1                  (0xe2c4)    /* unsigned short */
-#define FIGOBJ_UNKN_X1_BAK              (0xe2c6)    /* unsigned short */
-#define FIGOBJ_UNKN_Y2                  (0xe2c8)    /* unsigned short */
-#define FIGOBJ_UNKN_Y2_BAK              (0xe2ca)    /* unsigned short */
-#define FIGOBJ_UNKN_X2                  (0xe2cc)    /* unsigned short */
-#define FIGOBJ_UNKN_X2_BAK              (0xe2ce)    /* unsigned short */
+//#define FIGOBJ_UNKN_Y1                  (0xe2c0)    /* unsigned short */
+//#define FIGOBJ_UNKN_Y1_BAK              (0xe2c2)    /* unsigned short */
+//#define FIGOBJ_UNKN_X1                  (0xe2c4)    /* unsigned short */
+//#define FIGOBJ_UNKN_X1_BAK              (0xe2c6)    /* unsigned short */
+//#define FIGOBJ_UNKN_Y2                  (0xe2c8)    /* unsigned short */
+//#define FIGOBJ_UNKN_Y2_BAK              (0xe2ca)    /* unsigned short */
+//#define FIGOBJ_UNKN_X2                  (0xe2cc)    /* unsigned short */
+//#define FIGOBJ_UNKN_X2_BAK              (0xe2ce)    /* unsigned short */
 //#define DELAY_TIMER                     (0xe2d0)    /* unsigned short */
 //#define SAVED_FILES_BUF                 (0xe2d2)    /* Bit8u* */
 //#define LAST_SAVE_TIME                  (0xe2d6)    /* signed long */

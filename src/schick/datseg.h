@@ -963,7 +963,14 @@ extern char g_savegame_names[5][9];	// ds:0xe2da; seg026, seg027
 extern time_t g_last_save_time;		// ds:0xe2d6; seg026, seg059
 extern unsigned char *g_saved_files_buf;// ds:0xe2d2; seg026;
 extern signed short g_delay_timer;	// ds:0xe2d0; seg004, seg005
-
+extern signed short g_figobj_unkn_x2_bak;	// ds:0xe2ce; seg005
+extern signed short g_figobj_unkn_x2;		// ds:0xe2cc; seg005
+extern signed short g_figobj_unkn_y2_bak;	// ds:0xe2ca; seg005
+extern signed short g_figobj_unkn_y2;		// ds:0xe2c8; seg005
+extern signed short g_figobj_unkn_x1_bak;	// ds:0xe2c6; seg005
+extern signed short g_figobj_unkn_x1;		// ds:0xe2c4; seg005
+extern signed short g_figobj_unkn_y1_bak;	// ds:0xe2c2; seg005
+extern signed short g_figobj_unkn_y1;		// ds:0xe2c0; seg005
 extern struct struct_msg g_fig_target_grammar;	// ds:0xe2be; seg005, seg042, seg043
 extern struct struct_msg g_fig_actor_grammar;	// ds:0xe2ba; seg005, seg042, seg043
 extern signed short g_fig_ani_state[8];		// ds:0xe2a8; seg005
