@@ -1510,11 +1510,11 @@
 //#define ITEMSDAT                        (0xe22b)    /* long */
 //#define ITEMSNAME                       (0xe22f)    /* long */
 // ?1
-#define GFX_SPINLOCK                    (0xe234)    /* signed long */
-#define ANI_CHANGE_DIR                  (0xe238)    /* signed short[10] */
-#define ANI_AREA_STATUS                 (0xe24c)    /* signed short[10] */
-#define ANI_AREA_TIMEOUT                (0xe260)    /* signed short[10] */
-#define BC_TIMER                        (0xe274)    /* Bit8u* */
+//#define GFX_SPINLOCK                    (0xe234)    /* signed long */
+//#define ANI_CHANGE_DIR                  (0xe238)    /* signed short[10] */
+//#define ANI_AREA_STATUS                 (0xe24c)    /* signed short[10] */
+//#define ANI_AREA_TIMEOUT                (0xe260)    /* signed short[10] */
+//#define BC_TIMER                        (0xe274)    /* Bit8u* */
 #define FIG_GFXBUFFERS                  (0xe278)    /* Bit8u*[8]; 0x508 byte segments in FIGHTOBJ_BUF */
 #define FIG_FIGLIST_READD               (0xe298)    /* signed short[8] */
 #define FIG_ANI_STATE                   (0xe2a8)    /* unsigned short[8] */

@@ -34,7 +34,7 @@ void interrupt timer_isr(void);
 void save_and_set_timer(void)
 {
 #if defined(__BORLANDC__)
-	ds_writed(BC_TIMER, (Bit32u)getvect(8));
+	g_bc_timer = getvect(8);
 	setvect(8, (void interrupt far(*)(...))timer_isr);
 	/* REMARK: for C-compilation replace (...) with (void) */
 #endif
@@ -50,7 +50,7 @@ void set_timer(void)
 void reset_timer(void)
 {
 #if defined(__BORLANDC__)
-	setvect(8, (void interrupt far(*)(...))ds_readd(BC_TIMER));
+	setvect(8, (void interrupt far(*)(...))g_bc_timer);
 #endif
 }
 
@@ -63,9 +63,9 @@ void init_ani(Bit16u v1)
 
 	if ((v1 & 0x7f) != 2) {
 		for (i = 0; i < 10; i++) {
-			ds_writew(ANI_AREA_TIMEOUT + i * 2, 0);
-			ds_writew(ANI_AREA_STATUS + i * 2, 0xffff);
-			ds_writew(ANI_CHANGE_DIR + i * 2, 1);
+			g_ani_area_timeout[i] = 0;
+			g_ani_area_status[i] = -1;
+			g_ani_change_dir[i] = 1;
 		}
 
 		if (v1 & 0x80)
@@ -230,19 +230,20 @@ void interrupt timer_isr(void)
 			ptr = p_datseg + ANI_AREA_TABLE + SIZEOF_ANI_AREA * i;
 
 			if (host_readws(ptr + ANI_AREA_CHANGES)) {
-				sub_ds_ws(ANI_AREA_TIMEOUT + 2 * i, 5);
 
-				if (ds_readws(ANI_AREA_TIMEOUT + 2 * i) <= 0) {
+				g_ani_area_timeout[i] -= 5;
 
-					add_ds_ws(ANI_AREA_STATUS + 2 * i, ds_readws(ANI_CHANGE_DIR + 2 * i));
+				if (g_ani_area_timeout[i] <= 0) {
 
-					if (ds_readws(ANI_AREA_STATUS + 2 * i) == host_readws(ptr + ANI_AREA_CHANGES)) {
+					g_ani_area_status[i] += g_ani_change_dir[i];
+
+					if (g_ani_area_status[i] == host_readws(ptr + ANI_AREA_CHANGES)) {
 
 						if (host_readbs(ptr + ANI_AREA_CYCLIC) != 0) {
-							ds_writew(ANI_CHANGE_DIR + 2 * i, -1);
-							dec_ds_ws(ANI_AREA_STATUS + 2 * i);
+							g_ani_change_dir[i] = -1;
+							g_ani_area_status[i]--;
 						} else {
-							ds_writew(ANI_AREA_STATUS + 2 * i, 0);
+							g_ani_area_status[i] = 0;
 						}
 
 						if (g_ani_busy) {
@@ -252,13 +253,12 @@ void interrupt timer_isr(void)
 						}
 					}
 
-					if ((ds_readws(ANI_AREA_STATUS + 2 * i) == 0) &&
-						(host_readb(ptr + ANI_AREA_CYCLIC) != 0))
+					if (!g_ani_area_status[i] && *(ptr + ANI_AREA_CYCLIC))
 					{
-						ds_writew(ANI_CHANGE_DIR + 2 * i, 1);
+						g_ani_change_dir[i] = 1;
 					}
 
-					ds_writew(ANI_AREA_TIMEOUT + 2 * i, 2 * (host_readws(ptr + (ANI_AREA_CHANGES_TB+2) + 4 * ds_readws(ANI_AREA_STATUS + 2 * i))));
+					g_ani_area_timeout[i] = 2 * host_readws(ptr + (ANI_AREA_CHANGES_TB+2) + 4 * g_ani_area_status[i]);
 
 					flag = 0;
 
@@ -276,7 +276,7 @@ void interrupt timer_isr(void)
 					g_pic_copy.y1 =	g_ani_posy + host_readb(ptr + ANI_AREA_Y);
 					g_pic_copy.x2 = g_ani_posx + host_readw(ptr + ANI_AREA_X) + host_readw(ptr + ANI_AREA_WIDTH) - 1;
 					g_pic_copy.y2 = g_ani_posy + host_readb(ptr + ANI_AREA_Y) + host_readb(ptr + ANI_AREA_HEIGHT) - 1;
-					g_pic_copy.src = (Bit8u*)host_readd(ptr + ANI_AREA_PICS_TAB + 4 * (host_readws(ptr + ANI_AREA_CHANGES_TB + 4 * ds_readw(ANI_AREA_STATUS + 2 * i)) - 1));
+					g_pic_copy.src = (Bit8u*)host_readd(ptr + ANI_AREA_PICS_TAB + 4 * (host_readws(ptr + ANI_AREA_CHANGES_TB + 4 * g_ani_area_status[i]) - 1));
 
 					do_pic_copy(1);
 
@@ -299,7 +299,7 @@ void interrupt timer_isr(void)
 	}
 
 	/* call the old timer ISR */
-	((void interrupt far(*)(...))ds_readd(BC_TIMER))();
+	((void interrupt far(*)(...))g_bc_timer)();
 }
 
 static void unused_gfx_spinlock(void)

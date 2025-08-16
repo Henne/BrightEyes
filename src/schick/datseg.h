@@ -960,6 +960,12 @@ extern unsigned char *g_saved_files_buf;// ds:0xe2d2; seg026;
 extern signed short g_delay_timer;	// ds:0xe2d0; seg004, seg005
 
 extern unsigned char* g_fig_gfxbuffers[8];	// ds:0xe278; seg005
+#if defined(__BORLANDC__)
+extern void interrupt far(*g_bc_timer)(...);		// ds:0xe274; seg004
+#endif
+extern signed short g_ani_area_timeout[10];	// ds:0xe260; seg004
+extern signed short g_ani_area_status[10];	// ds:0xe24c; seg004
+extern signed short g_ani_change_dir[10];	// ds:0xe238; seg004
 extern Bit32s g_gfx_spinlock;		// ds:0xe234; seg004
 extern char **g_itemsname;		// ds:0xe22f; seg026, seg120
 extern unsigned char *g_itemsdat;	// ds:0xe22b; seg002, seg027, seg105, seg107, seg120

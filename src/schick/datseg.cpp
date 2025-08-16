@@ -6346,7 +6346,9 @@ unsigned short g_fig_actor_grammar_type; // ds:0xe2b8, 2 = hero, 1 = monster
 unsigned short g_fig_ani_state[8]; // ds:0xe2a8
 signed short g_fig_figlist_readd[8]; // ds:0xe298
 unsigned char* g_fig_gfxbuffers[8]; // ds:0xe278, 0x508 byte segments in FIGHTOBJ_BUF
-void *g_bc_timer; // ds:0xe274
+#if defined(__BORLANDC__)
+void interrupt far (*g_bc_timer)(...); // ds:0xe274
+#endif
 signed short g_ani_area_timeout[10]; // ds:0xe260
 signed short g_ani_area_status[10]; // ds:0xe24c
 signed short g_ani_change_dir[10]; // ds:0xe238
