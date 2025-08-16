@@ -424,7 +424,7 @@ signed short DNG_step(void)
 {
 	signed short l_si;
 	signed short l_di;
-	const signed short (*dungeon_handler)(void);
+	signed short (*dungeon_handler)(void);
 	signed short retval;
 	signed short tw_bak;
 	signed short old_value;
