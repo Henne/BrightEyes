@@ -2,7 +2,7 @@
 namespace M302de {
 #endif
 
-Bit8u* FIG_get_ptr(signed char);
+struct struct_fighter* FIG_get_fighter(signed char);
 
 void FIG_draw_figures(void);
 

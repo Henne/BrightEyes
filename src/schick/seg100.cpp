@@ -222,7 +222,7 @@ void spell_harmlos(void)
 
 void spell_hexenknoten(void)
 {
-	Bit8u *ptr;
+	struct struct_fighter *fighter;
 	Bit8u *rp;
 	signed short x;
 	signed short y;
@@ -236,9 +236,9 @@ void spell_hexenknoten(void)
 		return;
 	}
 
-	ptr = (Bit8u*)FIG_get_ptr(host_readbs(get_spelluser() + HERO_FIGHTER_ID));
-	x = host_readbs(ptr + 3);
-	y = host_readbs(ptr + 4);
+	fighter = FIG_get_fighter(host_readbs(get_spelluser() + HERO_FIGHTER_ID));
+	x = fighter->cbx;
+	y = fighter->cby;
 
 	if (!host_readbs(get_spelluser() + HERO_VIEWDIR)) {
 		x++;

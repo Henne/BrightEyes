@@ -83,21 +83,21 @@ void FIG_chessboard_init(void)
 
 void FIG_preload_gfx(void)
 {
-	Bit8u *p1;
+	struct struct_fighter *fighter;
 	signed short i;
 	struct nvf_desc nvf;
 	signed short handle;
 
 	g_fig_list_head = NULL;
 
-	g_fig_list_buffer = (Bit8u*)(((HugePt)g_fig_figure2_buf) - 0x115d);
+	g_fig_list_buffer = (struct struct_fighter*)(((HugePt)g_fig_figure2_buf) - 0x115d);
 
 	memset(g_fig_list_buffer, 0, 0x115d);
-	p1 = g_fig_list_buffer;
+	fighter = g_fig_list_buffer;
 
 	for (i = 0; i < 127; i++) {
-		host_writeb(p1 + 0x10, -1);
-		p1 += SIZEOF_FIGHTER;
+		fighter->id = -1;
+		fighter++;
 		g_fig_list_array[i] = 0;
 	}
 

@@ -62,7 +62,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 	signed short weapon_id;
 	signed short radio_i;
 	signed short slot_no;
-	Bit8u *ptr;
+	struct struct_fighter *ptr;
 	signed short tw_bak;
 	signed short slots[16];
 
@@ -606,16 +606,15 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 
 								if (rwt1 != rwt2) {
 
-									ptr = (Bit8u*)(FIG_get_ptr(host_readbs(hero + HERO_FIGHTER_ID)));
+									ptr = FIG_get_fighter(host_readbs(hero + HERO_FIGHTER_ID));
 
 									if (rwt2 != -1) {
-										host_writeb(ptr + 2,
-										ds_readbs((NVFTAB_FIGURES_RANGEWEAPON - 12) + 12 * host_readbs(hero + HERO_SPRITE_NO) + 4 * rwt2 + host_readbs(hero + HERO_VIEWDIR)));
+										ptr->nvf_no = ds_readbs((NVFTAB_FIGURES_RANGEWEAPON - 12) + 12 * host_readbs(hero + HERO_SPRITE_NO) + 4 * rwt2 + host_readbs(hero + HERO_VIEWDIR));
 									} else {
-										host_writeb(ptr + 2, host_readbs(hero + HERO_VIEWDIR));
+										ptr->nvf_no = host_readbs(hero + HERO_VIEWDIR);
 									}
 
-									host_writeb(ptr + 0xd, -1);
+									ptr->reload = -1;
 
 									draw_fight_screen_pal(0);
 								}

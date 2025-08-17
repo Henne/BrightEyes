@@ -4406,7 +4406,7 @@ void sub_hero_le(Bit8u *hero, signed short le)
 	signed short i;
 	signed short bak;
 	signed short old_le;
-	Bit8u *ptr;
+	struct struct_fighter *fighter;
 	Bit8u *hero_i;
 
 	if (!hero_dead(hero) && (le > 0)) {
@@ -4425,13 +4425,14 @@ void sub_hero_le(Bit8u *hero, signed short le)
 
 			/* in fight mode */
 			if (g_in_fight) {
-				ptr = (Bit8u*)FIG_get_ptr(host_readb(hero + HERO_FIGHTER_ID));
+
+				fighter = FIG_get_fighter(host_readb(hero + HERO_FIGHTER_ID));
 
 				/* update looking dir and other  */
-				host_writeb(ptr + FIGHTER_NVF_NO, host_readb(hero + HERO_VIEWDIR));
-				host_writeb(ptr + FIGHTER_RELOAD, -1);
-				host_writeb(ptr + FIGHTER_OFFSETX, 0);
-				host_writeb(ptr + FIGHTER_OFFSETY, 0);
+				fighter->nvf_no = host_readb(hero + HERO_VIEWDIR);
+				fighter->reload = -1;
+				fighter->offsetx = 0;
+				fighter->offsety = 0;
 			}
 		}
 
@@ -4507,18 +4508,15 @@ void sub_hero_le(Bit8u *hero, signed short le)
 				/* in fight mode */
 				if (g_in_fight) {
 
-					ptr = (Bit8u*)FIG_get_ptr(host_readb(hero + HERO_FIGHTER_ID));
+					fighter = FIG_get_fighter(host_readb(hero + HERO_FIGHTER_ID));
 
-					host_writeb(ptr + 2,
-						ds_readb(NVFTAB_FIGURES_UNCONSCIOUS + host_readbs(hero + HERO_SPRITE_NO) * 2) + host_readbs(hero + HERO_VIEWDIR));
+					fighter->nvf_no = ds_readb(NVFTAB_FIGURES_UNCONSCIOUS + host_readbs(hero + HERO_SPRITE_NO) * 2) + host_readbs(hero + HERO_VIEWDIR);
 
-					host_writeb(ptr + 0x0d, -1);
+					fighter->reload = -1;
 
-					host_writeb(ptr + 5,
-						ds_readb(GFXTAB_OFFSETS_UNCONSCIOUS + host_readbs(hero + HERO_SPRITE_NO) * 8 + host_readbs(hero + HERO_VIEWDIR) * 2));
+					fighter->offsetx = ds_readb(GFXTAB_OFFSETS_UNCONSCIOUS + host_readbs(hero + HERO_SPRITE_NO) * 8 + host_readbs(hero + HERO_VIEWDIR) * 2);
 
-					host_writeb(ptr + 6,
-						ds_readb((GFXTAB_OFFSETS_UNCONSCIOUS + 1) + host_readbs(hero + HERO_SPRITE_NO) * 8 + host_readbs(hero + HERO_VIEWDIR) * 2));
+					fighter->offsety = ds_readb((GFXTAB_OFFSETS_UNCONSCIOUS + 1) + host_readbs(hero + HERO_SPRITE_NO) * 8 + host_readbs(hero + HERO_VIEWDIR) * 2);
 
 
 					FIG_add_msg(7, 0);
@@ -4553,7 +4551,7 @@ void sub_hero_le(Bit8u *hero, signed short le)
 void add_hero_le(Bit8u *hero, signed short le)
 {
 	signed short val_bak;
-	Bit8u *ptr;
+	struct struct_fighter *fighter;
 	signed short ret;
 
 	/* dead heroes never get LE */
@@ -4577,19 +4575,20 @@ void add_hero_le(Bit8u *hero, signed short le)
 
 			/* maybe if we are in a fight */
 			if (g_in_fight) {
-				ptr = (Bit8u*)FIG_get_ptr(host_readb(hero + HERO_FIGHTER_ID));
+
+				fighter = FIG_get_fighter(host_readb(hero + HERO_FIGHTER_ID));
+
 				ret = FIG_get_range_weapon_type(hero);
 
 				if (ret != -1) {
-					host_writeb(ptr + 2, ds_readb((NVFTAB_FIGURES_RANGEWEAPON - 12) +
-						host_readbs(hero + HERO_SPRITE_NO) * 12 + 4 * ret + host_readbs(hero + HERO_VIEWDIR)));
+					fighter->nvf_no = ds_readb((NVFTAB_FIGURES_RANGEWEAPON - 12) + host_readbs(hero + HERO_SPRITE_NO) * 12 + 4 * ret + host_readbs(hero + HERO_VIEWDIR));
 				} else {
-					host_writeb(ptr + 2, host_readb(hero + HERO_VIEWDIR));
+					fighter->nvf_no = host_readb(hero + HERO_VIEWDIR);
 				}
 
-				host_writeb(ptr + 0x0d, -1);
-				host_writeb(ptr + 5, 0);
-				host_writeb(ptr + 6, 0);
+				fighter->reload = -1;
+				fighter->offsetx = 0;
+				fighter->offsety = 0;
 			}
 		}
 

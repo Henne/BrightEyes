@@ -514,7 +514,7 @@ void spell_kraehenruf(void)
 
 void spell_skelettarius(void)
 {
-	Bit8u *fighter;
+	struct struct_fighter *fighter;
 	signed short x;
 	signed short y;
 	signed char unk;
@@ -526,26 +526,22 @@ void spell_skelettarius(void)
 	if (!enemy_dead(get_spelltarget_e())) {
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(15),
-			(Bit8u*)(GUI_names_grammar((signed short)0x8000,
-				host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
+		sprintf(g_dtp2,	get_tx(15), (Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
 
 		/* set ae costs */
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 	} else {
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(16),
-			(Bit8u*)(GUI_names_grammar((signed short)0x8000,
-				host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
+		sprintf(g_dtp2,	get_tx(16), (Bit8u*)GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1));
 
-		fighter = (Bit8u*)(FIG_get_ptr(host_readbs(get_spelltarget_e() + ENEMY_SHEET_FIGHTER_ID)));
+		fighter = FIG_get_fighter(host_readbs(get_spelltarget_e() + ENEMY_SHEET_FIGHTER_ID));
 
-		x = host_readbs(fighter + FIGHTER_CBX);
-		y = host_readbs(fighter + FIGHTER_CBY);
+		x = fighter->cbx;
+		y = fighter->cbx;
 
-		if (host_readbs(fighter + FIGHTER_TWOFIELDED) != -1) {
-			FIG_remove_from_list(g_fig_twofielded_table[host_readbs(fighter + FIGHTER_TWOFIELDED)], 0);
+		if (fighter->twofielded != -1) {
+			FIG_remove_from_list(g_fig_twofielded_table[fighter->twofielded], 0);
 		}
 #ifdef M302de_ORIGINAL_BUGFIX
 		/* Original-Bug 1:
@@ -593,8 +589,8 @@ void spell_skelettarius(void)
 #ifdef M302de_ORIGINAL_BUGFIX
 		/* Original-Bug 1:
 		 * restore the FIGHTER_OBJ_ID value. */
-		fighter = (Bit8u*)(FIG_get_ptr(host_readbs(get_spelltarget_e() + ENEMY_SHEET_FIGHTER_ID)));
-		host_writebs(fighter + FIGHTER_OBJ_ID, obj_id_bak);
+		fighter = FIG_get_fighter(host_readbs(get_spelltarget_e() + ENEMY_SHEET_FIGHTER_ID));
+		fighter->obj_id = obj_id_bak;
 #endif
 	}
 }

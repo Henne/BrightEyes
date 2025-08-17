@@ -52,6 +52,36 @@ struct struct_msg {
 	signed int type;
 };
 
+struct struct_fighter {
+	signed short figure;
+	signed char nvf_no;
+	signed char cbx;
+	signed char cby;
+	signed char offsetx;
+	signed char offsety;
+	signed char height;
+	signed char width;
+	signed char x1;
+	signed char y1;
+	signed char x2;
+	signed char y2;
+	signed char reload; 	/* {0, -1	= update gfx data} */
+	signed char sheet;	/* 0xe274, 0xe2a8, 0xd8ce */
+	signed char wsheet;	/* 0xe274 */
+	signed char id;		/* position in g_fig_list_array */
+	signed char z;
+	signed char visible;	/* {0, 1, 2, 3} */
+	signed char twofielded;	/* -1 if fighter is not twofielded. for twofielded fighter:
+				 * head part: FIGHTER_TWOFIELDED can be used as index for FIG_TWOFIELDED_TABLE which contains the FIGHTER_ID);
+				 * tail part: entry is FIGHTER_TWOFIELDED+20 of the head part. */
+	signed char obj_id;	/* stores the id of the cb_entry of the square before the fighter entered it */
+	signed char is_enemy;	/* {0 = hero, 1	= enemy, 2 = hero} */ /* strangly, at one position in seg039.cpp the value 2 is written */
+	signed char sprite_no;	/* 0x12c0, 0x1531, 0x1210 */
+	Bit8u* gfxbuf;
+	struct struct_fighter* next;	/* TODO: These should located at the start of the structure */
+	struct struct_fighter* prev;
+};
+
 struct struct_smith_repairitems {
 	Bit16s item_id;
 	Bit32s pickup_time;
@@ -942,7 +972,7 @@ extern signed char g_fig_spellgfx_id;		// ds:0xe38c; seg040, seg042, seg043, seg
 extern unsigned char **g_figobj_gfxbuf_table;	// ds:0xe388; seg032, seg040
 extern signed short *g_figobj_gfxheight_table;	// ds:0xe384; seg032, seg040
 extern signed short *g_figobj_gfxwidth_table;	// ds:0xe380; seg032, seg040
-extern unsigned char *g_fig_list_buffer;	// ds:0xe37c; seg006, seg040
+extern struct struct_fighter *g_fig_list_buffer;	// ds:0xe37c; seg006, seg040
 extern unsigned char *g_buffer_anidat;		// ds:0xe378; seg036, seg037, seg040, seg044
 extern unsigned char *g_buffer_weapanidat;	// ds:0xe374; seg036, seg037, seg040, seg044
 extern Bit32s g_fightobj_buf_freespace;		// ds:0xe370; seg032-seg100
@@ -997,8 +1027,9 @@ extern signed short g_wallclock_x;	// ds:0xe111; seg004, seg029, seg063, seg094
 extern signed short g_wallclock_y;	// ds:0xe10f; seg004, seg029, seg063, seg094
 extern signed short g_wallclock_redraw;	// ds:0xe10e; seg004, seg029
 extern signed char  g_location_market_flag;	// ds:0xe10c; seg066
-extern Bit8u *g_fig_list_head;		// ds:0xe108; seg005, seg006, seg040
+extern struct struct_fighter *g_fig_list_head;		// ds:0xe108; seg005, seg006, seg040
 extern signed char g_fig_list_array[127];	// ds:0xe089; seg006, seg040
+extern struct struct_fighter g_fig_list_elem;	// ds:0xe066; seg006, seg034, seg038, seg039, seg040, seg042, seg043, seg045, seg100
 
 extern signed char g_fightobj_list[90];	// ds:0xd874; seg040
 extern signed int g_nr_of_enemies;	// ds:0xd872; seg032, seg034, seg039, seg100

@@ -65,7 +65,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 	signed short l13;
 	signed short target_is_hero = 0;
 	signed short l15;
-	Bit8u *p3;
+	struct struct_fighter *fighter_add;
 	signed short width;
 	signed short height;
 	signed short l16 = 0;
@@ -77,7 +77,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 	signed short target_x;
 	signed short target_y;
 	signed short dir;
-	Bit8u *p_fighter;
+	struct struct_fighter *fighter;
 	struct struct_msg tmp;
 	signed short fg_bak;
 	signed short bg_bak;
@@ -183,12 +183,12 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 					and_ptr_bs(target_hero + HERO_FLAGS1, 0xfd); /* unset 'asleep' flag */
 
-					p_fighter = (Bit8u*)(FIG_get_ptr(host_readbs(target_hero + HERO_FIGHTER_ID)));
+					fighter = FIG_get_fighter(host_readbs(target_hero + HERO_FIGHTER_ID));
 
-					host_writeb(p_fighter + FIGHTER_NVF_NO, host_readbs(target_hero + HERO_VIEWDIR));
-					host_writeb(p_fighter + FIGHTER_RELOAD, -1);
-					host_writeb(p_fighter + FIGHTER_OFFSETX, 0);
-					host_writeb(p_fighter + FIGHTER_OFFSETY, 0);
+					fighter->nvf_no = host_readbs(target_hero + HERO_VIEWDIR);
+					fighter->reload = -1;
+					fighter->offsetx = 0;
+					fighter->offsety = 0;
 				}
 
 				if (hero_dead(target_hero) || !host_readbs(target_hero + HERO_TYPE)) {
@@ -652,10 +652,10 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 					if (FIG_get_range_weapon_type(hero) == -1) {
 
-						p_fighter = (Bit8u*)(FIG_get_ptr(host_readbs(hero + HERO_FIGHTER_ID)));
+						fighter = FIG_get_fighter(host_readbs(hero + HERO_FIGHTER_ID));
 
-						host_writeb(p_fighter + FIGHTER_NVF_NO, host_readbs(hero + HERO_VIEWDIR));
-						host_writeb(p_fighter + FIGHTER_RELOAD, -1);
+						fighter->nvf_no = host_readbs(hero + HERO_VIEWDIR);
+						fighter->reload = -1;
 					}
 
 					if (l13 != 0) {
@@ -852,9 +852,9 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 								if (is_in_byte_array(host_readbs(target_monster + 1), p_datseg + TWO_FIELDED_SPRITE_ID))
 								{
-									p3 = (Bit8u*)(FIG_get_ptr(host_readbs(target_monster + ENEMY_SHEET_FIGHTER_ID)));
+									fighter_add = FIG_get_fighter(host_readbs(target_monster + ENEMY_SHEET_FIGHTER_ID));
 
-									FIG_set_sheet(g_fig_twofielded_table[host_readbs(p3 + FIGHTER_TWOFIELDED)], 3);
+									FIG_set_sheet(g_fig_twofielded_table[fighter_add->twofielded], 3);
 								}
 
 							} else {
@@ -882,9 +882,9 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 								if (is_in_byte_array(host_readbs(target_monster + 1), p_datseg + TWO_FIELDED_SPRITE_ID))
 								{
-									p3 = (Bit8u*)(FIG_get_ptr(host_readbs(target_monster + ENEMY_SHEET_FIGHTER_ID)));
+									fighter_add = FIG_get_fighter(host_readbs(target_monster + ENEMY_SHEET_FIGHTER_ID));
 
-									FIG_make_invisible(g_fig_twofielded_table[host_readbs(p3 + FIGHTER_TWOFIELDED)]);
+									FIG_make_invisible(g_fig_twofielded_table[fighter_add->twofielded]);
 								}
 							} else {
 								if (host_readbs(hero + HERO_ENEMY_ID) > 0) {

@@ -6309,7 +6309,7 @@ signed char g_fig_spellgfx_id; // ds:0xe38c
 unsigned char **g_figobj_gfxbuf_table; // ds:0xe388, to long[63]; Bit8u*
 signed short *g_figobj_gfxwidth_table; // ds:0xe384, to signed short[63]
 signed short *g_figobj_gfxheight_table; // ds:0xe380, to signed short[63]
-unsigned char *g_fig_list_buffer; // ds:0xe37c, to buffer of size 4445, initial value of FIG_LIST_HEAD
+struct struct_fighter *g_fig_list_buffer; // ds:0xe37c, to buffer of size 4445, initial value of FIG_LIST_HEAD
 unsigned char *g_buffer_anidat; // ds:0xe378, pointer to ANI.DAT buffer
 unsigned char *g_buffer_weapanidat; // ds:0xe374, pointer to WEAPANI.DAT
 Bit32s g_fightobj_buf_freespace; // ds:0xe370
@@ -6366,9 +6366,9 @@ signed short g_wallclock_x; // ds:0xe111
 signed short g_wallclock_y; // ds:0xe10f
 signed short g_wallclock_redraw; // ds:0xe10d
 signed char g_location_market_flag; // ds:0xe10c
-Bit8u *g_fig_list_head; // ds:0xe108, to a list
+struct struct_fighter *g_fig_list_head; // ds:0xe108, to a list
 signed char g_fig_list_array[127]; // ds:0xe089
-struct{unsigned char unkn[35];} g_fig_list_elem; // ds:0xe066
+struct struct_fighter g_fig_list_elem; // ds:0xe066
 struct{unsigned char unkn[243];} g_fig_anisheets[8]; // ds:0xd8ce
 signed char g_fightobj_list[90]; // ds:0xd874
 signed int g_nr_of_enemies; // ds:0xd872, ?

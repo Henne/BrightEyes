@@ -389,7 +389,7 @@ void FIG_do_round(void)
 	Bit8u* enemy;
 	signed short x;
 	signed short y;
-	Bit8u *fighter_ptr;
+	struct struct_fighter *fighter_ptr;
 
 	/* A round is the phase of a fight where all heroes and enemies get their number of BP (Bewegungspunkte; depending on load, enemy type etc.) and use them to perform a series of actions.
 	 * Actions are performed in action phases, An action phase consists of one or more actions by the active actor, where the actions 'melee attack', 'ranged attack',
@@ -532,8 +532,8 @@ void FIG_do_round(void)
 		}
 
 		if (is_enemies_turn == 0) {
-			/* heroes on turn */
 
+			/* heroes on turn */
 			actor_id = FIG_choose_next_hero();
 
 			hero = get_hero(actor_id);
@@ -550,12 +550,12 @@ void FIG_do_round(void)
 
 					and_ptr_bs(hero + HERO_FLAGS1, 0xfd); /* unset 'sleep' flag */
 
-					fighter_ptr = (Bit8u*)(FIG_get_ptr(host_readbs(hero + HERO_FIGHTER_ID)));
+					fighter_ptr = FIG_get_fighter(host_readbs(hero + HERO_FIGHTER_ID));
 
-					host_writeb(fighter_ptr + FIGHTER_NVF_NO, host_readbs(hero + HERO_VIEWDIR));
-					host_writeb(fighter_ptr + FIGHTER_RELOAD, -1);
-					host_writeb(fighter_ptr + FIGHTER_OFFSETX, 0);
-					host_writeb(fighter_ptr + FIGHTER_OFFSETY, 0);
+					fighter_ptr->nvf_no = host_readbs(hero + HERO_VIEWDIR);
+					fighter_ptr->reload = -1;
+					fighter_ptr->offsetx = 0;
+					fighter_ptr->offsety = 0;
 				}
 			}
 
@@ -617,21 +617,21 @@ void FIG_do_round(void)
 #endif
 
 
-									fighter_ptr = (Bit8u*)FIG_get_ptr(host_readbs(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FIGHTER_ID) + SIZEOF_ENEMY_SHEET * host_readbs(hero + HERO_ENEMY_ID)));
+									fighter_ptr = FIG_get_fighter(host_readbs(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FIGHTER_ID) + SIZEOF_ENEMY_SHEET * host_readbs(hero + HERO_ENEMY_ID)));
 									/* intermediate: fighter_ptr points to the FIGHTER entry of the enemy */
 
-									fighter_ptr = (Bit8u*)FIG_get_ptr(g_fig_twofielded_table[host_readbs(fighter_ptr + FIGHTER_TWOFIELDED)]);
+									fighter_ptr = FIG_get_fighter(g_fig_twofielded_table[fighter_ptr->twofielded]);
 									/* fighter_ptr now points the FIGHTER entry of the tail part of the enemy */
 									/* should be true: (host_readbs(fighter_ptr + FIGHTER_CBX) == x) and (host_readbs(fighter_ptr + FIGHTER_CBY) == y) */
 
 									/* Probably, the following if-then-else-condition is not necessary as the condition is always true. */
-									if (host_readbs(fighter_ptr + FIGHTER_OBJ_ID) >= 0) {
+									if (fighter_ptr->obj_id >= 0) {
 										/* if the id of a cb_entry has been saved in FIGHTER_OBJ_ID (meaning that the tail part is standing on it),
 										 * restore that to the cb */
-										FIG_set_cb_field(y, x, host_readbs(fighter_ptr + FIGHTER_OBJ_ID));
+										FIG_set_cb_field(y, x, fighter_ptr->obj_id);
 									} else {
 										/* otherwise, set the square in the cb to 0 (free) */
-										FIG_set_cb_field(host_readbs(fighter_ptr + FIGHTER_CBY), host_readbs(fighter_ptr + FIGHTER_CBX), 0);
+										FIG_set_cb_field(fighter_ptr->cby, fighter_ptr->cbx, 0);
 									}
 								}
 							}
@@ -712,21 +712,21 @@ void FIG_do_round(void)
 									y = host_readws((Bit8u*)&y);
 #endif
 
-									fighter_ptr = (Bit8u*)(FIG_get_ptr(host_readbs(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FIGHTER_ID) + SIZEOF_ENEMY_SHEET * host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_ENEMY_ID))));
+									fighter_ptr = FIG_get_fighter(host_readbs(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FIGHTER_ID) + SIZEOF_ENEMY_SHEET * host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_ENEMY_ID)));
 									/* intermediate: fighter_ptr points to the FIGHTER entry of the killed enemy */
 
-									fighter_ptr = (Bit8u*)(FIG_get_ptr(g_fig_twofielded_table[host_readbs(fighter_ptr + FIGHTER_TWOFIELDED)]));
+									fighter_ptr = FIG_get_fighter(g_fig_twofielded_table[fighter_ptr->twofielded]);
 									/* fighter_ptr now points the FIGHTER entry of the tail part of the killed enemy */
 									/* should be true: (host_readbs(fighter_ptr + FIGHTER_CBX) == x) and (host_readbs(fighter_ptr + FIGHTER_CBY) == y) */
 
 									/* Probably, the following if-then-else-condition is not necessary as the condition is always true. */
-									if (host_readbs(fighter_ptr + FIGHTER_OBJ_ID) >= 0) {
+									if (fighter_ptr->obj_id >= 0) {
 										/* if the id of a cb_entry has been saved in FIGHTER_OBJ_ID (meaning that the tail part is standing on it),
 										 * restore that to the cb */
-										FIG_set_cb_field(y, x, host_readbs(fighter_ptr + FIGHTER_OBJ_ID));
+										FIG_set_cb_field(y, x, fighter_ptr->obj_id);
 									} else {
 										/* otherwise, set the square in the cb to 0 (free) */
-										FIG_set_cb_field(host_readbs(fighter_ptr + FIGHTER_CBY), host_readbs(fighter_ptr + FIGHTER_CBX), 0);
+										FIG_set_cb_field(fighter_ptr->cby, fighter_ptr->cbx, 0);
 									}
 								}
 							}
@@ -754,15 +754,15 @@ void FIG_do_round(void)
 								/* attacking dead enemy is two-squares */
 								/* goal: remove tail part */
 
-								fighter_ptr = (Bit8u*)FIG_get_ptr(host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_FIGHTER_ID));
+								fighter_ptr = FIG_get_fighter(host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_FIGHTER_ID));
 								/* intermediate: fighter_ptr points to the FIGHTER entry of the enemy */
 
-								fighter_ptr = (Bit8u*)FIG_get_ptr(g_fig_twofielded_table[host_readbs(fighter_ptr + FIGHTER_TWOFIELDED)]);
+								fighter_ptr = FIG_get_fighter(g_fig_twofielded_table[fighter_ptr->twofielded]);
 								/* fighter_ptr now points the FIGHTER entry of the tail part of the enemy */
 								/* should be true: (host_readbs(fighter_ptr + FIGHTER_CBX) == x) and (host_readbs(fighter_ptr + FIGHTER_CBY) == y) */
 
 								/* restore the cb_entry stored at FIGHTER_OBJ_ID (meaning that the tail part is standing on it). */
-								FIG_set_cb_field(host_readbs(fighter_ptr + FIGHTER_CBY), host_readbs(fighter_ptr + FIGHTER_CBX), host_readbs(fighter_ptr + FIGHTER_OBJ_ID));
+								FIG_set_cb_field(fighter_ptr->cby, fighter_ptr->cbx, fighter_ptr->obj_id);
 							}
 						}
 #endif

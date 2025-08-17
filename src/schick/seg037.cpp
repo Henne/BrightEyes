@@ -90,7 +90,7 @@ void seg037_00ae(Bit8u *enemy, signed short enemy_no)
 	signed char b2;
 	signed char b3;
 	Bit8u *p1;
-	Bit8u *p2;
+	struct struct_fighter *fighter;
 	Bit8u *p3;
 
 	signed short i;
@@ -172,9 +172,9 @@ void seg037_00ae(Bit8u *enemy, signed short enemy_no)
 
 		memcpy(p_datseg + (FIG_ANISHEETS + 3*0xf3), p_datseg + (FIG_ANISHEETS + 0xf3), 0xf3);
 
-		p2 = (Bit8u*)(FIG_get_ptr(host_readbs(enemy + ENEMY_SHEET_FIGHTER_ID)));
+		fighter = FIG_get_fighter(host_readbs(enemy + ENEMY_SHEET_FIGHTER_ID));
 
-		FIG_set_sheet(g_fig_twofielded_table[host_readbs(p2 + FIGHTER_TWOFIELDED)], 3);
+		FIG_set_sheet(g_fig_twofielded_table[fighter->twofielded], 3);
 	}
 
 	/* draw_fight_screen */

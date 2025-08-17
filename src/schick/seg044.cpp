@@ -353,7 +353,7 @@ void FIG_prepare_enemy_fight_ani(signed short a1, Bit8u *enemy, signed short f_a
 	signed short i;
 	Bit8u *p1;
 	Bit8u *p2;
-	Bit8u *p3;			/* only user for two sprited figures */
+	struct struct_fighter *fighter;			/* only user for two sprited figures */
 	Bit8u *p4;			/* read only */
 	signed short weapon_type;
 
@@ -553,9 +553,9 @@ void FIG_prepare_enemy_fight_ani(signed short a1, Bit8u *enemy, signed short f_a
 
 		memcpy(p_datseg + (FIG_ANISHEETS + 2*0xf3) + a1 * 0xf3, p_datseg + FIG_ANISHEETS + a1 * 0xf3, 0xf3);
 
-		p3 = (Bit8u*)(FIG_get_ptr(host_readbs(enemy + ENEMY_SHEET_FIGHTER_ID)));
+		fighter = FIG_get_fighter(host_readbs(enemy + ENEMY_SHEET_FIGHTER_ID));
 
-		FIG_set_sheet(g_fig_twofielded_table[host_readbs(p3 + 0x13)], a1 + 2);
+		FIG_set_sheet(g_fig_twofielded_table[fighter->twofielded], a1 + 2);
 	}
 
 	if (weapon_type != -1) {

@@ -64,7 +64,7 @@ void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 	signed short l13;
 	signed short l14;
 	signed short l15;
-	Bit8u *l16;
+	struct struct_fighter *fighter;
 	signed short l17 = 0;
 	signed short fighter_id;
 	signed short hero_x;
@@ -702,9 +702,9 @@ void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 
 							if (is_in_byte_array(host_readbs(mon + 1), p_datseg + TWO_FIELDED_SPRITE_ID)) {
 
-								l16 = (Bit8u*)(FIG_get_ptr(host_readbs(mon + ENEMY_SHEET_FIGHTER_ID)));
+								fighter = FIG_get_fighter(host_readbs(mon + ENEMY_SHEET_FIGHTER_ID));
 
-								FIG_set_sheet(g_fig_twofielded_table[host_readbs(l16 + FIGHTER_TWOFIELDED)], 3);
+								FIG_set_sheet(g_fig_twofielded_table[fighter->twofielded], 3);
 							}
 						} else {
 
@@ -762,9 +762,9 @@ void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 
 								if (is_in_byte_array(host_readbs(mon + 1), p_datseg + TWO_FIELDED_SPRITE_ID)) {
 
-									l16 = (Bit8u*)(FIG_get_ptr(host_readbs(mon + ENEMY_SHEET_FIGHTER_ID)));
+									fighter = FIG_get_fighter(host_readbs(mon + ENEMY_SHEET_FIGHTER_ID));
 
-									FIG_make_invisible(g_fig_twofielded_table[host_readbs(l16 + FIGHTER_TWOFIELDED)]);
+									FIG_make_invisible(g_fig_twofielded_table[fighter->twofielded]);
 								}
 							} else {
 

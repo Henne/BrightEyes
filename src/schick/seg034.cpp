@@ -428,8 +428,8 @@ void FIG_latecomers(void)
 	signed short y;
 	signed short l4;
 	Bit8u *p_mon;		/* pointer to a monster sheet */
-	Bit8u *p2;
-	Bit8u *p3;
+	struct struct_fighter *fighter;
+	struct struct_fighter *fighter_add;
 
 #if !defined(__BORLANDC__)
         struct dummy a;
@@ -469,19 +469,17 @@ void FIG_latecomers(void)
 								host_readbs(g_current_fight + FIGHT_MONSTERS_VIEWDIR + SIZEOF_FIGHT_MONSTER * i),
 								1);
 
-						p2 = (Bit8u*)FIG_get_ptr(host_readbs(p_mon + ENEMY_SHEET_FIGHTER_ID));
+						fighter = FIG_get_fighter(host_readbs(p_mon + ENEMY_SHEET_FIGHTER_ID));
 
-						host_writebs(p2 + 3, (signed char)x);
-						host_writebs(p2 + 4, (signed char)y);
+						fighter->cbx = x;
+						fighter->cby = y;
 
-						l4 = g_fig_twofielded_table[host_readbs(p2 + FIGHTER_TWOFIELDED)];
+						l4 = g_fig_twofielded_table[fighter->twofielded];
 
-						p3 = (Bit8u*)FIG_get_ptr((signed char)l4);
+						fighter_add = FIG_get_fighter((signed char)l4);
 
-						host_writeb(p3 + 3,
-								x - a.a[host_readbs(g_current_fight + FIGHT_MONSTERS_VIEWDIR + SIZEOF_FIGHT_MONSTER * i)].x);
-						host_writeb(p3 + 4,
-								y - a.a[host_readbs(g_current_fight + FIGHT_MONSTERS_VIEWDIR + SIZEOF_FIGHT_MONSTER * i)].y);
+						fighter_add->cbx = x - a.a[host_readbs(g_current_fight + FIGHT_MONSTERS_VIEWDIR + SIZEOF_FIGHT_MONSTER * i)].x;
+						fighter_add->cby = y - a.a[host_readbs(g_current_fight + FIGHT_MONSTERS_VIEWDIR + SIZEOF_FIGHT_MONSTER * i)].y;
 
 						FIG_remove_from_list(host_readbs(p_mon + ENEMY_SHEET_FIGHTER_ID), 1);
 
@@ -497,10 +495,10 @@ void FIG_latecomers(void)
 								host_readbs(g_current_fight + FIGHT_MONSTERS_VIEWDIR + SIZEOF_FIGHT_MONSTER * i),
 								0);
 
-						p2 = (Bit8u*)FIG_get_ptr(host_readbs(p_mon + ENEMY_SHEET_FIGHTER_ID));
+						fighter = FIG_get_fighter(host_readbs(p_mon + ENEMY_SHEET_FIGHTER_ID));
 
-						host_writebs(p2 + 3, (signed char)x);
-						host_writebs(p2 + 4, (signed char)y);
+						fighter->cbx = (signed char)x;
+						fighter->cby = (signed char)y;
 
 						FIG_remove_from_list(host_readbs(p_mon + ENEMY_SHEET_FIGHTER_ID), 1);
 

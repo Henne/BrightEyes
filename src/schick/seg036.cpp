@@ -181,7 +181,7 @@ signed short KI_change_hero_weapon(Bit8u *hero)
 	signed short has_new_weapon = 0;
 	Bit8u *item_p;
 	signed short item_id;
-	Bit8u *ptr;
+	struct struct_fighter *fighter;
 
 	for (pos = HERO_INVENTORY_SLOT_KNAPSACK_1; pos < NR_HERO_INVENTORY_SLOTS; pos++) {
 
@@ -220,10 +220,12 @@ signed short KI_change_hero_weapon(Bit8u *hero)
 		has_new_weapon = 0;
 	}
 
-	ptr = (Bit8u*)(FIG_get_ptr(host_readbs(hero + HERO_FIGHTER_ID)));
-	host_writeb(ptr + 0x2, host_readbs(hero + HERO_VIEWDIR));
-	host_writeb(ptr + 0xd, -1);
+	fighter = FIG_get_fighter(host_readbs(hero + HERO_FIGHTER_ID));
+	fighter->nvf_no = host_readbs(hero + HERO_VIEWDIR);
+	fighter->reload = -1;
+
 	draw_fight_screen_pal(0);
+
 	host_writeb(hero + HERO_BP_LEFT, host_readbs(hero + HERO_BP_LEFT) - 2);
 
 	return has_new_weapon;
