@@ -181,26 +181,26 @@ signed char FIG_cb_select_target(Bit8u *px, Bit8u *py, const signed short max_ra
 		g_fig_cb_selector_id[0] = -1;
 	}
 
-	ds_writew(FIG_LIST_ELEM, 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_NVF_NO), 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_CBX), host_readbs(px));
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_CBY), host_readbs(py));
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETX), 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETY), 4);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_HEIGHT), 11);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_WIDTH), 22);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_X1), 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_Y1), 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_X2), 21);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_Y2), 10);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_IS_ENEMY), 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_RELOAD), 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_WSHEET), -1);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_SHEET), -1);
-	ds_writed((FIG_LIST_ELEM+FIGHTER_GFXBUF), (Bit32u)g_fig_cb_selector_buf);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_Z), 1);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_VISIBLE), 1);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_TWOFIELDED), -1);
+	g_fig_list_elem.figure = 0;
+	g_fig_list_elem.nvf_no = 0;
+	g_fig_list_elem.cbx = host_readbs(px);
+	g_fig_list_elem.cby = host_readbs(py);
+	g_fig_list_elem.offsetx = 0;
+	g_fig_list_elem.offsety = 4;
+	g_fig_list_elem.height = 11;
+	g_fig_list_elem.width = 22;
+	g_fig_list_elem.x1 = 0;
+	g_fig_list_elem.y1 = 0;
+	g_fig_list_elem.x2 = 21;
+	g_fig_list_elem.y2 = 10;
+	g_fig_list_elem.is_enemy = 0;
+	g_fig_list_elem.reload = 0;
+	g_fig_list_elem.wsheet = -1;
+	g_fig_list_elem.sheet = -1;
+	g_fig_list_elem.gfxbuf = g_fig_cb_selector_buf;
+	g_fig_list_elem.z = 1;
+	g_fig_list_elem.visible = 1;
+	g_fig_list_elem.twofielded = -1;
 
 	g_fig_cb_selector_id[0] = FIG_add_to_list(-1);
 
@@ -284,7 +284,7 @@ signed char FIG_cb_select_target(Bit8u *px, Bit8u *py, const signed short max_ra
 			}
 		}
 
-		if ((ds_readbs((FIG_LIST_ELEM+FIGHTER_CBX)) != host_readws(px)) || (ds_readbs((FIG_LIST_ELEM+FIGHTER_CBY)) != host_readws(py))) {
+		if ((g_fig_list_elem.cbx != host_readws(px)) || (g_fig_list_elem.cby != host_readws(py))) {
 
 			update_mouse_cursor();
 
@@ -318,8 +318,8 @@ signed char FIG_cb_select_target(Bit8u *px, Bit8u *py, const signed short max_ra
 
 			FIG_remove_from_list(g_fig_cb_selector_id[0], 1);
 
-			ds_writeb((FIG_LIST_ELEM+FIGHTER_CBX), (signed char)host_readws(px));
-			ds_writeb((FIG_LIST_ELEM+FIGHTER_CBY), (signed char)host_readws(py));
+			g_fig_list_elem.cbx = (signed char)host_readws(px);
+			g_fig_list_elem.cby = (signed char)host_readws(py);
 
 			FIG_add_to_list(g_fig_cb_selector_id[0]);
 			FIG_draw_figures();
@@ -589,26 +589,26 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 		g_fig_cb_selector_id[0] = -1;
 	}
 
-	ds_writew(FIG_LIST_ELEM, 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_NVF_NO), 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_CBX), (signed char)sel_x);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_CBY), (signed char)sel_y);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETX), 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETY), 4);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_X1), 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_Y1), 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_X2), 21);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_Y2), 10);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_HEIGHT), 11);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_WIDTH), 22);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_IS_ENEMY), 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_RELOAD), 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_WSHEET), -1);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_SHEET), -1);
-	ds_writed((FIG_LIST_ELEM+FIGHTER_GFXBUF), (Bit32u)g_fig_cb_selector_buf);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_Z), 1);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_VISIBLE), 1);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_TWOFIELDED), -1);
+	g_fig_list_elem.figure = 0;
+	g_fig_list_elem.nvf_no = (0);
+	g_fig_list_elem.cbx = ((signed char)sel_x);
+	g_fig_list_elem.cby = ((signed char)sel_y);
+	g_fig_list_elem.offsetx = (0);
+	g_fig_list_elem.offsety = (4);
+	g_fig_list_elem.x1 = (0);
+	g_fig_list_elem.y1 = (0);
+	g_fig_list_elem.x2 = (21);
+	g_fig_list_elem.y2 = (10);
+	g_fig_list_elem.height = (11);
+	g_fig_list_elem.width = (22);
+	g_fig_list_elem.is_enemy = (0);
+	g_fig_list_elem.reload = (0);
+	g_fig_list_elem.wsheet = (-1);
+	g_fig_list_elem.sheet = (-1);
+	g_fig_list_elem.gfxbuf = (g_fig_cb_selector_buf);
+	g_fig_list_elem.z = (1);
+	g_fig_list_elem.visible = (1);
+	g_fig_list_elem.twofielded = (-1);
 
 	g_fig_cb_selector_id[0] = FIG_add_to_list(-1);
 
@@ -686,10 +686,10 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 
 			FIG_remove_from_list(g_fig_cb_selector_id[0], 0);
 
-			ds_writeb((FIG_LIST_ELEM+FIGHTER_CBX), (signed char)sel_x);
-			ds_writeb((FIG_LIST_ELEM+FIGHTER_CBY), (signed char)sel_y);
-			ds_writed((FIG_LIST_ELEM+FIGHTER_GFXBUF), (Bit32u)g_fig_cb_selector_buf);
-			ds_writeb((FIG_LIST_ELEM+FIGHTER_TWOFIELDED), -1);
+			g_fig_list_elem.cbx = ((signed char)sel_x);
+			g_fig_list_elem.cby = ((signed char)sel_y);
+			g_fig_list_elem.gfxbuf = (g_fig_cb_selector_buf);
+			g_fig_list_elem.twofielded = (-1);
 			g_fig_cb_selector_id[0] = FIG_add_to_list(-1);
 
 			FIG_draw_figures();

@@ -244,26 +244,26 @@ void FIG_draw_scenario(void)
 						g_fightobj_buf_freespace -= width * height + 8L;
 					}
 
-					ds_writew(FIG_LIST_ELEM, 0);
-					ds_writeb((FIG_LIST_ELEM+FIGHTER_NVF_NO), (signed char)obj_id);
-					ds_writeb((FIG_LIST_ELEM+FIGHTER_CBX), (signed char)cb_x);
-					ds_writeb((FIG_LIST_ELEM+FIGHTER_CBY), (signed char)cb_y);
-					ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETX), g_gfxtab_obj_offset_x[obj_id]);
-					ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETY), g_gfxtab_obj_offset_y[obj_id]);
-					ds_writeb((FIG_LIST_ELEM+FIGHTER_HEIGHT), g_figobj_gfxheight_table[obj_id]);
-					ds_writeb((FIG_LIST_ELEM+FIGHTER_WIDTH), g_figobj_gfxwidth_table[obj_id]);
-					ds_writeb((FIG_LIST_ELEM+FIGHTER_X1), 0);
-					ds_writeb((FIG_LIST_ELEM+FIGHTER_Y1), 0);
-					ds_writebs((FIG_LIST_ELEM+FIGHTER_X2), g_figobj_gfxwidth_table[obj_id] - 1);
-					ds_writebs((FIG_LIST_ELEM+FIGHTER_Y2), g_figobj_gfxheight_table[obj_id] - 1);
-					ds_writeb((FIG_LIST_ELEM+FIGHTER_IS_ENEMY), 0);
-					ds_writeb((FIG_LIST_ELEM+FIGHTER_RELOAD), 0);
-					ds_writeb((FIG_LIST_ELEM+FIGHTER_WSHEET), -1);
-					ds_writeb((FIG_LIST_ELEM+FIGHTER_SHEET), -1);
-					ds_writed((FIG_LIST_ELEM+FIGHTER_GFXBUF), (Bit32u)ptr);
-					ds_writeb((FIG_LIST_ELEM+FIGHTER_Z), obj_id >= 58 && obj_id <= 61 ? -1 : 50);
-					ds_writeb((FIG_LIST_ELEM+FIGHTER_VISIBLE), 1);
-					ds_writeb((FIG_LIST_ELEM+FIGHTER_TWOFIELDED), -1);
+					g_fig_list_elem.figure = 0;
+					g_fig_list_elem.nvf_no = ((signed char)obj_id);
+					g_fig_list_elem.cbx = ((signed char)cb_x);
+					g_fig_list_elem.cby = ((signed char)cb_y);
+					g_fig_list_elem.offsetx = (g_gfxtab_obj_offset_x[obj_id]);
+					g_fig_list_elem.offsety = (g_gfxtab_obj_offset_y[obj_id]);
+					g_fig_list_elem.height = (g_figobj_gfxheight_table[obj_id]);
+					g_fig_list_elem.width = (g_figobj_gfxwidth_table[obj_id]);
+					g_fig_list_elem.x1 = (0);
+					g_fig_list_elem.y1 = (0);
+					g_fig_list_elem.x2 = (g_figobj_gfxwidth_table[obj_id] - 1);
+					g_fig_list_elem.y2 = (g_figobj_gfxheight_table[obj_id] - 1);
+					g_fig_list_elem.is_enemy = (0);
+					g_fig_list_elem.reload = (0);
+					g_fig_list_elem.wsheet = (-1);
+					g_fig_list_elem.sheet = (-1);
+					g_fig_list_elem.gfxbuf = (ptr);
+					g_fig_list_elem.z = (obj_id >= 58 && obj_id <= 61 ? -1 : 50);
+					g_fig_list_elem.visible = (1);
+					g_fig_list_elem.twofielded = (-1);
 
 					g_fightobj_list[g_fightobj_count] = FIG_add_to_list(-1);
 					g_fightobj_count++;

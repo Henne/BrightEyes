@@ -817,7 +817,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 								FIG_remove_from_list(host_readbs(target_monster + ENEMY_SHEET_FIGHTER_ID), 1);
 
 
-								nvf.dst = (Bit8u*)(ds_readd((FIG_LIST_ELEM + FIGHTER_GFXBUF)));
+								nvf.dst = g_fig_list_elem.gfxbuf;
 								nvf.src = g_spellobj_nvf_buf;
 								nvf.no = 26;
 								nvf.type = 0;
@@ -831,15 +831,15 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 								height = host_readws((Bit8u*)&height);
 #endif
 
-								ds_writeb((FIG_LIST_ELEM + FIGHTER_OFFSETX), 0);
-								ds_writeb((FIG_LIST_ELEM + FIGHTER_OFFSETY), 0);
-								ds_writeb((FIG_LIST_ELEM + FIGHTER_HEIGHT), (signed char)height);
-								ds_writeb((FIG_LIST_ELEM + FIGHTER_WIDTH), (signed char)width);
-								ds_writeb((FIG_LIST_ELEM + FIGHTER_X1), 0);
-								ds_writeb((FIG_LIST_ELEM + FIGHTER_Y1), 0);
-								ds_writeb((FIG_LIST_ELEM + FIGHTER_X2), (signed char)(width - 1));
-								ds_writeb((FIG_LIST_ELEM + FIGHTER_Y2), (signed char)(height - 1));
-								ds_writeb((FIG_LIST_ELEM + FIGHTER_RELOAD), 0);
+								g_fig_list_elem.offsetx = 0;
+								g_fig_list_elem.offsety = 0;
+								g_fig_list_elem.height = (signed char)height;
+								g_fig_list_elem.width = (signed char)width;
+								g_fig_list_elem.x1 = 0;
+								g_fig_list_elem.y1 = 0;
+								g_fig_list_elem.x2 = (signed char)(width - 1);
+								g_fig_list_elem.y2 = (signed char)(height - 1);
+								g_fig_list_elem.reload = 0;
 
 								FIG_add_to_list(host_readbs(target_monster + ENEMY_SHEET_FIGHTER_ID));
 

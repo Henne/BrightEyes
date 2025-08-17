@@ -1027,7 +1027,7 @@ extern signed short g_wallclock_x;	// ds:0xe111; seg004, seg029, seg063, seg094
 extern signed short g_wallclock_y;	// ds:0xe10f; seg004, seg029, seg063, seg094
 extern signed short g_wallclock_redraw;	// ds:0xe10e; seg004, seg029
 extern signed char  g_location_market_flag;	// ds:0xe10c; seg066
-extern struct struct_fighter *g_fig_list_head;		// ds:0xe108; seg005, seg006, seg040
+extern struct struct_fighter *g_fig_list_head;	// ds:0xe108; seg005, seg006, seg040
 extern signed char g_fig_list_array[127];	// ds:0xe089; seg006, seg040
 extern struct struct_fighter g_fig_list_elem;	// ds:0xe066; seg006, seg034, seg038, seg039, seg040, seg042, seg043, seg045, seg100
 

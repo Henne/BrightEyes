@@ -728,28 +728,28 @@ void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 
 							FIG_remove_from_list(host_readbs(mon + ENEMY_SHEET_FIGHTER_ID), 1);
 
-							ds_writew((FIG_LIST_ELEM + 0x00), ds_readbs(GFXTAB_FIGURES_MAIN + 5 * host_readbs(mon + ENEMY_SHEET_GFX_ID)));
-							ds_writeb((FIG_LIST_ELEM + FIGHTER_NVF_NO), host_readbs(mon + ENEMY_SHEET_VIEWDIR));
-							ds_writeb((FIG_LIST_ELEM + FIGHTER_OFFSETX), ds_readbs(GFXTAB_OFFSETS_MAIN + 10 * host_readbs(mon + ENEMY_SHEET_GFX_ID) + 2 * host_readbs(mon + ENEMY_SHEET_VIEWDIR)));
-							ds_writeb((FIG_LIST_ELEM + FIGHTER_OFFSETY), ds_readbs((GFXTAB_OFFSETS_MAIN + 1) + 10 * host_readbs(mon + ENEMY_SHEET_GFX_ID) + 2 * host_readbs(mon + ENEMY_SHEET_VIEWDIR)));
+							g_fig_list_elem.figure = ds_readbs(GFXTAB_FIGURES_MAIN + 5 * host_readbs(mon + ENEMY_SHEET_GFX_ID));
+							g_fig_list_elem.nvf_no = host_readbs(mon + ENEMY_SHEET_VIEWDIR);
+							g_fig_list_elem.offsetx = ds_readbs(GFXTAB_OFFSETS_MAIN + 10 * host_readbs(mon + ENEMY_SHEET_GFX_ID) + 2 * host_readbs(mon + ENEMY_SHEET_VIEWDIR));
+							g_fig_list_elem.offsety = ds_readbs((GFXTAB_OFFSETS_MAIN + 1) + 10 * host_readbs(mon + ENEMY_SHEET_GFX_ID) + 2 * host_readbs(mon + ENEMY_SHEET_VIEWDIR));
 
 							if (is_in_byte_array(host_readbs(mon + 1), p_datseg + TWO_FIELDED_SPRITE_ID)) {
-								ds_writeb((FIG_LIST_ELEM + FIGHTER_X1), ds_readbs(GFXTAB_TWOFIELDED_X1 + host_readbs(mon + ENEMY_SHEET_VIEWDIR)));
-								ds_writeb((FIG_LIST_ELEM + FIGHTER_X2), ds_readbs(GFXTAB_TWOFIELDED_X2 + host_readbs(mon + ENEMY_SHEET_VIEWDIR)));
+								g_fig_list_elem.x1 = (ds_readbs(GFXTAB_TWOFIELDED_X1 + host_readbs(mon + ENEMY_SHEET_VIEWDIR)));
+								g_fig_list_elem.x2 = (ds_readbs(GFXTAB_TWOFIELDED_X2 + host_readbs(mon + ENEMY_SHEET_VIEWDIR)));
 							} else {
-								ds_writeb((FIG_LIST_ELEM + FIGHTER_X1), 0);
-								ds_writeb((FIG_LIST_ELEM + FIGHTER_X2), 31);
-								ds_writeb((FIG_LIST_ELEM + FIGHTER_TWOFIELDED), -1);
+								g_fig_list_elem.x1 = (0);
+								g_fig_list_elem.x2 = (31);
+								g_fig_list_elem.twofielded = (-1);
 							}
 
-							ds_writeb((FIG_LIST_ELEM + FIGHTER_Y1), 0);
-							ds_writeb((FIG_LIST_ELEM + FIGHTER_Y2), 39);
-							ds_writeb((FIG_LIST_ELEM + FIGHTER_HEIGHT), 40);
-							ds_writeb((FIG_LIST_ELEM + FIGHTER_WIDTH), 32);
-							ds_writeb((FIG_LIST_ELEM + FIGHTER_IS_ENEMY), 1);
-							ds_writeb((FIG_LIST_ELEM + FIGHTER_RELOAD), -1);
-							ds_writeb((FIG_LIST_ELEM + FIGHTER_WSHEET), -1);
-							ds_writeb((FIG_LIST_ELEM + FIGHTER_SHEET), -1);
+							g_fig_list_elem.y1 = (0);
+							g_fig_list_elem.y2 = (39);
+							g_fig_list_elem.height = (40);
+							g_fig_list_elem.width = (32);
+							g_fig_list_elem.is_enemy = (1);
+							g_fig_list_elem.reload = (-1);
+							g_fig_list_elem.wsheet = (-1);
+							g_fig_list_elem.sheet = (-1);
 
 							FIG_add_to_list(host_readbs(mon + ENEMY_SHEET_FIGHTER_ID));
 						}

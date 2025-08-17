@@ -69,29 +69,29 @@ void FIG_init_list_elem(signed short obj)
 	y = host_readws((Bit8u*)&y);
 #endif
 
-	/* This initializes a FIGHTER structure at DS:FIG_LIST_ELEM */
-	ds_writew(FIG_LIST_ELEM, 0);
-	ds_writeb((FIG_LIST_ELEM + FIGHTER_NVF_NO), 0);
-	ds_writeb((FIG_LIST_ELEM + FIGHTER_CBX), (signed char)x);
-	ds_writeb((FIG_LIST_ELEM + FIGHTER_CBY), (signed char)y);
-	ds_writeb((FIG_LIST_ELEM + FIGHTER_OFFSETX), 0);
-	ds_writeb((FIG_LIST_ELEM + FIGHTER_OFFSETY), 4);
-	ds_writeb((FIG_LIST_ELEM + FIGHTER_HEIGHT), 11);
-	ds_writeb((FIG_LIST_ELEM + FIGHTER_WIDTH), 22);
-	ds_writeb((FIG_LIST_ELEM + FIGHTER_X1), 0);
-	ds_writeb((FIG_LIST_ELEM + FIGHTER_Y1), 0);
-	ds_writeb((FIG_LIST_ELEM + FIGHTER_X2), 21);
-	ds_writeb((FIG_LIST_ELEM + FIGHTER_Y2), 10);
+	/* This initializes the global FIGHTER structure g_fig_list_elem */
+	g_fig_list_elem.figure = 0;
+	g_fig_list_elem.nvf_no = 0;
+	g_fig_list_elem.cbx = (signed char)x;
+	g_fig_list_elem.cby = (signed char)y;
+	g_fig_list_elem.offsetx = 0;
+	g_fig_list_elem.offsety = 4;
+	g_fig_list_elem.height = 11;
+	g_fig_list_elem.width = 22;
+	g_fig_list_elem.x1 = 0;
+	g_fig_list_elem.y1 = 0;
+	g_fig_list_elem.x2 = 21;
+	g_fig_list_elem.y2 = 10;
 
-	ds_writeb((FIG_LIST_ELEM + FIGHTER_IS_ENEMY), 0);
-	ds_writeb((FIG_LIST_ELEM + FIGHTER_RELOAD), 0);
-	ds_writeb((FIG_LIST_ELEM + FIGHTER_WSHEET), -1);
-	ds_writeb((FIG_LIST_ELEM + FIGHTER_SHEET), -1);
+	g_fig_list_elem.is_enemy = 0;
+	g_fig_list_elem.reload = 0;
+	g_fig_list_elem.wsheet = -1;
+	g_fig_list_elem.sheet = -1;
 
-	ds_writed((FIG_LIST_ELEM + FIGHTER_GFXBUF), (Bit32u)g_fig_cb_marker_buf);
-	ds_writeb((FIG_LIST_ELEM + FIGHTER_Z), 0);
-	ds_writeb((FIG_LIST_ELEM + FIGHTER_VISIBLE), 1);
-	ds_writeb((FIG_LIST_ELEM + FIGHTER_TWOFIELDED), -1);
+	g_fig_list_elem.gfxbuf = g_fig_cb_marker_buf;
+	g_fig_list_elem.z = 0;
+	g_fig_list_elem.visible = 1;
+	g_fig_list_elem.twofielded = -1;
 
 	g_fig_cb_marker_id = FIG_add_to_list(-1);
 }

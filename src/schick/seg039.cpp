@@ -129,8 +129,7 @@ void fill_enemy_sheet(unsigned short sheet_no, signed char enemy_id, unsigned ch
 	host_writews(sheet + ENEMY_SHEET_AE_ORIG, host_writews(sheet + ENEMY_SHEET_AE, dice_template(host_readw(monster + MONSTER_AE))));
 
 	/* roll out MR  and save it */
-	host_writeb(sheet + ENEMY_SHEET_MR,
-		(signed char)dice_template(host_readw(monster + MONSTER_MR)));
+	host_writeb(sheet + ENEMY_SHEET_MR, (signed char)dice_template(host_readw(monster + MONSTER_MR)));
 
 	/* Terrible hack:
 		if the current fight is FIGHTS_F084, set MR to 5 (Travel-Event 84),
@@ -213,26 +212,30 @@ unsigned short place_obj_on_cb(signed short x, signed short y, signed short obje
 			FIG_set_cb_field(y + 1, x, object);
 			FIG_set_cb_field(y + 1, x - 1, object);
 			FIG_set_cb_field(y, x - 1, object);
+
 		} else if (type == 9) {
 				FIG_set_cb_field(y, x + 1, object);
 				FIG_set_cb_field(y - 1, x, object);
+
 		} else if (type == 43 || type == 44 || type == 48 ||
 				type == 49 || type == 50 || type == 51 ||
 				type == 52 || type == 53 || type == 54 ||
 				type == 55) {
 
 				FIG_set_cb_field(y + 1, x, object);
+
 		} else if (type == 60) {
 			for (i = 0; i < 7; i++)
 				FIG_set_cb_field(y + i, x, object);
+
 		} else if (type == 61) {
 			for (i = 0; i < 7; i++)
 				FIG_set_cb_field(y, x + i, object);
+
 		}
 	} else {
 		/* if object is an enemy and needs 2 fields */
-		if (object >= 10 &&
-			is_in_byte_array(type, p_datseg + TWO_FIELDED_SPRITE_ID))
+		if (object >= 10 && is_in_byte_array(type, p_datseg + TWO_FIELDED_SPRITE_ID))
 		{
 
 			/* check if field is empty */
@@ -269,81 +272,80 @@ void FIG_load_enemy_sprites(Bit8u *ptr, signed short x, signed short y)
 	struct nvf_desc nvf;
 	signed short l1;
 
-	ds_writew(FIG_LIST_ELEM, ds_readbs(GFXTAB_FIGURES_MAIN + host_readbs(ptr + ENEMY_SHEET_GFX_ID) * 5));
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_NVF_NO), host_readbs(ptr + ENEMY_SHEET_VIEWDIR));
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_CBX), (signed char)x);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_CBY), (signed char)y);
+	g_fig_list_elem.figure = ds_readbs(GFXTAB_FIGURES_MAIN + host_readbs(ptr + ENEMY_SHEET_GFX_ID) * 5);
+	g_fig_list_elem.nvf_no = host_readbs(ptr + ENEMY_SHEET_VIEWDIR);
+	g_fig_list_elem.cbx = (signed char)x;
+	g_fig_list_elem.cby = (signed char)y;
 
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETX),
-		ds_readb(GFXTAB_OFFSETS_MAIN + host_readbs(ptr + ENEMY_SHEET_GFX_ID) * 10 + host_readbs(ptr + ENEMY_SHEET_VIEWDIR) * 2));
+	g_fig_list_elem.offsetx = ds_readb(GFXTAB_OFFSETS_MAIN + host_readbs(ptr + ENEMY_SHEET_GFX_ID) * 10 + host_readbs(ptr + ENEMY_SHEET_VIEWDIR) * 2);
 
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETY),
-		ds_readb((GFXTAB_OFFSETS_MAIN + 1) + host_readbs(ptr + ENEMY_SHEET_GFX_ID) * 10 + host_readbs(ptr + ENEMY_SHEET_VIEWDIR) * 2));
+	g_fig_list_elem.offsety = ds_readb((GFXTAB_OFFSETS_MAIN + 1) + host_readbs(ptr + ENEMY_SHEET_GFX_ID) * 10 + host_readbs(ptr + ENEMY_SHEET_VIEWDIR) * 2);
 
 	if (is_in_byte_array(host_readbs(ptr + ENEMY_SHEET_GFX_ID), p_datseg + TWO_FIELDED_SPRITE_ID)) {
-		/* sprite uses two fields */
 
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_X1), ds_readbs(GFXTAB_TWOFIELDED_X1 + host_readbs(ptr + ENEMY_SHEET_VIEWDIR)));
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_X2), ds_readbs(GFXTAB_TWOFIELDED_X2 + host_readbs(ptr + ENEMY_SHEET_VIEWDIR)));
+		/* sprite uses two fields */
+		g_fig_list_elem.x1 = (ds_readbs(GFXTAB_TWOFIELDED_X1 + host_readbs(ptr + ENEMY_SHEET_VIEWDIR)));
+		g_fig_list_elem.x2 = (ds_readbs(GFXTAB_TWOFIELDED_X2 + host_readbs(ptr + ENEMY_SHEET_VIEWDIR)));
 
 		/* TODO: b = ++a; */
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_TWOFIELDED), (g_fig_twofielded_count = g_fig_twofielded_count + 1));
+		g_fig_list_elem.twofielded = g_fig_twofielded_count = g_fig_twofielded_count + 1;
 	} else {
 		/* sprite uses one field */
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_X1), 0);
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_X2), 0x1f);
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_TWOFIELDED), -1);
+		g_fig_list_elem.x1 = 0;
+		g_fig_list_elem.x2 = 0x1f;
+		g_fig_list_elem.twofielded = -1;
 	}
 
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_Y1), 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_Y2), 0x27);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_HEIGHT), 0x28);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_WIDTH), 0x20);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_IS_ENEMY), 1);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_SPRITE_NO), host_readbs(ptr + ENEMY_SHEET_GFX_ID)); /* gfx_set_id */
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_RELOAD), -1);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_WSHEET), -1);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_SHEET), -1);
-	ds_writed((FIG_LIST_ELEM+FIGHTER_GFXBUF), (Bit32u)g_fightobj_buf_seek_ptr); /* ->prev */
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_OBJ_ID), 0); /* ->next */
+	g_fig_list_elem.y1 = 0;
+	g_fig_list_elem.y2 = 0x27;
+	g_fig_list_elem.height = 0x28;
+	g_fig_list_elem.width = 0x20;
+	g_fig_list_elem.is_enemy = 1;
+	g_fig_list_elem.sprite_no = host_readbs(ptr + ENEMY_SHEET_GFX_ID); /* gfx_set_id */
+	g_fig_list_elem.reload = -1;
+	g_fig_list_elem.wsheet = -1;
+	g_fig_list_elem.sheet = -1;
+	g_fig_list_elem.gfxbuf = g_fightobj_buf_seek_ptr; /* ->prev */
+	g_fig_list_elem.obj_id = 0; /* ->next */
 
 	g_fightobj_buf_seek_ptr += 0x508;
 
 	g_fightobj_buf_freespace -= 0x508;
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_Z), 0x63);
+	g_fig_list_elem.z = 0x63;
 
 	/* check presence in the first round */
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_VISIBLE), host_readb(ptr + ENEMY_SHEET_ROUND_APPEAR) == 0 ? 1 : 0);
+	g_fig_list_elem.visible = (host_readb(ptr + ENEMY_SHEET_ROUND_APPEAR) == 0 ? 1 : 0);
 
 	if (is_in_byte_array(host_readb(ptr + ENEMY_SHEET_GFX_ID), p_datseg + TWO_FIELDED_SPRITE_ID)) {
 
-		nvf.src = (Bit8u*)(load_fight_figs(ds_readw(FIG_LIST_ELEM)));
-		nvf.dst = (Bit8u*)(ds_readd((FIG_LIST_ELEM+FIGHTER_GFXBUF)));
-		nvf.no = ds_readbs((FIG_LIST_ELEM+FIGHTER_NVF_NO));
+		nvf.src = (Bit8u*)load_fight_figs(g_fig_list_elem.figure);
+		nvf.dst = g_fig_list_elem.gfxbuf;
+		nvf.no = g_fig_list_elem.nvf_no;
 		nvf.type = 0;
 		nvf.width = (Bit8u*)&l1;
 		nvf.height = (Bit8u*)&l1;
 		process_nvf(&nvf);
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_RELOAD), 0);
+		g_fig_list_elem.reload = (0);
 	}
 
 	host_writeb(ptr + ENEMY_SHEET_FIGHTER_ID, FIG_add_to_list(-1));
 
 	if (is_in_byte_array(host_readb(ptr + ENEMY_SHEET_GFX_ID), p_datseg + TWO_FIELDED_SPRITE_ID)) {
+
 		/* create fighter entry for the tail of a two-fielded enemy */
 
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_CBX), x + ds_readbs(GFXTAB_TWOFIELDED_EXTRA_CB + host_readbs(ptr + ENEMY_SHEET_VIEWDIR) * 4));
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_CBY), y + ds_readbs((GFXTAB_TWOFIELDED_EXTRA_CB + 2) + host_readbs(ptr + ENEMY_SHEET_VIEWDIR) * 4));
+		g_fig_list_elem.cbx = x + ds_readbs(GFXTAB_TWOFIELDED_EXTRA_CB + host_readbs(ptr + ENEMY_SHEET_VIEWDIR) * 4);
+		g_fig_list_elem.cby = y + ds_readbs((GFXTAB_TWOFIELDED_EXTRA_CB + 2) + host_readbs(ptr + ENEMY_SHEET_VIEWDIR) * 4);
 
-		add_ds_bs((FIG_LIST_ELEM+FIGHTER_OFFSETX), ds_readbs(GFXTAB_TWOFIELDED_EXTRA_OX + host_readbs(ptr + ENEMY_SHEET_VIEWDIR)));
-		add_ds_bs((FIG_LIST_ELEM+FIGHTER_OFFSETY), ds_readbs(GFXTAB_TWOFIELDED_EXTRA_OY + host_readbs(ptr + ENEMY_SHEET_VIEWDIR)));
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_X1), ds_readb(GFXTAB_TWOFIELDED_EXTRA_X1 + host_readbs(ptr + ENEMY_SHEET_VIEWDIR)));
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_X2), ds_readb(GFXTAB_TWOFIELDED_EXTRA_X2 + host_readbs(ptr + ENEMY_SHEET_VIEWDIR)));
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_Y1), 0);
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_Y2), 0x27);
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_IS_ENEMY), 1);
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_Z), 10);
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_TWOFIELDED), g_fig_twofielded_count + 20);
+		g_fig_list_elem.offsetx += ds_readbs(GFXTAB_TWOFIELDED_EXTRA_OX + host_readbs(ptr + ENEMY_SHEET_VIEWDIR));
+		g_fig_list_elem.offsety += ds_readbs(GFXTAB_TWOFIELDED_EXTRA_OY + host_readbs(ptr + ENEMY_SHEET_VIEWDIR));
+		g_fig_list_elem.x1 = ds_readb(GFXTAB_TWOFIELDED_EXTRA_X1 + host_readbs(ptr + ENEMY_SHEET_VIEWDIR));
+		g_fig_list_elem.x2 = ds_readb(GFXTAB_TWOFIELDED_EXTRA_X2 + host_readbs(ptr + ENEMY_SHEET_VIEWDIR));
+		g_fig_list_elem.y1 = 0;
+		g_fig_list_elem.y2 = 0x27;
+		g_fig_list_elem.is_enemy = 1;
+		g_fig_list_elem.z = 10;
+		g_fig_list_elem.twofielded = g_fig_twofielded_count + 20;
 		g_fig_twofielded_table[g_fig_twofielded_count] = FIG_add_to_list(-1);
 	}
 }
@@ -436,95 +438,97 @@ void FIG_init_heroes(void)
 
 		/* FINAL FIGHT */
 		if (g_current_fight_no == FIGHTS_F144) {
+
 			if (hero == (Bit8u*)gs_main_acting_hero) {
+
 				cb_x = host_readbs(g_current_fight + FIGHT_PLAYERS_X);
 				cb_y = host_readbs(g_current_fight + FIGHT_PLAYERS_Y);
-				host_writeb(hero + HERO_VIEWDIR,
-					host_readb(g_current_fight + FIGHT_PLAYERS_VIEWDIR));
+				host_writeb(hero + HERO_VIEWDIR, host_readb(g_current_fight + FIGHT_PLAYERS_VIEWDIR));
+
 			} else {
 				do {
 					l_di = random_schick(6);
 
 					cb_x = host_readbs(g_current_fight + l_di * SIZEOF_FIGHT_PLAYER + FIGHT_PLAYERS_X);
 					cb_y = host_readbs(g_current_fight + l_di * SIZEOF_FIGHT_PLAYER + FIGHT_PLAYERS_Y);
-					host_writeb(hero + HERO_VIEWDIR,
-						host_readb(g_current_fight + l_di * SIZEOF_FIGHT_PLAYER + FIGHT_PLAYERS_VIEWDIR));
+					host_writeb(hero + HERO_VIEWDIR, host_readb(g_current_fight + l_di * SIZEOF_FIGHT_PLAYER + FIGHT_PLAYERS_VIEWDIR));
+
 				} while (get_cb_val(cb_x, cb_y) != 0);
 			}
 		} else {
 			cb_x = host_readbs(g_current_fight + FIGHT_PLAYERS_X + SIZEOF_FIGHT_PLAYER * l_si);
 			cb_y = host_readbs(g_current_fight + FIGHT_PLAYERS_Y + SIZEOF_FIGHT_PLAYER * l_si);
+
 			/* Direction */
 			host_writeb(hero + HERO_VIEWDIR, host_readb(g_current_fight + FIGHT_PLAYERS_VIEWDIR + SIZEOF_FIGHT_PLAYER * l_si));
 		}
 
 		/* heroes sleep until they appear */
 		if (host_readb(g_current_fight + l_si * SIZEOF_FIGHT_PLAYER + FIGHT_PLAYERS_ROUND_APPEAR) != 0) {
+
 			if (!hero_dead(hero))
 				or_ptr_bs(hero + HERO_FLAGS1, 2); /* set 'sleep' flag */
 		}
 
-		place_obj_on_cb(cb_x, cb_y, l_si + 1,
-			host_readb(hero + HERO_TYPE), host_readb(hero + HERO_VIEWDIR));
+		place_obj_on_cb(cb_x, cb_y, l_si + 1, host_readb(hero + HERO_TYPE), host_readb(hero + HERO_VIEWDIR));
 
 		l_di = FIG_get_range_weapon_type(hero);
 
 		if (l_di != -1) {
-			ds_writeb((FIG_LIST_ELEM+FIGHTER_NVF_NO),
+			g_fig_list_elem.nvf_no = (
 				ds_readb((NVFTAB_FIGURES_RANGEWEAPON - 12) + host_readbs(hero + HERO_SPRITE_NO) * 12 + l_di * 4 + host_readbs(hero + HERO_VIEWDIR)));
 		} else {
-			ds_writeb((FIG_LIST_ELEM+FIGHTER_NVF_NO), host_readb(hero + HERO_VIEWDIR));
+			g_fig_list_elem.nvf_no = (host_readb(hero + HERO_VIEWDIR));
 		}
 
-		ds_writew(FIG_LIST_ELEM, ds_readbs(GFXTAB_FIGURES_MAIN + host_readbs(hero + HERO_SPRITE_NO) * 5));
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_CBX), (signed char)cb_x);
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_CBY), (signed char)cb_y);
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETX), 0);
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETY), 0);
+		g_fig_list_elem.figure = ds_readbs(GFXTAB_FIGURES_MAIN + host_readbs(hero + HERO_SPRITE_NO) * 5);
+		g_fig_list_elem.cbx = (signed char)cb_x;
+		g_fig_list_elem.cby = (signed char)cb_y;
+		g_fig_list_elem.offsetx = 0;
+		g_fig_list_elem.offsety = 0;
 
 		if (hero_dead(hero)) {
 			/* hero is dead */
-			ds_writeb((FIG_LIST_ELEM+FIGHTER_NVF_NO),
+			g_fig_list_elem.nvf_no = (
 				ds_readb(NVFTAB_FIGURES_DEAD + host_readbs(hero + HERO_SPRITE_NO) * 2));
-			ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETX),
+			g_fig_list_elem.offsetx = (
 				ds_readb((GFXTAB_OFFSETS_MAIN + 8) + host_readbs(hero + HERO_SPRITE_NO) * 10));
-			ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETY),
+			g_fig_list_elem.offsety = (
 				ds_readb((GFXTAB_OFFSETS_MAIN + 9) + host_readbs(hero + HERO_SPRITE_NO) * 10));
 		} else if (hero_asleep(hero) || hero_unconscious(hero)) {
 			/* hero is asleep or unconscious */
-			ds_writeb((FIG_LIST_ELEM+FIGHTER_NVF_NO),
+			g_fig_list_elem.nvf_no = (
 				ds_readb(NVFTAB_FIGURES_UNCONSCIOUS + host_readbs(hero + HERO_SPRITE_NO) * 2) + host_readbs(hero + HERO_VIEWDIR));
 
-			ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETX),
+			g_fig_list_elem.offsetx = (
 				ds_readbs(GFXTAB_OFFSETS_UNCONSCIOUS + host_readbs(hero + HERO_SPRITE_NO) * 8 + host_readbs(hero + HERO_VIEWDIR) * 2));
-			ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETY),
+			g_fig_list_elem.offsety = (
 				ds_readbs(GFXTAB_OFFSETS_UNCONSCIOUS + 1 + host_readbs(hero + HERO_SPRITE_NO) * 8 + host_readbs(hero + HERO_VIEWDIR) * 2));
 		}
 
 
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_HEIGHT), 40);
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_WIDTH), 32);
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_X1), 0);
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_Y1), 0);
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_X2), 31);
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_Y2), 39);
+		g_fig_list_elem.height = 40;
+		g_fig_list_elem.width = 32;
+		g_fig_list_elem.x1 = 0;
+		g_fig_list_elem.y1 = 0;
+		g_fig_list_elem.x2 = 31;
+		g_fig_list_elem.y2 = 39;
 
 		/* in the next line, value 0 (hero) would make better sense.
 		 * however, the apparently only read operation checks for ==1, so the value 2 does not make a difference */
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_IS_ENEMY), 2);
+		g_fig_list_elem.is_enemy = 2;
 
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_SPRITE_NO), host_readb(hero + HERO_SPRITE_NO));
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_RELOAD), 0xff);
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_WSHEET), 0xff);
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_SHEET), 0xff);
-		ds_writed((FIG_LIST_ELEM+FIGHTER_GFXBUF), (Bit32u)g_fightobj_buf_seek_ptr);
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_OBJ_ID), 0);
+		g_fig_list_elem.sprite_no = host_readb(hero + HERO_SPRITE_NO);
+		g_fig_list_elem.reload = -1;
+		g_fig_list_elem.wsheet = -1;
+		g_fig_list_elem.sheet = -1;
+		g_fig_list_elem.gfxbuf = g_fightobj_buf_seek_ptr;
+		g_fig_list_elem.obj_id = 0;
 		g_fightobj_buf_seek_ptr += 0x508;
 		g_fightobj_buf_freespace -= 0x508L;
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_Z), 0x63);
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_VISIBLE), 1);
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_TWOFIELDED), 0xff);
-
+		g_fig_list_elem.z = 99;
+		g_fig_list_elem.visible = 1;
+		g_fig_list_elem.twofielded = -1;
 
 		host_writeb(get_hero(l_si) + HERO_FIGHTER_ID, FIG_add_to_list(-1));
 	}
