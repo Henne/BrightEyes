@@ -6390,13 +6390,7 @@ signed short g_gather_herbs_mod; // ds:0xd32f
 signed short g_wildcamp_sleep_quality; // ds:0xd32d
 signed short g_fig_flee_position[4]; // ds:0xd325, see HERO_ESCAPE_POSITION
 unsigned char *g_townpal_buf; // ds:0xd321
-signed short g_txt_tabpos7; // ds:0xd31f
-signed short g_txt_tabpos6; // ds:0xd31d
-signed short g_txt_tabpos5; // ds:0xd31b
-signed short g_txt_tabpos4; // ds:0xd319
-signed short g_txt_tabpos3; // ds:0xd317
-signed short g_txt_tabpos2; // ds:0xd315
-signed short g_txt_tabpos1; // ds:0xd313
+signed short g_txt_tabpos[7]; // ds:0xd313
 unsigned char g_unkn_083[4]; // ds:0xd30f
 signed short g_video_mode_bak; // ds:0xd30d
 signed short g_video_page_bak; // ds:0xd30b

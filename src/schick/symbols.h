@@ -1464,13 +1464,13 @@
 #define VIDEO_PAGE_BAK                  (0xd30b)    /* signed short */
 #define VIDEO_MODE_BAK                  (0xd30d)    /* signed short */
 // ?4
-#define TXT_TABPOS1                     (0xd313)    /* signed short */
-#define TXT_TABPOS2                     (0xd315)    /* signed short */
-#define TXT_TABPOS3                     (0xd317)    /* signed short */
-#define TXT_TABPOS4                     (0xd319)    /* signed short */
-#define TXT_TABPOS5                     (0xd31b)    /* signed short */
-#define TXT_TABPOS6                     (0xd31d)    /* signed short */
-#define TXT_TABPOS7                     (0xd31f)    /* signed short */
+//#define TXT_TABPOS1                     (0xd313)    /* signed short */
+//#define TXT_TABPOS2                     (0xd315)    /* signed short */
+//#define TXT_TABPOS3                     (0xd317)    /* signed short */
+//#define TXT_TABPOS4                     (0xd319)    /* signed short */
+//#define TXT_TABPOS5                     (0xd31b)    /* signed short */
+//#define TXT_TABPOS6                     (0xd31d)    /* signed short */
+//#define TXT_TABPOS7                     (0xd31f)    /* signed short */
 //#define TOWNPAL_BUF                     (0xd321)    /* Bit8u* */
 //#define FIG_FLEE_POSITION               (0xd325)    /* signed short[4]; the goal square in the dungeon if a hero escapes, depending on the direction the fight board is exited. the direction is stored at HERO_ESCAPE_POSITION */
 //#define WILDCAMP_SLEEP_QUALITY          (0xd32d)    /* signed short */

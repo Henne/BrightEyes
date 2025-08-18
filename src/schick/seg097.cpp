@@ -65,20 +65,20 @@ void GUI_unused1(Bit8u *a1, signed short a2, signed short a3)
 				GUI_get_first_pos_centered(a1 + l1, g_textline_posx, g_textline_maxlen, 1) : l2;
 
 		} else if (c == '~') {
-			if (a2 < ds_readws(TXT_TABPOS1)) {
-				a2 = ds_readws(TXT_TABPOS1);
-			} else if (a2 < ds_readws(TXT_TABPOS2)) {
-				a2 = ds_readws(TXT_TABPOS2);
-			} else if (a2 < ds_readws(TXT_TABPOS3)) {
-				a2 = ds_readws(TXT_TABPOS3);
-			} else if (a2 < ds_readws(TXT_TABPOS4)) {
-				a2 = ds_readws(TXT_TABPOS4);
-			} else if (a2 < ds_readws(TXT_TABPOS5)) {
-				a2 = ds_readws(TXT_TABPOS5);
-			} else if (a2 < ds_readws(TXT_TABPOS6)) {
-				a2 = ds_readws(TXT_TABPOS6);
-			} else if (a2 < ds_readws(TXT_TABPOS7)) {
-				a2 = ds_readws(TXT_TABPOS7);
+			if (a2 < g_txt_tabpos[0]) {
+				a2 = g_txt_tabpos[0];
+			} else if (a2 < g_txt_tabpos[1]) {
+				a2 = g_txt_tabpos[1];
+			} else if (a2 < g_txt_tabpos[2]) {
+				a2 = g_txt_tabpos[2];
+			} else if (a2 < g_txt_tabpos[3]) {
+				a2 = g_txt_tabpos[3];
+			} else if (a2 < g_txt_tabpos[4]) {
+				a2 = g_txt_tabpos[4];
+			} else if (a2 < g_txt_tabpos[5]) {
+				a2 = g_txt_tabpos[5];
+			} else if (a2 < g_txt_tabpos[6]) {
+				a2 = g_txt_tabpos[6];
 			}
 		} else if ((c == (signed char)0xf0) || (c == (signed char)0xf1) || (c == (signed char)0xf2) || (c == (signed char)0xf3)) {
 			g_textcolor_index = (unsigned char)c + 0xff10;
@@ -505,8 +505,8 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
 	g_textbox_pos_x = ((signed short)(320 - l_di) >> 1) + g_basepos_x;
 	g_textline_posx = (g_textbox_pos_x + 5);
 	g_textline_maxlen = (l_di - 8);
-	l10 = ds_readw(TXT_TABPOS1);
-	ds_writew(TXT_TABPOS1, g_textline_posx + g_textline_maxlen - 24);
+	l10 = g_txt_tabpos[0];
+	g_txt_tabpos[0] = (g_textline_posx + g_textline_maxlen - 24);
 	g_dialogbox_indent_width = 40;
 	g_dialogbox_indent_height = 5;
 
@@ -584,13 +584,13 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
 	refresh_screen_size();
 	set_textcolor(fg_bak, bg_bak);
 
-	g_textline_posx = (l7);
-	g_textline_posy = (l8);
-	g_textline_maxlen = (l9);
+	g_textline_posx = l7;
+	g_textline_posy = l8;
+	g_textline_maxlen = l9;
 
 	g_textbox_width = tw_bak;
 
-	ds_writew(TXT_TABPOS1, l10);
+	g_txt_tabpos[0] = l10;
 
 	g_wallclock_update = l11;
 
@@ -745,8 +745,8 @@ signed short GUI_radio(char *text, signed char options, ...)
 	g_textline_posx = (g_textbox_pos_x + 5);
 	g_textline_maxlen = (l11 - 8);
 
-	l10 = ds_readw(TXT_TABPOS1);
-	ds_writew(TXT_TABPOS1, g_textline_posx + g_textline_maxlen - 24);
+	l10 = g_txt_tabpos[0];
+	g_txt_tabpos[0] = (g_textline_posx + g_textline_maxlen - 24);
 
 	l_di = GUI_count_lines(text);
 	l5 = l_di + options;
@@ -785,10 +785,10 @@ signed short GUI_radio(char *text, signed char options, ...)
 	refresh_screen_size();
 	set_textcolor(fg_bak, bg_bak);
 
-	g_textline_posx = (l7);
-	g_textline_posy = (l8);
-	g_textline_maxlen = (l9);
-	ds_writew(TXT_TABPOS1, l10);
+	g_textline_posx = l7;
+	g_textline_posy = l8;
+	g_textline_maxlen = l9;
+	g_txt_tabpos[0] = l10;
 	ds_writew(ACTION, g_dialogbox_lock = 0);
 	ds_writew(UPDATE_STATUSLINE, l12);
 

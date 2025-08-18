@@ -43,7 +43,10 @@ void diary_show(void)
 {
 	signed short fg_bak;
 	signed short bg_bak;
-	Bit16u bak1, bak2, txt_tabpos1_bak, txt_tabpos2_bak;
+	signed short bak1;
+	signed short bak2;
+	signed short txt_tabpos1_bak;
+	signed short txt_tabpos2_bak;
 	signed short tw_bak;
 	signed short i;
 
@@ -63,12 +66,12 @@ void diary_show(void)
 	g_vga_backbuffer = (Bit8u*)g_buffer9_ptr;
 	bak1 = g_textline_maxlen;
 	bak2 = g_textline_posx;
-	txt_tabpos1_bak = ds_readw(TXT_TABPOS1);
-	txt_tabpos2_bak = ds_readw(TXT_TABPOS2);
-	g_textline_maxlen = (200);
-	g_textline_posx = (65);
-	ds_writew(TXT_TABPOS1, 83);
-	ds_writew(TXT_TABPOS2, 130);
+	txt_tabpos1_bak = g_txt_tabpos[0];
+	txt_tabpos2_bak = g_txt_tabpos[1];
+	g_textline_maxlen = 200;
+	g_textline_posx = 65;
+	g_txt_tabpos[0] = 83;
+	g_txt_tabpos[1] = 130;
 
 	set_textcolor(4, 0);
 
@@ -98,10 +101,10 @@ void diary_show(void)
 
 	g_pic_copy.dst = g_vga_backbuffer = g_vga_memstart;
 
-	g_textline_posx = (bak2);
-	g_textline_maxlen = (bak1);
-	ds_writew(TXT_TABPOS1, txt_tabpos1_bak);
-	ds_writew(TXT_TABPOS2, txt_tabpos2_bak);
+	g_textline_posx = bak2;
+	g_textline_maxlen = bak1;
+	g_txt_tabpos[0] = txt_tabpos1_bak;
+	g_txt_tabpos[1] = txt_tabpos2_bak;
 	g_textbox_width = tw_bak;
 
 	delay_or_keypress(5000);
@@ -166,11 +169,11 @@ Bit16u diary_print_entry(Bit16u line)
 		town_name = get_ttx(entry->town + 0xeb);
 
 		if (di == 0) {
-			if ((signed short)strlen(town_name) > 24) {
+			if (strlen(town_name) > 24) {
 
 				sprintf(g_dtp2, g_diary_string1, entry->day, get_ttx(entry->month + 0x15), town_name);
 
-			} else if ((signed short)strlen(town_name) > 15) {
+			} else if (strlen(town_name) > 15) {
 
 				sprintf(g_dtp2, g_diary_string2, entry->day, get_ttx(entry->month + 0x15), town_name);
 
@@ -178,15 +181,15 @@ Bit16u diary_print_entry(Bit16u line)
 				sprintf(g_dtp2, g_diary_string3, entry->day, get_ttx(entry->month + 0x15), town_name);
 			}
 		} else {
-			if ((signed short)strlen(town_name) > 24) {
+			if (strlen(town_name) > 24) {
 
 				sprintf(g_dtp2, g_diary_string4, town_name);
 
-			} else if ((signed short)strlen(town_name) > 15) {
+			} else if (strlen(town_name) > 15) {
 
 				sprintf(g_dtp2, g_diary_string5, town_name);
 
-			} else if ((signed short)strlen(town_name) > 6) {
+			} else if (strlen(town_name) > 6) {
 
 				sprintf(g_dtp2, g_diary_string6, town_name);
 

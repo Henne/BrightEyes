@@ -88,12 +88,12 @@ void draw_playmask(void)
 
 	set_textcolor(0x1f, 0x1b);
 
-	g_textline_posx = (196);
-	g_textline_posy = (12);
+	g_textline_posx = 196;
+	g_textline_posy = 12;
 	g_textline_unknown = 103;
-	g_textline_maxlen = (113);
+	g_textline_maxlen = 113;
 
-	ds_writew(TXT_TABPOS1, 205);
+	g_txt_tabpos[0] = 205;
 
 	g_action_table_primary = &g_action_table_playmask[0];
 	g_action_table_secondary = NULL;
@@ -101,7 +101,6 @@ void draw_playmask(void)
 	ds_writew(UPDATE_STATUSLINE, 1);
 
 	refresh_screen_size();
-
 }
 
 /**

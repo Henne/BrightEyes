@@ -390,20 +390,20 @@ void GUI_print_string(char *str, signed short x, signed short y)
 
 		} else	if (l4 == '~') {
 
-			if (x < ds_readws(TXT_TABPOS1))
-				x = ds_readws(TXT_TABPOS1);
-			else if (x < ds_readws(TXT_TABPOS2))
-				x = ds_readws(TXT_TABPOS2);
-			else if (x < ds_readws(TXT_TABPOS3))
-				x = ds_readws(TXT_TABPOS3);
-			else if (x < ds_readws(TXT_TABPOS4))
-				x = ds_readws(TXT_TABPOS4);
-			else if (x < ds_readws(TXT_TABPOS5))
-				x = ds_readws(TXT_TABPOS5);
-			else if (x < ds_readws(TXT_TABPOS6))
-				x = ds_readws(TXT_TABPOS6);
-			else if (x < ds_readws(TXT_TABPOS7))
-				x = ds_readws(TXT_TABPOS7);
+			if (x < g_txt_tabpos[0])
+				x = g_txt_tabpos[0];
+			else if (x < g_txt_tabpos[1])
+				x = g_txt_tabpos[1];
+			else if (x < g_txt_tabpos[2])
+				x = g_txt_tabpos[2];
+			else if (x < g_txt_tabpos[3])
+				x = g_txt_tabpos[3];
+			else if (x < g_txt_tabpos[4])
+				x = g_txt_tabpos[4];
+			else if (x < g_txt_tabpos[5])
+				x = g_txt_tabpos[5];
+			else if (x < g_txt_tabpos[6])
+				x = g_txt_tabpos[6];
 
 		} else if (l4 == (unsigned char)0xf0 ||
 				l4 == (unsigned char)0xf1 ||

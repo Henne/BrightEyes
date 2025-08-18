@@ -1049,7 +1049,10 @@ extern signed short g_replenish_stocks_mod;	// ds:0xd331; seg051, seg109
 extern signed short g_gather_herbs_mod;		// ds:0xd32f; seg051, seg109
 extern signed short g_wildcamp_sleep_quality;	// ds:0xd32d; seg051, seg094, seg109, seg114, seg118
 extern signed short g_fig_flee_position[4];	// ds:0xd325; seg005, seg076-seg089
-extern unsigned char *g_townpal_buf;	// ds:0xd312; seg002, seg027, seg120
+extern unsigned char *g_townpal_buf;		// ds:0xd312; seg002, seg027, seg120
+extern signed short g_txt_tabpos[7];		// ds:0xd313; seg024, seg029, seg33, seg046, seg096, seg097
+
+
 extern unsigned char *g_renderbuf_ptr;	// ds:0xd303; seg002-seg120
 extern unsigned char *g_vga_memstart;	// ds:0xd2ff; seg002-seg120 aka FRAMEBUF_PTR
 extern unsigned char *g_vga_backbuffer;	// ds:0xd2fb; seg002-seg120 aka PRINT_STRING_BUFFER

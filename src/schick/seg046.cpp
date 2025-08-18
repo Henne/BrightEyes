@@ -182,10 +182,10 @@ void status_show(Bit16u index)
 
 	struct nvf_desc nvf;
 
-	txt_tabpos1_bak = ds_readws(TXT_TABPOS1);
-	txt_tabpos2_bak = ds_readws(TXT_TABPOS2);
-	txt_tabpos3_bak = ds_readws(TXT_TABPOS3);
-	txt_tabpos4_bak = ds_readws(TXT_TABPOS4);
+	txt_tabpos1_bak = g_txt_tabpos[0];
+	txt_tabpos2_bak = g_txt_tabpos[1];
+	txt_tabpos3_bak = g_txt_tabpos[2];
+	txt_tabpos4_bak = g_txt_tabpos[3];
 
 	hero = get_hero(index);
 
@@ -279,7 +279,7 @@ void status_show(Bit16u index)
 		do_fill_rect(g_renderbuf_ptr, 0, 50, 319, 191, 2);
 	}
 
-	ds_writew(TXT_TABPOS1, 0x5f);
+	g_txt_tabpos[0] = 0x5f;
 
 	/* print name */
 	set_textcolor(0xff, 2);
@@ -344,34 +344,28 @@ void status_show(Bit16u index)
 		case 1: {
 
 			/* print god */
-			ds_writew(TXT_TABPOS1, 265);
+			g_txt_tabpos[0] = 265;
 
 			sprintf(g_dtp2, get_tx2(10), get_ttx(host_readbs(hero + HERO_GOD) + 21));
 			GUI_print_string(g_dtp2, 200, 55);
 
 			/* show attributes */
-			ds_writew(TXT_TABPOS1, 220);
-			ds_writew(TXT_TABPOS2, 265);
-			ds_writew(TXT_TABPOS3, 285);
+			g_txt_tabpos[0] = 220;
+			g_txt_tabpos[1] = 265;
+			g_txt_tabpos[2] = 285;
 
 			for (i = 0; i <= 13; i++) {
 
 				val = host_readbs(hero + i * 3 + HERO_ATTRIB) + host_readbs(hero + i * 3 + HERO_ATTRIB_MOD);
 
-				sprintf(g_text_output_buf + i * 10,
-					get_tx2(51),
-					host_readbs(hero + i * 3 + 0x34) != val ?
-						get_tx2(49) :
-						(char*)p_datseg + EMPTY_STRING6,
+				sprintf(g_text_output_buf + i * 10, get_tx2(51),
+					host_readbs(hero + i * 3 + 0x34) != val ? get_tx2(49) :	(char*)p_datseg + EMPTY_STRING6,
 					val,
-					host_readbs(hero + i * 3 + 0x34) != val ?
-						get_tx2(50) :
-						(char*)p_datseg + EMPTY_STRING7,
+					host_readbs(hero + i * 3 + 0x34) != val ? get_tx2(50) :	(char*)p_datseg + EMPTY_STRING7,
 					host_readbs(hero + i * 3 + 0x34));
 
 			}
-			sprintf(g_dtp2,
-				get_tx2(12),
+			sprintf(g_dtp2,	get_tx2(12),
 				g_text_output_buf,
 				g_text_output_buf + 70,
 				g_text_output_buf + 10,
@@ -421,8 +415,7 @@ void status_show(Bit16u index)
 					sprintf(le_fix, "%d", host_readw(hero + HERO_LE_ORIG));
 				}
 
-				sprintf(g_dtp2,
-					get_tx2(13),
+				sprintf(g_dtp2,	get_tx2(13),
 					host_readw(hero + HERO_LE), le_fix,			/* LE */
 					host_readw(hero + HERO_AE), host_readw(hero + HERO_AE_ORIG),	/* AE */
 					host_readbs(hero + HERO_MR),			/* MR */
@@ -532,8 +525,8 @@ void status_show(Bit16u index)
 		}
 		/* AT PA values */
 		case 2: {
-			ds_writew(TXT_TABPOS1, 275);
-			ds_writew(TXT_TABPOS2, 295);
+			g_txt_tabpos[0] = 275;
+			g_txt_tabpos[1] = 295;
 
 			/* Fernkampfwaffen-Basiswert: (KL + GE + KK)/4 */
 			j = (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KL)) +
@@ -705,10 +698,10 @@ void status_show(Bit16u index)
 		do_v_line(g_vga_memstart, 212, 54, 195, 0);
 	}
 
-	ds_writew(TXT_TABPOS1, txt_tabpos1_bak);
-	ds_writew(TXT_TABPOS2, txt_tabpos2_bak);
-	ds_writew(TXT_TABPOS3, txt_tabpos3_bak);
-	ds_writew(TXT_TABPOS4, txt_tabpos4_bak);
+	g_txt_tabpos[0] = txt_tabpos1_bak;
+	g_txt_tabpos[1] = txt_tabpos2_bak;
+	g_txt_tabpos[2] = txt_tabpos3_bak;
+	g_txt_tabpos[3] = txt_tabpos4_bak;
 
 	g_vga_backbuffer = g_vga_memstart;
 
