@@ -135,7 +135,7 @@ void DNG_door(signed short action)
 			if (action == ACTION_ID_ICON_7)
 			{
 				/* 7th icon/menu option has been triggered. Might be 'open door', 'close door', 'smash door'. distinguish based on DNG_MENU_MODE */
-				if (ds_readws(DNG_MENU_MODE) != DNG_MENU_MODE_UNLOCK_DOOR) {
+				if (g_dng_extra_action != DNG_MENU_MODE_UNLOCK_DOOR) {
 					/* either 'open door' or 'close door' */
 
 					if (gs_dungeon_index == DUNGEONS_HYGGELIKS_RUINE && pos == DNG_POS(1,9,3) && gs_dng15_unknown_flag)
@@ -158,7 +158,7 @@ void DNG_door(signed short action)
 						{
 							/* ASSERT */
 							/*
-							if (ds_readws(DNG_MENU_MODE) != DNG_MENU_MODE_OPEN_DOOR) {
+							if (g_dng_extra_action != DNG_MENU_MODE_OPEN_DOOR) {
 								D1_INFO("FEHLER: DNG_MENU_MODE sollte DNG_MENU_MODE_OPEN_DOOR sein, stimmt aber nicht.\n");
 							}
 							*/
@@ -175,22 +175,22 @@ void DNG_door(signed short action)
 								DNG_open_door();
 
 								ds_writebs((NEW_MENU_ICONS + 6), ds_writebs((NEW_MENU_ICONS + 7), ds_writebs((NEW_MENU_ICONS + 8), MENU_ICON_NONE)));
-								ds_writew(REDRAW_MENUICONS, 1);
-								ds_writew(DNG_MENU_MODE, DNG_MENU_MODE_CLOSE_DOOR);
+								g_redraw_menuicons = 1;
+								g_dng_extra_action = (DNG_MENU_MODE_CLOSE_DOOR);
 							} else {
 								/* door closed and locked -> show icons for different opening methods */
 								ds_writebs((NEW_MENU_ICONS + 6), MENU_ICON_SMASH_DOOR);
 								ds_writebs((NEW_MENU_ICONS + 7), MENU_ICON_PICK_LOCK);
 								ds_writebs((NEW_MENU_ICONS + 8), MENU_ICON_MAGIC);
-								ds_writew(REDRAW_MENUICONS, 1);
-								ds_writew(DNG_MENU_MODE, DNG_MENU_MODE_UNLOCK_DOOR);
+								g_redraw_menuicons = 1;
+								g_dng_extra_action = (DNG_MENU_MODE_UNLOCK_DOOR);
 							}
 
 						} else if (div16(*(g_dng_map_ptr + MAP_POS(x,y))) == DNG_TILE_OPEN_DOOR) /* 0010.... i.e. door is open */
 						{
 							/* ASSERT */
 							/*
-							if (ds_readws(DNG_MENU_MODE) != DNG_MENU_MODE_CLOSE_DOOR) {
+							if (g_dng_extra_action != DNG_MENU_MODE_CLOSE_DOOR) {
 								D1_INFO("FEHLER: DNG_MENU_MODE sollte DNG_MENU_MODE_CLOSE_DOOR sein, stimmt aber nicht.\n");
 							}
 							*/
@@ -204,7 +204,7 @@ void DNG_door(signed short action)
 							*(g_dng_map_ptr + MAP_POS(x, y)) |= (DNG_TILE_CLOSED_DOOR << 4) + 0x02;
 
 							ds_writeb(STEPTARGET_FRONT, *(g_dng_map_ptr + MAP_POS(x,y)));
-							ds_writew(DNG_MENU_MODE, DNG_MENU_MODE_OPEN_DOOR);
+							g_dng_extra_action = (DNG_MENU_MODE_OPEN_DOOR);
 						}
 					}
 				} else {
@@ -276,7 +276,7 @@ void DNG_door(signed short action)
 							add_hero_ap(hero, 1L); /* hero gets 1 AP for successful lock pick */
 
 							ds_writebs((NEW_MENU_ICONS + 6), ds_writebs((NEW_MENU_ICONS + 7), ds_writebs((NEW_MENU_ICONS + 8), MENU_ICON_NONE)));
-							ds_writew(REDRAW_MENUICONS, 1);
+							g_redraw_menuicons = 1;
 						}
 
 					} else {
@@ -332,7 +332,7 @@ void DNG_door(signed short action)
 							add_hero_ap(hero, 1L); /* hero gets 1 AP for successful lock pick */
 
 							ds_writebs((NEW_MENU_ICONS + 6), ds_writebs((NEW_MENU_ICONS + 7), ds_writebs((NEW_MENU_ICONS + 8), MENU_ICON_NONE)));
-							ds_writew(REDRAW_MENUICONS, 1);
+							g_redraw_menuicons = 1;
 						}
 					}
 				}
@@ -438,7 +438,7 @@ signed short DNG_step(void)
 
 	if (ds_readbs((NEW_MENU_ICONS + 1)) != old_value)
 	{
-		ds_writew(REDRAW_MENUICONS, 1);
+		g_redraw_menuicons = 1;
 	}
 
 	ds_writeb((NEW_MENU_ICONS + 2), MENU_ICON_SWITCH_GROUP);
@@ -446,24 +446,24 @@ signed short DNG_step(void)
 	ds_writeb((NEW_MENU_ICONS + 4), MENU_ICON_MAP);
 	ds_writeb((NEW_MENU_ICONS + 5), MENU_ICON_MAGIC);
 
-	if (ds_readw(DNG_MENU_MODE) == DNG_MENU_MODE_PLAIN && ds_readb((NEW_MENU_ICONS + 6)) != MENU_ICON_CAMP)
+	if (g_dng_extra_action == DNG_MENU_MODE_PLAIN && ds_readb((NEW_MENU_ICONS + 6)) != MENU_ICON_CAMP)
 	{
 		ds_writeb((NEW_MENU_ICONS + 6), MENU_ICON_CAMP);
-		ds_writew(REDRAW_MENUICONS, 1);
+		g_redraw_menuicons = 1;
 	}
 
 	if (g_request_refresh != 0)
 	{
 		draw_main_screen();
 		GUI_print_loc_line(get_tx(0));
-		g_request_refresh = ds_writew(REDRAW_MENUICONS, 0);
+		g_request_refresh = g_redraw_menuicons = 0;
 		g_dng_refresh_x_target = -1;
 	}
 
-	if (ds_readw(REDRAW_MENUICONS) != 0 && g_pp20_index == 0)
+	if (g_redraw_menuicons && g_pp20_index == 0)
 	{
 		draw_icons();
-		ds_writew(REDRAW_MENUICONS, 0);
+		g_redraw_menuicons = 0;
 	}
 
 	if (gs_direction != g_dng_refresh_direction || gs_x_target != g_dng_refresh_x_target || gs_y_target != g_dng_refresh_y_target)
@@ -506,11 +506,11 @@ signed short DNG_step(void)
 					get_ttx(538),
 					get_ttx(539),
 					get_ttx(213),
-					ds_readws(DNG_MENU_MODE) == DNG_MENU_MODE_PLAIN ? get_ttx(306) :(
-						ds_readws(DNG_MENU_MODE) == DNG_MENU_MODE_OPEN_DOOR ? get_ttx(540) :(
-						ds_readws(DNG_MENU_MODE) == DNG_MENU_MODE_CLOSE_DOOR ? get_ttx(787) :(
-						ds_readws(DNG_MENU_MODE) == DNG_MENU_MODE_UNLOCK_DOOR ? get_ttx(542) :(
-						ds_readws(DNG_MENU_MODE) == 4 ? get_ttx(555) : get_ttx(541))))),
+					g_dng_extra_action == DNG_MENU_MODE_PLAIN ? get_ttx(306) :(
+						g_dng_extra_action == DNG_MENU_MODE_OPEN_DOOR ? get_ttx(540) :(
+						g_dng_extra_action == DNG_MENU_MODE_CLOSE_DOOR ? get_ttx(787) :(
+						g_dng_extra_action == DNG_MENU_MODE_UNLOCK_DOOR ? get_ttx(542) :(
+						g_dng_extra_action == 4 ? get_ttx(555) : get_ttx(541))))),
 					get_ttx(543),
 					get_ttx(544)) - 1;
 
@@ -568,7 +568,7 @@ signed short DNG_step(void)
 			g_dng_refresh_direction = -1;
 		}
 
-	} else if (ds_readws(ACTION) == ACTION_ID_ICON_7 && ds_readw(DNG_MENU_MODE) == DNG_MENU_MODE_PLAIN)
+	} else if (ds_readws(ACTION) == ACTION_ID_ICON_7 && g_dng_extra_action == DNG_MENU_MODE_PLAIN)
 	{
 		gs_current_loctype = LOCTYPE_CITYCAMP;
 		g_citycamp_city = 0; /* CITYCAMP takes place in dungeon */
@@ -624,10 +624,10 @@ signed short DNG_step(void)
 			ds_readws(ACTION) <= ACTION_ID_ICON_9 &&
 			ds_readbs((NEW_MENU_ICONS - ACTION_ID_ICON_1) + ds_readws(ACTION)) != -1)
 	{
-		if (ds_readw(DNG_MENU_MODE) == DNG_MENU_MODE_OPEN_DOOR || ds_readw(DNG_MENU_MODE) == DNG_MENU_MODE_CLOSE_DOOR || ds_readw(DNG_MENU_MODE) == DNG_MENU_MODE_UNLOCK_DOOR)
+		if (g_dng_extra_action == DNG_MENU_MODE_OPEN_DOOR || g_dng_extra_action == DNG_MENU_MODE_CLOSE_DOOR || g_dng_extra_action == DNG_MENU_MODE_UNLOCK_DOOR)
 		{
 			DNG_door(ds_readws(ACTION));
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_7 && ds_readw(DNG_MENU_MODE) == DNG_MENU_MODE_OPEN_CHEST)
+		} else if (ds_readws(ACTION) == ACTION_ID_ICON_7 && g_dng_extra_action == DNG_MENU_MODE_OPEN_CHEST)
 		{
 			seg092_06b4(1);
 
@@ -736,22 +736,22 @@ void DNG_see_door(void)
 		if (ds_readbs((NEW_MENU_ICONS + 6)) != MENU_ICON_OPEN_CLOSE_DOOR && ds_readbs((NEW_MENU_ICONS + 6)) != MENU_ICON_SMASH_DOOR)
 		{
 			ds_writebs((NEW_MENU_ICONS + 6), MENU_ICON_OPEN_CLOSE_DOOR);
-			ds_writew(REDRAW_MENUICONS, 1);
+			g_redraw_menuicons = 1;
 		}
 
 		if (ds_readbs((NEW_MENU_ICONS + 6)) != MENU_ICON_SMASH_DOOR)
 		{
-			ds_writew(DNG_MENU_MODE, l_si == 1 ? DNG_MENU_MODE_OPEN_DOOR : DNG_MENU_MODE_CLOSE_DOOR);
+			g_dng_extra_action = (l_si == 1 ? DNG_MENU_MODE_OPEN_DOOR : DNG_MENU_MODE_CLOSE_DOOR);
 		}
 
 	} else {
 		if (ds_readbs((NEW_MENU_ICONS + 6)) != MENU_ICON_NONE &&
-			(ds_readws(DNG_MENU_MODE) == DNG_MENU_MODE_OPEN_DOOR || ds_readws(DNG_MENU_MODE) == DNG_MENU_MODE_CLOSE_DOOR || ds_readws(DNG_MENU_MODE) == DNG_MENU_MODE_UNLOCK_DOOR))
+			(g_dng_extra_action == DNG_MENU_MODE_OPEN_DOOR || g_dng_extra_action == DNG_MENU_MODE_CLOSE_DOOR || g_dng_extra_action == DNG_MENU_MODE_UNLOCK_DOOR))
 		{
 			/* standing two fields before a door with view to it */
 			ds_writebs((NEW_MENU_ICONS + 6), ds_writebs((NEW_MENU_ICONS + 7), ds_writebs((NEW_MENU_ICONS + 8), MENU_ICON_NONE)));
-			ds_writew(REDRAW_MENUICONS, 1);
-			ds_writew(DNG_MENU_MODE, DNG_MENU_MODE_PLAIN);
+			g_redraw_menuicons = 1;
+			g_dng_extra_action = (DNG_MENU_MODE_PLAIN);
 		}
 	}
 }
@@ -764,17 +764,17 @@ void DNG_see_chest(void)
 		if (ds_readbs((NEW_MENU_ICONS + 6)) != MENU_ICON_OPEN_CHEST)
 		{
 			ds_writebs((NEW_MENU_ICONS + 6), MENU_ICON_OPEN_CHEST);
-			ds_writew(REDRAW_MENUICONS, 1);
-			ds_writew(DNG_MENU_MODE, DNG_MENU_MODE_OPEN_CHEST);
+			g_redraw_menuicons = 1;
+			g_dng_extra_action = (DNG_MENU_MODE_OPEN_CHEST);
 		}
 
 	} else {
-		if (ds_readbs((NEW_MENU_ICONS + 6)) != MENU_ICON_NONE && ds_readws(DNG_MENU_MODE) == DNG_MENU_MODE_OPEN_CHEST)
+		if (ds_readbs((NEW_MENU_ICONS + 6)) != MENU_ICON_NONE && g_dng_extra_action == DNG_MENU_MODE_OPEN_CHEST)
 		{
 			/* standing two fields before a treasure chest with view to it */
 			ds_writebs((NEW_MENU_ICONS + 6), ds_writebs((NEW_MENU_ICONS + 7), ds_writebs((NEW_MENU_ICONS + 8), MENU_ICON_NONE)));
-			ds_writew(REDRAW_MENUICONS, 1);
-			ds_writew(DNG_MENU_MODE, DNG_MENU_MODE_PLAIN);
+			g_redraw_menuicons = 1;
+			g_dng_extra_action = (DNG_MENU_MODE_PLAIN);
 		}
 	}
 }
@@ -783,7 +783,7 @@ void do_dungeon(void)
 {
 	signed short tw_bak;
 
-	if ((g_dng_area_loaded != gs_dungeon_index) || g_area_prepared || (ds_readws(DNG_INIT_FLAG) != 0))
+	if ((g_dng_area_loaded != gs_dungeon_index) || g_area_prepared || g_dng_init_flag)
 	{
 		g_dng_map_ptr = g_dng_map;
 
@@ -796,7 +796,7 @@ void do_dungeon(void)
 //		g_dng_gfxtab = (unsigned char*)RealMake(datseg, (!gs_dungeon_gfx_style ? DNG_GFXTAB_WOOD : (gs_dungeon_gfx_style == 1 ? DNG_GFXTAB_MARBLE : DNG_GFXTAB_STONE))));
 #endif
 
-		ds_writew(DNG_INIT_FLAG, 0);
+		g_dng_init_flag = 0;
 		g_request_refresh = 1;
 	}
 
@@ -1009,15 +1009,15 @@ void DNG_see_lever(void)
 		if (ds_readbs((NEW_MENU_ICONS + 6)) == MENU_ICON_NONE)
 		{
 			ds_writeb((NEW_MENU_ICONS + 6), MENU_ICON_MOVE_LEVER);
-			ds_writew(REDRAW_MENUICONS, 1);
-			ds_writew(DNG_MENU_MODE, DNG_MENU_MODE_LEVER);
+			g_redraw_menuicons = 1;
+			g_dng_extra_action = (DNG_MENU_MODE_LEVER);
 		}
 
-	} else if (ds_readbs((NEW_MENU_ICONS + 6)) != MENU_ICON_NONE && ds_readw(DNG_MENU_MODE) == DNG_MENU_MODE_LEVER)
+	} else if (ds_readbs((NEW_MENU_ICONS + 6)) != MENU_ICON_NONE && g_dng_extra_action == DNG_MENU_MODE_LEVER)
 	{
 			ds_writeb((NEW_MENU_ICONS + 6), MENU_ICON_NONE);
-			ds_writew(REDRAW_MENUICONS, 1);
-			ds_writew(DNG_MENU_MODE, DNG_MENU_MODE_PLAIN);
+			g_redraw_menuicons = 1;
+			g_dng_extra_action = (DNG_MENU_MODE_PLAIN);
 	}
 }
 

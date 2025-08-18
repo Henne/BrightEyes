@@ -5466,13 +5466,15 @@ int schick_main(int argc, char** argv)
 
 #if defined(__BORLANDC__)
 	randomize();
-#endif
 
-	save_display_stat(((Bit8u*)p_datseg + VIDEO_PAGE_BAK));
+	save_display_stat((Bit8u*)&g_video_page_bak);
+#endif
 
 	if (!init_memory()) {
 
-		ds_writew(GAMEINIT_FLAG, 1);
+#if defined(__BORLANDC__)
+		g_gameinit_flag = 1;
+#endif
 
 		schick_set_video();
 

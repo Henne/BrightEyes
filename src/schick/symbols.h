@@ -1416,16 +1416,16 @@
 #define LAST_CURSOR                     (0xcec7)    /* Bit8u* */
 #define CURRENT_CURSOR                  (0xcecb)    /* Bit8u* */
 #define GGST_CURSOR                     (0xcecf)    /* struct(64); struct{char unkn[32]; unsigned short mask[16];} */
-#define MOUSE_BG_BAK                    (0xcf0f)    /* unsigned char[256] */
-#define DNG_INIT_FLAG                   (0xd00f)    /* unsigned short; {0,1} */
-#define DNG_MENU_MODE                   (0xd011)    /* unsigned short; {0 = warehouse (?), 1: 7th symbol is "open door" , 2: 7th symbol is "open chest", 3: 7th symbol is "close door", 4: 7th symbol is "lever", 5: 7th to 9th symbol are the different options to smash/unlock a door } */
-#define REDRAW_MENUICONS                (0xd013)    /* unsigned short; {0,1} */
+//#define MOUSE_BG_BAK                    (0xcf0f)    /* unsigned char[256] */
+//#define DNG_INIT_FLAG                   (0xd00f)    /* unsigned short; {0,1} */
+//#define DNG_MENU_MODE                   (0xd011)    /* unsigned short; {0 = warehouse (?), 1: 7th symbol is "open door" , 2: 7th symbol is "open chest", 3: 7th symbol is "close door", 4: 7th symbol is "lever", 5: 7th to 9th symbol are the different options to smash/unlock a door } */
+//#define REDRAW_MENUICONS                (0xd013)    /* unsigned short; {0,1} */
 //#define BUFFER9_PTR2                    (0xd015)    /* Bit8u*; unused copy of BUFFER9_PTR */
 //#define BUFFER9_PTR3                    (0xd019)    /* Bit8u*; copy of BUFFER9_PTR */
-#define BUFFER_MONSTER_TAB              (0xd01d)    /* unsigned long[36] */
-#define BUFFER_WFIGS_TAB                (0xd0ad)    /* unsigned long[43] */
-#define BUFFER_MFIGS_TAB                (0xd159)    /* unsigned long[43] */
-#define BUFFER_ANIS_TAB                 (0xd205)    /* unsigned long[37] */
+//#define BUFFER_MONSTER_TAB              (0xd01d)    /* unsigned long[36] */
+//#define BUFFER_WFIGS_TAB                (0xd0ad)    /* unsigned long[43] */
+//#define BUFFER_MFIGS_TAB                (0xd159)    /* unsigned long[43] */
+//#define BUFFER_ANIS_TAB                 (0xd205)    /* unsigned long[37] */
 //#define TRV_TRACK_PIXEL_BAK             (0xd299)    /* Bit8u*; to buffer of size 500 */
 //#define FIG_STAR_GFX                    (0xd29d)    /* Bit8u* */
 //#define MONNAMES_BUFFER                 (0xd2a1)    /* Bit8u* */
@@ -1460,9 +1460,9 @@
 //#define VGA_MEMSTART                    (0xd2ff)    /* Bit8u* */
 //#define RENDERBUF_PTR                   (0xd303)    /* Bit8u*; to buffer of size 65000 */
 // ?2
-#define GAMEINIT_FLAG                   (0xd309)    /* unsigned short; writeonly (1) */
-#define VIDEO_PAGE_BAK                  (0xd30b)    /* signed short */
-#define VIDEO_MODE_BAK                  (0xd30d)    /* signed short */
+//#define GAMEINIT_FLAG                   (0xd309)    /* unsigned short; writeonly (1) */
+//#define VIDEO_PAGE_BAK                  (0xd30b)    /* signed short */
+//#define VIDEO_MODE_BAK                  (0xd30d)    /* signed short */
 // ?4
 //#define TXT_TABPOS1                     (0xd313)    /* signed short */
 //#define TXT_TABPOS2                     (0xd315)    /* signed short */

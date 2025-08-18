@@ -6391,11 +6391,13 @@ signed short g_wildcamp_sleep_quality; // ds:0xd32d
 signed short g_fig_flee_position[4]; // ds:0xd325, see HERO_ESCAPE_POSITION
 unsigned char *g_townpal_buf; // ds:0xd321
 signed short g_txt_tabpos[7]; // ds:0xd313
+#if defined(__BORLANDC__)
 unsigned char g_unkn_083[4]; // ds:0xd30f
 signed short g_video_mode_bak; // ds:0xd30d
 signed short g_video_page_bak; // ds:0xd30b
-unsigned short g_gameinit_flag; // ds:0xd309, writeonly (1)
+signed short g_gameinit_flag; // ds:0xd309, writeonly (1)
 unsigned char g_unkn_082[2]; // ds:0xd307
+#endif
 unsigned char *g_renderbuf_ptr; // ds:0xd303, to buffer of size 65000
 unsigned char *g_vga_memstart; // ds:0xd2ff
 unsigned char *g_vga_backbuffer; // ds:0xd2fb
@@ -6426,15 +6428,15 @@ char *g_buffer5_ptr; // ds:0xd2a5, to buffer of size 3880
 char *g_monnames_buffer; // ds:0xd2a1
 unsigned char *g_fig_star_gfx; // ds:0xd29d
 unsigned char *g_trv_track_pixel_bak; // ds:0xd299, to buffer of size 500
-unsigned long g_buffer_anis_tab[37]; // ds:0xd205
-unsigned long g_buffer_mfigs_tab[43]; // ds:0xd159
-unsigned long g_buffer_wfigs_tab[43]; // ds:0xd0ad
-unsigned long g_buffer_monster_tab[36]; // ds:0xd01d
+Bit32s g_buffer_anis_tab[37]; // ds:0xd205
+Bit32u g_buffer_mfigs_tab[43]; // ds:0xd159
+Bit32u g_buffer_wfigs_tab[43]; // ds:0xd0ad
+Bit32u g_buffer_monster_tab[36]; // ds:0xd01d
 HugePt g_buffer9_ptr3; // ds:0xd019, copy of BUFFER9_PTR
 unsigned char *g_buffer9_ptr2; // ds:0xd015, copy of BUFFER9_PTR
-unsigned short g_redraw_menuicons; // ds:0xd013
-unsigned short g_dng_extra_action; // ds:0xd011, {0 = warehouse,1 = open door,2 = open chest,3 = close door,4 = lever,5 = smash door}
-unsigned short g_dng_init_flag; // ds:0xd00f
+signed short g_redraw_menuicons; // ds:0xd013
+signed short g_dng_extra_action; // ds:0xd011, {0 = warehouse,1 = open door,2 = open chest,3 = close door,4 = lever,5 = smash door}
+signed short g_dng_init_flag; // ds:0xd00f
 unsigned char g_mouse_bg_bak[256]; // ds:0xcf0f
 struct{char unkn[32]; unsigned short mask[16];} g_ggst_cursor; // ds:0xcecf
 void *g_current_cursor; // ds:0xcecb

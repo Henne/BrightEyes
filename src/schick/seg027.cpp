@@ -144,7 +144,7 @@ Bit8u* load_fight_figs(signed short fig)
 	unsigned short fd;
 	signed short max_entries;
 	Bit8u *mem_slots;
-	Bit8u *p_tab;
+	Bit32u *p_tab;
 	signed short index;
 	Bit8u *src;
 
@@ -172,7 +172,7 @@ Bit8u* load_fight_figs(signed short fig)
 		/* ...for foes */
 		max_entries = 36;
 		mem_slots = g_mem_slots_mon;
-		p_tab = p_datseg + BUFFER_MONSTER_TAB;
+		p_tab = g_buffer_monster_tab;
 		index = 16;
 		fig -= 88;
 	} else {
@@ -181,13 +181,13 @@ Bit8u* load_fight_figs(signed short fig)
 
 		if (fig >= 44) {
 			/* female */
-			p_tab = p_datseg + BUFFER_WFIGS_TAB;
+			p_tab = g_buffer_wfigs_tab;
 			index = ARCHIVE_FILE_WFIGS;
 			mem_slots = g_mem_slots_wfig;
 			fig -= 44;
 		} else {
 			/* male */
-			p_tab = p_datseg + BUFFER_MFIGS_TAB;
+			p_tab = g_buffer_mfigs_tab;
 			index = ARCHIVE_FILE_MFIGS;
 			mem_slots = g_mem_slots_mfig;
 		}
@@ -219,8 +219,8 @@ Bit8u* load_fight_figs(signed short fig)
 #endif
 
 		/* read fig from file */
-		offset = host_readd(p_tab + (fig - 1) * 4);
-		len = host_readd(p_tab + fig * 4) - offset;
+		offset = p_tab[fig - 1];
+		len = p_tab[fig] - offset;
 
 		fd = load_archive_file(index);
 
@@ -246,7 +246,7 @@ Bit8u* load_fight_figs(signed short fig)
 			host_writew(mem_slots + i * 12 + 6, 0);
 			host_writed(mem_slots + i * 12 + 8, len);
 
-			memcpy((Bit8u*)(dst), (Bit8u*)(src), (unsigned short)len);
+			memcpy((Bit8u*)dst, (Bit8u*)src, (unsigned short)len);
 
 		} else if (g_ems_enabled != 0) {
 #if !defined(__BORLANDC__)
@@ -346,8 +346,8 @@ void load_ani(const signed short no)
 		from_EMS((Bit8u*)g_buffer9_ptr, ems_handle, host_readd(g_mem_slots_anis + i * 8 + 4));
 	} else {
 		/* load it from file */
-		ani_off = ds_readd(BUFFER_ANIS_TAB - 4 + no * 4);
-		ani_len = ds_readd(BUFFER_ANIS_TAB + no * 4) - ani_off;
+		ani_off = g_buffer_anis_tab[no - 1];
+		ani_len = g_buffer_anis_tab[no]- ani_off;
 
 		/* load ANIS */
 		fd = load_archive_file(ARCHIVE_FILE_ANIS);
@@ -702,19 +702,19 @@ void init_common_buffers(void)
 	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_ANIS_TAB);
-	read_archive_file(fd, p_datseg + BUFFER_ANIS_TAB, 148);
+	read_archive_file(fd, (Bit8u*)&g_buffer_anis_tab, 148);
 	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_MFIGS_TAB);
-	read_archive_file(fd, p_datseg + BUFFER_MFIGS_TAB, 172);
+	read_archive_file(fd, (Bit8u*)&g_buffer_mfigs_tab, 172);
 	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_WFIGS_TAB);
-	read_archive_file(fd, p_datseg + BUFFER_WFIGS_TAB, 172);
+	read_archive_file(fd, (Bit8u*)&g_buffer_wfigs_tab, 172);
 	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_MONSTER_TAB);
-	read_archive_file(fd, p_datseg + BUFFER_MONSTER_TAB, 144);
+	read_archive_file(fd, (Bit8u*)&g_buffer_monster_tab, 144);
 	close(fd);
 
 	fd = load_regular_file(ARCHIVE_FILE_GAMES_NAM);

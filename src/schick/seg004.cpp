@@ -651,7 +651,7 @@ void save_mouse_bg(void)
 
 	for (delta_y = 0; delta_y < realheight; src += 320, delta_y++) {
 		for (delta_x = 0; delta_x < realwidth; delta_x++) {
-			ds_writeb(MOUSE_BG_BAK + delta_y * 16 + delta_x, *(src + delta_x));
+			g_mouse_bg_bak[delta_y * 16 + delta_x] = *(src + delta_x);
 		}
 	}
 }
@@ -684,8 +684,7 @@ void restore_mouse_bg(void)
 
 	for (delta_y = 0; delta_y < realheight; dst += 320, delta_y++)
 		for (delta_x = 0; delta_x < realwidth; delta_x++)
-			*(dst + delta_x) = ds_readb(MOUSE_BG_BAK + 16 * delta_y + delta_x);
-
+			*(dst + delta_x) = g_mouse_bg_bak[16 * delta_y + delta_x];
 }
 
 void load_wallclock_nvf(void)
@@ -724,7 +723,6 @@ void load_wallclock_nvf(void)
 
 	/* shift palette by 0xe0 */
 	array_add(g_objects_nvf_buf, 0xd3f, 0xe0, 2);
-
 }
 
 void update_wallclock(void)
@@ -732,10 +730,7 @@ void update_wallclock(void)
 	signed short night;
 	Bit32s d;
 
-	if ((g_wallclock_update != 0) &&
-		((g_pp20_index == ARCHIVE_FILE_PLAYM_UK) || (g_pp20_index == ARCHIVE_FILE_KARTE_DAT)) &&
-		!g_dialogbox_lock)
-	{
+	if ((g_wallclock_update) && ((g_pp20_index == ARCHIVE_FILE_PLAYM_UK) || (g_pp20_index == ARCHIVE_FILE_KARTE_DAT)) && !g_dialogbox_lock) {
 
 		if ((gs_day_timer >= HOURS(7)) && (gs_day_timer <= HOURS(19))) {
 			/* day */
@@ -759,10 +754,6 @@ void update_wallclock(void)
 		}
 	}
 }
-
-struct dummy2 {
-	char a[8];
-};
 
 /**
  * \brief   draws the clock in day- or nighttime
@@ -907,8 +898,10 @@ void schick_set_video(void)
 
 void schick_reset_video(void)
 {
-	set_video_mode(ds_readws(VIDEO_MODE_BAK));
-	set_video_page(ds_readws(VIDEO_PAGE_BAK));
+#if defined(__BORLANDC__)
+	set_video_mode(g_video_mode_bak);
+	set_video_page(g_video_page_bak);
+#endif
 }
 
 struct dummy4 {

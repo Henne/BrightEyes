@@ -770,7 +770,7 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 
 #ifdef M302de_ORIGINAL_BUGFIX
 			/* Original-Bug 29: door-specific spell handicap is not considered in a free Foramen spell (from the spellcast menu). */
-			if (spell_id == SP_FORAMEN_FORAMINOR && gs_dungeon_index != DUNGEONS_NONE && (ds_readw(DNG_MENU_MODE) == DNG_MENU_MODE_OPEN_DOOR || ds_readw(DNG_MENU_MODE) == DNG_MENU_MODE_UNLOCK_DOOR)) {
+			if (spell_id == SP_FORAMEN_FORAMINOR && gs_dungeon_index != DUNGEONS_NONE && (g_dng_extra_action == DNG_MENU_MODE_OPEN_DOOR || g_dng_extra_action == DNG_MENU_MODE_UNLOCK_DOOR)) {
 				x = gs_x_target;
 				y = gs_y_target;
 				ptr_doors = g_dungeon_doors_buf;

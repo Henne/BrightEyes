@@ -1051,8 +1051,11 @@ extern signed short g_wildcamp_sleep_quality;	// ds:0xd32d; seg051, seg094, seg1
 extern signed short g_fig_flee_position[4];	// ds:0xd325; seg005, seg076-seg089
 extern unsigned char *g_townpal_buf;		// ds:0xd312; seg002, seg027, seg120
 extern signed short g_txt_tabpos[7];		// ds:0xd313; seg024, seg029, seg33, seg046, seg096, seg097
-
-
+#if defined (__BORLANDC__)
+extern signed short g_video_mode_bak;		// ds:0xd30d; seg002
+extern signed short g_video_page_bak;		// ds:0xd30b; seg002, seg004
+extern signed short g_gameinit_flag;		// ds:0xd309; seg002
+#endif
 extern unsigned char *g_renderbuf_ptr;	// ds:0xd303; seg002-seg120
 extern unsigned char *g_vga_memstart;	// ds:0xd2ff; seg002-seg120 aka FRAMEBUF_PTR
 extern unsigned char *g_vga_backbuffer;	// ds:0xd2fb; seg002-seg120 aka PRINT_STRING_BUFFER
@@ -1083,9 +1086,16 @@ extern char *g_buffer5_ptr;		// ds:0xd2a5; seg026, seg120
 extern char *g_monnames_buffer;		// ds:0xd2a1; seg026, seg120
 extern unsigned char *g_fig_star_gfx;	// ds:0xd29d; seg005, seg040
 extern unsigned char *g_trv_track_pixel_bak;	// ds:0xd299; seg063, seg094, seg120
+extern Bit32s g_buffer_anis_tab[37];	// ds:0xd205; seg027
+extern Bit32u g_buffer_mfigs_tab[43];	// ds:0xd159; seg027
+extern Bit32u g_buffer_wfigs_tab[43];	// ds:0xd0ad; seg027
+extern Bit32u g_buffer_monster_tab[36];	// ds:0xd01d; seg027
 extern HugePt g_buffer9_ptr3;		// ds:0xd019; seg003-seg120
 extern unsigned char *g_buffer9_ptr2;	// ds:0xd015; seg120
-
+extern signed short g_redraw_menuicons;	// ds:0xd013; seg066, seg076, seg099
+extern signed short g_dng_extra_action;	// ds:0xd011; seg076, seg099
+extern signed short g_dng_init_flag;	// ds:0xd00f; seg076,
+extern unsigned char g_mouse_bg_bak[256];	// ds:0xcf0f; seg004
 extern unsigned char g_gui_text_buffer[64];	// ds:0xce87; seg096
 extern Bit32s g_ani_unknown4;		// ds:0xce43; seg027, seg120
 extern signed int g_ani_posx;		// ds:0xce41; seg004, seg029, seg066, seg074, seg075

@@ -873,7 +873,7 @@ signed short city_step(void)
 	ds_writebs((NEW_MENU_ICONS + 1), g_can_merge_group == -1 ? MENU_ICON_MERGE_GROUP_GRAYED : MENU_ICON_MERGE_GROUP);
 
 	if (ds_readbs((NEW_MENU_ICONS + 1)) != l4) {
-		ds_writew(REDRAW_MENUICONS, 1);
+		g_redraw_menuicons = 1;
 	}
 
 	ds_writebs((NEW_MENU_ICONS + 2), MENU_ICON_SWITCH_GROUP);
@@ -887,13 +887,13 @@ signed short city_step(void)
 		draw_main_screen();
 		GUI_print_loc_line(get_tx(0));
 
-		g_request_refresh = ds_writews(REDRAW_MENUICONS, 0);
+		g_request_refresh = g_redraw_menuicons = 0;
 		g_city_refresh_x_target = -1;
 	}
 
-	if (ds_readw(REDRAW_MENUICONS) != 0 && g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
+	if (g_redraw_menuicons && g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 		draw_icons();
-		ds_writews(REDRAW_MENUICONS, 0);
+		g_redraw_menuicons = 0;
 	}
 
 	/* check if position or direction has changed */

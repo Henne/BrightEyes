@@ -670,9 +670,9 @@ void spell_foramen(void)
 #ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 28:
 	 * Free Foramen spell (from the spellcast menu) can open closed dors only if the 'open door' submenu has been activated before (showing the three symbols smash, pick and spell). */
-	(ds_readws(DNG_MENU_MODE) != DNG_MENU_MODE_UNLOCK_DOOR)
+	(g_dng_extra_action != DNG_MENU_MODE_UNLOCK_DOOR)
 #else
-	(gs_dungeon_index == DUNGEONS_NONE || (ds_readws(DNG_MENU_MODE) != DNG_MENU_MODE_UNLOCK_DOOR && ds_readws(DNG_MENU_MODE) != DNG_MENU_MODE_OPEN_DOOR))
+	(gs_dungeon_index == DUNGEONS_NONE || (g_dng_extra_action != DNG_MENU_MODE_UNLOCK_DOOR && g_dng_extra_action != DNG_MENU_MODE_OPEN_DOOR))
 #endif
 	{
 		/* check if the party is in front of a closed door in a dungeon */
@@ -698,7 +698,7 @@ void spell_foramen(void)
 	add_hero_ap(get_spelluser(), 1); /* hero gets 1 AP for successful lock pick */
 
 	ds_writebs((NEW_MENU_ICONS + 6), ds_writebs((NEW_MENU_ICONS + 7), ds_writebs((NEW_MENU_ICONS + 8), MENU_ICON_NONE)));
-	ds_writew(REDRAW_MENUICONS, 1);
+	g_redraw_menuicons = 1;
 }
 
 void spell_motoricus(void)
