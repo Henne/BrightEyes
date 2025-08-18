@@ -524,12 +524,12 @@ signed short FIG_move_pathlen(void)
 	signed short i = 0;
 
 	/* count everything till the end marker -1 of the path */
-	while (ds_readbs(FIG_MOVE_PATHDIR + i) != -1) {
+	while (g_fig_move_pathdir[i] != -1) {
 		i++;
 	}
 
 	/* if the end marker -1 is followed by a -2, the available BP are not sufficient */
-	if (ds_readbs((FIG_MOVE_PATHDIR + 1) + i) == -2) {
+	if (g_fig_move_pathdir[i + 1] == -2) {
 		return 99;
 	}
 
@@ -747,7 +747,7 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 					if ((escape_dir != 0) && (host_readws(px) == sel_x) && (host_readws(py) == sel_y))
 					{
 						/* active hero wants to escape over the border of the map and is already at the border. */
-						ds_writeb(FIG_MOVE_PATHDIR, -1);
+						g_fig_move_pathdir[0] = -1;
 						bp_cost = 0;
 					} else {
 						FIG_set_cb_field(sel_y, sel_x, 124); /* target marker for FIG_find_path_to_target. The original content of this square has been backuped before in 'cb_entry_bak' or 'cb_entry_bak_escape'. */
@@ -764,28 +764,36 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 						FIG_set_cb_field(sel_y, sel_x, cb_entry_bak_escape);
 
 						path_end = 0;
-						while (ds_readbs(FIG_MOVE_PATHDIR + path_end) != -1) {
+						while (g_fig_move_pathdir[path_end] != -1) {
 							path_end++;
 						}
 
 						/* add the last escape step to the path */
 						if (escape_dir == 1) {
+
 							sel_x = -1;
+
 							if (host_readbs(hero + HERO_BP_LEFT) > bp_cost) {
-								ds_writeb((FIG_MOVE_PATHDIR + 0) + path_end, 2);
-								ds_writeb((FIG_MOVE_PATHDIR + 1) + path_end, -1);
+								g_fig_move_pathdir[path_end] = 2;
+								g_fig_move_pathdir[path_end + 1] = -1;
 							}
+
 						} else if (escape_dir == 2) {
+
 							sel_y = -1;
+
 							if (bp_cost < (host_readbs(hero + HERO_BP_LEFT) - 1)) {
-								ds_writeb((FIG_MOVE_PATHDIR + 0) + path_end, 1);
-								ds_writeb((FIG_MOVE_PATHDIR + 1) + path_end, -1);
+								g_fig_move_pathdir[path_end] = 1;
+								g_fig_move_pathdir[path_end + 1] = -1;
 							}
+
 						} else {
+
 							sel_y = 24;
+
 							if (bp_cost < (host_readbs(hero + HERO_BP_LEFT) - 1)) {
-								ds_writeb((FIG_MOVE_PATHDIR + 0) + path_end, 3);
-								ds_writeb((FIG_MOVE_PATHDIR + 1) + path_end, -1);
+								g_fig_move_pathdir[path_end] = 3;
+								g_fig_move_pathdir[path_end + 1] = -1;
 							}
 						}
 

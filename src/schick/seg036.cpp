@@ -107,9 +107,9 @@ void seg036_00ae(Bit8u *hero, signed short hero_pos)
 
 	i = 0;
 
-	while (ds_readbs(FIG_MOVE_PATHDIR + i) != -1) {
+	while (g_fig_move_pathdir[i] != -1) {
 
-		if (host_readbs(hero + HERO_VIEWDIR) != ds_readbs(FIG_MOVE_PATHDIR + i)) {
+		if (host_readbs(hero + HERO_VIEWDIR) != g_fig_move_pathdir[i]) {
 
 			dir2 = dir1 = -1;
 			dir3 = host_readbs(hero + HERO_VIEWDIR);
@@ -120,7 +120,7 @@ void seg036_00ae(Bit8u *hero, signed short hero_pos)
 				dir3 = 0;
 			}
 
-			if (ds_readbs(FIG_MOVE_PATHDIR + i) != dir3) {
+			if (g_fig_move_pathdir[i] != dir3) {
 
 				dir1 = dir3;
 				dir3++;
@@ -129,7 +129,7 @@ void seg036_00ae(Bit8u *hero, signed short hero_pos)
 					dir3 = 0;
 				}
 
-				if (ds_readbs(FIG_MOVE_PATHDIR + i) != dir3) {
+				if (g_fig_move_pathdir[i] != dir3) {
 
 					dir2 = host_readbs(hero + HERO_VIEWDIR) + 4;
 					dir1 = -1;
@@ -137,7 +137,7 @@ void seg036_00ae(Bit8u *hero, signed short hero_pos)
 			}
 
 			/* set heroes looking direction */
-			host_writeb(hero + HERO_VIEWDIR, ds_readbs(FIG_MOVE_PATHDIR + i));
+			host_writeb(hero + HERO_VIEWDIR, g_fig_move_pathdir[i]);
 
 			ptr1 += KI_copy_ani_sequence(ptr1, host_readws(ptr2 + dir2 * 2), 2);
 
@@ -146,13 +146,14 @@ void seg036_00ae(Bit8u *hero, signed short hero_pos)
 			}
 		}
 
-		if (ds_readbs(FIG_MOVE_PATHDIR + i) == ds_readbs((FIG_MOVE_PATHDIR+1) + i)) {
-			ptr1 += KI_copy_ani_sequence(ptr1, host_readws(ptr2 + (ds_readbs(FIG_MOVE_PATHDIR + i) + 12) * 2), 2);
+		if (g_fig_move_pathdir[i] == g_fig_move_pathdir[i + 1]) {
+
+			ptr1 += KI_copy_ani_sequence(ptr1, host_readws(ptr2 + (g_fig_move_pathdir[i] + 12) * 2), 2);
 			i += 2;
 			/* BP - 2 */
 			host_writeb(hero + HERO_BP_LEFT, host_readbs(hero + HERO_BP_LEFT) - 2);
 		} else {
-			ptr1 += KI_copy_ani_sequence(ptr1, host_readws(ptr2 + (ds_readbs(FIG_MOVE_PATHDIR + i) + 8) * 2), 2);
+			ptr1 += KI_copy_ani_sequence(ptr1, host_readws(ptr2 + (g_fig_move_pathdir[i] + 8) * 2), 2);
 			i++;
 			/* BP - 1 */
 			dec_ptr_bs(hero + HERO_BP_LEFT);

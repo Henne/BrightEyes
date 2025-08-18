@@ -102,9 +102,9 @@ void seg037_00ae(Bit8u *enemy, signed short enemy_no)
 	i = 0;
 	p3 = (Bit8u*)(ds_readd(GFX_ANI_INDEX + host_readbs(enemy + ENEMY_SHEET_GFX_ID) * 4));
 
-	while (ds_readbs(FIG_MOVE_PATHDIR + i) != -1) {
+	while (g_fig_move_pathdir[i] != -1) {
 
-		if (host_readbs(enemy + ENEMY_SHEET_VIEWDIR) != ds_readbs(FIG_MOVE_PATHDIR + i)) {
+		if (host_readbs(enemy + ENEMY_SHEET_VIEWDIR) != g_fig_move_pathdir[i]) {
 
 			b2 = b1 = -1;
 			b3 = host_readbs(enemy + ENEMY_SHEET_VIEWDIR);
@@ -116,7 +116,7 @@ void seg037_00ae(Bit8u *enemy, signed short enemy_no)
 				b3 = 0;
 			}
 
-			if (ds_readbs(FIG_MOVE_PATHDIR + i) != b3) {
+			if (g_fig_move_pathdir[i] != b3) {
 
 				b1 = b3;
 				b3++;
@@ -125,14 +125,14 @@ void seg037_00ae(Bit8u *enemy, signed short enemy_no)
 					b3 = 0;
 				}
 
-				if (ds_readbs(FIG_MOVE_PATHDIR + i) != b3) {
+				if (g_fig_move_pathdir[i] != b3) {
 					b2 = host_readbs(enemy + ENEMY_SHEET_VIEWDIR) + 4;
 					b1 = -1;
 				}
 
 			}
 
-			host_writeb(enemy + ENEMY_SHEET_VIEWDIR, ds_readbs(FIG_MOVE_PATHDIR + i));
+			host_writeb(enemy + ENEMY_SHEET_VIEWDIR, g_fig_move_pathdir[i]);
 
 			p1 += copy_ani_stuff(p1, host_readws(p3 + b2 * 2), 1);
 
@@ -142,15 +142,15 @@ void seg037_00ae(Bit8u *enemy, signed short enemy_no)
 			}
 		}
 
-		if (ds_readbs(FIG_MOVE_PATHDIR + i) == ds_readbs((FIG_MOVE_PATHDIR+1) + i)) {
+		if (g_fig_move_pathdir[i] == g_fig_move_pathdir[i + 1]) {
 
-			p1 += copy_ani_stuff(p1, host_readws(p3 + (ds_readbs(FIG_MOVE_PATHDIR + i) + 0x0c) * 2), 1);
+			p1 += copy_ani_stuff(p1, host_readws(p3 + (g_fig_move_pathdir[i] + 0x0c) * 2), 1);
 			i += 2;
 			/* BP - 2 */
 			host_writeb(enemy + ENEMY_SHEET_BP, host_readbs(enemy + ENEMY_SHEET_BP) - 2);
 
 		} else {
-			p1 += copy_ani_stuff(p1, host_readws(p3 + (ds_readbs(FIG_MOVE_PATHDIR + i) + 0x08) * 2), 1);
+			p1 += copy_ani_stuff(p1, host_readws(p3 + (g_fig_move_pathdir[i] + 0x08) * 2), 1);
 			i++;
 			/* BP - 1 */
 			dec_ptr_bs(enemy + ENEMY_SHEET_BP);

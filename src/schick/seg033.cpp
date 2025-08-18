@@ -85,7 +85,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 			and_ptr_bs(hero + HERO_FLAGS1, 0xfb); /* unset 'petrified' flag (why???) */
 
 			if (FIG_find_path_to_target(hero, hero_pos, x, y, 5) != -1) {
-				seg036_00ae(hero, hero_pos); /* probably: execute hero movement based on path saved in 'FIG_MOVE_PATHDIR'. */
+				seg036_00ae(hero, hero_pos); /* probably: execute hero movement based on path saved in g_fig_move_pathdir. */
 			}
 			done = 1;
 

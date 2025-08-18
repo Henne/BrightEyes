@@ -345,7 +345,7 @@ void FIG_remove_from_list(signed char fighter_id, signed char keep_in_memory)
 		}
 	}
 
-	memset(list_i, 0, SIZEOF_FIGHTER);
+	memset(list_i, 0, sizeof(struct struct_fighter));
 
 	list_i->id = -1;
 }

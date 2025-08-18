@@ -297,17 +297,18 @@ void FIG_find_path_to_target_backtrack(Bit8u *dist_table_ptr, signed short targe
 		}
 	}
 
-	memcpy(p_datseg + FIG_MOVE_PATHDIR, path_table[best_dir], 20);
+	/* TODO: g_fig_move_pathdir is only 10 bytes, but should be enlarged */
+	memcpy(g_fig_move_pathdir, path_table[best_dir], 20);
 
 	/* In the way the path has been created, it is terminated by at least one symbol -1.
 	 * In the case that the path doesnt reach the target (because of insufficient bp_avail),
 	 * after the (first) end marker -1 another marker -2 is appended. */
-	if (target_out_of_reach != 0) {
+	if (target_out_of_reach) {
 
 		i = 0;
 
-		while (ds_readbs(FIG_MOVE_PATHDIR + i++) != -1);
-		ds_writeb(FIG_MOVE_PATHDIR + i, -2);
+		while (g_fig_move_pathdir[i++] != -1);
+		g_fig_move_pathdir[i] = -2;
 	}
 }
 
@@ -337,7 +338,7 @@ signed short FIG_count_direction_changes_of_path(signed char *path_ptr)
  /**
   * \brief  Find target for actor and compute path
   *
-  * Searches for a target (depending on given mode) for a actor and computes a path to it. The computed path is written at FIG_MOVE_PATHDIR in the data segment.
+  * Searches for a target (depending on given mode) for a actor and computes a path to it. The computed path is written at g_fig_move_pathdir in the data segment.
   * The path is a sequence of the following symbols:
   * 0: right / 1: down / 2: left / 3: up
   * -1: end marker of the path. The length of the path (without end marker) is at most the number of available BP of the actor.
@@ -738,7 +739,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 					FIG_find_path_to_target_backtrack(dist_table_ptr, target_reached_x[i], target_reached_y[i], dist, host_readbs(actor_ptr + HERO_BP_LEFT), mode, two_squares, actor_id);
 				}
 
-				nr_dir_changes = FIG_count_direction_changes_of_path((signed char*)p_datseg + FIG_MOVE_PATHDIR);
+				nr_dir_changes = FIG_count_direction_changes_of_path(g_fig_move_pathdir);
 
 				if ((nr_dir_changes == 0)) {
 					best_target = i;

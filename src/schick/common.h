@@ -495,6 +495,7 @@ enum {
 
 #define SIZEOF_MONSTER (44)
 
+#if 0
 enum {
 	FIGHTER_FIGURE		= 0x00,
 	FIGHTER_NVF_NO		= 0x02,
@@ -522,8 +523,8 @@ enum {
 	FIGHTER_NEXT		= 0x1b, /* Bit8u* */
 	FIGHTER_PREV		= 0x1f, /* Bit8u* */
 };
-
 #define SIZEOF_FIGHTER (0x23)
+#endif
 
 
 enum {
