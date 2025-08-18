@@ -155,9 +155,9 @@ void do_wildcamp(void)
 		} else if (ds_readws(ACTION) == ACTION_ID_ICON_2) {
 
 			if (g_good_camp_place == 99) {
-				l_di = replenish_stocks(ds_readws(REPLENISH_STOCKS_MOD) + 99, stock_tries);
+				l_di = replenish_stocks(g_replenish_stocks_mod + 99, stock_tries);
 			} else {
-				l_di = replenish_stocks(ds_readws(REPLENISH_STOCKS_MOD), stock_tries);
+				l_di = replenish_stocks(g_replenish_stocks_mod, stock_tries);
 			}
 
 			if (l_di) {

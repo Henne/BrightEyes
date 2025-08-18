@@ -180,23 +180,23 @@ signed short TRV_found_camp_place(signed short a0)
 	signed short randval;
 
 	randval = random_schick(5) + 10;
-	sprintf(g_dtp2,
-		get_tx(8),
-		get_tx(randval),
+	sprintf(g_dtp2, get_tx(8), get_tx(randval),
 		(a0 == 1 ? get_tx(42) : (a0 == 2 ? get_tx(45) : (char*)p_datseg + EMPTY_STRING11)));
 	do {
-		answer = GUI_radio(g_dtp2, 2,
-					get_tx(9),
-					get_tx(10));
+		answer = GUI_radio(g_dtp2, 2, get_tx(9), get_tx(10));
+
 	} while (answer == -1);
 
 	if (answer == 1) {
 
-		g_wildcamp_sleep_quality = ds_writews(REPLENISH_STOCKS_MOD, g_gather_herbs_mod = 0);
+		g_wildcamp_sleep_quality = g_replenish_stocks_mod = g_gather_herbs_mod = 0;
 
 		if (a0 == 1) {
-			ds_writews(REPLENISH_STOCKS_MOD, -3);
+
+			g_replenish_stocks_mod = -3;
+
 		} else if (a0 == 2) {
+
 			g_gather_herbs_mod = -3;
 		}
 
@@ -209,7 +209,7 @@ signed short TRV_found_camp_place(signed short a0)
 
 		TRV_load_textfile(-1);
 
-		g_wildcamp_sleep_quality = ds_writews(REPLENISH_STOCKS_MOD, g_gather_herbs_mod = 0);
+		g_wildcamp_sleep_quality = g_replenish_stocks_mod = g_gather_herbs_mod = 0;
 		g_request_refresh = 2;
 
 		return 1;
