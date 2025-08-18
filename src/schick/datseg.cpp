@@ -6357,10 +6357,10 @@ unsigned char* g_itemsdat; // ds:0xe22b
 signed char g_market_itemsaldo_table[254]; // ds:0xe12d
 char **g_monnames_index; // ds:0xe129
 unsigned char *g_monster_dat_buf; // ds:0xe125
-unsigned char *g_mem_slots_anis; // ds:0xe121, to ()[36]
-unsigned char *g_mem_slots_mfig; // ds:0xe11d
-unsigned char *g_mem_slots_wfig; // ds:0xe119
-unsigned char *g_mem_slots_mon; // ds:0xe115
+struct struct_memslot_ani *g_memslots_anis; // ds:0xe121, to ()[36]
+struct struct_memslot_fig *g_memslots_mfig; // ds:0xe11d
+struct struct_memslot_fig *g_memslots_wfig; // ds:0xe119
+struct struct_memslot_fig *g_memslots_mon; // ds:0xe115
 signed short g_wallclock_update; // ds:0xe113, 0 = don't update the wallclock
 signed short g_wallclock_x; // ds:0xe111
 signed short g_wallclock_y; // ds:0xe10f

@@ -143,7 +143,7 @@ Bit8u* load_fight_figs(signed short fig)
 	Bit32u len;
 	unsigned short fd;
 	signed short max_entries;
-	Bit8u *mem_slots;
+	struct struct_memslot_fig *memslots;
 	Bit32u *p_tab;
 	signed short index;
 	Bit8u *src;
@@ -171,7 +171,7 @@ Bit8u* load_fight_figs(signed short fig)
 	if (fig >= 88) {
 		/* ...for foes */
 		max_entries = 36;
-		mem_slots = g_mem_slots_mon;
+		memslots = g_memslots_mon;
 		p_tab = g_buffer_monster_tab;
 		index = 16;
 		fig -= 88;
@@ -183,35 +183,35 @@ Bit8u* load_fight_figs(signed short fig)
 			/* female */
 			p_tab = g_buffer_wfigs_tab;
 			index = ARCHIVE_FILE_WFIGS;
-			mem_slots = g_mem_slots_wfig;
+			memslots = g_memslots_wfig;
 			fig -= 44;
 		} else {
 			/* male */
 			p_tab = g_buffer_mfigs_tab;
 			index = ARCHIVE_FILE_MFIGS;
-			mem_slots = g_mem_slots_mfig;
+			memslots = g_memslots_mfig;
 		}
 	}
 
 	/* check if fig is already in memory */
 	for (i = 0; i < max_entries; i++) {
-		if (host_readw(mem_slots + i * 12) == fig)
+		if (memslots[i].figure == fig)
 			break;
 	}
 
 	if (i != max_entries) {
 		/* Yes, it is */
 
-		if (host_readw(mem_slots + i * 12 + 6) != 0) {
+		if (memslots[i].ems_handle) {
 			/* is in EMS */
-			ems_handle = host_readw(mem_slots + i * 12 + 6);
-			from_EMS(src, ems_handle, host_readd(mem_slots + i * 12 + 8));
+			ems_handle = memslots[i].ems_handle;
+			from_EMS(src, ems_handle, memslots[i].length);
 		} else {
 			/* is in HEAP */
 #if !defined(__BORLANDC__)
 			D1_LOG("cached from HEAP %d\n", fig);
 #endif
-			memcpy((Bit8u*)(src), (Bit8u*)(host_readd(mem_slots + i * 12 + 2)), host_readw(mem_slots + i * 12 + 8));
+			memcpy((Bit8u*)src, memslots[i].ptr, memslots[i].length);
 		}
 	} else {
 #if !defined(__BORLANDC__)
@@ -226,7 +226,7 @@ Bit8u* load_fight_figs(signed short fig)
 
 		seek_archive_file(fd, offset, 0);
 
-		read_archive_file(fd, (Bit8u*)(src), (unsigned short)len);
+		read_archive_file(fd, (Bit8u*)src, (unsigned short)len);
 
 		close(fd);
 
@@ -237,14 +237,14 @@ Bit8u* load_fight_figs(signed short fig)
 			/* use heap */
 
 			for (i = 0; i < max_entries - 1; i++) {
-				if (host_readw(mem_slots + i * 12) == 0)
+				if (!memslots[i].figure)
 					break;
 			}
 
-			host_writew(mem_slots + i * 12, fig);
-			host_writed(mem_slots + i * 12 + 2, (Bit32u)dst);
-			host_writew(mem_slots + i * 12 + 6, 0);
-			host_writed(mem_slots + i * 12 + 8, len);
+			memslots[i].figure = fig;
+			memslots[i].ptr = dst;
+			memslots[i].ems_handle = 0;
+			memslots[i].length = len;
 
 			memcpy((Bit8u*)dst, (Bit8u*)src, (unsigned short)len);
 
@@ -257,15 +257,15 @@ Bit8u* load_fight_figs(signed short fig)
 
 				/* find a free slot */
 				for (i = 0; i < max_entries - 1; i++) {
-					if (host_readw(mem_slots + i * 12) == 0)
+					if (!memslots[i].figure)
 						break;
 				}
 
 				/* write slot */
-				host_writew(mem_slots + i * 12, fig);
-				host_writew(mem_slots + i * 12 + 6, ems_handle);
-				host_writed(mem_slots + i * 12 + 2, 0);
-				host_writed(mem_slots + i * 12 + 8, len);
+				memslots[i].figure = fig;
+				memslots[i].ems_handle = ems_handle;
+				memslots[i].ptr = NULL;
+				memslots[i].length = len;
 
 				/* copy to EMS */
 				to_EMS(ems_handle, src, len);
@@ -336,14 +336,16 @@ void load_ani(const signed short no)
 
 	/* count to the ordered ani in an array*/
 	for (i = 0; i < 37; i++) {
-		if (no == host_readw(g_mem_slots_anis + i * 8))
+		if (no == g_memslots_anis[i].figure)
 			break;
 	}
 
 	if (i != 37) {
+
 		/* already buffered in EMS, get from there */
-		ems_handle = host_readw(g_mem_slots_anis + i * 8 + 2);
-		from_EMS((Bit8u*)g_buffer9_ptr, ems_handle, host_readd(g_mem_slots_anis + i * 8 + 4));
+		ems_handle = g_memslots_anis[i].ems_handle;
+		from_EMS((Bit8u*)g_buffer9_ptr, ems_handle, g_memslots_anis[i].length);
+
 	} else {
 		/* load it from file */
 		ani_off = g_buffer_anis_tab[no - 1];
@@ -351,6 +353,7 @@ void load_ani(const signed short no)
 
 		/* load ANIS */
 		fd = load_archive_file(ARCHIVE_FILE_ANIS);
+
 		/* seek to ordered ani */
 		seek_archive_file(fd, ani_off, 0);
 		read_archive_file(fd, (Bit8u*)g_buffer9_ptr, (unsigned short)ani_len);
@@ -360,14 +363,14 @@ void load_ani(const signed short no)
 
 			/* find an empty EMS slot */
 			for (i = 0; i < 36; i++) {
-				if (host_readw(g_mem_slots_anis + i * 8) == 0)
+				if (!g_memslots_anis[i].figure)
 					break;
 			}
 
 			/* fill the entry */
-			host_writew(g_mem_slots_anis + i * 8, no);
-			host_writew(g_mem_slots_anis + i * 8 + 2, ems_handle);
-			host_writed(g_mem_slots_anis + i * 8 + 4, ani_len);
+			g_memslots_anis[i].figure = no;
+			g_memslots_anis[i].ems_handle = ems_handle;
+			g_memslots_anis[i].length = ani_len;
 
 			/* copy data to EMS */
 			to_EMS(ems_handle, (Bit8u*)g_buffer9_ptr, ani_len);

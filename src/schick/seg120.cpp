@@ -288,10 +288,10 @@ signed short init_memory(void)
 	g_itemsdat 		= (unsigned char*)schick_alloc(255 * SIZEOF_ITEM_STATS);
 	g_monnames_buffer	= (char*)schick_alloc(950);
 	g_monnames_index	= (char**)schick_alloc(77 * sizeof(char*));
-	g_mem_slots_anis	= (unsigned char*)schick_alloc(37 * 8);
-	g_mem_slots_mfig	= (unsigned char*)schick_alloc(43 * 12);
-	g_mem_slots_wfig	= (unsigned char*)schick_alloc(43 * 12);
-	g_mem_slots_mon		= (unsigned char*)schick_alloc(36 * 12);
+	g_memslots_anis		= (struct struct_memslot_ani*)schick_alloc(37 * sizeof(struct struct_memslot_ani));
+	g_memslots_mfig		= (struct struct_memslot_fig*)schick_alloc(43 * sizeof(struct struct_memslot_fig));
+	g_memslots_wfig		= (struct struct_memslot_fig*)schick_alloc(43 * sizeof(struct struct_memslot_fig));
+	g_memslots_mon		= (struct struct_memslot_fig*)schick_alloc(36 * sizeof(struct struct_memslot_fig));
 	g_heroes		= (unsigned char*)schick_alloc(7 * SIZEOF_HERO);
 	g_dungeon_fights_buf	= (unsigned char*)schick_alloc(630);
 	g_dungeon_doors_buf	= (unsigned char*)schick_alloc(225);
@@ -579,34 +579,32 @@ void cleanup_game(void)
 	if (g_ems_enabled != 0) {
 
 		for (l_si = 0; l_si < 37; l_si++) {
-			if (host_readw(g_mem_slots_anis + l_si * 8) != 0) {
-				EMS_free_pages(host_readw(g_mem_slots_anis + 2 + l_si * 8));
+			/* TODO: test for ems_handle missing */
+			if (g_memslots_anis[l_si].figure) {
+				EMS_free_pages(g_memslots_anis[l_si].ems_handle);
 			}
 		}
 
 		/* free male and female figures */
 		for (l_si = 0; l_si < 43; l_si++) {
 
-			if ((host_readw(g_mem_slots_mfig + l_si * 12) != 0) &&
-				(host_readw(g_mem_slots_mfig + l_si * 12 + 6) != 0))
+			if (g_memslots_mfig[l_si].figure && g_memslots_mfig[l_si].ems_handle)
 			{
-				EMS_free_pages(host_readw(g_mem_slots_mfig + 6 + l_si * 12));
+				EMS_free_pages(g_memslots_mfig[l_si].ems_handle);
 			}
 
-			if ((host_readw(g_mem_slots_wfig + l_si * 12) != 0) &&
-				(host_readw(g_mem_slots_wfig + l_si * 12 + 6) != 0))
+			if (g_memslots_wfig[l_si].figure && g_memslots_wfig[l_si].ems_handle)
 			{
-				EMS_free_pages(host_readw(g_mem_slots_wfig + 6 + l_si * 12));
+				EMS_free_pages(host_readw(g_memslots_wfig + 6 + l_si * 12));
 			}
 		}
 
 		/* free monster figures */
 		for (l_si = 0; l_si < 36; l_si++) {
 
-			if ((host_readw(g_mem_slots_mon + l_si * 12) != 0) &&
-				(host_readw(g_mem_slots_mon + l_si * 12 + 6) != 0))
+			if (g_memslots_mon[l_si].figure && g_memslots_mon[l_si].ems_handle)
 			{
-				EMS_free_pages(host_readw(g_mem_slots_mon + 6 + l_si * 12));
+				EMS_free_pages(g_memslots_mon[l_si].ems_handle);
 			}
 		}
 

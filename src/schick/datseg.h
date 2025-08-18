@@ -28,6 +28,19 @@ struct struct_pic_copy {
 	int v4;
 };
 
+struct struct_memslot_ani {
+	signed int figure;
+	signed int ems_handle;
+	Bit32u length;
+};
+
+struct struct_memslot_fig {
+	signed int figure;
+	Bit8u *ptr;
+	signed int ems_handle;
+	Bit32s length;
+};
+
 struct struct_point {
 	int x;
 	int y;
@@ -1018,10 +1031,10 @@ extern unsigned char *g_itemsdat;	// ds:0xe22b; seg002, seg027, seg105, seg107, 
 extern signed char g_market_itemsaldo_table[254]; // ds:0xe12d; seg056, seg057, seg120
 extern char **g_monnames_index;		// ds:0xe129; seg026, seg120
 extern unsigned char *g_monster_dat_buf;// ds:0xe125; seg032, seg039
-extern unsigned char *g_mem_slots_anis;	// ds:0xe121; seg027, seg120
-extern unsigned char *g_mem_slots_mfig;	// ds:0xe11d; seg027, seg120
-extern unsigned char *g_mem_slots_wfig;	// ds:0xe119; seg027, seg120
-extern unsigned char *g_mem_slots_mon;	// ds:0xe115; seg027, seg120
+extern struct struct_memslot_ani *g_memslots_anis;	// ds:0xe121; seg027, seg120
+extern struct struct_memslot_fig *g_memslots_mfig;	// ds:0xe11d; seg027, seg120
+extern struct struct_memslot_fig *g_memslots_wfig;	// ds:0xe119; seg027, seg120
+extern struct struct_memslot_fig *g_memslots_mon;	// ds:0xe115; seg027, seg120
 extern signed short g_wallclock_update;	// ds:0xe113; seg004-seg117, seg120
 extern signed short g_wallclock_x;	// ds:0xe111; seg004, seg029, seg063, seg094
 extern signed short g_wallclock_y;	// ds:0xe10f; seg004, seg029, seg063, seg094
