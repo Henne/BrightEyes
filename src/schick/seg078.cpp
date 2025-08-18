@@ -54,21 +54,16 @@ signed short DNG02_handler(void)
 		{
 		} else {
 
-			ds_writew((FIG_FLEE_POSITION + 0),
-				ds_writew((FIG_FLEE_POSITION + 2),
-				ds_writew((FIG_FLEE_POSITION + 4),
-				ds_writew((FIG_FLEE_POSITION + 6), DNG_POS_DIR(0,2,6,NORTH)))));
+			g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(0,2,6,NORTH);
 
 			do_fight(FIGHTS_F046_01);
 		}
 
 	} else if (target_pos == DNG_POS(0,3,6) && target_pos != gs_dng_handled_pos && gs_direction == SOUTH)
 	{
-		strcpy(g_dtp2,
-			get_tx(4));
+		strcpy(g_dtp2, get_tx(4));
 
-		strcat(g_dtp2,
-			 (char*)((test_spell_group(SP_ODEM_ARCANUM, 0) == 0) ? get_tx(5) : get_tx(6)));
+		strcat(g_dtp2,  (char*)((test_spell_group(SP_ODEM_ARCANUM, 0) == 0) ? get_tx(5) : get_tx(6)));
 
 		GUI_output(g_dtp2);
 
@@ -401,10 +396,7 @@ signed short DNG02_handler(void)
 
 	} else if ((target_pos == DNG_POS(0,12,11) || target_pos == DNG_POS(0,14,11) || target_pos == DNG_POS(0,13,10) || target_pos == DNG_POS(0,13,12)) && target_pos != gs_dng_handled_pos)
 	{
-		ds_writew((FIG_FLEE_POSITION + 0),
-			ds_writew((FIG_FLEE_POSITION + 2),
-			ds_writew((FIG_FLEE_POSITION + 4),
-			ds_writew((FIG_FLEE_POSITION + 6), DNG_POS_DIR(0,12,11,NORTH)))));
+		g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(0,12,11,NORTH);
 
 		if (!do_fight(FIGHTS_F046_31))
 		{

@@ -371,7 +371,7 @@ void DNG01_chest0_x1(Bit8u* chest)
 		gs_deathtrap = 1;
 
 		/* fight the demon */
-		ds_writew((FIG_FLEE_POSITION + 0), ds_writew((FIG_FLEE_POSITION + 2), ds_writew((FIG_FLEE_POSITION + 4), ds_writew((FIG_FLEE_POSITION + 6), DNG_POS_DIR(1,13,10,WEST)))));
+		g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(1,13,10,WEST);
 
 		if (!do_fight(FIGHTS_SHIP10_1))
 		{

@@ -265,8 +265,8 @@ signed short DNG03_handler(void)
 	} else if ((target_pos == DNG_POS(1,2,10) || target_pos == DNG_POS(1,3,13)) &&
 		target_pos != gs_dng_handled_pos)
 	{
-		ds_writews((FIG_FLEE_POSITION + 0), ds_writews((FIG_FLEE_POSITION + 6), DNG_POS_DIR(1,2,8,NORTH)));
-		ds_writews((FIG_FLEE_POSITION + 2), ds_writews((FIG_FLEE_POSITION + 4), DNG_POS_DIR(1,5,13,NORTH)));
+		g_fig_flee_position[NORTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(1,2,8,NORTH);
+		g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = DNG_POS_DIR(1,5,13,NORTH);
 
 		if (!gs_dng03_highpriest_killed)
 		{
@@ -278,8 +278,8 @@ signed short DNG03_handler(void)
 	} else if ((target_pos == DNG_POS(1,2,4) || target_pos == DNG_POS(1,5,2)) &&
 		target_pos != gs_dng_handled_pos)
 	{
-		ds_writews((FIG_FLEE_POSITION + 0), ds_writews((FIG_FLEE_POSITION + 2), DNG_POS_DIR(1,7,2,NORTH)));
-		ds_writews((FIG_FLEE_POSITION + 4), ds_writews((FIG_FLEE_POSITION + 6), DNG_POS_DIR(1,2,6,NORTH)));
+		g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = DNG_POS_DIR(1,7,2,NORTH);
+		g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(1,2,6,NORTH);
 
 		if (!gs_dng03_highpriest_killed)
 		{
@@ -308,10 +308,7 @@ signed short DNG03_handler(void)
 		{
 			GUI_output(get_tx(17));
 
-			ds_writews((FIG_FLEE_POSITION + 0),
-				ds_writews((FIG_FLEE_POSITION + 2),
-				ds_writews((FIG_FLEE_POSITION + 4),
-				ds_writews((FIG_FLEE_POSITION + 6), DNG_POS_DIR(1,5,13,NORTH)))));
+			g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(1,5,13,NORTH);
 
 			/* drop all crystals from the heroes of that group */
 			i = get_first_hero_with_item(ITEM_CRYSTAL);

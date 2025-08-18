@@ -728,7 +728,7 @@ void draw_fight_screen(Bit16u val)
 												 * Note: Apparently, this is done in any fight, including seafights and wilderness fights where it doesn't make sense.
 												 * The distinction is done only later. */
 												host_writew(hero + HERO_ESCAPE_POSITION,
-													ds_readws(FIG_FLEE_POSITION + 2 * ((host_readbs(hero + HERO_VIEWDIR) == 3) ? 0 : (host_readbs(hero + HERO_VIEWDIR) + 1))));
+													g_fig_flee_position[(host_readbs(hero + HERO_VIEWDIR) == 3) ? NORTH : (host_readbs(hero + HERO_VIEWDIR) + 1)]);
 												figlist_remove[list_ii->sheet] = host_readbs(hero + HERO_FIGHTER_ID);
 
 											}

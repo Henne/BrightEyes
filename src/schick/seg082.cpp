@@ -69,21 +69,18 @@ signed short DNG07_handler(void)
 						if (skill_result == -99) {
 
 							print_msg_with_first_hero(get_ttx(533));
+
 							or_ptr_bs(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * lockpick_pos, 0x01); /* set 'broken' flag */
-							ds_writew((FIG_FLEE_POSITION + 0),
-								ds_writew((FIG_FLEE_POSITION + 2),
-								ds_writew((FIG_FLEE_POSITION + 4),
-								ds_writew((FIG_FLEE_POSITION + 6), target_pos))));
+
+							g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = target_pos;
 
 							do_fight(FIGHTS_F100_03);
 
 						} else if (skill_result <= 0) {
 
 							print_msg_with_first_hero(get_ttx(532));
-							ds_writew((FIG_FLEE_POSITION + 0),
-								ds_writew((FIG_FLEE_POSITION + 2),
-								ds_writew((FIG_FLEE_POSITION + 4),
-								ds_writew((FIG_FLEE_POSITION + 6), target_pos))));
+
+							g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = target_pos;
 
 							do_fight(FIGHTS_F100_03);
 
@@ -113,8 +110,8 @@ signed short DNG07_handler(void)
 				} else {
 					spell_result = test_spell(hero, SP_FORAMEN_FORAMINOR, 5);
 
-					if (spell_result > 0)
-					{
+					if (spell_result > 0) {
+
 						sub_ae_splash(hero, get_spell_cost(SP_FORAMEN_FORAMINOR, 0));
 
 						and_ptr_bs(amap_ptr + MAP_POS(13,2), 0x0f);
@@ -122,23 +119,17 @@ signed short DNG07_handler(void)
 
 						add_hero_ap(hero, 1L);
 
-					} else if (spell_result != -99)
-					{
+					} else if (spell_result != -99) {
 
 						sub_ae_splash(hero, get_spell_cost(SP_FORAMEN_FORAMINOR, 1));
 
-						ds_writew((FIG_FLEE_POSITION + 0),
-							ds_writew((FIG_FLEE_POSITION + 2),
-							ds_writew((FIG_FLEE_POSITION + 4),
-							ds_writew((FIG_FLEE_POSITION + 6), target_pos))));
+						g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = target_pos;
 
 						do_fight(FIGHTS_F100_03);
-					} else
-					{
-						sprintf(g_dtp2,
-							get_ttx(607),
-							(char*)hero + HERO_NAME2);
 
+					} else {
+
+						sprintf(g_dtp2,	get_ttx(607), (char*)hero + HERO_NAME2);
 						GUI_output(g_dtp2);
 					}
 				}

@@ -58,7 +58,8 @@ signed short DNG11_handler(void)
 
 			if (random_schick(100) <= 50)
 			{
-				ds_writew((FIG_FLEE_POSITION + 0), ds_writew((FIG_FLEE_POSITION + 2), ds_writew((FIG_FLEE_POSITION + 4), ds_writew((FIG_FLEE_POSITION + 6), DNG_POS_DIR(0,8,15,SOUTH)))));
+				g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(0,8,15,SOUTH);
+
 				do_fight(FIGHTS_F131_01B);
 			}
 		}

@@ -630,10 +630,7 @@ void DNG09_chest6_x1(Bit8u* chest)
 
 void DNG09_chest4_x2(void)
 {
-	ds_writew((FIG_FLEE_POSITION + 0),
-		ds_writew((FIG_FLEE_POSITION + 2),
-		ds_writew((FIG_FLEE_POSITION + 4),
-		ds_writew((FIG_FLEE_POSITION + 6), DNG_POS_DIR(1,10,11,SOUTH)))));
+	g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(1,10,11,SOUTH);
 
 	do_fight(FIGHTS_F126_22);
 }

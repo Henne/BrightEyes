@@ -842,10 +842,10 @@ void DNG_fight(void)
 		if (host_readws((Bit8u*)fight_ptr + 0) == target_pos)
 		{
 			/* set positions of heroes which escape from the fight */
-			ds_writew((FIG_FLEE_POSITION + 0), host_readws((Bit8u*)fight_ptr + 4));
-			ds_writew((FIG_FLEE_POSITION + 2), host_readws((Bit8u*)fight_ptr + 6));
-			ds_writew((FIG_FLEE_POSITION + 4), host_readws((Bit8u*)fight_ptr + 8));
-			ds_writew((FIG_FLEE_POSITION + 6), host_readws((Bit8u*)fight_ptr + 10));
+			g_fig_flee_position[NORTH] = host_readws((Bit8u*)fight_ptr + 4);
+			g_fig_flee_position[EAST] = host_readws((Bit8u*)fight_ptr + 6);
+			g_fig_flee_position[SOUTH] = host_readws((Bit8u*)fight_ptr + 8);
+			g_fig_flee_position[WEST] = host_readws((Bit8u*)fight_ptr + 10);
 
 			/* execute the fight */
 			if (!do_fight(host_readws((Bit8u*)fight_ptr + 2)))

@@ -226,7 +226,7 @@ signed short DNG10_handler(void)
 		/* FIGHT: scared heshtot */
 		if (GUI_bool(get_tx(22)))
 		{
-			ds_writew((FIG_FLEE_POSITION + 0), ds_writew((FIG_FLEE_POSITION + 2), ds_writew((FIG_FLEE_POSITION + 4), ds_writew((FIG_FLEE_POSITION + 6), DNG_POS_DIR(0,10,13,NORTH)))));
+			g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(0,10,13,NORTH);
 			gs_dng_handled_pos = 0;
 
 			if (!do_fight(FIGHTS_F129_17))
@@ -282,9 +282,10 @@ signed short DNG10_handler(void)
 	} else if ((target_pos == DNG_POS(1,10,3) || target_pos == DNG_POS(1,7,3)) && target_pos != gs_dng_handled_pos && ds_readb(DNG10_MUMMY_LEVER) != 0)
 	{
 		/* FIGHT: four mummies again and again */
-		ds_writew((FIG_FLEE_POSITION + 0), ds_writew((FIG_FLEE_POSITION + 6), DNG_POS_DIR(1,5,3,WEST)));
-		ds_writew((FIG_FLEE_POSITION + 2), ds_writew((FIG_FLEE_POSITION + 4), DNG_POS_DIR(1,12,3,EAST)));
+		g_fig_flee_position[NORTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(1,5,3,WEST);
+		g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = DNG_POS_DIR(1,12,3,EAST);
 		g_fig_discard = 1;
+
 		do_fight(FIGHTS_F129_21);
 
 	} else if (target_pos == DNG_POS(1,1,12) && target_pos != gs_dng_handled_pos && gs_direction == SOUTH)
@@ -295,8 +296,9 @@ signed short DNG10_handler(void)
 	} else if (target_pos == DNG_POS(1,9,12) && target_pos != gs_dng_handled_pos && ds_readb(DNG10_DRAGON_QUEST) != 0)
 	{
 		/* FIGHT: get PLATINKEY for the dragon */
-		ds_writew((FIG_FLEE_POSITION + 0), ds_writew((FIG_FLEE_POSITION + 6), DNG_POS_DIR(1,9,10,NORTH)));
-		ds_writew((FIG_FLEE_POSITION + 2), ds_writew((FIG_FLEE_POSITION + 4), DNG_POS_DIR(1,9,10,NORTH)));
+		g_fig_flee_position[NORTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(1,9,10,NORTH);
+		g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = DNG_POS_DIR(1,9,10,NORTH);
+
 		do_fight(FIGHTS_F129_29);
 
 	} else if (target_pos == DNG_POS(2,12,12) && target_pos != gs_dng_handled_pos)
@@ -308,9 +310,8 @@ signed short DNG10_handler(void)
 			load_in_head(58);
 
 			do {
-				answer = GUI_dialogbox((unsigned char*)g_dtp2, get_tx(28),
-						get_tx(29), 2,
-						get_tx(30), get_tx(31));
+				answer = GUI_dialogbox((unsigned char*)g_dtp2, get_tx(28), get_tx(29), 2, get_tx(30), get_tx(31));
+
 			} while (answer == -1);
 
 			if (answer == 1)
@@ -318,11 +319,10 @@ signed short DNG10_handler(void)
 				/* try to fight the dragon */
 				ds_writeb(DNG10_DRAGON_QUEST, 1);
 
-				if (GUI_dialogbox((unsigned char*)g_dtp2, get_tx(28),
-						get_tx(32), 2,
-						get_ttx(2), get_ttx(3)) == 1)
+				if (GUI_dialogbox((unsigned char*)g_dtp2, get_tx(28), get_tx(32), 2, get_ttx(2), get_ttx(3)) == 1)
 				{
 					GUI_dialogbox((unsigned char*)g_dtp2, get_tx(28), get_tx(33), 0);
+
 				} else {
 					GUI_dialogbox((unsigned char*)g_dtp2, get_tx(28), get_tx(34), 0);
 
