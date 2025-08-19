@@ -65,6 +65,16 @@ struct struct_msg {
 	signed int type;
 };
 
+struct struct_dialog_state {
+	Bit16s txt_id;	/* main txt_id >= 0 */
+	Bit8u txt_id1;
+	Bit8u txt_id2;
+	Bit8u txt_id3;
+	Bit8u state1;
+	Bit8u state2;
+	Bit8u state3;
+};
+
 struct struct_fighter {
 	signed short figure;
 	signed char nvf_no;
@@ -415,6 +425,9 @@ extern Bit8u  gs_show_travel_map;		//ds:0x3614; seg002, seg025, seg032, seg063, 
 extern Bit8u  gs_hermit_visited;		//ds:0x3615; seg066
 extern Bit8u  gs_dungeon_gfx_style;		//ds:0x3616; seg028, seg075, seg076
 extern Bit8u  gs_estorik_known;			//ds:0x3617; seg081
+
+extern struct struct_dialog_state gs_dialog_states[160];	// ds:0x3794; seg028, seg060
+
 extern Bit8u  gs_dng02_sphere_known;		//ds:0x3c94; seg087
 extern Bit8u  gs_dng02_corpse_flag;		//ds:0x3c95; seg078
 extern Bit8u  gs_dng02_apparature_destroyed;	//ds:0x3c96; seg078

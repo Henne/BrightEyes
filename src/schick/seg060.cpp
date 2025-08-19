@@ -37,8 +37,8 @@ void talk_tavern(void)
 	signed short food_quality;
 	signed short answer;
 	signed short options;
-	Bit8u *state_ptr;
-	Bit8u *states_tab;
+	struct struct_dialog_state *state_ptr;
+	struct struct_dialog_state *states_tab;
 	char *text_buffer;
 	char *answer1_buffer;
 	char *answer2_buffer;
@@ -64,26 +64,26 @@ void talk_tavern(void)
 	init_ani(0);
 	load_tlk(ARCHIVE_FILE_TAVERN_TLK);
 	g_dialog_state = g_dialog_done = 0;
-	states_tab = p_datseg + DIALOG_STATES;
+	states_tab = &gs_dialog_states[0];
 
 	do {
 		answer = options = 0;
 
-		state_ptr = states_tab + 8 * g_dialog_state;
+		state_ptr = &states_tab[g_dialog_state];
 
-		if (host_readbs(state_ptr + 2) != 0) {
+		if (state_ptr->txt_id1) {
 			options++;
 		}
-		if (host_readbs(state_ptr + 3) != 0) {
+		if (state_ptr->txt_id2) {
 			options++;
 		}
-		if (host_readbs(state_ptr + 4) != 0) {
+		if (state_ptr->txt_id3) {
 			options++;
 		}
 
-		if (host_readws(state_ptr) != -1) {
+		if (state_ptr->txt_id != -1) {
 
-			txt_id = host_readws(state_ptr) & 0x7fff;
+			txt_id = (state_ptr->txt_id & 0x7fff);
 			format = get_tx(txt_id);
 			hero = (Bit8u*)get_first_hero_available_in_group();
 
@@ -109,10 +109,11 @@ void talk_tavern(void)
 
 			} else if (txt_id == 40 || txt_id == 46) {
 
-				gossip_ptr1 = (Bit8u*)(load_current_town_gossip());
+				gossip_ptr1 = (Bit8u*)load_current_town_gossip();
 
 				do {
-					gossip_ptr2 = (Bit8u*)(load_current_town_gossip());
+					gossip_ptr2 = (Bit8u*)load_current_town_gossip();
+
 				} while (gossip_ptr1 == gossip_ptr2);
 
 				sprintf(text_buffer, format, (char*)gossip_ptr1, (char*)gossip_ptr2);
@@ -173,7 +174,7 @@ void talk_tavern(void)
 				strcpy(text_buffer, format);
 			}
 
-			txt_id = host_readb(state_ptr + 2);
+			txt_id = state_ptr->txt_id1;
 			format = get_tx(txt_id);
 
 
@@ -183,7 +184,7 @@ void talk_tavern(void)
 				strcpy(answer1_buffer, format);
 			}
 
-			txt_id = host_readb(state_ptr + 3);
+			txt_id = state_ptr->txt_id2;
 			format = get_tx(txt_id);
 
 			if (txt_id == 13) {
@@ -203,21 +204,22 @@ void talk_tavern(void)
 				strcpy(answer2_buffer, format);
 			}
 
-			txt_id = host_readb(state_ptr + 4);
+			txt_id = state_ptr->txt_id3;
 			strcpy(answer3_buffer, get_tx(txt_id));
 
 			do {
 				answer = GUI_radio((char*)text_buffer, (signed char)options, answer1_buffer, answer2_buffer, answer3_buffer);
+
 			} while (answer == -1);
 		}
 
-		g_dialog_next_state = (-1);
+		g_dialog_next_state = -1;
 
-		if (host_readws(state_ptr) & 0x8000 || host_readws(state_ptr) == -1) {
+		if ((state_ptr->txt_id & 0x8000) || (state_ptr->txt_id == -1)) {
 			TLK_tavern(answer);
 		}
 
-		g_dialog_state = (g_dialog_next_state == -1 ? host_readb(state_ptr + 5) : g_dialog_next_state);
+		g_dialog_state = (g_dialog_next_state == -1 ? state_ptr->state1 : g_dialog_next_state);
 
 		if (g_dialog_done == 0) {
 
@@ -226,11 +228,11 @@ void talk_tavern(void)
 				if (answer == -1) {
 					g_dialog_done = 1;
 				} else if (answer == 1) {
-					g_dialog_state = (host_readb(state_ptr + 5));
+					g_dialog_state = state_ptr->state1;
 				} else if (answer == 2) {
-					g_dialog_state = (host_readb(state_ptr + 6));
+					g_dialog_state = state_ptr->state2;
 				} else if (answer == 3) {
-					g_dialog_state = (host_readb(state_ptr + 7));
+					g_dialog_state = state_ptr->state3;
 				}
 			}
 

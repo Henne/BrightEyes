@@ -600,7 +600,7 @@ void load_informer_tlk(signed short index)
 	read_archive_file(fd, ptr = (p_datseg + DIALOG_PARTNERS), partners * 0x26);
 
 	/* read the dialog layouts */
-	read_archive_file(fd, p_datseg + DIALOG_STATES, (Bit16u)(off - partners * 0x26));
+	read_archive_file(fd, (Bit8u*)&gs_dialog_states, (Bit16u)(off - partners * 0x26));
 
 	/* read the text */
 	text_len = (signed short)read_archive_file(fd, g_buffer8_ptr, 10000);
@@ -611,7 +611,7 @@ void load_informer_tlk(signed short index)
 
 	/* adjust the pointers to the layouts */
 	for (i = 0; i < partners; i++, ptr += 0x26) {
-		host_writed(ptr, (Bit32u)(p_datseg + host_readw(ptr) + DIALOG_STATES));
+		host_writed(ptr, (Bit32u)((Bit8u*)&gs_dialog_states + host_readw(ptr)));
 	}
 }
 
@@ -642,7 +642,7 @@ void load_tlk(signed short index)
 	read_archive_file(fd, ptr = p_datseg + DIALOG_PARTNERS, partners * 0x26);
 
 	/* read the dialog layouts */
-	read_archive_file(fd, (Bit8u*)(p_datseg + DIALOG_STATES), off - partners * 0x26);
+	read_archive_file(fd, (Bit8u*)&gs_dialog_states, off - partners * 0x26);
 
 	/* read the text */
 	text_len = (signed short)read_archive_file(fd, (Bit8u*)g_buffer7_ptr, 64000);
@@ -653,7 +653,7 @@ void load_tlk(signed short index)
 
 	/* adjust the pointers to the layouts */
 	for (i = 0; i < partners; i++, ptr += 0x26) {
-		host_writed(ptr, (Bit32u)(p_datseg + host_readw(ptr) + DIALOG_STATES));
+		host_writed(ptr, (Bit32u)((Bit8u*)&gs_dialog_states + host_readw(ptr)));
 	}
 }
 
