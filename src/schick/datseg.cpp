@@ -141,7 +141,7 @@ signed short *g_wearable_items_index[12] = {
     g_wearable_items_sylvan_elf
 }; // ds:0x0638, items wearable depending on hero type
 
-struct ranged_weapons g_ranged_weapons_table[9] = {
+const struct struct_ranged_weapon g_ranged_weapons_table[9] = {
 	{  1,  0,  0, -1,-99,-99,-99,  6 }, /* 0 <- ITEM_THROWING_STAR, ITEM_THROWING_KNIFE */
 	{  1,  1,  0,  0, -1,-99,-99,  6 }, /* 1 <- ITEM_SPEAR, ITEM_SLING */
 	{  2,  1,  0,  0,  0,-99,-99,  7 }, /* 2 <- ITEM_FRANCESCA, ITEM_THROWING_AXE */

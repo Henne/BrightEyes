@@ -42,7 +42,7 @@
 //#define WEARABLE_ITEMS_ICE_ELF          (0x05ec)    /* short[19]; array terminated by -1 */
 //#define WEARABLE_ITEMS_SYLVAN_ELF       (0x0612)    /* short[19]; array terminated by -1 */
 //#define WEARABLE_ITEMS_INDEX            (0x0638)    /* Bit8u*[12]; items wearable depending on hero type */
-#define RANGED_WEAPONS_TABLE            (0x0668)    /* struct(8)[9]; struct{char unkn[8];} */
+//#define RANGED_WEAPONS_TABLE            (0x0668)    /* struct(8)[9]; struct{char unkn[8];} */
 #define WEAPONS_TABLE                   (0x06b0)    /* struct(7)[65]; struct{char unkn[7];} */
 #define ARMORS_TABLE                    (0x0877)    /* struct(2)[25]; struct{char rs, be;} */
 #define SPECIALITEMS_TABLE              (0x08a9)    /* struct(3)[14]; struct{char unkn1, unkn2, handler_no;} */

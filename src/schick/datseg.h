@@ -168,12 +168,12 @@ extern signed char g_items_genders[254];
 /* seg048, seg056, seg105 */
 extern signed short* g_wearable_items_index[12];
 /* seg041 */
-struct ranged_weapons {
+struct struct_ranged_weapon {
 	signed char damage_modifier[7];
 	signed char base_handicap;
 };
 /* TODO: use it properly in seg041 */
-extern struct ranged_weapons g_ranged_weapons_table[9];
+extern const struct struct_ranged_weapon g_ranged_weapons_table[9]; // ds:0x0668; seg041
 
 extern signed short g_poison_potions[10];
 extern signed short g_herbs_toxic[5];

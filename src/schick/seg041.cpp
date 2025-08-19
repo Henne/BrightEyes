@@ -224,14 +224,13 @@ void FIG_damage_enemy(Bit8u *enemy, Bit16s damage, signed short preserve_renegad
 /*
  *	\param attack_hero	0 = the attacked one is a foe; 1 = the attacked one is a hero
  */
-
 signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signed short attack_hero)
 {
 	signed short damage;
 	signed short damage_mod;
 	Bit8u* item_p_rh;
 	Bit8u* p_weapontab;
-	Bit8u* p_rangedtab;
+	const struct struct_ranged_weapon* p_rangedtab;
 	signed short target_size;
 	signed short right_hand;
 	signed short beeline;
@@ -311,7 +310,7 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 				distance = 6;
 			}
 
-			p_rangedtab = p_datseg + RANGED_WEAPONS_TABLE + host_readbs(p_weapontab + WEAPON_STATS_RANGED_INDEX) * SIZEOF_RANGED_WEAPON_STATS;
+			p_rangedtab = &g_ranged_weapons_table[host_readbs(p_weapontab + WEAPON_STATS_RANGED_INDEX)];
 
 			if (attack_hero != 0) {
 				if (host_readbs(target + HERO_TYPE) == HERO_TYPE_DWARF) {
@@ -325,13 +324,11 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 				target_size = host_readbs(target + ENEMY_SHEET_SIZE);
 			}
 
+			/* Original-Bug: For ITEM_SPEAR and ITEM_SPEAR_MAGIC, a test on TA_SCHUSSWAFFEN will be performed */
 			damage_mod = (test_skill(hero,
-					/* Original-Bug: For ITEM_SPEAR and ITEM_SPEAR_MAGIC, a test on TA_SCHUSSWAFFEN will be performed */
 						(host_readbs(item_p_rh + ITEM_STATS_SUBTYPE) == WEAPON_TYPE_WURFWAFFE ? TA_WURFWAFFEN : TA_SCHUSSWAFFEN),
-						host_readbs(p_rangedtab + RANGED_WEAPON_STATS_BASE_HANDICAP) + 2 * distance - 2 * target_size
-					)
-				> 0) ?
-					ds_readbs(RANGED_WEAPONS_TABLE + SIZEOF_RANGED_WEAPON_STATS * host_readbs(p_weapontab + WEAPON_STATS_RANGED_INDEX) + RANGED_WEAPON_STATS_DAMAGE_MODIFIER + distance)
+						p_rangedtab->base_handicap + 2 * distance - 2 * target_size) > 0) ?
+					g_ranged_weapons_table[host_readbs(p_weapontab + WEAPON_STATS_RANGED_INDEX)].damage_modifier[distance]
 					: -damage;
 
 			if (damage_mod != 0) { /* test is redundant */
