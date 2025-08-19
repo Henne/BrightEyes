@@ -486,7 +486,7 @@ signed short DNG_step(void)
 
 	handle_gui_input();
 
-	if (ds_readw(MOUSE2_EVENT) != 0 || ds_readws(ACTION) == ACTION_ID_PAGE_UP)
+	if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP)
 	{
 		tw_bak = g_textbox_width;
 		g_textbox_width = 3;
@@ -516,7 +516,7 @@ signed short DNG_step(void)
 
 		if (l_di != -2)
 		{
-			ds_writew(ACTION, l_di + ACTION_ID_ICON_1);
+			g_action = (l_di + ACTION_ID_ICON_1);
 		}
 
 		g_textbox_width = tw_bak;
@@ -524,12 +524,12 @@ signed short DNG_step(void)
 
 	l_di = 0;
 
-	if (ds_readws(ACTION) == ACTION_ID_ICON_1)
+	if (g_action == ACTION_ID_ICON_1)
 	{
 		GRP_split();
 		g_can_merge_group = can_merge_group();
 
-	} else if (ds_readws(ACTION) == ACTION_ID_ICON_2)
+	} else if (g_action == ACTION_ID_ICON_2)
 	{
 		/* merge groups or reach hands through the mirror */
 		pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
@@ -549,42 +549,42 @@ signed short DNG_step(void)
 			/* TODO: if a "dark" group was merged with a "lighted" group, make group "lighted". */
 		}
 
-	} else if (ds_readws(ACTION) == ACTION_ID_ICON_3)
+	} else if (g_action == ACTION_ID_ICON_3)
 	{
 		GRP_switch_to_next(0);
 
-	} else if (ds_readws(ACTION) == ACTION_ID_ICON_4)
+	} else if (g_action == ACTION_ID_ICON_4)
 	{
 		game_options();
 
-	} else if (ds_readws(ACTION) == ACTION_ID_ICON_5)
+	} else if (g_action == ACTION_ID_ICON_5)
 	{
 		show_automap();
 
-	} else if (ds_readws(ACTION) == ACTION_ID_ICON_6)
+	} else if (g_action == ACTION_ID_ICON_6)
 	{
 		if (select_magic_user() > 0)
 		{
 			g_dng_refresh_direction = -1;
 		}
 
-	} else if (ds_readws(ACTION) == ACTION_ID_ICON_7 && g_dng_extra_action == DNG_MENU_MODE_PLAIN)
+	} else if (g_action == ACTION_ID_ICON_7 && g_dng_extra_action == DNG_MENU_MODE_PLAIN)
 	{
 		gs_current_loctype = LOCTYPE_CITYCAMP;
 		g_citycamp_city = 0; /* CITYCAMP takes place in dungeon */
 		l_di = 1;
 
-	} else if (ds_readws(ACTION) == ACTION_ID_LEFT)
+	} else if (g_action == ACTION_ID_LEFT)
 	{
 		update_direction(3);
 		ds_writebs((NEW_MENU_ICONS + 6), ds_writebs((NEW_MENU_ICONS + 7), ds_writebs((NEW_MENU_ICONS + 8), MENU_ICON_NONE)));
 
-	} else if (ds_readws(ACTION) == ACTION_ID_RIGHT)
+	} else if (g_action == ACTION_ID_RIGHT)
 	{
 		update_direction(1);
 		ds_writebs((NEW_MENU_ICONS + 6), ds_writebs((NEW_MENU_ICONS + 7), ds_writebs((NEW_MENU_ICONS + 8), MENU_ICON_NONE)));
 
-	} else if (ds_readws(ACTION) == ACTION_ID_UP)
+	} else if (g_action == ACTION_ID_UP)
 	{
 		if ((l_si = div16(ds_readb(STEPTARGET_FRONT))) == DNG_TILE_SEMIPERMEABLE_WALL)
 		{
@@ -607,7 +607,7 @@ signed short DNG_step(void)
 			no_way();
 		}
 
-	} else if (ds_readws(ACTION) == ACTION_ID_DOWN)
+	} else if (g_action == ACTION_ID_DOWN)
 	{
 		if ((l_si = div16(ds_readb(STEPTARGET_BACK))) != DNG_TILE_WALL &&
 				l_si != DNG_TILE_CLOSED_DOOR &&
@@ -620,14 +620,14 @@ signed short DNG_step(void)
 			no_way();
 		}
 
-	} else if (ds_readws(ACTION) >= ACTION_ID_ICON_7 &&
-			ds_readws(ACTION) <= ACTION_ID_ICON_9 &&
-			ds_readbs((NEW_MENU_ICONS - ACTION_ID_ICON_1) + ds_readws(ACTION)) != -1)
+	} else if (g_action >= ACTION_ID_ICON_7 &&
+			g_action <= ACTION_ID_ICON_9 &&
+			ds_readbs((NEW_MENU_ICONS - ACTION_ID_ICON_1) + g_action) != -1)
 	{
 		if (g_dng_extra_action == DNG_MENU_MODE_OPEN_DOOR || g_dng_extra_action == DNG_MENU_MODE_CLOSE_DOOR || g_dng_extra_action == DNG_MENU_MODE_UNLOCK_DOOR)
 		{
-			DNG_door(ds_readws(ACTION));
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_7 && g_dng_extra_action == DNG_MENU_MODE_OPEN_CHEST)
+			DNG_door(g_action);
+		} else if (g_action == ACTION_ID_ICON_7 && g_dng_extra_action == DNG_MENU_MODE_OPEN_CHEST)
 		{
 			seg092_06b4(1);
 
@@ -647,7 +647,7 @@ signed short DNG_step(void)
 				*(g_dng_map_ptr + MAP_POS(x,y)) |= (0x02);
 				/* set bit 1 'unlocked' */
 			}
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_7 && (!gs_dng15_lever_south || !gs_dng15_lever_north))
+		} else if (g_action == ACTION_ID_ICON_7 && (!gs_dng15_lever_south || !gs_dng15_lever_north))
 		{
 			DNG15_riddle();
 		}

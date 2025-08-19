@@ -122,9 +122,7 @@ void tevent_057(void)
 				if (get_first_hero_with_item(ITEM_ROPE) == -1 || get_first_hero_with_item(ITEM_ROPE_LADDER) != -1)
 				{
 
-					sprintf(g_dtp2, get_tx2(8), (char*)hero + HERO_NAME2,
-						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
-
+					sprintf(g_dtp2, get_tx2(8), (char*)hero + HERO_NAME2, GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
 					GUI_output(g_dtp2);
 
 					sub_hero_le(hero, random_schick(9) + 3);
@@ -159,19 +157,18 @@ void tevent_059(void)
 
 	if (TRV_enter_hut_question())
 	{
-		gs_camp_incident = (0);
+		gs_camp_incident = 0;
 		gs_current_loctype = LOCTYPE_WILDCAMP;
 		do_location();
 		gs_current_loctype = LOCTYPE_NONE;
-		gs_camp_incident = (-1);
+		gs_camp_incident = -1;
 
 		TRV_load_textfile(-1);
 
 		load_in_head(10);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(9),
-						2, get_tx2(10),	get_tx2(11));
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(9), 2, get_tx2(10), get_tx2(11));
 		} while (answer == -1);
 
 		if (answer == 1) {
@@ -221,8 +218,7 @@ void tevent_060(void)
 
 	do {
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(19),
-						2, get_tx2(20), get_tx2(21));
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(19), 2, get_tx2(20), get_tx2(21));
 
 		} while (answer == -1);
 
@@ -244,8 +240,7 @@ void tevent_060(void)
 				timewarp(HOURS(4));
 
 				do {
-					answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(24),
-								2, get_tx2(26),	get_tx2(27));
+					answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(24), 2, get_tx2(26), get_tx2(27));
 
 				} while (answer == -1);
 
@@ -290,8 +285,7 @@ void tevent_060(void)
 				timewarp(HOURS(4));
 
 				do {
-					answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(25),
-								2, get_tx2(27), get_tx2(28));
+					answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(25), 2, get_tx2(27), get_tx2(28));
 				} while (answer == -1);
 
 				if (answer == 2) {

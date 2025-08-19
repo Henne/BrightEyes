@@ -287,16 +287,16 @@ void spell_hexenknoten(void)
 
 	g_fig_list_elem.figure = 0;
 	g_fig_list_elem.nvf_no = 127;
-	g_fig_list_elem.cbx = ((signed char)x);
-	g_fig_list_elem.cby = ((signed char)y);
-	g_fig_list_elem.offsetx = (0);
-	g_fig_list_elem.offsety = (0);
-	g_fig_list_elem.height = ((signed char)height);
-	g_fig_list_elem.width = ((signed char)width);
+	g_fig_list_elem.cbx = x;
+	g_fig_list_elem.cby = y;
+	g_fig_list_elem.offsetx = 0;
+	g_fig_list_elem.offsety = 0;
+	g_fig_list_elem.height = height;
+	g_fig_list_elem.width = width;
 	g_fig_list_elem.x1 = 0;
 	g_fig_list_elem.y1 = 0;
-	g_fig_list_elem.x2 = ((signed char)(width) - 1);
-	g_fig_list_elem.y2 = ((signed char)(height) - 1);
+	g_fig_list_elem.x2 = width - 1;
+	g_fig_list_elem.y2 = height - 1;
 	g_fig_list_elem.reload = 0;
 	g_fig_list_elem.wsheet = -1;
 	g_fig_list_elem.sheet = -1;

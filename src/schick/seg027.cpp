@@ -387,8 +387,8 @@ void load_ani(const signed short no)
 	g_ani_palette = (ani_buffer + host_readd(g_buffer9_ptr + 4L)) + 6L;
 
 	/* read some bytes between data and palette */
-	ds_writew(ANI_UNKNOWN1,	host_readw(g_ani_palette - 6L));
-	ds_writew(ANI_UNKNOWN2,	host_readw(g_ani_palette - 4L));
+	g_ani_unknown1 = host_readw(g_ani_palette - 6L);
+	g_ani_unknown2 = host_readw(g_ani_palette - 4L);
 	/* compression type */
 	g_ani_compr_flag = host_readb(g_ani_palette - 1L);
 	g_ani_palette_size = host_readb(g_ani_palette - 2L);
@@ -396,10 +396,10 @@ void load_ani(const signed short no)
 	ani_end_ptr = g_ani_palette + 3 * g_ani_palette_size;
 
 	/* set picture size */
-	ds_writew(ANI_WIDTH, host_readw(g_buffer9_ptr + 8L));
-	ds_writeb(ANI_HEIGHT, host_readb(g_buffer9_ptr + 10L));
+	g_ani_width = host_readws(g_buffer9_ptr + 8L);
+	g_ani_height = host_readb(g_buffer9_ptr + 10L);
 	/* set number of areas */
-	ds_writeb(ANI_AREACOUNT, host_readb(g_buffer9_ptr + 11L));
+	g_ani_areacount = host_readb(g_buffer9_ptr + 11L);
 
 	/* Process Main Picture */
 	if (g_ani_compr_flag) {
@@ -436,7 +436,7 @@ void load_ani(const signed short no)
 	}
 
 	/* Process the Areas */
-	for (i_area = 0; ds_readbs(ANI_AREACOUNT) > i_area; i_area++) {
+	for (i_area = 0; g_ani_areacount > i_area; i_area++) {
 		p_area2 = (Bit8u*)(p_datseg + ANI_AREA_TABLE + i_area * SIZEOF_ANI_AREA);
 		area_offset = host_readd((g_buffer9_ptr + 4 * i_area) + 0xc);
 		p_area = g_buffer9_ptr + area_offset;

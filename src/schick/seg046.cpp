@@ -193,7 +193,7 @@ void status_show(Bit16u index)
 	update_mouse_cursor();
 
 	if (g_pp20_index != ARCHIVE_FILE_ZUSTA_UK) {
-		ds_writew(UPDATE_STATUSLINE, 0);
+		g_update_statusline = 0;
 		g_pp20_index = ARCHIVE_FILE_ZUSTA_UK;
 		do_fill_rect(g_vga_memstart, 0, 0, 319, 199, 0);
 		wait_for_vsync();
@@ -691,7 +691,7 @@ void status_show(Bit16u index)
 	g_pic_copy.src = g_renderbuf_ptr;
 	do_pic_copy(0);
 
-	ds_writew(UPDATE_STATUSLINE, 1);
+	g_update_statusline = 1;
 
 	if (g_status_page_mode >= 3) {
 		do_v_line(g_vga_memstart, 107, 54, 195, 0);

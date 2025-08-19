@@ -1164,12 +1164,12 @@ void interrupt mouse_isr(void)
 	if (!g_mouse_locked) {
 
 		if (l_si & 0x2) {
-			ds_writew(MOUSE1_EVENT2, 1);
-			ds_writew(MOUSE1_EVENT1, 1);
+			g_mouse1_event2 = 1;
+			g_mouse1_event1 = 1;
 		}
 
 		if (l_si & 0x8) {
-			ds_writew(MOUSE2_EVENT, 1);
+			g_mouse2_event = 1;
 		}
 
 		if (((gs_dungeon_index != DUNGEONS_NONE) || (gs_current_town != TOWNS_NONE)) &&
@@ -1512,28 +1512,28 @@ void handle_gui_input(void)
 	signed short tw_bak;
 	signed short l1;
 
-	ds_writew(BIOSKEY_EVENT, ds_writew(ACTION, l_si = 0));
+	g_bioskey_event = g_action = l_si = 0;
 
 	herokeeping();
 
 	if (CD_bioskey(1)) {
 
-		l_si = (ds_writews(BIOSKEY_EVENT, bioskey(0))) >> 8;
-		and_ds_ws(BIOSKEY_EVENT, 0xff);
+		l_si = (g_bioskey_event = bioskey(0)) >> 8;
+		g_bioskey_event &= 0xff;
 
 		if (l_si == 0x24) {
 			l_si = 0x2c;
 		}
 
 		/* Ctrl + Q -> quit */
-		if ((ds_readw(BIOSKEY_EVENT) == 0x11) && (ds_readw(PREGAME_STATE) == 0)) {
+		if ((g_bioskey_event == 0x11) && (ds_readw(PREGAME_STATE) == 0)) {
 			cleanup_game();
 
 			exit(0);
 		}
 	}
 
-	if (ds_readw(MOUSE1_EVENT2) == 0) {
+	if (g_mouse1_event2 == 0) {
 
 		g_always_zero3 = 0;
 
@@ -1541,24 +1541,24 @@ void handle_gui_input(void)
 		}
 
 		/* Ctrl + E */
-		if (ds_readw(BIOSKEY_EVENT) == 5) {
+		if (g_bioskey_event == 5) {
 			status_select_hero();
 			l_si = 0;
 		}
 
 		/* Ctrl + O -> swap heroes */
-		if (ds_readw(BIOSKEY_EVENT) == 15) {
+		if (g_bioskey_event == 15) {
 			GRP_swap_heroes();
 			l_si = 0;
 		}
 
 		/* Ctrl + S -> sound menu */
-		if ((ds_readw(BIOSKEY_EVENT) == 0x13) && !g_dialogbox_lock) {
+		if ((g_bioskey_event == 0x13) && !g_dialogbox_lock) {
 			sound_menu();
 		}
 
 		/* Ctrl + P -> pause game */
-		if ((ds_readw(BIOSKEY_EVENT) == 0x10) &&
+		if ((g_bioskey_event == 0x10) &&
 			(g_bioskey_event10 == 0) &&
 			!g_dialogbox_lock &&
 			(ds_readws(PREGAME_STATE) == 0))
@@ -1571,12 +1571,12 @@ void handle_gui_input(void)
 			GUI_output(g_pause_string);		/* P A U S E */
 			g_textbox_width = tw_bak;
 			g_gui_text_centered = 0;
-			g_bioskey_event10 = l_si = ds_writew(BIOSKEY_EVENT, 0);
+			g_bioskey_event10 = l_si = g_bioskey_event = 0;
 			g_timers_disabled--;
 		}
 	} else {
 		play_voc(ARCHIVE_FILE_FX1_VOC);
-		ds_writew(MOUSE1_EVENT2, 0);
+		g_mouse1_event2 = 0;
 		l_si = 0;
 
 		if (g_action_table_secondary) {
@@ -1593,15 +1593,15 @@ void handle_gui_input(void)
 				wait_for_vsync();
 			}
 
-			if (ds_readw(MOUSE1_EVENT2) != 0) {
-				ds_writew(MOUSE1_DOUBLECLICK, 1);
-				ds_writew(MOUSE1_EVENT2, 0);
+			if (g_mouse1_event2 != 0) {
+				g_mouse1_doubleclick = 1;
+				g_mouse1_event2 = 0;
 			}
 		}
 
 		if ((l_si >= 0xf1) && (l_si <= 0xf8)) {
 
-			if (ds_readws(MOUSE1_DOUBLECLICK) != 0) {
+			if (g_mouse1_doubleclick) {
 
 				/* open character screen by double click on hero picture */
 				if ((host_readbs(get_hero(l_si - 241) + HERO_TYPE) != HERO_TYPE_NONE) &&
@@ -1609,8 +1609,8 @@ void handle_gui_input(void)
 				{
 					status_menu(l_si - 241);
 					l_si = 0;
-					ds_writew(MOUSE1_DOUBLECLICK, 0);
-					ds_writew(MOUSE1_EVENT2, 0);
+					g_mouse1_doubleclick = 0;
+					g_mouse1_event2 = 0;
 				}
 			} else {
 				/* swap heroes by click - move mouse - click */
@@ -1621,8 +1621,8 @@ void handle_gui_input(void)
 					/* the destination will be selected by a mouse klick in the following function call */
 					GRP_move_hero(l_si - 241);
 					l_si = 0;
-					ds_writew(MOUSE1_DOUBLECLICK, 0);
-					ds_writew(MOUSE1_EVENT2, 0);
+					g_mouse1_doubleclick = 0;
+					g_mouse1_event2 = 0;
 				}
 			}
 		} else if (l_si == 0xfd) {
@@ -1651,7 +1651,7 @@ void handle_gui_input(void)
 	}
 
 	mouse_19dc();
-	ds_writew(ACTION, l_si);
+	g_action = (l_si);
 }
 
 /**
@@ -1686,43 +1686,41 @@ void handle_input(void)
 	signed short l_si;
 	signed short l_di;
 
-	ds_writew(BIOSKEY_EVENT, ds_writew(ACTION, l_si = 0));
+	g_bioskey_event = g_action = l_si = 0;
 
 	herokeeping();
 
 	if (CD_bioskey(1)) {
 
-		l_si = (ds_writews(BIOSKEY_EVENT, bioskey(0))) >> 8;
-		and_ds_ws(BIOSKEY_EVENT, 0xff);
+		l_si = (g_bioskey_event = bioskey(0)) >> 8;
+		g_bioskey_event &= 0xff;
 
 		if (l_si == 0x24) {
 			l_si = 0x2c;
 		}
 
 		/* Ctrl + Q -> quit */
-		if ((ds_readw(BIOSKEY_EVENT) == 0x11) && (ds_readw(PREGAME_STATE) == 0)) {
+		if ((g_bioskey_event == 0x11) && (ds_readw(PREGAME_STATE) == 0)) {
 			cleanup_game();
 
 			exit(0);
 		}
 	}
 
-	if (ds_readw(MOUSE1_EVENT2) == 0) {
+	if (g_mouse1_event2 == 0) {
 
 		if (g_have_mouse == 0) {
 		}
 
 		/* Ctrl + S -> sound menu */
-		if ((ds_readw(BIOSKEY_EVENT) == 0x13) && !g_dialogbox_lock) {
+		if ((g_bioskey_event == 0x13) && !g_dialogbox_lock) {
 			sound_menu();
 		}
 
 		/* Ctrl + P -> pause game */
 		/* TODO: use tw_bak here */
-		if ((ds_readw(BIOSKEY_EVENT) == 0x10) &&
-			(g_bioskey_event10 == 0) &&
-			!g_dialogbox_lock &&
-			(ds_readws(PREGAME_STATE) == 0))
+		if ((g_bioskey_event == 0x10) && (g_bioskey_event10 == 0) &&
+			!g_dialogbox_lock && (ds_readws(PREGAME_STATE) == 0))
 		{
 			g_timers_disabled++;
 			g_bioskey_event10 = 1;
@@ -1733,11 +1731,11 @@ void handle_input(void)
 			g_gui_text_centered = 0;
 			g_timers_disabled--;
 
-			g_bioskey_event10 = l_si = ds_writew(BIOSKEY_EVENT, 0);
+			g_bioskey_event10 = l_si = g_bioskey_event = 0;
 		}
 	} else {
 		play_voc(ARCHIVE_FILE_FX1_VOC);
-		ds_writew(MOUSE1_EVENT2, 0);
+		g_mouse1_event2 = 0;
 		l_si = 0;
 
 		if (g_action_table_secondary) {
@@ -1754,9 +1752,9 @@ void handle_input(void)
 
 				wait_for_vsync();
 
-				if (ds_readw(MOUSE1_EVENT2) != 0) {
-					ds_writew(MOUSE1_DOUBLECLICK, 1);
-					ds_writew(MOUSE1_EVENT2, 0);
+				if (g_mouse1_event2) {
+					g_mouse1_doubleclick = 1;
+					g_mouse1_event2 = 0;
 					break;
 				}
 			}
@@ -1764,7 +1762,7 @@ void handle_input(void)
 	}
 
 	mouse_19dc();
-	ds_writew(ACTION, l_si);
+	g_action = (l_si);
 }
 
 void wait_for_keyboard1(void)
@@ -3689,15 +3687,14 @@ void wait_for_keypress(void)
 	flushall();
 #endif
 
-	ds_writew(MOUSE1_EVENT2, 0);
+	g_mouse1_event2 = 0;
 
 	do {
 		if (CD_bioskey(1)) {
 
 			si = bioskey(0);
 
-			if (((si & 0xff) == 0x20) &&
-				(g_bioskey_event10 == 0))
+			if (((si & 0xff) == 0x20) && (g_bioskey_event10 == 0))
 			{
 
 				seg002_47e2();
@@ -3709,12 +3706,12 @@ void wait_for_keypress(void)
 			}
 		}
 
-	} while (!CD_bioskey(1) && ds_readw(MOUSE1_EVENT2) == 0);
+	} while (!CD_bioskey(1) && g_mouse1_event2 == 0);
 
 	if (CD_bioskey(1))
 		si = bioskey(0);
 
-	ds_writew(MOUSE1_EVENT2, 0);
+	g_mouse1_event2 = 0;
 }
 
 /**
@@ -3735,9 +3732,9 @@ void delay_or_keypress(signed short duration)
 
 		if (g_c_event_active) {
 
-			if (ds_readw(ACTION) != 0) {
+			if (g_action != 0) {
 
-				if (ds_readw(ACTION) == ACTION_ID_SPACE) {
+				if (g_action == ACTION_ID_SPACE) {
 
 					seg002_47e2();
 					while (!CD_bioskey(1)) { ; }
@@ -3746,25 +3743,25 @@ void delay_or_keypress(signed short duration)
 
 				} else {
 
-					if ((ds_readw(ACTION) != ACTION_ID_UP) &&
-						(ds_readw(ACTION) != ACTION_ID_DOWN) &&
-						(ds_readw(ACTION) != ACTION_ID_RIGHT) &&
-						(ds_readw(ACTION) != ACTION_ID_LEFT))
+					if ((g_action != ACTION_ID_UP) &&
+						(g_action != ACTION_ID_DOWN) &&
+						(g_action != ACTION_ID_RIGHT) &&
+						(g_action != ACTION_ID_LEFT))
 					{
 						done = 1;
 					}
 				}
 			} else {
 
-				if (ds_readw(MOUSE2_EVENT) != 0) {
+				if (g_mouse2_event) {
 					done = 1;
 				}
 			}
 		} else {
 
-			if (ds_readw(ACTION) != 0) {
+			if (g_action != 0) {
 
-				if (ds_readw(ACTION) == ACTION_ID_SPACE) {
+				if (g_action == ACTION_ID_SPACE) {
 
 					seg002_47e2();
 					while (!CD_bioskey(1)) { ; }
@@ -3775,7 +3772,7 @@ void delay_or_keypress(signed short duration)
 
 			} else {
 
-				if (ds_readw(MOUSE2_EVENT) != 0) {
+				if (g_mouse2_event) {
 					done = 1;
 				}
 			}
@@ -3783,8 +3780,8 @@ void delay_or_keypress(signed short duration)
 
 
 		if (done) {
-			ds_writew(MOUSE2_EVENT, 0);
-			ds_writew(ACTION, ACTION_ID_RETURN);
+			g_mouse2_event = 0;
+			g_action = (ACTION_ID_RETURN);
 			break;
 		}
 
@@ -4096,7 +4093,7 @@ void select_with_keyboard(Bit8u *p1, Bit8u *p2)
 {
 	signed short pos = host_readws(p1);
 
-	if (ds_readw(ACTION) == ACTION_ID_UP) {
+	if (g_action == ACTION_ID_UP) {
 		/* Key UP */
 		if (pos) {
 			pos--;
@@ -4106,7 +4103,7 @@ void select_with_keyboard(Bit8u *p1, Bit8u *p2)
 				pos--;
 			}
 		}
-	} else if (ds_readw(ACTION) == ACTION_ID_DOWN) {
+	} else if (g_action == ACTION_ID_DOWN) {
 		/* Key DOWN */
 		if (pos < 14) {
 			if (host_readw(p2 + (pos + 1) * 7) != 0) {
@@ -4117,7 +4114,7 @@ void select_with_keyboard(Bit8u *p1, Bit8u *p2)
 		} else {
 			pos = 0;
 		}
-	} else if (ds_readw(ACTION) == ACTION_ID_RIGHT) {
+	} else if (g_action == ACTION_ID_RIGHT) {
 		/* Key RIGHT */
 		if (pos < 10) {
 			if (host_readw(p2 + (pos + 5) * 7) != 0) {
@@ -4126,7 +4123,7 @@ void select_with_keyboard(Bit8u *p1, Bit8u *p2)
 		} else {
 			pos -= 10;
 		}
-	} else if (ds_readw(ACTION) == ACTION_ID_LEFT) {
+	} else if (g_action == ACTION_ID_LEFT) {
 		/* Key LEFT */
 		if (pos > 4) {
 			pos -= 5;
@@ -4336,8 +4333,8 @@ void sub_ae_splash(Bit8u *hero, signed short ae)
 {
 	if (!hero_dead(hero) && (ae > 0)) {
 
-		signed short tmp = ds_readw(UPDATE_STATUSLINE);
-		ds_writew(UPDATE_STATUSLINE, 0);
+		signed short tmp = g_update_statusline;
+		g_update_statusline = 0;
 
 		if ((host_readb(hero + HERO_TYPE) == HERO_TYPE_MAGE) &&
 		    (host_readbs(hero + HERO_STAFFSPELL_LVL) >= 4)) {
@@ -4358,11 +4355,11 @@ void sub_ae_splash(Bit8u *hero, signed short ae)
 			host_writew(hero + HERO_AE, 0);
 		}
 
-		ds_writew(UPDATE_STATUSLINE, tmp);
+		g_update_statusline = tmp;
 
 #ifdef M302de_ORIGINAL_BUGFIX
 		/* AE bar was not updated in pseudo 3D mode */
-		if (!g_in_fight && ds_readw(MOUSE1_DOUBLECLICK) != 0) {
+		if (!g_in_fight && g_mouse1_doubleclick) {
 			/* redraw AE bar */
 			draw_bar(1, get_hero_index(hero), host_readw(hero + HERO_AE),
 				host_readw(hero + HERO_AE_ORIG), 0);
@@ -4380,8 +4377,8 @@ void add_hero_ae(Bit8u* hero, signed short ae)
 	/* dont add AE if hero is dead or ae = 0 */
 	if (!hero_dead(hero) && (ae > 0)) {
 
-		signed short tmp = ds_readw(UPDATE_STATUSLINE);
-		ds_writew(UPDATE_STATUSLINE, 0);
+		signed short tmp = g_update_statusline;
+		g_update_statusline = 0;
 
 		/* add AE to hero's current AE */
 		add_ptr_ws(hero + HERO_AE, ae);
@@ -4391,7 +4388,7 @@ void add_hero_ae(Bit8u* hero, signed short ae)
 		if (host_readws(hero + HERO_AE) > host_readws(hero + HERO_AE_ORIG))
 			host_writew(hero + HERO_AE, host_readws(hero + HERO_AE_ORIG));
 
-		ds_writew(UPDATE_STATUSLINE, tmp);
+		g_update_statusline = tmp;
 	}
 }
 
@@ -4411,8 +4408,8 @@ void sub_hero_le(Bit8u *hero, signed short le)
 
 	if (!hero_dead(hero) && (le > 0)) {
 
-		bak = ds_readw(UPDATE_STATUSLINE);
-		ds_writew(UPDATE_STATUSLINE, 0);
+		bak = g_update_statusline;
+		g_update_statusline = 0;
 
 		/* do the damage */
 		old_le = host_readw(hero + HERO_LE);
@@ -4532,7 +4529,7 @@ void sub_hero_le(Bit8u *hero, signed short le)
 			}
 		}
 
-		ds_writew(UPDATE_STATUSLINE, bak);
+		g_update_statusline = bak;
 	}
 
 	if (!g_in_fight) {
@@ -4557,8 +4554,8 @@ void add_hero_le(Bit8u *hero, signed short le)
 	/* dead heroes never get LE */
 	if (!hero_dead(hero) && (le > 0)) {
 
-		val_bak = ds_readw(UPDATE_STATUSLINE);
-		ds_writew(UPDATE_STATUSLINE, 0);
+		val_bak = g_update_statusline;
+		g_update_statusline = 0;
 
 		/* add LE */
 		add_ptr_ws(hero + HERO_LE, le);
@@ -4592,7 +4589,7 @@ void add_hero_le(Bit8u *hero, signed short le)
 			}
 		}
 
-		ds_writew(UPDATE_STATUSLINE, val_bak);
+		g_update_statusline = val_bak;
 	}
 }
 
@@ -4631,8 +4628,8 @@ void do_starve_damage(Bit8u *hero, signed short index, signed short type)
 	if (!hero_dead(hero)) {
 
 		/* save this value locally */
-		const int sl_bak = ds_readw(UPDATE_STATUSLINE);
-		ds_writew(UPDATE_STATUSLINE, 0);
+		const int sl_bak = g_update_statusline;
+		g_update_statusline = 0;
 
 		/* decrement LE of the hero */
 		dec_ptr_ws(hero + HERO_LE);
@@ -4653,7 +4650,7 @@ void do_starve_damage(Bit8u *hero, signed short index, signed short type)
 		}
 
 		/* restore the locally save value */
-		ds_writew(UPDATE_STATUSLINE, sl_bak);
+		g_update_statusline = sl_bak;
 	}
 }
 

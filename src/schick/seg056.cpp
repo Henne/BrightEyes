@@ -322,31 +322,31 @@ void buy_screen(void)
 			l15 = 0;
 		}
 
-		if ((ds_readws(MOUSE2_EVENT) != 0) && get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_merchant)) {
-			ds_writew(ACTION, ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK);
+		if (g_mouse2_event && get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_merchant)) {
+			g_action = ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK;
 		}
 
-		if ((ds_readws(MOUSE2_EVENT) != 0 && ds_readws(ACTION) != ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK) || ds_readws(ACTION) == ACTION_ID_PAGE_UP) {
+		if ((g_mouse2_event && g_action != ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK) || g_action == ACTION_ID_PAGE_UP) {
 
 			l3 = GUI_radio(NULL, 4,	get_ttx(433), get_ttx(435), get_ttx(436), get_ttx(437)) - 1;
 
 			if (l3 != -2) {
-				ds_writew(ACTION, l3 + ACTION_ID_ICON_1);
+				g_action = l3 + ACTION_ID_ICON_1;
 			}
 		}
 
-		if (ds_readws(ACTION) == ACTION_ID_CLOSING_SQUARE_BRACKET || ds_readws(ACTION) == ACTION_ID_SLASH || ds_readws(ACTION) == ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK) {
+		if (g_action == ACTION_ID_CLOSING_SQUARE_BRACKET || g_action == ACTION_ID_SLASH || g_action == ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK) {
 
 			l3 = 1;
 
-			if (ds_readws(ACTION) == ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK) {
+			if (g_action == ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK) {
 
-				if (ds_readws(MOUSE2_EVENT) != 0) {
-					ds_writew(MOUSE2_EVENT, 0);
+				if (g_mouse2_event) {
+					g_mouse2_event = 0;
 					l3 = 2;
 				}
 			} else {
-				if (ds_readws(ACTION) == ACTION_ID_SLASH) {
+				if (g_action == ACTION_ID_SLASH) {
 					l3 = 2;
 				}
 			}
@@ -475,16 +475,16 @@ void buy_screen(void)
 			}
 		}
 
-		if (ds_readws(ACTION) == ACTION_ID_ICON_3 && item != 0) {
+		if (g_action == ACTION_ID_ICON_3 && item != 0) {
 			l8 = 1;
 			item -= 15;
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_2 && host_readws((Bit8u*)g_buyitems + 7 * (item + 15))) {
+		} else if (g_action == ACTION_ID_ICON_2 && host_readws((Bit8u*)g_buyitems + 7 * (item + 15))) {
 			l8 = 1;
 			item += 15;
 		}
 
 
-		if (ds_readws(ACTION) == ACTION_ID_ICON_1 && price) {
+		if (g_action == ACTION_ID_ICON_1 && price) {
 
 			j = 0;
 
@@ -592,7 +592,7 @@ void buy_screen(void)
 			}
 		}
 
-		if (ds_readws(ACTION) == ACTION_ID_ICON_4) {
+		if (g_action == ACTION_ID_ICON_4) {
 			done = 1;
 		}
 	}

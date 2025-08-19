@@ -72,7 +72,7 @@ void do_temple(void)
 			set_audio_track(ARCHIVE_FILE_TEMPLE_XMI);
 
 			/* draw temple icon */
-			g_pic_copy.x1 = g_pic_copy.y1 = (0);
+			g_pic_copy.x1 = g_pic_copy.y1 = 0;
 			g_pic_copy.x2 = 40;
 			g_pic_copy.y2 = 22;
 			g_pic_copy.dst = g_vga_memstart + 28259;
@@ -96,7 +96,7 @@ void do_temple(void)
 		handle_gui_input();
 
 		/* input window */
-		if (ds_readws(MOUSE2_EVENT) != 0 || ds_readws(ACTION) == ACTION_ID_PAGE_UP) {
+		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
 
 			l_di = GUI_radio(get_ttx(225), 9,
 						get_ttx(226),
@@ -110,29 +110,29 @@ void do_temple(void)
 						get_ttx(231)) - 1;
 
 			if (l_di != -2) {
-				ds_writew(ACTION, l_di + ACTION_ID_ICON_1);
+				g_action = (l_di + ACTION_ID_ICON_1);
 			}
 		}
 
-		if (ds_readws(ACTION) == ACTION_ID_ICON_9) {
+		if (g_action == ACTION_ID_ICON_9) {
 			/* leave temple */
 			if (!gs_group_member_counts[gs_current_group]) {
 				GUI_output(get_ttx(232));
 			} else {
 				done = 1;
 			}
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_1) {
+		} else if (g_action == ACTION_ID_ICON_1) {
 			/* add character */
 			char_add(gs_current_typeindex);
 			draw_status_line();
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_2) {
+		} else if (g_action == ACTION_ID_ICON_2) {
 			/* let go character */
 			char_letgo(gs_current_typeindex);
 			draw_status_line();
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_3) {
+		} else if (g_action == ACTION_ID_ICON_3) {
 			/* erase character */
 			char_erase();
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_4) {
+		} else if (g_action == ACTION_ID_ICON_4) {
 			/* load game */
 			if (gs_current_typeindex != 58) {
 
@@ -155,7 +155,7 @@ void do_temple(void)
 			} else {
 				GUI_output(get_ttx(817));
 			}
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_5) {
+		} else if (g_action == ACTION_ID_ICON_5) {
 			/* save game */
 			if (gs_current_typeindex != 58) {
 				if (!gs_group_member_counts[gs_current_group]) {
@@ -168,7 +168,7 @@ void do_temple(void)
 			}
 		}
 
-		if (ds_readws(ACTION) == ACTION_ID_ICON_6) {
+		if (g_action == ACTION_ID_ICON_6) {
 			/* quit game */
 			if (GUI_bool(get_ttx(299))) {
 
@@ -177,7 +177,7 @@ void do_temple(void)
 			}
 		}
 
-		if (ds_readws(ACTION) == ACTION_ID_ICON_7) {
+		if (g_action == ACTION_ID_ICON_7) {
 			/* ask for a miracle */
 			if (!gs_group_member_counts[gs_current_group]) {
 				GUI_output(get_ttx(232));
@@ -186,7 +186,7 @@ void do_temple(void)
 			}
 		}
 
-		if (ds_readws(ACTION) == ACTION_ID_ICON_8) {
+		if (g_action == ACTION_ID_ICON_8) {
 			/* make a donation */
 			if (!gs_group_member_counts[gs_current_group]) {
 				GUI_output(get_ttx(232));

@@ -151,9 +151,9 @@ signed short enter_location_daspota(void)
 					do {
 						handle_gui_input();
 
-					} while (ds_readws(ACTION) == 0 && ds_readws(MOUSE1_EVENT2) == 0);
+					} while (g_action == 0 && g_mouse1_event2 == 0);
 
-					ds_writew(MOUSE1_EVENT2, 0);
+					g_mouse1_event2 = 0;
 				}
 
 				set_var_to_zero();
@@ -916,7 +916,7 @@ signed short city_step(void)
 
 	handle_gui_input();
 
-	if (ds_readw(MOUSE2_EVENT) != 0 || ds_readws(ACTION) == ACTION_ID_PAGE_UP) {
+	if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
 
 		for (i = options = 0; i < 9; i++) {
 			if (ds_readbs(NEW_MENU_ICONS + i) != MENU_ICON_NONE) {
@@ -930,59 +930,59 @@ signed short city_step(void)
 				get_ttx(306), get_ttx(569)) - 1;
 
 		if (i != -2) {
-			ds_writew(ACTION, i + ACTION_ID_ICON_1);
+			g_action = (i + ACTION_ID_ICON_1);
 		}
 	}
 
 	i = 0;
 
-	if (ds_readws(ACTION) == ACTION_ID_ICON_1) {
+	if (g_action == ACTION_ID_ICON_1) {
 
 		GRP_split();
 		g_can_merge_group = can_merge_group();
 
-	} else if (ds_readws(ACTION) == ACTION_ID_ICON_2) {
+	} else if (g_action == ACTION_ID_ICON_2) {
 
 		GRP_merge();
 		g_can_merge_group = -1;
 
-	} else if (ds_readws(ACTION) == ACTION_ID_ICON_3) {
+	} else if (g_action == ACTION_ID_ICON_3) {
 
 		GRP_switch_to_next(0);
 		i = 1;
 
-	} else if (ds_readws(ACTION) == ACTION_ID_ICON_4) {
+	} else if (g_action == ACTION_ID_ICON_4) {
 
 		game_options();
 
-	} else if (ds_readws(ACTION) == ACTION_ID_ICON_5) {
+	} else if (g_action == ACTION_ID_ICON_5) {
 
 		show_automap();
 
-	} else if (ds_readws(ACTION) == ACTION_ID_ICON_6) {
+	} else if (g_action == ACTION_ID_ICON_6) {
 
 		select_magic_user();
 
-	} else if (ds_readws(ACTION) == ACTION_ID_ICON_7) {
+	} else if (g_action == ACTION_ID_ICON_7) {
 
 		gs_current_loctype = LOCTYPE_CITYCAMP;
 		g_citycamp_city = 1; /* CITYCAMP takes place in a town */
 		i = 1;
 
-	} else if (ds_readws(ACTION) == ACTION_ID_ICON_8 && ds_readbs((NEW_MENU_ICONS + 7)) != MENU_ICON_NONE) {
+	} else if (g_action == ACTION_ID_ICON_8 && ds_readbs((NEW_MENU_ICONS + 7)) != MENU_ICON_NONE) {
 
 		gs_current_loctype = LOCTYPE_MARKET;
 		i = 1;
 
-	} else if (ds_readws(ACTION) == ACTION_ID_LEFT) {
+	} else if (g_action == ACTION_ID_LEFT) {
 
 		update_direction(3);
 
-	} else if (ds_readws(ACTION) == ACTION_ID_RIGHT) {
+	} else if (g_action == ACTION_ID_RIGHT) {
 
 		update_direction(1);
 
-	} else if (ds_readws(ACTION) == ACTION_ID_UP) {
+	} else if (g_action == ACTION_ID_UP) {
 
 		bi = get_border_index(ds_readb(STEPTARGET_FRONT));
 
@@ -994,7 +994,7 @@ signed short city_step(void)
 			no_way();
 		}
 
-	} else if (ds_readws(ACTION) == ACTION_ID_DOWN) {
+	} else if (g_action == ACTION_ID_DOWN) {
 
 		bi = get_border_index(ds_readb(STEPTARGET_BACK));
 
@@ -1085,24 +1085,23 @@ void seg066_14dd(signed short forward)
 
 	if (gs_x_target < 0) {
 
-		gs_x_target = (0);
+		gs_x_target = 0;
 		no_way();
 
 	} else if (g_dng_map_size - 1 < gs_x_target) {
 
-		gs_x_target = (g_dng_map_size - 1);
+		gs_x_target = g_dng_map_size - 1;
 		no_way();
-
 	}
 
 	if (gs_y_target < 0) {
 
-		gs_y_target = (0);
+		gs_y_target = 0;
 		no_way();
 
 	} else if (gs_y_target > 15) {
 
-		gs_y_target = (15);
+		gs_y_target = 15;
 		no_way();
 	}
 }

@@ -241,7 +241,7 @@ void TM_func1(signed short route_no, signed short backwards)
 		gs_route_progress += (gs_trv_return == 2 ? -gs_route_stepsize : gs_route_stepsize);
 		gs_route_dayprogress += gs_route_stepsize;
 
-		if (ds_readws(MOUSE2_EVENT) != 0 || ds_readws(ACTION) == ACTION_ID_PAGE_UP)
+		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP)
 		{
 			if (!gs_forcedmarch_timer)
 			{

@@ -107,7 +107,7 @@ void do_healer(void)
 
 		handle_gui_input();
 
-		if (ds_readw(MOUSE2_EVENT) != 0 || ds_readw(ACTION) == ACTION_ID_PAGE_UP) {
+		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
 
 			g_textbox_width = 4;
 
@@ -119,16 +119,16 @@ void do_healer(void)
 			g_textbox_width = 3;
 
 			if (answer != -2) {
-				ds_writew(ACTION, answer + ACTION_ID_ICON_1);
+				g_action = (answer + ACTION_ID_ICON_1);
 			}
 		}
 
-		if (ds_readw(ACTION) == ACTION_ID_ICON_4) {
+		if (g_action == ACTION_ID_ICON_4) {
 			leave_healer = 1;
 			continue;
 		}
 
-		if (ds_readw(ACTION) == ACTION_ID_ICON_1) {
+		if (g_action == ACTION_ID_ICON_1) {
 
 			/* Heal Wounds */
 
@@ -197,7 +197,7 @@ void do_healer(void)
 				}
 			}
 
-		} else if (ds_readw(ACTION) == ACTION_ID_ICON_2) {
+		} else if (g_action == ACTION_ID_ICON_2) {
 			/* Cure Disease */
 			money = get_party_money();
 			answer = select_hero_from_group(get_ttx(460));
@@ -262,7 +262,7 @@ void do_healer(void)
 					}
 				}
 			}
-		} else if (ds_readw(ACTION) == ACTION_ID_ICON_3) {
+		} else if (g_action == ACTION_ID_ICON_3) {
 			/* Heal Poison */
 			money = get_party_money();
 			answer = select_hero_from_group(get_ttx(460));

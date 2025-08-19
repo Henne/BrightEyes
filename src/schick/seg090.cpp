@@ -268,33 +268,40 @@ signed short DNG12_handler(void)
 			GUI_output(get_tx(17));
 		}
 	} else if (target_pos == DNG_POS(1,3,2) && target_pos != gs_dng_handled_pos && gs_direction == SOUTH) {
+
 #if !defined(__BORLANDC__)
 		D1_INFO("Rueckwaerts gehen\n");
 #endif
 		GUI_output(get_tx(23));
-		gs_x_target = (1);
-		gs_y_target = (3);
-		gs_direction = (WEST);
+		gs_x_target = 1;
+		gs_y_target = 3;
+		gs_direction = WEST;
 		DNG_update_pos();
+
 	} else if (target_pos == DNG_POS(1,2,3) && target_pos != gs_dng_handled_pos && gs_direction == EAST) {
+
 #if !defined(__BORLANDC__)
 		D1_INFO("Rueckwaerts gehen\n");
 #endif
 		GUI_output(get_tx(23));
-		gs_x_target = (5);
-		gs_y_target = (3);
-		gs_direction = (EAST);
+		gs_x_target = 5;
+		gs_y_target = 3;
+		gs_direction = EAST;
 		DNG_update_pos();
+
 	} else if (target_pos == DNG_POS(1,4,3) && target_pos != gs_dng_handled_pos && gs_direction == WEST) {
+
 #if !defined(__BORLANDC__)
 		D1_INFO("Rueckwaerts gehen\n");
 #endif
 		GUI_output(get_tx(23));
-		gs_x_target = (3);
-		gs_y_target = (1);
-		gs_direction = (NORTH);
+		gs_x_target = 3;
+		gs_y_target = 1;
+		gs_direction = NORTH;
 		DNG_update_pos();
+
 	} else if (target_pos == DNG_POS(1,11,6) && target_pos != gs_dng_handled_pos) {
+
 #if !defined(__BORLANDC__)
 		D1_INFO("Illusionswand und Grube\n");
 #endif
@@ -468,11 +475,12 @@ signed short DNG12_handler(void)
 		}
 
 	} else if (target_pos == DNG_POS(0,13,15) && target_pos != gs_dng_handled_pos) {
+
 		/* exit mine */
 		leave_dungeon();
-		gs_x_target = (1);
-		gs_y_target = (6);
-		gs_direction = (NORTH);
+		gs_x_target = 1;
+		gs_y_target = 6;
+		gs_direction = NORTH;
 	}
 
 	g_textbox_width = tw_bak;

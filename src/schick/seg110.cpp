@@ -149,7 +149,7 @@ void TRV_a_path(void)
 		/* Original-Glitch:
 		 * gs_travel_detour == 1 is indicating a detour to DNG_TOTENSCHIFF (which has the ID 1).
 		 * Probably, this does not make a difference, but still, it would be better to use another number. */
-		gs_travel_detour = (1);
+		gs_travel_detour = 1;
 	} else {
 		/* swim back */
 
@@ -268,7 +268,7 @@ void tevent_020(void)
 				/* Original-Glitch:
 				 * gs_travel_detour == 1 is indicating a detour to DNG_TOTENSCHIFF (which had the ID 1).
 				 * Probably, this does not make a difference, but still, it would be better to use another number. */
-				gs_travel_detour = (1);
+				gs_travel_detour = 1;
 			}
 		}
 

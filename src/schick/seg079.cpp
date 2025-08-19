@@ -49,7 +49,7 @@ signed short DNG03_handler(void)
 	{
 		GUI_output(get_tx(1));
 
-		gs_x_target = (gs_y_target = (1));
+		gs_x_target = gs_y_target = 1;
 		DNG_inc_level();
 
 	} else if (target_pos == DNG_POS(0,3,4) && target_pos != gs_dng_handled_pos && gs_direction == NORTH)
@@ -362,7 +362,7 @@ signed short DNG03_handler(void)
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH &&
-				host_readws(hero + HERO_AE) != 0)
+				host_readws(hero + HERO_AE))
 			{
 				sub_ae_splash(hero, random_schick(6));
 

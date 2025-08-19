@@ -177,7 +177,7 @@ signed short GUI_enter_text(char* dst, signed short x, signed short y, signed sh
 	}
 
 	wait_for_keyboard2();
-	ds_writew(MOUSE1_EVENT1, 0);
+	g_mouse1_event1 = 0;
 
 	c = 0;
 	while ((c != 0xd) || (pos == 0)) {
@@ -186,26 +186,26 @@ signed short GUI_enter_text(char* dst, signed short x, signed short y, signed sh
 dummy:
 
 			/* This loop is evil */
-			do {;} while ((CD_bioskey(1) == 0) && (ds_readws(MOUSE1_EVENT1) == 0));
+			do {;} while ((CD_bioskey(1) == 0) && !g_mouse1_event2);
 
-			if (ds_readws(MOUSE1_EVENT1) != 0) {
-				ds_writew(BIOSKEY_EVENT, 0x0d);
-				ds_writew(MOUSE1_EVENT1, ds_writew(MOUSE1_EVENT2, 0x00));
+			if (g_mouse1_event1) {
+				g_bioskey_event = 0x0d;
+				g_mouse1_event1 = g_mouse1_event2 = 0;
 			} else {
-				ds_writew(ACTION, (signed short)(ds_writew(BIOSKEY_EVENT, bioskey(0))) >> 8);
-				and_ds_ws(BIOSKEY_EVENT, 0xff);
+				g_action = (g_bioskey_event = bioskey(0)) >> 8;
+				g_bioskey_event &= 0xff;
 			}
 
-		} while ((ds_readws(ACTION) == 0) && (ds_readws(BIOSKEY_EVENT) == 0));
+		} while ((g_action == 0) && (g_bioskey_event == 0));
 
-		c = ds_readws(BIOSKEY_EVENT);
+		c = g_bioskey_event;
 
 		if (c == 0x0d) {
 
-		} else if (ds_readw(ACTION) == ACTION_ID_ESC) {
+		} else if (g_action == ACTION_ID_ESC) {
 			*dst_start = 0;
 			refresh_screen_size();
-			ds_writew(ACTION, 0);
+			g_action = 0;
 			return -1;
 		} else if (c == 8) {
 			if (pos > 0) {
@@ -273,8 +273,7 @@ dummy:
 }
 
 //static
-void GUI_draw_radio_bg(signed short header, signed short options, signed short width,
-								signed short height)
+void GUI_draw_radio_bg(signed short header, signed short options, signed short width, signed short height)
 {
 	signed short i;
 
@@ -338,8 +337,8 @@ signed short GUI_input(char *str, unsigned short num)
 
 	retval = 0;
 
-	l7 = ds_readw(UPDATE_STATUSLINE);
-	ds_writew(UPDATE_STATUSLINE, 0);
+	l7 = g_update_statusline;
+	g_update_statusline = 0;
 
 	if (!str || !(*str) || g_autofight != 0)
 		return -1;
@@ -377,7 +376,7 @@ signed short GUI_input(char *str, unsigned short num)
 
 	GUI_print_header(str);
 
-	ds_writew(MOUSE2_EVENT, 0);
+	g_mouse2_event = 0;
 
 	refresh_screen_size();
 
@@ -409,16 +408,16 @@ signed short GUI_input(char *str, unsigned short num)
 
 	refresh_screen_size();
 
-	g_textline_posx = (l3);
-	g_textline_posy = (l4);
-	g_textline_maxlen = (l5);
+	g_textline_posx = l3;
+	g_textline_posy = l4;
+	g_textline_maxlen = l5;
 
-	ds_writew(ACTION, 0);
+	g_action = 0;
 	g_dialogbox_lock = 0;
 
 	g_wallclock_update = l6;
 	g_gui_text_centered = 0;
-	ds_writew(UPDATE_STATUSLINE, l7);
+	g_update_statusline = l7;
 
 	return retval;
 }
@@ -487,8 +486,8 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
 	signed short l_si, l_di;
 
 	l13 = g_ani_enabled;
-	l12 = ds_readw(UPDATE_STATUSLINE);
-	ds_writew(UPDATE_STATUSLINE, 0);
+	l12 = g_update_statusline;
+	g_update_statusline = 0;
 
 	set_var_to_zero();
 
@@ -594,9 +593,9 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
 
 	g_wallclock_update = l11;
 
-	ds_writew(ACTION, g_dialogbox_lock = 0);
+	g_action = (g_dialogbox_lock = 0);
 
-	ds_writew(UPDATE_STATUSLINE, l12);
+	g_update_statusline = l12;
 
 	if (l13 != 0)
 		init_ani(2);
@@ -635,7 +634,7 @@ signed short GUI_menu_input(signed short positions, signed short h_lines, signed
 		g_mouse_posy_max = l6 + g_textbox_pos_y - 1 + positions * 8;
 		refresh_screen_size();
 
-		ds_writew(MOUSE1_EVENT2, ds_writew(MOUSE1_EVENT1, ds_writew(MOUSE2_EVENT, 0)));
+		g_mouse1_event2 = g_mouse1_event1 = g_mouse2_event = 0;
 
 		while (!done) {
 			g_action_table_secondary = &g_action_table_menu[0];
@@ -647,28 +646,26 @@ signed short GUI_menu_input(signed short positions, signed short h_lines, signed
 				l5 = g_menu_selected;
 			}
 
-			if (ds_readw(MOUSE2_EVENT) != 0 ||
-				ds_readw(ACTION) == ACTION_ID_ESC ||
-				ds_readw(ACTION) == ACTION_ID_PAGE_DOWN) {
+			if (g_mouse2_event || g_action == ACTION_ID_ESC || g_action == ACTION_ID_PAGE_DOWN) {
 				/* close menu */
 
 				retval = -1;
 				done = 1;
-				ds_writew(MOUSE2_EVENT, 0);
+				g_mouse2_event = 0;
 			}
 
-			if (ds_readw(ACTION) == ACTION_ID_RETURN) {
+			if (g_action == ACTION_ID_RETURN) {
 				retval = g_menu_selected;
 				done = 1;
 			}
 
 			/* TODO: ... */
-			if (ds_readw(ACTION) == ACTION_ID_UP) {
+			if (g_action == ACTION_ID_UP) {
 				if (g_menu_selected-- == 1)
 					g_menu_selected = positions;
 			}
 
-			if (ds_readw(ACTION) == ACTION_ID_DOWN) {
+			if (g_action == ACTION_ID_DOWN) {
 				if (g_menu_selected++ == positions)
 					g_menu_selected = 1;
 			}
@@ -680,9 +677,9 @@ signed short GUI_menu_input(signed short positions, signed short h_lines, signed
 
 			if (ds_readw(GUI_BOOL_FLAG) != 0) {
 				/* in yes-no-mode, answer "Ja" (yes) can be selected with the 'J' key, and answer "Nein" (no) can be selected with the 'N' key. */
-				if (ds_readw(ACTION) == ACTION_ID_J) {
+				if (g_action == ACTION_ID_J) {
 					retval = done = 1;
-				} else if (ds_readw(ACTION) == ACTION_ID_N) {
+				} else if (g_action == ACTION_ID_N) {
 					retval = 2;
 					done = 1;
 				}
@@ -704,7 +701,7 @@ signed short GUI_menu_input(signed short positions, signed short h_lines, signed
 		do {
 			delay_or_keypress(10000);
 
-		} while (ds_readw(ACTION) == 0);
+		} while (g_action == 0);
 
 		retval = -1;
 	}
@@ -726,8 +723,8 @@ signed short GUI_radio(char *text, signed char options, ...)
 	signed short retval;
 	signed short l12;
 
-	l12 = ds_readw(UPDATE_STATUSLINE);
-	ds_writew(UPDATE_STATUSLINE, 0);
+	l12 = g_update_statusline;
+	g_update_statusline = 0;
 
 	if (!options) {
 		GUI_output(text);
@@ -789,8 +786,8 @@ signed short GUI_radio(char *text, signed char options, ...)
 	g_textline_posy = l8;
 	g_textline_maxlen = l9;
 	g_txt_tabpos[0] = l10;
-	ds_writew(ACTION, g_dialogbox_lock = 0);
-	ds_writew(UPDATE_STATUSLINE, l12);
+	g_action = (g_dialogbox_lock = 0);
+	g_update_statusline = l12;
 
 	return retval;
 }

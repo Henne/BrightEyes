@@ -88,7 +88,7 @@ void do_wildcamp(void)
 
 		handle_gui_input();
 
-		if (ds_readws(MOUSE2_EVENT) != 0 || ds_readws(ACTION) == ACTION_ID_PAGE_UP) {
+		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
 
 			i = !g_good_camp_place ? 6 : 7;
 
@@ -99,11 +99,11 @@ void do_wildcamp(void)
 						get_ttx(814)) -1;
 
 			if (answer != -2) {
-				ds_writews(ACTION, answer + ACTION_ID_ICON_1);
+				g_action = (answer + ACTION_ID_ICON_1);
 			}
 		}
 
-		if (ds_readws(ACTION) == ACTION_ID_ICON_1) {
+		if (g_action == ACTION_ID_ICON_1) {
 
 			answer = -1;
 
@@ -152,7 +152,7 @@ void do_wildcamp(void)
 				}
 			}
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_2) {
+		} else if (g_action == ACTION_ID_ICON_2) {
 
 			if (g_good_camp_place == 99) {
 				l_di = replenish_stocks(g_replenish_stocks_mod + 99, stock_tries);
@@ -164,11 +164,11 @@ void do_wildcamp(void)
 				stock_tries++;
 			}
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_3) {
+		} else if (g_action == ACTION_ID_ICON_3) {
 
 			GUI_use_skill2(0, get_ttx(395));
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_4) {
+		} else if (g_action == ACTION_ID_ICON_4) {
 
 			answer = select_hero_ok(get_ttx(317));
 
@@ -207,7 +207,7 @@ void do_wildcamp(void)
 				}
 			}
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_5) {
+		} else if (g_action == ACTION_ID_ICON_5) {
 			/* COLLECT HERBS */
 
 			g_skilled_hero_pos = get_skilled_hero_pos(TA_PFLANZENKUNDE);
@@ -256,7 +256,7 @@ void do_wildcamp(void)
 					}
 				}
 			}
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_6) {
+		} else if (g_action == ACTION_ID_ICON_6) {
 			/* Sleep */
 
 			if (GUI_bool(get_ttx(318))) {
@@ -365,7 +365,7 @@ void do_wildcamp(void)
 
 				done = 1;
 			}
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_7) {
+		} else if (g_action == ACTION_ID_ICON_7) {
 			done = 1;
 		}
 	}

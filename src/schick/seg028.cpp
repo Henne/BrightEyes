@@ -382,15 +382,15 @@ void unused_store(signed short no)
 	height = host_readws((Bit8u*)&height);
 #endif
 
-	EMS_map_memory(ds_readws(EMS_UNUSED_HANDLE), g_ems_unused_lpage, 0);
-	EMS_map_memory(ds_readws(EMS_UNUSED_HANDLE), g_ems_unused_lpage + 1, 1);
-	EMS_map_memory(ds_readws(EMS_UNUSED_HANDLE), g_ems_unused_lpage + 2, 2);
-	EMS_map_memory(ds_readws(EMS_UNUSED_HANDLE), 0, 3);
+	EMS_map_memory(g_ems_unused_handle, g_ems_unused_lpage, 0);
+	EMS_map_memory(g_ems_unused_handle, g_ems_unused_lpage + 1, 1);
+	EMS_map_memory(g_ems_unused_handle, g_ems_unused_lpage + 2, 2);
+	EMS_map_memory(g_ems_unused_handle, 0, 3);
 
 	size = width * height;
 	memmove((Bit8u*)(g_ems_frame_ptr + g_ems_unused_offset), (g_renderbuf_ptr + 0x7530), size);
 
-	ptr = no * 5 + (Bit8u*)ds_readd(EMS_UNUSED_TAB);
+	ptr = no * 5 + g_ems_unused_tab;
 
 	host_writebs(ptr, (signed char)g_ems_unused_lpage);
 	host_writeb(ptr + 1, g_ems_unused_offset >> 8);
@@ -405,15 +405,15 @@ Bit8u* unused_load(signed short no)
 {
 	signed short l_si;
 
-	EMS_map_memory(ds_readws(EMS_UNUSED_HANDLE), 0, 3);
+	EMS_map_memory(g_ems_unused_handle, 0, 3);
 
-	l_si = host_readb((Bit8u*)ds_readd(EMS_UNUSED_TAB) + 5 * no);
+	l_si = host_readb(g_ems_unused_tab + 5 * no);
 
-	EMS_map_memory(ds_readws(EMS_UNUSED_HANDLE), l_si, 0);
-	EMS_map_memory(ds_readws(EMS_UNUSED_HANDLE), l_si + 1, 1);
-	EMS_map_memory(ds_readws(EMS_UNUSED_HANDLE), l_si + 2, 2);
+	EMS_map_memory(g_ems_unused_handle, l_si, 0);
+	EMS_map_memory(g_ems_unused_handle, l_si + 1, 1);
+	EMS_map_memory(g_ems_unused_handle, l_si + 2, 2);
 
-	return (Bit8u*)g_ems_frame_ptr + 256 * host_readb((Bit8u*)ds_readd(EMS_UNUSED_TAB) + 5 * no + 1);
+	return g_ems_frame_ptr + 256 * host_readb(g_ems_unused_tab + 5 * no + 1);
 }
 
 void load_map(void)
@@ -450,12 +450,12 @@ void load_map(void)
 
 #if defined(__BORLANDC__)
 	/* if the ems_map_handler exists */
-	if (ds_readw(EMS_TRAVEL_MAP)) {
+	if (g_ems_travelmap_handle) {
 		/* get data from EMS */
-		EMS_map_memory(ds_readw(EMS_TRAVEL_MAP), 0, 0);
-		EMS_map_memory(ds_readw(EMS_TRAVEL_MAP), 1, 1);
-		EMS_map_memory(ds_readw(EMS_TRAVEL_MAP), 2, 2);
-		EMS_map_memory(ds_readw(EMS_TRAVEL_MAP), 3, 3);
+		EMS_map_memory(g_ems_travelmap_handle, 0, 0);
+		EMS_map_memory(g_ems_travelmap_handle, 1, 1);
+		EMS_map_memory(g_ems_travelmap_handle, 2, 2);
+		EMS_map_memory(g_ems_travelmap_handle, 3, 3);
 		/* set map pointer to EMS */
 		gs_travel_map_ptr = (Bit8u*)g_ems_frame_ptr;
 	} else {
@@ -469,12 +469,13 @@ void load_map(void)
 #if defined(__BORLANDC__)
 		if (g_ems_enabled) {
 
-			if ((ds_writew(EMS_TRAVEL_MAP, alloc_EMS(64100)))) {
+			if ((g_ems_travelmap_handle = alloc_EMS(64100))) {
+
 				/* map the map into EMS */
-				EMS_map_memory(ds_readw(EMS_TRAVEL_MAP), 0, 0);
-				EMS_map_memory(ds_readw(EMS_TRAVEL_MAP), 1, 1);
-				EMS_map_memory(ds_readw(EMS_TRAVEL_MAP), 2, 2);
-				EMS_map_memory(ds_readw(EMS_TRAVEL_MAP), 3, 3);
+				EMS_map_memory(g_ems_travelmap_handle, 0, 0);
+				EMS_map_memory(g_ems_travelmap_handle, 1, 1);
+				EMS_map_memory(g_ems_travelmap_handle, 2, 2);
+				EMS_map_memory(g_ems_travelmap_handle, 3, 3);
 
 				/* TODO: update window */
 				memmove((void*)g_ems_frame_ptr,	(void*)g_renderbuf_ptr, 320 * 200 + 98);

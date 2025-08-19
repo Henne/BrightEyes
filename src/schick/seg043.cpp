@@ -737,19 +737,19 @@ void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 								g_fig_list_elem.x1 = (ds_readbs(GFXTAB_TWOFIELDED_X1 + host_readbs(mon + ENEMY_SHEET_VIEWDIR)));
 								g_fig_list_elem.x2 = (ds_readbs(GFXTAB_TWOFIELDED_X2 + host_readbs(mon + ENEMY_SHEET_VIEWDIR)));
 							} else {
-								g_fig_list_elem.x1 = (0);
-								g_fig_list_elem.x2 = (31);
-								g_fig_list_elem.twofielded = (-1);
+								g_fig_list_elem.x1 = 0;
+								g_fig_list_elem.x2 = 31;
+								g_fig_list_elem.twofielded = -1;
 							}
 
-							g_fig_list_elem.y1 = (0);
-							g_fig_list_elem.y2 = (39);
-							g_fig_list_elem.height = (40);
-							g_fig_list_elem.width = (32);
-							g_fig_list_elem.is_enemy = (1);
-							g_fig_list_elem.reload = (-1);
-							g_fig_list_elem.wsheet = (-1);
-							g_fig_list_elem.sheet = (-1);
+							g_fig_list_elem.y1 = 0;
+							g_fig_list_elem.y2 = 39;
+							g_fig_list_elem.height = 40;
+							g_fig_list_elem.width = 32;
+							g_fig_list_elem.is_enemy = 1;
+							g_fig_list_elem.reload = -1;
+							g_fig_list_elem.wsheet = -1;
+							g_fig_list_elem.sheet = -1;
 
 							FIG_add_to_list(host_readbs(mon + ENEMY_SHEET_FIGHTER_ID));
 						}

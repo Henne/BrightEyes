@@ -520,7 +520,7 @@ void GRP_move_hero(signed short src_pos)
 		g_mouse_posx_bak = g_mouse_posx;
 		g_mouse_posy_bak = g_mouse_posy;
 
-		while (ds_readw(MOUSE1_EVENT2) == 0) {
+		while (!g_mouse1_event2) {
 #if !defined(__BORLANDC__)
 			/* call DOSBOX to handle mouse ISR */
 			wait_for_vsync();
@@ -617,7 +617,7 @@ void GRP_move_hero(signed short src_pos)
 			}
 		}
 
-		ds_writew(MOUSE1_EVENT2, 0);
+		g_mouse1_event2 = 0;
 		g_mouse_posy_min = 0;
 		g_mouse_posy_max = 200 - 1;
 		g_mouse_posx_min = 0;

@@ -608,13 +608,13 @@ void cleanup_game(void)
 			}
 		}
 
-		if (ds_readw(EMS_UNUSED_HANDLE) != 0) {
-			EMS_free_pages(ds_readw(EMS_UNUSED_HANDLE));
+		if (g_ems_unused_handle) {
+			EMS_free_pages(g_ems_unused_handle);
 		}
 
 		/* free map memory */
-		if (ds_readw(EMS_TRAVEL_MAP) != 0) {
-			EMS_free_pages(ds_readw(EMS_TRAVEL_MAP));
+		if (g_ems_travelmap_handle != 0) {
+			EMS_free_pages(g_ems_travelmap_handle);
 		}
 	}
 

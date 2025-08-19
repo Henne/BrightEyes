@@ -92,7 +92,7 @@ void show_citizen(void)
 				if (!show_storytext()) {
 					GUI_print_loc_line(g_text_output_buf);
 				} else {
-					ds_writew(ACTION, ACTION_ID_ESC);
+					g_action = (ACTION_ID_ESC);
 				}
 			} else {
 				GUI_print_loc_line(g_text_output_buf);
@@ -102,9 +102,9 @@ void show_citizen(void)
 			}
 		}
 
-	} while ((ds_readw(ACTION) == 0) && (ds_readw(MOUSE1_EVENT2) == 0));
+	} while ((g_action == 0) && (g_mouse1_event2 == 0));
 
-	ds_writew(MOUSE1_EVENT2, 0);
+	g_mouse1_event2 = 0;
 	set_var_to_zero();
 	copy_palette();
 	leave_location();
@@ -504,7 +504,7 @@ signed short game_options(void)
 		handle_input();
 		g_action_table_secondary = NULL;
 
-		if (ds_readw(MOUSE2_EVENT) != 0 || ds_readws(ACTION) == ACTION_ID_PAGE_UP) {
+		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
 
 			/* use the radio menu */
 			answer = GUI_radio(get_ttx(590), 9,
@@ -519,11 +519,11 @@ signed short game_options(void)
 						get_ttx(589)) - 1;
 
 			if (answer != -2) {
-				ds_writew(ACTION, answer + ACTION_ID_ICON_1);
+				g_action = (answer + ACTION_ID_ICON_1);
 			}
 		}
 
-		if (ds_readws(ACTION) == ACTION_ID_ICON_1) {
+		if (g_action == ACTION_ID_ICON_1) {
 
 			do {
 				game_state = load_game_state();
@@ -533,29 +533,29 @@ signed short game_options(void)
 				done = 1;
 			}
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_2) {
+		} else if (g_action == ACTION_ID_ICON_2) {
 
 			if (save_game_state()) {
 				done = 1;
 			}
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_3) {
+		} else if (g_action == ACTION_ID_ICON_3) {
 
 			g_renderbuf_in_use_flag = 1;
 			char_erase();
 			g_renderbuf_in_use_flag = 0;
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_4) {
+		} else if (g_action == ACTION_ID_ICON_4) {
 
 			g_renderbuf_in_use_flag = 1;
 			show_treasure_map();
 			g_special_screen = 1;
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_5) {
+		} else if (g_action == ACTION_ID_ICON_5) {
 
 			diary_show();
 			done = 1;
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_6) {
+		} else if (g_action == ACTION_ID_ICON_6) {
 
 			sprintf(g_dtp2, get_ttx(827), g_delay_factor);
 
@@ -565,11 +565,11 @@ signed short game_options(void)
 				g_delay_factor = new_delay;
 			}
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_7) {
+		} else if (g_action == ACTION_ID_ICON_7) {
 
 			sound_menu();
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_8) {
+		} else if (g_action == ACTION_ID_ICON_8) {
 
 			if (GUI_bool(get_ttx(299))) {
 
@@ -577,7 +577,7 @@ signed short game_options(void)
 				g_game_state = (GAME_STATE_QUIT);
 			}
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_9) {
+		} else if (g_action == ACTION_ID_ICON_9) {
 			done = 1;
 		}
 

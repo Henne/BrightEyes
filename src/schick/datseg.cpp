@@ -6451,21 +6451,21 @@ unsigned char g_ani_palette_size; // ds:0xce3a
 unsigned char g_ani_compr_flag; // ds:0xce39, {0,1 = compressed}
 unsigned char *g_ani_main_ptr; // ds:0xce35
 struct{unsigned char unkn[263];} g_ani_area_table[10]; // ds:0xc3ef
-unsigned char g_ani_areacount; // ds:0xc3ee
+signed char g_ani_areacount; // ds:0xc3ee
 unsigned char g_ani_height; // ds:0xc3ed
 unsigned short g_ani_unknown2; // ds:0xc3eb
 unsigned short g_ani_unknown1; // ds:0xc3e9
-unsigned short g_ani_width; // ds:0xc3e7
+signed short g_ani_width; // ds:0xc3e7
 unsigned char g_unkn_080[8]; // ds:0xc3df
 HugePt g_buffer9_ptr; // ds:0xc3db, to buffer of size 180000 (or 203000 if LARGE_BUF), used for NVF
-unsigned short g_action; // ds:0xc3d9
-unsigned short g_bioskey_event; // ds:0xc3d7
-unsigned short g_mouse1_event2; // ds:0xc3d5
-unsigned short g_mouse2_event; // ds:0xc3d3
-unsigned short g_mouse1_event1; // ds:0xc3d1
-unsigned short g_mouse1_doubleclick; // ds:0xc3cf
+signed short g_action; // ds:0xc3d9
+signed short g_bioskey_event; // ds:0xc3d7
+signed short g_mouse1_event2; // ds:0xc3d5
+signed short g_mouse2_event; // ds:0xc3d3
+signed short g_mouse1_event1; // ds:0xc3d1
+signed short g_mouse1_doubleclick; // ds:0xc3cf
 unsigned char g_unkn_079[2]; // ds:0xc3cd
-unsigned short g_update_statusline; // ds:0xc3cb
+signed short g_update_statusline; // ds:0xc3cb
 signed short g_unused_spinlock_flag; // ds:0xc3c9
 signed short g_have_mouse; // ds:0xc3c7
 signed short g_bioskey_event10; // ds:0xc3c5
@@ -6489,9 +6489,9 @@ unsigned char *g_gui_buffer_unkn; // ds:0xbff9
 char *g_radio_name_list[25]; // ds:0xbf95, used for items, heroes, spells, skills, recipes
 unsigned char g_dng_map[512]; // ds:0xbd95
 unsigned char g_dng_map_size; // ds:0xbd94
-unsigned short g_ems_unused_handle; // ds:0xbd92
-unsigned short g_ems_travel_map; // ds:0xbd90
-void *g_ems_unused_tab; // ds:0xbd8c
+signed short g_ems_unused_handle; // ds:0xbd92
+signed short g_ems_travelmap_handle; // ds:0xbd90
+Bit8u *g_ems_unused_tab; // ds:0xbd8c
 unsigned char g_unkn_075[1]; // ds:0xbd8b
 unsigned char g_visual_field_vals[29]; // ds:0xbd6e
 unsigned char g_unkn_074[1]; // ds:0xbd6d

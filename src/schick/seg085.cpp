@@ -237,9 +237,9 @@ signed short DNG10_handler(void)
 			GUI_output(get_tx(23));
 			sub_group_le(random_schick(6));
 
-			gs_x_target = (1);
-			gs_y_target = (3);
-			gs_direction = (WEST);
+			gs_x_target = 1;
+			gs_y_target = 3;
+			gs_direction = WEST;
 			DNG_update_pos();
 		}
 
@@ -270,10 +270,7 @@ signed short DNG10_handler(void)
 		{
 			xor_ds_bs(DNG10_MUMMY_LEVER, 1);
 
-			sprintf(g_dtp2,
-				get_tx(26),
-				(char*)hero + HERO_NAME2);
-
+			sprintf(g_dtp2, get_tx(26), (char*)hero + HERO_NAME2);
 			GUI_output(g_dtp2);
 
 			sub_hero_le(hero, 2);

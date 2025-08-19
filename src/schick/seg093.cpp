@@ -72,12 +72,12 @@ signed short do_travel_mode(void)
 
 	prepare_map_marker();
 
-	ds_writew(MOUSE1_EVENT1, 0);
+	g_mouse1_event1 = 0;
 
 	signpost_ptr = p_datseg + SIGNPOSTS;
 
 	do {
-		if (g_request_refresh != 0)
+		if (g_request_refresh)
 		{
 			update_mouse_cursor();
 
@@ -105,7 +105,7 @@ signed short do_travel_mode(void)
 			while (1) {
 				handle_input();
 
-				if (ds_readws(MOUSE2_EVENT) != 0 || ds_readws(ACTION) == ACTION_ID_PAGE_UP)
+				if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP)
 				{
 					i = 0;
 					while ((l_di = host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + i)) != 255)
@@ -132,7 +132,7 @@ signed short do_travel_mode(void)
 
 					g_textbox_width = tw_bak;
 
-					g_current_town_anix = (0);
+					g_current_town_anix = 0;
 
 					set_and_spin_lock();
 
@@ -193,7 +193,7 @@ signed short do_travel_mode(void)
 
 					break;
 
-				} else if (ds_readw(MOUSE1_EVENT1) != 0 )
+				} else if (g_mouse1_event1)
 				{
 
 					for (i = 0, l4 = -1; i < 52; i++)
@@ -215,7 +215,7 @@ signed short do_travel_mode(void)
 					if (l4 != -1)
 					{
 						answer = g_current_town_anix;
-						g_current_town_anix = (0);
+						g_current_town_anix = 0;
 						l6 = g_basepos_x;
 						l7 = g_basepos_y;
 						g_basepos_y = 0;
@@ -227,10 +227,10 @@ signed short do_travel_mode(void)
 
 						g_basepos_x = l6;
 						g_basepos_y = l7;
-						g_current_town_anix = (answer);
+						g_current_town_anix = answer;
 					}
 
-					ds_writew(MOUSE1_EVENT1, 0);
+					g_mouse1_event1 = 0;
 				}
 			}
 			break;

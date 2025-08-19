@@ -743,7 +743,7 @@ void tevent_100(void)
 
 		} else if (answer == 3)
 		{
-			gs_trv_return = (1);
+			gs_trv_return = 1;
 		}
 	}
 

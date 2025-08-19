@@ -349,11 +349,6 @@ static inline unsigned char *get_hero(signed short index) {
 	return g_heroes + index * SIZEOF_HERO;
 }
 
-static inline void and_ds_ws(Bit16u off, Bit16s val)
-{
-	ds_writew(off, ds_readws(off) & val);
-}
-
 static inline Bit32s sub_ds_ds(Bit16u off, Bit32s val)
 {
 	return ds_writed(off, ds_readds(off) - val);
@@ -1119,7 +1114,6 @@ static inline char* get_itemname(unsigned short item)
 
 #define inc_ds_ws(o)		(++(*(Bit16s*)(ds + (o))))
 
-#define and_ds_ws(o, v)		(*(Bit16s*)(ds + (o)) &= (v))
 #define or_ds_ws(o, v)		(*(Bit16s*)(ds + o) |= (v))
 
 #define sub_ds_ds(o, v)		(*(Bit32s*)(ds + (o)) -= (v))

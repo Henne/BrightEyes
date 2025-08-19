@@ -1118,10 +1118,19 @@ extern unsigned char g_ani_palette_size;	// ds:0xce3a; seg027
 extern unsigned char g_ani_compr_flag;		// ds:0xce39; seg027
 extern unsigned char *g_ani_main_ptr;	// ds:0xce35; seg004, seg027
 
-
-
+extern signed char g_ani_areacount;	// ds:0xc3ee; seg004, seg027
+extern unsigned char g_ani_height;	// ds:0xc3ed; seg004, seg027
+extern unsigned short g_ani_unknown1;	// ds:0xc3eb; seg027
+extern unsigned short g_ani_unknown2;	// ds:0xc3e9; seg027
+extern signed short g_ani_width;	// ds:0xc3e7; seg004
 extern HugePt g_buffer9_ptr;		// ds:0xc3db; seg004-seg120
-
+extern signed short g_action;		// ds:0xc3d9; seg002, seg025-seg097
+extern signed short g_bioskey_event;	// ds:0xc3d7; seg002, seg097
+extern signed short g_mouse1_event2;	// ds:0xc3d5; seg002, seg004, seg025, seg049, seg066, seg097
+extern signed short g_mouse2_event;	// ds:0xc3d3; seg002, seg025-seg097
+extern signed short g_mouse1_event1;	// ds:0xc3d1; seg002, seg034, seg093, seg097
+extern signed short g_mouse1_doubleclick;	// ds:0xc3cf; seg002, seg048
+extern signed short g_update_statusline;	// ds:0xc3cb; seg002, seg004, seg026, seg029, seg046, seg097
 extern signed short g_unused_spinlock_flag;	// ds:0xc3cb; seg002, seg004
 extern signed short g_have_mouse;	// ds:0xc3c7; seg002-seg058
 extern signed short g_bioskey_event10;	// ds:0xc3c5; seg002, seg097
@@ -1144,7 +1153,9 @@ extern unsigned char *g_gui_buffer_unkn;// ds:0xbff9; seg025, seg032, seg097, se
 extern char *g_radio_name_list[25];	// ds:0xbf95; seg033, seg047, seg048, seg098, seg103, seg104, seg105
 extern unsigned char g_dng_map[512];	// ds:0xbd95; seg002-seg107
 extern unsigned char g_dng_map_size;	// ds:0xbd94; seg002, seg003, seg028, seg066, seg074, seg100
-
+extern signed short g_ems_unused_handle;	// ds:0xbd92; seg028, seg120
+extern signed short g_ems_travelmap_handle;	// ds:0xbd90; seg028, seg120
+extern Bit8u *g_ems_unused_tab;		// ds:0xbd8c; seg028
 extern unsigned char *g_heroes;		// ds:0xbd34
 extern unsigned char *g_fightobj_buf;	// ds:0xbd30; seg032, seg040
 extern signed char *g_scenario_buf;	// ds:0xbd2c; seg027, seg032, seg034, seg038, seg040

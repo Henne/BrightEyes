@@ -80,7 +80,7 @@ void status_menu(signed short hero_pos)
 	flag2 = 1;
 	flag3 = 0;
 	flag4 = 0;
-	ds_writew(MOUSE1_DOUBLECLICK, 0);
+	g_mouse1_doubleclick = 0;
 
 	hero1 = hero2 = get_hero(hero_pos);
 
@@ -104,7 +104,7 @@ void status_menu(signed short hero_pos)
 	load_ggsts_nvf();
 
 	g_request_refresh = 1;
-	ds_writew(ACTION, 0);
+	g_action = 0;
 	g_status_page_mode = 1;
 
 	while (flag1 == 0) {
@@ -170,7 +170,7 @@ void status_menu(signed short hero_pos)
 		handle_input();
 
 		/* RIGHT_KEY */
-		if ((ds_readws(ACTION) == ACTION_ID_RIGHT) && (gs_group_member_counts[gs_current_group] > 1)) {
+		if ((g_action == ACTION_ID_RIGHT) && (gs_group_member_counts[gs_current_group] > 1)) {
 
 			/* set hero_pos to the next possible hero */
 			do {
@@ -203,7 +203,7 @@ void status_menu(signed short hero_pos)
 		}
 
 		/* LEFT_KEY */
-		if ((ds_readws(ACTION) == ACTION_ID_LEFT) && (gs_group_member_counts[gs_current_group] > 1)) {
+		if ((g_action == ACTION_ID_LEFT) && (gs_group_member_counts[gs_current_group] > 1)) {
 
 			/* set hero_pos to the next possible hero */
 			do {
@@ -237,7 +237,7 @@ void status_menu(signed short hero_pos)
 		if (g_status_page_mode < 3) {
 
 			/* UP_KEY */
-			if (ds_readws(ACTION) == ACTION_ID_UP) {
+			if (g_action == ACTION_ID_UP) {
 
 				if (ds_readbs(STATUSPAGE_SELITEM4_NO) != -1) {
 
@@ -256,7 +256,7 @@ void status_menu(signed short hero_pos)
 			}
 
 			/* DOWN_KEY */
-			if (ds_readws(ACTION) == ACTION_ID_DOWN) {
+			if (g_action == ACTION_ID_DOWN) {
 
 				if (ds_readbs(STATUSPAGE_SELITEM4_NO) != -1) {
 
@@ -283,14 +283,14 @@ void status_menu(signed short hero_pos)
 				}
 			}
 
-			if (ds_readws(ACTION) >= 128 && ds_readws(ACTION) <= 152)
+			if (g_action >= 128 && g_action <= 152)
 			{
 				if (ds_readbs(STATUSPAGE_SELITEM4_NO) != -1) {
-					ds_writeb(STATUSPAGE_SELITEM4_NO, ds_readws(ACTION) + 128);
-					ds_writew(ACTION, ACTION_ID_RETURN);
-				} else if (ds_readws(ACTION) <= 150) {
-					ds_writeb(STATUSPAGE_SELITEM3_NO, ds_readws(ACTION) + 128);
-					ds_writew(ACTION, ACTION_ID_RETURN);
+					ds_writeb(STATUSPAGE_SELITEM4_NO, g_action + 128);
+					g_action = (ACTION_ID_RETURN);
+				} else if (g_action <= 150) {
+					ds_writeb(STATUSPAGE_SELITEM3_NO, g_action + 128);
+					g_action = (ACTION_ID_RETURN);
 				}
 			}
 
@@ -368,7 +368,7 @@ void status_menu(signed short hero_pos)
 				ds_writeb(STATUSPAGE_SELITEM2_NO, ds_readbs(STATUSPAGE_SELITEM4_NO));
 			}
 
-			if (ds_readws(ACTION) == ACTION_ID_RETURN) {
+			if (g_action == ACTION_ID_RETURN) {
 				if (ds_readbs(STATUSPAGE_SELITEM4_NO) != -1) {
 
 					if (flag4 != 0) {
@@ -446,7 +446,7 @@ void status_menu(signed short hero_pos)
 
 		/* check if the hero is diseased and print a message */
 		if (g_status_page_mode == 1 &&
-			ds_readws(ACTION) == ACTION_ID_240 &&
+			g_action == ACTION_ID_240 &&
 			hero_is_diseased(hero2))
 		{
 			sprintf(g_dtp2, get_tx2(25 + hero_is_diseased(hero2)), (char*)(hero2 + HERO_NAME2),
@@ -456,7 +456,7 @@ void status_menu(signed short hero_pos)
 
 		}
 
-		if (ds_readws(MOUSE2_EVENT) != 0 || ds_readws(ACTION) == ACTION_ID_PAGE_UP) {
+		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
 
 			g_current_cursor_bak =  (Bit8u*)ds_readd(CURRENT_CURSOR);
 			ds_writed(CURRENT_CURSOR, (Bit32u)(p_datseg + DEFAULT_MOUSE_CURSOR));

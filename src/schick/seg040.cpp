@@ -252,18 +252,18 @@ void FIG_draw_scenario(void)
 					g_fig_list_elem.offsety = (g_gfxtab_obj_offset_y[obj_id]);
 					g_fig_list_elem.height = (g_figobj_gfxheight_table[obj_id]);
 					g_fig_list_elem.width = (g_figobj_gfxwidth_table[obj_id]);
-					g_fig_list_elem.x1 = (0);
-					g_fig_list_elem.y1 = (0);
+					g_fig_list_elem.x1 = 0;
+					g_fig_list_elem.y1 = 0;
 					g_fig_list_elem.x2 = (g_figobj_gfxwidth_table[obj_id] - 1);
 					g_fig_list_elem.y2 = (g_figobj_gfxheight_table[obj_id] - 1);
-					g_fig_list_elem.is_enemy = (0);
-					g_fig_list_elem.reload = (0);
-					g_fig_list_elem.wsheet = (-1);
-					g_fig_list_elem.sheet = (-1);
-					g_fig_list_elem.gfxbuf = (ptr);
+					g_fig_list_elem.is_enemy = 0;
+					g_fig_list_elem.reload = 0;
+					g_fig_list_elem.wsheet = -1;
+					g_fig_list_elem.sheet = -1;
+					g_fig_list_elem.gfxbuf = ptr;
 					g_fig_list_elem.z = (obj_id >= 58 && obj_id <= 61 ? -1 : 50);
-					g_fig_list_elem.visible = (1);
-					g_fig_list_elem.twofielded = (-1);
+					g_fig_list_elem.visible = 1;
+					g_fig_list_elem.twofielded = -1;
 
 					g_fightobj_list[g_fightobj_count] = FIG_add_to_list(-1);
 					g_fightobj_count++;

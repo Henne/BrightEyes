@@ -85,8 +85,8 @@ void init_ani(Bit16u v1)
 		g_pic_copy.y1 = g_ani_posy;
 
 		/* set lower right coordinates */
-		g_pic_copy.x2 = g_ani_posx + ds_readw(ANI_WIDTH) - 1;
-		g_pic_copy.y2 = g_ani_posy + ds_readb(ANI_HEIGHT) - 1;
+		g_pic_copy.x2 = g_ani_posx + g_ani_width - 1;
+		g_pic_copy.y2 = g_ani_posy + g_ani_height - 1;
 
 		/* copy pointer */
 		g_pic_copy.src = g_ani_main_ptr;
@@ -135,9 +135,9 @@ void clear_ani(void)
 {
 	signed short i, j;
 
-	ds_writew(ANI_WIDTH, 0);
-	ds_writeb(ANI_HEIGHT, 0);
-	ds_writeb(ANI_AREACOUNT, 0);
+	g_ani_width = 0;
+	g_ani_height = 0;
+	g_ani_areacount = 0;
 	g_ani_main_ptr = NULL;
 	g_ani_palette = NULL;
 
@@ -179,10 +179,10 @@ void interrupt timer_isr(void)
 		g_random_schick_seed2 = 0;
 	}
 
-	if (g_autofight && (bioskey(1) || ds_readw(MOUSE1_EVENT2))) {
+	if (g_autofight && (bioskey(1) || g_mouse1_event2)) {
 
 		g_autofight = 2;
-		ds_writew(MOUSE1_EVENT2, 0);
+		g_mouse1_event2 = 0;
 	}
 
 	start_midi_playback_IRQ();
@@ -217,7 +217,7 @@ void interrupt timer_isr(void)
 		g_pic_copy_rect.x2 = g_ani_posx + 208;
 		pic_copy_bak = g_pic_copy;
 
-		l_di = ds_readbs(ANI_AREACOUNT);
+		l_di = g_ani_areacount;
 
 		if (!l_di && g_ani_busy) {
 
@@ -263,9 +263,9 @@ void interrupt timer_isr(void)
 					flag = 0;
 
 					if ((g_mouse_posx >= g_ani_posx) &&
-						(g_ani_posx + ds_readws(ANI_WIDTH) >= g_mouse_posx) &&
+						(g_ani_posx + g_ani_width >= g_mouse_posx) &&
 						(g_mouse_posy >= g_ani_posy) &&
-						(g_ani_posy + ds_readb(ANI_HEIGHT) >= g_mouse_posy))
+						(g_ani_posy + g_ani_height >= g_mouse_posy))
 					{
 						flag = 1;
 						update_mouse_cursor();
@@ -317,7 +317,7 @@ void update_status_bars(void)
 
 	g_unused_spinlock_flag = 0;
 
-	if (ds_readw(UPDATE_STATUSLINE) != 0) {
+	if (g_update_statusline) {
 
 		if (g_pp20_index == ARCHIVE_FILE_ZUSTA_UK) {
 			/* in the status menu */

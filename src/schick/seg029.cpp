@@ -53,7 +53,7 @@ static signed char icon_array[9] = {
 //static
 void draw_playmask(void)
 {
-	ds_writew(UPDATE_STATUSLINE, 0);
+	g_update_statusline = 0;
 
 	/* load the desired playmask */
 	if (g_playmask_us != 0)
@@ -98,7 +98,7 @@ void draw_playmask(void)
 	g_action_table_primary = &g_action_table_playmask[0];
 	g_action_table_secondary = NULL;
 
-	ds_writew(UPDATE_STATUSLINE, 1);
+	g_update_statusline = 1;
 
 	refresh_screen_size();
 }
@@ -138,7 +138,7 @@ void draw_status_line(void)
 	Bit16s head_bak;
 	signed short i, j;
 
-	ds_writew(UPDATE_STATUSLINE, 0);
+	g_update_statusline = 0;
 
 	get_textcolor(&fg_bak, &bg_bak);
 
@@ -237,7 +237,7 @@ void draw_status_line(void)
 
 	set_textcolor(fg_bak, bg_bak);
 
-	ds_writew(UPDATE_STATUSLINE, 1);
+	g_update_statusline = 1;
 }
 
 /**

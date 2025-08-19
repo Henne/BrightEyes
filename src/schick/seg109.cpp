@@ -328,14 +328,10 @@ signed short TRV_follow_trail_question(void)
 
 	hero = (Bit8u*)get_first_hero_available_in_group();
 
-	sprintf(g_dtp2,
-		get_tx(25),
-		(char*)hero + HERO_NAME2);
+	sprintf(g_dtp2, get_tx(25), (char*)hero + HERO_NAME2);
 
 	do {
-		answer = GUI_radio(g_dtp2, 2,
-				get_tx(26),
-				get_tx(27));
+		answer = GUI_radio(g_dtp2, 2, get_tx(26), get_tx(27));
 
 	} while (answer == -1);
 
@@ -355,24 +351,23 @@ signed short TRV_cross_a_ford(char *msg, signed short time, signed short mod)
 	init_ani(0);
 
 	do {
-		sprintf(g_dtp2,
-			get_tx(34),
-			(char*)msg);
+		sprintf(g_dtp2,	get_tx(34), (char*)msg);
 
 		do {
-			answer = GUI_radio(g_dtp2, 2,
-						get_tx(35),
-						get_tx(36));
+			answer = GUI_radio(g_dtp2, 2, get_tx(35), get_tx(36));
+
 		} while (answer == -1);
 
 		if (answer == 1) {
+
 			done = 1;
 			TRV_ford_test(mod, time);
+
 		} else {
 			answer = GUI_bool(get_tx(39));
 
 			if (answer == 1) {
-				done = gs_trv_return = (1);
+				done = gs_trv_return = 1;
 			}
 		}
 
@@ -381,6 +376,7 @@ signed short TRV_cross_a_ford(char *msg, signed short time, signed short mod)
 	set_var_to_zero();
 	g_event_ani_busy = 0;
 	g_request_refresh = 1;
+
 	return 1;
 }
 

@@ -161,7 +161,7 @@ signed char FIG_cb_select_target(Bit8u *px, Bit8u *py, const signed short max_ra
 	signed short cb_base_x = 9;
 	signed short cb_base_y = 116;
 
-	ds_writew(MOUSE1_EVENT1, ds_writew(MOUSE2_EVENT, 0));
+	g_mouse1_event1 = g_mouse2_event = 0;
 
 	update_mouse_cursor();
 
@@ -209,12 +209,11 @@ signed char FIG_cb_select_target(Bit8u *px, Bit8u *py, const signed short max_ra
 	do {
 		handle_input();
 
-		if ((ds_readws(ACTION) == ACTION_ID_ESC) ||
-			(ds_readws(MOUSE2_EVENT) != 0)) {
+		if ((g_action == ACTION_ID_ESC) || g_mouse2_event) {
 
 			/* cancel */
 
-			ds_writew(MOUSE2_EVENT, 0);
+			g_mouse2_event = 0;
 
 			FIG_remove_from_list(g_fig_cb_selector_id[0], 0);
 
@@ -227,10 +226,10 @@ signed char FIG_cb_select_target(Bit8u *px, Bit8u *py, const signed short max_ra
 
 		from_kbd = 0;
 
-		if ((ds_readws(ACTION) == ACTION_ID_UP) ||
-			(ds_readws(ACTION) == ACTION_ID_DOWN) ||
-			(ds_readws(ACTION) == ACTION_ID_RIGHT) ||
-			(ds_readws(ACTION) == ACTION_ID_LEFT))
+		if ((g_action == ACTION_ID_UP) ||
+			(g_action == ACTION_ID_DOWN) ||
+			(g_action == ACTION_ID_RIGHT) ||
+			(g_action == ACTION_ID_LEFT))
 		{
 			from_kbd = 1;
 		} else {
@@ -241,44 +240,44 @@ signed char FIG_cb_select_target(Bit8u *px, Bit8u *py, const signed short max_ra
 			if (((y_diff > 0) && (x_diff <= -10)) ||
 				((x_diff < 0) && (y_diff >= 5)))
 			{
-				ds_writew(ACTION, ACTION_ID_DOWN);
+				g_action = (ACTION_ID_DOWN);
 
 			} else if (((y_diff < 0) && (x_diff >= 10)) ||
 					((x_diff > 0) && (y_diff <= -5)))
 			{
-				ds_writew(ACTION, ACTION_ID_UP);
+				g_action = (ACTION_ID_UP);
 
 			} else if (((y_diff > 0) && (x_diff >= 10)) ||
 					((x_diff > 0) && (y_diff >= 5)))
 			{
-				ds_writew(ACTION, ACTION_ID_RIGHT);
+				g_action = (ACTION_ID_RIGHT);
 
 			} else if (((y_diff < 0) && (x_diff <= -10)) ||
 					((x_diff < 0) && (y_diff <= -5)))
 			{
-				ds_writew(ACTION, ACTION_ID_LEFT);
+				g_action = (ACTION_ID_LEFT);
 			}
 		}
 
-		if (ds_readws(MOUSE1_EVENT1) != 0) {
-			ds_writew(ACTION, ACTION_ID_RETURN);
-			ds_writew(MOUSE1_EVENT1, 0);
+		if (g_mouse1_event1) {
+			g_action = ACTION_ID_RETURN;
+			g_mouse1_event1 = 0;
 		}
 
-		if (ds_readws(ACTION) == ACTION_ID_RIGHT) {
+		if (g_action == ACTION_ID_RIGHT) {
 
 			if (seg034_000(x, y, host_readws(px), host_readws(py), 1, 0, max_range)) {
 				inc_ptr_ws(px);
 			}
-		} else if (ds_readws(ACTION) == ACTION_ID_LEFT) {
+		} else if (g_action == ACTION_ID_LEFT) {
 			if (seg034_000(x, y, host_readws(px), host_readws(py), -1, 0, max_range)) {
 				dec_ptr_ws(px);
 			}
-		} else if (ds_readws(ACTION) == ACTION_ID_UP) {
+		} else if (g_action == ACTION_ID_UP) {
 			if (seg034_000(x, y, host_readws(px), host_readws(py), 0, 1, max_range)) {
 				inc_ptr_ws(py);
 			}
-		} else if (ds_readws(ACTION) == ACTION_ID_DOWN) {
+		} else if (g_action == ACTION_ID_DOWN) {
 			if (seg034_000(x, y, host_readws(px), host_readws(py), 0, -1, max_range)) {
 				dec_ptr_ws(py);
 			}
@@ -326,7 +325,7 @@ signed char FIG_cb_select_target(Bit8u *px, Bit8u *py, const signed short max_ra
 			FIG_set_gfx();
 		}
 
-	} while (ds_readws(ACTION) != ACTION_ID_RETURN);
+	} while (g_action != ACTION_ID_RETURN);
 
 	FIG_remove_from_list(g_fig_cb_selector_id[0], 0);
 
@@ -577,7 +576,7 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 
 	refresh_screen_size();
 
-	ds_writew(MOUSE1_EVENT1, ds_writew(MOUSE2_EVENT, 0));
+	g_mouse1_event1 = g_mouse2_event = 0;
 
 	sel_x = host_readws(px);
 	sel_y = host_readws(py);
@@ -590,25 +589,25 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 	}
 
 	g_fig_list_elem.figure = 0;
-	g_fig_list_elem.nvf_no = (0);
+	g_fig_list_elem.nvf_no = 0;
 	g_fig_list_elem.cbx = ((signed char)sel_x);
 	g_fig_list_elem.cby = ((signed char)sel_y);
-	g_fig_list_elem.offsetx = (0);
-	g_fig_list_elem.offsety = (4);
-	g_fig_list_elem.x1 = (0);
-	g_fig_list_elem.y1 = (0);
-	g_fig_list_elem.x2 = (21);
-	g_fig_list_elem.y2 = (10);
-	g_fig_list_elem.height = (11);
-	g_fig_list_elem.width = (22);
-	g_fig_list_elem.is_enemy = (0);
-	g_fig_list_elem.reload = (0);
-	g_fig_list_elem.wsheet = (-1);
-	g_fig_list_elem.sheet = (-1);
-	g_fig_list_elem.gfxbuf = (g_fig_cb_selector_buf);
-	g_fig_list_elem.z = (1);
-	g_fig_list_elem.visible = (1);
-	g_fig_list_elem.twofielded = (-1);
+	g_fig_list_elem.offsetx = 0;
+	g_fig_list_elem.offsety = 4;
+	g_fig_list_elem.x1 = 0;
+	g_fig_list_elem.y1 = 0;
+	g_fig_list_elem.x2 = 21;
+	g_fig_list_elem.y2 = 10;
+	g_fig_list_elem.height = 11;
+	g_fig_list_elem.width = 22;
+	g_fig_list_elem.is_enemy = 0;
+	g_fig_list_elem.reload = 0;
+	g_fig_list_elem.wsheet = -1;
+	g_fig_list_elem.sheet = -1;
+	g_fig_list_elem.gfxbuf = g_fig_cb_selector_buf;
+	g_fig_list_elem.z = 1;
+	g_fig_list_elem.visible = 1;
+	g_fig_list_elem.twofielded = -1;
 
 	g_fig_cb_selector_id[0] = FIG_add_to_list(-1);
 
@@ -621,10 +620,10 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 		curr_y = sel_y;
 		from_kbd = 0;
 
-		if ((ds_readws(ACTION) == ACTION_ID_UP) ||
-			(ds_readws(ACTION) == ACTION_ID_DOWN) ||
-			(ds_readws(ACTION) == ACTION_ID_RIGHT) ||
-			(ds_readws(ACTION) == ACTION_ID_LEFT))
+		if ((g_action == ACTION_ID_UP) ||
+			(g_action == ACTION_ID_DOWN) ||
+			(g_action == ACTION_ID_RIGHT) ||
+			(g_action == ACTION_ID_LEFT))
 		{
 			from_kbd = 1;
 		} else {
@@ -635,25 +634,25 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 			if ((mouse_cb_x != sel_x) || (mouse_cb_y != sel_y)) {
 
 				if ((mouse_cb_x >= -1) && (mouse_cb_x <= 24) && (mouse_cb_y >= -1) && (mouse_cb_y <= 24)) {
-					ds_writew(ACTION, ACTION_ID_VOID);
+					g_action = (ACTION_ID_VOID);
 				}
 			}
 		}
 
-		if (ds_readws(MOUSE1_EVENT1) != 0) {
-			ds_writew(MOUSE1_EVENT1, 0);
-			ds_writew(ACTION, ACTION_ID_RETURN);
+		if (g_mouse1_event1 != 0) {
+			g_mouse1_event1 = 0;
+			g_action = ACTION_ID_RETURN;
 		}
 
-		if ((ds_readws(ACTION) == ACTION_ID_RIGHT) && (sel_x < 23)) {
+		if ((g_action == ACTION_ID_RIGHT) && (sel_x < 23)) {
 			sel_x++;
-		} else if ((ds_readws(ACTION) == ACTION_ID_LEFT) && (sel_x >= 0)) {
+		} else if ((g_action == ACTION_ID_LEFT) && (sel_x >= 0)) {
 			sel_x--;
-		} else if ((ds_readws(ACTION) == ACTION_ID_UP) && (sel_y <= 23)) {
+		} else if ((g_action == ACTION_ID_UP) && (sel_y <= 23)) {
 			sel_y++;
-		} else if ((ds_readws(ACTION) == ACTION_ID_DOWN) && (sel_y >= 0)) {
+		} else if ((g_action == ACTION_ID_DOWN) && (sel_y >= 0)) {
 			sel_y--;
-		} else if (ds_readws(ACTION) == ACTION_ID_VOID) {
+		} else if (g_action == ACTION_ID_VOID) {
 			sel_x = mouse_cb_x;
 			sel_y = mouse_cb_y;
 		}
@@ -874,13 +873,13 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 			set_textcolor(fg_bak, bg_bak);
 		}
 
-		if ((ds_readws(MOUSE2_EVENT) != 0) || (ds_readws(ACTION) == ACTION_ID_ESC)) {
-			ds_writew(MOUSE2_EVENT, 0);
-			ds_writew(ACTION, ACTION_ID_RETURN);
+		if ((g_mouse2_event) || (g_action == ACTION_ID_ESC)) {
+			g_mouse2_event = 0;
+			g_action = ACTION_ID_RETURN;
 			problem = 5;
 		}
 
-	} while (ds_readws(ACTION) != ACTION_ID_RETURN);
+	} while (g_action != ACTION_ID_RETURN);
 
 	get_textcolor(&fg_bak, &bg_bak);
 	set_textcolor(255, 0);

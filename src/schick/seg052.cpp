@@ -80,7 +80,7 @@ void do_citycamp(void)
 
 		handle_gui_input();
 
-		if (ds_readws(MOUSE2_EVENT) != 0 || ds_readws(ACTION) == ACTION_ID_PAGE_UP) {
+		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
 
 			/* open citycamp radio menu */
 			answer = GUI_radio(get_ttx(307), 5,
@@ -92,11 +92,11 @@ void do_citycamp(void)
 
 			/* set action on a valid answer */
 			if (answer != -2) {
-				ds_writew(ACTION, answer + ACTION_ID_ICON_1);
+				g_action = (answer + ACTION_ID_ICON_1);
 			}
 		}
 
-		if (ds_readws(ACTION) == ACTION_ID_ICON_1) {
+		if (g_action == ACTION_ID_ICON_1) {
 
 			answer = -1;
 
@@ -137,11 +137,11 @@ void do_citycamp(void)
 				}
 			}
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_2) {
+		} else if (g_action == ACTION_ID_ICON_2) {
 
 			GUI_use_skill2(0, get_ttx(395));
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_3) {
+		} else if (g_action == ACTION_ID_ICON_3) {
 
 			answer = select_hero_ok(get_ttx(317));
 
@@ -173,7 +173,7 @@ void do_citycamp(void)
 					GUI_output(get_ttx(330));
 				}
 			}
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_4) {
+		} else if (g_action == ACTION_ID_ICON_4) {
 
 			if (GUI_bool(get_ttx(318))) {
 
@@ -287,7 +287,7 @@ void do_citycamp(void)
 				done = 1;
 			}
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_5) {
+		} else if (g_action == ACTION_ID_ICON_5) {
 			done = 1;
 		}
 	}

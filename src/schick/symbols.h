@@ -1352,9 +1352,9 @@
 // ?1
 #define VISUAL_FIELD_VALS               (0xbd6e)    /* unsigned char[29] */
 // ?1
-#define EMS_UNUSED_TAB                  (0xbd8c)    /* Bit8u* */
-#define EMS_TRAVEL_MAP                  (0xbd90)    /* unsigned short */
-#define EMS_UNUSED_HANDLE               (0xbd92)    /* unsigned short */
+//#define EMS_UNUSED_TAB                  (0xbd8c)    /* Bit8u* */
+//#define EMS_TRAVEL_MAP                  (0xbd90)    /* unsigned short */
+//#define EMS_UNUSED_HANDLE               (0xbd92)    /* unsigned short */
 //#define DNG_MAP_SIZE                    (0xbd94)    /* unsigned char; {16, 32} */
 //#define DNG_MAP                         (0xbd95)    /* unsigned char[512]; 1 byte for each square of the current dungeon level. higher nybble: ID of the tile on the square. lower nybble: 4 flags */
 //#define RADIO_NAME_LIST                 (0xbf95)    /* Bit8u*[15]; used for items, heroes, spells, skills, recipes */
@@ -1388,21 +1388,21 @@
 //#define BIOSKEY_EVENT10                 (0xc3c5)    /* unsigned short; {0,1} */
 //#define HAVE_MOUSE                      (0xc3c7)    /* unsigned short; {0,2} */
 //#define UNUSED_SPINLOCK_FLAG            (0xc3c9)    /* unsigned short; {0,1} */
-#define UPDATE_STATUSLINE               (0xc3cb)    /* unsigned short; {0,1} */
+//#define UPDATE_STATUSLINE               (0xc3cb)    /* unsigned short; {0,1} */
 // ?2
-#define MOUSE1_DOUBLECLICK              (0xc3cf)    /* unsigned short; {0,1} */
-#define MOUSE1_EVENT1                   (0xc3d1)    /* unsigned short; {0,1}. Indicates a click event on mouse button 1 */
-#define MOUSE2_EVENT                    (0xc3d3)    /* unsigned short; {0,1}. Indicates a click event on mouse button 2 */
-#define MOUSE1_EVENT2                   (0xc3d5)    /* unsigned short; {0,1}. Indicates a click-and-drag event on mouse button 1 */
-#define BIOSKEY_EVENT                   (0xc3d7)    /* unsigned short */
-#define ACTION                          (0xc3d9)    /* unsigned short */
+//#define MOUSE1_DOUBLECLICK              (0xc3cf)    /* unsigned short; {0,1} */
+//#define MOUSE1_EVENT1                   (0xc3d1)    /* unsigned short; {0,1}. Indicates a click event on mouse button 1 */
+//#define MOUSE2_EVENT                    (0xc3d3)    /* unsigned short; {0,1}. Indicates a click event on mouse button 2 */
+//#define MOUSE1_EVENT2                   (0xc3d5)    /* unsigned short; {0,1}. Indicates a click-and-drag event on mouse button 1 */
+//#define BIOSKEY_EVENT                   (0xc3d7)    /* unsigned short */
+//#define ACTION                          (0xc3d9)    /* unsigned short */
 //#define BUFFER9_PTR                     (0xc3db)    /* Bit8u*; to buffer of size 180000 (or 203000 if LARGE_BUF), used for NVF */
 // ?8
-#define ANI_WIDTH                       (0xc3e7)    /* unsigned short */
-#define ANI_UNKNOWN1                    (0xc3e9)    /* unsigned short */
-#define ANI_UNKNOWN2                    (0xc3eb)    /* unsigned short */
-#define ANI_HEIGHT                      (0xc3ed)    /* unsigned char */
-#define ANI_AREACOUNT                   (0xc3ee)    /* unsigned char */
+//#define ANI_WIDTH                       (0xc3e7)    /* unsigned short */
+//#define ANI_UNKNOWN1                    (0xc3e9)    /* unsigned short */
+//#define ANI_UNKNOWN2                    (0xc3eb)    /* unsigned short */
+//#define ANI_HEIGHT                      (0xc3ed)    /* unsigned char */
+//#define ANI_AREACOUNT                   (0xc3ee)    /* unsigned char */
 #define ANI_AREA_TABLE                  (0xc3ef)    /* struct(263)[10] */
 //#define ANI_MAIN_PTR                    (0xce35)    /* Bit8u* */
 //#define ANI_COMPR_FLAG                  (0xce39)    /* unsigned char; {0,1 = compressed} */

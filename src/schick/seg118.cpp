@@ -500,7 +500,7 @@ void tevent_124(void)
 
 	if (answer == 2)
 	{
-		gs_trv_return = (1);
+		gs_trv_return = 1;
 
 	} else {
 

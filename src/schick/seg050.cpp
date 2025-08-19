@@ -415,7 +415,7 @@ void level_up(signed short hero_pos)
 
 	hero = get_hero(hero_pos);
 
-	if (g_fading_state != 0) {
+	if (g_fading_state) {
 		refresh_colors();
 	}
 
@@ -439,7 +439,7 @@ void level_up(signed short hero_pos)
 	sprintf(g_dtp2, get_ttx(411), (char*)hero + HERO_NAME2);
 	GUI_output(g_dtp2);
 
-	ds_writew(ACTION, 0);
+	g_action = 0;
 	g_status_page_mode = 1;
 
 	for (i = 0; i < 86; i++) {

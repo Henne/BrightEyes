@@ -325,7 +325,7 @@ void FIG_load_enemy_sprites(Bit8u *ptr, signed short x, signed short y)
 		nvf.width = (Bit8u*)&l1;
 		nvf.height = (Bit8u*)&l1;
 		process_nvf(&nvf);
-		g_fig_list_elem.reload = (0);
+		g_fig_list_elem.reload = 0;
 	}
 
 	host_writeb(ptr + ENEMY_SHEET_FIGHTER_ID, FIG_add_to_list(-1));
