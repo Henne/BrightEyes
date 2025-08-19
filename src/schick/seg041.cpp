@@ -355,39 +355,42 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 
 		enemy_gfx_id = host_readbs(enemy_p + ENEMY_SHEET_GFX_ID);
 
-		/* magic SABRE gives Damage + 1 to SKELETONS and ZOMBIES */
 		if ((right_hand == ITEM_SABER_MAGIC) && (enemy_gfx_id == 0x1c || enemy_gfx_id == 0x22)) {
+
+			/* magic SABRE gives Damage + 1 to SKELETONS and ZOMBIES */
 			damage++;
-		} else {
-			if (right_hand == ITEM_KUKRIS_DAGGER) {
-				/* KUKRIS DAGGER / KUKRISDOLCH */
 
-				/* Interesting */
-				damage = 1000;
+		} else if (right_hand == ITEM_KUKRIS_DAGGER) {
 
-				/* drop the KUKRISDOLCH and equip a normal DOLCH / DAGGER */
-				drop_item(hero, HERO_INVENTORY_SLOT_RIGHT_HAND, 1);
-				give_hero_new_item(hero, ITEM_DAGGER, 1 ,1); /* TODO: what if no free knapsack slot? */
-				move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos(hero, ITEM_DAGGER), hero);
+			/* KUKRIS DAGGER / KUKRISDOLCH */
+			/* Interesting */
+			damage = 1000;
 
-			} else if (right_hand == ITEM_KUKRIS_MENGBILAR) {
-				/* KUKRISMENGBILAR */
+			/* drop the KUKRISDOLCH and equip a normal DOLCH / DAGGER */
+			drop_item(hero, HERO_INVENTORY_SLOT_RIGHT_HAND, 1);
+			give_hero_new_item(hero, ITEM_DAGGER, 1 ,1); /* TODO: what if no free knapsack slot? */
+			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos(hero, ITEM_DAGGER), hero);
 
-				/* Interesting */
-				damage = 1000;
+		} else if (right_hand == ITEM_KUKRIS_MENGBILAR) {
 
-				/* drop the KUKRISMENGBILAR and equip a normal MENGBILAR  */
-				drop_item(hero, HERO_INVENTORY_SLOT_RIGHT_HAND, 1);
-				give_hero_new_item(hero, ITEM_MENGBILAR, 1 ,1); /* TODO: what if no free knapsack slot? */
-				move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos(hero, ITEM_MENGBILAR), hero);
+			/* KUKRISMENGBILAR */
+			/* Interesting */
+			damage = 1000;
 
-			} else if ((right_hand == ITEM_SILVER_MACE) && (enemy_gfx_id == 0x1c)) {
-				/* SILVER MACE / SILBERSTREITKOLBEN gives Damage + 4 to SKELETONS */
-				damage += 4;
-			} else if ((right_hand == ITEM_GRIMRING) && (enemy_gfx_id == 0x18)) {
-				/* DAS SCHWERT GRIMRING gives Damage + 5 to ORCS */
-				damage += 5;
-			}
+			/* drop the KUKRISMENGBILAR and equip a normal MENGBILAR  */
+			drop_item(hero, HERO_INVENTORY_SLOT_RIGHT_HAND, 1);
+			give_hero_new_item(hero, ITEM_MENGBILAR, 1 ,1); /* TODO: what if no free knapsack slot? */
+			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos(hero, ITEM_MENGBILAR), hero);
+
+		} else if ((right_hand == ITEM_SILVER_MACE) && (enemy_gfx_id == 0x1c)) {
+
+			/* SILVER MACE / SILBERSTREITKOLBEN gives Damage + 4 to SKELETONS */
+			damage += 4;
+
+		} else if ((right_hand == ITEM_GRIMRING) && (enemy_gfx_id == 0x18)) {
+
+			/* DAS SCHWERT GRIMRING gives Damage + 5 to ORCS */
+			damage += 5;
 		}
 	}
 
