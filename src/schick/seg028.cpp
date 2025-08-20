@@ -579,7 +579,7 @@ void load_informer_tlk(signed short index)
 	Bit32s text_len;
 	Bit32s off;
 	signed short partners;
-	Bit8u *ptr;
+	struct struct_dialog_partner *partner;
 
 
 	g_text_file_index = index;
@@ -597,10 +597,10 @@ void load_informer_tlk(signed short index)
 #endif
 
 	/* read the partner structures */
-	read_archive_file(fd, ptr = (p_datseg + DIALOG_PARTNERS), partners * 0x26);
+	read_archive_file(fd, (Bit8u*)(partner = &gs_dialog_partners[0]), partners * sizeof(struct struct_dialog_partner));
 
 	/* read the dialog layouts */
-	read_archive_file(fd, (Bit8u*)&gs_dialog_states, (Bit16u)(off - partners * 0x26));
+	read_archive_file(fd, (Bit8u*)&gs_dialog_states, (Bit16u)(off - partners * sizeof(struct struct_dialog_partner)));
 
 	/* read the text */
 	text_len = (signed short)read_archive_file(fd, g_buffer8_ptr, 10000);
@@ -610,8 +610,9 @@ void load_informer_tlk(signed short index)
 	split_textbuffer((char**)g_tx2_index, (char*)g_buffer8_ptr, text_len);
 
 	/* adjust the pointers to the layouts */
-	for (i = 0; i < partners; i++, ptr += 0x26) {
-		host_writed(ptr, (Bit32u)((Bit8u*)&gs_dialog_states + host_readw(ptr)));
+	/* TODO: Not portable! */
+	for (i = 0; i < partners; i++, partner++) {
+		partner->states_offset = (Bit32u)((Bit8u*)&gs_dialog_states + (Bit16u)partner->states_offset);
 	}
 }
 
@@ -622,7 +623,7 @@ void load_tlk(signed short index)
 	Bit32s text_len;
 	Bit32s off;
 	signed short partners;
-	Bit8u *ptr;
+	struct struct_dialog_partner *partner;
 
 	g_text_file_index = index;
 
@@ -639,10 +640,10 @@ void load_tlk(signed short index)
 #endif
 
 	/* read the partner structures */
-	read_archive_file(fd, ptr = p_datseg + DIALOG_PARTNERS, partners * 0x26);
+	read_archive_file(fd, (Bit8u*)(partner = &gs_dialog_partners[0]), partners * sizeof(struct struct_dialog_partner));
 
 	/* read the dialog layouts */
-	read_archive_file(fd, (Bit8u*)&gs_dialog_states, off - partners * 0x26);
+	read_archive_file(fd, (Bit8u*)&gs_dialog_states, off - partners * sizeof(struct struct_dialog_partner));
 
 	/* read the text */
 	text_len = (signed short)read_archive_file(fd, (Bit8u*)g_buffer7_ptr, 64000);
@@ -652,8 +653,9 @@ void load_tlk(signed short index)
 	split_textbuffer((char**)g_tx_index, g_buffer7_ptr, text_len);
 
 	/* adjust the pointers to the layouts */
-	for (i = 0; i < partners; i++, ptr += 0x26) {
-		host_writed(ptr, (Bit32u)((Bit8u*)&gs_dialog_states + host_readw(ptr)));
+	/* TODO: Not portable! */
+	for (i = 0; i < partners; i++, partner++) {
+		partner->states_offset = (Bit32u)((Bit8u*)&gs_dialog_states + partner->states_offset);
 	}
 }
 
@@ -678,8 +680,7 @@ void load_fightbg(signed short index)
 #if !defined(__BORLANDC__)
 			g_renderbuf_ptr + 4,
 #else
-			FP_OFF(g_renderbuf_ptr) + 4,
-			FP_SEG(g_renderbuf_ptr),
+			FP_OFF(g_renderbuf_ptr) + 4, FP_SEG(g_renderbuf_ptr),
 #endif
 			get_readlength2(fd));
 	close(fd);

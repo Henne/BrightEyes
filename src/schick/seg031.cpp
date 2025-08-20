@@ -43,9 +43,9 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 	signed short opt0_rand;
 	signed short opt1_rand;
 	signed short opt2_rand;
-	Bit8u *state_ptr;
-	Bit8u *states_tab;
-	Bit8u *partners_tab;
+	struct struct_dialog_state *state_ptr;
+	struct struct_dialog_state *states_tab;
+	struct struct_dialog_partner *partners_tab;
 	char *dialog_title;
 	char *dst;
 	char *fmt;
@@ -58,20 +58,20 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 	struct tlk_option options[3];
 
 	g_dialog_informer = informer_id;
-	g_tlk_id = (talk_id);
+	g_tlk_id = talk_id;
 
 	load_tlk(talk_id + ARCHIVE_FILE_DIALOGS_TLK);
-	g_dialog_state = (g_dialog_done = 0);
-	partners_tab = p_datseg + DIALOG_PARTNERS;
-	states_tab = (Bit8u*)(host_readds(partners_tab + 38 * informer_id));
-	txt_offset = host_readws(partners_tab + 4 + 38 * informer_id);
-	dialog_title = 38 * informer_id + (char*)partners_tab + 6;
-	load_in_head(host_readws(partners_tab + 38 * informer_id + 36));
-	dst = (char*)((char*)(g_dtp2 + 0x400));
+	g_dialog_state = g_dialog_done = 0;
+	partners_tab = &gs_dialog_partners[0];
+	states_tab = (struct struct_dialog_state*)partners_tab[informer_id].states_offset;
+	txt_offset = partners_tab[informer_id].txt_offset;
+	dialog_title = partners_tab[informer_id].title;
+	load_in_head(partners_tab[informer_id].head_id);
+	dst = (char*)g_dtp2 + 0x400;
 
 	do {
 		answer = optioncount = 0;
-		state_ptr = 8 * g_dialog_state + states_tab;
+		state_ptr = &states_tab[g_dialog_state];
 
 		if (g_tlk_id == 13 && g_dialog_state >= 20) {
 			txt_id_rand = opt0_rand = opt1_rand = opt2_rand = 0;
@@ -82,31 +82,31 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 			opt2_rand = random_schick(4) - 1;
 		}
 
-		if ((txt_id_raw = host_readws(state_ptr)) != -1) {
+		if ((txt_id_raw = state_ptr->txt_id) != -1) {
 			txt_id_raw = 4 * txt_id_raw + txt_id_rand;
 		}
-		if (host_readb(state_ptr + 2) != 0) {
-			opt0_txt = 4 * host_readb(state_ptr + 2) + opt0_rand;
+		if (state_ptr->txt_id1) {
+			opt0_txt = 4 * state_ptr->txt_id1 + opt0_rand;
 			optioncount++;
 		}
-		if (host_readb(state_ptr + 3) != 0) {
-			opt1_txt = 4 * host_readb(state_ptr + 3) + opt1_rand;
+		if (state_ptr->txt_id2) {
+			opt1_txt = 4 * state_ptr->txt_id2 + opt1_rand;
 			optioncount++;
 		}
-		if (host_readb(state_ptr + 4) != 0) {
-			opt2_txt = 4 * host_readb(state_ptr + 4) + opt2_rand;
+		if (state_ptr->txt_id3) {
+			opt2_txt = 4 * state_ptr->txt_id3 + opt2_rand;
 			optioncount++;
 		}
 
 		if (txt_id_raw != -1) {
 
-			txt_id = (4 * host_readw(state_ptr) + txt_id_rand) & 0x7fff;
+			txt_id = (4 * state_ptr->txt_id + txt_id_rand) & 0x7fff;
 			fmt = get_tx(txt_id + txt_offset);
 
 			if (g_tlk_id == 15) {
 
 				if (g_dialog_state == 13) {
-					sprintf(dst, fmt, (char*)(waffinfo_herbs()));
+					sprintf(dst, fmt, (char*)waffinfo_herbs());
 				} else {
 					strcpy(dst, fmt);
 				}
@@ -114,7 +114,7 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 			} else if (g_tlk_id == 14) {
 
 				if (g_dialog_state == 11) {
-					sprintf(dst, fmt, (char*)(waffinfo_general()));
+					sprintf(dst, fmt, (char*)waffinfo_general());
 				} else {
 					strcpy(dst, fmt);
 				}
@@ -122,7 +122,7 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 			} else if (g_tlk_id == 16) {
 
 				if (g_dialog_state == 19 || g_dialog_state == 23) {
-					sprintf(dst, fmt, (char*)(waffinfo_weapons()));
+					sprintf(dst, fmt, (char*)waffinfo_weapons());
 				} else {
 					strcpy(dst, fmt);
 				}
@@ -140,11 +140,11 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 			}
 
 			options[0].txt = opt0_txt + txt_offset;
-			options[0].goto_state = host_readb(state_ptr + 5);
+			options[0].goto_state = state_ptr->state1;
 			options[1].txt = opt1_txt + txt_offset;
-			options[1].goto_state = host_readb(state_ptr + 6);
+			options[1].goto_state = state_ptr->state2;
 			options[2].txt = opt2_txt + txt_offset;
-			options[2].goto_state = host_readb(state_ptr + 7);
+			options[2].goto_state = state_ptr->state3;
 
 			if (optioncount) {
 
@@ -173,11 +173,11 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 					get_tx(options[2].txt));
 
 		} else {
-			options[0].goto_state = host_readb(state_ptr + 5);
+			options[0].goto_state = state_ptr->state1;
 		}
 
-		g_dialog_next_state = (-1);
-		if ((host_readw(state_ptr) & 0x8000) || host_readws(state_ptr) == -1) {
+		g_dialog_next_state = -1;
+		if ((state_ptr->txt_id & 0x8000) || (state_ptr->txt_id == -1)) {
 			talk_switch();
 		}
 
@@ -190,11 +190,11 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 				if (answer == -1) {
 					g_dialog_done = 1;
 				} else if (answer == 1) {
-					g_dialog_state = (options[0].goto_state);
+					g_dialog_state = options[0].goto_state;
 				} else if (answer == 2) {
-					g_dialog_state = (options[1].goto_state);
+					g_dialog_state = options[1].goto_state;
 				} else if (answer == 3) {
-					g_dialog_state = (options[2].goto_state);
+					g_dialog_state = options[2].goto_state;
 				}
 			}
 

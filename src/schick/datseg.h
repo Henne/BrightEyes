@@ -65,6 +65,16 @@ struct struct_msg {
 	signed int type;
 };
 
+/* REMARK1: DOS-Version: struct is inside the game state! */
+/* REMARK2: DOS-Version: states_offset is added with a 4-Byte pointer. Not portable! */
+struct struct_dialog_partner {
+	Bit32u states_offset; /* TODO: Mixed with pointer: not portable! */
+	Bit16s txt_offset;
+	char title[30];
+	Bit16s head_id;
+};
+
+/* REMARK: Can stay in the game state, since it's protable, but should be mouved out of it */
 struct struct_dialog_state {
 	Bit16s txt_id;	/* main txt_id >= 0 */
 	Bit8u txt_id1;
@@ -426,6 +436,7 @@ extern Bit8u  gs_hermit_visited;		//ds:0x3615; seg066
 extern Bit8u  gs_dungeon_gfx_style;		//ds:0x3616; seg028, seg075, seg076
 extern Bit8u  gs_estorik_known;			//ds:0x3617; seg081
 
+extern struct struct_dialog_partner gs_dialog_partners[10];	// ds:0x3618; seg028, seg030, seg031
 extern struct struct_dialog_state gs_dialog_states[160];	// ds:0x3794; seg028, seg060
 
 extern Bit8u  gs_dng02_sphere_known;		//ds:0x3c94; seg087

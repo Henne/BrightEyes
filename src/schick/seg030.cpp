@@ -150,7 +150,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 	signed short optioncount;
 	Bit8u *state_ptr;
 	Bit8u *states_tab;
-	Bit8u* partners_tab;
+	struct struct_dialog_partner *partners_tab;
 	char *dst;
 	char *fmt;
 	Bit8u *hero;
@@ -175,21 +175,21 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 	g_dialog_state = g_dialog_done = 0;
 
-	partners_tab = (Bit8u*)p_datseg + DIALOG_PARTNERS;
-	states_tab = (Bit8u*)(host_readd((Bit8u*)(partners_tab) + 38 * tlk_informer));
-	txt_offset = host_readws((Bit8u*)(partners_tab) + 38 * tlk_informer + 4);
-	g_dialog_title = tlk_informer * 38 + (char*)partners_tab + 6;
+	partners_tab = &gs_dialog_partners[0];
+	states_tab = (Bit8u*)partners_tab[tlk_informer].states_offset;
+	txt_offset = partners_tab[tlk_informer].txt_offset;
+	g_dialog_title = (char*)partners_tab[tlk_informer].title;
 
-	load_in_head(host_readws((Bit8u*)(partners_tab) + 38 * tlk_informer + 0x24));
+	load_in_head(partners_tab[tlk_informer].head_id);
 	dst = (char*)(g_dtp2 + 0x400);
 
 	do {
 		answer = optioncount = 0;
 		state_ptr = 8 * g_dialog_state + states_tab;
 
-		if (host_readbs(state_ptr + 2) != 0) optioncount++;
-		if (host_readbs(state_ptr + 3) != 0) optioncount++;
-		if (host_readbs(state_ptr + 4) != 0) optioncount++;
+		if (host_readb(state_ptr + 2)) optioncount++;
+		if (host_readb(state_ptr + 3)) optioncount++;
+		if (host_readb(state_ptr + 4)) optioncount++;
 
 		if (host_readws(state_ptr) != -1) {
 
