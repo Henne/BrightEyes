@@ -207,6 +207,10 @@ extern const signed short* g_magic_schools_index[9];
 extern void (*g_spell_handlers[86])(void);		//ds:0x0dbb; seg098
 extern void (*g_mon_spellhandlers[15])(void);		//ds:0x0fc2; seg102
 
+extern Bit16s *g_gfx_ani_index[41];			//ds:0x2555; seg036, seg037, seg044
+extern signed char g_two_fielded_sprite_id[5];		//ds:0x25f9; seg032, seg034, seg037, seg038, seg039, seg042, seg043, seg044
+extern unsigned short g_weaponani_table[72];		//ds:0x25fe; seg044
+
 extern signed char g_weaponani_types[22];		//ds:0x268e; seg044
 extern signed char g_food_message_shown[7];		//ds:0x26a4; seg002-seg093
 extern unsigned char g_ems_enabled;			//ds:0x26ab; seg027-seg028, seg120

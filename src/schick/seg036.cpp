@@ -97,13 +97,13 @@ void seg036_00ae(Bit8u *hero, signed short hero_pos)
 	signed char dir2;
 	Bit8u *ptr1;
 	signed char dir3;
-	Bit8u *ptr2;
+	Bit16s *ptr2;
 
 	ds_writeb(FIG_ANISHEETS, 0);
 	ds_writeb((FIG_ANISHEETS + 242), host_readbs(hero + HERO_SPRITE_NO));
 
 	ptr1 = p_datseg + (FIG_ANISHEETS + 1);
-	ptr2 = (Bit8u*)(ds_readd(GFX_ANI_INDEX + 4 * host_readbs(hero + HERO_SPRITE_NO)));
+	ptr2 = g_gfx_ani_index[host_readbs(hero + HERO_SPRITE_NO)];
 
 	i = 0;
 
@@ -139,21 +139,21 @@ void seg036_00ae(Bit8u *hero, signed short hero_pos)
 			/* set heroes looking direction */
 			host_writeb(hero + HERO_VIEWDIR, g_fig_move_pathdir[i]);
 
-			ptr1 += KI_copy_ani_sequence(ptr1, host_readws(ptr2 + dir2 * 2), 2);
+			ptr1 += KI_copy_ani_sequence(ptr1, ptr2[dir2], 2);
 
 			if (dir1 != -1) {
-				ptr1 += KI_copy_ani_sequence(ptr1, host_readws(ptr2 + dir1 * 2), 2);
+				ptr1 += KI_copy_ani_sequence(ptr1, ptr2[dir1], 2);
 			}
 		}
 
 		if (g_fig_move_pathdir[i] == g_fig_move_pathdir[i + 1]) {
 
-			ptr1 += KI_copy_ani_sequence(ptr1, host_readws(ptr2 + (g_fig_move_pathdir[i] + 12) * 2), 2);
+			ptr1 += KI_copy_ani_sequence(ptr1, ptr2[(g_fig_move_pathdir[i] + 12)], 2);
 			i += 2;
 			/* BP - 2 */
 			host_writeb(hero + HERO_BP_LEFT, host_readbs(hero + HERO_BP_LEFT) - 2);
 		} else {
-			ptr1 += KI_copy_ani_sequence(ptr1, host_readws(ptr2 + (g_fig_move_pathdir[i] + 8) * 2), 2);
+			ptr1 += KI_copy_ani_sequence(ptr1, ptr2[(g_fig_move_pathdir[i] + 8)], 2);
 			i++;
 			/* BP - 1 */
 			dec_ptr_bs(hero + HERO_BP_LEFT);

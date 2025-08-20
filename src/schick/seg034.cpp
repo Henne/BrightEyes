@@ -460,7 +460,7 @@ void FIG_latecomers(void)
 
 				if (!enemy_scared(p_mon)) {
 
-					if (is_in_byte_array(host_readbs(p_mon + ENEMY_SHEET_GFX_ID), p_datseg + TWO_FIELDED_SPRITE_ID)) {
+					if (is_in_byte_array(host_readbs(p_mon + ENEMY_SHEET_GFX_ID), (Bit8u*)g_two_fielded_sprite_id)) {
 
 						seg034_718(	host_readbs(g_current_fight + FIGHT_MONSTERS_X + SIZEOF_FIGHT_MONSTER * i),
 								host_readbs(g_current_fight + FIGHT_MONSTERS_Y + SIZEOF_FIGHT_MONSTER * i),

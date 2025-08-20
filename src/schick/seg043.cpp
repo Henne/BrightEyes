@@ -114,7 +114,7 @@ void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 
 			target_is_hero = 0;
 
-			if ((is_in_byte_array(host_readbs(mon + 1), p_datseg + TWO_FIELDED_SPRITE_ID)) &&
+			if ((is_in_byte_array(host_readbs(mon + 1), (Bit8u*)g_two_fielded_sprite_id)) &&
 				(l17 == 0))
 			{
 				FIG_search_obj_on_cb(host_readbs((Bit8u*)(monster) + ENEMY_SHEET_ENEMY_ID), &target_x, &target_y);
@@ -700,7 +700,7 @@ void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 							FIG_set_sheet(host_readbs(mon + ENEMY_SHEET_FIGHTER_ID), 1);
 
 
-							if (is_in_byte_array(host_readbs(mon + 1), p_datseg + TWO_FIELDED_SPRITE_ID)) {
+							if (is_in_byte_array(host_readbs(mon + 1), (Bit8u*)g_two_fielded_sprite_id)) {
 
 								fighter = FIG_get_fighter(host_readbs(mon + ENEMY_SHEET_FIGHTER_ID));
 
@@ -733,7 +733,7 @@ void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 							g_fig_list_elem.offsetx = ds_readbs(GFXTAB_OFFSETS_MAIN + 10 * host_readbs(mon + ENEMY_SHEET_GFX_ID) + 2 * host_readbs(mon + ENEMY_SHEET_VIEWDIR));
 							g_fig_list_elem.offsety = ds_readbs((GFXTAB_OFFSETS_MAIN + 1) + 10 * host_readbs(mon + ENEMY_SHEET_GFX_ID) + 2 * host_readbs(mon + ENEMY_SHEET_VIEWDIR));
 
-							if (is_in_byte_array(host_readbs(mon + 1), p_datseg + TWO_FIELDED_SPRITE_ID)) {
+							if (is_in_byte_array(host_readbs(mon + 1), (Bit8u*)g_two_fielded_sprite_id)) {
 								g_fig_list_elem.x1 = (ds_readbs(GFXTAB_TWOFIELDED_X1 + host_readbs(mon + ENEMY_SHEET_VIEWDIR)));
 								g_fig_list_elem.x2 = (ds_readbs(GFXTAB_TWOFIELDED_X2 + host_readbs(mon + ENEMY_SHEET_VIEWDIR)));
 							} else {
@@ -760,7 +760,7 @@ void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 
 								FIG_make_invisible(host_readbs(mon + ENEMY_SHEET_FIGHTER_ID));
 
-								if (is_in_byte_array(host_readbs(mon + 1), p_datseg + TWO_FIELDED_SPRITE_ID)) {
+								if (is_in_byte_array(host_readbs(mon + 1), (Bit8u*)g_two_fielded_sprite_id)) {
 
 									fighter = FIG_get_fighter(host_readbs(mon + ENEMY_SHEET_FIGHTER_ID));
 

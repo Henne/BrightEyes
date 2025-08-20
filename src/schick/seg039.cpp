@@ -235,7 +235,7 @@ unsigned short place_obj_on_cb(signed short x, signed short y, signed short obje
 		}
 	} else {
 		/* if object is an enemy and needs 2 fields */
-		if (object >= 10 && is_in_byte_array(type, p_datseg + TWO_FIELDED_SPRITE_ID))
+		if (object >= 10 && is_in_byte_array(type, (Bit8u*)g_two_fielded_sprite_id))
 		{
 
 			/* check if field is empty */
@@ -281,7 +281,7 @@ void FIG_load_enemy_sprites(Bit8u *ptr, signed short x, signed short y)
 
 	g_fig_list_elem.offsety = ds_readb((GFXTAB_OFFSETS_MAIN + 1) + host_readbs(ptr + ENEMY_SHEET_GFX_ID) * 10 + host_readbs(ptr + ENEMY_SHEET_VIEWDIR) * 2);
 
-	if (is_in_byte_array(host_readbs(ptr + ENEMY_SHEET_GFX_ID), p_datseg + TWO_FIELDED_SPRITE_ID)) {
+	if (is_in_byte_array(host_readbs(ptr + ENEMY_SHEET_GFX_ID), (Bit8u*)g_two_fielded_sprite_id)) {
 
 		/* sprite uses two fields */
 		g_fig_list_elem.x1 = (ds_readbs(GFXTAB_TWOFIELDED_X1 + host_readbs(ptr + ENEMY_SHEET_VIEWDIR)));
@@ -316,7 +316,7 @@ void FIG_load_enemy_sprites(Bit8u *ptr, signed short x, signed short y)
 	/* check presence in the first round */
 	g_fig_list_elem.visible = (host_readb(ptr + ENEMY_SHEET_ROUND_APPEAR) == 0 ? 1 : 0);
 
-	if (is_in_byte_array(host_readb(ptr + ENEMY_SHEET_GFX_ID), p_datseg + TWO_FIELDED_SPRITE_ID)) {
+	if (is_in_byte_array(host_readb(ptr + ENEMY_SHEET_GFX_ID), (Bit8u*)g_two_fielded_sprite_id)) {
 
 		nvf.src = (Bit8u*)load_fight_figs(g_fig_list_elem.figure);
 		nvf.dst = g_fig_list_elem.gfxbuf;
@@ -330,7 +330,7 @@ void FIG_load_enemy_sprites(Bit8u *ptr, signed short x, signed short y)
 
 	host_writeb(ptr + ENEMY_SHEET_FIGHTER_ID, FIG_add_to_list(-1));
 
-	if (is_in_byte_array(host_readb(ptr + ENEMY_SHEET_GFX_ID), p_datseg + TWO_FIELDED_SPRITE_ID)) {
+	if (is_in_byte_array(host_readb(ptr + ENEMY_SHEET_GFX_ID), (Bit8u*)g_two_fielded_sprite_id)) {
 
 		/* create fighter entry for the tail of a two-fielded enemy */
 

@@ -602,7 +602,7 @@ void FIG_do_round(void)
 							if (test_bit0(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FLAGS1) + SIZEOF_ENEMY_SHEET * host_readbs(hero + HERO_ENEMY_ID))) /* check 'dead' flag */
 							{
 								/* attacked enemy is dead */
-								if (is_in_byte_array(host_readbs(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_GFX_ID) + SIZEOF_ENEMY_SHEET * host_readbs(hero + HERO_ENEMY_ID)), p_datseg + TWO_FIELDED_SPRITE_ID))
+								if (is_in_byte_array(host_readbs(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_GFX_ID) + SIZEOF_ENEMY_SHEET * host_readbs(hero + HERO_ENEMY_ID)), (Bit8u*)g_two_fielded_sprite_id))
 								{
 									/* attacked dead enemy is two-squares */
 									/* goal: remove tail part */
@@ -699,7 +699,7 @@ void FIG_do_round(void)
 							if (test_bit0(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FLAGS1) + SIZEOF_ENEMY_SHEET * host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_ENEMY_ID))) /* check 'dead' flag */
 							{
 								/* attacked enemy is dead */
-								if (is_in_byte_array(host_readbs(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_GFX_ID) + SIZEOF_ENEMY_SHEET * host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_ENEMY_ID)), p_datseg + TWO_FIELDED_SPRITE_ID))
+								if (is_in_byte_array(host_readbs(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_GFX_ID) + SIZEOF_ENEMY_SHEET * host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_ENEMY_ID)), (Bit8u*)g_two_fielded_sprite_id))
 								{
 									/* attacked dead enemy is two-squares */
 									/* goal: remove tail part */
@@ -750,7 +750,7 @@ void FIG_do_round(void)
 
 						if (enemy_dead((Bit8u*)(enemy))) { /* check 'dead' flag */
 							/* attacking enemy is dead because of critical attack failure */
-							if (is_in_byte_array(host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_GFX_ID), p_datseg + TWO_FIELDED_SPRITE_ID)) {
+							if (is_in_byte_array(host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_GFX_ID), (Bit8u*)g_two_fielded_sprite_id)) {
 								/* attacking dead enemy is two-squares */
 								/* goal: remove tail part */
 

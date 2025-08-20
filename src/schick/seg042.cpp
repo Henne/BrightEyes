@@ -124,7 +124,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 				return;
 			}
 
-			if ((is_in_byte_array(host_readbs(target_monster + 1), p_datseg + TWO_FIELDED_SPRITE_ID)) &&
+			if ((is_in_byte_array(host_readbs(target_monster + 1), (Bit8u*)g_two_fielded_sprite_id)) &&
 				(l16 == 0))
 			{
 				FIG_search_obj_on_cb(host_readbs(hero + HERO_ENEMY_ID), &target_x, &target_y);
@@ -850,7 +850,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 								FIG_set_sheet(host_readbs(target_monster + ENEMY_SHEET_FIGHTER_ID), 1);
 
-								if (is_in_byte_array(host_readbs(target_monster + 1), p_datseg + TWO_FIELDED_SPRITE_ID))
+								if (is_in_byte_array(host_readbs(target_monster + 1), (Bit8u*)g_two_fielded_sprite_id))
 								{
 									fighter_add = FIG_get_fighter(host_readbs(target_monster + ENEMY_SHEET_FIGHTER_ID));
 
@@ -880,7 +880,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 								FIG_make_invisible(host_readbs(target_monster + ENEMY_SHEET_FIGHTER_ID));
 
-								if (is_in_byte_array(host_readbs(target_monster + 1), p_datseg + TWO_FIELDED_SPRITE_ID))
+								if (is_in_byte_array(host_readbs(target_monster + 1), (Bit8u*)g_two_fielded_sprite_id))
 								{
 									fighter_add = FIG_get_fighter(host_readbs(target_monster + ENEMY_SHEET_FIGHTER_ID));
 

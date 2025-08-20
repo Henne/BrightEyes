@@ -80,37 +80,37 @@
 #define GFXTAB_OFFSETS_MAIN             (0x1531)    /* struct(2)[625]; struct{char x,y;}; by viewdir+dead */
 #define NVFTAB_FIGURES_DEAD             (0x1a13)    /* short[22] */
 // ? 38
-#define GFX_ANI_DESCRIPTIONS_01         (0x1a65)    /* short[65] */
-#define GFX_ANI_DESCRIPTIONS_02         (0x1ae7)    /* short[65] */
-#define GFX_ANI_DESCRIPTIONS_03         (0x1b69)    /* short[65] */
-#define GFX_ANI_DESCRIPTIONS_04         (0x1beb)    /* short[65] */
-#define GFX_ANI_DESCRIPTIONS_05         (0x1c6d)    /* short[65] */
-#define GFX_ANI_DESCRIPTIONS_06         (0x1cef)    /* short[65] */
-#define GFX_ANI_DESCRIPTIONS_07         (0x1d71)    /* short[65] */
-#define GFX_ANI_DESCRIPTIONS_08         (0x1df3)    /* short[65] */
-#define GFX_ANI_DESCRIPTIONS_09         (0x1e75)    /* short[65] */
-#define GFX_ANI_DESCRIPTIONS_10         (0x1ef7)    /* short[65] */
-#define GFX_ANI_DESCRIPTIONS_11         (0x1f79)    /* short[65] */
-#define GFX_ANI_DESCRIPTIONS_12         (0x1ffb)    /* short[65] */
-#define GFX_ANI_DESCRIPTIONS_13         (0x207d)    /* short[65] */
-#define GFX_ANI_DESCRIPTIONS_14         (0x20ff)    /* short[37] */
-#define GFX_ANI_DESCRIPTIONS_15         (0x2149)    /* short[37] */
-#define GFX_ANI_DESCRIPTIONS_16         (0x2193)    /* short[37] */
-#define GFX_ANI_DESCRIPTIONS_17         (0x21dd)    /* short[37] */
-#define GFX_ANI_DESCRIPTIONS_18         (0x2227)    /* short[37] */
-#define GFX_ANI_DESCRIPTIONS_19         (0x2271)    /* short[37] */
-#define GFX_ANI_DESCRIPTIONS_20         (0x22bb)    /* short[37] */
-#define GFX_ANI_DESCRIPTIONS_21         (0x2305)    /* short[37] */
-#define GFX_ANI_DESCRIPTIONS_22         (0x234f)    /* short[37] */
-#define GFX_ANI_DESCRIPTIONS_23         (0x2399)    /* short[37] */
-#define GFX_ANI_DESCRIPTIONS_24         (0x23e3)    /* short[37] */
-#define GFX_ANI_DESCRIPTIONS_25         (0x242d)    /* short[37] */
-#define GFX_ANI_DESCRIPTIONS_26         (0x2477)    /* short[37] */
-#define GFX_ANI_DESCRIPTIONS_27         (0x24c1)    /* short[37] */
-#define GFX_ANI_DESCRIPTIONS_28         (0x250b)    /* short[37] */
-#define GFX_ANI_INDEX                   (0x2555)    /* Bit8u*[41] */
-#define TWO_FIELDED_SPRITE_ID           (0x25f9)    /* char[5] */
-#define WEAPONANI_TABLE                 (0x25fe)    /* unsigned short[72] */
+//#define GFX_ANI_DESCRIPTIONS_01         (0x1a65)    /* short[65] */
+//#define GFX_ANI_DESCRIPTIONS_02         (0x1ae7)    /* short[65] */
+//#define GFX_ANI_DESCRIPTIONS_03         (0x1b69)    /* short[65] */
+//#define GFX_ANI_DESCRIPTIONS_04         (0x1beb)    /* short[65] */
+//#define GFX_ANI_DESCRIPTIONS_05         (0x1c6d)    /* short[65] */
+//#define GFX_ANI_DESCRIPTIONS_06         (0x1cef)    /* short[65] */
+//#define GFX_ANI_DESCRIPTIONS_07         (0x1d71)    /* short[65] */
+//#define GFX_ANI_DESCRIPTIONS_08         (0x1df3)    /* short[65] */
+//#define GFX_ANI_DESCRIPTIONS_09         (0x1e75)    /* short[65] */
+//#define GFX_ANI_DESCRIPTIONS_10         (0x1ef7)    /* short[65] */
+//#define GFX_ANI_DESCRIPTIONS_11         (0x1f79)    /* short[65] */
+//#define GFX_ANI_DESCRIPTIONS_12         (0x1ffb)    /* short[65] */
+//#define GFX_ANI_DESCRIPTIONS_13         (0x207d)    /* short[65] */
+//#define GFX_ANI_DESCRIPTIONS_14         (0x20ff)    /* short[37] */
+//#define GFX_ANI_DESCRIPTIONS_15         (0x2149)    /* short[37] */
+//#define GFX_ANI_DESCRIPTIONS_16         (0x2193)    /* short[37] */
+//#define GFX_ANI_DESCRIPTIONS_17         (0x21dd)    /* short[37] */
+//#define GFX_ANI_DESCRIPTIONS_18         (0x2227)    /* short[37] */
+//#define GFX_ANI_DESCRIPTIONS_19         (0x2271)    /* short[37] */
+//#define GFX_ANI_DESCRIPTIONS_20         (0x22bb)    /* short[37] */
+//#define GFX_ANI_DESCRIPTIONS_21         (0x2305)    /* short[37] */
+//#define GFX_ANI_DESCRIPTIONS_22         (0x234f)    /* short[37] */
+//#define GFX_ANI_DESCRIPTIONS_23         (0x2399)    /* short[37] */
+//#define GFX_ANI_DESCRIPTIONS_24         (0x23e3)    /* short[37] */
+//#define GFX_ANI_DESCRIPTIONS_25         (0x242d)    /* short[37] */
+//#define GFX_ANI_DESCRIPTIONS_26         (0x2477)    /* short[37] */
+//#define GFX_ANI_DESCRIPTIONS_27         (0x24c1)    /* short[37] */
+//#define GFX_ANI_DESCRIPTIONS_28         (0x250b)    /* short[37] */
+//#define GFX_ANI_INDEX                   (0x2555)    /* Bit8u*[41] */
+//#define TWO_FIELDED_SPRITE_ID           (0x25f9)    /* char[5] */
+//define WEAPONANI_TABLE                 (0x25fe)    /* unsigned short[72] */
 //#define WEAPONANI_TYPES                 (0x268e)    /* signed char[22]; { 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0 } */
 //#define FOOD_MESSAGE_SHOWN              (0x26a4)    /* signed char[7] */
 //#define EMS_ENABLED                     (0x26ab)    /* char */

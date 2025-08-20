@@ -91,7 +91,7 @@ void seg037_00ae(Bit8u *enemy, signed short enemy_no)
 	signed char b3;
 	Bit8u *p1;
 	struct struct_fighter *fighter;
-	Bit8u *p3;
+	Bit16s *p3;
 
 	signed short i;
 
@@ -100,7 +100,7 @@ void seg037_00ae(Bit8u *enemy, signed short enemy_no)
 	p1 = p_datseg + (FIG_ANISHEETS + 1 + 0xf3); /* second position of the second FIG_ANISHEET */
 
 	i = 0;
-	p3 = (Bit8u*)(ds_readd(GFX_ANI_INDEX + host_readbs(enemy + ENEMY_SHEET_GFX_ID) * 4));
+	p3 = g_gfx_ani_index[host_readbs(enemy + ENEMY_SHEET_GFX_ID)];
 
 	while (g_fig_move_pathdir[i] != -1) {
 
@@ -134,23 +134,23 @@ void seg037_00ae(Bit8u *enemy, signed short enemy_no)
 
 			host_writeb(enemy + ENEMY_SHEET_VIEWDIR, g_fig_move_pathdir[i]);
 
-			p1 += copy_ani_stuff(p1, host_readws(p3 + b2 * 2), 1);
+			p1 += copy_ani_stuff(p1, p3[b2], 1);
 
 			if (b1 != -1) {
 
-				p1 += copy_ani_stuff(p1, host_readws(p3 + b1 * 2), 1);
+				p1 += copy_ani_stuff(p1, p3[b1], 1);
 			}
 		}
 
 		if (g_fig_move_pathdir[i] == g_fig_move_pathdir[i + 1]) {
 
-			p1 += copy_ani_stuff(p1, host_readws(p3 + (g_fig_move_pathdir[i] + 0x0c) * 2), 1);
+			p1 += copy_ani_stuff(p1, p3[g_fig_move_pathdir[i] + 0x0c], 1);
 			i += 2;
 			/* BP - 2 */
 			host_writeb(enemy + ENEMY_SHEET_BP, host_readbs(enemy + ENEMY_SHEET_BP) - 2);
 
 		} else {
-			p1 += copy_ani_stuff(p1, host_readws(p3 + (g_fig_move_pathdir[i] + 0x08) * 2), 1);
+			p1 += copy_ani_stuff(p1, p3[g_fig_move_pathdir[i] + 0x08], 1);
 			i++;
 			/* BP - 1 */
 			dec_ptr_bs(enemy + ENEMY_SHEET_BP);
@@ -168,7 +168,7 @@ void seg037_00ae(Bit8u *enemy, signed short enemy_no)
 
 	FIG_set_sheet(host_readbs(enemy + ENEMY_SHEET_FIGHTER_ID), 1);
 
-	if (is_in_byte_array(host_readbs(enemy + ENEMY_SHEET_GFX_ID), p_datseg + TWO_FIELDED_SPRITE_ID)) {
+	if (is_in_byte_array(host_readbs(enemy + ENEMY_SHEET_GFX_ID), (Bit8u*)g_two_fielded_sprite_id)) {
 
 		memcpy(p_datseg + (FIG_ANISHEETS + 3*0xf3), p_datseg + (FIG_ANISHEETS + 0xf3), 0xf3);
 
@@ -834,7 +834,7 @@ void enemy_turn(Bit8u *enemy, signed short enemy_no, signed short x, signed shor
 
 					l5 = 1;
 
-					if (is_in_byte_array(host_readbs(enemy + ENEMY_SHEET_GFX_ID), p_datseg + TWO_FIELDED_SPRITE_ID))
+					if (is_in_byte_array(host_readbs(enemy + ENEMY_SHEET_GFX_ID), (Bit8u*)g_two_fielded_sprite_id))
 					{
 
 						l_di = get_cb_val(x - diff.d[dir].x, y - diff.d[dir].y);
