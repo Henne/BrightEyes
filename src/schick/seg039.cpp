@@ -475,10 +475,9 @@ void FIG_init_heroes(void)
 		l_di = FIG_get_range_weapon_type(hero);
 
 		if (l_di != -1) {
-			g_fig_list_elem.nvf_no = (
-				ds_readb((NVFTAB_FIGURES_RANGEWEAPON - 12) + host_readbs(hero + HERO_SPRITE_NO) * 12 + l_di * 4 + host_readbs(hero + HERO_VIEWDIR)));
+			g_fig_list_elem.nvf_no = g_nvftab_figures_rangeweapon[host_readbs(hero + HERO_SPRITE_NO) - 1][l_di][host_readbs(hero + HERO_VIEWDIR)];
 		} else {
-			g_fig_list_elem.nvf_no = (host_readb(hero + HERO_VIEWDIR));
+			g_fig_list_elem.nvf_no = host_readb(hero + HERO_VIEWDIR);
 		}
 
 		g_fig_list_elem.figure = ds_readbs(GFXTAB_FIGURES_MAIN + host_readbs(hero + HERO_SPRITE_NO) * 5);
@@ -489,16 +488,15 @@ void FIG_init_heroes(void)
 
 		if (hero_dead(hero)) {
 			/* hero is dead */
-			g_fig_list_elem.nvf_no = (
-				ds_readb(NVFTAB_FIGURES_DEAD + host_readbs(hero + HERO_SPRITE_NO) * 2));
+			g_fig_list_elem.nvf_no = g_nvftab_figures_dead[host_readbs(hero + HERO_SPRITE_NO)];
 			g_fig_list_elem.offsetx = (
 				ds_readb((GFXTAB_OFFSETS_MAIN + 8) + host_readbs(hero + HERO_SPRITE_NO) * 10));
 			g_fig_list_elem.offsety = (
 				ds_readb((GFXTAB_OFFSETS_MAIN + 9) + host_readbs(hero + HERO_SPRITE_NO) * 10));
 		} else if (hero_asleep(hero) || hero_unconscious(hero)) {
+
 			/* hero is asleep or unconscious */
-			g_fig_list_elem.nvf_no = (
-				ds_readb(NVFTAB_FIGURES_UNCONSCIOUS + host_readbs(hero + HERO_SPRITE_NO) * 2) + host_readbs(hero + HERO_VIEWDIR));
+			g_fig_list_elem.nvf_no = g_nvftab_figures_unconscious[host_readbs(hero + HERO_SPRITE_NO)] + host_readbs(hero + HERO_VIEWDIR);
 
 			g_fig_list_elem.offsetx = (
 				ds_readbs(GFXTAB_OFFSETS_UNCONSCIOUS + host_readbs(hero + HERO_SPRITE_NO) * 8 + host_readbs(hero + HERO_VIEWDIR) * 2));

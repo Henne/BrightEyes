@@ -600,7 +600,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 
 								rwt1 = FIG_get_range_weapon_type(hero);
 
-								move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, slots[selected -1], hero);
+								move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, slots[selected - 1], hero);
 
 								rwt2 = FIG_get_range_weapon_type(hero);
 
@@ -609,7 +609,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 									ptr = FIG_get_fighter(host_readbs(hero + HERO_FIGHTER_ID));
 
 									if (rwt2 != -1) {
-										ptr->nvf_no = ds_readbs((NVFTAB_FIGURES_RANGEWEAPON - 12) + 12 * host_readbs(hero + HERO_SPRITE_NO) + 4 * rwt2 + host_readbs(hero + HERO_VIEWDIR));
+										ptr->nvf_no = g_nvftab_figures_rangeweapon[host_readbs(hero + HERO_SPRITE_NO) - 1][rwt2][host_readbs(hero + HERO_VIEWDIR)];
 									} else {
 										ptr->nvf_no = host_readbs(hero + HERO_VIEWDIR);
 									}

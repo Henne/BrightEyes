@@ -544,13 +544,13 @@ void draw_fight_screen(Bit16u val)
 							}
 
 						} else {
-							if (list_ii->nvf_no == ds_readws(NVFTAB_FIGURES_DEAD + list_ii->sprite_no * 2)) {
+							if (list_ii->nvf_no == g_nvftab_figures_dead[list_ii->sprite_no]) {
 
 								list_ii->offsetx = ds_readbs((GFXTAB_OFFSETS_MAIN + 8) + list_ii->sprite_no * 10);
 								list_ii->offsety = ds_readbs((GFXTAB_OFFSETS_MAIN + 9) + list_ii->sprite_no * 10);
 
 							} else {
-								viewdir_unconsc = list_ii->nvf_no - ds_readws(NVFTAB_FIGURES_UNCONSCIOUS + list_ii->sprite_no * 2);
+								viewdir_unconsc = list_ii->nvf_no - g_nvftab_figures_unconscious[list_ii->sprite_no];
 
 								if (viewdir_unconsc >= 0) {
 									list_ii->offsetx = ds_readbs(GFXTAB_OFFSETS_UNCONSCIOUS + list_ii->sprite_no * 8 + viewdir_unconsc * 2);
@@ -559,8 +559,7 @@ void draw_fight_screen(Bit16u val)
 							}
 						}
 
-						obj_x = 10 - (list_ii->width / 2) +
-							(10 * (list_ii->cbx + list_ii->cby));
+						obj_x = 10 - (list_ii->width / 2) + (10 * (list_ii->cbx + list_ii->cby));
 
 						obj_y = 118 - list_ii->height + ((list_ii->cbx - list_ii->cby) * 5);
 

@@ -73,12 +73,12 @@
 //#define MON_SPELL_HANDLERS              (0x0fc2)    /* long[15]; function pointer[15] */
 #define SKILL_DESCRIPTIONS              (0x0ffe)    /* struct(4)[52]; struct{signed char attrib1, attrib2, attrib3, max_inc;} */
 #define SKILLS_INDEX                    (0x10ce)    /* struct(2)[7]; struct{signed char first, length;}; { {0,9}, {9,10}, {19,7}, {26,6}, {32,9}, {41,9}, {50,2} } */
-#define NVFTAB_FIGURES_RANGEWEAPON      (0x10dc)    /* char[264]; by rwt/viewdir */
-#define NVFTAB_FIGURES_UNCONSCIOUS      (0x11e4)    /* short[22] */
+//#define NVFTAB_FIGURES_RANGEWEAPON      (0x10dc)    /* char[264]; by rwt/viewdir */
+//#define NVFTAB_FIGURES_UNCONSCIOUS      (0x11e4)    /* short[22] */
 #define GFXTAB_OFFSETS_UNCONSCIOUS      (0x1210)    /* struct(2)[88]; struct{char x,y;}; by viewdir */
 #define GFXTAB_FIGURES_MAIN             (0x12c0)    /* struct(5)[125]; struct{char figure_no, unkn2, unkn3, unkn4, unkn5;} */
 #define GFXTAB_OFFSETS_MAIN             (0x1531)    /* struct(2)[625]; struct{char x,y;}; by viewdir+dead */
-#define NVFTAB_FIGURES_DEAD             (0x1a13)    /* short[22] */
+//#define NVFTAB_FIGURES_DEAD             (0x1a13)    /* short[22] */
 // ? 38
 //#define GFX_ANI_DESCRIPTIONS_01         (0x1a65)    /* short[65] */
 //#define GFX_ANI_DESCRIPTIONS_02         (0x1ae7)    /* short[65] */
@@ -110,7 +110,7 @@
 //#define GFX_ANI_DESCRIPTIONS_28         (0x250b)    /* short[37] */
 //#define GFX_ANI_INDEX                   (0x2555)    /* Bit8u*[41] */
 //#define TWO_FIELDED_SPRITE_ID           (0x25f9)    /* char[5] */
-//define WEAPONANI_TABLE                 (0x25fe)    /* unsigned short[72] */
+//#define WEAPONANI_TABLE                 (0x25fe)    /* unsigned short[72] */
 //#define WEAPONANI_TYPES                 (0x268e)    /* signed char[22]; { 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0 } */
 //#define FOOD_MESSAGE_SHOWN              (0x26a4)    /* signed char[7] */
 //#define EMS_ENABLED                     (0x26ab)    /* char */
