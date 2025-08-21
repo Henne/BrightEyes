@@ -638,10 +638,10 @@
 //#define DNG04_CHEST_CORPSE2             (0x40b5)    /* signed char[10] */
 //#define DNG06_CHEST1_CONTENT            (0x40bf)    /* signed char[16] */
 //#define DNG06_CHEST_DASPTREAS           (0x40cf)    /* signed char[17] */
-#define DNG08_CHEST1_CONTENT            (0x40e0)    /* signed char[11] */
-#define DNG08_CHEST2_CONTENT            (0x40eb)    /* signed char[2] */
-#define DNG08_CHEST4_CONTENT            (0x40ed)    /* signed char[2] */
-#define DNG08_CHEST5_CONTENT            (0x40ef)    /* signed char[6] */
+//#define DNG08_CHEST1_CONTENT            (0x40e0)    /* signed char[11] */
+//#define DNG08_CHEST2_CONTENT            (0x40eb)    /* signed char[2] */
+//#define DNG08_CHEST4_CONTENT            (0x40ed)    /* signed char[2] */
+//#define DNG08_CHEST5_CONTENT            (0x40ef)    /* signed char[6] */
 #define DNG09_LEVER1_FLAG               (0x40f5)    /* unsigned char; {0,1} */
 #define DNG09_BOLTTRAP1_FLAG            (0x40f6)    /* unsigned char; {0,1} */
 #define DNG09_BOLTTRAP2_FLAG            (0x40f7)    /* unsigned char; {0,1} */

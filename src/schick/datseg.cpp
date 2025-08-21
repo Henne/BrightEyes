@@ -2508,10 +2508,18 @@ Bit8u  gs_dng06_chest_dasptreas[17] = {
 	ITEM_KK_ELIXIR, 1,
 	0xff
 }; // ds:0x40cf
-signed char g_dng08_chest1_content[11] = { 0x03, 0x08, 0x05, 0x03, 0x42, 0x02, 0x09, 0x01, 0x0a, 0x28, -1 }; // ds:0x40e0
-signed char g_dng08_chest2_content[2] = { -0x4f, -1 }; // ds:0x40eb
-signed char g_dng08_chest4_content[2] = { -0x4e, -1 }; // ds:0x40ed
-signed char g_dng08_chest5_content[6] = { 0x27, 0x27, 0x4a, -0x6d, -0x4d, -1 }; // ds:0x40ef
+   //
+Bit8u  gs_dng08_chest1_content[11] = {
+	ITEM_SABER, 8,
+	ITEM_SPEAR, 3,
+	ITEM_MACE, 2,
+	ITEM_SHORTBOW, 1,
+	ITEM_ARROWS, 40,
+	0xff
+}; // ds:0x40e0
+Bit8u  gs_dng08_chest2_content[2] = { 0xb1, 0xff }; // ds:0x40eb
+Bit8u  gs_dng08_chest4_content[2] = { 0xb2, 0xff }; // ds:0x40ed
+Bit8u  gs_dng08_chest5_content[6] = { 0x27, 0x27, 0x4a, 0x93, 0xb3, 0xff }; // ds:0x40ef
 unsigned char g_dng09_lever1_flag = 0; // ds:0x40f5
 unsigned char g_dng09_bolttrap1_flag = 3; // ds:0x40f6
 unsigned char g_dng09_bolttrap2_flag = 3; // ds:0x40f7
