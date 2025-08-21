@@ -549,7 +549,7 @@ void spell_skelettarius(void)
 		 * after the 'Skelettarius' the other body is still displayed, but cannot be selected for 'Skelettarius'.
 		 *
 		 * Fix: store and restore the FIGHTER_OBJ_ID value. */
-		signed char obj_id_bak = host_readbs(fighter + FIGHTER_OBJ_ID);
+		signed char obj_id_bak = fighter->obj_id;
 #endif
 #ifdef M302de_ORIGINAL_BUGFIX
 		/* Original-Bug 2:
@@ -565,7 +565,7 @@ void spell_skelettarius(void)
 		 * https://www.crystals-dsa-foren.de/showthread.php?tid=5191&pid=166097#pid166097
 		 * */
                 Bit8u* buf_seek_ptr_bak = g_fightobj_buf_seek_ptr; /* backup the entry of FIGHTOBJ_BUF_SEEK_PTR */
-		g_fightobj_buf_seek_ptr = (unsigned char*)host_readd(fighter + FIGHTER_GFXBUF);
+		g_fightobj_buf_seek_ptr = fighter->gfxbuf;
 #endif
 
 		FIG_remove_from_list(host_readbs(get_spelltarget_e() + ENEMY_SHEET_FIGHTER_ID), 0);
