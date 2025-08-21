@@ -633,6 +633,17 @@ extern Bit8u  gs_dng02_chest02_content[8];	//ds:0x4045; seg078
 extern Bit8u  gs_dng02_chest03_content[8];	//ds:0x404d; seg078
 extern Bit8u  gs_dng02_chest05_content[8];	//ds:0x4055; seg078
 
+extern Bit8u  gs_dng03_chest00_content[7];	//ds:0x405d; seg079
+extern Bit8u  gs_dng03_chest01_content[8];	//ds:0x4064; seg079
+extern Bit8u  gs_dng03_chest02_content[13];	//ds:0x406c; seg079
+extern Bit8u  gs_dng03_chest03_content[3];	//ds:0x4079; seg079
+extern Bit8u  gs_dng03_chest04_content[9];	//ds:0x407c; seg079
+extern Bit8u  gs_dng03_chest06_content[8];	//ds:0x4085; seg079
+extern Bit8u  gs_dng03_chest07_content[2];	//ds:0x408d; seg079
+extern Bit8u  gs_dng03_chest08_content[4];	//ds:0x408f; seg079
+extern Bit8u  gs_dng03_chest09_content[11];	//ds:0x4093; seg079
+extern Bit8u  gs_dng03_chest12_content[7];	//ds:0x409e; seg079
+
 extern Bit8u  gs_dng10_corpse_flag;		//ds:0x4140; seg078
 
 extern Bit8u  gs_dng11_waterbarrel1;		//ds:0x415d; seg086
