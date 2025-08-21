@@ -596,6 +596,35 @@ extern Bit8s  gs_dng12_obstacle_hp;		//ds:0x3fa7; seg090
 extern Bit8u  gs_dng12_obstacle_active;		//ds:0x3fa8; seg090
 extern Bit8u  gs_dng12_speartrap_active;	//ds:0x3fa9; seg090
 extern Bit8u  gs_dng12_chest1_content[12];	//ds:0x3faa; seg090
+extern Bit8u  gs_dng14_money_flag;		//ds:0x3fb6; seg087
+extern Bit8u  gs_dng14_alarm_flag;		//ds:0x3fb7; seg087
+extern Bit8u  gs_dng14_secretdoor1;		//ds:0x3fb8; seg087
+extern Bit8u  gs_dng14_secretdoor2;		//ds:0x3fb9; seg087
+extern Bit8u  gs_dng14_secretdoor3;		//ds:0x3fba; seg087
+extern Bit8u  gs_dng14_secretdoor4;		//ds:0x3fbb; seg087
+extern Bit8u  gs_dng14_secretdoor5;		//ds:0x3fbc; seg087
+extern Bit8u  gs_dng14_poisontrap;		//ds:0x3fbd; seg087
+extern Bit8u  gs_dng14_lvl2_fight;		//ds:0x3fbe; seg087
+extern Bit8u  gs_dng14_booty_flag;		//ds:0x3fbf; seg087
+extern Bit8u  gs_dng14_torches_flag;		//ds:0x3fc0; seg087
+extern Bit8u  gs_dng14_spear_flag;		//ds:0x3fc1; seg087
+extern Bit8u  gs_dng14_hatchet_flag;		//ds:0x3fc2; seg087
+extern Bit8u  gs_dng14_ring_flag;		//ds:0x3fc3; seg087
+extern Bit8u  gs_dng14_orknase_flag;		//ds:0x3fc4; seg087
+extern Bit8u  gs_dng14_spooky_flag;		//ds:0x3fc4; seg087
+extern Bit8u  gs_dng14_cellarexit_flag;		//ds:0x3fc6; seg058, seg087
+extern Bit8u  gs_dng14_chest_pantry[9];		//ds:0x3fc7; seg087
+extern Bit8u  gs_dng14_chest_gear[13];		//ds:0x3fd0; seg087
+extern Bit8u  gs_dng14_chest_barrel[7];		//ds:0x3fdd; seg087
+extern Bit8u  gs_dng14_chest_x1[7];		//ds:0x3fe4; seg088
+extern Bit8u  gs_dng14_chest_x2[16];		//ds:0x3feb; seg088
+extern Bit8u  gs_dng14_chest_x3[11];		//ds:0x3ffb; seg088
+extern Bit8u  gs_dng14_chest_x4[14];		//ds:0x4006; seg088
+extern Bit8u  gs_dng14_chest_x5[10];		//ds:0x4014; seg088
+extern Bit8u  gs_dng14_chest_x6[8];		//ds:0x401e; seg088
+extern Bit8u  gs_dng14_chest_x7[7];		//ds:0x4026; seg088
+extern Bit8u  gs_dng14_chest_x8[13];		//ds:0x402d; seg088
+extern Bit8u  gs_dng14_fullmap_flag;		//ds:0x403a; seg088
 
 extern Bit8u  gs_dng10_corpse_flag;		//ds:0x4140; seg078
 

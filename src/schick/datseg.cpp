@@ -2418,25 +2418,31 @@ Bit8u  gs_dng12_chest1_content[12] = {
 	ITEM_LE_POTION,
 	ITEM_AE_POTION,
 	0xff }; // ds:0x3faa
-unsigned char g_dng14_money_flag = 0; // ds:0x3fb6
-unsigned char g_dng14_alarm_flag = 0; // ds:0x3fb7
-unsigned char g_dng14_secretdoor1 = 0; // ds:0x3fb8, {0, 1 = found, 2 = unlocked}
-unsigned char g_dng14_secretdoor2 = 0; // ds:0x3fb9, {0, 1 = found, 2 = unlocked}
-unsigned char g_dng14_secretdoor3 = 0; // ds:0x3fba, {0, 1 = found, 2 = unlocked}
-unsigned char g_dng14_secretdoor4 = 0; // ds:0x3fbb, {0, 1 = found, 2 = unlocked}
-unsigned char g_dng14_secretdoor5 = 0; // ds:0x3fbc, {0, 1 = found, 2 = unlocked}
-unsigned char g_dng14_poisontrap = 0; // ds:0x3fbd
-unsigned char g_dng14_lvl2_fight = 0; // ds:0x3fbe
-unsigned char g_dng14_booty_flag = 0; // ds:0x3fbf
-unsigned char g_dng14_torches_flag = 0; // ds:0x3fc0
-unsigned char g_dng14_spear_flag = 0; // ds:0x3fc1
-unsigned char g_dng14_hatchet_flag = 0; // ds:0x3fc2
-unsigned char g_dng14_ring_flag = 0; // ds:0x3fc3
-unsigned char g_dng14_orknase_flag = 0; // ds:0x3fc4
-unsigned char g_dng14_spooky_flag = 0; // ds:0x3fc5
-unsigned char g_dng14_cellarexit_flag = 0; // ds:0x3fc6
-unsigned char g_dng14_chest_pantry[9] = { 0x2d, 0x32, 0x17, 0x14, 0x5b, 0x14, 0x5c, 0x05, 0xff }; // ds:0x3fc7
-unsigned char g_dng14_chest_gear[13] = {
+Bit8u  gs_dng14_money_flag = 0; // ds:0x3fb6
+Bit8u  gs_dng14_alarm_flag = 0; // ds:0x3fb7
+Bit8u  gs_dng14_secretdoor1 = 0; // ds:0x3fb8, {0, 1 = found, 2 = unlocked}
+Bit8u  gs_dng14_secretdoor2 = 0; // ds:0x3fb9, {0, 1 = found, 2 = unlocked}
+Bit8u  gs_dng14_secretdoor3 = 0; // ds:0x3fba, {0, 1 = found, 2 = unlocked}
+Bit8u  gs_dng14_secretdoor4 = 0; // ds:0x3fbb, {0, 1 = found, 2 = unlocked}
+Bit8u  gs_dng14_secretdoor5 = 0; // ds:0x3fbc, {0, 1 = found, 2 = unlocked}
+Bit8u  gs_dng14_poisontrap = 0; // ds:0x3fbd
+Bit8u  gs_dng14_lvl2_fight = 0; // ds:0x3fbe
+Bit8u  gs_dng14_booty_flag = 0; // ds:0x3fbf
+Bit8u  gs_dng14_torches_flag = 0; // ds:0x3fc0
+Bit8u  gs_dng14_spear_flag = 0; // ds:0x3fc1
+Bit8u  gs_dng14_hatchet_flag = 0; // ds:0x3fc2
+Bit8u  gs_dng14_ring_flag = 0; // ds:0x3fc3
+Bit8u  gs_dng14_orknase_flag = 0; // ds:0x3fc4
+Bit8u  gs_dng14_spooky_flag = 0; // ds:0x3fc5
+Bit8u  gs_dng14_cellarexit_flag = 0; // ds:0x3fc6
+Bit8u  gs_dng14_chest_pantry[9] = {
+	ITEM_FOOD_PACKAGE, 50,
+	ITEM_BEER, 20,
+	ITEM_WINE, 20,
+	ITEM_BRANDY, 5,
+	0xff
+}; // ds:0x3fc7
+Bit8u  gs_dng14_chest_gear[13] = {
 	ITEM_PICKAXE, 3,
 	ITEM_SHOVEL, 2,
 	ITEM_ROPE, 3,
@@ -2445,16 +2451,28 @@ unsigned char g_dng14_chest_gear[13] = {
 	ITEM_CROWBAR, 3,
 	0xff
 }; // ds:0x3fd0
-unsigned char g_dng14_chest_barrel[7] = { 0x05, 0x03, 0x67, 0x03, 0x69, 0x01, 0xff }; // ds:0x3fdd
-unsigned char g_dng14_chest_x1[7] = { 0x5c, 0x9a, 0x9a, 0x0e, 0x9b, 0x9b, 0xff }; // ds:0x3fe4
-unsigned char g_dng14_chest_x2[16] = { 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x9a, 0x9a, 0x9a, 0x9b, 0x9b, 0x9b, 0xff }; // ds:0x3feb
-unsigned char g_dng14_chest_x3[11] = { 0x09, 0x03, 0x0c, 0x01, 0x62, 0x04, 0x0d, 0x14, 0x0a, 0x32, 0xff }; // ds:0x3ffb
-unsigned char g_dng14_chest_x4[14] = { 0x03, 0x03, 0x03, 0x03, 0x01, 0x01, 0x0e, 0x0e, 0x0e, 0x0e, 0x87, 0x87, 0x92, 0xff }; // ds:0x4006
-unsigned char g_dng14_chest_x5[10] = { 0x5b, 0x5b, 0x5b, 0x5b, 0x5b, 0x5c, 0x5c, 0x91, 0x91, 0xff }; // ds:0x4014
-unsigned char g_dng14_chest_x6[8] = { 0x4a, 0x4a, 0x4a, 0x27, 0x27, 0x22, 0x4c, 0xff }; // ds:0x401e
-unsigned char g_dng14_chest_x7[7] = { 0xef, 0xef, 0xef, 0xef, 0xef, 0xef, 0xff }; // ds:0x4026
-unsigned char g_dng14_chest_x8[13] = { 0x88, 0x88, 0x88, 0x86, 0x86, 0x86, 0x05, 0x05, 0x05, 0x07, 0x07, 0x07, 0xff }; // ds:0x402d
-unsigned char g_dng14_fullmap_flag = 1; // ds:0x403a
+Bit8u  gs_dng14_chest_barrel[7] = {
+	ITEM_SPEAR, 3,
+	ITEM_HALBERD, 3,
+	ITEM_ZWEILILIEN, 1,
+	0xff
+}; // ds:0x3fdd
+Bit8u gs_dng14_chest_x1[7] = { 0x5c, 0x9a, 0x9a, 0x0e, 0x9b, 0x9b, 0xff }; // ds:0x3fe4
+Bit8u gs_dng14_chest_x2[16] = { 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x9a, 0x9a, 0x9a, 0x9b, 0x9b, 0x9b, 0xff }; // ds:0x3feb
+Bit8u gs_dng14_chest_x3[11] = {
+	ITEM_SHORTBOW, 3,
+	ITEM_CROSSBOW, 1,
+	ITEM_THROWING_KNIFE, 4,
+	ITEM_BOLTS, 20,
+	ITEM_ARROWS, 50,
+	0xff
+}; // ds:0x3ffb
+Bit8u gs_dng14_chest_x4[14] = { 0x03, 0x03, 0x03, 0x03, 0x01, 0x01, 0x0e, 0x0e, 0x0e, 0x0e, 0x87, 0x87, 0x92, 0xff }; // ds:0x4006
+Bit8u gs_dng14_chest_x5[10] = { 0x5b, 0x5b, 0x5b, 0x5b, 0x5b, 0x5c, 0x5c, 0x91, 0x91, 0xff }; // ds:0x4014
+Bit8u gs_dng14_chest_x6[8] = { 0x4a, 0x4a, 0x4a, 0x27, 0x27, 0x22, 0x4c, 0xff }; // ds:0x401e
+Bit8u gs_dng14_chest_x7[7] = { 0xef, 0xef, 0xef, 0xef, 0xef, 0xef, 0xff }; // ds:0x4026
+Bit8u gs_dng14_chest_x8[13] = { 0x88, 0x88, 0x88, 0x86, 0x86, 0x86, 0x05, 0x05, 0x05, 0x07, 0x07, 0x07, 0xff }; // ds:0x402d
+Bit8u  gs_dng14_fullmap_flag = 1; // ds:0x403a
 unsigned char g_dng02_chest00_content[2] = { 0x86, 0xff }; // ds:0x403b
 unsigned char g_dng02_chest01_content[4] = { 0x03, 0x62, 0x04, 0xff }; // ds:0x403d
 unsigned char g_dng02_chest06_content[4] = { 0x48, 0x1e, 0x0e, 0xff }; // ds:0x4041

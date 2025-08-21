@@ -588,35 +588,35 @@
 //#define DNG12_OBSTACLE_ACTIVE           (0x3fa8)    /* signed char; {0,1} */
 //#define DNG12_SPEARTRAP_ACTIVE          (0x3fa9)    /* signed char; {0,1} */
 //#define DNG12_CHEST1_CONTENT            (0x3faa)    /* signed char[12] */
-#define DNG14_MONEY_FLAG                (0x3fb6)    /* unsigned char; {0,1} */
-#define DNG14_ALARM_FLAG                (0x3fb7)    /* unsigned char; {0,1} */
-#define DNG14_SECRETDOOR1               (0x3fb8)    /* unsigned char; {0, 1 = found, 2 = unlocked} */
-#define DNG14_SECRETDOOR2               (0x3fb9)    /* unsigned char; {0, 1 = found, 2 = unlocked} */
-#define DNG14_SECRETDOOR3               (0x3fba)    /* unsigned char; {0, 1 = found, 2 = unlocked} */
-#define DNG14_SECRETDOOR4               (0x3fbb)    /* unsigned char; {0, 1 = found, 2 = unlocked} */
-#define DNG14_SECRETDOOR5               (0x3fbc)    /* unsigned char; {0, 1 = found, 2 = unlocked} */
-#define DNG14_POISONTRAP                (0x3fbd)    /* unsigned char; {0, 1, 2} */
-#define DNG14_LVL2_FIGHT                (0x3fbe)    /* unsigned char; {0,1} */
-#define DNG14_BOOTY_FLAG                (0x3fbf)    /* unsigned char; {0,1} */
-#define DNG14_TORCHES_FLAG              (0x3fc0)    /* unsigned char; {0,1} */
-#define DNG14_SPEAR_FLAG                (0x3fc1)    /* unsigned char; {0,1} */
-#define DNG14_HATCHET_FLAG              (0x3fc2)    /* unsigned char; {0,1} */
-#define DNG14_RING_FLAG                 (0x3fc3)    /* unsigned char; {0,1} */
-#define DNG14_ORKNASE_FLAG              (0x3fc4)    /* unsigned char; {0,1} */
-#define DNG14_SPOOKY_FLAG               (0x3fc5)    /* unsigned char; {0,1} */
-#define DNG14_CELLAREXIT_FLAG           (0x3fc6)    /* unsigned char; {0,1} */
-#define DNG14_CHEST_PANTRY              (0x3fc7)    /* unsigned char[9] */
-#define DNG14_CHEST_GEAR                (0x3fd0)    /* unsigned char[13] */
-#define DNG14_CHEST_BARREL              (0x3fdd)    /* unsigned char[7] */
-#define DNG14_CHEST_X1                  (0x3fe4)    /* unsigned char[7] */
-#define DNG14_CHEST_X2                  (0x3feb)    /* unsigned char[16] */
-#define DNG14_CHEST_X3                  (0x3ffb)    /* unsigned char[11] */
-#define DNG14_CHEST_X4                  (0x4006)    /* unsigned char[14] */
-#define DNG14_CHEST_X5                  (0x4014)    /* unsigned char[10] */
-#define DNG14_CHEST_X6                  (0x401e)    /* unsigned char[8] */
-#define DNG14_CHEST_X7                  (0x4026)    /* unsigned char[7] */
-#define DNG14_CHEST_X8                  (0x402d)    /* unsigned char[13] */
-#define DNG14_FULLMAP_FLAG              (0x403a)    /* unsigned char; {0,1} */
+//#define DNG14_MONEY_FLAG                (0x3fb6)    /* unsigned char; {0,1} */
+//#define DNG14_ALARM_FLAG                (0x3fb7)    /* unsigned char; {0,1} */
+//#define DNG14_SECRETDOOR1               (0x3fb8)    /* unsigned char; {0, 1 = found, 2 = unlocked} */
+//#define DNG14_SECRETDOOR2               (0x3fb9)    /* unsigned char; {0, 1 = found, 2 = unlocked} */
+//#define DNG14_SECRETDOOR3               (0x3fba)    /* unsigned char; {0, 1 = found, 2 = unlocked} */
+//#define DNG14_SECRETDOOR4               (0x3fbb)    /* unsigned char; {0, 1 = found, 2 = unlocked} */
+//#define DNG14_SECRETDOOR5               (0x3fbc)    /* unsigned char; {0, 1 = found, 2 = unlocked} */
+//#define DNG14_POISONTRAP                (0x3fbd)    /* unsigned char; {0, 1, 2} */
+//#define DNG14_LVL2_FIGHT                (0x3fbe)    /* unsigned char; {0,1} */
+//#define DNG14_BOOTY_FLAG                (0x3fbf)    /* unsigned char; {0,1} */
+//#define DNG14_TORCHES_FLAG              (0x3fc0)    /* unsigned char; {0,1} */
+//#define DNG14_SPEAR_FLAG                (0x3fc1)    /* unsigned char; {0,1} */
+//#define DNG14_HATCHET_FLAG              (0x3fc2)    /* unsigned char; {0,1} */
+//#define DNG14_RING_FLAG                 (0x3fc3)    /* unsigned char; {0,1} */
+//#define DNG14_ORKNASE_FLAG              (0x3fc4)    /* unsigned char; {0,1} */
+//#define DNG14_SPOOKY_FLAG               (0x3fc5)    /* unsigned char; {0,1} */
+//#define DNG14_CELLAREXIT_FLAG           (0x3fc6)    /* unsigned char; {0,1} */
+//#define DNG14_CHEST_PANTRY              (0x3fc7)    /* unsigned char[9] */
+//#define DNG14_CHEST_GEAR                (0x3fd0)    /* unsigned char[13] */
+//#define DNG14_CHEST_BARREL              (0x3fdd)    /* unsigned char[7] */
+//#define DNG14_CHEST_X1                  (0x3fe4)    /* unsigned char[7] */
+//#define DNG14_CHEST_X2                  (0x3feb)    /* unsigned char[16] */
+//#define DNG14_CHEST_X3                  (0x3ffb)    /* unsigned char[11] */
+//#define DNG14_CHEST_X4                  (0x4006)    /* unsigned char[14] */
+//#define DNG14_CHEST_X5                  (0x4014)    /* unsigned char[10] */
+//#define DNG14_CHEST_X6                  (0x401e)    /* unsigned char[8] */
+//#define DNG14_CHEST_X7                  (0x4026)    /* unsigned char[7] */
+//#define DNG14_CHEST_X8                  (0x402d)    /* unsigned char[13] */
+//#define DNG14_FULLMAP_FLAG              (0x403a)    /* unsigned char; {0,1} */
 #define DNG02_CHEST00_CONTENT           (0x403b)    /* unsigned char[2] */
 #define DNG02_CHEST01_CONTENT           (0x403d)    /* unsigned char[4] */
 #define DNG02_CHEST06_CONTENT           (0x4041)    /* unsigned char[4] */

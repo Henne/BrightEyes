@@ -505,7 +505,7 @@ void do_smith(void)
 
 	if (gs_smith_kicked_flags[gs_current_typeindex] ||
 		gs_smith_flogged_flags[gs_current_typeindex] ||
-		(gs_current_typeindex == 1 && ds_readb(DNG14_CELLAREXIT_FLAG))) {
+		(gs_current_typeindex == 1 && gs_dng14_cellarexit_flag)) {
 
 		talk_smith();
 		leave_location();
@@ -582,7 +582,7 @@ void TLK_schmied(signed short state)
 	if (!state) {
 		g_dialog_next_state = (gs_smith_kicked_flags[gs_current_typeindex] ? 1 :
 					(gs_current_typeindex == 17 ? 27 :
-					(gs_current_typeindex == 1 && ds_readb(DNG14_CELLAREXIT_FLAG) != 0 ? 28 : 4)));
+					(gs_current_typeindex == 1 && gs_dng14_cellarexit_flag ? 28 : 4)));
 	} else if (state == 1) {
 		g_dialog_next_state = (gs_smith_flogged_flags[gs_current_typeindex] ? 2 : 3);
 	} else if (state == 3) {
@@ -597,10 +597,11 @@ void TLK_schmied(signed short state)
 	} else if (state == 30) {
 
 		DNG_enter_dungeon(DUNGEONS_ZWINGFESTE);
+
 		gs_dungeon_level = 3;
-		gs_x_target_bak = (gs_x_target = (11));
-		gs_y_target_bak = (gs_y_target = (2));
-		gs_direction = (2);
+		gs_x_target_bak = gs_x_target = 11;
+		gs_y_target_bak = gs_y_target = 2;
+		gs_direction = 2;
 	}
 }
 
