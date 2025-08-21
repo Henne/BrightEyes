@@ -617,12 +617,12 @@
 //#define DNG14_CHEST_X7                  (0x4026)    /* unsigned char[7] */
 //#define DNG14_CHEST_X8                  (0x402d)    /* unsigned char[13] */
 //#define DNG14_FULLMAP_FLAG              (0x403a)    /* unsigned char; {0,1} */
-#define DNG02_CHEST00_CONTENT           (0x403b)    /* unsigned char[2] */
-#define DNG02_CHEST01_CONTENT           (0x403d)    /* unsigned char[4] */
-#define DNG02_CHEST06_CONTENT           (0x4041)    /* unsigned char[4] */
-#define DNG02_CHEST02_CONTENT           (0x4045)    /* unsigned char[8] */
-#define DNG02_CHEST03_CONTENT           (0x404d)    /* unsigned char[8] */
-#define DNG02_CHEST05_CONTENT           (0x4055)    /* unsigned char[8] */
+//#define DNG02_CHEST00_CONTENT           (0x403b)    /* unsigned char[2] */
+//#define DNG02_CHEST01_CONTENT           (0x403d)    /* unsigned char[4] */
+//#define DNG02_CHEST06_CONTENT           (0x4041)    /* unsigned char[4] */
+//#define DNG02_CHEST02_CONTENT           (0x4045)    /* unsigned char[8] */
+//#define DNG02_CHEST03_CONTENT           (0x404d)    /* unsigned char[8] */
+//#define DNG02_CHEST05_CONTENT           (0x4055)    /* unsigned char[8] */
 #define DNG03_CHEST00_CONTENT           (0x405d)    /* signed char[7] */
 #define DNG03_CHEST01_CONTENT           (0x4064)    /* signed char[8] */
 #define DNG03_CHEST02_CONTENT           (0x406c)    /* signed char[13] */
