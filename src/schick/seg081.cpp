@@ -394,13 +394,14 @@ signed short DNG06_handler(void)
 	} else if (target_pos == DNG_POS(1,6,11) && target_pos != gs_dng_handled_pos && !gs_dng06_dasptreas_found)
 	{
 		/* treasure of Daspota found */
+		/* REMARK: should be modified, in a way that looting is still possible */
 		GUI_output(get_tx(36));
 
 		p_money = get_party_money();
 		p_money += 50000L;
 		set_party_money(p_money);
 
-		loot_multi_chest(p_datseg + DNG06_CHEST_DASPTREAS, get_tx(37));
+		loot_multi_chest(gs_dng06_chest_dasptreas, get_tx(37));
 
 		gs_dng06_dasptreas_found = 1;
 
@@ -462,7 +463,7 @@ void DNG06_chest1(Bit8u* chest)
 	Bit8u* ptr_bak;
 
 	ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG06_CHEST1_CONTENT));
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng06_chest1_content);
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }

@@ -633,11 +633,11 @@
 //#define DNG03_CHEST08_CONTENT           (0x408f)    /* signed char[4] */
 //#define DNG03_CHEST09_CONTENT           (0x4093)    /* signed char[11] */
 //#define DNG03_CHEST12_CONTENT           (0x409e)    /* signed char[7] */
-#define DNG04_CHEST_CORPSE0             (0x40a5)    /* signed char[4] */
-#define DNG04_CHEST_CORPSE1             (0x40a9)    /* signed char[12] */
-#define DNG04_CHEST_CORPSE2             (0x40b5)    /* signed char[10] */
-#define DNG06_CHEST1_CONTENT            (0x40bf)    /* signed char[16] */
-#define DNG06_CHEST_DASPTREAS           (0x40cf)    /* signed char[17] */
+//#define DNG04_CHEST_CORPSE0             (0x40a5)    /* signed char[4] */
+//#define DNG04_CHEST_CORPSE1             (0x40a9)    /* signed char[12] */
+//#define DNG04_CHEST_CORPSE2             (0x40b5)    /* signed char[10] */
+//#define DNG06_CHEST1_CONTENT            (0x40bf)    /* signed char[16] */
+//#define DNG06_CHEST_DASPTREAS           (0x40cf)    /* signed char[17] */
 #define DNG08_CHEST1_CONTENT            (0x40e0)    /* signed char[11] */
 #define DNG08_CHEST2_CONTENT            (0x40eb)    /* signed char[2] */
 #define DNG08_CHEST4_CONTENT            (0x40ed)    /* signed char[2] */

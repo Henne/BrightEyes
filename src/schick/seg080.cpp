@@ -296,7 +296,7 @@ void DNG04_corpse0_chest(Bit8u* chest)
 	Bit8u* bak;
 
 	bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG04_CHEST_CORPSE0));
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng04_chest_corpse0);
 
 	loot_chest((Bit8u*)(chest), get_tx(22), get_tx(6));
 
@@ -308,7 +308,7 @@ void DNG04_corpse1_chest(Bit8u* chest)
 	Bit8u* bak;
 
 	bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG04_CHEST_CORPSE1));
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng04_chest_corpse1);
 
 	loot_chest((Bit8u*)(chest), get_tx(23), get_tx(6));
 
@@ -320,7 +320,7 @@ void DNG04_corpse2_chest(Bit8u* chest)
 	Bit8u* bak;
 
 	bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG04_CHEST_CORPSE2));
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng04_chest_corpse2);
 
 	loot_chest((Bit8u*)(chest), get_tx(24), get_tx(6));
 

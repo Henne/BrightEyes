@@ -644,6 +644,12 @@ extern Bit8u  gs_dng03_chest08_content[4];	//ds:0x408f; seg079
 extern Bit8u  gs_dng03_chest09_content[11];	//ds:0x4093; seg079
 extern Bit8u  gs_dng03_chest12_content[7];	//ds:0x409e; seg079
 
+extern Bit8u  gs_dng04_chest_corpse0[4];	//ds:0x40a5; seg080
+extern Bit8u  gs_dng04_chest_corpse1[12];	//ds:0x40a9; seg080
+extern Bit8u  gs_dng04_chest_corpse2[10];	//ds:0x40b5; seg080
+extern Bit8u  gs_dng06_chest1_content[16];	//ds:0x40bf; seg081
+extern Bit8u  gs_dng06_chest_dasptreas[17];	//ds:0x40cf; seg081
+
 extern Bit8u  gs_dng10_corpse_flag;		//ds:0x4140; seg078
 
 extern Bit8u  gs_dng11_waterbarrel1;		//ds:0x415d; seg086
