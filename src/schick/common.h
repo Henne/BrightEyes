@@ -495,38 +495,6 @@ enum {
 
 #define SIZEOF_MONSTER (44)
 
-#if 0
-enum {
-	FIGHTER_FIGURE		= 0x00,
-	FIGHTER_NVF_NO		= 0x02,
-	FIGHTER_CBX		= 0x03,
-	FIGHTER_CBY		= 0x04,
-	FIGHTER_OFFSETX		= 0x05,
-	FIGHTER_OFFSETY		= 0x06,
-	FIGHTER_HEIGHT		= 0x07,
-	FIGHTER_WIDTH		= 0x08,
-	FIGHTER_X1		= 0x09,
-	FIGHTER_Y1		= 0x0a,
-	FIGHTER_X2		= 0x0b,
-	FIGHTER_Y2		= 0x0c,
-	FIGHTER_RELOAD		= 0x0d, /* {0, -1	= update gfx data } */
-	FIGHTER_SHEET		= 0x0e, /* 0xe274, 0xe2a8, 0xd8ce */
-	FIGHTER_WSHEET		= 0x0f, /* 0xe274 */
-	FIGHTER_ID		= 0x10, /* position in FIG_LIST_ARRAY */
-	FIGHTER_Z		= 0x11,
-	FIGHTER_VISIBLE		= 0x12, /* {0,1,2} */
-	FIGHTER_TWOFIELDED	= 0x13, /* -1 if fighter is not twofielded. for twofielded fighter: head part: FIGHTER_TWOFIELDED can be used as index for FIG_TWOFIELDED_TABLE which contains the FIGHTER_ID); tail part: entry is FIGHTER_TWOFIELDED+20 of the head part. */
-	FIGHTER_OBJ_ID		= 0x14, /* stores the id of the cb_entry of the square before the fighter entered it */
-	FIGHTER_IS_ENEMY	= 0x15, /* {0	= hero, 1	= enemy, 2	= hero} */ /* strangly, at one position in seg039.cpp the value 2 is written */
-	FIGHTER_SPRITE_NO	= 0x16, /* 0x12c0, 0x1531, 0x1210 */
-	FIGHTER_GFXBUF		= 0x17, /* Bit8u* */
-	FIGHTER_NEXT		= 0x1b, /* Bit8u* */
-	FIGHTER_PREV		= 0x1f, /* Bit8u* */
-};
-#define SIZEOF_FIGHTER (0x23)
-#endif
-
-
 enum {
 	ATTRIB_MU = 0,
 	ATTRIB_KL = 1,
