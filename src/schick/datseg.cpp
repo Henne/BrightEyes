@@ -6385,9 +6385,11 @@ signed short g_redraw_menuicons; // ds:0xd013
 signed short g_dng_extra_action; // ds:0xd011, {0 = warehouse,1 = open door,2 = open chest,3 = close door,4 = lever,5 = smash door}
 signed short g_dng_init_flag; // ds:0xd00f
 unsigned char g_mouse_bg_bak[256]; // ds:0xcf0f
-struct{char unkn[32]; unsigned short mask[16];} g_ggst_cursor; // ds:0xcecf
-void *g_current_cursor; // ds:0xcecb
-void *g_last_cursor; // ds:0xcec7
+unsigned short g_ggst_cursor[16];	// ds:0xcecf
+unsigned short g_ggst_mask[16];		// ds:0xceef
+//struct{char unkn[32]; unsigned short mask[16];} g_ggst_cursor; // ds:0xcecf
+unsigned short *g_current_cursor; // ds:0xcecb
+unsigned short *g_last_cursor; // ds:0xcec7
 unsigned char g_gui_text_buffer[64]; // ds:0xce87
 unsigned char g_unkn_081[64]; // ds:0xce47
 Bit32s g_ani_unknown4; // ds:0xce43, writeonly (0)

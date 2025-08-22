@@ -1413,9 +1413,9 @@
 //#define ANI_UNKNOWN4                    (0xce43)    /* unsigned long; writeonly (0) */
 // ?64
 //#define GUI_TEXT_BUFFER                 (0xce87)    /* unsigned char[64] */
-#define LAST_CURSOR                     (0xcec7)    /* Bit8u* */
-#define CURRENT_CURSOR                  (0xcecb)    /* Bit8u* */
-#define GGST_CURSOR                     (0xcecf)    /* struct(64); struct{char unkn[32]; unsigned short mask[16];} */
+//#define LAST_CURSOR                     (0xcec7)    /* Bit8u* */
+//#define CURRENT_CURSOR                  (0xcecb)    /* Bit8u* */
+//#define GGST_CURSOR                     (0xcecf)    /* struct(64); struct{char unkn[32]; unsigned short mask[16];} */
 //#define MOUSE_BG_BAK                    (0xcf0f)    /* unsigned char[256] */
 //#define DNG_INIT_FLAG                   (0xd00f)    /* unsigned short; {0,1} */
 //#define DNG_MENU_MODE                   (0xd011)    /* unsigned short; {0 = warehouse (?), 1: 7th symbol is "open door" , 2: 7th symbol is "open chest", 3: 7th symbol is "close door", 4: 7th symbol is "lever", 5: 7th to 9th symbol are the different options to smash/unlock a door } */

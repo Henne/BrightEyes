@@ -56,7 +56,7 @@ void reset_item_selector(void)
 		g_statuspage_selitem2_no = (23);
 	}
 
-	ds_writed(CURRENT_CURSOR, (Bit32u)(g_current_cursor_bak = (p_datseg + DEFAULT_MOUSE_CURSOR)));
+	g_current_cursor = (unsigned short*)(g_current_cursor_bak = (p_datseg + DEFAULT_MOUSE_CURSOR));
 }
 
 /* nearly identical, same length */
@@ -438,7 +438,7 @@ void status_menu(signed short hero_pos)
 
 						make_ggst_cursor(g_icon);
 
-						ds_writed(CURRENT_CURSOR, (Bit32u)(p_datseg + GGST_CURSOR));
+						g_current_cursor = g_ggst_cursor;
 					}
 				}
 			}
@@ -458,8 +458,8 @@ void status_menu(signed short hero_pos)
 
 		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
 
-			g_current_cursor_bak =  (Bit8u*)ds_readd(CURRENT_CURSOR);
-			ds_writed(CURRENT_CURSOR, (Bit32u)(p_datseg + DEFAULT_MOUSE_CURSOR));
+			g_current_cursor_bak = (Bit8u*)g_current_cursor;
+			g_current_cursor = (unsigned short*)(p_datseg + DEFAULT_MOUSE_CURSOR);
 
 			switch (g_status_page_mode) {
 			case 1: {
@@ -814,7 +814,7 @@ void status_menu(signed short hero_pos)
 			}
 			}
 
-			ds_writed(CURRENT_CURSOR, (Bit32u)g_current_cursor_bak);
+			g_current_cursor = (unsigned short*)g_current_cursor_bak;
 		}
 	}
 

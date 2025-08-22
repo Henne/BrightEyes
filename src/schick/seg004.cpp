@@ -591,13 +591,13 @@ void draw_mouse_cursor(void)
 	signed char i;
 	signed char j;
 	Bit8u *dst;
-	signed short *mouse_cursor;
+	unsigned short *mouse_cursor;
 	signed short y;
 	signed short width;
 	signed short height;
 
 	dst = g_vga_memstart;
-	mouse_cursor = (short*)((Bit8u*)ds_readd(CURRENT_CURSOR) + 32);
+	mouse_cursor = g_current_cursor + 16;
 
 	x = g_mouse_posx - g_mouse_pointer_offsetx;
 	y = g_mouse_posy - g_mouse_pointer_offsety;

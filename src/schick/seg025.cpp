@@ -416,7 +416,7 @@ signed short game_options(void)
 	g_special_screen = 1;
 	g_wallclock_update = 0;
 	g_area_prepared = -1;
-	ds_writed(CURRENT_CURSOR, (Bit32u)(p_datseg + DEFAULT_MOUSE_CURSOR));
+	g_current_cursor = (unsigned short*)(p_datseg + DEFAULT_MOUSE_CURSOR);
 
 	load_pp20(ARCHIVE_FILE_BUCH_DAT);
 	g_pp20_index = ARCHIVE_FILE_BUCH_DAT;
@@ -698,7 +698,7 @@ void do_location(void)
 
 	func = g_location_handlers[gs_current_loctype];
 
-	ds_writed(CURRENT_CURSOR, (Bit32u)(p_datseg + DEFAULT_MOUSE_CURSOR));
+	g_current_cursor = (unsigned short*)(p_datseg + DEFAULT_MOUSE_CURSOR);
 
 	if (func) {
 		func();
