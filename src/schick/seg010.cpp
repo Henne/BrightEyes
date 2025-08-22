@@ -37,7 +37,7 @@ static unsigned short EMS_installed(void)
 static Bit8u* EMS_get_frame_ptr()
 {
 #if 0
-	reg_ax = DNG09_SECRETDOOR1;
+	reg_ax = 0x4100;
 	CALLBACK_RunRealInt(0x67);
 
 	if (reg_ax == 0)
