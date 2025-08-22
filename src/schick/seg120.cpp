@@ -326,7 +326,7 @@ signed short init_memory(void)
 
 	} else {
 
-		printf((char*)p_datseg + STR_NOT_ENOUGH_MEM, 329000 - freemem);
+		printf(g_str_not_enough_mem, 329000 - freemem);
 
 		wait_for_keypress();
 		error = 1;
@@ -341,7 +341,7 @@ signed short init_memory(void)
 			g_fig_figure1_buf += 23000L;
 		}
 
-		g_fig_figure2_buf = (unsigned char*)(((HugePt)g_fig_figure1_buf) -20000L);
+		g_fig_figure2_buf = (unsigned char*)(((HugePt)g_fig_figure1_buf) - 20000L);
 		g_buffer10_ptr = (unsigned char*)(((HugePt)g_fig_figure2_buf) - 16771L);
 	}
 
@@ -351,15 +351,13 @@ signed short init_memory(void)
 /* Borlandified and identical */
 void refresh_colors(void)
 {
-	set_color(p_datseg + COLOR_BLACK, 0);
-	set_color(p_datseg + COLOR_WHITE, 0xff);
-	set_palette(p_datseg + PALETTE_UNKNOWN2, 0xd8, 8);
-
-	set_palette(p_datseg + PALETTE_UNKNOWN3, 0xc8, 3);
-	set_palette(p_datseg + PALETTE_UNKNOWN4, 0x40, 0x20);
-	set_palette(p_datseg + PALETTE_GENERAL, 0x20, 0x20);
+	set_color((Bit8u*)g_color_black, 0);
+	set_color((Bit8u*)g_color_white, 0xff);
+	set_palette((Bit8u*)g_palette_unknown2, 0xd8, 8);
+	set_palette((Bit8u*)g_palette_unknown3, 0xc8, 3);
+	set_palette((Bit8u*)g_palette_unknown4, 0x40, 0x20);
+	set_palette((Bit8u*)g_palette_general, 0x20, 0x20);
 	set_palette((Bit8u*)g_palette_unknown1, 0x60, 0x20);
-
 }
 
 
@@ -466,7 +464,7 @@ void prepare_dirs(void)
 		setdisk(drive);
 
 		/* copy "X:\\" */
-		strcpy(gamepath, (char*)p_datseg + STR_DRIVE_X);
+		strcpy(gamepath, g_str_drive_x);
 
 		/* set drive name in path */
 		gamepath[0] = drive + 'A';
@@ -479,7 +477,7 @@ void prepare_dirs(void)
 
 		strcpy(g_text_output_buf, gamepath);
 		/* "\\TEMP" */
-		strcat(g_text_output_buf, (char*)p_datseg + STR_BACKSLASH_TEMP);
+		strcat(g_text_output_buf, g_str_backslash_temp);
 
 		if (!chdir(g_text_output_buf)) {
 			/*	check if it's possible to change to TEMP-dir: OK
@@ -501,7 +499,7 @@ void prepare_dirs(void)
 
 			/* ERROR, cant write => exit */
 
-			GUI_output((char*)p_datseg + STR_TEMP_DIR_FAIL);
+			GUI_output(g_str_temp_dir_fail);
 
 			cleanup_game();
 
@@ -510,7 +508,7 @@ void prepare_dirs(void)
 	}
 
 	/* delete *.* in TEMP-dir */
-	sprintf(g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), (char*)p_datseg + ALL_FILES_WILDCARD2);
+	sprintf(g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), g_all_files_wildcard2);
 
 	l_si = findfirst(g_text_output_buf, &blk, 0);
 
@@ -519,7 +517,7 @@ void prepare_dirs(void)
 		do {
 			sprintf(g_text_output_buf,
 				(char*)ds_readd(STR_TEMP_XX_PTR2),
-				((char*)(&blk)) + 30);			/* contains a filename */
+				((char*)&blk) + 30);			/* contains a filename */
 
 			unlink(g_text_output_buf);
 
@@ -529,7 +527,7 @@ void prepare_dirs(void)
 	}
 
 	/* search for "*.CHR" in the gamepath */
-	l_si = findfirst((char*)(p_datseg + ALL_CHR_WILDCARD4), &blk, 0);
+	l_si = findfirst(g_all_chr_wildcard4, &blk, 0);
 
 	while (!l_si) {
 
@@ -622,7 +620,7 @@ void cleanup_game(void)
 
 	sprintf(g_text_output_buf,
 		(char*)ds_readd(STR_TEMP_XX_PTR2),	/* contains "TEMP\\%s" */
-		(char*)p_datseg + ALL_FILES_WILDCARD3);		/* contains "*.*" */
+		g_all_files_wildcard3);			/* contains "*.*" */
 
 	l_di = findfirst(g_text_output_buf, &blk, 0);
 
@@ -688,14 +686,14 @@ void game_over_screen(void)
 	set_palette(g_palette_allblack2, 0x00, 0x20);
 	set_palette(g_palette_allblack2, 0x20, 0x20);
 
-	memcpy((void*)(g_vga_memstart), (void*)g_renderbuf_ptr, 320 * 200);
+	memcpy((void*)g_vga_memstart, (void*)g_renderbuf_ptr, 320 * 200);
 
 	set_palette((Bit8u*)g_renderbuf_ptr + 64002L, 0x00, 0x40);
 
 	wait_for_keypress();
 
 	/* TODO: update window */
-	memset((void*)(g_vga_memstart), 0, 320 * 200);
+	memset((void*)g_vga_memstart, 0, 320 * 200);
 
 	wait_for_vsync();
 
@@ -724,11 +722,9 @@ void call_gen(void)
 	freemem = farcoreleft();
 
 	/* ret = spawnl(0, "gen.exe", "gen.exe", "b", gamemode == 2 ? "a" : "n", "1", NULL); */
-	ret = spawnl(0,
-			(char*)(p_datseg + STR_GEN_EXE), (char*)(p_datseg + STR_GEN_EXE2),
-			(p_datseg + STR_GEN_B),
-			g_game_mode == GAME_MODE_ADVANCED ? (p_datseg + STR_GEN_A) : (p_datseg + STR_GEN_N),
-			(p_datseg + STR_GEN_1), (Bit8u*)NULL);
+	ret = spawnl(0, g_str_gen_exe, g_str_gen_exe2, g_str_gen_b,
+			(g_game_mode == GAME_MODE_ADVANCED ? g_str_gen_a : g_str_gen_n),
+			g_str_gen_1, NULL);
 
 #endif
 	refresh_screen_size();
@@ -736,7 +732,7 @@ void call_gen(void)
 	if (ret == -1) {
 
 		/* perror("Generation") */
-		perror((char*)(p_datseg + STR_GEN_GENERATION));
+		perror(g_str_gen_generation);
 
 		wait_for_keypress();
 

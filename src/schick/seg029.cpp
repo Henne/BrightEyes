@@ -79,7 +79,7 @@ void draw_playmask(void)
 
 	wait_for_vsync();
 
-	set_color(p_datseg + COLOR_BLACK, 0);
+	set_color((Bit8u*)g_color_black, 0);
 
 	set_palette((Bit8u*)g_palette_special, 0xe0, 0x20);
 

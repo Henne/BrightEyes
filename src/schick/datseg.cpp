@@ -5944,9 +5944,10 @@ unsigned char g_unkn_068[1] = { 0x00 }; // ds:0xb21d
 char g_str_rad1[4] = "RAD"; // ds:0xb21e
 char g_str_rad2[4] = "RAD"; // ds:0xb222
 char g_str_rad3[4] = "RAD"; // ds:0xb226
-unsigned char g_color_white[3] = { 0x3f, 0x3f, 0x3f }; // ds:0xb22a, { 0x3f, 0x3f, 0x3f }
-unsigned char g_color_black[3] = { 0, 0, 0 }; // ds:0xb22d, { 0x00, 0x00, 0x00 }
-struct{unsigned char r,g,b;} g_palette_unknown2[8] = {
+
+Bit8u g_color_white[3] = { 0x3f, 0x3f, 0x3f }; // ds:0xb22a
+Bit8u g_color_black[3] = { 0, 0, 0 }; // ds:0xb22d
+Bit8u g_palette_unknown2[8][3] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x38, 0x30, 0x28 },
 	{ 0x38, 0x30, 0x10 },
@@ -5956,12 +5957,12 @@ struct{unsigned char r,g,b;} g_palette_unknown2[8] = {
 	{ 0x18, 0x14, 0x00 },
 	{ 0x0b, 0x19, 0x0c }
 }; // ds:0xb230
-struct{unsigned char r,g,b;} g_palette_unknown3[3] = {
+Bit8u g_palette_unknown3[3][3] = {
 	{ 0x30, 0x00, 0x00 },
 	{ 0x30, 0x30, 0x00 },
 	{ 0x00, 0x00, 0x30 }
 }; // ds:0xb248
-struct{unsigned char r,g,b;} g_palette_unknown4[32] = {
+Bit8u g_palette_unknown4[32][3] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x38, 0x30, 0x28 },
 	{ 0x30, 0x24, 0x1c },
@@ -5995,7 +5996,7 @@ struct{unsigned char r,g,b;} g_palette_unknown4[32] = {
 	{ 0x30, 0x30, 0x30 },
 	{ 0x3c, 0x3c, 0x3c }
 }; // ds:0xb251
-struct{unsigned char r,g,b;} g_palette_general[32] = {
+Bit8u g_palette_general[32][3] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x00, 0x00, 0x3f },
 	{ 0x00, 0x00, 0x24 },
@@ -6038,11 +6039,11 @@ char g_all_chr_wildcard4[6] = "*.CHR"; // ds:0xb4b3
 char g_all_files_wildcard3[4] = "*.*"; // ds:0xb4b9
 char g_str_gen_exe[8] = "gen.exe"; // ds:0xb4bd
 char g_str_gen_exe2[8] = "gen.exe"; // ds:0xb4c5
-char g_str_gen_b[2] = "b"; // ds:0xb4cd
-char g_str_gen_a[2] = "a"; // ds:0xb4cf
-char g_str_gen_n[2] = "n"; // ds:0xb4d1
-char g_str_gen_1[2] = "1"; // ds:0xb4d3
-char g_str_gen_generation[11] = "Generation"; // ds:0xb4d5
+const char g_str_gen_b[2] = "b"; // ds:0xb4cd
+const char g_str_gen_a[2] = "a"; // ds:0xb4cf
+const char g_str_gen_n[2] = "n"; // ds:0xb4d1
+const char g_str_gen_1[2] = "1"; // ds:0xb4d3
+const char g_str_gen_generation[11] = "Generation"; // ds:0xb4d5
 
 /* start of the BSS section */
 

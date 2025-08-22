@@ -1271,26 +1271,26 @@
 #define STR_RAD2                        (0xb222)    /* char[4]; "RAD" */
 #define STR_RAD3                        (0xb226)    /* char[4]; "RAD" */
 
-#define COLOR_WHITE                     (0xb22a)    /* unsigned char[3]; { 0x3f, 0x3f, 0x3f } */
-#define COLOR_BLACK                     (0xb22d)    /* unsigned char[3]; { 0x00, 0x00, 0x00 } */
-#define PALETTE_UNKNOWN2                (0xb230)    /* struct(3)[8]; struct{unsigned char r,g,b;} */
-#define PALETTE_UNKNOWN3                (0xb248)    /* struct(3)[3]; struct{unsigned char r,g,b;} */
-#define PALETTE_UNKNOWN4                (0xb251)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
-#define PALETTE_GENERAL                 (0xb2b1)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
-#define STR_BACKSLASH_TEMP              (0xb311)    /* char[6]; "\\TEMP" */
-#define STR_NOT_ENOUGH_MEM              (0xb317)    /* char[124]; "\x0a\x0aNot enough memory!\x0a\"Realms of Arkania - Blade of Destiny\" needs %ld Byte more memory!\x0aPlease uninstall resident programs!" */
-#define STR_DRIVE_X                     (0xb393)    /* char[4]; "X:\" */
-#define STR_TEMP_DIR_FAIL               (0xb397)    /* char[280]; "\xf2!!!!! ACHTUNG !!!!!\xf0\x40\x40DAS SCHWARZE AUGE\x40KANN KEIN TEMPOR\x8eRES VERZEICHNIS ANLEGEN UND IST DAHER NICHT LAUFF\x8eHIG. WAHRSCHEINLICH VERSUCHEN SIE, DAS SPIEL AUF EINEM\xf2 SCHREIBGESCH\x9aTZTEN LAUFWERK\xf0\x40ZU STARTEN. BITTE INSTALLIEREN SIE DAS SPIEL AUF EINE FESTPLATTE.\x40\x40-TASTE ZUM BEENDEN-" */
-#define ALL_FILES_WILDCARD2             (0xb4af)    /* char[4]; "*.*" */
-#define ALL_CHR_WILDCARD4               (0xb4b3)    /* char[6]; "*.CHR" */
-#define ALL_FILES_WILDCARD3             (0xb4b9)    /* char[4]; "*.*" */
-#define STR_GEN_EXE                     (0xb4bd)    /* char[8]; "gen.exe" */
-#define STR_GEN_EXE2                    (0xb4c5)    /* char[8]; "gen.exe" */
-#define STR_GEN_B                       (0xb4cd)    /* char[2]; "b" */
-#define STR_GEN_A                       (0xb4cf)    /* char[2]; "a" */
-#define STR_GEN_N                       (0xb4d1)    /* char[2]; "n" */
-#define STR_GEN_1                       (0xb4d3)    /* char[2]; "1" */
-#define STR_GEN_GENERATION              (0xb4d5)    /* char[11]; "Generation" */
+//#define COLOR_WHITE                     (0xb22a)    /* unsigned char[3]; { 0x3f, 0x3f, 0x3f } */
+//#define COLOR_BLACK                     (0xb22d)    /* unsigned char[3]; { 0x00, 0x00, 0x00 } */
+//#define PALETTE_UNKNOWN2                (0xb230)    /* struct(3)[8]; struct{unsigned char r,g,b;} */
+//#define PALETTE_UNKNOWN3                (0xb248)    /* struct(3)[3]; struct{unsigned char r,g,b;} */
+//#define PALETTE_UNKNOWN4                (0xb251)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
+//#define PALETTE_GENERAL                 (0xb2b1)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
+//#define STR_BACKSLASH_TEMP              (0xb311)    /* char[6]; "\\TEMP" */
+//#define STR_NOT_ENOUGH_MEM              (0xb317)    /* char[124]; "\x0a\x0aNot enough memory!\x0a\"Realms of Arkania - Blade of Destiny\" needs %ld Byte more memory!\x0aPlease uninstall resident programs!" */
+//#define STR_DRIVE_X                     (0xb393)    /* char[4]; "X:\" */
+//#define STR_TEMP_DIR_FAIL               (0xb397)    /* char[280]; "\xf2!!!!! ACHTUNG !!!!!\xf0\x40\x40DAS SCHWARZE AUGE\x40KANN KEIN TEMPOR\x8eRES VERZEICHNIS ANLEGEN UND IST DAHER NICHT LAUFF\x8eHIG. WAHRSCHEINLICH VERSUCHEN SIE, DAS SPIEL AUF EINEM\xf2 SCHREIBGESCH\x9aTZTEN LAUFWERK\xf0\x40ZU STARTEN. BITTE INSTALLIEREN SIE DAS SPIEL AUF EINE FESTPLATTE.\x40\x40-TASTE ZUM BEENDEN-" */
+//#define ALL_FILES_WILDCARD2             (0xb4af)    /* char[4]; "*.*" */
+//#define ALL_CHR_WILDCARD4               (0xb4b3)    /* char[6]; "*.CHR" */
+//#define ALL_FILES_WILDCARD3             (0xb4b9)    /* char[4]; "*.*" */
+//#define STR_GEN_EXE                     (0xb4bd)    /* char[8]; "gen.exe" */
+//#define STR_GEN_EXE2                    (0xb4c5)    /* char[8]; "gen.exe" */
+//#define STR_GEN_B                       (0xb4cd)    /* char[2]; "b" */
+//#define STR_GEN_A                       (0xb4cf)    /* char[2]; "a" */
+//#define STR_GEN_N                       (0xb4d1)    /* char[2]; "n" */
+//#define STR_GEN_1                       (0xb4d3)    /* char[2]; "1" */
+//#define STR_GEN_GENERATION              (0xb4d5)    /* char[11]; "Generation" */
 
 // ?9
 //#define CHAR_TYPE_TABLE                 (0xb4e9)    /* signed char[256] */
