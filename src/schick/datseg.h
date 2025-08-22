@@ -7,6 +7,13 @@
 extern char ds[1];
 #endif
 
+struct struct_modification_timer {
+	Bit32s time_left;
+	Bit16u offset;
+	Bit8s target;
+	Bit8s modifier;
+};
+
 struct mouse_action {
 	int x1;
 	int y1;
@@ -339,7 +346,7 @@ extern Bit8s  gs_month;				//ds:0x2dc1; seg002, seg024, seg025, seg030, seg068, 
 extern Bit8s  gs_year;				//ds:0x2dc2; seg002, seg024, seg025, seg030, seg068, seg116, seg120
 extern Bit8s  gs_special_day;			//ds:0x2dc3; seg002, seg030
 extern Bit32s gs_ingame_timers[26];		//ds:0x2dc4; seg002, seg042-seg103
-
+extern struct struct_modification_timer gs_modification_timers[100];	//ds:0x2e2c; seg002
 extern Bit32s gs_gods_estimation[15];		//ds:0x314e; seg003-seg114
 extern Bit8s  gs_tav_cheated_flags[88];		//ds:0x318a; seg059, seg103
 extern struct struct_smith_repairitems gs_smith_repairitems[50]; //ds:0x31e2; seg002, seg058

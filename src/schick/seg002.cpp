@@ -2510,14 +2510,10 @@ void sub_mod_timers(Bit32s val)
 	signed short i;
 	signed short j;
 	signed short h_index;
-#if !defined(__BORLANDC__)
-	Bit8u *mp;
-#else
-	Bit8u huge *mp;
-#endif
+	HugePt mp;
 	signed char target;
 	unsigned char reset_target;
-	Bit8u *sp;
+	struct struct_modification_timer *sp;
 
 	h_index = -1;
 
@@ -2527,15 +2523,15 @@ void sub_mod_timers(Bit32s val)
 	for (i = 0; i < 100; i++) {
 
 		/* if timer is 0 continue */
-		if (ds_readd(MODIFICATION_TIMERS + 8 * i) == 0)
+		if (gs_modification_timers[i].time_left == 0)
 			continue;
 
 		/* subtract diff from timer */
-		sub_ds_ds(MODIFICATION_TIMERS + 8 * i, val);
+		gs_modification_timers[i].time_left -= val;
 
 
 		/* if timer > 0 continue */
-		if (ds_readds(MODIFICATION_TIMERS + 8 * i) <= 0) {
+		if (gs_modification_timers[i].time_left <= 0) {
 
 
 #if !defined(__BORLANDC__)
@@ -2543,16 +2539,16 @@ void sub_mod_timers(Bit32s val)
 #endif
 
 			/* set timer to 0 */
-			ds_writed(MODIFICATION_TIMERS + 8 * i, 0);
+			gs_modification_timers[i].time_left = 0;
 
 			/* make a pointer to the slot */
-			sp = p_datseg + MODIFICATION_TIMERS + i * 8;
+			sp = &gs_modification_timers[i];
 
-			if (host_readb(sp + 6) != 0) {
+			if (sp->target) {
 				/* target is a hero/npc */
 
 				/* get the hero index from the target */
-				target = host_readb(sp + 6);
+				target = sp->target;
 				for (j = 0; j <= 6; j++) {
 					if (host_readbs(get_hero(j) + HERO_TIMER_ID) == target) {
 						h_index = j;
@@ -2565,21 +2561,21 @@ void sub_mod_timers(Bit32s val)
 
 					mp = get_hero(h_index);
 					/* make a pointer to the hero's attribute mod */
-					mp += (Bit32u)host_readw(sp + 4);
+					mp += (Bit32u)sp->offset;
 					/* subtract the mod */
-					sub_ptr_bs(mp, host_readbs(sp + 7));
+					*mp -= sp->modifier;
 
 					if (g_pp20_index == ARCHIVE_FILE_ZUSTA_UK) {
 						g_request_refresh = 1;
 					}
 
 					/* reset target */
-					host_writeb(sp + 6, 0);
+					sp->target = 0;
 
 					/* reset target if no other slots of target */
 					reset_target = 1;
 					for (j = 0; j < 100; j++) {
-						if (ds_readbs((MODIFICATION_TIMERS+6) + j * 8) == target) {
+						if (gs_modification_timers[j].target == target) {
 							reset_target = 0;
 							break;
 						}
@@ -2595,9 +2591,9 @@ void sub_mod_timers(Bit32s val)
 
 					/* reset all slots of invalid target */
 					for (j = 0; j < 100; j++) {
-						if (ds_readbs((MODIFICATION_TIMERS+6) + j * 8) == target) {
-							host_writeb(sp + 6, host_writebs(sp + 7, 0));
-							host_writew(sp + 4, 0);
+						if (gs_modification_timers[j].target == target) {
+							sp->target = sp->modifier = 0;
+							sp->offset = 0;
 						}
 					}
 				}
@@ -2605,13 +2601,13 @@ void sub_mod_timers(Bit32s val)
 			} else {
 				/* target affects the savegame */
 				mp = (Bit8u*)&gs_datseg_status_start;
-				mp += host_readw(sp + 4);
-				sub_ptr_bs(mp, host_readbs(sp + 7));
+				mp += sp->offset;
+				*mp -= sp->modifier;
 			}
 
 			/* reset offset, target, and modificator */
-			host_writeb(sp + 6, host_writebs(sp + 7, 0));
-			host_writew(sp + 4, 0);
+			sp->target = sp->modifier = 0;
+			sp->offset = 0;
 		}
 	}
 }
@@ -2627,7 +2623,7 @@ signed short get_free_mod_slot(void)
 
 	for (i = 0; i < 100; i++) {
 
-		if (ds_readw(MODIFICATION_TIMERS + i * 8 + 4) == 0) {
+		if (gs_modification_timers[i].target == 0) {
 			break;
 		}
 	}
@@ -2636,7 +2632,7 @@ signed short get_free_mod_slot(void)
 		/* all 100 mod timers are in use. apply hack to free timer in slot 0 */
 
 		/* set timer of slot 0 to 1 */
-		host_writed(p_datseg + MODIFICATION_TIMERS, 1);
+		gs_modification_timers[0].time_left = 1;
 		/* subtract one from each mod timer -> timer in slot 0 will be freed. */
 		sub_mod_timers(1);
 
@@ -2693,16 +2689,12 @@ void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr, signed c
 			host_writeb(get_hero(who) + HERO_TIMER_ID, target);
 		}
 
-		ds_writeb(MODIFICATION_TIMERS + slot_no * 8 + 6, target);
+		gs_modification_timers[slot_no].target = target;
 	}
 
-	ds_writeb(MODIFICATION_TIMERS + slot_no * 8 + 7, mod);
-#if !defined (__BORLANDC__)
-	ds_writew(MODIFICATION_TIMERS + slot_no * 8 + 4, ptr - mod_ptr);
-#else
-	ds_writew(MODIFICATION_TIMERS + slot_no * 8 + 4, (Bit8u huge*)ptr - mod_ptr);
-#endif
-	ds_writed(MODIFICATION_TIMERS + slot_no * 8, timer_value);
+	gs_modification_timers[slot_no].modifier = mod;
+	gs_modification_timers[slot_no].target = (HugePt)ptr - mod_ptr;
+	gs_modification_timers[slot_no].time_left = timer_value;
 	add_ptr_bs(ptr, mod);
 }
 
