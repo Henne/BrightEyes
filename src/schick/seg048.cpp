@@ -35,25 +35,25 @@ void reset_item_selector(void)
 
 		/* remove the previous border */
 		do_border(g_vga_memstart,
-				ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)),
-				ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)),
-				ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)) + 17,
-				ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)) + 17,
+				ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem3_no),
+				ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem3_no),
+				ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem3_no) + 17,
+				ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem3_no) + 17,
 				30);
 
 		/* mark the actual selected item */
-		ds_writeb(STATUSPAGE_SELITEM1_NO, ds_writeb(STATUSPAGE_SELITEM3_NO, 7));
+		g_statuspage_selitem1_no = (g_statuspage_selitem3_no = (7));
 
 		/* set the new red border */
 		do_border(g_vga_memstart,
-				ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)),
-				ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)),
-				ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)) + 17,
-				ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)) + 17,
+				ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem3_no),
+				ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem3_no),
+				ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem3_no) + 17,
+				ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem3_no) + 17,
 				9);
 
-		ds_writebs(STATUSPAGE_SELITEM4_NO, -1);
-		ds_writebs(STATUSPAGE_SELITEM2_NO, 23);
+		g_statuspage_selitem4_no = (-1);
+		g_statuspage_selitem2_no = (23);
 	}
 
 	ds_writed(CURRENT_CURSOR, (Bit32u)(g_current_cursor_bak = (p_datseg + DEFAULT_MOUSE_CURSOR)));
@@ -126,38 +126,38 @@ void status_menu(signed short hero_pos)
 				if (hero1 == hero2) {
 					/* set the new red border */
 					do_border(g_vga_memstart,
-						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)),
-						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)),
-						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)) + 17,
-						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)) + 17,
+						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem3_no),
+						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem3_no),
+						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem3_no) + 17,
+						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem3_no) + 17,
 						9);
 				}
 
-				if (host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO)) != ITEM_NONE) {
+				if (host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no) != ITEM_NONE) {
 
 					sprintf(g_dtp2,
 						/* "%s %s " */
 						(char*)(p_datseg + EXTRASPACE_SEPARATED_STRINGS),
-						(char*)GUI_name_singular(get_itemname(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO)))),
+						(char*)GUI_name_singular(get_itemname(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no))),
 						!is_in_word_array(
-						    host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO)),
+						    host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no),
 						    g_wearable_items_index[host_readbs(hero2 + HERO_TYPE) - 1]) ? ((char*)p_datseg + EMPTY_STRING8) : get_tx2(66));
 
-					if (item_weapon(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))))) {
+					if (item_weapon(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no)))) {
 						strcat(g_dtp2,
-							get_ttx(48 + host_readbs(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))) + 3)));
+							get_ttx(48 + host_readbs(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no)) + 3)));
 					}
 
 					GUI_print_string(g_dtp2, 16, 192);
 				}
 
-				if (ds_readbs(STATUSPAGE_SELITEM4_NO) != -1) {
+				if (g_statuspage_selitem4_no != -1) {
 					/* set the new ??? border */
 					do_border(g_vga_memstart,
-						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)),
-						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)),
-						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)) + 17,
-						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)) + 17,
+						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem4_no),
+						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem4_no),
+						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem4_no) + 17,
+						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem4_no) + 17,
 						8);
 				}
 			}
@@ -183,7 +183,7 @@ void status_menu(signed short hero_pos)
 					(host_readbs(get_hero(hero_pos) + HERO_TYPE) < HERO_TYPE_WITCH && g_status_page_mode > 3));
 
 
-			if (ds_readbs(STATUSPAGE_SELITEM4_NO) != -1) {
+			if (g_statuspage_selitem4_no != -1) {
 
 				if (flag4 == 0) {
 					hero1 = hero2;
@@ -215,7 +215,7 @@ void status_menu(signed short hero_pos)
 					(host_readbs(get_hero(hero_pos) + HERO_TYPE) < HERO_TYPE_WITCH && g_status_page_mode > 3));
 
 
-			if (ds_readbs(STATUSPAGE_SELITEM4_NO) != -1) {
+			if (g_statuspage_selitem4_no != -1) {
 
 				if (flag4 == 0) {
 					hero1 = hero2;
@@ -239,18 +239,18 @@ void status_menu(signed short hero_pos)
 			/* UP_KEY */
 			if (g_action == ACTION_ID_UP) {
 
-				if (ds_readbs(STATUSPAGE_SELITEM4_NO) != -1) {
+				if (g_statuspage_selitem4_no != -1) {
 
-					if (!ds_readbs(STATUSPAGE_SELITEM4_NO)) {
-						ds_writeb(STATUSPAGE_SELITEM4_NO, 24);
+					if (!g_statuspage_selitem4_no) {
+						g_statuspage_selitem4_no = 24;
 					} else {
-						dec_ds_bs_post(STATUSPAGE_SELITEM4_NO);
+						g_statuspage_selitem4_no--;
 					}
 				} else {
-					if (ds_readbs(STATUSPAGE_SELITEM3_NO) == 0) {
-						ds_writeb(STATUSPAGE_SELITEM3_NO, 22);
+					if (g_statuspage_selitem3_no == 0) {
+						g_statuspage_selitem3_no = 22;
 					} else {
-						dec_ds_bs_post(STATUSPAGE_SELITEM3_NO);
+						g_statuspage_selitem3_no--;
 					}
 				}
 			}
@@ -258,157 +258,157 @@ void status_menu(signed short hero_pos)
 			/* DOWN_KEY */
 			if (g_action == ACTION_ID_DOWN) {
 
-				if (ds_readbs(STATUSPAGE_SELITEM4_NO) != -1) {
+				if (g_statuspage_selitem4_no != -1) {
 
 					if (hero1 != hero2) {
 
-						if (ds_readbs(STATUSPAGE_SELITEM4_NO) == 24) {
-							ds_writeb(STATUSPAGE_SELITEM4_NO, 0);
+						if (g_statuspage_selitem4_no == 24) {
+							g_statuspage_selitem4_no = 0;
 						} else {
-							inc_ds_bs_post(STATUSPAGE_SELITEM4_NO);
+							g_statuspage_selitem4_no++;
 						}
 					} else {
-						if (ds_readbs(STATUSPAGE_SELITEM4_NO) == 24) {
-							ds_writeb(STATUSPAGE_SELITEM4_NO, 0);
+						if (g_statuspage_selitem4_no == 24) {
+							g_statuspage_selitem4_no = 0;
 						} else {
-							inc_ds_bs_post(STATUSPAGE_SELITEM4_NO);
+							g_statuspage_selitem4_no++;
 						}
 					}
 				} else {
-					if (ds_readbs(STATUSPAGE_SELITEM3_NO) == 22) {
-						ds_writeb(STATUSPAGE_SELITEM3_NO, 0);
+					if (g_statuspage_selitem3_no == 22) {
+						g_statuspage_selitem3_no = 0;
 					} else {
-						inc_ds_bs_post(STATUSPAGE_SELITEM3_NO);
+						g_statuspage_selitem3_no++;
 					}
 				}
 			}
 
 			if (g_action >= 128 && g_action <= 152)
 			{
-				if (ds_readbs(STATUSPAGE_SELITEM4_NO) != -1) {
-					ds_writeb(STATUSPAGE_SELITEM4_NO, g_action + 128);
-					g_action = (ACTION_ID_RETURN);
+				if (g_statuspage_selitem4_no != -1) {
+					g_statuspage_selitem4_no = g_action + 128;
+					g_action = ACTION_ID_RETURN;
 				} else if (g_action <= 150) {
-					ds_writeb(STATUSPAGE_SELITEM3_NO, g_action + 128);
-					g_action = (ACTION_ID_RETURN);
+					g_statuspage_selitem3_no = g_action + 128;
+					g_action = ACTION_ID_RETURN;
 				}
 			}
 
-			if (ds_readbs(STATUSPAGE_SELITEM1_NO) != ds_readbs(STATUSPAGE_SELITEM3_NO) && hero1 == hero2) {
+			if (g_statuspage_selitem1_no != g_statuspage_selitem3_no && hero1 == hero2) {
 
 				/* set the new ??? border */
 				do_border(g_vga_memstart,
-					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM1_NO)),
-					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM1_NO)),
-					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM1_NO)) + 17,
-					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM1_NO)) + 17,
+					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem1_no),
+					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem1_no),
+					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem1_no) + 17,
+					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem1_no) + 17,
 					30);
 				/* set the new ??? border */
 				do_border(g_vga_memstart,
-					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)),
-					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)),
-					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)) + 17,
-					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)) + 17,
+					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem3_no),
+					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem3_no),
+					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem3_no) + 17,
+					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem3_no) + 17,
 					9);
 
-				ds_writeb(STATUSPAGE_SELITEM1_NO, ds_readbs(STATUSPAGE_SELITEM3_NO));
+				g_statuspage_selitem1_no = g_statuspage_selitem3_no;
 
 				memset(g_dtp2, ' ', 60);
 				host_writeb((Bit8u*)g_dtp2 + 60, 0);
 				GUI_print_string(g_dtp2, 16, 192);
 
-				if (host_readws(hero2 + HERO_INVENTORY + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))) {
+				if (host_readws(hero2 + HERO_INVENTORY + SIZEOF_INVENTORY * g_statuspage_selitem3_no)) {
 					sprintf(g_dtp2,
 						/* "%s %s " */
 						(char*)(p_datseg + EXTRASPACE_SEPARATED_STRINGS2),
-						(char*)GUI_name_singular(get_itemname(host_readws(hero2 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO)))),
+						(char*)GUI_name_singular(get_itemname(host_readws(hero2 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no))),
 						!is_in_word_array(
-						    host_readws(hero2 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO)),
+						    host_readws(hero2 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no),
 						    g_wearable_items_index[host_readbs(hero2 + HERO_TYPE) - 1]) ? ((char*)p_datseg + EMPTY_STRING9) : get_tx2(66));
 
-					if (item_weapon(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))))) {
+					if (item_weapon(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no)))) {
 						strcat(g_dtp2,
-							get_ttx(48 + host_readbs(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))) + 3)));
+							get_ttx(48 + host_readbs(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no)) + 3)));
 					}
 
 					GUI_print_string(g_dtp2, 16, 192);
 				}
 			}
 
-			if (ds_readbs(STATUSPAGE_SELITEM2_NO) != ds_readbs(STATUSPAGE_SELITEM4_NO) && ds_readbs(STATUSPAGE_SELITEM4_NO) != -1) {
+			if (g_statuspage_selitem2_no != g_statuspage_selitem4_no && g_statuspage_selitem4_no != -1) {
 
 				/* set the new ??? border */
 				do_border(g_vga_memstart,
-					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM2_NO)),
-					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM2_NO)),
-					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM2_NO)) + 17,
-					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM2_NO)) + 17,
+					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem2_no),
+					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem2_no),
+					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem2_no) + 17,
+					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem2_no) + 17,
 					30);
 
 				if (hero1 == hero2) {
 
 					/* set the new ??? border */
 					do_border(g_vga_memstart,
-						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)),
-						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)),
-						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)) + 17,
-						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM3_NO)) + 17,
+						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem3_no),
+						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem3_no),
+						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem3_no) + 17,
+						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem3_no) + 17,
 						9);
 				}
 
 
 				/* set the new ??? border */
 				do_border(g_vga_memstart,
-					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)),
-					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)),
-					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)) + 17,
-					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)) + 17,
+					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem4_no),
+					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem4_no),
+					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem4_no) + 17,
+					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem4_no) + 17,
 					8);
 
-				ds_writeb(STATUSPAGE_SELITEM2_NO, ds_readbs(STATUSPAGE_SELITEM4_NO));
+				g_statuspage_selitem2_no = (g_statuspage_selitem4_no);
 			}
 
 			if (g_action == ACTION_ID_RETURN) {
-				if (ds_readbs(STATUSPAGE_SELITEM4_NO) != -1) {
+				if (g_statuspage_selitem4_no != -1) {
 
 					if (flag4 != 0) {
 
-						if (ds_readbs(STATUSPAGE_SELITEM4_NO) < 23) {
-							pass_item(hero1, ds_readbs(STATUSPAGE_SELITEM3_NO), hero2, ds_readbs(STATUSPAGE_SELITEM4_NO));
+						if (g_statuspage_selitem4_no < 23) {
+							pass_item(hero1, g_statuspage_selitem3_no, hero2, g_statuspage_selitem4_no);
 							g_request_refresh = 1;
-						} else if (ds_readbs(STATUSPAGE_SELITEM4_NO) == 23) { /* eye icon */
-							print_item_description(hero1, ds_readbs(STATUSPAGE_SELITEM3_NO));
-						} else if (ds_readbs(STATUSPAGE_SELITEM4_NO) == 24) { /* mouth icon */
-							consume(hero1, hero2, ds_readbs(STATUSPAGE_SELITEM3_NO));
+						} else if (g_statuspage_selitem4_no == 23) { /* eye icon */
+							print_item_description(hero1, g_statuspage_selitem3_no);
+						} else if (g_statuspage_selitem4_no == 24) { /* mouth icon */
+							consume(hero1, hero2, g_statuspage_selitem3_no);
 						}
 
 						/* set the new ??? border */
 						do_border(g_vga_memstart,
-							ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)),
-							ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)),
-							ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)) + 17,
-							ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)) + 17,
+							ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem4_no),
+							ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem4_no),
+							ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem4_no) + 17,
+							ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem4_no) + 17,
 							30);
 
 						flag4 = 0;
 						hero1 = hero2;
 
 					} else {
-						if (ds_readbs(STATUSPAGE_SELITEM4_NO) < 23) {
-							move_item(ds_readbs(STATUSPAGE_SELITEM3_NO), ds_readbs(STATUSPAGE_SELITEM4_NO), hero2);
+						if (g_statuspage_selitem4_no < 23) {
+							move_item(g_statuspage_selitem3_no, g_statuspage_selitem4_no, hero2);
 							g_request_refresh = 1;
-						} else if (ds_readbs(STATUSPAGE_SELITEM4_NO) == 23) { /* eye icon */
-							print_item_description(hero2, ds_readbs(STATUSPAGE_SELITEM3_NO));
-						} else if (ds_readbs(STATUSPAGE_SELITEM4_NO) == 24) { /* mouth icon */
-							consume(hero2, hero2, ds_readbs(STATUSPAGE_SELITEM3_NO));
+						} else if (g_statuspage_selitem4_no == 23) { /* eye icon */
+							print_item_description(hero2, g_statuspage_selitem3_no);
+						} else if (g_statuspage_selitem4_no == 24) { /* mouth icon */
+							consume(hero2, hero2, g_statuspage_selitem3_no);
 						}
 
 						/* set the new ??? border */
 						do_border(g_vga_memstart,
-							ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)),
-							ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)),
-							ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)) + 17,
-							ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)) + 17,
+							ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem4_no),
+							ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem4_no),
+							ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem4_no) + 17,
+							ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem4_no) + 17,
 							30);
 					}
 
@@ -416,24 +416,24 @@ void status_menu(signed short hero_pos)
 					flag2 = 1;
 				} else {
 
-					ds_writeb(STATUSPAGE_SELITEM4_NO, 23);
+					g_statuspage_selitem4_no = (23);
 
 					/* set the new ??? border */
 					do_border(g_vga_memstart,
-						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)),
-						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)),
-						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)) + 17,
-						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * ds_readbs(STATUSPAGE_SELITEM4_NO)) + 17,
+						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem4_no),
+						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem4_no),
+						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem4_no) + 17,
+						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem4_no) + 17,
 						8);
 
-					if (host_readws(hero2 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))) {
+					if (host_readws(hero2 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no)) {
 
 						nvf.dst = g_icon;
 						nvf.src = g_buffer10_ptr;
 						nvf.type = 0;
 						nvf.width = (Bit8u*)&width;
 						nvf.height = (Bit8u*)&height;
-						nvf.no = host_readws(get_itemsdat(host_readws(hero2 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * ds_readbs(STATUSPAGE_SELITEM3_NO))));
+						nvf.no = host_readws(get_itemsdat(host_readws(hero2 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no)));
 						process_nvf(&nvf);
 
 						make_ggst_cursor(g_icon);
@@ -515,7 +515,7 @@ void status_menu(signed short hero_pos)
 						if (hero1 != hero2) {
 							GUI_output(get_tx2(68));
 						} else {
-							use_item(ds_readbs(STATUSPAGE_SELITEM3_NO), hero_pos);
+							use_item(g_statuspage_selitem3_no, hero_pos);
 							reset_item_selector();
 							g_request_refresh = 1;
 						}
@@ -526,7 +526,7 @@ void status_menu(signed short hero_pos)
 						if (hero1 != hero2) {
 							GUI_output(get_tx2(68));
 						} else {
-							drop_item(hero2, ds_readbs(STATUSPAGE_SELITEM3_NO), -1);
+							drop_item(hero2, g_statuspage_selitem3_no, -1);
 							reset_item_selector();
 							g_request_refresh = 1;
 						}
@@ -633,7 +633,7 @@ void status_menu(signed short hero_pos)
 						if (hero1 != hero2) {
 							GUI_output(get_tx2(68));
 						} else {
-							use_item(ds_readbs(STATUSPAGE_SELITEM3_NO), hero_pos);
+							use_item(g_statuspage_selitem3_no, hero_pos);
 							reset_item_selector();
 						}
 						break;
@@ -643,7 +643,7 @@ void status_menu(signed short hero_pos)
 						if (hero1 != hero2) {
 							GUI_output(get_tx2(68));
 						} else {
-							drop_item(hero2, ds_readbs(STATUSPAGE_SELITEM3_NO), -1);
+							drop_item(hero2, g_statuspage_selitem3_no, -1);
 							reset_item_selector();
 							g_request_refresh = 1;
 						}

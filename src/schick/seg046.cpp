@@ -197,7 +197,7 @@ void status_show(Bit16u index)
 		g_pp20_index = ARCHIVE_FILE_ZUSTA_UK;
 		do_fill_rect(g_vga_memstart, 0, 0, 319, 199, 0);
 		wait_for_vsync();
-		set_palette(p_datseg + STATUSPAGE_PALETTE, 0, 0x20);
+		set_palette(&g_statuspage_palette[0][0], 0, 0x20);
 	}
 
 	g_action_table_primary = &g_action_table_status[0];

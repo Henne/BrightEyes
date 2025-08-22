@@ -934,6 +934,11 @@ extern signed short g_anitab_spell_oy[2];	//ds:0x6342; seg045
 extern signed char  g_anitab_spell_nvfno[2];	//ds:0x634c; seg045
 extern signed char* g_anitab_spell_index[2];	//ds:0x6366; seg045
 
+extern Bit8s g_statuspage_selitem1_no;		//ds:0x636e; seg048
+extern Bit8s g_statuspage_selitem2_no;		//ds:0x636f; seg048
+extern Bit8s g_statuspage_selitem3_no;		//ds:0x6370; seg048
+extern Bit8s g_statuspage_selitem4_no;		//ds:0x6371; seg048
+extern Bit8u g_statuspage_palette[32][3];	//ds:0x6372; seg046
 extern const struct struct_point g_invslot_iconxy_table[23];	//ds:0x63d2; seg046
 
 extern signed char g_hero_sel_exclude;		//ds:0x64a2; seg047, seg049, seg103, seg120
@@ -989,6 +994,8 @@ extern char g_grammar_article_den[4];		//ds:0xa8e4; seg096
 extern char g_grammar_article_dem[4];		//ds:0xa8e8; seg096
 
 extern char *g_grammar_articles_index[15];	//ds:0xa917; seg096
+
+extern signed short g_grammar_buf_no;		//ds:0xa9eb; seg096
 
 extern char g_grammar_pronouns_er[3];		//ds:0xa9f3; seg096
 extern char g_grammar_pronouns_sie[4];		//ds:0xa9f6; seg096

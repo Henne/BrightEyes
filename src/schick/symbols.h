@@ -983,11 +983,11 @@
 //#define ANITAB_SPELL_OY                 (0x6342)    /* signed short[2]; { 0, 0 } */
 //#define ANITAB_SPELL_DATA               (0x6346)    /* char[32]; 2 arrays, each terminated by -1 */
 //#define ANITAB_SPELL_INDEX              (0x6366)    /* Bit8u*[2] */
-#define STATUSPAGE_SELITEM1_NO          (0x636e)    /* unsigned char */
-#define STATUSPAGE_SELITEM2_NO          (0x636f)    /* unsigned char */
-#define STATUSPAGE_SELITEM3_NO          (0x6370)    /* unsigned char */
-#define STATUSPAGE_SELITEM4_NO          (0x6371)    /* unsigned char */
-#define STATUSPAGE_PALETTE              (0x6372)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
+//#define STATUSPAGE_SELITEM1_NO          (0x636e)    /* unsigned char */
+//#define STATUSPAGE_SELITEM2_NO          (0x636f)    /* unsigned char */
+//#define STATUSPAGE_SELITEM3_NO          (0x6370)    /* unsigned char */
+//#define STATUSPAGE_SELITEM4_NO          (0x6371)    /* unsigned char */
+//#define STATUSPAGE_PALETTE              (0x6372)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
 //#define INVSLOT_ICONXY_TABLE            (0x63d2)    /* struct(4)[23]; struct{unsigned short x,y;} */
 #define STATUSPAGE_SPELLS_XY            (0x642e)    /* struct(6)[8]; struct{unsigned short x_name,x_val,y;} */
 #define STATUSPAGE_SPELLS2_XY           (0x645e)    /* struct(6)[4]; struct{unsigned short x_name,x_val,y;} */
@@ -1214,7 +1214,7 @@
 #define GRAMMAR_NOARTICLE_TABLE         (0xa9b3)    /* short[24]; [8], by case, then by gender */
 #define STR_S_S_PTR                     (0xa9e3)    /* Bit8u*; to STR_S_S */
 #define STR_VON_S_S_PTR                 (0xa9e7)    /* Bit8u*; to STR_VON_S_S */
-#define GRAMMAR_BUF_NO                  (0xa9eb)    /* unsigned short */
+//#define GRAMMAR_BUF_NO                  (0xa9eb)    /* unsigned short */
 #define GRAMMAR_GENDER_BITMASKS         (0xa9ed)    /* signed short[3]; {0x1000, 0x2000, 0x3000} */
 //#define GRAMMAR_PRONOUNS_ER             (0xa9f3)    /* char[3]; "ER" */
 //#define GRAMMAR_PRONOUNS_SIE            (0xa9f6)    /* char[4]; "SIE" */

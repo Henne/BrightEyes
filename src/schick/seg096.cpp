@@ -74,12 +74,12 @@ Bit8u* GUI_names_grammar(signed short flag, signed short index, signed short typ
 				(signed short*)(p_datseg + GRAMMAR_INDEF_TABLE + (flag & 0xf) * 6));
 
 
-	sprintf(g_grammar_bufs[ds_readw(GRAMMAR_BUF_NO)],
+	sprintf(g_grammar_bufs[g_grammar_buf_no],
 		(l2 == 0 ? (char*)ds_readd(STR_S_S_PTR) : (char*)ds_readd(STR_VON_S_S_PTR)),
 		g_grammar_articles_index[host_readws((Bit8u*)lp1 + 2 * (((flag & 0x3000) - 1) >> 12))],
 		(char*)GUI_name_plural(flag, p_name));
 
-	p_name = g_grammar_bufs[ds_readw(GRAMMAR_BUF_NO)];
+	p_name = g_grammar_bufs[g_grammar_buf_no];
 
 	if (*p_name == 0x20) {
 		do {
@@ -89,10 +89,10 @@ Bit8u* GUI_names_grammar(signed short flag, signed short index, signed short typ
 		} while (l4 != 0);
 	}
 
-	l4 = ds_readw(GRAMMAR_BUF_NO);
+	l4 = g_grammar_buf_no;
 
-	if (inc_ds_ws(GRAMMAR_BUF_NO) == 4)
-		ds_writew(GRAMMAR_BUF_NO, 0);
+	if (++g_grammar_buf_no == 4)
+		g_grammar_buf_no = 0;
 
 	return (Bit8u*)g_grammar_bufs[l4];
 }

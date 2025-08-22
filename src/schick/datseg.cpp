@@ -3389,11 +3389,11 @@ signed char* g_anitab_spell_index[2] = {
 	(signed char*)&g_anitab_spell_data[1],
 }; // ds:0x6366; Bit8u*
 
-unsigned char g_statuspage_selitem1_no = 1; // ds:0x636e
-unsigned char g_statuspage_selitem2_no = 1; // ds:0x636f
-unsigned char g_statuspage_selitem3_no = 7; // ds:0x6370
-unsigned char g_statuspage_selitem4_no = 0xff; // ds:0x6371
-struct{unsigned char r,g,b;} g_statuspage_palette[32] = {
+Bit8s g_statuspage_selitem1_no = 1; // ds:0x636e
+Bit8s g_statuspage_selitem2_no = 1; // ds:0x636f
+Bit8s g_statuspage_selitem3_no = 7; // ds:0x6370
+Bit8s g_statuspage_selitem4_no = -1; // ds:0x6371
+Bit8u g_statuspage_palette[32][3] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x06, 0x06, 0x06 },
 	{ 0x3f, 0x26, 0x10 },
@@ -5512,7 +5512,7 @@ short g_grammar_indef_table[24] = { 0x0006, 0x0007, 0x0006, 0x0008, 0x0009, 0x00
 short g_grammar_noarticle_table[24] = { 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d }; // ds:0xa9b3, [8], by case, then by gender
 long g_str_s_s_ptr = 0x14fcab32; // ds:0xa9e3, to STR_S_S; Bit8u*
 long g_str_von_s_s_ptr = 0x14fcab38; // ds:0xa9e7, to STR_VON_S_S; Bit8u*
-unsigned short g_grammar_buf_no = 0; // ds:0xa9eb
+signed short g_grammar_buf_no = 0; // ds:0xa9eb
 signed short g_grammar_gender_bitmasks[3] = { 0x1000, 0x2000, 0x3000 }; // ds:0xa9ed, {0x1000, 0x2000, 0x3000}
 char g_grammar_pronouns_er[3] = "ER"; // ds:0xa9f3
 char g_grammar_pronouns_sie[4] = "SIE"; // ds:0xa9f6
