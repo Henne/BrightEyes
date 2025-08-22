@@ -113,7 +113,7 @@ signed short DNG09_handler(void)
 			GUI_output(get_tx(15));
 
 			gs_x_target += 2;
-			gs_direction = (EAST);
+			gs_direction = EAST;
 			DNG_inc_level();
 		}
 
@@ -134,10 +134,7 @@ signed short DNG09_handler(void)
 				/* failed FF+4 test */
 				sub_hero_le(hero, dice_roll(2, 6, 4));
 
-				sprintf(g_dtp2,
-					get_tx(12),
-					(char*)hero + HERO_NAME2);
-
+				sprintf(g_dtp2,	get_tx(12), (char*)hero + HERO_NAME2);
 				GUI_output(g_dtp2);
 			}
 		}
@@ -159,10 +156,7 @@ signed short DNG09_handler(void)
 				/* failed FF+4 test */
 				sub_hero_le(hero, dice_roll(2, 6, 4));
 
-				sprintf(g_dtp2,
-					get_tx(12),
-					(char*)hero + HERO_NAME2);
-
+				sprintf(g_dtp2,	get_tx(12), (char*)hero + HERO_NAME2);
 				GUI_output(g_dtp2);
 			}
 		}
@@ -215,10 +209,7 @@ signed short DNG09_handler(void)
 				/* failed FF+4 test */
 				sub_hero_le(hero, dice_roll(2, 6, 4));
 
-				sprintf(g_dtp2,
-					get_tx(12),
-					(char*)hero + HERO_NAME2);
-
+				sprintf(g_dtp2,	get_tx(12), (char*)hero + HERO_NAME2);
 				GUI_output(g_dtp2);
 			}
 		}
@@ -248,10 +239,7 @@ signed short DNG09_handler(void)
 				/* failed FF+4 test */
 				sub_hero_le(hero, dice_roll(2, 6, 4));
 
-				sprintf(g_dtp2,
-					get_tx(12),
-					(char*)hero + HERO_NAME2);
-
+				sprintf(g_dtp2,	get_tx(12), (char*)hero + HERO_NAME2);
 				GUI_output(g_dtp2);
 			}
 		}
@@ -259,6 +247,7 @@ signed short DNG09_handler(void)
 	} else if ((target_pos == DNG_POS(1,6,7) || target_pos == DNG_POS(1,4,1) ||
 			target_pos == DNG_POS(1,4,3)) &&
 			target_pos != gs_dng_handled_pos) {
+
 		DNG09_statues(20, 50);
 
 	} else if (target_pos == DNG_POS(1,3,12) && target_pos != gs_dng_handled_pos) {
@@ -266,10 +255,11 @@ signed short DNG09_handler(void)
 		DNG09_pitfall();
 
 	} else if (target_pos == DNG_POS(1,2,8) && target_pos != gs_dng_handled_pos) {
+
 		if (GUI_bool(get_tx(38))) {
 			gs_x_target--;
 			gs_y_target++;
-			gs_direction = (SOUTH);
+			gs_direction = SOUTH;
 			DNG_dec_level();
 		}
 
@@ -415,7 +405,7 @@ signed short DNG09_handler(void)
 				sub_hero_le(hero, dice_roll(2, 6, 0));
 			}
 
-			gs_direction_bak = (gs_direction);
+			gs_direction_bak = gs_direction;
 		}
 	} else if (target_pos == DNG_POS(1,5,11)  &&
 			(target_pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&
@@ -425,9 +415,7 @@ signed short DNG09_handler(void)
 		{
 			gs_dng09_secretdoor2 = 1;
 
-			sprintf(g_dtp2,
-				get_tx(51),
-				(char*)hero + HERO_NAME2);
+			sprintf(g_dtp2,	get_tx(51), (char*)hero + HERO_NAME2);
 
 			sprintf(g_text_output_buf,
 				(char*)(((l3 = test_skill(hero, TA_SCHLOESSER, 6)) > 0) ? get_tx(52) : get_tx(53)),
@@ -447,21 +435,19 @@ signed short DNG09_handler(void)
 				DNG_update_pos();
 			}
 
-			gs_direction_bak = (gs_direction);
+			gs_direction_bak = gs_direction;
 		}
 
 	} else if (target_pos == DNG_POS(0,7,15) && target_pos != gs_dng_handled_pos)
 	{
 		leave_dungeon();
-		gs_current_town = ((signed char)gs_travel_destination_town_id);
-		gs_x_target = (gs_travel_destination_x);
-		gs_y_target = (gs_travel_destination_y);
+		gs_current_town = (signed char)gs_travel_destination_town_id;
+		gs_x_target = gs_travel_destination_x;
+		gs_y_target = gs_travel_destination_y;
 		gs_current_loctype = LOCTYPE_NONE;
 		gs_direction = ((gs_travel_destination_viewdir + 2) & 3);
 
-		sprintf(g_dtp2,
-			get_tx(55),
-			get_ttx(gs_trv_destination + 0xeb));
+		sprintf(g_dtp2,	get_tx(55), get_ttx(gs_trv_destination + 0xeb));
 
 		GUI_output(g_dtp2);
 
@@ -539,22 +525,18 @@ void DNG09_chest4_x1(Bit8u* chest)
 		if (GUI_bool(get_tx(20)))
 		{
 			do {
-				answer = GUI_radio(get_tx(21), 3,
-							get_tx(22),
-							get_tx(23),
-							get_tx(24));
+				answer = GUI_radio(get_tx(21), 3, get_tx(22), get_tx(23), get_tx(24));
 			} while (answer == -1);
 
 			hero = (Bit8u*)get_first_hero_available_in_group();
 
 			if (answer == 1)
 			{
-				sprintf(g_dtp2,
-					get_tx(25),
-					(char*)hero + HERO_NAME2);
+				sprintf(g_dtp2, get_tx(25), (char*)hero + HERO_NAME2);
 				GUI_output(g_dtp2);
 
 				sub_hero_le(hero, dice_roll(2, 20, 0));
+
 			} else if (answer == 2)
 			{
 				hero = get_hero(0) + select_hero_ok_forced(get_ttx(317)) * SIZEOF_HERO;
@@ -572,9 +554,7 @@ void DNG09_chest4_x1(Bit8u* chest)
 					gs_dng09_crystal_flag = 1;
 
 				} else {
-					sprintf(g_dtp2,
-						get_tx(26),
-						(char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_tx(26), (char*)hero + HERO_NAME2);
 					GUI_output(g_dtp2);
 
 					sub_ae_splash(hero, 10);
@@ -597,9 +577,7 @@ void DNG09_chest4_x1(Bit8u* chest)
 					gs_dng09_crystal_flag = 1;
 
 				} else {
-					sprintf(g_dtp2,
-						get_tx(26),
-						(char*)hero + HERO_NAME2);
+					sprintf(g_dtp2,	get_tx(26), (char*)hero + HERO_NAME2);
 					GUI_output(g_dtp2);
 
 					sub_ae_splash(hero, 20);
