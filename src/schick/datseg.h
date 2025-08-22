@@ -666,8 +666,28 @@ extern Bit8u  gs_dng09_pit_flag;		//ds:0x40fd; seg084
 extern Bit8u  gs_dng09_altar_flag;		//ds:0x40ff; seg081, seg084
 extern Bit8u  gs_dng09_secretdoor1;	//ds:0x4100; seg084
 extern Bit8u  gs_dng09_secretdoor2;	//ds:0x4101; seg084
-
-extern Bit8u  gs_dng10_corpse_flag;		//ds:0x4140; seg078
+extern Bit8u  gs_dng09_chest0[12];	//ds:0x4102; seg084
+extern Bit8u  gs_dng09_chest1[10];	//ds:0x410e; seg084
+extern Bit8u  gs_dng09_chest2[8];	//ds:0x4118; seg084
+extern Bit8u  gs_dng09_chest3[21];	//ds:0x4120; seg084
+extern Bit8u  gs_dng09_chest5[4];	//ds:0x4135; seg084
+extern Bit8u  gs_dng09_chest6[7];	//ds:0x4139; seg084
+extern Bit8u  gs_dng10_corpse_flag;	//ds:0x4140; seg085
+extern Bit8u  gs_dng10_lever_found;	//ds:0x4141; seg085
+extern Bit8u  gs_dng10_hole_state;	//ds:0x4142; seg085
+extern Bit8u  gs_dng10_lever_state;	//ds:0x4143; seg085
+extern Bit8u  gs_dng10_hole_damage;	//ds:0x4144; seg085
+extern Bit8u  gs_dng10_floorplate_found;//ds:0x4145; seg085
+extern Bit8u  gs_dng10_floorplate_loads;//ds:0x4146; seg085
+extern Bit8u  gs_dng10_mummy_lever;	//ds:0x4147; seg085
+extern Bit8u  gs_dng10_heshtot;		//ds:0x4148; seg085
+extern Bit8u  gs_dng10_dragon_quest;	//ds:0x4149; seg085
+extern Bit8u  gs_dng10_hoard_plundered;	//ds:0x414a; seg085
+extern Bit8u  gs_dng10_chest0_content[5];	//ds:0x414b; seg085
+extern Bit8u  gs_dng10_chest1_content[4];	//ds:0x4150; seg085
+extern Bit8u  gs_dng10_chest2_content[4];	//ds:0x4154; seg085
+extern Bit8u  gs_dng10_chest3_content[3];	//ds:0x4158; seg085
+extern Bit8u  gs_dng10_chest4_content[2];	//ds:0x415b; seg085
 
 extern Bit8u  gs_dng11_waterbarrel1;		//ds:0x415d; seg086
 extern Bit8u  gs_dng11_waterbarrel2;		//ds:0x415e; seg086

@@ -655,28 +655,28 @@
 //#define DNG09_ALTAR_FLAG                (0x40ff)    /* unsigned char; {0,1} */
 //#define DNG09_SECRETDOOR1               (0x4100)    /* unsigned char; {0, 1 = found, 2 = unlocked} */
 //#define DNG09_SECRETDOOR2               (0x4101)    /* unsigned char; {0, 1 = found, 2 = unlocked} */
-#define DNG09_CHEST0                    (0x4102)    /* unsigned char[12] */
-#define DNG09_CHEST1                    (0x410e)    /* unsigned char[10] */
-#define DNG09_CHEST2                    (0x4118)    /* unsigned char[8] */
-#define DNG09_CHEST3                    (0x4120)    /* unsigned char[21] */
-#define DNG09_CHEST5                    (0x4135)    /* unsigned char[4] */
-#define DNG09_CHEST6                    (0x4139)    /* unsigned char[7] */
+//#define DNG09_CHEST0                    (0x4102)    /* unsigned char[12] */
+//#define DNG09_CHEST1                    (0x410e)    /* unsigned char[10] */
+//#define DNG09_CHEST2                    (0x4118)    /* unsigned char[8] */
+//#define DNG09_CHEST3                    (0x4120)    /* unsigned char[21] */
+//#define DNG09_CHEST5                    (0x4135)    /* unsigned char[4] */
+//#define DNG09_CHEST6                    (0x4139)    /* unsigned char[7] */
 //#define DNG10_CORPSE_LOOTED             (0x4140)    /* char; unsgiend {0,1} */
-#define DNG10_LEVER_FOUND               (0x4141)    /* unsigned char; {0, 1, 3} ; default = 0 */
-#define DNG10_HOLE_STATE                (0x4142)    /* unsigned char; {0, 1, 2} ; default = 0 */
-#define DNG10_LEVER_STATE               (0x4143)    /* unsigned char; {0,1} ; default = 0 */
-#define DNG10_HOLE_DAMAGE               (0x4144)    /* unsigned char; {0, 1, ..., 255} ; default = 0 */
-#define DNG10_FLOORPLATE_FOUND          (0x4145)    /* unsigned char; {0,1} */
-#define DNG10_FLOORPLATE_LOADS          (0x4146)    /* unsigned char; {0,1,2,3} ; default = 3 */
-#define DNG10_MUMMY_LEVER               (0x4147)    /* char */
-#define DNG10_HESHTOT                   (0x4148)    /* char */
-#define DNG10_DRAGON_QUEST              (0x4149)    /* char */
-#define DNG10_HOARD_PLUNDERED           (0x414a)    /* char */
-#define DNG10_CHEST0_CONTENT            (0x414b)    /* char[5] */
-#define DNG10_CHEST1_CONTENT            (0x4150)    /* char[4] */
-#define DNG10_CHEST2_CONTENT            (0x4154)    /* char[4] */
-#define DNG10_CHEST3_CONTENT            (0x4158)    /* char[3] */
-#define DNG10_CHEST4_CONTENT            (0x415b)    /* char[2] */
+//#define DNG10_LEVER_FOUND               (0x4141)    /* unsigned char; {0, 1, 3} ; default = 0 */
+//#define DNG10_HOLE_STATE                (0x4142)    /* unsigned char; {0, 1, 2} ; default = 0 */
+//#define DNG10_LEVER_STATE               (0x4143)    /* unsigned char; {0,1} ; default = 0 */
+//#define DNG10_HOLE_DAMAGE               (0x4144)    /* unsigned char; {0, 1, ..., 255} ; default = 0 */
+//#define DNG10_FLOORPLATE_FOUND          (0x4145)    /* unsigned char; {0,1} */
+//#define DNG10_FLOORPLATE_LOADS          (0x4146)    /* unsigned char; {0,1,2,3} ; default = 3 */
+//#define DNG10_MUMMY_LEVER               (0x4147)    /* char */
+//#define DNG10_HESHTOT                   (0x4148)    /* char */
+//#define DNG10_DRAGON_QUEST              (0x4149)    /* char */
+//#define DNG10_HOARD_PLUNDERED           (0x414a)    /* char */
+//#define DNG10_CHEST0_CONTENT            (0x414b)    /* char[5] */
+//#define DNG10_CHEST1_CONTENT            (0x4150)    /* char[4] */
+//#define DNG10_CHEST2_CONTENT            (0x4154)    /* char[4] */
+//#define DNG10_CHEST3_CONTENT            (0x4158)    /* char[3] */
+//#define DNG10_CHEST4_CONTENT            (0x415b)    /* char[2] */
 //#define DNG11_WATERBARREL1              (0x415d)    /* unsigned char; {0,1} */
 //#define DNG11_WATERBARREL2              (0x415e)    /* unsigned char; {0,1} */
 //#define DNG11_EFFERD_SACRIFICE          (0x415f)    /* unsigned char; {0,1} */

@@ -74,43 +74,38 @@ signed short DNG10_handler(void)
 	} else if (target_pos == DNG_POS(0,8,1) && target_pos != gs_dng_handled_pos)
 	{
 		/* another hole in a wall with a lever for a trap */
-		if ((ds_readb(DNG10_LEVER_FOUND) != 0) || test_skill(hero, TA_SINNESSCHAERFE, 7) > 0)
+		if (gs_dng10_lever_found || test_skill(hero, TA_SINNESSCHAERFE, 7) > 0)
 		{
-			or_ds_bs(DNG10_LEVER_FOUND, 1);
+			gs_dng10_lever_found |= 1;
 
-			if (GUI_bool((!(ds_readb(DNG10_LEVER_FOUND) & 2) ? get_tx(6) : get_tx(41))))
+			if (GUI_bool((!(gs_dng10_lever_found & 2) ? get_tx(6) : get_tx(41))))
 			{
-				if (GUI_bool(get_tx(7)))
-				{
-					or_ds_bs(DNG10_LEVER_FOUND, 2);
-					xor_ds_bs(DNG10_LEVER_STATE, 1);
+				if (GUI_bool(get_tx(7))) {
+
+					gs_dng10_lever_found |= 2;
+					gs_dng10_lever_state ^= 1;
 
 					GUI_output(get_tx(8));
 				}
 			}
 		}
 
-	} else if ((target_pos == DNG_POS(0,8,4) && target_pos != gs_dng_handled_pos && !ds_readb(DNG10_LEVER_STATE)) ||
-			(target_pos == DNG_POS(0,7,4) && target_pos != gs_dng_handled_pos && ds_readb(DNG10_LEVER_STATE) != 0))
+	} else if ((target_pos == DNG_POS(0,8,4) && target_pos != gs_dng_handled_pos && !gs_dng10_lever_state) ||
+			(target_pos == DNG_POS(0,7,4) && target_pos != gs_dng_handled_pos && gs_dng10_lever_state))
 	{
 		/* TRAP: terrible pain; radom hero gets 3W6+4 LE damage */
 		hero = get_hero(get_random_hero());
 
 		answer = dice_roll(3, 6, 4);
 
-		sprintf(g_dtp2,
-			get_tx(9),
-			(char*)hero + HERO_NAME2);
+		sprintf(g_dtp2,	get_tx(9), (char*)hero + HERO_NAME2);
 
 		/* check if the hero will survive */
 		if (host_readws(hero + HERO_LE) > answer)
 		{
-			sprintf(g_text_output_buf,
-				get_tx(10),
-				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+			sprintf(g_text_output_buf, get_tx(10), (GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-			strcat(g_dtp2,
-				g_text_output_buf);
+			strcat(g_dtp2, g_text_output_buf);
 		}
 
 		GUI_output(g_dtp2);
@@ -122,34 +117,30 @@ signed short DNG10_handler(void)
 			gs_direction == WEST)
 	{
 		/* TRAP: a loose stone in a wall */
-		if (ds_readb(DNG10_HOLE_STATE) != 0 || test_skill(hero, TA_SINNESSCHAERFE, 5) > 0)
+		if (gs_dng10_hole_state || test_skill(hero, TA_SINNESSCHAERFE, 5) > 0)
 		{
-			/* Original-Bug: ??? */
-			ds_writeb(DNG10_HOLE_STATE, 1);
+			/* set hole found */
+			gs_dng10_hole_state = 1;
 
-			if (ds_readb(DNG10_HOLE_STATE) == 2 || GUI_bool(get_tx(6)))
+			if (gs_dng10_hole_state == 2 || GUI_bool(get_tx(6)))
 			{
-				ds_writeb(DNG10_HOLE_STATE, 2);
+				gs_dng10_hole_state = 2;
 
-				sprintf(g_dtp2,
-					get_tx(11),
-					(char*)hero + HERO_NAME2);
+				sprintf(g_dtp2,	get_tx(11), (char*)hero + HERO_NAME2);
 
 				if (GUI_bool(g_dtp2))
 				{
-					sprintf(g_dtp2,
-						get_tx(12),
-						(char*)hero + HERO_NAME2);
+					sprintf(g_dtp2,	get_tx(12), (char*)hero + HERO_NAME2);
 
 					GUI_output(g_dtp2);
 
 					result = random_schick(6);
 
-					add_ds_bs(DNG10_HOLE_DAMAGE, result);
+					gs_dng10_hole_damage += result;
 
 					sub_hero_le(hero, result);
 
-					if (ds_readb(DNG10_HOLE_DAMAGE) >= 7)
+					if (gs_dng10_hole_damage >= 7)
 					{
 						/* the secret wall can now be passed forward */
 						host_writeb(amap_ptr + MAP_POS(3,7), (DNG_TILE_SEMIPERMEABLE_WALL << 4) + 0x0f); /* set flags 0,1,2,3 => can be entered from all directions */
@@ -166,28 +157,25 @@ signed short DNG10_handler(void)
 	} else if (target_pos == DNG_POS(0,1,8) && target_pos != gs_dng_handled_pos)
 	{
 		/* TRAP: a floorplate */
-		if (ds_readb(DNG10_FLOORPLATE_FOUND) != 0 || test_skill(hero, TA_SINNESSCHAERFE, 5) > 0)
+		if (gs_dng10_floorplate_found || test_skill(hero, TA_SINNESSCHAERFE, 5) > 0)
 		{
-			ds_writeb(DNG10_FLOORPLATE_FOUND, 1);
+			gs_dng10_floorplate_found = 1;
 
 			/* Original-Bug: ???*/
 			/* Damage only happens here when the leader of the group tries to disable this trap.
 			   If the trap is not found or left alone nobody gets damaged. Weird! */
 			if (GUI_bool(get_tx(13)) && test_skill(hero, TA_SCHLOESSER, 7) <= 0)
 			{
-				if (ds_readb(DNG10_FLOORPLATE_LOADS) != 0)
+				if (gs_dng10_floorplate_loads)
 				{
 
-					sprintf(g_dtp2,
-						get_tx(14),
-						(char*)hero + HERO_NAME2);
+					sprintf(g_dtp2,	get_tx(14), (char*)hero + HERO_NAME2);
 
-					dec_ds_bs_post(DNG10_FLOORPLATE_LOADS);
+					gs_dng10_floorplate_loads--;
 
 					sub_hero_le(hero, dice_roll(3, 6, 0));
 				} else {
-					strcpy(g_dtp2,
-						get_tx(15));
+					strcpy(g_dtp2, get_tx(15));
 				}
 
 				GUI_output(g_dtp2);
@@ -221,7 +209,7 @@ signed short DNG10_handler(void)
 		/* INFO: an empty room */
 		GUI_output(get_tx(21));
 
-	} else if (target_pos == DNG_POS(0,10,13) && target_pos != gs_dng_handled_pos && !ds_readb(DNG10_HESHTOT))
+	} else if (target_pos == DNG_POS(0,10,13) && target_pos != gs_dng_handled_pos && !gs_dng10_heshtot)
 	{
 		/* FIGHT: scared heshtot */
 		if (GUI_bool(get_tx(22)))
@@ -229,10 +217,10 @@ signed short DNG10_handler(void)
 			g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(0,10,13,NORTH);
 			gs_dng_handled_pos = 0;
 
-			if (!do_fight(FIGHTS_F129_17))
-			{
-				ds_writeb(DNG10_HESHTOT, 1);
+			if (!do_fight(FIGHTS_F129_17)) {
+				gs_dng10_heshtot = 1;
 			}
+
 		} else {
 			GUI_output(get_tx(23));
 			sub_group_le(random_schick(6));
@@ -268,7 +256,7 @@ signed short DNG10_handler(void)
 		/* LEVER: enables/disables fight 111, leader get 2 LE damage */
 		if (GUI_bool(get_tx(25)))
 		{
-			xor_ds_bs(DNG10_MUMMY_LEVER, 1);
+			gs_dng10_mummy_lever ^= 1;
 
 			sprintf(g_dtp2, get_tx(26), (char*)hero + HERO_NAME2);
 			GUI_output(g_dtp2);
@@ -276,7 +264,7 @@ signed short DNG10_handler(void)
 			sub_hero_le(hero, 2);
 		}
 
-	} else if ((target_pos == DNG_POS(1,10,3) || target_pos == DNG_POS(1,7,3)) && target_pos != gs_dng_handled_pos && ds_readb(DNG10_MUMMY_LEVER) != 0)
+	} else if ((target_pos == DNG_POS(1,10,3) || target_pos == DNG_POS(1,7,3)) && target_pos != gs_dng_handled_pos && gs_dng10_mummy_lever)
 	{
 		/* FIGHT: four mummies again and again */
 		g_fig_flee_position[NORTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(1,5,3,WEST);
@@ -290,7 +278,7 @@ signed short DNG10_handler(void)
 		/* INFO: glowing walls */
 		GUI_output(get_tx(27));
 
-	} else if (target_pos == DNG_POS(1,9,12) && target_pos != gs_dng_handled_pos && ds_readb(DNG10_DRAGON_QUEST) != 0)
+	} else if (target_pos == DNG_POS(1,9,12) && target_pos != gs_dng_handled_pos && gs_dng10_dragon_quest)
 	{
 		/* FIGHT: get PLATINKEY for the dragon */
 		g_fig_flee_position[NORTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(1,9,10,NORTH);
@@ -302,7 +290,7 @@ signed short DNG10_handler(void)
 	{
 		/* QUEST: the dragon */
 		/* TIP: plunder sucessfully, do the quest and get the reward */
-		if (!ds_readb(DNG10_DRAGON_QUEST))
+		if (!gs_dng10_dragon_quest)
 		{
 			load_in_head(58);
 
@@ -314,7 +302,7 @@ signed short DNG10_handler(void)
 			if (answer == 1)
 			{
 				/* try to fight the dragon */
-				ds_writeb(DNG10_DRAGON_QUEST, 1);
+				gs_dng10_dragon_quest = 1;
 
 				if (GUI_dialogbox((unsigned char*)g_dtp2, get_tx(28), get_tx(32), 2, get_ttx(2), get_ttx(3)) == 1)
 				{
@@ -340,9 +328,9 @@ signed short DNG10_handler(void)
 					}
 				}
 
-				if (result == 0 && !ds_readb(DNG10_HOARD_PLUNDERED))
+				if (result == 0 && !gs_dng10_hoard_plundered)
 				{
-					ds_writeb(DNG10_HOARD_PLUNDERED, 1);
+					gs_dng10_hoard_plundered = 1;
 
 					GUI_dialogbox((unsigned char*)g_dtp2, get_tx(28), get_tx(35), 0);
 
@@ -357,7 +345,7 @@ signed short DNG10_handler(void)
 					set_party_money(p_money);
 
 				} else {
-					ds_writeb(DNG10_DRAGON_QUEST, 1);
+					gs_dng10_dragon_quest = 1;
 
 					if (GUI_dialogbox((unsigned char*)g_dtp2, get_tx(28), get_tx(32), 2,
 								get_ttx(2), get_ttx(3)) == 1)
@@ -370,7 +358,7 @@ signed short DNG10_handler(void)
 				}
 			}
 
-		} else if (ds_readb(DNG10_DRAGON_QUEST) == 1) {
+		} else if (gs_dng10_dragon_quest == 1) {
 
 			load_in_head(58);
 
@@ -399,7 +387,8 @@ signed short DNG10_handler(void)
 				/* ... 50 AP */
 				add_hero_ap_all(50);
 
-				ds_writeb(DNG10_DRAGON_QUEST, 2);
+				gs_dng10_dragon_quest = 2;
+
 			} else {
 				GUI_dialogbox((unsigned char*)g_dtp2, get_tx(28), get_tx(38), 0);
 			}
@@ -420,10 +409,7 @@ signed short DNG10_handler(void)
 		gs_current_loctype = LOCTYPE_NONE;
 		gs_direction = ((gs_travel_destination_viewdir + 2) & 0x03);
 
-		sprintf(g_dtp2,
-			get_tx(40),
-			get_ttx(gs_trv_destination + 0xeb));
-
+		sprintf(g_dtp2,	get_tx(40), get_ttx(gs_trv_destination + 0xeb));
 		GUI_output(g_dtp2);
 
 		timewarp(HOURS(3));
@@ -445,7 +431,7 @@ void DNG10_chest0_x1(Bit8u* ptr)
 void DNG10_chest0_x2(Bit8u* chest)
 {
 	Bit8u* ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG10_CHEST0_CONTENT));
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng10_chest0_content);
 	loot_chest((Bit8u*)(chest), get_tx(4), get_tx(5));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
@@ -453,7 +439,7 @@ void DNG10_chest0_x2(Bit8u* chest)
 void DNG10_chest1_x1(Bit8u* chest)
 {
 	Bit8u* ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG10_CHEST1_CONTENT));
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng10_chest1_content);
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
@@ -461,7 +447,7 @@ void DNG10_chest1_x1(Bit8u* chest)
 void DNG10_chest2_x1(Bit8u* chest)
 {
 	Bit8u* ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG10_CHEST2_CONTENT));
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng10_chest2_content);
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
@@ -469,7 +455,7 @@ void DNG10_chest2_x1(Bit8u* chest)
 void DNG10_chest3_x1(Bit8u* chest)
 {
 	Bit8u* ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG10_CHEST3_CONTENT));
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng10_chest3_content);
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
@@ -477,7 +463,7 @@ void DNG10_chest3_x1(Bit8u* chest)
 void DNG10_chest4_x1(Bit8u* chest)
 {
 	Bit8u* ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG10_CHEST4_CONTENT));
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng10_chest4_content);
 	loot_simple_chest((Bit8u*)(chest));
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }

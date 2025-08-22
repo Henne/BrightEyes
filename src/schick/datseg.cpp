@@ -2540,22 +2540,23 @@ Bit8u  gs_dng09_chest2[8] = { 0x4a, 0x4a, 0x27, 0x27, 0x27, 0xea, 0x9a, 0xff }; 
 Bit8u  gs_dng09_chest3[21] = { 0x4b, 0x4b, 0x4b, 0x30, 0x30, 0x30, 0x31, 0x31, 0x31, 0x0e, 0x0e, 0x0e, 0x01, 0x5b, 0x17, 0xff, 0x01, 0x0e, 0x4a, 0x23, 0xff }; // ds:0x4120
 Bit8u  gs_dng09_chest5[4] = { 0xbd, 0xbe, 0x4c, 0xff }; // ds:0x4135
 Bit8u  gs_dng09_chest6[7] = { 0x4a, 0x4a, 0x27, 0x27, 0x27, 0xd9, 0xff }; // ds:0x4139
-Bit8u  gs_dng10_corpse_flag = 0; // ds:0x4140, unsgiend
-unsigned char g_dng10_lever_found = 0; // ds:0x4141, ; default = 0
-unsigned char g_dng10_hole_state = 0; // ds:0x4142, ; default = 0
-unsigned char g_dng10_lever_state = 0; // ds:0x4143, ; default = 0
-unsigned char g_dng10_hole_damage = 0; // ds:0x4144, {0, 1, ..., 255} ; default = 0
-unsigned char g_dng10_floorplate_found = 0; // ds:0x4145
-unsigned char g_dng10_floorplate_loads = 3; // ds:0x4146, ; default = 3
-char g_dng10_mummy_lever = 0; // ds:0x4147
-char g_dng10_heshtot = 0; // ds:0x4148
-char g_dng10_dragon_quest = 0; // ds:0x4149
-char g_dng10_hoard_plundered = 0; // ds:0x414a
-char g_dng10_chest0_content[5] = { 0x50, 0x1b, -0x6f, -0x49, -1 }; // ds:0x414b
-char g_dng10_chest1_content[4] = { -0x6f, -0x6e, -0x6f, -1 }; // ds:0x4150
-char g_dng10_chest2_content[4] = { -0x66, -0x65, -0x66, -1 }; // ds:0x4154
-char g_dng10_chest3_content[3] = { -0x39, -0x3b, -1 }; // ds:0x4158
-char g_dng10_chest4_content[2] = { -0x21, -1 }; // ds:0x415b
+Bit8u  gs_dng10_corpse_flag = 0; // ds:0x4140
+Bit8u  gs_dng10_lever_found = 0; // ds:0x4141
+Bit8u  gs_dng10_hole_state = 0; // ds:0x4142
+Bit8u  gs_dng10_lever_state = 0; // ds:0x4143
+Bit8u  gs_dng10_hole_damage = 0; // ds:0x4144, {0, 1, ..., 255} ; default = 0
+Bit8u  gs_dng10_floorplate_found = 0; // ds:0x4145
+Bit8u  gs_dng10_floorplate_loads = 3; // ds:0x4146
+Bit8u  gs_dng10_mummy_lever = 0; // ds:0x4147
+Bit8u  gs_dng10_heshtot = 0; // ds:0x4148
+Bit8u  gs_dng10_dragon_quest = 0; // ds:0x4149
+Bit8u  gs_dng10_hoard_plundered = 0; // ds:0x414a
+Bit8u  gs_dng10_chest0_content[5] = { 0x50, 0x1b, 0x91, 0xb7, 0xff}; // ds:0x414b
+Bit8u  gs_dng10_chest1_content[4] = { 0x91, 0x92, 0x91, 0xff}; // ds:0x4150
+Bit8u  gs_dng10_chest2_content[4] = { 0x9a, 0x9b, 0x9a, 0xff}; // ds:0x4154
+Bit8u  gs_dng10_chest3_content[3] = { 0xc7, 0xc5, 0xff}; // ds:0x4158
+Bit8u  gs_dng10_chest4_content[2] = { 0xdf, 0xff}; // ds:0x415b
+
 Bit8u  gs_dng11_waterbarrel1 = 80; // ds:0x415d
 Bit8u  gs_dng11_waterbarrel2 = 20; // ds:0x415e
 Bit8u  gs_dng11_efferd_sacrifice = 0; // ds:0x415f
