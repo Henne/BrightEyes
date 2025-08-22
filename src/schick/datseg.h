@@ -654,6 +654,19 @@ extern Bit8u  gs_dng08_chest2_content[2];	//ds:0x40eb; seg083
 extern Bit8u  gs_dng08_chest4_content[2];	//ds:0x40ed; seg083
 extern Bit8u  gs_dng08_chest5_content[6];	//ds:0x40ef; seg083
 
+extern Bit8u  gs_dng09_lever1_flag;		//ds:0x40f5; seg084
+extern Bit8u  gs_dng09_bolttrap1_flag;		//ds:0x40f6; seg084
+extern Bit8u  gs_dng09_bolttrap2_flag;		//ds:0x40f7; seg084
+extern Bit8u  gs_dng09_bolttrap3_flag;		//ds:0x40f8; seg084
+extern Bit8u  gs_dng09_cultist_flag;		//ds:0x40f9; seg041, seg084
+extern Bit8u  gs_dng09_lever2_flag;		//ds:0x40fa; seg084
+extern Bit8u  gs_dng09_bolttrap4_flag;		//ds:0x40fb; seg084
+extern Bit8u  gs_dng09_crystal_flag;		//ds:0x40fc; seg084
+extern Bit8u  gs_dng09_pit_flag;		//ds:0x40fd; seg084
+extern Bit8u  gs_dng09_altar_flag;		//ds:0x40ff; seg081, seg084
+extern Bit8u  gs_dng09_secretdoor1;	//ds:0x4100; seg084
+extern Bit8u  gs_dng09_secretdoor2;	//ds:0x4101; seg084
+
 extern Bit8u  gs_dng10_corpse_flag;		//ds:0x4140; seg078
 
 extern Bit8u  gs_dng11_waterbarrel1;		//ds:0x415d; seg086

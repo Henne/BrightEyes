@@ -510,7 +510,7 @@ void DNG09_pitfall(void)
 
 	hero = (Bit8u*)get_first_hero_available_in_group();
 
-	if (!ds_readb(DNG09_PIT_FLAG))
+	if (!gs_dng09_pit_flag)
 	{
 		for (i = l3 = 0; i <= 6; i++, hero += SIZEOF_HERO)
 		{
@@ -558,7 +558,7 @@ void DNG09_pitfall(void)
 
 				gs_groups_dng_level[l3] = gs_dungeon_level + 1;
 
-				ds_writeb(DNG09_PIT_FLAG, 2);
+				gs_dng09_pit_flag = 2;
 			} else {
 				/* the current group has only one hero */
 
@@ -582,7 +582,7 @@ void DNG09_pitfall(void)
 
 				gs_groups_dng_level[l3] = gs_dungeon_level + 1;
 
-				ds_writeb(DNG09_PIT_FLAG, 1);
+				gs_dng09_pit_flag = 1;
 			}
 		}
 
@@ -601,7 +601,7 @@ void DNG09_pitfall(void)
 					sprintf(g_dtp2, get_ttx(768), (char*)get_hero(i - 1) + HERO_NAME2);
 				}
 
-				strcat(g_dtp2, (char*)(ds_readbs(DNG09_PIT_FLAG) == 2 ? get_tx(36) : get_tx(37)));
+				strcat(g_dtp2, (char*)(gs_dng09_pit_flag == 2 ? get_tx(36) : get_tx(37)));
 
 				GUI_output(g_dtp2);
 
@@ -614,7 +614,8 @@ void DNG09_pitfall(void)
 
 				GRP_merge();
 
-				ds_writeb(DNG09_PIT_FLAG, 0);
+				gs_dng09_pit_flag = 0;
+
 			} else {
 				GUI_output(get_tx(35));
 			}

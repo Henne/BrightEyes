@@ -642,19 +642,19 @@
 //#define DNG08_CHEST2_CONTENT            (0x40eb)    /* signed char[2] */
 //#define DNG08_CHEST4_CONTENT            (0x40ed)    /* signed char[2] */
 //#define DNG08_CHEST5_CONTENT            (0x40ef)    /* signed char[6] */
-#define DNG09_LEVER1_FLAG               (0x40f5)    /* unsigned char; {0,1} */
-#define DNG09_BOLTTRAP1_FLAG            (0x40f6)    /* unsigned char; {0,1} */
-#define DNG09_BOLTTRAP2_FLAG            (0x40f7)    /* unsigned char; {0,1} */
-#define DNG09_BOLTTRAP3_FLAG            (0x40f8)    /* unsigned char; {0,1} */
-#define DNG09_CULTIST_FLAG              (0x40f9)    /* unsigned char; {0,1} */
-#define DNG09_LEVER2_FLAG               (0x40fa)    /* unsigned char; {0,1} */
-#define DNG09_BOLTTRAP4_FLAG            (0x40fb)    /* unsigned char; {0,1} */
-#define DNG09_CRYSTAL_FLAG              (0x40fc)    /* unsigned char; {0,1} */
-#define DNG09_PIT_FLAG                  (0x40fd)    /* unsigned char; {0,1,2}, number of heroes in pit */
+//#define DNG09_LEVER1_FLAG               (0x40f5)    /* unsigned char; {0,1} */
+//#define DNG09_BOLTTRAP1_FLAG            (0x40f6)    /* unsigned char; {0,1} */
+//#define DNG09_BOLTTRAP2_FLAG            (0x40f7)    /* unsigned char; {0,1} */
+//#define DNG09_BOLTTRAP3_FLAG            (0x40f8)    /* unsigned char; {0,1} */
+//#define DNG09_CULTIST_FLAG              (0x40f9)    /* unsigned char; {0,1} */
+//#define DNG09_LEVER2_FLAG               (0x40fa)    /* unsigned char; {0,1} */
+//#define DNG09_BOLTTRAP4_FLAG            (0x40fb)    /* unsigned char; {0,1} */
+//#define DNG09_CRYSTAL_FLAG              (0x40fc)    /* unsigned char; {0,1} */
+//#define DNG09_PIT_FLAG                  (0x40fd)    /* unsigned char; {0,1,2}, number of heroes in pit */
 // ?1
-#define DNG09_ALTAR_FLAG                (0x40ff)    /* unsigned char; {0,1} */
-#define DNG09_SECRETDOOR1               (0x4100)    /* unsigned char; {0, 1 = found, 2 = unlocked} */
-#define DNG09_SECRETDOOR2               (0x4101)    /* unsigned char; {0, 1 = found, 2 = unlocked} */
+//#define DNG09_ALTAR_FLAG                (0x40ff)    /* unsigned char; {0,1} */
+//#define DNG09_SECRETDOOR1               (0x4100)    /* unsigned char; {0, 1 = found, 2 = unlocked} */
+//#define DNG09_SECRETDOOR2               (0x4101)    /* unsigned char; {0, 1 = found, 2 = unlocked} */
 #define DNG09_CHEST0                    (0x4102)    /* unsigned char[12] */
 #define DNG09_CHEST1                    (0x410e)    /* unsigned char[10] */
 #define DNG09_CHEST2                    (0x4118)    /* unsigned char[8] */
