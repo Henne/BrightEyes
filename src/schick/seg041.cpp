@@ -178,7 +178,7 @@ void FIG_add_msg(unsigned short f_action, unsigned short damage)
  *
  * \param   enemy       pointer to the enemy
  * \param   damage      the damage
- * \param   flag        impact on 'renegade' flag. 0: not affacted. 1: reset 'renegade' to 0 (monster will be hostile again)
+ * \param   flag        impact on 'renegade' flag. 0: not affected. 1: reset 'renegade' to 0 (monster will be hostile again)
  */
 void FIG_damage_enemy(Bit8u *enemy, Bit16s damage, signed short preserve_renegade)
 {
@@ -193,6 +193,7 @@ void FIG_damage_enemy(Bit8u *enemy, Bit16s damage, signed short preserve_renegad
 		host_writew(enemy + ENEMY_SHEET_LE, 0); /* set LE to 0 */
 
 		if ((g_current_fight_no == FIGHTS_F126_08) && (host_readb(enemy) == 0x38)) {
+
 			/* slaying a special cultist */
 			/* set a flag in the status area */
 			gs_dng09_cultist_flag = 0;
@@ -200,19 +201,15 @@ void FIG_damage_enemy(Bit8u *enemy, Bit16s damage, signed short preserve_renegad
 		} else if ((g_current_fight_no == FIGHTS_F144) && (host_readb(enemy) == 0x48) && !g_finalfight_tumult)
 		{
 			/* slaying the orc champion, ends the fight */
-				g_in_fight = 0;
+			g_in_fight = 0;
 
 		} else if ((g_current_fight_no == FIGHTS_F064) && (host_readb(enemy) == 0x46)) {
 
 			/* slaying Gorah makes everyone flee except Heshthot */
 			for (i = 0; i < 20; i++) {
-#if !defined(__BORLANDC__)
-				if (ds_readb(ENEMY_SHEETS + ENEMY_SHEET_GFX_ID + i * SIZEOF_ENEMY_SHEET) != 26)
-					or_ds_bs((ENEMY_SHEETS + ENEMY_SHEET_FLAGS2) + i * SIZEOF_ENEMY_SHEET, 4); /* set 'scared' flag */
-#else
-				if ( ((struct enemy_sheet*)((Bit8u*)(MK_FP(datseg, ENEMY_SHEETS))))[i].gfx_id != 0x1a)
-					((struct enemy_sheet*)((Bit8u*)(MK_FP(datseg, ENEMY_SHEETS))))[i].flags2.scared = 1;
-#endif
+				if (g_enemy_sheets[i].gfx_id != 0x1a) {
+					g_enemy_sheets[i].flags2.scared = 1;
+				}
 			}
 		}
 	}
@@ -241,13 +238,13 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 	signed short y_target;
 	signed short hero_idx;
 	signed char enemy_gfx_id;
-	Bit8u* enemy_p;
+	struct enemy_sheet* enemy_p;
 	signed short weapon_type;
 
 	damage_mod = 0;
 
 	if (attack_hero == 0) {
-		enemy_p = target;
+		enemy_p = (struct enemy_sheet*)target;
 	}
 
 	right_hand = host_readw(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID);
@@ -350,7 +347,7 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 
 	if (attack_hero == 0) {
 
-		enemy_gfx_id = host_readbs(enemy_p + ENEMY_SHEET_GFX_ID);
+		enemy_gfx_id = enemy_p->gfx_id;
 
 		if ((right_hand == ITEM_SABER_MAGIC) && (enemy_gfx_id == 0x1c || enemy_gfx_id == 0x22)) {
 
@@ -408,8 +405,10 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 		if (host_readbs(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_POISON_TYPE) != POISON_TYPE_NONE) {
 
 			if (host_readbs(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_POISON_TYPE) == POISON_TYPE_ANGSTGIFT) {
-				or_ptr_bs(enemy_p + ENEMY_SHEET_FLAGS2, 0x04); /* set 'scared' flag */
-				and_ptr_bs(enemy_p + ENEMY_SHEET_FLAGS2, 0xfd); /* unset 'renegade' flag */
+
+				enemy_p->flags2.scared = 1;
+				enemy_p->flags2.renegade = 0;
+
 			} else {
 				/* the following line is the source for the totally excessive and unbalanced poison damage */
 
@@ -428,27 +427,25 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 		damage *= 2;
 	}
 
-	if ((ds_readbs(TEVENT071_ORCSTATUE) != 0) &&
-		(host_readbs(hero + HERO_TYPE) == HERO_TYPE_DWARF) &&
-		(attack_hero == 0) &&
-		(host_readbs(enemy_p + ENEMY_SHEET_GFX_ID) == 0x18))
+	if (ds_readbs(TEVENT071_ORCSTATUE) && (host_readbs(hero + HERO_TYPE) == HERO_TYPE_DWARF) && (attack_hero == 0) && (enemy_p->gfx_id == 0x18))
 	{
 		damage++;
 	}
 
 	if (attack_hero == 0) {
-		damage -= host_readbs(enemy_p + 2);
 
-		if (enemy_petrified(enemy_p)) {
+		damage -= enemy_p->rs;
+
+		if (enemy_p->flags1.petrified) {
 			damage = 0;
 		}
 
-		if ((host_readbs(enemy_p + ENEMY_SHEET_MAGIC) != 0) && !inventory_magic(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY)) {
+		if (enemy_p->magic && !inventory_magic(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY)) {
 			damage = 0;
 		}
 
-		if (host_readws(enemy_p + ENEMY_SHEET_LE) < damage) {
-			damage = host_readws(enemy_p + ENEMY_SHEET_LE) + 1;
+		if (enemy_p->le < damage) {
+			damage = enemy_p->le + 1;
 		}
 	} else {
 		damage -= host_readbs(target + HERO_RS_BONUS1);

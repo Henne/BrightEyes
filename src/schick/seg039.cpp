@@ -359,13 +359,14 @@ void FIG_init_enemies(void)
 	/* Cleanup the old enemy tables */
 	for (i = 0; i < 20; i++) {
 
-		if (ds_readbs(ENEMY_SHEETS + ENEMY_SHEET_FIGHTER_ID + i * SIZEOF_ENEMY_SHEET) != -1) {
+		if (g_enemy_sheets[i].fighter_id != -1) {
 
-			FIG_remove_from_list(ds_readbs(ENEMY_SHEETS + ENEMY_SHEET_FIGHTER_ID + i * SIZEOF_ENEMY_SHEET), 0);
+			FIG_remove_from_list(g_enemy_sheets[i].fighter_id, 0);
 
-			ds_writeb(ENEMY_SHEETS + ENEMY_SHEET_FIGHTER_ID + i * SIZEOF_ENEMY_SHEET, -1);
+			g_enemy_sheets[i].fighter_id = -1;
 		}
-		or_ds_bs((ENEMY_SHEETS + ENEMY_SHEET_FLAGS1) + i * SIZEOF_ENEMY_SHEET, 1); /* set 'dead' flag */
+
+		g_enemy_sheets[i].flags1.dead = 1;
 	}
 
 	g_nr_of_enemies = 0;
@@ -393,17 +394,12 @@ void FIG_init_enemies(void)
 		/* place only the enemies from round 0 */
 		if (!host_readbs(g_current_fight + i * SIZEOF_FIGHT_MONSTER + FIGHT_MONSTERS_ROUND_APPEAR)) {
 
-			place_obj_on_cb(x, y, i + 10,
-				ds_readbs(i * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS + ENEMY_SHEET_GFX_ID)),
+			place_obj_on_cb(x, y, i + 10, g_enemy_sheets[i].gfx_id,
 				host_readb(g_current_fight + i * SIZEOF_FIGHT_MONSTER + FIGHT_MONSTERS_VIEWDIR));
 		}
 
 		/* load the sprites */
-#if !defined(__BORLANDC__)
-		FIG_load_enemy_sprites((Bit8u*)((p_datseg + ENEMY_SHEETS + i * SIZEOF_ENEMY_SHEET)), x, y);
-#else
-		FIG_load_enemy_sprites((Bit8u*)&((struct enemy_sheet*)(p_datseg +  ENEMY_SHEETS))[i], x, y);
-#endif
+		FIG_load_enemy_sprites((Bit8u*)&g_enemy_sheets[i], x, y);
 	}
 }
 

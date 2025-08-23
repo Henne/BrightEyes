@@ -891,7 +891,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 		(host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_SPELL) || (host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_USE_ITEM)))
 	{
 		for (slot_no = 0; slot_no < 20; slot_no++) {
-			and_ds_bs((ENEMY_SHEETS + ENEMY_SHEET_FLAGS1) + SIZEOF_ENEMY_SHEET * slot_no, (signed char)0xdf); /* unset 'tied' flag */
+			g_enemy_sheets[slot_no].flags1.tied = 0;
 		}
 
 		g_finalfight_tumult = 1;

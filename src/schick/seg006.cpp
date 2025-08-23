@@ -498,7 +498,7 @@ void FIG_draw_char_pic(signed short loc, signed short hero_pos)
 void FIG_draw_enemy_pic(signed short loc, signed short id)
 {
 	signed short height_width;
-	Bit8u *p_enemy;
+	struct enemy_sheet *p_enemy;
 	signed short fg_bak;
 	signed short bg_bak;
 	Bit8u* p1;
@@ -506,12 +506,12 @@ void FIG_draw_enemy_pic(signed short loc, signed short id)
 
 	p1 = ((HugePt)g_buffer8_ptr) - 1288L;
 
-	p_enemy = p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + id * SIZEOF_ENEMY_SHEET;
+	p_enemy = &g_enemy_sheets[id - 10];
 
-	if (ds_readbs(GFXTAB_FIGURES_MAIN + host_readbs(p_enemy + ENEMY_SHEET_GFX_ID) * 5) != ds_readws(FIGHT_FIGS_INDEX)) {
+	if (ds_readbs(GFXTAB_FIGURES_MAIN + p_enemy->gfx_id * 5) != ds_readws(FIGHT_FIGS_INDEX)) {
 
-		nvf.src = (Bit8u*)(load_fight_figs(ds_readbs(GFXTAB_FIGURES_MAIN + host_readbs(p_enemy + ENEMY_SHEET_GFX_ID) * 5)));
-		nvf.dst = (Bit8u*)p1;
+		nvf.src = (Bit8u*)load_fight_figs(ds_readbs(GFXTAB_FIGURES_MAIN + p_enemy->gfx_id * 5));
+		nvf.dst = p1;
 		nvf.no = 1;
 		nvf.type = 0;
 		nvf.width = (Bit8u*)&height_width;
@@ -519,8 +519,7 @@ void FIG_draw_enemy_pic(signed short loc, signed short id)
 
 		process_nvf(&nvf);
 
-		ds_writew(FIGHT_FIGS_INDEX,
-			ds_readbs(GFXTAB_FIGURES_MAIN + host_readbs(p_enemy + ENEMY_SHEET_GFX_ID) * 5));
+		ds_writew(FIGHT_FIGS_INDEX, ds_readbs(GFXTAB_FIGURES_MAIN + p_enemy->gfx_id * 5));
 	}
 
 	/* save and set text colors */
@@ -539,7 +538,7 @@ void FIG_draw_enemy_pic(signed short loc, signed short id)
 		g_pic_copy.y2 = 49;
 		g_pic_copy.src = p1;
 		do_pic_copy(0);
-		GUI_print_string(GUI_name_singular(get_monname(host_readbs(p_enemy))), 1, 1);
+		GUI_print_string(GUI_name_singular(get_monname(p_enemy->mon_id)), 1, 1);
 	} else {
 		do_border(g_renderbuf_ptr, 1, 149, 34, 190, 0x1d);
 		g_pic_copy.x1 = 2;
@@ -548,7 +547,7 @@ void FIG_draw_enemy_pic(signed short loc, signed short id)
 		g_pic_copy.y2 = 189;
 		g_pic_copy.src = p1;
 		do_pic_copy(0);
-		GUI_print_string(GUI_name_singular(get_monname(host_readbs(p_enemy))), 1, 193);
+		GUI_print_string(GUI_name_singular(get_monname(p_enemy->mon_id)), 1, 193);
 	}
 
 	g_pic_copy.dst = g_vga_memstart;

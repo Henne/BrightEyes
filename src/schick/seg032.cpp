@@ -184,7 +184,7 @@ signed short FIG_choose_next_enemy(void)
 	signed short retval;
 
 #if !defined(__BORLANDC__)
-	Bit8u *enemy;
+	struct enemy_sheet *enemy;
 	unsigned short i;
 	unsigned short loop_cnt = 0;
 	long tries[20] = {	0, 0, 0, 0, 0,
@@ -212,18 +212,13 @@ signed short FIG_choose_next_enemy(void)
 			for (i = 0; i < 20; i++)
 				D1_ERR("tries[%d] = %ld\n", i, tries[i]);
 
-			/*
-			 * search by hand for an enemy and dump	the
-			 * interesting bits
-			 */
-			enemy = p_datseg + ENEMY_SHEETS;
-			for (i = 0; i < g_nr_of_enemies; i++, enemy += SIZEOF_ENEMY_SHEET) {
-				D1_ERR("Enemy %02d %x %x\n",
-					i, host_readb(enemy),
-					host_readb(enemy + ENEMY_SHEET_ATTACKS_LEFT));
+			/* search by hand for an enemy and dump	the interesting bits */
+			enemy = &g_enemy_sheets[0];
+			for (i = 0; i < g_nr_of_enemies; i++, enemy++) {
 
-				if (host_readb(enemy) &&
-					host_readb(enemy + ENEMY_SHEET_ATTACKS_LEFT))
+				D1_ERR("Enemy %02d %x %x\n", i, enemy->mon_id, enemy->attacks_left);
+
+				if (enemy->mon_id && enemy->attacks_left)
 						retval = i;
 			}
 
@@ -236,11 +231,10 @@ signed short FIG_choose_next_enemy(void)
 
 			return retval;
 		}
-		enemy = p_datseg + ENEMY_SHEETS + retval * SIZEOF_ENEMY_SHEET;
+		enemy = &g_enemy_sheets[retval];
 #endif
 
-	} while (ds_readbs(ENEMY_SHEETS + retval * SIZEOF_ENEMY_SHEET + ENEMY_SHEET_MON_ID) == 0
-	    || ds_readbs(ENEMY_SHEETS + ENEMY_SHEET_ATTACKS_LEFT + retval * SIZEOF_ENEMY_SHEET) == 0);
+	} while (g_enemy_sheets[retval].mon_id == 0 || g_enemy_sheets[retval].attacks_left == 0);
 
 	return retval;
 }
@@ -250,20 +244,21 @@ signed short FIG_choose_next_enemy(void)
  */
 signed short FIG_count_active_enemies(void)
 {
-	Bit8u *enemy;
-	signed short i, retval = 0;
+	struct enemy_sheet *enemy;
+	signed short i;
+	signed short retval = 0;
 
 	for (i = 0; i < 20; i++) {
 
-		enemy = p_datseg + ENEMY_SHEETS + i * SIZEOF_ENEMY_SHEET;
+		enemy = &g_enemy_sheets[i];
 
-		if ((host_readb(enemy + ENEMY_SHEET_MON_ID) != 0) &&
-			!enemy_dead(enemy) &&
-			!enemy_petrified(enemy) &&
-			!enemy_tied(enemy) &&
-			!enemy_mushroom(enemy) &&
-			!enemy_busy(enemy) &&
-			!host_readbs(enemy + ENEMY_SHEET_ROUND_APPEAR))
+		if (enemy->mon_id &&
+			!enemy->flags1.dead &&
+			!enemy->flags1.petrified &&
+			!enemy->flags1.tied &&
+			!enemy->flags1.mushroom &&
+			!enemy->flags1.busy &&
+			!enemy->round_appear)
 		{
 			retval++;
 		}
@@ -279,16 +274,16 @@ signed short FIG_count_active_enemies(void)
  * \return              1 if enemy can act or 0 if not.
  */
 //static
-signed short FIG_is_enemy_active(Bit8u *enemy)
+signed short FIG_is_enemy_active(struct enemy_sheet *enemy)
 {
-	if (enemy_asleep(enemy) ||
-		enemy_dead(enemy) ||
-		enemy_petrified(enemy) ||
-		enemy_dancing(enemy) ||
-		enemy_mushroom(enemy) ||
-		enemy_busy(enemy) ||
-		enemy_tame(enemy) ||
-		(host_readbs(enemy + ENEMY_SHEET_ROUND_APPEAR) > 0))
+	if (enemy->flags1.asleep ||
+		enemy->flags1.dead ||
+		enemy->flags1.petrified ||
+		enemy->flags2.dancing ||
+		enemy->flags1.mushroom ||
+		enemy->flags1.busy ||
+		enemy->flags2.tame ||
+		(enemy->round_appear > 0))
 	{
 		return 0;
 	}
@@ -386,7 +381,7 @@ void FIG_do_round(void)
 	signed short nr_action_phases_left_in_turn; /* number of action phases left in the turn of an actor */
 	signed char is_enemies_turn; /* 0: enemies' turn; 1: heroes' turn */
 	Bit8u* hero;
-	Bit8u* enemy;
+	struct enemy_sheet *enemy;
 	signed short x;
 	signed short y;
 	struct struct_fighter *fighter_ptr;
@@ -469,12 +464,12 @@ void FIG_do_round(void)
 	for (i = 0; i < g_nr_of_enemies; i++) {
 
 		/* set #phases */
-		ds_writeb((ENEMY_SHEETS + ENEMY_SHEET_ATTACKS_LEFT) + SIZEOF_ENEMY_SHEET * i, ds_readbs((ENEMY_SHEETS + ENEMY_SHEET_ATTACKS) + SIZEOF_ENEMY_SHEET * i));
+		g_enemy_sheets[i].attacks_left = g_enemy_sheets[i].attacks;
 
-		nr_enemy_action_phases_left_in_round += ds_readbs((ENEMY_SHEETS + ENEMY_SHEET_ATTACKS) + SIZEOF_ENEMY_SHEET * i);
+		nr_enemy_action_phases_left_in_round += g_enemy_sheets[i].attacks;
 
 		/* set BP */
-		ds_writeb((ENEMY_SHEETS + ENEMY_SHEET_BP) + SIZEOF_ENEMY_SHEET * i, ds_readbs((ENEMY_SHEETS + ENEMY_SHEET_BP_ORIG) + SIZEOF_ENEMY_SHEET * i));
+		g_enemy_sheets[i].bp = g_enemy_sheets[i].bp_orig;
 
 		g_fig_actors_unkn[i + 10] = 0;
 	}
@@ -483,8 +478,7 @@ void FIG_do_round(void)
 
 	/* the variable is set up 'the wrong way round',
 	 * as it will be flipped in the first run */
-	is_enemies_turn = (g_fig_initiative == 2 ? 1 :
-				(g_fig_initiative == 1 ? 0 : random_interval(0, 1)));
+	is_enemies_turn = (g_fig_initiative == 2 ? 1 : (g_fig_initiative == 1 ? 0 : random_interval(0, 1)));
 
 	while ((g_in_fight) && (nr_hero_action_phases_left_in_round + nr_enemy_action_phases_left_in_round > 0)) {
 
@@ -599,10 +593,10 @@ void FIG_do_round(void)
 								sub_ptr_bs(hero + HERO_ENEMY_ID, 20);
 							}
 
-							if (test_bit0(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FLAGS1) + SIZEOF_ENEMY_SHEET * host_readbs(hero + HERO_ENEMY_ID))) /* check 'dead' flag */
+							if (g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].flags1.dead)
 							{
 								/* attacked enemy is dead */
-								if (is_in_byte_array(host_readbs(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_GFX_ID) + SIZEOF_ENEMY_SHEET * host_readbs(hero + HERO_ENEMY_ID)), (Bit8u*)g_two_fielded_sprite_id))
+								if (is_in_byte_array(g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].gfx_id, (Bit8u*)g_two_fielded_sprite_id))
 								{
 									/* attacked dead enemy is two-squares */
 									/* goal: remove tail part */
@@ -617,7 +611,7 @@ void FIG_do_round(void)
 #endif
 
 
-									fighter_ptr = FIG_get_fighter(host_readbs(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FIGHTER_ID) + SIZEOF_ENEMY_SHEET * host_readbs(hero + HERO_ENEMY_ID)));
+									fighter_ptr = FIG_get_fighter(g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].fighter_id);
 									/* intermediate: fighter_ptr points to the FIGHTER entry of the enemy */
 
 									fighter_ptr = FIG_get_fighter(g_fig_twofielded_table[fighter_ptr->twofielded]);
@@ -657,53 +651,50 @@ void FIG_do_round(void)
 
 			actor_id = FIG_choose_next_enemy();
 
-			enemy = ((Bit8u*)p_datseg + ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * actor_id);
+			enemy = &g_enemy_sheets[actor_id];
 
-			dec_ptr_bs((Bit8u*)(enemy) + ENEMY_SHEET_ATTACKS_LEFT);
+			enemy->attacks_left--;
 
-			if (FIG_search_obj_on_cb(actor_id + 10, &x_coord, &y_coord) &&
-				FIG_is_enemy_active((Bit8u*)(enemy)))
+			if (FIG_search_obj_on_cb(actor_id + 10, &x_coord, &y_coord) && FIG_is_enemy_active(enemy))
 			{
 #if !defined(__BORLANDC__)
 				/* BE-fix */
 				x_coord = host_readws((Bit8u*)&x_coord);
 				y_coord = host_readws((Bit8u*)&y_coord);
 #endif
-				if (host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_BLIND) != 0) {
-					dec_ptr_bs((Bit8u*)(enemy) + ENEMY_SHEET_BLIND);
+				if (enemy->blind) {
+					enemy->blind--;
 				} else {
 
 					g_fig_enemy_pic = actor_id + 10;
 
-					host_writebs((Bit8u*)(enemy) + ENEMY_SHEET_ACTION_ID, 1);
+					enemy->action_id = 1;
 
-					enemy_turn((Bit8u*)(enemy), actor_id, x_coord, y_coord);
+					enemy_turn(enemy, actor_id, x_coord, y_coord);
 
-					if ((host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_ACTION_ID) == FIG_ACTION_MELEE_ATTACK) ||
-						(host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_ACTION_ID) == FIG_ACTION_SPELL) ||
-						(host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_ACTION_ID) == FIG_ACTION_USE_ITEM) ||
-						(host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_ACTION_ID) == FIG_ACTION_RANGE_ATTACK))
+					if ((enemy->action_id == FIG_ACTION_MELEE_ATTACK) || (enemy->action_id == FIG_ACTION_SPELL) ||
+						(enemy->action_id == FIG_ACTION_USE_ITEM) || (enemy->action_id == FIG_ACTION_RANGE_ATTACK))
 					{
 
-						FIG_do_enemy_action(enemy, actor_id);
+						FIG_do_enemy_action((Bit8u*)enemy, actor_id);
 
-						if (host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_ENEMY_ID) >= 10) {
-						/* enemy did attack some enemy (by weapon/spell etc.) */
+						if (enemy->enemy_id >= 10) {
+							/* enemy attacks another enemy (by weapon/spell etc.) */
 
-						/* if the tail of a two-squares enemy has been attacked,
-						 * replace ENEMY_SHEET_ENEMY_ID by the main id of that enemy */
-							if (host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_ENEMY_ID) >= 30) {
-								sub_ptr_bs((Bit8u*)(enemy) + ENEMY_SHEET_ENEMY_ID, 20);
+							/* if the tail of a two-squares enemy has been attacked,
+							 * replace enemy->enemy_id by the main id of that enemy */
+							if (enemy->enemy_id >= 30) {
+								enemy->enemy_id -= 20;
 							}
 
-							if (test_bit0(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FLAGS1) + SIZEOF_ENEMY_SHEET * host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_ENEMY_ID))) /* check 'dead' flag */
+							if (test_bit0(p_datseg + ((ENEMY_SHEETS + (enemy->enemy_id - 10)*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FLAGS1))) /* check 'dead' flag */
 							{
 								/* attacked enemy is dead */
-								if (is_in_byte_array(host_readbs(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_GFX_ID) + SIZEOF_ENEMY_SHEET * host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_ENEMY_ID)), (Bit8u*)g_two_fielded_sprite_id))
+								if (is_in_byte_array(g_enemy_sheets[enemy->enemy_id - 10].gfx_id, (Bit8u*)g_two_fielded_sprite_id))
 								{
 									/* attacked dead enemy is two-squares */
 									/* goal: remove tail part */
-									FIG_search_obj_on_cb(host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_ENEMY_ID) + 20, &x, &y);
+									FIG_search_obj_on_cb(enemy->enemy_id + 20, &x, &y);
 									/* (x,y) are the coordinates of the tail of the enemy. redundant as fighter_ptr + FIGHTER_CBX, fighter_ptr + FIGHTER_CBY could have been used later. */
 
 #if !defined(__BORLANDC__)
@@ -712,7 +703,7 @@ void FIG_do_round(void)
 									y = host_readws((Bit8u*)&y);
 #endif
 
-									fighter_ptr = FIG_get_fighter(host_readbs(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FIGHTER_ID) + SIZEOF_ENEMY_SHEET * host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_ENEMY_ID)));
+									fighter_ptr = FIG_get_fighter(g_enemy_sheets[enemy->enemy_id - 10].fighter_id);
 									/* intermediate: fighter_ptr points to the FIGHTER entry of the killed enemy */
 
 									fighter_ptr = FIG_get_fighter(g_fig_twofielded_table[fighter_ptr->twofielded]);
@@ -748,13 +739,14 @@ void FIG_do_round(void)
 						 * It cannot be treated here as the FIGHTER entry of the tail is
 						 * removed in seg005.cpp, which is needed to restore the object under the tail. */
 
-						if (enemy_dead((Bit8u*)(enemy))) { /* check 'dead' flag */
+						if (enemy->flags1.dead) { /* check 'dead' flag */
+
 							/* attacking enemy is dead because of critical attack failure */
-							if (is_in_byte_array(host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_GFX_ID), (Bit8u*)g_two_fielded_sprite_id)) {
+							if (is_in_byte_array(enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id)) {
 								/* attacking dead enemy is two-squares */
 								/* goal: remove tail part */
 
-								fighter_ptr = FIG_get_fighter(host_readbs((Bit8u*)(enemy) + ENEMY_SHEET_FIGHTER_ID));
+								fighter_ptr = FIG_get_fighter(enemy->fighter_id);
 								/* intermediate: fighter_ptr points to the FIGHTER entry of the enemy */
 
 								fighter_ptr = FIG_get_fighter(g_fig_twofielded_table[fighter_ptr->twofielded]);
@@ -1151,7 +1143,7 @@ signed short do_fight(signed short fight_id)
 			if ((g_max_enemies != 0) && !g_fig_discard) {
 
 				for (i = 0; i < 20; i++) {
-					or_ds_bs((ENEMY_SHEETS + ENEMY_SHEET_FLAGS1) + SIZEOF_ENEMY_SHEET * i, 1); /* set 'dead' flag */
+					g_enemy_sheets[i].flags1.dead = 1;
 				}
 			}
 		}
@@ -1221,9 +1213,9 @@ signed short do_fight(signed short fight_id)
 					}
 
 					GRP_save_pos(group_nr | 0x8000);
-					gs_x_target = (x_target_bak);
-					gs_y_target = (y_target_bak);
-					gs_direction = ((signed char)direction_bak);
+					gs_x_target = x_target_bak;
+					gs_y_target = y_target_bak;
+					gs_direction = (signed char)direction_bak;
 					gs_dungeon_level = dungeon_level_bak;
 				}
 

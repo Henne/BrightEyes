@@ -311,7 +311,7 @@ void draw_fight_screen(Bit16u val)
 
 	struct struct_rect rect_bak;
 	Bit8u *hero;
-	Bit8u *p_enemy_sheet;
+	struct enemy_sheet *p_enemy_sheet;
 
 	signed short viewdir_before;
 	signed short viewdir_after;
@@ -672,7 +672,7 @@ void draw_fight_screen(Bit16u val)
 									twofielded_move_tail_first = 1;
 
 									/* create pointer to the head part of the enemy */
-									p_fighter_tmp = FIG_get_fighter(ds_readbs(((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FIGHTER_ID) + target_id * SIZEOF_ENEMY_SHEET));
+									p_fighter_tmp = FIG_get_fighter(g_enemy_sheets[target_id - 10].mon_id);
 
 #ifdef M302de_ORIGINAL_BUGFIX
 									/* Original-Bug 5: */
@@ -698,11 +698,11 @@ void draw_fight_screen(Bit16u val)
 
 										if (list_ii->is_enemy == 1) {
 											/* enemy escapes */
-											p_enemy_sheet = (Bit8u*)FIG_get_enemy_sheet(list_ii->id);
+											p_enemy_sheet = FIG_get_enemy_sheet(list_ii->id);
 											if (p_enemy_sheet) {
-												or_ptr_bs(p_enemy_sheet + ENEMY_SHEET_FLAGS1, 1); /* set 'dead' flag */
-												host_writeb(p_enemy_sheet + ENEMY_SHEET_BP, 0);
-												figlist_remove[list_ii->sheet] = host_readbs(p_enemy_sheet + ENEMY_SHEET_FIGHTER_ID);
+												p_enemy_sheet->flags1.dead = 1;
+												p_enemy_sheet->bp = 0;
+												figlist_remove[list_ii->sheet] = p_enemy_sheet->fighter_id;
 
 												if (list_ii->twofielded != -1) {
 #ifdef M302de_ORIGINAL_BUGFIX

@@ -30,10 +30,6 @@ struct dummy5 {
 	char a[5];
 };
 
-struct dummy62 {
-	char a[62];
-};
-
 /**
  * \brief   compress monsters
  */
@@ -47,10 +43,8 @@ void FIG_tidy_monsters(void)
 	while (i < 20) {
 
 		/* if the monster is not able to fight anymore ... */
-		if ((ds_readbs(ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * i + ENEMY_SHEET_MON_ID) != 0) &&
-			(enemy_dead(((Bit8u*)p_datseg + (ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * i))) ||
-			enemy_mushroom(((Bit8u*)p_datseg + (ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * i))) ||
-			enemy_petrified(((Bit8u*)p_datseg + (ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * i))) ||
+		if (g_enemy_sheets[i].mon_id &&
+			(g_enemy_sheets[i].flags1.dead || g_enemy_sheets[i].flags1.mushroom || g_enemy_sheets[i].flags1.petrified ||
 			((host_readbs(g_current_fight + SIZEOF_FIGHT_MONSTER * i + FIGHT_MONSTERS_ROUND_APPEAR) != 0) && (monsters == 0))))
 		{
 
@@ -67,12 +61,11 @@ void FIG_tidy_monsters(void)
 
 					memset(g_current_fight + SIZEOF_FIGHT_MONSTER * (j + 1) + FIGHT_MONSTERS_ID, 0, SIZEOF_FIGHT_MONSTER);
 
-					*(struct dummy62*)(p_datseg + ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * j) =
-						*(struct dummy62*)(p_datseg + ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * (j + 1));
+					g_enemy_sheets[j] = g_enemy_sheets[j + 1];
 
-					memset(p_datseg + ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * (j + 1), 0, SIZEOF_ENEMY_SHEET);
+					memset(&g_enemy_sheets[j + 1], 0, sizeof(struct enemy_sheet));
 
-					or_ds_bs((ENEMY_SHEETS + ENEMY_SHEET_FLAGS1 + SIZEOF_ENEMY_SHEET) + SIZEOF_ENEMY_SHEET * j, 1); /* set 'dead' flag */
+					g_enemy_sheets[j].flags1.dead = 1;
 				}
 			}
 		} else {
