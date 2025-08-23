@@ -37,7 +37,7 @@ void spell_eigenschaften(void)
 	signed short min;
 	signed short max;
 
-	g_spelltarget_e = (unsigned char*)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET);
+	g_spelltarget_e = (struct enemy_sheet*)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET);
 
 	damage_range_template(host_readws(get_spelltarget_e() + ENEMY_SHEET_DAM1), (Bit8u*)&min, (Bit8u*)&max);
 
@@ -49,8 +49,8 @@ void spell_eigenschaften(void)
           GUI_name_singular(get_monname(host_readbs(get_spelltarget_e()))),
           host_readbs(get_spelltarget_e() + ENEMY_SHEET_LEVEL),	/* Level */
           host_readbs(get_spelltarget_e() + ENEMY_SHEET_AT),	  /* AT */
-          host_readbs(get_spelltarget_e() + ENEMY_SHEET_PA),	  /* PA */
-          host_readbs(get_spelltarget_e() + ENEMY_SHEET_RS),		/* RS */
+          g_spelltarget_e->pa,	  /* PA */
+          g_spelltarget_e->rs,		/* RS */
           host_readbs(get_spelltarget_e() + ENEMY_SHEET_ATTACKS),	/* Attacks */
           (host_readbs(get_spelltarget_e() + ENEMY_SHEET_ATTACKS) > 1) ? get_tx(26) : get_tx(27),
           min,							/* TPmin */
@@ -338,7 +338,7 @@ void spell_blitz(void)
 		/* cast an enemy */
 
 		/* set a pointer to the enemy */
-		g_spelltarget_e = (unsigned char*)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET);
+		g_spelltarget_e = (struct enemy_sheet*)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET);
 
 		/* set the rounds counter */
 		host_writeb(get_spelltarget_e() + ENEMY_SHEET_BLIND, 3);
@@ -425,7 +425,7 @@ void spell_eisenrost(void)
 		}
 	} else {
 		/* target is an enemy */
-		g_spelltarget_e = (unsigned char*)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET);
+		g_spelltarget_e = (struct enemy_sheet*)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET);
 
 		/* check if target is an animal */
 		if (host_readbs(get_spelltarget_e() + ENEMY_SHEET_IS_ANIMAL) != 0)
@@ -433,7 +433,7 @@ void spell_eisenrost(void)
 			sprintf(g_dtp2, get_tx(89));
 		} else {
 			/* check if weapon is already broken */
-			if (host_readbs(get_spelltarget_e() + ENEMY_SHEET_BROKEN) != 0) {
+			if (g_spelltarget_e->weapon_broken != 0) {
 				strcpy(g_dtp2, get_tx(90));
 			} else {
 
@@ -596,10 +596,10 @@ void spell_ignifaxius(void)
 		/* target is an enemy */
 
 		/* set a pointer to the enemy */
-		g_spelltarget_e = (unsigned char*)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET);
+		g_spelltarget_e = (struct enemy_sheet*)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET);
 
 		host_writebs(get_spelltarget_e() + ENEMY_SHEET_RS,
-			host_readbs(get_spelltarget_e() + ENEMY_SHEET_RS) - rs_malus);
+			g_spelltarget_e->rs - rs_malus);
 		sub_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_AT, level / 2);
 		sub_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_PA, level / 2);
 
@@ -658,7 +658,7 @@ void spell_plumbumbarum(void)
 	/* target is an enemy */
 
 	/* set a pointer to the enemy */
-	g_spelltarget_e = (unsigned char*)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET);
+	g_spelltarget_e = (struct enemy_sheet*)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET);
 
 	/* AT-malus of -3 (permanent) */
 	sub_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_AT, 3);

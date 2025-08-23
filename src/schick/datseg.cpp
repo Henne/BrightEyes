@@ -6074,10 +6074,10 @@ signed int g_used_item_pos; // ds:0xe5cc, used_item position
 signed int g_used_item_id; // ds:0xe5ca, used_item ID
 unsigned char *g_used_item_desc; // ds:0xe5c6, pointer to the item description
 signed int g_alchemy_missing_item; // ds:0xe5c4
-unsigned char *g_spelluser_e; // ds:0xe5c0
+struct enemy_sheet *g_spelluser_e; // ds:0xe5c0
 unsigned char *g_spelluser; // ds:0xe5bc
 unsigned char *g_spelltarget; // ds:0xe5b8
-unsigned char *g_spelltarget_e; // ds:0xe5b4, Pointer to enemy
+struct enemy_sheet *g_spelltarget_e; // ds:0xe5b4, Pointer to enemy
 signed int g_spelltest_result; // ds:0xe5b2
 signed int g_menu_selected; // ds:0xe5b0
 signed int g_menu_input_busy; // ds:0xe5ae

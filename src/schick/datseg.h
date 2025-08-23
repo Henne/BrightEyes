@@ -1043,10 +1043,10 @@ extern signed int g_used_item_pos;	// ds:0xe5cc; seg107
 extern signed int g_used_item_id;	// ds:0xe5ca; seg107
 extern unsigned char *g_used_item_desc;	// ds:0xe5c6; seg107
 extern signed int g_alchemy_missing_item;	// ds:0xe5c4; seg104
-extern unsigned char *g_spelluser_e;	// ds:0xe5c0; seg102
+extern struct enemy_sheet *g_spelluser_e;	// ds:0xe5c0; seg102
 extern unsigned char *g_spelluser;	// ds:0xe5bc; seg068, seg098, seg102, seg107
 extern unsigned char *g_spelltarget;	// ds:0xe5b8; seg098-seg102
-extern unsigned char *g_spelltarget_e;	// ds:0xe5b4; seg098-seg102
+extern struct enemy_sheet *g_spelltarget_e;	// ds:0xe5b4; seg098-seg102
 extern signed int g_spelltest_result;	// ds:0xe5b2; seg098, seg099, seg102
 extern signed int g_menu_selected;	// ds:0xe5b0; seg002, seg097
 extern signed int g_menu_input_busy;	// ds:0xe5ae; seg002, seg097

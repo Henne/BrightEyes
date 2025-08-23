@@ -3,7 +3,7 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-signed short MON_cast_spell(Bit8u*, signed char);
+signed short MON_cast_spell(struct enemy_sheet*, signed char);
 
 /* 0x25 */
 void mspell_verwandlung(void);
@@ -65,15 +65,15 @@ signed short MON_get_spell_cost(signed short, signed short);
 
 /* 0x7f */
 /* should be static */
-signed short MON_test_attrib3(Bit8u*, signed short, signed short, signed short, signed char);
+signed short MON_test_attrib3(struct enemy_sheet*, signed short, signed short, signed short, signed char);
 
 /* 0x84 */
 /* should be static */
-signed short MON_test_skill(Bit8u*, signed short, signed char);
+signed short MON_test_skill(struct enemy_sheet*, signed short, signed char);
 
 /* 0x89 */
 /* should be static */
-void MON_sub_ae(Bit8u*, signed short);
+void MON_sub_ae(struct enemy_sheet*, signed short);
 
 #if !defined(__BORLANDC__)
 }

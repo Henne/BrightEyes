@@ -426,7 +426,7 @@ void FIG_latecomers(void)
 	signed short x;
 	signed short y;
 	signed short l4;
-	Bit8u *p_mon;		/* pointer to a monster sheet */
+	struct enemy_sheet *p_enemy;		/* pointer to a monster sheet */
 	struct struct_fighter *fighter;
 	struct struct_fighter *fighter_add;
 
@@ -447,20 +447,21 @@ void FIG_latecomers(void)
 	/* for all enemies in this fight */
 	for (i = 0; i < g_nr_of_enemies; i++) {
 
-		p_mon = p_datseg + ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * i;
+		p_enemy = &g_enemy_sheets[i];
 
 		/* if monster has not appeared */
-		if (host_readbs(p_mon + ENEMY_SHEET_ROUND_APPEAR) > 0) {
+		if (p_enemy->round_appear > 0) {
 
 			/* decrement counter */
-			dec_ptr_bs(p_mon + ENEMY_SHEET_ROUND_APPEAR);
+			p_enemy->round_appear--;
 
-			if (!host_readbs(p_mon + ENEMY_SHEET_ROUND_APPEAR)) {
+			if (!p_enemy->round_appear) {
+
 				/* let monster enter the fight */
 
-				if (!enemy_scared(p_mon)) {
+				if (!p_enemy->flags2.scared) {
 
-					if (is_in_byte_array(host_readbs(p_mon + ENEMY_SHEET_GFX_ID), (Bit8u*)g_two_fielded_sprite_id)) {
+					if (is_in_byte_array(p_enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id)) {
 
 						seg034_718(	host_readbs(g_current_fight + FIGHT_MONSTERS_X + SIZEOF_FIGHT_MONSTER * i),
 								host_readbs(g_current_fight + FIGHT_MONSTERS_Y + SIZEOF_FIGHT_MONSTER * i),
@@ -468,7 +469,7 @@ void FIG_latecomers(void)
 								host_readbs(g_current_fight + FIGHT_MONSTERS_VIEWDIR + SIZEOF_FIGHT_MONSTER * i),
 								1);
 
-						fighter = FIG_get_fighter(host_readbs(p_mon + ENEMY_SHEET_FIGHTER_ID));
+						fighter = FIG_get_fighter(p_enemy->fighter_id);
 
 						fighter->cbx = x;
 						fighter->cby = y;
@@ -480,9 +481,9 @@ void FIG_latecomers(void)
 						fighter_add->cbx = x - a.a[host_readbs(g_current_fight + FIGHT_MONSTERS_VIEWDIR + SIZEOF_FIGHT_MONSTER * i)].x;
 						fighter_add->cby = y - a.a[host_readbs(g_current_fight + FIGHT_MONSTERS_VIEWDIR + SIZEOF_FIGHT_MONSTER * i)].y;
 
-						FIG_remove_from_list(host_readbs(p_mon + ENEMY_SHEET_FIGHTER_ID), 1);
+						FIG_remove_from_list(p_enemy->fighter_id, 1);
 
-						FIG_add_to_list(host_readbs(p_mon + ENEMY_SHEET_FIGHTER_ID));
+						FIG_add_to_list(p_enemy->fighter_id);
 
 						FIG_remove_from_list((signed char)l4, 1);
 
@@ -494,24 +495,24 @@ void FIG_latecomers(void)
 								host_readbs(g_current_fight + FIGHT_MONSTERS_VIEWDIR + SIZEOF_FIGHT_MONSTER * i),
 								0);
 
-						fighter = FIG_get_fighter(host_readbs(p_mon + ENEMY_SHEET_FIGHTER_ID));
+						fighter = FIG_get_fighter(p_enemy->fighter_id);
 
 						fighter->cbx = (signed char)x;
 						fighter->cby = (signed char)y;
 
-						FIG_remove_from_list(host_readbs(p_mon + ENEMY_SHEET_FIGHTER_ID), 1);
+						FIG_remove_from_list(p_enemy->fighter_id, 1);
 
-						FIG_add_to_list(host_readbs(p_mon + ENEMY_SHEET_FIGHTER_ID));
+						FIG_add_to_list(p_enemy->fighter_id);
 					}
 
-					place_obj_on_cb(x, y, i + 10, host_readbs(p_mon + ENEMY_SHEET_GFX_ID),
+					place_obj_on_cb(x, y, i + 10, p_enemy->gfx_id,
 						(signed short)host_readbs(g_current_fight + FIGHT_MONSTERS_VIEWDIR + SIZEOF_FIGHT_MONSTER * i));
 
-					FIG_make_visible(host_readbs(p_mon + ENEMY_SHEET_FIGHTER_ID));
+					FIG_make_visible(p_enemy->fighter_id);
 
 				} else {
 					/* scared enemies entering a fight are marked as dead. does this ever happen? */
-					or_ptr_bs(p_mon + ENEMY_SHEET_FLAGS1, 1); /* set 'dead' flag */
+					p_enemy->flags1.dead = 1;
 				}
 			}
 		}

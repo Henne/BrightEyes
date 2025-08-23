@@ -197,7 +197,7 @@ void FIG_loot_monsters(void)
  */
 void FIG_split_ap(void)
 {
-	signed short l_si;
+	signed short i;
 	signed short ap;
 	signed short known_ap;
 	signed short autofight_bak;
@@ -207,28 +207,28 @@ void FIG_split_ap(void)
 	g_autofight = 0;
 
 	/* calculate ap from all monsters in that fight */
-	for (l_si = 0; l_si < 20; l_si++) {
+	for (i = 0; i < 20; i++) {
 
-		if (ds_readbs(ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * l_si + ENEMY_SHEET_MON_ID) != 0) {
+		if (g_enemy_sheets[i].mon_id) {
 
-			if (gs_known_monsters[ds_readbs(ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * l_si)]) {
+			if (gs_known_monsters[g_enemy_sheets[i].mon_id]) {
 
 				/* monster is already known */
-				known_ap = ds_readbs((ENEMY_SHEETS + ENEMY_SHEET_FIRSTAP) + SIZEOF_ENEMY_SHEET * l_si) / 10;
+				known_ap = g_enemy_sheets[i].first_ap / 10;
 				ap += (known_ap == 0 ? 1 : known_ap);
 			} else {
 				/* first time bonus */
-				ap += ds_readbs((ENEMY_SHEETS + ENEMY_SHEET_FIRSTAP) + SIZEOF_ENEMY_SHEET * l_si);
+				ap += g_enemy_sheets[i].first_ap;
 			}
 		}
 	}
 
-	/* mark each monster type from that fight */
-	for (l_si = 0; l_si < 20; l_si++) {
+	/* mark each type of monster from that fight in the game state */
+	for (i = 0; i < 20; i++) {
 
-		if (ds_readbs(ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * l_si + ENEMY_SHEET_MON_ID) != 0) {
+		if (g_enemy_sheets[i].mon_id) {
 
-			gs_known_monsters[ds_readbs(ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * l_si)] = 1;
+			gs_known_monsters[g_enemy_sheets[i].mon_id] = 1;
 		}
 	}
 
