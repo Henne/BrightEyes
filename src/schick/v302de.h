@@ -349,58 +349,6 @@ static inline unsigned char *get_hero(signed short index) {
 	return g_heroes + index * SIZEOF_HERO;
 }
 
-static inline Bit32s sub_ds_ds(Bit16u off, Bit32s val)
-{
-	return ds_writed(off, ds_readds(off) - val);
-}
-
-/* Increment and Decrement on Bit8s variables in the datasegment */
-
-static inline Bit8s inc_ds_bs_post(Bit16u off)
-{
-	Bit8s val = ds_readbs(off);
-	ds_writeb(off, ds_readbs(off) + 1);
-	return val;
-}
-
-static inline Bit8s dec_ds_bs_post(Bit16u off)
-{
-	Bit8s val = ds_readbs(off);
-	ds_writeb(off, ds_readbs(off) - 1);
-	return val;
-}
-
-
-static inline void add_ds_bs(Bit16u off, Bit8s val)
-{
-	ds_writeb(off, ds_readbs(off) + val);
-}
-
-static inline void and_ds_bs(Bit16u off, Bit8s val)
-{
-	ds_writeb(off, ds_readbs(off) & val);
-}
-
-static inline void or_ds_bs(Bit16u off, const unsigned char val)
-{
-	ds_writeb(off, ds_readb(off) | val);
-}
-
-static inline void or_ds_ws(Bit16u off, const signed short val)
-{
-	ds_writew(off, ds_readw(off) | val);
-}
-
-static inline void xor_ds_bs(Bit16u off, const unsigned char val)
-{
-	ds_writeb(off, ds_readb(off) ^ val);
-}
-
-static inline signed short inc_ds_ws(Bit16u off)
-{
-	return ds_writew(off, ds_readws(off) + 1);
-}
-
 static inline void dec_ptr_ws(Bit8u *p)
 {
 	host_writews(p, host_readws(p) - 1);
@@ -434,11 +382,6 @@ static inline void add_ptr_ws(Bit8u *p, Bit16s val)
 static inline void sub_ptr_ws(Bit8u *p, Bit16s val)
 {
 	host_writews(p, host_readws(p) - val);
-}
-
-static inline void mul_ptr_ws(Bit8u *p, Bit16s val)
-{
-	host_writews(p, host_readws(p) * val);
 }
 
 static inline Bit32s add_ptr_ds(Bit8u *p, Bit32s val)
@@ -711,13 +654,6 @@ static inline unsigned short enemy_dead(Bit8u *enemy) {
 		return 1;
 }
 
-static inline unsigned short enemy_asleep(Bit8u *enemy) {
-	if (((host_readb(enemy + ENEMY_SHEET_FLAGS1) >> 1) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
 /**
  * enemy_petrified() -	check if enemy is petrified
  * @enemy:	ptr to enemy
@@ -726,20 +662,6 @@ static inline unsigned short enemy_asleep(Bit8u *enemy) {
  */
 static inline unsigned short enemy_petrified(Bit8u *enemy) {
 	if (((host_readb(enemy + ENEMY_SHEET_FLAGS1) >> 2) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-static inline unsigned short enemy_busy(Bit8u *enemy) {
-	if (((host_readb(enemy + ENEMY_SHEET_FLAGS1) >> 3) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-static inline unsigned short enemy_tied(Bit8u *enemy) {
-	if (((host_readb(enemy + ENEMY_SHEET_FLAGS1) >> 5) & 1) == 0)
 		return 0;
 	else
 		return 1;
@@ -765,13 +687,6 @@ static inline unsigned short enemy_illusion(Bit8u *enemy) {
 		return 1;
 }
 
-static inline unsigned short enemy_tame(Bit8u *enemy) {
-	if (((host_readb(enemy + ENEMY_SHEET_FLAGS2) >> 0) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
 /**
  * enemy_renegade() -	check if enemy is under boeser blick spell
  * @enemy:	ptr to enemy
@@ -787,13 +702,6 @@ static inline unsigned short enemy_renegade(Bit8u *enemy) {
 
 static inline unsigned short enemy_scared(Bit8u *enemy) {
 	if (((host_readb(enemy + ENEMY_SHEET_FLAGS2) >> 2) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-static inline unsigned short enemy_dancing(Bit8u *enemy) {
-	if (((host_readb(enemy + ENEMY_SHEET_FLAGS2) >> 3) & 1) == 0)
 		return 0;
 	else
 		return 1;
@@ -1103,21 +1011,6 @@ static inline char* get_itemname(unsigned short item)
 #define ds_writew(p, d)		(*(Bit16u*)(ds + p) = (d))
 #define ds_writed(p, d)		(*(Bit32u*)(ds + p) = (d))
 
-#define inc_ds_bs_post(o)	((*(Bit8s*)(ds + (o)))++)
-#define dec_ds_bs_post(o)	((*(Bit8s*)(ds + (o)))--)
-
-#define add_ds_bs(o, val)	((*(Bit8s*)(ds + (o)))+= (val))
-
-#define and_ds_bs(o, v)		(*(Bit8s*)(ds + o) &= (v))
-#define or_ds_bs(o, v)		(*(Bit8s*)(ds + o) |= (v))
-#define xor_ds_bs(o, v)		(*(Bit8s*)(ds + o) ^= (v))
-
-#define inc_ds_ws(o)		(++(*(Bit16s*)(ds + (o))))
-
-#define or_ds_ws(o, v)		(*(Bit16s*)(ds + o) |= (v))
-
-#define sub_ds_ds(o, v)		(*(Bit32s*)(ds + (o)) -= (v))
-
 #define inc_ptr_bs(p)		((*(Bit8s*)(p))++)
 #define dec_ptr_bs(p)		((*(Bit8s*)(p))--)
 
@@ -1126,13 +1019,12 @@ static inline char* get_itemname(unsigned short item)
 
 #define or_ptr_bs(p, v)		(*(Bit8s*)(p) |= (v))
 #define and_ptr_bs(p, v)	(*(Bit8s*)(p) &= (v))
+
 #define add_ptr_bs(p, v)	(*(Bit8s*)(p) += (v))
 #define sub_ptr_bs(p, v)	(*(Bit8s*)(p) -= (v))
 
-
 #define add_ptr_ws(p, v)	(*(Bit16s*)(p) += (v))
 #define sub_ptr_ws(p, v)	(*(Bit16s*)(p) -= (v))
-#define mul_ptr_ws(p, v)	(*(Bit16s*)(p) *= (v))
 
 #define add_ptr_ds(p, v)	(*(Bit32s*)(p) += (v))
 #define sub_ptr_ds(p, v)	(*(Bit32s*)(p) -= (v))
@@ -1200,17 +1092,12 @@ struct bittest {
 #define hero_seen_phantom_set(hero, v) ((*(struct hero_flags*)(hero + HERO_FLAGS1)).seen_phantom = v)
 
 #define enemy_dead(enemy)	(((struct enemy_sheet*)(enemy))->flags1.dead)
-#define enemy_asleep(enemy)	(((struct enemy_sheet*)(enemy))->flags1.asleep)
 #define enemy_petrified(enemy)	(((struct enemy_sheet*)(enemy))->flags1.petrified)
-#define enemy_busy(enemy)	(((struct enemy_sheet*)(enemy))->flags1.busy)
-#define enemy_tied(enemy)	(((struct enemy_sheet*)(enemy))->flags1.tied)
 #define enemy_mushroom(enemy)	(((struct enemy_sheet*)(enemy))->flags1.mushroom)
 #define enemy_illusion(enemy)	(((struct enemy_sheet*)(enemy))->flags1.illusion)
 
-#define enemy_tame(enemy)	(((struct enemy_sheet*)(enemy))->flags2.tame)
 #define enemy_renegade(enemy)	(((struct enemy_sheet*)(enemy))->flags2.renegade)
 #define enemy_scared(enemy)	(((struct enemy_sheet*)(enemy))->flags2.scared)
-#define enemy_dancing(enemy)	(((struct enemy_sheet*)(enemy))->flags2.dancing)
 
 #define add_inventory_quantity(i1, i2, hero) (    ((struct inventory*)(hero + HERO_INVENTORY))[i1].quantity+=((struct inventory*)(hero + HERO_INVENTORY))[i2].quantity)
 

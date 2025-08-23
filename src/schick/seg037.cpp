@@ -752,7 +752,7 @@ void enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed short x
 
 		/* F144: final fight */
 
-		if (enemy_tied((Bit8u*)enemy)) {
+		if (enemy->flags1.tied) {
 			enemy->bp = 0;
 		}
 	}
