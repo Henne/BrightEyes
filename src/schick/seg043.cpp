@@ -614,7 +614,7 @@ void FIG_do_enemy_action(Bit8u* monster, signed short monster_pos)
 
 				/* spellcast */
 
-				l14 = ds_readbs((MON_SPELL_DESCRIPTIONS + MON_SPELL_DESCRIPTIONS_ANI_ID) + SIZEOF_MON_SPELL_DESCRIPTIONS * host_readbs((Bit8u*)(monster) + ENEMY_SHEET_CUR_SPELL));
+				l14 = g_mon_spell_descriptions[((struct enemy_sheet*)monster)->cur_spell].ani_id;
 
 				*g_dtp2 = '\0';
 

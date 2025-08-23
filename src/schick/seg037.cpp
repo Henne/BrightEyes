@@ -391,18 +391,17 @@ signed short test_foe_range_attack(signed short x, signed short y, const signed 
 }
 
 
-signed short get_foe_attack_mode(signed short a1, signed short a2)
-	/* a1: ID of monster spell */
+signed short get_foe_attack_mode(signed short mspell_id, signed short a2)
 {
 	signed short retval = 0;
-	Bit8u *ptr = p_datseg + MON_SPELL_DESCRIPTIONS + a1 * SIZEOF_MON_SPELL_DESCRIPTIONS;
+	struct mon_spell_description *desc = &g_mon_spell_descriptions[mspell_id];
 
 	if (a2 == 0) {
 
-		if ((host_readbs(ptr + MON_SPELL_DESCRIPTIONS_MODE) == 3) || (host_readbs(ptr + MON_SPELL_DESCRIPTIONS_MODE) == 2)) {
+		if ((desc->mode == 3) || (desc->mode == 2)) {
 			retval = 2;
 		} else {
-			if (host_readbs(ptr + MON_SPELL_DESCRIPTIONS_MODE) == 1) {
+			if (desc->mode == 1) {
 				retval = 1;
 			} else {
 				retval = 3;
@@ -410,9 +409,9 @@ signed short get_foe_attack_mode(signed short a1, signed short a2)
 		}
 
 	} else {
-		if (host_readbs(ptr + MON_SPELL_DESCRIPTIONS_MODE) == 3) {
+		if (desc->mode == 3) {
 			retval = 1;
-		} else if (host_readbs(ptr + MON_SPELL_DESCRIPTIONS_MODE) == 0) {
+		} else if (desc->mode == 0) {
 			retval = 3;
 		}
 	}
@@ -471,7 +470,7 @@ signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signe
 
 			l2 = ds_readbs(MON_SPELL_REPERTOIRE + enemy->mag_id * 5 + l_si);
 
-			if (ds_readbs((MON_SPELL_DESCRIPTIONS_UNKN1 + MON_SPELL_DESCRIPTIONS) + l2 * SIZEOF_MON_SPELL_DESCRIPTIONS) == 1) {
+			if (g_mon_spell_descriptions[l2].unkn1 == 1) {
 
 				if (random_schick(100) < 75) {
 					l7 = 1;
@@ -495,7 +494,7 @@ signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signe
 				done = 1;
 			} else {
 
-				if (!ds_readbs((MON_SPELL_DESCRIPTIONS + MON_SPELL_DESCRIPTIONS_UNKN1) + l2 * SIZEOF_MON_SPELL_DESCRIPTIONS)) {
+				if (!g_mon_spell_descriptions[l2].unkn1) {
 
 					while (enemy->bp && (done == 0)) {
 

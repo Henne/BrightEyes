@@ -212,6 +212,7 @@ extern signed char g_monname_genders[78];
 
 extern const signed short* g_magic_schools_index[9];
 extern void (*g_spell_handlers[86])(void);		//ds:0x0dbb; seg098
+extern struct mon_spell_description g_mon_spell_descriptions[15];	//ds:0x0f13; seg037, seg043, seg102
 extern void (*g_mon_spellhandlers[15])(void);		//ds:0x0fc2; seg102
 
 extern signed char g_nvftab_figures_rangeweapon[22][3][4];	//ds:0x10dc; seg002, seg033, seg039

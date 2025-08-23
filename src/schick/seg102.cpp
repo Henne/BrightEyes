@@ -113,11 +113,11 @@ signed short MON_get_target_RS(void)
 	}
 }
 
-signed short MON_get_spell_cost(signed short mspell_no, signed short flag)
+signed short MON_get_spell_cost(signed short mspell_id, signed short flag)
 {
 	signed char cost;
 
-	cost = ds_readbs((MON_SPELL_DESCRIPTIONS + MON_SPELL_DESCRIPTIONS_AE_COST) + SIZEOF_MON_SPELL_DESCRIPTIONS * mspell_no);
+	cost = g_mon_spell_descriptions[mspell_id].ae_cost;
 
 	if (flag != 0) {
 
@@ -151,9 +151,7 @@ signed short MON_test_attrib3(struct enemy_sheet *monster, signed short attrib1,
 
 	randval = dice_roll(3, 20, handicap);
 
-	attr_sum = host_readbs((Bit8u*)monster + ENEMY_SHEET_ATTRIB + 2 * attrib1)
-		+ host_readbs((Bit8u*)monster + ENEMY_SHEET_ATTRIB + 2 * attrib2)
-		+ host_readbs((Bit8u*)monster + ENEMY_SHEET_ATTRIB + 2 * attrib3);
+	attr_sum = monster->attrib[2 * attrib1] + monster->attrib[2 * attrib2] + monster->attrib[2 * attrib3];
 
 	return attr_sum - randval + 1;
 #else
@@ -167,9 +165,9 @@ signed short MON_test_attrib3(struct enemy_sheet *monster, signed short attrib1,
 	signed short fail = 0;
 	signed char attrib [3];
 
-	attrib[0] = host_readbs((Bit8u*)monster + ENEMY_SHEET_ATTRIB + 2 * attrib1);
-	attrib[1] = host_readbs((Bit8u*)monster + ENEMY_SHEET_ATTRIB + 2 * attrib2);
-	attrib[2] = host_readbs((Bit8u*)monster + ENEMY_SHEET_ATTRIB + 2 * attrib3);
+	attrib[0] = monster->attrib[2 * attrib1];
+	attrib[1] = monster->attrib[2 * attrib2];
+	attrib[2] = monster->attrib[2 * attrib3];
 
 #if !defined(__BORLANDC__)
 	D1_INFO(" (%s %d/%s %d/%s %d) ->",
@@ -251,29 +249,30 @@ signed short MON_test_attrib3(struct enemy_sheet *monster, signed short attrib1,
 #endif
 }
 
-signed short MON_test_skill(struct enemy_sheet *monster, signed short mspell_no, signed char handicap)
-/* called only from a single position, in MON_cast_spell(..) */
-{
-	Bit8u *desc;
 
-	desc = p_datseg + MON_SPELL_DESCRIPTIONS + SIZEOF_MON_SPELL_DESCRIPTIONS * mspell_no;
+/* called only from a single position, in MON_cast_spell(..) */
+signed short MON_test_skill(struct enemy_sheet *monster, signed short mspell_id, signed char handicap)
+{
+	struct mon_spell_description *desc;
+
+	desc = &g_mon_spell_descriptions[mspell_id];
 
 	/* depends on MR */
-	if (host_readbs(desc + MON_SPELL_DESCRIPTIONS_VS_MR) != 0) {
+	if (desc->vs_mr) {
 
 		/* add MR */
-		handicap += (monster->enemy_id >= 10) ?	g_enemy_sheets[monster->enemy_id].mr : host_readbs(get_hero(monster->enemy_id - 1) + HERO_MR);
+		handicap += (monster->enemy_id >= 10 ?	g_enemy_sheets[monster->enemy_id].mr : host_readbs(get_hero(monster->enemy_id - 1) + HERO_MR));
 	}
 
 	/* check if the monster spell has a valid ID */
-	if ((mspell_no >= 1) && (mspell_no <= 14)) {
+	if ((mspell_id >= 1) && (mspell_id <= 14)) {
+
 #if !defined(__BORLANDC__)
-		D1_INFO("Gegnerischer Zauber %s Probe %+d",names_mspell[mspell_no], handicap);
+		D1_INFO("Gegnerischer Zauber %s Probe %+d", names_mspell[mspell_id], handicap);
 #endif
+
 		/* TODO: balancing problem: enemy spells are always cast with skill value 0 */
-		return MON_test_attrib3(monster, host_readbs(desc + MON_SPELL_DESCRIPTIONS_ATTRIB1),
-			host_readbs(desc + MON_SPELL_DESCRIPTIONS_ATTRIB2), host_readbs(desc + MON_SPELL_DESCRIPTIONS_ATTRIB3),
-			handicap);
+		return MON_test_attrib3(monster, desc->attrib1, desc->attrib2, desc->attrib3, handicap);
 	}
 
 	return 0;

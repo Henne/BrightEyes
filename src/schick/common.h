@@ -360,11 +360,6 @@ struct informer {
 	signed char unknown;	/* {0, 1} */
 };
 
-struct struct_enemy_attrib {
-	Bit8s orig;
-	Bit8s current;
-};
-
 struct enemy_flags1 {
 	/* enemy + 0x31 */
 	unsigned short dead		:1;
@@ -398,7 +393,7 @@ struct enemy_sheet {
 	Bit8s mon_id;
 	Bit8s gfx_id;
 	Bit8s rs;
-	struct struct_enemy_attrib attribs[7];
+	Bit8s attrib[14]; // used in steps of 2 for positive attribs only
 	Bit16s le_orig;
 	Bit16s le;
 	Bit16s ae_orig;
@@ -1974,16 +1969,15 @@ enum { /* note that the order differs from the one in HERO_TYPE... :( */
 	SPELL_DESC_HEROTYPE_SELF = 5
 };
 
-enum {
-	MON_SPELL_DESCRIPTIONS_AE_COST	= 0,
-	MON_SPELL_DESCRIPTIONS_MODE	= 1,
-	MON_SPELL_DESCRIPTIONS_UNKN1	= 2,
-	MON_SPELL_DESCRIPTIONS_ATTRIB1	= 3,
-	MON_SPELL_DESCRIPTIONS_ATTRIB2	= 4,
-	MON_SPELL_DESCRIPTIONS_ATTRIB3	= 5,
-	MON_SPELL_DESCRIPTIONS_VS_MR	= 6,
-	MON_SPELL_DESCRIPTIONS_ANI_ID	= 7,
-	SIZEOF_MON_SPELL_DESCRIPTIONS	= 8 /* size of entry at MON_SPELL_DESCRIPTIONS in bytes */
+struct mon_spell_description {
+	Bit8s ae_cost;
+	Bit8s mode;
+	Bit8s unkn1;
+	Bit8s attrib1;
+	Bit8s attrib2;
+	Bit8s attrib3;
+	Bit8s vs_mr;
+	Bit8s ani_id;
 };
 
 enum {
