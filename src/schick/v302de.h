@@ -1199,18 +1199,18 @@ struct bittest {
 
 #define hero_seen_phantom_set(hero, v) ((*(struct hero_flags*)(hero + HERO_FLAGS1)).seen_phantom = v)
 
-#define enemy_dead(enemy)	(((struct enemy_sheets*)(enemy))->flags1.dead)
-#define enemy_asleep(enemy)	(((struct enemy_sheets*)(enemy))->flags1.asleep)
-#define enemy_petrified(enemy)	(((struct enemy_sheets*)(enemy))->flags1.petrified)
-#define enemy_busy(enemy)	(((struct enemy_sheets*)(enemy))->flags1.busy)
-#define enemy_tied(enemy)	(((struct enemy_sheets*)(enemy))->flags1.tied)
-#define enemy_mushroom(enemy)	(((struct enemy_sheets*)(enemy))->flags1.mushroom)
-#define enemy_illusion(enemy)	(((struct enemy_sheets*)(enemy))->flags1.illusion)
+#define enemy_dead(enemy)	(((struct enemy_sheet*)(enemy))->flags1.dead)
+#define enemy_asleep(enemy)	(((struct enemy_sheet*)(enemy))->flags1.asleep)
+#define enemy_petrified(enemy)	(((struct enemy_sheet*)(enemy))->flags1.petrified)
+#define enemy_busy(enemy)	(((struct enemy_sheet*)(enemy))->flags1.busy)
+#define enemy_tied(enemy)	(((struct enemy_sheet*)(enemy))->flags1.tied)
+#define enemy_mushroom(enemy)	(((struct enemy_sheet*)(enemy))->flags1.mushroom)
+#define enemy_illusion(enemy)	(((struct enemy_sheet*)(enemy))->flags1.illusion)
 
-#define enemy_tame(enemy)	(((struct enemy_sheets*)(enemy))->flags2.tame)
-#define enemy_renegade(enemy)	(((struct enemy_sheets*)(enemy))->flags2.renegade)
-#define enemy_scared(enemy)	(((struct enemy_sheets*)(enemy))->flags2.scared)
-#define enemy_dancing(enemy)	(((struct enemy_sheets*)(enemy))->flags2.dancing)
+#define enemy_tame(enemy)	(((struct enemy_sheet*)(enemy))->flags2.tame)
+#define enemy_renegade(enemy)	(((struct enemy_sheet*)(enemy))->flags2.renegade)
+#define enemy_scared(enemy)	(((struct enemy_sheet*)(enemy))->flags2.scared)
+#define enemy_dancing(enemy)	(((struct enemy_sheet*)(enemy))->flags2.dancing)
 
 #define add_inventory_quantity(i1, i2, hero) (    ((struct inventory*)(hero + HERO_INVENTORY))[i1].quantity+=((struct inventory*)(hero + HERO_INVENTORY))[i2].quantity)
 

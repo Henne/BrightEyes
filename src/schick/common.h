@@ -292,35 +292,6 @@ enum {
 
 #define SIZEOF_HERO_POISON (5)
 
-struct enemy_flags1 {
-	/* enemy + 0x31 */
-	unsigned short dead		:1;
-	unsigned short asleep		:1;
-	unsigned short petrified	:1; /* 1: enemy is petrified (from 'Paralue' spell) */
-	unsigned short busy		:1;
-	unsigned short bit4		:1; /* unused? */
-	unsigned short tied		:1; /* 1: enemy is tied (from 'Band und Fessel' spell; all enemies in the final fight except the Orkchampion) */
-	unsigned short mushroom		:1; /* 1: enemy is a mushroom (from 'Salander' spell) */
-	unsigned short illusion		:1;
-};
-
-struct enemy_flags2 {
-	/* enemy + 0x32 */
-	unsigned short tame		:1; /* from 'Bannbaladin', 'Herr der Tiere' or 'Sanftmut' spell */
-	unsigned short renegade		:1; /* from 'Boeser Blick' spell. removed by 'Horriphobus' spell or Angstgift. */
-	unsigned short scared		:1; /* from 'Horriphobus' spell or Angstgift */
-	unsigned short dancing		:1; /* from 'Zwingtanz' spell */
-	unsigned short bit12		:1; /* unused? */
-	unsigned short bit13		:1; /* unused? */
-	unsigned short bit14		:1; /* unused? */
-	unsigned short bit15		:1; /* unused? */
-};
-
-/* remark siebenstreich 2021-08-15:
- * I tried to combine these two structs into a single 2-byte bitfield 'enemy_flags' (similar to 'inventory_flags' below)
- * Subsequently, the macros enemy_dead, enemy_asleep etc. in v302de.h had to be adjusted.
- * However, no matter what I tried, this always broke binary BCC-compatibility. */
-
 struct item_flags {
 	/* item + 0x02 */
 	unsigned short armor		:1;
@@ -389,34 +360,82 @@ struct informer {
 	signed char unknown;	/* {0, 1} */
 };
 
-/* dummy */
-struct enemy_sheets {
-	signed char mon_id;
-	signed char gfx_id;
-	signed char v[0x2f];
+struct struct_enemy_attrib {
+	Bit8s orig;
+	Bit8s current;
+};
 
-	/* 0x31 */
+struct enemy_flags1 {
+	/* enemy + 0x31 */
+	unsigned short dead		:1;
+	unsigned short asleep		:1;
+	unsigned short petrified	:1; /* 1: enemy is petrified (from 'Paralue' spell) */
+	unsigned short busy		:1;
+	unsigned short bit4		:1; /* unused? */
+	unsigned short tied		:1; /* 1: enemy is tied (from 'Band und Fessel' spell; all enemies in the final fight except the Orkchampion) */
+	unsigned short mushroom		:1; /* 1: enemy is a mushroom (from 'Salander' spell) */
+	unsigned short illusion		:1;
+};
+
+struct enemy_flags2 {
+	/* enemy + 0x32 */
+	unsigned short tame		:1; /* from 'Bannbaladin', 'Herr der Tiere' or 'Sanftmut' spell */
+	unsigned short renegade		:1; /* from 'Boeser Blick' spell. removed by 'Horriphobus' spell or Angstgift. */
+	unsigned short scared		:1; /* from 'Horriphobus' spell or Angstgift */
+	unsigned short dancing		:1; /* from 'Zwingtanz' spell */
+	unsigned short bit12		:1; /* unused? */
+	unsigned short bit13		:1; /* unused? */
+	unsigned short bit14		:1; /* unused? */
+	unsigned short bit15		:1; /* unused? */
+};
+
+/* remark siebenstreich 2021-08-15:
+ * I tried to combine these two structs into a single 2-byte bitfield 'enemy_flags' (similar to 'inventory_flags' below)
+ * Subsequently, the macros enemy_dead, enemy_asleep etc. in v302de.h had to be adjusted.
+ * However, no matter what I tried, this always broke binary BCC-compatibility. */
+
+struct enemy_sheet {
+	Bit8s mon_id;
+	Bit8s gfx_id;
+	Bit8s rs;
+	struct struct_enemy_attrib attribs[7];
+	Bit16s le_orig;
+	Bit16s le;
+	Bit16s ae_orig;
+	Bit16s ae;
+	Bit8s  mr;
+	Bit8s  first_ap;
+	Bit8s  attacks;
+	Bit8s  at;
+	Bit8s  pa;
+	Bit16s dam1;
+	Bit16s dam2;
+	Bit8s  bp_orig;
+	Bit8s  bp;
+	Bit8s  magic;
+	Bit8s  mag_id;
+	Bit8s  fighter_id;
+	Bit8s  viewdir;
+	Bit8s  attacks_left;	 /* number attacks left in the current turn of a battle */
+	Bit8s  level;
+	Bit8s  dummy3;
+	Bit8s  action_id;
+	Bit8s  cur_spell;
+	Bit8s  enemy_id;
+	Bit8s  saftkraft;		/* stores extra damage of spell 'Saft, Kraft, Monstermacht' */
+	Bit8s  blind;			/* blind rounds remaining from 'Blitz' spell */
+	Bit8s  weapon_broken;	/* weapon broken? 0	= no, 1	= yes */
 	struct enemy_flags1 flags1;
-
-	/* 0x32 */
 	struct enemy_flags2 flags2;
-
-	/* 0x33 */
-	signed char unused_8;
-	signed char size;
-	signed char round_appear;
-	signed char flags3;
-
-	/* 0x37 */
-	signed char nr_shoot;
-	/* 0x38 */
-	signed short damage_shoot;
-	/* 0x3a */
-	signed char nr_throw;
-	/* 0x3b */
-	signed short damage_throw;
-	/* 0x3d */
-	signed char le_flee;
+	Bit8s	unused8;
+	Bit8s	size;
+	Bit8s	round_appear;
+	Bit8s	is_animal;		/* is the enemy an animal? */
+	Bit8s	shots;
+	Bit16s	shot_dam;
+	Bit8s	throws;
+	Bit16s	throw_dam;
+	Bit8s 	le_flee;
 };
 
 enum {

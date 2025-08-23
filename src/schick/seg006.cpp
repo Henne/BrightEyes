@@ -184,7 +184,7 @@ Bit8u* FIG_get_enemy_sheet(signed short fighter_id)
 #if !defined(__BORLANDC__)
 			return ((Bit8u*)p_datseg + ENEMY_SHEETS + i * SIZEOF_ENEMY_SHEET);
 #else
-			return (Bit8u*)&(((struct enemy_sheets*)(p_datseg + ENEMY_SHEETS))[i]);
+			return (Bit8u*)&(((struct enemy_sheet*)(p_datseg + ENEMY_SHEETS))[i]);
 #endif
 	}
 
