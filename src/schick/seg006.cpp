@@ -175,20 +175,16 @@ Bit8u* FIG_get_hero_ptr(signed short v1)
 	return get_hero(0);
 }
 
-Bit8u* FIG_get_enemy_sheet(signed short fighter_id)
+struct enemy_sheet* FIG_get_enemy_sheet(const signed short fighter_id)
 {
 	signed short i;
 
 	for (i = 0; i < 20; i++) {
-		if (fighter_id == ds_readbs(ENEMY_SHEETS + ENEMY_SHEET_FIGHTER_ID + (i * SIZEOF_ENEMY_SHEET)))
-#if !defined(__BORLANDC__)
-			return ((Bit8u*)p_datseg + ENEMY_SHEETS + i * SIZEOF_ENEMY_SHEET);
-#else
-			return (Bit8u*)&(((struct enemy_sheet*)(p_datseg + ENEMY_SHEETS))[i]);
-#endif
+		if (fighter_id == g_enemy_sheets[i].fighter_id)
+			return &g_enemy_sheets[i];
 	}
 
-	return 0;
+	return NULL;
 }
 
 void FIG_set_sheet(signed char fighter_id, signed char val)

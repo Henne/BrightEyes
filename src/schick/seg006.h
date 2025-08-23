@@ -14,7 +14,7 @@ void FIG_draw_pic(void);
 
 Bit8u* FIG_get_hero_ptr(signed short);
 
-Bit8u* FIG_get_enemy_sheet(signed short);
+struct enemy_sheet* FIG_get_enemy_sheet(const signed short);
 
 void FIG_set_sheet(signed char, signed char);
 
