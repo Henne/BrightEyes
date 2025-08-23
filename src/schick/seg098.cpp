@@ -142,7 +142,7 @@ void FIG_do_spell_damage(signed short le)
 		/* attack enemy */
 
 		/* set a pointer to the enemy */
-		g_spelltarget_e = (struct enemy_sheet*)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET);
+		g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
 		/* do the damage */
 		FIG_damage_enemy(get_spelltarget_e(), le, 0);
@@ -181,7 +181,7 @@ signed short get_attackee_parade(void)
 		/* attacked an enemy */
 
 		/* set a global pointer to the target */
-		g_spelltarget_e = (struct enemy_sheet*)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET);
+		g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
 		return g_spelltarget_e->pa;
 	}
@@ -207,7 +207,7 @@ signed short get_attackee_rs(void)
 		/* attacked an enemy */
 
 		/* set a global pointer to the target */
-		g_spelltarget_e = (struct enemy_sheet*)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET);
+		g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
 		return g_spelltarget_e->rs;
 	}

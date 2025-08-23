@@ -106,15 +106,13 @@ void spell_gardanium(void)
 void spell_illusionen(void)
 {
 	/* Set pointer to enemy target */
-	g_spelltarget_e = (struct enemy_sheet*)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET));
+	g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
 	/* check if enemy is an illusion */
-	if (enemy_illusion(get_spelltarget_e())) {
+	if (g_spelltarget_e->flags1.illusion) {
 
 		/* AEcosts = enemy level - spelluser_level */
-		ds_writew(SPELL_SPECIAL_AECOST,
-			(host_readbs(get_spelltarget_e() + ENEMY_SHEET_LEVEL)
-			 -host_readbs(get_spelluser() + HERO_LEVEL)) * 2);
+		ds_writew(SPELL_SPECIAL_AECOST,	(g_spelltarget_e->level - host_readbs(get_spelluser() + HERO_LEVEL)) * 2);
 
 		/* AEcost are at least 5 */
 		if (ds_readws(SPELL_SPECIAL_AECOST) < 5)
@@ -127,13 +125,12 @@ void spell_illusionen(void)
 		} else {
 			/* YES: spell has effect */
 			g_spell_illusionen = 1;
-			/* kill enemy */
-			or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS1, 1); /* set 'dead' flag */
+			/* set 'dead' flag */
+			g_spelltarget_e->flags1.dead = 1;
 		}
 	} else {
 		/* print a failure message */
-		sprintf(g_dtp2,	get_tx(3),
-			GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1));
+		sprintf(g_dtp2,	get_tx(3), GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 
 		/* costs 2 AE */
 		ds_writew(SPELL_SPECIAL_AECOST, 2);
@@ -198,19 +195,18 @@ void spell_band(void)
 		/* cast enemy */
 
 		/* Set pointer to enemy target */
-		g_spelltarget_e = (struct enemy_sheet*)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET));
+		g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
-		if (host_readbs(get_spelltarget_e() + ENEMY_SHEET_GFX_ID) == 0x1c) {
+		if (g_spelltarget_e->gfx_id == 0x1c) {
 			/* does not work on skeletons */
 			ds_writew(SPELL_SPECIAL_AECOST, -2);
 			return;
 		}
 
-		or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS1, 0x20); /* set 'tied' flag */
+		/* set 'tied' flag */
+		g_spelltarget_e->flags1.tied = 1;
 
-		sprintf(g_dtp2, get_tx(6),
-				(Bit8u*)(GUI_names_grammar((signed short)0x8000,
-					host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
+		sprintf(g_dtp2, get_tx(6), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 	} else {
 		/* cast hero */
 
@@ -237,51 +233,50 @@ void spell_band(void)
 
 void spell_bannbaladin(void)
 {
-
 	/* Set pointer to enemy target */
-	g_spelltarget_e = (struct enemy_sheet*)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET));
+	g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
-	if (host_readbs(get_spelltarget_e() + ENEMY_SHEET_IS_ANIMAL) != 0) {
+	if (g_spelltarget_e->is_animal != 0) {
 		/* spell does not work on animals */
 
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 
-		sprintf(g_dtp2,	get_tx(8),
-				(Bit8u*)(GUI_names_grammar(0,
-					host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
+		sprintf(g_dtp2,	get_tx(8), (Bit8u*)GUI_names_grammar(0, g_spelltarget_e->mon_id, 1));
 	} else {
 
-		if (host_readbs(get_spelltarget_e() + ENEMY_SHEET_GFX_ID) == 0x1c) {
+		if (g_spelltarget_e->gfx_id == 0x1c) {
 			/* spell does not work on skeletons */
 			ds_writew(SPELL_SPECIAL_AECOST, -2);
 			return;
 		}
 
-		or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS2, 1); /* set 'tame' flag */
+		/* set 'tame' flag */
+		g_spelltarget_e->flags2.tame = 1;
 
-		sprintf(g_dtp2,	get_tx(9),
-				(Bit8u*)(GUI_names_grammar((signed short)0x8000,
-					host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
+		sprintf(g_dtp2,	get_tx(9), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 	}
 }
 
 void spell_boeser_blick(void)
 {
 	/* set attacked foe */
-	g_spelltarget_e = (struct enemy_sheet*)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET));
+	g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
 	/* this spell does not work on all kind of skeletons */
-	if (host_readb(get_spelltarget_e() + ENEMY_SHEET_GFX_ID) == 0x1c) {
-		ds_writew(SPELL_SPECIAL_AECOST, -2);
-	} else {
-		or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS2, 2); /* set 'renegade' flag */
+	if (g_spelltarget_e->gfx_id == 0x1c) {
 
-		host_writeb(get_spelltarget_e() + ENEMY_SHEET_ATTACKS, 2); /* set number of attacks to 2 */
+		ds_writew(SPELL_SPECIAL_AECOST, -2);
+
+	} else {
+
+		/* set 'renegade' flag */
+		g_spelltarget_e->flags2.renegade = 1;
+
+		/* set number of attacks to 2 */
+		g_spelltarget_e->attacks = 2;
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(10),
-			(char*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
-
+		sprintf(g_dtp2,	get_tx(10), (char*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 	}
 }
 
@@ -295,10 +290,10 @@ void spell_grosse_gier(void)
 
 void spell_grosse_ver(void)
 {
-	g_spelltarget_e = (struct enemy_sheet*)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET));
+	g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
 	/* this spell does not work on all kind of skeletons */
-	if (host_readb(get_spelltarget_e() + ENEMY_SHEET_GFX_ID) == 0x1c) {
+	if (g_spelltarget_e->gfx_id == 0x1c) {
 		ds_writew(SPELL_SPECIAL_AECOST, -2);
 		return;
 	} else {
@@ -308,61 +303,55 @@ void spell_grosse_ver(void)
 	}
 
 	/* Sub -2 from AT */
-	host_writeb(get_spelltarget_e() + ENEMY_SHEET_AT,
-		host_readb(get_spelltarget_e() + ENEMY_SHEET_AT) - 2);
+	g_spelltarget_e->at = g_spelltarget_e->at - 2;
 
 	/* Sub -2 from PA */
-	host_writeb(get_spelltarget_e() + ENEMY_SHEET_PA,
-		host_readb(get_spelltarget_e() + ENEMY_SHEET_PA) - 2);
+	g_spelltarget_e->pa = g_spelltarget_e->pa - 2;
 }
 
 void spell_herrdertiere(void)
 {
 
 	/* Set pointer to enemy target */
-	g_spelltarget_e = (struct enemy_sheet*)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET));
+	g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
-	if (!host_readbs(get_spelltarget_e() + ENEMY_SHEET_IS_ANIMAL)) {
+	if (!g_spelltarget_e->is_animal) {
 		/* spell does not work on animals */
 
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 
-		sprintf(g_dtp2,	get_tx(11),
-				(Bit8u*)(GUI_names_grammar(0,
-					host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
+		sprintf(g_dtp2,	get_tx(11), (Bit8u*)GUI_names_grammar(0, g_spelltarget_e->mon_id, 1));
 	} else {
 
-		ds_writew(SPELL_SPECIAL_AECOST, host_readbs(get_spelltarget_e() + ENEMY_SHEET_FIRSTAP));
+		ds_writew(SPELL_SPECIAL_AECOST, g_spelltarget_e->first_ap);
 
 		if (host_readws(get_spelluser() + HERO_AE) < ds_readws(SPELL_SPECIAL_AECOST)) {
 			ds_writew(SPELL_SPECIAL_AECOST, -2);
 		} else {
 
-			or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS2, 1); /* set 'tame' flag */
+			/* set 'tame' flag */
+			g_spelltarget_e->flags2.tame = 1;
 
-			sprintf(g_dtp2,	get_tx(9),
-				(Bit8u*)(GUI_names_grammar((signed short)0x8000,
-					host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
+			sprintf(g_dtp2,	get_tx(9), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 		}
 	}
 }
 
 void spell_horriphobus(void)
 {
-
 	/* Set pointer to enemy target */
-	g_spelltarget_e = (struct enemy_sheet*)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET));
+	g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
 	/* this spell does not work on all kind of skeletons */
-	if (host_readb(get_spelltarget_e() + ENEMY_SHEET_GFX_ID) == 0x1c) {
+	if (g_spelltarget_e->gfx_id == 0x1c) {
 		ds_writew(SPELL_SPECIAL_AECOST, -2);
 	} else {
-		or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS2, 4); /* set 'scared' flag */
-		and_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS2, 0xfd); /* unset 'renegade' flag */
+		/* set 'scared' flag */
+		g_spelltarget_e->flags2.scared = 1;
+		/* unset 'renegade' flag */
+		g_spelltarget_e->flags2.renegade = 0;
 
-		sprintf(g_dtp2,	get_tx(12),
-			(Bit8u*)(GUI_names_grammar((signed short)0x8000,
-				host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
+		sprintf(g_dtp2,	get_tx(12), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 	}
 }
 
@@ -392,20 +381,19 @@ void spell_somnigravis(void)
 		/* cast an enemy */
 
 		/* Set pointer to enemy target */
-		g_spelltarget_e = (struct enemy_sheet*)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET));
+		g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
 		/* this spell does not work on all kind of skeletons */
-		if (host_readb(get_spelltarget_e() + ENEMY_SHEET_GFX_ID) == 0x1c) {
+		if (g_spelltarget_e->gfx_id == 0x1c) {
 			ds_writew(SPELL_SPECIAL_AECOST, -2);
 			return;
 		}
 
-		or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS1, 2); /* set 'asleep' flag */
+		/* set 'asleep' flag */
+		g_spelltarget_e->flags1.asleep = 1;
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(13),
-			(Bit8u*)(GUI_names_grammar((signed short)0x8000,
-				host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
+		sprintf(g_dtp2,	get_tx(13), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 		return;
 	}
 
@@ -434,20 +422,18 @@ void spell_somnigravis(void)
 void spell_zwingtanz(void)
 {
 	/* Set pointer to enemy target */
-	g_spelltarget_e = (struct enemy_sheet*)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET));
+	g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
 	/* this spell does not work on all kind of skeletons */
-	if (host_readb(get_spelltarget_e() + ENEMY_SHEET_GFX_ID) == 0x1c) {
+	if (g_spelltarget_e->gfx_id == 0x1c) {
 		ds_writew(SPELL_SPECIAL_AECOST, -2);
 	} else {
 
-		/* set the flag */
-		or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS2, 8); /* set 'dancing' flag */
+		/* set 'dancing' flag */
+		g_spelltarget_e->flags2.dancing = 1;
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(14),
-			(Bit8u*)(GUI_names_grammar((signed short)0x8000,
-				host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
+		sprintf(g_dtp2,	get_tx(14), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 	}
 }
 
@@ -520,22 +506,22 @@ void spell_skelettarius(void)
 	signed char unk;
 
 	/* Set pointer to enemy target */
-	g_spelltarget_e = (struct enemy_sheet*)(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET));
+	g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
 	/* check if the enemy is dead */
-	if (!enemy_dead(get_spelltarget_e())) {
+	if (!g_spelltarget_e->flags1.dead) {
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(15), (Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1)));
+		sprintf(g_dtp2,	get_tx(15), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 
 		/* set ae costs */
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 	} else {
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(16), (Bit8u*)GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e() + ENEMY_SHEET_MON_ID), 1));
+		sprintf(g_dtp2,	get_tx(16), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 
-		fighter = FIG_get_fighter(host_readbs(get_spelltarget_e() + ENEMY_SHEET_FIGHTER_ID));
+		fighter = FIG_get_fighter(g_spelltarget_e->fighter_id);
 
 		x = fighter->cbx;
 		y = fighter->cbx;
@@ -568,14 +554,13 @@ void spell_skelettarius(void)
 		g_fightobj_buf_seek_ptr = fighter->gfxbuf;
 #endif
 
-		FIG_remove_from_list(host_readbs(get_spelltarget_e() + ENEMY_SHEET_FIGHTER_ID), 0);
+		FIG_remove_from_list(g_spelltarget_e->fighter_id, 0);
 
-		unk = host_readbs(get_spelltarget_e() + ENEMY_SHEET_ATTACKS_LEFT);
-
+		unk = g_spelltarget_e->attacks_left;
 
 		fill_enemy_sheet(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10, 0x10, 0);
 
-		FIG_load_enemy_sprites(get_spelltarget_e() + ENEMY_SHEET_MON_ID, x, y);
+		FIG_load_enemy_sprites((Bit8u*)g_spelltarget_e, x, y);
 #ifdef M302de_ORIGINAL_BUGFIX
 		/* Original-Bug 2:
 		 * set FIGHTOBJ_BUF_FREESPACE and FIGHTOBJ_BUF_SEEK_PTR to the correct values as discussed above */
@@ -584,12 +569,14 @@ void spell_skelettarius(void)
 #endif
 
 		/* zombie will fight for the heroes */
-		or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS2, 2); /* set 'renegade' flag */
-		host_writebs(get_spelltarget_e() + ENEMY_SHEET_ATTACKS_LEFT, unk);
+		/* set 'renegade' flag */
+		g_spelltarget_e->flags2.renegade = 1;
+		g_spelltarget_e->attacks_left = unk;
+
 #ifdef M302de_ORIGINAL_BUGFIX
 		/* Original-Bug 1:
 		 * restore the FIGHTER_OBJ_ID value. */
-		fighter = FIG_get_fighter(host_readbs(get_spelltarget_e() + ENEMY_SHEET_FIGHTER_ID));
+		fighter = FIG_get_fighter(g_spelltarget_e->fighter_id);
 		fighter->obj_id = obj_id_bak;
 #endif
 	}
@@ -951,7 +938,7 @@ char* spell_analues(void)
 	signed short i;
 	signed short item_pos;
 
-	/* set analyzation capabilities */
+	/* set analisation capabilities */
 	if (gs_in_academy == 99) {
 		g_spelltest_result = (99);
 	}

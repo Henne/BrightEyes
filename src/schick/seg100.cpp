@@ -37,28 +37,27 @@ void spell_eigenschaften(void)
 	signed short min;
 	signed short max;
 
-	g_spelltarget_e = (struct enemy_sheet*)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET);
+	g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
-	damage_range_template(host_readws(get_spelltarget_e() + ENEMY_SHEET_DAM1), (Bit8u*)&min, (Bit8u*)&max);
+	damage_range_template(g_spelltarget_e->dam1, (Bit8u*)&min, (Bit8u*)&max);
 
 	/* Remark: For unknown reasons the shown TP-values of enemies are scaled down to 80% */
 	min = min * 8 / 10;
 	max = max * 8 / 10;
 
-	sprintf(g_dtp2, get_tx(25),
-          GUI_name_singular(get_monname(host_readbs(get_spelltarget_e()))),
-          host_readbs(get_spelltarget_e() + ENEMY_SHEET_LEVEL),	/* Level */
-          host_readbs(get_spelltarget_e() + ENEMY_SHEET_AT),	  /* AT */
-          g_spelltarget_e->pa,	  /* PA */
+	sprintf(g_dtp2, get_tx(25), GUI_name_singular(get_monname(g_spelltarget_e->mon_id)),
+          g_spelltarget_e->level,	/* Level */
+          g_spelltarget_e->at,		/* AT */
+          g_spelltarget_e->pa,		/* PA */
           g_spelltarget_e->rs,		/* RS */
-          host_readbs(get_spelltarget_e() + ENEMY_SHEET_ATTACKS),	/* Attacks */
-          (host_readbs(get_spelltarget_e() + ENEMY_SHEET_ATTACKS) > 1) ? get_tx(26) : get_tx(27),
-          min,							/* TPmin */
-          max,							/* TPmax */
-          host_readws(get_spelltarget_e() + ENEMY_SHEET_LE),	      /* LE */
-          host_readws(get_spelltarget_e() + ENEMY_SHEET_LE_ORIG),	  /* LEmax */
-          host_readws(get_spelltarget_e() + ENEMY_SHEET_AE),	      /* AE */
-          host_readws(get_spelltarget_e() + ENEMY_SHEET_AE_ORIG));	/* AEmax */
+          g_spelltarget_e->attacks,	/* Attacks */
+          (g_spelltarget_e->attacks > 1) ? get_tx(26) : get_tx(27),
+          min,				/* TPmin */
+          max,				/* TPmax */
+          g_spelltarget_e->le,		/* LE */
+          g_spelltarget_e->le_orig,	/* LEmax */
+          g_spelltarget_e->ae,		/* AE */
+          g_spelltarget_e->ae_orig);	/* AEmax */
 }
 
 void spell_exposami(void)
@@ -338,7 +337,7 @@ void spell_blitz(void)
 		/* cast an enemy */
 
 		/* set a pointer to the enemy */
-		g_spelltarget_e = (struct enemy_sheet*)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET);
+		g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
 		/* set the rounds counter */
 		host_writeb(get_spelltarget_e() + ENEMY_SHEET_BLIND, 3);
@@ -425,10 +424,10 @@ void spell_eisenrost(void)
 		}
 	} else {
 		/* target is an enemy */
-		g_spelltarget_e = (struct enemy_sheet*)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET);
+		g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
 		/* check if target is an animal */
-		if (host_readbs(get_spelltarget_e() + ENEMY_SHEET_IS_ANIMAL) != 0)
+		if (g_spelltarget_e->is_animal != 0)
 		{
 			sprintf(g_dtp2, get_tx(89));
 		} else {
@@ -596,10 +595,9 @@ void spell_ignifaxius(void)
 		/* target is an enemy */
 
 		/* set a pointer to the enemy */
-		g_spelltarget_e = (struct enemy_sheet*)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET);
+		g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
-		host_writebs(get_spelltarget_e() + ENEMY_SHEET_RS,
-			g_spelltarget_e->rs - rs_malus);
+		host_writebs(get_spelltarget_e() + ENEMY_SHEET_RS, g_spelltarget_e->rs - rs_malus);
 		sub_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_AT, level / 2);
 		sub_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_PA, level / 2);
 
@@ -658,14 +656,13 @@ void spell_plumbumbarum(void)
 	/* target is an enemy */
 
 	/* set a pointer to the enemy */
-	g_spelltarget_e = (struct enemy_sheet*)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET);
+	g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
 	/* AT-malus of -3 (permanent) */
 	sub_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_AT, 3);
 
 	/* prepare the message */
-	sprintf(g_dtp2, get_tx(95),
-		GUI_names_grammar((signed short)0x8001, host_readbs(get_spelltarget_e()), 1));
+	sprintf(g_dtp2, get_tx(95), GUI_names_grammar((signed short)0x8001, host_readbs(get_spelltarget_e()), 1));
 }
 
 void spell_radau(void)

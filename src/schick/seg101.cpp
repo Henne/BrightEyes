@@ -478,7 +478,7 @@ void spell_paralue(void)
 		/* cast an enemy */
 
 		/* BC-TODO: calculation of ptr could be better */
-		g_spelltarget_e = (struct enemy_sheet*)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET);
+		g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
 		/* set the enemy to petrified */
 		or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS1, 0x04); /* set 'petrified' flag */
@@ -523,12 +523,10 @@ void spell_salander(void)
 	/* TODO: Original-Bug: Strange effect when cast on a two-squared monster */
 	signed short ae_cost;
 
-	/* BC-TODO: calculation of ptr could be better */
-	/* set a pointer */
-	g_spelltarget_e = (struct enemy_sheet*)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET);
+	g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
 	/* read a value from that struct */
-	ae_cost = host_readbs(get_spelltarget_e() + ENEMY_SHEET_MR) * 3;
+	ae_cost = g_spelltarget_e->mr * 3;
 
 	/* set the minimal astral cost to 25 AE */
 	if (ae_cost < 25)

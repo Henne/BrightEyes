@@ -667,26 +667,6 @@ static inline unsigned short enemy_petrified(Bit8u *enemy) {
 		return 1;
 }
 
-static inline unsigned short enemy_mushroom(Bit8u *enemy) {
-	if (((host_readb(enemy + ENEMY_SHEET_FLAGS1) >> 6) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-/**
- * enemy_illusion() -	check if enemy is an illusion
- * @enemy:	ptr to enemy
- *
- * 0 = real / 1 = illusion
- */
-static inline unsigned short enemy_illusion(Bit8u *enemy) {
-	if (((host_readb(enemy + ENEMY_SHEET_FLAGS1) >> 7) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
 /**
  * enemy_renegade() -	check if enemy is under boeser blick spell
  * @enemy:	ptr to enemy
@@ -695,13 +675,6 @@ static inline unsigned short enemy_illusion(Bit8u *enemy) {
  */
 static inline unsigned short enemy_renegade(Bit8u *enemy) {
 	if (((host_readb(enemy + ENEMY_SHEET_FLAGS2) >> 1) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-static inline unsigned short enemy_scared(Bit8u *enemy) {
-	if (((host_readb(enemy + ENEMY_SHEET_FLAGS2) >> 2) & 1) == 0)
 		return 0;
 	else
 		return 1;
@@ -1089,11 +1062,8 @@ struct bittest {
 
 #define enemy_dead(enemy)	(((struct enemy_sheet*)(enemy))->flags1.dead)
 #define enemy_petrified(enemy)	(((struct enemy_sheet*)(enemy))->flags1.petrified)
-#define enemy_mushroom(enemy)	(((struct enemy_sheet*)(enemy))->flags1.mushroom)
-#define enemy_illusion(enemy)	(((struct enemy_sheet*)(enemy))->flags1.illusion)
 
 #define enemy_renegade(enemy)	(((struct enemy_sheet*)(enemy))->flags2.renegade)
-#define enemy_scared(enemy)	(((struct enemy_sheet*)(enemy))->flags2.scared)
 
 #define add_inventory_quantity(i1, i2, hero) (    ((struct inventory*)(hero + HERO_INVENTORY))[i1].quantity+=((struct inventory*)(hero + HERO_INVENTORY))[i2].quantity)
 
