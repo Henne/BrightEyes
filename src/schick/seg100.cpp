@@ -340,11 +340,10 @@ void spell_blitz(void)
 		g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
 		/* set the rounds counter */
-		host_writeb(get_spelltarget_e() + ENEMY_SHEET_BLIND, 3);
+		g_spelltarget_e->blind = 3;
 
 		/* prepare the message */
-		sprintf(g_dtp2, get_tx(85),
-			GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1));
+		sprintf(g_dtp2, get_tx(85), GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 	}
 }
 
@@ -427,21 +426,20 @@ void spell_eisenrost(void)
 		g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
 		/* check if target is an animal */
-		if (g_spelltarget_e->is_animal != 0)
+		if (g_spelltarget_e->is_animal)
 		{
 			sprintf(g_dtp2, get_tx(89));
 		} else {
 			/* check if weapon is already broken */
-			if (g_spelltarget_e->weapon_broken != 0) {
+			if (g_spelltarget_e->weapon_broken) {
 				strcpy(g_dtp2, get_tx(90));
 			} else {
 
 				/* set weapon broken */
-				host_writeb(get_spelltarget_e() + ENEMY_SHEET_BROKEN, 1);
+				g_spelltarget_e->weapon_broken = 1;
 
 				/* prepare message */
-				sprintf(g_dtp2, get_tx(91),
-					GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1));
+				sprintf(g_dtp2, get_tx(91), GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 			}
 		}
 	}
@@ -543,7 +541,7 @@ void spell_ignifaxius(void)
 
 	/* damage doubles if the target is a mummy */
 	if ((host_readbs(get_spelluser() + HERO_ENEMY_ID) >= 10) &&
-		(host_readbs(p_datseg + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_GFX_ID) == 0x1e))
+			(g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10].gfx_id == 0x1e))
 	{
 		damage *= 2;
 		mummy = 1;
@@ -597,9 +595,9 @@ void spell_ignifaxius(void)
 		/* set a pointer to the enemy */
 		g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
-		host_writebs(get_spelltarget_e() + ENEMY_SHEET_RS, g_spelltarget_e->rs - rs_malus);
-		sub_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_AT, level / 2);
-		sub_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_PA, level / 2);
+		g_spelltarget_e->rs = g_spelltarget_e->rs - rs_malus;
+		g_spelltarget_e->at -= level / 2;
+		g_spelltarget_e->pa -= level / 2;
 
 	}
 
@@ -659,10 +657,10 @@ void spell_plumbumbarum(void)
 	g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
 	/* AT-malus of -3 (permanent) */
-	sub_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_AT, 3);
+	g_spelltarget_e->at -= 3;
 
 	/* prepare the message */
-	sprintf(g_dtp2, get_tx(95), GUI_names_grammar((signed short)0x8001, host_readbs(get_spelltarget_e()), 1));
+	sprintf(g_dtp2, get_tx(95), GUI_names_grammar((signed short)0x8001, g_spelltarget_e->mon_id, 1));
 }
 
 void spell_radau(void)

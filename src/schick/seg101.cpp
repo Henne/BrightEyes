@@ -473,18 +473,16 @@ void spell_mutabili(void)
 
 void spell_paralue(void)
 {
-
 	if (host_readbs(get_spelluser() + HERO_ENEMY_ID) >= 10) {
-		/* cast an enemy */
+		/* cast at an enemy */
 
 		/* BC-TODO: calculation of ptr could be better */
 		g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
-		/* set the enemy to petrified */
-		or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS1, 0x04); /* set 'petrified' flag */
+		/* set 'petrified' flag */
+		g_spelltarget_e->flags1.petrified = 1;
 
-		sprintf(g_dtp2,	get_tx(103),
-			(char*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
+		sprintf(g_dtp2,	get_tx(103), (char*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 	} else {
 		/* cast a hero */
 		/* TODO: the first check can be removed, cause it would not give a message */
@@ -534,12 +532,11 @@ void spell_salander(void)
 
 	if (host_readws(get_spelluser() + HERO_AE) >= ae_cost) {
 
-		or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS1, 0x40); /* sets 'mushroom' flag */
+		/* sets 'mushroom' flag */
+		g_spelltarget_e->flags1.mushroom = 1;
 
 		/* prepare message */
-		sprintf(g_dtp2,
-			get_tx(104),
-			(char*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
+		sprintf(g_dtp2, get_tx(104), (char*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 
 		/* set AE cost */
 		ds_writew(SPELL_SPECIAL_AECOST, ae_cost);

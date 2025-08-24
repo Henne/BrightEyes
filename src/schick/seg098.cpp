@@ -612,7 +612,7 @@ signed short test_spell(Bit8u *hero, signed short spell_no, signed char handicap
 
 		if (host_readbs(hero + HERO_ENEMY_ID) >= 10) {
 
-			handicap += ds_readbs(host_readbs(hero + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_MR));
+			handicap += g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].mr;
 
 			if (test_bit6(p_datseg + host_readbs(hero + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FLAGS1))) { // tests if enemy is mushroom
 				return 0;

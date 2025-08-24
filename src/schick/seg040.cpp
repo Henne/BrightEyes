@@ -115,8 +115,8 @@ void FIG_preload_gfx(void)
 	}
 
 	for (i = 0; i < 20; i++) {
-		ds_writeb(i * SIZEOF_ENEMY_SHEET + ENEMY_SHEETS + ENEMY_SHEET_MON_ID, 0);
-		ds_writeb(i * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS + ENEMY_SHEET_FIGHTER_ID), -1);
+		g_enemy_sheets[i].mon_id = 0;
+		g_enemy_sheets[i].fighter_id = -1;
 	}
 
 	for (i = 0; i < 90; i++) {
