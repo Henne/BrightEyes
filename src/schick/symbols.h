@@ -1259,10 +1259,10 @@
 #define EMPTY_STRING10                  (0xb13b)    /* char; "" */
 #define EMPTY_STRING11                  (0xb13c)    /* char; "" */
 #define EMPTY_STRING12                  (0xb13d)    /* char; "" */
-#define TEVENT014_CORPSE                (0xb13e)    /* struct(22) */
-#define TEVENT064_CHEST_DESCR           (0xb154)    /* struct(22) */
-#define TEVENT067_CHEST                 (0xb16a)    /* char[8] */
-#define TEVENT135_CLIMB_DAMAGE          (0xb172)    /* struct(2)[6]; struct{unsigned char damage_min,damage_max;}; { {0xff,0}, {1,5}, {4,13}, {7,21}, {10,32}, {15,40} } */
+//#define TEVENT014_CORPSE                (0xb13e)    /* struct(22) */
+//#define TEVENT064_CHEST_DESCR           (0xb154)    /* struct(22) */
+//#define TEVENT067_CHEST                 (0xb16a)    /* char[8] */
+//#define TEVENT135_CLIMB_DAMAGE          (0xb172)    /* struct(2)[6]; struct{unsigned char damage_min,damage_max;}; { {0xff,0}, {1,5}, {4,13}, {7,21}, {10,32}, {15,40} } */
 //#define RANDOM_ENCOUNTER_INDEX          (0xb17e)    /* unsigned char[59] */
 #define RANDOM_ENCOUNTER_DESCR          (0xb1b9)    /* struct(7)[14] */
 //#define TLK_RUIN_HERO_COUNTER           (0xb21b)    /* signed short */

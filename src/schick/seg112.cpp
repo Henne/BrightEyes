@@ -36,15 +36,13 @@ void tevent_067(void)
 	Bit8u *hero;
 
 	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 6) > 0 && !gs_tevent067_flag) ||
-		gs_tevent067_flag != 0)
+		gs_tevent067_flag)
 	{
 		GUI_output(get_tx2(90));
 
 		do {
-			answer = GUI_radio(get_tx2(91), 3,
-						get_tx2(92),
-						get_tx2(93),
-						get_tx2(94));
+			answer = GUI_radio(get_tx2(91), 3, get_tx2(92),	get_tx2(93), get_tx2(94));
+
 		} while (answer == -1);
 
 		if (answer == 2) {
@@ -69,7 +67,7 @@ void tevent_067(void)
 
 			if (!gs_tevent067_flag && count >= 3) {
 
-				loot_multi_chest(p_datseg + TEVENT067_CHEST, get_tx2(96));
+				loot_multi_chest((Bit8u*)&g_tevent067_chest, get_tx2(96));
 
 				GUI_output(get_tx2(97));
 
@@ -416,9 +414,7 @@ void tevent_073(void)
 		load_in_head(55);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
-							get_tx2(42), 2,
-							get_tx2(43), get_tx2(44));
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(42), 2, get_tx2(43), get_tx2(44));
 		} while (answer == -1);
 
 		if (answer == 1) {
@@ -427,7 +423,7 @@ void tevent_073(void)
 
 			loot_multi_chest((Bit8u*)&gs_tevent073_corpse, get_tx2(105));
 
-			gs_tevent073_flag = (1);
+			gs_tevent073_flag = 1;
 		}
 	}
 }

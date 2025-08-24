@@ -590,7 +590,7 @@ void tevent_064(void)
 					} while (answer == -1);
 
 					if (answer == 1) {
-						use_lockpicks_on_chest(((Bit8u*)p_datseg + TEVENT064_CHEST_DESCR));
+						use_lockpicks_on_chest((Bit8u*)&g_tevent064_chest_descr);
 					}
 				}
 
@@ -621,7 +621,7 @@ void tevent_064(void)
 					} while (answer == -1);
 
 					if (answer == 1) {
-						use_lockpicks_on_chest(((Bit8u*)p_datseg + TEVENT064_CHEST_DESCR));
+						use_lockpicks_on_chest((Bit8u*)&g_tevent064_chest_descr);
 					}
 				}
 			}
@@ -630,7 +630,7 @@ void tevent_064(void)
 	}
 }
 
-void tevent_064_chest(void)
+void tevent_064_chest(Bit8u*)
 {
 	loot_multi_chest((Bit8u*)&gs_tevent064_chest, get_tx2(74));
 }

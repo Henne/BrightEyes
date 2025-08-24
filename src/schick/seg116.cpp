@@ -303,7 +303,7 @@ void tevent_135(void)
 				GUI_output(g_dtp2);
 
 				/* depending on fall height stored in tmp: damage in the interval [1..5], [4..13], [7..21], [10..32], [15..40] */
-				tmp2 = random_interval(ds_readb(TEVENT135_CLIMB_DAMAGE + 2 * tmp), host_readb((p_datseg + TEVENT135_CLIMB_DAMAGE + 1) + (2 * tmp)));
+				tmp2 = random_interval(g_tevent135_climb_damage[tmp - 1][0], g_tevent135_climb_damage[tmp - 1][1]);
 
 				tmp = host_readws(hero + HERO_LE);
 				tmp -= tmp2;

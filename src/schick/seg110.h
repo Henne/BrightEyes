@@ -4,7 +4,7 @@ namespace M302de {
 
 /* 0x20 */
 void TRV_swim2(signed char, signed short);
-/* 0x20 */
+/* 0x25 */
 void tevent_014_chest(Bit8u*);
 /* 0x2a */
 void TRV_a_path(void);
