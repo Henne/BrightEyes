@@ -1,5 +1,8 @@
 # Tools
 
+## Usage
+Just run 'make'
+
 ## pre-commit
 copy this file into Bright-Eyes/.git/hooks
 and modify it to enable automated testing
@@ -10,3 +13,6 @@ values into human readable names
 
 ## dump_obj
 dumps OBJ-files, this is used internally by compile.sh and build.sh
+
+## exe_comp
+compares and extracts valuable information from two EXE files build with BCC 3.1

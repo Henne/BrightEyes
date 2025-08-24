@@ -8,6 +8,7 @@
  */
 
 #include <stdio.h>
+#include <time.h>
 
 #include "v302de.h"
 #include "common.h"
@@ -43,62 +44,62 @@ void do_tavern(void)
 	time_t timeval;
 
 	done = 0;
-	tav_ptr = p_datseg + TAVERN_DESCR_TABLE + 4 * ds_readws(CURRENT_TYPEINDEX);
+	tav_ptr = p_datseg + TAVERN_DESCR_TABLE + 4 * gs_current_typeindex;
 
-	GUI_print_loc_line(get_tx(ds_readws(CURRENT_LOCDATA)));
+	GUI_print_loc_line(get_tx(gs_current_locdata));
 
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 
 	if (host_readws(tav_ptr) >= 6 && host_readws(tav_ptr) <= 13) {
 
-		if (ds_readds(DAY_TIMER) < HOURS(11) && ds_readds(DAY_TIMER) > HOURS(3)) {
+		if (gs_day_timer < HOURS(11) && gs_day_timer > HOURS(3)) {
 
 			GUI_output(get_ttx(801));
 			leave_location();
 			return;
 		}
 
-	} else if (ds_readds(DAY_TIMER) < HOURS(16) && ds_readds(DAY_TIMER) > HOURS(3)) {
+	} else if (gs_day_timer < HOURS(16) && gs_day_timer > HOURS(3)) {
 
 			GUI_output(get_ttx(481));
 			leave_location();
 			return;
 	}
 
-	draw_loc_icons(ds_readws(COMBO_MODE) == 0 ? 4 : 5, MENU_ICON_TALK, MENU_ICON_ORDER_FOOD, MENU_ICON_APPLY_SKILL, MENU_ICON_LEAVE, MENU_ICON_INN);
+	draw_loc_icons(g_combo_mode == 0 ? 4 : 5, MENU_ICON_TALK, MENU_ICON_ORDER_FOOD, MENU_ICON_APPLY_SKILL, MENU_ICON_LEAVE, MENU_ICON_INN);
 
 	while (!done) {
 
-		if (ds_readw(REQUEST_REFRESH) != 0) {
+		if (g_request_refresh != 0) {
 
 			draw_main_screen();
 			set_var_to_zero();
 			load_ani(27);
 			init_ani(0);
-			GUI_print_loc_line(get_tx(ds_readws(CURRENT_LOCDATA)));
+			GUI_print_loc_line(get_tx(gs_current_locdata));
 			set_audio_track(ARCHIVE_FILE_INN_XMI);
-			ds_writew(REQUEST_REFRESH, 0);
+			g_request_refresh = 0;
 		}
 
 		handle_gui_input();
 
-		if (ds_readbs(TAV_CHEATED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0) {
+		if (gs_tav_cheated_flags[gs_current_typeindex]) {
 
 			GUI_output(get_ttx(472));
 			done = 1;
-			ds_writew(MOUSE2_EVENT, ds_writew(ACTION, 0));
+			g_mouse2_event = (g_action = 0);
 		}
 
-		if (ds_readds(DAY_TIMER) < HOURS(11) && ds_readds(DAY_TIMER) > HOURS(3)) {
+		if (gs_day_timer < HOURS(11) && gs_day_timer > HOURS(3)) {
 
 			GUI_output(get_ttx(9));
 			done = 1;
-			ds_writew(MOUSE2_EVENT, ds_writew(ACTION, 0));
+			g_mouse2_event = (g_action = 0);
 		}
 
-		if (ds_readw(MOUSE2_EVENT) != 0 || ds_readws(ACTION) == ACTION_ID_PAGE_UP) {
+		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
 
-			answer = GUI_radio(get_ttx(469), ds_readw(COMBO_MODE) == 0 ? 4 : 5,
+			answer = GUI_radio(get_ttx(469), g_combo_mode == 0 ? 4 : 5,
 						get_ttx(343),
 						get_ttx(470),
 						get_ttx(212),
@@ -106,11 +107,11 @@ void do_tavern(void)
 						get_ttx(824)) - 1;
 
 			if (answer != -2) {
-				ds_writew(ACTION, answer + ACTION_ID_ICON_1);
+				g_action = (answer + ACTION_ID_ICON_1);
 			}
 		}
 
-		if (ds_readws(ACTION) == ACTION_ID_ICON_1) {
+		if (g_action == ACTION_ID_ICON_1) {
 			/* TALK */
 
 			p_money_before = get_party_money();
@@ -119,33 +120,28 @@ void do_tavern(void)
 
 			if (p_money_before != p_money_after) {
 
-				make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), p_money_before - p_money_after);
-
-				sprintf((char*)ds_readd(DTP2), get_ttx(825),
-					(char*)ds_readd(TEXT_OUTPUT_BUF));
-
-				GUI_output((char*)ds_readd(DTP2));
+				make_valuta_str(g_text_output_buf, p_money_before - p_money_after);
+				sprintf(g_dtp2, get_ttx(825), g_text_output_buf);
+				GUI_output(g_dtp2);
 			}
 
-			if (ds_readb(TLK_TAV_FOLLOWINFORMER) != 0) {
+			if (gs_tlk_tav_followinformer) {
 
 				tavern_follow_informer();
 			}
 
-			ds_writew(REQUEST_REFRESH, done = 1);
-			ds_writew(COMBO_MODE, 0);
+			g_request_refresh = done = 1;
+			g_combo_mode = 0;
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_2) {
+		} else if (g_action == ACTION_ID_ICON_2) {
 			/* EAT AND DRINK */
 
 			p_money_after = count_heroes_in_group() * (6 - host_readws(tav_ptr) / 4);
 
 			p_money_after += host_readws(tav_ptr + 2) * p_money_after / 100;
-			sprintf((char*)ds_readd(DTP2),
-				get_ttx(473),
-				(signed short)p_money_after);
+			sprintf(g_dtp2, get_ttx(473), (signed short)p_money_after);
 
-			if (GUI_bool((char*)ds_readd(DTP2))) {
+			if (GUI_bool(g_dtp2)) {
 
 				GUI_output(host_readws(tav_ptr) < 5 ? get_ttx(475) : (
 						host_readws(tav_ptr) < 15 ? get_ttx(476) : get_ttx(477)));
@@ -154,10 +150,10 @@ void do_tavern(void)
 
 				for (i = 0; i <= 6; i++) {
 
-					ds_writeb(FOOD_MESSAGE + i, ds_writeb(FOOD_MESSAGE_SHOWN + i, 0));
+					gs_food_message[i] = g_food_message_shown[i] = 0;
 
 					if (host_readbs(get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(get_hero(i) + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+						host_readbs(get_hero(i) + HERO_GROUP_NO) == gs_current_group)
 					{
 
 						l3 = (21 - host_readws(tav_ptr)) * 20;
@@ -192,9 +188,9 @@ void do_tavern(void)
 
 					GUI_output(get_ttx(474));
 
-					ds_writeb(TAV_CHEATED_FLAGS + ds_readws(CURRENT_TYPEINDEX), 1);
+					gs_tav_cheated_flags[gs_current_typeindex] = 1;
 					done = 1;
-					ds_writew(COMBO_MODE, 0);
+					g_combo_mode = 0;
 
 				} else {
 
@@ -203,33 +199,33 @@ void do_tavern(void)
 				}
 			}
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_3) {
+		} else if (g_action == ACTION_ID_ICON_3) {
 			/* USE SKILL */
 
 			time(&timeval);
 
 			/* skill test will be +50 if the game was saved up to 2 minutes ago.
 			 * probably to prevent excessive save & reload */
-			bonus = (timeval - ds_readds(LAST_SAVE_TIME)) > 120 ? 0 : 50;
+			bonus = (timeval - g_last_save_time) > 120 ? 0 : 50;
 
 			if (GUI_use_skill2(bonus, get_ttx(395)) == -1) {
 				done = 1;
-				ds_writew(COMBO_MODE, 0);
+				g_combo_mode = 0;
 			}
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_4) {
+		} else if (g_action == ACTION_ID_ICON_4) {
 			/* LEAVE */
 
 			done = 1;
-			ds_writew(COMBO_MODE, 0);
+			g_combo_mode = 0;
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_5) {
+		} else if (g_action == ACTION_ID_ICON_5) {
 			/* VISIT INN */
 
-			if (ds_readws(COMBO_MODE) != 0) {
+			if (g_combo_mode != 0) {
 
 				done = 1;
-				ds_writew(COMBO_MODE, 2);
+				g_combo_mode = 2;
 			}
 		}
 	}
@@ -241,13 +237,13 @@ void do_tavern(void)
 void octopus_attack_wrapper(void)
 {
 	octopus_attack();
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 }
 
 void pirates_attack_wrapper(void)
 {
 	pirates_attack();
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 }
 
 void prolog_ghostship(void)
@@ -257,11 +253,11 @@ void prolog_ghostship(void)
 	signed short bak1;
 	signed short bak2;
 
-	tw_bak = ds_readws(TEXTBOX_WIDTH);
-	bak1 = ds_readws(BASEPOS_X);
-	bak2 = ds_readws(BASEPOS_Y);
-	ds_writews(TEXTBOX_WIDTH, 7);
-	ds_writews(BASEPOS_X, ds_writews(BASEPOS_Y, 0));
+	tw_bak = g_textbox_width;
+	bak1 = g_basepos_x;
+	bak2 = g_basepos_y;
+	g_textbox_width = 7;
+	g_basepos_x = g_basepos_y = 0;
 
 	load_ani(17);
 	draw_main_screen();
@@ -278,16 +274,16 @@ void prolog_ghostship(void)
 	} while (answer == -1);
 
 	if (answer == 1) {
-		ds_writew(REQUEST_REFRESH, 0);
-		ds_writeb(TRAVEL_DETOUR, DUNGEONS_TOTENSCHIFF);
+		g_request_refresh = 0;
+		gs_travel_detour = (DUNGEONS_TOTENSCHIFF);
 	} else {
-		ds_writew(REQUEST_REFRESH, 1);
+		g_request_refresh = 1;
 	}
 
 	set_var_to_zero();
-	ds_writews(TEXTBOX_WIDTH, tw_bak);
-	ds_writews(BASEPOS_X, bak1);
-	ds_writews(BASEPOS_Y, bak2);
+	g_textbox_width = tw_bak;
+	g_basepos_x = bak1;
+	g_basepos_y = bak2;
 }
 
 #if !defined(__BORLANDC__)

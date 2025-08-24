@@ -25,14 +25,14 @@ signed short get_foe_attack_mode(signed short, signed short);
 
 /* 0x34 */
 /* should be static */
-signed short seg037_0791(Bit8u*, signed short, signed short, signed short, signed short);
+signed short seg037_0791(struct enemy_sheet*, signed short, signed short, signed short, signed short);
 
 /* 0x39 */
 /* should be static */
-signed short seg037_0b3e(Bit8u*, signed short, signed short, signed short, signed short);
+signed short seg037_0b3e(struct enemy_sheet*, signed short, signed short, signed short, signed short);
 
 /* 0x3e */
-void enemy_turn(Bit8u *, signed short, signed short, signed short);
+void enemy_turn(struct enemy_sheet*, signed short, signed short, signed short);
 
 #if !defined(__BORLANDC__)
 }

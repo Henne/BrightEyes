@@ -34,36 +34,31 @@ void DNG14_dive(signed short diver_pos, signed char mod, signed short dest_x)
 	{
 		if (i != diver_pos &&
 			host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 			!hero_dead(hero))
 		{
 
 			if (test_skill(hero, TA_SCHWIMMEN, mod) <= 0) {
 				/* swimming failed */
-				sprintf((char*)ds_readd(DTP2),
-					get_tx(42),
-					(char*)hero + HERO_NAME2,
-					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+				sprintf(g_dtp2,	get_tx(42), (char*)hero + HERO_NAME2,
+					GUI_get_ptr(host_readbs(hero + HERO_SEX), 0),
+					GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
 
-				GUI_output((char*)ds_readd(DTP2));
+				GUI_output(g_dtp2);
 
 				/* loose 2W6 LE */
 				sub_hero_le(hero, dice_roll(2, 6, 0));
 			} else {
 				/* swimming succeeded */
 
-				sprintf((char*)ds_readd(DTP2),
-					get_tx(43),
-					(char*)hero + HERO_NAME2);
-
-				GUI_output((char*)ds_readd(DTP2));
+				sprintf(g_dtp2, get_tx(43), (char*)hero + HERO_NAME2);
+				GUI_output(g_dtp2);
 			}
 		}
 	}
 
-	ds_writew(X_TARGET, dest_x);
-	ds_writews(DNG_REFRESH_DIRECTION, -1);
+	gs_x_target = dest_x;
+	g_dng_refresh_direction = -1;
 
 }
 
@@ -79,65 +74,65 @@ void DNG14_fight_intro(signed short fight_id)
 	}
 }
 
-void DNG14_chest_x1(RealPt chest)
+void DNG14_chest_x1(Bit8u* chest)
 {
-	RealPt ptr_bak;
+	Bit8u* ptr_bak;
 
-	ptr_bak = (RealPt)host_readd(chest + 11);
-	host_writed(chest + 11, (Bit32u)(p_datseg + DNG14_CHEST_X1));
+	ptr_bak = (Bit8u*)host_readd(chest + 11);
+	host_writed(chest + 11, (Bit32u)gs_dng14_chest_x1);
 	loot_simple_chest(chest);
 	host_writed(chest + 11, (Bit32u)ptr_bak);
 }
 
-void DNG14_chest_x2(RealPt chest)
+void DNG14_chest_x2(Bit8u* chest)
 {
-	RealPt ptr_bak;
+	Bit8u* ptr_bak;
 
-	ptr_bak = (RealPt)host_readd(chest + 11);
-	host_writed(chest + 11, (Bit32u)(p_datseg + DNG14_CHEST_X2));
+	ptr_bak = (Bit8u*)host_readd(chest + 11);
+	host_writed(chest + 11, (Bit32u)gs_dng14_chest_x2);
 	loot_simple_chest(chest);
 	host_writed(chest + 11, (Bit32u)ptr_bak);
 }
 
-void DNG14_chest_x3(RealPt chest)
+void DNG14_chest_x3(Bit8u* chest)
 {
-	loot_multi_chest(p_datseg + DNG14_CHEST_X3, get_tx(62));
+	loot_multi_chest(gs_dng14_chest_x3, get_tx(62));
 }
 
-void DNG14_chest_x4(RealPt chest)
+void DNG14_chest_x4(Bit8u* chest)
 {
-	RealPt ptr_bak;
+	Bit8u* ptr_bak;
 
-	ptr_bak = (RealPt)host_readd(chest + 11);
-	host_writed(chest + 11, (Bit32u)(p_datseg + DNG14_CHEST_X4));
+	ptr_bak = (Bit8u*)host_readd(chest + 11);
+	host_writed(chest + 11, (Bit32u)gs_dng14_chest_x4);
 	loot_simple_chest(chest);
 	host_writed(chest + 11, (Bit32u)ptr_bak);
 }
 
-void DNG14_chest_x5(RealPt chest)
+void DNG14_chest_x5(Bit8u* chest)
 {
-	RealPt ptr_bak;
+	Bit8u* ptr_bak;
 
-	ptr_bak = (RealPt)host_readd(chest + 11);
-	host_writed(chest + 11, (Bit32u)(p_datseg + DNG14_CHEST_X5));
+	ptr_bak = (Bit8u*)host_readd(chest + 11);
+	host_writed(chest + 11, (Bit32u)gs_dng14_chest_x5);
 	loot_simple_chest(chest);
 	host_writed(chest + 11, (Bit32u)ptr_bak);
 }
 
-void DNG14_chest_x6(RealPt chest)
+void DNG14_chest_x6(Bit8u* chest)
 {
-	RealPt ptr_bak;
+	Bit8u* ptr_bak;
 	unsigned char x;
 	unsigned char y;
 
-	ptr_bak = (RealPt)host_readd(chest + 11);
-	host_writed(chest + 11, (Bit32u)(p_datseg + DNG14_CHEST_X6));
+	ptr_bak = (Bit8u*)host_readd(chest + 11);
+	host_writed(chest + 11, (Bit32u)gs_dng14_chest_x6);
 	loot_simple_chest(chest);
 	host_writed(chest + 11, (Bit32u)ptr_bak);
 
-	if (ds_readb(DNG14_FULLMAP_FLAG) != 0) {
+	if (gs_dng14_fullmap_flag) {
 
-		ds_writeb(DNG14_FULLMAP_FLAG, 0);
+		gs_dng14_fullmap_flag = 0;
 
 		GUI_output(get_tx(64));
 
@@ -149,22 +144,22 @@ void DNG14_chest_x6(RealPt chest)
 	}
 }
 
-void DNG14_chest_x7(RealPt chest)
+void DNG14_chest_x7(Bit8u* chest)
 {
-	RealPt ptr_bak;
+	Bit8u* ptr_bak;
 
-	ptr_bak = (RealPt)host_readd(chest + 11);
-	host_writed(chest + 11, (Bit32u)(p_datseg + DNG14_CHEST_X7));
+	ptr_bak = (Bit8u*)host_readd(chest + 11);
+	host_writed(chest + 11, (Bit32u)gs_dng14_chest_x7);
 	loot_simple_chest(chest);
 	host_writed(chest + 11, (Bit32u)ptr_bak);
 }
 
-void DNG14_chest_x8(RealPt chest)
+void DNG14_chest_x8(Bit8u* chest)
 {
-	RealPt ptr_bak;
+	Bit8u* ptr_bak;
 
-	ptr_bak = (RealPt)host_readd(chest + 11);
-	host_writed(chest + 11, (Bit32u)(p_datseg + DNG14_CHEST_X8));
+	ptr_bak = (Bit8u*)host_readd(chest + 11);
+	host_writed(chest + 11, (Bit32u)gs_dng14_chest_x8);
 	loot_simple_chest(chest);
 	host_writed(chest + 11, (Bit32u)ptr_bak);
 }
@@ -186,30 +181,30 @@ void DNG15_riddle(void)
 	signed short tw_bak;
 	Bit8u *ptr;
 
-	tw_bak = ds_readws(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 8);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 8;
 
-	ptr = p_datseg + DNG_MAP;
+	ptr = g_dng_map;
 
-	pos = (ds_readbs(DUNGEON_LEVEL) << 12) + (ds_readws(X_TARGET) << 8) + ds_readws(Y_TARGET);
+	pos = (gs_dungeon_level << 12) + (gs_x_target << 8) + gs_y_target;
 
 	/* check if the other group is in position */
 	for (i = l_di = 0; i < 6; i++) {
 
-		if (pos == DNG_POS(1,8,1) && ds_readws(GROUPS_X_TARGET + 2 * i) == 8 &&
-			ds_readws(GROUPS_Y_TARGET + 2 * i) == 5 && ds_readbs(CURRENT_GROUP) != i)
+		if (pos == DNG_POS(1,8,1) && gs_groups_x_target[i] == 8 &&
+			gs_groups_y_target[i] == 5 && gs_current_group != i)
 		{
 			l_di = 1;
 		}
 
-		if (pos == DNG_POS(1,8,5) && ds_readws(GROUPS_X_TARGET + 2 * i) == 8 &&
-			ds_readws(GROUPS_Y_TARGET + 2 * i) == 1 && ds_readbs(CURRENT_GROUP) != i)
+		if (pos == DNG_POS(1,8,5) && gs_groups_x_target[i] == 8 &&
+			gs_groups_y_target[i] == 1 && gs_current_group != i)
 		{
 			l_di = 1;
 		}
 	}
 
-	if (!l_di || !ds_readb(DNG15_REACHED_HANDS)) {
+	if (!l_di || !gs_dng15_reached_hands) {
 
 		/* INFO: you hear a soft cracking noise */
 		GUI_output(get_tx(28));
@@ -226,13 +221,13 @@ void DNG15_riddle(void)
 			/* pull on the other side */
 
 			/* set the corresponding lever */
-			if (ds_readws(Y_TARGET) == 1) {
-				ds_writeb(DNG15_LEVER_SOUTH, 1);
-			} else if (ds_readws(Y_TARGET) == 5) {
-				ds_writeb(DNG15_LEVER_NORTH, 1);
+			if (gs_y_target == 1) {
+				gs_dng15_lever_south = 1;
+			} else if (gs_y_target == 5) {
+				gs_dng15_lever_north = 1;
 			}
 
-			if (ds_readb(DNG15_LEVER_SOUTH) != 0 && ds_readb(DNG15_LEVER_NORTH) != 0)
+			if (gs_dng15_lever_south && gs_dng15_lever_north)
 			{
 				/* riddle solved: remove the door from the map */
 				GUI_output(get_tx(32));
@@ -251,7 +246,7 @@ void DNG15_riddle(void)
 		}
 	}
 
-	ds_writew(TEXTBOX_WIDTH, tw_bak);
+	g_textbox_width = tw_bak;
 }
 
 #if !defined(__BORLANDC__)

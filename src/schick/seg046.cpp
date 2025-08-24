@@ -50,7 +50,7 @@ void status_show_spell(Bit8u *hero, unsigned short spell, unsigned short fsig,
 	my_itoa(host_readbs(hero + HERO_SPELLS + spell), str, 10);
 
 	/* print value */
-	GUI_print_string((Bit8u*)str, x2 - GUI_get_space_for_string((Bit8u*)str, 0), gy + group * 7);
+	GUI_print_string(str, x2 - GUI_get_space_for_string(str, 0), gy + group * 7);
 }
 
 /**
@@ -78,7 +78,7 @@ void status_show_skill(Bit8u *hero, unsigned short skill, unsigned short ftig,
 	my_itoa(host_readbs(hero + HERO_TALENTS + skill) , str, 10);
 
 	/* print value */
-	GUI_print_string((Bit8u*)str, x2 - GUI_get_space_for_string((Bit8u*)str, 0), gy + group * 7);
+	GUI_print_string(str, x2 - GUI_get_space_for_string(str, 0), gy + group * 7);
 }
 
 /**
@@ -94,26 +94,19 @@ void status_show_skills(Bit8u *hero) {
 	set_textcolor(0xff, 2);
 
 	/* print skill category names */
-	GUI_print_string(get_ttx(100),
-		GUI_get_first_pos_centered(get_ttx(100), 5, 100, 0), 55);
+	GUI_print_string(get_ttx(100), GUI_get_first_pos_centered(get_ttx(100), 5, 100, 0), 55);
 
-	GUI_print_string(get_ttx(104),
-		GUI_get_first_pos_centered(get_ttx(104), 110, 100, 0), 55);
+	GUI_print_string(get_ttx(104), GUI_get_first_pos_centered(get_ttx(104), 110, 100, 0), 55);
 
-	GUI_print_string(get_ttx(101),
-		GUI_get_first_pos_centered(get_ttx(101), 215, 100, 0), 55);
+	GUI_print_string(get_ttx(101), GUI_get_first_pos_centered(get_ttx(101), 215, 100, 0), 55);
 
-	GUI_print_string(get_ttx(105),
-		GUI_get_first_pos_centered(get_ttx(105), 5, 100, 0), 125);
+	GUI_print_string(get_ttx(105), GUI_get_first_pos_centered(get_ttx(105), 5, 100, 0), 125);
 
-	GUI_print_string(get_ttx(103),
-		GUI_get_first_pos_centered(get_ttx(103), 110, 100, 0), 125);
+	GUI_print_string(get_ttx(103), GUI_get_first_pos_centered(get_ttx(103), 110, 100, 0), 125);
 
-	GUI_print_string(get_ttx(102),
-		GUI_get_first_pos_centered(get_ttx(102), 215, 100, 0), 132);
+	GUI_print_string(get_ttx(102), GUI_get_first_pos_centered(get_ttx(102), 215, 100, 0), 132);
 
-	GUI_print_string(get_ttx(106),
-		GUI_get_first_pos_centered(get_ttx(106), 5, 100, 0), 174);
+	GUI_print_string(get_ttx(106), GUI_get_first_pos_centered(get_ttx(106), 5, 100, 0), 174);
 
 	set_textcolor(0, 2);
 
@@ -125,6 +118,7 @@ void status_show_skills(Bit8u *hero) {
 				ds_readw(STATUSPAGE_SKILLS_XY + skill_category * 6),
 				ds_readw((STATUSPAGE_SKILLS_XY + 2) + skill_category * 6),
 				ds_readw((STATUSPAGE_SKILLS_XY + 4) + skill_category * 6));
+
 			skill_no++;
 		}
 	}
@@ -174,8 +168,8 @@ void status_show(Bit16u index)
 #ifdef M302de_ORIGINAL_BUGFIX
 	char le_fix[10];
 #endif
-	RealPt hero;
-	Bit16u txt_tabpos1_bak, txt_tabpos2_bak, txt_tabpos3_bak, txt_tabpos4_bak;
+	unsigned char *hero;
+	Bit16s txt_tabpos1_bak, txt_tabpos2_bak, txt_tabpos3_bak, txt_tabpos4_bak;
 	Bit8s val;
 	signed short width;
 	signed short height;
@@ -188,48 +182,49 @@ void status_show(Bit16u index)
 
 	struct nvf_desc nvf;
 
-	txt_tabpos1_bak = ds_readw(TXT_TABPOS1);
-	txt_tabpos2_bak = ds_readw(TXT_TABPOS2);
-	txt_tabpos3_bak = ds_readw(TXT_TABPOS3);
-	txt_tabpos4_bak = ds_readw(TXT_TABPOS4);
+	txt_tabpos1_bak = g_txt_tabpos[0];
+	txt_tabpos2_bak = g_txt_tabpos[1];
+	txt_tabpos3_bak = g_txt_tabpos[2];
+	txt_tabpos4_bak = g_txt_tabpos[3];
 
-	hero = (Bit8u*)ds_readd(HEROES) + index * SIZEOF_HERO;
+	hero = get_hero(index);
 
 	set_var_to_zero();
 	update_mouse_cursor();
 
-	if (ds_readb(PP20_INDEX) != ARCHIVE_FILE_ZUSTA_UK) {
-		ds_writew(UPDATE_STATUSLINE, 0);
-		ds_writeb(PP20_INDEX, ARCHIVE_FILE_ZUSTA_UK);
-		do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
+	if (g_pp20_index != ARCHIVE_FILE_ZUSTA_UK) {
+		g_update_statusline = 0;
+		g_pp20_index = ARCHIVE_FILE_ZUSTA_UK;
+		do_fill_rect(g_vga_memstart, 0, 0, 319, 199, 0);
 		wait_for_vsync();
-		set_palette(p_datseg + STATUSPAGE_PALETTE, 0, 0x20);
+		set_palette(&g_statuspage_palette[0][0], 0, 0x20);
 	}
 
-	ds_writed(ACTION_TABLE_PRIMARY, (Bit32u)(p_datseg + ACTION_TABLE_STATUS));
-	ds_writed(ACTION_TABLE_SECONDARY, 0);
-	ds_writed(PRINT_STRING_BUFFER, ds_readd(RENDERBUF_PTR));
+	g_action_table_primary = &g_action_table_status[0];
+	g_action_table_secondary = NULL;
+
+	g_vga_backbuffer = g_renderbuf_ptr;
 	set_textcolor(0, 2);
 
 	/* load and draw the background */
 	load_pp20(ARCHIVE_FILE_ZUSTA_UK);
 
 	/* draw the picture of the hero */
-	ds_writew(PIC_COPY_X1, 16);
-	ds_writew(PIC_COPY_Y1, 9);
-	ds_writew(PIC_COPY_X2, 47);
-	ds_writew(PIC_COPY_Y2, 40);
-	ds_writed(PIC_COPY_DST, ds_readd(RENDERBUF_PTR));
-	/* the source must be passed here as RealPt */
-	ds_writed(PIC_COPY_SRC, (Bit32u)(hero + HERO_PORTRAIT));
+	g_pic_copy.x1 = 16;
+	g_pic_copy.y1 = 9;
+	g_pic_copy.x2 = 47;
+	g_pic_copy.y2 = 40;
+	g_pic_copy.dst = g_renderbuf_ptr;
+	/* the source must be passed here as Bit8u* */
+	g_pic_copy.src = hero + HERO_PORTRAIT;
 	do_pic_copy(0);
 
-	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
+	g_pic_copy.dst = g_vga_memstart;
 
 	/* print inventory and silouette values */
-	if (ds_readws(STATUS_PAGE_MODE) < 3) {
+	if (g_status_page_mode < 3) {
 
-		nvf.src = (Bit8u*)ds_readd(BUFFER10_PTR);
+		nvf.src = g_buffer10_ptr;
 		nvf.type = 0;
 
 		nvf.width = (Bit8u*)&width;
@@ -240,86 +235,75 @@ void status_show(Bit16u index)
 			if (host_readw(hero + i * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID) == ITEM_NONE)
 				continue;
 
-			nvf.dst = (Bit8u*)ds_readd(ICON);
+			nvf.dst = g_icon;
 			/* set no */
 			nvf.no = host_readw(get_itemsdat(host_readw(hero + i * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID)));
 
 			process_nvf(&nvf);
 
 			/* draw the item icon */
-			ds_writew(PIC_COPY_X1, ds_readw(INVSLOT_ICONXY_TABLE + i * 4));
-			ds_writew(PIC_COPY_Y1, ds_readw(INVSLOT_ICONXY_TABLE + i * 4 + 2));
-			ds_writew(PIC_COPY_X2, ds_readw(INVSLOT_ICONXY_TABLE + i * 4) + 15);
-			ds_writew(PIC_COPY_Y2, ds_readw(INVSLOT_ICONXY_TABLE + i * 4 + 2) + 15);
-			ds_writed(PIC_COPY_DST, ds_readd(RENDERBUF_PTR));
-			ds_writed(PIC_COPY_SRC, ds_readd(ICON));
+			g_pic_copy.x1 = g_invslot_iconxy_table[i].x;
+			g_pic_copy.y1 = g_invslot_iconxy_table[i].y;
+			g_pic_copy.x2 = g_invslot_iconxy_table[i].x + 15;
+			g_pic_copy.y2 = g_invslot_iconxy_table[i].y + 15;
+			g_pic_copy.dst = g_renderbuf_ptr;
+			g_pic_copy.src = g_icon;
 			do_pic_copy(0);
 
-			ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
+			g_pic_copy.dst = g_vga_memstart;
 
 			/* check if stackable */
 			if (item_stackable(get_itemsdat(host_readw(hero + i * SIZEOF_INVENTORY + HERO_INVENTORY)))) {
 
 				set_textcolor(0xff, 0);
 				my_itoa(host_readw(hero + i * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_QUANTITY),
-					(char*)ds_readd(DTP2), 10);
+					g_dtp2, 10);
 
-				GUI_print_string((char*)ds_readd(DTP2),
-					ds_readw(INVSLOT_ICONXY_TABLE + i * 4) + 16 - GUI_get_space_for_string((char*)ds_readd(DTP2), 0),
-					ds_readw(INVSLOT_ICONXY_TABLE + i * 4 + 2) + 9);
+				GUI_print_string(g_dtp2,
+					g_invslot_iconxy_table[i].x + 16 - GUI_get_space_for_string(g_dtp2, 0),
+					g_invslot_iconxy_table[i].y + 9);
 
 				set_textcolor(0, 2);
 			}
 		}
 
 		/* print height */
-		sprintf((char*)ds_readd(DTP2),
-			get_tx2(33),
-			host_readb(hero + HERO_HEIGHT));
-		GUI_print_string((char*)ds_readd(DTP2), 158, 116);
+		sprintf(g_dtp2, get_tx2(33), host_readb(hero + HERO_HEIGHT));
+		GUI_print_string(g_dtp2, 158, 116);
 
 		/* print weight */
-		sprintf((char*)ds_readd(DTP2),
-			get_tx2(34),
-			host_readw(hero + HERO_WEIGHT));
-		GUI_print_string((char*)ds_readd(DTP2), 59, 179);
+		sprintf(g_dtp2, get_tx2(34), host_readw(hero + HERO_WEIGHT));
+		GUI_print_string(g_dtp2, 59, 179);
+
 	} else {
-		do_fill_rect((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 50, 319, 191, 2);
+		do_fill_rect(g_renderbuf_ptr, 0, 50, 319, 191, 2);
 	}
 
-	ds_writew(TXT_TABPOS1, 0x5f);
+	g_txt_tabpos[0] = 0x5f;
 
 	/* print name */
 	set_textcolor(0xff, 2);
-	GUI_print_string(hero + HERO_NAME2, 59, 9);
+	GUI_print_string((char*)hero + HERO_NAME2, 59, 9);
 
 	/* print typus */
 	set_textcolor(0, 2);
 
-	GUI_print_string((Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + (
-	((host_readb(hero + HERO_SEX)) ? 0x251 : 0x9) + host_readbs(hero + HERO_TYPE)) * 4)), 59, 16);
+	GUI_print_string(get_ttx(((host_readbs(hero + HERO_SEX)) ? 0x251 : 0x9) + host_readbs(hero + HERO_TYPE)), 59, 16);
 
 
 	/* show AP */
-	sprintf((char*)ds_readd(DTP2),
-		(char*)(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x9ac)),
-		host_readd(hero + HERO_AP));
-	GUI_print_string((char*)ds_readd(DTP2), 59, 26);
+	sprintf(g_dtp2, get_ttx(619), host_readds(hero + HERO_AP));
+	GUI_print_string(g_dtp2, 59, 26);
 
 	/* print level */
-	sprintf((char*)ds_readd(DTP2),
-		get_tx2(7),
-		host_readbs(hero + HERO_LEVEL));
-	GUI_print_string((char*)ds_readd(DTP2), 59, 33);
+	sprintf(g_dtp2, get_tx2(7), host_readbs(hero + HERO_LEVEL));
+	GUI_print_string(g_dtp2, 59, 33);
 
 	/* print money */
-	make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF),
-		host_readd(hero + HERO_MONEY));
+	make_valuta_str(g_text_output_buf, host_readd(hero + HERO_MONEY));
 
-	sprintf((char*)ds_readd(DTP2),
-		(char*)(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x4b0)),
-		(char*)ds_readd(TEXT_OUTPUT_BUF));
-	GUI_print_string((char*)ds_readd(DTP2), 59, 43);
+	sprintf(g_dtp2, get_ttx(300), g_text_output_buf);
+	GUI_print_string(g_dtp2, 59, 43);
 
 	/* dead, unconscious or drunk */
 	if (hero_dead(hero))
@@ -355,58 +339,49 @@ void status_show(Bit16u index)
 
 
 	/* print page content */
-	switch (ds_readw(STATUS_PAGE_MODE)) {
+	switch (g_status_page_mode) {
 		/* base values */
 		case 1: {
 
 			/* print god */
-			ds_writew(TXT_TABPOS1, 265);
+			g_txt_tabpos[0] = 265;
 
-			sprintf((char*)ds_readd(DTP2),
-					get_tx2(10),
-					(char*)(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + (host_readbs(hero + HERO_GOD) + 0x15) * 4)));
-			GUI_print_string((char*)ds_readd(DTP2), 200, 55);
+			sprintf(g_dtp2, get_tx2(10), get_ttx(host_readbs(hero + HERO_GOD) + 21));
+			GUI_print_string(g_dtp2, 200, 55);
 
 			/* show attributes */
-			ds_writew(TXT_TABPOS1, 220);
-			ds_writew(TXT_TABPOS2, 265);
-			ds_writew(TXT_TABPOS3, 285);
+			g_txt_tabpos[0] = 220;
+			g_txt_tabpos[1] = 265;
+			g_txt_tabpos[2] = 285;
 
 			for (i = 0; i <= 13; i++) {
 
-				val = host_readbs(hero + i * 3 + HERO_ATTRIB)
-					+ host_readbs(hero + i * 3 + HERO_ATTRIB_MOD);
+				val = host_readbs(hero + i * 3 + HERO_ATTRIB) + host_readbs(hero + i * 3 + HERO_ATTRIB_MOD);
 
-				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF) + i * 10,
-					get_tx2(51),
-					host_readbs(hero + i * 3 + 0x34) != val ?
-						get_tx2(49) :
-						(char*)p_datseg + EMPTY_STRING6,
+				sprintf(g_text_output_buf + i * 10, get_tx2(51),
+					host_readbs(hero + i * 3 + 0x34) != val ? get_tx2(49) :	(char*)p_datseg + EMPTY_STRING6,
 					val,
-					host_readbs(hero + i * 3 + 0x34) != val ?
-						get_tx2(50) :
-						(char*)p_datseg + EMPTY_STRING7,
+					host_readbs(hero + i * 3 + 0x34) != val ? get_tx2(50) :	(char*)p_datseg + EMPTY_STRING7,
 					host_readbs(hero + i * 3 + 0x34));
 
 			}
-			sprintf((char*)ds_readd(DTP2),
-				get_tx2(12),
-				(char*)ds_readd(TEXT_OUTPUT_BUF),
-				(char*)ds_readd(TEXT_OUTPUT_BUF) + 70,
-				(char*)ds_readd(TEXT_OUTPUT_BUF) + 10,
-				(char*)ds_readd(TEXT_OUTPUT_BUF) + 80,
-				(char*)ds_readd(TEXT_OUTPUT_BUF) + 20,
-				(char*)ds_readd(TEXT_OUTPUT_BUF) + 90,
-				(char*)ds_readd(TEXT_OUTPUT_BUF) + 30,
-				(char*)ds_readd(TEXT_OUTPUT_BUF) + 100,
-				(char*)ds_readd(TEXT_OUTPUT_BUF) + 40,
-				(char*)ds_readd(TEXT_OUTPUT_BUF) + 110,
-				(char*)ds_readd(TEXT_OUTPUT_BUF) + 50,
-				(char*)ds_readd(TEXT_OUTPUT_BUF) + 120,
-				(char*)ds_readd(TEXT_OUTPUT_BUF) + 60,
-				(char*)ds_readd(TEXT_OUTPUT_BUF) + 130);
+			sprintf(g_dtp2,	get_tx2(12),
+				g_text_output_buf,
+				g_text_output_buf + 70,
+				g_text_output_buf + 10,
+				g_text_output_buf + 80,
+				g_text_output_buf + 20,
+				g_text_output_buf + 90,
+				g_text_output_buf + 30,
+				g_text_output_buf + 100,
+				g_text_output_buf + 40,
+				g_text_output_buf + 110,
+				g_text_output_buf + 50,
+				g_text_output_buf + 120,
+				g_text_output_buf + 60,
+				g_text_output_buf + 130);
 
-			GUI_print_string((char*)ds_readd(DTP2), 200, 70);
+			GUI_print_string(g_dtp2, 200, 70);
 
 			/* calculate BP */
 			bp = 8;
@@ -424,7 +399,7 @@ void status_show(Bit16u index)
 			}
 #endif
 
-			if (ds_readw(GAME_MODE) == GAME_MODE_ADVANCED) {
+			if (g_game_mode == GAME_MODE_ADVANCED) {
 				/* advanded mode */
 
 #ifdef M302de_ORIGINAL_BUGFIX
@@ -440,8 +415,7 @@ void status_show(Bit16u index)
 					sprintf(le_fix, "%d", host_readw(hero + HERO_LE_ORIG));
 				}
 
-				sprintf((char*)ds_readd(DTP2),
-					get_tx2(13),
+				sprintf(g_dtp2,	get_tx2(13),
 					host_readw(hero + HERO_LE), le_fix,			/* LE */
 					host_readw(hero + HERO_AE), host_readw(hero + HERO_AE_ORIG),	/* AE */
 					host_readbs(hero + HERO_MR),			/* MR */
@@ -455,7 +429,7 @@ void status_show(Bit16u index)
 #else
 
 				/* Original Behavior: print max LE in black */
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx2(13),
 					host_readw(hero + HERO_LE), host_readw(hero + HERO_LE_ORIG),	/* LE */
 					host_readw(hero + HERO_AE), host_readw(hero + HERO_AE_ORIG),	/* AE */
@@ -468,7 +442,7 @@ void status_show(Bit16u index)
 #endif
 
 
-				GUI_print_string((char*)ds_readd(DTP2), 200, 130);
+				GUI_print_string(g_dtp2, 200, 130);
 			} else {
 				/* novice mode */
 
@@ -516,7 +490,7 @@ void status_show(Bit16u index)
 				}
 
 
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx2(52),
 					host_readw(hero + HERO_LE), le_fix,			/* LE */
 					host_readw(hero + HERO_AE), host_readw(hero + HERO_AE_ORIG),	/* AE */
@@ -531,7 +505,7 @@ void status_show(Bit16u index)
 				reset_status_string(get_tx2(52));
 				/* Original-Bugfix end */
 #else
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx2(52),
 					host_readw(hero + HERO_LE), host_readw(hero + HERO_LE_ORIG),	/* LE */
 					host_readw(hero + HERO_AE), host_readw(hero + HERO_AE_ORIG),	/* AE */
@@ -544,15 +518,15 @@ void status_show(Bit16u index)
 					bp);							/* BP */
 #endif
 
-				GUI_print_string((char*)ds_readd(DTP2), 200, 124);
+				GUI_print_string(g_dtp2, 200, 124);
 			}
 
 			break;
 		}
 		/* AT PA values */
 		case 2: {
-			ds_writew(TXT_TABPOS1, 275);
-			ds_writew(TXT_TABPOS2, 295);
+			g_txt_tabpos[0] = 275;
+			g_txt_tabpos[1] = 295;
 
 			/* Fernkampfwaffen-Basiswert: (KL + GE + KK)/4 */
 			j = (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KL)) +
@@ -587,47 +561,46 @@ void status_show(Bit16u index)
 			if (pa < 0)
 				pa = 0;
 
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_tx2(5),
 				host_readbs(hero + HERO_ATPA_BASIS),
-				(char*)(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0xc0)),
-
+				get_ttx(48),
 				host_readbs(hero + HERO_AT) - host_readbs(hero + HERO_RS_BE) / 2,
 				host_readbs(hero + HERO_PA) - host_readbs(hero + HERO_RS_BE) / 2,
-				(char*)(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0xc4)),
+				get_ttx(49),
 
 				host_readbs(hero + (HERO_AT + 1)) - host_readbs(hero + HERO_RS_BE) / 2,
 				host_readbs(hero + (HERO_PA + 1)) - host_readbs(hero + HERO_RS_BE) / 2,
-				(char*)(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0xc8)),
+				get_ttx(50),
 
 				host_readbs(hero + (HERO_AT + 2)) - host_readbs(hero + HERO_RS_BE) / 2,
 				host_readbs(hero + (HERO_PA + 2)) - host_readbs(hero + HERO_RS_BE) / 2,
-				(char*)(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0xcc)),
+				get_ttx(51),
 
 				host_readbs(hero + (HERO_AT + 3)) - host_readbs(hero + HERO_RS_BE) / 2,
 				host_readbs(hero + (HERO_PA + 3)) - host_readbs(hero + HERO_RS_BE) / 2,
-				(char*)(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0xd0)),
+				get_ttx(52),
 
 				host_readbs(hero + (HERO_AT + 4)) - host_readbs(hero + HERO_RS_BE) / 2,
 				host_readbs(hero + (HERO_PA + 4)) - host_readbs(hero + HERO_RS_BE) / 2,
-				(char*)(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0xd4)),
+				get_ttx(53),
 
 				host_readbs(hero + (HERO_AT + 5)) - host_readbs(hero + HERO_RS_BE) / 2,
 				host_readbs(hero + (HERO_PA + 5)) - host_readbs(hero + HERO_RS_BE) / 2,
-				(char*)(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0xd8)),
+				get_ttx(54),
 
 				host_readbs(hero + (HERO_AT + 6)) - host_readbs(hero + HERO_RS_BE) / 2,
 				host_readbs(hero + (HERO_PA + 6)) - host_readbs(hero + HERO_RS_BE) / 2,
 				at,
 				pa,
 
-				(char*)(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0xdc)),
+				get_ttx(55),
 				host_readbs(hero + (HERO_TALENTS + TA_SCHUSSWAFFEN)) + j,
 
-				(char*)(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0xe0)),
+				get_ttx(56),
 				host_readbs(hero + (HERO_TALENTS + TA_WURFWAFFEN)) + j);
 
-			GUI_print_string((char*)ds_readd(DTP2), 200, 60);
+			GUI_print_string(g_dtp2, 200, 60);
 			break;
 		}
 		/* skills */
@@ -640,45 +613,21 @@ void status_show(Bit16u index)
 			/* print headers */
 			set_textcolor(0xff, 2);
 
-			GUI_print_string(
-				(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x300)),
-				GUI_get_first_pos_centered((Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x300)), 5, 100, 0),
-				55);
+			GUI_print_string(get_ttx(192), GUI_get_first_pos_centered(get_ttx(192), 5, 100, 0), 55);
 
-			GUI_print_string(
-				(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x308)),
-				GUI_get_first_pos_centered((Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x308)), 110, 100, 0),
-				55);
+			GUI_print_string(get_ttx(194), GUI_get_first_pos_centered(get_ttx(194), 110, 100, 0), 55);
 
-			GUI_print_string(
-				(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x314)),
-				GUI_get_first_pos_centered((Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x314)), 215, 100, 0),
-				55);
+			GUI_print_string(get_ttx(197), GUI_get_first_pos_centered(get_ttx(197), 215, 100, 0), 55);
 
-			GUI_print_string(
-				(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x304)),
-				GUI_get_first_pos_centered((Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x304)), 5, 100, 0),
-				97);
+			GUI_print_string(get_ttx(193), GUI_get_first_pos_centered(get_ttx(193), 5, 100, 0), 97);
 
-			GUI_print_string(
-				(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x30c)),
-				GUI_get_first_pos_centered((Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x30c)), 110, 100, 0),
-				104);
+			GUI_print_string(get_ttx(195), GUI_get_first_pos_centered(get_ttx(195), 110, 100, 0), 104);
 
-			GUI_print_string(
-				(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x318)),
-				GUI_get_first_pos_centered((Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x318)), 215, 100, 0),
-				97);
+			GUI_print_string(get_ttx(198), GUI_get_first_pos_centered(get_ttx(198), 215, 100, 0), 97);
 
-			GUI_print_string(
-				(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x310)),
-				GUI_get_first_pos_centered((Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x310)), 110, 100, 0),
-				132);
+			GUI_print_string(get_ttx(196), GUI_get_first_pos_centered(get_ttx(196), 110, 100, 0), 132);
 
-			GUI_print_string(
-				(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x31c)),
-				GUI_get_first_pos_centered((Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x31c)), 215, 100, 0),
-				153);
+			GUI_print_string(get_ttx(199), GUI_get_first_pos_centered(get_ttx(199), 215, 100, 0), 153);
 
 			/* print values */
 			set_textcolor(0, 2);
@@ -705,26 +654,13 @@ void status_show(Bit16u index)
 			/* print headers */
 			set_textcolor(0xff, 2);
 
-			GUI_print_string(
-				(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x190)),
-				GUI_get_first_pos_centered((Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x190)), 5, 100, 0),
-				55);
+			GUI_print_string(get_ttx(100), GUI_get_first_pos_centered(get_ttx(100), 5, 100, 0), 55);
 
-			GUI_print_string(
-				(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x324)),
-				GUI_get_first_pos_centered((Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x324)), 5, 100, 0),
-				129);
+			GUI_print_string(get_ttx(201), GUI_get_first_pos_centered(get_ttx(201), 5, 100, 0), 129);
 
-			GUI_print_string(
-				(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x328)),
-				GUI_get_first_pos_centered((Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x328)), 110, 100, 0),
-				55);
+			GUI_print_string(get_ttx(202), GUI_get_first_pos_centered(get_ttx(202), 110, 100, 0), 55);
 
-			GUI_print_string(
-				(Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x32c)),
-				GUI_get_first_pos_centered((Bit8u*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x32c)), 215, 100, 0),
-				55);
-
+			GUI_print_string(get_ttx(203), GUI_get_first_pos_centered(get_ttx(203), 215, 100, 0), 55);
 
 			/* show values */
 			set_textcolor(0, 2);
@@ -748,26 +684,26 @@ void status_show(Bit16u index)
 		}
 	}
 
-	ds_writew(PIC_COPY_X1, 0);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, 319);
-	ds_writew(PIC_COPY_Y2, 199);
-	ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = 319;
+	g_pic_copy.y2 = 199;
+	g_pic_copy.src = g_renderbuf_ptr;
 	do_pic_copy(0);
 
-	ds_writew(UPDATE_STATUSLINE, 1);
+	g_update_statusline = 1;
 
-	if (ds_readws(STATUS_PAGE_MODE) >= 3) {
-		do_v_line((Bit8u*)ds_readd(FRAMEBUF_PTR), 107, 54, 195, 0);
-		do_v_line((Bit8u*)ds_readd(FRAMEBUF_PTR), 212, 54, 195, 0);
+	if (g_status_page_mode >= 3) {
+		do_v_line(g_vga_memstart, 107, 54, 195, 0);
+		do_v_line(g_vga_memstart, 212, 54, 195, 0);
 	}
 
-	ds_writew(TXT_TABPOS1, txt_tabpos1_bak);
-	ds_writew(TXT_TABPOS2, txt_tabpos2_bak);
-	ds_writew(TXT_TABPOS3, txt_tabpos3_bak);
-	ds_writew(TXT_TABPOS4, txt_tabpos4_bak);
+	g_txt_tabpos[0] = txt_tabpos1_bak;
+	g_txt_tabpos[1] = txt_tabpos2_bak;
+	g_txt_tabpos[2] = txt_tabpos3_bak;
+	g_txt_tabpos[3] = txt_tabpos4_bak;
 
-	ds_writed(PRINT_STRING_BUFFER, ds_readd(FRAMEBUF_PTR));
+	g_vga_backbuffer = g_vga_memstart;
 
 	refresh_screen_size();
 }

@@ -5,11 +5,13 @@ namespace M302de {
 //0x20
 void unused_store(signed short);
 //0x25
-RealPt unused_load(signed short);
+Bit8u* unused_load(signed short);
 //0x2a
 void load_area_description(signed short);
 //0x2f
+#if defined(__BORLANDC__)
 void unused_load_archive_file(signed short, signed short, Bit32u);
+#endif
 //0x34
 void prepare_dungeon_area(void);
 //0x39
@@ -17,7 +19,7 @@ void load_map(void);
 //0x3e
 void load_dungeon_ddt(void);
 //0x43
-RealPt seg028_0444(signed short, signed short, signed short, signed short);
+Bit8u* seg028_0444(signed short, signed short, signed short, signed short);
 //0x48
 void seg028_0224(void);
 //0x4d

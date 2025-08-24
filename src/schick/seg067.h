@@ -23,11 +23,11 @@ void city_event_6(void);
 /* 0x4d */
 void city_event_switch(void);
 /* 0x52 */
-RealPt waffinfo_weapons(void);
+Bit8u* waffinfo_weapons(void);
 /* 0x57 */
-RealPt waffinfo_herbs(void);
+Bit8u* waffinfo_herbs(void);
 /* 0x5c */
-RealPt waffinfo_general(void);
+Bit8u* waffinfo_general(void);
 
 #if !defined(__BORLANDC__)
 }

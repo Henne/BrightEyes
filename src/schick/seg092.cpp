@@ -61,10 +61,14 @@ void chest_poisoned1(void)
 	print_msg_with_first_hero(get_ttx(520));
 
 	/* the first hero gets wounded with 2W6 */
-	sub_hero_le((Bit8u*)ds_writed(MAIN_ACTING_HERO, (Bit32u)get_first_hero_available_in_group()), dice_roll(2, 6, 0));
+	sub_hero_le((Bit8u*)(gs_main_acting_hero = get_first_hero_available_in_group()), dice_roll(2, 6, 0));
 
 	/* and gets poisoned */
-	hero_gets_poisoned((Bit8u*)ds_readd(MAIN_ACTING_HERO), 1);
+	hero_gets_poisoned((Bit8u*)gs_main_acting_hero, 1);
+
+#if !defined(__BORLANDC__)
+	gs_main_acting_hero = NULL;
+#endif
 }
 
 void chest_poisoned2(void)
@@ -73,10 +77,14 @@ void chest_poisoned2(void)
 	print_msg_with_first_hero(get_ttx(520));
 
 	/* the first hero gets wounded with 2W6 */
-	sub_hero_le((Bit8u*)ds_writed(MAIN_ACTING_HERO, (Bit32u)get_first_hero_available_in_group()), dice_roll(2, 6, 0));
+	sub_hero_le((Bit8u*)(gs_main_acting_hero = get_first_hero_available_in_group()), dice_roll(2, 6, 0));
 
 	/* and gets poisoned */
-	hero_gets_poisoned((Bit8u*)ds_readd(MAIN_ACTING_HERO), 2);
+	hero_gets_poisoned((Bit8u*)gs_main_acting_hero, 2);
+
+#if !defined(__BORLANDC__)
+	gs_main_acting_hero = NULL;
+#endif
 }
 
 void chest_poisoned3(void)
@@ -85,10 +93,14 @@ void chest_poisoned3(void)
 	print_msg_with_first_hero(get_ttx(520));
 
 	/* the first hero gets wounded with 1W6 */
-	sub_hero_le((Bit8u*)ds_writed(MAIN_ACTING_HERO, (Bit32u)get_first_hero_available_in_group()), dice_roll(1, 6, 0));
+	sub_hero_le((Bit8u*)(gs_main_acting_hero = get_first_hero_available_in_group()), dice_roll(1, 6, 0));
 
 	/* and gets poisoned */
-	hero_gets_poisoned((Bit8u*)ds_readd(MAIN_ACTING_HERO), 8);
+	hero_gets_poisoned((Bit8u*)gs_main_acting_hero, 8);
+
+#if !defined(__BORLANDC__)
+	gs_main_acting_hero = NULL;
+#endif
 }
 
 void chest_protected_brutal(void)
@@ -106,10 +118,14 @@ void chest_petrified(void)
 	print_msg_with_first_hero(get_ttx(776));
 
 	/* save pointer of the first hero */
-	ds_writed(MAIN_ACTING_HERO, (Bit32u)get_first_hero_available_in_group());
+	gs_main_acting_hero = get_first_hero_available_in_group();
 
 	/* and make him petrified */
-	or_ptr_bs((Bit8u*)ds_readd(MAIN_ACTING_HERO) + HERO_FLAGS1, 0x04); /* set 'petrified' flag */
+	or_ptr_bs((Bit8u*)gs_main_acting_hero + HERO_FLAGS1, 0x04); /* set 'petrified' flag */
+
+#if !defined(__BORLANDC__)
+	gs_main_acting_hero = NULL;
+#endif
 }
 
 void chest_ignifax_normal(void)
@@ -194,8 +210,8 @@ void loot_simple_chest(Bit8u *chest)
 	signed short tw_bak;
 	char names[20][30];
 
-	tw_bak = ds_readws(TEXTBOX_WIDTH);
-	ds_writews(TEXTBOX_WIDTH, 7);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 7;
 
 	host_writeb(chest + 0x2, 0);
 
@@ -206,7 +222,7 @@ void loot_simple_chest(Bit8u *chest)
 		/* write the names of the items in the chest into names[] */
 		while((item_id = host_readb((Bit8u*)host_readd(chest + 0x0b) + item_no)) != (signed short)0x00ff) {
 
-			strcpy(names[item_no++], (char*)GUI_name_plural(0, get_itemname(item_id)));
+			strcpy(names[item_no++], GUI_name_plural(0, get_itemname(item_id)));
 		}
 
 		if (item_no == 0) {
@@ -238,7 +254,7 @@ void loot_simple_chest(Bit8u *chest)
 
 	} while (item_no != -2);
 
-	ds_writews(TEXTBOX_WIDTH, tw_bak);
+	g_textbox_width = tw_bak;
 }
 
 /**
@@ -271,7 +287,7 @@ void delete_chest_item(Bit8u *chest, signed short item_no)
  * \param   text_non_empty shown text if chest is not empty
  * \param   text_empty  shown text if chest is empty
  */
-void loot_chest(Bit8u *chest, Bit8u *text_non_empty, Bit8u *text_empty)
+void loot_chest(Bit8u *chest, char *text_non_empty, char *text_empty)
 {
 	signed short item_no;
 	signed short item_id;
@@ -280,17 +296,16 @@ void loot_chest(Bit8u *chest, Bit8u *text_non_empty, Bit8u *text_empty)
 
 	host_writeb(chest + 0x2, 0);
 
-	tw_bak = ds_readws(TEXTBOX_WIDTH);
-	ds_writews(TEXTBOX_WIDTH, 7);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 7;
 
 	do {
-
 		item_no = 0;
 
 		/* write the names of the items in the chest into names[] */
 		while ((item_id = host_readb((Bit8u*)host_readd(chest + 0x0b) + item_no)) != (signed short)0x00ff) {
 
-			strcpy(names[item_no++], (char*)GUI_name_plural(0, get_itemname(item_id)));
+			strcpy(names[item_no++], GUI_name_plural(0, get_itemname(item_id)));
 		}
 
 		if (item_no == 0) {
@@ -322,7 +337,7 @@ void loot_chest(Bit8u *chest, Bit8u *text_non_empty, Bit8u *text_empty)
 
 	} while (item_no != -2);
 
-	ds_writews(TEXTBOX_WIDTH, tw_bak);
+	g_textbox_width = tw_bak;
 }
 
 /**
@@ -354,19 +369,6 @@ signed short hero_has_lockpicks(Bit8u *hero)
 	return retval;
 }
 
-void (*func)(RealPt);
-
-struct chest {
-	signed short pos;
-	signed char mod;
-	void (*func1)(RealPt);
-	void (*func2)(void);
-	void (*func3)(RealPt);
-	unsigned short ap;
-	unsigned short money;
-	signed short food;
-};
-
 /* handle special chest */
 void seg092_06b4(signed short a1)
 {
@@ -374,17 +376,17 @@ void seg092_06b4(signed short a1)
 	signed short y;
 	signed short pos;
 	signed short l4;
-	RealPt chest_ptr;
+	struct struct_chest *chest_ptr;
 	Bit8u *ptr;
 
-	chest_ptr = (Bit8u*)ds_readd(DNG_SPECIALCHEST_INDEX + 4 * ds_readbs(DUNGEON_INDEX));
-	ptr = p_datseg + DNG_MAP;
-	ds_writew(GET_EXTRA_LOOT, 0);
-	x = ds_readws(X_TARGET);
-	y = ds_readws(Y_TARGET);
+	chest_ptr = g_dng_specialchest_index[gs_dungeon_index - 1];
+	ptr = g_dng_map;
+	g_get_extra_loot = 0;
+	x = gs_x_target;
+	y = gs_y_target;
 
 	if (a1 != 0) {
-		switch(ds_readbs(DIRECTION)) {
+		switch (gs_direction) {
 			case NORTH: y--; break;
 			case EAST: x++; break;
 			case SOUTH: y++; break;
@@ -393,79 +395,70 @@ void seg092_06b4(signed short a1)
 	}
 
 	l4 = host_readb(ptr + MAP_POS(x,y)) & 0x02;
-	pos = DNG_POS(ds_readbs(DUNGEON_LEVEL), x, y);
+	pos = DNG_POS(gs_dungeon_level, x, y);
 
 	play_voc(ARCHIVE_FILE_FX13_VOC);
 
 	do {
 
-		if (host_readws(chest_ptr) == pos) {
+		if (chest_ptr->pos == pos) {
 
-			if (l4 != 0 && host_readd(chest_ptr + 11)) {
-#if defined(__BORLANDC__)
-				((void (*)(RealPt))((Bit8u*)host_readd(chest_ptr + 11)))(chest_ptr);
-#else
-				(t_map(chest_ptr, 11)(chest_ptr));
-#endif
-			} else if (host_readbs(chest_ptr + 2) != 0) {
-#if defined(__BORLANDC__)
-				((void (*)(RealPt))((Bit8u*)host_readd(chest_ptr + 3)))(chest_ptr);
-#else
-				(t_map(chest_ptr, 3)(chest_ptr));
-#endif
-			} else if ((Bit8u*)host_readd(chest_ptr + 3)) {
-#if defined(__BORLANDC__)
-				((void (*)(RealPt))((Bit8u*)host_readd(chest_ptr + 3)))(chest_ptr);
-#else
-				(t_map(chest_ptr, 3)(chest_ptr));
-#endif
-			} else if ((Bit8u*)host_readd(chest_ptr + 11)) {
-#if defined(__BORLANDC__)
-				((void (*)(RealPt))((Bit8u*)host_readd(chest_ptr + 11)))(chest_ptr);
-#else
-				(t_map(chest_ptr, 11)(chest_ptr));
-#endif
-				ds_writew(GET_EXTRA_LOOT, 1);
-			} else if (host_readws(chest_ptr + 17) != 0) {
-				ds_writew(GET_EXTRA_LOOT, 1);
+			if (l4 != 0 && chest_ptr->loot) {
+
+				chest_ptr->loot((Bit8u*)chest_ptr);
+
+			} else if (chest_ptr->mod) {
+
+				chest_ptr->open((Bit8u*)chest_ptr);
+
+			} else if (chest_ptr->open) {
+
+				chest_ptr->open((Bit8u*)chest_ptr);
+
+			} else if (chest_ptr->loot) {
+
+				chest_ptr->loot((Bit8u*)chest_ptr);
+				g_get_extra_loot = 1;
+
+			} else if (chest_ptr->money) {
+
+				g_get_extra_loot = 1;
 			}
 
 			break;
 		}
 
-#if !defined(__BORLANDC__)
-		chest_ptr += 21;
-	} while (host_readws(chest_ptr) != -1);
-#else
-	} while (host_readws((Bit8u*)((struct chest*)chest_ptr)++) != -1);
-#endif
+		chest_ptr++;
 
-	if (l4 == 0 && ds_readws(GET_EXTRA_LOOT) != 0) {
+	} while (chest_ptr->pos != -1);
 
-		if (host_readws(chest_ptr + 15) != 0) {
+	if (l4 == 0 && g_get_extra_loot) {
+
+		if (chest_ptr->ap) {
+
 			/* There are AP in the chest */
-			add_hero_ap_all(host_readws(chest_ptr + 15));
+			add_hero_ap_all(chest_ptr->ap);
 		}
 
-		if (host_readws(chest_ptr + 17) != 0) {
+		if (chest_ptr->money) {
 
 			/* There is money in the chest */
-			make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), host_readw(chest_ptr + 17));
+			make_valuta_str(g_text_output_buf, chest_ptr->money);
 
-			sprintf((char*)ds_readd(DTP2), get_ttx(793), (char*)ds_readd(TEXT_OUTPUT_BUF));
-			GUI_output((char*)ds_readd(DTP2));
+			sprintf(g_dtp2, get_ttx(793), g_text_output_buf);
+			GUI_output(g_dtp2);
 
-			set_party_money(get_party_money() + host_readw(chest_ptr + 17));
+			set_party_money(get_party_money() + chest_ptr->money);
 		}
 
-		if (host_readws(chest_ptr + 19) != 0) {
+		if (chest_ptr->food) {
 			/* There are FOOD PACKAGES in the chest */
-			get_item(ITEM_FOOD_PACKAGE, 1, host_readws(chest_ptr + 19));
+			get_item(ITEM_FOOD_PACKAGE, 1, chest_ptr->food);
 		}
 	}
 }
 
-void use_lockpicks_on_chest(RealPt chest_ptr)
+void use_lockpicks_on_chest(Bit8u* chest_ptr)
 {
 	signed short l_si;
 	signed short l_di;
@@ -492,7 +485,7 @@ void use_lockpicks_on_chest(RealPt chest_ptr)
 				}
 #else
 				if ((Bit8u*)host_readd(chest_ptr + 7)) {
-					((void (*)(void))((RealPt)host_readd(chest_ptr + 7)))();
+					((void (*)(void))((Bit8u*)host_readd(chest_ptr + 7)))();
 				}
 #endif
 
@@ -503,8 +496,8 @@ void use_lockpicks_on_chest(RealPt chest_ptr)
 					((treasure_trap)(t_map(chest_ptr, 7)))();
 				}
 #else
-				if ((RealPt)host_readd(chest_ptr + 7)) {
-					((void (*)(void))((RealPt)host_readd(chest_ptr + 7)))();
+				if ((Bit8u*)host_readd(chest_ptr + 7)) {
+					((void (*)(void))((Bit8u*)host_readd(chest_ptr + 7)))();
 				}
 #endif
 
@@ -525,18 +518,18 @@ void use_lockpicks_on_chest(RealPt chest_ptr)
 					}
 				}
 #else
-				if ((RealPt)host_readd(chest_ptr + 11))
+				if ((Bit8u*)host_readd(chest_ptr + 11))
 				{
-					((void (*)(RealPt))((RealPt)host_readd(chest_ptr + 11)))(chest_ptr);
+					((void (*)(Bit8u*))((Bit8u*)host_readd(chest_ptr + 11)))(chest_ptr);
 
-					if ((RealPt)host_readd(chest_ptr + 7) == (RealPt)&chest_protected_heavy)
+					if ((Bit8u*)host_readd(chest_ptr + 7) == (Bit8u*)&chest_protected_heavy)
 					{
 						add_hero_ap(hero, 5);
 					}
 				}
 #endif
 
-				ds_writew(GET_EXTRA_LOOT, 1);
+				g_get_extra_loot = 1;
 			}
 
 		} else {
@@ -547,7 +540,7 @@ void use_lockpicks_on_chest(RealPt chest_ptr)
 	}
 }
 
-void use_key_on_chest(RealPt chest_ptr)
+void use_key_on_chest(Bit8u* chest_ptr)
 {
 	signed short key_pos;
 	Bit8u *hero;
@@ -562,23 +555,33 @@ void use_key_on_chest(RealPt chest_ptr)
 		{
 
 #if defined(__BORLANDC__)
-			((void (*)(RealPt))((RealPt)host_readd(chest_ptr + 11)))(chest_ptr);
+			((void (*)(Bit8u*))((Bit8u*)host_readd(chest_ptr + 11)))(chest_ptr);
 #else
 			t_map(chest_ptr, 11)(chest_ptr);
 #endif
 
-			ds_writew(GET_EXTRA_LOOT, 1);
+			g_get_extra_loot = 1;
 		}
 	} else {
 #if defined(__BORLANDC__)
-		((void (*)(void))((RealPt)host_readd(chest_ptr + 7)))();
+		((void (*)(void))((Bit8u*)host_readd(chest_ptr + 7)))();
 #else
 		((treasure_trap)(t_map(chest_ptr, 7)))();
 #endif
 	}
 }
 
-void loot_multi_chest(Bit8u *chest, Bit8u *msg)
+/**
+ * \brief loot a chest with stacked items (item_id, no of items)
+ * \param chest pointer to the chest
+ * \param msg header of the radio box
+ *
+ * \note: These type of chests have a content of the following format:
+ *  ( (item_1, no_1), (item_2, no_2), ... , (item_n, no_n), 0xff).
+ *  These informations are stored in an array of type Bit8u[2*n+1]
+ *  and are contained in the game state.
+ */
+void loot_multi_chest(Bit8u *chest, char *msg)
 {
 	unsigned short item_cnt;
 	signed short item_no;
@@ -588,13 +591,13 @@ void loot_multi_chest(Bit8u *chest, Bit8u *msg)
 	signed short len;
 	char names[20][25];
 
-	tw_bak = ds_readws(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 7);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 7;
 
 	do {
 
 		item_no = 0;
-		while ((i = host_readb((item_no + item_no) + chest)) != 255) {
+		while ((i = host_readb((item_no + item_no) + chest)) != 0xff) {
 
 			names[item_no][0] = '\0';
 
@@ -602,10 +605,10 @@ void loot_multi_chest(Bit8u *chest, Bit8u *msg)
 			{
 				my_itoa(item_cnt, names[item_no], 10);
 
-				strcat(names[item_no], (char*)p_datseg + STR_SINGLE_SPACE);
+				strcat(names[item_no], g_str_single_space);
 			}
 
-			strcat(names[item_no++], (char*)GUI_name_plural( ((signed short)(item_cnt > 1 ? (unsigned short)1 : (unsigned short)0)) ? 4 : 0, get_itemname(i)));
+			strcat(names[item_no++], GUI_name_plural( ((signed short)(item_cnt > 1 ? (unsigned short)1 : (unsigned short)0)) ? 4 : 0, get_itemname(i)));
 		}
 
 		if (item_no != 0) {
@@ -635,7 +638,7 @@ void loot_multi_chest(Bit8u *chest, Bit8u *msg)
 
 				if (i != 0) {
 
-					if (chest[item_no] == 250) {
+					if (chest[item_no] == ITEM_DUCATS) {
 						add_party_money(i * 100L);
 					} else {
 						i = get_item(chest[item_no], 1, i);
@@ -664,7 +667,7 @@ void loot_multi_chest(Bit8u *chest, Bit8u *msg)
 
 	} while (item_no != -2);
 
-	ds_writew(TEXTBOX_WIDTH, tw_bak);
+	g_textbox_width = tw_bak;
 }
 
 #if !defined(__BORLANDC__)

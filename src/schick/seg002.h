@@ -2,6 +2,8 @@
 namespace M302de {
 #endif
 
+#include "datseg.h"
+
 void play_music_file(signed short);
 void set_audio_track(Bit16u);
 void sound_menu(void);
@@ -10,19 +12,19 @@ void read_sound_cfg(void);
 void init_AIL(Bit32u);
 void exit_AIL(void);
 /* static */
-RealPt read_music_driver(RealPt);
+Bit8u* read_music_driver(Bit8u*);
 /* static */
 signed short prepare_midi_playback(signed short);
 /* static */
 signed short start_midi_playback(signed short);
 /* static */
-RealPt prepare_timbre(signed short, signed short);
+Bit8u* prepare_timbre(signed short, signed short);
 /* static */
 signed short load_midi_file(signed short);
 /* static */
 signed short do_load_midi_file(signed short);
 /* static */
-signed short load_music_driver(RealPt, signed short, signed short);
+signed short load_music_driver(Bit8u*, signed short, signed short);
 /* static */
 void do_play_music_file(signed short);
 /* static */
@@ -46,7 +48,7 @@ void SND_stop_digi(void);
 /* static */
 void SND_set_volume(unsigned short);
 /* static */
-signed short load_digi_driver(RealPt, signed short, signed short, signed short);
+signed short load_digi_driver(Bit8u*, signed short, signed short, signed short);
 /* static */
 unsigned char* read_digi_driver(char*);
 //static
@@ -85,7 +87,7 @@ void refresh_screen_size1(void);
 //static
 void mouse_19dc(void);
 void handle_gui_input(void);
-signed short get_mouse_action(signed short, signed short, Bit8u*);
+signed short get_mouse_action(signed short, signed short, struct mouse_action*);
 void handle_input(void);
 void wait_for_keyboard1(void);
 /* static */
@@ -123,12 +125,8 @@ void passages_reset();
 void timewarp(Bit32s);
 void timewarp_until_time_of_day(Bit32s);
 void dec_splash(void);
-//static
-void draw_splash(signed short, signed short);
 void timewarp_until_midnight(void);
 void wait_for_keyboard2(void);
-/* static */
-void seg002_4031(void);
 void wait_for_keypress(void);
 void delay_or_keypress(signed short);
 void unused_delay(signed short);
@@ -136,8 +134,8 @@ void unused_spinlock(void);
 Bit32s swap_u32(Bit32u);
 Bit32u swap_u32_unused(Bit32u);
 signed short alloc_EMS(Bit32s);
-void from_EMS(RealPt, signed short, Bit32s);
-void to_EMS(signed short, RealPt, Bit32s);
+void from_EMS(Bit8u*, signed short, Bit32s);
+void to_EMS(signed short, Bit8u*, Bit32s);
 void set_to_ff(void);
 void draw_loc_icons(signed short, ...);
 signed short mod_day_timer(signed short);
@@ -180,8 +178,8 @@ signed short get_item_pos(Bit8u*, signed short);
 signed short get_first_hero_with_item(signed short);
 signed short get_first_hero_with_item_in_group(signed short, signed short);
 void sub_group_le(signed short);
-RealPt get_first_hero_available_in_group(void);
-RealPt get_second_hero_available_in_group(void);
+Bit8u* get_first_hero_available_in_group(void);
+Bit8u* get_second_hero_available_in_group(void);
 signed short count_heroes_available(void);
 #ifdef M302de_ORIGINAL_BUGFIX
 /* this function allows cleaner fixes for Original-Bug 15 */

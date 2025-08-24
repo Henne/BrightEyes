@@ -25,37 +25,15 @@
 namespace M302de {
 #endif
 
-#if !defined(__BORLANDC__)
-static void (*mspell[])(void) = {
-	NULL,
-	mspell_verwandlung,		/*  1 */
-	mspell_bannbaladin,		/*  2 */
-	mspell_boeser_blick,		/*  3 */
-	mspell_horriphobus,		/*  4 */
-	mspell_axxeleratus,		/*  5 */
-	mspell_balsam,			/*  6 */
-	mspell_blitz,			/*  7 */
-	mspell_eisenrost,		/*  8 */
-	mspell_fulminictus,		/*  9 */
-	mspell_ignifaxius,		/* 10 */
-	mspell_plumbumbarum,		/* 11 */
-	mspell_saft_kraft,		/* 12 */
-	mspell_armatrutz,		/* 13 */
-	mspell_paralue,			/* 14 */
-};
-
-#endif
-
 void MON_do_spell_damage(signed short damage)
 {
 	if (damage > 0) {
 
-		if (host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) < 10) {
+		if (g_spelluser_e->enemy_id < 10) {
 			/* target is a hero */
 
 			/* set the pointer to the target */
-			ds_writed(SPELLTARGET,
-				(Bit32u)((Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * (host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) - 1)));
+			g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
 
 			/* do the damage */
 			sub_hero_le(get_spelltarget(), damage);
@@ -65,15 +43,14 @@ void MON_do_spell_damage(signed short damage)
 
 			/* check if someone died */
 			if (hero_dead(get_spelltarget())) {
-				ds_writew(DEFENDER_DEAD, 1);
+				g_defender_dead = 1;
 			}
 
 		} else {
 			/* target is a monster */
 
 			/* set the pointer to the target */
-			ds_writed(SPELLTARGET_E,
-				(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+			g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
 
 			/* do the damage */
 			FIG_damage_enemy(get_spelltarget_e(), damage, 1);
@@ -83,7 +60,7 @@ void MON_do_spell_damage(signed short damage)
 
 			/* check if someone died */
 			if (enemy_dead(get_spelltarget_e())) {
-				ds_writew(DEFENDER_DEAD, 1);
+				g_defender_dead = 1;
 			}
 		}
 	}
@@ -92,12 +69,11 @@ void MON_do_spell_damage(signed short damage)
 /* unused */
 signed short MON_get_target_PA(void)
 {
-	if (host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) < 10) {
+	if (g_spelluser_e->enemy_id < 10) {
 		/* target is a hero */
 
 		/* set the pointer to the target */
-		ds_writed(SPELLTARGET,
-			(Bit32u)((Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * (host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) - 1)));
+		g_spelltarget =  get_hero(g_spelluser_e->enemy_id - 1);
 
 		/* calc and return PA-value */
 		return host_readbs(get_spelltarget() + HERO_PA + host_readbs(get_spelltarget() + HERO_WEAPON_TYPE))
@@ -107,23 +83,21 @@ signed short MON_get_target_PA(void)
 		/* target is a monster */
 
 		/* set the pointer to the target */
-		ds_writed(SPELLTARGET_E,
-			(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
 
 		/* calc and return PA-value */
-		return host_readbs(get_spelltarget_e() + ENEMY_SHEET_PA);
+		return g_spelltarget_e->pa;
 	}
 }
 
 /* unused */
 signed short MON_get_target_RS(void)
 {
-	if (host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) < 10) {
+	if (g_spelluser_e->enemy_id < 10) {
 		/* target is a hero */
 
 		/* set the pointer to the target */
-		ds_writed(SPELLTARGET,
-			(Bit32u)((Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * (host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) - 1)));
+		g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
 
 		/* return RS-value */
 		return host_readbs(get_spelltarget() + HERO_RS_BONUS1);
@@ -132,19 +106,18 @@ signed short MON_get_target_RS(void)
 		/* target is a monster */
 
 		/* set the pointer to the target */
-		ds_writed(SPELLTARGET_E,
-			(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
 
 		/* return PA-value */
-		return host_readbs(get_spelltarget_e() + ENEMY_SHEET_RS);
+		return g_spelltarget_e->rs;
 	}
 }
 
-signed short MON_get_spell_cost(signed short mspell_no, signed short flag)
+signed short MON_get_spell_cost(signed short mspell_id, signed short flag)
 {
 	signed char cost;
 
-	cost = ds_readbs((MON_SPELL_DESCRIPTIONS + MON_SPELL_DESCRIPTIONS_AE_COST) + SIZEOF_MON_SPELL_DESCRIPTIONS * mspell_no);
+	cost = g_mon_spell_descriptions[mspell_id].ae_cost;
 
 	if (flag != 0) {
 
@@ -164,7 +137,7 @@ signed short MON_get_spell_cost(signed short mspell_no, signed short flag)
  * \param   attrib3     no of 3rd attribute
  * \param   handicap    may be positive or negative. The higher the value, the harder the test.
  */
-signed short MON_test_attrib3(Bit8u *monster, signed short attrib1, signed short attrib2, signed short attrib3, signed char handicap)
+signed short MON_test_attrib3(struct enemy_sheet *monster, signed short attrib1, signed short attrib2, signed short attrib3, signed char handicap)
 /* called only from a single position, in MON_test_skill(..) */
 {
 #ifndef M302de_FEATURE_MOD
@@ -178,9 +151,7 @@ signed short MON_test_attrib3(Bit8u *monster, signed short attrib1, signed short
 
 	randval = dice_roll(3, 20, handicap);
 
-	attr_sum = host_readbs(monster + ENEMY_SHEET_ATTRIB + 2 * attrib1)
-		+ host_readbs(monster + ENEMY_SHEET_ATTRIB + 2 * attrib2)
-		+ host_readbs(monster + ENEMY_SHEET_ATTRIB + 2 * attrib3);
+	attr_sum = monster->attrib[2 * attrib1] + monster->attrib[2 * attrib2] + monster->attrib[2 * attrib3];
 
 	return attr_sum - randval + 1;
 #else
@@ -194,9 +165,9 @@ signed short MON_test_attrib3(Bit8u *monster, signed short attrib1, signed short
 	signed short fail = 0;
 	signed char attrib [3];
 
-	attrib[0] = host_readbs(monster + ENEMY_SHEET_ATTRIB + 2 * attrib1);
-	attrib[1] = host_readbs(monster + ENEMY_SHEET_ATTRIB + 2 * attrib2);
-	attrib[2] = host_readbs(monster + ENEMY_SHEET_ATTRIB + 2 * attrib3);
+	attrib[0] = monster->attrib[2 * attrib1];
+	attrib[1] = monster->attrib[2 * attrib2];
+	attrib[2] = monster->attrib[2 * attrib3];
 
 #if !defined(__BORLANDC__)
 	D1_INFO(" (%s %d/%s %d/%s %d) ->",
@@ -278,94 +249,89 @@ signed short MON_test_attrib3(Bit8u *monster, signed short attrib1, signed short
 #endif
 }
 
-signed short MON_test_skill(Bit8u *monster, signed short mspell_no, signed char handicap)
-/* called only from a single position, in MON_cast_spell(..) */
-{
-	Bit8u *desc;
 
-	desc = p_datseg + MON_SPELL_DESCRIPTIONS + SIZEOF_MON_SPELL_DESCRIPTIONS * mspell_no;
+/* called only from a single position, in MON_cast_spell(..) */
+signed short MON_test_skill(struct enemy_sheet *monster, signed short mspell_id, signed char handicap)
+{
+	struct mon_spell_description *desc;
+
+	desc = &g_mon_spell_descriptions[mspell_id];
 
 	/* depends on MR */
-	if (host_readbs(desc + MON_SPELL_DESCRIPTIONS_VS_MR) != 0) {
+	if (desc->vs_mr) {
 
 		/* add MR */
-		handicap += (host_readbs(monster + ENEMY_SHEET_ENEMY_ID) >= 10) ?
-			ds_readbs(((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_MR) + SIZEOF_ENEMY_SHEET * host_readbs(monster + ENEMY_SHEET_ENEMY_ID)) :
-			host_readbs(get_hero(host_readbs(monster + ENEMY_SHEET_ENEMY_ID) - 1) + HERO_MR);
+		handicap += (monster->enemy_id >= 10 ?	g_enemy_sheets[monster->enemy_id].mr : host_readbs(get_hero(monster->enemy_id - 1) + HERO_MR));
 	}
 
 	/* check if the monster spell has a valid ID */
-	if ((mspell_no >= 1) && (mspell_no <= 14)) {
+	if ((mspell_id >= 1) && (mspell_id <= 14)) {
+
 #if !defined(__BORLANDC__)
-		D1_INFO("Gegnerischer Zauber %s Probe %+d",names_mspell[mspell_no], handicap);
+		D1_INFO("Gegnerischer Zauber %s Probe %+d", names_mspell[mspell_id], handicap);
 #endif
+
 		/* TODO: balancing problem: enemy spells are always cast with skill value 0 */
-		return MON_test_attrib3(monster, host_readbs(desc + MON_SPELL_DESCRIPTIONS_ATTRIB1),
-			host_readbs(desc + MON_SPELL_DESCRIPTIONS_ATTRIB2), host_readbs(desc + MON_SPELL_DESCRIPTIONS_ATTRIB3),
-			handicap);
+		return MON_test_attrib3(monster, desc->attrib1, desc->attrib2, desc->attrib3, handicap);
 	}
 
 	return 0;
 }
 
-void MON_sub_ae(Bit8u *monster, signed short ae)
+void MON_sub_ae(struct enemy_sheet *monster, signed short ae)
 {
-	if (!enemy_dead(monster)) {
-		sub_ptr_ws(monster + ENEMY_SHEET_AE, ae);
+	if (!monster->flags1.dead) {
 
-		if (host_readws(monster + ENEMY_SHEET_AE) < 0) {
-			host_writew(monster + ENEMY_SHEET_AE, 0);
+		monster->ae -= ae;
+
+		if (monster->ae < 0) {
+			monster->ae = 0;
 		}
 	}
 }
 
-signed short MON_cast_spell(RealPt monster, signed char handicap)
+signed short MON_cast_spell(struct enemy_sheet* monster, signed char handicap)
 {
 	signed short l_si;
 	signed short l_di;
 	signed short cost;
 	void (*func)(void);
-	volatile signed short tx_file_bak;
+	signed short tx_file_bak;
 
-	l_si = host_readbs((Bit8u*)(monster) + ENEMY_SHEET_CUR_SPELL);
+	l_si = monster->cur_spell;
 
 	if (l_si > 0) {
 
 		cost = MON_get_spell_cost(l_si, 0);
 
 		/* check AE */
-		if (host_readws((Bit8u*)(monster) + ENEMY_SHEET_AE) < cost) {
+		if (monster->ae < cost) {
 			return -1;
 		}
 
-		ds_writew(SPELLTEST_RESULT, MON_test_skill((Bit8u*)(monster), l_si, handicap));
+		g_spelltest_result = MON_test_skill(monster, l_si, handicap);
 
-		if ((ds_readws(SPELLTEST_RESULT) <= 0) || (ds_readds(INGAME_TIMERS + 4 * INGAME_TIMER_RONDRA_NO_SPELLS) > 0)) {
+		if ((g_spelltest_result <= 0) || (gs_ingame_timers[INGAME_TIMER_RONDRA_NO_SPELLS] > 0)) {
 
 			/* spell failed */
-			MON_sub_ae((Bit8u*)(monster), MON_get_spell_cost(l_si, 1));
+			MON_sub_ae(monster, MON_get_spell_cost(l_si, 1));
 
 			return 0;
 
 		} else {
 
-			ds_writed(SPELLUSER_E, (Bit32u)monster);
+			g_spelluser_e = monster;
 
-			ds_writew(MONSTER_SPELL_AE_COST, -1);
+			g_monster_spell_ae_cost = -1;
 
 			/* terminate output string */
-			host_writeb((char*)ds_readd(DTP2), 0);
+			*g_dtp2 = '\0';
 
-			tx_file_bak = ds_readws(TX_FILE_INDEX);
+			tx_file_bak = g_tx_file_index;
 
 			load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 
-#if !defined(__BORLANDC__)
-			func = mspell[l_si];
-#else
-			func = (void (*)(void))ds_readd(MON_SPELL_HANDLERS + 4 * l_si);
-#endif
-
+			func = g_mon_spellhandlers[l_si];
 			func();
 
 			if ((tx_file_bak != -1) && (tx_file_bak != ARCHIVE_FILE_SPELLTXT_LTX)) {
@@ -374,15 +340,15 @@ signed short MON_cast_spell(RealPt monster, signed char handicap)
 
 			l_di = 1;
 
-			if (ds_readws(MONSTER_SPELL_AE_COST) == 0) {
+			if (!g_monster_spell_ae_cost) {
 				l_di = -1;
-			} else if (ds_readws(MONSTER_SPELL_AE_COST) == -2) {
-				MON_sub_ae((Bit8u*)(monster), MON_get_spell_cost(l_si, 1));
+			} else if (g_monster_spell_ae_cost == -2) {
+				MON_sub_ae(monster, MON_get_spell_cost(l_si, 1));
 				l_di = 0;
-			} else if (ds_readws(MONSTER_SPELL_AE_COST) != -1) {
-				MON_sub_ae((Bit8u*)(monster), ds_readws(MONSTER_SPELL_AE_COST));
+			} else if (g_monster_spell_ae_cost != -1) {
+				MON_sub_ae(monster, g_monster_spell_ae_cost);
 			} else {
-				MON_sub_ae((Bit8u*)(monster), cost);
+				MON_sub_ae(monster, cost);
 			}
 
 			return l_di;
@@ -390,112 +356,104 @@ signed short MON_cast_spell(RealPt monster, signed char handicap)
 	} else {
 		return 0;
 	}
-
 }
 
+/**
+ * \brief can undo 'petrified' and 'mushroom'-effects on enemies
+ */
 void mspell_verwandlung(void)
 {
 	/* set pointer to monster target */
-	ds_writed(SPELLTARGET_E,
-		(Bit32u)(p_datseg + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET)));
+	g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
 
-	if (enemy_petrified(get_spelltarget_e())) {
+	if (g_spelltarget_e->flags1.petrified) {
 
 		/* set the spellcosts */
-		ds_writew(MONSTER_SPELL_AE_COST, 5 * random_schick(10));
+		g_monster_spell_ae_cost = 5 * random_schick(10);
 
-		if (host_readws(get_spelluser_e() + ENEMY_SHEET_AE) < ds_readws(MONSTER_SPELL_AE_COST)) {
+		if (g_spelluser_e->ae < g_monster_spell_ae_cost) {
 			/* if not enough AE, all AE will be consumed, without further effect */
-			ds_writew(MONSTER_SPELL_AE_COST, host_readws(get_spelluser_e() + ENEMY_SHEET_AE));
+			g_monster_spell_ae_cost = g_spelluser_e->ae;
 		} else {
-			and_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS1, 0xfb); /* unset 'petrified' flag */
+			/* unset 'petrified' flag */
+			g_spelltarget_e->flags1.petrified = 0;
 
 			/* prepare message */
-			sprintf((char*)ds_readd(DTP2),
-				get_tx(114),
-				(Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
+			sprintf(g_dtp2,	get_tx(114), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 		}
-	} else if (enemy_mushroom(get_spelltarget_e())) {
+
+	} else if (g_spelltarget_e->flags1.mushroom) {
 
 		/* set the spellcosts */
-		ds_writew(MONSTER_SPELL_AE_COST, 5 * random_schick(10));
+		g_monster_spell_ae_cost = 5 * random_schick(10);
 
-		if (host_readws(get_spelluser_e() + ENEMY_SHEET_AE) < ds_readws(MONSTER_SPELL_AE_COST)) {
+		if (g_spelluser_e->ae < g_monster_spell_ae_cost) {
 			/* if not enough AE, all AE will be consumed, without further effect */
-			ds_writew(MONSTER_SPELL_AE_COST, host_readws(get_spelluser_e() + ENEMY_SHEET_AE));
+			g_monster_spell_ae_cost = g_spelluser_e->ae;
 		} else {
-			and_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS1, 0xbf); /* unset 'mushroom' flag */
+			/* unset 'mushroom' flag */
+			g_spelltarget_e->flags1.mushroom = 0;
 
 			ds_writew(MSPELL_AWAKE_FLAG, 1);
 		}
 	} else {
-		ds_writew(MONSTER_SPELL_AE_COST, 2);
+		g_monster_spell_ae_cost = 2;
 	}
 }
 
 void mspell_bannbaladin(void)
 {
 	/* set pointer to hero target */
-	ds_writed(SPELLTARGET,
-                        (Bit32u)((Bit8u*)ds_readd(HEROES) + (host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) - 1) * SIZEOF_HERO));
+	g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
 
 	/* set the flag */
 	or_ptr_bs(get_spelltarget() + HERO_FLAGS2, 0x08); /* set 'tame' flag */
 
 	/* prepare message */
-	sprintf((char*)ds_readd(DTP2),
-		get_tx(115),
-		get_spelltarget() + HERO_NAME2);
+	sprintf(g_dtp2, get_tx(115), get_spelltarget() + HERO_NAME2);
 }
 
 void mspell_boeser_blick(void)
 {
 	/* set pointer to hero target */
-	ds_writed(SPELLTARGET,
-                        (Bit32u)((Bit8u*)ds_readd(HEROES) + (host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) - 1) * SIZEOF_HERO));
+	g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
 
 	/* set the flag */
 	or_ptr_bs(get_spelltarget() + HERO_FLAGS1, 0x20); /* set 'renegade' flag */
 
 	/* prepare message */
-	sprintf((char*)ds_readd(DTP2),
-		get_tx(116),
-		get_spelltarget() + HERO_NAME2);
+	sprintf(g_dtp2, get_tx(116), get_spelltarget() + HERO_NAME2);
 }
 
 void mspell_horriphobus(void)
 {
 	/* set pointer to hero target */
-	ds_writed(SPELLTARGET,
-                        (Bit32u)((Bit8u*)ds_readd(HEROES) + (host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) - 1) * SIZEOF_HERO));
+	g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
 
 	/* set the flag */
 	or_ptr_bs(get_spelltarget() + HERO_FLAGS2, 0x01); /* set 'scared' flag */
 	and_ptr_bs(get_spelltarget() + HERO_FLAGS1, 0xdf); /* unset 'renegade' flag */
 
 	/* prepare message */
-	sprintf((char*)ds_readd(DTP2),
-		get_tx(117),
-		get_spelltarget() + HERO_NAME2);
+	sprintf(g_dtp2, get_tx(117), get_spelltarget() + HERO_NAME2);
 }
 
 void mspell_axxeleratus(void)
 {
 	/* set pointer to monster target */
-	ds_writed(SPELLTARGET_E,
-		(Bit32u)(p_datseg + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET)));
+	g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
 
 	/* #Attacks + 1 */
-	inc_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_ATTACKS);
+	g_spelltarget_e->attacks++;
 
 	/* AT + 1 */
-	add_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_AT, 1);
+	g_spelltarget_e->at += 1;
 
 	/* PA + 1 */
-	add_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_PA, 1);
+	g_spelltarget_e->pa += 1;
 
 	/* BP * 2 */
-	host_writebs(get_spelltarget_e() + ENEMY_SHEET_BP, 2 * host_readbs(get_spelltarget_e() + ENEMY_SHEET_BP));
+	g_spelltarget_e->bp = 2 * g_spelltarget_e->bp;
 
 }
 
@@ -504,8 +462,7 @@ void mspell_balsam(void)
 	signed short le;
 
 	/* set pointer to monster target */
-	ds_writed(SPELLTARGET_E,
-		(Bit32u)(p_datseg + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET)));
+	g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
 
 #ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug:
@@ -518,70 +475,65 @@ void mspell_balsam(void)
 	 *
 	 * Hard to guess what the intended behavior was. */
 
-	ds_writew(MONSTER_SPELL_AE_COST, 0);
+	g_monster_spell_ae_cost = 0;
 
-	le = (host_readws(get_spelltarget_e() + ENEMY_SHEET_LE_ORIG) - host_readws(get_spelltarget_e() + ENEMY_SHEET_LE)) / 2; /* half of the missing LE */
+	le = (g_spelltarget_e->le_orig - g_spelltarget_e->le) / 2; /* half of the missing LE */
 
 	if (le) {
 		if (le < 7) {
 			/* AE costs are at least 7 */
-			ds_writew(MONSTER_SPELL_AE_COST, 7);
+			g_monster_spell_ae_cost = 7;
 		}
-		if (host_readws(get_spelluser_e() + ENEMY_SHEET_AE) < ds_readws(MONSTER_SPELL_AE_COST)) {
+		if (g_spelluser_e->ae < g_monster_spell_ae_cost) {
 			/* not enough AE: heal only that many LE as the spellcaster has AE available */
-			ds_writew(MONSTER_SPELL_AE_COST, host_readws(get_spelluser_e() + ENEMY_SHEET_AE));
+			g_monster_spell_ae_cost = g_spelluser_e->ae;
 		}
-		add_ptr_ws(get_spelltarget_e() + ENEMY_SHEET_LE, ds_readws(MONSTER_SPELL_AE_COST));
+		g_spelltarget_e->le += g_monster_spell_ae_cost;
 	}
 #else
 	/* Fix:
 	 * Let's do it this way:
 	 * Heal (missing LE)/2 LE, but at least 7, as long as it won't be healed above max.
 	 * If not enouh AE available, number of healed LE is lowered accordingly. */
-	le = host_readws(get_spelltarget_e() + ENEMY_SHEET_LE_ORIG) - host_readws(get_spelltarget_e() + ENEMY_SHEET_LE); /* missing LE */
+	le = g_spelltarget_e->le_orig - g_spelltarget_e->le; /* missing LE */
 	if (le >= 16) {
 		le /= 2;
 	} else if (le > 7) {
 		le = 7;
 	}
-	if (host_readws(get_spelluser_e() + ENEMY_SHEET_AE) < le) {
-		le = host_readws(get_spelluser_e() + ENEMY_SHEET_AE);
+	if (g_spelluser_e->ae < le) {
+		le = g_spelluser_e->ae;
 	}
-	ds_writew(MONSTER_SPELL_AE_COST, le);
-	add_ptr_ws(get_spelltarget_e() + ENEMY_SHEET_LE, le);
+
+	g_monster_spell_ae_cost = le;
+	g_spelltarget_e->le += le;
 #endif
 }
 
 void mspell_blitz(void)
 {
-	if (host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) < 10) {
+	if (g_spelluser_e->enemy_id < 10) {
 		/* target is a hero */
 
 		/* set the pointer to the target */
-		ds_writed(SPELLTARGET,
-			(Bit32u)((Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * (host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) - 1)));
+		g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
 
 		/* set blitz timer to 3 rounds */
 		host_writeb(get_spelltarget() + HERO_BLIND, 3);
 
 		/* prepare message */
-		sprintf((char*)ds_readd(DTP2),
-			get_tx(86),
-			get_spelltarget() + HERO_NAME2);
+		sprintf(g_dtp2, get_tx(86), get_spelltarget() + HERO_NAME2);
 	} else {
 		/* target is a monster */
 
 		/* set the pointer to the target */
-		ds_writed(SPELLTARGET_E,
-			(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
 
 		/* set blitz timer to 3 rounds */
-		host_writeb(get_spelltarget_e() + ENEMY_SHEET_BLIND, 3);
+		g_spelltarget_e->blind = 3;
 
 		/* prepare message */
-		sprintf((char*)ds_readd(DTP2),
-			get_tx(85),
-			(Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
+		sprintf(g_dtp2,	get_tx(85), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 	}
 }
 
@@ -589,18 +541,18 @@ void mspell_eisenrost(void)
 {
 	signed short id;
 
-	if (host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) < 10) {
+	if (g_spelluser_e->enemy_id < 10) {
 		/* target is a hero */
 
 		/* set the pointer to the target */
-		ds_writed(SPELLTARGET,
-			(Bit32u)((Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * (host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) - 1)));
+		g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
 
 		id = host_readws(get_spelltarget() + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID);
 
 		if (!id) {
 			/* target hero has no weapon */
-			ds_writew(MONSTER_SPELL_AE_COST, 2);
+			g_monster_spell_ae_cost = 2;
+
 		} else if (!inventory_broken(get_spelltarget() + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY)) {
 
 			if (host_readbs(get_spelltarget() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_BF)) > 0) {
@@ -608,12 +560,10 @@ void mspell_eisenrost(void)
 				or_ptr_bs(get_spelltarget() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_FLAGS), 1); /* set 'broken' flag */
 
 				/* prepare message */
-				sprintf((char*)ds_readd(DTP2),
-					get_tx(92),
-					(Bit8u*)(GUI_names_grammar((signed short)0x8000, id, 0)),
-					get_spelltarget() + HERO_NAME2);
+				sprintf(g_dtp2,	get_tx(92), (Bit8u*)GUI_names_grammar((signed short)0x8000, id, 0), get_spelltarget() + HERO_NAME2);
+
 			} else {
-				ds_writew(MONSTER_SPELL_AE_COST, -2);
+				g_monster_spell_ae_cost = -2;
 			}
 		}
 
@@ -621,19 +571,16 @@ void mspell_eisenrost(void)
 		/* target is a monster */
 
 		/* set the pointer to the target */
-		ds_writed(SPELLTARGET_E,
-			(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
 
 		/* if weapon is not broken */
-		if (!host_readbs(get_spelltarget_e() + ENEMY_SHEET_BROKEN)) {
+		if (!g_spelltarget_e->weapon_broken) {
 
 			/* set weapon broken */
-			host_writebs(get_spelltarget_e() + ENEMY_SHEET_BROKEN, 1);
+			g_spelltarget_e->weapon_broken = 1;
 
 			/* prepare message */
-			sprintf((char*)ds_readd(DTP2),
-				get_tx(91),
-				(Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
+			sprintf(g_dtp2,	get_tx(91), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 		}
 	}
 }
@@ -646,18 +593,18 @@ void mspell_fulminictus(void)
 	damage = dice_roll(3, 6, 0);
 
 	/* add the level of the spelluser */
-	damage += host_readbs(get_spelluser_e() + ENEMY_SHEET_LEVEL);
+	damage += g_spelluser_e->level;
 
 	/* adjust damage */
-	if (host_readws(get_spelluser_e() + ENEMY_SHEET_AE) < damage) {
-		damage =  host_readws(get_spelluser_e() + ENEMY_SHEET_AE);
+	if (g_spelluser_e->ae < damage) {
+		damage = g_spelluser_e->ae;
 	}
 
 	/* do the damage */
 	MON_do_spell_damage(damage);
 
 	/* set the cost */
-	ds_writew(MONSTER_SPELL_AE_COST, damage);
+	g_monster_spell_ae_cost = damage;
 }
 
 void mspell_ignifaxius(void)
@@ -670,14 +617,14 @@ void mspell_ignifaxius(void)
 	Bit8u *p_armor;
 
 	/* get the level of the spelluser */
-	level = host_readbs(get_spelluser_e() + ENEMY_SHEET_LEVEL);
+	level = g_spelluser_e->level;
 
 	/* roll the damage: damage = level * W6 */
 	damage = dice_roll(level, 6, 0);
 
 	/* damage must not exceed AE of the spelluser */
-	if (host_readws(get_spelluser_e() + ENEMY_SHEET_AE) < damage) {
-		damage = host_readws(get_spelluser_e() + ENEMY_SHEET_AE);
+	if (g_spelluser_e->ae < damage) {
+		damage = g_spelluser_e->ae;
 	}
 
 	/* do the damage */
@@ -686,15 +633,14 @@ void mspell_ignifaxius(void)
 	/* calc RS malus */
 	rs_malus = damage / 10;
 
-	if (host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) < 10) {
+	if (g_spelluser_e->enemy_id < 10) {
 		/* target is a hero */
 
 		/* get the position of the target hero */
-		hero_pos = host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) - 1;
+		hero_pos = g_spelluser_e->enemy_id - 1;
 
 		/* set the pointer to the target */
-		ds_writed(SPELLTARGET,
-			(Bit32u)((Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * hero_pos));
+		g_spelltarget = get_hero(hero_pos);
 
 		/* pointer to the armor of the target hero */
 		p_armor = get_spelltarget() + HERO_INVENTORY + HERO_INVENTORY_SLOT_BODY * SIZEOF_INVENTORY;
@@ -724,25 +670,21 @@ void mspell_ignifaxius(void)
 		/* target is a monster */
 
 		/* set the pointer to the target */
-		ds_writed(SPELLTARGET_E,
-			(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
 
 		/* subtract RS malus */
-		host_writeb(get_spelltarget_e() + ENEMY_SHEET_RS,
-			host_readbs(get_spelltarget_e() + ENEMY_SHEET_RS) - rs_malus);
+		g_spelltarget_e->rs = g_spelltarget_e->rs - rs_malus;
 
 		/* AT - level / 2 */
-		host_writeb(get_spelltarget_e() + ENEMY_SHEET_AT,
-			host_readbs(get_spelltarget_e() + ENEMY_SHEET_AT) - level / 2);
+		g_spelltarget_e->at = g_spelltarget_e->at - level / 2;
 
 		/* PA - level / 2 */
-		host_writeb(get_spelltarget_e() + ENEMY_SHEET_PA,
-			host_readbs(get_spelltarget_e() + ENEMY_SHEET_PA) - level / 2);
+		g_spelltarget_e->pa = g_spelltarget_e->pa - level / 2;
 	}
 
 	/* terminate output string */
-	host_writebs((char*)ds_readd(DTP2), 0);
-	ds_writew(MONSTER_SPELL_AE_COST, damage);
+	*g_dtp2 = '\0';
+	g_monster_spell_ae_cost = damage;
 }
 
 void mspell_plumbumbarum(void)
@@ -750,63 +692,51 @@ void mspell_plumbumbarum(void)
 	signed short slot;
 	signed short hero_pos;
 
-	if (host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) < 10) {
+	if (g_spelluser_e->enemy_id < 10) {
 		/* target is a hero */
 
 		/* get the position of the target hero */
-		hero_pos = host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) - 1;
+		hero_pos = g_spelluser_e->enemy_id - 1;
 
 		/* set the pointer to the target */
-		ds_writed(SPELLTARGET,
-			(Bit32u)((Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * hero_pos));
+		g_spelltarget = get_hero(hero_pos);
 
 		/* AT - 3 */
 		slot = get_free_mod_slot();
 		set_mod_slot(slot, HOURS(1), get_spelltarget() + HERO_AT + host_readbs(get_spelltarget() + HERO_WEAPON_TYPE), -3, (signed char)hero_pos);
 
 		/* prepare message */
-		sprintf((char*)ds_readd(DTP2),
-			get_tx(94),
-			get_spelltarget() + HERO_NAME2);
+		sprintf(g_dtp2, get_tx(94), get_spelltarget() + HERO_NAME2);
 	} else {
 		/* target is a monster */
 
 		/* set the pointer to the target */
-		ds_writed(SPELLTARGET_E,
-			(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
 
 		/* AT - 3 */
-		host_writeb(get_spelltarget_e() + ENEMY_SHEET_AT,
-			host_readbs(get_spelltarget_e() + ENEMY_SHEET_AT) - 3);
+		g_spelltarget_e->at = g_spelltarget_e->at - 3;
 
 		/* prepare message */
-		sprintf((char*)ds_readd(DTP2),
-			get_tx(95),
-			(Bit8u*)(GUI_names_grammar((signed short)0x8001, host_readbs(get_spelltarget_e()), 1)));
+		sprintf(g_dtp2,	get_tx(95), (Bit8u*)GUI_names_grammar((signed short)0x8001, g_spelltarget_e->mon_id, 1));
 	}
 }
 
 void mspell_saft_kraft(void)
 {
-
 	/* set the pointer to the target */
-	ds_writed(SPELLTARGET_E,
-		(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+	g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
 
 	/* AT + 5 */
-	host_writeb(get_spelltarget_e() + ENEMY_SHEET_AT,
-		host_readbs(get_spelltarget_e() + ENEMY_SHEET_AT) + 5);
+	g_spelltarget_e->at = g_spelltarget_e->at + 5;
 
 	/* PA - 5 */
-	host_writeb(get_spelltarget_e() + ENEMY_SHEET_PA,
-		host_readbs(get_spelltarget_e() + ENEMY_SHEET_PA) - 5);
+	g_spelltarget_e->pa = g_spelltarget_e->pa - 5;
 
 	/* damage + 5 */
-	host_writeb(get_spelltarget_e() + ENEMY_SHEET_SAFTKRAFT,
-		host_readbs(get_spelltarget_e() + ENEMY_SHEET_SAFTKRAFT) + 5);
+	g_spelltarget_e->saftkraft = g_spelltarget_e->saftkraft + 5;
 
 	/* set spellcost */
-	ds_writew(MONSTER_SPELL_AE_COST, random_schick(20));
+	g_monster_spell_ae_cost = random_schick(20);
 }
 
 void mspell_armatrutz(void)
@@ -815,51 +745,43 @@ void mspell_armatrutz(void)
 	signed short rs_bonus;
 
 	i = 0;
-	while ((i * i) < host_readws(get_spelluser_e() + ENEMY_SHEET_AE)) {
+	while ((i * i) < g_spelluser_e->ae) {
 		i++;
 	}
 
 	rs_bonus = random_interval(1, i);
 
 	/* set spellcost */
-	ds_writew(MONSTER_SPELL_AE_COST, rs_bonus * rs_bonus);
+	g_monster_spell_ae_cost = rs_bonus * rs_bonus;
 
 	/* RS + rs_bonus */
-	host_writebs(get_spelluser_e() + ENEMY_SHEET_RS,
-		host_readbs(get_spelluser_e() + ENEMY_SHEET_RS) + (signed char)rs_bonus);
+	g_spelluser_e->rs = g_spelluser_e->rs + rs_bonus;
 }
 
 void mspell_paralue(void)
 {
-
-	if (host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) >= 10) {
+	if (g_spelluser_e->enemy_id >= 10) {
 		/* target is a monster */
 
 		/* set the pointer to the target */
-		ds_writed(SPELLTARGET_E,
-			(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
 
-		/* set the flag */
-		or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS1, 0x04); /* set 'petrified' flag */
+		/* set 'petrified' flag */
+		g_spelltarget_e->flags1.petrified = 1;
 
 		/* prepare message */
-		sprintf((char*)ds_readd(DTP2),
-			get_tx(103),
-			(Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
+		sprintf(g_dtp2,	get_tx(103), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 	} else {
 		/* target is a hero */
 
 		/* set the pointer to the target */
-		ds_writed(SPELLTARGET,
-			(Bit32u)((Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * (host_readbs(get_spelluser_e() + ENEMY_SHEET_ENEMY_ID) - 1)));
+		g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
 
 		/* set the flag */
 		or_ptr_bs(get_spelltarget() + HERO_FLAGS1, 0x04); /* set 'petrified' flag */
 
 		/* prepare message */
-		sprintf((char*)ds_readd(DTP2),
-			get_tx(103),
-			get_spelltarget() + HERO_NAME2);
+		sprintf(g_dtp2, get_tx(103), get_spelltarget() + HERO_NAME2);
 	}
 }
 

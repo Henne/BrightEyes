@@ -30,10 +30,6 @@ struct dummy5 {
 	char a[5];
 };
 
-struct dummy62 {
-	char a[62];
-};
-
 /**
  * \brief   compress monsters
  */
@@ -47,32 +43,29 @@ void FIG_tidy_monsters(void)
 	while (i < 20) {
 
 		/* if the monster is not able to fight anymore ... */
-		if ((ds_readbs(ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * i + ENEMY_SHEET_MON_ID) != 0) &&
-			(enemy_dead((Bit8u*)(RealMake(datseg, ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * i))) ||
-			enemy_mushroom((Bit8u*)(RealMake(datseg, ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * i))) ||
-			enemy_petrified((Bit8u*)(RealMake(datseg, ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * i))) ||
-			((host_readbs((Bit8u*)ds_readd(CURRENT_FIGHT) + SIZEOF_FIGHT_MONSTER * i + FIGHT_MONSTERS_ROUND_APPEAR) != 0) && (monsters == 0))))
+		if (g_enemy_sheets[i].mon_id &&
+			(g_enemy_sheets[i].flags1.dead || g_enemy_sheets[i].flags1.mushroom || g_enemy_sheets[i].flags1.petrified ||
+			((host_readbs(g_current_fight + SIZEOF_FIGHT_MONSTER * i + FIGHT_MONSTERS_ROUND_APPEAR) != 0) && (monsters == 0))))
 		{
 
 			if (i == 19) {
 				/* just clear the last one */
-				memset((Bit8u*)ds_readd(CURRENT_FIGHT) + SIZEOF_FIGHT_MONSTER * i + FIGHT_MONSTERS_ID, 0, 5);
+				memset(g_current_fight + SIZEOF_FIGHT_MONSTER * i + FIGHT_MONSTERS_ID, 0, 5);
 				break;
 			} else {
 				/* move the next monsters one position to the front */
 				for (j = i; j < 19; j++) {
 
-					*(struct dummy5*)((Bit8u*)ds_readd(CURRENT_FIGHT) + SIZEOF_FIGHT_MONSTER * j + FIGHT_MONSTERS_ID) =
-						*(struct dummy5*)((Bit8u*)ds_readd(CURRENT_FIGHT) + SIZEOF_FIGHT_MONSTER * (j + 1) + FIGHT_MONSTERS_ID);
+					*(struct dummy5*)(g_current_fight + SIZEOF_FIGHT_MONSTER * j + FIGHT_MONSTERS_ID) =
+						*(struct dummy5*)(g_current_fight + SIZEOF_FIGHT_MONSTER * (j + 1) + FIGHT_MONSTERS_ID);
 
-					memset((Bit8u*)ds_readd(CURRENT_FIGHT) + SIZEOF_FIGHT_MONSTER * (j + 1) + FIGHT_MONSTERS_ID, 0, SIZEOF_FIGHT_MONSTER);
+					memset(g_current_fight + SIZEOF_FIGHT_MONSTER * (j + 1) + FIGHT_MONSTERS_ID, 0, SIZEOF_FIGHT_MONSTER);
 
-					*(struct dummy62*)(p_datseg + ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * j) =
-						*(struct dummy62*)(p_datseg + ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * (j + 1));
+					g_enemy_sheets[j] = g_enemy_sheets[j + 1];
 
-					memset(p_datseg + ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * (j + 1), 0, SIZEOF_ENEMY_SHEET);
+					memset(&g_enemy_sheets[j + 1], 0, sizeof(struct enemy_sheet));
 
-					or_ds_bs((ENEMY_SHEETS + ENEMY_SHEET_FLAGS1 + SIZEOF_ENEMY_SHEET) + SIZEOF_ENEMY_SHEET * j, 1); /* set 'dead' flag */
+					g_enemy_sheets[j].flags1.dead = 1;
 				}
 			}
 		} else {
@@ -92,30 +85,30 @@ void FIG_loot_monsters(void)
 	signed short l6;
 	Bit32s money;
 	signed short autofight_bak;
-	signed short textbox_width_bak;
+	signed short tw_bak;
 
 	char *a[31];
 
 	l_si = 0;
 
-	autofight_bak = ds_readws(AUTOFIGHT);
-	ds_writew(AUTOFIGHT, 0);
+	autofight_bak = g_autofight;
+	g_autofight = 0;
 
 	for (l_di = 0; l_di < 30; l_di++) {
 
-			a[l_di] = (char*)(Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 40 * l_di));
+		a[l_di] = (char*)(g_buffer9_ptr + 40 * l_di);
 	}
 
 	do {
 
 		l_di = l3 = 0;
 
-		while (((l1 = host_readws((Bit8u*)ds_readd(CURRENT_FIGHT) + 2 * l_di + FIGHT_LOOT)) != 0) &&
+		while (((l1 = host_readws(g_current_fight + 2 * l_di + FIGHT_LOOT)) != 0) &&
 			(l_di < 30) && (l1 != ITEM_BONE_WITH_RUNE))
 			/* Apparently a quick "fix" for an unwanted bone with runes in fight THOR8,
 			 * see https://www.crystals-dsa-foren.de/showthread.php?tid=453&pid=172221#pid172221 */
 		{
-			strcpy(a[l_di++], (char*)(Bit8u*)(GUI_name_plural(0, get_itemname(l1))));
+			strcpy(a[l_di++], GUI_name_plural(0, get_itemname(l1)));
 			l3++;
 		}
 
@@ -138,8 +131,8 @@ void FIG_loot_monsters(void)
 				l6 = l3;
 			}
 
-			textbox_width_bak = ds_readws(TEXTBOX_WIDTH);
-			ds_writew(TEXTBOX_WIDTH, 6);
+			tw_bak = g_textbox_width;
+			g_textbox_width = 6;
 
 			l4 = GUI_radio(get_tx(14), l6,
 						a[0 + l_si], a[1 + l_si], a[2 + l_si], a[3 + l_si],
@@ -147,8 +140,7 @@ void FIG_loot_monsters(void)
 						a[8 + l_si], a[9 + l_si], a[10 + l_si], a[11 + l_si],
 						a[12 + l_si], a[13 + l_si], a[14 + l_si], a[15 + l_si]) - 1;
 
-			ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
-
+			g_textbox_width = tw_bak;
 
 			if ((l5 != 0) && (l6 - 1 == l4)) {
 				if (!l_si) {
@@ -160,18 +152,18 @@ void FIG_loot_monsters(void)
 
 			if ((l4 != -2) && ((l5 == 0) || ((l5 != 0) && (l6 - 1 != l4)))) {
 
-				if (!get_item(host_readws((Bit8u*)ds_readd(CURRENT_FIGHT) + 2 * (l4 + l_si) + FIGHT_LOOT), 1, 1))
+				if (!get_item(host_readws(g_current_fight + 2 * (l4 + l_si) + FIGHT_LOOT), 1, 1))
 				{
 					l4 = -2;
 				} else {
-					host_writew((Bit8u*)ds_readd(CURRENT_FIGHT) + 2 * (l4 + l_si) + FIGHT_LOOT, 0);
+					host_writew(g_current_fight + 2 * (l4 + l_si) + FIGHT_LOOT, 0);
 
 					for (l_di = l4 + l_si; l_di < 29; l_di++) {
 
-						host_writew((Bit8u*)ds_readd(CURRENT_FIGHT) + 2 * (l_di) + FIGHT_LOOT,
-							host_readws((Bit8u*)ds_readd(CURRENT_FIGHT) + 2 * (l_di + 1) + FIGHT_LOOT));
+						host_writew(g_current_fight + 2 * (l_di) + FIGHT_LOOT,
+							host_readws(g_current_fight + 2 * (l_di + 1) + FIGHT_LOOT));
 
-						host_writew((Bit8u*)ds_readd(CURRENT_FIGHT) + 2 * (l_di + 1) + FIGHT_LOOT, 0);
+						host_writew(g_current_fight + 2 * (l_di + 1) + FIGHT_LOOT, 0);
 					}
 				}
 			}
@@ -181,23 +173,23 @@ void FIG_loot_monsters(void)
 		}
 	} while (l4 != -2);
 
-	money = host_readws((Bit8u*)ds_readd(CURRENT_FIGHT) + FIGHT_DUCATS) * 100;
-	money += host_readws((Bit8u*)ds_readd(CURRENT_FIGHT) + FIGHT_SILVER) * 10;
-	money += host_readws((Bit8u*)ds_readd(CURRENT_FIGHT) + FIGHT_HELLER);
+	money = host_readws(g_current_fight + FIGHT_DUCATS) * 100;
+	money += host_readws(g_current_fight + FIGHT_SILVER) * 10;
+	money += host_readws(g_current_fight + FIGHT_HELLER);
 
 	if (money > 0) {
 
-		make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), money);
+		make_valuta_str(g_text_output_buf, money);
 
-		sprintf((char*)((char*)ds_readd(DTP2)),
+		sprintf((char*)(g_dtp2),
 			get_tx(15),
-			(char*)ds_readd(TEXT_OUTPUT_BUF));
-		GUI_output((char*)ds_readd(DTP2));
+			g_text_output_buf);
+		GUI_output(g_dtp2);
 
 		set_party_money(get_party_money() + money);
 	}
 
-	ds_writew(AUTOFIGHT, autofight_bak);
+	g_autofight = autofight_bak;
 }
 
 /**
@@ -205,38 +197,38 @@ void FIG_loot_monsters(void)
  */
 void FIG_split_ap(void)
 {
-	signed short l_si;
+	signed short i;
 	signed short ap;
 	signed short known_ap;
 	signed short autofight_bak;
 
 	ap = 0;
-	autofight_bak = ds_readws(AUTOFIGHT);
-	ds_writew(AUTOFIGHT, 0);
+	autofight_bak = g_autofight;
+	g_autofight = 0;
 
 	/* calculate ap from all monsters in that fight */
-	for (l_si = 0; l_si < 20; l_si++) {
+	for (i = 0; i < 20; i++) {
 
-		if (ds_readbs(ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * l_si + ENEMY_SHEET_MON_ID) != 0) {
+		if (g_enemy_sheets[i].mon_id) {
 
-			if (ds_readbs(KNOWN_MONSTERS + ds_readbs(ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * l_si)) != 0) {
+			if (gs_known_monsters[g_enemy_sheets[i].mon_id]) {
 
 				/* monster is already known */
-				known_ap = ds_readbs((ENEMY_SHEETS + ENEMY_SHEET_FIRSTAP) + SIZEOF_ENEMY_SHEET * l_si) / 10;
+				known_ap = g_enemy_sheets[i].first_ap / 10;
 				ap += (known_ap == 0 ? 1 : known_ap);
 			} else {
 				/* first time bonus */
-				ap += ds_readbs((ENEMY_SHEETS + ENEMY_SHEET_FIRSTAP) + SIZEOF_ENEMY_SHEET * l_si);
+				ap += g_enemy_sheets[i].first_ap;
 			}
 		}
 	}
 
-	/* mark each monster type from that fight */
-	for (l_si = 0; l_si < 20; l_si++) {
+	/* mark each type of monster from that fight in the game state */
+	for (i = 0; i < 20; i++) {
 
-		if (ds_readbs(ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * l_si + ENEMY_SHEET_MON_ID) != 0) {
+		if (g_enemy_sheets[i].mon_id) {
 
-			ds_writeb(KNOWN_MONSTERS + ds_readbs(ENEMY_SHEETS + SIZEOF_ENEMY_SHEET * l_si), 1);
+			gs_known_monsters[g_enemy_sheets[i].mon_id] = 1;
 		}
 	}
 
@@ -253,13 +245,13 @@ void FIG_split_ap(void)
 	}
 
 	/* prepare output */
-	sprintf((char*)ds_readd(DTP2), get_tx(33), ap);
-	GUI_output((char*)ds_readd(DTP2));
+	sprintf(g_dtp2, get_tx(33), ap);
+	GUI_output(g_dtp2);
 
 	/* give AP to the group */
 	add_group_ap(ap);
 
-	ds_writew(AUTOFIGHT, autofight_bak);
+	g_autofight = autofight_bak;
 }
 
 /**

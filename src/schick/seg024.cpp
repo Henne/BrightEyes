@@ -43,31 +43,36 @@ void diary_show(void)
 {
 	signed short fg_bak;
 	signed short bg_bak;
-	Bit16u bak1, bak2, txt_tabpos1_bak, txt_tabpos2_bak, textbox_width_bak;
+	signed short bak1;
+	signed short bak2;
+	signed short txt_tabpos1_bak;
+	signed short txt_tabpos2_bak;
+	signed short tw_bak;
 	signed short i;
 
-	textbox_width_bak = ds_readw(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 3);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 3;
 
-	ds_writeb(SPECIAL_SCREEN, 1);
-	ds_writew(WALLCLOCK_UPDATE, 0);
-	ds_writew(AREA_PREPARED, 0xffff);
-	ds_writed(CURRENT_CURSOR, (Bit32u)(p_datseg + DEFAULT_MOUSE_CURSOR));
+	g_special_screen = 1;
+	g_wallclock_update = 0;
+	g_area_prepared = -1;
+
+	g_current_cursor = (unsigned short*)(p_datseg + DEFAULT_MOUSE_CURSOR);
 
 	load_pp20(ARCHIVE_FILE_BUCH_DAT);
-	ds_writeb(PP20_INDEX, ARCHIVE_FILE_BUCH_DAT);
+	g_pp20_index = ARCHIVE_FILE_BUCH_DAT;
 
 	get_textcolor(&fg_bak, &bg_bak);
 
-	ds_writed(PRINT_STRING_BUFFER, ds_readd(BUFFER9_PTR));
-	bak1 = ds_readw(TEXTLINE_MAXLEN);
-	bak2 = ds_readw(TEXTLINE_POSX);
-	txt_tabpos1_bak = ds_readw(TXT_TABPOS1);
-	txt_tabpos2_bak = ds_readw(TXT_TABPOS2);
-	ds_writew(TEXTLINE_MAXLEN, 200);
-	ds_writew(TEXTLINE_POSX, 65);
-	ds_writew(TXT_TABPOS1, 83);
-	ds_writew(TXT_TABPOS2, 130);
+	g_vga_backbuffer = (Bit8u*)g_buffer9_ptr;
+	bak1 = g_textline_maxlen;
+	bak2 = g_textline_posx;
+	txt_tabpos1_bak = g_txt_tabpos[0];
+	txt_tabpos2_bak = g_txt_tabpos[1];
+	g_textline_maxlen = 200;
+	g_textline_posx = 65;
+	g_txt_tabpos[0] = 83;
+	g_txt_tabpos[1] = 130;
 
 	set_textcolor(4, 0);
 
@@ -75,18 +80,19 @@ void diary_show(void)
 	i = 0;
 	do {
 		i = diary_print_entry(i);
-	} while (i < ds_readws(DIARY_ENTRY_COUNTER));
 
-	ds_writew(PIC_COPY_X1, 0);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, 319);
-	ds_writew(PIC_COPY_Y2, 199);
-	ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
-	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
+	} while (i < gs_diary_entry_counter);
+
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = 319;
+	g_pic_copy.y2 = 199;
+	g_pic_copy.src = g_renderbuf_ptr;
+	g_pic_copy.dst = g_vga_memstart;
 
 	update_mouse_cursor();
 
-	set_palette((Bit8u*)ds_readd(RENDERBUF_PTR) + 0xfa02, 0, 0x20);
+	set_palette(g_renderbuf_ptr + 0xfa02, 0, 0x20);
 
 	do_pic_copy(0);
 
@@ -94,47 +100,47 @@ void diary_show(void)
 
 	set_textcolor(fg_bak, bg_bak);
 
-	ds_writed(PIC_COPY_DST, ds_writed(PRINT_STRING_BUFFER, ds_readd(FRAMEBUF_PTR)));
+	g_pic_copy.dst = g_vga_backbuffer = g_vga_memstart;
 
-	ds_writew(TEXTLINE_POSX, bak2);
-	ds_writew(TEXTLINE_MAXLEN, bak1);
-	ds_writew(TXT_TABPOS1, txt_tabpos1_bak);
-	ds_writew(TXT_TABPOS2, txt_tabpos2_bak);
-	ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
+	g_textline_posx = bak2;
+	g_textline_maxlen = bak1;
+	g_txt_tabpos[0] = txt_tabpos1_bak;
+	g_txt_tabpos[1] = txt_tabpos2_bak;
+	g_textbox_width = tw_bak;
 
 	delay_or_keypress(5000);
 }
 
 void diary_new_entry(void)
 {
-	Bit8u *ptr;
+	struct struct_diary_entry *entry;
 
-	/* move all entries if the list is full */
-	if (ds_readw(DIARY_ENTRY_COUNTER) == 23) {
-		memcpy(p_datseg + DIARY_ENTRIES, p_datseg + DIARY_ENTRIES+8, (22*8));
-		dec_ds_ws(DIARY_ENTRY_COUNTER);
+	/* if all entries are occupied, move all entries one slot forward to have the last slot free */
+	if (gs_diary_entry_counter == 23) {
+		memcpy(&gs_diary_entries[0], &gs_diary_entries[1], (22 * sizeof(struct_diary_entry)));
+		gs_diary_entry_counter--;
 	}
 
 	/* make a pointer to the last entry */
-	ptr = p_datseg + (DIARY_ENTRIES-8) + ds_readw(DIARY_ENTRY_COUNTER) * 8;
+	entry = &gs_diary_entries[gs_diary_entry_counter];
 
 	/* avoid double entries for the same town */
-	if (ds_readbs(CURRENT_TOWN) != host_readw(ptr + 6)) {
+	if (gs_current_town != entry->year) {
 
 		/* make a pointer to the current entry */
-		ptr = p_datseg + DIARY_ENTRIES + ds_readw(DIARY_ENTRY_COUNTER) * 8;
+		entry = &gs_diary_entries[gs_diary_entry_counter];
 
-		/* deccrement entry counter */
-		inc_ds_ws(DIARY_ENTRY_COUNTER);
+		/* increment entry counter */
+		gs_diary_entry_counter++;
 
 		/* Write day of month */
-		host_writew(ptr, ds_readbs(DAY_OF_MONTH));
+		entry->day = gs_day_of_month;
 		/* Write month */
-		host_writew(ptr + 2, ds_readbs(MONTH));
+		entry->month = gs_month;
 		/* Write year */
-		host_writew(ptr + 4, ds_readbs(YEAR));
+		entry->year = gs_year;
 		/* Write city */
-		host_writew(ptr + 6, ds_readbs(CURRENT_TOWN));
+		entry->town = gs_current_town;
 	}
 }
 
@@ -148,77 +154,65 @@ Bit16u diary_print_entry(Bit16u line)
 	signed short day;
 	signed short month;
 	signed short startline;
-	Bit8u *ptr;
-	char *city_name;
+	struct struct_diary_entry *entry;
+	char *town_name;
 	signed short di = 0;
 
-	memset((Bit8u*)ds_readd(BUFFER9_PTR), 0, 64000);
+	memset((Bit8u*)g_buffer9_ptr, 0, 64000);
 
-	ptr = p_datseg + DIARY_ENTRIES + line * 8;
+	entry = &gs_diary_entries[line];
 
 	startline = line;
 
 	do {
-		day = host_readw(ptr);
-		month = host_readw(ptr + 2);
-		city_name = get_ttx(host_readw(ptr + 6) + 0xeb);
+		day = entry->day;
+		month = entry->month;
+		town_name = get_ttx(entry->town + 0xeb);
 
 		if (di == 0) {
-			if ((signed short)strlen(city_name) > 24) {
+			if (strlen(town_name) > 24) {
 
-				sprintf((char*)ds_readd(DTP2), (char*)(p_datseg + DIARY_STRING1),
-					host_readw(ptr), get_ttx(host_readw(ptr + 2) + 0x15), city_name);
+				sprintf(g_dtp2, g_diary_string1, entry->day, get_ttx(entry->month + 0x15), town_name);
 
-			} else if ((signed short)strlen(city_name) > 15 ) {
+			} else if (strlen(town_name) > 15) {
 
-				sprintf((char*)ds_readd(DTP2), (char*)(p_datseg + DIARY_STRING2),
-					host_readw(ptr), get_ttx(host_readw(ptr + 2) + 0x15), city_name);
+				sprintf(g_dtp2, g_diary_string2, entry->day, get_ttx(entry->month + 0x15), town_name);
 
 			} else {
-				sprintf((char*)ds_readd(DTP2), (char*)(p_datseg + DIARY_STRING3),
-					host_readw(ptr), get_ttx(host_readw(ptr + 2) + 0x15), city_name);
+				sprintf(g_dtp2, g_diary_string3, entry->day, get_ttx(entry->month + 0x15), town_name);
 			}
 		} else {
-			if ((signed short)strlen(city_name) > 24) {
+			if (strlen(town_name) > 24) {
 
-				sprintf((char*)ds_readd(DTP2), (char*)(p_datseg + DIARY_STRING4), city_name);
+				sprintf(g_dtp2, g_diary_string4, town_name);
 
-			} else if ((signed short)strlen(city_name) > 15) {
+			} else if (strlen(town_name) > 15) {
 
-				sprintf((char*)ds_readd(DTP2), (char*)(p_datseg + DIARY_STRING5), city_name);
+				sprintf(g_dtp2, g_diary_string5, town_name);
 
-			} else if ((signed short)strlen(city_name) > 6) {
+			} else if (strlen(town_name) > 6) {
 
-				sprintf((char*)ds_readd(DTP2), (char*)(p_datseg + DIARY_STRING6), city_name);
+				sprintf(g_dtp2, g_diary_string6, town_name);
 
 			} else {
 
-				sprintf((char*)ds_readd(DTP2), (char*)(p_datseg + DIARY_STRING7), city_name);
+				sprintf(g_dtp2, g_diary_string7, town_name);
 			}
 		}
 
-		GUI_print_string((char*)ds_readd(DTP2), 65, (line - startline) * 7);
-		ptr += 8;
+		GUI_print_string(g_dtp2, 65, (line - startline) * 7);
+		entry++;
 		line++;
 		di++;
 
-	} while ((host_readws(ptr) == day) && (host_readws(ptr + 2) == month));
+	} while ((entry->day == day) && (entry->month == month));
 
-	ds_writew(PIC_COPY_X1, 0);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, 319);
-	ds_writew(PIC_COPY_Y2, line * 7);
-	ds_writed(PIC_COPY_SRC, ds_readd(BUFFER9_PTR));
-#if !defined(__BORLANDC__)
-	ds_writed(PIC_COPY_DST,
-		(Bit32u)(((Bit8u*)ds_readd(RENDERBUF_PTR) + startline * 2240) + 9600));
-#else
-	/* TODO: ugly hack */
-	/*	this calculation of the address of
-		a twodimiensional array is done
-		here with inline assembly */
-	calc_twodim_array_ptr(RENDERBUF_PTR, 0x8c0, startline, 9600, PIC_COPY_DST);
-#endif
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = 319;
+	g_pic_copy.y2 = line * 7;
+	g_pic_copy.src = (Bit8u*)g_buffer9_ptr;
+	g_pic_copy.dst = &g_renderbuf_ptr[(startline * 2240) + 9600];
 	do_pic_copy(2);
 
 	return line;

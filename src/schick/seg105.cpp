@@ -95,7 +95,7 @@ void add_equip_boni(Bit8u *owner, Bit8u *equipper, signed short item, signed sho
 
 	if (item) {
 		/* calculate pointer to item description */
-		item_p = (Bit8u*)ds_readd(ITEMSDAT) + item * SIZEOF_ITEM_STATS;
+		item_p = g_itemsdat + item * SIZEOF_ITEM_STATS;
 
 		/* armor and shield */
 		if (item_armor(item_p)) {
@@ -161,7 +161,7 @@ void add_equip_boni(Bit8u *owner, Bit8u *equipper, signed short item, signed sho
 			host_writeb(equipper + (HERO_ATTRIB + 3 * ATTRIB_TA),
 				host_readbs(equipper + (HERO_ATTRIB + 3 * ATTRIB_TA)) - 4);
 
-			if (ds_readb(PP20_INDEX) == ARCHIVE_FILE_ZUSTA_UK) {
+			if (g_pp20_index == ARCHIVE_FILE_ZUSTA_UK) {
 				equip_belt_ani();
 			}
 		}
@@ -193,7 +193,7 @@ unsigned short can_hero_use_item(Bit8u *hero, unsigned short item)
 #endif
 
 	/* calculate the address of the class forbidden items array */
-	if (is_in_word_array(item, (signed short*)((Bit8u*)ds_readd((WEARABLE_ITEMS_INDEX - 4) + host_readbs(hero + HERO_TYPE) * 4))))
+	if (is_in_word_array(item, g_wearable_items_index[host_readbs(hero + HERO_TYPE) - 1]))
 		return 0;
 	else
 		return 1;
@@ -325,10 +325,10 @@ signed short give_hero_new_item(Bit8u *hero, signed short item, signed short mod
 		(host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 100 <= host_readws(hero + HERO_LOAD))) {
 
 		if (mode != 0) {
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_ttx(779),
 				(char*)(hero + HERO_NAME2));
-			GUI_output((char*)ds_readd(DTP2));
+			GUI_output(g_dtp2);
 		}
 	} else {
 		item_p = get_itemsdat(item);
@@ -504,22 +504,22 @@ unsigned short drop_item(Bit8u *hero, signed short pos, signed short no)
 		if (item_undropable(p_item)) {
 			/* this item is not droppable */
 
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_ttx(454),
-				(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8002, item, 0)));
+				(char*)(GUI_names_grammar((signed short)0x8002, item, 0)));
 
-			GUI_output((char*)ds_readd(DTP2));
+			GUI_output(g_dtp2);
 		} else {
 			/* this item is droppable */
 
 			if (item_stackable(p_item)) {
 				if (no == -1) {
-					sprintf((char*)ds_readd(DTP2),
+					sprintf(g_dtp2,
 						get_ttx(219),
-						(char*)(Bit8u*)(GUI_names_grammar(6, item, 0)));
+						(char*)(GUI_names_grammar(6, item, 0)));
 
 					do {
-						answer = GUI_input((char*)ds_readd(DTP2), 2);
+						answer = GUI_input(g_dtp2, 2);
 					} while (answer < 0);
 
 					no = answer;
@@ -581,18 +581,18 @@ unsigned short drop_item(Bit8u *hero, signed short pos, signed short no)
 		}
 
 		/* check for the pirate cave on Manrek to bring Efferd a gift */
-		if ((item == ITEM_TRIDENT || item == ITEM_NET) && ds_readb(DUNGEON_INDEX) == DUNGEONS_PIRATENHOEHLE &&
-			ds_readw(X_TARGET) == 9 && ds_readw(Y_TARGET) == 9)
+		if ((item == ITEM_TRIDENT || item == ITEM_NET) && gs_dungeon_index == DUNGEONS_PIRATENHOEHLE &&
+			gs_x_target == 9 && gs_y_target == 9)
 		{
-			ds_writeb(DNG11_EFFERD_SACRIFICE, 1);
+			gs_dng11_efferd_sacrifice = 1;
 		}
 
 		/* check for the mine in Oberorken to bring Ingerimm a gift */
-		if (item_pleasing_ingerimm(item) && ds_readb(DUNGEON_INDEX) == DUNGEONS_ZWERGENFESTE &&
-			ds_readw(X_TARGET) == 2 && ds_readw(Y_TARGET) == 14 &&
-			ds_readb(DUNGEON_LEVEL) == 1)
+		if (item_pleasing_ingerimm(item) && gs_dungeon_index == DUNGEONS_ZWERGENFESTE &&
+			gs_x_target == 2 && gs_y_target == 14 &&
+			gs_dungeon_level == 1)
 		{
-			ds_writeb(DNG12_INGERIMM_SACRIFICE, 1);
+			gs_dng12_ingerimm_sacrifice = 1;
 		}
 	}
 
@@ -626,8 +626,7 @@ signed short get_item(signed short id, signed short unused, signed short no)
 	do {
 		hero_i = get_hero(0);
 		for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
-			if (host_readb(hero_i + HERO_TYPE) &&
-				host_readb(hero_i + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP))
+			if (host_readb(hero_i + HERO_TYPE) && host_readb(hero_i + HERO_GROUP_NO) == gs_current_group)
 			{
 
 				while ((no > 0) && (v6 = give_hero_new_item(hero_i, id, 0, no)) > 0) {
@@ -638,22 +637,20 @@ signed short get_item(signed short id, signed short unused, signed short no)
 		}
 
 		if (no > 0) {
-			autofight_bak = ds_readws(AUTOFIGHT);
-			ds_writew(AUTOFIGHT, 0);
+			autofight_bak = g_autofight;
+			g_autofight = 0;
 
-			sprintf((char*)ds_readd(DTP2),
-				get_ttx(549),
-				(char*)(Bit8u*)(GUI_names_grammar(((no > 1) ? 4 : 0) + 2, id, 0)));
+			sprintf(g_dtp2,	get_ttx(549), GUI_names_grammar(((no > 1) ? 4 : 0) + 2, id, 0));
 
-			if (GUI_bool((char*)ds_readd(DTP2))) {
+			if (GUI_bool(g_dtp2)) {
 
 				dropper = select_hero_ok(get_ttx(550));
 
 				if (dropper != -1) {
 					hero_i = get_hero(dropper);
-					ds_writeb(PREVENT_DROP_EQUIPPED_ITEMS, 1);
+					g_prevent_drop_equipped_items = 1;
 					vc = select_item_to_drop(hero_i);
-					ds_writeb(PREVENT_DROP_EQUIPPED_ITEMS, 0);
+					g_prevent_drop_equipped_items = 0;
 
 					if (vc != -1) {
 						drop_item(hero_i, vc, -1);
@@ -662,7 +659,7 @@ signed short get_item(signed short id, signed short unused, signed short no)
 			} else {
 				done = 1;
 			}
-			ds_writew(AUTOFIGHT, autofight_bak);
+			g_autofight = autofight_bak;
 		} else {
 			done = 1;
 		}
@@ -707,7 +704,7 @@ signed short group_count_item(signed short item)
 		/* check class */
 		if (host_readb(hero_i + HERO_TYPE) &&
 			/* check group */
-			(host_readb(hero_i + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP))) {
+			(host_readb(hero_i + HERO_GROUP_NO) == gs_current_group)) {
 
 			ret += hero_count_item(hero_i, item);
 		}
@@ -745,11 +742,11 @@ void loose_random_item(Bit8u *hero, signed short percent, char *text)
 			/* drop 1 item */
 			drop_item(hero, pos, 1);
 
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+			sprintf(g_text_output_buf,
 				(char*)text, hero + HERO_NAME2,
 				(Bit8u*)(GUI_names_grammar(0, item, 0)));
 
-			GUI_output((char*)ds_readd(TEXT_OUTPUT_BUF));
+			GUI_output(g_text_output_buf);
 
 			return;
 		}
@@ -763,28 +760,25 @@ signed short select_item_to_drop(Bit8u *hero)
 	signed short v6 = 0;
 	signed short item;
 	signed short va;
-	signed short textbox_width_bak, bak2, bak3;
-	RealPt ptr;
+	signed short tw_bak, bak2, bak3;
+	char *ptr;
 	signed short str[23];
 	signed short di;
 
 	/* check if we drop equipped items or not */
-	i = (ds_readb(PREVENT_DROP_EQUIPPED_ITEMS) != 0) ? HERO_INVENTORY_SLOT_KNAPSACK_1 : 0;
+	i = g_prevent_drop_equipped_items ? HERO_INVENTORY_SLOT_KNAPSACK_1 : 0;
 	for (; i < NR_HERO_INVENTORY_SLOTS; i++) {
 		if ((item = host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + i * SIZEOF_INVENTORY))) {
 			str[v6] = i;
-			ds_writed(RADIO_NAME_LIST + v6 * 4 , (Bit32u)((char*)ds_readd(DTP2) + v6 * 30));
-			strcpy((char*)(char*)(ds_readd(RADIO_NAME_LIST + v6 * 4)),
-				(GUI_name_singular(get_itemname(item))));
+			g_radio_name_list[v6] = (g_dtp2 + v6 * 30);
+			strcpy(g_radio_name_list[v6], GUI_name_singular(get_itemname(item)));
 			v6++;
 		}
 	}
 
 	if (v6 == 0) {
-		sprintf((char*)ds_readd(DTP2),
-			get_ttx(750),
-			(char*)(hero + HERO_NAME2));
-		GUI_output((char*)ds_readd(DTP2));
+		sprintf(g_dtp2, get_ttx(750), (char*)(hero + HERO_NAME2));
+		GUI_output(g_dtp2);
 		return -1;
 	}
 	di = 0;
@@ -794,45 +788,39 @@ signed short select_item_to_drop(Bit8u *hero)
 			if (!di) {
 				i = 13;
 				va = i - 1;
-				ptr = (Bit8u*)ds_readd(RADIO_NAME_LIST + 4 * va);
-				ds_writed(RADIO_NAME_LIST + 4 * va,
-					host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0xbbc));
+				ptr = g_radio_name_list[va];
+				g_radio_name_list[va] = get_ttx(751);
 			} else {
 				i = v6 + 1;
 				va = i - 1;
-				ptr = (Bit8u*)ds_readd(RADIO_NAME_LIST + 4 * va);
-				ds_writed(RADIO_NAME_LIST + 4 * va,
-					host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0xbbc));
+				ptr = g_radio_name_list[va];
+				g_radio_name_list[va] = get_ttx(751);
 				i -= di;
 			}
 		} else {
 			i = v6;
 		}
-		textbox_width_bak = ds_readw(TEXTBOX_WIDTH);
-		bak2 = ds_readw(BASEPOS_X);
-		bak3 = ds_readw(BASEPOS_Y);
-		ds_writew(TEXTBOX_WIDTH, 6);
-		ds_writew(BASEPOS_X, ds_writew(BASEPOS_Y, 0));
-		v4 = GUI_radio((char*)get_ttx(752), (signed char)i,
-			(char*)(ds_readd(RADIO_NAME_LIST + 0x00 + di * 4)),
-			(char*)(ds_readd(RADIO_NAME_LIST + 0x04 + di * 4)),
-			(char*)(ds_readd(RADIO_NAME_LIST + 0x08 + di * 4)),
-			(char*)(ds_readd(RADIO_NAME_LIST + 0x0c + di * 4)),
-			(char*)(ds_readd(RADIO_NAME_LIST + 0x10 + di * 4)),
-			(char*)(ds_readd(RADIO_NAME_LIST + 0x14 + di * 4)),
-			(char*)(ds_readd(RADIO_NAME_LIST + 0x18 + di * 4)),
-			(char*)(ds_readd(RADIO_NAME_LIST + 0x1c + di * 4)),
-			(char*)(ds_readd(RADIO_NAME_LIST + 0x20 + di * 4)),
-			(char*)(ds_readd(RADIO_NAME_LIST + 0x24 + di * 4)),
-			(char*)(ds_readd(RADIO_NAME_LIST + 0x28 + di * 4)),
-			(char*)(ds_readd(RADIO_NAME_LIST + 0x2c + di * 4)),
-			(char*)(ds_readd(RADIO_NAME_LIST + 0x30 + di * 4)));
-		ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
-		ds_writew(BASEPOS_X, bak2);
-		ds_writew(BASEPOS_Y, bak3);
+		tw_bak = g_textbox_width;
+		bak2 = g_basepos_x;
+		bak3 = g_basepos_y;
+		g_textbox_width = 6;
+		g_basepos_x = g_basepos_y = 0;
+
+		v4 = GUI_radio(get_ttx(752), (signed char)i,
+				g_radio_name_list[di + 0], g_radio_name_list[di + 1],
+				g_radio_name_list[di + 2], g_radio_name_list[di + 3],
+				g_radio_name_list[di + 4], g_radio_name_list[di + 5],
+				g_radio_name_list[di + 6], g_radio_name_list[di + 7],
+				g_radio_name_list[di + 8], g_radio_name_list[di + 9],
+				g_radio_name_list[di + 10], g_radio_name_list[di + 11],
+				g_radio_name_list[di + 12]);
+
+		g_textbox_width = tw_bak;
+		g_basepos_x = bak2;
+		g_basepos_y = bak3;
 
 		if (va != -1) {
-			ds_writed(RADIO_NAME_LIST + 0x00 + va * 4, (Bit32u)ptr);
+			g_radio_name_list[va] = ptr;
 		}
 		if ((v6 > 12) && (v4 == i)) {
 			di += 12;

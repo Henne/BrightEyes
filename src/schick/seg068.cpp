@@ -4,7 +4,7 @@
  *
  *	Borlandified and identical
  *	Compiler:	Borland C++ 3.1
- *	Call:		BCC.EXE -mlarge -O- -c -1 -Yo seg058.cpp
+ *	Call:		BCC.EXE -mlarge -O- -c -1 -Yo seg068.cpp
  */
 #include <stdio.h>
 #include <string.h>
@@ -35,15 +35,13 @@ void THO_eisenhof(void)
 	Bit32s money;
 
 	do {
-		answer = GUI_radio(get_tx2(47), 3,
-					get_tx2(48),
-					get_tx2(49),
-					get_tx2(50));
+		answer = GUI_radio(get_tx2(47), 3, get_tx2(48),	get_tx2(49), get_tx2(50));
+
 	} while (answer == -1);
 
 	if (answer == 1) {
 
-		ds_writews(CURRENT_TYPEINDEX, 41);
+		gs_current_typeindex = 41;
 		do_smith();
 
 	} else if (answer == 2) {
@@ -59,9 +57,8 @@ void THO_eisenhof(void)
 
 			GUI_input(get_tx2(52), 0);
 
-			sprintf((char*)ds_readd(DTP2),
-					get_tx(random_schick(26) + 55));
-			GUI_input((char*)ds_readd(DTP2), 0);
+			sprintf(g_dtp2, get_tx(random_schick(26) + 55));
+			GUI_input(g_dtp2, 0);
 		} else {
 			GUI_input(get_tx2(53), 0);
 		}
@@ -75,25 +72,24 @@ void THO_imman(void)
 
 	tmp = get_current_season();
 
-	if ((tmp == 1 || tmp == 3) && (ds_readb(DAY_OF_WEEK) == 5)) {
+	if ((tmp == 1 || tmp == 3) && (gs_day_of_week == 5)) {
 		/* ask to visit the game */
 		if (GUI_bool(get_tx2(55)) != 0) {
 
-		tmp = random_schick(4) + 0x38;
-		sprintf((char*)ds_readd(DTP2),
-			get_tx2(56),
-			/* winner */
-			get_tx2(tmp),
-			/* looser */
-			get_tx2(random_schick(7) + 0x3c),
-			/* winner */
-			get_tx2(tmp),
-			/* winners points */
-			random_interval(15, 30),
-			/* loosers points */
-			random_schick(14));
+			tmp = random_schick(4) + 0x38;
+			sprintf(g_dtp2, get_tx2(56),
+				/* winner */
+				get_tx2(tmp),
+				/* looser */
+				get_tx2(random_schick(7) + 0x3c),
+				/* winner */
+				get_tx2(tmp),
+				/* winners points */
+				random_interval(15, 30),
+				/* loosers points */
+				random_schick(14));
 
-		GUI_input((char*)ds_readd(DTP2), 0);
+			GUI_input(g_dtp2, 0);
 		}
 	} else {
 		/* no imman game at the moment */
@@ -110,13 +106,13 @@ void THO_botschaft(void)
 	/* Reason:
 	 * Diplomatische Probleme infolge des Bruchs des Garether Vertrags? (Die Thorwaler besetzen im Hesinde Salzerhaven) *
 	 * https://www.crystals-dsa-foren.de/showthread.php?tid=700&pid=99706#pid99706 */
-	if (ds_readbs(YEAR) > 17 ||
-		(ds_readbs(YEAR) == 17 && ds_readbs(MONTH) > 5)) {
+
+	if ((gs_year > 17) || ((gs_year == 17) && (gs_month > 5))) {
 
 		closed = 1;
 	}
 
-	GUI_input( (!closed) ? get_tx2(68): get_tx2(69), 0);
+	GUI_input(!closed ? get_tx2(68) : get_tx2(69), 0);
 }
 
 void THO_bank(void)
@@ -128,12 +124,12 @@ void THO_bank(void)
 
 	done = 0;
 
-	if (ds_readws(BANK_DEPOSIT) <= -1000) {
+	if (gs_bank_deposit <= -1000) {
 
 		GUI_input(get_tx2(77), 0);
 
-		if (ds_readws(DEBT_DAYS) == 0) {
-			ds_writews(DEBT_DAYS, 7);
+		if (!gs_debt_days) {
+			gs_debt_days = 7;
 		}
 	}
 
@@ -141,13 +137,10 @@ void THO_bank(void)
 
 	do {
 
-		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-			get_tx2(72),
-			ds_readws(BANK_DEPOSIT));
+		sprintf(g_text_output_buf, get_tx2(72), gs_bank_deposit);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(81),
-						(char*)ds_readd(TEXT_OUTPUT_BUF), 3,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(81), g_text_output_buf, 3,
 						get_tx2(73), get_tx2(74), get_tx2(80));
 		} while (answer == -1);
 
@@ -157,50 +150,50 @@ void THO_bank(void)
 			answer = GUI_input(get_tx2(75), 3);
 
 			if (answer <= 0) {
-				GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(81),
-						get_tx2(79), 0);
+
+				GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(81), get_tx2(79), 0);
+
 			} else {
 
-				if (ds_readws(DAYS_TO_CENS) != 0 ||
-					(ds_readws(BANK_DEPOSIT) > 0 && ds_readws(BANK_DEPOSIT) + 200 < answer) ||
-					(ds_readws(BANK_DEPOSIT) <= 0 && answer > 200))
-				{
-					GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(81),
-							get_tx2(76), 0);
+				if (gs_days_to_cens
+					|| ((gs_bank_deposit > 0) && (gs_bank_deposit + 200 < answer))
+					|| ((gs_bank_deposit <= 0) && (answer > 200))) {
+
+					GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(81), get_tx2(76), 0);
+
 				} else {
 
-					if (ds_readws(BANK_DEPOSIT) < answer) {
+					if (gs_bank_deposit < answer) {
 
-						if (ds_readws(BANK_DEPOSIT) > 0) {
-							answer -= ds_readws(BANK_DEPOSIT);
+						if (gs_bank_deposit > 0) {
+							answer -= gs_bank_deposit;
 							p_money = get_party_money();
-							p_money += 10 * ds_readws(BANK_DEPOSIT);
+							p_money += 10 * gs_bank_deposit;
 							set_party_money(p_money);
-							ds_writews(BANK_DEPOSIT, 0);
+							gs_bank_deposit = 0;
 						}
 
-						add_ds_ws(MONTHLY_CREDIT, answer);
+						gs_monthly_credit += answer;
 
-						if (ds_readws(MONTHLY_CREDIT) > 200) {
+						if (gs_monthly_credit > 200) {
 
-							GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(81),
-									get_tx2(76), 0);
+							GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(81), get_tx2(76), 0);
 
-							l3 = ds_readws(MONTHLY_CREDIT) - 200;
+							l3 = gs_monthly_credit - 200;
 							answer -= l3;
-							ds_writews(MONTHLY_CREDIT, 200);
+							gs_monthly_credit = 200;
 
 							if (answer < 0) {
 								answer = 0;
 							}
 						}
 
-						if (ds_readws(MONTHLY_CREDIT) >= 200) {
-							ds_writews(DAYS_TO_CENS, 30);
+						if (gs_monthly_credit >= 200) {
+							gs_days_to_cens = 30;
 						}
 					}
 
-					sub_ds_ws(BANK_DEPOSIT, answer);
+					gs_bank_deposit -= answer;
 					p_money = get_party_money();
 					p_money += 10 * answer;
 					set_party_money(p_money);
@@ -209,10 +202,10 @@ void THO_bank(void)
 
 		} else if (answer == 1) {
 
-			if (ds_readws(BANK_DEPOSIT) >= 30000) {
+			if (gs_bank_deposit >= 30000) {
 
 				/* prevent overflow  at 32767 */
-				GUI_output(p_datseg + STR_BANK_DEPOSIT_TO_BIG);
+				GUI_output((char*)g_str_bank_deposit_to_big);
 
 			} else {
 
@@ -220,31 +213,34 @@ void THO_bank(void)
 				p_money = get_party_money();
 
 				if (answer * 10 > p_money) {
+
 					GUI_output(get_ttx(401));
+
 				} else {
 
 					if (answer <= 0) {
 
-						GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx2(81),
-								get_tx2(79), 0);
+						GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(81), get_tx2(79), 0);
 
 					} else {
 
 						p_money -= 10 * answer;
 						set_party_money(p_money);
-						ds_writews(DAYS_TO_CENS, 0);
-						add_ds_ws(BANK_DEPOSIT, answer);
+						gs_days_to_cens = 0;
+						gs_bank_deposit += answer;
 
-						if (ds_readws(MONTHLY_CREDIT) != 0) {
+						if (gs_monthly_credit) {
 
-							sub_ds_ws(MONTHLY_CREDIT, answer);
+							gs_monthly_credit -= answer;
 
-							if (ds_readws(MONTHLY_CREDIT) < 0) {
-								ds_writews(MONTHLY_CREDIT, 0);
+							if (gs_monthly_credit < 0) {
+
+								gs_monthly_credit = 0;
 							}
 						}
-						if (ds_readws(BANK_DEPOSIT) > -1000) {
-							ds_writews(DEBT_DAYS, 0);
+
+						if (gs_bank_deposit > -1000) {
+							gs_debt_days = 0;
 						}
 					}
 				}
@@ -264,15 +260,15 @@ void THO_arsenal(void)
 	signed short tw_bak;
 	Bit32s p_money;
 
-	if (ds_readds(DAY_TIMER) < HOURS(8) || ds_readds(DAY_TIMER) > HOURS(19)) {
+	if (gs_day_timer < HOURS(8) || gs_day_timer > HOURS(19)) {
 
 		GUI_output(get_ttx(482));
 
-	} else if (ds_readb(MERCHANT_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0) {
+	} else if (gs_merchant_kicked_flags[gs_current_typeindex]) {
 
 			talk_merchant();
 
-	} else if (ds_readws(ARSENAL_MONEY) != 0) {
+	} else if (gs_arsenal_money) {
 
 		load_in_head(13);
 
@@ -280,52 +276,48 @@ void THO_arsenal(void)
 		options = get_first_hero_with_item(ITEM_WRITING_OF_JARDA) != -1 || get_first_hero_with_item(ITEM_WRITING_OF_HETMAN) != -1 ? 2 : 1;
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
-					get_tx2(0), options,
-					get_tx2(2), get_tx2(1));
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(0), options, get_tx2(2), get_tx2(1));
 
 		} while (answer == -1);
 
 		if (answer == 2) {
 
-			if (ds_readws(ARSENAL_MONEY) == -1) {
+			if (gs_arsenal_money == -1) {
 
 				/* calculate the maximal shopping price [10-60] D */
-				if (ds_writews(ARSENAL_MONEY, 15 * ds_readws(SUBVENTION)) < 10) {
+				if ((gs_arsenal_money = 15 * gs_subvention) < 10) {
 					/* at least 10D */
-					ds_writew(ARSENAL_MONEY, 10);
+					gs_arsenal_money = 10;
 				}
 			}
 
-			sprintf((char*)ds_readd(DTP2) + 0x400,
-				get_tx2(3),
-				ds_readws(ARSENAL_MONEY));
+			sprintf(g_dtp2 + 0x400, get_tx2(3), gs_arsenal_money);
 
-			mul_ds_ws(ARSENAL_MONEY, 100);
-			GUI_dialog_na(0, (char*)ds_readd(DTP2) + 0x400);
+			gs_arsenal_money *= 100;
+			GUI_dialog_na(0, (char*)(g_dtp2 + 0x400));
 			p_money = get_party_money();
-			set_party_money(ds_readws(ARSENAL_MONEY));
+			set_party_money(gs_arsenal_money);
 
-			ds_writew(CURRENT_TYPEINDEX, 92);
-			tw_bak = ds_readws(TEXTBOX_WIDTH);
-			ds_writew(TEXTBOX_WIDTH, 3);
+			gs_current_typeindex = 92;
+			tw_bak = g_textbox_width;
+			g_textbox_width = 3;
 
 			do_merchant();
 
-			ds_writews(ARSENAL_MONEY, (signed short)get_party_money());
-			div_ds_ws(ARSENAL_MONEY, 100);
-			ds_writew(TEXTBOX_WIDTH, tw_bak);
+			gs_arsenal_money = (signed short)get_party_money();
+			gs_arsenal_money /= 100;
+			g_textbox_width = tw_bak;
 			set_party_money(p_money);
 
 
 		} else {
 			GUI_dialog_na(0, get_tx2(4));
-			ds_writeb(NEED_LETTER, 1);
+			gs_need_letter = 1;
 		}
 
 	} else {
 
-		GUI_output(p_datseg + STR_OBVIOUSLY_CLOSED);
+		GUI_output((char*)g_str_obviously_closed);
 	}
 }
 
@@ -333,7 +325,7 @@ void THO_magistracy(void)
 {
 	signed short answer;
 
-	if (ds_readw(GOT_MAIN_QUEST) == 0) {
+	if (!gs_got_main_quest) {
 
 		GUI_output(get_tx2(5));
 		GUI_output(get_tx2(6));
@@ -342,17 +334,16 @@ void THO_magistracy(void)
 	} else {
 
 		do {
-			answer = GUI_radio(get_tx2(5), 3,
-						get_tx2(8),
-						get_tx2(9),
-						get_tx2(10));
+			answer = GUI_radio(get_tx2(5), 3, get_tx2(8), get_tx2(9), get_tx2(10));
+
 		} while (answer == -1);
 
 		if (answer == 1) {
 
-			if (ds_readws(GOT_LETTER_JAD) == 0) {
+			if (!gs_got_letter_jad) {
 
-				ds_writews(GOT_LETTER_JAD, 1);
+				gs_got_letter_jad = 1;
+
 				GUI_output(get_tx2(14));
 
 				/* get "LETTER FROM JADRA" */
@@ -361,9 +352,11 @@ void THO_magistracy(void)
 			} else {
 				GUI_output(get_tx2(15));
 			}
+
 		} else if (answer == 2) {
 
 			GUI_output(get_tx2(12));
+
 		} else {
 			GUI_output(get_tx2(13));
 		}
@@ -374,11 +367,11 @@ void THO_mueller(void)
 {
 	if (GUI_bool(get_tx2(16))) {
 
-		GUI_output((ds_readw(VISITED_MILLER) == 0) ? /* first visit ? */
-			get_tx2(17) : get_tx2(18));
+		/* first visit ? */
+		GUI_output(!gs_visited_miller ? get_tx2(17) : get_tx2(18));
 
 		/* mark the miller as visited */
-		ds_writew(VISITED_MILLER, 1);
+		gs_visited_miller = 1;
 	}
 }
 
@@ -391,10 +384,9 @@ void THO_black_finger(void)
 }
 
 /* static */
-void dramosch_says(Bit8u *msg)
+void dramosch_says(char *msg)
 {
-	GUI_dialogbox((unsigned char*)ds_readd(DTP2),
-			(Bit8u*)(host_readd((Bit8u*)ds_readd(TX2_INDEX) + 0xc0)), msg, 0);
+	GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(48), msg, 0);
 }
 
 void THO_ugdalf(void)
@@ -402,14 +394,14 @@ void THO_ugdalf(void)
 	signed short answer;
 	signed short randval;
 
-	load_in_head(ds_readw(QUEST_UGDALF) == 0 ? 0 : 14);
+	load_in_head(gs_quest_ugdalf == 0 ? 0 : 14);
 
-	if (ds_readw(QUEST_UGDALF) == 0) {
+	if (gs_quest_ugdalf == 0) {
 
 		/* talk to the guards */
 		randval = random_schick(10) - 1;
 
-		answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+		answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 					get_tx2(23), 3,
 					get_tx2(randval + 38),
 					get_tx2(24),
@@ -417,68 +409,62 @@ void THO_ugdalf(void)
 
 		if (answer == 1) {
 
-			GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
-					get_tx2(27), 0);
+			GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(27), 0);
 
 		} else if (answer == 2) {
 
 			/* talk to DRAMOSCH */
-			GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
-					get_tx2(28), 0);
+			GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(28), 0);
 
 			load_in_head(14);
 
 			dramosch_says(get_tx2(29));
 
 			do {
-				answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
-							(Bit8u*)(host_readd((Bit8u*)ds_readd(TX2_INDEX) + 0xc0)),
+				answer = GUI_dialogbox((unsigned char*)g_dtp2, get_tx2(48), get_tx2(30), 2, get_tx2(31), get_tx2(32));
 
-							get_tx2(30), 2,
-							get_tx2(31),
-							get_tx2(32));
 			} while (answer == -1);
 
 			if (answer == 1) {
 				/* take the quest */
 				dramosch_says(get_tx2(33));
-				ds_writew(QUEST_UGDALF, 1);
+				gs_quest_ugdalf = 1;
 
 			} else {
 
 				dramosch_says(get_tx2(34));
 			}
 		}
-	} else if (ds_readw(QUEST_UGDALF) == 1 || !ds_readb(DNG14_UGDALF_DONE)) {
+	} else if (gs_quest_ugdalf == 1 || !gs_dng14_ugdalf_done) {
 
 		dramosch_says(get_tx2(35));
 
 		/* enter the dungeon */
 		DNG_enter_dungeon(DUNGEONS_ZWINGFESTE);
 
-		ds_writews(X_TARGET_BAK, ds_readw(X_TARGET));
-		ds_writews(Y_TARGET_BAK, ds_readw(Y_TARGET));
+		gs_x_target_bak = gs_x_target;
+		gs_y_target_bak = gs_y_target;
 
-		if (ds_readw(QUEST_UGDALF) == 1) {
+		if (gs_quest_ugdalf == 1) {
 			add_party_money(2000L);
 
 		/* Original-Bug:	Everytime the heroes enter the dungeon they get 20D.
 					Why this fix works is not seen that easy.
-					As long as ds_readb(DNG14_UGDALF_DONE) is 0 this block is executed.
+					As long as gs_dng14_ugdalf_done is 0 this block is executed.
 		 */
 #ifdef M302de_ORIGINAL_BUGFIX
-			ds_writew(QUEST_UGDALF, 2);
+			gs_quest_ugdalf = 2;
 #endif
 		}
 
-	} else if (ds_readw(QUEST_UGDALF) == 3) {
+	} else if (gs_quest_ugdalf == 3) {
 
 		/* talk with DRAMOSCH for 8 h */
 		dramosch_says(get_tx2(36));
 		timewarp(HOURS(8));
 
 		/* mark this quest as done */
-		ds_writew(QUEST_UGDALF, 4);
+		gs_quest_ugdalf = 4;
 
 		/* get the reward */
 		add_hero_ap_all(25);
@@ -487,16 +473,15 @@ void THO_ugdalf(void)
 
 		dramosch_says(get_tx2(37));
 
-		sprintf((char*)ds_readd(DTP2) + 0x400,
-			get_tx(random_schick(26) + 55));
+		sprintf(g_dtp2 + 0x400, get_tx(random_schick(26) + 55));
 
-		dramosch_says((char*)ds_readd(DTP2) + 0x400);
+		dramosch_says((char*)(g_dtp2 + 0x400));
 
 		/* enter the dungeon */
 		DNG_enter_dungeon(DUNGEONS_ZWINGFESTE);
 
-		ds_writews(X_TARGET_BAK, ds_readw(X_TARGET));
-		ds_writews(Y_TARGET_BAK, ds_readw(Y_TARGET));
+		gs_x_target_bak = (gs_x_target);
+		gs_y_target_bak = (gs_y_target);
 	}
 }
 
@@ -509,35 +494,33 @@ void academy_analues(void)
 	GUI_input(get_tx2(62), 0);
 
 	/* change behavior of analues spell */
-	ds_writew(IN_ACADEMY, 99);
+	gs_in_academy = 99;
 
 	/* select a hero (does not need to be a magic user here) */
 	hero_pos = select_hero_ok(get_ttx(794));
 
 	if (hero_pos != -1) {
 
-		ds_writed(SPELLUSER, (Bit32u)((Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * hero_pos));
+		g_spelluser = get_hero(hero_pos);
 
-		buffer1_bak = ds_readws(TX_FILE_INDEX);
+		buffer1_bak = g_tx_file_index;
 
 		load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 
-		sprintf((char*)ds_readd(DTP2),
-			get_tx2(64),
-			(char*)(Bit8u*)(spell_analues()));
+		sprintf(g_dtp2, get_tx2(64), (char*)spell_analues());
 
 		if (buffer1_bak != -1 && buffer1_bak != 222) {
 
 			load_tx(buffer1_bak);
 		}
 
-		GUI_input((char*)ds_readd(DTP2), 0);
+		GUI_input(g_dtp2, 0);
 
-		ds_writew(ACADEMY_DAILY_IDENT, 1);
+		gs_academy_daily_ident = 1;
 	}
 
 	/* change behaviour of analues spell */
-	ds_writew(IN_ACADEMY, 0);
+	gs_in_academy = 0;
 }
 
 void THO_academy(void)
@@ -554,7 +537,7 @@ void THO_academy(void)
 	for (item_pos = cursed_hero_pos = 0; item_pos <= 6; item_pos++, hero += SIZEOF_HERO) {
 
 		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 			hero_renegade(hero))
 		{
 			cursed_hero_pos = item_pos;
@@ -563,10 +546,8 @@ void THO_academy(void)
 	}
 
 	do {
-		answer = GUI_radio(get_tx2(49), 3,
-					get_tx2(50),
-					get_tx2(51),
-					get_tx2(52));
+		answer = GUI_radio(get_tx2(49), 3, get_tx2(50), get_tx2(51), get_tx2(52));
+
 	} while (answer == -1);
 
 	if (answer == 1) {
@@ -577,20 +558,17 @@ void THO_academy(void)
 
 			GUI_input(get_tx2(67), 0);
 
-		} else if (ds_readw(ACADEMY_DAILY_CURSE) != 0) {
+		} else if (gs_academy_daily_curse != 0) {
 
 			GUI_input(get_tx2(65), 0);
 
 		} else {
 
-			sprintf((char*)ds_readd(DTP2),
-				get_tx2(53),
-				(char*)hero + HERO_NAME2);
+			sprintf(g_dtp2, get_tx2(53), (char*)hero + HERO_NAME2);
 
 			do {
-				answer = GUI_radio((char*)ds_readd(DTP2), 2,
-							get_tx2(68),
-							get_tx2(69));
+				answer = GUI_radio(g_dtp2, 2, get_tx2(68), get_tx2(69));
+
 			} while (answer == -1);
 
 			if (answer == 1) {
@@ -599,16 +577,12 @@ void THO_academy(void)
 
 				if (item_id >= 0) {
 
-					sprintf((char*)ds_readd(DTP2),
-						get_tx2(56),
-						(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8002, item_id, 0)));
+					sprintf(g_dtp2, get_tx2(56),
+						GUI_names_grammar((signed short)0x8002, item_id, 0));
 
 					do {
-						answer = GUI_radio((char*)ds_readd(DTP2), 4,
-									get_tx2(57),
-									get_tx2(58),
-									get_tx2(59),
-									get_tx2(60));
+						answer = GUI_radio(g_dtp2, 4, get_tx2(57), get_tx2(58), get_tx2(59), get_tx2(60));
+
 					} while (answer == -1);
 
 					if (answer == 1 || answer == 3) {
@@ -625,9 +599,10 @@ void THO_academy(void)
 							GUI_input(get_tx2(62), 0);
 							GUI_input(get_tx2(63), 0);
 
-							ds_writew(ACADEMY_DAILY_CURSE, 1);
+							gs_academy_daily_curse = 1;
 
-							and_ptr_bs(get_hero(cursed_hero_pos) + HERO_FLAGS1, 0xdf); /* unset 'renegate' flag */
+							/* unset 'renegate' flag */
+							and_ptr_bs(get_hero(cursed_hero_pos) + HERO_FLAGS1, 0xdf);
 
 						} else {
 							GUI_input(get_tx2(70), 0);
@@ -642,7 +617,7 @@ void THO_academy(void)
 
 					GUI_input(get_tx2(63), 0);
 
-					ds_writew(ACADEMY_DAILY_CURSE, 1);
+					gs_academy_daily_curse = 1;
 
 					and_ptr_bs(get_hero(cursed_hero_pos) + HERO_FLAGS1, 0xdf); /* unset 'renegate' flag */
 
@@ -658,16 +633,15 @@ void THO_academy(void)
 
 		/* identify item */
 
-		if (ds_readw(ACADEMY_DAILY_IDENT) != 0) {
+		if (gs_academy_daily_ident != 0) {
 
 			GUI_input(get_tx2(66), 0);
 
 		} else {
 
 			do {
-				answer = GUI_radio(get_tx2(54), 2,
-							get_tx2(68),
-							get_tx2(69));
+				answer = GUI_radio(get_tx2(54), 2, get_tx2(68), get_tx2(69));
+
 			} while (answer == -1);
 
 			if (answer == 1) {
@@ -676,16 +650,12 @@ void THO_academy(void)
 
 				if (item_id >= 0) {
 
-					sprintf((char*)ds_readd(DTP2),
-						get_tx2(56),
-						(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8002, item_id, 0)));
+					sprintf(g_dtp2, get_tx2(56),
+						GUI_names_grammar((signed short)0x8002, item_id, 0));
 
 					do {
-						answer = GUI_radio((char*)ds_readd(DTP2), 4,
-									get_tx2(57),
-									get_tx2(58),
-									get_tx2(59),
-									get_tx2(60));
+						answer = GUI_radio(g_dtp2, 4, get_tx2(57), get_tx2(58), get_tx2(59), get_tx2(60));
+
 					} while (answer == -1);
 
 					if (answer == 1 || answer == 3) {
@@ -755,7 +725,7 @@ signed short academy_get_equal_item(signed short price)
 		for (i = 0; i < 6; i++, hero += SIZEOF_HERO) {
 
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero))
 			{
 				for (item_pos = 0; item_pos < NR_HERO_INVENTORY_SLOTS; item_pos++) {

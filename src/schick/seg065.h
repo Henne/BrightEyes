@@ -4,7 +4,7 @@ namespace M302de {
 
 #if !defined(__BORLANDC__)
 /* static */
-RealPt hyg_ani_1(signed short, Bit8u*);
+Bit8u* hyg_ani_1(signed short, Bit8u*);
 /* static */
 void hyg_ani_2(Bit8u*, signed short, signed short);
 /* static */

@@ -42,7 +42,7 @@ void tevent_016(void)
 		load_in_head(46);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, get_tx2(19), 2, get_tx2(20), get_tx2(21));
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(19), 2, get_tx2(20), get_tx2(21));
 
 		} while (answer == -1);
 
@@ -55,7 +55,7 @@ void tevent_016(void)
 			/* wave */
 
 			do {
-				answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, get_tx2(23), 2, get_tx2(24), get_tx2(25));
+				answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(23), 2, get_tx2(24), get_tx2(25));
 
 			} while (answer == -1);
 
@@ -67,7 +67,7 @@ void tevent_016(void)
 				/* go towards them */
 
 				do {
-					answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+					answer = GUI_dialogbox((unsigned char*)g_dtp2,
 							NULL, get_tx2(27), 2,
 							get_tx2(28), get_tx2(29));
 
@@ -104,34 +104,34 @@ void tevent_016(void)
 							/* success */
 							timewarp(MINUTES(15));
 
-							sprintf((char*)ds_readd(DTP2) + 0x400,
+							sprintf(g_dtp2 + 0x400,
 								get_tx2(35),
 								(char*)hero + HERO_NAME2,
-								(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+								(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-							GUI_dialog_na(0, (char*)ds_readd(DTP2) + 0x400);
+							GUI_dialog_na(0, (char*)((char*)(g_dtp2 + 0x400)));
 
 							GUI_dialog_na(0, get_tx2(36));
 						} else {
 							/* fail */
-							sprintf((char*)ds_readd(DTP2) + 0x400,
+							sprintf(g_dtp2 + 0x400,
 								get_tx2(34),
 								(char*)hero + HERO_NAME2,
-								(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-								(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),
-								(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)),
-								(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
+								(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+								(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),
+								(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)),
+								(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 
-							GUI_dialog_na(0, (char*)ds_readd(DTP2) + 0x400);
+							GUI_dialog_na(0, (char*)((char*)(g_dtp2 + 0x400)));
 
 							timewarp(HOURS(1));
 
-							sprintf((char*)ds_readd(DTP2) + 0x400,
+							sprintf(g_dtp2 + 0x400,
 								get_tx2(37),
 								(char*)hero + HERO_NAME2,
-								(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
+								(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
 
-							GUI_dialog_na(0, (char*)ds_readd(DTP2) + 0x400);
+							GUI_dialog_na(0, (char*)((char*)(g_dtp2 + 0x400)));
 
 							add_hero_ap(hero, 5);
 
@@ -162,7 +162,7 @@ void tevent_090(void)
 	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 	{
 		if (host_readbs(hero + HERO_TYPE) &&
-			host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 			!hero_dead(hero) &&
 			test_skill(hero, TA_GEFAHRENSINN, 0) <= 0)
 		{
@@ -211,7 +211,7 @@ void tevent_094(void)
 		load_in_head(53);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+			answer = GUI_dialogbox((unsigned char*)g_dtp2,
 				       NULL, get_tx2(4), 2,
 				       get_tx2(5), get_tx2(6));
 
@@ -219,7 +219,7 @@ void tevent_094(void)
 
 		if (answer == 1) {
 			/* enter Daspota dungeon */
-			ds_writeb(TRAVEL_DETOUR, DUNGEONS_DASPOTASCHATZ);
+			gs_travel_detour = (DUNGEONS_DASPOTASCHATZ);
 		}
 	}
 }
@@ -245,7 +245,7 @@ void tevent_095(void)
 		for (i = counter_failed = counter_heroes = 0; i <= 6; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero))
 			{
 				counter_heroes++;
@@ -254,11 +254,11 @@ void tevent_095(void)
 				{
 					timewarp(MINUTES(30));
 
-					sprintf((char*)ds_readd(DTP2),
+					sprintf(g_dtp2,
 						get_tx2(8),
 						(char*)hero + HERO_NAME2);
 
-					GUI_output((char*)ds_readd(DTP2));
+					GUI_output(g_dtp2);
 
 					counter_failed++;
 				}
@@ -283,13 +283,13 @@ void tevent_095(void)
 			if (counter_failed == 2)
 			{
 				/* make a rest */
-				ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+				gs_current_loctype = LOCTYPE_WILDCAMP;
 				do_location();
-				ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+				gs_current_loctype = LOCTYPE_NONE;
 
 				TRV_load_textfile(-1);
 			} else {
-				ds_writew(TRV_RETURN, done = 1);
+				gs_trv_return = (done = 1);
 			}
 		} else {
 			/* at least one hero failed HA-test */
@@ -351,11 +351,11 @@ void tevent_095(void)
 							/* spell failed unluckily */
 
 							/* TODO: this gets output, but no spell costst ??? */
-							sprintf((char*)ds_readd(DTP2),
+							sprintf(g_dtp2,
 								get_ttx(607),
 								(char*)hero + HERO_NAME2);
 
-							GUI_output((char*)ds_readd(DTP2));
+							GUI_output(g_dtp2);
 						}
 
 						timewarp(MINUTES(30));
@@ -435,9 +435,9 @@ void tevent_096(void)
 
 			GUI_output(get_tx2(25));
 
-			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+			gs_current_loctype = LOCTYPE_WILDCAMP;
 			do_location();
-			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+			gs_current_loctype = LOCTYPE_NONE;
 
 			TRV_load_textfile(-1);
 
@@ -467,7 +467,7 @@ void tevent_126(void)
 
 		if (answer == 1)
 		{
-			ds_writeb(TRAVEL_DETOUR, DUNGEONS_KULTSTAETTE_DES_NAMENLOSEN);
+			gs_travel_detour = (DUNGEONS_KULTSTAETTE_DES_NAMENLOSEN);
 		}
 	}
 }
@@ -479,7 +479,7 @@ void tevent_127(void)
 	load_in_head(14);
 
 	do {
-		answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+		answer = GUI_dialogbox((unsigned char*)g_dtp2,
 					NULL, get_tx2(6), 3,
 					get_tx2(7),get_tx2(8), get_tx2(9));
 	} while (answer == -1);
@@ -494,15 +494,15 @@ void tevent_127(void)
 
 void tevent_128(void)
 {
-	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !ds_readb(TEVENT128_FLAG)) ||
-		ds_readb(TEVENT128_FLAG) != 0)
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent128_flag) ||
+		gs_tevent128_flag)
 	{
-		ds_writeb(TEVENT128_FLAG, 1);
+		gs_tevent128_flag = 1;
 
-		if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 && !ds_readb(TEVENT128_REPLEN_FLAG)) ||
-			ds_readb(TEVENT128_REPLEN_FLAG) != 0)
+		if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 && !gs_tevent128_replen_flag) ||
+			gs_tevent128_replen_flag)
 		{
-			ds_writeb(TEVENT128_REPLEN_FLAG, 1);
+			gs_tevent128_replen_flag = 1;
 			TRV_found_replenish_place(1);
 		} else {
 			TRV_found_replenish_place(0);
@@ -515,37 +515,35 @@ void tevent_129(void)
 {
 	signed short answer;
 
-	if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 4) > 0 && !ds_readb(TEVENT129_FLAG))
+	if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 4) > 0 && !gs_tevent129_flag)
 	{
-		ds_writeb(TEVENT129_FLAG, 1);
+		gs_tevent129_flag = 1;
 
 		GUI_output(get_tx2(12));
 
 		load_in_head(53);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
-					NULL, get_tx2(13), 2,
-					get_tx2(14), get_tx2(15));
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(13), 2, get_tx2(14), get_tx2(15));
 
 		} while (answer == -1);
 
 		if (answer == 1) {
-			ds_writeb(TRAVEL_DETOUR, DUNGEONS_DRACHENHORT);
+			gs_travel_detour = DUNGEONS_DRACHENHORT;
 		}
 
-	} else if (ds_readb(TEVENT129_FLAG) != 0) {
+	} else if (gs_tevent129_flag) {
 
 		load_in_head(53);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+			answer = GUI_dialogbox((unsigned char*)g_dtp2,
 				       NULL, get_tx2(16), 2, get_tx2(17), get_tx2(18));
 
 		} while (answer == -1);
 
 		if (answer == 1) {
-			ds_writeb(TRAVEL_DETOUR, DUNGEONS_DRACHENHORT);
+			gs_travel_detour = (DUNGEONS_DRACHENHORT);
 		}
 	}
 }
@@ -602,7 +600,7 @@ void tevent_047(void)
 			load_in_head(42);
 
 			do {
-				answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+				answer = GUI_dialogbox((unsigned char*)g_dtp2,
 							NULL, (!l_di ? get_tx2(15) : get_tx2(11)), 2,
 							get_tx2(12), get_tx2(13));
 
@@ -620,7 +618,7 @@ void tevent_047(void)
 				if (!l_di)
 				{
 					do {
-						answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+						answer = GUI_dialogbox((unsigned char*)g_dtp2,
 								NULL, get_tx2(16), 3,
 								get_tx2(17), get_tx2(18), get_tx2(19));
 					} while (answer == -1);
@@ -636,20 +634,20 @@ void tevent_047(void)
 
 						if (answer == 1)
 						{
-							ds_writeb(CURRENT_TOWN, TOWNS_LJASDAHL);
-							ds_writew(X_TARGET, 7);
-							ds_writew(Y_TARGET, 3);
+							gs_current_town = (TOWNS_LJASDAHL);
+							gs_x_target = (7);
+							gs_y_target = (3);
 						} else {
-							ds_writeb(CURRENT_TOWN, TOWNS_OTTARJE);
-							ds_writew(X_TARGET, 9);
-							ds_writew(Y_TARGET, 10);
+							gs_current_town = (TOWNS_OTTARJE);
+							gs_x_target = (9);
+							gs_y_target = (10);
 						}
 
-						ds_writeb(TRAVEL_DETOUR, 99);
+						gs_travel_detour = (99);
 					}
 				} else {
 					do {
-						answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, get_tx2(21), 2, get_tx2(22), get_tx2(19));
+						answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(21), 2, get_tx2(22), get_tx2(19));
 
 					} while (answer == -1);
 
@@ -662,10 +660,10 @@ void tevent_047(void)
 						GUI_dialog_na(0, get_tx2(23));
 						GUI_dialog_na(0, get_tx2(25));
 
-						ds_writeb(CURRENT_TOWN, TOWNS_VARNHEIM);
-						ds_writew(X_TARGET, 4);
-						ds_writew(Y_TARGET, 10);
-						ds_writeb(TRAVEL_DETOUR, 99);
+						gs_current_town = (TOWNS_VARNHEIM);
+						gs_x_target = (4);
+						gs_y_target = (10);
+						gs_travel_detour = (99);
 					}
 				}
 			}
@@ -691,7 +689,7 @@ void tevent_100(void)
 		{
 			GUI_output(get_tx2(56));
 
-			ds_writeb(EVENT_ANI_BUSY, 1);
+			g_event_ani_busy = 1;
 
 			load_ani(11);
 			draw_main_screen();
@@ -707,7 +705,7 @@ void tevent_100(void)
 
 			if (answer == 1)
 			{
-				ds_writeb(TRAVEL_DETOUR, DUNGEONS_RUINE_DES_SCHWARZMAGIERS);
+				gs_travel_detour = (DUNGEONS_RUINE_DES_SCHWARZMAGIERS);
 			} else {
 
 				GUI_output(get_tx2(67));
@@ -729,28 +727,28 @@ void tevent_100(void)
 					timewarp(MINUTES(15));
 
 
-					sprintf((char*)ds_readd(DTP2),
+					sprintf(g_dtp2,
 						get_tx2(69),
 						(char*)hero + HERO_NAME2,
-						(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-						(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-					GUI_output((char*)ds_readd(DTP2));
+					GUI_output(g_dtp2);
 				}
 
 				GUI_output(get_tx2(70));
 			}
 
-			ds_writew(REQUEST_REFRESH, 1);
+			g_request_refresh = 1;
 
 		} else if (answer == 3)
 		{
-			ds_writew(TRV_RETURN, 1);
+			gs_trv_return = 1;
 		}
 	}
 
 	set_var_to_zero();
-	ds_writeb(EVENT_ANI_BUSY, 0);
+	g_event_ani_busy = 0;
 }
 
 #if !defined(__BORLANDC__)

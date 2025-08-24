@@ -7,6 +7,9 @@
  *	Call:		BCC.EXE -mlarge -O- -c -1 -Yo seg050.cpp
  */
 #include <stdio.h>
+#if !defined(__BORLANDC__)
+#include <unistd.h>
+#endif
 
 #include "v302de.h"
 #include "common.h"
@@ -84,19 +87,19 @@ void inc_spell_advanced(Bit8u *hero, signed short spell)
 		}
 
 		/* depending on the HERO_MAGIC_SCHOOL, the mage will get 3 possible increases on certain spells */
-		if (is_in_word_array(spell, (signed short*)((Bit8u*)ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)))))
+		if (is_in_word_array(spell, (signed short*)g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)]))
 		{
 			max_incs = 3;
 		}
 	}
 
-	if (host_readbs((Bit8u*)ds_readd(INC_SPELLS_COUNTER) + 2 * spell + 1) >= max_incs) {
+	if (host_readbs(g_inc_spells_counter + 2 * spell + 1) >= max_incs) {
 
 		/* no increase is possible */
 
 		GUI_output(get_tx2(43));
 
-	} else if (host_readbs((Bit8u*)ds_readd(INC_SPELLS_COUNTER) + 2 * spell) == 3) {
+	} else if (host_readbs(g_inc_spells_counter + 2 * spell) == 3) {
 
 		/* 3 increase failures -> no further increase try allowed */
 
@@ -132,15 +135,15 @@ void inc_spell_advanced(Bit8u *hero, signed short spell)
 			inc_ptr_bs(hero + spell + HERO_SPELLS);
 
 			/* set the try counter to 0 */
-			host_writebs((Bit8u*)ds_readd(INC_SPELLS_COUNTER) + 2 * spell, 0);
+			host_writebs(g_inc_spells_counter + 2 * spell, 0);
 			/* increment the increase counter */
-			inc_ptr_bs((Bit8u*)ds_readd(INC_SPELLS_COUNTER) + 2 * spell + 1);
+			inc_ptr_bs(g_inc_spells_counter + 2 * spell + 1);
 		} else {
 			/* fail */
 			GUI_output(get_ttx(338));
 
 			/* increment the try counter */
-			inc_ptr_bs((Bit8u*)ds_readd(INC_SPELLS_COUNTER) + 2 * spell);
+			inc_ptr_bs(g_inc_spells_counter + 2 * spell);
 		}
 	}
 }
@@ -158,21 +161,19 @@ void inc_skill_advanced(Bit8u *hero, signed short skill)
 
 	max_incs = ds_readbs(SKILL_DESCRIPTIONS + 4 * skill + 3);
 
-
-	if (host_readbs((Bit8u*)ds_readd(INC_SKILLS_COUNTER) + 2 * skill + 1) >= max_incs) {
+	if (host_readbs(g_inc_skills_counter + 2 * skill + 1) >= max_incs) {
 
 		/* no increase is possible */
-
 		GUI_output(get_tx2(43));
 
-	} else if (host_readbs((Bit8u*)ds_readd(INC_SKILLS_COUNTER) + 2 * skill) == 3) {
+	} else if (host_readbs(g_inc_skills_counter + 2 * skill) == 3) {
 
 		/* used up legal increase */
-
 		GUI_output(get_tx2(44));
-	} else {
-		/* try to increase */
 
+	} else {
+
+		/* try to increase */
 		dec_ptr_bs(hero + HERO_TA_RISE);
 
 #ifndef M302de_FEATURE_MOD
@@ -201,30 +202,30 @@ void inc_skill_advanced(Bit8u *hero, signed short skill)
 			inc_ptr_bs(hero + skill + HERO_TALENTS);
 
 			/* set the try counter to 0 */
-			host_writebs((Bit8u*)ds_readd(INC_SKILLS_COUNTER) + 2 * skill, 0);
+			host_writebs(g_inc_skills_counter + 2 * skill, 0);
 			/* increment the increase counter */
-			inc_ptr_bs((Bit8u*)ds_readd(INC_SKILLS_COUNTER) + 2 * skill + 1);
+			inc_ptr_bs(g_inc_skills_counter + 2 * skill + 1);
 
 			if (skill <= 6) {
 				/* increment a melee weapon skill */
 
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_ttx(426), get_ttx(48 + skill));
 
 				randval = -1;
 
 				/* AT - value */
-				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+				sprintf(g_text_output_buf,
 					get_ttx(427), host_readbs(hero + skill + 0x68));
 
 				/* PA - value */
-				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF) + 50,
+				sprintf(g_text_output_buf + 50,
 					get_ttx(428), host_readbs(hero + skill + 0x6f));
 
 				do {
-					randval = GUI_radio((char*)ds_readd(DTP2), 2,
-								(char*)ds_readd(TEXT_OUTPUT_BUF),
-								(char*)ds_readd(TEXT_OUTPUT_BUF) + 50);
+					randval = GUI_radio(g_dtp2, 2,
+								g_text_output_buf,
+								g_text_output_buf + 50);
 				} while (randval == -1);
 
 				if (randval == 1) {
@@ -239,7 +240,7 @@ void inc_skill_advanced(Bit8u *hero, signed short skill)
 			GUI_output(get_ttx(338));
 
 			/* increment the try counter */
-			inc_ptr_bs((Bit8u*)ds_readd(INC_SKILLS_COUNTER) + 2 * skill);
+			inc_ptr_bs(g_inc_skills_counter + 2 * skill);
 		}
 	}
 }
@@ -264,7 +265,7 @@ void inc_skill_novice(Bit8u *hero, signed short skill)
 	while (!done) {
 
 		/* leave the loop if 3 incs failes or the skill value is 18 */
-		if ((host_readbs((Bit8u*)ds_readd(INC_SKILLS_COUNTER) + skill * 2) == 3) ||
+		if ((host_readbs(g_inc_skills_counter + skill * 2) == 3) ||
 			(host_readbs(hero + HERO_TALENTS + skill) == 18)) {
 			done = 1;
 #if !defined(__BORLANDC__)
@@ -304,7 +305,7 @@ void inc_skill_novice(Bit8u *hero, signed short skill)
 				inc_ptr_bs(hero + HERO_TALENTS + skill);
 
 				/* reset failed counter */
-				host_writeb((Bit8u*)ds_readd(INC_SKILLS_COUNTER) + 2 * skill, 0);
+				host_writeb(g_inc_skills_counter + 2 * skill, 0);
 
 				done = 1;
 
@@ -319,7 +320,7 @@ void inc_skill_novice(Bit8u *hero, signed short skill)
 
 			} else {
 				/* inc failed counter */
-				inc_ptr_bs((Bit8u*)ds_readd(INC_SKILLS_COUNTER) + 2 * skill);
+				inc_ptr_bs(g_inc_skills_counter + 2 * skill);
 			}
 		}
 	}
@@ -344,7 +345,7 @@ void inc_spell_novice(Bit8u *hero, signed short spell)
 
 	while (!done) {
 		/* leave the loop if 3 tries to increase have failed or if the spell is already at the max value 18 */
-		if ((host_readb((Bit8u*)ds_readd(INC_SPELLS_COUNTER) + 2 * spell) == 3) ||
+		if ((host_readb(g_inc_spells_counter + 2 * spell) == 3) ||
 			(host_readbs(hero + HERO_SPELLS + spell) == 18)) {
 			done = 1;
 #if !defined(__BORLANDC__)
@@ -384,13 +385,13 @@ void inc_spell_novice(Bit8u *hero, signed short spell)
 				inc_ptr_bs(hero + HERO_SPELLS + spell);
 
 				/* reset failed counter */
-				host_writeb((Bit8u*)ds_readd(INC_SPELLS_COUNTER) + 2 * spell, 0);
+				host_writeb(g_inc_spells_counter + 2 * spell, 0);
 
 				done = 1;
 
 			} else {
 				/* inc failed counter */
-				inc_ptr_bs((Bit8u*)ds_readd(INC_SPELLS_COUNTER) + 2 * spell);
+				inc_ptr_bs(g_inc_spells_counter + 2 * spell);
 			}
 		}
 	}
@@ -414,44 +415,39 @@ void level_up(signed short hero_pos)
 
 	hero = get_hero(hero_pos);
 
-	if (ds_readb(FADING_STATE) != 0) {
+	if (g_fading_state) {
 		refresh_colors();
 	}
 
-	ds_writew(TIMERS_DISABLED, 1);
+	g_timers_disabled = 1;
 
-	city_bak = ds_readws(TEXT_FILE_INDEX);
+	city_bak = g_text_file_index;
 
 	load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
 
-	ds_writed(INC_SKILLS_COUNTER, (Bit32u)((Bit8u*)ds_readd(BUFFER8_PTR) + 4500));
-	ds_writed(INC_SPELLS_COUNTER, (Bit32u)((Bit8u*)ds_readd(INC_SKILLS_COUNTER) + 208));
-	ds_writed(SKILLS_BUFFER, ds_readd(BUFFER9_PTR));
+	g_inc_skills_counter = (unsigned char*)(g_buffer8_ptr + 4500);
+	g_inc_spells_counter = (unsigned char*)(g_inc_skills_counter + 208);
+	g_skills_buffer = (unsigned char*)g_buffer9_ptr;
 
 	l_si = load_archive_file(ARCHIVE_FILE_BSKILLS_DAT);
 
-	read_archive_file(l_si, (Bit8u*)ds_readd(SKILLS_BUFFER), 1300);
+	read_archive_file(l_si, g_skills_buffer, 1300);
 
 	close(l_si);
 
 
-	sprintf((char*)ds_readd(DTP2),
-		get_ttx(411),
-		(char*)hero + HERO_NAME2);
+	sprintf(g_dtp2, get_ttx(411), (char*)hero + HERO_NAME2);
+	GUI_output(g_dtp2);
 
-	GUI_output((char*)ds_readd(DTP2));
-
-	ds_writew(ACTION, 0);
-	ds_writew(STATUS_PAGE_MODE, 1);
+	g_action = 0;
+	g_status_page_mode = 1;
 
 	for (i = 0; i < 86; i++) {
-		host_writeb((Bit8u*)ds_readd(INC_SPELLS_COUNTER) + 2 * i,
-			host_writebs((Bit8u*)ds_readd(INC_SPELLS_COUNTER) + 2 * i + 1, 0));
+		host_writeb(g_inc_spells_counter + 2 * i, host_writebs(g_inc_spells_counter + 2 * i + 1, 0));
 	}
 
 	for (i = 0; i < 52; i++) {
-		host_writeb((Bit8u*)ds_readd(INC_SKILLS_COUNTER) + 2 * i,
-			host_writebs((Bit8u*)ds_readd(INC_SKILLS_COUNTER) + 2 * i + 1, 0));
+		host_writeb(g_inc_skills_counter + 2 * i, host_writebs(g_inc_skills_counter + 2 * i + 1, 0));
 	}
 
 	load_ggsts_nvf();
@@ -459,11 +455,11 @@ void level_up(signed short hero_pos)
 	/* increment level */
 	inc_ptr_bs(hero + HERO_LEVEL);
 
-	ds_writew(STATUS_PAGE_HERO, hero_pos);
+	g_status_page_hero = hero_pos;
 
 	status_show(hero_pos);
 
-	ds_writebs(STATUS_PAGE_HUNGER, ds_writebs(STATUS_PAGE_THIRST, -1));
+	g_status_page_hunger = g_status_page_thirst = -1;
 
 	update_status_bars();
 
@@ -482,7 +478,7 @@ void level_up(signed short hero_pos)
 
 		do {
 
-			ds_writew(BASEPOS_X, -30);
+			g_basepos_x = -30;
 
 			l_si = GUI_radio(get_tx2(35), 7,
 						get_ttx(412),
@@ -505,7 +501,7 @@ void level_up(signed short hero_pos)
 
 		status_show(hero_pos);
 
-		ds_writebs(STATUS_PAGE_HUNGER, ds_writebs(STATUS_PAGE_THIRST, -1));
+		g_status_page_hunger = g_status_page_thirst = -1;
 
 		update_status_bars();
 	}
@@ -558,7 +554,7 @@ void level_up(signed short hero_pos)
 
 			status_show(hero_pos);
 
-			ds_writebs(STATUS_PAGE_HUNGER, ds_writebs(STATUS_PAGE_THIRST, -1));
+			g_status_page_hunger = g_status_page_thirst = -1;
 
 			update_status_bars();
 		} else {
@@ -570,7 +566,7 @@ void level_up(signed short hero_pos)
 	/* check changes in MR */
 
 	mr = (host_readbs(hero + (HERO_ATTRIB_ORIG + 3 * ATTRIB_KL)) + host_readbs(hero + (HERO_ATTRIB_ORIG + 3 * ATTRIB_MU)) + host_readbs(hero + HERO_LEVEL)) / 3 - 2 * host_readbs(hero + (HERO_ATTRIB_ORIG + 3 * ATTRIB_AG));
-	mr += ds_readbs(MR_MODIFICATORS + host_readbs(hero + HERO_TYPE));
+	mr += g_mr_modificators[host_readbs(hero + HERO_TYPE)];
 
 	if (host_readbs(hero + HERO_MR) != mr) {
 		/* set new basic MR */
@@ -590,24 +586,21 @@ void level_up(signed short hero_pos)
 		}
 
 		/* show the user the new MR value */
-		sprintf((char*)ds_readd(DTP2),
-			get_tx2(41),
-			host_readbs(hero + HERO_MR));
-
-		GUI_output((char*)ds_readd(DTP2));
+		sprintf(g_dtp2, get_tx2(41), host_readbs(hero + HERO_MR));
+		GUI_output(g_dtp2);
 
 		/* update status background */
 		status_show(hero_pos);
 
 		/* update_the bars of the hero */
-		ds_writebs(STATUS_PAGE_HUNGER, ds_writebs(STATUS_PAGE_THIRST, -1));
+		g_status_page_hunger = g_status_page_thirst = -1;
 
 		update_status_bars();
 	}
 
 
 	/* add skill increasements */
-	add_ptr_bs(hero + HERO_TA_RISE, ds_readbs((LEVELUP_TA_RISE-1) + host_readbs(hero + HERO_TYPE)));
+	add_ptr_bs(hero + HERO_TA_RISE, g_levelup_ta_rise[host_readbs(hero + HERO_TYPE) - 1]);
 
 	/* roll how many LE points the hero may get */
 	i = random_schick(6);
@@ -616,17 +609,16 @@ void level_up(signed short hero_pos)
 		/* a magic user */
 
 		/* add spell increasements */
-		add_ptr_bs(hero + HERO_SP_RISE, ds_readbs((LEVELUP_SP_RISE - 7) + host_readbs(hero + HERO_TYPE)));
+		add_ptr_bs(hero + HERO_SP_RISE, g_levelup_sp_rise[host_readbs(hero + HERO_TYPE) - 7]);
 
 		i += 2;
 
 		/* show how many LE the hero may get */
-		sprintf((char*)ds_readd(DTP2),
-			get_tx2(39),
-			i);
+		sprintf(g_dtp2, get_tx2(39), i);
 
 		do {
-			l_si = GUI_input((char*)ds_readd(DTP2), 1);
+			l_si = GUI_input(g_dtp2, 1);
+
 		} while (l_si < 0);
 
 		if (l_si > i) {
@@ -642,7 +634,7 @@ void level_up(signed short hero_pos)
 		add_hero_ae(hero, i - l_si);
 
 		/* change skill increasements into AE */
-		if (host_readbs(hero + HERO_TYPE) == HERO_TYPE_MAGE && ds_readws(GAME_MODE) == GAME_MODE_ADVANCED) {
+		if (host_readbs(hero + HERO_TYPE) == HERO_TYPE_MAGE && g_game_mode == GAME_MODE_ADVANCED) {
 
 			if (GUI_bool(get_tx2(40))) {
 				/* trade 10 skill increasements into 1W6+2 AE */
@@ -657,11 +649,8 @@ void level_up(signed short hero_pos)
 		/* not a magic user */
 
 		/* show how many LE the hero gets */
-		sprintf((char*)ds_readd(DTP2),
-			get_tx2(38),
-			i);
-
-		GUI_output((char*)ds_readd(DTP2));
+		sprintf(g_dtp2, get_tx2(38), i);
+		GUI_output(g_dtp2);
 
 		/* add LE and fill them up */
 		add_ptr_ws(hero + HERO_LE_ORIG, i);
@@ -671,21 +660,21 @@ void level_up(signed short hero_pos)
 	status_show(hero_pos);
 
 	/* update_the bars of the hero */
-	ds_writebs(STATUS_PAGE_HUNGER, ds_writebs(STATUS_PAGE_THIRST, -1));
+	g_status_page_hunger = g_status_page_thirst = -1;
 
 	update_status_bars();
 
 	update_atpa(hero);
 
-	if (ds_readws(GAME_MODE) == GAME_MODE_BEGINNER) {
+	if (g_game_mode == GAME_MODE_BEGINNER) {
 
 		i = v2 = 0;
 
 		while (host_readbs(hero + HERO_TA_RISE) > 0) {
 
-			l_si = host_readws((Bit8u*)ds_readd(SKILLS_BUFFER) + 100 * host_readbs(hero + HERO_TYPE) + 4 * i);
+			l_si = host_readws(g_skills_buffer + 100 * host_readbs(hero + HERO_TYPE) + 4 * i);
 
-			if (host_readbs(hero + HERO_TALENTS + l_si) < host_readws((Bit8u*)ds_readd(SKILLS_BUFFER) + 100 * host_readbs(hero + HERO_TYPE) + 4 * i + 2))
+			if (host_readbs(hero + HERO_TALENTS + l_si) < host_readws(g_skills_buffer + 100 * host_readbs(hero + HERO_TYPE) + 4 * i + 2))
 			{
 				inc_skill_novice(hero, l_si);
 			}
@@ -764,20 +753,18 @@ void level_up(signed short hero_pos)
 						i = 0;
 
 						while (host_readbs(hero + HERO_SP_RISE) != 0 &&
-							(host_readws((Bit8u*)ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i)) != -1) {
+							(g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i] != -1)) {
 
-							if (host_readbs(hero + HERO_SPELLS +
-									host_readws((Bit8u*)ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i)) < 11)
+							if (host_readbs(hero + HERO_SPELLS + g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i]) < 11)
 							{
-								inc_spell_novice(hero,
-									host_readws((Bit8u*)ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i));
+								inc_spell_novice(hero, g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i]);
 							}
 							i++;
 						}
 
 						i = 0;
 						while (host_readbs(hero + HERO_SP_RISE) != 0 &&
-							(host_readws((Bit8u*)ds_readd(AUTOINC_SPELLS_MAGE_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i)) != -1) {
+							(g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i] != -1)) {
 
 							if (host_readbs(hero + HERO_SPELLS +
 									host_readws((Bit8u*)ds_readd(AUTOINC_SPELLS_MAGE_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i)) < 11)
@@ -790,13 +777,12 @@ void level_up(signed short hero_pos)
 
 						i = 0;
 						while (host_readbs(hero + HERO_SP_RISE) != 0 &&
-							(host_readws((Bit8u*)ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i)) != -1) {
+							(g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i] != -1)) {
 
 							if (host_readbs(hero + HERO_SPELLS +
-									host_readws((Bit8u*)ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i)) < 11)
+									(g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i])) < 11)
 							{
-								inc_spell_novice(hero,
-									host_readws((Bit8u*)ds_readd(MAGIC_SCHOOLS_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i));
+								inc_spell_novice(hero, g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i]);
 							}
 							i++;
 						}
@@ -896,13 +882,12 @@ void level_up(signed short hero_pos)
 	} else {
 
 		if ((host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH) &&
-			(l_di = ds_readbs((LEVELUP_SPTA_CONV - 7) + host_readbs(hero + HERO_TYPE))) &&
+			(l_di = g_levelup_spta_conv[host_readbs(hero + HERO_TYPE) - 7]) &&
 			GUI_bool(get_tx2(45)))
 		{
-			sprintf((char*)ds_readd(DTP2),
-				get_tx2(46), l_di);
+			sprintf(g_dtp2, get_tx2(46), l_di);
 
-			i = GUI_input((char*)ds_readd(DTP2), 1);
+			i = GUI_input(g_dtp2, 1);
 
 			if (i > 0) {
 
@@ -916,9 +901,9 @@ void level_up(signed short hero_pos)
 
 			} else {
 
-				sprintf((char*)ds_readd(DTP2), get_tx2(47), l_di);
+				sprintf(g_dtp2, get_tx2(47), l_di);
 
-				i = GUI_input((char*)ds_readd(DTP2), 1);
+				i = GUI_input(g_dtp2, 1);
 
 				if (i > 0) {
 
@@ -965,11 +950,11 @@ void level_up(signed short hero_pos)
 		}
 	}
 
-	ds_writew(BASEPOS_X, 0);
-	ds_writew(REQUEST_REFRESH, 1);
-	ds_writew(TIMERS_DISABLED, 0);
+	g_basepos_x = 0;
+	g_request_refresh = 1;
+	g_timers_disabled = 0;
 
-	ds_writews(CURRENT_ANI, -1);
+	g_current_ani = -1;
 
 	/* restore text file except for CHARTEXT.LTX, TAVERN.TLK and except for dialogs */
 	if (city_bak != -1 && city_bak != ARCHIVE_FILE_CHARTEXT_LTX

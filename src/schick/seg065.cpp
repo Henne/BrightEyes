@@ -8,6 +8,10 @@
  */
 #include <string.h>
 
+#if !defined(__BORLANDC__)
+#include <unistd.h>
+#endif
+
 #include "v302de.h"
 #include "common.h"
 
@@ -39,18 +43,18 @@ void do_market(void)
 	signed short bak1;
 
 	done = 0;
-	ds_writew(REQUEST_REFRESH, 1);
-	bak1 = ds_readbs(DIRECTION_BAK);
-	dir_bak = ds_readbs(DIRECTION);
+	g_request_refresh = 1;
+	bak1 = gs_direction_bak;
+	dir_bak = gs_direction;
 
 	do {
 
-		if (ds_readw(REQUEST_REFRESH) != 0) {
+		if (g_request_refresh != 0) {
 			draw_main_screen();
 			set_var_to_zero();
 			load_ani(16);
 			init_ani(0);
-			ds_writew(REQUEST_REFRESH, 0);
+			g_request_refresh = 0;
 		}
 
 		answer = GUI_radio(get_ttx(680), 4,
@@ -62,22 +66,22 @@ void do_market(void)
 		} else {
 
 			/* set up parameters for this merchant */
-			ds_writeb(SHOP_DESCR_TABLE + 90 * 9 + 0, ds_readb((MARKET_DESCR_TABLE + 2) + 8 * ds_readws(CURRENT_TYPEINDEX)));
-			ds_writeb(SHOP_DESCR_TABLE + 90 * 9 + 2, ds_readb((MARKET_DESCR_TABLE + 6) + 8 * ds_readws(CURRENT_TYPEINDEX)));
+			ds_writeb(SHOP_DESCR_TABLE + 90 * 9 + 0, ds_readb((MARKET_DESCR_TABLE + 2) + 8 * gs_current_typeindex));
+			ds_writeb(SHOP_DESCR_TABLE + 90 * 9 + 2, ds_readb((MARKET_DESCR_TABLE + 6) + 8 * gs_current_typeindex));
 			ds_writeb(SHOP_DESCR_TABLE + 90 * 9 + 1, (signed char)answer);
-			type_bak = ds_readws(CURRENT_TYPEINDEX);
-			ds_writew(CURRENT_TYPEINDEX, 90);
+			type_bak = gs_current_typeindex;
+			gs_current_typeindex = 90;
 
 			/* visit this merchant */
 			do_merchant();
 
 			/* change back to market */
-			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_MARKET);
+			gs_current_loctype = LOCTYPE_MARKET;
 
 			/* clean up */
-			ds_writew(CURRENT_TYPEINDEX, type_bak);
-			ds_writeb(DIRECTION_BAK, (signed char)bak1);
-			ds_writeb(DIRECTION, (signed char)dir_bak); /* by this line, the party will *not* be rotated after leaving the market */
+			gs_current_typeindex = type_bak;
+			gs_direction_bak = ((signed char)bak1);
+			gs_direction = ((signed char)dir_bak); /* by this line, the party will *not* be rotated after leaving the market */
 			ds_writeb(SHOP_DESCR_TABLE + 90 * 9 + 0, 0);
 			ds_writeb(SHOP_DESCR_TABLE + 90 * 9 + 2, 0);
 			ds_writeb(SHOP_DESCR_TABLE + 90 * 9 + 1, 0);
@@ -85,7 +89,7 @@ void do_market(void)
 
 	} while (!done);
 
-	ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+	gs_current_loctype = LOCTYPE_NONE;
 	copy_palette();
 }
 
@@ -97,72 +101,72 @@ void final_intro(void)
 	signed short height;
 	Bit32u len;
 	Bit8u *ptr1;
-	RealPt ptr2;
+	Bit8u* ptr2;
 	struct nvf_desc nvf;
 
-	ds_writebs(PP20_INDEX, (signed char)(ARCHIVE_FILE_DNGS + 12));
+	g_pp20_index = (ARCHIVE_FILE_DNGS + 12);
 
 	update_mouse_cursor();
 
-	ds_writew(WALLCLOCK_UPDATE, 0);
+	g_wallclock_update = 0;
 
 	/* load FACE.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_FACE_NVF);
-	len = read_archive_file(handle, (Bit8u*)ds_readd(BUFFER9_PTR), 64000);
+	len = read_archive_file(handle, g_buffer9_ptr, 64000);
 	close(handle);
 
-	ptr1 = (Bit8u*)(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), len), -(96 * 3)));
+	ptr1 = (g_buffer9_ptr + len) - (96 * 3);
 
-	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
+	do_fill_rect(g_vga_memstart, 0, 0, 319, 199, 0);
 
 	wait_for_vsync();
 
 	set_palette(ptr1, 0, 0x60);
 
-	ptr2 = (RealPt)F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 80000);
+	ptr2 = g_buffer9_ptr + 80000L;
 
-	nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
-	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
+	nvf.dst = g_renderbuf_ptr;
+	nvf.src = (Bit8u*)g_buffer9_ptr;
 	nvf.no = 0;
 	nvf.type = 3;
 	nvf.width = (Bit8u*)&width;
 	nvf.height = (Bit8u*)&height;
 	process_nvf(&nvf);
 
-	map_effect((Bit8u*)ds_readd(RENDERBUF_PTR));
+	map_effect(g_renderbuf_ptr);
 
-	nvf.dst = (Bit8u*)(ptr2);
-	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
+	nvf.dst = (Bit8u*)ptr2;
+	nvf.src = (Bit8u*)g_buffer9_ptr;
 	nvf.no = 1;
 	nvf.type = 3;
 	nvf.width = (Bit8u*)&width;
 	nvf.height = (Bit8u*)&height;
 	process_nvf(&nvf);
 
-	ds_writew(PIC_COPY_X1, 0);
-	ds_writew(PIC_COPY_Y1, 20);
-	ds_writew(PIC_COPY_X2, 319);
-	ds_writew(PIC_COPY_Y2, 39);
-	ds_writed(PIC_COPY_SRC, (Bit32u)ptr2);
-	ds_writed(PIC_COPY_DST, ds_readd(RENDERBUF_PTR));
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 20;
+	g_pic_copy.x2 = 319;
+	g_pic_copy.y2 = 39;
+	g_pic_copy.src = ptr2;
+	g_pic_copy.dst = g_renderbuf_ptr;
 
 	do_pic_copy(2);
 
 	delay_or_keypress(100);
 
-	map_effect((Bit8u*)ds_readd(RENDERBUF_PTR));
+	map_effect(g_renderbuf_ptr);
 
-	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
+	g_pic_copy.dst = (g_vga_memstart);
 
 	delay_or_keypress(250);
 
-	memset((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 96 * 3);
+	memset(g_renderbuf_ptr, 0, 96 * 3);
 
 	for (i = 0; i < 0x40; i++) {
 
-		pal_fade(ptr1, (Bit8u*)ds_readd(RENDERBUF_PTR));
-		pal_fade(ptr1 + 0x60, (Bit8u*)ds_readd(RENDERBUF_PTR) + 0x60);
-		pal_fade(ptr1 + 0xc0, (Bit8u*)ds_readd(RENDERBUF_PTR) + 0xc0);
+		pal_fade(ptr1, g_renderbuf_ptr);
+		pal_fade(ptr1 + 0x60, g_renderbuf_ptr + 0x60);
+		pal_fade(ptr1 + 0xc0, g_renderbuf_ptr + 0xc0);
 
 		wait_for_vsync();
 
@@ -170,7 +174,7 @@ void final_intro(void)
 	}
 
 	/* TODO: update window */
-	memset((void*)((Bit8u*)ds_readd(FRAMEBUF_PTR)), 0, 320 * 200);
+	memset((void*)(g_vga_memstart), 0, 320 * 200);
 
 	refresh_colors();
 	refresh_screen_size();
@@ -179,13 +183,13 @@ void final_intro(void)
 #if defined(__BORLANDC__)
 static
 #endif
-RealPt hyg_ani_1(signed short nvf_no, Bit8u *ptr)
+Bit8u* hyg_ani_1(signed short nvf_no, Bit8u *ptr)
 {
 	HugePt retval;
 	struct nvf_desc nvf;
 
 	nvf.dst = (Bit8u*)(host_readd(ptr));
-	nvf.src = (Bit8u*)ds_readd(RENDERBUF_PTR);
+	nvf.src = g_renderbuf_ptr;
 	nvf.no = nvf_no;
 	nvf.type = 3;
 	nvf.width = ptr + 4;
@@ -193,10 +197,9 @@ RealPt hyg_ani_1(signed short nvf_no, Bit8u *ptr)
 
 	process_nvf(&nvf);
 
-	retval = F_PADD((RealPt)host_readd(ptr),
-			host_readws(ptr + 4) * host_readws(ptr + 6));
+	retval = ((HugePt)host_readd(ptr) + host_readws(ptr + 4) * host_readws(ptr + 6));
 
-	return (RealPt)retval;
+	return (Bit8u*)retval;
 }
 
 #if defined(__BORLANDC__)
@@ -204,13 +207,14 @@ static
 #endif
 void hyg_ani_2(Bit8u *ptr, signed short x, signed short y)
 {
-	ds_writew(PIC_COPY_X1, x);
-	ds_writew(PIC_COPY_Y1, y);
-	ds_writew(PIC_COPY_X2, x + host_readws(ptr + 4) - 1);
-	ds_writew(PIC_COPY_Y2, y + host_readws(ptr + 6) - 1);
+	g_pic_copy.x1 = x;
+	g_pic_copy.y1 = y;
+	g_pic_copy.x2 = x + host_readws(ptr + 4) - 1;
+	g_pic_copy.y2 = y + host_readws(ptr + 6) - 1;
 
-	ds_writed(PIC_COPY_SRC, host_readd(ptr));
-	ds_writed(PIC_COPY_DST, ds_readd(RENDERBUF_PTR));
+	//g_pic_copy.src = host_readd(ptr);
+	g_pic_copy.src = (unsigned char*)(*((unsigned char*)ptr));
+	g_pic_copy.dst = g_renderbuf_ptr;
 
 	do_pic_copy(2);
 }
@@ -220,12 +224,12 @@ static
 #endif
 void hyg_ani_3(void)
 {
-	ds_writew(PIC_COPY_X1, 0);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, 319);
-	ds_writew(PIC_COPY_Y2, 199);
-	ds_writed(PIC_COPY_SRC, (Bit32u)F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 0x1fbd0));
-	ds_writed(PIC_COPY_DST, ds_readd(RENDERBUF_PTR));
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = 319;
+	g_pic_copy.y2 = 199;
+	g_pic_copy.src = g_buffer9_ptr + 130000L;
+	g_pic_copy.dst = g_renderbuf_ptr;
 
 	do_pic_copy(0);
 }
@@ -235,12 +239,12 @@ static
 #endif
 void hyg_ani_4(void)
 {
-	ds_writew(PIC_COPY_X1, 0);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, 319);
-	ds_writew(PIC_COPY_Y2, 199);
-	ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
-	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = 319;
+	g_pic_copy.y2 = 199;
+	g_pic_copy.src = g_renderbuf_ptr;
+	g_pic_copy.dst = g_vga_memstart;
 
 	do_pic_copy(0);
 }
@@ -251,22 +255,22 @@ void show_hyggelik_ani(void)
 	signed short handle;
 	Bit32s filelen;
 	Bit8u *src;
-	RealPt ptr1;
-	RealPt ptr2;
+	Bit8u* ptr1;
+	Bit8u* ptr2;
 	Bit8u array[30*8];
 
-	ds_writew(WALLCLOCK_UPDATE, 0);
-	ptr1 = (Bit8u*)ds_readd(BUFFER9_PTR);
-	ptr2 = (RealPt)F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 0x1fbd0);
+	g_wallclock_update = 0;
+	ptr1 = g_buffer9_ptr;
+	ptr2 = g_buffer9_ptr + 1300000L;
 
 	handle = load_archive_file(ARCHIVE_FILE_HYGBACK_NVF);
-	filelen = read_archive_file(handle, (Bit8u*)ds_readd(RENDERBUF_PTR), 64000);
+	filelen = read_archive_file(handle, g_renderbuf_ptr, 64000);
 	close(handle);
-	src = &(((Bit8u*)ds_readd(RENDERBUF_PTR))[filelen - 0xc0]);
+	src = &(g_renderbuf_ptr[filelen - 0xc0]);
 
-	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
-	memcpy((void*)(char*)ds_readd(DTP2), src, 192);
-	src = (char*)ds_readd(DTP2);
+	do_fill_rect(g_vga_memstart, 0, 0, 319, 199, 0);
+	memcpy((void*)g_dtp2, src, 192);
+	src = (Bit8u*)g_dtp2;
 
 	wait_for_vsync();
 	set_palette(src, 0 , 0x40);
@@ -275,7 +279,7 @@ void show_hyggelik_ani(void)
 	hyg_ani_1(0, array);
 
 	handle = load_archive_file(ARCHIVE_FILE_HYGGELIK_NVF);
-	filelen = read_archive_file(handle, (Bit8u*)ds_readd(RENDERBUF_PTR), 64000);
+	filelen = read_archive_file(handle, g_renderbuf_ptr, 64000);
 	close(handle);
 	host_writed(array + 0, (Bit32u)ptr1);
 
@@ -291,7 +295,7 @@ void show_hyggelik_ani(void)
 	hyg_ani_2(array + 10 * 8, 82, 67);
 	hyg_ani_2(array + 20 * 8, 186, 67);
 
-	map_effect((Bit8u*)ds_readd(RENDERBUF_PTR));
+	map_effect(g_renderbuf_ptr);
 
 	for (i = 0; i < 7; i++) {
 		hyg_ani_3();
@@ -350,25 +354,25 @@ void show_hyggelik_ani(void)
 	delay_or_keypress(100);
 
 	/* clear the screen */
-	do_fill_rect((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 0, 319, 199, 0);
+	do_fill_rect(g_renderbuf_ptr, 0, 0, 319, 199, 0);
 
 	hyg_ani_2(array + 25 * 8, 100, 0);
-	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
-	map_effect((Bit8u*)ds_readd(RENDERBUF_PTR));
+	g_pic_copy.dst = (g_vga_memstart);
+	map_effect(g_renderbuf_ptr);
 	delay_or_keypress(500);
 
-	memset((void*)(Bit8u*)ds_readd(RENDERBUF_PTR), 0, 0xc0);
+	memset(g_renderbuf_ptr, 0, 0xc0);
 
 	for (i = 0; i < 64; i++) {
-		pal_fade(src, (Bit8u*)ds_readd(RENDERBUF_PTR));
-		pal_fade(src + 0x60, (Bit8u*)ds_readd(RENDERBUF_PTR) + 0x60);
+		pal_fade(src, g_renderbuf_ptr);
+		pal_fade(src + 0x60, g_renderbuf_ptr + 0x60);
 		wait_for_vsync();
 		set_palette(src, 0, 0x40);
 	}
 
 	refresh_screen_size();
 	/* TODO: update window */
-	memset((void*)((Bit8u*)ds_readd(FRAMEBUF_PTR)), 0, 320 * 200);
+	memset((void*)(g_vga_memstart), 0, 320 * 200);
 	refresh_colors();
 }
 
@@ -379,7 +383,7 @@ void show_times_up(void)
 	signed short bak1;
 	signed short bak2;
 
-	fi_bak = ds_readws(TEXT_FILE_INDEX);
+	fi_bak = g_text_file_index;
 	load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
 	set_audio_track(ARCHIVE_FILE_VICTORY_XMI);
 	set_var_to_zero();
@@ -389,21 +393,21 @@ void show_times_up(void)
 
 	delay_or_keypress(200);
 
-	tw_bak = ds_readws(TEXTBOX_WIDTH);
-	bak1 = ds_readws(BASEPOS_X);
-	bak2 = ds_readws(BASEPOS_Y);
+	tw_bak = g_textbox_width;
+	bak1 = g_basepos_x;
+	bak2 = g_basepos_y;
 
-	ds_writew(TEXTBOX_WIDTH, 7);
-	ds_writew(BASEPOS_X, 0);
-	ds_writew(BASEPOS_Y, 55);
+	g_textbox_width = 7;
+	g_basepos_x = 0;
+	g_basepos_y = 55;
 
 	GUI_output(get_tx2(55));
 	GUI_output(get_tx2(56));
 	GUI_output(get_tx2(57));
 
-	ds_writew(BASEPOS_X, bak1);
-	ds_writew(BASEPOS_Y, bak2);
-	ds_writew(TEXTBOX_WIDTH, tw_bak);
+	g_basepos_x = bak1;
+	g_basepos_y = bak2;
+	g_textbox_width = tw_bak;
 
 	/* restore text file except for CHARTEXT.LTX, TAVERN.TLK and except for dialogs */
 	if (fi_bak != -1 && fi_bak != ARCHIVE_FILE_CHARTEXT_LTX
@@ -425,9 +429,9 @@ void show_outro(void)
 	signed short i;
 	struct nvf_desc nvf;
 
-	ds_writew(TEXTBOX_WIDTH, 7);
-	ds_writew(BASEPOS_X, 0);
-	ds_writew(BASEPOS_Y, 60);
+	g_textbox_width = 7;
+	g_basepos_x = 0;
+	g_basepos_y = 60;
 
 	load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
 	set_audio_track(ARCHIVE_FILE_VICTORY_XMI);
@@ -435,16 +439,16 @@ void show_outro(void)
 
 	/* load OUTRO1.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_OUTRO1_NVF);
-	len = read_archive_file(handle, (Bit8u*)ds_readd(BUFFER9_PTR), 64000);
+	len = read_archive_file(handle, (Bit8u*)g_buffer9_ptr, 64000);
 	close(handle);
 
-	pal_ptr = (Bit8u*)(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), len), - 0xc0));
-	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
+	pal_ptr = (g_buffer9_ptr + len) - 0xc0L;
+	do_fill_rect(g_vga_memstart, 0, 0, 319, 199, 0);
 	wait_for_vsync();
 	set_palette(pal_ptr, 0, 0x40);
 
-	nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
-	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
+	nvf.dst = g_renderbuf_ptr;
+	nvf.src = (Bit8u*)g_buffer9_ptr;
 	nvf.no = 0;
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&width;
@@ -456,11 +460,11 @@ void show_outro(void)
 	height = host_readws((Bit8u*)&height);
 #endif
 
-	ds_writew(PIC_COPY_X1, (320 - width) / 2);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, (320 - width) / 2 + width - 1);
-	ds_writew(PIC_COPY_Y2, height - 1);
-	ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+	g_pic_copy.x1 = (320 - width) / 2;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = (320 - width) / 2 + width - 1;
+	g_pic_copy.y2 = height - 1;
+	g_pic_copy.src = g_renderbuf_ptr;
 	do_pic_copy(0);
 
 	delay_or_keypress(200);
@@ -469,16 +473,16 @@ void show_outro(void)
 
 	/* load OUTRO2.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_OUTRO2_NVF);
-	len = read_archive_file(handle, (Bit8u*)ds_readd(BUFFER9_PTR), 64000);
+	len = read_archive_file(handle, (Bit8u*)g_buffer9_ptr, 64000);
 	close(handle);
 
-	pal_ptr = (Bit8u*)(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), len), - 0xc0));
-	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
+	pal_ptr = (g_buffer9_ptr + len) - 0xc0L;
+	do_fill_rect(g_vga_memstart, 0, 0, 319, 199, 0);
 	wait_for_vsync();
 	set_palette(pal_ptr, 0, 0x40);
 
-	nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
-	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
+	nvf.dst = g_renderbuf_ptr;
+	nvf.src = (Bit8u*)g_buffer9_ptr;
 	nvf.no = 0;
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&width;
@@ -490,11 +494,11 @@ void show_outro(void)
 	height = host_readws((Bit8u*)&height);
 #endif
 
-	ds_writew(PIC_COPY_X1, (320 - width) / 2);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, (320 - width) / 2 + width - 1);
-	ds_writew(PIC_COPY_Y2, height - 1);
-	ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+	g_pic_copy.x1 = (320 - width) / 2;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = (320 - width) / 2 + width - 1;
+	g_pic_copy.y2 = height - 1;
+	g_pic_copy.src = g_renderbuf_ptr;
 	do_pic_copy(0);
 
 	delay_or_keypress(200);
@@ -503,16 +507,16 @@ void show_outro(void)
 
 	/* load OUTRO3.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_OUTRO3_NVF);
-	len = read_archive_file(handle, (Bit8u*)ds_readd(BUFFER9_PTR), 64000);
+	len = read_archive_file(handle, (Bit8u*)g_buffer9_ptr, 64000);
 	close(handle);
 
-	pal_ptr = (Bit8u*)(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), len), - 0xc0));
-	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
+	pal_ptr = (g_buffer9_ptr + len) - 0xc0L;
+	do_fill_rect(g_vga_memstart, 0, 0, 319, 199, 0);
 	wait_for_vsync();
 	set_palette(pal_ptr, 0, 0x40);
 
-	nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
-	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
+	nvf.dst = g_renderbuf_ptr;
+	nvf.src = (Bit8u*)g_buffer9_ptr;
 	nvf.no = 0;
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&width;
@@ -524,11 +528,11 @@ void show_outro(void)
 	height = host_readws((Bit8u*)&height);
 #endif
 
-	ds_writew(PIC_COPY_X1, (320 - width) / 2);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, (320 - width) / 2 + width - 1);
-	ds_writew(PIC_COPY_Y2, height - 1);
-	ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+	g_pic_copy.x1 = (320 - width) / 2;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = (320 - width) / 2 + width - 1;
+	g_pic_copy.y2 = height - 1;
+	g_pic_copy.src = g_renderbuf_ptr;
 	do_pic_copy(0);
 
 	delay_or_keypress(200);
@@ -625,10 +629,10 @@ void show_outro(void)
 	set_party_money(get_party_money());
 
 	/* mark the game as done */
-	ds_writeb(DATSEG_STATUS_START, 99);
+	gs_datseg_status_start = 99;
 
-	ds_writew(BASEPOS_X, 0);
-	ds_writew(BASEPOS_Y, 0);
+	g_basepos_x = 0;
+	g_basepos_y = 0;
 
 	/* save the game */
 	save_game_state();

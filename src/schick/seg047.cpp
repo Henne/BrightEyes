@@ -43,7 +43,7 @@ unsigned short get_hero_CH_best()
 	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 
 		if ((host_readb(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readb(hero_i + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP)) &&
+			(host_readb(hero_i + HERO_GROUP_NO) == gs_current_group) &&
 				/* check if in group */
 			(!hero_dead(hero_i)) &&
 				/* check if not dead */
@@ -74,7 +74,7 @@ unsigned short get_hero_KK_best() {
 
 	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 		if ((host_readb(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readb(hero_i + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP)) &&
+			(host_readb(hero_i + HERO_GROUP_NO) == gs_current_group) &&
 				/* check if in group */
 			(!hero_dead(hero_i)) &&
 				/* check if not dead */
@@ -231,7 +231,7 @@ short check_heroes_KK(short val) {
 	hero = get_hero(1);
 
 	/* check class, group and dead status of hero in slot 2*/
-	if (host_readb(hero + HERO_TYPE) && host_readb(hero + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP) && (!hero_dead(hero))) {
+	if (host_readb(hero + HERO_TYPE) && host_readb(hero + HERO_GROUP_NO) == gs_current_group && (!hero_dead(hero))) {
 		sum += host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK));
 	}
 
@@ -309,11 +309,11 @@ void update_atpa(Bit8u *hero)
 		host_writeb(hero + HERO_ATPA_BASIS, erg.quot);
 
 		/* prepare message */
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_ttx(8), host_readbs(hero + HERO_ATPA_BASIS));
 
 		/* print message */
-		GUI_output((char*)ds_readd(DTP2));
+		GUI_output(g_dtp2);
 
 		for (i = 0; i < 7; i++) {
 			/* add diff to AT value */
@@ -335,7 +335,7 @@ void update_atpa(Bit8u *hero)
  * \return              the number of the selected hero.
  * Used only in temples.
  */
-signed short menu_enter_delete(RealPt ptr, signed short entries, signed short mode)
+signed short menu_enter_delete(Bit8u* ptr, signed short entries, signed short mode)
 {
 	signed short i;
 	signed short answer;
@@ -351,31 +351,22 @@ signed short menu_enter_delete(RealPt ptr, signed short entries, signed short mo
 
 		/* fill a pointer array with the pointer to the names */
 		for (i = 0; i < i_max; i++) {
-			ds_writed(RADIO_NAME_LIST + 4 * i,
-				(Bit32u)((i + i_min) * 32 + ptr + 0x10));
+			g_radio_name_list[i] = (char*)((i + i_min) * 32 + ptr + 0x10);
 		}
 
 		i = i_max;
 		if (entries > 10) {
-			ds_writed(RADIO_NAME_LIST + 4 * i,
-				host_readd((Bit8u*)((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0x48c)));
+			g_radio_name_list[i] = get_ttx(291);
 			i++;
 		}
 
-		answer = GUI_radio( (mode == -1) ? get_ttx(567) : get_ttx(292),
-				(signed char)i,
-				(char*)(ds_readd(RADIO_NAME_LIST)),
-				(char*)(ds_readd((RADIO_NAME_LIST + 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 2 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 3 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 4 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 5 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 6 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 7 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 8 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 9 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 10 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 11 * 4))));
+		answer = GUI_radio( (mode == -1) ? get_ttx(567) : get_ttx(292), (signed char)i,
+				g_radio_name_list[0], g_radio_name_list[1],
+				g_radio_name_list[2], g_radio_name_list[3],
+				g_radio_name_list[4], g_radio_name_list[5],
+				g_radio_name_list[6], g_radio_name_list[7],
+				g_radio_name_list[8], g_radio_name_list[9],
+				g_radio_name_list[10], g_radio_name_list[11]);
 
 		if ((entries > 10) && (answer == i)) {
 			i_min += 10;
@@ -402,7 +393,7 @@ signed short menu_enter_delete(RealPt ptr, signed short entries, signed short mo
  * \return              index of the hero or -1 (ESC).
  * Remark: The available heroes must be in the group only.
  */
-signed short select_hero_from_group(Bit8u *title)
+signed short select_hero_from_group(char *title)
 {
 	signed short i;
 	signed short answer;
@@ -415,52 +406,49 @@ signed short select_hero_from_group(Bit8u *title)
 	struct helper dst = *(((struct helper*)(p_datseg + SEG047_INIT1)));
 #endif
 	signed short cnt;
-	signed short textbox_width_bak;
+	signed short tw_bak;
 	signed short bak_2;
 	signed short bak_3;
-	RealPt hero;
+	unsigned char *hero;
 
-	textbox_width_bak = ds_readw(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 3);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 3;
 	cnt = 0;
 
 	for (i = 0; i <= 6; i++) {
 
-		hero = (Bit8u*)ds_readd(HEROES) + i * SIZEOF_HERO;
+		hero = get_hero(i);
 
 		if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readb(hero + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP) &&
+			host_readb(hero + HERO_GROUP_NO) == gs_current_group &&
 				/* TODO: find out what that means */
-				ds_readbs(HERO_SEL_EXCLUDE) != i) {
+				g_hero_sel_exclude != i) {
 
 			/* save pointer to the name of the hero */
-			ds_writed(RADIO_NAME_LIST + cnt * 4, (Bit32u)(hero + HERO_NAME2));
+			g_radio_name_list[cnt] = (char*)(hero + HERO_NAME2);
 			dst.v[cnt] = i;
 			cnt++;
 		}
 	}
 
 
-	ds_writeb(HERO_SEL_EXCLUDE, -1);
+	g_hero_sel_exclude = -1;
 
 	if (cnt != 0) {
-		bak_2 = ds_readw(BASEPOS_X);
-		bak_3 = ds_readw(BASEPOS_Y);
+		bak_2 = g_basepos_x;
+		bak_3 = g_basepos_y;
 
-		ds_writew(BASEPOS_X, ds_writew(BASEPOS_Y, 0));
+		g_basepos_x = g_basepos_y = 0;
 
 		answer = GUI_radio(title, (signed char)cnt,
-				(char*)(ds_readd(RADIO_NAME_LIST)),
-				(char*)(ds_readd((RADIO_NAME_LIST + 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 2 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 3 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 4 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 5 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 6 * 4)))) - 1;
+				g_radio_name_list[0], g_radio_name_list[1],
+				g_radio_name_list[2], g_radio_name_list[3],
+				g_radio_name_list[4], g_radio_name_list[5],
+				g_radio_name_list[6]) - 1;
 
-		ds_writew(BASEPOS_X, bak_2);
-		ds_writew(BASEPOS_Y, bak_3);
-		ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
+		g_basepos_x = bak_2;
+		g_basepos_y = bak_3;
+		g_textbox_width = tw_bak;
 
 		if (answer != -2)
 			return dst.v[answer];
@@ -468,7 +456,7 @@ signed short select_hero_from_group(Bit8u *title)
 			return -1;
 	}
 
-	ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
+	g_textbox_width = tw_bak;
 	return -1;
 }
 
@@ -479,7 +467,7 @@ signed short select_hero_from_group(Bit8u *title)
  * \return              index of the hero or -1 (ESC).
  * Remark: The available heroes must be in the group and pass check_hero().
  */
-signed short select_hero_ok(Bit8u *title)
+signed short select_hero_ok(char *title)
 {
 	signed short i;
 	signed short answer;
@@ -492,51 +480,48 @@ signed short select_hero_ok(Bit8u *title)
 	struct helper dst = *(((struct helper*)(p_datseg + SEG047_INIT2)));
 #endif
 	signed short cnt;
-	signed short textbox_width_bak;
+	signed short tw_bak;
 	signed short bak_2;
 	signed short bak_3;
-	RealPt hero;
+	unsigned char *hero;
 
-	textbox_width_bak = ds_readw(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 3);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 3;
 	cnt = 0;
 
-	for (hero = (Bit8u*)ds_readd(HEROES), i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+	for (hero = get_hero(0), i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 		if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readb(hero + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP) &&
+			host_readb(hero + HERO_GROUP_NO) == gs_current_group &&
 			check_hero(hero) &&
 				/* TODO: find out what that means */
-				ds_readbs(HERO_SEL_EXCLUDE) != i) {
+				g_hero_sel_exclude != i) {
 
 			/* save pointer to the name of the hero */
-			ds_writed(RADIO_NAME_LIST + cnt * 4, (Bit32u)(hero + HERO_NAME2));
+			g_radio_name_list[cnt] = (char*)(hero + HERO_NAME2);
 			dst.v[cnt] = i;
 			cnt++;
 		}
 	}
 
-	ds_writeb(HERO_SEL_EXCLUDE, -1);
+	g_hero_sel_exclude = -1;
 
 	if (cnt != 0) {
-		bak_2 = ds_readw(BASEPOS_X);
-		bak_3 = ds_readw(BASEPOS_Y);
+		bak_2 = g_basepos_x;
+		bak_3 = g_basepos_y;
 
-		ds_writew(BASEPOS_X, ds_writew(BASEPOS_Y, 0));
+		g_basepos_x = g_basepos_y = 0;
 
 		answer = GUI_radio(title, (signed char)cnt,
-				(char*)(ds_readd(RADIO_NAME_LIST)),
-				(char*)(ds_readd((RADIO_NAME_LIST + 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 2 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 3 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 4 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 5 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 6 * 4)))) - 1;
+				g_radio_name_list[0], g_radio_name_list[1],
+				g_radio_name_list[2], g_radio_name_list[3],
+				g_radio_name_list[4], g_radio_name_list[5],
+				g_radio_name_list[6]) - 1;
 
-		ds_writew(BASEPOS_X, bak_2);
-		ds_writew(BASEPOS_Y, bak_3);
-		ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
-		ds_writew(SKILLED_HERO_POS, -1);
+		g_basepos_x = bak_2;
+		g_basepos_y = bak_3;
+		g_textbox_width = tw_bak;
+		g_skilled_hero_pos = -1;
 
 		if (answer != -2)
 			return dst.v[answer];
@@ -544,8 +529,8 @@ signed short select_hero_ok(Bit8u *title)
 			return -1;
 	}
 
-	ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
-	ds_writew(SKILLED_HERO_POS, -1);
+	g_textbox_width = tw_bak;
+	g_skilled_hero_pos = -1;
 	return -1;
 }
 
@@ -570,60 +555,57 @@ signed short select_hero_ok_forced(char *title)
 	struct helper dst = *(((struct helper*)(p_datseg + SEG047_INIT3)));
 #endif
 	signed short cnt;
-	signed short textbox_width_bak;
+	signed short tw_bak;
 	signed short bak_2;
 	signed short bak_3;
-	RealPt hero;
+	unsigned char *hero;
 
-	textbox_width_bak = ds_readw(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 3);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 3;
 	cnt = 0;
 
-	for (hero = (Bit8u*)ds_readd(HEROES), i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+	for (hero = get_hero(0), i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 		if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readb(hero + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP) &&
+			host_readb(hero + HERO_GROUP_NO) == gs_current_group &&
 			check_hero(hero) &&
 				/* TODO: find out what that means */
-				ds_readbs(HERO_SEL_EXCLUDE) != i) {
+				g_hero_sel_exclude != i) {
 
 			/* save pointer to the name of the hero */
-			ds_writed(RADIO_NAME_LIST + cnt * 4, (Bit32u)(hero + HERO_NAME2));
+			g_radio_name_list[cnt] = (char*)(hero + HERO_NAME2);
 			dst.v[cnt] = i;
 			cnt++;
 		}
 	}
 
-	ds_writeb(HERO_SEL_EXCLUDE, -1);
+	g_hero_sel_exclude = -1;
 
 	if (cnt != 0) {
 		do {
-			bak_2 = ds_readw(BASEPOS_X);
-			bak_3 = ds_readw(BASEPOS_Y);
+			bak_2 = g_basepos_x;
+			bak_3 = g_basepos_y;
 
-			ds_writew(BASEPOS_X, ds_writew(BASEPOS_Y, 0));
+			g_basepos_x = g_basepos_y = 0;
 
 			answer = GUI_radio(title, (signed char)cnt,
-				(char*)(ds_readd(RADIO_NAME_LIST)),
-				(char*)(ds_readd((RADIO_NAME_LIST + 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 2 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 3 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 4 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 5 * 4))),
-				(char*)(ds_readd((RADIO_NAME_LIST + 6 * 4)))) - 1;
+					g_radio_name_list[0], g_radio_name_list[1],
+					g_radio_name_list[2], g_radio_name_list[3],
+					g_radio_name_list[4], g_radio_name_list[5],
+					g_radio_name_list[6]) - 1;
 
-			ds_writew(BASEPOS_X, bak_2);
-			ds_writew(BASEPOS_Y, bak_3);
+			g_basepos_x = bak_2;
+			g_basepos_y = bak_3;
 
 		} while (answer == -2);
 
-		ds_writew(SKILLED_HERO_POS, -1);
-		ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
+		g_skilled_hero_pos = -1;
+		g_textbox_width = tw_bak;
 
 		return dst.v[answer];
 	} else {
 
-		ds_writew(SKILLED_HERO_POS, -1);
+		g_skilled_hero_pos = -1;
 		return 0;
 	}
 }
@@ -644,7 +626,7 @@ signed short count_heroes_in_group(void)
 	for (hero_i = get_hero(0), i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 		/* Check class, group and dead */
 		if ((host_readb(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readb(hero_i + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP)) &&
+			(host_readb(hero_i + HERO_GROUP_NO) == gs_current_group) &&
 			(!hero_dead(hero_i))) {
 
 			retval++;
@@ -686,8 +668,8 @@ void hero_get_drunken(Bit8u *hero)
 		add_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_JZ), 1);
 
 		/* do a burp FX2.VOC */
-		if (ds_readb(PP20_INDEX) == ARCHIVE_FILE_ZUSTA_UK) {
-			ds_writew(REQUEST_REFRESH, 1);
+		if (g_pp20_index == ARCHIVE_FILE_ZUSTA_UK) {
+			g_request_refresh = 1;
 		}
 
 		play_voc_delay(ARCHIVE_FILE_FX2_VOC);
@@ -730,8 +712,8 @@ void hero_get_sober(Bit8u *hero) {
 	sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_NG), 1);
 	sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_JZ), 1);
 
-	if (ds_readb(PP20_INDEX) == ARCHIVE_FILE_ZUSTA_UK)
-		ds_writew(REQUEST_REFRESH, 1);
+	if (g_pp20_index == ARCHIVE_FILE_ZUSTA_UK)
+		g_request_refresh = 1;
 }
 
 #if !defined(__BORLANDC__)

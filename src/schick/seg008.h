@@ -7,7 +7,7 @@ extern "C" {
 unsigned short swap_u16(unsigned short);
 void set_video_mode(signed short);
 void set_video_page(signed short);
-void save_display_stat(RealPt);
+void save_display_stat(Bit8u*);
 void set_color(Bit8u *ptr, unsigned char color);
 void set_palette(Bit8u *ptr, unsigned short first_color, unsigned short colors);
 void draw_h_line(Bit8u*, unsigned short, signed short);

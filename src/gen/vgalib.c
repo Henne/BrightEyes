@@ -23,7 +23,7 @@
 #if !defined(__BORLANDC__)
 extern unsigned char *g_vga_memstart;
 
-static const int DEF_RATIO = 3;
+enum { DEF_RATIO = 3 };
 static int RATIO = DEF_RATIO;
 static int W_WIDTH = DEF_RATIO * O_WIDTH;
 static int W_HEIGHT = DEF_RATIO * O_HEIGHT;

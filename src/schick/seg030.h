@@ -11,9 +11,9 @@ void prepare_date_str(void);
 /* 0x2f */
 void talk_switch(void);
 /* 0x34 */
-RealPt seg030_008d(signed short);
+char* get_random_unknown_informer_name(const int);
 /* 0x39 */
-RealPt seg030_0000(signed short);
+char* get_random_known_informer_name(const int);
 
 #if !defined(__BORLANDC__)
 }

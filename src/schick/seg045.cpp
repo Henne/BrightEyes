@@ -32,54 +32,54 @@ void seg045_0000(signed short fighter_id, signed short type, signed short a3)
 	obj_y = host_readws((Bit8u*)&obj_y);
 #endif
 
-	ds_writew(FIG_LIST_ELEM, 0);
+	g_fig_list_elem.figure = 0;
 
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_NVF_NO), ds_readb(type * 2 + GFXTAB_SHOTBOLT_NVFNO));
+	g_fig_list_elem.nvf_no = (ds_readb(type * 2 + GFXTAB_SHOTBOLT_NVFNO));
 
 	if (type != 2) {
-		ds_writeb((FIG_LIST_ELEM+FIGHTER_NVF_NO), ds_readbs((FIG_LIST_ELEM+FIGHTER_NVF_NO)) + a3);
+		g_fig_list_elem.nvf_no = g_fig_list_elem.nvf_no + a3;
 	}
 
 	if (a3 == 0) {
 		obj_x += 2;
 	}
 
-	ds_writebs((FIG_LIST_ELEM+FIGHTER_CBX), (signed char)obj_x);
-	ds_writebs((FIG_LIST_ELEM+FIGHTER_CBY), (signed char)obj_y);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETX), ds_readb(GFXTAB_SHOTBOLT_OX + type * 8 + a3 * 2));
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETY), ds_readb(GFXTAB_SHOTBOLT_OY + type * 8 + a3 * 2));
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_HEIGHT), ds_readb(GFXTAB_SHOTBOLT_HEIGHT + type * 2));
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_WIDTH), ds_readb(GFXTAB_SHOTBOLT_WIDTH + type * 2));
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_X1), 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_Y1), 0);
+	g_fig_list_elem.cbx = (signed char)obj_x;
+	g_fig_list_elem.cby = (signed char)obj_y;
+	g_fig_list_elem.offsetx = ds_readb(GFXTAB_SHOTBOLT_OX + type * 8 + a3 * 2);
+	g_fig_list_elem.offsety = ds_readb(GFXTAB_SHOTBOLT_OY + type * 8 + a3 * 2);
+	g_fig_list_elem.height = ds_readb(GFXTAB_SHOTBOLT_HEIGHT + type * 2);
+	g_fig_list_elem.width = ds_readb(GFXTAB_SHOTBOLT_WIDTH + type * 2);
+	g_fig_list_elem.x1 = 0;
+	g_fig_list_elem.y1 = 0;
 
-	ds_writebs((FIG_LIST_ELEM+FIGHTER_X2), ds_readbs(GFXTAB_SHOTBOLT_WIDTH + type * 2) - 1);
-	ds_writebs((FIG_LIST_ELEM+FIGHTER_Y2), ds_readbs(GFXTAB_SHOTBOLT_HEIGHT + type * 2) - 1);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_IS_ENEMY), 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_RELOAD), 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_WSHEET), -1);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_SHEET), -1);
-	ds_writed((FIG_LIST_ELEM+FIGHTER_GFXBUF), ds_readd(FIG_SHOT_BOLT_BUF));
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_Z), 100);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_VISIBLE), 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_TWOFIELDED), -1);
+	g_fig_list_elem.x2 = ds_readbs(GFXTAB_SHOTBOLT_WIDTH + type * 2) - 1;
+	g_fig_list_elem.y2 = ds_readbs(GFXTAB_SHOTBOLT_HEIGHT + type * 2) - 1;
+	g_fig_list_elem.is_enemy = 0;
+	g_fig_list_elem.reload = 0;
+	g_fig_list_elem.wsheet = -1;
+	g_fig_list_elem.sheet = -1;
+	g_fig_list_elem.gfxbuf = g_fig_shot_bolt_buf;
+	g_fig_list_elem.z = 100;
+	g_fig_list_elem.visible = 0;
+	g_fig_list_elem.twofielded = -1;
 
-	nvf.dst = (Bit8u*)ds_readd(FIG_SHOT_BOLT_BUF);
-	nvf.src = (Bit8u*)ds_readd(SPELLOBJ_NVF_BUF);
-	nvf.no = ds_readbs((FIG_LIST_ELEM+FIGHTER_NVF_NO));
+	nvf.dst = g_fig_shot_bolt_buf;
+	nvf.src = g_spellobj_nvf_buf;
+	nvf.no = g_fig_list_elem.nvf_no;
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&obj_x;
 	nvf.height = (Bit8u*)&obj_x;
 
 	process_nvf(&nvf);
 
-	ds_writeb(FIG_SHOT_BOLT_ID, FIG_add_to_list(-1));
+	g_fig_shot_bolt_id = FIG_add_to_list(-1);
 }
 
 void FIG_remove_smth(void)
 {
-	FIG_remove_from_list(ds_readb(FIG_SHOT_BOLT_ID), 0);
-	ds_writeb(FIG_SHOT_BOLT_ID, 0xff);
+	FIG_remove_from_list(g_fig_shot_bolt_id, 0);
+	g_fig_shot_bolt_id = -1;
 }
 
 /**
@@ -166,14 +166,14 @@ void seg045_0273(signed short x, signed short y, signed short spell_ani_id)
 	unsigned short width;
 
 	/* TODO: some kind of initialized structure */
-	struct dummy2 a = *(struct dummy2*)(p_datseg + ANITAB_SPELL_NVFNO);
-	struct dummy4 b = *(struct dummy4*)(p_datseg + ANITAB_SPELL_OX);
-	struct dummy4 c = *(struct dummy4*)(p_datseg + ANITAB_SPELL_OY);
+	struct dummy2 a = *(struct dummy2*)&g_anitab_spell_nvfno;
+	struct dummy4 b = *(struct dummy4*)&g_anitab_spell_ox;
+	struct dummy4 c = *(struct dummy4*)&g_anitab_spell_oy;
 
 	struct nvf_desc nvf;
 
-	nvf.dst = (Bit8u*)ds_readd(FIG_SPELLGFX_BUF);
-	nvf.src = (Bit8u*)ds_readd(SPELLOBJ_NVF_BUF);
+	nvf.dst = g_fig_spellgfx_buf;
+	nvf.src = g_spellobj_nvf_buf;
 
 	nvf.no = a.a[spell_ani_id - 1];
 	nvf.type = 0;
@@ -187,35 +187,35 @@ void seg045_0273(signed short x, signed short y, signed short spell_ani_id)
 	width = host_readws((Bit8u*)&width);
 #endif
 
-	ds_writew(FIG_LIST_ELEM, 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_NVF_NO), a.a[spell_ani_id - 1]);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_CBX), (signed char)x);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_CBY), (signed char)y);
+	g_fig_list_elem.figure = 0;
+	g_fig_list_elem.nvf_no = a.a[spell_ani_id - 1];
+	g_fig_list_elem.cbx = (signed char)x;
+	g_fig_list_elem.cby = (signed char)y;
 
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETX), (unsigned char)b.a[spell_ani_id - 1]);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETY), (unsigned char)c.a[spell_ani_id - 1]);
+	g_fig_list_elem.offsetx = (unsigned char)b.a[spell_ani_id - 1];
+	g_fig_list_elem.offsety = (unsigned char)c.a[spell_ani_id - 1];
 
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_HEIGHT), (unsigned char)height);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_WIDTH), (unsigned char)width);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_X1), 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_Y1), 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_X2), (unsigned char)(width - 1));
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_Y2), (unsigned char)(height - 1));
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_IS_ENEMY), 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_RELOAD), 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_WSHEET), -1);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_SHEET), -1);
-	ds_writed((FIG_LIST_ELEM+FIGHTER_GFXBUF), ds_readd(FIG_SPELLGFX_BUF));
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_Z), 99);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_VISIBLE), 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_TWOFIELDED), -1);
-	ds_writeb(FIG_SPELLGFX_ID, FIG_add_to_list(-1));
+	g_fig_list_elem.height = ((unsigned char)height);
+	g_fig_list_elem.width = ((unsigned char)width);
+	g_fig_list_elem.x1 = 0;
+	g_fig_list_elem.y1 = 0;
+	g_fig_list_elem.x2 = (unsigned char)(width - 1);
+	g_fig_list_elem.y2 = (unsigned char)(height - 1);
+	g_fig_list_elem.is_enemy = 0;
+	g_fig_list_elem.reload = 0;
+	g_fig_list_elem.wsheet = -1;
+	g_fig_list_elem.sheet = -1;
+	g_fig_list_elem.gfxbuf = g_fig_spellgfx_buf;
+	g_fig_list_elem.z = 99;
+	g_fig_list_elem.visible = 0;
+	g_fig_list_elem.twofielded = -1;
+	g_fig_spellgfx_id = FIG_add_to_list(-1);
 }
 
 void FIG_remove_smth2(void)
 {
-	FIG_remove_from_list(ds_readb(FIG_SPELLGFX_ID), 0);
-	ds_writeb(FIG_SPELLGFX_ID, 0xff);
+	FIG_remove_from_list(g_fig_spellgfx_id, 0);
+	g_fig_spellgfx_id = -1;
 }
 
 void seg045_0394(signed short a1, Bit8u *hero, signed short spell_ani_id)
@@ -239,7 +239,7 @@ void seg045_0394(signed short a1, Bit8u *hero, signed short spell_ani_id)
 	ds_writeb((FIG_ANISHEETS + 242) + a1 * 0xf3, -1);
 
 	/* copy the ani sequence and terminate it */
-	ptr += FIG_copy_it(ptr, (Bit8u*)(ds_readd((ANITAB_SPELL_INDEX - 4) + spell_ani_id * 4)), -1);
+	ptr += FIG_copy_it(ptr, (Bit8u*)g_anitab_spell_index[spell_ani_id - 1], -1);
 	host_writeb(ptr, -1);
 
 	seg045_0273(x, y, spell_ani_id);
@@ -266,7 +266,7 @@ void seg045_041b(signed short a1, Bit8u *enemy, signed short spell_ani_id)
 	ds_writeb((FIG_ANISHEETS + 242) + a1 * 0xf3, -1);
 
 	/* copy the ani sequence and terminate it */
-	ptr += FIG_copy_it(ptr, (Bit8u*)(ds_readd((ANITAB_SPELL_INDEX - 4) + spell_ani_id * 4)), -1);
+	ptr += FIG_copy_it(ptr, (Bit8u*)g_anitab_spell_index[spell_ani_id - 1], -1);
 	host_writeb(ptr, -1);
 
 	seg045_0273(x, y, spell_ani_id);

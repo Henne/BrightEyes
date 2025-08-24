@@ -29,7 +29,7 @@ namespace M302de {
 
 #if 0
 /* FIG_MSG_COUNTER */
-static unsigned short msg_counter;
+static signed short msg_counter;
 #endif
 
 /**
@@ -63,12 +63,12 @@ signed short range_attack_check_ammo(Bit8u *hero, signed short arg)
 			{
 				if (!arg) {
 
-					if (ds_readws(FIG_DROPPED_COUNTER) < 30) {
+					if (g_fig_dropped_counter < 30) {
 						/* potential Original-Bug: Only the item IDs are stored, but not the other item stats. Is this a problem?
 						 * For example, magic_revealed for the ITEM_THROWING_DAGGER_MAGIC might get lost.
 						 * Moreover, it would be nice to store the owner, to give it back the hero who used the ranged weapon. */
-						ds_writew(FIG_DROPPED_WEAPONS + ds_readw(FIG_DROPPED_COUNTER) * 2, right_hand);
-						inc_ds_ws(FIG_DROPPED_COUNTER);
+						g_fig_dropped_weapons[g_fig_dropped_counter] = right_hand;
+						g_fig_dropped_counter++;
 					}
 
 					drop_item(hero, HERO_INVENTORY_SLOT_RIGHT_HAND, 1);
@@ -87,11 +87,8 @@ signed short range_attack_check_ammo(Bit8u *hero, signed short arg)
 				if (left_hand != ITEM_ARROWS) { /* Pfeil */
 					if (arg != 2) {
 
-						sprintf((char*)ds_readd(DTP2),
-								get_tx(8),
-								(char*)hero + HERO_NAME2);
-
-						GUI_output((char*)ds_readd(DTP2));
+						sprintf(g_dtp2, get_tx(8), (char*)hero + HERO_NAME2);
+						GUI_output(g_dtp2);
 					}
 
 				} else {
@@ -107,11 +104,8 @@ signed short range_attack_check_ammo(Bit8u *hero, signed short arg)
 				if (left_hand != ITEM_BOLTS) { /* Bolzen */
 					if (arg != 2) {
 
-						sprintf((char*)ds_readd(DTP2),
-								get_tx(9),
-								(char*)hero + HERO_NAME2);
-
-						GUI_output((char*)ds_readd(DTP2));
+						sprintf(g_dtp2, get_tx(9), (char*)hero + HERO_NAME2);
+						GUI_output(g_dtp2);
 					}
 				} else {
 					if (!arg) {
@@ -129,11 +123,8 @@ signed short range_attack_check_ammo(Bit8u *hero, signed short arg)
 				if (left_hand != 999) {
 					if (arg != 2) {
 
-						sprintf((char*)ds_readd(DTP2),
-								get_tx(10),
-								(char*)hero + HERO_NAME2);
-
-						GUI_output((char*)ds_readd(DTP2));
+						sprintf(g_dtp2, get_tx(10), (char*)hero + HERO_NAME2);
+						GUI_output(g_dtp2);
 					}
 				} else {
 					if (!arg) {
@@ -155,7 +146,7 @@ signed short range_attack_check_ammo(Bit8u *hero, signed short arg)
 	return retval;
 }
 
-void FIG_output(Bit8u *str)
+void FIG_output(char *str)
 {
 	if (*str != 0) {
 		GUI_output(str);
@@ -168,15 +159,16 @@ void FIG_output(Bit8u *str)
 void FIG_clear_msgs(void)
 {
 	memset(p_datseg + FIG_MSG_DATA, 0 , 20);
-	ds_writew(FIG_MSG_COUNTER, 0);
+	g_fig_msg_counter = 0;
 }
 
 void FIG_add_msg(unsigned short f_action, unsigned short damage)
 {
-	ds_writew(FIG_MSG_DATA + 4 * ds_readws(FIG_MSG_COUNTER), f_action);
-	ds_writew(FIG_MSG_DATA + 2 + 4 * ds_readws(FIG_MSG_COUNTER) , damage);
-	if (ds_readws(FIG_MSG_COUNTER) < 4)
-		inc_ds_ws(FIG_MSG_COUNTER);
+	ds_writew(FIG_MSG_DATA + 4 * g_fig_msg_counter, f_action);
+	ds_writew(FIG_MSG_DATA + 2 + 4 * g_fig_msg_counter, damage);
+	if (g_fig_msg_counter < 4) {
+		g_fig_msg_counter++;
+	}
 }
 
 /**
@@ -186,7 +178,7 @@ void FIG_add_msg(unsigned short f_action, unsigned short damage)
  *
  * \param   enemy       pointer to the enemy
  * \param   damage      the damage
- * \param   flag        impact on 'renegade' flag. 0: not affacted. 1: reset 'renegade' to 0 (monster will be hostile again)
+ * \param   flag        impact on 'renegade' flag. 0: not affected. 1: reset 'renegade' to 0 (monster will be hostile again)
  */
 void FIG_damage_enemy(Bit8u *enemy, Bit16s damage, signed short preserve_renegade)
 {
@@ -200,29 +192,24 @@ void FIG_damage_enemy(Bit8u *enemy, Bit16s damage, signed short preserve_renegad
 		or_ptr_bs(enemy + ENEMY_SHEET_FLAGS1, 1); /* set 'dead' flag */
 		host_writew(enemy + ENEMY_SHEET_LE, 0); /* set LE to 0 */
 
-		if ((ds_readw(CURRENT_FIG_NO) == FIGHTS_F126_08) && (host_readb(enemy) == 0x38)) {
+		if ((g_current_fight_no == FIGHTS_F126_08) && (host_readb(enemy) == 0x38)) {
+
 			/* slaying a special cultist */
 			/* set a flag in the status area */
-			ds_writeb(DNG09_CULTIST_FLAG, 0);
+			gs_dng09_cultist_flag = 0;
 
-		} else if ((ds_readw(CURRENT_FIG_NO) == FIGHTS_F144) &&
-				(host_readb(enemy) == 0x48) &&
-				!ds_readbs(FINALFIGHT_TUMULT))
+		} else if ((g_current_fight_no == FIGHTS_F144) && (host_readb(enemy) == 0x48) && !g_finalfight_tumult)
 		{
 			/* slaying the orc champion, ends the fight */
-				ds_writew(IN_FIGHT, 0);
+			g_in_fight = 0;
 
-		} else if ((ds_readw(CURRENT_FIG_NO) == FIGHTS_F064) && (host_readb(enemy) == 0x46)) {
+		} else if ((g_current_fight_no == FIGHTS_F064) && (host_readb(enemy) == 0x46)) {
 
 			/* slaying Gorah makes everyone flee except Heshthot */
 			for (i = 0; i < 20; i++) {
-#if !defined(__BORLANDC__)
-				if (ds_readb(ENEMY_SHEETS + ENEMY_SHEET_GFX_ID + i * SIZEOF_ENEMY_SHEET) != 26)
-					or_ds_bs((ENEMY_SHEETS + ENEMY_SHEET_FLAGS2) + i * SIZEOF_ENEMY_SHEET, 4); /* set 'scared' flag */
-#else
-				if ( ((struct enemy_sheets*)((Bit8u*)(RealMake(datseg, ENEMY_SHEETS))))[i].gfx_id != 0x1a)
-					((struct enemy_sheets*)((Bit8u*)(RealMake(datseg, ENEMY_SHEETS))))[i].flags2.scared = 1;
-#endif
+				if (g_enemy_sheets[i].gfx_id != 0x1a) {
+					g_enemy_sheets[i].flags2.scared = 1;
+				}
 			}
 		}
 	}
@@ -234,14 +221,13 @@ void FIG_damage_enemy(Bit8u *enemy, Bit16s damage, signed short preserve_renegad
 /*
  *	\param attack_hero	0 = the attacked one is a foe; 1 = the attacked one is a hero
  */
-
 signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signed short attack_hero)
 {
 	signed short damage;
 	signed short damage_mod;
 	Bit8u* item_p_rh;
 	Bit8u* p_weapontab;
-	Bit8u* p_rangedtab;
+	const struct struct_ranged_weapon* p_rangedtab;
 	signed short target_size;
 	signed short right_hand;
 	signed short beeline;
@@ -252,13 +238,13 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 	signed short y_target;
 	signed short hero_idx;
 	signed char enemy_gfx_id;
-	Bit8u* enemy_p;
+	struct enemy_sheet* enemy_p;
 	signed short weapon_type;
 
 	damage_mod = 0;
 
 	if (attack_hero == 0) {
-		enemy_p = target;
+		enemy_p = (struct enemy_sheet*)target;
 	}
 
 	right_hand = host_readw(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID);
@@ -321,7 +307,7 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 				distance = 6;
 			}
 
-			p_rangedtab = p_datseg + RANGED_WEAPONS_TABLE + host_readbs(p_weapontab + WEAPON_STATS_RANGED_INDEX) * SIZEOF_RANGED_WEAPON_STATS;
+			p_rangedtab = &g_ranged_weapons_table[host_readbs(p_weapontab + WEAPON_STATS_RANGED_INDEX)];
 
 			if (attack_hero != 0) {
 				if (host_readbs(target + HERO_TYPE) == HERO_TYPE_DWARF) {
@@ -331,18 +317,15 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 					target_size = 3;
 				}
 			} else {
-					/* size of the enemy */
+				/* size of the enemy */
 				target_size = host_readbs(target + ENEMY_SHEET_SIZE);
 			}
 
-			damage_mod = (test_skill(
-						hero,
-					/* Original-Bug: For ITEM_SPEAR and ITEM_SPEAR_MAGIC, a test on TA_SCHUSSWAFFEN will be performed */
+			/* Original-Bug: For ITEM_SPEAR and ITEM_SPEAR_MAGIC, a test on TA_SCHUSSWAFFEN will be performed */
+			damage_mod = (test_skill(hero,
 						(host_readbs(item_p_rh + ITEM_STATS_SUBTYPE) == WEAPON_TYPE_WURFWAFFE ? TA_WURFWAFFEN : TA_SCHUSSWAFFEN),
-						host_readbs(p_rangedtab + RANGED_WEAPON_STATS_BASE_HANDICAP) + 2 * distance - 2 * target_size
-					)
-				> 0) ?
-					ds_readbs(RANGED_WEAPONS_TABLE + SIZEOF_RANGED_WEAPON_STATS * host_readbs(p_weapontab + WEAPON_STATS_RANGED_INDEX) + RANGED_WEAPON_STATS_DAMAGE_MODIFIER + distance)
+						p_rangedtab->base_handicap + 2 * distance - 2 * target_size) > 0) ?
+					g_ranged_weapons_table[host_readbs(p_weapontab + WEAPON_STATS_RANGED_INDEX)].damage_modifier[distance]
 					: -damage;
 
 			if (damage_mod != 0) { /* test is redundant */
@@ -364,41 +347,44 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 
 	if (attack_hero == 0) {
 
-		enemy_gfx_id = host_readbs(enemy_p + ENEMY_SHEET_GFX_ID);
+		enemy_gfx_id = enemy_p->gfx_id;
 
-		/* magic SABRE gives Damage + 1 to SKELETONS and ZOMBIES */
 		if ((right_hand == ITEM_SABER_MAGIC) && (enemy_gfx_id == 0x1c || enemy_gfx_id == 0x22)) {
+
+			/* magic SABRE gives Damage + 1 to SKELETONS and ZOMBIES */
 			damage++;
-		} else {
-			if (right_hand == ITEM_KUKRIS_DAGGER) {
-				/* KUKRIS DAGGER / KUKRISDOLCH */
 
-				/* Interesting */
-				damage = 1000;
+		} else if (right_hand == ITEM_KUKRIS_DAGGER) {
 
-				/* drop the KUKRISDOLCH and equip a normal DOLCH / DAGGER */
-				drop_item(hero, HERO_INVENTORY_SLOT_RIGHT_HAND, 1);
-				give_hero_new_item(hero, ITEM_DAGGER, 1 ,1); /* TODO: what if no free knapsack slot? */
-				move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos(hero, ITEM_DAGGER), hero);
+			/* KUKRIS DAGGER / KUKRISDOLCH */
+			/* Interesting */
+			damage = 1000;
 
-			} else if (right_hand == ITEM_KUKRIS_MENGBILAR) {
-				/* KUKRISMENGBILAR */
+			/* drop the KUKRISDOLCH and equip a normal DOLCH / DAGGER */
+			drop_item(hero, HERO_INVENTORY_SLOT_RIGHT_HAND, 1);
+			give_hero_new_item(hero, ITEM_DAGGER, 1 ,1); /* TODO: what if no free knapsack slot? */
+			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos(hero, ITEM_DAGGER), hero);
 
-				/* Interesting */
-				damage = 1000;
+		} else if (right_hand == ITEM_KUKRIS_MENGBILAR) {
 
-				/* drop the KUKRISMENGBILAR and equip a normal MENGBILAR  */
-				drop_item(hero, HERO_INVENTORY_SLOT_RIGHT_HAND, 1);
-				give_hero_new_item(hero, ITEM_MENGBILAR, 1 ,1); /* TODO: what if no free knapsack slot? */
-				move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos(hero, ITEM_MENGBILAR), hero);
+			/* KUKRISMENGBILAR */
+			/* Interesting */
+			damage = 1000;
 
-			} else if ((right_hand == ITEM_SILVER_MACE) && (enemy_gfx_id == 0x1c)) {
-				/* SILVER MACE / SILBERSTREITKOLBEN gives Damage + 4 to SKELETONS */
-				damage += 4;
-			} else if ((right_hand == ITEM_GRIMRING) && (enemy_gfx_id == 0x18)) {
-				/* DAS SCHWERT GRIMRING gives Damage + 5 to ORCS */
-				damage += 5;
-			}
+			/* drop the KUKRISMENGBILAR and equip a normal MENGBILAR  */
+			drop_item(hero, HERO_INVENTORY_SLOT_RIGHT_HAND, 1);
+			give_hero_new_item(hero, ITEM_MENGBILAR, 1 ,1); /* TODO: what if no free knapsack slot? */
+			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, get_item_pos(hero, ITEM_MENGBILAR), hero);
+
+		} else if ((right_hand == ITEM_SILVER_MACE) && (enemy_gfx_id == 0x1c)) {
+
+			/* SILVER MACE / SILBERSTREITKOLBEN gives Damage + 4 to SKELETONS */
+			damage += 4;
+
+		} else if ((right_hand == ITEM_GRIMRING) && (enemy_gfx_id == 0x18)) {
+
+			/* DAS SCHWERT GRIMRING gives Damage + 5 to ORCS */
+			damage += 5;
 		}
 	}
 
@@ -419,12 +405,14 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 		if (host_readbs(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_POISON_TYPE) != POISON_TYPE_NONE) {
 
 			if (host_readbs(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_POISON_TYPE) == POISON_TYPE_ANGSTGIFT) {
-				or_ptr_bs(enemy_p + ENEMY_SHEET_FLAGS2, 0x04); /* set 'scared' flag */
-				and_ptr_bs(enemy_p + ENEMY_SHEET_FLAGS2, 0xfd); /* unset 'renegade' flag */
+
+				enemy_p->flags2.scared = 1;
+				enemy_p->flags2.renegade = 0;
+
 			} else {
 				/* the following line is the source for the totally excessive and unbalanced poison damage */
 
-				damage += 10 * ds_readws(POISON_PRICES + 2 * host_readbs(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_POISON_TYPE));
+				damage += 10 * g_poison_prices[host_readbs(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_POISON_TYPE)];
 			}
 
 			dec_ptr_bs(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_NR_POISON_CHARGES);
@@ -439,27 +427,25 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 		damage *= 2;
 	}
 
-	if ((ds_readbs(TEVENT071_ORCSTATUE) != 0) &&
-		(host_readbs(hero + HERO_TYPE) == HERO_TYPE_DWARF) &&
-		(attack_hero == 0) &&
-		(host_readbs(enemy_p + ENEMY_SHEET_GFX_ID) == 0x18))
+	if (ds_readbs(TEVENT071_ORCSTATUE) && (host_readbs(hero + HERO_TYPE) == HERO_TYPE_DWARF) && (attack_hero == 0) && (enemy_p->gfx_id == 0x18))
 	{
 		damage++;
 	}
 
 	if (attack_hero == 0) {
-		damage -= host_readbs(enemy_p + 2);
 
-		if (enemy_petrified(enemy_p)) {
+		damage -= enemy_p->rs;
+
+		if (enemy_p->flags1.petrified) {
 			damage = 0;
 		}
 
-		if ((host_readbs(enemy_p + ENEMY_SHEET_MAGIC) != 0) && !inventory_magic(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY)) {
+		if (enemy_p->magic && !inventory_magic(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY)) {
 			damage = 0;
 		}
 
-		if (host_readws(enemy_p + ENEMY_SHEET_LE) < damage) {
-			damage = host_readws(enemy_p + ENEMY_SHEET_LE) + 1;
+		if (enemy_p->le < damage) {
+			damage = enemy_p->le + 1;
 		}
 	} else {
 		damage -= host_readbs(target + HERO_RS_BONUS1);
@@ -602,9 +588,9 @@ signed short weapon_check(Bit8u *hero)
 	{
 		l_di = -1;
 	} else {
-		if (is_in_word_array(item, (signed short*)(p_datseg + FORCE_WEAPONS))) {
+		if (is_in_word_array(item, g_force_weapons)) {
 			l_di = 1;
-		} else if (is_in_word_array(item, (signed short*)(p_datseg + KNIVE_WEAPONS))) {
+		} else if (is_in_word_array(item, g_knive_weapons)) {
 			l_di = 0;
 		} else {
 			l_di = 2;

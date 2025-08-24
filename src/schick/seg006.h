@@ -2,10 +2,7 @@
 namespace M302de {
 #endif
 
-RealPt FIG_get_ptr(signed char);
-
-/* static */
-signed char FIG_set_array(void);
+struct struct_fighter* FIG_get_fighter(signed char);
 
 void FIG_draw_figures(void);
 
@@ -15,9 +12,9 @@ void FIG_call_draw_pic(void);
 
 void FIG_draw_pic(void);
 
-RealPt FIG_get_hero_ptr(signed short);
+Bit8u* FIG_get_hero_ptr(signed short);
 
-RealPt FIG_get_enemy_sheet(signed short);
+struct enemy_sheet* FIG_get_enemy_sheet(const signed short);
 
 void FIG_set_sheet(signed char, signed char);
 

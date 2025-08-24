@@ -20,7 +20,7 @@ void select_hero_icon(unsigned short);
 //0x43
 void deselect_hero_icon(unsigned short);
 //0x48
-void copy_forename(Bit8u *, Bit8u *);
+void copy_forename(char*, char*);
 //0x4d
 //static
 void load_icon(Bit16u, Bit16s, Bit16s);

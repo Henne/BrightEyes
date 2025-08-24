@@ -49,9 +49,9 @@ void tevent_067(void)
 
 		if (answer == 2) {
 
-			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+			gs_current_loctype = LOCTYPE_WILDCAMP;
 			do_location();
-			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+			gs_current_loctype = LOCTYPE_NONE;
 
 		} else if (answer == 3) {
 
@@ -59,7 +59,7 @@ void tevent_067(void)
 			for (i = count = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 					!hero_dead(hero) &&
 					test_attrib(hero, ATTRIB_GE, 0) > 0)
 				{
@@ -77,9 +77,9 @@ void tevent_067(void)
 
 				add_party_money(7L);
 
-				ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+				gs_current_loctype = LOCTYPE_WILDCAMP;
 				do_location();
-				ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+				gs_current_loctype = LOCTYPE_NONE;
 			} else {
 
 				GUI_output(get_tx2(95));
@@ -88,15 +88,15 @@ void tevent_067(void)
 				for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+						host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 					{
 						sub_hero_le(hero, random_schick(8));
 					}
 				}
 
-				ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+				gs_current_loctype = LOCTYPE_WILDCAMP;
 				do_location();
-				ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+				gs_current_loctype = LOCTYPE_NONE;
 
 				TRV_load_textfile(-1);
 			}
@@ -114,9 +114,9 @@ void tevent_067(void)
 		} while (answer == -1);
 
 		if (answer == 2) {
-			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+			gs_current_loctype = LOCTYPE_WILDCAMP;
 			do_location();
-			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+			gs_current_loctype = LOCTYPE_NONE;
 		}
 	}
 }
@@ -197,15 +197,15 @@ void tevent_071(void)
 		/* Track + 4, Faehrtensuche + 4 */
 		if (test_skill(hero, TA_FAEHRTENSUCHEN, 4) > 0) {
 
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_tx2(13),
 				(char*)hero + HERO_NAME2,
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
 
 			do {
-				l_si = GUI_radio((char*)ds_readd(DTP2), 2,
+				l_si = GUI_radio(g_dtp2, 2,
 						get_tx2(14),
 						get_tx2(15));
 			} while (l_si == -1);
@@ -235,11 +235,11 @@ void tevent_071(void)
 
 				if (l_si == 1 || l_si == 2) {
 
-					sprintf((char*)ds_readd(DTP2),
+					sprintf(g_dtp2,
 						get_tx2(22),
 						(char*)hero + HERO_NAME2);
 					do {
-						l_si = GUI_radio((char*)ds_readd(DTP2), 2,
+						l_si = GUI_radio(g_dtp2, 2,
 								get_tx2(23),
 								get_tx2(24));
 					} while (l_si == -1);
@@ -251,7 +251,7 @@ void tevent_071(void)
 
 						/* REWARD: get gods estimation + 500 for each god */
 						for (i = 1; i <= 14; i++) {
-							add_ds_ds(GODS_ESTIMATION + 4 * i, 500L);
+							gs_gods_estimation[i] += 500L;
 						}
 
 						/* mark the statuette as destroyed => has effects in fights */
@@ -264,7 +264,7 @@ void tevent_071(void)
 
 						/* PUNISHMENT: set gods estimation to 0 for each god */
 						for (i = 1; i <= 14; i++) {
-							ds_writed(GODS_ESTIMATION + 4 * i, 0L);
+							gs_gods_estimation[i] = 0L;
 						}
 					}
 
@@ -304,7 +304,7 @@ void TRV_swimm(signed short mod, signed short percent)
 	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 			!hero_dead(hero))
 		{
 
@@ -318,16 +318,16 @@ void TRV_swimm(signed short mod, signed short percent)
 				sub_hero_le(hero, random_schick(5));
 
 
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx2(21),
 					(char*)hero + HERO_NAME2);
 			} else {
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx2(20),
 					(char*)hero + HERO_NAME2);
 			}
 
-			GUI_output((char*)ds_readd(DTP2));
+			GUI_output(g_dtp2);
 		}
 	}
 }
@@ -350,15 +350,15 @@ void tevent_unused01(void)
 
 		ds_writeb(TEVENTU01_FLAG, 1);
 
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx2(29),
 			(char*)hero + HERO_NAME2,
-			(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-			(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
+			(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+			(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
 
 		do {
-			answer = GUI_radio((char*)ds_readd(DTP2), 2,
+			answer = GUI_radio(g_dtp2, 2,
 					get_tx2(30),
 					get_tx2(31));
 		} while (answer == -1);
@@ -433,7 +433,7 @@ void tevent_073(void)
 		load_in_head(55);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 							get_tx2(42), 2,
 							get_tx2(43), get_tx2(44));
 		} while (answer == -1);
@@ -442,7 +442,7 @@ void tevent_073(void)
 
 			GUI_dialog_na(0, get_tx2(45));
 
-			loot_multi_chest(p_datseg + TEVENT073_CORPSE, get_tx2(105));
+			loot_multi_chest((Bit8u*)&gs_tevent073_corpse, get_tx2(105));
 
 			ds_writeb(TEVENT073_FLAG, 1);
 		}
@@ -464,7 +464,7 @@ void tevent_074(void)
 		load_in_head(49);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx(49), get_tx2(46), 3,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, get_tx(49), get_tx2(46), 3,
 						get_tx2(47),
 						get_tx2(48),
 						get_tx2(49));
@@ -473,7 +473,7 @@ void tevent_074(void)
 		if (answer == 1) {
 
 			/* fight */
-			ds_writeb(TEVENT074_FIGHT_FLAG, (signed char)TRV_fight_event(FIGHTS_F074, 74));
+			gs_tevent074_fight_flag = TRV_fight_event(FIGHTS_F074, 74);
 
 		} else if (answer == 2) {
 
@@ -482,8 +482,8 @@ void tevent_074(void)
 			if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 2) <= 0)
 			{
 				/* failed, so fight */
-				ds_writeb(FIG_INITIATIVE, 1);
-				ds_writeb(TEVENT074_FIGHT_FLAG, (signed char)TRV_fight_event(FIGHTS_F074, 74));
+				g_fig_initiative = 1;
+				gs_tevent074_fight_flag = TRV_fight_event(FIGHTS_F074, 74);
 
 			} else {
 
@@ -492,7 +492,7 @@ void tevent_074(void)
 				for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 						!hero_dead(hero))
 					{
 						answer = i;
@@ -501,12 +501,8 @@ void tevent_074(void)
 
 				hero = get_hero(answer);
 
-				sprintf((char*)ds_readd(DTP2) + 0x400,
-					get_tx2(54),
-					(char*)hero + HERO_NAME2);
-
-				GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx(49),
-						(char*)ds_readd(DTP2) + 0x400, 0);
+				sprintf((char*)(g_dtp2 + 0x400), get_tx2(54), (char*)hero + HERO_NAME2);
+				GUI_dialogbox((unsigned char*)g_dtp2, get_tx(49), (char*)(g_dtp2 + 0x400), 0);
 
 				/* this hero gets a damage of 2W6+4 */
 				sub_hero_le(hero, dice_roll(2, 6, 4));
@@ -515,7 +511,7 @@ void tevent_074(void)
 
 			/* try to make a deal */
 			do {
-				answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx(49), get_tx2(50), 3,
+				answer = GUI_dialogbox((unsigned char*)g_dtp2, get_tx(49), get_tx2(50), 3,
 							get_tx2(51),
 							get_tx2(52),
 							get_tx2(53));
@@ -527,7 +523,7 @@ void tevent_074(void)
 
 				if (p_money < 1500) {
 					/* not enough money, so fight */
-					ds_writeb(TEVENT074_FIGHT_FLAG, (signed char)TRV_fight_event(FIGHTS_F074, 74));
+					gs_tevent074_fight_flag = TRV_fight_event(FIGHTS_F074, 74);
 				} else {
 					/* pay 1500 */
 					p_money -= 1500;
@@ -537,7 +533,7 @@ void tevent_074(void)
 			} else if (answer == 2) {
 
 				/* fight */
-				ds_writeb(TEVENT074_FIGHT_FLAG, (signed char)TRV_fight_event(FIGHTS_F074, 74));
+				gs_tevent074_fight_flag = TRV_fight_event(FIGHTS_F074, 74);
 
 			} else {
 
@@ -547,8 +543,8 @@ void tevent_074(void)
 				if (test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 14 - answer) <= 0)
 				{
 					/* fight */
-					ds_writeb(FIG_INITIATIVE, 1);
-					ds_writeb(TEVENT074_FIGHT_FLAG, (signed char)TRV_fight_event(FIGHTS_F074, 74));
+					g_fig_initiative = 1;
+					gs_tevent074_fight_flag = TRV_fight_event(FIGHTS_F074, 74);
 				}
 			}
 		}
@@ -567,23 +563,20 @@ void tevent_075(void)
 	if (!ds_readb(TEVENT075_FLAG)) {
 
 		do {
-			answer = GUI_radio(get_tx2(55), 2,
-						get_tx2(56),
-						get_tx2(57));
+			answer = GUI_radio(get_tx2(55), 2, get_tx2(56), get_tx2(57));
+
 		} while (answer == -1);
 
 		if (answer == 1) {
 
 			do {
-				answer = GUI_radio(get_tx2(58), 3,
-							get_tx2(59),
-							get_tx2(60),
-							get_tx2(61));
+				answer = GUI_radio(get_tx2(58), 3, get_tx2(59),	get_tx2(60), get_tx2(61));
+
 			} while (answer == -1);
 
 			if (answer == 1) {
 
-				ds_writeb(FIG_INITIATIVE, 2);
+				g_fig_initiative = 2;
 
 				ret = TRV_fight_event(FIGHTS_F075_A, 75);
 
@@ -591,11 +584,11 @@ void tevent_075(void)
 
 				i = FIGHTS_F075_B;
 
-				if (!ds_readb(TEVENT074_FIGHT_FLAG) && !ds_readb(TEVENT077_FIGHT_FLAG)) {
+				if (!gs_tevent074_fight_flag && !gs_tevent077_fight_flag) {
 
 					i = FIGHTS_F075_A;
 
-				} else if (ds_readb(TEVENT074_FIGHT_FLAG) != 0 && ds_readb(TEVENT077_FIGHT_FLAG) != 0) {
+				} else if (gs_tevent074_fight_flag && gs_tevent077_fight_flag) {
 
 					i = FIGHTS_F075_C;
 				}
@@ -608,7 +601,7 @@ void tevent_075(void)
 				for (i = answer = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 						!hero_dead(hero) &&
 						test_skill(hero, TA_SCHLEICHEN, 0) <= 0)
 					{
@@ -620,15 +613,15 @@ void tevent_075(void)
 
 					GUI_output(get_tx2(62));
 
-					ds_writeb(FIG_INITIATIVE, 1);
+					g_fig_initiative = 1;
 
 					i = FIGHTS_F075_B;
 
-					if (!ds_readb(TEVENT074_FIGHT_FLAG) && !ds_readb(TEVENT077_FIGHT_FLAG)) {
+					if (!gs_tevent074_fight_flag && !gs_tevent077_fight_flag) {
 
 						i = FIGHTS_F075_A;
 
-					} else if (ds_readb(TEVENT074_FIGHT_FLAG) != 0 && ds_readb(TEVENT077_FIGHT_FLAG) != 0) {
+					} else if (gs_tevent074_fight_flag != 0 && gs_tevent077_fight_flag != 0) {
 
 						i = FIGHTS_F075_C;
 					}
@@ -663,14 +656,14 @@ void tevent_076(void)
 			GUI_dialog_na(53, get_tx2(63));
 
 			do {
-				answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+				answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 								get_tx2(64), 2,
 								get_tx2(65),
 								get_tx2(66));
 			} while (answer == -1);
 
 			if (answer == 1) {
-				ds_writeb(TRAVEL_DETOUR, DUNGEONS_GOBLINHOEHLE);
+				gs_travel_detour = (DUNGEONS_GOBLINHOEHLE);
 			}
 		}
 
@@ -679,14 +672,14 @@ void tevent_076(void)
 		load_in_head(53);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 							get_tx2(67), 2,
 							get_tx2(68),
 							get_tx2(69));
 		} while (answer == -1);
 
 		if (answer == 1) {
-			ds_writeb(TRAVEL_DETOUR, DUNGEONS_GOBLINHOEHLE);
+			gs_travel_detour = DUNGEONS_GOBLINHOEHLE;
 		}
 	}
 }
@@ -706,7 +699,7 @@ void tevent_077(void)
 		load_in_head(4);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx(50),
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, get_tx(50),
 						get_tx2(70), 3,
 						get_tx2(71),
 						get_tx2(72),
@@ -716,15 +709,15 @@ void tevent_077(void)
 		if (answer == 1) {
 
 			/* fight */
-			ds_writeb(TEVENT077_FIGHT_FLAG, (signed char)TRV_fight_event(186, 77));
+			gs_tevent077_fight_flag = TRV_fight_event(186, 77);
 
 		} else if (answer == 2) {
 
 			if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 6) <= 0) {
 
 				/* test failed, so fight */
-				ds_writeb(FIG_INITIATIVE, 1);
-				ds_writeb(TEVENT077_FIGHT_FLAG, (signed char)TRV_fight_event(FIGHTS_F077, 77));
+				g_fig_initiative = 1;
+				gs_tevent077_fight_flag = TRV_fight_event(FIGHTS_F077, 77);
 
 			} else {
 
@@ -733,7 +726,7 @@ void tevent_077(void)
 				for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 						!hero_dead(hero))
 					{
 						answer = i;
@@ -742,12 +735,8 @@ void tevent_077(void)
 
 				hero = get_hero(answer);
 
-				sprintf((char*)ds_readd(DTP2) + 0x400,
-					get_tx2(54),
-					(char*)hero + HERO_NAME2);
-
-				GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx(50),
-						(char*)ds_readd(DTP2) + 0x400, 0);
+				sprintf((char*)(g_dtp2 + 0x400), get_tx2(54), (char*)hero + HERO_NAME2);
+				GUI_dialogbox((unsigned char*)g_dtp2, get_tx(50), (char*)(g_dtp2 + 0x400), 0);
 
 				/* the last hero looses between 6 and 16 LE */
 				sub_hero_le(hero, random_schick(11) + 5);
@@ -757,7 +746,7 @@ void tevent_077(void)
 
 			/* try to make a deal */
 			do {
-				answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), get_tx(50), get_tx2(74), 3,
+				answer = GUI_dialogbox((unsigned char*)g_dtp2, get_tx(50), get_tx2(74), 3,
 							get_tx2(75),
 							get_tx2(76),
 							get_tx2(77));
@@ -769,7 +758,7 @@ void tevent_077(void)
 
 				if (p_money < 1500) {
 					/* not enough money, so fight */
-					ds_writeb(TEVENT077_FIGHT_FLAG, (signed char)TRV_fight_event(FIGHTS_F077, 77));
+					gs_tevent077_fight_flag = TRV_fight_event(FIGHTS_F077, 77);
 				} else {
 					/* pay 1500 */
 					p_money -= 1500;
@@ -779,7 +768,7 @@ void tevent_077(void)
 			} else if (answer == 2) {
 
 				/* fight */
-				ds_writeb(TEVENT077_FIGHT_FLAG, (signed char)TRV_fight_event(FIGHTS_F077, 77));
+				gs_tevent077_fight_flag = TRV_fight_event(FIGHTS_F077, 77);
 
 			} else {
 
@@ -789,8 +778,8 @@ void tevent_077(void)
 				if (test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 14 - answer) <= 0)
 				{
 					/* fight */
-					ds_writeb(FIG_INITIATIVE, 1);
-					ds_writeb(TEVENT077_FIGHT_FLAG, (signed char)TRV_fight_event(FIGHTS_F077, 77));
+					g_fig_initiative = 1;
+					gs_tevent077_fight_flag = TRV_fight_event(FIGHTS_F077, 77);
 				}
 			}
 		}

@@ -3,11 +3,11 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-signed short use_magic(RealPt);
+signed short use_magic(Bit8u*);
 /* 0x25 */
 signed short test_spell(Bit8u*, signed short, signed char);
 /* 0x2a */
-signed short use_spell(RealPt, signed short, signed char);
+signed short use_spell(Bit8u*, signed short, signed char);
 
 /* 0x2f */
 signed short select_spell(Bit8u*, signed short);

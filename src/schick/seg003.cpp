@@ -27,7 +27,6 @@ namespace M302de {
 #endif
 
 #if 0
-/* DS:NOWAY_STRING */
 static const char no_way_msg[][41] = {
 	"IN DIESE RICHTUNG GEHT ES NICHT WEITER.",
 	"YOU CAN GO NO FURTHER IN THIS DIRECTION."
@@ -37,9 +36,9 @@ static const char no_way_msg[][41] = {
 signed short update_direction(unsigned char mod)
 {
 	/* save old direction */
-	ds_writeb(DIRECTION_BAK, ds_readb(DIRECTION));
+	gs_direction_bak = gs_direction;
 	/* set new direction */
-	ds_writeb(DIRECTION, (ds_readb(DIRECTION) + mod) & 0x3);
+	gs_direction = ((gs_direction + mod) & 0x3);
 	/* set bogus variable to 1 */
 	ds_writeb(DIRECTION_UNKN, 0x1);
 
@@ -59,25 +58,26 @@ void move(void)
 	signed short y;
 
 
-	p_map_small = p_map_large = p_datseg + DNG_MAP;
+	p_map_small = p_map_large = g_dng_map;
 
 	/* direction */
-
-	p_vis_field = (Bit8u*)RealMake(datseg, ((ds_readb(DIRECTION) == 0) ? VISUAL_FIELD_DIR0 :
-				((ds_readb(DIRECTION) == 1) ? VISUAL_FIELD_DIR1 :
-				((ds_readb(DIRECTION) == 2) ? VISUAL_FIELD_DIR2 : VISUAL_FIELD_DIR3))));
+#if defined(__BORLANDC__)
+	p_vis_field = (Bit8u*)MK_FP(datseg, ((gs_direction == 0) ? VISUAL_FIELD_DIR0 :
+				((gs_direction == 1) ? VISUAL_FIELD_DIR1 :
+				((gs_direction == 2) ? VISUAL_FIELD_DIR2 : VISUAL_FIELD_DIR3))));
+#endif
 
 	for (i = 0; i < 29; i++, p_vis_field += 2) {
 		boundary_flag = 0;
-		x = ds_readws(X_TARGET) + host_readbs(p_vis_field);
-		y = ds_readw(Y_TARGET) + host_readbs(p_vis_field + 1);
+		x = gs_x_target + host_readbs(p_vis_field);
+		y = gs_y_target + host_readbs(p_vis_field + 1);
 
 		if (x < 0) {
 			x = 0;
 			boundary_flag = 1;
 		} else {
-			if (ds_readb(DNG_MAP_SIZE) - 1 < x) {
-				x = ds_readb(DNG_MAP_SIZE) - 1;
+			if (g_dng_map_size - 1 < x) {
+				x = g_dng_map_size - 1;
 				boundary_flag = 1;
 			}
 		}
@@ -92,7 +92,7 @@ void move(void)
 			}
 		}
 
-		mapval = (ds_readb(DNG_MAP_SIZE) == 0x10) ?
+		mapval = (g_dng_map_size == 0x10) ?
 			/* dungeon */
 			host_readb(p_map_small + (y << 4) + x) :
 			/* city */
@@ -105,24 +105,24 @@ void move(void)
 		}
 	}
 
-	if (ds_readb(DNG_MAP_SIZE) == 0x10) {
+	if (g_dng_map_size == 0x10) {
 		/* dungeon mode */
 		ds_writeb(STEPTARGET_FRONT, host_readb(p_map_small +
-			((ds_readw(Y_TARGET) + host_readbs(p_vis_field + 1)) << 4) +
-			ds_readw(X_TARGET) + host_readbs(p_vis_field)));
+			((gs_y_target + host_readbs(p_vis_field + 1)) << 4) +
+			gs_x_target + host_readbs(p_vis_field)));
 
 		ds_writeb(STEPTARGET_BACK, host_readb(p_map_small +
-			((ds_readw(Y_TARGET) + host_readbs(p_vis_field + 3)) << 4) +
-			ds_readw(X_TARGET) + host_readbs(p_vis_field + 2)));
+			((gs_y_target + host_readbs(p_vis_field + 3)) << 4) +
+			gs_x_target + host_readbs(p_vis_field + 2)));
 	} else {
 		/* city mode */
 		ds_writeb(STEPTARGET_FRONT, host_readb(p_map_large +
-			((ds_readw(Y_TARGET) + host_readbs(p_vis_field + 1)) << 5) +
-			 ds_readw(X_TARGET) + host_readbs(p_vis_field)));
+			((gs_y_target + host_readbs(p_vis_field + 1)) << 5) +
+			 gs_x_target + host_readbs(p_vis_field)));
 
 		ds_writeb(STEPTARGET_BACK, host_readb(p_map_large +
-			((ds_readw(Y_TARGET) + host_readbs(p_vis_field + 3)) << 5) +
-			ds_readw(X_TARGET) + host_readbs(p_vis_field + 2)));
+			((gs_y_target + host_readbs(p_vis_field + 3)) << 5) +
+			gs_x_target + host_readbs(p_vis_field + 2)));
 	}
 }
 
@@ -135,8 +135,8 @@ void door_frame(signed short no, signed short x, signed short y, signed short fr
 	Bit8u *p2;
 	struct nvf_desc nvf;
 
-	nvf.dst = (Bit8u*)F_PADD(ds_readd(BUFFER9_PTR3), 0x2e248);
-	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR3);
+	nvf.dst = (Bit8u*)((HugePt)g_buffer9_ptr3 + 0x2e248L);
+	nvf.src = (Bit8u*)g_buffer9_ptr3;
 	nvf.no = no;
 	nvf.type = 3;
 	nvf.width = (Bit8u*)&width;
@@ -152,7 +152,7 @@ void door_frame(signed short no, signed short x, signed short y, signed short fr
 	height -= frame;
 	l1 = width;
 
-	p1 = (Bit8u*)F_PADD(F_PADD(ds_readd(BUFFER9_PTR3), frame * width), 0x2e248);
+	p1 = (Bit8u*)((((HugePt)g_buffer9_ptr3) + frame * width) + 0x2e248L);
 
 	if ((x < 0) && ((x + width) > 0)) {
 		width += x;
@@ -176,7 +176,7 @@ void door_frame(signed short no, signed short x, signed short y, signed short fr
 			height = 135 - y;
 		}
 
-		p2 = (Bit8u*)ds_readd(RENDERBUF_PTR) + 208 * y + x;
+		p2 = g_renderbuf_ptr + 208 * y + x;
 
 		copy_solid(p2, p1, width, height, 208, l1, 0);
 	}
@@ -189,27 +189,21 @@ void door_frame(signed short no, signed short x, signed short y, signed short fr
  * \param   text        output text
  * \param   flag        to mark this chest as done
  */
-void loot_corpse(RealPt chest_ptr, Bit8u *text, Bit8u *flag)
+void loot_corpse(Bit8u* chest_ptr, char *text, Bit8s *flag)
 {
 	signed short answer;
 
-	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-		(char*)(!host_readbs(flag) ? get_ttx(523) : get_ttx(527)),
-		text);
+	sprintf(g_text_output_buf, (char*)(!(*flag) ? get_ttx(523) : get_ttx(527)), text);
 
-	if (!host_readbs(flag))
-	{
-		ds_writew(TEXTBOX_WIDTH, 7);
+	if (!(*flag)) {
 
-		answer = GUI_radio((char*)ds_readd(TEXT_OUTPUT_BUF), 3,
-					get_ttx(524),
-					get_ttx(525),
-					get_ttx(526)) - 1;
+		g_textbox_width = 7;
 
-		ds_writew(TEXTBOX_WIDTH, 3);
+		answer = GUI_radio(g_text_output_buf, 3, get_ttx(524), get_ttx(525), get_ttx(526)) - 1;
 
-		if (answer == 0)
-		{
+		g_textbox_width = 3;
+
+		if (answer == 0) {
 			/* examine the corpse */
 #if !defined(__BORLANDC__)
 			(t_map(chest_ptr, 11))(chest_ptr);
@@ -217,33 +211,32 @@ void loot_corpse(RealPt chest_ptr, Bit8u *text, Bit8u *flag)
 			((void(*)(Bit8u*))(Bit8u*)host_readd(chest_ptr + 0xb))(chest_ptr);
 #endif
 
-			if (!host_readbs(flag))
-			{
+			if (!(*flag))	{
+
 				/* mark this corpse as done */
-				host_writeb(flag, 1);
+				*flag = 1;
 				/* Boron - 20 */
-				sub_ds_ds(GODS_ESTIMATION + 4 * GOD_BORON, 20);
+				gs_gods_estimation[GOD_BORON] -= 20L;
 			}
 
-		} else if (answer == 1)
-		{
+		} else if (answer == 1) {
+
 			/* Borons Blessing */
-			if (!host_readbs(flag))
-			{
+			if (!(*flag)) {
 				/* mark this corpse as done */
-				host_writeb(flag, 1);
+				*flag = 1;
 				/* Boron + 20 */
-				add_ds_ds(GODS_ESTIMATION + 4 * GOD_BORON, 20);
+				gs_gods_estimation[GOD_BORON] += 20L;
 			}
 		}
 	} else {
-		GUI_output((char*)ds_readd(TEXT_OUTPUT_BUF));
+		GUI_output(g_text_output_buf);
 	}
 }
 
 void no_way(void)
 {
-	GUI_output(p_datseg + NOWAY_STRING);
+	GUI_output(g_noway_string);
 }
 
 #if !defined(__BORLANDC__)

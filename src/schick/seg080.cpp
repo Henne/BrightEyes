@@ -40,44 +40,40 @@ signed short DNG04_handler(void)
 	signed short tw_bak;
 	Bit8u *hero;
 
-	tw_bak = ds_readws(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 7);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 7;
 
-        pos = (ds_readbs(DUNGEON_LEVEL) << 12) + (ds_readws(X_TARGET) << 8) + ds_readws(Y_TARGET);
+        pos = (gs_dungeon_level << 12) + (gs_x_target << 8) + gs_y_target;
 
-	if (pos == DNG_POS(0,6,7) && pos != ds_readws(DNG_HANDLED_POS) && !ds_readb(DNG04_CORPSE0_FLAG))
+	if (pos == DNG_POS(0,6,7) && pos != gs_dng_handled_pos && !gs_dng04_corpse0_flag)
 	{
 		/* DNG04_corpse0 */
 		seg092_06b4(0);
 
-	} else if (pos == DNG_POS(0,8,8) && pos != ds_readws(DNG_HANDLED_POS) && !ds_readb(DNG04_GAP_FLAG))
+	} else if (pos == DNG_POS(0,8,8) && pos != gs_dng_handled_pos && !gs_dng04_gap_flag)
 	{
 		/* do you want to grab into the gap ? */
 		do {
-			i = GUI_radio(get_tx(2), 2,
-						get_tx(3),
-						get_tx(4));
+			i = GUI_radio(get_tx(2), 2, get_tx(3), get_tx(4));
+
 		} while (i == -1);
 
 		if (i == 2)
 		{
 			hero = (Bit8u*)get_first_hero_available_in_group();
 
-			sprintf((char*)ds_readd(DTP2),
-				get_tx(5),
-				(char*)hero + HERO_NAME2);
-
-			GUI_output((char*)ds_readd(DTP2));
+			sprintf(g_dtp2,	get_tx(5), (char*)hero + HERO_NAME2);
+			GUI_output(g_dtp2);
 
 			sub_hero_le(hero, 2);
 
 			/* get a magic AMULET */
 			get_item(ITEM_TRAVIA_AMULET, 1, 1);
 
-			ds_writeb(DNG04_GAP_FLAG, 1);
+			gs_dng04_gap_flag = 1;
 		}
 
-	} else if (pos == DNG_POS(0,5,11) && pos != ds_readws(DNG_HANDLED_POS) && !ds_readb(DNG04_HELMET_FLAG))
+	} else if (pos == DNG_POS(0,5,11) && pos != gs_dng_handled_pos && !gs_dng04_helmet_flag)
 	{
 		/* do you want the SILVER HELMET? */
 		if (GUI_bool(get_tx(7)))
@@ -86,16 +82,16 @@ signed short DNG04_handler(void)
 			if (get_item(ITEM_SILVER_HELMET, 1, 1))
 			{
 				/* mark SILVER HELMET as taken */
-				ds_writeb(DNG04_HELMET_FLAG, 1);
+				gs_dng04_helmet_flag = 1;
 			}
 		}
 
-	} else if (pos == DNG_POS(0,1,12) && pos != ds_readws(DNG_HANDLED_POS))
+	} else if (pos == DNG_POS(0,1,12) && pos != gs_dng_handled_pos)
 	{
 		/* DNG04_corpse1 */
 		seg092_06b4(0);
 
-	} else if (pos == DNG_POS(0,8,3) && pos != ds_readws(DNG_HANDLED_POS))
+	} else if (pos == DNG_POS(0,8,3) && pos != gs_dng_handled_pos)
 	{
 		/* the ceiling may drop on your head */
 		GUI_output(get_tx(9));
@@ -104,15 +100,12 @@ signed short DNG04_handler(void)
 		for (i = 0; i <= 6 ; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_skill(hero, TA_SCHLEICHEN, 2) <= 0)
 			{
-				sprintf((char*)ds_readd(DTP2),
-					get_tx(10),
-					(char*)hero + HERO_NAME2);
-
-				GUI_output((char*)ds_readd(DTP2));
+				sprintf(g_dtp2,	get_tx(10), (char*)hero + HERO_NAME2);
+				GUI_output(g_dtp2);
 
 				sub_group_le(dice_roll(2, 6, 0));
 
@@ -120,15 +113,15 @@ signed short DNG04_handler(void)
 			}
 		}
 
-	} else if (pos == DNG_POS(0,7,3) && pos != ds_readws(DNG_HANDLED_POS))
+	} else if (pos == DNG_POS(0,7,3) && pos != gs_dng_handled_pos)
 	{
 		GUI_output(get_tx(11));
 
-	} else if (pos == DNG_POS(0,5,5) && pos != ds_readws(DNG_HANDLED_POS))
+	} else if (pos == DNG_POS(0,5,5) && pos != gs_dng_handled_pos)
 	{
 		GUI_output(get_tx(12));
 
-	} else if (pos == DNG_POS(0,10,13) && pos != ds_readws(DNG_HANDLED_POS))
+	} else if (pos == DNG_POS(0,10,13) && pos != gs_dng_handled_pos)
 	{
 		/* dig into a heap of dirt? */
 		if (GUI_bool(get_tx(13)) && GUI_bool(get_tx(14)))
@@ -142,7 +135,7 @@ signed short DNG04_handler(void)
 			set_mod_slot(i, DAYS(1), get_hero(0) + (HERO_ATTRIB + 3 * ATTRIB_CH), -5, 0);
 		}
 
-	} else if (pos == DNG_POS(0,14,14) && pos != ds_readws(DNG_HANDLED_POS))
+	} else if (pos == DNG_POS(0,14,14) && pos != gs_dng_handled_pos)
 	{
 		/* the ceiling may drop on your head */
 		GUI_output(get_tx(9));
@@ -151,15 +144,12 @@ signed short DNG04_handler(void)
 		for (i = 0; i <= 6 ; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_skill(hero, TA_SCHLEICHEN, 4) <= 0)
 			{
-				sprintf((char*)ds_readd(DTP2),
-					get_tx(10),
-					(char*)hero + HERO_NAME2);
-
-				GUI_output((char*)ds_readd(DTP2));
+				sprintf(g_dtp2, get_tx(10), (char*)hero + HERO_NAME2);
+				GUI_output(g_dtp2);
 
 				sub_group_le(dice_roll(1, 6, 2));
 
@@ -167,7 +157,7 @@ signed short DNG04_handler(void)
 			}
 		}
 
-	} else if (pos == DNG_POS(0,10,6) && pos != ds_readws(DNG_HANDLED_POS) && !ds_readb(DNG04_LANTERN_FLAG))
+	} else if (pos == DNG_POS(0,10,6) && pos != gs_dng_handled_pos && !gs_dng04_lantern_flag)
 	{
 		/* do you want a LANTERN? */
 		if (GUI_bool(get_tx(16)))
@@ -176,19 +166,19 @@ signed short DNG04_handler(void)
 			if (get_item(ITEM_LANTERN_OFF, 1, 1))
 			{
 				/* mark LANTERN as taken */
-				ds_writeb(DNG04_LANTERN_FLAG, 1);
+				gs_dng04_lantern_flag = 1;
 			}
 		}
 
-	} else if (pos == DNG_POS(0,10,2) && pos != ds_readws(DNG_HANDLED_POS))
+	} else if (pos == DNG_POS(0,10,2) && pos != gs_dng_handled_pos)
 	{
 		/* a very deep gap */
 		i = 1;
 		hero = (Bit8u*)get_first_hero_available_in_group();
 
-		if (!ds_readb(DNG04_DEEPGAP_FLAG) || test_attrib(hero, ATTRIB_GE, 0) > 0)
+		if (!gs_dng04_deepgap_flag || test_attrib(hero, ATTRIB_GE, 0) > 0)
 		{
-			ds_writeb(DNG04_DEEPGAP_FLAG, 1);
+			gs_dng04_deepgap_flag = 1;
 
 			i = GUI_bool(get_tx(17));
 		}
@@ -197,35 +187,29 @@ signed short DNG04_handler(void)
 		{
 			if (test_attrib(hero, ATTRIB_GE, 0) > 0)
 			{
-				sprintf((char*)ds_readd(DTP2),
-					get_tx(18),
-					(char*)hero + HERO_NAME2,
-					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)),
-					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
-
-				GUI_output((char*)ds_readd(DTP2));
+				sprintf(g_dtp2,	get_tx(18), (char*)hero + HERO_NAME2,
+					GUI_get_ptr(host_readbs(hero + HERO_SEX), 3),
+					GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
+				GUI_output(g_dtp2);
 
 			} else {
 
-				sprintf((char*)ds_readd(DTP2),
-					get_tx(19),
-					(char*)hero + HERO_NAME2,
-					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
+				sprintf(g_dtp2,	get_tx(19), (char*)hero + HERO_NAME2,
+					GUI_get_ptr(host_readbs(hero + HERO_SEX), 0),
 					(char*)hero + HERO_NAME2);
-
-				GUI_output((char*)ds_readd(DTP2));
+				GUI_output(g_dtp2);
 
 				hero_disappear(hero, 0, -1);
 			}
 		}
 	}
 
-	if (pos == DNG_POS(0,6,1) && pos != ds_readws(DNG_HANDLED_POS) && !ds_readb(DNG04_CORPSE2_FLAG))
+	if (pos == DNG_POS(0,6,1) && pos != gs_dng_handled_pos && !gs_dng04_corpse2_flag)
 	{
 		/* DNG04_corpse2 */
 		seg092_06b4(0);
 
-	} else if ((pos == DNG_POS(0,13,6) || pos == DNG_POS(0,14,6) || pos == DNG_POS(0,14,5)) && pos != ds_readws(DNG_HANDLED_POS))
+	} else if ((pos == DNG_POS(0,13,6) || pos == DNG_POS(0,14,6) || pos == DNG_POS(0,14,5)) && pos != gs_dng_handled_pos)
 	{
 		/* Probability of 5% to get bitten by a rat */
 		if (mod_day_timer(MINUTES(10)))
@@ -235,16 +219,13 @@ signed short DNG04_handler(void)
 			{
 				if (random_schick(100) <= 5 &&
 					host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 					!hero_dead(hero))
 				{
 					sub_hero_le(hero, 2);
 
-					sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-						get_tx(21),
-						(char*)hero + HERO_NAME2);
-
-					GUI_output((char*)ds_readd(TEXT_OUTPUT_BUF));
+					sprintf(g_text_output_buf, get_tx(21), (char*)hero + HERO_NAME2);
+					GUI_output(g_text_output_buf);
 				}
 			}
 		}
@@ -260,92 +241,86 @@ signed short DNG04_handler(void)
 				/* Original-Bug: forgot to check if the hero is dead */
 				if (random_schick(100) <= 10 &&
 					host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+					host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 				{
 					sub_hero_le(hero, 2);
 
-					sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-						get_tx(25),
-						(char*)hero + HERO_NAME2);
-
-					GUI_output((char*)ds_readd(TEXT_OUTPUT_BUF));
+					sprintf(g_text_output_buf, get_tx(25), (char*)hero + HERO_NAME2);
+					GUI_output(g_text_output_buf);
 				}
 			}
 		}
 
-	} else if (pos == DNG_POS(0,7,15) && pos != ds_readws(DNG_HANDLED_POS))
+	} else if (pos == DNG_POS(0,7,15) && pos != gs_dng_handled_pos)
 	{
 		/* the exit of this dungeon */
 		leave_dungeon();
 
-		ds_writeb(CURRENT_TOWN, ds_readb(TRAVEL_DESTINATION_TOWN_ID));
-		ds_writew(X_TARGET, ds_readws(TRAVEL_DESTINATION_X));
-		ds_writew(Y_TARGET, ds_readws(TRAVEL_DESTINATION_Y));
-		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
-		ds_writeb(DIRECTION, (ds_readb(TRAVEL_DESTINATION_VIEWDIR) + 2) & 0x03);
+		gs_current_town = gs_travel_destination_town_id;
+		gs_x_target = gs_travel_destination_x;
+		gs_y_target = gs_travel_destination_y;
+		gs_current_loctype = LOCTYPE_NONE;
+		gs_direction = ((gs_travel_destination_viewdir + 2) & 0x03);
 
-		sprintf((char*)ds_readd(DTP2),
-			get_tx(26),
-			get_ttx(ds_readws(TRV_DESTINATION) + 0xeb));
-
-		GUI_output((char*)ds_readd(DTP2));
+		sprintf(g_dtp2, get_tx(26), get_ttx(gs_trv_destination + 0xeb));
+		GUI_output(g_dtp2);
 
 		timewarp(HOURS(2));
 
-		ds_writeb(FADING_STATE, 3);
+		g_fading_state = 3;
 	}
 
-	ds_writew(TEXTBOX_WIDTH, tw_bak);
-	ds_writew(DNG_HANDLED_POS, pos);
+	g_textbox_width = tw_bak;
+	gs_dng_handled_pos = pos;
 
 	return 0;
 }
 
-void DNG04_corpse0(RealPt ptr)
+void DNG04_corpse0(Bit8u* ptr)
 {
-	loot_corpse(ptr, get_tx(1), p_datseg + DNG04_CORPSE0_FLAG);
+	loot_corpse(ptr, get_tx(1), (Bit8s*)&gs_dng04_corpse0_flag);
 }
 
-void DNG04_corpse1(RealPt ptr)
+void DNG04_corpse1(Bit8u* ptr)
 {
-	loot_corpse(ptr, get_tx(8), p_datseg + DNG04_CORPSE1_FLAG);
+	loot_corpse(ptr, get_tx(1), (Bit8s*)&gs_dng04_corpse1_flag);
 }
 
-void DNG04_corpse2(RealPt ptr)
+void DNG04_corpse2(Bit8u* ptr)
 {
-	loot_corpse(ptr, get_tx(20), p_datseg + DNG04_CORPSE2_FLAG);
+	loot_corpse(ptr, get_tx(1), (Bit8s*)&gs_dng04_corpse2_flag);
 }
 
-void DNG04_corpse0_chest(RealPt chest)
+void DNG04_corpse0_chest(Bit8u* chest)
 {
-	RealPt bak;
+	Bit8u* bak;
 
-	bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG04_CHEST_CORPSE0));
+	bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng04_chest_corpse0);
 
 	loot_chest((Bit8u*)(chest), get_tx(22), get_tx(6));
 
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)bak);
 }
 
-void DNG04_corpse1_chest(RealPt chest)
+void DNG04_corpse1_chest(Bit8u* chest)
 {
-	RealPt bak;
+	Bit8u* bak;
 
-	bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG04_CHEST_CORPSE1));
+	bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng04_chest_corpse1);
 
 	loot_chest((Bit8u*)(chest), get_tx(23), get_tx(6));
 
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)bak);
 }
 
-void DNG04_corpse2_chest(RealPt chest)
+void DNG04_corpse2_chest(Bit8u* chest)
 {
-	RealPt bak;
+	Bit8u* bak;
 
-	bak = (RealPt)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + DNG04_CHEST_CORPSE2));
+	bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng04_chest_corpse2);
 
 	loot_chest((Bit8u*)(chest), get_tx(24), get_tx(6));
 
@@ -362,16 +337,16 @@ signed short DNG05_handler(void)
 	signed short tw_bak;
 	Bit8u *hero;
 
-	tw_bak = ds_readws(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 7);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 7;
 
-	pos = (ds_readbs(DUNGEON_LEVEL) << 12) + (ds_readws(X_TARGET) << 8) + ds_readws(Y_TARGET);
+	pos = (gs_dungeon_level << 12) + (gs_x_target << 8) + gs_y_target;
 
-	if (pos == DNG_POS(0,7,14) && pos != ds_readws(DNG_HANDLED_POS) && ds_readw(DNG05_TRASH_FLAG) == 0)
+	if (pos == DNG_POS(0,7,14) && pos != gs_dng_handled_pos && !g_dng05_trash_flag)
 	{
 		if (GUI_bool(get_tx(1)) && GUI_bool(get_tx(15)))
 		{
-			ds_writew(DNG05_TRASH_FLAG, 1);
+			g_dng05_trash_flag = 1;
 
 			hero = (Bit8u*)get_first_hero_available_in_group();
 
@@ -383,7 +358,7 @@ signed short DNG05_handler(void)
 			add_party_money(20L);
 		}
 
-	} else if (pos == DNG_POS(0,5,12) && pos != ds_readws(DNG_HANDLED_POS) && !ds_readb(DNG05_PROVIANT_FLAG))
+	} else if (pos == DNG_POS(0,5,12) && pos != gs_dng_handled_pos && !gs_dng05_proviant_flag)
 	{
 		if (GUI_bool(get_tx(2)))
 		{
@@ -391,67 +366,60 @@ signed short DNG05_handler(void)
 
 			get_item(ITEM_FOOD_PACKAGE, 1, 10);
 
-			ds_writeb(DNG05_PROVIANT_FLAG, 1);
+			gs_dng05_proviant_flag = 1;
 		}
 
-	} else if (pos == DNG_POS(0,9,7) && pos != ds_readws(DNG_HANDLED_POS) && !ds_readb(DNG05_BATS_FLAG))
+	} else if (pos == DNG_POS(0,9,7) && pos != gs_dng_handled_pos && !gs_dng05_bats_flag)
 	{
 		if (GUI_bool(get_tx(4)))
 		{
 			GUI_output(get_tx(5));
 
-			ds_writeb(DNG05_BATS_FLAG, 1);
+			gs_dng05_bats_flag = 1;
 		}
 
-	} else if (pos == DNG_POS(0,3,9) && pos != ds_readws(DNG_HANDLED_POS) && !ds_readb(DNG05_GOD_FLAG))
+	} else if (pos == DNG_POS(0,3,9) && pos != gs_dng_handled_pos && !gs_dng05_god_flag)
 	{
 		do {
-			tmp = GUI_radio(get_tx(6), 2,
-						get_tx(7),
-						get_tx(8));
+			tmp = GUI_radio(get_tx(6), 2, get_tx(7), get_tx(8));
+
 		} while (tmp == -1);
 
-		add_ds_ds((GODS_ESTIMATION + 4 * GOD_TRAVIA), tmp == 1 ? -15 : 15);
+		gs_gods_estimation[GOD_TRAVIA] += (tmp == 1 ? -15 : 15);
 
 		GUI_output(get_tx(9));
 
-		ds_writeb(DNG05_GOD_FLAG, 1);
+		gs_dng05_god_flag = 1;
 
-	} else if (pos == DNG_POS(0,8,5) && pos != ds_readws(DNG_HANDLED_POS))
+	} else if (pos == DNG_POS(0,8,5) && pos != gs_dng_handled_pos)
 	{
 		if (random_schick(100) < 30)
 		{
-			ds_writew(MAX_ENEMIES, random_schick(100) < 10 ? 3 : 2);
-			ds_writew((FIG_FLEE_POSITION + 0),
-				 ds_writew((FIG_FLEE_POSITION + 2),
-				 ds_writew((FIG_FLEE_POSITION + 4),
-				 ds_writew((FIG_FLEE_POSITION + 6), DNG_POS_DIR(0,8,7,SOUTH)))));
+			g_max_enemies = (random_schick(100) < 10 ? 3 : 2);
+			g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(0,8,7,SOUTH);
 
 			do_fight(FIGHTS_F061_4B);
 		}
 
-	} else if (pos == DNG_POS(0,11,1) && pos != ds_readws(DNG_HANDLED_POS))
+	} else if (pos == DNG_POS(0,11,1) && pos != gs_dng_handled_pos)
 	{
 		GUI_output(get_tx(11));
 
-	} else if (pos == DNG_POS(0,6,1) && pos != ds_readws(DNG_HANDLED_POS))
+	} else if (pos == DNG_POS(0,6,1) && pos != gs_dng_handled_pos)
 	{
 		if (GUI_bool(get_tx(12)))
 		{
 			hero = (Bit8u*)get_first_hero_available_in_group();
 
-			sprintf((char*)ds_readd(DTP2),
-				get_tx(13),
-				(char*)hero + HERO_NAME2);
-
-			GUI_output((char*)ds_readd(DTP2));
+			sprintf(g_dtp2,	get_tx(13), (char*)hero + HERO_NAME2);
+			GUI_output(g_dtp2);
 
 			sub_hero_le(hero, dice_roll(1, 3, 2));
 
 			hero_disease_test(hero, 1, 65);
 		}
 
-	} else if (pos == DNG_POS(0,3,14) && pos != ds_readws(DNG_HANDLED_POS))
+	} else if (pos == DNG_POS(0,3,14) && pos != gs_dng_handled_pos)
 	{
 		load_ani(32);
 		init_ani(1);
@@ -460,33 +428,30 @@ signed short DNG05_handler(void)
 
 		set_var_to_zero();
 
-		ds_writew(X_TARGET, 5);
-		ds_writew(AREA_PREPARED, -1);
+		gs_x_target = 5;
+		g_area_prepared = -1;
 
-	} else if (pos == DNG_POS(0,6,15) && pos != ds_readws(DNG_HANDLED_POS))
+	} else if (pos == DNG_POS(0,6,15) && pos != gs_dng_handled_pos)
 	{
 		/* the exit of this dungeon */
 		leave_dungeon();
 
-		ds_writeb(CURRENT_TOWN, ds_readb(TRAVEL_DESTINATION_TOWN_ID));
-		ds_writew(X_TARGET, ds_readws(TRAVEL_DESTINATION_X));
-		ds_writew(Y_TARGET, ds_readws(TRAVEL_DESTINATION_Y));
-		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
-		ds_writeb(DIRECTION, (ds_readb(TRAVEL_DESTINATION_VIEWDIR) + 2) & 0x03);
+		gs_current_town = gs_travel_destination_town_id;
+		gs_x_target = gs_travel_destination_x;
+		gs_y_target = gs_travel_destination_y;
+		gs_current_loctype = LOCTYPE_NONE;
+		gs_direction = ((gs_travel_destination_viewdir + 2) & 0x03);
 
-		sprintf((char*)ds_readd(DTP2),
-			get_tx(17),
-			get_ttx(ds_readws(TRV_DESTINATION) + 0xeb));
-
-		GUI_output((char*)ds_readd(DTP2));
+		sprintf(g_dtp2, get_tx(17), get_ttx(gs_trv_destination + 0xeb));
+		GUI_output(g_dtp2);
 
 		timewarp(HOURS(2));
 
-		ds_writeb(FADING_STATE, 3);
+		g_fading_state = 3;
 	}
 
-	ds_writew(TEXTBOX_WIDTH, tw_bak);
-	ds_writew(DNG_HANDLED_POS, pos);
+	g_textbox_width = tw_bak;
+	gs_dng_handled_pos = pos;
 
 	return 0;
 }

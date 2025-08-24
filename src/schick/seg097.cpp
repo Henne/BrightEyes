@@ -39,6 +39,7 @@
 namespace M302de {
 #endif
 
+#if defined(__BORLANDC__)
 void GUI_unused1(Bit8u *a1, signed short a2, signed short a3)
 {
 	signed short l1;
@@ -49,8 +50,8 @@ void GUI_unused1(Bit8u *a1, signed short a2, signed short a3)
 
 	update_mouse_cursor();
 
-	if (ds_readws(GUI_TEXT_CENTERED) == 1) {
-		a2 = GUI_get_first_pos_centered(a1, a2, ds_readws(TEXTLINE_MAXLEN), 1);
+	if (g_gui_text_centered == 1) {
+		a2 = GUI_get_first_pos_centered(a1, a2, g_textline_maxlen, 1);
 	}
 
 	l2 = a2;
@@ -60,49 +61,47 @@ void GUI_unused1(Bit8u *a1, signed short a2, signed short a3)
 		if ((c == 0x0d) || (c == 0x40)) {
 			a3 += 10;
 
-			a2 = (ds_readws(GUI_TEXT_CENTERED) == 1) ?
-				GUI_get_first_pos_centered(a1 + l1, ds_readws(TEXTLINE_POSX), ds_readws(TEXTLINE_MAXLEN), 1) : l2;
+			a2 = (g_gui_text_centered == 1) ?
+				GUI_get_first_pos_centered(a1 + l1, g_textline_posx, g_textline_maxlen, 1) : l2;
 
 		} else if (c == '~') {
-			if (a2 < ds_readws(TXT_TABPOS1)) {
-				a2 = ds_readws(TXT_TABPOS1);
-			} else if (a2 < ds_readws(TXT_TABPOS2)) {
-				a2 = ds_readws(TXT_TABPOS2);
-			} else if (a2 < ds_readws(TXT_TABPOS3)) {
-				a2 = ds_readws(TXT_TABPOS3);
-			} else if (a2 < ds_readws(TXT_TABPOS4)) {
-				a2 = ds_readws(TXT_TABPOS4);
-			} else if (a2 < ds_readws(TXT_TABPOS5)) {
-				a2 = ds_readws(TXT_TABPOS5);
-			} else if (a2 < ds_readws(TXT_TABPOS6)) {
-				a2 = ds_readws(TXT_TABPOS6);
-			} else if (a2 < ds_readws(TXT_TABPOS7)) {
-				a2 = ds_readws(TXT_TABPOS7);
+			if (a2 < g_txt_tabpos[0]) {
+				a2 = g_txt_tabpos[0];
+			} else if (a2 < g_txt_tabpos[1]) {
+				a2 = g_txt_tabpos[1];
+			} else if (a2 < g_txt_tabpos[2]) {
+				a2 = g_txt_tabpos[2];
+			} else if (a2 < g_txt_tabpos[3]) {
+				a2 = g_txt_tabpos[3];
+			} else if (a2 < g_txt_tabpos[4]) {
+				a2 = g_txt_tabpos[4];
+			} else if (a2 < g_txt_tabpos[5]) {
+				a2 = g_txt_tabpos[5];
+			} else if (a2 < g_txt_tabpos[6]) {
+				a2 = g_txt_tabpos[6];
 			}
 		} else if ((c == (signed char)0xf0) || (c == (signed char)0xf1) || (c == (signed char)0xf2) || (c == (signed char)0xf3)) {
-			ds_writew(TEXTCOLOR, (unsigned char)c + 0xff10);
+			g_textcolor_index = (unsigned char)c + 0xff10;
 		} else {
-			a2 += GUI_unused2(c, (RealPt)RealMake(a3, a2));
+			a2 += GUI_unused2(c, (Bit8u*)MK_FP(a3, a2));
 		}
 	}
 
 	refresh_screen_size();
 }
 
-signed short GUI_unused2(signed short c, RealPt p)
+signed short GUI_unused2(signed short c, Bit8u* p)
 {
 	signed short v1;
 	signed short v2;
 
 	v2 = GUI_lookup_char_height((signed char)c, &v1);
-#if !defined(__BORLANDC__)
-	/* BE-fix */
-	v1 = host_readws((Bit8u*)&v1);
-#endif
+
 	GUI_1c2(v2, v1, p);
 
 	return v1;
 }
+#endif
 
 signed short GUI_lookup_char_height(signed char c, signed short *p)
 {
@@ -130,22 +129,24 @@ signed short GUI_lookup_char_height(signed char c, signed short *p)
 	return 0;
 }
 
-void GUI_1c2(signed short v1, signed short v2, RealPt v3)
+#if defined(__BORLANDC__)
+void GUI_1c2(signed short index, signed short v2, Bit8u* v3)
 {
 
 	GUI_blank_char();
-	GUI_font_to_buf((Bit8u*)ds_readd(SPLASH_BUFFER) + v1 * 8);
+	GUI_font_to_buf(g_splash_buffer + index * 8);
 	GUI_write_char_to_screen(v3, 8, v2);
 }
+#endif
 
 //static
-signed short GUI_enter_text(Bit8u* dst, signed short x, signed short y, signed short num, signed short zero)
+signed short GUI_enter_text(char* dst, signed short x, signed short y, signed short num, signed short zero)
 {
 	signed short di;
 	register signed short si;
 	signed short pos;
 	signed short c;
-	Bit8u *dst_start;
+	char *dst_start;
 	signed short length;
 
 	dst_start = dst;
@@ -156,7 +157,7 @@ signed short GUI_enter_text(Bit8u* dst, signed short x, signed short y, signed s
 
 	if (zero == 0) {
 		for (si = 0; si < num; si++) {
-			if ((ds_readws(GUI_ENTERING_SAVEGAME) != 0) && (length >= si)) {
+			if ((g_gui_entering_savegame) && (length >= si)) {
 				GUI_print_char(0x20, di, y);
 				GUI_print_char(*dst, di, y);
 				pos++;
@@ -176,7 +177,7 @@ signed short GUI_enter_text(Bit8u* dst, signed short x, signed short y, signed s
 	}
 
 	wait_for_keyboard2();
-	ds_writew(MOUSE1_EVENT1, 0);
+	g_mouse1_event1 = 0;
 
 	c = 0;
 	while ((c != 0xd) || (pos == 0)) {
@@ -185,26 +186,26 @@ signed short GUI_enter_text(Bit8u* dst, signed short x, signed short y, signed s
 dummy:
 
 			/* This loop is evil */
-			do {;} while ((CD_bioskey(1) == 0) && (ds_readws(MOUSE1_EVENT1) == 0));
+			do {;} while ((CD_bioskey(1) == 0) && !g_mouse1_event2);
 
-			if (ds_readws(MOUSE1_EVENT1) != 0) {
-				ds_writew(BIOSKEY_EVENT, 0x0d);
-				ds_writew(MOUSE1_EVENT1, ds_writew(MOUSE1_EVENT2, 0x00));
+			if (g_mouse1_event1) {
+				g_bioskey_event = 0x0d;
+				g_mouse1_event1 = g_mouse1_event2 = 0;
 			} else {
-				ds_writew(ACTION, (signed short)(ds_writew(BIOSKEY_EVENT, bioskey(0))) >> 8);
-				and_ds_ws(BIOSKEY_EVENT, 0xff);
+				g_action = (g_bioskey_event = bioskey(0)) >> 8;
+				g_bioskey_event &= 0xff;
 			}
 
-		} while ((ds_readws(ACTION) == 0) && (ds_readws(BIOSKEY_EVENT) == 0));
+		} while ((g_action == 0) && (g_bioskey_event == 0));
 
-		c = ds_readws(BIOSKEY_EVENT);
+		c = g_bioskey_event;
 
 		if (c == 0x0d) {
 
-		} else if (ds_readw(ACTION) == ACTION_ID_ESC) {
-			host_writeb(dst_start, 0);
+		} else if (g_action == ACTION_ID_ESC) {
+			*dst_start = 0;
 			refresh_screen_size();
-			ds_writew(ACTION, 0);
+			g_action = 0;
 			return -1;
 		} else if (c == 8) {
 			if (pos > 0) {
@@ -225,9 +226,7 @@ dummy:
 		if (((c >= 0x20) && (c <= 0x7a)) ||
 			(c == 0x81) || (c == 0x84) || (c == 0x94))
 		{
-			/* is_alpha(c) */
-			if (ds_readb(CHAR_TYPE_TABLE + c) & 0xc)
-				c = toupper(c);
+			if (isalpha(c)) c = toupper(c);
 
 			/* ae */
 			if (c == 0x84)
@@ -246,7 +245,7 @@ dummy:
 				pos--;
 			}
 
-			host_writeb(dst++, (unsigned char)c);
+			*dst++ = (unsigned char)c;
 			GUI_print_char(0x20, di, y);
 			GUI_print_char((unsigned char)c, di, y);
 			di += 6;
@@ -267,26 +266,25 @@ dummy:
 		}
 	}
 
-	host_writeb(dst, 0);
+	*dst = 0;
 	refresh_screen_size();
 
 	return 0;
 }
 
 //static
-void GUI_draw_radio_bg(signed short header, signed short options, signed short width,
-								signed short height)
+void GUI_draw_radio_bg(signed short header, signed short options, signed short width, signed short height)
 {
 	signed short i;
 
 	/* set upper left coordinates */
-	ds_writew(PIC_COPY_X1, ds_readw(TEXTBOX_POS_X));
-	ds_writew(PIC_COPY_Y1, ds_readw(TEXTBOX_POS_Y));
+	g_pic_copy.x1 = g_textbox_pos_x;
+	g_pic_copy.y1 = g_textbox_pos_y;
 	/* set lower righti coordinates */
-	ds_writew(PIC_COPY_X2, ds_readw(TEXTBOX_POS_X) + width - 1);
-	ds_writew(PIC_COPY_Y2, ds_readw(TEXTBOX_POS_Y) + height - 1);
+	g_pic_copy.x2 = g_textbox_pos_x + width - 1;
+	g_pic_copy.y2 = g_textbox_pos_y + height - 1;
 	/* set pointer */
-	ds_writed(PIC_COPY_SRC, ds_readd(GUI_BUFFER_UNKN));
+	g_pic_copy.src = g_gui_buffer_unkn;
 	do_save_rect();
 
 	/* play FX3.VOC */
@@ -310,11 +308,11 @@ void GUI_draw_radio_bg(signed short header, signed short options, signed short w
 
 void GUI_copy_smth(unsigned short width, unsigned short height)
 {
-	ds_writew(PIC_COPY_X1, ds_readw(TEXTBOX_POS_X));
-	ds_writew(PIC_COPY_Y1, ds_readw(TEXTBOX_POS_Y));
-	ds_writew(PIC_COPY_X2, ds_readw(TEXTBOX_POS_X) + width - 1);
-	ds_writew(PIC_COPY_Y2, ds_readw(TEXTBOX_POS_Y) + height - 1);
-	ds_writed(PIC_COPY_SRC, ds_readd(GUI_BUFFER_UNKN));
+	g_pic_copy.x1 = g_textbox_pos_x;
+	g_pic_copy.y1 = g_textbox_pos_y;
+	g_pic_copy.x2 = g_textbox_pos_x + width - 1;
+	g_pic_copy.y2 = g_textbox_pos_y + height - 1;
+	g_pic_copy.src = g_gui_buffer_unkn;
 	do_pic_copy(0);
 }
 
@@ -339,26 +337,26 @@ signed short GUI_input(char *str, unsigned short num)
 
 	retval = 0;
 
-	l7 = ds_readw(UPDATE_STATUSLINE);
-	ds_writew(UPDATE_STATUSLINE, 0);
+	l7 = g_update_statusline;
+	g_update_statusline = 0;
 
-	if (!str || !host_readbs(str) || ds_readw(AUTOFIGHT) != 0)
+	if (!str || !(*str) || g_autofight != 0)
 		return -1;
 
-	l6 = ds_readw(WALLCLOCK_UPDATE);
-	ds_writew(WALLCLOCK_UPDATE, 0);
-	ds_writeb(DIALOGBOX_LOCK, 1);
-	ds_writew(GUI_TEXT_CENTERED, 1);
+	l6 = g_wallclock_update;
+	g_wallclock_update = 0;
+	g_dialogbox_lock = 1;
+	g_gui_text_centered = 1;
 
-	l3 = ds_readw(TEXTLINE_POSX);
-	l4 = ds_readw(TEXTLINE_POSY);
-	l5 = ds_readw(TEXTLINE_MAXLEN);
+	l3 = g_textline_posx;
+	l4 = g_textline_posy;
+	l5 = g_textline_maxlen;
 
-	l_di = (ds_readw(TEXTBOX_WIDTH) * 32) + 32;
-	ds_writew(TEXTBOX_POS_X, ((signed short)(320u - l_di) >> 1) + ds_readws(BASEPOS_X));
+	l_di = (g_textbox_width * 32) + 32;
+	g_textbox_pos_x = ((signed short)(320u - l_di) >> 1) + g_basepos_x;
 
-	ds_writew(TEXTLINE_POSX, ds_readw(TEXTBOX_POS_X) + 5);
-	ds_writew(TEXTLINE_MAXLEN, l_di - 8);
+	g_textline_posx = (g_textbox_pos_x + 5);
+	g_textline_maxlen = (l_di - 8);
 
 	l_si = GUI_count_lines(str);
 
@@ -367,8 +365,8 @@ signed short GUI_input(char *str, unsigned short num)
 
 	l2 = (l_si + 2) * 8;
 
-	ds_writew(TEXTBOX_POS_Y, ((signed short)(200u - l2) >> 1) + ds_readw(BASEPOS_Y));
-	ds_writew(TEXTLINE_POSY, ds_readw(TEXTBOX_POS_Y) + 7);
+	g_textbox_pos_y = ((signed short)(200u - l2) >> 1) + g_basepos_y;
+	g_textline_posy = (g_textbox_pos_y + 7);
 
 	get_textcolor(&fg_bak, &bg_bak);
 
@@ -378,28 +376,28 @@ signed short GUI_input(char *str, unsigned short num)
 
 	GUI_print_header(str);
 
-	ds_writew(MOUSE2_EVENT, 0);
+	g_mouse2_event = 0;
 
 	refresh_screen_size();
 
 	if (num != 0) {
-		if (GUI_enter_text((char*)ds_readd(TEXT_INPUT_BUF), ds_readws(TEXTBOX_POS_X) + ((signed short)(l_di - num * 6) >> 1), ds_readws(TEXTBOX_POS_Y) + l_si * 8 -2, num, 0) != -1) {
-			retval = (signed short)atol((char*)ds_readd(TEXT_INPUT_BUF));
+		if (GUI_enter_text(g_text_input_buf, g_textbox_pos_x + ((signed short)(l_di - num * 6) >> 1), g_textbox_pos_y + l_si * 8 -2, num, 0) != -1) {
+			retval = (signed short)atol(g_text_input_buf);
 		} else {
 			retval = -1;
 		}
 	} else {
 		/* set action table */
-		ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)(p_datseg + ACTION_TABLE_MENU));
+		g_action_table_secondary = &g_action_table_menu[0];
 
-		if (ds_readw(BIOSKEY_EVENT10) != 0) {
+		if (g_bioskey_event10 != 0) {
 			wait_for_keypress();
 		} else {
-			delay_or_keypress(l_si * ds_readw(TEXTBOX_WIDTH) * 50);
+			delay_or_keypress(l_si * g_textbox_width * 50);
 		}
 
 		/* delete action table */
-		ds_writed(ACTION_TABLE_SECONDARY, 0);
+		g_action_table_secondary = NULL;
 	}
 
 	set_textcolor(fg_bak, bg_bak);
@@ -410,16 +408,16 @@ signed short GUI_input(char *str, unsigned short num)
 
 	refresh_screen_size();
 
-	ds_writew(TEXTLINE_POSX, l3);
-	ds_writew(TEXTLINE_POSY, l4);
-	ds_writew(TEXTLINE_MAXLEN, l5);
+	g_textline_posx = l3;
+	g_textline_posy = l4;
+	g_textline_maxlen = l5;
 
-	ds_writew(ACTION, 0);
-	ds_writeb(DIALOGBOX_LOCK, 0);
+	g_action = 0;
+	g_dialogbox_lock = 0;
 
-	ds_writew(WALLCLOCK_UPDATE, l6);
-	ds_writew(GUI_TEXT_CENTERED, 0);
-	ds_writew(UPDATE_STATUSLINE, l7);
+	g_wallclock_update = l6;
+	g_gui_text_centered = 0;
+	g_update_statusline = l7;
 
 	return retval;
 }
@@ -452,76 +450,77 @@ void GUI_fill_radio_button(signed short old_pos, unsigned short new_pos,
 
 	update_mouse_cursor();
 
-	y = ds_readw(TEXTBOX_POS_X) + 6;
+	y = g_textbox_pos_x + 6;
 
 	if (old_pos != -1) {
 
-		x = ds_readws(TEXTBOX_POS_Y) + (offset + old_pos) * 8 + 2;
+		x = g_textbox_pos_y + (offset + old_pos) * 8 + 2;
 
 		/* clear the old button */
 		for (i = 0; i < 4; i++)
-			do_v_line((Bit8u*)ds_readd(FRAMEBUF_PTR), y + i, x, x + 3,
+			do_v_line(g_vga_memstart, y + i, x, x + 3,
 				(signed char)0xd8);
 	}
 
-	x = ds_readws(TEXTBOX_POS_Y) + (offset + new_pos) * 8 + 2;
+	x = g_textbox_pos_y + (offset + new_pos) * 8 + 2;
 
 	/* fill the new button */
 	for (i = 0; i < 4; i++)
-		do_v_line((Bit8u*)ds_readd(FRAMEBUF_PTR), y + i, x, x + 3,
+		do_v_line(g_vga_memstart, y + i, x, x + 3,
 			(signed char)0xd9);
 
 	refresh_screen_size();
 }
 
-signed short GUI_dialogbox(RealPt picture, char *name, char *text,
+signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
 		signed short options, ...)
 {
 	va_list arguments;
 	signed short i;
-	signed short l2, l3, l4, l5, l6;
+	signed short l2, l3, l4, l5;
+	signed short tw_bak;
 	signed short fg_bak, bg_bak;
 	signed short l7, l8, l9, l10;
 	signed short retval;
 	signed short l11, l12, l13;
 	signed short l_si, l_di;
 
-	l13 = ds_readw(ANI_ENABLED);
-	l12 = ds_readw(UPDATE_STATUSLINE);
-	ds_writew(UPDATE_STATUSLINE, 0);
+	l13 = g_ani_enabled;
+	l12 = g_update_statusline;
+	g_update_statusline = 0;
 
 	set_var_to_zero();
 
-	l11 = ds_readw(WALLCLOCK_UPDATE);
-	ds_writew(WALLCLOCK_UPDATE, 0);
-	ds_writeb(DIALOGBOX_LOCK, 1);
-	l7 = ds_readw(TEXTLINE_POSX);
-	l8 = ds_readw(TEXTLINE_POSY);
-	l9 = ds_readw(TEXTLINE_MAXLEN);
-	l6 = ds_readw(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 9);
+	l11 = g_wallclock_update;
+	g_wallclock_update = 0;
+	g_dialogbox_lock = 1;
+	l7 = g_textline_posx;
+	l8 = g_textline_posy;
+	l9 = g_textline_maxlen;
+	tw_bak = g_textbox_width;
+	g_textbox_width = 9;
 
-	l_di = ds_readw(TEXTBOX_WIDTH) * 32 + 32;
-	ds_writew(TEXTBOX_POS_X, ((signed short)(320 - l_di) >> 1) + ds_readw(BASEPOS_X));
-	ds_writew(TEXTLINE_POSX, ds_readw(TEXTBOX_POS_X) + 5);
-	ds_writew(TEXTLINE_MAXLEN, l_di - 8);
-	l10 = ds_readw(TXT_TABPOS1);
-	ds_writew(TXT_TABPOS1, ds_readws(TEXTLINE_POSX) + ds_readws(TEXTLINE_MAXLEN) - 24);
-	ds_writew(DIALOGBOX_INDENT_WIDTH, 40);
-	ds_writew(DIALOGBOX_INDENT_HEIGHT, 5);
+	l_di = g_textbox_width * 32 + 32;
+	g_textbox_pos_x = ((signed short)(320 - l_di) >> 1) + g_basepos_x;
+	g_textline_posx = (g_textbox_pos_x + 5);
+	g_textline_maxlen = (l_di - 8);
+	l10 = g_txt_tabpos[0];
+	g_txt_tabpos[0] = (g_textline_posx + g_textline_maxlen - 24);
+	g_dialogbox_indent_width = 40;
+	g_dialogbox_indent_height = 5;
 
 	l_si = GUI_count_lines(text) - 1;
 
 	if (name)
 		l_si += 2;
 
-	if (l_si < ds_readws(DIALOGBOX_INDENT_HEIGHT))
-		l_si = ds_readw(DIALOGBOX_INDENT_HEIGHT) - 1;
+	if (l_si < g_dialogbox_indent_height)
+		l_si = g_dialogbox_indent_height - 1;
 
 	l4 = l_si + (signed char)options;
 	l5 = (l4 + 2) * 8;
-	ds_writew(TEXTBOX_POS_Y, (200 - (l5 + 2)) >> 1);
-	ds_writew(TEXTLINE_POSY, ds_readw(TEXTBOX_POS_Y) + 5);
+	g_textbox_pos_y = (200 - (l5 + 2)) >> 1;
+	g_textline_posy = (g_textbox_pos_y + 5);
 
 	update_mouse_cursor();
 	get_textcolor(&fg_bak, &bg_bak);
@@ -530,47 +529,48 @@ signed short GUI_dialogbox(RealPt picture, char *name, char *text,
 
 	if (picture != 0) {
 		/* draw a frame */
-		do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
-			ds_readw(TEXTBOX_POS_X) + 5, ds_readw(TEXTBOX_POS_Y) + 6,
-			ds_readw(TEXTBOX_POS_X) + 38, ds_readw(TEXTBOX_POS_Y) + 39,
+		do_border(g_vga_memstart,
+			g_textbox_pos_x + 5, g_textbox_pos_y + 6,
+			g_textbox_pos_x + 38, g_textbox_pos_y + 39,
 				(signed char)0xff);
 
 		/* set the coordinates */
-		ds_writew(PIC_COPY_X1, ds_readw(TEXTBOX_POS_X) + 6);
-		ds_writew(PIC_COPY_Y1, ds_readw(TEXTBOX_POS_Y) + 7);
-		ds_writew(PIC_COPY_X2, ds_readw(TEXTBOX_POS_X) + 37);
-		ds_writew(PIC_COPY_Y2, ds_readw(TEXTBOX_POS_Y) + 38);
-		ds_writed(PIC_COPY_SRC, (Bit32u)picture);
+		g_pic_copy.x1 = g_textbox_pos_x + 6;
+		g_pic_copy.y1 = g_textbox_pos_y + 7;
+		g_pic_copy.x2 = g_textbox_pos_x + 37;
+		g_pic_copy.y2 = g_textbox_pos_y + 38;
+		g_pic_copy.src = picture;
 
 		do_pic_copy(0);
 	}
 
 	if (name) {
 		/* set text color */
-		ds_writew(TEXTCOLOR, 1);
+		g_textcolor_index = 1;
 
-		GUI_print_string(name, ds_readw(TEXTLINE_POSX), ds_readw(TEXTLINE_POSY));
+		GUI_print_string(name, g_textline_posx, g_textline_posy);
 
 		/* set text color */
-		ds_writew(TEXTCOLOR, 0);
+		g_textcolor_index = 1;
 
-		add_ds_ws(TEXTLINE_POSY, 14);
-		sub_ds_ws(DIALOGBOX_INDENT_HEIGHT, 2);
+		g_textline_posy += 14;
+		g_dialogbox_indent_height -= 2;
 	}
 
 	if (l_si != 0) {
 		GUI_print_header(text);
 	}
 
-	ds_writew(DIALOGBOX_INDENT_WIDTH, ds_writew(DIALOGBOX_INDENT_HEIGHT, 0));
+	g_dialogbox_indent_width = g_dialogbox_indent_height = 0;
 
 	if ((signed char)options != 0) {
-		l2 = ds_readw(TEXTLINE_POSX) + 8;
-		l3 = ds_readws(TEXTBOX_POS_Y) + (l_si + 1) * 8;
+
+		l2 = g_textline_posx + 8;
+		l3 = g_textbox_pos_y + (l_si + 1) * 8;
 
 		va_start(arguments, options);
 		for (i = 0; i < (signed char)options; l3 += 8, i++) {
-			GUI_print_string((Bit8u*)va_arg(arguments, char*), l2, l3);
+			GUI_print_string((char*)va_arg(arguments, char*), l2, l3);
 		}
 	}
 
@@ -583,19 +583,19 @@ signed short GUI_dialogbox(RealPt picture, char *name, char *text,
 	refresh_screen_size();
 	set_textcolor(fg_bak, bg_bak);
 
-	ds_writew(TEXTLINE_POSX, l7);
-	ds_writew(TEXTLINE_POSY, l8);
-	ds_writew(TEXTLINE_MAXLEN, l9);
+	g_textline_posx = l7;
+	g_textline_posy = l8;
+	g_textline_maxlen = l9;
 
-	ds_writew(TEXTBOX_WIDTH, l6);
+	g_textbox_width = tw_bak;
 
-	ds_writew(TXT_TABPOS1, l10);
+	g_txt_tabpos[0] = l10;
 
-	ds_writew(WALLCLOCK_UPDATE, l11);
+	g_wallclock_update = l11;
 
-	ds_writew(ACTION, ds_writebs(DIALOGBOX_LOCK, 0));
+	g_action = (g_dialogbox_lock = 0);
 
-	ds_writew(UPDATE_STATUSLINE, l12);
+	g_update_statusline = l12;
 
 	if (l13 != 0)
 		init_ani(2);
@@ -604,8 +604,7 @@ signed short GUI_dialogbox(RealPt picture, char *name, char *text,
 }
 
 //static
-signed short GUI_menu_input(signed short positions, signed short h_lines,
-			signed short width)
+signed short GUI_menu_input(signed short positions, signed short h_lines, signed short width)
 {
 	volatile signed short l1, l2, l3, l4, l5, l6;
 	signed short done;
@@ -614,74 +613,73 @@ signed short GUI_menu_input(signed short positions, signed short h_lines,
 	l5 = -1;
 	done = 0;
 
-	ds_writew(MENU_SELECTED, ds_writew(MENU_INPUT_BUSY, 1));
-	add_ds_ws(MENU_SELECTED, ds_readws(MENU_DEFAULT_SELECT));
+	g_menu_selected = g_menu_input_busy = 1;
+	g_menu_selected += g_menu_default_select;
 
 	if (positions != 0) {
 		l6 = h_lines * 8;
-		l3 = ds_readw(MOUSE_POSX);
-		l4 = ds_readw(MOUSE_POSY);
-		ds_writew(MOUSE_POSX_BAK, ds_writew(MOUSE_POSX, ds_readw(TEXTBOX_POS_X) + 90));
-		l1 = ds_readws(TEXTBOX_POS_Y) + l6;
+		l3 = g_mouse_posx;
+		l4 = g_mouse_posy;
+		g_mouse_posx_bak = g_mouse_posx = g_textbox_pos_x + 90;
+		l1 = g_textbox_pos_y + l6;
 
-		ds_writew(MOUSE_POSY_BAK, ds_writew(MOUSE_POSY, (l2 = l1 + ds_readws(MENU_DEFAULT_SELECT) * 8)));
+		g_mouse_posy_bak = g_mouse_posy = l2 = l1 + 8 * g_menu_default_select;
 
-		mouse_move_cursor(ds_readw(MOUSE_POSX), ds_readw(MOUSE_POSY));
+		mouse_move_cursor(g_mouse_posx, g_mouse_posy);
 
-		ds_writew(MOUSE_POSX_MAX, ds_readws(TEXTBOX_POS_X) + width - 16);
-		ds_writew(MOUSE_POSX_MIN, ds_readws(TEXTBOX_POS_X));
-		ds_writew(MOUSE_POSY_MIN, ds_readws(TEXTBOX_POS_Y) + l6);
+		g_mouse_posx_max = g_textbox_pos_x + width - 16;
+		g_mouse_posx_min = g_textbox_pos_x;
+		g_mouse_posy_min = g_textbox_pos_y + l6;
 
-		ds_writew(MOUSE_POSY_MAX, l6 + ds_readws(TEXTBOX_POS_Y) - 1 + positions * 8);
+		g_mouse_posy_max = l6 + g_textbox_pos_y - 1 + positions * 8;
 		refresh_screen_size();
 
-		ds_writew(MOUSE1_EVENT2, ds_writew(MOUSE1_EVENT1, ds_writew(MOUSE2_EVENT, 0)));
+		g_mouse1_event2 = g_mouse1_event1 = g_mouse2_event = 0;
 
 		while (!done) {
-			ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)(p_datseg + ACTION_TABLE_MENU));
+			g_action_table_secondary = &g_action_table_menu[0];
 			handle_input();
-			ds_writed(ACTION_TABLE_SECONDARY, 0);
+			g_action_table_secondary = NULL;
 
-			if (l5 != ds_readw(MENU_SELECTED)) {
-				GUI_fill_radio_button(l5, ds_readw(MENU_SELECTED),
-					h_lines - 1);
-				l5 = ds_readw(MENU_SELECTED);
+			if (l5 != g_menu_selected) {
+				GUI_fill_radio_button(l5, g_menu_selected, h_lines - 1);
+				l5 = g_menu_selected;
 			}
 
-			if (ds_readw(MOUSE2_EVENT) != 0 ||
-				ds_readw(ACTION) == ACTION_ID_ESC ||
-				ds_readw(ACTION) == ACTION_ID_PAGE_DOWN) {
+			if (g_mouse2_event || g_action == ACTION_ID_ESC || g_action == ACTION_ID_PAGE_DOWN) {
 				/* close menu */
 
 				retval = -1;
 				done = 1;
-				ds_writew(MOUSE2_EVENT, 0);
+				g_mouse2_event = 0;
 			}
 
-			if (ds_readw(ACTION) == ACTION_ID_RETURN) {
-				retval = ds_readw(MENU_SELECTED);
+			if (g_action == ACTION_ID_RETURN) {
+				retval = g_menu_selected;
 				done = 1;
 			}
 
-			if (ds_readw(ACTION) == ACTION_ID_UP) {
-				if (dec_ds_ws_post(MENU_SELECTED) == 1)
-					ds_writew(MENU_SELECTED, positions);
-			}
-			if (ds_readw(ACTION) == ACTION_ID_DOWN) {
-				if (inc_ds_ws_post(MENU_SELECTED) == positions)
-					ds_writew(MENU_SELECTED, 1);
+			/* TODO: ... */
+			if (g_action == ACTION_ID_UP) {
+				if (g_menu_selected-- == 1)
+					g_menu_selected = positions;
 			}
 
-			if (ds_readw(MOUSE_POSY) != l2) {
-				l2 = ds_readw(MOUSE_POSY);
-				ds_writew(MENU_SELECTED, ((l2 - l1) >> 3) + 1);
+			if (g_action == ACTION_ID_DOWN) {
+				if (g_menu_selected++ == positions)
+					g_menu_selected = 1;
+			}
+
+			if (g_mouse_posy != l2) {
+				l2 = g_mouse_posy;
+				g_menu_selected = ((l2 - l1) >> 3) + 1;
 			}
 
 			if (ds_readw(GUI_BOOL_FLAG) != 0) {
 				/* in yes-no-mode, answer "Ja" (yes) can be selected with the 'J' key, and answer "Nein" (no) can be selected with the 'N' key. */
-				if (ds_readw(ACTION) == ACTION_ID_J) {
+				if (g_action == ACTION_ID_J) {
 					retval = done = 1;
-				} else if (ds_readw(ACTION) == ACTION_ID_N) {
+				} else if (g_action == ACTION_ID_N) {
 					retval = 2;
 					done = 1;
 				}
@@ -690,24 +688,25 @@ signed short GUI_menu_input(signed short positions, signed short h_lines,
 
 		update_mouse_cursor();
 
-		ds_writew(MOUSE_POSX_BAK, ds_writew(MOUSE_POSX, l3));
-		ds_writew(MOUSE_POSY_BAK, ds_writew(MOUSE_POSY, l4));
-		ds_writew(MOUSE_POSX_MAX, 319);
-		ds_writew(MOUSE_POSX_MIN, 0);
-		ds_writew(MOUSE_POSY_MIN, 0);
-		ds_writew(MOUSE_POSY_MAX, 199);
+		g_mouse_posx_bak = g_mouse_posx = l3;
+		g_mouse_posy_bak = g_mouse_posy = l4;
+		g_mouse_posx_max = 319;
+		g_mouse_posx_min = 0;
+		g_mouse_posy_min = 0;
+		g_mouse_posy_max = 199;
 
-		mouse_move_cursor(ds_readw(MOUSE_POSX), ds_readw(MOUSE_POSY));
+		mouse_move_cursor(g_mouse_posx, g_mouse_posy);
 
 	} else {
 		do {
 			delay_or_keypress(10000);
-		} while (ds_readw(ACTION) == 0);
+
+		} while (g_action == 0);
 
 		retval = -1;
 	}
 
-	ds_writew(MENU_DEFAULT_SELECT, ds_writew(MENU_INPUT_BUSY, 0));
+	g_menu_default_select = g_menu_input_busy = 0;
 
 	return retval;
 }
@@ -724,8 +723,8 @@ signed short GUI_radio(char *text, signed char options, ...)
 	signed short retval;
 	signed short l12;
 
-	l12 = ds_readw(UPDATE_STATUSLINE);
-	ds_writew(UPDATE_STATUSLINE, 0);
+	l12 = g_update_statusline;
+	g_update_statusline = 0;
 
 	if (!options) {
 		GUI_output(text);
@@ -733,24 +732,24 @@ signed short GUI_radio(char *text, signed char options, ...)
 	}
 
 
-	ds_writeb(DIALOGBOX_LOCK, 1);
-	l7 = ds_readw(TEXTLINE_POSX);
-	l8 = ds_readw(TEXTLINE_POSY);
-	l9 = ds_readw(TEXTLINE_MAXLEN);
+	g_dialogbox_lock = 1;
+	l7 = g_textline_posx;
+	l8 = g_textline_posy;
+	l9 = g_textline_maxlen;
 
-	l11 = ds_readw(TEXTBOX_WIDTH) * 32 + 32;
-	ds_writew(TEXTBOX_POS_X, ((320 - l11) >> 1) + ds_readw(BASEPOS_X));
-	ds_writew(TEXTLINE_POSX, ds_readw(TEXTBOX_POS_X) + 5);
-	ds_writew(TEXTLINE_MAXLEN, l11 - 8);
+	l11 = g_textbox_width * 32 + 32;
+	g_textbox_pos_x = ((320 - l11) >> 1) + g_basepos_x;
+	g_textline_posx = (g_textbox_pos_x + 5);
+	g_textline_maxlen = (l11 - 8);
 
-	l10 = ds_readw(TXT_TABPOS1);
-	ds_writew(TXT_TABPOS1, ds_readws(TEXTLINE_POSX) + ds_readws(TEXTLINE_MAXLEN) - 24);
+	l10 = g_txt_tabpos[0];
+	g_txt_tabpos[0] = (g_textline_posx + g_textline_maxlen - 24);
 
 	l_di = GUI_count_lines(text);
 	l5 = l_di + options;
 	l6 = (l5 + 2) * 8;
-	ds_writew(TEXTBOX_POS_Y, ((200 - l6 + 2) >> 1) + ds_readw(BASEPOS_Y));
-	ds_writew(TEXTLINE_POSY, ds_readw(TEXTBOX_POS_Y) + 7);
+	g_textbox_pos_y = ((200 - l6 + 2) >> 1) + g_basepos_y;
+	g_textline_posy = (g_textbox_pos_y + 7);
 
 	update_mouse_cursor();
 	get_textcolor(&fg_bak, &bg_bak);
@@ -760,20 +759,20 @@ signed short GUI_radio(char *text, signed char options, ...)
 	if (l_di != 0)
 		GUI_print_header(text);
 
-	l3 = ds_readw(TEXTLINE_POSX) + 8;
-	l4 = ds_readws(TEXTBOX_POS_Y) + (l_di + 1) * 8;
+	l3 = g_textline_posx + 8;
+	l4 = g_textbox_pos_y + (l_di + 1) * 8;
 
 	va_start(arguments, options);
 	for (i = 0; i < options; l4 += 8, i++) {
 
 		/* highlight special option */
-		if (ds_readw(GAME_MODE) == GAME_MODE_BEGINNER && ds_readw(SKILLED_HERO_POS) == i)
+		if ((g_game_mode == GAME_MODE_BEGINNER) && (g_skilled_hero_pos == i))
 			set_textcolor(0xc9, 0xdf);
 
-		GUI_print_string((Bit8u*)va_arg(arguments, char*), l3, l4);
+		GUI_print_string((char*)va_arg(arguments, char*), l3, l4);
 
 		/* reset highlight special option */
-		if (ds_readw(GAME_MODE) == GAME_MODE_BEGINNER && ds_readw(SKILLED_HERO_POS) == i)
+		if ((g_game_mode == GAME_MODE_BEGINNER) && (g_skilled_hero_pos == i))
 			set_textcolor(0xff, 0xdf);
 	}
 
@@ -783,12 +782,12 @@ signed short GUI_radio(char *text, signed char options, ...)
 	refresh_screen_size();
 	set_textcolor(fg_bak, bg_bak);
 
-	ds_writew(TEXTLINE_POSX, l7);
-	ds_writew(TEXTLINE_POSY, l8);
-	ds_writew(TEXTLINE_MAXLEN, l9);
-	ds_writew(TXT_TABPOS1, l10);
-	ds_writew(ACTION, ds_writebs(DIALOGBOX_LOCK, 0));
-	ds_writew(UPDATE_STATUSLINE, l12);
+	g_textline_posx = l7;
+	g_textline_posy = l8;
+	g_textline_maxlen = l9;
+	g_txt_tabpos[0] = l10;
+	g_action = (g_dialogbox_lock = 0);
+	g_update_statusline = l12;
 
 	return retval;
 }
@@ -800,39 +799,39 @@ signed short GUI_radio(char *text, signed char options, ...)
  */
 void GUI_print_fight_intro_msg(signed short fight_id)
 {
-	signed short textbox_width_bak = ds_readws(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 7);
+	signed short tw_bak = g_textbox_width;
+	g_textbox_width = 7;
 
-	if (ds_readbs(DUNGEON_INDEX) == DUNGEONS_VERFALLENE_HERBERGE) {
+	if (gs_dungeon_index == DUNGEONS_VERFALLENE_HERBERGE) {
 		DNG02_fight_intro(fight_id);
 	}
-	if (ds_readbs(DUNGEON_INDEX) == DUNGEONS_GOBLINHOEHLE) {
+	if (gs_dungeon_index == DUNGEONS_GOBLINHOEHLE) {
 		DNG5_fight_intro(fight_id);
 	}
-	if (ds_readbs(DUNGEON_INDEX) == DUNGEONS_DASPOTASCHATZ) {
+	if (gs_dungeon_index == DUNGEONS_DASPOTASCHATZ) {
 		DNG06_fight_intro(fight_id);
 	}
-	if (ds_readbs(DUNGEON_INDEX) == DUNGEONS_KULTSTAETTE_DES_NAMENLOSEN) {
+	if (gs_dungeon_index == DUNGEONS_KULTSTAETTE_DES_NAMENLOSEN) {
 		DNG09_fight_intro(fight_id);
 	}
-	if (ds_readbs(DUNGEON_INDEX) == DUNGEONS_PIRATENHOEHLE) {
+	if (gs_dungeon_index == DUNGEONS_PIRATENHOEHLE) {
 		DNG11_fight_intro(fight_id);
 	}
-	if (ds_readbs(DUNGEON_INDEX) == DUNGEONS_ZWERGENFESTE) {
+	if (gs_dungeon_index == DUNGEONS_ZWERGENFESTE) {
 		DNG12_fight_intro(fight_id);
 	}
-	if (ds_readbs(DUNGEON_INDEX) == DUNGEONS_VERLASSENE_MINE) {
+	if (gs_dungeon_index == DUNGEONS_VERLASSENE_MINE) {
 		DNG13_fight_intro(fight_id);
 	}
-	if (ds_readbs(DUNGEON_INDEX) == DUNGEONS_ZWINGFESTE) {
+	if (gs_dungeon_index == DUNGEONS_ZWINGFESTE) {
 		DNG14_fight_intro(fight_id);
 	}
 
-	ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
+	g_textbox_width = tw_bak;
 }
 
 /**
- * \brief   print a Dialog windows without answers
+ * \brief   print a dialog window without answer options
  *
  * \param   head_index  the number of a head, if another should be loaded
  * \param   text        the text
@@ -843,7 +842,7 @@ void GUI_dialog_na(unsigned short head_index, char *text)
 	if (head_index != 0)
 		load_in_head(head_index);
 
-	GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, text, 0);
+	GUI_dialogbox((unsigned char*)g_dtp2, NULL, text, 0);
 
 }
 

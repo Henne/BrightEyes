@@ -9,6 +9,11 @@
 #include <string.h>
 #include <stdio.h>
 
+#if !defined(__BORLANDC__)
+#include <unistd.h>
+#endif
+
+
 #include "v302de.h"
 #include "common.h"
 
@@ -45,31 +50,6 @@
 namespace M302de {
 #endif
 
-#if !defined(__BORLANDC__)
-
-
-static void (*locationhandler[])(void) = {
-	NULL,
-	do_location1, /* empty function */
-	do_temple,
-	do_tavern,
-	do_healer,
-	do_merchant,
-	do_wildcamp,
-	do_inn,
-	do_smith,
-	do_market,
-	show_citizen,
-	do_harbor,
-	enter_map,
-	do_informer,
-	show_entrance,
-	NULL,
-	do_house,
-	do_special_buildings,
-	do_citycamp,
-};
-#endif
 
 void show_entrance(void)
 {
@@ -81,7 +61,7 @@ void show_entrance(void)
 	if (GUI_bool(get_ttx(760))) {
 
 		init_ani_busy_loop(2);
-		DNG_enter_dungeon(ds_readws(CURRENT_TYPEINDEX));
+		DNG_enter_dungeon(gs_current_typeindex);
 	} else {
 
 		leave_location();
@@ -93,39 +73,38 @@ void show_entrance(void)
  */
 void show_citizen(void)
 {
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 
 	do {
 		handle_gui_input();
 
-		if (ds_readw(REQUEST_REFRESH) != 0) {
+		if (g_request_refresh != 0) {
 
 			draw_main_screen();
 			set_var_to_zero();
 			load_ani(20);
-			init_ani(ds_writew(REQUEST_REFRESH, 0));
+			init_ani(g_request_refresh = 0);
 
-			strcpy((char*)ds_readd(TEXT_OUTPUT_BUF),
-				get_tx(ds_readw(CURRENT_LOCDATA)));
+			strcpy(g_text_output_buf, get_tx(gs_current_locdata));
 
-			if (ds_readbs(YEAR) == 15 && ds_readbs(MONTH) == 1 && random_schick(100) <= 20) {
+			if ((gs_year == 15) && (gs_month == 1) && (random_schick(100) <= 20)) {
 
 				if (!show_storytext()) {
-					GUI_print_loc_line((char*)ds_readd(TEXT_OUTPUT_BUF));
+					GUI_print_loc_line(g_text_output_buf);
 				} else {
-					ds_writew(ACTION, ACTION_ID_ESC);
+					g_action = (ACTION_ID_ESC);
 				}
 			} else {
-				GUI_print_loc_line((char*)ds_readd(TEXT_OUTPUT_BUF));
+				GUI_print_loc_line(g_text_output_buf);
 #ifdef M302de_SPEEDFIX
 				delay_or_keypress(200);
 #endif
 			}
 		}
 
-	} while ((ds_readw(ACTION) == 0) && (ds_readw(MOUSE1_EVENT2) == 0));
+	} while ((g_action == 0) && (g_mouse1_event2 == 0));
 
-	ds_writew(MOUSE1_EVENT2, 0);
+	g_mouse1_event2 = 0;
 	set_var_to_zero();
 	copy_palette();
 	leave_location();
@@ -141,13 +120,13 @@ void do_house(void)
 	Bit8u *hero;
 
 	/* prepare the question */
-	strcpy((char*)ds_readd(DTP2), get_tx(ds_readws(CURRENT_LOCDATA)));
+	strcpy(g_dtp2, get_tx(gs_current_locdata));
 
-	strcat((char*)ds_readd(DTP2), get_ttx(623));
+	strcat(g_dtp2, get_ttx(623));
 
-	ds_writew(MENU_DEFAULT_SELECT, 1);
+	g_menu_default_select = 1;
 
-	if (GUI_bool((char*)ds_readd(DTP2))) {
+	if (GUI_bool(g_dtp2)) {
 
 		/* break into the house */
 
@@ -163,13 +142,13 @@ void do_house(void)
 		for (i = 0; i < 6; i++, hero += SIZEOF_HERO) {
 
 			if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-				(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 				!hero_dead(hero) && /* Original-Bug: What if petrified, sleeping etc. */
 				(test_skill(hero, TA_VERSTECKEN, -2) <= 0))
 			{
 				/* every hero must pass a sneak -2 test */
 
-				i = ds_readbs(CURRENT_TOWN);
+				i = gs_current_town;
 
 				if ((i == TOWNS_THORWAL) || (i == TOWNS_PREM) || (i == TOWNS_PHEXCAER) || (i == TOWNS_OBERORKEN)) {
 
@@ -188,11 +167,11 @@ void do_house(void)
 						}
 					}
 
-					if ((ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP)) < ds_readbs(TOTAL_HERO_COUNTER)) && l_di)
+					if ((gs_group_member_counts[gs_current_group] < gs_total_hero_counter) && l_di)
 					{
 						i = 0;
 
-						while (host_readbs(get_hero(i) + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+						while (host_readbs(get_hero(i) + HERO_GROUP_NO) == gs_current_group)
 						{
 							/* imprison hero */
 							host_writeb(get_hero(i) + HERO_JAIL, 1);
@@ -203,7 +182,7 @@ void do_house(void)
 
 					} else {
 
-						if (ds_readds(DAY_TIMER) < HOURS(6)) {
+						if (gs_day_timer < HOURS(6)) {
 							/* before 6:00 turn clock to 0:00 */
 							timewarp_until_time_of_day(HOURS(0));
 						}
@@ -222,44 +201,45 @@ void do_house(void)
 		leave_location();
 
 	} else {
-		ds_writeb(CURRENT_LOCTYPE, ds_readb(CURRENT_LOCTYPE_BAK));
-		ds_writew(X_TARGET, ds_readw(X_TARGET_BAK));
-		ds_writew(Y_TARGET, ds_readw(Y_TARGET_BAK));
+		gs_current_loctype = gs_current_loctype_bak;
+		gs_x_target = (gs_x_target_bak);
+		gs_y_target = (gs_y_target_bak);
 	}
 
 }
 
 void do_informer(void)
 {
-	signed short no = ds_readws(CURRENT_TYPEINDEX) - 1;
+	signed short no = gs_current_typeindex - 1;
 
-	if (!no) do_talk(6, 0);
-	else if (no == 1) do_talk(6, 1);
-	else if (no == 2) do_talk(7, 0);
-	else if (no == 3) do_talk(7, 1);
-	else if (no == 4) do_talk(7, 2);
-	else if (no == 5) do_talk(8, 0);
-	else if (no == 6) do_talk(8, 1);
-	else if (no == 7) do_talk(10, 1);
-	else if (no == 8) do_talk(9, 0);
-	else if (no == 9) do_talk(10, 0);
-	else if (no == 10) do_talk(12, 0);
-	else if (no == 11) do_talk(11, 0);
-	else if (no == 12) do_talk(11, 2);
-	else if (no == 13) do_talk(8, 2);
-	else if (no == 14) do_talk(9, 1);
+	if (no == INFORMER_JURGE)	do_talk(6, 0); else
+	if (no == INFORMER_HJORE)	do_talk(6, 1); else
+	if (no == INFORMER_YASMA)	do_talk(7, 0); else
+	if (no == INFORMER_UMBRIK)	do_talk(7, 1); else
+	if (no == INFORMER_ISLEIF)	do_talk(7, 2); else
+	if (no == INFORMER_RAGNA)	do_talk(8, 0); else
+	if (no == INFORMER_BEORN)	do_talk(8, 1); else
+	if (no == INFORMER_ASGRIMM)	do_talk(10, 1); else
+	if (no == INFORMER_ELIANE)	do_talk(9, 0); else
+	if (no == INFORMER_OLVIR)	do_talk(10, 0); else
+	if (no == INFORMER_SWAFNILD)	do_talk(12, 0); else
+	if (no == INFORMER_TREBORN)	do_talk(11, 0); else
+	if (no == INFORMER_UNICORN)	do_talk(11, 2); else
+	if (no == INFORMER_ALGRID)	do_talk(8, 2); else
+	if (no == INFORMER_TIOMAR)	do_talk(9, 1);
 
 	leave_location();
 }
 
 void enter_map(void)
 {
-	ds_writew(CURRENT_SIGNPOST, ds_readw(CURRENT_TYPEINDEX));
+	gs_current_signpost = gs_current_typeindex;
 
-	ds_writew(CURRENT_TYPEINDEX, ds_readbs(CURRENT_TOWN));
+	gs_current_typeindex = gs_current_town;
 
-	ds_writeb(CURRENT_LOCTYPE, ds_writeb(CURRENT_TOWN, TOWNS_NONE));
-	ds_writeb(SHOW_TRAVEL_MAP, 1);
+	gs_current_loctype = gs_current_town = TOWNS_NONE;
+
+	gs_show_travel_map = 1;
 }
 
 void show_treasure_map(void)
@@ -275,7 +255,7 @@ void show_treasure_map(void)
 
 	/* count the collected treasure map parts */
 	for (l_si = count = 0; l_si < 9; l_si++) {
-		if (ds_readbs(TREASURE_MAPS + l_si) != 0) {
+		if (gs_treasure_maps[l_si]) {
 			count++;
 		}
 	}
@@ -284,15 +264,15 @@ void show_treasure_map(void)
 		/* no treasure map parts found */
 		GUI_output(get_ttx(609));
 	} else {
-		ds_writeb(SPECIAL_SCREEN, 1);
-		pp20_index_bak = ds_readbs(PP20_INDEX);
-		ds_writeb(PP20_INDEX, 0xff);
+		g_special_screen = 1;
+		pp20_index_bak = g_pp20_index;
+		g_pp20_index = -1;
 		set_var_to_zero();
 
 		/* load SKARTE.NVF */
 		l_si = load_archive_file(ARCHIVE_FILE_SKARTE_NVF);
 
-		read_archive_file(l_si, (Bit8u*)ds_readd(BUFFER9_PTR), 30000);
+		read_archive_file(l_si, (Bit8u*)g_buffer9_ptr, 30000);
 
 		length = get_readlength2(l_si);
 
@@ -301,20 +281,19 @@ void show_treasure_map(void)
 		/* clear the screen */
 		wait_for_vsync();
 
-		set_palette(p_datseg + PALETTE_ALLBLACK2, 0, 0x20);
+		set_palette(g_palette_allblack2, 0, 0x20);
 
-		do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 0, 0, 319, 199, 0);
+		do_fill_rect(g_vga_memstart, 0, 0, 319, 199, 0);
 
 		update_mouse_cursor();
 
 		for (l_si = 0; l_si < 10; l_si++) {
 
-			if (ds_readbs(TREASURE_MAPS + l_si) != 0 &&
-				(l_si != 9 || (l_si == 9 && !ds_readbs(TREASURE_MAPS + 6))))
+			if (gs_treasure_maps[l_si] && (l_si != 9 || (l_si == 9 && !gs_treasure_maps[6])))
 			{
 				/* decompress picture */
-				nvf.dst = (Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 30000));
-				nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
+				nvf.dst = (Bit8u*)(((HugePt)g_buffer9_ptr) + 30000L);
+				nvf.src = (Bit8u*)g_buffer9_ptr;
 				nvf.no = l_si;
 				nvf.type = 0;
 				nvf.width = (Bit8u*)&width;
@@ -329,89 +308,90 @@ void show_treasure_map(void)
 				#endif
 
 				/* copy to screen */
-				ds_writew(PIC_COPY_X1, ds_readws(TMAP_X + 2 * l_si));
-				ds_writew(PIC_COPY_Y1, ds_readws(TMAP_Y + 2 * l_si));
-				ds_writew(PIC_COPY_X2, ds_readws(TMAP_X + 2 * l_si) + width - 1);
-				ds_writew(PIC_COPY_Y2, ds_readws(TMAP_Y + 2 * l_si) + height - 1);
-				ds_writed(PIC_COPY_SRC, (Bit32u)F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 30000));
-				ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
+				g_pic_copy.x1 = g_tmap_x[l_si];
+				g_pic_copy.y1 = g_tmap_y[l_si];
+				g_pic_copy.x2 = g_tmap_x[l_si] + width - 1;
+				g_pic_copy.y2 = g_tmap_y[l_si] + height - 1;
+				g_pic_copy.src = g_buffer9_ptr + 30000L;
+				g_pic_copy.dst = g_vga_memstart;
 				do_pic_copy(0);
 			}
 		}
 
 		wait_for_vsync();
 
-		set_palette((Bit8u*)(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), length), -0x60)), 0, 0x20);
+		set_palette((Bit8u*)((g_buffer9_ptr + length) -0x60L), 0, 0x20);
 
 		refresh_screen_size();
 
-		if (ds_readb(TMAP_DOUBLE1) != 0) {
+		if (g_tmap_double1) {
+
 			/* unicorn brought a piece you already have */
-			tw_bak = ds_readws(TEXTBOX_WIDTH);
-			ds_writew(TEXTBOX_WIDTH, 3);
+			tw_bak = g_textbox_width;
+			g_textbox_width = 3;
 
 			GUI_output(get_ttx(808));
 
-			ds_writew(TEXTBOX_WIDTH, tw_bak);
-			ds_writeb(TMAP_DOUBLE1, 0);
+			g_textbox_width = tw_bak;
+			g_tmap_double1 = 0;
 		}
 
-		if (ds_readb(TMAP_DOUBLE2) != 0) {
+		if (g_tmap_double2) {
 			/* you got a piece you already have from the unicorn */
-			tw_bak = ds_readws(TEXTBOX_WIDTH);
-			ds_writew(TEXTBOX_WIDTH, 3);
+			tw_bak = g_textbox_width;
+			g_textbox_width = 3;
 
 			GUI_output(get_ttx(809));
 
-			ds_writew(TEXTBOX_WIDTH, tw_bak);
-			ds_writeb(TMAP_DOUBLE2, 0);
+			g_textbox_width = tw_bak;
+			g_tmap_double2 = 0;
 		}
 
 		if (count >= 7 && !ds_readb(FIND_HYGGELIK)) {
 			/* the way can now be found */
 
-			tw_bak = ds_readws(TEXTBOX_WIDTH);
-			ds_writew(TEXTBOX_WIDTH, 3);
+			tw_bak = g_textbox_width;
+			g_textbox_width = 3;
 
 			/* */
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-				get_ttx(727),
-				(char*)get_hero(get_random_hero()) + HERO_NAME2);
+			sprintf(g_text_output_buf, get_ttx(727), (char*)get_hero(get_random_hero()) + HERO_NAME2);
+			GUI_output(g_text_output_buf);
 
-			GUI_output((char*)ds_readd(TEXT_OUTPUT_BUF));
+			g_textbox_width = tw_bak;
 
-			ds_writew(TEXTBOX_WIDTH, tw_bak);
 			ds_writeb(FIND_HYGGELIK, 1);
 		}
 
 		delay_or_keypress(1000);
 
-		if (ds_readb(RENDERBUF_IN_USE_FLAG) != 0) {
+		if (g_renderbuf_in_use_flag) {
+
 			/* copy to screen */
-			ds_writew(PIC_COPY_X1, 0);
-			ds_writew(PIC_COPY_Y1, 0);
-			ds_writew(PIC_COPY_X2, 319);
-			ds_writew(PIC_COPY_Y2, 199);
-			ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
-			ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
+			g_pic_copy.x1 = 0;
+			g_pic_copy.y1 = 0;
+			g_pic_copy.x2 = 319;
+			g_pic_copy.y2 = 199;
+			g_pic_copy.src = g_renderbuf_ptr;
+			g_pic_copy.dst = g_vga_memstart;
 
 			update_mouse_cursor();
 			wait_for_vsync();
 
-			set_palette((Bit8u*)ds_readd(RENDERBUF_PTR) + 64000 + 2, 0, 0x20);
+			set_palette(g_renderbuf_ptr + 64000 + 2, 0, 0x20);
 
 			do_pic_copy(0);
 
 			refresh_screen_size();
 
-			ds_writeb(RENDERBUF_IN_USE_FLAG, 0);
-			ds_writeb(SPECIAL_SCREEN, 0);
-			ds_writeb(PP20_INDEX, pp20_index_bak);
+			g_renderbuf_in_use_flag = 0;
+
+			g_special_screen = 0;
+			g_pp20_index = pp20_index_bak;
 		} else {
-			ds_writew(CURRENT_ANI, -1);
-			ds_writew(REQUEST_REFRESH, 1);
-			ds_writew(AREA_PREPARED, -1);
-			ds_writeb(SPECIAL_SCREEN, 0);
+			g_current_ani = -1;
+			g_request_refresh = 1;
+			g_area_prepared = -1;
+			g_special_screen = 0;
 			draw_main_screen();
 		}
 	}
@@ -431,57 +411,57 @@ signed short game_options(void)
 
 	done = 0;
 
-	tw_bak = ds_readws(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 3);
-	ds_writeb(SPECIAL_SCREEN, 1);
-	ds_writew(WALLCLOCK_UPDATE, 0);
-	ds_writew(AREA_PREPARED, -1);
-	ds_writed(CURRENT_CURSOR, (Bit32u)(p_datseg + DEFAULT_MOUSE_CURSOR));
+	tw_bak = g_textbox_width;
+	g_textbox_width = 3;
+	g_special_screen = 1;
+	g_wallclock_update = 0;
+	g_area_prepared = -1;
+	g_current_cursor = (unsigned short*)(p_datseg + DEFAULT_MOUSE_CURSOR);
 
 	load_pp20(ARCHIVE_FILE_BUCH_DAT);
-	ds_writeb(PP20_INDEX, ARCHIVE_FILE_BUCH_DAT);
+	g_pp20_index = ARCHIVE_FILE_BUCH_DAT;
 
 	get_textcolor(&fg_bak, &bg_bak);
 
-	ds_writed(PRINT_STRING_BUFFER, ds_readd(BUFFER9_PTR));
+	g_vga_backbuffer = (Bit8u*)g_buffer9_ptr;
 
-	bak1 = ds_readws(TEXTLINE_MAXLEN);
-	bak2 = ds_readws(TEXTLINE_POSX);
-	ds_writew(TEXTLINE_MAXLEN, 200);
-	ds_writew(TEXTLINE_POSX, 70);
+	bak1 = g_textline_maxlen;
+	bak2 = g_textline_posx;
+	g_textline_maxlen = (200);
+	g_textline_posx = (70);
 
 	set_textcolor(4, 0);
 
-	memset((Bit8u*)ds_readd(BUFFER9_PTR), 0, 20000);
+	memset((Bit8u*)g_buffer9_ptr, 0, 20000);
 
 	prepare_date_str();
 
-	GUI_print_header((char*)ds_readd(DTP2));
+	GUI_print_header(g_dtp2);
 
-	ds_writew(PIC_COPY_X1, 0);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, 319);
-	ds_writew(PIC_COPY_Y2, 61);
-	ds_writed(PIC_COPY_SRC, ds_readd(BUFFER9_PTR));
-	ds_writed(PIC_COPY_DST, (Bit32u)((Bit8u*)ds_readd(RENDERBUF_PTR) + 9600));
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = 319;
+	g_pic_copy.y2 = 61;
+	g_pic_copy.src = g_buffer9_ptr;
+	g_pic_copy.dst = g_renderbuf_ptr + 9600;
 	do_pic_copy(2);
 
-	memset((Bit8u*)ds_readd(BUFFER9_PTR), 0, 28000);
+	memset((Bit8u*)g_buffer9_ptr, 0, 28000);
 
-	if (ds_readbs(CURRENT_TOWN) != TOWNS_NONE) {
+	if (gs_current_town != TOWNS_NONE) {
 		/* if the party is in a town */
 		load_tx(ARCHIVE_FILE_MAPTEXT_LTX);
 
-		GUI_print_header(get_tx(ds_readbs(CURRENT_TOWN) - 1));
+		GUI_print_header(get_tx(gs_current_town - 1));
 
-		load_tx(ds_readbs(CURRENT_TOWN) + (ARCHIVE_FILE_CITY_DAT-1));
+		load_tx(gs_current_town + (ARCHIVE_FILE_CITY_DAT-1));
 
-		ds_writew(PIC_COPY_X1, 0);
-		ds_writew(PIC_COPY_Y1, 0);
-		ds_writew(PIC_COPY_X2, 319);
-		ds_writew(PIC_COPY_Y2, 86);
-		ds_writed(PIC_COPY_SRC, ds_readd(BUFFER9_PTR));
-		ds_writed(PIC_COPY_DST, (Bit32u)((Bit8u*)ds_readd(RENDERBUF_PTR) + 22400));
+		g_pic_copy.x1 = 0;
+		g_pic_copy.y1 = 0;
+		g_pic_copy.x2 = 319;
+		g_pic_copy.y2 = 86;
+		g_pic_copy.src = g_buffer9_ptr;
+		g_pic_copy.dst = g_renderbuf_ptr + 22400;
 		do_pic_copy(2);
 	}
 
@@ -496,35 +476,35 @@ signed short game_options(void)
 	draw_icon(MENU_ICON_SOUND, 190, 170);
 	draw_icon(MENU_ICON_QUIT_GAME, 236, 170);
 
-	ds_writew(PIC_COPY_X1, 0);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, 319);
-	ds_writew(PIC_COPY_Y2, 199);
-	ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
-	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = 319;
+	g_pic_copy.y2 = 199;
+	g_pic_copy.src = g_renderbuf_ptr;
+	g_pic_copy.dst = g_vga_memstart;
 
 	update_mouse_cursor();
 	wait_for_vsync();
 
-	set_palette((Bit8u*)ds_readd(RENDERBUF_PTR) + 64002, 0, 32);
+	set_palette(g_renderbuf_ptr + 64002, 0, 32);
 
 	do_pic_copy(0);
 	refresh_screen_size();
 
 	set_textcolor(fg_bak, bg_bak);
 
-	ds_writed(PIC_COPY_DST, ds_writed(PRINT_STRING_BUFFER, ds_readd(FRAMEBUF_PTR)));
+	g_pic_copy.dst = g_vga_backbuffer = g_vga_memstart;
 
-	ds_writew(TEXTLINE_POSX, bak2);
-	ds_writew(TEXTLINE_MAXLEN, bak1);
-	ds_writed(GUI_BUFFER_UNKN, ds_readd(BUFFER9_PTR));
+	g_textline_posx = (bak2);
+	g_textline_maxlen = (bak1);
+	g_gui_buffer_unkn = (unsigned char*)g_buffer9_ptr;
 
 	do {
-		ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)(p_datseg + ACTION_TABLE_OPTIONS));
+		g_action_table_secondary = &g_action_table_options[0];
 		handle_input();
-		ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)0);
+		g_action_table_secondary = NULL;
 
-		if (ds_readw(MOUSE2_EVENT) != 0 || ds_readws(ACTION) == ACTION_ID_PAGE_UP) {
+		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
 
 			/* use the radio menu */
 			answer = GUI_radio(get_ttx(590), 9,
@@ -539,11 +519,11 @@ signed short game_options(void)
 						get_ttx(589)) - 1;
 
 			if (answer != -2) {
-				ds_writew(ACTION, answer + ACTION_ID_ICON_1);
+				g_action = (answer + ACTION_ID_ICON_1);
 			}
 		}
 
-		if (ds_readws(ACTION) == ACTION_ID_ICON_1) {
+		if (g_action == ACTION_ID_ICON_1) {
 
 			do {
 				game_state = load_game_state();
@@ -553,69 +533,67 @@ signed short game_options(void)
 				done = 1;
 			}
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_2) {
+		} else if (g_action == ACTION_ID_ICON_2) {
 
 			if (save_game_state()) {
 				done = 1;
 			}
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_3) {
+		} else if (g_action == ACTION_ID_ICON_3) {
 
-			ds_writeb(RENDERBUF_IN_USE_FLAG, 1);
+			g_renderbuf_in_use_flag = 1;
 			char_erase();
-			ds_writeb(RENDERBUF_IN_USE_FLAG, 0);
+			g_renderbuf_in_use_flag = 0;
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_4) {
+		} else if (g_action == ACTION_ID_ICON_4) {
 
-			ds_writeb(RENDERBUF_IN_USE_FLAG, 1);
+			g_renderbuf_in_use_flag = 1;
 			show_treasure_map();
-			ds_writeb(SPECIAL_SCREEN, 1);
+			g_special_screen = 1;
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_5) {
+		} else if (g_action == ACTION_ID_ICON_5) {
 
 			diary_show();
 			done = 1;
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_6) {
+		} else if (g_action == ACTION_ID_ICON_6) {
 
-			sprintf((char*)ds_readd(DTP2),
-				get_ttx(827),
-				ds_readws(DELAY_FACTOR));
+			sprintf(g_dtp2, get_ttx(827), g_delay_factor);
 
-			new_delay = GUI_input((char*)ds_readd(DTP2), 2);
+			new_delay = GUI_input(g_dtp2, 2);
 
 			if (new_delay != -1) {
-				ds_writew(DELAY_FACTOR, new_delay);
+				g_delay_factor = new_delay;
 			}
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_7) {
+		} else if (g_action == ACTION_ID_ICON_7) {
 
 			sound_menu();
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_8) {
+		} else if (g_action == ACTION_ID_ICON_8) {
 
 			if (GUI_bool(get_ttx(299))) {
 
 				done = -1;
-				ds_writew(GAME_STATE, GAME_STATE_QUIT);
+				g_game_state = (GAME_STATE_QUIT);
 			}
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_9) {
+		} else if (g_action == ACTION_ID_ICON_9) {
 			done = 1;
 		}
 
 	} while (!done);
 
-	ds_writed(GUI_BUFFER_UNKN, ds_readd(RENDERBUF_PTR));
+	g_gui_buffer_unkn = g_renderbuf_ptr;
 
-	ds_writews(FIG_FIGURE1, ds_writews(FIG_FIGURE2, ds_writews(CURRENT_ANI, ds_writebs(PP20_INDEX, 0xff))));
-	ds_writew(REQUEST_REFRESH, 1);
-	ds_writeb(SPECIAL_SCREEN, 0);
+	g_fig_figure1 = g_fig_figure2 = g_current_ani = g_pp20_index = -1;
+	g_request_refresh = 1;
+	g_special_screen = 0;
 
-	if (ds_readbs(CURRENT_TOWN) != TOWNS_NONE) {
-		ds_writeb(FADING_STATE, 3);
+	if (gs_current_town != TOWNS_NONE) {
+		g_fading_state = 3;
 	}
 
-	ds_writew(TEXTBOX_WIDTH, tw_bak);
+	g_textbox_width = tw_bak;
 
 	return done == -1 ? 1 : 0;
 }
@@ -623,27 +601,27 @@ signed short game_options(void)
 void draw_icon(signed short id, signed short x, signed short y)
 {
 	signed short handle;
-	RealPt ptr_bak;
+	Bit8u* dst_bak;
 
 	handle = load_archive_file(ARCHIVE_FILE_ICONS);
 
 	seek_archive_file(handle, id * 576L, 0);
 
-	read_archive_file(handle, (Bit8u*)ds_readd(ICON), 576);
+	read_archive_file(handle, g_icon, 576);
 
 	close(handle);
 
-	ptr_bak = (Bit8u*)ds_readd(PIC_COPY_DST);
+	dst_bak = g_pic_copy.dst;
 
-	ds_writed(PIC_COPY_SRC, ds_readd(ICON));
-	ds_writew(PIC_COPY_X1, x);
-	ds_writew(PIC_COPY_Y1, y);
-	ds_writew(PIC_COPY_X2, x + 23);
-	ds_writew(PIC_COPY_Y2, y + 23);
-	ds_writed(PIC_COPY_DST, ds_readd(RENDERBUF_PTR));
+	g_pic_copy.src = g_icon;
+	g_pic_copy.x1 = x;
+	g_pic_copy.y1 = y;
+	g_pic_copy.x2 = x + 23;
+	g_pic_copy.y2 = y + 23;
+	g_pic_copy.dst = g_renderbuf_ptr;
 	do_pic_copy(2);
 
-	ds_writed(PIC_COPY_DST, (Bit32u)ptr_bak);
+	g_pic_copy.dst = dst_bak;
 }
 
 /* 0xd54 */
@@ -651,12 +629,12 @@ void draw_icon(signed short id, signed short x, signed short y)
  * \brief   show storytexts
  *
  * \return              1 if dialog was shown / 0 if had already been shown
- * These were introduced in V3.00 (de and en) to find better into the story.
+ * These were introduced in V3.00 (de and en) to find a better way into the story.
  */
 /* static */
 signed short show_storytext(void)
 {
-	Bit8u *ptr;
+	char *ptr;
 	signed short person;
 	signed short icon;
 
@@ -688,9 +666,12 @@ signed short show_storytext(void)
 
 	}
 
-	if (!ds_readbs(KNOWN_PERSONS + person)) {
+	if (!gs_known_persons[person]) {
+
 		GUI_dialog_na(icon, ptr);
-		ds_writeb(KNOWN_PERSONS + person, 1);
+
+		gs_known_persons[person] = 1;
+
 		return 1;
 	} else {
 		return 0;
@@ -705,37 +686,33 @@ void do_location(void)
 	signed short tm_bak;
 	void (*func)(void);
 
-	tm_bak = ds_readb(SHOW_TRAVEL_MAP);
-	tw_bak = ds_readws(TEXTBOX_WIDTH);
-	bak1 = ds_readws(BASEPOS_X);
-	bak2 = ds_readws(BASEPOS_Y);
+	tm_bak = gs_show_travel_map;
+	tw_bak = g_textbox_width;
+	bak1 = g_basepos_x;
+	bak2 = g_basepos_y;
 
-	ds_writew(BASEPOS_X, 0);
-	ds_writew(BASEPOS_Y, 0);
-	ds_writeb(SHOW_TRAVEL_MAP, 0);
-	ds_writew(TEXTBOX_WIDTH, 3);
+	g_basepos_x = 0;
+	g_basepos_y = 0;
+	gs_show_travel_map = 0;
+	g_textbox_width = 3;
 
-#if !defined(__BORLANDC__)
-	func = locationhandler[ds_readbs(CURRENT_LOCTYPE)];
-#else
-	func = (void (*)(void))ds_readd(LOCATION_HANDLERS + 4 * ds_readbs(CURRENT_LOCTYPE));
-#endif
+	func = g_location_handlers[gs_current_loctype];
 
-	ds_writed(CURRENT_CURSOR, (Bit32u)(p_datseg + DEFAULT_MOUSE_CURSOR));
+	g_current_cursor = (unsigned short*)(p_datseg + DEFAULT_MOUSE_CURSOR);
 
 	if (func) {
 		func();
 	}
 
-	ds_writew(BASEPOS_X, bak1);
-	ds_writew(BASEPOS_Y, bak2);
-	ds_writew(TEXTBOX_WIDTH, tw_bak);
+	g_basepos_x = bak1;
+	g_basepos_y = bak2;
+	g_textbox_width = tw_bak;
 
-	if (!ds_readb(SHOW_TRAVEL_MAP)) {
-		ds_writeb(SHOW_TRAVEL_MAP, tm_bak);
+	if (!gs_show_travel_map) {
+		gs_show_travel_map = tm_bak;
 	}
 
-	ds_writebs(TRAVEL_MAP_LOADED, -1);
+	g_travel_map_loaded = -1;
 }
 
 /**
@@ -746,18 +723,18 @@ void leave_location(void)
 	set_var_to_zero();
 
 	/* reset location */
-	ds_writeb(CURRENT_LOCTYPE, ds_readb(CURRENT_LOCTYPE_BAK));
+	gs_current_loctype = gs_current_loctype_bak;
 
 	/* set target  coordinates*/
-	ds_writew(X_TARGET, ds_readw(X_TARGET_BAK));
-	ds_writew(Y_TARGET, ds_readw(Y_TARGET_BAK));
+	gs_x_target = (gs_x_target_bak);
+	gs_y_target = (gs_y_target_bak);
 
 	/* rotate party by 180 degrees */
-	ds_writeb(DIRECTION, (ds_readbs(DIRECTION) + 2) % 4);
+	gs_direction = ((gs_direction + 2) % 4);
 
 	set_to_ff();
 
-	ds_writew(REQUEST_REFRESH, ds_writebs(SPECIAL_SCREEN, 1));
+	g_request_refresh = g_special_screen = 1;
 }
 
 void leave_dungeon(void)
@@ -766,42 +743,42 @@ void leave_dungeon(void)
 	Bit8u *ptr;
 
 	DNG_lights();
-	ptr = (char*)ds_readd(TEXT_OUTPUT_BUF);
+	ptr = (Bit8u*)g_text_output_buf;
 
-	memset((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 0xc0);
+	memset(g_renderbuf_ptr, 0, 0xc0);
 
 	for (i = 0; i < 64; i++) {
 
-		pal_fade(ptr, (Bit8u*)ds_readd(RENDERBUF_PTR));
-		pal_fade(ptr + 0x60, (Bit8u*)ds_readd(RENDERBUF_PTR) + 0x60);
+		pal_fade(ptr, g_renderbuf_ptr);
+		pal_fade(ptr + 0x60, g_renderbuf_ptr + 0x60);
 		wait_for_vsync();
 		set_palette(ptr, 0x80, 0x40);
 	}
 
-	ds_writeb(CURRENT_LOCTYPE, ds_writeb(CURRENT_LOCTYPE_BAK, LOCTYPE_NONE));
-	ds_writeb(CURRENT_TOWN, ds_readb(CURRENT_TOWN_BAK));
-	ds_writeb(DUNGEON_INDEX_BAK, ds_readb(DUNGEON_INDEX));
-	ds_writeb(DUNGEON_INDEX, ds_writeb(DUNGEON_LEVEL, ds_writeb(DUNGEON_LIGHT, 0)));
-	ds_writebs(CITY_AREA_LOADED, -1);
-	ds_writeb(FADING_STATE, ds_writew(REQUEST_REFRESH, 1));
+	gs_current_loctype = gs_current_loctype_bak = LOCTYPE_NONE;
+	gs_current_town = gs_current_town_bak;
+	gs_dungeon_index_bak = gs_dungeon_index;
+	gs_dungeon_index = gs_dungeon_level = gs_dungeon_light = 0;
+	g_city_area_loaded = -1;
+	g_fading_state = g_request_refresh = 1;
 
-	do_fill_rect((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 0, 319, 199, 0);
+	do_fill_rect(g_renderbuf_ptr, 0, 0, 319, 199, 0);
 
-	ds_writew(PIC_COPY_X1, 0);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, 240);
-	ds_writew(PIC_COPY_Y2, 136);
-	ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = 240;
+	g_pic_copy.y2 = 136;
+	g_pic_copy.src = g_renderbuf_ptr;
 
 	update_mouse_cursor();
 
 	do_pic_copy(1);
 	refresh_screen_size();
 	wait_for_vsync();
-	set_palette((Bit8u*)ds_readd(RENDERBUF_PTR), 0 , 0x20);
+	set_palette(g_renderbuf_ptr, 0 , 0x20);
 
 	/* disable the deathtrap */
-	ds_writew(DEATHTRAP, 0);
+	gs_deathtrap = 0;
 }
 
 /**
@@ -809,10 +786,10 @@ void leave_dungeon(void)
  */
 void tumult(void)
 {
-	signed short textbox_width_bak;
+	signed short tw_bak;
 
-	textbox_width_bak = ds_readw(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 7);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 7;
 
 	/* print message */
 	GUI_output(get_ttx(764));
@@ -820,19 +797,17 @@ void tumult(void)
 	/* each hero in the group looses 1W6 LE */
 	sub_group_le(random_schick(6));
 
-
 	/* the guards or a mob */
-	sprintf((char*)ds_readd(DTP2),
-		get_ttx(765),
-		((ds_readb(CURRENT_TOWN) == TOWNS_PREM ||
-			ds_readb(CURRENT_TOWN) == TOWNS_PHEXCAER ||
-			ds_readb(CURRENT_TOWN) == TOWNS_THORWAL ||
-			ds_readb(CURRENT_TOWN) == TOWNS_OBERORKEN)
+	sprintf(g_dtp2, get_ttx(765),
+		((gs_current_town == TOWNS_PREM ||
+			gs_current_town == TOWNS_PHEXCAER ||
+			gs_current_town == TOWNS_THORWAL ||
+			gs_current_town == TOWNS_OBERORKEN)
 				? get_ttx(766) : get_ttx(767)));
 
-	GUI_output((char*)ds_readd(DTP2));
+	GUI_output(g_dtp2);
 
-	ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
+	g_textbox_width = tw_bak;
 }
 
 /**
@@ -843,32 +818,30 @@ void fade_into(void)
 	Bit8u *ptr;
 	signed short i;
 
-	ptr = (Bit8u*)ds_readd(RENDERBUF_PTR) + 0xfa00;
+	ptr = g_renderbuf_ptr + 0xfa00;
 
-	memset((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 0xc0);
+	memset(g_renderbuf_ptr, 0, 0xc0);
 
 	wait_for_vsync();
 
-	set_palette((Bit8u*)ds_readd(RENDERBUF_PTR), 0x80, 0x40);
+	set_palette(g_renderbuf_ptr, 0x80, 0x40);
 
 	for (i = 0; i < 0x20; i++) {
 
-		pal_fade(ptr, (Bit8u*)ds_readd(RENDERBUF_PTR));
+		pal_fade(ptr, g_renderbuf_ptr);
 
-		pal_fade(ptr, (Bit8u*)ds_readd(RENDERBUF_PTR));
+		pal_fade(ptr, g_renderbuf_ptr);
 
 		wait_for_vsync();
 
 		set_palette(ptr, 0, 0x20);
 	}
-
-
 }
 
 void copy_palette(void)
 {
-	memcpy((Bit8u*)ds_readd(RENDERBUF_PTR) + 0xfa00, (Bit8u*)ds_readd(ANI_PALETTE), 0x60);
-	ds_writeb(FADING_STATE, 2);
+	memcpy(g_renderbuf_ptr + 0xfa00, (Bit8u*)g_ani_palette, 0x60);
+	g_fading_state = 2;
 }
 
 #if !defined(__BORLANDC__)

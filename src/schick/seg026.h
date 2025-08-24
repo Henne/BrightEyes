@@ -5,7 +5,7 @@ namespace M302de {
 //0x20
 void init_text(void);
 //0x25
-void split_textbuffer(Bit8u *, RealPt, Bit32u);
+void split_textbuffer(char **, char*, Bit32u);
 //0x2a
 void load_ggsts_nvf(void);
 /* 0x2f */
@@ -13,7 +13,7 @@ signed short load_game_state(void);
 /* 0x34 */
 signed short save_game_state(void);
 /* 0x39 */
-signed short read_chr_temp(RealPt, signed short, signed short);
+signed short read_chr_temp(char*, signed short, signed short);
 //0x3e
 void write_chr_temp(unsigned short);
 /* 0x43 */

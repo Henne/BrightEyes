@@ -34,17 +34,17 @@ unsigned short get_tavern_gossip(void)
 	unsigned short r_si;
 	unsigned short r_di;
 
-	r_di = ds_readb(TOWNS_GOSSIP_MAX + ds_readbs(CURRENT_TOWN));
+	r_di = g_towns_gossip_max[gs_current_town];
 
 	r_si = r_di = random_schick(r_di) - 1;
 
-	switch (ds_readbs(CURRENT_TOWN) - 1) {
+	switch (gs_current_town - 1) {
 	/* Thorwal */
 	case (TOWNS_THORWAL - 1): {
 		if (r_si == 6)
-			ds_writeb_z(INFORMER_FLAGS + INFORMER_ELIANE, 1);	/* Eliane Windenbeck */
+			update_informer_cond(INFORMER_ELIANE);	/* Eliane Windenbeck */
 		else if (r_si == 7)
-			ds_writeb_z(INFORMER_FLAGS + INFORMER_ASGRIMM, 1);	/* Asgrimm Thurboldsson */
+			update_informer_cond(INFORMER_ASGRIMM);	/* Asgrimm Thurboldsson */
 
 		break;
 	}
@@ -55,9 +55,9 @@ unsigned short get_tavern_gossip(void)
 		else if (r_si == 2)
 			ds_writeb(TEVENT004_FLAG, 1);
 		else if (r_si == 9)
-			ds_writeb_z(INFORMER_FLAGS + INFORMER_ELIANE, 1);	/* Eliane Windenbeck */
+			update_informer_cond(INFORMER_ELIANE);	/* Eliane Windenbeck */
 		else if (r_si == 10)
-			ds_writeb_z(INFORMER_FLAGS + INFORMER_ASGRIMM, 1);	/* Asgrimm Thurboldsson */
+			update_informer_cond(INFORMER_ASGRIMM);	/* Asgrimm Thurboldsson */
 
 		break;
 	}
@@ -90,9 +90,9 @@ unsigned short get_tavern_gossip(void)
 		else if (r_si == 3)
 			ds_writeb(TEVENT011_FLAG, 1);
 		else if (r_si == 4)
-			ds_writeb(TEVENT119_FLAG, 1);
+			gs_tevent119_flag = 1;
 		else if (r_si == 5)
-			ds_writeb(TEVENT120_FLAG, 1);
+			gs_tevent120_flag = 1;
 
 		break;
 	}
@@ -125,7 +125,7 @@ unsigned short get_tavern_gossip(void)
 		else if (r_si == 3)
 			ds_writeb(TEVENT106_FLAG, 1);
 		else if (r_si == 4) {
-			ds_writeb(TEVENT112_FLAG, ds_writeb(TEVENT112_HERB_FLAG, 1));
+			gs_tevent112_flag = gs_tevent112_herb_flag = 1;
 		}
 
 		break;
@@ -133,15 +133,15 @@ unsigned short get_tavern_gossip(void)
 	/* Merske (has no tavern) */
 	case (TOWNS_MERSKE - 1): {
 		if (r_si == 1)
-			ds_writeb(TEVENT118_FLAG, 1);	/* Restplaces */
+			gs_tevent118_flag = 1;
 		else if (r_si == 2)
-			ds_writeb(TEVENT119_FLAG, 1);
+			gs_tevent119_flag = 1;
 		else if (r_si == 3)
-			ds_writeb(TEVENT120_FLAG, 1);
+			gs_tevent120_flag = 1;
 		else if (r_si == 11)
-			ds_writeb_z(INFORMER_FLAGS + INFORMER_ELIANE, 1);	/* Eliane Windenbeck */
+			update_informer_cond(INFORMER_ELIANE);	/* Eliane Windenbeck */
 		else if (r_si == 12)
-			ds_writeb_z(INFORMER_FLAGS + INFORMER_ASGRIMM, 1);	/* Asgrimm Thurboldsson */
+			update_informer_cond(INFORMER_ASGRIMM);	/* Asgrimm Thurboldsson */
 
 		break;
 	}
@@ -150,9 +150,9 @@ unsigned short get_tavern_gossip(void)
 		if (r_si == 2)
 			ds_writeb(TEVENT008_FLAG, 1);	/* Restplaces */
 		else if (r_si == 7)
-			ds_writeb_z(INFORMER_FLAGS + INFORMER_ELIANE, 1);	/* Eliane Windenbeck */
+			update_informer_cond(INFORMER_ELIANE);	/* Eliane Windenbeck */
 		else if (r_si == 8)
-			ds_writeb_z(INFORMER_FLAGS + INFORMER_ASGRIMM, 1);	/* Asgrimm Thurboldsson */
+			update_informer_cond(INFORMER_ASGRIMM);	/* Asgrimm Thurboldsson */
 
 		break;
 	}
@@ -243,7 +243,7 @@ unsigned short get_tavern_gossip(void)
 		else if (r_si == 6)
 			ds_writeb(TEVENTU07_FLAG, 1);
 		else if (r_si == 7)
-			ds_writeb(TEVENT116_FLAG, 1);
+			gs_tevent116_flag = 1;
 
 		break;
 	}
@@ -309,17 +309,17 @@ unsigned short get_tavern_gossip(void)
 			ds_writeb(TEVENT066_TRACK_FLAG, 1);
 		else if (r_si == 3) {
 			/* Restplaces */
-			ds_writeb(TEVENTU10_FLAG, ds_writeb(TEVENTU11_FLAG, 1));
+			gs_teventu10_flag = gs_teventu11_flag = 1;
 		}
 		else if (r_si == 4)
-			ds_writeb(TEVENTU12_FLAG, 1);
+			gs_teventu12_flag = 1;
 
 		break;
 	}
 	/* Rovik */
 	case (TOWNS_ROVIK - 1): {
 		if (r_si == 1)
-			ds_writeb(TEVENTU12_FLAG, 1);	/* Restplaces */
+			gs_teventu12_flag = 1; /* Restplaces */
 
 		break;
 	}
@@ -334,7 +334,7 @@ unsigned short get_tavern_gossip(void)
 	case (TOWNS_RUNINSHAVEN - 1): {
 		if (r_si == 1) {
 			/* Restplaces */
-			ds_writeb(TEVENT128_FLAG, ds_writeb(TEVENTU09_FLAG, 1));
+			gs_tevent128_flag = gs_teventu09_flag = 1;
 		}
 
 		break;
@@ -369,7 +369,7 @@ unsigned short get_tavern_gossip(void)
 		else if (r_si == 3)
 			ds_writeb(TEVENTU06_FLAG, 1);
 		else if (r_si == 4) {
-			ds_writeb(TEVENTU10_FLAG, ds_writeb(TEVENTU11_FLAG, 1));
+			gs_teventu10_flag = gs_teventu11_flag = 1;
 		}
 
 		break;
@@ -399,18 +399,18 @@ unsigned short get_tavern_gossip(void)
 			ds_writeb(TEVENTU02_FLAG, ds_writeb(TEVENT040_FLAG, 1));
 		}
 		else if (r_si == 9)
-			ds_writeb_z(INFORMER_FLAGS + INFORMER_ELIANE, 1);	/* Eliane Windenbeck */
+			update_informer_cond(INFORMER_ELIANE);	/* Eliane Windenbeck */
 		else if (r_si == 10)
-			ds_writeb_z(INFORMER_FLAGS + INFORMER_ASGRIMM, 1);	/* Asgrimm Thurboldsson */
+			update_informer_cond(INFORMER_ASGRIMM);	/* Asgrimm Thurboldsson */
 
 		break;
 	}
 	/* Vaermhag */
 	case (TOWNS_VAERMHAG - 1): {
 		if (r_si == 7)
-			ds_writeb_z(INFORMER_FLAGS + INFORMER_ELIANE, 1);	/* Eliane Windenbeck */
+			update_informer_cond(INFORMER_ELIANE);	/* Eliane Windenbeck */
 		else if (r_si == 8)
-			ds_writeb_z(INFORMER_FLAGS + INFORMER_ASGRIMM, 1);	/* Asgrimm Thurboldsson */
+			update_informer_cond(INFORMER_ASGRIMM);	/* Asgrimm Thurboldsson */
 
 		break;
 	}
@@ -424,22 +424,22 @@ unsigned short get_tavern_gossip(void)
 	/* Brendhil */
 	case (TOWNS_BRENDHIL - 1): {
 		if (r_si == 1)
-			ds_writeb(TEVENTU13_FLAG, 1);	/* Restplaces */
+			gs_teventu13_flag = 1;	/* Restplaces */
 
 		break;
 	}
 	/* Manrin */
 	case (TOWNS_MANRIN - 1): {
 		if (r_si == 1)
-			ds_writeb(TEVENTU13_FLAG, 1);	/* Restplaces */
+			gs_teventu13_flag = 1;	/* Restplaces */
 		else if (r_si == 2)
-			ds_writeb(TEVENT132_HERB_FLAG, 1);
+			gs_tevent132_herb_flag = 1;
 
 		break;
 	}
 	}
 
-	return r_di + ds_readb(TOWNS_GOSSIP_OFF + ds_readbs(CURRENT_TOWN));
+	return r_di + g_towns_gossip_off[gs_current_town];
 
 }
 
@@ -451,7 +451,7 @@ char* get_drinkmate(void)
 	signed short name;
 	signed short surname;
 
-	name = ((ds_readb(TLK_TAV_INFORMERSEX) - 1) == 0 ? 0xa7 : 0xbb);
+	name = ((gs_tlk_tav_informersex - 1) == 0 ? 0xa7 : 0xbb);
 	name += random_schick(20) - 1;
 
 	surname = random_schick(2) - 1;
@@ -459,13 +459,10 @@ char* get_drinkmate(void)
 	surname = (surname == 0 ? 0xa7 : 0xbb);
 	surname += random_schick(20) - 1;
 
-	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-		(char*)p_datseg + GOSSIP_STR_TRIPLE_WILDCARD, /* "%s %s%s" */
-		get_tx(name),
-		get_tx(surname),
-		get_tx((ds_readb(TLK_TAV_INFORMERSEX) - 1) == 0 ? 207 : 208));
+	sprintf(g_text_output_buf, g_gossip_str_triple_wildcard, get_tx(name), get_tx(surname),
+		get_tx((gs_tlk_tav_informersex - 1) == 0 ? 207 : 208));
 
-	return (char*)ds_readd(TEXT_OUTPUT_BUF);
+	return g_text_output_buf;
 }
 
 /**
@@ -475,103 +472,97 @@ char* get_drinkmate(void)
  */
 signed short tavern_quest_infos(void)
 {
-	signed short l_si;
+	signed short l_si; /* TODO: should be initialized with 0 */
 
-	if (ds_readws(HEARD_ANNOUNCE) == 0) {
+	if (!gs_heard_announce) {
 
-		/* print the announcement from the hetman */
+		/* print the announcement from the hetmann */
 		GUI_output(get_tx(210));
 
 		/* remember you heard the announcement */
-		ds_writews(HEARD_ANNOUNCE, 1);
+		gs_heard_announce = 1;
 
 		/* calculate the day in a week */
 		/* not used in the game */
 		/* TODO: Does this work with the nameless days ? */
-		ds_writeb(ANNOUNCE_DAY, ds_readbs(DAY_OF_MONTH) + 7);
+		gs_announce_day = gs_day_of_month + 7;
 
-		if (ds_readbs(ANNOUNCE_DAY) > 30) {
+		if (gs_announce_day > 30) {
 
-			sub_ds_bs(ANNOUNCE_DAY, 30);
+			gs_announce_day -= 30;
 		}
+
 		/* Original-Bug: which return value here? */
 
-	} else if ((ds_readbs(CURRENT_TOWN) == TOWNS_THORWAL) &&
-			!(ds_readb(QUEST_DEADSHIP)) &&
-			(ds_readws(CURRENT_TYPEINDEX) == 6))
+	} else if ((gs_current_town == TOWNS_THORWAL) && !gs_quest_deadship && (gs_current_typeindex == 6))
 	{
 		/* print the message about a ghost ship */
 		GUI_output(get_tx(209));
 
 		/* remember that */
-		ds_writeb(QUEST_DEADSHIP, (unsigned char)(l_si = 1));
+		gs_quest_deadship = l_si = 1;
 
-	} else if ((ds_readbs(CURRENT_TOWN) == TOWNS_SKJAL) &&
-			(ds_readws(CURRENT_TYPEINDEX) == 69) &&
-			(ds_readb(INFORMER_FLAGS + INFORMER_JURGE) != 2) &&
-			(ds_readb(INFORMER_FLAGS + INFORMER_JURGE) != 0) &&
-			!(ds_readb(JURGE_AWAITS_LETTER)))
+	} else if ((gs_current_town == TOWNS_SKJAL) &&	(gs_current_typeindex == 69) &&
+			(gs_informer_flags[INFORMER_JURGE] != 2) && (gs_informer_flags[INFORMER_JURGE] != 0) &&
+			!gs_jurge_awaits_letter)
 	{
 		/* meet Informer Jurge */
 
 		if (random_schick(100) <= 30) {
-			ds_writeb(CURRENT_INFORMER, (unsigned char)(l_si = 1));
+			gs_current_informer = l_si = 1;
 		}
 
-	} else if ((ds_readbs(CURRENT_TOWN) == TOWNS_VIDSAND) &&
-			(ds_readws(CURRENT_TYPEINDEX) == 84) &&
-			(ds_readb(INFORMER_FLAGS + INFORMER_RAGNA) != 2) &&
-			(ds_readb(INFORMER_FLAGS + INFORMER_RAGNA) != 0))
+	} else if ((gs_current_town == TOWNS_VIDSAND) && (gs_current_typeindex == 84) &&
+			(gs_informer_flags[INFORMER_RAGNA] != 2) && (gs_informer_flags[INFORMER_RAGNA] != 0))
 	{
 		/* meet Informer Ragna */
 
 		if (random_schick(100) <= 30) {
-			ds_writeb(CURRENT_INFORMER, (unsigned char)(l_si = 6));
+			gs_current_informer = l_si = 6;
 		}
 
-	} else if ((ds_readbs(CURRENT_TOWN) == TOWNS_ANGBODIRTAL) &&
-			((ds_readws(CURRENT_TYPEINDEX) == 27) || (ds_readws(CURRENT_TYPEINDEX) == 28)) &&
-			(ds_readb(INFORMER_FLAGS + INFORMER_BEORN) != 2) &&
-			(ds_readb(INFORMER_FLAGS + INFORMER_BEORN) != 0))
+	} else if ((gs_current_town == TOWNS_ANGBODIRTAL) && ((gs_current_typeindex == 27) || (gs_current_typeindex == 28)) &&
+			(gs_informer_flags[INFORMER_BEORN] != 2) && (gs_informer_flags[INFORMER_BEORN] != 0))
 	{
 		/* meet Informer Beorn */
 
-		if (((ds_readws(CURRENT_TYPEINDEX) == 27) && (random_schick(100) <= 50)) ||
-			((ds_readws(CURRENT_TYPEINDEX) == 28) && (random_schick(100) <= 20)))
+		if (((gs_current_typeindex == 27) && (random_schick(100) <= 50)) ||
+			((gs_current_typeindex == 28) && (random_schick(100) <= 20)))
 		{
-			ds_writeb(CURRENT_INFORMER, (unsigned char)(l_si = 7));
+			gs_current_informer = l_si = 7;
 		}
 
 
-	} else if ((ds_readbs(CURRENT_TOWN) == TOWNS_BREIDA) &&
-			((ds_readws(CURRENT_TYPEINDEX) == 14) || (ds_readws(CURRENT_TYPEINDEX) == 15)) &&
-			(ds_readb(INFORMER_FLAGS + INFORMER_ASGRIMM) != 2) &&
-			(ds_readb(INFORMER_FLAGS + INFORMER_ASGRIMM) != 0) &&
-			(ds_readws(GOT_MAIN_QUEST) != 0))
+	} else if ((gs_current_town == TOWNS_BREIDA) && ((gs_current_typeindex == 14) || (gs_current_typeindex == 15)) &&
+			(gs_informer_flags[INFORMER_ASGRIMM] != 2) &&
+			(gs_informer_flags[INFORMER_ASGRIMM] != 0) &&
+			(gs_got_main_quest != 0))
 	{
 		/* meet Informer Asgrimm */
 
 		if (random_schick(100) <= 50) {
-			ds_writeb(CURRENT_INFORMER, (unsigned char)(l_si = 8));
+			gs_current_informer = l_si = 8;
 		}
 
-	} else if ((ds_readbs(CURRENT_TOWN) == TOWNS_HJALSINGOR) &&
-			((ds_readws(CURRENT_TYPEINDEX) == 61) || (ds_readws(CURRENT_TYPEINDEX) == 62)) &&
-			(ds_readb(INFORMER_FLAGS + INFORMER_ALGRID) != 2) &&
-			(ds_readb(INFORMER_FLAGS + INFORMER_ALGRID) != 0))
+	} else if ((gs_current_town == TOWNS_HJALSINGOR) &&
+			((gs_current_typeindex == 61) || (gs_current_typeindex == 62)) &&
+			(gs_informer_flags[INFORMER_ALGRID] != 2) &&
+			(gs_informer_flags[INFORMER_ALGRID] != 0))
 	{
 		/* meet Informer Algrid */
 
-		if (((ds_readws(CURRENT_TYPEINDEX) == 61) && (random_schick(100) <= 50)) ||
-			((ds_readws(CURRENT_TYPEINDEX) == 62) && (random_schick(100) <= 20)))
+		if (((gs_current_typeindex == 61) && (random_schick(100) <= 50)) ||
+			((gs_current_typeindex == 62) && (random_schick(100) <= 20)))
 		{
-			ds_writeb(CURRENT_INFORMER, (unsigned char)(l_si = 14));
+			gs_current_informer = l_si = 14;
 		}
 
-	} else if ((ds_readbs(CURRENT_TOWN) == TOWNS_PHEXCAER) && (ds_readb(ALRIK_DERONDAN))) {
+	} else if ((gs_current_town == TOWNS_PHEXCAER) && gs_alrik_derondan) {
 
 		/* meet Alrik Derondan */
 		PHX_alrik_derondan();
+
+		/* Original-Bug: which return value here? */
 	}
 
 	return l_si ? 1 : 0;
@@ -586,36 +577,36 @@ void tavern_follow_informer(void)
 	switch (get_town_lookup_entry() + 1) {
 	case 1: {
 		do_talk(6, 0);
-		ds_writew(X_TARGET_BAK, 8);
-		ds_writew(Y_TARGET_BAK, 6);
-		ds_writeb(DIRECTION, 3);
+		gs_x_target_bak = 8;
+		gs_y_target_bak = 6;
+		gs_direction = 3;
 		break;
 	}
 	case 6: {
 		do_talk(8, 0);
-		ds_writew(X_TARGET_BAK, 5);
-		ds_writew(Y_TARGET_BAK, 4);
-		ds_writeb(DIRECTION, 3);
+		gs_x_target_bak = 5;
+		gs_y_target_bak = 4;
+		gs_direction = 3;
 		break;
 	}
 	case 7: {
 		do_talk(8, 1);
-		ds_writew(X_TARGET_BAK, 12);
-		ds_writew(Y_TARGET_BAK, 10);
-		ds_writeb(DIRECTION, 1);
+		gs_x_target_bak = 12;
+		gs_y_target_bak = 10;
+		gs_direction = 1;
 		break;
 	}
 	case 8: {
 		do_talk(10, 1);
-		ds_writew(X_TARGET_BAK, ds_writew(Y_TARGET_BAK, 7));
-		ds_writeb(DIRECTION, 1);
+		gs_x_target_bak = gs_y_target_bak = 7;
+		gs_direction = 1;
 		break;
 	}
 	case 14: {
 		do_talk(8, 2);
-		ds_writew(X_TARGET_BAK, 5);
-		ds_writew(Y_TARGET_BAK, 8);
-		ds_writeb(DIRECTION, 0);
+		gs_x_target_bak = 5;
+		gs_y_target_bak = 8;
+		gs_direction = 0;
 		break;
 	}
 	}

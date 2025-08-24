@@ -5,7 +5,7 @@ namespace M302de {
 /*0x20*/
 char* print_passage_price(signed short, Bit8u*);
 /*0x25*/
-RealPt get_ship_name(signed char, signed short);
+Bit8u* get_ship_name(signed char, signed short);
 /*0x2a*/
 unsigned short prepare_passages(void);
 /*0x2f*/

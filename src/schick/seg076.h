@@ -19,7 +19,7 @@ void DNG_fight(void);
 /* 0x43 */
 void DNG_see_lever(void);
 /* 0x48 */
-void print_msg_with_first_hero(Bit8u*);
+void print_msg_with_first_hero(char*);
 /* 0x4d */
 signed short DNG_step(void);
 /* 0x52 */

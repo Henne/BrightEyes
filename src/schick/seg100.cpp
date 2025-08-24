@@ -37,31 +37,27 @@ void spell_eigenschaften(void)
 	signed short min;
 	signed short max;
 
-	ds_writed(SPELLTARGET_E,
-		(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+	g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
-	damage_range_template(host_readws(get_spelltarget_e() + ENEMY_SHEET_DAM1),
-		(Bit8u*)&min, (Bit8u*)&max);
+	damage_range_template(g_spelltarget_e->dam1, (Bit8u*)&min, (Bit8u*)&max);
 
-	min = min * 8 / 10; /* TODO: What is happening here */
+	/* Remark: For unknown reasons the shown TP-values of enemies are scaled down to 80% */
+	min = min * 8 / 10;
 	max = max * 8 / 10;
 
-	sprintf((char*)ds_readd(DTP2),
-          get_tx(25),
-          (GUI_name_singular(get_monname(host_readbs(get_spelltarget_e())))),
-          host_readbs(get_spelltarget_e() + ENEMY_SHEET_LEVEL),	/* Level */
-          host_readbs(get_spelltarget_e() + ENEMY_SHEET_AT),	  /* AT */
-          host_readbs(get_spelltarget_e() + ENEMY_SHEET_PA),	  /* PA */
-          host_readbs(get_spelltarget_e() + ENEMY_SHEET_RS),		/* RS */
-          host_readbs(get_spelltarget_e() + ENEMY_SHEET_ATTACKS),	/* Attacks */
-          (host_readbs(get_spelltarget_e() + ENEMY_SHEET_ATTACKS) > 1) ?
-          get_tx(26) : get_tx(27),
-          min,							/* TPmin */
-          max,							/* TPmax */
-          host_readws(get_spelltarget_e() + ENEMY_SHEET_LE),	      /* LE */
-          host_readws(get_spelltarget_e() + ENEMY_SHEET_LE_ORIG),	  /* LEmax */
-          host_readws(get_spelltarget_e() + ENEMY_SHEET_AE),	      /* AE */
-          host_readws(get_spelltarget_e() + ENEMY_SHEET_AE_ORIG));	/* AEmax */
+	sprintf(g_dtp2, get_tx(25), GUI_name_singular(get_monname(g_spelltarget_e->mon_id)),
+          g_spelltarget_e->level,	/* Level */
+          g_spelltarget_e->at,		/* AT */
+          g_spelltarget_e->pa,		/* PA */
+          g_spelltarget_e->rs,		/* RS */
+          g_spelltarget_e->attacks,	/* Attacks */
+          (g_spelltarget_e->attacks > 1) ? get_tx(26) : get_tx(27),
+          min,				/* TPmin */
+          max,				/* TPmax */
+          g_spelltarget_e->le,		/* LE */
+          g_spelltarget_e->le_orig,	/* LEmax */
+          g_spelltarget_e->ae,		/* AE */
+          g_spelltarget_e->ae_orig);	/* AEmax */
 }
 
 void spell_exposami(void)
@@ -76,11 +72,11 @@ void spell_exposami(void)
 
 	count = 0;
 
-	for (i = 0; i < ds_readws(NR_OF_ENEMIES); i++) {
+	for (i = 0; i < g_nr_of_enemies; i++) {
 
-		if (host_readbs((Bit8u*)ds_readd(CURRENT_FIGHT) + SIZEOF_FIGHT_MONSTER * i + FIGHT_MONSTERS_ROUND_APPEAR) != 0) {
+		if (host_readbs(g_current_fight + SIZEOF_FIGHT_MONSTER * i + FIGHT_MONSTERS_ROUND_APPEAR) != 0) {
 
-			id = host_readbs((Bit8u*)ds_readd(CURRENT_FIGHT) + SIZEOF_FIGHT_MONSTER * i + FIGHT_MONSTERS_ID);
+			id = host_readbs(g_current_fight + SIZEOF_FIGHT_MONSTER * i + FIGHT_MONSTERS_ID);
 
 			changed = 0;
 
@@ -105,44 +101,34 @@ void spell_exposami(void)
 
 	if (count) {
 		/* Intro text */
-		strcpy((char*)ds_readd(DTP2),
-			get_tx(31));
+		strcpy(g_dtp2, get_tx(31));
 
 		for (i = 0; count - 1 > i; i++) {
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-				get_tx(33),		/* "%d %s" */
+			sprintf(g_text_output_buf, get_tx(33),		/* "%d %s" */
 				arr[i][1],
-				(char*)(Bit8u*)(GUI_names_grammar(((arr[i][1] > 1)? 4 : 0) + 0x4000,
-									arr[i][0], 1)));
-			strcat((char*)ds_readd(DTP2),
-				(char*)ds_readd(TEXT_OUTPUT_BUF));
+				(char*)(Bit8u*)GUI_names_grammar(((arr[i][1] > 1) ? 4 : 0) + 0x4000, arr[i][0], 1));
+			strcat(g_dtp2, g_text_output_buf);
 
 			if (count - 2 > i) {
-				strcat((char*)ds_readd(DTP2),
-					get_tx(28));		/* "," */
+				strcat(g_dtp2, get_tx(28));		/* "," */
 			}
 		}
 
 		if (count > 1) {
-			strcat((char*)ds_readd(DTP2),
-				get_tx(29));		/* "AND" */
+			strcat(g_dtp2, get_tx(29));		/* "AND" */
 		}
 
-		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-			get_tx(33),
+		sprintf(g_text_output_buf, get_tx(33),
 			arr[count - 1][1],	/* TODO: this field access produces other code */
-			(char*)(Bit8u*)(GUI_names_grammar((arr[count - 1][1] > 1 ? 4 : 0) + 0x4000,
-								arr[count - 1][0], 1)));
+			(char*)(Bit8u*)GUI_names_grammar((arr[count - 1][1] > 1 ? 4 : 0) + 0x4000,
+								arr[count - 1][0], 1));
 
-		strcat((char*)ds_readd(DTP2),
-			(char*)ds_readd(TEXT_OUTPUT_BUF));
+		strcat(g_dtp2, g_text_output_buf);
 
-		strcat((char*)ds_readd(DTP2),
-			get_tx(30));			/* "." */
+		strcat(g_dtp2, get_tx(30));			/* "." */
 	} else {
 		/* no more hidden enemies */
-		strcpy((char*)ds_readd(DTP2),
-			get_tx(32));
+		strcpy(g_dtp2, get_tx(32));
 	}
 }
 
@@ -159,7 +145,7 @@ void spell_odem_arcanum(void)
 	   The original uses the return value to calculate an index, whithout checking for this. */
 	if (pos == -1)
 	{
-		sprintf((char*)ds_readd(DTP2), "");
+		sprintf(g_dtp2, "");
 		return;
 	}
 
@@ -171,16 +157,12 @@ void spell_odem_arcanum(void)
 
 		if (inventory_magic(get_spelluser() + pos * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID)) {
 
-			sprintf((char*)ds_readd(DTP2),
-				get_tx(81),
-				(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8000, id, 0)));
+			sprintf(g_dtp2, get_tx(81), GUI_names_grammar((signed short)0x8000, id, 0));
 
 			or_ptr_bs(get_spelluser() + pos * SIZEOF_INVENTORY + (HERO_INVENTORY + INVENTORY_FLAGS), 0x80); /* set 'magic_revealed' flag */
 
 		} else {
-			sprintf((char*)ds_readd(DTP2),
-				get_tx(82),
-				(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8000, id, 0)));
+			sprintf(g_dtp2, get_tx(82), GUI_names_grammar((signed short)0x8000, id, 0));
 		}
 	}
 }
@@ -192,9 +174,9 @@ void spell_penetrizzel(void)
 
 	for (y = -2;  y <= 2; y++) {
 		for (x = -2;  x <= 2; x++) {
-			if ((ds_readws(Y_TARGET) + y >= 0) && (ds_readws(X_TARGET) + x >= 0)) {
-				if ((ds_readb(DNG_MAP_SIZE) - 1 >= ds_readws(X_TARGET) + x) && (ds_readws(Y_TARGET) + y <= 15)) {
-					set_automap_tile(ds_readws(X_TARGET) + x, ds_readws(Y_TARGET) + y);
+			if ((gs_y_target + y >= 0) && (gs_x_target + x >= 0)) {
+				if ((g_dng_map_size - 1 >= gs_x_target + x) && (gs_y_target + y <= 15)) {
+					set_automap_tile(gs_x_target + x, gs_y_target + y);
 				}
 			}
 		}
@@ -214,10 +196,8 @@ void spell_chamaelioni(void)
 	or_ptr_bs(get_spelluser() + HERO_FLAGS1, 0x10); /* set 'chamaelioni' flag */
 
 	/* prepare the message */
-	sprintf((char*)ds_readd(DTP2),
-		get_tx(83),
-		(char*)get_spelluser() + HERO_NAME2,
-		(char*)(GUI_get_ptr(host_readbs(get_spelluser() + HERO_SEX), 0)));
+	sprintf(g_dtp2,	get_tx(83), (char*)get_spelluser() + HERO_NAME2,
+		(GUI_get_ptr(host_readbs(get_spelluser() + HERO_SEX), 0)));
 
 }
 
@@ -227,10 +207,8 @@ void spell_duplicatus(void)
 	or_ptr_bs(get_spelluser() + HERO_FLAGS2, 0x04); /* set 'duplicatus' flag
 
 	/* prepare the message */
-	sprintf((char*)ds_readd(DTP2),
-		get_tx(84),
-		(char*)get_spelluser() + HERO_NAME2,
-		(char*)(GUI_get_ptr(host_readbs(get_spelluser() + HERO_SEX), 0)));
+	sprintf(g_dtp2, get_tx(84), (char*)get_spelluser() + HERO_NAME2,
+		GUI_get_ptr(host_readbs(get_spelluser() + HERO_SEX), 0));
 
 }
 
@@ -243,7 +221,7 @@ void spell_harmlos(void)
 
 void spell_hexenknoten(void)
 {
-	Bit8u *ptr;
+	struct struct_fighter *fighter;
 	Bit8u *rp;
 	signed short x;
 	signed short y;
@@ -252,14 +230,14 @@ void spell_hexenknoten(void)
 	signed short width;
 	struct nvf_desc nvf;
 
-	if (ds_readds(FIGHTOBJ_BUF_FREESPACE) < 0x240) {
+	if (g_fightobj_buf_freespace < 0x240L) {
 		ds_writew(SPELL_SPECIAL_AECOST, -2);
 		return;
 	}
 
-	ptr = (Bit8u*)FIG_get_ptr(host_readbs(get_spelluser() + HERO_FIGHTER_ID));
-	x = host_readbs(ptr + 3);
-	y = host_readbs(ptr + 4);
+	fighter = FIG_get_fighter(host_readbs(get_spelluser() + HERO_FIGHTER_ID));
+	x = fighter->cbx;
+	y = fighter->cby;
 
 	if (!host_readbs(get_spelluser() + HERO_VIEWDIR)) {
 		x++;
@@ -281,13 +259,13 @@ void spell_hexenknoten(void)
 
 	no = 24;
 
-	if ((Bit8u*)ds_readd(HEXENKNOTEN_GFX_BUF)) {
-		rp = (Bit8u*)ds_readd(HEXENKNOTEN_GFX_BUF);
+	if (g_hexenknoten_gfx_buf) {
+		rp = g_hexenknoten_gfx_buf;
 		/* TODO: graphic bug if cast more than once */
 	} else {
-		rp = (Bit8u*)ds_readd(FIGHTOBJ_BUF_SEEK_PTR);
+		rp = g_fightobj_buf_seek_ptr;
 		nvf.dst = rp;
-		nvf.src = (Bit8u*)ds_readd(SPELLOBJ_NVF_BUF);
+		nvf.src = g_spellobj_nvf_buf;
 		nvf.no = no;
 		nvf.type = 0;
 		nvf.width = (Bit8u*)&width;
@@ -300,34 +278,31 @@ void spell_hexenknoten(void)
 		height = host_readws((Bit8u*)&height);
 #endif
 
-		ds_writed(HEXENKNOTEN_GFX_BUF, ds_readd(FIGHTOBJ_BUF_SEEK_PTR));
-#if defined(__BORLANDC__)
+		g_hexenknoten_gfx_buf = g_fightobj_buf_seek_ptr;
 		/* move pointer further */
-		add_ds_fp(FIGHTOBJ_BUF_SEEK_PTR, width * height + 8);
-#endif
-
-		sub_ds_ds(FIGHTOBJ_BUF_FREESPACE, width * height + 8L);
+		g_fightobj_buf_seek_ptr += width * height + 8;
+		g_fightobj_buf_freespace -= width * height + 8L;
 	}
 
-	ds_writew(FIG_LIST_ELEM, 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_NVF_NO), 127);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_CBX), (signed char)x);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_CBY), (signed char)y);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETX), 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_OFFSETY), 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_HEIGHT), (signed char)height);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_WIDTH), (signed char)width);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_X1), 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_Y1), 0);
-	ds_writebs((FIG_LIST_ELEM+FIGHTER_X2), (signed char)(width) - 1);
-	ds_writebs((FIG_LIST_ELEM+FIGHTER_Y2), (signed char)(height) - 1);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_RELOAD), 0);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_WSHEET), -1);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_SHEET), -1);
-	ds_writed((FIG_LIST_ELEM+FIGHTER_GFXBUF), (Bit32u)rp);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_Z), 50);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_VISIBLE), 1);
-	ds_writeb((FIG_LIST_ELEM+FIGHTER_TWOFIELDED), -1);
+	g_fig_list_elem.figure = 0;
+	g_fig_list_elem.nvf_no = 127;
+	g_fig_list_elem.cbx = x;
+	g_fig_list_elem.cby = y;
+	g_fig_list_elem.offsetx = 0;
+	g_fig_list_elem.offsety = 0;
+	g_fig_list_elem.height = height;
+	g_fig_list_elem.width = width;
+	g_fig_list_elem.x1 = 0;
+	g_fig_list_elem.y1 = 0;
+	g_fig_list_elem.x2 = width - 1;
+	g_fig_list_elem.y2 = height - 1;
+	g_fig_list_elem.reload = 0;
+	g_fig_list_elem.wsheet = -1;
+	g_fig_list_elem.sheet = -1;
+	g_fig_list_elem.gfxbuf = rp;
+	g_fig_list_elem.z = 50;
+	g_fig_list_elem.visible = 1;
+	g_fig_list_elem.twofielded = -1;
 
 	FIG_add_to_list(-1);
 
@@ -344,38 +319,32 @@ void spell_blitz(void)
 		/* cast a hero */
 
 		/* set the spell target */
-		ds_writed(SPELLTARGET,
-	                (Bit32u)((Bit8u*)ds_readd(HEROES) + (host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1) * SIZEOF_HERO));
+		g_spelltarget = get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
 
 		if (get_spelltarget() == get_spelluser()) {
 
 			ds_writew(SPELL_SPECIAL_AECOST, 0);
 
-			strcpy((char*)ds_readd(DTP2),
-				get_tx(112));
+			strcpy(g_dtp2, get_tx(112));
 		} else {
 			/* set the rounds counter */
 			host_writeb(get_spelltarget() + HERO_BLIND, 3);
 
 			/* prepare the message */
-			sprintf((char*)ds_readd(DTP2),
-				get_tx(86),
-				(char*)get_spelltarget() + HERO_NAME2);
+			sprintf(g_dtp2, get_tx(86), (char*)get_spelltarget() + HERO_NAME2);
 		}
 	} else {
 		/* cast an enemy */
 
 		/* set a pointer to the enemy */
-		ds_writed(SPELLTARGET_E,
-			(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+		g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
 		/* set the rounds counter */
 		host_writeb(get_spelltarget_e() + ENEMY_SHEET_BLIND, 3);
 
 		/* prepare the message */
-		sprintf((char*)ds_readd(DTP2),
-			get_tx(85),
-			(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
+		sprintf(g_dtp2, get_tx(85),
+			GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1));
 	}
 }
 
@@ -398,16 +367,11 @@ void spell_ecliptifactus(void)
 			/* enable the spell */
 			host_writeb(get_spelluser() + HERO_ECLIPTIFACTUS, (signed char)rounds + 1);
 			/* prepare the message */
-			sprintf((char*)ds_readd(DTP2),
-				get_tx(88),
-				(char*)(get_spelluser() + HERO_NAME2),
-				(char*)(GUI_get_ptr(host_readbs(get_spelluser() + HERO_SEX), 3)),
-				rounds);
+			sprintf(g_dtp2, get_tx(88), (char*)(get_spelluser() + HERO_NAME2),
+				GUI_get_ptr(host_readbs(get_spelluser() + HERO_SEX), 3), rounds);
 		} else {
 			/* prepare the message */
-			sprintf((char*)ds_readd(DTP2),
-				get_ttx(607),
-				(char*)get_spelluser() + HERO_NAME2);
+			sprintf(g_dtp2, get_ttx(607), (char*)get_spelluser() + HERO_NAME2);
 			/* set costs to 0 */
 			ds_writew(SPELL_SPECIAL_AECOST, 0);
 		}
@@ -424,15 +388,13 @@ void spell_eisenrost(void)
 		/* target is a hero */
 
 		/* set the spell target */
-		ds_writed(SPELLTARGET,
-	                (Bit32u)((Bit8u*)ds_readd(HEROES) + (host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1) * SIZEOF_HERO));
+		g_spelltarget = get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
 
 		if (get_spelltarget() == get_spelluser()) {
 
 			ds_writew(SPELL_SPECIAL_AECOST, 0);
 
-			strcpy((char*)ds_readd(DTP2),
-				get_tx(112));
+			strcpy(g_dtp2, get_tx(112));
 		} else {
 			/* get weapon id of the target */
 			id = host_readws(get_spelltarget() + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID);
@@ -444,16 +406,15 @@ void spell_eisenrost(void)
 				/* check if weapon is already broken */
 				if (inventory_broken(get_spelltarget() + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY)) {
 
-					strcpy((char*)ds_readd(DTP2),
-						get_tx(90));
+					strcpy(g_dtp2, get_tx(90));
 
 				} else {
 
 					if (host_readbs(get_spelltarget() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_BF)) > 0) {
 						or_ptr_bs(get_spelltarget() + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_FLAGS), 0x01); /* set 'broken' flag */
-						sprintf((char*)ds_readd(DTP2),
-							get_tx(92),
-							(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8000, id, 0)),
+
+						sprintf(g_dtp2, get_tx(92),
+							GUI_names_grammar((signed short)0x8000, id, 0),
 							(char*)(get_spelltarget() + HERO_NAME2));
 					} else {
 						ds_writew(SPELL_SPECIAL_AECOST, -2);
@@ -463,27 +424,24 @@ void spell_eisenrost(void)
 		}
 	} else {
 		/* target is an enemy */
-		ds_writed(SPELLTARGET_E,
-			(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+		g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
 		/* check if target is an animal */
-		if (host_readbs(get_spelltarget_e() + ENEMY_SHEET_IS_ANIMAL) != 0)
+		if (g_spelltarget_e->is_animal != 0)
 		{
-			sprintf((char*)ds_readd(DTP2),
-				get_tx(89));
+			sprintf(g_dtp2, get_tx(89));
 		} else {
 			/* check if weapon is already broken */
-			if (host_readbs(get_spelltarget_e() + ENEMY_SHEET_BROKEN) != 0) {
-				strcpy((char*)ds_readd(DTP2), get_tx(90));
+			if (g_spelltarget_e->weapon_broken != 0) {
+				strcpy(g_dtp2, get_tx(90));
 			} else {
 
 				/* set weapon broken */
 				host_writeb(get_spelltarget_e() + ENEMY_SHEET_BROKEN, 1);
 
 				/* prepare message */
-				sprintf((char*)ds_readd(DTP2),
-					get_tx(91),
-					(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
+				sprintf(g_dtp2, get_tx(91),
+					GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1));
 			}
 		}
 	}
@@ -502,7 +460,7 @@ void spell_fulminictus(void)
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 
 		/* prepare message */
-		strcpy((char*)ds_readd(DTP2), get_tx(112));
+		strcpy(g_dtp2, get_tx(112));
 	} else {
 		/* roll 3W6+0 damage */
 		damage = dice_roll(3, 6, 0);
@@ -542,26 +500,24 @@ void spell_ignifaxius(void)
 			ds_writew(SPELL_SPECIAL_AECOST, 0);
 
 			/* prepare message */
-			strcpy((char*)ds_readd(DTP2), get_tx(112));
+			strcpy(g_dtp2, get_tx(112));
 			return;;
 		}
 	}
 
 	/* get spell level... */
-	if ((ds_readws(AUTOFIGHT) == 0) && (host_readbs(get_spelluser() + HERO_NPC_ID) == 0)) {
+	if ((g_autofight == 0) && (host_readbs(get_spelluser() + HERO_NPC_ID) == 0)) {
 		/* ... manual mode */
 
 		/* prepare question of spell level */
-		sprintf((char*)ds_readd(DTP2),
-			get_tx(93),
-			host_readbs(get_spelluser() + HERO_LEVEL) + 1);
+		sprintf(g_dtp2, get_tx(93), host_readbs(get_spelluser() + HERO_LEVEL) + 1);
 
-		level = GUI_input((char*)ds_readd(DTP2), 2);
+		level = GUI_input(g_dtp2, 2);
 
 		if (level <= 0) {
 			/* abort */
 			/* terminate string */
-			host_writeb((char*)ds_readd(DTP2), 0);
+			*g_dtp2 = '\0';
 			ds_writew(SPELL_SPECIAL_AECOST, 0);
 			return;
 		}
@@ -601,12 +557,10 @@ void spell_ignifaxius(void)
 	if (host_readbs(get_spelluser() + HERO_ENEMY_ID) < 10) {
 
 		/* target is a hero */
-
 		hero_pos = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
 
 		/* set the spell target */
-		ds_writed(SPELLTARGET,
-	                (Bit32u)((Bit8u*)ds_readd(HEROES) + hero_pos * SIZEOF_HERO));
+		g_spelltarget = get_hero(hero_pos);
 
 		/* get a pointer to the armor */
 		p_armor = get_spelltarget() + HERO_INVENTORY + HERO_INVENTORY_SLOT_BODY * SIZEOF_INVENTORY;
@@ -641,18 +595,16 @@ void spell_ignifaxius(void)
 		/* target is an enemy */
 
 		/* set a pointer to the enemy */
-		ds_writed(SPELLTARGET_E,
-			(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+		g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
-		host_writebs(get_spelltarget_e() + ENEMY_SHEET_RS,
-			host_readbs(get_spelltarget_e() + ENEMY_SHEET_RS) - rs_malus);
+		host_writebs(get_spelltarget_e() + ENEMY_SHEET_RS, g_spelltarget_e->rs - rs_malus);
 		sub_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_AT, level / 2);
 		sub_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_PA, level / 2);
 
 	}
 
 	/* terminate output string */
-	host_writeb((char*)ds_readd(DTP2), 0);
+	*g_dtp2 = '\0';
 
 	if (mummy != 0) {
 		/* halve damage to get the correct AE costs */
@@ -675,8 +627,7 @@ void spell_plumbumbarum(void)
 		hero_pos = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
 
 		/* set the spell target */
-		ds_writed(SPELLTARGET,
-	                (Bit32u)((Bit8u*)ds_readd(HEROES) + hero_pos * SIZEOF_HERO));
+		g_spelltarget = get_hero(hero_pos);
 
 		if (get_spelltarget() == get_spelluser()) {
 
@@ -684,7 +635,7 @@ void spell_plumbumbarum(void)
 			ds_writew(SPELL_SPECIAL_AECOST, 0);
 
 			/* prepare message */
-			strcpy((char*)ds_readd(DTP2), get_tx(112));
+			strcpy(g_dtp2, get_tx(112));
 
 		} else {
 
@@ -695,9 +646,7 @@ void spell_plumbumbarum(void)
 				-3, (signed char)hero_pos);
 
 			/* prepare the message */
-			sprintf((char*)ds_readd(DTP2),
-				get_tx(94),
-				(char*)get_spelltarget() + HERO_NAME2);
+			sprintf(g_dtp2, get_tx(94), (char*)get_spelltarget() + HERO_NAME2);
 			}
 
 		return;
@@ -707,16 +656,13 @@ void spell_plumbumbarum(void)
 	/* target is an enemy */
 
 	/* set a pointer to the enemy */
-	ds_writed(SPELLTARGET_E,
-		(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+	g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
 	/* AT-malus of -3 (permanent) */
 	sub_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_AT, 3);
 
 	/* prepare the message */
-	sprintf((char*)ds_readd(DTP2),
-		get_tx(95),
-		(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8001, host_readbs(get_spelltarget_e()), 1)));
+	sprintf(g_dtp2, get_tx(95), GUI_names_grammar((signed short)0x8001, host_readbs(get_spelltarget_e()), 1));
 }
 
 void spell_radau(void)
@@ -736,9 +682,7 @@ void spell_saft_kraft(void)
 	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
 
 	/* set a pointer to the target */
-	ds_writed(SPELLTARGET,
-		(Bit32u)((Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * target));
-
+	g_spelltarget = get_hero(target);
 
 	/* +5 on AT of the current weapon */
 	slot = get_free_mod_slot();
@@ -774,9 +718,7 @@ void spell_saft_kraft(void)
 #endif
 
 	/* prepare message */
-	sprintf((char*)ds_readd(DTP2),
-		get_tx(96),
-		(char*)get_spelltarget() + HERO_NAME2);
+	sprintf(g_dtp2, get_tx(96), (char*)get_spelltarget() + HERO_NAME2);
 
 }
 
@@ -789,8 +731,7 @@ void spell_scharfes_auge(void)
 	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
 
 	/* set a pointer to the target */
-	ds_writed(SPELLTARGET,
-		(Bit32u)((Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * target));
+	g_spelltarget = get_hero(target);
 
 	/* all range skills are boosted + 3 */
 
@@ -802,10 +743,7 @@ void spell_scharfes_auge(void)
 
 	set_mod_slot(slot, 3 * 9L, get_spelltarget() + (HERO_TALENTS + TA_SCHUSSWAFFEN), 3, (signed char)target); /* TA_SCHUSSWAFFEN */
 
-	sprintf((char*)ds_readd(DTP2),
-		get_tx(97),
-		(char*)get_spelltarget() + HERO_NAME2);
-
+	sprintf(g_dtp2, get_tx(97), (char*)get_spelltarget() + HERO_NAME2);
 }
 
 

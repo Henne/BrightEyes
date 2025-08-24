@@ -45,23 +45,23 @@ void tevent_080(void)
 			ds_readb(TEVENT080_FLAG) != 0)
 	{
 		ds_writeb(TEVENT080_FLAG, 1);
-		ds_writed(MAIN_ACTING_HERO, 0);
+		gs_main_acting_hero = NULL;
 
 		TRV_found_replenish_place(0);
 
-		hero = (Bit8u*)ds_readd(MAIN_ACTING_HERO);
+		hero = (Bit8u*)gs_main_acting_hero;
 
 		if ((hero && !ds_readb(TEVENT080_TATZELWURM) && test_skill(hero, TA_FAEHRTENSUCHEN, 5) > 0) ||
 			ds_readb(TEVENT080_TATZELWURM) == 1)
 		{
 			ds_writeb(TEVENT080_TATZELWURM, 1);
 
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_tx2(87),
 				(char*)hero + HERO_NAME2);
 
 			do {
-				answer = GUI_radio((char*)ds_readd(DTP2), 2,
+				answer = GUI_radio(g_dtp2, 2,
 							get_tx2(88),
 							get_tx2(89));
 			} while (answer == -1);
@@ -137,7 +137,7 @@ void tevent_084(void)
 
 		do {
 
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 						get_tx2(97), 2,
 						get_tx2(98),
 						get_tx2(99));
@@ -152,7 +152,7 @@ void tevent_084(void)
 
 			if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 5) <= 0)
 			{
-				ds_writeb(FIG_INITIATIVE, 1);
+				g_fig_initiative = 1;
 
 				if (!do_fight(FIGHTS_F084)) {
 					ds_writeb(TEVENT084_FLAG, 1);
@@ -193,7 +193,7 @@ void tevent_086(void)
 	load_in_head(58);
 
 	do {
-		answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+		answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 					get_tx2(100), 2,
 					get_tx2(101), get_tx2(102));
 	} while (answer == -1);
@@ -205,7 +205,7 @@ void tevent_086(void)
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 			{
 				sub_hero_le(hero, 2);
 			}
@@ -248,9 +248,9 @@ void tevent_097(void)
 {
 	if (TRV_enter_hut_question()) {
 
-		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+		gs_current_loctype = LOCTYPE_WILDCAMP;
 		do_location();
-		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+		gs_current_loctype = LOCTYPE_NONE;
 	}
 }
 
@@ -287,25 +287,25 @@ void tevent_098(void)
 			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 					!hero_dead(hero))
 				{
 
 					if (test_skill(hero, TA_AKROBATIK, 0) > 0) {
 
-						sprintf((char*)ds_readd(DTP2),
+						sprintf(g_dtp2,
 							get_tx2(31),
 							(char*)hero + HERO_NAME2);
 
-						GUI_output((char*)ds_readd(DTP2));
+						GUI_output(g_dtp2);
 
 					} else {
 
-						sprintf((char*)ds_readd(DTP2),
+						sprintf(g_dtp2,
 							get_tx2(32),
 							(char*)hero + HERO_NAME2);
 
-						GUI_output((char*)ds_readd(DTP2));
+						GUI_output(g_dtp2);
 
 						hero_disappear(hero, i, 33);
 					}
@@ -325,9 +325,9 @@ void tevent_098(void)
 
 			loose_random_item(hero, 1, get_ttx(506));
 
-			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+			gs_current_loctype = LOCTYPE_WILDCAMP;
 			do_location();
-			ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+			gs_current_loctype = LOCTYPE_NONE;
 
 			TRV_load_textfile(-1);
 		} else {
@@ -336,35 +336,35 @@ void tevent_098(void)
 
 			if (test_skill(hero, TA_AKROBATIK, 0) > 0) {
 
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx2(35),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output((char*)ds_readd(DTP2));
+				GUI_output(g_dtp2);
 
 				hero = get_hero(0);
 				for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 					if (i != hero_pos &&
 						host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 						!hero_dead(hero))
 					{
 						if (test_attrib(hero, ATTRIB_GE, -4) > 0) {
 
-							sprintf((char*)ds_readd(DTP2),
+							sprintf(g_dtp2,
 								get_tx2(36),
 								(char*)hero + HERO_NAME2);
 
-							GUI_output((char*)ds_readd(DTP2));
+							GUI_output(g_dtp2);
 
 						} else {
 
-							sprintf((char*)ds_readd(DTP2),
+							sprintf(g_dtp2,
 								get_tx2(32),
 								(char*)hero + HERO_NAME2);
 
-							GUI_output((char*)ds_readd(DTP2));
+							GUI_output(g_dtp2);
 
 							hero_disappear(hero, i, 33);
 						}
@@ -372,11 +372,11 @@ void tevent_098(void)
 				}
 			} else {
 
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx2(32),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output((char*)ds_readd(DTP2));
+				GUI_output(g_dtp2);
 
 				hero_disappear(hero, i, 33);
 
@@ -405,16 +405,16 @@ void hero_disappear(Bit8u *hero, unsigned short pos, signed short temple_id)
 {
 
 	/* decrement the number of heroes */
-	dec_ds_bs_post(TOTAL_HERO_COUNTER);
+	gs_total_hero_counter--;
 
 	/* load a new savegame if no hero is present */
 	/* TODO: potential Original-Bug: What if only the NPC is left? */
-	if (!ds_readbs(TOTAL_HERO_COUNTER)) {
-		ds_writew(GAME_STATE, GAME_STATE_DEAD);
+	if (!gs_total_hero_counter) {
+		g_game_state = (GAME_STATE_DEAD);
 	}
 
 	/* decrement group counter */
-	dec_ds_bs_post(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP));
+	gs_group_member_counts[gs_current_group]--;
 
 	/* write temple_id to character sheet */
 	host_writeb(hero + HERO_TEMPLE_ID, (signed char)temple_id);
@@ -427,7 +427,7 @@ void hero_disappear(Bit8u *hero, unsigned short pos, signed short temple_id)
 		save_npc(ARCHIVE_FILE_NPCS + host_readbs(get_hero(6) + HERO_NPC_ID));
 
 		/* reset NPC timer */
-		ds_writebs((NPC_TIMERS + 1) + host_readbs(get_hero(6) + HERO_NPC_ID), -1);
+		gs_npc_timers[host_readbs(get_hero(6) + HERO_NPC_ID)] = -1;
 	} else {
 		/* Regular Hero */
 		write_chr_temp(pos);
@@ -439,11 +439,11 @@ void hero_disappear(Bit8u *hero, unsigned short pos, signed short temple_id)
 	if (temple_id != -2) {
 		draw_main_screen();
 		init_ani(2);
-		ds_writew(REQUEST_REFRESH, 1);
+		g_request_refresh = 1;
 	}
 
 	/* set flag to check all heroes */
-	ds_writeb(CHECK_PARTY, 1);
+	g_check_party = 1;
 }
 
 /* fight with 4 harpyes */
@@ -476,7 +476,7 @@ void tevent_099(void)
 
 			if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 4) <= 0) {
 
-				ds_writeb(FIG_INITIATIVE, 1);
+				g_fig_initiative = 1;
 
 				if (!do_fight(FIGHTS_F099)) {
 					ds_writeb(TEVENT099_FLAG, 1);
@@ -497,18 +497,18 @@ void tevent_101(void)
 
 	if (!ds_readb(TEVENT101_FLAG)) {
 
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx2(41),
 			(mod = random_schick(4) + 2));
 
 
 		do {
-			answer = GUI_radio((char*)ds_readd(DTP2), 2,
+			answer = GUI_radio(g_dtp2, 2,
 						get_tx2(42),
 						get_tx2(43));
 		} while (answer == -1);
 
-		ds_writew(MAX_ENEMIES, mod);
+		g_max_enemies = (mod);
 
 		/* Original-Bugfix: see description in tevent_099() */
 		if (answer == 1) {
@@ -522,7 +522,7 @@ void tevent_101(void)
 
 			if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, (signed char)mod) <= 0) {
 
-				ds_writeb(FIG_INITIATIVE, 1);
+				g_fig_initiative = 1;
 
 				if (!do_fight(FIGHTS_F101)) {
 					ds_writeb(TEVENT101_FLAG, 1);
@@ -539,9 +539,9 @@ void tevent_102(void)
 {
 	if (TRV_enter_hut_question())
 	{
-		ds_writebs(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+		gs_current_loctype = LOCTYPE_WILDCAMP;
 		do_location();
-		ds_writebs(CURRENT_LOCTYPE, LOCTYPE_NONE);
+		gs_current_loctype = LOCTYPE_NONE;
 	}
 }
 
@@ -608,9 +608,9 @@ void tevent_103(void)
 
 			GUI_output(get_tx2(52));
 
-			ds_writebs(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+			gs_current_loctype = LOCTYPE_WILDCAMP;
 			do_location();
-			ds_writebs(CURRENT_LOCTYPE, LOCTYPE_NONE);
+			gs_current_loctype = LOCTYPE_NONE;
 
 			TRV_load_textfile(-1);
 
@@ -641,7 +641,7 @@ void tevent_104(void)
 		for (i = l_si = nr_heroes = 0; i <= 6; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero))
 			{
 				nr_heroes++;
@@ -653,11 +653,11 @@ void tevent_104(void)
 
 					timewarp(MINUTES(30));
 
-					sprintf((char*)ds_readd(DTP2) + 0x400,
+					sprintf(g_dtp2 + 0x400,
 						get_tx2(55),
 						(char*)hero + HERO_NAME2);
 
-					GUI_dialog_na(0, (char*)ds_readd(DTP2) + 0x400);
+					GUI_dialog_na(0, (char*)((char*)(g_dtp2 + 0x400)));
 
 					l_si++;
 				}
@@ -676,7 +676,7 @@ void tevent_104(void)
 			/* all heroes have failed the test */
 
 			do {
-				l_si = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+				l_si = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 							get_tx2(56), 2,
 							get_tx2(57), get_tx2(58));
 			} while (l_si == -1);
@@ -684,9 +684,9 @@ void tevent_104(void)
 			if (l_si == 2) {
 				/* make a camp */
 
-				ds_writebs(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+				gs_current_loctype = LOCTYPE_WILDCAMP;
 				do_location();
-				ds_writebs(CURRENT_LOCTYPE, LOCTYPE_NONE);
+				gs_current_loctype = LOCTYPE_NONE;
 
 				TRV_load_textfile(-1);
 #ifdef M302de_ORIGINAL_BUGFIX
@@ -697,7 +697,7 @@ void tevent_104(void)
 			} else {
 				/* turn around */
 
-				ds_writew(TRV_RETURN, done = 1);
+				gs_trv_return = (done = 1);
 			}
 
 		} else {
@@ -709,7 +709,7 @@ void tevent_104(void)
 			do {
 
 				do {
-					l_si = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+					l_si = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 								(nr_heroes == 0 ? get_tx2(59) : get_tx2(87)), 3,
 								get_tx2(60), get_tx2(61), get_tx2(62));
 				} while (l_si == -1);
@@ -749,11 +749,11 @@ void tevent_104(void)
 
 						} else {
 
-							sprintf((char*)ds_readd(DTP2),
+							sprintf(g_dtp2,
 								get_ttx(607),
 								(char*)hero + HERO_NAME2);
 
-							GUI_output((char*)ds_readd(DTP2));
+							GUI_output(g_dtp2);
 						}
 
 						timewarp(MINUTES(30));
@@ -777,9 +777,9 @@ void tevent_105(void)
 {
 	if (TRV_enter_hut_question()) {
 
-		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+		gs_current_loctype = LOCTYPE_WILDCAMP;
 		do_location();
-		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+		gs_current_loctype = LOCTYPE_NONE;
 	}
 }
 
@@ -813,27 +813,27 @@ void tevent_107(void)
 		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_skill(hero, TA_KLETTERN, 1) <= 0)
 			{
 
 				if (get_first_hero_with_item(ITEM_ROPE) != -1) { /* TODO: ROPE_LADDER? STAFFSPELL? */
 
-					sprintf((char*)ds_readd(DTP2), get_tx2(70), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_tx2(70), (char*)hero + HERO_NAME2);
 
 					sub_hero_le(hero, random_schick(11) + 1);
 
 				} else {
 
-					sprintf((char*)ds_readd(DTP2),
+					sprintf(g_dtp2,
 						get_tx2(71),
 						(char*)hero + HERO_NAME2);
 
 					sub_hero_le(hero, random_schick(11) + 4);
 				}
 
-				GUI_output((char*)ds_readd(DTP2));
+				GUI_output(g_dtp2);
 			}
 		}
 
@@ -857,7 +857,7 @@ void tevent_107(void)
 	}
 
 	set_var_to_zero();
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 }
 
 /* Phexcaer <-> Skelellen: entrance to the dungeon 'orc cave' */
@@ -872,13 +872,13 @@ void tevent_108(void)
 		GUI_dialog_na(53, get_tx2(72));
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 						get_tx2(73), 2,
 						get_tx2(74), get_tx2(75));
 		} while (answer == -1);
 
 		if (answer == 1) {
-			ds_writeb(TRAVEL_DETOUR, DUNGEONS_ORKBEHAUSUNG);
+			gs_travel_detour = (DUNGEONS_ORKBEHAUSUNG);
 		}
 
 	} else if (ds_readb(TEVENT108_FLAG) != 0) {
@@ -886,13 +886,13 @@ void tevent_108(void)
 		load_in_head(53);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 						get_tx2(76), 2,
 						get_tx2(77), get_tx2(78));
 		} while (answer == -1);
 
 		if (answer == 1) {
-			ds_writeb(TRAVEL_DETOUR, DUNGEONS_ORKBEHAUSUNG);
+			gs_travel_detour = (DUNGEONS_ORKBEHAUSUNG);
 		}
 	}
 }

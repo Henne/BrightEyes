@@ -43,8 +43,7 @@ void spell_arcano(void)
 	/* get the spell target */
 	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
 
-	ds_writed(SPELLTARGET, (Bit32u)((Bit8u*)ds_readd(HEROES) + target * SIZEOF_HERO));
-
+	g_spelltarget = get_hero(target);
 
 	/* get a free mod_slot */
 	slot = get_free_mod_slot();
@@ -53,7 +52,7 @@ void spell_arcano(void)
 	set_mod_slot(slot, HOURS(1), get_spelltarget() + HERO_MR, 2, (signed char)target);
 
 	/* "Die Magieresistenz von %s steigt um 2 Punkte." */
-	sprintf((char*)ds_readd(DTP2), get_tx(98), (char*)(get_spelltarget() + HERO_NAME2));
+	sprintf(g_dtp2, get_tx(98), (char*)(get_spelltarget() + HERO_NAME2));
 }
 
 void spell_armatrutz(void)
@@ -76,16 +75,16 @@ void spell_armatrutz(void)
 		max_bonus++;
 	}
 	--max_bonus;
-#endif;
+#endif
 
 	/* the maximum bonus is 9 */
 	if (max_bonus > 9)
 		max_bonus = 9;
 
 	/* ask the user which bonus he wants */
-	sprintf((char*)ds_readd(DTP2),
+	sprintf(g_dtp2,
 		get_tx(99), max_bonus);
-	bonus = GUI_input((char*)ds_readd(DTP2), 1);
+	bonus = GUI_input(g_dtp2, 1);
 
 	/* fix wrong input */
 	if (bonus > max_bonus)
@@ -101,7 +100,7 @@ void spell_armatrutz(void)
 			(signed char)bonus, (signed char)pos);
 
 		/* prepare output message */
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx(100),
 			(char*)get_spelluser() + HERO_NAME2,
 			bonus);
@@ -111,7 +110,7 @@ void spell_armatrutz(void)
 		/* set AE to 0 */
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 		/* avoid the textbox output */
-		host_writeb((char*)ds_readd(DTP2), 0);
+		*g_dtp2 = '\0';
 	}
 }
 
@@ -124,7 +123,7 @@ void spell_inc_ch(void)
 	/* get the spell target */
 	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
 
-	ds_writed(SPELLTARGET, (Bit32u)((Bit8u*)ds_readd(HEROES) + target * SIZEOF_HERO));
+	g_spelltarget = get_hero(target);
 
 	/* check if the target is the spelluser */
 	if (get_spelltarget() == get_spelluser()) {
@@ -133,7 +132,7 @@ void spell_inc_ch(void)
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 
 		/* copy message text */
-		strcpy((char*)ds_readd(DTP2),
+		strcpy(g_dtp2,
 			get_tx(112));
 
 		return;
@@ -142,7 +141,7 @@ void spell_inc_ch(void)
 	/* check if CH was already increased */
 	if (host_readbs(get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_CH)) > host_readbs(get_spelltarget() + (HERO_ATTRIB_ORIG + 3 * ATTRIB_CH))) {
 		/* "Bei %s ist %s schon magisch gesteigert" */
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx(113),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(414));
@@ -154,7 +153,7 @@ void spell_inc_ch(void)
 		set_mod_slot(slot, HOURS(2), get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_CH), 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx(101),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(414));
@@ -178,7 +177,7 @@ void spell_feuerbann(void)
 			get_spelluser() + HERO_FIREBAN, 1, (signed char)target);
 
 		/* prepare message */
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx(102),
 			(char*)get_spelluser() + HERO_NAME2);
 	} else {
@@ -196,7 +195,7 @@ void spell_inc_ff(void)
 	/* get the spell target */
 	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
 
-	ds_writed(SPELLTARGET, (Bit32u)((Bit8u*)ds_readd(HEROES) + target * SIZEOF_HERO));
+	g_spelltarget = get_hero(target);
 
 	/* check if the target is the spelluser */
 	if (get_spelltarget() == get_spelluser()) {
@@ -205,7 +204,7 @@ void spell_inc_ff(void)
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 
 		/* copy message text */
-		strcpy((char*)ds_readd(DTP2),
+		strcpy(g_dtp2,
 			get_tx(112));
 
 		return;
@@ -214,7 +213,7 @@ void spell_inc_ff(void)
 	/* check if FF was already increased */
 	if (host_readbs(get_spelltarget() + 0x3e) > host_readbs(get_spelltarget() + (HERO_ATTRIB_ORIG + 3 * ATTRIB_FF))) {
 		/* "Bei %s ist %s schon magisch gesteigert" */
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx(113),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(415));
@@ -226,7 +225,7 @@ void spell_inc_ff(void)
 		set_mod_slot(slot, HOURS(2), get_spelltarget() + 0x3e, 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx(101),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(415));
@@ -242,7 +241,7 @@ void spell_inc_ge(void)
 	/* get the spell target */
 	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
 
-	ds_writed(SPELLTARGET, (Bit32u)((Bit8u*)ds_readd(HEROES) + target * SIZEOF_HERO));
+	g_spelltarget = get_hero(target);
 
 	/* check if the target is the spelluser */
 	if (get_spelltarget() == get_spelluser()) {
@@ -251,7 +250,7 @@ void spell_inc_ge(void)
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 
 		/* copy message text */
-		strcpy((char*)ds_readd(DTP2),
+		strcpy(g_dtp2,
 			get_tx(112));
 
 		return;
@@ -260,7 +259,7 @@ void spell_inc_ge(void)
 	/* check if GE was already increased */
 	if (host_readbs(get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_GE)) > host_readbs(get_spelltarget() + (HERO_ATTRIB_ORIG + 3 * ATTRIB_GE))) {
 		/* "Bei %s ist %s schon magisch gesteigert" */
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx(113),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(416));
@@ -272,7 +271,7 @@ void spell_inc_ge(void)
 		set_mod_slot(slot, HOURS(2), get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_GE), 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx(101),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(416));
@@ -288,7 +287,7 @@ void spell_inc_in(void)
 	/* get the spell target */
 	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
 
-	ds_writed(SPELLTARGET, (Bit32u)((Bit8u*)ds_readd(HEROES) + target * SIZEOF_HERO));
+	g_spelltarget = get_hero(target);
 
 	/* check if the target is the spelluser */
 	if (get_spelltarget() == get_spelluser()) {
@@ -297,7 +296,7 @@ void spell_inc_in(void)
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 
 		/* copy message text */
-		strcpy((char*)ds_readd(DTP2),
+		strcpy(g_dtp2,
 			get_tx(112));
 
 		return;
@@ -306,7 +305,7 @@ void spell_inc_in(void)
 	/* check if IN was already increased */
 	if (host_readbs(get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_IN)) > host_readbs(get_spelltarget() + (HERO_ATTRIB_ORIG + 3 * ATTRIB_IN))) {
 		/* "Bei %s ist %s schon magisch gesteigert" */
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx(113),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(417));
@@ -318,7 +317,7 @@ void spell_inc_in(void)
 		set_mod_slot(slot, HOURS(2), get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_IN), 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx(101),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(417));
@@ -334,7 +333,7 @@ void spell_inc_kk(void)
 	/* get the spell target */
 	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
 
-	ds_writed(SPELLTARGET, (Bit32u)((Bit8u*)ds_readd(HEROES) + target * SIZEOF_HERO));
+	g_spelltarget = get_hero(target);
 
 	/* check if the target is the spelluser */
 	if (get_spelltarget() == get_spelluser()) {
@@ -343,7 +342,7 @@ void spell_inc_kk(void)
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 
 		/* copy message text */
-		strcpy((char*)ds_readd(DTP2),
+		strcpy(g_dtp2,
 			get_tx(112));
 
 		return;
@@ -352,7 +351,7 @@ void spell_inc_kk(void)
 	/* check if KK was already increased */
 	if (host_readbs(get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_KK)) > host_readbs(get_spelltarget() + (HERO_ATTRIB_ORIG + 3 * ATTRIB_KK))) {
 		/* "Bei %s ist %s schon magisch gesteigert" */
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx(113),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(418));
@@ -364,7 +363,7 @@ void spell_inc_kk(void)
 		set_mod_slot(slot, HOURS(2), get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_KK), 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx(101),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(418));
@@ -380,7 +379,7 @@ void spell_inc_kl(void)
 	/* get the spell target */
 	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
 
-	ds_writed(SPELLTARGET, (Bit32u)((Bit8u*)ds_readd(HEROES) + target * SIZEOF_HERO));
+	g_spelltarget = get_hero(target);
 
 	/* check if the target is the spelluser */
 	if (get_spelltarget() == get_spelluser()) {
@@ -389,7 +388,7 @@ void spell_inc_kl(void)
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 
 		/* copy message text */
-		strcpy((char*)ds_readd(DTP2),
+		strcpy(g_dtp2,
 			get_tx(112));
 
 		return;
@@ -398,7 +397,7 @@ void spell_inc_kl(void)
 	/* check if KL was already increased */
 	if (host_readbs(get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_KL)) > host_readbs(get_spelltarget() + (HERO_ATTRIB_ORIG + 3 * ATTRIB_KL))) {
 		/* "Bei %s ist %s schon magisch gesteigert" */
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx(113),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(413));
@@ -410,7 +409,7 @@ void spell_inc_kl(void)
 		set_mod_slot(slot, HOURS(2), get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_KL), 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx(101),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(413));
@@ -426,7 +425,7 @@ void spell_inc_mu(void)
 	/* get the spell target */
 	target = host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1;
 
-	ds_writed(SPELLTARGET, (Bit32u)((Bit8u*)ds_readd(HEROES) + target * SIZEOF_HERO));
+	g_spelltarget = get_hero(target);
 
 	/* check if the target is the spelluser */
 	if (get_spelltarget() == get_spelluser()) {
@@ -435,7 +434,7 @@ void spell_inc_mu(void)
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 
 		/* copy message text */
-		strcpy((char*)ds_readd(DTP2),
+		strcpy(g_dtp2,
 			get_tx(112));
 
 		return;
@@ -444,7 +443,7 @@ void spell_inc_mu(void)
 	/* check if MU was already increased */
 	if (host_readbs(get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_MU)) > host_readbs(get_spelltarget() + (HERO_ATTRIB_ORIG + 3 * ATTRIB_MU))) {
 		/* "Bei %s ist %s schon magisch gesteigert" */
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx(113),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(412));
@@ -456,7 +455,7 @@ void spell_inc_mu(void)
 		set_mod_slot(slot, HOURS(2), get_spelltarget() + (HERO_ATTRIB + 3 * ATTRIB_MU), 2, (signed char)target);
 
 		/* "Bei %s steigt %s um 2 Punkte" */
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx(101),
 			(char*)get_spelltarget() + HERO_NAME2,
 			get_ttx(412));
@@ -479,23 +478,20 @@ void spell_paralue(void)
 		/* cast an enemy */
 
 		/* BC-TODO: calculation of ptr could be better */
-		ds_writed(SPELLTARGET_E,
-			(Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+		g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
 		/* set the enemy to petrified */
 		or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS1, 0x04); /* set 'petrified' flag */
 
-		sprintf((char*)ds_readd(DTP2),
-			get_tx(103),
-			(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
+		sprintf(g_dtp2,	get_tx(103),
+			(char*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
 	} else {
 		/* cast a hero */
 		/* TODO: the first check can be removed, cause it would not give a message */
 		if (get_spelltarget() != get_spelluser()) {
 
 			/* set the target  */
-			ds_writed(SPELLTARGET,
-				(Bit32u)((Bit8u*)ds_readd(HEROES) + (host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1) * SIZEOF_HERO));
+			g_spelltarget = get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
 
 			/* check again */
 			if (get_spelltarget() == get_spelluser()) {
@@ -503,15 +499,12 @@ void spell_paralue(void)
 				/* never cast yourself */
 				ds_writew(SPELL_SPECIAL_AECOST, 0);
 
-				strcpy((char*)ds_readd(DTP2),
-					get_tx(112));
+				strcpy(g_dtp2, get_tx(112));
 			} else {
 				or_ptr_bs(get_spelltarget() + HERO_FLAGS1, 0x4); /* set 'petrified' flag */
 
 				/* prepare message */
-				sprintf((char*)ds_readd(DTP2),
-					get_tx(103),
-					(char*)get_spelltarget() + HERO_NAME2);
+				sprintf(g_dtp2, get_tx(103), (char*)get_spelltarget() + HERO_NAME2);
 			}
 		} else {
 			/* set AE to 0 */
@@ -530,12 +523,10 @@ void spell_salander(void)
 	/* TODO: Original-Bug: Strange effect when cast on a two-squared monster */
 	signed short ae_cost;
 
-	/* BC-TODO: calculation of ptr could be better */
-	/* set a pointer */
-	ds_writed(SPELLTARGET_E, (Bit32u)(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + host_readbs(get_spelluser() + HERO_ENEMY_ID) * SIZEOF_ENEMY_SHEET));
+	g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
 	/* read a value from that struct */
-	ae_cost = host_readbs(get_spelltarget_e() + ENEMY_SHEET_MR) * 3;
+	ae_cost = g_spelltarget_e->mr * 3;
 
 	/* set the minimal astral cost to 25 AE */
 	if (ae_cost < 25)
@@ -546,15 +537,15 @@ void spell_salander(void)
 		or_ptr_bs(get_spelltarget_e() + ENEMY_SHEET_FLAGS1, 0x40); /* sets 'mushroom' flag */
 
 		/* prepare message */
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx(104),
-			(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
+			(char*)(GUI_names_grammar((signed short)0x8000, host_readbs(get_spelltarget_e()), 1)));
 
 		/* set AE cost */
 		ds_writew(SPELL_SPECIAL_AECOST, ae_cost);
 	} else {
 		/* prepare message */
-		sprintf((char*)ds_readd(DTP2), get_ttx(607), (char*)(get_spelluser() + HERO_NAME2));
+		sprintf(g_dtp2, get_ttx(607), (char*)(get_spelluser() + HERO_NAME2));
 
 		/* no AE cost */
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
@@ -580,9 +571,8 @@ void spell_visibili(void)
 	signed short rounds;
 
 	/* ask the user how many rounds he wants to be invisible */
-	sprintf((char*)ds_readd(DTP2),
-		get_tx(105), (char*)get_spelluser() + HERO_NAME2);
-	rounds = GUI_input((char*)ds_readd(DTP2), 2);
+	sprintf(g_dtp2, get_tx(105), (char*)get_spelluser() + HERO_NAME2);
+	rounds = GUI_input(g_dtp2, 2);
 
 	/* the spell has also no effect if it is already active */
 	if ((rounds <= 0) || (host_readb(get_spelluser() + HERO_INVISIBLE) != 0)) {
@@ -590,7 +580,7 @@ void spell_visibili(void)
 		/* set AE to 0 */
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 		/* clear output string */
-		host_writeb((char*)ds_readd(DTP2), 0);
+		*g_dtp2 = '\0';
 
 		return;
 	}
@@ -603,14 +593,10 @@ void spell_visibili(void)
 		slot = get_free_mod_slot();
 		set_mod_slot(slot, (Bit32s)rounds * MINUTES(5), get_spelluser() + HERO_INVISIBLE, 1, (signed char)pos);
 
-		sprintf((char*)ds_readd(DTP2),
-			get_tx(106),
-			(char*)get_spelluser() + HERO_NAME2,
-			(char*)(GUI_get_ptr(host_readbs(get_spelluser() + HERO_SEX), 0)));
+		sprintf(g_dtp2,	get_tx(106), (char*)get_spelluser() + HERO_NAME2,
+			(GUI_get_ptr(host_readbs(get_spelluser() + HERO_SEX), 0)));
 	} else {
-		sprintf((char*)ds_readd(DTP2),
-			get_ttx(607),
-			(char*)get_spelluser() + HERO_NAME2);
+		sprintf(g_dtp2,	get_ttx(607), (char*)get_spelluser() + HERO_NAME2);
 
 		ds_writew(SPELL_SPECIAL_AECOST, 0);
 	}
@@ -651,10 +637,10 @@ void spell_brenne(void)
 
 	ds_writew(SPELL_SPECIAL_AECOST, 0);
 
-	if (ds_readw(LIGHT_TYPE) == LIGHTING_TORCH) {
+	if (g_light_type == LIGHTING_TORCH) {
 		torch_pos = get_item_pos(get_spelluser(), ITEM_TORCH_OFF);
 	} else {
-		if (ds_readw(LIGHT_TYPE) == LIGHTING_LANTERN) {
+		if (g_light_type == LIGHTING_LANTERN) {
 		} else {
 			torch_pos = get_item_pos(get_spelluser(), ITEM_TORCH_OFF);
 		}
@@ -666,14 +652,14 @@ void spell_brenne(void)
 		if (lantern_pos != -1) {
 			/* lantern and torch are available, must decide */
 
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_tx(107),
 				(char*)get_spelluser() + HERO_NAME2);
 
-			answer = GUI_radio((char*)ds_readd(DTP2),
+			answer = GUI_radio(g_dtp2,
 					2,
-					(char*)(Bit8u*)(GUI_names_grammar(0x4000, ITEM_TORCH_OFF, 0)),
-					(char*)(Bit8u*)(GUI_names_grammar(0x4000, ITEM_LANTERN_OFF, 0)));
+					(char*)(GUI_names_grammar(0x4000, ITEM_TORCH_OFF, 0)),
+					(char*)(GUI_names_grammar(0x4000, ITEM_LANTERN_OFF, 0)));
 
 			if (answer == -1) {
 				/* abort */
@@ -698,7 +684,7 @@ void spell_brenne(void)
 		ds_writew(SPELL_SPECIAL_AECOST, random_schick(20));
 
 		/* prepare message */
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx(108),
 			get_spelluser() + HERO_NAME2);
 
@@ -725,12 +711,12 @@ void spell_brenne(void)
 			ds_writew(SPELL_SPECIAL_AECOST, random_schick(20));
 
 			/* prepare message */
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_tx(119),
 				get_spelluser() + HERO_NAME2);
 		} else {
 			/* prepare message */
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_tx(120),
 				get_spelluser() + HERO_NAME2);
 		}
@@ -738,7 +724,7 @@ void spell_brenne(void)
 		/* neither torch nor lantern */
 
 		/* prepare message */
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx(121),
 			get_spelluser() + HERO_NAME2);
 	}
@@ -753,16 +739,11 @@ void spell_claudibus(void)
 
 void spell_dunkelheit(void)
 {
-
-
-	/* set dunkelheit duration (level + 3) hours */
-	ds_writed(INGAME_TIMERS + 4 * INGAME_TIMER_DARKNESS,
-		(Bit32s)(host_readbs(get_spelluser() + HERO_LEVEL) + 3) * HOURS(1));
+	/* set dunkelheit duration (level + 3) * hours */
+	gs_ingame_timers[INGAME_TIMER_DARKNESS] = (Bit32s)(host_readbs(get_spelluser() + HERO_LEVEL) + 3) * HOURS(1);
 
 	/* copy message text */
-	strcpy((char*)ds_readd(DTP2),
-		get_tx(109));
-
+	strcpy(g_dtp2, get_tx(109));
 }
 
 void spell_erstarre(void)
@@ -774,16 +755,11 @@ void spell_erstarre(void)
 
 void spell_flimflam(void)
 {
-
-
 	/* set flim flam duration (level + 3) hours */
-	ds_writed(INGAME_TIMERS + 4 * INGAME_TIMER_FLIM_FLAM,
-		(Bit32s)(host_readbs(get_spelluser() + HERO_LEVEL) + 3) * HOURS(1));
+	gs_ingame_timers[INGAME_TIMER_FLIM_FLAM] = (Bit32s)(host_readbs(get_spelluser() + HERO_LEVEL) + 3) * HOURS(1);
 
 	/* copy message text */
-	strcpy((char*)ds_readd(DTP2),
-		get_tx(110));
-
+	strcpy(g_dtp2, get_tx(110));
 }
 
 void spell_schmelze(void)
@@ -805,7 +781,7 @@ void spell_silentium(void)
 	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 		if ((host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
 			/* check group */
-			(host_readb(hero + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP)) &&
+			(host_readb(hero + HERO_GROUP_NO) == gs_current_group) &&
 			/* check dead */
 			!(hero_dead(hero))) {
 
@@ -820,7 +796,7 @@ void spell_silentium(void)
 	ds_writew(SPELL_SPECIAL_AECOST, 5);
 
 	/* copy message text */
-	strcpy((char*)ds_readd(DTP2),
+	strcpy(g_dtp2,
 		get_tx(111));
 }
 

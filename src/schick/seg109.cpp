@@ -42,158 +42,6 @@
 namespace M302de {
 #endif
 
-#if !defined(__BORLANDC__)
-
-static void (*handler[])(void) = {
-	NULL,
-	tevent_001,
-	tevent_002,
-	tevent_003,
-	tevent_004,
-	tevent_005,
-	tevent_006,
-	tevent_007,
-	tevent_008,
-	tevent_009,
-	tevent_010,
-	tevent_011,
-	tevent_012,
-	tevent_013,
-	tevent_014,
-	tevent_015,
-	tevent_016,
-	tevent_017,
-	tevent_018,
-	tevent_019,
-	tevent_020,
-	tevent_021,
-	tevent_022,
-	tevent_023,
-	tevent_024,
-	tevent_025,
-	tevent_026,
-	tevent_027,
-	tevent_028,
-	tevent_029,
-	tevent_030,
-	tevent_031,
-	tevent_032,
-	tevent_033,
-	tevent_034,
-	tevent_035,
-	tevent_036,
-	tevent_037,
-	tevent_038,
-	tevent_039,
-	tevent_040,
-	tevent_041,
-	tevent_042,
-	tevent_043,
-	tevent_044,
-	tevent_045,
-	tevent_046,
-	tevent_047,
-	tevent_048,
-	tevent_049,
-	tevent_050,
-	tevent_051,
-	tevent_052,
-	tevent_053,
-	tevent_054,
-	tevent_055,
-	tevent_056,
-	tevent_057,
-	tevent_058,
-	tevent_059,
-	tevent_060,
-	tevent_061,
-	tevent_062,
-	tevent_063,
-	tevent_064,
-	tevent_065,
-	tevent_066,
-	tevent_067,
-	tevent_068,
-	tevent_069,
-	tevent_070,
-	tevent_071,
-	tevent_072,
-	tevent_073,
-	tevent_074,
-	tevent_075,
-	tevent_076,
-	tevent_077,
-	tevent_078,
-	tevent_079,
-	tevent_080,
-	tevent_081,
-	tevent_082,
-	tevent_083,
-	tevent_084,
-	tevent_085,
-	tevent_086,
-	tevent_087,
-	tevent_088,
-	tevent_089,
-	tevent_090,
-	tevent_091,
-	tevent_092,
-	tevent_093,
-	tevent_094,
-	tevent_095,
-	tevent_096,
-	tevent_097,
-	tevent_098,
-	tevent_099,
-	tevent_100,
-	tevent_101,
-	tevent_102,
-	tevent_103,
-	tevent_104,
-	tevent_105,
-	tevent_106,
-	tevent_107,
-	tevent_108,
-	tevent_109,
-	tevent_110,
-	tevent_111,
-	tevent_112,
-	tevent_113,
-	tevent_114,
-	tevent_115,
-	tevent_116,
-	tevent_117,
-	tevent_118,
-	tevent_119,
-	tevent_120,
-	tevent_121,
-	tevent_122,
-	tevent_123,
-	tevent_124,
-	tevent_125,
-	tevent_126,
-	tevent_127,
-	tevent_128,
-	tevent_129,
-	tevent_130,
-	tevent_131,
-	tevent_132,
-	tevent_133,
-	tevent_134,
-	tevent_135,
-	tevent_136,
-	tevent_137,
-	tevent_138,
-	tevent_139,
-	tevent_140,
-	tevent_141,
-	tevent_142,
-	tevent_143,
-	tevent_144,
-	tevent_145,
-};
-#endif
-
 void TRV_load_textfile(signed short travel_event)
 {
 	load_tx(ARCHIVE_FILE_FEATURE_LTX);
@@ -225,33 +73,31 @@ void TRV_event(signed short travel_event)
 
 	TRV_load_textfile(travel_event);
 
-	tw_bak = ds_readws(TEXTBOX_WIDTH);
-	bak1 = ds_readws(BASEPOS_X);
-	bak2 = ds_readws(BASEPOS_Y);
-	traveling_bak = ds_readb(SHOW_TRAVEL_MAP);
-	ds_writews(BASEPOS_X, 0);
-	ds_writews(BASEPOS_Y, 0);
-	ds_writeb(SHOW_TRAVEL_MAP, 0);
-	ds_writews(TEXTBOX_WIDTH, 9);
-	ds_writeb(DIALOGBOX_LOCK, 1);
+	tw_bak = g_textbox_width;
+	bak1 = g_basepos_x;
+	bak2 = g_basepos_y;
+	traveling_bak = gs_show_travel_map;
+	g_basepos_x = 0;
+	g_basepos_y = 0;
+	gs_show_travel_map = 0;
+	g_textbox_width = 9;
+	g_dialogbox_lock = 1;
 	ds_writeb(TRAVEL_EVENT_ACTIVE, 1);
 
-	#if defined(__BORLANDC__)
-	event_handler = (void (*)(void))ds_readd(TRAVEL_EVENT_HANDLERS + 4 * travel_event);
-	#else
+#if !defined(__BORLANDC__)
 	D1_INFO("Reisebegegnung %d\n", travel_event);
-	event_handler = handler[travel_event];
-	#endif
+#endif
+	event_handler = (void (*)(void))g_travel_event_handlers[travel_event];
 	if (event_handler) event_handler();
 
 	ds_writeb(TRAVEL_EVENT_ACTIVE, 0);
-	ds_writeb(SHOW_TRAVEL_MAP, (signed char)traveling_bak);
-	ds_writews(BASEPOS_X, bak1);
-	ds_writews(BASEPOS_Y, bak2);
-	ds_writews(TEXTBOX_WIDTH, tw_bak);
-	ds_writeb(DIALOGBOX_LOCK, 0);
+	gs_show_travel_map = traveling_bak;
+	g_basepos_x = bak1;
+	g_basepos_y = bak2;
+	g_textbox_width = tw_bak;
+	g_dialogbox_lock = 0;
 	load_tx(ARCHIVE_FILE_MAPTEXT_LTX);
-	ds_writew(WALLCLOCK_UPDATE, 1);
+	g_wallclock_update = 1;
 }
 
 /**
@@ -281,14 +127,14 @@ void TRV_found_herb_place(signed short a0)
 
 	randval = random_schick(5) + 2;
 
-	sprintf((char*)ds_readd(DTP2),
+	sprintf(g_dtp2,
 		get_tx(0),
 		get_tx(randval),
 		(char*)hero + HERO_NAME2,
-		(char*)(a0 != 0 ? get_tx(42) : p_datseg + EMPTY_STRING10));
+		(a0 != 0 ? get_tx(42) : (char*)p_datseg + EMPTY_STRING10));
 
 	do {
-		answer = GUI_radio((char*)ds_readd(DTP2), 2,
+		answer = GUI_radio(g_dtp2, 2,
 				get_tx(1),
 				get_tx(2));
 
@@ -315,17 +161,17 @@ void TRV_inside_herb_place(void)
 		hours = GUI_input(get_ttx(327), 1);
 
 		if (hours > 0) {
-			bak = ds_readbs(SPECIAL_SCREEN);
-			ds_writebs(SPECIAL_SCREEN, 1);
+			bak = g_special_screen;
+			g_special_screen = 1;
 
 			gather_herbs(get_hero(hero_pos), hours - 1, -3);
 
-			ds_writebs(SPECIAL_SCREEN, (signed char)bak);
+			g_special_screen = (signed char)bak;
 		}
 	}
 
 	set_var_to_zero();
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 }
 
 signed short TRV_found_camp_place(signed short a0)
@@ -334,37 +180,37 @@ signed short TRV_found_camp_place(signed short a0)
 	signed short randval;
 
 	randval = random_schick(5) + 10;
-	sprintf((char*)ds_readd(DTP2),
-		get_tx(8),
-		get_tx(randval),
-		(char*)(a0 == 1 ? get_tx(42) : (a0 == 2 ? get_tx(45) : p_datseg + EMPTY_STRING11)));
+	sprintf(g_dtp2, get_tx(8), get_tx(randval),
+		(a0 == 1 ? get_tx(42) : (a0 == 2 ? get_tx(45) : (char*)p_datseg + EMPTY_STRING11)));
 	do {
-		answer = GUI_radio((char*)ds_readd(DTP2), 2,
-					get_tx(9),
-					get_tx(10));
+		answer = GUI_radio(g_dtp2, 2, get_tx(9), get_tx(10));
+
 	} while (answer == -1);
 
 	if (answer == 1) {
 
-		ds_writew(WILDCAMP_SLEEP_QUALITY, ds_writews(REPLENISH_STOCKS_MOD, ds_writews(GATHER_HERBS_MOD, 0)));
+		g_wildcamp_sleep_quality = g_replenish_stocks_mod = g_gather_herbs_mod = 0;
 
 		if (a0 == 1) {
-			ds_writews(REPLENISH_STOCKS_MOD, -3);
+
+			g_replenish_stocks_mod = -3;
+
 		} else if (a0 == 2) {
-			ds_writews(GATHER_HERBS_MOD, -3);
+
+			g_gather_herbs_mod = -3;
 		}
 
-		ds_writeb(GOOD_CAMP_PLACE, 1);
-		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+		g_good_camp_place = 1;
+		gs_current_loctype = LOCTYPE_WILDCAMP;
 
 		do_location();
 
-		ds_writeb(CURRENT_LOCTYPE, ds_writeb(GOOD_CAMP_PLACE, 0));
+		gs_current_loctype = g_good_camp_place = LOCTYPE_NONE; /* == 0 */
 
 		TRV_load_textfile(-1);
 
-		ds_writew(WILDCAMP_SLEEP_QUALITY, ds_writews(REPLENISH_STOCKS_MOD, ds_writews(GATHER_HERBS_MOD, 0)));
-		ds_writew(REQUEST_REFRESH, 2);
+		g_wildcamp_sleep_quality = g_replenish_stocks_mod = g_gather_herbs_mod = 0;
+		g_request_refresh = 2;
 
 		return 1;
 	}
@@ -377,12 +223,12 @@ void TRV_found_replenish_place(signed short a0)
 	signed short hero_pos;
 	signed short answer;
 
-	sprintf((char*)ds_readd(DTP2),
+	sprintf(g_dtp2,
 		get_tx(16),
 		get_tx(random_schick(5) + 11),
-		(char*)(a0 != 0 ? get_tx(45) : p_datseg + EMPTY_STRING12));
+		(a0 != 0 ? get_tx(45) : (char*)p_datseg + EMPTY_STRING12));
 	do {
-		answer = GUI_radio((char*)ds_readd(DTP2), 2,
+		answer = GUI_radio(g_dtp2, 2,
 					get_tx(21),
 					get_tx(22));
 	} while (answer == -1);
@@ -399,15 +245,19 @@ void TRV_found_replenish_place(signed short a0)
 		*/
 #ifdef M302de_ORIGINAL_BUGFIX
 		for (hero_pos = 0; hero_pos <= 7; hero_pos++) {
-			ds_writeb(WILDCAMP_REPLSTATUS + hero_pos,
-				ds_writeb(WILDCAMP_HERBSTATUS + hero_pos,
-				ds_writeb(WILDCAMP_MAGICSTATUS + hero_pos,
-				ds_writeb(WILDCAMP_GUARDSTATUS + hero_pos, 0))));
+
+			g_wildcamp_replstatus[hero_pos] =
+				g_wildcamp_herbstatus[hero_pos] =
+				g_wildcamp_magicstatus[hero_pos] =
+				g_wildcamp_guardstatus[hero_pos] = 0;
 		}
 #else
 		hero_pos = get_hero_index((Bit8u*)get_first_hero_available_in_group());
 
-		ds_writeb(WILDCAMP_REPLSTATUS + hero_pos, ds_writeb(WILDCAMP_HERBSTATUS + hero_pos, ds_writeb(WILDCAMP_MAGICSTATUS + hero_pos, ds_writeb(WILDCAMP_GUARDSTATUS + hero_pos, 0))));
+		g_wildcamp_replstatus[hero_pos] =
+			g_wildcamp_herbstatus[hero_pos] =
+			g_wildcamp_magicstatus[hero_pos] =
+			g_wildcamp_guardstatus[hero_pos] = 0;
 #endif
 
 		/* Original-Bug: the second argument is is the counter of replenish tries, not the position of the leader.
@@ -422,7 +272,7 @@ void TRV_found_replenish_place(signed short a0)
 
 		set_var_to_zero();
 
-		ds_writew(REQUEST_REFRESH, 1);
+		g_request_refresh = 1;
 	}
 }
 
@@ -435,19 +285,19 @@ void TRV_found_inn(signed short town_id, signed short type)
 	init_ani(0);
 
 	if (GUI_bool(get_tx(23))) {
-		ds_writew(CURRENT_LOCDATA, town_id);
-		ds_writew(CURRENT_TYPEINDEX, type);
-		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_INN);
+		gs_current_locdata = (town_id);
+		gs_current_typeindex = type;
+		gs_current_loctype = LOCTYPE_INN;
 
 		do_location();
 
-		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+		gs_current_loctype = LOCTYPE_NONE;
 
 		TRV_load_textfile(-1);
 	}
 
 	set_var_to_zero();
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 }
 
 /**
@@ -466,7 +316,7 @@ signed short TRV_enter_hut_question(void)
 	answer = GUI_bool(get_tx(24));
 
 	set_var_to_zero();
-	ds_writew(REQUEST_REFRESH, 1);
+	g_request_refresh = 1;
 
 	return answer;
 }
@@ -478,14 +328,10 @@ signed short TRV_follow_trail_question(void)
 
 	hero = (Bit8u*)get_first_hero_available_in_group();
 
-	sprintf((char*)ds_readd(DTP2),
-		get_tx(25),
-		(char*)hero + HERO_NAME2);
+	sprintf(g_dtp2, get_tx(25), (char*)hero + HERO_NAME2);
 
 	do {
-		answer = GUI_radio((char*)ds_readd(DTP2), 2,
-				get_tx(26),
-				get_tx(27));
+		answer = GUI_radio(g_dtp2, 2, get_tx(26), get_tx(27));
 
 	} while (answer == -1);
 
@@ -498,39 +344,39 @@ signed short TRV_cross_a_ford(char *msg, signed short time, signed short mod)
 	signed short done;
 
 	done = 0;
-	ds_writeb(EVENT_ANI_BUSY, 1);
+	g_event_ani_busy = 1;
 
 	load_ani(7);
 	draw_main_screen();
 	init_ani(0);
 
 	do {
-		sprintf((char*)ds_readd(DTP2),
-			get_tx(34),
-			(char*)msg);
+		sprintf(g_dtp2,	get_tx(34), (char*)msg);
 
 		do {
-			answer = GUI_radio((char*)ds_readd(DTP2), 2,
-						get_tx(35),
-						get_tx(36));
+			answer = GUI_radio(g_dtp2, 2, get_tx(35), get_tx(36));
+
 		} while (answer == -1);
 
 		if (answer == 1) {
+
 			done = 1;
 			TRV_ford_test(mod, time);
+
 		} else {
 			answer = GUI_bool(get_tx(39));
 
 			if (answer == 1) {
-				done = ds_writew(TRV_RETURN, 1);
+				done = gs_trv_return = 1;
 			}
 		}
 
 	} while (!done);
 
 	set_var_to_zero();
-	ds_writeb(EVENT_ANI_BUSY, 0);
-	ds_writew(REQUEST_REFRESH, 1);
+	g_event_ani_busy = 0;
+	g_request_refresh = 1;
+
 	return 1;
 }
 
@@ -543,7 +389,7 @@ void TRV_ford_test(signed short mod, signed short time)
 	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 			!hero_dead(hero))
 		{
 			/* Original-Bugfix: tests fail if their result is lower or equal than zero */
@@ -556,7 +402,7 @@ void TRV_ford_test(signed short mod, signed short time)
 				/* test failed */
 				timewarp(MINUTES(time));
 
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx(37),
 					(char*)hero + HERO_NAME2);
 
@@ -567,17 +413,17 @@ void TRV_ford_test(signed short mod, signed short time)
 				/* test succeded */
 				timewarp(MINUTES(10));
 
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx(38),
 					(char*)hero + HERO_NAME2);
 			}
 
-			GUI_output((char*)ds_readd(DTP2));
+			GUI_output(g_dtp2);
 		}
 	}
 }
 
-signed short TRV_ferry(Bit8u *msg, signed short price)
+signed short TRV_ferry(char *msg, signed short price)
 {
 	signed short done;
 	signed short answer;
@@ -589,13 +435,13 @@ signed short TRV_ferry(Bit8u *msg, signed short price)
 
 	do {
 
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx(28),
 			(char*)msg,
 			price, 5 * price);
 
 		do {
-			answer = GUI_radio((char*)ds_readd(DTP2), 3,
+			answer = GUI_radio(g_dtp2, 3,
 						get_tx(29),
 						get_tx(30),
 						get_tx(31));
@@ -627,11 +473,11 @@ signed short TRV_ferry(Bit8u *msg, signed short price)
 				p_money -= price;
 				set_party_money(p_money);
 
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx(32),
 					done = random_schick(6));
 
-				GUI_output((char*)ds_readd(DTP2));
+				GUI_output(g_dtp2);
 
 				timewarp(HOURS(done));
 
@@ -640,7 +486,7 @@ signed short TRV_ferry(Bit8u *msg, signed short price)
 		} else {
 
 			if (GUI_bool(get_tx(33))) {
-				ds_writew(TRV_RETURN, done = 1);
+				gs_trv_return = (done = 1);
 			}
 		}
 
@@ -665,7 +511,7 @@ void tevent_002(void)
 
 	/* show dialogbox */
 	do {
-		answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
+		answer = GUI_dialogbox((unsigned char*)g_dtp2,
 				NULL,
 				get_tx2(0),
 				3,
@@ -711,7 +557,7 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 	signed short answer;
 	Bit8u *hero;
 
-	ds_writeb(EVENT_ANI_BUSY, 1);
+	g_event_ani_busy = 1;
 
 	load_ani(ani_id);
 	draw_main_screen();
@@ -723,7 +569,7 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 	for (i = l_di = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 		if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+			(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 			!hero_dead(hero) &&
 			test_skill(hero, TA_SCHLEICHEN, (signed char)mod1) <= 0)
 		{
@@ -754,11 +600,11 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 			} while (answer == -1);
 		} else {
 
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_tx2(city_index + 3),
 				(char*)hero + HERO_NAME2);
 
-			GUI_input((char*)ds_readd(DTP2), l_di = 0);
+			GUI_input(g_dtp2, l_di = 0);
 
 			if ((i = test_skill(hero, TA_SCHUSSWAFFEN, (signed char)mod3)) > 0) {
 				l_di++;
@@ -770,11 +616,11 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 
 			if (l_di == 2 || i == 99 || l4 == 99) {
 
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx2(city_index + 4),
 					(char*)hero + HERO_NAME2);
 
-				GUI_output((char*)ds_readd(DTP2));
+				GUI_output(g_dtp2);
 
 				add_hero_ap_all(ap_all1);
 				add_hero_ap(hero, ap_hero);
@@ -786,12 +632,12 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 				answer = 0;
 			} else {
 
-				sprintf((char*)ds_readd(DTP2),
+				sprintf(g_dtp2,
 					get_tx2(l_di == 1 ? city_index + 5 : city_index + 6),
 					(char*)hero + HERO_NAME2);
 
 				do {
-					answer = GUI_radio((char*)ds_readd(DTP2), 2,
+					answer = GUI_radio(g_dtp2, 2,
 								get_tx2(city_index + 7),
 								get_tx2(city_index + 8));
 				} while (answer == -1);
@@ -817,8 +663,8 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 	}
 
 	set_var_to_zero();
-	ds_writeb(EVENT_ANI_BUSY, 0);
-	ds_writew(REQUEST_REFRESH, 1);
+	g_event_ani_busy = 0;
+	g_request_refresh = 1;
 }
 
 void tevent_005(void)
@@ -862,7 +708,7 @@ void TRV_barrier(signed short text_start)
 	do {
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 						get_tx2(text_start + 0), 2,
 						get_tx2(text_start + 1),
 						get_tx2(text_start + 2));
@@ -882,7 +728,7 @@ void TRV_barrier(signed short text_start)
 			for (i = l_di = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+					host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 				{
 					l_di+=hero_count_item(hero, ITEM_ROPE);
 					l_di+=hero_count_item(hero, ITEM_ROPE_LADDER);
@@ -906,8 +752,7 @@ void TRV_barrier(signed short text_start)
 
 				} while (l_di && ds_readbs(TRAVEL_EVENT_AXES + i) != -1);
 
-				if
-					(l_di || get_first_hero_with_item(ITEM_HAMMER) == -1)
+				if (l_di || get_first_hero_with_item(ITEM_HAMMER) == -1)
 				{
 
 					GUI_dialog_na(0, get_tx2(text_start + 4));
@@ -941,12 +786,12 @@ void TRV_barrier(signed short text_start)
 
 						hero = get_hero(select_hero_ok_forced(get_tx2(text_start + 5)));
 
-						sprintf((char*)ds_readd(DTP2) + 0x400,
+						sprintf(g_dtp2 + 0x400,
 								get_tx2(text_start + 7),
 								(char*)hero + HERO_NAME2,
 								(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)),
 								(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
-						GUI_dialog_na(0, (char*)ds_readd(DTP2) + 0x400);
+						GUI_dialog_na(0, (char*)((char*)(g_dtp2 + 0x400)));
 
 						hero_disease_test(hero, 2, 30);
 

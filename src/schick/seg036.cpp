@@ -48,11 +48,11 @@ signed short KI_copy_ani_sequence(Bit8u *dst, signed short ani_no, signed short 
 
 
 	/* set the right buffer */
-	p_datbuffer = (Bit8u*)ds_readd(BUFFER_ANIDAT);
+	p_datbuffer = g_buffer_anidat;
 
 	/* This function is never calld with mode == 3 */
 	if (mode == 3)
-		p_datbuffer = (Bit8u*)ds_readd(BUFFER_WEAPANIDAT);
+		p_datbuffer = g_buffer_weapanidat;
 
 	/* read how many ani sequences are in the file */
 	ani_max_no = host_readw(p_datbuffer);
@@ -97,19 +97,19 @@ void seg036_00ae(Bit8u *hero, signed short hero_pos)
 	signed char dir2;
 	Bit8u *ptr1;
 	signed char dir3;
-	Bit8u *ptr2;
+	Bit16s *ptr2;
 
 	ds_writeb(FIG_ANISHEETS, 0);
 	ds_writeb((FIG_ANISHEETS + 242), host_readbs(hero + HERO_SPRITE_NO));
 
 	ptr1 = p_datseg + (FIG_ANISHEETS + 1);
-	ptr2 = (Bit8u*)(ds_readd(GFX_ANI_INDEX + 4 * host_readbs(hero + HERO_SPRITE_NO)));
+	ptr2 = g_gfx_ani_index[host_readbs(hero + HERO_SPRITE_NO)];
 
 	i = 0;
 
-	while (ds_readbs(FIG_MOVE_PATHDIR + i) != -1) {
+	while (g_fig_move_pathdir[i] != -1) {
 
-		if (host_readbs(hero + HERO_VIEWDIR) != ds_readbs(FIG_MOVE_PATHDIR + i)) {
+		if (host_readbs(hero + HERO_VIEWDIR) != g_fig_move_pathdir[i]) {
 
 			dir2 = dir1 = -1;
 			dir3 = host_readbs(hero + HERO_VIEWDIR);
@@ -120,7 +120,7 @@ void seg036_00ae(Bit8u *hero, signed short hero_pos)
 				dir3 = 0;
 			}
 
-			if (ds_readbs(FIG_MOVE_PATHDIR + i) != dir3) {
+			if (g_fig_move_pathdir[i] != dir3) {
 
 				dir1 = dir3;
 				dir3++;
@@ -129,7 +129,7 @@ void seg036_00ae(Bit8u *hero, signed short hero_pos)
 					dir3 = 0;
 				}
 
-				if (ds_readbs(FIG_MOVE_PATHDIR + i) != dir3) {
+				if (g_fig_move_pathdir[i] != dir3) {
 
 					dir2 = host_readbs(hero + HERO_VIEWDIR) + 4;
 					dir1 = -1;
@@ -137,22 +137,23 @@ void seg036_00ae(Bit8u *hero, signed short hero_pos)
 			}
 
 			/* set heroes looking direction */
-			host_writeb(hero + HERO_VIEWDIR, ds_readbs(FIG_MOVE_PATHDIR + i));
+			host_writeb(hero + HERO_VIEWDIR, g_fig_move_pathdir[i]);
 
-			ptr1 += KI_copy_ani_sequence(ptr1, host_readws(ptr2 + dir2 * 2), 2);
+			ptr1 += KI_copy_ani_sequence(ptr1, ptr2[dir2], 2);
 
 			if (dir1 != -1) {
-				ptr1 += KI_copy_ani_sequence(ptr1, host_readws(ptr2 + dir1 * 2), 2);
+				ptr1 += KI_copy_ani_sequence(ptr1, ptr2[dir1], 2);
 			}
 		}
 
-		if (ds_readbs(FIG_MOVE_PATHDIR + i) == ds_readbs((FIG_MOVE_PATHDIR+1) + i)) {
-			ptr1 += KI_copy_ani_sequence(ptr1, host_readws(ptr2 + (ds_readbs(FIG_MOVE_PATHDIR + i) + 12) * 2), 2);
+		if (g_fig_move_pathdir[i] == g_fig_move_pathdir[i + 1]) {
+
+			ptr1 += KI_copy_ani_sequence(ptr1, ptr2[(g_fig_move_pathdir[i] + 12)], 2);
 			i += 2;
 			/* BP - 2 */
 			host_writeb(hero + HERO_BP_LEFT, host_readbs(hero + HERO_BP_LEFT) - 2);
 		} else {
-			ptr1 += KI_copy_ani_sequence(ptr1, host_readws(ptr2 + (ds_readbs(FIG_MOVE_PATHDIR + i) + 8) * 2), 2);
+			ptr1 += KI_copy_ani_sequence(ptr1, ptr2[(g_fig_move_pathdir[i] + 8)], 2);
 			i++;
 			/* BP - 1 */
 			dec_ptr_bs(hero + HERO_BP_LEFT);
@@ -161,8 +162,8 @@ void seg036_00ae(Bit8u *hero, signed short hero_pos)
 
 	host_writeb(ptr1, -1);
 	FIG_call_draw_pic();
-	FIG_remove_from_list(ds_readbs(FIG_CB_MAKRER_ID), 0);
-	ds_writeb(FIG_CB_MAKRER_ID, -1);
+	FIG_remove_from_list(g_fig_cb_marker_id, 0);
+	g_fig_cb_marker_id = -1;
 	FIG_set_sheet(host_readbs(hero + HERO_FIGHTER_ID), 0);
 	draw_fight_screen(0);
 	memset(p_datseg + FIG_ANISHEETS, -1, 0xf3);
@@ -181,7 +182,7 @@ signed short KI_change_hero_weapon(Bit8u *hero)
 	signed short has_new_weapon = 0;
 	Bit8u *item_p;
 	signed short item_id;
-	Bit8u *ptr;
+	struct struct_fighter *fighter;
 
 	for (pos = HERO_INVENTORY_SLOT_KNAPSACK_1; pos < NR_HERO_INVENTORY_SLOTS; pos++) {
 
@@ -220,10 +221,12 @@ signed short KI_change_hero_weapon(Bit8u *hero)
 		has_new_weapon = 0;
 	}
 
-	ptr = (Bit8u*)(FIG_get_ptr(host_readbs(hero + HERO_FIGHTER_ID)));
-	host_writeb(ptr + 0x2, host_readbs(hero + HERO_VIEWDIR));
-	host_writeb(ptr + 0xd, -1);
+	fighter = FIG_get_fighter(host_readbs(hero + HERO_FIGHTER_ID));
+	fighter->nvf_no = host_readbs(hero + HERO_VIEWDIR);
+	fighter->reload = -1;
+
 	draw_fight_screen_pal(0);
+
 	host_writeb(hero + HERO_BP_LEFT, host_readbs(hero + HERO_BP_LEFT) - 2);
 
 	return has_new_weapon;
@@ -350,7 +353,7 @@ signed short KI_search_spell_target(signed short x, signed short y,
 			} else if ( (obj_id != 0) && (((obj_id >= 10) && (obj_id < 30) &&
 					!enemy_dead(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + obj_id * SIZEOF_ENEMY_SHEET)
 					) || ((obj_id >= 50) &&
-						!is_in_word_array(obj_id - 50, (signed short*)(p_datseg + CB_OBJ_NONOBSTACLE)))
+						!is_in_word_array(obj_id - 50, g_cb_obj_nonobstacle))
 					))
 				{
 					done = 1;
@@ -373,7 +376,7 @@ signed short KI_search_spell_target(signed short x, signed short y,
 						!hero_unconscious(get_hero(obj_id - 1))
 						) || (
 							(obj_id >= 50) &&
-							!is_in_word_array(obj_id - 50, (signed short*)(p_datseg + CB_OBJ_NONOBSTACLE))
+							!is_in_word_array(obj_id - 50, g_cb_obj_nonobstacle)
 						))
 					)
 				)
@@ -749,7 +752,7 @@ signed short KI_count_heroes(signed short hero_pos)
 	signed short i;
 
 	/* for each hero in this group */
-	for (i = 0; ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP)) > i; i++) {
+	for (i = 0; gs_group_member_counts[gs_current_group] > i; i++) {
 
 		if ((i != hero_pos) && check_hero(get_hero(i))) {
 			cnt++;
@@ -802,7 +805,7 @@ void KI_hero(Bit8u *hero, signed short hero_pos, signed short x, signed short y)
 		if (host_readbs(hero + HERO_NPC_ID) == NPC_NARIELL) {
 			/* equip LONGBOW and ARROWS in the first round,
 			 * if the hero has them in the inventory */
-			if ((ds_readws(FIGHT_ROUND) == 0) &&
+			if ((g_fight_round == 0) &&
 				(host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID) != ITEM_LONGBOW) &&
 				(get_item_pos(hero, ITEM_ARROWS) != -1) &&
 				(get_item_pos(hero, ITEM_LONGBOW) != -1))
@@ -820,7 +823,7 @@ void KI_hero(Bit8u *hero, signed short hero_pos, signed short x, signed short y)
 
 				/* equip LONGBOW and ARROWS in the first round,
 				 * if the hero has them in the inventory */
-				if ((ds_readws(FIGHT_ROUND) == 0) &&
+				if ((g_fight_round == 0) &&
 					(host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID) != ITEM_LONGBOW) &&
 					(get_item_pos(hero, ITEM_ARROWS) != -1) &&
 					(get_item_pos(hero, ITEM_LONGBOW) != -1))
@@ -948,8 +951,8 @@ void KI_hero(Bit8u *hero, signed short hero_pos, signed short x, signed short y)
 			if ((host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH) &&		/* magic user */
 				(host_readws(hero + HERO_AE) > 10) &&	/* AE > 10 */
 				(l5 != 0) &&
-				(ds_readws(CURRENT_FIG_NO) != FIGHTS_F144) &&	/* not in the final fight */
-				(ds_readbs(AUTOFIGHT_MAGIC) != 0)) /* magic activated in auto fight */
+				(g_current_fight_no != FIGHTS_F144) &&	/* not in the final fight */
+				g_autofight_magic) /* magic activated in auto fight */
 			{
 				if (seg036_8cf(hero, hero_pos, hero_renegade(hero), x, y)) {
 

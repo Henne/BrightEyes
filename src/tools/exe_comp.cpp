@@ -9,12 +9,12 @@ static unsigned char readb(const char *p)
 
 static unsigned short readw(const char *p)
 {
-	return (((unsigned char)p[0]) | ((unsigned char)p[1] << 8)); 
+	return (((unsigned char)p[0]) | ((unsigned char)p[1] << 8));
 }
 
 static unsigned long readd(const char *p)
 {
-	return ((readw((const char*)p)) | (readw((const char*)p + 2) << 16)); 
+	return ((readw((const char*)p)) | (readw((const char*)p + 2) << 16));
 }
 
 static int check_is_exe(const char *buffer, unsigned long len)
@@ -30,7 +30,7 @@ static int compare_exe_stub(const char *orig, const char *rewrite)
 	for (int i = 0x02; i <= 0x1c; i+=2) {
 		if (readw(orig) != readw(rewrite)) {
 			diff++;
-			fprintf(stdout, "@ EXE-Header:0x%04x O = 0x%04x R = 0x%04x\n", i, readw(orig), readw(rewrite)); 
+			fprintf(stdout, "@ EXE-Header:0x%04x O = 0x%04x R = 0x%04x\n", i, readw(orig), readw(rewrite));
 		}
 	}
 
@@ -47,7 +47,7 @@ static int compare_exe_stub_reloc_items(const char *orig, const char *rewrite)
 
 	ITEMS[0] = readw(orig + 0x06);
 	ITEMS[1] = readw(rewrite + 0x06);
-	const int items_max = ITEMS[0] >= ITEMS[1] ? ITEMS[0] : ITEMS[1]; 
+	const int items_max = ITEMS[0] >= ITEMS[1] ? ITEMS[0] : ITEMS[1];
 	const int longer_table = ITEMS[0] >= ITEMS[1] ? 0 : 1;
 	char *marker = (char*)calloc(items_max, sizeof(char));
 
@@ -78,8 +78,8 @@ static int compare_exe_stub_reloc_items(const char *orig, const char *rewrite)
 				fprintf(stdout, "@ EXE-Reloc[0x%04x]@0x%04x O = 0x%08x R = 0x%08x\n",
 					i,
 					TABLE_START[0] + 4 * i,
-				       	readd(orig + TABLE_START[0] + 4 * i),
-				       	readd(rewrite + TABLE_START[1] + 4 * i));
+						readd(orig + TABLE_START[0] + 4 * i),
+						readd(rewrite + TABLE_START[1] + 4 * i));
 			}
 		}
 	} else {
@@ -176,7 +176,7 @@ static void disjoin_file(const char *name, const char *buffer, unsigned long len
 		char fname[50];
 
 		// EXE Header
-		sprintf(fname, "TEMP/%s_EXE.bin", name);
+		sprintf(fname, "%s_EXE.bin", name);
 		fd = fopen(fname, "w");
 		if (fd != NULL) {
 			fwrite(buffer, 1, off_cs, fd);
@@ -184,7 +184,7 @@ static void disjoin_file(const char *name, const char *buffer, unsigned long len
 		}
 
 		// CODE
-		sprintf(fname, "TEMP/%s_CODE.bin", name);
+		sprintf(fname, "%s_CODE.bin", name);
 		fd = fopen(fname, "w");
 		if (fd != NULL) {
 			fwrite(buffer + off_cs, 1, off_ds - off_cs, fd);
@@ -192,7 +192,7 @@ static void disjoin_file(const char *name, const char *buffer, unsigned long len
 		}
 
 		// DATA
-		sprintf(fname, "TEMP/%s_DATA.bin", name);
+		sprintf(fname, "%s_DATA.bin", name);
 		fd = fopen(fname, "w");
 		if (fd != NULL) {
 			fwrite(buffer + off_ds, 1, len - off_ds, fd);
@@ -235,7 +235,7 @@ static void compare(const char *orig, unsigned long len_orig, const char* rewrit
 	/* From here assumptions from BCC 3.1 generated files with -mlarge are made. */
 
 	start_cs[0] = 16 * readw(orig + 0x08);
-       	start_cs[1] = 16 * readw(rewrite + 0x08);
+	start_cs[1] = 16 * readw(rewrite + 0x08);
 	fprintf(stdout, "Start CS: orig = 0x%04x, rewrite = 0x%04x\n", start_cs[0], start_cs[1]);
 
 	if (readb(orig + start_cs[0]) == 0xba) {
@@ -330,7 +330,7 @@ static void compare(const char *orig, unsigned long len_orig, const char* rewrit
 		for (i = 0; (i < BSS[0]) && (diffs < 20); i++) {
 			if (orig[start_ds[0] + i] != rewrite[start_ds[1] + i]) {
 				fprintf(stdout, "@ DS:0x%04x O = 0x%02x R = 0x%02x\n", i,
-				       	(unsigned char)orig[start_ds[0] + i],
+					(unsigned char)orig[start_ds[0] + i],
 					(unsigned char)rewrite[start_ds[1] + i]);
 				diffs++;
 				if (diff_offset == -1) diff_offset = i;
@@ -347,7 +347,7 @@ static void compare(const char *orig, unsigned long len_orig, const char* rewrit
 		for (i = 0; (i < max_len) && (diffs < 20); i++) {
 			if (orig[start_ds[0] + i] != rewrite[start_ds[1] + i]) {
 				fprintf(stdout, "@ DS:0x%04x O = 0x%02x R = 0x%02x\n", i,
-				       	(unsigned char)orig[start_ds[0] + i],
+					(unsigned char)orig[start_ds[0] + i],
 					(unsigned char)rewrite[start_ds[1] + i]);
 				diffs++;
 			}
@@ -422,5 +422,3 @@ int main(int argc, char **argv)
 
 	return 0;
 }
-
-

@@ -37,7 +37,7 @@ void PHX_fuhrhaus(void)
 	load_in_head(42);
 
 	do {
-		answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+		answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 				get_tx2(0), 3,
 				get_tx2(1), get_tx2(2), get_tx2(3));
 
@@ -50,7 +50,7 @@ void PHX_fuhrhaus(void)
 	} else if (answer == 2) {
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 					get_tx2(5), 3,
 					get_tx2(6), get_tx2(7), get_tx2(8));
 
@@ -60,7 +60,7 @@ void PHX_fuhrhaus(void)
 
 		if (answer == 3) {
 			/* You are now able to talk to Alrik */
-			ds_writeb(ALRIK_DERONDAN, 1);
+			gs_alrik_derondan = 1;
 		}
 
 		GUI_dialog_na(0, get_tx2(13));
@@ -167,7 +167,7 @@ void PHX_spielhaus(void)
 		for (pos = counter = answer = 0; pos <= 6; pos++, hero += SIZEOF_HERO) {
 
 			if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-				(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 				!hero_dead(hero) &&
 				(test_skill(hero, TA_FALSCHSPIEL, 3) > 0))
 			{
@@ -188,7 +188,7 @@ void PHX_spielhaus(void)
 
 			/* you loose: at least the half of your group have not passed the test */
 
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_tx2(30), pos);
 
 			money -= pos * 100;
@@ -199,7 +199,7 @@ void PHX_spielhaus(void)
 		} else {
 
 			/* you win */
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_tx2(31), pos);
 
 			money += pos * 100;
@@ -207,14 +207,14 @@ void PHX_spielhaus(void)
 
 		set_party_money(money);
 
-		GUI_output((char*)ds_readd(DTP2));
+		GUI_output(g_dtp2);
 
 	} else if (answer == 2) {
 
 		GUI_output(get_tx2(32));
 
 		/* You are now able to talk to Alrik */
-		ds_writeb(ALRIK_DERONDAN, 1);
+		gs_alrik_derondan = 1;
 
 	} else {
 
@@ -250,9 +250,9 @@ void PHX_spielhaus(void)
  */
 void PHX_villa_gremob(void)
 {
-	GUI_output(!ds_readb(GREMOB_INVITED)? get_tx2(40) : get_tx2(39));
+	GUI_output(!gs_gremob_invited ? get_tx2(40) : get_tx2(39));
 
-	if (ds_readb(GREMOB_INVITED) != 0) {
+	if (gs_gremob_invited) {
 		do_fight(FIGHTS_PHEX24);
 	}
 }
@@ -269,32 +269,27 @@ void PHX_bordell(void)
 	init_ani(0);
 
 	do {
-		answer = GUI_radio(get_tx2(41), 3,
-					get_tx2(42),
-					get_tx2(43),
-					get_tx2(44));
+		answer = GUI_radio(get_tx2(41), 3, get_tx2(42), get_tx2(43), get_tx2(44));
 
 	} while (answer == -1);
 
 	if (answer == 1) {
 
 		do {
-			answer = GUI_radio(get_tx2(45), 3,
-						get_tx2(46),
-						get_tx2(47),
-						get_tx2(48));
+			answer = GUI_radio(get_tx2(45), 3, get_tx2(46), get_tx2(47), get_tx2(48));
 
 		} while (answer == -1);
 
 		GUI_input(answer == 3 ? get_tx2(51) : get_tx2(52), 0);
 
 		if ((answer == 1) || (answer == 2)) {
-			ds_writeb(HARLOT_DATE, 1);
+			gs_harlot_date = 1;
 		}
 
 	} else if (answer == 2) {
-	    /* increase RAHJA's estimation */
-		add_ds_ds((GODS_ESTIMATION + 4 * GOD_RAHJA), 30L);
+
+		/* increase RAHJA's estimation */
+		gs_gods_estimation[GOD_RAHJA] += 30L;
 
 		timewarp_until_time_of_day(HOURS(7));
 
@@ -322,10 +317,7 @@ void PHX_apotheke(void)
 	init_ani(0);
 
 	do {
-		answer = GUI_radio(get_tx2(53), 3,
-					get_tx2(54),
-					get_tx2(55),
-					get_tx2(56));
+		answer = GUI_radio(get_tx2(53), 3, get_tx2(54),	get_tx2(55), get_tx2(56));
 
 	} while (answer == -1);
 
@@ -337,10 +329,7 @@ void PHX_apotheke(void)
 
 
 		do {
-			answer = GUI_radio(get_tx2(57), (signed char)options,
-						get_tx2(62),
-						get_tx2(61),
-						get_tx2(60));
+			answer = GUI_radio(get_tx2(57), (signed char)options, get_tx2(62), get_tx2(61), get_tx2(60));
 
 		} while (answer == -1);
 
@@ -362,10 +351,7 @@ void PHX_apotheke(void)
 		answer = money >= 500 ? 3 : 2;
 
 		do {
-			answer = GUI_radio(get_tx2(58), (signed char)answer,
-						get_tx2(63),
-						get_tx2(65),
-						get_tx2(64));
+			answer = GUI_radio(get_tx2(58), (signed char)answer, get_tx2(63), get_tx2(65), get_tx2(64));
 
 		} while (answer == -1);
 
@@ -385,10 +371,7 @@ void PHX_apotheke(void)
 	} else {
 
 		do {
-			answer = GUI_radio(get_tx2(59), 3,
-						get_tx2(66),
-						get_tx2(67),
-						get_tx2(68));
+			answer = GUI_radio(get_tx2(59), 3, get_tx2(66), get_tx2(67), get_tx2(68));
 
 		} while (answer == -1);
 
@@ -399,10 +382,7 @@ void PHX_apotheke(void)
 		} else if (answer == 2) {
 
 			do {
-				answer = GUI_radio(get_tx2(72), 3,
-							get_tx2(55),
-							get_tx2(73),
-							get_tx2(74));
+				answer = GUI_radio(get_tx2(72), 3, get_tx2(55), get_tx2(73), get_tx2(74));
 
 			} while (answer == -1);
 
@@ -488,10 +468,7 @@ void PHX_healer(void)
 		init_ani(0);
 
 		do {
-			answer = GUI_radio(get_tx2(78), 3,
-						get_tx2(79),
-						get_tx2(80),
-						get_tx2(81));
+			answer = GUI_radio(get_tx2(78), 3, get_tx2(79), get_tx2(80), get_tx2(81));
 
 		} while (answer == -1);
 
@@ -500,8 +477,8 @@ void PHX_healer(void)
 			GUI_output(get_tx2(82));
 
 			/* enter the healer */
-			ds_writew(CURRENT_TYPEINDEX, 13);
-			ds_writew(CURRENT_LOCDATA, 15);
+			gs_current_typeindex = 13;
+			gs_current_locdata = (15);
 
 			do_healer();
 
@@ -512,20 +489,14 @@ void PHX_healer(void)
 		} else {
 			/* answer == 2 */
 			do {
-				answer = GUI_radio(get_tx2(83), 3,
-							get_tx2(85),
-							get_tx2(86),
-							get_tx2(87));
+				answer = GUI_radio(get_tx2(83), 3, get_tx2(85), get_tx2(86), get_tx2(87));
 
 			} while (answer == -1);
 
 			if (answer == 1) {
 
 				do {
-					answer = GUI_radio(get_tx2(88), 3,
-								get_tx2(89),
-								get_tx2(90),
-								get_tx2(91));
+					answer = GUI_radio(get_tx2(88), 3, get_tx2(89), get_tx2(90), get_tx2(91));
 
 				} while (answer == -1);
 

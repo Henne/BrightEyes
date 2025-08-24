@@ -37,12 +37,12 @@ void talk_inn(void)
 /**
  * \brief   returns a pointer to the first brewing hero, who is not in this group, but in this location
  */
-RealPt get_first_brewing_hero(void)
+Bit8u* get_first_brewing_hero(void)
 {
-	RealPt hero;
+	unsigned char *hero;
 	signed short i;
 
-	hero = (Bit8u*)ds_readd(HEROES);
+	hero = get_hero(0);
 # ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 11: If NPC Curian got separated from the group for brewing a recipe at an inn,
 	 * he is stuck in the inn. When the group enters the inn where they left him, no dialog appears.
@@ -54,15 +54,15 @@ RealPt get_first_brewing_hero(void)
 # endif
 	{
 		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP) &&
+			host_readbs(hero + HERO_GROUP_NO) != gs_current_group &&
 			hero_brewing(hero) &&
-			host_readbs(hero + HERO_ALCHEMY_INN_ID) == ds_readws(CURRENT_TYPEINDEX))
+			host_readbs(hero + HERO_ALCHEMY_INN_ID) == gs_current_typeindex)
 		{
 			return hero;
 		}
 	}
 
-	return (RealPt)NULL;
+	return (Bit8u*)NULL;
 }
 
 /**
@@ -82,7 +82,7 @@ void do_inn(void)
 # else
 	signed char magic_act[7];
 # endif
-	RealPt hero;
+	Bit8u* hero;
 	Bit8u *hero2;
 	Bit8u *inn_ptr;
 	Bit32s party_money;
@@ -99,7 +99,7 @@ void do_inn(void)
 
 	done = 0;
 	stay = 0;
-	ds_writebs(SLEEP_QUALITY, -1);
+	g_sleep_quality = -1;
 
 #ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 8:
@@ -107,7 +107,7 @@ void do_inn(void)
 	 * a textbox is shown with the possibility to interrupt the brewing process.
 	 * However, this textbox is not shown if a single hero enters the inn. */
 
-	if (ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP)) == 1) {
+	if (gs_group_member_counts[gs_current_group] == 1) {
 		/* current group consists only of a single hero */
 
 		hero = get_first_hero_available_in_group();
@@ -117,13 +117,11 @@ void do_inn(void)
 
 			if (host_readbs(hero + HERO_RECIPE_TIMER) != 0) {
 
-				sprintf((char*)ds_readd(DTP2),
-					get_ttx(733),
-					(char*)hero + HERO_NAME2,
+				sprintf(g_dtp2, get_ttx(733), (char*)hero + HERO_NAME2,
 					host_readbs(hero + HERO_RECIPE_TIMER),
 					(char*)(host_readbs(hero + HERO_RECIPE_TIMER) < 2 ? get_ttx(735) : get_ttx(736)));
 
-				answer = GUI_radio((char*)ds_readd(DTP2), 2, get_ttx(734), get_ttx(537));
+				answer = GUI_radio(g_dtp2, 2, get_ttx(734), get_ttx(537));
 				/* <HERO> befindet sich inmitten eines alchimistischen Versuchs, der wohl noch <DAYS> Tage dauert.
 				 * * Versuch abbrechen
 				 * * Weiter brauen lassen
@@ -134,7 +132,7 @@ void do_inn(void)
 					do_alchemy(hero, host_readbs(hero + HERO_RECIPE_ID), 1);
 				} else {
 					done = 1;
-					ds_writew(COMBO_MODE, 0);
+					g_combo_mode = 0;
 					stay = 1;
 				}
 			} else {
@@ -155,22 +153,22 @@ void do_inn(void)
 
 		if (host_readbs(hero + HERO_RECIPE_TIMER) != 0) {
 
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_ttx(733),
 				(char*)hero + HERO_NAME2,
 				host_readbs(hero + HERO_RECIPE_TIMER),
 				(char*)(host_readbs(hero + HERO_RECIPE_TIMER) < 2 ? get_ttx(735) : get_ttx(736)));
 
-			tw_bak = ds_readws(TEXTBOX_WIDTH);
-			ds_writews(TEXTBOX_WIDTH, 4);
+			tw_bak = g_textbox_width;
+			g_textbox_width = 4;
 
-			answer = GUI_radio((char*)ds_readd(DTP2), 2, get_ttx(734), get_ttx(562));
+			answer = GUI_radio(g_dtp2, 2, get_ttx(734), get_ttx(562));
 			/* <HERO> befindet sich inmitten eines alchimistischen Versuchs, der wohl noch <DAYS> Tage dauert.
 			 * * Versuch abbrechen
 			 * * Weiter brauen lassen
 			 */
 
-			ds_writews(TEXTBOX_WIDTH, tw_bak);
+			g_textbox_width = tw_bak;
 
 			if (answer == 1) {
 				/* abort brewing */
@@ -208,7 +206,7 @@ void do_inn(void)
 		/* situation: 'switch groups' just switched to a group consisting of a single hero which has been separated for brewing a long recipe in an inn */
 		/* ASSERT */
 		/*
-		if ((host_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP))) != 1) {
+		if (gs_group_member_counts[gs_current_group] != 1) {
 			D1_INFO("FEHLER: Gruppengroesse eines brauenden Helden ist nicht 1.");
 		}
 		*/
@@ -216,13 +214,13 @@ void do_inn(void)
 
 		if (host_readbs(hero + HERO_RECIPE_TIMER) != 0) {
 
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 					get_ttx(733),
 					(char*)hero + HERO_NAME2,
 					host_readbs(hero + HERO_RECIPE_TIMER),
 					(char*)(host_readbs(hero + HERO_RECIPE_TIMER) < 2 ? get_ttx(735) : get_ttx(736)));
 
-			answer = GUI_radio((char*)ds_readd(DTP2), 2, get_ttx(734), get_ttx(537));
+			answer = GUI_radio(g_dtp2, 2, get_ttx(734), get_ttx(537));
 			/* <HERO> befindet sich inmitten eines alchimistischen Versuchs, der wohl noch <DAYS> Tage dauert.
 			 * * Versuch abbrechen
 			 * * Weiter brauen lassen
@@ -233,7 +231,7 @@ void do_inn(void)
 				do_alchemy(hero, host_readbs(hero + HERO_RECIPE_ID), 1);
 			} else {
 				done = 1;
-				ds_writew(COMBO_MODE, 0);
+				g_combo_mode = 0;
 				stay = 1;
 			}
 		} else {
@@ -241,12 +239,12 @@ void do_inn(void)
 			do_alchemy(hero, host_readbs(hero + HERO_RECIPE_ID), 0);
 		}
 	} else {
-		hero = (Bit8u*)ds_readd(HEROES);
+		hero = get_hero(0);
 		for (i = 0; i < 7; i++, hero += SIZEOF_HERO) {
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP) &&
+					host_readbs(hero + HERO_GROUP_NO) != gs_current_group &&
 					hero_brewing(hero) &&
-					host_readbs(hero + HERO_ALCHEMY_INN_ID) == ds_readws(CURRENT_TYPEINDEX))
+					host_readbs(hero + HERO_ALCHEMY_INN_ID) == gs_current_typeindex)
 			{
 				draw_status_line();
 
@@ -254,22 +252,22 @@ void do_inn(void)
 
 				if (host_readbs(hero + HERO_RECIPE_TIMER) != 0) {
 
-					sprintf((char*)ds_readd(DTP2),
+					sprintf(g_dtp2,
 							get_ttx(733),
 							(char*)hero + HERO_NAME2,
 							host_readbs(hero + HERO_RECIPE_TIMER),
 							(char*)(host_readbs(hero + HERO_RECIPE_TIMER) < 2 ? get_ttx(735) : get_ttx(736)));
 
-					tw_bak = ds_readws(TEXTBOX_WIDTH);
-					ds_writews(TEXTBOX_WIDTH, 4);
+					tw_bak = g_textbox_width;
+					g_textbox_width = 4;
 
-					answer = GUI_radio((char*)ds_readd(DTP2), 2, get_ttx(734), get_ttx(562));
+					answer = GUI_radio(g_dtp2, 2, get_ttx(734), get_ttx(562));
 					/* <HERO> befindet sich inmitten eines alchimistischen Versuchs, der wohl noch <DAYS> Tage dauert.
 					 * * Versuch abbrechen
 					 * * Weiter brauen lassen
 					 */
 
-					ds_writews(TEXTBOX_WIDTH, tw_bak);
+					g_textbox_width = tw_bak;
 
 					if (answer == 1) {
 						/* abort brewing */
@@ -286,29 +284,30 @@ void do_inn(void)
 
 					/* ASSERT */
 					/*
-					if ((host_readbs(GROUP_MEMBER_COUNTS + group_nr)) != 1) {
+					if (gs_group_member_counts[group_nr] != 1) {
 						D1_INFO("FEHLER: Gruppengroesse eines brauenden Helden ist nicht 1.");
 					}
 					*/
 
 					/* the following lines are taken (& adjusted) from function GRP_merge (seg049.cpp) */
-					ds_writeb(GROUPS_DIRECTION + group_nr, 0);
-					ds_writew(GROUPS_X_TARGET + group_nr * 2,0);
-					ds_writew(GROUPS_Y_TARGET + group_nr * 2,0);
-					ds_writebs(GROUPS_TOWN + group_nr,0);
-					ds_writeb(GROUPS_DNG_INDEX + group_nr,0);
-					ds_writeb(GROUPS_DNG_LEVEL + group_nr,0);
-					ds_writeb(GROUPS_DIRECTION_BAK + group_nr,0);
-					ds_writew(GROUPS_X_TARGET_BAK + group_nr * 2,0);
-					ds_writew(GROUPS_Y_TARGET_BAK + group_nr * 2,0);
-					ds_writebs(GROUPS_CURRENT_LOCTYPE_BAK + group_nr, LOCTYPE_NONE);
-					ds_writeb(GROUPS_TOWN_BAK + group_nr,0);
-					ds_writeb(GROUPS_DNG_INDEX_BAK + group_nr,0);
-					ds_writeb(GROUPS_DNG_LEVEL_BAK + group_nr, 0);
-					ds_writeb(GROUP_MEMBER_COUNTS + group_nr, 0);
+					gs_groups_direction[group_nr] = 0;
+					gs_groups_x_target[group_nr] = 0;
+					gs_groups_y_target[group_nr] = 0; /* TODO: remove one of them */
+					gs_groups_y_target[group_nr] = 0;
+					gs_groups_town[group_nr] = 0;
+					gs_groups_dng_index[group_nr] = 0;
+					gs_groups_dng_level[group_nr] = 0;
+					gs_groups_direction_bak[group_nr] = 0;
+					gs_groups_x_target_bak[group_nr] = 0;
+					gs_groups_y_target_bak[group_nr] = 0;
+					gs_groups_current_loctype_bak[group_nr] = LOCTYPE_NONE;
+					gs_groups_town_bak[group_nr] = 0;
+					gs_groups_dng_index_bak[group_nr] = 0;
+					gs_groups_dng_level_bak[group_nr] = 0;
+					gs_group_member_counts[group_nr] = 0;
 
-					inc_ds_bs_post(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP));
-					host_writeb(hero + HERO_GROUP_NO, ds_readbs(CURRENT_GROUP));
+					gs_group_member_counts[gs_current_group]++;
+					host_writeb(hero + HERO_GROUP_NO, gs_current_group);
 
 					GRP_sort_heroes();
 				}
@@ -319,9 +318,9 @@ void do_inn(void)
 
 	if (done == 0) {
 
-		refresh = ds_writews(REQUEST_REFRESH, 1);
+		refresh = g_request_refresh = 1;
 
-		draw_loc_icons(ds_readws(COMBO_MODE) == 0 ? 7 : 8, MENU_ICON_TALK, MENU_ICON_ORDER_FOOD, MENU_ICON_BOOK_BED, MENU_ICON_APPLY_SKILL, MENU_ICON_MAGIC, MENU_ICON_SLEEP, MENU_ICON_LEAVE, MENU_ICON_TAVERN);
+		draw_loc_icons(g_combo_mode == 0 ? 7 : 8, MENU_ICON_TALK, MENU_ICON_ORDER_FOOD, MENU_ICON_BOOK_BED, MENU_ICON_APPLY_SKILL, MENU_ICON_MAGIC, MENU_ICON_SLEEP, MENU_ICON_LEAVE, MENU_ICON_TAVERN);
 
 # ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 7: NPC Curian cannot do magic actions in an inn. */
@@ -336,7 +335,7 @@ void do_inn(void)
 
 	while (done == 0) {
 
-		if (ds_readws(REQUEST_REFRESH) != 0) {
+		if (g_request_refresh != 0) {
 
 			draw_main_screen();
 
@@ -346,48 +345,49 @@ void do_inn(void)
 
 			init_ani(0);
 
-			GUI_print_loc_line(get_tx(ds_readws(CURRENT_LOCDATA)));
+			GUI_print_loc_line(get_tx(gs_current_locdata));
 
-			ds_writews(REQUEST_REFRESH, refresh = 0);
+			g_request_refresh = refresh = 0;
 		}
 
 		if (refresh != 0) {
 
-			GUI_print_loc_line(get_tx(ds_readws(CURRENT_LOCDATA)));
+			GUI_print_loc_line(get_tx(gs_current_locdata));
 
 			refresh = 0;
 		}
 
-		inn_ptr = p_datseg + INN_DESCR_TABLE + SIZEOF_INN_STATS * ds_readws(CURRENT_TYPEINDEX);
+		inn_ptr = p_datseg + INN_DESCR_TABLE + SIZEOF_INN_STATS * gs_current_typeindex;
 
 		handle_gui_input();
 
-		if (ds_readws(MOUSE2_EVENT) != 0 || ds_readws(ACTION) == ACTION_ID_PAGE_UP) {
+		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
 
-			answer = GUI_radio(get_ttx(345), ds_readws(COMBO_MODE) == 0 ? 7 : 8,
+			answer = GUI_radio(get_ttx(345), g_combo_mode == 0 ? 7 : 8,
 						get_ttx(343), get_ttx(470),
 						get_ttx(344), get_ttx(212),
 						get_ttx(310), get_ttx(316),
 						get_ttx(347), get_ttx(823)) - 1;
 
 			if (answer != -2) {
-				ds_writews(ACTION, answer + ACTION_ID_ICON_1);
+				g_action = (answer + ACTION_ID_ICON_1);
 			}
 		}
 
-		if (ds_readws(ACTION) == ACTION_ID_ICON_1) {
-			talk_inn();
-			ds_writews(REQUEST_REFRESH, 1);
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_2) { /* order food */
+		if (g_action == ACTION_ID_ICON_1) {
 
-			price = count_heroes_in_group() * (6L - host_readws(inn_ptr + INN_STATS_QUALITY) / 4L); /* higher food quality -> higher price */
+			talk_inn();
+			g_request_refresh = 1;
+
+		} else if (g_action == ACTION_ID_ICON_2) { /* order food */
+
+			price = count_heroes_in_group() * (6L - host_readws(inn_ptr + INN_STATS_QUALITY) / 4L);
+			/* higher food quality -> higher price */
 			price += (price * host_readws(inn_ptr + INN_STATS_PRICE_MOD)) / 100L;
 
-			sprintf((char*)ds_readd(DTP2),
-				get_ttx(473),
-				(signed short)price);
+			sprintf(g_dtp2,	get_ttx(473), (signed short)price);
 
-			if (GUI_bool((char*)ds_readd(DTP2))) {
+			if (GUI_bool(g_dtp2)) {
 
 				party_money = get_party_money();
 				price *= 10;
@@ -406,7 +406,7 @@ void do_inn(void)
 					for (i = 0, hero2 = get_hero(0); i <= 6; i++, hero2 += SIZEOF_HERO) {
 
 						if (host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE &&
-							host_readbs(hero2 + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+							host_readbs(hero2 + HERO_GROUP_NO) == gs_current_group &&
 							!hero_dead(hero2))
 						{
 							portion_size = (21 - host_readws(inn_ptr + INN_STATS_QUALITY)) * 20;
@@ -438,7 +438,7 @@ void do_inn(void)
 				}
 			}
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_3 && ds_readbs(SLEEP_QUALITY) == -1) {
+		} else if (g_action == ACTION_ID_ICON_3 && g_sleep_quality == -1) {
 
 			price_schlafsaal = 5;
 			price_einzelzimmer = 30;
@@ -447,37 +447,28 @@ void do_inn(void)
 			price_einzelzimmer += price_schlafsaal * host_readws(inn_ptr + INN_STATS_PRICE_MOD) / 100;
 			price_suite += price_schlafsaal * host_readws(inn_ptr + INN_STATS_PRICE_MOD) / 100;
 
-			tw_bak = ds_readws(TEXTBOX_WIDTH);
-			ds_writews(TEXTBOX_WIDTH, 5);
+			tw_bak = g_textbox_width;
+			g_textbox_width = 5;
 
-			sprintf((char*)ds_readd(DTP2),
-				get_ttx(397),
-				(signed short)price_schlafsaal);
+			sprintf(g_dtp2,	get_ttx(397), (signed short)price_schlafsaal);
 
-			sprintf((char*)ds_readd(DTP2) + 50,
-				get_ttx(398),
-				(signed short)price_einzelzimmer);
+			sprintf(g_dtp2 + 50, get_ttx(398), (signed short)price_einzelzimmer);
 
-			sprintf((char*)ds_readd(DTP2) + 100,
-				get_ttx(399),
-				(signed short)price_suite);
+			sprintf(g_dtp2 + 100, get_ttx(399), (signed short)price_suite);
 
-			ds_writebs(SLEEP_QUALITY, (signed char)GUI_radio(get_ttx(396), 3,
-							(char*)ds_readd(DTP2),
-							(char*)ds_readd(DTP2) + 50,
-							(char*)ds_readd(DTP2) + 100));
+			g_sleep_quality = GUI_radio(get_ttx(396), 3, g_dtp2, g_dtp2 + 50, g_dtp2 + 100);
 
-			if (ds_readbs(SLEEP_QUALITY) != -1) {
-				ds_writebs(BOOKED_INN_DAYS, (signed char)GUI_input(get_ttx(826), 2));
+			if (g_sleep_quality != -1) {
+				g_booked_inn_days = GUI_input(get_ttx(826), 2);
 			}
 
-			if (ds_readbs(BOOKED_INN_DAYS) <= 0) {
-				ds_writebs(SLEEP_QUALITY, -1);
+			if (g_booked_inn_days <= 0) {
+				g_sleep_quality = -1;
 			}
 
-			ds_writews(TEXTBOX_WIDTH, tw_bak);
+			g_textbox_width = tw_bak;
 
-			if (ds_readbs(SLEEP_QUALITY) != -1) {
+			if (g_sleep_quality != -1) {
 
 				nr_heroes = count_heroes_in_group();
 
@@ -486,9 +477,9 @@ void do_inn(void)
 				price_suite *= nr_heroes;
 				party_money = get_party_money();
 
-				price = ds_readbs(SLEEP_QUALITY) == 1 ? price_schlafsaal : (ds_readbs(SLEEP_QUALITY) == 2 ? price_einzelzimmer : price_suite);
+				price = g_sleep_quality == 1 ? price_schlafsaal : (g_sleep_quality == 2 ? price_einzelzimmer : price_suite);
 
-				price *= ds_readbs(BOOKED_INN_DAYS);
+				price *= g_booked_inn_days;
 
 				if (price < 0) {
 					price = 1;
@@ -496,7 +487,7 @@ void do_inn(void)
 
 				if (party_money < price) {
 					GUI_output(get_ttx(401));
-					ds_writebs(SLEEP_QUALITY, -1);
+					g_sleep_quality = -1;
 				} else {
 					party_money -= price;
 					set_party_money(party_money);
@@ -504,24 +495,24 @@ void do_inn(void)
 				}
 			}
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_4) {
+		} else if (g_action == ACTION_ID_ICON_4) {
 
-			if (ds_readbs(SLEEP_QUALITY) != -1) {
+			if (g_sleep_quality != -1) {
 				GUI_use_skill2(0, get_ttx(395));
 				refresh = 1;
 			} else {
 				GUI_output(get_ttx(346));
 			}
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_5) {
+		} else if (g_action == ACTION_ID_ICON_5) {
 
-			if (ds_readbs(SLEEP_QUALITY) != -1) {
+			if (g_sleep_quality != -1) {
 
 				answer = select_hero_ok(get_ttx(317));
 
 				if (answer != -1) {
 
-					hero = (Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * answer;
+					hero = get_hero(answer);
 
 					if (host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH) {
 
@@ -538,34 +529,39 @@ void do_inn(void)
 				GUI_output(get_ttx(346));
 			}
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_6) {
+		} else if (g_action == ACTION_ID_ICON_6) {
 
-			if (ds_readbs(SLEEP_QUALITY) != -1 && ds_readbs(BOOKED_INN_DAYS) > 0) {
+			if (g_sleep_quality != -1 && g_booked_inn_days > 0) {
 
 				if (GUI_bool(get_ttx(318))) {
-					booked_days = ds_readbs(BOOKED_INN_DAYS);
+
+					booked_days = g_booked_inn_days;
 
 					if (host_readws(inn_ptr + INN_STATS_QUALITY) < 8) {
-						inc_ds_bs_post(SLEEP_QUALITY);
+
+						g_sleep_quality++;
+
 					} else if (host_readws(inn_ptr + INN_STATS_QUALITY) > 15) {
-						dec_ds_bs_post(SLEEP_QUALITY);
+
+						g_sleep_quality--;
 					}
 
 					done = 1;
-					ds_writews(COMBO_MODE, 0);
-					ds_writebs(FOOD_MOD, 1);
+					g_combo_mode = 0;
+					g_food_mod = 1;
 
 					do {
 						timewarp_until_time_of_day(HOURS(8));
-					} while (dec_ds_bs(BOOKED_INN_DAYS));
 
-					ds_writeb(FOOD_MOD, 0);
+					} while (--g_booked_inn_days);
 
-					hero = (Bit8u*)ds_readd(HEROES);
+					g_food_mod = 0;
+
+					hero = get_hero(0);
 					for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 						if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-							host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+							host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 						{
 							if (booked_days > 1) {
 								/* Original-Bug 7:
@@ -578,7 +574,7 @@ void do_inn(void)
 
 								for (rested_days = 0; rested_days < booked_days; rested_days++)
 								{
-									GRP_hero_sleep(hero, ds_readbs(SLEEP_QUALITY));
+									GRP_hero_sleep(hero, g_sleep_quality);
 								}
 							}
 						}
@@ -587,38 +583,38 @@ void do_inn(void)
 			} else {
 				GUI_output(get_ttx(346));
 			}
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_7) {
+		} else if (g_action == ACTION_ID_ICON_7) {
 
-			if (ds_readbs(SLEEP_QUALITY) != -1) {
+			if (g_sleep_quality != -1) {
 
 				if (GUI_bool(get_ttx(400))) {
 					done = 1;
-					ds_writews(COMBO_MODE, 0);
+					g_combo_mode = 0;
 				}
 			} else {
 				done = 1;
-				ds_writews(COMBO_MODE, 0);
+				g_combo_mode = 0;
 			}
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_8 && ds_readws(COMBO_MODE) != 0) {
+		} else if (g_action == ACTION_ID_ICON_8 && g_combo_mode != 0) {
 
-			tavern_ptr = p_datseg + TAVERN_DESCR_TABLE + 4 * ds_readws(CURRENT_TYPEINDEX);
+			tavern_ptr = p_datseg + TAVERN_DESCR_TABLE + 4 * gs_current_typeindex;
 
 			if (host_readws(tavern_ptr) >= 6 && host_readws(tavern_ptr) <= 13 &&
-				ds_readds(DAY_TIMER) < HOURS(11) && ds_readds(DAY_TIMER) > HOURS(3)) {
+				gs_day_timer < HOURS(11) && gs_day_timer > HOURS(3)) {
 				GUI_output(get_ttx(801));
 			} else if ((host_readws(tavern_ptr) < 6 || host_readws(tavern_ptr) > 13) &&
-				ds_readds(DAY_TIMER) < HOURS(16) && ds_readds(DAY_TIMER) > HOURS(3)) {
+				gs_day_timer < HOURS(16) && gs_day_timer > HOURS(3)) {
 				GUI_output(get_ttx(481));
-			} else if (ds_readbs(SLEEP_QUALITY) != -1) {
+			} else if (g_sleep_quality != -1) {
 
 				if (GUI_bool(get_ttx(400))) {
 					done = 1;
-					ds_writews(COMBO_MODE, 2);
+					g_combo_mode = 2;
 				}
 			} else {
 				done = 1;
-				ds_writews(COMBO_MODE, 2);
+				g_combo_mode = 2;
 			}
 		}
 	}
@@ -637,24 +633,24 @@ void TLK_herberg(signed short state)
 	Bit8u *hero = (Bit8u*)get_first_hero_available_in_group();
 
 	if (!state) {
-		ds_writews(DIALOG_NEXT_STATE, ds_readb(HERBERG_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ? 1 : 2);
+		g_dialog_next_state = (gs_herberg_kicked_flags[gs_current_typeindex] ? 1 : 2);
 	} else if (state == 1 || state == 14) {
-		ds_writeb(HERBERG_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX), 1);
+		gs_herberg_kicked_flags[gs_current_typeindex] = 1;
 	} else if (state == 11) {
 		tumult();
-		ds_writeb(TOWN_OUTLAWED_FLAGS + ds_readbs(CURRENT_TOWN), 1);
-		ds_writeb(HERBERG_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX), 1);
+		gs_town_outlawed_flags[gs_current_town] = 1;
+		gs_herberg_kicked_flags[gs_current_typeindex] = 1;
 	} else if (state == 12) {
 		/* CH + 5 */
-		ds_writews(DIALOG_NEXT_STATE, test_attrib(hero, ATTRIB_CH, 5) > 0 ? 14 : 11);
+		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 5) > 0 ? 14 : 11);
 	} else if (state == 13) {
 		/* CH + 0 */
-		ds_writews(DIALOG_NEXT_STATE, test_attrib(hero, ATTRIB_CH, 0) > 0 ? 14 : 7);
+		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 0) > 0 ? 14 : 7);
 	} else if (state == 15) {
 		/* CH - 3 */
-		ds_writews(DIALOG_NEXT_STATE, test_attrib(hero, ATTRIB_CH, -3) > 0 ? 16 : 17);
+		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, -3) > 0 ? 16 : 17);
 	} else if (state == 17) {
-		ds_writew(ACTION, ACTION_ID_ICON_2);
+		g_action = (ACTION_ID_ICON_2);
 	}
 }
 

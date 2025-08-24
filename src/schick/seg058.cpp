@@ -9,6 +9,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#if !defined(__BORLANDC__)
+#include <unistd.h>
+#endif
+
 #include "v302de.h"
 #include "common.h"
 
@@ -47,21 +51,21 @@ void add_item_to_smith(Bit8u *smith_ptr, Bit8u *hero, signed short item_pos, sig
 
 	item_id = host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * item_pos);
 
-	host_writews((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos, item_id);
+	host_writews((Bit8u*)g_sellitems + 7 * smith_pos, item_id);
 
 	if (item_armor(get_itemsdat(item_id)) || item_weapon(get_itemsdat(item_id))) {
 
 		if (inventory_broken(hero + HERO_INVENTORY + SIZEOF_INVENTORY * item_pos)) {
 
-			host_writews((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos + 2,
+			host_writews((Bit8u*)g_sellitems + 7 * smith_pos + 2,
 				(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) +
 					(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * host_readbs(smith_ptr + SMITH_STATS_PRICE_MOD) / 100)) / 2);
 
-			if (host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos + 2) == 0) {
-				host_writews((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos + 2, 1);
+			if (host_readws((Bit8u*)g_sellitems + 7 * smith_pos + 2) == 0) {
+				host_writews((Bit8u*)g_sellitems + 7 * smith_pos + 2, 1);
 			}
 
-			host_writews((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos + 4,
+			host_writews((Bit8u*)g_sellitems + 7 * smith_pos + 4,
 				host_readbs(get_itemsdat(item_id) + ITEM_STATS_PRICE_UNIT));
 
 		} else {
@@ -69,27 +73,27 @@ void add_item_to_smith(Bit8u *smith_ptr, Bit8u *hero, signed short item_pos, sig
 			if (host_readbs(hero + HERO_INVENTORY + INVENTORY_RS_LOST + SIZEOF_INVENTORY * item_pos) != 0) {
 				/* armor has degraded RS */
 
-				host_writews((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos + 2,
+				host_writews((Bit8u*)g_sellitems + 7 * smith_pos + 2,
 					(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) +
 						(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * host_readbs(smith_ptr + SMITH_STATS_PRICE_MOD) / 100)) / 4);
 
-				if (host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos + 2) == 0) {
-					host_writews((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos + 2, 1);
+				if (host_readws((Bit8u*)g_sellitems + 7 * smith_pos + 2) == 0) {
+					host_writews((Bit8u*)g_sellitems + 7 * smith_pos + 2, 1);
 				}
 
-				host_writews((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos + 4,
+				host_writews((Bit8u*)g_sellitems + 7 * smith_pos + 4,
 					host_readbs(get_itemsdat(item_id) + ITEM_STATS_PRICE_UNIT));
 			} else {
-				host_writews((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos + 2, 0);
-				host_writews((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos + 4, 1);
+				host_writews((Bit8u*)g_sellitems + 7 * smith_pos + 2, 0);
+				host_writews((Bit8u*)g_sellitems + 7 * smith_pos + 4, 1);
 			}
 		}
 	} else {
-		host_writews((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos + 2, 0);
-		host_writews((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos + 4, 1);
+		host_writews((Bit8u*)g_sellitems + 7 * smith_pos + 2, 0);
+		host_writews((Bit8u*)g_sellitems + 7 * smith_pos + 4, 1);
 	}
 
-	host_writebs((Bit8u*)ds_readd(SELLITEMS) + 7 * smith_pos + 6, (signed char)item_pos);
+	host_writebs((Bit8u*)g_sellitems + 7 * smith_pos + 6, (signed char)item_pos);
 }
 
 struct dummy3 {
@@ -156,27 +160,27 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 	struct nvf_desc nvf;
 
 	/* check if this smith has an item in repair */
-	if (ds_readws(SMITH_REPAIRITEMS + 6 * smith_id) != 0) {
+	if (gs_smith_repairitems[smith_id].item_id) {
 
-		if (ds_readds(SMITH_REPAIRITEMS + 2 + 6 * smith_id) > ds_readds(DAY_TIMER)) {
+		if (gs_smith_repairitems[smith_id].pickup_time > gs_day_timer) {
+
 			/* not ready yet */
 			GUI_output(get_ttx(485));
 
-		} else if (get_item(ds_readws(SMITH_REPAIRITEMS + 6 * smith_id), 1, 1)) {
+		} else if (get_item(gs_smith_repairitems[smith_id].item_id, 1, 1)) {
 
-			sprintf((char*)ds_readd(DTP2),
-				get_ttx(486),
-				(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8002, ds_readws(SMITH_REPAIRITEMS + 6 * smith_id), 0)));
+			sprintf(g_dtp2, get_ttx(486),
+				GUI_names_grammar((signed short)0x8002, gs_smith_repairitems[smith_id].item_id, 0));
 
-			GUI_output((char*)ds_readd(DTP2));
+			GUI_output(g_dtp2);
 
-			ds_writed(SMITH_REPAIRITEMS + 2 + 6 * smith_id, 0);
-			ds_writew(SMITH_REPAIRITEMS + 6 * smith_id, 0);
+			gs_smith_repairitems[smith_id].item_id = 0;
+			gs_smith_repairitems[smith_id].pickup_time = 0;
 		}
 	} else {
 
 		set_var_to_zero();
-		ds_writeb(PP20_INDEX, 0xff);
+		g_pp20_index = -1;
 
 		draw_loc_icons(5, MENU_ICON_BARGAIN, MENU_ICON_SCROLL_RIGHT, MENU_ICON_SCROLL_LEFT, MENU_ICON_HERO, MENU_ICON_LEAVE);
 		draw_main_screen();
@@ -184,18 +188,18 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 		/* ICONS */
 		l_si = load_archive_file(ARCHIVE_FILE_ICONS);
 		seek_archive_file(l_si, 18 * 576L);
-		read_archive_file(l_si, (Bit8u*)ds_readd(ICON), 576L);
+		read_archive_file(l_si, g_icon, 576L);
 		close(l_si);
 
-		ds_writew(PIC_COPY_X1, 108);
-		ds_writew(PIC_COPY_Y1, 5);
-		ds_writew(PIC_COPY_X2, 131);
-		ds_writew(PIC_COPY_Y2, 28);
-		ds_writed(PIC_COPY_SRC, ds_readd(ICON));
+		g_pic_copy.x1 = 108;
+		g_pic_copy.y1 = 5;
+		g_pic_copy.x2 = 131;
+		g_pic_copy.y2 = 28;
+		g_pic_copy.src = g_icon;
 		do_pic_copy(0);
 
-		ds_writed(SELLITEMS, ds_readd(FIG_FIGURE1_BUF));
-		memset((Bit8u*)ds_readd(SELLITEMS), 0, 350);
+		g_sellitems = g_fig_figure1_buf;
+		memset((Bit8u*)g_sellitems, 0, 350);
 
 		get_textcolor(&fg_bak, &bg_bak);
 		set_textcolor(255, 0);
@@ -231,7 +235,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 					}
 
 					for (l_si = smith_pos; l_si < 23; l_si++) {
-						host_writew((Bit8u*)ds_readd(SELLITEMS) + 7 * l_si, 0);
+						host_writew((Bit8u*)g_sellitems + 7 * l_si, 0);
 					}
 
 					l11 = 0;
@@ -239,22 +243,21 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 					l7 = item = l12 = 0;
 					percent_old = 100;
 
-					do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 26, 26, 105, 33, 0);
+					do_fill_rect(g_vga_memstart, 26, 26, 105, 33, 0);
 
-					make_valuta_str((char*)ds_readd(DTP2), host_readds(hero2 + HERO_MONEY));
-					GUI_print_string((char*)ds_readd(DTP2),
-						104 - GUI_get_space_for_string((char*)ds_readd(DTP2), 0), 26);
+					make_valuta_str(g_dtp2, host_readds(hero2 + HERO_MONEY));
+					GUI_print_string(g_dtp2, 104 - GUI_get_space_for_string(g_dtp2, 0), 26);
 				}
 
 				update_mouse_cursor();
 
-				do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 29, 34, 214, 133, 0);
+				do_fill_rect(g_vga_memstart, 29, 34, 214, 133, 0);
 
-				do_v_line((Bit8u*)ds_readd(FRAMEBUF_PTR), 87, 35, 131, -1);
-				do_v_line((Bit8u*)ds_readd(FRAMEBUF_PTR), 152, 35, 131, -1);
+				do_v_line(g_vga_memstart, 87, 35, 131, -1);
+				do_v_line(g_vga_memstart, 152, 35, 131, -1);
 
-				nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
-				nvf.src = (Bit8u*)ds_readd(BUFFER10_PTR);
+				nvf.dst = g_renderbuf_ptr;
+				nvf.src = g_buffer10_ptr;
 				nvf.type = 0;
 				nvf.width =  (Bit8u*)&width;
 				nvf.height = (Bit8u*)&height;
@@ -265,13 +268,13 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 						answer = 5 * items_x + l_si + item;
 
-						if ((j = host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * answer))) {
+						if ((j = host_readws((Bit8u*)g_sellitems + 7 * answer))) {
 
-							ds_writew(PIC_COPY_X1, array3.a[items_x]);
-							ds_writew(PIC_COPY_Y1, array5.a[l_si]);
-							ds_writew(PIC_COPY_X2, array3.a[items_x] + 15);
-							ds_writew(PIC_COPY_Y2, array5.a[l_si] + 15);
-							ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+							g_pic_copy.x1 = array3.a[items_x];
+							g_pic_copy.y1 = array5.a[l_si];
+							g_pic_copy.x2 = array3.a[items_x] + 15;
+							g_pic_copy.y2 = array5.a[l_si] + 15;
+							g_pic_copy.src = g_renderbuf_ptr;
 
 							nvf.no = host_readws(get_itemsdat(j));
 
@@ -281,24 +284,24 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 							if (item_stackable(get_itemsdat(j))) {
 
-								if ((val = host_readws(hero2 + (HERO_INVENTORY + INVENTORY_QUANTITY) + SIZEOF_INVENTORY * host_readbs((Bit8u*)ds_readd(SELLITEMS) + 7 * answer + 6))) > 1)
+								if ((val = host_readws(hero2 + (HERO_INVENTORY + INVENTORY_QUANTITY) + SIZEOF_INVENTORY * host_readbs((Bit8u*)g_sellitems + 7 * answer + 6))) > 1)
 								{
-									my_itoa(val, (char*)ds_readd(DTP2), 10);
+									my_itoa(val, g_dtp2, 10);
 
-									GUI_print_string((char*)ds_readd(DTP2),
-										array3.a[items_x] + 16 - GUI_get_space_for_string((char*)ds_readd(DTP2), 0),
+									GUI_print_string(g_dtp2,
+										array3.a[items_x] + 16 - GUI_get_space_for_string(g_dtp2, 0),
 										array5.a[l_si] + 9);
 
 								}
 							}
 
-							sprintf((char*)ds_readd(DTP2),
-								host_readws((Bit8u*)ds_readd(SELLITEMS) + 4 + 7 * answer) == 1 ? fmt_h.a :
-									(host_readws((Bit8u*)ds_readd(SELLITEMS) + 4 + 7 * answer) == 10 ? fmt_s.a : fmt_d.a),
-								host_readws((Bit8u*)ds_readd(SELLITEMS) + 2 + 7 * answer));
+							sprintf(g_dtp2,
+								host_readws((Bit8u*)g_sellitems + 4 + 7 * answer) == 1 ? fmt_h.a :
+									(host_readws((Bit8u*)g_sellitems + 4 + 7 * answer) == 10 ? fmt_s.a : fmt_d.a),
+								host_readws((Bit8u*)g_sellitems + 2 + 7 * answer));
 
 
-							GUI_print_string((char*)ds_readd(DTP2), array3.a[items_x] + 20, array5.a[l_si] + 5);
+							GUI_print_string(g_dtp2, array3.a[items_x] + 20, array5.a[l_si] + 5);
 						}
 					}
 				}
@@ -310,26 +313,26 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 			}
 
-			ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)(p_datseg + ACTION_TABLE_MERCHANT));
+			g_action_table_secondary = &g_action_table_merchant[0];
 			handle_input();
-			ds_writed(ACTION_TABLE_SECONDARY, (Bit32u)0L);
+			g_action_table_secondary = NULL;
 
-			if (ds_readws(HAVE_MOUSE) == 2) {
-				select_with_mouse((Bit8u*)&l7, (Bit8u*)ds_readd(SELLITEMS) + 7 * item);
+			if (g_have_mouse == 2) {
+				select_with_mouse((Bit8u*)&l7, (Bit8u*)g_sellitems + 7 * item);
 			} else {
-				select_with_keyboard((Bit8u*)&l7, (Bit8u*)ds_readd(SELLITEMS) + 7 * item);
+				select_with_keyboard((Bit8u*)&l7, (Bit8u*)g_sellitems + 7 * item);
 			}
 
 			if (l6 != l7) {
 
-				do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
+				do_border(g_vga_memstart,
 					array3.a[l6 / 5] - 1,
 					array5.a[l6 % 5] - 1,
 					array3.a[l6 / 5] + 16,
 					array5.a[l6 % 5] + 16,
 					0);
 
-				do_border((Bit8u*)ds_readd(FRAMEBUF_PTR),
+				do_border(g_vga_memstart,
 					array3.a[l7 / 5] - 1,
 					array5.a[l7 % 5] - 1,
 					array3.a[l7 / 5] + 16,
@@ -340,10 +343,10 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 				clear_loc_line();
 
-				GUI_print_loc_line((GUI_name_singular(get_itemname(host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l7 + item))))));
+				GUI_print_loc_line((GUI_name_singular(get_itemname(host_readws((Bit8u*)g_sellitems + 7 * (l7 + item))))));
 			}
 
-			if (ds_readws(MOUSE2_EVENT) != 0  || ds_readws(ACTION) == ACTION_ID_PAGE_UP) {
+			if (g_mouse2_event  || g_action == ACTION_ID_PAGE_UP) {
 
 				answer = GUI_radio(NULL, 5,
 						get_ttx(433),
@@ -353,27 +356,27 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 						get_ttx(437)) - 1;
 
 				if (answer != -2) {
-					ds_writew(ACTION, answer + ACTION_ID_ICON_1);
+					g_action = (answer + ACTION_ID_ICON_1);
 				}
 			}
 
-			if (ds_readws(ACTION) == ACTION_ID_ICON_3 && item != 0) {
+			if (g_action == ACTION_ID_ICON_3 && item != 0) {
 				l8 = 1;
 				item -= 15;
-			} else if (ds_readws(ACTION) == ACTION_ID_ICON_2 && host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (item + 15))) {
+			} else if (g_action == ACTION_ID_ICON_2 && host_readws((Bit8u*)g_sellitems + 7 * (item + 15))) {
 				l8 = 1;
 				item += 15;
 			}
 
-			if (ds_readws(ACTION) == ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK || ds_readws(ACTION) == ACTION_ID_ICON_1 || ds_readws(ACTION) == ACTION_ID_RETURN) {
+			if (g_action == ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK || g_action == ACTION_ID_ICON_1 || g_action == ACTION_ID_RETURN) {
 				/* Is ACTION == ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK possible at all?
 				 * ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK can be written to ACTION in buy_screen(), but where should it show up in repair_screen()?? */
 
-				item_id = host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l7 + item));
+				item_id = host_readws((Bit8u*)g_sellitems + 7 * (l7 + item));
 
 				p_money = get_party_money();
 
-				if (host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l7 + item) + 2) == 0) {
+				if (host_readws((Bit8u*)g_sellitems + 7 * (l7 + item) + 2) == 0) {
 					GUI_output(get_ttx(487));
 				} else {
 
@@ -383,19 +386,18 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 					while (l12 == 0 && j < 3) {
 
 
-						price = (host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l7 + item) + 2)
-							* host_readws((Bit8u*)ds_readd(SELLITEMS) + 7 * (l7 + item) + 4)) * ds_readws(PRICE_MODIFICATOR) / 4;
+						price = (host_readws((Bit8u*)g_sellitems + 7 * (l7 + item) + 2)
+							* host_readws((Bit8u*)g_sellitems + 7 * (l7 + item) + 4)) * g_price_modificator / 4;
 
-						make_valuta_str((char*)ds_readd(TEXT_OUTPUT_BUF), price);
+						make_valuta_str(g_text_output_buf, price);
 
-						sprintf((char*)ds_readd(DTP2),
-							get_ttx(488),
-							(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8002, item_id, 0)),
-							(char*)ds_readd(TEXT_OUTPUT_BUF));
+						sprintf(g_dtp2, get_ttx(488),
+							GUI_names_grammar((signed short)0x8002, item_id, 0),
+							g_text_output_buf);
 
 
 						do {
-							percent = GUI_input((char*)ds_readd(DTP2), 2);
+							percent = GUI_input(g_dtp2, 2);
 
 						} while (percent > 50);
 
@@ -426,17 +428,18 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 									GUI_output(get_ttx(492));
 								}
 
-								ds_writew(SMITH_REPAIRITEMS + 6 * smith_id, item_id);
+								gs_smith_repairitems[smith_id].item_id = item_id;
 
-								if (ds_readds(DAY_TIMER) > HOURS(14)) {
-									ds_writed(SMITH_REPAIRITEMS + 2 + 6 * smith_id, HOURS(23));
+								if (gs_day_timer > HOURS(14)) {
+
+									gs_smith_repairitems[smith_id].pickup_time = HOURS(23);
 									GUI_output(get_ttx(490));
 								} else {
-									ds_writed(SMITH_REPAIRITEMS + 2 + 6 * smith_id, ds_readd(DAY_TIMER) + HOURS(6));
+									gs_smith_repairitems[smith_id].pickup_time = gs_day_timer + HOURS(6);
 									GUI_output(get_ttx(491));
 								}
 
-								drop_item(hero2, host_readbs((Bit8u*)ds_readd(SELLITEMS) + 6 + 7 * (l7 + item)), 1);
+								drop_item(hero2, host_readbs((Bit8u*)g_sellitems + 6 + 7 * (l7 + item)), 1);
 								p_money -= price;
 								set_party_money(p_money);
 
@@ -458,9 +461,9 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 				}
 			}
 
-			if (ds_readws(ACTION) >= 241 && ds_readws(ACTION) <= 247) {
+			if (g_action >= 241 && g_action <= 247) {
 
-				hero_pos = ds_readws(ACTION) - 241;
+				hero_pos = g_action - 241;
 				hero2 = get_hero(hero_pos);
 				deselect_hero_icon(hero_pos_old);
 				select_hero_icon(hero_pos);
@@ -468,19 +471,19 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 				l11 = 1;
 			}
 
-			if (ds_readws(ACTION) == ACTION_ID_ICON_4) {
+			if (g_action == ACTION_ID_ICON_4) {
 				l10 = 1;
 			}
 
-			if (ds_readws(ACTION) == ACTION_ID_ICON_5) {
+			if (g_action == ACTION_ID_ICON_5) {
 				done = 1;
 			}
 
 		}
 
 		set_textcolor(fg_bak, bg_bak);
-		ds_writew(REQUEST_REFRESH, 1);
-		ds_writeb(PP20_INDEX, 0xff);
+		g_request_refresh = 1;
+		g_pp20_index = -1;
 	}
 }
 
@@ -493,16 +496,16 @@ void do_smith(void)
 	signed short answer;
 	Bit8u *smith_ptr;
 
-	if (ds_readds(DAY_TIMER) < HOURS(6) || ds_readds(DAY_TIMER) > HOURS(20)) {
+	if (gs_day_timer < HOURS(6) || gs_day_timer > HOURS(20)) {
 
 		GUI_output(get_ttx(483));
 		leave_location();
 		return;
 	}
 
-	if (ds_readbs(SMITH_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ||
-		ds_readbs(SMITH_FLOGGED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ||
-		(ds_readws(CURRENT_TYPEINDEX) == 1 && ds_readb(DNG14_CELLAREXIT_FLAG))) {
+	if (gs_smith_kicked_flags[gs_current_typeindex] ||
+		gs_smith_flogged_flags[gs_current_typeindex] ||
+		(gs_current_typeindex == 1 && gs_dng14_cellarexit_flag)) {
 
 		talk_smith();
 		leave_location();
@@ -510,29 +513,29 @@ void do_smith(void)
 	}
 
 	load_ggsts_nvf();
-	ds_writew(REQUEST_REFRESH, 1);
-	smith_ptr = p_datseg + SMITH_DESCR_TABLE + SIZEOF_SMITH_STATS * ds_readws(CURRENT_TYPEINDEX);
-	ds_writew(PRICE_MODIFICATOR, 4);
+	g_request_refresh = 1;
+	smith_ptr = p_datseg + SMITH_DESCR_TABLE + SIZEOF_SMITH_STATS * gs_current_typeindex;
+	g_price_modificator = 4;
 
 	while (!done) {
 
-		if (ds_readws(REQUEST_REFRESH) != 0) {
+		if (g_request_refresh != 0) {
 
 			draw_loc_icons(3, MENU_ICON_TALK, MENU_ICON_REPAIR, MENU_ICON_LEAVE);
 			draw_main_screen();
 			set_var_to_zero();
 			load_ani(5);
 			init_ani(0);
-			GUI_print_loc_line(get_tx(ds_readws(CURRENT_LOCDATA)));
+			GUI_print_loc_line(get_tx(gs_current_locdata));
 			set_audio_track(ARCHIVE_FILE_SMITH_XMI);
-			ds_writew(REQUEST_REFRESH, 0);
+			g_request_refresh = 0;
 		}
 
 		handle_gui_input();
 
-		if (ds_readws(MOUSE2_EVENT) != 0 || ds_readws(ACTION) == ACTION_ID_PAGE_UP) {
+		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
 
-			ds_writew(TEXTBOX_WIDTH, 4);
+			g_textbox_width = 4;
 
 			answer = GUI_radio(get_ttx(496), 3,
 						get_ttx(343),
@@ -540,28 +543,28 @@ void do_smith(void)
 						get_ttx(498)) - 1;
 
 			/* TODO: why should it be 3??? Better make a backup */
-			ds_writew(TEXTBOX_WIDTH, 3);
+			g_textbox_width = 3;
 
 			if (answer != -2) {
-				ds_writew(ACTION, answer + ACTION_ID_ICON_1);
+				g_action = (answer + ACTION_ID_ICON_1);
 			}
 		}
 
-		if (ds_readws(ACTION) == ACTION_ID_ICON_3) {
+		if (g_action == ACTION_ID_ICON_3) {
 			done = 1;
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_1) {
+		} else if (g_action == ACTION_ID_ICON_1) {
 
 			talk_smith();
-			ds_writew(REQUEST_REFRESH, 1);
+			g_request_refresh = 1;
 
-			if (ds_readbs(SMITH_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ||
-				ds_readbs(SMITH_FLOGGED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ||
-				ds_readbs(DUNGEON_INDEX) != DUNGEONS_NONE)
+			if (gs_smith_kicked_flags[gs_current_typeindex] ||
+				gs_smith_flogged_flags[gs_current_typeindex] ||
+				gs_dungeon_index != DUNGEONS_NONE)
 			{
 				done = 1;
 			}
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_2) {
-			repair_screen(smith_ptr, ds_readws(CURRENT_TYPEINDEX));
+		} else if (g_action == ACTION_ID_ICON_2) {
+			repair_screen(smith_ptr, gs_current_typeindex);
 		}
 	}
 
@@ -577,27 +580,28 @@ void talk_smith(void)
 void TLK_schmied(signed short state)
 {
 	if (!state) {
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(SMITH_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ? 1 :
-					(ds_readws(CURRENT_TYPEINDEX) == 17 ? 27 :
-					(ds_readws(CURRENT_TYPEINDEX) == 1 && ds_readb(DNG14_CELLAREXIT_FLAG) != 0 ? 28 : 4)));
+		g_dialog_next_state = (gs_smith_kicked_flags[gs_current_typeindex] ? 1 :
+					(gs_current_typeindex == 17 ? 27 :
+					(gs_current_typeindex == 1 && gs_dng14_cellarexit_flag ? 28 : 4)));
 	} else if (state == 1) {
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(SMITH_FLOGGED_FLAGS + ds_readws(CURRENT_TYPEINDEX)) != 0 ? 2 : 3);
+		g_dialog_next_state = (gs_smith_flogged_flags[gs_current_typeindex] ? 2 : 3);
 	} else if (state == 3) {
-		ds_writeb(SMITH_FLOGGED_FLAGS + ds_readws(CURRENT_TYPEINDEX), 1);
+		gs_smith_flogged_flags[gs_current_typeindex] = 1;
 	} else if (state == 6 || state == 26) {
 		tumult();
-		ds_writeb(SMITH_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX), ds_writeb(SMITH_FLOGGED_FLAGS + ds_readws(CURRENT_TYPEINDEX), 1));
+		gs_smith_kicked_flags[gs_current_typeindex] = gs_smith_flogged_flags[gs_current_typeindex] = 1;
 	} else if (state == 11 || state == 14 || state == 16 || state == 23) {
-		ds_writeb(SMITH_KICKED_FLAGS + ds_readws(CURRENT_TYPEINDEX), 1);
+		gs_smith_kicked_flags[gs_current_typeindex] = 1;
 	} else if (state == 19 || state == 31) {
-		ds_writew(PRICE_MODIFICATOR, 3);
+		g_price_modificator = 3;
 	} else if (state == 30) {
 
 		DNG_enter_dungeon(DUNGEONS_ZWINGFESTE);
-		ds_writeb(DUNGEON_LEVEL, 3);
-		ds_writews(X_TARGET_BAK, ds_writews(X_TARGET, 11));
-		ds_writews(Y_TARGET_BAK, ds_writews(Y_TARGET, 2));
-		ds_writeb(DIRECTION, 2);
+
+		gs_dungeon_level = 3;
+		gs_x_target_bak = gs_x_target = 11;
+		gs_y_target_bak = gs_y_target = 2;
+		gs_direction = 2;
 	}
 }
 

@@ -59,7 +59,7 @@ void tevent_055(void)
 
 		load_in_head(52);
 
-		GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, get_tx2(0), 0);
+		GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(0), 0);
 
 		timewarp(HOURS(3));
 	}
@@ -100,7 +100,7 @@ void tevent_057(void)
 			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+					host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 				{
 					sub_hero_le(hero, random_schick(3));
 				}
@@ -113,7 +113,7 @@ void tevent_057(void)
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_skill(hero, TA_KLETTERN, 3) <= 0)
 			{
@@ -122,21 +122,14 @@ void tevent_057(void)
 				if (get_first_hero_with_item(ITEM_ROPE) == -1 || get_first_hero_with_item(ITEM_ROPE_LADDER) != -1)
 				{
 
-					sprintf((char*)ds_readd(DTP2),
-						get_tx2(8),
-						(char*)hero + HERO_NAME2,
-						(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
-
-					GUI_output((char*)ds_readd(DTP2));
+					sprintf(g_dtp2, get_tx2(8), (char*)hero + HERO_NAME2, GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
+					GUI_output(g_dtp2);
 
 					sub_hero_le(hero, random_schick(9) + 3);
 
 				} else {
-					sprintf((char*)ds_readd(DTP2),
-						get_tx2(7),
-						(char*)hero + HERO_NAME2);
-
-					GUI_output((char*)ds_readd(DTP2));
+					sprintf(g_dtp2, get_tx2(7), (char*)hero + HERO_NAME2);
+					GUI_output(g_dtp2);
 
 					sub_hero_le(hero, random_schick(8));
 				}
@@ -164,21 +157,18 @@ void tevent_059(void)
 
 	if (TRV_enter_hut_question())
 	{
-		ds_writews(CAMP_INCIDENT, 0);
-		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+		gs_camp_incident = 0;
+		gs_current_loctype = LOCTYPE_WILDCAMP;
 		do_location();
-		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
-		ds_writews(CAMP_INCIDENT, -1);
+		gs_current_loctype = LOCTYPE_NONE;
+		gs_camp_incident = -1;
 
 		TRV_load_textfile(-1);
 
 		load_in_head(10);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
-						get_tx2(9), 2,
-						get_tx2(10),
-						get_tx2(11));
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(9), 2, get_tx2(10), get_tx2(11));
 		} while (answer == -1);
 
 		if (answer == 1) {
@@ -186,11 +176,8 @@ void tevent_059(void)
 			if (get_first_hero_with_item(ITEM_BRANDY) != -1 || get_first_hero_with_item(ITEM_WINE) != -1)
 			{
 				do {
-					answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
-								get_tx2(12), 3,
-								get_tx2(13),
-								get_tx2(14),
-								get_tx2(15));
+					answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(12),
+								3, get_tx2(13), get_tx2(14), get_tx2(15));
 				} while (answer == -1);
 
 				if (answer == 1) {
@@ -204,17 +191,16 @@ void tevent_059(void)
 				}
 
 			} else {
-				GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
-						get_tx2(12), 1,
-						get_tx2(18));
+				GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(12),
+						1, get_tx2(18));
 
 				GUI_dialog_na(0, get_tx2(17));
 			}
 		}
 
-		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+		gs_current_loctype = LOCTYPE_WILDCAMP;
 		do_location();
-		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+		gs_current_loctype = LOCTYPE_NONE;
 	}
 }
 
@@ -232,10 +218,8 @@ void tevent_060(void)
 
 	do {
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
-						get_tx2(19), 2,
-						get_tx2(20),
-						get_tx2(21));
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(19), 2, get_tx2(20), get_tx2(21));
+
 		} while (answer == -1);
 
 		if (answer == 1) {
@@ -246,7 +230,7 @@ void tevent_060(void)
 
 				timewarp(HOURS(3));
 
-				GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, get_tx2(22), 0);
+				GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(22), 0);
 
 				done = 1;
 			} else {
@@ -256,10 +240,8 @@ void tevent_060(void)
 				timewarp(HOURS(4));
 
 				do {
-					answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
-								get_tx2(24), 2,
-								get_tx2(26),
-								get_tx2(27));
+					answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(24), 2, get_tx2(26), get_tx2(27));
+
 				} while (answer == -1);
 
 				if (answer == 1) {
@@ -271,7 +253,7 @@ void tevent_060(void)
 					for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 						if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-							host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+							host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 							!hero_dead(hero) &&
 							test_skill(hero, TA_KLETTERN, 0) <= 0)
 						{
@@ -279,7 +261,7 @@ void tevent_060(void)
 						}
 					}
 
-					GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, get_tx2(29), 0);
+					GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(29), 0);
 
 					done = 1;
 				} else {
@@ -293,7 +275,7 @@ void tevent_060(void)
 
 				timewarp(HOURS(3));
 
-				GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL, get_tx2(23), 0);
+				GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(23), 0);
 
 				done = 1;
 			} else {
@@ -303,10 +285,7 @@ void tevent_060(void)
 				timewarp(HOURS(4));
 
 				do {
-					answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
-								get_tx2(25), 2,
-								get_tx2(27),
-								get_tx2(28));
+					answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(25), 2, get_tx2(27), get_tx2(28));
 				} while (answer == -1);
 
 				if (answer == 2) {
@@ -316,7 +295,7 @@ void tevent_060(void)
 					for (i = has_magic_rope = nr_items = 0; i <= 6 ; i++, hero += SIZEOF_HERO){
 
 						if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-							host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+							host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 							!hero_dead(hero))
 						{
 							nr_items += hero_count_item(hero, ITEM_ROPE);
@@ -398,14 +377,13 @@ void tevent_061(void)
 			load_in_head(53);
 
 			do {
-				answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
-							get_tx2(36), 2,
-							get_tx2(37),
-							get_tx2(38));
+				answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(36),
+							2, get_tx2(37), get_tx2(38));
+
 			} while (answer == -1);
 
 			if (answer == 1) {
-				ds_writeb(TRAVEL_DETOUR, DUNGEONS_WOLFSHOEHLE);
+				gs_travel_detour = (DUNGEONS_WOLFSHOEHLE);
 			}
 		}
 
@@ -414,14 +392,13 @@ void tevent_061(void)
 		load_in_head(53);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
-						get_tx2(39), 2,
-						get_tx2(40),
-						get_tx2(41));
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(39),
+						2, get_tx2(40),	get_tx2(41));
+
 		} while (answer == -1);
 
 		if (answer == 1) {
-			ds_writeb(TRAVEL_DETOUR, DUNGEONS_WOLFSHOEHLE);
+			gs_travel_detour = (DUNGEONS_WOLFSHOEHLE);
 		}
 	}
 }
@@ -453,10 +430,9 @@ void tevent_063(void)
 	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP) &&
+			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 			!hero_dead(hero))
 		{
-
 			/* MU+0 */
 			if ((proof = test_attrib(hero, ATTRIB_MU, 0)) < max) {
 				max = proof;
@@ -467,12 +443,10 @@ void tevent_063(void)
 
 	hero = get_hero(vomiter);
 
-	sprintf((char*)ds_readd(DTP2),
-		get_tx2(47),
-		(char*)hero + HERO_NAME2);
+	sprintf(g_dtp2, get_tx2(47), (char*)hero + HERO_NAME2);
 
 	/* print who vomits */
-	GUI_output((char*)ds_readd(DTP2));
+	GUI_output(g_dtp2);
 
 	/* LE - 2 */
 	sub_hero_le(hero, 2);
@@ -499,15 +473,14 @@ void tevent_064(void)
 	approach_flag = 0;
 	silentium_flag = 0;
 
-	if (!ds_readb(TEVENT064_FLAG) && ds_readb(UMBRIK_QUEST_GORAH) != 0) {
+	if (!ds_readb(TEVENT064_FLAG) && gs_umbrik_quest_gorah) {
 
 		do {
 
 			do {
 				answer = GUI_radio(silentium_flag != 0 ? get_tx2(102) : get_tx2(49), 3,
-							get_tx2(50),
-							get_tx2(51),
-							get_tx2(52));
+							get_tx2(50), get_tx2(51), get_tx2(52));
+
 			} while (answer == -1);
 
 			if (answer == 1) {
@@ -548,7 +521,7 @@ void tevent_064(void)
 				for (i = result = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 						!hero_dead(hero) &&
 						test_skill(hero, TA_SCHLEICHEN, 0) <= 0)
 					{
@@ -557,7 +530,7 @@ void tevent_064(void)
 				}
 
 				if (result > 1) {
-				    /* test failed for at least one hero */
+					/* test failed for at least one hero */
 					ds_writeb(TEVENT064_SILENT_FLAG, 1);
 				}
 
@@ -566,9 +539,8 @@ void tevent_064(void)
 				approach_flag = 1;
 
 				do {
-					answer = GUI_radio(get_tx2(55), 2,
-							get_tx2(56),
-							get_tx2(57));
+					answer = GUI_radio(get_tx2(55), 2, get_tx2(56), get_tx2(57));
+
 				} while (answer == -1);
 
 				if (answer == 2)  return;
@@ -577,9 +549,8 @@ void tevent_064(void)
 		} while (approach_flag == 0);
 
 		do {
-			answer = GUI_radio(get_tx2(58), 2,
-					get_tx2(59),
-					get_tx2(60));
+			answer = GUI_radio(get_tx2(58), 2, get_tx2(59), get_tx2(60));
+
 		} while (answer == -1);
 
 		if (answer == 1) {
@@ -606,19 +577,17 @@ void tevent_064(void)
 
 			do {
 				do {
-					answer = GUI_radio(get_tx2(64), 2,
-							get_tx2(65),
-							get_tx2(66));
+					answer = GUI_radio(get_tx2(64), 2, get_tx2(65), get_tx2(66));
+
 				} while (answer == -1);
 
 				if (answer == 1) {
 
-					loot_multi_chest(p_datseg + TEVENT064_HUT_CONTENT, get_tx2(71));
+					loot_multi_chest((Bit8u*)&gs_tevent064_hut_content, get_tx2(71));
 
 					do {
-						answer = GUI_radio(get_tx2(67), 2,
-							get_tx2(68),
-							get_tx2(69));
+						answer = GUI_radio(get_tx2(67), 2, get_tx2(68),	get_tx2(69));
+
 					} while (answer == -1);
 
 					if (answer == 1) {
@@ -630,29 +599,25 @@ void tevent_064(void)
 
 			GUI_output(get_tx2(70));
 
-			ds_writews(TRV_RETURN, ds_readws(TRV_RETURN) == 0 ? 1 : -1);
+			gs_trv_return = (gs_trv_return == 0 ? 1 : -1);
 		}
 
 	} else if (ds_readb(TEVENT064_FLAG) != 0) {
 
 		do {
 			do {
-				answer = GUI_radio(get_tx2(64), 2,
-					get_tx2(65),
-					get_ttx(814));
+				answer = GUI_radio(get_tx2(64), 2, get_tx2(65),	get_ttx(814));
 
 			} while (answer == -1);
 
 			if (answer == 1) {
 
-				loot_multi_chest(p_datseg + TEVENT064_HUT_CONTENT, get_tx2(71));
+				loot_multi_chest((Bit8u*)&gs_tevent064_hut_content, get_tx2(71));
 
-				if (ds_readbs(TEVENT064_CHEST) != -1) {
+				if ((signed char)gs_tevent064_chest[0] != -1) {
 
 					do {
-						answer = GUI_radio(get_tx2(67), 2,
-							get_tx2(68),
-							get_ttx(814));
+						answer = GUI_radio(get_tx2(67), 2, get_tx2(68),	get_ttx(814));
 
 					} while (answer == -1);
 
@@ -663,13 +628,12 @@ void tevent_064(void)
 			}
 
 		} while (answer != 2);
-
 	}
 }
 
 void tevent_064_chest(void)
 {
-	loot_multi_chest(p_datseg + TEVENT064_CHEST, get_tx2(74));
+	loot_multi_chest((Bit8u*)&gs_tevent064_chest, get_tx2(74));
 }
 
 /* Orvil <-> Ala: rider */
@@ -682,13 +646,8 @@ void tevent_065(void)
 
 	/* show dialogbox */
 	do {
-		answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2),
-				NULL,
-				get_tx2(75),
-				3,
-				get_tx2(76),
-				get_tx2(77),
-				get_tx2(78));
+		answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(75),
+				3, get_tx2(76),	get_tx2(77), get_tx2(78));
 
 	} while (answer == -1);
 
@@ -702,9 +661,8 @@ void tevent_065(void)
 		if (answer == 2) {
 			/* Make Umbrik Siebenstein known */
 
-			/* Original-Bug: if Umbrik is done the value 2
-					is overwritten with 1 */
-			ds_writeb_z(INFORMER_FLAGS + INFORMER_UMBRIK, 1);
+			/* Original-Bug: if Umbrik is done the value 2 is overwritten with 1 */
+			update_informer_cond(INFORMER_UMBRIK);
 		}
 	}
 }
@@ -726,9 +684,8 @@ void tevent_066(void)
 		{
 
 			do {
-				l_si = GUI_radio(get_tx2(81), 2,
-							get_tx2(82),
-							get_tx2(83));
+				l_si = GUI_radio(get_tx2(81), 2, get_tx2(82), get_tx2(83));
+
 			} while (l_si == -1);
 
 			if (l_si == 1) {
@@ -739,7 +696,7 @@ void tevent_066(void)
 				for (l_di = count = 0; l_di <= 6; l_di++, hero += SIZEOF_HERO)
 				{
 					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 						!hero_dead(hero) &&
 						test_skill(hero, TA_SCHLEICHEN, -2) <= 0)
 					{
@@ -753,9 +710,7 @@ void tevent_066(void)
 
 				} else {
 					do {
-						l_si = GUI_radio(get_tx2(86), 2,
-									get_tx2(87),
-									get_tx2(88));
+						l_si = GUI_radio(get_tx2(86), 2, get_tx2(87), get_tx2(88));
 					} while (l_si == -1);
 
 					if (l_si == 1) {

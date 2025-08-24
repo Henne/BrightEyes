@@ -36,7 +36,6 @@ typedef unsigned int Bit32u;
 typedef signed int Bit32s;
 typedef Bit8u* HugePt;
 #endif
-typedef Bit8u* RealPt;
 
 /**
 	struct nvf_desc - nvf descriptor
@@ -80,7 +79,6 @@ struct screen_rect {
 #if defined(__BORLANDC__)
 #define RealSeg(p) FP_SEG(p)
 #define RealOff(p) FP_OFF(p)
-#define RealMake(s, o) MK_FP(s, o)
 #define datseg (_DS)
 #define p_datseg (&ds[0x0000])
 #else
@@ -115,10 +113,10 @@ static inline unsigned short cast_u16(unsigned char v)
 
 #if !defined(__BORLANDC__)
 
-#define INTCAST RealPt
-
 #define _creat creat
 #define _read read
+
+static inline int bioskey(const int cmd) { return 0; }
 
 /* comment this out to have the original, but buggy behaviour */
 #define M302de_ORIGINAL_BUGFIX
@@ -193,11 +191,6 @@ static inline void struct_copy(Bit8u *dst, Bit8u *src, int len)
 
 	memcpy(dst, src, len);
 }
-
-extern const char* names_attrib[];
-extern const char* names_skill[];
-extern const char* names_spell[];
-extern const char* names_mspell[];
 
 static inline Bit8u host_readb(Bit8u* p)
 {
@@ -336,151 +329,24 @@ static inline Bit16s ds_and_ws(unsigned short offs, unsigned short val) {
 }
 
 /**
- *	ds_writeb_z() -	write only if target is 0
- *	@addr:	address in datasegment
- *	@val:	value which should be written
+ * \brief mark informer only as known iff unknown
+ * \param informer the index of the informer
  *
- *	A often occuring Original-Bug resets some informants
- *	to older states. This helper writes only that value
- *	if the informer is unknown (0).
+ * \note A often occuring Original-Bug resets some informers to older states.
+ * 	This helper marks the informer only as known iff the informer is unknown (0).
  */
-static inline void ds_writeb_z(Bit16u addr, char val) {
-	if (ds_readb(addr) == 0)
-		ds_writeb(addr, val);
+static inline void update_informer_cond(const int informer)
+{
+	if ((0 <= informer) && (informer < 15) && (gs_informer_flags[informer] == 0)) {
+		gs_informer_flags[informer] = 1;
+	}
 }
 
-static inline Bit8u *get_hero(signed short index) {
+static inline unsigned char *get_hero(signed short index) {
 	if (index < 0 || index > 6) {
 		D1_ERR("ERROR: Versuch auf Held an Position %d zuzugreifen\n", index);
 	}
-	return (Bit8u*)ds_readd(HEROES) + index * SIZEOF_HERO;
-}
-
-static inline void add_ds_ws(Bit16u off, Bit16s val)
-{
-	ds_writew(off, ds_readws(off) + val);
-}
-
-static inline void sub_ds_ws(Bit16u off, Bit16s val)
-{
-	ds_writew(off, ds_readws(off) - val);
-}
-
-static inline void mul_ds_ws(Bit16u off, Bit16s val)
-{
-	ds_writew(off, ds_readws(off) * val);
-}
-
-static inline void div_ds_ws(Bit16u off, Bit16s val)
-{
-	ds_writew(off, ds_readws(off) / val);
-}
-
-static inline void mod_ds_ws(Bit16u off, Bit16s val)
-{
-	ds_writew(off, ds_readws(off) % val);
-}
-
-static inline void and_ds_ws(Bit16u off, Bit16s val)
-{
-	ds_writew(off, ds_readws(off) & val);
-}
-
-static inline void shr_ds_ws(Bit16u off, Bit16s val)
-{
-	ds_writew(off, ds_readw(off) >> val);
-}
-
-static inline Bit32s add_ds_ds(Bit16u off, Bit32s val)
-{
-	return ds_writed(off, ds_readds(off) + val);
-}
-
-static inline Bit32s sub_ds_ds(Bit16u off, Bit32s val)
-{
-	return ds_writed(off, ds_readds(off) - val);
-}
-
-/* Increment and Decrement on Bit8s variables in the datasegment */
-
-static inline Bit8s inc_ds_bs(Bit16u off)
-{
-	return ds_writeb(off, ds_readbs(off) + 1);
-}
-
-static inline Bit8s dec_ds_bs(Bit16u off)
-{
-	return ds_writeb(off, ds_readbs(off) - 1);
-}
-
-static inline Bit8s inc_ds_bs_post(Bit16u off)
-{
-	Bit8s val = ds_readbs(off);
-	ds_writeb(off, ds_readbs(off) + 1);
-	return val;
-}
-
-static inline Bit8s dec_ds_bs_post(Bit16u off)
-{
-	Bit8s val = ds_readbs(off);
-	ds_writeb(off, ds_readbs(off) - 1);
-	return val;
-}
-
-
-static inline void add_ds_bs(Bit16u off, Bit8s val)
-{
-	ds_writeb(off, ds_readbs(off) + val);
-}
-
-static inline void sub_ds_bs(Bit16u off, Bit8s val)
-{
-	ds_writeb(off, ds_readbs(off) - val);
-}
-
-static inline Bit8u add_ds_bu(Bit16u off, Bit8s val)
-{
-	return ds_writeb(off, ds_readb(off) + val);
-}
-
-static inline void and_ds_bs(Bit16u off, Bit8s val)
-{
-	ds_writeb(off, ds_readbs(off) & val);
-}
-
-static inline void or_ds_bs(Bit16u off, const unsigned char val)
-{
-	ds_writeb(off, ds_readb(off) | val);
-}
-
-static inline void or_ds_ws(Bit16u off, const signed short val)
-{
-	ds_writew(off, ds_readw(off) | val);
-}
-
-static inline void xor_ds_bs(Bit16u off, const unsigned char val)
-{
-	ds_writeb(off, ds_readb(off) ^ val);
-}
-
-static inline signed short inc_ds_ws(Bit16u off)
-{
-	return ds_writew(off, ds_readws(off) + 1);
-}
-
-static inline signed short inc_ds_ws_post(Bit16u off)
-{
-	return ds_writew(off, ds_readws(off) + 1) - 1;
-}
-
-static inline Bit16s dec_ds_ws(Bit16u off)
-{
-	return ds_writew(off, ds_readws(off) - 1);
-}
-
-static inline Bit16s dec_ds_ws_post(Bit16u off)
-{
-	return ds_writew(off, ds_readws(off) - 1) + 1;
+	return g_heroes + index * SIZEOF_HERO;
 }
 
 static inline void dec_ptr_ws(Bit8u *p)
@@ -518,11 +384,6 @@ static inline void sub_ptr_ws(Bit8u *p, Bit16s val)
 	host_writews(p, host_readws(p) - val);
 }
 
-static inline void mul_ptr_ws(Bit8u *p, Bit16s val)
-{
-	host_writews(p, host_readws(p) * val);
-}
-
 static inline Bit32s add_ptr_ds(Bit8u *p, Bit32s val)
 {
 	return host_writeds(p, host_readds(p) + val);
@@ -538,17 +399,11 @@ static inline int __abs__(int j)
 	return abs(j);
 }
 
-static inline void F_PADA(Bit8u *p, Bit32s o)		{ *p += o; }
-static inline Bit8u* F_PADD(Bit8u* ptr, Bit32s o)	{ return ptr + o; }
-static inline Bit32s F_PSUB(Bit8u *p1, Bit8u *p2)	{ return p1 - p2; }
-
 static inline char* my_itoa(int value, char *string, int radix)
 {
 	sprintf(string, "%d", value);
 	return string;
 }
-
-
 
 /**
  * test_bit0() -	check if bit0 ist set
@@ -799,13 +654,6 @@ static inline unsigned short enemy_dead(Bit8u *enemy) {
 		return 1;
 }
 
-static inline unsigned short enemy_asleep(Bit8u *enemy) {
-	if (((host_readb(enemy + ENEMY_SHEET_FLAGS1) >> 1) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
 /**
  * enemy_petrified() -	check if enemy is petrified
  * @enemy:	ptr to enemy
@@ -819,47 +667,6 @@ static inline unsigned short enemy_petrified(Bit8u *enemy) {
 		return 1;
 }
 
-static inline unsigned short enemy_busy(Bit8u *enemy) {
-	if (((host_readb(enemy + ENEMY_SHEET_FLAGS1) >> 3) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-static inline unsigned short enemy_tied(Bit8u *enemy) {
-	if (((host_readb(enemy + ENEMY_SHEET_FLAGS1) >> 5) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-static inline unsigned short enemy_mushroom(Bit8u *enemy) {
-	if (((host_readb(enemy + ENEMY_SHEET_FLAGS1) >> 6) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-/**
- * enemy_illusion() -	check if enemy is an illusion
- * @enemy:	ptr to enemy
- *
- * 0 = real / 1 = illusion
- */
-static inline unsigned short enemy_illusion(Bit8u *enemy) {
-	if (((host_readb(enemy + ENEMY_SHEET_FLAGS1) >> 7) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-static inline unsigned short enemy_tame(Bit8u *enemy) {
-	if (((host_readb(enemy + ENEMY_SHEET_FLAGS2) >> 0) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
 /**
  * enemy_renegade() -	check if enemy is under boeser blick spell
  * @enemy:	ptr to enemy
@@ -868,20 +675,6 @@ static inline unsigned short enemy_tame(Bit8u *enemy) {
  */
 static inline unsigned short enemy_renegade(Bit8u *enemy) {
 	if (((host_readb(enemy + ENEMY_SHEET_FLAGS2) >> 1) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-static inline unsigned short enemy_scared(Bit8u *enemy) {
-	if (((host_readb(enemy + ENEMY_SHEET_FLAGS2) >> 2) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-static inline unsigned short enemy_dancing(Bit8u *enemy) {
-	if (((host_readb(enemy + ENEMY_SHEET_FLAGS2) >> 3) & 1) == 0)
 		return 0;
 	else
 		return 1;
@@ -1074,56 +867,53 @@ static inline unsigned short item_undropable(Bit8u *item) {
 }
 
 static inline Bit8u *get_spelltarget_e(void) {
-	return (Bit8u*)ds_readd(SPELLTARGET_E);
+	return (Bit8u*)g_spelltarget_e;
 }
 
 static inline Bit8u *get_spelltarget(void) {
-	return (Bit8u*)ds_readd(SPELLTARGET);
+	return (Bit8u*)g_spelltarget;
 }
 
 static inline Bit8u *get_spelluser(void) {
-	return (Bit8u*)ds_readd(SPELLUSER);
+	return (Bit8u*)g_spelluser;
 }
-
-static inline Bit8u *get_spelluser_e(void) {
-	return (Bit8u*)ds_readd(SPELLUSER_E);
-}
-
 
 static inline Bit8u *get_itemuser(void) {
-	return (Bit8u*)ds_readd(ITEMUSER);
+	return (Bit8u*)g_itemuser;
 }
 
 static inline Bit8u *get_fname(unsigned short off) {
 	return (Bit8u*)ds_readd(FNAMES + off * 4);
 }
 
-static inline Bit8u *get_monname(unsigned short off)
+static inline char *get_monname(const int no)
 {
-	return (Bit8u*)host_readd((Bit8u*)ds_readd(MONNAMES_INDEX) + off * 4);
+	if ((0 <= no) && (no < 77))
+		return g_monnames_index[no];
+	else {
+		fprintf(stderr, "ERROR: %s[%d] is out of bounds\n", __func__, no);
+		return NULL;
+	}
 }
 
-#define get_tx2(no) get_tx2_func(4*(no))
-static inline char *get_tx2_func(unsigned short off) {
-	return (char*)host_readd((Bit8u*)ds_readd(TX2_INDEX) + off);
+static inline char *get_tx2(unsigned short no) {
+	return (char*)g_tx2_index[no];
 }
 
-#define get_ttx(no) get_ttx_func(4*(no))
-static inline char *get_ttx_func(unsigned short off) {
-	return (char*)host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + off);
+static inline char *get_ttx(unsigned short no) {
+	return (char*)g_text_ltx_index[no];
 }
 
-#define get_tx(no) get_tx_func(4*(no))
-static inline char *get_tx_func(unsigned short off) {
-	return (char*)host_readd((Bit8u*)ds_readd(TX_INDEX) + off);
+static inline char *get_tx(unsigned short no) {
+	return (char*)g_tx_index[no];
 }
 
-static inline signed char get_cb_val(signed short x, signed short y) {
-	return host_readbs((Bit8u*)ds_readd(CHESSBOARD) + y * 25 + x);
+static inline signed char get_cb_val(const signed short x, const signed short y) {
+	return *(g_chessboard + 25 * y + x);
 }
 
-static inline void set_cb_val(unsigned short x, unsigned short y, signed char val) {
-	host_writeb((Bit8u*)ds_readd(CHESSBOARD) + y * 25 + x, val);
+static inline void set_cb_val(const unsigned short x, const unsigned short y, const signed char val) {
+	*(g_chessboard + 25 * y + x) = val;
 }
 
 static inline void dump_cb(void)
@@ -1151,12 +941,12 @@ static inline void dump_cb(void)
 }
 
 static inline Bit8u *get_itemsdat(unsigned short item) {
-	return (Bit8u*)ds_readd(ITEMSDAT) + item * 12;
+	return g_itemsdat + SIZEOF_ITEM_STATS * item;
 }
 
 static inline char* get_itemname(unsigned short item)
 {
-	return (char*)(host_readd((Bit8u*)ds_readd(ITEMSNAME) + item * 4));
+	return (char*)g_itemsname[item];
 }
 
 #define DUMMY_WARNING() D1_ERR("Error: %s is not implemented\n", __func__)
@@ -1168,26 +958,8 @@ static inline char* get_itemname(unsigned short item)
 
 #undef M302de_ORIGINAL_BUGFIX
 
-#ifdef __cplusplus
-#define INTCAST void interrupt (*)(...)
-#else
-#define INTCAST void interrupt (*)()
-#endif
-
-/* porting functions for Borland C++ */
-struct hero_struct {
-	char name[16];
-	char alias[16];
-	char dummy;
-	char typus;
-};
-
 /* helper, use only when neccessary */
 #define struct_copy memcpy
-
-#define F_PADA(p, o) (*((HugePt*)p) += o)
-#define F_PADD(p, o) ((HugePt)(p) + o)
-#define F_PSUB(p1, p2) ((HugePt)(p1) - (HugePt)(p2))
 
 #define my_itoa itoa
 
@@ -1208,40 +980,6 @@ struct hero_struct {
 #define ds_writew(p, d)		(*(Bit16u*)(ds + p) = (d))
 #define ds_writed(p, d)		(*(Bit32u*)(ds + p) = (d))
 
-#define inc_ds_bs(o)		(++(*(Bit8s*)(ds + (o))))
-#define dec_ds_bs(o)		(--(*(Bit8s*)(ds + (o))))
-#define inc_ds_bs_post(o)	((*(Bit8s*)(ds + (o)))++)
-#define dec_ds_bs_post(o)	((*(Bit8s*)(ds + (o)))--)
-
-#define add_ds_bs(o, val)	((*(Bit8s*)(ds + (o)))+= (val))
-#define sub_ds_bs(o, val)	((*(Bit8s*)(ds + (o)))-= (val))
-#define add_ds_bu(o, val)	((*(Bit8u*)(ds + (o)))+= (val))
-
-#define inc_ds_ws(o)		(++(*(Bit16s*)(ds + (o))))
-#define dec_ds_ws(o)		(--(*(Bit16s*)(ds + (o))))
-
-#define inc_ds_ws_post(o)	((*(Bit16s*)(ds + o))++)
-#define dec_ds_ws_post(o)	((*(Bit16s*)(ds + o))--)
-
-#define and_ds_bs(o, v)		(*(Bit8s*)(ds + o) &= (v))
-#define or_ds_bs(o, v)		(*(Bit8s*)(ds + o) |= (v))
-#define or_ds_ws(o, v)		(*(Bit16s*)(ds + o) |= (v))
-#define xor_ds_bs(o, v)		(*(Bit8s*)(ds + o) ^= (v))
-
-#define add_ds_ws(o, v)		(*(Bit16s*)(ds + o) += (v))
-#define sub_ds_ws(o, v)		(*(Bit16s*)(ds + (o)) -= (v))
-#define mul_ds_ws(o, v)		(*(Bit16s*)(ds + (o)) *= (v))
-#define div_ds_ws(o, v)		(*(Bit16s*)(ds + (o)) /= (v))
-#define mod_ds_ws(o, v)		(*(Bit16s*)(ds + (o)) %= (v))
-#define and_ds_ws(o, v)		(*(Bit16s*)(ds + (o)) &= (v))
-#define shr_ds_ws(o, v)		(*(Bit16s*)(ds + (o)) >>= (v))
-
-#define add_ds_ds(o, v)		(*(Bit32s*)(ds + (o)) += (v))
-#define sub_ds_ds(o, v)		(*(Bit32s*)(ds + (o)) -= (v))
-
-#define add_ds_fp(o, v)		(*(RealPt*)(ds + (o)) += (v))
-#define sub_ds_fp(o, v)		(*(RealPt*)(ds + (o)) -= (v))
-
 #define inc_ptr_bs(p)		((*(Bit8s*)(p))++)
 #define dec_ptr_bs(p)		((*(Bit8s*)(p))--)
 
@@ -1250,28 +988,23 @@ struct hero_struct {
 
 #define or_ptr_bs(p, v)		(*(Bit8s*)(p) |= (v))
 #define and_ptr_bs(p, v)	(*(Bit8s*)(p) &= (v))
+
 #define add_ptr_bs(p, v)	(*(Bit8s*)(p) += (v))
 #define sub_ptr_bs(p, v)	(*(Bit8s*)(p) -= (v))
 
-
 #define add_ptr_ws(p, v)	(*(Bit16s*)(p) += (v))
 #define sub_ptr_ws(p, v)	(*(Bit16s*)(p) -= (v))
-#define mul_ptr_ws(p, v)	(*(Bit16s*)(p) *= (v))
 
 #define add_ptr_ds(p, v)	(*(Bit32s*)(p) += (v))
 #define sub_ptr_ds(p, v)	(*(Bit32s*)(p) -= (v))
 
-#define get_hero(no) ((Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * (no))
+#define get_hero(no) ((unsigned char*)g_heroes + SIZEOF_HERO * (no))
 
 #ifdef M302de_ORIGINAL_BUGFIX
-#define ds_writeb_z(addr, val) (if (ds_readb(addr) == 0) ds_writeb(addr, val))
+#define update_informer_cond(informer) (if (gs_informer_flags[informer] == 0) gs_informer_flags[informer] = 1)
 #else
-#define ds_writeb_z(addr, val) (ds_writeb(addr, val))
+#define update_informer_cond(informer) (gs_informer_flags[informer] = 1)
 #endif
-
-extern Bit8u* text_ltx_index[];
-extern Bit8u* tx_index[];
-extern Bit8u* tx2_index[];
 
 #define host_readb(p) (*(Bit8u*)(p))
 #define host_readw(p) (*(Bit16u*)(p))
@@ -1289,9 +1022,6 @@ extern Bit8u* tx2_index[];
 #define host_writews(p, d)	(*(Bit16s*)(p) = (d))
 #define host_writeds(p, d)	(*(Bit32s*)(p) = (d))
 
-/* TODO: ugly hack, BASM does not like 16bit immediate values with imul */
-#define calc_twodim_array_ptr(start, width, disp, off, dst) \
-asm { mov ax,disp; db 0x69,0xc0,0xc0,0x08; mov dx, [start + 2]; add ax, [start]; add ax, off; mov[dst + 2],dx; mov [dst],ax }
 struct bittest {
 	unsigned short bit0:1;
 	unsigned short bit1:1;
@@ -1330,18 +1060,10 @@ struct bittest {
 
 #define hero_seen_phantom_set(hero, v) ((*(struct hero_flags*)(hero + HERO_FLAGS1)).seen_phantom = v)
 
-#define enemy_dead(enemy)	(((struct enemy_sheets*)(enemy))->flags1.dead)
-#define enemy_asleep(enemy)	(((struct enemy_sheets*)(enemy))->flags1.asleep)
-#define enemy_petrified(enemy)	(((struct enemy_sheets*)(enemy))->flags1.petrified)
-#define enemy_busy(enemy)	(((struct enemy_sheets*)(enemy))->flags1.busy)
-#define enemy_tied(enemy)	(((struct enemy_sheets*)(enemy))->flags1.tied)
-#define enemy_mushroom(enemy)	(((struct enemy_sheets*)(enemy))->flags1.mushroom)
-#define enemy_illusion(enemy)	(((struct enemy_sheets*)(enemy))->flags1.illusion)
+#define enemy_dead(enemy)	(((struct enemy_sheet*)(enemy))->flags1.dead)
+#define enemy_petrified(enemy)	(((struct enemy_sheet*)(enemy))->flags1.petrified)
 
-#define enemy_tame(enemy)	(((struct enemy_sheets*)(enemy))->flags2.tame)
-#define enemy_renegade(enemy)	(((struct enemy_sheets*)(enemy))->flags2.renegade)
-#define enemy_scared(enemy)	(((struct enemy_sheets*)(enemy))->flags2.scared)
-#define enemy_dancing(enemy)	(((struct enemy_sheets*)(enemy))->flags2.dancing)
+#define enemy_renegade(enemy)	(((struct enemy_sheet*)(enemy))->flags2.renegade)
 
 #define add_inventory_quantity(i1, i2, hero) (    ((struct inventory*)(hero + HERO_INVENTORY))[i1].quantity+=((struct inventory*)(hero + HERO_INVENTORY))[i2].quantity)
 
@@ -1361,22 +1083,21 @@ struct bittest {
 #define item_herb_potion(item)	((*(struct item_flags*)(item + ITEM_STATS_FLAGS)).herb_potion)
 #define item_undropable(item)	((*(struct item_flags*)(item + ITEM_STATS_FLAGS)).undropable)
 
-#define get_spelltarget_e()	((Bit8u*)ds_readd(SPELLTARGET_E))
-#define get_spelltarget()	((Bit8u*)ds_readd(SPELLTARGET))
-#define get_spelluser()		((Bit8u*)ds_readd(SPELLUSER))
-#define get_spelluser_e()	((Bit8u*)ds_readd(SPELLUSER_E))
+#define get_spelltarget_e()	((Bit8u*)g_spelltarget_e)
+#define get_spelltarget()	((unsigned char*)g_spelltarget)
+#define get_spelluser()		((unsigned char*)g_spelluser)
 
-#define get_itemuser() ((Bit8u*)ds_readd(ITEMUSER))
+#define get_itemuser() ((unsigned char*)g_itemuser)
 
-#define get_ttx(no) ((char*)(host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 4 * (no))))
-#define get_tx(no) ((char*)(host_readd((Bit8u*)ds_readd(TX_INDEX) + 4 * (no))))
-#define get_tx2(no) ((char*)(host_readd((Bit8u*)ds_readd(TX2_INDEX) + 4 * (no))))
-#define get_monname(no) ((char*)(host_readd((Bit8u*)ds_readd(MONNAMES_INDEX) + 4 * (no))))
-#define get_itemsdat(no) ((char*)((Bit8u*)ds_readd(ITEMSDAT) + 12 * (no)))
-#define get_itemname(no) ((char*)(host_readd((Bit8u*)ds_readd(ITEMSNAME) + 4 * (no))))
+#define get_ttx(no) ((char*)(g_text_ltx_index[(no)]))
+#define get_tx(no) ((char*)(g_tx_index[(no)]))
+#define get_tx2(no) ((char*)(g_tx2_index[(no)]))
+#define get_monname(no) ((char*)g_monnames_index[no])
+#define get_itemsdat(no) ((unsigned char*)(g_itemsdat + SIZEOF_ITEM_STATS * (no)))
+#define get_itemname(no) ((char*)g_itemsname[(no)])
 
-#define get_cb_val(x, y) (host_readbs((Bit8u*)ds_readd(CHESSBOARD) + (y) * 25 + (x)))
-#define set_cb_val(x, y, val) (host_writeb((Bit8u*)ds_readd(CHESSBOARD) + (y) * 25 + (x), (val)))
+#define get_cb_val(x, y) (*(g_chessboard + (y) * 25 + (x)))
+#define set_cb_val(x, y, val) (*(g_chessboard + (y) * 25 + (x)) = (val))
 
 #endif
 #endif

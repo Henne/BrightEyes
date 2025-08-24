@@ -9,6 +9,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
+#include <ctype.h>
+#include <time.h>
 
 #if defined(__BORLANDC__)
 #include <DIR.H>
@@ -37,27 +39,26 @@ void init_text(void)
 	signed short handle;
 
 	handle = load_archive_file(ARCHIVE_FILE_FONT6);
-	read_archive_file(handle, (Bit8u*)ds_readd(BUF_FONT6), 1000);
+	read_archive_file(handle, g_buf_font6, 1000);
 	close(handle);
 
 	handle = load_archive_file(ARCHIVE_FILE_TEXT_LTX);
-	len = (signed short)read_archive_file(handle, (Bit8u*)ds_readd(TEXT_LTX_BUFFER), 64000);
+	len = (signed short)read_archive_file(handle, (Bit8u*)g_text_ltx_buffer, 64000);
 	close(handle);
 
-	split_textbuffer((Bit8u*)ds_readd(TEXT_LTX_INDEX), (Bit8u*)ds_readd(TEXT_LTX_BUFFER), len);
+	split_textbuffer((char**)g_text_ltx_index, g_text_ltx_buffer, len);
 
 	handle = load_archive_file(ARCHIVE_FILE_ITEMNAME);
-	len = (signed short)read_archive_file(handle, (Bit8u*)ds_readd(BUFFER5_PTR), 5000);
+	len = (signed short)read_archive_file(handle, (Bit8u*)g_buffer5_ptr, 5000);
 	close(handle);
 
-	split_textbuffer((Bit8u*)ds_readd(ITEMSNAME), (Bit8u*)ds_readd(BUFFER5_PTR), len);
+	split_textbuffer((char**)g_itemsname, g_buffer5_ptr, len);
 
 	handle = load_archive_file(ARCHIVE_FILE_MONNAMES);
-	len = (signed short)read_archive_file(handle, (Bit8u*)ds_readd(MONNAMES_BUFFER), 5000);
+	len = (signed short)read_archive_file(handle, (Bit8u*)g_monnames_buffer, 5000);
 	close(handle);
 
-	split_textbuffer((Bit8u*)ds_readd(MONNAMES_INDEX), (Bit8u*)ds_readd(MONNAMES_BUFFER), len);
-
+	split_textbuffer((char**)g_monnames_index, g_monnames_buffer, len);
 }
 
 void load_tx(signed short index)
@@ -70,13 +71,13 @@ void load_tx(signed short index)
 
 	archive_file_handle = load_archive_file(index);
 
-	archive_file_len = (signed short)read_archive_file(archive_file_handle, (Bit8u*)ds_readd(BUFFER7_PTR), 64000);
+	archive_file_len = (signed short)read_archive_file(archive_file_handle, (Bit8u*)g_buffer7_ptr, 64000);
 
 	close(archive_file_handle);
 
-	split_textbuffer((Bit8u*)ds_readd(TX_INDEX), (Bit8u*)ds_readd(BUFFER7_PTR), archive_file_len);
+	split_textbuffer((char**)g_tx_index, g_buffer7_ptr, archive_file_len);
 
-	ds_writew(TX_FILE_INDEX, index);
+	g_tx_file_index = index;
 }
 
 void load_tx2(signed short index)
@@ -87,12 +88,12 @@ void load_tx2(signed short index)
 	if (index == -1)
 		return;
 
-	ds_writew(TEXT_FILE_INDEX, index);
+	g_text_file_index = index;
 	fd = load_archive_file(index);
-	len = (signed short)read_archive_file(fd, (Bit8u*)ds_readd(BUFFER8_PTR), 12000);
+	len = (signed short)read_archive_file(fd, g_buffer8_ptr, 12000);
 	close(fd);
 
-	split_textbuffer((Bit8u*)ds_readd(TX2_INDEX), (Bit8u*)ds_readd(BUFFER8_PTR), len);
+	split_textbuffer((char**)g_tx2_index, (char*)g_buffer8_ptr, len);
 }
 
 void load_ltx(unsigned short index)
@@ -101,28 +102,26 @@ void load_ltx(unsigned short index)
 	signed short fd;
 
 	fd = load_archive_file(index);
-	ds_writew(AREA_PREPARED, 0xffff);
-	len = (signed short)read_archive_file(fd, (Bit8u*)ds_readd(BUFFER9_PTR3) + 1000, 64000);
+	g_area_prepared = -1;
+	len = (signed short)read_archive_file(fd, ((Bit8u*)g_buffer9_ptr3) + 1000, 64000);
 	close(fd);
 
-	split_textbuffer((Bit8u*)ds_readd(BUFFER9_PTR3),
-		F_PADD((Bit8u*)ds_readd(BUFFER9_PTR3), 1000L), len);
+	split_textbuffer((char**)g_buffer9_ptr3, (char*)(g_buffer9_ptr3 + 1000L), len);
 }
 
-void split_textbuffer(Bit8u *dst, RealPt src, Bit32u len)
+void split_textbuffer(char **dst, char *src, Bit32u len)
 {
 	Bit32u i = 0;
 
-	host_writed(dst, (Bit32u)src);
-	dst += 4;
+	*dst = src;
+	dst += sizeof(char*);
 
 	for (; i != len; src++, i++) {
 		/* continue if not the end of the string */
-		if (!host_readbs((Bit8u*)(src))) {
-
+		if (!(*src)) {
 			/* write the adress of the next string */
-			host_writed(dst, (Bit32u)(src + 1));
-			dst += 4;
+			*dst = src + 1;
+			dst += sizeof(char*);
 		}
 	}
 }
@@ -134,11 +133,11 @@ void load_ggsts_nvf(void)
 	/* seek to GGSTS.NVF */
 	fd = load_archive_file(ARCHIVE_FILE_GGSTS_NVF);
 	/* read it */
-	read_archive_file(fd, (Bit8u*)ds_readd(BUFFER10_PTR), 16771);
+	read_archive_file(fd, g_buffer10_ptr, 16771);
 	/* close it */
 	close(fd);
 
-	ds_writew(AREA_PREPARED, 0xffff);
+	g_area_prepared = -1;
 }
 
 void prepare_chr_name(char *dst, char *src)
@@ -153,15 +152,14 @@ void prepare_chr_name(char *dst, char *src)
 		if (!tmp_str[i])
 			break;
 
-		/* maybe !isalnum(tmp_str[i]) */
-		if (!(ds_readbs(CHAR_TYPE_TABLE + tmp_str[i]) & 0x0e)) {
+		if (!isalnum(tmp_str[i])) {
 			tmp_str[i] = 0x5f;
 		}
 	}
 
 	strncpy(dst, tmp_str, 8);
 	dst[8] = '\0';
-	strcat(dst, (char*)p_datseg + CHR_FILE_SUFFIX);
+	strcat(dst, g_chr_file_suffix);
 }
 
 void prepare_sg_name(char *dst, char *src)
@@ -183,8 +181,7 @@ void prepare_sg_name(char *dst, char *src)
 			break;
 		}
 
-		/* maybe !isalnum(tmp_str[i]) */
-		if (!(ds_readbs(CHAR_TYPE_TABLE + tmp_str[i]) & 0x0e)) {
+		if (!isalnum(tmp_str[i])) {
 			tmp_str[i] = 0x5f;
 		}
 		i++;
@@ -196,6 +193,7 @@ void prepare_sg_name(char *dst, char *src)
 
 signed short load_game_state(void)
 {
+#if defined(__BORLANDC__)
 	register signed short handle_gs;
 	signed short i;
 	signed short handle;
@@ -208,7 +206,7 @@ signed short load_game_state(void)
 	signed short l3;
 	signed short retval;
 	signed short l4;
-	RealPt hero_i;
+	Bit8u* hero_i;
 	signed char version[4];
 	struct ffblk blk;
 	char name[20];
@@ -216,23 +214,20 @@ signed short load_game_state(void)
 	retval = 0;
 
 	/* select a game state */
-	answer = GUI_radio(get_ttx(0), 6,
-			p_datseg + (SAVEGAME_NAMES + 0),
-			p_datseg + (SAVEGAME_NAMES + 9),
-			p_datseg + (SAVEGAME_NAMES + 18),
-			p_datseg + (SAVEGAME_NAMES + 27),
-			p_datseg + (SAVEGAME_NAMES + 36),
-			get_ttx(737)) -1;
+	answer = GUI_radio(get_ttx(0), 6, g_savegame_names[0],
+			g_savegame_names[1], g_savegame_names[2],
+			g_savegame_names[3], g_savegame_names[4],
+			get_ttx(737)) - 1;
 
 	/* sanity check if answer is in range */
 	if (answer != -2 && answer != 5) {
 
-		prepare_sg_name((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)p_datseg + SAVEGAME_NAMES + 9 * answer);
+		prepare_sg_name(g_text_output_buf, g_savegame_names[answer]);
 		/* concat with ".gam" */
-		strcat((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)p_datseg + SAVEGAME_SUFFIX);
+		strcat(g_text_output_buf, g_savegame_suffix);
 
 		/* open the game state file */
-		if ((handle_gs = open((char*)ds_readd(TEXT_OUTPUT_BUF), O_BINARY | O_RDONLY)) == -1)
+		if ((handle_gs = open(g_text_output_buf, O_BINARY | O_RDONLY)) == -1)
 		{
 			GUI_output(get_ttx(635));
 			retval = -1;
@@ -242,30 +237,23 @@ signed short load_game_state(void)
 		update_mouse_cursor();
 
 		/* something ani related */
-		l1 = ds_readws(UPDATE_STATUSLINE);
-		ds_writew(UPDATE_STATUSLINE, 0);
+		l1 = g_update_statusline;
+		g_update_statusline = 0;
 
-		l4 = ds_readws(ANI_ENABLED);
-		ds_writew(ANI_ENABLED, 0);
+		l4 = g_ani_enabled;
+		g_ani_enabled = 0;
 
-		/* delete every file in TEMP */
-		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-			/* "TEMP\\%s" */
-			(char*)ds_readd(STR_TEMP_XX_PTR2),
-			/* "*.*" */
-			(char*)p_datseg + ALL_FILES_WILDCARD);
+		/* delete every file TEMP\\*.* */
+		sprintf(g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), g_all_files_wildcard);
 
 #if defined(__BORLANDC__)
-		l2 = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
+		l2 = findfirst(g_text_output_buf, &blk, 0);
 
 		if (l2 == 0) {
 
 			do {
-				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-					(char*)ds_readd(STR_TEMP_XX_PTR2),
-					((char*)(&blk))+ 30);
-
-				unlink((char*)ds_readd(TEXT_OUTPUT_BUF));
+				sprintf(g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), ((char*)(&blk))+ 30);
+				unlink(g_text_output_buf);
 
 				l2 = findnext(&blk);
 
@@ -274,60 +262,57 @@ signed short load_game_state(void)
 #endif
 
 		/* init */
-		ds_writed(SAVED_FILES_BUF, ds_readd(DTP2));
-		memset((Bit8u*)ds_readd(SAVED_FILES_BUF), 0, 286 * 4);
+		g_saved_files_buf = g_dtp2;
+		memset(g_saved_files_buf, 0, 286 * 4);
 
 		/* read version info */
-		_read(handle_gs, (Bit8u*)ds_readd(TEXT_OUTPUT_BUF), 12);
+		_read(handle_gs, (Bit8u*)g_text_output_buf, 12);
 		_read(handle_gs, (Bit8u*)&version[3], 1);
 		_read(handle_gs, (Bit8u*)&version[2], 1);
 		_read(handle_gs, (Bit8u*)&version[0], 1);
 		_read(handle_gs, (Bit8u*)&version[1], 1);
 
-		_read(handle_gs, p_datseg + DATSEG_STATUS_START, 4);
+		_read(handle_gs, &gs_datseg_status_start, 4);
 
 		/* read game status */
-		p_status_start = (HugePt)(p_datseg + DATSEG_STATUS_START);
-		p_status_end = (HugePt)(p_datseg + DATSEG_STATUS_END);
-#if !defined(__BORLANDC__)
-		status_length = (signed short)F_PSUB(p_status_end, p_status_start);
-#else
+		/* TODO: check pointer arithmetics work with other pointers */
+		p_status_start = (HugePt)&gs_datseg_status_start;
+		p_status_end = (HugePt)&gs_datseg_status_end;
 		status_length = (signed short)(p_status_end - p_status_start);
-#endif
 
-		_read(handle_gs, p_datseg + DATSEG_STATUS_START, status_length);
+		_read(handle_gs, &gs_datseg_status_start, status_length);
 
-		ds_writeb(SPECIAL_SCREEN, 1);
+		g_special_screen = 1;
 
 		/* read file table */
-		_read(handle_gs, (Bit8u*)ds_readd(SAVED_FILES_BUF), 286 * 4);
+		_read(handle_gs, g_saved_files_buf, 286 * 4);
 
 		/* create for each saved file in gam a file in TEMP */
 		for (i = 0; i < 286; i++) {
 
-			if (host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * i)) {
+			if (host_readd(g_saved_files_buf + 4 * i)) {
 
 				/* write file content to TEMP */
-				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+				sprintf(g_text_output_buf,
 					(char*)ds_readd(STR_TEMP_XX_PTR2),
-					(char*)(Bit8u*)(ds_readd(FNAMES + 4 * i)));
+					(char*)(ds_readd(FNAMES + 4 * i)));
 
 				/* TODO: should be O_BINARY | O_WRONLY */
-				handle = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
+				handle = _creat(g_text_output_buf, 0);
 
-				_read(handle_gs, (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * i));
-				_write(handle,   (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * i));
+				_read(handle_gs, g_renderbuf_ptr, (unsigned short)host_readd(g_saved_files_buf + 4 * i));
+				write(handle,   g_renderbuf_ptr, (unsigned short)host_readd(g_saved_files_buf + 4 * i));
 				close(handle);
 			}
 		}
 
 		/* clear the heroes */
-		hero_i = (Bit8u*)ds_readd(HEROES);
+		hero_i = get_hero(0);
 		for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 			memset(hero_i, 0, SIZEOF_HERO);
 		}
 
-		hero_i = (Bit8u*)ds_readd(RENDERBUF_PTR);
+		hero_i = g_renderbuf_ptr;
 
 		do {
 			l3 = _read(handle_gs, (Bit8u*)hero_i, SIZEOF_HERO);
@@ -337,34 +322,21 @@ signed short load_game_state(void)
 				prepare_chr_name(name, (char*)hero_i);
 
 				/* write file content to TEMP */
-				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+				sprintf(g_text_output_buf,
 					(char*)ds_readd(STR_TEMP_XX_PTR2),
 					name);
 
 				/* TODO: should be O_BINARY | O_WRONLY */
-				handle = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
+				handle = _creat(g_text_output_buf, 0);
 
-				_write(handle, (Bit8u*)hero_i, SIZEOF_HERO);
+				write(handle, (Bit8u*)hero_i, SIZEOF_HERO);
 				close(handle);
 
 				if (host_readbs(hero_i + HERO_GROUP_POS) != 0) {
 
 					prepare_chr_name(name, (char*)hero_i);
-#if !defined(__BORLANDC__)
-					{
-						/* create a char[20] on the stack */
-						Bit16u sp_bak = reg_sp;
-						reg_sp -= 20;
 
-						RealPt r_name = RealMake(SegValue(ss), reg_sp);
-						strncpy((char*)(Bit8u*)(r_name), name, 20);
-						host_writeb((Bit8u*)(r_name) + 20, 0);
-						read_chr_temp(r_name, host_readbs(hero_i + HERO_GROUP_POS) - 1, host_readbs(hero_i + HERO_GROUP_NO));
-						reg_sp = sp_bak;
-					}
-#else
 					read_chr_temp(name, host_readbs(hero_i + HERO_GROUP_POS) - 1, host_readbs(hero_i + HERO_GROUP_NO));
-#endif
 				}
 			}
 		} while (l3 != 0);
@@ -373,22 +345,20 @@ signed short load_game_state(void)
 
 #if defined(__BORLANDC__)
 		/* search for "*.CHR" */
-		l2 = findfirst((char*)(p_datseg + ALL_CHR_WILDCARD), &blk, 0);
+		l2 = findfirst(g_all_chr_wildcard, &blk, 0);
 
 		while (l2 == 0) {
 
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-				(char*)ds_readd(STR_TEMP_XX_PTR2),
-				((char*)(&blk)) + 30);
+			sprintf(g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), ((char*)(&blk)) + 30);
 
-			if ((handle_gs = open((char*)ds_readd(TEXT_OUTPUT_BUF), O_BINARY | O_RDWR)) == -1) {
+			if ((handle_gs = open(g_text_output_buf, O_BINARY | O_RDWR)) == -1) {
 				handle = open((char*)(&blk) + 30, O_BINARY | O_RDWR);
-				_read(handle, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
+				_read(handle, g_renderbuf_ptr, SIZEOF_HERO);
 				close(handle);
 
 				/* TODO: should be O_BINARY | O_WRONLY */
-				handle_gs = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
-				_write(handle_gs, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
+				handle_gs = _creat(g_text_output_buf, 0);
+				write(handle_gs, g_renderbuf_ptr, SIZEOF_HERO);
 			} else {
 				/* Yes, indeed! */
 			}
@@ -409,25 +379,28 @@ signed short load_game_state(void)
 			}
 		}
 
-		ds_writew(AREA_PREPARED, -1);
-		ds_writew(REQUEST_REFRESH, retval = 1);
-		ds_writew(CHECK_DISEASE, 0);
-		ds_writew(CHECK_POISON, 0);
-		ds_writeb(FADING_STATE, 3);
+		g_area_prepared = -1;
+		g_request_refresh = retval = 1;
+		g_check_disease = 0;
+		g_check_poison = 0;
+		g_fading_state = 3;
 
-		if (ds_readbs(CURRENT_LOCTYPE) != LOCTYPE_TEMPLE) {
+		if (gs_current_loctype != LOCTYPE_TEMPLE) {
 			ds_writebs((NEW_MENU_ICONS + 6), ds_writebs((NEW_MENU_ICONS + 7), ds_writebs((NEW_MENU_ICONS + 8), MENU_ICON_NONE)));
 		}
 
 		load_area_description(2);
 
-		ds_writews(UPDATE_STATUSLINE, l1);
-		ds_writews(ANI_ENABLED, l4);
+		g_update_statusline = l1;
+		g_ani_enabled = l4;
 
 		refresh_screen_size();
 	}
 
 	return retval;
+#else
+	return 0;
+#endif
 }
 
 /**
@@ -437,6 +410,7 @@ signed short load_game_state(void)
  */
 signed short save_game_state(void)
 {
+#if defined(__BORLANDC__)
 	signed short l_di;
 	HugePt p_status_start;
 	HugePt p_status_end;
@@ -451,40 +425,38 @@ signed short save_game_state(void)
 	Bit32u len;
 	struct ffblk blk;
 
-	tw_bak = ds_readws(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 5);
+	tw_bak = g_textbox_width;
+	g_textbox_width = 5;
 
 	/* prepare the header for the radio box */
-	if (ds_readws(GAME_STATE) == GAME_STATE_VICTORY) {
+	if (g_game_state == GAME_STATE_VICTORY) {
 
 		/* game won. creating savegame for import in DSA2 */
-		strcpy((char*)ds_readd(TEXT_OUTPUT_BUF), get_ttx(810)); /* "Welcher Spielstand soll fuer die Fortsetzung abgespeichert werden?" */
+		strcpy(g_text_output_buf, get_ttx(810)); /* "Welcher Spielstand soll fuer die Fortsetzung abgespeichert werden?" */
 
 	} else {
 
 #ifndef M302de_FEATURE_MOD
 		/* Feature mod 4: In the original game, when creating a savegame while not being in a temple, the AP of all heroes is decreased by 1. This feature mod stops the AP decrease.
 		 * Here, the warning message "Dabei verliert jeder Held in der Gruppe einen Abenteuerpunkt" is displayed. */
-		if (ds_readbs(CURRENT_LOCTYPE) != LOCTYPE_TEMPLE && ds_readws(GAME_STATE) != GAME_STATE_VICTORY) {
+		if ((gs_current_loctype != LOCTYPE_TEMPLE) && (g_game_state != GAME_STATE_VICTORY)) {
 
 			/* create savegame not in a temple */
 
-			sprintf((char*)ds_readd(DTP2),
+			sprintf(g_dtp2,
 				get_ttx(813), /* "Dabei verliert jeder Held in der Gruppe einen Abenteuerpunkt" */
-				1,
-				get_ttx(392),
-				p_datseg + EMPTY_STRING1);
+				1, get_ttx(392), g_empty_string1);
 
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+			sprintf(g_text_output_buf,
 				get_ttx(1), /* "Welchen Spielstand wollen Sie abspeichern ?" */
-				(char*)ds_readd(DTP2));
+				g_dtp2);
 		} else {
 #endif
 
 			/* create savegame inside a temple */
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+			sprintf(g_text_output_buf,
 				get_ttx(1), /* "Welchen Spielstand wollen Sie abspeichern ?" */
-				(char*)p_datseg + EMPTY_STRING2);
+				g_empty_string2);
 #ifndef M302de_FEATURE_MOD
 		/* Feature mod 4: In the original game, when creating a savegame while not being in a temple, the AP of all heroes is decreased by 1. This mod stops the AP decrease. */
 		}
@@ -492,41 +464,37 @@ signed short save_game_state(void)
 	}
 
 	/* get the slot number */
-	slot = GUI_radio((char*)ds_readd(TEXT_OUTPUT_BUF), 6,
-			p_datseg + (SAVEGAME_NAMES + 9 * 0),
-			p_datseg + (SAVEGAME_NAMES + 9 * 1),
-			p_datseg + (SAVEGAME_NAMES + 9 * 2),
-			p_datseg + (SAVEGAME_NAMES + 9 * 3),
-			p_datseg + (SAVEGAME_NAMES + 9 * 4),
-			get_ttx(737)) - 1;
+	slot = GUI_radio(g_text_output_buf, 6, g_savegame_names[0], g_savegame_names[1],
+					g_savegame_names[2], g_savegame_names[3],
+					g_savegame_names[4], get_ttx(737)) - 1;
 
-	ds_writew(TEXTBOX_WIDTH, tw_bak);
+	g_textbox_width = tw_bak;
 
-	ds_writed(SAVED_FILES_BUF, ds_readd(DTP2));
-	memset((Bit8u*)ds_readd(SAVED_FILES_BUF), 0, 4 * 286);
+	g_saved_files_buf = g_dtp2;
+	memset(g_saved_files_buf, 0, 4 * 286);
 
 	if (slot != -2 && slot != 5) {
 
 		do {
 			/* ask for filename */
-			ds_writew(GUI_ENTERING_SAVEGAME, 1);
-			strcpy((char*)ds_readd(TEXT_INPUT_BUF), (char*)p_datseg + SAVEGAME_NAMES + 9 * slot);
+			g_gui_entering_savegame = 1;
+			strcpy(g_text_input_buf, g_savegame_names[slot]);
 			GUI_input(get_ttx(634), 8);
-			ds_writew(GUI_ENTERING_SAVEGAME, 0);
+			g_gui_entering_savegame = 0;
 
-			if (host_readbs((char*)ds_readd(TEXT_INPUT_BUF)) == 0) {
+			if (host_readbs(g_text_input_buf) == 0) {
 				return 0;
 			}
 
 			flag = 0;
 
-			prepare_sg_name((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)ds_readd(TEXT_INPUT_BUF));
+			prepare_sg_name(g_text_output_buf, g_text_input_buf);
 
 			for (tw_bak = 0; tw_bak < 5; tw_bak++) {
 
-				prepare_sg_name((char*)ds_readd(TEXT_OUTPUT_BUF) + 50, (char*)p_datseg + SAVEGAME_NAMES + 9 * tw_bak);
+				prepare_sg_name(g_text_output_buf + 50, g_savegame_names[tw_bak]);
 
-				if (slot != tw_bak && !strcmp((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)ds_readd(TEXT_OUTPUT_BUF) + 50)) {
+				if ((slot != tw_bak) && !strcmp(g_text_output_buf, g_text_output_buf + 50)) {
 
 					GUI_output(get_ttx(806));
 					flag = 1;
@@ -535,10 +503,10 @@ signed short save_game_state(void)
 		} while (flag != 0);
 
 		/* delete the previous file of that slot */
-		prepare_sg_name((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)p_datseg + SAVEGAME_NAMES + 9 * slot);
-		strcat((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)p_datseg + SAVEGAME_SUFFIX2);
-		unlink((char*)ds_readd(TEXT_OUTPUT_BUF));
-		strcpy((char*)p_datseg + SAVEGAME_NAMES + 9 * slot, (char*)ds_readd(TEXT_INPUT_BUF));
+		prepare_sg_name(g_text_output_buf, g_savegame_names[slot]);
+		strcat(g_text_output_buf, g_savegame_suffix2);
+		unlink(g_text_output_buf);
+		strcpy(g_savegame_names[slot], g_text_input_buf);
 
 		/* create a CHR-file for each hero in TEMP */
 		for (tw_bak = 0; tw_bak < 6; tw_bak++) {
@@ -551,8 +519,8 @@ signed short save_game_state(void)
 #ifndef M302de_FEATURE_MOD
 				/* Feature mod 4: In the original game, when creating a savegame while not being in a temple, the AP of all heroes is decrease by 1. This feature mod stops the AP decrease.
 				 * Here, the actual decrease is executed */
-				if (ds_readws(GAME_STATE) != GAME_STATE_VICTORY &&
-					ds_readbs(CURRENT_LOCTYPE) != LOCTYPE_TEMPLE &&
+				if (g_game_state != GAME_STATE_VICTORY &&
+					gs_current_loctype != LOCTYPE_TEMPLE &&
 					host_readds(get_hero(tw_bak) + HERO_AP) > 0)
 				{
 					add_hero_ap(get_hero(tw_bak), -1L);
@@ -572,40 +540,37 @@ signed short save_game_state(void)
 
 		load_area_description(1);
 
-		p_status_start = (HugePt)(p_datseg + DATSEG_STATUS_START);
-		p_status_end = (HugePt)(p_datseg + DATSEG_STATUS_END);
-#if !defined(__BORLANDC__)
-		status_len = (signed short)F_PSUB(p_status_end, p_status_start);
-#else
+		/* TODO: check if pointer arithmetics work with other pointers */
+		p_status_start = (HugePt)&gs_datseg_status_start;
+		p_status_end = (HugePt)&gs_datseg_status_end;
 		status_len = (signed short)(p_status_end - p_status_start);
-#endif
 
-		prepare_sg_name((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)p_datseg + SAVEGAME_NAMES + 9 * slot);
-		strcat((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)p_datseg + SAVEGAME_SUFFIX3);
+		prepare_sg_name(g_text_output_buf, g_savegame_names[slot]);
+		strcat(g_text_output_buf, g_savegame_suffix3);
 
 		/* TODO: should be O_BINARY | O_RWONLY */
-		while ((l_di = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0)) == -1) {
+		while ((l_di = _creat(g_text_output_buf, 0)) == -1) {
 			GUI_output(get_ttx(348));
 			return 0;
 		}
 
-		time((Bit32s*)(p_datseg + LAST_SAVE_TIME));
+		time(&g_last_save_time);
 
 		filepos = 0;
 
 		/* write version identifier 16 bytes */
-		filepos += _write(l_di, p_datseg + DSA_VERSION_STRING, 12);
-		filepos += _write(l_di, p_datseg + VERSION_TOKEN4, 1);
-		filepos += _write(l_di, p_datseg + VERSION_TOKEN3, 1);
-		filepos += _write(l_di, p_datseg + VERSION_TOKEN1, 1);
-		filepos += _write(l_di, p_datseg + VERSION_TOKEN2, 1);
+		filepos += write(l_di, &g_dsa_version_string, 12);
+		filepos += write(l_di, &g_version_token4, 1);
+		filepos += write(l_di, &g_version_token3, 1);
+		filepos += write(l_di, &g_version_token1, 1);
+		filepos += write(l_di, &g_version_token2, 1);
 
 		/* write fileposition 4 bytes */
 		/* this will be updated later to find the data of the CHR files */
-		filepos += _write(l_di, &filepos, 4);
+		filepos += write(l_di, &filepos, 4);
 
 		/* save the status section 5952 bytes */
-		filepos += _write(l_di, p_status_start, status_len);
+		filepos += write(l_di, p_status_start, status_len);
 
 		/* check if enough bytes were written */
 		if (status_len + 16 + 4L != filepos) {
@@ -615,7 +580,7 @@ signed short save_game_state(void)
 		}
 
 		filepos2 = filepos;
-		len = (Bit16u)_write(l_di, (Bit8u*)ds_readd(SAVED_FILES_BUF), 4 * 286);
+		len = (Bit16u)write(l_di, g_saved_files_buf, 4 * 286);
 		filepos += len;
 
 		if (len != 4 * 286) {
@@ -624,64 +589,60 @@ signed short save_game_state(void)
 			return 0;
 		}
 
-#if defined(__BORLANDC__)
 		/* save all changed files from SCHICK.DAT */
 		for (tw_bak = 0; tw_bak < 286; tw_bak++) {
 
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+			sprintf(g_text_output_buf,
 				(char*)ds_readd(STR_TEMP_XX_PTR2),
-				(char*)(Bit8u*)(ds_readd(FNAMES + 4 * tw_bak)));
+				(char*)(ds_readd(FNAMES + 4 * tw_bak)));
 
-			l1 = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
+			l1 = findfirst(g_text_output_buf, &blk, 0);
 
 
 			if (l1 == 0) {
 
 				handle = load_archive_file(tw_bak + 0x8000);
-				host_writed((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * tw_bak, get_readlength2(handle));
-				_read(handle, (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * tw_bak));
+				host_writed(g_saved_files_buf + 4 * tw_bak, get_readlength2(handle));
+				_read(handle, g_renderbuf_ptr, (unsigned short)host_readd(g_saved_files_buf + 4 * tw_bak));
 				close(handle);
 
-				len = (Bit16u)_write(l_di, (Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * tw_bak));
+				len = (Bit16u)write(l_di, g_renderbuf_ptr, (unsigned short)host_readd(g_saved_files_buf + 4 * tw_bak));
 				filepos += len;
 
-				if ((Bit16u)host_readd((Bit8u*)ds_readd(SAVED_FILES_BUF) + 4 * tw_bak) != len) {
+				if ((Bit16u)host_readd(g_saved_files_buf + 4 * tw_bak) != len) {
 					GUI_output(get_ttx(348));
 					close(l_di);
 					return 0;
 				}
 			}
 		}
-#endif
 
 		/* skip back to the start of the offset of the CHR data */
 		lseek(l_di, 16, 0);
-		_write(l_di, &filepos, 4);
+		write(l_di, &filepos, 4);
 
 		/* write the file table */
 		lseek(l_di, filepos2, 0);
-		_write(l_di, (Bit8u*)ds_readd(SAVED_FILES_BUF), 4 * 286);
+		write(l_di, g_saved_files_buf, 4 * 286);
 
 		/* append all CHR files */
 		lseek(l_di, filepos, 0);
-		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-			(char*)ds_readd(STR_TEMP_XX_PTR2),
-			(char*)p_datseg + ALL_CHR_WILDCARD2);
-#if defined(__BORLANDC__)
-		l1 = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
+		sprintf(g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), g_all_chr_wildcard2);
+
+		l1 = findfirst(g_text_output_buf, &blk, 0);
 		do {
 			/* create the CHR filename */
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+			sprintf(g_text_output_buf,
 				(char*)ds_readd(STR_TEMP_XX_PTR2),
 				((char*)(&blk)) + 30);
 
 			/* read the CHR file from temp */
-			handle = open((char*)ds_readd(TEXT_OUTPUT_BUF), O_BINARY | O_RDWR);
-			_read(handle, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
+			handle = open(g_text_output_buf, O_BINARY | O_RDWR);
+			_read(handle, g_renderbuf_ptr, SIZEOF_HERO);
 			close(handle);
 
 			/* append it */
-			len = _write(l_di, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
+			len = write(l_di, g_renderbuf_ptr, SIZEOF_HERO);
 
 			if (len != SIZEOF_HERO) {
 				GUI_output(get_ttx(348));
@@ -694,15 +655,15 @@ signed short save_game_state(void)
 		} while (l1 == 0);
 
 		close(l_di);
-#endif
 
 		/* rewrite GAMES.NAM */
 		l_di = _creat((char*)ds_readd(FNAMES + 0x33c), 0);
-		_write(l_di, p_datseg + SAVEGAME_NAMES, 45);
+		write(l_di, &g_savegame_names[0][0], 45);
 		close(l_di);
 
 		return 1;
 	}
+#endif
 
 	return 0;
 }
@@ -715,19 +676,18 @@ signed short save_game_state(void)
  * \param   a2          ???
  * \return              1 = OK, 0 = Error
  */
-signed short read_chr_temp(RealPt fname, signed short hero_pos, signed short a2)
+signed short read_chr_temp(char *fname, signed short hero_pos, signed short a2)
 {
+#if defined(__BORLANDC__)
 	signed short handle;
 	signed short hero_size = SIZEOF_HERO;
 	Bit8u *hero;
 
-	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-		(char*)ds_readd(STR_TEMP_XX_PTR2),
-		(char*)(Bit8u*)(fname));
+	sprintf(g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), (char*)fname);
 
-	if ((handle = open((char*)ds_readd(TEXT_OUTPUT_BUF), O_BINARY | O_RDWR)) == -1) {
-		copy_file_to_temp(fname, (char*)ds_readd(TEXT_OUTPUT_BUF));
-		handle = open((char*)ds_readd(TEXT_OUTPUT_BUF), O_BINARY | O_RDWR);
+	if ((handle = open(g_text_output_buf, O_BINARY | O_RDWR)) == -1) {
+		copy_file_to_temp((char*)fname, g_text_output_buf);
+		handle = open(g_text_output_buf, O_BINARY | O_RDWR);
 	}
 
 	if (handle != -1) {
@@ -768,9 +728,8 @@ signed short read_chr_temp(RealPt fname, signed short hero_pos, signed short a2)
 		GUI_output(get_ttx(4));
 		return 0;
 	}
-
+#endif
 	return 1;
-
 }
 
 /**
@@ -785,13 +744,13 @@ void write_chr_temp(unsigned short hero_pos)
 
 	prepare_chr_name(fname, (char*)get_hero(hero_pos));
 
-	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+	sprintf(g_text_output_buf,
 		(char*)ds_readd(STR_TEMP_XX_PTR2),		/* "TEMP\\%s" */
 		fname);
 
 	/* TODO: should be O_BINARY | O_WRONLY */
-	fd = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
-	_write(fd, (Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * hero_pos, SIZEOF_HERO);
+	fd = _creat(g_text_output_buf, 0);
+	write(fd, get_hero(hero_pos), SIZEOF_HERO);
 	close(fd);
 }
 
@@ -811,23 +770,21 @@ signed short copy_chr_names(Bit8u *ptr, signed short temple_id)
 	Bit8u *buf;
 	struct ffblk blk;
 
-	buf = (Bit8u*)ds_readd(RENDERBUF_PTR) + 60000;
-	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-		(char*)ds_readd(STR_TEMP_XX_PTR2),
-		(char*)p_datseg + ALL_CHR_WILDCARD3);
+	buf = g_renderbuf_ptr + 60000;
+	sprintf(g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), g_all_chr_wildcard3);
 
-	l_di = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
+	l_di = findfirst(g_text_output_buf, &blk, 0);
 
 	if (!l_di) {
 
 		do {
 			/* create the CHR filename */
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+			sprintf(g_text_output_buf,
 				(char*)ds_readd(STR_TEMP_XX_PTR2),
 				((char*)(&blk)) + 30);
 
 			/* read the CHR file from temp */
-			handle = open((char*)ds_readd(TEXT_OUTPUT_BUF), O_BINARY | O_RDWR);
+			handle = open(g_text_output_buf, O_BINARY | O_RDWR);
 			_read(handle, buf, SIZEOF_HERO);
 			close(handle);
 
@@ -867,7 +824,7 @@ void load_in_head(signed short head)
 
 		seek_archive_file(handle, 1024L * head, 0);
 
-		read_archive_file(handle, (char*)ds_readd(DTP2), 1024);
+		read_archive_file(handle, (unsigned char*)g_dtp2, 1024);
 
 		close(handle);
 
@@ -891,11 +848,11 @@ void load_tempicon(signed short no)
 
 	/* load TEMPICON */
 	handle = load_archive_file(ARCHIVE_FILE_TEMPICON);
-	read_archive_file(handle, (Bit8u*)ds_readd(BUFFER8_PTR), 7000);
+	read_archive_file(handle, g_buffer8_ptr, 7000);
 	close(handle);
 
-	nvf.dst = (Bit8u*)ds_readd(BUFFER8_PTR) + 7000;
-	nvf.src = (Bit8u*)ds_readd(BUFFER8_PTR);
+	nvf.dst = g_buffer8_ptr + 7000;
+	nvf.src = g_buffer8_ptr;
 	nvf.no = no;
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&handle;

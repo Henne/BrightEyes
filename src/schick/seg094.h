@@ -14,7 +14,9 @@ void prepare_map_marker(void);
 /* static */
 void set_textbox_positions(signed short);
 /* 0x39 */
-signed short TM_unused1(RealPt, signed short);
+#if defined(__BORLANDC__)
+signed short TM_unused1(Bit8u*, signed short);
+#endif
 /* 0x3e */
 signed short TM_enter_target_town_viewdir(signed short);
 
@@ -25,7 +27,9 @@ signed short TM_enter_target_town(void);
 /* 0x4d */
 void TM_draw_track(signed short, signed short, signed short, signed short);
 /* 0x52 */
+#if defined(__BORLANDC__)
 void TM_unused2(void);
+#endif
 
 #if !defined(__BORLANDC__)
 }

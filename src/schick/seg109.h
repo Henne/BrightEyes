@@ -17,7 +17,7 @@ signed short TRV_cross_a_ford(char*, signed short, signed short);
 /* 0x3e */
 void TRV_ford_test(signed short, signed short);
 /* 0x43 */
-signed short TRV_ferry(Bit8u*, signed short);
+signed short TRV_ferry(char*, signed short);
 /* 0x48 */
 void TRV_barrier(signed short);
 /* 0x4d */

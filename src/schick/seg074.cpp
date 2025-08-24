@@ -36,41 +36,43 @@ void show_automap(void)
 	signed short done;
 	signed short dungeon;
 	signed short town;
-	signed short textbox_width_bak;
+	signed short tw_bak;
 
-	if (!ds_readb(DUNGEON_LIGHT) ||
-		((ds_readbs(DUNGEON_LIGHT) == 1) && (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 6) > 0)))
+	if (!gs_dungeon_light ||
+		((gs_dungeon_light == 1) && (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 6) > 0)))
 	{
 
-		ds_writeb(SPECIAL_SCREEN, 1);
+		g_special_screen = 1;
 
-		dungeon = ds_readbs(DUNGEON_INDEX);
-		town = ds_readbs(CURRENT_TOWN);
+		dungeon = gs_dungeon_index;
+		town = gs_current_town;
 
-		ds_writeb(CURRENT_TOWN, ds_writeb(DUNGEON_INDEX, 0));
+		gs_current_town = (gs_dungeon_index = 0);
 
-		textbox_width_bak = ds_readw(TEXTBOX_WIDTH);
-		ds_writew(TEXTBOX_WIDTH, 3);
+		tw_bak = g_textbox_width;
+		g_textbox_width = 3;
 
-		l_si = (ds_readb(DNG_MAP_SIZE) == 16) ? 0 :
-				((ds_readws(X_TARGET) - 8 < 0) ? 0 :
-				((ds_readws(X_TARGET) - 8 > 15) ? 16 : ds_readws(X_TARGET) - 8));
+		l_si = (g_dng_map_size == 16) ? 0 :
+				((gs_x_target - 8 < 0) ? 0 :
+				((gs_x_target - 8 > 15) ? 16 : gs_x_target - 8));
 
-		ds_writeb(CURRENT_TOWN, (signed char)town);
-		ds_writeb(DUNGEON_INDEX, (signed char)dungeon);
+		gs_current_town = ((signed char)town);
+		gs_dungeon_index = dungeon;
 
-		ds_writew(REQUEST_REFRESH, 1);
+		g_request_refresh = 1;
 
 		do {
 
-			if (ds_readw(REQUEST_REFRESH) != 0) {
-				loc_bak = ds_readbs(CURRENT_LOCTYPE);
-				ds_writeb(CURRENT_LOCTYPE, LOCTYPE_UNKN1);
+			if (g_request_refresh != 0) {
+
+				loc_bak = gs_current_loctype;
+				gs_current_loctype = LOCTYPE_UNKN1;
 
 				draw_main_screen();
-				ds_writeb(CURRENT_LOCTYPE, (signed char)loc_bak);
 
-				if (ds_readb(DNG_MAP_SIZE) == 16) {
+				gs_current_loctype = loc_bak;
+
+				if (g_dng_map_size == 16) {
 					draw_loc_icons(1, MENU_ICON_LEAVE);
 				} else {
 					draw_loc_icons(3, MENU_ICON_SCROLL_LEFT, MENU_ICON_SCROLL_RIGHT, MENU_ICON_LEAVE);
@@ -80,33 +82,33 @@ void show_automap(void)
 				clear_ani_pal();
 				draw_automap_to_screen();
 				set_ani_pal(p_datseg + PALETTE_FIGHT2);
-				ds_writew(REQUEST_REFRESH, 0);
+				g_request_refresh = 0;
 			}
 
 			done = 0;
 
 			handle_gui_input();
 
-			if ((ds_readw(MOUSE2_EVENT) != 0) || (ds_readw(ACTION) == ACTION_ID_PAGE_UP)) {
+			if ((g_mouse2_event) || (g_action == ACTION_ID_PAGE_UP)) {
 
-				if (ds_readb(DNG_MAP_SIZE) == 16) {
+				if (g_dng_map_size == 16) {
+
 					l_di = GUI_radio(get_ttx(612), 1, get_ttx(613)) - 1;
+
 				} else {
-					ds_writew(MENU_DEFAULT_SELECT, 2);
-					l_di = GUI_radio(get_ttx(612), 3,
-								 get_ttx(614),
-								 get_ttx(615),
-								 get_ttx(613)) - 1;
+					g_menu_default_select = 2;
+
+					l_di = GUI_radio(get_ttx(612), 3, get_ttx(614), get_ttx(615), get_ttx(613)) - 1;
 				}
 
 				if (l_di != -2) {
-					ds_writew(ACTION, l_di + ACTION_ID_ICON_1);
+					g_action = (l_di + ACTION_ID_ICON_1);
 				}
 			}
 
-			if (ds_readb(DNG_MAP_SIZE) != 16) {
+			if (g_dng_map_size != 16) {
 
-				if ((ds_readws(ACTION) == ACTION_ID_ICON_1) || (ds_readws(ACTION) == ACTION_ID_LEFT)) {
+				if ((g_action == ACTION_ID_ICON_1) || (g_action == ACTION_ID_LEFT)) {
 
 					if (l_si > 0) {
 						render_automap(--l_si);
@@ -114,7 +116,7 @@ void show_automap(void)
 					}
 				}
 
-				if ((ds_readws(ACTION) == ACTION_ID_ICON_2) || (ds_readws(ACTION) == ACTION_ID_RIGHT)) {
+				if ((g_action == ACTION_ID_ICON_2) || (g_action == ACTION_ID_RIGHT)) {
 
 					if (l_si < 16) {
 						render_automap(++l_si);
@@ -123,15 +125,15 @@ void show_automap(void)
 				}
 			}
 
-			if (((ds_readws(ACTION) == ACTION_ID_ICON_1) && (ds_readb(DNG_MAP_SIZE) == 16)) ||
-				((ds_readws(ACTION) == ACTION_ID_ICON_3) && (ds_readb(DNG_MAP_SIZE) != 16)))
+			if (((g_action == ACTION_ID_ICON_1) && (g_dng_map_size == 16)) ||
+				((g_action == ACTION_ID_ICON_3) && (g_dng_map_size != 16)))
 			{
 				done = 1;
 			}
 		} while (done == 0);
 
-		ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
-		ds_writew(REQUEST_REFRESH, 1);
+		g_textbox_width = tw_bak;
+		g_request_refresh = 1;
 
 		clear_ani_pal();
 
@@ -142,7 +144,7 @@ void show_automap(void)
 
 unsigned short is_discovered(signed short x, signed short y)
 {
-	return ds_readb(AUTOMAP_BUF + (4 * y) + (x >> 3)) & (ds_readb(AUTOMAP_BITMASK + (x & 7)));
+	return g_automap_buf[(4 * y) + (x >> 3)] & g_automap_bitmask[(x & 7)];
 }
 
 /**
@@ -154,7 +156,7 @@ unsigned short is_discovered(signed short x, signed short y)
  */
 unsigned short get_mapval_small(signed short x, signed short y)
 {
-	Bit8u *map = p_datseg + DNG_MAP;
+	Bit8u *map = g_dng_map;
 
 	return host_readb(map + 16 * y + x);
 }
@@ -168,7 +170,7 @@ unsigned short get_mapval_small(signed short x, signed short y)
  */
 unsigned short get_mapval_large(signed short x, signed short y)
 {
-	Bit8u *map = p_datseg + DNG_MAP;
+	Bit8u *map = g_dng_map;
 
 	return host_readb(map + 32 * y + x);
 }
@@ -197,7 +199,7 @@ signed short is_group_in_prison(signed short group_no)
 }
 
 /**
- * \brief   render the automap in RENDERBUF
+ * \brief   render the automap in g_renderbuf
  *
  * \param   x_off           x offset for vertical scroll
  */
@@ -209,19 +211,19 @@ void render_automap(signed short x_off)
 	signed short y;
 	signed short entrance_dir;
 
-	ds_writew(PIC_COPY_X1, 0);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, 6);
-	ds_writew(PIC_COPY_Y2, 6);
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = 6;
+	g_pic_copy.y2 = 6;
 
 	/* set buffer to 0 */
-	memset((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 64000);
+	memset(g_renderbuf_ptr, 0, 64000);
 
 	for (y = 0; y < 16; y++) {
 		for (x = 0; x < 16; x++) {
 			if (is_discovered(x + x_off, y)) {
 
-				if (ds_readbs(DUNGEON_INDEX) != DUNGEONS_NONE) {
+				if (gs_dungeon_index != DUNGEONS_NONE) {
 					/* in dungeon */
 
 					tile_type = div16(get_mapval_small(x, y));
@@ -239,7 +241,7 @@ void render_automap(signed short x_off)
 					/* in a town */
 
 					if (!(tile_type = get_maploc(x + x_off, y))) {
-						tile_type = get_border_index((ds_readb(DNG_MAP_SIZE) == 16) ?
+						tile_type = get_border_index((g_dng_map_size == 16) ?
 										get_mapval_small(x, y) :
 										get_mapval_large(x + x_off, y));
 					}
@@ -259,7 +261,7 @@ void render_automap(signed short x_off)
 
 					if ((tile_type != TOWN_TILE_STREET) && (tile_type != TOWN_TILE_GRASS) && (tile_type != TOWN_TILE_WATER) && (tile_type != TOWN_TILE_SIGNPOST)) {
 
-						entrance_dir = (ds_readb(DNG_MAP_SIZE) == 16) ?
+						entrance_dir = (g_dng_map_size == 16) ?
 										get_mapval_small(x, y) :
 										get_mapval_large(x + x_off, y);
 
@@ -276,29 +278,29 @@ void render_automap(signed short x_off)
 
 	/* Original-Bug 31: If there is another group on the same map square as the active group, the automap will mark that square by a purple arrow (for the other group) instead of a yellow one (for the active group).
 	 * The reason is that the yellow arrow will be overdrawn by the purple ones, which are drawn later. */
-	if (((ds_readws(X_TARGET) - x_off) >= 0) && ((ds_readws(X_TARGET) - x_off) <= 16)) { /* shouldn't this always be true? */
+	if (((gs_x_target - x_off) >= 0) && ((gs_x_target - x_off) <= 16)) { /* shouldn't this always be true? */
 
-		draw_automap_square(ds_readws(X_TARGET) - x_off, ds_readws(Y_TARGET),
-					MAP_TILE_YELLOW_ARROW, ds_readbs(DIRECTION));
+		draw_automap_square(gs_x_target - x_off, gs_y_target,
+					MAP_TILE_YELLOW_ARROW, gs_direction);
 	}
 #endif
 
 	/* draw purple arrows at the positions of other groups */
 	for (group_i = 0; group_i < 6; group_i++) {
 
-		if ((ds_readbs(CURRENT_GROUP) != group_i) &&
-			(ds_readbs(GROUP_MEMBER_COUNTS + group_i) > 0) &&
-			(ds_readb(GROUPS_DNG_LEVEL + group_i) == ds_readbs(DUNGEON_LEVEL)) &&
-			(ds_readb(GROUPS_TOWN + group_i) == ds_readbs(CURRENT_TOWN)) &&
-			(ds_readb(GROUPS_DNG_INDEX + group_i) == ds_readbs(DUNGEON_INDEX)) &&
+		if ((gs_current_group != group_i) &&
+			(gs_group_member_counts[group_i] > 0) &&
+			(gs_groups_dng_level[group_i] == gs_dungeon_level) &&
+			(gs_groups_town[group_i] == gs_current_town) &&
+			(gs_groups_dng_index[group_i] == gs_dungeon_index) &&
 			!is_group_in_prison(group_i) &&
-			(ds_readws(GROUPS_X_TARGET + 2 * group_i) - x_off >= 0) &&
-			(ds_readws(GROUPS_X_TARGET + 2 * group_i) - x_off <= 16))
+			(gs_groups_x_target[group_i] - x_off >= 0) &&
+			(gs_groups_x_target[group_i] - x_off <= 16))
 		{
-			draw_automap_square(ds_readws(GROUPS_X_TARGET + 2 * group_i) - x_off,
-					ds_readws(GROUPS_Y_TARGET + 2 * group_i),
+			draw_automap_square(gs_groups_x_target[group_i] - x_off,
+					gs_groups_y_target[group_i],
 					MAP_TILE_PURPLE_ARROW,
-					ds_readbs(GROUPS_DIRECTION + group_i));
+					gs_groups_direction[group_i]);
 		}
 	}
 
@@ -307,17 +309,17 @@ void render_automap(signed short x_off)
 
 	/* Original-Bug 31: see above.
 	 * Fix: Move the code block drawing the yellow arrow after the one drawing the purple arrows. */
-	if (((ds_readws(X_TARGET) - x_off) >= 0) && ((ds_readws(X_TARGET) - x_off) <= 16)) { /* shouldn't this always be true? */
+	if (((gs_x_target - x_off) >= 0) && ((gs_x_target - x_off) <= 16)) { /* shouldn't this always be true? */
 
-		draw_automap_square(ds_readws(X_TARGET) - x_off, ds_readws(Y_TARGET),
-					MAP_TILE_YELLOW_ARROW, ds_readbs(DIRECTION));
+		draw_automap_square(gs_x_target - x_off, gs_y_target,
+					MAP_TILE_YELLOW_ARROW, gs_direction);
 	}
 #endif
 
 	/* In the target selector screen of the Transversalis spell, mark the target with a cross */
-	if (((ds_readws(AUTOMAP_SELX) - x_off) >= 0) && ((ds_readws(AUTOMAP_SELX) - x_off) <= 16)) {
+	if (((g_automap_selx - x_off) >= 0) && ((g_automap_selx - x_off) <= 16)) {
 
-		draw_automap_square(ds_readws(AUTOMAP_SELX) - x_off,	ds_readws(AUTOMAP_SELY), MAP_TILE_CROSS, -1);
+		draw_automap_square(g_automap_selx - x_off,	g_automap_sely, MAP_TILE_CROSS, -1);
 	}
 }
 
@@ -333,14 +335,14 @@ void draw_automap_square(signed short x, signed short y, signed short color, sig
 {
 	signed short i;
 	unsigned short offset_y;
-	RealPt p_img_tile;
+	Bit8u* p_img_tile;
 	signed char tile[50];
 
 	offset_y = y;
 	offset_y <<= 3;
 	offset_y *= 320;
 
-	p_img_tile = (Bit8u*)ds_readd(RENDERBUF_PTR) + offset_y + 8 * x + 0xca8;
+	p_img_tile = (Bit8u*)g_renderbuf_ptr + offset_y + 8 * x + 0xca8;
 
 	for (i = 0; i < 49; i++) {
 		tile[i] = (signed char)color;
@@ -350,27 +352,27 @@ void draw_automap_square(signed short x, signed short y, signed short color, sig
 
 		if (dir == 0) {
 
-			memcpy((char*)ds_readd(TEXT_OUTPUT_BUF), p_datseg + AUTOMAP_TILE_ARROWUP, 49);
+			memcpy(g_text_output_buf, g_automap_tile_arrowup, 49);
 
 		} else if (dir == 2) {
 
 			for (i = 0; i < 49; i++) {
-				host_writeb((char*)ds_readd(TEXT_OUTPUT_BUF) + i, ds_readb(AUTOMAP_TILE_ARROWUP + (48 - i)));
+				g_text_output_buf[i] = g_automap_tile_arrowup[48 - i];
 			}
 
 		} else if (dir == 1) {
 
-			memcpy((char*)ds_readd(TEXT_OUTPUT_BUF), p_datseg + AUTOMAP_TILE_ARROWRIGHT, 49);
+			memcpy(g_text_output_buf, g_automap_tile_arrowright, 49);
 
 		} else {
 
 			for (i = 0; i < 49; i++) {
-				host_writeb((char*)ds_readd(TEXT_OUTPUT_BUF) + i, ds_readb(AUTOMAP_TILE_ARROWRIGHT + (48 - i)));
+				g_text_output_buf[i] = g_automap_tile_arrowright[48 - i];
 			}
 		}
 
 		for (i = 0; i < 49; i++) {
-			if (!host_readbs((char*)ds_readd(TEXT_OUTPUT_BUF) + i)) {
+			if (!g_text_output_buf[i]) {
 				tile[i] = 0;
 			}
 		}
@@ -379,7 +381,7 @@ void draw_automap_square(signed short x, signed short y, signed short color, sig
 	if (color == 7) {
 
 		for (i = 0; i < 49; i++) {
-			if (!ds_readb(AUTOMAP_TILE_CROSS + i)) {
+			if (!g_automap_tile_cross[i]) {
 				tile[i] = 0;
 			} else {
 				tile[i] = (signed char)color;
@@ -387,31 +389,10 @@ void draw_automap_square(signed short x, signed short y, signed short color, sig
 		}
 	}
 
-	ds_writed(PIC_COPY_DST, (Bit32u)p_img_tile);
+	g_pic_copy.dst = p_img_tile;
+	g_pic_copy.src = (Bit8u*)tile;
 
-#if !defined(__BORLANDC__)
-	/* need 50 bytes on the DOSBox-Stack */
-	reg_esp -= 50;
-
-	/* make a pointer to this position */
-	Bit8u *p = (Bit8u*)(RealMake(SegValue(ss), reg_sp));
-
-	/* copy the tile from host stack to DOSBox stack */
-	for (i = 0; i < 50; i++, p++) {
-		host_writeb(p, tile[i]);
-	}
-
-	/* save the pointer as the graphic source */
-	ds_writed(PIC_COPY_SRC, (Bit32u)RealMake(SegValue(ss), reg_sp));
-
-	/* free 50 bytes */
-	reg_esp += 50;
-#else
-	ds_writed(PIC_COPY_SRC, (Bit32u)&tile);
-#endif
-	/* */
 	do_pic_copy(0);
-
 }
 
 /**
@@ -431,7 +412,7 @@ void draw_automap_entrance(signed short x, signed short y, signed short dir)
 	offset_y <<= 3;
 	offset_y *= 320;
 
-	p_img_tile = (Bit8u*)ds_readd(RENDERBUF_PTR) + offset_y + 8 * x + 0xca8;
+	p_img_tile = ((Bit8u*)g_renderbuf_ptr) + offset_y + 8 * x + 0xca8;
 
 	if (!d) {
 		p_img_tile += 2;
@@ -453,47 +434,37 @@ void draw_automap_entrance(signed short x, signed short y, signed short dir)
 	host_writeb(p_img_tile + skipsize + skipsize, 0);
 }
 
-struct coords {
-	signed short x, y;
-};
-
-struct dummy {
-	struct coords a[2];
-};
-
 void draw_automap_to_screen(void)
 {
-	struct dummy bak;
-
 	/* save screen coordinates */
-	bak = *(struct dummy*)(p_datseg + PIC_COPY_DS_RECT);
+	struct struct_rect rect_bak = g_pic_copy_rect;
 
 	/* set the screen coordinates */
-	ds_writew((PIC_COPY_DS_RECT + 2), ds_writew(PIC_COPY_DS_RECT, 0));
-	ds_writew((PIC_COPY_DS_RECT + 6), ds_readw(ANI_POSX) + 208);
-	ds_writew((PIC_COPY_DS_RECT + 4), ds_readw(ANI_POSY) + 135);
+	g_pic_copy_rect.x1 = g_pic_copy_rect.y1 = 0;
+	g_pic_copy_rect.x2 = g_ani_posx + 208;
+	g_pic_copy_rect.y2 = g_ani_posy + 135;
 
-	ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+	g_pic_copy.src = g_renderbuf_ptr;
 
-	ds_writew(PIC_COPY_X1, 0);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, 319);
-	ds_writew(PIC_COPY_Y2, 134);
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = 320 - 1;
+	g_pic_copy.y2 = 135 - 1;
 
-	ds_writed(PIC_COPY_DST, (Bit32u)((Bit8u*)ds_readd(FRAMEBUF_PTR) + ds_readws(ANI_POSX) + 320 * ds_readws(ANI_POSY)));
+	g_pic_copy.dst = g_vga_memstart + g_ani_posx + 320 * g_ani_posy;
 
 	update_mouse_cursor();
 
-	ds_writew(PIC_COPY_FLAG, 1);
+	g_pic_copy_flag = 1;
 	do_pic_copy(1);
-	ds_writew(PIC_COPY_FLAG, 0);
+	g_pic_copy_flag = 0;
 
 	refresh_screen_size();
 
-	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
+	g_pic_copy.dst = g_vga_memstart;
 
 	/* restore screen coordinates */
-	*(struct dummy*)(p_datseg + PIC_COPY_DS_RECT) = bak;
+	g_pic_copy_rect = rect_bak;
 }
 
 /**
@@ -511,24 +482,24 @@ signed short select_teleport_dest(void)
 	signed short dungeon;
 	signed short town;
 	signed short ae_costs;
-	signed short textbox_width_bak;
+	signed short tw_bak;
 
 	draw_main_screen();
 
-	dungeon = ds_readbs(DUNGEON_INDEX);
-	town = ds_readbs(CURRENT_TOWN);
-	ds_writeb(CURRENT_TOWN, ds_writeb(DUNGEON_INDEX, 0));
+	dungeon = gs_dungeon_index;
+	town = gs_current_town;
+	gs_current_town = gs_dungeon_index = 0;
 
-	l_si = ((ds_readb(DNG_MAP_SIZE) == 16) ? 0 :
-			((ds_readws(X_TARGET) - 8 < 0) ? 0 :
-			((ds_readws(X_TARGET) - 8 > 15) ? 16 : ds_readws(X_TARGET) - 8)));
+	l_si = ((g_dng_map_size == 16) ? 0 :
+			((gs_x_target - 8 < 0) ? 0 :
+			((gs_x_target - 8 > 15) ? 16 : gs_x_target - 8)));
 
-	ds_writew(AUTOMAP_SELX, ds_readws(X_TARGET));
-	ds_writew(AUTOMAP_SELY, ds_readws(Y_TARGET));
-	ds_writeb(DUNGEON_INDEX, (signed char)dungeon);
-	ds_writeb(CURRENT_TOWN, (signed char)town);
-	textbox_width_bak = ds_readws(TEXTBOX_WIDTH);
-	ds_writew(TEXTBOX_WIDTH, 3);
+	g_automap_selx = gs_x_target;
+	g_automap_sely = gs_y_target;
+	gs_dungeon_index = dungeon;
+	gs_current_town = (signed char)town;
+	tw_bak = g_textbox_width;
+	g_textbox_width = 3;
 
 	render_automap(l_si);
 
@@ -538,7 +509,7 @@ signed short select_teleport_dest(void)
 
 	set_ani_pal(p_datseg + PALETTE_FIGHT2);
 
-	if (ds_readb(DNG_MAP_SIZE) == 16) {
+	if (g_dng_map_size == 16) {
 		draw_loc_icons(1, MENU_ICON_MAGIC);
 	} else {
 		draw_loc_icons(3, MENU_ICON_SCROLL_LEFT, MENU_ICON_SCROLL_RIGHT, MENU_ICON_MAGIC);
@@ -549,9 +520,9 @@ signed short select_teleport_dest(void)
 	do {
 		handle_input();
 
-		if ((ds_readw(MOUSE2_EVENT) != 0) || (ds_readw(ACTION) == ACTION_ID_PAGE_UP)) {
+		if ((g_mouse2_event) || (g_action == ACTION_ID_PAGE_UP)) {
 
-			if (ds_readb(DNG_MAP_SIZE) == 16) {
+			if (g_dng_map_size == 16) {
 				answer = GUI_radio(get_ttx(616), 1, get_ttx(617)) - 1;
 			} else {
 				answer = GUI_radio(get_ttx(616), 3,
@@ -561,58 +532,58 @@ signed short select_teleport_dest(void)
 			}
 
 			if (answer != -2) {
-				ds_writew(ACTION, answer + ACTION_ID_ICON_1);
+				g_action = (answer + ACTION_ID_ICON_1);
 			}
 		}
 
-		if ((ds_readw(ACTION) == ACTION_ID_LEFT) &&
-			(ds_readws(AUTOMAP_SELX) > 0) &&
-			is_discovered(ds_readws(AUTOMAP_SELX) - 1, ds_readws(AUTOMAP_SELY)))
+		if ((g_action == ACTION_ID_LEFT) &&
+			(g_automap_selx > 0) &&
+			is_discovered(g_automap_selx - 1, g_automap_sely))
 		{
-			dec_ds_ws(AUTOMAP_SELX);
+			g_automap_selx--;
 			render_automap(l_si);
 			draw_automap_to_screen();
 
-		} else if ((ds_readw(ACTION) == ACTION_ID_UP) &&
-			(ds_readws(AUTOMAP_SELY) > 0) &&
-			is_discovered(ds_readws(AUTOMAP_SELX), ds_readws(AUTOMAP_SELY) - 1))
+		} else if ((g_action == ACTION_ID_UP) &&
+			(g_automap_sely > 0) &&
+			is_discovered(g_automap_selx, g_automap_sely - 1))
 		{
-			dec_ds_ws(AUTOMAP_SELY);
+			g_automap_sely--;
 			render_automap(l_si);
 			draw_automap_to_screen();
 
-		} else if ((ds_readw(ACTION) == ACTION_ID_RIGHT) &&
-			(ds_readb(DNG_MAP_SIZE) - 1 > ds_readws(AUTOMAP_SELX)) &&
-			is_discovered(ds_readws(AUTOMAP_SELX) + 1, ds_readws(AUTOMAP_SELY)))
+		} else if ((g_action == ACTION_ID_RIGHT) &&
+			(g_dng_map_size - 1 > g_automap_selx) &&
+			is_discovered(g_automap_selx + 1, g_automap_sely))
 		{
-			inc_ds_ws(AUTOMAP_SELX);
+			g_automap_selx++;
 			render_automap(l_si);
 			draw_automap_to_screen();
 
-		} else if ((ds_readw(ACTION) == ACTION_ID_DOWN) &&
-			(ds_readws(AUTOMAP_SELY) < 16) &&
-			is_discovered(ds_readws(AUTOMAP_SELX), ds_readws(AUTOMAP_SELY) + 1))
+		} else if ((g_action == ACTION_ID_DOWN) &&
+			(g_automap_sely < 16) &&
+			is_discovered(g_automap_selx, g_automap_sely + 1))
 		{
-			inc_ds_ws(AUTOMAP_SELY);
+			g_automap_sely++;
 			render_automap(l_si);
 			draw_automap_to_screen();
 		}
 
-		if (ds_readb(DNG_MAP_SIZE) != 16) {
+		if (g_dng_map_size != 16) {
 
-			if ((ds_readw(ACTION) == ACTION_ID_ICON_1) && (l_si > 0)) {
+			if ((g_action == ACTION_ID_ICON_1) && (l_si > 0)) {
 				render_automap(--l_si);
 				draw_automap_to_screen();
 			}
 
-			if ((ds_readw(ACTION) == ACTION_ID_ICON_2) && (l_si < 16)) {
+			if ((g_action == ACTION_ID_ICON_2) && (l_si < 16)) {
 				render_automap(++l_si);
 				draw_automap_to_screen();
 			}
 		}
 
-		if (((ds_readw(ACTION) == ACTION_ID_ICON_1) && (ds_readb(DNG_MAP_SIZE) == 16)) ||
-			((ds_readw(ACTION) == ACTION_ID_ICON_3) && (ds_readb(DNG_MAP_SIZE) != 16)))
+		if (((g_action == ACTION_ID_ICON_1) && (g_dng_map_size == 16)) ||
+			((g_action == ACTION_ID_ICON_3) && (g_dng_map_size != 16)))
 		{
 			done = 1;
 		}
@@ -620,11 +591,11 @@ signed short select_teleport_dest(void)
 
 	} while (done == 0);
 
-	l_di = (ds_readb(DNG_MAP_SIZE) == 16) ?
-		get_mapval_small(ds_readws(AUTOMAP_SELX), ds_readws(AUTOMAP_SELY)) :
-		get_mapval_large(ds_readws(AUTOMAP_SELX), ds_readws(AUTOMAP_SELY));
+	l_di = (g_dng_map_size == 16) ?
+		get_mapval_small(g_automap_selx, g_automap_sely) :
+		get_mapval_large(g_automap_selx, g_automap_sely);
 
-	if (ds_readbs(CURRENT_TOWN) != TOWNS_NONE) {
+	if (gs_current_town != TOWNS_NONE) {
 		l_di = get_border_index(l_di);
 	} else {
 		l_di = div16(l_di);
@@ -632,25 +603,25 @@ signed short select_teleport_dest(void)
 
 	ae_costs = 0;
 
-	if ((ds_readws(AUTOMAP_SELX) == ds_readws(X_TARGET)) &&
-		(ds_readws(AUTOMAP_SELY) == ds_readws(Y_TARGET)))
+	if ((g_automap_selx == gs_x_target) &&
+		(g_automap_sely == gs_y_target))
 	{
 		ae_costs = 0;
-		host_writeb((char*)ds_readd(DTP2), 0);
+		host_writeb((Bit8u*)g_dtp2, 0);
 
-	} else if (((ds_readbs(DUNGEON_INDEX) != 0) && (l_di == 15)) ||
-			((ds_readbs(CURRENT_TOWN) != TOWNS_NONE) && (((l_di >= 2) && (l_di <= 5)) ||
+	} else if (((gs_dungeon_index != 0) && (l_di == 15)) ||
+			((gs_current_town != TOWNS_NONE) && (((l_di >= 2) && (l_di <= 5)) ||
 			(l_di == 6))))
 	{
-		strcpy((char*)ds_readd(DTP2), get_ttx(611));
+		strcpy(g_dtp2, get_ttx(611));
 		ae_costs = -2;
 	} else {
-		host_writeb((char*)ds_readd(DTP2), 0);
+		host_writeb((Bit8u*)g_dtp2, 0);
 		ae_costs = 15;
 	}
 
-	ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
-	ds_writew(REQUEST_REFRESH, 1);
+	g_textbox_width = tw_bak;
+	g_request_refresh = 1;
 
 	return ae_costs;
 }
@@ -668,7 +639,7 @@ signed short get_maploc(signed short x, signed short y)
 	unsigned short pos_xy = TOWN_POS(x,y);
 
 	// Wow. Original game has these hard-coded manipulation of the data.
-	if (ds_readbs(CURRENT_TOWN) == TOWNS_THORWAL) {
+	if (gs_current_town == TOWNS_THORWAL) {
 
 		if (pos_xy == TOWN_POS(4,13)) {
 			// schwarzer Finger
@@ -683,12 +654,12 @@ signed short get_maploc(signed short x, signed short y)
 		{
 			return TOWN_TILE_INN_OR_TAVERN;
 		}
-	} else if (ds_readbs(CURRENT_TOWN) == TOWNS_PREM) {
+	} else if (gs_current_town == TOWNS_PREM) {
 		if (pos_xy == TOWN_POS(28,9)) {
 			// Inn "Zur Trutz". Why is this a special case here?
 			return TOWN_TILE_INN_OR_TAVERN;
 		}
-	} else if (ds_readbs(CURRENT_TOWN) == TOWNS_GUDDASUNDEN) {
+	} else if (gs_current_town == TOWNS_GUDDASUNDEN) {
 		if (pos_xy == TOWN_POS(1,14)) {
 			// Harbor, which is located in a building (not a signpost).
 			return TOWN_TILE_SIGNPOST;

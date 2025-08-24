@@ -42,20 +42,20 @@ void DNG_floor_ceil(void)
 	signed short width, height;
 
 	/* Load ceiling */
-	nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
-	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR3);
+	nvf.dst = g_renderbuf_ptr;
+	nvf.src = (Bit8u*)g_buffer9_ptr3;
 	nvf.no = 0;
-	nvf.type = (!ds_readbs(DNG_FLOOR_TEX)) ? 3 : 5;
+	nvf.type = !g_dng_floor_tex ? 3 : 5;
 	nvf.width = (unsigned char*)&width;
 	nvf.height = (unsigned char*)&height;
 	process_nvf(&nvf);
 
 
 	/* Load ceiling */
-	nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR) + 0x4030;
-	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR3);
-	nvf.no = (!(ds_readbs(DIRECTION)&1)) ? 1 : 2;
-	nvf.type = (!ds_readbs(DNG_FLOOR_TEX)) ? 3 : 5;
+	nvf.dst = ((Bit8u*)g_renderbuf_ptr) + 0x4030;
+	nvf.src = (Bit8u*)g_buffer9_ptr3;
+	nvf.no = (!(gs_direction&1)) ? 1 : 2;
+	nvf.type = !g_dng_floor_tex ? 3 : 5;
 	nvf.width = (unsigned char*)&width;
 	nvf.height = (unsigned char*)&height;
 	process_nvf(&nvf);
@@ -319,9 +319,7 @@ void DNG_stub2(void)
 	if ((tmp == 2) || (tmp == 9)) {
 
 		if (div16(ds_readb((VISUAL_FIELD_VALS + 5))) == 15) {
-			DNG_draw_walls( ((ds_readb(DUNGEON_GFX_STYLE) == 1) ? 0x4e :
-						((ds_readb(DUNGEON_GFX_STYLE) == 2) ? 0x28 : 0x3e)),
-					0, 0x36);
+			DNG_draw_walls( ((gs_dungeon_gfx_style == 1) ? 0x4e : ((gs_dungeon_gfx_style == 2) ? 0x28 : 0x3e)), 0, 0x36);
 		}
 	}
 }
@@ -365,16 +363,16 @@ void DNG_draw_walls(signed short a1, signed short a2, signed short a3)
 	flag = (a3 & 0x8000) ? 1 : 0;
 	a3 &= 0x3fff;
 
-	if ((a3 >= 8) && (a3 <= 13) && !ds_readbs(DNG_FLOOR_TEX)) {
+	if ((a3 >= 8) && (a3 <= 13) && !g_dng_floor_tex) {
 		a3 += 6;
 	} else {
-		if ((a3 >= 14) && (a3 <= 19) && !ds_readbs(DNG_FLOOR_TEX)) {
+		if ((a3 >= 14) && (a3 <= 19) && !g_dng_floor_tex) {
 			a3 -= 6;
 		}
 	}
 
-	nvf.dst = dst_ptr = (Bit8u*)ds_readd(RENDERBUF_PTR) + 0x7530;
-	nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR3);
+	nvf.dst = dst_ptr = ((Bit8u*)g_renderbuf_ptr) + 0x7530;
+	nvf.src = (Bit8u*)g_buffer9_ptr3;
 	nvf.no = a3;
 	nvf.width = (Bit8u*)&width;
 	nvf.height = (Bit8u*)&height;
@@ -412,7 +410,7 @@ void DNG_draw_walls(signed short a1, signed short a2, signed short a3)
 			height2 = 135 - a2;
 		}
 
-		ptr2 = (Bit8u*)ds_readd(RENDERBUF_PTR) + 208 * a2 + a1;
+		ptr2 = ((Bit8u*)g_renderbuf_ptr) + 208 * a2 + a1;
 
 		if (!flag) {
 			copy_solid(ptr2, dst_ptr, width2, height2, 208, width, 128);
@@ -454,12 +452,12 @@ void DNG_stub4(void)
 
 		if (l3 != -1) {
 
-			ptr = (Bit8u*)ds_readd(DNG_GFXTAB) + (l3 - 1) * 18;
+			ptr = g_dng_gfxtab + (l3 - 1) * 18;
 
 			if ((j = host_readws(ptr + 4)) != -1) {
 
 				if ((j & 0x4000) &&
-					((((l5 & 3) + 2) & 3) != ds_readbs(DIRECTION)))
+					((((l5 & 3) + 2) & 3) != gs_direction))
 				{
 				} else {
 					DNG_draw_walls(l1 + host_readws(ptr), l2 + host_readws(ptr + 2), j);
@@ -469,7 +467,7 @@ void DNG_stub4(void)
 			if ((j = host_readws(ptr + 0xa)) != -1) {
 
 				if ((j & 0x4000) &&
-					((((l5 & 3) + 2) & 3) != ds_readbs(DIRECTION)))
+					((((l5 & 3) + 2) & 3) != gs_direction))
 				{
 				} else {
 					DNG_draw_walls(l1 + host_readws(ptr + 6), l2 + host_readws(ptr + 8), j);
@@ -479,7 +477,7 @@ void DNG_stub4(void)
 			if ((j = host_readws(ptr + 0x10)) != -1) {
 
 				if ((j & 0x4000) &&
-					((((l5 & 3) + 2) & 3) != ds_readbs(DIRECTION)))
+					((((l5 & 3) + 2) & 3) != gs_direction))
 				{
 				} else {
 					DNG_draw_walls(l1 + host_readws(ptr + 0x0c), l2 + host_readws(ptr + 0x0e), j);
@@ -493,15 +491,15 @@ void DNG_stub5(void)
 {
 	draw_compass();
 
-	ds_writew(PIC_COPY_X1, ds_readw(ANI_POSX));
-	ds_writew(PIC_COPY_Y1, ds_readw(ANI_POSY));
-	ds_writew(PIC_COPY_X2, ds_readw(ANI_POSX) + 207);
-	ds_writew(PIC_COPY_Y2, ds_readw(ANI_POSY) + 134);
-	ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+	g_pic_copy.x1 = g_ani_posx;
+	g_pic_copy.y1 = g_ani_posy;
+	g_pic_copy.x2 = g_ani_posx + 207;
+	g_pic_copy.y2 = g_ani_posy + 134;
+	g_pic_copy.src = g_renderbuf_ptr;
 
 	update_mouse_cursor();
 
-	ds_writeb(SPECIAL_SCREEN, 0);
+	g_special_screen = 0;
 
 	wait_for_vsync();
 
@@ -526,7 +524,7 @@ signed short is_staff_lvl2_in_group(void)
 	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 
 		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) &&
 			check_hero(hero_i) &&
 			(host_readbs(hero_i + HERO_STAFFSPELL_LVL) >= 2))
 		{
@@ -547,13 +545,13 @@ void DNG_lights(void)
 	if (div16(ds_readb((VISUAL_FIELD_VALS + 1))) != 11) {
 
 		/* copy palette */
-		memcpy((char*)ds_readd(TEXT_OUTPUT_BUF), (Bit8u*)ds_readd(BUFFER11_PTR), 0xc0);
+		memcpy(g_text_output_buf, g_buffer11_ptr, 0xc0);
 
 		if (!(ds_readb((VISUAL_FIELD_VALS + 1)) & 1)) {
 
-			if (ds_readd(INGAME_TIMERS + 4 * INGAME_TIMER_DARKNESS)) {
+			if (gs_ingame_timers[INGAME_TIMER_DARKNESS]) {
 				l1 = 10;
-			} else if (ds_readd(INGAME_TIMERS + 4 * INGAME_TIMER_FLIM_FLAM) || is_staff_lvl2_in_group()) {
+			} else if (gs_ingame_timers[INGAME_TIMER_FLIM_FLAM] || is_staff_lvl2_in_group()) {
 				l1 = 0;
 			} else {
 				if ( (l1 = get_max_light_time()) != -1) {
@@ -563,29 +561,29 @@ void DNG_lights(void)
 				}
 			}
 		} else {
-			if (ds_readd(INGAME_TIMERS + 4 * INGAME_TIMER_DARKNESS)) {
+			if (gs_ingame_timers[INGAME_TIMER_DARKNESS]) {
 				l1 = 10;
 			} else {
 				l1 = 0;
 			}
 		}
 
-		ds_writeb(DUNGEON_LIGHT, (l1 == 9) ? 1 : (l1 == 10) ? 2 : 0);
+		gs_dungeon_light = ((l1 == 9) ? 1 : (l1 == 10) ? 2 : 0);
 		l1 *= 3;
 
 		for (i = 0; i < 0xc0; i++) {
 
-			l2 = host_readbs((char*)ds_readd(TEXT_OUTPUT_BUF) + i) - l1;
+			l2 = host_readbs((Bit8u*)g_text_output_buf + i) - l1;
 
 			if (l2 < 0) {
 				l2 = 0;
 			}
 
-			host_writeb((char*)ds_readd(TEXT_OUTPUT_BUF) + i, l2);
+			host_writeb((Bit8u*)g_text_output_buf + i, l2);
 		}
 
 		wait_for_vsync();
-		set_palette((char*)ds_readd(TEXT_OUTPUT_BUF), 0x80, 0x40);
+		set_palette((Bit8u*)g_text_output_buf, 0x80, 0x40);
 	}
 }
 
@@ -600,10 +598,10 @@ void DNG_timestep(signed short forward)
 
 	timewarp(MINUTES(1));
 
-	if ((ds_readws(DEATHTRAP) != 0) && !(dec_ds_ws(DEATHTRAP_STEPS))) {
+	if (gs_deathtrap && !(--gs_deathtrap_steps)) {
 		/* oh oh: death trap is activated and there are no remaining steps in the dungeon... */
 
-		if (ds_readws(DEATHTRAP) == 1) {
+		if (gs_deathtrap == 1) {
 			/* It is the death trap on the Totenschiff. -> it sinks...  */
 
 			load_ani(18);
@@ -612,15 +610,15 @@ void DNG_timestep(signed short forward)
 			GUI_output(get_tx(23));
 		}
 
-		ds_writeb(DUNGEON_INDEX, DUNGEONS_NONE);
+		gs_dungeon_index = DUNGEONS_NONE;
 
 		/* exit game */
-		ds_writew(GAME_STATE, GAME_STATE_DEAD);
+		g_game_state = (GAME_STATE_DEAD);
 	}
 
-	if (ds_readw(GAME_STATE) == GAME_STATE_MAIN) {
+	if (g_game_state == GAME_STATE_MAIN) {
 
-		dir = ds_readbs(DIRECTION);
+		dir = gs_direction;
 
 		if (forward == 1) {
 
@@ -628,16 +626,16 @@ void DNG_timestep(signed short forward)
 
 			if (!dir) {
 				/* north */
-				dec_ds_ws(Y_TARGET);
+				gs_y_target--;
 			} else if (dir == EAST) {
 				/* east */
-				inc_ds_ws(X_TARGET);
+				gs_x_target++;
 			} else if (dir == SOUTH) {
 				/* south */
-				inc_ds_ws(Y_TARGET);
+				gs_y_target++;
 			} else {
 				/* west */
-				dec_ds_ws(X_TARGET);
+				gs_x_target--;
 			}
 		} else {
 
@@ -645,20 +643,20 @@ void DNG_timestep(signed short forward)
 
 			if (!dir) {
 				/* north */
-				inc_ds_ws(Y_TARGET);
+				gs_y_target++;
 			} else if (dir == EAST) {
 				/* east */
-				dec_ds_ws(X_TARGET);
+				gs_x_target--;
 			} else if (dir == SOUTH) {
 				/* south */
-				dec_ds_ws(Y_TARGET);
+				gs_y_target--;
 			} else {
 				/* west */
-				inc_ds_ws(X_TARGET);
+				gs_x_target++;
 			}
 		}
 
-		xor_ds_bs(DNG_FLOOR_TEX, 1);
+		g_dng_floor_tex ^= 1;
 	}
 }
 
@@ -668,28 +666,25 @@ void DNG_update_pos(void)
 
 	DNG_stub1();
 
-	ds_writew(DNG_REFRESH_X_TARGET, ds_readw(X_TARGET));
-	ds_writew(DNG_REFRESH_Y_TARGET, ds_readw(Y_TARGET));
-	ds_writew(DNG_REFRESH_DIRECTION, ds_readbs(DIRECTION));
-
+	g_dng_refresh_x_target = gs_x_target;
+	g_dng_refresh_y_target = gs_y_target;
+	g_dng_refresh_direction = gs_direction;
 }
 
 void DNG_inc_level(void)
 {
-	ds_writew(DNG_LEVEL_CHANGED, 1);
-	inc_ds_bs_post(DUNGEON_LEVEL);
+	g_dng_level_changed = 1;
+	gs_dungeon_level++;
 	load_area_description(1);
 	DNG_update_pos();
-
 }
 
 void DNG_dec_level(void)
 {
-	ds_writew(DNG_LEVEL_CHANGED, 1);
-	dec_ds_bs_post(DUNGEON_LEVEL);
+	g_dng_level_changed = 1;
+	gs_dungeon_level--;
 	load_area_description(1);
 	DNG_update_pos();
-
 }
 
 void DNG_open_door(void)
@@ -706,13 +701,13 @@ void DNG_open_door(void)
 	DNG_stub3();
 	DNG_stub4();
 
-	memmove((Bit8u*)ds_readd(RENDERBUF_PTR) + 0x7530, (Bit8u*)ds_readd(RENDERBUF_PTR), 0x6db0);
+	memmove(((Bit8u*)g_renderbuf_ptr) + 0x7530, g_renderbuf_ptr, 0x6db0);
 
-	if (!ds_readb(DUNGEON_GFX_STYLE)) {
+	if (!gs_dungeon_gfx_style) {
 		x = 45;
 		y = 38;
 		iters = 19;
-	} else if (ds_readb(DUNGEON_GFX_STYLE) == 1) {
+	} else if (gs_dungeon_gfx_style == 1) {
 		x = 47;
 		y = 30;
 		iters = 20;
@@ -732,7 +727,7 @@ void DNG_open_door(void)
 
 		DNG_stub5();
 
-		memmove((Bit8u*)ds_readd(RENDERBUF_PTR), (Bit8u*)ds_readd(RENDERBUF_PTR) + 0x7530, 0x6db0);
+		memmove(g_renderbuf_ptr, ((Bit8u*)g_renderbuf_ptr) + 0x7530, 0x6db0);
 	}
 
 	refresh_screen_size();
@@ -751,13 +746,13 @@ void DNG_close_door(void)
 	DNG_stub3();
 	DNG_stub4();
 
-	memmove((Bit8u*)ds_readd(RENDERBUF_PTR) + 0x7530, (Bit8u*)ds_readd(RENDERBUF_PTR), 0x6db0);
+	memmove(((Bit8u*)g_renderbuf_ptr) + 0x7530, g_renderbuf_ptr, 0x6db0);
 
-	if (!ds_readb(DUNGEON_GFX_STYLE)) { /* dungeon graphics: wood */
+	if (!gs_dungeon_gfx_style) { /* dungeon graphics: wood */
 		x = 45;
 		y = 38;
 		iters = 18;
-	} else if (ds_readb(DUNGEON_GFX_STYLE) == 1) { /* dungeon graphics: marble */
+	} else if (gs_dungeon_gfx_style == 1) { /* dungeon graphics: marble */
 		x = 47;
 		y = 30;
 		iters = 19;
@@ -777,7 +772,7 @@ void DNG_close_door(void)
 
 		DNG_stub5();
 
-		memmove((Bit8u*)ds_readd(RENDERBUF_PTR), (Bit8u*)ds_readd(RENDERBUF_PTR) + 0x7530, 0x6db0);
+		memmove(g_renderbuf_ptr, ((Bit8u*)g_renderbuf_ptr) + 0x7530, 0x6db0);
 	}
 
 	refresh_screen_size();
@@ -794,11 +789,11 @@ void DNG_stub6(void)
 
 	play_voc(ARCHIVE_FILE_FX18_VOC);
 
-	if (ds_readb(DUNGEON_LIGHT) != 0) {
+	if (gs_dungeon_light != 0) {
 
 		if (DNG_fallpit(6)) {
-			ds_writew(X_TARGET, ds_readw(X_TARGET_BAK));
-			ds_writew(Y_TARGET, ds_readw(Y_TARGET_BAK));
+			gs_x_target = (gs_x_target_bak);
+			gs_y_target = (gs_y_target_bak);
 		}
 	} else {
 
@@ -807,13 +802,11 @@ void DNG_stub6(void)
 		{
 
 			/* ropes oder staff */
-			host_writeb((char*)ds_readd(DTP2), 0);
+			*g_dtp2 = '\0';
 
 			if (l_si) {
 
-				sprintf((char*)ds_readd(DTP2),
-					get_ttx(768),
-					get_hero(l_si - 1) + HERO_NAME2);
+				sprintf(g_dtp2, get_ttx(768), get_hero(l_si - 1) + HERO_NAME2);
 			}
 
 			if (l_di == 2) {
@@ -822,24 +815,21 @@ void DNG_stub6(void)
 
 				hero2 = (Bit8u*)get_second_hero_available_in_group();
 
-				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+				sprintf(g_text_output_buf,
 					get_ttx(769),
 					hero1 + HERO_NAME2,
 					hero2 + HERO_NAME2);
 
-				strcat((char*)ds_readd(DTP2),
-					(char*)ds_readd(TEXT_OUTPUT_BUF));
+				strcat(g_dtp2, g_text_output_buf);
 
 				if (test_attrib(hero1, ATTRIB_GE, 2) <= 0) {
 
-					sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-						get_ttx(770),
+					sprintf(g_text_output_buf, get_ttx(770),
 						hero1 + HERO_NAME2,
 						hero2 + HERO_NAME2,
 						l_si = random_schick(3) + 1);
 
-					strcat((char*)ds_readd(DTP2),
-						(char*)ds_readd(TEXT_OUTPUT_BUF));
+					strcat(g_dtp2, g_text_output_buf);
 
 					sub_hero_le(hero2, l_si);
 				}
@@ -857,29 +847,24 @@ void DNG_stub6(void)
 						l_si++;
 					}
 
-					strcat((char*)ds_readd(DTP2),
-						(char*)(get_hero(l_si++) + HERO_NAME2));
+					strcat(g_dtp2, (char*)(get_hero(l_si++) + HERO_NAME2));
 
 					if (--l_di) {
 
-						strcat((char*)ds_readd(DTP2),
+						strcat(g_dtp2,
 							(char*)((l_di >= 2) ? p_datseg + DNG_STUB6_STR_COMMA : p_datseg+ DNG_STUB6_STR_AND));
 					}
 
 				} while (l_di);
 
-				sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-					get_ttx(771),
-					hero_auto + HERO_NAME2,
-					(GUI_get_ptr(host_readbs(hero_auto + HERO_SEX), 0)),
-					(GUI_get_ptr(host_readbs(hero_auto + HERO_SEX), 2)));
+				sprintf(g_text_output_buf, get_ttx(771), hero_auto + HERO_NAME2,
+					GUI_get_ptr(host_readbs(hero_auto + HERO_SEX), 0),
+					GUI_get_ptr(host_readbs(hero_auto + HERO_SEX), 2));
 
-				strcat((char*)ds_readd(DTP2),
-					(char*)ds_readd(TEXT_OUTPUT_BUF));
-
+				strcat(g_dtp2, g_text_output_buf);
 			}
 
-			GUI_output((char*)ds_readd(DTP2));
+			GUI_output(g_dtp2);
 		} else {
 
 			sub_group_le(random_schick(5));
@@ -901,7 +886,7 @@ signed short DNG_check_climb_tools(void)
 	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 		if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+			(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 			!hero_dead(hero) && /* TODO: potential Original-Bug: What if petrified / unconscious etc.? Compare to is_staff_lvl2_in_group where check_hero is called */
 			(host_readbs(hero + HERO_TYPE) == HERO_TYPE_MAGE) &&
 			(host_readbs(hero + HERO_STAFFSPELL_LVL) > 2))
@@ -926,21 +911,21 @@ signed short DNG_fallpit(signed short max_damage)
 	new_group = 0;
 	retval = 0;
 
-	ds_writew(DNG_LEVEL_CHANGED, 1);
-	nr_fallen_heroes = random_schick(ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP)));
+	g_dng_level_changed = 1;
+	nr_fallen_heroes = random_schick(gs_group_member_counts[gs_current_group]);
 
 	/* If the result was rolled that all but one hero of the active group should fall down, all heroes will fall down.
 	 * Reason probably: Avoid that the NPC gets separated into a single group (as he might be the single hero not falling down) */
 
-	if (ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP)) - 1 == nr_fallen_heroes) {
-		nr_fallen_heroes = ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP));
+	if (gs_group_member_counts[gs_current_group] - 1 == nr_fallen_heroes) {
+		nr_fallen_heroes = gs_group_member_counts[gs_current_group];
 	}
 
-	if (ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP)) != nr_fallen_heroes) {
+	if (gs_group_member_counts[gs_current_group] != nr_fallen_heroes) {
 		/* only a part of the heroes of the active group falls down */
 
 		/* find empty group */
-		while (ds_readbs(GROUP_MEMBER_COUNTS + new_group)) {
+		while (gs_group_member_counts[new_group]) {
 			new_group++;
 		}
 
@@ -950,17 +935,17 @@ signed short DNG_fallpit(signed short max_damage)
 				hero_id = random_schick(7) - 1;
 
 			} while ( (!host_readbs(get_hero(hero_id) + HERO_TYPE)) ||
-					(host_readbs(get_hero(hero_id) + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP)) ||
+					(host_readbs(get_hero(hero_id) + HERO_GROUP_NO) != gs_current_group) ||
 					((nr_fallen_heroes == 1) && (hero_id == 6))); /* avoid that the NPC gets separated into a single group */
 
 			host_writeb(get_hero(hero_id) + HERO_GROUP_NO, (unsigned char)new_group);
-			inc_ds_bs_post(GROUP_MEMBER_COUNTS + new_group);
-			dec_ds_bs_post(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP));
+			gs_group_member_counts[new_group]++;
+			gs_group_member_counts[gs_current_group]--;
 			sub_hero_le(get_hero(hero_id), random_schick(max_damage));
 		}
 
 		GRP_save_pos(new_group);
-		ds_writeb(GROUPS_DNG_LEVEL + new_group, ds_readbs(DUNGEON_LEVEL) + 1);
+		gs_groups_dng_level[new_group] = gs_dungeon_level + 1;
 
 		retval = 1;
 
@@ -971,7 +956,7 @@ signed short DNG_fallpit(signed short max_damage)
 		for (i = 0; i < nr_fallen_heroes; i++) {
 
 			while (!host_readbs(get_hero(hero_id) + HERO_TYPE) ||
-				(host_readbs(get_hero(hero_id) + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP)))
+				(host_readbs(get_hero(hero_id) + HERO_GROUP_NO) != gs_current_group))
 			{
 				hero_id++;
 			}
@@ -1033,41 +1018,41 @@ mark2:			   goto mark1;
 			dir = NORTH;
 			level = 0;
 
-			ds_writeb(DNG13_COLLAPSECOUNT, 0);
-			ds_writeb(DNG13_HEROCOUNT, (signed char)count_heroes_in_group());
+			gs_dng13_collapsecount = 0;
+			gs_dng13_herocount = count_heroes_in_group();
 			break;
 		}
 		case DUNGEONS_ZWINGFESTE: {
 			x_pos = 1;
 			y_pos = 14;
 			dir = WEST;
-			level = ds_writebs(CURRENT_LOCTYPE, 0);
+			level = gs_current_loctype = LOCTYPE_NONE; /* == 0 */
 			break;
 		}
 		case DUNGEONS_HYGGELIKS_RUINE:  x_pos = 1;  y_pos = 11;   dir = EAST;  level = 0;  break;
 	}
 
-	ds_writew(X_TARGET, x_pos);
-	ds_writew(Y_TARGET, y_pos);
-	ds_writeb(DIRECTION, (signed char)dir);
-	ds_writeb(DUNGEON_LEVEL, (signed char)level);
-	ds_writeb(DUNGEON_INDEX, (signed char)dungeon_id);
-	ds_writebs(CURRENT_LOCTYPE_BAK, ds_readbs(CURRENT_LOCTYPE));
-	ds_writeb(CURRENT_TOWN_BAK, ds_readb(CURRENT_TOWN));
-	ds_writeb(CURRENT_LOCTYPE, ds_writeb(CURRENT_TOWN, TOWNS_NONE));
-	ds_writeb(DNG_AREA_LOADED, ds_writeb(CITY_AREA_LOADED, -1));
+	gs_x_target = x_pos;
+	gs_y_target = y_pos;
+	gs_direction = dir;
+	gs_dungeon_level = level;
+	gs_dungeon_index = dungeon_id;
+	gs_current_loctype_bak = gs_current_loctype;
+	gs_current_town_bak = gs_current_town;
+	gs_current_loctype = gs_current_town = TOWNS_NONE;
+	g_dng_area_loaded = g_city_area_loaded = -1;
 
 	if (dungeon_id == DUNGEONS_ZWINGFESTE) {
 
-		ptr = (Bit8u*)ds_readd(RENDERBUF_PTR) + 0x1f4;
-		memset((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 0x120);
-		memcpy((Bit8u*)ds_readd(RENDERBUF_PTR) + 0x1f4, p_datseg + PALETTE_FLOOR, 0x120);
+		ptr = ((Bit8u*)g_renderbuf_ptr) + 0x1f4;
+		memset(g_renderbuf_ptr, 0, 0x120);
+		memcpy(((Bit8u*)g_renderbuf_ptr) + 0x1f4, gs_palette_floor, 0x120);
 
 		for (i = 0; i < 0x40; i++) {
 
-			pal_fade(ptr, (Bit8u*)ds_readd(RENDERBUF_PTR));
-			pal_fade(ptr + 0x60, (Bit8u*)ds_readd(RENDERBUF_PTR) + 0x60);
-			pal_fade(ptr + 0xc0, (Bit8u*)ds_readd(RENDERBUF_PTR) + 0xc0);
+			pal_fade(ptr, ((Bit8u*)g_renderbuf_ptr));
+			pal_fade(ptr + 0x60, ((Bit8u*)g_renderbuf_ptr) + 0x60);
+			pal_fade(ptr + 0xc0, ((Bit8u*)g_renderbuf_ptr) + 0xc0);
 
 			wait_for_vsync();
 
@@ -1075,12 +1060,12 @@ mark2:			   goto mark1;
 			set_palette(ptr + 0x60, 0x80, 0x40);
 		}
 
-		do_fill_rect((Bit8u*)ds_readd(RENDERBUF_PTR), 0, 0, 319, 199, 0);
-		ds_writew(PIC_COPY_X1, 0);
-		ds_writew(PIC_COPY_Y1, 0);
-		ds_writew(PIC_COPY_X2, 240);
-		ds_writew(PIC_COPY_Y2, 136);
-		ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+		do_fill_rect(((Bit8u*)g_renderbuf_ptr), 0, 0, 319, 199, 0);
+		g_pic_copy.x1 = 0;
+		g_pic_copy.y1 = 0;
+		g_pic_copy.x2 = 240;
+		g_pic_copy.y2 = 136;
+		g_pic_copy.src = g_renderbuf_ptr;
 		update_mouse_cursor();
 		do_pic_copy(1);
 		refresh_screen_size();
@@ -1090,4 +1075,3 @@ mark2:			   goto mark1;
 #if !defined(__BORLANDC__)
 }
 #endif
-

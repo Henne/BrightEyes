@@ -42,8 +42,7 @@ static
 #endif
 void pause_traveling(signed short ani_no)
 {
-
-	ds_writeb(EVENT_ANI_BUSY, 1);
+	g_event_ani_busy = 1;
 
 	load_ani(ani_no);
 
@@ -53,18 +52,19 @@ void pause_traveling(signed short ani_no)
 
 	load_tx2(ARCHIVE_FILE_WILD_LTX);
 
-	ds_writew(BASEPOS_X_BAK, ds_readw(BASEPOS_X));
-	ds_writew(BASEPOS_Y_BAK, ds_readw(BASEPOS_Y));
-	ds_writew(TEXTBOX_WIDTH_BAK, ds_readw(TEXTBOX_WIDTH));
-	ds_writew(WALLCLOCK_UPDATE_BAK, ds_readw(WALLCLOCK_UPDATE));
+	g_basepos_x_bak = g_basepos_x;
+	g_basepos_y_bak = g_basepos_y;
+
+	g_textbox_width_bak = g_textbox_width;
+	g_wallclock_update_bak = g_wallclock_update;
 
 	ds_writeb(TRAVEL_EVENT_ACTIVE, 1);
 
 	/* c = b = a = 0 */
-	ds_writeb(SHOW_TRAVEL_MAP, (unsigned char)ds_writew(BASEPOS_X, ds_writew(WALLCLOCK_UPDATE, 0)));
+	gs_show_travel_map = g_basepos_x = g_wallclock_update = 0;
 
-	ds_writew(BASEPOS_Y, ani_no == 21 ? 60: 70);
-	ds_writew(TEXTBOX_WIDTH, 9);
+	g_basepos_y = (ani_no == 21 ? 60: 70);
+	g_textbox_width = 9;
 }
 
 #if defined(__BORLANDC__)
@@ -72,16 +72,17 @@ static
 #endif
 void resume_traveling(void)
 {
-	ds_writew(BASEPOS_X, ds_readw(BASEPOS_X_BAK));
-	ds_writew(BASEPOS_Y, ds_readw(BASEPOS_Y_BAK));
-	ds_writew(TEXTBOX_WIDTH, ds_readw(TEXTBOX_WIDTH_BAK));
-	ds_writew(WALLCLOCK_UPDATE, ds_readw(WALLCLOCK_UPDATE_BAK));
+	g_basepos_x = g_basepos_x_bak;
+	g_basepos_y = g_basepos_y_bak;
+
+	g_textbox_width = g_textbox_width_bak;
+	g_wallclock_update = g_wallclock_update_bak;
 
 	set_var_to_zero();
 
-	ds_writew(REQUEST_REFRESH, ds_writeb(SHOW_TRAVEL_MAP, 1));
+	g_request_refresh = gs_show_travel_map = 1;
 
-	ds_writeb(EVENT_ANI_BUSY, 0);
+	g_event_ani_busy = 0;
 	ds_writeb(TRAVEL_EVENT_ACTIVE, 0);
 }
 
@@ -111,7 +112,7 @@ void hunt_karen(void)
 			for (i = passed = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 				if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-					(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+					(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 					!hero_dead(hero) &&
 					(test_skill(hero, TA_SCHLEICHEN, 2) > 0))
 				{
@@ -129,7 +130,7 @@ void hunt_karen(void)
 				for (i = passed = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 					if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-						(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+						(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 						!hero_dead(hero) &&
 						(test_skill(hero, TA_SCHUSSWAFFEN, 0) > 0))
 					{
@@ -193,7 +194,7 @@ void hunt_wildboar(void)
 			for (i = passed = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 				if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-					(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+					(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 					!hero_dead(hero) &&
 					(test_skill(hero, TA_SCHLEICHEN, 0) > 0))
 				{
@@ -211,7 +212,7 @@ void hunt_wildboar(void)
 				for (i = passed = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 					if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-						(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+						(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 						!hero_dead(hero) &&
 						(test_skill(hero, TA_SCHUSSWAFFEN, 0) > 0))
 					{
@@ -270,7 +271,7 @@ void hunt_cavebear(void)
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 			if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-				(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 				!hero_dead(hero))
 			{
 
@@ -327,7 +328,7 @@ void hunt_viper(void)
 		/* check GE+0 */
 		/* Original-Bug: something was forgotten */
 		if ((host_readb(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readb(hero_i + HERO_GROUP_NO) == ds_readb(CURRENT_GROUP)) &&
+			(host_readb(hero_i + HERO_GROUP_NO) == gs_current_group) &&
 			(!hero_dead(hero_i)) &&
 			(test_attrib(hero_i, ATTRIB_GE, 0) < l_di))
 		{
@@ -342,11 +343,9 @@ void hunt_viper(void)
 		hero_i = get_hero(choosen_hero);
 
 		/* print a message */
-		sprintf((char*)ds_readd(DTP2),
-			get_tx2(26),
-			hero_i + HERO_NAME2);
+		sprintf(g_dtp2, get_tx2(26), hero_i + HERO_NAME2);
 
-		GUI_output((char*)ds_readd(DTP2));
+		GUI_output(g_dtp2);
 
 		/* hero gets 2 AP */
 		add_hero_ap(hero_i, 2);
@@ -395,7 +394,7 @@ void octopus_attack(void)
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				!overboard[i])
 			{
@@ -421,10 +420,8 @@ void octopus_attack(void)
 
 					add_hero_ap(hero, 5);
 					sub_hero_le(hero, random_schick(6));
-					sprintf((char*)ds_readd(DTP2),
-						get_tx2(30),
-						(char*)hero + HERO_NAME2);
-					GUI_output((char*)ds_readd(DTP2));
+					sprintf(g_dtp2, get_tx2(30), (char*)hero + HERO_NAME2);
+					GUI_output(g_dtp2);
 				}
 
 #ifndef M302de_ORIGINAL_BUGFIX
@@ -439,10 +436,8 @@ void octopus_attack(void)
 
 					add_hero_ap(hero, 20);
 					sub_hero_le(hero, random_schick(6));
-					sprintf((char*)ds_readd(DTP2),
-						get_tx2(31),
-						(char*)hero + HERO_NAME2);
-					GUI_output((char*)ds_readd(DTP2));
+					sprintf(g_dtp2, get_tx2(31), (char*)hero + HERO_NAME2);
+					GUI_output(g_dtp2);
 
 					if (test_skill(hero, TA_SCHWIMMEN, 0) <= 0) {
 						sub_hero_le(hero, random_schick(6));
@@ -471,7 +466,7 @@ void octopus_attack(void)
 		/* octopus has won. all heroes disappear in the open sea. */
 		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
-			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE && host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) {
+			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE && host_readbs(hero + HERO_GROUP_NO) == gs_current_group) {
 				hero_disappear(hero, i, -2);
 			}
 		}
@@ -482,7 +477,7 @@ void octopus_attack(void)
 	add_hero_ap_all(5);
 	GUI_output(get_tx2(32));
 
-	ds_writew(BASEPOS_X, ds_writew(BASEPOS_Y, 0));
+	g_basepos_x = g_basepos_y = 0;
 	status_menu(get_hero_index((Bit8u*)get_first_hero_available_in_group()));
 	resume_traveling();
 }
@@ -506,10 +501,9 @@ void hunt_bison(void)
 		GUI_output(get_tx2(36));
 
 		hero = get_hero(get_random_hero());
-		sprintf((char*)ds_readd(DTP2),
-			get_tx2(37),
-			(char*)hero + HERO_NAME2);
-		GUI_output((char*)ds_readd(DTP2));
+		sprintf(g_dtp2, get_tx2(37), (char*)hero + HERO_NAME2);
+		GUI_output(g_dtp2);
+
 		sub_hero_le(hero, random_schick(6));
 		add_hero_ap(hero, 2);
 	}
@@ -536,10 +530,8 @@ void hunt_rhino(void)
 		GUI_output(get_tx2(42));
 
 		hero = get_hero(get_random_hero());
-		sprintf((char*)ds_readd(DTP2),
-			get_tx2(43),
-			(char*)hero + HERO_NAME2);
-		GUI_output((char*)ds_readd(DTP2));
+		sprintf(g_dtp2, get_tx2(43), (char*)hero + HERO_NAME2);
+		GUI_output(g_dtp2);
 		sub_hero_le(hero, dice_roll(2, 6, 0));
 		add_hero_ap(hero, 6);
 	}
@@ -555,12 +547,12 @@ void pirates_attack(void)
 	GUI_output(get_tx2(46));
 	GUI_output(get_tx2(47));
 
-	ds_writew(MAX_ENEMIES, random_interval(3, 8));
-	ds_writew(FIG_DISCARD, 1);
+	g_max_enemies = random_interval(3, 8);
+	g_fig_discard = 1;
 
 	do_fight(FIGHTS_S001);
 
-	ds_writew(BASEPOS_X, ds_writew(BASEPOS_Y, 0));
+	g_basepos_x = g_basepos_y = 0;
 
 	status_menu(get_hero_index((Bit8u*)get_first_hero_available_in_group()));
 
@@ -572,22 +564,22 @@ void do_wild8_fight(void)
 	signed short bak1;
 	signed short bak2;
 
-	bak1 = ds_readws(BASEPOS_X);
-	bak2 = ds_readws(BASEPOS_Y);
-	ds_writew(WALLCLOCK_UPDATE_BAK, ds_readws(WALLCLOCK_UPDATE));
-	ds_writew(BASEPOS_X, 0);
-	ds_writew(BASEPOS_Y, 0);
-	ds_writeb(SHOW_TRAVEL_MAP, 0);
+	bak1 = g_basepos_x;
+	bak2 = g_basepos_y;
+	g_wallclock_update_bak = g_wallclock_update;
+	g_basepos_x = 0;
+	g_basepos_y = 0;
+	gs_show_travel_map = 0;
 
-	ds_writew(MAX_ENEMIES, random_interval(5, 10));
-	ds_writew(FIG_DISCARD, 1);
+	g_max_enemies = random_interval(5, 10);
+	g_fig_discard = 1;
 
 	do_fight(FIGHTS_WILD8);
 
-	ds_writew(ROUTE_FIGHT_FLAG, 0);
-	ds_writeb(SHOW_TRAVEL_MAP, 1);
-	ds_writew(BASEPOS_X, bak1);
-	ds_writew(BASEPOS_Y, bak2);
+	gs_route_fight_flag = 0;
+	gs_show_travel_map = 1;
+	g_basepos_x = bak1;
+	g_basepos_y = bak2;
 }
 
 void random_encounter(signed short arg)
@@ -605,11 +597,11 @@ void random_encounter(signed short arg)
 		l_si = 1;
 	}
 
-	bak1 = ds_readws(BASEPOS_X);
-	bak2 = ds_readws(BASEPOS_Y);
-	wallclock_update_bak = ds_readws(WALLCLOCK_UPDATE);
-	ds_writew(BASEPOS_X, 0);
-	ds_writew(BASEPOS_Y, 0);
+	bak1 = g_basepos_x;
+	bak2 = g_basepos_y;
+	wallclock_update_bak = g_wallclock_update;
+	g_basepos_x = 0;
+	g_basepos_y = 0;
 
 	arg = ds_readb((RANDOM_ENCOUNTER_INDEX-1) + arg);
 
@@ -619,21 +611,21 @@ void random_encounter(signed short arg)
 
 		if ((ds_readb(RANDOM_ENCOUNTER_DESCR + 7 * i + arg) <= randval) && (ds_readb(RANDOM_ENCOUNTER_DESCR + 7 * i + arg) != 0)) {
 
-			ds_writeb(SHOW_TRAVEL_MAP, (signed char)ds_writew(WALLCLOCK_UPDATE, 0));
+			gs_show_travel_map = g_wallclock_update = 0;
 			ds_writeb(TRAVEL_EVENT_ACTIVE, 1);
-			ds_writew(FIG_DISCARD, 1);
+			g_fig_discard = 1;
 
 			switch (i) {
 				case 0: {
 					if (!l_si) {
-						ds_writew(MAX_ENEMIES, random_schick(6) + 1);
+						g_max_enemies = random_schick(6) + 1;
 						do_fight(FIGHTS_WILD1);
 					}
 					break;
 				}
 				case 1: {
 					if (!l_si) {
-						ds_writew(MAX_ENEMIES, random_schick(3));
+						g_max_enemies = random_schick(3);
 						do_fight(FIGHTS_WILD2);
 					}
 					break;
@@ -644,7 +636,7 @@ void random_encounter(signed short arg)
 				}
 				case 3: {
 					if (!l_si) {
-						ds_writew(MAX_ENEMIES, random_schick(2));
+						g_max_enemies = random_schick(2);
 						do_fight(FIGHTS_WILD3);
 					}
 					break;
@@ -655,21 +647,21 @@ void random_encounter(signed short arg)
 				}
 				case 5: {
 					if (!l_si) {
-						ds_writew(MAX_ENEMIES, random_schick(6) + 1);
+						g_max_enemies = random_schick(6) + 1;
 						do_fight(FIGHTS_WILD4);
 					}
 					break;
 				}
 				case 6: {
 					if (!l_si) {
-						ds_writew(MAX_ENEMIES, random_schick(3) + 3);
+						g_max_enemies = random_schick(3) + 3;
 						do_fight(FIGHTS_WILD4);
 					}
 					break;
 				}
 				case 7: {
 					if (!l_si) {
-						ds_writew(MAX_ENEMIES, random_schick(2) + 1);
+						g_max_enemies = random_schick(2) + 1;
 						do_fight(FIGHTS_WILD5);
 					}
 					break;
@@ -684,7 +676,7 @@ void random_encounter(signed short arg)
 				}
 				case 10: {
 					if (!l_si) {
-						ds_writew(MAX_ENEMIES, random_schick(3));
+						g_max_enemies = random_schick(3);
 						do_fight(FIGHTS_WILD6);
 					}
 					break;
@@ -695,7 +687,7 @@ void random_encounter(signed short arg)
 				}
 				case 12: {
 					if (!l_si) {
-						ds_writew(MAX_ENEMIES, random_schick(3));
+						g_max_enemies = random_schick(3);
 						do_fight(FIGHTS_WILD7);
 					}
 					break;
@@ -706,16 +698,16 @@ void random_encounter(signed short arg)
 				}
 			}
 
-			ds_writew(FIG_DISCARD, 0);
-			ds_writeb(SHOW_TRAVEL_MAP, 1);
+			g_fig_discard = 0;
+			gs_show_travel_map = 1;
 			ds_writeb(TRAVEL_EVENT_ACTIVE, 0);
 			break;
 		}
 	}
 
-	ds_writew(BASEPOS_X, bak1);
-	ds_writew(BASEPOS_Y, bak2);
-	ds_writew(WALLCLOCK_UPDATE, wallclock_update_bak);
+	g_basepos_x = bak1;
+	g_basepos_y = bak2;
+	g_wallclock_update = wallclock_update_bak;
 	load_tx(ARCHIVE_FILE_MAPTEXT_LTX);
 }
 
@@ -728,7 +720,7 @@ void search_ruin1(void)
 void tevent_115(void)
 {
 	if (ds_readb(FIND_HYGGELIK) != 0) {
-		ds_writeb(TEVENT115_FLAG, 1);
+		gs_tevent115_flag = 1;
 		do_talk(17, 0);
 		set_var_to_zero();
 	}
@@ -737,51 +729,57 @@ void tevent_115(void)
 void TLK_way_to_ruin(signed short state)
 {
 	signed short i;
-	RealPt hero;
+	unsigned char *hero;
 	Bit8u *hero2;
 
 	hero2 = (Bit8u*)get_first_hero_available_in_group();
 
 	if (!state) {
-		ds_writew(DIALOG_NEXT_STATE, ds_readb(TEVENT115_FLAG) != 0 ? 45 : 66);
-		ds_writew(TLK_RUIN_HERO_COUNTER, 0);
+
+		g_dialog_next_state = (gs_tevent115_flag ? 45 : 66);
+		g_tlk_ruin_hero_counter = 0;
+
 	} else if (state == 66 || state == 45) {
 		show_treasure_map();
 	} else if (state == 4 || state == 7) {
 		timewarp(HOURS(1));
 	} else if (state == 6) {
-		hero = (Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * get_random_hero();
-		ds_writew(DIALOG_NEXT_STATE, test_skill(hero, TA_WILDNISLEBEN, 6) > 0 ? 8 : 7);
+		hero = get_hero(get_random_hero());
+		g_dialog_next_state = (test_skill(hero, TA_WILDNISLEBEN, 6) > 0 ? 8 : 7);
 	} else if (state == 8) {
 		timewarp(HOURS(1));
 		TRV_ford_test(0, 30);
 	} else if (state == 9) {
 
 		do {
-			hero = (Bit8u*)ds_readds(HEROES) + SIZEOF_HERO * ds_readws(TLK_RUIN_HERO_COUNTER);
-			inc_ds_ws(TLK_RUIN_HERO_COUNTER);
+			hero = get_hero(g_tlk_ruin_hero_counter);
+			g_tlk_ruin_hero_counter++;
 
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero)) {
 
-				ds_writed(RUIN_HERO, (Bit32u)hero);
+				gs_ruin_hero = hero;
+
 				break;
 			}
 
-		} while (ds_readws(TLK_RUIN_HERO_COUNTER) != 7);
+		} while (g_tlk_ruin_hero_counter != 7);
 
-		ds_writew(DIALOG_NEXT_STATE, ds_readws(TLK_RUIN_HERO_COUNTER) == 7 ? 13 : 10);
+		g_dialog_next_state = (g_tlk_ruin_hero_counter == 7 ? 13 : 10);
+
 	} else if (state == 10) {
-		ds_writew(DIALOG_NEXT_STATE, test_skill((Bit8u*)ds_readd(RUIN_HERO), TA_SCHWIMMEN, 5) > 0 ? 11 : 12);
+
+		g_dialog_next_state = (test_skill(gs_ruin_hero, TA_SCHWIMMEN, 5) > 0 ? 11 : 12);
 	} else if (state == 12) {
-		sub_hero_le((Bit8u*)ds_readd(RUIN_HERO), random_schick(4) + 1);
+
+		sub_hero_le(gs_ruin_hero, random_schick(4) + 1);
 
 		/* Original-Bug: hero != RUIN_HERO */
-		hero_disease_test((Bit8u*)ds_readd(RUIN_HERO), 2,
+		hero_disease_test(gs_ruin_hero, 2,
 			25 - (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs((Bit8u*)(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK)))));
 
-		loose_random_item((Bit8u*)ds_readd(RUIN_HERO), 10, get_ttx(506));
+		loose_random_item(gs_ruin_hero, 10, get_ttx(506));
 
 	} else if (state == 13 || state == 25 || state == 34 || state == 59 || state == 62) {
 		timewarp(MINUTES(30));
@@ -790,11 +788,11 @@ void TLK_way_to_ruin(signed short state)
 	} else if (state == 15 || state == 16) {
 		timewarp(MINUTES(20));
 	} else if (state == 17) {
-		ds_writew(DIALOG_NEXT_STATE, test_skill(hero2, TA_ORIENTIERUNG, 5) > 0 ? 18 : 19);
+		g_dialog_next_state = (test_skill(hero2, TA_ORIENTIERUNG, 5) > 0 ? 18 : 19);
 	} else if (state == 19) {
 		timewarp(MINUTES(20));
-		ds_writed(RUIN_HERO, (Bit32u)((Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * get_random_hero()));
-		ds_writew(DIALOG_NEXT_STATE, test_skill((Bit8u*)ds_readd(RUIN_HERO), TA_AEXTE, 2) > 0 ? 20 : 21);
+		gs_ruin_hero = get_hero(get_random_hero());
+		g_dialog_next_state = (test_skill(gs_ruin_hero, TA_AEXTE, 2) > 0 ? 20 : 21);
 	} else if (state == 20) {
 		loose_random_item(get_hero(get_random_hero()), 5, get_ttx(506));
 	} else if (state == 21) {
@@ -811,57 +809,57 @@ void TLK_way_to_ruin(signed short state)
 		timewarp(HOURS(5));
 	} else if (state == 28) {
 
-		hero = (Bit8u*)ds_readds(HEROES);
+		hero = get_hero(0);
 
-		for (i = ds_writews(TLK_RUIN_HERO_COUNTER, 0); i <= 6; i++, hero += SIZEOF_HERO) {
+		for (i = g_tlk_ruin_hero_counter = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_skill(hero, TA_ORIENTIERUNG, 0) > 0) {
 
-					inc_ds_ws(TLK_RUIN_HERO_COUNTER);
+					g_tlk_ruin_hero_counter++;
 			}
 		}
 
-		ds_writew(DIALOG_NEXT_STATE, (count_heroes_in_group() >> 1) < ds_readws(TLK_RUIN_HERO_COUNTER) ? 29 : 30);
+		g_dialog_next_state = ((count_heroes_in_group() >> 1) < g_tlk_ruin_hero_counter ? 29 : 30);
 
 	} else if (state == 41) {
-		ds_writeb(EVENT_ANI_BUSY, 1);
+		g_event_ani_busy = 1;
 		load_ani(11);
 		draw_main_screen();
 		init_ani(0);
 		timewarp(MINUTES(90));
-		ds_writew(REQUEST_REFRESH, 1);
+		g_request_refresh = 1;
 	} else if (state == 42 || state == 60) {
 		timewarp(MINUTES(150));
 	} else if (state == 67 || state == 44) {
-		ds_writeb(TRAVEL_DETOUR, DUNGEONS_HYGGELIKS_RUINE);
+		gs_travel_detour = (DUNGEONS_HYGGELIKS_RUINE);
 
 	} else if (state == 48) {
 
-		hero = (Bit8u*)ds_readds(HEROES);
+		hero = get_hero(0);
 
-		for (i = ds_writews(TLK_RUIN_HERO_COUNTER, 0); i <= 6; i++, hero += SIZEOF_HERO) {
+		for (i = g_tlk_ruin_hero_counter = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
 				test_skill(hero, TA_ORIENTIERUNG, 0) > 0) {
 
-					inc_ds_ws(TLK_RUIN_HERO_COUNTER);
+					g_tlk_ruin_hero_counter++;
 			}
 		}
 
-		ds_writew(DIALOG_NEXT_STATE, (count_heroes_in_group() >> 1) < ds_readws(TLK_RUIN_HERO_COUNTER) ? 49 : 50);
+		g_dialog_next_state = ((count_heroes_in_group() >> 1) < g_tlk_ruin_hero_counter ? 49 : 50);
 	}
 
-	ds_writeb(EVENT_ANI_BUSY, 0);
+	g_event_ani_busy = 0;
 }
 
 void tevent_087(void)
 {
-	if (!ds_readb(MET_UNICORN_FLAG) && ds_readws(GOT_MAIN_QUEST) != 0) {
+	if (!ds_readb(MET_UNICORN_FLAG) && gs_got_main_quest != 0) {
 		do_talk(11, 2);
 		ds_writeb(MET_UNICORN_FLAG, 1);
 	}

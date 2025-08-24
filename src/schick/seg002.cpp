@@ -78,9 +78,11 @@ void sub_light_timers(Bit32s);
 /* static */
 void play_music_file(signed short index)
 {
-	if (ds_readbs(MUSIC_ENABLED) != 0) {
+#if defined(__BORLANDC__)
+	if (g_music_enabled != 0) {
 		do_play_music_file(index);
 	}
+#endif
 }
 
 void set_audio_track(Bit16u index)
@@ -90,9 +92,9 @@ void set_audio_track(Bit16u index)
 #endif
 
 	/* only do something when index is not the current track */
-	if (ds_readw(MUSIC_CURRENT_TRACK) != index) {
+	if (g_music_current_track != index) {
 
-		ds_writew(MUSIC_CURRENT_TRACK, index);
+		g_music_current_track = index;
 
 		if (ds_readw(USE_CDAUDIO_FLAG) != 0) {
 			/* we use CD */
@@ -108,36 +110,34 @@ void sound_menu(void)
 {
 	signed short answer;
 
-	answer = GUI_radio(p_datseg + SND_MENU_QUESTION, 4,
-				p_datseg + SND_MENU_RADIO1,
-				p_datseg + SND_MENU_RADIO2,
-				p_datseg + SND_MENU_RADIO3,
-				p_datseg + SND_MENU_RADIO4);
+	answer = GUI_radio(g_snd_menu_title, 4,
+				g_snd_menu_radio1, g_snd_menu_radio2,
+				g_snd_menu_radio3, g_snd_menu_radio4);
 
 	switch (answer - 1) {
 		case 0: {
-			ds_writeb(MUSIC_ENABLED, 0);
-			ds_writeb(SND_EFFECTS_ENABLED, 0);
+			g_music_enabled = 0;
+			g_snd_effects_enabled = 0;
 			break;
 		}
 		case 1: {
-			ds_writeb(MUSIC_ENABLED, 1);
-			ds_writeb(SND_EFFECTS_ENABLED, 0);
+			g_music_enabled = 1;
+			g_snd_effects_enabled = 0;
 			break;
 		}
 		case 2: {
-			ds_writeb(MUSIC_ENABLED, 0);
-			ds_writeb(SND_EFFECTS_ENABLED, 1);
+			g_music_enabled = 0;
+			g_snd_effects_enabled = 1;
 			break;
 		}
 		case 3: {
-			ds_writeb(MUSIC_ENABLED, 1);
-			ds_writeb(SND_EFFECTS_ENABLED, 1);
+			g_music_enabled = 1;
+			g_snd_effects_enabled = 1;
 			break;
 		}
 	}
 
-	if (ds_readb(MUSIC_ENABLED) == 0) {
+	if (g_music_enabled == 0) {
 		/* music disabled */
 		if (ds_readw(USE_CDAUDIO_FLAG) != 0) {
 			CD_audio_pause();
@@ -145,12 +145,12 @@ void sound_menu(void)
 			stop_midi_playback();
 		}
 	} else {
-		if (ds_readws(MUSIC_CURRENT_TRACK) != -1) {
+		if (g_music_current_track != -1) {
 			/* music enabled */
 			if (ds_readw(USE_CDAUDIO_FLAG) != 0) {
 				CD_audio_play();
 			} else {
-				play_music_file(ds_readws(MUSIC_CURRENT_TRACK));
+				play_music_file(g_music_current_track);
 			}
 		}
 	}
@@ -158,6 +158,7 @@ void sound_menu(void)
 
 void read_sound_cfg(void)
 {
+#if defined(__BORLANDC__)
 	signed short midi_port;
 	signed short dummy;
 	signed short digi_port;
@@ -165,7 +166,7 @@ void read_sound_cfg(void)
 	signed short handle;
 
 	/* try to open SOUND.CFG */
-	if ( (handle = open((char*)(p_datseg + FNAME_SOUND_CFG), O_BINARY | O_RDONLY)) != -1) {
+	if ( (handle = open(g_fname_sound_cfg, O_BINARY | O_RDONLY)) != -1) {
 
 		_read(handle, (Bit8u*)&midi_port, 2);
 		_read(handle, (Bit8u*)&dummy, 2);
@@ -183,18 +184,18 @@ void read_sound_cfg(void)
 
 #if !defined(__BORLANDC__)
 		/* menu to select the music source */
-		const Bit16s tw_bak = ds_readws(TEXTBOX_WIDTH);
-		Bit8u question[] = "WIE SOLL DIE MUSIK WIEDERGEGEBEN WERDEN?";
-		Bit8u opt1[] = "AUDIO-CD";
-		Bit8u opt2[] = "MIDI";
+		const Bit16s tw_bak = g_textbox_width;
+		char question[] = "WIE SOLL DIE MUSIK WIEDERGEGEBEN WERDEN?";
+		char opt1[] = "AUDIO-CD";
+		char opt2[] = "MIDI";
 		signed short answer;
 
-		ds_writews(TEXTBOX_WIDTH, 3);
+		g_textbox_width = 3;
 		do {
 			answer = GUI_radio(question, 2, opt1, opt2);
 
 		} while (answer == -1);
-		ds_writews(TEXTBOX_WIDTH, tw_bak);
+		g_textbox_width = tw_bak;
 
 		if (answer == 1)
 		{
@@ -219,7 +220,7 @@ void read_sound_cfg(void)
 #endif
 		{
 			if (midi_port != 0) {
-				load_music_driver(((Bit8u*)p_datseg + FNAME_SOUND_ADV2), 3, midi_port);
+				load_music_driver(g_fname_sound_adv2, 3, midi_port);
 			} else {
 
 				/* music was disabled in SOUND.CFG */
@@ -233,22 +234,23 @@ void read_sound_cfg(void)
 
 		if (digi_port != 0) {
 
-			if (ds_readw(SND_VOC_ENABLED) != 0) {
+			if (g_snd_voc_enabled != 0) {
 
-				if (!load_digi_driver(((Bit8u*)p_datseg + FNAME_DIGI_ADV), 2, digi_port, digi_irq))
+				if (!load_digi_driver(g_fname_digi_adv, 2, digi_port, digi_irq))
 				{
-					ds_writew(SND_VOC_ENABLED, 0);
+					g_snd_voc_enabled = 0;
 				}
 			} else {
 				/* print that sound effects are disabled */
-				GUI_output(p_datseg + SND_TXT_DISABLED_MEM);
-				ds_writew(SND_VOC_ENABLED, 0);
+				GUI_output(g_snd_txt_disabled_mem);
+				g_snd_voc_enabled = 0;
 			}
 		} else {
-			ds_writew(SND_VOC_ENABLED, 0);
+			g_snd_voc_enabled = 0;
 		}
 
 	}
+#endif
 }
 
 void init_AIL(Bit32u size)
@@ -264,7 +266,7 @@ void init_AIL(Bit32u size)
 void exit_AIL(void)
 {
 #if defined(__BORLANDC__)
-	AIL_shutdown((RealPt)NULL);
+	AIL_shutdown((Bit8u*)NULL);
 
 	if (ds_readd(AIL_TIMBRE_CACHE) != 0) {
 		free((void*)ds_readd(AIL_TIMBRE_CACHE));
@@ -285,17 +287,17 @@ void exit_AIL(void)
 	/* set all pointers to NULL */
 	ds_writed(AIL_TIMBRE_CACHE, ds_writed(AIL_STATE_TABLE, ds_writed(AIL_MIDI_BUFFER, ds_writed(AIL_MUSIC_DRIVER_BUF2, 0))));
 
-	if (ds_readw(SND_VOC_ENABLED) != 0) {
+	if (g_snd_voc_enabled != 0) {
 		free_voc_buffer();
 	}
 #endif
 }
 
-RealPt read_music_driver(RealPt fname)
+Bit8u* read_music_driver(Bit8u* fname)
 {
 #if defined(__BORLANDC__)
 	Bit32u len;
-	RealPt buf;
+	Bit8u* buf;
 	Bit32u ptr;
 
 	signed short handle;
@@ -308,7 +310,7 @@ RealPt read_music_driver(RealPt fname)
 		/* insane pointer casting */
 		ptr = (ds_readd(AIL_MUSIC_DRIVER_BUF2) + 15L);
 		ptr &= 0xfffffff0;
-		buf = EMS_norm_ptr((RealPt)ptr);
+		buf = EMS_norm_ptr((Bit8u*)ptr);
 		/* and_ptr_ds((Bit8u*)&ptr, 0xfffffff0); */
 		_read(handle, (Bit8u*)buf, (unsigned short)len);
 		close(handle);
@@ -325,7 +327,7 @@ signed short prepare_midi_playback(signed short sequence)
 	unsigned short l_si;
 	signed short l_di;
 	signed short patch;
-	RealPt ptr;
+	Bit8u* ptr;
 
 	if ((ds_writews(SAMPLE_AD_HANDLE, load_archive_file(ARCHIVE_FILE_SAMPLE_AD))) != -1) {
 
@@ -366,7 +368,7 @@ signed short start_midi_playback(signed short seq)
 
 
 /* static */
-RealPt prepare_timbre(signed short a1, signed short patch)
+Bit8u* prepare_timbre(signed short a1, signed short patch)
 {
 #if defined(__BORLANDC__)
 	char *buf;
@@ -420,7 +422,7 @@ signed short do_load_midi_file(signed short index)
 }
 
 /* static */
-signed short load_music_driver(RealPt fname, signed short type, signed short port)
+signed short load_music_driver(Bit8u* fname, signed short type, signed short port)
 {
 #if defined(__BORLANDC__)
 	if (port &&
@@ -464,7 +466,7 @@ signed short load_music_driver(RealPt fname, signed short type, signed short por
 			} else {
 
 				/* no sound hardware found */
-				GUI_output((char*)p_datseg +SND_TXT_HW_NOT_FOUND);
+				GUI_output(g_snd_txt_hw_not_found);
 				exit_AIL();
 			}
 		}
@@ -504,7 +506,7 @@ void start_midi_playback_IRQ(void)
 {
 #if defined(__BORLANDC__)
 	if ((ds_readw(LOAD_SOUND_DRIVER) == 0) &&
-		(ds_readb(MUSIC_ENABLED) != 0) &&
+		(g_music_enabled != 0) &&
 		(host_readw((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 2) == 3))
 	{
 		if (AIL_sequence_status(ds_readws(AIL_MUSIC_DRIVER_ID), ds_readws(AIL_SEQUENCE)) == 2) {
@@ -547,7 +549,7 @@ signed short have_mem_for_sound(void)
 	signed short retval;
 	struct ffblk blk;
 
-	if (!findfirst((char*)(p_datseg + FNAME_SOUND_ADV), &blk, 0)) {
+	if (!findfirst(g_fname_sound_adv, &blk, 0)) {
 		/* SOUND.ADV was found */
 		size = host_readd((Bit8u*)(&blk) + 26);
 		size += 4000L;
@@ -557,7 +559,7 @@ signed short have_mem_for_sound(void)
 
 			if ((Bit32u)(size + 25000L) < farcoreleft()) {
 
-				ds_writew(SND_VOC_ENABLED, 1);
+				g_snd_voc_enabled = 1;
 			}
 		} else {
 			retval = 0;
@@ -567,7 +569,7 @@ signed short have_mem_for_sound(void)
 		retval = 1;
 
 		if (25000L < farcoreleft()) {
-			ds_writew(SND_VOC_ENABLED, 1);
+			g_snd_voc_enabled = 1;
 		}
 	}
 
@@ -580,7 +582,7 @@ signed short have_mem_for_sound(void)
 void play_voc(signed short index)
 {
 #if defined(__BORLANDC__)
-	if (ds_readw(SND_VOC_ENABLED) && ds_readb(SND_EFFECTS_ENABLED)) {
+	if (g_snd_voc_enabled && g_snd_effects_enabled) {
 		SND_set_volume(90);
 		SND_play_voc(index);
 	}
@@ -590,7 +592,7 @@ void play_voc(signed short index)
 void play_voc_delay(signed short index)
 {
 #if defined(__BORLANDC__)
-	if (ds_readw(SND_VOC_ENABLED) && ds_readb(SND_EFFECTS_ENABLED)) {
+	if (g_snd_voc_enabled && g_snd_effects_enabled) {
 		SND_set_volume(90);
 		SND_play_voc(index);
 
@@ -604,7 +606,7 @@ void play_voc_delay(signed short index)
 void alloc_voc_buffer(Bit32u size)
 {
 #if defined(__BORLANDC__)
-	if (ds_readw(SND_VOC_ENABLED)) {
+	if (g_snd_voc_enabled) {
 		if ((((Bit8u*)ds_writed(AIL_VOC_BUFFER, (Bit32u)schick_alloc(size))))) ;
 	}
 #endif
@@ -614,7 +616,7 @@ void alloc_voc_buffer(Bit32u size)
 void free_voc_buffer(void)
 {
 #if defined(__BORLANDC__)
-	if (ds_readw(SND_VOC_ENABLED) != 0) {
+	if (g_snd_voc_enabled != 0) {
 
 		if (ds_readd(AIL_VOC_BUFFER) != 0) {
 			free((void*)ds_readd(AIL_VOC_BUFFER));
@@ -663,7 +665,7 @@ signed short read_voc_file(signed short index)
 void SND_play_voc(signed short index)
 {
 #if defined(__BORLANDC__)
-	if (ds_readw(SND_VOC_ENABLED)) {
+	if (g_snd_voc_enabled) {
 
 		AIL_stop_digital_playback(ds_readw(AIL_DIGI_DRIVER_ID));
 		read_new_voc_file(index);
@@ -676,7 +678,7 @@ void SND_play_voc(signed short index)
 void SND_stop_digi(void)
 {
 #if defined(__BORLANDC__)
-	if (ds_readw(SND_VOC_ENABLED)) {
+	if (g_snd_voc_enabled) {
 		AIL_stop_digital_playback(ds_readw(AIL_DIGI_DRIVER_ID));
 	}
 #endif
@@ -685,7 +687,7 @@ void SND_stop_digi(void)
 void SND_set_volume(unsigned short volume)
 {
 #if defined(__BORLANDC__)
-	if (ds_readw(SND_VOC_ENABLED)) {
+	if (g_snd_voc_enabled) {
 
 		AIL_set_digital_playback_volume(ds_readw(AIL_DIGI_DRIVER_ID), volume);
 
@@ -697,7 +699,7 @@ void SND_set_volume(unsigned short volume)
 }
 
 /* static */
-signed short load_digi_driver(RealPt fname, signed short type, signed short io, signed short irq)
+signed short load_digi_driver(Bit8u* fname, signed short type, signed short io, signed short irq)
 {
 #if defined(__BORLANDC__)
 	if (io &&
@@ -722,11 +724,11 @@ signed short load_digi_driver(RealPt fname, signed short type, signed short io, 
 					host_readws((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR) + 0x10),
 					host_readws((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR) + 0x12));
 
-				ds_writeb(SND_EFFECTS_ENABLED, 1);
+				g_snd_effects_enabled = 1;
 				return 1;
 			} else {
 				/* no sound hardware found */
-				GUI_output((char*)p_datseg + SND_TXT_HW_NOT_FOUND2);
+				GUI_output(g_snd_txt_hw_not_found2);
 				free_voc_buffer();
 			}
 		}
@@ -752,7 +754,7 @@ unsigned char* read_digi_driver(char *fname)
 		ds_writed(AIL_DIGI_DRIVER_BUF2, (Bit32u)schick_alloc(len + 16L));
 		ptr = ds_readd(AIL_DIGI_DRIVER_BUF2) + 15L;
 		ptr &= 0xfffffff0;
-		buf = EMS_norm_ptr((RealPt)ptr);
+		buf = EMS_norm_ptr((Bit8u*)ptr);
 		_read(handle, (Bit8u*)buf, (unsigned short)len);
 		close(handle);
 		return buf;
@@ -774,7 +776,7 @@ signed short open_and_seek_dat(unsigned short fileindex)
 	signed short fd;
 
 	/* open SCHICK.DAT */
-	if ( (fd = open((char*)(p_datseg + FNAME_SCHICK_DAT), O_BINARY | O_RDONLY)) != -1) {
+	if ( (fd = open(g_fname_schick_dat, O_BINARY | O_RDONLY)) != -1) {
 
 		/* seek to the fileindex position in the offset table */
 		lseek(fd, fileindex * 4, SEEK_SET);
@@ -797,7 +799,7 @@ signed short open_and_seek_dat(unsigned short fileindex)
 		ds_writed(ARCHIVE_FILE_OFFSET, start);
 
 		/* save the length of the desired file in 2 variables */
-		ds_writed(ARCHIVE_FILE_LENGTH, ds_writed(ARCHIVE_FILE_REMAINING, end - start));
+		ds_writed(ARCHIVE_FILE_LENGTH, (g_archive_file_remaining = end - start));
 	}
 
 	return fd;
@@ -820,13 +822,13 @@ unsigned short read_archive_file(Bit16u handle, Bit8u *buffer, Bit16u len)
 {
 
 	/* no need to read */
-	if (ds_readd(ARCHIVE_FILE_REMAINING) != 0) {
+	if (g_archive_file_remaining != 0) {
 
 		/* adjust number of bytes to read */
-		if (len > ds_readds(ARCHIVE_FILE_REMAINING))
-			len = ds_readw(ARCHIVE_FILE_REMAINING);
+		if (len > g_archive_file_remaining)
+			len = (Bit16u)g_archive_file_remaining;
 
-		sub_ds_ds(ARCHIVE_FILE_REMAINING, len);
+		g_archive_file_remaining -= len;
 
 		return _read(handle, buffer, len);
 	} else {
@@ -845,7 +847,7 @@ void seek_archive_file(Bit16u handle, Bit32s off, ...)
 
 	Bit32u file_off;
 
-	ds_writed(ARCHIVE_FILE_REMAINING, ds_readd(ARCHIVE_FILE_LENGTH) - off);
+	g_archive_file_remaining = (Bit32s)(ds_readd(ARCHIVE_FILE_LENGTH) - off);
 
 	file_off = ds_readd(ARCHIVE_FILE_OFFSET) + off;
 
@@ -856,17 +858,15 @@ void seek_archive_file(Bit16u handle, Bit32s off, ...)
 
 signed short load_regular_file(Bit16u index)
 {
-
 	signed short handle;
 
 	if ( (handle = open((char*)ds_readd(FNAMES + index * 4), O_BINARY | O_RDWR)) == -1) {
 
-		/* "FILE %s IS MISSING!" */
-		sprintf((char*)ds_readd(DTP2), (char*)ds_readd(STR_FILE_MISSING_PTR), (char*)ds_readd(FNAMES + index * 4));
+		sprintf(g_dtp2, g_str_file_missing_ptr, (char*)ds_readd(FNAMES + index * 4));
 
-		ds_writeb(MISSING_FILE_GUILOCK, 1);
-		GUI_output((char*)ds_readd(DTP2));
-		ds_writeb(MISSING_FILE_GUILOCK, 0);
+		g_missing_file_guilock = 1;
+		GUI_output(g_dtp2);
+		g_missing_file_guilock = 0;
 	}
 
 	return handle;
@@ -900,7 +900,7 @@ signed short open_temp_file(unsigned short index)
 	}
 
 	/* get the length of the file */
-	ds_writed(ARCHIVE_FILE_LENGTH, ds_writed(ARCHIVE_FILE_REMAINING, lseek(handle, 0, 2)));
+	ds_writed(ARCHIVE_FILE_LENGTH, (g_archive_file_remaining = lseek(handle, 0, 2)));
 	/* seek to start */
 	lseek(handle, 0, 0);
 
@@ -922,9 +922,9 @@ void copy_from_archive_to_temp(unsigned short index, char* fname)
 		handle2 = _creat(fname, 0);
 
 		/* copy it */
-		while ( (len = read_archive_file(handle1, (Bit8u*)ds_readd(RENDERBUF_PTR), 60000)) && (len != -1))
+		while ( (len = read_archive_file(handle1, g_renderbuf_ptr, 60000)) && (len != -1))
 		{
-			_write(handle2, (Bit8u*)ds_readd(RENDERBUF_PTR), len);
+			write(handle2, g_renderbuf_ptr, len);
 		}
 
 		close(handle1);
@@ -932,7 +932,7 @@ void copy_from_archive_to_temp(unsigned short index, char* fname)
 	}
 }
 
-void copy_file_to_temp(RealPt src_file, char* fname)
+void copy_file_to_temp(char* src_file, char* fname)
 {
 	signed short handle1;
 	signed short handle2;
@@ -945,9 +945,9 @@ void copy_file_to_temp(RealPt src_file, char* fname)
 		handle2 = _creat(fname, 0);
 
 		/* copy it */
-		while ( (len = _read(handle1, (Bit8u*)ds_readd(RENDERBUF_PTR), 60000)) && (len != -1))
+		while ( (len = _read(handle1, g_renderbuf_ptr, 60000)) && (len != -1))
 		{
-			_write(handle2, (Bit8u*)ds_readd(RENDERBUF_PTR), len);
+			write(handle2, g_renderbuf_ptr, len);
 		}
 
 		close(handle1);
@@ -979,7 +979,7 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 	va = nvf_type & 0x80;
 	nvf_type &= 0x7f;
 
-	pics = host_readws(F_PADD(nvf->src, 1L));
+	pics = host_readws(nvf->src + 1L);
 
 	if (nvf->no < 0)
 		nvf->no = 0;
@@ -990,49 +990,49 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 	switch (nvf_type) {
 
 	case 0x00:
-		width = host_readws(F_PADD(nvf->src, 3));
-		height = host_readws(F_PADD(nvf->src, 5));
+		width = host_readws(nvf->src + 3L);
+		height = host_readws(nvf->src + 5L);
 		p_size = width * height;
-		src =  F_PADD(nvf->src, nvf->no * p_size + 7);
+		src =  nvf->src + nvf->no * p_size + 7L;
 		break;
 
 	case 0x01:
 		offs = pics * 4 + 3L;
 		for (i = 0; i < nvf->no; i++) {
 #if !defined(__BORLANDC__)
-			width = host_readw(nvf->src + i * 4 + 3);
-			height = host_readw(nvf->src + i * 4 + 5);
+			width = host_readw(nvf->src + i * 4 + 3L);
+			height = host_readw(nvf->src + i * 4 + 5L);
 #endif
 			offs += width * height;
 		}
 
-		width = host_readw(F_PADD(nvf->src, nvf->no * 4 + 3));
-		height = host_readw(F_PADD(nvf->src, nvf->no * 4 + 5));
+		width = host_readw(nvf->src + nvf->no * 4 + 3L);
+		height = host_readw(nvf->src + nvf->no * 4 + 5L);
 		p_size = width * height;
-		src = F_PADD(nvf->src, offs);
+		src = nvf->src + offs;
 		break;
 
 	case 0x02: case 0x04:
-		width = host_readw(F_PADD(nvf->src, 3L));
-		height = host_readw(F_PADD(nvf->src, 5));
+		width = host_readw(nvf->src + 3L);
+		height = host_readw(nvf->src + 5L);
 		offs = pics * 4 + 7L;
 		for (i = 0; i < nvf->no; i++) {
-			offs += host_readd(F_PADD(nvf->src, (i * 4) + 7));
+			offs += host_readd(nvf->src + (i * 4) + 7L);
 		}
 
-		p_size = host_readd(F_PADD(nvf->src, nvf->no * 4 + 7));
-		src = F_PADD(nvf->src, offs);
+		p_size = host_readd(nvf->src + nvf->no * 4 + 7L);
+		src = nvf->src + offs;
 		break;
 
 	case 0x03: case 0x05:
 		offs = pics * 8 + 3L;
 		for (i = 0; i < nvf->no; i++)
-			offs += host_readd(F_PADD(nvf->src, (i * 8) + 7));
+			offs += host_readd(nvf->src + (i * 8) + 7L);
 
-		width = host_readw(F_PADD(nvf->src, nvf->no * 8 + 3));
-		height = host_readw(F_PADD(nvf->src, nvf->no * 8 + 5));
-		p_size = host_readd(F_PADD(nvf->src, i * 8 + 7));
-		src = F_PADD(nvf->src, offs);
+		width = host_readw(nvf->src + nvf->no * 8 + 3L);
+		height = host_readw(nvf->src +  nvf->no * 8 + 5L);
+		p_size = host_readd(nvf->src + i * 8 + 7L);
+		src = nvf->src + offs;
 		break;
 	}
 
@@ -1068,8 +1068,7 @@ Bit32s process_nvf(struct nvf_desc *nvf)
 		dst = nvf->dst;
 
 		/* RLE decompression */
-		decomp_rle(width, height, dst, src,
-			(char*)ds_readd(TEXT_OUTPUT_BUF), nvf->type);
+		decomp_rle(width, height, dst, src, (Bit8u*)g_text_output_buf, nvf->type);
 #ifdef M302de_ORIGINAL_BUGFIX
 		/* retval was originally neither set nor used here.
 			VC++2008 complains about an uninitialized variable
@@ -1162,64 +1161,64 @@ void interrupt mouse_isr(void)
 	signed short l5;
 	signed short l6;
 
-	if (ds_readws(MOUSE_LOCKED) == 0) {
+	if (!g_mouse_locked) {
 
 		if (l_si & 0x2) {
-			ds_writew(MOUSE1_EVENT2, 1);
-			ds_writew(MOUSE1_EVENT1, 1);
+			g_mouse1_event2 = 1;
+			g_mouse1_event1 = 1;
 		}
 
 		if (l_si & 0x8) {
-			ds_writew(MOUSE2_EVENT, 1);
+			g_mouse2_event = 1;
 		}
 
-		if (((ds_readb(DUNGEON_INDEX) != DUNGEONS_NONE) || (ds_readb(CURRENT_TOWN) != TOWNS_NONE)) &&
-				!ds_readbs(CURRENT_LOCTYPE) &&
-				!ds_readbs(DIALOGBOX_LOCK) &&
-				(ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK))
+		if (((gs_dungeon_index != DUNGEONS_NONE) || (gs_current_town != TOWNS_NONE)) &&
+				!gs_current_loctype &&
+				!g_dialogbox_lock &&
+				(g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
 		{
-			ds_writed(CURRENT_CURSOR, (Bit32u) (is_mouse_in_rect(68, 4, 171, 51) ? (p_datseg + CURSOR_ARROW_UP):
+			g_current_cursor = (unsigned short*) (is_mouse_in_rect(68, 4, 171, 51) ? (p_datseg + CURSOR_ARROW_UP):
 							(is_mouse_in_rect(68, 89, 171, 136) ? (p_datseg + CURSOR_ARROW_DOWN) :
 							(is_mouse_in_rect(16, 36, 67, 96) ? (p_datseg + CURSOR_ARROW_LEFT) :
 							(is_mouse_in_rect(172, 36, 223, 96) ? (p_datseg + CURSOR_ARROW_RIGHT) :
 							(!is_mouse_in_rect(16, 4, 223, 138) ? (p_datseg + DEFAULT_MOUSE_CURSOR) :
-								(void*)ds_readd(CURRENT_CURSOR)))))));
+								(void*)g_current_cursor)))));
 		} else {
-			if (ds_readbs(DIALOGBOX_LOCK) != 0) {
-				ds_writed(CURRENT_CURSOR, (Bit32u) (p_datseg + DEFAULT_MOUSE_CURSOR));
+			if (g_dialogbox_lock) {
+				g_current_cursor = (unsigned short*)(p_datseg + DEFAULT_MOUSE_CURSOR);
 			}
 		}
 
 		if (l_si & 1) {
 			l1 = 3;
-			l4 = ds_readws(MOUSE_POSX);
-			l5 = ds_readws(MOUSE_POSY);
+			l4 = g_mouse_posx;
+			l5 = g_mouse_posy;
 
 			mouse_action((Bit8u*)&l1, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5, (Bit8u*)&l6);
 
-			ds_writew(MOUSE_POSX, l4);
-			ds_writew(MOUSE_POSY, l5);
+			g_mouse_posx = l4;
+			g_mouse_posy = l5;
 
-			if (ds_readws(MOUSE_POSX) > ds_readws(MOUSE_POSX_MAX)) {
-				ds_writew(MOUSE_POSX, ds_readws(MOUSE_POSX_MAX));
+			if (g_mouse_posx > g_mouse_posx_max) {
+				g_mouse_posx = g_mouse_posx_max;
 			}
-			if (ds_readws(MOUSE_POSX) < ds_readws(MOUSE_POSX_MIN)) {
-				ds_writew(MOUSE_POSX, ds_readws(MOUSE_POSX_MIN));
+			if (g_mouse_posx < g_mouse_posx_min) {
+				g_mouse_posx = g_mouse_posx_min;
 			}
-			if (ds_readws(MOUSE_POSY) < ds_readws(MOUSE_POSY_MIN)) {
-				ds_writew(MOUSE_POSY, ds_readws(MOUSE_POSY_MIN));
+			if (g_mouse_posy < g_mouse_posy_min) {
+				g_mouse_posy = g_mouse_posy_min;
 			}
-			if (ds_readws(MOUSE_POSY) > ds_readws(MOUSE_POSY_MAX)) {
-				ds_writew(MOUSE_POSY, ds_readws(MOUSE_POSY_MAX));
+			if (g_mouse_posy > g_mouse_posy_max) {
+				g_mouse_posy = g_mouse_posy_max;
 			}
 
 			l1 = 4;
-			l4 = ds_readws(MOUSE_POSX);
-			l5 = ds_readws(MOUSE_POSY);
+			l4 = g_mouse_posx;
+			l5 = g_mouse_posy;
 
 			mouse_action((Bit8u*)&l1, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5, (Bit8u*)&l6);
 
-			ds_writew(MOUSE_MOVED, 1);
+			g_mouse_moved = 1;
 		}
 	}
 }
@@ -1240,15 +1239,15 @@ signed short is_mouse_in_rect(signed short x1, signed short y1,
 	signed short m_x;
 	signed short m_y;
 
-	m_x = ds_readws(MOUSE_POSX);
-	m_y = ds_readws(MOUSE_POSY);
+	m_x = g_mouse_posx;
+	m_y = g_mouse_posy;
 
 	return ((m_x >= x1) && (m_x <= x2) && (m_y >= y1) && (m_y <= y2)) ? 1 : 0;
 }
 
 void mouse_init(void)
 {
-	if (ds_readw(HAVE_MOUSE) == 2) {
+	if (g_have_mouse == 2) {
 
 #if defined(__BORLANDC__)
 		unsigned short p1, p2, p3, p4, p5;
@@ -1258,17 +1257,17 @@ void mouse_init(void)
 		mouse_action((Bit8u*)&p1, (Bit8u*)&p2, (Bit8u*)&p3, (Bit8u*)&p4, (Bit8u*)&p5);
 
 		if (p1 == 0) {
-			ds_writew(HAVE_MOUSE, 0);
+			g_have_mouse = 0;
 		}
 
-		ds_writed(CURRENT_CURSOR, (Bit32u)(p_datseg + DEFAULT_MOUSE_CURSOR));
-		ds_writed(LAST_CURSOR, (Bit32u)(p_datseg + DEFAULT_MOUSE_CURSOR));
+		g_current_cursor = (unsigned short*)(p_datseg + DEFAULT_MOUSE_CURSOR);
+		g_last_cursor = (unsigned short*)(p_datseg + DEFAULT_MOUSE_CURSOR);
 
-		if (ds_readw(HAVE_MOUSE) == 2) {
+		if (g_have_mouse == 2) {
 
 			p1 = 4;
-			p3 = ds_readws(MOUSE_POSX);
-			p4 = ds_readws(MOUSE_POSY);
+			p3 = g_mouse_posx;
+			p4 = g_mouse_posy;
 
 			mouse_action((Bit8u*)&p1, (Bit8u*)&p2, (Bit8u*)&p3, (Bit8u*)&p4, (Bit8u*)&p5);
 
@@ -1280,7 +1279,7 @@ void mouse_init(void)
 
 void disable_mouse(void)
 {
-	if (ds_readw(HAVE_MOUSE) == 2) {
+	if (g_have_mouse == 2) {
 		mouse_reset_ehandler();
 	}
 }
@@ -1318,11 +1317,11 @@ void mouse_irq_init(signed short irq_no, void interrupt *(isr))
 	l6 = 0x51e;
 
 	ds_writed(MOUSE_HANDLER_BAK, (Bit32u)getvect(0x78));
-	setvect(0x78, (INTCAST)isr);
+	setvect(0x78, (void interrupt far (*)(...))isr);
 
 	mouse_action((Bit8u*)&l1, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5, (Bit8u*)&l6);
 
-	ds_writew(MOUSE_IRQ_INIT, 1);
+	g_mouse_irq_init = 1;
 }
 #endif
 
@@ -1336,7 +1335,7 @@ void mouse_reset_ehandler(void)
 	signed short l4;
 	signed short l5;
 
-	setvect(0x78, (INTCAST) ds_readd(MOUSE_HANDLER_BAK));
+	setvect(0x78, (void interrupt far (*)(...))ds_readd(MOUSE_HANDLER_BAK));
 
 	l1 = 12;
 	l3 = 0;
@@ -1345,7 +1344,7 @@ void mouse_reset_ehandler(void)
 
 	mouse_action((Bit8u*)&l1, (Bit8u*)&l2, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5);
 
-	ds_writew(MOUSE_IRQ_INIT, 0);
+	g_mouse_irq_init = 1;
 #endif
 }
 
@@ -1403,7 +1402,7 @@ void make_ggst_cursor(Bit8u *icon)
 
 	/* clear the bitmask */
 	for (y = 0; y < 16; y++) {
-		ds_writew((GGST_CURSOR + 32) + y * 2, 0);
+		g_ggst_mask[y] = 0;
 	}
 
 	/* make a bitmask from the icon */
@@ -1411,14 +1410,14 @@ void make_ggst_cursor(Bit8u *icon)
 		for (x = 0; x < 16; x++) {
 			/* if pixelcolor of the icon is not black */
 			if (*icon++ != 0x40) {
-				or_ds_ws((GGST_CURSOR + 32) + y * 2, (0x8000 >> x));
+				g_ggst_mask[y] |= (0x8000 >> x);
 			}
 		}
 	}
 
 	/* copy and negate the bitmask */
 	for (y = 0; y < 16; y++) {
-		ds_writew(GGST_CURSOR + y * 2, ~ds_readw((GGST_CURSOR + 32) + y * 2));
+		g_ggst_cursor[y] = ~g_ggst_mask[y];
 	}
 }
 
@@ -1434,51 +1433,51 @@ void refresh_screen_size(void)
 
 void update_mouse_cursor1(void)
 {
-	if (ds_readw(MOUSE_LOCKED) == 0) {
+	if (!g_mouse_locked) {
 
-		if  (ds_readw(MOUSE_REFRESH_FLAG) == 0) {
-			ds_writew(MOUSE_LOCKED, 1);
+		if  (!g_mouse_refresh_flag) {
+			g_mouse_locked = 1;
 			restore_mouse_bg();
-			ds_writew(MOUSE_LOCKED, 0);
+			g_mouse_locked = 0;
 		}
 
-		dec_ds_ws(MOUSE_REFRESH_FLAG);
+		g_mouse_refresh_flag--;
 	}
 }
 
 void refresh_screen_size1(void)
 {
 	/* check lock */
-	if (ds_readw(MOUSE_LOCKED) == 0) {
+	if (!g_mouse_locked) {
 
-		inc_ds_ws(MOUSE_REFRESH_FLAG);
+		g_mouse_refresh_flag++;
 
-		if (ds_readw(MOUSE_REFRESH_FLAG) == 0) {
+		if (!g_mouse_refresh_flag) {
 
 			/* get lock */
-			ds_writew(MOUSE_LOCKED, 1);
+			g_mouse_locked = 1;
 
-			if (ds_readws(MOUSE_POSX) < ds_readws(MOUSE_POINTER_OFFSETX))
-				ds_writew(MOUSE_POSX, ds_readw(MOUSE_POINTER_OFFSETX));
+			if (g_mouse_posx < g_mouse_pointer_offsetx)
+				g_mouse_posx = g_mouse_pointer_offsetx;
 
-			if (ds_readws(MOUSE_POSX) > 315)
-				ds_writew(MOUSE_POSX, 315);
+			if (g_mouse_posx > 315)
+				g_mouse_posx = 315;
 
-			if (ds_readws(MOUSE_POSY) < ds_readws(MOUSE_POINTER_OFFSETY))
-				ds_writew(MOUSE_POSY, ds_readw(MOUSE_POINTER_OFFSETY));
+			if (g_mouse_posy < g_mouse_pointer_offsety)
+				g_mouse_posy = g_mouse_pointer_offsety;
 
-			if (ds_readws(MOUSE_POSY) > 195)
-				ds_writew(MOUSE_POSY, 195);
+			if (g_mouse_posy > 195)
+				g_mouse_posy = 195;
 
 			save_mouse_bg();
-			ds_writew(MOUSE_POSX_BAK, ds_readw(MOUSE_POSX));
-			ds_writew(MOUSE_POSY_BAK, ds_readw(MOUSE_POSY));
-			ds_writew(MOUSE_POINTER_OFFSETX_BAK, ds_readw(MOUSE_POINTER_OFFSETX));
-			ds_writew(MOUSE_POINTER_OFFSETY_BAK, ds_readw(MOUSE_POINTER_OFFSETY));
+			g_mouse_posx_bak = g_mouse_posx;
+			g_mouse_posy_bak = g_mouse_posy;
+			g_mouse_pointer_offsetx_bak = g_mouse_pointer_offsetx;
+			g_mouse_pointer_offsety_bak = g_mouse_pointer_offsety;
 			draw_mouse_cursor();
 
 			/* put lock */
-			ds_writew(MOUSE_LOCKED, 0);
+			g_mouse_locked = 0;
 		}
 	}
 }
@@ -1486,22 +1485,22 @@ void refresh_screen_size1(void)
 void mouse_19dc(void)
 {
 	/* return if mouse was not moved and the cursor remains */
-	if ((ds_readw(MOUSE_MOVED) != 0) || (ds_readd(LAST_CURSOR) != ds_readd(CURRENT_CURSOR))) {
+	if (g_mouse_moved || (g_last_cursor != g_current_cursor)) {
 
 		/* set new cursor */
-		ds_writed(LAST_CURSOR, ds_readd(CURRENT_CURSOR));
+		g_last_cursor = g_current_cursor;
 
 		/* check if the new cursor is the default cursor */
-		if ((Bit8u*)ds_readd(CURRENT_CURSOR) == p_datseg + DEFAULT_MOUSE_CURSOR) {
+		if ((Bit8u*)g_current_cursor == p_datseg + DEFAULT_MOUSE_CURSOR) {
 			/* set cursor size 0x0 */
-			ds_writew(MOUSE_POINTER_OFFSETX, ds_writew(MOUSE_POINTER_OFFSETY, 0));
+			g_mouse_pointer_offsetx = g_mouse_pointer_offsety = 0;
 		} else {
 			/* set cursor size 8x8 */
-			ds_writew(MOUSE_POINTER_OFFSETX, ds_writew(MOUSE_POINTER_OFFSETY, 8));
+			g_mouse_pointer_offsetx = g_mouse_pointer_offsety = 8;
 		}
 
 		/* reset mouse was moved */
-		ds_writew(MOUSE_MOVED, 0);
+		g_mouse_moved = 0;
 		update_mouse_cursor1();
 		refresh_screen_size1();
 	}
@@ -1510,153 +1509,149 @@ void mouse_19dc(void)
 void handle_gui_input(void)
 {
 	signed short l_si;
-	signed short l_di;
+	signed short tw_bak;
 	signed short l1;
 
-	ds_writew(BIOSKEY_EVENT, ds_writew(ACTION, l_si = 0));
+	g_bioskey_event = g_action = l_si = 0;
 
 	herokeeping();
 
 	if (CD_bioskey(1)) {
 
-		l_si = (ds_writews(BIOSKEY_EVENT, bioskey(0))) >> 8;
-		and_ds_ws(BIOSKEY_EVENT, 0xff);
+		l_si = (g_bioskey_event = bioskey(0)) >> 8;
+		g_bioskey_event &= 0xff;
 
 		if (l_si == 0x24) {
 			l_si = 0x2c;
 		}
 
 		/* Ctrl + Q -> quit */
-		if ((ds_readw(BIOSKEY_EVENT) == 0x11) && (ds_readw(PREGAME_STATE) == 0)) {
+		if ((g_bioskey_event == 0x11) && (ds_readw(PREGAME_STATE) == 0)) {
 			cleanup_game();
 
 			exit(0);
 		}
 	}
 
-	if (ds_readw(MOUSE1_EVENT2) == 0) {
+	if (g_mouse1_event2 == 0) {
 
-		ds_writew(ALWAYS_ZERO3, 0);
+		g_always_zero3 = 0;
 
-		if (ds_readw(HAVE_MOUSE) == 0) {
+		if (g_have_mouse == 0) {
 		}
 
 		/* Ctrl + E */
-		if (ds_readw(BIOSKEY_EVENT) == 5) {
+		if (g_bioskey_event == 5) {
 			status_select_hero();
 			l_si = 0;
 		}
 
 		/* Ctrl + O -> swap heroes */
-		if (ds_readw(BIOSKEY_EVENT) == 15) {
+		if (g_bioskey_event == 15) {
 			GRP_swap_heroes();
 			l_si = 0;
 		}
 
 		/* Ctrl + S -> sound menu */
-		if ((ds_readw(BIOSKEY_EVENT) == 0x13) && !ds_readbs(DIALOGBOX_LOCK)) {
+		if ((g_bioskey_event == 0x13) && !g_dialogbox_lock) {
 			sound_menu();
 		}
 
 		/* Ctrl + P -> pause game */
-		if ((ds_readw(BIOSKEY_EVENT) == 0x10) &&
-			(ds_readws(BIOSKEY_EVENT10) == 0) &&
-			!ds_readbs(DIALOGBOX_LOCK) &&
+		if ((g_bioskey_event == 0x10) &&
+			(g_bioskey_event10 == 0) &&
+			!g_dialogbox_lock &&
 			(ds_readws(PREGAME_STATE) == 0))
 		{
-			ds_writew(BIOSKEY_EVENT10, 1);
-			inc_ds_ws(TIMERS_DISABLED);
-			ds_writew(GUI_TEXT_CENTERED, 1);
-			l_di = ds_readws(TEXTBOX_WIDTH);
-			ds_writew(TEXTBOX_WIDTH, 2);
-			GUI_output(p_datseg + PAUSE_STRING);		/* P A U S E */
-			ds_writew(TEXTBOX_WIDTH, l_di);
-			ds_writew(GUI_TEXT_CENTERED, 0);
-			ds_writew(BIOSKEY_EVENT10, l_si = ds_writew(BIOSKEY_EVENT, 0));
-			dec_ds_ws(TIMERS_DISABLED);
+			g_bioskey_event10 = 1;
+			g_timers_disabled++;
+			g_gui_text_centered = 1;
+			tw_bak = g_textbox_width;
+			g_textbox_width = 2;
+			GUI_output(g_pause_string);		/* P A U S E */
+			g_textbox_width = tw_bak;
+			g_gui_text_centered = 0;
+			g_bioskey_event10 = l_si = g_bioskey_event = 0;
+			g_timers_disabled--;
 		}
 	} else {
 		play_voc(ARCHIVE_FILE_FX1_VOC);
-		ds_writew(MOUSE1_EVENT2, 0);
+		g_mouse1_event2 = 0;
 		l_si = 0;
 
-		if (((Bit8u*)ds_readd(ACTION_TABLE_SECONDARY))) {
-			l_si = get_mouse_action(ds_readw(MOUSE_POSX),
-					ds_readw(MOUSE_POSY),
-					(Bit8u*)ds_readd(ACTION_TABLE_SECONDARY));
+		if (g_action_table_secondary) {
+			l_si = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_secondary);
 		}
 
-		if (!l_si && ((Bit8u*)ds_readd(ACTION_TABLE_PRIMARY))) {
-			l_si = get_mouse_action(ds_readw(MOUSE_POSX),
-					ds_readw(MOUSE_POSY),
-					(Bit8u*)ds_readd(ACTION_TABLE_PRIMARY));
+		if (!l_si && (g_action_table_primary)) {
+			l_si = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_primary);
 		}
 
-		if (ds_readw(HAVE_MOUSE) == 2) {
+		if (g_have_mouse == 2) {
 
 			for (l1 = 0; l1 < 15; l1++) {
 				wait_for_vsync();
 			}
 
-			if (ds_readw(MOUSE1_EVENT2) != 0) {
-				ds_writew(MOUSE1_DOUBLECLICK, 1);
-				ds_writew(MOUSE1_EVENT2, 0);
+			if (g_mouse1_event2 != 0) {
+				g_mouse1_doubleclick = 1;
+				g_mouse1_event2 = 0;
 			}
 		}
 
 		if ((l_si >= 0xf1) && (l_si <= 0xf8)) {
 
-			if (ds_readws(MOUSE1_DOUBLECLICK) != 0) {
+			if (g_mouse1_doubleclick) {
 
 				/* open character screen by double click on hero picture */
 				if ((host_readbs(get_hero(l_si - 241) + HERO_TYPE) != HERO_TYPE_NONE) &&
-						host_readbs(get_hero(l_si - 241) + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+						host_readbs(get_hero(l_si - 241) + HERO_GROUP_NO) == gs_current_group)
 				{
 					status_menu(l_si - 241);
 					l_si = 0;
-					ds_writew(MOUSE1_DOUBLECLICK, 0);
-					ds_writew(MOUSE1_EVENT2, 0);
+					g_mouse1_doubleclick = 0;
+					g_mouse1_event2 = 0;
 				}
 			} else {
 				/* swap heroes by click - move mouse - click */
-				if ((ds_readws(HEROSWAP_ALLOWED) != 0) &&
+				if (g_heroswap_allowed &&
 					(host_readbs(get_hero(l_si - 241) + HERO_TYPE) != HERO_TYPE_NONE) &&
-						host_readbs(get_hero(l_si - 241) + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+						host_readbs(get_hero(l_si - 241) + HERO_GROUP_NO) == gs_current_group)
 				{
 					/* the destination will be selected by a mouse klick in the following function call */
 					GRP_move_hero(l_si - 241);
 					l_si = 0;
-					ds_writew(MOUSE1_DOUBLECLICK, 0);
-					ds_writew(MOUSE1_EVENT2, 0);
+					g_mouse1_doubleclick = 0;
+					g_mouse1_event2 = 0;
 				}
 			}
 		} else if (l_si == 0xfd) {
 			/* Credits */
 
 			l_si = 0;
-			l_di = ds_readws(TEXTBOX_WIDTH);
-			ds_writew(TEXTBOX_WIDTH, 5);
-			ds_writew(GUI_TEXT_CENTERED, 1);
+			tw_bak = g_textbox_width;
+			g_textbox_width = 5;
+			g_gui_text_centered = 1;
 			GUI_output(get_ttx(394));
-			ds_writew(GUI_TEXT_CENTERED, 0);
-			ds_writew(TEXTBOX_WIDTH, l_di);
+			g_gui_text_centered = 0;
+			g_textbox_width = tw_bak;
 
 		} else if (l_si == 0xfc) {
 			/* Clock */
 			l_si = 0;
-			l_di = ds_readws(TEXTBOX_WIDTH);
-			ds_writew(TEXTBOX_WIDTH, 5);
-			ds_writew(GUI_TEXT_CENTERED, 1);
+			tw_bak = g_textbox_width;
+			g_textbox_width = 5;
+			g_gui_text_centered = 1;
 			prepare_date_str();
-			GUI_output((char*)ds_readd(DTP2));
-			ds_writew(GUI_TEXT_CENTERED, 0);
-			ds_writew(TEXTBOX_WIDTH, l_di);
+			GUI_output(g_dtp2);
+			g_gui_text_centered = 0;
+			g_textbox_width = tw_bak;
 
 		}
 	}
 
 	mouse_19dc();
-	ds_writew(ACTION, l_si);
+	g_action = (l_si);
 }
 
 /**
@@ -1670,18 +1665,15 @@ void handle_gui_input(void)
  * \return  if (x,y) is in one of the rectangles, return the return value of the first fitting rectangle.
  *          otherwise, return 0.
  */
-signed short get_mouse_action(signed short x, signed short y, Bit8u *rectangles)
+signed short get_mouse_action(signed short x, signed short y, struct mouse_action *act)
 {
 	signed short i;
 
-	for (i = 0; host_readws(rectangles + i * 10) != -1; i++) {
+	for (i = 0; act[i].x1 != -1; i++) {
 
-		if ((host_readws(rectangles + i * 10) <= x) &&
-			(host_readws(rectangles + i * 10 + 4) >= x) &&
-			(host_readws(rectangles + i * 10 + 2) <= y) &&
-			(host_readws(rectangles + i * 10 + 6) >= y))
+		if ((act[i].x1 <= x) && (act[i].x2 >= x) && (act[i].y1 <= y) && (act[i].y2 >= y))
 		{
-			return host_readw(rectangles + i * 10 + 8);
+			return act[i].action;
 		}
 
 	}
@@ -1694,80 +1686,75 @@ void handle_input(void)
 	signed short l_si;
 	signed short l_di;
 
-	ds_writew(BIOSKEY_EVENT, ds_writew(ACTION, l_si = 0));
+	g_bioskey_event = g_action = l_si = 0;
 
 	herokeeping();
 
 	if (CD_bioskey(1)) {
 
-		l_si = (ds_writews(BIOSKEY_EVENT, bioskey(0))) >> 8;
-		and_ds_ws(BIOSKEY_EVENT, 0xff);
+		l_si = (g_bioskey_event = bioskey(0)) >> 8;
+		g_bioskey_event &= 0xff;
 
 		if (l_si == 0x24) {
 			l_si = 0x2c;
 		}
 
 		/* Ctrl + Q -> quit */
-		if ((ds_readw(BIOSKEY_EVENT) == 0x11) && (ds_readw(PREGAME_STATE) == 0)) {
+		if ((g_bioskey_event == 0x11) && (ds_readw(PREGAME_STATE) == 0)) {
 			cleanup_game();
 
 			exit(0);
 		}
 	}
 
-	if (ds_readw(MOUSE1_EVENT2) == 0) {
+	if (g_mouse1_event2 == 0) {
 
-		if (ds_readw(HAVE_MOUSE) == 0) {
+		if (g_have_mouse == 0) {
 		}
 
 		/* Ctrl + S -> sound menu */
-		if ((ds_readw(BIOSKEY_EVENT) == 0x13) && !ds_readbs(DIALOGBOX_LOCK)) {
+		if ((g_bioskey_event == 0x13) && !g_dialogbox_lock) {
 			sound_menu();
 		}
 
 		/* Ctrl + P -> pause game */
-		if ((ds_readw(BIOSKEY_EVENT) == 0x10) &&
-			(ds_readws(BIOSKEY_EVENT10) == 0) &&
-			!ds_readbs(DIALOGBOX_LOCK) &&
-			(ds_readws(PREGAME_STATE) == 0))
+		/* TODO: use tw_bak here */
+		if ((g_bioskey_event == 0x10) && (g_bioskey_event10 == 0) &&
+			!g_dialogbox_lock && (ds_readws(PREGAME_STATE) == 0))
 		{
-			inc_ds_ws(TIMERS_DISABLED);
-			ds_writew(BIOSKEY_EVENT10, 1);
-			ds_writew(GUI_TEXT_CENTERED, 1);
-			ds_writew(TEXTBOX_WIDTH, 2);
-			GUI_output(p_datseg + PAUSE_STRING);		/* P A U S E */
-			ds_writew(TEXTBOX_WIDTH, 3);
-			ds_writew(GUI_TEXT_CENTERED, 0);
-			dec_ds_ws(TIMERS_DISABLED);
+			g_timers_disabled++;
+			g_bioskey_event10 = 1;
+			g_gui_text_centered = 1;
+			g_textbox_width = 2;
+			GUI_output(g_pause_string);		/* P A U S E */
+			g_textbox_width = 3;
+			g_gui_text_centered = 0;
+			g_timers_disabled--;
 
-			ds_writew(BIOSKEY_EVENT10, l_si = ds_writew(BIOSKEY_EVENT, 0));
+			g_bioskey_event10 = l_si = g_bioskey_event = 0;
 		}
 	} else {
 		play_voc(ARCHIVE_FILE_FX1_VOC);
-		ds_writew(MOUSE1_EVENT2, 0);
+		g_mouse1_event2 = 0;
 		l_si = 0;
 
-		if (((Bit8u*)ds_readd(ACTION_TABLE_SECONDARY))) {
-			l_si = get_mouse_action(ds_readw(MOUSE_POSX),
-					ds_readw(MOUSE_POSY),
-					(Bit8u*)ds_readd(ACTION_TABLE_SECONDARY));
+		if (g_action_table_secondary) {
+			l_si = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_secondary);
 		}
 
-		if (!l_si && ((Bit8u*)ds_readd(ACTION_TABLE_PRIMARY))) {
-			l_si = get_mouse_action(ds_readw(MOUSE_POSX),
-					ds_readw(MOUSE_POSY),
-					(Bit8u*)ds_readd(ACTION_TABLE_PRIMARY));
+		if (!l_si && g_action_table_primary) {
+			l_si = get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_primary);
 		}
 
-		if (ds_readw(HAVE_MOUSE) == 2) {
+		if (g_have_mouse == 2) {
 
 			for (l_di = 0; l_di < 25; l_di++) {
 
 				wait_for_vsync();
 
-				if (ds_readw(MOUSE1_EVENT2) != 0) {
-					ds_writew(MOUSE1_DOUBLECLICK, 1);
-					ds_writew(MOUSE1_EVENT2, 0);
+				if (g_mouse1_event2) {
+					g_mouse1_doubleclick = 1;
+					g_mouse1_event2 = 0;
 					break;
 				}
 			}
@@ -1775,7 +1762,7 @@ void handle_input(void)
 	}
 
 	mouse_19dc();
-	ds_writew(ACTION, l_si);
+	g_action = (l_si);
 }
 
 void wait_for_keyboard1(void)
@@ -1790,40 +1777,40 @@ void game_loop(void)
 {
 	signed short answer;
 
-	while (ds_readw(GAME_STATE) == GAME_STATE_MAIN) {
+	while (g_game_state == GAME_STATE_MAIN) {
 
-		if (ds_readbs(CURRENT_LOCTYPE) != LOCTYPE_NONE) {
+		if (gs_current_loctype != LOCTYPE_NONE) {
 			do_location();
-		} else if (ds_readbs(CURRENT_TOWN) != TOWNS_NONE) {
+		} else if (gs_current_town != TOWNS_NONE) {
 			do_town();
-		} else if (ds_readbs(DUNGEON_INDEX) != DUNGEONS_NONE) {
+		} else if (gs_dungeon_index != DUNGEONS_NONE) {
 			do_dungeon();
-		} else if (ds_readbs(SHOW_TRAVEL_MAP) != 0) {
+		} else if (gs_show_travel_map != 0) {
 			do_travel_mode();
 		}
 
-		if (ds_readb(DATSEG_STATUS_START) == 99) {
-			ds_writew(GAME_STATE, GAME_STATE_OUTRO);
+		if (gs_datseg_status_start == 99) {
+			g_game_state = (GAME_STATE_OUTRO);
 		}
 
-		if (ds_readw(CHECK_DISEASE) != 0) {
+		if (g_check_disease) {
 			disease_effect();
 		}
 
-		if (ds_readw(CHECK_POISON) != 0) {
+		if (g_check_poison) {
 			poison_effect();
 		}
 
-		if (ds_readbs(CHECK_PARTY) != 0) {
+		if (g_check_party) {
 			/* check the party for active heroes.
 			 * If necessary, switch to another group or in fatal case: game over */
 
-			ds_writeb(CHECK_PARTY, 0);
+			g_check_party = 0;
 
 			if (!count_heroes_available() || ((count_heroes_available() == 1) && check_hero(get_hero(6)))) // count_heroes_available_ignore_npc() == 0
 			{
 				/* no heroes or only the NPC can act => GAME OVER */
-				ds_writew(GAME_STATE, GAME_STATE_DEAD);
+				g_game_state = (GAME_STATE_DEAD);
 
 			} else if (!count_heroes_available_in_group() || ((count_heroes_available_in_group() == 1) && is_hero_available_in_group(get_hero(6)))) // count_heroes_available_in_group_ignore_npc() == 0
 			{
@@ -1834,49 +1821,48 @@ void game_loop(void)
 		}
 
 		if ((host_readbs(get_hero(6) + HERO_TYPE) != HERO_TYPE_NONE) &&
-			((ds_readbs(CURRENT_TOWN) != TOWNS_NONE) || (ds_readws(GAME_STATE) == GAME_STATE_VICTORY)) &&
-			(ds_readws(NPC_MONTHS) >= 1) &&
-			(ds_readbs(NPC_LAST_FAREWELLCHECK) != ds_readws(NPC_MONTHS)))
+			((gs_current_town != TOWNS_NONE) || (g_game_state == GAME_STATE_VICTORY)) &&
+			(gs_npc_months >= 1) &&	(g_npc_last_farewellcheck != gs_npc_months))
 		{
 			npc_farewell();
-			ds_writeb(NPC_LAST_FAREWELLCHECK, (signed short)ds_readws(NPC_MONTHS));
+			g_npc_last_farewellcheck = gs_npc_months;
 		}
 
-		if ((ds_readws(IN_FIGHT) == 0) &&
-			((ds_readws(GAME_STATE) == GAME_STATE_MAIN) || (ds_readws(GAME_STATE) == GAME_STATE_VICTORY)) &&
-			!ds_readbs(CURRENT_LOCTYPE))
+		if (!g_in_fight &&
+			((g_game_state == GAME_STATE_MAIN) || (g_game_state == GAME_STATE_VICTORY)) &&
+			!gs_current_loctype)
 		{
 			check_level_up();
 		}
 
-		if (ds_readbs(REFRESH_STATUS_LINE) != 0) {
+		if (g_refresh_status_line) {
 
-			ds_writeb(REFRESH_STATUS_LINE, 0);
+			g_refresh_status_line = 0;
 
-			if (ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) {
+			if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 				draw_status_line();
 			}
 		}
 
-		if ((ds_readws(GAME_STATE) != GAME_STATE_MAIN) && (ds_readbs(FADING_STATE) != 0)) {
+		if ((g_game_state != GAME_STATE_MAIN) && (g_fading_state != 0)) {
 			refresh_colors();
 		}
 
-		if (ds_readws(GAME_STATE) == GAME_STATE_DEAD) {
+		if (g_game_state == GAME_STATE_DEAD) {
 			game_over_screen();
 		}
 
-		if (ds_readws(GAME_STATE) == GAME_STATE_TIMEUP) {
+		if (g_game_state == GAME_STATE_TIMEUP) {
 			show_times_up();
 		}
 
-		if ((ds_readws(GAME_STATE) == GAME_STATE_DEAD) ||
-			ds_readws(GAME_STATE) == GAME_STATE_UNKNOWN ||
-			ds_readws(GAME_STATE) == GAME_STATE_TIMEUP ||
-			ds_readws(GAME_STATE) == GAME_STATE_OUTRO ||
-			ds_readws(GAME_STATE) == GAME_STATE_FIGQUIT)
+		if ((g_game_state == GAME_STATE_DEAD) ||
+			g_game_state == GAME_STATE_UNKNOWN ||
+			g_game_state == GAME_STATE_TIMEUP ||
+			g_game_state == GAME_STATE_OUTRO ||
+			g_game_state == GAME_STATE_FIGQUIT)
 		{
-			ds_writebs(CURRENT_LOCTYPE, LOCTYPE_NONE);
+			gs_current_loctype = LOCTYPE_NONE;
 
 			do {
 				answer = load_game_state();
@@ -1884,12 +1870,12 @@ void game_loop(void)
 			} while (answer == -1);
 
 			if (answer) {
-				ds_writew(GAME_STATE, GAME_STATE_MAIN);
+				g_game_state = (GAME_STATE_MAIN);
 				refresh_colors();
 			}
 		}
 
-		if (ds_readw(GAME_STATE) == GAME_STATE_VICTORY) {
+		if (g_game_state == GAME_STATE_VICTORY) {
 			show_outro();
 			cleanup_game();
 
@@ -1901,7 +1887,7 @@ void game_loop(void)
 //static
 /*
  *	This function does daily accounting stuff.
- *	The CHECK_DISEASE flag is set here, indicating that the disease status should be updated. */
+ *	The g_check_disease flag is set here, indicating that the disease status should be updated. */
 
 void timers_daily(void)
 {
@@ -1911,15 +1897,15 @@ void timers_daily(void)
 	/* Smith / items to repair */
 	for (i = 0; i < 50; i++) {
 
-		if (ds_readw(SMITH_REPAIRITEMS + i * 6) != 0) {
+		if (gs_smith_repairitems[i].item_id) {
 			/* set time to 6:00 am */
-			ds_writed((SMITH_REPAIRITEMS + 2) + i * 6, 32400L);
+			gs_smith_repairitems[i].pickup_time = HOURS(6);
 		}
 	}
 
-	/* reset insulted merchants */
+	/* reset offended merchants */
 	for (i = 0; i < 94; i++) {
-		ds_writeb(MERCHANT_OFFENDED_FLAGS + i, 0);
+		gs_merchant_offended_flags[i] = 0;
 	}
 
 	hero_i = get_hero(0);
@@ -1933,31 +1919,31 @@ void timers_daily(void)
 	}
 
 	/* enable disease check */
-	ds_writew(CHECK_DISEASE, 1);
+	g_check_disease = 1;
 
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug: Reenable identifying item in the academy */
-	ds_writew(ACADEMY_DAILY_IDENT, 0);
+	gs_academy_daily_ident = 0;
 #endif
 
 	/* Decrase monthly credit cens timer (bank) */
-	if (ds_readws(DAYS_TO_CENS) > 0) {
+	if (gs_days_to_cens > 0) {
 
-		dec_ds_ws(DAYS_TO_CENS);
+		gs_days_to_cens--;
 
-		if (ds_readws(DAYS_TO_CENS) == 0) {
-			ds_writew(MONTHLY_CREDIT, 0);
+		if (!gs_days_to_cens) {
+			gs_monthly_credit = 0;
 		}
 	}
 
 	/* Days until you run in trouble, if you have more
 		than 1000S debt at the bank */
-	if (ds_readws(DEBT_DAYS) > 0) {
+	if (gs_debt_days > 0) {
 
-		dec_ds_ws(DEBT_DAYS);
+		gs_debt_days--;
 
-		if (ds_readws(DEBT_DAYS) == 0) {
-			ds_writew(DEBT_DAYS, -1);
+		if (!gs_debt_days) {
+			gs_debt_days = -1;
 		}
 	}
 }
@@ -2058,37 +2044,37 @@ void pal_fade_in(Bit8u *dst, Bit8u *p2, signed short v3, signed short colors)
 void dawning(void)
 {
 	/* Between 6 and 7, in 64 steps (i.e. each 56 seconds) */
-	if ((ds_readds(DAY_TIMER) >= HOURS(6)) &&
-		(ds_readds(DAY_TIMER) <= HOURS(7)) &&
-		!((ds_readds(DAY_TIMER) - HOURS(6)) % SECONDS(56)))
+	if ((gs_day_timer >= HOURS(6)) &&
+		(gs_day_timer <= HOURS(7)) &&
+		!((gs_day_timer - HOURS(6)) % SECONDS(56)))
 	{
 
 		/* floor */
-		pal_fade(p_datseg + PALETTE_FLOOR, (Bit8u*)ds_readd(TOWNPAL_BUF));
+		pal_fade(gs_palette_floor, g_townpal_buf);
 		/* buildings */
-		pal_fade(p_datseg + PALETTE_BUILDINGS, (Bit8u*)ds_readd(TOWNPAL_BUF) + 0x60);
+		pal_fade(gs_palette_buildings, g_townpal_buf + 0x60);
 		/* sky */
-		pal_fade(p_datseg + PALETTE_SKY, (Bit8u*)ds_readd(TOWNPAL_BUF) + 0xc0);
+		pal_fade(gs_palette_sky, g_townpal_buf + 0xc0);
 
 		/* in a town */
-		if (ds_readbs(CURRENT_TOWN) &&
+		if (gs_current_town &&
 			/* not in a dungeon */
-			!ds_readbs(DUNGEON_INDEX) &&
+			!gs_dungeon_index &&
 			/* not in a location */
-			!ds_readbs(CURRENT_LOCTYPE) &&
+			!gs_current_loctype &&
 			/* not in a travel mode */
-			!ds_readb(SHOW_TRAVEL_MAP) &&
+			!gs_show_travel_map &&
 			/* no event animation */
-			!ds_readb(EVENT_ANI_BUSY) &&
+			!g_event_ani_busy &&
 			/* unknown */
-			!ds_readbs(SPECIAL_SCREEN) &&
+			!g_special_screen &&
 			/* unknown */
-			(ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK))
+			(g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
 		{
 			wait_for_vsync();
 
-			set_palette(p_datseg + PALETTE_FLOOR, 0, 0x20);
-			set_palette(p_datseg + PALETTE_BUILDINGS, 0x80, 0x40);
+			set_palette(gs_palette_floor, 0, 0x20);
+			set_palette(gs_palette_buildings, 0x80, 0x40);
 		}
 	}
 }
@@ -2099,37 +2085,37 @@ void dawning(void)
 void nightfall(void)
 {
 	/* Between 20 and 21, in 64 steps (i.e. each 56 seconds) */
-	if ((ds_readds(DAY_TIMER) >= HOURS(20)) &&
-		(ds_readds(DAY_TIMER) <= HOURS(21)) &&
-		!((ds_readds(DAY_TIMER) - HOURS(20)) % SECONDS(56)))
+	if ((gs_day_timer >= HOURS(20)) &&
+		(gs_day_timer <= HOURS(21)) &&
+		!((gs_day_timer - HOURS(20)) % SECONDS(56)))
 	{
 
 		/* floor */
-		pal_fade(p_datseg + PALETTE_FLOOR, p_datseg + FLOOR_FADE_PALETTE);
+		pal_fade(gs_palette_floor, (Bit8u*)g_floor_fade_palette);
 		/* buildings */
-		pal_fade(p_datseg + PALETTE_BUILDINGS, p_datseg + BUILDING_FADE_PALETTE);
+		pal_fade(gs_palette_buildings, (Bit8u*)g_building_fade_palette);
 		/* sky */
-		pal_fade(p_datseg + PALETTE_SKY, p_datseg + SKY_FADE_PALETTE);
+		pal_fade(gs_palette_sky, (Bit8u*)g_sky_fade_palette);
 
 		/* in a town */
-		if (ds_readbs(CURRENT_TOWN) &&
+		if (gs_current_town &&
 			/* not in a dungeon */
-			!ds_readbs(DUNGEON_INDEX) &&
+			!gs_dungeon_index &&
 			/* not in a location */
-			!ds_readbs(CURRENT_LOCTYPE) &&
+			!gs_current_loctype &&
 			/* not in a travel mode */
-			!ds_readb(SHOW_TRAVEL_MAP) &&
+			!gs_show_travel_map &&
 			/* no event animation */
-			!ds_readb(EVENT_ANI_BUSY) &&
+			!g_event_ani_busy &&
 			/* unknown */
-			!ds_readbs(SPECIAL_SCREEN) &&
+			!g_special_screen &&
 			/* unknown */
-			(ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK))
+			(g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
 		{
 			wait_for_vsync();
 
-			set_palette(p_datseg + PALETTE_FLOOR, 0, 0x20);
-			set_palette(p_datseg + PALETTE_BUILDINGS, 0x80, 0x40);
+			set_palette(gs_palette_floor, 0, 0x20);
+			set_palette(gs_palette_buildings, 0x80, 0x40);
 		}
 	}
 }
@@ -2141,11 +2127,11 @@ void nightfall(void)
  */
 signed short get_current_season(void)
 {
-	if (is_in_byte_array(ds_readb(MONTH), p_datseg + MONTHS_WINTER)) {
+	if (is_in_byte_array(gs_month, (Bit8u*)g_months_winter)) {
 		return SEASON_WINTER;
-	} else if (is_in_byte_array(ds_readb(MONTH), p_datseg + MONTHS_SUMMER)) {
+	} else if (is_in_byte_array(gs_month, (Bit8u*)g_months_summer)) {
 		return SEASON_SUMMER;
-	} else if (is_in_byte_array(ds_readb(MONTH), p_datseg + MONTHS_SPRING)) {
+	} else if (is_in_byte_array(gs_month, (Bit8u*)g_months_spring)) {
 		return SEASON_SPRING;
 	} else {
 		return SEASON_AUTUMN;
@@ -2166,9 +2152,9 @@ void do_census(void)
 	signed short si = 0;
 	Bit32s val;
 
-	if (ds_readws(BANK_DEPOSIT) > 0) {
+	if (gs_bank_deposit > 0) {
 		si = 1;
-	} else if (ds_readws(BANK_DEPOSIT) < 0) {
+	} else if (gs_bank_deposit < 0) {
 			si = -1;
 	}
 
@@ -2177,36 +2163,39 @@ void do_census(void)
 		return;
 
 	/* convert to heller */
-	val = ds_readws(BANK_DEPOSIT) * 10L;
-	val += ds_readws(BANK_HELLER);
-
-	if (val < 0)
-		/* 15% Interest for borrowed money */
-		val += val * 15 / 100L / 12L;
-	else if (val > 0)
-		/* 5% Interest for deposited money */
-			val += val * 5 / 100L / 12L;
-
-	/* remember the heller */
-	ds_writew(BANK_HELLER, val % 10);
+	val = gs_bank_deposit * 10L;
+	val += g_bank_heller;
 
 	if (val < 0) {
-		ds_writew(BANK_HELLER, -__abs__(ds_readws(BANK_HELLER)));
+		/* 15% Interest for borrowed money */
+		val += val * 15 / 100L / 12L;
+	} else if (val > 0) {
+		/* 5% Interest for deposited money */
+		val += val * 5 / 100L / 12L;
+	}
+
+	/* remember the heller */
+	g_bank_heller = val % 10;
+
+	if (val < 0) {
+		g_bank_heller = -__abs__(g_bank_heller);
 	}
 
 	/* save the new deposit */
-	ds_writew(BANK_DEPOSIT, (signed short)(val / 10));
+	gs_bank_deposit = val / 10;
 
 	/* fixup over- and underflows */
-	if ((ds_readws(BANK_DEPOSIT) < 0) && (si == 1))
-		ds_writew(BANK_DEPOSIT, 32760);
-	else if ((ds_readws(BANK_DEPOSIT) > 0) && (si == -1))
-			ds_writew(BANK_DEPOSIT, -32760);
+	if ((gs_bank_deposit < 0) && (si == 1)) {
+		gs_bank_deposit = 32760;
+	} else if ((gs_bank_deposit > 0) && (si == -1)) {
+		gs_bank_deposit = -32760;
+	}
 
 }
 
+/* called from timewarp(..), timewarp_until_time_of_day(..),
+ * timewarp_until_midnight(..) and interrupt timer_isr() */
 void do_timers(void)
-	/* called from timewarp(..), timewarp_until_time_of_day(..), timewarp_until_midnight(..) and interrupt timer_isr() */
 {
 	Bit8u *hero_i;
 	signed char afternoon;
@@ -2215,8 +2204,9 @@ void do_timers(void)
 
 	afternoon = 0;
 
-	if (ds_readw(TIMERS_DISABLED) != 0)
-		/* TIMERS_DISABLED is set during a fight or a level-up or if the game is paused (Ctrl + P) */
+	/* TIMERS_DISABLED is set during a fight, a level-up or if
+	 * the game is paused (Ctrl + P) */
+	if (g_timers_disabled)
 		return;
 
 	dawning();
@@ -2224,7 +2214,7 @@ void do_timers(void)
 	nightfall();
 
 	/* inc day timer */
-	add_ds_ds(DAY_TIMER, 1);
+	gs_day_timer += 1L;
 
 	if (!ds_readbs(FREEZE_TIMERS)) {
 		/* FREEZE_TIMERS is set in timewarp(..) and timewarp_until_time_of_day(..) for efficiency reasons,
@@ -2237,59 +2227,58 @@ void do_timers(void)
 
 		/* set day timer to pm */
 		/* TODO: afternoon is useless */
-		if (ds_readds(DAY_TIMER) >= HOURS(12)) {
-			sub_ds_ds(DAY_TIMER, HOURS(12));
+		if (gs_day_timer >= HOURS(12)) {
+			gs_day_timer -= HOURS(12);
 			afternoon = 1;
 		}
 
 		/* every 5 minutes ingame */
-		if (!(ds_readds(DAY_TIMER) % MINUTES(5))) {
+		if (!(gs_day_timer % MINUTES(5))) {
 			sub_heal_staffspell_timers(1);
 		}
 
 		/* every 15 minutes ingame */
-		if (!(ds_readds(DAY_TIMER) % MINUTES(15))) {
+		if (!(gs_day_timer % MINUTES(15))) {
 			sub_light_timers(1L);
 		}
 		/* every hour ingame */
-		if (!(ds_readds(DAY_TIMER) % HOURS(1))) {
+		if (!(gs_day_timer % HOURS(1))) {
 
 			magical_chainmail_damage();
 
 			/* What about herokeeping()? Original-Bug? */
 
 			/* decrement unicorn timer */
-			if (ds_readb(UNICORN_GET_MAP) != 0 &&
-				ds_readb(UNICORN_TIMER) != 0)
+			if (gs_unicorn_get_map && gs_unicorn_timer)
 			{
-				dec_ds_bs_post(UNICORN_TIMER);
+				gs_unicorn_timer--;
 			}
 
 			/* handle sphere timer */
-			if (ds_readb(DNG02_SPHERE_TIMER) != 0) {
+			if (gs_dng02_sphere_timer) {
 
-				if (!add_ds_bu(DNG02_SPHERE_TIMER, -1)) {
-					ds_writeb(DNG02_SPHERE_ACTIVE, 1);
+				if (!(--gs_dng02_sphere_timer)) {
+					gs_dng02_sphere_active = 1;
 				}
 			}
 
 			/* barrels with orc muck in the orc dungeon */
-			if (ds_readbs(DNG08_TIMER1) != 0) {
-				dec_ds_bs_post(DNG08_TIMER1);
+			if (gs_dng08_timer1) {
+				gs_dng08_timer1--;
 			}
-			if (ds_readbs(DNG08_TIMER2) != 0) {
-				dec_ds_bs_post(DNG08_TIMER2);
+			if (gs_dng08_timer2) {
+				gs_dng08_timer2--;
 			}
 		}
 
 		/* reset the day timer to 24h time */
 		if (afternoon) {
-			add_ds_ds(DAY_TIMER, HOURS(12));
+			gs_day_timer += HOURS(12);
 		}
 	}
 
 	/* at 6 o'clock in the morninig */
-	if (ds_readd(DAY_TIMER) == HOURS(6)) {
+	if (gs_day_timer == HOURS(6)) {
 
 		hero_i = get_hero(0);
 
@@ -2300,19 +2289,20 @@ void do_timers(void)
 			{
 				host_writeb(hero_i + HERO_JAIL, 0);
 
-				ds_writeb(GROUPS_CURRENT_LOCTYPE + host_readbs(hero_i + HERO_GROUP_NO),
-					ds_readb(GROUPS_CURRENT_LOCTYPE_BAK + host_readbs(hero_i + HERO_GROUP_NO)));
+				gs_groups_current_loctype[host_readbs(hero_i + HERO_GROUP_NO)] =
+					gs_groups_current_loctype_bak[host_readbs(hero_i + HERO_GROUP_NO)];
 
-				ds_writew(GROUPS_X_TARGET + host_readbs(hero_i + HERO_GROUP_NO) * 2,
-					ds_readw(GROUPS_X_TARGET_BAK + host_readbs(hero_i + HERO_GROUP_NO) * 2));
-				ds_writew(GROUPS_Y_TARGET + host_readbs(hero_i + HERO_GROUP_NO) * 2,
-					ds_readw(GROUPS_Y_TARGET_BAK + host_readbs(hero_i + HERO_GROUP_NO) * 2));
+				gs_groups_x_target[host_readbs(hero_i + HERO_GROUP_NO)] =
+					gs_groups_x_target_bak[host_readbs(hero_i + HERO_GROUP_NO)];
+
+				gs_groups_y_target[host_readbs(hero_i + HERO_GROUP_NO)] =
+					gs_groups_y_target_bak[host_readbs(hero_i + HERO_GROUP_NO)];
 			}
 		}
 	}
 
 	/* at 10 o'clock */
-	if (ds_readd(DAY_TIMER) == HOURS(10)) {
+	if (gs_day_timer == HOURS(10)) {
 
 		hero_i = get_hero(0);
 
@@ -2326,13 +2316,13 @@ void do_timers(void)
 	}
 
 	/* poison timer in the mage dungeon */
-	if (ds_readd(DNG07_POISON_TIMER) != 0) {
+	if (gs_dng07_poison_timer) {
 
 		/* decrement the timer */
-		sub_ds_ds(DNG07_POISON_TIMER, 1);
+		gs_dng07_poison_timer -= 1L;
 
 		/* every 15 minutes do damage */
-		if (ds_readd(DNG07_POISON_TIMER) % MINUTES(15) == 0) {
+		if (gs_dng07_poison_timer % MINUTES(15) == 0) {
 
 			ptr = get_hero(0);
 
@@ -2342,31 +2332,29 @@ void do_timers(void)
 					di = host_readbs(ptr + HERO_GROUP_NO);
 
 					/* hero is in group and in mage dungeon */
-					if ((ds_readbs(CURRENT_GROUP) == di) &&
-						(ds_readb(DUNGEON_INDEX) == DUNGEONS_RUINE_DES_SCHWARZMAGIERS))
+					if ((gs_current_group == di) && (gs_dungeon_index == DUNGEONS_RUINE_DES_SCHWARZMAGIERS))
 					{
 
-						if (ds_readbs(DUNGEON_LEVEL) == 1) {
+						if (gs_dungeon_level == 1) {
+
 							/* 1W6-1 */
-							sub_hero_le(ptr,
-								dice_roll(1, 6,	-1));
-						} else if (ds_readbs(DUNGEON_LEVEL) == 2) {
+							sub_hero_le(ptr, dice_roll(1, 6, -1));
+
+						} else if (gs_dungeon_level == 2) {
 							/* 1W6+1 */
-							sub_hero_le(ptr,
-								dice_roll(1, 6, 1));
+							sub_hero_le(ptr, dice_roll(1, 6, 1));
 						}
 
 					} else {
-						if (ds_readb(GROUPS_DNG_INDEX + di) == 7) {
+						if (gs_groups_dng_index[di] == 7) {
 
-							if (ds_readbs(GROUPS_DNG_LEVEL + di) == 1) {
+							if (gs_groups_dng_level[di] == 1) {
 								/* 1W6-1 */
-								sub_hero_le(ptr,
-									dice_roll(1, 6, -1));
-							} else if (ds_readbs(GROUPS_DNG_LEVEL + di) == 2) {
+								sub_hero_le(ptr, dice_roll(1, 6, -1));
+
+							} else if (gs_groups_dng_level[di] == 2) {
 								/* 1W6+1 */
-								sub_hero_le(ptr,
-									dice_roll(1, 6, 1));
+								sub_hero_le(ptr, dice_roll(1, 6, 1));
 							}
 						}
 					}
@@ -2375,89 +2363,87 @@ void do_timers(void)
 		}
 	}
 
-	if (ds_readd(DNG12_WATERTRAP_TIMER) != 0)
-	{
-		sub_ds_ds(DNG12_WATERTRAP_TIMER, 1);
+	if (gs_dng12_watertrap_timer) {
+		gs_dng12_watertrap_timer -= 1L;
 	}
 
 	/* at 24 o'clock, daily stuff */
-	if (ds_readds(DAY_TIMER) >= HOURS(24)) {
+	if (gs_day_timer >= HOURS(24)) {
 
 		timers_daily();
 
 		seg002_2177();
 
 		/* reset day timer */
-		ds_writed(DAY_TIMER, 0);
+		gs_day_timer = 0L;
 
 		/* inc DAY date */
-		inc_ds_bs_post(DAY_OF_WEEK);
-		inc_ds_bs_post(DAY_OF_MONTH);
+		gs_day_of_week++;
+		gs_day_of_month++;
 
-		if (ds_readb(DAY_OF_WEEK) == 7) {
-			ds_writeb(DAY_OF_WEEK, 0);
+		if (gs_day_of_week == 7) {
+			gs_day_of_week = 0;
 		}
 
 		/* decrement NPC timers */
 		for (i = 1; i < 7; i++) {
 
-			if ((ds_readbs(NPC_TIMERS + i) != 0) &&
-				(ds_readbs(NPC_TIMERS + i) != -1))
+			if (gs_npc_timers[i] && (gs_npc_timers[i] != -1))
 			{
-				dec_ds_bs_post(NPC_TIMERS + i);
+				gs_npc_timers[i]--;
 			}
 		}
 
 		/* drug timer (phexcaer) */
-		if (ds_readb(DRUG_TIMER) != 0) {
-			dec_ds_bs_post(DRUG_TIMER);
+		if (gs_drug_timer) {
+			gs_drug_timer--;
 		}
 
 		/* unknown timer */
-		if (ds_readb(FORCEDMARCH_TIMER) != 0) {
-			dec_ds_bs_post(FORCEDMARCH_TIMER);
+		if (gs_forcedmarch_timer) {
+			gs_forcedmarch_timer--;
 		}
 
 		/* calendar */
-		if (ds_readb(DAY_OF_MONTH) == 31) {
+		if (gs_day_of_month == 31) {
+
 			/* new month */
-			ds_writeb(DAY_OF_MONTH, 1);
-			inc_ds_bs_post(MONTH);
+			gs_day_of_month = 1;
+			gs_month++;
 
 			/* increment quested months counter */
-			if (ds_readw(GOT_MAIN_QUEST) != 0) {
-				inc_ds_ws(QUESTED_MONTHS);
+			if (gs_got_main_quest) {
+				gs_quested_months++;
 			}
 
 			/* increment the months the NPC is in the group */
 			if (host_readb(get_hero(6) + HERO_TYPE) != HERO_TYPE_NONE) {
-				inc_ds_ws(NPC_MONTHS);
+				gs_npc_months++;
 			}
 
 			do_census();
 
 			/* set days of the nameless (negative) */
-			if (ds_readb(MONTH) == 13) {
-				ds_writeb(DAY_OF_MONTH, -5);
+			if (gs_month == 13) {
+				gs_day_of_month = -5;
 			}
 		} else {
 			/* new year */
-			if (ds_readb(DAY_OF_MONTH) == 0) {
-				ds_writeb(MONTH, 1);
-				inc_ds_bs_post(YEAR);
-				ds_writeb(DAY_OF_MONTH, 1);
+			if (gs_day_of_month == 0) {
+				gs_month = 1;
+				gs_year++;
+				gs_day_of_month = 1;
 			}
 		}
 
 		/* check if we have a special day */
-		ds_writeb(SPECIAL_DAY, 0);
+		gs_special_day = 0;
 
-		for (i = 0; ds_readbs(SPECIAL_DAYS + 3 * i) != -1; i++) {
+		for (i = 0; g_special_days[i].month != -1; i++) {
 
-			if ((ds_readbs(SPECIAL_DAYS + 3 * i) == ds_readbs(MONTH)) &&
-				(ds_readbs((SPECIAL_DAYS + 1) + 3 * i) == ds_readbs(DAY_OF_MONTH)))
+			if ((g_special_days[i].month == gs_month) && (g_special_days[i].day == gs_day_of_month))
 			{
-				ds_writeb(SPECIAL_DAY, ds_readb((SPECIAL_DAYS + 2) + 3 * i));
+				gs_special_day = g_special_days[i].id;
 				break;
 			}
 		}
@@ -2465,25 +2451,22 @@ void do_timers(void)
 		passages_recalc();
 
 		/* roll out the weather, used for passages */
-		ds_writew(WEATHER1, random_schick(6));
-		ds_writew(WEATHER2, random_schick(7));
+		gs_weather1 = random_schick(6);
+		gs_weather2 = random_schick(7);
 #ifndef __BORLANDC__
-		i = (ds_readw(WEATHER2) + 6) * (ds_readw(WEATHER1) * 15 + 100); /* between 805 and 2470 */
-		D1_INFO_VERBOSE("WEATHER1=%d, WEATHER2=%d -> ",ds_readw(WEATHER1), ds_readw(WEATHER2));
+		i = (gs_weather2 + 6) * (gs_weather1 * 15 + 100); /* between 805 and 2470 */
+		D1_INFO_VERBOSE("WEATHER1=%d, WEATHER2=%d -> ",gs_weather1, gs_weather2);
 		D1_INFO("Heutige Wetter-Anpassung der Schiffs-Geschwindigkeiten: %d,%d%%.\n",i/10,i%10);
 #endif
 
 		/* check if times up */
-		if ((ds_readbs(YEAR) == 17) &&
-			(ds_readbs(MONTH) >= 10) &&
-			(ds_readbs(DAY_OF_MONTH) >= 17))
-		{
-			ds_writew(GAME_STATE, GAME_STATE_TIMEUP);
+		if ((gs_year == 17) && (gs_month >= 10) && (gs_day_of_month >= 17)) {
+			g_game_state = (GAME_STATE_TIMEUP);
 		}
 	}
 
 	/* at 9 o'clock */
-	if (ds_readd(DAY_TIMER) == HOURS(9)) {
+	if (gs_day_timer == HOURS(9)) {
 		/* ships leave the harbor at 9 o'clock */
 		passages_reset();
 	}
@@ -2493,25 +2476,25 @@ void do_timers(void)
  * \brief   subtracts val from the ingame timers
  *
  * \param   val         vaule to subtract from the ingame timers
+ * \note improvable
  */
 void sub_ingame_timers(Bit32s val)
 {
 	signed short i = 0;
 
-	if (ds_readw(TIMERS_DISABLED))
-		return;
+	if (g_timers_disabled) return;
 
 	for (i = 0; i < 26; i++) {
 
 		/* only subtract if greater than zero */
-		if (ds_readds(INGAME_TIMERS + i * 4) > 0) {
+		if (gs_ingame_timers[i] > 0) {
 
 			/* subtract val from timer*/
-			sub_ds_ds(INGAME_TIMERS + i * 4, val);
+			gs_ingame_timers[i] -= val;
 
 			/* if the timer is now lower than zero, set the timer to zero */
-			if (ds_readds(INGAME_TIMERS + i * 4) < 0) {
-				ds_writed(INGAME_TIMERS + i * 4, 0);
+			if (gs_ingame_timers[i] < 0) {
+				gs_ingame_timers[i] = 0;
 			}
 		}
 	}
@@ -2527,32 +2510,28 @@ void sub_mod_timers(Bit32s val)
 	signed short i;
 	signed short j;
 	signed short h_index;
-#if !defined(__BORLANDC__)
-	Bit8u *mp;
-#else
-	Bit8u huge *mp;
-#endif
-	unsigned char target;
+	HugePt mp;
+	signed char target;
 	unsigned char reset_target;
-	Bit8u *sp;
+	struct struct_modification_timer *sp;
 
 	h_index = -1;
 
-	if (ds_readw(TIMERS_DISABLED))
+	if (g_timers_disabled)
 		return;
 
 	for (i = 0; i < 100; i++) {
 
 		/* if timer is 0 continue */
-		if (ds_readd(MODIFICATION_TIMERS + 8 * i) == 0)
+		if (gs_modification_timers[i].time_left == 0)
 			continue;
 
 		/* subtract diff from timer */
-		sub_ds_ds(MODIFICATION_TIMERS + 8 * i, val);
+		gs_modification_timers[i].time_left -= val;
 
 
 		/* if timer > 0 continue */
-		if (ds_readds(MODIFICATION_TIMERS + 8 * i) <= 0) {
+		if (gs_modification_timers[i].time_left <= 0) {
 
 
 #if !defined(__BORLANDC__)
@@ -2560,16 +2539,16 @@ void sub_mod_timers(Bit32s val)
 #endif
 
 			/* set timer to 0 */
-			ds_writed(MODIFICATION_TIMERS + 8 * i, 0);
+			gs_modification_timers[i].time_left = 0;
 
 			/* make a pointer to the slot */
-			sp = p_datseg + MODIFICATION_TIMERS + i * 8;
+			sp = &gs_modification_timers[i];
 
-			if (host_readb(sp + 6) != 0) {
+			if (sp->target) {
 				/* target is a hero/npc */
 
 				/* get the hero index from the target */
-				target = host_readb(sp + 6);
+				target = sp->target;
 				for (j = 0; j <= 6; j++) {
 					if (host_readbs(get_hero(j) + HERO_TIMER_ID) == target) {
 						h_index = j;
@@ -2582,21 +2561,21 @@ void sub_mod_timers(Bit32s val)
 
 					mp = get_hero(h_index);
 					/* make a pointer to the hero's attribute mod */
-					mp += (Bit32u)host_readw(sp + 4);
+					mp += (Bit32u)sp->offset;
 					/* subtract the mod */
-					sub_ptr_bs(mp, host_readbs(sp + 7));
+					*mp -= sp->modifier;
 
-					if (ds_readb(PP20_INDEX) == ARCHIVE_FILE_ZUSTA_UK) {
-						ds_writew(REQUEST_REFRESH, 1);
+					if (g_pp20_index == ARCHIVE_FILE_ZUSTA_UK) {
+						g_request_refresh = 1;
 					}
 
 					/* reset target */
-					host_writeb(sp + 6, 0);
+					sp->target = 0;
 
 					/* reset target if no other slots of target */
 					reset_target = 1;
 					for (j = 0; j < 100; j++) {
-						if (ds_readb((MODIFICATION_TIMERS+6) + j * 8) == target) {
+						if (gs_modification_timers[j].target == target) {
 							reset_target = 0;
 							break;
 						}
@@ -2612,27 +2591,23 @@ void sub_mod_timers(Bit32s val)
 
 					/* reset all slots of invalid target */
 					for (j = 0; j < 100; j++) {
-						if (ds_readb((MODIFICATION_TIMERS+6) + j * 8) == target) {
-							host_writeb(sp + 6,
-									host_writebs(sp + 7, 0));
-
-							host_writew(sp + 4, 0);
+						if (gs_modification_timers[j].target == target) {
+							sp->target = sp->modifier = 0;
+							sp->offset = 0;
 						}
 					}
 				}
 
 			} else {
 				/* target affects the savegame */
-				mp = p_datseg + DATSEG_STATUS_START;
-				mp += host_readw(sp + 4);
-				sub_ptr_bs(mp, host_readbs(sp + 7));
+				mp = (Bit8u*)&gs_datseg_status_start;
+				mp += sp->offset;
+				*mp -= sp->modifier;
 			}
 
 			/* reset offset, target, and modificator */
-			host_writeb(sp + 6,
-				host_writebs(sp + 7, 0));
-
-			host_writew(sp + 4, 0);
+			sp->target = sp->modifier = 0;
+			sp->offset = 0;
 		}
 	}
 }
@@ -2648,7 +2623,7 @@ signed short get_free_mod_slot(void)
 
 	for (i = 0; i < 100; i++) {
 
-		if (ds_readw(MODIFICATION_TIMERS + i * 8 + 4) == 0) {
+		if (gs_modification_timers[i].target == 0) {
 			break;
 		}
 	}
@@ -2657,7 +2632,7 @@ signed short get_free_mod_slot(void)
 		/* all 100 mod timers are in use. apply hack to free timer in slot 0 */
 
 		/* set timer of slot 0 to 1 */
-		host_writed(p_datseg + MODIFICATION_TIMERS, 1);
+		gs_modification_timers[0].time_left = 1;
 		/* subtract one from each mod timer -> timer in slot 0 will be freed. */
 		sub_mod_timers(1);
 
@@ -2668,8 +2643,7 @@ signed short get_free_mod_slot(void)
 	return i;
 }
 
-void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr,
-	signed char mod, signed char who)
+void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr, signed char mod, signed char who)
 {
 	signed short j;
 
@@ -2685,7 +2659,7 @@ void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr,
 
 	if (who == -1) {
 		/* mod slot is on savegame */
-		mod_ptr = p_datseg + DATSEG_STATUS_START;
+		mod_ptr = (Bit8u*)&gs_datseg_status_start;
 	} else {
 		/* mod slot is on a hero/npc */
 		mod_ptr = get_hero(who);
@@ -2715,16 +2689,12 @@ void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr,
 			host_writeb(get_hero(who) + HERO_TIMER_ID, target);
 		}
 
-		ds_writeb(MODIFICATION_TIMERS + slot_no * 8 + 6, target);
+		gs_modification_timers[slot_no].target = target;
 	}
 
-	ds_writeb(MODIFICATION_TIMERS + slot_no * 8 + 7, mod);
-#if !defined (__BORLANDC__)
-	ds_writew(MODIFICATION_TIMERS + slot_no * 8 + 4, ptr - mod_ptr);
-#else
-	ds_writew(MODIFICATION_TIMERS + slot_no * 8 + 4, (Bit8u huge*)ptr - mod_ptr);
-#endif
-	ds_writed(MODIFICATION_TIMERS + slot_no * 8, timer_value);
+	gs_modification_timers[slot_no].modifier = mod;
+	gs_modification_timers[slot_no].target = (HugePt)ptr - mod_ptr;
+	gs_modification_timers[slot_no].time_left = timer_value;
 	add_ptr_bs(ptr, mod);
 }
 
@@ -2732,14 +2702,14 @@ void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr,
  * \param   fmin        five minutes
  *
  *	This function decrements the timers for the healing and staffspell timeouts.
- *	Furthermore, the CHECK_POISON flag is set.
+ *	Furthermore, the g_check_poison flag is set.
  */
 void sub_heal_staffspell_timers(Bit32s fmin)
 {
 	signed short i;
 	Bit8u *hero_i;
 
-	if (ds_readw(TIMERS_DISABLED) != 0)
+	if (g_timers_disabled)
 		return;
 
 	hero_i = get_hero(0);
@@ -2784,7 +2754,7 @@ void sub_heal_staffspell_timers(Bit32s fmin)
 			 * This won't work if the game does not jump back to game_loop() where poison_effect() is called.
 			 * Also, fmin > 1 triggers only one call of poison_effect().
 			 * Solution could be to move the poison_effect() call from game_loop() to do_timers() and timewarp(..). */
-			ds_writew(CHECK_POISON, 1);
+			g_check_poison = 1;
 		}
 	}
 }
@@ -2795,7 +2765,7 @@ void sub_heal_staffspell_timers(Bit32s fmin)
  * \param   quarter     the time in quarters of an hour
  *
  *	This function decrements the timers of burning torches and lanterns.
- *	If the time of the lightsource is up the toch is removed from the
+ *	If the time of the lightsource is up the torch is removed from the
  *	inventory and the lantern is turned off.
  */
 void sub_light_timers(Bit32s quarter)
@@ -2806,7 +2776,7 @@ void sub_light_timers(Bit32s quarter)
 	Bit8u *hero_i;
 	signed char tmp;
 
-	if (ds_readw(TIMERS_DISABLED))
+	if (g_timers_disabled)
 		return;
 
 	hero_i = get_hero(0);
@@ -2835,7 +2805,7 @@ void sub_light_timers(Bit32s quarter)
 
 						/* subtract weight of a torch */
 						sub_ptr_ws(hero_i + HERO_LOAD,
-							host_readws((Bit8u*)ds_readd(ITEMSDAT) + (SIZEOF_ITEM_STATS * ITEM_TORCH_ON + ITEM_STATS_WEIGHT)));
+							host_readws(get_itemsdat(ITEM_TORCH_ON) + ITEM_STATS_WEIGHT));
 
 						/* Remove Torch from inventory */
 						memset(hero_i + HERO_INVENTORY + SIZEOF_INVENTORY * j, 0, SIZEOF_INVENTORY);
@@ -2866,11 +2836,11 @@ void magical_chainmail_damage(void)
 	signed short i;
 	Bit8u *hero_i;
 
-	if (ds_readw(TIMERS_DISABLED) != 0) {
+	if (g_timers_disabled) {
 		return;
 	}
 
-	ds_writeb(HEROKEEPING_FLAG, (ds_readb(SHOW_TRAVEL_MAP) != 0) ? 1 : 2);
+	g_herokeeping_flag = (gs_show_travel_map ? 1 : 2);
 
 	for (i = 0; i <= 6; i++) {
 
@@ -2900,10 +2870,10 @@ void herokeeping(void)
 	Bit8u *hero;
 	char buffer[100];
 
-	if (ds_readw(GAME_STATE) != GAME_STATE_MAIN)
+	if (g_game_state != GAME_STATE_MAIN)
 		return;
 
-	/* The actual food consumption is done only if HEROKEEPING_FLAG is set.
+	/* The actual food consumption is done only if g_herokeeping_flag is set.
 	 * This happens hourly in magical_chainmail_damage()
 	 * The flag is reset at the end of this function. */
 
@@ -2913,10 +2883,10 @@ void herokeeping(void)
 
 		/* consume food and set messages */
 		if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			ds_readb(HEROKEEPING_FLAG) != 0 &&
+			g_herokeeping_flag &&
 			check_hero_no3(hero) &&			/* must be vital */
 			!host_readbs(hero + HERO_JAIL) &&
-			!ds_readbs(TRAVEL_HEROKEEPING))
+			!g_travel_herokeeping)
 		{
 			/* Do the eating */
 
@@ -2934,22 +2904,22 @@ void herokeeping(void)
 
 						if (pos != -1) {
 							/* Lunchpack found, consume quiet */
-							ds_writeb(CONSUME_QUIET, 1);
+							g_consume_quiet = 1;
 							consume(hero, hero, pos);
 #if !defined(__BORLANDC__)
 							D1_INFO("%s isst etwas\n", (char*)hero + HERO_NAME2);
 #endif
-							ds_writeb(CONSUME_QUIET, 0);
+							g_consume_quiet = 0;
 
 							/* search for another Lunchpack */
 							/* print last ration message */
 							if (get_item_pos(hero, ITEM_FOOD_PACKAGE) == -1) {
-								ds_writeb(FOOD_MESSAGE + i, 6);
+								gs_food_message[i] = 6;
 							}
 						} else {
 							/* print ration warning */
 							if (host_readbs(hero + HERO_HUNGER) < 100) {
-								ds_writeb(FOOD_MESSAGE + i, 4);
+								gs_food_message[i] = 4;
 							}
 						}
 
@@ -2959,10 +2929,10 @@ void herokeeping(void)
 						/* increase hunger value. FOOD_MOD is always 0 or 1 */
 						if (host_readbs(hero + HERO_HUNGER_TIMER) <= 0) {
 							/* increase more (FOOD_MOD == 0 -> increase by 2. FOOD_MOD == 1 -> increase by 0.) */
-							add_ptr_bs(hero + HERO_HUNGER, 2 / (ds_readbs(FOOD_MOD) * 2 + 1));
+							add_ptr_bs(hero + HERO_HUNGER, 2 / (g_food_mod * 2 + 1));
 						} else {
 							/* increase less (FOOD_MOD == 0 -> increase by 1. FOOD_MOD == 1 -> increase by 0.) */
-							add_ptr_bs(hero + HERO_HUNGER, 1 / (ds_readbs(FOOD_MOD) * 2 + 1));
+							add_ptr_bs(hero + HERO_HUNGER, 1 / (g_food_mod * 2 + 1));
 						}
 
 						/* adjust hunger */
@@ -2990,10 +2960,10 @@ void herokeeping(void)
 			/* check if someone in the group of the hero has the magic bread bag */
 			/* check for magic waterskin in group */
 			if ((get_first_hero_with_item_in_group(ITEM_MAGIC_WATERSKIN, host_readbs(hero + HERO_GROUP_NO)) == -1) &&
-				((host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
-				(!ds_readbs(CURRENT_TOWN) || (ds_readbs(CURRENT_TOWN) != TOWNS_NONE && ds_readb(SHOW_TRAVEL_MAP) != 0))) ||
-				((host_readbs(hero + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP) &&
-				!ds_readbs(GROUPS_TOWN + host_readbs(hero + HERO_GROUP_NO)))))) {
+				((host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
+				(!gs_current_town || (gs_current_town != TOWNS_NONE && gs_show_travel_map != 0))) ||
+				(host_readbs(hero + HERO_GROUP_NO) != gs_current_group &&
+				!gs_groups_town[host_readbs(hero + HERO_GROUP_NO)]))) {
 
 					/* check for food amulett */
 					if (get_item_pos(hero, ITEM_TRAVIA_AMULET) == -1) {
@@ -3001,7 +2971,7 @@ void herokeeping(void)
 						/* hero should drink something */
 						if (host_readbs(hero + HERO_THIRST) > 90) {
 
-							ds_writeb(CONSUME_QUIET, 1);
+							g_consume_quiet = 1;
 
 							/* first check for beer :) */
 							pos = get_item_pos(hero, ITEM_BEER);
@@ -3020,17 +2990,17 @@ void herokeeping(void)
 								/* nothing to drink message */
 								if ((get_item_pos(hero, ITEM_BEER) == -1)
 									&& (get_full_waterskin_pos(hero) == -1)) {
-									ds_writeb(FOOD_MESSAGE + i, 5);
+									gs_food_message[i] = 5;
 								}
 
 							} else {
 								/* hero has nothing to drink */
 								if (host_readbs(hero + HERO_THIRST) < 100) {
-									ds_writeb(FOOD_MESSAGE + i, 3);
+									gs_food_message[i] = 3;
 								}
 							}
 
-							ds_writeb(CONSUME_QUIET, 0);
+							g_consume_quiet = 0;
 						}
 
 						if (host_readbs(hero + HERO_THIRST) < 100) {
@@ -3038,11 +3008,11 @@ void herokeeping(void)
 							if (host_readbs(hero + HERO_HUNGER_TIMER) <= 0) {
 
 								/* increase more (FOOD_MOD == 0 -> increase by 4. FOOD_MOD == 1 -> increase by 1.) */
-								add_ptr_bs(hero + HERO_THIRST, 4 / (ds_readbs(FOOD_MOD) * 2 + 1));
+								add_ptr_bs(hero + HERO_THIRST, 4 / (g_food_mod * 2 + 1));
 							} else {
 
 								/* increase less (FOOD_MOD == 0 -> increase by 2. FOOD_MOD == 1 -> increase by 0.) */
-								add_ptr_bs(hero + HERO_THIRST, 2 / (ds_readbs(FOOD_MOD) * 2 + 1));
+								add_ptr_bs(hero + HERO_THIRST, 2 / (g_food_mod * 2 + 1));
 							}
 
 							/* adjust thirst */
@@ -3067,79 +3037,73 @@ void herokeeping(void)
 		}
 
 		/* print hero message */
-		if ((ds_readb(FOOD_MESSAGE + i) != 0) &&
-			!ds_readbs(DIALOGBOX_LOCK) &&
-			(ds_readw(IN_FIGHT) == 0) &&
-			!ds_readbs(FREEZE_TIMERS))
+		if (gs_food_message[i] && !g_dialogbox_lock &&	!g_in_fight && !ds_readbs(FREEZE_TIMERS))
 		{
 
 			if ((host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-				(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 				!hero_dead(hero) &&
-				(!ds_readb(SHOW_TRAVEL_MAP) || ds_readb(FOOD_MESSAGE_SHOWN + i) != ds_readb(FOOD_MESSAGE + i))) {
+				(!gs_show_travel_map || (g_food_message_shown[i] != gs_food_message[i]))) {
 
-					sprintf(buffer,
-						(ds_readb(FOOD_MESSAGE + i) == 1) ? get_ttx(224):
-							((ds_readb(FOOD_MESSAGE + i) == 2) ? get_ttx(223) :
-							((ds_readb(FOOD_MESSAGE + i) == 3) ? get_ttx(797) :
-							((ds_readb(FOOD_MESSAGE + i) == 4) ? get_ttx(798) :
-							((ds_readb(FOOD_MESSAGE + i) == 5) ? get_ttx(799) :
+					sprintf(buffer,	 (gs_food_message[i] == 1) ? get_ttx(224):
+							((gs_food_message[i] == 2) ? get_ttx(223) :
+							((gs_food_message[i] == 3) ? get_ttx(797) :
+							((gs_food_message[i] == 4) ? get_ttx(798) :
+							((gs_food_message[i] == 5) ? get_ttx(799) :
 							get_ttx(800))))),
+							(char*)hero + HERO_NAME2, GUI_get_ptr(host_readbs(hero + HERO_SEX), 1));
 
-						(char*)hero + HERO_NAME2, (char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
+					g_food_message_shown[i] = gs_food_message[i];
 
-					ds_writeb(FOOD_MESSAGE_SHOWN + i, ds_readb(FOOD_MESSAGE + i));
+					GUI_output(buffer);
 
-					GUI_output((Bit8u*)buffer);
-
-					if (ds_readb(PP20_INDEX) == ARCHIVE_FILE_ZUSTA_UK) {
-						ds_writew(REQUEST_REFRESH, 1);
+					if (g_pp20_index == ARCHIVE_FILE_ZUSTA_UK) {
+						g_request_refresh = 1;
 					}
 			}
 
-			ds_writeb(FOOD_MESSAGE + i, 0);
+			gs_food_message[i] = 0;
 		}
 
 
 		/* print unconscious message */
-		if ((ds_readb(UNCONSCIOUS_MESSAGE + i) != 0) && !ds_readbs(DIALOGBOX_LOCK)) {
+		if (gs_unconscious_message[i] && !g_dialogbox_lock) {
 
 			if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 				!hero_dead(hero)) {
 
 					/* prepare output */
-					sprintf(buffer, get_ttx(789),
-						(char*)hero + HERO_NAME2);
+					sprintf(buffer, get_ttx(789), (char*)hero + HERO_NAME2);
 
 					/* print output */
-					GUI_output((Bit8u*)buffer);
+					GUI_output(buffer);
 
-					if (ds_readb(PP20_INDEX) == ARCHIVE_FILE_ZUSTA_UK) {
-						ds_writew(REQUEST_REFRESH, 1);
+					if (g_pp20_index == ARCHIVE_FILE_ZUSTA_UK) {
+						g_request_refresh = 1;
 					}
 			}
 
 			/* reset condition */
-			ds_writeb(UNCONSCIOUS_MESSAGE + i, 0);
+			gs_unconscious_message[i] = 0;
 		}
 	}
 
-	ds_writeb(HEROKEEPING_FLAG, 0);
+	g_herokeeping_flag = 0;
 }
 
 void check_level_up(void)
 {
 	signed short i;
-	signed short done;
+	signed short not_done;
 	Bit8u *hero;
 
-	if (ds_readw(TIMERS_DISABLED) != 0) {
+	if (g_timers_disabled) {
 		return;
 	}
 
 	do {
-		done = 0;
+		not_done = 0;
 		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
@@ -3153,7 +3117,7 @@ void check_level_up(void)
 				 * Adjust AP requirement for level up to match the original DSA 2/3 rules.
 				 * Without this mod, it is "off by one".
 				 * For example, for level 2, 100 AP should be enough, but the game requires 101 AP. */
-				(ds_readds(LEVEL_AP_TAB + 4 * host_readbs(hero + HERO_LEVEL)) < host_readds(hero + HERO_AP))
+				(g_level_ap_tab[host_readbs(hero + HERO_LEVEL)] < host_readds(hero + HERO_AP))
 				/* could be easily done without accessing the data segment by the formula level_ap_tab[i] = 50 * i * (i+1) */
 #else
 				(50 * host_readbs(hero + HERO_LEVEL) * (host_readbs(hero + HERO_LEVEL) + 1) <= host_readds(hero + HERO_AP))
@@ -3161,43 +3125,37 @@ void check_level_up(void)
 #endif
 			) {
 				level_up(i);
-				done = 1;
+				not_done = 1;
 			}
 		}
 
-	} while(done);
+	} while (not_done);
 }
-
-struct dummy {
-	char a[24];
-};
 
 void seg002_37c4(void)
 {
 	signed short l_si = 0;
-	RealPt p1;
-	RealPt p2;
-	RealPt p3;
-	struct dummy a = *(struct dummy*)(p_datseg + PIC_COPY_DST);
+	Bit8u* p1;
+	Bit8u* p2;
+	Bit8u* p3;
+	struct struct_pic_copy pic_copy_bak = g_pic_copy;
 
-	p1 = (Bit8u*)ds_readd(BUFFER6_PTR) + 2000;
-	p2 = (Bit8u*)ds_readd(BUFFER6_PTR) + 2100;
-	p3 = (Bit8u*)ds_readd(BUFFER6_PTR) + 1000;
+	p1 = g_buffer6_ptr + 2000;
+	p2 = g_buffer6_ptr + 2100;
+	p3 = g_buffer6_ptr + 1000;
 
-	if ((ds_readws(TRV_MENU_SELECTION) != 0) && (ds_readb(SHOW_TRAVEL_MAP))) {
+	if (g_trv_menu_selection && gs_show_travel_map) {
 
-		ds_writew(SELECTED_TOWN_ANIX,
-				ds_readws((TOWN_POSITIONS-4) + 4 * ds_readbs((TRV_MENU_TOWNS - 1) + ds_readws(TRV_MENU_SELECTION))));
-		ds_writew(SELECTED_TOWN_ANIY,
-				ds_readws((TOWN_POSITIONS-4) + 2 + 4 * ds_readbs((TRV_MENU_TOWNS - 1) + ds_readws(TRV_MENU_SELECTION))));
+		g_selected_town_anix = ds_readws((TOWN_POSITIONS-4) + 4 * gs_trv_menu_towns[g_trv_menu_selection - 1]);
+		g_selected_town_aniy = ds_readws((TOWN_POSITIONS-4) + 2 + 4 * gs_trv_menu_towns[g_trv_menu_selection - 1]);
 
-		ds_writew(PIC_COPY_X1, ds_readws(SELECTED_TOWN_ANIX) - 4);
-		ds_writew(PIC_COPY_Y1, ds_readws(SELECTED_TOWN_ANIY) - 4);
-		ds_writew(PIC_COPY_X2, ds_readws(SELECTED_TOWN_ANIX) + 4);
-		ds_writew(PIC_COPY_Y2, ds_readws(SELECTED_TOWN_ANIY) + 4);
-		ds_writed(PIC_COPY_SRC, (Bit32u)p1);
+		g_pic_copy.x1 = g_selected_town_anix - 4;
+		g_pic_copy.y1 = g_selected_town_aniy - 4;
+		g_pic_copy.x2 = g_selected_town_anix + 4;
+		g_pic_copy.y2 = g_selected_town_aniy + 4;
+		g_pic_copy.src = p1;
 
-		if (is_mouse_in_rect(ds_readws(PIC_COPY_X1) - 16, ds_readws(PIC_COPY_Y1) - 16, ds_readws(PIC_COPY_X2) + 16, ds_readws(PIC_COPY_Y2) + 16))
+		if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
 		{
 			update_mouse_cursor();
 			l_si = 1;
@@ -3209,24 +3167,24 @@ void seg002_37c4(void)
 			refresh_screen_size();
 		}
 
-		ds_writew(TRV_MENU_SELECTION, l_si = 0);
+		g_trv_menu_selection = l_si = 0;
 	}
 
-	if (ds_readws(CURRENT_TOWN_OVER) != 0) {
+	if (g_current_town_over) {
 
-		ds_writew(PIC_COPY_X1, ds_readws(CURRENT_TOWN_OVERX) - 4);
-		ds_writew(PIC_COPY_Y1, ds_readws(CURRENT_TOWN_OVERY) - 4);
-		ds_writew(PIC_COPY_X2, ds_readws(CURRENT_TOWN_OVERX) + 4);
-		ds_writew(PIC_COPY_Y2, ds_readws(CURRENT_TOWN_OVERY) + 4);
-		ds_writed(PIC_COPY_SRC, (Bit32u)p2);
+		g_pic_copy.x1 = g_current_town_overx - 4;
+		g_pic_copy.y1 = g_current_town_overy - 4;
+		g_pic_copy.x2 = g_current_town_overx + 4;
+		g_pic_copy.y2 = g_current_town_overy + 4;
+		g_pic_copy.src = p2;
 
-		if (is_mouse_in_rect(ds_readws(PIC_COPY_X1) - 16, ds_readws(PIC_COPY_Y1) - 16, ds_readws(PIC_COPY_X2) + 16, ds_readws(PIC_COPY_Y2) + 16))
+		if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
 		{
 			update_mouse_cursor();
 			l_si = 1;
 		}
 
-		if (ds_readws(CURRENT_TOWN_OVER) != 0) {
+		if (g_current_town_over) {
 			do_pic_copy(0);
 		}
 
@@ -3234,18 +3192,18 @@ void seg002_37c4(void)
 			refresh_screen_size();
 		}
 
-		l_si = ds_writew(CURRENT_TOWN_OVER, 0);
+		l_si = g_current_town_over = 0;
 	}
 
-	if (ds_readws(CURRENT_TOWN_ANIX) != 0) {
+	if (g_current_town_anix) {
 
-		ds_writew(PIC_COPY_X1, ds_readws(CURRENT_TOWN_ANIX) - 4);
-		ds_writew(PIC_COPY_Y1, ds_readws(CURRENT_TOWN_ANIY) - 4);
-		ds_writew(PIC_COPY_X2, ds_readws(CURRENT_TOWN_ANIX) + 4);
-		ds_writew(PIC_COPY_Y2, ds_readws(CURRENT_TOWN_ANIY) + 4);
-		ds_writed(PIC_COPY_SRC, (Bit32u)p2);
+		g_pic_copy.x1 = g_current_town_anix - 4;
+		g_pic_copy.y1 = g_current_town_aniy - 4;
+		g_pic_copy.x2 = g_current_town_anix + 4;
+		g_pic_copy.y2 = g_current_town_aniy + 4;
+		g_pic_copy.src = p2;
 
-		if (is_mouse_in_rect(ds_readws(PIC_COPY_X1) - 16, ds_readws(PIC_COPY_Y1) - 16, ds_readws(PIC_COPY_X2) + 16, ds_readws(PIC_COPY_Y2) + 16))
+		if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
 		{
 			update_mouse_cursor();
 			l_si = 1;
@@ -3257,49 +3215,48 @@ void seg002_37c4(void)
 			refresh_screen_size();
 		}
 
-		ds_writew(CURRENT_TOWN_OVER, 1);
-		ds_writew(CURRENT_TOWN_OVERX, ds_readw(CURRENT_TOWN_ANIX));
-		ds_writew(CURRENT_TOWN_OVERY, ds_readw(CURRENT_TOWN_ANIY));
+		g_current_town_over = 1;
+		g_current_town_overx = g_current_town_anix;
+		g_current_town_overy = g_current_town_aniy;
 		l_si = 0;
 
-		if ((ds_readws(MENU_INPUT_BUSY) != 0) && (ds_readb(SHOW_TRAVEL_MAP))) {
+		if (g_menu_input_busy && gs_show_travel_map) {
 
-			ds_writew(SELECTED_TOWN_ANIX,
-					ds_readws((TOWN_POSITIONS-4) + 4 * ds_readbs((TRV_MENU_TOWNS - 1) + ds_readws(MENU_SELECTED))));
-			ds_writew(SELECTED_TOWN_ANIY,
-					ds_readws((TOWN_POSITIONS-4) + 2 + 4 * ds_readbs((TRV_MENU_TOWNS - 1) + ds_readws(MENU_SELECTED))));
+			g_selected_town_anix = ds_readws((TOWN_POSITIONS-4) + 4 * gs_trv_menu_towns[g_menu_selected - 1]);
+			g_selected_town_aniy = ds_readws((TOWN_POSITIONS-4) + 2 + 4 * gs_trv_menu_towns[g_menu_selected - 1]);
 
-			ds_writew(PIC_COPY_X1, ds_readws(SELECTED_TOWN_ANIX) - 4);
-			ds_writew(PIC_COPY_Y1, ds_readws(SELECTED_TOWN_ANIY) - 4);
-			ds_writew(PIC_COPY_X2, ds_readws(SELECTED_TOWN_ANIX) + 4);
-			ds_writew(PIC_COPY_Y2, ds_readws(SELECTED_TOWN_ANIY) + 4);
-			ds_writed(PIC_COPY_SRC, (Bit32u)p1);
+			g_pic_copy.x1 = g_selected_town_anix - 4;
+			g_pic_copy.y1 = g_selected_town_aniy - 4;
+			g_pic_copy.x2 = g_selected_town_anix + 4;
+			g_pic_copy.y2 = g_selected_town_aniy + 4;
+			g_pic_copy.src = p1;
 
-			if (is_mouse_in_rect(ds_readws(PIC_COPY_X1) - 16, ds_readws(PIC_COPY_Y1) - 16, ds_readws(PIC_COPY_X2) + 16, ds_readws(PIC_COPY_Y2) + 16))
+			if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
 			{
 				update_mouse_cursor();
 				l_si = 1;
 			}
 
 			do_save_rect();
-			ds_writed(PIC_COPY_SRC, (Bit32u)(p3 + 100 * ds_readws(MAP_TOWNMARK_STATE)));
+			g_pic_copy.src = p3 + 100 * g_map_townmark_state;
 			do_pic_copy(2);
 
 			if (l_si) {
 				refresh_screen_size();
 			}
 
-			ds_writew(TRV_MENU_SELECTION, ds_readws(MENU_SELECTED));
+			g_trv_menu_selection = g_menu_selected;
+
 			l_si = 0;
 		}
 
-		ds_writew(PIC_COPY_X1, ds_readws(CURRENT_TOWN_ANIX) - 4);
-		ds_writew(PIC_COPY_Y1, ds_readws(CURRENT_TOWN_ANIY) - 4);
-		ds_writew(PIC_COPY_X2, ds_readws(CURRENT_TOWN_ANIX) + 4);
-		ds_writew(PIC_COPY_Y2, ds_readws(CURRENT_TOWN_ANIY) + 4);
-		ds_writed(PIC_COPY_SRC, (Bit32u)(p3 + 100 * (ds_readws(MAP_TOWNMARK_STATE) + 5)));
+		g_pic_copy.x1 = g_current_town_anix - 4;
+		g_pic_copy.y1 = g_current_town_aniy - 4;
+		g_pic_copy.x2 = g_current_town_anix + 4;
+		g_pic_copy.y2 = g_current_town_aniy + 4;
+		g_pic_copy.src = p3 + 100 * (g_map_townmark_state + 5);
 
-		if (is_mouse_in_rect(ds_readws(PIC_COPY_X1) - 16, ds_readws(PIC_COPY_Y1) - 16, ds_readws(PIC_COPY_X2) + 16, ds_readws(PIC_COPY_Y2) + 16))
+		if (is_mouse_in_rect(g_pic_copy.x1 - 16, g_pic_copy.y1 - 16, g_pic_copy.x2 + 16, g_pic_copy.y2 + 16))
 		{
 			update_mouse_cursor();
 			l_si = 1;
@@ -3311,16 +3268,14 @@ void seg002_37c4(void)
 			refresh_screen_size();
 		}
 
-		ds_writew(CURRENT_TOWN_OVER, 1);
+		g_current_town_over = 1;
 	}
 
-
 	ds_writew(SPINLOCK_FLAG, 0);
-	inc_ds_ws(MAP_TOWNMARK_STATE);
+	g_map_townmark_state++;
+	g_map_townmark_state %= 5;
 
-	mod_ds_ws(MAP_TOWNMARK_STATE, 5);
-
-	*(struct dummy*)(p_datseg + PIC_COPY_DST) = a;
+	g_pic_copy = pic_copy_bak;
 }
 
 void set_and_spin_lock(void)
@@ -3396,8 +3351,8 @@ void passages_recalc(void)
 	}
 
 	/* If a passage is hired decrement Passage days timer */
-	if (ds_readb(SEA_TRAVEL_PSGBOOKED_FLAG) == 0xaa) {
-		dec_ds_bs_post(SEA_TRAVEL_PSGBOOKED_TIMER);
+	if (gs_sea_travel_psgbooked_flag == 0xaa) {
+		gs_sea_travel_psgbooked_timer--;
 	}
 }
 
@@ -3423,8 +3378,8 @@ void passages_reset(void)
 
 	/* If a passage is booked and the timer is zero, the ship leaves the harbor.
 	 * Therefore, reset the flag for the passage (i.e., unbook the passage) */
-	if ((ds_readb(SEA_TRAVEL_PSGBOOKED_FLAG) == 0xaa) && !ds_readb(SEA_TRAVEL_PSGBOOKED_TIMER)) {
-		ds_writeb(SEA_TRAVEL_PSGBOOKED_FLAG, 0);
+	if ((gs_sea_travel_psgbooked_flag == 0xaa) && !gs_sea_travel_psgbooked_timer) {
+		gs_sea_travel_psgbooked_flag = 0;
 	}
 }
 
@@ -3442,9 +3397,9 @@ void timewarp(Bit32s time)
 	signed short hour_diff;
 	Bit32s timer_bak;
 
-	timer_bak = ds_readd(DAY_TIMER);
-	td_bak = ds_readw(TIMERS_DISABLED);
-	ds_writew(TIMERS_DISABLED, 0);
+	timer_bak = gs_day_timer;
+	td_bak = g_timers_disabled;
+	g_timers_disabled = 0;
 
 	ds_writeb(FREEZE_TIMERS, 1);
 	/* this deactivates the function calls sub_ingame_timers(1); and sub_mod_timers(1); in do_timers(); within the following loop.
@@ -3491,7 +3446,7 @@ void timewarp(Bit32s time)
 	 *
 	 * Again, sloppy treatment of modular arithmetics. */
 	hour_old = (signed short)(timer_bak / HOURS(1));
-	hour_new = (signed short)(ds_readd(DAY_TIMER) / HOURS(1));
+	hour_new = (signed short)(gs_day_timer / HOURS(1));
 
 	if (hour_old != hour_new) {
 		if (hour_new > hour_old) {
@@ -3517,33 +3472,32 @@ void timewarp(Bit32s time)
 
 		/* fix Original-Bug 39. add missing timers. */
 		/* timer for 2nd encounter of the unicorn */
-		if (ds_readb(UNICORN_GET_MAP) != 0 &&
-			ds_readb(UNICORN_TIMER) != 0)
+		if (gs_unicorn_get_map && gs_unicorn_timer != 0)
 		{
-			dec_ds_bs_post(UNICORN_TIMER);
+			gs_unicorn_timer--;
 		}
 
 		/* timer for Sphaerenriss in verfallene Herberge */
-		if (ds_readb(DNG02_SPHERE_TIMER) != 0) {
+		if (gs_dng02_sphere_timer) {
 
-			if (!add_ds_bu(DNG02_SPHERE_TIMER, -1)) {
-				ds_writeb(DNG02_SPHERE_ACTIVE, 1);
+			if (!(--gs_dng02_sphere_timer)) {
+				gs_dng02_sphere_active = 1;
 			}
 		}
 
 		/* timer for barrels with orc muck in the orc dungeon */
-		if (ds_readbs(DNG08_TIMER1) != 0) {
-			dec_ds_bs_post(DNG08_TIMER1);
+		if (gs_dng08_timer1) {
+			gs_dng08_timer1--;
 		}
-		if (ds_readbs(DNG08_TIMER2) != 0) {
-			dec_ds_bs_post(DNG08_TIMER2);
+		if (gs_dng08_timer2) {
+			gs_dng08_timer2--;
 		}
 	}
 #endif
 
 	/* restore variables */
 	ds_writeb(FREEZE_TIMERS, 0);
-	ds_writew(TIMERS_DISABLED, td_bak);
+	g_timers_disabled = td_bak;
 }
 
 /**
@@ -3557,10 +3511,10 @@ void timewarp_until_time_of_day(Bit32s time)
 	/* The code of the function replicates the one of timewarp(..)
 	 * Better call timewarp(..), such that we don't have to apply the same bugfixes twice.
 	 * The bypassed code below suffers from Original-Bug 37 and 38. */
-	if (ds_readd(DAY_TIMER) < time) {
-		timewarp(time - ds_readd(DAY_TIMER));
+	if (gs_day_timer < time) {
+		timewarp(time - gs_day_timer);
 	} else {
-		timewarp(DAYS(1) + time - ds_readd(DAY_TIMER));
+		timewarp(DAYS(1) + time - gs_day_timer);
 	}
 #else
 	signed short hour_old;
@@ -3572,9 +3526,9 @@ void timewarp_until_time_of_day(Bit32s time)
 	Bit32s timer_bak;
 
 	i = 0;
-	timer_bak = ds_readd(DAY_TIMER);
-	td_bak = ds_readw(TIMERS_DISABLED);
-	ds_writew(TIMERS_DISABLED, 0);
+	timer_bak = gs_day_timer;
+	td_bak = g_timers_disabled;
+	g_timers_disabled = 0;
 
 	ds_writeb(FREEZE_TIMERS, 1);
 
@@ -3585,7 +3539,7 @@ void timewarp_until_time_of_day(Bit32s time)
 		if (i % 768 == 0)
 			wait_for_vsync();
 #endif
-	} while (ds_readds(DAY_TIMER) != time);
+	} while (gs_day_timer != time);
 
 	sub_ingame_timers(i);
 
@@ -3596,7 +3550,7 @@ void timewarp_until_time_of_day(Bit32s time)
 	sub_light_timers(i / MINUTES(15));
 
 	hour_old = (signed short)(timer_bak / HOURS(1));
-	hour_new = (signed short)(ds_readds(DAY_TIMER) / HOURS(1));
+	hour_new = (signed short)(gs_day_timer / HOURS(1));
 
 	/* Original-Bug 38: see above */
 	if (hour_old != hour_new) {
@@ -3613,40 +3567,30 @@ void timewarp_until_time_of_day(Bit32s time)
 	}
 
 	/* Original-Bug:
-	 * forgotten hourly timers: UNICORN_TIMER, DNG02_SPHERE_TIMER,DNG08_TIMER1, DNG08_TIMER2
+	 * forgotten hourly timers: UNICORN_TIMER, gs_dng02_sphere_timer, gs_dng08_timer1, gd_dng08_timer2
 	 * see do_timers(..).
 	 * For a bugfix either add code here (and in timewarp(..)), or modify do_timers(..)
 	 * */
 
 	/* restore variables */
 	ds_writeb(FREEZE_TIMERS, 0);
-	ds_writew(TIMERS_DISABLED, td_bak);
+	g_timers_disabled = td_bak;
 #endif
 }
 
 /**
- * \brief   decrements splash timer and restores picture
+ * \brief   decrements splash timer and restores pictures
  */
 void dec_splash(void)
 {
-	signed short i;
+	signed int i;
 
 	for (i = 0; i <= 6; i++) {
 
-		/* I have no clue */
-		if (
-			!ds_readbs(DIALOGBOX_LOCK) &&
-			/* Check if splash timer is 0 */
-			(ds_readbs(HERO_SPLASH_TIMER + i) != 0) &&
-			!add_ds_bu(HERO_SPLASH_TIMER + i, -1) &&
-			/* Check splash timer again if 0 */
-			/* I have no clue */
-			/* Could be in fight */
-			(ds_readb(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) &&
-			/* check if hero is dead */
-			!hero_dead(get_hero(i))
-		) {
-			restore_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), get_hero(i) + HERO_PORTRAIT, ds_readw(HERO_PIC_POSX + i * 2), 157, 32, 32);
+		if (!g_dialogbox_lock && (g_hero_splash_timer[i]) && !(--g_hero_splash_timer[i]) &&
+			(g_pp20_index == ARCHIVE_FILE_PLAYM_UK) && !hero_dead(get_hero(i))) {
+
+			restore_rect(g_vga_memstart, get_hero(i) + HERO_PORTRAIT, g_hero_pic_posx[i], 157, 32, 32);
 		}
 	}
 }
@@ -3657,18 +3601,16 @@ void dec_splash(void)
  * \param   hero_pos    on which slot the splash is drawn
  * \param   type        kind of damage (0 = red,LE / !0 = yellow,AE)
  */
-/* static */
-void draw_splash(signed short hero_pos, signed short type)
+static void draw_splash(signed short hero_pos, signed short type)
 {
-	/* Could be in fight */
-	if (ds_readb(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) {
+	if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 
-		Bit8u *splash = (type == 0) ? (Bit8u*)ds_readd(SPLASH_LE) : (Bit8u*)ds_readd(SPLASH_AE);
+		Bit8u *splash = (type == 0 ? g_splash_le : g_splash_ae);
 
-		restore_rect_rle((Bit8u*)ds_readd(FRAMEBUF_PTR), splash, ds_readw(HERO_PIC_POSX + 2 * hero_pos), 157, 32, 32, 2);
+		restore_rect_rle(g_vga_memstart, splash, g_hero_pic_posx[hero_pos], 157, 32, 32, 2);
 
 		/* how long the splash should be displayed */
-		ds_writeb(HERO_SPLASH_TIMER + hero_pos, 10);
+		g_hero_splash_timer[hero_pos] = 10;
 	}
 }
 
@@ -3684,17 +3626,17 @@ void timewarp_until_midnight(void)
 	signed short td_bak;
 
 	/* save the timers status */
-	td_bak = ds_readw(TIMERS_DISABLED);
+	td_bak = g_timers_disabled;
 
 	/* enable timers */
-	ds_writew(TIMERS_DISABLED, 0);
+	g_timers_disabled = 0;
 
 	/* calculate the ticks left on this day */
-	ticks_left = (HOURS(24) - 1) - ds_readd(DAY_TIMER);
+	ticks_left = (HOURS(24) - 1) - gs_day_timer;
 
 	/* Set the day timer to one tick before midnight.
 	 * Original-Bug: Hard setting the time skips events at a fixed time of the day, like getting sober at 10 o'clock. */
-	ds_writed(DAY_TIMER, (HOURS(24) - 1));
+	gs_day_timer = HOURS(24) - 1L;
 
 	do_timers(); /* now it is precisely midnight */
 	sub_ingame_timers(ticks_left);
@@ -3707,7 +3649,7 @@ void timewarp_until_midnight(void)
 	 * and two timers for barrels with orc muck in the orc dungeon are not affected from passing in-game time. */
 
 	/* restore the timer status */
-	ds_writew(TIMERS_DISABLED, td_bak);
+	g_timers_disabled = td_bak;
 }
 
 void wait_for_keyboard2(void)
@@ -3722,10 +3664,12 @@ void wait_for_keyboard2(void)
 
 
 /* unused */
-void seg002_4031(Bit8u *ptr)
+#if defined(__BORLANDC__)
+static void seg002_4031(char *ptr)
 {
 	delay_or_keypress(150 * GUI_print_header(ptr));
 }
+#endif
 
 void wait_for_keypress(void)
 {
@@ -3735,15 +3679,14 @@ void wait_for_keypress(void)
 	flushall();
 #endif
 
-	ds_writew(MOUSE1_EVENT2, 0);
+	g_mouse1_event2 = 0;
 
 	do {
 		if (CD_bioskey(1)) {
 
 			si = bioskey(0);
 
-			if (((si & 0xff) == 0x20) &&
-				(ds_readw(BIOSKEY_EVENT10) == 0))
+			if (((si & 0xff) == 0x20) && (g_bioskey_event10 == 0))
 			{
 
 				seg002_47e2();
@@ -3755,12 +3698,12 @@ void wait_for_keypress(void)
 			}
 		}
 
-	} while (!CD_bioskey(1) && ds_readw(MOUSE1_EVENT2) == 0);
+	} while (!CD_bioskey(1) && g_mouse1_event2 == 0);
 
 	if (CD_bioskey(1))
 		si = bioskey(0);
 
-	ds_writew(MOUSE1_EVENT2, 0);
+	g_mouse1_event2 = 0;
 }
 
 /**
@@ -3775,15 +3718,15 @@ void delay_or_keypress(signed short duration)
 
 	while (counter < duration) {
 
-		ds_writeb(DELAY_OR_KEYPRESS_FLAG, 1);
+		g_delay_or_keypress_flag = 1;
 		handle_input();
-		ds_writeb(DELAY_OR_KEYPRESS_FLAG, 0);
+		g_delay_or_keypress_flag = 0;
 
-		if (ds_readb(C_EVENT_ACTIVE) != 0) {
+		if (g_c_event_active) {
 
-			if (ds_readw(ACTION) != 0) {
+			if (g_action != 0) {
 
-				if (ds_readw(ACTION) == ACTION_ID_SPACE) {
+				if (g_action == ACTION_ID_SPACE) {
 
 					seg002_47e2();
 					while (!CD_bioskey(1)) { ; }
@@ -3792,25 +3735,25 @@ void delay_or_keypress(signed short duration)
 
 				} else {
 
-					if ((ds_readw(ACTION) != ACTION_ID_UP) &&
-						(ds_readw(ACTION) != ACTION_ID_DOWN) &&
-						(ds_readw(ACTION) != ACTION_ID_RIGHT) &&
-						(ds_readw(ACTION) != ACTION_ID_LEFT))
+					if ((g_action != ACTION_ID_UP) &&
+						(g_action != ACTION_ID_DOWN) &&
+						(g_action != ACTION_ID_RIGHT) &&
+						(g_action != ACTION_ID_LEFT))
 					{
 						done = 1;
 					}
 				}
 			} else {
 
-				if (ds_readw(MOUSE2_EVENT) != 0) {
+				if (g_mouse2_event) {
 					done = 1;
 				}
 			}
 		} else {
 
-			if (ds_readw(ACTION) != 0) {
+			if (g_action != 0) {
 
-				if (ds_readw(ACTION) == ACTION_ID_SPACE) {
+				if (g_action == ACTION_ID_SPACE) {
 
 					seg002_47e2();
 					while (!CD_bioskey(1)) { ; }
@@ -3821,7 +3764,7 @@ void delay_or_keypress(signed short duration)
 
 			} else {
 
-				if (ds_readw(MOUSE2_EVENT) != 0) {
+				if (g_mouse2_event) {
 					done = 1;
 				}
 			}
@@ -3829,8 +3772,8 @@ void delay_or_keypress(signed short duration)
 
 
 		if (done) {
-			ds_writew(MOUSE2_EVENT, 0);
-			ds_writew(ACTION, ACTION_ID_RETURN);
+			g_mouse2_event = 0;
+			g_action = (ACTION_ID_RETURN);
 			break;
 		}
 
@@ -3854,9 +3797,9 @@ void unused_delay(signed short no)
 /* unused */
 void unused_spinlock(void)
 {
-	ds_writew(UNUSED_SPINLOCK_FLAG, 1);
+	g_unused_spinlock_flag = 1;
 
-	while (ds_readw(UNUSED_SPINLOCK_FLAG) != 0) {
+	while (g_unused_spinlock_flag) {
 	}
 }
 
@@ -3921,55 +3864,55 @@ signed short alloc_EMS(Bit32s bytes)
 	return 0;
 }
 
-void from_EMS(RealPt dst, signed short handle, Bit32s bytes)
+void from_EMS(Bit8u* dst, signed short handle, Bit32s bytes)
 {
 #if defined(__BORLANDC__)
 	signed short si;
 	signed short di;
 	signed short v1;
 	signed short len;
-	RealPt ptr;
+	Bit8u* ptr;
 
 	di = (signed short)(bytes / 0x4000 + 1);
 	v1 = si = 0;
 
 	do {
 		EMS_map_memory(handle, v1++, 0);
-		ptr = (RealPt)F_PADD(dst, (((Bit32s)si) << 0x0e));
+		ptr = (Bit8u*)((HugePt)dst + (((Bit32s)si) << 0x0e));
 		si++;
 
 		len = (bytes - 0x4000 > 0) ? 0x4000 : (signed short)bytes;
 
 		bytes -= 0x4000;
 
-		memmove((void*)EMS_norm_ptr(ptr), (void*)ds_readd(EMS_FRAME_PTR), len);
+		memmove((void*)EMS_norm_ptr(ptr), (void*)g_ems_frame_ptr, len);
 
 	} while (--di != 0);
 #endif
 }
 
-void to_EMS(signed short handle, RealPt src, Bit32s bytes)
+void to_EMS(signed short handle, Bit8u* src, Bit32s bytes)
 {
 #if defined(__BORLANDC__)
 	signed short si;
 	signed short di;
 	signed short v1;
 	signed short len;
-	RealPt ptr;
+	Bit8u* ptr;
 
 	di = (signed short)(bytes / 0x4000 + 1);
 	v1 = si = 0;
 
 	do {
 		EMS_map_memory(handle, v1++, 0);
-		ptr = (RealPt)F_PADD(src, ((((Bit32s)si) << 0x0e)));
+		ptr = (Bit8u*)((HugePt)src + (((Bit32s)si) << 0x0e));
 		si++;
 
 		len = (bytes - 0x4000 > 0) ? 0x4000 : (signed short)bytes;
 
 		bytes -= 0x4000;
 
-		memmove((void*)ds_readd(EMS_FRAME_PTR), (void*)EMS_norm_ptr(ptr), len);
+		memmove((void*)g_ems_frame_ptr, (void*)EMS_norm_ptr(ptr), len);
 
 	} while (--di != 0);
 #endif
@@ -4019,14 +3962,14 @@ void draw_loc_icons(signed short icons, ...)
 	if (icons_bak[i] != -1)
 		changed = 1;
 
-	if (changed && ds_readb(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) {
+	if (changed && g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 		draw_icons();
 	}
 }
 
 signed short mod_day_timer(signed short val)
 {
-	return ((ds_readds(DAY_TIMER) % val) == 0) ? 1 : 0;
+	return ((gs_day_timer % val) == 0) ? 1 : 0;
 }
 
 void draw_compass(void)
@@ -4036,21 +3979,21 @@ void draw_compass(void)
 	struct nvf_desc n;
 
 	/* No compass in a location */
-	if (!ds_readbs(CURRENT_LOCTYPE) &&
+	if (!gs_current_loctype &&
 		/* Has something to do with traveling */
 		!ds_readbs(TRAVEL_EVENT_ACTIVE) &&
 		/* Not in town or dungeon */
-		((ds_readbs(DUNGEON_INDEX) != DUNGEONS_NONE) || (ds_readbs(CURRENT_TOWN) != TOWNS_NONE)) &&
+		((gs_dungeon_index != DUNGEONS_NONE) || (gs_current_town != TOWNS_NONE)) &&
 		/* I have no clue */
-		(ds_readb(FADING_STATE) != 2))
+		(g_fading_state != 2))
 	{
 
 		/* set src */
-		n.dst = (Bit8u*)ds_readd(ICON);
+		n.dst = g_icon;
 		/* set dst */
-		n.src = (Bit8u*)ds_readd(BUFFER6_PTR);
+		n.src = g_buffer6_ptr;
 		/* set no */
-		n.no = ds_readbs(DIRECTION);
+		n.no = gs_direction;
 		/* set type*/
 		n.type = 0;
 
@@ -4061,13 +4004,13 @@ void draw_compass(void)
 		process_nvf(&n);
 
 		/* set x and y values */
-		ds_writew(PIC_COPY_X1, 94);
-		ds_writew(PIC_COPY_Y1, 115);
-		ds_writew(PIC_COPY_X2, 145);
-		ds_writew(PIC_COPY_Y2, 136);
+		g_pic_copy.x1 = 94;
+		g_pic_copy.y1 = 115;
+		g_pic_copy.x2 = 145;
+		g_pic_copy.y2 = 136;
 
 		/* set source */
-		ds_writed(PIC_COPY_SRC, ds_readd(ICON));
+		g_pic_copy.src = g_icon;
 
 		update_mouse_cursor();
 		do_pic_copy(2);
@@ -4080,7 +4023,7 @@ signed short can_merge_group(void)
 	signed short i;
 	signed short retval = -1;
 
-	if (ds_readbs(ds_readbs(CURRENT_GROUP) + GROUP_MEMBER_COUNTS) == ds_readbs(TOTAL_HERO_COUNTER)) {
+	if (gs_group_member_counts[gs_current_group] == gs_total_hero_counter) {
 
 		retval = -1;
 
@@ -4088,20 +4031,20 @@ signed short can_merge_group(void)
 
 		for (i = 0; i < 6; i++)	{
 
-			if ((i != ds_readbs(CURRENT_GROUP)) &&
-				(0 != ds_readb(i + GROUP_MEMBER_COUNTS)) &&
+			if ((i != gs_current_group) &&
+				(0 != gs_group_member_counts[i]) &&
 				/* check XTarget */
-				(ds_readw(i * 2 + GROUPS_X_TARGET) == ds_readw(X_TARGET)) &&
+				(gs_groups_x_target[i] == gs_x_target) &&
 				/* check YTarget */
-				(ds_readw(i * 2 + GROUPS_Y_TARGET) == ds_readw(Y_TARGET)) &&
+				(gs_groups_y_target[i] == gs_y_target) &&
 				/* check Location */
-				(ds_readbs(GROUPS_CURRENT_LOCTYPE + i) == ds_readbs(CURRENT_LOCTYPE)) &&
+				(gs_groups_current_loctype[i] == gs_current_loctype) &&
 				/* check currentTown */
-				(ds_readb(GROUPS_TOWN + i) == ds_readb(CURRENT_TOWN)) &&
+				(gs_groups_town[i] == gs_current_town) &&
 				/* check DungeonIndex */
-				(ds_readb(GROUPS_DNG_INDEX + i) == ds_readb(DUNGEON_INDEX)) &&
+				(gs_groups_dng_index[i] == gs_dungeon_index) &&
 				/* check DungeonLevel */
-				(ds_readb(GROUPS_DNG_LEVEL + i) == ds_readb(DUNGEON_LEVEL)))
+				(gs_groups_dng_level[i] == gs_dungeon_level))
 			{
 				retval = i;
 			}
@@ -4121,15 +4064,15 @@ void select_with_mouse(Bit8u *p1, Bit8u *p2)
 {
 	signed short i;
 
-	if (ds_readw(HAVE_MOUSE) != 2) {
+	if (g_have_mouse != 2) {
 		return;
 	}
 
 	for (i = 0; i < 15; i++) {
-		if ((ds_readws(MERCHANT_ITEMS_POSX + i * 2) <= ds_readws(MOUSE_POSX)) &&
-			(ds_readws(MERCHANT_ITEMS_POSX + i * 2) + 50 >= ds_readws(MOUSE_POSX)) &&
-			(ds_readws(MERCHANT_ITEMS_POSY + i * 2) <= ds_readws(MOUSE_POSY)) &&
-			(ds_readws(MERCHANT_ITEMS_POSY + i * 2) + 17 >= ds_readws(MOUSE_POSY)) &&
+		if ((g_merchant_items_posx[i] <= g_mouse_posx) &&
+			(g_merchant_items_posx[i] + 50 >= g_mouse_posx) &&
+			(g_merchant_items_posy[i] <= g_mouse_posy) &&
+			(g_merchant_items_posy[i] + 17 >= g_mouse_posy) &&
 			(host_readws(p2 + i * 7) != 0))
 		{
 			host_writew(p1, i);
@@ -4142,7 +4085,7 @@ void select_with_keyboard(Bit8u *p1, Bit8u *p2)
 {
 	signed short pos = host_readws(p1);
 
-	if (ds_readw(ACTION) == ACTION_ID_UP) {
+	if (g_action == ACTION_ID_UP) {
 		/* Key UP */
 		if (pos) {
 			pos--;
@@ -4152,7 +4095,7 @@ void select_with_keyboard(Bit8u *p1, Bit8u *p2)
 				pos--;
 			}
 		}
-	} else if (ds_readw(ACTION) == ACTION_ID_DOWN) {
+	} else if (g_action == ACTION_ID_DOWN) {
 		/* Key DOWN */
 		if (pos < 14) {
 			if (host_readw(p2 + (pos + 1) * 7) != 0) {
@@ -4163,7 +4106,7 @@ void select_with_keyboard(Bit8u *p1, Bit8u *p2)
 		} else {
 			pos = 0;
 		}
-	} else if (ds_readw(ACTION) == ACTION_ID_RIGHT) {
+	} else if (g_action == ACTION_ID_RIGHT) {
 		/* Key RIGHT */
 		if (pos < 10) {
 			if (host_readw(p2 + (pos + 5) * 7) != 0) {
@@ -4172,7 +4115,7 @@ void select_with_keyboard(Bit8u *p1, Bit8u *p2)
 		} else {
 			pos -= 10;
 		}
-	} else if (ds_readw(ACTION) == ACTION_ID_LEFT) {
+	} else if (g_action == ACTION_ID_LEFT) {
 		/* Key LEFT */
 		if (pos > 4) {
 			pos -= 5;
@@ -4194,7 +4137,7 @@ void select_with_keyboard(Bit8u *p1, Bit8u *p2)
  */
 void set_automap_tile(signed short x, signed short y)
 {
-	or_ds_bs(AUTOMAP_BUF + (4 * y + (x >> 3)), ds_readb(AUTOMAP_BITMASK + (x & 0x7)));
+	g_automap_buf[4 * y + (x >> 3)] |= g_automap_bitmask[x & 0x07];
 }
 
 /**
@@ -4214,7 +4157,7 @@ void set_automap_tiles(signed short x, signed short y)
 
 		set_automap_tile(x, y - 1);
 
-		if (ds_readb(DNG_MAP_SIZE) - 1 > x) {
+		if (g_dng_map_size - 1 > x) {
 			set_automap_tile(x + 1, y - 1);
 		}
 	}
@@ -4226,7 +4169,7 @@ void set_automap_tiles(signed short x, signed short y)
 
 	set_automap_tile(x, y);
 
-	if (ds_readb(DNG_MAP_SIZE) - 1 > x) {
+	if (g_dng_map_size - 1 > x) {
 		set_automap_tile(x + 1, y);
 	}
 
@@ -4238,7 +4181,7 @@ void set_automap_tiles(signed short x, signed short y)
 
 		set_automap_tile(x, y + 1);
 
-		if (ds_readb(DNG_MAP_SIZE) - 1 > x) {
+		if (g_dng_map_size - 1 > x) {
 			set_automap_tile(x + 1, y + 1);
 		}
 	}
@@ -4249,25 +4192,25 @@ void set_automap_tiles(signed short x, signed short y)
 void seg002_47e2(void)
 {
 	/* save gfx settings to stack */
-	struct dummy a = *(struct dummy*)(p_datseg + PIC_COPY_DST);
+	struct struct_pic_copy pic_copy_bak = g_pic_copy;
 
 	/* set range 0,0 - 7,7 */
-	ds_writew(PIC_COPY_X1, 0);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, 7);
-	ds_writew(PIC_COPY_Y2, 7);
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = 7;
+	g_pic_copy.y2 = 7;
 
 	/* set destination */
-	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
+	g_pic_copy.dst = g_vga_memstart;
 	/* set source */
-	ds_writed(PIC_COPY_SRC, (Bit32u)(p_datseg + GFXBUF_WAIT_KEYPRESS));
+	g_pic_copy.src = g_gfxbuf_wait_keypress;
 
 	do_save_rect();
 
 	GUI_print_char('P', 0, 0);
 
 	/* restore gfx settings from stack */
-	*(struct dummy*)(p_datseg + PIC_COPY_DST) = a;
+	g_pic_copy = pic_copy_bak;
 }
 
 /**
@@ -4275,23 +4218,23 @@ void seg002_47e2(void)
 void seg002_484f(void)
 {
 	/* save gfx settings to stack */
-	struct dummy a = *(struct dummy*)(p_datseg + PIC_COPY_DST);
+	struct struct_pic_copy pic_copy_bak = g_pic_copy;
 
 	/* set range 0,0 - 7,7 */
-	ds_writew(PIC_COPY_X1, 0);
-	ds_writew(PIC_COPY_Y1, 0);
-	ds_writew(PIC_COPY_X2, 7);
-	ds_writew(PIC_COPY_Y2, 7);
+	g_pic_copy.x1 = 0;
+	g_pic_copy.y1 = 0;
+	g_pic_copy.x2 = 7;
+	g_pic_copy.y2 = 7;
 
 	/* set destination */
-	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
+	g_pic_copy.dst = g_vga_memstart;
 	/* set source */
-	ds_writed(PIC_COPY_SRC, (Bit32u)(p_datseg + GFXBUF_WAIT_KEYPRESS));
+	g_pic_copy.src = g_gfxbuf_wait_keypress;
 
 	do_pic_copy(0);
 
 	/* restore gfx settings from stack */
-	*(struct dummy*)(p_datseg + PIC_COPY_DST) = a;
+	g_pic_copy = pic_copy_bak;
 }
 
 /**
@@ -4364,7 +4307,7 @@ signed short is_hero_available_in_group(Bit8u *hero)
 
 	if (
 		check_hero(hero) &&
-		(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP))
+		(host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 	) {
 		return 1;
 	}
@@ -4382,8 +4325,8 @@ void sub_ae_splash(Bit8u *hero, signed short ae)
 {
 	if (!hero_dead(hero) && (ae > 0)) {
 
-		signed short tmp = ds_readw(UPDATE_STATUSLINE);
-		ds_writew(UPDATE_STATUSLINE, 0);
+		signed short tmp = g_update_statusline;
+		g_update_statusline = 0;
 
 		if ((host_readb(hero + HERO_TYPE) == HERO_TYPE_MAGE) &&
 		    (host_readbs(hero + HERO_STAFFSPELL_LVL) >= 4)) {
@@ -4404,11 +4347,11 @@ void sub_ae_splash(Bit8u *hero, signed short ae)
 			host_writew(hero + HERO_AE, 0);
 		}
 
-		ds_writew(UPDATE_STATUSLINE, tmp);
+		g_update_statusline = tmp;
 
 #ifdef M302de_ORIGINAL_BUGFIX
 		/* AE bar was not updated in pseudo 3D mode */
-		if (ds_readw(IN_FIGHT) == 0 && ds_readw(MOUSE1_DOUBLECLICK) != 0) {
+		if (!g_in_fight && g_mouse1_doubleclick) {
 			/* redraw AE bar */
 			draw_bar(1, get_hero_index(hero), host_readw(hero + HERO_AE),
 				host_readw(hero + HERO_AE_ORIG), 0);
@@ -4426,8 +4369,8 @@ void add_hero_ae(Bit8u* hero, signed short ae)
 	/* dont add AE if hero is dead or ae = 0 */
 	if (!hero_dead(hero) && (ae > 0)) {
 
-		signed short tmp = ds_readw(UPDATE_STATUSLINE);
-		ds_writew(UPDATE_STATUSLINE, 0);
+		signed short tmp = g_update_statusline;
+		g_update_statusline = 0;
 
 		/* add AE to hero's current AE */
 		add_ptr_ws(hero + HERO_AE, ae);
@@ -4437,7 +4380,7 @@ void add_hero_ae(Bit8u* hero, signed short ae)
 		if (host_readws(hero + HERO_AE) > host_readws(hero + HERO_AE_ORIG))
 			host_writew(hero + HERO_AE, host_readws(hero + HERO_AE_ORIG));
 
-		ds_writew(UPDATE_STATUSLINE, tmp);
+		g_update_statusline = tmp;
 	}
 }
 
@@ -4452,13 +4395,13 @@ void sub_hero_le(Bit8u *hero, signed short le)
 	signed short i;
 	signed short bak;
 	signed short old_le;
-	Bit8u *ptr;
+	struct struct_fighter *fighter;
 	Bit8u *hero_i;
 
 	if (!hero_dead(hero) && (le > 0)) {
 
-		bak = ds_readw(UPDATE_STATUSLINE);
-		ds_writew(UPDATE_STATUSLINE, 0);
+		bak = g_update_statusline;
+		g_update_statusline = 0;
 
 		/* do the damage */
 		old_le = host_readw(hero + HERO_LE);
@@ -4470,14 +4413,15 @@ void sub_hero_le(Bit8u *hero, signed short le)
 			and_ptr_bs(hero + HERO_FLAGS1, 0xfd); /* unset 'asleep' flag */
 
 			/* in fight mode */
-			if (ds_readw(IN_FIGHT) != 0) {
-				ptr = (Bit8u*)FIG_get_ptr(host_readb(hero + HERO_FIGHTER_ID));
+			if (g_in_fight) {
+
+				fighter = FIG_get_fighter(host_readb(hero + HERO_FIGHTER_ID));
 
 				/* update looking dir and other  */
-				host_writeb(ptr + FIGHTER_NVF_NO, host_readb(hero + HERO_VIEWDIR));
-				host_writeb(ptr + FIGHTER_RELOAD, -1);
-				host_writeb(ptr + FIGHTER_OFFSETX, 0);
-				host_writeb(ptr + FIGHTER_OFFSETY, 0);
+				fighter->nvf_no = host_readb(hero + HERO_VIEWDIR);
+				fighter->reload = -1;
+				fighter->offsetx = 0;
+				fighter->offsety = 0;
 			}
 		}
 
@@ -4491,13 +4435,13 @@ void sub_hero_le(Bit8u *hero, signed short le)
 			/* mark hero as dead */
 			or_ptr_bs(hero + HERO_FLAGS1, 1); /* set 'dead' flag */
 
-			ds_writeb(UNCONSCIOUS_MESSAGE + get_hero_index(hero), 0);
+			gs_unconscious_message[get_hero_index(hero)] = 0;
 
 			/* unknown */
 			host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_UNKNOWN2);
 
-			if (ds_readb(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) {
-				ds_writeb(REFRESH_STATUS_LINE, 1);
+			if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
+				g_refresh_status_line = 1;
 			}
 
 			/* reset sickness */
@@ -4513,25 +4457,25 @@ void sub_hero_le(Bit8u *hero, signed short le)
 			}
 
 			/* FINAL FIGHT */
-			if (ds_readw(CURRENT_FIG_NO) == FIGHTS_F144) {
-				if (hero == (Bit8u*)ds_readd(MAIN_ACTING_HERO)) {
-					ds_writew(GAME_STATE, GAME_STATE_DEAD);
-					ds_writew(IN_FIGHT, 0);
+			if (g_current_fight_no == FIGHTS_F144) {
+				if (hero == (Bit8u*)gs_main_acting_hero) {
+					g_game_state = (GAME_STATE_DEAD);
+					g_in_fight = 0;
 				}
 			}
 
 			if ((ds_readb(TRAVELING) != 0)
-				&& (ds_readw(IN_FIGHT) == 0) &&
+				&& !g_in_fight &&
 				(!count_heroes_available_in_group() || ((count_heroes_available_in_group() == 1) && is_hero_available_in_group(get_hero(6))))) /* count_heroes_available_in_group_ignore_npc() == 0 */
 			{
 				/* if traveling, not in a fight, and no hero in the group (except possibly the NPC) is available. */
 
-				ds_writeb(TRAVEL_DETOUR, 99);
+				gs_travel_detour = (99);
 
 				hero_i = get_hero(0);
 				for (i = 0; i <=6; i++, hero_i += SIZEOF_HERO) {
 					if ((host_readbs(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
-						(host_readbs(hero_i + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)))
+						(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group))
 					{
 						hero_disappear(hero_i, i, -1);
 					}
@@ -4548,43 +4492,40 @@ void sub_hero_le(Bit8u *hero, signed short le)
 				host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_WAIT);
 
 				/* unknown yet */
-				ds_writeb(UNCONSCIOUS_MESSAGE + get_hero_index(hero), 1);
+				gs_unconscious_message[get_hero_index(hero)] = 1;
 
 				/* in fight mode */
-				if (ds_readw(IN_FIGHT) != 0) {
+				if (g_in_fight) {
 
-					ptr = (Bit8u*)FIG_get_ptr(host_readb(hero + HERO_FIGHTER_ID));
+					fighter = FIG_get_fighter(host_readb(hero + HERO_FIGHTER_ID));
 
-					host_writeb(ptr + 2,
-						ds_readb(NVFTAB_FIGURES_UNCONSCIOUS + host_readbs(hero + HERO_SPRITE_NO) * 2) + host_readbs(hero + HERO_VIEWDIR));
+					fighter->nvf_no = g_nvftab_figures_unconscious[host_readbs(hero + HERO_SPRITE_NO)] + host_readbs(hero + HERO_VIEWDIR);
 
-					host_writeb(ptr + 0x0d, -1);
+					fighter->reload = -1;
 
-					host_writeb(ptr + 5,
-						ds_readb(GFXTAB_OFFSETS_UNCONSCIOUS + host_readbs(hero + HERO_SPRITE_NO) * 8 + host_readbs(hero + HERO_VIEWDIR) * 2));
+					fighter->offsetx = ds_readb(GFXTAB_OFFSETS_UNCONSCIOUS + host_readbs(hero + HERO_SPRITE_NO) * 8 + host_readbs(hero + HERO_VIEWDIR) * 2);
 
-					host_writeb(ptr + 6,
-						ds_readb((GFXTAB_OFFSETS_UNCONSCIOUS + 1) + host_readbs(hero + HERO_SPRITE_NO) * 8 + host_readbs(hero + HERO_VIEWDIR) * 2));
+					fighter->offsety = ds_readb((GFXTAB_OFFSETS_UNCONSCIOUS + 1) + host_readbs(hero + HERO_SPRITE_NO) * 8 + host_readbs(hero + HERO_VIEWDIR) * 2);
 
 
 					FIG_add_msg(7, 0);
 
 					/* FINAL FIGHT */
-					if (ds_readw(CURRENT_FIG_NO) == FIGHTS_F144) {
-						if (hero == (Bit8u*)ds_readd(MAIN_ACTING_HERO)) {
-							ds_writew(GAME_STATE, GAME_STATE_DEAD);
-							ds_writew(IN_FIGHT, 0);
+					if (g_current_fight_no == FIGHTS_F144) {
+						if (hero == (Bit8u*)gs_main_acting_hero) {
+							g_game_state = (GAME_STATE_DEAD);
+							g_in_fight = 0;
 						}
 					}
 				}
 			}
 		}
 
-		ds_writew(UPDATE_STATUSLINE, bak);
+		g_update_statusline = bak;
 	}
 
-	if (ds_readw(IN_FIGHT) == 0) {
-		ds_writeb(CHECK_PARTY, 1);
+	if (!g_in_fight) {
+		g_check_party = 1;
 	}
 }
 
@@ -4599,14 +4540,14 @@ void sub_hero_le(Bit8u *hero, signed short le)
 void add_hero_le(Bit8u *hero, signed short le)
 {
 	signed short val_bak;
-	Bit8u *ptr;
+	struct struct_fighter *fighter;
 	signed short ret;
 
 	/* dead heroes never get LE */
 	if (!hero_dead(hero) && (le > 0)) {
 
-		val_bak = ds_readw(UPDATE_STATUSLINE);
-		ds_writew(UPDATE_STATUSLINE, 0);
+		val_bak = g_update_statusline;
+		g_update_statusline = 0;
 
 		/* add LE */
 		add_ptr_ws(hero + HERO_LE, le);
@@ -4622,24 +4563,26 @@ void add_hero_le(Bit8u *hero, signed short le)
 			and_ptr_bs(hero + HERO_FLAGS1, 0xbf); /* set 'conscious' flag */
 
 			/* maybe if we are in a fight */
-			if (ds_readw(IN_FIGHT)) {
-				ptr = (Bit8u*)FIG_get_ptr(host_readb(hero + HERO_FIGHTER_ID));
+			if (g_in_fight) {
+
+				fighter = FIG_get_fighter(host_readb(hero + HERO_FIGHTER_ID));
+
 				ret = FIG_get_range_weapon_type(hero);
 
 				if (ret != -1) {
-					host_writeb(ptr + 2, ds_readb((NVFTAB_FIGURES_RANGEWEAPON - 12) +
-						host_readbs(hero + HERO_SPRITE_NO) * 12 + 4 * ret + host_readbs(hero + HERO_VIEWDIR)));
+					//fighter->nvf_no = ds_readb((NVFTAB_FIGURES_RANGEWEAPON - 12) + host_readbs(hero + HERO_SPRITE_NO) * 12 + 4 * ret + host_readbs(hero + HERO_VIEWDIR));
+					fighter->nvf_no = g_nvftab_figures_rangeweapon[host_readbs(hero + HERO_SPRITE_NO) - 1][ret][host_readbs(hero + HERO_VIEWDIR)];
 				} else {
-					host_writeb(ptr + 2, host_readb(hero + HERO_VIEWDIR));
+					fighter->nvf_no = host_readb(hero + HERO_VIEWDIR);
 				}
 
-				host_writeb(ptr + 0x0d, -1);
-				host_writeb(ptr + 5, 0);
-				host_writeb(ptr + 6, 0);
+				fighter->reload = -1;
+				fighter->offsetx = 0;
+				fighter->offsety = 0;
 			}
 		}
 
-		ds_writew(UPDATE_STATUSLINE, val_bak);
+		g_update_statusline = val_bak;
 	}
 }
 
@@ -4658,7 +4601,7 @@ void add_group_le(signed short le)
 	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 		if ((host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)))
+			(host_readbs(hero + HERO_GROUP_NO) == gs_current_group))
 		{
 			add_hero_le(hero, le);
 		}
@@ -4678,14 +4621,14 @@ void do_starve_damage(Bit8u *hero, signed short index, signed short type)
 	if (!hero_dead(hero)) {
 
 		/* save this value locally */
-		signed short bak = ds_readw(UPDATE_STATUSLINE);
-		ds_writew(UPDATE_STATUSLINE, 0);
+		const int sl_bak = g_update_statusline;
+		g_update_statusline = 0;
 
 		/* decrement LE of the hero */
 		dec_ptr_ws(hero + HERO_LE);
 
 		/* set the critical message type for the hero */
-		ds_writeb(FOOD_MESSAGE + index, type != 0 ? 1 : 2);
+		gs_food_message[index] = (type != 0 ? 1 : 2);
 
 		if (host_readws(hero + HERO_LE) <= 0) {
 
@@ -4700,7 +4643,7 @@ void do_starve_damage(Bit8u *hero, signed short index, signed short type)
 		}
 
 		/* restore the locally save value */
-		ds_writew(UPDATE_STATUSLINE, bak);
+		g_update_statusline = sl_bak;
 	}
 }
 
@@ -4935,14 +4878,14 @@ signed short unused_cruft(void)
 
 	signed short l_si;
 
-	if (!ds_readbs(TOTAL_HERO_COUNTER)) {
+	if (!gs_total_hero_counter) {
 		return -1;
 	}
 
 	do {
 		l_si = random_schick(6) - 1;
 
-	} while (!(host_readbs(get_hero(l_si) + HERO_TYPE)) || (host_readbs(get_hero(l_si) + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP)));
+	} while (!(host_readbs(get_hero(l_si) + HERO_TYPE)) || (host_readbs(get_hero(l_si) + HERO_GROUP_NO) != gs_current_group));
 
 	return l_si;
 }
@@ -4960,7 +4903,7 @@ signed short get_random_hero(void)
 
 	do {
 		/* get number of current group */
-		cur_hero = random_schick(ds_readbs(GROUP_MEMBER_COUNTS + ds_readbs(CURRENT_GROUP))) - 1;
+		cur_hero = random_schick(gs_group_member_counts[gs_current_group]) - 1;
 
 #ifdef M302de_ORIGINAL_BUGFIX
 		signed short pos = 0;
@@ -4971,7 +4914,7 @@ signed short get_random_hero(void)
 			if (host_readbs(hero + HERO_TYPE) == HERO_TYPE_NONE)
 				continue;
 			/* Check if in current group */
-			if (host_readbs(hero + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP))
+			if (host_readbs(hero + HERO_GROUP_NO) != gs_current_group)
 				continue;
 
 			if (pos == cur_hero) {
@@ -4986,7 +4929,7 @@ signed short get_random_hero(void)
 
 	} while (
 		!host_readbs(get_hero(cur_hero) + HERO_TYPE) ||
-		(host_readbs(get_hero(cur_hero) + HERO_GROUP_NO) != ds_readbs(CURRENT_GROUP)) ||
+		(host_readbs(get_hero(cur_hero) + HERO_GROUP_NO) != gs_current_group) ||
 		hero_dead(get_hero(cur_hero))
 	);
 
@@ -5008,7 +4951,7 @@ Bit32s get_party_money(void)
 
 	for (i=0; i < 6; i++, hero += SIZEOF_HERO) {
 		if (host_readbs(hero + HERO_TYPE) &&
-			(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)))
+			(host_readbs(hero + HERO_GROUP_NO) == gs_current_group))
 		{
 			sum += host_readds(hero + HERO_MONEY);
 		}
@@ -5043,7 +4986,7 @@ void set_party_money(Bit32s money)
 	/* if we have an NPC in current group and alive */
 	if (
 		host_readbs(hero + HERO_TYPE) &&
-		(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+		(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 		!hero_dead(hero)
 	) {
 
@@ -5066,13 +5009,13 @@ void set_party_money(Bit32s money)
 
 			if (
 				host_readbs(hero + HERO_TYPE) &&
-				(host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 				!hero_dead(hero)
 			) {
 				/* account the money to hero */
 				host_writed(hero + HERO_MONEY, hero_money);
 			} else {
-				if (host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) {
+				if (host_readbs(hero + HERO_GROUP_NO) == gs_current_group) {
 					host_writed(hero + HERO_MONEY, 0);
 				}
 			}
@@ -5122,7 +5065,7 @@ void add_group_ap(Bit32s ap)
 	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 
 		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) &&
 			!hero_dead(hero_i))
 		{
 			add_hero_ap(hero_i, ap);
@@ -5147,7 +5090,7 @@ void add_hero_ap_all(signed short ap)
 	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 
 		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) &&
 			!hero_dead(hero_i))
 		{
 #if !defined(__BORLANDC__)
@@ -5176,7 +5119,7 @@ void sub_hero_ap_all(signed short ap)
 	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 
 		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) &&
 			!hero_dead(hero_i))
 		{
 			if ((Bit32u)ap <= host_readd(hero_i + HERO_AP)) {
@@ -5250,7 +5193,7 @@ signed short get_first_hero_with_item(signed short item)
 	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 
 		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)))
+			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group))
 		{
 			/* Search inventory */
 			for (j = 0; j < NR_HERO_INVENTORY_SLOTS; j++) {
@@ -5310,7 +5253,7 @@ void sub_group_le(signed short le)
 		hero_i = get_hero(i);
 
 		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)))
+			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group))
 		{
 			sub_hero_le(hero_i, le);
 		}
@@ -5322,16 +5265,16 @@ void sub_group_le(signed short le)
  *
  * \return              a pointer to the first available hero. If none in available it returns a pointer to the first hero.
  */
-RealPt get_first_hero_available_in_group(void)
+Bit8u* get_first_hero_available_in_group(void)
 {
 	signed short i;
-	RealPt hero_i = (Bit8u*)ds_readd(HEROES);
+	unsigned char *hero_i = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 
 		/* Check class, group, deadness and check_hero() */
 		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) &&
 			!hero_dead(hero_i) &&
 			check_hero(hero_i))
 		{
@@ -5339,7 +5282,7 @@ RealPt get_first_hero_available_in_group(void)
 		}
 	}
 
-	return (RealPt) ds_readd(HEROES);
+	return (Bit8u*)get_hero(0);
 }
 
 /**
@@ -5347,18 +5290,18 @@ RealPt get_first_hero_available_in_group(void)
  *
  * \return              a pointer to the second available hero in the group or NULL.
  */
-RealPt get_second_hero_available_in_group(void)
+Bit8u* get_second_hero_available_in_group(void)
 {
 	signed short i;
 	signed short tmp;
-	RealPt hero_i;
+	unsigned char *hero_i;
 
-	hero_i = (Bit8u*)ds_readd(HEROES);
+	hero_i = get_hero(0);
 
 	for (i = tmp = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 		/* Check class, group and check_hero() */
 		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) &&
 			check_hero(hero_i))
 		{
 			if (tmp) {
@@ -5435,7 +5378,7 @@ signed short count_heroes_available_in_group(void)
 
 	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
 		if (host_readbs(hero_i + HERO_TYPE) && /* != HERO_TYPE_NONE */
-			(host_readbs(hero_i + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) && /* hero in current group */
+			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) && /* hero in current group */
 			check_hero_no2(hero_i)) /* hero not dead, petrified, unconscious or renegade */
 		{
 			heroes++;
@@ -5455,7 +5398,7 @@ signed short count_heroes_available_in_group_ignore_npc(void)
 
 	for (i = 0; i < 6; i++, hero_i += SIZEOF_HERO) {
 		if (host_readbs(hero_i + HERO_TYPE) && /* != HERO_TYPE_NONE */
-			(host_readbs(hero_i + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) && /* hero in current group */
+			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) && /* hero in current group */
 			check_hero_no2(hero_i)) /* hero not dead, petrified, unconscious or renegade */
 		{
 			heroes++;
@@ -5483,7 +5426,7 @@ void check_group(void)
 #endif
 	{
 		/* game over */
-		ds_writew(GAME_STATE, GAME_STATE_DEAD);
+		g_game_state = (GAME_STATE_DEAD);
 
 	} else if
 #ifndef M302de_ORIGINAL_BUGFIX
@@ -5507,28 +5450,30 @@ int schick_main(int argc, char** argv)
 	signed short len;
 
 	ds_writew(PREGAME_STATE, 1);
-	ds_writeb(PLAYMASK_US, 1);
+	g_playmask_us = 1;
 
 	init_AIL(16000);
 
 #if defined(__BORLANDC__)
 	randomize();
-#endif
 
-	save_display_stat(((Bit8u*)p_datseg + VIDEO_PAGE_BAK));
+	save_display_stat((Bit8u*)&g_video_page_bak);
+#endif
 
 	if (!init_memory()) {
 
-		ds_writew(GAMEINIT_FLAG, 1);
+#if defined(__BORLANDC__)
+		g_gameinit_flag = 1;
+#endif
 
 		schick_set_video();
 
-		ds_writew(HAVE_MOUSE, 2);
+		g_have_mouse = 2;
 
 		mouse_init();
 
-		if (ds_readw(HAVE_MOUSE) == 0) {
-			ds_writew(MOUSE_REFRESH_FLAG, -10);
+		if (g_have_mouse == 0) {
+			g_mouse_refresh_flag = -10;
 		}
 
 		init_game_state();
@@ -5537,7 +5482,7 @@ int schick_main(int argc, char** argv)
 
 		init_common_buffers();
 
-		ds_writew(TEXTBOX_WIDTH, 3);
+		g_textbox_width = 3;
 
 		refresh_screen_size();
 
@@ -5548,11 +5493,12 @@ int schick_main(int argc, char** argv)
 			len = strlen(argv[1]);
 
 			l_si = 0;
-			ds_writed(CD_CHECK_SKIPMAGIC, 1);
+			g_cd_skipmagic = 1;
 
 			while (l_si < len) {
 
-				ds_writed(CD_CHECK_SKIPMAGIC, argv[1][0] * ds_readds(CD_CHECK_SKIPMAGIC));
+
+				g_cd_skipmagic = argv[1][0] * g_cd_skipmagic;
 				argv[1]++;
 				l_si++;
 			}
@@ -5568,12 +5514,12 @@ int schick_main(int argc, char** argv)
 		} else {
 			/* disable sound */
 			exit_AIL();
-			GUI_output(p_datseg + SND_TXT_DISABLED_MEM2);
+			GUI_output(g_snd_txt_disabled_mem2);
 		}
 
 		CD_init();
 
-		if (ds_readw(CD_INIT_SUCCESSFUL) == 0) {
+		if (!g_cd_init_successful) {
 
 			/* CD init failed */
 			cleanup_game();
@@ -5582,22 +5528,22 @@ int schick_main(int argc, char** argv)
 
 
 		/* select game mode */
-		ds_writew(GAME_MODE, GAME_MODE_UNSPECIFIED);
+		g_game_mode = GAME_MODE_UNSPECIFIED;
 
-		while (ds_readws(GAME_MODE) == GAME_MODE_UNSPECIFIED) {
-			ds_writew(GAME_MODE, GUI_radio(get_ttx(5), 2, get_ttx(6), get_ttx(7)));
+		while (g_game_mode == GAME_MODE_UNSPECIFIED) {
+			g_game_mode = GUI_radio(get_ttx(5), 2, get_ttx(6), get_ttx(7));
 		}
 
 		if (copy_protection()) {
 
-			ds_writew(TEXTBOX_WIDTH, 3);
+			g_textbox_width = 3;
 
 			l3 = get_diskspace();
 
 			if (l3 < 0) {
 
-				sprintf((char*)ds_readd(DTP2), get_ttx(807), -l3);
-				GUI_output((char*)ds_readd(DTP2));
+				sprintf(g_dtp2, get_ttx(807), -l3);
+				GUI_output(g_dtp2);
 				cleanup_game();
 
 			} else {
@@ -5639,6 +5585,10 @@ int schick_main(int argc, char** argv)
 		clrscr();
 #endif
 	}
+
+#if !defined(__BORLANDC__)
+	return 0;
+#endif
 }
 
 Bit8u* schick_alloc(Bit32u size)
@@ -5653,14 +5603,14 @@ Bit8u* schick_alloc(Bit32u size)
 signed short copy_protection(void)
 {
 	signed short i;
-	signed short l_di;
+	signed short randval;
 	signed short tries;
-	signed short l1;
+	signed short len;
 
 #ifndef M302de_FEATURE_MOD
 	load_tx(ARCHIVE_FILE_FIGHTTXT_LTX);
 
-	ds_writew(TEXTBOX_WIDTH, 4);
+	g_textbox_width = 4;
 
 	set_textcolor(0xff, 0);
 
@@ -5672,60 +5622,56 @@ signed short copy_protection(void)
 			/* handbook question */
 
 			/* select a question */
-			l_di = random_schick(10) - 1;
+			randval = random_schick(10) - 1;
 
 			/* prepare the string */
-			sprintf((char*)ds_readd(DTP2),
-				get_tx(39),
-				ds_readbs((QUESTIONS_HANDBOOK + 3) + 19 * l_di),
-				ds_readbs((QUESTIONS_HANDBOOK + 2) + 19 * l_di),
-				ds_readbs((QUESTIONS_HANDBOOK + 1) + 19 * l_di),
-				ds_readbs((QUESTIONS_HANDBOOK + 0) + 19 * l_di));
+			sprintf(g_dtp2, get_tx(39),
+				g_questions_handbook[randval][3],
+				g_questions_handbook[randval][2],
+				g_questions_handbook[randval][1],
+				g_questions_handbook[randval][0]);
 
 			/* print version number */
-			GUI_print_string(p_datseg + GAME_VERSION, 290, 190);
+			GUI_print_string(g_game_version, 290, 190);
 
 			/* ask the question */
-			GUI_input((char*)ds_readd(DTP2), 20);
+			GUI_input(g_dtp2, 20);
 
-			l1 = strlen((char*)ds_readd(TEXT_INPUT_BUF));
+			len = strlen(g_text_input_buf);
 
 			/* transform the input string in uppercase letters and bitwise invert them */
-			for (i = 0; i < l1; i++) {
-				host_writeb((char*)ds_readd(TEXT_INPUT_BUF) + i,
-					~toupper(host_readbs((char*)ds_readd(TEXT_INPUT_BUF) + i)));
+			for (i = 0; i < len; i++) {
+				g_text_input_buf[i] = ~toupper(g_text_input_buf[i]);
 			}
 
-			if (!strcmp((char*)(p_datseg + (QUESTIONS_HANDBOOK + 4)) + 19 * l_di, (char*)ds_readd(TEXT_INPUT_BUF))) {
+			if (!strcmp((char*)&g_questions_handbook[randval][4], g_text_input_buf)) {
 				return 1;
 			}
 		} else {
 			/* map question */
 
 			/* select a question */
-			l_di = random_schick(10) - 1;
+			randval = random_schick(10) - 1;
 
 			/* prepare the string */
-			sprintf((char*)ds_readd(DTP2),
-				get_tx(40),
-				get_tx(41 + ds_readbs((QUESTIONS_MAP + 0) + 3 * l_di)),
-				get_ttx(235 + ds_readbs((QUESTIONS_MAP + 1) + 3 * l_di)));
+			sprintf(g_dtp2, get_tx(40),
+				get_tx(41 + g_questions_map[randval][0]),
+				get_ttx(235 + g_questions_map[randval][1]));
 
 			/* print version number */
-			GUI_print_string(p_datseg + GAME_VERSION, 290, 190);
+			GUI_print_string(g_game_version, 290, 190);
 
 			/* ask the question */
-			GUI_input((char*)ds_readd(DTP2), 20);
+			GUI_input(g_dtp2, 20);
 
-			l1 = strlen((char*)ds_readd(TEXT_INPUT_BUF));
+			len = strlen(g_text_input_buf);
 
 			/* transform the input string in uppercase letters */
-			for (i = 0; i < l1; i++) {
-				host_writeb((char*)ds_readd(TEXT_INPUT_BUF) + i,
-					toupper(host_readbs((char*)ds_readd(TEXT_INPUT_BUF) + i)));
+			for (i = 0; i < len; i++) {
+				g_text_input_buf[i] = toupper(g_text_input_buf[i]);
 			}
 
-			if (!strcmp(get_ttx(235 + ds_readbs((QUESTIONS_MAP + 2) + 3 * l_di)), (char*)ds_readd(TEXT_INPUT_BUF))) {
+			if (!strcmp(get_ttx(235 + g_questions_map[randval][2]), g_text_input_buf)) {
 				return 1;
 			}
 		}

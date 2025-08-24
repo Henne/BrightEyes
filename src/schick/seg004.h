@@ -15,8 +15,8 @@ void interrupt timer_isr(void);
 #endif
 void update_status_bars(void);
 void draw_bar(unsigned short, signed short, signed short, signed short, signed short);
-void restore_rect(RealPt, Bit8u*, unsigned short, unsigned short, signed char, signed char);
-void restore_rect_rle(RealPt, Bit8u*, unsigned short, unsigned short, signed char, signed char, unsigned short);
+void restore_rect(Bit8u*, Bit8u*, unsigned short, unsigned short, signed char, signed char);
+void restore_rect_rle(Bit8u*, Bit8u*, unsigned short, unsigned short, signed char, signed char, unsigned short);
 void draw_mouse_cursor(void);
 void save_mouse_bg(void);
 void restore_mouse_bg(void);
@@ -28,12 +28,12 @@ void schick_set_video(void);
 void schick_reset_video(void);
 void clear_ani_pal(void);
 void set_ani_pal(Bit8u*);
-void do_h_line(RealPt, signed short, signed short, signed short, signed char);
-void do_v_line(RealPt, signed short, signed short, signed short, signed char);
-void do_border(RealPt, signed short, signed short, signed short, signed short, signed char);
+void do_h_line(Bit8u*, signed short, signed short, signed short, signed char);
+void do_v_line(Bit8u*, signed short, signed short, signed short, signed char);
+void do_border(Bit8u*, signed short, signed short, signed short, signed short, signed char);
 void do_pic_copy(unsigned short mode);
 void do_save_rect(void);
-void do_fill_rect(RealPt, signed short, signed short, signed short, signed short, signed short);
+void do_fill_rect(Bit8u*, signed short, signed short, signed short, signed short, signed short);
 void wait_for_vsync(void);
 void map_effect(Bit8u*);
 

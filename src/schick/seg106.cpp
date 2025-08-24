@@ -135,35 +135,29 @@ void move_item(signed short pos1, signed short pos2, Bit8u *hero)
 #endif
 					} else {
 						if (!can_hero_use_item(hero, item2)) {
-							sprintf((char*)ds_readd(DTP2),
-								get_ttx(221),
-								(char*)hero + HERO_NAME2,
+
+							sprintf(g_dtp2, get_ttx(221), (char*)hero + HERO_NAME2,
 								get_ttx((host_readbs(hero + HERO_SEX) != 0 ? 593 : 9) + host_readbs(hero + HERO_TYPE)),
-								(char*)(Bit8u*)(GUI_names_grammar(2, item2, 0)));
+								GUI_names_grammar(2, item2, 0));
 
+							GUI_output(g_dtp2);
 
-							GUI_output((char*)ds_readd(DTP2));
 						} else {
 							if (!can_item_at_pos(item2, pos1)) {
-								if (is_in_word_array(item2, (signed short*)(p_datseg + ITEMS_PLURALWORDS)))
-									sprintf((char*)ds_readd(DTP2),
-										get_ttx(222),
-										(char*)(Bit8u*)(GUI_names_grammar(0x4000, item2, 0)),
-										get_ttx(557));
+								if (is_in_word_array(item2, g_items_pluralwords))
+
+									sprintf(g_dtp2, get_ttx(222),
+										GUI_names_grammar(0x4000, item2, 0), get_ttx(557));
 								else
-									sprintf((char*)ds_readd(DTP2),
-										get_ttx(222),
-										(char*)(Bit8u*)(GUI_names_grammar(0, item2, 0)),
-										get_ttx(556));
-								GUI_output((char*)ds_readd(DTP2));
+									sprintf(g_dtp2, get_ttx(222),
+										GUI_names_grammar(0, item2, 0), get_ttx(556));
+
+								GUI_output(g_dtp2);
 							} else {
 								if (two_hand_collision(hero, item2, pos1)) {
 
-									sprintf((char*)ds_readd(DTP2),
-										get_ttx(829),
-										(char*)hero + HERO_NAME2);
-
-									GUI_output((char*)ds_readd(DTP2));
+									sprintf(g_dtp2, get_ttx(829), (char*)hero + HERO_NAME2);
+									GUI_output(g_dtp2);
 
 								} else {
 									if (item1 != 0)
@@ -192,8 +186,7 @@ void move_item(signed short pos1, signed short pos2, Bit8u *hero)
 				add_inventory_quantity(pos1, pos2, hero);
 
 				/* delete item at pos2 */
-				memset(hero + HERO_INVENTORY + pos2 * SIZEOF_INVENTORY,
-							0, SIZEOF_INVENTORY);
+				memset(hero + HERO_INVENTORY + pos2 * SIZEOF_INVENTORY,	0, SIZEOF_INVENTORY);
 #ifdef M302de_ORIGINAL_BUGFIX
 				/* Decrement the item counter */
 				dec_ptr_bs(hero + HERO_NR_INVENTORY_SLOTS_FILLED);
@@ -231,58 +224,52 @@ void print_item_description(Bit8u *hero, signed short pos)
 
 		if ((((signed short)host_readw(inventory_p + INVENTORY_QUANTITY) > 1) &&
 			item_stackable(get_itemsdat(host_readw(inventory_p + INVENTORY_ITEM_ID)))) ||
-			is_in_word_array(host_readw(inventory_p + INVENTORY_ITEM_ID), (signed short*)(p_datseg + ITEMS_PLURALWORDS))) {
+			is_in_word_array(host_readw(inventory_p + INVENTORY_ITEM_ID), g_items_pluralwords)) {
+
 			/* more than one item or special */
-			sprintf((char*)ds_readd(DTP2),
-				get_tx2(72),
-				get_ttx(305),
-				(Bit8u*)(GUI_names_grammar(0x4004, host_readw(inventory_p + INVENTORY_ITEM_ID), 0)));
+			sprintf(g_dtp2, get_tx2(72), get_ttx(305),
+				(Bit8u*)GUI_names_grammar(0x4004, host_readw(inventory_p + INVENTORY_ITEM_ID), 0));
 		} else {
 			/* one item */
-			sprintf((char*)ds_readd(DTP2),
-				get_tx2(11),
-				get_ttx(304),
-				(Bit8u*)(GUI_names_grammar(0, host_readw(inventory_p + INVENTORY_ITEM_ID), 0)));
+			sprintf(g_dtp2, get_tx2(11), get_ttx(304),
+				(Bit8u*)GUI_names_grammar(0, host_readw(inventory_p + INVENTORY_ITEM_ID), 0));
 		}
 	} else {
 		/* no item */
-		strcpy((char*)ds_readd(DTP2), get_ttx(209));
+		strcpy(g_dtp2, get_ttx(209));
 	}
 
 
 	/* broken */
 	if (inventory_broken(inventory_p)) {
-		strcat((char*)ds_readd(DTP2), get_ttx(478));
+		strcat(g_dtp2, get_ttx(478));
 	}
 
 	/* magic */
 	if (inventory_magic(inventory_p) &&	/* is magic */
 		inventory_magic_revealed(inventory_p)) { /* and you know it */
-		strcat((char*)ds_readd(DTP2), get_ttx(479));
+		strcat(g_dtp2, get_ttx(479));
 	}
 
 	/* RS degraded */
 	if (host_readb(inventory_p + INVENTORY_RS_LOST) != 0) {
-		strcat((char*)ds_readd(DTP2), get_ttx(480));
+		strcat(g_dtp2, get_ttx(480));
 	}
 
 	/* poisoned */
 	if (host_readw(inventory_p + INVENTORY_ITEM_ID) == ITEM_KUKRIS_DAGGER || host_readw(inventory_p + INVENTORY_ITEM_ID) == ITEM_KUKRIS_MENGBILAR ||
 		inventory_poison_expurgicum(inventory_p) || inventory_poison_vomicum(inventory_p) ||
 		host_readb(hero + HERO_INVENTORY + INVENTORY_POISON_TYPE + pos * SIZEOF_INVENTORY) != POISON_TYPE_NONE) {
-		strcat((char*)ds_readd(DTP2), get_ttx(548));
+		strcat(g_dtp2, get_ttx(548));
 	}
 
 	/* magic wand */
 	if (host_readw(inventory_p + INVENTORY_ITEM_ID) == ITEM_MAGIC_WAND) {
-		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-			get_tx2(53),
-			host_readbs(hero + HERO_STAFFSPELL_LVL));
-		strcat((char*)ds_readd(DTP2),
-			(char*)ds_readd(TEXT_OUTPUT_BUF));
+		sprintf(g_text_output_buf, get_tx2(53), host_readbs(hero + HERO_STAFFSPELL_LVL));
+		strcat(g_dtp2, g_text_output_buf);
 	}
 
-	GUI_output((char*)ds_readd(DTP2));
+	GUI_output(g_dtp2);
 }
 
 /* Borlandified and nearly identical */
@@ -305,6 +292,7 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 	/* check if item1 is an item */
 	if (item1 == 0) {
+
 		GUI_output(get_ttx(209));
 		return;
 	}
@@ -316,21 +304,16 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 	if (item_undropable(item1_desc)) {
 
-		sprintf((char*)ds_readd(DTP2),
-			get_ttx(454),
-			(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8002, item1, 0)));
+		sprintf(g_dtp2, get_ttx(454), GUI_names_grammar((signed short)0x8002, item1, 0));
 
-		GUI_output((char*)ds_readd(DTP2));
+		GUI_output(g_dtp2);
 		return;
 	}
 
 	if (item_undropable(item2_desc)) {
 
-		sprintf((char*)ds_readd(DTP2),
-			get_ttx(454),
-			(char*)(Bit8u*)(GUI_names_grammar((signed short)0x8002, item2, 0)));
-
-		GUI_output((char*)ds_readd(DTP2));
+		sprintf(g_dtp2, get_ttx(454), GUI_names_grammar((signed short)0x8002, item2, 0));
+		GUI_output(g_dtp2);
 		return;
 
 	}
@@ -339,41 +322,29 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 	if (pos2 < 7) {
 		if (!can_hero_use_item(hero2, item1)) {
 
-			sprintf((char*)ds_readd(DTP2),
-				get_ttx(221),
-				(char*)(hero2 + HERO_NAME2),
+			sprintf(g_dtp2,	get_ttx(221), (char*)(hero2 + HERO_NAME2),
 				get_ttx((host_readbs(hero2 + HERO_SEX) ? 593 : 9) + host_readbs(hero2 + HERO_TYPE)),
-				(char*)(Bit8u*)(GUI_names_grammar(2, item1, 0)));
+				GUI_names_grammar(2, item1, 0));
 
-
-			GUI_output((char*)ds_readd(DTP2));
+			GUI_output(g_dtp2);
 			return;
 
 		} else if (!can_item_at_pos(item1, pos2)) {
 
-			if (is_in_word_array(item1, (signed short*)(p_datseg + ITEMS_PLURALWORDS))) {
+			if (is_in_word_array(item1, g_items_pluralwords)) {
 
-				sprintf((char*)ds_readd(DTP2),
-					get_ttx(222),
-					(char*)(Bit8u*)(GUI_names_grammar(0x4000, item1, 0)),
-					get_ttx(557));
+				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0x4000, item1, 0), get_ttx(557));
 			} else {
-				sprintf((char*)ds_readd(DTP2),
-					get_ttx(222),
-					(char*)(Bit8u*)(GUI_names_grammar(0, item1, 0)),
-					get_ttx(556));
+				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0, item1, 0), get_ttx(556));
 			}
 
-			GUI_output((char*)ds_readd(DTP2));
+			GUI_output(g_dtp2);
 			return;
 
 		} else if (two_hand_collision(hero2, item1, pos2)) {
 
-			sprintf((char*)ds_readd(DTP2),
-				get_tx2(67),
-				(char*)(hero2 + HERO_NAME2));
-
-			GUI_output((char*)ds_readd(DTP2));
+			sprintf(g_dtp2, get_tx2(67), (char*)(hero2 + HERO_NAME2));
+			GUI_output(g_dtp2);
 			return;
 		}
 	}
@@ -388,35 +359,28 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 	if ((item2 != 0) && (pos1 < 7)) {
 
 		if (!can_hero_use_item(hero1, item2)) {
-			sprintf((char*)ds_readd(DTP2),
-				get_ttx(221),
-				(char*)(hero1 + HERO_NAME2),
+
+			sprintf(g_dtp2,	get_ttx(221), (char*)(hero1 + HERO_NAME2),
 				get_ttx((host_readbs(hero1 + HERO_SEX) ? 593 : 9) + host_readbs(hero1 + HERO_TYPE)),
-				(char*)(Bit8u*)(GUI_names_grammar(2, item2, 0)));
+				(char*)(GUI_names_grammar(2, item2, 0)));
 
 #if defined(__BORLANDC__)
 			desc1_5 = desc1_5;
 #endif
 
-			GUI_output((char*)ds_readd(DTP2));
+			GUI_output(g_dtp2);
 			return;
 
 		} else if (!can_item_at_pos(item2, pos1)) {
 
-			if (is_in_word_array(item2, (signed short*)(p_datseg + ITEMS_PLURALWORDS))) {
+			if (is_in_word_array(item2, g_items_pluralwords)) {
 
-				sprintf((char*)ds_readd(DTP2),
-					get_ttx(222),
-					(char*)(Bit8u*)(GUI_names_grammar(0x4000, item2, 0)),
-					get_ttx(557));
+				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0x4000, item2, 0), get_ttx(557));
 			} else {
-				sprintf((char*)ds_readd(DTP2),
-					get_ttx(222),
-					(char*)(Bit8u*)(GUI_names_grammar(0, item2, 0)),
-					get_ttx(556));
+				sprintf(g_dtp2, get_ttx(222), GUI_names_grammar(0, item2, 0), get_ttx(556));
 			}
 
-			GUI_output((char*)ds_readd(DTP2));
+			GUI_output(g_dtp2);
 			return;
 		}
 	}
@@ -434,14 +398,13 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 			if (host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + pos1 * SIZEOF_INVENTORY) > 1) {
 
-				sprintf((char*)ds_readd(DTP2),
-					get_ttx(210),
+				sprintf(g_dtp2,	get_ttx(210),
 					host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + pos1 * SIZEOF_INVENTORY),
-					(char*)(Bit8u*)(GUI_names_grammar(6, item1, 0)),
+					(char*)(GUI_names_grammar(6, item1, 0)),
 					(char*)hero2 + HERO_NAME2);
 
 
-				l_di = GUI_input((char*)ds_readd(DTP2), 2);
+				l_di = GUI_input(g_dtp2, 2);
 			}
 
 			if (host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + pos1 * SIZEOF_INVENTORY) < l_di) {
@@ -463,10 +426,8 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 					add_ptr_ws(hero2 + (HERO_INVENTORY + INVENTORY_QUANTITY) + pos2 * SIZEOF_INVENTORY, l_di);
 					drop_item(hero1, pos1, l_di);
 				} else {
-					sprintf((char*)ds_readd(DTP2),
-						get_ttx(779),
-						(char*)hero2 + HERO_NAME2);
-					GUI_output((char*)ds_readd(DTP2));
+					sprintf(g_dtp2,	get_ttx(779), (char*)hero2 + HERO_NAME2);
+					GUI_output(g_dtp2);
 				}
 			}
 		}
@@ -483,11 +444,9 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 			if (host_readbs(hero2 + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 100 <= host_readws(hero2 + HERO_LOAD) + desc1_5 - desc2_5) {
 
-				sprintf((char*)ds_readd(DTP2),
-					get_ttx(779),
-					(char*)hero2 + HERO_NAME2);
+				sprintf(g_dtp2,	get_ttx(779), (char*)hero2 + HERO_NAME2);
+				GUI_output(g_dtp2);
 
-				GUI_output((char*)ds_readd(DTP2));
 			} else {
 				if (pos1 < 7) {
 					unequip(hero1, item1, pos1);
@@ -521,9 +480,7 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 				sub_ptr_ws(hero1 + HERO_LOAD, desc1_5);
 
 #if !defined(__BORLANDC__)
-				struct_copy(hero1 + HERO_INVENTORY + pos1 * SIZEOF_INVENTORY,
-						(Bit8u*)&tmp,
-						SIZEOF_INVENTORY);
+				struct_copy(hero1 + HERO_INVENTORY + pos1 * SIZEOF_INVENTORY, (Bit8u*)&tmp, SIZEOF_INVENTORY);
 #else
 				*(struct inventory*)(hero1 + HERO_INVENTORY + pos1 * SIZEOF_INVENTORY) = tmp;
 #endif
@@ -559,14 +516,12 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 
 		if (host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + pos1 * SIZEOF_INVENTORY) > 1) {
 
-			sprintf((char*)ds_readd(DTP2),
-				get_ttx(210),
+			sprintf(g_dtp2,	get_ttx(210),
 				host_readws(hero1+ (HERO_INVENTORY + INVENTORY_QUANTITY) + pos1 * SIZEOF_INVENTORY),
-				(char*)(Bit8u*)(GUI_names_grammar(6, item1, 0)),
-				(char*)hero2 + HERO_NAME2);
+				(char*)(GUI_names_grammar(6, item1, 0)), (char*)hero2 + HERO_NAME2);
 
 
-			l_di = GUI_input((char*)ds_readd(DTP2), 2);
+			l_di = GUI_input(g_dtp2, 2);
 		}
 
 		if (host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + pos1 * SIZEOF_INVENTORY) < l_di) {
@@ -590,16 +545,15 @@ void pass_item(Bit8u *hero1, signed short old_pos1, Bit8u *hero2, signed short p
 			drop_item(hero1, pos1, l_di);
 
 		} else {
-			sprintf((char*)ds_readd(DTP2),
-				get_ttx(779),
-				(char*)hero2 + HERO_NAME2);
-			GUI_output((char*)ds_readd(DTP2));
+			sprintf(g_dtp2,	get_ttx(779), (char*)hero2 + HERO_NAME2);
+			GUI_output(g_dtp2);
 		}
+
 	} else if (host_readbs(hero2 + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 100 <= host_readws(hero2 + HERO_LOAD) + host_readws(item1_desc + 5)) {
-		sprintf((char*)ds_readd(DTP2),
-			get_ttx(779),
-			(char*)hero2 + HERO_NAME2);
-		GUI_output((char*)ds_readd(DTP2));
+
+		sprintf(g_dtp2,	get_ttx(779), (char*)hero2 + HERO_NAME2);
+		GUI_output(g_dtp2);
+
 	} else {
 
 		/* do the change */
@@ -651,14 +605,8 @@ void startup_equipment(Bit8u *hero)
 {
 	signed short i;
 	struct items_all all;
-#if !defined(__BORLANDC__)
-	all.a[0] = ITEM_WATERSKIN;
-	all.a[1] = ITEM_FOOD_PACKAGE;
-	all.a[2] = ITEM_FOOD_PACKAGE;
-	all.a[3] = ITEM_TROUSERS;
-#else
-	*(struct items_all*)&all = *(struct items_all*)(p_datseg + HERO_STARTUP_ITEMS_ALL);
-#endif
+
+	*(struct items_all*)&all = *(struct items_all*)g_hero_startup_items_all;
 
 	for (i = 0; i < 4; i++) {
 		give_hero_new_item(hero, all.a[i], 1, 1);
@@ -673,9 +621,9 @@ void startup_equipment(Bit8u *hero)
 	}
 
 	i = 0;
-	while (ds_readws((HERO_STARTUP_ITEMS-8) + 8 * host_readbs(hero + HERO_TYPE) + 2 * i) != -1 && (i < 4)) {
+	while ((g_hero_startup_items[host_readbs(hero + HERO_TYPE)][i] != -1) && (i < 4)) {
 
-		give_hero_new_item(hero, ds_readws((HERO_STARTUP_ITEMS-8) + 8 * host_readbs(hero + HERO_TYPE) + 2 * i++), 1, 1);
+		give_hero_new_item(hero, g_hero_startup_items[host_readbs(hero + HERO_TYPE)][i++], 1, 1);
 
 		if (i == 1) {
 			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, HERO_INVENTORY_SLOT_KNAPSACK_3, hero);
@@ -762,60 +710,59 @@ void equip_belt_ani(void)
 	handle = load_archive_file(ARCHIVE_FILE_GUERTEL_NVF);
 
 	/* read NVF part 1 */
-	nvf_length = read_archive_file(handle,
-			(Bit8u*)ds_readd(BUFFER9_PTR), 64000);
+	nvf_length = read_archive_file(handle, (Bit8u*)g_buffer9_ptr, 64000);
 	/* read NVF part 2 */
-	nvf_length += read_archive_file(handle, (Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 64000)), 64000);
+	nvf_length += read_archive_file(handle, (Bit8u*)(g_buffer9_ptr + 64000L), 64000);
 
 	close(handle);
 
 	/* calculate palette pointer */
-	p_pal = (Bit8u*)(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), nvf_length), -0x60));
+	p_pal = (Bit8u*)((g_buffer9_ptr + nvf_length) -0x60L);
 
 	wait_for_vsync();
 
 	set_palette(p_pal, 0x80, 0x20);
 
-	do_border((Bit8u*)ds_readd(FRAMEBUF_PTR), 209, 79, 215, 89, 9);
+	do_border(g_vga_memstart, 209, 79, 215, 89, 9);
 
-	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 209, 79, 215, 89, 0);
-
-	wait_for_vsync();
-	wait_for_vsync();
-	wait_for_vsync();
-
-	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 189, 69, 235, 99, 0);
-
-	do_border((Bit8u*)ds_readd(FRAMEBUF_PTR), 189, 69, 235, 99, 9);
+	do_fill_rect(g_vga_memstart, 209, 79, 215, 89, 0);
 
 	wait_for_vsync();
 	wait_for_vsync();
 	wait_for_vsync();
 
-	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 169, 59, 255, 109, 0);
+	do_fill_rect(g_vga_memstart, 189, 69, 235, 99, 0);
 
-	do_border((Bit8u*)ds_readd(FRAMEBUF_PTR), 169, 59, 255, 109, 9);
-
-	wait_for_vsync();
-	wait_for_vsync();
-	wait_for_vsync();
-
-	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 164, 54, 260, 114, 0);
-
-	do_border((Bit8u*)ds_readd(FRAMEBUF_PTR), 164, 54, 260, 114, 9);
+	do_border(g_vga_memstart, 189, 69, 235, 99, 9);
 
 	wait_for_vsync();
 	wait_for_vsync();
 	wait_for_vsync();
 
-	do_fill_rect((Bit8u*)ds_readd(FRAMEBUF_PTR), 159, 49, 263, 117, 0);
+	do_fill_rect(g_vga_memstart, 169, 59, 255, 109, 0);
 
-	do_border((Bit8u*)ds_readd(FRAMEBUF_PTR), 159, 49, 263, 117, 9);
+	do_border(g_vga_memstart, 169, 59, 255, 109, 9);
+
+	wait_for_vsync();
+	wait_for_vsync();
+	wait_for_vsync();
+
+	do_fill_rect(g_vga_memstart, 164, 54, 260, 114, 0);
+
+	do_border(g_vga_memstart, 164, 54, 260, 114, 9);
+
+	wait_for_vsync();
+	wait_for_vsync();
+	wait_for_vsync();
+
+	do_fill_rect(g_vga_memstart, 159, 49, 263, 117, 0);
+
+	do_border(g_vga_memstart, 159, 49, 263, 117, 9);
 
 	for (i = 0; i < 12; i++) {
 
-		nvf.dst = (Bit8u*)ds_readd(RENDERBUF_PTR);
-		nvf.src = (Bit8u*)ds_readd(BUFFER9_PTR);
+		nvf.dst = g_renderbuf_ptr;
+		nvf.src = (Bit8u*)g_buffer9_ptr;
 		nvf.no = i;
 		nvf.type = 3;
 		nvf.width = (Bit8u*)&width;
@@ -828,11 +775,11 @@ void equip_belt_ani(void)
 		height = host_readws((Bit8u*)&height);
 #endif
 
-		ds_writew(PIC_COPY_X1, 160);
-		ds_writew(PIC_COPY_Y1, 50);
-		ds_writew(PIC_COPY_X2, width + 159);
-		ds_writew(PIC_COPY_Y2, height + 49);
-		ds_writed(PIC_COPY_SRC, ds_readd(RENDERBUF_PTR));
+		g_pic_copy.x1 = 160;
+		g_pic_copy.y1 = 50;
+		g_pic_copy.x2 = width + 159;
+		g_pic_copy.y2 = height + 49;
+		g_pic_copy.src = g_renderbuf_ptr;
 
 		wait_for_vsync();
 		wait_for_vsync();
@@ -845,7 +792,7 @@ void equip_belt_ani(void)
 		refresh_screen_size();
 	}
 
-	ds_writew(CURRENT_ANI, ds_writebs(DNG_AREA_LOADED, ds_writebs(CITY_AREA_LOADED, -1)));
+	g_current_ani = g_dng_area_loaded = g_city_area_loaded = -1;
 }
 
 /**

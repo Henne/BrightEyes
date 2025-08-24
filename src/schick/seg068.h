@@ -20,7 +20,7 @@ void THO_mueller(void);
 void THO_black_finger(void);
 /* 0x48 */
 /* should be static */
-void dramosch_says(Bit8u*);
+void dramosch_says(char*);
 /* 0x4d */
 void THO_ugdalf(void);
 /* 0x52 */

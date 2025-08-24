@@ -43,10 +43,10 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 	signed short opt0_rand;
 	signed short opt1_rand;
 	signed short opt2_rand;
-	Bit8u *state_ptr;
-	Bit8u *states_tab;
-	Bit8u *partners_tab;
-	Bit8u *dialog_title;
+	struct struct_dialog_state *state_ptr;
+	struct struct_dialog_state *states_tab;
+	struct struct_dialog_partner *partners_tab;
+	char *dialog_title;
 	char *dst;
 	char *fmt;
 	signed short shufflepair_1;
@@ -57,23 +57,23 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 	signed short tmp2;
 	struct tlk_option options[3];
 
-	ds_writew(DIALOG_INFORMER, informer_id);
-	ds_writew(TLK_ID, talk_id);
+	g_dialog_informer = informer_id;
+	g_tlk_id = talk_id;
 
 	load_tlk(talk_id + ARCHIVE_FILE_DIALOGS_TLK);
-	ds_writew(DIALOG_STATE, ds_writew(DIALOG_DONE, 0));
-	partners_tab = p_datseg + DIALOG_PARTNERS;
-	states_tab = (Bit8u*)(host_readds(partners_tab + 38 * informer_id));
-	txt_offset = host_readws(partners_tab + 4 + 38 * informer_id);
-	dialog_title = 38 * informer_id + partners_tab + 6;
-	load_in_head(host_readws(partners_tab + 38 * informer_id + 36));
-	dst = (char*)ds_readd(DTP2) + 0x400;
+	g_dialog_state = g_dialog_done = 0;
+	partners_tab = &gs_dialog_partners[0];
+	states_tab = (struct struct_dialog_state*)partners_tab[informer_id].states_offset;
+	txt_offset = partners_tab[informer_id].txt_offset;
+	dialog_title = partners_tab[informer_id].title;
+	load_in_head(partners_tab[informer_id].head_id);
+	dst = (char*)g_dtp2 + 0x400;
 
 	do {
 		answer = optioncount = 0;
-		state_ptr = 8 * ds_readws(DIALOG_STATE) + states_tab;
+		state_ptr = &states_tab[g_dialog_state];
 
-		if (ds_readws(TLK_ID) == 13 && ds_readws(DIALOG_STATE) >= 20) {
+		if (g_tlk_id == 13 && g_dialog_state >= 20) {
 			txt_id_rand = opt0_rand = opt1_rand = opt2_rand = 0;
 		} else {
 			txt_id_rand = random_schick(4) - 1;
@@ -82,55 +82,55 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 			opt2_rand = random_schick(4) - 1;
 		}
 
-		if ((txt_id_raw = host_readws(state_ptr)) != -1) {
+		if ((txt_id_raw = state_ptr->txt_id) != -1) {
 			txt_id_raw = 4 * txt_id_raw + txt_id_rand;
 		}
-		if (host_readb(state_ptr + 2) != 0) {
-			opt0_txt = 4 * host_readb(state_ptr + 2) + opt0_rand;
+		if (state_ptr->txt_id1) {
+			opt0_txt = 4 * state_ptr->txt_id1 + opt0_rand;
 			optioncount++;
 		}
-		if (host_readb(state_ptr + 3) != 0) {
-			opt1_txt = 4 * host_readb(state_ptr + 3) + opt1_rand;
+		if (state_ptr->txt_id2) {
+			opt1_txt = 4 * state_ptr->txt_id2 + opt1_rand;
 			optioncount++;
 		}
-		if (host_readb(state_ptr + 4) != 0) {
-			opt2_txt = 4 * host_readb(state_ptr + 4) + opt2_rand;
+		if (state_ptr->txt_id3) {
+			opt2_txt = 4 * state_ptr->txt_id3 + opt2_rand;
 			optioncount++;
 		}
 
 		if (txt_id_raw != -1) {
 
-			txt_id = (4 * host_readw(state_ptr) + txt_id_rand) & 0x7fff;
+			txt_id = (4 * state_ptr->txt_id + txt_id_rand) & 0x7fff;
 			fmt = get_tx(txt_id + txt_offset);
 
-			if (ds_readws(TLK_ID) == 15) {
+			if (g_tlk_id == 15) {
 
-				if (ds_readws(DIALOG_STATE) == 13) {
-					sprintf(dst, fmt, (char*)(Bit8u*)(waffinfo_herbs()));
+				if (g_dialog_state == 13) {
+					sprintf(dst, fmt, (char*)waffinfo_herbs());
 				} else {
 					strcpy(dst, fmt);
 				}
 
-			} else if (ds_readws(TLK_ID) == 14) {
+			} else if (g_tlk_id == 14) {
 
-				if (ds_readws(DIALOG_STATE) == 11) {
-					sprintf(dst, fmt, (char*)(Bit8u*)(waffinfo_general()));
+				if (g_dialog_state == 11) {
+					sprintf(dst, fmt, (char*)waffinfo_general());
 				} else {
 					strcpy(dst, fmt);
 				}
 
-			} else if (ds_readws(TLK_ID) == 16) {
+			} else if (g_tlk_id == 16) {
 
-				if (ds_readws(DIALOG_STATE) == 19 || ds_readws(DIALOG_STATE) == 23) {
-					sprintf(dst, fmt, (char*)(Bit8u*)(waffinfo_weapons()));
+				if (g_dialog_state == 19 || g_dialog_state == 23) {
+					sprintf(dst, fmt, (char*)waffinfo_weapons());
 				} else {
 					strcpy(dst, fmt);
 				}
 
-			} else if (ds_readws(TLK_ID) == 1) {
+			} else if (g_tlk_id == 1) {
 
-				if (ds_readws(DIALOG_STATE) == 16) {
-					sprintf(dst, fmt, (char*)(Bit8u*)(load_current_town_gossip()));
+				if (g_dialog_state == 16) {
+					sprintf(dst, fmt, load_current_town_gossip());
 				} else {
 					strcpy(dst, fmt);
 				}
@@ -140,11 +140,11 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 			}
 
 			options[0].txt = opt0_txt + txt_offset;
-			options[0].goto_state = host_readb(state_ptr + 5);
+			options[0].goto_state = state_ptr->state1;
 			options[1].txt = opt1_txt + txt_offset;
-			options[1].goto_state = host_readb(state_ptr + 6);
+			options[1].goto_state = state_ptr->state2;
 			options[2].txt = opt2_txt + txt_offset;
-			options[2].goto_state = host_readb(state_ptr + 7);
+			options[2].goto_state = state_ptr->state3;
 
 			if (optioncount) {
 
@@ -167,46 +167,46 @@ void do_random_talk(signed short talk_id, signed short informer_id)
 				}
 			}
 
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), dialog_title, (Bit8u*)dst, optioncount,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, dialog_title, dst, optioncount,
 					get_tx(options[0].txt),
 					get_tx(options[1].txt),
 					get_tx(options[2].txt));
 
 		} else {
-			options[0].goto_state = host_readb(state_ptr + 5);
+			options[0].goto_state = state_ptr->state1;
 		}
 
-		ds_writews(DIALOG_NEXT_STATE, -1);
-		if ((host_readw(state_ptr) & 0x8000) || host_readws(state_ptr) == -1) {
+		g_dialog_next_state = -1;
+		if ((state_ptr->txt_id & 0x8000) || (state_ptr->txt_id == -1)) {
 			talk_switch();
 		}
 
-		ds_writew(DIALOG_STATE, ds_readws(DIALOG_NEXT_STATE) == -1 ? options[0].goto_state : ds_readws(DIALOG_NEXT_STATE));
+		g_dialog_state = (g_dialog_next_state == -1 ? options[0].goto_state : g_dialog_next_state);
 
-		if (ds_readws(DIALOG_DONE) == 0) {
+		if (g_dialog_done == 0) {
 
 			if (optioncount) {
 
 				if (answer == -1) {
-					ds_writew(DIALOG_DONE, 1);
+					g_dialog_done = 1;
 				} else if (answer == 1) {
-					ds_writew(DIALOG_STATE, options[0].goto_state);
+					g_dialog_state = options[0].goto_state;
 				} else if (answer == 2) {
-					ds_writew(DIALOG_STATE, options[1].goto_state);
+					g_dialog_state = options[1].goto_state;
 				} else if (answer == 3) {
-					ds_writew(DIALOG_STATE, options[2].goto_state);
+					g_dialog_state = options[2].goto_state;
 				}
 			}
 
-			if (ds_readws(DIALOG_STATE) == 255) {
-				ds_writew(DIALOG_DONE, 1);
+			if (g_dialog_state == 255) {
+				g_dialog_done = 1;
 			}
 		}
 
-	} while (ds_readws(DIALOG_DONE) == 0);
+	} while (g_dialog_done == 0);
 
-	ds_writews(TEXT_FILE_INDEX, ds_writews(CURRENT_ANI, -1));
-	load_tx(ds_readws(TX_FILE_INDEX));
+	g_text_file_index = g_current_ani = -1;
+	load_tx(g_tx_file_index);
 }
 
 /* This function is dead code */
@@ -214,32 +214,32 @@ char* get_informer_forename(void)
 {
 	signed short i;
 	char tmp;
-	Bit8u *p_info;
-	Bit8u *informer_name;
+	struct struct_informer_tab *p_info;
+	char *informer_name;
 
-	p_info = p_datseg + INFORMER_TAB;
+	p_info = &g_informer_tab[0];
 
-	for (i = 0; i < 15; i++, p_info += 4) {
+	for (i = 0; i < 15; i++, p_info += 1) {
 
-		if (host_readbs(p_info + 2) == ds_readbs(CURRENT_TOWN)) {
+		if (p_info->town == gs_current_town) {
 
 			i = 0;
-			informer_name = get_ttx(host_readws(p_info));
+			informer_name = get_ttx(p_info->name_id);
 
 			do {
-				tmp = host_readbs(informer_name);
+				tmp = *informer_name;
 				informer_name++;
-				i++;
+				i++;	// TODO: setting i to 0 in a for loop is not a good idea
 			} while (tmp != ' ');
 
-			strncpy((char*)ds_readd(TEXT_OUTPUT_BUF), get_ttx(host_readws(p_info)), i);
+			strncpy(g_text_output_buf, get_ttx(p_info->name_id), i);
 #ifdef M302de_ORIGINAL_BUGFIX
 			break;
 #endif
 		}
 	}
 
-	return (char*)ds_readd(TEXT_OUTPUT_BUF);
+	return g_text_output_buf;
 }
 
 /**
@@ -249,12 +249,12 @@ char* get_informer_forename(void)
  */
 signed short get_town_lookup_entry(void)
 {
-	Bit8u *ptr;
+	struct struct_informer_tab *p_info;
 	signed short i;
 
-	ptr = p_datseg + INFORMER_TAB;
-	for (i = 0; i < 15; i++, ptr += 4) {
-		if (host_readb(ptr + 2) == ds_readb(CURRENT_TOWN)) {
+	p_info = &g_informer_tab[0];
+	for (i = 0; i < 15; i++, p_info++) {
+		if (p_info->town == gs_current_town) {
 			return i;
 		}
 	}
@@ -266,44 +266,43 @@ signed short get_town_lookup_entry(void)
  * \brief   gives a hint where a informer lives
  *
  *          Game Info: You can ask in some towns where informers live.
- *          This function returns a pointer to the answer or to an empty string.
+ *          This function returns a pointer to the answer or an empty string.
  *
  * \return              a pointer to the string.
  */
-RealPt get_informer_hint(void)
+char* get_informer_hint(void)
 {
 	signed short i;
-	Bit8u *ptr;
+	struct struct_informer_tab *p_info;
 
-	ptr = p_datseg + INFORMER_TAB;
-	for (i = 0; i < 15; i++, ptr += 4) {
-		if (host_readb(ptr + 2) == ds_readb(CURRENT_TOWN)) {
-			return (RealPt)host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 4 * (i + 0x2cb));
+	p_info = &g_informer_tab[0];
+	for (i = 0; i < 15; i++, p_info++) {
+		if (p_info->town == gs_current_town) {
+			return get_ttx(i + 715);
 		}
 	}
 
-	return (RealPt)host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 0xb54);
+	return get_ttx(725);
 }
 
 /**
  * \brief   get the name on the current informer
  *
- * \return              a pointer to the name of the informer
+ * \return  a pointer to the name of the informer
  */
-RealPt get_informer_name(void)
+char* get_informer_name(void)
 {
-	return (RealPt)host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) + ds_readw(INFORMER_TAB - 4 + ds_readb(CURRENT_INFORMER) * 4) * 4);
+	return get_ttx(g_informer_tab[gs_current_informer - 1].name_id);
 }
 
 /**
  * \brief   get the name of the informer in this town
  *
- * \return              a pointer to the name of the informer
+ * \return a pointer to the name of the informer
  */
-RealPt get_informer_name2(void)
+char* get_informer_name2(void)
 {
-	return (RealPt)host_readd((Bit8u*)ds_readd(TEXT_LTX_INDEX) +
-			ds_readw(INFORMER_TAB + get_town_lookup_entry() * 4) * 4);
+	return get_ttx(g_informer_tab[get_town_lookup_entry()].name_id);
 }
 
 /**
@@ -311,47 +310,43 @@ RealPt get_informer_name2(void)
  *
  * \return              a pointer to the message.
  */
-RealPt load_current_town_gossip(void)
+char* load_current_town_gossip(void)
 {
 	signed short gossip_id;
 	Bit8u *ptr;
 
 	/* load TOWN.LTX */
-	load_ltx(ds_readbs(CURRENT_TOWN) + ARCHIVE_FILE_CITY_LTX);
+	load_ltx(gs_current_town + ARCHIVE_FILE_CITY_LTX);
 
 	/* mark some buffers invalid */
-	ds_writews(AREA_PREPARED, ds_writews(CURRENT_ANI, -1));
+	g_area_prepared = g_current_ani = -1;
 
 	/* get the pointer to the ltx buffer */
-	ptr = (Bit8u*)ds_readd(BUFFER9_PTR3);
+	ptr = (Bit8u*)g_buffer9_ptr3;
 
 	/* get some gossip */
 	gossip_id = get_tavern_gossip();
 
 	/* return the pointer to the gossip (pointers are stored in the first 1000 bytes) */
-	return (RealPt)host_readd(ptr + 4 * gossip_id);
+	return (char*)host_readd(ptr + 4 * gossip_id);
 }
 
 char* get_random_tavern_message(void)
 {
-	signed short randval;
-	char *ptr;
-
-	randval = random_schick(20) - 1;
-
-	ptr = (char*)host_readd((Bit8u*)ds_readd(TX_INDEX) + 4 * (randval + 147));
+	const signed short randval = random_schick(20) - 1;
+	char *ptr = get_tx(randval + 147);
 
 	if (!randval || randval == 19) {
 
-		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)(Bit8u*)(ptr), (char*)(Bit8u*)(load_current_town_gossip()));
+		sprintf(g_text_output_buf, ptr, load_current_town_gossip());
 
-		return (char*)ds_readd(TEXT_OUTPUT_BUF);
+		return g_text_output_buf;
 
 	} else if (randval == 3) {
 
-		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)(Bit8u*)(ptr), get_ttx(ds_readbs(CURRENT_TOWN) + 235));
+		sprintf(g_text_output_buf, ptr, get_ttx(gs_current_town + 235));
 
-		return (char*)ds_readd(TEXT_OUTPUT_BUF);
+		return g_text_output_buf;
 
 	} else {
 		return ptr;
@@ -378,7 +373,7 @@ void drink_while_drinking(signed short amount)
 	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 			!hero_dead(hero)) {
 
 			/* sub fluid amount */
@@ -411,7 +406,7 @@ void eat_while_drinking(signed short amount)
 	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 
 		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 			!hero_dead(hero)) {
 
 			/* sub food amount */

@@ -5,7 +5,7 @@ namespace M302de {
 /* 0x20 */
 signed short range_attack_check_ammo(Bit8u*, signed short);
 //0x25
-void FIG_output(Bit8u*);
+void FIG_output(char*);
 //0x2a
 void FIG_clear_msgs();
 //0x2f

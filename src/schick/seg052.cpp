@@ -40,7 +40,7 @@ void do_citycamp(void)
 	signed short done;
 	signed short answer;
 	signed short l3;
-	RealPt hero;
+	Bit8u* hero;
 	signed char hours;
 	signed short l5;
 	signed short l6;
@@ -49,28 +49,28 @@ void do_citycamp(void)
 
 	done = 0;
 
-	l3 = ds_writew(REQUEST_REFRESH, 1);
+	l3 = g_request_refresh = 1;
 
 	for (l_si = 0; l_si <= 6; l_si++) {
-		ds_writeb(CITYCAMP_MAGICSTATUS + l_si, ds_writeb(CITYCAMP_GUARDSTATUS + l_si, 0));
+		g_citycamp_magicstatus[l_si] = g_citycamp_guardstatus[l_si] = 0;
 	}
 
 	for (l_si = 0; l_si < 3; l_si++) {
-		ds_writeb(CITYCAMP_GUARDS + l_si, -1);
+		g_citycamp_guards[l_si] = -1;
 	}
 
 	draw_loc_icons(5, MENU_ICON_GUARDS, MENU_ICON_APPLY_SKILL, MENU_ICON_MAGIC, MENU_ICON_SLEEP, MENU_ICON_LEAVE);
 
 	while (done == 0) {
 
-		if (ds_readw(REQUEST_REFRESH) != 0) {
+		if (g_request_refresh != 0) {
 			draw_main_screen();
 			set_var_to_zero();
 			load_ani(36);
 			init_ani(0);
 			GUI_print_loc_line(get_ttx(306));
 			set_audio_track(ARCHIVE_FILE_CAMP_XMI);
-			ds_writew(REQUEST_REFRESH, l3 = 0);
+			g_request_refresh = l3 = 0;
 		}
 
 		if (l3 != 0) {
@@ -80,7 +80,7 @@ void do_citycamp(void)
 
 		handle_gui_input();
 
-		if (ds_readws(MOUSE2_EVENT) != 0 || ds_readws(ACTION) == ACTION_ID_PAGE_UP) {
+		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
 
 			/* open citycamp radio menu */
 			answer = GUI_radio(get_ttx(307), 5,
@@ -92,18 +92,18 @@ void do_citycamp(void)
 
 			/* set action on a valid answer */
 			if (answer != -2) {
-				ds_writew(ACTION, answer + ACTION_ID_ICON_1);
+				g_action = (answer + ACTION_ID_ICON_1);
 			}
 		}
 
-		if (ds_readws(ACTION) == ACTION_ID_ICON_1) {
+		if (g_action == ACTION_ID_ICON_1) {
 
 			answer = -1;
 
 			for (l_si = 0; l_si <= 6; l_si++) {
 
-				if (!ds_readbs(CITYCAMP_MAGICSTATUS + l_si) && check_hero(get_hero(l_si))) {
-					ds_writeb(CITYCAMP_GUARDSTATUS + l_si, 0);
+				if (!g_citycamp_magicstatus[l_si] && check_hero(get_hero(l_si))) {
+					g_citycamp_guardstatus[l_si] = 0;
 					answer = 0;
 				}
 			}
@@ -114,15 +114,13 @@ void do_citycamp(void)
 
 				for (l_si = 0; l_si < 3; l_si++) {
 
-					sprintf((char*)ds_readd(DTP2),
-						get_ttx(321),
-						l_si + 1);
+					sprintf(g_dtp2,	get_ttx(321), l_si + 1);
 
 					do {
 
-						answer = select_hero_ok((char*)ds_readd(DTP2));
+						answer = select_hero_ok(g_dtp2);
 
-						if (answer != -1 && ds_readbs(CITYCAMP_MAGICSTATUS + answer) != 0) {
+						if (answer != -1 && g_citycamp_magicstatus[answer] != 0) {
 							GUI_output(get_ttx(331));
 							answer = -1;
 						}
@@ -134,16 +132,16 @@ void do_citycamp(void)
 
 					} while (answer == -1);
 
-					inc_ds_bs_post(CITYCAMP_GUARDSTATUS + answer);
-					ds_writebs(CITYCAMP_GUARDS + l_si, (signed char)answer);
+					g_citycamp_guardstatus[answer]++;
+					g_citycamp_guards[l_si] = answer;
 				}
 			}
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_2) {
+		} else if (g_action == ACTION_ID_ICON_2) {
 
 			GUI_use_skill2(0, get_ttx(395));
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_3) {
+		} else if (g_action == ACTION_ID_ICON_3) {
 
 			answer = select_hero_ok(get_ttx(317));
 
@@ -154,24 +152,28 @@ void do_citycamp(void)
 
 			if (answer != -1) {
 
-				hero = (Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * answer;
+				hero = get_hero(answer);
 
 				if (host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH) {
 
-					if (ds_readb(CITYCAMP_GUARDSTATUS + answer) != 0) {
+					if (g_citycamp_guardstatus[answer]) {
+
 						GUI_output(get_ttx(331));
+
 					} else {
-						if (ds_readb(CITYCAMP_MAGICSTATUS + answer) != 0) {
+						if (g_citycamp_magicstatus[answer]) {
+
 							GUI_output(get_ttx(334));
+
 						} else {
-							ds_writebs(CITYCAMP_MAGICSTATUS + answer, (signed char)use_magic(hero));
+							g_citycamp_magicstatus[answer] = use_magic(hero);
 						}
 					}
 				} else {
 					GUI_output(get_ttx(330));
 				}
 			}
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_4) {
+		} else if (g_action == ACTION_ID_ICON_4) {
 
 			if (GUI_bool(get_ttx(318))) {
 
@@ -182,38 +184,37 @@ void do_citycamp(void)
 					l6 = l5;
 					l_di = 0;
 
-					if (ds_readws(CAMP_INCIDENT) == -1) {
+					if (gs_camp_incident == -1) {
 						/* with guards: (hours - 1) % chance for an incident */
 						/* without guards: (4*hours - 1) % chance for an incident */
 						/* For a 1 hour rest with guards this will be 0% chance! */
 						/* TODO: maybe change it to random_schick(100) - 1 to fix that */
-						if ((ds_readbs(CITYCAMP_GUARDS) == -1 ? 4 * hours : hours) > random_schick(100)) {
-							ds_writews(CAMP_INCIDENT, random_schick(3) - 1);
+						if ((g_citycamp_guards[0] == -1 ? 4 * hours : hours) > random_schick(100)) {
+							gs_camp_incident = random_schick(3) - 1;
 						}
 					}
 
 					l8 = 0;
 					l7 = hours;
 
-					if (ds_readbs(CITYCAMP_GUARDS + l_di) != -1) {
+					if (g_citycamp_guards[l_di] != -1) {
 
-						sprintf((char*)ds_readd(DTP2),
-							get_ttx(774),
-							(char*)get_hero(ds_readbs(CITYCAMP_GUARDS + l_di)) + 0x10);
+						sprintf(g_dtp2,	get_ttx(774),
+							(char*)get_hero(g_citycamp_guards[l_di]) + 0x10);
 
-						GUI_print_loc_line((char*)ds_readd(DTP2));
+						GUI_print_loc_line(g_dtp2);
 					}
 
 					do {
-						ds_writeb(FOOD_MOD, 1);
+						g_food_mod = 1;
 						timewarp(HOURS(1));
-						ds_writeb(FOOD_MOD, 0);
+						g_food_mod = 0;
 
 						l6--;
 						l8++;
 						l7--;
 
-						if (l_di == ds_readws(CAMP_INCIDENT) && (l5 / 2) >= l6) {
+						if (l_di == gs_camp_incident && (l5 / 2) >= l6) {
 							done = 1;
 						}
 
@@ -222,13 +223,12 @@ void do_citycamp(void)
 							l6 = l5;
 							l_di++;
 
-							if (ds_readbs(CITYCAMP_GUARDS + l_di) != -1) {
+							if (g_citycamp_guards[l_di] != -1) {
 
-								sprintf((char*)ds_readd(DTP2),
-									get_ttx(774),
-									(char*)get_hero(ds_readbs(CITYCAMP_GUARDS + l_di)) + 0x10);
+								sprintf(g_dtp2,	get_ttx(774),
+									(char*)get_hero(g_citycamp_guards[l_di]) + 0x10);
 
-								GUI_print_loc_line((char*)ds_readd(DTP2));
+								GUI_print_loc_line(g_dtp2);
 							}
 						}
 
@@ -236,24 +236,24 @@ void do_citycamp(void)
 
 					if (done != 0) {
 
-						ds_writew(CAMP_INCIDENT, -1);
+						gs_camp_incident = -1;
 
-						if (ds_readb(CITYCAMP_CITY) == 0) {
+						if (g_citycamp_city == 0) {
 							/* in a dungeon */
 
-							ds_writeb(FIG_INITIATIVE, 1);
-							ds_writew(FIG_DISCARD, 1);
+							g_fig_initiative = 1;
+							g_fig_discard = 1;
 
 							do_fight(ds_readws((DCAMPFIGHTS-2) + 2 * random_schick(4)));
 
-							if (ds_readws(GAME_STATE) == GAME_STATE_MAIN) {
+							if (g_game_state == GAME_STATE_MAIN) {
 								draw_main_screen();
 								set_var_to_zero();
 								load_ani(36);
 								init_ani(0);
 								GUI_print_loc_line(get_ttx(306));
 								set_audio_track(ARCHIVE_FILE_CAMP_XMI);
-								ds_writew(REQUEST_REFRESH, l3 = 0);
+								g_request_refresh = l3 = 0;
 							}
 
 						} else {
@@ -263,21 +263,21 @@ void do_citycamp(void)
 						}
 
 						if (l7 > 0) {
-							ds_writeb(FOOD_MOD, 1);
+							g_food_mod = 1;
 							timewarp(HOURS(l7));
-							ds_writeb(FOOD_MOD, 0);
+							g_food_mod = 0;
 						}
 					}
 
 					if (done == 0) {
 
-						hero = (Bit8u*)ds_readd(HEROES);
+						hero = get_hero(0);
 						for (l_si = 0; l_si <= 6; l_si++, hero += SIZEOF_HERO) {
 
 							if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-								host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
-								ds_readbs(CITYCAMP_GUARDSTATUS + l_si) < 2 &&
-								ds_readbs(CITYCAMP_MAGICSTATUS + l_si) != 1)
+								host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
+								(g_citycamp_guardstatus[l_si] < 2) &&
+								(g_citycamp_magicstatus[l_si] != 1))
 							{
 								GRP_hero_sleep(hero, hours - 10);
 							}
@@ -287,19 +287,19 @@ void do_citycamp(void)
 				done = 1;
 			}
 
-		} else if (ds_readws(ACTION) == ACTION_ID_ICON_5) {
+		} else if (g_action == ACTION_ID_ICON_5) {
 			done = 1;
 		}
 	}
 
-	ds_writeb(CURRENT_LOCTYPE_BAK, LOCTYPE_NONE);
+	gs_current_loctype_bak = LOCTYPE_NONE;
 
 	/* Original-Bug 26: After leaving a camp in town/dungeon-mode, the party is rotated by 180 degrees. This does not make sense. */
 	leave_location();
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* The rotation is performed in the function leave_location().
 	 * We fix the bug in a hacky way by simply correcting the rotation afterwards. */
-	ds_writeb(DIRECTION, (ds_readbs(DIRECTION) + 2) % 4); /* rotate by 180 degrees */
+	gs_direction = ((gs_direction + 2) % 4); /* rotate by 180 degrees */
 #endif
 
 }

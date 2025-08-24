@@ -46,12 +46,12 @@ namespace M302de {
 #endif
 
 /* Borlandified and identical */
-void rabies(RealPt hero, signed short hero_pos)
+void rabies(Bit8u* hero, signed short hero_pos)
 {
 	signed short answer;
 	signed short l_di;
 	signed short done;
-	signed short textbox_width_bak;
+	signed short tw_bak;
 	Bit8u *hero2;
 	signed short group_bak;
 	signed short group_no;
@@ -59,7 +59,7 @@ void rabies(RealPt hero, signed short hero_pos)
 
 	done = 0;
 
-	group_bak = ds_readbs(CURRENT_GROUP);
+	group_bak = gs_current_group;
 	sex_bak = host_readbs(hero + HERO_SEX);
 	group_no = host_readbs(hero + HERO_GROUP_NO);
 
@@ -67,7 +67,7 @@ void rabies(RealPt hero, signed short hero_pos)
 	host_writeb(hero + HERO_SEX, 50);
 
 	/* switch to the group of the hero */
-	while (ds_readbs(CURRENT_GROUP) != group_no) {
+	while (gs_current_group != group_no) {
 		GRP_switch_to_next(1);
 	}
 
@@ -76,10 +76,10 @@ void rabies(RealPt hero, signed short hero_pos)
 		hero_pos++;
 	}
 
-	hero = (Bit8u*)ds_readd(HEROES) + SIZEOF_HERO * hero_pos;
+	hero = get_hero(hero_pos);
 	host_writeb(hero + HERO_SEX, sex_bak);
 
-	if (ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) {
+	if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 		draw_status_line();
 	}
 
@@ -87,45 +87,32 @@ void rabies(RealPt hero, signed short hero_pos)
 
 		if (count_heroes_available_in_group() > 1) {
 
-			sprintf((char*)ds_readd(DTP2),
-				get_ttx(741),
-				(char*)hero + HERO_NAME2,
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
+			sprintf(g_dtp2, get_ttx(741), (char*)hero + HERO_NAME2,
+				GUI_get_ptr(host_readbs(hero + HERO_SEX), 2),
+				GUI_get_ptr(host_readbs(hero + HERO_SEX), 2));
 
-			sprintf((char*)ds_readd(DTP2) + 500,
-				get_ttx(742),
-				(char*)hero + HERO_NAME2);
+			sprintf(g_dtp2 + 500, get_ttx(742), (char*)hero + HERO_NAME2);
 
-			sprintf((char*)ds_readd(DTP2) + 600,
-				get_ttx(743),
-				(char*)hero + HERO_NAME2);
+			sprintf(g_dtp2 + 600, get_ttx(743), (char*)hero + HERO_NAME2);
 
-			textbox_width_bak = ds_readws(TEXTBOX_WIDTH);
-			ds_writew(TEXTBOX_WIDTH, 6);
+			tw_bak = g_textbox_width;
+			g_textbox_width = 6;
 
-			answer = GUI_dialogbox(hero + HERO_PORTRAIT,
-						hero + HERO_NAME2,
-						(char*)ds_readd(DTP2),
-						3,
-						(char*)ds_readd(DTP2) + 500,
-						(char*)ds_readd(DTP2) + 600,
-						get_ttx(744));
+			answer = GUI_dialogbox(hero + HERO_PORTRAIT, (char*)hero + HERO_NAME2,
+						g_dtp2, 3, g_dtp2 + 500, g_dtp2 + 600, get_ttx(744));
 
-			ds_writew(TEXTBOX_WIDTH, textbox_width_bak);
+			g_textbox_width = tw_bak;
 
 			if (answer == 1) {
 				/* knock the infected hero out */
 
 				sub_hero_le(hero, host_readws(hero + HERO_LE) / 2);
 
-				sprintf((char*)ds_readd(DTP2),
-					get_ttx(745),
-					(char*)hero + HERO_NAME2);
+				sprintf(g_dtp2, get_ttx(745), (char*)hero + HERO_NAME2);
 
-				GUI_output((char*)ds_readd(DTP2));
+				GUI_output(g_dtp2);
 
-				ds_writeb(HERO_SEL_EXCLUDE, (signed char)hero_pos);
+				g_hero_sel_exclude = (signed char)hero_pos;
 
 				answer = select_hero_ok(get_ttx(395));
 
@@ -148,13 +135,11 @@ void rabies(RealPt hero, signed short hero_pos)
 						 * (found by siebenstreich 2021-08-15) */
 					{
 						done = 1;
-						sprintf((char*)ds_readd(DTP2),
-							get_ttx(746),
-							(char*)hero + HERO_NAME2);
+						sprintf(g_dtp2, get_ttx(746), (char*)hero + HERO_NAME2);
 
-						GUI_output((char*)ds_readd(DTP2));
+						GUI_output(g_dtp2);
 
-						ds_writeb(HERO_SEL_EXCLUDE, (signed char)hero_pos);
+						g_hero_sel_exclude = (signed char)hero_pos;
 
 						answer = select_hero_ok(get_ttx(395));
 
@@ -167,7 +152,7 @@ void rabies(RealPt hero, signed short hero_pos)
 			} else if (answer == 3) {
 				/* cast a spell */
 
-				ds_writeb(HERO_SEL_EXCLUDE, (signed char)hero_pos);
+				g_hero_sel_exclude = (signed char)hero_pos;
 
 				answer = select_hero_ok(get_ttx(213));
 
@@ -188,13 +173,11 @@ void rabies(RealPt hero, signed short hero_pos)
 
 								sub_ae_splash(hero2, 15);
 
-								sprintf((char*)ds_readd(DTP2),
-									get_ttx(746),
-									(char*)hero + HERO_NAME2);
+								sprintf(g_dtp2, get_ttx(746), (char*)hero + HERO_NAME2);
 
-								GUI_output((char*)ds_readd(DTP2));
+								GUI_output(g_dtp2);
 
-								ds_writeb(HERO_SEL_EXCLUDE, (signed char)hero_pos);
+								g_hero_sel_exclude = (signed char)hero_pos;
 
 								answer = select_hero_ok(get_ttx(395));
 
@@ -203,11 +186,8 @@ void rabies(RealPt hero, signed short hero_pos)
 								}
 							}
 						} else {
-							sprintf((char*)ds_readd(DTP2),
-								get_ttx(607),
-								(char*)hero2 + HERO_NAME2);
-
-							GUI_output((char*)ds_readd(DTP2));
+							sprintf(g_dtp2, get_ttx(607), (char*)hero2 + HERO_NAME2);
+							GUI_output(g_dtp2);
 						}
 					}
 				}
@@ -215,12 +195,8 @@ void rabies(RealPt hero, signed short hero_pos)
 		} else {
 
 			/* Hero has rabies / Tollwut */
-
-			sprintf((char*)ds_readd(DTP2),
-				get_ttx(747),
-				(char*)hero + HERO_NAME2);
-
-			GUI_output((char*)ds_readd(DTP2));
+			sprintf(g_dtp2, get_ttx(747), (char*)hero + HERO_NAME2);
+			GUI_output(g_dtp2);
 
 			done = 1;
 		}
@@ -232,7 +208,7 @@ void rabies(RealPt hero, signed short hero_pos)
 
 				if ((l_di != hero_pos) &&
 					(host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE) &&
-					(host_readbs(hero2 + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP)) &&
+					(host_readbs(hero2 + HERO_GROUP_NO) == gs_current_group) &&
 					!hero_dead(hero2))
 				{
 					sub_hero_le(hero2, dice_roll(1, 6, 2));
@@ -240,23 +216,19 @@ void rabies(RealPt hero, signed short hero_pos)
 			}
 
 			/* hero has berserker fury / Berserkerwut */
-
-			sprintf((char*)ds_readd(DTP2),
-				get_ttx(791),
-				(char*)hero + HERO_NAME2);
-
-			GUI_output((char*)ds_readd(DTP2));
+			sprintf(g_dtp2, get_ttx(791), (char*)hero + HERO_NAME2);
+			GUI_output(g_dtp2);
 
 			done = 1;
 		}
 	}
 
 	/* switch back to the group */
-	while (ds_readbs(CURRENT_GROUP) != group_bak) {
+	while (gs_current_group != group_bak) {
 		GRP_switch_to_next(1);
 	}
 
-	if (ds_readbs(PP20_INDEX) == ARCHIVE_FILE_PLAYM_UK) {
+	if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 		draw_status_line();
 	}
 }
@@ -264,28 +236,27 @@ void rabies(RealPt hero, signed short hero_pos)
 /* Borlandified and identical */
 void init_global_buffer(void)
 {
+	g_global_buffer_ptr = (HugePt)schick_alloc(g_buffersize);
+	g_renderbuf_ptr = g_global_buffer_ptr + 8L;
 
-	ds_writed(GLOBAL_BUFFER_PTR, (Bit32u)schick_alloc(ds_readd(BUFFERSIZE)));
-	ds_writed(RENDERBUF_PTR, (Bit32u)F_PADD(ds_readd(GLOBAL_BUFFER_PTR), 8));
-	ds_writed(TEXT_LTX_BUFFER, (Bit32u)F_PADD(ds_readd(RENDERBUF_PTR), 65000));
+	g_text_ltx_buffer = (char*)(((HugePt)g_renderbuf_ptr) + 65000L);
 
-	ds_writed(TEXT_LTX_INDEX, (Bit32u)F_PADD(ds_readd(TEXT_LTX_BUFFER), 30500));
-	ds_writed(TX_INDEX, (Bit32u)((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 3360));
-	ds_writed(TX2_INDEX, (Bit32u)((Bit8u*)ds_readd(TEXT_LTX_INDEX) + 3960));
+	g_text_ltx_index = (char**)(((HugePt)g_text_ltx_buffer) + 30500L);
+	g_tx_index = g_text_ltx_index + 3360;
+	g_tx2_index = g_text_ltx_index + 3960;
 
-	ds_writed(OBJECTS_NVF_BUF, (Bit32u)(F_PADD(ds_readd(TEXT_LTX_INDEX), 4760)));
-	ds_writed(DTP2, (Bit32u)(F_PADD(ds_readd(OBJECTS_NVF_BUF), 3400)));
-	ds_writed(TEXT_INPUT_BUF, (Bit32u)((char*)ds_readd(DTP2) + 1500));
-	ds_writed(TEXT_OUTPUT_BUF, (Bit32u)(F_PADD((Bit8u*)ds_readd(DTP2), 1524L)));
-	ds_writed(BUFFER5_PTR, (Bit32u)(F_PADD(ds_readd(TEXT_OUTPUT_BUF), 300)));
-	ds_writed(BUFFER6_PTR, (Bit32u)(F_PADD(ds_readd(BUFFER5_PTR), 3880)));
-	ds_writed(BUFFER7_PTR, (Bit32u)(F_PADD(ds_readd(BUFFER6_PTR), 2200)));
-	ds_writed(BUFFER8_PTR, (Bit32u)(F_PADD(ds_readd(BUFFER7_PTR), 10000)));
-	ds_writed(BUFFER9_PTR, (Bit32u)(F_PADD(ds_readd(BUFFER7_PTR), 22008)));
+	g_objects_nvf_buf = (((HugePt)g_text_ltx_index) + 4760L);
+	g_dtp2 = (char*)(((HugePt)g_objects_nvf_buf) + 3400L);
+	g_text_input_buf = (char*)(g_dtp2 + 1500);
+	g_text_output_buf = (char*)(((HugePt)g_dtp2) + 1524L);
+	g_buffer5_ptr = (char*)(((HugePt)g_text_output_buf) + 300L);
+	g_buffer6_ptr = (unsigned char*)(((HugePt)g_buffer5_ptr) + 3880L);
+	g_buffer7_ptr = (char*)(((HugePt)g_buffer6_ptr) + 2200L);
+	g_buffer8_ptr = (unsigned char*)(((HugePt)g_buffer7_ptr) + 10000L);
+	g_buffer9_ptr = (HugePt)(((HugePt)g_buffer7_ptr) + 22008L);
 
-	ds_writed(BUFFER9_PTR3, ds_writed(BUFFER9_PTR2, ds_readd(BUFFER9_PTR)));
-	ds_writed(ANI_UNKNOWN4, 0);
-
+	g_buffer9_ptr3 = (HugePt)(g_buffer9_ptr2 = (unsigned char*)g_buffer9_ptr);
+	g_ani_unknown4 = 0;
 }
 
 /* Borlandified and identical */
@@ -295,7 +266,7 @@ signed short init_memory(void)
 	Bit32u freemem;
 
 	/* disable EMS memory */
-	ds_writeb(EMS_ENABLED, 0);
+	g_ems_enabled = 0;
 
 #if defined(__BORLANDC__)
 	if (EMS_init()) {
@@ -303,32 +274,36 @@ signed short init_memory(void)
 	} else {
 		;
 	}
-#endif
 
 	/* set the pointer for the framebuffer */
-	ds_writed(PRINT_STRING_BUFFER, ds_writed(FRAMEBUF_PTR, (Bit32u)RealMake(0x0a000, 0x0000)));
+	g_vga_backbuffer = g_vga_memstart = (unsigned char*)MK_FP(0x0a000, 0x0000);
+#else
+	g_vga_memstart = (unsigned char*)calloc(320 * 200, sizeof(unsigned char));
+	g_vga_backbuffer = g_vga_memstart;
+
+#endif
 
 	/* allocate small chunks of memory */
-	ds_writed(ITEMSNAME,		(Bit32u)schick_alloc(1016));
-	ds_writed(ITEMSDAT,		(Bit32u)schick_alloc(3060));
-	ds_writed(MONNAMES_BUFFER,		(Bit32u)schick_alloc(950));
-	ds_writed(MONNAMES_INDEX,		(Bit32u)schick_alloc(308));
-	ds_writed(MEM_SLOTS_ANIS,		(Bit32u)schick_alloc(296));
-	ds_writed(MEM_SLOTS_MFIG,	(Bit32u)schick_alloc(516));
-	ds_writed(MEM_SLOTS_WFIG,	(Bit32u)schick_alloc(516));
-	ds_writed(MEM_SLOTS_MON,		(Bit32u)schick_alloc(432));
-	ds_writed(HEROES,		(Bit32u)schick_alloc(7 * SIZEOF_HERO));
-	ds_writed(DUNGEON_FIGHTS_BUF,		(Bit32u)schick_alloc(630));
-	ds_writed(DUNGEON_DOORS_BUF,		(Bit32u)schick_alloc(225));
-	ds_writed(DUNGEON_STAIRS_BUF,		(Bit32u)schick_alloc(80));
-	ds_writed(BUF_FONT6,		(Bit32u)schick_alloc(592));
-	ds_writed(SPLASH_BUFFER,		(Bit32u)schick_alloc(1000));
-	ds_writed(TRV_TRACK_PIXEL_BAK,		(Bit32u)schick_alloc(500));
-	ds_writed(CHESSBOARD,		(Bit32u)schick_alloc(625));
-	ds_writed(POPUP,		(Bit32u)(schick_alloc(1673) + 8));
-	ds_writed(ICON,			(Bit32u)(schick_alloc(1500) + 8));
-	ds_writed(BUF_ICON,		(Bit32u)schick_alloc(5184));
-	ds_writed(TOWNPAL_BUF,		(Bit32u)schick_alloc(288));
+	g_itemsname		= (char**)schick_alloc(254 * sizeof(char*));
+	g_itemsdat 		= (unsigned char*)schick_alloc(255 * SIZEOF_ITEM_STATS);
+	g_monnames_buffer	= (char*)schick_alloc(950);
+	g_monnames_index	= (char**)schick_alloc(77 * sizeof(char*));
+	g_memslots_anis		= (struct struct_memslot_ani*)schick_alloc(37 * sizeof(struct struct_memslot_ani));
+	g_memslots_mfig		= (struct struct_memslot_fig*)schick_alloc(43 * sizeof(struct struct_memslot_fig));
+	g_memslots_wfig		= (struct struct_memslot_fig*)schick_alloc(43 * sizeof(struct struct_memslot_fig));
+	g_memslots_mon		= (struct struct_memslot_fig*)schick_alloc(36 * sizeof(struct struct_memslot_fig));
+	g_heroes		= (unsigned char*)schick_alloc(7 * SIZEOF_HERO);
+	g_dungeon_fights_buf	= (unsigned char*)schick_alloc(630);
+	g_dungeon_doors_buf	= (unsigned char*)schick_alloc(225);
+	g_dungeon_stairs_buf	= (unsigned char*)schick_alloc(80);
+	g_buf_font6		= (unsigned char*)schick_alloc(592);
+	g_splash_buffer		= (unsigned char*)schick_alloc(1000);
+	g_trv_track_pixel_bak	= (unsigned char*)schick_alloc(500);
+	g_chessboard		= (signed char*)schick_alloc(625);
+	g_popup			= (unsigned char*)(schick_alloc(1673) + 8);
+	g_icon			= (unsigned char*)(schick_alloc(1500) + 8);
+	g_buf_icon		= (unsigned char*)schick_alloc(5184);
+	g_townpal_buf		= (unsigned char*)schick_alloc(288);
 
 #if defined(__BORLANDC__)
 	freemem = farcoreleft();
@@ -340,18 +315,18 @@ signed short init_memory(void)
 	if (freemem > 334000) {
 
 		if (freemem >= 357000) {
-			ds_writed(BUFFERSIZE, 357000);
-			ds_writeb(LARGE_BUF, 1);
+			g_buffersize = 357000L;
+			g_large_buf = 1;
 		} else {
-			ds_writed(BUFFERSIZE, 334000);
-			ds_writeb(LARGE_BUF, 0);
+			g_buffersize = 334000L;
+			g_large_buf = 0;
 		}
 
 		init_global_buffer();
 
 	} else {
 
-		printf((char*)p_datseg + STR_NOT_ENOUGH_MEM, 329000 - freemem);
+		printf(g_str_not_enough_mem, 329000 - freemem);
 
 		wait_for_keypress();
 		error = 1;
@@ -361,15 +336,13 @@ signed short init_memory(void)
 
 		init_text();
 
-		ds_writed(FIG_FIGURE1_BUF, (Bit32u)F_PADD(ds_readd(BUFFER9_PTR3), 180000L));
-#if defined(__BORLANDC__)
-		if (ds_readb(LARGE_BUF) == 1) {
-			add_ds_fp(FIG_FIGURE1_BUF, 23000L);
+		g_fig_figure1_buf = (unsigned char*)(g_buffer9_ptr3 + 180000L);
+		if (g_large_buf == 1) {
+			g_fig_figure1_buf += 23000L;
 		}
-#endif
 
-		ds_writed(FIG_FIGURE2_BUF, (Bit32u)F_PADD(ds_readd(FIG_FIGURE1_BUF), -20000L));
-		ds_writed(BUFFER10_PTR, (Bit32u)F_PADD(ds_readd(FIG_FIGURE2_BUF), -16771L));
+		g_fig_figure2_buf = (unsigned char*)(((HugePt)g_fig_figure1_buf) - 20000L);
+		g_buffer10_ptr = (unsigned char*)(((HugePt)g_fig_figure2_buf) - 16771L);
 	}
 
 	return error;
@@ -378,21 +351,20 @@ signed short init_memory(void)
 /* Borlandified and identical */
 void refresh_colors(void)
 {
-	set_color(p_datseg + COLOR_BLACK, 0);
-	set_color(p_datseg + COLOR_WHITE, 0xff);
-	set_palette(p_datseg + PALETTE_UNKNOWN2, 0xd8, 8);
-
-	set_palette(p_datseg + PALETTE_UNKNOWN3, 0xc8, 3);
-	set_palette(p_datseg + PALETTE_UNKNOWN4, 0x40, 0x20);
-	set_palette(p_datseg + PALETTE_GENERAL, 0x20, 0x20);
-	set_palette(p_datseg + PALETTE_UNKNOWN1, 0x60, 0x20);
-
+	set_color((Bit8u*)g_color_black, 0);
+	set_color((Bit8u*)g_color_white, 0xff);
+	set_palette((Bit8u*)g_palette_unknown2, 0xd8, 8);
+	set_palette((Bit8u*)g_palette_unknown3, 0xc8, 3);
+	set_palette((Bit8u*)g_palette_unknown4, 0x40, 0x20);
+	set_palette((Bit8u*)g_palette_general, 0x20, 0x20);
+	set_palette((Bit8u*)g_palette_unknown1, 0x60, 0x20);
 }
 
 
 /* Borlandified and identical */
 Bit32s get_diskspace(void)
 {
+#if defined(__BORLANDC__)
 	unsigned short a[4];
 	Bit32s space;
 
@@ -401,6 +373,9 @@ Bit32s get_diskspace(void)
 	space = (Bit32s)a[0] * (Bit32s)a[2] * (Bit32s)a[3];
 
 	return space - 204800;
+#else
+	return 8 * 1024 * 1024;
+#endif
 }
 
 /* Borlandified and identical */
@@ -410,50 +385,50 @@ void init_game_state(void)
 
 	refresh_colors();
 
-	ds_writew(INIT_COLOR1, 0xc8);
-	ds_writew(INIT_COLOR2, 0xc9);
-	ds_writew(INIT_COLOR3, 0xca);
+	g_textcolor_fg[1] = 0xc8;
+	g_textcolor_fg[2] = 0xc9;
+	g_textcolor_fg[3] = 0xca;
 
 	set_to_ff();
 
-	for (i = 0; i < 0xfe; i++) {
-		ds_writeb(MARKET_ITEMSALDO_TABLE + i, 0);
+	for (i = 0; i < 254; i++) {
+		g_market_itemsaldo_table[i] = 0;
 	}
 
-	ds_writeb(CURRENT_LOCTYPE_BAK, LOCTYPE_NONE);
+	gs_current_loctype_bak = LOCTYPE_NONE;
 	/* Travia Temple in Thorwal */
-	ds_writeb(CURRENT_LOCTYPE, LOCTYPE_TEMPLE);
-	ds_writew(CURRENT_TYPEINDEX, 1);
-	ds_writew(X_TARGET_BAK, 9);
-	ds_writew(Y_TARGET_BAK, 9);
-	ds_writew(X_TARGET, 9);
-	ds_writew(Y_TARGET, 8);
-	ds_writeb(DIRECTION_BAK, 0);
-	ds_writeb(DIRECTION, 0);
-	ds_writeb(DUNGEON_INDEX, DUNGEONS_NONE);
+	gs_current_loctype = LOCTYPE_TEMPLE;
+	gs_current_typeindex = 1;
+	gs_x_target_bak = 9;
+	gs_y_target_bak = 9;
+	gs_x_target = 9;
+	gs_y_target = 8;
+	gs_direction_bak = 0;
+	gs_direction = 0;
+	gs_dungeon_index = DUNGEONS_NONE;
 
-	ds_writeb(CURRENT_TOWN_BAK, ds_writeb(CURRENT_TOWN, TOWNS_THORWAL));
+	gs_current_town_bak = gs_current_town = TOWNS_THORWAL;
 
-	ds_writew(TEXTBOX_WIDTH, 3);
+	g_textbox_width = 3;
 
 	/* timer */
-	ds_writed(DAY_TIMER, HOURS(24) - 1);
+	gs_day_timer = HOURS(24) - 1;
 	timewarp_until_time_of_day(1);
-	ds_writed(DAY_TIMER,  HOURS(8));
-	ds_writeb(DAY_OF_WEEK, 4);
-	ds_writeb(DAY_OF_MONTH, 17);
-	ds_writeb(MONTH, 1);
-	ds_writeb(YEAR, 15);
+	gs_day_timer = HOURS(8);
+	gs_day_of_week = 4;
+	gs_day_of_month = 17;
+	gs_month = 1;
+	gs_year = 15;
 
-	ds_writed(PIC_COPY_DST, ds_readd(FRAMEBUF_PTR));
+	g_pic_copy.dst = g_vga_memstart;
 
 	load_wallclock_nvf();
 	passages_init();
 
-	ds_writew(CURRENT_ANI, -1);
-	ds_writew(WALLCLOCK_UPDATE, 1);
+	g_current_ani = -1;
+	g_wallclock_update = 1;
 
-	ds_writed(GUI_BUFFER_UNKN, ds_readd(RENDERBUF_PTR));
+	g_gui_buffer_unkn = g_renderbuf_ptr;
 	load_splashes();
 }
 
@@ -489,7 +464,7 @@ void prepare_dirs(void)
 		setdisk(drive);
 
 		/* copy "X:\\" */
-		strcpy(gamepath, (char*)p_datseg + STR_DRIVE_X);
+		strcpy(gamepath, g_str_drive_x);
 
 		/* set drive name in path */
 		gamepath[0] = drive + 'A';
@@ -500,11 +475,11 @@ void prepare_dirs(void)
 			gamepath[2] = '\0';
 		}
 
-		strcpy((char*)ds_readd(TEXT_OUTPUT_BUF), gamepath);
+		strcpy(g_text_output_buf, gamepath);
 		/* "\\TEMP" */
-		strcat((char*)ds_readd(TEXT_OUTPUT_BUF), (char*)p_datseg + STR_BACKSLASH_TEMP);
+		strcat(g_text_output_buf, g_str_backslash_temp);
 
-		if (!chdir((char*)ds_readd(TEXT_OUTPUT_BUF))) {
+		if (!chdir(g_text_output_buf)) {
 			/*	check if it's possible to change to TEMP-dir: OK
 				change to gamepath */
 
@@ -513,7 +488,7 @@ void prepare_dirs(void)
 
 		} else {
 
-			if (mkdir((char*)ds_readd(TEXT_OUTPUT_BUF))) {
+			if (mkdir(g_text_output_buf)) {
 				errorval = 1;
 			} else {
 				errorval = 2;
@@ -524,7 +499,7 @@ void prepare_dirs(void)
 
 			/* ERROR, cant write => exit */
 
-			GUI_output(p_datseg + STR_TEMP_DIR_FAIL);
+			GUI_output(g_str_temp_dir_fail);
 
 			cleanup_game();
 
@@ -533,20 +508,18 @@ void prepare_dirs(void)
 	}
 
 	/* delete *.* in TEMP-dir */
-	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
-		(char*)ds_readd(STR_TEMP_XX_PTR2),
-		(char*)p_datseg + ALL_FILES_WILDCARD2);
+	sprintf(g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), g_all_files_wildcard2);
 
-	l_si = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
+	l_si = findfirst(g_text_output_buf, &blk, 0);
 
 	if (!l_si) {
 
 		do {
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+			sprintf(g_text_output_buf,
 				(char*)ds_readd(STR_TEMP_XX_PTR2),
-				((char*)(&blk)) + 30);			/* contains a filename */
+				((char*)&blk) + 30);			/* contains a filename */
 
-			unlink((char*)ds_readd(TEXT_OUTPUT_BUF));
+			unlink(g_text_output_buf);
 
 			l_si = findnext(&blk);
 
@@ -554,24 +527,24 @@ void prepare_dirs(void)
 	}
 
 	/* search for "*.CHR" in the gamepath */
-	l_si = findfirst((char*)(p_datseg + ALL_CHR_WILDCARD4), &blk, 0);
+	l_si = findfirst(g_all_chr_wildcard4, &blk, 0);
 
 	while (!l_si) {
 
 		/* open CHR-file and copy it into TEMP-dir */
 		l_di = open(((char*)&blk) + 30, O_BINARY | O_RDWR);
 
-		_read(l_di, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
+		_read(l_di, g_renderbuf_ptr, SIZEOF_HERO);
 
 		close(l_di);
 
-		sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+		sprintf(g_text_output_buf,
 			(char*)ds_readd(STR_TEMP_XX_PTR2),
 			((char*)(&blk)) + 30);			/* contains a filename */
 
-		l_di = _creat((char*)ds_readd(TEXT_OUTPUT_BUF), 0);
+		l_di = _creat(g_text_output_buf, 0);
 
-		_write(l_di, (Bit8u*)ds_readd(RENDERBUF_PTR), SIZEOF_HERO);
+		write(l_di, g_renderbuf_ptr, SIZEOF_HERO);
 
 		close(l_di);
 
@@ -596,73 +569,73 @@ void cleanup_game(void)
 	exit_AIL();
 
 	/* disable CD-Audio */
-	if (ds_readw(CD_INIT_SUCCESSFUL) != 0) {
+	if (g_cd_init_successful) {
 		CD_audio_stop();
 	}
 
 	/* free EMS memory */
-	if (ds_readb(EMS_ENABLED) != 0) {
+	if (g_ems_enabled != 0) {
 
 		for (l_si = 0; l_si < 37; l_si++) {
-			if (host_readw((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + l_si * 8) != 0) {
-				EMS_free_pages(host_readw((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + 2 + l_si * 8));
+			/* TODO: test for ems_handle missing */
+			if (g_memslots_anis[l_si].figure) {
+				EMS_free_pages(g_memslots_anis[l_si].ems_handle);
 			}
 		}
 
 		/* free male and female figures */
 		for (l_si = 0; l_si < 43; l_si++) {
 
-			if ((host_readw((Bit8u*)ds_readd(MEM_SLOTS_MFIG) + l_si * 12) != 0) &&
-				((host_readw((Bit8u*)ds_readd(MEM_SLOTS_MFIG) + l_si * 12 + 6) != 0)))
+			if (g_memslots_mfig[l_si].figure && g_memslots_mfig[l_si].ems_handle)
 			{
-				EMS_free_pages(host_readw((Bit8u*)ds_readd(MEM_SLOTS_MFIG) + 6 + l_si * 12));
+				EMS_free_pages(g_memslots_mfig[l_si].ems_handle);
 			}
 
-			if ((host_readw((Bit8u*)ds_readd(MEM_SLOTS_WFIG) + l_si * 12) != 0) &&
-				((host_readw((Bit8u*)ds_readd(MEM_SLOTS_WFIG) + l_si * 12 + 6) != 0)))
+			if (g_memslots_wfig[l_si].figure && g_memslots_wfig[l_si].ems_handle)
 			{
-				EMS_free_pages(host_readw((Bit8u*)ds_readd(MEM_SLOTS_WFIG) + 6 + l_si * 12));
+				EMS_free_pages(host_readw(g_memslots_wfig + 6 + l_si * 12));
 			}
 		}
 
 		/* free monster figures */
 		for (l_si = 0; l_si < 36; l_si++) {
 
-			if ((host_readw((Bit8u*)ds_readd(MEM_SLOTS_MON) + l_si * 12) != 0) &&
-				((host_readw((Bit8u*)ds_readd(MEM_SLOTS_MON) + l_si * 12 + 6) != 0)))
+			if (g_memslots_mon[l_si].figure && g_memslots_mon[l_si].ems_handle)
 			{
-				EMS_free_pages(host_readw((Bit8u*)ds_readd(MEM_SLOTS_MON) + 6 + l_si * 12));
+				EMS_free_pages(g_memslots_mon[l_si].ems_handle);
 			}
 		}
 
-		if (ds_readw(EMS_UNUSED_HANDLE) != 0) {
-			EMS_free_pages(ds_readw(EMS_UNUSED_HANDLE));
+		if (g_ems_unused_handle) {
+			EMS_free_pages(g_ems_unused_handle);
 		}
 
 		/* free map memory */
-		if (ds_readw(EMS_TRAVEL_MAP) != 0) {
-			EMS_free_pages(ds_readw(EMS_TRAVEL_MAP));
+		if (g_ems_travelmap_handle != 0) {
+			EMS_free_pages(g_ems_travelmap_handle);
 		}
 	}
 
 	/* delete all files in TEMP */
 
-	sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+	sprintf(g_text_output_buf,
 		(char*)ds_readd(STR_TEMP_XX_PTR2),	/* contains "TEMP\\%s" */
-		(char*)p_datseg + ALL_FILES_WILDCARD3);		/* contains "*.*" */
+		g_all_files_wildcard3);			/* contains "*.*" */
 
-	l_di = findfirst((char*)ds_readd(TEXT_OUTPUT_BUF), &blk, 0);
+	l_di = findfirst(g_text_output_buf, &blk, 0);
 
 	if (l_di == 0) {
+
 		do {
 			/* delete each found file */
-			sprintf((char*)ds_readd(TEXT_OUTPUT_BUF),
+			sprintf(g_text_output_buf,
 				(char*)ds_readd(STR_TEMP_XX_PTR2),	/* contains "TEMP\\%s" */
 				((char*)(&blk)) + 30);			/* contains a filename */
 
-			unlink((char*)ds_readd(TEXT_OUTPUT_BUF));
+			unlink(g_text_output_buf);
 
 			l_di = findnext(&blk);
+
 		} while (!l_di);
 	}
 #endif
@@ -674,6 +647,14 @@ void cleanup_game(void)
 	schick_reset_video();
 #if defined(__BORLANDC__)
 	clrscr();
+#endif
+
+#if !defined(__BORLANDC__)
+	if (g_vga_memstart) {
+		free(g_vga_memstart);
+		g_vga_memstart = NULL;
+		g_vga_backbuffer = NULL;
+	}
 #endif
 }
 
@@ -692,36 +673,36 @@ void game_over_screen(void)
 	/* load SKULL.NVF */
 	handle = load_archive_file(ARCHIVE_FILE_SKULL_NVF);
 
-	read_archive_file(handle, (Bit8u*)ds_readd(RENDERBUF_PTR), 64200);
+	read_archive_file(handle, g_renderbuf_ptr, 64200);
 
 	close(handle);
 
 	update_mouse_cursor();
 
-	ds_writew(WALLCLOCK_UPDATE, 0);
+	g_wallclock_update = 0;
 
 	wait_for_vsync();
 
-	set_palette(p_datseg + PALETTE_ALLBLACK2, 0x00, 0x20);
-	set_palette(p_datseg + PALETTE_ALLBLACK2, 0x20, 0x20);
+	set_palette(g_palette_allblack2, 0x00, 0x20);
+	set_palette(g_palette_allblack2, 0x20, 0x20);
 
-	memcpy((void*)((Bit8u*)ds_readd(FRAMEBUF_PTR)), (void*)((Bit8u*)ds_readd(RENDERBUF_PTR)), 320 * 200);
+	memcpy((void*)g_vga_memstart, (void*)g_renderbuf_ptr, 320 * 200);
 
-	set_palette((Bit8u*)ds_readd(RENDERBUF_PTR) + 64002, 0x00, 0x40);
+	set_palette((Bit8u*)g_renderbuf_ptr + 64002L, 0x00, 0x40);
 
 	wait_for_keypress();
 
 	/* TODO: update window */
-	memset((void*)((Bit8u*)ds_readd(FRAMEBUF_PTR)), 0, 320 * 200);
+	memset((void*)g_vga_memstart, 0, 320 * 200);
 
 	wait_for_vsync();
 
-	set_palette(p_datseg + PALETTE_ALLBLACK2, 0x00, 0x20);
-	set_palette(p_datseg + PALETTE_ALLBLACK2, 0x20, 0x20);
+	set_palette(g_palette_allblack2, 0x00, 0x20);
+	set_palette(g_palette_allblack2, 0x20, 0x20);
 
 	refresh_screen_size();
 
-	ds_writeb(PP20_INDEX, 0xff);
+	g_pp20_index = -1;
 }
 
 /* Borlandified and identical */
@@ -735,17 +716,15 @@ void call_gen(void)
 	exit_AIL();
 
 	/* free the global buffer */
-	free((void*)ds_readd(GLOBAL_BUFFER_PTR));
+	free((HugePt)g_global_buffer_ptr);
 
 #if defined(__BORLANDC__)
 	freemem = farcoreleft();
 
 	/* ret = spawnl(0, "gen.exe", "gen.exe", "b", gamemode == 2 ? "a" : "n", "1", NULL); */
-	ret = spawnl(0,
-			(char*)(p_datseg + STR_GEN_EXE), (char*)(p_datseg + STR_GEN_EXE2),
-			(p_datseg + STR_GEN_B),
-			ds_readws(GAME_MODE) == GAME_MODE_ADVANCED ? (p_datseg + STR_GEN_A) : (p_datseg + STR_GEN_N),
-			(p_datseg + STR_GEN_1), (RealPt)NULL);
+	ret = spawnl(0, g_str_gen_exe, g_str_gen_exe2, g_str_gen_b,
+			(g_game_mode == GAME_MODE_ADVANCED ? g_str_gen_a : g_str_gen_n),
+			g_str_gen_1, NULL);
 
 #endif
 	refresh_screen_size();
@@ -753,7 +732,7 @@ void call_gen(void)
 	if (ret == -1) {
 
 		/* perror("Generation") */
-		perror((char*)(p_datseg + STR_GEN_GENERATION));
+		perror(g_str_gen_generation);
 
 		wait_for_keypress();
 
@@ -785,24 +764,22 @@ void call_gen(void)
 			exit_AIL();
 		}
 
-		ds_writed(FIG_FIGURE1_BUF, (Bit32u)F_PADD(ds_readd(BUFFER9_PTR3), 180000L));
-#if defined(__BORLANDC__)
-		if (ds_readb(LARGE_BUF) == 1) {
-			add_ds_fp(FIG_FIGURE1_BUF, 23000L);
+		g_fig_figure1_buf = (unsigned char*)(g_buffer9_ptr3 + 180000L);
+		if (g_large_buf == 1) {
+			g_fig_figure1_buf += 23000L;
 		}
-#endif
 
-		ds_writed(FIG_FIGURE2_BUF, (Bit32u)F_PADD(ds_readd(FIG_FIGURE1_BUF), -20000L));
-		ds_writed(BUFFER10_PTR, (Bit32u)F_PADD(ds_readd(FIG_FIGURE2_BUF), -16771L));
+		g_fig_figure2_buf = (unsigned char*)(((HugePt)g_fig_figure1_buf) - 20000L);
+		g_buffer10_ptr = (unsigned char*)(((HugePt)g_fig_figure2_buf) - 16771L);
 
-		ds_writed(DAY_TIMER, HOURS(24) - 1);
+		gs_day_timer = HOURS(24) - 1;
 		timewarp_until_time_of_day(1);
-		ds_writed(DAY_TIMER, HOURS(8));
+		gs_day_timer = HOURS(8);
 
-		ds_writeb(DAY_OF_WEEK, 4);
-		ds_writeb(DAY_OF_MONTH, 17);
-		ds_writeb(MONTH, 1);
-		ds_writeb(YEAR, 15);
+		gs_day_of_week = 4;
+		gs_day_of_month = 17;
+		gs_month = 1;
+		gs_year = 15;
 	}
 }
 

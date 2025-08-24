@@ -23,7 +23,7 @@ enum {
 	ANI_AREA_WIDTH		 = 0x09,
 	ANI_AREA_CYCLIC		 = 0x0b,
 	ANI_AREA_PICS		 = 0x0c,
-	ANI_AREA_PICS_TAB	 = 0x0d, /* RealPt[20] */
+	ANI_AREA_PICS_TAB	 = 0x0d, /* Bit8u*[20] */
 	ANI_AREA_CHANGES	 = 0x5d,
 	ANI_AREA_CHANGES_TB	 = 0x5f, /* struct{ short pic, duration; }[42] */
 	SIZEOF_ANI_AREA 	 = 0x107
@@ -292,35 +292,6 @@ enum {
 
 #define SIZEOF_HERO_POISON (5)
 
-struct enemy_flags1 {
-	/* enemy + 0x31 */
-	unsigned short dead		:1;
-	unsigned short asleep		:1;
-	unsigned short petrified	:1; /* 1: enemy is petrified (from 'Paralue' spell) */
-	unsigned short busy		:1;
-	unsigned short bit4		:1; /* unused? */
-	unsigned short tied		:1; /* 1: enemy is tied (from 'Band und Fessel' spell; all enemies in the final fight except the Orkchampion) */
-	unsigned short mushroom		:1; /* 1: enemy is a mushroom (from 'Salander' spell) */
-	unsigned short illusion		:1;
-};
-
-struct enemy_flags2 {
-	/* enemy + 0x32 */
-	unsigned short tame		:1; /* from 'Bannbaladin', 'Herr der Tiere' or 'Sanftmut' spell */
-	unsigned short renegade		:1; /* from 'Boeser Blick' spell. removed by 'Horriphobus' spell or Angstgift. */
-	unsigned short scared		:1; /* from 'Horriphobus' spell or Angstgift */
-	unsigned short dancing		:1; /* from 'Zwingtanz' spell */
-	unsigned short bit12		:1; /* unused? */
-	unsigned short bit13		:1; /* unused? */
-	unsigned short bit14		:1; /* unused? */
-	unsigned short bit15		:1; /* unused? */
-};
-
-/* remark siebenstreich 2021-08-15:
- * I tried to combine these two structs into a single 2-byte bitfield 'enemy_flags' (similar to 'inventory_flags' below)
- * Subsequently, the macros enemy_dead, enemy_asleep etc. in v302de.h had to be adjusted.
- * However, no matter what I tried, this always broke binary BCC-compatibility. */
-
 struct item_flags {
 	/* item + 0x02 */
 	unsigned short armor		:1;
@@ -389,34 +360,77 @@ struct informer {
 	signed char unknown;	/* {0, 1} */
 };
 
-/* dummy */
-struct enemy_sheets {
-	signed char mon_id;
-	signed char gfx_id;
-	signed char v[0x2f];
+struct enemy_flags1 {
+	/* enemy + 0x31 */
+	unsigned short dead		:1;
+	unsigned short asleep		:1;
+	unsigned short petrified	:1; /* 1: enemy is petrified (from 'Paralue' spell) */
+	unsigned short busy		:1;
+	unsigned short bit4		:1; /* unused? */
+	unsigned short tied		:1; /* 1: enemy is tied (from 'Band und Fessel' spell; all enemies in the final fight except the Orkchampion) */
+	unsigned short mushroom		:1; /* 1: enemy is a mushroom (from 'Salander' spell) */
+	unsigned short illusion		:1;
+};
 
-	/* 0x31 */
+struct enemy_flags2 {
+	/* enemy + 0x32 */
+	unsigned short tame		:1; /* from 'Bannbaladin', 'Herr der Tiere' or 'Sanftmut' spell */
+	unsigned short renegade		:1; /* from 'Boeser Blick' spell. removed by 'Horriphobus' spell or Angstgift. */
+	unsigned short scared		:1; /* from 'Horriphobus' spell or Angstgift */
+	unsigned short dancing		:1; /* from 'Zwingtanz' spell */
+	unsigned short bit12		:1; /* unused? */
+	unsigned short bit13		:1; /* unused? */
+	unsigned short bit14		:1; /* unused? */
+	unsigned short bit15		:1; /* unused? */
+};
+
+/* remark siebenstreich 2021-08-15:
+ * I tried to combine these two structs into a single 2-byte bitfield 'enemy_flags' (similar to 'inventory_flags' below)
+ * Subsequently, the macros enemy_dead, enemy_asleep etc. in v302de.h had to be adjusted.
+ * However, no matter what I tried, this always broke binary BCC-compatibility. */
+
+struct enemy_sheet {
+	Bit8s mon_id;
+	Bit8s gfx_id;
+	Bit8s rs;
+	Bit8s attrib[14]; // used in steps of 2 for positive attribs only
+	Bit16s le_orig;
+	Bit16s le;
+	Bit16s ae_orig;
+	Bit16s ae;
+	Bit8s  mr;
+	Bit8s  first_ap;
+	Bit8s  attacks;
+	Bit8s  at;
+	Bit8s  pa;
+	Bit16s dam1;
+	Bit16s dam2;
+	Bit8s  bp_orig;
+	Bit8s  bp;
+	Bit8s  magic;
+	Bit8s  mag_id;
+	Bit8s  fighter_id;
+	Bit8s  viewdir;
+	Bit8s  attacks_left;	 /* number attacks left in the current turn of a battle */
+	Bit8s  level;
+	Bit8s  dummy3;
+	Bit8s  action_id;
+	Bit8s  cur_spell;
+	Bit8s  enemy_id;
+	Bit8s  saftkraft;		/* stores extra damage of spell 'Saft, Kraft, Monstermacht' */
+	Bit8s  blind;			/* blind rounds remaining from 'Blitz' spell */
+	Bit8s  weapon_broken;	/* weapon broken? 0	= no, 1	= yes */
 	struct enemy_flags1 flags1;
-
-	/* 0x32 */
 	struct enemy_flags2 flags2;
-
-	/* 0x33 */
-	signed char unused_8;
-	signed char size;
-	signed char round_appear;
-	signed char flags3;
-
-	/* 0x37 */
-	signed char nr_shoot;
-	/* 0x38 */
-	signed short damage_shoot;
-	/* 0x3a */
-	signed char nr_throw;
-	/* 0x3b */
-	signed short damage_throw;
-	/* 0x3d */
-	signed char le_flee;
+	Bit8s	unused8;
+	Bit8s	size;
+	Bit8s	round_appear;
+	Bit8s	is_animal;		/* is the enemy an animal? */
+	Bit8s	shots;
+	Bit16s	shot_dam;
+	Bit8s	throws;
+	Bit16s	throw_dam;
+	Bit8s 	le_flee;
 };
 
 enum {
@@ -494,37 +508,6 @@ enum {
 };
 
 #define SIZEOF_MONSTER (44)
-
-enum {
-	FIGHTER_FIGURE		= 0x00,
-	FIGHTER_NVF_NO		= 0x02,
-	FIGHTER_CBX		= 0x03,
-	FIGHTER_CBY		= 0x04,
-	FIGHTER_OFFSETX		= 0x05,
-	FIGHTER_OFFSETY		= 0x06,
-	FIGHTER_HEIGHT		= 0x07,
-	FIGHTER_WIDTH		= 0x08,
-	FIGHTER_X1		= 0x09,
-	FIGHTER_Y1		= 0x0a,
-	FIGHTER_X2		= 0x0b,
-	FIGHTER_Y2		= 0x0c,
-	FIGHTER_RELOAD		= 0x0d, /* {0, -1	= update gfx data } */
-	FIGHTER_SHEET		= 0x0e, /* 0xe274, 0xe2a8, 0xd8ce */
-	FIGHTER_WSHEET		= 0x0f, /* 0xe274 */
-	FIGHTER_ID		= 0x10, /* position in FIG_LIST_ARRAY */
-	FIGHTER_Z		= 0x11,
-	FIGHTER_VISIBLE		= 0x12, /* {0,1,2} */
-	FIGHTER_TWOFIELDED	= 0x13, /* -1 if fighter is not twofielded. for twofielded fighter: head part: FIGHTER_TWOFIELDED can be used as index for FIG_TWOFIELDED_TABLE which contains the FIGHTER_ID); tail part: entry is FIGHTER_TWOFIELDED+20 of the head part. */
-	FIGHTER_OBJ_ID		= 0x14, /* stores the id of the cb_entry of the square before the fighter entered it */
-	FIGHTER_IS_ENEMY	= 0x15, /* {0	= hero, 1	= enemy, 2	= hero} */ /* strangly, at one position in seg039.cpp the value 2 is written */
-	FIGHTER_SPRITE_NO	= 0x16, /* 0x12c0, 0x1531, 0x1210 */
-	FIGHTER_GFXBUF		= 0x17, /* RealPt */
-	FIGHTER_NEXT		= 0x1b, /* RealPt */
-	FIGHTER_PREV		= 0x1f, /* RealPt */
-};
-
-#define SIZEOF_FIGHTER (0x23)
-
 
 enum {
 	ATTRIB_MU = 0,
@@ -972,7 +955,7 @@ enum {
 	FIGHT_HELLER			= 0xD6
 };
 
-#define SIZEOF_FIGHT (216)
+#define SIZEOF_FIGHT (216L)
 #define SIZEOF_FIGHT_MONSTER (5)
 #define SIZEOF_FIGHT_PLAYER (4)
 
@@ -1849,19 +1832,6 @@ enum {
 	SIZEOF_RECIPE		= 28
 };
 
-enum {
-	LAND_ROUTE_TOWN_1 = 0, /* one byte */ /* ID of the first town of the route. Note that the routes are undirected; i.e. both endpoint towns are treated equal. */
-	LAND_ROUTE_TOWN_2 = 1, /* one byte */ /* ID of the second town of the route. */
-	LAND_ROUTE_DISTANCE = 2, /* one byte */
-	LAND_ROUTE_SPEED_MOD = 3, /* one byte */ /* a number between -4 and +7 */
-	LAND_ROUTE_ENCOUNTERS = 4, /* one byte */
-	LAND_ROUTE_UNKN1 = 5, /* one byte */
-	LAND_ROUTE_UNKN2 = 6, /* one byte */
-	LAND_ROUTE_FIGHTS = 7, /* one byte */
-	LAND_ROUTE_UNKN3 = 8, /* one byte */
-	SIZEOF_LAND_ROUTE = 9
-};
-
 #define NR_SEA_ROUTES (45)
 
 enum {
@@ -1932,14 +1902,14 @@ enum {
 enum { // struct signpost
 	SIGNPOST_TOWN = 0, /* one byte */ /* ID of the town where the harbor is located */
 	SIGNPOST_TYPEINDEX = 1, /* one byte */ /* TYPEINDEX of the signpost within its town */
-	SIGNPOST_LAND_ROUTES = 2, /* four byte, RealPt to the route. Points to the first associated entry in SIGNPOSTS_LINKED_LAND_ROUTES */
+	SIGNPOST_LAND_ROUTES = 2, /* four byte, Bit8u* to the route. Points to the first associated entry in SIGNPOSTS_LINKED_LAND_ROUTES */
 	SIZEOF_SIGNPOST = 6
 };
 
 enum { // struct harbor
 	HARBOR_TOWN = 0, /* one byte */ /* ID of the town where the harbor is located */
 	HARBOR_TYPEINDEX = 1, /* one byte */ /* TYPEINDEX of the harbor within its town */
-	HARBOR_SEA_ROUTES = 2, /* four byte, RealPt to the route. Points to the first associated entry in HARBORS_LINKED_SEA_ROUTES */
+	HARBOR_SEA_ROUTES = 2, /* four byte, Bit8u* to the route. Points to the first associated entry in HARBORS_LINKED_SEA_ROUTES */
 	SIZEOF_HARBOR = 6
 };
 
@@ -1999,16 +1969,15 @@ enum { /* note that the order differs from the one in HERO_TYPE... :( */
 	SPELL_DESC_HEROTYPE_SELF = 5
 };
 
-enum {
-	MON_SPELL_DESCRIPTIONS_AE_COST	= 0,
-	MON_SPELL_DESCRIPTIONS_MODE	= 1,
-	MON_SPELL_DESCRIPTIONS_UNKN1	= 2,
-	MON_SPELL_DESCRIPTIONS_ATTRIB1	= 3,
-	MON_SPELL_DESCRIPTIONS_ATTRIB2	= 4,
-	MON_SPELL_DESCRIPTIONS_ATTRIB3	= 5,
-	MON_SPELL_DESCRIPTIONS_VS_MR	= 6,
-	MON_SPELL_DESCRIPTIONS_ANI_ID	= 7,
-	SIZEOF_MON_SPELL_DESCRIPTIONS	= 8 /* size of entry at MON_SPELL_DESCRIPTIONS in bytes */
+struct mon_spell_description {
+	Bit8s ae_cost;
+	Bit8s mode;
+	Bit8s unkn1;
+	Bit8s attrib1;
+	Bit8s attrib2;
+	Bit8s attrib3;
+	Bit8s vs_mr;
+	Bit8s ani_id;
 };
 
 enum {

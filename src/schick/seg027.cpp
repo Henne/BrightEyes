@@ -30,7 +30,7 @@ namespace M302de {
 void load_pp20(signed short index)
 {
 	volatile signed short fd;
-	RealPt buffer_ptr;
+	Bit8u* buffer_ptr;
 	signed short bi;
 
 	if (index <= 5
@@ -47,17 +47,19 @@ void load_pp20(signed short index)
 		if (index == ARCHIVE_FILE_ZUSTA_US)
 			bi = 8;
 
-		if (ds_readd(PP20_BUFFERS + bi * 4)) {
+		if (g_pp20_buffers[bi]) {
 
 			/* already buffered, just decomp */
-			decomp_pp20((Bit8u*)(ds_readd(PP20_BUFFERS + bi * 4)), (Bit8u*)ds_readd(RENDERBUF_PTR),
+			decomp_pp20(g_pp20_buffers[bi], g_renderbuf_ptr,
+				/* TODO: check this out */
 #if !defined(__BORLANDC__)
-				(Bit8u*)(ds_readd(PP20_BUFFERS) + 4 + bi) + 4,
+				//(Bit8u*)(ds_readd(PP20_BUFFERS) + 4 + bi) + 4,
+				g_pp20_buffers[bi] + 4,
 #else
 				ds_readw(PP20_BUFFERS + 4 * bi) + 4,
 				ds_readw((PP20_BUFFERS + 2) + 4 * bi),
 #endif
-				ds_readd(PP20_BUFFER_LENGTHS + bi * 4));
+				g_pp20_buffer_lengths[bi]);
 
 		} else {
 			fd = load_archive_file(index);
@@ -66,37 +68,37 @@ void load_pp20(signed short index)
 				/* successful allocation */
 
 				/* save pointer */
-				ds_writed(PP20_BUFFERS + bi * 4, (Bit32u)buffer_ptr);
+				g_pp20_buffers[bi] = buffer_ptr;
 				/* save length */
-				ds_writed(PP20_BUFFER_LENGTHS + bi * 4, get_readlength2(fd));
+				g_pp20_buffer_lengths[bi] = get_readlength2(fd);
 
 				/* read pic */
-				read_archive_file(fd, (Bit8u*)(ds_readd(PP20_BUFFERS + bi * 4)), ds_readw(PP20_BUFFER_LENGTHS + bi * 4));
+				read_archive_file(fd, (Bit8u*)(ds_readd(PP20_BUFFERS + bi * 4)), g_pp20_buffer_lengths[bi]);
 
 				/* decompress */
-				decomp_pp20((Bit8u*)(ds_readd(PP20_BUFFERS + bi * 4)), (Bit8u*)ds_readd(RENDERBUF_PTR),
+				decomp_pp20((Bit8u*)(ds_readd(PP20_BUFFERS + bi * 4)), g_renderbuf_ptr,
 #if !defined(__BORLANDC__)
 					(Bit8u*)(ds_readd(PP20_BUFFERS + 4 + bi)) + 4,
 #else
 					ds_readw((PP20_BUFFERS + 0) + bi * 4) + 4,
 					ds_readw((PP20_BUFFERS + 2) + bi * 4),
 #endif
-					ds_readd(PP20_BUFFER_LENGTHS + bi * 4));
+					g_pp20_buffer_lengths[bi]);
 
 				close(fd);
 			} else {
 				/* failed allocation */
 
 				/* read it directly */
-				read_archive_file(fd, (Bit8u*)ds_readd(RENDERBUF_PTR) - 8, 64000);
+				read_archive_file(fd, g_renderbuf_ptr - 8, 64000);
 
 				/* decompress it */
-				decomp_pp20((Bit8u*)ds_readd(RENDERBUF_PTR) - 8, (Bit8u*)ds_readd(RENDERBUF_PTR),
+				decomp_pp20(g_renderbuf_ptr - 8, g_renderbuf_ptr,
 #if !defined(__BORLANDC__)
-					(Bit8u*)ds_readd(RENDERBUF_PTR) -8 +4,
+					g_renderbuf_ptr -8 +4,
 #else
-					FP_OFF((Bit8u*)ds_readd(RENDERBUF_PTR) -8) +4,
-					FP_SEG((Bit8u*)ds_readd(RENDERBUF_PTR) -8),
+					FP_OFF(g_renderbuf_ptr -8) +4,
+					FP_SEG(g_renderbuf_ptr -8),
 #endif
 					get_readlength2(fd));
 
@@ -108,15 +110,15 @@ void load_pp20(signed short index)
 
 		fd = load_archive_file(index);
 
-		read_archive_file(fd, (Bit8u*)ds_readd(RENDERBUF_PTR) - 8, 64000);
+		read_archive_file(fd, g_renderbuf_ptr - 8, 64000);
 
 		/* decompress it */
-		decomp_pp20((Bit8u*)ds_readd(RENDERBUF_PTR) - 8, (Bit8u*)ds_readd(RENDERBUF_PTR),
+		decomp_pp20(g_renderbuf_ptr - 8, g_renderbuf_ptr,
 #if !defined(__BORLANDC__)
-			(Bit8u*)(ds_readd(RENDERBUF_PTR) - 8 + 4),
+			(Bit8u*)(g_renderbuf_ptr - 8 + 4),
 #else
-			FP_OFF((Bit8u*)ds_readd(RENDERBUF_PTR) - 8) + 4,
-			FP_SEG((Bit8u*)ds_readd(RENDERBUF_PTR) - 8),
+			FP_OFF(g_renderbuf_ptr - 8) + 4,
+			FP_SEG(g_renderbuf_ptr - 8),
 #endif
 			get_readlength2(fd));
 
@@ -131,37 +133,37 @@ void load_pp20(signed short index)
  * \return              a pointer to the location where the data is.
  */
 /* Original-Bug: when using EMS for caching something strage happens. */
-RealPt load_fight_figs(signed short fig)
+Bit8u* load_fight_figs(signed short fig)
 {
 	signed short i;
 
-	RealPt dst;
+	Bit8u* dst;
 	unsigned short ems_handle;
 	Bit32u offset;
 	Bit32u len;
 	unsigned short fd;
 	signed short max_entries;
-	Bit8u *mem_slots;
-	Bit8u *p_tab;
+	struct struct_memslot_fig *memslots;
+	Bit32u *p_tab;
 	signed short index;
 	Bit8u *src;
 
 	/* check if fig is at a known place */
-	if (fig == ds_readws(FIG_FIGURE1)) {
-		return (Bit8u*)ds_readd(FIG_FIGURE1_BUF);
-	} else if (fig == ds_readws(FIG_FIGURE2)) {
-		return (Bit8u*)ds_readd(FIG_FIGURE2_BUF);
-	} else if (ds_readws(FIG_FIGURE2) != -1) {
-		ds_writew(FIG_FIGURE1, ds_readw(FIG_FIGURE2));
-		memcpy((Bit8u*)ds_readd(FIG_FIGURE1_BUF), (Bit8u*)ds_readd(FIG_FIGURE2_BUF), 20000);
-		src = (Bit8u*)ds_readd(FIG_FIGURE2_BUF);
-		ds_writew(FIG_FIGURE2, fig);
-	} else if (ds_readws(FIG_FIGURE1) != -1) {
-		src = (Bit8u*)ds_readd(FIG_FIGURE2_BUF);
-		ds_writew(FIG_FIGURE2, fig);
+	if (fig == g_fig_figure1) {
+		return (Bit8u*)g_fig_figure1_buf;
+	} else if (fig == g_fig_figure2) {
+		return (Bit8u*)g_fig_figure2_buf;
+	} else if (g_fig_figure2 != -1) {
+		g_fig_figure1 = g_fig_figure2;
+		memcpy((Bit8u*)g_fig_figure1_buf, (Bit8u*)g_fig_figure2_buf, 20000);
+		src = (Bit8u*)g_fig_figure2_buf;
+		g_fig_figure2 = fig;
+	} else if (g_fig_figure1 != -1) {
+		src = (Bit8u*)g_fig_figure2_buf;
+		g_fig_figure2 = fig;
 	} else {
-		src = (Bit8u*)ds_readd(FIG_FIGURE1_BUF);
-		ds_writew(FIG_FIGURE1, fig);
+		src = (Bit8u*)g_fig_figure1_buf;
+		g_fig_figure1 = fig;
 	}
 
 	/* prepare archive access... */
@@ -169,8 +171,8 @@ RealPt load_fight_figs(signed short fig)
 	if (fig >= 88) {
 		/* ...for foes */
 		max_entries = 36;
-		mem_slots = (Bit8u*)ds_readd(MEM_SLOTS_MON);
-		p_tab = p_datseg + BUFFER_MONSTER_TAB;
+		memslots = g_memslots_mon;
+		p_tab = g_buffer_monster_tab;
 		index = 16;
 		fig -= 88;
 	} else {
@@ -179,37 +181,37 @@ RealPt load_fight_figs(signed short fig)
 
 		if (fig >= 44) {
 			/* female */
-			p_tab = p_datseg + BUFFER_WFIGS_TAB;
+			p_tab = g_buffer_wfigs_tab;
 			index = ARCHIVE_FILE_WFIGS;
-			mem_slots = (Bit8u*)ds_readd(MEM_SLOTS_WFIG);
+			memslots = g_memslots_wfig;
 			fig -= 44;
 		} else {
 			/* male */
-			p_tab = p_datseg + BUFFER_MFIGS_TAB;
+			p_tab = g_buffer_mfigs_tab;
 			index = ARCHIVE_FILE_MFIGS;
-			mem_slots = (Bit8u*)ds_readd(MEM_SLOTS_MFIG);
+			memslots = g_memslots_mfig;
 		}
 	}
 
 	/* check if fig is already in memory */
 	for (i = 0; i < max_entries; i++) {
-		if (host_readw(mem_slots + i * 12) == fig)
+		if (memslots[i].figure == fig)
 			break;
 	}
 
 	if (i != max_entries) {
 		/* Yes, it is */
 
-		if (host_readw(mem_slots + i * 12 + 6) != 0) {
+		if (memslots[i].ems_handle) {
 			/* is in EMS */
-			ems_handle = host_readw(mem_slots + i * 12 + 6);
-			from_EMS(src, ems_handle, host_readd(mem_slots + i * 12 + 8));
+			ems_handle = memslots[i].ems_handle;
+			from_EMS(src, ems_handle, memslots[i].length);
 		} else {
 			/* is in HEAP */
 #if !defined(__BORLANDC__)
 			D1_LOG("cached from HEAP %d\n", fig);
 #endif
-			memcpy((Bit8u*)(src), (Bit8u*)(host_readd(mem_slots + i * 12 + 2)), host_readw(mem_slots + i * 12 + 8));
+			memcpy((Bit8u*)src, memslots[i].ptr, memslots[i].length);
 		}
 	} else {
 #if !defined(__BORLANDC__)
@@ -217,14 +219,14 @@ RealPt load_fight_figs(signed short fig)
 #endif
 
 		/* read fig from file */
-		offset = host_readd(p_tab + (fig - 1) * 4);
-		len = host_readd(p_tab + fig * 4) - offset;
+		offset = p_tab[fig - 1];
+		len = p_tab[fig] - offset;
 
 		fd = load_archive_file(index);
 
 		seek_archive_file(fd, offset, 0);
 
-		read_archive_file(fd, (Bit8u*)(src), (unsigned short)len);
+		read_archive_file(fd, (Bit8u*)src, (unsigned short)len);
 
 		close(fd);
 
@@ -235,18 +237,18 @@ RealPt load_fight_figs(signed short fig)
 			/* use heap */
 
 			for (i = 0; i < max_entries - 1; i++) {
-				if (host_readw(mem_slots + i * 12) == 0)
+				if (!memslots[i].figure)
 					break;
 			}
 
-			host_writew(mem_slots + i * 12, fig);
-			host_writed(mem_slots + i * 12 + 2, (Bit32u)dst);
-			host_writew(mem_slots + i * 12 + 6, 0);
-			host_writed(mem_slots + i * 12 + 8, len);
+			memslots[i].figure = fig;
+			memslots[i].ptr = dst;
+			memslots[i].ems_handle = 0;
+			memslots[i].length = len;
 
-			memcpy((Bit8u*)(dst), (Bit8u*)(src), (unsigned short)len);
+			memcpy((Bit8u*)dst, (Bit8u*)src, (unsigned short)len);
 
-		} else if (ds_readb(EMS_ENABLED) != 0) {
+		} else if (g_ems_enabled != 0) {
 #if !defined(__BORLANDC__)
 			D1_LOG("use EMS for fig %d\n", fig);
 #endif
@@ -255,15 +257,15 @@ RealPt load_fight_figs(signed short fig)
 
 				/* find a free slot */
 				for (i = 0; i < max_entries - 1; i++) {
-					if (host_readw(mem_slots + i * 12) == 0)
+					if (!memslots[i].figure)
 						break;
 				}
 
 				/* write slot */
-				host_writew(mem_slots + i * 12, fig);
-				host_writew(mem_slots + i * 12 + 6, ems_handle);
-				host_writed(mem_slots + i * 12 + 2, 0);
-				host_writed(mem_slots + i * 12 + 8, len);
+				memslots[i].figure = fig;
+				memslots[i].ems_handle = ems_handle;
+				memslots[i].ptr = NULL;
+				memslots[i].length = len;
 
 				/* copy to EMS */
 				to_EMS(ems_handle, src, len);
@@ -288,10 +290,11 @@ void load_ani(const signed short no)
 	signed short i;
 	Bit8u *p_area;
 	unsigned short ems_handle;
-	RealPt ani_buffer;
 #if !defined(__BORLANDC__)
+	Bit8u* ani_buffer;
 	Bit8u *unplen_ptr;
 #else
+	Bit8u huge *ani_buffer;
 	Bit8u huge *unplen_ptr;
 #endif
 	Bit8u *area_changes_ptr;
@@ -322,126 +325,121 @@ void load_ani(const signed short no)
 		return;
 
 	/* no need to reload  the same ani*/
-	if (no == (signed short)ds_readw(CURRENT_ANI))
+	if (no == g_current_ani)
 		return;
 
-	ds_writew(ANI_ENABLED, 0);
+	g_ani_enabled = 0;
 	/* set the new ani no*/
-	ds_writew(CURRENT_ANI, no);
+	g_current_ani = no;
 	/* clear the old ani */
 	clear_ani();
 
 	/* count to the ordered ani in an array*/
 	for (i = 0; i < 37; i++) {
-		if (no == host_readw((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8))
+		if (no == g_memslots_anis[i].figure)
 			break;
 	}
 
 	if (i != 37) {
+
 		/* already buffered in EMS, get from there */
-		ems_handle = host_readw((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8 + 2);
-		from_EMS((Bit8u*)ds_readd(BUFFER9_PTR), ems_handle, host_readd((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8 + 4));
+		ems_handle = g_memslots_anis[i].ems_handle;
+		from_EMS((Bit8u*)g_buffer9_ptr, ems_handle, g_memslots_anis[i].length);
+
 	} else {
 		/* load it from file */
-		ani_off = ds_readd(BUFFER_ANIS_TAB - 4 + no * 4);
-		ani_len = ds_readd(BUFFER_ANIS_TAB + no * 4) - ani_off;
+		ani_off = g_buffer_anis_tab[no - 1];
+		ani_len = g_buffer_anis_tab[no]- ani_off;
 
 		/* load ANIS */
 		fd = load_archive_file(ARCHIVE_FILE_ANIS);
+
 		/* seek to ordered ani */
 		seek_archive_file(fd, ani_off, 0);
-		read_archive_file(fd, (Bit8u*)ds_readd(BUFFER9_PTR), (unsigned short)ani_len);
+		read_archive_file(fd, (Bit8u*)g_buffer9_ptr, (unsigned short)ani_len);
 
 		/* if EMS is enabled buffer it */
-		if ((ds_readb(EMS_ENABLED) != 0) &&
-			((ems_handle = alloc_EMS(ani_len))))
-		{
+		if ((g_ems_enabled != 0) && (ems_handle = alloc_EMS(ani_len))) {
 
 			/* find an empty EMS slot */
 			for (i = 0; i < 36; i++) {
-				if (host_readw((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8) == 0)
+				if (!g_memslots_anis[i].figure)
 					break;
 			}
 
 			/* fill the entry */
-			host_writew((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8, no);
-			host_writew((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8 + 2, ems_handle);
-			host_writed((Bit8u*)ds_readd(MEM_SLOTS_ANIS) + i * 8 + 4, ani_len);
+			g_memslots_anis[i].figure = no;
+			g_memslots_anis[i].ems_handle = ems_handle;
+			g_memslots_anis[i].length = ani_len;
 
 			/* copy data to EMS */
-			to_EMS(ems_handle, (Bit8u*)ds_readd(BUFFER9_PTR), ani_len);
+			to_EMS(ems_handle, (Bit8u*)g_buffer9_ptr, ani_len);
 		}
 
 		close(fd);
 	}
 
-	ani_buffer = (Bit8u*)ds_readd(BUFFER9_PTR);
+	ani_buffer = g_buffer9_ptr;
 
 	/* set start of picture data */
-	ds_writed(ANI_MAIN_PTR, (Bit32u)(F_PADD(ani_buffer, host_readd((Bit8u*)ds_readd(BUFFER9_PTR)))));
+	g_ani_main_ptr = ani_buffer + host_readd(g_buffer9_ptr);
 	/* set start of palette */
-	ds_writed(ANI_PALETTE, (Bit32u)(F_PADD(F_PADD(ani_buffer, host_readd((Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 4L)))), 6L)));
-	//	(Bit32u)(host_readd((Bit8u*)ds_readd(BUFFER9_PTR) + 4) + ani_buffer + 6));
+	g_ani_palette = (ani_buffer + host_readd(g_buffer9_ptr + 4L)) + 6L;
 
 	/* read some bytes between data and palette */
-	ds_writew(ANI_UNKNOWN1,	host_readw((Bit8u*)(F_PADD(ds_readd(ANI_PALETTE), -6))));
-	ds_writew(ANI_UNKNOWN2,	host_readw((Bit8u*)(F_PADD(ds_readd(ANI_PALETTE), -4))));
+	g_ani_unknown1 = host_readw(g_ani_palette - 6L);
+	g_ani_unknown2 = host_readw(g_ani_palette - 4L);
 	/* compression type */
-	ds_writeb(ANI_COMPR_FLAG, host_readb((Bit8u*)(F_PADD(ds_readd(ANI_PALETTE), -1))));
-	ds_writeb(ANI_PALETTE_SIZE, host_readb((Bit8u*)(F_PADD(ds_readd(ANI_PALETTE), -2))));
+	g_ani_compr_flag = host_readb(g_ani_palette - 1L);
+	g_ani_palette_size = host_readb(g_ani_palette - 2L);
 
-	ani_end_ptr = (Bit8u*)(F_PADD(ds_readd(ANI_PALETTE), 3 * ds_readb(ANI_PALETTE_SIZE)));
+	ani_end_ptr = g_ani_palette + 3 * g_ani_palette_size;
 
 	/* set picture size */
-	ds_writew(ANI_WIDTH, host_readw((Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 8))));
-	ds_writeb(ANI_HEIGHT, host_readb((Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 10))));
+	g_ani_width = host_readws(g_buffer9_ptr + 8L);
+	g_ani_height = host_readb(g_buffer9_ptr + 10L);
 	/* set number of areas */
-	ds_writeb(ANI_AREACOUNT, host_readb((Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 11))));
+	g_ani_areacount = host_readb(g_buffer9_ptr + 11L);
 
 	/* Process Main Picture */
-	if (ds_readb(ANI_COMPR_FLAG) != 0) {
-		plen = host_readd((Bit8u*)ds_readd(ANI_MAIN_PTR));
-		unplen_ptr = (Bit8u*)ds_readd(ANI_MAIN_PTR);
+	if (g_ani_compr_flag) {
+
+		plen = host_readd((Bit8u*)g_ani_main_ptr);
+		unplen_ptr = (Bit8u*)g_ani_main_ptr;
 
 		unplen_ptr += (plen - 4);
 
 		unplen = host_readd(unplen_ptr);
 		unplen = swap_u32(unplen) >> 8;
 
-		decomp_pp20((Bit8u*)ds_readd(ANI_MAIN_PTR),
-			(Bit8u*)ds_readd(RENDERBUF_PTR),
+		decomp_pp20((Bit8u*)g_ani_main_ptr, g_renderbuf_ptr,
 #if !defined(__BORLANDC__)
-			(Bit8u*)(ds_readd(ANI_MAIN_PTR) + 4),
+			(Bit8u*)(g_ani_main_ptr + 4),
 #else
-			FP_OFF((Bit8u*)ds_readd(ANI_MAIN_PTR)) + 4,
-			FP_SEG((Bit8u*)ds_readd(ANI_MAIN_PTR)),
+			FP_OFF((Bit8u*)g_ani_main_ptr) + 4,
+			FP_SEG((Bit8u*)g_ani_main_ptr),
 #endif
 			plen);
 
 		packed_delta = unplen - plen;
-		ani_residue_ptr = (Bit8u*)ds_readd(ANI_MAIN_PTR);
+		ani_residue_ptr = (Bit8u*)g_ani_main_ptr;
 		ani_residue_ptr += plen;
 		ani_residue_len = ani_end_ptr - ani_residue_ptr;
 		memcpy(ani_end_ptr + packed_delta, ani_residue_ptr, ani_residue_len);
 
-		memcpy((Bit8u*)ds_readd(ANI_MAIN_PTR), (Bit8u*)ds_readd(RENDERBUF_PTR), unplen);
+		memcpy((Bit8u*)g_ani_main_ptr, g_renderbuf_ptr, unplen);
 		ani_residue_ptr += packed_delta;
 		memcpy(ani_residue_ptr, ani_end_ptr + packed_delta, ani_residue_len);
 
-#if !defined(__BORLANDC__)
-		ds_writed(ANI_PALETTE, ds_readd(ANI_PALETTE) + packed_delta);
-#else
-		*(HugePt*)(p_datseg + ANI_PALETTE) += packed_delta;
-#endif
-
+		g_ani_palette += packed_delta;
 		ani_end_ptr += packed_delta;
 	}
 
 	/* Process the Areas */
-	for (i_area = 0; ds_readbs(ANI_AREACOUNT) > i_area; i_area++) {
-		p_area2 = (Bit8u*)((p_datseg + ANI_AREA_TABLE + i_area * SIZEOF_ANI_AREA));
-		area_offset = host_readd((Bit8u*)(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), 4 * i_area), 0xc)));
-		p_area = (Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), area_offset));
+	for (i_area = 0; g_ani_areacount > i_area; i_area++) {
+		p_area2 = (Bit8u*)(p_datseg + ANI_AREA_TABLE + i_area * SIZEOF_ANI_AREA);
+		area_offset = host_readd((g_buffer9_ptr + 4 * i_area) + 0xc);
+		p_area = g_buffer9_ptr + area_offset;
 		strncpy((char*)p_area2 + ANI_AREA_NAME, (char*)p_area, 4);
 
 		host_writew(p_area2 + ANI_AREA_X, host_readw(p_area + 4));
@@ -452,57 +450,53 @@ void load_ani(const signed short no)
 
 		host_writeb(p_area2 + ANI_AREA_PICS, (signed char)(area_pics = host_readbs(p_area + 0x0b)));
 
-		if (ds_readb(ANI_COMPR_FLAG) != 0) {
+		if (g_ani_compr_flag) {
 
 			area_data_offset = host_readd(p_area + 0xc);
 			area_data_offset += packed_delta;
-			unplen_ptr = (Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), area_data_offset));
+			unplen_ptr = g_buffer9_ptr + area_data_offset;
 
 			plen = host_readd(unplen_ptr);
 			unplen_ptr += (plen - 4);
 			area_size = host_readd(unplen_ptr);
 			area_size = swap_u32(area_size) >> 8;
 
-			decomp_pp20((Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), area_data_offset)),
-				(Bit8u*)ds_readd(RENDERBUF_PTR),
+			decomp_pp20(g_buffer9_ptr + area_data_offset, g_renderbuf_ptr,
 #if !defined(__BORLANDC__)
-				(Bit8u*)ds_readd(BUFFER9_PTR) + area_data_offset + 4,
+				(Bit8u*)g_buffer9_ptr + area_data_offset + 4,
 #else
-				FP_OFF(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), area_data_offset)) + 4,
-				FP_SEG(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), area_data_offset)),
+				FP_OFF(g_buffer9_ptr + area_data_offset) + 4,
+				FP_SEG(g_buffer9_ptr + area_data_offset),
 #endif
 				plen);
 
 			packed_delta2 = area_size - plen;
 			packed_delta += packed_delta2;
 
-			ani_residue_ptr = (Bit8u*)ds_readd(BUFFER9_PTR);
+			ani_residue_ptr = (Bit8u*)g_buffer9_ptr;
 			ani_residue_ptr += area_data_offset;
 			ani_residue_ptr += plen;
 			ani_residue_len = ani_end_ptr - ani_residue_ptr;
 			memcpy(ani_end_ptr + packed_delta2, ani_residue_ptr, (unsigned short)ani_residue_len);
 
-			memcpy((Bit8u*)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), area_data_offset)),
-				(Bit8u*)ds_readd(RENDERBUF_PTR), (unsigned short)area_size);
+			memcpy(g_buffer9_ptr + area_data_offset, g_renderbuf_ptr, (unsigned short)area_size);
 			ani_residue_ptr += packed_delta2;
 			memcpy(ani_residue_ptr, ani_end_ptr + packed_delta2, (unsigned short)ani_residue_len);
-#if !defined(__BORLANDC__)
-		ds_writed(ANI_PALETTE, ds_readd(ANI_PALETTE) + packed_delta2);
-#else
-		*(HugePt*)(p_datseg + ANI_PALETTE) += packed_delta2;
-#endif
+
+			g_ani_palette += packed_delta2;
 			ani_end_ptr += packed_delta2;
+
 			area_size = (unsigned char)host_readb(p_area2 + ANI_AREA_HEIGHT)
 				* (signed short)host_readw(p_area2 + ANI_AREA_WIDTH);
 
 			for (j = 0; j < area_pics; j++) {
 				host_writed(p_area2 + j * 4 + ANI_AREA_PICS_TAB,
-					(Bit32u)(F_PADD(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), area_data_offset), j * area_size)));
+					(Bit32u)((g_buffer9_ptr + area_data_offset) + j * area_size));
 			}
 		} else {
 			for (j = 0; j < area_pics; j++) {
 				area_data_offset = host_readd(p_area + j * 4 + 0xc);
-				host_writed(p_area2 + j * 4 + ANI_AREA_PICS_TAB, (Bit32u)(F_PADD((Bit8u*)ds_readd(BUFFER9_PTR), area_data_offset)));
+				host_writed(p_area2 + j * 4 + ANI_AREA_PICS_TAB, (Bit32u)(g_buffer9_ptr + area_data_offset));
 			}
 		}
 
@@ -515,21 +509,21 @@ void load_ani(const signed short no)
 		}
 	}
 
-	ani_len = ani_end_ptr - (Bit8u*)ds_readd(BUFFER9_PTR);
+	ani_len = ani_end_ptr - (Bit8u*)g_buffer9_ptr;
 	/* this is always true */
-	if (ani_len > (Bit32s)ds_readd(ANI_UNKNOWN4)) {
-		ds_writew(AREA_PREPARED, 0xffff);
+	if (ani_len > g_ani_unknown4) {
+		g_area_prepared = -1;
 	}
 }
 
 /**
- * \brief   reads an entry in SCENARIO.LST and stores it in SCENARIO_BUF
+ * \brief   reads an entry in SCENARIO.LST and stores it in g_scenario_buf
  *
  * \param   scenario_id number of the scenario in SCENARIO.LST
  */
 void load_scenario(signed short scenario_id)
 {
-	unsigned short scenario_lst_handle;
+	signed short scenario_lst_handle;
 	signed short scenario_lst_buf;
 
 	/* load SCENARIO.LST */
@@ -551,7 +545,7 @@ void load_scenario(signed short scenario_id)
 	seek_archive_file(scenario_lst_handle, 621L * (scenario_id - 1) + 2, 0);
 
 	/* read scenario */
-	read_archive_file(scenario_lst_handle, (Bit8u*)ds_readd(SCENARIO_BUF), 621);
+	read_archive_file(scenario_lst_handle, (Bit8u*)g_scenario_buf, 621);
 
 	/* close archive */
 	close(scenario_lst_handle);
@@ -575,7 +569,7 @@ signed short count_fight_enemies(signed short fight_id)
 
 	enemy_count = 0;
 
-	fight_lst_buf = (char*)ds_readd(DTP2);
+	fight_lst_buf = (Bit8u*)g_dtp2;
 
 	/* load FIGHT.LST from TEMP dir */
 	fight_lst_handle = load_archive_file(0x8000 | ARCHIVE_FILE_FIGHT_LST);
@@ -615,7 +609,7 @@ signed short count_fight_enemies(signed short fight_id)
 }
 
 /**
- * \brief   reads an entry in FIGHT.LST and stores it in CURRENT_FIGHT
+ * \brief   reads an entry in FIGHT.LST and stores it in g_current_fight
  *
  * \param   fight_id    number of the fight in FIGHT.LST
  */
@@ -639,18 +633,18 @@ void read_fight_lst(signed short fight_id)
 		fight_id = 0;
 
 	/* write the fight number to a global var */
-	ds_writew(CURRENT_FIGHT_ID, fight_id);
+	g_current_fight_id = fight_id;
 
 	/* seek to file position */
 	lseek(fight_lst_handle, (long)SIZEOF_FIGHT * fight_id + 2, SEEK_SET);
 
 	/* read the fight entry */
-	_read(fight_lst_handle, (void*)ds_readd(CURRENT_FIGHT), SIZEOF_FIGHT);
+	_read(fight_lst_handle, g_current_fight, SIZEOF_FIGHT);
 
 #if !defined(__BORLANDC__)
 	char fight_name[21];
 	/* Improvement */
-	strncpy(fight_name, (char*)(Bit8u*)ds_readd(CURRENT_FIGHT), 20);
+	strncpy(fight_name, (char*)g_current_fight, 20);
 	fight_name[20] = '\0';
 	D1_INFO("Lade Kampf fight_id %3d\t Name \"%s\"\n", fight_id, fight_name);
 	/* Improvement end */
@@ -661,23 +655,23 @@ void read_fight_lst(signed short fight_id)
 }
 
 /**
- * \brief   writes the data in CURRENT_FIGHT to FIGHT.LST
+ * \brief   writes the data from g_current_fight to FIGHT.LST
  */
 void write_fight_lst(void)
 {
 	signed short fight_id;
-	unsigned short fight_lst_handle;
+	signed short fight_lst_handle;
 
-	fight_id = ds_readw(CURRENT_FIGHT_ID);
+	fight_id = g_current_fight_id;
 
 	/* load FIGHT.LST from TEMP dir */
 	fight_lst_handle = load_archive_file(0x8000 | ARCHIVE_FILE_FIGHT_LST);
 
 	/* seek to the entry */
-	lseek(fight_lst_handle, (long)SIZEOF_FIGHT * fight_id + 2, SEEK_SET);
+	lseek(fight_lst_handle, SIZEOF_FIGHT * fight_id + 2, SEEK_SET);
 
 	/* write it */
-	_write(fight_lst_handle, (void*)ds_readd(CURRENT_FIGHT), SIZEOF_FIGHT);
+	write(fight_lst_handle, g_current_fight, SIZEOF_FIGHT);
 
 	/* close the file */
 	close(fight_lst_handle);
@@ -689,50 +683,49 @@ void init_common_buffers(void)
 	signed short bytes;
 
 	fd = load_archive_file(ARCHIVE_FILE_POPUP_DAT);
-	bytes = read_archive_file(fd, (Bit8u*)((Bit8u*)ds_readd(POPUP) - 8), 500);
+	bytes = read_archive_file(fd, g_popup - 8, 500);
 	close(fd);
 
 	/* decompress POPUP.DAT */
-	decomp_pp20((Bit8u*)((Bit8u*)ds_readd(POPUP) - 8),
-		(Bit8u*)ds_readd(POPUP),
+	decomp_pp20(g_popup - 8, g_popup,
 #if !defined(__BORLANDC__)
-		(Bit8u*)ds_readd(POPUP) - 8 + 4,
+		g_popup - 8 + 4,
 #else
-		FP_OFF((Bit8u*)ds_readd(POPUP) - 8) + 4,
-		FP_SEG((Bit8u*)ds_readd(POPUP) - 8),
+		FP_OFF(g_popup - 8) + 4,
+		FP_SEG(g_popup - 8),
 #endif
 		bytes);
 
 	fd = load_archive_file(ARCHIVE_FILE_COMPASS);
-	bytes = read_archive_file(fd, (Bit8u*)ds_readd(BUFFER6_PTR), 5000);
+	bytes = read_archive_file(fd, g_buffer6_ptr, 5000);
 	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_ITEMS_DAT);
-	bytes = read_archive_file(fd, (Bit8u*)ds_readd(ITEMSDAT), 3060);
+	bytes = read_archive_file(fd, g_itemsdat, 3060);
 	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_ANIS_TAB);
-	read_archive_file(fd, p_datseg + BUFFER_ANIS_TAB, 148);
+	read_archive_file(fd, (Bit8u*)&g_buffer_anis_tab, 148);
 	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_MFIGS_TAB);
-	read_archive_file(fd, p_datseg + BUFFER_MFIGS_TAB, 172);
+	read_archive_file(fd, (Bit8u*)&g_buffer_mfigs_tab, 172);
 	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_WFIGS_TAB);
-	read_archive_file(fd, p_datseg + BUFFER_WFIGS_TAB, 172);
+	read_archive_file(fd, (Bit8u*)&g_buffer_wfigs_tab, 172);
 	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_MONSTER_TAB);
-	read_archive_file(fd, p_datseg + BUFFER_MONSTER_TAB, 144);
+	read_archive_file(fd, (Bit8u*)&g_buffer_monster_tab, 144);
 	close(fd);
 
 	fd = load_regular_file(ARCHIVE_FILE_GAMES_NAM);
-	_read(fd, p_datseg + SAVEGAME_NAMES, 45);
+	_read(fd, &g_savegame_names[0][0], 45);
 	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_TOWNPAL_DAT);
-	read_archive_file(fd, (Bit8u*)ds_readd(TOWNPAL_BUF), 288);
+	read_archive_file(fd, g_townpal_buf, 288);
 	close(fd);
 
 }

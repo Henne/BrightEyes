@@ -61,7 +61,7 @@ void do_healer(void)
 	leave_healer = 0;
 
 #if !defined(__BORLANDC__)
-	const Bit8u typi = ds_readb(CURRENT_TYPEINDEX);
+	const Bit8u typi = gs_current_typeindex;
 	const Bit8s h_price = ds_readb(HEALER_DESCR_TABLE + 2 * typi);
 	const Bit8u h_qual = ds_readb(HEALER_DESCR_TABLE + 1 + 2 * typi);
 
@@ -70,30 +70,30 @@ void do_healer(void)
 	D1_INFO("\tQualitaet: %2d [1,15]\n", h_qual);
 #endif
 
-	request_refresh = ds_writew(REQUEST_REFRESH, 1);
-	healer_stats_ptr = p_datseg + HEALER_DESCR_TABLE + ds_readw(CURRENT_TYPEINDEX) * SIZEOF_HEALER_STATS;
+	request_refresh = g_request_refresh = 1;
+	healer_stats_ptr = p_datseg + HEALER_DESCR_TABLE + gs_current_typeindex * SIZEOF_HEALER_STATS;
 	draw_loc_icons(4, MENU_ICON_HEAL_WOUNDS, MENU_ICON_HEAL_DISEASE, MENU_ICON_HEAL_POISON, MENU_ICON_LEAVE);
 
 	while (leave_healer == 0) {
 
-		if (ds_readw(REQUEST_REFRESH) != 0) {
+		if (g_request_refresh != 0) {
 			draw_main_screen();
 			set_var_to_zero();
 			load_ani(23);
 			init_ani(0);
 
-			GUI_print_loc_line(get_tx(ds_readw(CURRENT_LOCDATA)));
+			GUI_print_loc_line(get_tx(gs_current_locdata));
 
 			set_audio_track(ARCHIVE_FILE_HEALER_XMI);
 
-			ds_writew(REQUEST_REFRESH, request_refresh = 0);
+			g_request_refresh = request_refresh = 0;
 
 			if (!motivation) {
 
 				motivation = 1;
 
 				/* from 9.00 pm to 6.00 am the healer gets unkind */
-				if (ds_readds(DAY_TIMER) > HOURS(21) || ds_readds(DAY_TIMER) < HOURS(6)) {
+				if (gs_day_timer > HOURS(21) || gs_day_timer < HOURS(6)) {
 					GUI_output(get_ttx(484));
 					motivation = 2;
 				}
@@ -101,34 +101,34 @@ void do_healer(void)
 		}
 
 		if (request_refresh != 0) {
-			GUI_print_loc_line(get_tx(ds_readw(CURRENT_LOCDATA)));
+			GUI_print_loc_line(get_tx(gs_current_locdata));
 			request_refresh = 0;
 		}
 
 		handle_gui_input();
 
-		if (ds_readw(MOUSE2_EVENT) != 0 || ds_readw(ACTION) == ACTION_ID_PAGE_UP) {
+		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
 
-			ds_writew(TEXTBOX_WIDTH, 4);
+			g_textbox_width = 4;
 
 			answer = GUI_radio(get_ttx(459), 4,
 						get_ttx(455),
 						get_ttx(456),
 						get_ttx(457),
 						get_ttx(458)) - 1;
-			ds_writew(TEXTBOX_WIDTH, 3);
+			g_textbox_width = 3;
 
 			if (answer != -2) {
-				ds_writew(ACTION, answer + ACTION_ID_ICON_1);
+				g_action = (answer + ACTION_ID_ICON_1);
 			}
 		}
 
-		if (ds_readw(ACTION) == ACTION_ID_ICON_4) {
+		if (g_action == ACTION_ID_ICON_4) {
 			leave_healer = 1;
 			continue;
 		}
 
-		if (ds_readw(ACTION) == ACTION_ID_ICON_1) {
+		if (g_action == ACTION_ID_ICON_1) {
 
 			/* Heal Wounds */
 
@@ -145,10 +145,10 @@ void do_healer(void)
 						&& !host_readbs(hero + HERO_LE_MOD)) {
 
 						/* Hero seems OK */
-						sprintf((char*)ds_readd(DTP2),
+						sprintf(g_dtp2,
 							get_ttx(461),
 							(char*)(hero + HERO_NAME2));
-						GUI_output((char*)ds_readd(DTP2));
+						GUI_output(g_dtp2);
 					} else {
 
 						/* calculate price */
@@ -160,12 +160,12 @@ void do_healer(void)
 							price *= 2;
 
 						/* ask */
-						sprintf((char*)ds_readd(DTP2),
+						sprintf(g_dtp2,
 							get_ttx(464),
 							(char*)(hero + HERO_NAME2),
 							price);
 
-						if (GUI_bool((char*)ds_readd(DTP2))) {
+						if (GUI_bool(g_dtp2)) {
 							price *= 10;
 
 							if (money < price) {
@@ -186,18 +186,18 @@ void do_healer(void)
 								add_hero_le(hero, host_readws(hero + HERO_LE_ORIG));
 
 								/* prepare output */
-								sprintf((char*)ds_readd(DTP2),
+								sprintf(g_dtp2,
 									get_ttx(467),
 									(char*)(hero + HERO_NAME2));
 
-								GUI_output((char*)ds_readd(DTP2));
+								GUI_output(g_dtp2);
 							}
 						}
 					}
 				}
 			}
 
-		} else if (ds_readw(ACTION) == ACTION_ID_ICON_2) {
+		} else if (g_action == ACTION_ID_ICON_2) {
 			/* Cure Disease */
 			money = get_party_money();
 			answer = select_hero_from_group(get_ttx(460));
@@ -209,14 +209,14 @@ void do_healer(void)
 
 					if (!disease) {
 						/* Hero is not diseased */
-						sprintf((char*)ds_readd(DTP2),
+						sprintf(g_dtp2,
 							get_ttx(462),
 							(char*)(hero + HERO_NAME2));
 
-						GUI_output((char*)ds_readd(DTP2));
+						GUI_output(g_dtp2);
 					} else {
 						/* calculate price */
-						price = ds_readws(DISEASE_PRICES + disease * 2) * 10;
+						price = g_disease_prices[disease] * 10;
 
 						price += (host_readbs(healer_stats_ptr + HEALER_STATS_PRICE_MOD) * price) / 100;
 
@@ -224,13 +224,13 @@ void do_healer(void)
 							price *= 2;
 
 						/* prepare output */
-						sprintf((char*)ds_readd(DTP2),
+						sprintf(g_dtp2,
 							get_ttx(465),
 							(char*)(hero + HERO_NAME2),
 							get_ttx(disease + 0x193),
 							price);
 
-						if (GUI_bool((char*)ds_readd(DTP2))) {
+						if (GUI_bool(g_dtp2)) {
 							price *= 10;
 
 							if (money < price) {
@@ -238,17 +238,17 @@ void do_healer(void)
 							} else {
 								timewarp(HOURS(1));
 
-								if (random_schick(100) <= (120 - host_readbs(healer_stats_ptr + HEALER_STATS_QUALITY) * 10) + ds_readws(DISEASE_DELAYS + disease * 2)) {
+								if (random_schick(100) <= (120 - host_readbs(healer_stats_ptr + HEALER_STATS_QUALITY) * 10) + g_disease_delays[disease]) {
 									/* heal the disease */
 									host_writeb(hero + (HERO_ILLNESS) + disease * SIZEOF_HERO_ILLNESS, 1);
 									host_writeb(hero + (HERO_ILLNESS + 1) + disease * SIZEOF_HERO_ILLNESS, 0);
 
 									/* prepare output */
-									sprintf((char*)ds_readd(DTP2),
+									sprintf(g_dtp2,
 										get_ttx(467),
 										(char*)(hero + HERO_NAME2));
 
-									GUI_output((char*)ds_readd(DTP2));
+									GUI_output(g_dtp2);
 								} else {
 									price /= 2;
 									GUI_output(get_ttx(468));
@@ -262,7 +262,7 @@ void do_healer(void)
 					}
 				}
 			}
-		} else if (ds_readw(ACTION) == ACTION_ID_ICON_3) {
+		} else if (g_action == ACTION_ID_ICON_3) {
 			/* Heal Poison */
 			money = get_party_money();
 			answer = select_hero_from_group(get_ttx(460));
@@ -274,25 +274,25 @@ void do_healer(void)
 
 					if (poison == 0) {
 						/* Hero is not poisoned */
-						sprintf((char*)ds_readd(DTP2),
+						sprintf(g_dtp2,
 							get_ttx(463),
 							(char*)(hero + HERO_NAME2));
 
-						GUI_output((char*)ds_readd(DTP2));
+						GUI_output(g_dtp2);
 					} else {
 						/* calculate price */
-						price = ds_readws(POISON_PRICES + poison * 2) * 20;
+						price = g_poison_prices[poison] * 20;
 						price += (host_readbs(healer_stats_ptr + HEALER_STATS_PRICE_MOD) * price) / 100;
 						if (motivation == 2)
 							price *= 2;
 
 						/* prepare output */
-						sprintf((char*)ds_readd(DTP2),
+						sprintf(g_dtp2,
 							get_ttx(466),
 							price,
 							(char*)(hero + HERO_NAME2));
 
-						if (GUI_bool((char*)ds_readd(DTP2))) {
+						if (GUI_bool(g_dtp2)) {
 							price *= 10;
 
 							if (money < price) {
@@ -300,17 +300,17 @@ void do_healer(void)
 							} else {
 								timewarp(HOURS(1));
 
-								if (random_schick(100) <= (120 - host_readbs(healer_stats_ptr + HEALER_STATS_QUALITY) * 5) + ds_readws(POISON_DELAYS + poison * 2)) {
+								if (random_schick(100) <= (120 - host_readbs(healer_stats_ptr + HEALER_STATS_QUALITY) * 5) + g_poison_delays[poison]) {
 									/* cure the poison */
 									host_writeb(hero + (HERO_POISON + 1) + poison * SIZEOF_HERO_POISON, 0);
 									host_writeb(hero + (HERO_POISON) + poison * SIZEOF_HERO_POISON, 1);
 
 									/* prepare output */
-									sprintf((char*)ds_readd(DTP2),
+									sprintf(g_dtp2,
 										get_ttx(467),
 										(char*)(hero + HERO_NAME2));
 
-									GUI_output((char*)ds_readd(DTP2));
+									GUI_output(g_dtp2);
 								} else {
 									price /= 2;
 									GUI_output(get_ttx(468));

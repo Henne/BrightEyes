@@ -45,13 +45,13 @@ void tevent_011(void)
 	{
 		ds_writeb(TEVENT011_FLAG, 1);
 
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx2(24),
 			(char*)hero + HERO_NAME2,
 			(char*)hero + HERO_NAME2);
 
 		do {
-			answer = GUI_radio((char*)ds_readd(DTP2), 2,
+			answer = GUI_radio(g_dtp2, 2,
 						get_tx2(25),
 						get_tx2(26));
 		} while (answer == -1);
@@ -100,31 +100,26 @@ void TRV_swim2(signed char mod, signed short percent)
 	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 	{
 		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+			(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 			!hero_dead(hero))
 		{
 			/* a swim test */
 			if (test_skill(hero, TA_SCHWIMMEN, (signed char)mod) > 0)
 			{
 				/* skill test succeeded */
-				sprintf((char*)ds_readd(DTP2),
-					get_tx2(31),
-					(char*)hero + HERO_NAME2);
+				sprintf(g_dtp2, get_tx2(31), (char*)hero + HERO_NAME2);
+				GUI_output(g_dtp2);
 
-				GUI_output((char*)ds_readd(DTP2));
 			} else {
 				/* skill test failed */
-				sprintf((char*)ds_readd(DTP2),
-					get_tx2(32),
-					(char*)hero + HERO_NAME2,
-					(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+				sprintf(g_dtp2, get_tx2(32), (char*)hero + HERO_NAME2,
+					(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 
-				GUI_output((char*)ds_readd(DTP2));
+				GUI_output(g_dtp2);
 
 				hero_disease_test(hero, 2, 20 - (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK))));
 
-				if (percent)
-				{
+				if (percent) {
 					loose_random_item(hero, percent, get_ttx(506));
 				}
 
@@ -132,7 +127,6 @@ void TRV_swim2(signed char mod, signed short percent)
 			}
 		}
 	}
-
 }
 
 /* Path east from the route Rovamund <-> Peilinen. */
@@ -150,12 +144,12 @@ void TRV_a_path(void)
 	if (answer == 1)
 	{
 		/* follow the path */
-		ds_writeb(ROUTE59_FLAG, (ds_readb(CURRENT_TOWN) == TOWNS_PEILINEN ? 2 : 4));
+		g_route59_flag = (gs_current_town == TOWNS_PEILINEN ? 2 : 4);
 
 		/* Original-Glitch:
-		 * TRAVEL_DETOUR == 1 is indicating a detour to DNG_TOTENSCHIFF (which has the ID 1).
+		 * gs_travel_detour == 1 is indicating a detour to DNG_TOTENSCHIFF (which has the ID 1).
 		 * Probably, this does not make a difference, but still, it would be better to use another number. */
-		ds_writeb(TRAVEL_DETOUR, 1);
+		gs_travel_detour = 1;
 	} else {
 		/* swim back */
 
@@ -198,28 +192,26 @@ void tevent_014(void)
 {
 	signed short answer;
 
-	if (!ds_readb(TEVENT014_FLAG))
+	if (!gs_tevent014_flag)
 	{
 		load_in_head(55);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
-						get_tx2(43), 2,
-						get_tx2(44),
-						get_tx2(45));
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(43), 2, get_tx2(44), get_tx2(45));
+
 		} while (answer == -1);
 
 		if (answer == 1)
 		{
 			/* examine the corpse */
-			loot_corpse(((Bit8u*)p_datseg + TEVENT014_CORPSE), get_tx2(46), p_datseg + TEVENT014_FLAG);
+			loot_corpse(((Bit8u*)p_datseg + TEVENT014_CORPSE), get_tx2(46), (Bit8s*)&gs_tevent014_flag);
 		}
 	}
 }
 
-void tevent_014_chest(RealPt chest)
+void tevent_014_chest(Bit8u* chest)
 {
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)(p_datseg + TEVENT014_CHEST));
+	host_writed((Bit8u*)(chest) + 11, (Bit32u)&gs_tevent014_chest);
 
 	loot_chest((Bit8u*)(chest), get_tx2(47), get_tx2(48));
 }
@@ -250,12 +242,12 @@ void tevent_020(void)
 	{
 		ds_writeb(TEVENT020_FLAG, 1);
 
-		sprintf((char*)ds_readd(DTP2),
+		sprintf(g_dtp2,
 			get_tx2(49),
 			(char*)hero + HERO_NAME2);
 
 		do {
-			answer = GUI_radio((char*)ds_readd(DTP2), 2,
+			answer = GUI_radio(g_dtp2, 2,
 						get_tx2(50),
 						get_tx2(51));
 		} while (answer == -1);
@@ -271,12 +263,12 @@ void tevent_020(void)
 			if (answer == 1)
 			{
 			    /* TODO: Original-Bug: CURRENT_TOWN is either Kravik or Skelellen. */
-				ds_writeb(ROUTE59_FLAG, (ds_readb(CURRENT_TOWN) == TOWNS_PEILINEN ? 1 : 3));
+				g_route59_flag = (gs_current_town == TOWNS_PEILINEN ? 1 : 3);
 
 				/* Original-Glitch:
-				 * TRAVEL_DETOUR == 1 is indicating a detour to DNG_TOTENSCHIFF (which had the ID 1).
+				 * gs_travel_detour == 1 is indicating a detour to DNG_TOTENSCHIFF (which had the ID 1).
 				 * Probably, this does not make a difference, but still, it would be better to use another number. */
-				ds_writeb(TRAVEL_DETOUR, 1);
+				gs_travel_detour = 1;
 			}
 		}
 
@@ -397,23 +389,21 @@ void tevent_029(void)
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 		{
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == ds_readbs(CURRENT_GROUP) &&
+				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 				!hero_dead(hero))
 			{
 				sub_hero_le(hero, 2);
 
 				item_pos = get_item_pos(hero, ITEM_FOOD_PACKAGE);
 
-				if (item_pos != -1)
-				{
+				if (item_pos != -1) {
 					/* hero looses the first set of FOOD PACKAGES */
 					drop_item(hero, item_pos, host_readws(hero + HERO_INVENTORY + INVENTORY_QUANTITY + SIZEOF_INVENTORY * item_pos));
 				}
 
 				item_pos = hero_count_item(hero, ITEM_WATERSKIN);
 
-				if (item_pos)
-				{
+				if (item_pos) {
 					/* hero looses the first WATERSKIN */
 					drop_item(hero, get_item_pos(hero, ITEM_WATERSKIN), item_pos - 1);
 				}
@@ -449,7 +439,7 @@ void tevent_031(void)
 		load_in_head(49);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 						get_tx2(0), 2,
 						get_tx2(1),
 						get_tx2(2));
@@ -460,7 +450,7 @@ void tevent_031(void)
 			if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 7) <= 0)
 			{
 				/* skill test failed */
-				ds_writeb(FIG_INITIATIVE, 1);
+				g_fig_initiative = 1;
 				do_fight(FIGHTS_F031);
 			}
 		} else {
@@ -498,7 +488,7 @@ void tevent_033(void)
 	load_in_head(9);
 
 	do {
-		answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+		answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 					get_tx2(3), 3,
 					get_tx2(4),
 					get_tx2(5),
@@ -509,7 +499,7 @@ void tevent_033(void)
 	{
 		timewarp(MINUTES(15));
 
-		GUI_dialog_na(0, (Bit8u*)(answer == 1 ? get_tx2(7) : get_tx2(8)));
+		GUI_dialog_na(0, (answer == 1 ? get_tx2(7) : get_tx2(8)));
 	}
 }
 
@@ -540,7 +530,7 @@ void tevent_035(void)
 			if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 8) <= 0)
 			{
 				/* skill test failed */
-				ds_writeb(FIG_INITIATIVE, 1);
+				g_fig_initiative = 1;
 				do_fight(FIGHTS_F035);
 			}
 		} else {
@@ -604,9 +594,8 @@ void tevent_041(void)
 	{
 		do {
 			/* Spuren von Karenen */
-			answer = GUI_radio(get_tx2(20), 2,
-						get_tx2(21),
-						get_tx2(22));
+			answer = GUI_radio(get_tx2(20), 2, get_tx2(21), get_tx2(22));
+
 		} while (answer == -1);
 
 		if (answer == 1)
@@ -646,30 +635,25 @@ void tevent_044(void)
 	signed short answer;
 	Bit8u *hero;
 
-	if (!ds_readb(TEVENT094_FLAG))
-	{
+	if (!ds_readb(TEVENT094_FLAG)) {
+
 		ds_writeb(TEVENT094_FLAG, 1);
 
 		load_in_head(1);
 
 		hero = (Bit8u*)get_first_hero_available_in_group();
 
-		sprintf((char*)ds_readd(DTP2) + 0x400,
-			get_tx2(33),
-			(char*)hero + HERO_NAME2,
-			(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
+		sprintf((char*)(g_dtp2 + 0x400), get_tx2(33), (char*)hero + HERO_NAME2, GUI_get_ptr(host_readbs(hero + HERO_SEX), 3));
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
-						(char*)ds_readd(DTP2) + 0x400, 2,
-						get_tx2(34),
-						get_tx2(35));
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, (char*)(g_dtp2 + 0x400), 2, get_tx2(34), get_tx2(35));
+
 		} while (answer == -1);
 
-		if (answer == 2)
-		{
+		if (answer == 2) {
+
 			/* bury her */
-			add_ds_ds(GODS_ESTIMATION + 4 * GOD_BORON, 50L);
+			gs_gods_estimation[GOD_BORON] += 50L;
 
 			timewarp(HOURS(1));
 
@@ -683,12 +667,12 @@ void tevent_045(void)
 {
 	signed short answer;
 
-	if (ds_readw(TRV_DESTINATION) == TOWNS_DASPOTA)
+	if (gs_trv_destination == TOWNS_DASPOTA)
 	{
 		load_in_head(11);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)ds_readd(DTP2), NULL,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
 						get_tx2(36), 3,
 						get_tx2(37),
 						get_tx2(38),
@@ -699,7 +683,7 @@ void tevent_045(void)
 		{
 			timewarp(MINUTES(15));
 
-			GUI_dialog_na(0, (Bit8u*)(answer == 1 ? get_tx2(40) : get_tx2(41)));
+			GUI_dialog_na(0, (answer == 1 ? get_tx2(40) : get_tx2(41)));
 		}
 	}
 }
@@ -714,79 +698,72 @@ void tevent_046(void)
 	enter_inn = 0;
 
 	/* pause traveling */
-	ds_writeb(EVENT_ANI_BUSY, 1);
+	g_event_ani_busy = 1;
 
 	load_ani(12);
 	draw_main_screen();
 	init_ani(0);
 
 	do {
-		answer = GUI_radio(get_tx2(42), 2,
-					get_tx2(43),
-					get_tx2(44));
+		answer = GUI_radio(get_tx2(42), 2, get_tx2(43),	get_tx2(44));
+
 	} while (answer == -1);
 
 	if (answer == 1)
 	{
 		/* make a camp */
-		ds_writew(CAMP_INCIDENT, 1);
-		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_WILDCAMP);
+		gs_camp_incident = 1;
+		gs_current_loctype = LOCTYPE_WILDCAMP;
 		do_location();
-		ds_writeb(CURRENT_LOCTYPE, LOCTYPE_NONE);
+		gs_current_loctype = LOCTYPE_NONE;
 		TRV_load_textfile(-1);
 
-		hero = (ds_readws(CAMP_INCIDENT) != -1 ? get_hero(ds_readw(CAMP_INCIDENT)) : (Bit8u*)get_first_hero_available_in_group());
-		ds_writew(CAMP_INCIDENT, -1);
+		hero = (gs_camp_incident != -1 ? get_hero(gs_camp_incident) : (Bit8u*)get_first_hero_available_in_group());
+		gs_camp_incident = -1;
 
 		if (test_skill(hero, TA_SINNESSCHAERFE, 0) > 0)
 		{
-			sprintf((char*)ds_readd(DTP2),
-				get_tx2(45),
-				(char*)hero + HERO_NAME2,
-				(char*)(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+			sprintf(g_dtp2,	get_tx2(45), (char*)hero + HERO_NAME2,
+				GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
 
 			do {
-				answer = GUI_radio((char*)ds_readd(DTP2), 2,
-							get_tx2(46),
-							get_tx2(47));
+				answer = GUI_radio(g_dtp2, 2, get_tx2(46), get_tx2(47));
+
 			} while (answer == -1);
 
 			if (answer == 1)
 			{
-				ds_writeb(TRAVEL_DETOUR, DUNGEONS_VERFALLENE_HERBERGE);
+				gs_travel_detour = (DUNGEONS_VERFALLENE_HERBERGE);
 				enter_inn = 1;
 			}
 		}
 
 		if (!enter_inn)
 		{
-			sprintf((char*)ds_readd(DTP2),
-				get_tx2(48),
-				(char*)hero + HERO_NAME2);
+			sprintf(g_dtp2, get_tx2(48), (char*)hero + HERO_NAME2);
 
-			GUI_output((char*)ds_readd(DTP2));
+			GUI_output(g_dtp2);
 
-			ds_writew(FIG_DISCARD, 1);
+			g_fig_discard = 1;
 
 			TRV_fight_event(FIGHTS_F046, 46);
 
 			do {
-				answer = GUI_radio(get_tx2(49), 2,
-							get_tx2(50),
-							get_tx2(51));
+				answer = GUI_radio(get_tx2(49), 2, get_tx2(50), get_tx2(51));
+
 			} while (answer == -1);
 
 			if (answer == 1)
 			{
-				ds_writeb(TRAVEL_DETOUR, DUNGEONS_VERFALLENE_HERBERGE);
+				gs_travel_detour = (DUNGEONS_VERFALLENE_HERBERGE);
 			}
 		}
 	}
 
 	set_var_to_zero();
 	/* resume traveling */
-	ds_writeb(EVENT_ANI_BUSY, 0);
-	ds_writew(REQUEST_REFRESH, 1);
+	g_event_ani_busy = 0;
+	g_request_refresh = 1;
 }
 
 /* Daspota <-> Ottarje: alte Feuerstelle. idealer Rastplatz. */
