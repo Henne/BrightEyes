@@ -1393,6 +1393,12 @@ extern unsigned char *g_splash_ae;	// ds:0xbcc7; seg002, seg028
 extern unsigned char g_gfx_wait_keypress[100];	// ds:0xbc63; seg002
 extern unsigned char g_playmask_us;	// ds:0xbc62; seg002, seg029
 
+extern signed char g_travel_event_active;		// ds:0xb132; seg002, seg109, seg117
+extern signed short g_travel_event_tx2;			// ds:0xb133; seg109
+extern Bit8u g_travel_event_axes[6];			// ds:0xb135; seg109, seg118
+extern char g_empty_string10[1];			// ds:0xb13b; seg109
+extern char g_empty_string11[1];			// ds:0xb13c; seg109
+extern char g_empty_string12[1];			// ds:0xb13d; seg109
 extern struct struct_chest g_tevent014_corpse;		// ds:0xb13e; seg110
 extern struct struct_chest g_tevent064_chest_descr;	// ds:0xb154; seg111
 extern Bit8u g_tevent067_chest[10];			// ds:0xb16a; seg112

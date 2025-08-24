@@ -5902,9 +5902,9 @@ signed short g_travel_event_tx2 = -1; // ds:0xb133
  * (These are: bridge building Breida <-> Tjoila, bridge building Auplog <-> Varnheim, path blocked by a tree Skjal <-> Ottarje)
  * The list of accepted axes is a bit arbitrary (The common pattern is that all have "...axt" or "...beil" in their name.
  * Other more or less sensible options would be: ITEM_SKRAJA, ITEM_ORKNASE, ITEM_SCHNEIDZAHN, ITEM_ORKNASE_MAGIC, ITEM_HELLEBARDE. */
-unsigned char g_travel_event_axes[6] = { ITEM_KRIEGSBEIL_SPECIAL, ITEM_STREITAXT, ITEM_THROWING_AXE, ITEM_FRANCESCA, ITEM_KRIEGSBEIL, 0xff }; // ds:0xb135
+Bit8u g_travel_event_axes[6] = { ITEM_KRIEGSBEIL_SPECIAL, ITEM_STREITAXT, ITEM_THROWING_AXE, ITEM_FRANCESCA, ITEM_KRIEGSBEIL, 0xff }; // ds:0xb135
 #else
-unsigned char g_travel_event_axes[6] = { ITEM_KRIEGSBEIL_SPECIAL, ITEM_STREITAXT, ITEM_ORKNASE, ITEM_ORKNASE_MAGIC, ITEM_KRIEGSBEIL, 0xff }; // ds:0xb135
+Bit8u g_travel_event_axes[6] = { ITEM_KRIEGSBEIL_SPECIAL, ITEM_STREITAXT, ITEM_ORKNASE, ITEM_ORKNASE_MAGIC, ITEM_KRIEGSBEIL, 0xff }; // ds:0xb135
 /* rationale:
  * - don't allow throwing axes (ITEM_THROWING_AXE, ITEM_FRANCESCA, ITEM_SCHNEIDZAHN), as they are pretty light and designed for a completely different purpose.
  * - don't allow ITEM_HELLEBARDE, as it is a polearm with a different purpose. (Note that surprisingliy, it is classified as WEAPON_TYPE_AXT in Schicksalsklinge)

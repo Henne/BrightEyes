@@ -1253,12 +1253,12 @@
 //#define USE_SPECIAL_ITEM_HANDLERS       (0xaeb0)    /* long[14] */
 //#define LIGHT_TYPE                      (0xaee8)    /* unsigned short; 0 = none, 1 = torch, 2 = lantern */
 //#define TRAVEL_EVENT_HANDLERS           (0xaeea)    /* long[146]; function pointers, */
-#define TRAVEL_EVENT_ACTIVE             (0xb132)    /* signed char; {0,1} */
-#define TRAVEL_EVENT_TX2                (0xb133)    /* signed short */
-#define TRAVEL_EVENT_AXES               (0xb135)    /* signed char[6] */
-#define EMPTY_STRING10                  (0xb13b)    /* char; "" */
-#define EMPTY_STRING11                  (0xb13c)    /* char; "" */
-#define EMPTY_STRING12                  (0xb13d)    /* char; "" */
+//#define TRAVEL_EVENT_ACTIVE             (0xb132)    /* signed char; {0,1} */
+//#define TRAVEL_EVENT_TX2                (0xb133)    /* signed short */
+//#define TRAVEL_EVENT_AXES               (0xb135)    /* signed char[6] */
+//#define EMPTY_STRING10                  (0xb13b)    /* char; "" */
+//#define EMPTY_STRING11                  (0xb13c)    /* char; "" */
+//#define EMPTY_STRING12                  (0xb13d)    /* char; "" */
 //#define TEVENT014_CORPSE                (0xb13e)    /* struct(22) */
 //#define TEVENT064_CHEST_DESCR           (0xb154)    /* struct(22) */
 //#define TEVENT067_CHEST                 (0xb16a)    /* char[8] */

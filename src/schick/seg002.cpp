@@ -3981,7 +3981,7 @@ void draw_compass(void)
 	/* No compass in a location */
 	if (!gs_current_loctype &&
 		/* Has something to do with traveling */
-		!ds_readbs(TRAVEL_EVENT_ACTIVE) &&
+		!g_travel_event_active &&
 		/* Not in town or dungeon */
 		((gs_dungeon_index != DUNGEONS_NONE) || (gs_current_town != TOWNS_NONE)) &&
 		/* I have no clue */

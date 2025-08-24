@@ -58,7 +58,7 @@ void pause_traveling(signed short ani_no)
 	g_textbox_width_bak = g_textbox_width;
 	g_wallclock_update_bak = g_wallclock_update;
 
-	ds_writeb(TRAVEL_EVENT_ACTIVE, 1);
+	g_travel_event_active = 1;
 
 	/* c = b = a = 0 */
 	gs_show_travel_map = g_basepos_x = g_wallclock_update = 0;
@@ -83,7 +83,7 @@ void resume_traveling(void)
 	g_request_refresh = gs_show_travel_map = 1;
 
 	g_event_ani_busy = 0;
-	ds_writeb(TRAVEL_EVENT_ACTIVE, 0);
+	g_travel_event_active = 0;
 }
 
 void hunt_karen(void)
@@ -612,7 +612,7 @@ void random_encounter(signed short arg)
 		if ((ds_readb(RANDOM_ENCOUNTER_DESCR + 7 * i + arg) <= randval) && (ds_readb(RANDOM_ENCOUNTER_DESCR + 7 * i + arg) != 0)) {
 
 			gs_show_travel_map = g_wallclock_update = 0;
-			ds_writeb(TRAVEL_EVENT_ACTIVE, 1);
+			g_travel_event_active = 1;
 			g_fig_discard = 1;
 
 			switch (i) {
@@ -700,7 +700,7 @@ void random_encounter(signed short arg)
 
 			g_fig_discard = 0;
 			gs_show_travel_map = 1;
-			ds_writeb(TRAVEL_EVENT_ACTIVE, 0);
+			g_travel_event_active = 0;
 			break;
 		}
 	}

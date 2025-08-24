@@ -440,12 +440,12 @@ void tevent_052(void)
 
 			do {
 				/* check for a chopping tool */
-				if (get_first_hero_with_item(ds_readb(TRAVEL_EVENT_AXES + i)) != -1)
+				if (get_first_hero_with_item(g_travel_event_axes[i]) != -1)
 				{
 					done = 1;
 				}
 
-			} while(!done && ds_readb(TRAVEL_EVENT_AXES + ++i) != 255);
+			} while (!done && (g_travel_event_axes[++i] != 0xff));
 
 			if (done)
 			{

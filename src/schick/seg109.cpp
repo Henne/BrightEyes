@@ -47,7 +47,7 @@ void TRV_load_textfile(signed short travel_event)
 	load_tx(ARCHIVE_FILE_FEATURE_LTX);
 
 	if (travel_event == -1) {
-		travel_event = ds_readws(TRAVEL_EVENT_TX2);
+		travel_event = g_travel_event_tx2;
 	}
 
 	load_tx2( (travel_event == 37 || travel_event == 47 || travel_event == 100) ? ARCHIVE_FILE_FEATURE9_LTX :
@@ -59,8 +59,7 @@ void TRV_load_textfile(signed short travel_event)
 			( travel_event < 111 ? ARCHIVE_FILE_FEATURE5_LTX :
 			( travel_event < 126 ? ARCHIVE_FILE_FEATURE6_LTX :
 			( travel_event < 143 ? ARCHIVE_FILE_FEATURE7_LTX : ARCHIVE_FILE_FEATURE8_LTX)))))))));
-
-	ds_writews(TRAVEL_EVENT_TX2, travel_event);
+	g_travel_event_tx2 = travel_event;
 }
 
 void TRV_event(signed short travel_event)
@@ -82,15 +81,15 @@ void TRV_event(signed short travel_event)
 	gs_show_travel_map = 0;
 	g_textbox_width = 9;
 	g_dialogbox_lock = 1;
-	ds_writeb(TRAVEL_EVENT_ACTIVE, 1);
+	g_travel_event_active = 1;
 
 #if !defined(__BORLANDC__)
 	D1_INFO("Reisebegegnung %d\n", travel_event);
 #endif
-	event_handler = (void (*)(void))g_travel_event_handlers[travel_event];
+	event_handler = g_travel_event_handlers[travel_event];
 	if (event_handler) event_handler();
 
-	ds_writeb(TRAVEL_EVENT_ACTIVE, 0);
+	g_travel_event_active = 0;
 	gs_show_travel_map = traveling_bak;
 	g_basepos_x = bak1;
 	g_basepos_y = bak2;
@@ -127,16 +126,11 @@ void TRV_found_herb_place(signed short a0)
 
 	randval = random_schick(5) + 2;
 
-	sprintf(g_dtp2,
-		get_tx(0),
-		get_tx(randval),
-		(char*)hero + HERO_NAME2,
-		(a0 != 0 ? get_tx(42) : (char*)p_datseg + EMPTY_STRING10));
+	sprintf(g_dtp2,	get_tx(0), get_tx(randval), (char*)hero + HERO_NAME2,
+		(a0 != 0 ? get_tx(42) : g_empty_string10));
 
 	do {
-		answer = GUI_radio(g_dtp2, 2,
-				get_tx(1),
-				get_tx(2));
+		answer = GUI_radio(g_dtp2, 2, get_tx(1), get_tx(2));
 
 	} while (answer == -1);
 
@@ -181,7 +175,7 @@ signed short TRV_found_camp_place(signed short a0)
 
 	randval = random_schick(5) + 10;
 	sprintf(g_dtp2, get_tx(8), get_tx(randval),
-		(a0 == 1 ? get_tx(42) : (a0 == 2 ? get_tx(45) : (char*)p_datseg + EMPTY_STRING11)));
+		(a0 == 1 ? get_tx(42) : (a0 == 2 ? get_tx(45) : g_empty_string11)));
 	do {
 		answer = GUI_radio(g_dtp2, 2, get_tx(9), get_tx(10));
 
@@ -223,14 +217,10 @@ void TRV_found_replenish_place(signed short a0)
 	signed short hero_pos;
 	signed short answer;
 
-	sprintf(g_dtp2,
-		get_tx(16),
-		get_tx(random_schick(5) + 11),
-		(a0 != 0 ? get_tx(45) : (char*)p_datseg + EMPTY_STRING12));
+	sprintf(g_dtp2,	get_tx(16), get_tx(random_schick(5) + 11), (a0 != 0 ? get_tx(45) : g_empty_string12));
 	do {
-		answer = GUI_radio(g_dtp2, 2,
-					get_tx(21),
-					get_tx(22));
+		answer = GUI_radio(g_dtp2, 2, get_tx(21), get_tx(22));
+
 	} while (answer == -1);
 
 	if (answer == 1) {
@@ -739,14 +729,14 @@ void TRV_barrier(signed short text_start)
 
 				do {
 					/* look for a suitable axe */
-					if (get_first_hero_with_item(ds_readb(TRAVEL_EVENT_AXES + i)) != -1)
+					if (get_first_hero_with_item(g_travel_event_axes[i]) != -1)
 					{
 						l_di = 0;
 					}
 
 					i++;
 
-				} while (l_di && ds_readbs(TRAVEL_EVENT_AXES + i) != -1);
+				} while (l_di && g_travel_event_axes[i] != 0xff);
 
 				if (l_di || get_first_hero_with_item(ITEM_HAMMER) == -1)
 				{

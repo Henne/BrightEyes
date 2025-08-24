@@ -650,6 +650,7 @@ void loot_multi_chest(Bit8u *chest, char *msg)
 							chest[item_no] = (unsigned char)(i = chest[item_no + 2]);
 							chest[item_no + 1] = chest[item_no + 3];
 							item_no += 2;
+
 						} while (i != 255);
 
 					} else if (i != 0) {
