@@ -5,11 +5,7 @@ project(NGen VERSION 1.0.0
     LANGUAGES C)
 
 set(CMAKE_C_STANDARD 11)
-if (MSVC)
-# so far no special setting beside default for Debug/Release
-else()
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0 -g -fno-asm")
-endif()
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_mixer REQUIRED)
@@ -28,8 +24,7 @@ add_executable(ngen
     vgalib.h
     vgalib.c
     ail_stub.c
-    hero.h
-)
+    hero.h)
 
 # Rename output to include compiler
 get_filename_component(COMPILER_NAME ${CMAKE_C_COMPILER_ID} NAME)
@@ -50,5 +45,10 @@ if(WIN32)
 endif()
 
 target_include_directories(ngen PRIVATE ${SDL2_INCLUDE_DIR})
-target_link_libraries(ngen PUBLIC SDL2::SDL2 SDL2_mixer::SDL2_mixer SDL2::SDL2main)
+
+if(WIN32)
+  set_target_properties(ngen PROPERTIES WIN32_EXECUTABLE TRUE)
+endif()
+target_link_libraries(ngen PRIVATE SDL2::SDL2 SDL2_mixer::SDL2_mixer)
+
 install(TARGETS ngen RUNTIME DESTINATION bin)
