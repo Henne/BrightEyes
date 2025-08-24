@@ -1263,14 +1263,13 @@
 #define TEVENT064_CHEST_DESCR           (0xb154)    /* struct(22) */
 #define TEVENT067_CHEST                 (0xb16a)    /* char[8] */
 #define TEVENT135_CLIMB_DAMAGE          (0xb172)    /* struct(2)[6]; struct{unsigned char damage_min,damage_max;}; { {0xff,0}, {1,5}, {4,13}, {7,21}, {10,32}, {15,40} } */
-#define RANDOM_ENCOUNTER_INDEX          (0xb17e)    /* unsigned char[59] */
+//#define RANDOM_ENCOUNTER_INDEX          (0xb17e)    /* unsigned char[59] */
 #define RANDOM_ENCOUNTER_DESCR          (0xb1b9)    /* struct(7)[14] */
 //#define TLK_RUIN_HERO_COUNTER           (0xb21b)    /* signed short */
 // ?1
-#define STR_RAD1                        (0xb21e)    /* char[4]; "RAD" */
-#define STR_RAD2                        (0xb222)    /* char[4]; "RAD" */
-#define STR_RAD3                        (0xb226)    /* char[4]; "RAD" */
-
+//#define STR_RAD1                        (0xb21e)    /* char[4]; "RAD" */
+//#define STR_RAD2                        (0xb222)    /* char[4]; "RAD" */
+//#define STR_RAD3                        (0xb226)    /* char[4]; "RAD" */
 //#define COLOR_WHITE                     (0xb22a)    /* unsigned char[3]; { 0x3f, 0x3f, 0x3f } */
 //#define COLOR_BLACK                     (0xb22d)    /* unsigned char[3]; { 0x00, 0x00, 0x00 } */
 //#define PALETTE_UNKNOWN2                (0xb230)    /* struct(3)[8]; struct{unsigned char r,g,b;} */

@@ -603,7 +603,7 @@ void random_encounter(signed short arg)
 	g_basepos_x = 0;
 	g_basepos_y = 0;
 
-	arg = ds_readb((RANDOM_ENCOUNTER_INDEX-1) + arg);
+	arg = g_random_encounter_index[arg - 1];
 
 	randval = random_schick(100);
 

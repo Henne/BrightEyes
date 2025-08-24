@@ -1393,6 +1393,11 @@ extern unsigned char *g_splash_ae;	// ds:0xbcc7; seg002, seg028
 extern unsigned char g_gfx_wait_keypress[100];	// ds:0xbc63; seg002
 extern unsigned char g_playmask_us;	// ds:0xbc62; seg002, seg029
 
+extern unsigned char g_random_encounter_index[59];	// ds:0xb17e; seg117
+
+extern char g_str_rad1[4];			// ds:0xb21e; seg118
+extern char g_str_rad2[4];			// ds:0xb222; seg118
+extern char g_str_rad3[4];			// ds:0xb226; seg118
 extern Bit8u g_color_white[3];			// ds:0xb22a; seg120
 extern Bit8u g_color_black[3];			// ds:0xb22d; seg029, seg120
 extern Bit8u g_palette_unknown2[8][3];		// ds:0xb230; seg120
