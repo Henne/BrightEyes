@@ -537,10 +537,11 @@ void tevent_003(void)
 
 void tevent_004(void)
 {
-	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 2) > 0 && !ds_readb(TEVENT004_FLAG)) ||
-		ds_readb(TEVENT004_FLAG) != 0)
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 2) > 0 && !gs_tevent004_flag) ||
+		gs_tevent004_flag)
 	{
-		ds_writeb(TEVENT004_FLAG, 1);
+		gs_tevent004_flag = 1;
+
 		if (!TRV_follow_trail_question()) {
 			TRV_hunt_generic(29, 6, -2, 4, 10, 8, 7, 5, 7, 80, 0);
 		}
@@ -600,10 +601,7 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 			} while (answer == -1);
 		} else {
 
-			sprintf(g_dtp2,
-				get_tx2(city_index + 3),
-				(char*)hero + HERO_NAME2);
-
+			sprintf(g_dtp2,	get_tx2(city_index + 3), (char*)hero + HERO_NAME2);
 			GUI_input(g_dtp2, l_di = 0);
 
 			if ((i = test_skill(hero, TA_SCHUSSWAFFEN, (signed char)mod3)) > 0) {
@@ -616,10 +614,7 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 
 			if (l_di == 2 || i == 99 || l4 == 99) {
 
-				sprintf(g_dtp2,
-					get_tx2(city_index + 4),
-					(char*)hero + HERO_NAME2);
-
+				sprintf(g_dtp2, get_tx2(city_index + 4), (char*)hero + HERO_NAME2);
 				GUI_output(g_dtp2);
 
 				add_hero_ap_all(ap_all1);
@@ -669,11 +664,12 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 
 void tevent_005(void)
 {
-	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 0) > 0 && !ds_readb(TEVENT005_FLAG)) ||
-		ds_readb(TEVENT005_FLAG) != 0)
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 0) > 0 && !gs_tevent005_flag) ||
+		gs_tevent005_flag)
 	{
 		TRV_found_camp_place(1);
-		ds_writeb(TEVENT005_FLAG, 1);
+
+		gs_tevent005_flag = 1;
 	}
 }
 
@@ -811,23 +807,24 @@ void TRV_barrier(signed short text_start)
 /* Tjeula <-> Breida: kleiner Bachlauf */
 void tevent_008(void)
 {
-	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !ds_readb(TEVENT008_FLAG)) ||
-		ds_readb(TEVENT008_FLAG) != 0)
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent008_flag) ||
+		gs_tevent008_flag)
 	{
 		TRV_found_replenish_place(0);
-		ds_writeb(TEVENT008_FLAG, 1);
+		gs_tevent008_flag = 1;
 	}
 }
 
 void tevent_009(void)
 {
-	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 && !ds_readb(TEVENT009_FLAG)) ||
-		ds_readb(TEVENT009_FLAG) != 0)
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 && !gs_tevent009_flag) ||
+		gs_tevent009_flag)
 	{
 		ds_writeb(GATHER_HERBS_SPECIAL, 60);
 		TRV_found_herb_place(0);
 		ds_writeb(GATHER_HERBS_SPECIAL, 255);
-		ds_writeb(TEVENT009_FLAG, 1);
+
+		gs_tevent009_flag = 1;
 	}
 }
 

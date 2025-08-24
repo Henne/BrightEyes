@@ -128,7 +128,7 @@ void INF_yasma_umbrik_isleif(signed short informer, signed short state)
 		if (!state) {
 			g_dialog_next_state = (gs_informer_flags[INFORMER_YASMA] == 2 ? 1 : 2);
 		} else if (state == 15) {
-			ds_writeb(TEVENT100_FLAG, 1);
+			gs_tevent100_flag = 1;
 		} else if (state == 22) {
 			/* make HJORE AHRENSSON known */
 			if (!gs_informer_flags[INFORMER_HJORE]) gs_informer_flags[INFORMER_HJORE] = 1;

@@ -427,7 +427,7 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 		damage *= 2;
 	}
 
-	if (ds_readbs(TEVENT071_ORCSTATUE) && (host_readbs(hero + HERO_TYPE) == HERO_TYPE_DWARF) && (attack_hero == 0) && (enemy_p->gfx_id == 0x18))
+	if (gs_tevent071_orcstatue && (host_readbs(hero + HERO_TYPE) == HERO_TYPE_DWARF) && (attack_hero == 0) && (enemy_p->gfx_id == 0x18))
 	{
 		damage++;
 	}

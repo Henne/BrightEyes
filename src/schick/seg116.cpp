@@ -702,20 +702,20 @@ void TLK_old_woman(signed short state)
 	} else if (state == 34) {
 		g_dialog_next_state = (gs_current_town == TOWNS_FELSTEYN ? 35 : 39);
 	} else if (state == 37) {
-		ds_writeb(TEVENT093_FLAG, ds_writeb(TEVENT088_FLAG, 1));
+		gs_tevent093_flag = (gs_tevent088_flag = (1));
 	} else if (state == 38) {
 		timewarp(HOURS(1));
 	} else if (state == 41) {
-		ds_writeb(TEVENT093_FLAG, ds_writeb(TEVENT091_FLAG, (gs_informer_flags[INFORMER_ISLEIF] = gs_isleif_jandas_regards = 1)));
+		gs_tevent093_flag = (gs_tevent091_flag = ((gs_informer_flags[INFORMER_ISLEIF] = gs_isleif_jandas_regards = 1)));
 	}
 }
 
 void tevent_136(void)
 {
-	if (ds_readb(MET_UNICORN_FLAG) && gs_got_main_quest && gs_unicorn_get_map && !gs_unicorn_timer) {
+	if (gs_met_unicorn_flag && gs_got_main_quest && gs_unicorn_get_map && !gs_unicorn_timer) {
 
 		do_talk(12, 1);
-		ds_writeb(MET_UNICORN_FLAG, 1);
+		gs_met_unicorn_flag = 1;
 		gs_unicorn_get_map = 0;
 	}
 }

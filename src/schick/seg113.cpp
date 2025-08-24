@@ -41,29 +41,26 @@ void tevent_080(void)
 
 	hero = (Bit8u*)get_first_hero_available_in_group();
 
-	if ((!ds_readb(TEVENT080_FLAG) && (test_skill(hero, TA_WILDNISLEBEN, 4) > 0)) ||
-			ds_readb(TEVENT080_FLAG) != 0)
+	if ((!gs_tevent080_flag && (test_skill(hero, TA_WILDNISLEBEN, 4) > 0)) ||
+			gs_tevent080_flag != 0)
 	{
-		ds_writeb(TEVENT080_FLAG, 1);
+		gs_tevent080_flag = (1);
 		gs_main_acting_hero = NULL;
 
 		TRV_found_replenish_place(0);
 
 		hero = (Bit8u*)gs_main_acting_hero;
 
-		if ((hero && !ds_readb(TEVENT080_TATZELWURM) && test_skill(hero, TA_FAEHRTENSUCHEN, 5) > 0) ||
-			ds_readb(TEVENT080_TATZELWURM) == 1)
+		if ((hero && !gs_tevent080_tatzelwurm && test_skill(hero, TA_FAEHRTENSUCHEN, 5) > 0) ||
+			gs_tevent080_tatzelwurm == 1)
 		{
-			ds_writeb(TEVENT080_TATZELWURM, 1);
+			gs_tevent080_tatzelwurm = 1;
 
-			sprintf(g_dtp2,
-				get_tx2(87),
-				(char*)hero + HERO_NAME2);
+			sprintf(g_dtp2, get_tx2(87), (char*)hero + HERO_NAME2);
 
 			do {
-				answer = GUI_radio(g_dtp2, 2,
-							get_tx2(88),
-							get_tx2(89));
+				answer = GUI_radio(g_dtp2, 2, get_tx2(88), get_tx2(89));
+
 			} while (answer == -1);
 
 			if (answer == 1) {
@@ -71,9 +68,7 @@ void tevent_080(void)
 				timewarp(HOURS(1));
 
 				do {
-					answer = GUI_radio(get_tx2(90), 2,
-								get_tx2(91),
-								get_tx2(92));
+					answer = GUI_radio(get_tx2(90), 2, get_tx2(91), get_tx2(92));
 				} while (answer == -1);
 
 				if (answer == 2) {
@@ -81,16 +76,15 @@ void tevent_080(void)
 					timewarp(HOURS(1));
 
 					do {
-						answer = GUI_radio(get_tx2(93), 2,
-									get_tx2(94),
-									get_tx2(95));
+						answer = GUI_radio(get_tx2(93), 2, get_tx2(94),	get_tx2(95));
+
 					} while (answer == -1);
 
 					if (answer == 1) {
 
 						GUI_output(get_tx2(96));
 
-						ds_writeb(TEVENT080_TATZELWURM, 2);
+						gs_tevent080_tatzelwurm = 2;
 
 						add_hero_ap_all(20);
 					}
@@ -102,11 +96,11 @@ void tevent_080(void)
 
 void tevent_081(void)
 {
-	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !ds_readb(TEVENT081_FLAG)) ||
-		 ds_readb(TEVENT081_FLAG) != 0)
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent081_flag) ||
+		 gs_tevent081_flag != 0)
 	{
 		TRV_found_camp_place(0);
-		ds_writeb(TEVENT081_FLAG, 1);
+		gs_tevent081_flag = (1);
 	}
 }
 
@@ -117,13 +111,13 @@ void tevent_082(void)
 
 void tevent_083(void)
 {
-	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 6) > 0 && !ds_readb(TEVENT083_FLAG)) ||
-		 ds_readb(TEVENT083_FLAG) != 0)
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 6) > 0 && !gs_tevent083_flag) ||
+		 gs_tevent083_flag != 0)
 	{
 		ds_writeb(GATHER_HERBS_SPECIAL, 61);
 		TRV_found_herb_place(0);
 		ds_writeb(GATHER_HERBS_SPECIAL, -1);
-		ds_writeb(TEVENT083_FLAG, 1);
+		gs_tevent083_flag = (1);
 	}
 }
 
@@ -131,7 +125,7 @@ void tevent_084(void)
 {
 	signed short answer;
 
-	if (!ds_readb(TEVENT084_FLAG)) {
+	if (!gs_tevent084_flag) {
 
 		load_in_head(44);
 
@@ -146,7 +140,7 @@ void tevent_084(void)
 		if (answer == 1) {
 
 			if (!do_fight(FIGHTS_F084)) {
-				ds_writeb(TEVENT084_FLAG, 1);
+				gs_tevent084_flag = (1);
 			}
 		} else {
 
@@ -155,7 +149,7 @@ void tevent_084(void)
 				g_fig_initiative = 1;
 
 				if (!do_fight(FIGHTS_F084)) {
-					ds_writeb(TEVENT084_FLAG, 1);
+					gs_tevent084_flag = (1);
 				}
 			}
 		}
@@ -166,18 +160,19 @@ void tevent_085(void)
 {
 	Bit8u *hero = (Bit8u*)get_first_hero_available_in_group();
 
-	if ((test_skill(hero, TA_WILDNISLEBEN, 4) > 0 && !ds_readb(TEVENT085_FLAG)) ||
-		 ds_readb(TEVENT085_FLAG) != 0)
-	{
-		ds_writeb(TEVENT085_FLAG, 1);
+	if ((test_skill(hero, TA_WILDNISLEBEN, 4) > 0 && !gs_tevent085_flag) || gs_tevent085_flag) {
 
-		if ((test_skill(hero, TA_PFLANZENKUNDE, 6) > 0 && !ds_readb(TEVENT085_HERB_FLAG)) ||
-			 ds_readb(TEVENT085_HERB_FLAG) != 0)
+		gs_tevent085_flag = 1;
+
+		if ((test_skill(hero, TA_PFLANZENKUNDE, 6) > 0 && !gs_tevent085_herb_flag) ||
+			 gs_tevent085_herb_flag)
 		{
-			ds_writeb(TEVENT085_HERB_FLAG, 1);
+			gs_tevent085_herb_flag = 1;
+
 			ds_writebs(GATHER_HERBS_SPECIAL, 124);
 			TRV_found_camp_place(2);
 			ds_writebs(GATHER_HERBS_SPECIAL, -1);
+
 		} else {
 			TRV_found_camp_place(0);
 		}
@@ -213,29 +208,29 @@ void tevent_086(void)
 
 		GUI_dialog_na(0, get_tx2(103));
 
-		if (!ds_readb(TEVENT086_FLAG)) {
+		if (!gs_tevent086_flag) {
 
-			add_hero_ap_all(ds_writeb(TEVENT086_FLAG, 15));
+			add_hero_ap_all(gs_tevent086_flag = (15));
 		}
 
 	} else {
 
 		GUI_dialog_na(0, get_tx2(104));
 
-		if (!ds_readb(TEVENT086_FLAG)) {
+		if (!gs_tevent086_flag) {
 
-			add_hero_ap_all(ds_writeb(TEVENT086_FLAG, 5));
+			add_hero_ap_all(gs_tevent086_flag = (5));
 		}
 	}
 }
 
 void tevent_088(void)
 {
-	if (((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0) && (!ds_readb(TEVENT088_FLAG))) ||
-		 ds_readb(TEVENT088_FLAG) != 0)
+	if (((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0) && (!gs_tevent088_flag)) ||
+		 gs_tevent088_flag != 0)
 	{
 		TRV_found_camp_place(0);
-		ds_writeb(TEVENT088_FLAG, 1);
+		gs_tevent088_flag = (1);
 	}
 }
 
@@ -451,12 +446,11 @@ void tevent_099(void)
 {
 	signed short answer;
 
-	if (!ds_readb(TEVENT099_FLAG)) {
+	if (!gs_tevent099_flag) {
 
 		do {
-			answer = GUI_radio(get_tx2(38), 2,
-						get_tx2(39),
-						get_tx2(40));
+			answer = GUI_radio(get_tx2(38), 2, get_tx2(39),	get_tx2(40));
+
 		} while (answer == -1);
 
 		/* Original-Bug: The 2nd option "try to flee (or avoid the fight)" is not a try.
@@ -468,7 +462,7 @@ void tevent_099(void)
 		if (answer == 1) {
 
 			if (!do_fight(FIGHTS_F099)) {
-				ds_writeb(TEVENT099_FLAG, 1);
+				gs_tevent099_flag = 1;
 #ifdef M302de_ORIGINAL_BUGFIX
 			}
 #endif
@@ -479,7 +473,7 @@ void tevent_099(void)
 				g_fig_initiative = 1;
 
 				if (!do_fight(FIGHTS_F099)) {
-					ds_writeb(TEVENT099_FLAG, 1);
+					gs_tevent099_flag = 1;
 				}
 			}
 #ifndef M302de_ORIGINAL_BUGFIX
@@ -495,26 +489,24 @@ void tevent_101(void)
 	signed short answer;
 	signed short mod;
 
-	if (!ds_readb(TEVENT101_FLAG)) {
+	if (!gs_tevent101_flag) {
 
-		sprintf(g_dtp2,
-			get_tx2(41),
-			(mod = random_schick(4) + 2));
+		sprintf(g_dtp2,	get_tx2(41), (mod = random_schick(4) + 2));
 
 
 		do {
-			answer = GUI_radio(g_dtp2, 2,
-						get_tx2(42),
-						get_tx2(43));
+			answer = GUI_radio(g_dtp2, 2, get_tx2(42), get_tx2(43));
+
 		} while (answer == -1);
 
-		g_max_enemies = (mod);
+		g_max_enemies = mod;
 
 		/* Original-Bugfix: see description in tevent_099() */
 		if (answer == 1) {
 
 			if (!do_fight(FIGHTS_F101)) {
-				ds_writeb(TEVENT101_FLAG, 1);
+
+				gs_tevent101_flag = 1;
 #ifdef M302de_ORIGINAL_BUGFIX
 			}
 #endif
@@ -525,7 +517,7 @@ void tevent_101(void)
 				g_fig_initiative = 1;
 
 				if (!do_fight(FIGHTS_F101)) {
-					ds_writeb(TEVENT101_FLAG, 1);
+					gs_tevent101_flag = 1;
 				}
 			}
 #ifndef M302de_ORIGINAL_BUGFIX
@@ -558,9 +550,8 @@ void tevent_103(void)
 #endif
 
 	do {
-		answer = GUI_radio(get_tx2(44), 2,
-					get_tx2(45),
-					get_tx2(46));
+		answer = GUI_radio(get_tx2(44), 2, get_tx2(45),	get_tx2(46));
+
 	} while (answer == -1);
 
 	if (answer == 1) {
@@ -785,10 +776,11 @@ void tevent_105(void)
 
 void tevent_106(void)
 {
-	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 4) > 0 && !ds_readb(TEVENT106_FLAG)) ||
-		 ds_readb(TEVENT106_FLAG) != 0)
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 4) > 0 && !gs_tevent106_flag) ||
+		 gs_tevent106_flag)
 	{
-		ds_writeb(TEVENT106_FLAG, 1);
+		gs_tevent106_flag = 1;
+
 		TRV_found_camp_place(1);
 	}
 }
@@ -865,44 +857,43 @@ void tevent_108(void)
 {
 	signed short answer;
 
-	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 3) > 0) && !ds_readb(TEVENT108_FLAG))
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 3) > 0) && !gs_tevent108_flag)
 	{
-		ds_writeb(TEVENT108_FLAG, 1);
+		gs_tevent108_flag = 1;
 
 		GUI_dialog_na(53, get_tx2(72));
 
 		do {
 			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
-						get_tx2(73), 2,
-						get_tx2(74), get_tx2(75));
+						get_tx2(73), 2, get_tx2(74), get_tx2(75));
+
 		} while (answer == -1);
 
 		if (answer == 1) {
-			gs_travel_detour = (DUNGEONS_ORKBEHAUSUNG);
+			gs_travel_detour = DUNGEONS_ORKBEHAUSUNG;
 		}
 
-	} else if (ds_readb(TEVENT108_FLAG) != 0) {
+	} else if (gs_tevent108_flag) {
 
 		load_in_head(53);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
-						get_tx2(76), 2,
-						get_tx2(77), get_tx2(78));
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(76), 2,	get_tx2(77), get_tx2(78));
+
 		} while (answer == -1);
 
 		if (answer == 1) {
-			gs_travel_detour = (DUNGEONS_ORKBEHAUSUNG);
+			gs_travel_detour = DUNGEONS_ORKBEHAUSUNG;
 		}
 	}
 }
 
 void tevent_109(void)
 {
-	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 6) > 0 && !ds_readb(TEVENT109_FLAG)) ||
-		 ds_readb(TEVENT109_FLAG) != 0)
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 6) > 0 && !gs_tevent109_flag) || gs_tevent109_flag)
 	{
-		ds_writeb(TEVENT109_FLAG, 1);
+		gs_tevent109_flag = 1;
+
 		TRV_found_camp_place(0);
 	}
 }

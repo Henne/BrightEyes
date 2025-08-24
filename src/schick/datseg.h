@@ -524,9 +524,91 @@ extern Bit8u  gs_daspota_location13_loot[9];	//ds:0x3d7c; seg???
 extern Bit8u  gs_daspota_location14_loot[5];	//ds:0x3d85; seg???
 extern Bit8u  gs_daspota_location16_loot[5];	//ds:0x3d8a; seg???
 extern Bit8u  gs_daspota_location18_loot[19];	//ds:0x3d8f; seg???
-
+extern Bit8u  gs_tevent004_flag;		//ds:0x3da2; seg073, seg109
+extern Bit8u  gs_tevent005_flag;		//ds:0x3da3; seg073, seg109
+extern Bit8u  gs_tevent008_flag;		//ds:0x3da4; seg073, seg109
+extern Bit8u  gs_tevent009_flag;		//ds:0x3da5; seg073, seg109
+extern Bit8u  gs_tevent011_flag;		//ds:0x3da6; seg073, seg110
+extern Bit8u  gs_tevent013_flag;		//ds:0x3da7; seg073, seg110
 extern Bit8u  gs_tevent014_flag;		//ds:0x3da8; seg110
-
+extern Bit8u  gs_tevent016_flag;		//ds:0x3da9; seg115
+extern Bit8u  gs_tevent017_flag;		//ds:0x3daa; seg073, seg110
+extern Bit8u  gs_tevent020_flag;		//ds:0x3dab; seg073, seg110
+extern Bit8u  gs_tevent021_flag;		//ds:0x3dac; seg073, seg110
+extern Bit8u  gs_tevent022_flag;		//ds:0x3dad; seg073, seg110
+extern Bit8u  gs_tevent022_track_flag;		//ds:0x3dae; seg110
+extern Bit8u  gs_tevent024_flag;		//ds:0x3daf; seg073, seg110
+extern Bit8u  gs_tevent025_flag;		//ds:0x3db0; seg073, seg110
+extern Bit8u  gs_tevent028_flag;		//ds:0x3db1; seg073, seg110
+extern Bit8u  gs_tevent030_flag;		//ds:0x3db2; seg073, seg110
+extern Bit8u  gs_tevent031_flag;		//ds:0x3db3; seg110
+extern Bit8u  gs_tevent032_flag;		//ds:0x3db4; seg073, seg110
+extern Bit8u  gs_tevent032_herb_flag;		//ds:0x3db5; seg073, seg110
+extern Bit8u  gs_tevent034_flag;		//ds:0x3db6; seg073, seg110
+extern Bit8u  gs_tevent035_flag;		//ds:0x3db7; seg073, seg110
+extern Bit8u  gs_tevent036_flag;		//ds:0x3db8; seg073, seg110
+extern Bit8u  gs_tevent036_herb_flag;		//ds:0x3db9; seg110
+extern Bit8u  gs_tevent037_flag;		//ds:0x3dba; seg118
+extern Bit8u  gs_tevent039_flag;		//ds:0x3dbb; seg110
+extern Bit8u  gs_tevent040_flag;		//ds:0x3dbc; seg073, seg110
+extern Bit8u  gs_tevent041_flag;		//ds:0x3dbd; seg110
+extern Bit8u  gs_tevent042_flag;		//ds:0x3dbe; seg110
+extern Bit8u  gs_tevent043_flag;		//ds:0x3dbf; seg110
+extern Bit8u  gs_tevent048_flag;		//ds:0x3dc0; seg073, seg110
+extern Bit8u  gs_tevent048_track_flag;		//ds:0x3dc1; seg110
+extern Bit8u  gs_tevent049_flag;		//ds:0x3dc2; seg073, seg110
+extern Bit8u  gs_tevent050_flag;		//ds:0x3dc3; seg073, seg110
+extern Bit8u  gs_tevent050_herb_flag;		//ds:0x3dc4; seg110
+extern Bit8u  gs_tevent051_flag;		//ds:0x3dc5; seg118
+extern Bit8u  gs_tevent053_flag;		//ds:0x3dc6; seg073, seg111
+extern Bit8u  gs_tevent058_flag;		//ds:0x3dc7; seg073, seg111
+extern Bit8u  gs_tevent061_flag;		//ds:0x3dc8; seg111
+extern Bit8u  gs_tevent064_flag;		//ds:0x3dc9; seg111
+extern Bit8u  gs_tevent066_flag;		//ds:0x3dca; seg111
+extern Bit8u  gs_tevent066_track_flag;		//ds:0x3dcb; seg073, seg111
+extern Bit8u  gs_tevent067_flag;		//ds:0x3dcc; seg112
+extern Bit8u  gs_tevent069_flag;		//ds:0x3dcd; seg073, seg112
+extern Bit8u  gs_tevent070_flag;		//ds:0x3dce; seg073, seg112
+extern Bit8u  gs_tevent070_herb_flag;		//ds:0x3dcf; seg073, seg112
+extern Bit8u  gs_tevent070_trail_flag;		//ds:0x3dd0; seg112
+extern Bit8u  gs_tevent071_flag;		//ds:0x3dd1; seg112
+extern Bit8u  gs_teventu01_flag;		//ds:0x3dd2; seg112
+extern Bit8u  gs_tevent064_silent_flag;		//ds:0x3dd3; seg111
+extern Bit8u  gs_teventu02_flag;		//ds:0x3dd5; seg073
+extern Bit8u  gs_teventu03_flag;		//ds:0x3dd6; seg073
+extern Bit8u  gs_teventu04_flag;		//ds:0x3dd7; seg073
+extern Bit8u  gs_teventu05_flag;		//ds:0x3dd8; seg073
+extern Bit8u  gs_teventu06_flag;		//ds:0x3dd9; seg073
+extern Bit8u  gs_tevent071_orcstatue;		//ds:0x3dda; seg041, seg042, seg043, seg112
+extern Bit8u  gs_met_unicorn_flag;		//ds:0x3ddb; seg116, seg117, seg118
+extern Bit8u  gs_find_hyggelik;			//ds:0x3ddc; seg025, seg110, seg117
+extern Bit8u  gs_tevent072_flag;		//ds:0x3ddd; seg073, seg112
+extern Bit8u  gs_tevent073_flag;		//ds:0x3dde; seg112
+extern Bit8u  gs_tevent074_flag;		//ds:0x3ddf; seg112
+extern Bit8u  gs_tevent075_flag;		//ds:0x3de0; seg073, seg112
+extern Bit8u  gs_tevent076_flag;		//ds:0x3de1; seg112
+extern Bit8u  gs_tevent077_flag;		//ds:0x3de2; seg112
+extern Bit8u  gs_tevent079_flag;		//ds:0x3de3; seg073, seg118
+extern Bit8u  gs_tevent080_flag;		//ds:0x3de4; seg113
+extern Bit8u  gs_tevent080_tatzelwurm;		//ds:0x3de5; seg113
+extern Bit8u  gs_tevent081_flag;		//ds:0x3de6; seg073, seg113
+extern Bit8u  gs_tevent083_flag;		//ds:0x3de7; seg073, seg113
+extern Bit8u  gs_tevent084_flag;		//ds:0x3de8; seg113
+extern Bit8u  gs_tevent085_flag;		//ds:0x3de9; seg113
+extern Bit8u  gs_tevent085_herb_flag;		//ds:0x3dea; seg113
+extern Bit8u  gs_tevent086_flag;		//ds:0x3deb; seg113
+extern Bit8u  gs_tevent088_flag;		//ds:0x3dec; seg113, seg116
+extern Bit8u  gs_tevent091_flag;		//ds:0x3ded; seg073, seg115, seg116
+extern Bit8u  gs_tevent093_flag;		//ds:0x3dee; seg073, seg115, seg116
+extern Bit8u  gs_tevent094_flag;		//ds:0x3def; seg110, seg115
+extern Bit8u  gs_teventu07_flag;		//ds:0x3df0; seg073
+extern Bit8u  gs_teventu08_flag;		//ds:0x3df1; seg073
+extern Bit8u  gs_tevent099_flag;		//ds:0x3df2; seg113
+extern Bit8u  gs_tevent100_flag;		//ds:0x3df3; seg072, seg115
+extern Bit8u  gs_tevent101_flag;		//ds:0x3df4; seg113
+extern Bit8u  gs_tevent106_flag;		//ds:0x3df5; seg073, seg113
+extern Bit8u  gs_tevent108_flag;		//ds:0x3df6; seg113
+extern Bit8u  gs_tevent109_flag;		//ds:0x3df7; seg113
 extern Bit8u  gs_tevent111_flag;		//ds:0x3df8; seg114
 extern Bit8u  gs_tevent112_flag;		//ds:0x3df9; seg073, seg114
 extern Bit8u  gs_tevent112_herb_flag;		//ds:0x3dfa; seg073, seg114

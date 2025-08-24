@@ -719,9 +719,12 @@ void search_ruin1(void)
 
 void tevent_115(void)
 {
-	if (ds_readb(FIND_HYGGELIK) != 0) {
+	if (gs_find_hyggelik) {
+
 		gs_tevent115_flag = 1;
+
 		do_talk(17, 0);
+
 		set_var_to_zero();
 	}
 }
@@ -859,9 +862,11 @@ void TLK_way_to_ruin(signed short state)
 
 void tevent_087(void)
 {
-	if (!ds_readb(MET_UNICORN_FLAG) && gs_got_main_quest != 0) {
+	if (!gs_met_unicorn_flag && gs_got_main_quest) {
+
 		do_talk(11, 2);
-		ds_writeb(MET_UNICORN_FLAG, 1);
+
+		gs_met_unicorn_flag = 1;
 	}
 }
 

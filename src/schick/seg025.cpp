@@ -347,19 +347,19 @@ void show_treasure_map(void)
 			g_tmap_double2 = 0;
 		}
 
-		if (count >= 7 && !ds_readb(FIND_HYGGELIK)) {
+		if (count >= 7 && !gs_find_hyggelik) {
+
 			/* the way can now be found */
 
 			tw_bak = g_textbox_width;
 			g_textbox_width = 3;
 
-			/* */
 			sprintf(g_text_output_buf, get_ttx(727), (char*)get_hero(get_random_hero()) + HERO_NAME2);
 			GUI_output(g_text_output_buf);
 
 			g_textbox_width = tw_bak;
 
-			ds_writeb(FIND_HYGGELIK, 1);
+			gs_find_hyggelik = 1;
 		}
 
 		delay_or_keypress(1000);

@@ -43,7 +43,7 @@ void tevent_037(void)
 
 	done = 0;
 
-	if (!ds_readb(TEVENT037_FLAG))
+	if (!gs_tevent037_flag)
 	{
 		g_event_ani_busy = 1;
 
@@ -128,7 +128,7 @@ void tevent_037(void)
 				if (answer == 1)
 				{
 					/* offer a deposit */
-					ds_writeb(TEVENT037_FLAG, 1);
+					gs_tevent037_flag = 1;
 
 					/* select a hero randomly */
 					hero = get_hero(answer = get_random_hero());
@@ -227,10 +227,11 @@ void tevent_037(void)
 /* unicorn 1st time */
 void tevent_038(void)
 {
-	if (!ds_readb(MET_UNICORN_FLAG) && gs_got_main_quest != 0)
+	if (!gs_met_unicorn_flag && gs_got_main_quest)
 	{
 		do_talk(11, 2);
-		ds_writeb(MET_UNICORN_FLAG, 1);
+
+		gs_met_unicorn_flag = 1;
 	}
 }
 
@@ -356,11 +357,11 @@ void tevent_078(void)
 
 void tevent_079(void)
 {
-	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 4) > 0 && !ds_readb(TEVENT079_FLAG)) ||
-		ds_readb(TEVENT079_FLAG) != 0)
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 4) > 0 && !gs_tevent079_flag) ||
+		gs_tevent079_flag != 0)
 	{
 		TRV_found_camp_place(0);
-		ds_writeb(TEVENT079_FLAG, 1);
+		gs_tevent079_flag = (1);
 	}
 }
 
@@ -369,9 +370,9 @@ void tevent_051(void)
 {
 	signed short answer;
 
-	if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 4) > 0 && !ds_readb(TEVENT051_FLAG))
+	if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 4) > 0 && !gs_tevent051_flag)
 	{
-		ds_writeb(TEVENT051_FLAG, 1);
+		gs_tevent051_flag = 1;
 
 		if (!TRV_follow_trail_question())
 		{
@@ -392,7 +393,7 @@ void tevent_051(void)
 			}
 		}
 
-	} else if (ds_readb(TEVENT051_FLAG) != 0) {
+	} else if (gs_tevent051_flag != 0) {
 
 		load_in_head(53);
 
@@ -554,6 +555,7 @@ void tevent_125(void)
 
 	do {
 		answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(57), 3, get_tx2(58), get_tx2(59), get_tx2(60));
+
 	} while (answer == -1);
 
 	if (answer == 1 || answer == 2)

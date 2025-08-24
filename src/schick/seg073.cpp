@@ -51,9 +51,9 @@ unsigned short get_tavern_gossip(void)
 	/* Serske */
 	case (TOWNS_SERSKE - 1): {
 		if (r_si == 1)
-			ds_writeb(TEVENT005_FLAG, 1);	/* Restplaces */
+			gs_tevent005_flag = 1;
 		else if (r_si == 2)
-			ds_writeb(TEVENT004_FLAG, 1);
+			gs_tevent004_flag = 1;
 		else if (r_si == 9)
 			update_informer_cond(INFORMER_ELIANE);	/* Eliane Windenbeck */
 		else if (r_si == 10)
@@ -64,31 +64,31 @@ unsigned short get_tavern_gossip(void)
 	/* Breida */
 	case (TOWNS_BREIDA - 1): {
 		if (r_si == 1)
-			ds_writeb(TEVENT005_FLAG, 1);	/* Restplaces */
+			gs_tevent005_flag = 1;
 		else if (r_si == 3)
-			ds_writeb(TEVENT004_FLAG, 1);
+			gs_tevent004_flag = 1;
 		else if (r_si == 4)
-			ds_writeb(TEVENT008_FLAG, 1);
+			gs_tevent008_flag = 1;
 		else if (r_si == 5)
-			ds_writeb(TEVENT009_FLAG, 1);
+			gs_tevent009_flag = 1;
 
 		break;
 	}
 	/* Peilinen */
 	case (TOWNS_PEILINEN - 1): {
 		if (r_si == 1)
-			ds_writeb(TEVENT009_FLAG, 1);	/* Restplaces */
+			gs_tevent009_flag = 1;
 		else if (r_si == 3)
-			ds_writeb(TEVENT011_FLAG, 1);
+			gs_tevent011_flag = 1;
 
 		break;
 	}
 	/* Rovamund */
 	case (TOWNS_ROVAMUND - 1): {
 		if (r_si == 1)
-			ds_writeb(TEVENT013_FLAG, 1);	/* Restplaces */
+			gs_tevent013_flag = 1;
 		else if (r_si == 3)
-			ds_writeb(TEVENT011_FLAG, 1);
+			gs_tevent011_flag = 1;
 		else if (r_si == 4)
 			gs_tevent119_flag = 1;
 		else if (r_si == 5)
@@ -99,31 +99,31 @@ unsigned short get_tavern_gossip(void)
 	/* Nordvest */
 	case (TOWNS_NORDVEST - 1): {
 		if (r_si == 1)
-			ds_writeb(TEVENT013_FLAG, 1);	/* Restplaces */
+			gs_tevent013_flag = 1;
 		else if (r_si == 3)
-			ds_writeb(TEVENT017_FLAG, 1);
+			gs_tevent017_flag = 1;
 
 		break;
 	}
 	/* Kravik */
 	case (TOWNS_KRAVIK - 1): {
 		if (r_si == 1)
-			ds_writeb(TEVENT017_FLAG, 1);	/* Restplaces */
+			gs_tevent017_flag = 1;	/* Restplaces */
 		else if (r_si == 2)
-			ds_writeb(TEVENT020_FLAG, 1);
+			gs_tevent020_flag = 1;
 		else if (r_si == 3)
-			ds_writeb(TEVENT021_FLAG, 1);
+			gs_tevent021_flag = 1;
 
 		break;
 	}
 	/* Skelellen */
 	case (TOWNS_SKELELLEN - 1): {
 		if (r_si == 1)
-			ds_writeb(TEVENT021_FLAG, 1);	/* Restplaces */
+			gs_tevent021_flag = 1;	/* Restplaces */
 		else if (r_si == 2)
-			ds_writeb(TEVENTU07_FLAG, 1);
+			gs_teventu07_flag = 1;
 		else if (r_si == 3)
-			ds_writeb(TEVENT106_FLAG, 1);
+			gs_tevent106_flag = 1;
 		else if (r_si == 4) {
 			gs_tevent112_flag = gs_tevent112_herb_flag = 1;
 		}
@@ -148,7 +148,7 @@ unsigned short get_tavern_gossip(void)
 	/* Tjoila */
 	case (TOWNS_TJOILA - 1): {
 		if (r_si == 2)
-			ds_writeb(TEVENT008_FLAG, 1);	/* Restplaces */
+			gs_tevent008_flag = 1;
 		else if (r_si == 7)
 			update_informer_cond(INFORMER_ELIANE);	/* Eliane Windenbeck */
 		else if (r_si == 8)
@@ -161,19 +161,19 @@ unsigned short get_tavern_gossip(void)
 	case (TOWNS_ANGBODIRTAL - 1):
 	 {
 		if (r_si == 1)
-			ds_writeb(TEVENT022_FLAG, 1);	/* Restplaces */
+			gs_tevent022_flag = 1;	/* Restplaces */
 		break;
 	}
 	/* Auplog */
 	case (TOWNS_AUPLOG - 1): {
 		if (r_si == 1) {
 			/* Restplaces */
-			ds_writeb(TEVENT024_FLAG, ds_writeb(TEVENT025_FLAG, 1));
+			gs_tevent024_flag = gs_tevent025_flag = 1;
 		}
 		else if (r_si == 2)
-			ds_writeb(TEVENT040_FLAG, 1);
+			gs_tevent040_flag = 1;
 		else if (r_si == 3) {
-			ds_writeb(TEVENTU02_FLAG, ds_writeb(TEVENT040_FLAG, 1));
+			gs_teventu02_flag = gs_tevent040_flag = 1;
 		}
 
 		break;
@@ -182,18 +182,18 @@ unsigned short get_tavern_gossip(void)
 	case (TOWNS_VILNHEIM - 1): {
 		if (r_si == 1) {
 			/* Restplaces */
-			ds_writeb(TEVENT024_FLAG, ds_writeb(TEVENT025_FLAG, 1));
+			gs_tevent024_flag = gs_tevent025_flag = 1;
 		}
 		else if (r_si == 2)
-			ds_writeb(TEVENT028_FLAG, 1);
+			gs_tevent028_flag = 1;
 		else if (r_si == 3) {
-			ds_writeb(TEVENT030_FLAG, 1);
+			gs_tevent030_flag = 1;
 		}
 		else if (r_si == 4) {
-			ds_writeb(TEVENT032_FLAG, ds_writeb(TEVENT032_HERB_FLAG, 1));
+			gs_tevent032_flag = gs_tevent032_herb_flag = 1;
 		}
 		else if (r_si == 5) {
-			ds_writeb(TEVENT034_FLAG, 1);
+			gs_tevent034_flag = 1;
 		}
 
 		break;
@@ -202,18 +202,18 @@ unsigned short get_tavern_gossip(void)
 	case (TOWNS_BODON - 1): {
 		if (r_si == 3) {
 			/* Restplaces */
-			ds_writeb(TEVENT024_FLAG, ds_writeb(TEVENT025_FLAG, 1));
+			gs_tevent024_flag = gs_tevent025_flag = 1;
 		}
 		else if (r_si == 4)
-			ds_writeb(TEVENT028_FLAG, 1);
+			gs_tevent028_flag = 1;
 		else if (r_si == 5) {
-			ds_writeb(TEVENT030_FLAG, 1);
+			gs_tevent030_flag = 1;
 		}
 		else if (r_si == 6) {
-			ds_writeb(TEVENT032_FLAG, ds_writeb(TEVENT032_HERB_FLAG, 1));
+			gs_tevent032_flag = gs_tevent032_herb_flag = 1;
 		}
 		else if (r_si == 7) {
-			ds_writeb(TEVENT034_FLAG, 1);
+			gs_tevent034_flag = 1;
 		}
 
 		break;
@@ -221,27 +221,27 @@ unsigned short get_tavern_gossip(void)
 	/* Oberorken */
 	case (TOWNS_OBERORKEN - 1): {
 		if (r_si == 2)
-			ds_writeb(TEVENT072_FLAG, 1);	/* Restplaces */
+			gs_tevent072_flag = 1;	/* Restplaces */
 		else if (r_si == 3)
-			ds_writeb(TEVENT083_FLAG, 1);
+			gs_tevent083_flag = 1;
 
 		break;
 	}
 	/* Phexcaer */
 	case (TOWNS_PHEXCAER - 1): {
 		if (r_si == 1)
-			ds_writeb(TEVENT034_FLAG, 1);	/* Restplaces */
+			gs_tevent034_flag = 1;	/* Restplaces */
 		else if (r_si == 2) {
-			ds_writeb(TEVENT032_FLAG, ds_writeb(TEVENT032_HERB_FLAG, 1));
+			gs_tevent032_flag = gs_tevent032_herb_flag = 1;
 		}
 		else if (r_si == 3)
-			ds_writeb(TEVENT030_FLAG, 1);
+			gs_tevent030_flag = 1;
 		else if (r_si == 4)
-			ds_writeb(TEVENT028_FLAG, 1);
+			gs_tevent028_flag = 1;
 		else if (r_si == 5)
-			ds_writeb(TEVENT036_FLAG, 1);
+			gs_tevent036_flag = 1;
 		else if (r_si == 6)
-			ds_writeb(TEVENTU07_FLAG, 1);
+			gs_teventu07_flag = 1;
 		else if (r_si == 7)
 			gs_tevent116_flag = 1;
 
@@ -250,31 +250,31 @@ unsigned short get_tavern_gossip(void)
 	/* Felsteyn */
 	case (TOWNS_FELSTEYN - 1): {
 		if (r_si == 1)
-			ds_writeb(TEVENT072_FLAG, 1);	/* Restplaces */
+			gs_tevent072_flag = 1;	/* Restplaces */
 		else if (r_si == 2)
-			ds_writeb(TEVENT075_FLAG, 1);
+			gs_tevent075_flag = 1;
 		else if (r_si == 3)
-			ds_writeb(TEVENT091_FLAG, 1);
+			gs_tevent091_flag = 1;
 		else if (r_si == 4)
-			ds_writeb(TEVENT093_FLAG, 1);
+			gs_tevent093_flag = 1;
 
 		break;
 	}
 	/* Orkanger */
 	case (TOWNS_ORKANGER - 1): {
 		if (r_si == 1)
-			ds_writeb(TEVENT075_FLAG, 1);	/* Restplaces */
+			gs_tevent075_flag = 1;	/* Restplaces */
 		else if (r_si == 2)
-			ds_writeb(TEVENT079_FLAG, 1);
+			gs_tevent079_flag = 1;
 
 		break;
 	}
 	/* Clanegh */
 	case (TOWNS_CLANEGH - 1): {
 		if (r_si == 1)
-			ds_writeb(TEVENT079_FLAG, 1);	/* Restplaces */
+			gs_tevent079_flag = 1;	/* Restplaces */
 		else if (r_si == 2)
-			ds_writeb(TEVENT081_FLAG, 1);
+			gs_tevent081_flag = 1;
 
 		break;
 	}
@@ -282,19 +282,19 @@ unsigned short get_tavern_gossip(void)
 	case (TOWNS_THOSS - 1): {
 		if (r_si == 1) {
 			/* Restplaces */
-			ds_writeb(TEVENT069_FLAG, ds_writeb(TEVENT070_FLAG, ds_writeb(TEVENT070_HERB_FLAG, 1)));
+			gs_tevent069_flag = gs_tevent070_flag = gs_tevent070_herb_flag = 1;
 		}
 		else if (r_si == 2)
-			ds_writeb(TEVENTU08_FLAG, 1);
+			gs_teventu08_flag = 1;
 
 		break;
 	}
 	/* Ala */
 	case (TOWNS_ALA - 1): {
 		if (r_si == 1)
-			ds_writeb(TEVENT066_TRACK_FLAG, 1);	/* Restplaces */
+			gs_tevent066_track_flag = 1;	/* Restplaces */
 		else if (r_si == 2) {
-			ds_writeb(TEVENT069_FLAG, ds_writeb(TEVENT070_FLAG, ds_writeb(TEVENT070_HERB_FLAG, 1)));
+			gs_tevent069_flag = gs_tevent070_flag = gs_tevent070_herb_flag = 1;
 		}
 
 		break;
@@ -303,10 +303,10 @@ unsigned short get_tavern_gossip(void)
 	case (TOWNS_ORVIL - 1): {
 		if (r_si == 1) {
 			/* Restplaces */
-			ds_writeb(TEVENT058_FLAG, ds_writeb(TEVENTU03_FLAG, 1));
+			gs_tevent058_flag = gs_teventu03_flag = 1;
 		}
 		else if (r_si == 2)
-			ds_writeb(TEVENT066_TRACK_FLAG, 1);
+			gs_tevent066_track_flag = 1;
 		else if (r_si == 3) {
 			/* Restplaces */
 			gs_teventu10_flag = gs_teventu11_flag = 1;
@@ -326,7 +326,7 @@ unsigned short get_tavern_gossip(void)
 	/* Kord */
 	case (TOWNS_KORD - 1): {
 		if (r_si == 1)
-			ds_writeb(TEVENTU05_FLAG, 1);	/* Restplaces */
+			gs_teventu05_flag = 1;	/* Restplaces */
 
 		break;
 	}
@@ -343,31 +343,30 @@ unsigned short get_tavern_gossip(void)
 	/* Ottarje */
 	case (TOWNS_OTTARJE - 1): {
 		if (r_si == 1)
-			ds_writeb(TEVENTU04_FLAG, 1);	/* Restplaces */
+			gs_teventu04_flag = 1;	/* Restplaces */
 		else if (r_si == 2)
-			ds_writeb(TEVENT048_FLAG, 1);
+			gs_tevent048_flag = 1;
 		else if (r_si == 3) {
-			ds_writeb(TEVENT049_FLAG, ds_writeb(TEVENT053_FLAG, 1));
+			gs_tevent049_flag = gs_tevent053_flag = 1;
 		}
 		else if (r_si == 4)
-			ds_writeb(TEVENT050_FLAG, 1);
+			gs_tevent050_flag = 1;
 		else if (r_si == 5) {
 			/* Yes this was done twice */
-			ds_writeb(TEVENT058_FLAG, ds_writeb(TEVENT058_FLAG, 1));
+			gs_tevent058_flag = gs_tevent058_flag = 1;
 		}
 
 		break;
 	}
 	/* Skjal */
 	case (TOWNS_SKJAL - 1): {
-		if (r_si == 1) {
-			/* Restplaces */
-			ds_writeb(TEVENT049_FLAG, ds_writeb(TEVENT053_FLAG, 1));
-		}
+		/* Restplaces */
+		if (r_si == 1)
+			gs_tevent049_flag = gs_tevent053_flag = 1;
 		else if (r_si == 2)
-			ds_writeb(TEVENT050_FLAG, 1);
+			gs_tevent050_flag = 1;
 		else if (r_si == 3)
-			ds_writeb(TEVENTU06_FLAG, 1);
+			gs_teventu06_flag = 1;
 		else if (r_si == 4) {
 			gs_teventu10_flag = gs_teventu11_flag = 1;
 		}
@@ -377,26 +376,26 @@ unsigned short get_tavern_gossip(void)
 	/* Prem */
 	case (TOWNS_PREM - 1): {
 		if (r_si == 2)
-			ds_writeb(TEVENTU06_FLAG, 1);	/* Restplaces */
+			gs_teventu06_flag = 1;	/* Restplaces */
 		else if (r_si == 3)
-			ds_writeb(TEVENTU05_FLAG, 1);
+			gs_teventu05_flag = 1;
 
 		break;
 	}
 	/* Rybon */
 	case (TOWNS_RYBON - 1): {
 		if (r_si == 0)
-			ds_writeb(TEVENTU08_FLAG, 1);	/* Restplaces */
+			gs_teventu08_flag = 1;	/* Restplaces */
 
 		break;
 	}
 	/* Varnheim */
 	case (TOWNS_VARNHEIM - 1): {
 		if (r_si == 2)
-			ds_writeb(TEVENT040_FLAG, 1);	/* Restplaces */
+			gs_tevent040_flag = 1;	/* Restplaces */
 		else if (r_si == 3) {
 			/* hunt and Restplace */
-			ds_writeb(TEVENTU02_FLAG, ds_writeb(TEVENT040_FLAG, 1));
+			gs_teventu02_flag = gs_tevent040_flag = 1;
 		}
 		else if (r_si == 9)
 			update_informer_cond(INFORMER_ELIANE);	/* Eliane Windenbeck */
@@ -417,7 +416,7 @@ unsigned short get_tavern_gossip(void)
 	/* Tyldon */
 	case (TOWNS_TYLDON - 1): {
 		if (r_si == 1)
-			ds_writeb(TEVENT081_FLAG, 1);	/* Restplaces */
+			gs_tevent081_flag = 1;	/* Restplaces */
 
 		break;
 	}

@@ -36,7 +36,7 @@ void tevent_016(void)
 	signed short answer;
 	Bit8u *hero;
 
-	if (!ds_readb(TEVENT016_FLAG))
+	if (!gs_tevent016_flag)
 	{
 
 		load_in_head(46);
@@ -122,7 +122,7 @@ void tevent_016(void)
 								(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)),
 								(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 
-							GUI_dialog_na(0, (char*)((char*)(g_dtp2 + 0x400)));
+							GUI_dialog_na(0, (char*)g_dtp2 + 0x400);
 
 							timewarp(HOURS(1));
 
@@ -131,7 +131,7 @@ void tevent_016(void)
 								(char*)hero + HERO_NAME2,
 								(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
 
-							GUI_dialog_na(0, (char*)((char*)(g_dtp2 + 0x400)));
+							GUI_dialog_na(0, (char*)g_dtp2 + 0x400);
 
 							add_hero_ap(hero, 5);
 
@@ -145,7 +145,7 @@ void tevent_016(void)
 			}
 		}
 
-		ds_writeb(TEVENT016_FLAG, 1);
+		gs_tevent016_flag = 1;
 	}
 }
 
@@ -179,30 +179,30 @@ void tevent_090(void)
 
 void tevent_091(void)
 {
-	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 5) > 0 && !ds_readb(TEVENT091_FLAG)) ||
-		ds_readb(TEVENT091_FLAG) != 0)
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 5) > 0 && !gs_tevent091_flag) ||
+		gs_tevent091_flag != 0)
 	{
 		ds_writeb(GATHER_HERBS_SPECIAL, 122);
 		TRV_found_herb_place(0);
 		ds_writeb(GATHER_HERBS_SPECIAL, -1);
-		ds_writeb(TEVENT091_FLAG, 1);
+		gs_tevent091_flag = (1);
 	}
 }
 
 void tevent_093(void)
 {
-	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 4) > 0 && !ds_readb(TEVENT093_FLAG)) ||
-		ds_readb(TEVENT093_FLAG) != 0)
+	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 4) > 0 && !gs_tevent093_flag) ||
+		gs_tevent093_flag != 0)
 	{
 		TRV_found_camp_place(0);
-		ds_writeb(TEVENT093_FLAG, 1);
+		gs_tevent093_flag = (1);
 	}
 }
 
 /* Rybon <-> Thoss: entrance to the Daspota treasure dungeon */
 void tevent_094(void)
 {
-	if (ds_readb(TEVENT094_FLAG) != 0)
+	if (gs_tevent094_flag != 0)
 	{
 		signed short answer;
 
@@ -543,7 +543,7 @@ void tevent_129(void)
 		} while (answer == -1);
 
 		if (answer == 1) {
-			gs_travel_detour = (DUNGEONS_DRACHENHORT);
+			gs_travel_detour = DUNGEONS_DRACHENHORT;
 		}
 	}
 }
@@ -557,9 +557,8 @@ void tevent_047(void)
 	l_di = 0;
 
 	do {
-		answer = GUI_radio(get_tx2(0), 2,
-					get_tx2(1),
-					get_tx2(2));
+		answer = GUI_radio(get_tx2(0), 2, get_tx2(1), get_tx2(2));
+
 	} while (answer == -1);
 
 	if (answer == 1)
@@ -570,18 +569,16 @@ void tevent_047(void)
 	} else {
 		/* wave */
 		do {
-			answer = GUI_radio(get_tx2(4), 2,
-						get_tx2(5),
-						get_tx2(6));
+			answer = GUI_radio(get_tx2(4), 2, get_tx2(5), get_tx2(6));
+
 		} while (answer == -1);
 
 		if (answer == 1)
 		{
 			/* run away */
 			do {
-				answer = GUI_radio(get_tx2(7), 2,
-							get_tx2(9),
-							get_tx2(8));
+				answer = GUI_radio(get_tx2(7), 2, get_tx2(9), get_tx2(8));
+
 			} while (answer == -1);
 
 			if (answer == 1)
@@ -634,16 +631,16 @@ void tevent_047(void)
 
 						if (answer == 1)
 						{
-							gs_current_town = (TOWNS_LJASDAHL);
-							gs_x_target = (7);
-							gs_y_target = (3);
+							gs_current_town = TOWNS_LJASDAHL;
+							gs_x_target = 7;
+							gs_y_target = 3;
 						} else {
-							gs_current_town = (TOWNS_OTTARJE);
-							gs_x_target = (9);
-							gs_y_target = (10);
+							gs_current_town = TOWNS_OTTARJE;
+							gs_x_target = 9;
+							gs_y_target = 10;
 						}
 
-						gs_travel_detour = (99);
+						gs_travel_detour = 99;
 					}
 				} else {
 					do {
@@ -660,10 +657,10 @@ void tevent_047(void)
 						GUI_dialog_na(0, get_tx2(23));
 						GUI_dialog_na(0, get_tx2(25));
 
-						gs_current_town = (TOWNS_VARNHEIM);
-						gs_x_target = (4);
-						gs_y_target = (10);
-						gs_travel_detour = (99);
+						gs_current_town = TOWNS_VARNHEIM;
+						gs_x_target = 4;
+						gs_y_target = 10;
+						gs_travel_detour = 99;
 					}
 				}
 			}
@@ -676,17 +673,15 @@ void tevent_100(void)
 {
 	signed short answer;
 
-	if (ds_readb(TEVENT100_FLAG) != 0)
-	{
+	if (gs_tevent100_flag) {
+
 		do {
-			answer = GUI_radio(get_tx2(52), 3,
-						get_tx2(53),
-						get_tx2(54),
-						get_tx2(55));
+			answer = GUI_radio(get_tx2(52), 3, get_tx2(53), get_tx2(54), get_tx2(55));
+
 		} while (answer == -1);
 
-		if (answer == 1)
-		{
+		if (answer == 1) {
+
 			GUI_output(get_tx2(56));
 
 			g_event_ani_busy = 1;
@@ -698,14 +693,14 @@ void tevent_100(void)
 			GUI_output(get_tx2(57));
 
 			do {
-				answer = GUI_radio(get_tx2(58), 2,
-							get_tx2(59),
-							get_tx2(60));
+				answer = GUI_radio(get_tx2(58), 2, get_tx2(59), get_tx2(60));
+
 			} while (answer == -1);
 
-			if (answer == 1)
-			{
-				gs_travel_detour = (DUNGEONS_RUINE_DES_SCHWARZMAGIERS);
+			if (answer == 1) {
+
+				gs_travel_detour = DUNGEONS_RUINE_DES_SCHWARZMAGIERS;
+
 			} else {
 
 				GUI_output(get_tx2(67));
@@ -715,6 +710,7 @@ void tevent_100(void)
 				{
 					/* success */
 					GUI_output(get_tx2(68));
+
 				} else {
 					/* fail */
 					Bit8u *hero;
@@ -726,12 +722,9 @@ void tevent_100(void)
 
 					timewarp(MINUTES(15));
 
-
-					sprintf(g_dtp2,
-						get_tx2(69),
-						(char*)hero + HERO_NAME2,
-						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+					sprintf(g_dtp2,	get_tx2(69), (char*)hero + HERO_NAME2,
+						GUI_get_ptr(host_readbs(hero + HERO_SEX), 0),
+						GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
 
 					GUI_output(g_dtp2);
 				}
@@ -741,8 +734,8 @@ void tevent_100(void)
 
 			g_request_refresh = 1;
 
-		} else if (answer == 3)
-		{
+		} else if (answer == 3) {
+
 			gs_trv_return = 1;
 		}
 	}
