@@ -259,9 +259,9 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						} else if (target_id == (hero_pos + 1)) {
 							GUI_output(get_tx(3));
 						} else if (((target_id < 10) && hero_dead(get_hero(target_id - 1))) ||
-								((target_id >= 10) && (target_id < 30) && (g_enemy_sheets[target_id - 10].flags1.dead || g_enemy_sheets[target_id - 10].flags1.dead)) ||
+								((target_id >= 10) && (target_id < 30) && (g_enemy_sheets[target_id - 10].flags.dead || g_enemy_sheets[target_id - 10].flags.dead)) ||
 								/* TODO: check target_id < 50 */
-								((target_id >= 30) && (g_enemy_sheets[target_id - 30].flags1.dead || g_enemy_sheets[target_id - 30].flags1.mushroom)))
+								((target_id >= 30) && (g_enemy_sheets[target_id - 30].flags.dead || g_enemy_sheets[target_id - 30].flags.mushroom)))
 						{
 							GUI_output(get_tx(29));
 
@@ -840,7 +840,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 				{
 
 					/* TODO: check fighter_id upper bound */
-					if (((host_readbs(hero + HERO_ENEMY_ID) >= 10) && g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].flags1.dead) || /* check 'dead' flag */
+					if (((host_readbs(hero + HERO_ENEMY_ID) >= 10) && g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].flags.dead) || /* check 'dead' flag */
 						((host_readbs(hero + HERO_ENEMY_ID) < 10) && hero_dead(get_hero(host_readbs(hero + HERO_ENEMY_ID) - 1))))
 					{
 
@@ -850,7 +850,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						done = 0;
 
 					/* TODO: check fighter_id upper bound */
-					} else if (((host_readbs(hero + HERO_ENEMY_ID) >= 10) && g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].flags2.scared) || /* check 'scared' flag */
+					} else if (((host_readbs(hero + HERO_ENEMY_ID) >= 10) && g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].flags.scared) || /* check 'scared' flag */
 						((host_readbs(hero + HERO_ENEMY_ID) < 10) && (hero_scared(get_hero(host_readbs(hero + HERO_ENEMY_ID) - 1)))))
 					{
 
@@ -877,7 +877,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 		(host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_SPELL) || (host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_USE_ITEM)))
 	{
 		for (slot_no = 0; slot_no < 20; slot_no++) {
-			g_enemy_sheets[slot_no].flags1.tied = 0;
+			g_enemy_sheets[slot_no].flags.tied = 0;
 		}
 
 		g_finalfight_tumult = 1;

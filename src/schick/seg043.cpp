@@ -108,7 +108,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 			g_fig_target_grammar.type = 1;
 			g_fig_target_grammar.id = target_enemy->mon_id;
 
-			if (target_enemy->flags1.dead || !target_enemy->mon_id) {
+			if (target_enemy->flags.dead || !target_enemy->mon_id) {
 				return;
 			}
 
@@ -149,8 +149,8 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 						if ((fighter_id >= 50) ||
 							((fighter_id < 10) && !hero_dead(get_hero(fighter_id - 1))) ||
-							((fighter_id >= 10) && (fighter_id < 30) && !g_enemy_sheets[fighter_id - 10].flags1.dead) ||
-							((fighter_id >= 30) && (fighter_id < 50) && !g_enemy_sheets[fighter_id - 30].flags1.dead))
+							((fighter_id >= 10) && (fighter_id < 30) && !g_enemy_sheets[fighter_id - 10].flags.dead) ||
+							((fighter_id >= 30) && (fighter_id < 50) && !g_enemy_sheets[fighter_id - 30].flags.dead))
 						{
 							l17 = 1;
 						}
@@ -280,7 +280,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 								g_fig_target_grammar = g_fig_actor_grammar;
 								g_fig_actor_grammar = tmp;
 
-								if (monster->flags1.dead) {
+								if (monster->flags.dead) {
 									g_attacker_dead = 1;
 								}
 							}
@@ -299,7 +299,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 						g_fig_target_grammar = g_fig_actor_grammar;
 
-						if (monster->flags1.dead) {
+						if (monster->flags.dead) {
 							g_attacker_dead = 1;
 						}
 					} else if (two_w_6 == 12) {
@@ -373,7 +373,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 											FIG_add_msg(11, damage);
 
-											if (target_enemy->flags1.dead) {
+											if (target_enemy->flags.dead) {
 												g_defender_dead = 1;
 											}
 										}
@@ -404,7 +404,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 									FIG_add_msg(11, damage);
 
-									if (target_enemy->flags1.dead) {
+									if (target_enemy->flags.dead) {
 										g_defender_dead = 1;
 									}
 								}
@@ -486,7 +486,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 								FIG_add_msg(11, damage);
 
-								if (target_enemy->flags1.dead) {
+								if (target_enemy->flags.dead) {
 									g_defender_dead = 1;
 								}
 							}
@@ -560,7 +560,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 						FIG_add_msg(11, damage);
 
-						if (target_enemy->flags1.dead) {
+						if (target_enemy->flags.dead) {
 							g_defender_dead = 1;
 						}
 					}
@@ -838,7 +838,7 @@ void FIG_use_item(Bit8u *hero, struct enemy_sheet *target_monster, Bit8u *target
 
 			FIG_add_msg(11, damage);
 
-			if (target_monster->flags1.dead) {
+			if (target_monster->flags.dead) {
 				g_defender_dead = 1;
 			}
 		} else {
@@ -872,7 +872,7 @@ void FIG_use_item(Bit8u *hero, struct enemy_sheet *target_monster, Bit8u *target
 
 			FIG_add_msg(11, 20);
 
-			if (target_monster->flags1.dead) {
+			if (target_monster->flags.dead) {
 				g_defender_dead = 1;
 			}
 		} else {

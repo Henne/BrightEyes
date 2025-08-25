@@ -44,7 +44,7 @@ void FIG_tidy_monsters(void)
 
 		/* if the monster is not able to fight anymore ... */
 		if (g_enemy_sheets[i].mon_id &&
-			(g_enemy_sheets[i].flags1.dead || g_enemy_sheets[i].flags1.mushroom || g_enemy_sheets[i].flags1.petrified ||
+			(g_enemy_sheets[i].flags.dead || g_enemy_sheets[i].flags.mushroom || g_enemy_sheets[i].flags.petrified ||
 			((host_readbs(g_current_fight + SIZEOF_FIGHT_MONSTER * i + FIGHT_MONSTERS_ROUND_APPEAR) != 0) && (monsters == 0))))
 		{
 
@@ -65,7 +65,7 @@ void FIG_tidy_monsters(void)
 
 					memset(&g_enemy_sheets[j + 1], 0, sizeof(struct enemy_sheet));
 
-					g_enemy_sheets[j].flags1.dead = 1;
+					g_enemy_sheets[j].flags.dead = 1;
 				}
 			}
 		} else {

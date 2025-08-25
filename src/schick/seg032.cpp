@@ -253,11 +253,11 @@ signed short FIG_count_active_enemies(void)
 		enemy = &g_enemy_sheets[i];
 
 		if (enemy->mon_id &&
-			!enemy->flags1.dead &&
-			!enemy->flags1.petrified &&
-			!enemy->flags1.tied &&
-			!enemy->flags1.mushroom &&
-			!enemy->flags1.busy &&
+			!enemy->flags.dead &&
+			!enemy->flags.petrified &&
+			!enemy->flags.tied &&
+			!enemy->flags.mushroom &&
+			!enemy->flags.busy &&
 			!enemy->round_appear)
 		{
 			retval++;
@@ -276,13 +276,13 @@ signed short FIG_count_active_enemies(void)
 //static
 signed short FIG_is_enemy_active(struct enemy_sheet *enemy)
 {
-	if (enemy->flags1.asleep ||
-		enemy->flags1.dead ||
-		enemy->flags1.petrified ||
-		enemy->flags2.dancing ||
-		enemy->flags1.mushroom ||
-		enemy->flags1.busy ||
-		enemy->flags2.tame ||
+	if (enemy->flags.asleep ||
+		enemy->flags.dead ||
+		enemy->flags.petrified ||
+		enemy->flags.dancing ||
+		enemy->flags.mushroom ||
+		enemy->flags.busy ||
+		enemy->flags.tame ||
 		(enemy->round_appear > 0))
 	{
 		return 0;
@@ -593,7 +593,7 @@ void FIG_do_round(void)
 								sub_ptr_bs(hero + HERO_ENEMY_ID, 20);
 							}
 
-							if (g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].flags1.dead)
+							if (g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].flags.dead)
 							{
 								/* attacked enemy is dead */
 								if (is_in_byte_array(g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].gfx_id, (Bit8u*)g_two_fielded_sprite_id))
@@ -687,7 +687,7 @@ void FIG_do_round(void)
 								enemy->enemy_id -= 20;
 							}
 
-							if (g_enemy_sheets[enemy->enemy_id - 10].flags1.dead) /* check 'dead' flag */
+							if (g_enemy_sheets[enemy->enemy_id - 10].flags.dead) /* check 'dead' flag */
 							{
 								/* attacked enemy is dead */
 								if (is_in_byte_array(g_enemy_sheets[enemy->enemy_id - 10].gfx_id, (Bit8u*)g_two_fielded_sprite_id))
@@ -739,7 +739,7 @@ void FIG_do_round(void)
 						 * It cannot be treated here as the FIGHTER entry of the tail is
 						 * removed in seg005.cpp, which is needed to restore the object under the tail. */
 
-						if (enemy->flags1.dead) { /* check 'dead' flag */
+						if (enemy->flags.dead) { /* check 'dead' flag */
 
 							/* attacking enemy is dead because of critical attack failure */
 							if (is_in_byte_array(enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id)) {
@@ -1143,7 +1143,7 @@ signed short do_fight(signed short fight_id)
 			if ((g_max_enemies != 0) && !g_fig_discard) {
 
 				for (i = 0; i < 20; i++) {
-					g_enemy_sheets[i].flags1.dead = 1;
+					g_enemy_sheets[i].flags.dead = 1;
 				}
 			}
 		}

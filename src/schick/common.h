@@ -360,7 +360,7 @@ struct informer {
 	signed char unknown;	/* {0, 1} */
 };
 
-struct enemy_flags1 {
+struct enemy_flags {
 	/* enemy + 0x31 */
 	unsigned short dead		:1;
 	unsigned short asleep		:1;
@@ -370,9 +370,6 @@ struct enemy_flags1 {
 	unsigned short tied		:1; /* 1: enemy is tied (from 'Band und Fessel' spell; all enemies in the final fight except the Orkchampion) */
 	unsigned short mushroom		:1; /* 1: enemy is a mushroom (from 'Salander' spell) */
 	unsigned short illusion		:1;
-};
-
-struct enemy_flags2 {
 	/* enemy + 0x32 */
 	unsigned short tame		:1; /* from 'Bannbaladin', 'Herr der Tiere' or 'Sanftmut' spell */
 	unsigned short renegade		:1; /* from 'Boeser Blick' spell. removed by 'Horriphobus' spell or Angstgift. */
@@ -383,10 +380,6 @@ struct enemy_flags2 {
 	unsigned short bit14		:1; /* unused? */
 	unsigned short bit15		:1; /* unused? */
 };
-
-/* remark siebenstreich 2021-08-15:
- * I tried to combine these two structs into a single 2-byte bitfield 'enemy_flags' (similar to 'inventory_flags' below)
- * However, no matter what I tried, this always broke binary BCC-compatibility. */
 
 struct enemy_sheet {
 	Bit8s mon_id;
@@ -419,8 +412,7 @@ struct enemy_sheet {
 	Bit8s  saftkraft;		/* stores extra damage of spell 'Saft, Kraft, Monstermacht' */
 	Bit8s  blind;			/* blind rounds remaining from 'Blitz' spell */
 	Bit8s  weapon_broken;	/* weapon broken? 0	= no, 1	= yes */
-	struct enemy_flags1 flags1;
-	struct enemy_flags2 flags2;
+	struct enemy_flags flags;
 	Bit8s	unused8;
 	Bit8s	size;
 	Bit8s	round_appear;

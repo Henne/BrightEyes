@@ -150,7 +150,7 @@ void FIG_do_spell_damage(signed short le)
 		FIG_add_msg(0x0b, le);
 
 		/* set a variable if the enemy died */
-		if (g_spelltarget_e->flags1.dead) {
+		if (g_spelltarget_e->flags.dead) {
 			g_defender_dead = 1;
 		}
 	}
@@ -614,7 +614,7 @@ signed short test_spell(Bit8u *hero, signed short spell_no, signed char handicap
 
 			handicap += g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].mr;
 
-			if (g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].flags1.mushroom) { // tests if enemy is mushroom
+			if (g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].flags.mushroom) { // tests if enemy is mushroom
 				return 0;
 			}
 		} else {

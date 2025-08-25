@@ -63,8 +63,8 @@ signed short seg034_000(signed short x_hero, signed short y_hero,
 			}
 
 		} else if (((fighter_id >= 50) ||
-				((fighter_id >= 10) && (fighter_id < 30) && g_enemy_sheets[fighter_id - 10].flags1.dead) ||
-				((fighter_id >= 30) && (fighter_id < 50) && g_enemy_sheets[fighter_id - 30].flags1.dead) ||
+				((fighter_id >= 10) && (fighter_id < 30) && g_enemy_sheets[fighter_id - 10].flags.dead) ||
+				((fighter_id >= 30) && (fighter_id < 50) && g_enemy_sheets[fighter_id - 30].flags.dead) ||
 				((fighter_id < 10) && hero_dead(get_hero(fighter_id - 1))))
 				&&
 				((fighter_id_target >= 0) &&
@@ -459,7 +459,7 @@ void FIG_latecomers(void)
 
 				/* let monster enter the fight */
 
-				if (!p_enemy->flags2.scared) {
+				if (!p_enemy->flags.scared) {
 
 					if (is_in_byte_array(p_enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id)) {
 
@@ -512,7 +512,7 @@ void FIG_latecomers(void)
 
 				} else {
 					/* scared enemies entering a fight are marked as dead. does this ever happen? */
-					p_enemy->flags1.dead = 1;
+					p_enemy->flags.dead = 1;
 				}
 			}
 		}
@@ -808,7 +808,7 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 #ifndef M302de_ORIGINAL_BUGFIX
 					} else if (cb_entry_bak >= 10) {
 						/* target square contains a monster (including the tail of a two-squares monster) */
-						if (!g_enemy_sheets[(cb_entry_bak - 10 - (cb_entry_bak >= 30 ? 20 : 0))].flags1.dead) /* check 'dead' flag */
+						if (!g_enemy_sheets[(cb_entry_bak - 10 - (cb_entry_bak >= 30 ? 20 : 0))].flags.dead) /* check 'dead' flag */
 						{
 							/* monster is not dead */
 							problem = 3;
@@ -835,7 +835,7 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 #else
 						/* Bug fix:
 						 * flatten the nested if branches. */
-					} else if ((cb_entry_bak >= 10) && !g_enemy_sheets[(cb_entry_bak - 10 - (cb_entry_bak >= 30 ? 20 : 0))].flags1.dead) { /* check 'dead' flag */
+					} else if ((cb_entry_bak >= 10) && !g_enemy_sheets[(cb_entry_bak - 10 - (cb_entry_bak >= 30 ? 20 : 0))].flags.dead) { /* check 'dead' flag */
 						/* target square contains a non-dead monster (including the tail of a two-squares monster) */
 						problem = 3;
 					} else if ((cb_entry_bak > 0) && (cb_entry_bak < 10) && !hero_dead(get_hero(cb_entry_bak - 1)) && !hero_unconscious(get_hero(cb_entry_bak - 1)) && (cb_entry_bak != hero_pos + 1)) {

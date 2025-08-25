@@ -110,12 +110,12 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 			target_monster = &g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10];
 
 			/* attacked enemy won't be asleep any more */
-			target_monster->flags1.asleep = 0;
+			target_monster->flags.asleep = 0;
 
 			g_fig_target_grammar.type = 1;
 			g_fig_target_grammar.id = target_monster->mon_id;
 
-			if (!target_monster->mon_id || (target_monster->flags1.dead && ((host_readbs(hero + HERO_ACTION_ID) != FIG_ACTION_SPELL) || (host_readbs(hero + HERO_SPELL_ID) != SP_SKELETTARIUS_KRYPTADUFT))))
+			if (!target_monster->mon_id || (target_monster->flags.dead && ((host_readbs(hero + HERO_ACTION_ID) != FIG_ACTION_SPELL) || (host_readbs(hero + HERO_SPELL_ID) != SP_SKELETTARIUS_KRYPTADUFT))))
 			{
 				refresh_screen_size();
 				return;
@@ -156,8 +156,8 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 						if ((fighter_id >= 50) ||
 							((fighter_id < 10) && !hero_dead(get_hero(fighter_id - 1))) ||
-							((fighter_id >= 10) && (fighter_id < 30) && !g_enemy_sheets[fighter_id - 10].flags1.dead) ||
-							((fighter_id >= 30) && (fighter_id < 50) && !g_enemy_sheets[fighter_id - 30].flags1.dead))
+							((fighter_id >= 10) && (fighter_id < 30) && !g_enemy_sheets[fighter_id - 10].flags.dead) ||
+							((fighter_id >= 30) && (fighter_id < 50) && !g_enemy_sheets[fighter_id - 30].flags.dead))
 						{
 							l16 = 1;
 						}
@@ -356,17 +356,17 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 							l10 -= 5;
 						}
 
-						if (target_monster->flags1.tied) { /* check 'tied' flag */
+						if (target_monster->flags.tied) { /* check 'tied' flag */
 							l10 -= 2;
-						} else if (target_monster->flags2.dancing) { /* check 'dancing' flag */
+						} else if (target_monster->flags.dancing) { /* check 'dancing' flag */
 							l10 -= 3;
 						}
 
-						if (target_monster->flags1.petrified || /* check 'petrified' flag */
-							target_monster->flags1.busy || /* check 'busy' flag */
-							target_monster->flags1.mushroom || /* check 'mushroom' flag */
-							target_monster->flags2.tame || /* check 'tame' flag */
-							target_monster->flags2.renegade) /* check 'renegade' flag */
+						if (target_monster->flags.petrified || /* check 'petrified' flag */
+							target_monster->flags.busy || /* check 'busy' flag */
+							target_monster->flags.mushroom || /* check 'mushroom' flag */
+							target_monster->flags.tame || /* check 'tame' flag */
+							target_monster->flags.renegade) /* check 'renegade' flag */
 						{
 							l10 = 0;
 						}
@@ -422,7 +422,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 										FIG_add_msg(11, damage);
 
-										if (target_monster->flags1.dead) {
+										if (target_monster->flags.dead) {
 											g_defender_dead = 1;
 										}
 									}
@@ -446,7 +446,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 								FIG_add_msg(11, damage);
 
-								if (target_monster->flags1.dead) {
+								if (target_monster->flags.dead) {
 									g_defender_dead = 1;
 								}
 							}
@@ -521,7 +521,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 							FIG_add_msg(11, damage);
 
-							if (target_monster->flags1.dead) {
+							if (target_monster->flags.dead) {
 								g_defender_dead = 1;
 							}
 						}
@@ -620,7 +620,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 							FIG_add_msg(11, damage);
 
-							if (target_monster->flags1.dead) {
+							if (target_monster->flags.dead) {
 								g_defender_dead = 1;
 							}
 						}

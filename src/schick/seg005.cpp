@@ -700,7 +700,7 @@ void draw_fight_screen(Bit16u val)
 											/* enemy escapes */
 											p_enemy_sheet = FIG_get_enemy_sheet(list_ii->id);
 											if (p_enemy_sheet) {
-												p_enemy_sheet->flags1.dead = 1;
+												p_enemy_sheet->flags.dead = 1;
 												p_enemy_sheet->bp = 0;
 												figlist_remove[list_ii->sheet] = p_enemy_sheet->fighter_id;
 

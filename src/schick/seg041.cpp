@@ -192,7 +192,7 @@ void FIG_damage_enemy(struct enemy_sheet *enemy, Bit16s damage, signed short pre
 	/* are the enemies LE lower than 0 */
 	if (enemy->le <= 0) {
 
-		enemy->flags1.dead = 1;
+		enemy->flags.dead = 1;
 		enemy->le = 0;
 
 		if ((g_current_fight_no == FIGHTS_F126_08) && (enemy->mon_id == 0x38)) {
@@ -211,14 +211,14 @@ void FIG_damage_enemy(struct enemy_sheet *enemy, Bit16s damage, signed short pre
 			/* slaying Gorah makes everyone flee except Heshthot */
 			for (i = 0; i < 20; i++) {
 				if (g_enemy_sheets[i].gfx_id != 0x1a) {
-					g_enemy_sheets[i].flags2.scared = 1;
+					g_enemy_sheets[i].flags.scared = 1;
 				}
 			}
 		}
 	}
 
 	if (!preserve_renegade)
-		enemy->flags2.renegade = 0;
+		enemy->flags.renegade = 0;
 }
 
 /*
@@ -410,8 +410,8 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 
 			if (host_readbs(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_POISON_TYPE) == POISON_TYPE_ANGSTGIFT) {
 
-				enemy_p->flags2.scared = 1;
-				enemy_p->flags2.renegade = 0;
+				enemy_p->flags.scared = 1;
+				enemy_p->flags.renegade = 0;
 
 			} else {
 				/* the following line is the source for the totally excessive and unbalanced poison damage */
@@ -440,7 +440,7 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 
 		damage -= enemy_p->rs;
 
-		if (enemy_p->flags1.petrified) {
+		if (enemy_p->flags.petrified) {
 			damage = 0;
 		}
 
@@ -529,7 +529,7 @@ signed short FIG_get_enemy_attack_damage(struct enemy_sheet *attacker, struct en
 		/* subtract RS */
 		damage -= target->rs;
 
-		if (target->flags1.petrified)
+		if (target->flags.petrified)
 			damage = 0;
 
 		/* check if the target is immune

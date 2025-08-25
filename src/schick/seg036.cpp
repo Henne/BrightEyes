@@ -252,7 +252,7 @@ signed short KI_can_attack_neighbour(signed short start_x, signed short start_y,
 		/* target is hero or enemy */
 		if ( ( (target > 0) && (target < 10) &&	!hero_dead(get_hero(target - 1)) && !hero_unconscious(get_hero(target - 1))) || (
 
-			((target >= 10) && (target < 30) && !g_enemy_sheets[target - 10].flags1.dead && g_enemy_sheets[target - 10].flags2.renegade)))
+			((target >= 10) && (target < 30) && !g_enemy_sheets[target - 10].flags.dead && g_enemy_sheets[target - 10].flags.renegade)))
 		{
 			return 1;
 		} else {
@@ -261,7 +261,7 @@ signed short KI_can_attack_neighbour(signed short start_x, signed short start_y,
 
 	} else if (!mode) {
 		/* target is an enemy */
-		if ((target >= 10) && (target < 30) && !g_enemy_sheets[target - 10].flags1.dead)
+		if ((target >= 10) && (target < 30) && !g_enemy_sheets[target - 10].flags.dead)
 		{
 			return 1;
 		} else {
@@ -331,12 +331,12 @@ signed short KI_search_spell_target(signed short x, signed short y,
 
 			/* attack only heroes and renegade enemies */
 			if ( ((obj_id > 0) && (obj_id < 10) && !hero_dead(get_hero(obj_id - 1)) && !hero_unconscious(get_hero(obj_id - 1))) ||
-				((obj_id >= 10) && (obj_id < 30) && !g_enemy_sheets[obj_id - 10].flags1.dead && g_enemy_sheets[obj_id - 10].flags2.renegade))
+				((obj_id >= 10) && (obj_id < 30) && !g_enemy_sheets[obj_id - 10].flags.dead && g_enemy_sheets[obj_id - 10].flags.renegade))
 			{
 				will_attack = 1;
 				done = 1;
 
-			} else if ( (obj_id != 0) && (((obj_id >= 10) && (obj_id < 30) && !g_enemy_sheets[obj_id - 10].flags1.dead) || ((obj_id >= 50) && !is_in_word_array(obj_id - 50, g_cb_obj_nonobstacle))))
+			} else if ( (obj_id != 0) && (((obj_id >= 10) && (obj_id < 30) && !g_enemy_sheets[obj_id - 10].flags.dead) || ((obj_id >= 50) && !is_in_word_array(obj_id - 50, g_cb_obj_nonobstacle))))
 				{
 					done = 1;
 				}
@@ -344,7 +344,7 @@ signed short KI_search_spell_target(signed short x, signed short y,
 		} else if (renegade == 0) {
 
 			/* attack only enemies */
-			if ((obj_id >= 10) && (obj_id < 30) && !g_enemy_sheets[obj_id - 10].flags1.dead)
+			if ((obj_id >= 10) && (obj_id < 30) && !g_enemy_sheets[obj_id - 10].flags.dead)
 			{
 				will_attack = 1;
 				done = 1;

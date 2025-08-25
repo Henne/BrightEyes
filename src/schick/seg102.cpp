@@ -59,7 +59,7 @@ void MON_do_spell_damage(signed short damage)
 			FIG_add_msg(11, damage);
 
 			/* check if someone died */
-			if (g_spelltarget_e->flags1.dead) {
+			if (g_spelltarget_e->flags.dead) {
 				g_defender_dead = 1;
 			}
 		}
@@ -280,7 +280,7 @@ signed short MON_test_skill(struct enemy_sheet *monster, signed short mspell_id,
 
 void MON_sub_ae(struct enemy_sheet *monster, signed short ae)
 {
-	if (!monster->flags1.dead) {
+	if (!monster->flags.dead) {
 
 		monster->ae -= ae;
 
@@ -366,7 +366,7 @@ void mspell_verwandlung(void)
 	/* set pointer to monster target */
 	g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
 
-	if (g_spelltarget_e->flags1.petrified) {
+	if (g_spelltarget_e->flags.petrified) {
 
 		/* set the spellcosts */
 		g_monster_spell_ae_cost = 5 * random_schick(10);
@@ -376,13 +376,13 @@ void mspell_verwandlung(void)
 			g_monster_spell_ae_cost = g_spelluser_e->ae;
 		} else {
 			/* unset 'petrified' flag */
-			g_spelltarget_e->flags1.petrified = 0;
+			g_spelltarget_e->flags.petrified = 0;
 
 			/* prepare message */
 			sprintf(g_dtp2,	get_tx(114), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 		}
 
-	} else if (g_spelltarget_e->flags1.mushroom) {
+	} else if (g_spelltarget_e->flags.mushroom) {
 
 		/* set the spellcosts */
 		g_monster_spell_ae_cost = 5 * random_schick(10);
@@ -392,7 +392,7 @@ void mspell_verwandlung(void)
 			g_monster_spell_ae_cost = g_spelluser_e->ae;
 		} else {
 			/* unset 'mushroom' flag */
-			g_spelltarget_e->flags1.mushroom = 0;
+			g_spelltarget_e->flags.mushroom = 0;
 
 			ds_writew(MSPELL_AWAKE_FLAG, 1);
 		}
@@ -767,7 +767,7 @@ void mspell_paralue(void)
 		g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
 
 		/* set 'petrified' flag */
-		g_spelltarget_e->flags1.petrified = 1;
+		g_spelltarget_e->flags.petrified = 1;
 
 		/* prepare message */
 		sprintf(g_dtp2,	get_tx(103), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));

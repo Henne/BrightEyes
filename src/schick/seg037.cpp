@@ -205,7 +205,7 @@ unsigned short test_foe_melee_attack(signed short x, signed short y,
 	if (mode == 0) {
 
 		if ( ((cb_val > 0) && (cb_val < 10) && !hero_dead(get_hero(cb_val - 1)) && !hero_unconscious(get_hero(cb_val - 1))) || (
-			(cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags1.dead && g_enemy_sheets[cb_val -10].flags2.renegade))
+			(cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags.dead && g_enemy_sheets[cb_val -10].flags.renegade))
 		{
 			return 1;
 		} else {
@@ -215,7 +215,7 @@ unsigned short test_foe_melee_attack(signed short x, signed short y,
 	} else if (mode == 1) {
 
 		/* is a living enemy */
-		if ((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags1.dead)
+		if ((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags.dead)
 		{
 			return 1;
 		} else {
@@ -286,7 +286,7 @@ signed short test_foe_range_attack(signed short x, signed short y, const signed 
 			if (mode == 0) {
 				/* hero or enemy reacheable from enemies position */
 				if ( ((cb_val > 0) && (cb_val < 10) && !hero_dead(get_hero(cb_val - 1)) && !hero_unconscious(get_hero(cb_val - 1))) ||
-					((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags1.dead && g_enemy_sheets[cb_val - 10].flags2.renegade))
+					((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags.dead && g_enemy_sheets[cb_val - 10].flags.renegade))
 				{
 					can_attack = 1;
 					done = 1;
@@ -297,7 +297,7 @@ signed short test_foe_range_attack(signed short x, signed short y, const signed 
 				if (cb_val != 0) {
 
 					/* an enemy or another object */
-					if ( ((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags1.dead) ||
+					if ( ((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags.dead) ||
 						((cb_val >= 50) && !is_in_word_array(cb_val - 50, g_cb_obj_nonobstacle)))
 					{
 							done = 1;
@@ -306,7 +306,7 @@ signed short test_foe_range_attack(signed short x, signed short y, const signed 
 
 			} else if (mode == 1) {
 				/* attack foe first */
-				if ((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags1.dead)
+				if ((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags.dead)
 				{
 					can_attack = 1;
 					done = 1;
@@ -349,7 +349,7 @@ signed short test_foe_range_attack(signed short x, signed short y, const signed 
 
 					if ( ((cb_val < 10) && !hero_dead(get_hero(cb_val - 1)) && !hero_unconscious(get_hero(cb_val - 1))) ||
 						((cb_val >= 50) && !is_in_word_array(cb_val - 50, g_cb_obj_nonobstacle)) ||
-						((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags1.dead))
+						((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags.dead))
 					{
 						done = 1;
 					}
@@ -496,7 +496,7 @@ signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signe
 
 						} else if (enemy->bp > 0) {
 
-							if (!enemy->flags1.tied) {
+							if (!enemy->flags.tied) {
 
 								if (mode == 1)
 									l6 = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 2);
@@ -548,7 +548,7 @@ signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signe
 
 						} else if (enemy->bp > 0) {
 
-							if (!enemy->flags1.tied) {
+							if (!enemy->flags.tied) {
 
 								if (mode == 1)
 									l6 = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 7);
@@ -633,7 +633,7 @@ signed short seg037_0b3e(struct enemy_sheet *enemy, signed short enemy_no, signe
 
 			} else if (enemy->bp > 0) {
 
-					if (!enemy->flags1.tied) {
+					if (!enemy->flags.tied) {
 
 						if (attack_foe == 0)
 							l4 = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 6);
@@ -713,20 +713,20 @@ void enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed short x
 		/* F099: fight against four HARPIES */
 
 		/* after 8-12 rounds, the enemies flee */
-		enemy->flags2.scared = 1;
+		enemy->flags.scared = 1;
 
 	} else if ((g_current_fight_no == FIGHTS_F122) && (FIG_count_active_enemies() <= 3)) {
 
 		/* F122: fight against 13 WOLVES */
 
 		/* if at most 3 wolves are left, all enemies flee */
-		enemy->flags2.scared = 1;
+		enemy->flags.scared = 1;
 
 	} else if (g_current_fight_no == FIGHTS_F144) {
 
 		/* F144: final fight */
 
-		if (enemy->flags1.tied) {
+		if (enemy->flags.tied) {
 			enemy->bp = 0;
 		}
 	}
@@ -748,25 +748,25 @@ void enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed short x
 		/* LE threshold reached */
 		if (enemy->le_flee >= enemy->le) {
 
-			enemy->flags2.scared = 1;
+			enemy->flags.scared = 1;
 		}
 
 		/* chance of 4% that an illusion enemy disappears */
 		if (random_schick(100) < 5) {
 #if !defined(__BORLANDC__)
-			if (enemy->flags1.illusion) {
+			if (enemy->flags.illusion) {
 				D1_INFO("Feind %d verliert seinen Illusionszauber\n", enemy_no);
 			}
 #endif
 			/* Original-Bug? Why unset 'tied' and not 'illusion'?? */
-			enemy->flags1.tied = 0;
+			enemy->flags.tied = 0;
 		}
 
-		if (!enemy->flags2.scared) {
+		if (!enemy->flags.scared) {
 
 			attack_foe = 0;
 
-			if (enemy->flags2.renegade) {
+			if (enemy->flags.renegade) {
 				attack_foe = 1;
 			}
 
@@ -818,7 +818,7 @@ void enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed short x
 
 							if ((l_di < 0) || (l_di >= 50) || (l_di >= 30) ||
 								((l_di > 0) && (l_di < 10) && !hero_dead(get_hero(l_di - 1))) ||
-								((l_di < 30) && (l_di >= 10) && !g_enemy_sheets[l_di - 10].flags1.dead))
+								((l_di < 30) && (l_di >= 10) && !g_enemy_sheets[l_di - 10].flags.dead))
 							{
 								l5 = 0;
 							}
@@ -845,13 +845,13 @@ void enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed short x
 
 		} else if (enemy->bp > 0) {
 
-			if (!enemy->flags1.tied) {
+			if (!enemy->flags.tied) {
 
-				if (enemy->flags2.scared) {
+				if (enemy->flags.scared) {
 					target_reachable = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 4);
 					enemy->bp = 0;
 				} else {
-					if (enemy->flags2.renegade)
+					if (enemy->flags.renegade)
 						target_reachable = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 2);
 					else
 						target_reachable = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 0);

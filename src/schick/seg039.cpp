@@ -141,7 +141,7 @@ void fill_enemy_sheet(signed short sheet_no, signed char enemy_id, signed char r
 	} else if ((g_current_fight_no == FIGHTS_F144) && (sheet->mon_id != 0x48)) {
 
 		/* set 'tied' flag */
-		sheet->flags1.tied = 1;
+		sheet->flags.tied = 1;
 	}
 
 	sheet->first_ap = host_readb(monster + MONSTER_FIRSTAP);
@@ -161,7 +161,7 @@ void fill_enemy_sheet(signed short sheet_no, signed char enemy_id, signed char r
 
 	/* unset 'dead' flag */
 	/* bogus this value is 0x00 or 0x20 */
-	sheet->flags1.dead = 0;
+	sheet->flags.dead = 0;
 
 	sheet->fighter_id = -1;
 	sheet->level = host_readb(monster + MONSTER_LEVEL);
@@ -182,7 +182,7 @@ void fill_enemy_sheet(signed short sheet_no, signed char enemy_id, signed char r
 	if ((g_current_fight_no == FIGHTS_F126_08) && (sheet->mon_id == 0x38)) {
 		/* Kultist will flee */
 		/* set 'scared' flag */
-		sheet->flags2.scared = 1;
+		sheet->flags.scared = 1;
 	}
 }
 
@@ -371,7 +371,7 @@ void FIG_init_enemies(void)
 			g_enemy_sheets[i].fighter_id = -1;
 		}
 
-		g_enemy_sheets[i].flags1.dead = 1;
+		g_enemy_sheets[i].flags.dead = 1;
 	}
 
 	g_nr_of_enemies = 0;

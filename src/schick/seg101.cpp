@@ -480,7 +480,7 @@ void spell_paralue(void)
 		g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
 		/* set 'petrified' flag */
-		g_spelltarget_e->flags1.petrified = 1;
+		g_spelltarget_e->flags.petrified = 1;
 
 		sprintf(g_dtp2,	get_tx(103), (char*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 	} else {
@@ -533,7 +533,7 @@ void spell_salander(void)
 	if (host_readws(get_spelluser() + HERO_AE) >= ae_cost) {
 
 		/* sets 'mushroom' flag */
-		g_spelltarget_e->flags1.mushroom = 1;
+		g_spelltarget_e->flags.mushroom = 1;
 
 		/* prepare message */
 		sprintf(g_dtp2, get_tx(104), (char*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));

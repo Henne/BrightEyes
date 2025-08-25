@@ -109,7 +109,7 @@ void spell_illusionen(void)
 	g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
 	/* check if enemy is an illusion */
-	if (g_spelltarget_e->flags1.illusion) {
+	if (g_spelltarget_e->flags.illusion) {
 
 		/* AEcosts = enemy level - spelluser_level */
 		ds_writew(SPELL_SPECIAL_AECOST,	(g_spelltarget_e->level - host_readbs(get_spelluser() + HERO_LEVEL)) * 2);
@@ -126,7 +126,7 @@ void spell_illusionen(void)
 			/* YES: spell has effect */
 			g_spell_illusionen = 1;
 			/* set 'dead' flag */
-			g_spelltarget_e->flags1.dead = 1;
+			g_spelltarget_e->flags.dead = 1;
 		}
 	} else {
 		/* print a failure message */
@@ -204,7 +204,7 @@ void spell_band(void)
 		}
 
 		/* set 'tied' flag */
-		g_spelltarget_e->flags1.tied = 1;
+		g_spelltarget_e->flags.tied = 1;
 
 		sprintf(g_dtp2, get_tx(6), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 	} else {
@@ -251,7 +251,7 @@ void spell_bannbaladin(void)
 		}
 
 		/* set 'tame' flag */
-		g_spelltarget_e->flags2.tame = 1;
+		g_spelltarget_e->flags.tame = 1;
 
 		sprintf(g_dtp2,	get_tx(9), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 	}
@@ -270,7 +270,7 @@ void spell_boeser_blick(void)
 	} else {
 
 		/* set 'renegade' flag */
-		g_spelltarget_e->flags2.renegade = 1;
+		g_spelltarget_e->flags.renegade = 1;
 
 		/* set number of attacks to 2 */
 		g_spelltarget_e->attacks = 2;
@@ -330,7 +330,7 @@ void spell_herrdertiere(void)
 		} else {
 
 			/* set 'tame' flag */
-			g_spelltarget_e->flags2.tame = 1;
+			g_spelltarget_e->flags.tame = 1;
 
 			sprintf(g_dtp2,	get_tx(9), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 		}
@@ -347,9 +347,9 @@ void spell_horriphobus(void)
 		ds_writew(SPELL_SPECIAL_AECOST, -2);
 	} else {
 		/* set 'scared' flag */
-		g_spelltarget_e->flags2.scared = 1;
+		g_spelltarget_e->flags.scared = 1;
 		/* unset 'renegade' flag */
-		g_spelltarget_e->flags2.renegade = 0;
+		g_spelltarget_e->flags.renegade = 0;
 
 		sprintf(g_dtp2,	get_tx(12), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 	}
@@ -390,7 +390,7 @@ void spell_somnigravis(void)
 		}
 
 		/* set 'asleep' flag */
-		g_spelltarget_e->flags1.asleep = 1;
+		g_spelltarget_e->flags.asleep = 1;
 
 		/* prepare message */
 		sprintf(g_dtp2,	get_tx(13), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
@@ -430,7 +430,7 @@ void spell_zwingtanz(void)
 	} else {
 
 		/* set 'dancing' flag */
-		g_spelltarget_e->flags2.dancing = 1;
+		g_spelltarget_e->flags.dancing = 1;
 
 		/* prepare message */
 		sprintf(g_dtp2,	get_tx(14), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
@@ -509,7 +509,7 @@ void spell_skelettarius(void)
 	g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
 	/* check if the enemy is dead */
-	if (!g_spelltarget_e->flags1.dead) {
+	if (!g_spelltarget_e->flags.dead) {
 
 		/* prepare message */
 		sprintf(g_dtp2,	get_tx(15), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
@@ -570,7 +570,7 @@ void spell_skelettarius(void)
 
 		/* zombie will fight for the heroes */
 		/* set 'renegade' flag */
-		g_spelltarget_e->flags2.renegade = 1;
+		g_spelltarget_e->flags.renegade = 1;
 		g_spelltarget_e->attacks_left = unk;
 
 #ifdef M302de_ORIGINAL_BUGFIX
