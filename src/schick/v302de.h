@@ -406,66 +406,6 @@ static inline char* my_itoa(int value, char *string, int radix)
 }
 
 /**
- * test_bit0() -	check if bit0 ist set
- * @p:			pointer
- *
- * 0 = not set / 1 = set
- */
-static inline int test_bit0(Bit8u *p) {
-	return (host_readbs(p) & 1) ? 1 : 0;
-}
-
-/**
- * test_bit1() -	check if bit1 ist set
- * @p:			pointer
- *
- * 0 = not set / 1 = set
- */
-static inline int test_bit1(Bit8u *p) {
-	return ((host_readbs(p) >> 1) & 1) ? 1 : 0;
-}
-
-/**
- * test_bit2() -	check if bit2 ist set
- * @p:			pointer
- *
- * 0 = not set / 1 = set
- */
-static inline int test_bit2(Bit8u *p) {
-	return ((host_readbs(p) >> 2) & 1) ? 1 : 0;
-}
-
-/**
- * test_bit3() -	check if bit3 ist set
- * @p:			pointer
- *
- * 0 = not set / 1 = set
- */
-static inline int test_bit3(Bit8u *p) {
-	return ((host_readbs(p) >> 3) & 1) ? 1 : 0;
-}
-
-/**
- * test_bit5() -	check if bit5 ist set
- * @p:			pointer
- *
- * 0 = not set / 1 = set
- */
-static inline int test_bit5(Bit8u *p) {
-	return ((host_readbs(p) >> 5) & 1) ? 1 : 0;
-}
-
-/**
- * test_bit6() -	check if bit6 ist set
- * @p:			pointer
- *
- * 0 = not set / 1 = set
- */
-static inline int test_bit6(Bit8u *p) {
-	return ((host_readbs(p) >> 6) & 1) ? 1 : 0;
-}
-
-/**
  * hero_dead() -	check if hero is dead
  * @hero:	ptr to hero
  *
@@ -662,19 +602,6 @@ static inline unsigned short enemy_dead(Bit8u *enemy) {
  */
 static inline unsigned short enemy_petrified(Bit8u *enemy) {
 	if (((host_readb(enemy + ENEMY_SHEET_FLAGS1) >> 2) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-/**
- * enemy_renegade() -	check if enemy is under boeser blick spell
- * @enemy:	ptr to enemy
- *
- * 0 = no / 1 = casted
- */
-static inline unsigned short enemy_renegade(Bit8u *enemy) {
-	if (((host_readb(enemy + ENEMY_SHEET_FLAGS2) >> 1) & 1) == 0)
 		return 0;
 	else
 		return 1;
@@ -1022,24 +949,6 @@ static inline char* get_itemname(unsigned short item)
 #define host_writews(p, d)	(*(Bit16s*)(p) = (d))
 #define host_writeds(p, d)	(*(Bit32s*)(p) = (d))
 
-struct bittest {
-	unsigned short bit0:1;
-	unsigned short bit1:1;
-	unsigned short bit2:1;
-	unsigned short bit3:1;
-	unsigned short bit4:1;
-	unsigned short bit5:1;
-	unsigned short bit6:1;
-	unsigned short bit7:1;
-};
-
-#define test_bit0(a)		((*(struct bittest*)(a)).bit0)
-#define test_bit1(a)		((*(struct bittest*)(a)).bit1)
-#define test_bit2(a)		((*(struct bittest*)(a)).bit2)
-#define test_bit3(a)		((*(struct bittest*)(a)).bit3)
-#define test_bit5(a)		((*(struct bittest*)(a)).bit5)
-#define test_bit6(a)		((*(struct bittest*)(a)).bit6)
-
 #define hero_dead(hero)		((*(struct hero_flags*)(hero + HERO_FLAGS1)).dead)
 #define hero_asleep(hero)	((*(struct hero_flags*)(hero + HERO_FLAGS1)).asleep)
 #define hero_petrified(hero)	((*(struct hero_flags*)(hero + HERO_FLAGS1)).petrified)
@@ -1062,8 +971,6 @@ struct bittest {
 
 #define enemy_dead(enemy)	(((struct enemy_sheet*)(enemy))->flags1.dead)
 #define enemy_petrified(enemy)	(((struct enemy_sheet*)(enemy))->flags1.petrified)
-
-#define enemy_renegade(enemy)	(((struct enemy_sheet*)(enemy))->flags2.renegade)
 
 #define add_inventory_quantity(i1, i2, hero) (    ((struct inventory*)(hero + HERO_INVENTORY))[i1].quantity+=((struct inventory*)(hero + HERO_INVENTORY))[i2].quantity)
 

@@ -356,17 +356,17 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 							l10 -= 5;
 						}
 
-						if (test_bit5((Bit8u*)target_monster + ENEMY_SHEET_FLAGS1)) { /* check 'tied' flag */
+						if (target_monster->flags1.tied) { /* check 'tied' flag */
 							l10 -= 2;
-						} else if (test_bit3((Bit8u*)target_monster + ENEMY_SHEET_FLAGS2)) { /* check 'dancing' flag */
+						} else if (target_monster->flags2.dancing) { /* check 'dancing' flag */
 							l10 -= 3;
 						}
 
-						if (test_bit2((Bit8u*)target_monster + ENEMY_SHEET_FLAGS1) || /* check 'petrified' flag */
-							test_bit3((Bit8u*)target_monster + ENEMY_SHEET_FLAGS1) || /* check 'busy' flag */
-							test_bit6((Bit8u*)target_monster + ENEMY_SHEET_FLAGS1) || /* check 'mushroom' flag */
-							test_bit0((Bit8u*)target_monster + ENEMY_SHEET_FLAGS2) || /* check 'tame' flag */
-							test_bit1((Bit8u*)target_monster + ENEMY_SHEET_FLAGS2)) /* check 'renegade' flag */
+						if (target_monster->flags1.petrified || /* check 'petrified' flag */
+							target_monster->flags1.busy || /* check 'busy' flag */
+							target_monster->flags1.mushroom || /* check 'mushroom' flag */
+							target_monster->flags2.tame || /* check 'tame' flag */
+							target_monster->flags2.renegade) /* check 'renegade' flag */
 						{
 							l10 = 0;
 						}
