@@ -120,6 +120,8 @@ signed short range_attack_check_ammo(Bit8u *hero, signed short arg)
 #ifndef M302de_FEATURE_MOD
 				/* sling does not work in the original game.
 				 * there is no object with the id 999 */
+				/* REMARK: That's true for technical reasons!
+				 * The maximum value of an unsigned char is 255/0xff */
 				if (left_hand != 999) {
 					if (arg != 2) {
 
