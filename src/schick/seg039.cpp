@@ -84,104 +84,105 @@ signed short FIG_get_range_weapon_type(Bit8u *hero)
  * \param   sheet_no    the number of the sheet
  * \param   enemy_id    the ID of the enemy (MONSTER.DAT)
  * \param   round       the fight round the enemy appears
+ *
+ * \remark: special fight situations should be handled elsewhere
  */
-void fill_enemy_sheet(unsigned short sheet_no, signed char enemy_id, unsigned char round)
+void fill_enemy_sheet(signed short sheet_no, signed char enemy_id, signed char round)
 {
 
 	Bit8u *monster;
-	Bit8u *sheet;
+	struct enemy_sheet *sheet;
 	signed short i;
 
 	/* calculate the pointers */
 	monster = g_monster_dat_buf + enemy_id * SIZEOF_MONSTER;
-	sheet = p_datseg + ENEMY_SHEETS + sheet_no * SIZEOF_ENEMY_SHEET;
+	sheet = &g_enemy_sheets[sheet_no];
 
 	/* erease the sheet */
-	memset(sheet, 0, SIZEOF_ENEMY_SHEET);
+	memset(sheet, 0, sizeof(struct enemy_sheet));
 
 	/* copy enemy id, gfx_id and RS to the sheet */
-	host_writeb(sheet + ENEMY_SHEET_MON_ID, host_readb(monster + MONSTER_MON_ID));
-	host_writeb(sheet + ENEMY_SHEET_GFX_ID, host_readb(monster + MONSTER_GFX_ID));
-	host_writeb(sheet + ENEMY_SHEET_RS, host_readb(monster + MONSTER_RS));
+	sheet->mon_id = host_readb(monster + MONSTER_MON_ID);
+	sheet->gfx_id = host_readb(monster + MONSTER_GFX_ID);
+	sheet->rs = host_readb(monster + MONSTER_RS);
 
 	/* roll attributes  and save them to the sheet */
 	for (i = 0; i < 7; i++) {
 
 		/* UGLY: a = b = dice_template() */
-		host_writebs(sheet + i * 2 + ENEMY_SHEET_ATTRIB_ORIG,
-			host_writebs(sheet + i * 2 + ENEMY_SHEET_ATTRIB,
-				dice_template(host_readw(monster + i * 2 + MONSTER_ATTRIB))));
+		sheet->attrib[i * 2] = sheet->attrib[i * 2 + 1] = dice_template(host_readw(monster + i * 2 + MONSTER_ATTRIB));
 	}
 
 	/* roll out LE and save it to the sheet */
-	host_writew(sheet + ENEMY_SHEET_LE_ORIG, dice_template(host_readw(monster + MONSTER_LE)));
+	sheet->le_orig = dice_template(host_readw(monster + MONSTER_LE));
 
 	/* Feature mod 1: avoid the a posteriori weakening of the enemies (5/6 LE) of the original game. */
 #ifndef M302de_FEATURE_MOD
 	/* recalculate LE = LE / 6 * 5; */
-	host_writew(sheet + ENEMY_SHEET_LE_ORIG, host_readws(sheet + ENEMY_SHEET_LE_ORIG) / 6 * 5);
+	sheet->le_orig = sheet->le_orig / 6 * 5;
 #endif
 
 	/* copy LE*/
-	host_writew(sheet + ENEMY_SHEET_LE, host_readw(sheet + ENEMY_SHEET_LE_ORIG));
+	sheet->le = sheet->le_orig;
 
 	/* roll out AE and save it to the sheet */
-	host_writews(sheet + ENEMY_SHEET_AE_ORIG, host_writews(sheet + ENEMY_SHEET_AE, dice_template(host_readw(monster + MONSTER_AE))));
+	sheet->ae_orig = sheet->ae = dice_template(host_readw(monster + MONSTER_AE));
 
 	/* roll out MR  and save it */
-	host_writeb(sheet + ENEMY_SHEET_MR, (signed char)dice_template(host_readw(monster + MONSTER_MR)));
+	sheet->mr = (signed char)dice_template(host_readw(monster + MONSTER_MR));
 
 	/* Terrible hack:
 		if the current fight is FIGHTS_F084, set MR to 5 (Travel-Event 84),
 		if the current fight is FIGHTS_F144 (final fight), and the enemy is no "Orkchampion" then set the 'tied' flag */
 	if (g_current_fight_no == FIGHTS_F084) {
 
-		host_writeb(sheet + ENEMY_SHEET_MR, 5);
+		sheet->mr = 5;
 
-	} else if ((g_current_fight_no == FIGHTS_F144) && (host_readb(sheet + ENEMY_SHEET_MON_ID) != 0x48)) {
-		or_ptr_bs(sheet + ENEMY_SHEET_FLAGS1, 0x20); /* set 'tied' flag */
+	} else if ((g_current_fight_no == FIGHTS_F144) && (sheet->mon_id != 0x48)) {
 
+		/* set 'tied' flag */
+		sheet->flags1.tied = 1;
 	}
 
-	host_writeb(sheet + ENEMY_SHEET_FIRSTAP, host_readb(monster + MONSTER_FIRSTAP));
-	host_writeb(sheet + ENEMY_SHEET_ATTACKS, host_readb(monster + MONSTER_ATTACKS));
-	host_writeb(sheet + ENEMY_SHEET_AT, host_readb(monster + MONSTER_AT));
-	host_writeb(sheet + ENEMY_SHEET_PA, host_readb(monster + MONSTER_PA));
-	host_writew(sheet + ENEMY_SHEET_DAM1, host_readw(monster + MONSTER_DAM1));
-	host_writew(sheet + ENEMY_SHEET_DAM2, host_readw(monster + MONSTER_DAM2));
+	sheet->first_ap = host_readb(monster + MONSTER_FIRSTAP);
+	sheet->attacks = host_readb(monster + MONSTER_ATTACKS);
+	sheet->at = host_readb(monster + MONSTER_AT);
+	sheet->pa = host_readb(monster + MONSTER_PA);
+	sheet->dam1 = host_readw(monster + MONSTER_DAM1);
+	sheet->dam2 = host_readw(monster + MONSTER_DAM2);
 
-	host_writeb(sheet + ENEMY_SHEET_BP_ORIG, host_readb(monster + MONSTER_BP));
+	sheet->bp_orig = host_readb(monster + MONSTER_BP);
 
-	if (host_readbs(sheet + ENEMY_SHEET_BP_ORIG) > 10)
-		host_writeb(sheet + ENEMY_SHEET_BP_ORIG, 10);
+	if (sheet->bp_orig > 10)
+		sheet->bp_orig = 10;
 
-	host_writeb(sheet + ENEMY_SHEET_MAGIC, host_readb(monster + MONSTER_MAGIC));
-	host_writeb(sheet + ENEMY_SHEET_MAG_ID, host_readb(monster + MONSTER_MAG_ID));
+	sheet->magic = host_readb(monster + MONSTER_MAGIC);
+	sheet->mag_id = host_readb(monster + MONSTER_MAG_ID);
 
+	/* unset 'dead' flag */
 	/* bogus this value is 0x00 or 0x20 */
-	and_ptr_bs(sheet + ENEMY_SHEET_FLAGS1, 0xfe); /* unset 'dead' flag */
+	sheet->flags1.dead = 0;
 
-	host_writeb(sheet + ENEMY_SHEET_FIGHTER_ID, 0xff);
-	host_writeb(sheet + ENEMY_SHEET_LEVEL, host_readb(monster + MONSTER_LEVEL));
-	host_writeb(sheet + ENEMY_SHEET_SIZE, host_readb(monster + MONSTER_SIZE));
-	host_writeb(sheet + ENEMY_SHEET_IS_ANIMAL, host_readb(monster + MONSTER_IS_ANIMAL));
-	host_writeb(sheet + ENEMY_SHEET_ROUND_APPEAR, round);
+	sheet->fighter_id = -1;
+	sheet->level = host_readb(monster + MONSTER_LEVEL);
+	sheet->size = host_readb(monster + MONSTER_SIZE);
+	sheet->is_animal = host_readb(monster + MONSTER_IS_ANIMAL);
+	sheet->round_appear = round;
 
-	host_writeb(sheet + ENEMY_SHEET_VIEWDIR,
-		host_readb(g_current_fight + sheet_no * SIZEOF_FIGHT_MONSTER + FIGHT_MONSTERS_VIEWDIR));
+	sheet->viewdir = host_readb(g_current_fight + sheet_no * SIZEOF_FIGHT_MONSTER + FIGHT_MONSTERS_VIEWDIR);
 
-	host_writeb(sheet + ENEMY_SHEET_SHOTS, host_readb(monster + MONSTER_SHOTS));
-	host_writew(sheet + ENEMY_SHEET_SHOT_DAM, host_readw(monster + MONSTER_SHOT_DAM));
-	host_writeb(sheet + ENEMY_SHEET_THROWS, host_readb(monster + MONSTER_THROWS));
-	host_writew(sheet + ENEMY_SHEET_THROW_DAM, host_readw(monster + MONSTER_THROW_DAM));
-	host_writeb(sheet + ENEMY_SHEET_LE_FLEE, host_readb(monster + MONSTER_LE_FLEE));
+	sheet->shots = host_readb(monster + MONSTER_SHOTS);
+	sheet->shot_dam = host_readw(monster + MONSTER_SHOT_DAM);
+	sheet->throws = host_readb(monster + MONSTER_THROWS);
+	sheet->throw_dam = host_readw(monster + MONSTER_THROW_DAM);
+	sheet->le_flee = host_readb(monster + MONSTER_LE_FLEE);
 
 	/* Another hack:
 		If the current fight == FIGHTS_F126_08 (fleeing cultist) and the enemy is "Kultist", set the 'scared' flag */
-	if ((g_current_fight_no == FIGHTS_F126_08) && (host_readb(sheet + ENEMY_SHEET_MON_ID) == 0x38)) {
+	if ((g_current_fight_no == FIGHTS_F126_08) && (sheet->mon_id == 0x38)) {
 		/* Kultist will flee */
-		or_ptr_bs(sheet + ENEMY_SHEET_FLAGS2, 0x4); /* set 'scared' flag */
-
+		/* set 'scared' flag */
+		sheet->flags2.scared = 1;
 	}
 }
 

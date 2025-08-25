@@ -7,7 +7,7 @@ signed short calc_beeline(signed short, signed short, signed short, signed short
 /* 0x25 */
 signed short FIG_get_range_weapon_type(Bit8u *);
 /* 0x2a */
-void fill_enemy_sheet(unsigned short, signed char, unsigned char);
+void fill_enemy_sheet(signed short, signed char, signed char);
 
 
 /* 0x2f */
