@@ -115,7 +115,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 			g_fig_target_grammar.type = 1;
 			g_fig_target_grammar.id = target_monster->mon_id;
 
-			if (!target_monster->mon_id || (target_monster->flags1.dead && ((host_readbs(hero + HERO_ACTION_ID) != FIG_ACTION_SPELL) || (host_readbs(hero + HERO_SPELL_ID) != 23))))
+			if (!target_monster->mon_id || (target_monster->flags1.dead && ((host_readbs(hero + HERO_ACTION_ID) != FIG_ACTION_SPELL) || (host_readbs(hero + HERO_SPELL_ID) != SP_SKELETTARIUS_KRYPTADUFT))))
 			{
 				refresh_screen_size();
 				return;
