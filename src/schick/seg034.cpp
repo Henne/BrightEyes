@@ -63,8 +63,8 @@ signed short seg034_000(signed short x_hero, signed short y_hero,
 			}
 
 		} else if (((fighter_id >= 50) ||
-				((fighter_id >= 10) && (fighter_id < 30) && test_bit0(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + 49) + SIZEOF_ENEMY_SHEET * fighter_id)) ||
-				((fighter_id >= 30) && (fighter_id < 50) && test_bit0(p_datseg + ((ENEMY_SHEETS - 30*SIZEOF_ENEMY_SHEET) + 49) + SIZEOF_ENEMY_SHEET * fighter_id)) ||
+				((fighter_id >= 10) && (fighter_id < 30) && g_enemy_sheets[fighter_id - 10].flags1.dead) ||
+				((fighter_id >= 30) && (fighter_id < 50) && g_enemy_sheets[fighter_id - 30].flags1.dead) ||
 				((fighter_id < 10) && hero_dead(get_hero(fighter_id - 1))))
 				&&
 				((fighter_id_target >= 0) &&
@@ -808,7 +808,7 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 #ifndef M302de_ORIGINAL_BUGFIX
 					} else if (cb_entry_bak >= 10) {
 						/* target square contains a monster (including the tail of a two-squares monster) */
-						if (!test_bit0(p_datseg + (ENEMY_SHEETS + ENEMY_SHEET_FLAGS1) + SIZEOF_ENEMY_SHEET * (cb_entry_bak - 10 - (cb_entry_bak >= 30 ? 20 : 0)))) /* check 'dead' flag */
+						if (!g_enemy_sheets[(cb_entry_bak - 10 - (cb_entry_bak >= 30 ? 20 : 0))].flags1.dead) /* check 'dead' flag */
 						{
 							/* monster is not dead */
 							problem = 3;
@@ -835,7 +835,7 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 #else
 						/* Bug fix:
 						 * flatten the nested if branches. */
-					} else if ((cb_entry_bak >= 10) && (!test_bit0(p_datseg + (ENEMY_SHEETS + ENEMY_SHEET_FLAGS1) + SIZEOF_ENEMY_SHEET * (cb_entry_bak - 10 - (cb_entry_bak >= 30 ? 20 : 0))))) { /* check 'dead' flag */
+					} else if ((cb_entry_bak >= 10) && !g_enemy_sheets[(cb_entry_bak - 10 - (cb_entry_bak >= 30 ? 20 : 0))].flags1.dead) { /* check 'dead' flag */
 						/* target square contains a non-dead monster (including the tail of a two-squares monster) */
 						problem = 3;
 					} else if ((cb_entry_bak > 0) && (cb_entry_bak < 10) && !hero_dead(get_hero(cb_entry_bak - 1)) && !hero_unconscious(get_hero(cb_entry_bak - 1)) && (cb_entry_bak != hero_pos + 1)) {
@@ -859,8 +859,7 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 			set_textcolor(255, 0);
 
 			if (!problem) {
-				sprintf(g_dtp2,
-					get_tx(12), bp_cost); /* Target: %d BP */
+				sprintf(g_dtp2,	get_tx(12), bp_cost); /* Target: %d BP */
 			}
 
 

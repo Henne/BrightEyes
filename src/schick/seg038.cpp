@@ -429,8 +429,8 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 					/* cb_or_dist_entry is a dead or unsonscious hero */
 					*(g_chessboard_cpy + (y * 25) + x) = 0;
 
-				} else if ((cb_or_dist_entry >= 10) && (cb_or_dist_entry < 30) &&
-					(test_bit0(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FLAGS1) + cb_or_dist_entry * SIZEOF_ENEMY_SHEET))) { /* test 'dead' flag */
+				} else if ((cb_or_dist_entry >= 10) && (cb_or_dist_entry < 30) && g_enemy_sheets[cb_or_dist_entry - 10].flags1.dead) {
+					/* test 'dead' flag */
 					/* cb_or_dist_entry is a dead enemy. tail parts of two-squares enemies are not considered. */
 					*(g_chessboard_cpy + (y * 25) + x) = 0;
 					/* Original-Bug: The tail parts of dead two-squares enemies have been forgotten,
@@ -441,8 +441,8 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 					 * For enemies, squares with dead tail-parts are blocked completely. */
 #ifdef M302de_ORIGINAL_BUGFIX
 					/* make dead tail-parts walkable */
-				} else if ((cb_or_dist_entry >= 30) && (cb_or_dist_entry < 50) &&
-					(test_bit0(p_datseg + ((ENEMY_SHEETS - 30*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FLAGS1) + cb_or_dist_entry * SIZEOF_ENEMY_SHEET))) { /* test 'dead' flag */
+				} else if ((cb_or_dist_entry >= 30) && (cb_or_dist_entry < 50) && g_enemy_sheets[cb_or_dist_entry - 30].flags1.dead) {
+					/* test 'dead' flag */
 					*(g_chessboard_cpy + (y * 25) + x) = 0;
 #endif
 				}

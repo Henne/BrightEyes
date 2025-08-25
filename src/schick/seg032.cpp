@@ -687,7 +687,7 @@ void FIG_do_round(void)
 								enemy->enemy_id -= 20;
 							}
 
-							if (test_bit0(p_datseg + ((ENEMY_SHEETS + (enemy->enemy_id - 10)*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FLAGS1))) /* check 'dead' flag */
+							if (g_enemy_sheets[enemy->enemy_id - 10].flags1.dead) /* check 'dead' flag */
 							{
 								/* attacked enemy is dead */
 								if (is_in_byte_array(g_enemy_sheets[enemy->enemy_id - 10].gfx_id, (Bit8u*)g_two_fielded_sprite_id))

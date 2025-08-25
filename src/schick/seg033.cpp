@@ -260,14 +260,9 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						} else if (target_id == (hero_pos + 1)) {
 							GUI_output(get_tx(3));
 						} else if (((target_id < 10) && hero_dead(get_hero(target_id - 1))) ||
-								((target_id >= 10) && (target_id < 30) &&
-										/* mushroom or dead */
-										(test_bit0(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FLAGS1) + SIZEOF_ENEMY_SHEET * target_id) || /* check 'dead' flag */
-										test_bit6(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FLAGS1) + SIZEOF_ENEMY_SHEET * target_id))) || /* check 'mushroom' flag */
-								((target_id >= 30) &&
-										/* mushroom or dead */
-										(test_bit0(p_datseg + ((ENEMY_SHEETS - 30*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FLAGS1) + SIZEOF_ENEMY_SHEET * target_id) || /* check 'dead' flag */
-										test_bit6(p_datseg + ((ENEMY_SHEETS - 30*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FLAGS1) + SIZEOF_ENEMY_SHEET * target_id)))) /* check 'mushroom' flag */
+								((target_id >= 10) && (target_id < 30) && (g_enemy_sheets[target_id - 10].flags1.dead || g_enemy_sheets[target_id - 10].flags1.dead)) ||
+								/* TODO: check target_id < 50 */
+								((target_id >= 30) && (g_enemy_sheets[target_id - 30].flags1.dead || g_enemy_sheets[target_id - 30].flags1.mushroom)))
 						{
 							GUI_output(get_tx(29));
 
@@ -295,10 +290,8 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 								do {
 									refresh_screen_size();
 
-									selected = GUI_radio(get_ttx(584), 3,
-											get_ttx(585),
-											get_ttx(586),
-											get_ttx(587));
+									selected = GUI_radio(get_ttx(584), 3, get_ttx(585), get_ttx(586), get_ttx(587));
+
 									update_mouse_cursor();
 
 								} while (selected == -1);
@@ -843,16 +836,13 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 				done = 1;
 
 				/* check last action and target_id */
-				if (((host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_SPELL) ||
-					(host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_MELEE_ATTACK) ||
+				if (((host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_SPELL) || (host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_MELEE_ATTACK) ||
 					(host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_RANGE_ATTACK)) && (host_readbs(hero + HERO_ENEMY_ID) > 0))
 				{
 
 					/* TODO: check fighter_id upper bound */
-					if (((host_readbs(hero + HERO_ENEMY_ID) >= 10)
-						&& (test_bit0(p_datseg + ((ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FLAGS1) + SIZEOF_ENEMY_SHEET * host_readbs(hero + HERO_ENEMY_ID)))) || /* check 'dead' flag */
-						((host_readbs(hero + HERO_ENEMY_ID) < 10)
-						&& (hero_dead(get_hero(host_readbs(hero + HERO_ENEMY_ID) - 1)))))
+					if (((host_readbs(hero + HERO_ENEMY_ID) >= 10) && g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].flags1.dead) || /* check 'dead' flag */
+						((host_readbs(hero + HERO_ENEMY_ID) < 10) && hero_dead(get_hero(host_readbs(hero + HERO_ENEMY_ID) - 1))))
 					{
 
 						GUI_output(get_tx(29));
@@ -861,19 +851,16 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						done = 0;
 
 					/* TODO: check fighter_id upper bound */
-					} else if (((host_readbs(hero + HERO_ENEMY_ID) >= 10)
-						&& (test_bit2(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + ENEMY_SHEET_FLAGS2 + SIZEOF_ENEMY_SHEET * host_readbs(hero + HERO_ENEMY_ID)))) || /* check 'scared' flag */
-						((host_readbs(hero + HERO_ENEMY_ID) < 10)
-						&& (hero_scared(get_hero(host_readbs(hero + HERO_ENEMY_ID) - 1)))))
+					} else if (((host_readbs(hero + HERO_ENEMY_ID) >= 10) && g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].flags2.scared) || /* check 'scared' flag */
+						((host_readbs(hero + HERO_ENEMY_ID) < 10) && (hero_scared(get_hero(host_readbs(hero + HERO_ENEMY_ID) - 1)))))
 					{
 
 						/* GUI_output(get_tx(29)); */
 						host_writebs(hero + HERO_ACTION_ID, FIG_ACTION_WAIT);
 						host_writebs(hero + HERO_ENEMY_ID, 0);
 						done = 0;
-					} else if (((host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_SPELL) ||
-							(host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_RANGE_ATTACK)) &&
-							!check_hero_range_attack(hero, hero_pos))
+
+					} else if (((host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_SPELL) ||	(host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_RANGE_ATTACK)) && !check_hero_range_attack(hero, hero_pos))
 					{
 						/* GUI_output(get_tx(29)); */
 						host_writebs(hero + HERO_ACTION_ID, FIG_ACTION_WAIT);

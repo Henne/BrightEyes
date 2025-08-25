@@ -1476,7 +1476,7 @@
 //#define GATHER_HERBS_MOD                (0xd32f)    /* signed short */
 //#define REPLENISH_STOCKS_MOD            (0xd331)    /* signed short */
 #define FIG_MSG_DATA                    (0xd333)    /* struct(4)[6]; struct{signed short type, damage;} */
-#define ENEMY_SHEETS                    (0xd34b)    /* struct(62)[20]; struct enemy[20] */
+//#define ENEMY_SHEETS                    (0xd34b)    /* struct(62)[20]; struct enemy[20] */
 //#define FIG_MOVE_PATHDIR                (0xd823)    /* signed char[10] */
 //#define FIG_ACTORS_UNKN                 (0xd82d)    /* signed char[30]; see FIG_ACTION_UNKNOWN2 */
 //#define HERO_IS_TARGET                  (0xd84b)    /* signed char[7] */
