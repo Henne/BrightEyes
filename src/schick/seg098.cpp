@@ -150,7 +150,7 @@ void FIG_do_spell_damage(signed short le)
 		FIG_add_msg(0x0b, le);
 
 		/* set a variable if the enemy died */
-		if (enemy_dead(get_spelltarget_e())) {
+		if (g_spelltarget_e->flags1.dead) {
 			g_defender_dead = 1;
 		}
 	}

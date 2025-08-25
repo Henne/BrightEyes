@@ -59,7 +59,7 @@ void MON_do_spell_damage(signed short damage)
 			FIG_add_msg(11, damage);
 
 			/* check if someone died */
-			if (enemy_dead(get_spelltarget_e())) {
+			if (g_spelltarget_e->flags1.dead) {
 				g_defender_dead = 1;
 			}
 		}

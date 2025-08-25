@@ -374,7 +374,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 	signed char cb_entry;
 	Bit8u *dist_table_ptr;
 	Bit8u *hero_ptr;
-	Bit8u *enemy_ptr;
+	struct enemy_sheet *enemy_ptr;
 	signed short done;
 	signed short ranged_dist;
 	Bit8u *actor_enemy_ptr; /* not needed, in principal. is only used for tests with NOT_NULL at a few places to determine wether the actor is an enemy. could also be done based on mode. */
@@ -515,9 +515,9 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 
 			if ((mode != 7) || (i != actor_id)) { /* enemy shoud not attack himself */
 
-				enemy_ptr = p_datseg + ENEMY_SHEETS + i * SIZEOF_ENEMY_SHEET;
+				enemy_ptr = &g_enemy_sheets[i];
 
-				if ((host_readbs(enemy_ptr + ENEMY_SHEET_MON_ID) != 0) && !enemy_dead(enemy_ptr)) {
+				if (enemy_ptr->mon_id && !enemy_ptr->flags1.dead) {
 
 					FIG_search_obj_on_cb(i + 10, &x, &y);
 

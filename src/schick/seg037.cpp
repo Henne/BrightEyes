@@ -200,17 +200,12 @@ void seg037_00ae(Bit8u *enemy, signed short enemy_no)
 unsigned short test_foe_melee_attack(signed short x, signed short y,
 		signed short dx, signed short dy, signed short mode)
 {
-	signed char cb_val;
-
-	cb_val = get_cb_val(x + dx, y + dy);
+	signed char cb_val = get_cb_val(x + dx, y + dy);
 
 	if (mode == 0) {
 
 		if ( ((cb_val > 0) && (cb_val < 10) && !hero_dead(get_hero(cb_val - 1)) && !hero_unconscious(get_hero(cb_val - 1))) || (
-			(cb_val >= 10) && (cb_val < 30) &&
-				(!enemy_dead(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + cb_val * SIZEOF_ENEMY_SHEET))  &&
-				(enemy_renegade(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + cb_val * SIZEOF_ENEMY_SHEET)))
-			)
+			(cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags1.dead && g_enemy_sheets[cb_val -10].flags2.renegade))
 		{
 			return 1;
 		} else {
@@ -220,7 +215,7 @@ unsigned short test_foe_melee_attack(signed short x, signed short y,
 	} else if (mode == 1) {
 
 		/* is a living enemy */
-		if ((cb_val >= 10) && (cb_val < 30) && (!enemy_dead(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + cb_val * SIZEOF_ENEMY_SHEET)))
+		if ((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags1.dead)
 		{
 			return 1;
 		} else {
@@ -230,7 +225,7 @@ unsigned short test_foe_melee_attack(signed short x, signed short y,
 	} else if (mode == 2) {
 
 		/* is a living, conscious hero */
-		if ((cb_val > 0) && (cb_val < 10) && (!hero_dead(get_hero(cb_val - 1))) && (!hero_unconscious(get_hero(cb_val - 1))))
+		if ((cb_val > 0) && (cb_val < 10) && !hero_dead(get_hero(cb_val - 1)) && !hero_unconscious(get_hero(cb_val - 1)))
 		{
 			return 1;
 		} else {
@@ -290,15 +285,8 @@ signed short test_foe_range_attack(signed short x, signed short y, const signed 
 
 			if (mode == 0) {
 				/* hero or enemy reacheable from enemies position */
-				if ( (
-					(cb_val > 0) && (cb_val < 10) &&
-						!hero_dead(get_hero(cb_val - 1)) &&
-						!hero_unconscious(get_hero(cb_val - 1))
-					) || (
-					(cb_val >= 10) && (cb_val < 30) &&
-						!enemy_dead(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + SIZEOF_ENEMY_SHEET * cb_val) &&
-						enemy_renegade(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + SIZEOF_ENEMY_SHEET * cb_val))
-				)
+				if ( ((cb_val > 0) && (cb_val < 10) && !hero_dead(get_hero(cb_val - 1)) && !hero_unconscious(get_hero(cb_val - 1))) ||
+					((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags1.dead && g_enemy_sheets[cb_val - 10].flags2.renegade))
 				{
 					can_attack = 1;
 					done = 1;
@@ -309,14 +297,8 @@ signed short test_foe_range_attack(signed short x, signed short y, const signed 
 				if (cb_val != 0) {
 
 					/* an enemy or another object */
-					if ( (
-						(cb_val >= 10) && (cb_val < 30) &&
-							!enemy_dead(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + SIZEOF_ENEMY_SHEET * cb_val)
-						) || (
-						(cb_val >= 50) &&
-							!is_in_word_array(cb_val - 50, g_cb_obj_nonobstacle))
-
-					)
+					if ( ((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags1.dead) ||
+						((cb_val >= 50) && !is_in_word_array(cb_val - 50, g_cb_obj_nonobstacle)))
 					{
 							done = 1;
 					}
@@ -324,7 +306,7 @@ signed short test_foe_range_attack(signed short x, signed short y, const signed 
 
 			} else if (mode == 1) {
 				/* attack foe first */
-				if ((cb_val >= 10) && (cb_val < 30) && !enemy_dead(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + SIZEOF_ENEMY_SHEET * cb_val))
+				if ((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags1.dead)
 				{
 					can_attack = 1;
 					done = 1;
@@ -365,16 +347,9 @@ signed short test_foe_range_attack(signed short x, signed short y, const signed 
 					} else
 #endif
 
-					if ( (
-						(cb_val < 10) && !hero_dead(get_hero(cb_val - 1)) &&
-						!hero_unconscious(get_hero(cb_val - 1))
-						) || (
-						(cb_val >= 50) &&
-							!is_in_word_array(cb_val - 50, g_cb_obj_nonobstacle)
-						) || (
-						(cb_val >= 10) && (cb_val < 30) &&
-							!enemy_dead(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + SIZEOF_ENEMY_SHEET * cb_val))
-					)
+					if ( ((cb_val < 10) && !hero_dead(get_hero(cb_val - 1)) && !hero_unconscious(get_hero(cb_val - 1))) ||
+						((cb_val >= 50) && !is_in_word_array(cb_val - 50, g_cb_obj_nonobstacle)) ||
+						((cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags1.dead))
 					{
 						done = 1;
 					}
@@ -557,7 +532,7 @@ signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signe
 
 						while (!enemy->enemy_id && (l_di < 4)) {
 
-							enemy->enemy_id = (signed char)test_foe_range_attack(x, y, l_si, mode);
+							enemy->enemy_id = test_foe_range_attack(x, y, l_si, mode);
 
 							l_di++;
 							if (++l_si == 4) {
@@ -643,7 +618,7 @@ signed short seg037_0b3e(struct enemy_sheet *enemy, signed short enemy_no, signe
 			/* check clockwise for someone to attack */
 			while (!enemy->enemy_id && (cnt < 4)) {
 
-				enemy->enemy_id = (signed char)test_foe_range_attack(x, y, dir, attack_foe);
+				enemy->enemy_id = test_foe_range_attack(x, y, dir, attack_foe);
 				cnt++;
 				if (++dir == 4) {
 					dir = 0;
@@ -843,7 +818,7 @@ void enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed short x
 
 							if ((l_di < 0) || (l_di >= 50) || (l_di >= 30) ||
 								((l_di > 0) && (l_di < 10) && !hero_dead(get_hero(l_di - 1))) ||
-								((l_di < 30) && (l_di >= 10) && !(enemy_dead(p_datseg + (ENEMY_SHEETS - 10*SIZEOF_ENEMY_SHEET) + SIZEOF_ENEMY_SHEET * l_di))))
+								((l_di < 30) && (l_di >= 10) && !g_enemy_sheets[l_di - 10].flags1.dead))
 							{
 								l5 = 0;
 							}
