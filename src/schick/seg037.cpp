@@ -504,7 +504,7 @@ signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signe
 									l6 = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 0);
 
 								if (l6 != -1) {
-									seg037_00ae((struct enemy_sheet*)enemy, enemy_no);
+									seg037_00ae(enemy, enemy_no);
 									FIG_search_obj_on_cb(enemy_no + 10, &x, &y);
 
 #if !defined(__BORLANDC__)
@@ -556,7 +556,7 @@ signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signe
 									l6 = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 6);
 
 								if (l6 != -1) {
-									seg037_00ae((struct enemy_sheet*)enemy, enemy_no);
+									seg037_00ae(enemy, enemy_no);
 									FIG_search_obj_on_cb(enemy_no + 10, &x, &y);
 
 #if !defined(__BORLANDC__)
@@ -641,7 +641,7 @@ signed short seg037_0b3e(struct enemy_sheet *enemy, signed short enemy_no, signe
 							l4 = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 7);
 
 						if (l4 != -1) {
-							seg037_00ae((struct enemy_sheet*)enemy, enemy_no);
+							seg037_00ae(enemy, enemy_no);
 							FIG_search_obj_on_cb(enemy_no + 10, &x, &y);
 
 #if !defined(__BORLANDC__)
@@ -861,7 +861,7 @@ void enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed short x
 
 					x_bak = x;
 					y_bak = y;
-					seg037_00ae((struct enemy_sheet*)enemy, enemy_no);
+					seg037_00ae(enemy, enemy_no);
 					FIG_search_obj_on_cb(enemy_no + 10, &x, &y);
 
 #if !defined(__BORLANDC__)

@@ -676,7 +676,7 @@ void FIG_do_round(void)
 						(enemy->action_id == FIG_ACTION_USE_ITEM) || (enemy->action_id == FIG_ACTION_RANGE_ATTACK))
 					{
 
-						FIG_do_enemy_action((struct enemy_sheet*)enemy, actor_id);
+						FIG_do_enemy_action(enemy, actor_id);
 
 						if (enemy->enemy_id >= 10) {
 							/* enemy attacks another enemy (by weapon/spell etc.) */

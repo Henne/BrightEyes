@@ -85,7 +85,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 			g_defender_attacks = g_attacker_dead = g_defender_dead = 0;
 
 		g_fig_actor_grammar.type = 1;
-		g_fig_actor_grammar.id = host_readbs((Bit8u*)monster);
+		g_fig_actor_grammar.id = monster->mon_id;
 
 		if (monster->enemy_id < 10) {
 
@@ -271,7 +271,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 							if (damage > 0) {
 
-								FIG_damage_enemy((struct enemy_sheet*)monster, damage, 1);
+								FIG_damage_enemy(monster, damage, 1);
 
 								FIG_add_msg(11, damage);
 
@@ -293,7 +293,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 						damage = random_schick(6);
 
-						FIG_damage_enemy((struct enemy_sheet*)monster, damage, 1);
+						FIG_damage_enemy(monster, damage, 1);
 
 						FIG_add_msg(11, damage);
 
@@ -349,12 +349,12 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 									if (target_is_hero != 0) {
 
-										damage = FIG_get_enemy_attack_damage((struct enemy_sheet*)monster, (struct enemy_sheet*)hero, 0);
+										damage = FIG_get_enemy_attack_damage(monster, (struct enemy_sheet*)hero, 0);
 
 										if (damage > 0) {
 
 											/* HESHTHOT */
-											if (host_readbs((Bit8u*)monster) != 77) {
+											if (monster->mon_id != 0x4d) {
 												sub_hero_le(hero, damage);
 											}
 
@@ -462,11 +462,11 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 						if (target_is_hero != 0) {
 
-							damage = FIG_get_enemy_attack_damage((struct enemy_sheet*)monster, (struct enemy_sheet*)hero, 0);
+							damage = FIG_get_enemy_attack_damage(monster, (struct enemy_sheet*)hero, 0);
 
 							if (damage > 0) {
 
-								if (host_readbs((Bit8u*)(monster)) != 77) {
+								if (monster->mon_id != 0x4d) {
 									sub_hero_le(hero, damage);
 								}
 
