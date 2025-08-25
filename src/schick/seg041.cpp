@@ -182,30 +182,31 @@ void FIG_add_msg(unsigned short f_action, unsigned short damage)
  * \param   damage      the damage
  * \param   flag        impact on 'renegade' flag. 0: not affected. 1: reset 'renegade' to 0 (monster will be hostile again)
  */
-void FIG_damage_enemy(Bit8u *enemy, Bit16s damage, signed short preserve_renegade)
+void FIG_damage_enemy(struct enemy_sheet *enemy, Bit16s damage, signed short preserve_renegade)
 {
 	signed short i;
 
 	/* subtract the damage from the enemies LE */
-	sub_ptr_ws(enemy + ENEMY_SHEET_LE, damage);
+	enemy->le -= damage;
 
 	/* are the enemies LE lower than 0 */
-	if (host_readws(enemy + ENEMY_SHEET_LE) <= 0) {
-		or_ptr_bs(enemy + ENEMY_SHEET_FLAGS1, 1); /* set 'dead' flag */
-		host_writew(enemy + ENEMY_SHEET_LE, 0); /* set LE to 0 */
+	if (enemy->le <= 0) {
 
-		if ((g_current_fight_no == FIGHTS_F126_08) && (host_readb(enemy) == 0x38)) {
+		enemy->flags1.dead = 1;
+		enemy->le = 0;
+
+		if ((g_current_fight_no == FIGHTS_F126_08) && (enemy->mon_id == 0x38)) {
 
 			/* slaying a special cultist */
 			/* set a flag in the status area */
 			gs_dng09_cultist_flag = 0;
 
-		} else if ((g_current_fight_no == FIGHTS_F144) && (host_readb(enemy) == 0x48) && !g_finalfight_tumult)
-		{
+		} else if ((g_current_fight_no == FIGHTS_F144) && (enemy->mon_id == 0x48) && !g_finalfight_tumult) {
+
 			/* slaying the orc champion, ends the fight */
 			g_in_fight = 0;
 
-		} else if ((g_current_fight_no == FIGHTS_F064) && (host_readb(enemy) == 0x46)) {
+		} else if ((g_current_fight_no == FIGHTS_F064) && (enemy->mon_id == 0x46)) {
 
 			/* slaying Gorah makes everyone flee except Heshthot */
 			for (i = 0; i < 20; i++) {
@@ -217,7 +218,7 @@ void FIG_damage_enemy(Bit8u *enemy, Bit16s damage, signed short preserve_renegad
 	}
 
 	if (!preserve_renegade)
-		and_ptr_bs(enemy + ENEMY_SHEET_FLAGS2, 0xfd); /* unset 'renegade' flag */
+		enemy->flags2.renegade = 0;
 }
 
 /*
@@ -246,7 +247,7 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 	damage_mod = 0;
 
 	if (attack_hero == 0) {
-		enemy_p = (struct enemy_sheet*)target;
+		enemy_p = (struct enemy_sheet*)target; /* TODO: to attack an enemy enemy_p should be used instead of target */
 	}
 
 	right_hand = host_readw(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID);
@@ -311,7 +312,7 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 
 			p_rangedtab = &g_ranged_weapons_table[host_readbs(p_weapontab + WEAPON_STATS_RANGED_INDEX)];
 
-			if (attack_hero != 0) {
+			if (attack_hero) {
 				if (host_readbs(target + HERO_TYPE) == HERO_TYPE_DWARF) {
 					/* ZWERG / DWARF */
 					target_size = 2;
@@ -320,7 +321,8 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 				}
 			} else {
 				/* size of the enemy */
-				target_size = host_readbs(target + ENEMY_SHEET_SIZE);
+				/* TODO: use enemy_p instead of a casted target */
+				target_size = ((struct enemy_sheet*)target)->size;
 			}
 
 			/* Original-Bug: For ITEM_SPEAR and ITEM_SPEAR_MAGIC, a test on TA_SCHUSSWAFFEN will be performed */
@@ -347,7 +349,7 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 		damage = random_schick(6);
 	}
 
-	if (attack_hero == 0) {
+	if (!attack_hero) {
 
 		enemy_gfx_id = enemy_p->gfx_id;
 
@@ -434,7 +436,7 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 		damage++;
 	}
 
-	if (attack_hero == 0) {
+	if (!attack_hero) {
 
 		damage -= enemy_p->rs;
 
@@ -468,12 +470,12 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
  * \brief   calculates attack damage from an enemy
  *
  * \param   attacker    the enemy which attacks
- * \param   attacked    the enemy/hero which gets attacked
- * \param   is_enemy    1 = if attacked is an enemy / 0 = attacked is a hero
+ * \param   target    the enemy/hero which gets attacked
+ * \param   is_enemy    1 = if target is an enemy / 0 = target is a hero
  *
  */
 
-signed short FIG_get_enemy_attack_damage(Bit8u *attacker, Bit8u *attacked, signed short is_enemy)
+signed short FIG_get_enemy_attack_damage(struct enemy_sheet *attacker, struct enemy_sheet *target, signed short is_enemy)
 {
 	signed short pos;
 	Bit8u *hero;
@@ -481,32 +483,32 @@ signed short FIG_get_enemy_attack_damage(Bit8u *attacker, Bit8u *attacked, signe
 	signed short damage;
 	signed short dice;
 
-	dice = host_readw(attacker + ENEMY_SHEET_DAM1);
+	dice = attacker->dam1;
 
-	if (host_readw(attacker + ENEMY_SHEET_DAM2) != 0 && random_schick(100) < 50)
-		dice = host_readw(attacker + ENEMY_SHEET_DAM2);
+	if ((attacker->dam2 != 0) && (random_schick(100) < 50)) {
+		dice = attacker->dam2;
+	}
 
 	damage = dice_template(dice);
 
 	if (!is_enemy) {
-		/* the attacked is a hero */
-		hero = attacked;
+
+		/* the target is a hero */
+		hero = (Bit8u*)target;
 
 		/* subtract RS */
 		damage -= host_readbs(hero + HERO_RS_BONUS1);
 
 		/* armor bonus against skeletons and zombies */
 		if (host_readw(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_BODY * SIZEOF_INVENTORY + INVENTORY_ITEM_ID) == ITEM_CHAIN_MAIL_CURSED && (
-			host_readb(attacker + ENEMY_SHEET_GFX_ID) == 0x22 ||
-			host_readb(attacker + ENEMY_SHEET_GFX_ID) == 0x1c)) {
+			(attacker->gfx_id == 0x22) || (attacker->gfx_id == 0x1c))) {
+
 				damage -= 3;
 		}
 
 		/* get position of Totenkopfguertel/Skullbelt */
 
-		if ( (pos = get_item_pos(hero, ITEM_SKULL_BELT)) != -1 &&
-			(host_readb(attacker + ENEMY_SHEET_GFX_ID) == 0x22 ||
-			host_readb(attacker + ENEMY_SHEET_GFX_ID) == 0x1c)) {
+		if ( ((pos = get_item_pos(hero, ITEM_SKULL_BELT)) != -1) && ((attacker->gfx_id == 0x22) || (attacker->gfx_id == 0x1c))) {
 
 			/* no damage for the hero who has it */
 			damage = 0;
@@ -522,25 +524,25 @@ signed short FIG_get_enemy_attack_damage(Bit8u *attacker, Bit8u *attacked, signe
 		if (hero_petrified(hero))
 			damage = 0;
 	} else {
-		/* the attacked is an enemy */
+		/* the target is an enemy */
 
 		/* subtract RS */
-		damage -= host_readbs(attacked + ENEMY_SHEET_RS);
+		damage -= target->rs;
 
-		if (enemy_petrified(attacked))
+		if (target->flags1.petrified)
 			damage = 0;
 
-		/* check if the attacked is immune
+		/* check if the target is immune
 		 * against non-magicial weapons */
-		if (host_readb(attacked + ENEMY_SHEET_MAGIC) != 0)
+		if (target->magic)
 			damage = 0;
 	}
 
 	/* damage bonus */
-	damage += host_readbs(attacker + ENEMY_SHEET_SAFTKRAFT);
+	damage += attacker->saftkraft;
 
 	/* half damage */
-	if (host_readb(attacker + ENEMY_SHEET_BROKEN) != 0)
+	if (attacker->weapon_broken)
 		damage /= 2;
 
 	return damage;

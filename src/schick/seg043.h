@@ -3,10 +3,10 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-void FIG_do_enemy_action(Bit8u*, signed short);
+void FIG_do_enemy_action(struct enemy_sheet*, signed short);
 
 /* 0x25 */
-void FIG_use_item(Bit8u*, Bit8u*, Bit8u*, signed short, signed short);
+void FIG_use_item(Bit8u*, struct enemy_sheet*, Bit8u*, signed short, signed short);
 
 #if !defined(__BORLANDC__)
 }

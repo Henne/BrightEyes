@@ -560,7 +560,7 @@ void spell_skelettarius(void)
 
 		fill_enemy_sheet(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10, 0x10, 0);
 
-		FIG_load_enemy_sprites((Bit8u*)g_spelltarget_e, x, y);
+		FIG_load_enemy_sprites(g_spelltarget_e, x, y);
 #ifdef M302de_ORIGINAL_BUGFIX
 		/* Original-Bug 2:
 		 * set FIGHTOBJ_BUF_FREESPACE and FIGHTOBJ_BUF_SEEK_PTR to the correct values as discussed above */

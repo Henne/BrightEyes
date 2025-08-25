@@ -245,20 +245,14 @@ void seg045_0394(signed short a1, Bit8u *hero, signed short spell_ani_id)
 	seg045_0273(x, y, spell_ani_id);
 }
 
-void seg045_041b(signed short a1, Bit8u *enemy, signed short spell_ani_id)
+void seg045_041b(signed short a1, struct enemy_sheet *enemy, signed short spell_ani_id)
 {
 	Bit8u *ptr;
 	signed short x;
 	signed short y;
 
-#if !defined(__BORLANDC__)
-	/* BE-fix */
-	x = host_readws((Bit8u*)&x);
-	y = host_readws((Bit8u*)&y);
-#endif
-
 	/* search the target on the chessboard */
-	FIG_search_obj_on_cb(host_readbs(enemy + ENEMY_SHEET_ENEMY_ID), &x, &y);
+	FIG_search_obj_on_cb(enemy->enemy_id, &x, &y);
 
 	ptr = p_datseg + a1 * 0xf3 + (FIG_ANISHEETS + 1);
 

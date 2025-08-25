@@ -24,7 +24,7 @@ void FIG_remove_smth2(void);
 void seg045_0394(signed short, Bit8u*, signed short);
 
 /* 0x43 */
-void seg045_041b(signed short, Bit8u*, signed short);
+void seg045_041b(signed short, struct enemy_sheet*, signed short);
 
 #if !defined(__BORLANDC__)
 }

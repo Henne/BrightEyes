@@ -84,7 +84,7 @@ signed short copy_ani_stuff(Bit8u *dst, signed short no, signed short mode)
 	return retval;
 }
 
-void seg037_00ae(Bit8u *enemy, signed short enemy_no)
+void seg037_00ae(struct enemy_sheet *enemy, signed short enemy_no)
 {
 	signed char b1;
 	signed char b2;
@@ -96,18 +96,18 @@ void seg037_00ae(Bit8u *enemy, signed short enemy_no)
 	signed short i;
 
 	ds_writeb((FIG_ANISHEETS + 0xf3), 0); /* first position of the second FIG_ANISHEET (0xf3 == 243, FIG_ANISHEET is a struct(243)[8]) */
-	ds_writeb((FIG_ANISHEETS + 242 + 0xf3), host_readbs(enemy + ENEMY_SHEET_GFX_ID)); /* last position of the second FIG_ANISHEET */
+	ds_writeb((FIG_ANISHEETS + 242 + 0xf3), enemy->gfx_id); /* last position of the second FIG_ANISHEET */
 	p1 = p_datseg + (FIG_ANISHEETS + 1 + 0xf3); /* second position of the second FIG_ANISHEET */
 
 	i = 0;
-	p3 = g_gfx_ani_index[host_readbs(enemy + ENEMY_SHEET_GFX_ID)];
+	p3 = g_gfx_ani_index[enemy->gfx_id];
 
 	while (g_fig_move_pathdir[i] != -1) {
 
-		if (host_readbs(enemy + ENEMY_SHEET_VIEWDIR) != g_fig_move_pathdir[i]) {
+		if (enemy->viewdir != g_fig_move_pathdir[i]) {
 
 			b2 = b1 = -1;
-			b3 = host_readbs(enemy + ENEMY_SHEET_VIEWDIR);
+			b3 = enemy->viewdir;
 			b2 = b3;
 
 			b3++;
@@ -126,13 +126,13 @@ void seg037_00ae(Bit8u *enemy, signed short enemy_no)
 				}
 
 				if (g_fig_move_pathdir[i] != b3) {
-					b2 = host_readbs(enemy + ENEMY_SHEET_VIEWDIR) + 4;
+					b2 = enemy->viewdir + 4;
 					b1 = -1;
 				}
 
 			}
 
-			host_writeb(enemy + ENEMY_SHEET_VIEWDIR, g_fig_move_pathdir[i]);
+			enemy->viewdir = g_fig_move_pathdir[i];
 
 			p1 += copy_ani_stuff(p1, p3[b2], 1);
 
@@ -147,13 +147,13 @@ void seg037_00ae(Bit8u *enemy, signed short enemy_no)
 			p1 += copy_ani_stuff(p1, p3[g_fig_move_pathdir[i] + 0x0c], 1);
 			i += 2;
 			/* BP - 2 */
-			host_writeb(enemy + ENEMY_SHEET_BP, host_readbs(enemy + ENEMY_SHEET_BP) - 2);
+			enemy->bp = enemy->bp - 2;
 
 		} else {
 			p1 += copy_ani_stuff(p1, p3[g_fig_move_pathdir[i] + 0x08], 1);
 			i++;
 			/* BP - 1 */
-			dec_ptr_bs(enemy + ENEMY_SHEET_BP);
+			enemy->bp--;
 		}
 	}
 
@@ -166,13 +166,13 @@ void seg037_00ae(Bit8u *enemy, signed short enemy_no)
 
 	g_fig_cb_marker_id = -1;
 
-	FIG_set_sheet(host_readbs(enemy + ENEMY_SHEET_FIGHTER_ID), 1);
+	FIG_set_sheet(enemy->fighter_id, 1);
 
-	if (is_in_byte_array(host_readbs(enemy + ENEMY_SHEET_GFX_ID), (Bit8u*)g_two_fielded_sprite_id)) {
+	if (is_in_byte_array(enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id)) {
 
-		memcpy(p_datseg + (FIG_ANISHEETS + 3*0xf3), p_datseg + (FIG_ANISHEETS + 0xf3), 0xf3);
+		memcpy(p_datseg + (FIG_ANISHEETS + 3*0xf3), p_datseg + (FIG_ANISHEETS + 1*0xf3), 0xf3);
 
-		fighter = FIG_get_fighter(host_readbs(enemy + ENEMY_SHEET_FIGHTER_ID));
+		fighter = FIG_get_fighter(enemy->fighter_id);
 
 		FIG_set_sheet(g_fig_twofielded_table[fighter->twofielded], 3);
 	}
@@ -180,7 +180,7 @@ void seg037_00ae(Bit8u *enemy, signed short enemy_no)
 	/* draw_fight_screen */
 	draw_fight_screen(0);
 
-	memset(p_datseg + (FIG_ANISHEETS + 0xf3), -1, 0xf3); /* set second FIG_ANISHEET to -1 */
+	memset(p_datseg + (FIG_ANISHEETS + 1*0xf3), -1, 0xf3); /* set second FIG_ANISHEET to -1 */
 	memset(p_datseg + (FIG_ANISHEETS + 3*0xf3), -1, 0xf3); /* set fourth FIG_ANISHEET to -1 */
 
 	FIG_init_list_elem(enemy_no + 10);
@@ -504,7 +504,7 @@ signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signe
 									l6 = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 0);
 
 								if (l6 != -1) {
-									seg037_00ae((Bit8u*)enemy, enemy_no);
+									seg037_00ae((struct enemy_sheet*)enemy, enemy_no);
 									FIG_search_obj_on_cb(enemy_no + 10, &x, &y);
 
 #if !defined(__BORLANDC__)
@@ -556,7 +556,7 @@ signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signe
 									l6 = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 6);
 
 								if (l6 != -1) {
-									seg037_00ae((Bit8u*)enemy, enemy_no);
+									seg037_00ae((struct enemy_sheet*)enemy, enemy_no);
 									FIG_search_obj_on_cb(enemy_no + 10, &x, &y);
 
 #if !defined(__BORLANDC__)
@@ -641,7 +641,7 @@ signed short seg037_0b3e(struct enemy_sheet *enemy, signed short enemy_no, signe
 							l4 = FIG_find_path_to_target((Bit8u*)enemy, enemy_no, x, y, 7);
 
 						if (l4 != -1) {
-							seg037_00ae((Bit8u*)enemy, enemy_no);
+							seg037_00ae((struct enemy_sheet*)enemy, enemy_no);
 							FIG_search_obj_on_cb(enemy_no + 10, &x, &y);
 
 #if !defined(__BORLANDC__)
@@ -861,7 +861,7 @@ void enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed short x
 
 					x_bak = x;
 					y_bak = y;
-					seg037_00ae((Bit8u*)enemy, enemy_no);
+					seg037_00ae((struct enemy_sheet*)enemy, enemy_no);
 					FIG_search_obj_on_cb(enemy_no + 10, &x, &y);
 
 #if !defined(__BORLANDC__)

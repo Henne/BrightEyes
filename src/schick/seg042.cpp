@@ -295,7 +295,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 						if (random_schick(20) <= target_monster->at) {
 
-							damage = FIG_get_enemy_attack_damage((Bit8u*)target_monster, hero, 0);
+							damage = FIG_get_enemy_attack_damage((struct enemy_sheet*)target_monster, (struct enemy_sheet*)hero, 0);
 						}
 					}
 
@@ -418,7 +418,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 									if (damage > 0) {
 
-										FIG_damage_enemy((Bit8u*)target_monster, damage, 0);
+										FIG_damage_enemy((struct enemy_sheet*)target_monster, damage, 0);
 
 										FIG_add_msg(11, damage);
 
@@ -442,7 +442,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 									g_defender_dead = 1;
 								}
 							} else {
-								FIG_damage_enemy((Bit8u*)target_monster, damage, 1);
+								FIG_damage_enemy((struct enemy_sheet*)target_monster, damage, 1);
 
 								FIG_add_msg(11, damage);
 
@@ -517,7 +517,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 						if (damage > 0 ) {
 
-							FIG_damage_enemy((Bit8u*)target_monster, damage, 0);
+							FIG_damage_enemy((struct enemy_sheet*)target_monster, damage, 0);
 
 							FIG_add_msg(11, damage);
 
@@ -544,10 +544,10 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 			} else {
 
 				if (l16 == 0) {
-					FIG_prepare_enemy_fight_ani(1, (Bit8u*)target_monster, 100, host_readbs(hero + HERO_ENEMY_ID), hero_pos + 1, 1);
+					FIG_prepare_enemy_fight_ani(1, (struct enemy_sheet*)target_monster, 100, host_readbs(hero + HERO_ENEMY_ID), hero_pos + 1, 1);
 				} else {
 					if (g_defender_dead != 0) {
-						FIG_prepare_enemy_fight_ani(1, (Bit8u*)target_monster, 0, host_readbs(hero + HERO_ENEMY_ID), hero_pos + 1, 1);
+						FIG_prepare_enemy_fight_ani(1, (struct enemy_sheet*)target_monster, 0, host_readbs(hero + HERO_ENEMY_ID), hero_pos + 1, 1);
 					}
 				}
 			}
@@ -616,7 +616,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 						if (damage > 0 ) {
 
-							FIG_damage_enemy((Bit8u*)target_monster, damage, 0);
+							FIG_damage_enemy((struct enemy_sheet*)target_monster, damage, 0);
 
 							FIG_add_msg(11, damage);
 
@@ -667,11 +667,9 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 					if (g_defender_dead != 0) {
 
 						if (target_is_hero != 0) {
-							FIG_prepare_hero_fight_ani(1, target_hero, -1, 0,
-								host_readbs(hero + HERO_ENEMY_ID), hero_pos + 1, 1);
+							FIG_prepare_hero_fight_ani(1, target_hero, -1, 0, host_readbs(hero + HERO_ENEMY_ID), hero_pos + 1, 1);
 						} else {
-							FIG_prepare_enemy_fight_ani(1, (Bit8u*)target_monster, 0,
-								host_readbs(hero + HERO_ENEMY_ID), hero_pos + 1, 1);
+							FIG_prepare_enemy_fight_ani(1, (struct enemy_sheet*)target_monster, 0, host_readbs(hero + HERO_ENEMY_ID), hero_pos + 1, 1);
 						}
 					}
 
@@ -760,7 +758,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 								if (target_is_hero == 0) {
 
-									seg044_002f(1, (Bit8u*)target_monster, 99,
+									seg044_002f(1, (struct enemy_sheet*)target_monster, 99,
 											l17 == 0 ? host_readbs(hero + HERO_ENEMY_ID) : host_readbs(hero + HERO_ENEMY_ID) + 20,
 											hero_pos + 1, 1);
 								} else {
@@ -910,7 +908,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 			} else if (host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_USE_ITEM) {
 
-				FIG_use_item(hero, (Bit8u*)target_monster, target_hero, target_is_hero, hero_pos);
+				FIG_use_item(hero, (struct enemy_sheet*)target_monster, target_hero, target_is_hero, hero_pos);
 
 			}
 		}

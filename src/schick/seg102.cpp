@@ -53,7 +53,7 @@ void MON_do_spell_damage(signed short damage)
 			g_spelltarget_e = &g_enemy_sheets[g_spelluser_e->enemy_id - 10];
 
 			/* do the damage */
-			FIG_damage_enemy(get_spelltarget_e(), damage, 1);
+			FIG_damage_enemy(g_spelltarget_e, damage, 1);
 
 			/* add a fight message */
 			FIG_add_msg(11, damage);

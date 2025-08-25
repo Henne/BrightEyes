@@ -145,7 +145,7 @@ void FIG_do_spell_damage(signed short le)
 		g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
 		/* do the damage */
-		FIG_damage_enemy(get_spelltarget_e(), le, 0);
+		FIG_damage_enemy(g_spelltarget_e, le, 0);
 		/* add a message (green star with le) */
 		FIG_add_msg(0x0b, le);
 

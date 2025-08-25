@@ -386,7 +386,6 @@ struct enemy_flags2 {
 
 /* remark siebenstreich 2021-08-15:
  * I tried to combine these two structs into a single 2-byte bitfield 'enemy_flags' (similar to 'inventory_flags' below)
- * Subsequently, the macros enemy_dead, enemy_asleep etc. in v302de.h had to be adjusted.
  * However, no matter what I tried, this always broke binary BCC-compatibility. */
 
 struct enemy_sheet {
@@ -432,53 +431,6 @@ struct enemy_sheet {
 	Bit16s	throw_dam;
 	Bit8s 	le_flee;
 };
-
-enum {
-	ENEMY_SHEET_MON_ID		= 0x00,
-	ENEMY_SHEET_GFX_ID		= 0x01,
-	ENEMY_SHEET_RS			= 0x02,
-	ENEMY_SHEET_ATTRIB_ORIG		= 0x03, /* Only main 7 attributes */
-	ENEMY_SHEET_ATTRIB		= 0x04,
-	ENEMY_SHEET_LE_ORIG		= 0x11,
-	ENEMY_SHEET_LE			= 0x13,
-	ENEMY_SHEET_AE_ORIG		= 0x15,
-	ENEMY_SHEET_AE			= 0x17,
-	ENEMY_SHEET_MR			= 0x19,
-	ENEMY_SHEET_FIRSTAP		= 0x1a,
-	ENEMY_SHEET_ATTACKS		= 0x1b,
-	ENEMY_SHEET_AT			= 0x1c,
-	ENEMY_SHEET_PA			= 0x1d,
-	ENEMY_SHEET_DAM1		= 0x1e,
-	ENEMY_SHEET_DAM2		= 0x20,
-	ENEMY_SHEET_BP_ORIG		= 0x22,
-	ENEMY_SHEET_BP			= 0x23,
-	ENEMY_SHEET_MAGIC		= 0x24,
-	ENEMY_SHEET_MAG_ID		= 0x25,
-	ENEMY_SHEET_FIGHTER_ID		= 0x26,
-	ENEMY_SHEET_VIEWDIR		= 0x27,
-	ENEMY_SHEET_ATTACKS_LEFT	= 0x28, /* number attacks left in the current turn of a battle */
-	ENEMY_SHEET_LEVEL		= 0x29,
-	ENEMY_SHEET_DUMMY3		= 0x2a,
-	ENEMY_SHEET_ACTION_ID		= 0x2b,
-	ENEMY_SHEET_CUR_SPELL		= 0x2c,
-	ENEMY_SHEET_ENEMY_ID		= 0x2d,
-	ENEMY_SHEET_SAFTKRAFT		= 0x2e, /* stores extra damage of spell 'Saft, Kraft, Monstermacht' */
-	ENEMY_SHEET_BLIND		= 0x2f, /* blind rounds remaining from 'Blitz' spell */
-	ENEMY_SHEET_BROKEN		= 0x30, /* weapon broken? 0	= no, 1	= yes */
-	ENEMY_SHEET_FLAGS1		= 0x31,
-	ENEMY_SHEET_FLAGS2		= 0x32,
-	ENEMY_SHEET_UNUSED8		= 0x33,
-	ENEMY_SHEET_SIZE		= 0x34,
-	ENEMY_SHEET_ROUND_APPEAR	= 0x35,
-	ENEMY_SHEET_IS_ANIMAL		= 0x36, /* is the enemy an animal? */
-	ENEMY_SHEET_SHOTS		= 0x37,
-	ENEMY_SHEET_SHOT_DAM		= 0x38,
-	ENEMY_SHEET_THROWS		= 0x3a,
-	ENEMY_SHEET_THROW_DAM		= 0x3b,
-	ENEMY_SHEET_LE_FLEE		= 0x3d
-};
-
-#define SIZEOF_ENEMY_SHEET (62)
 
 enum {
 	MONSTER_MON_ID		= 0x00,

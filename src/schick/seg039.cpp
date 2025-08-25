@@ -210,30 +210,34 @@ unsigned short place_obj_on_cb(signed short x, signed short y, signed short obje
 	/* check if the object is decoration */
 	if (object >= 50) {
 		if (type == 57 || type == 56 || type == 62) {
+
 			FIG_set_cb_field(y + 1, x, object);
 			FIG_set_cb_field(y + 1, x - 1, object);
 			FIG_set_cb_field(y, x - 1, object);
 
 		} else if (type == 9) {
-				FIG_set_cb_field(y, x + 1, object);
-				FIG_set_cb_field(y - 1, x, object);
+
+			FIG_set_cb_field(y, x + 1, object);
+			FIG_set_cb_field(y - 1, x, object);
 
 		} else if (type == 43 || type == 44 || type == 48 ||
 				type == 49 || type == 50 || type == 51 ||
 				type == 52 || type == 53 || type == 54 ||
 				type == 55) {
 
-				FIG_set_cb_field(y + 1, x, object);
+			FIG_set_cb_field(y + 1, x, object);
 
 		} else if (type == 60) {
+
 			for (i = 0; i < 7; i++)
 				FIG_set_cb_field(y + i, x, object);
 
 		} else if (type == 61) {
+
 			for (i = 0; i < 7; i++)
 				FIG_set_cb_field(y, x + i, object);
-
 		}
+
 	} else {
 		/* if object is an enemy and needs 2 fields */
 		if (object >= 10 && is_in_byte_array(type, (Bit8u*)g_two_fielded_sprite_id))
@@ -264,29 +268,29 @@ unsigned short place_obj_on_cb(signed short x, signed short y, signed short obje
 /**
  * \brief   load the sprites from monsters
  *
- * \param   ptr         pointer to a monster datasheet
+ * \param   enemy       pointer to a monster datasheet
  * \param   x           x-coordinate on the chessboard
  * \param   y           y-coordinate on the chessboard
  */
-void FIG_load_enemy_sprites(Bit8u *ptr, signed short x, signed short y)
+void FIG_load_enemy_sprites(struct enemy_sheet *enemy, signed short x, signed short y)
 {
 	struct nvf_desc nvf;
 	signed short l1;
 
-	g_fig_list_elem.figure = ds_readbs(GFXTAB_FIGURES_MAIN + host_readbs(ptr + ENEMY_SHEET_GFX_ID) * 5);
-	g_fig_list_elem.nvf_no = host_readbs(ptr + ENEMY_SHEET_VIEWDIR);
+	g_fig_list_elem.figure = ds_readbs(GFXTAB_FIGURES_MAIN + enemy->gfx_id * 5);
+	g_fig_list_elem.nvf_no = enemy->viewdir;
 	g_fig_list_elem.cbx = (signed char)x;
 	g_fig_list_elem.cby = (signed char)y;
 
-	g_fig_list_elem.offsetx = ds_readb(GFXTAB_OFFSETS_MAIN + host_readbs(ptr + ENEMY_SHEET_GFX_ID) * 10 + host_readbs(ptr + ENEMY_SHEET_VIEWDIR) * 2);
+	g_fig_list_elem.offsetx = ds_readb(GFXTAB_OFFSETS_MAIN + enemy->gfx_id * 10 + enemy->viewdir * 2);
 
-	g_fig_list_elem.offsety = ds_readb((GFXTAB_OFFSETS_MAIN + 1) + host_readbs(ptr + ENEMY_SHEET_GFX_ID) * 10 + host_readbs(ptr + ENEMY_SHEET_VIEWDIR) * 2);
+	g_fig_list_elem.offsety = ds_readb((GFXTAB_OFFSETS_MAIN + 1) + enemy->gfx_id * 10 + enemy->viewdir * 2);
 
-	if (is_in_byte_array(host_readbs(ptr + ENEMY_SHEET_GFX_ID), (Bit8u*)g_two_fielded_sprite_id)) {
+	if (is_in_byte_array(enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id)) {
 
 		/* sprite uses two fields */
-		g_fig_list_elem.x1 = (ds_readbs(GFXTAB_TWOFIELDED_X1 + host_readbs(ptr + ENEMY_SHEET_VIEWDIR)));
-		g_fig_list_elem.x2 = (ds_readbs(GFXTAB_TWOFIELDED_X2 + host_readbs(ptr + ENEMY_SHEET_VIEWDIR)));
+		g_fig_list_elem.x1 = ds_readbs(GFXTAB_TWOFIELDED_X1 + enemy->viewdir);
+		g_fig_list_elem.x2 = ds_readbs(GFXTAB_TWOFIELDED_X2 + enemy->viewdir);
 
 		/* TODO: b = ++a; */
 		g_fig_list_elem.twofielded = g_fig_twofielded_count = g_fig_twofielded_count + 1;
@@ -302,7 +306,7 @@ void FIG_load_enemy_sprites(Bit8u *ptr, signed short x, signed short y)
 	g_fig_list_elem.height = 0x28;
 	g_fig_list_elem.width = 0x20;
 	g_fig_list_elem.is_enemy = 1;
-	g_fig_list_elem.sprite_no = host_readbs(ptr + ENEMY_SHEET_GFX_ID); /* gfx_set_id */
+	g_fig_list_elem.sprite_no = enemy->gfx_id;
 	g_fig_list_elem.reload = -1;
 	g_fig_list_elem.wsheet = -1;
 	g_fig_list_elem.sheet = -1;
@@ -315,9 +319,9 @@ void FIG_load_enemy_sprites(Bit8u *ptr, signed short x, signed short y)
 	g_fig_list_elem.z = 0x63;
 
 	/* check presence in the first round */
-	g_fig_list_elem.visible = (host_readb(ptr + ENEMY_SHEET_ROUND_APPEAR) == 0 ? 1 : 0);
+	g_fig_list_elem.visible = (enemy->round_appear == 0 ? 1 : 0);
 
-	if (is_in_byte_array(host_readb(ptr + ENEMY_SHEET_GFX_ID), (Bit8u*)g_two_fielded_sprite_id)) {
+	if (is_in_byte_array(enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id)) {
 
 		nvf.src = (Bit8u*)load_fight_figs(g_fig_list_elem.figure);
 		nvf.dst = g_fig_list_elem.gfxbuf;
@@ -329,19 +333,19 @@ void FIG_load_enemy_sprites(Bit8u *ptr, signed short x, signed short y)
 		g_fig_list_elem.reload = 0;
 	}
 
-	host_writeb(ptr + ENEMY_SHEET_FIGHTER_ID, FIG_add_to_list(-1));
+	enemy->fighter_id = FIG_add_to_list(-1);
 
-	if (is_in_byte_array(host_readb(ptr + ENEMY_SHEET_GFX_ID), (Bit8u*)g_two_fielded_sprite_id)) {
+	if (is_in_byte_array(enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id)) {
 
 		/* create fighter entry for the tail of a two-fielded enemy */
 
-		g_fig_list_elem.cbx = x + ds_readbs(GFXTAB_TWOFIELDED_EXTRA_CB + host_readbs(ptr + ENEMY_SHEET_VIEWDIR) * 4);
-		g_fig_list_elem.cby = y + ds_readbs((GFXTAB_TWOFIELDED_EXTRA_CB + 2) + host_readbs(ptr + ENEMY_SHEET_VIEWDIR) * 4);
+		g_fig_list_elem.cbx = x + ds_readbs(GFXTAB_TWOFIELDED_EXTRA_CB + enemy->viewdir * 4);
+		g_fig_list_elem.cby = y + ds_readbs((GFXTAB_TWOFIELDED_EXTRA_CB + 2) + enemy->viewdir * 4);
 
-		g_fig_list_elem.offsetx += ds_readbs(GFXTAB_TWOFIELDED_EXTRA_OX + host_readbs(ptr + ENEMY_SHEET_VIEWDIR));
-		g_fig_list_elem.offsety += ds_readbs(GFXTAB_TWOFIELDED_EXTRA_OY + host_readbs(ptr + ENEMY_SHEET_VIEWDIR));
-		g_fig_list_elem.x1 = ds_readb(GFXTAB_TWOFIELDED_EXTRA_X1 + host_readbs(ptr + ENEMY_SHEET_VIEWDIR));
-		g_fig_list_elem.x2 = ds_readb(GFXTAB_TWOFIELDED_EXTRA_X2 + host_readbs(ptr + ENEMY_SHEET_VIEWDIR));
+		g_fig_list_elem.offsetx += ds_readbs(GFXTAB_TWOFIELDED_EXTRA_OX + enemy->viewdir);
+		g_fig_list_elem.offsety += ds_readbs(GFXTAB_TWOFIELDED_EXTRA_OY + enemy->viewdir);
+		g_fig_list_elem.x1 = ds_readb(GFXTAB_TWOFIELDED_EXTRA_X1 + enemy->viewdir);
+		g_fig_list_elem.x2 = ds_readb(GFXTAB_TWOFIELDED_EXTRA_X2 + enemy->viewdir);
 		g_fig_list_elem.y1 = 0;
 		g_fig_list_elem.y2 = 0x27;
 		g_fig_list_elem.is_enemy = 1;
@@ -400,7 +404,7 @@ void FIG_init_enemies(void)
 		}
 
 		/* load the sprites */
-		FIG_load_enemy_sprites((Bit8u*)&g_enemy_sheets[i], x, y);
+		FIG_load_enemy_sprites(&g_enemy_sheets[i], x, y);
 	}
 }
 

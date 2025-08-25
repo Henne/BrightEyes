@@ -9,7 +9,7 @@ signed short copy_ani_stuff(Bit8u*, signed short, signed short);
 
 /* 0x20 */
 /* should be static */
-void seg037_00ae(Bit8u*, signed short);
+void seg037_00ae(struct enemy_sheet*, signed short);
 
 /* 0x25 */
 /* should be static */

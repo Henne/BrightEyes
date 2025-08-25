@@ -582,32 +582,6 @@ static inline unsigned short hero_seen_phantom_set(Bit8u *hero, unsigned short v
 }
 
 /**
- * enemy_dead() -	check if enemy is dead
- * @enemy:	ptr to enemy
- *
- * 0 = alive / 1 = dead
- */
-static inline unsigned short enemy_dead(Bit8u *enemy) {
-	if (((host_readb(enemy + ENEMY_SHEET_FLAGS1) >> 0) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-/**
- * enemy_petrified() -	check if enemy is petrified
- * @enemy:	ptr to enemy
- *
- * 0 = not petrified / 1 = petrified
- */
-static inline unsigned short enemy_petrified(Bit8u *enemy) {
-	if (((host_readb(enemy + ENEMY_SHEET_FLAGS1) >> 2) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-/**
  * inventory_broken() -	check if an item in the inventory is broken
  * @item:	ptr to item
  *
@@ -968,9 +942,6 @@ static inline char* get_itemname(unsigned short item)
 #define hero_encouraged(hero)	((*(struct hero_flags*)(hero + HERO_FLAGS1)).encouraged)
 
 #define hero_seen_phantom_set(hero, v) ((*(struct hero_flags*)(hero + HERO_FLAGS1)).seen_phantom = v)
-
-#define enemy_dead(enemy)	(((struct enemy_sheet*)(enemy))->flags1.dead)
-#define enemy_petrified(enemy)	(((struct enemy_sheet*)(enemy))->flags1.petrified)
 
 #define add_inventory_quantity(i1, i2, hero) (    ((struct inventory*)(hero + HERO_INVENTORY))[i1].quantity+=((struct inventory*)(hero + HERO_INVENTORY))[i2].quantity)
 

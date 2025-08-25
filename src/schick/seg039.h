@@ -18,7 +18,7 @@ unsigned short place_obj_on_cb(signed short, signed short, signed short, signed 
 #endif
 
 /* 0x34 */
-void FIG_load_enemy_sprites(Bit8u *, signed short, signed short);
+void FIG_load_enemy_sprites(struct enemy_sheet*, signed short, signed short);
 
 /* 0x39 */
 void FIG_init_enemies(void);
