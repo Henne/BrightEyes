@@ -1380,11 +1380,19 @@ extern unsigned char g_dng_map_size;	// ds:0xbd94; seg002, seg003, seg028, seg06
 extern signed short g_ems_unused_handle;	// ds:0xbd92; seg028, seg120
 extern signed short g_ems_travelmap_handle;	// ds:0xbd90; seg028, seg120
 extern Bit8u *g_ems_unused_tab;		// ds:0xbd8c; seg028
+
+extern signed char g_visual_fields_tex[29];	// ds:0xbd50; seg066, seg075
+extern signed char g_direction_unkn;		// ds:0xbd4f; seg003
+extern unsigned char g_steptarget_back;		// ds:0xbd4e; seg003, seg066, seg076
+extern unsigned char g_steptarget_front;	// ds:0xbd4d; seg003, seg066, seg076, seg099
+extern signed char g_new_menu_icons[9];		// ds:0xbd38; seg002, seg026, seg066, seg076, seg099
 extern unsigned char *g_heroes;		// ds:0xbd34
 extern unsigned char *g_fightobj_buf;	// ds:0xbd30; seg032, seg040
 extern signed char *g_scenario_buf;	// ds:0xbd2c; seg027, seg032, seg034, seg038, seg040
 extern unsigned char *g_current_fight;	// ds:0xbd28; seg027, seg032, seg043, seg035, seg039, seg040, seg100
 extern signed char g_citycamp_city;	// ds:0xbd27; seg052, seg066, seg076
+extern signed short g_pregame_state;	// ds:0xbd25; seg002, seg097
+
 extern Bit32s g_archive_file_remaining;	// ds:0xbce3; seg002
 extern signed short g_map_townmark_state;	// ds:0xbcd8; seg002
 extern Bit8u  g_hero_splash_timer[7];	// ds:0xbccf; seg002

@@ -678,13 +678,13 @@ void spell_foramen(void)
 
 	*(g_dng_map_ptr + MAP_POS(x,y)) = 0x0f; /* clear higher 4 bits */
 	*(g_dng_map_ptr + MAP_POS(x,y)) |= (DNG_TILE_OPEN_DOOR << 4);
-	ds_writeb(STEPTARGET_FRONT, *(g_dng_map_ptr + MAP_POS(x,y)));
+	g_steptarget_front = *(g_dng_map_ptr + MAP_POS(x,y));
 
 	DNG_open_door();
 
 	add_hero_ap(get_spelluser(), 1); /* hero gets 1 AP for successful lock pick */
 
-	ds_writebs((NEW_MENU_ICONS + 6), ds_writebs((NEW_MENU_ICONS + 7), ds_writebs((NEW_MENU_ICONS + 8), MENU_ICON_NONE)));
+	g_new_menu_icons[6] = (g_new_menu_icons[7] = (g_new_menu_icons[8] = (MENU_ICON_NONE)));
 	g_redraw_menuicons = 1;
 }
 

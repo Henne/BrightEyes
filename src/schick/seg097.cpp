@@ -288,7 +288,7 @@ void GUI_draw_radio_bg(signed short header, signed short options, signed short w
 	do_save_rect();
 
 	/* play FX3.VOC */
-	if (ds_readw(PREGAME_STATE) == 0)
+	if (!g_pregame_state)
 		play_voc(ARCHIVE_FILE_FX3_VOC);
 
 	GUI_draw_popup_line(0, 0);

@@ -302,9 +302,9 @@ void draw_icons(void)
 		g_pic_copy.y2 = g_gui_buttons_pos[i].y + 23;
 		g_pic_copy.src = g_buf_icon + i * 576;
 
-		if (ds_readbs(NEW_MENU_ICONS + i) != MENU_ICON_NONE) {
-			if (g_loaded_menu_icons[i] != ds_readbs(NEW_MENU_ICONS + i))
-				load_icon(ARCHIVE_FILE_ICONS, ds_readbs(NEW_MENU_ICONS + i), i);
+		if (g_new_menu_icons[i] != MENU_ICON_NONE) {
+			if (g_loaded_menu_icons[i] != g_new_menu_icons[i])
+				load_icon(ARCHIVE_FILE_ICONS, g_new_menu_icons[i], i);
 		} else {
 			if (g_loaded_menu_icons[i] != -1)
 				load_icon(ARCHIVE_FILE_BICONS, i, i);

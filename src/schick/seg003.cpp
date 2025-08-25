@@ -39,8 +39,9 @@ signed short update_direction(unsigned char mod)
 	gs_direction_bak = gs_direction;
 	/* set new direction */
 	gs_direction = ((gs_direction + mod) & 0x3);
+
 	/* set bogus variable to 1 */
-	ds_writeb(DIRECTION_UNKN, 0x1);
+	g_direction_unkn = 1;
 
 	return -1;
 }
@@ -107,22 +108,14 @@ void move(void)
 
 	if (g_dng_map_size == 0x10) {
 		/* dungeon mode */
-		ds_writeb(STEPTARGET_FRONT, host_readb(p_map_small +
-			((gs_y_target + host_readbs(p_vis_field + 1)) << 4) +
-			gs_x_target + host_readbs(p_vis_field)));
+		g_steptarget_front = host_readb(p_map_small + ((gs_y_target + host_readbs(p_vis_field + 1)) << 4) + gs_x_target + host_readbs(p_vis_field));
 
-		ds_writeb(STEPTARGET_BACK, host_readb(p_map_small +
-			((gs_y_target + host_readbs(p_vis_field + 3)) << 4) +
-			gs_x_target + host_readbs(p_vis_field + 2)));
+		g_steptarget_back = host_readb(p_map_small + ((gs_y_target + host_readbs(p_vis_field + 3)) << 4) + gs_x_target + host_readbs(p_vis_field + 2));
 	} else {
 		/* city mode */
-		ds_writeb(STEPTARGET_FRONT, host_readb(p_map_large +
-			((gs_y_target + host_readbs(p_vis_field + 1)) << 5) +
-			 gs_x_target + host_readbs(p_vis_field)));
+		g_steptarget_front = host_readb(p_map_large + ((gs_y_target + host_readbs(p_vis_field + 1)) << 5) + gs_x_target + host_readbs(p_vis_field));
 
-		ds_writeb(STEPTARGET_BACK, host_readb(p_map_large +
-			((gs_y_target + host_readbs(p_vis_field + 3)) << 5) +
-			gs_x_target + host_readbs(p_vis_field + 2)));
+		g_steptarget_back = host_readb(p_map_large + ((gs_y_target + host_readbs(p_vis_field + 3)) << 5) + gs_x_target + host_readbs(p_vis_field + 2));
 	}
 }
 

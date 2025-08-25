@@ -333,7 +333,7 @@ void DNG_stub3(void)
 
 		tmp = div16(ds_readb(VISUAL_FIELD_VALS + i));
 
-		ds_writeb(VISUAL_FIELDS_TEX + i,
+		g_visual_fields_tex[i] = (
 			(tmp == 6) ? ds_readb(DNG_STUB3_UNKN1 + i) :
 				(tmp == 5) ? ds_readb(DNG_STUB3_UNKN2 + i) :
 				(tmp == 3) ? ds_readb(DNG_STUB3_UNKN4 + i) :
@@ -448,7 +448,8 @@ void DNG_stub4(void)
 
 		l1 = host_readws(ptr);
 		l2 = host_readws(ptr + 2);
-		l3 = ds_readbs(VISUAL_FIELDS_TEX + l3);
+
+		l3 = g_visual_fields_tex[l3];
 
 		if (l3 != -1) {
 

@@ -1526,7 +1526,7 @@ void handle_gui_input(void)
 		}
 
 		/* Ctrl + Q -> quit */
-		if ((g_bioskey_event == 0x11) && (ds_readw(PREGAME_STATE) == 0)) {
+		if ((g_bioskey_event == 0x11) && !g_pregame_state) {
 			cleanup_game();
 
 			exit(0);
@@ -1561,7 +1561,7 @@ void handle_gui_input(void)
 		if ((g_bioskey_event == 0x10) &&
 			(g_bioskey_event10 == 0) &&
 			!g_dialogbox_lock &&
-			(ds_readws(PREGAME_STATE) == 0))
+			!g_pregame_state)
 		{
 			g_bioskey_event10 = 1;
 			g_timers_disabled++;
@@ -1700,7 +1700,7 @@ void handle_input(void)
 		}
 
 		/* Ctrl + Q -> quit */
-		if ((g_bioskey_event == 0x11) && (ds_readw(PREGAME_STATE) == 0)) {
+		if ((g_bioskey_event == 0x11) && !g_pregame_state) {
 			cleanup_game();
 
 			exit(0);
@@ -1720,7 +1720,7 @@ void handle_input(void)
 		/* Ctrl + P -> pause game */
 		/* TODO: use tw_bak here */
 		if ((g_bioskey_event == 0x10) && (g_bioskey_event10 == 0) &&
-			!g_dialogbox_lock && (ds_readws(PREGAME_STATE) == 0))
+			!g_dialogbox_lock && !g_pregame_state)
 		{
 			g_timers_disabled++;
 			g_bioskey_event10 = 1;
@@ -3923,7 +3923,7 @@ void set_to_ff(void)
 	signed short i;
 
 	for (i = 0; i < 9; i++) {
-		ds_writeb(NEW_MENU_ICONS + i, MENU_ICON_NONE);
+		g_new_menu_icons[i] = MENU_ICON_NONE;
 	}
 }
 
@@ -3943,16 +3943,16 @@ void draw_loc_icons(signed short icons, ...)
 
 	/* save icon ids in local variable */
 	for (i = 0; i < 9; i++) {
-		icons_bak[i] = ds_readbs(NEW_MENU_ICONS + i);
-		ds_writeb(NEW_MENU_ICONS + i, MENU_ICON_NONE);
+		icons_bak[i] = g_new_menu_icons[i];
+		g_new_menu_icons[i] = MENU_ICON_NONE;
 	}
 
 	va_start(arguments, icons);
 
 	for (i = 0; i < icons; i++) {
-		ds_writeb(NEW_MENU_ICONS + i, va_arg(arguments, int));
+		g_new_menu_icons[i] = va_arg(arguments, int);
 
-		if (ds_readbs(NEW_MENU_ICONS + i) != icons_bak[i]) {
+		if (g_new_menu_icons[i] != icons_bak[i]) {
 			changed = 1;
 		}
 	}
@@ -5449,7 +5449,8 @@ int schick_main(int argc, char** argv)
 	signed short savegame;
 	signed short len;
 
-	ds_writew(PREGAME_STATE, 1);
+	g_pregame_state = 1;
+
 	g_playmask_us = 1;
 
 	init_AIL(16000);
@@ -5566,7 +5567,7 @@ int schick_main(int argc, char** argv)
 					savegame = load_game_state();
 				} while (savegame == -1);
 
-				ds_writew(PREGAME_STATE, 0);
+				g_pregame_state = 0;
 
 				/* start the game */
 				game_loop();

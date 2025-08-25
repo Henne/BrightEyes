@@ -386,7 +386,7 @@ signed short load_game_state(void)
 		g_fading_state = 3;
 
 		if (gs_current_loctype != LOCTYPE_TEMPLE) {
-			ds_writebs((NEW_MENU_ICONS + 6), ds_writebs((NEW_MENU_ICONS + 7), ds_writebs((NEW_MENU_ICONS + 8), MENU_ICON_NONE)));
+			g_new_menu_icons[6] = g_new_menu_icons[7] = g_new_menu_icons[8] = MENU_ICON_NONE;
 		}
 
 		load_area_description(2);

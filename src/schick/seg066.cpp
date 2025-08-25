@@ -603,9 +603,10 @@ void seg066_0bad(void)
 		bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + i)));
 
 		if (bi == -1) {
-			ds_writebs(VISUAL_FIELDS_TEX + i, -1);
+			g_visual_fields_tex[i] = -1;
 		} else {
-			ds_writebs(VISUAL_FIELDS_TEX + i,	bi == 2 ? ds_readbs(SEG066_0BAD_UNKN0 + i) : (
+			g_visual_fields_tex[i] = (
+						bi == 2 ? ds_readbs(SEG066_0BAD_UNKN0 + i) : (
 						bi == 3 ? ds_readbs(SEG066_0BAD_UNKN1 + i) : (
 						bi == 4 ? ds_readbs(SEG066_0BAD_UNKN2 + i) : (
 						bi == 5 ? ds_readbs(SEG066_0BAD_UNKN3 + i) : (
@@ -650,7 +651,7 @@ void city_water_and_grass(void)
 				x = host_readws(ptr);
 				y = host_readws(ptr + 2);
 
-				c1 = ds_readbs(VISUAL_FIELDS_TEX + c1);
+				c1 = g_visual_fields_tex[c1];
 
 				if (c1 != -1) {
 
@@ -710,7 +711,7 @@ void city_building_textures(void)
 				x = host_readws(ptr);
 				y = host_readws(ptr + 2);
 
-				c1 = ds_readbs(VISUAL_FIELDS_TEX + c1);
+				c1 = g_visual_fields_tex[c1];
 
 				if (c1 != -1) {
 
@@ -868,19 +869,19 @@ signed short city_step(void)
 	signed short options;
 	signed short l4;
 
-	ds_writebs((NEW_MENU_ICONS + 0), MENU_ICON_SPLIT_GROUP);
-	l4 = ds_readbs((NEW_MENU_ICONS + 1));
-	ds_writebs((NEW_MENU_ICONS + 1), g_can_merge_group == -1 ? MENU_ICON_MERGE_GROUP_GRAYED : MENU_ICON_MERGE_GROUP);
+	g_new_menu_icons[0] = MENU_ICON_SPLIT_GROUP;
+	l4 = g_new_menu_icons[1];
+	g_new_menu_icons[1] = (g_can_merge_group == -1 ? MENU_ICON_MERGE_GROUP_GRAYED : MENU_ICON_MERGE_GROUP);
 
-	if (ds_readbs((NEW_MENU_ICONS + 1)) != l4) {
+	if (g_new_menu_icons[1] != l4) {
 		g_redraw_menuicons = 1;
 	}
 
-	ds_writebs((NEW_MENU_ICONS + 2), MENU_ICON_SWITCH_GROUP);
-	ds_writebs((NEW_MENU_ICONS + 3), MENU_ICON_INFO);
-	ds_writebs((NEW_MENU_ICONS + 4), MENU_ICON_MAP);
-	ds_writebs((NEW_MENU_ICONS + 5), MENU_ICON_MAGIC);
-	ds_writebs((NEW_MENU_ICONS + 6), MENU_ICON_CAMP);
+	g_new_menu_icons[2] = MENU_ICON_SWITCH_GROUP;
+	g_new_menu_icons[3] = MENU_ICON_INFO;
+	g_new_menu_icons[4] = MENU_ICON_MAP;
+	g_new_menu_icons[5] = MENU_ICON_MAGIC;
+	g_new_menu_icons[6] = MENU_ICON_CAMP;
 
 	if (g_request_refresh != 0) {
 
@@ -919,7 +920,7 @@ signed short city_step(void)
 	if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
 
 		for (i = options = 0; i < 9; i++) {
-			if (ds_readbs(NEW_MENU_ICONS + i) != MENU_ICON_NONE) {
+			if (g_new_menu_icons[i] != MENU_ICON_NONE) {
 				options++;
 			}
 		}
@@ -969,7 +970,7 @@ signed short city_step(void)
 		g_citycamp_city = 1; /* CITYCAMP takes place in a town */
 		i = 1;
 
-	} else if (g_action == ACTION_ID_ICON_8 && ds_readbs((NEW_MENU_ICONS + 7)) != MENU_ICON_NONE) {
+	} else if (g_action == ACTION_ID_ICON_8 && g_new_menu_icons[7] != MENU_ICON_NONE) {
 
 		gs_current_loctype = LOCTYPE_MARKET;
 		i = 1;
@@ -984,7 +985,7 @@ signed short city_step(void)
 
 	} else if (g_action == ACTION_ID_UP) {
 
-		bi = get_border_index(ds_readb(STEPTARGET_FRONT));
+		bi = get_border_index(g_steptarget_front);
 
 		if (!bi || bi == 7 || bi == 8) {
 			seg066_14dd(1);
@@ -996,7 +997,7 @@ signed short city_step(void)
 
 	} else if (g_action == ACTION_ID_DOWN) {
 
-		bi = get_border_index(ds_readb(STEPTARGET_BACK));
+		bi = get_border_index(g_steptarget_back);
 
 		if (!bi || bi == 7 || bi == 8) {
 			seg066_14dd(-1);
@@ -1029,20 +1030,20 @@ signed short city_step(void)
 			}
 		}
 
-		if (g_location_market_flag && ds_readb((NEW_MENU_ICONS + 7)) != MENU_ICON_MARKET) {
+		if (g_location_market_flag && g_new_menu_icons[7] != MENU_ICON_MARKET) {
 
 			if (((i = ds_readws((MARKET_DESCR_TABLE + 4) + 8 * gs_current_typeindex)) == -1 ||
 				gs_day_of_week == i) &&
 				gs_day_timer >= HOURS(6) &&
 				gs_day_timer <= HOURS(16))
 			{
-				ds_writebs((NEW_MENU_ICONS + 7), MENU_ICON_MARKET);
+				g_new_menu_icons[7] = MENU_ICON_MARKET;
 				draw_icons();
 			}
 
-		} else if (!g_location_market_flag && ds_readbs((NEW_MENU_ICONS + 7)) == MENU_ICON_MARKET) {
+		} else if (!g_location_market_flag && g_new_menu_icons[7] == MENU_ICON_MARKET) {
 
-			ds_writebs((NEW_MENU_ICONS + 7), MENU_ICON_NONE);
+			g_new_menu_icons[7] = MENU_ICON_NONE;
 			draw_icons();
 		}
 	}

@@ -6353,7 +6353,7 @@ unsigned char g_unkn_075[1]; // ds:0xbd8b
 unsigned char g_visual_field_vals[29]; // ds:0xbd6e
 unsigned char g_unkn_074[1]; // ds:0xbd6d
 signed char g_visual_fields_tex[29]; // ds:0xbd50
-unsigned char g_direction_unkn; // ds:0xbd4f, writeonly (1)
+signed char g_direction_unkn; // ds:0xbd4f, writeonly (1)
 unsigned char g_steptarget_back; // ds:0xbd4e
 unsigned char g_steptarget_front; // ds:0xbd4d
 unsigned char g_unkn_073[12]; // ds:0xbd41
@@ -6363,7 +6363,7 @@ unsigned char *g_fightobj_buf; // ds:0xbd30
 signed char *g_scenario_buf; // ds:0xbd2c
 unsigned char *g_current_fight; // ds:0xbd28
 signed char g_citycamp_city; // ds:0xbd27, {0 = camp in dungeon, 1}
-unsigned short g_pregame_state; // ds:0xbd25
+signed short g_pregame_state; // ds:0xbd25
 signed short g_ail_music_driver_id; // ds:0xbd23
 signed short g_ail_sequence; // ds:0xbd21
 void *g_ail_music_driver_descr; // ds:0xbd1d
