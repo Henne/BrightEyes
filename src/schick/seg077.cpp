@@ -273,9 +273,9 @@ void DNG01_chest5_x1(Bit8u* chest)
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG01_chest7_x1(Bit8u* chest)
+void DNG01_chest7_open(struct struct_chest* chest)
 {
-	loot_corpse(chest, get_tx(4), &gs_dng01_corpse_looted);
+	loot_corpse((Bit8u*)chest, get_tx(4), &gs_dng01_corpse_looted);
 }
 
 void DNG01_chest7_x2(Bit8u* chest)
@@ -326,7 +326,7 @@ void DNG01_chest6_x2(void)
 	GUI_output(get_tx(3));
 }
 
-void DNG01_chest6_x1(Bit8u* chest)
+void DNG01_chest6_open(struct struct_chest* chest)
 {
 	if (!gs_dng01_key_taken)
 	{
@@ -336,23 +336,16 @@ void DNG01_chest6_x1(Bit8u* chest)
 		if (!strcmp(g_text_input_buf, g_dng01_str_marbo))
 		{
 			// correct answer
-#if defined(__BORLANDC__)
-			((void (*)(Bit8u*))((Bit8u*)host_readd((Bit8u*)(chest) + 11)))(chest);
-#else
-			t_map(chest, 11)(chest);
-#endif
+			chest->loot((Bit8u*)chest);
 
 			// Original-Bug: enable the extra loot, here 10 AP
 #ifdef M302de_ORIGINAL_BUGFIX
 			g_get_extra_loot = 1;
 #endif
-		} else if ((Bit8u*)host_readd((Bit8u*)(chest) + 7) != 0){
-#if defined(__BORLANDC__)
-			((void (*)(void))((Bit8u*)host_readd((Bit8u*)(chest) + 7)))();
-#else
+		} else if (chest->trap){
+
 			// wrong answer
-			((treasure_trap)(t_map(chest, 7)))();
-#endif
+			chest->trap();
 		}
 
 	} else {

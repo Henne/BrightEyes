@@ -4641,8 +4641,8 @@ struct struct_chest g_dng01_specialchests[9] = {
 	{ 0x3505,    0, NULL, NULL, DNG01_chest3_x1, 0, 0, 0 },
 	{ 0x3d04,    6, use_lockpicks_on_chest, chest_cursed, NULL, 0, 5000, 0 },
 	{ 0x3e06,    3, use_lockpicks_on_chest, chest_fulminictus, DNG01_chest5_x1,  0, 0, 0 },
-	{ 0x3d0b,    1, DNG01_chest6_x1, DNG01_chest6_x2, DNG01_chest6_x3, 10, 0, 0 },
-	{ 0x4d06,    1, DNG01_chest7_x1, NULL, DNG01_chest7_x2, 0, 0, 0 },
+	{ 0x3d0b,    1, DNG01_chest6_open, DNG01_chest6_x2, DNG01_chest6_x3, 10, 0, 0 },
+	{ 0x4d06,    1, DNG01_chest7_open, NULL, DNG01_chest7_x2, 0, 0, 0 },
 	{     -1,    0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x9314
 const char g_dng01_str_marbo[6] = "MARBO"; // ds:0x93d1
@@ -4654,7 +4654,7 @@ struct struct_chest g_dng02_specialchests[8] = {
 	{ 0x140a, 4, use_lockpicks_on_chest, chest_protected_heavy, DNG02_chest03_func3, 0, 0, 0 },
 	{ 0x180c, 0, NULL, NULL, DNG02_chest04_func3, 0, 0, 0 },
 	{ 0x1e07, 6, use_lockpicks_on_chest, chest_petrified, DNG02_chest05_func3, 0, 0, 0 },
-	{ 0x1101, 1, DNG02_chest06_func1, NULL, DNG02_chest06_func3, 0, 0, 0 },
+	{ 0x1101, 1, DNG02_chest06_open, NULL, DNG02_chest06_func3, 0, 0, 0 },
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x93d8
 struct struct_chest g_dng03_specialchests[14] = {
@@ -4676,9 +4676,9 @@ struct struct_chest g_dng03_specialchests[14] = {
 const char g_dng03_str_spinnennetz[12] = "SPINNENNETZ"; // ds:0x95a6
 const char g_dng03_str_mactans[8] = "MACTANS"; // ds:0x95b2
 struct struct_chest g_dng04_specialchests[4] = {
-	{ 0x0607, 1, DNG04_corpse0, NULL, DNG04_corpse0_chest, 0, 0, 0 },
-	{ 0x010c, 1, DNG04_corpse1, NULL, DNG04_corpse1_chest, 0, 0, 0 },
-	{ 0x0601, 1, DNG04_corpse2, NULL, DNG04_corpse2_chest, 0, 0, 0 },
+	{ 0x0607, 1, DNG04_corpse0_open, NULL, DNG04_corpse0_chest, 0, 0, 0 },
+	{ 0x010c, 1, DNG04_corpse1_open, NULL, DNG04_corpse1_chest, 0, 0, 0 },
+	{ 0x0601, 1, DNG04_corpse2_open, NULL, DNG04_corpse2_chest, 0, 0, 0 },
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x95ba
 Bit16s g_dng05_trash_flag = 0; // ds:0x960e
@@ -4696,10 +4696,10 @@ struct struct_chest g_dng07_specialchests[2] = {
 struct struct_chest g_dng08_specialchests[7] = {
 	{ 0x0e01, 0, NULL, NULL, DNG08_chest0_func3, 0, 0, 0 },
 	{ 0x0e03, 4, use_lockpicks_on_chest, DNG08_chest1_func2, DNG08_chest1_func3, 0, 0, 0 },
-	{ 0x0907, 0, DNG08_chest2_func1, NULL, DNG08_chest2_func3, 0, 0, 0 },
-	{ 0x050d, 5, DNG08_chest3_func1, chest_poisoned1, NULL, 0, 0, 0 },
-	{ 0x060c, 5, DNG08_chest4_func1, chest_poisoned1, DNG08_chest4_func3, 0, 0, 0 },
-	{ 0x060e, 5, DNG08_chest5_func1, chest_poisoned1, DNG08_chest5_func3, 0, 0, 0 },
+	{ 0x0907, 0, DNG08_chest2_open, NULL, DNG08_chest2_func3, 0, 0, 0 },
+	{ 0x050d, 5, DNG08_chest3_open, chest_poisoned1, NULL, 0, 0, 0 },
+	{ 0x060c, 5, DNG08_chest4_open, chest_poisoned1, DNG08_chest4_func3, 0, 0, 0 },
+	{ 0x060e, 5, DNG08_chest5_open, chest_poisoned1, DNG08_chest5_func3, 0, 0, 0 },
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x9692
 char g_dng08_str_tairach[8] = "TAIRACH"; // ds:0x9725
@@ -4715,7 +4715,7 @@ struct struct_chest g_dng09_specialchests[8] = {
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x972e
 struct struct_chest g_dng10_specialchests[6] = {
-	{ 0x0502, 1, DNG10_chest0_x1, NULL, DNG10_chest0_x2, 0, 0, 0 },
+	{ 0x0502, 1, DNG10_chest0_open, NULL, DNG10_chest0_x2, 0, 0, 0 },
 	{ 0x0305, 0, NULL, NULL, DNG10_chest1_x1, 0, 0, 0 },
 	{ 0x0105, 0, NULL, NULL, DNG10_chest2_x1, 0, 0, 0 },
 	{ 0x1101, 0, use_lockpicks_on_chest, chest_ignifax_brutal, DNG10_chest3_x1, 0, 0, 0 },
@@ -4797,8 +4797,8 @@ signed int g_dng12_obstacle_tries = 0; // ds:0x9d43
 signed int g_dng12_watertrap_bak = 0; // ds:0x9d45
 unsigned char g_unkn_062[1] = { 0x00 }; // ds:0x9d47
 struct struct_chest g_dng13_specialchests[3] = {
-	{ 0x0b05, 1, DNG13_corpse0, NULL, DNG13_chest0, 0, 0, 0 },
-	{ 0x0401, 1, DNG13_corpse1, NULL, DNG13_chest1, 0, 0, 0 },
+	{ 0x0b05, 1, DNG13_corpse0_open, NULL, DNG13_chest0, 0, 0, 0 },
+	{ 0x0401, 1, DNG13_corpse1_open, NULL, DNG13_chest1, 0, 0, 0 },
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0}
 }; // ds:0x9d48
 unsigned char g_unkn_063[1] = { 0x00 }; // ds:0x9d57

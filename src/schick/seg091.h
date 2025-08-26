@@ -9,9 +9,9 @@ void DNG13_collapsing_ceiling(void);
 /* 0x2a */
 void DNG13_collapsing_ceiling_easy(void);
 /* 0x2f */
-void DNG13_corpse1(Bit8u*);
+void DNG13_corpse1_open(struct struct_chest*);
 /* 0x34 */
-void DNG13_corpse0(Bit8u*);
+void DNG13_corpse0_open(struct struct_chest*);
 /* 0x39 */
 void DNG13_chest1(Bit8u*);
 /* 0x3e */

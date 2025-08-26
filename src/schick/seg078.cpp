@@ -636,9 +636,9 @@ void DNG02_chest05_func3(Bit8u* chest)
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG02_chest06_func1(Bit8u* chest)
+void DNG02_chest06_open(struct struct_chest* chest)
 {
-	loot_corpse(chest, get_tx(19), (Bit8s*)&gs_dng02_corpse_flag);
+	loot_corpse((Bit8u*)chest, get_tx(19), (Bit8s*)&gs_dng02_corpse_flag);
 }
 
 void DNG02_chest06_func3(Bit8u* chest)

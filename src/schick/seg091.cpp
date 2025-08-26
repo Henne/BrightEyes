@@ -95,7 +95,7 @@ signed short DNG13_handler(void)
 
 	} else if (pos == DNG_POS(0,2,9) && pos != gs_dng_handled_pos)
 	{
-		loot_multi_chest((Bit8u*)&gs_dng13_chest_equips, get_tx(8));
+		loot_multi_chest(gs_dng13_chest_equips, get_tx(8));
 
 	} else if (pos == DNG_POS(0,10,6) && pos != gs_dng_handled_pos)
 	{
@@ -211,9 +211,9 @@ void DNG13_unblock_passage(char* text, Bit8u* flag)
 	}
 }
 
-void DNG13_corpse0(Bit8u* ptr)
+void DNG13_corpse0_open(struct struct_chest* chest)
 {
-	loot_corpse(ptr, get_tx(9), &gs_dng13_corpse0_flag);
+	loot_corpse((Bit8u*)chest, get_tx(9), &gs_dng13_corpse0_flag);
 }
 
 void DNG13_chest0(Bit8u* chest)
@@ -228,9 +228,9 @@ void DNG13_chest0(Bit8u* chest)
 	host_writed((Bit8u*)(chest) + 0xb, (Bit32u)bak);
 }
 
-void DNG13_corpse1(Bit8u* ptr)
+void DNG13_corpse1_open(struct struct_chest* chest)
 {
-	loot_corpse(ptr, get_tx(14), &gs_dng13_corpse1_flag);
+	loot_corpse((Bit8u*)chest, get_tx(14), &gs_dng13_corpse1_flag);
 }
 
 void DNG13_chest1(Bit8u* chest)

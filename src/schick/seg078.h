@@ -15,7 +15,7 @@ void DNG02_chest04_func3(Bit8u*);
 /* 0x39 */
 void DNG02_chest05_func3(Bit8u*);
 /* 0x3e */
-void DNG02_chest06_func1(Bit8u*);
+void DNG02_chest06_open(struct struct_chest*);
 /* 0x43 */
 void DNG02_chest06_func3(Bit8u*);
 /* 0x48 */

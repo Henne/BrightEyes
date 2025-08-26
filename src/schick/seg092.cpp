@@ -244,7 +244,7 @@ void loot_simple_chest(Bit8u *chest)
 				if (get_item(host_readb((Bit8u*)host_readd(chest + 0xb) + item_no), 1, 1))
 				{
 					/* got the item in inventory => remove from chest */
-					delete_chest_item(chest, item_no);
+					delete_chest_item((struct struct_chest*)chest, item_no);
 				} else {
 					/* group has not taken the item */
 					item_no = -2;
@@ -263,17 +263,13 @@ void loot_simple_chest(Bit8u *chest)
  * \param   chest       pointer to the chest
  * \param   item_no     the number of the item to be deleted
  */
-void delete_chest_item(Bit8u *chest, signed short item_no)
+void delete_chest_item(struct struct_chest *chest, signed short item_no)
 {
 	signed char tmp;
 
 	do {
-#if defined(__BORLANDC__)
-		((Bit8u*)host_readd(chest + 0xb))[item_no] = tmp = ((Bit8u*)host_readd(chest + 0xb))[item_no + 1];
-#else
-		host_writeb((Bit8u*)host_readd(chest + 0xb) + item_no,
-			tmp = host_readbs((Bit8u*)host_readd(chest + 0xb) + item_no + 1));
-#endif
+		chest->content[item_no] = tmp = chest->content[item_no + 1];
+
 		item_no++;
 
 	} while (tmp != -1);
@@ -327,7 +323,7 @@ void loot_chest(Bit8u *chest, char *text_non_empty, char *text_empty)
 				if (get_item(host_readb((Bit8u*)host_readd(chest + 0xb) + item_no), 1, 1))
 				{
 					/* got the item in inventory => remove from chest */
-					delete_chest_item(chest, item_no);
+					delete_chest_item((struct struct_chest*)chest, item_no);
 				} else {
 					/* group has not taken the item */
 					item_no = -2;
@@ -409,11 +405,11 @@ void seg092_06b4(signed short a1)
 
 			} else if (chest_ptr->mod) {
 
-				chest_ptr->open((Bit8u*)chest_ptr);
+				chest_ptr->open(chest_ptr);
 
 			} else if (chest_ptr->open) {
 
-				chest_ptr->open((Bit8u*)chest_ptr);
+				chest_ptr->open(chest_ptr);
 
 			} else if (chest_ptr->loot) {
 
@@ -458,7 +454,7 @@ void seg092_06b4(signed short a1)
 	}
 }
 
-void use_lockpicks_on_chest(Bit8u* chest_ptr)
+void use_lockpicks_on_chest(struct struct_chest* chest_ptr)
 {
 	signed short l_si;
 	signed short l_di;
@@ -470,36 +466,26 @@ void use_lockpicks_on_chest(Bit8u* chest_ptr)
 
 		if (l_si != -2) {
 
-			l_di = test_skill(hero, TA_SCHLOESSER, host_readbs(chest_ptr + 2));
+			l_di = test_skill(hero, TA_SCHLOESSER, ((struct struct_chest*)chest_ptr)->mod);
 
 			if (l_di == -99) {
+
 				/* unlucky, your lockpicks break... */
 
 				print_msg_with_first_hero(get_ttx(533));
 				or_ptr_bs(hero + (HERO_INVENTORY + INVENTORY_FLAGS) + SIZEOF_INVENTORY * l_si, 1); /* set 'broken' flag */
 
 				/* ... and you trigger the trap */
-#if !defined(__BORLANDC__)
-				if (t_map(chest_ptr, 7) != NULL) {
-					((treasure_trap)(t_map(chest_ptr, 7)))();
+				if (((struct struct_chest*)chest_ptr)->trap) {
+					((struct struct_chest*)chest_ptr)->trap();
 				}
-#else
-				if ((Bit8u*)host_readd(chest_ptr + 7)) {
-					((void (*)(void))((Bit8u*)host_readd(chest_ptr + 7)))();
-				}
-#endif
 
 			} else if (l_di <= 0) {
+
 				/* trigger the trap */
-#if !defined(__BORLANDC__)
-				if (t_map(chest_ptr, 7) != NULL) {
-					((treasure_trap)(t_map(chest_ptr, 7)))();
+				if (((struct struct_chest*)chest_ptr)->trap) {
+					((struct struct_chest*)chest_ptr)->trap();
 				}
-#else
-				if ((Bit8u*)host_readd(chest_ptr + 7)) {
-					((void (*)(void))((Bit8u*)host_readd(chest_ptr + 7)))();
-				}
-#endif
 
 			} else {
 				/* success */
@@ -507,27 +493,14 @@ void use_lockpicks_on_chest(Bit8u* chest_ptr)
 				add_hero_ap(hero, 1);
 
 
-#if !defined(__BORLANDC__)
-				if (t_map(chest_ptr, 11) != NULL)
-				{
-					(t_map(chest_ptr, 11))(chest_ptr);
+				if (((struct struct_chest*)chest_ptr)->loot) {
 
-					if (((treasure_trap)(t_map(chest_ptr, 7))) == chest_protected_heavy)
-					{
+					((struct struct_chest*)chest_ptr)->loot((Bit8u*)chest_ptr);
+
+					if (((struct struct_chest*)chest_ptr)->trap == chest_protected_heavy) {
 						add_hero_ap(hero, 5);
 					}
 				}
-#else
-				if ((Bit8u*)host_readd(chest_ptr + 11))
-				{
-					((void (*)(Bit8u*))((Bit8u*)host_readd(chest_ptr + 11)))(chest_ptr);
-
-					if ((Bit8u*)host_readd(chest_ptr + 7) == (Bit8u*)&chest_protected_heavy)
-					{
-						add_hero_ap(hero, 5);
-					}
-				}
-#endif
 
 				g_get_extra_loot = 1;
 			}
@@ -540,34 +513,24 @@ void use_lockpicks_on_chest(Bit8u* chest_ptr)
 	}
 }
 
-void use_key_on_chest(Bit8u* chest_ptr)
+void use_key_on_chest(struct struct_chest* chest)
 {
 	signed short key_pos;
-	Bit8u *hero;
-
-	hero = (Bit8u*)get_first_hero_available_in_group();
+	Bit8u *hero = (Bit8u*)get_first_hero_available_in_group();
 
 	/* the leader of the group must have the key */
-	if ((key_pos = get_item_pos(hero, host_readb(chest_ptr + 2))) != -1)
-	{
+	if ((key_pos = get_item_pos(hero, ((struct struct_chest*)chest)->key)) != -1) {
 
-		if (!inventory_broken(hero + HERO_INVENTORY + SIZEOF_INVENTORY * key_pos))
-		{
+		if (!inventory_broken(hero + HERO_INVENTORY + SIZEOF_INVENTORY * key_pos)) {
 
-#if defined(__BORLANDC__)
-			((void (*)(Bit8u*))((Bit8u*)host_readd(chest_ptr + 11)))(chest_ptr);
-#else
-			t_map(chest_ptr, 11)(chest_ptr);
-#endif
+			((struct struct_chest*)chest)->loot((Bit8u*)chest);
 
 			g_get_extra_loot = 1;
 		}
+
 	} else {
-#if defined(__BORLANDC__)
-		((void (*)(void))((Bit8u*)host_readd(chest_ptr + 7)))();
-#else
-		((treasure_trap)(t_map(chest_ptr, 7)))();
-#endif
+
+		((struct struct_chest*)chest)->trap();
 	}
 }
 
@@ -581,7 +544,7 @@ void use_key_on_chest(Bit8u* chest_ptr)
  *  These informations are stored in an array of type Bit8u[2*n+1]
  *  and are contained in the game state.
  */
-void loot_multi_chest(Bit8u *chest, char *msg)
+void loot_multi_chest(Bit8u *content, char *msg)
 {
 	unsigned short item_cnt;
 	signed short item_no;
@@ -595,13 +558,12 @@ void loot_multi_chest(Bit8u *chest, char *msg)
 	g_textbox_width = 7;
 
 	do {
-
 		item_no = 0;
-		while ((i = host_readb((item_no + item_no) + chest)) != 0xff) {
+		while ((i = content[(item_no + item_no)]) != 0xff) {
 
 			names[item_no][0] = '\0';
 
-			if ((item_cnt = chest[item_no + item_no + 1]) > 1)
+			if ((item_cnt = content[item_no + item_no + 1]) > 1)
 			{
 				my_itoa(item_cnt, names[item_no], 10);
 
@@ -621,14 +583,15 @@ void loot_multi_chest(Bit8u *chest, char *msg)
 				names[16], names[17], names[18], names[19]) - 1;
 
 			if (item_no != -2) {
+
 				item_no += item_no;
 
-				my_itoa(chest[item_no + 1], temp_str, 10);
+				my_itoa(content[item_no + 1], temp_str, 10);
 
 				len = strlen(temp_str);
 
 				do {
-					i = (item_cnt = chest[item_no + 1]) > 1 ? GUI_input(get_ttx(593), len) : item_cnt;
+					i = (item_cnt = content[item_no + 1]) > 1 ? GUI_input(get_ttx(593), len) : item_cnt;
 
 				} while (i < 0);
 
@@ -638,23 +601,25 @@ void loot_multi_chest(Bit8u *chest, char *msg)
 
 				if (i != 0) {
 
-					if (chest[item_no] == ITEM_DUCATS) {
+					if (content[item_no] == ITEM_DUCATS) {
+
 						add_party_money(i * 100L);
+
 					} else {
-						i = get_item(chest[item_no], 1, i);
+						i = get_item(content[item_no], 1, i);
 					}
 
 					if (i == item_cnt) {
 
 						do {
-							chest[item_no] = (unsigned char)(i = chest[item_no + 2]);
-							chest[item_no + 1] = chest[item_no + 3];
+							content[item_no] = (unsigned char)(i = content[item_no + 2]);
+							content[item_no + 1] = content[item_no + 3];
 							item_no += 2;
 
 						} while (i != 255);
 
 					} else if (i != 0) {
-						chest[item_no + 1] -= i;
+						content[item_no + 1] -= i;
 					} else {
 						item_no = -2;
 					}

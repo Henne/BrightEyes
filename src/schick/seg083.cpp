@@ -515,7 +515,7 @@ void DNG08_chest2_func3(Bit8u* chest)
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
-void DNG08_chest2_func1(Bit8u* chest)
+void DNG08_chest2_open(struct struct_chest* chest)
 {
 	if (!gs_dng08_chest2_looted)
 	{
@@ -523,22 +523,15 @@ void DNG08_chest2_func1(Bit8u* chest)
 		{
 			GUI_input(get_tx(27), 10);
 
-			if (!strcmp(g_text_input_buf, (char*)p_datseg + DNG08_STR_TAIRACH))
-			{
-#if defined(__BORLANDC__)
-			((void (*)(Bit8u*))((Bit8u*)host_readd((Bit8u*)(chest) + 11)))(chest);
-#else
-			t_map(chest, 11)(chest);
-#endif
+			if (!strcmp(g_text_input_buf, (char*)p_datseg + DNG08_STR_TAIRACH)) {
 
-			} else if ((Bit8u*)host_readd((Bit8u*)(chest) + 7) != 0)
-			{
-#if defined(__BORLANDC__)
-			((void (*)(void))((Bit8u*)host_readd((Bit8u*)(chest) + 7)))();
-#else
-			((treasure_trap)(t_map(chest, 7)))();
-#endif
+				chest->loot((Bit8u*)chest);
+
+			} else if (chest->trap) {
+
+				chest->trap();
 			}
+
 		} else {
 			GUI_output(get_tx(26));
 		}
@@ -547,17 +540,14 @@ void DNG08_chest2_func1(Bit8u* chest)
 	}
 }
 
-void DNG08_chest3_func1(Bit8u* chest)
+void DNG08_chest3_open(struct struct_chest* chest)
 {
-	Bit8u *hero;
+	Bit8u *hero = (Bit8u*)get_first_hero_available_in_group();
 
-	hero = (Bit8u*)get_first_hero_available_in_group();
-
-	if (get_first_hero_with_item(ITEM_KEY_BRONZE) != -1 ||
-		test_skill(hero, TA_SCHLOESSER, 5) > 0)
+	if (get_first_hero_with_item(ITEM_KEY_BRONZE) != -1 || test_skill(hero, TA_SCHLOESSER, 5) > 0)
 	{
-		if (!(gs_dng08_chest35_looted & 1))
-		{
+		if (!(gs_dng08_chest35_looted & 1)) {
+
 			GUI_output(get_tx(28));
 
 			add_party_money(8530L);
@@ -567,57 +557,35 @@ void DNG08_chest3_func1(Bit8u* chest)
 			GUI_output(get_ttx(522));
 		}
 	} else {
-#if defined(__BORLANDC__)
-			((void (*)(void))((Bit8u*)host_readd((Bit8u*)(chest) + 7)))();
-#else
-			((treasure_trap)(t_map(chest, 7)))();
-#endif
+		chest->trap();
 	}
 }
 
-void DNG08_chest4_func1(Bit8u* chest)
+void DNG08_chest4_open(struct struct_chest* chest)
 {
-	Bit8u *hero;
-	hero = (Bit8u*)get_first_hero_available_in_group();
+	Bit8u *hero = (Bit8u*)get_first_hero_available_in_group();
 
-	if (get_first_hero_with_item(ITEM_KEY_BRONZE) != -1 ||
-		test_skill(hero, TA_SCHLOESSER, 5) > 0)
-	{
-#if defined(__BORLANDC__)
-		((void (*)(Bit8u*))((Bit8u*)host_readd((Bit8u*)(chest) + 11)))(chest);
-#else
-		t_map(chest, 11)(chest);
-#endif
+	if (get_first_hero_with_item(ITEM_KEY_BRONZE) != -1 || test_skill(hero, TA_SCHLOESSER, 5) > 0) {
+
+		chest->loot((Bit8u*)chest);
 
 	} else {
-#if defined(__BORLANDC__)
-		((void (*)(void))((Bit8u*)host_readd((Bit8u*)(chest) + 7)))();
-#else
-		((treasure_trap)(t_map(chest, 7)))();
-#endif
+
+		chest->trap();
 	}
 }
 
-void DNG08_chest5_func1(Bit8u* chest)
+void DNG08_chest5_open(struct struct_chest* chest)
 {
-	Bit8u *hero;
-	hero = (Bit8u*)get_first_hero_available_in_group();
+	Bit8u *hero = (Bit8u*)get_first_hero_available_in_group();
 
-	if (get_first_hero_with_item(ITEM_KEY_BRONZE) != -1 ||
-		test_skill(hero, TA_SCHLOESSER, 5) > 0)
-	{
-#if defined(__BORLANDC__)
-		((void (*)(Bit8u*))((Bit8u*)host_readd((Bit8u*)(chest) + 11)))(chest);
-#else
-		t_map(chest, 11)(chest);
-#endif
+	if (get_first_hero_with_item(ITEM_KEY_BRONZE) != -1 || test_skill(hero, TA_SCHLOESSER, 5) > 0) {
+
+		chest->loot((Bit8u*)chest);
 
 	} else {
-#if defined(__BORLANDC__)
-		((void (*)(void))((Bit8u*)host_readd((Bit8u*)(chest) + 7)))();
-#else
-		((treasure_trap)(t_map(chest, 7)))();
-#endif
+
+		chest->trap();
 	}
 }
 

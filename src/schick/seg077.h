@@ -15,11 +15,11 @@ void DNG01_chest5_x1(Bit8u*);
 /* 0x30 */
 void DNG01_chest7_x2(Bit8u*);
 /* 0x3e */
-void DNG01_chest7_x1(Bit8u*);
+void DNG01_chest7_open(struct struct_chest*);
 /* 0x43 */
 void DNG01_chest0_x1(Bit8u*);
 /* 0x48 */
-void DNG01_chest6_x1(Bit8u*);
+void DNG01_chest6_open(struct struct_chest*);
 /* 0x4d */
 void DNG01_chest6_x2(void);
 /* 0x52 */

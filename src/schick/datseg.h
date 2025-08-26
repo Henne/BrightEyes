@@ -140,10 +140,16 @@ struct struct_shopping_cart {
 
 struct struct_chest {
 	signed short pos;
-	signed char mod;
-	void (*open)(Bit8u*);
+	union {
+		signed char mod;
+		unsigned char key;
+	};
+	void (*open)(struct struct_chest*);
 	void (*trap)(void);
-	void (*loot)(Bit8u*);
+	union {
+		void (*loot)(Bit8u*);
+		Bit8u* content;
+	};
 	signed short ap;
 	unsigned int money; //TODO: should become Int32 instead
 	signed short food;

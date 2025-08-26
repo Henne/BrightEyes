@@ -5,15 +5,15 @@ namespace M302de {
 /* 0x20 */
 void DNG04_corpse0_chest(Bit8u*);
 /* 0x25 */
-void DNG04_corpse0(Bit8u*);
+void DNG04_corpse0_open(struct struct_chest*);
 /* 0x2a */
 void DNG04_corpse1_chest(Bit8u*);
 /* 0x2f */
-void DNG04_corpse1(Bit8u*);
+void DNG04_corpse1_open(struct struct_chest*);
 /* 0x34 */
 void DNG04_corpse2_chest(Bit8u*);
 /* 0x39 */
-void DNG04_corpse2(Bit8u*);
+void DNG04_corpse2_open(struct struct_chest*);
 /* 0x3e */
 signed short DNG04_handler(void);
 /* 0x43 */

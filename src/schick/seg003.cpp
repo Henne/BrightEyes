@@ -197,12 +197,9 @@ void loot_corpse(Bit8u* chest_ptr, char *text, Bit8s *flag)
 		g_textbox_width = 3;
 
 		if (answer == 0) {
+
 			/* examine the corpse */
-#if !defined(__BORLANDC__)
-			(t_map(chest_ptr, 11))(chest_ptr);
-#else
-			((void(*)(Bit8u*))(Bit8u*)host_readd(chest_ptr + 0xb))(chest_ptr);
-#endif
+			((struct struct_chest*)chest_ptr)->loot((Bit8u*)chest_ptr);
 
 			if (!(*flag))	{
 
@@ -210,6 +207,7 @@ void loot_corpse(Bit8u* chest_ptr, char *text, Bit8s *flag)
 				*flag = 1;
 				/* Boron - 20 */
 				gs_gods_estimation[GOD_BORON] -= 20L;
+
 			}
 
 		} else if (answer == 1) {

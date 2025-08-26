@@ -543,13 +543,11 @@ void DNG15_rotten_clothes_chest(Bit8u* chest)
 void DNG15_smelling_chest(Bit8u* chest)
 {
 	Bit8u *hero;
-	if (GUI_bool(get_tx(35)))
-	{
+
+	if (GUI_bool(get_tx(35))) {
 		hero = get_hero(get_random_hero());
 
-		sprintf(g_dtp2,
-			get_tx(36),
-			(char*)hero + HERO_NAME2);
+		sprintf(g_dtp2,	get_tx(36), (char*)hero + HERO_NAME2);
 		GUI_output(g_dtp2);
 
 		sub_hero_le(hero, 4);

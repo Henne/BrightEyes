@@ -5,7 +5,7 @@ namespace M302de {
 /* 0x20 */
 void DNG10_chest0_x2(Bit8u*);
 /* 0x25 */
-void DNG10_chest0_x1(Bit8u*);
+void DNG10_chest0_open(struct struct_chest*);
 /* 0x2a */
 void DNG10_chest1_x1(Bit8u*);
 /* 0x2f */

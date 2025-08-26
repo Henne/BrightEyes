@@ -67,7 +67,7 @@ void tevent_067(void)
 
 			if (!gs_tevent067_flag && count >= 3) {
 
-				loot_multi_chest((Bit8u*)&g_tevent067_chest, get_tx2(96));
+				loot_multi_chest(g_tevent067_chest, get_tx2(96));
 
 				GUI_output(get_tx2(97));
 
@@ -415,13 +415,14 @@ void tevent_073(void)
 
 		do {
 			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(42), 2, get_tx2(43), get_tx2(44));
+
 		} while (answer == -1);
 
 		if (answer == 1) {
 
 			GUI_dialog_na(0, get_tx2(45));
 
-			loot_multi_chest((Bit8u*)&gs_tevent073_corpse, get_tx2(105));
+			loot_multi_chest(gs_tevent073_corpse, get_tx2(105));
 
 			gs_tevent073_flag = 1;
 		}
