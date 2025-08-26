@@ -796,10 +796,10 @@ signed short open_and_seek_dat(unsigned short fileindex)
 		lseek(fd, start, SEEK_SET);
 
 		/* save the offset of the desired file */
-		ds_writed(ARCHIVE_FILE_OFFSET, start);
+		g_archive_file_offset = start;
 
 		/* save the length of the desired file in 2 variables */
-		ds_writed(ARCHIVE_FILE_LENGTH, (g_archive_file_remaining = end - start));
+		g_archive_file_length = g_archive_file_remaining = end - start;
 	}
 
 	return fd;
@@ -807,7 +807,7 @@ signed short open_and_seek_dat(unsigned short fileindex)
 
 Bit32u get_readlength2(signed short index)
 {
-	return index != -1 ? ds_readd(ARCHIVE_FILE_LENGTH) : 0;
+	return index != -1 ? g_archive_file_length : 0;
 }
 
 /**
@@ -847,9 +847,9 @@ void seek_archive_file(Bit16u handle, Bit32s off, ...)
 
 	Bit32u file_off;
 
-	g_archive_file_remaining = (Bit32s)(ds_readd(ARCHIVE_FILE_LENGTH) - off);
+	g_archive_file_remaining = g_archive_file_length - off;
 
-	file_off = ds_readd(ARCHIVE_FILE_OFFSET) + off;
+	file_off = g_archive_file_offset + off;
 
 	lseek(handle, file_off, SEEK_SET);
 
@@ -900,11 +900,11 @@ signed short open_temp_file(unsigned short index)
 	}
 
 	/* get the length of the file */
-	ds_writed(ARCHIVE_FILE_LENGTH, (g_archive_file_remaining = lseek(handle, 0, 2)));
+	g_archive_file_length = g_archive_file_remaining = lseek(handle, 0, 2);
 	/* seek to start */
 	lseek(handle, 0, 0);
 
-	ds_writed(ARCHIVE_FILE_OFFSET, 0);
+	g_archive_file_offset = 0;
 
 	return handle;
 }
@@ -1310,13 +1310,10 @@ void mouse_irq_init(signed short irq_no, void interrupt *(isr))
 	l1 = 12;
 	l4 = irq_no;
 
-	/* TODO : keep the numbers here until we can build the binary */
-/*	l5 = FP_OFF(call_mouse_isr);
-	l6 = FP_SEG(call_mouse_isr); */
-	l5 = 0x1742;
-	l6 = 0x51e;
+	l5 = FP_OFF(call_mouse_isr);
+	l6 = FP_SEG(call_mouse_isr);
 
-	ds_writed(MOUSE_HANDLER_BAK, (Bit32u)getvect(0x78));
+	g_mouse_handler_bak = getvect(0x78);
 	setvect(0x78, (void interrupt far (*)(...))isr);
 
 	mouse_action((Bit8u*)&l1, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5, (Bit8u*)&l6);
@@ -1335,7 +1332,7 @@ void mouse_reset_ehandler(void)
 	signed short l4;
 	signed short l5;
 
-	setvect(0x78, (void interrupt far (*)(...))ds_readd(MOUSE_HANDLER_BAK));
+	setvect(0x78, g_mouse_handler_bak);
 
 	l1 = 12;
 	l3 = 0;
@@ -1356,6 +1353,7 @@ void mouse_reset_ehandler(void)
  */
 void mouse_move_cursor(signed short x, signed short y)
 {
+#if defined(__BORLANDC__)
 	signed short l1 = 4;
 	signed short l3;
 	signed short l4 = x;
@@ -1363,8 +1361,10 @@ void mouse_move_cursor(signed short x, signed short y)
 	signed short l6;
 
 	mouse_action((Bit8u*)&l1, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5, (Bit8u*)&l6);
+#endif
 }
 
+#if defined(__BORLANDC__)
 /* unused */
 void seg002_1838(signed short a1, signed short a2, signed short a3, signed short a4)
 {
@@ -1388,12 +1388,13 @@ void seg002_1880(signed short a1)
 
 	mouse_action((Bit8u*)&l1, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5, (Bit8u*)&l6);
 }
+#endif
 
 
 /**
  * \brief   makes a mouse cursor from a selected item
  *
- * \param   p           pointer to the icon of the item
+ * \param   p pointer to the icon of the item
  */
 void make_ggst_cursor(Bit8u *icon)
 {
@@ -2216,14 +2217,14 @@ void do_timers(void)
 	/* inc day timer */
 	gs_day_timer += 1L;
 
-	if (!ds_readbs(FREEZE_TIMERS)) {
-		/* FREEZE_TIMERS is set in timewarp(..) and timewarp_until_time_of_day(..) for efficiency reasons,
+	if (!g_freeze_timers) {
+		/* g_freeze_timers is set in timewarp(..) and timewarp_until_time_of_day(..) for efficiency reasons,
 		 *  where certain timers are updated separately in a single step (instead of many 1-tick update calls). */
 		sub_ingame_timers(1);
 		sub_mod_timers(1);
 	}
 
-	if (!ds_readbs(FREEZE_TIMERS)) {
+	if (!g_freeze_timers) {
 
 		/* set day timer to pm */
 		/* TODO: afternoon is useless */
@@ -3037,7 +3038,7 @@ void herokeeping(void)
 		}
 
 		/* print hero message */
-		if (gs_food_message[i] && !g_dialogbox_lock &&	!g_in_fight && !ds_readbs(FREEZE_TIMERS))
+		if (gs_food_message[i] && !g_dialogbox_lock &&	!g_in_fight && !g_freeze_timers)
 		{
 
 			if ((host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
@@ -3271,7 +3272,8 @@ void seg002_37c4(void)
 		g_current_town_over = 1;
 	}
 
-	ds_writew(SPINLOCK_FLAG, 0);
+	g_spinlock_flag = 0;
+
 	g_map_townmark_state++;
 	g_map_townmark_state %= 5;
 
@@ -3280,9 +3282,9 @@ void seg002_37c4(void)
 
 void set_and_spin_lock(void)
 {
-	ds_writew(SPINLOCK_FLAG, 1);
+	g_spinlock_flag = 1;
 
-	while (ds_readw(SPINLOCK_FLAG)) {
+	while (g_spinlock_flag) {
 #if !defined(__BORLANDC__)
 		/* deadlock avoidance */
 		static int cnt = 0;
@@ -3401,7 +3403,7 @@ void timewarp(Bit32s time)
 	td_bak = g_timers_disabled;
 	g_timers_disabled = 0;
 
-	ds_writeb(FREEZE_TIMERS, 1);
+	g_freeze_timers = 1;
 	/* this deactivates the function calls sub_ingame_timers(1); and sub_mod_timers(1); in do_timers(); within the following loop.
 	 * these timers will be dealt with in a single call sub_ingame_timers(time); and sub_mod_timers(time); for efficiency reasons.
 	 */
@@ -3496,7 +3498,7 @@ void timewarp(Bit32s time)
 #endif
 
 	/* restore variables */
-	ds_writeb(FREEZE_TIMERS, 0);
+	g_freeze_timers = 0;
 	g_timers_disabled = td_bak;
 }
 
@@ -3530,7 +3532,7 @@ void timewarp_until_time_of_day(Bit32s time)
 	td_bak = g_timers_disabled;
 	g_timers_disabled = 0;
 
-	ds_writeb(FREEZE_TIMERS, 1);
+	g_freeze_timers = 1;
 
 	do {
 		do_timers();
@@ -3573,7 +3575,7 @@ void timewarp_until_time_of_day(Bit32s time)
 	 * */
 
 	/* restore variables */
-	ds_writeb(FREEZE_TIMERS, 0);
+	g_freeze_timers = 0;
 	g_timers_disabled = td_bak;
 #endif
 }

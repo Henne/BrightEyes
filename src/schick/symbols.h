@@ -1310,14 +1310,14 @@
 //#define GFXBUF_WAIT_KEYPRESS            (0xbc63)    /* char[100] */
 //#define SPLASH_AE                       (0xbcc7)    /* long */
 //#define SPLASH_LE                       (0xbccb)    /* long */
-#define HERO_SPLASH_TIMER               (0xbccf)    /* signed char[7] */
-#define SPINLOCK_FLAG                   (0xbcd6)    /* unsigned short; {0,1} */
+//#define HERO_SPLASH_TIMER               (0xbccf)    /* signed char[7] */
+//#define SPINLOCK_FLAG                   (0xbcd6)    /* unsigned short; {0,1} */
 //#define MAP_TOWNMARK_STATE              (0xbcd8)    /* unsigned short; {0, 1, 2, 3, 4} */
-#define FREEZE_TIMERS                   (0xbcda)    /* unsigned char; {0,1} */
-#define MOUSE_HANDLER_BAK               (0xbcdb)    /* unsigned long */
-#define ARCHIVE_FILE_OFFSET             (0xbcdf)    /* unsigned long; start offset in SCHICK.DAT */
+//#define FREEZE_TIMERS                   (0xbcda)    /* unsigned char; {0,1} */
+//#define MOUSE_HANDLER_BAK               (0xbcdb)    /* unsigned long */
+//#define ARCHIVE_FILE_OFFSET             (0xbcdf)    /* unsigned long; start offset in SCHICK.DAT */
 //#define ARCHIVE_FILE_REMAINING          (0xbce3)    /* unsigned long; flen - off */
-#define ARCHIVE_FILE_LENGTH             (0xbce7)    /* unsigned long */
+//#define ARCHIVE_FILE_LENGTH             (0xbce7)    /* unsigned long */
 #define AIL_DIGI_DRIVER_BUF2            (0xbceb)    /* Bit8u*; to buffer of size 5016 */
 #define AIL_VOC_BUFFER                  (0xbcef)    /* Bit8u* */
 #define AIL_DIGI_DRIVER_BUF             (0xbcf3)    /* Bit8u* */

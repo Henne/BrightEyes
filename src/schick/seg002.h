@@ -77,8 +77,10 @@ void mouse_irq_init(signed short, void interrupt *);
 #endif
 void mouse_reset_ehandler(void);
 void mouse_move_cursor(signed short, signed short);
+#if defined(__BORLANDC__)
 void seg002_1838(signed short, signed short, signed short, signed short);
 void seg002_1880(signed short);
+#endif
 void make_ggst_cursor(Bit8u *icon);
 void update_mouse_cursor(void);
 void refresh_screen_size(void);

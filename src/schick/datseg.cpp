@@ -4590,7 +4590,7 @@ signed short (*g_dng_handlers[15])(void) = {
 //long g_dng_handlers[15] = { 0x13d10020, 0x13d70048, 0x13dd0066, 0x13e4003e, 0x13e40043, 0x13e9002a, 0x13ed0020, 0x13f00057, 0x13f60048, 0x13fc003e, 0x14010066, 0x1417002a, 0x141b0043, 0x14080020, 0x1411003e }; // ds:0x92d6; Bit8u*
 signed short g_dng_level_changed = 0; // ds:0x9312
 struct struct_chest g_dng01_specialchests[9] = {
-	{ 0x0c09, 0xdb, use_key_on_chest, chest_protected_normal, DNG01_chest0_x1, 0, 0, 0 }, //TODO: DNG01_chest0_x1
+	{ 0x0c09,  -37, use_key_on_chest, chest_protected_normal, DNG01_chest0_x1, 0, 0, 0 }, //TODO: DNG01_chest0_x1
 	{ 0x1508,    2, use_lockpicks_on_chest, chest_closed, DNG01_chest1_x1, 0, 0, 0 },
 	{ 0x1e08,    3, use_lockpicks_on_chest, chest_protected_heavy, DNG01_chest2_x1, 0, 0, 0 },
 	{ 0x3505,    0, NULL, NULL, DNG01_chest3_x1, 0, 0, 0 },
@@ -6382,13 +6382,15 @@ void *g_ail_digi_driver_descr; // ds:0xbcf7
 void *g_ail_digi_driver_buf; // ds:0xbcf3
 void *g_ail_voc_buffer; // ds:0xbcef
 void *g_ail_digi_driver_buf2; // ds:0xbceb, to buffer of size 5016
-unsigned long g_archive_file_length; // ds:0xbce7
+Bit32s g_archive_file_length; // ds:0xbce7
 Bit32s g_archive_file_remaining; // ds:0xbce3, flen - off
-unsigned long g_archive_file_offset; // ds:0xbcdf, start offset in SCHICK.DAT
-unsigned long g_mouse_handler_bak; // ds:0xbcdb
-unsigned char g_freeze_timers; // ds:0xbcda
+Bit32s g_archive_file_offset; // ds:0xbcdf, start offset in SCHICK.DAT
+#if defined(__BORLANDC__)
+void interrupt far (*g_mouse_handler_bak)(...); // ds:0xbcdb; seg002
+#endif
+signed char g_freeze_timers; // ds:0xbcda
 signed short g_map_townmark_state; // ds:0xbcd8
-unsigned short g_spinlock_flag; // ds:0xbcd6
+signed short g_spinlock_flag; // ds:0xbcd6
 Bit8u g_hero_splash_timer[7]; // ds:0xbccf
 unsigned char *g_splash_le; // ds:0xbccb
 unsigned char *g_splash_ae; // ds:0xbcc7

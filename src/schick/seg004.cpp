@@ -197,7 +197,7 @@ void interrupt timer_isr(void)
 		--g_fig_star_timer;
 	}
 
-	if (!ds_readbs(FREEZE_TIMERS)) {
+	if (!g_freeze_timers) {
 		do_timers();
 	}
 
