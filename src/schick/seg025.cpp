@@ -732,7 +732,7 @@ void leave_location(void)
 	/* rotate party by 180 degrees */
 	gs_direction = ((gs_direction + 2) % 4);
 
-	set_to_ff();
+	clear_menu_icons();
 
 	g_request_refresh = g_special_screen = 1;
 }

@@ -3920,7 +3920,7 @@ void to_EMS(signed short handle, Bit8u* src, Bit32s bytes)
 #endif
 }
 
-void set_to_ff(void)
+void clear_menu_icons(void)
 {
 	signed short i;
 

@@ -138,7 +138,7 @@ Bit32u swap_u32_unused(Bit32u);
 signed short alloc_EMS(Bit32s);
 void from_EMS(Bit8u*, signed short, Bit32s);
 void to_EMS(signed short, Bit8u*, Bit32s);
-void set_to_ff(void);
+void clear_menu_icons(void);
 void draw_loc_icons(signed short, ...);
 signed short mod_day_timer(signed short);
 void draw_compass(void);

@@ -389,7 +389,7 @@ void init_game_state(void)
 	g_textcolor_fg[2] = 0xc9;
 	g_textcolor_fg[3] = 0xca;
 
-	set_to_ff();
+	clear_menu_icons();
 
 	for (i = 0; i < 254; i++) {
 		g_market_itemsaldo_table[i] = 0;
