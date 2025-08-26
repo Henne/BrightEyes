@@ -975,9 +975,9 @@
 #define GFXTAB_SHOTBOLT_NVFNO           (0x61f8)    /* signed short[6]; { 0, 4, 8, 12, 16, 20 } */
 #define GFXTAB_SHOTBOLT_HEIGHT          (0x6204)    /* signed short[6]; { 15, 15, 15, 5, 5, 8 } */
 #define GFXTAB_SHOTBOLT_WIDTH           (0x6210)    /* signed short[6]; { 25, 25, 25, 9, 9, 16 } */
-#define ANITAB_SHOTBOLT_DATA            (0x621c)    /* char[168]; arrays, each terminated by -1 */
-#define ANITAB_SHOTBOLT_INDEX2          (0x62c4)    /* Bit8u*[24]; 6 Bit8u* arrays of length 4 (viewdir) */
-#define ANITAB_SHOTBOLT_INDEX           (0x6324)    /* Bit8u*[6] */
+//#define ANITAB_SHOTBOLT_DATA            (0x621c)    /* char[168]; arrays, each terminated by -1 */
+//#define ANITAB_SHOTBOLT_INDEX2          (0x62c4)    /* Bit8u*[24]; 6 Bit8u* arrays of length 4 (viewdir) */
+//#define ANITAB_SHOTBOLT_INDEX           (0x6324)    /* Bit8u*[6] */
 //#define ANITAB_SPELL_NVFNO              (0x633c)    /* signed char[2]; { 9, 27 } */
 //#define ANITAB_SPELL_OX                 (0x633e)    /* signed short[2]; { 0, 0 } */
 //#define ANITAB_SPELL_OY                 (0x6342)    /* signed short[2]; { 0, 0 } */

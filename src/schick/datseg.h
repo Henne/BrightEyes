@@ -1019,6 +1019,8 @@ extern const signed short g_gfxtab_obj_offset_y[63];	//ds:0x6060; seg032, seg040
 extern signed short g_force_weapons[9];		//ds:0x615c; seg041
 extern signed short g_knive_weapons[5];		//ds:0x616e; seg041
 
+extern signed char **g_anitab_shotbolt_index[6];	//ds:0x6324; seg045
+
 extern signed short g_anitab_spell_ox[2];	//ds:0x633e; seg045
 extern signed short g_anitab_spell_oy[2];	//ds:0x6342; seg045
 extern signed char  g_anitab_spell_nvfno[2];	//ds:0x634c; seg045
