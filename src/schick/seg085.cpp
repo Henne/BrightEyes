@@ -430,10 +430,13 @@ void DNG10_chest0_open(struct struct_chest* chest)
 
 void DNG10_chest0_x2(Bit8u* chest)
 {
-	Bit8u* ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng10_chest0_content);
-	loot_chest((Bit8u*)(chest), get_tx(4), get_tx(5));
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
+	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
+
+	((struct struct_chest*)chest)->content = gs_dng10_chest0_content;
+
+	loot_chest((struct struct_chest*)chest, get_tx(4), get_tx(5));
+
+	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
 void DNG10_chest1_x1(Bit8u* chest)

@@ -24,7 +24,7 @@ void chest_fulminictus(void);
 void loot_simple_chest(Bit8u*);
 
 /* 0x43 */
-void loot_chest(Bit8u*, char*, char*);
+void loot_chest(struct struct_chest*, char*, char*);
 
 /* 0x48 */
 void seg092_06b4(signed short);

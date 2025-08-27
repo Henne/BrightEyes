@@ -643,12 +643,13 @@ void DNG02_chest06_open(struct struct_chest* chest)
 
 void DNG02_chest06_func3(Bit8u* chest)
 {
-	Bit8u* ptr_bak;
+	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
-	ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng02_chest06_content);
-	loot_chest((Bit8u*)(chest), get_tx(20), get_tx(21));
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
+	((struct struct_chest*)chest)->content = gs_dng02_chest06_content;
+
+	loot_chest((struct struct_chest*)chest, get_tx(20), get_tx(21));
+
+	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
 /**

@@ -203,9 +203,9 @@ void tevent_014(void)
 
 void tevent_014_chest(Bit8u* chest)
 {
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)&gs_tevent014_chest);
+	((struct struct_chest*)chest)->content = gs_tevent014_chest;
 
-	loot_chest((Bit8u*)(chest), get_tx2(47), get_tx2(48));
+	loot_chest((struct struct_chest*)chest, get_tx2(47), get_tx2(48));
 }
 
 void tevent_015(void)

@@ -283,14 +283,14 @@ void delete_chest_item(struct struct_chest *chest, signed short item_no)
  * \param   text_non_empty shown text if chest is not empty
  * \param   text_empty  shown text if chest is empty
  */
-void loot_chest(Bit8u *chest, char *text_non_empty, char *text_empty)
+void loot_chest(struct struct_chest *chest, char *text_non_empty, char *text_empty)
 {
 	signed short item_no;
 	signed short item_id;
 	signed short tw_bak;
 	char names[20][20];
 
-	host_writeb(chest + 0x2, 0);
+	chest->key = 0;
 
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
@@ -299,7 +299,7 @@ void loot_chest(Bit8u *chest, char *text_non_empty, char *text_empty)
 		item_no = 0;
 
 		/* write the names of the items in the chest into names[] */
-		while ((item_id = host_readb((Bit8u*)host_readd(chest + 0x0b) + item_no)) != (signed short)0x00ff) {
+		while ((item_id = chest->content[item_no]) != 0xff) {
 
 			strcpy(names[item_no++], GUI_name_plural(0, get_itemname(item_id)));
 		}
@@ -319,11 +319,12 @@ void loot_chest(Bit8u *chest, char *text_non_empty, char *text_empty)
 						names[16], names[17], names[18], names[19]) - 1;
 
 			if (item_no != -2) {
+
 				/* if not pressed ESC */
-				if (get_item(host_readb((Bit8u*)host_readd(chest + 0xb) + item_no), 1, 1))
-				{
+				if (get_item(chest->content[item_no], 1, 1)) {
+
 					/* got the item in inventory => remove from chest */
-					delete_chest_item((struct struct_chest*)chest, item_no);
+					delete_chest_item(chest, item_no);
 				} else {
 					/* group has not taken the item */
 					item_no = -2;
