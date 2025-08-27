@@ -514,7 +514,7 @@ void DNG_oberorken_chest(Bit8u* chest)
 
 	host_writed((Bit8u*)(chest) + 0x0b, (Bit32u)&gs_dng12_chest1_content);
 
-	loot_simple_chest((Bit8u*)(chest));
+	loot_simple_chest((struct struct_chest*)chest);
 
 	host_writed((Bit8u*)(chest) + 0x0b, (Bit32u)ptr_bak);
 }

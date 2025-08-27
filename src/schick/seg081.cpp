@@ -464,7 +464,7 @@ void DNG06_chest1(Bit8u* chest)
 
 	ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng06_chest1_content);
-	loot_simple_chest((Bit8u*)(chest));
+	loot_simple_chest((struct struct_chest*)chest);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 

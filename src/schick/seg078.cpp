@@ -551,7 +551,7 @@ void DNG02_chest00_func3(Bit8u* chest)
 
 	ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng02_chest00_content);
-	loot_simple_chest((Bit8u*)(chest));
+	loot_simple_chest((struct struct_chest*)chest);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
@@ -561,7 +561,7 @@ void DNG02_chest01_func3(Bit8u* chest)
 
 	ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng02_chest01_content);
-	loot_simple_chest((Bit8u*)(chest));
+	loot_simple_chest((struct struct_chest*)chest);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
@@ -571,7 +571,7 @@ void DNG02_chest02_func3(Bit8u* chest)
 
 	ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng02_chest02_content);
-	loot_simple_chest((Bit8u*)(chest));
+	loot_simple_chest((struct struct_chest*)chest);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
@@ -581,7 +581,7 @@ void DNG02_chest03_func3(Bit8u* chest)
 
 	ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng02_chest03_content);
-	loot_simple_chest((Bit8u*)(chest));
+	loot_simple_chest((struct struct_chest*)chest);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 
@@ -632,7 +632,7 @@ void DNG02_chest05_func3(Bit8u* chest)
 
 	ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng02_chest05_content);
-	loot_simple_chest((Bit8u*)(chest));
+	loot_simple_chest((struct struct_chest*)chest);
 	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
 }
 

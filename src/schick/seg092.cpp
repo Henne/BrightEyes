@@ -203,7 +203,7 @@ void chest_fulminictus(void)
  *
  * \param   chest       pointer to the chest
  */
-void loot_simple_chest(Bit8u *chest)
+void loot_simple_chest(struct struct_chest *chest)
 {
 	signed short item_no;
 	signed short item_id;
@@ -213,19 +213,20 @@ void loot_simple_chest(Bit8u *chest)
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 
-	host_writeb(chest + 0x2, 0);
+	((struct struct_chest*)chest)->key = 0;
 
 	do {
 
 		item_no = 0;
 
 		/* write the names of the items in the chest into names[] */
-		while((item_id = host_readb((Bit8u*)host_readd(chest + 0x0b) + item_no)) != (signed short)0x00ff) {
+		while((item_id = ((struct struct_chest*)chest)->content[item_no]) != 0xff) {
 
 			strcpy(names[item_no++], GUI_name_plural(0, get_itemname(item_id)));
 		}
 
 		if (item_no == 0) {
+
 			/* this chest is empty */
 			GUI_output(get_ttx(522));
 			break;
@@ -240,9 +241,10 @@ void loot_simple_chest(Bit8u *chest)
 						names[16], names[17], names[18], names[19]) - 1;
 
 			if (item_no != -2) {
+
 				/* if not pressed ESC */
-				if (get_item(host_readb((Bit8u*)host_readd(chest + 0xb) + item_no), 1, 1))
-				{
+				if (get_item(((struct struct_chest*)chest)->content[item_no], 1, 1)) {
+
 					/* got the item in inventory => remove from chest */
 					delete_chest_item((struct struct_chest*)chest, item_no);
 				} else {

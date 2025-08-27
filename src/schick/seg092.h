@@ -21,7 +21,7 @@ void chest_cursed(void);
 void chest_fulminictus(void);
 
 /* 0x3e */
-void loot_simple_chest(Bit8u*);
+void loot_simple_chest(struct struct_chest*);
 
 /* 0x43 */
 void loot_chest(struct struct_chest*, char*, char*);
