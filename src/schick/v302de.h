@@ -316,18 +316,6 @@ static inline Bit32u ds_writed(unsigned short offs, Bit32u val) {
 	return val;
 }
 
-static inline Bit16s ds_inc_ws(unsigned short offs) {
-	return ++*(Bit16s*)(p_datseg + offs);
-}
-
-static inline Bit16s ds_dec_ws(unsigned short offs) {
-	return --*(Bit16s*)(p_datseg + offs);
-}
-
-static inline Bit16s ds_and_ws(unsigned short offs, unsigned short val) {
-	return *(Bit16s*)(p_datseg + offs) &= val;
-}
-
 /**
  * \brief mark informer only as known iff unknown
  * \param informer the index of the informer
