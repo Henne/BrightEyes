@@ -508,15 +508,13 @@ void DNG_clear_corridor(Bit8s *flag)
 
 void DNG_oberorken_chest(Bit8u* chest)
 {
-	Bit8u* ptr_bak;
+	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
-	ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 0x0b);
-
-	host_writed((Bit8u*)(chest) + 0x0b, (Bit32u)&gs_dng12_chest1_content);
+	((struct struct_chest*)chest)->content = gs_dng12_chest1_content;
 
 	loot_simple_chest((struct struct_chest*)chest);
 
-	host_writed((Bit8u*)(chest) + 0x0b, (Bit32u)ptr_bak);
+	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
 /**

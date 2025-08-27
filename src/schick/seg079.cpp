@@ -399,52 +399,57 @@ signed short DNG03_handler(void)
 
 void DNG03_chest00_func3(Bit8u* chest)
 {
-        Bit8u* ptr_bak;
+        Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
-        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-        host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng03_chest00_content);
+        ((struct struct_chest*)chest)->content = gs_dng03_chest00_content;
+
         loot_simple_chest((struct struct_chest*)chest);
-        host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
+
+        ((struct struct_chest*)chest)->content = ptr_bak;
 }
 
 void DNG03_chest01_func3(Bit8u* chest)
 {
-        Bit8u* ptr_bak;
+        Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
-        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-        host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng03_chest01_content);
+        ((struct struct_chest*)chest)->content = gs_dng03_chest01_content;
+
         loot_simple_chest((struct struct_chest*)chest);
-        host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
+
+        ((struct struct_chest*)chest)->content = ptr_bak;
 }
 
 void DNG03_chest02_func3(Bit8u* chest)
 {
-        Bit8u* ptr_bak;
+        Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
-        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-        host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng03_chest02_content);
+        ((struct struct_chest*)chest)->content = gs_dng03_chest02_content;
+
         loot_simple_chest((struct struct_chest*)chest);
-        host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
+
+        ((struct struct_chest*)chest)->content = ptr_bak;
 }
 
 void DNG03_chest03_func3(Bit8u* chest)
 {
-        Bit8u* ptr_bak;
+        Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
-        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-        host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng03_chest03_content);
+        ((struct struct_chest*)chest)->content = gs_dng03_chest03_content;
+
         loot_simple_chest((struct struct_chest*)chest);
-        host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
+
+        ((struct struct_chest*)chest)->content = ptr_bak;
 }
 
 void DNG03_chest04_func3(Bit8u* chest)
 {
-        Bit8u* ptr_bak;
+        Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
-        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-        host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng03_chest04_content);
+        ((struct struct_chest*)chest)->content = gs_dng03_chest04_content;
+
         loot_simple_chest((struct struct_chest*)chest);
-        host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
+
+        ((struct struct_chest*)chest)->content = ptr_bak;
 }
 
 void DNG03_chest05_func3(Bit8u*)
@@ -466,42 +471,46 @@ void DNG03_chest05_func3(Bit8u*)
 
 void DNG03_chest06_func3(Bit8u* chest)
 {
-        Bit8u* ptr_bak;
+        Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
-        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-        host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng03_chest06_content);
+        ((struct struct_chest*)chest)->content = gs_dng03_chest06_content;
+
         loot_simple_chest((struct struct_chest*)chest);
-        host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
+
+        ((struct struct_chest*)chest)->content = ptr_bak;
 }
 
 void DNG03_chest07_func3(Bit8u* chest)
 {
-        Bit8u* ptr_bak;
+        Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
-        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-        host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng03_chest07_content);
+        ((struct struct_chest*)chest)->content = gs_dng03_chest07_content;
+
         loot_simple_chest((struct struct_chest*)chest);
-        host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
+
+        ((struct struct_chest*)chest)->content = ptr_bak;
 }
 
 void DNG03_chest08_func3(Bit8u* chest)
 {
-        Bit8u* ptr_bak;
+        Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
-        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-        host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng03_chest08_content);
+        ((struct struct_chest*)chest)->content = gs_dng03_chest08_content;
+
         loot_simple_chest((struct struct_chest*)chest);
-        host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
+
+        ((struct struct_chest*)chest)->content = ptr_bak;
 }
 
 void DNG03_chest09_func3(Bit8u* chest)
 {
-        Bit8u* ptr_bak;
+        Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
-        ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-        host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng03_chest09_content);
+        ((struct struct_chest*)chest)->content = gs_dng03_chest09_content;
+
         loot_simple_chest((struct struct_chest*)chest);
-        host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
+
+        ((struct struct_chest*)chest)->content = ptr_bak;
 }
 
 void DNG03_chest12_func3(Bit8u* chest)
@@ -527,10 +536,13 @@ void DNG03_chest12_func3(Bit8u* chest)
 	/* this chest can only be opened with a leader with 4 crystals */
 	if (crystals == 4)
 	{
-		ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-		host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng03_chest12_content);
+		ptr_bak = ((struct struct_chest*)chest)->content;
+
+		((struct struct_chest*)chest)->content = gs_dng03_chest12_content;
+
 		loot_simple_chest((struct struct_chest*)chest);
-		host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
+
+		((struct struct_chest*)chest)->content = ptr_bak;
 
 	} else {
 		DNG03_chest12_func2();

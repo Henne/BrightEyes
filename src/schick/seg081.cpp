@@ -460,12 +460,13 @@ void DNG06_fight_intro(signed short fight_id)
 
 void DNG06_chest1(Bit8u* chest)
 {
-	Bit8u* ptr_bak;
+	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
-	ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng06_chest1_content);
+	((struct struct_chest*)chest)->content = gs_dng06_chest1_content;
+
 	loot_simple_chest((struct struct_chest*)chest);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
+
+	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
 

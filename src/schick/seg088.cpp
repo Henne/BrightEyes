@@ -76,22 +76,24 @@ void DNG14_fight_intro(signed short fight_id)
 
 void DNG14_chest_x1(Bit8u* chest)
 {
-	Bit8u* ptr_bak;
+	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
-	ptr_bak = (Bit8u*)host_readd(chest + 11);
-	host_writed(chest + 11, (Bit32u)gs_dng14_chest_x1);
+	((struct struct_chest*)chest)->content = gs_dng14_chest_x1;
+
 	loot_simple_chest((struct struct_chest*)chest);
-	host_writed(chest + 11, (Bit32u)ptr_bak);
+
+	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
 void DNG14_chest_x2(Bit8u* chest)
 {
-	Bit8u* ptr_bak;
+	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
-	ptr_bak = (Bit8u*)host_readd(chest + 11);
-	host_writed(chest + 11, (Bit32u)gs_dng14_chest_x2);
+	((struct struct_chest*)chest)->content = gs_dng14_chest_x2;
+
 	loot_simple_chest((struct struct_chest*)chest);
-	host_writed(chest + 11, (Bit32u)ptr_bak);
+
+	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
 void DNG14_chest_x3(Bit8u* chest)
@@ -101,22 +103,24 @@ void DNG14_chest_x3(Bit8u* chest)
 
 void DNG14_chest_x4(Bit8u* chest)
 {
-	Bit8u* ptr_bak;
+	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
-	ptr_bak = (Bit8u*)host_readd(chest + 11);
-	host_writed(chest + 11, (Bit32u)gs_dng14_chest_x4);
+	((struct struct_chest*)chest)->content = gs_dng14_chest_x4;
+
 	loot_simple_chest((struct struct_chest*)chest);
-	host_writed(chest + 11, (Bit32u)ptr_bak);
+
+	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
 void DNG14_chest_x5(Bit8u* chest)
 {
-	Bit8u* ptr_bak;
+	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
-	ptr_bak = (Bit8u*)host_readd(chest + 11);
-	host_writed(chest + 11, (Bit32u)gs_dng14_chest_x5);
+	((struct struct_chest*)chest)->content = gs_dng14_chest_x5;
+
 	loot_simple_chest((struct struct_chest*)chest);
-	host_writed(chest + 11, (Bit32u)ptr_bak);
+
+	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
 void DNG14_chest_x6(Bit8u* chest)
@@ -125,10 +129,13 @@ void DNG14_chest_x6(Bit8u* chest)
 	unsigned char x;
 	unsigned char y;
 
-	ptr_bak = (Bit8u*)host_readd(chest + 11);
-	host_writed(chest + 11, (Bit32u)gs_dng14_chest_x6);
+	ptr_bak = ((struct struct_chest*)chest)->content;
+
+	((struct struct_chest*)chest)->content = gs_dng14_chest_x6;
+
 	loot_simple_chest((struct struct_chest*)chest);
-	host_writed(chest + 11, (Bit32u)ptr_bak);
+
+	((struct struct_chest*)chest)->content = ptr_bak;
 
 	if (gs_dng14_fullmap_flag) {
 
@@ -146,22 +153,24 @@ void DNG14_chest_x6(Bit8u* chest)
 
 void DNG14_chest_x7(Bit8u* chest)
 {
-	Bit8u* ptr_bak;
+	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
-	ptr_bak = (Bit8u*)host_readd(chest + 11);
-	host_writed(chest + 11, (Bit32u)gs_dng14_chest_x7);
+	((struct struct_chest*)chest)->content = (gs_dng14_chest_x7);
+
 	loot_simple_chest((struct struct_chest*)chest);
-	host_writed(chest + 11, (Bit32u)ptr_bak);
+
+	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
 void DNG14_chest_x8(Bit8u* chest)
 {
-	Bit8u* ptr_bak;
+	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
-	ptr_bak = (Bit8u*)host_readd(chest + 11);
-	host_writed(chest + 11, (Bit32u)gs_dng14_chest_x8);
+	((struct struct_chest*)chest)->content = (gs_dng14_chest_x8);
+
 	loot_simple_chest((struct struct_chest*)chest);
-	host_writed(chest + 11, (Bit32u)ptr_bak);
+
+	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
 void DNG14_chest_x9(void)

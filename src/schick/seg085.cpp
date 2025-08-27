@@ -441,34 +441,46 @@ void DNG10_chest0_x2(Bit8u* chest)
 
 void DNG10_chest1_x1(Bit8u* chest)
 {
-	Bit8u* ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng10_chest1_content);
+	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
+
+	((struct struct_chest*)chest)->content = gs_dng10_chest1_content;
+
 	loot_simple_chest((struct struct_chest*)chest);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
+
+	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
 void DNG10_chest2_x1(Bit8u* chest)
 {
-	Bit8u* ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng10_chest2_content);
+	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
+
+	((struct struct_chest*)chest)->content = gs_dng10_chest2_content;
+
 	loot_simple_chest((struct struct_chest*)chest);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
+
+	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
 void DNG10_chest3_x1(Bit8u* chest)
 {
-	Bit8u* ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng10_chest3_content);
+	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
+
+	((struct struct_chest*)chest)->content = gs_dng10_chest3_content;
+
 	loot_simple_chest((struct struct_chest*)chest);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
+
+	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
 void DNG10_chest4_x1(Bit8u* chest)
 {
-	Bit8u* ptr_bak = (Bit8u*)host_readd((Bit8u*)(chest) + 11);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)gs_dng10_chest4_content);
+	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
+
+	((struct struct_chest*)chest)->content = gs_dng10_chest4_content;
+
 	loot_simple_chest((struct struct_chest*)chest);
-	host_writed((Bit8u*)(chest) + 11, (Bit32u)ptr_bak);
+
+	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
 #if !defined(__BORLANDC__)
