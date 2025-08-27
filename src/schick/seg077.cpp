@@ -275,7 +275,7 @@ void DNG01_chest5_x1(Bit8u* chest)
 
 void DNG01_chest7_open(struct struct_chest* chest)
 {
-	loot_corpse((Bit8u*)chest, get_tx(4), &gs_dng01_corpse_looted);
+	loot_corpse(chest, get_tx(4), &gs_dng01_corpse_looted);
 }
 
 void DNG01_chest7_x2(Bit8u* chest)

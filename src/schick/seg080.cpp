@@ -278,17 +278,17 @@ signed short DNG04_handler(void)
 
 void DNG04_corpse0_open(struct struct_chest* chest)
 {
-	loot_corpse((Bit8u*)chest, get_tx(1), (Bit8s*)&gs_dng04_corpse0_flag);
+	loot_corpse(chest, get_tx(1), (Bit8s*)&gs_dng04_corpse0_flag);
 }
 
 void DNG04_corpse1_open(struct struct_chest* chest)
 {
-	loot_corpse((Bit8u*)chest, get_tx(1), (Bit8s*)&gs_dng04_corpse1_flag);
+	loot_corpse(chest, get_tx(1), (Bit8s*)&gs_dng04_corpse1_flag);
 }
 
 void DNG04_corpse2_open(struct struct_chest* chest)
 {
-	loot_corpse((Bit8u*)chest, get_tx(1), (Bit8s*)&gs_dng04_corpse2_flag);
+	loot_corpse(chest, get_tx(1), (Bit8s*)&gs_dng04_corpse2_flag);
 }
 
 void DNG04_corpse0_chest(Bit8u* chest)

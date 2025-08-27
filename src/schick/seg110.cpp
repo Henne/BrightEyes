@@ -196,7 +196,7 @@ void tevent_014(void)
 		if (answer == 1)
 		{
 			/* examine the corpse */
-			loot_corpse(((Bit8u*)&g_tevent014_corpse), get_tx2(46), (Bit8s*)&gs_tevent014_flag);
+			loot_corpse(&g_tevent014_corpse, get_tx2(46), (Bit8s*)&gs_tevent014_flag);
 		}
 	}
 }

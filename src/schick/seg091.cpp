@@ -213,7 +213,7 @@ void DNG13_unblock_passage(char* text, Bit8u* flag)
 
 void DNG13_corpse0_open(struct struct_chest* chest)
 {
-	loot_corpse((Bit8u*)chest, get_tx(9), &gs_dng13_corpse0_flag);
+	loot_corpse(chest, get_tx(9), &gs_dng13_corpse0_flag);
 }
 
 void DNG13_chest0(Bit8u* chest)
@@ -230,7 +230,7 @@ void DNG13_chest0(Bit8u* chest)
 
 void DNG13_corpse1_open(struct struct_chest* chest)
 {
-	loot_corpse((Bit8u*)chest, get_tx(14), &gs_dng13_corpse1_flag);
+	loot_corpse(chest, get_tx(14), &gs_dng13_corpse1_flag);
 }
 
 void DNG13_chest1(Bit8u* chest)

@@ -425,7 +425,7 @@ signed short DNG10_handler(void)
 
 void DNG10_chest0_open(struct struct_chest* chest)
 {
-	loot_corpse((Bit8u*)chest, get_tx(3), (Bit8s*)&gs_dng10_corpse_flag);
+	loot_corpse(chest, get_tx(3), (Bit8s*)&gs_dng10_corpse_flag);
 }
 
 void DNG10_chest0_x2(Bit8u* chest)

@@ -182,7 +182,7 @@ void door_frame(signed short no, signed short x, signed short y, signed short fr
  * \param   text        output text
  * \param   flag        to mark this chest as done
  */
-void loot_corpse(Bit8u* chest_ptr, char *text, Bit8s *flag)
+void loot_corpse(struct struct_chest* chest_ptr, char *text, Bit8s *flag)
 {
 	signed short answer;
 
@@ -199,7 +199,7 @@ void loot_corpse(Bit8u* chest_ptr, char *text, Bit8s *flag)
 		if (answer == 0) {
 
 			/* examine the corpse */
-			((struct struct_chest*)chest_ptr)->loot((Bit8u*)chest_ptr);
+			chest_ptr->loot((Bit8u*)chest_ptr);
 
 			if (!(*flag))	{
 
