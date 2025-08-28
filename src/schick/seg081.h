@@ -3,9 +3,9 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-void DNG06_chest1(Bit8u*);
+void DNG06_chest00_loot(Bit8u*);
 /* 0x25 */
-void DNG06_chest2(Bit8u*);
+void DNG06_chest01_loot(Bit8u*);
 /* 0x2a */
 signed short DNG06_handler(void);
 /* 0x2f */

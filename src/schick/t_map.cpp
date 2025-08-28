@@ -119,12 +119,12 @@ treasure_type t_map(Bit8u* ptr, const int off)
 	}
 	case 0x13e4: {
 		/* TODO: seg080.cpp: wolfcave, cave */
-		if (f_off == 0x20) return (treasure_type)DNG04_corpse0_chest;
-		if (f_off == 0x25) return (treasure_type)DNG04_corpse0;
-		if (f_off == 0x2a) return (treasure_type)DNG04_corpse1_chest;
-		if (f_off == 0x2f) return (treasure_type)DNG04_corpse1;
-		if (f_off == 0x34) return (treasure_type)DNG04_corpse2_chest;
-		if (f_off == 0x39) return (treasure_type)DNG04_corpse2;
+		if (f_off == 0x20) return (treasure_type)DNG04_chest00_loot;
+		if (f_off == 0x25) return (treasure_type)DNG04_chest00;
+		if (f_off == 0x2a) return (treasure_type)DNG04_chest01_loot;
+		if (f_off == 0x2f) return (treasure_type)DNG04_chest01;
+		if (f_off == 0x34) return (treasure_type)DNG04_chest02_loot;
+		if (f_off == 0x39) return (treasure_type)DNG04_chest02;
 
 		D1_ERR("ERROR: call to seg080:0x%x should not happen\n", f_off);
 		exit(-1);

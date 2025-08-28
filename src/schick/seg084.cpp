@@ -475,7 +475,7 @@ void DNG09_fight_intro(signed short fight_id)
 	}
 }
 
-void DNG09_chest0_x1(Bit8u* chest)
+void DNG09_chest00_loot(Bit8u* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -486,7 +486,7 @@ void DNG09_chest0_x1(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG09_chest1_x1(Bit8u* chest)
+void DNG09_chest01_loot(Bit8u* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -497,7 +497,7 @@ void DNG09_chest1_x1(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG09_chest2_x1(Bit8u* chest)
+void DNG09_chest02_loot(Bit8u* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -508,7 +508,7 @@ void DNG09_chest2_x1(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG09_chest3_x1(Bit8u* chest)
+void DNG09_chest03_loot(Bit8u* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -519,7 +519,7 @@ void DNG09_chest3_x1(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG09_chest4_x1(Bit8u* chest)
+void DNG09_chest04_loot(Bit8u* chest)
 {
 	signed short answer;
 	Bit8u *hero;
@@ -593,7 +593,7 @@ void DNG09_chest4_x1(Bit8u* chest)
 	}
 }
 
-void DNG09_chest5_x1(Bit8u* chest)
+void DNG09_chest05_loot(Bit8u* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -604,7 +604,7 @@ void DNG09_chest5_x1(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG09_chest6_x1(Bit8u* chest)
+void DNG09_chest06_loot(Bit8u* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -615,7 +615,7 @@ void DNG09_chest6_x1(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG09_chest4_x2(void)
+void DNG09_chest04_trap(void)
 {
 	g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = DNG_POS_DIR(1,10,11,SOUTH);
 

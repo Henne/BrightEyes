@@ -397,7 +397,7 @@ signed short DNG03_handler(void)
 	return 0;
 }
 
-void DNG03_chest00_func3(Bit8u* chest)
+void DNG03_chest00_loot(Bit8u* chest)
 {
         Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -408,7 +408,7 @@ void DNG03_chest00_func3(Bit8u* chest)
         ((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG03_chest01_func3(Bit8u* chest)
+void DNG03_chest01_loot(Bit8u* chest)
 {
         Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -419,7 +419,7 @@ void DNG03_chest01_func3(Bit8u* chest)
         ((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG03_chest02_func3(Bit8u* chest)
+void DNG03_chest02_loot(Bit8u* chest)
 {
         Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -430,7 +430,7 @@ void DNG03_chest02_func3(Bit8u* chest)
         ((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG03_chest03_func3(Bit8u* chest)
+void DNG03_chest03_loot(Bit8u* chest)
 {
         Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -441,7 +441,7 @@ void DNG03_chest03_func3(Bit8u* chest)
         ((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG03_chest04_func3(Bit8u* chest)
+void DNG03_chest04_loot(Bit8u* chest)
 {
         Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -452,7 +452,7 @@ void DNG03_chest04_func3(Bit8u* chest)
         ((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG03_chest05_func3(Bit8u*)
+void DNG03_chest05_loot(Bit8u*)
 {
 	signed short answer;
 
@@ -469,7 +469,7 @@ void DNG03_chest05_func3(Bit8u*)
 	}
 }
 
-void DNG03_chest06_func3(Bit8u* chest)
+void DNG03_chest06_loot(Bit8u* chest)
 {
         Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -480,7 +480,7 @@ void DNG03_chest06_func3(Bit8u* chest)
         ((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG03_chest07_func3(Bit8u* chest)
+void DNG03_chest07_loot(Bit8u* chest)
 {
         Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -491,7 +491,7 @@ void DNG03_chest07_func3(Bit8u* chest)
         ((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG03_chest08_func3(Bit8u* chest)
+void DNG03_chest08_loot(Bit8u* chest)
 {
         Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -502,7 +502,7 @@ void DNG03_chest08_func3(Bit8u* chest)
         ((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG03_chest09_func3(Bit8u* chest)
+void DNG03_chest09_loot(Bit8u* chest)
 {
         Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -513,7 +513,7 @@ void DNG03_chest09_func3(Bit8u* chest)
         ((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG03_chest12_func3(Bit8u* chest)
+void DNG03_chest12_loot(Bit8u* chest)
 {
 	Bit8u* ptr_bak;
 	signed char crystals;
@@ -545,16 +545,16 @@ void DNG03_chest12_func3(Bit8u* chest)
 		((struct struct_chest*)chest)->content = ptr_bak;
 
 	} else {
-		DNG03_chest12_func2();
+		DNG03_chest12_trap();
 	}
 }
 
-void DNG03_chest10_func3(Bit8u*)
+void DNG03_chest10_loot(Bit8u*)
 {
 	GUI_output(get_ttx(522));
 }
 
-void DNG03_chest11_func3(Bit8u*)
+void DNG03_chest11_loot(Bit8u*)
 {
 	signed short l_si;
 	signed short l_di;
@@ -604,7 +604,7 @@ void DNG03_chest11_func3(Bit8u*)
 	}
 }
 
-void DNG03_chest12_func2(void)
+void DNG03_chest12_trap(void)
 {
 	if (gs_dng03_chest12_loads) {
 

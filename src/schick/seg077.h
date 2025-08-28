@@ -5,25 +5,25 @@ namespace M302de {
 /* 0x20 */
 signed short DNG01_handler(void);
 /* 0x25 */
-void DNG01_chest1_x1(Bit8u*);
+void DNG01_chest01_loot(Bit8u*);
 /* 0x2a */
-void DNG01_chest2_x1(Bit8u*);
+void DNG01_chest02_loot(Bit8u*);
 /* 0x2f */
-void DNG01_chest3_x1(Bit8u*);
+void DNG01_chest03_loot(Bit8u*);
 /* 0x34 */
-void DNG01_chest5_x1(Bit8u*);
+void DNG01_chest05_loot(Bit8u*);
 /* 0x30 */
-void DNG01_chest7_x2(Bit8u*);
+void DNG01_chest07_loot(Bit8u*);
 /* 0x3e */
-void DNG01_chest7_open(struct struct_chest*);
+void DNG01_chest07_open(struct struct_chest*);
 /* 0x43 */
-void DNG01_chest0_x1(Bit8u*);
+void DNG01_chest00_loot(Bit8u*);
 /* 0x48 */
-void DNG01_chest6_open(struct struct_chest*);
+void DNG01_chest06_open(struct struct_chest*);
 /* 0x4d */
-void DNG01_chest6_x2(void);
+void DNG01_chest06_trap(void);
 /* 0x52 */
-void DNG01_chest6_x3(Bit8u*);
+void DNG01_chest06_loot(Bit8u*);
 
 #if !defined(__BORLANDC__)
 }

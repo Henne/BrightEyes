@@ -423,12 +423,12 @@ signed short DNG10_handler(void)
 	return 0;
 }
 
-void DNG10_chest0_open(struct struct_chest* chest)
+void DNG10_chest00_open(struct struct_chest* chest)
 {
 	loot_corpse(chest, get_tx(3), (Bit8s*)&gs_dng10_corpse_flag);
 }
 
-void DNG10_chest0_x2(Bit8u* chest)
+void DNG10_chest00_loot(Bit8u* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -439,7 +439,7 @@ void DNG10_chest0_x2(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG10_chest1_x1(Bit8u* chest)
+void DNG10_chest01_loot(Bit8u* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -450,7 +450,7 @@ void DNG10_chest1_x1(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG10_chest2_x1(Bit8u* chest)
+void DNG10_chest02_loot(Bit8u* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -461,7 +461,7 @@ void DNG10_chest2_x1(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG10_chest3_x1(Bit8u* chest)
+void DNG10_chest03_loot(Bit8u* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -472,7 +472,7 @@ void DNG10_chest3_x1(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG10_chest4_x1(Bit8u* chest)
+void DNG10_chest04_loot(Bit8u* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 

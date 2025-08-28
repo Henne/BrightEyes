@@ -67,7 +67,7 @@ signed short DNG01_handler(void)
 	{
 		DNG_stub6();
 
-	} else if (target_pos == 0x3e07)
+	} else if (target_pos == DNG_POS(3,14,7))
 	{
 		DNG_fallpit_test(6);
 
@@ -78,7 +78,7 @@ signed short DNG01_handler(void)
 
 	} else if ((target_pos == DNG_POS(1,13,5)) && (target_pos != gs_dng_handled_pos) && !gs_dng01_sabre_taken)
 	{
-		sprintf(g_text_output_buf, get_ttx(528), GUI_names_grammar(0, 3, 0), (char*)GUI_2f2(2, 3, 0));
+		sprintf(g_text_output_buf, get_ttx(528), GUI_names_grammar(0, ITEM_SABER, 0), (char*)GUI_2f2(2, ITEM_SABER, 0));
 
 		/* ITEM: get a SABRE */
 		if (GUI_bool(g_text_output_buf) && get_item(ITEM_SABER, 1, 1)) {
@@ -87,7 +87,7 @@ signed short DNG01_handler(void)
 
 	} else if ((target_pos == DNG_POS(3,2,9)) && (target_pos != gs_dng_handled_pos) && !gs_dng01_crossbow_taken)
 	{
-		sprintf(g_text_output_buf, get_ttx(528), GUI_names_grammar(0, 12, 0), (char*)GUI_2f2(2, 12, 0));
+		sprintf(g_text_output_buf, get_ttx(528), GUI_names_grammar(0, ITEM_CROSSBOW, 0), (char*)GUI_2f2(2, ITEM_CROSSBOW, 0));
 
 		/* ITEM: get a CROSSBOW */
 		if (GUI_bool(g_text_output_buf) && get_item(ITEM_CROSSBOW, 1, 1)) {
@@ -233,7 +233,7 @@ signed short DNG01_handler(void)
 	return 0;
 }
 
-void DNG01_chest1_x1(Bit8u* chest)
+void DNG01_chest01_loot(Bit8u* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -244,7 +244,7 @@ void DNG01_chest1_x1(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG01_chest2_x1(Bit8u* chest)
+void DNG01_chest02_loot(Bit8u* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -255,7 +255,7 @@ void DNG01_chest2_x1(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG01_chest3_x1(Bit8u* chest)
+void DNG01_chest03_loot(Bit8u* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -266,7 +266,7 @@ void DNG01_chest3_x1(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG01_chest5_x1(Bit8u* chest)
+void DNG01_chest05_loot(Bit8u* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -277,12 +277,12 @@ void DNG01_chest5_x1(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG01_chest7_open(struct struct_chest* chest)
+void DNG01_chest07_open(struct struct_chest* chest)
 {
 	loot_corpse(chest, get_tx(4), &gs_dng01_corpse_looted);
 }
 
-void DNG01_chest7_x2(Bit8u* chest)
+void DNG01_chest07_loot(Bit8u* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -293,10 +293,10 @@ void DNG01_chest7_x2(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG01_chest6_x3(Bit8u* chest)
+void DNG01_chest06_loot(Bit8u* chest)
 {
 #ifdef M302de_ORIGINAL_BUGFIX
-	/* Enabling the extra loot in function DNG01_chest6_x1() also causes the special chest handler to call this function instead of DNG01_chest6_x1().
+	/* Enabling the extra loot in function DNG01_chest6_x1() also causes the special chest handler to call this function instead of DNG01_chest6_open().
 	   Without this additional check the player will always get another golden key and the same text as the first time the chest is successfully opened.*/
 	if (!gs_dng01_key_taken)
 	{
@@ -326,12 +326,12 @@ void DNG01_chest6_x3(Bit8u* chest)
 #endif
 }
 
-void DNG01_chest6_x2(void)
+void DNG01_chest06_trap(void)
 {
 	GUI_output(get_tx(3));
 }
 
-void DNG01_chest6_open(struct struct_chest* chest)
+void DNG01_chest06_open(struct struct_chest* chest)
 {
 	if (!gs_dng01_key_taken)
 	{
@@ -358,7 +358,7 @@ void DNG01_chest6_open(struct struct_chest* chest)
 	}
 }
 
-void DNG01_chest0_x1(Bit8u* chest)
+void DNG01_chest00_loot(Bit8u* chest)
 {
 	if (!gs_deadship_final && GUI_bool(get_tx(1)))
 	{

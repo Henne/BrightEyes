@@ -3,17 +3,17 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-void DNG10_chest0_x2(Bit8u*);
+void DNG10_chest00_loot(Bit8u*);
 /* 0x25 */
-void DNG10_chest0_open(struct struct_chest*);
+void DNG10_chest00_open(struct struct_chest*);
 /* 0x2a */
-void DNG10_chest1_x1(Bit8u*);
+void DNG10_chest01_loot(Bit8u*);
 /* 0x2f */
-void DNG10_chest2_x1(Bit8u*);
+void DNG10_chest02_loot(Bit8u*);
 /* 0x34 */
-void DNG10_chest3_x1(Bit8u*);
+void DNG10_chest03_loot(Bit8u*);
 /* 0x39 */
-void DNG10_chest4_x1(Bit8u*);
+void DNG10_chest04_loot(Bit8u*);
 /* 0x3e */
 signed short DNG10_handler(void);
 

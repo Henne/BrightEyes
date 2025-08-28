@@ -4634,171 +4634,181 @@ signed short (*g_dng_handlers[15])(void) = {
 }; // ds:0x92d6
 //long g_dng_handlers[15] = { 0x13d10020, 0x13d70048, 0x13dd0066, 0x13e4003e, 0x13e40043, 0x13e9002a, 0x13ed0020, 0x13f00057, 0x13f60048, 0x13fc003e, 0x14010066, 0x1417002a, 0x141b0043, 0x14080020, 0x1411003e }; // ds:0x92d6; Bit8u*
 signed short g_dng_level_changed = 0; // ds:0x9312
+/* REMARK: The function stub addresses of the *_loot() functions are permutated here!
+ *         It seems that this structure and the related funtions are static an belong into
+ *         the corrosponding file. At the current point in time thats the only way and
+ *         may hopefully be corrected later, since these addresses are assigned by the linker. */
 struct struct_chest g_dng01_specialchests[9] = {
-	{ 0x0c09,  -37, use_key_on_chest, chest_protected_normal, DNG01_chest0_x1, 0, 0, 0 }, //TODO: DNG01_chest0_x1
-	{ 0x1508,    2, use_lockpicks_on_chest, chest_closed, DNG01_chest1_x1, 0, 0, 0 },
-	{ 0x1e08,    3, use_lockpicks_on_chest, chest_protected_heavy, DNG01_chest2_x1, 0, 0, 0 },
-	{ 0x3505,    0, NULL, NULL, DNG01_chest3_x1, 0, 0, 0 },
-	{ 0x3d04,    6, use_lockpicks_on_chest, chest_cursed, NULL, 0, 5000, 0 },
-	{ 0x3e06,    3, use_lockpicks_on_chest, chest_fulminictus, DNG01_chest5_x1,  0, 0, 0 },
-	{ 0x3d0b,    1, DNG01_chest6_open, DNG01_chest6_x2, DNG01_chest6_x3, 10, 0, 0 },
-	{ 0x4d06,    1, DNG01_chest7_open, NULL, DNG01_chest7_x2, 0, 0, 0 },
-	{     -1,    0, NULL, NULL, NULL, 0, 0, 0 }
+	{ DNG_POS(0,12,9), (signed char)ITEM_KEY_GOLDEN_2, use_key_on_chest,		chest_protected_normal, DNG01_chest00_loot, 0, 0, 0 },
+	{ DNG_POS(1,5,8),				2, use_lockpicks_on_chest,	chest_closed,		DNG01_chest01_loot, 0, 0, 0 },
+	{ DNG_POS(1,14,8),    				3, use_lockpicks_on_chest,	chest_protected_heavy,	DNG01_chest02_loot, 0, 0, 0 },
+	{ DNG_POS(3,5,5),    				0, NULL,			NULL,			DNG01_chest03_loot, 0, 0, 0 },
+	{ DNG_POS(3,13,4),    				6, use_lockpicks_on_chest,	chest_cursed, 		NULL,		0, 5000, 0 },
+	{ DNG_POS(3,14,6),    				3, use_lockpicks_on_chest,	chest_fulminictus,	DNG01_chest05_loot,  0, 0, 0 },
+	{ DNG_POS(3,13,11),    				1, DNG01_chest06_open,		DNG01_chest06_trap,	DNG01_chest06_loot, 10, 0, 0 },
+	{ DNG_POS(4,13,6),    				1, DNG01_chest07_open,		NULL,			DNG01_chest07_loot, 0, 0, 0 },
+	{ -1,						0, NULL,			NULL,			NULL,		0, 0, 0 }
 }; // ds:0x9314
 const char g_dng01_str_marbo[6] = "MARBO"; // ds:0x93d1
 unsigned char g_unkn_057[1] = { 0x00 }; // ds:0x93d7
+
 struct struct_chest g_dng02_specialchests[8] = {
-	{ 0x030b, 0, NULL, NULL, DNG02_chest00_func3, 0, 0, 0 },
-	{ 0x080a, 0, NULL, NULL, DNG02_chest01_func3, 0, 0, 0 },
-	{ 0x1408, 4, use_lockpicks_on_chest, chest_protected_heavy, DNG02_chest02_func3, 0, 0, 0 },
-	{ 0x140a, 4, use_lockpicks_on_chest, chest_protected_heavy, DNG02_chest03_func3, 0, 0, 0 },
-	{ 0x180c, 0, NULL, NULL, DNG02_chest04_func3, 0, 0, 0 },
-	{ 0x1e07, 6, use_lockpicks_on_chest, chest_petrified, DNG02_chest05_func3, 0, 0, 0 },
-	{ 0x1101, 1, DNG02_chest06_open, NULL, DNG02_chest06_func3, 0, 0, 0 },
-	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
+	{ DNG_POS(0,3,11),	0, NULL,			NULL,			DNG02_chest00_loot, 0, 0, 0 },
+	{ DNG_POS(0,8,10),	0, NULL,			NULL,			DNG02_chest01_loot, 0, 0, 0 },
+	{ DNG_POS(1,4,8),	4, use_lockpicks_on_chest,	chest_protected_heavy,	DNG02_chest02_loot, 0, 0, 0 },
+	{ DNG_POS(1,4,10),	4, use_lockpicks_on_chest,	chest_protected_heavy,	DNG02_chest03_loot, 0, 0, 0 },
+	{ DNG_POS(1,8,12),	0, NULL,			NULL,			DNG02_chest04_loot, 0, 0, 0 },
+	{ DNG_POS(1,14,7),	6, use_lockpicks_on_chest,	chest_petrified,	DNG02_chest05_loot, 0, 0, 0 },
+	{ DNG_POS(1,1,1),	1, DNG02_chest06_open,		NULL,			DNG02_chest06_loot, 0, 0, 0 },
+	{     -1,		0, NULL,			NULL,			NULL,		0, 0, 0 }
 }; // ds:0x93d8
+
 struct struct_chest g_dng03_specialchests[14] = {
-	{ 0x0503, 0, NULL, NULL, DNG03_chest00_func3, 15, 0, 0 },
-	{ 0x0901, 0, NULL, NULL, DNG03_chest01_func3, 0, 0, 0 },
-	{ 0x0b01, 0, NULL, NULL, DNG03_chest02_func3, 0, 0, 48 },
-	{ 0x0a06, 6, use_lockpicks_on_chest, chest_protected_heavy, DNG03_chest03_func3, 0, 0, 0 },
-	{ 0x0b0b, 4, use_lockpicks_on_chest, chest_poisoned2, DNG03_chest04_func3, 0, 0, 0 },
-	{ 0x040c, 5, use_lockpicks_on_chest, chest_ignifax_normal, DNG03_chest05_func3, 0, 0, 0 },
-	{ 0x0b0c, 4, use_lockpicks_on_chest, chest_protected_heavy, DNG03_chest06_func3, 0, 0, 0 },
-	{ 0x1e0e, 0, NULL, NULL, DNG03_chest07_func3, 0, 0, 0 },
-	{ 0x110e, 1, use_lockpicks_on_chest, chest_ignifax_brutal, DNG03_chest08_func3, 0, 0, 0 },
-	{ 0x1103, 6, use_lockpicks_on_chest, chest_protected_normal, DNG03_chest09_func3, 0, 20000, 0 },
-	{ 0x1e00, 0, NULL, NULL, DNG03_chest10_func3, 0, 0, 0 },
-	{ 0x190b, 0, NULL, NULL, DNG03_chest11_func3, 0, 0, 0 },
-	{ 0x1a07, 6, use_lockpicks_on_chest, DNG03_chest12_func2, DNG03_chest12_func3, 0, 0, 0 },
-	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
+	{ DNG_POS(0,5,3),	0, NULL,			NULL,			DNG03_chest00_loot, 15, 0, 0 },
+	{ DNG_POS(0,9,1),	0, NULL,			NULL,			DNG03_chest01_loot, 0, 0, 0 },
+	{ DNG_POS(0,11,1),	0, NULL,			NULL,			DNG03_chest02_loot, 0, 0, 48 },
+	{ DNG_POS(0,10,6),	6, use_lockpicks_on_chest,	chest_protected_heavy,	DNG03_chest03_loot, 0, 0, 0 },
+	{ DNG_POS(0,11,11),	4, use_lockpicks_on_chest,	chest_poisoned2,	DNG03_chest04_loot, 0, 0, 0 },
+	{ DNG_POS(0,4,12),	5, use_lockpicks_on_chest,	chest_ignifax_normal,	DNG03_chest05_loot, 0, 0, 0 },
+	{ DNG_POS(0,11,12),	4, use_lockpicks_on_chest,	chest_protected_heavy,	DNG03_chest06_loot, 0, 0, 0 },
+	{ DNG_POS(1,14,14),	0, NULL,			NULL,			DNG03_chest07_loot, 0, 0, 0 },
+	{ DNG_POS(1,1,14),	1, use_lockpicks_on_chest,	chest_ignifax_brutal,	DNG03_chest08_loot, 0, 0, 0 },
+	{ DNG_POS(1,1,3),	6, use_lockpicks_on_chest,	chest_protected_normal, DNG03_chest09_loot, 0, 20000, 0 },
+	{ DNG_POS(1,14,0),	0, NULL,			NULL,			DNG03_chest10_loot, 0, 0, 0 },
+	{ DNG_POS(1,9,11),	0, NULL,			NULL,			DNG03_chest11_loot, 0, 0, 0 },
+	{ DNG_POS(1,10,7),	6, use_lockpicks_on_chest,	DNG03_chest12_trap,	DNG03_chest12_loot, 0, 0, 0 },
+	{     -1,		0, NULL,			NULL,			NULL, 0, 0, 0 }
 }; // ds:0x9480
 const char g_dng03_str_spinnennetz[12] = "SPINNENNETZ"; // ds:0x95a6
 const char g_dng03_str_mactans[8] = "MACTANS"; // ds:0x95b2
 struct struct_chest g_dng04_specialchests[4] = {
-	{ 0x0607, 1, DNG04_corpse0_open, NULL, DNG04_corpse0_chest, 0, 0, 0 },
-	{ 0x010c, 1, DNG04_corpse1_open, NULL, DNG04_corpse1_chest, 0, 0, 0 },
-	{ 0x0601, 1, DNG04_corpse2_open, NULL, DNG04_corpse2_chest, 0, 0, 0 },
-	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
+	{ DNG_POS(0,6,7),	1, DNG04_chest00_open, NULL, DNG04_chest00_loot, 0, 0, 0 },
+	{ DNG_POS(0,1,12),	1, DNG04_chest01_open, NULL, DNG04_chest01_loot, 0, 0, 0 },
+	{ DNG_POS(0,6,1),	1, DNG04_chest02_open, NULL, DNG04_chest02_loot, 0, 0, 0 },
+	{     -1,		0, NULL, 	       NULL, NULL,		0, 0, 0 }
 }; // ds:0x95ba
 Bit16s g_dng05_trash_flag = 0; // ds:0x960e
+
 struct struct_chest g_dng06_specialchests[3] = {
-	{ 0x0703, 0, NULL, NULL, DNG06_chest1, 0, 0, 40, }, //TODO: DNG06_chest1
-	{ 0x1904, 0, use_lockpicks_on_chest, chest_poisoned1, DNG06_chest2, 0, 0, 0 },
+	{ DNG_POS(0,7,3), 0, NULL,			NULL,			DNG06_chest00_loot, 0, 0, 40, },
+	{ DNG_POS(1,9,4), 0, use_lockpicks_on_chest,	chest_poisoned1,	DNG06_chest00_loot, 0, 0, 0 },
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x9610
 char g_str_s_war[8] = "%s WAR "; // ds:0x964f
 char g_str_s_und_s_waren[17] = "%s UND %s WAREN "; // ds:0x9657
+
+/* REMARK: These 500 D might result in an integer overflow. */
 struct struct_chest g_dng07_specialchests[2] = {
-	{ 0x2805, 5, use_lockpicks_on_chest, chest_ignifax_normal, NULL, 0, 50000, 0 },
+	{ DNG_POS(2,8,5), 5, use_lockpicks_on_chest, chest_ignifax_normal, NULL, 0, 50000L, 0 },
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x9668
 struct struct_chest g_dng08_specialchests[7] = {
-	{ 0x0e01, 0, NULL, NULL, DNG08_chest0_func3, 0, 0, 0 },
-	{ 0x0e03, 4, use_lockpicks_on_chest, DNG08_chest1_func2, DNG08_chest1_func3, 0, 0, 0 },
-	{ 0x0907, 0, DNG08_chest2_open, NULL, DNG08_chest2_func3, 0, 0, 0 },
-	{ 0x050d, 5, DNG08_chest3_open, chest_poisoned1, NULL, 0, 0, 0 },
-	{ 0x060c, 5, DNG08_chest4_open, chest_poisoned1, DNG08_chest4_func3, 0, 0, 0 },
-	{ 0x060e, 5, DNG08_chest5_open, chest_poisoned1, DNG08_chest5_func3, 0, 0, 0 },
+	{ DNG_POS(0,14,1), 0, NULL,			NULL,			DNG08_chest00_loot, 0, 0, 0 },
+	{ DNG_POS(0,14,3), 4, use_lockpicks_on_chest,	DNG08_chest01_trap,	DNG08_chest01_loot, 0, 0, 0 },
+	{ DNG_POS(0,9,7),  0, DNG08_chest02_open,	NULL,			DNG08_chest02_loot, 0, 0, 0 },
+	{ DNG_POS(0,5,13), 5, DNG08_chest03_open,	chest_poisoned1,	NULL, 0, 0, 0 },
+	{ DNG_POS(0,6,12), 5, DNG08_chest04_open,	chest_poisoned1,	DNG08_chest04_loot, 0, 0, 0 },
+	{ DNG_POS(0,6,14), 5, DNG08_chest05_open,	chest_poisoned1,	DNG08_chest05_loot, 0, 0, 0 },
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x9692
 char g_dng08_str_tairach[8] = "TAIRACH"; // ds:0x9725
 unsigned char g_unkn_058[1] = { 0x00 }; // ds:0x972d
 struct struct_chest g_dng09_specialchests[8] = {
-	{ 0x0c08, 0, NULL, NULL, DNG09_chest0_x1, 0, 0, 8 },
-	{ 0x0d04, 0, NULL, NULL, DNG09_chest1_x1, 0, 0, 0 },
-	{ 0x0e05, 4, use_lockpicks_on_chest, NULL, DNG09_chest2_x1, 0, 0, 0 },
-	{ 0x1c0b, 0, NULL, NULL, DNG09_chest3_x1, 0, 10, 0 },
-	{ 0x1908, 8, use_lockpicks_on_chest, DNG09_chest4_x2, DNG09_chest4_x1, 0, 0, 0 },
-	{ 0x1101, 4, use_lockpicks_on_chest, NULL, DNG09_chest5_x1, 0, 1500, 0 },
-	{ 0x1105, 8, use_lockpicks_on_chest, chest_poisoned3, DNG09_chest6_x1, 0, 25000, 0 },
+	{ DNG_POS(0,12,8),	0, NULL,			NULL,			DNG09_chest00_loot, 0, 0, 8 },
+	{ DNG_POS(0,13,4),	0, NULL,			NULL,			DNG09_chest01_loot, 0, 0, 0 },
+	{ DNG_POS(0,14,5),	4, use_lockpicks_on_chest,	NULL,			DNG09_chest02_loot, 0, 0, 0 },
+	{ DNG_POS(1,12,11),	0, NULL,			NULL,			DNG09_chest03_loot, 0, 10, 0 },
+	{ DNG_POS(1,9,8),	8, use_lockpicks_on_chest,	DNG09_chest04_trap,	DNG09_chest04_loot, 0, 0, 0 },
+	{ DNG_POS(1,1,1),	4, use_lockpicks_on_chest,	NULL,			DNG09_chest05_loot, 0, 1500, 0 },
+	{ DNG_POS(1,1,5),	8, use_lockpicks_on_chest,	chest_poisoned3,	DNG09_chest06_loot, 0, 25000, 0 },
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x972e
 struct struct_chest g_dng10_specialchests[6] = {
-	{ 0x0502, 1, DNG10_chest0_open, NULL, DNG10_chest0_x2, 0, 0, 0 },
-	{ 0x0305, 0, NULL, NULL, DNG10_chest1_x1, 0, 0, 0 },
-	{ 0x0105, 0, NULL, NULL, DNG10_chest2_x1, 0, 0, 0 },
-	{ 0x1101, 0, use_lockpicks_on_chest, chest_ignifax_brutal, DNG10_chest3_x1, 0, 0, 0 },
-	{ 0x1207, 0, NULL, NULL, DNG10_chest4_x1, 0, 0, 0 },
+	{ DNG_POS(0,5,2), 1, DNG10_chest00_open, 	NULL,			DNG10_chest00_loot, 0, 0, 0 },
+	{ DNG_POS(0,3,5), 0, NULL,			NULL,			DNG10_chest01_loot, 0, 0, 0 },
+	{ DNG_POS(0,1,5), 0, NULL,			NULL,			DNG10_chest02_loot, 0, 0, 0 },
+	{ DNG_POS(1,1,1), 0, use_lockpicks_on_chest,	chest_ignifax_brutal,	DNG10_chest03_loot, 0, 0, 0 },
+	{ DNG_POS(1,2,7), 0, NULL,			NULL,			DNG10_chest04_loot, 0, 0, 0 },
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x97d6
 struct struct_chest g_dng11_specialchests[15] = {
-	{ 0x0b0c, 0, NULL, NULL, DNG11_chest1, 0, 0, 50 },
-	{ 0x0c0c, 0, NULL, NULL, DNG11_chest2, 0, 0, 21 },
-	{ 0x0e0c, 6, use_lockpicks_on_chest, chest_crossbow_bolts, DNG11_chest3, 0, 0, 0 },
-	{ 0x0e0e, 6, use_lockpicks_on_chest, chest_crossbow_bolts, DNG11_chest4, 0, 0, 0 },
-	{ 0x010d, 0, NULL, NULL, DNG11_chest5, 0, 230, 0 },
-	{ 0x010a, 3, use_lockpicks_on_chest, NULL, DNG11_chest6, 0, 680, 0 },
-	{ 0x0107, 0, NULL, NULL, DNG11_chest7, 0, 0, 0 },
-	{ 0x0104, 4, use_lockpicks_on_chest, NULL, DNG11_chest8, 0, 440, 0 },
-	{ 0x0101, 0, NULL, NULL, DNG11_chest9, 0, 0, 0 },
-	{ 0x0102, 0, NULL, NULL, DNG11_chest10, 0, 0, 0 },
-	{ 0x060a, 4, use_lockpicks_on_chest, chest_ignifax_heavy, DNG11_chest11, 0, 2000, 0 },
-	{ 0x0b05, 6, use_lockpicks_on_chest, chest_ignifax_brutal, DNG11_chest12, 0, 10000, 0 },
-	{ 0x0c05, 6, use_lockpicks_on_chest, chest_ignifax_brutal, DNG11_chest13, 0, 0, 0 },
-	{ 0x0405, 4, use_lockpicks_on_chest, NULL, DNG11_chest14, 0, 0, 0 },
+	{ DNG_POS(0,11,12),	0, NULL,			NULL,			DNG11_chest00_loot, 0, 0, 50 },
+	{ DNG_POS(0,12,12),	0, NULL,			NULL,			DNG11_chest01_loot, 0, 0, 21 },
+	{ DNG_POS(0,14,12),	6, use_lockpicks_on_chest,	chest_crossbow_bolts,	DNG11_chest02_loot, 0, 0, 0 },
+	{ DNG_POS(0,14,14),	6, use_lockpicks_on_chest,	chest_crossbow_bolts,	DNG11_chest03_loot, 0, 0, 0 },
+	{ DNG_POS(0,1,13),	0, NULL,			NULL,			DNG11_chest04_loot, 0, 230, 0 },
+	{ DNG_POS(0,1,10),	3, use_lockpicks_on_chest,	NULL,			DNG11_chest05_loot, 0, 680, 0 },
+	{ DNG_POS(0,1,7),	0, NULL,			NULL,			DNG11_chest06_loot, 0, 0, 0 },
+	{ DNG_POS(0,1,4),	4, use_lockpicks_on_chest,	NULL,			DNG11_chest07_loot, 0, 440, 0 },
+	{ DNG_POS(0,1,1),	0, NULL,			NULL,			DNG11_chest08_loot, 0, 0, 0 },
+	{ DNG_POS(0,1,2),	0, NULL,			NULL,			DNG11_chest09_loot, 0, 0, 0 },
+	{ DNG_POS(0,6,10),	4, use_lockpicks_on_chest,	chest_ignifax_heavy,	DNG11_chest10_loot, 0, 2000, 0 },
+	{ DNG_POS(0,11,5),	6, use_lockpicks_on_chest,	chest_ignifax_brutal,	DNG11_chest11_loot, 0, 10000, 0 },
+	{ DNG_POS(0,12,5),	6, use_lockpicks_on_chest,	chest_ignifax_brutal,	DNG11_chest12_loot, 0, 0, 0 },
+	{ DNG_POS(0,4,5),	4, use_lockpicks_on_chest,	NULL,			DNG11_chest13_loot, 0, 0, 0 },
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x9854
 unsigned char g_unkn_059[1] = { 0x00 }; // ds:0x998f
 struct struct_chest g_dng14_specialchests[9] = {
-	{ 0x0101, 0, NULL, NULL, DNG14_chest_x1, 0, 0, 0 },
-	{ 0x0a02, 0, NULL, NULL, DNG14_chest_x2, 0, 0, 0 },
-	{ 0x1306, 4, use_lockpicks_on_chest, chest_protected_normal, DNG14_chest_x3, 0, 0, 0 },
-	{ 0x1406, 4, use_lockpicks_on_chest, chest_protected_normal, DNG14_chest_x4, 0, 0, 0 },
-	{ 0x1a0b, 0, NULL, NULL, DNG14_chest_x5, 0, 0, 0 },
-	{ 0x1508, 6, use_lockpicks_on_chest, chest_protected_heavy, DNG14_chest_x6, 0, 10300, 0 },
-	{ 0x2d02, 8, use_lockpicks_on_chest, NULL, DNG14_chest_x7, 0, 0, 0 },
-	{ 0x2d0c, 6, use_lockpicks_on_chest, DNG14_chest_x9, DNG14_chest_x8, 0, 0, 0 },
+	{ DNG_POS(0,1,1),	0, NULL,			NULL,			DNG14_chest00_loot, 0, 0, 0 },
+	{ DNG_POS(0,10,2),	0, NULL,			NULL,			DNG14_chest01_loot, 0, 0, 0 },
+	{ DNG_POS(1,3,6),	4, use_lockpicks_on_chest,	chest_protected_normal,	DNG14_chest02_loot, 0, 0, 0 },
+	{ DNG_POS(1,4,6),	4, use_lockpicks_on_chest,	chest_protected_normal,	DNG14_chest03_loot, 0, 0, 0 },
+	{ DNG_POS(1,10,11),	0, NULL,			NULL,			DNG14_chest04_loot, 0, 0, 0 },
+	{ DNG_POS(1,5,8),	6, use_lockpicks_on_chest,	chest_protected_heavy,	DNG14_chest05_loot, 0, 10300, 0 },
+	{ DNG_POS(2,13,2),	8, use_lockpicks_on_chest,	NULL,			DNG14_chest06_loot, 0, 0, 0 },
+	{ DNG_POS(2,13,12),	6, use_lockpicks_on_chest,	DNG14_chest07_trap,	DNG14_chest07_loot, 0, 0, 0 },
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x9990
 unsigned char g_unkn_060[1] = { 0x00 }; // ds:0x9a4d
 struct struct_chest g_dng15_specialchests[33] = {
-	{ 0x040b, 0, NULL, NULL, DNG15_empty_chest, 0, 0, 0 },
-	{ 0x080e, 0, NULL, NULL, DNG15_rotten_clothes_chest, 0, 0, 0 },
-	{ 0x0e0d, 0, NULL, NULL, DNG15_rotten_clothes_chest, 0, 0, 0 },
-	{ 0x1203, 0, NULL, NULL, DNG15_rotten_clothes_chest, 0, 0, 0 },
-	{ 0x1303, 3, use_lockpicks_on_chest, NULL, DNG15_empty_chest, 0, 0, 0 },
-	{ 0x1e08, 0, NULL, NULL, DNG15_empty_chest, 0, 0, 0 },
-	{ 0x1e09, 0, NULL, NULL, DNG15_empty_chest, 0, 0, 0 },
-	{ 0x1b08, 0, NULL, NULL, DNG15_empty_chest, 0, 0, 0 },
-	{ 0x1b09, 0, NULL, NULL, DNG15_empty_chest, 0, 0, 0 },
-	{ 0x1e0e, 8, use_lockpicks_on_chest, chest_poisoned1, DNG15_figures_chest, 0, 0, 0 },
-	{ 0x150a, 3, use_lockpicks_on_chest, NULL, DNG15_empty_chest, 0, 0, 0 },
-	{ 0x160e, 0, NULL, NULL, DNG15_empty_chest, 0, 0, 0 },
-	{ 0x2603, 3, use_lockpicks_on_chest, NULL, DNG15_empty_chest, 0, 0, 0 },
-	{ 0x2607, 0, NULL, NULL, DNG15_empty_chest, 0, 0, 0 },
-	{ 0x2e0c, 0, NULL, NULL, DNG15_cursed_money_chest, 0, 0, 0 },
-	{ 0x2e09, 0, NULL, NULL, DNG15_cursed_money_chest, 0, 0, 0 },
-	{ 0x2d07, 0, NULL, NULL, DNG15_empty_chest, 0, 0, 0 },
-	{ 0x2d06, 0, NULL, NULL, DNG15_empty_chest, 0, 0, 0 },
-	{ 0x2d05, 0, NULL, NULL, DNG15_empty_chest, 0, 0, 0 },
-	{ 0x370e, 3, use_lockpicks_on_chest, NULL, DNG15_empty_chest, 0, 0, 0 },
-	{ 0x340a, 0, NULL, NULL, DNG15_empty_chest, 0, 0, 0 },
-	{ 0x350a, 0, NULL, NULL, DNG15_empty_chest, 0, 0, 0 },
-	{ 0x360a, 0, NULL, NULL, DNG15_rotten_clothes_chest, 0, 0, 0 },
-	{ 0x370a, 3, use_lockpicks_on_chest, NULL, DNG15_empty_chest, 0, 0, 0 },
-	{ 0x3707, 0, NULL, NULL, DNG15_smelling_chest, 0, 0, 0 },
-	{ 0x3503, 0, NULL, NULL, DNG15_smelling_chest, 0, 0, 0 },
-	{ 0x3504, 0, NULL, NULL, DNG15_smelling_chest, 0, 0, 0 },
-	{ 0x3b01, 0, NULL, NULL, DNG15_empty_chest, 0, 0, 0 },
-	{ 0x3906, 0, NULL, NULL, DNG15_empty_chest, 0, 0, 0 },
-	{ 0x3907, 0, NULL, NULL, DNG15_empty_chest, 0, 0, 0 },
-	{ 0x3e06, 0, NULL, NULL, DNG15_empty_chest, 0, 0, 0 },
-	{ 0x3e07, 0, NULL, NULL, DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(0,4,11),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(0,8,14),	0, NULL,			NULL,			DNG15_rotten_clothes_chest, 0, 0, 0 },
+	{ DNG_POS(0,14,13),	0, NULL,			NULL,			DNG15_rotten_clothes_chest, 0, 0, 0 },
+	{ DNG_POS(1,2,3),	0, NULL,			NULL,			DNG15_rotten_clothes_chest, 0, 0, 0 },
+	{ DNG_POS(1,3,3),	3, use_lockpicks_on_chest,	NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(1,14,8),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(1,14,9),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(1,11,8),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(1,11,9),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(1,14,14),	8, use_lockpicks_on_chest,	chest_poisoned1,	DNG15_figures_chest, 0, 0, 0 },
+	{ DNG_POS(1,5,10),	3, use_lockpicks_on_chest,	NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(1,6,14),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(2,6,3),	3, use_lockpicks_on_chest,	NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(2,6,7),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(2,14,12),	0, NULL,			NULL,			DNG15_cursed_money_chest, 0, 0, 0 },
+	{ DNG_POS(2,14,9),	0, NULL,			NULL,			DNG15_cursed_money_chest, 0, 0, 0 },
+	{ DNG_POS(2,13,7),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(2,13,6),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(2,13,5),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(3,7,14),	3, use_lockpicks_on_chest,	NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(3,4,10),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(3,5,10),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(3,6,10),	0, NULL,			NULL,			DNG15_rotten_clothes_chest, 0, 0, 0 },
+	{ DNG_POS(3,7,10),	3, use_lockpicks_on_chest,	NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(3,7,7),	0, NULL,			NULL,			DNG15_smelling_chest, 0, 0, 0 },
+	{ DNG_POS(3,5,3),	0, NULL,			NULL,			DNG15_smelling_chest, 0, 0, 0 },
+	{ DNG_POS(3,5,4),	0, NULL,			NULL,			DNG15_smelling_chest, 0, 0, 0 },
+	{ DNG_POS(3,11,1),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(3,9,6),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(3,9,7),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(3,14,6),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
+	{ DNG_POS(3,14,7),	0, NULL,			NULL,			DNG15_empty_chest, 0, 0, 0 },
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x9a4e
 unsigned char g_unkn_061[1] = { 0x00 }; // ds:0x9d03
+/* REMARK: These 400 D might result in an integer overflow. */
 struct struct_chest g_dng12_specialchests[3] = {
-	{ 0x080a, 6, use_lockpicks_on_chest, chest_crossbow_bolts, DNG_oberorken_chest, 0, 0, 0 },
-	{ 0x1e07, 0, NULL, NULL, NULL, 0, 40000, 0 },
+	{ DNG_POS(0,8,10), 6, use_lockpicks_on_chest,	chest_crossbow_bolts,	DNG12_chest00_loot, 0, 0, 0 },
+	{ DNG_POS(1,14,7), 0, NULL,			NULL,			NULL, 0, 40000L, 0 },
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x9d04
 signed int g_dng12_obstacle_tries = 0; // ds:0x9d43
 signed int g_dng12_watertrap_bak = 0; // ds:0x9d45
 unsigned char g_unkn_062[1] = { 0x00 }; // ds:0x9d47
 struct struct_chest g_dng13_specialchests[3] = {
-	{ 0x0b05, 1, DNG13_corpse0_open, NULL, DNG13_chest0, 0, 0, 0 },
-	{ 0x0401, 1, DNG13_corpse1_open, NULL, DNG13_chest1, 0, 0, 0 },
+	{ DNG_POS(0,11,5),	1, DNG13_chest00_open, NULL, DNG13_chest00_loot, 0, 0, 0 },
+	{ DNG_POS(0,4,1),	1, DNG13_chest01_open, NULL, DNG13_chest01_loot, 0, 0, 0 },
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0}
 }; // ds:0x9d48
 unsigned char g_unkn_063[1] = { 0x00 }; // ds:0x9d57

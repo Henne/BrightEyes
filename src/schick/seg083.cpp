@@ -475,7 +475,7 @@ void DNG08_search_bed(void)
 	}
 }
 
-void DNG08_chest1_func2(void)
+void DNG08_chest01_trap(void)
 {
 	Bit8u *hero = (Bit8u*)get_first_hero_available_in_group();
 
@@ -487,7 +487,7 @@ void DNG08_chest1_func2(void)
 	sub_hero_le(hero, dice_roll(3, 6, 0));
 }
 
-void DNG08_chest0_func3(Bit8u*)
+void DNG08_chest00_loot(Bit8u*)
 {
 	if (!gs_dng08_chest0_looted)
 	{
@@ -500,12 +500,12 @@ void DNG08_chest0_func3(Bit8u*)
 	}
 }
 
-void DNG08_chest1_func3(Bit8u*)
+void DNG08_chest01_loot(Bit8u*)
 {
 	loot_multi_chest(gs_dng08_chest1_content, get_tx(34));
 }
 
-void DNG08_chest2_func3(Bit8u* chest)
+void DNG08_chest02_loot(Bit8u* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -516,7 +516,7 @@ void DNG08_chest2_func3(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG08_chest2_open(struct struct_chest* chest)
+void DNG08_chest02_open(struct struct_chest* chest)
 {
 	if (!gs_dng08_chest2_looted)
 	{
@@ -541,7 +541,7 @@ void DNG08_chest2_open(struct struct_chest* chest)
 	}
 }
 
-void DNG08_chest3_open(struct struct_chest* chest)
+void DNG08_chest03_open(struct struct_chest* chest)
 {
 	Bit8u *hero = (Bit8u*)get_first_hero_available_in_group();
 
@@ -562,7 +562,7 @@ void DNG08_chest3_open(struct struct_chest* chest)
 	}
 }
 
-void DNG08_chest4_open(struct struct_chest* chest)
+void DNG08_chest04_open(struct struct_chest* chest)
 {
 	Bit8u *hero = (Bit8u*)get_first_hero_available_in_group();
 
@@ -576,7 +576,7 @@ void DNG08_chest4_open(struct struct_chest* chest)
 	}
 }
 
-void DNG08_chest5_open(struct struct_chest* chest)
+void DNG08_chest05_open(struct struct_chest* chest)
 {
 	Bit8u *hero = (Bit8u*)get_first_hero_available_in_group();
 
@@ -590,7 +590,7 @@ void DNG08_chest5_open(struct struct_chest* chest)
 	}
 }
 
-void DNG08_chest4_func3(Bit8u* chest)
+void DNG08_chest04_loot(Bit8u* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -601,7 +601,7 @@ void DNG08_chest4_func3(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG08_chest5_func3(Bit8u* chest)
+void DNG08_chest05_loot(Bit8u* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 

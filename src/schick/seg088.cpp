@@ -74,7 +74,7 @@ void DNG14_fight_intro(signed short fight_id)
 	}
 }
 
-void DNG14_chest_x1(Bit8u* chest)
+void DNG14_chest00_loot(Bit8u* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -85,7 +85,7 @@ void DNG14_chest_x1(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG14_chest_x2(Bit8u* chest)
+void DNG14_chest01_loot(Bit8u* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -96,12 +96,12 @@ void DNG14_chest_x2(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG14_chest_x3(Bit8u* chest)
+void DNG14_chest02_loot(Bit8u* chest)
 {
 	loot_multi_chest(gs_dng14_chest_x3, get_tx(62));
 }
 
-void DNG14_chest_x4(Bit8u* chest)
+void DNG14_chest03_loot(Bit8u* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -112,7 +112,7 @@ void DNG14_chest_x4(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG14_chest_x5(Bit8u* chest)
+void DNG14_chest04_loot(Bit8u* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -123,7 +123,7 @@ void DNG14_chest_x5(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG14_chest_x6(Bit8u* chest)
+void DNG14_chest05_loot(Bit8u* chest)
 {
 	Bit8u* ptr_bak;
 	unsigned char x;
@@ -151,7 +151,7 @@ void DNG14_chest_x6(Bit8u* chest)
 	}
 }
 
-void DNG14_chest_x7(Bit8u* chest)
+void DNG14_chest06_loot(Bit8u* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -162,7 +162,7 @@ void DNG14_chest_x7(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG14_chest_x8(Bit8u* chest)
+void DNG14_chest07_loot(Bit8u* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -173,7 +173,7 @@ void DNG14_chest_x8(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG14_chest_x9(void)
+void DNG14_chest07_trap(void)
 {
 	Bit8u *hero;
 
@@ -195,7 +195,7 @@ void DNG15_riddle(void)
 
 	ptr = g_dng_map;
 
-	pos = (gs_dungeon_level << 12) + (gs_x_target << 8) + gs_y_target;
+	pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
 	/* check if the other group is in position */
 	for (i = l_di = 0; i < 6; i++) {
@@ -241,7 +241,7 @@ void DNG15_riddle(void)
 				/* riddle solved: remove the door from the map */
 				GUI_output(get_tx(32));
 
-				host_writeb(ptr + MAP_POS(9,3), DNG_TILE_OPEN_DOOR << 4);
+				ptr[MAP_POS(9,3)] = DNG_TILE_OPEN_DOOR << 4;
 
 				add_hero_ap_all(10);
 			} else {

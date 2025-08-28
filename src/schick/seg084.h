@@ -3,21 +3,21 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-void DNG09_chest0_x1(Bit8u*);
+void DNG09_chest00_loot(Bit8u*);
 /* 0x25 */
-void DNG09_chest1_x1(Bit8u*);
+void DNG09_chest01_loot(Bit8u*);
 /* 0x2a */
-void DNG09_chest2_x1(Bit8u*);
+void DNG09_chest02_loot(Bit8u*);
 /* 0x2f */
-void DNG09_chest3_x1(Bit8u*);
+void DNG09_chest03_loot(Bit8u*);
 /* 0x34 */
-void DNG09_chest4_x1(Bit8u*);
+void DNG09_chest04_loot(Bit8u*);
 /* 0x39 */
-void DNG09_chest5_x1(Bit8u*);
+void DNG09_chest05_loot(Bit8u*);
 /* 0x3e */
-void DNG09_chest6_x1(Bit8u*);
+void DNG09_chest06_loot(Bit8u*);
 /* 0x43 */
-void DNG09_chest4_x2(void);
+void DNG09_chest04_trap(void);
 /* 0x48 */
 signed short DNG09_handler(void);
 /* 0x4d */

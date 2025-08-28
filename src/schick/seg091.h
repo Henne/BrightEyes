@@ -9,13 +9,13 @@ void DNG13_collapsing_ceiling(void);
 /* 0x2a */
 void DNG13_collapsing_ceiling_easy(void);
 /* 0x2f */
-void DNG13_corpse1_open(struct struct_chest*);
+void DNG13_chest01_open(struct struct_chest*);
 /* 0x34 */
-void DNG13_corpse0_open(struct struct_chest*);
+void DNG13_chest00_open(struct struct_chest*);
 /* 0x39 */
-void DNG13_chest1(Bit8u*);
+void DNG13_chest01_loot(Bit8u*);
 /* 0x3e */
-void DNG13_chest0(Bit8u*);
+void DNG13_chest00_loot(Bit8u*);
 /* 0x43 */
 signed short DNG13_handler(void);
 /* 0x48 */
