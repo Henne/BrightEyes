@@ -96,7 +96,8 @@ void TM_func1(signed short route_no, signed short backwards)
 	signed short last_tevent_no;
 	signed short answer;
 
-	ds_writeb(TRAVELING, 1);
+	g_traveling = 1;
+
 	last_tevent_no = -1;
 	gs_route_course_ptr = (Bit8u*)((g_buffer9_ptr + host_readws((Bit8u*)g_buffer9_ptr + 4 * (route_no - 1))) + 0xecL);
 	fb_start = g_vga_memstart;
@@ -325,7 +326,7 @@ void TM_func1(signed short route_no, signed short backwards)
 					{
 						TRV_event(gs_route_tevents[(last_tevent_no = gs_trv_i)].tevent_id);
 
-						if (!ds_readbs((TEVENTS_REPEATABLE-1) + gs_route_tevents[gs_trv_i].tevent_id))
+						if (!g_tevents_repeatable[gs_route_tevents[gs_trv_i].tevent_id - 1])
 						{
 							g_route_tevent_flags[gs_trv_i] = 1;
 
@@ -477,7 +478,7 @@ void TM_func1(signed short route_no, signed short backwards)
 		refresh_screen_size();
 	}
 
-	ds_writeb(TRAVELING, 0);
+	g_traveling = 0;
 }
 
 #if defined(__BORLANDC__)

@@ -524,7 +524,7 @@ void DNG08_chest02_open(struct struct_chest* chest)
 		{
 			GUI_input(get_tx(27), 10);
 
-			if (!strcmp(g_text_input_buf, (char*)p_datseg + DNG08_STR_TAIRACH)) {
+			if (!strcmp(g_text_input_buf, g_dng08_str_tairach)) {
 
 				chest->loot((Bit8u*)chest);
 

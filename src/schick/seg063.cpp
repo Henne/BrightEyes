@@ -460,7 +460,7 @@ void sea_travel(signed short passage, signed short dir)
 	struct dummy7 a = *(struct dummy7*)(p_datseg + SEA_TRAVEL_SLEEPBONUS_TABLE2);
 #endif
 
-	ds_writeb(TRAVELING, 1);
+	g_traveling = 1;
 
 	gs_sea_travel_courses = (Bit8u*)(passage < 7 ? (g_buffer9_ptr + 7600L) : (g_buffer9_ptr + 11400L));
 
@@ -692,7 +692,7 @@ void sea_travel(signed short passage, signed short dir)
 		refresh_screen_size();
 	}
 
-	ds_writeb(TRAVELING, 0);
+	g_traveling = 0;
 }
 
 signed short get_srout_len(Bit8u *ptr)

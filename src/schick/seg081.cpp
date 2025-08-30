@@ -113,7 +113,7 @@ signed short DNG06_handler(void)
 			hero_second = (Bit8u*)get_second_hero_available_in_group();
 		}
 
-		sprintf(g_dtp2, (char*)(l3 == 1 ? p_datseg + STR_S_WAR : p_datseg + STR_S_UND_S_WAREN),
+		sprintf(g_dtp2, (char*)(l3 == 1 ? g_str_s_war : g_str_s_und_s_waren),
 			(char*)hero_first + HERO_NAME2,	(char*)hero_second + HERO_NAME2);
 
 		strcat(g_dtp2, get_tx(6));

@@ -1160,11 +1160,11 @@
 //#define DNG04_SPECIALCHESTS             (0x95ba)    /* struct(21)[4] */
 //#define DNG05_TRASH_FLAG                (0x960e)    /* short; {0,1} */
 //#define DNG06_SPECIALCHESTS             (0x9610)    /* struct(21)[3] */
-#define STR_S_WAR                       (0x964f)    /* char[8]; "%s WAR " */
-#define STR_S_UND_S_WAREN               (0x9657)    /* char[17]; "%s UND %s WAREN " */
+//#define STR_S_WAR                       (0x964f)    /* char[8]; "%s WAR " */
+//#define STR_S_UND_S_WAREN               (0x9657)    /* char[17]; "%s UND %s WAREN " */
 //#define DNG07_SPECIALCHESTS             (0x9668)    /* struct(21)[2] */
 //#define DNG08_SPECIALCHESTS             (0x9692)    /* struct(21)[7] */
-#define DNG08_STR_TAIRACH               (0x9725)    /* char[8]; "TAIRACH" */
+//#define DNG08_STR_TAIRACH               (0x9725)    /* char[8]; "TAIRACH" */
 // ?1
 //#define DNG09_SPECIALCHESTS             (0x972e)    /* struct(21)[8] */
 //#define DNG10_SPECIALCHESTS             (0x97d6)    /* struct(21)[6] */
@@ -1191,8 +1191,8 @@
 //#define ACTION_TABLE_TRAVELMAP          (0xa50f)    /* struct(10)[35] */
 //#define TEVENTS_TAB                     (0xa66d)    /* struct(3)[155]; struct{char route_id, place, tevent_id;} */
 // ?4
-#define TRAVELING                       (0xa842)    /* unsigned char; {0,1} */
-#define TEVENTS_REPEATABLE              (0xa843)    /* unsigned char[145]; {0,1} */
+//#define TRAVELING                       (0xa842)    /* unsigned char; {0,1} */
+//#define TEVENTS_REPEATABLE              (0xa843)    /* unsigned char[145]; {0,1} */
 //#define GRAMMAR_ARTICLE_DER             (0xa8d4)    /* char[4]; "DER" */
 //#define GRAMMAR_ARTICLE_DIE             (0xa8d8)    /* char[4]; "DIE" */
 //#define GRAMMAR_ARTICLE_DAS             (0xa8dc)    /* char[4]; "DAS" */

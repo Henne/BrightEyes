@@ -1047,25 +1047,25 @@ extern const struct struct_point g_visual_field_offsets_std[29];	//ds:0x733a; se
 extern const struct struct_point g_visual_field_offsets_sign[29];	//ds:0x73ae; seg066
 extern const struct struct_point g_visual_field_offsets_inn[29];	//ds:0x7422; seg066
 extern const struct struct_point g_visual_field_offsets_grass[29];	//ds:0x7496; seg066
-extern unsigned char g_tex_descr_table[101][18];	//ds:0x750a; seg066
-extern const signed char g_visual_field_draw_order[29];//ds:0x7c24; seg066
-extern signed char g_can_merge_group;		//ds:0x7c41; seg066, seg076
-extern signed char g_c_event_active;		//ds:0x7c42; seg002, seg067
-extern const char g_str_bank_deposit_to_big[57];//ds:0x7c44; seg068
-extern const char g_str_obviously_closed[28];	//ds:0x7c7d; seg068
-extern signed char g_tmap_double1;		//ds:0x7c9a; seg025, seg072
-extern signed char g_tmap_double2;		//ds:0x7c9b; seg025, seg072, seg082
-extern signed char g_swafnild_traveled;		//ds:0x7c9c; seg063, seg072
-extern unsigned char g_towns_gossip_max[52];	//ds:0x7c9d; seg073
-extern unsigned char g_towns_gossip_off[52];	//ds:0x7cd1; seg073
-extern const char g_gossip_str_triple_wildcard[8];	//ds:0x7d06;
+extern unsigned char g_tex_descr_table[101][18];		//ds:0x750a; seg066
+extern const signed char g_visual_field_draw_order[29];		//ds:0x7c24; seg066
+extern signed char g_can_merge_group;				//ds:0x7c41; seg066, seg076
+extern signed char g_c_event_active;				//ds:0x7c42; seg002, seg067
+extern const char g_str_bank_deposit_to_big[57];		//ds:0x7c44; seg068
+extern const char g_str_obviously_closed[28];			//ds:0x7c7d; seg068
+extern signed char g_tmap_double1;				//ds:0x7c9a; seg025, seg072
+extern signed char g_tmap_double2;				//ds:0x7c9b; seg025, seg072, seg082
+extern signed char g_swafnild_traveled;				//ds:0x7c9c; seg063, seg072
+extern unsigned char g_towns_gossip_max[52];			//ds:0x7c9d; seg073
+extern unsigned char g_towns_gossip_off[52];			//ds:0x7cd1; seg073
+extern const char g_gossip_str_triple_wildcard[8];		//ds:0x7d06;
 
-extern const unsigned char g_automap_bitmask[8];	//ds:0x7d4a; seg002, seg074
-extern const unsigned char g_automap_tile_arrowup[49];	//ds:0x7d52; seg074
+extern const unsigned char g_automap_bitmask[8];		//ds:0x7d4a; seg002, seg074
+extern const unsigned char g_automap_tile_arrowup[49];		//ds:0x7d52; seg074
 extern const unsigned char g_automap_tile_arrowright[49];	//ds:0x7d83; seg074
-extern const unsigned char g_automap_tile_cross[49];	//ds:0x7d4b; seg074
-extern signed short g_automap_selx;		//ds:0x7de5; seg074, seg099
-extern signed short g_automap_sely;		//ds:0x7de7; seg074, seg099
+extern const unsigned char g_automap_tile_cross[49];		//ds:0x7d4b; seg074
+extern signed short g_automap_selx;				//ds:0x7de5; seg074, seg099
+extern signed short g_automap_sely;				//ds:0x7de7; seg074, seg099
 
 extern signed short (*g_dng_handlers[15])(void);	//ds:0x92d6; seg076
 extern signed short g_dng_level_changed;	//ds:0x9312; seg075, seg076
@@ -1075,6 +1075,9 @@ extern const char g_dng03_str_spinnennetz[12];	//ds:0x95a6; seg079
 extern const char g_dng03_str_mactans[8];	//ds:0x95b2; seg079
 extern Bit16s g_dng05_trash_flag;		//ds:0x960e; seg080 SHOULD BE IN GAME STATE
 
+extern const char g_str_s_war[8];		//ds:0x964f; seg081
+extern const char g_str_s_und_s_waren[17];	//ds:0x9657; seg081
+extern const char g_dng08_str_tairach[8];	//ds:0x9725; seg083
 extern signed int g_dng12_obstacle_tries;	//ds:0x9d43; seg090 SHOULD BE IN GAME STATE
 extern signed int g_dng12_watertrap_bak;	//ds:0x9d45; seg090 SHOULD BE IN GAME STATE
 extern struct struct_chest *g_dng_specialchest_index[15];	//ds:0x9d57; seg092
@@ -1084,7 +1087,8 @@ extern struct struct_land_route g_land_routes[59];	//ds:0x9dc6; seg093, seg094
 extern struct mouse_action g_action_table_travelmap[35];	//ds:0xa50f; seg093
 
 extern struct struct_tevent g_tevents_tab[156]; //ds:0xa66d; seg094
-
+extern signed char g_traveling;				//ds:0xa842; seg002, seg032, seg063, seg094
+extern const signed char g_tevents_repeatable[145];	//ds:0xa843; seg094
 extern char g_grammar_article_der[4];		//ds:0xa8d4; seg096
 extern char g_grammar_article_die[4];		//ds:0xa8d8; seg096
 extern char g_grammar_article_des[4];		//ds:0xa8e0; seg096

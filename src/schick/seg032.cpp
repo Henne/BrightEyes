@@ -1099,7 +1099,7 @@ signed short do_fight(signed short fight_id)
 
 				g_game_state = (GAME_STATE_MAIN);
 
-				if (ds_readbs(TRAVELING) != 0) {
+				if (g_traveling) {
 
 					gs_travel_detour = (99);
 					ptr = get_hero(0);

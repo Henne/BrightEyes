@@ -4466,7 +4466,7 @@ void sub_hero_le(Bit8u *hero, signed short le)
 				}
 			}
 
-			if ((ds_readb(TRAVELING) != 0)
+			if (g_traveling
 				&& !g_in_fight &&
 				(!count_heroes_available_in_group() || ((count_heroes_available_in_group() == 1) && is_hero_available_in_group(get_hero(6))))) /* count_heroes_available_in_group_ignore_npc() == 0 */
 			{

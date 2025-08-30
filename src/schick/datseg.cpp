@@ -4694,8 +4694,8 @@ struct struct_chest g_dng06_specialchests[3] = {
 	{ DNG_POS(1,9,4), 0, use_lockpicks_on_chest,	chest_poisoned1,	DNG06_chest00_loot, 0, 0, 0 },
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x9610
-char g_str_s_war[8] = "%s WAR "; // ds:0x964f
-char g_str_s_und_s_waren[17] = "%s UND %s WAREN "; // ds:0x9657
+const char g_str_s_war[8] = "%s WAR "; // ds:0x964f
+const char g_str_s_und_s_waren[17] = "%s UND %s WAREN "; // ds:0x9657
 
 /* REMARK: These 500 D might result in an integer overflow. */
 struct struct_chest g_dng07_specialchests[2] = {
@@ -4711,7 +4711,7 @@ struct struct_chest g_dng08_specialchests[7] = {
 	{ DNG_POS(0,6,14), 5, DNG08_chest05_open,	chest_poisoned1,	DNG08_chest05_loot, 0, 0, 0 },
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x9692
-char g_dng08_str_tairach[8] = "TAIRACH"; // ds:0x9725
+const char g_dng08_str_tairach[8] = "TAIRACH"; // ds:0x9725
 unsigned char g_unkn_058[1] = { 0x00 }; // ds:0x972d
 struct struct_chest g_dng09_specialchests[8] = {
 	{ DNG_POS(0,12,8),	0, NULL,			NULL,			DNG09_chest00_loot, 0, 0, 8 },
@@ -5427,8 +5427,8 @@ struct struct_tevent g_tevents_tab[156] = {
 	{ -1,  0,   0 },
 }; // ds:0xa66d
 unsigned char g_unkn_064[1] = { 0x00 }; // ds:0xa841
-unsigned char g_traveling = 0; // ds:0xa842
-unsigned char g_tevents_repeatable[145] = { 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 }; // ds:0xa843
+signed char g_traveling = 0; // ds:0xa842
+const signed char g_tevents_repeatable[145] = { 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 }; // ds:0xa843
 char g_grammar_article_der[4] = "DER"; // ds:0xa8d4
 char g_grammar_article_die[4] = "DIE"; // ds:0xa8d8
 char g_grammar_article_das[4] = "DAS"; // ds:0xa8dc
