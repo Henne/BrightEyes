@@ -34,6 +34,12 @@ namespace M302de {
 void sub_light_timers(signed short);
 #endif
 
+struct struct_ani {
+	Bit8u* ptr;
+	signed int width;
+	signed int height;
+};
+
 void do_market(void)
 {
 	signed short done;
@@ -49,7 +55,8 @@ void do_market(void)
 
 	do {
 
-		if (g_request_refresh != 0) {
+		if (g_request_refresh) {
+
 			draw_main_screen();
 			set_var_to_zero();
 			load_ani(16);
@@ -57,12 +64,12 @@ void do_market(void)
 			g_request_refresh = 0;
 		}
 
-		answer = GUI_radio(get_ttx(680), 4,
-					get_ttx(676), get_ttx(677),
-					get_ttx(678), get_ttx(613));
+		answer = GUI_radio(get_ttx(680), 4, get_ttx(676), get_ttx(677), get_ttx(678), get_ttx(613));
 
 		if (answer == 4 || answer == -1) {
+
 			done = 1;
+
 		} else {
 
 			/* set up parameters for this merchant */
@@ -80,8 +87,9 @@ void do_market(void)
 
 			/* clean up */
 			gs_current_typeindex = type_bak;
-			gs_direction_bak = ((signed char)bak1);
-			gs_direction = ((signed char)dir_bak); /* by this line, the party will *not* be rotated after leaving the market */
+			gs_direction_bak = (signed char)bak1;
+			gs_direction = (signed char)dir_bak; /* by this line, the party will *not* be rotated after leaving the market */
+
 			ds_writeb(SHOP_DESCR_TABLE + 90 * 9 + 0, 0);
 			ds_writeb(SHOP_DESCR_TABLE + 90 * 9 + 2, 0);
 			ds_writeb(SHOP_DESCR_TABLE + 90 * 9 + 1, 0);
@@ -101,10 +109,10 @@ void final_intro(void)
 	signed short height;
 	Bit32u len;
 	Bit8u *ptr1;
-	Bit8u* ptr2;
+	Bit8u *ptr2;
 	struct nvf_desc nvf;
 
-	g_pp20_index = (ARCHIVE_FILE_DNGS + 12);
+	g_pp20_index = ARCHIVE_FILE_DNGS + 12;
 
 	update_mouse_cursor();
 
@@ -135,7 +143,7 @@ void final_intro(void)
 
 	map_effect(g_renderbuf_ptr);
 
-	nvf.dst = (Bit8u*)ptr2;
+	nvf.dst = ptr2;
 	nvf.src = (Bit8u*)g_buffer9_ptr;
 	nvf.no = 1;
 	nvf.type = 3;
@@ -156,7 +164,7 @@ void final_intro(void)
 
 	map_effect(g_renderbuf_ptr);
 
-	g_pic_copy.dst = (g_vga_memstart);
+	g_pic_copy.dst = g_vga_memstart;
 
 	delay_or_keypress(250);
 
@@ -174,7 +182,7 @@ void final_intro(void)
 	}
 
 	/* TODO: update window */
-	memset((void*)(g_vga_memstart), 0, 320 * 200);
+	memset((void*)g_vga_memstart, 0, 320 * 200);
 
 	refresh_colors();
 	refresh_screen_size();
@@ -183,21 +191,21 @@ void final_intro(void)
 #if defined(__BORLANDC__)
 static
 #endif
-Bit8u* hyg_ani_1(signed short nvf_no, Bit8u *ptr)
+Bit8u* hyg_ani_1(signed short nvf_no, struct struct_ani *ani)
 {
 	HugePt retval;
 	struct nvf_desc nvf;
 
-	nvf.dst = (Bit8u*)(host_readd(ptr));
+	nvf.dst = ani->ptr;
 	nvf.src = g_renderbuf_ptr;
 	nvf.no = nvf_no;
 	nvf.type = 3;
-	nvf.width = ptr + 4;
-	nvf.height = ptr + 6;
+	nvf.width = (Bit8u*)&ani->width;
+	nvf.height = (Bit8u*)&ani->height;
 
 	process_nvf(&nvf);
 
-	retval = ((HugePt)host_readd(ptr) + host_readws(ptr + 4) * host_readws(ptr + 6));
+	retval = (HugePt)ani->ptr + ani->width * ani->height;
 
 	return (Bit8u*)retval;
 }
@@ -205,15 +213,15 @@ Bit8u* hyg_ani_1(signed short nvf_no, Bit8u *ptr)
 #if defined(__BORLANDC__)
 static
 #endif
-void hyg_ani_2(Bit8u *ptr, signed short x, signed short y)
+void hyg_ani_2(struct struct_ani *ani, signed short x, signed short y)
 {
 	g_pic_copy.x1 = x;
 	g_pic_copy.y1 = y;
-	g_pic_copy.x2 = x + host_readws(ptr + 4) - 1;
-	g_pic_copy.y2 = y + host_readws(ptr + 6) - 1;
+	g_pic_copy.x2 = x + ani->width - 1;
+	g_pic_copy.y2 = y + ani->height - 1;
 
 	//g_pic_copy.src = host_readd(ptr);
-	g_pic_copy.src = (unsigned char*)(*((unsigned char*)ptr));
+	g_pic_copy.src = ani->ptr;
 	g_pic_copy.dst = g_renderbuf_ptr;
 
 	do_pic_copy(2);
@@ -257,7 +265,7 @@ void show_hyggelik_ani(void)
 	Bit8u *src;
 	Bit8u* ptr1;
 	Bit8u* ptr2;
-	Bit8u array[30*8];
+	struct_ani ani[30];
 
 	g_wallclock_update = 0;
 	ptr1 = g_buffer9_ptr;
@@ -274,35 +282,36 @@ void show_hyggelik_ani(void)
 
 	wait_for_vsync();
 	set_palette(src, 0 , 0x40);
-	host_writed(array + 0, (Bit32u)ptr2);
+	ani[0].ptr = ptr2;
 
-	hyg_ani_1(0, array);
+	hyg_ani_1(0, ani);
 
 	handle = load_archive_file(ARCHIVE_FILE_HYGGELIK_NVF);
 	filelen = read_archive_file(handle, g_renderbuf_ptr, 64000);
 	close(handle);
-	host_writed(array + 0, (Bit32u)ptr1);
+
+	ani[0].ptr = ptr1;
 
 	for (i = 0; i < 26; i++) {
-		host_writed(array + 8 * i + 8, (Bit32u)hyg_ani_1(i, array + 8 * i));
+		ani[i].ptr = hyg_ani_1(i, &ani[i]);
 	}
 
 	update_mouse_cursor();
 
 	hyg_ani_3();
-	hyg_ani_2(array + 0 * 8, 145, 39);
-	hyg_ani_2(array + 7 * 8, 142, 86);
-	hyg_ani_2(array + 10 * 8, 82, 67);
-	hyg_ani_2(array + 20 * 8, 186, 67);
+	hyg_ani_2(&ani[0], 145, 39);
+	hyg_ani_2(&ani[7], 142, 86);
+	hyg_ani_2(&ani[10], 82, 67);
+	hyg_ani_2(&ani[20], 186, 67);
 
 	map_effect(g_renderbuf_ptr);
 
 	for (i = 0; i < 7; i++) {
 		hyg_ani_3();
-		hyg_ani_2(array + 7 * 8, 142, 86);
-		hyg_ani_2((array + 0 * 8) + 8 * i, 145, 39);
-		hyg_ani_2(array + 10 * 8, 82, 67);
-		hyg_ani_2(array + 20 * 8, 186, 67);
+		hyg_ani_2(&ani[7], 142, 86);
+		hyg_ani_2(&ani[i], 145, 39);
+		hyg_ani_2(&ani[10], 82, 67);
+		hyg_ani_2(&ani[20], 186, 67);
 		hyg_ani_4();
 		delay_or_keypress(3);
 	}
@@ -311,53 +320,53 @@ void show_hyggelik_ani(void)
 
 	for (i = 0; i < 5; i++) {
 		hyg_ani_3();
-		hyg_ani_2(array + 6 * 8, 145, 39);
-		hyg_ani_2(array + 7 * 8, 142, 86);
-		hyg_ani_2(array + 20 * 8, 186, 67);
-		hyg_ani_2(array + 10 * 8 + 8 * i, ds_readb(HYG_ANI_X0 + i), 67);
+		hyg_ani_2(&ani[6], 145, 39);
+		hyg_ani_2(&ani[7], 142, 86);
+		hyg_ani_2(&ani[20], 186, 67);
+		hyg_ani_2(&ani[10 + i], ds_readb(HYG_ANI_X0 + i), 67);
 		hyg_ani_4();
 		delay_or_keypress(3);
 	}
 
 	hyg_ani_3();
-	hyg_ani_2(array + 5 * 8, 145, 39);
-	hyg_ani_2(array + 7 * 8, 142, 86);
-	hyg_ani_2(array + 15 * 8, ds_readb(HYG_ANI_X1), 67);
-	hyg_ani_2(array + 20 * 8, ds_readb(HYG_ANI_X5), 67);
+	hyg_ani_2(&ani[5], 145, 39);
+	hyg_ani_2(&ani[7], 142, 86);
+	hyg_ani_2(&ani[15], ds_readb(HYG_ANI_X1), 67);
+	hyg_ani_2(&ani[20], ds_readb(HYG_ANI_X5), 67);
 	hyg_ani_4();
 	delay_or_keypress(3);
 
 	hyg_ani_3();
-	hyg_ani_2(array + 5 * 8, 145, 39);
-	hyg_ani_2(array + 7 * 8, 142, 86);
-	hyg_ani_2(array + 16 * 8, ds_readb(HYG_ANI_X2), 67);
-	hyg_ani_2(array + 21 * 8, ds_readb(HYG_ANI_X6), 67);
+	hyg_ani_2(&ani[5], 145, 39);
+	hyg_ani_2(&ani[7], 142, 86);
+	hyg_ani_2(&ani[16], ds_readb(HYG_ANI_X2), 67);
+	hyg_ani_2(&ani[21], ds_readb(HYG_ANI_X6), 67);
 	hyg_ani_4();
 	delay_or_keypress(3);
 
 	for (i = 0; i < 3; i++) {
 		hyg_ani_3();
-		hyg_ani_2(array + 6 * 8, 145, 39);
-		hyg_ani_2(array + 8 * 8, 144, ds_readb(HYG_ANI_X9 + i));
-		hyg_ani_2(array + 17 * 8 + 8 * i, ds_readb(HYG_ANI_X3 + i), 67);
-		hyg_ani_2(array + 22 * 8 + 8 * i, ds_readb(HYG_ANI_X7 + i), 67);
+		hyg_ani_2(&ani[6], 145, 39);
+		hyg_ani_2(&ani[8], 144, ds_readb(HYG_ANI_X9 + i));
+		hyg_ani_2(&ani[17 + i], ds_readb(HYG_ANI_X3 + i), 67);
+		hyg_ani_2(&ani[22 + i], ds_readb(HYG_ANI_X7 + i), 67);
 		hyg_ani_4();
 		delay_or_keypress(3);
 	}
 
 	hyg_ani_3();
-	hyg_ani_2(array + 6 * 8, 145, 39);
-	hyg_ani_2(array + 9 * 8, 125, 104);
-	hyg_ani_2(array + 19 * 8, ds_readb((HYG_ANI_X3+2)), 67);
-	hyg_ani_2(array + 24 * 8, ds_readb((HYG_ANI_X7+2)), 67);
+	hyg_ani_2(&ani[6], 145, 39);
+	hyg_ani_2(&ani[9], 125, 104);
+	hyg_ani_2(&ani[19], ds_readb((HYG_ANI_X3+2)), 67);
+	hyg_ani_2(&ani[24], ds_readb((HYG_ANI_X7+2)), 67);
 	hyg_ani_4();
 	delay_or_keypress(100);
 
 	/* clear the screen */
 	do_fill_rect(g_renderbuf_ptr, 0, 0, 319, 199, 0);
 
-	hyg_ani_2(array + 25 * 8, 100, 0);
-	g_pic_copy.dst = (g_vga_memstart);
+	hyg_ani_2(&ani[25], 100, 0);
+	g_pic_copy.dst = g_vga_memstart;
 	map_effect(g_renderbuf_ptr);
 	delay_or_keypress(500);
 
@@ -372,7 +381,7 @@ void show_hyggelik_ani(void)
 
 	refresh_screen_size();
 	/* TODO: update window */
-	memset((void*)(g_vga_memstart), 0, 320 * 200);
+	memset((void*)g_vga_memstart, 0, 320 * 200);
 	refresh_colors();
 }
 
@@ -454,11 +463,6 @@ void show_outro(void)
 	nvf.width = (Bit8u*)&width;
 	nvf.height = (Bit8u*)&height;
 	process_nvf(&nvf);
-#if !defined(__BORLANDC__)
-	/* BE-fix */
-	width = host_readws((Bit8u*)&width);
-	height = host_readws((Bit8u*)&height);
-#endif
 
 	g_pic_copy.x1 = (320 - width) / 2;
 	g_pic_copy.y1 = 0;
@@ -488,11 +492,6 @@ void show_outro(void)
 	nvf.width = (Bit8u*)&width;
 	nvf.height = (Bit8u*)&height;
 	process_nvf(&nvf);
-#if !defined(__BORLANDC__)
-	/* BE-fix */
-	width = host_readws((Bit8u*)&width);
-	height = host_readws((Bit8u*)&height);
-#endif
 
 	g_pic_copy.x1 = (320 - width) / 2;
 	g_pic_copy.y1 = 0;
@@ -522,11 +521,6 @@ void show_outro(void)
 	nvf.width = (Bit8u*)&width;
 	nvf.height = (Bit8u*)&height;
 	process_nvf(&nvf);
-#if !defined(__BORLANDC__)
-	/* BE-fix */
-	width = host_readws((Bit8u*)&width);
-	height = host_readws((Bit8u*)&height);
-#endif
 
 	g_pic_copy.x1 = (320 - width) / 2;
 	g_pic_copy.y1 = 0;
