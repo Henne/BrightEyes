@@ -81,7 +81,7 @@ void show_automap(void)
 				render_automap(l_si);
 				clear_ani_pal();
 				draw_automap_to_screen();
-				set_ani_pal(p_datseg + PALETTE_FIGHT2);
+				set_ani_pal((Bit8u*)g_palette_fight2);
 				g_request_refresh = 0;
 			}
 
@@ -507,7 +507,7 @@ signed short select_teleport_dest(void)
 
 	draw_automap_to_screen();
 
-	set_ani_pal(p_datseg + PALETTE_FIGHT2);
+	set_ani_pal((Bit8u*)g_palette_fight2);
 
 	if (g_dng_map_size == 16) {
 		draw_loc_icons(1, MENU_ICON_MAGIC);
@@ -525,10 +525,7 @@ signed short select_teleport_dest(void)
 			if (g_dng_map_size == 16) {
 				answer = GUI_radio(get_ttx(616), 1, get_ttx(617)) - 1;
 			} else {
-				answer = GUI_radio(get_ttx(616), 3,
-							 get_ttx(614),
-							 get_ttx(615),
-							 get_ttx(617)) - 1;
+				answer = GUI_radio(get_ttx(616), 3, get_ttx(614), get_ttx(615), get_ttx(617)) - 1;
 			}
 
 			if (answer != -2) {

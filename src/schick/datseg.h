@@ -1076,7 +1076,7 @@ extern signed char g_swafnild_traveled;				//ds:0x7c9c; seg063, seg072
 extern unsigned char g_towns_gossip_max[52];			//ds:0x7c9d; seg073
 extern unsigned char g_towns_gossip_off[52];			//ds:0x7cd1; seg073
 extern const char g_gossip_str_triple_wildcard[8];		//ds:0x7d06;
-
+extern Bit8u g_palette_fight2[20][3];				//ds:0x7d0e; seg032, seg047
 extern const unsigned char g_automap_bitmask[8];		//ds:0x7d4a; seg002, seg074
 extern const unsigned char g_automap_tile_arrowup[49];		//ds:0x7d52; seg074
 extern const unsigned char g_automap_tile_arrowright[49];	//ds:0x7d83; seg074

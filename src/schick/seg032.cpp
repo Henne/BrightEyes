@@ -87,11 +87,11 @@ void draw_fight_screen_pal(signed short mode)
 
 		/* clear framebuffer */
 		/* TODO: add update */
-		memset((void*)(g_vga_memstart), 0, 320 * 200);
+		memset((void*)g_vga_memstart, 0, 320 * 200);
 
 		/* set palettes */
 		set_palette((Bit8u*)g_palette_fight1, 0x00, 0x20);
-		set_palette(p_datseg + PALETTE_FIGHT2, 0x80, 0x14);
+		set_palette((Bit8u*)g_palette_fight2, 0x80, 0x14);
 		set_palette(g_buffer8_ptr + 0xfa02, 0x60, 0x20);
 
 		g_pp20_index = -1;
