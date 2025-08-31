@@ -3,7 +3,7 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-void tevent_064_chest(Bit8u*);
+void tevent_064_chest(struct struct_chest*);
 /* 0x25 */
 void tevent_060(void);
 /* 0x2a */

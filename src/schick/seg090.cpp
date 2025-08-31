@@ -509,7 +509,7 @@ void DNG_clear_corridor(Bit8s *flag)
 	}
 }
 
-void DNG12_chest00_loot(Bit8u* chest)
+void DNG12_chest00_loot(struct struct_chest* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 

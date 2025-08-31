@@ -197,7 +197,7 @@ void tevent_014(void)
 	}
 }
 
-void tevent_014_chest(Bit8u* chest)
+void tevent_014_chest(struct struct_chest* chest)
 {
 	((struct struct_chest*)chest)->content = gs_tevent014_chest;
 

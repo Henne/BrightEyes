@@ -517,17 +517,17 @@ void DNG15_debris(signed short ladder)
 	}
 }
 
-void DNG15_empty_chest(Bit8u* chest)
+void DNG15_empty_chest(struct struct_chest* chest)
 {
 	GUI_output(get_ttx(522));
 }
 
-void DNG15_rotten_clothes_chest(Bit8u* chest)
+void DNG15_rotten_clothes_chest(struct struct_chest* chest)
 {
 	GUI_output(get_tx(34));
 }
 
-void DNG15_smelling_chest(Bit8u* chest)
+void DNG15_smelling_chest(struct struct_chest* chest)
 {
 	struct struct_hero *hero;
 
@@ -542,7 +542,7 @@ void DNG15_smelling_chest(Bit8u* chest)
 	}
 }
 
-void DNG15_figures_chest(Bit8u* chest)
+void DNG15_figures_chest(struct struct_chest* chest)
 {
 	signed short tw_bak;
 
@@ -552,7 +552,7 @@ void DNG15_figures_chest(Bit8u* chest)
 	g_textbox_width = tw_bak;
 }
 
-void DNG15_cursed_money_chest(Bit8u* chest)
+void DNG15_cursed_money_chest(struct struct_chest* chest)
 {
 	Bit32s p_money;
 	signed short tw_bak;

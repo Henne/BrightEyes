@@ -459,7 +459,7 @@ void DNG08_chest01_trap(void)
 	sub_hero_le(hero, dice_roll(3, 6, 0));
 }
 
-void DNG08_chest00_loot(Bit8u*)
+void DNG08_chest00_loot(struct struct_chest* chest)
 {
 	if (!gs_dng08_chest0_looted)
 	{
@@ -472,12 +472,12 @@ void DNG08_chest00_loot(Bit8u*)
 	}
 }
 
-void DNG08_chest01_loot(Bit8u*)
+void DNG08_chest01_loot(struct struct_chest* chest)
 {
 	loot_multi_chest(gs_dng08_chest1_content, get_tx(34));
 }
 
-void DNG08_chest02_loot(Bit8u* chest)
+void DNG08_chest02_loot(struct struct_chest* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -498,7 +498,7 @@ void DNG08_chest02_open(struct struct_chest* chest)
 
 			if (!strcmp(g_text_input_buf, g_dng08_str_tairach)) {
 
-				chest->loot((Bit8u*)chest);
+				chest->loot(chest);
 
 			} else if (chest->trap) {
 
@@ -540,7 +540,7 @@ void DNG08_chest04_open(struct struct_chest* chest)
 
 	if (get_first_hero_with_item(ITEM_KEY_BRONZE) != -1 || test_skill(hero, TA_SCHLOESSER, 5) > 0) {
 
-		chest->loot((Bit8u*)chest);
+		chest->loot(chest);
 
 	} else {
 
@@ -554,7 +554,7 @@ void DNG08_chest05_open(struct struct_chest* chest)
 
 	if (get_first_hero_with_item(ITEM_KEY_BRONZE) != -1 || test_skill(hero, TA_SCHLOESSER, 5) > 0) {
 
-		chest->loot((Bit8u*)chest);
+		chest->loot(chest);
 
 	} else {
 
@@ -562,7 +562,7 @@ void DNG08_chest05_open(struct struct_chest* chest)
 	}
 }
 
-void DNG08_chest04_loot(Bit8u* chest)
+void DNG08_chest04_loot(struct struct_chest* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -573,7 +573,7 @@ void DNG08_chest04_loot(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG08_chest05_loot(Bit8u* chest)
+void DNG08_chest05_loot(struct struct_chest* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 

@@ -193,7 +193,7 @@ void loot_corpse(struct struct_chest* chest_ptr, char *text, Bit8s *flag)
 		if (answer == 0) {
 
 			/* examine the corpse */
-			chest_ptr->loot((Bit8u*)chest_ptr);
+			chest_ptr->loot(chest_ptr);
 
 			if (!(*flag))	{
 

@@ -5,7 +5,7 @@ namespace M302de {
 /* 0x20 */
 void DNG_clear_corridor(Bit8s*);
 /* 0x25 */
-void DNG12_chest00_loot(Bit8u*);
+void DNG12_chest00_loot(struct struct_chest*);
 /* 0x2a */
 signed short DNG12_handler(void);
 /* 0x2f */

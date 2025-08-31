@@ -620,7 +620,7 @@ void tevent_064(void)
 	}
 }
 
-void tevent_064_chest(Bit8u*)
+void tevent_064_chest(struct struct_chest*)
 {
 	loot_multi_chest(gs_tevent064_chest, get_tx2(74));
 }

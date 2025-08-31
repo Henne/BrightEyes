@@ -227,7 +227,7 @@ signed short DNG01_handler(void)
 	return 0;
 }
 
-void DNG01_chest01_loot(Bit8u* chest)
+void DNG01_chest01_loot(struct struct_chest* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -238,7 +238,7 @@ void DNG01_chest01_loot(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG01_chest02_loot(Bit8u* chest)
+void DNG01_chest02_loot(struct struct_chest* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -249,7 +249,7 @@ void DNG01_chest02_loot(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG01_chest03_loot(Bit8u* chest)
+void DNG01_chest03_loot(struct struct_chest* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -260,7 +260,7 @@ void DNG01_chest03_loot(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG01_chest05_loot(Bit8u* chest)
+void DNG01_chest05_loot(struct struct_chest* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -276,7 +276,7 @@ void DNG01_chest07_open(struct struct_chest* chest)
 	loot_corpse(chest, get_tx(4), &gs_dng01_corpse_looted);
 }
 
-void DNG01_chest07_loot(Bit8u* chest)
+void DNG01_chest07_loot(struct struct_chest* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -287,7 +287,7 @@ void DNG01_chest07_loot(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG01_chest06_loot(Bit8u* chest)
+void DNG01_chest06_loot(struct struct_chest* chest)
 {
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* Enabling the extra loot in function DNG01_chest6_x1() also causes the special chest handler to call this function instead of DNG01_chest6_open().
@@ -335,7 +335,7 @@ void DNG01_chest06_open(struct struct_chest* chest)
 		if (!strcmp(g_text_input_buf, g_dng01_str_marbo))
 		{
 			// correct answer
-			chest->loot((Bit8u*)chest);
+			chest->loot(chest);
 
 			// Original-Bug: enable the extra loot, here 10 AP
 #ifdef M302de_ORIGINAL_BUGFIX
@@ -352,7 +352,7 @@ void DNG01_chest06_open(struct struct_chest* chest)
 	}
 }
 
-void DNG01_chest00_loot(Bit8u* chest)
+void DNG01_chest00_loot(struct struct_chest* chest)
 {
 	if (!gs_deadship_final && GUI_bool(get_tx(1)))
 	{

@@ -397,7 +397,7 @@ void seg092_06b4(signed short a1)
 
 			if (l4 != 0 && chest_ptr->loot) {
 
-				chest_ptr->loot((Bit8u*)chest_ptr);
+				chest_ptr->loot(chest_ptr);
 
 			} else if (chest_ptr->mod) {
 
@@ -409,7 +409,7 @@ void seg092_06b4(signed short a1)
 
 			} else if (chest_ptr->loot) {
 
-				chest_ptr->loot((Bit8u*)chest_ptr);
+				chest_ptr->loot(chest_ptr);
 				g_get_extra_loot = 1;
 
 			} else if (chest_ptr->money) {
@@ -489,7 +489,7 @@ void use_lockpicks_on_chest(struct struct_chest* chest_ptr)
 
 				if (((struct struct_chest*)chest_ptr)->loot) {
 
-					((struct struct_chest*)chest_ptr)->loot((Bit8u*)chest_ptr);
+					((struct struct_chest*)chest_ptr)->loot(chest_ptr);
 
 					if (((struct struct_chest*)chest_ptr)->trap == chest_protected_heavy) {
 						add_hero_ap(hero, 5);
@@ -517,7 +517,7 @@ void use_key_on_chest(struct struct_chest* chest)
 
 		if (!hero->inventory[key_pos].flags.broken) {
 
-			((struct struct_chest*)chest)->loot((Bit8u*)chest);
+			((struct struct_chest*)chest)->loot(chest);
 
 			g_get_extra_loot = 1;
 		}

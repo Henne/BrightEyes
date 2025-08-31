@@ -426,7 +426,7 @@ struct struct_chest {
 	void (*open)(struct struct_chest*);
 	void (*trap)(void);
 	union {
-		void (*loot)(Bit8u*);
+		void (*loot)(struct struct_chest*);
 		Bit8u* content;
 	};
 	signed short ap;

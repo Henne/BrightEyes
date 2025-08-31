@@ -523,7 +523,7 @@ signed short DNG02_handler(void)
 	return 0;
 }
 
-void DNG02_chest00_loot(Bit8u* chest)
+void DNG02_chest00_loot(struct struct_chest* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -534,7 +534,7 @@ void DNG02_chest00_loot(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG02_chest01_loot(Bit8u* chest)
+void DNG02_chest01_loot(struct struct_chest* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -545,7 +545,7 @@ void DNG02_chest01_loot(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG02_chest02_loot(Bit8u* chest)
+void DNG02_chest02_loot(struct struct_chest* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -556,7 +556,7 @@ void DNG02_chest02_loot(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG02_chest03_loot(Bit8u* chest)
+void DNG02_chest03_loot(struct struct_chest* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -567,7 +567,7 @@ void DNG02_chest03_loot(Bit8u* chest)
 	((struct struct_chest*)chest)->content = ptr_bak;
 }
 
-void DNG02_chest04_loot(Bit8u*)
+void DNG02_chest04_loot(struct struct_chest*)
 {
 	signed short i;
 	signed short answer;
@@ -607,7 +607,7 @@ void DNG02_chest04_loot(Bit8u*)
 	g_textbox_width = tw_bak;
 }
 
-void DNG02_chest05_loot(Bit8u* chest)
+void DNG02_chest05_loot(struct struct_chest* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -623,7 +623,7 @@ void DNG02_chest06_open(struct struct_chest* chest)
 	loot_corpse(chest, get_tx(19), (Bit8s*)&gs_dng02_corpse_flag);
 }
 
-void DNG02_chest06_loot(Bit8u* chest)
+void DNG02_chest06_loot(struct struct_chest* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 

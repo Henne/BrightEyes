@@ -3,21 +3,21 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-void DNG02_chest00_loot(Bit8u*);
+void DNG02_chest00_loot(struct struct_chest*);
 /* 0x25 */
-void DNG02_chest01_loot(Bit8u*);
+void DNG02_chest01_loot(struct struct_chest*);
 /* 0x2a */
-void DNG02_chest02_loot(Bit8u*);
+void DNG02_chest02_loot(struct struct_chest*);
 /* 0x2f */
-void DNG02_chest03_loot(Bit8u*);
+void DNG02_chest03_loot(struct struct_chest*);
 /* 0x34 */
-void DNG02_chest04_loot(Bit8u*);
+void DNG02_chest04_loot(struct struct_chest*);
 /* 0x39 */
-void DNG02_chest05_loot(Bit8u*);
+void DNG02_chest05_loot(struct struct_chest*);
 /* 0x3e */
 void DNG02_chest06_open(struct struct_chest*);
 /* 0x43 */
-void DNG02_chest06_loot(Bit8u*);
+void DNG02_chest06_loot(struct struct_chest*);
 /* 0x48 */
 signed short DNG02_handler(void);
 /* 0x4d */

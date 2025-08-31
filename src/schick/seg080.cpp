@@ -291,7 +291,7 @@ void DNG04_chest02_open(struct struct_chest* chest)
 	loot_corpse(chest, get_tx(1), (Bit8s*)&gs_dng04_corpse2_flag);
 }
 
-void DNG04_chest00_loot(Bit8u* chest)
+void DNG04_chest00_loot(struct struct_chest* chest)
 {
 	Bit8u* bak = ((struct struct_chest*)chest)->content;
 
@@ -302,7 +302,7 @@ void DNG04_chest00_loot(Bit8u* chest)
 	((struct struct_chest*)chest)->content = bak;
 }
 
-void DNG04_chest01_loot(Bit8u* chest)
+void DNG04_chest01_loot(struct struct_chest* chest)
 {
 	Bit8u* bak = ((struct struct_chest*)chest)->content;
 
@@ -313,7 +313,7 @@ void DNG04_chest01_loot(Bit8u* chest)
 	((struct struct_chest*)chest)->content = bak;
 }
 
-void DNG04_chest02_loot(Bit8u* chest)
+void DNG04_chest02_loot(struct struct_chest* chest)
 {
 	Bit8u* bak = ((struct struct_chest*)chest)->content;
 

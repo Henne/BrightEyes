@@ -453,7 +453,7 @@ void DNG06_fight_intro(signed short fight_id)
 }
 
 
-void DNG06_chest00_loot(Bit8u* chest)
+void DNG06_chest00_loot(struct struct_chest* chest)
 {
 	Bit8u* ptr_bak = ((struct struct_chest*)chest)->content;
 
@@ -465,7 +465,7 @@ void DNG06_chest00_loot(Bit8u* chest)
 }
 
 
-void DNG06_chest01_loot(Bit8u* chest)
+void DNG06_chest01_loot(struct struct_chest* chest)
 {
 	signed short i;
 	struct struct_hero *hero;
