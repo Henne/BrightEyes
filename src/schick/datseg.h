@@ -155,6 +155,22 @@ struct struct_chest {
 	signed short food;
 };
 
+/* TODO: SHOULD BE IN GAME STATE */
+/* rationale: write SEA_ROUTE_PASSAGE... if the value depends on the current passage on the route (and will change with time).
+ * the other values are constants. */
+struct sea_route {
+
+	signed char town1;	/* one byte readonly */
+				/* ID of the first town of the connection. Note that the routes are undirected; i.e. both endpoint towns are treated equal. */
+	signed char town2;	/* one byte readonly */ /* ID of the second town of the connection */
+	unsigned char distance; /* one byte readonly */ /* TODO: But should be 2 Byte for Prem <-> Manrin to avoid an integer overflow */
+	signed char frequency;/* one byte readonly */ /* the higher this value, the rarer a passage on the route is offered */
+	signed char passage_timer;	/* one byte rw */ /* after how many days will a ship do a passage on this route? */
+	signed char coastal_route;	/* one byte readonly */ /* 0 = high seas route (= Hochseeroute), 1 = costal route */
+	signed char ship_type;	/* one byte rw */ /* passage type of the next passage on this route */
+	unsigned char price_mod;	/* one byte rw */ /* a number between 70 and 130 which serves as a percentage modifier to the price of the next ship on this route */
+};
+
 struct struct_route_tevent {
 	Bit16s place;
 	Bit16s tevent_id;
@@ -1041,6 +1057,7 @@ extern const struct struct_point g_invslot_iconxy_table[23];	//ds:0x63d2; seg046
 
 extern signed char g_hero_sel_exclude;		//ds:0x64a2; seg047, seg049, seg103, seg120
 
+extern struct sea_route g_sea_routes[46];	//ds:0x6f00; seg002, seg063, seg064 SHOULD BE IN GAME STATE
 extern Bit8u* g_daspota_locloot_index[18];	//ds:0x71fe; seg066
 
 extern const struct struct_point g_visual_field_offsets_std[29];	//ds:0x733a; seg066

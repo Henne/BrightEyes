@@ -43,36 +43,36 @@ void passages_init(void)
 {
 	signed short si;
 	signed short i;
-	Bit8u *p = p_datseg + SEA_ROUTES;
+	struct sea_route *route = &g_sea_routes[0];
 
 
-	for (i = 0; i < NR_SEA_ROUTES; p += SIZEOF_SEA_ROUTE, i++) {
+	for (i = 0; i < NR_SEA_ROUTES; route++, i++) {
 
-		host_writeb(p + SEA_ROUTE_PASSAGE_TIMER, (unsigned char)random_interval(0, host_readbs(p + SEA_ROUTE_FREQUENCY)));
-		host_writeb(p + SEA_ROUTE_PASSAGE_PRICE_MOD, (unsigned char)random_interval(70, 130));
+		route->frequency = (unsigned char)random_interval(0, route->frequency);
+		route->price_mod = (unsigned char)random_interval(70, 130);
 
 		si = random_schick(100);
 
-		if (!host_readbs(p + SEA_ROUTE_COSTAL_ROUTE)) {
+		if (!route->coastal_route) {
 			/* high seas route */
-			host_writeb(p + SEA_ROUTE_PASSAGE_SHIP_TYPE, si <= 50 ? SHIP_TYPE_LANGSCHIFF_HIGH_SEAS : (si <= 80 ? SHIP_TYPE_KARRACKE : (si <= 95 ? SHIP_TYPE_SCHNELLSEGLER : SHIP_TYPE_SCHNELLSEGLER_LUXURY)));
+			route->ship_type = si <= 50 ? SHIP_TYPE_LANGSCHIFF_HIGH_SEAS : (si <= 80 ? SHIP_TYPE_KARRACKE : (si <= 95 ? SHIP_TYPE_SCHNELLSEGLER : SHIP_TYPE_SCHNELLSEGLER_LUXURY));
 
 		} else {
 
 			/* costal route */
-			host_writeb(p + SEA_ROUTE_PASSAGE_SHIP_TYPE, si <= 10 ? SHIP_TYPE_LANGSCHIFF_COSTAL : (si <= 40 ? SHIP_TYPE_KUESTENSEGLER : (si <= 80 ? SHIP_TYPE_KUTTER : SHIP_TYPE_FISCHERBOOT)));
+			route->ship_type = si <= 10 ? SHIP_TYPE_LANGSCHIFF_COSTAL : (si <= 40 ? SHIP_TYPE_KUESTENSEGLER : (si <= 80 ? SHIP_TYPE_KUTTER : SHIP_TYPE_FISCHERBOOT));
 		}
 
 #if !defined(__BORLANDC__)
 	D1_LOG("%16s - %16s: %d %d %d %d %d %d\n",
-		get_ttx(host_readb(p + SEA_ROUTE_TOWN_1) + 0xeb),
-		get_ttx(host_readb(p + SEA_ROUTE_TOWN_2) + 0xeb),
-		host_readb(p + SEA_ROUTE_DISTANCE),
-		host_readb(p + SEA_ROUTE_FREQUENCY),
-		host_readb(p + SEA_ROUTE_PASSAGE_TIMER),
-		host_readb(p + SEA_ROUTE_COSTAL_ROUTE),
-		host_readb(p + SEA_ROUTE_PASSAGE_SHIP_TYPE),
-		host_readb(p + SEA_ROUTE_PASSAGE_PRICE_MOD));
+		get_ttx(route->town1 + 0xeb),
+		get_ttx(route->town2 + 0xeb),
+		route->distance,
+		route->frequency,
+		route->passage_timer,
+		route->coastal_route,
+		route->ship_type,
+		route->price_mod);
 #endif
 	}
 }
@@ -178,27 +178,26 @@ void do_harbor(void)
 
 					psg_ptr = p_datseg + SIZEOF_HARBOR_OPTION * answer + HARBOR_OPTIONS;
 
-					sprintf(g_dtp2,
-						get_tx(16),
+					sprintf(g_dtp2,	get_tx(16),
 
 						get_tx(ds_readws(SEA_TRAVEL_TX_SHIP + 2 * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE))), /* Fischerboot, Schnellsegler etc. */
-						(char*)(host_readds(psg_ptr + HARBOR_OPTION_SHIP_NAME_PTR)),
+						(char*)host_readds(psg_ptr + HARBOR_OPTION_SHIP_NAME_PTR),
 
 						(char*)(!host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TIMER) ? get_tx(5) : get_tx(6)), /* today or tomorrow */
 
 						get_tx(ds_readws(PASSAGE_TYPE_TO_NAME + 2 * ds_readbs(SHIP_TABLE + SHIP_TABLE_PASSAGE_TYPE + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE)))), /* Kabinenpassage etc. */
 						get_ttx(host_readb(psg_ptr + HARBOR_OPTION_DESTINATION) + 235),
 #ifdef __BORLANDC__
-						get_passage_travel_hours(host_readb((Bit8u*)(host_readd(psg_ptr + HARBOR_OPTION_ROUTE_PTR)) + SEA_ROUTE_DISTANCE), ds_readbs(SHIP_TABLE + SHIP_TABLE_BASE_SPEED + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE))),
+						get_passage_travel_hours(((struct sea_route*)host_readd(psg_ptr + HARBOR_OPTION_ROUTE_PTR))->distance, ds_readbs(SHIP_TABLE + SHIP_TABLE_BASE_SPEED + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE))),
 #else
 						/* when compiled with gcc, occasionally passage times of 0 hours do show up. (which does not happen in the original game!!)
 						 * I observed that within the function get_passage_travel_hours(..), computations with negative numbers might happen and lead to this bug.
 						 * The following line fixes this. However, it will lead to incompatible binaries when compiled with the original 1992 BCC compiler
 						 * This incompatibility of the behavior gcc vs. BCC is a bit scary.
 						 * A better understanding is urgently needed... */
-						get_passage_travel_hours(host_readb((Bit8u*)(host_readd(psg_ptr + HARBOR_OPTION_ROUTE_PTR)) + SEA_ROUTE_DISTANCE), (unsigned char)ds_readbs(SHIP_TABLE + SHIP_TABLE_BASE_SPEED + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE))),
+						get_passage_travel_hours(((struct sea_route*)host_readd(psg_ptr + HARBOR_OPTION_ROUTE_PTR))->distance, (unsigned char)ds_readbs(SHIP_TABLE + SHIP_TABLE_BASE_SPEED + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE))),
 #endif
-						(Bit8u*)(print_passage_price(ds_readbs(SHIP_TABLE + SHIP_TABLE_BASE_PRICE_PER_DISTANCE + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE)), (Bit8u*)(host_readds(psg_ptr + HARBOR_OPTION_ROUTE_PTR)))));
+						(Bit8u*)print_passage_price(ds_readbs(SHIP_TABLE + SHIP_TABLE_BASE_PRICE_PER_DISTANCE + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE)), (struct sea_route*)host_readds(psg_ptr + HARBOR_OPTION_ROUTE_PTR)));
 
 					i = g_textbox_width;
 					g_textbox_width = 5;
@@ -383,7 +382,7 @@ void do_harbor(void)
 				g_wallclock_y = g_basepos_y + 87;
 				g_wallclock_update = 1;
 
-				sea_travel(gs_current_sea_route_id, ds_readbs(SEA_ROUTES + SIZEOF_SEA_ROUTE * gs_current_sea_route_id + SEA_ROUTE_TOWN_1) == gs_current_town ? 0 : 1);
+				sea_travel(gs_current_sea_route_id, (g_sea_routes[gs_current_sea_route_id].town1 == gs_current_town ? 0 : 1));
 				passage_arrival();
 
 				g_wallclock_update = g_basepos_x = g_basepos_y = gs_sea_travel_psgbooked_flag = 0;
@@ -481,10 +480,10 @@ void sea_travel(signed short passage, signed short dir)
 
 	memset(g_trv_track_pixel_bak, 0xaa, 500);
 	gs_travel_speed = 10 * gs_sea_travel_passage_speed1; /* speed [unit: 10m per hour] */
-	gs_route_total_steps = (get_srout_len(gs_route_course_ptr)); /* a step for each pixel on the map. */
-	gs_route_length = (100 * ds_readb(SEA_ROUTES + SEA_ROUTE_DISTANCE + SIZEOF_SEA_ROUTE * passage)); /* length of sea route [unit: 10m] */
-	gs_route_duration = (gs_route_length / gs_travel_speed * 60); /* duration [unit: minutes] */
-	gs_route_timedelta = (gs_route_duration / gs_route_total_steps); /* duration of each step [unit: minutes] */
+	gs_route_total_steps = get_srout_len(gs_route_course_ptr); /* a step for each pixel on the map. */
+	gs_route_length = 100 * g_sea_routes[passage].distance; /* length of sea route [unit: 10m] */
+	gs_route_duration = gs_route_length / gs_travel_speed * 60; /* duration [unit: minutes] */
+	gs_route_timedelta = gs_route_duration / gs_route_total_steps; /* duration of each step [unit: minutes] */
 	gs_route_stepsize = gs_route_length / gs_route_total_steps; /* length of a single step [unit: 10m] */
 
 	if (gs_route_stepsize == 0) {

@@ -1779,20 +1779,6 @@ enum {
 #define NR_SEA_ROUTES (45)
 
 enum {
-	/* rationale: write SEA_ROUTE_PASSAGE... if the value depends on the current passage on the route (and will change with time).
-	 * the other values are constants. */
-	SEA_ROUTE_TOWN_1 = 0, /* one byte readonly */ /* ID of the first town of the connection. Note that the routes are undirected; i.e. both endpoint towns are treated equal. */
-	SEA_ROUTE_TOWN_2 = 1, /* one byte readonly */ /* ID of the second town of the connection */
-	SEA_ROUTE_DISTANCE = 2, /* one byte readonly */
-	SEA_ROUTE_FREQUENCY = 3, /* one byte readonly */ /* the higher this value, the rarer a passage on the route is offered */
-	SEA_ROUTE_PASSAGE_TIMER = 4, /* one byte rw */ /* after how many days will a ship do a passage on this route? */
-	SEA_ROUTE_COSTAL_ROUTE = 5, /* one byte readonly */ /* 0 = high seas route (= Hochseeroute), 1 = costal route */
-	SEA_ROUTE_PASSAGE_SHIP_TYPE = 6, /* one byte rw */ /* passage type of the next passage on this route */
-	SEA_ROUTE_PASSAGE_PRICE_MOD = 7, /* one byte rw */ /* a number between 70 and 130 which serves as a percentage modifier to the price of the next ship on this route */
-	SIZEOF_SEA_ROUTE = 8
-};
-
-enum {
 	/* strictly speaking, these values encode not only the ship type, but the combined information
 	 * route type (high seas vs. costal); ship type (Langschiff, etc.); passage type (Kabinenpassage, etc.)
 	 * As there are at most two possible combinations per type of ship, we still call it SHIP_TYPE for simplicity. */

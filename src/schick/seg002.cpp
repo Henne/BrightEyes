@@ -3308,9 +3308,9 @@ void passages_recalc(void)
 	signed short i;
 	signed short di;
 	signed short frequency_modifier; /* passages are rarer in summer and still rarer in winter */
-	Bit8u *p;
+	struct sea_route *route;
 
-	p = p_datseg + SEA_ROUTES;
+	route = &g_sea_routes[0];
 
 	i = get_current_season();
 
@@ -3319,35 +3319,32 @@ void passages_recalc(void)
 		 * summer -> 2
 		 * spring, autumn -> 0 */
 
-	for (i = 0; i < NR_SEA_ROUTES; p += SIZEOF_SEA_ROUTE, i++) {
+	for (i = 0; i < NR_SEA_ROUTES; route++, i++) {
 
-		if (dec_ptr_bs(p + SEA_ROUTE_PASSAGE_TIMER) == -1) { /* note that dec_ptr_bs returns the old (still un-decremented) value */
+		if (route->passage_timer-- == -1) { /* note that dec_ptr_bs returns the old (still un-decremented) value */
 			/* ship of a sea passage has left yesterday -> set up a new ship of this passage */
 
-			host_writeb(p + SEA_ROUTE_PASSAGE_PRICE_MOD, (unsigned char)random_interval(70, 130));
+			route->price_mod = random_interval(70, 130);
 			/* random price modifier in the range 70% -- 130% */
 
-			host_writeb(p + SEA_ROUTE_PASSAGE_TIMER, random_interval(0, host_readbs(p + SEA_ROUTE_FREQUENCY) * 10 + host_readbs(p + SEA_ROUTE_FREQUENCY) * frequency_modifier) / 10);
+			route->passage_timer = random_interval(0, route->frequency * 10 + route->frequency * frequency_modifier) / 10;
 			/* setup timer: In how many days will a ship of this passage be available? */
-			/* This results in a random number in the interval [ 0..(SEA_ROUTE_FREQUENCY + frequency_modifier) ], where
-			 * all numbers have the same probabilty, except the upper end SEA_ROUTE_FREQUENCY + frequency_modifier
+			/* This results in a random number in the interval [ 0..(route->frequency + frequency_modifier) ], where
+			 * all numbers have the same probabilty, except the upper end route->frequency + frequency_modifier
 			 * of the interval which has only 1/10 of the probabilty of each other number. */
 
 			di = random_schick(100);
 
-			host_writeb(p + SEA_ROUTE_PASSAGE_SHIP_TYPE,
-				(!host_readbs(p + SEA_ROUTE_COSTAL_ROUTE)) ?
+			route->ship_type =
+				(!route->coastal_route ?
 					((di <= 50) ? SHIP_TYPE_LANGSCHIFF_HIGH_SEAS : ((di <= 80) ? SHIP_TYPE_KARRACKE : (di <= 95) ? SHIP_TYPE_SCHNELLSEGLER : SHIP_TYPE_SCHNELLSEGLER_LUXURY)) :
 					((di <= 10) ? SHIP_TYPE_LANGSCHIFF_COSTAL : ((di <= 40) ? SHIP_TYPE_KUESTENSEGLER : (di <= 80) ? SHIP_TYPE_KUTTER : SHIP_TYPE_FISCHERBOOT)));
-#ifndef __BORLANDC__
+
+#if !defined(__BORLANDC__)
+			// TODO: Ausgabe fuer Schiffstyp verbessern (momentan nur Zahl)
 			D1_INFO_VERBOSE("Neue Passage auf Seeroute ID %d (%s -- %s): Abfahrt in %d Tagen, Schiffstyp: %d, Preisanpassung: %d%%.\n",
-					i,
-					get_ttx(host_readb(p + SEA_ROUTE_TOWN_1) + 235),
-					get_ttx(host_readb(p + SEA_ROUTE_TOWN_2) + 235),
-					host_readb(p + SEA_ROUTE_PASSAGE_TIMER),
-					host_readb(p + SEA_ROUTE_PASSAGE_SHIP_TYPE), // TODO: Ausgabe fuer Schiffstyp verbessern (momentan nur Zahl)
-					host_readb(p + SEA_ROUTE_PASSAGE_PRICE_MOD)
-			);
+					i, get_ttx(route->town1 + 235), get_ttx(route->town2 + 235),
+					route->passage_timer, route->ship_type,	route->price_mod);
 #endif
 		}
 	}
@@ -3364,17 +3361,17 @@ void passages_recalc(void)
 void passages_reset(void)
 {
 	signed short i;
-	Bit8u *p = p_datseg + SEA_ROUTES;
+	struct sea_route *route = &g_sea_routes[0];
 
 #ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 36: the loop operates only on the first sea route (which is Thorwal-Prem) */
 	for (i = 0; i < NR_SEA_ROUTES; i++)
 #else
-	for (i = 0; i < NR_SEA_ROUTES; p += SIZEOF_SEA_ROUTE, i++)
+	for (i = 0; i < NR_SEA_ROUTES; route++, i++)
 #endif
 	{
-		if (!host_readbs(p + SEA_ROUTE_PASSAGE_TIMER)) {
-			host_writeb(p + SEA_ROUTE_PASSAGE_TIMER, -1);
+		if (!route->passage_timer) {
+			route->passage_timer = -1;
 		}
 	}
 

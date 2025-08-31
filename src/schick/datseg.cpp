@@ -3917,7 +3917,7 @@ signed short g_passage_type_to_name[7] = {
 }; // ds:0x6ec2/*
 struct{unsigned char passage_type,unkn2,base_price_per_distance,base_speed;} g_ship_table[8] = { { 0x00, 0x01, 0x00, 0x78 }, { 0x03, 0x01, 0x23, 0x64 }, { 0x01, 0x01, 0x00, 0x96 }, { 0x02, 0x01, 0x2d, 0x96 }, { 0x00, 0x01, 0x00, 0x5a }, { 0x04, 0x01, 0x14, 0x50 }, { 0x05, 0x00, 0x0a, 0x3c }, { 0x06, 0x00, 0x00, 0x28 } }; // ds:0x6ed0
 signed short g_sea_travel_tx_ship[8] = { 0x0024, 0x0025, 0x0026, 0x0026, 0x0024, 0x0027, 0x0028, 0x0029 }; // ds:0x6ef0
-struct{unsigned char unkn[8];} g_sea_routes[46] = {
+struct sea_route g_sea_routes[46] = {
 	{ TOWNS_THORWAL    , TOWNS_PREM            , 115,  1, 0, 0, 0, 0 }, //  1
 	{ TOWNS_PREM       , TOWNS_HJALSINGOR      , 210,  3, 0, 0, 0, 0 }, //  2
 #ifndef M302de_ORIGINAL_BUGFIX
@@ -3969,7 +3969,7 @@ struct{unsigned char unkn[8];} g_sea_routes[46] = {
 	{ TOWNS_RUNINSHAVEN, TOWNS_LEUCHTTURM_RUNIN,  25,  8, 0, 1, 0, 0 }, // 43
 	{ TOWNS_TREBAN     , TOWNS_LEUCHTTURM_RUNIN,  50, 10, 0, 1, 0, 0 }, // 44
 	{ TOWNS_MANRIN     , TOWNS_OVERTHORN       ,  60,  5, 0, 1, 0, 0 }, // 45
-	{ 0xff             , 0x00                  ,   0,  0, 0, 0, 0, 0 }
+	{ -1             , 0x00                  ,   0,  0, 0, 0, 0, 0 }
 }; // ds:0x6f00
 unsigned char g_travel_by_ship = 0; // ds:0x7070, 0 = on land, 1 = at the ship
 signed short g_sea_travel_sleepbonus_table1[7] = { -2, 0, 5, 4, 3, 1, 0 }; // ds:0x7071, { -2, 0, 5, 4, 3, 1, 0 }

@@ -3,7 +3,7 @@ namespace M302de {
 #endif
 
 /*0x20*/
-char* print_passage_price(signed short, Bit8u*);
+char* print_passage_price(signed short, struct sea_route*);
 /*0x25*/
 Bit8u* get_ship_name(signed char, signed short);
 /*0x2a*/
