@@ -81,7 +81,7 @@ void draw_fight_screen_pal(signed short mode)
 	FIG_draw_pic();
 
 	/* check for palette update */
-	if (g_pp20_index != 0xff) {
+	if (g_pp20_index != -1) {
 
 		update_mouse_cursor();
 
