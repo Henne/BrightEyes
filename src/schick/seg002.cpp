@@ -96,7 +96,7 @@ void set_audio_track(Bit16u index)
 
 		g_music_current_track = index;
 
-		if (ds_readw(USE_CDAUDIO_FLAG) != 0) {
+		if (g_use_cdaudio_flag) {
 			/* we use CD */
 			CD_set_track(index);
 		} else {
@@ -139,7 +139,7 @@ void sound_menu(void)
 
 	if (g_music_enabled == 0) {
 		/* music disabled */
-		if (ds_readw(USE_CDAUDIO_FLAG) != 0) {
+		if (g_use_cdaudio_flag) {
 			CD_audio_pause();
 		} else {
 			stop_midi_playback();
@@ -147,7 +147,7 @@ void sound_menu(void)
 	} else {
 		if (g_music_current_track != -1) {
 			/* music enabled */
-			if (ds_readw(USE_CDAUDIO_FLAG) != 0) {
+			if (g_use_cdaudio_flag) {
 				CD_audio_play();
 			} else {
 				play_music_file(g_music_current_track);
@@ -200,41 +200,41 @@ void read_sound_cfg(void)
 		if (answer == 1)
 		{
 			/* AUDIO-CD selected */
-			ds_writew(USE_CDAUDIO_FLAG, 1);
-			ds_writew(LOAD_SOUND_DRIVER, 1);
+			g_use_cdaudio_flag = 1;
+			g_load_sound_driver = 1;
 
 		} else if (answer == 2)
 		{
 			/* MIDI selected */
-			ds_writew(USE_CDAUDIO_FLAG, 0);
-			ds_writew(LOAD_SOUND_DRIVER, 0);
+			g_use_cdaudio_flag = 0;
+			g_load_sound_driver = 0;
 		}
 
-		if (ds_readw(USE_CDAUDIO_FLAG) == 0)
+		if (g_use_cdaudio_flag == 0)
 #else
-		/* enable useage of audio-CD */
-		ds_writew(USE_CDAUDIO_FLAG, ds_writew(LOAD_SOUND_DRIVER, 1));
+		/* enable usage of audio-CD */
+		g_use_cdaudio_flag = g_load_sound_driver = 1;
 
 		/* disable loading of the music driver */
 		if (0)
 #endif
 		{
-			if (midi_port != 0) {
+			if (midi_port) {
 				load_music_driver(g_fname_sound_adv2, 3, midi_port);
 			} else {
 
 				/* music was disabled in SOUND.CFG */
-				if (((Bit8u*)ds_readd(AIL_MIDI_BUFFER))) {
-					free((void*)ds_readd(AIL_MIDI_BUFFER));
+				if (g_ail_midi_buffer) {
+					free((void*)g_ail_midi_buffer);
 				}
 
-				ds_writed(AIL_MIDI_BUFFER, 0);
+				g_ail_midi_buffer = NULL;
 			}
 		}
 
-		if (digi_port != 0) {
+		if (digi_port) {
 
-			if (g_snd_voc_enabled != 0) {
+			if (g_snd_voc_enabled) {
 
 				if (!load_digi_driver(g_fname_digi_adv, 2, digi_port, digi_irq))
 				{
@@ -256,9 +256,9 @@ void read_sound_cfg(void)
 void init_AIL(Bit32u size)
 {
 #if defined(__BORLANDC__)
-	if (((Bit8u*)ds_writed(AIL_MIDI_BUFFER, (Bit32u)schick_alloc(size)))) {
+	if ((g_ail_midi_buffer = (Bit8u*)schick_alloc(size))) {
 		AIL_startup();
-		ds_writew(LOAD_SOUND_DRIVER, 1);
+		g_load_sound_driver = 1;
 	}
 #endif
 }
@@ -268,26 +268,26 @@ void exit_AIL(void)
 #if defined(__BORLANDC__)
 	AIL_shutdown((Bit8u*)NULL);
 
-	if (ds_readd(AIL_TIMBRE_CACHE) != 0) {
-		free((void*)ds_readd(AIL_TIMBRE_CACHE));
+	if (g_ail_timbre_cache) {
+		free((void*)g_ail_timbre_cache);
 	}
 
-	if (ds_readd(AIL_STATE_TABLE) != 0) {
-		free((void*)ds_readd(AIL_STATE_TABLE));
+	if (g_ail_state_table) {
+		free((void*)g_ail_state_table);
 	}
 
-	if (ds_readd(AIL_MIDI_BUFFER) != 0) {
-		free((void*)ds_readd(AIL_MIDI_BUFFER));
+	if (g_ail_midi_buffer) {
+		free((void*)g_ail_midi_buffer);
 	}
 
-	if (ds_readd(AIL_MUSIC_DRIVER_BUF2) != 0) {
-		free((void*)ds_readd(AIL_MUSIC_DRIVER_BUF2));
+	if (g_ail_music_driver_buf2) {
+		free((void*)g_ail_music_driver_buf2);
 	}
 
 	/* set all pointers to NULL */
-	ds_writed(AIL_TIMBRE_CACHE, ds_writed(AIL_STATE_TABLE, ds_writed(AIL_MIDI_BUFFER, ds_writed(AIL_MUSIC_DRIVER_BUF2, 0))));
+	g_ail_timbre_cache = g_ail_state_table = g_ail_midi_buffer = g_ail_music_driver_buf2 = NULL;
 
-	if (g_snd_voc_enabled != 0) {
+	if (g_snd_voc_enabled) {
 		free_voc_buffer();
 	}
 #endif
@@ -306,9 +306,9 @@ Bit8u* read_music_driver(Bit8u* fname)
 
 		len = 16500L;
 
-		ds_writed(AIL_MUSIC_DRIVER_BUF2, (Bit32u)schick_alloc(len + 16L));
+		g_ail_music_driver_buf2 = (Bit8u*)schick_alloc(len + 16L);
 		/* insane pointer casting */
-		ptr = (ds_readd(AIL_MUSIC_DRIVER_BUF2) + 15L);
+		ptr = (Bit32u)g_ail_music_driver_buf2 + 15L;
 		ptr &= 0xfffffff0;
 		buf = EMS_norm_ptr((Bit8u*)ptr);
 		/* and_ptr_ds((Bit8u*)&ptr, 0xfffffff0); */
@@ -329,26 +329,26 @@ signed short prepare_midi_playback(signed short sequence)
 	signed short patch;
 	Bit8u* ptr;
 
-	if ((ds_writews(SAMPLE_AD_HANDLE, load_archive_file(ARCHIVE_FILE_SAMPLE_AD))) != -1) {
+	if ((g_sample_ad_handle = load_archive_file(ARCHIVE_FILE_SAMPLE_AD)) != -1) {
 
-		if ((ds_writews(AIL_SEQUENCE, AIL_register_sequence(ds_readw(AIL_MUSIC_DRIVER_ID), (Bit8u*)ds_readd(AIL_MIDI_BUFFER), sequence, (Bit8u*)ds_readd(AIL_STATE_TABLE), 0))) != -1) {
+		if ((g_ail_sequence = AIL_register_sequence(g_ail_music_driver_id, g_ail_midi_buffer, sequence, g_ail_state_table, 0)) != -1) {
 
-			while ( (l_si = AIL_timbre_request(ds_readw(AIL_MUSIC_DRIVER_ID), ds_readw(AIL_SEQUENCE))) != (unsigned short)-1)
+			while ( (l_si = AIL_timbre_request(g_ail_music_driver_id, g_ail_sequence)) != (unsigned short)-1)
 			{
 				l_di = l_si >> 8;
 				patch = l_si & 0xff;
 
 				if ( (ptr = prepare_timbre(l_di, patch))) {
-					AIL_install_timbre(ds_readw(AIL_MUSIC_DRIVER_ID), l_di, patch, ptr);
+					AIL_install_timbre(g_ail_music_driver_id, l_di, patch, ptr);
 					free(ptr);
 				}
 			}
 
-			close(ds_readw(SAMPLE_AD_HANDLE));
+			close(g_sample_ad_handle);
 			return 1;
 		}
 
-		close(ds_readw(SAMPLE_AD_HANDLE));
+		close(g_sample_ad_handle);
 	}
 #endif
 	return 0;
@@ -359,7 +359,7 @@ signed short start_midi_playback(signed short seq)
 {
 #if defined(__BORLANDC__)
 	if (prepare_midi_playback(seq)) {
-		AIL_start_sequence(ds_readw(AIL_MUSIC_DRIVER_ID), seq);
+		AIL_start_sequence(g_ail_music_driver_id, seq);
 		return 1;
 	}
 #endif
@@ -373,10 +373,10 @@ Bit8u* prepare_timbre(signed short a1, signed short patch)
 #if defined(__BORLANDC__)
 	char *buf;
 
-	seek_archive_file(ds_readws(SAMPLE_AD_HANDLE), 0, 0);
+	seek_archive_file(g_sample_ad_handle, 0, 0);
 
 	do {
-		read_archive_file(ds_readws(SAMPLE_AD_HANDLE), p_datseg + SAMPLE_AD_IDX_ENTRY, 6);
+		read_archive_file(g_sample_ad_handle, p_datseg + SAMPLE_AD_IDX_ENTRY, 6);
 
 		if (ds_readbs((SAMPLE_AD_IDX_ENTRY+1)) == -1) {
 			return NULL;
@@ -384,15 +384,15 @@ Bit8u* prepare_timbre(signed short a1, signed short patch)
 
 	} while ((ds_readbs((SAMPLE_AD_IDX_ENTRY+1)) != a1) || (ds_readbs(SAMPLE_AD_IDX_ENTRY) != patch));
 
-	seek_archive_file(ds_readws(SAMPLE_AD_HANDLE), ds_readd((SAMPLE_AD_IDX_ENTRY+2)), 0);
+	seek_archive_file(g_sample_ad_handle, ds_readd((SAMPLE_AD_IDX_ENTRY+2)), 0);
 
-	read_archive_file(ds_readws(SAMPLE_AD_HANDLE), p_datseg + SAMPLE_AD_LENGTH, 2);
+	read_archive_file(g_sample_ad_handle, p_datseg + SAMPLE_AD_LENGTH, 2);
 
 	buf = schick_alloc(ds_readw(SAMPLE_AD_LENGTH));
 
 	host_writew(buf, ds_readw(SAMPLE_AD_LENGTH));
 
-	read_archive_file(ds_readws(SAMPLE_AD_HANDLE), buf + 2, ds_readw(SAMPLE_AD_LENGTH) - 2);
+	read_archive_file(g_sample_ad_handle, buf + 2, ds_readw(SAMPLE_AD_LENGTH) - 2);
 
 	return buf;
 #else
@@ -413,7 +413,7 @@ signed short do_load_midi_file(signed short index)
 	signed short handle;
 
 	if ((handle = load_archive_file(index)) != -1) {
-		read_archive_file(handle, (Bit8u*)ds_readd(AIL_MIDI_BUFFER), 0x7fff);
+		read_archive_file(handle, g_ail_midi_buffer, 0x7fff);
 		close(handle);
 		return 1;
 	}
@@ -425,43 +425,42 @@ signed short do_load_midi_file(signed short index)
 signed short load_music_driver(Bit8u* fname, signed short type, signed short port)
 {
 #if defined(__BORLANDC__)
-	if (port &&
-		(((Bit8u*)ds_writed(AIL_MUSIC_DRIVER_BUF, (Bit32u)read_music_driver(fname)))) &&
-		((ds_writew(AIL_MUSIC_DRIVER_ID, AIL_register_driver((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_BUF)))) != 0xffff))
+	if (port && (g_ail_music_driver_buf = (Bit8u*)read_music_driver(fname)) &&
+		((g_ail_music_driver_id = AIL_register_driver(g_ail_music_driver_buf)) != -1))
 	{
+		g_ail_music_driver_descr = (Bit8u*)AIL_describe_driver(g_ail_music_driver_id);
 
-		ds_writed(AIL_MUSIC_DRIVER_DESCR, (Bit32u)AIL_describe_driver(ds_readw(AIL_MUSIC_DRIVER_ID)));
-
-		if (host_readws((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 2) == type)
+		if (host_readws(g_ail_music_driver_descr + 2) == type)
 		{
 			if (port == -1) {
-				port = host_readws((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 0xc);
+				port = host_readws(g_ail_music_driver_descr + 0xc);
 			}
 
-			if (AIL_detect_device(ds_readw(AIL_MUSIC_DRIVER_ID), port,
-				host_readws((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 0x0e),
-				host_readws((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 0x10),
-				host_readws((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 0x12)))
+			if (AIL_detect_device(g_ail_music_driver_id, port,
+				host_readws(g_ail_music_driver_descr + 0x0e),
+				host_readws(g_ail_music_driver_descr + 0x10),
+				host_readws(g_ail_music_driver_descr + 0x12)))
 			{
-				AIL_init_driver(ds_readw(AIL_MUSIC_DRIVER_ID), port,
-					host_readws((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 0x0e),
-					host_readws((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 0x10),
-					host_readws((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 0x12));
+				AIL_init_driver(g_ail_music_driver_id, port,
+					host_readws(g_ail_music_driver_descr + 0x0e),
+					host_readws(g_ail_music_driver_descr + 0x10),
+					host_readws(g_ail_music_driver_descr + 0x12));
 
 				if (type == 3) {
-					ds_writed(AIL_STATE_TABLE_SIZE, AIL_state_table_size(ds_readw(AIL_MUSIC_DRIVER_ID)));
-					ds_writed(AIL_STATE_TABLE, (Bit32u)schick_alloc(ds_readd(AIL_STATE_TABLE_SIZE)));
-					ds_writew(AIL_TIMBRE_CACHE_SIZE, AIL_default_timbre_cache_size(ds_readw(AIL_MUSIC_DRIVER_ID)));
+					g_ail_state_table_size = AIL_state_table_size(g_ail_music_driver_id);
+					g_ail_state_table = (Bit8u*)schick_alloc(g_ail_state_table_size);
+					g_ail_timbre_cache_size = AIL_default_timbre_cache_size(g_ail_music_driver_id);
 
-					if (ds_readw(AIL_TIMBRE_CACHE_SIZE) != 0) {
-						ds_writed(AIL_TIMBRE_CACHE, (Bit32u)schick_alloc(ds_readw(AIL_TIMBRE_CACHE_SIZE)));
-						AIL_define_timbre_cache(ds_readw(AIL_MUSIC_DRIVER_ID),
-								(Bit8u*)ds_readd(AIL_TIMBRE_CACHE),
-								ds_readw(AIL_TIMBRE_CACHE_SIZE));
+					if (g_ail_timbre_cache_size) {
+
+						g_ail_timbre_cache = (Bit8u*)schick_alloc(g_ail_timbre_cache_size);
+
+						AIL_define_timbre_cache(g_ail_music_driver_id, g_ail_timbre_cache, g_ail_timbre_cache_size);
 					}
 				}
 
-				ds_writew(LOAD_SOUND_DRIVER, 0);
+				g_load_sound_driver = 0;
+
 				return 1;
 			} else {
 
@@ -472,7 +471,7 @@ signed short load_music_driver(Bit8u* fname, signed short type, signed short por
 		}
 	}
 
-	ds_writew(LOAD_SOUND_DRIVER, 1);
+	g_load_sound_driver = 1;
 #endif
 	return 0;
 }
@@ -481,7 +480,7 @@ signed short load_music_driver(Bit8u* fname, signed short type, signed short por
 void do_play_music_file(signed short index)
 {
 #if defined(__BORLANDC__)
-	if ((ds_readw(LOAD_SOUND_DRIVER) == 0) && (host_readw((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 2) == 3)) {
+	if (!g_load_sound_driver && (host_readws(g_ail_music_driver_descr + 2) == 3)) {
 
 		stop_midi_playback();
 		load_midi_file(index);
@@ -494,10 +493,10 @@ void do_play_music_file(signed short index)
 void stop_midi_playback(void)
 {
 #if defined(__BORLANDC__)
-	if ((ds_readw(LOAD_SOUND_DRIVER) == 0) && (host_readw((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 2) == 3))
+	if (!g_load_sound_driver && (host_readws(g_ail_music_driver_descr + 2) == 3))
 	{
-		AIL_stop_sequence(ds_readws(AIL_MUSIC_DRIVER_ID), ds_readws(AIL_SEQUENCE));
-		AIL_release_sequence_handle(ds_readws(AIL_MUSIC_DRIVER_ID), ds_readws(AIL_SEQUENCE));
+		AIL_stop_sequence(g_ail_music_driver_id, g_ail_sequence);
+		AIL_release_sequence_handle(g_ail_music_driver_id, g_ail_sequence);
 	}
 #endif
 }
@@ -505,12 +504,10 @@ void stop_midi_playback(void)
 void start_midi_playback_IRQ(void)
 {
 #if defined(__BORLANDC__)
-	if ((ds_readw(LOAD_SOUND_DRIVER) == 0) &&
-		(g_music_enabled != 0) &&
-		(host_readw((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 2) == 3))
+	if (!g_load_sound_driver && g_music_enabled && (host_readws(g_ail_music_driver_descr + 2) == 3))
 	{
-		if (AIL_sequence_status(ds_readws(AIL_MUSIC_DRIVER_ID), ds_readws(AIL_SEQUENCE)) == 2) {
-			AIL_start_sequence(ds_readws(AIL_MUSIC_DRIVER_ID), ds_readws(AIL_SEQUENCE));
+		if (AIL_sequence_status(g_ail_music_driver_id, g_ail_sequence) == 2) {
+			AIL_start_sequence(g_ail_music_driver_id, g_ail_sequence);
 		}
 	}
 #endif
@@ -519,20 +516,19 @@ void start_midi_playback_IRQ(void)
 void cruft_1(void)
 /* This function is never called */
 {
-	if ((ds_readw(LOAD_SOUND_DRIVER) == 0) &&
-		(host_readw((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 2) == 3))
+	if (!g_load_sound_driver && (host_readws(g_ail_music_driver_descr + 2) == 3))
 	{
-		AIL_start_sequence(ds_readws(AIL_MUSIC_DRIVER_ID), ds_readws(AIL_SEQUENCE));
+		AIL_start_sequence(g_ail_music_driver_id, g_ail_sequence);
 	}
 }
 
 void cruft_2(signed short volume)
 /* This function is never called */
 {
-	if (ds_readw(LOAD_SOUND_DRIVER) == 0) {
+	if (!g_load_sound_driver) {
 
-		if (host_readw((Bit8u*)ds_readd(AIL_MUSIC_DRIVER_DESCR) + 2) == 3) {
-			AIL_set_relative_volume(ds_readws(AIL_MUSIC_DRIVER_ID), ds_readws(AIL_SEQUENCE), volume, 0);
+		if (host_readw(g_ail_music_driver_descr + 2) == 3) {
+			AIL_set_relative_volume(g_ail_music_driver_id, g_ail_sequence, volume, 0);
 		}
 
 		if (!volume) {
@@ -596,7 +592,7 @@ void play_voc_delay(signed short index)
 		SND_set_volume(90);
 		SND_play_voc(index);
 
-		while (AIL_VOC_playback_status(ds_readw(AIL_DIGI_DRIVER_ID)) == 2) {
+		while (AIL_VOC_playback_status(g_ail_digi_driver_id) == 2) {
 			wait_for_vsync();
 		}
 	}
@@ -607,7 +603,7 @@ void alloc_voc_buffer(Bit32u size)
 {
 #if defined(__BORLANDC__)
 	if (g_snd_voc_enabled) {
-		if ((((Bit8u*)ds_writed(AIL_VOC_BUFFER, (Bit32u)schick_alloc(size))))) ;
+		if ((g_ail_voc_buffer = (Bit8u*)schick_alloc(size))) ;
 	}
 #endif
 }
@@ -618,15 +614,15 @@ void free_voc_buffer(void)
 #if defined(__BORLANDC__)
 	if (g_snd_voc_enabled != 0) {
 
-		if (ds_readd(AIL_VOC_BUFFER) != 0) {
-			free((void*)ds_readd(AIL_VOC_BUFFER));
+		if (g_ail_voc_buffer) {
+			free((void*)g_ail_voc_buffer);
 		}
 
-		if (ds_readd(AIL_DIGI_DRIVER_BUF2) != 0) {
-			free((void*)ds_readd(AIL_DIGI_DRIVER_BUF2));
+		if (g_ail_digi_driver_buf2) {
+			free((void*)g_ail_digi_driver_buf2);
 		}
 
-		ds_writed(AIL_VOC_BUFFER, ds_writed(AIL_DIGI_DRIVER_BUF2, 0));
+		g_ail_voc_buffer = g_ail_digi_driver_buf2 = NULL;
 
 	}
 #endif
@@ -635,13 +631,13 @@ void free_voc_buffer(void)
 signed short read_new_voc_file(signed short index)
 {
 #if defined(__BORLANDC__)
-	if (AIL_VOC_playback_status(ds_readw(AIL_DIGI_DRIVER_ID)) == 2) {
+	if (AIL_VOC_playback_status(g_ail_digi_driver_id) == 2) {
 		SND_stop_digi();
 	}
 
 	if (read_voc_file(index)) {
 
-		AIL_format_VOC_file(ds_readw(AIL_DIGI_DRIVER_ID), (Bit8u*)ds_readd(AIL_VOC_BUFFER), -1);
+		AIL_format_VOC_file(g_ail_digi_driver_id, g_ail_voc_buffer, -1);
 		return 1;
 	}
 #endif
@@ -654,7 +650,7 @@ signed short read_voc_file(signed short index)
 	signed short handle;
 
 	if ( (handle = load_archive_file(index)) != -1) {
-		read_archive_file(handle, (Bit8u*)ds_readd(AIL_VOC_BUFFER), 0x7fff);
+		read_archive_file(handle, g_ail_voc_buffer, 0x7fff);
 		close(handle);
 		return 1;
 	}
@@ -667,10 +663,10 @@ void SND_play_voc(signed short index)
 #if defined(__BORLANDC__)
 	if (g_snd_voc_enabled) {
 
-		AIL_stop_digital_playback(ds_readw(AIL_DIGI_DRIVER_ID));
+		AIL_stop_digital_playback(g_ail_digi_driver_id);
 		read_new_voc_file(index);
-		AIL_play_VOC_file(ds_readw(AIL_DIGI_DRIVER_ID), (Bit8u*)ds_readd(AIL_VOC_BUFFER), -1);
-		AIL_start_digital_playback(ds_readw(AIL_DIGI_DRIVER_ID));
+		AIL_play_VOC_file(g_ail_digi_driver_id, g_ail_voc_buffer, -1);
+		AIL_start_digital_playback(g_ail_digi_driver_id);
 	}
 #endif
 }
@@ -679,7 +675,7 @@ void SND_stop_digi(void)
 {
 #if defined(__BORLANDC__)
 	if (g_snd_voc_enabled) {
-		AIL_stop_digital_playback(ds_readw(AIL_DIGI_DRIVER_ID));
+		AIL_stop_digital_playback(g_ail_digi_driver_id);
 	}
 #endif
 }
@@ -689,7 +685,7 @@ void SND_set_volume(unsigned short volume)
 #if defined(__BORLANDC__)
 	if (g_snd_voc_enabled) {
 
-		AIL_set_digital_playback_volume(ds_readw(AIL_DIGI_DRIVER_ID), volume);
+		AIL_set_digital_playback_volume(g_ail_digi_driver_id, volume);
 
 		if (!volume) {
 			SND_stop_digi();
@@ -702,27 +698,26 @@ void SND_set_volume(unsigned short volume)
 signed short load_digi_driver(Bit8u* fname, signed short type, signed short io, signed short irq)
 {
 #if defined(__BORLANDC__)
-	if (io &&
-		((Bit8u*)ds_writed(AIL_DIGI_DRIVER_BUF, (Bit32u)read_digi_driver(fname))) &&
-		((ds_writew(AIL_DIGI_DRIVER_ID, AIL_register_driver((Bit8u*)ds_readd(AIL_DIGI_DRIVER_BUF)))) != 0xffff))
+	if (io && ((g_ail_digi_driver_buf = (Bit8u*)read_digi_driver(fname))) &&
+		((g_ail_digi_driver_id = AIL_register_driver(g_ail_digi_driver_buf)) != -1))
 	{
 
-		ds_writed(AIL_DIGI_DRIVER_DESCR, (Bit32u)AIL_describe_driver(ds_readw(AIL_DIGI_DRIVER_ID)));
+		g_ail_digi_driver_descr = (Bit8u*)AIL_describe_driver(g_ail_digi_driver_id);
 
-		if (host_readws((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR) + 2) == type) {
+		if (host_readws(g_ail_digi_driver_descr + 2) == type) {
 
 			if (io == -1) {
-				io = host_readws((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR) + 0xc);
-				irq = host_readws((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR) + 0xe);
+				io = host_readws(g_ail_digi_driver_descr + 0xc);
+				irq = host_readws(g_ail_digi_driver_descr + 0xe);
 			}
 
-			if (AIL_detect_device(ds_readw(AIL_DIGI_DRIVER_ID), io, irq,
-				host_readws((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR) + 0x10),
-				host_readws((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR) + 0x12)))
+			if (AIL_detect_device(g_ail_digi_driver_id, io, irq,
+				host_readws(g_ail_digi_driver_descr + 0x10),
+				host_readws(g_ail_digi_driver_descr + 0x12)))
 			{
-				AIL_init_driver(ds_readw(AIL_DIGI_DRIVER_ID), io, irq,
-					host_readws((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR) + 0x10),
-					host_readws((Bit8u*)ds_readd(AIL_DIGI_DRIVER_DESCR) + 0x12));
+				AIL_init_driver(g_ail_digi_driver_id, io, irq,
+					host_readws(g_ail_digi_driver_descr + 0x10),
+					host_readws(g_ail_digi_driver_descr + 0x12));
 
 				g_snd_effects_enabled = 1;
 				return 1;
@@ -751,8 +746,8 @@ unsigned char* read_digi_driver(char *fname)
 
 		len = 5000L;
 
-		ds_writed(AIL_DIGI_DRIVER_BUF2, (Bit32u)schick_alloc(len + 16L));
-		ptr = ds_readd(AIL_DIGI_DRIVER_BUF2) + 15L;
+		g_ail_digi_driver_buf2 = (Bit8u*)schick_alloc(len + 16L);
+		ptr = (Bit32u)g_ail_digi_driver_buf2 + 15L;
 		ptr &= 0xfffffff0;
 		buf = EMS_norm_ptr((Bit8u*)ptr);
 		_read(handle, (Bit8u*)buf, (unsigned short)len);

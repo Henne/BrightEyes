@@ -1318,24 +1318,24 @@
 //#define ARCHIVE_FILE_OFFSET             (0xbcdf)    /* unsigned long; start offset in SCHICK.DAT */
 //#define ARCHIVE_FILE_REMAINING          (0xbce3)    /* unsigned long; flen - off */
 //#define ARCHIVE_FILE_LENGTH             (0xbce7)    /* unsigned long */
-#define AIL_DIGI_DRIVER_BUF2            (0xbceb)    /* Bit8u*; to buffer of size 5016 */
-#define AIL_VOC_BUFFER                  (0xbcef)    /* Bit8u* */
-#define AIL_DIGI_DRIVER_BUF             (0xbcf3)    /* Bit8u* */
-#define AIL_DIGI_DRIVER_DESCR           (0xbcf7)    /* Bit8u* */
-#define AIL_DIGI_DRIVER_ID              (0xbcfb)    /* signed short */
-#define USE_CDAUDIO_FLAG                (0xbcfd)    /* unsigned short; {0,1} */
-#define LOAD_SOUND_DRIVER               (0xbcff)    /* unsigned short; {0,1} */
-#define SAMPLE_AD_HANDLE                (0xbd01)    /* signed short */
-#define AIL_TIMBRE_CACHE_SIZE           (0xbd03)    /* unsigned short */
-#define AIL_STATE_TABLE_SIZE            (0xbd05)    /* unsigned long */
-#define AIL_MUSIC_DRIVER_BUF2           (0xbd09)    /* Bit8u* */
-#define AIL_MIDI_BUFFER                 (0xbd0d)    /* Bit8u* */
-#define AIL_TIMBRE_CACHE                (0xbd11)    /* Bit8u* */
-#define AIL_STATE_TABLE                 (0xbd15)    /* Bit8u* */
-#define AIL_MUSIC_DRIVER_BUF            (0xbd19)    /* Bit8u* */
-#define AIL_MUSIC_DRIVER_DESCR          (0xbd1d)    /* Bit8u* */
-#define AIL_SEQUENCE                    (0xbd21)    /* signed short */
-#define AIL_MUSIC_DRIVER_ID             (0xbd23)    /* signed short */
+//#define AIL_DIGI_DRIVER_BUF2            (0xbceb)    /* Bit8u*; to buffer of size 5016 */
+//#define AIL_VOC_BUFFER                  (0xbcef)    /* Bit8u* */
+//#define AIL_DIGI_DRIVER_BUF             (0xbcf3)    /* Bit8u* */
+//#define AIL_DIGI_DRIVER_DESCR           (0xbcf7)    /* Bit8u* */
+//#define AIL_DIGI_DRIVER_ID              (0xbcfb)    /* signed short */
+//#define USE_CDAUDIO_FLAG                (0xbcfd)    /* unsigned short; {0,1} */
+//#define LOAD_SOUND_DRIVER               (0xbcff)    /* unsigned short; {0,1} */
+//#define SAMPLE_AD_HANDLE                (0xbd01)    /* signed short */
+//#define AIL_TIMBRE_CACHE_SIZE           (0xbd03)    /* unsigned short */
+//#define AIL_STATE_TABLE_SIZE            (0xbd05)    /* unsigned long */
+//#define AIL_MUSIC_DRIVER_BUF2           (0xbd09)    /* Bit8u* */
+//#define AIL_MIDI_BUFFER                 (0xbd0d)    /* Bit8u* */
+//#define AIL_TIMBRE_CACHE                (0xbd11)    /* Bit8u* */
+//#define AIL_STATE_TABLE                 (0xbd15)    /* Bit8u* */
+//#define AIL_MUSIC_DRIVER_BUF            (0xbd19)    /* Bit8u* */
+//#define AIL_MUSIC_DRIVER_DESCR          (0xbd1d)    /* Bit8u* */
+//#define AIL_SEQUENCE                    (0xbd21)    /* signed short */
+//#define AIL_MUSIC_DRIVER_ID             (0xbd23)    /* signed short */
 //#define PREGAME_STATE                   (0xbd25)    /* unsigned short; {0,1} */
 //#define CITYCAMP_CITY                   (0xbd27)    /* unsigned char; { 0 = camp in a dungeon, 1 = camp in a town } */
 //#define CURRENT_FIGHT                   (0xbd28)    /* Bit8u* */

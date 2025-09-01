@@ -1421,8 +1421,26 @@ extern signed char *g_scenario_buf;	// ds:0xbd2c; seg027, seg032, seg034, seg038
 extern unsigned char *g_current_fight;	// ds:0xbd28; seg027, seg032, seg043, seg035, seg039, seg040, seg100
 extern signed char g_citycamp_city;	// ds:0xbd27; seg052, seg066, seg076
 extern signed short g_pregame_state;	// ds:0xbd25; seg002, seg097
-
-
+#if defined(__BORLANDC__)
+extern signed short g_ail_music_driver_id;	// ds:0xbd23; seg002
+extern signed short g_ail_sequence;		// ds:0xbd21; seg002
+extern Bit8u *g_ail_music_driver_descr;		// ds:0xbd1d; seg002
+extern Bit8u *g_ail_music_driver_buf;		// ds:0xbd19; seg002
+extern Bit8u *g_ail_state_table;		// ds:0xbd15; seg002
+extern Bit8u *g_ail_timbre_cache;		// ds:0xbd11; seg002
+extern Bit8u *g_ail_midi_buffer;		// ds:0xbd0d; seg002
+extern Bit8u *g_ail_music_driver_buf2;		// ds:0xbd09; seg002
+extern signed long g_ail_state_table_size;	// ds:0xbd05; seg002
+extern unsigned short g_ail_timbre_cache_size;	// ds:0xbd03; seg002
+extern signed short g_sample_ad_handle;		// ds:0xbd01; seg002
+extern signed short g_load_sound_driver;	// ds:0xbcff; seg002
+extern signed short g_use_cdaudio_flag;		// ds:0xbcfd; seg002
+extern signed short g_ail_digi_driver_id;	// ds:0xbcfb; seg002
+extern Bit8u *g_ail_digi_driver_descr;		// ds:0xbcf7; seg002
+extern Bit8u *g_ail_digi_driver_buf;		// ds:0xbcf7; seg002
+extern Bit8u *g_ail_voc_buffer;			// ds:0xbcef; seg002
+extern Bit8u *g_ail_digi_driver_buf2;		// ds:0xbceb; seg002
+#endif
 extern Bit32s g_archive_file_length;	// ds:0xbce7; seg002
 extern Bit32s g_archive_file_remaining;	// ds:0xbce3; seg002
 extern Bit32s g_archive_file_offset;	// ds:0xbcfd; seg002

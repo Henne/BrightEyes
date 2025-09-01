@@ -6419,24 +6419,26 @@ signed char *g_scenario_buf; // ds:0xbd2c
 unsigned char *g_current_fight; // ds:0xbd28
 signed char g_citycamp_city; // ds:0xbd27, {0 = camp in dungeon, 1}
 signed short g_pregame_state; // ds:0xbd25
+#if defined(__BORLANDC__)
 signed short g_ail_music_driver_id; // ds:0xbd23
 signed short g_ail_sequence; // ds:0xbd21
-void *g_ail_music_driver_descr; // ds:0xbd1d
-void *g_ail_music_driver_buf; // ds:0xbd19
-void *g_ail_state_table; // ds:0xbd15
-void *g_ail_timbre_cache; // ds:0xbd11
-void *g_ail_midi_buffer; // ds:0xbd0d
-void *g_ail_music_driver_buf2; // ds:0xbd09
-unsigned long g_ail_state_table_size; // ds:0xbd05
+Bit8u *g_ail_music_driver_descr; // ds:0xbd1d
+Bit8u *g_ail_music_driver_buf; // ds:0xbd19
+Bit8u *g_ail_state_table; // ds:0xbd15
+Bit8u *g_ail_timbre_cache; // ds:0xbd11
+Bit8u *g_ail_midi_buffer; // ds:0xbd0d
+Bit8u *g_ail_music_driver_buf2; // ds:0xbd09
+signed long g_ail_state_table_size; // ds:0xbd05
 unsigned short g_ail_timbre_cache_size; // ds:0xbd03
 signed short g_sample_ad_handle; // ds:0xbd01
-unsigned short g_load_sound_driver; // ds:0xbcff
-unsigned short g_use_cdaudio_flag; // ds:0xbcfd
+signed short g_load_sound_driver; // ds:0xbcff
+signed short g_use_cdaudio_flag; // ds:0xbcfd
 signed short g_ail_digi_driver_id; // ds:0xbcfb
-void *g_ail_digi_driver_descr; // ds:0xbcf7
-void *g_ail_digi_driver_buf; // ds:0xbcf3
-void *g_ail_voc_buffer; // ds:0xbcef
-void *g_ail_digi_driver_buf2; // ds:0xbceb, to buffer of size 5016
+Bit8u *g_ail_digi_driver_descr; // ds:0xbcf7
+Bit8u *g_ail_digi_driver_buf; // ds:0xbcf3
+Bit8u *g_ail_voc_buffer; // ds:0xbcef
+Bit8u *g_ail_digi_driver_buf2; // ds:0xbceb, to buffer of size 5016
+#endif
 Bit32s g_archive_file_length; // ds:0xbce7
 Bit32s g_archive_file_remaining; // ds:0xbce3, flen - off
 Bit32s g_archive_file_offset; // ds:0xbcdf, start offset in SCHICK.DAT
