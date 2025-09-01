@@ -49,8 +49,8 @@ struct struct_memslot_fig {
 };
 
 struct struct_point {
-	int x;
-	int y;
+	signed short x;
+	signed short y;
 };
 
 struct struct_rect {
@@ -1064,7 +1064,19 @@ extern const struct struct_point g_invslot_iconxy_table[23];	//ds:0x63d2; seg046
 
 extern signed char g_hero_sel_exclude;		//ds:0x64a2; seg047, seg049, seg103, seg120
 
+extern Bit8s *g_god_temples_index[15]; 		//ds:0x6e36; seg061
+extern char g_str_temp_file_wildcard[8];	//ds:0x6e72; seg061
+extern char g_str_no_save_in_temple[41];	//ds:0x6e7a; seg061
+
 extern struct sea_route g_sea_routes[46];	//ds:0x6f00; seg002, seg063, seg064 SHOULD BE IN GAME STATE
+extern signed char g_travel_by_ship;		//ds:0x7070; seg049, seg063
+
+extern char g_sea_travel_str_t[2];		//ds:0x708d; seg063
+extern char g_sea_travel_str_en[3];		//ds:0x708f; seg063
+extern char g_sea_travel_str_comma[3];		//ds:0x7092; seg063
+extern char g_sea_travel_str_heller[10];	//ds:0x7096; seg064
+extern char g_sea_travel_str_nothing[7];	//ds:0x70a0; seg064
+
 extern Bit8u* g_daspota_locloot_index[18];	//ds:0x71fe; seg066
 
 extern const struct struct_point g_visual_field_offsets_std[29];	//ds:0x733a; seg066
@@ -1106,8 +1118,10 @@ extern signed int g_dng12_obstacle_tries;	//ds:0x9d43; seg090 SHOULD BE IN GAME 
 extern signed int g_dng12_watertrap_bak;	//ds:0x9d45; seg090 SHOULD BE IN GAME STATE
 extern struct struct_chest *g_dng_specialchest_index[15];	//ds:0x9d57; seg092
 extern const char g_str_single_space[2];	//ds:0x9dc4; seg092
+
 extern struct struct_land_route g_land_routes[59];	//ds:0x9dc6; seg093, seg094
 
+extern struct struct_point g_town_positions[52];	//ds:0xa43f; seg002, seg063, seg094, seg094
 extern struct mouse_action g_action_table_travelmap[35];	//ds:0xa50f; seg093
 
 extern struct struct_tevent g_tevents_tab[156]; //ds:0xa66d; seg094

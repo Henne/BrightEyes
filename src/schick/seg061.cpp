@@ -58,7 +58,7 @@ void do_temple(void)
 			/* search which god owns this temple */
 			g_temple_god = 1;
 			for (l_si = 1; l_si < 15; l_si++) {
-				if (is_in_byte_array((signed char)gs_current_typeindex, (Bit8u*)ds_readd(GOD_TEMPLES_INDEX + 4 * l_si)))
+				if (is_in_byte_array((signed char)gs_current_typeindex, (Bit8u*)g_god_temples_index[l_si]))
 				{
 					g_temple_god = l_si;
 					break;
@@ -156,19 +156,22 @@ void do_temple(void)
 				GUI_output(get_ttx(817));
 			}
 		} else if (g_action == ACTION_ID_ICON_5) {
+
 			/* save game */
 			if (gs_current_typeindex != 58) {
+
 				if (!gs_group_member_counts[gs_current_group]) {
 					GUI_output(get_ttx(232));
 				} else {
 					save_game_state();
 				}
 			} else {
-				GUI_output((char*)(p_datseg + STR_NO_SAVE_IN_TEMPLE));
+				GUI_output(g_str_no_save_in_temple);
 			}
 		}
 
 		if (g_action == ACTION_ID_ICON_6) {
+
 			/* quit game */
 			if (GUI_bool(get_ttx(299))) {
 
@@ -178,6 +181,7 @@ void do_temple(void)
 		}
 
 		if (g_action == ACTION_ID_ICON_7) {
+
 			/* ask for a miracle */
 			if (!gs_group_member_counts[gs_current_group]) {
 				GUI_output(get_ttx(232));
@@ -187,6 +191,7 @@ void do_temple(void)
 		}
 
 		if (g_action == ACTION_ID_ICON_8) {
+
 			/* make a donation */
 			if (!gs_group_member_counts[gs_current_group]) {
 				GUI_output(get_ttx(232));
@@ -375,12 +380,14 @@ signed short char_erase(void)
 
 					unlink_ret = unlink(g_text_output_buf);
 
-					if (unlink_ret != 0) {
+					if (unlink_ret) {
+
 						GUI_output(get_ttx(294));
+
 						return 0;
 					}
 
-					sprintf(g_dtp2, (char*)p_datseg + STR_TEMP_FILE_WILDCARD, g_text_output_buf);
+					sprintf(g_dtp2, g_str_temp_file_wildcard, g_text_output_buf);
 					unlink(g_dtp2);
 				}
 

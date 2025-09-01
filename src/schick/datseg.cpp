@@ -3885,21 +3885,40 @@ struct{short a,b;} g_tavern_descr_table[89] = {
 	{ 0x0013, -0x0032 },
 	{ -0x0001, 0x0000 }
 }; // ds:0x6c84
-char g_god_temples_table_01[2] = { 0x3d, -1 }; // ds:0x6de8, array terminated by -1
-char g_god_temples_table_02[6] = { 0x0b, 0x1c, 0x25, 0x2d, 0x33, -1 }; // ds:0x6dea, array terminated by -1
-char g_god_temples_table_03[11] = { 0x03, 0x0d, 0x0e, 0x21, 0x22, 0x26, 0x29, 0x2c, 0x35, 0x39, -1 }; // ds:0x6df0, array terminated by -1
-char g_god_temples_table_04[16] = { 0x01, 0x08, 0x0a, 0x10, 0x11, 0x14, 0x18, 0x1e, 0x23, 0x2a, 0x2b, 0x2f, 0x30, 0x32, 0x34, -1 }; // ds:0x6dfb, array terminated by -1
-char g_god_temples_table_05[2] = { 0x3e, -1 }; // ds:0x6e0b, array terminated by -1
-char g_god_temples_table_06[2] = { 0x3f, -1 }; // ds:0x6e0d, array terminated by -1
-char g_god_temples_table_07[4] = { 0x12, 0x1a, 0x3a, -1 }; // ds:0x6e0f, array terminated by -1
-char g_god_temples_table_08[2] = { 6, -1 }; // ds:0x6e13, array terminated by -1
-char g_god_temples_table_09[6] = { 0x05, 0x09, 0x13, 0x27, 0x3b, -1 }; // ds:0x6e15, array terminated by -1
-char g_god_temples_table_10[5] = { 0x04, 0x0c, 0x19, 0x3c, -1 }; // ds:0x6e1b, array terminated by -1
-char g_god_temples_table_11[3] = { 0x16, 0x1b, -1 }; // ds:0x6e20, array terminated by -1
-char g_god_temples_table_12[2] = { 0x40, -1 }; // ds:0x6e23, array terminated by -1
-char g_god_temples_table_13[13] = { 0x02, 0x07, 0x0f, 0x15, 0x1d, 0x20, 0x24, 0x28, 0x2e, 0x31, 0x36, 0x38, -1 }; // ds:0x6e25, array terminated by -1
-char g_god_temples_table_14[4] = { 0x17, 0x1f, 0x37, -1 }; // ds:0x6e32, array terminated by -1
-long g_god_temples_index[15] = { 0x00000000, 0x14fc6de8, 0x14fc6dea, 0x14fc6df0, 0x14fc6dfb, 0x14fc6e0b, 0x14fc6e0d, 0x14fc6e0f, 0x14fc6e13, 0x14fc6e15, 0x14fc6e1b, 0x14fc6e20, 0x14fc6e23, 0x14fc6e25, 0x14fc6e32 }; // ds:0x6e36; Bit8u*
+Bit8s g_god_temples_table_01[2] = { 0x3d, -1 }; // ds:0x6de8, array terminated by -1
+Bit8s g_god_temples_table_02[6] = { 0x0b, 0x1c, 0x25, 0x2d, 0x33, -1 }; // ds:0x6dea, array terminated by -1
+Bit8s g_god_temples_table_03[11] = { 0x03, 0x0d, 0x0e, 0x21, 0x22, 0x26, 0x29, 0x2c, 0x35, 0x39, -1 }; // ds:0x6df0, array terminated by -1
+Bit8s g_god_temples_table_04[16] = { 0x01, 0x08, 0x0a, 0x10, 0x11, 0x14, 0x18, 0x1e, 0x23, 0x2a, 0x2b, 0x2f, 0x30, 0x32, 0x34, -1 }; // ds:0x6dfb, array terminated by -1
+Bit8s g_god_temples_table_05[2] = { 0x3e, -1 }; // ds:0x6e0b, array terminated by -1
+Bit8s g_god_temples_table_06[2] = { 0x3f, -1 }; // ds:0x6e0d, array terminated by -1
+Bit8s g_god_temples_table_07[4] = { 0x12, 0x1a, 0x3a, -1 }; // ds:0x6e0f, array terminated by -1
+Bit8s g_god_temples_table_08[2] = { 6, -1 }; // ds:0x6e13, array terminated by -1
+Bit8s g_god_temples_table_09[6] = { 0x05, 0x09, 0x13, 0x27, 0x3b, -1 }; // ds:0x6e15, array terminated by -1
+Bit8s g_god_temples_table_10[5] = { 0x04, 0x0c, 0x19, 0x3c, -1 }; // ds:0x6e1b, array terminated by -1
+Bit8s g_god_temples_table_11[3] = { 0x16, 0x1b, -1 }; // ds:0x6e20, array terminated by -1
+Bit8s g_god_temples_table_12[2] = { 0x40, -1 }; // ds:0x6e23, array terminated by -1
+Bit8s g_god_temples_table_13[13] = { 0x02, 0x07, 0x0f, 0x15, 0x1d, 0x20, 0x24, 0x28, 0x2e, 0x31, 0x36, 0x38, -1 }; // ds:0x6e25, array terminated by -1
+Bit8s g_god_temples_table_14[4] = { 0x17, 0x1f, 0x37, -1 }; // ds:0x6e32, array terminated by -1
+Bit8s* g_god_temples_index[15] = {
+	NULL,
+	g_god_temples_table_01,
+	g_god_temples_table_02,
+	g_god_temples_table_03,
+
+	g_god_temples_table_04,
+	g_god_temples_table_05,
+	g_god_temples_table_06,
+	g_god_temples_table_07,
+
+	g_god_temples_table_08,
+	g_god_temples_table_09,
+	g_god_temples_table_10,
+	g_god_temples_table_11,
+
+	g_god_temples_table_12,
+	g_god_temples_table_13,
+	g_god_temples_table_14,
+}; // ds:0x6e36; Bit8s*
 char g_str_temp_file_wildcard[8] = "TEMP\\%s"; // ds:0x6e72
 char g_str_no_save_in_temple[41] = "IN DIESEM TEMPEL KEIN SPEICHERN M\x99GLICH!"; // ds:0x6e7a
 unsigned char g_unkn_049[1] = { 0x00 }; // ds:0x6ea3
@@ -3971,7 +3990,7 @@ struct sea_route g_sea_routes[46] = {
 	{ TOWNS_MANRIN     , TOWNS_OVERTHORN       ,  60,  5, 0, 1, 0, 0 }, // 45
 	{ -1             , 0x00                  ,   0,  0, 0, 0, 0, 0 }
 }; // ds:0x6f00
-unsigned char g_travel_by_ship = 0; // ds:0x7070, 0 = on land, 1 = at the ship
+signed char g_travel_by_ship = 0; // ds:0x7070, 0 = on land, 1 = at the ship
 signed short g_sea_travel_sleepbonus_table1[7] = { -2, 0, 5, 4, 3, 1, 0 }; // ds:0x7071, { -2, 0, 5, 4, 3, 1, 0 }
 signed short g_sea_travel_sleepbonus_table2[7] = { -2, 0, 5, 4, 3, 1, 0 }; // ds:0x707f, { -2, 0, 5, 4, 3, 1, 0 }
 char g_sea_travel_str_t[2] = "T"; // ds:0x708d
@@ -5177,7 +5196,7 @@ struct{char town, typeindex; long sea_routes;} g_harbors[26] = { // a list of th
 #endif
 	{ -0x01                 , 0, 0x00000000 }
 }; // ds:0xa3a3; Bit8u*
-struct{signed short x, y;} g_town_positions[52] = {
+struct struct_point g_town_positions[52] = {
 	{ 0x00bd, 0x0098 },
 	{ 0x00be, 0x00a1 },
 	{ 0x00e2, 0x009e },

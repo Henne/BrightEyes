@@ -277,10 +277,9 @@ void do_harbor(void)
 
 					if (answer != 0) {
 
-						sprintf(g_dtp2,
-							(char*)(i == 1 ? get_tx(28) : get_tx(22)),
-							(char*)(answer == 1 ? p_datseg + SEA_TRAVEL_STR_T : p_datseg + SEA_TRAVEL_STR_EN),
-							(char*)(answer == 1 ? get_tx(23) : get_tx(24)));
+						sprintf(g_dtp2,	(i == 1 ? get_tx(28) : get_tx(22)),
+							(answer == 1 ? g_sea_travel_str_t : g_sea_travel_str_en),
+							(answer == 1 ? get_tx(23) : get_tx(24)));
 
 						i = 0;
 
@@ -290,11 +289,10 @@ void do_harbor(void)
 								get_ttx(ds_readb((HARBOR_OPTIONS + HARBOR_OPTION_DESTINATION) + SIZEOF_HARBOR_OPTION * i++) + 235));
 							if (--answer) {
 
-								strcat(g_dtp2,
-									(answer >= 2 ? (char*)(p_datseg + SEA_TRAVEL_STR_COMMA) : get_tx(7)));
+								strcat(g_dtp2, (answer >= 2 ? g_sea_travel_str_comma : get_tx(7)));
 							}
 
-						} while (answer != 0);
+						} while (answer);
 
 						strcat(g_dtp2, get_tx(25));
 
@@ -435,8 +433,8 @@ void mod_clock_pos(signed short town_id)
 	signed short map_x;
 	signed short map_y;
 
-	map_x = ds_readws((TOWN_POSITIONS-4) + 4 * town_id);
-	map_y = ds_readws((TOWN_POSITIONS-4) + 4 * town_id + 2);
+	map_x = g_town_positions[town_id].x;
+	map_y = g_town_positions[town_id].y;
 
 	val = map_x >= 0 && map_x <= 159 ?
 		(map_y >= 0 && map_y <= 99 ? 3 : 1) :
@@ -618,7 +616,7 @@ void sea_travel(signed short passage, signed short dir)
 
 			disease_effect();
 
-			ds_writeb(TRAVEL_BY_SHIP, 1);
+			g_travel_by_ship = 1;
 
 			hero = get_hero(0);
 			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
@@ -631,10 +629,10 @@ void sea_travel(signed short passage, signed short dir)
 				}
 			}
 
-			ds_writeb(TRAVEL_BY_SHIP, 0);
+			g_travel_by_ship = 0;
 		}
 
-		if (g_request_refresh != 0 && !gs_travel_detour) {
+		if (g_request_refresh && !gs_travel_detour) {
 
 			update_mouse_cursor();
 

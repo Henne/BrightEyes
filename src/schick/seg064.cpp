@@ -148,10 +148,10 @@ char* print_passage_price(signed short price, struct sea_route *route)
 		price = ROUNDED_DIVISION(di,100);
 
 		/* generate a price string "%d^HELLER" */
-		sprintf(g_text_output_buf, (char*)p_datseg + SEA_TRAVEL_STR_HELLER, price);
+		sprintf(g_text_output_buf, g_sea_travel_str_heller, price);
 	} else {
 		/* "NICHTS" */
-		strcpy(g_text_output_buf, (char*)p_datseg + SEA_TRAVEL_STR_NOTHING);
+		strcpy(g_text_output_buf, g_sea_travel_str_nothing);
 	}
 
 	gs_sea_travel_passage_price = price;

@@ -639,7 +639,8 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 		(host_readbs(hero + HERO_RECIPE_TIMER) == 0))
 	{
 
-		if ((ds_readbs(TRAVEL_BY_SHIP) != 0) && (random_schick(100) < 10)) {
+		if (g_travel_by_ship && (random_schick(100) < 10)) {
+
 			/* chance of motion sickness is 9% */
 
 			sprintf(g_dtp2,	get_ttx(796), hero + HERO_NAME2);
@@ -701,10 +702,13 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 						sprintf(g_dtp2, get_ttx(319), hero + HERO_NAME2, le_regen, g_text_output_buf);
 
 						if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
+
 							GUI_print_loc_line(g_dtp2);
 							delay_or_keypress(200);
+
 						} else {
-							if (ds_readbs(TRAVEL_BY_SHIP) != 0) {
+
+							if (g_travel_by_ship) {
 								GUI_output(g_dtp2);
 							}
 						}
@@ -732,10 +736,12 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 							sprintf(g_dtp2, get_ttx(320), hero + HERO_NAME2,	ae_regen, g_text_output_buf);
 
 							if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
+
 								GUI_print_loc_line(g_dtp2);
 								delay_or_keypress(200);
+
 							} else {
-								if (ds_readbs(TRAVEL_BY_SHIP) != 0) {
+								if (g_travel_by_ship) {
 									GUI_output(g_dtp2);
 								}
 							}

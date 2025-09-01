@@ -71,8 +71,8 @@ void set_textbox_positions(signed short town_id)
 	g_current_town_over = g_trv_menu_selection = g_selected_town_anix = g_selected_town_aniy = 0;
 
 
-	x = g_current_town_anix = ds_readws((TOWN_POSITIONS-4) + 4 * town_id);
-	y = g_current_town_aniy = ds_readws((TOWN_POSITIONS-4) + 4 * town_id + 2);
+	x = g_current_town_anix = g_town_positions[town_id - 1].x;
+	y = g_current_town_aniy = g_town_positions[town_id - 1].y;
 
 	r_dx = (x >= 0 && x <= 159) ? (y >= 0 && y <= 99 ? 3 : 1) : (y >= 0 && y <= 99 ? 2 : 0);
 

@@ -1046,23 +1046,23 @@
 #define SMITH_ITEMS_POSY                (0x6c79)    /* signed short[5]; { 35, 55, 75, 95, 115 } */
 // ?1
 #define TAVERN_DESCR_TABLE              (0x6c84)    /* struct(4)[89]; struct{short a,b;} */
-#define GOD_TEMPLES_TABLE_01            (0x6de8)    /* char[2]; array terminated by -1 */
-#define GOD_TEMPLES_TABLE_02            (0x6dea)    /* char[6]; array terminated by -1 */
-#define GOD_TEMPLES_TABLE_03            (0x6df0)    /* char[11]; array terminated by -1 */
-#define GOD_TEMPLES_TABLE_04            (0x6dfb)    /* char[16]; array terminated by -1 */
-#define GOD_TEMPLES_TABLE_05            (0x6e0b)    /* char[2]; array terminated by -1 */
-#define GOD_TEMPLES_TABLE_06            (0x6e0d)    /* char[2]; array terminated by -1 */
-#define GOD_TEMPLES_TABLE_07            (0x6e0f)    /* char[4]; array terminated by -1 */
-#define GOD_TEMPLES_TABLE_08            (0x6e13)    /* char[2]; array terminated by -1 */
-#define GOD_TEMPLES_TABLE_09            (0x6e15)    /* char[6]; array terminated by -1 */
-#define GOD_TEMPLES_TABLE_10            (0x6e1b)    /* char[5]; array terminated by -1 */
-#define GOD_TEMPLES_TABLE_11            (0x6e20)    /* char[3]; array terminated by -1 */
-#define GOD_TEMPLES_TABLE_12            (0x6e23)    /* char[2]; array terminated by -1 */
-#define GOD_TEMPLES_TABLE_13            (0x6e25)    /* char[13]; array terminated by -1 */
-#define GOD_TEMPLES_TABLE_14            (0x6e32)    /* char[4]; array terminated by -1 */
-#define GOD_TEMPLES_INDEX               (0x6e36)    /* Bit8u*[15] */
-#define STR_TEMP_FILE_WILDCARD          (0x6e72)    /* char[8]; "TEMP\%s" */
-#define STR_NO_SAVE_IN_TEMPLE           (0x6e7a)    /* char[41]; "IN DIESEM TEMPEL KEIN SPEICHERN M\x99GLICH!" */
+//#define GOD_TEMPLES_TABLE_01            (0x6de8)    /* char[2]; array terminated by -1 */
+//#define GOD_TEMPLES_TABLE_02            (0x6dea)    /* char[6]; array terminated by -1 */
+//#define GOD_TEMPLES_TABLE_03            (0x6df0)    /* char[11]; array terminated by -1 */
+//#define GOD_TEMPLES_TABLE_04            (0x6dfb)    /* char[16]; array terminated by -1 */
+//#define GOD_TEMPLES_TABLE_05            (0x6e0b)    /* char[2]; array terminated by -1 */
+//#define GOD_TEMPLES_TABLE_06            (0x6e0d)    /* char[2]; array terminated by -1 */
+//#define GOD_TEMPLES_TABLE_07            (0x6e0f)    /* char[4]; array terminated by -1 */
+//#define GOD_TEMPLES_TABLE_08            (0x6e13)    /* char[2]; array terminated by -1 */
+//#define GOD_TEMPLES_TABLE_09            (0x6e15)    /* char[6]; array terminated by -1 */
+//#define GOD_TEMPLES_TABLE_10            (0x6e1b)    /* char[5]; array terminated by -1 */
+//#define GOD_TEMPLES_TABLE_11            (0x6e20)    /* char[3]; array terminated by -1 */
+//#define GOD_TEMPLES_TABLE_12            (0x6e23)    /* char[2]; array terminated by -1 */
+//#define GOD_TEMPLES_TABLE_13            (0x6e25)    /* char[13]; array terminated by -1 */
+//#define GOD_TEMPLES_TABLE_14            (0x6e32)    /* char[4]; array terminated by -1 */
+//#define GOD_TEMPLES_INDEX               (0x6e36)    /* Bit8u*[15] */
+//#define STR_TEMP_FILE_WILDCARD          (0x6e72)    /* char[8]; "TEMP\%s" */
+//#define STR_NO_SAVE_IN_TEMPLE           (0x6e7a)    /* char[41]; "IN DIESEM TEMPEL KEIN SPEICHERN M\x99GLICH!" */
 // ?1
 #define TEMPLE_MIRACLE_BONUS            (0x6ea4)    /* signed char[15]; {0, 2, 15, 10, 20, 5, 10, 1, 15, 3, 15, 5, 10, 0} */
 #define TEMPLE_MIRACLE_DICE             (0x6eb3)    /* signed char[15]; {0, 9, 9, 10, 17, 6, 10, 10, 18, 10, 19, 8, 15, 0, 10} */
@@ -1070,15 +1070,15 @@
 #define SHIP_TABLE                      (0x6ed0)    /* struct(4)[8]; struct{unsigned char passage_type,unkn2,base_price_per_distance,base_speed;}; { { 0, 1, 0, 120 }, { 3, 1, 35, 100 }, { 1, 1, 0, 150 }, { 2, 1, 45, 150 }, { 0, 1, 0, 90 }, { 4, 1, 20, 80 }, { 5, 0, 10, 60 }, { 6, 0, 0, 40 } } */
 #define SEA_TRAVEL_TX_SHIP              (0x6ef0)    /* signed short[8]; { 0x0024, 0x0025, 0x0026, 0x0026, 0x0024, 0x0027, 0x0028, 0x0029 }*/ /* maps ship_type -> ptr to ship name (Langschiff, Kutter, etc.) */
 //#define SEA_ROUTES                      (0x6f00)    /* struct(8)[46] */
-#define TRAVEL_BY_SHIP                  (0x7070)    /* unsigned char; 0 = on land, 1 = at the ship */
+//#define TRAVEL_BY_SHIP                  (0x7070)    /* unsigned char; 0 = on land, 1 = at the ship */
 #define SEA_TRAVEL_SLEEPBONUS_TABLE1    (0x7071)    /* signed short[7]; { -2, 0, 5, 4, 3, 1, 0 } */ /* maps entry PASSAGE_TYPE in SHIP_TABLE -> regeneration modifier (aka 'sleep quality') */
 #define SEA_TRAVEL_SLEEPBONUS_TABLE2    (0x707f)    /* signed short[7]; { -2, 0, 5, 4, 3, 1, 0 } */
-#define SEA_TRAVEL_STR_T                (0x708d)    /* char[2]; "T" */
-#define SEA_TRAVEL_STR_EN               (0x708f)    /* char[3]; "EN" */
-#define SEA_TRAVEL_STR_COMMA            (0x7092)    /* char[3]; ", " */
+//#define SEA_TRAVEL_STR_T                (0x708d)    /* char[2]; "T" */
+//#define SEA_TRAVEL_STR_EN               (0x708f)    /* char[3]; "EN" */
+//#define SEA_TRAVEL_STR_COMMA            (0x7092)    /* char[3]; ", " */
 // ?1
-#define SEA_TRAVEL_STR_HELLER           (0x7096)    /* char[10]; "%d^HELLER" */
-#define SEA_TRAVEL_STR_NOTHING          (0x70a0)    /* char[7]; "NICHTS" */
+//#define SEA_TRAVEL_STR_HELLER           (0x7096)    /* char[10]; "%d^HELLER" */
+//#define SEA_TRAVEL_STR_NOTHING          (0x70a0)    /* char[7]; "NICHTS" */
 // ?1
 #define MARKET_DESCR_TABLE              (0x70a8)    /* struct(8)[34]; struct{short min_size,price_mod,market_day,size;} */
 #define HYG_ANI_X0                      (0x71b8)    /* unsigned char[5] */
@@ -1187,7 +1187,7 @@
 #define SIGNPOSTS                       (0xa0b4)    /* struct(6)[106]; struct{char town, typeindex; Bit8u* land_routes;} */
 #define HARBORS_LINKED_SEA_ROUTES       (0xa330)    /* char[115]; 25 arrays, each terminated by -1 */
 #define HARBORS                         (0xa3a3)    /* struct(6)[26]; struct{char town, typeindex; Bit8u* sea_routes;} */
-#define TOWN_POSITIONS                  (0xa43f)    /* struct(4)[52]; struct{signed short x, y;} */
+//#define TOWN_POSITIONS                  (0xa43f)    /* struct(4)[52]; struct{signed short x, y;} */
 //#define ACTION_TABLE_TRAVELMAP          (0xa50f)    /* struct(10)[35] */
 //#define TEVENTS_TAB                     (0xa66d)    /* struct(3)[155]; struct{char route_id, place, tevent_id;} */
 // ?4
