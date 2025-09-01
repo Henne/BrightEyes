@@ -230,7 +230,7 @@ signed short DNG04_handler(void)
 			}
 		}
 
-	} else if (ds_readb((VISUAL_FIELD_VALS + 1)) == 2)
+	} else if (g_visual_field_vals[1] == 2)
 	{
 		/* Probability of 10% to get bitten by a rat */
 		if (mod_day_timer(MINUTES(10)))

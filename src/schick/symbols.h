@@ -1349,7 +1349,7 @@
 //#define DIRECTION_UNKN                  (0xbd4f)    /* unsigned char; writeonly (1) */
 //#define VISUAL_FIELDS_TEX               (0xbd50)    /* signed char[29] */
 // ?1
-#define VISUAL_FIELD_VALS               (0xbd6e)    /* unsigned char[29] */
+//#define VISUAL_FIELD_VALS               (0xbd6e)    /* unsigned char[29] */
 // ?1
 //#define EMS_UNUSED_TAB                  (0xbd8c)    /* Bit8u* */
 //#define EMS_TRAVEL_MAP                  (0xbd90)    /* unsigned short */

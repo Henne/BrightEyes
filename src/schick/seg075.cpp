@@ -69,233 +69,193 @@ void DNG_turn(void)
 {
 	signed short tmp;
 
-	if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 3)))) == 15) || (tmp == 1)) {
-		ds_writeb((VISUAL_FIELD_VALS + 3), 0);
+	if ( ((tmp = div16(g_visual_field_vals[3])) == 15) || (tmp == 1)) {
+		g_visual_field_vals[3] = 0;
 	}
 
-	if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 7)))) == 15) || (tmp == 1)) {
-		ds_writeb((VISUAL_FIELD_VALS + 7), 0);
+	if ( ((tmp = div16(g_visual_field_vals[7])) == 15) || (tmp == 1)) {
+		g_visual_field_vals[7] = 0;
 	}
 
-	if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 8)))) == 15) || (tmp == 1)) {
-		ds_writeb((VISUAL_FIELD_VALS + 8), 0);
+	if ( ((tmp = div16(g_visual_field_vals[8])) == 15) || (tmp == 1)) {
+		g_visual_field_vals[8] = 0;
 	}
 
-	if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 14)))) == 15) || (tmp == 1)) {
-		ds_writeb((VISUAL_FIELD_VALS + 14), 0);
+	if ( ((tmp = div16(g_visual_field_vals[14])) == 15) || (tmp == 1)) {
+		g_visual_field_vals[14] = 0;
 	}
 
-	if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 15)))) == 15) || (tmp == 1)) {
-		ds_writeb((VISUAL_FIELD_VALS + 15), 0);
+	if ( ((tmp = div16(g_visual_field_vals[15])) == 15) || (tmp == 1)) {
+		g_visual_field_vals[15] = 0;
 	}
 
-	if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 21)))) == 15) || (tmp == 1)) {
-		ds_writeb((VISUAL_FIELD_VALS + 21), 0);
+	if ( ((tmp = div16(g_visual_field_vals[21])) == 15) || (tmp == 1)) {
+		g_visual_field_vals[21] = 0;
 	}
 
-	if ( ((tmp = div16(ds_readb(VISUAL_FIELD_VALS))) == 15) || (tmp == 1)) {
+	if ( ((tmp = div16(g_visual_field_vals[0])) == 15) || (tmp == 1)) {
 
-		ds_writeb((VISUAL_FIELD_VALS + 9),
-			ds_writeb((VISUAL_FIELD_VALS + 15),
-			ds_writeb((VISUAL_FIELD_VALS + 22), 0)));
+		g_visual_field_vals[9] = g_visual_field_vals[15] = g_visual_field_vals[22] = 0;
 
-		if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 5)))) == 15) || (tmp == 1)) {
+		if ( ((tmp = div16(g_visual_field_vals[5])) == 15) || (tmp == 1)) {
 
-			ds_writeb((VISUAL_FIELD_VALS + 4),
-				ds_writeb((VISUAL_FIELD_VALS + 10),
-				ds_writeb((VISUAL_FIELD_VALS + 16),
-				ds_writeb((VISUAL_FIELD_VALS + 23), 0))));
+			g_visual_field_vals[4] = g_visual_field_vals[10] = g_visual_field_vals[16] = g_visual_field_vals[23] = 0;
 		}
 	}
 
-	if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 2)))) == 15) || (tmp == 1)) {
+	if ( ((tmp = div16(g_visual_field_vals[2])) == 15) || (tmp == 1)) {
 
-		ds_writeb((VISUAL_FIELD_VALS + 13),
-			ds_writeb((VISUAL_FIELD_VALS + 21),
-			ds_writeb((VISUAL_FIELD_VALS + 28), 0)));
+		g_visual_field_vals[13] = g_visual_field_vals[21] = g_visual_field_vals[28] = 0;
 
-		if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 5)))) == 15) || (tmp == 1)) {
+		if ( ((tmp = div16(g_visual_field_vals[5])) == 15) || (tmp == 1)) {
 
-			ds_writeb((VISUAL_FIELD_VALS + 6),
-				ds_writeb((VISUAL_FIELD_VALS + 12),
-				ds_writeb((VISUAL_FIELD_VALS + 20),
-				ds_writeb((VISUAL_FIELD_VALS + 27), 0))));
+			g_visual_field_vals[6] = g_visual_field_vals[12] = g_visual_field_vals[20] = g_visual_field_vals[27] = 0;
 		}
 	}
 
-	if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 4)))) == 15) || (tmp == 1)) {
+	if ( ((tmp = div16(g_visual_field_vals[4])) == 15) || (tmp == 1)) {
 
-		ds_writeb((VISUAL_FIELD_VALS + 9),
-			ds_writeb((VISUAL_FIELD_VALS + 16),
-			ds_writeb((VISUAL_FIELD_VALS + 22),
-			ds_writeb((VISUAL_FIELD_VALS + 23), 0))));
+		g_visual_field_vals[9] = g_visual_field_vals[16] = g_visual_field_vals[22] = g_visual_field_vals[23] = 0;
 
-		if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 5)))) == 15) || (tmp == 1)) {
+		if ( ((tmp = div16(g_visual_field_vals[5])) == 15) || (tmp == 1)) {
 
-			ds_writeb((VISUAL_FIELD_VALS + 10), 0);
+			g_visual_field_vals[10] = 0;
 		}
 
-		if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 11)))) == 15) || (tmp == 1)) {
-				ds_writeb((VISUAL_FIELD_VALS + 10),
-					ds_writeb((VISUAL_FIELD_VALS + 17),
-					ds_writeb((VISUAL_FIELD_VALS + 18), 0)));
+		if ( ((tmp = div16(g_visual_field_vals[11])) == 15) || (tmp == 1)) {
 
-				ds_writeb((VISUAL_FIELD_VALS + 24),
-					ds_writeb((VISUAL_FIELD_VALS + 25), 0));
+			g_visual_field_vals[10] = g_visual_field_vals[17] = g_visual_field_vals[18] = 0;
+
+			g_visual_field_vals[24] = g_visual_field_vals[25] = 0;
 		}
 	}
 
-	if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 5)))) == 15) || (tmp == 1)) {
+	if ( ((tmp = div16(g_visual_field_vals[5])) == 15) || (tmp == 1)) {
 
-		ds_writeb((VISUAL_FIELD_VALS + 11),
-			ds_writeb((VISUAL_FIELD_VALS + 17),
-			ds_writeb((VISUAL_FIELD_VALS + 18), 0)));
+		g_visual_field_vals[11] = g_visual_field_vals[17] = g_visual_field_vals[18] = 0;
 
-		ds_writeb((VISUAL_FIELD_VALS + 19),
-			ds_writeb((VISUAL_FIELD_VALS + 24),
-			ds_writeb((VISUAL_FIELD_VALS + 25), 0)));
+		g_visual_field_vals[19] = g_visual_field_vals[24] = g_visual_field_vals[25] = 0;
 
-		ds_writeb((VISUAL_FIELD_VALS + 26), 0);
+		g_visual_field_vals[26] = 0;
 	}
 
-	if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 6)))) == 15) || (tmp == 1)) {
+	if ( ((tmp = div16(g_visual_field_vals[6])) == 15) || (tmp == 1)) {
 
-		ds_writeb((VISUAL_FIELD_VALS + 13),
-			ds_writeb((VISUAL_FIELD_VALS + 20),
-			ds_writeb((VISUAL_FIELD_VALS + 27),
-			ds_writeb((VISUAL_FIELD_VALS + 28), 0))));
+		g_visual_field_vals[13] = (
+			g_visual_field_vals[20] = (
+			g_visual_field_vals[27] = (
+			g_visual_field_vals[28] = (0))));
 
-		if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 5)))) == 15) || (tmp == 1)) {
+		if ( ((tmp = div16(g_visual_field_vals[5])) == 15) || (tmp == 1)) {
 
-			ds_writeb((VISUAL_FIELD_VALS + 11),
-				ds_writeb((VISUAL_FIELD_VALS + 12),
-				ds_writeb((VISUAL_FIELD_VALS + 17), 0)));
+			g_visual_field_vals[11] = g_visual_field_vals[12] = g_visual_field_vals[17] = 0;
 
-			ds_writeb((VISUAL_FIELD_VALS + 18),
-				ds_writeb((VISUAL_FIELD_VALS + 19),
-				ds_writeb((VISUAL_FIELD_VALS + 24), 0)));
+			g_visual_field_vals[18] = g_visual_field_vals[19] = g_visual_field_vals[24] = 0;
 
-			ds_writeb((VISUAL_FIELD_VALS + 25),
-				ds_writeb((VISUAL_FIELD_VALS + 26), 0));
+			g_visual_field_vals[25] = g_visual_field_vals[26] = 0;
 
 		}
 
-		if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 11)))) == 15) || (tmp == 1)) {
-				ds_writeb((VISUAL_FIELD_VALS + 12),
-					ds_writeb((VISUAL_FIELD_VALS + 18),
-					ds_writeb((VISUAL_FIELD_VALS + 19), 0)));
+		if ( ((tmp = div16(g_visual_field_vals[11])) == 15) || (tmp == 1)) {
 
-				ds_writeb((VISUAL_FIELD_VALS + 25),
-					ds_writeb((VISUAL_FIELD_VALS + 26), 0));
+				g_visual_field_vals[12] = g_visual_field_vals[18] = g_visual_field_vals[19] = 0;
+
+				g_visual_field_vals[25] = g_visual_field_vals[26] = 0;
 		}
 	}
 
-	if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 9)))) == 15) || (tmp == 1)) {
+	if ( ((tmp = div16(g_visual_field_vals[9])) == 15) || (tmp == 1)) {
 
-		ds_writeb((VISUAL_FIELD_VALS + 22), 0);
+		g_visual_field_vals[22] = 0;
 
-		if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 17)))) == 15) || (tmp == 1)) {
+		if ( ((tmp = div16(g_visual_field_vals[17])) == 15) || (tmp == 1)) {
 
-			ds_writeb((VISUAL_FIELD_VALS + 16),
-				ds_writeb((VISUAL_FIELD_VALS + 23), 0));
+			g_visual_field_vals[16] = g_visual_field_vals[23] = 0;
 		}
 	}
 
-	if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 13)))) == 15) || (tmp == 1)) {
+	if ( ((tmp = div16(g_visual_field_vals[13])) == 15) || (tmp == 1)) {
 
-		ds_writeb((VISUAL_FIELD_VALS + 28), 0);
+		g_visual_field_vals[28] = 0;
 
-		if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 19)))) == 15) || (tmp == 1)) {
+		if ( ((tmp = div16(g_visual_field_vals[19])) == 15) || (tmp == 1)) {
 
-			ds_writeb((VISUAL_FIELD_VALS + 20),
-				ds_writeb((VISUAL_FIELD_VALS + 27), 0));
+			g_visual_field_vals[20] = g_visual_field_vals[27] = 0;
 		}
 	}
 
-	if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 10)))) == 15) || (tmp == 1)) {
+	if ( ((tmp = div16(g_visual_field_vals[10])) == 15) || (tmp == 1)) {
 
-		ds_writeb((VISUAL_FIELD_VALS + 9),
-			ds_writeb((VISUAL_FIELD_VALS + 16),
-			ds_writeb((VISUAL_FIELD_VALS + 22),
-			ds_writeb((VISUAL_FIELD_VALS + 23), 0))));
+		g_visual_field_vals[9] = g_visual_field_vals[16] = g_visual_field_vals[22] = g_visual_field_vals[23] = 0;
 
-		if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 11)))) == 15) || (tmp == 1)) {
+		if ( ((tmp = div16(g_visual_field_vals[11])) == 15) || (tmp == 1)) {
 
-			ds_writeb((VISUAL_FIELD_VALS + 18), 0);
+			g_visual_field_vals[18] = 0;
 		}
 
-		if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 11)))) == 15) || (tmp == 1) ||
-			((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 18)))) == 15) || (tmp == 1)) {
+		if ( ((tmp = div16(g_visual_field_vals[11])) == 15) || (tmp == 1) ||
+			((tmp = div16(g_visual_field_vals[18])) == 15) || (tmp == 1)) {
 
-			ds_writeb((VISUAL_FIELD_VALS + 17),
-				ds_writeb((VISUAL_FIELD_VALS + 24),
-				ds_writeb((VISUAL_FIELD_VALS + 25), 0)));
+			g_visual_field_vals[17] = g_visual_field_vals[24] = g_visual_field_vals[25] = 0;
 		}
 	}
 
-	if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 12)))) == 15) || (tmp == 1)) {
+	if ( ((tmp = div16(g_visual_field_vals[12])) == 15) || (tmp == 1)) {
 
-		ds_writeb((VISUAL_FIELD_VALS + 13),
-			ds_writeb((VISUAL_FIELD_VALS + 20),
-			ds_writeb((VISUAL_FIELD_VALS + 27),
-			ds_writeb((VISUAL_FIELD_VALS + 28), 0))));
+		g_visual_field_vals[13] = g_visual_field_vals[20] = g_visual_field_vals[27] = g_visual_field_vals[28] = 0;
 
-		if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 11)))) == 15) || (tmp == 1)) {
+		if ( ((tmp = div16(g_visual_field_vals[11])) == 15) || (tmp == 1)) {
 
-			ds_writeb((VISUAL_FIELD_VALS + 18), 0);
+			g_visual_field_vals[18] = 0;
 		}
 
-		if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 11)))) == 15) || (tmp == 1) ||
-			((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 18)))) == 15) || (tmp == 1)) {
+		if ( ((tmp = div16(g_visual_field_vals[11])) == 15) || (tmp == 1) ||
+			((tmp = div16(g_visual_field_vals[18])) == 15) || (tmp == 1)) {
 
-			ds_writeb((VISUAL_FIELD_VALS + 19),
-				ds_writeb((VISUAL_FIELD_VALS + 25),
-				ds_writeb((VISUAL_FIELD_VALS + 26), 0)));
+			g_visual_field_vals[19] = g_visual_field_vals[25] = g_visual_field_vals[26] = 0;
 		}
 	}
 
-	if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 11)))) == 15) || (tmp == 1)) {
-		ds_writeb((VISUAL_FIELD_VALS + 18),
-			ds_writeb((VISUAL_FIELD_VALS + 25), 0));
+	if ( ((tmp = div16(g_visual_field_vals[11])) == 15) || (tmp == 1)) {
+		g_visual_field_vals[18] = g_visual_field_vals[25] = 0;
 	}
 
-	if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 16)))) == 15) || (tmp == 1)) {
+	if ( ((tmp = div16(g_visual_field_vals[16])) == 15) || (tmp == 1)) {
 
-		ds_writeb((VISUAL_FIELD_VALS + 22), 0);
+		g_visual_field_vals[22] = 0;
 
-		if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 24)))) == 15) || (tmp == 1)) {
+		if ( ((tmp = div16(g_visual_field_vals[24])) == 15) || (tmp == 1)) {
 
-			ds_writeb((VISUAL_FIELD_VALS + 23), 0);
+			g_visual_field_vals[23] = 0;
 		}
 	}
 
-	if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 20)))) == 15) || (tmp == 1)) {
+	if ( ((tmp = div16(g_visual_field_vals[20])) == 15) || (tmp == 1)) {
 
-		ds_writeb((VISUAL_FIELD_VALS + 28), 0);
+		g_visual_field_vals[28] = 0;
 
-		if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 26)))) == 15) || (tmp == 1)) {
+		if ( ((tmp = div16(g_visual_field_vals[26])) == 15) || (tmp == 1)) {
 
-			ds_writeb((VISUAL_FIELD_VALS + 27), 0);
+			g_visual_field_vals[27] = 0;
 		}
 	}
 
-	if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 18)))) == 15) || (tmp == 1)) {
+	if ( ((tmp = div16(g_visual_field_vals[18])) == 15) || (tmp == 1)) {
 
-		ds_writeb((VISUAL_FIELD_VALS + 25), 0);
+		g_visual_field_vals[25] = 0;
 	}
 
-	if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 18)))) == 15) || (tmp == 1) ||
-		((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 25)))) == 15) || (tmp == 1)) {
+	if ( ((tmp = div16(g_visual_field_vals[18])) == 15) || (tmp == 1) ||
+		((tmp = div16(g_visual_field_vals[25])) == 15) || (tmp == 1)) {
 
-		if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 17)))) == 15) || (tmp == 1)) {
+		if ( ((tmp = div16(g_visual_field_vals[17])) == 15) || (tmp == 1)) {
 
-			ds_writeb((VISUAL_FIELD_VALS + 24), 0);
+			g_visual_field_vals[24] = 0;
 		}
-		if ( ((tmp = div16(ds_readb((VISUAL_FIELD_VALS + 19)))) == 15) || (tmp == 1)) {
+		if ( ((tmp = div16(g_visual_field_vals[19])) == 15) || (tmp == 1)) {
 
-			ds_writeb((VISUAL_FIELD_VALS + 26), 0);
+			g_visual_field_vals[26] = 0;
 		}
-
 	}
 }
 
@@ -314,11 +274,11 @@ void DNG_stub2(void)
 {
 	signed short tmp;
 
-	tmp = div16(ds_readb((VISUAL_FIELD_VALS + 1)));
+	tmp = div16(g_visual_field_vals[1]);
 
 	if ((tmp == 2) || (tmp == 9)) {
 
-		if (div16(ds_readb((VISUAL_FIELD_VALS + 5))) == 15) {
+		if (div16(g_visual_field_vals[5]) == 15) {
 			DNG_draw_walls( ((gs_dungeon_gfx_style == 1) ? 0x4e : ((gs_dungeon_gfx_style == 2) ? 0x28 : 0x3e)), 0, 0x36);
 		}
 	}
@@ -331,7 +291,7 @@ void DNG_stub3(void)
 
 	for (i = 21; i >= 0; i--) {
 
-		tmp = div16(ds_readb(VISUAL_FIELD_VALS + i));
+		tmp = div16(g_visual_field_vals[i]);
 
 		g_visual_fields_tex[i] = (
 			(tmp == 6) ? ds_readb(DNG_STUB3_UNKN1 + i) :
@@ -436,7 +396,7 @@ void DNG_stub4(void)
 
 		l3 = ds_readbs(DNG_STUB4_UNKN4 + i);
 
-		l5 = ds_readbs(VISUAL_FIELD_VALS + l3);
+		l5 = g_visual_field_vals[l3];
 
 		l4 = (unsigned char)div16(l5);
 
@@ -543,12 +503,12 @@ void DNG_lights(void)
 
 	signed short i;
 
-	if (div16(ds_readb((VISUAL_FIELD_VALS + 1))) != 11) {
+	if (div16(g_visual_field_vals[1]) != 11) {
 
 		/* copy palette */
 		memcpy(g_text_output_buf, g_buffer11_ptr, 0xc0);
 
-		if (!(ds_readb((VISUAL_FIELD_VALS + 1)) & 1)) {
+		if (!(g_visual_field_vals[1] & 1)) {
 
 			if (gs_ingame_timers[INGAME_TIMER_DARKNESS]) {
 				l1 = 10;
@@ -697,7 +657,7 @@ void DNG_open_door(void)
 
 	DNG_floor_ceil();
 	move();
-	ds_writebs((VISUAL_FIELD_VALS + 5), 32);
+	g_visual_field_vals[5] = (32);
 	DNG_turn();
 	DNG_stub3();
 	DNG_stub4();

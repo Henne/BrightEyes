@@ -1409,7 +1409,7 @@ extern unsigned char g_dng_map_size;	// ds:0xbd94; seg002, seg003, seg028, seg06
 extern signed short g_ems_unused_handle;	// ds:0xbd92; seg028, seg120
 extern signed short g_ems_travelmap_handle;	// ds:0xbd90; seg028, seg120
 extern Bit8u *g_ems_unused_tab;		// ds:0xbd8c; seg028
-
+extern unsigned char g_visual_field_vals[29];	// ds:0xbd6e; seg003, seg066,seg075, seg077, seg080
 extern signed char g_visual_fields_tex[29];	// ds:0xbd50; seg066, seg075
 extern signed char g_direction_unkn;		// ds:0xbd4f; seg003
 extern unsigned char g_steptarget_back;		// ds:0xbd4e; seg003, seg066, seg076

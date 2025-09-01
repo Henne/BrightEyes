@@ -67,7 +67,7 @@ signed short enter_location(signed short town_id)
 			gs_current_loctype_bak = LOCTYPE_NONE;
 			gs_current_loctype = host_readbs(locations_list_ptr + LOCATION_LOCTYPE);
 			gs_current_typeindex = host_readb(locations_list_ptr + LOCATION_TYPEINDEX);
-			gs_current_locdata = (host_readw(locations_list_ptr + LOCATION_LOCDATA));
+			gs_current_locdata = host_readw(locations_list_ptr + LOCATION_LOCDATA);
 
 			if (gs_current_loctype == LOCTYPE_MARKET) {
 				gs_current_loctype = LOCTYPE_NONE;
@@ -83,10 +83,10 @@ signed short enter_location(signed short town_id)
 
 	move();
 
-	if ((b_index = get_border_index(cast_u16(ds_readbs((VISUAL_FIELD_VALS + 1))))) >= 2 && b_index <= 5) {
+	if ((b_index = get_border_index(cast_u16(g_visual_field_vals[1]))) >= 2 && b_index <= 5) {
 
 		gs_current_loctype_bak = LOCTYPE_NONE;
-		gs_current_locdata = (ds_readb((TOWNS_CITYINDEX_TABLE-1) + town_id));
+		gs_current_locdata = ds_readb((TOWNS_CITYINDEX_TABLE-1) + town_id);
 
 		if (!((gs_direction + gs_x_target + gs_y_target) & 1)) {
 			gs_current_loctype = LOCTYPE_CITIZEN;
@@ -181,7 +181,7 @@ signed short enter_location_daspota(void)
 
 	move();
 
-	if ((b_index = get_border_index(cast_u16(ds_readb((VISUAL_FIELD_VALS + 1))))) >= 2 && b_index <= 5) {
+	if ((b_index = get_border_index(cast_u16(g_visual_field_vals[1]))) >= 2 && b_index <= 5) {
 
 		gs_current_loctype_bak = LOCTYPE_NONE;
 		gs_current_loctype = LOCTYPE_CITIZEN;
@@ -397,175 +397,175 @@ void seg066_06c1(void)
 {
 	signed short bi;
 
-	if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 3)))) >= 2 && bi <= 5) {
-		ds_writeb((VISUAL_FIELD_VALS + 3), 0);
+	if ((bi = get_border_index(g_visual_field_vals[3])) >= 2 && bi <= 5) {
+		g_visual_field_vals[3] = (0);
 	}
 
-	if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 7)))) >= 2 && bi <= 5) {
-		ds_writeb((VISUAL_FIELD_VALS + 7), 0);
+	if ((bi = get_border_index(g_visual_field_vals[7])) >= 2 && bi <= 5) {
+		g_visual_field_vals[7] = (0);
 	}
 
-	if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 8)))) >= 2 && bi <= 5) {
-		ds_writeb((VISUAL_FIELD_VALS + 8), 0);
+	if ((bi = get_border_index(g_visual_field_vals[8])) >= 2 && bi <= 5) {
+		g_visual_field_vals[8] = (0);
 	}
 
-	if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 14)))) >= 2 && bi <= 5) {
-		ds_writeb((VISUAL_FIELD_VALS + 14), 0);
+	if ((bi = get_border_index(g_visual_field_vals[14])) >= 2 && bi <= 5) {
+		g_visual_field_vals[14] = (0);
 	}
 
-	if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 15)))) >= 2 && bi <= 5) {
-		ds_writeb((VISUAL_FIELD_VALS + 15), 0);
+	if ((bi = get_border_index(g_visual_field_vals[15])) >= 2 && bi <= 5) {
+		g_visual_field_vals[15] = (0);
 	}
 
-	if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 21)))) >= 2 && bi <= 5) {
-		ds_writeb((VISUAL_FIELD_VALS + 21), 0);
+	if ((bi = get_border_index(g_visual_field_vals[21])) >= 2 && bi <= 5) {
+		g_visual_field_vals[21] = (0);
 	}
 
-	if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 0)))) >= 2 && bi <= 5) {
+	if ((bi = get_border_index(g_visual_field_vals[0])) >= 2 && bi <= 5) {
 
-		ds_writeb((VISUAL_FIELD_VALS + 9), ds_writeb((VISUAL_FIELD_VALS + 15), ds_writeb((VISUAL_FIELD_VALS + 22), 0)));
+		g_visual_field_vals[9] = g_visual_field_vals[15] = g_visual_field_vals[22] = 0;
 
-		if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 5)))) >= 2 && bi <= 5) {
-			ds_writeb((VISUAL_FIELD_VALS + 4), ds_writeb((VISUAL_FIELD_VALS + 10), ds_writeb((VISUAL_FIELD_VALS + 16), ds_writeb((VISUAL_FIELD_VALS + 23), 0))));
+		if ((bi = get_border_index(g_visual_field_vals[5])) >= 2 && bi <= 5) {
+			g_visual_field_vals[4] = g_visual_field_vals[10] = g_visual_field_vals[16] = g_visual_field_vals[23] = 0;
 		}
 	}
 
-	if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 2)))) >= 2 && bi <= 5) {
+	if ((bi = get_border_index(g_visual_field_vals[2])) >= 2 && bi <= 5) {
 
-		ds_writeb((VISUAL_FIELD_VALS + 13), ds_writeb((VISUAL_FIELD_VALS + 21), ds_writeb((VISUAL_FIELD_VALS + 28),0)));
+		g_visual_field_vals[13] = g_visual_field_vals[21] = g_visual_field_vals[28] = 0;
 
-		if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 5)))) >= 2 && bi <= 5) {
-			ds_writeb((VISUAL_FIELD_VALS + 6), ds_writeb((VISUAL_FIELD_VALS + 12), ds_writeb((VISUAL_FIELD_VALS + 20), ds_writeb((VISUAL_FIELD_VALS + 27), 0))));
+		if ((bi = get_border_index(g_visual_field_vals[5])) >= 2 && bi <= 5) {
+			g_visual_field_vals[6] = g_visual_field_vals[12] = g_visual_field_vals[20] = g_visual_field_vals[27] = 0;
 		}
 	}
 
-	if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 4)))) >= 2 && bi <= 5) {
+	if ((bi = get_border_index(g_visual_field_vals[4])) >= 2 && bi <= 5) {
 
-		ds_writeb((VISUAL_FIELD_VALS + 9), ds_writeb((VISUAL_FIELD_VALS + 16), ds_writeb((VISUAL_FIELD_VALS + 22), ds_writeb((VISUAL_FIELD_VALS + 23), 0))));
+		g_visual_field_vals[9] = g_visual_field_vals[16] = g_visual_field_vals[22] = g_visual_field_vals[23] = 0;
 
-		if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 5)))) >= 2 && bi <= 5) {
-			ds_writeb((VISUAL_FIELD_VALS + 10), 0);
+		if ((bi = get_border_index(g_visual_field_vals[5])) >= 2 && bi <= 5) {
+			g_visual_field_vals[10] = 0;
 		}
 
-		if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 11)))) >= 2 && bi <= 5) {
-			ds_writeb((VISUAL_FIELD_VALS + 10), ds_writeb((VISUAL_FIELD_VALS + 17), ds_writeb((VISUAL_FIELD_VALS + 18), 0)));
-			ds_writeb((VISUAL_FIELD_VALS + 24), ds_writeb((VISUAL_FIELD_VALS + 25), 0));
-		}
-	}
-
-	if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 5)))) >= 2 && bi <= 5) {
-
-		ds_writeb((VISUAL_FIELD_VALS + 11), ds_writeb((VISUAL_FIELD_VALS + 17), ds_writeb((VISUAL_FIELD_VALS + 18), 0)));
-
-		ds_writeb((VISUAL_FIELD_VALS + 19), ds_writeb((VISUAL_FIELD_VALS + 24), ds_writeb((VISUAL_FIELD_VALS + 25), 0)));
-
-		ds_writeb((VISUAL_FIELD_VALS + 26), 0);
-	}
-
-	if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 6)))) >= 2 && bi <= 5) {
-
-		ds_writeb((VISUAL_FIELD_VALS + 13), ds_writeb((VISUAL_FIELD_VALS + 20), ds_writeb((VISUAL_FIELD_VALS + 27), ds_writeb((VISUAL_FIELD_VALS + 28), 0))));
-
-		if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 5)))) >= 2 && bi <= 5) {
-
-			ds_writeb((VISUAL_FIELD_VALS + 11), ds_writeb((VISUAL_FIELD_VALS + 12), ds_writeb((VISUAL_FIELD_VALS + 17), 0)));
-
-			ds_writeb((VISUAL_FIELD_VALS + 18), ds_writeb((VISUAL_FIELD_VALS + 19), ds_writeb((VISUAL_FIELD_VALS + 24), 0)));
-
-			ds_writeb((VISUAL_FIELD_VALS + 25), ds_writeb((VISUAL_FIELD_VALS + 26), 0));
-		}
-
-		if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 11)))) >= 2 && bi <= 5) {
-
-			ds_writeb((VISUAL_FIELD_VALS + 12), ds_writeb((VISUAL_FIELD_VALS + 18), ds_writeb((VISUAL_FIELD_VALS + 19), 0)));
-
-			ds_writeb((VISUAL_FIELD_VALS + 25), ds_writeb((VISUAL_FIELD_VALS + 26), 0));
+		if ((bi = get_border_index(g_visual_field_vals[11])) >= 2 && bi <= 5) {
+			g_visual_field_vals[10] = g_visual_field_vals[17] = g_visual_field_vals[18] = 0;
+			g_visual_field_vals[24] = g_visual_field_vals[25] = 0;
 		}
 	}
 
-	if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 9)))) >= 2 && bi <= 5) {
+	if ((bi = get_border_index(g_visual_field_vals[5])) >= 2 && bi <= 5) {
 
-		ds_writeb((VISUAL_FIELD_VALS + 22), 0);
+		g_visual_field_vals[11] = g_visual_field_vals[17] = g_visual_field_vals[18] = 0;
 
-		if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 17)))) >= 2 && bi <= 5) {
-			ds_writeb((VISUAL_FIELD_VALS + 16), ds_writeb((VISUAL_FIELD_VALS + 23), 0));
+		g_visual_field_vals[19] = g_visual_field_vals[24] = g_visual_field_vals[25] = 0;
+
+		g_visual_field_vals[26] = 0;
+	}
+
+	if ((bi = get_border_index(g_visual_field_vals[6])) >= 2 && bi <= 5) {
+
+		g_visual_field_vals[13] = g_visual_field_vals[20] = g_visual_field_vals[27] = g_visual_field_vals[28] = 0;
+
+		if ((bi = get_border_index(g_visual_field_vals[5])) >= 2 && bi <= 5) {
+
+			g_visual_field_vals[11] = g_visual_field_vals[12] = g_visual_field_vals[17] = 0;
+
+			g_visual_field_vals[18] = g_visual_field_vals[19] = g_visual_field_vals[24] = 0;
+
+			g_visual_field_vals[25] = g_visual_field_vals[26] = 0;
+		}
+
+		if ((bi = get_border_index(g_visual_field_vals[11])) >= 2 && bi <= 5) {
+
+			g_visual_field_vals[12] = g_visual_field_vals[18] = g_visual_field_vals[19] = 0;
+
+			g_visual_field_vals[25] = g_visual_field_vals[26] = 0;
 		}
 	}
 
-	if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 13)))) >= 2 && bi <= 5) {
+	if ((bi = get_border_index(g_visual_field_vals[9])) >= 2 && bi <= 5) {
 
-		ds_writeb((VISUAL_FIELD_VALS + 28), 0);
+		g_visual_field_vals[22] = 0;
 
-		if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 19)))) >= 2 && bi <= 5) {
-			ds_writeb((VISUAL_FIELD_VALS + 20), ds_writeb((VISUAL_FIELD_VALS + 27), 0));
+		if ((bi = get_border_index(g_visual_field_vals[17])) >= 2 && bi <= 5) {
+			g_visual_field_vals[16] = g_visual_field_vals[23] = 0;
 		}
 	}
 
-	if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 10)))) >= 2 && bi <= 5) {
+	if ((bi = get_border_index(g_visual_field_vals[13])) >= 2 && bi <= 5) {
 
-		ds_writeb((VISUAL_FIELD_VALS + 9), ds_writeb((VISUAL_FIELD_VALS + 16), ds_writeb((VISUAL_FIELD_VALS + 22), ds_writeb((VISUAL_FIELD_VALS + 23), 0))));
+		g_visual_field_vals[28] = 0;
 
-		if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 11)))) >= 2 && bi <= 5) {
-			ds_writeb((VISUAL_FIELD_VALS + 18), 0);
-		}
-
-		if (((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 11)))) >= 2 && bi <= 5) ||
-			((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 18)))) >= 2 && bi <= 5)) {
-
-			ds_writeb((VISUAL_FIELD_VALS + 17), ds_writeb((VISUAL_FIELD_VALS + 24), ds_writeb((VISUAL_FIELD_VALS + 25), 0)));
+		if ((bi = get_border_index(g_visual_field_vals[19])) >= 2 && bi <= 5) {
+			g_visual_field_vals[20] = g_visual_field_vals[27] = 0;
 		}
 	}
 
-	if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 12)))) >= 2 && bi <= 5) {
+	if ((bi = get_border_index(g_visual_field_vals[10])) >= 2 && bi <= 5) {
 
-		ds_writeb((VISUAL_FIELD_VALS + 13), ds_writeb((VISUAL_FIELD_VALS + 20), ds_writeb((VISUAL_FIELD_VALS + 27), ds_writeb((VISUAL_FIELD_VALS + 28), 0))));
+		g_visual_field_vals[9] = g_visual_field_vals[16] = g_visual_field_vals[22] = g_visual_field_vals[23] = 0;
 
-		if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 11)))) >= 2 && bi <= 5) {
-			ds_writeb((VISUAL_FIELD_VALS + 18), 0);
+		if ((bi = get_border_index(g_visual_field_vals[11])) >= 2 && bi <= 5) {
+			g_visual_field_vals[18] = 0;
 		}
 
-		if (((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 11)))) >= 2 && bi <= 5) ||
-			((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 18)))) >= 2 && bi <= 5)) {
+		if (((bi = get_border_index(g_visual_field_vals[11])) >= 2 && bi <= 5) ||
+			((bi = get_border_index(g_visual_field_vals[18])) >= 2 && bi <= 5)) {
 
-			ds_writeb((VISUAL_FIELD_VALS + 19), ds_writeb((VISUAL_FIELD_VALS + 25), ds_writeb((VISUAL_FIELD_VALS + 26), 0)));
-		}
-	}
-
-	if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 11)))) >= 2 && bi <= 5) {
-		ds_writeb((VISUAL_FIELD_VALS + 18), ds_writeb((VISUAL_FIELD_VALS + 25), 0));
-	}
-
-	if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 16)))) >= 2 && bi <= 5) {
-
-		ds_writeb((VISUAL_FIELD_VALS + 22), 0);
-
-		if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 24)))) >= 2 && bi <= 5) {
-			ds_writeb((VISUAL_FIELD_VALS + 23), 0);
+			g_visual_field_vals[17] = g_visual_field_vals[24] = g_visual_field_vals[25] = 0;
 		}
 	}
 
-	if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 20)))) >= 2 && bi <= 5) {
+	if ((bi = get_border_index(g_visual_field_vals[12])) >= 2 && bi <= 5) {
 
-		ds_writeb((VISUAL_FIELD_VALS + 28), 0);
+		g_visual_field_vals[13] = g_visual_field_vals[20] = g_visual_field_vals[27] = g_visual_field_vals[28] = 0;
 
-		if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 26)))) >= 2 && bi <= 5) {
-			ds_writeb((VISUAL_FIELD_VALS + 27), 0);
+		if ((bi = get_border_index(g_visual_field_vals[11])) >= 2 && bi <= 5) {
+			g_visual_field_vals[18] = 0;
+		}
+
+		if (((bi = get_border_index(g_visual_field_vals[11])) >= 2 && bi <= 5) ||
+			((bi = get_border_index(g_visual_field_vals[18])) >= 2 && bi <= 5)) {
+
+			g_visual_field_vals[19] = g_visual_field_vals[25] = g_visual_field_vals[26] = 0;
 		}
 	}
 
-	if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 18)))) >= 2 && bi <= 5) {
-		ds_writeb((VISUAL_FIELD_VALS + 25), 0);
+	if ((bi = get_border_index(g_visual_field_vals[11])) >= 2 && bi <= 5) {
+		g_visual_field_vals[18] = g_visual_field_vals[25] = 0;
 	}
 
-	if (((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 18)))) >= 2 && bi <= 5) ||
-		((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 25)))) >= 2 && bi <= 5)) {
+	if ((bi = get_border_index(g_visual_field_vals[16])) >= 2 && bi <= 5) {
 
-		if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 17)))) >= 2 && bi <= 5) {
-			ds_writeb((VISUAL_FIELD_VALS + 24), 0);
+		g_visual_field_vals[22] = 0;
+
+		if ((bi = get_border_index(g_visual_field_vals[24])) >= 2 && bi <= 5) {
+			g_visual_field_vals[23] = 0;
+		}
+	}
+
+	if ((bi = get_border_index(g_visual_field_vals[20])) >= 2 && bi <= 5) {
+
+		g_visual_field_vals[28] = 0;
+
+		if ((bi = get_border_index(g_visual_field_vals[26])) >= 2 && bi <= 5) {
+			g_visual_field_vals[27] = 0;
+		}
+	}
+
+	if ((bi = get_border_index(g_visual_field_vals[18])) >= 2 && bi <= 5) {
+		g_visual_field_vals[25] = 0;
+	}
+
+	if (((bi = get_border_index(g_visual_field_vals[18])) >= 2 && bi <= 5) ||
+		((bi = get_border_index(g_visual_field_vals[25])) >= 2 && bi <= 5)) {
+
+		if ((bi = get_border_index(g_visual_field_vals[17])) >= 2 && bi <= 5) {
+			g_visual_field_vals[24] = 0;
 		}
 
-		if ((bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + 19)))) >= 2 && bi <= 5) {
-			ds_writeb((VISUAL_FIELD_VALS + 26), 0);
+		if ((bi = get_border_index(g_visual_field_vals[19])) >= 2 && bi <= 5) {
+			g_visual_field_vals[26] = 0;
 		}
 	}
 }
@@ -600,7 +600,7 @@ void seg066_0bad(void)
 
 	for (i = 28; i >= 0; i--) {
 
-		bi = get_border_index(ds_readb((VISUAL_FIELD_VALS + i)));
+		bi = get_border_index(g_visual_field_vals[i]);
 
 		if (bi == -1) {
 			g_visual_fields_tex[i] = -1;
@@ -637,7 +637,7 @@ void city_water_and_grass(void)
 	for (i = 0; i < 29; i++) {
 
 		c1 = g_visual_field_draw_order[i];
-		c2 = ds_readb(VISUAL_FIELD_VALS + c1);
+		c2 = g_visual_field_vals[c1];
 
 		if (c2 != 0) {
 
@@ -689,7 +689,7 @@ void city_building_textures(void)
 	for (i = 0; i < 29; i++) {
 
 		c1 = g_visual_field_draw_order[i];
-		c2 = ds_readb(VISUAL_FIELD_VALS + c1);
+		c2 = g_visual_field_vals[c1];
 
 		if (c2 != 0) {
 

@@ -100,9 +100,9 @@ void move(void)
 			host_readb(p_map_large + (y << 5) + x);
 
 		if (boundary_flag != 0) {
-			ds_writeb(VISUAL_FIELD_VALS + i, ((mapval == 0xa0) || (mapval == 0xb0)) ? mapval : 0xb0);
+			g_visual_field_vals[i] = ((mapval == 0xa0) || (mapval == 0xb0) ? mapval : 0xb0);
 		} else {
-			ds_writeb(VISUAL_FIELD_VALS + i, mapval);
+			g_visual_field_vals[i] = mapval;
 		}
 	}
 
