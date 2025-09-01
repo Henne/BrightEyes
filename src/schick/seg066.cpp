@@ -50,24 +50,24 @@ signed short enter_location(signed short town_id)
 {
 	signed short map_pos;
 	signed short b_index;
-	Bit8u *locations_list_ptr;
+	struct location *locations_tab_ptr;
 
 	if (town_id == TOWNS_DASPOTA) {
 		return enter_location_daspota();
 	}
 
 	map_pos = 256 * gs_x_target + gs_y_target;
-	locations_list_ptr = p_datseg + LOCATIONS_LIST;
+	locations_tab_ptr = &g_locations_tab[0];
 	g_location_market_flag = 0;
 
 	do {
-		if (host_readws(locations_list_ptr + LOCATION_XY) == map_pos) {
+		if (locations_tab_ptr->pos == map_pos) {
 
 			/* found the location */
 			gs_current_loctype_bak = LOCTYPE_NONE;
-			gs_current_loctype = host_readbs(locations_list_ptr + LOCATION_LOCTYPE);
-			gs_current_typeindex = host_readb(locations_list_ptr + LOCATION_TYPEINDEX);
-			gs_current_locdata = host_readw(locations_list_ptr + LOCATION_LOCDATA);
+			gs_current_loctype = locations_tab_ptr->loctype;
+			gs_current_typeindex = locations_tab_ptr->typeindex;
+			gs_current_locdata = locations_tab_ptr->locdata;
 
 			if (gs_current_loctype == LOCTYPE_MARKET) {
 				gs_current_loctype = LOCTYPE_NONE;
@@ -77,9 +77,9 @@ signed short enter_location(signed short town_id)
 			return 1;
 		}
 
-		locations_list_ptr += SIZEOF_LOCATION;
+		locations_tab_ptr++;
 
-	} while (host_readws(locations_list_ptr) != -1);
+	} while (locations_tab_ptr->pos != -1);
 
 	move();
 
@@ -105,31 +105,31 @@ signed short enter_location_daspota(void)
 {
 	signed short map_pos;
 	signed short b_index;
-	Bit8u *locations_list_ptr;
+	struct location *locations_tab_ptr;
 
 	if (g_game_state == GAME_STATE_FIGQUIT) {
 		return 1;
 	}
 
 	map_pos = 256 * gs_x_target + gs_y_target;
-	locations_list_ptr = p_datseg + LOCATIONS_LIST;
+	locations_tab_ptr = &g_locations_tab[0];
 	g_location_market_flag = 0;
 
 	do {
 
-		if (host_readws(locations_list_ptr + LOCATION_XY) == map_pos) {
+		if (locations_tab_ptr->pos == map_pos) {
 
-			gs_current_typeindex = host_readb(locations_list_ptr + LOCATION_TYPEINDEX);
+			gs_current_typeindex = locations_tab_ptr->typeindex;
 
-			if (host_readb(locations_list_ptr + LOCATION_LOCTYPE) != LOCTYPE_SIGNPOST) {
+			if (locations_tab_ptr->loctype != LOCTYPE_SIGNPOST) {
 
-				GUI_print_loc_line(get_tx(host_readws(locations_list_ptr + LOCATION_LOCDATA)));
+				GUI_print_loc_line(get_tx(locations_tab_ptr->locdata));
 
-				if (!gs_daspota_fightflags[host_readws(locations_list_ptr + LOCATION_LOCDATA)]) {
+				if (!gs_daspota_fightflags[locations_tab_ptr->locdata]) {
 
-					do_talk(host_readbs(locations_list_ptr + LOCATION_LOCTYPE), host_readb(locations_list_ptr + LOCATION_TYPEINDEX) - 1);
+					do_talk(locations_tab_ptr->loctype, locations_tab_ptr->typeindex - 1);
 
-					if (!gs_daspota_fightflags[host_readws(locations_list_ptr + LOCATION_LOCDATA)]) {
+					if (!gs_daspota_fightflags[locations_tab_ptr->locdata]) {
 						leave_location();
 						return 1;
 					}
@@ -139,12 +139,12 @@ signed short enter_location_daspota(void)
 				set_var_to_zero();
 
 				load_ani(10);
-				GUI_print_loc_line(get_tx(host_readws(locations_list_ptr + LOCATION_LOCDATA)));
+				GUI_print_loc_line(get_tx(locations_tab_ptr->locdata));
 				init_ani(0);
 
-				if (g_daspota_locloot_index[host_readws(locations_list_ptr + LOCATION_LOCDATA) - 1]) {
+				if (g_daspota_locloot_index[locations_tab_ptr->locdata - 1]) {
 
-					loot_multi_chest(g_daspota_locloot_index[host_readws(locations_list_ptr + LOCATION_LOCDATA) - 1], get_tx(21));
+					loot_multi_chest(g_daspota_locloot_index[locations_tab_ptr->locdata - 1], get_tx(21));
 
 				} else {
 
@@ -158,9 +158,9 @@ signed short enter_location_daspota(void)
 
 				set_var_to_zero();
 
-				if (host_readw(locations_list_ptr + LOCATION_LOCDATA) == 6) {
+				if (locations_tab_ptr->locdata == 6) {
 					do_fight(FIGHTS_DASP6B);
-				} else if (host_readw(locations_list_ptr + LOCATION_LOCDATA) == 12) {
+				} else if (locations_tab_ptr->locdata == 12) {
 					do_fight(FIGHTS_DASP12B);
 				}
 
@@ -168,16 +168,16 @@ signed short enter_location_daspota(void)
 
 			} else {
 				gs_current_loctype_bak = LOCTYPE_NONE;
-				gs_current_loctype = host_readbs(locations_list_ptr + LOCATION_LOCTYPE);
-				gs_current_locdata = host_readw(locations_list_ptr + LOCATION_LOCDATA);
+				gs_current_loctype = locations_tab_ptr->loctype;
+				gs_current_locdata = locations_tab_ptr->locdata;
 			}
 
 			return 1;
 		}
 
-		locations_list_ptr += SIZEOF_LOCATION;
+		locations_tab_ptr++;
 
-	} while (host_readws(locations_list_ptr) != -1);
+	} while (locations_tab_ptr->pos != -1);
 
 	move();
 

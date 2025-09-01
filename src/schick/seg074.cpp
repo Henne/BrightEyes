@@ -632,8 +632,8 @@ signed short select_teleport_dest(void)
  */
 signed short get_maploc(signed short x, signed short y)
 {
-	Bit8u *locations_list_ptr;
-	unsigned short pos_xy = TOWN_POS(x,y);
+	struct location *locations_tab_ptr;
+	signed short pos_xy = TOWN_POS(x,y);
 
 	// Wow. Original game has these hard-coded manipulation of the data.
 	if (gs_current_town == TOWNS_THORWAL) {
@@ -663,32 +663,34 @@ signed short get_maploc(signed short x, signed short y)
 		}
 	}
 
-	locations_list_ptr = p_datseg + LOCATIONS_LIST;
+	locations_tab_ptr = &g_locations_tab[0];
 
 	do {
 
-		if (host_readws(locations_list_ptr) + LOCATION_XY == pos_xy) {
-			if (host_readbs(locations_list_ptr + LOCATION_LOCTYPE) == LOCTYPE_TEMPLE) {
+		if (locations_tab_ptr->pos == pos_xy) {
+
+			if (locations_tab_ptr->loctype == LOCTYPE_TEMPLE) {
 				return TOWN_TILE_TEMPLE;
 			}
-			if (host_readbs(locations_list_ptr + LOCATION_LOCTYPE) == LOCTYPE_MERCHANT) {
+			if (locations_tab_ptr->loctype == LOCTYPE_MERCHANT) {
 				return TOWN_TILE_MERCHANT;
 			}
-			if (host_readbs(locations_list_ptr + LOCATION_LOCTYPE) == LOCTYPE_SMITH) {
+			if (locations_tab_ptr->loctype == LOCTYPE_SMITH) {
 				return TOWN_TILE_SMITH;
 			}
-			if ((host_readbs(locations_list_ptr + LOCATION_LOCTYPE) == LOCTYPE_TAVERN) || (host_readbs(locations_list_ptr + LOCATION_LOCTYPE) == LOCTYPE_INN)) {
+			if ((locations_tab_ptr->loctype == LOCTYPE_TAVERN) || (locations_tab_ptr->loctype == LOCTYPE_INN)) {
 				return TOWN_TILE_INN_OR_TAVERN;
 			}
-			if (host_readbs(locations_list_ptr + LOCATION_LOCTYPE) == LOCTYPE_HEALER) {
+			if (locations_tab_ptr->loctype == LOCTYPE_HEALER) {
 				return TOWN_TILE_HEALER;
 			}
 		}
 
-		locations_list_ptr += SIZEOF_LOCATION;
-	} while (host_readws(locations_list_ptr) != -1);
+		locations_tab_ptr++;
 
-	return 0;
+	} while (locations_tab_ptr->pos != -1);
+
+	return TOWN_TILE_STREET;
 }
 
 #if !defined(__BORLANDC__)

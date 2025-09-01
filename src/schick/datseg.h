@@ -67,6 +67,13 @@ struct struct_diary_entry {
 	Bit16s town;
 };
 
+struct location {
+	Bit16s pos;
+	Bit8s loctype;
+	Bit8u typeindex;
+	Bit16s locdata;
+};
+
 struct struct_msg {
 	signed int id;
 	signed int type;
@@ -1393,7 +1400,7 @@ extern char **g_text_ltx_index;		// ds:0xc3b5;
 extern char **g_tx_index;		// ds:0xc3b1; seg026, seg028, seg031, seg064, seg120
 extern char **g_tx2_index;		// ds:0xc3ad; seg
 extern unsigned char *g_buffer8_ptr;	// ds:0xc3a9; seg005, seg026, seg028, seg032, seg042, seg050, seg061, seg098, seg120
-
+extern struct location g_locations_tab[150];	//ds:0xc025; seg028, seg64, seg066, seg74, seg094
 extern struct_pic_copy g_pic_copy;	// ds:0xc00d; seg002-seg120
 
 extern Bit8u *g_buyitems;		// ds:0xc009; seg055, seg056

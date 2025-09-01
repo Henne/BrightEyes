@@ -577,7 +577,7 @@ signed short TM_enter_target_town(void)
 	signed short signpost_id;
 	signed short tmp2;
 	Bit8u *signpost_ptr;
-	Bit8u *locations_list_ptr;
+	struct location *locations_tab_ptr;
 
 	signpost_id = 0;
 	gs_travel_destination_town_id = gs_trv_destination;
@@ -619,16 +619,16 @@ signed short TM_enter_target_town(void)
 			/* load the map */
 			call_load_area(1);
 
-			locations_list_ptr = p_datseg + LOCATIONS_LIST;
-			while (host_readb(locations_list_ptr + LOCATION_LOCTYPE) != LOCTYPE_SIGNPOST || host_readb(locations_list_ptr + LOCATION_TYPEINDEX) != signpost_id)
+			locations_tab_ptr = &g_locations_tab[0];
+			while (locations_tab_ptr->loctype != LOCTYPE_SIGNPOST || locations_tab_ptr->typeindex != signpost_id)
 			{
-				locations_list_ptr += SIZEOF_LOCATION;
+				locations_tab_ptr++;
 			}
 
-			tmp = host_readws(locations_list_ptr + LOCATION_LOCDATA);
+			tmp = locations_tab_ptr->locdata;
 			gs_travel_destination_x = (tmp >> 8) & 0xff;
 			gs_travel_destination_y = tmp & 0x0f;
-			gs_travel_destination_viewdir = TM_enter_target_town_viewdir(host_readws(locations_list_ptr));
+			gs_travel_destination_viewdir = TM_enter_target_town_viewdir(locations_tab_ptr->pos);
 
 			gs_current_town = (signed char)tmp2;
 

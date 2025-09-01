@@ -1375,7 +1375,7 @@
 //#define PIC_COPY_V2                     (0xc01f)    /* unsigned short */
 //#define PIC_COPY_V3                     (0xc021)    /* unsigned short */
 //#define PIC_COPY_V4                     (0xc023)    /* unsigned short */
-#define LOCATIONS_LIST                  (0xc025)    /* struct(6)[150]; struct{short pos; char loc, type; short id;} */
+//#define LOCATIONS_LIST                  (0xc025)    /* struct(6)[150]; struct{short pos; char loc, type; short id;} */
 //#define BUFFER8_PTR                     (0xc3a9)    /* Bit8u*; to buffer of size 12008 */
 //#define TX2_INDEX                       (0xc3ad)    /* Bit8u*; to index table of secondary text file */
 //#define TX_INDEX                        (0xc3b1)    /* Bit8u*; to index table of primary text file */

@@ -293,7 +293,7 @@ void load_area_description(signed short type)
 			/* write automap tiles */
 			write(fd, (void*)g_automap_buf, 64);
 			/* write location information */
-			write(fd, (void*)MK_FP(datseg, LOCATIONS_LIST), g_locations_tab_size);
+			write(fd, (void*)g_locations_tab, g_locations_tab_size);
 
 			close(fd);
 
@@ -329,9 +329,9 @@ void load_area_description(signed short type)
 			_read(fd, g_automap_buf, 64);
 
 			/* TODO: is that neccessary ? */
-			memset(p_datseg + LOCATIONS_LIST, -1, 900);
+			memset(g_locations_tab, -1, 900);
 
-			g_locations_tab_size = _read(fd, p_datseg + LOCATIONS_LIST, 1000);
+			g_locations_tab_size = _read(fd, g_locations_tab, 1000);
 
 			g_dng_map_size = 32;
 		} else {
@@ -345,8 +345,8 @@ void load_area_description(signed short type)
 
 			if (!gs_dungeon_index) {
 				/* TODO: is that neccessary ? */
-				memset(p_datseg + LOCATIONS_LIST, -1, 900);
-				g_locations_tab_size = _read(fd, p_datseg + LOCATIONS_LIST, 1000);
+				memset(g_locations_tab, -1, 900);
+				g_locations_tab_size = _read(fd, g_locations_tab, 1000);
 			}
 
 			g_dng_map_size = 16;

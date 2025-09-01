@@ -279,7 +279,7 @@ unsigned short passage_arrival(void)
 {
 	signed short tmp;
 	Bit8u *harbor_ptr;
-	Bit8u *locations_list_ptr;
+	struct location *locations_tab_ptr;
 	sea_route *p_sea_route;
 	signed short si;
 	signed short harbor_typeindex;
@@ -329,14 +329,14 @@ unsigned short passage_arrival(void)
 		call_load_area(1);
 
 		/* search for the harbour in the locations list */
-		locations_list_ptr = p_datseg + LOCATIONS_LIST;
-		while ((host_readb(locations_list_ptr + LOCATION_LOCTYPE) != LOCTYPE_HARBOR) ||
-				(host_readb(locations_list_ptr + LOCATION_TYPEINDEX) != harbor_typeindex)) {
-			locations_list_ptr += SIZEOF_LOCATION;
+		locations_tab_ptr = &g_locations_tab[0];
+		while ((locations_tab_ptr->loctype != LOCTYPE_HARBOR) || (locations_tab_ptr->typeindex != harbor_typeindex)) {
+			locations_tab_ptr++;
 		}
 
 		/* set the position of the party */
-		si = host_readw(locations_list_ptr + LOCATION_LOCDATA);
+		si = locations_tab_ptr->locdata;
+
 		gs_travel_destination_x = (si >> 8) & 0xff;		/* = (si / 256) % 255 */
 		gs_travel_destination_y = si & 0x0f;			/* = si % 15 */
 		gs_travel_destination_viewdir = (si >> 4) & 0x0f;	/* = (si / 16) % 15 */
@@ -347,7 +347,6 @@ unsigned short passage_arrival(void)
 	}
 
 	return 0;
-
 }
 
 #if !defined(__BORLANDC__)
