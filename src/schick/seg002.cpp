@@ -513,6 +513,7 @@ void start_midi_playback_IRQ(void)
 #endif
 }
 
+#if defined(__BORLANDC__)
 void cruft_1(void)
 /* This function is never called */
 {
@@ -536,7 +537,7 @@ void cruft_2(signed short volume)
 		}
 	}
 }
-
+#endif
 
 signed short have_mem_for_sound(void)
 {

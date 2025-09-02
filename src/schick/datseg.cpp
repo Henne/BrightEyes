@@ -6451,7 +6451,9 @@ signed long g_ail_state_table_size; // ds:0xbd05
 unsigned short g_ail_timbre_cache_size; // ds:0xbd03
 signed short g_sample_ad_handle; // ds:0xbd01
 signed short g_load_sound_driver; // ds:0xbcff
+#endif
 signed short g_use_cdaudio_flag; // ds:0xbcfd
+#if defined(__BORLANDC__)
 signed short g_ail_digi_driver_id; // ds:0xbcfb
 Bit8u *g_ail_digi_driver_descr; // ds:0xbcf7
 Bit8u *g_ail_digi_driver_buf; // ds:0xbcf3
