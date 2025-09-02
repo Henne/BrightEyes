@@ -67,6 +67,12 @@ struct struct_diary_entry {
 	Bit16s town;
 };
 
+struct trv_start_point {
+	Bit8s town;
+	Bit8s typeindex;
+	Bit8s *end_points;
+};
+
 struct location {
 	Bit16s pos;
 	Bit8s loctype;
@@ -1121,6 +1127,7 @@ extern const char g_str_single_space[2];	//ds:0x9dc4; seg092
 
 extern struct struct_land_route g_land_routes[59];	//ds:0x9dc6; seg093, seg094
 
+extern struct trv_start_point g_harbors[26];			//ds:0xa3a3; seg064
 extern struct struct_point g_town_positions[52];	//ds:0xa43f; seg002, seg063, seg094, seg094
 extern struct mouse_action g_action_table_travelmap[35];	//ds:0xa50f; seg093
 

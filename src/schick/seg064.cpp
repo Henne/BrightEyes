@@ -1,5 +1,5 @@
 /*
- *	Rewrite of DSA1 v3.02_de functions of seg064 (harbour_helper)
+ *	Rewrite of DSA1 v3.02_de functions of seg064 (harbor_helper)
  *	Functions rewritten: 6/6 (complete)
  *
  *	Borlandified and identical
@@ -54,7 +54,7 @@ Bit8u* get_ship_name(signed char passage_type, signed short nr_ships_created)
 }
 
 /**
- * \brief   prepares the available passages at a harbour
+ * \brief   prepares the available passages at a harbor
  *
  * \return	number of prepared passages */
 
@@ -78,14 +78,14 @@ unsigned short prepare_passages(void)
 
 #ifndef M302de_ORIGINAL_BUGFIX
 			/* Original-Bug 23:
-			 * In the function get_ship_name(..), the ship names are created randomly every time the party checks the available ships at a harbour.
+			 * In the function get_ship_name(..), the ship names are created randomly every time the party checks the available ships at a harbor.
 			 * In this way, the names of the ships can (and usually do) change when repeatedly checking the available ships. */
 			ds_writed(HARBOR_OPTIONS + prepared * SIZEOF_HARBOR_OPTION + HARBOR_OPTION_SHIP_NAME_PTR, (Bit32u)get_ship_name(ent->ship_type, prepared));
 #else
 			/* As a fix, we derive the name from the PASSAGE_PRICE_MOD entry of the SEA_ROUTE, which is created
 			 * randomly once the new passage of the route is set up, and is kept fixed over the lifetime of the passage.
 			 *
-			 * In this way, it may however happen that two ships of the same name are located in a harbour
+			 * In this way, it may however happen that two ships of the same name are located in a harbor
 			 * (which has been avoided in the original random assignment code). But this is a rare event and not be a big issue anyway.
 			 */
 			ds_writed(HARBOR_OPTIONS + prepared * SIZEOF_HARBOR_OPTION + HARBOR_OPTION_SHIP_NAME_PTR,
@@ -223,7 +223,7 @@ unsigned short get_passage_travel_hours(signed short distance, signed short base
 }
 
 /**
- * \brief   get destination harbors. called from Hafenmeister option at a harbour
+ * \brief   get destination harbors. called from Hafenmeister option at a harbor
  *
  * \param   type        1 = passages next days "Ankommende Routen erfragen" / 2 = all passages
  * \return  number of prepared passages.
@@ -278,14 +278,14 @@ unsigned short get_next_passages(unsigned short type)
 unsigned short passage_arrival(void)
 {
 	signed short tmp;
-	Bit8u *harbor_ptr;
+	struct trv_start_point *harbor_ptr;
 	struct location *locations_tab_ptr;
 	sea_route *p_sea_route;
 	signed short si;
 	signed short harbor_typeindex;
 
 	harbor_typeindex = 0;
-	harbor_ptr = p_datseg + HARBORS;
+	harbor_ptr = &g_harbors[0];
 
 	p_sea_route = &g_sea_routes[gs_current_sea_route_id];
 
@@ -300,25 +300,26 @@ unsigned short passage_arrival(void)
 	/* find the harbor of the destination town. */
 
 	do {
-		if (host_readb(harbor_ptr + HARBOR_TOWN) == gs_travel_destination_town_id) {
+		if (harbor_ptr->town == gs_travel_destination_town_id) {
 			si = 0;
 			do {
 				/* tmp ranges over the IDs of the linked sea routes, diminished by 1. */
-				tmp = host_readb((Bit8u*)host_readd(harbor_ptr + HARBOR_SEA_ROUTES) + si) - 1;
+				tmp = harbor_ptr->end_points[si] - 1;
 				if (g_sea_routes[tmp].town1 == gs_current_town || g_sea_routes[tmp].town2 == gs_current_town) {
-					harbor_typeindex = (unsigned char)host_readb(harbor_ptr + HARBOR_TYPEINDEX);
+					harbor_typeindex = (unsigned char)harbor_ptr->typeindex;
 					break;
 				}
 
 				si++;
-			} while (host_readb((Bit8u*)(host_readd(harbor_ptr + HARBOR_SEA_ROUTES)) + si) != 0xff);
+
+			} while (harbor_ptr->end_points[si] != -1);
 		}
 
-		harbor_ptr += SIZEOF_HARBOR;
+		harbor_ptr++;
 
-	} while (harbor_typeindex == 0 && host_readb(harbor_ptr) != 0xff);
+	} while ((harbor_typeindex == 0) && (harbor_ptr->town != -1));
 
-	if (harbor_typeindex != 0) {
+	if (harbor_typeindex) {
 
 		/* save the old town in tmp */
 		tmp = (signed char)gs_current_town;
@@ -328,7 +329,7 @@ unsigned short passage_arrival(void)
 		/* load the area of the new town */
 		call_load_area(1);
 
-		/* search for the harbour in the locations list */
+		/* search for the harbor in the locations list */
 		locations_tab_ptr = &g_locations_tab[0];
 		while ((locations_tab_ptr->loctype != LOCTYPE_HARBOR) || (locations_tab_ptr->typeindex != harbor_typeindex)) {
 			locations_tab_ptr++;

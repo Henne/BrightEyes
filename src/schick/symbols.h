@@ -1185,8 +1185,8 @@
 //#define LAND_ROUTES                     (0x9dc6)    /* struct(9)[59]; struct{char from, to, distance, speed_mod, encounters, u1, u2, fights, u3;} */
 #define SIGNPOSTS_LINKED_LAND_ROUTES    (0x9fd9)    /* char[219]; 105 arrays, each terminated by -1 */
 #define SIGNPOSTS                       (0xa0b4)    /* struct(6)[106]; struct{char town, typeindex; Bit8u* land_routes;} */
-#define HARBORS_LINKED_SEA_ROUTES       (0xa330)    /* char[115]; 25 arrays, each terminated by -1 */
-#define HARBORS                         (0xa3a3)    /* struct(6)[26]; struct{char town, typeindex; Bit8u* sea_routes;} */
+//#define HARBORS_LINKED_SEA_ROUTES       (0xa330)    /* char[115]; 25 arrays, each terminated by -1 */
+//#define HARBORS                         (0xa3a3)    /* struct(6)[26]; struct{char town, typeindex; Bit8u* sea_routes;} */
 //#define TOWN_POSITIONS                  (0xa43f)    /* struct(4)[52]; struct{signed short x, y;} */
 //#define ACTION_TABLE_TRAVELMAP          (0xa50f)    /* struct(10)[35] */
 //#define TEVENTS_TAB                     (0xa66d)    /* struct(3)[155]; struct{char route_id, place, tevent_id;} */

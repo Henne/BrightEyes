@@ -5126,75 +5126,80 @@ struct{char town, typeindex; long land_routes;} g_signposts[106] = {
 	{ TOWNS_LEUCHTTURM_RUNIN   , 2, 0x14fca0b2 }, // 105
 	{ -0x01                    , 0, 0x00000000 }
 }; // ds:0xa0b4; Bit8u*
-char g_harbors_linked_sea_routes[115] = { // for each of the 25 harbors (see g_harbors), a -1 terminated list of the IDs of the linked sea routes
-	1, 8, 33, 35, 39, -0x01,
-	36, 37, -0x01,
-	33, 34, 36, -0x01,
-	34, 35, 37, -0x01,
-	28, 27, 38, -0x01,
-	27, 29, 25, -0x01,
-	24, -0x01,
-	6, 25, 26, 30, 38, 23, 45, -0x01,
-	22, 23, 24, 32, -0x01,
+
+/* Numbers here are entries in g_sea_route */
+Bit8s g_harbors_linked_sea_routes_01[] = {1, 8, 33, 35, 39, -1};		//ds:0xa330
+Bit8s g_harbors_linked_sea_routes_02[] = {36, 37, -1};				//ds:0xa336
+Bit8s g_harbors_linked_sea_routes_03[] = {33, 34, 36, -1};			//ds:0xa339
+Bit8s g_harbors_linked_sea_routes_04[] = {34, 35, 37, -1};			//ds:0xa33d
+Bit8s g_harbors_linked_sea_routes_05[] = {28, 27, 38, -1};			//ds:0xa341
+Bit8s g_harbors_linked_sea_routes_06[] = {27, 29, 25, -1};			//ds:0xa345
+Bit8s g_harbors_linked_sea_routes_07[] = {24, -1};				//ds:0xa349
+Bit8s g_harbors_linked_sea_routes_08[] = {6, 25, 26, 30, 38, 23, 45, -1};	//ds:0xa34b
+Bit8s g_harbors_linked_sea_routes_09[] = {22, 23, 24, 32, -1};			//ds:0xa353
+Bit8s g_harbors_linked_sea_routes_10[] = {
 #ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 40: After doing a ship passage from Overthorn to Hjalsingor and leaving the harbor,
 	 * the party is positioned in a wrong square behind the buildings. */
 	/* Reason: In the hard-coded list of the sea routes linked to the Hjalsingor harbor, the route Overthorn-Hjalsignor (ID 6) is missing.
 	 * Instead, the route Varnheim-Ljasdahl (ID 10) is wrongly linked. */
-	2, 5, 7, 10, 21, 22, -0x01,
+	2, 5,	7, /* diff */ 10,	21, 22, -1,
 #else
-	2, 5, 6, 7, 21, 22, -0x01,
+	2, 5,	/* diff */ 6, 7,	21, 22, -1,
 #endif
-	20, 21, -0x01,
-	4, 5, 19, 20, -0x01,
-	18, 19, 44, -0x01,
-	15, 17, -0x01,
-	16, 17, 18, 41, 42, 43, -0x01,
-	13, 12, 11, 40, 41, -0x01,
-	13, 42, 14, -0x01,
-	1, 2, 3, 4, 14, 15, 16, 40, -0x01,
-	10, 12, -0x01,
-	9, 10, 11, 39, -0x01,
-	8, 9, -0x01,
-	26, 28, 29, -0x01,
-	30, 31, -0x01,
-	3, 7, 31, 32, 45, -0x01,
-	43, 44, -0x01
-}; // ds:0xa330, 25 arrays, each terminated by -1
-struct{char town, typeindex; long sea_routes;} g_harbors[26] = { // a list of the available sea routes for each of the 25 harbors in the game.
-	{ TOWNS_THORWAL         , 3, 0x14fca330 }, //  1
-	{ TOWNS_SERSKE          , 3, 0x14fca336 }, //  2
-	{ TOWNS_MERSKE          , 1, 0x14fca339 }, //  3
-	{ TOWNS_EFFERDUN        , 1, 0x14fca33d }, //  4
-	{ TOWNS_LISKOR          , 4, 0x14fca341 }, //  5
-	{ TOWNS_TJANSET         , 3, 0x14fca345 }, //  6
-	{ TOWNS_ORVIL           , 4, 0x14fca349 }, //  7
-	{ TOWNS_OVERTHORN       , 1, 0x14fca34b }, //  8
-	{ TOWNS_ROVIK           , 2, 0x14fca353 }, //  9
-	{ TOWNS_HJALSINGOR      , 1, 0x14fca358 }, // 10
-	{ TOWNS_GUDDASUNDEN     , 1, 0x14fca35f }, // 11
-	{ TOWNS_KORD            , 2, 0x14fca362 }, // 12
-	{ TOWNS_TREBAN          , 1, 0x14fca367 }, // 13
-	{ TOWNS_ARYN            , 1, 0x14fca36b }, // 14
-	{ TOWNS_RUNINSHAVEN     , 3, 0x14fca36e }, // 15
-	{ TOWNS_OTTARJE         , 4, 0x14fca375 }, // 16
-	{ TOWNS_SKJAL           , 4, 0x14fca37b }, // 17
-	{ TOWNS_PREM            , 3, 0x14fca37f }, // 18
-	{ TOWNS_LJASDAHL        , 1, 0x14fca388 }, // 19
-	{ TOWNS_VARNHEIM        , 4, 0x14fca38b }, // 20
-	{ TOWNS_VAERMHAG        , 3, 0x14fca390 }, // 21
-	{ TOWNS_VIDSAND         , 2, 0x14fca393 }, // 22
-	{ TOWNS_BRENDHIL        , 2, 0x14fca397 }, // 23
-	{ TOWNS_MANRIN          , 2, 0x14fca39a }, // 24
+};										//ds:0xa358
+Bit8s g_harbors_linked_sea_routes_11[] = {20, 21, -1};				//ds:0xa35f
+Bit8s g_harbors_linked_sea_routes_12[] = {4, 5, 19, 20, -1};			//ds:0xa362
+Bit8s g_harbors_linked_sea_routes_13[] = {18, 19, 44, -1};			//ds:0xa367
+Bit8s g_harbors_linked_sea_routes_14[] = {15, 17, -1};				//ds:0xa36b
+Bit8s g_harbors_linked_sea_routes_15[] = {16, 17, 18, 41, 42, 43, -1};		//ds:0xa36e
+Bit8s g_harbors_linked_sea_routes_16[] = {13, 12, 11, 40, 41, -1};		//ds:0xa375
+Bit8s g_harbors_linked_sea_routes_17[] = {13, 42, 14, -1};			//ds:0xa37b
+Bit8s g_harbors_linked_sea_routes_18[] = {1, 2, 3, 4, 14, 15, 16, 40, -1};      //ds:0xa37f
+Bit8s g_harbors_linked_sea_routes_19[] = {10, 12, -1};				//ds:0xa388
+Bit8s g_harbors_linked_sea_routes_20[] = {9, 10, 11, 39, -1};			//ds:0xa38b
+Bit8s g_harbors_linked_sea_routes_21[] = {8, 9, -1};				//ds:0xa390
+Bit8s g_harbors_linked_sea_routes_22[] = {26, 28, 29, -1};			//ds:0xa393
+Bit8s g_harbors_linked_sea_routes_23[] = {30, 31, -1};				//ds:0xa397
+Bit8s g_harbors_linked_sea_routes_24[] = {3, 7, 31, 32, 45, -1};		//ds:0xa39a
+Bit8s g_harbors_linked_sea_routes_25[] = {43, 44, -1};					  //ds:0xa3a0
+
+// for each of the 25 harbors (see g_harbors), a -1 terminated list of the IDs of the linked sea routes
+
+struct trv_start_point g_harbors[26] = { // a list of the available sea routes for each of the 25 harbors in the game.
+	{ TOWNS_THORWAL         , 3, g_harbors_linked_sea_routes_01 }, //  1
+	{ TOWNS_SERSKE          , 3, g_harbors_linked_sea_routes_02 }, //  2
+	{ TOWNS_MERSKE          , 1, g_harbors_linked_sea_routes_03 }, //  3
+	{ TOWNS_EFFERDUN        , 1, g_harbors_linked_sea_routes_04 }, //  4
+	{ TOWNS_LISKOR          , 4, g_harbors_linked_sea_routes_05 }, //  5
+	{ TOWNS_TJANSET         , 3, g_harbors_linked_sea_routes_06 }, //  6
+	{ TOWNS_ORVIL           , 4, g_harbors_linked_sea_routes_07 }, //  7
+	{ TOWNS_OVERTHORN       , 1, g_harbors_linked_sea_routes_08 }, //  8
+	{ TOWNS_ROVIK           , 2, g_harbors_linked_sea_routes_09 }, //  9
+	{ TOWNS_HJALSINGOR      , 1, g_harbors_linked_sea_routes_10 }, // 10
+	{ TOWNS_GUDDASUNDEN     , 1, g_harbors_linked_sea_routes_11 }, // 11
+	{ TOWNS_KORD            , 2, g_harbors_linked_sea_routes_12 }, // 12
+	{ TOWNS_TREBAN          , 1, g_harbors_linked_sea_routes_13 }, // 13
+	{ TOWNS_ARYN            , 1, g_harbors_linked_sea_routes_14 }, // 14
+	{ TOWNS_RUNINSHAVEN     , 3, g_harbors_linked_sea_routes_15 }, // 15
+	{ TOWNS_OTTARJE         , 4, g_harbors_linked_sea_routes_16 }, // 16
+	{ TOWNS_SKJAL           , 4, g_harbors_linked_sea_routes_17 }, // 17
+	{ TOWNS_PREM            , 3, g_harbors_linked_sea_routes_18 }, // 18
+	{ TOWNS_LJASDAHL        , 1, g_harbors_linked_sea_routes_19 }, // 19
+	{ TOWNS_VARNHEIM        , 4, g_harbors_linked_sea_routes_20 }, // 20
+	{ TOWNS_VAERMHAG        , 3, g_harbors_linked_sea_routes_21 }, // 21
+	{ TOWNS_VIDSAND         , 2, g_harbors_linked_sea_routes_22 }, // 22
+	{ TOWNS_BRENDHIL        , 2, g_harbors_linked_sea_routes_23 }, // 23
+	{ TOWNS_MANRIN          , 2, g_harbors_linked_sea_routes_24 }, // 24
 #ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 41: After doing a ship passage to Leuchtturm Runin and leaving the harbor,
 	 * the party is positioned in a remote town square. */
 	/* Reason: The following line is incorrect; it is a duplicate of the corresponding entry in g_signposts. */
-	{ TOWNS_LEUCHTTURM_RUNIN, 2, 0x14fca0b2 }, // 25
+	{ TOWNS_LEUCHTTURM_RUNIN, 2, (Bit8s*)0x14fca0b2 }, // 25 links to land route 105
 #else
-	{ TOWNS_LEUCHTTURM_RUNIN, 1, 0x14fca3a0 }, // 25
+	{ TOWNS_LEUCHTTURM_RUNIN, 1, g_harbors_linked_sea_routes_25 }, // 25
 #endif
-	{ -0x01                 , 0, 0x00000000 }
+	{ -1                 , 0, NULL }
 }; // ds:0xa3a3; Bit8u*
 struct struct_point g_town_positions[52] = {
 	{ 0x00bd, 0x0098 },
