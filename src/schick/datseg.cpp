@@ -4764,7 +4764,7 @@ struct struct_chest g_dng11_specialchests[15] = {
 	{ DNG_POS(0,6,10),	4, use_lockpicks_on_chest,	chest_ignifax_heavy,	DNG11_chest10_loot, 0, 2000, 0 },
 	{ DNG_POS(0,11,5),	6, use_lockpicks_on_chest,	chest_ignifax_brutal,	DNG11_chest11_loot, 0, 10000, 0 },
 	{ DNG_POS(0,12,5),	6, use_lockpicks_on_chest,	chest_ignifax_brutal,	DNG11_chest12_loot, 0, 0, 0 },
-	{ DNG_POS(0,4,5),	4, use_lockpicks_on_chest,	NULL,			DNG11_chest13_loot, 0, 0, 0 },
+	{ DNG_POS(0,9,5),	4, use_lockpicks_on_chest,	NULL,			DNG11_chest13_loot, 0, 0, 0 },
 	{     -1, 0, NULL, NULL, NULL, 0, 0, 0 }
 }; // ds:0x9854
 unsigned char g_unkn_059[1] = { 0x00 }; // ds:0x998f
