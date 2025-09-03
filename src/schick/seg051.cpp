@@ -427,25 +427,26 @@ signed short gather_herbs(Bit8u *hero, signed short hours, signed short handicap
 
 			if (herb_count[herb_index] != 0) {
 
-				sprintf(g_text_output_buf,
-					(char*)p_datseg + GATHER_HERBS_STR_FOUND, /* "%d %s" */
-					herb_count[herb_index],
+				sprintf(g_text_output_buf, g_gather_herbs_str_found, herb_count[herb_index],
 					(Bit8u*)(GUI_names_grammar((herb_count[herb_index] > 1 ? 4 : 0) + 0x4002, ds_readb(GATHER_HERBS_TABLE + 4 * herb_index + GATHER_HERBS_ITEM_ID), 0)));
 
 				strcat(g_dtp2, g_text_output_buf);
 
 				if (--unique_herbs_count > 1) {
+
 					/* add a comma ", " */
-					strcat(g_dtp2, (char*)p_datseg + GATHER_HERBS_STR_COMMA);
+					strcat(g_dtp2, g_gather_herbs_str_comma);
+
 				} else if (unique_herbs_count == 1) {
+
 					/* add an and " UND " */
-					strcat(g_dtp2, (char*)p_datseg + GATHER_HERBS_STR_AND);
+					strcat(g_dtp2, g_gather_herbs_str_and);
 				}
 			}
 		}
 
 		/* add a dot "." */
-		strcat(g_dtp2, (char*)p_datseg + GATHER_HERBS_STR_DOT);
+		strcat(g_dtp2, g_gather_herbs_str_dot);
 
 	} else {
 

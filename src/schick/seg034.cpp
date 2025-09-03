@@ -883,7 +883,7 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 
 	get_textcolor(&fg_bak, &bg_bak);
 	set_textcolor(255, 0);
-	GUI_print_string((char*)p_datseg + STRING_14SPACES, 5, 190);
+	GUI_print_string(g_string_14spaces, 5, 190);
 	set_textcolor(fg_bak, bg_bak);
 
 	if ((host_readws(px) != sel_x) || (host_readws(py) != sel_y)) {

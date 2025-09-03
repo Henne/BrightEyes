@@ -394,7 +394,7 @@ void mspell_verwandlung(void)
 			/* unset 'mushroom' flag */
 			g_spelltarget_e->flags.mushroom = 0;
 
-			ds_writew(MSPELL_AWAKE_FLAG, 1);
+			g_mspell_awake_flag = 1;
 		}
 	} else {
 		g_monster_spell_ae_cost = 2;

@@ -712,9 +712,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 					get_textcolor(&fg_bak, &bg_bak);
 					set_textcolor(0xff, 0x00);
 
-					sprintf(g_text_output_buf,
-						(char*)p_datseg + STRING_CASTS_SPELL,		/* "%s ZAUBERT %s" */
-						(char*)hero + HERO_NAME2,
+					sprintf(g_text_output_buf, g_string_casts_spell, (char*)hero + HERO_NAME2,
 						get_ttx(host_readbs(hero + HERO_SPELL_ID) + 0x6a));
 
 					GUI_print_string(g_text_output_buf, 1, 194);

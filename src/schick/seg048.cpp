@@ -135,13 +135,11 @@ void status_menu(signed short hero_pos)
 
 				if (host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no) != ITEM_NONE) {
 
-					sprintf(g_dtp2,
-						/* "%s %s " */
-						(char*)(p_datseg + EXTRASPACE_SEPARATED_STRINGS),
+					sprintf(g_dtp2, g_extraspace_separated_strings,
 						(char*)GUI_name_singular(get_itemname(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no))),
 						!is_in_word_array(
 						    host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no),
-						    g_wearable_items_index[host_readbs(hero2 + HERO_TYPE) - 1]) ? ((char*)p_datseg + EMPTY_STRING8) : get_tx2(66));
+						    g_wearable_items_index[host_readbs(hero2 + HERO_TYPE) - 1]) ? g_empty_string8 : get_tx2(66));
 
 					if (item_weapon(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no)))) {
 						strcat(g_dtp2,
@@ -318,13 +316,11 @@ void status_menu(signed short hero_pos)
 				GUI_print_string(g_dtp2, 16, 192);
 
 				if (host_readws(hero2 + HERO_INVENTORY + SIZEOF_INVENTORY * g_statuspage_selitem3_no)) {
-					sprintf(g_dtp2,
-						/* "%s %s " */
-						(char*)(p_datseg + EXTRASPACE_SEPARATED_STRINGS2),
+					sprintf(g_dtp2, g_extraspace_separated_strings2,
 						(char*)GUI_name_singular(get_itemname(host_readws(hero2 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no))),
 						!is_in_word_array(
 						    host_readws(hero2 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no),
-						    g_wearable_items_index[host_readbs(hero2 + HERO_TYPE) - 1]) ? ((char*)p_datseg + EMPTY_STRING9) : get_tx2(66));
+						    g_wearable_items_index[host_readbs(hero2 + HERO_TYPE) - 1]) ? g_empty_string9 : get_tx2(66));
 
 					if (item_weapon(get_itemsdat(host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no)))) {
 						strcat(g_dtp2,

@@ -252,6 +252,7 @@ void DNG_turn(void)
 
 			g_visual_field_vals[24] = 0;
 		}
+
 		if ( ((tmp = div16(g_visual_field_vals[19])) == 15) || (tmp == 1)) {
 
 			g_visual_field_vals[26] = 0;
@@ -812,8 +813,7 @@ void DNG_stub6(void)
 
 					if (--l_di) {
 
-						strcat(g_dtp2,
-							(char*)((l_di >= 2) ? p_datseg + DNG_STUB6_STR_COMMA : p_datseg+ DNG_STUB6_STR_AND));
+						strcat(g_dtp2, (l_di >= 2 ? g_dng_stub6_str_comma : g_dng_stub6_str_and));
 					}
 
 				} while (l_di);

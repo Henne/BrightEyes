@@ -283,7 +283,7 @@ void buy_screen(void)
 
 			if (item_weapon(get_itemsdat(item_id))) {
 
-				strcat(g_dtp2, (char*)p_datseg + BUY_SCREEN_STR_COMMA_SPACE);
+				strcat(g_dtp2, g_buy_screen_str_comma_space);
 
 				strcat(g_dtp2, get_ttx(48 + host_readbs(get_itemsdat(item_id) + ITEM_STATS_SUBTYPE)));
 			}

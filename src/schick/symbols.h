@@ -943,9 +943,9 @@
 //#define CB_OBJ_NONOBSTACLE              (0x5f46)    /* signed short[27]; { 23,24,25,26,27,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,-1 } */
 #define VIEWDIR_OFFSETS1                (0x5f7c)    /* struct(4)[4]; struct{signed short x, y;}; { {1,0}, {0,-1}, {-1,0}, {0,1} } */
 #define VIEWDIR_OFFSETS2                (0x5f8c)    /* struct(4)[4]; struct{signed short x, y;}; { {1,0}, {0,-1}, {-1,0}, {0,1} } */
-#define STRING_14SPACES                 (0x5f9c)    /* char[15]; "              " */
+//#define STRING_14SPACES                 (0x5f9c)    /* char[15]; "              " */
 // ?1
-#define AF_SPELL_LIST                   (0x5fac)    /* char[11] */
+//#define AF_SPELL_LIST                   (0x5fac)    /* char[11] */
 #define VIEWDIR_OFFSETS3                (0x5fb7)    /* struct(4)[4]; struct{signed short x,y;}; { {1,0}, {0,-1}, {-1,0}, {0,1} } */
 #define VIEWDIR_OFFSETS4                (0x5fc7)    /* struct(4)[4]; struct{signed short x,y;}; { {1,0}, {0,-1}, {-1,0}, {0,1} } */
 // ?1
@@ -967,8 +967,8 @@
 //#define FORCE_WEAPONS                   (0x615c)    /* signed short[9]; terminated with -1 */
 //#define KNIVE_WEAPONS                   (0x616e)    /* signed short[5]; terminated with -1 */
 #define VIEWDIR_INVOFFSETS2             (0x6178)    /* struct(2)[4]; struct{signed char x,y;}; { {-1,0}, {0,1}, {1,0}, {0,-1} } */
-#define STRING_CASTS_SPELL              (0x6180)    /* char[14]; "%s ZAUBERT %s" */
-#define MSPELL_AWAKE_FLAG               (0x618e)    /* unsigned short; {0,1} */
+//#define STRING_CASTS_SPELL              (0x6180)    /* char[14]; "%s ZAUBERT %s" */
+//#define MSPELL_AWAKE_FLAG               (0x618e)    /* unsigned short; {0,1} */
 #define VIEWDIR_INVOFFSETS3             (0x6190)    /* struct(2)[4]; struct{signed char x,y;}; { {-1,0}, {0,1}, {1,0}, {0,-1} } */
 #define GFXTAB_SHOTBOLT_OX              (0x6198)    /* unsigned short[24] */
 #define GFXTAB_SHOTBOLT_OY              (0x61c8)    /* unsigned short[24] */
@@ -992,8 +992,8 @@
 #define STATUSPAGE_SPELLS_XY            (0x642e)    /* struct(6)[8]; struct{unsigned short x_name,x_val,y;} */
 #define STATUSPAGE_SPELLS2_XY           (0x645e)    /* struct(6)[4]; struct{unsigned short x_name,x_val,y;} */
 #define STATUSPAGE_SKILLS_XY            (0x6476)    /* struct(6)[7]; struct{unsigned short x_name,x_val,y;} */
-#define EMPTY_STRING6                   (0x64a0)    /* char; "" */
-#define EMPTY_STRING7                   (0x64a1)    /* char; "" */
+//#define EMPTY_STRING6                   (0x64a0)    /* char; "" */
+//#define EMPTY_STRING7                   (0x64a1)    /* char; "" */
 //#define HERO_SEL_EXCLUDE                (0x64a2)    /* signed char */
 #define SEG047_INIT1                    (0x64a3)    /* signed short[7]; filled with zeroes */
 #define SEG047_INIT2                    (0x64b1)    /* signed short[7]; filled with zeroes */
@@ -1001,10 +1001,10 @@
 // ?1
 #define INVSLOT_BORDERXY_TABLE          (0x64ce)    /* struct(4)[25]; struct{signed short x,y;} */
 #define CHEATSKILL_USABLE               (0x6532)    /* signed short; {0,1} */
-#define EXTRASPACE_SEPARATED_STRINGS    (0x6534)    /* char[7]; "%s %s " */
-#define EMPTY_STRING8                   (0x653b)    /* char; "" */
-#define EXTRASPACE_SEPARATED_STRINGS2   (0x653c)    /* char[7]; "%s %s " */
-#define EMPTY_STRING9                   (0x6543)    /* char; "" */
+//#define EXTRASPACE_SEPARATED_STRINGS    (0x6534)    /* char[7]; "%s %s " */
+//#define EMPTY_STRING8                   (0x653b)    /* char; "" */
+//#define EXTRASPACE_SEPARATED_STRINGS2   (0x653c)    /* char[7]; "%s %s " */
+//#define EMPTY_STRING9                   (0x6543)    /* char; "" */
 #define AUTOINC_SPELLS_WITCH            (0x6544)    /* signed short[3] */
 #define AUTOINC_SPELLS_DRUID            (0x654a)    /* signed short[4] */
 #define AUTOINC_SPELLS_MAGE_TABLE       (0x6552)    /* short[108]; 9 arrays, each terminated by -1 */
@@ -1016,10 +1016,10 @@
 #define CAMPFIGHTS                      (0x6694)    /* signed short[4] */
 #define GATHER_HERBS_TABLE              (0x669c)    /* struct(4)[13]; struct{unsigned char herb_id,chance,ta_mod,max_count;} */
 #define GATHER_HERBS_SPECIAL            (0x66d0)    /* unsigned char */
-#define GATHER_HERBS_STR_FOUND          (0x66d1)    /* char[6]; "%d^%s" */
-#define GATHER_HERBS_STR_COMMA          (0x66d7)    /* char[3]; ", " */
-#define GATHER_HERBS_STR_AND            (0x66da)    /* char[6]; " UND " */
-#define GATHER_HERBS_STR_DOT            (0x66e0)    /* char[2]; "." */
+//#define GATHER_HERBS_STR_FOUND          (0x66d1)    /* char[6]; "%d^%s" */
+//#define GATHER_HERBS_STR_COMMA          (0x66d7)    /* char[3]; ", " */
+//#define GATHER_HERBS_STR_AND            (0x66da)    /* char[6]; " UND " */
+//#define GATHER_HERBS_STR_DOT            (0x66e0)    /* char[2]; "." */
 #define DCAMPFIGHTS                     (0x66e2)    /* signed short[4] */
 #define HEALER_DESCR_TABLE              (0x66ea)    /* struct(2)[41]; struct{signed char price,quality;} */
 #define INN_DESCR_TABLE                 (0x673c)    /* struct(4)[77]; struct{signed short quality,unkn;} */
@@ -1031,7 +1031,7 @@
 #define BUY_SCREEN_ITEMS_POSX           (0x6bd7)    /* signed short[3]; { 30, 95, 160 } */
 #define BUY_SCREEN_ITEMS_POSY           (0x6bdd)    /* signed short[5]; { 35, 55, 75, 95, 115 } */
 #define BUY_SCREEN_STR_D_S              (0x6be7)    /* char[6]; "%d %s" */
-#define BUY_SCREEN_STR_COMMA_SPACE      (0x6bed)    /* char[3]; ", " */
+//#define BUY_SCREEN_STR_COMMA_SPACE      (0x6bed)    /* char[3]; ", " */
 #define SELL_SCREEN_STR_MONEY_H         (0x6bf0)    /* char[5]; "H %d" */
 #define SELL_SCREEN_STR_MONEY_S         (0x6bf5)    /* char[5]; "S %d" */
 #define SELL_SCREEN_STR_MONEY_D         (0x6bfa)    /* char[5]; "D %d" */
@@ -1145,8 +1145,8 @@
 #define DNG_STUB4_UNKN2                 (0x9206)    /* signed short[44] */
 #define DNG_STUB4_UNKN3                 (0x925e)    /* signed short[44] */
 #define DNG_STUB4_UNKN4                 (0x92b6)    /* signed char[22] */
-#define DNG_STUB6_STR_COMMA             (0x92cc)    /* char[3]; ", " */
-#define DNG_STUB6_STR_AND               (0x92cf)    /* char[6]; " UND " */
+//#define DNG_STUB6_STR_COMMA             (0x92cc)    /* char[3]; ", " */
+//#define DNG_STUB6_STR_AND               (0x92cf)    /* char[6]; " UND " */
 // ?1
 //#define DNG_HANDLERS                    (0x92d6)    /* Bit8u*[15] */
 //#define DNG_LEVEL_CHANGED               (0x9312)    /* unsigned short; {1,0} */

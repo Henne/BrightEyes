@@ -3169,7 +3169,7 @@ struct{signed short x, y;} g_viewdir_offsets2[4] = {
 }; // ds:0x5f8c, ; { , {0,-1}, {-1,0},  }
 char g_string_14spaces[15] = "              "; // ds:0x5f9c
 unsigned char g_unkn_043[1] = { 0x00 }; // ds:0x5fab
-char g_af_spell_list[11] = { 0x34, 0x0c, 0x35, 0x21, 0x08, 0x1b, 0x2e, 0x31, 0x36, 0x38, 0x48 }; // ds:0x5fac
+signed char g_af_spell_list[11] = { 0x34, 0x0c, 0x35, 0x21, 0x08, 0x1b, 0x2e, 0x31, 0x36, 0x38, 0x48 }; // ds:0x5fac
 struct{signed short x,y;} g_viewdir_offsets3[4] = {
 	{ 0x0001, 0x0000 },
 	{ 0x0000, -1 },
@@ -3259,7 +3259,7 @@ signed short g_knive_weapons[5] = {
 }; // ds:0x616e, terminated with -1
 struct{signed char x,y;} g_viewdir_invoffsets2[4] = { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } }; // ds:0x6178, ; { {-1,0}, , , {0,-1} }
 char g_string_casts_spell[14] = "%s ZAUBERT %s"; // ds:0x6180
-unsigned short g_mspell_awake_flag = 0; // ds:0x618e
+signed short g_mspell_awake_flag = 0; // ds:0x618e
 struct{signed char x,y;} g_viewdir_invoffsets3[4] = {
 	{ -0x01, 0x00 },
 	{ 0x00, 0x01 },

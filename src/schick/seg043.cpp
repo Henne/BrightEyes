@@ -716,9 +716,9 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 							FIG_make_invisible(g_fig_shot_bolt_id);
 						}
 
-						if (ds_readw(MSPELL_AWAKE_FLAG) != 0) {
+						if (g_mspell_awake_flag) {
 
-							ds_writew(MSPELL_AWAKE_FLAG, 0);
+							g_mspell_awake_flag = 0;
 
 							FIG_remove_from_list(target_enemy->fighter_id, 1);
 

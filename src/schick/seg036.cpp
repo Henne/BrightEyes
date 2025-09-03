@@ -567,7 +567,7 @@ signed short seg036_8cf(Bit8u *hero, signed short hero_pos, signed short renegad
 		for (l_si = 0; l_si <= 10; l_si++) {
 
 			/* get a spell from an array */
-			spell = ds_readbs(AF_SPELL_LIST + l_si);
+			spell = g_af_spell_list[l_si];
 
 			if ((ds_readbs((SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_RANGE) + SIZEOF_SPELL_DESCRIPTIONS * spell) == 1) && (random_schick(100) < 50))
 			{
@@ -582,7 +582,7 @@ signed short seg036_8cf(Bit8u *hero, signed short hero_pos, signed short renegad
 
 		if (decided == 0) {
 
-			spell = ds_readbs(AF_SPELL_LIST + random_interval(0, 10));
+			spell = g_af_spell_list[random_interval(0, 10)];
 		}
 
 		/* reset the target of the hero */

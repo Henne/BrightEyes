@@ -1048,11 +1048,17 @@ extern const char g_empty_string4[1];		//ds:0x5f43; seg033
 extern const char g_empty_string5[1];		//ds:0x5f44; seg033
 extern signed short g_cb_obj_nonobstacle[27];	//ds:0x5f46; seg034, seg036, seg037
 
+extern char g_string_14spaces[15];		//ds:0x5fab; seg034
+extern signed char g_af_spell_list[11];		//ds:0x5fac; seg036
+
 extern signed short g_fightobj_count;		//ds:0x605e; seg040
 extern const signed short g_gfxtab_obj_offset_x[63];	//ds:0x6060; seg032, seg040
 extern const signed short g_gfxtab_obj_offset_y[63];	//ds:0x6060; seg032, seg040
 extern signed short g_force_weapons[9];		//ds:0x615c; seg041
 extern signed short g_knive_weapons[5];		//ds:0x616e; seg041
+
+extern char g_string_casts_spell[14];		//ds:0x6180; seg042
+extern signed short g_mspell_awake_flag;	//ds:0x618e; seg043, seg102
 
 extern signed char **g_anitab_shotbolt_index[6];	//ds:0x6324; seg045
 
@@ -1068,7 +1074,21 @@ extern Bit8s g_statuspage_selitem4_no;		//ds:0x6371; seg048
 extern Bit8u g_statuspage_palette[32][3];	//ds:0x6372; seg046
 extern const struct struct_point g_invslot_iconxy_table[23];	//ds:0x63d2; seg046
 
+extern char g_empty_string6[1];			//ds:0x64a0; seg046
+extern char g_empty_string7[1];			//ds:0x64a1; seg046
 extern signed char g_hero_sel_exclude;		//ds:0x64a2; seg047, seg049, seg103, seg120
+
+extern char g_extraspace_separated_strings[7];	//ds:0x6534; seg048
+extern char g_empty_string8[1];			//ds:0x653b; seg048
+extern char g_extraspace_separated_strings2[7];	//ds:0x653c; seg048
+extern char g_empty_string9[1];			//ds:0x6543; seg048
+
+extern char g_gather_herbs_str_found[6];	//ds:0x66d1; seg051
+extern char g_gather_herbs_str_comma[3];	//ds:0x66d7; seg051
+extern char g_gather_herbs_str_and[6];		//ds:0x66da; seg051
+extern char g_gather_herbs_str_dot[2];		//ds:0x66e0; seg051
+
+extern char g_buy_screen_str_comma_space[3];	//ds:0x6bed; seg056
 
 extern Bit8s *g_god_temples_index[15]; 		//ds:0x6e36; seg061
 extern char g_str_temp_file_wildcard[8];	//ds:0x6e72; seg061
@@ -1109,6 +1129,8 @@ extern const unsigned char g_automap_tile_cross[49];		//ds:0x7d4b; seg074
 extern signed short g_automap_selx;				//ds:0x7de5; seg074, seg099
 extern signed short g_automap_sely;				//ds:0x7de7; seg074, seg099
 
+extern char g_dng_stub6_str_comma[3];			//ds:0x92cc; seg075
+extern char g_dng_stub6_str_and[6];			//ds:0x92cf; seg075
 extern signed short (*g_dng_handlers[15])(void);	//ds:0x92d6; seg076
 extern signed short g_dng_level_changed;	//ds:0x9312; seg075, seg076
 
@@ -1496,7 +1518,7 @@ extern struct struct_chest g_tevent064_chest_descr;	// ds:0xb154; seg111
 extern Bit8u g_tevent067_chest[10];			// ds:0xb16a; seg112
 extern unsigned char g_tevent135_climb_damage[5][2];	// ds:0xb174; seg116
 extern unsigned char g_random_encounter_index[59];	// ds:0xb17e; seg117
-extern const Bit8u g_random_encounter_descr[14][7];		// ds:0xb1b9; seg117
+extern const Bit8u g_random_encounter_descr[14][7];	// ds:0xb1b9; seg117
 extern char g_str_rad1[4];			// ds:0xb21e; seg118
 extern char g_str_rad2[4];			// ds:0xb222; seg118
 extern char g_str_rad3[4];			// ds:0xb226; seg118

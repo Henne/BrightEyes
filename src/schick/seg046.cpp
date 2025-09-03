@@ -359,9 +359,9 @@ void status_show(Bit16u index)
 				val = host_readbs(hero + i * 3 + HERO_ATTRIB) + host_readbs(hero + i * 3 + HERO_ATTRIB_MOD);
 
 				sprintf(g_text_output_buf + i * 10, get_tx2(51),
-					host_readbs(hero + i * 3 + 0x34) != val ? get_tx2(49) :	(char*)p_datseg + EMPTY_STRING6,
+					host_readbs(hero + i * 3 + 0x34) != val ? get_tx2(49) :	g_empty_string6,
 					val,
-					host_readbs(hero + i * 3 + 0x34) != val ? get_tx2(50) :	(char*)p_datseg + EMPTY_STRING7,
+					host_readbs(hero + i * 3 + 0x34) != val ? get_tx2(50) :	g_empty_string7,
 					host_readbs(hero + i * 3 + 0x34));
 
 			}
