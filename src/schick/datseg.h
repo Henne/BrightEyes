@@ -911,9 +911,9 @@ extern Bit16s gs_travel_destination_y;		//ds:0x433c; seg063-seg094
 extern Bit16s gs_travel_destination_viewdir;	//ds:0x433e; seg063-seg094
 
 #if defined(__BORLANDC__)
-extern Bit8u *gs_tm_unused1_ptr;		//ds:0x4340; seg094
+extern struct trv_start_point *gs_tm_unused1_ptr;		//ds:0x4340; seg094
 #else
-extern Bit32u gs_tm_unused1_ptr;		//ds:0x4340; UNUSED
+extern Bit32u gs_tm_unused1_ptr_obsolete;	//ds:0x4340; UNUSED
 #endif
 
 extern Bit8s  gs_trv_menu_towns[6];		//ds:0x4344; seg002, seg093, seg094
@@ -1127,8 +1127,9 @@ extern const char g_str_single_space[2];	//ds:0x9dc4; seg092
 
 extern struct struct_land_route g_land_routes[59];	//ds:0x9dc6; seg093, seg094
 
+extern struct trv_start_point g_signposts[106];			//ds:0xa0b4; seg093, se094
 extern struct trv_start_point g_harbors[26];			//ds:0xa3a3; seg064
-extern struct struct_point g_town_positions[52];	//ds:0xa43f; seg002, seg063, seg094, seg094
+extern struct struct_point g_town_positions[52];		//ds:0xa43f; seg002, seg063, seg094, seg094
 extern struct mouse_action g_action_table_travelmap[35];	//ds:0xa50f; seg093
 
 extern struct struct_tevent g_tevents_tab[156]; //ds:0xa66d; seg094

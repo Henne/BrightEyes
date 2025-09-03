@@ -15,7 +15,7 @@ void prepare_map_marker(void);
 void set_textbox_positions(signed short);
 /* 0x39 */
 #if defined(__BORLANDC__)
-signed short TM_unused1(Bit8u*, signed short);
+signed short TM_unused1(struct trv_start_point*, signed short);
 #endif
 /* 0x3e */
 signed short TM_enter_target_town_viewdir(signed short);

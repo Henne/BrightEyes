@@ -483,7 +483,7 @@ void TM_func1(signed short route_no, signed short backwards)
 
 #if defined(__BORLANDC__)
 /* continue travel after arrival while still on map */
-signed short TM_unused1(Bit8u* signpost_ptr, signed short old_route_no)
+signed short TM_unused1(struct trv_start_point *signpost_ptr, signed short old_route_no)
 {
 	signed short route_no1;
 	signed short route_id;
@@ -494,28 +494,28 @@ signed short TM_unused1(Bit8u* signpost_ptr, signed short old_route_no)
 	signed short old_route_id;
 	char *destinations_tab[7];
 
-	old_route_id = host_readb((Bit8u*)(host_readd((Bit8u*)(signpost_ptr) + SIGNPOST_LAND_ROUTES)) + old_route_no) - 1;
+	old_route_id = signpost_ptr->end_points[old_route_no] - 1;
 	gs_current_town = town = gs_trv_destination;
-	signpost_ptr = ((Bit8u*)p_datseg + SIGNPOSTS);
+	signpost_ptr = &g_signposts[0];
 
 	do {
-		if (host_readb(signpost_ptr + SIGNPOST_TOWN) == town)
+		if (signpost_ptr->town == town)
 		{
 			route_no1 = 0;
-			while (host_readbs((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + route_no1) != -1)
+			while (signpost_ptr->end_points[route_no1] != -1)
 			{
-				if (host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + route_no1) - 1 == old_route_id &&
-					(route_no1 || host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + (route_no1 + 1)) != 255))
+				if (signpost_ptr->end_points[route_no1] - 1 == old_route_id &&
+					(route_no1 || signpost_ptr->end_points[route_no1 + 1] != -1))
 				{
 					town_i = route_no2 = 0;
-					while ((route_id = host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + route_no2)) != 255)
+
+					while ((route_id = signpost_ptr->end_points[route_no2]) != -1)
 					{
 						if (route_no2 != route_no1)
 						{
 							destinations_tab[town_i++] = get_ttx(235 + (gs_trv_menu_towns[town_i] =
 								((answer = g_land_routes[route_id - 1].town1_id) != gs_current_town ?
-									(signed char)answer : g_land_routes[route_id - 1].town2_id)
-                            ));
+									(signed char)answer : g_land_routes[route_id - 1].town2_id)));
 						}
 						route_no2++;
 					}
@@ -524,17 +524,14 @@ signed short TM_unused1(Bit8u* signpost_ptr, signed short old_route_no)
 					destinations_tab[town_i] = get_ttx(547);
 					town_i++;
 
-#if defined(__BORLANDC__)
 					gs_tm_unused1_ptr = signpost_ptr;
-#endif
+
 					set_textbox_positions(town);
+
 					answer = GUI_radio(get_ttx(546), (signed char)town_i,
-								destinations_tab[0],
-								destinations_tab[1],
-								destinations_tab[2],
-								destinations_tab[3],
-								destinations_tab[4],
-								destinations_tab[5]);
+								destinations_tab[0], destinations_tab[1],
+								destinations_tab[2], destinations_tab[3],
+								destinations_tab[4], destinations_tab[5]);
 
 					if (answer == -1)
 					{
@@ -549,9 +546,9 @@ signed short TM_unused1(Bit8u* signpost_ptr, signed short old_route_no)
 			}
 		}
 
-		signpost_ptr += SIZEOF_SIGNPOST;
+		signpost_ptr++;
 
-	} while (host_readbs((Bit8u*)(signpost_ptr)) != -1);
+	} while (signpost_ptr->town != -1);
 
 	return -1;
 }
@@ -576,7 +573,7 @@ signed short TM_enter_target_town(void)
 	signed short tmp;
 	signed short signpost_id;
 	signed short tmp2;
-	Bit8u *signpost_ptr;
+	struct trv_start_point *signpost_ptr;
 	struct location *locations_tab_ptr;
 
 	signpost_id = 0;
@@ -585,30 +582,30 @@ signed short TM_enter_target_town(void)
 
 	if (signpost_id)
 	{
-		signpost_ptr = p_datseg + SIGNPOSTS;
+		signpost_ptr = &g_signposts[0];
 		signpost_id = 0;
 		do {
-			if (host_readb(signpost_ptr) == gs_travel_destination_town_id)
+			if (signpost_ptr->town == gs_travel_destination_town_id)
 			{
 				tmp = 0;
 
 				do {
-					tmp2 = host_readb((Bit8u*)host_readd(signpost_ptr + 2) + tmp) - 1;
+					tmp2 = signpost_ptr->end_points[tmp] - 1;
 
 					if ((g_land_routes[tmp2].town1_id == gs_current_town) || (g_land_routes[tmp2].town2_id == gs_current_town))
 					{
-						signpost_id = host_readb(signpost_ptr + 1);
+						signpost_id = signpost_ptr->typeindex;
 						break;
 					}
 
 					tmp++;
 
-				} while (host_readb((Bit8u*)host_readd(signpost_ptr + 2) + tmp) != 255);
+				} while (signpost_ptr->end_points[tmp] != -1);
 			}
 
-			signpost_ptr += 6;
+			signpost_ptr++;
 
-		} while (!signpost_id && host_readb(signpost_ptr) != 255);
+		} while (!signpost_id && signpost_ptr->town != -1);
 
 		if (signpost_id)
 		{

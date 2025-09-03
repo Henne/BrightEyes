@@ -37,7 +37,7 @@ signed short do_travel_mode(void)
 	signed short answer;
 	signed short l4;
 	signed short route_id;
-	Bit8u *signpost_ptr;
+	struct trv_start_point *signpost_ptr;
 	signed short l6;
 	signed short l7;
 	signed short bak1;
@@ -74,7 +74,7 @@ signed short do_travel_mode(void)
 
 	g_mouse1_event1 = 0;
 
-	signpost_ptr = p_datseg + SIGNPOSTS;
+	signpost_ptr = &g_signposts[0];
 
 	do {
 		if (g_request_refresh)
@@ -100,7 +100,7 @@ signed short do_travel_mode(void)
 			g_request_refresh = 0;
 		}
 
-		if (host_readbs(signpost_ptr + SIGNPOST_TOWN) == gs_current_town && host_readb(signpost_ptr + SIGNPOST_TYPEINDEX) == gs_current_signpost)
+		if ((signpost_ptr->town == gs_current_town) && (signpost_ptr->typeindex == gs_current_signpost))
 		{
 			while (1) {
 				handle_input();
@@ -108,7 +108,7 @@ signed short do_travel_mode(void)
 				if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP)
 				{
 					i = 0;
-					while ((l_di = host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + i)) != 255)
+					while ((l_di = signpost_ptr->end_points[i]) != -1)
 					{
 						destinations_tab[i] = get_ttx(235 + (gs_trv_menu_towns[i] = (
 							(answer = g_land_routes[l_di - 1].town1_id) != gs_current_town ?
@@ -143,7 +143,7 @@ signed short do_travel_mode(void)
 						break;
 					}
 
-					route_id = host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + answer);
+					route_id = signpost_ptr->end_points[answer];
 					gs_trv_destination = gs_trv_menu_towns[answer];
 
 					if (!get_current_season() &&
@@ -159,8 +159,8 @@ signed short do_travel_mode(void)
 
 					g_wallclock_update = 1;
 
-					TM_func1(host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + answer),
-						(g_land_routes[host_readb((Bit8u*)(host_readd(signpost_ptr + SIGNPOST_LAND_ROUTES)) + answer)].town1_id == gs_current_town ? 0 : 1));
+					TM_func1(signpost_ptr->end_points[answer],
+						(g_land_routes[signpost_ptr->end_points[answer]].town1_id == gs_current_town ? 0 : 1));
 					g_wallclock_update = 0;
 
 					if (g_route59_flag)
@@ -236,9 +236,9 @@ signed short do_travel_mode(void)
 			break;
 		}
 
-		signpost_ptr += SIZEOF_SIGNPOST;
+		signpost_ptr++;
 
-	} while (host_readb(signpost_ptr) != 255);
+	} while (signpost_ptr->town != -1);
 
 	g_current_town_anix = g_current_town_aniy = g_selected_town_anix = g_selected_town_aniy = 0;
 
