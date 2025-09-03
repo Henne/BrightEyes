@@ -1081,14 +1081,14 @@
 //#define SEA_TRAVEL_STR_NOTHING          (0x70a0)    /* char[7]; "NICHTS" */
 // ?1
 #define MARKET_DESCR_TABLE              (0x70a8)    /* struct(8)[34]; struct{short min_size,price_mod,market_day,size;} */
-#define HYG_ANI_X0                      (0x71b8)    /* unsigned char[5] */
-#define HYG_ANI_X1                      (0x71bd)    /* unsigned char */
-#define HYG_ANI_X2                      (0x71be)    /* unsigned char */
-#define HYG_ANI_X3                      (0x71bf)    /* unsigned char[3] */
-#define HYG_ANI_X5                      (0x71c2)    /* unsigned char */
-#define HYG_ANI_X6                      (0x71c3)    /* unsigned char */
-#define HYG_ANI_X7                      (0x71c4)    /* unsigned char[3] */
-#define HYG_ANI_X9                      (0x71c7)    /* unsigned char[3] */
+//#define HYG_ANI_X0                      (0x71b8)    /* unsigned char[5] */
+//#define HYG_ANI_X1                      (0x71bd)    /* unsigned char */
+//#define HYG_ANI_X2                      (0x71be)    /* unsigned char */
+//#define HYG_ANI_X3                      (0x71bf)    /* unsigned char[3] */
+//#define HYG_ANI_X5                      (0x71c2)    /* unsigned char */
+//#define HYG_ANI_X6                      (0x71c3)    /* unsigned char */
+//#define HYG_ANI_X7                      (0x71c4)    /* unsigned char[3] */
+//#define HYG_ANI_X9                      (0x71c7)    /* unsigned char[3] */
 #define TOWNS_CITYINDEX_TABLE           (0x71ca)    /* unsigned char[52] */
 //#define DASPOTA_LOCLOOT_INDEX           (0x71fe)    /* Bit8u*[18] */
 #define MAPVAL_TO_LOCTYPE               (0x7246)    /* unsigned char[12]; { 0, 15, 31, 63, 95, 127, 159, 175, 191, 207, 223, 239 } */

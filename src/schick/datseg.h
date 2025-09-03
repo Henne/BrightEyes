@@ -1106,6 +1106,15 @@ extern char g_sea_travel_str_nothing[7];	//ds:0x70a0; seg064
 
 extern Bit8u* g_daspota_locloot_index[18];	//ds:0x71fe; seg066
 
+extern const Bit8u g_hyg_ani_x0[5];		//ds:0x71b8; seg065
+extern const Bit8u g_hyg_ani_x1;		//ds:0x71b9; seg065
+extern const Bit8u g_hyg_ani_x2;		//ds:0x71ba; seg065
+extern const Bit8u g_hyg_ani_x3[3];		//ds:0x71bf; seg065
+extern const Bit8u g_hyg_ani_x5;		//ds:0x71c2; seg065
+extern const Bit8u g_hyg_ani_x6;		//ds:0x71c3; seg065
+extern const Bit8u g_hyg_ani_x7[3];		//ds:0x71c4; seg065
+extern const Bit8u g_hyg_ani_x9[3];		//ds:0x71c7; seg065
+
 extern const struct struct_point g_visual_field_offsets_std[29];	//ds:0x733a; seg066
 extern const struct struct_point g_visual_field_offsets_sign[29];	//ds:0x73ae; seg066
 extern const struct struct_point g_visual_field_offsets_inn[29];	//ds:0x7422; seg066

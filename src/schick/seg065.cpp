@@ -323,7 +323,7 @@ void show_hyggelik_ani(void)
 		hyg_ani_2(&ani[6], 145, 39);
 		hyg_ani_2(&ani[7], 142, 86);
 		hyg_ani_2(&ani[20], 186, 67);
-		hyg_ani_2(&ani[10 + i], ds_readb(HYG_ANI_X0 + i), 67);
+		hyg_ani_2(&ani[10 + i], g_hyg_ani_x0[i], 67);
 		hyg_ani_4();
 		delay_or_keypress(3);
 	}
@@ -331,25 +331,25 @@ void show_hyggelik_ani(void)
 	hyg_ani_3();
 	hyg_ani_2(&ani[5], 145, 39);
 	hyg_ani_2(&ani[7], 142, 86);
-	hyg_ani_2(&ani[15], ds_readb(HYG_ANI_X1), 67);
-	hyg_ani_2(&ani[20], ds_readb(HYG_ANI_X5), 67);
+	hyg_ani_2(&ani[15], g_hyg_ani_x1, 67);
+	hyg_ani_2(&ani[20], g_hyg_ani_x5, 67);
 	hyg_ani_4();
 	delay_or_keypress(3);
 
 	hyg_ani_3();
 	hyg_ani_2(&ani[5], 145, 39);
 	hyg_ani_2(&ani[7], 142, 86);
-	hyg_ani_2(&ani[16], ds_readb(HYG_ANI_X2), 67);
-	hyg_ani_2(&ani[21], ds_readb(HYG_ANI_X6), 67);
+	hyg_ani_2(&ani[16], g_hyg_ani_x2, 67);
+	hyg_ani_2(&ani[21], g_hyg_ani_x6, 67);
 	hyg_ani_4();
 	delay_or_keypress(3);
 
 	for (i = 0; i < 3; i++) {
 		hyg_ani_3();
 		hyg_ani_2(&ani[6], 145, 39);
-		hyg_ani_2(&ani[8], 144, ds_readb(HYG_ANI_X9 + i));
-		hyg_ani_2(&ani[17 + i], ds_readb(HYG_ANI_X3 + i), 67);
-		hyg_ani_2(&ani[22 + i], ds_readb(HYG_ANI_X7 + i), 67);
+		hyg_ani_2(&ani[8], 144, g_hyg_ani_x9[i]);
+		hyg_ani_2(&ani[17 + i], g_hyg_ani_x3[i], 67);
+		hyg_ani_2(&ani[22 + i], g_hyg_ani_x7[i], 67);
 		hyg_ani_4();
 		delay_or_keypress(3);
 	}
@@ -357,8 +357,8 @@ void show_hyggelik_ani(void)
 	hyg_ani_3();
 	hyg_ani_2(&ani[6], 145, 39);
 	hyg_ani_2(&ani[9], 125, 104);
-	hyg_ani_2(&ani[19], ds_readb((HYG_ANI_X3+2)), 67);
-	hyg_ani_2(&ani[24], ds_readb((HYG_ANI_X7+2)), 67);
+	hyg_ani_2(&ani[19], g_hyg_ani_x3[2], 67);
+	hyg_ani_2(&ani[24], g_hyg_ani_x7[2], 67);
 	hyg_ani_4();
 	delay_or_keypress(100);
 
