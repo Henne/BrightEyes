@@ -148,9 +148,9 @@ void tevent_070(void)
 			gs_tevent070_herb_flag)
 		{
 			gs_tevent070_herb_flag = 1;
-			ds_writeb(GATHER_HERBS_SPECIAL, 130);
+			g_gather_herbs_special = (130);
 			l_si = TRV_found_camp_place(2);
-			ds_writeb(GATHER_HERBS_SPECIAL, -1);
+			g_gather_herbs_special = (-1);
 		} else {
 			l_si = TRV_found_camp_place(0);
 		}
@@ -369,9 +369,9 @@ void tevent_unused01(void)
 
 				GUI_output(get_tx2(38));
 
-				ds_writeb(GATHER_HERBS_SPECIAL, 63);
+				g_gather_herbs_special = (63);
 				TRV_inside_herb_place();
-				ds_writeb(GATHER_HERBS_SPECIAL, -1);
+				g_gather_herbs_special = (-1);
 
 				options = (!has_raft ? 1 : 2);
 

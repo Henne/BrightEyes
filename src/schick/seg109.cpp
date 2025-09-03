@@ -810,9 +810,9 @@ void tevent_009(void)
 	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 && !gs_tevent009_flag) ||
 		gs_tevent009_flag)
 	{
-		ds_writeb(GATHER_HERBS_SPECIAL, 60);
+		g_gather_herbs_special = (60);
 		TRV_found_herb_place(0);
-		ds_writeb(GATHER_HERBS_SPECIAL, 255);
+		g_gather_herbs_special = (255);
 
 		gs_tevent009_flag = 1;
 	}

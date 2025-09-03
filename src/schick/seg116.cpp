@@ -127,9 +127,9 @@ void tevent_132(void)
 		if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 1) > 0 && !gs_tevent132_herb_flag) || gs_tevent132_herb_flag) {
 
 			gs_tevent132_herb_flag = 1;
-			ds_writebs(GATHER_HERBS_SPECIAL, 61);
+			g_gather_herbs_special = (61);
 			TRV_found_camp_place(2);
-			ds_writebs(GATHER_HERBS_SPECIAL, -1);
+			g_gather_herbs_special = (-1);
 		} else {
 			TRV_found_camp_place(0);
 		}
@@ -193,9 +193,9 @@ void tevent_134(void)
 	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 6) > 0 && !gs_tevent134_flag) ||
 		gs_tevent134_flag)
 	{
-		ds_writeb(GATHER_HERBS_SPECIAL, 157);
+		g_gather_herbs_special = (157);
 		TRV_found_herb_place(0);
-		ds_writeb(GATHER_HERBS_SPECIAL, -1);
+		g_gather_herbs_special = (-1);
 		gs_tevent134_flag = 1;
 	}
 }
@@ -459,9 +459,9 @@ void tevent_140(void)
 		if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 && !gs_tevent140_herb_flag) || gs_tevent140_herb_flag) {
 
 			gs_tevent140_herb_flag = 1;
-			ds_writebs(GATHER_HERBS_SPECIAL, -126);
+			g_gather_herbs_special = (-126);
 			TRV_found_camp_place(2);
-			ds_writebs(GATHER_HERBS_SPECIAL, -1);
+			g_gather_herbs_special = (-1);
 		} else {
 			TRV_found_camp_place(0);
 		}

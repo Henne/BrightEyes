@@ -393,7 +393,8 @@ signed short gather_herbs(Bit8u *hero, signed short hours, signed short handicap
 	for (unique_herbs_count = herb_index = 0; herb_index < 12; herb_index++, ptr += SIZEOF_GATHER_HERBS) {
 
 		/* check if this is a special place for collecting the considered herb.. */
-		if (host_readb(ptr + GATHER_HERBS_ITEM_ID) == ds_readb(GATHER_HERBS_SPECIAL)) {
+		if (host_readb(ptr + GATHER_HERBS_ITEM_ID) == g_gather_herbs_special) {
+
 			/* dirty code follows. The original herbs table is modified. */
 			add_ptr_bs(ptr + GATHER_HERBS_CHANCE, 10); // 10% higher chance to find the herb
 			inc_ptr_bs(ptr + GATHER_HERBS_MAX_COUNT);  // increase maximum count of single herbs by 1.
@@ -409,7 +410,8 @@ signed short gather_herbs(Bit8u *hero, signed short hours, signed short handicap
 			}
 		}
 
-		if (host_readb(ptr) == ds_readb(GATHER_HERBS_SPECIAL)) {
+		if (host_readb(ptr) == g_gather_herbs_special) {
+
 			/* The herbs table is reverted to original state. */
 			sub_ptr_bs(ptr + GATHER_HERBS_CHANCE, 10);
 			dec_ptr_bs(ptr + GATHER_HERBS_MAX_COUNT);
@@ -419,16 +421,14 @@ signed short gather_herbs(Bit8u *hero, signed short hours, signed short handicap
 	if (unique_herbs_count) {
 
 		/* print a sentence with all the herb names */
-		sprintf(g_dtp2,
-			get_ttx(328),
-			(char*)hero + HERO_NAME2);
+		sprintf(g_dtp2,	get_ttx(328), (char*)hero + HERO_NAME2);
 
 		for (herb_index = 0; herb_index < 12; herb_index++) {
 
 			if (herb_count[herb_index] != 0) {
 
 				sprintf(g_text_output_buf, g_gather_herbs_str_found, herb_count[herb_index],
-					(Bit8u*)(GUI_names_grammar((herb_count[herb_index] > 1 ? 4 : 0) + 0x4002, ds_readb(GATHER_HERBS_TABLE + 4 * herb_index + GATHER_HERBS_ITEM_ID), 0)));
+					(Bit8u*)GUI_names_grammar((herb_count[herb_index] > 1 ? 4 : 0) + 0x4002, ds_readb(GATHER_HERBS_TABLE + 4 * herb_index + GATHER_HERBS_ITEM_ID), 0));
 
 				strcat(g_dtp2, g_text_output_buf);
 

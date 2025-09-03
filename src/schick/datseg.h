@@ -1083,6 +1083,7 @@ extern char g_empty_string8[1];			//ds:0x653b; seg048
 extern char g_extraspace_separated_strings2[7];	//ds:0x653c; seg048
 extern char g_empty_string9[1];			//ds:0x6543; seg048
 
+extern Bit8s g_gather_herbs_special;		//ds:0x66d0; seg051, seg109, seg110, seg112, seg113, seg114, seg115, seg116
 extern char g_gather_herbs_str_found[6];	//ds:0x66d1; seg051
 extern char g_gather_herbs_str_comma[3];	//ds:0x66d7; seg051
 extern char g_gather_herbs_str_and[6];		//ds:0x66da; seg051

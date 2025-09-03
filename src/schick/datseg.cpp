@@ -3505,7 +3505,7 @@ struct{unsigned char item_id,chance,max_count,handicap;} g_gather_herbs_table[13
 	{ ITEM_KROTENSCHEMEL, 20, 2,  4 },
 	{ 0xff              ,  0, 0,  0 }
 }; // ds:0x669c
-unsigned char g_gather_herbs_special = 0xff; // ds:0x66d0
+signed char g_gather_herbs_special = -1; // ds:0x66d0
 char g_gather_herbs_str_found[6] = "%d^%s"; // ds:0x66d1
 char g_gather_herbs_str_comma[3] = ", "; // ds:0x66d7
 char g_gather_herbs_str_and[6] = " UND "; // ds:0x66da
