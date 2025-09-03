@@ -609,7 +609,7 @@ void random_encounter(signed short arg)
 
 	for (i = 0; i < 14; i++) {
 
-		if ((ds_readb(RANDOM_ENCOUNTER_DESCR + 7 * i + arg) <= randval) && (ds_readb(RANDOM_ENCOUNTER_DESCR + 7 * i + arg) != 0)) {
+		if ((g_random_encounter_descr[i][arg] <= randval) && g_random_encounter_descr[i][arg]) {
 
 			gs_show_travel_map = g_wallclock_update = 0;
 			g_travel_event_active = 1;

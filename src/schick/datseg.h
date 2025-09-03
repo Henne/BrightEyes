@@ -1496,7 +1496,7 @@ extern struct struct_chest g_tevent064_chest_descr;	// ds:0xb154; seg111
 extern Bit8u g_tevent067_chest[10];			// ds:0xb16a; seg112
 extern unsigned char g_tevent135_climb_damage[5][2];	// ds:0xb174; seg116
 extern unsigned char g_random_encounter_index[59];	// ds:0xb17e; seg117
-
+extern const Bit8u g_random_encounter_descr[14][7];		// ds:0xb1b9; seg117
 extern char g_str_rad1[4];			// ds:0xb21e; seg118
 extern char g_str_rad2[4];			// ds:0xb222; seg118
 extern char g_str_rad3[4];			// ds:0xb226; seg118
