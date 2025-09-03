@@ -1089,7 +1089,7 @@
 //#define HYG_ANI_X6                      (0x71c3)    /* unsigned char */
 //#define HYG_ANI_X7                      (0x71c4)    /* unsigned char[3] */
 //#define HYG_ANI_X9                      (0x71c7)    /* unsigned char[3] */
-#define TOWNS_CITYINDEX_TABLE           (0x71ca)    /* unsigned char[52] */
+//#define TOWNS_CITYINDEX_TABLE           (0x71ca)    /* unsigned char[52] */
 //#define DASPOTA_LOCLOOT_INDEX           (0x71fe)    /* Bit8u*[18] */
 #define MAPVAL_TO_LOCTYPE               (0x7246)    /* unsigned char[12]; { 0, 15, 31, 63, 95, 127, 159, 175, 191, 207, 223, 239 } */
 #define SEG066_0BAD_UNKN0               (0x7252)    /* signed char[29] */

@@ -86,7 +86,7 @@ signed short enter_location(signed short town_id)
 	if ((b_index = get_border_index(cast_u16(g_visual_field_vals[1]))) >= 2 && b_index <= 5) {
 
 		gs_current_loctype_bak = LOCTYPE_NONE;
-		gs_current_locdata = ds_readb((TOWNS_CITYINDEX_TABLE-1) + town_id);
+		gs_current_locdata = g_towns_cityindex_table[town_id - 1];
 
 		if (!((gs_direction + gs_x_target + gs_y_target) & 1)) {
 			gs_current_loctype = LOCTYPE_CITIZEN;

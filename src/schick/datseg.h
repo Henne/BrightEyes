@@ -1114,6 +1114,7 @@ extern const Bit8u g_hyg_ani_x5;		//ds:0x71c2; seg065
 extern const Bit8u g_hyg_ani_x6;		//ds:0x71c3; seg065
 extern const Bit8u g_hyg_ani_x7[3];		//ds:0x71c4; seg065
 extern const Bit8u g_hyg_ani_x9[3];		//ds:0x71c7; seg065
+extern const Bit8u g_towns_cityindex_table[52];	//ds:0x71ca; seg066
 
 extern const struct struct_point g_visual_field_offsets_std[29];	//ds:0x733a; seg066
 extern const struct struct_point g_visual_field_offsets_sign[29];	//ds:0x73ae; seg066
