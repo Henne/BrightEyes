@@ -888,7 +888,7 @@ signed short open_temp_file(unsigned short index)
 	char tmppath[40];
 	signed short handle;
 
-	sprintf((char*)tmppath, (char*)ds_readd(STR_TEMP_XX_PTR2), (char*)ds_readd(FNAMES + index * 4));
+	sprintf((char*)tmppath, g_str_temp_xx_ptr2, (char*)ds_readd(FNAMES + index * 4));
 
 	while ( (handle = open(tmppath, O_BINARY | O_RDWR)) == -1) {
 
@@ -1950,10 +1950,9 @@ void seg002_2177(void)
 {
 	signed short i;
 
-	for (i = 0; ds_readws(MARKET_DESCR_TABLE + i * 8) != -1; i++) {
+	for (i = 0; g_market_descr_table[i].min_size != -1; i++) {
 
-		ds_writew((MARKET_DESCR_TABLE + 6) + i * 8,
-			random_interval(ds_readws(MARKET_DESCR_TABLE + i * 8), 20));
+		g_market_descr_table[i].market_day = random_interval(g_market_descr_table[i].min_size, 20);
 	}
 }
 

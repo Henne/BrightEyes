@@ -340,7 +340,7 @@ void do_wildcamp(void)
 					g_fig_discard = 1;
 
 					/* pick a random campfight out of 4 possibilities */
-					do_fight(ds_readws((CAMPFIGHTS-2) + 2 * random_schick(4)));
+					do_fight(g_campfights[random_schick(4) - 1]);
 
 					if (gs_travel_detour != 99 && g_game_state == GAME_STATE_MAIN) {
 

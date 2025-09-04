@@ -508,7 +508,7 @@ void FIG_draw_enemy_pic(signed short loc, signed short id)
 
 	p_enemy = &g_enemy_sheets[id - 10];
 
-	if (ds_readbs(GFXTAB_FIGURES_MAIN + p_enemy->gfx_id * 5) != ds_readws(FIGHT_FIGS_INDEX)) {
+	if (ds_readbs(GFXTAB_FIGURES_MAIN + p_enemy->gfx_id * 5) != g_fight_figs_index) {
 
 		nvf.src = (Bit8u*)load_fight_figs(ds_readbs(GFXTAB_FIGURES_MAIN + p_enemy->gfx_id * 5));
 		nvf.dst = p1;
@@ -519,7 +519,7 @@ void FIG_draw_enemy_pic(signed short loc, signed short id)
 
 		process_nvf(&nvf);
 
-		ds_writew(FIGHT_FIGS_INDEX, ds_readbs(GFXTAB_FIGURES_MAIN + p_enemy->gfx_id * 5));
+		g_fight_figs_index = ds_readbs(GFXTAB_FIGURES_MAIN + p_enemy->gfx_id * 5);
 	}
 
 	/* save and set text colors */

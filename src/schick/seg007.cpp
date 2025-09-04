@@ -46,13 +46,13 @@ int random_schick(const int val)
 	}
 
 	/* rand_seed XOR rand_seed2 */
-	retval = ds_readw(RANDOM_SCHICK_SEED) ^ g_random_schick_seed2;
+	retval = g_random_schick_seed ^ g_random_schick_seed2;
 	retval = _rotl(retval, 2);		/* ROL retval */
-	retval = (retval + g_random_schick_seed2) ^ ds_readw(RANDOM_SCHICK_SEED);
+	retval = (retval + g_random_schick_seed2) ^ g_random_schick_seed;
 	retval = _rotl(retval, 3);
 
 	/* update rand_seed */
-	ds_writew(RANDOM_SCHICK_SEED, __abs__(retval) + 1);
+	g_random_schick_seed = __abs__(retval) + 1;
 
 	retval = __abs__(retval) % val;
 

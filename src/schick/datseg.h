@@ -85,6 +85,13 @@ struct struct_msg {
 	signed int type;
 };
 
+struct market {
+	Bit16s min_size;	/* value in {1, ..., 19} or -1 as terminator */
+	Bit16s price_mod;
+	Bit16s market_day;
+	Bit16s size;		/* unused */
+};
+
 /* REMARK1: DOS-Version: struct is inside the game state! */
 /* REMARK2: DOS-Version: states_offset is added with a 4-Byte pointer. Not portable! */
 struct struct_dialog_partner {
@@ -996,7 +1003,7 @@ extern Bit8u  g_wallclock_palette_day[3][3];	//ds:0x4af1; seg004;
 extern Bit8u  g_wallclock_palette_night[3][3];	//ds:0x4afa; seg004;
 
 extern signed short g_delay_factor;		//ds:0x4b66; seg005, seg025
-
+extern char *g_str_temp_xx_ptr;			//ds:0x4b68; seg005
 extern signed char g_fig_star_colors[12];	//ds:0x4b6c; seg005
 extern signed char g_fig_star_counter;		//ds:0x4b78; seg005
 extern signed short g_fig_star_timer;		//ds:0x4b79; seg004, seg005
@@ -1004,6 +1011,8 @@ extern signed char g_fig_star_last_count;	//ds:0x4b7b; seg005
 extern signed short g_fig_msg_dtps[12];		//ds:0x4b7c; seg005
 extern char g_str_temp_xx[8];			//ds:0x4b95; seg005
 extern signed char g_fig_star_printed;		//ds:0x4b94; seg004, seg005
+extern signed short g_fight_figs_index;		//ds:0x4b9e; seg006, seg032
+extern unsigned short g_random_schick_seed;	//ds:0x4ba0; seg007
 
 extern Bit8u* g_ems_frame_ptr;			//ds:0x4baa; seg002, seg010, seg028
 extern struct mouse_action g_action_table_options[10];	//ds:0x4bae; seg025
@@ -1012,6 +1021,11 @@ extern signed short g_tmap_x[10];		//ds:0x4c12; seg025
 extern signed short g_tmap_y[10];		//ds:0x4c26; seg025
 extern unsigned char g_renderbuf_in_use_flag;	//ds:0x4c3a; seg025, seg061
 extern void (*g_location_handlers[19])(void);	//ds:0x4c3b; seg025
+
+extern char *g_str_temp_xx_ptr2;		//ds:0x4c88; seg002, seg026, seg120
+
+extern signed short g_loaded_head_id;		//ds:0x515c; seg026, seg029
+extern char g_str_temp_xx2[8];			//ds:0x515e;
 
 extern char g_chr_file_suffix[5];		//ds:0x5e3e; seg026
 extern char g_savegame_suffix[5];		//ds:0x5e43; seg026
@@ -1083,17 +1097,26 @@ extern char g_empty_string8[1];			//ds:0x653b; seg048
 extern char g_extraspace_separated_strings2[7];	//ds:0x653c; seg048
 extern char g_empty_string9[1];			//ds:0x6543; seg048
 
+extern const signed short g_campfights[4];	//ds:0x6694; seg051
+
 extern Bit8s g_gather_herbs_special;		//ds:0x66d0; seg051, seg109, seg110, seg112, seg113, seg114, seg115, seg116
 extern char g_gather_herbs_str_found[6];	//ds:0x66d1; seg051
 extern char g_gather_herbs_str_comma[3];	//ds:0x66d7; seg051
 extern char g_gather_herbs_str_and[6];		//ds:0x66da; seg051
 extern char g_gather_herbs_str_dot[2];		//ds:0x66e0; seg051
+extern const signed short g_dcampfights[4];	//ds:0x66e2; seg052
+
+extern char g_buy_screen_str_money_h[5];	//ds:0x6bc8; seg056
 
 extern char g_buy_screen_str_comma_space[3];	//ds:0x6bed; seg056
 
 extern Bit8s *g_god_temples_index[15]; 		//ds:0x6e36; seg061
 extern char g_str_temp_file_wildcard[8];	//ds:0x6e72; seg061
 extern char g_str_no_save_in_temple[41];	//ds:0x6e7a; seg061
+
+extern signed short g_passage_type_to_name[7];	//ds:0x6ec2; seg063
+
+extern signed short g_sea_travel_tx_ship[8];	//ds:0x6ef0; seg063
 
 extern struct sea_route g_sea_routes[46];	//ds:0x6f00; seg002, seg063, seg064 SHOULD BE IN GAME STATE
 extern signed char g_travel_by_ship;		//ds:0x7070; seg049, seg063
@@ -1103,9 +1126,7 @@ extern char g_sea_travel_str_en[3];		//ds:0x708f; seg063
 extern char g_sea_travel_str_comma[3];		//ds:0x7092; seg063
 extern char g_sea_travel_str_heller[10];	//ds:0x7096; seg064
 extern char g_sea_travel_str_nothing[7];	//ds:0x70a0; seg064
-
-extern Bit8u* g_daspota_locloot_index[18];	//ds:0x71fe; seg066
-
+extern struct market g_market_descr_table[34];	//ds:0x70a8; seg002, seg065, seg066
 extern const Bit8u g_hyg_ani_x0[5];		//ds:0x71b8; seg065
 extern const Bit8u g_hyg_ani_x1;		//ds:0x71b9; seg065
 extern const Bit8u g_hyg_ani_x2;		//ds:0x71ba; seg065
@@ -1115,7 +1136,16 @@ extern const Bit8u g_hyg_ani_x6;		//ds:0x71c3; seg065
 extern const Bit8u g_hyg_ani_x7[3];		//ds:0x71c4; seg065
 extern const Bit8u g_hyg_ani_x9[3];		//ds:0x71c7; seg065
 extern const Bit8u g_towns_cityindex_table[52];	//ds:0x71ca; seg066
-
+extern Bit8u* g_daspota_locloot_index[18];	//ds:0x71fe; seg066
+extern unsigned char g_mapval_to_loctype[12];	//ds:0x7246; seg066
+extern signed char g_seg066_0bad_unkn0[29];	//ds:0x7252; seg066
+extern signed char g_seg066_0bad_unkn1[29];	//ds:0x726f; seg066
+extern signed char g_seg066_0bad_unkn2[29];	//ds:0x728c; seg066
+extern signed char g_seg066_0bad_unkn3[29];	//ds:0x72a9; seg066
+extern signed char g_seg066_0bad_unkn4[29];	//ds:0x72c6; seg066
+extern signed char g_seg066_0bad_unkn5[29];	//ds:0x72e3; seg066
+extern signed char g_seg066_0bad_unkn6[29];	//ds:0x7300; seg066
+extern signed char g_seg066_0bad_unkn7[29];	//ds:0x731d; seg066
 extern const struct struct_point g_visual_field_offsets_std[29];	//ds:0x733a; seg066
 extern const struct struct_point g_visual_field_offsets_sign[29];	//ds:0x73ae; seg066
 extern const struct struct_point g_visual_field_offsets_inn[29];	//ds:0x7422; seg066

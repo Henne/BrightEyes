@@ -42,10 +42,6 @@
 namespace M302de {
 #endif
 
-#if defined(__BORLANDC__)
-signed short get_border_index(unsigned char);
-#endif
-
 signed short enter_location(signed short town_id)
 {
 	signed short map_pos;
@@ -579,7 +575,7 @@ signed short get_border_index(unsigned char val)
 	signed short i;
 
 	i = 0;
-	while (ds_readb(MAPVAL_TO_LOCTYPE + i) < val) {
+	while (g_mapval_to_loctype[i] < val) {
 		i++;
 	}
 
@@ -606,16 +602,16 @@ void seg066_0bad(void)
 			g_visual_fields_tex[i] = -1;
 		} else {
 			g_visual_fields_tex[i] = (
-						bi == 2 ? ds_readbs(SEG066_0BAD_UNKN0 + i) : (
-						bi == 3 ? ds_readbs(SEG066_0BAD_UNKN1 + i) : (
-						bi == 4 ? ds_readbs(SEG066_0BAD_UNKN2 + i) : (
-						bi == 5 ? ds_readbs(SEG066_0BAD_UNKN3 + i) : (
-						bi == 6 ? ds_readbs(SEG066_0BAD_UNKN4 + i) : (
-						bi == 7 ? ds_readbs(SEG066_0BAD_UNKN4 + i) : (
-						bi == 8 ? ds_readbs(SEG066_0BAD_UNKN5 + i) : (
-						bi == 9 ? ds_readbs(SEG066_0BAD_UNKN6 + i) : (
-						bi == 10 ? ds_readbs(SEG066_0BAD_UNKN7 + i) : (
-						bi == 1 ? ds_readbs(SEG066_0BAD_UNKN2 + i) : -1))))))))));
+						bi == 2 ? g_seg066_0bad_unkn0[i] : (
+						bi == 3 ? g_seg066_0bad_unkn1[i] : (
+						bi == 4 ? g_seg066_0bad_unkn2[i] : (
+						bi == 5 ? g_seg066_0bad_unkn3[i] : (
+						bi == 6 ? g_seg066_0bad_unkn4[i] : (
+						bi == 7 ? g_seg066_0bad_unkn4[i] : (
+						bi == 8 ? g_seg066_0bad_unkn5[i] : (
+						bi == 9 ? g_seg066_0bad_unkn6[i] : (
+						bi == 10 ? g_seg066_0bad_unkn7[i] : (
+						bi == 1 ? g_seg066_0bad_unkn2[i] : -1))))))))));
 		}
 	}
 }
@@ -1014,8 +1010,7 @@ signed short city_step(void)
 
 		/* random city event? */
 		/* check if the party has moved to another square */
-		if ((gs_y_target != gs_y_target_bak ||
-			(gs_x_target != gs_x_target_bak)) &&
+		if ((gs_y_target != gs_y_target_bak || (gs_x_target != gs_x_target_bak)) &&
 
 			/* only in big town */
 			(gs_current_town == TOWNS_THORWAL || gs_current_town == TOWNS_PREM ||
@@ -1032,10 +1027,8 @@ signed short city_step(void)
 
 		if (g_location_market_flag && g_new_menu_icons[7] != MENU_ICON_MARKET) {
 
-			if (((i = ds_readws((MARKET_DESCR_TABLE + 4) + 8 * gs_current_typeindex)) == -1 ||
-				gs_day_of_week == i) &&
-				gs_day_timer >= HOURS(6) &&
-				gs_day_timer <= HOURS(16))
+			if (((i = g_market_descr_table[gs_current_typeindex].market_day) == -1 || gs_day_of_week == i) &&
+				gs_day_timer >= HOURS(6) && gs_day_timer <= HOURS(16))
 			{
 				g_new_menu_icons[7] = MENU_ICON_MARKET;
 				draw_icons();

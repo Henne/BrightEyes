@@ -244,7 +244,7 @@ signed short load_game_state(void)
 		g_ani_enabled = 0;
 
 		/* delete every file TEMP\\*.* */
-		sprintf(g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), g_all_files_wildcard);
+		sprintf(g_text_output_buf, g_str_temp_xx_ptr2, g_all_files_wildcard);
 
 #if defined(__BORLANDC__)
 		l2 = findfirst(g_text_output_buf, &blk, 0);
@@ -252,7 +252,7 @@ signed short load_game_state(void)
 		if (l2 == 0) {
 
 			do {
-				sprintf(g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), ((char*)(&blk))+ 30);
+				sprintf(g_text_output_buf, g_str_temp_xx_ptr2, ((char*)(&blk))+ 30);
 				unlink(g_text_output_buf);
 
 				l2 = findnext(&blk);
@@ -294,7 +294,7 @@ signed short load_game_state(void)
 
 				/* write file content to TEMP */
 				sprintf(g_text_output_buf,
-					(char*)ds_readd(STR_TEMP_XX_PTR2),
+					g_str_temp_xx_ptr2,
 					(char*)(ds_readd(FNAMES + 4 * i)));
 
 				/* TODO: should be O_BINARY | O_WRONLY */
@@ -323,7 +323,7 @@ signed short load_game_state(void)
 
 				/* write file content to TEMP */
 				sprintf(g_text_output_buf,
-					(char*)ds_readd(STR_TEMP_XX_PTR2),
+					g_str_temp_xx_ptr2,
 					name);
 
 				/* TODO: should be O_BINARY | O_WRONLY */
@@ -349,7 +349,7 @@ signed short load_game_state(void)
 
 		while (l2 == 0) {
 
-			sprintf(g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), ((char*)(&blk)) + 30);
+			sprintf(g_text_output_buf, g_str_temp_xx_ptr2, ((char*)(&blk)) + 30);
 
 			if ((handle_gs = open(g_text_output_buf, O_BINARY | O_RDWR)) == -1) {
 				handle = open((char*)(&blk) + 30, O_BINARY | O_RDWR);
@@ -593,7 +593,7 @@ signed short save_game_state(void)
 		for (tw_bak = 0; tw_bak < 286; tw_bak++) {
 
 			sprintf(g_text_output_buf,
-				(char*)ds_readd(STR_TEMP_XX_PTR2),
+				g_str_temp_xx_ptr2,
 				(char*)(ds_readd(FNAMES + 4 * tw_bak)));
 
 			l1 = findfirst(g_text_output_buf, &blk, 0);
@@ -627,13 +627,13 @@ signed short save_game_state(void)
 
 		/* append all CHR files */
 		lseek(l_di, filepos, 0);
-		sprintf(g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), g_all_chr_wildcard2);
+		sprintf(g_text_output_buf, g_str_temp_xx_ptr2, g_all_chr_wildcard2);
 
 		l1 = findfirst(g_text_output_buf, &blk, 0);
 		do {
 			/* create the CHR filename */
 			sprintf(g_text_output_buf,
-				(char*)ds_readd(STR_TEMP_XX_PTR2),
+				g_str_temp_xx_ptr2,
 				((char*)(&blk)) + 30);
 
 			/* read the CHR file from temp */
@@ -683,7 +683,7 @@ signed short read_chr_temp(char *fname, signed short hero_pos, signed short a2)
 	signed short hero_size = SIZEOF_HERO;
 	Bit8u *hero;
 
-	sprintf(g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), (char*)fname);
+	sprintf(g_text_output_buf, g_str_temp_xx_ptr2, (char*)fname);
 
 	if ((handle = open(g_text_output_buf, O_BINARY | O_RDWR)) == -1) {
 		copy_file_to_temp((char*)fname, g_text_output_buf);
@@ -745,7 +745,7 @@ void write_chr_temp(unsigned short hero_pos)
 	prepare_chr_name(fname, (char*)get_hero(hero_pos));
 
 	sprintf(g_text_output_buf,
-		(char*)ds_readd(STR_TEMP_XX_PTR2),		/* "TEMP\\%s" */
+		g_str_temp_xx_ptr2,		/* "TEMP\\%s" */
 		fname);
 
 	/* TODO: should be O_BINARY | O_WRONLY */
@@ -771,7 +771,7 @@ signed short copy_chr_names(Bit8u *ptr, signed short temple_id)
 	struct ffblk blk;
 
 	buf = g_renderbuf_ptr + 60000;
-	sprintf(g_text_output_buf, (char*)ds_readd(STR_TEMP_XX_PTR2), g_all_chr_wildcard3);
+	sprintf(g_text_output_buf, g_str_temp_xx_ptr2, g_all_chr_wildcard3);
 
 	l_di = findfirst(g_text_output_buf, &blk, 0);
 
@@ -780,7 +780,7 @@ signed short copy_chr_names(Bit8u *ptr, signed short temple_id)
 		do {
 			/* create the CHR filename */
 			sprintf(g_text_output_buf,
-				(char*)ds_readd(STR_TEMP_XX_PTR2),
+				g_str_temp_xx_ptr2,
 				((char*)(&blk)) + 30);
 
 			/* read the CHR file from temp */
@@ -828,7 +828,7 @@ void load_in_head(signed short head)
 
 		close(handle);
 
-		ds_writew(LOADED_HEAD_ID, head);
+		g_loaded_head_id = head;
 	}
 }
 

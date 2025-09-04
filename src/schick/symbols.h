@@ -878,7 +878,7 @@
 #define COLOR_PAL_BLACK                 (0x4b03)    /* char[3]; {0x3f,0x3f,0x3f} */
 #define PALETTE_ALLBLACK                (0x4b06)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
 //#define DELAY_FACTOR                    (0x4b66)    /* short */
-#define STR_TEMP_XX_PTR                 (0x4b68)    /* Bit8u*; to STR_TEMP_XX */
+//#define STR_TEMP_XX_PTR                 (0x4b68)    /* Bit8u*; to STR_TEMP_XX */
 //#define FIG_STAR_COLORS                 (0x4b6c)    /* signed char[12] */
 //#define FIG_STAR_COUNTER                (0x4b78)    /* signed char */
 //#define FIG_STAR_TIMER                  (0x4b79)    /* signed short */
@@ -887,8 +887,8 @@
 //#define FIG_STAR_PRINTED                (0x4b94)    /* signed char; {0,1} */
 //#define STR_TEMP_XX                     (0x4b95)    /* char[8]; "TEMP\XX" */
 // ?1
-#define FIGHT_FIGS_INDEX                (0x4b9e)    /* signed short */
-#define RANDOM_SCHICK_SEED              (0x4ba0)    /* unsigned short */
+//#define FIGHT_FIGS_INDEX                (0x4b9e)    /* signed short */
+//#define RANDOM_SCHICK_SEED              (0x4ba0)    /* unsigned short */
 #define EMM_SIG                         (0x4ba2)    /* char[8] */
 //#define EMS_FRAME_PTR                   (0x4baa)    /* Bit8u* */
 //#define ACTION_TABLE_OPTIONS            (0x4bae)    /* struct(10)[10]; struct{signed short x1, x2, y1, y2; unsigned short action;} */
@@ -897,10 +897,10 @@
 //#define RENDERBUF_IN_USE_FLAG           (0x4c3a)    /* unsigned char; {0,1} */
 #define LOCATION_HANDLERS               (0x4c3b)    /* Bit8u*[19]; (void (*)(void))[19] */
 // ?1
-#define STR_TEMP_XX_PTR2                (0x4c88)    /* Bit8u*; to STR_TEMP_XX2 */
+//#define STR_TEMP_XX_PTR2                (0x4c88)    /* Bit8u*; to STR_TEMP_XX2 */
 #define FNAMES                          (0x4c8c)    /* long[308] */
-#define LOADED_HEAD_ID                  (0x515c)    /* unsigned short */
-#define STR_TEMP_XX2                    (0x515e)    /* char[8]; "TEMP\%s" */
+//#define LOADED_HEAD_ID                  (0x515c)    /* unsigned short */
+//#define STR_TEMP_XX2                    (0x515e)    /* char[8]; "TEMP\%s" */
 #define SCHICK_DAT_FNAMES               (0x5166)    /* char[3288]; names of files in SCHICK.DAT */
 //#define CHR_FILE_SUFFIX                 (0x5e3e)    /* char[5]; ".CHR" */
 //#define SAVEGAME_SUFFIX                 (0x5e43)    /* char[5]; ".gam" */
@@ -1013,14 +1013,14 @@
 #define AUTOINC_SPELLS_SELF             (0x665c)    /* signed short[7] */
 #define AUTOINC_SPELLS_IELF             (0x666a)    /* signed short[12] */
 #define MAGIC_SCHOOL_SPELLRANGES        (0x6682)    /* struct(2)[9]; struct{signed char first, last;} */
-#define CAMPFIGHTS                      (0x6694)    /* signed short[4] */
+//#define CAMPFIGHTS                      (0x6694)    /* signed short[4] */
 #define GATHER_HERBS_TABLE              (0x669c)    /* struct(4)[13]; struct{unsigned char herb_id,chance,ta_mod,max_count;} */
 //#define GATHER_HERBS_SPECIAL            (0x66d0)    /* unsigned char */
 //#define GATHER_HERBS_STR_FOUND          (0x66d1)    /* char[6]; "%d^%s" */
 //#define GATHER_HERBS_STR_COMMA          (0x66d7)    /* char[3]; ", " */
 //#define GATHER_HERBS_STR_AND            (0x66da)    /* char[6]; " UND " */
 //#define GATHER_HERBS_STR_DOT            (0x66e0)    /* char[2]; "." */
-#define DCAMPFIGHTS                     (0x66e2)    /* signed short[4] */
+//#define DCAMPFIGHTS                     (0x66e2)    /* signed short[4] */
 #define HEALER_DESCR_TABLE              (0x66ea)    /* struct(2)[41]; struct{signed char price,quality;} */
 #define INN_DESCR_TABLE                 (0x673c)    /* struct(4)[77]; struct{signed short quality,unkn;} */
 #define SHOP_DESCR_TABLE                (0x6870)    /* struct(9)[95]; struct{char price_mod,type,size; short extra_items[3];} */
@@ -1066,9 +1066,9 @@
 // ?1
 #define TEMPLE_MIRACLE_BONUS            (0x6ea4)    /* signed char[15]; {0, 2, 15, 10, 20, 5, 10, 1, 15, 3, 15, 5, 10, 0} */
 #define TEMPLE_MIRACLE_DICE             (0x6eb3)    /* signed char[15]; {0, 9, 9, 10, 17, 6, 10, 10, 18, 10, 19, 8, 15, 0, 10} */
-#define PASSAGE_TYPE_TO_NAME            (0x6ec2)    /* signed short[7]; {0x001d, 0x001e, 0x001f, 0x0020, 0x0021, 0x0022, 0x0023} */ /* maps entry PASSAGE_TYPE in SHIP_TABLE -> ptr to name of type of passage (Begleitschutzfahrt, Deckpassage etc.) */
+//#define PASSAGE_TYPE_TO_NAME            (0x6ec2)    /* signed short[7]; {0x001d, 0x001e, 0x001f, 0x0020, 0x0021, 0x0022, 0x0023} */ /* maps entry PASSAGE_TYPE in SHIP_TABLE -> ptr to name of type of passage (Begleitschutzfahrt, Deckpassage etc.) */
 #define SHIP_TABLE                      (0x6ed0)    /* struct(4)[8]; struct{unsigned char passage_type,unkn2,base_price_per_distance,base_speed;}; { { 0, 1, 0, 120 }, { 3, 1, 35, 100 }, { 1, 1, 0, 150 }, { 2, 1, 45, 150 }, { 0, 1, 0, 90 }, { 4, 1, 20, 80 }, { 5, 0, 10, 60 }, { 6, 0, 0, 40 } } */
-#define SEA_TRAVEL_TX_SHIP              (0x6ef0)    /* signed short[8]; { 0x0024, 0x0025, 0x0026, 0x0026, 0x0024, 0x0027, 0x0028, 0x0029 }*/ /* maps ship_type -> ptr to ship name (Langschiff, Kutter, etc.) */
+//#define SEA_TRAVEL_TX_SHIP              (0x6ef0)    /* signed short[8]; { 0x0024, 0x0025, 0x0026, 0x0026, 0x0024, 0x0027, 0x0028, 0x0029 }*/ /* maps ship_type -> ptr to ship name (Langschiff, Kutter, etc.) */
 //#define SEA_ROUTES                      (0x6f00)    /* struct(8)[46] */
 //#define TRAVEL_BY_SHIP                  (0x7070)    /* unsigned char; 0 = on land, 1 = at the ship */
 #define SEA_TRAVEL_SLEEPBONUS_TABLE1    (0x7071)    /* signed short[7]; { -2, 0, 5, 4, 3, 1, 0 } */ /* maps entry PASSAGE_TYPE in SHIP_TABLE -> regeneration modifier (aka 'sleep quality') */
@@ -1080,7 +1080,7 @@
 //#define SEA_TRAVEL_STR_HELLER           (0x7096)    /* char[10]; "%d^HELLER" */
 //#define SEA_TRAVEL_STR_NOTHING          (0x70a0)    /* char[7]; "NICHTS" */
 // ?1
-#define MARKET_DESCR_TABLE              (0x70a8)    /* struct(8)[34]; struct{short min_size,price_mod,market_day,size;} */
+//#define MARKET_DESCR_TABLE              (0x70a8)    /* struct(8)[34]; struct{short min_size,price_mod,market_day,size;} */
 //#define HYG_ANI_X0                      (0x71b8)    /* unsigned char[5] */
 //#define HYG_ANI_X1                      (0x71bd)    /* unsigned char */
 //#define HYG_ANI_X2                      (0x71be)    /* unsigned char */
@@ -1091,15 +1091,15 @@
 //#define HYG_ANI_X9                      (0x71c7)    /* unsigned char[3] */
 //#define TOWNS_CITYINDEX_TABLE           (0x71ca)    /* unsigned char[52] */
 //#define DASPOTA_LOCLOOT_INDEX           (0x71fe)    /* Bit8u*[18] */
-#define MAPVAL_TO_LOCTYPE               (0x7246)    /* unsigned char[12]; { 0, 15, 31, 63, 95, 127, 159, 175, 191, 207, 223, 239 } */
-#define SEG066_0BAD_UNKN0               (0x7252)    /* signed char[29] */
-#define SEG066_0BAD_UNKN1               (0x726f)    /* signed char[29] */
-#define SEG066_0BAD_UNKN2               (0x728c)    /* signed char[29] */
-#define SEG066_0BAD_UNKN3               (0x72a9)    /* signed char[29] */
-#define SEG066_0BAD_UNKN4               (0x72c6)    /* signed char[29] */
-#define SEG066_0BAD_UNKN5               (0x72e3)    /* signed char[29] */
-#define SEG066_0BAD_UNKN6               (0x7300)    /* signed char[29] */
-#define SEG066_0BAD_UNKN7               (0x731d)    /* signed char[29] */
+//#define MAPVAL_TO_LOCTYPE               (0x7246)    /* unsigned char[12]; { 0, 15, 31, 63, 95, 127, 159, 175, 191, 207, 223, 239 } */
+//#define SEG066_0BAD_UNKN0               (0x7252)    /* signed char[29] */
+//#define SEG066_0BAD_UNKN1               (0x726f)    /* signed char[29] */
+//#define SEG066_0BAD_UNKN2               (0x728c)    /* signed char[29] */
+//#define SEG066_0BAD_UNKN3               (0x72a9)    /* signed char[29] */
+//#define SEG066_0BAD_UNKN4               (0x72c6)    /* signed char[29] */
+//#define SEG066_0BAD_UNKN5               (0x72e3)    /* signed char[29] */
+//#define SEG066_0BAD_UNKN6               (0x7300)    /* signed char[29] */
+//#define SEG066_0BAD_UNKN7               (0x731d)    /* signed char[29] */
 //#define VISUAL_FIELD_OFFSETS_STD        (0x733a)    /* struct(4)[29]; struct{signed short x,y;} */
 //#define VISUAL_FIELD_OFFSETS_SIGN       (0x73ae)    /* struct(4)[29]; struct{signed short x,y;} */
 //#define VISUAL_FIELD_OFFSETS_INN        (0x7422)    /* struct(4)[29]; struct{signed short x,y;} */

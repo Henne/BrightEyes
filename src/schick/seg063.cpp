@@ -180,12 +180,12 @@ void do_harbor(void)
 
 					sprintf(g_dtp2,	get_tx(16),
 
-						get_tx(ds_readws(SEA_TRAVEL_TX_SHIP + 2 * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE))), /* Fischerboot, Schnellsegler etc. */
+						get_tx(g_sea_travel_tx_ship[host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE)]), /* Fischerboot, Schnellsegler etc. */
 						(char*)host_readds(psg_ptr + HARBOR_OPTION_SHIP_NAME_PTR),
 
 						(char*)(!host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TIMER) ? get_tx(5) : get_tx(6)), /* today or tomorrow */
 
-						get_tx(ds_readws(PASSAGE_TYPE_TO_NAME + 2 * ds_readbs(SHIP_TABLE + SHIP_TABLE_PASSAGE_TYPE + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE)))), /* Kabinenpassage etc. */
+						get_tx(g_passage_type_to_name[ds_readbs(SHIP_TABLE + SHIP_TABLE_PASSAGE_TYPE + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE))]), /* Kabinenpassage etc. */
 						get_ttx(host_readb(psg_ptr + HARBOR_OPTION_DESTINATION) + 235),
 #ifdef __BORLANDC__
 						get_passage_travel_hours(((struct sea_route*)host_readd(psg_ptr + HARBOR_OPTION_ROUTE_PTR))->distance, ds_readbs(SHIP_TABLE + SHIP_TABLE_BASE_SPEED + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE))),

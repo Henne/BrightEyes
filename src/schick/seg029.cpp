@@ -182,7 +182,7 @@ void draw_status_line(void)
 
 				/* load skull if hero is dead */
 				if (hero_dead(get_hero(i))) {
-					head_bak = ds_readw(LOADED_HEAD_ID);
+					head_bak = g_loaded_head_id;
 					load_in_head(41);
 				}
 
@@ -202,7 +202,7 @@ void draw_status_line(void)
 
 				/* load skull if hero is dead */
 				if (hero_dead(get_hero(i))) {
-					head_bak = ds_readw(LOADED_HEAD_ID);
+					head_bak = g_loaded_head_id;
 					load_in_head(41);
 				}
 

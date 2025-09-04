@@ -244,7 +244,7 @@ void do_citycamp(void)
 							g_fig_initiative = 1;
 							g_fig_discard = 1;
 
-							do_fight(ds_readws((DCAMPFIGHTS-2) + 2 * random_schick(4)));
+							do_fight(g_dcampfights[random_schick(4) - 1]);
 
 							if (g_game_state == GAME_STATE_MAIN) {
 								draw_main_screen();

@@ -965,7 +965,7 @@ signed short do_fight(signed short fight_id)
 	g_autofight = (g_fight_round = g_fig_all_heroes_withdrawn = 0);
 	/* set some vars to -1 */
 	g_fig_figure1 = g_fig_figure2 = -1;
-	ds_writew(FIGHT_FIGS_INDEX, -1);
+	g_fight_figs_index = -1;
 
 	g_request_refresh = 1;
 

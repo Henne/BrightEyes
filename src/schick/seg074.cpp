@@ -14,12 +14,7 @@
 #include "seg002.h"
 #include "seg004.h"
 #include "seg029.h"
-#if !defined(__BORLANDC__)
 #include "seg066.h"
-#else
-/* BC: only the same code is produced, when this prototype is known */
-signed short get_border_index(unsigned short);
-#endif
 #include "seg074.h"
 #include "seg097.h"
 #include "seg103.h"
@@ -241,9 +236,7 @@ void render_automap(signed short x_off)
 					/* in a town */
 
 					if (!(tile_type = get_maploc(x + x_off, y))) {
-						tile_type = get_border_index((g_dng_map_size == 16) ?
-										get_mapval_small(x, y) :
-										get_mapval_large(x + x_off, y));
+						tile_type = get_border_index((Bit16u)(g_dng_map_size == 16 ? get_mapval_small(x, y) : get_mapval_large(x + x_off, y)));
 					}
 
 					draw_automap_square(x, y,
@@ -588,12 +581,10 @@ signed short select_teleport_dest(void)
 
 	} while (done == 0);
 
-	l_di = (g_dng_map_size == 16) ?
-		get_mapval_small(g_automap_selx, g_automap_sely) :
-		get_mapval_large(g_automap_selx, g_automap_sely);
+	l_di = (g_dng_map_size == 16 ? get_mapval_small(g_automap_selx, g_automap_sely) : get_mapval_large(g_automap_selx, g_automap_sely));
 
 	if (gs_current_town != TOWNS_NONE) {
-		l_di = get_border_index(l_di);
+		l_di = get_border_index((Bit16u)l_di);
 	} else {
 		l_di = div16(l_di);
 	}

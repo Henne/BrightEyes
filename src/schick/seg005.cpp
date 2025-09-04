@@ -394,7 +394,7 @@ void draw_fight_screen(Bit16u val)
 
 	/* write TEMP/XX */
 	/* TODO: should be O_BINARY | O_WRONLY */
-	handle = _creat((char*)ds_readd(STR_TEMP_XX_PTR), 0);
+	handle = _creat(g_str_temp_xx_ptr, 0);
 	write(handle, g_buffer8_ptr, 64000);
 	close(handle);
 
@@ -994,7 +994,7 @@ to the DOSBox-CPU and may run the timer.
 
 	/* read TEMP/XX */
 	/* TODO: should be O_BINARY | O_RDONLY */
-	handle = open((char*)ds_readd(STR_TEMP_XX_PTR), 0);
+	handle = open(g_str_temp_xx_ptr, 0);
 	_read(handle, g_buffer8_ptr, 64000);
 	close(handle);
 
