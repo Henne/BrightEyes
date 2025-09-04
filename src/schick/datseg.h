@@ -1170,6 +1170,17 @@ extern const unsigned char g_automap_tile_cross[49];		//ds:0x7d4b; seg074
 extern signed short g_automap_selx;				//ds:0x7de5; seg074, seg099
 extern signed short g_automap_sely;				//ds:0x7de7; seg074, seg099
 
+extern unsigned char g_dng_stub3_unkn0[22];			//ds:0x907a; seg075
+extern unsigned char g_dng_stub3_unkn1[22];			//ds:0x9090; seg075
+extern unsigned char g_dng_stub3_unkn2[22];			//ds:0x90a6; seg075
+extern unsigned char g_dng_stub3_unkn3[22];			//ds:0x90bc; seg075
+extern unsigned char g_dng_stub3_unkn4[22];			//ds:0x90d2; seg075
+extern unsigned char g_dng_stub3_unkn5[22];			//ds:0x90e8; seg075
+extern unsigned char g_dng_stub3_unkn6[22];			//ds:0x90fe; seg075
+extern unsigned char g_dng_stub3_unkn7[22];			//ds:0x9114; seg075
+extern unsigned char g_dng_stub3_unkn8[22];			//ds:0x912a; seg075
+extern unsigned char g_dng_stub3_unkn9[22];			//ds:0x9140; seg075
+
 extern char g_dng_stub6_str_comma[3];			//ds:0x92cc; seg075
 extern char g_dng_stub6_str_and[6];			//ds:0x92cf; seg075
 extern signed short (*g_dng_handlers[15])(void);	//ds:0x92d6; seg076

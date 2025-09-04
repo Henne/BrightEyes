@@ -294,19 +294,19 @@ void DNG_stub3(void)
 
 		tmp = div16(g_visual_field_vals[i]);
 
-		g_visual_fields_tex[i] = (
-			(tmp == 6) ? ds_readb(DNG_STUB3_UNKN1 + i) :
-				(tmp == 5) ? ds_readb(DNG_STUB3_UNKN2 + i) :
-				(tmp == 3) ? ds_readb(DNG_STUB3_UNKN4 + i) :
-				(tmp == 4) ? ds_readb(DNG_STUB3_UNKN3 + i) :
-				(tmp == 7) ? ds_readb(DNG_STUB3_UNKN5 + i) :
-				(tmp == 1) ? ds_readb(DNG_STUB3_UNKN6 + i) :
-				(tmp == 2) ? ds_readb(DNG_STUB3_UNKN7 + i) :
-				(tmp == 9) ? ds_readb(DNG_STUB3_UNKN8 + i) :
-				(tmp == 8) ? ds_readb(DNG_STUB3_UNKN9 + i) :
-				(tmp == 10) ? ds_readb(DNG_STUB3_UNKN0 + i) :
-				(tmp == 11) ? ds_readb(DNG_STUB3_UNKN0 + i) :
-				(tmp != 15) ? -1 : ds_readb(DNG_STUB3_UNKN0 + i));
+		g_visual_fields_tex[i] =
+			(tmp == 6) ? g_dng_stub3_unkn1[i] :
+				(tmp == 5) ? g_dng_stub3_unkn2[i] :
+				(tmp == 3) ? g_dng_stub3_unkn4[i] :
+				(tmp == 4) ? g_dng_stub3_unkn3[i] :
+				(tmp == 7) ? g_dng_stub3_unkn5[i] :
+				(tmp == 1) ? g_dng_stub3_unkn6[i] :
+				(tmp == 2) ? g_dng_stub3_unkn7[i] :
+				(tmp == 9) ? g_dng_stub3_unkn8[i] :
+				(tmp == 8) ? g_dng_stub3_unkn9[i] :
+				(tmp == 10) ? g_dng_stub3_unkn0[i] :
+				(tmp == 11) ? g_dng_stub3_unkn0[i] :
+				(tmp != 15) ? -1 : g_dng_stub3_unkn0[i];
 	}
 }
 

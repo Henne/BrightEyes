@@ -1130,16 +1130,16 @@
 #define DNG_GFXTAB_WOOD                 (0x7dea)    /* struct(18)[88] */
 #define DNG_GFXTAB_STONE                (0x841a)    /* struct(18)[88] */
 #define DNG_GFXTAB_MARBLE               (0x8a4a)    /* struct(18)[88] */
-#define DNG_STUB3_UNKN0                 (0x907a)    /* unsigned char[22] */
-#define DNG_STUB3_UNKN1                 (0x9090)    /* unsigned char[22] */
-#define DNG_STUB3_UNKN2                 (0x90a6)    /* unsigned char[22] */
-#define DNG_STUB3_UNKN3                 (0x90bc)    /* unsigned char[22] */
-#define DNG_STUB3_UNKN4                 (0x90d2)    /* unsigned char[22] */
-#define DNG_STUB3_UNKN5                 (0x90e8)    /* unsigned char[22] */
-#define DNG_STUB3_UNKN6                 (0x90fe)    /* unsigned char[22] */
-#define DNG_STUB3_UNKN7                 (0x9114)    /* unsigned char[22] */
-#define DNG_STUB3_UNKN8                 (0x912a)    /* unsigned char[22] */
-#define DNG_STUB3_UNKN9                 (0x9140)    /* unsigned char[22] */
+//#define DNG_STUB3_UNKN0                 (0x907a)    /* unsigned char[22] */
+//#define DNG_STUB3_UNKN1                 (0x9090)    /* unsigned char[22] */
+//#define DNG_STUB3_UNKN2                 (0x90a6)    /* unsigned char[22] */
+//#define DNG_STUB3_UNKN3                 (0x90bc)    /* unsigned char[22] */
+//#define DNG_STUB3_UNKN4                 (0x90d2)    /* unsigned char[22] */
+//#define DNG_STUB3_UNKN5                 (0x90e8)    /* unsigned char[22] */
+//#define DNG_STUB3_UNKN6                 (0x90fe)    /* unsigned char[22] */
+//#define DNG_STUB3_UNKN7                 (0x9114)    /* unsigned char[22] */
+//#define DNG_STUB3_UNKN8                 (0x912a)    /* unsigned char[22] */
+//#define DNG_STUB3_UNKN9                 (0x9140)    /* unsigned char[22] */
 #define DNG_STUB4_UNKN0                 (0x9156)    /* signed short[44] */
 #define DNG_STUB4_UNKN1                 (0x91ae)    /* signed short[44] */
 #define DNG_STUB4_UNKN2                 (0x9206)    /* signed short[44] */
