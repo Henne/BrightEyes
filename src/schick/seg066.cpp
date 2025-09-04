@@ -566,11 +566,7 @@ void seg066_06c1(void)
 	}
 }
 
-#if !defined(__BORLANDC__)
-signed short get_border_index(unsigned short val)
-#else
 signed short get_border_index(unsigned char val)
-#endif
 {
 	signed short i;
 

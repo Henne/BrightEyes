@@ -236,7 +236,7 @@ void render_automap(signed short x_off)
 					/* in a town */
 
 					if (!(tile_type = get_maploc(x + x_off, y))) {
-						tile_type = get_border_index((Bit16u)(g_dng_map_size == 16 ? get_mapval_small(x, y) : get_mapval_large(x + x_off, y)));
+						tile_type = get_border_index((g_dng_map_size == 16 ? get_mapval_small(x, y) : get_mapval_large(x + x_off, y)));
 					}
 
 					draw_automap_square(x, y,
@@ -584,22 +584,19 @@ signed short select_teleport_dest(void)
 	l_di = (g_dng_map_size == 16 ? get_mapval_small(g_automap_selx, g_automap_sely) : get_mapval_large(g_automap_selx, g_automap_sely));
 
 	if (gs_current_town != TOWNS_NONE) {
-		l_di = get_border_index((Bit16u)l_di);
+		l_di = get_border_index(l_di);
 	} else {
 		l_di = div16(l_di);
 	}
 
 	ae_costs = 0;
 
-	if ((g_automap_selx == gs_x_target) &&
-		(g_automap_sely == gs_y_target))
+	if ((g_automap_selx == gs_x_target) && (g_automap_sely == gs_y_target))
 	{
 		ae_costs = 0;
 		host_writeb((Bit8u*)g_dtp2, 0);
 
-	} else if (((gs_dungeon_index != 0) && (l_di == 15)) ||
-			((gs_current_town != TOWNS_NONE) && (((l_di >= 2) && (l_di <= 5)) ||
-			(l_di == 6))))
+	} else if ((gs_dungeon_index && (l_di == 15)) || ((gs_current_town != TOWNS_NONE) && (((l_di >= 2) && (l_di <= 5)) || (l_di == 6))))
 	{
 		strcpy(g_dtp2, get_ttx(611));
 		ae_costs = -2;
