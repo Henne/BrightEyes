@@ -29,7 +29,7 @@ namespace M302de {
 void spell_adler(void)
 {
 	/* triggers the "spell failed" messages */
-	ds_writew(SPELL_SPECIAL_AECOST, -2);
+	g_spell_special_aecost = (-2);
 #if !defined(__BORLANDC__)
 	D1_INFO("Zauberspruch \"Adler, Wolf und Hammerhai\" ist nicht implementiert\n");
 #endif
@@ -93,7 +93,7 @@ void spell_armatrutz(void)
 	if (bonus != -1) {
 
 		pos = get_hero_index(get_spelluser());
-		ds_writew(SPELL_SPECIAL_AECOST, bonus * bonus);
+		g_spell_special_aecost = (bonus * bonus);
 		slot = get_free_mod_slot();
 		set_mod_slot(slot, MINUTES(5),
 			get_spelluser() + HERO_RS_BONUS1,
@@ -108,7 +108,7 @@ void spell_armatrutz(void)
 	} else {
 		/* spell canceled */
 		/* set AE to 0 */
-		ds_writew(SPELL_SPECIAL_AECOST, 0);
+		g_spell_special_aecost = (0);
 		/* avoid the textbox output */
 		*g_dtp2 = '\0';
 	}
@@ -129,7 +129,7 @@ void spell_inc_ch(void)
 	if (get_spelltarget() == get_spelluser()) {
 
 		/* set AP costs to 0 */
-		ds_writew(SPELL_SPECIAL_AECOST, 0);
+		g_spell_special_aecost = (0);
 
 		/* copy message text */
 		strcpy(g_dtp2,
@@ -182,7 +182,7 @@ void spell_feuerbann(void)
 			(char*)get_spelluser() + HERO_NAME2);
 	} else {
 		/* set AP costs to 0 */
-		ds_writew(SPELL_SPECIAL_AECOST, 0);
+		g_spell_special_aecost = (0);
 	}
 }
 
@@ -201,7 +201,7 @@ void spell_inc_ff(void)
 	if (get_spelltarget() == get_spelluser()) {
 
 		/* set AP costs to 0 */
-		ds_writew(SPELL_SPECIAL_AECOST, 0);
+		g_spell_special_aecost = (0);
 
 		/* copy message text */
 		strcpy(g_dtp2,
@@ -247,7 +247,7 @@ void spell_inc_ge(void)
 	if (get_spelltarget() == get_spelluser()) {
 
 		/* set AP costs to 0 */
-		ds_writew(SPELL_SPECIAL_AECOST, 0);
+		g_spell_special_aecost = (0);
 
 		/* copy message text */
 		strcpy(g_dtp2,
@@ -293,7 +293,7 @@ void spell_inc_in(void)
 	if (get_spelltarget() == get_spelluser()) {
 
 		/* set AP costs to 0 */
-		ds_writew(SPELL_SPECIAL_AECOST, 0);
+		g_spell_special_aecost = (0);
 
 		/* copy message text */
 		strcpy(g_dtp2,
@@ -339,7 +339,7 @@ void spell_inc_kk(void)
 	if (get_spelltarget() == get_spelluser()) {
 
 		/* set AP costs to 0 */
-		ds_writew(SPELL_SPECIAL_AECOST, 0);
+		g_spell_special_aecost = (0);
 
 		/* copy message text */
 		strcpy(g_dtp2,
@@ -385,7 +385,7 @@ void spell_inc_kl(void)
 	if (get_spelltarget() == get_spelluser()) {
 
 		/* set AP costs to 0 */
-		ds_writew(SPELL_SPECIAL_AECOST, 0);
+		g_spell_special_aecost = (0);
 
 		/* copy message text */
 		strcpy(g_dtp2,
@@ -431,7 +431,7 @@ void spell_inc_mu(void)
 	if (get_spelltarget() == get_spelluser()) {
 
 		/* set AP costs to 0 */
-		ds_writew(SPELL_SPECIAL_AECOST, 0);
+		g_spell_special_aecost = (0);
 
 		/* copy message text */
 		strcpy(g_dtp2,
@@ -465,7 +465,7 @@ void spell_inc_mu(void)
 void spell_mutabili(void)
 {
 	/* triggers the "spell failed" messages */
-	ds_writew(SPELL_SPECIAL_AECOST, -2);
+	g_spell_special_aecost = (-2);
 #if !defined(__BORLANDC__)
 	D1_INFO("Zauberspruch \"Mutabili\" ist nicht implementiert\n");
 #endif
@@ -495,7 +495,7 @@ void spell_paralue(void)
 			if (get_spelltarget() == get_spelluser()) {
 
 				/* never cast yourself */
-				ds_writew(SPELL_SPECIAL_AECOST, 0);
+				g_spell_special_aecost = (0);
 
 				strcpy(g_dtp2, get_tx(112));
 			} else {
@@ -506,7 +506,7 @@ void spell_paralue(void)
 			}
 		} else {
 			/* set AE to 0 */
-			ds_writew(SPELL_SPECIAL_AECOST, 0);
+			g_spell_special_aecost = (0);
 		}
 	}
 }
@@ -539,13 +539,13 @@ void spell_salander(void)
 		sprintf(g_dtp2, get_tx(104), (char*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 
 		/* set AE cost */
-		ds_writew(SPELL_SPECIAL_AECOST, ae_cost);
+		g_spell_special_aecost = (ae_cost);
 	} else {
 		/* prepare message */
 		sprintf(g_dtp2, get_ttx(607), (char*)(get_spelluser() + HERO_NAME2));
 
 		/* no AE cost */
-		ds_writew(SPELL_SPECIAL_AECOST, 0);
+		g_spell_special_aecost = (0);
 	}
 }
 
@@ -575,7 +575,7 @@ void spell_visibili(void)
 	if ((rounds <= 0) || (host_readb(get_spelluser() + HERO_INVISIBLE) != 0)) {
 
 		/* set AE to 0 */
-		ds_writew(SPELL_SPECIAL_AECOST, 0);
+		g_spell_special_aecost = (0);
 		/* clear output string */
 		*g_dtp2 = '\0';
 
@@ -585,7 +585,7 @@ void spell_visibili(void)
 	/* check if the hero has enough AE */
 	if (rounds * 5 <= host_readws(get_spelluser() + HERO_AE)) {
 
-		ds_writew(SPELL_SPECIAL_AECOST, rounds * 5);
+		g_spell_special_aecost = (rounds * 5);
 		pos = (signed short)get_hero_index(get_spelluser());
 		slot = get_free_mod_slot();
 		set_mod_slot(slot, (Bit32s)rounds * MINUTES(5), get_spelluser() + HERO_INVISIBLE, 1, (signed char)pos);
@@ -595,7 +595,7 @@ void spell_visibili(void)
 	} else {
 		sprintf(g_dtp2,	get_ttx(607), (char*)get_spelluser() + HERO_NAME2);
 
-		ds_writew(SPELL_SPECIAL_AECOST, 0);
+		g_spell_special_aecost = (0);
 	}
 
 }
@@ -632,7 +632,7 @@ void spell_brenne(void)
 	torch_pos = -1;
 	lantern_pos = -1;
 
-	ds_writew(SPELL_SPECIAL_AECOST, 0);
+	g_spell_special_aecost = (0);
 
 	if (g_light_type == LIGHTING_TORCH) {
 		torch_pos = get_item_pos(get_spelluser(), ITEM_TORCH_OFF);
@@ -678,7 +678,7 @@ void spell_brenne(void)
 		host_writeb(get_spelluser() + HERO_INVENTORY  + INVENTORY_LIGHTING_TIMER + torch_pos * SIZEOF_INVENTORY, 10);
 
 		/* set AP cost */
-		ds_writew(SPELL_SPECIAL_AECOST, random_schick(20));
+		g_spell_special_aecost = (random_schick(20));
 
 		/* prepare message */
 		sprintf(g_dtp2,
@@ -705,7 +705,7 @@ void spell_brenne(void)
 			give_hero_new_item(get_spelluser(), ITEM_FLASK_BRONZE, 0, 1);
 
 			/* set AP cost */
-			ds_writew(SPELL_SPECIAL_AECOST, random_schick(20));
+			g_spell_special_aecost = (random_schick(20));
 
 			/* prepare message */
 			sprintf(g_dtp2,
@@ -790,7 +790,7 @@ void spell_silentium(void)
 	}
 
 	/* set AP cost */
-	ds_writew(SPELL_SPECIAL_AECOST, 5);
+	g_spell_special_aecost = (5);
 
 	/* copy message text */
 	strcpy(g_dtp2,

@@ -75,7 +75,7 @@ Bit8u* GUI_names_grammar(signed short flag, signed short index, signed short typ
 
 
 	sprintf(g_grammar_bufs[g_grammar_buf_no],
-		(l2 == 0 ? (char*)ds_readd(STR_S_S_PTR) : (char*)ds_readd(STR_VON_S_S_PTR)),
+		(l2 == 0 ? g_str_s_s_ptr : g_str_von_s_s_ptr),
 		g_grammar_articles_index[host_readws((Bit8u*)lp1 + 2 * (((flag & 0x3000) - 1) >> 12))],
 		(char*)GUI_name_plural(flag, p_name));
 

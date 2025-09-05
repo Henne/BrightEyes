@@ -1180,7 +1180,11 @@ extern unsigned char g_dng_stub3_unkn6[22];			//ds:0x90fe; seg075
 extern unsigned char g_dng_stub3_unkn7[22];			//ds:0x9114; seg075
 extern unsigned char g_dng_stub3_unkn8[22];			//ds:0x912a; seg075
 extern unsigned char g_dng_stub3_unkn9[22];			//ds:0x9140; seg075
-
+extern struct struct_point g_dng_stub4_unkn0[22];		//ds:0x9156; seg075
+extern struct struct_point g_dng_stub4_unkn1[22];		//ds:0x91ae; seg075
+extern struct struct_point g_dng_stub4_unkn2[22];		//ds:0x9206; seg075
+extern struct struct_point g_dng_stub4_unkn3[22];		//ds:0x925e; seg075
+extern signed char g_dng_stub4_unkn4[22];			//ds:0x92b6; seg075
 extern char g_dng_stub6_str_comma[3];			//ds:0x92cc; seg075
 extern char g_dng_stub6_str_and[6];			//ds:0x92cf; seg075
 extern signed short (*g_dng_handlers[15])(void);	//ds:0x92d6; seg076
@@ -1217,6 +1221,8 @@ extern char g_grammar_article_dem[4];		//ds:0xa8e8; seg096
 
 extern char *g_grammar_articles_index[15];	//ds:0xa917; seg096
 
+extern char *g_str_s_s_ptr;			//ds:0xabe3; seg096
+extern char *g_str_von_s_s_ptr;			//ds:0xabe7; seg096
 extern signed short g_grammar_buf_no;		//ds:0xa9eb; seg096
 
 extern char g_grammar_pronouns_er[3];		//ds:0xa9f3; seg096
@@ -1228,6 +1234,10 @@ extern char g_grammar_pronouns_ihm[4];		//ds:0xaa0a; seg096
 
 extern char *g_grammar_pronouns_index[7];	//ds:0xaa14; seg096
 extern const signed char g_grammar_pronouns_table2[33];	//ds:0xaa30; seg096
+
+
+extern signed short g_gui_bool_flag;		// ds:0xac0b; seg097
+extern signed short g_spell_special_aecost;	// ds:0xac0e; seg098, seg099, seg100, seg101
 
 extern unsigned char *g_hexenknoten_gfx_buf;	// ds:0xacc8; seg100
 extern signed short g_monster_spell_ae_cost;	// ds:0xaccc; seg102

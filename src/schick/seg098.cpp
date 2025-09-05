@@ -830,7 +830,7 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 				g_spelluser = hero;
 
 				ae_cost = get_spell_cost(spell_id, 0); /* spell successful -> full AE cost */
-				ds_writew(SPELL_SPECIAL_AECOST, -1);
+				g_spell_special_aecost = (-1);
 
 				*g_dtp2 = '\0';
 
@@ -847,19 +847,19 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 
 				retval = 1;
 
-				if (ds_readws(SPELL_SPECIAL_AECOST) == 0) {
+				if (g_spell_special_aecost == 0) {
 					retval = -1;
 
 					if (!(*g_dtp2)) {
 						strcpy(g_dtp2, get_ttx(606));
 					}
-				} else if (ds_readws(SPELL_SPECIAL_AECOST) == -2) {
+				} else if (g_spell_special_aecost == -2) {
 
 					strcpy(g_dtp2, get_ttx(606));
 					sub_ae_splash(hero, get_spell_cost(spell_id, 1));
 					retval = 0;
-				} else if (ds_readws(SPELL_SPECIAL_AECOST) != -1) {
-					sub_ae_splash(hero, ds_readws(SPELL_SPECIAL_AECOST));
+				} else if (g_spell_special_aecost != -1) {
+					sub_ae_splash(hero, g_spell_special_aecost);
 				} else {
 					sub_ae_splash(hero, ae_cost);
 				}

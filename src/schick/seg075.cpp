@@ -43,7 +43,7 @@ void DNG_floor_ceil(void)
 
 	/* Load ceiling */
 	nvf.dst = g_renderbuf_ptr;
-	nvf.src = (Bit8u*)g_buffer9_ptr3;
+	nvf.src = g_buffer9_ptr3;
 	nvf.no = 0;
 	nvf.type = !g_dng_floor_tex ? 3 : 5;
 	nvf.width = (unsigned char*)&width;
@@ -52,8 +52,8 @@ void DNG_floor_ceil(void)
 
 
 	/* Load ceiling */
-	nvf.dst = ((Bit8u*)g_renderbuf_ptr) + 0x4030;
-	nvf.src = (Bit8u*)g_buffer9_ptr3;
+	nvf.dst = g_renderbuf_ptr + 0x4030;
+	nvf.src = g_buffer9_ptr3;
 	nvf.no = (!(gs_direction&1)) ? 1 : 2;
 	nvf.type = !g_dng_floor_tex ? 3 : 5;
 	nvf.width = (unsigned char*)&width;
@@ -332,7 +332,7 @@ void DNG_draw_walls(signed short a1, signed short a2, signed short a3)
 		}
 	}
 
-	nvf.dst = dst_ptr = ((Bit8u*)g_renderbuf_ptr) + 0x7530;
+	nvf.dst = dst_ptr = g_renderbuf_ptr + 0x7530;
 	nvf.src = (Bit8u*)g_buffer9_ptr3;
 	nvf.no = a3;
 	nvf.width = (Bit8u*)&width;
@@ -371,7 +371,7 @@ void DNG_draw_walls(signed short a1, signed short a2, signed short a3)
 			height2 = 135 - a2;
 		}
 
-		ptr2 = ((Bit8u*)g_renderbuf_ptr) + 208 * a2 + a1;
+		ptr2 = g_renderbuf_ptr + 208 * a2 + a1;
 
 		if (!flag) {
 			copy_solid(ptr2, dst_ptr, width2, height2, 208, width, 128);
@@ -388,61 +388,56 @@ void DNG_stub4(void)
 	signed char l3;
 	unsigned char l4;
 	unsigned char l5;
-	Bit8u *ptr;
+	/* REMARK: not sure if (x.y) is the correct terminology here */
+	struct struct_point *ptr;
 
 	signed short i;
 	signed short j;
 
 	for (i = 0; i < 22; i++) {
 
-		l3 = ds_readbs(DNG_STUB4_UNKN4 + i);
+		l3 = g_dng_stub4_unkn4[i];
 
 		l5 = g_visual_field_vals[l3];
 
 		l4 = (unsigned char)div16(l5);
 
-		ptr = (l4 == 6) ? (Bit8u*)((p_datseg + 4 * l3)) + DNG_STUB4_UNKN2 :
-			(l4 == 5) ? p_datseg + DNG_STUB4_UNKN3 + l3 * 4 :
-			(l4 == 4) ? p_datseg + DNG_STUB4_UNKN1 + l3 * 4 :
-			(l4 == 3) ? p_datseg + DNG_STUB4_UNKN1 + l3 * 4 : p_datseg + DNG_STUB4_UNKN0 + l3 * 4;
+		ptr = (l4 == 6) ? &g_dng_stub4_unkn2[l3] :
+			(l4 == 5) ? &g_dng_stub4_unkn3[l3] :
+			(l4 == 4) ? &g_dng_stub4_unkn1[l3] :
+			(l4 == 3) ? &g_dng_stub4_unkn1[l3] : &g_dng_stub4_unkn0[l3];
 
 
-		l1 = host_readws(ptr);
-		l2 = host_readws(ptr + 2);
+		l1 = ptr[0].x;
+		l2 = ptr[0].y;
 
 		l3 = g_visual_fields_tex[l3];
 
 		if (l3 != -1) {
 
-			ptr = g_dng_gfxtab + (l3 - 1) * 18;
+			ptr = (struct struct_point*)(g_dng_gfxtab + (l3 - 1) * 18);
 
-			if ((j = host_readws(ptr + 4)) != -1) {
+			if ((j = ptr[1].x) != -1) {
 
-				if ((j & 0x4000) &&
-					((((l5 & 3) + 2) & 3) != gs_direction))
-				{
+				if ((j & 0x4000) && ((((l5 & 3) + 2) & 3) != gs_direction)) {
 				} else {
-					DNG_draw_walls(l1 + host_readws(ptr), l2 + host_readws(ptr + 2), j);
+					DNG_draw_walls(l1 + ptr[0].x, l2 + ptr[0].y, j);
 				}
 			}
 
-			if ((j = host_readws(ptr + 0xa)) != -1) {
+			if ((j = ptr[2].y) != -1) {
 
-				if ((j & 0x4000) &&
-					((((l5 & 3) + 2) & 3) != gs_direction))
-				{
+				if ((j & 0x4000) && ((((l5 & 3) + 2) & 3) != gs_direction)) {
 				} else {
-					DNG_draw_walls(l1 + host_readws(ptr + 6), l2 + host_readws(ptr + 8), j);
+					DNG_draw_walls(l1 + ptr[1].y, l2 + ptr[2].x, j);
 				}
 			}
 
-			if ((j = host_readws(ptr + 0x10)) != -1) {
+			if ((j = ptr[4].x) != -1) {
 
-				if ((j & 0x4000) &&
-					((((l5 & 3) + 2) & 3) != gs_direction))
-				{
+				if ((j & 0x4000) && ((((l5 & 3) + 2) & 3) != gs_direction)) {
 				} else {
-					DNG_draw_walls(l1 + host_readws(ptr + 0x0c), l2 + host_readws(ptr + 0x0e), j);
+					DNG_draw_walls(l1 + ptr[3].x, l2 + ptr[3].y, j);
 				}
 			}
 		}
@@ -535,13 +530,13 @@ void DNG_lights(void)
 
 		for (i = 0; i < 0xc0; i++) {
 
-			l2 = host_readbs((Bit8u*)g_text_output_buf + i) - l1;
+			l2 = g_text_output_buf[i] - l1;
 
 			if (l2 < 0) {
 				l2 = 0;
 			}
 
-			host_writeb((Bit8u*)g_text_output_buf + i, l2);
+			g_text_output_buf[i] = l2;
 		}
 
 		wait_for_vsync();
@@ -575,7 +570,7 @@ void DNG_timestep(signed short forward)
 		gs_dungeon_index = DUNGEONS_NONE;
 
 		/* exit game */
-		g_game_state = (GAME_STATE_DEAD);
+		g_game_state = GAME_STATE_DEAD;
 	}
 
 	if (g_game_state == GAME_STATE_MAIN) {
@@ -658,12 +653,12 @@ void DNG_open_door(void)
 
 	DNG_floor_ceil();
 	move();
-	g_visual_field_vals[5] = (32);
+	g_visual_field_vals[5] = 32;
 	DNG_turn();
 	DNG_stub3();
 	DNG_stub4();
 
-	memmove(((Bit8u*)g_renderbuf_ptr) + 0x7530, g_renderbuf_ptr, 0x6db0);
+	memmove((Bit8u*)g_renderbuf_ptr + 0x7530, g_renderbuf_ptr, 0x6db0);
 
 	if (!gs_dungeon_gfx_style) {
 		x = 45;
@@ -689,7 +684,7 @@ void DNG_open_door(void)
 
 		DNG_stub5();
 
-		memmove(g_renderbuf_ptr, ((Bit8u*)g_renderbuf_ptr) + 0x7530, 0x6db0);
+		memmove(g_renderbuf_ptr, g_renderbuf_ptr + 30000, 28080);
 	}
 
 	refresh_screen_size();
@@ -708,7 +703,7 @@ void DNG_close_door(void)
 	DNG_stub3();
 	DNG_stub4();
 
-	memmove(((Bit8u*)g_renderbuf_ptr) + 0x7530, g_renderbuf_ptr, 0x6db0);
+	memmove(g_renderbuf_ptr + 30000, g_renderbuf_ptr, 28080);
 
 	if (!gs_dungeon_gfx_style) { /* dungeon graphics: wood */
 		x = 45;
@@ -734,7 +729,7 @@ void DNG_close_door(void)
 
 		DNG_stub5();
 
-		memmove(g_renderbuf_ptr, ((Bit8u*)g_renderbuf_ptr) + 0x7530, 0x6db0);
+		memmove(g_renderbuf_ptr, g_renderbuf_ptr + 30000, 28080);
 	}
 
 	refresh_screen_size();
@@ -751,16 +746,15 @@ void DNG_stub6(void)
 
 	play_voc(ARCHIVE_FILE_FX18_VOC);
 
-	if (gs_dungeon_light != 0) {
+	if (gs_dungeon_light) {
 
 		if (DNG_fallpit(6)) {
-			gs_x_target = (gs_x_target_bak);
-			gs_y_target = (gs_y_target_bak);
+			gs_x_target = gs_x_target_bak;
+			gs_y_target = gs_y_target_bak;
 		}
 	} else {
 
-		if (((l_si = DNG_check_climb_tools()) != -1) &&
-			((l_di = count_heroes_available_in_group()) > 1))
+		if (((l_si = DNG_check_climb_tools()) != -1) && ((l_di = count_heroes_available_in_group()) > 1))
 		{
 
 			/* ropes oder staff */
@@ -777,19 +771,13 @@ void DNG_stub6(void)
 
 				hero2 = (Bit8u*)get_second_hero_available_in_group();
 
-				sprintf(g_text_output_buf,
-					get_ttx(769),
-					hero1 + HERO_NAME2,
-					hero2 + HERO_NAME2);
+				sprintf(g_text_output_buf, get_ttx(769), hero1 + HERO_NAME2, hero2 + HERO_NAME2);
 
 				strcat(g_dtp2, g_text_output_buf);
 
 				if (test_attrib(hero1, ATTRIB_GE, 2) <= 0) {
 
-					sprintf(g_text_output_buf, get_ttx(770),
-						hero1 + HERO_NAME2,
-						hero2 + HERO_NAME2,
-						l_si = random_schick(3) + 1);
+					sprintf(g_text_output_buf, get_ttx(770), hero1 + HERO_NAME2, hero2 + HERO_NAME2, l_si = random_schick(3) + 1);
 
 					strcat(g_dtp2, g_text_output_buf);
 
@@ -809,7 +797,7 @@ void DNG_stub6(void)
 						l_si++;
 					}
 
-					strcat(g_dtp2, (char*)(get_hero(l_si++) + HERO_NAME2));
+					strcat(g_dtp2, (char*)get_hero(l_si++) + HERO_NAME2);
 
 					if (--l_di) {
 
@@ -1005,15 +993,15 @@ mark2:			   goto mark1;
 
 	if (dungeon_id == DUNGEONS_ZWINGFESTE) {
 
-		ptr = ((Bit8u*)g_renderbuf_ptr) + 0x1f4;
+		ptr = g_renderbuf_ptr + 0x1f4;
 		memset(g_renderbuf_ptr, 0, 0x120);
-		memcpy(((Bit8u*)g_renderbuf_ptr) + 0x1f4, gs_palette_floor, 0x120);
+		memcpy(g_renderbuf_ptr + 0x1f4, gs_palette_floor, 0x120);
 
 		for (i = 0; i < 0x40; i++) {
 
-			pal_fade(ptr, ((Bit8u*)g_renderbuf_ptr));
-			pal_fade(ptr + 0x60, ((Bit8u*)g_renderbuf_ptr) + 0x60);
-			pal_fade(ptr + 0xc0, ((Bit8u*)g_renderbuf_ptr) + 0xc0);
+			pal_fade(ptr, g_renderbuf_ptr);
+			pal_fade(ptr + 0x60, g_renderbuf_ptr + 0x60);
+			pal_fade(ptr + 0xc0, g_renderbuf_ptr + 0xc0);
 
 			wait_for_vsync();
 
@@ -1021,7 +1009,7 @@ mark2:			   goto mark1;
 			set_palette(ptr + 0x60, 0x80, 0x40);
 		}
 
-		do_fill_rect(((Bit8u*)g_renderbuf_ptr), 0, 0, 319, 199, 0);
+		do_fill_rect(g_renderbuf_ptr, 0, 0, 319, 199, 0);
 		g_pic_copy.x1 = 0;
 		g_pic_copy.y1 = 0;
 		g_pic_copy.x2 = 240;

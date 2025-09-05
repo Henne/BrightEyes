@@ -431,10 +431,11 @@ signed short GUI_bool(char *text)
 {
 	signed short ret_radio;
 
-	ds_writew(GUI_BOOL_FLAG, 1);
+	g_gui_bool_flag = 1;
 
 	ret_radio = GUI_radio(text, 2, get_ttx(2), get_ttx(3));
-	ds_writew(GUI_BOOL_FLAG, 0);
+
+	g_gui_bool_flag = 0;
 
 	return (ret_radio == 1) ? 1 : 0;
 }
@@ -675,8 +676,9 @@ signed short GUI_menu_input(signed short positions, signed short h_lines, signed
 				g_menu_selected = ((l2 - l1) >> 3) + 1;
 			}
 
-			if (ds_readw(GUI_BOOL_FLAG) != 0) {
-				/* in yes-no-mode, answer "Ja" (yes) can be selected with the 'J' key, and answer "Nein" (no) can be selected with the 'N' key. */
+			if (g_gui_bool_flag) {
+				/* in yes-no-mode, answer "Ja" (yes) can be selected with the 'J' key,
+				 * and answer "Nein" (no) can be selected with the 'N' key. */
 				if (g_action == ACTION_ID_J) {
 					retval = done = 1;
 				} else if (g_action == ACTION_ID_N) {

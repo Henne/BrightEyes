@@ -231,7 +231,7 @@ void spell_hexenknoten(void)
 	struct nvf_desc nvf;
 
 	if (g_fightobj_buf_freespace < 0x240L) {
-		ds_writew(SPELL_SPECIAL_AECOST, -2);
+		g_spell_special_aecost = (-2);
 		return;
 	}
 
@@ -253,7 +253,7 @@ void spell_hexenknoten(void)
 	}
 
 	if (get_cb_val(x, y) != 0) {
-		ds_writew(SPELL_SPECIAL_AECOST, -2);
+		g_spell_special_aecost = (-2);
 		return;
 	}
 
@@ -323,7 +323,7 @@ void spell_blitz(void)
 
 		if (get_spelltarget() == get_spelluser()) {
 
-			ds_writew(SPELL_SPECIAL_AECOST, 0);
+			g_spell_special_aecost = (0);
 
 			strcpy(g_dtp2, get_tx(112));
 		} else {
@@ -362,7 +362,7 @@ void spell_ecliptifactus(void)
 
 		if (host_readws(get_spelluser() + HERO_AE) >= ae) {
 			/* set AP costs */
-			ds_writew(SPELL_SPECIAL_AECOST, ae);
+			g_spell_special_aecost = (ae);
 			/* enable the spell */
 			host_writeb(get_spelluser() + HERO_ECLIPTIFACTUS, (signed char)rounds + 1);
 			/* prepare the message */
@@ -372,10 +372,10 @@ void spell_ecliptifactus(void)
 			/* prepare the message */
 			sprintf(g_dtp2, get_ttx(607), (char*)get_spelluser() + HERO_NAME2);
 			/* set costs to 0 */
-			ds_writew(SPELL_SPECIAL_AECOST, 0);
+			g_spell_special_aecost = (0);
 		}
 	} else {
-		ds_writew(SPELL_SPECIAL_AECOST, -2);
+		g_spell_special_aecost = (-2);
 	}
 }
 
@@ -391,7 +391,7 @@ void spell_eisenrost(void)
 
 		if (get_spelltarget() == get_spelluser()) {
 
-			ds_writew(SPELL_SPECIAL_AECOST, 0);
+			g_spell_special_aecost = (0);
 
 			strcpy(g_dtp2, get_tx(112));
 		} else {
@@ -400,7 +400,7 @@ void spell_eisenrost(void)
 
 			if (!id) {
 				/* no weapon in hand */
-				ds_writew(SPELL_SPECIAL_AECOST, -2);
+				g_spell_special_aecost = (-2);
 			} else {
 				/* check if weapon is already broken */
 				if (inventory_broken(get_spelltarget() + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY)) {
@@ -416,7 +416,7 @@ void spell_eisenrost(void)
 							GUI_names_grammar((signed short)0x8000, id, 0),
 							(char*)(get_spelltarget() + HERO_NAME2));
 					} else {
-						ds_writew(SPELL_SPECIAL_AECOST, -2);
+						g_spell_special_aecost = (-2);
 					}
 				}
 			}
@@ -455,7 +455,7 @@ void spell_fulminictus(void)
 		/* do not attack yourself */
 
 		/* set costs to 0 */
-		ds_writew(SPELL_SPECIAL_AECOST, 0);
+		g_spell_special_aecost = (0);
 
 		/* prepare message */
 		strcpy(g_dtp2, get_tx(112));
@@ -476,7 +476,7 @@ void spell_fulminictus(void)
 		FIG_do_spell_damage(damage);
 
 		/* set costs to damage AE */
-		ds_writew(SPELL_SPECIAL_AECOST, damage);
+		g_spell_special_aecost = (damage);
 	}
 }
 
@@ -495,7 +495,7 @@ void spell_ignifaxius(void)
 		if (get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1) == get_spelluser()) {
 
 			/* don't attack yourself */
-			ds_writew(SPELL_SPECIAL_AECOST, 0);
+			g_spell_special_aecost = (0);
 
 			/* prepare message */
 			strcpy(g_dtp2, get_tx(112));
@@ -516,7 +516,7 @@ void spell_ignifaxius(void)
 			/* abort */
 			/* terminate string */
 			*g_dtp2 = '\0';
-			ds_writew(SPELL_SPECIAL_AECOST, 0);
+			g_spell_special_aecost = (0);
 			return;
 		}
 
@@ -610,7 +610,7 @@ void spell_ignifaxius(void)
 	}
 
 	/* set spell costs */
-	ds_writew(SPELL_SPECIAL_AECOST, damage);
+	g_spell_special_aecost = (damage);
 }
 
 void spell_plumbumbarum(void)
@@ -630,7 +630,7 @@ void spell_plumbumbarum(void)
 		if (get_spelltarget() == get_spelluser()) {
 
 			/* don't attack yourself */
-			ds_writew(SPELL_SPECIAL_AECOST, 0);
+			g_spell_special_aecost = (0);
 
 			/* prepare message */
 			strcpy(g_dtp2, get_tx(112));
@@ -703,7 +703,7 @@ void spell_saft_kraft(void)
 		get_spelltarget() + HERO_SAFTKRAFT, 5, (signed char)target);
 
 	/* set ae costs */
-	ds_writew(SPELL_SPECIAL_AECOST, rounds);
+	g_spell_special_aecost = (rounds);
 
 #ifdef M302de_ORIGINAL_BUGFIX
 	char *p = get_tx(96);

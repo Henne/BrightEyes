@@ -1140,11 +1140,11 @@
 //#define DNG_STUB3_UNKN7                 (0x9114)    /* unsigned char[22] */
 //#define DNG_STUB3_UNKN8                 (0x912a)    /* unsigned char[22] */
 //#define DNG_STUB3_UNKN9                 (0x9140)    /* unsigned char[22] */
-#define DNG_STUB4_UNKN0                 (0x9156)    /* signed short[44] */
-#define DNG_STUB4_UNKN1                 (0x91ae)    /* signed short[44] */
-#define DNG_STUB4_UNKN2                 (0x9206)    /* signed short[44] */
-#define DNG_STUB4_UNKN3                 (0x925e)    /* signed short[44] */
-#define DNG_STUB4_UNKN4                 (0x92b6)    /* signed char[22] */
+//#define DNG_STUB4_UNKN0                 (0x9156)    /* signed short[44] */
+//#define DNG_STUB4_UNKN1                 (0x91ae)    /* signed short[44] */
+//#define DNG_STUB4_UNKN2                 (0x9206)    /* signed short[44] */
+//#define DNG_STUB4_UNKN3                 (0x925e)    /* signed short[44] */
+//#define DNG_STUB4_UNKN4                 (0x92b6)    /* signed char[22] */
 //#define DNG_STUB6_STR_COMMA             (0x92cc)    /* char[3]; ", " */
 //#define DNG_STUB6_STR_AND               (0x92cf)    /* char[6]; " UND " */
 // ?1
@@ -1212,8 +1212,8 @@
 #define GRAMMAR_DEF_TABLE               (0xa953)    /* short[24]; [8], by case, then by gender */
 #define GRAMMAR_INDEF_TABLE             (0xa983)    /* short[24]; [8], by case, then by gender */
 #define GRAMMAR_NOARTICLE_TABLE         (0xa9b3)    /* short[24]; [8], by case, then by gender */
-#define STR_S_S_PTR                     (0xa9e3)    /* Bit8u*; to STR_S_S */
-#define STR_VON_S_S_PTR                 (0xa9e7)    /* Bit8u*; to STR_VON_S_S */
+//#define STR_S_S_PTR                     (0xa9e3)    /* Bit8u*; to STR_S_S */
+//#define STR_VON_S_S_PTR                 (0xa9e7)    /* Bit8u*; to STR_VON_S_S */
 //#define GRAMMAR_BUF_NO                  (0xa9eb)    /* unsigned short */
 #define GRAMMAR_GENDER_BITMASKS         (0xa9ed)    /* signed short[3]; {0x1000, 0x2000, 0x3000} */
 //#define GRAMMAR_PRONOUNS_ER             (0xa9f3)    /* char[3]; "ER" */
@@ -1227,13 +1227,13 @@
 //#define GRAMMAR_PRONOUNS_INDEX          (0xaa14)    /* Bit8u*[7] */
 //#define GRAMMAR_PRONOUNS_TABLE2         (0xaa30)    /* unsigned char[33]; by gender and ?? */
 #define GUI_CHAR_WIDTH                  (0xaa51)    /* struct(3)[75]; struct{char c, font_id, width;} */
-#define STR_S_S                         (0xab32)    /* char[6]; "%s %s" */
-#define STR_VON_S_S                     (0xab38)    /* char[9]; "VON%s %s" */
+//#define STR_S_S                         (0xab32)    /* char[6]; "%s %s" */
+//#define STR_VON_S_S                     (0xab38)    /* char[9]; "VON%s %s" */
 // ?1
 #define GUI_CHAR_HEIGHT                 (0xab42)    /* struct(3)[67]; struct{char c, font_id, height;} */
-#define GUI_BOOL_FLAG                   (0xac0b)    /* unsigned short; {0,1} */
+//#define GUI_BOOL_FLAG                   (0xac0b)    /* unsigned short; {0,1} */
 // ?1
-#define SPELL_SPECIAL_AECOST            (0xac0e)    /* signed short */
+//#define SPELL_SPECIAL_AECOST            (0xac0e)    /* signed short */
 #define ANI_HEAL_PICSTARS               (0xac10)    /* signed short[5]; { 0, 1, 2, 1, 0 } */
 #define SPELL_SELECT_STR_KEYVAL         (0xac1a)    /* char[6]; "%s~%d" */
 #define SPELL_SELECT_STR_KEY            (0xac20)    /* char[5]; "\xf2%s\xf0" */

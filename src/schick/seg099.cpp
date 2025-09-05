@@ -41,16 +41,16 @@ void spell_beherrschung(void)
 	g_spelltarget = get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
 
 	if (!hero_renegade(get_spelltarget())) {
-		ds_writew(SPELL_SPECIAL_AECOST, -2);
+		g_spell_special_aecost = (-2);
 	} else {
 		if (get_spelltarget() == get_spelluser()) {
 			strcpy(g_dtp2, get_tx(0));
-			ds_writew(SPELL_SPECIAL_AECOST, 0);
+			g_spell_special_aecost = (0);
 		} else {
-			ds_writew(SPELL_SPECIAL_AECOST, random_interval(2, 5) * 4);
+			g_spell_special_aecost = (random_interval(2, 5) * 4);
 
-			if (host_readws(get_spelluser() + HERO_AE) < ds_readws(SPELL_SPECIAL_AECOST)) {
-				ds_writew(SPELL_SPECIAL_AECOST, -2);
+			if (host_readws(get_spelluser() + HERO_AE) < g_spell_special_aecost) {
+				g_spell_special_aecost = (-2);
 			} else {
 				and_ptr_bs(get_spelltarget() + HERO_FLAGS1, 0xdf); /* unset 'renegade' flag */
 				sprintf(g_dtp2,	get_tx(1), (char*)get_spelltarget() + HERO_NAME2);
@@ -64,7 +64,7 @@ void spell_destructibo(void)
 #if !defined(__BORLANDC__)
         D1_INFO("Zauberspruch \"Destructibo\" ist nicht implementiert\n");
 #endif
-	ds_writew(SPELL_SPECIAL_AECOST, -2);
+	g_spell_special_aecost = (-2);
 }
 
 void spell_gardanium(void)
@@ -89,17 +89,17 @@ void spell_gardanium(void)
 
 			gs_gardanium_used_ae += answer;
 			/* set AE costs */
-			ds_writew(SPELL_SPECIAL_AECOST, answer);
+			g_spell_special_aecost = (answer);
 			/* prepare the message */
 			strcpy(g_dtp2, get_tx(7));
 		} else {
 			/* not enough AE */
 			sprintf(g_dtp2, get_ttx(607), (char*)get_spelluser() + HERO_NAME2);
 			/* set AE costs */
-			ds_writew(SPELL_SPECIAL_AECOST, 0);
+			g_spell_special_aecost = 0;
 		}
 	} else {
-		ds_writew(SPELL_SPECIAL_AECOST, 0);
+		g_spell_special_aecost = 0;
 	}
 }
 
@@ -112,16 +112,16 @@ void spell_illusionen(void)
 	if (g_spelltarget_e->flags.illusion) {
 
 		/* AEcosts = enemy level - spelluser_level */
-		ds_writew(SPELL_SPECIAL_AECOST,	(g_spelltarget_e->level - host_readbs(get_spelluser() + HERO_LEVEL)) * 2);
+		g_spell_special_aecost = (g_spelltarget_e->level - host_readbs(get_spelluser() + HERO_LEVEL)) * 2;
 
 		/* AEcost are at least 5 */
-		if (ds_readws(SPELL_SPECIAL_AECOST) < 5)
-			ds_writew(SPELL_SPECIAL_AECOST, 5);
+		if (g_spell_special_aecost < 5)
+			g_spell_special_aecost = 5;
 
 		/* check if spelluser has enough AE */
-		if (host_readws(get_spelluser() + HERO_AE) < ds_readws(SPELL_SPECIAL_AECOST)) {
+		if (host_readws(get_spelluser() + HERO_AE) < g_spell_special_aecost) {
 			/* NO: spell has no effect */
-			ds_writew(SPELL_SPECIAL_AECOST, -2);
+			g_spell_special_aecost = -2;
 		} else {
 			/* YES: spell has effect */
 			g_spell_illusionen = 1;
@@ -133,7 +133,7 @@ void spell_illusionen(void)
 		sprintf(g_dtp2,	get_tx(3), GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 
 		/* costs 2 AE */
-		ds_writew(SPELL_SPECIAL_AECOST, 2);
+		g_spell_special_aecost = 2;
 	}
 }
 
@@ -147,12 +147,12 @@ void spell_verwandlung(void)
 	if (hero_petrified(get_spelltarget())) {
 
 		/* set AEcosts */
-		ds_writew(SPELL_SPECIAL_AECOST, random_schick(10) * 5);
+		g_spell_special_aecost = random_schick(10) * 5;
 
 		/* check if spelluser has enough AE */
-		if (host_readws(get_spelluser() + HERO_AE) < ds_readws(SPELL_SPECIAL_AECOST)) {
+		if (host_readws(get_spelluser() + HERO_AE) < g_spell_special_aecost) {
 			/* NO: spell has no effect */
-			ds_writew(SPELL_SPECIAL_AECOST, -2);
+			g_spell_special_aecost = -2;
 		} else {
 			/* YES: spell has effect */
 			/* unset petrified bit */
@@ -176,7 +176,7 @@ void spell_verwandlung(void)
 #endif
 
 			sprintf(g_dtp2,	get_tx(5), (char*)get_spelltarget() + HERO_NAME2);
-			ds_writew(SPELL_SPECIAL_AECOST, 0);
+			g_spell_special_aecost = 0;
 		}
 	}
 }
@@ -199,7 +199,7 @@ void spell_band(void)
 
 		if (g_spelltarget_e->gfx_id == 0x1c) {
 			/* does not work on skeletons */
-			ds_writew(SPELL_SPECIAL_AECOST, -2);
+			g_spell_special_aecost = -2;
 			return;
 		}
 
@@ -217,7 +217,7 @@ void spell_band(void)
 			/* don't cast yourself */
 
 			/* set AE costs */
-			ds_writew(SPELL_SPECIAL_AECOST, 0);
+			g_spell_special_aecost = 0;
 
 			/* prepare message */
 			strcpy(g_dtp2, get_tx(112));
@@ -236,17 +236,17 @@ void spell_bannbaladin(void)
 	/* Set pointer to enemy target */
 	g_spelltarget_e = &g_enemy_sheets[host_readbs(get_spelluser() + HERO_ENEMY_ID) - 10];
 
-	if (g_spelltarget_e->is_animal != 0) {
-		/* spell does not work on animals */
+	if (g_spelltarget_e->is_animal) {
 
-		ds_writew(SPELL_SPECIAL_AECOST, 0);
+		/* spell does not work on animals */
+		g_spell_special_aecost = 0;
 
 		sprintf(g_dtp2,	get_tx(8), (Bit8u*)GUI_names_grammar(0, g_spelltarget_e->mon_id, 1));
 	} else {
 
 		if (g_spelltarget_e->gfx_id == 0x1c) {
 			/* spell does not work on skeletons */
-			ds_writew(SPELL_SPECIAL_AECOST, -2);
+			g_spell_special_aecost = -2;
 			return;
 		}
 
@@ -265,7 +265,7 @@ void spell_boeser_blick(void)
 	/* this spell does not work on all kind of skeletons */
 	if (g_spelltarget_e->gfx_id == 0x1c) {
 
-		ds_writew(SPELL_SPECIAL_AECOST, -2);
+		g_spell_special_aecost = -2;
 
 	} else {
 
@@ -285,7 +285,7 @@ void spell_grosse_gier(void)
 #if !defined(__BORLANDC__)
 	D1_INFO("Zauberspruch \"Grosse Gier\" ist nicht implementiert\n");
 #endif
-	ds_writew(SPELL_SPECIAL_AECOST, -2);
+	g_spell_special_aecost = -2;
 }
 
 void spell_grosse_ver(void)
@@ -294,12 +294,12 @@ void spell_grosse_ver(void)
 
 	/* this spell does not work on all kind of skeletons */
 	if (g_spelltarget_e->gfx_id == 0x1c) {
-		ds_writew(SPELL_SPECIAL_AECOST, -2);
+		g_spell_special_aecost = -2;
 		return;
 	} else {
 
 		/* cost is 8 AP */
-		ds_writew(SPELL_SPECIAL_AECOST, 8);
+		g_spell_special_aecost = 8;
 	}
 
 	/* Sub -2 from AT */
@@ -318,15 +318,15 @@ void spell_herrdertiere(void)
 	if (!g_spelltarget_e->is_animal) {
 		/* spell does not work on animals */
 
-		ds_writew(SPELL_SPECIAL_AECOST, 0);
+		g_spell_special_aecost = 0;
 
 		sprintf(g_dtp2,	get_tx(11), (Bit8u*)GUI_names_grammar(0, g_spelltarget_e->mon_id, 1));
 	} else {
 
-		ds_writew(SPELL_SPECIAL_AECOST, g_spelltarget_e->first_ap);
+		g_spell_special_aecost = (g_spelltarget_e->first_ap);
 
-		if (host_readws(get_spelluser() + HERO_AE) < ds_readws(SPELL_SPECIAL_AECOST)) {
-			ds_writew(SPELL_SPECIAL_AECOST, -2);
+		if (host_readws(get_spelluser() + HERO_AE) < g_spell_special_aecost) {
+			g_spell_special_aecost = -2;
 		} else {
 
 			/* set 'tame' flag */
@@ -344,7 +344,9 @@ void spell_horriphobus(void)
 
 	/* this spell does not work on all kind of skeletons */
 	if (g_spelltarget_e->gfx_id == 0x1c) {
-		ds_writew(SPELL_SPECIAL_AECOST, -2);
+
+		g_spell_special_aecost = -2;
+
 	} else {
 		/* set 'scared' flag */
 		g_spelltarget_e->flags.scared = 1;
@@ -385,7 +387,7 @@ void spell_somnigravis(void)
 
 		/* this spell does not work on all kind of skeletons */
 		if (g_spelltarget_e->gfx_id == 0x1c) {
-			ds_writew(SPELL_SPECIAL_AECOST, -2);
+			g_spell_special_aecost = -2;
 			return;
 		}
 
@@ -406,7 +408,7 @@ void spell_somnigravis(void)
 		/* don't cast yourself */
 
 		/* set AE costs */
-		ds_writew(SPELL_SPECIAL_AECOST, 0);
+		g_spell_special_aecost = 0;
 
 		/* prepare message */
 		strcpy(g_dtp2, get_tx(112));
@@ -426,7 +428,7 @@ void spell_zwingtanz(void)
 
 	/* this spell does not work on all kind of skeletons */
 	if (g_spelltarget_e->gfx_id == 0x1c) {
-		ds_writew(SPELL_SPECIAL_AECOST, -2);
+		g_spell_special_aecost = -2;
 	} else {
 
 		/* set 'dancing' flag */
@@ -444,7 +446,7 @@ void spell_furor_blut(void)
 #if !defined(__BORLANDC__)
         D1_INFO("Zauberspruch \"Furor Blut\" ist nicht implementiert\n");
 #endif
-	ds_writew(SPELL_SPECIAL_AECOST, -2);
+	g_spell_special_aecost = -2;
 }
 
 void spell_geister_bannen(void)
@@ -459,7 +461,7 @@ void spell_geister_rufen(void)
 #if !defined(__BORLANDC__)
         D1_INFO("Zauberspruch \"Geister rufen\" ist nicht implementiert\n");
 #endif
-	ds_writew(SPELL_SPECIAL_AECOST, -2);
+	g_spell_special_aecost = -2;
 }
 
 void spell_heptagon(void)
@@ -467,7 +469,7 @@ void spell_heptagon(void)
 #if !defined(__BORLANDC__)
         D1_INFO("Zauberspruch \"Heptagon\" ist nicht implementiert\n");
 #endif
-	ds_writew(SPELL_SPECIAL_AECOST, -2);
+	g_spell_special_aecost = (-2);
 }
 
 void spell_kraehenruf(void)
@@ -515,7 +517,7 @@ void spell_skelettarius(void)
 		sprintf(g_dtp2,	get_tx(15), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 
 		/* set ae costs */
-		ds_writew(SPELL_SPECIAL_AECOST, 0);
+		g_spell_special_aecost = (0);
 	} else {
 
 		/* prepare message */
@@ -589,7 +591,7 @@ void spell_elementare(void)
 #if !defined(__BORLANDC__)
         D1_INFO("Zauberspruch \"Elementare\" ist nicht implementiert\n");
 #endif
-	ds_writew(SPELL_SPECIAL_AECOST, -2);
+	g_spell_special_aecost = (-2);
 }
 
 void spell_nihilatio(void)
@@ -644,7 +646,7 @@ void spell_axxeleratus(void)
 
 	} else {
 		/* axxeleratus already active */
-		ds_writew(SPELL_SPECIAL_AECOST, -2);
+		g_spell_special_aecost = (-2);
 	}
 }
 
@@ -712,13 +714,13 @@ void spell_transversalis(void)
 
 	} else {
 		/* set spell costs */
-		ds_writew(SPELL_SPECIAL_AECOST, select_teleport_dest());
+		g_spell_special_aecost = (select_teleport_dest());
 
-		if (ds_readws(SPELL_SPECIAL_AECOST) > 0) {
+		if (g_spell_special_aecost > 0) {
 			/* check AE */
-			if (host_readws(get_spelluser() + HERO_AE) < ds_readws(SPELL_SPECIAL_AECOST)) {
+			if (host_readws(get_spelluser() + HERO_AE) < g_spell_special_aecost) {
 				/* abort */
-				ds_writew(SPELL_SPECIAL_AECOST, -2);
+				g_spell_special_aecost = (-2);
 			} else {
 				/* play sound */
 				play_voc(ARCHIVE_FILE_FX16_VOC);
@@ -738,7 +740,7 @@ void spell_ueber_eis(void)
 #if !defined(__BORLANDC__)
         D1_INFO("Zauberspruch \"Ueber Eis\" ist nicht implementiert\n");
 #endif
-	ds_writew(SPELL_SPECIAL_AECOST, -2);
+	g_spell_special_aecost = (-2);
 }
 
 
@@ -752,7 +754,7 @@ void spell_balsam(void)
 	/* Set pointer to hero target */
 	g_spelltarget = get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
 
-	ds_writew(SPELL_SPECIAL_AECOST, 0);
+	g_spell_special_aecost = (0);
 
 	if ((g_autofight != 0) ||
 		((host_readbs(get_spelluser() + HERO_NPC_ID) != 0) && g_in_fight))
@@ -774,24 +776,24 @@ void spell_balsam(void)
 
 		if (le_to_heal < 7) {
 			/* AE-cost is at least 7 */
-			ds_writew(SPELL_SPECIAL_AECOST, 7);
+			g_spell_special_aecost = (7);
 			/* TODO: potential ORIGINAL-BUG: What if le_to_heal is bigger than the missing LE? */
 		} else {
 			if (host_readws(get_spelltarget() + HERO_LE_ORIG) - host_readws(get_spelltarget() + HERO_LE) < le_to_heal) {
 				/* spellcaster wants to heal more LE than wiche are missing */
-				ds_writew(SPELL_SPECIAL_AECOST, host_readws(get_spelltarget() + HERO_LE_ORIG) - host_readws(get_spelltarget() + HERO_LE));
-				le_to_heal = ds_readws(SPELL_SPECIAL_AECOST);
+				g_spell_special_aecost = (host_readws(get_spelltarget() + HERO_LE_ORIG) - host_readws(get_spelltarget() + HERO_LE));
+				le_to_heal = g_spell_special_aecost;
 				/* reduce le and AE_COST to the amount of LE which is actually missing */
 				/* This is in accordance with DSA3 rules. The spell costs are at least 7 AE, unless the spellcaster does not have 7 AE any more. */
 			} else {
-				ds_writew(SPELL_SPECIAL_AECOST, le_to_heal);
+				g_spell_special_aecost = (le_to_heal);
 			}
 		}
 
-		if (host_readws(get_spelluser() + HERO_AE) < ds_readws(SPELL_SPECIAL_AECOST)) {
+		if (host_readws(get_spelluser() + HERO_AE) < g_spell_special_aecost) {
 			/* not enough AE */
-			ds_writew(SPELL_SPECIAL_AECOST, host_readws(get_spelluser() + HERO_AE));
-			le_to_heal = ds_readws(SPELL_SPECIAL_AECOST);
+			g_spell_special_aecost = (host_readws(get_spelluser() + HERO_AE));
+			le_to_heal = g_spell_special_aecost;
 			/* reduce AE-costs and 'le_to_heal' to the available AE */
 		}
 
@@ -807,7 +809,7 @@ void spell_hexenspeichel(void)
 	g_spelltarget = get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
 
 	/* set costs to 0 */
-	ds_writew(SPELL_SPECIAL_AECOST, 0);
+	g_spell_special_aecost = (0);
 
 	if (get_spelltarget() == get_spelluser()) {
 		/* spell cannot be used to heal yourself */
@@ -827,17 +829,18 @@ void spell_hexenspeichel(void)
 	if (le != -1) {
 
 		if (host_readws(get_spelltarget() + HERO_LE_ORIG) - host_readws(get_spelltarget() + HERO_LE) < le * 2) {
-			ds_writew(SPELL_SPECIAL_AECOST,
-				(host_readws(get_spelltarget() + HERO_LE_ORIG) - host_readws(get_spelltarget() + HERO_LE)) * 2);
+
+			g_spell_special_aecost = (host_readws(get_spelltarget() + HERO_LE_ORIG) - host_readws(get_spelltarget() + HERO_LE)) * 2;
+
 		} else {
-			if (host_readws(get_spelluser() + HERO_AE ) < ds_readws(SPELL_SPECIAL_AECOST)) {
-				ds_writew(SPELL_SPECIAL_AECOST, host_readws(get_spelluser() + HERO_AE));
+			if (host_readws(get_spelluser() + HERO_AE ) < g_spell_special_aecost) {
+				g_spell_special_aecost = host_readws(get_spelluser() + HERO_AE);
 			} else {
-				ds_writew(SPELL_SPECIAL_AECOST, le * 2);
+				g_spell_special_aecost = (le * 2);
 			}
 		}
 
-		add_hero_le(get_spelltarget(), ds_readws(SPELL_SPECIAL_AECOST) / 2);
+		add_hero_le(get_spelltarget(), g_spell_special_aecost / 2);
 	}
 }
 
@@ -854,16 +857,16 @@ void spell_klarum_purum(void)
 
 		/* prepare message */
 		sprintf(g_dtp2, get_tx(21), (char*)get_spelltarget() + HERO_NAME2);
-		ds_writew(SPELL_SPECIAL_AECOST, 0);
+		g_spell_special_aecost = (0);
 		return;
 	}
 
 	/* AE-cost = poison cost */
-	ds_writew(SPELL_SPECIAL_AECOST, g_poison_prices[poison]);
+	g_spell_special_aecost = (g_poison_prices[poison]);
 
-	if (host_readws(get_spelluser() + HERO_AE) < ds_readws(SPELL_SPECIAL_AECOST)) {
+	if (host_readws(get_spelluser() + HERO_AE) < g_spell_special_aecost) {
 		/* not enough AE */
-		ds_writew(SPELL_SPECIAL_AECOST, -2);
+		g_spell_special_aecost = -2;
 	} else {
 		/* reset poison */
 		host_writeb(get_spelltarget() + poison * 5 + 0xd7, 0);
@@ -895,7 +898,7 @@ void spell_tiere_heilen(void)
 	signed short ae;
 
 	/* set AE costs to 0 */
-	ds_writew(SPELL_SPECIAL_AECOST, 0);
+	g_spell_special_aecost = (0);
 
 	/* prepare message */
 	sprintf(g_dtp2, get_tx(23), (char*)get_spelluser() + HERO_NAME2);
@@ -908,7 +911,7 @@ void spell_tiere_heilen(void)
 
 	if (ae != -1) {
 		/* set AE costs to AE */
-		ds_writew(SPELL_SPECIAL_AECOST, ae);
+		g_spell_special_aecost = ae;
 	}
 }
 
@@ -940,7 +943,7 @@ char* spell_analues(void)
 
 	/* set analisation capabilities */
 	if (gs_in_academy == 99) {
-		g_spelltest_result = (99);
+		g_spelltest_result = 99;
 	}
 
 	item_pos = select_item_to_drop(get_spelluser());
