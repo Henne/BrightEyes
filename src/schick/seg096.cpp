@@ -55,7 +55,7 @@ Bit8u* GUI_names_grammar(signed short flag, signed short index, signed short typ
 
 		lp1 = &g_items_noplural[0];
 
-		while (((l4 = host_readws((Bit8u*)(lp1++))) != -1) && (l4 != index));
+		while (((l4 = *lp1++) != -1) && (l4 != index));
 
 		if (l4 == index) {
 			flag += 4;
@@ -69,15 +69,12 @@ Bit8u* GUI_names_grammar(signed short flag, signed short index, signed short typ
 		flag += lp5.a[g_monname_genders[index]];
 	}
 
-	lp1 = (flag & 0x8000) ? (signed short*)(p_datseg + GRAMMAR_DEF_TABLE + (flag & 0xf) * 6) :
-			((flag & 0x4000) ? (signed short*)(p_datseg + GRAMMAR_NOARTICLE_TABLE) :
-				(signed short*)(p_datseg + GRAMMAR_INDEF_TABLE + (flag & 0xf) * 6));
+	lp1 = (flag & 0x8000) ? &g_grammar_def_table[(flag & 0xf) * 6] :
+		((flag & 0x4000) ? &g_grammar_noarticle_table[0] : &g_grammar_indef_table[(flag & 0xf) * 6]);
 
 
-	sprintf(g_grammar_bufs[g_grammar_buf_no],
-		(l2 == 0 ? g_str_s_s_ptr : g_str_von_s_s_ptr),
-		g_grammar_articles_index[host_readws((Bit8u*)lp1 + 2 * (((flag & 0x3000) - 1) >> 12))],
-		(char*)GUI_name_plural(flag, p_name));
+	sprintf(g_grammar_bufs[g_grammar_buf_no], (l2 == 0 ? g_str_s_s_ptr : g_str_von_s_s_ptr),
+		g_grammar_articles_index[lp1[((flag & 0x3000) - 1) >> 12]], GUI_name_plural(flag, p_name));
 
 	p_name = g_grammar_bufs[g_grammar_buf_no];
 

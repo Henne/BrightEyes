@@ -1209,9 +1209,9 @@
 //#define GRAMMAR_ARTICLE_0               (0xa912)    /* char[1]; "" */
 //#define GRAMMAR_ARTICLE_VON             (0xa913)    /* char[4]; "VON" */
 //#define GRAMMAR_ARTICLES_INDEX          (0xa917)    /* Bit8u*[15] */
-#define GRAMMAR_DEF_TABLE               (0xa953)    /* short[24]; [8], by case, then by gender */
-#define GRAMMAR_INDEF_TABLE             (0xa983)    /* short[24]; [8], by case, then by gender */
-#define GRAMMAR_NOARTICLE_TABLE         (0xa9b3)    /* short[24]; [8], by case, then by gender */
+//#define GRAMMAR_DEF_TABLE               (0xa953)    /* short[24]; [8], by case, then by gender */
+//#define GRAMMAR_INDEF_TABLE             (0xa983)    /* short[24]; [8], by case, then by gender */
+//#define GRAMMAR_NOARTICLE_TABLE         (0xa9b3)    /* short[24]; [8], by case, then by gender */
 //#define STR_S_S_PTR                     (0xa9e3)    /* Bit8u*; to STR_S_S */
 //#define STR_VON_S_S_PTR                 (0xa9e7)    /* Bit8u*; to STR_VON_S_S */
 //#define GRAMMAR_BUF_NO                  (0xa9eb)    /* unsigned short */

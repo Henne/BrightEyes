@@ -5627,9 +5627,24 @@ char* g_grammar_articles_index[15] = {
 	g_grammar_article_0,
 	g_grammar_article_von
 }; // ds:0xa917; Bit8u*
-short g_grammar_def_table[24] = { 0, 1, 2, 3, 0, 3, 4, 1, 2, 5, 0, 5, 1, 1, 1, 0, 0, 0, 1, 1, 1, 4, 4, 4 }; // ds:0xa953, [8], by case, then by gender
-short g_grammar_indef_table[24] = { 0x0006, 0x0007, 0x0006, 0x0008, 0x0009, 0x0008, 0x000a, 0x000b, 0x0006, 0x000c, 0x0009, 0x000c, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d }; // ds:0xa983, [8], by case, then by gender
-short g_grammar_noarticle_table[24] = { 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d }; // ds:0xa9b3, [8], by case, then by gender
+signed short g_grammar_def_table[24] = {
+	0, 1, 2, 3, 0, 3,
+	4, 1, 2, 5, 0, 5,
+	1, 1, 1, 0, 0, 0,
+	1, 1, 1, 4, 4, 4
+}; // ds:0xa953, [8], by case, then by gender
+signed short g_grammar_indef_table[24] = {
+	6, 7, 6, 8, 9, 8,
+	10, 11, 6, 12, 9, 12,
+	13, 13, 13, 13, 13, 13,
+	13, 13, 13, 13, 13, 13
+}; // ds:0xa983, [8], by case, then by gender
+signed short g_grammar_noarticle_table[24] = {
+	0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d,
+	0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d,
+	0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d,
+	0x000d, 0x000d, 0x000d, 0x000d, 0x000d, 0x000d
+}; // ds:0xa9b3, [8], by case, then by gender
 extern char g_str_s_s[6];
 extern char g_str_von_s_s[9];
 char *g_str_s_s_ptr = (char*)&g_str_s_s; // ds:0xa9e3, to STR_S_S; Bit8u*

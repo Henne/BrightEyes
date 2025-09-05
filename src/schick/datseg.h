@@ -1220,6 +1220,9 @@ extern char g_grammar_article_den[4];		//ds:0xa8e4; seg096
 extern char g_grammar_article_dem[4];		//ds:0xa8e8; seg096
 
 extern char *g_grammar_articles_index[15];	//ds:0xa917; seg096
+extern signed short g_grammar_def_table[24];	//ds:0xa953; seg096
+extern signed short g_grammar_indef_table[24];	//ds:0xa983; seg096
+extern signed short g_grammar_noarticle_table[24];	//ds:0xa9b3; seg096
 
 extern char *g_str_s_s_ptr;			//ds:0xabe3; seg096
 extern char *g_str_von_s_s_ptr;			//ds:0xabe7; seg096
@@ -1232,7 +1235,7 @@ extern char g_grammar_pronouns_ihr[4];		//ds:0xaa02; seg096
 extern char g_grammar_pronouns_ihn[4];		//ds:0xaa06; seg096
 extern char g_grammar_pronouns_ihm[4];		//ds:0xaa0a; seg096
 
-extern char *g_grammar_pronouns_index[7];	//ds:0xaa14; seg096
+extern char *g_grammar_pronouns_index[7];		//ds:0xaa14; seg096
 extern const signed char g_grammar_pronouns_table2[33];	//ds:0xaa30; seg096
 
 
