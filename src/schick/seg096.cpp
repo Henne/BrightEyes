@@ -442,27 +442,23 @@ signed short GUI_lookup_char_width(signed char c, signed short *p)
 {
 	signed short i;
 
+	/* REMARK: This array of struct should be seen as signed char[75*3] */
 	for (i = 0; i != 75 * 3; i += 3) {
 
-		if (c == ds_readbs(GUI_CHAR_WIDTH + i)) {
+		if (c == ((signed char*)g_gui_char_width)[i]) {
 
-			host_writew((Bit8u*)p,
-				ds_readbs(GUI_CHAR_WIDTH + i + 2) & 0xff);
+			*p = ((signed char*)g_gui_char_width)[i + 2] & 0xff;
 
-			return ds_readbs(GUI_CHAR_WIDTH + i + 1) & 0xff;
+			return ((signed char*)g_gui_char_width)[i + 1] & 0xff;
 		}
 	}
 
-	if ((c == (signed char)'~')
-		|| (c == (signed char)0xf0)
-		|| (c == (signed char)0xf1)
-		|| (c == (signed char)0xf2)
-		|| (c == (signed char)0xf3))
+	if ((c == '~') || (c == (signed char)0xf0) || (c == (signed char)0xf1) || (c == (signed char)0xf2) || (c == (signed char)0xf3))
 	{
-		return host_writews((Bit8u*)p, 0);
+		return *p = 0;
 	}
 
-	host_writew((Bit8u*)p, 5);
+	*p = 5;
 	return 0;
 }
 

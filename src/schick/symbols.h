@@ -1226,11 +1226,11 @@
 //#define GRAMMAR_PRONOUNS_IHNEN          (0xaa0e)    /* char[6]; "IHNEN" */
 //#define GRAMMAR_PRONOUNS_INDEX          (0xaa14)    /* Bit8u*[7] */
 //#define GRAMMAR_PRONOUNS_TABLE2         (0xaa30)    /* unsigned char[33]; by gender and ?? */
-#define GUI_CHAR_WIDTH                  (0xaa51)    /* struct(3)[75]; struct{char c, font_id, width;} */
+//#define GUI_CHAR_WIDTH                  (0xaa51)    /* struct(3)[75]; struct{char c, font_id, width;} */
 //#define STR_S_S                         (0xab32)    /* char[6]; "%s %s" */
 //#define STR_VON_S_S                     (0xab38)    /* char[9]; "VON%s %s" */
 // ?1
-#define GUI_CHAR_HEIGHT                 (0xab42)    /* struct(3)[67]; struct{char c, font_id, height;} */
+//#define GUI_CHAR_HEIGHT                 (0xab42)    /* struct(3)[67]; struct{char c, font_id, height;} */
 //#define GUI_BOOL_FLAG                   (0xac0b)    /* unsigned short; {0,1} */
 // ?1
 //#define SPELL_SPECIAL_AECOST            (0xac0e)    /* signed short */

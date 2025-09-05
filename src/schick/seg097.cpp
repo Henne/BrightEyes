@@ -108,23 +108,19 @@ signed short GUI_lookup_char_height(signed char c, signed short *p)
 	signed short i;
 
 	for (i = 0; i != 201; i += 3) {
-		if (c == ds_readbs(GUI_CHAR_HEIGHT + i)) {
+		if (c == ((signed char*)g_gui_char_height)[i]) {
 
-			host_writew((Bit8u*)p, ((signed short)ds_readbs((GUI_CHAR_HEIGHT + 2) + i)) & 0xff);
-			return ds_readbs((GUI_CHAR_HEIGHT + 1) + i) & 0xff;
+			*p = ((signed char*)g_gui_char_height)[i + 2] & 0xff;
+			return ((signed char*)g_gui_char_height)[i + 1] & 0xff;
 		}
 	}
 
-	if ((c == (signed char)'~')
-			|| (c == (signed char)0xf0)
-			|| (c == (signed char)0xf1)
-			|| (c == (signed char)0xf2)
-			|| (c == (signed char)0xf3))
+	if ((c == '~') || (c == (signed char)0xf0) || (c == (signed char)0xf1) || (c == (signed char)0xf2) || (c == (signed char)0xf3))
 	{
-		return host_writews((Bit8u*)p, 0);
+		return *p = 0;
 	}
 
-	host_writew((Bit8u*)p, 8);
+	*p = 8;
 
 	return 0;
 }

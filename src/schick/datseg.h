@@ -35,6 +35,18 @@ struct struct_pic_copy {
 	int v4;
 };
 
+struct struct_char_width {
+	char c;
+	char font_id;
+	char width;
+};
+
+struct struct_char_height {
+	char c;
+	char font_id;
+	char height;
+};
+
 struct struct_memslot_ani {
 	signed int figure;
 	signed int ems_handle;
@@ -1237,7 +1249,8 @@ extern char g_grammar_pronouns_ihm[4];		//ds:0xaa0a; seg096
 
 extern char *g_grammar_pronouns_index[7];		//ds:0xaa14; seg096
 extern const signed char g_grammar_pronouns_table2[33];	//ds:0xaa30; seg096
-
+extern struct struct_char_width g_gui_char_width[75];	//ds:0xaa51; seg096
+extern struct struct_char_height g_gui_char_height[67];	//ds:0xab42; seg097
 
 extern signed short g_gui_bool_flag;		// ds:0xac0b; seg097
 extern signed short g_spell_special_aecost;	// ds:0xac0e; seg098, seg099, seg100, seg101
