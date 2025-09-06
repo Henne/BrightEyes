@@ -285,6 +285,11 @@ struct struct_recipe {
 	signed char  duration;		/* time needed to brew the recipe in hours */
 };
 
+struct spells_index {
+	Bit8s first;
+	Bit8s length;
+};
+
 /* seg001 */
 extern unsigned short g_cd_init_successful;
 extern Bit32u g_cd_skipmagic;
@@ -306,6 +311,8 @@ extern signed short g_attack_items[3];					// ds:0x091f; seg033
 extern signed char g_monname_genders[78];				// ds:0x0925; seg096
 extern struct staffspell_descr g_staffspell_descriptions[7];		// ds:0x0973; seg098
 extern struct spell_descr g_spell_descriptions[87];			// ds:0x099d; seg033, seg036, seg042, seg050, seg098
+extern const struct spells_index g_spells_index[8];			// ds:0x0d03; seg046, seg098
+extern const struct spells_index g_spells_index2[4];			// ds:0x0d13; seg046
 
 extern const signed short* g_magic_schools_index[9];
 extern void (*g_spell_handlers[86])(void);		//ds:0x0dbb; seg098

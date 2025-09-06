@@ -419,7 +419,7 @@ struct spell_descr g_spell_descriptions[87] = {
 	{  SPELL_DESC_HEROTYPE_IELF , ATTRIB_KL, ATTRIB_CH, ATTRIB_KK,  5, -1, 0, 0, 0, 0 }, /* Sturmgebruell besaenftge dich */
 	{                        -1 ,         0,         0,         0,  0,  0, 0, 0, 0, 0 }  /* ... terminator entry */
 }; // ds:0x099d
-struct{signed char first, length;} g_spells_index[8] = {
+const struct spells_index g_spells_index[8] = {
 	{ 0x01, 0x05 },
 	{ 0x06, 0x0c },
 	{ 0x12, 0x06 },
@@ -429,7 +429,7 @@ struct{signed char first, length;} g_spells_index[8] = {
 	{ 0x26, 0x07 },
 	{ 0x2d, 0x04 }
 }; // ds:0x0d03
-struct{signed char first, length;} g_spells_index2[4] = {
+const struct spells_index g_spells_index2[4] = {
 	{ 0x31, 0x09 },
 	{ 0x3a, 0x02 },
 	{ 0x3c, 0x10 },

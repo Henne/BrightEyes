@@ -409,8 +409,8 @@ signed short can_use_spellclass(Bit8u *hero, signed short spellclass_no)
 	signed short first_spell;
 
 
-	first_spell = ds_readbs(SPELLS_INDEX + 2 * spellclass_no);
-	for (i = 0; ds_readbs((SPELLS_INDEX + 1) + 2 * spellclass_no) > i; i++) {
+	first_spell = g_spells_index[spellclass_no].first;
+	for (i = 0; g_spells_index[spellclass_no].length > i; i++) {
 
 		if ((host_readbs(hero + HERO_SPELLS + first_spell + i) >= -5) &&
 			((g_in_fight && (g_spell_descriptions[first_spell + i].where_to_use == 1)) ||
@@ -496,6 +496,7 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 	if (answer1 != -2) {
 
 		if (!ones.a[answer1]) {
+
 			/* this cant use any spells of this class */
 
 			sprintf(g_dtp2, get_ttx(559), (char*)hero + HERO_NAME2);
@@ -505,11 +506,11 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 			retval = -2;
 		} else {
 
-			first_spell = ds_readbs(SPELLS_INDEX + 2 * answer1);
+			first_spell = g_spells_index[answer1].first;
 
-			for (l_di = 0; l_di < ds_readbs((SPELLS_INDEX + 1) + 2 * answer1); l_di++) {
+			for (l_di = 0; l_di < g_spells_index[answer1].length; l_di++) {
 
-				g_radio_name_list[l_di] = (g_dtp2 + 50 * (l_di));
+				g_radio_name_list[l_di] = g_dtp2 + 50 * l_di;
 
 				if (show_vals == 1) {
 
@@ -539,7 +540,7 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 				}
 			}
 
-			retval = GUI_radio(get_ttx(217), ds_readbs((SPELLS_INDEX + 1) + 2 * answer1),
+			retval = GUI_radio(get_ttx(217), g_spells_index[answer1].length,
 					g_radio_name_list[0], g_radio_name_list[1],
 					g_radio_name_list[2], g_radio_name_list[3],
 					g_radio_name_list[5], g_radio_name_list[6],

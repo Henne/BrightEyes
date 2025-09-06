@@ -634,13 +634,13 @@ void status_show(Bit16u index)
 
 			for (j = 0; j < 8; j++) {
 
-				i = ds_readbs(SPELLS_INDEX + j * 2);
+				i = g_spells_index[j].first;
 
-				while (ds_readbs(SPELLS_INDEX + j * 2) + ds_readbs(SPELLS_INDEX + 1 + j * 2) > i) {
+				while (g_spells_index[j].first + g_spells_index[j].length > i) {
 
 					status_show_spell(hero,
 						i,
-						ds_readbs(SPELLS_INDEX + j * 2),
+						g_spells_index[j].first,
 						ds_readws(STATUSPAGE_SPELLS_XY + 0 + j * 6),
 						ds_readws(STATUSPAGE_SPELLS_XY + 2 + j * 6),
 						ds_readws(STATUSPAGE_SPELLS_XY + 4 + j * 6));
@@ -667,13 +667,13 @@ void status_show(Bit16u index)
 
 			for (j = 0; j < 4; j++) {
 
-				i = ds_readbs(SPELLS_INDEX2 + j * 2);
+				i = g_spells_index2[j].first;
 
-				while (ds_readbs(SPELLS_INDEX2 + j * 2) + ds_readbs(SPELLS_INDEX2 + 1 + j * 2) > i) {
+				while (g_spells_index2[j].first + g_spells_index2[j].length > i) {
 
 					status_show_spell(hero,
 						i,
-						ds_readbs(SPELLS_INDEX2 + j * 2),
+						g_spells_index2[j].first,
 						ds_readws(STATUSPAGE_SPELLS2_XY + 0 + j * 6),
 						ds_readws(STATUSPAGE_SPELLS2_XY + 2 + j * 6),
 						ds_readws(STATUSPAGE_SPELLS2_XY + 4 + j * 6));
