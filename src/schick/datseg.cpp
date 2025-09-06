@@ -248,21 +248,22 @@ struct armors_descr g_armors_table[25] = {
 	{ 5, 3 }, /* 23 <- ITEM_CHAIN_MAIL_MAGIC */
 	{-1, 0 }
 }; // ds:0x0877
-struct{char unkn1, unkn2, handler_no;} g_specialitems_table[14] = {
-	{ 0x00, 0x00, 0x00 },
-	{ 0x02, 0x05, 0x01 },
-	{ 0x00, 0x01, 0x02 },
-	{ 0x00, 0x01, 0x03 },
-	{ 0x02, 0x03, 0x04 },
-	{ 0x00, 0x06, 0x05 },
-	{ 0x00, 0x01, 0x06 },
-	{ 0x00, 0x01, 0x07 },
-	{ 0x00, 0x01, 0x08 },
-	{ 0x00, 0x01, 0x09 },
-	{ 0x00, 0x01, 0x0a },
-	{ 0x00, 0x01, 0x0b },
-	{ 0x00, 0x01, 0x0c },
-	{ 0x00, 0x01, 0x0d }
+
+const struct specialitem_descr g_specialitems_table[14] = {
+	{ 0, 0,  0 }, /*  0 <- DUMMY */
+	{ 2, 5,  1 }, /*  1 <- arcano */
+	{ 0, 1,  2 }, /*  2 <- read_recipe */
+	{ 0, 1,  3 }, /*  3 <- read_document */
+	{ 2, 3,  4 }, /*  4 <- armatrutz */
+	{ 0, 6,  5 }, /*  5 <- flim_flam */
+	{ 0, 1,  6 }, /*  6 <- debtbook */
+	{ 0, 1,  7 }, /*  7 <- orcdocument */
+	{ 0, 1,  8 }, /*  8 <- weapon_poison */
+	{ 0, 1,  9 }, /*  9 <- myastmatic */
+	{ 0, 1, 10 }, /* 10 <- hylailic */
+	{ 0, 1, 11 }, /* 11 <- magic_book */
+	{ 0, 1, 12 }, /* 12 <- brenne */
+	{ 0, 1, 13 }  /* 13 <- bag */
 }; // ds:0x08a9
 
 signed short g_poison_potions[10] = {

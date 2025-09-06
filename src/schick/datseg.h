@@ -100,6 +100,12 @@ struct armors_descr {
 	Bit8s be;
 };
 
+struct specialitem_descr {
+	Bit8s unkn1;
+	Bit8s quantity;
+	Bit8s handler_id;
+};
+
 struct staffspell_descr {
 	Bit8s attrib1;
 	Bit8s attrib2;

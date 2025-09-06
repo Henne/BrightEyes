@@ -45,6 +45,7 @@ void use_item(signed short item_pos, signed short hero_pos)
 	if (check_hero(get_itemuser())) {
 
 			if (!item_useable(g_used_item_desc)) {
+
 				/* item is not usable */
 
 				if (is_in_word_array(g_used_item_id, g_items_pluralwords))
@@ -57,18 +58,18 @@ void use_item(signed short item_pos, signed short hero_pos)
 
 				GUI_output(g_dtp2);
 
-			} else if ((item_herb_potion(g_used_item_desc)) &&
-					!is_in_word_array(g_used_item_id, g_poison_potions))
-			{
+			} else if ((item_herb_potion(g_used_item_desc)) && !is_in_word_array(g_used_item_id, g_poison_potions)) {
+
 				/* don't consume poison */
 				consume(get_itemuser(), get_itemuser(), item_pos);
 
 			} else if ((host_readws(get_itemuser() + SIZEOF_INVENTORY * g_used_item_pos + (HERO_INVENTORY + INVENTORY_QUANTITY))) <= 0) {
+
 				/* magic item is used up */
 				GUI_output(get_ttx(638));
 			} else {
 				/* special item */
-				func = g_use_special_item_handlers[ds_readbs((SPECIALITEMS_TABLE + 2) + 3 * host_readbs(g_used_item_desc + 4))];
+				func = g_use_special_item_handlers[g_specialitems_table[host_readbs(g_used_item_desc + ITEM_STATS_TABLE_INDEX)].handler_id];
 				func();
 			}
 	}
