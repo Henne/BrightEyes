@@ -692,7 +692,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 					g_attacker_dead = 1;
 				}
 
-				l6 = ds_readbs((SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_UNKN6) + SIZEOF_SPELL_DESCRIPTIONS * host_readbs(hero + HERO_SPELL_ID));
+				l6 = g_spell_descriptions[host_readbs(hero + HERO_SPELL_ID)].unkn6;
 
 				*g_dtp2 = '\0';
 

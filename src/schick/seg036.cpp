@@ -490,23 +490,23 @@ signed short KI_select_spell_target(Bit8u *hero, signed short hero_pos, signed s
  */
 signed short KI_get_spell(signed short spell, signed short renegade)
 {
-	Bit8u *spell_description;
+	struct spell_descr *spell_description;
 	signed short retval = -1;
 
 	/* make a pointer to the spell description */
-	spell_description = p_datseg + spell * SIZEOF_SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS;
+	spell_description = &g_spell_descriptions[spell];
 
 	if (renegade == 0) {
-		if (host_readb(spell_description + SPELL_DESCRIPTIONS_TARGET_TYPE) == 2)
+		if (spell_description->target_type == 2)
 			retval = 1;
-		else if (host_readb(spell_description + SPELL_DESCRIPTIONS_TARGET_TYPE) == 1 || host_readb(spell_description + SPELL_DESCRIPTIONS_TARGET_TYPE) == 3)
+		else if ((spell_description->target_type == 1) || (spell_description->target_type == 3))
 			retval = 0;
 		else
 			retval = 2;
 	} else {
-		if (host_readb(spell_description + SPELL_DESCRIPTIONS_TARGET_TYPE) == 3)
+		if (spell_description->target_type == 3)
 			retval = 1;
-		else if (host_readb(spell_description + SPELL_DESCRIPTIONS_TARGET_TYPE) == 0)
+		else if (spell_description->target_type == 0)
 			retval = 2;
 	}
 
@@ -569,7 +569,7 @@ signed short seg036_8cf(Bit8u *hero, signed short hero_pos, signed short renegad
 			/* get a spell from an array */
 			spell = g_af_spell_list[l_si];
 
-			if ((ds_readbs((SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_RANGE) + SIZEOF_SPELL_DESCRIPTIONS * spell) == 1) && (random_schick(100) < 50))
+			if ((g_spell_descriptions[spell].range == 1) && (random_schick(100) < 50))
 			{
 				decided = 1;
 				break;
@@ -600,7 +600,7 @@ signed short seg036_8cf(Bit8u *hero, signed short hero_pos, signed short renegad
 				done = 1;
 			} else {
 
-				if (!ds_readbs((SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_RANGE) + SIZEOF_SPELL_DESCRIPTIONS * spell)) {
+				if (!g_spell_descriptions[spell].range) {
 
 					while ((host_readbs(hero + HERO_BP_LEFT) != 0) && (done == 0)) {
 

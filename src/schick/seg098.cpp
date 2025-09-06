@@ -216,16 +216,15 @@ signed short get_attackee_rs(void)
 /**
  * \brief   get the amount of AE-Points needed for a spell
  *
- * \param   spell       numberof the spell
+ * \param   spell_id       number of the spell
  * \param   half        cost    	the caster needs only half AE
  */
-signed short get_spell_cost(signed short spell, signed short half_cost)
+signed short get_spell_cost(signed short spell_id, signed short half_cost)
 {
-	signed char ret;
-
-	ret = ds_readbs(SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_AE_COST + spell * SIZEOF_SPELL_DESCRIPTIONS);
+	signed char ret = g_spell_descriptions[spell_id].ae_cost;
 
 	if (half_cost != 0) {
+
 		if (ret == -1) {
 			ret = (signed char)random_interval(5, 10);
 		} else {
@@ -415,8 +414,8 @@ signed short can_use_spellclass(Bit8u *hero, signed short spellclass_no)
 	for (i = 0; ds_readbs((SPELLS_INDEX + 1) + 2 * spellclass_no) > i; i++) {
 
 		if ((host_readbs(hero + HERO_SPELLS + first_spell + i) >= -5) &&
-			((g_in_fight && (ds_readbs((SPELL_DESCRIPTIONS + 5) + 10 * (first_spell + i)) == 1)) ||
-			(!g_in_fight && (ds_readbs((SPELL_DESCRIPTIONS + 5) + 10 * (first_spell + i)) != 1))))
+			((g_in_fight && (g_spell_descriptions[first_spell + i].where_to_use == 1)) ||
+			(!g_in_fight && (g_spell_descriptions[first_spell + i].where_to_use != 1))))
 		{
 			return 1;
 		}
@@ -519,8 +518,8 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 						get_ttx(first_spell + l_di + 106),
 						host_readbs(hero + HERO_SPELLS + first_spell + l_di));
 				} else if (
-					((g_in_fight && (ds_readbs((SPELL_DESCRIPTIONS + 5) + 10 * (first_spell + l_di)) == 1)) ||
-					(!g_in_fight && (ds_readbs((SPELL_DESCRIPTIONS + 5) + 10 * (first_spell + l_di)) != 1))) &&
+					((g_in_fight && (g_spell_descriptions[first_spell + l_di].where_to_use == 1)) ||
+					(!g_in_fight && (g_spell_descriptions[first_spell + l_di].where_to_use != 1))) &&
 					(host_readbs(hero + HERO_SPELLS + first_spell + l_di) >= -5))
 				{
 
@@ -558,6 +557,7 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 					sprintf(g_dtp2,	get_ttx(560), (char*)hero + HERO_NAME2);
 					GUI_output(g_dtp2);
 					retval = -1;
+
 				} else {
 					retval += first_spell -1;
 				}
@@ -565,15 +565,13 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 		}
 
 		if (retval > 0) {
-			if (!g_in_fight &&
-				(ds_readbs((SPELL_DESCRIPTIONS + 5) + 10 * retval) == 1) &&
-				(show_vals == 0))
+			if (!g_in_fight && (g_spell_descriptions[retval].where_to_use == 1) && (show_vals == 0))
 			{
 				GUI_output(get_ttx(591));
 				retval = -2;
+
 			} else {
-				if (g_in_fight &&
-					(ds_readbs((SPELL_DESCRIPTIONS + 5) + 10 * retval) == -1))
+				if (g_in_fight && (g_spell_descriptions[retval].where_to_use == -1))
 				{
 					GUI_output(get_ttx(592));
 					retval = -2;
@@ -593,7 +591,7 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 signed short test_spell(Bit8u *hero, signed short spell_no, signed char handicap)
 {
 	signed short retval;
-	Bit8u *spell_desc;
+	struct spell_descr *spell_desc;
 
 	/* check if class is magic user */
 	if ((host_readbs(hero + HERO_TYPE) < HERO_TYPE_WITCH) || (check_hero(hero) == 0)) {
@@ -606,9 +604,9 @@ signed short test_spell(Bit8u *hero, signed short spell_no, signed char handicap
 	if (get_spell_cost(spell_no, 0) > host_readws(hero + HERO_AE))
 		return -99;
 
-	spell_desc = p_datseg + spell_no * SIZEOF_SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS;
+	spell_desc = &g_spell_descriptions[spell_no];
 
-	if (host_readb(spell_desc + SPELL_DESCRIPTIONS_FIGHT) != 0) {
+	if (spell_desc->fight) {
 
 		if (host_readbs(hero + HERO_ENEMY_ID) >= 10) {
 
@@ -630,8 +628,7 @@ signed short test_spell(Bit8u *hero, signed short spell_no, signed char handicap
 
 		handicap -= host_readbs(hero + spell_no + HERO_SPELLS);
 
-		retval = test_attrib3(hero, host_readbs(spell_desc + SPELL_DESCRIPTIONS_ATTRIB1),
-			host_readbs(spell_desc + SPELL_DESCRIPTIONS_ATTRIB2), host_readbs(spell_desc + SPELL_DESCRIPTIONS_ATTRIB3), handicap);
+		retval = test_attrib3(hero, spell_desc->attrib1, spell_desc->attrib2, spell_desc->attrib3, handicap);
 
 		if (retval == -99) {
 			retval = -1;
@@ -703,7 +700,7 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 	signed short spell_id;
 	signed short ae_cost;
 	signed short tw_bak;
-	Bit8u *ptr;
+	struct spell_descr *spell_description;
 	void (*func)(void);
 	signed short l4;
 #ifdef M302de_ORIGINAL_BUGFIX
@@ -723,17 +720,20 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 	g_textbox_width = 3;
 
 	if (selection_menu == 1) {
+
 		spell_id = select_spell(hero, 0);
 
 		if (spell_id > SP_NONE) {
+
 			/* pointer to the spell description */
-			ptr = p_datseg + SPELL_DESCRIPTIONS + SIZEOF_SPELL_DESCRIPTIONS * spell_id;
+			spell_description = &g_spell_descriptions[spell_id];
+
 			/* reset the spelltarget of the hero */
 			host_writeb(hero + HERO_ENEMY_ID, 0);
 
-			if ((host_readbs(ptr + SPELL_DESCRIPTIONS_TARGET_TYPE) != 0) && (host_readbs(ptr + SPELL_DESCRIPTIONS_TARGET_TYPE) != 4)) {
+			if (spell_description->target_type && (spell_description->target_type != 4)) {
 
-				if (host_readbs(ptr + SPELL_DESCRIPTIONS_TARGET_TYPE) == 1) {
+				if (spell_description->target_type == 1) {
 
 					GUI_output(get_ttx(234));
 
@@ -755,13 +755,17 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 	if (spell_id > 0) {
 
 		/* pointer to the spell description */
-		ptr = p_datseg + SPELL_DESCRIPTIONS + SIZEOF_SPELL_DESCRIPTIONS * spell_id;
+		spell_description = &g_spell_descriptions[spell_id];
 
-		if (!g_in_fight && (host_readbs(ptr + SPELL_DESCRIPTIONS_WHERE_TO_USE) == 1)) {
+		if (!g_in_fight && (spell_description->where_to_use == 1)) {
+
+			/* only in fight spell */
 			GUI_output(get_ttx(591));
 			retval = 0;
 
-		} else if (g_in_fight && (host_readbs(ptr + SPELL_DESCRIPTIONS_WHERE_TO_USE) == -1)) {
+		} else if (g_in_fight && (spell_description->where_to_use == -1)) {
+
+			/* only in fight spell */
 			GUI_output(get_ttx(592));
 			retval = 0;
 		}
@@ -801,7 +805,7 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 			}
 #endif
 
-			g_spelltest_result = (test_spell(hero, spell_id, handicap));
+			g_spelltest_result = test_spell(hero, spell_id, handicap);
 
 			if (g_spelltest_result == -99) {
 

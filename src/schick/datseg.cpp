@@ -329,7 +329,7 @@ struct{char attrib1, attrib2, attrib3, handicap, ae_cost, ae_mod;} g_staffspell_
 	{ ATTRIB_MU, ATTRIB_CH, ATTRIB_CH, 99, 26, 0 },
 	{ ATTRIB_MU, ATTRIB_KL, ATTRIB_CH, 99, 21, 2 }
 }; // ds:0x0973
-struct{char herotype, attrib1, attrib2, attrib3, ae_cost, wher_to_use, unkn6, target_type, range, fight;} g_spell_descriptions[87] = {
+struct spell_descr g_spell_descriptions[87] = {
 	{  0                        , 0        , 0        , 0        ,  0,  0, 0, 0, 0, 0 }, /* ... strangely, an all-zero entry */
 	{  SPELL_DESC_HEROTYPE_DRUID, ATTRIB_KL, ATTRIB_IN, ATTRIB_CH, -1,  0, 1, 2, 0, 0 }, /* Beherrschung brechen */
 	{  SPELL_DESC_HEROTYPE_MAGE , ATTRIB_KL, ATTRIB_IN, ATTRIB_FF, -1,  0, 0, 0, 0, 0 }, /* Destructibo Arcanitas */

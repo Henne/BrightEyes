@@ -49,24 +49,23 @@ void inc_spell_advanced(Bit8u *hero, signed short spell)
 	signed short randval;
 	struct dummy a = *(struct dummy*)(p_datseg + MAGIC_SCHOOL_SPELLRANGES);
 
-	if ((host_readbs(hero + HERO_TYPE) == HERO_TYPE_WITCH) &&
-		(ds_readbs((SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE) + SIZEOF_SPELL_DESCRIPTIONS * spell) == SPELL_DESC_HEROTYPE_WITCH))
+	if ((host_readbs(hero + HERO_TYPE) == HERO_TYPE_WITCH) && (g_spell_descriptions[spell].herotype == SPELL_DESC_HEROTYPE_WITCH))
 	{
 		/* witch spell */
 		max_incs = 2;
 	}
 
 	if ((host_readbs(hero + HERO_TYPE) >= HERO_TYPE_GREEN_ELF) && /* hero is one of the three elven types */
-		((ds_readbs((SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE) + SIZEOF_SPELL_DESCRIPTIONS * spell) == SPELL_DESC_HEROTYPE_GELF) ||
-			(ds_readbs((SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE) + SIZEOF_SPELL_DESCRIPTIONS * spell) == SPELL_DESC_HEROTYPE_SELF) ||
-			(ds_readbs((SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE) + SIZEOF_SPELL_DESCRIPTIONS * spell) == SPELL_DESC_HEROTYPE_IELF)))
+		((g_spell_descriptions[spell].herotype == SPELL_DESC_HEROTYPE_GELF) ||
+			(g_spell_descriptions[spell].herotype == SPELL_DESC_HEROTYPE_SELF) ||
+			(g_spell_descriptions[spell].herotype == SPELL_DESC_HEROTYPE_IELF)))
 	{
 		/* elven spell */
 		max_incs = 2;
 	}
 
 	if ((host_readbs(hero + HERO_TYPE) == HERO_TYPE_DRUID) &&
-		(ds_readbs((SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE) + SIZEOF_SPELL_DESCRIPTIONS * spell) == SPELL_DESC_HEROTYPE_DRUID))
+		(g_spell_descriptions[spell].herotype == SPELL_DESC_HEROTYPE_DRUID))
 	{
 		/* druid spell */
 		max_incs = 2;
@@ -75,7 +74,7 @@ void inc_spell_advanced(Bit8u *hero, signed short spell)
 	if (host_readbs(hero + HERO_TYPE) == HERO_TYPE_MAGE) {
 
 		/* mages */
-		if (ds_readbs((SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE) + SIZEOF_SPELL_DESCRIPTIONS * spell) == SPELL_DESC_HEROTYPE_MAGE) {
+		if (g_spell_descriptions[spell].herotype == SPELL_DESC_HEROTYPE_MAGE) {
 			/* spell is a mage spell */
 			max_incs = 2;
 		}
@@ -712,7 +711,7 @@ void level_up(signed short hero_pos)
 						 * up to skill value at most 11. */
 						while (host_readbs(hero + HERO_SP_RISE) != 0 && i < 86) {
 
-							if (ds_readbs(SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE + SIZEOF_SPELL_DESCRIPTIONS * i) == SPELL_DESC_HEROTYPE_WITCH && host_readbs(hero + HERO_SPELLS + i) < 11) {
+							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_WITCH && host_readbs(hero + HERO_SPELLS + i) < 11) {
 								inc_spell_novice(hero, i);
 							}
 							i++;
@@ -733,7 +732,7 @@ void level_up(signed short hero_pos)
 
 						while (host_readbs(hero + HERO_SP_RISE) != 0 && i < 86) {
 
-							if (ds_readbs(SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE + SIZEOF_SPELL_DESCRIPTIONS * i) == SPELL_DESC_HEROTYPE_DRUID && host_readbs(hero + HERO_SPELLS + i) < 11) {
+							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_DRUID && host_readbs(hero + HERO_SPELLS + i) < 11) {
 								inc_spell_novice(hero, i);
 							}
 							i++;
@@ -793,7 +792,7 @@ void level_up(signed short hero_pos)
 
 						while (host_readbs(hero + HERO_SP_RISE) != 0 && i < 86) {
 
-							if (ds_readbs(SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE + SIZEOF_SPELL_DESCRIPTIONS * i) == SPELL_DESC_HEROTYPE_GELF && host_readbs(hero + HERO_SPELLS + i) < 11) {
+							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_GELF && host_readbs(hero + HERO_SPELLS + i) < 11) {
 								inc_spell_novice(hero, i);
 							}
 							i++;
@@ -809,7 +808,7 @@ void level_up(signed short hero_pos)
 						i = 1;
 						while (host_readbs(hero + HERO_SP_RISE) != 0 && i < 86) {
 
-							if (ds_readbs(SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE + SIZEOF_SPELL_DESCRIPTIONS * i) == SPELL_DESC_HEROTYPE_GELF && host_readbs(hero + HERO_SPELLS + i) < 11) {
+							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_GELF && host_readbs(hero + HERO_SPELLS + i) < 11) {
 								inc_spell_novice(hero, i);
 							}
 							i++;
@@ -821,7 +820,7 @@ void level_up(signed short hero_pos)
 
 						while (host_readbs(hero + HERO_SP_RISE) != 0 && i < 86) {
 
-							if (ds_readbs(SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE + SIZEOF_SPELL_DESCRIPTIONS * i) == SPELL_DESC_HEROTYPE_IELF && host_readbs(hero + HERO_SPELLS + i) < 11) {
+							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_IELF && host_readbs(hero + HERO_SPELLS + i) < 11) {
 								inc_spell_novice(hero, i);
 							}
 							i++;
@@ -837,7 +836,7 @@ void level_up(signed short hero_pos)
 						i = 1;
 						while (host_readbs(hero + HERO_SP_RISE) != 0 && i < 86) {
 
-							if (ds_readbs(SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE + SIZEOF_SPELL_DESCRIPTIONS * i) == SPELL_DESC_HEROTYPE_IELF && host_readbs(hero + HERO_SPELLS + i) < 11) {
+							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_IELF && host_readbs(hero + HERO_SPELLS + i) < 11) {
 								inc_spell_novice(hero, i);
 							}
 							i++;
@@ -848,7 +847,7 @@ void level_up(signed short hero_pos)
 
 						while (host_readbs(hero + HERO_SP_RISE) != 0 && i < 86) {
 
-							if (ds_readbs(SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE + SIZEOF_SPELL_DESCRIPTIONS * i) == SPELL_DESC_HEROTYPE_SELF && host_readbs(hero + HERO_SPELLS + i) < 11) {
+							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_SELF && host_readbs(hero + HERO_SPELLS + i) < 11) {
 								inc_spell_novice(hero, i);
 							}
 							i++;
@@ -864,7 +863,7 @@ void level_up(signed short hero_pos)
 						i = 1;
 						while (host_readbs(hero + HERO_SP_RISE) != 0 && i < 86) {
 
-							if (ds_readbs(SPELL_DESCRIPTIONS + SPELL_DESCRIPTIONS_HEROTYPE + SIZEOF_SPELL_DESCRIPTIONS * i) == SPELL_DESC_HEROTYPE_SELF && host_readbs(hero + HERO_SPELLS + i) < 11) {
+							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_SELF && host_readbs(hero + HERO_SPELLS + i) < 11) {
 								inc_spell_novice(hero, i);
 							}
 							i++;

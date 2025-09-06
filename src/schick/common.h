@@ -1876,20 +1876,6 @@ enum {
 	SIZEOF_STAFFSPELL_DESCRIPTIONS = 6
 };
 
-enum { /* descriptions of the 85 hero spells */
-	SPELL_DESCRIPTIONS_HEROTYPE = 0, /* 0: druid spell; 1: mage spell; 2: which spell; 3: green elf spell; 4: ice elf spell; 5: sylvan elf spell */
-	SPELL_DESCRIPTIONS_ATTRIB1 = 1,
-	SPELL_DESCRIPTIONS_ATTRIB2 = 2,
-	SPELL_DESCRIPTIONS_ATTRIB3 = 3,
-	SPELL_DESCRIPTIONS_AE_COST = 4,
-	SPELL_DESCRIPTIONS_WHERE_TO_USE = 5, /* -1: spell cannot be casted in fight / 0: spell can be casted in fight and normal mode / 1: spell can be casted only in fight mode */
-	SPELL_DESCRIPTIONS_UNKN6 = 6,
-	SPELL_DESCRIPTIONS_TARGET_TYPE = 7,
-	SPELL_DESCRIPTIONS_RANGE = 8,
-	SPELL_DESCRIPTIONS_FIGHT = 9,
-	SIZEOF_SPELL_DESCRIPTIONS = 10
-};
-
 enum { /* note that the order differs from the one in HERO_TYPE... :( */
 	SPELL_DESC_HEROTYPE_DRUID = 0,
 	SPELL_DESC_HEROTYPE_MAGE = 1,
