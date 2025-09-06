@@ -79,6 +79,12 @@ struct struct_diary_entry {
 	Bit16s town;
 };
 
+/* seg041 */
+struct ranged_weapon_descr {
+	signed char damage_modifier[7];
+	signed char base_handicap;
+};
+
 struct weapon_descr {
 	Bit8s damage_d6;
 	Bit8s damage_const;
@@ -277,33 +283,23 @@ struct struct_recipe {
 extern unsigned short g_cd_init_successful;
 extern Bit32u g_cd_skipmagic;
 
-/* seg096 */
-extern signed short g_items_noplural[23];
-/* seg106 + seg107 */
-extern signed short g_items_pluralwords[7];
-/* seg096 */
-extern signed char g_items_genders[254];
-/* seg048, seg056, seg105 */
-extern signed short* g_wearable_items_index[12];
-/* seg041 */
-struct struct_ranged_weapon {
-	signed char damage_modifier[7];
-	signed char base_handicap;
-};
-/* TODO: use it properly in seg041 */
-extern const struct struct_ranged_weapon g_ranged_weapons_table[9];	// ds:0x0668; seg041
+extern signed short g_items_noplural[23];				// ds:0x0270; seg096
+extern signed short g_items_pluralwords[7];				// ds:0x029e; seg106, seg107
+extern signed char g_items_genders[254];				// ds:0x02ac; seg096
+extern signed short* g_wearable_items_index[12];			// ds:0x0638; seg048, seg056, seg105
+extern const struct ranged_weapon_descr g_ranged_weapons_table[9];	// ds:0x0668; seg041
 extern struct weapon_descr g_weapons_table[65];				// ds:0x06b0; seg033, seg041, seg105
 extern struct armors_descr g_armors_table[25];				// ds:0x0877; seg079, seg100, seg102, seg105
-extern struct staffspell_descr g_staffspell_descriptions[7];	// ds:0x973; seg098
-extern struct spell_descr g_spell_descriptions[87];		// ds:0x99d; seg033, seg036, seg042, seg050, seg098
-
-extern signed short g_poison_potions[10];
-extern signed short g_herbs_toxic[5];
-extern signed short g_herbs_uneatable[7];
-extern signed short g_elixir_potions[8];
-extern signed short g_bad_elixirs[8];
-extern signed short g_attack_items[3];
-extern signed char g_monname_genders[78];
+extern const struct specialitem_descr g_specialitems_table[14];		// ds:0x08a9; seg105, seg107
+extern signed short g_poison_potions[10];				// ds:0x08d3; seg107, seg108
+extern signed short g_herbs_toxic[5];					// ds:0x08e7; seg108
+extern signed short g_herbs_uneatable[7];				// ds:0x08f1; seg108
+extern signed short g_elixir_potions[8];				// ds:0x08ff; seg108
+extern signed short g_bad_elixirs[8];					// ds:0x090f; seg108
+extern signed short g_attack_items[3];					// ds:0x091f; seg033
+extern signed char g_monname_genders[78];				// ds:0x0925; seg096
+extern struct staffspell_descr g_staffspell_descriptions[7];		// ds:0x0973; seg098
+extern struct spell_descr g_spell_descriptions[87];			// ds:0x099d; seg033, seg036, seg042, seg050, seg098
 
 extern const signed short* g_magic_schools_index[9];
 extern void (*g_spell_handlers[86])(void);		//ds:0x0dbb; seg098

@@ -230,7 +230,7 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 	signed short damage_mod;
 	Bit8u* item_p_rh;
 	struct weapon_descr *weapon;
-	const struct struct_ranged_weapon* p_rangedtab;
+	const struct ranged_weapon_descr *p_rangedtab;
 	signed short target_size;
 	signed short right_hand;
 	signed short beeline;
