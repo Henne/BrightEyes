@@ -71,7 +71,7 @@
 //#define MON_SPELL_DESCRIPTIONS          (0x0f13)    /* struct(8)[15]; */
 //#define MON_SPELL_REPERTOIRE            (0x0f8b)    /* struct(5)[11]; struct{char spells[5];} */
 //#define MON_SPELL_HANDLERS              (0x0fc2)    /* long[15]; function pointer[15] */
-#define SKILL_DESCRIPTIONS              (0x0ffe)    /* struct(4)[52]; struct{signed char attrib1, attrib2, attrib3, max_inc;} */
+//#define SKILL_DESCRIPTIONS              (0x0ffe)    /* struct(4)[52]; struct{signed char attrib1, attrib2, attrib3, max_inc;} */
 #define SKILLS_INDEX                    (0x10ce)    /* struct(2)[7]; struct{signed char first, length;}; { {0,9}, {9,10}, {19,7}, {26,6}, {32,9}, {41,9}, {50,2} } */
 //#define NVFTAB_FIGURES_RANGEWEAPON      (0x10dc)    /* char[264]; by rwt/viewdir */
 //#define NVFTAB_FIGURES_UNCONSCIOUS      (0x11e4)    /* short[22] */

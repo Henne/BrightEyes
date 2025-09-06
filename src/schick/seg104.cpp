@@ -533,12 +533,12 @@ signed short get_skilled_hero_pos(signed short skill)
 			(host_readbs(hero + HERO_GROUP_NO) == gs_current_group))
 		{
 
-			cur =	host_readbs(hero + HERO_ATTRIB + 3 * (ds_readbs(SKILL_DESCRIPTIONS + 4 * skill))) +
-				host_readbs(hero + HERO_ATTRIB_MOD + 3 * (ds_readbs(SKILL_DESCRIPTIONS + 4 * skill))) +
-				host_readbs(hero + HERO_ATTRIB + 3 * (ds_readbs((SKILL_DESCRIPTIONS + 1) + 4 * skill))) +
-				host_readbs(hero + HERO_ATTRIB_MOD + 3 * (ds_readbs((SKILL_DESCRIPTIONS + 1) + 4 * skill))) +
-				host_readbs(hero + HERO_ATTRIB + 3 * (ds_readbs((SKILL_DESCRIPTIONS + 2) + 4 * skill))) +
-				host_readbs(hero + HERO_ATTRIB_MOD + 3 * (ds_readbs((SKILL_DESCRIPTIONS + 2) + 4 * skill))) +
+			cur =	host_readbs(hero + HERO_ATTRIB + 3 * g_skill_descriptions[skill].attrib1) +
+				host_readbs(hero + HERO_ATTRIB_MOD + 3 * g_skill_descriptions[skill].attrib1) +
+				host_readbs(hero + HERO_ATTRIB + 3 * g_skill_descriptions[skill].attrib2) +
+				host_readbs(hero + HERO_ATTRIB_MOD + 3 * g_skill_descriptions[skill].attrib2) +
+				host_readbs(hero + HERO_ATTRIB + 3 * g_skill_descriptions[skill].attrib3) +
+				host_readbs(hero + HERO_ATTRIB_MOD + 3 * g_skill_descriptions[skill].attrib3) +
 				host_readbs(hero + HERO_TALENTS + skill);
 
 			if (cur > max) {

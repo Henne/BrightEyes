@@ -136,12 +136,12 @@ Bit8u* get_proper_hero(signed short skill)
 			!hero_dead(hero_i)) {
 
 			/* add current and maximum attibute values */
-			cur =	host_readbs(hero_i + HERO_ATTRIB + 3 * ds_readbs(SKILL_DESCRIPTIONS + 4 * skill)) +
-				host_readbs(hero_i + HERO_ATTRIB_MOD + 3 * ds_readbs(SKILL_DESCRIPTIONS + 4 * skill)) +
-				host_readbs(hero_i + HERO_ATTRIB + 3 * ds_readbs((SKILL_DESCRIPTIONS + 1) + 4 * skill)) +
-				host_readbs(hero_i + HERO_ATTRIB_MOD + 3 * ds_readbs((SKILL_DESCRIPTIONS + 1) + 4 * skill)) +
-				host_readbs(hero_i + HERO_ATTRIB + 3 * ds_readbs((SKILL_DESCRIPTIONS + 2) + 4 * skill)) +
-				host_readbs(hero_i + HERO_ATTRIB_MOD + 3 * ds_readbs((SKILL_DESCRIPTIONS + 2) + 4 * skill)) +
+			cur =	host_readbs(hero_i + HERO_ATTRIB + 3 * g_skill_descriptions[skill].attrib1) +
+				host_readbs(hero_i + HERO_ATTRIB_MOD + 3 * g_skill_descriptions[skill].attrib1) +
+				host_readbs(hero_i + HERO_ATTRIB + 3 * g_skill_descriptions[skill].attrib2) +
+				host_readbs(hero_i + HERO_ATTRIB_MOD + 3 * g_skill_descriptions[skill].attrib2) +
+				host_readbs(hero_i + HERO_ATTRIB + 3 * g_skill_descriptions[skill].attrib3) +
+				host_readbs(hero_i + HERO_ATTRIB_MOD + 3 * g_skill_descriptions[skill].attrib3) +
 				host_readbs(hero_i + HERO_TALENTS + skill);
 
 			if (cur > max) {
@@ -239,7 +239,7 @@ signed short test_skill(Bit8u *hero, signed short skill, signed char handicap)
 		/* do the test */
 		handicap -= host_readbs(hero + HERO_TALENTS + skill);
 
-		return test_attrib3(hero, ds_readbs(SKILL_DESCRIPTIONS + skill * 4), ds_readbs((SKILL_DESCRIPTIONS + 1) + skill * 4), ds_readbs((SKILL_DESCRIPTIONS + 2) + skill * 4), handicap);
+		return test_attrib3(hero, g_skill_descriptions[skill].attrib1, g_skill_descriptions[skill].attrib2, g_skill_descriptions[skill].attrib3, handicap);
 
 	}
 

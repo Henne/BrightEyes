@@ -158,7 +158,7 @@ void inc_skill_advanced(Bit8u *hero, signed short skill)
 	signed short randval;
 	signed short max_incs;
 
-	max_incs = ds_readbs(SKILL_DESCRIPTIONS + 4 * skill + 3);
+	max_incs = g_skill_descriptions[skill].max_incs;
 
 	if (host_readbs(g_inc_skills_counter + 2 * skill + 1) >= max_incs) {
 

@@ -611,7 +611,7 @@ void (*g_mon_spellhandlers[15])(void) = {
 	mspell_paralue,			/* 14 */
 }; // ds:0x0fc2, function pointer[15]
 
-struct{signed char attrib1, attrib2, attrib3, max_inc;} g_skill_descriptions[52] = {
+const struct skill_descr g_skill_descriptions[52] = {
 	{ 0x00, 0x00, 0x00, 0x01 },
 	{ 0x00, 0x00, 0x00, 0x01 },
 	{ 0x00, 0x00, 0x00, 0x01 },

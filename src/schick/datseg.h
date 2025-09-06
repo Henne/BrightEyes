@@ -128,6 +128,13 @@ struct spell_descr {
 	Bit8s fight;
 };
 
+struct skill_descr {
+	Bit8s attrib1;
+	Bit8s attrib2;
+	Bit8s attrib3;
+	Bit8s max_incs;
+};
+
 struct trv_start_point {
 	Bit8s town;
 	Bit8s typeindex;
@@ -318,6 +325,7 @@ extern void (*g_spell_handlers[86])(void);				// ds:0x0dbb; seg098
 extern struct mon_spell_description g_mon_spell_descriptions[15];	// ds:0x0f13; seg037, seg043, seg102
 extern Bit8s g_mon_spell_repertoire[11][5];				// ds:0x0f8b; seg037
 extern void (*g_mon_spellhandlers[15])(void);				// ds:0x0fc2; seg102
+extern const struct skill_descr g_skill_descriptions[52];		// ds:0x0ffe; seg050, seg103, seg104
 
 extern signed char g_nvftab_figures_rangeweapon[22][3][4];	//ds:0x10dc; seg002, seg033, seg039
 
