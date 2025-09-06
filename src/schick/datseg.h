@@ -313,11 +313,11 @@ extern struct staffspell_descr g_staffspell_descriptions[7];		// ds:0x0973; seg0
 extern struct spell_descr g_spell_descriptions[87];			// ds:0x099d; seg033, seg036, seg042, seg050, seg098
 extern const struct spells_index g_spells_index[8];			// ds:0x0d03; seg046, seg098
 extern const struct spells_index g_spells_index2[4];			// ds:0x0d13; seg046
-
 extern const signed short* g_magic_schools_index[9];
-extern void (*g_spell_handlers[86])(void);		//ds:0x0dbb; seg098
-extern struct mon_spell_description g_mon_spell_descriptions[15];	//ds:0x0f13; seg037, seg043, seg102
-extern void (*g_mon_spellhandlers[15])(void);		//ds:0x0fc2; seg102
+extern void (*g_spell_handlers[86])(void);				// ds:0x0dbb; seg098
+extern struct mon_spell_description g_mon_spell_descriptions[15];	// ds:0x0f13; seg037, seg043, seg102
+extern Bit8s g_mon_spell_repertoire[11][5];				// ds:0x0f8b; seg037
+extern void (*g_mon_spellhandlers[15])(void);				// ds:0x0fc2; seg102
 
 extern signed char g_nvftab_figures_rangeweapon[22][3][4];	//ds:0x10dc; seg002, seg033, seg039
 

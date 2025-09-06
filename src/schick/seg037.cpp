@@ -431,7 +431,7 @@ signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signe
 	retval = 0;
 
 	available_spells = l_si = 0;
-	while ((l_si < 5) && (ds_readbs(MON_SPELL_REPERTOIRE + enemy->mag_id * 5 + l_si++) != -1))
+	while ((l_si < 5) && (g_mon_spell_repertoire[enemy->mag_id][l_si++] != -1))
 	{
 		available_spells++;
 	}
@@ -443,7 +443,7 @@ signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signe
 
 		for (l_si = 0; l_si < available_spells; l_si++) {
 
-			l2 = ds_readbs(MON_SPELL_REPERTOIRE + enemy->mag_id * 5 + l_si);
+			l2 = g_mon_spell_repertoire[enemy->mag_id][l_si];
 
 			if (g_mon_spell_descriptions[l2].unkn1 == 1) {
 
@@ -455,7 +455,7 @@ signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signe
 		}
 
 		if (l7 == 0) {
-			l2 = ds_readbs(MON_SPELL_REPERTOIRE + enemy->mag_id * 5 + random_interval(0, available_spells - 1));
+			l2 = g_mon_spell_repertoire[enemy->mag_id][random_interval(0, available_spells - 1)];
 		}
 
 		enemy->enemy_id = 0;
