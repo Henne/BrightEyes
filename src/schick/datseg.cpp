@@ -319,7 +319,7 @@ signed short g_attack_items[3] = {
 	-1
 }; // ds:0x091f
 signed char g_monname_genders[78] = { 0, 0, 0, 0, 0, 0, 2, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; // ds:0x0925
-struct{char attrib1, attrib2, attrib3, handicap, ae_cost, ae_mod;} g_staffspell_descriptions[7] = {
+struct staffspell_descr g_staffspell_descriptions[7] = {
 	/* The following are the older skill test attributes from DSA2 / early DSA3. */
 	{ ATTRIB_KL, ATTRIB_KL, ATTRIB_CH,  1, 21, 1 },
 	{ ATTRIB_KL, ATTRIB_KL, ATTRIB_CH,  0, 23, 0 }, /* maybe handicap 0 should be handicap 2 instead. has to be checked with the official DSA2/early DSA3 rules. */

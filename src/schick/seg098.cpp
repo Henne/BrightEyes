@@ -332,25 +332,24 @@ signed short use_magic(Bit8u* hero)
 				GUI_output(get_ttx(335));
 			} else {
 
-				if (ds_readbs((STAFFSPELL_DESCRIPTIONS + STAFFSPELL_DESCRIPTIONS_AE_COST) + SIZEOF_STAFFSPELL_DESCRIPTIONS * host_readbs(hero + HERO_STAFFSPELL_LVL)) <= host_readws(hero + HERO_AE)) {
+				if (g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].ae_cost <= host_readws(hero + HERO_AE)) {
 					/* check AE */
 
 					retval = 1;
 
 #if !defined(__BORLANDC__)
-					D1_INFO("%s Probe fuer Stabzauber Nr. %d (%+d)",(char*)(hero + HERO_NAME2), host_readbs(hero + HERO_STAFFSPELL_LVL + 1), ds_readbs((STAFFSPELL_DESCRIPTIONS + 3) + 6 * host_readbs(hero + HERO_STAFFSPELL_LVL)));
+					D1_INFO("%s Probe fuer Stabzauber Nr. %d (%+d)",(char*)(hero + HERO_NAME2), host_readbs(hero + HERO_STAFFSPELL_LVL + 1), g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].handicap);
 #endif
 					if (test_attrib3(hero,
-
-						ds_readbs((STAFFSPELL_DESCRIPTIONS + STAFFSPELL_DESCRIPTIONS_ATTRIB1) + SIZEOF_STAFFSPELL_DESCRIPTIONS * host_readbs(hero + HERO_STAFFSPELL_LVL)),
-						ds_readbs((STAFFSPELL_DESCRIPTIONS + STAFFSPELL_DESCRIPTIONS_ATTRIB2) + SIZEOF_STAFFSPELL_DESCRIPTIONS * host_readbs(hero + HERO_STAFFSPELL_LVL)),
+							g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].attrib1,
+							g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].attrib2,
 #ifndef M302de_ORIGINAL_BUGFIX
 						/* Original-Bug 17: the first attribute is tested twice, the second one is left out */
-						ds_readbs((STAFFSPELL_DESCRIPTIONS + STAFFSPELL_DESCRIPTIONS_ATTRIB2) + SIZEOF_STAFFSPELL_DESCRIPTIONS * host_readbs(hero + HERO_STAFFSPELL_LVL)),
+							g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].attrib2,
 #else
-						ds_readbs((STAFFSPELL_DESCRIPTIONS + STAFFSPELL_DESCRIPTIONS_ATTRIB3) + SIZEOF_STAFFSPELL_DESCRIPTIONS * host_readbs(hero + HERO_STAFFSPELL_LVL)),
+							g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].attrib3,
 #endif
-						ds_readbs((STAFFSPELL_DESCRIPTIONS + STAFFSPELL_DESCRIPTIONS_HANDICAP) + SIZEOF_STAFFSPELL_DESCRIPTIONS * host_readbs(hero + HERO_STAFFSPELL_LVL))) > 0)
+							g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].handicap) > 0)
 					{
 						/* Success */
 
@@ -358,9 +357,9 @@ signed short use_magic(Bit8u* hero)
 						sprintf(g_dtp2,	get_ttx(339), host_readbs(hero + HERO_STAFFSPELL_LVL) + 1);
 						GUI_output(g_dtp2);
 
-						sub_ae_splash(hero, ds_readbs((STAFFSPELL_DESCRIPTIONS + STAFFSPELL_DESCRIPTIONS_AE_COST) + SIZEOF_STAFFSPELL_DESCRIPTIONS * host_readbs(hero + HERO_STAFFSPELL_LVL)));
+						sub_ae_splash(hero, g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].ae_cost);
 
-						sub_ptr_ws(hero + HERO_AE_ORIG, ds_readbs((STAFFSPELL_DESCRIPTIONS + STAFFSPELL_DESCRIPTIONS_AE_MOD) + SIZEOF_STAFFSPELL_DESCRIPTIONS * host_readbs(hero + HERO_STAFFSPELL_LVL)));
+						sub_ptr_ws(hero + HERO_AE_ORIG, g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].ae_mod);
 
 						/* Staffspell level +1 */
 						inc_ptr_bs(hero + HERO_STAFFSPELL_LVL);
@@ -374,7 +373,7 @@ signed short use_magic(Bit8u* hero)
 						GUI_output(get_ttx(338));
 
 						/* only half of the AE costs */
-						sub_ae_splash(hero, ds_readbs((STAFFSPELL_DESCRIPTIONS + STAFFSPELL_DESCRIPTIONS_AE_COST) + SIZEOF_STAFFSPELL_DESCRIPTIONS * host_readbs(hero + HERO_STAFFSPELL_LVL)) / 2);
+						sub_ae_splash(hero, g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].ae_cost / 2);
 
 						timewarp(HOURS(2));
 					}

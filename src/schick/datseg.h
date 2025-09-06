@@ -79,6 +79,15 @@ struct struct_diary_entry {
 	Bit16s town;
 };
 
+struct staffspell_descr {
+	Bit8s attrib1;
+	Bit8s attrib2;
+	Bit8s attrib3;
+	Bit8s handicap;
+	Bit8s ae_cost;
+	Bit8s ae_mod;
+};
+
 struct spell_descr {
 	Bit8s herotype;	/* 0: druid spell; 1: mage spell; 2: witch spell; 3: green elf spell; 4: ice elf spell; 5: sylvan elf spell */
 	Bit8s attrib1;
@@ -269,6 +278,7 @@ struct struct_ranged_weapon {
 /* TODO: use it properly in seg041 */
 extern const struct struct_ranged_weapon g_ranged_weapons_table[9]; // ds:0x0668; seg041
 
+extern struct staffspell_descr g_staffspell_descriptions[7];	// ds:0x973; seg098
 extern struct spell_descr g_spell_descriptions[87];		// ds:0x99d; seg033, seg036, seg042, seg050, seg098
 
 extern signed short g_poison_potions[10];
