@@ -1162,6 +1162,8 @@ extern char g_empty_string6[1];			//ds:0x64a0; seg046
 extern char g_empty_string7[1];			//ds:0x64a1; seg046
 extern signed char g_hero_sel_exclude;		//ds:0x64a2; seg047, seg049, seg103, seg120
 
+extern signed short g_cheatskill_usable;	//ds:0x6532; seg048, seg103
+
 extern char g_extraspace_separated_strings[7];	//ds:0x6534; seg048
 extern char g_empty_string8[1];			//ds:0x653b; seg048
 extern char g_extraspace_separated_strings2[7];	//ds:0x653c; seg048

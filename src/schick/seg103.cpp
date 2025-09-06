@@ -262,7 +262,7 @@ signed short select_skill(void)
 		a.a[nr_skills] = TA_AKROBATIK;
 		nr_skills++;
 
-		if (ds_readws(CHEATSKILL_USABLE) == 0) {
+		if (!g_cheatskill_usable) {
 			a.a[nr_skills] = TA_FALSCHSPIEL;
 			nr_skills++;
 		}

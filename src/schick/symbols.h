@@ -1000,7 +1000,7 @@
 #define SEG047_INIT3                    (0x64bf)    /* signed short[7]; filled with zeroes */
 // ?1
 #define INVSLOT_BORDERXY_TABLE          (0x64ce)    /* struct(4)[25]; struct{signed short x,y;} */
-#define CHEATSKILL_USABLE               (0x6532)    /* signed short; {0,1} */
+//#define CHEATSKILL_USABLE               (0x6532)    /* signed short; {0,1} */
 //#define EXTRASPACE_SEPARATED_STRINGS    (0x6534)    /* char[7]; "%s %s " */
 //#define EMPTY_STRING8                   (0x653b)    /* char; "" */
 //#define EXTRASPACE_SEPARATED_STRINGS2   (0x653c)    /* char[7]; "%s %s " */

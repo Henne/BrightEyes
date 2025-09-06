@@ -530,9 +530,9 @@ void status_menu(signed short hero_pos)
 					}
 					case 4: {
 						/* use skill */
-						ds_writew(CHEATSKILL_USABLE, 1);
+						g_cheatskill_usable = 1;
 						GUI_use_skill(hero_pos, 0);
-						ds_writew(CHEATSKILL_USABLE, 0);
+						g_cheatskill_usable = 0;
 
 						if (g_tx_file_index == 19) {
 							load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
@@ -647,9 +647,9 @@ void status_menu(signed short hero_pos)
 					}
 					case 3: {
 						/* use skill */
-						ds_writew(CHEATSKILL_USABLE, 1);
+						g_cheatskill_usable = 1;
 						GUI_use_skill(hero_pos, 0);
-						ds_writew(CHEATSKILL_USABLE, 0);
+						g_cheatskill_usable = 0;
 
 						if (g_tx_file_index == 19) {
 							load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
@@ -699,21 +699,15 @@ void status_menu(signed short hero_pos)
 			}
 			case 3: {
 				/* from skills-page */
-				l_di = GUI_radio((char*)0, 6,
-						get_ttx(212),
-						get_tx2(24),
-						get_tx2(19),
-						get_tx2(21),
-						get_ttx(213),
-						get_tx2(15));
+				l_di = GUI_radio((char*)NULL, 6, get_ttx(212), get_tx2(24), get_tx2(19), get_tx2(21), get_ttx(213), get_tx2(15));
 
 				if (l_di != -1) {
 					switch (l_di) {
 					case 1: {
 						/* use skill */
-						ds_writew(CHEATSKILL_USABLE, 1);
+						g_cheatskill_usable = 1;
 						GUI_use_skill(hero_pos, 0);
-						ds_writew(CHEATSKILL_USABLE, 0);
+						g_cheatskill_usable = 0;
 
 						if (g_tx_file_index == 19) {
 							load_tx2(ARCHIVE_FILE_CHARTEXT_LTX);
