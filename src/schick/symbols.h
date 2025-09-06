@@ -1304,7 +1304,7 @@
 //#define CD_AUDIO_POS                    (0xbc4e)    /* unsigned long */
 //#define CD_DRIVE_NO                     (0xbc52)    /* unsigned short */
 // ?6
-#define SAMPLE_AD_LENGTH                (0xbc5a)    /* unsigned short */
+//#define SAMPLE_AD_LENGTH                (0xbc5a)    /* unsigned short */
 #define SAMPLE_AD_IDX_ENTRY             (0xbc5c)    /* struct(6); struct{signed char u1; signed char u2; unsigned long u3;} */
 //#define PLAYMASK_US                     (0xbc62)    /* unsigned char; 1 = PLAYM_US, 0 = PLAYM_UK */
 //#define GFXBUF_WAIT_KEYPRESS            (0xbc63)    /* char[100] */

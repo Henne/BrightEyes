@@ -1333,6 +1333,7 @@ extern signed int g_tlk_ruin_hero_counter;	//ds:0xb21b; seg117
 extern signed char g_large_buf;		// ds:0xe5e4; seg120, seg028
 extern HugePt g_global_buffer_ptr;	// ds:0xe5e0; seg120
 extern Bit32u g_buffersize;		// ds:0xe5dc; seg120
+extern unsigned short g_sample_ad_length;	// ds:0xbc5a; seg002
 extern signed short g_basepos_x_bak;	// ds:0xe5d9; seg117
 extern signed short g_basepos_y_bak;	// ds:0xe5d7; seg117
 extern signed short g_textbox_width_bak; // ds:0xe5d5; seg117

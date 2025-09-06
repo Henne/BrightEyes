@@ -386,13 +386,13 @@ Bit8u* prepare_timbre(signed short a1, signed short patch)
 
 	seek_archive_file(g_sample_ad_handle, ds_readd((SAMPLE_AD_IDX_ENTRY+2)), 0);
 
-	read_archive_file(g_sample_ad_handle, p_datseg + SAMPLE_AD_LENGTH, 2);
+	read_archive_file(g_sample_ad_handle, (Bit8u*)&g_sample_ad_length, 2);
 
-	buf = schick_alloc(ds_readw(SAMPLE_AD_LENGTH));
+	buf = schick_alloc(g_sample_ad_length);
 
-	host_writew(buf, ds_readw(SAMPLE_AD_LENGTH));
+	host_writew(buf, g_sample_ad_length);
 
-	read_archive_file(g_sample_ad_handle, buf + 2, ds_readw(SAMPLE_AD_LENGTH) - 2);
+	read_archive_file(g_sample_ad_handle, buf + 2, g_sample_ad_length - 2);
 
 	return buf;
 #else
