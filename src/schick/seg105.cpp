@@ -118,12 +118,10 @@ void add_equip_boni(Bit8u *owner, Bit8u *equipper, signed short item, signed sho
 			host_writeb(equipper + HERO_WEAPON_TYPE, host_readb(item_p + ITEM_STATS_SUBTYPE));
 
 			/* set AT */
-			host_writeb(equipper + HERO_AT_MOD,
-				ds_readb(WEAPONS_TABLE + WEAPON_STATS_AT_MOD + host_readbs(item_p + ITEM_STATS_TABLE_INDEX) * SIZEOF_WEAPON_STATS));
+			host_writeb(equipper + HERO_AT_MOD, g_weapons_table[host_readbs(item_p + ITEM_STATS_TABLE_INDEX) * SIZEOF_WEAPON_STATS].at_mod);
 
 			/* set PA */
-			host_writeb(equipper + HERO_PA_MOD,
-				ds_readb(WEAPONS_TABLE + WEAPON_STATS_PA_MOD + host_readbs(item_p + ITEM_STATS_TABLE_INDEX) * SIZEOF_WEAPON_STATS));
+			host_writeb(equipper + HERO_PA_MOD, g_weapons_table[host_readbs(item_p + ITEM_STATS_TABLE_INDEX)].pa_mod);
 
 		}
 
@@ -408,14 +406,14 @@ signed short give_hero_new_item(Bit8u *hero, signed short item, signed short mod
 							/* set breakfactor */
 							if (item_weapon(item_p)) {
 								host_writeb(hero + HERO_INVENTORY + INVENTORY_BF + di * SIZEOF_INVENTORY,
-									ds_readb(WEAPONS_TABLE + WEAPON_STATS_BF + host_readbs(item_p + ITEM_STATS_TABLE_INDEX) * SIZEOF_WEAPON_STATS));
+									g_weapons_table[host_readbs(item_p + ITEM_STATS_TABLE_INDEX)].bf);
 							}
 
 							/* adjust weight */
 							if (item_stackable(item_p)) {
 								/* add stackable items weight */
 								add_ptr_ws(hero + HERO_LOAD,
-									(host_readws(item_p + ITEM_STATS_WEIGHT) * si));
+									host_readws(item_p + ITEM_STATS_WEIGHT) * si);
 								retval = si;
 								si = 0;
 							} else {

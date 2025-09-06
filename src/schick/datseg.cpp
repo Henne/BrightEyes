@@ -153,7 +153,7 @@ const struct struct_ranged_weapon g_ranged_weapons_table[9] = {
 	{ -1,  0,  0,  0,  0,  0,  0,  0 }
 }; // ds:0x0668
 
-struct{char damage_d6, damage_constant, damage_kk_bonus, bf, ranged_index, at_mod, pa_mod;} g_weapons_table[65] = {
+struct weapon_descr g_weapons_table[65] = {
 	{ 1, 4, 14,  2, -1,  0,  0 }, /*  0 <- ITEM_SWORD */
 	{ 1, 1, 14,  6, -1, -1, -3 }, /*  1 <- ITEM_CLUB */
 	{ 1, 3, 15,  2, -1,  0,  0 }, /*  2 <- ITEM_SABER */

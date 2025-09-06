@@ -79,6 +79,16 @@ struct struct_diary_entry {
 	Bit16s town;
 };
 
+struct weapon_descr {
+	Bit8s damage_d6;
+	Bit8s damage_const;
+	Bit8s damage_kk_bonus;		/* Koerperkraft-Zuschlag */
+	Bit8s bf;		/* Bruchfaktor */
+	Bit8s ranged_index;	/* related to ranged weapons */
+	Bit8s at_mod;
+	Bit8s pa_mod;
+};
+
 struct staffspell_descr {
 	Bit8s attrib1;
 	Bit8s attrib2;
@@ -276,7 +286,8 @@ struct struct_ranged_weapon {
 	signed char base_handicap;
 };
 /* TODO: use it properly in seg041 */
-extern const struct struct_ranged_weapon g_ranged_weapons_table[9]; // ds:0x0668; seg041
+extern const struct struct_ranged_weapon g_ranged_weapons_table[9];	// ds:0x0668; seg041
+extern struct weapon_descr g_weapons_table[65];				// ds:0x06b0; seg033, seg041, seg105
 
 extern struct staffspell_descr g_staffspell_descriptions[7];	// ds:0x973; seg098
 extern struct spell_descr g_spell_descriptions[87];		// ds:0x99d; seg033, seg036, seg042, seg050, seg098

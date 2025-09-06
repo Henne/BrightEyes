@@ -716,18 +716,7 @@ enum {
 	WEAPON_TYPE_WURFWAFFE	= 8
 };
 
-enum {
-	/* https://github.com/shihan42/BrightEyesWiki/wiki/SCHICKM.EXE#Waffentabelle */
-	/* structure of the entries of WEAPONS_TABLE */
-	WEAPON_STATS_DAMAGE_D6		= 0,
-	WEAPON_STATS_DAMAGE_CONSTANT	= 1,
-	WEAPON_STATS_DAMAGE_KK_BONUS	= 2, /* Körperkraft-Zuschlag */
-	WEAPON_STATS_BF			= 3, /* Bruchfaktor */
-	WEAPON_STATS_RANGED_INDEX	= 4, /* related to ranged weapons? */
-	WEAPON_STATS_AT_MOD		= 5,
-	WEAPON_STATS_PA_MOD		= 6,
-	SIZEOF_WEAPON_STATS		= 7
-};
+/* https://github.com/shihan42/BrightEyesWiki/wiki/SCHICKM.EXE#Waffentabelle */
 
 enum {
 	/* https://github.com/shihan42/BrightEyesWiki/wiki/SCHICKM.EXE#R%C3%BCstungstabelle */

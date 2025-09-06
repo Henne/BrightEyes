@@ -55,7 +55,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 	signed char at;
 	signed char pa;
 	Bit8u *p_itemsdat;
-	Bit8u *p_weapontab;
+	struct weapon_descr *weapon;
 	struct spell_descr *spell_description;
 	signed short damage_lo;
 	signed short damage_hi;
@@ -655,10 +655,9 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 
 
 						p_itemsdat = get_itemsdat(host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID));
-						p_weapontab = p_datseg + WEAPONS_TABLE + SIZEOF_WEAPON_STATS * host_readbs(p_itemsdat + ITEM_STATS_TABLE_INDEX);
+						weapon = &g_weapons_table[host_readbs(p_itemsdat + ITEM_STATS_TABLE_INDEX)];
 
-						calc_damage_range(host_readbs(p_weapontab + WEAPON_STATS_DAMAGE_D6), 6, host_readbs(p_weapontab + WEAPON_STATS_DAMAGE_CONSTANT),
-							(Bit8u*)&damage_lo, (Bit8u*)&damage_hi);
+						calc_damage_range(weapon->damage_d6, 6, weapon->damage_const, (Bit8u*)&damage_lo, (Bit8u*)&damage_hi);
 
 					}
 				} else {
@@ -676,10 +675,9 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 
 
 					p_itemsdat = get_itemsdat(host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID));
-					p_weapontab = p_datseg + WEAPONS_TABLE + SIZEOF_WEAPON_STATS * host_readbs(p_itemsdat + ITEM_STATS_TABLE_INDEX);
+					weapon = &g_weapons_table[host_readbs(p_itemsdat + ITEM_STATS_TABLE_INDEX)];
 
-					calc_damage_range(host_readbs(p_weapontab + WEAPON_STATS_DAMAGE_D6), 6, host_readbs(p_weapontab + WEAPON_STATS_DAMAGE_CONSTANT),
-						(Bit8u*)&damage_lo, (Bit8u*)&damage_hi);
+					calc_damage_range(weapon->damage_d6, 6, weapon->damage_const, (Bit8u*)&damage_lo, (Bit8u*)&damage_hi);
 
 					/* "THE SWORD GRIMRING" gets a damage bonus + 5 in the final fight */
 					if ((host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID) == ITEM_GRIMRING) && (g_current_fight_no == FIGHTS_F144)) {
@@ -689,7 +687,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 
 					weapon_id = host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK))
 							+ host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK))
-							- host_readbs(p_weapontab +  WEAPON_STATS_DAMAGE_KK_BONUS);
+							- weapon->damage_kk_bonus;
 
 					if (weapon_id > 0) {
 						damage_lo += weapon_id;

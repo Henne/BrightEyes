@@ -229,7 +229,7 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 	signed short damage;
 	signed short damage_mod;
 	Bit8u* item_p_rh;
-	Bit8u* p_weapontab;
+	struct weapon_descr *weapon;
 	const struct struct_ranged_weapon* p_rangedtab;
 	signed short target_size;
 	signed short right_hand;
@@ -273,11 +273,12 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 
 	if (weapon_type != -1) {
 
-		p_weapontab = p_datseg + WEAPONS_TABLE + host_readbs(item_p_rh + ITEM_STATS_TABLE_INDEX) * SIZEOF_WEAPON_STATS;
+		weapon = &g_weapons_table[host_readbs(item_p_rh + ITEM_STATS_TABLE_INDEX)];
 
-		damage = dice_roll(host_readbs(p_weapontab + WEAPON_STATS_DAMAGE_D6), 6, host_readbs(p_weapontab + WEAPON_STATS_DAMAGE_CONSTANT));
+		damage = dice_roll(weapon->damage_d6, 6, weapon->damage_const);
 
-		if (host_readbs(p_weapontab + WEAPON_STATS_RANGED_INDEX) != -1) {
+		if (weapon->ranged_index != -1) {
+
 			/* weapon does ranged damage */
 
 			hero_idx = get_hero_index(hero);
@@ -310,7 +311,7 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 				distance = 6;
 			}
 
-			p_rangedtab = &g_ranged_weapons_table[host_readbs(p_weapontab + WEAPON_STATS_RANGED_INDEX)];
+			p_rangedtab = &g_ranged_weapons_table[weapon->ranged_index];
 
 			if (attack_hero) {
 				if (host_readbs(target + HERO_TYPE) == HERO_TYPE_DWARF) {
@@ -329,7 +330,7 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 			damage_mod = (test_skill(hero,
 						(host_readbs(item_p_rh + ITEM_STATS_SUBTYPE) == WEAPON_TYPE_WURFWAFFE ? TA_WURFWAFFEN : TA_SCHUSSWAFFEN),
 						p_rangedtab->base_handicap + 2 * distance - 2 * target_size) > 0) ?
-					g_ranged_weapons_table[host_readbs(p_weapontab + WEAPON_STATS_RANGED_INDEX)].damage_modifier[distance]
+					g_ranged_weapons_table[weapon->ranged_index].damage_modifier[distance]
 					: -damage;
 
 			if (damage_mod != 0) { /* test is redundant */
@@ -340,7 +341,7 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 		} else {
 			/* weapon does melee damage */
 
-			damage_mod = host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK)) - host_readbs(p_weapontab + WEAPON_STATS_DAMAGE_KK_BONUS);
+			damage_mod = host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK)) - weapon->damage_kk_bonus;
 			if (damage_mod > 0) {
 				damage += damage_mod;
 			}
