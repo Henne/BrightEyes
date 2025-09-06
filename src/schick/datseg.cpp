@@ -221,7 +221,7 @@ struct weapon_descr g_weapons_table[65] = {
 	{-1, 0,  0,  0,  0,  0,  0 }
 }; // ds:0x06b0
 
-struct{char rs, be;} g_armors_table[25] = {
+struct armors_descr g_armors_table[25] = {
 	{ 1, 0 }, /*  0 <- ITEM_SHIELD */
 	{ 2, 1 }, /*  1 <- ITEM_IRON_SHIELD, ITEM_GOLDEN_SHIELD */
 	{ 3, 2 }, /*  2 <- ITEM_IRON_HELMET, ITEM_SILVER_HELMET */

@@ -48,11 +48,11 @@ void unequip(Bit8u *hero, unsigned short item, unsigned short pos)
 	/* if item is an armor ? */
 	if (item_armor(item_p)) {
 
-		sub_ptr_bs(hero + HERO_RS_BONUS1, ds_readbs(host_readbs(item_p + ITEM_STATS_TABLE_INDEX) * SIZEOF_ARMOR_STATS + (ARMORS_TABLE + ARMOR_STATS_RS)));
+		sub_ptr_bs(hero + HERO_RS_BONUS1, g_armors_table[host_readbs(item_p + ITEM_STATS_TABLE_INDEX)].rs);
 
 		add_ptr_bs(hero + HERO_RS_BONUS1, host_readbs(hero + HERO_INVENTORY + INVENTORY_RS_LOST + pos * SIZEOF_INVENTORY));
 
-		sub_ptr_bs(hero + HERO_RS_BE, ds_readbs(host_readbs(item_p + ITEM_STATS_TABLE_INDEX) * SIZEOF_ARMOR_STATS + (ARMORS_TABLE + ARMOR_STATS_BE)));
+		sub_ptr_bs(hero + HERO_RS_BE, g_armors_table[host_readbs(item_p + ITEM_STATS_TABLE_INDEX)].be);
 	}
 	/* if item is a weapon and in the right hand ? */
 	if (item_weapon(item_p) && pos == HERO_INVENTORY_SLOT_RIGHT_HAND) {
@@ -101,13 +101,13 @@ void add_equip_boni(Bit8u *owner, Bit8u *equipper, signed short item, signed sho
 		if (item_armor(item_p)) {
 
 			/* add RS boni */
-			add_ptr_bs(equipper + HERO_RS_BONUS1, ds_readbs(ARMORS_TABLE + ARMOR_STATS_RS + host_readbs(item_p + ITEM_STATS_TABLE_INDEX) * SIZEOF_ARMOR_STATS));
+			add_ptr_bs(equipper + HERO_RS_BONUS1, g_armors_table[host_readbs(item_p + ITEM_STATS_TABLE_INDEX)].rs);
 
 			/* subtract degraded RS */
 			sub_ptr_bs(equipper + HERO_RS_BONUS1, host_readbs(owner + HERO_INVENTORY + INVENTORY_RS_LOST + pos_i * SIZEOF_INVENTORY));
 
 			/* add RS-BE */
-			add_ptr_bs(equipper + HERO_RS_BE, ds_readbs(ARMORS_TABLE + ARMOR_STATS_BE + host_readbs(item_p + ITEM_STATS_TABLE_INDEX) * SIZEOF_ARMOR_STATS));
+			add_ptr_bs(equipper + HERO_RS_BE, g_armors_table[host_readbs(item_p + ITEM_STATS_TABLE_INDEX)].be);
 
 		}
 
@@ -118,7 +118,7 @@ void add_equip_boni(Bit8u *owner, Bit8u *equipper, signed short item, signed sho
 			host_writeb(equipper + HERO_WEAPON_TYPE, host_readb(item_p + ITEM_STATS_SUBTYPE));
 
 			/* set AT */
-			host_writeb(equipper + HERO_AT_MOD, g_weapons_table[host_readbs(item_p + ITEM_STATS_TABLE_INDEX) * SIZEOF_WEAPON_STATS].at_mod);
+			host_writeb(equipper + HERO_AT_MOD, g_weapons_table[host_readbs(item_p + ITEM_STATS_TABLE_INDEX)].at_mod);
 
 			/* set PA */
 			host_writeb(equipper + HERO_PA_MOD, g_weapons_table[host_readbs(item_p + ITEM_STATS_TABLE_INDEX)].pa_mod);
@@ -467,7 +467,7 @@ unsigned short item_pleasing_ingerimm(unsigned short item)
 		/* Ingerimm is pleased by either an axe ... */
 		return 1;
 
-	if (item_armor(p_item) && (ds_readbs(host_readbs(p_item + ITEM_STATS_TABLE_INDEX) * SIZEOF_ARMOR_STATS + ARMORS_TABLE + ARMOR_STATS_RS) > 1))
+	if (item_armor(p_item) && (g_armors_table[host_readbs(p_item + ITEM_STATS_TABLE_INDEX)].rs > 1))
 		/* or an armor with RS > 1 */
 		return 1;
 

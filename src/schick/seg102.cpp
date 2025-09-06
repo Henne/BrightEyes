@@ -648,9 +648,9 @@ void mspell_ignifaxius(void)
 		if ((host_readws(p_armor + INVENTORY_ITEM_ID) != ITEM_NONE) && (rs_malus != 0)) {
 
 			/* adjust rs_malus such that the RS of the worn body armor won't be negative */
-			if ((host_readbs(p_armor + INVENTORY_RS_LOST) + rs_malus) > ds_readbs(ARMORS_TABLE + ARMOR_STATS_RS + SIZEOF_ARMOR_STATS * host_readbs(ITEM_STATS_TABLE_INDEX + get_itemsdat(host_readws(p_armor + INVENTORY_ITEM_ID)))))
+			if ((host_readbs(p_armor + INVENTORY_RS_LOST) + rs_malus) > g_armors_table[host_readbs(ITEM_STATS_TABLE_INDEX + get_itemsdat(host_readws(p_armor + INVENTORY_ITEM_ID)))].rs)
 			{
-				rs_malus = ds_readbs(ARMORS_TABLE + ARMOR_STATS_RS + SIZEOF_ARMOR_STATS * host_readbs(ITEM_STATS_TABLE_INDEX + get_itemsdat(host_readws(p_armor + INVENTORY_ITEM_ID))))
+				rs_malus = g_armors_table[host_readbs(ITEM_STATS_TABLE_INDEX + get_itemsdat(host_readws(p_armor + INVENTORY_ITEM_ID)))].rs
 						- host_readbs(p_armor + INVENTORY_RS_LOST);
 			}
 
