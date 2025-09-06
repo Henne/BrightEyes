@@ -53,11 +53,10 @@ void load_pp20(signed short index)
 			decomp_pp20(g_pp20_buffers[bi], g_renderbuf_ptr,
 				/* TODO: check this out */
 #if !defined(__BORLANDC__)
-				//(Bit8u*)(ds_readd(PP20_BUFFERS) + 4 + bi) + 4,
 				g_pp20_buffers[bi] + 4,
 #else
-				ds_readw(PP20_BUFFERS + 4 * bi) + 4,
-				ds_readw((PP20_BUFFERS + 2) + 4 * bi),
+				FP_OFF(g_pp20_buffers[bi]) + 4,
+				FP_SEG(g_pp20_buffers[bi]),
 #endif
 				g_pp20_buffer_lengths[bi]);
 
@@ -73,15 +72,15 @@ void load_pp20(signed short index)
 				g_pp20_buffer_lengths[bi] = get_readlength2(fd);
 
 				/* read pic */
-				read_archive_file(fd, (Bit8u*)(ds_readd(PP20_BUFFERS + bi * 4)), g_pp20_buffer_lengths[bi]);
+				read_archive_file(fd, g_pp20_buffers[bi], g_pp20_buffer_lengths[bi]);
 
 				/* decompress */
-				decomp_pp20((Bit8u*)(ds_readd(PP20_BUFFERS + bi * 4)), g_renderbuf_ptr,
+				decomp_pp20(g_pp20_buffers[bi], g_renderbuf_ptr,
 #if !defined(__BORLANDC__)
-					(Bit8u*)(ds_readd(PP20_BUFFERS + 4 + bi)) + 4,
+					g_pp20_buffers[bi] + 4,
 #else
-					ds_readw((PP20_BUFFERS + 0) + bi * 4) + 4,
-					ds_readw((PP20_BUFFERS + 2) + bi * 4),
+					FP_OFF(g_pp20_buffers[bi]) + 4,
+					FP_SEG(g_pp20_buffers[bi]),
 #endif
 					g_pp20_buffer_lengths[bi]);
 

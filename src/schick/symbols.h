@@ -912,7 +912,7 @@
 //#define SAVEGAME_SUFFIX3                (0x5e59)    /* char[5]; ".gam" */
 //#define ALL_CHR_WILDCARD2               (0x5e5e)    /* char[6]; "*.CHR" */
 //#define ALL_CHR_WILDCARD3               (0x5e64)    /* char[6]; "*.CHR" */
-#define PP20_BUFFERS                    (0x5e6a)    /* Bit8u*[9] */
+//#define PP20_BUFFERS                    (0x5e6a)    /* Bit8u*[9] */
 //#define PP20_BUFFER_LENGTHS             (0x5e8e)    /* unsigned long[9] */
 //#define CURRENT_FIGHT_ID                (0x5eb2)    /* unsigned short */
 // ?4
