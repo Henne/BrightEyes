@@ -3273,19 +3273,15 @@ struct{signed short x,y;} g_viewdir_offsets7[4] = {
 	{ -0x0001, 0x0000 },
 	{ 0x0000, 0x0001 }
 }; // ds:0x6008, ; { , {0,-1}, {-1,0},  }
-struct{signed short x,y;} g_gfxtab_twofielded_extra_cb[4] = {
-	{ -0x0001, 0x0000 },
-	{ 0x0000, 0x0001 },
-	{ 0x0001, 0x0000 },
-	{ 0x0000, -1 }
-}; // ds:0x6018, ; { {-1,0}, , , {0,-1} }
-signed char g_gfxtab_twofielded_extra_ox[4] = { 0x0a, -0x0a, -0x0a, 0x0a }; // ds:0x6028, { 10,-10,-10,10 }
+struct struct_point g_gfxtab_twofielded_extra_cb[4] = {
+	{ -1,  0 }, {  0,  1 }, {  1,  0 }, {  0, -1 } }; // ds:0x6018, ; { {-1,0}, , , {0,-1} }
+signed char g_gfxtab_twofielded_extra_ox[4] = { 10, -10, -10, 10 }; // ds:0x6028, { 10,-10,-10,10 }
 signed char g_gfxtab_twofielded_extra_oy[4] = { 5, 5, -5, -5 }; // ds:0x602c, { 10,-10,-5,-5 }
-signed char g_gfxtab_twofielded_x1[4] = { 0x10, 0x00, 0x00, 0x10 }; // ds:0x6030
-signed char g_gfxtab_twofielded_x2[4] = { 0x1f, 0x0f, 0x0f, 0x1f }; // ds:0x6034
-signed char g_gfxtab_twofielded_extra_x1[4] = { 0x00, 0x10, 0x10, 0x00 }; // ds:0x6038
-signed char g_gfxtab_twofielded_extra_x2[4] = { 0x0f, 0x1f, 0x1f, 0x0f }; // ds:0x603c
-struct{signed char x,y;} g_cb_rear_border[15] = {
+signed char g_gfxtab_twofielded_x1[4] = { 16, 0, 0, 16 }; // ds:0x6030
+signed char g_gfxtab_twofielded_x2[4] = { 31, 15, 15, 31 }; // ds:0x6034
+signed char g_gfxtab_twofielded_extra_x1[4] = { 0, 16, 16, 0 }; // ds:0x6038
+signed char g_gfxtab_twofielded_extra_x2[4] = { 15, 31, 31, 15 }; // ds:0x603c
+struct point8s g_cb_rear_border[15] = {
 	{ 0x00, 0x10 },
 	{ 0x01, 0x10 },
 	{ 0x02, 0x10 },

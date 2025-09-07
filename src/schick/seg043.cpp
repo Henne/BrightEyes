@@ -728,8 +728,8 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 							g_fig_list_elem.offsety = ds_readbs((GFXTAB_OFFSETS_MAIN + 1) + 10 * target_enemy->gfx_id + 2 * target_enemy->viewdir);
 
 							if (is_in_byte_array(target_enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id)) {
-								g_fig_list_elem.x1 = ds_readbs(GFXTAB_TWOFIELDED_X1 + target_enemy->viewdir);
-								g_fig_list_elem.x2 = ds_readbs(GFXTAB_TWOFIELDED_X2 + target_enemy->viewdir);
+								g_fig_list_elem.x1 = g_gfxtab_twofielded_x1[target_enemy->viewdir];
+								g_fig_list_elem.x2 = g_gfxtab_twofielded_x2[target_enemy->viewdir];
 							} else {
 								g_fig_list_elem.x1 = 0;
 								g_fig_list_elem.x2 = 31;

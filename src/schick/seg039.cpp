@@ -244,18 +244,16 @@ unsigned short place_obj_on_cb(signed short x, signed short y, signed short obje
 		{
 
 			/* check if field is empty */
-			if ((get_cb_val(x + ds_readws(GFXTAB_TWOFIELDED_EXTRA_CB + dir * 4), y + ds_readws((GFXTAB_TWOFIELDED_EXTRA_CB + 2) + dir * 4)) != 0) ||
-				(y + ds_readws((GFXTAB_TWOFIELDED_EXTRA_CB + 2) + dir * 4) < 0) ||
-				(y + ds_readws((GFXTAB_TWOFIELDED_EXTRA_CB + 2) + dir * 4) > 23) ||
-				(x + ds_readws(GFXTAB_TWOFIELDED_EXTRA_CB + dir * 4) < 0 ||
-				(x + ds_readws(GFXTAB_TWOFIELDED_EXTRA_CB + dir * 4) > 23)))
+			if ((get_cb_val(x + g_gfxtab_twofielded_extra_cb[dir].x, y + g_gfxtab_twofielded_extra_cb[dir].y)) ||
+				(y + g_gfxtab_twofielded_extra_cb[dir].y < 0) ||
+				(y + g_gfxtab_twofielded_extra_cb[dir].y > 23) ||
+				(x + g_gfxtab_twofielded_extra_cb[dir].x < 0 ||
+				(x + g_gfxtab_twofielded_extra_cb[dir].x > 23)))
 			{
 				return 0;
 			}
 
-			FIG_set_cb_field(y + ds_readws((GFXTAB_TWOFIELDED_EXTRA_CB + 2) + dir * 4),
-				x + ds_readws(GFXTAB_TWOFIELDED_EXTRA_CB + dir * 4),
-				object + 20);
+			FIG_set_cb_field(y + g_gfxtab_twofielded_extra_cb[dir].y, x + g_gfxtab_twofielded_extra_cb[dir].x, object + 20);
 		}
 	}
 
@@ -289,8 +287,8 @@ void FIG_load_enemy_sprites(struct enemy_sheet *enemy, signed short x, signed sh
 	if (is_in_byte_array(enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id)) {
 
 		/* sprite uses two fields */
-		g_fig_list_elem.x1 = ds_readbs(GFXTAB_TWOFIELDED_X1 + enemy->viewdir);
-		g_fig_list_elem.x2 = ds_readbs(GFXTAB_TWOFIELDED_X2 + enemy->viewdir);
+		g_fig_list_elem.x1 = g_gfxtab_twofielded_x1[enemy->viewdir];
+		g_fig_list_elem.x2 = g_gfxtab_twofielded_x2[enemy->viewdir];
 
 		/* TODO: b = ++a; */
 		g_fig_list_elem.twofielded = g_fig_twofielded_count = g_fig_twofielded_count + 1;
@@ -339,13 +337,13 @@ void FIG_load_enemy_sprites(struct enemy_sheet *enemy, signed short x, signed sh
 
 		/* create fighter entry for the tail of a two-fielded enemy */
 
-		g_fig_list_elem.cbx = x + ds_readbs(GFXTAB_TWOFIELDED_EXTRA_CB + enemy->viewdir * 4);
-		g_fig_list_elem.cby = y + ds_readbs((GFXTAB_TWOFIELDED_EXTRA_CB + 2) + enemy->viewdir * 4);
+		g_fig_list_elem.cbx = x + g_gfxtab_twofielded_extra_cb[enemy->viewdir].x;
+		g_fig_list_elem.cby = y + g_gfxtab_twofielded_extra_cb[enemy->viewdir].y;
 
-		g_fig_list_elem.offsetx += ds_readbs(GFXTAB_TWOFIELDED_EXTRA_OX + enemy->viewdir);
-		g_fig_list_elem.offsety += ds_readbs(GFXTAB_TWOFIELDED_EXTRA_OY + enemy->viewdir);
-		g_fig_list_elem.x1 = ds_readb(GFXTAB_TWOFIELDED_EXTRA_X1 + enemy->viewdir);
-		g_fig_list_elem.x2 = ds_readb(GFXTAB_TWOFIELDED_EXTRA_X2 + enemy->viewdir);
+		g_fig_list_elem.offsetx += g_gfxtab_twofielded_extra_ox[enemy->viewdir];
+		g_fig_list_elem.offsety += g_gfxtab_twofielded_extra_oy[enemy->viewdir];
+		g_fig_list_elem.x1 = g_gfxtab_twofielded_extra_x1[enemy->viewdir];
+		g_fig_list_elem.x2 = g_gfxtab_twofielded_extra_x2[enemy->viewdir];
 		g_fig_list_elem.y1 = 0;
 		g_fig_list_elem.y2 = 0x27;
 		g_fig_list_elem.is_enemy = 1;

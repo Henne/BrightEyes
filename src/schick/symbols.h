@@ -953,14 +953,14 @@
 #define VIEWDIR_OFFSETS6                (0x5fe8)    /* struct(4)[4]; struct{signed short x,y;}; { {1,0}, {0,-1}, {-1,0}, {0,1} } */
 #define VIEWDIR_INVOFFSETS1             (0x5ff8)    /* struct(4)[4]; struct{signed short x,y;}; { {-1,0}, {0,1}, {1,0}, {0,-1} } */
 #define VIEWDIR_OFFSETS7                (0x6008)    /* struct(4)[4]; struct{signed short x,y;}; { {1,0}, {0,-1}, {-1,0}, {0,1} } */
-#define GFXTAB_TWOFIELDED_EXTRA_CB      (0x6018)    /* struct(4)[4]; struct{signed short x,y;}; { {-1,0}, {0,1}, {1,0}, {0,-1} } */
-#define GFXTAB_TWOFIELDED_EXTRA_OX      (0x6028)    /* signed char[4]; { 10,-10,-10,10 } */
-#define GFXTAB_TWOFIELDED_EXTRA_OY      (0x602c)    /* signed char[4]; { 10,-10,-5,-5 } */
-#define GFXTAB_TWOFIELDED_X1            (0x6030)    /* signed char[4] */
-#define GFXTAB_TWOFIELDED_X2            (0x6034)    /* signed char[4] */
-#define GFXTAB_TWOFIELDED_EXTRA_X1      (0x6038)    /* signed char[4] */
-#define GFXTAB_TWOFIELDED_EXTRA_X2      (0x603c)    /* signed char[4] */
-#define CB_REAR_BORDER                  (0x6040)    /* struct(2)[15]; struct{signed char x,y;}; { {0,16}, {1,16}, {2,16}, {3,16}, {3,17}, {3,18}, {3,19}, {4,20}, {5,20}, {6,20}, {7,20}, {7,21}, {7,22}, {7,23}, {-1,0} } */
+//#define GFXTAB_TWOFIELDED_EXTRA_CB      (0x6018)    /* struct(4)[4]; struct{signed short x,y;}; { {-1,0}, {0,1}, {1,0}, {0,-1} } */
+//#define GFXTAB_TWOFIELDED_EXTRA_OX      (0x6028)    /* signed char[4]; { 10,-10,-10,10 } */
+//#define GFXTAB_TWOFIELDED_EXTRA_OY      (0x602c)    /* signed char[4]; { 10,-10,-5,-5 } */
+//#define GFXTAB_TWOFIELDED_X1            (0x6030)    /* signed char[4] */
+//#define GFXTAB_TWOFIELDED_X2            (0x6034)    /* signed char[4] */
+//#define GFXTAB_TWOFIELDED_EXTRA_X1      (0x6038)    /* signed char[4] */
+//#define GFXTAB_TWOFIELDED_EXTRA_X2      (0x603c)    /* signed char[4] */
+//#define CB_REAR_BORDER                  (0x6040)    /* struct(2)[15]; struct{signed char x,y;}; { {0,16}, {1,16}, {2,16}, {3,16}, {3,17}, {3,18}, {3,19}, {4,20}, {5,20}, {6,20}, {7,20}, {7,21}, {7,22}, {7,23}, {-1,0} } */
 //#define FIGHTOBJ_COUNT                  (0x605e)    /* unsigned short */
 //#define GFXTAB_OBJ_OFFSET_X             (0x6060)    /* signed short[63] */
 //#define GFXTAB_OBJ_OFFSET_Y             (0x60de)    /* signed short[63] */

@@ -529,8 +529,8 @@ void draw_fight_screen(Bit16u val)
 								list_ii->offsety = (ds_readbs((GFXTAB_OFFSETS_MAIN + 9) + list_ii->sprite_no * 10));
 
 								if (list_ii->twofielded != -1) {
-									list_ii->x1 = ds_readb((GFXTAB_TWOFIELDED_X1 + 1));
-									list_ii->x2 = ds_readb((GFXTAB_TWOFIELDED_X2 + 1));
+									list_ii->x1 = g_gfxtab_twofielded_x1[1];
+									list_ii->x2 = g_gfxtab_twofielded_x2[1];
 								}
 
 							} else {
@@ -538,8 +538,8 @@ void draw_fight_screen(Bit16u val)
 								list_ii->offsety = ds_readbs((GFXTAB_OFFSETS_MAIN + 1) + list_ii->sprite_no * 10 + list_ii->nvf_no * 2);
 
 								if (list_ii->twofielded != -1) {
-									list_ii->x1 = ds_readb(GFXTAB_TWOFIELDED_X1 + list_ii->nvf_no);
-									list_ii->x2 = ds_readb(GFXTAB_TWOFIELDED_X2 + list_ii->nvf_no);
+									list_ii->x1 = g_gfxtab_twofielded_x1[list_ii->nvf_no];
+									list_ii->x2 = g_gfxtab_twofielded_x2[list_ii->nvf_no];
 								}
 							}
 
@@ -589,10 +589,10 @@ void draw_fight_screen(Bit16u val)
 
 							viewdir_after = (list_ii->nvf_no > 3) ? 1 : list_ii->nvf_no;
 
-							list_ii->offsetx += ds_readbs(GFXTAB_TWOFIELDED_EXTRA_OX + viewdir_after);
-							list_ii->offsety += ds_readbs(GFXTAB_TWOFIELDED_EXTRA_OY + viewdir_after);
-							list_ii->x1 = ds_readbs(GFXTAB_TWOFIELDED_EXTRA_X1 + viewdir_after);
-							list_ii->x2 = ds_readbs(GFXTAB_TWOFIELDED_EXTRA_X2 + viewdir_after);
+							list_ii->offsetx += g_gfxtab_twofielded_extra_ox[viewdir_after];
+							list_ii->offsety += g_gfxtab_twofielded_extra_oy[viewdir_after];
+							list_ii->x1 = g_gfxtab_twofielded_extra_x1[viewdir_after];
+							list_ii->x2 = g_gfxtab_twofielded_extra_x2[viewdir_after];
 
 							obj_id = get_cb_val(list_ii->cbx, list_ii->cby); /* enemy_id + 30 of the enemy the tail belongs to */
 

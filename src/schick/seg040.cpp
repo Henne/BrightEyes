@@ -73,9 +73,9 @@ void FIG_chessboard_init(void)
 
 	if (g_scenario_buf[0x14] <= 3) {
 
-		while (ds_readbs(CB_REAR_BORDER + i * 2) != -1) {
+		while (g_cb_rear_border[i].x != -1) {
 
-			FIG_set_cb_field(ds_readbs((CB_REAR_BORDER + 1) + i * 2), ds_readbs(CB_REAR_BORDER + i * 2), 50);
+			FIG_set_cb_field(g_cb_rear_border[i].y, g_cb_rear_border[i].x, 50);
 			i++;
 		}
 	}
