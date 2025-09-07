@@ -587,7 +587,8 @@ void FIG_do_round(void)
 								sub_ptr_bs(hero + HERO_ENEMY_ID, 20);
 							}
 
-							if (g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].flags.dead)
+							/* TODO: seems that (hero->enemy_id) gives better results than (hero->enemy_id - 10) */
+							if (g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID)].flags.dead)
 							{
 								/* attacked enemy is dead */
 								if (is_in_byte_array(g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].gfx_id, (Bit8u*)g_two_fielded_sprite_id))
@@ -616,7 +617,8 @@ void FIG_do_round(void)
 									if (fighter_ptr->obj_id >= 0) {
 										/* if the id of a cb_entry has been saved in FIGHTER_OBJ_ID (meaning that the tail part is standing on it),
 										 * restore that to the cb */
-										FIG_set_cb_field(y, x, fighter_ptr->obj_id);
+										/* TODO: passing of the 3rd parameter is different */
+										FIG_set_cb_field(y, x, ((unsigned char)fighter_ptr->obj_id));
 									} else {
 										/* otherwise, set the square in the cb to 0 (free) */
 										FIG_set_cb_field(fighter_ptr->cby, fighter_ptr->cbx, 0);
