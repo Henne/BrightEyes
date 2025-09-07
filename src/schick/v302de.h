@@ -801,10 +801,6 @@ static inline signed char get_cb_val(const signed short x, const signed short y)
 	return *(g_chessboard + 25 * y + x);
 }
 
-static inline void set_cb_val(const unsigned short x, const unsigned short y, const signed char val) {
-	*(g_chessboard + 25 * y + x) = val;
-}
-
 static inline void dump_cb(void)
 {
 	FILE *fd;
@@ -963,7 +959,6 @@ static inline char* get_itemname(unsigned short item)
 #define get_itemname(no) ((char*)g_itemsname[(no)])
 
 #define get_cb_val(x, y) (*(g_chessboard + (y) * 25 + (x)))
-#define set_cb_val(x, y, val) (*(g_chessboard + (y) * 25 + (x)) = (val))
 
 #endif
 #endif

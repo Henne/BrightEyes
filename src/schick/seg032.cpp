@@ -62,18 +62,12 @@ namespace M302de {
 /* The functions in this file need object to be signed short.
  * All other callers use signed short from the header.
  */
-#if !defined(__BORLANDC__)
 void FIG_set_cb_field(signed short y, signed short x, signed short object)
-#else
-void FIG_set_cb_field(signed short y, signed short x, signed char object)
-#endif
 {
 	/* check that the object is in the borders */
-	if (y < 0 || y > 24 || x < 0 || x > 24) {
-		return;
+	if ((y >= 0) && (y <= 24) && (x >= 0) && (x <= 24)) {
+		g_chessboard[y * 25 + x] = ((signed char)object);
 	}
-
-	set_cb_val(x, y, object);
 }
 
 void draw_fight_screen_pal(signed short mode)
