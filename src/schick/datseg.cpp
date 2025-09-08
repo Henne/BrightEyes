@@ -3595,7 +3595,7 @@ struct{signed char first, last;} g_magic_school_spellranges[9] = {
 	/* Note: There are no schools for the spell groups "Visionen" and "Verstaendigung". */
 }; // ds:0x6682
 const signed short g_campfights[4] = { 0x00d9, 0x00da, 0x00db, 0x00e8 }; // ds:0x6694
-struct{unsigned char item_id,chance,max_count,handicap;} g_gather_herbs_table[13] = {
+struct gather_herbs g_gather_herbs_table[13] = {
 	{ ITEM_ALRAUNE      ,  5, 1, 15 },
 	{ ITEM_BELMART      , 12, 3,  8 },
 	{ ITEM_DONF_SPRING  , 10, 2,  9 },

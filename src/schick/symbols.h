@@ -1014,7 +1014,7 @@
 //#define AUTOINC_SPELLS_IELF             (0x666a)    /* signed short[12] */
 #define MAGIC_SCHOOL_SPELLRANGES        (0x6682)    /* struct(2)[9]; struct{signed char first, last;} */
 //#define CAMPFIGHTS                      (0x6694)    /* signed short[4] */
-#define GATHER_HERBS_TABLE              (0x669c)    /* struct(4)[13]; struct{unsigned char herb_id,chance,ta_mod,max_count;} */
+//#define GATHER_HERBS_TABLE              (0x669c)    /* struct(4)[13]; struct{unsigned char herb_id,chance,ta_mod,max_count;} */
 //#define GATHER_HERBS_SPECIAL            (0x66d0)    /* unsigned char */
 //#define GATHER_HERBS_STR_FOUND          (0x66d1)    /* char[6]; "%d^%s" */
 //#define GATHER_HERBS_STR_COMMA          (0x66d7)    /* char[3]; ", " */

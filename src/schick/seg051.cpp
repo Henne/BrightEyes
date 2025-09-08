@@ -381,40 +381,40 @@ signed short gather_herbs(Bit8u *hero, signed short hours, signed short handicap
 {
 	signed short herb_index;
 	signed short unique_herbs_count;
-	Bit8u *ptr;
+	struct gather_herbs *ptr;
 	signed char herb_count[12];
 
 	memset(herb_count, 0 , 12);
 
-	timewarp(HOURS((hours + 1)));
+	timewarp(HOURS(hours + 1));
 
-	ptr = p_datseg + GATHER_HERBS_TABLE;
+	ptr = &g_gather_herbs_table[0];
 
-	for (unique_herbs_count = herb_index = 0; herb_index < 12; herb_index++, ptr += SIZEOF_GATHER_HERBS) {
+	for (unique_herbs_count = herb_index = 0; herb_index < 12; herb_index++, ptr++) {
 
 		/* check if this is a special place for collecting the considered herb.. */
-		if (host_readb(ptr + GATHER_HERBS_ITEM_ID) == g_gather_herbs_special) {
+		if (ptr->item_id == g_gather_herbs_special) {
 
 			/* dirty code follows. The original herbs table is modified. */
-			add_ptr_bs(ptr + GATHER_HERBS_CHANCE, 10); // 10% higher chance to find the herb
-			inc_ptr_bs(ptr + GATHER_HERBS_MAX_COUNT);  // increase maximum count of single herbs by 1.
+			ptr->chance_max += 10; // 10% higher chance to find the herb
+			ptr->max_count++;  // increase maximum count of single herbs by 1.
 		}
 
-		if (random_schick(100) <= host_readb(ptr + GATHER_HERBS_CHANCE) &&
-			test_skill(hero, TA_PFLANZENKUNDE, host_readb(ptr + GATHER_HERBS_HANDICAP) - hours + handicap) > 0) {
+		if ((random_schick(100) <= ptr->chance_max) &&
+			test_skill(hero, TA_PFLANZENKUNDE, ptr->handicap - hours + handicap) > 0) {
 
-			herb_count[herb_index] = (signed char)give_hero_new_item(hero, host_readb(ptr + GATHER_HERBS_ITEM_ID), 0, random_schick(host_readb(ptr + GATHER_HERBS_MAX_COUNT))); // collect a random amount between 1 and max_count herbs.
+			herb_count[herb_index] = (signed char)give_hero_new_item(hero, ptr->item_id, 0, random_schick(ptr->max_count)); // collect a random amount between 1 and max_count herbs.
 
-			if (herb_count[herb_index] != 0) {
+			if (herb_count[herb_index]) {
 				unique_herbs_count++;
 			}
 		}
 
-		if (host_readb(ptr) == g_gather_herbs_special) {
+		if (ptr->item_id == g_gather_herbs_special) {
 
 			/* The herbs table is reverted to original state. */
-			sub_ptr_bs(ptr + GATHER_HERBS_CHANCE, 10);
-			dec_ptr_bs(ptr + GATHER_HERBS_MAX_COUNT);
+			ptr->chance_max -= 10;
+			ptr->max_count--;
 		}
 	}
 
@@ -425,10 +425,11 @@ signed short gather_herbs(Bit8u *hero, signed short hours, signed short handicap
 
 		for (herb_index = 0; herb_index < 12; herb_index++) {
 
-			if (herb_count[herb_index] != 0) {
+			if (herb_count[herb_index]) {
 
 				sprintf(g_text_output_buf, g_gather_herbs_str_found, herb_count[herb_index],
-					(Bit8u*)GUI_names_grammar((herb_count[herb_index] > 1 ? 4 : 0) + 0x4002, ds_readb(GATHER_HERBS_TABLE + 4 * herb_index + GATHER_HERBS_ITEM_ID), 0));
+					(char*)GUI_names_grammar((herb_count[herb_index] > 1 ? 4 : 0) + 0x4002,
+						g_gather_herbs_table[herb_index].item_id, 0));
 
 				strcat(g_dtp2, g_text_output_buf);
 
@@ -451,10 +452,7 @@ signed short gather_herbs(Bit8u *hero, signed short hours, signed short handicap
 	} else {
 
 		/* no herbs found */
-
-		sprintf(g_dtp2,
-			get_ttx(342),
-			(char*)hero + HERO_NAME2);
+		sprintf(g_dtp2, get_ttx(342), (char*)hero + HERO_NAME2);
 	}
 
 	GUI_output(g_dtp2);

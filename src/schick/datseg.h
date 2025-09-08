@@ -281,6 +281,13 @@ struct shop_descr {
 	Bit16s extra_items[3];
 };
 
+struct gather_herbs {
+	Bit8u item_id;
+	Bit8s chance_max;
+	Bit8s max_count;
+	Bit8s handicap;
+};
+
 struct struct_shopping_cart {
 	int item_id;
 	int quantity;
@@ -1266,7 +1273,7 @@ extern const signed short g_autoinc_spells_self[7];	//ds:0x665c; seg050
 extern const signed short g_autoinc_spells_ielf[12];	//ds:0x666a; seg050
 
 extern const signed short g_campfights[4];	//ds:0x6694; seg051
-
+extern struct gather_herbs g_gather_herbs_table[13];	//ds:0x669c; seg051
 extern Bit8s g_gather_herbs_special;		//ds:0x66d0; seg051, seg109, seg110, seg112, seg113, seg114, seg115, seg116
 extern char g_gather_herbs_str_found[6];	//ds:0x66d1; seg051
 extern char g_gather_herbs_str_comma[3];	//ds:0x66d7; seg051
