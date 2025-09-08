@@ -376,15 +376,15 @@ Bit8u* prepare_timbre(signed short a1, signed short patch)
 	seek_archive_file(g_sample_ad_handle, 0, 0);
 
 	do {
-		read_archive_file(g_sample_ad_handle, p_datseg + SAMPLE_AD_IDX_ENTRY, 6);
+		read_archive_file(g_sample_ad_handle, (Bit8u*)&g_sample_ad_idx_entry, 6);
 
-		if (ds_readbs((SAMPLE_AD_IDX_ENTRY+1)) == -1) {
+		if (g_sample_ad_idx_entry.bank == -1) {
 			return NULL;
 		}
 
-	} while ((ds_readbs((SAMPLE_AD_IDX_ENTRY+1)) != a1) || (ds_readbs(SAMPLE_AD_IDX_ENTRY) != patch));
+	} while ((g_sample_ad_idx_entry.bank != a1) || (g_sample_ad_idx_entry.patch != patch));
 
-	seek_archive_file(g_sample_ad_handle, ds_readd((SAMPLE_AD_IDX_ENTRY+2)), 0);
+	seek_archive_file(g_sample_ad_handle, g_sample_ad_idx_entry.offset, 0);
 
 	read_archive_file(g_sample_ad_handle, (Bit8u*)&g_sample_ad_length, 2);
 

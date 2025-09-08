@@ -6643,7 +6643,7 @@ unsigned char *g_splash_le; // ds:0xbccb
 unsigned char *g_splash_ae; // ds:0xbcc7
 unsigned char g_gfxbuf_wait_keypress[100]; // ds:0xbc63
 unsigned char g_playmask_us; // ds:0xbc62, 1 = PLAYM_US, 0 = PLAYM_UK
-struct{signed char u1; signed char u2; unsigned long u3;} g_sample_ad_idx_entry; // ds:0xbc5c
+struct sample_idx g_sample_ad_idx_entry; // ds:0xbc5c
 
 #if !defined(__BORLANDC__)
 /* arrays for meaningful log messages */

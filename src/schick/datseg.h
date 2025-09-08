@@ -7,6 +7,12 @@
 extern char ds[1];
 #endif
 
+struct sample_idx {
+	Bit8s patch;
+	Bit8s bank;
+	Bit32u offset;
+};
+
 struct struct_modification_timer {
 	Bit32s time_left;
 	Bit16u offset;
