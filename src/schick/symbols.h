@@ -970,11 +970,11 @@
 //#define STRING_CASTS_SPELL              (0x6180)    /* char[14]; "%s ZAUBERT %s" */
 //#define MSPELL_AWAKE_FLAG               (0x618e)    /* unsigned short; {0,1} */
 #define VIEWDIR_INVOFFSETS3             (0x6190)    /* struct(2)[4]; struct{signed char x,y;}; { {-1,0}, {0,1}, {1,0}, {0,-1} } */
-#define GFXTAB_SHOTBOLT_OX              (0x6198)    /* unsigned short[24] */
-#define GFXTAB_SHOTBOLT_OY              (0x61c8)    /* unsigned short[24] */
-#define GFXTAB_SHOTBOLT_NVFNO           (0x61f8)    /* signed short[6]; { 0, 4, 8, 12, 16, 20 } */
-#define GFXTAB_SHOTBOLT_HEIGHT          (0x6204)    /* signed short[6]; { 15, 15, 15, 5, 5, 8 } */
-#define GFXTAB_SHOTBOLT_WIDTH           (0x6210)    /* signed short[6]; { 25, 25, 25, 9, 9, 16 } */
+//#define GFXTAB_SHOTBOLT_OX              (0x6198)    /* unsigned short[24] */
+//#define GFXTAB_SHOTBOLT_OY              (0x61c8)    /* unsigned short[24] */
+//#define GFXTAB_SHOTBOLT_NVFNO           (0x61f8)    /* signed short[6]; { 0, 4, 8, 12, 16, 20 } */
+//#define GFXTAB_SHOTBOLT_HEIGHT          (0x6204)    /* signed short[6]; { 15, 15, 15, 5, 5, 8 } */
+//#define GFXTAB_SHOTBOLT_WIDTH           (0x6210)    /* signed short[6]; { 25, 25, 25, 9, 9, 16 } */
 //#define ANITAB_SHOTBOLT_DATA            (0x621c)    /* char[168]; arrays, each terminated by -1 */
 //#define ANITAB_SHOTBOLT_INDEX2          (0x62c4)    /* Bit8u*[24]; 6 Bit8u* arrays of length 4 (viewdir) */
 //#define ANITAB_SHOTBOLT_INDEX           (0x6324)    /* Bit8u*[6] */

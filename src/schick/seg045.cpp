@@ -26,15 +26,9 @@ void seg045_0000(signed short fighter_id, signed short type, signed short a3)
 
 	FIG_search_obj_on_cb(fighter_id, &obj_x, &obj_y);
 
-#if !defined(__BORLANDC__)
-	/* BE-fix */
-	obj_x = host_readws((Bit8u*)&obj_x);
-	obj_y = host_readws((Bit8u*)&obj_y);
-#endif
-
 	g_fig_list_elem.figure = 0;
 
-	g_fig_list_elem.nvf_no = (ds_readb(type * 2 + GFXTAB_SHOTBOLT_NVFNO));
+	g_fig_list_elem.nvf_no = g_gfxtab_shotbolt_nvfno[type];
 
 	if (type != 2) {
 		g_fig_list_elem.nvf_no = g_fig_list_elem.nvf_no + a3;
@@ -46,15 +40,16 @@ void seg045_0000(signed short fighter_id, signed short type, signed short a3)
 
 	g_fig_list_elem.cbx = (signed char)obj_x;
 	g_fig_list_elem.cby = (signed char)obj_y;
-	g_fig_list_elem.offsetx = ds_readb(GFXTAB_SHOTBOLT_OX + type * 8 + a3 * 2);
-	g_fig_list_elem.offsety = ds_readb(GFXTAB_SHOTBOLT_OY + type * 8 + a3 * 2);
-	g_fig_list_elem.height = ds_readb(GFXTAB_SHOTBOLT_HEIGHT + type * 2);
-	g_fig_list_elem.width = ds_readb(GFXTAB_SHOTBOLT_WIDTH + type * 2);
+	g_fig_list_elem.offsetx = g_gfxtab_shotbolt_ox[type][a3];
+	g_fig_list_elem.offsety = g_gfxtab_shotbolt_oy[type][a3];
+	g_fig_list_elem.height = g_gfxtab_shotbolt_height[type];
+	g_fig_list_elem.width = g_gfxtab_shotbolt_width[type];
+
 	g_fig_list_elem.x1 = 0;
 	g_fig_list_elem.y1 = 0;
+	g_fig_list_elem.x2 = g_gfxtab_shotbolt_width[type] - 1;
+	g_fig_list_elem.y2 = g_gfxtab_shotbolt_height[type] - 1;
 
-	g_fig_list_elem.x2 = ds_readbs(GFXTAB_SHOTBOLT_WIDTH + type * 2) - 1;
-	g_fig_list_elem.y2 = ds_readbs(GFXTAB_SHOTBOLT_HEIGHT + type * 2) - 1;
 	g_fig_list_elem.is_enemy = 0;
 	g_fig_list_elem.reload = 0;
 	g_fig_list_elem.wsheet = -1;

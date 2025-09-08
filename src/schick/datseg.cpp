@@ -3328,11 +3328,25 @@ struct{signed char x,y;} g_viewdir_invoffsets3[4] = {
 	{ 0x01, 0x00 },
 	{ 0x00, -1 }
 }; // ds:0x6190, ; { {-1,0}, , , {0,-1} }
-unsigned short g_gfxtab_shotbolt_ox[24] = { 0xffef, 0xfffd, 0xfffd, 0x0003, 0xffef, 0xfffd, 0xfffd, 0x0003, 0xffef, 0xfffd, 0xfffd, 0x0003, 0xffef, 0xfffd, 0xfffd, 0x0003, 0xffef, 0xfffd, 0xfffd, 0x0003, 0xffef, 0xfffd, 0xfffd, 0x0003 }; // ds:0x6198
-unsigned short g_gfxtab_shotbolt_oy[24] = { 0xffe2, 0xffec, 0xffec, 0xffec, 0xffe2, 0xffec, 0xffec, 0xffec, 0xffe2, 0xffec, 0xffec, 0xffec, 0xffe2, 0xffec, 0xffec, 0xffec, 0xffe2, 0xffec, 0xffec, 0xffec, 0xffe2, 0xffec, 0xffec, 0xffec }; // ds:0x61c8
-signed short g_gfxtab_shotbolt_nvfno[6] = { 0x0000, 0x0004, 0x0008, 0x000c, 0x0010, 0x0014 }; // ds:0x61f8
-signed short g_gfxtab_shotbolt_height[6] = { 0x000f, 0x000f, 0x000f, 0x0005, 0x0005, 0x0008 }; // ds:0x6204
-signed short g_gfxtab_shotbolt_width[6] = { 0x0019, 0x0019, 0x0019, 0x0009, 0x0009, 0x0010 }; // ds:0x6210
+const signed short g_gfxtab_shotbolt_ox[6][4] = {
+	-17, -3, -3, 3,
+	-17, -3, -3, 3,
+	-17, -3, -3, 3,
+	-17, -3, -3, 3,
+	-17, -3, -3, 3,
+	-17, -3, -3, 3
+}; // ds:0x6198
+const signed short g_gfxtab_shotbolt_oy[6][4] = {
+	-30, -20, -20, -20,
+	-30, -20, -20, -20,
+	-30, -20, -20, -20,
+	-30, -20, -20, -20,
+	-30, -20, -20, -20,
+	-30, -20, -20, -20
+}; // ds:0x61c8
+signed short g_gfxtab_shotbolt_nvfno[6] = { 0, 4, 8, 12, 16, 20 }; // ds:0x61f8
+signed short g_gfxtab_shotbolt_height[6] = { 15, 15, 15, 5, 5, 8 }; // ds:0x6204
+signed short g_gfxtab_shotbolt_width[6] = { 25, 25, 25, 9, 9, 16 }; // ds:0x6210
 signed char g_anitab_shotbolt_data[24][7] = {
 
 	{-2,  1,  0,  0, 0, 0, -1},

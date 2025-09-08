@@ -1157,6 +1157,11 @@ extern signed short g_knive_weapons[5];		//ds:0x616e; seg041
 extern char g_string_casts_spell[14];		//ds:0x6180; seg042
 extern signed short g_mspell_awake_flag;	//ds:0x618e; seg043, seg102
 
+extern const signed short g_gfxtab_shotbolt_ox[6][4];	//ds:0x6198; seg045
+extern const signed short g_gfxtab_shotbolt_oy[6][4];	//ds:0x61c8; seg045
+extern signed short g_gfxtab_shotbolt_nvfno[6];		//ds:0x61f8; seg045
+extern signed short g_gfxtab_shotbolt_height[6];	//ds:0x6204; seg045
+extern signed short g_gfxtab_shotbolt_width[6];		//ds:0x6210; seg045
 extern signed char **g_anitab_shotbolt_index[6];	//ds:0x6324; seg045
 
 extern signed short g_anitab_spell_ox[2];	//ds:0x633e; seg045
