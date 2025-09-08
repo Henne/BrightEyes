@@ -7,9 +7,9 @@ void do_smith(void);
 /* 0x25 */
 void talk_smith(void);
 /* 0x2a */
-void add_item_to_smith(Bit8u*, Bit8u*, signed short, signed short);
+void add_item_to_smith(struct smith_descr*, Bit8u*, signed short, signed short);
 /* 0x2f */
-void repair_screen(Bit8u *, signed short);
+void repair_screen(struct smith_descr*, signed short);
 /* 0x34 */
 void TLK_schmied(signed short);
 

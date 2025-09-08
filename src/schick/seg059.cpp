@@ -39,18 +39,18 @@ void do_tavern(void)
 	signed short l3;
 	Bit32s p_money_before;
 	Bit32s p_money_after;
-	Bit8u *tav_ptr;
+	struct inn_descr *tavern;
 	signed short bonus;
 	time_t timeval;
 
 	done = 0;
-	tav_ptr = p_datseg + TAVERN_DESCR_TABLE + 4 * gs_current_typeindex;
+	tavern = &g_tavern_descr_table[gs_current_typeindex];
 
 	GUI_print_loc_line(get_tx(gs_current_locdata));
 
 	g_request_refresh = 1;
 
-	if (host_readws(tav_ptr) >= 6 && host_readws(tav_ptr) <= 13) {
+	if (tavern->quality >= 6 && tavern->quality <= 13) {
 
 		if (gs_day_timer < HOURS(11) && gs_day_timer > HOURS(3)) {
 
@@ -136,15 +136,14 @@ void do_tavern(void)
 		} else if (g_action == ACTION_ID_ICON_2) {
 			/* EAT AND DRINK */
 
-			p_money_after = count_heroes_in_group() * (6 - host_readws(tav_ptr) / 4);
+			p_money_after = count_heroes_in_group() * (6 - tavern->quality / 4);
 
-			p_money_after += host_readws(tav_ptr + 2) * p_money_after / 100;
+			p_money_after += tavern->price_mod * p_money_after / 100;
 			sprintf(g_dtp2, get_ttx(473), (signed short)p_money_after);
 
 			if (GUI_bool(g_dtp2)) {
 
-				GUI_output(host_readws(tav_ptr) < 5 ? get_ttx(475) : (
-						host_readws(tav_ptr) < 15 ? get_ttx(476) : get_ttx(477)));
+				GUI_output(tavern->quality < 5 ? get_ttx(475) : (tavern->quality < 15 ? get_ttx(476) : get_ttx(477)));
 
 				timewarp(HOURS(1));
 
@@ -156,7 +155,7 @@ void do_tavern(void)
 						host_readbs(get_hero(i) + HERO_GROUP_NO) == gs_current_group)
 					{
 
-						l3 = (21 - host_readws(tav_ptr)) * 20;
+						l3 = (21 - tavern->quality) * 20;
 						if (l3 > 100) {
 							l3 = 100;
 						}
@@ -167,7 +166,7 @@ void do_tavern(void)
 							host_writebs(get_hero(i) + HERO_HUNGER, 0);
 						}
 
-						l3 = (21 - host_readws(tav_ptr)) * 30;
+						l3 = (21 - tavern->quality) * 30;
 						if (l3 > 100) {
 							l3 = 100;
 						}

@@ -259,6 +259,28 @@ struct struct_informer_tab {
 	Bit8s unkn;
 };
 
+struct healer_descr {
+	Bit8s price_mod;	/* range: [-50,..,50], absolute difference as percentage */
+	Bit8s quality;
+};
+
+struct smith_descr {
+	Bit8s price_mod;
+	Bit8s quality;
+};
+
+struct inn_descr {
+	Bit16s quality;
+	Bit16s price_mod;
+};
+
+struct shop_descr {
+	Bit8s price_mod;
+	Bit8s type;
+	Bit8s sortiment;
+	Bit16s extra_items[3];
+};
+
 struct struct_shopping_cart {
 	int item_id;
 	int quantity;
@@ -1244,10 +1266,16 @@ extern char g_gather_herbs_str_comma[3];	//ds:0x66d7; seg051
 extern char g_gather_herbs_str_and[6];		//ds:0x66da; seg051
 extern char g_gather_herbs_str_dot[2];		//ds:0x66e0; seg051
 extern const signed short g_dcampfights[4];	//ds:0x66e2; seg052
-
+extern const healer_descr g_healer_descr_table[41];	//ds:0x66ea; seg053
+extern const struct inn_descr g_inn_descr_table[77];	//ds:0x673c; seg054
+extern struct shop_descr g_shop_descr_table[95];//ds:0x6870; seg055, seg065
 extern char g_buy_screen_str_money_h[5];	//ds:0x6bc8; seg056
 
 extern char g_buy_screen_str_comma_space[3];	//ds:0x6bed; seg056
+
+extern struct smith_descr g_smith_descr_table[42];	//ds:0x6c10; seg058
+
+extern struct inn_descr g_tavern_descr_table[89];	//ds:0x6c84; seg054, seg059, seg060
 
 extern Bit8s *g_god_temples_index[15]; 		//ds:0x6e36; seg061
 extern char g_str_temp_file_wildcard[8];	//ds:0x6e72; seg061

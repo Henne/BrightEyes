@@ -40,12 +40,12 @@ namespace M302de {
 /**
  * \brief   add all items of a hero to the repair list
  *
- * \param   smith_ptr   pointer to the smith description
+ * \param   smith   pointer to the smith description
  * \param   hero        pointer to the hero
  * \param   item_pos    the position of the item in the inventory
  * \param   smith_pos   the position of the item in the repair list
  */
-void add_item_to_smith(Bit8u *smith_ptr, Bit8u *hero, signed short item_pos, signed short smith_pos)
+void add_item_to_smith(struct smith_descr *smith, Bit8u *hero, signed short item_pos, signed short smith_pos)
 {
 	signed short item_id;
 
@@ -59,7 +59,7 @@ void add_item_to_smith(Bit8u *smith_ptr, Bit8u *hero, signed short item_pos, sig
 
 			host_writews((Bit8u*)g_sellitems + 7 * smith_pos + 2,
 				(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) +
-					(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * host_readbs(smith_ptr + SMITH_STATS_PRICE_MOD) / 100)) / 2);
+					(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * smith->price_mod / 100)) / 2);
 
 			if (host_readws((Bit8u*)g_sellitems + 7 * smith_pos + 2) == 0) {
 				host_writews((Bit8u*)g_sellitems + 7 * smith_pos + 2, 1);
@@ -75,7 +75,7 @@ void add_item_to_smith(Bit8u *smith_ptr, Bit8u *hero, signed short item_pos, sig
 
 				host_writews((Bit8u*)g_sellitems + 7 * smith_pos + 2,
 					(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) +
-						(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * host_readbs(smith_ptr + SMITH_STATS_PRICE_MOD) / 100)) / 4);
+						(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * smith->price_mod / 100)) / 4);
 
 				if (host_readws((Bit8u*)g_sellitems + 7 * smith_pos + 2) == 0) {
 					host_writews((Bit8u*)g_sellitems + 7 * smith_pos + 2, 1);
@@ -114,7 +114,7 @@ struct dummy_c5 {
  * \param   smith_ptr   pointer to the smith descriptor
  * \param   smith_id    ID of the smith [0,...,49]
  */
-void repair_screen(Bit8u *smith_ptr, signed short smith_id)
+void repair_screen(struct smith_descr *smith, signed short smith_id)
 {
 	signed short l_si;
 	signed short j;
@@ -169,8 +169,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 
 		} else if (get_item(gs_smith_repairitems[smith_id].item_id, 1, 1)) {
 
-			sprintf(g_dtp2, get_ttx(486),
-				GUI_names_grammar((signed short)0x8002, gs_smith_repairitems[smith_id].item_id, 0));
+			sprintf(g_dtp2, get_ttx(486), GUI_names_grammar((signed short)0x8002, gs_smith_repairitems[smith_id].item_id, 0));
 
 			GUI_output(g_dtp2);
 
@@ -230,7 +229,7 @@ void repair_screen(Bit8u *smith_ptr, signed short smith_id)
 					smith_pos = 0;
 					for (l_si = 0; l_si < NR_HERO_INVENTORY_SLOTS; l_si++) {
 						if (host_readws(hero2 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * l_si) != ITEM_NONE) {
-							add_item_to_smith(smith_ptr, hero2, l_si, smith_pos++);
+							add_item_to_smith(smith, hero2, l_si, smith_pos++);
 						}
 					}
 
@@ -494,7 +493,7 @@ void do_smith(void)
 {
 	signed short done = 0;
 	signed short answer;
-	Bit8u *smith_ptr;
+	struct smith_descr *smith;
 
 	if (gs_day_timer < HOURS(6) || gs_day_timer > HOURS(20)) {
 
@@ -514,7 +513,7 @@ void do_smith(void)
 
 	load_ggsts_nvf();
 	g_request_refresh = 1;
-	smith_ptr = p_datseg + SMITH_DESCR_TABLE + SIZEOF_SMITH_STATS * gs_current_typeindex;
+	smith = &g_smith_descr_table[gs_current_typeindex];
 	g_price_modificator = 4;
 
 	while (!done) {
@@ -537,16 +536,13 @@ void do_smith(void)
 
 			g_textbox_width = 4;
 
-			answer = GUI_radio(get_ttx(496), 3,
-						get_ttx(343),
-						get_ttx(497),
-						get_ttx(498)) - 1;
+			answer = GUI_radio(get_ttx(496), 3, get_ttx(343), get_ttx(497), get_ttx(498)) - 1;
 
 			/* TODO: why should it be 3??? Better make a backup */
 			g_textbox_width = 3;
 
 			if (answer != -2) {
-				g_action = (answer + ACTION_ID_ICON_1);
+				g_action = answer + ACTION_ID_ICON_1;
 			}
 		}
 
@@ -564,7 +560,7 @@ void do_smith(void)
 				done = 1;
 			}
 		} else if (g_action == ACTION_ID_ICON_2) {
-			repair_screen(smith_ptr, gs_current_typeindex);
+			repair_screen(smith, gs_current_typeindex);
 		}
 	}
 

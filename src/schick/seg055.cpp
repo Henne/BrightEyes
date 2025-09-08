@@ -37,15 +37,14 @@ namespace M302de {
  * \param   item_id     item_id
  * \param   pos         position in the shop
  */
-void add_item_to_shop(Bit8u *shop_ptr, signed short item_id, signed short pos)
+void add_item_to_shop(struct shop_descr *shop, signed short item_id, signed short pos)
 {
 	host_writews((Bit8u*)g_buyitems + 7 * pos, item_id);
 
 	host_writews((Bit8u*)g_buyitems + 7 * pos + 2,
-		host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) + host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * host_readbs(shop_ptr) / 100);
+		host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) + host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * shop->price_mod / 100);
 
-	host_writews((Bit8u*)g_buyitems + 7 * pos + 4,
-			host_readbs(get_itemsdat(item_id) + ITEM_STATS_PRICE_UNIT));
+	host_writews((Bit8u*)g_buyitems + 7 * pos + 4, host_readbs(get_itemsdat(item_id) + ITEM_STATS_PRICE_UNIT));
 }
 
 struct dummy7 {
@@ -61,16 +60,16 @@ void do_merchant(void)
 	signed short refresh;
 	signed short armor_pos;
 	Bit32s party_money;
-	Bit8u *shop_p;
+	struct shop_descr *shop;
 
 	done = 0;
 
 #if !defined(__BORLANDC__)
 	/* Print merchant values */
 	const Bit8u typi = gs_current_typeindex;
-	const Bit8s price = ds_readbs(SHOP_DESCR_TABLE + 9 * typi);
-	const Bit8s h_type = ds_readbs(SHOP_DESCR_TABLE + 1 + 9 * typi);
-	const Bit8s sortiment = ds_readbs(SHOP_DESCR_TABLE + 2 + 9 * typi);
+	const Bit8s price = g_shop_descr_table[typi].price_mod;
+	const Bit8s h_type = g_shop_descr_table[typi].type;
+	const Bit8s sortiment = g_shop_descr_table[typi].sortiment;
 	const char h_type0[] = "UNGUELTIG";
 	const char h_type1[] = "Waffen";
 	const char h_type2[] = "Kraeuter";
@@ -95,12 +94,15 @@ void do_merchant(void)
 	}
 
 	if (gs_merchant_kicked_flags[gs_current_typeindex]) {
-		if (ds_readbs((SHOP_DESCR_TABLE + 1) + 9 * gs_current_typeindex) != 3) {
+
+		if (g_shop_descr_table[gs_current_typeindex].type != 3) {
 			talk_merchant();
 			leave_location();
 			return;
 		}
+
 	} else if (gs_merchant_offended_flags[gs_current_typeindex]) {
+
 		GUI_output(get_ttx(507));
 		leave_location();
 		return;
@@ -112,7 +114,7 @@ void do_merchant(void)
 	g_buyitems = g_fig_figure1_buf;
 	memset((Bit8u*)g_buyitems, 0, 3500);
 	g_price_modificator = 4;
-	shop_p = p_datseg + SHOP_DESCR_TABLE + 9 * gs_current_typeindex;
+	shop = &g_shop_descr_table[gs_current_typeindex];
 
 	for (l_si = 0; l_si < 100; l_si++) {
 		host_writews((Bit8u*)g_buyitems + 7 * l_si, 0);
@@ -124,28 +126,28 @@ void do_merchant(void)
 
 	while (host_readws(get_itemsdat(l_si)) != -1) {
 
-		if (host_readbs(shop_p + 2) <= host_readbs(get_itemsdat(l_si) + ITEM_STATS_COMMONNESS)) {
+		if (shop->sortiment <= host_readbs(get_itemsdat(l_si) + ITEM_STATS_COMMONNESS)) {
 
 			if (item_armor(get_itemsdat(l_si)) || item_weapon(get_itemsdat(l_si))) {
 
-				if (host_readbs(shop_p + 1) == 1) {
+				if (shop->type == 1) {
 
-					add_item_to_shop(shop_p, l_si,
+					add_item_to_shop(shop, l_si,
 						item_weapon(get_itemsdat(l_si)) ? item_pos++ : armor_pos++);
 				}
 
 			} else if (item_herb_potion(get_itemsdat(l_si))) {
 
-				if (host_readbs(shop_p + 1) == 2) {
+				if (shop->type == 2) {
 
-					add_item_to_shop(shop_p, l_si, item_pos++);
+					add_item_to_shop(shop, l_si, item_pos++);
 				}
 
 			} else {
 
-				if (host_readbs(shop_p + 1) == 3) {
+				if (shop->type == 3) {
 
-					add_item_to_shop(shop_p, l_si, item_pos++);
+					add_item_to_shop(shop, l_si, item_pos++);
 				}
 			}
 		}
@@ -154,12 +156,12 @@ void do_merchant(void)
 	}
 
 	for (l_si = 0; l_si < 3; l_si++) {
-		if (host_readws(shop_p + 2 * l_si + 3) != 0) {
-			add_item_to_shop(shop_p, host_readws(shop_p + 2 * l_si + 3), item_pos++);
+		if (shop->extra_items[l_si]) {
+			add_item_to_shop(shop, shop->extra_items[l_si], item_pos++);
 		}
 	}
 
-	if (host_readbs(shop_p + 1) == 1) {
+	if (shop->type == 1) {
 
 		qsort((Bit8u*)g_buyitems, item_pos, 7, shop_compar);
 		qsort((Bit8u*)g_buyitems + 7 * 70, armor_pos - 70, 7, shop_compar);
@@ -189,7 +191,7 @@ void do_merchant(void)
 
 			set_var_to_zero();
 
-			load_ani(host_readbs(shop_p + 1) == 1 ? 15 : (host_readbs(shop_p + 1) == 2 ? 22 : 14));
+			load_ani(shop->type == 1 ? 15 : (shop->type == 2 ? 22 : 14));
 
 			init_ani(0);
 
@@ -274,7 +276,7 @@ void do_merchant(void)
 
 		} else if (g_action == ACTION_ID_ICON_2) {
 
-			sell_screen(shop_p);
+			sell_screen((Bit8u*)shop);
 
 		} else if (g_action == ACTION_ID_ICON_3) {
 
@@ -295,7 +297,7 @@ void talk_merchant(void)
 {
 	signed short tlk_id;
 
-	switch (ds_readbs(SHOP_DESCR_TABLE + 9 * gs_current_typeindex + 1)) {
+	switch (g_shop_descr_table[gs_current_typeindex].type) {
 		case 1: tlk_id = 16; break;
 		case 2: tlk_id = 15; break;
 		case 3: tlk_id = 14; break;

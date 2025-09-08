@@ -3577,8 +3577,8 @@ char g_gather_herbs_str_found[6] = "%d^%s"; // ds:0x66d1
 char g_gather_herbs_str_comma[3] = ", "; // ds:0x66d7
 char g_gather_herbs_str_and[6] = " UND "; // ds:0x66da
 char g_gather_herbs_str_dot[2] = "."; // ds:0x66e0
-const signed short g_dcampfights[4] = { 0x00fe, 0x00ff, 0x0100, 0x0101 }; // ds:0x66e2
-struct{signed char price,quality;} g_healer_descr_table[41] = {
+const signed short g_dcampfights[4] = { 254, 255, 256, 257 }; // ds:0x66e2
+const struct healer_descr g_healer_descr_table[41] = {
 	{  30,  2 },
 	{  50, 10 },
 	{ -10, 10 },
@@ -3621,7 +3621,7 @@ struct{signed char price,quality;} g_healer_descr_table[41] = {
 	{ -10,  3 },
 	{  -1,  0 }
 }; // ds:0x66ea
-struct{signed short quality,price_mod;} g_inn_descr_table[77] = {
+const struct inn_descr g_inn_descr_table[77] = {
 	{ 14,   0 },
 	{  7,  30 },
 	{ 12, -10 },
@@ -3700,7 +3700,7 @@ struct{signed short quality,price_mod;} g_inn_descr_table[77] = {
 	{ 10,   0 },
 	{ -1,   0 }
 }; // ds:0x673c
-struct{char price_mod,type,size; short extra_items[3];} g_shop_descr_table[95] = {
+struct shop_descr g_shop_descr_table[95] = {
 	{ 0x32, 0x03, 0x01, 0x0000, 0x0000, 0x0000 },
 	{ 0x28, 0x03, 0x02, 0x0000, 0x0000, 0x0000 },
 	{ 0x1e, 0x03, 0x08, 0x0000, 0x0000, 0x0000 },
@@ -3795,7 +3795,7 @@ struct{char price_mod,type,size; short extra_items[3];} g_shop_descr_table[95] =
 	{ 0x19, 0x03, 0x02, 0x0000, 0x0000, 0x0000 },
 	{ 0x00, 0x01, 0x0a, 0x0000, 0x0000, 0x0000 },
 	{ 0x00, 0x03, 0x06, 0x0000, 0x0000, 0x0000 },
-	{ -0x01, 0x00, 0x00, 0x0000, 0x0000, 0x0000 }
+	{ -1, 0, 0, 0, 0, 0 }
 }; // ds:0x6870
 unsigned char g_unkn_046[1] = { 0x00 }; // ds:0x6bc7
 char g_buy_screen_str_money_h[5] = "H %d"; // ds:0x6bc8
@@ -3811,7 +3811,7 @@ char g_sell_screen_str_money_d[5] = "D %d"; // ds:0x6bfa
 signed short g_sell_screen_items_posx[3] = { 0x001e, 0x005f, 0x00a0 }; // ds:0x6bff
 signed short g_sell_screen_items_posy[5] = { 0x0023, 0x0037, 0x004b, 0x005f, 0x0073 }; // ds:0x6c05
 unsigned char g_unkn_047[1] = { 0x00 }; // ds:0x6c0f
-struct{signed char price_mod,quality;} g_smith_descr_table[42] = { /* 'quality' is apparently unused. */
+struct smith_descr g_smith_descr_table[42] = { /* 'quality' is apparently unused. */
 	{  50,  1 },
 	{  20,  4 },
 	{   0, 10 },
@@ -3861,7 +3861,7 @@ char g_smith_str_money_d[5] = "D %d"; // ds:0x6c6e
 signed short g_smith_items_posx[3] = { 0x001e, 0x005f, 0x00a0 }; // ds:0x6c73
 signed short g_smith_items_posy[5] = { 0x0023, 0x0037, 0x004b, 0x005f, 0x0073 }; // ds:0x6c79
 unsigned char g_unkn_048[1] = { 0x00 }; // ds:0x6c83
-struct{short a,b;} g_tavern_descr_table[89] = {
+struct inn_descr g_tavern_descr_table[89] = {
 	{ 0x000c, -0x000a },
 	{ 0x000b, 0x0000 },
 	{ 0x0009, 0x0000 },

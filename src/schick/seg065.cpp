@@ -73,9 +73,9 @@ void do_market(void)
 		} else {
 
 			/* set up parameters for this merchant */
-			ds_writebs(SHOP_DESCR_TABLE + 90 * 9 + 0, g_market_descr_table[gs_current_typeindex].price_mod);
-			ds_writebs(SHOP_DESCR_TABLE + 90 * 9 + 2, g_market_descr_table[gs_current_typeindex].market_day);
-			ds_writebs(SHOP_DESCR_TABLE + 90 * 9 + 1, (signed char)answer);
+			g_shop_descr_table[90].price_mod = g_market_descr_table[gs_current_typeindex].price_mod;
+			g_shop_descr_table[90].sortiment = g_market_descr_table[gs_current_typeindex].market_day;
+			g_shop_descr_table[90].type = (signed char)answer;
 			type_bak = gs_current_typeindex;
 			gs_current_typeindex = 90;
 
@@ -90,9 +90,9 @@ void do_market(void)
 			gs_direction_bak = (signed char)bak1;
 			gs_direction = (signed char)dir_bak; /* by this line, the party will *not* be rotated after leaving the market */
 
-			ds_writebs(SHOP_DESCR_TABLE + 90 * 9 + 0, 0);
-			ds_writebs(SHOP_DESCR_TABLE + 90 * 9 + 2, 0);
-			ds_writebs(SHOP_DESCR_TABLE + 90 * 9 + 1, 0);
+			g_shop_descr_table[90].price_mod = 0;
+			g_shop_descr_table[90].sortiment = 0;
+			g_shop_descr_table[90].type = 0;
 		}
 
 	} while (!done);

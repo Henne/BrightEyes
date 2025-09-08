@@ -84,7 +84,7 @@ void do_inn(void)
 # endif
 	Bit8u* hero;
 	Bit8u *hero2;
-	Bit8u *inn_ptr;
+	const struct inn_descr *inn;
 	Bit32s party_money;
 	Bit32s price;
 	signed char stay;
@@ -95,7 +95,7 @@ void do_inn(void)
 	Bit32s price_suite;
 	signed short booked_days;
 	signed short rested_days;
-	Bit8u *tavern_ptr;
+	struct inn_descr *tavern;
 
 	done = 0;
 	stay = 0;
@@ -357,7 +357,7 @@ void do_inn(void)
 			refresh = 0;
 		}
 
-		inn_ptr = p_datseg + INN_DESCR_TABLE + SIZEOF_INN_STATS * gs_current_typeindex;
+		inn = &g_inn_descr_table[gs_current_typeindex];
 
 		handle_gui_input();
 
@@ -381,9 +381,10 @@ void do_inn(void)
 
 		} else if (g_action == ACTION_ID_ICON_2) { /* order food */
 
-			price = count_heroes_in_group() * (6L - host_readws(inn_ptr + INN_STATS_QUALITY) / 4L);
+			price = count_heroes_in_group() * (6L - inn->quality / 4L);
+
 			/* higher food quality -> higher price */
-			price += (price * host_readws(inn_ptr + INN_STATS_PRICE_MOD)) / 100L;
+			price += (price * inn->price_mod) / 100L;
 
 			sprintf(g_dtp2,	get_ttx(473), (signed short)price);
 
@@ -400,8 +401,7 @@ void do_inn(void)
 					GUI_output(get_ttx(401));
 				} else {
 
-					GUI_output(host_readws(inn_ptr + INN_STATS_QUALITY) < 5 ? get_ttx(475) :
-							(host_readws(inn_ptr + INN_STATS_QUALITY) < 15 ? get_ttx(476) : get_ttx(477)));
+					GUI_output(inn->quality < 5 ? get_ttx(475) : (inn->quality < 15 ? get_ttx(476) : get_ttx(477)));
 
 					for (i = 0, hero2 = get_hero(0); i <= 6; i++, hero2 += SIZEOF_HERO) {
 
@@ -409,7 +409,7 @@ void do_inn(void)
 							host_readbs(hero2 + HERO_GROUP_NO) == gs_current_group &&
 							!hero_dead(hero2))
 						{
-							portion_size = (21 - host_readws(inn_ptr + INN_STATS_QUALITY)) * 20;
+							portion_size = (21 - inn->quality) * 20;
 							if (portion_size > 100) {
 								portion_size = 100;
 							}
@@ -420,7 +420,7 @@ void do_inn(void)
 								host_writebs(hero2 + HERO_HUNGER, 0);
 							}
 
-							portion_size = (21 - host_readws(inn_ptr + INN_STATS_QUALITY)) * 30;
+							portion_size = (21 - inn->quality) * 30;
 							if (portion_size > 100) {
 								portion_size = 100;
 							}
@@ -443,9 +443,9 @@ void do_inn(void)
 			price_schlafsaal = 5;
 			price_einzelzimmer = 30;
 			price_suite = 100;
-			price_schlafsaal += price_schlafsaal * host_readws(inn_ptr + INN_STATS_PRICE_MOD) / 100;
-			price_einzelzimmer += price_schlafsaal * host_readws(inn_ptr + INN_STATS_PRICE_MOD) / 100;
-			price_suite += price_schlafsaal * host_readws(inn_ptr + INN_STATS_PRICE_MOD) / 100;
+			price_schlafsaal += price_schlafsaal * inn->price_mod / 100;
+			price_einzelzimmer += price_schlafsaal * inn->price_mod / 100;
+			price_suite += price_schlafsaal * inn->price_mod / 100;
 
 			tw_bak = g_textbox_width;
 			g_textbox_width = 5;
@@ -537,11 +537,11 @@ void do_inn(void)
 
 					booked_days = g_booked_inn_days;
 
-					if (host_readws(inn_ptr + INN_STATS_QUALITY) < 8) {
+					if (inn->quality < 8) {
 
 						g_sleep_quality++;
 
-					} else if (host_readws(inn_ptr + INN_STATS_QUALITY) > 15) {
+					} else if (inn->quality > 15) {
 
 						g_sleep_quality--;
 					}
@@ -598,14 +598,16 @@ void do_inn(void)
 
 		} else if (g_action == ACTION_ID_ICON_8 && g_combo_mode != 0) {
 
-			tavern_ptr = p_datseg + TAVERN_DESCR_TABLE + 4 * gs_current_typeindex;
+			tavern = &g_tavern_descr_table[gs_current_typeindex];
 
-			if (host_readws(tavern_ptr) >= 6 && host_readws(tavern_ptr) <= 13 &&
-				gs_day_timer < HOURS(11) && gs_day_timer > HOURS(3)) {
+			if (tavern->quality >= 6 && tavern->quality <= 13 && gs_day_timer < HOURS(11) && gs_day_timer > HOURS(3)) {
+
 				GUI_output(get_ttx(801));
-			} else if ((host_readws(tavern_ptr) < 6 || host_readws(tavern_ptr) > 13) &&
-				gs_day_timer < HOURS(16) && gs_day_timer > HOURS(3)) {
+
+			} else if ((tavern->quality < 6 || tavern->quality > 13) &&	gs_day_timer < HOURS(16) && gs_day_timer > HOURS(3)) {
+
 				GUI_output(get_ttx(481));
+
 			} else if (g_sleep_quality != -1) {
 
 				if (GUI_bool(get_ttx(400))) {

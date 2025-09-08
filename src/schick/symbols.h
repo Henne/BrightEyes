@@ -1021,9 +1021,9 @@
 //#define GATHER_HERBS_STR_AND            (0x66da)    /* char[6]; " UND " */
 //#define GATHER_HERBS_STR_DOT            (0x66e0)    /* char[2]; "." */
 //#define DCAMPFIGHTS                     (0x66e2)    /* signed short[4] */
-#define HEALER_DESCR_TABLE              (0x66ea)    /* struct(2)[41]; struct{signed char price,quality;} */
-#define INN_DESCR_TABLE                 (0x673c)    /* struct(4)[77]; struct{signed short quality,unkn;} */
-#define SHOP_DESCR_TABLE                (0x6870)    /* struct(9)[95]; struct{char price_mod,type,size; short extra_items[3];} */
+//#define HEALER_DESCR_TABLE              (0x66ea)    /* struct(2)[41]; struct{signed char price,quality;} */
+//#define INN_DESCR_TABLE                 (0x673c)    /* struct(4)[77]; struct{signed short quality,unkn;} */
+//#define SHOP_DESCR_TABLE                (0x6870)    /* struct(9)[95]; struct{char price_mod,type,size; short extra_items[3];} */
 // ?1
 #define BUY_SCREEN_STR_MONEY_H          (0x6bc8)    /* char[5]; "H %d" */
 #define BUY_SCREEN_STR_MONEY_S          (0x6bcd)    /* char[5]; "S %d" */
@@ -1038,14 +1038,14 @@
 #define SELL_SCREEN_ITEMS_POSX          (0x6bff)    /* signed short[3]; { 30, 95, 160 } */
 #define SELL_SCREEN_ITEMS_POSY          (0x6c05)    /* signed short[5]; { 35, 55, 75, 95, 115 } */
 // ?1
-#define SMITH_DESCR_TABLE               (0x6c10)    /* signed short[42] */
+//#define SMITH_DESCR_TABLE               (0x6c10)    /* signed short[42] */
 #define SMITH_STR_MONEY_H               (0x6c64)    /* char[5]; "H %d" */
 #define SMITH_STR_MONEY_S               (0x6c69)    /* char[5]; "S %d" */
 #define SMITH_STR_MONEY_D               (0x6c6e)    /* char[5]; "D %d" */
 #define SMITH_ITEMS_POSX                (0x6c73)    /* signed short[3]; { 30, 95, 160 } */
 #define SMITH_ITEMS_POSY                (0x6c79)    /* signed short[5]; { 35, 55, 75, 95, 115 } */
 // ?1
-#define TAVERN_DESCR_TABLE              (0x6c84)    /* struct(4)[89]; struct{short a,b;} */
+//#define TAVERN_DESCR_TABLE              (0x6c84)    /* struct(4)[89]; struct{short a,b;} */
 //#define GOD_TEMPLES_TABLE_01            (0x6de8)    /* char[2]; array terminated by -1 */
 //#define GOD_TEMPLES_TABLE_02            (0x6dea)    /* char[6]; array terminated by -1 */
 //#define GOD_TEMPLES_TABLE_03            (0x6df0)    /* char[11]; array terminated by -1 */

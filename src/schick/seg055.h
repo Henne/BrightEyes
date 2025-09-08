@@ -7,7 +7,7 @@ void do_merchant(void);
 /* 0x25 */
 void talk_merchant(void);
 /* 0x2a */
-void add_item_to_shop(Bit8u*, signed short, signed short);
+void add_item_to_shop(struct shop_descr*, signed short, signed short);
 /* 0x2f */
 void TLK_ghandel(signed short);
 /* 0x34 */
