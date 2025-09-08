@@ -26,23 +26,23 @@ namespace M302de {
  * \param   nr_ships_created	number of ships which have already been created before (for avoiding duplicate ship names)
  */
 
-Bit8u* get_ship_name(signed char passage_type, signed short nr_ships_created)
+char* get_ship_name(signed char passage_type, signed short nr_ships_created)
 	/* Function is called in a single place only, which is contained in the code of Original-Bug 23 (see below).
 	 * Therefore, the function could be removed if M302de_ORIGINAL_BUGFIX is activated.
 	 */
 {
 	signed char done, i;
-	signed short name;
+	signed short name_id;
 
 	done = 0;
 
 	do {
-		name = passage_type * 10 + random_schick(10) + 0x29;
+		name_id = passage_type * 10 + random_schick(10) + 0x29;
 		done = 1;
 
 		/* check if there is already a ship with the same name */
 		for (i = 0; i < nr_ships_created; i++) {
-			if ((char*)ds_readd(HARBOR_OPTIONS + i * SIZEOF_HARBOR_OPTION + HARBOR_OPTION_SHIP_NAME_PTR) == get_tx(name)) {
+			if (gs_harbor_options[i].ship_name_ptr == get_tx(name_id)) {
 				done = 0;
 				break;
 			}
@@ -50,7 +50,7 @@ Bit8u* get_ship_name(signed char passage_type, signed short nr_ships_created)
 
 	} while (!done);
 
-	return (Bit8u*)get_tx(name);
+	return get_tx(name_id);
 }
 
 /**
@@ -70,17 +70,17 @@ unsigned short prepare_passages(void)
 
 			/* ship is leaving today */
 
-			/* prepare a 12-byte entry in HARBOR_OPTIONS */
-			ds_writeb((HARBOR_OPTIONS + HARBOR_OPTION_ROUTE_ID) + prepared * SIZEOF_HARBOR_OPTION, (unsigned char)i);
-			ds_writed((HARBOR_OPTIONS + HARBOR_OPTION_ROUTE_PTR) + prepared * SIZEOF_HARBOR_OPTION, (Bit32u)ent);
-			ds_writeb((HARBOR_OPTIONS + HARBOR_OPTION_SHIP_TIMER) + prepared * SIZEOF_HARBOR_OPTION, 0);
-			ds_writeb((HARBOR_OPTIONS + HARBOR_OPTION_SHIP_TYPE) + prepared * SIZEOF_HARBOR_OPTION, ent->ship_type);
+			/* prepare a 12-byte entry in gs_harbor_options */
+			gs_harbor_options[prepared].route_id = (unsigned char)i;
+			gs_harbor_options[prepared].sea_route_ptr = ent;
+			gs_harbor_options[prepared].ship_timer = 0;
+			gs_harbor_options[prepared].ship_type = ent->ship_type;
 
 #ifndef M302de_ORIGINAL_BUGFIX
 			/* Original-Bug 23:
 			 * In the function get_ship_name(..), the ship names are created randomly every time the party checks the available ships at a harbor.
 			 * In this way, the names of the ships can (and usually do) change when repeatedly checking the available ships. */
-			ds_writed(HARBOR_OPTIONS + prepared * SIZEOF_HARBOR_OPTION + HARBOR_OPTION_SHIP_NAME_PTR, (Bit32u)get_ship_name(ent->ship_type, prepared));
+			gs_harbor_options[prepared].ship_name_ptr = get_ship_name(ent->ship_type, prepared);
 #else
 			/* As a fix, we derive the name from the PASSAGE_PRICE_MOD entry of the SEA_ROUTE, which is created
 			 * randomly once the new passage of the route is set up, and is kept fixed over the lifetime of the passage.
@@ -88,12 +88,10 @@ unsigned short prepare_passages(void)
 			 * In this way, it may however happen that two ships of the same name are located in a harbor
 			 * (which has been avoided in the original random assignment code). But this is a rare event and not be a big issue anyway.
 			 */
-			ds_writed(HARBOR_OPTIONS + prepared * SIZEOF_HARBOR_OPTION + HARBOR_OPTION_SHIP_NAME_PTR,
-				(Bit32u)get_tx(ent->ship_type * 10 + ent->price_mod % 10 + 0x2a));
+			gs_harbor_options[prepared].ship_name_ptr = get_tx(ent->ship_type * 10 + ent->price_mod % 10 + 0x2a);
 #endif
 
-			ds_writeb((HARBOR_OPTIONS + HARBOR_OPTION_DESTINATION) + prepared * SIZEOF_HARBOR_OPTION,
-				ent->town1 == gs_current_town ? ent->town2 : ent->town1);
+			gs_harbor_options[prepared].destination = ent->town1 == gs_current_town ? ent->town2 : ent->town1;
 
 				/* store the other town of the connection */
 			prepared++;
@@ -103,24 +101,21 @@ unsigned short prepare_passages(void)
 		        {
 				/* ship is leaving tomorrow and it is later than 14:00 */
 
-				/* prepare a 12-byte entry in HARBOR_OPTIONS */
-				ds_writeb((HARBOR_OPTIONS + HARBOR_OPTION_ROUTE_ID) + prepared * SIZEOF_HARBOR_OPTION, (unsigned char)i);
-				ds_writed((HARBOR_OPTIONS + HARBOR_OPTION_ROUTE_PTR) + prepared * SIZEOF_HARBOR_OPTION, (Bit32u)ent);
-				ds_writeb((HARBOR_OPTIONS + HARBOR_OPTION_SHIP_TIMER) + prepared * SIZEOF_HARBOR_OPTION, 1);
-				ds_writeb((HARBOR_OPTIONS + HARBOR_OPTION_SHIP_TYPE) + prepared * SIZEOF_HARBOR_OPTION, ent->ship_type);
+				/* prepare a 12-byte entry in gs_harbor_options */
+				gs_harbor_options[prepared].route_id = (unsigned char)i;
+				gs_harbor_options[prepared].sea_route_ptr = ent;
+				gs_harbor_options[prepared].ship_timer = 1;
+				gs_harbor_options[prepared].ship_type = ent->ship_type;
 
 #ifndef M302de_ORIGINAL_BUGFIX
 				/* Original-Bug 23:
 				 * see above */
-				ds_writed(HARBOR_OPTIONS + prepared * SIZEOF_HARBOR_OPTION + HARBOR_OPTION_SHIP_NAME_PTR,
-					(Bit32u)get_ship_name(ent->ship_type, prepared));
+				gs_harbor_options[prepared].ship_name_ptr = get_ship_name(ent->ship_type, prepared);
 #else
-				ds_writed(HARBOR_OPTIONS + prepared * SIZEOF_HARBOR_OPTION + HARBOR_OPTION_SHIP_NAME_PTR,
-					(Bit32u)get_tx(ent->ship_type * 10 + ent->price_mod % 10 + 0x2a));
+				gs_harbor_options[prepared].ship_name_ptr = get_tx(ent->ship_type * 10 + ent->price_mod % 10 + 0x2a);
 #endif
 
-				ds_writeb((HARBOR_OPTIONS + HARBOR_OPTION_DESTINATION) + prepared * SIZEOF_HARBOR_OPTION ,
-					ent->town1 == gs_current_town ? ent->town2 : ent->town1);
+				gs_harbor_options[prepared].destination = ent->town1 == gs_current_town ? ent->town2 : ent->town1;
 
 				prepared++;
 			}
@@ -231,12 +226,12 @@ unsigned short get_passage_travel_hours(signed short distance, signed short base
 unsigned short get_next_passages(unsigned short type)
 {
 	sea_route *entry;
-	signed short destinations;
+	signed short option;
 	signed short i;
 
 	entry = &g_sea_routes[0];
 
-	for (i = destinations = 0; i < NR_SEA_ROUTES; entry++, i++) {
+	for (i = option = 0; i < NR_SEA_ROUTES; entry++, i++) {
 
 		if (type == 1) {
 
@@ -244,35 +239,25 @@ unsigned short get_next_passages(unsigned short type)
 			if (entry->passage_timer == 1 || entry->passage_timer == 2) {
 
 				/* compare town */
-				if (entry->town1 == gs_current_town || entry->town2 == gs_current_town)
-				{
-#if !defined(__BORLANDC__)
-					ds_writeb(HARBOR_OPTIONS + 10 + destinations * SIZEOF_HARBOR_OPTION,
-						entry->town1 == gs_current_town ? entry->town2 : entry->town1);
-#else
-					((struct passages*)(p_datseg + HARBOR_OPTIONS))[destinations].town =
-						entry->town1 == gs_current_town ? entry->town2 : entry->town1;
-#endif
-					destinations++;
+				if (entry->town1 == gs_current_town || entry->town2 == gs_current_town) {
+					gs_harbor_options[option].destination = entry->town1 == gs_current_town ? entry->town2 : entry->town1;
+
+					option++;
 				}
 			}
 		} else {
+
 			/* compare town */
 			if (entry->town1 == gs_current_town || entry->town2 == gs_current_town) {
 
-#if !defined(__BORLANDC__)
-				ds_writeb(HARBOR_OPTIONS + 10 + destinations * SIZEOF_HARBOR_OPTION,
-					entry->town1 == gs_current_town ? entry->town2: entry->town1);
-#else
-					((struct passages*)(p_datseg + HARBOR_OPTIONS))[destinations].town =
-						entry->town1 == gs_current_town ? entry->town2: entry->town1;
-#endif
-				destinations++;
+				gs_harbor_options[option].destination = entry->town1 == gs_current_town ? entry->town2: entry->town1;
+
+				option++;
 			}
 		}
 	}
 
-	return destinations;
+	return option;
 }
 
 unsigned short passage_arrival(void)

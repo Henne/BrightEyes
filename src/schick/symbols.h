@@ -761,7 +761,7 @@
 //#define SEA_TRAVEL_PSGBOOKED_TIMER      (0x42af)    /* signed char; 0 = ship leaves today at 9 o'clock; 1 = ship leaves tomorrow at 9 o'clock */
 //#define SEA_TRAVEL_PASSAGE_SPEED1       (0x42b0)    /* signed char */
 //#define CURRENT_SEA_ROUTE_ID            (0x42b1)    /* signed char */
-#define HARBOR_OPTIONS                  (0x42b2)    /* struct(12)[10]; buffering passage data for building the menu in a harbor where a sea passage can be selected */
+//#define HARBOR_OPTIONS                  (0x42b2)    /* struct(12)[10]; buffering passage data for building the menu in a harbor where a sea passage can be selected */
 //#define SEA_TRAVEL_PASSAGE_PRICE        (0x432a)    /* signed short */
 //#define SEA_TRAVEL_PASSAGE_SPEED2       (0x432c)    /* unsigned short; basically, the same purpose as SEA_TRAVEL_PASSAGE_SPEED1. The variables could be merged. */
 //#define TRAVEL_MAP_PTR                  (0x432e)    /* Bit8u* */

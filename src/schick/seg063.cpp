@@ -86,7 +86,7 @@ void do_harbor(void)
 	signed short i; /* diverse usage */
 	signed short done;
 	signed short answer;
-	Bit8u *psg_ptr;
+	struct harbor_option_obsolete *psg_ptr;
 	Bit32s p_money;
 	Bit8u *hero;
 	signed char flag;
@@ -143,12 +143,10 @@ void do_harbor(void)
 
 		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
 
-			answer = GUI_radio(get_tx(9), 4,
-						get_tx(10), get_tx(11),
-						get_tx(12), get_tx(13)) - 1;
+			answer = GUI_radio(get_tx(9), 4,get_tx(10), get_tx(11), get_tx(12), get_tx(13)) - 1;
 
 			if (answer != -2) {
-				g_action = (answer + ACTION_ID_ICON_1);
+				g_action = answer + ACTION_ID_ICON_1;
 			}
 		}
 
@@ -163,41 +161,40 @@ void do_harbor(void)
 
 				/* select a destination */
 				answer = GUI_radio(get_tx(14), (signed char)answer,
-						get_ttx(ds_readb((HARBOR_OPTIONS + SIZEOF_HARBOR_OPTION * 0 + HARBOR_OPTION_DESTINATION)) + 235),
-						get_ttx(ds_readb((HARBOR_OPTIONS + SIZEOF_HARBOR_OPTION * 1 + HARBOR_OPTION_DESTINATION)) + 235),
-						get_ttx(ds_readb((HARBOR_OPTIONS + SIZEOF_HARBOR_OPTION * 2 + HARBOR_OPTION_DESTINATION)) + 235),
-						get_ttx(ds_readb((HARBOR_OPTIONS + SIZEOF_HARBOR_OPTION * 3 + HARBOR_OPTION_DESTINATION)) + 235),
-						get_ttx(ds_readb((HARBOR_OPTIONS + SIZEOF_HARBOR_OPTION * 4 + HARBOR_OPTION_DESTINATION)) + 235),
-						get_ttx(ds_readb((HARBOR_OPTIONS + SIZEOF_HARBOR_OPTION * 5 + HARBOR_OPTION_DESTINATION)) + 235),
-						get_ttx(ds_readb((HARBOR_OPTIONS + SIZEOF_HARBOR_OPTION * 6 + HARBOR_OPTION_DESTINATION)) + 235),
-						get_ttx(ds_readb((HARBOR_OPTIONS + SIZEOF_HARBOR_OPTION * 7 + HARBOR_OPTION_DESTINATION)) + 235),
-						get_ttx(ds_readb((HARBOR_OPTIONS + SIZEOF_HARBOR_OPTION * 8 + HARBOR_OPTION_DESTINATION)) + 235),
-						get_ttx(ds_readb((HARBOR_OPTIONS + SIZEOF_HARBOR_OPTION * 9 + HARBOR_OPTION_DESTINATION)) + 235)) - 1;
+						get_ttx(gs_harbor_options[0].destination + 235),
+						get_ttx(gs_harbor_options[1].destination + 235),
+						get_ttx(gs_harbor_options[2].destination + 235),
+						get_ttx(gs_harbor_options[3].destination + 235),
+						get_ttx(gs_harbor_options[4].destination + 235),
+						get_ttx(gs_harbor_options[5].destination + 235),
+						get_ttx(gs_harbor_options[6].destination + 235),
+						get_ttx(gs_harbor_options[7].destination + 235),
+						get_ttx(gs_harbor_options[8].destination + 235),
+						get_ttx(gs_harbor_options[9].destination + 235)) - 1;
 
 				if (answer != -2) {
 
-					psg_ptr = p_datseg + SIZEOF_HARBOR_OPTION * answer + HARBOR_OPTIONS;
+					psg_ptr = &gs_harbor_options[answer];
 
 					sprintf(g_dtp2,	get_tx(16),
 
-						get_tx(g_sea_travel_tx_ship[host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE)]), /* Fischerboot, Schnellsegler etc. */
-						(char*)host_readds(psg_ptr + HARBOR_OPTION_SHIP_NAME_PTR),
+						get_tx(g_sea_travel_tx_ship[psg_ptr->ship_type]), /* Fischerboot, Schnellsegler etc. */
+						psg_ptr->ship_name_ptr,
+						(!psg_ptr->ship_timer ? get_tx(5) : get_tx(6)), /* today or tomorrow */
 
-						(char*)(!host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TIMER) ? get_tx(5) : get_tx(6)), /* today or tomorrow */
-
-						get_tx(g_passage_type_to_name[ds_readbs(SHIP_TABLE + SHIP_TABLE_PASSAGE_TYPE + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE))]), /* Kabinenpassage etc. */
-						get_ttx(host_readb(psg_ptr + HARBOR_OPTION_DESTINATION) + 235),
+						get_tx(g_passage_type_to_name[ds_readbs(SHIP_TABLE + SHIP_TABLE_PASSAGE_TYPE + SIZEOF_SHIP_TABLE_ENTRY * psg_ptr->ship_type)]), /* Kabinenpassage etc. */
+						get_ttx(psg_ptr->destination + 235),
 #ifdef __BORLANDC__
-						get_passage_travel_hours(((struct sea_route*)host_readd(psg_ptr + HARBOR_OPTION_ROUTE_PTR))->distance, ds_readbs(SHIP_TABLE + SHIP_TABLE_BASE_SPEED + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE))),
+						get_passage_travel_hours(psg_ptr->sea_route_ptr->distance, ds_readbs(SHIP_TABLE + SHIP_TABLE_BASE_SPEED + SIZEOF_SHIP_TABLE_ENTRY * psg_ptr->ship_type)),
 #else
 						/* when compiled with gcc, occasionally passage times of 0 hours do show up. (which does not happen in the original game!!)
 						 * I observed that within the function get_passage_travel_hours(..), computations with negative numbers might happen and lead to this bug.
 						 * The following line fixes this. However, it will lead to incompatible binaries when compiled with the original 1992 BCC compiler
 						 * This incompatibility of the behavior gcc vs. BCC is a bit scary.
 						 * A better understanding is urgently needed... */
-						get_passage_travel_hours(((struct sea_route*)host_readd(psg_ptr + HARBOR_OPTION_ROUTE_PTR))->distance, (unsigned char)ds_readbs(SHIP_TABLE + SHIP_TABLE_BASE_SPEED + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE))),
+						get_passage_travel_hours(psg_ptr->sea_route_ptr->distance, (unsigned char)ds_readbs(SHIP_TABLE + SHIP_TABLE_BASE_SPEED + SIZEOF_SHIP_TABLE_ENTRY * psg_ptr->ship_type)),
 #endif
-						(Bit8u*)print_passage_price(ds_readbs(SHIP_TABLE + SHIP_TABLE_BASE_PRICE_PER_DISTANCE + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE)), (struct sea_route*)host_readds(psg_ptr + HARBOR_OPTION_ROUTE_PTR)));
+						(Bit8u*)print_passage_price(ds_readbs(SHIP_TABLE + SHIP_TABLE_BASE_PRICE_PER_DISTANCE + SIZEOF_SHIP_TABLE_ENTRY * psg_ptr->ship_type), psg_ptr->sea_route_ptr));
 
 					i = g_textbox_width;
 					g_textbox_width = 5;
@@ -217,11 +214,11 @@ void do_harbor(void)
 
 						} else {
 
-							g_sea_travel_sleep_quality = ds_readb(SHIP_TABLE + SHIP_TABLE_PASSAGE_TYPE + SIZEOF_SHIP_TABLE_ENTRY * host_readbs(psg_ptr + HARBOR_OPTION_SHIP_TYPE));
+							g_sea_travel_sleep_quality = ds_readb(SHIP_TABLE + SHIP_TABLE_PASSAGE_TYPE + SIZEOF_SHIP_TABLE_ENTRY * psg_ptr->ship_type);
 							money -= gs_sea_travel_passage_price;
 							set_party_money(money);
 
-							gs_sea_travel_psgbooked_timer = host_readb(psg_ptr + HARBOR_OPTION_SHIP_TIMER);
+							gs_sea_travel_psgbooked_timer = psg_ptr->ship_timer;
 							gs_sea_travel_psgbooked_flag = 0xaa;
 
 							gs_sea_travel_passage_speed1 = gs_sea_travel_passage_speed2; /* speed in [100m per hour] */
@@ -229,9 +226,9 @@ void do_harbor(void)
 							/* not clear why two variables ..._SPEED1 and ..._SPEED2 are used. */
 							/* In my opinion, a single variable would be enough (and then there would not be the need to copy the value around) */
 
-							gs_current_sea_route_id = host_readb(psg_ptr + HARBOR_OPTION_ROUTE_ID);
+							gs_current_sea_route_id = psg_ptr->route_id;
 
-							GUI_output(host_readb(psg_ptr + HARBOR_OPTION_SHIP_TIMER) != 0 ? get_tx(18) : get_tx(17));
+							GUI_output(psg_ptr->ship_timer ? get_tx(18) : get_tx(17));
 							/* ship leaving tomorrow or today */
 						}
 					}
@@ -271,7 +268,7 @@ void do_harbor(void)
 					p_money -= 10L;
 					set_party_money(p_money);
 
-					i  = answer;
+					i = answer;
 					answer = get_next_passages(answer);
 					/* answer now: number of passages reported by Hafenmeister */
 
@@ -285,8 +282,8 @@ void do_harbor(void)
 
 						do {
 
-							strcat(g_dtp2,
-								get_ttx(ds_readb((HARBOR_OPTIONS + HARBOR_OPTION_DESTINATION) + SIZEOF_HARBOR_OPTION * i++) + 235));
+							strcat(g_dtp2, get_ttx(gs_harbor_options[i++].destination + 235));
+
 							if (--answer) {
 
 								strcat(g_dtp2, (answer >= 2 ? g_sea_travel_str_comma : get_tx(7)));

@@ -345,15 +345,6 @@ struct inventory {
 	signed char unused3; /* +13 */
 };
 
-struct passages {
-	unsigned char *p1;
-	unsigned char *p2;
-	signed char flag;	/* 0 or 1, write only */
-	signed char v2;		/* 0, read only */
-	unsigned char town;	/* */
-	signed char v4;		/* write only */
-};
-
 struct informer {
 	signed short name;	/* in TEXT.LTX */
 	signed char city;	/* -1 = no city, else city id */
@@ -1830,16 +1821,6 @@ enum { // struct harbor
 	HARBOR_TYPEINDEX = 1, /* one byte */ /* TYPEINDEX of the harbor within its town */
 	HARBOR_SEA_ROUTES = 2, /* four byte, Bit8u* to the route. Points to the first associated entry in HARBORS_LINKED_SEA_ROUTES */
 	SIZEOF_HARBOR = 6
-};
-
-enum {
-	HARBOR_OPTION_SHIP_NAME_PTR = 0, /* four bytes */ /* pointer to the ship name */
-	HARBOR_OPTION_ROUTE_PTR = 4, /* four bytes */ /* pointer to the route */
-	HARBOR_OPTION_SHIP_TIMER = 8, /* one byte. 0 = ship leaves today; 1 = ship leaves tomorrow */
-	HARBOR_OPTION_SHIP_TYPE = 9, /* one byte */
-	HARBOR_OPTION_DESTINATION = 10, /* one byte */ /* ID of the destination town */
-	HARBOR_OPTION_ROUTE_ID = 11, /* one byte */ /* ID of the passage */
-	SIZEOF_HARBOR_OPTION = 12
 };
 
 enum {

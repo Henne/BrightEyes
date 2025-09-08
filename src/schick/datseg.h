@@ -264,6 +264,16 @@ struct sea_route {
 	unsigned char price_mod;	/* one byte rw */ /* a number between 70 and 130 which serves as a percentage modifier to the price of the next ship on this route */
 };
 
+/* TODO: This structure makes an inconsistent game state */
+struct harbor_option_obsolete {
+	char *ship_name_ptr;
+	struct sea_route *sea_route_ptr;
+	Bit8s ship_timer;	/* 0 or 1, write only */
+	Bit8s ship_type;	/* 0, read only */
+	Bit8u destination;
+	Bit8s route_id;		/* write only */
+};
+
 struct struct_route_tevent {
 	Bit16s place;
 	Bit16s tevent_id;
@@ -980,6 +990,7 @@ extern Bit8u  gs_sea_travel_psgbooked_timer;	//ds:0x42af; seg002, seg063
 extern Bit8s  gs_sea_travel_passage_speed1;	//ds:0x42b0; seg063
 extern Bit8u  gs_current_sea_route_id;		//ds:0x42b1; seg063, seg064
 // TODO: HORBOUR OPTIONS: contains pointers
+extern struct harbor_option_obsolete gs_harbor_options[10];	//ds:0x42b2; seg063, seg064
 extern Bit16s gs_sea_travel_passage_price;	//ds:0x432a; seg063, seg064
 extern Bit16s gs_sea_travel_passage_speed2;	//ds:0x432c; seg063, seg064
 extern Bit8u *gs_travel_map_ptr;		//ds:0x432e; seg028, seg063, seg093, seg094
