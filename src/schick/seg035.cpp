@@ -45,21 +45,20 @@ void FIG_tidy_monsters(void)
 		/* if the monster is not able to fight anymore ... */
 		if (g_enemy_sheets[i].mon_id &&
 			(g_enemy_sheets[i].flags.dead || g_enemy_sheets[i].flags.mushroom || g_enemy_sheets[i].flags.petrified ||
-			((host_readbs(g_current_fight + SIZEOF_FIGHT_MONSTER * i + FIGHT_MONSTERS_ROUND_APPEAR) != 0) && (monsters == 0))))
+			(g_current_fight->monsters[i].round_appear && (monsters == 0))))
 		{
 
 			if (i == 19) {
 				/* just clear the last one */
-				memset(g_current_fight + SIZEOF_FIGHT_MONSTER * i + FIGHT_MONSTERS_ID, 0, 5);
+				memset(&g_current_fight->monsters[i], 0, sizeof(struct fight_monster));
 				break;
 			} else {
 				/* move the next monsters one position to the front */
 				for (j = i; j < 19; j++) {
 
-					*(struct dummy5*)(g_current_fight + SIZEOF_FIGHT_MONSTER * j + FIGHT_MONSTERS_ID) =
-						*(struct dummy5*)(g_current_fight + SIZEOF_FIGHT_MONSTER * (j + 1) + FIGHT_MONSTERS_ID);
+					g_current_fight->monsters[j] = g_current_fight->monsters[j + 1];
 
-					memset(g_current_fight + SIZEOF_FIGHT_MONSTER * (j + 1) + FIGHT_MONSTERS_ID, 0, SIZEOF_FIGHT_MONSTER);
+					memset(&g_current_fight->monsters[j + 1], 0, sizeof(struct fight_monster));
 
 					g_enemy_sheets[j] = g_enemy_sheets[j + 1];
 
@@ -103,8 +102,7 @@ void FIG_loot_monsters(void)
 
 		l_di = l3 = 0;
 
-		while (((l1 = host_readws(g_current_fight + 2 * l_di + FIGHT_LOOT)) != 0) &&
-			(l_di < 30) && (l1 != ITEM_BONE_WITH_RUNE))
+		while ((l1 = g_current_fight->loot[l_di]) && (l_di < 30) && (l1 != ITEM_BONE_WITH_RUNE))
 			/* Apparently a quick "fix" for an unwanted bone with runes in fight THOR8,
 			 * see https://www.crystals-dsa-foren.de/showthread.php?tid=453&pid=172221#pid172221 */
 		{
@@ -152,18 +150,16 @@ void FIG_loot_monsters(void)
 
 			if ((l4 != -2) && ((l5 == 0) || ((l5 != 0) && (l6 - 1 != l4)))) {
 
-				if (!get_item(host_readws(g_current_fight + 2 * (l4 + l_si) + FIGHT_LOOT), 1, 1))
+				if (!get_item(g_current_fight->loot[l4 + l_si], 1, 1))
 				{
 					l4 = -2;
 				} else {
-					host_writew(g_current_fight + 2 * (l4 + l_si) + FIGHT_LOOT, 0);
+					g_current_fight->loot[l4 + l_si] = 0;
 
 					for (l_di = l4 + l_si; l_di < 29; l_di++) {
 
-						host_writew(g_current_fight + 2 * (l_di) + FIGHT_LOOT,
-							host_readws(g_current_fight + 2 * (l_di + 1) + FIGHT_LOOT));
-
-						host_writew(g_current_fight + 2 * (l_di + 1) + FIGHT_LOOT, 0);
+						g_current_fight->loot[l_di] = g_current_fight->loot[l_di + 1];
+						g_current_fight->loot[l_di + 1] = 0;
 					}
 				}
 			}
@@ -173,17 +169,15 @@ void FIG_loot_monsters(void)
 		}
 	} while (l4 != -2);
 
-	money = host_readws(g_current_fight + FIGHT_DUCATS) * 100;
-	money += host_readws(g_current_fight + FIGHT_SILVER) * 10;
-	money += host_readws(g_current_fight + FIGHT_HELLER);
+	money = g_current_fight->ducats * 100;
+	money += g_current_fight->silver * 10;
+	money += g_current_fight->heller;
 
 	if (money > 0) {
 
 		make_valuta_str(g_text_output_buf, money);
 
-		sprintf((char*)(g_dtp2),
-			get_tx(15),
-			g_text_output_buf);
+		sprintf((char*)g_dtp2, get_tx(15), g_text_output_buf);
 		GUI_output(g_dtp2);
 
 		set_party_money(get_party_money() + money);

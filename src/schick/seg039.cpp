@@ -169,7 +169,7 @@ void fill_enemy_sheet(signed short sheet_no, signed char enemy_id, signed char r
 	sheet->is_animal = host_readb(monster + MONSTER_IS_ANIMAL);
 	sheet->round_appear = round;
 
-	sheet->viewdir = host_readb(g_current_fight + sheet_no * SIZEOF_FIGHT_MONSTER + FIGHT_MONSTERS_VIEWDIR);
+	sheet->viewdir = g_current_fight->monsters[sheet_no].viewdir;
 
 	sheet->shots = host_readb(monster + MONSTER_SHOTS);
 	sheet->shot_dam = host_readw(monster + MONSTER_SHOT_DAM);
@@ -377,11 +377,9 @@ void FIG_init_enemies(void)
 	/* Fill the tables with new values */
 	for (i = 0; i < 20; i++) {
 
-		if (host_readb(g_current_fight + i * SIZEOF_FIGHT_MONSTER + FIGHT_MONSTERS_ID) != 0) {
+		if (g_current_fight->monsters[i].id) {
 
-			fill_enemy_sheet(i,
-				host_readb(g_current_fight + i * SIZEOF_FIGHT_MONSTER + FIGHT_MONSTERS_ID),
-				host_readb(g_current_fight + i * SIZEOF_FIGHT_MONSTER + FIGHT_MONSTERS_ROUND_APPEAR));
+			fill_enemy_sheet(i, g_current_fight->monsters[i].id, g_current_fight->monsters[i].round_appear);
 
 			g_nr_of_enemies++;
 		}
@@ -390,15 +388,13 @@ void FIG_init_enemies(void)
 	/* place the enemies on the chessboard */
 	for (i = 0; i < g_nr_of_enemies; i++) {
 
-		x = host_readbs(g_current_fight + i * SIZEOF_FIGHT_MONSTER + FIGHT_MONSTERS_X);
-		y = host_readbs(g_current_fight + i * SIZEOF_FIGHT_MONSTER + FIGHT_MONSTERS_Y);
-
+		x = g_current_fight->monsters[i].x;
+		y = g_current_fight->monsters[i].y;
 
 		/* place only the enemies from round 0 */
-		if (!host_readbs(g_current_fight + i * SIZEOF_FIGHT_MONSTER + FIGHT_MONSTERS_ROUND_APPEAR)) {
+		if (!g_current_fight->monsters[i].round_appear) {
 
-			place_obj_on_cb(x, y, i + 10, g_enemy_sheets[i].gfx_id,
-				host_readbs(g_current_fight + i * SIZEOF_FIGHT_MONSTER + FIGHT_MONSTERS_VIEWDIR));
+			place_obj_on_cb(x, y, i + 10, g_enemy_sheets[i].gfx_id,	g_current_fight->monsters[i].viewdir);
 		}
 
 		/* load the sprites */
@@ -440,30 +436,29 @@ void FIG_init_heroes(void)
 
 			if (hero == (Bit8u*)gs_main_acting_hero) {
 
-				cb_x = host_readbs(g_current_fight + FIGHT_PLAYERS_X);
-				cb_y = host_readbs(g_current_fight + FIGHT_PLAYERS_Y);
-				host_writeb(hero + HERO_VIEWDIR, host_readb(g_current_fight + FIGHT_PLAYERS_VIEWDIR));
+				cb_x = g_current_fight->heroes[0].x;
+				cb_y = g_current_fight->heroes[0].y;
+				host_writeb(hero + HERO_VIEWDIR, g_current_fight->heroes[0].viewdir);
 
 			} else {
 				do {
 					l_di = random_schick(6);
 
-					cb_x = host_readbs(g_current_fight + l_di * SIZEOF_FIGHT_PLAYER + FIGHT_PLAYERS_X);
-					cb_y = host_readbs(g_current_fight + l_di * SIZEOF_FIGHT_PLAYER + FIGHT_PLAYERS_Y);
-					host_writeb(hero + HERO_VIEWDIR, host_readb(g_current_fight + l_di * SIZEOF_FIGHT_PLAYER + FIGHT_PLAYERS_VIEWDIR));
+					cb_x = g_current_fight->heroes[l_di].x;
+					cb_y = g_current_fight->heroes[l_di].y;
+					host_writeb(hero + HERO_VIEWDIR, g_current_fight->heroes[l_di].viewdir);
 
 				} while (get_cb_val(cb_x, cb_y) != 0);
 			}
 		} else {
-			cb_x = host_readbs(g_current_fight + FIGHT_PLAYERS_X + SIZEOF_FIGHT_PLAYER * l_si);
-			cb_y = host_readbs(g_current_fight + FIGHT_PLAYERS_Y + SIZEOF_FIGHT_PLAYER * l_si);
 
-			/* Direction */
-			host_writeb(hero + HERO_VIEWDIR, host_readb(g_current_fight + FIGHT_PLAYERS_VIEWDIR + SIZEOF_FIGHT_PLAYER * l_si));
+			cb_x = g_current_fight->heroes[l_si].x;
+			cb_y = g_current_fight->heroes[l_si].y;
+			host_writeb(hero + HERO_VIEWDIR, g_current_fight->heroes[l_si].viewdir);
 		}
 
 		/* heroes sleep until they appear */
-		if (host_readb(g_current_fight + l_si * SIZEOF_FIGHT_PLAYER + FIGHT_PLAYERS_ROUND_APPEAR) != 0) {
+		if (g_current_fight->heroes[l_si].round_appear) {
 
 			if (!hero_dead(hero))
 				or_ptr_bs(hero + HERO_FLAGS1, 2); /* set 'sleep' flag */

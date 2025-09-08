@@ -936,21 +936,23 @@ signed short do_fight(signed short fight_id)
 	/* set some pointers */
 	g_scenario_buf = (signed char*)(((HugePt)g_buffer8_ptr) + 64100L);
 	g_monster_dat_buf = (Bit8u*)(((HugePt)g_scenario_buf) + 621L);
-	g_current_fight = (Bit8u*)(((HugePt)g_monster_dat_buf) + 3476L);
+	g_current_fight = (struct fight*)(((HugePt)g_monster_dat_buf) + 3476L);
 
 	read_fight_lst(fight_id);
 
-	load_scenario(host_readws(g_current_fight + FIGHT_SCENARIO));
+	load_scenario(g_current_fight->scenario_id);
 
-	if (!host_readbs(g_current_fight + FIGHT_INTRO_SEEN)) {
+	if (!g_current_fight->intro_seen) {
+
 		GUI_print_fight_intro_msg(fight_id);
 
-		host_writeb(g_current_fight + FIGHT_INTRO_SEEN, 1);
+		g_current_fight->intro_seen = 1;
 	}
 
 	if (g_max_enemies > 0) {
+
 		/* reduce number of enemies to MAX_ENEMIES */
-		memset(g_current_fight + SIZEOF_FIGHT_MONSTER * g_max_enemies + FIGHT_MONSTERS_ID, 0, SIZEOF_FIGHT_MONSTER * (20 - g_max_enemies));
+		memset(&g_current_fight->monsters[g_max_enemies], 0, sizeof(struct fight_monster) * (20 - g_max_enemies));
 		g_max_enemies = 0;
 	}
 

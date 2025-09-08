@@ -221,6 +221,33 @@ struct struct_fighter {
 	struct struct_fighter* prev;
 };
 
+struct fight_monster {
+	Bit8s id;
+	Bit8s x;
+	Bit8s y;
+	Bit8s viewdir;
+	Bit8s round_appear;
+};
+
+struct fight_hero {
+	Bit8s x;
+	Bit8s y;
+	Bit8s viewdir;
+	Bit8s round_appear;
+};
+
+struct fight {
+	char name[19];
+	Bit8s intro_seen;
+	Bit16s scenario_id;
+	struct fight_monster monsters[20];
+	struct fight_hero heroes[7];
+	Bit16s loot[30];
+	Bit16s ducats;
+	Bit16s silver;
+	Bit16s heller;
+};
+
 struct struct_smith_repairitems {
 	Bit16s item_id;
 	Bit32s pickup_time;
@@ -1648,7 +1675,7 @@ extern signed char g_new_menu_icons[9];		// ds:0xbd38; seg002, seg026, seg066, s
 extern unsigned char *g_heroes;		// ds:0xbd34
 extern unsigned char *g_fightobj_buf;	// ds:0xbd30; seg032, seg040
 extern signed char *g_scenario_buf;	// ds:0xbd2c; seg027, seg032, seg034, seg038, seg040
-extern unsigned char *g_current_fight;	// ds:0xbd28; seg027, seg032, seg043, seg035, seg039, seg040, seg100
+extern struct fight *g_current_fight;	// ds:0xbd28; seg027, seg032, seg043, seg035, seg039, seg040, seg100
 extern signed char g_citycamp_city;	// ds:0xbd27; seg052, seg066, seg076
 extern signed short g_pregame_state;	// ds:0xbd25; seg002, seg097
 #if defined(__BORLANDC__)

@@ -101,7 +101,7 @@ void FIG_preload_gfx(void)
 		g_fig_list_array[i] = 0;
 	}
 
-	g_weapons_nvf_buf =(HugePt)g_current_fight + SIZEOF_FIGHT;
+	g_weapons_nvf_buf =(HugePt)g_current_fight + sizeof(struct fight);
 	g_spellobj_nvf_buf = g_weapons_nvf_buf + 0x1953;
 	g_figobj_gfxbuf_table = (unsigned char**)(((HugePt)g_spellobj_nvf_buf) + 0xf5fL);
 	g_figobj_gfxwidth_table = (signed short*)(((HugePt)g_figobj_gfxbuf_table) + 0xfcL);

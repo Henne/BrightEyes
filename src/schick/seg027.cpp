@@ -562,13 +562,13 @@ signed short count_fight_enemies(signed short fight_id)
 {
 	signed short enemy_i;
 	signed short enemy_count;
-	Bit8u *fight_lst_buf;
+	struct fight *fight_lst_buf;
 	unsigned short fight_lst_handle;
 	signed short fight_count;
 
 	enemy_count = 0;
 
-	fight_lst_buf = (Bit8u*)g_dtp2;
+	fight_lst_buf = (struct fight*)g_dtp2;
 
 	/* load FIGHT.LST from TEMP dir */
 	fight_lst_handle = load_archive_file(0x8000 | ARCHIVE_FILE_FIGHT_LST);
@@ -585,19 +585,19 @@ signed short count_fight_enemies(signed short fight_id)
 		fight_id = 0;
 
 	/* seek to file position */
-	lseek(fight_lst_handle, (long)SIZEOF_FIGHT * fight_id + 2, SEEK_SET);
+	lseek(fight_lst_handle, (Bit32s)sizeof(struct fight) * fight_id + 2, SEEK_SET);
 
 	/* read the fight entry */
-	_read(fight_lst_handle, (void*)fight_lst_buf, SIZEOF_FIGHT);
+	_read(fight_lst_handle, (void*)fight_lst_buf, sizeof(struct fight));
 
 	/* close FIGHT.LST */
 	close(fight_lst_handle);
 
 	/* check all enemies */
 	for (enemy_i = 0; enemy_i < 20; enemy_i++) {
+
 		/* no enemy and enemy does not appear in the first round */
-		if ((host_readb(fight_lst_buf + FIGHT_MONSTERS_ID + enemy_i * 5) != 0)
-			&& (!host_readbs(fight_lst_buf + FIGHT_MONSTERS_ROUND_APPEAR + enemy_i * 5)))
+		if (fight_lst_buf->monsters[enemy_i].id	&& !fight_lst_buf->monsters[enemy_i].round_appear)
 		{
 			/* increment counter */
 			enemy_count++;
@@ -635,15 +635,15 @@ void read_fight_lst(signed short fight_id)
 	g_current_fight_id = fight_id;
 
 	/* seek to file position */
-	lseek(fight_lst_handle, (long)SIZEOF_FIGHT * fight_id + 2, SEEK_SET);
+	lseek(fight_lst_handle, (Bit32s)sizeof(struct fight) * fight_id + 2, SEEK_SET);
 
 	/* read the fight entry */
-	_read(fight_lst_handle, g_current_fight, SIZEOF_FIGHT);
+	_read(fight_lst_handle, (Bit8u*)&g_current_fight, sizeof(struct fight));
 
 #if !defined(__BORLANDC__)
 	char fight_name[21];
 	/* Improvement */
-	strncpy(fight_name, (char*)g_current_fight, 20);
+	strncpy(fight_name, g_current_fight->name, 20);
 	fight_name[20] = '\0';
 	D1_INFO("Lade Kampf fight_id %3d\t Name \"%s\"\n", fight_id, fight_name);
 	/* Improvement end */
@@ -667,10 +667,10 @@ void write_fight_lst(void)
 	fight_lst_handle = load_archive_file(0x8000 | ARCHIVE_FILE_FIGHT_LST);
 
 	/* seek to the entry */
-	lseek(fight_lst_handle, SIZEOF_FIGHT * fight_id + 2, SEEK_SET);
+	lseek(fight_lst_handle, sizeof(struct fight) * fight_id + 2, SEEK_SET);
 
 	/* write it */
-	write(fight_lst_handle, g_current_fight, SIZEOF_FIGHT);
+	write(fight_lst_handle, g_current_fight, sizeof(struct fight));
 
 	/* close the file */
 	close(fight_lst_handle);

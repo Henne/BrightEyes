@@ -463,11 +463,10 @@ void FIG_latecomers(void)
 
 					if (is_in_byte_array(p_enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id)) {
 
-						seg034_718(	host_readbs(g_current_fight + FIGHT_MONSTERS_X + SIZEOF_FIGHT_MONSTER * i),
-								host_readbs(g_current_fight + FIGHT_MONSTERS_Y + SIZEOF_FIGHT_MONSTER * i),
+						seg034_718(	g_current_fight->monsters[i].x,
+								g_current_fight->monsters[i].y,
 								(Bit8u*)&x, (Bit8u*)&y,
-								host_readbs(g_current_fight + FIGHT_MONSTERS_VIEWDIR + SIZEOF_FIGHT_MONSTER * i),
-								1);
+								g_current_fight->monsters[i].viewdir, 1);
 
 						fighter = FIG_get_fighter(p_enemy->fighter_id);
 
@@ -478,8 +477,8 @@ void FIG_latecomers(void)
 
 						fighter_add = FIG_get_fighter((signed char)l4);
 
-						fighter_add->cbx = x - a.a[host_readbs(g_current_fight + FIGHT_MONSTERS_VIEWDIR + SIZEOF_FIGHT_MONSTER * i)].x;
-						fighter_add->cby = y - a.a[host_readbs(g_current_fight + FIGHT_MONSTERS_VIEWDIR + SIZEOF_FIGHT_MONSTER * i)].y;
+						fighter_add->cbx = x - a.a[g_current_fight->monsters[i].viewdir].x;
+						fighter_add->cby = y - a.a[g_current_fight->monsters[i].viewdir].y;
 
 						FIG_remove_from_list(p_enemy->fighter_id, 1);
 
@@ -489,11 +488,10 @@ void FIG_latecomers(void)
 
 						FIG_add_to_list((signed char)l4);
 					} else {
-						seg034_718(	host_readbs(g_current_fight + FIGHT_MONSTERS_X + SIZEOF_FIGHT_MONSTER * i),
-								host_readbs(g_current_fight + FIGHT_MONSTERS_Y + SIZEOF_FIGHT_MONSTER * i),
+						seg034_718(	g_current_fight->monsters[i].x,
+								g_current_fight->monsters[i].y,
 								(Bit8u*)&x, (Bit8u*)&y,
-								host_readbs(g_current_fight + FIGHT_MONSTERS_VIEWDIR + SIZEOF_FIGHT_MONSTER * i),
-								0);
+								g_current_fight->monsters[i].viewdir, 0);
 
 						fighter = FIG_get_fighter(p_enemy->fighter_id);
 
@@ -505,8 +503,7 @@ void FIG_latecomers(void)
 						FIG_add_to_list(p_enemy->fighter_id);
 					}
 
-					place_obj_on_cb(x, y, i + 10, p_enemy->gfx_id,
-						(signed short)host_readbs(g_current_fight + FIGHT_MONSTERS_VIEWDIR + SIZEOF_FIGHT_MONSTER * i));
+					place_obj_on_cb(x, y, i + 10, p_enemy->gfx_id, (signed short)g_current_fight->monsters[i].viewdir);
 
 					FIG_make_visible(p_enemy->fighter_id);
 

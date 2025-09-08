@@ -74,9 +74,9 @@ void spell_exposami(void)
 
 	for (i = 0; i < g_nr_of_enemies; i++) {
 
-		if (host_readbs(g_current_fight + SIZEOF_FIGHT_MONSTER * i + FIGHT_MONSTERS_ROUND_APPEAR) != 0) {
+		if (g_current_fight->monsters[i].round_appear) {
 
-			id = host_readbs(g_current_fight + SIZEOF_FIGHT_MONSTER * i + FIGHT_MONSTERS_ID);
+			id = g_current_fight->monsters[i].id;
 
 			changed = 0;
 
