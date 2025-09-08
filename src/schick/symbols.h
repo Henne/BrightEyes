@@ -1005,13 +1005,13 @@
 //#define EMPTY_STRING8                   (0x653b)    /* char; "" */
 //#define EXTRASPACE_SEPARATED_STRINGS2   (0x653c)    /* char[7]; "%s %s " */
 //#define EMPTY_STRING9                   (0x6543)    /* char; "" */
-#define AUTOINC_SPELLS_WITCH            (0x6544)    /* signed short[3] */
-#define AUTOINC_SPELLS_DRUID            (0x654a)    /* signed short[4] */
+//#define AUTOINC_SPELLS_WITCH            (0x6544)    /* signed short[3] */
+//#define AUTOINC_SPELLS_DRUID            (0x654a)    /* signed short[4] */
 #define AUTOINC_SPELLS_MAGE_TABLE       (0x6552)    /* short[108]; 9 arrays, each terminated by -1 */
 #define AUTOINC_SPELLS_MAGE_INDEX       (0x662a)    /* Bit8u*[9]; by magic school */
-#define AUOTINC_SPELLS_GELF             (0x664e)    /* signed short[7] */
-#define AUTOINC_SPELLS_SELF             (0x665c)    /* signed short[7] */
-#define AUTOINC_SPELLS_IELF             (0x666a)    /* signed short[12] */
+//#define AUOTINC_SPELLS_GELF             (0x664e)    /* signed short[7] */
+//#define AUTOINC_SPELLS_SELF             (0x665c)    /* signed short[7] */
+//#define AUTOINC_SPELLS_IELF             (0x666a)    /* signed short[12] */
 #define MAGIC_SCHOOL_SPELLRANGES        (0x6682)    /* struct(2)[9]; struct{signed char first, last;} */
 //#define CAMPFIGHTS                      (0x6694)    /* signed short[4] */
 #define GATHER_HERBS_TABLE              (0x669c)    /* struct(4)[13]; struct{unsigned char herb_id,chance,ta_mod,max_count;} */

@@ -721,8 +721,8 @@ void level_up(signed short hero_pos)
 						 * up to max value 18 */
 						i = 0;
 
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && ds_readws(AUTOINC_SPELLS_WITCH + 2 * i) != -1) {
-							inc_spell_novice(hero, ds_readws(AUTOINC_SPELLS_WITCH + 2 * i));
+						while (host_readbs(hero + HERO_SP_RISE) != 0 && (g_autoinc_spells_witch[i] != -1)) {
+							inc_spell_novice(hero, g_autoinc_spells_witch[i]);
 							i++;
 						}
 
@@ -740,8 +740,8 @@ void level_up(signed short hero_pos)
 
 						i = 0;
 
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && ds_readws(AUTOINC_SPELLS_DRUID + 2 * i) != -1) {
-							inc_spell_novice(hero, ds_readws(AUTOINC_SPELLS_DRUID + 2 * i));
+						while (host_readbs(hero + HERO_SP_RISE) != 0 && (g_autoinc_spells_druid[i] != -1)) {
+							inc_spell_novice(hero, g_autoinc_spells_druid[i]);
 							i++;
 						}
 
@@ -800,8 +800,8 @@ void level_up(signed short hero_pos)
 
 						i = 0;
 
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && ds_readws(AUOTINC_SPELLS_GELF + 2 * i) != -1) {
-							inc_spell_novice(hero, ds_readws(AUOTINC_SPELLS_GELF + 2 * i));
+						while (host_readbs(hero + HERO_SP_RISE) != 0 && (g_autoinc_spells_gelf[i] != -1)) {
+							inc_spell_novice(hero, g_autoinc_spells_gelf[i]);
 							i++;
 						}
 
@@ -828,8 +828,8 @@ void level_up(signed short hero_pos)
 
 						i = 0;
 
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && ds_readws(AUTOINC_SPELLS_IELF + 2 * i) != -1) {
-							inc_spell_novice(hero, ds_readws(AUTOINC_SPELLS_IELF + 2 * i));
+						while (host_readbs(hero + HERO_SP_RISE) != 0 && (g_autoinc_spells_ielf[i] != -1)) {
+							inc_spell_novice(hero, g_autoinc_spells_ielf[i]);
 							i++;
 						}
 
@@ -855,8 +855,8 @@ void level_up(signed short hero_pos)
 
 						i = 0;
 
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && ds_readws(AUTOINC_SPELLS_SELF + 2 * i) != -1) {
-							inc_spell_novice(hero, ds_readws(AUTOINC_SPELLS_SELF + 2 * i));
+						while (host_readbs(hero + HERO_SP_RISE) != 0 && (g_autoinc_spells_self[i] != -1)) {
+							inc_spell_novice(hero, g_autoinc_spells_self[i]);
 							i++;
 						}
 
