@@ -684,7 +684,7 @@ void INF_treborn_unicorn(signed short informer, signed short state)
 			/* REMARK: what if the NPC is choosen ? */
 			/* REMARK: what if the positions are changed ? */
 			/* REMARK: what if the game is saved and the heroes are at another mem location ? */
-			ds_writed(UNICORN_HERO_PTR, (Bit32u)get_hero((gs_unicorn_hero_pos = (unsigned char)get_hero_CH_best())));
+			gs_unicorn_hero_ptr = get_hero((gs_unicorn_hero_pos = get_hero_CH_best()));
 		} else if (state == 7) {
 			timewarp(HOURS(1));
 		} else if (state == 8) {
@@ -696,18 +696,18 @@ void INF_treborn_unicorn(signed short informer, signed short state)
 			gs_informer_flags[INFORMER_UNICORN] = 2;
 		} else if (state == 10) {
 			/* test FF+2 */
-			g_dialog_next_state = (test_attrib((Bit8u*)ds_readd(UNICORN_HERO_PTR), ATTRIB_GE, 2) > 0 ? 11 : 14);
+			g_dialog_next_state = (test_attrib(gs_unicorn_hero_ptr, ATTRIB_GE, 2) > 0 ? 11 : 14);
 		} else if (state == 11) {
 			/* test FF+5 */
-			g_dialog_next_state = (test_attrib((Bit8u*)ds_readd(UNICORN_HERO_PTR), ATTRIB_GE, 5) > 0 ? 12 : 13);
+			g_dialog_next_state = (test_attrib(gs_unicorn_hero_ptr, ATTRIB_GE, 5) > 0 ? 12 : 13);
 		} else if (state == 15) {
 			g_dialog_next_state = (random_schick(100) <= 50 ? 16 : 17);
 		} else if (state == 16) {
 			/* the hero disappears */
-			hero_disappear((Bit8u*)ds_readd(UNICORN_HERO_PTR), gs_unicorn_hero_pos, -1);
+			hero_disappear(gs_unicorn_hero_ptr, gs_unicorn_hero_pos, -1);
 		} else if (state == 17) {
 			/* the hero gets heavily wounded, 1 LE left */
-			sub_hero_le((Bit8u*)ds_readd(UNICORN_HERO_PTR), host_readws((Bit8u*)ds_readd(UNICORN_HERO_PTR) + HERO_LE) - 1);
+			sub_hero_le(gs_unicorn_hero_ptr, host_readws(gs_unicorn_hero_ptr + HERO_LE) - 1);
 			/* the party opens a camp */
 			gs_current_loctype = LOCTYPE_WILDCAMP;
 			do_location();
@@ -718,7 +718,7 @@ void INF_treborn_unicorn(signed short informer, signed short state)
 			gs_unicorn_get_map = 1;
 
 			/* the hero gets 100 AP */
-			add_hero_ap((Bit8u*)ds_readd(UNICORN_HERO_PTR), 100);
+			add_hero_ap(gs_unicorn_hero_ptr, 100);
 
 			/* set the unicorn timer (in days) */
 			gs_unicorn_timer = random_schick(24) + 36;

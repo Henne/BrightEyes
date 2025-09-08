@@ -546,7 +546,7 @@ extern Bit8u  gs_unicorn_timer;			//ds:0x3466; seg002, seg072, seg116
 extern Bit8u  gs_algrid_treborns_hint;		//ds:0x3467; seg072
 extern Bit8u  gs_tiomar_drinkmate;		//ds:0x3468; seg030, seg072
 extern Bit8u  gs_tiomar_awaits_letter;		//ds:0x3469; seg072
-
+extern Bit8u *gs_unicorn_hero_ptr;		//ds:0x346a; seg030, seg072
 extern Bit16s gs_npc_meet_tavern;		//ds:0x346e; seg060, seg095
 extern Bit16s gs_npc_months;			//ds:0x3470; seg002-seg116
 extern Bit8u  gs_smith_kicked_flags[50];	//ds:0x3472; seg058

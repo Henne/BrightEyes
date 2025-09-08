@@ -2020,7 +2020,8 @@ Bit8u  gs_unicorn_timer = 0; // ds:0x3466
 Bit8u  gs_algrid_treborns_hint = 0; // ds:0x3467
 Bit8u  gs_tiomar_drinkmate = 0; // ds:0x3468, {0-6}
 Bit8u  gs_tiomar_awaits_letter = 0; // ds:0x3469
-long g_unicorn_hero_ptr = 0; // ds:0x346a; Bit8u*
+/* REMARK: pointer in gamestate are no good */
+Bit8u *gs_unicorn_hero_ptr = NULL; // ds:0x346a; Bit8u*
 Bit16s gs_npc_meet_tavern = 0;	// ds:0x346e
 Bit16s gs_npc_months = 0;	// ds:0x3470
 Bit8u  gs_smith_kicked_flags[50] = {0};		// ds:0x3472
