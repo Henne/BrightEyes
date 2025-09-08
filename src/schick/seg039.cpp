@@ -398,7 +398,7 @@ void FIG_init_enemies(void)
 		if (!host_readbs(g_current_fight + i * SIZEOF_FIGHT_MONSTER + FIGHT_MONSTERS_ROUND_APPEAR)) {
 
 			place_obj_on_cb(x, y, i + 10, g_enemy_sheets[i].gfx_id,
-				host_readb(g_current_fight + i * SIZEOF_FIGHT_MONSTER + FIGHT_MONSTERS_VIEWDIR));
+				host_readbs(g_current_fight + i * SIZEOF_FIGHT_MONSTER + FIGHT_MONSTERS_VIEWDIR));
 		}
 
 		/* load the sprites */
@@ -469,7 +469,7 @@ void FIG_init_heroes(void)
 				or_ptr_bs(hero + HERO_FLAGS1, 2); /* set 'sleep' flag */
 		}
 
-		place_obj_on_cb(cb_x, cb_y, l_si + 1, host_readb(hero + HERO_TYPE), host_readb(hero + HERO_VIEWDIR));
+		place_obj_on_cb(cb_x, cb_y, l_si + 1, host_readbs(hero + HERO_TYPE), host_readbs(hero + HERO_VIEWDIR));
 
 		l_di = FIG_get_range_weapon_type(hero);
 
