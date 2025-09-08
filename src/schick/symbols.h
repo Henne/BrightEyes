@@ -1007,8 +1007,8 @@
 //#define EMPTY_STRING9                   (0x6543)    /* char; "" */
 //#define AUTOINC_SPELLS_WITCH            (0x6544)    /* signed short[3] */
 //#define AUTOINC_SPELLS_DRUID            (0x654a)    /* signed short[4] */
-#define AUTOINC_SPELLS_MAGE_TABLE       (0x6552)    /* short[108]; 9 arrays, each terminated by -1 */
-#define AUTOINC_SPELLS_MAGE_INDEX       (0x662a)    /* Bit8u*[9]; by magic school */
+//#define AUTOINC_SPELLS_MAGE_TABLE       (0x6552)    /* short[108]; 9 arrays, each terminated by -1 */
+//#define AUTOINC_SPELLS_MAGE_INDEX       (0x662a)    /* Bit8u*[9]; by magic school */
 //#define AUOTINC_SPELLS_GELF             (0x664e)    /* signed short[7] */
 //#define AUTOINC_SPELLS_SELF             (0x665c)    /* signed short[7] */
 //#define AUTOINC_SPELLS_IELF             (0x666a)    /* signed short[12] */

@@ -1260,8 +1260,7 @@ extern char g_extraspace_separated_strings2[7];	//ds:0x653c; seg048
 extern char g_empty_string9[1];			//ds:0x6543; seg048
 extern const signed short g_autoinc_spells_witch[3];	//ds:0x6544; seg050
 extern const signed short g_autoinc_spells_druid[4];	//ds:0x654a; seg050
-
-
+extern const signed short *g_autoinc_spells_mage_index[9];	//ds:0x662a; seg050
 extern const signed short g_autoinc_spells_gelf[7];	//ds:0x664e; seg050
 extern const signed short g_autoinc_spells_self[7];	//ds:0x665c; seg050
 extern const signed short g_autoinc_spells_ielf[12];	//ds:0x666a; seg050

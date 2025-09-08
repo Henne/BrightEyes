@@ -765,11 +765,10 @@ void level_up(signed short hero_pos)
 						while (host_readbs(hero + HERO_SP_RISE) != 0 &&
 							(g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i] != -1)) {
 
-							if (host_readbs(hero + HERO_SPELLS +
-									host_readws((Bit8u*)ds_readd(AUTOINC_SPELLS_MAGE_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i)) < 11)
+							if (host_readbs(hero + HERO_SPELLS + g_autoinc_spells_mage_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i]) < 11)
 							{
 								inc_spell_novice(hero,
-									host_readws((Bit8u*)ds_readd(AUTOINC_SPELLS_MAGE_INDEX + 4 * host_readbs(hero + HERO_MAGIC_SCHOOL)) + 2 * i));
+									g_autoinc_spells_mage_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i]);
 							}
 							i++;
 						}
