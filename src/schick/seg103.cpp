@@ -61,32 +61,28 @@ signed short LVL_select_skill(Bit8u *hero, signed short show_values)
 	}
 
 	/* ask for the skill category */
-	answer = GUI_radio(g_dtp2, 7,
-				get_ttx(100), get_ttx(101),
-				get_ttx(102), get_ttx(105),
-				get_ttx(103), get_ttx(104),
-				get_ttx(106)) - 1;
+	answer = GUI_radio(g_dtp2, 7, get_ttx(100), get_ttx(101), get_ttx(102), get_ttx(105), get_ttx(103), get_ttx(104), get_ttx(106)) - 1;
 
 	if (answer != -2) {
 
-		l1 = ds_readbs(SKILLS_INDEX + 2 * answer);
+		l1 = g_skills_index[answer].first;
 
 		if (show_values != 0) {
 
-			for (i = 0; ds_readbs((SKILLS_INDEX + 1) + 2 * answer) > i; i++) {
+			for (i = 0; g_skills_index[answer].first > i; i++) {
 
 				sprintf(g_dtp2 + 50 * i, format_str.a, get_ttx(l1 + i + 48), host_readbs(hero + l1 + i + HERO_TALENTS));
 
-				g_radio_name_list[i] = (g_dtp2 + 50 * i);
+				g_radio_name_list[i] = g_dtp2 + 50 * i;
 			}
 		} else {
 
-			for (i = 0; ds_readbs((SKILLS_INDEX + 1) + 2 * answer) > i; i++) {
+			for (i = 0; g_skills_index[answer].length > i; i++) {
 				g_radio_name_list[i] = get_ttx(l1 + i + 48);
 			}
 		}
 
-		retval = GUI_radio(get_ttx(218), ds_readbs((SKILLS_INDEX + 1) + 2 * answer),
+		retval = GUI_radio(get_ttx(218), g_skills_index[answer].length,
 				g_radio_name_list[0], g_radio_name_list[1],
 				g_radio_name_list[2], g_radio_name_list[3],
 				g_radio_name_list[4], g_radio_name_list[5],

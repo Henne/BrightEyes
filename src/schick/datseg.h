@@ -312,6 +312,11 @@ struct spells_index {
 	Bit8s length;
 };
 
+struct skills_index {
+	Bit8s first;
+	Bit8s length;
+};
+
 /* seg001 */
 extern unsigned short g_cd_init_successful;
 extern Bit32u g_cd_skipmagic;
@@ -341,8 +346,8 @@ extern struct mon_spell_description g_mon_spell_descriptions[15];	// ds:0x0f13; 
 extern Bit8s g_mon_spell_repertoire[11][5];				// ds:0x0f8b; seg037
 extern void (*g_mon_spellhandlers[15])(void);				// ds:0x0fc2; seg102
 extern const struct skill_descr g_skill_descriptions[52];		// ds:0x0ffe; seg050, seg103, seg104
-
-extern signed char g_nvftab_figures_rangeweapon[22][3][4];	//ds:0x10dc; seg002, seg033, seg039
+extern const struct skills_index g_skills_index[7];			//ds:0x10ce; seg046, seg103
+extern signed char g_nvftab_figures_rangeweapon[22][3][4];		//ds:0x10dc; seg002, seg033, seg039
 
 extern signed short g_nvftab_figures_unconscious[22];	//ds:0x11e4; seg002, seg005, seg039
 

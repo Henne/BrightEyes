@@ -111,10 +111,9 @@ void status_show_skills(Bit8u *hero) {
 	set_textcolor(0, 2);
 
 	for (skill_category = 0; skill_category < 7; skill_category++) {
-		skill_no = ds_readbs(SKILLS_INDEX + skill_category * 2);
-		while (ds_readbs(SKILLS_INDEX + skill_category * 2) + ds_readbs((SKILLS_INDEX + 1) + skill_category * 2) > skill_no) {
-			status_show_skill(hero, skill_no,
-				ds_readbs(SKILLS_INDEX + skill_category * 2),
+		skill_no = g_skills_index[skill_category].first;
+		while (g_skills_index[skill_category].first + g_skills_index[skill_category].length > skill_no) {
+			status_show_skill(hero, skill_no, g_skills_index[skill_category].first,
 				ds_readw(STATUSPAGE_SKILLS_XY + skill_category * 6),
 				ds_readw((STATUSPAGE_SKILLS_XY + 2) + skill_category * 6),
 				ds_readw((STATUSPAGE_SKILLS_XY + 4) + skill_category * 6));
