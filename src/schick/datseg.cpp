@@ -3495,7 +3495,7 @@ signed short g_seg047_init1[7] = { 0, 0, 0, 0, 0, 0, 0 }; // ds:0x64a3, filled w
 signed short g_seg047_init2[7] = { 0, 0, 0, 0, 0, 0, 0 }; // ds:0x64b1, filled with zeroes
 signed short g_seg047_init3[7] = { 0, 0, 0, 0, 0, 0, 0 }; // ds:0x64bf, filled with zeroes
 unsigned char g_unkn_045[1] = { 0x00 }; // ds:0x64cd
-struct{signed short x,y;} g_invslot_borderxy_table[25] = {
+const struct struct_point g_invslot_borderxy_table[25] = {
 	{ 0x0044, 0x0037 },
 	{ 0x003a, 0x0050 },
 	{ 0x0091, 0x0050 },

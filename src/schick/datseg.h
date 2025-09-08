@@ -1250,6 +1250,7 @@ extern const struct struct_point g_invslot_iconxy_table[23];	//ds:0x63d2; seg046
 extern char g_empty_string6[1];			//ds:0x64a0; seg046
 extern char g_empty_string7[1];			//ds:0x64a1; seg046
 extern signed char g_hero_sel_exclude;		//ds:0x64a2; seg047, seg049, seg103, seg120
+extern const struct struct_point g_invslot_borderxy_table[25];	//ds:0x64ce; seg048
 
 extern signed short g_cheatskill_usable;	//ds:0x6532; seg048, seg103
 

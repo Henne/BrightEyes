@@ -35,10 +35,10 @@ void reset_item_selector(void)
 
 		/* remove the previous border */
 		do_border(g_vga_memstart,
-				ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem3_no),
-				ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem3_no),
-				ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem3_no) + 17,
-				ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem3_no) + 17,
+				g_invslot_borderxy_table[g_statuspage_selitem3_no].x,
+				g_invslot_borderxy_table[g_statuspage_selitem3_no].y,
+				g_invslot_borderxy_table[g_statuspage_selitem3_no].x + 17,
+				g_invslot_borderxy_table[g_statuspage_selitem3_no].y + 17,
 				30);
 
 		/* mark the actual selected item */
@@ -46,14 +46,14 @@ void reset_item_selector(void)
 
 		/* set the new red border */
 		do_border(g_vga_memstart,
-				ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem3_no),
-				ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem3_no),
-				ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem3_no) + 17,
-				ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem3_no) + 17,
+				g_invslot_borderxy_table[g_statuspage_selitem3_no].x,
+				g_invslot_borderxy_table[g_statuspage_selitem3_no].y,
+				g_invslot_borderxy_table[g_statuspage_selitem3_no].x + 17,
+				g_invslot_borderxy_table[g_statuspage_selitem3_no].y + 17,
 				9);
 
-		g_statuspage_selitem4_no = (-1);
-		g_statuspage_selitem2_no = (23);
+		g_statuspage_selitem4_no = -1;
+		g_statuspage_selitem2_no = 23;
 	}
 
 	g_current_cursor = (unsigned short*)(g_current_cursor_bak = (p_datseg + DEFAULT_MOUSE_CURSOR));
@@ -126,10 +126,10 @@ void status_menu(signed short hero_pos)
 				if (hero1 == hero2) {
 					/* set the new red border */
 					do_border(g_vga_memstart,
-						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem3_no),
-						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem3_no),
-						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem3_no) + 17,
-						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem3_no) + 17,
+						g_invslot_borderxy_table[g_statuspage_selitem3_no].x,
+						g_invslot_borderxy_table[g_statuspage_selitem3_no].y,
+						g_invslot_borderxy_table[g_statuspage_selitem3_no].x + 17,
+						g_invslot_borderxy_table[g_statuspage_selitem3_no].y + 17,
 						9);
 				}
 
@@ -152,10 +152,10 @@ void status_menu(signed short hero_pos)
 				if (g_statuspage_selitem4_no != -1) {
 					/* set the new ??? border */
 					do_border(g_vga_memstart,
-						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem4_no),
-						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem4_no),
-						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem4_no) + 17,
-						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem4_no) + 17,
+						g_invslot_borderxy_table[g_statuspage_selitem4_no].x,
+						g_invslot_borderxy_table[g_statuspage_selitem4_no].y,
+						g_invslot_borderxy_table[g_statuspage_selitem4_no].x + 17,
+						g_invslot_borderxy_table[g_statuspage_selitem4_no].y + 17,
 						8);
 				}
 			}
@@ -296,17 +296,17 @@ void status_menu(signed short hero_pos)
 
 				/* set the new ??? border */
 				do_border(g_vga_memstart,
-					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem1_no),
-					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem1_no),
-					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem1_no) + 17,
-					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem1_no) + 17,
+					g_invslot_borderxy_table[g_statuspage_selitem1_no].x,
+					g_invslot_borderxy_table[g_statuspage_selitem1_no].y,
+					g_invslot_borderxy_table[g_statuspage_selitem1_no].x + 17,
+					g_invslot_borderxy_table[g_statuspage_selitem1_no].y + 17,
 					30);
 				/* set the new ??? border */
 				do_border(g_vga_memstart,
-					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem3_no),
-					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem3_no),
-					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem3_no) + 17,
-					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem3_no) + 17,
+					g_invslot_borderxy_table[g_statuspage_selitem3_no].x,
+					g_invslot_borderxy_table[g_statuspage_selitem3_no].y,
+					g_invslot_borderxy_table[g_statuspage_selitem3_no].x + 17,
+					g_invslot_borderxy_table[g_statuspage_selitem3_no].y + 17,
 					9);
 
 				g_statuspage_selitem1_no = g_statuspage_selitem3_no;
@@ -335,33 +335,33 @@ void status_menu(signed short hero_pos)
 
 				/* set the new ??? border */
 				do_border(g_vga_memstart,
-					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem2_no),
-					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem2_no),
-					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem2_no) + 17,
-					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem2_no) + 17,
+					g_invslot_borderxy_table[g_statuspage_selitem2_no].x,
+					g_invslot_borderxy_table[g_statuspage_selitem2_no].y,
+					g_invslot_borderxy_table[g_statuspage_selitem2_no].x + 17,
+					g_invslot_borderxy_table[g_statuspage_selitem2_no].y + 17,
 					30);
 
 				if (hero1 == hero2) {
 
 					/* set the new ??? border */
 					do_border(g_vga_memstart,
-						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem3_no),
-						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem3_no),
-						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem3_no) + 17,
-						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem3_no) + 17,
+						g_invslot_borderxy_table[g_statuspage_selitem3_no].x,
+						g_invslot_borderxy_table[g_statuspage_selitem3_no].y,
+						g_invslot_borderxy_table[g_statuspage_selitem3_no].x + 17,
+						g_invslot_borderxy_table[g_statuspage_selitem3_no].y + 17,
 						9);
 				}
 
 
 				/* set the new ??? border */
 				do_border(g_vga_memstart,
-					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem4_no),
-					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem4_no),
-					ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem4_no) + 17,
-					ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem4_no) + 17,
+					g_invslot_borderxy_table[g_statuspage_selitem4_no].x,
+					g_invslot_borderxy_table[g_statuspage_selitem4_no].y,
+					g_invslot_borderxy_table[g_statuspage_selitem4_no].x + 17,
+					g_invslot_borderxy_table[g_statuspage_selitem4_no].y + 17,
 					8);
 
-				g_statuspage_selitem2_no = (g_statuspage_selitem4_no);
+				g_statuspage_selitem2_no = g_statuspage_selitem4_no;
 			}
 
 			if (g_action == ACTION_ID_RETURN) {
@@ -380,10 +380,10 @@ void status_menu(signed short hero_pos)
 
 						/* set the new ??? border */
 						do_border(g_vga_memstart,
-							ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem4_no),
-							ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem4_no),
-							ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem4_no) + 17,
-							ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem4_no) + 17,
+							g_invslot_borderxy_table[g_statuspage_selitem4_no].x,
+							g_invslot_borderxy_table[g_statuspage_selitem4_no].y,
+							g_invslot_borderxy_table[g_statuspage_selitem4_no].x + 17,
+							g_invslot_borderxy_table[g_statuspage_selitem4_no].y + 17,
 							30);
 
 						flag4 = 0;
@@ -401,10 +401,10 @@ void status_menu(signed short hero_pos)
 
 						/* set the new ??? border */
 						do_border(g_vga_memstart,
-							ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem4_no),
-							ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem4_no),
-							ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem4_no) + 17,
-							ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem4_no) + 17,
+							g_invslot_borderxy_table[g_statuspage_selitem4_no].x,
+							g_invslot_borderxy_table[g_statuspage_selitem4_no].y,
+							g_invslot_borderxy_table[g_statuspage_selitem4_no].x + 17,
+							g_invslot_borderxy_table[g_statuspage_selitem4_no].y + 17,
 							30);
 					}
 
@@ -416,10 +416,10 @@ void status_menu(signed short hero_pos)
 
 					/* set the new ??? border */
 					do_border(g_vga_memstart,
-						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem4_no),
-						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem4_no),
-						ds_readws(INVSLOT_BORDERXY_TABLE + 4 * g_statuspage_selitem4_no) + 17,
-						ds_readws(INVSLOT_BORDERXY_TABLE + 2 + 4 * g_statuspage_selitem4_no) + 17,
+						g_invslot_borderxy_table[g_statuspage_selitem4_no].x,
+						g_invslot_borderxy_table[g_statuspage_selitem4_no].y,
+						g_invslot_borderxy_table[g_statuspage_selitem4_no].x + 17,
+						g_invslot_borderxy_table[g_statuspage_selitem4_no].y + 17,
 						8);
 
 					if (host_readws(hero2 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * g_statuspage_selitem3_no)) {
