@@ -6529,7 +6529,7 @@ signed char g_hero_is_target[7]; // ds:0xd84b
 signed char g_fig_actors_unkn[30]; // ds:0xd82d, see FIG_ACTION_UNKNOWN2
 signed char g_fig_move_pathdir[10]; // ds:0xd823 /* TODO: 10 steps is to short */
 struct enemy_sheet g_enemy_sheets[20]; // ds:0xd34b
-struct{signed short type, damage;} g_fig_msg_data[6]; // ds:0xd333
+struct fight_msg g_fig_msg_data[6]; // ds:0xd333
 signed short g_replenish_stocks_mod; // ds:0xd331
 signed short g_gather_herbs_mod; // ds:0xd32f
 signed short g_wildcamp_sleep_quality; // ds:0xd32d

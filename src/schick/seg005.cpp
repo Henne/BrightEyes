@@ -157,7 +157,7 @@ static char *FIG_name_1st_case(unsigned short type, volatile unsigned short pos)
 		return (char*)GUI_names_grammar(0, pos, 1);
 }
 
-#define idx (g_fig_msg_dtps[ds_readws(FIG_MSG_DATA + 4 * g_fig_star_counter) - 1])
+#define idx (g_fig_msg_dtps[g_fig_msg_data[g_fig_star_counter].f_action - 1])
 
 unsigned short fight_printer(void)
 {
@@ -170,7 +170,7 @@ unsigned short fight_printer(void)
 
 	Bit16s f_action;
 
-	if (ds_readw(FIG_MSG_DATA) == 0)
+	if (!g_fig_msg_data[0].f_action)
 		g_fig_continue_print = 0;
 
 	if (!g_fig_star_timer && g_fig_star_printed) {
@@ -181,7 +181,7 @@ unsigned short fight_printer(void)
 
 		g_fig_star_timer = g_autofight ? 10 : g_delay_factor * 6;
 
-		if (!ds_readw(FIG_MSG_DATA + g_fig_star_counter * 4))
+		if (!g_fig_msg_data[g_fig_star_counter].f_action)
 			g_fig_continue_print = 0;
 	}
 
@@ -191,7 +191,7 @@ unsigned short fight_printer(void)
 
 			g_fig_star_printed = 1;
 
-			f_action = ds_readw(FIG_MSG_DATA + g_fig_star_counter * 4);
+			f_action = g_fig_msg_data[g_fig_star_counter].f_action;
 
 		if (f_action) {
 
@@ -215,11 +215,11 @@ unsigned short fight_printer(void)
 			g_pic_copy.dst = gfx_dst_bak;
 
 			/* print number into the star */
-			if (ds_readw((FIG_MSG_DATA + 2) + g_fig_star_counter * 4)) {
+			if (g_fig_msg_data[g_fig_star_counter].damage) {
 
 				set_textcolor(0xff, g_fig_star_colors[f_action - 1] + 0x80);
 
-				my_itoa(ds_readws((FIG_MSG_DATA + 2) + g_fig_star_counter * 4), str, 10);
+				my_itoa(g_fig_msg_data[g_fig_star_counter].damage, str, 10);
 
 				x = GUI_get_first_pos_centered(str, 30, 20, 0);
 				GUI_print_string(str, x, 170);

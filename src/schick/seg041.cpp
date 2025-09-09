@@ -28,7 +28,6 @@ namespace M302de {
 #endif
 
 #if 0
-/* FIG_MSG_COUNTER */
 static signed short msg_counter;
 #endif
 
@@ -160,14 +159,14 @@ void FIG_output(char *str)
  */
 void FIG_clear_msgs(void)
 {
-	memset(p_datseg + FIG_MSG_DATA, 0 , 20);
+	memset(g_fig_msg_data, 0 , 20);
 	g_fig_msg_counter = 0;
 }
 
 void FIG_add_msg(unsigned short f_action, unsigned short damage)
 {
-	ds_writew(FIG_MSG_DATA + 4 * g_fig_msg_counter, f_action);
-	ds_writew(FIG_MSG_DATA + 2 + 4 * g_fig_msg_counter, damage);
+	g_fig_msg_data[g_fig_msg_counter].f_action = f_action;
+	g_fig_msg_data[g_fig_msg_counter].damage = damage;
 	if (g_fig_msg_counter < 4) {
 		g_fig_msg_counter++;
 	}

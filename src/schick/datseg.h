@@ -115,6 +115,11 @@ struct struct_diary_entry {
 	Bit16s town;
 };
 
+struct fight_msg {
+	Bit16s f_action;
+	Bit16s damage;
+};
+
 /* seg041 */
 struct ranged_weapon_descr {
 	signed char damage_modifier[7];
@@ -1657,7 +1662,7 @@ extern signed char g_hero_is_target[7];	// ds:0xd84b; seg032, seg042, seg043, se
 extern signed char g_fig_actors_unkn[30];	// ds:0xd82d; seg032, seg042, seg043, seg044
 extern signed char g_fig_move_pathdir[10];	// ds:0xd823; seg034, seg036, seg037, seg038
 extern struct enemy_sheet g_enemy_sheets[20];	// ds:0xd34b; seg005, seg006, seg032-seg102
-
+extern struct fight_msg g_fig_msg_data[6];	// ds:0xd333; seg005, seg041
 extern signed short g_replenish_stocks_mod;	// ds:0xd331; seg051, seg109
 extern signed short g_gather_herbs_mod;		// ds:0xd32f; seg051, seg109
 extern signed short g_wildcamp_sleep_quality;	// ds:0xd32d; seg051, seg094, seg109, seg114, seg118
