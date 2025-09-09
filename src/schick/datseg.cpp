@@ -6597,7 +6597,7 @@ HugePt g_ani_palette; // ds:0xce3b
 unsigned char g_ani_palette_size; // ds:0xce3a
 unsigned char g_ani_compr_flag; // ds:0xce39, {0,1 = compressed}
 unsigned char *g_ani_main_ptr; // ds:0xce35
-struct{unsigned char unkn[263];} g_ani_area_table[10]; // ds:0xc3ef
+struct ani_area g_ani_area_table[10]; // ds:0xc3ef
 signed char g_ani_areacount; // ds:0xc3ee
 unsigned char g_ani_height; // ds:0xc3ed
 unsigned short g_ani_unknown2; // ds:0xc3eb

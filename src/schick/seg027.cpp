@@ -299,7 +299,7 @@ void load_ani(const signed short no)
 	Bit8u *area_changes_ptr;
 	Bit32s area_offset;
 	Bit32s area_data_offset;
-	Bit8u *p_area2;
+	struct ani_area *p_area2;
 	Bit32s ani_off;
 	Bit32s ani_len;
 #if !defined(__BORLANDC__)
@@ -436,18 +436,19 @@ void load_ani(const signed short no)
 
 	/* Process the Areas */
 	for (i_area = 0; g_ani_areacount > i_area; i_area++) {
-		p_area2 = (Bit8u*)(p_datseg + ANI_AREA_TABLE + i_area * SIZEOF_ANI_AREA);
+
+		p_area2 = &g_ani_area_table[i_area];
 		area_offset = host_readd((g_buffer9_ptr + 4 * i_area) + 0xc);
 		p_area = g_buffer9_ptr + area_offset;
-		strncpy((char*)p_area2 + ANI_AREA_NAME, (char*)p_area, 4);
+		strncpy(p_area2->name, (char*)p_area, 4);
 
-		host_writew(p_area2 + ANI_AREA_X, host_readw(p_area + 4));
-		host_writeb(p_area2 + ANI_AREA_Y, host_readb(p_area + 6));
-		host_writeb(p_area2 + ANI_AREA_HEIGHT, host_readb(p_area + 7));
-		host_writew(p_area2 + ANI_AREA_WIDTH, host_readw(p_area + 8));
-		host_writeb(p_area2 + ANI_AREA_CYCLIC, host_readb(p_area + 0x0a));
+		p_area2->x = host_readw(p_area + 4);
+		p_area2->y = host_readb(p_area + 6);
+		p_area2->height = host_readb(p_area + 7);
+		p_area2->width = host_readw(p_area + 8);
+		p_area2->cyclic = host_readb(p_area + 0x0a);
 
-		host_writeb(p_area2 + ANI_AREA_PICS, (signed char)(area_pics = host_readbs(p_area + 0x0b)));
+		p_area2->pics = (signed char)(area_pics = host_readbs(p_area + 0x0b));
 
 		if (g_ani_compr_flag) {
 
@@ -485,30 +486,30 @@ void load_ani(const signed short no)
 			g_ani_palette += packed_delta2;
 			ani_end_ptr += packed_delta2;
 
-			area_size = (unsigned char)host_readb(p_area2 + ANI_AREA_HEIGHT)
-				* (signed short)host_readw(p_area2 + ANI_AREA_WIDTH);
+			area_size = (unsigned char)p_area2->height * (signed short)p_area2->width;
 
 			for (j = 0; j < area_pics; j++) {
-				host_writed(p_area2 + j * 4 + ANI_AREA_PICS_TAB,
-					(Bit32u)((g_buffer9_ptr + area_data_offset) + j * area_size));
+				p_area2->pics_tab[j] = (Bit8u*)((g_buffer9_ptr + area_data_offset) + j * area_size);
 			}
 		} else {
 			for (j = 0; j < area_pics; j++) {
 				area_data_offset = host_readd(p_area + j * 4 + 0xc);
-				host_writed(p_area2 + j * 4 + ANI_AREA_PICS_TAB, (Bit32u)(g_buffer9_ptr + area_data_offset));
+				p_area2->pics_tab[j] = g_buffer9_ptr + area_data_offset;
 			}
 		}
 
-		host_writew(p_area2 + ANI_AREA_CHANGES, area_changes = host_readw(p_area + area_pics * 4 + 0x0c));
+		p_area2->changes = area_changes = host_readw(p_area + area_pics * 4 + 0x0c);
 
 		area_changes_ptr = p_area + area_pics * 4 + 0x0e;
+
 		for (j = 0; j < area_changes; j++) {
-			host_writew(p_area2 + ANI_AREA_CHANGES_TB + j * 4, host_readw(area_changes_ptr + ((j << 1) << 1)));
-			host_writew(p_area2 + (ANI_AREA_CHANGES_TB+2) + j * 4, host_readw(area_changes_ptr + ((j << 1) << 1)  + 2));
+			p_area2->changes_tb[j].pic = host_readw(area_changes_ptr + ((j << 1) << 1));
+			p_area2->changes_tb[j].duration = host_readw(area_changes_ptr + ((j << 1) << 1) + 2);
 		}
 	}
 
 	ani_len = ani_end_ptr - (Bit8u*)g_buffer9_ptr;
+
 	/* this is always true */
 	if (ani_len > g_ani_unknown4) {
 		g_area_prepared = -1;

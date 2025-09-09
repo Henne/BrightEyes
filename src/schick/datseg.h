@@ -90,6 +90,24 @@ struct struct_rect {
 	int x2;
 };
 
+struct ani_tile {
+	Bit16s pic;
+	Bit16s duration;
+};
+
+struct ani_area {
+	char name[5];
+	Bit16u x;
+	Bit8u y;
+	Bit8u height;
+	Bit16u width;
+	Bit8u cyclic;
+	Bit8s pics;
+	Bit8u* pics_tab[20];
+	Bit16s changes;
+	struct ani_tile changes_tb[42];
+};
+
 struct struct_diary_entry {
 	Bit16s day;
 	Bit16s month;
@@ -1703,7 +1721,7 @@ extern HugePt g_ani_palette;		// ds:0xce3b; seg004, seg025, seg027
 extern unsigned char g_ani_palette_size;	// ds:0xce3a; seg027
 extern unsigned char g_ani_compr_flag;		// ds:0xce39; seg027
 extern unsigned char *g_ani_main_ptr;	// ds:0xce35; seg004, seg027
-
+extern struct ani_area g_ani_area_table[10];	// ds:0xc3ef; seg004, seg027
 extern signed char g_ani_areacount;	// ds:0xc3ee; seg004, seg027
 extern unsigned char g_ani_height;	// ds:0xc3ed; seg004, seg027
 extern unsigned short g_ani_unknown1;	// ds:0xc3eb; seg027

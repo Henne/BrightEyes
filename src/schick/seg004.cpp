@@ -142,21 +142,23 @@ void clear_ani(void)
 	g_ani_palette = NULL;
 
 	for (i = 0; i < 10; i++) {
-		ds_writew((ANI_AREA_TABLE + ANI_AREA_X) + i * SIZEOF_ANI_AREA, 0);
-		ds_writeb((ANI_AREA_TABLE + ANI_AREA_Y) + i * SIZEOF_ANI_AREA, 0);
-		ds_writew((ANI_AREA_TABLE + ANI_AREA_WIDTH) + i * SIZEOF_ANI_AREA, 0);
-		ds_writeb((ANI_AREA_TABLE + ANI_AREA_HEIGHT) + i * SIZEOF_ANI_AREA, 0);
-		ds_writeb((ANI_AREA_TABLE + ANI_AREA_CYCLIC) + i * SIZEOF_ANI_AREA, 0);
-		ds_writeb((ANI_AREA_TABLE + ANI_AREA_PICS) + i * SIZEOF_ANI_AREA, 0);
-		ds_writew((ANI_AREA_TABLE + ANI_AREA_CHANGES) + i * SIZEOF_ANI_AREA, 0);
-		ds_writeb((ANI_AREA_TABLE + (ANI_AREA_NAME+4)) + i * SIZEOF_ANI_AREA, 0);
 
-		for (j = 0; j < 20; j++)
-			ds_writed((ANI_AREA_TABLE + ANI_AREA_PICS_TAB) + i * SIZEOF_ANI_AREA + (j << 2), 0);
+		g_ani_area_table[i].x = 0;
+		g_ani_area_table[i].y = 0;
+		g_ani_area_table[i].width = 0;
+		g_ani_area_table[i].height = 0;
+		g_ani_area_table[i].cyclic = 0;
+		g_ani_area_table[i].pics = 0;
+		g_ani_area_table[i].changes = 0;
+		g_ani_area_table[i].name[0] = '\0';
+
+		for (j = 0; j < 20; j++) {
+			g_ani_area_table[i].pics_tab[j] = NULL;
+		}
 
 		for (j = 0; j < 42; j++) {
-			ds_writew((ANI_AREA_TABLE + ANI_AREA_CHANGES_TB) + i * SIZEOF_ANI_AREA + (j << 2), 0);
-			ds_writew((ANI_AREA_TABLE + (ANI_AREA_CHANGES_TB+2)) + i * SIZEOF_ANI_AREA + (j << 2), 0);
+			g_ani_area_table[i].changes_tb[j].pic = 0;
+			g_ani_area_table[i].changes_tb[j].duration = 0;
 		}
 	 }
 }
@@ -167,7 +169,7 @@ void interrupt timer_isr(void)
 	signed short i;
 	signed short l_di;
 	signed char flag;
-	Bit8u *ptr;
+	struct ani_area *ptr;
 	struct struct_pic_copy pic_copy_bak;
 
 	/* TODO: unused feature */
@@ -227,9 +229,9 @@ void interrupt timer_isr(void)
 
 		for (i = 0; i < l_di; i++) {
 
-			ptr = p_datseg + ANI_AREA_TABLE + SIZEOF_ANI_AREA * i;
+			ptr = &g_ani_area_table[i];
 
-			if (host_readws(ptr + ANI_AREA_CHANGES)) {
+			if (ptr->changes) {
 
 				g_ani_area_timeout[i] -= 5;
 
@@ -237,9 +239,9 @@ void interrupt timer_isr(void)
 
 					g_ani_area_status[i] += g_ani_change_dir[i];
 
-					if (g_ani_area_status[i] == host_readws(ptr + ANI_AREA_CHANGES)) {
+					if (g_ani_area_status[i] == ptr->changes) {
 
-						if (host_readbs(ptr + ANI_AREA_CYCLIC) != 0) {
+						if (ptr->cyclic) {
 							g_ani_change_dir[i] = -1;
 							g_ani_area_status[i]--;
 						} else {
@@ -253,12 +255,12 @@ void interrupt timer_isr(void)
 						}
 					}
 
-					if (!g_ani_area_status[i] && *(ptr + ANI_AREA_CYCLIC))
+					if (!g_ani_area_status[i] && ptr->cyclic)
 					{
 						g_ani_change_dir[i] = 1;
 					}
 
-					g_ani_area_timeout[i] = 2 * host_readws(ptr + (ANI_AREA_CHANGES_TB+2) + 4 * g_ani_area_status[i]);
+					g_ani_area_timeout[i] = 2 * ptr->changes_tb[g_ani_area_status[i]].duration;
 
 					flag = 0;
 
@@ -272,11 +274,11 @@ void interrupt timer_isr(void)
 					}
 
 					/* set screen coordinates */
-					g_pic_copy.x1 = g_ani_posx + host_readw(ptr + ANI_AREA_X);
-					g_pic_copy.y1 =	g_ani_posy + host_readb(ptr + ANI_AREA_Y);
-					g_pic_copy.x2 = g_ani_posx + host_readw(ptr + ANI_AREA_X) + host_readw(ptr + ANI_AREA_WIDTH) - 1;
-					g_pic_copy.y2 = g_ani_posy + host_readb(ptr + ANI_AREA_Y) + host_readb(ptr + ANI_AREA_HEIGHT) - 1;
-					g_pic_copy.src = (Bit8u*)host_readd(ptr + ANI_AREA_PICS_TAB + 4 * (host_readws(ptr + ANI_AREA_CHANGES_TB + 4 * g_ani_area_status[i]) - 1));
+					g_pic_copy.x1 = g_ani_posx + ptr->x;
+					g_pic_copy.y1 =	g_ani_posy + ptr->y;
+					g_pic_copy.x2 = g_ani_posx + ptr->x + ptr->width - 1;
+					g_pic_copy.y2 = g_ani_posy + ptr->y + ptr->height - 1;
+					g_pic_copy.src = ptr->pics_tab[ptr->changes_tb[g_ani_area_status[i]].pic - 1];
 
 					do_pic_copy(1);
 
