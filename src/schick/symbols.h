@@ -168,7 +168,7 @@
 //#define ACTION_TABLE_PLAYMASK           (0x29e8)    /* struct(10)[24]; struct{signed short x1, x2, y1, y2; unsigned short action;} */
 //#define ACTION_TABLE_STATUS             (0x2ad8)    /* struct(10)[30]; struct{signed short x1, x2, y1, y2; unsigned short action;} */
 //#define ACTION_TABLE_MERCHANT           (0x2c04)    /* struct(10)[2]; struct{signed short x1, x2, y1, y2; unsigned short action;} */
-#define CHAR_STATUS_BARS                (0x2c18)    /* struct(8)[7]; struct{signed short LE_ORIG, LE, AE_ORIG, AE;} */
+//#define CHAR_STATUS_BARS                (0x2c18)    /* struct(8)[7]; struct{signed short LE_ORIG, LE, AE_ORIG, AE;} */
 //#define DISEASE_PRICES                  (0x2c50)    /* signed short[8] */
 //#define DISEASE_DELAYS                  (0x2c60)    /* signed short[8] */
 //#define POISON_PRICES                   (0x2c70)    /* signed short[10] */

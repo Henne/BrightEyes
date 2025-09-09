@@ -423,31 +423,31 @@ void update_status_bars(void)
 					hero = get_hero(i);
 
 					/* draw LE bars */
-					if ((ds_readws((CHAR_STATUS_BARS+2) + 8 * i) != host_readws(hero + HERO_LE)) ||
-						(ds_readws(CHAR_STATUS_BARS + 8 * i) != host_readws(hero + HERO_LE_ORIG)))
+					if ((g_char_status_bars[i][1] != host_readws(hero + HERO_LE)) ||
+						(g_char_status_bars[i][0] != host_readws(hero + HERO_LE_ORIG)))
 					{
 						draw_bar(0, i, host_readws(hero + HERO_LE), host_readws(hero + HERO_LE_ORIG), 0);
-						ds_writew(CHAR_STATUS_BARS + 8 * i, host_readws(hero + HERO_LE_ORIG));
-						ds_writew((CHAR_STATUS_BARS+2) + 8 * i, host_readws(hero + HERO_LE));
+						g_char_status_bars[i][0] = host_readws(hero + HERO_LE_ORIG);
+						g_char_status_bars[i][1] = host_readws(hero + HERO_LE);
 					}
 
 					/* draw AE bars */
-					if ((ds_readws((CHAR_STATUS_BARS+6) + 8 * i) != host_readws(hero + HERO_AE)) ||
-						(ds_readws((CHAR_STATUS_BARS+4) + 8 * i) != host_readws(hero + HERO_AE_ORIG)))
+					if ((g_char_status_bars[i][3] != host_readws(hero + HERO_AE)) ||
+						(g_char_status_bars[i][2] != host_readws(hero + HERO_AE_ORIG)))
 					{
 						draw_bar(1, i, host_readws(hero + HERO_AE), host_readws(hero + HERO_AE_ORIG), 0);
-						ds_writew((CHAR_STATUS_BARS+4) + 8 * i, host_readws(hero + HERO_AE_ORIG));
-						ds_writew((CHAR_STATUS_BARS+6) + 8 * i, host_readws(hero + HERO_AE));
+						g_char_status_bars[i][2] = host_readws(hero + HERO_AE_ORIG);
+						g_char_status_bars[i][3] = host_readws(hero + HERO_AE);
 					}
 				} else {
-					if (ds_readws(CHAR_STATUS_BARS + 8 * i) != 0) {
+					if (g_char_status_bars[i][0]) {
 						draw_bar(0, i, 0, 0, 0);
-						ds_writew(CHAR_STATUS_BARS + 8 * i, ds_writew((CHAR_STATUS_BARS+2) + 8 * i, 0));
+						g_char_status_bars[i][0] = g_char_status_bars[i][1] = 0;
 					}
 
-					if (ds_readws((CHAR_STATUS_BARS+4) + 8 * i) != 0) {
+					if (g_char_status_bars[i][2]) {
 						draw_bar(1, i, 0, 0, 0);
-						ds_writew((CHAR_STATUS_BARS+4) + 8 * i, ds_writew((CHAR_STATUS_BARS+6) + 8 * i, 0));
+						g_char_status_bars[i][2] = g_char_status_bars[i][3] = 0;
 					}
 				}
 			}

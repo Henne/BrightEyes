@@ -228,8 +228,10 @@ void draw_status_line(void)
 				}
 			}
 
-			for (j = 0; j < 6; j++)
-				ds_writew(CHAR_STATUS_BARS + i * 8 + j * 2, 0xffff);
+			/* TODO: j < 4, otherwise g_disease_prices gets invalidated */
+			for (j = 0; j < 6; j++) {
+				g_char_status_bars[i][j] = -1;
+			}
 		}
 
 		refresh_screen_size();

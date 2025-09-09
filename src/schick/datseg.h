@@ -28,6 +28,13 @@ struct mouse_action {
 	int action;
 };
 
+struct status_bar {
+	Bit16s le_orig;
+	Bit16s le;
+	Bit16s ae_orig;
+	Bit16s ae;
+};
+
 struct struct_pic_copy {
 	unsigned char *dst;
 	int x1;
@@ -485,7 +492,7 @@ extern struct mouse_action *g_action_table_secondary;	//ds:0x29e4; seg002, seg02
 extern struct mouse_action g_action_table_playmask[24];	//ds:0x29e8; seg029
 extern struct mouse_action g_action_table_status[30];	//ds:0x2ad8; seg046
 extern struct mouse_action g_action_table_merchant[2];	//ds:0x2c04; seg056, seg057, seg058
-
+extern Bit16s g_char_status_bars[7][4];			//ds:0x2c18; seg004, seg029
 
 extern signed short g_disease_prices[8];		//ds:0x2c50; seg053, seg104
 extern signed short g_disease_delays[8];		//ds:0x2c60; seg053
