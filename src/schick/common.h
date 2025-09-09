@@ -345,12 +345,6 @@ struct inventory {
 	signed char unused3; /* +13 */
 };
 
-struct informer {
-	signed short name;	/* in TEXT.LTX */
-	signed char city;	/* -1 = no city, else city id */
-	signed char unknown;	/* {0, 1} */
-};
-
 struct enemy_flags {
 	/* enemy + 0x31 */
 	unsigned short dead		:1;
@@ -759,8 +753,6 @@ enum {
 // A location is a point of interest in a town or a travel event. //
 enum {
 	// https://github.com/shihan42/BrightEyesWiki/wiki/DAT-(Stadt)#feldinhaltliste
-	LOCATION_XY        = 0, // 2 bytes // coordinates of the location within its town
-	LOCATION_LOCTYPE   = 2, // 1 byte  // the type of the location
 	LOCATION_TYPEINDEX = 3, // 1 byte  // Index among the locations of the same type.
 				// For LOCTYPE_TEMPLE, LOCTYPE_TAVERN, LOCTYPE_HEALER, LOCTYPE_MERCHANT, LOCTYPE_INN,
 				//     LOCTYPE_SMITH, LOCTYPE_MARKET, LOCTYPE_INFORMER, LOCTYPE_SPECIAL:
@@ -787,7 +779,6 @@ enum {
 			        //     unused.
 				// All LOCTYPEs not mentioned above:
 				//     probably unused.
-	SIZEOF_LOCATION    = 6
 };
 
 enum {
@@ -1721,16 +1712,6 @@ enum {
 	LIGHTING_LANTERN	= 2
 };
 
-enum {
-	RECIPE_ITEM_ID		= 0, /* two bytes */ /* item id of the recipe */
-	RECIPE_INGREDIENTS	= 2, /* two bytes [10] */ /* list of ingredients, two bytes each (item ids), terminated by -1 entry */
-	RECIPE_OUTCOME		= 22, /* two bytes */ /* item id of the outcome of the recipe */
-	RECIPE_AE_COST		= 24, /* AE needed */
-	RECIPE_HANDICAP		= 26, /* handicap for alchemy skill test */
-	RECIPE_DURATION		= 27, /* time needed to brew the recipe, in hours */
-	SIZEOF_RECIPE		= 28
-};
-
 #define NR_SEA_ROUTES (45)
 
 enum {
@@ -1764,24 +1745,6 @@ enum {
 	SHIP_TABLE_BASE_PRICE_PER_DISTANCE = 2, /* one byte. Unit: [Heller per 10 km] */
 	SHIP_TABLE_BASE_SPEED = 3, /* one byte. Unit: [km per day] */
 	SIZEOF_SHIP_TABLE_ENTRY = 4
-};
-
-enum {
-	HEALER_STATS_PRICE_MOD = 0, /* one byte */ /* price modification, range [-50..50], absolute difference as percentage value */
-	HEALER_STATS_QUALITY = 1, /* one byte */ /* range: [1..17]. the lower, the better healing quality */
-	SIZEOF_HEALER_STATS = 2
-};
-
-enum {
-	SMITH_STATS_PRICE_MOD = 0, /* one byte */ /* price modification, range [-50..50], absolute difference as percentage value */
-	SMITH_STATS_QUALITY = 1, /* one byte */ /* range: [1..17]. might be unused. */
-	SIZEOF_SMITH_STATS = 2
-};
-
-enum {
-	INN_STATS_QUALITY = 0, /* two bytes */ /* range: [1..20]. the lower, the better food and sleep quality */
-	INN_STATS_PRICE_MOD = 2, /* two bytes */ /* price modification, range [-40..70], absolute difference as percentage value */
-	SIZEOF_INN_STATS = 4
 };
 
 enum { // struct signpost
@@ -1818,17 +1781,6 @@ enum { /* note that the order differs from the one in HERO_TYPE... :( */
 	SPELL_DESC_HEROTYPE_GELF = 3,
 	SPELL_DESC_HEROTYPE_IELF = 4,
 	SPELL_DESC_HEROTYPE_SELF = 5
-};
-
-struct mon_spell_description {
-	Bit8s ae_cost;
-	Bit8s mode;
-	Bit8s unkn1;
-	Bit8s attrib1;
-	Bit8s attrib2;
-	Bit8s attrib3;
-	Bit8s vs_mr;
-	Bit8s ani_id;
 };
 
 enum {
@@ -1890,11 +1842,4 @@ enum {
 	MENU_ICON_CAMP			= 54
 };
 
-enum {
-	GATHER_HERBS_ITEM_ID = 0,
-	GATHER_HERBS_CHANCE = 1,
-	GATHER_HERBS_MAX_COUNT = 2,
-	GATHER_HERBS_HANDICAP = 3,
-	SIZEOF_GATHER_HERBS = 4
-};
 #endif

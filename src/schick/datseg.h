@@ -152,11 +152,12 @@ struct trv_start_point {
 	Bit8s *end_points;
 };
 
+// A location is a point of interest in a town or a travel event. //
 struct location {
-	Bit16s pos;
-	Bit8s loctype;
-	Bit8u typeindex;
-	Bit16s locdata;
+	Bit16s pos;		// coordinates of the location within its town
+	Bit8s loctype;		// the type of the location
+	Bit8u typeindex;	// Index among the locations of the same type.
+	Bit16s locdata;		// Additional data, depending on the LOCTYPE.
 };
 
 struct struct_msg {
@@ -248,30 +249,41 @@ struct fight {
 	Bit16s heller;
 };
 
+struct mon_spell_description {
+	Bit8s ae_cost;
+	Bit8s mode;
+	Bit8s unkn1;
+	Bit8s attrib1;
+	Bit8s attrib2;
+	Bit8s attrib3;
+	Bit8s vs_mr;
+	Bit8s ani_id;
+};
+
 struct struct_smith_repairitems {
 	Bit16s item_id;
 	Bit32s pickup_time;
 };
 
 struct struct_informer_tab {
-	Bit16s name_id;
-	Bit8s town;
-	Bit8s unkn;
+	Bit16s name_id;		/* in TEXT.LTX */
+	Bit8s town;		/* -1 = no city, else city id */
+	Bit8s unkn;		/* {0, 1} */
 };
 
 struct healer_descr {
-	Bit8s price_mod;	/* range: [-50,..,50], absolute difference as percentage */
-	Bit8s quality;
+	Bit8s price_mod;	/* range: [-50,..,50], absolute difference as percentage value */
+	Bit8s quality;		/* range: [1,..,17]. the lower, the better healing quality */
 };
 
 struct smith_descr {
-	Bit8s price_mod;
-	Bit8s quality;
+	Bit8s price_mod;	/* price modification, range [-50..50], absolute difference as percentage value */
+	Bit8s quality;		/* range: [1..17], is unused. */
 };
 
-struct inn_descr {
-	Bit16s quality;
-	Bit16s price_mod;
+struct inn_descr {		/* INNS and TAVERNS */
+	Bit16s quality;		/* range: [1..20]. the lower, the better food and sleep quality */
+	Bit16s price_mod;	/* price modification, range [-40..70], absolute difference as percentage value */
 };
 
 struct shop_descr {
