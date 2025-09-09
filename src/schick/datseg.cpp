@@ -4039,7 +4039,16 @@ signed short g_passage_type_to_name[7] = {
 	0x0022, /* DECKPASSAGE */
 	0x0023  /* MITFAHRGELEGENHEIT */
 }; // ds:0x6ec2/*
-struct{unsigned char passage_type,unkn2,base_price_per_distance,base_speed;} g_ship_table[8] = { { 0x00, 0x01, 0x00, 0x78 }, { 0x03, 0x01, 0x23, 0x64 }, { 0x01, 0x01, 0x00, 0x96 }, { 0x02, 0x01, 0x2d, 0x96 }, { 0x00, 0x01, 0x00, 0x5a }, { 0x04, 0x01, 0x14, 0x50 }, { 0x05, 0x00, 0x0a, 0x3c }, { 0x06, 0x00, 0x00, 0x28 } }; // ds:0x6ed0
+const struct ship g_ship_table[8] = {
+	{ 0, 1,  0, 120 },
+	{ 3, 1, 35, 100 },
+	{ 1, 1,  0, 150 },
+	{ 2, 1, 45, 150 },
+	{ 0, 1,  0,  90 },
+	{ 4, 1, 20,  80 },
+	{ 5, 0, 10,  60 },
+	{ 6, 0,  0,  40 }
+}; // ds:0x6ed0
 signed short g_sea_travel_tx_ship[8] = { 0x0024, 0x0025, 0x0026, 0x0026, 0x0024, 0x0027, 0x0028, 0x0029 }; // ds:0x6ef0
 struct sea_route g_sea_routes[46] = {
 	{ TOWNS_THORWAL    , TOWNS_PREM            , 115,  1, 0, 0, 0, 0 }, //  1

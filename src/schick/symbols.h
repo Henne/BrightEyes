@@ -1067,7 +1067,7 @@
 #define TEMPLE_MIRACLE_BONUS            (0x6ea4)    /* signed char[15]; {0, 2, 15, 10, 20, 5, 10, 1, 15, 3, 15, 5, 10, 0} */
 #define TEMPLE_MIRACLE_DICE             (0x6eb3)    /* signed char[15]; {0, 9, 9, 10, 17, 6, 10, 10, 18, 10, 19, 8, 15, 0, 10} */
 //#define PASSAGE_TYPE_TO_NAME            (0x6ec2)    /* signed short[7]; {0x001d, 0x001e, 0x001f, 0x0020, 0x0021, 0x0022, 0x0023} */ /* maps entry PASSAGE_TYPE in SHIP_TABLE -> ptr to name of type of passage (Begleitschutzfahrt, Deckpassage etc.) */
-#define SHIP_TABLE                      (0x6ed0)    /* struct(4)[8]; struct{unsigned char passage_type,unkn2,base_price_per_distance,base_speed;}; { { 0, 1, 0, 120 }, { 3, 1, 35, 100 }, { 1, 1, 0, 150 }, { 2, 1, 45, 150 }, { 0, 1, 0, 90 }, { 4, 1, 20, 80 }, { 5, 0, 10, 60 }, { 6, 0, 0, 40 } } */
+//#define SHIP_TABLE                      (0x6ed0)    /* struct(4)[8]; */
 //#define SEA_TRAVEL_TX_SHIP              (0x6ef0)    /* signed short[8]; { 0x0024, 0x0025, 0x0026, 0x0026, 0x0024, 0x0027, 0x0028, 0x0029 }*/ /* maps ship_type -> ptr to ship name (Langschiff, Kutter, etc.) */
 //#define SEA_ROUTES                      (0x6f00)    /* struct(8)[46] */
 //#define TRAVEL_BY_SHIP                  (0x7070)    /* unsigned char; 0 = on land, 1 = at the ship */

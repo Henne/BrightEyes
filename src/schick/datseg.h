@@ -329,6 +329,13 @@ struct struct_chest {
 	signed short food;
 };
 
+struct ship {
+	Bit8s passage_type;
+	Bit8s unkn;		/* UNUSED */
+	Bit8s base_price;	/* Unit: [Heller per 10 km] */
+	Bit8s base_speed;	/* Unit: [km per day] */	/* TODO: This value should be unsigned instead. */
+};
+
 /* TODO: SHOULD BE IN GAME STATE */
 /* rationale: write SEA_ROUTE_PASSAGE... if the value depends on the current passage on the route (and will change with time).
  * the other values are constants. */
@@ -1322,6 +1329,7 @@ extern char g_str_no_save_in_temple[41];	//ds:0x6e7a; seg061
 
 extern signed short g_passage_type_to_name[7];	//ds:0x6ec2; seg063
 
+extern const struct ship g_ship_table[8];	//ds:0x6ed0; seg063
 extern signed short g_sea_travel_tx_ship[8];	//ds:0x6ef0; seg063
 
 extern struct sea_route g_sea_routes[46];	//ds:0x6f00; seg002, seg063, seg064 SHOULD BE IN GAME STATE

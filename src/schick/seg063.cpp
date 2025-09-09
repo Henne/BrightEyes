@@ -182,19 +182,23 @@ void do_harbor(void)
 						psg_ptr->ship_name_ptr,
 						(!psg_ptr->ship_timer ? get_tx(5) : get_tx(6)), /* today or tomorrow */
 
-						get_tx(g_passage_type_to_name[ds_readbs(SHIP_TABLE + SHIP_TABLE_PASSAGE_TYPE + SIZEOF_SHIP_TABLE_ENTRY * psg_ptr->ship_type)]), /* Kabinenpassage etc. */
+						get_tx(g_passage_type_to_name[g_ship_table[psg_ptr->ship_type].passage_type]), /* Kabinenpassage etc. */
 						get_ttx(psg_ptr->destination + 235),
 #ifdef __BORLANDC__
-						get_passage_travel_hours(psg_ptr->sea_route_ptr->distance, ds_readbs(SHIP_TABLE + SHIP_TABLE_BASE_SPEED + SIZEOF_SHIP_TABLE_ENTRY * psg_ptr->ship_type)),
+						get_passage_travel_hours(psg_ptr->sea_route_ptr->distance, g_ship_table[psg_ptr->ship_type].base_speed),
 #else
 						/* when compiled with gcc, occasionally passage times of 0 hours do show up. (which does not happen in the original game!!)
 						 * I observed that within the function get_passage_travel_hours(..), computations with negative numbers might happen and lead to this bug.
 						 * The following line fixes this. However, it will lead to incompatible binaries when compiled with the original 1992 BCC compiler
 						 * This incompatibility of the behavior gcc vs. BCC is a bit scary.
 						 * A better understanding is urgently needed... */
-						get_passage_travel_hours(psg_ptr->sea_route_ptr->distance, (unsigned char)ds_readbs(SHIP_TABLE + SHIP_TABLE_BASE_SPEED + SIZEOF_SHIP_TABLE_ENTRY * psg_ptr->ship_type)),
+						/* REMARK: The base speed should be an unsigned char,
+						 * since a speed of 150 would result in a negative speed, which ssomehow happened.
+						 * Changing just this type to unsigned would hurt the binary aequivalency.
+						 * */
+						get_passage_travel_hours(psg_ptr->sea_route_ptr->distance, g_ship_table[psg_ptr->ship_type].base_speed),
 #endif
-						(Bit8u*)print_passage_price(ds_readbs(SHIP_TABLE + SHIP_TABLE_BASE_PRICE_PER_DISTANCE + SIZEOF_SHIP_TABLE_ENTRY * psg_ptr->ship_type), psg_ptr->sea_route_ptr));
+						print_passage_price(g_ship_table[psg_ptr->ship_type].base_price, psg_ptr->sea_route_ptr));
 
 					i = g_textbox_width;
 					g_textbox_width = 5;
@@ -214,7 +218,7 @@ void do_harbor(void)
 
 						} else {
 
-							g_sea_travel_sleep_quality = ds_readb(SHIP_TABLE + SHIP_TABLE_PASSAGE_TYPE + SIZEOF_SHIP_TABLE_ENTRY * psg_ptr->ship_type);
+							g_sea_travel_sleep_quality = g_ship_table[psg_ptr->ship_type].passage_type;
 							money -= gs_sea_travel_passage_price;
 							set_party_money(money);
 

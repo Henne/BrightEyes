@@ -1741,10 +1741,6 @@ enum {
 	       5 = Deckpassage (Regen. +1);
 	       6 = Mitfahrgelegenheit (Regen. 0)
 	*/
-	SHIP_TABLE_UNKN = 1, /* one byte */ /* is this byte ever read? */
-	SHIP_TABLE_BASE_PRICE_PER_DISTANCE = 2, /* one byte. Unit: [Heller per 10 km] */
-	SHIP_TABLE_BASE_SPEED = 3, /* one byte. Unit: [km per day] */
-	SIZEOF_SHIP_TABLE_ENTRY = 4
 };
 
 enum { // struct signpost
