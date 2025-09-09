@@ -372,6 +372,12 @@ struct struct_tevent {
 	Bit8u tevent_id;
 };
 
+struct analues_item {
+	Bit16s item_id;
+	Bit16s handicap;
+	Bit8s text_id;
+};
+
 struct struct_recipe {
 	signed short item_id;		/* item id of the recipe */
 	signed short ingredients[10];	/* list of ingredients (item_ids), terminated by -1 */
@@ -1436,6 +1442,7 @@ extern struct struct_char_height g_gui_char_height[67];	//ds:0xab42; seg097
 extern signed short g_gui_bool_flag;		// ds:0xac0b; seg097
 extern signed short g_spell_special_aecost;	// ds:0xac0e; seg098, seg099, seg100, seg101
 
+extern const struct analues_item g_analues_items[28];	//ds:0xac3c; seg099
 extern unsigned char *g_hexenknoten_gfx_buf;	// ds:0xacc8; seg100
 extern signed short g_monster_spell_ae_cost;	// ds:0xaccc; seg102
 extern char g_select_skill_lvlup[6]; 		// ds:0xacce; seg103

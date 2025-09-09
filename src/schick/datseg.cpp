@@ -5868,7 +5868,7 @@ char g_spell_select_str_key[5] = "\xf2%s\xf0"; // ds:0xac20
 char g_spell_select_str_key_color[3] = "%s"; // ds:0xac25
 char g_spell_select_str_keyval_color[8] = "\xf2%s~%d\xf0"; // ds:0xac28
 signed char g_spell_select_ones[12] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }; // ds:0xac30
-struct{signed short item_id, handicap; signed char dtp;} g_analues_items[28] = {
+const struct analues_item g_analues_items[28] = {
 	{ ITEM_AMULET_UNKNOWN_1      ,  2, 0x36 },
 	{ ITEM_RING_RED              ,  3, 0x38 },
 	{ ITEM_CORONET_SILVER        ,  4, 0x39 },

@@ -961,9 +961,9 @@ char* spell_analues(void)
 
 	if (item_id) {
 
-		for (i = 0; ds_readws(ANALUES_ITEMS + i * SIZEOF_ANALUES_ITEM + ANALUES_ITEM_ID) != -1; i++) {
+		for (i = 0; g_analues_items[i].item_id != -1; i++) {
 
-			if (ds_readws(ANALUES_ITEMS + i * SIZEOF_ANALUES_ITEM + ANALUES_ITEM_ID) == item_id) {
+			if (g_analues_items[i].item_id == item_id) {
 
 				/* check if the spellcaster is able to analyze this item */
 
@@ -974,10 +974,10 @@ char* spell_analues(void)
 				 * but a lighter "pool version".
 				 * Also, it results in the Original-Bug that, in the case that the +0 spell test was successful, but with handicap it is not,
 				 * the full AE cost has to be payed. (Normally, you get a 1/2 reduction for a failed attempt.) */
-				if (ds_readws((ANALUES_ITEMS + ANALUES_ITEM_HANDICAP) + i * SIZEOF_ANALUES_ITEM) <= g_spelltest_result) {
+				if (g_analues_items[i].handicap <= g_spelltest_result) {
 
 					/* copy the matching result string */
-					strcpy(g_text_output_buf, get_tx(ds_readbs((ANALUES_ITEMS + ANALUES_ITEM_DTP) + i * SIZEOF_ANALUES_ITEM)));
+					strcpy(g_text_output_buf, get_tx(g_analues_items[i].text_id));
 
 					or_ptr_bs(get_spelluser() + item_pos * SIZEOF_INVENTORY + (HERO_INVENTORY + INVENTORY_FLAGS), 0x80); /* set 'magic_revealed' flag */
 					break;

@@ -1767,13 +1767,6 @@ enum {
 	GAME_MODE_ADVANCED	= 2
 };
 
-enum {
-	ANALUES_ITEM_ID = 0,
-	ANALUES_ITEM_HANDICAP = 2,
-	ANALUES_ITEM_DTP = 4,
-	SIZEOF_ANALUES_ITEM = 5
-};
-
 enum { /* note that the order differs from the one in HERO_TYPE... :( */
 	SPELL_DESC_HEROTYPE_DRUID = 0,
 	SPELL_DESC_HEROTYPE_MAGE = 1,
