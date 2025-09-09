@@ -3463,7 +3463,7 @@ const struct struct_point g_invslot_iconxy_table[23] = {
 	{ 0x0010, 0x00af },
 	{ 0x0021, 0x00af }
 }; // ds:0x63d2
-struct{unsigned short x_name,x_val,y;} g_statuspage_spells_xy[8] = {
+const struct statuspage_line g_statuspage_spells_xy[8] = {
 	{ 0x0005, 0x0068, 0x003e },
 	{ 0x0005, 0x0068, 0x0068 },
 	{ 0x0070, 0x00d1, 0x003e },
@@ -3473,13 +3473,13 @@ struct{unsigned short x_name,x_val,y;} g_statuspage_spells_xy[8] = {
 	{ 0x00d9, 0x013b, 0x0068 },
 	{ 0x00d9, 0x013b, 0x00a0 }
 }; // ds:0x642e
-struct{unsigned short x_name,x_val,y;} g_statuspage_spells2_xy[4] = {
+const struct statuspage_line g_statuspage_spells2_xy[4] = {
 	{ 0x0005, 0x0068, 0x003e },
 	{ 0x0005, 0x0068, 0x008b },
 	{ 0x0070, 0x00d1, 0x003e },
 	{ 0x00d9, 0x013b, 0x003e }
 }; // ds:0x645e
-struct{unsigned short x_name,x_val,y;} g_statuspage_skills_xy[7] = {
+const struct statuspage_line g_statuspage_skills_xy[7] = {
 	{ 0x0005, 0x0068, 0x003e },
 	{ 0x00d9, 0x013b, 0x003e },
 	{ 0x00d9, 0x013b, 0x008b },

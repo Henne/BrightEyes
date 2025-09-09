@@ -111,12 +111,15 @@ void status_show_skills(Bit8u *hero) {
 	set_textcolor(0, 2);
 
 	for (skill_category = 0; skill_category < 7; skill_category++) {
+
 		skill_no = g_skills_index[skill_category].first;
+
 		while (g_skills_index[skill_category].first + g_skills_index[skill_category].length > skill_no) {
+
 			status_show_skill(hero, skill_no, g_skills_index[skill_category].first,
-				ds_readw(STATUSPAGE_SKILLS_XY + skill_category * 6),
-				ds_readw((STATUSPAGE_SKILLS_XY + 2) + skill_category * 6),
-				ds_readw((STATUSPAGE_SKILLS_XY + 4) + skill_category * 6));
+					g_statuspage_skills_xy[skill_category].x_name,
+					g_statuspage_skills_xy[skill_category].x_val,
+					g_statuspage_skills_xy[skill_category].y);
 
 			skill_no++;
 		}
@@ -637,12 +640,12 @@ void status_show(Bit16u index)
 
 				while (g_spells_index[j].first + g_spells_index[j].length > i) {
 
-					status_show_spell(hero,
-						i,
+					status_show_spell(hero, i,
 						g_spells_index[j].first,
-						ds_readws(STATUSPAGE_SPELLS_XY + 0 + j * 6),
-						ds_readws(STATUSPAGE_SPELLS_XY + 2 + j * 6),
-						ds_readws(STATUSPAGE_SPELLS_XY + 4 + j * 6));
+						g_statuspage_spells_xy[j].x_name,
+						g_statuspage_spells_xy[j].x_val,
+						g_statuspage_spells_xy[j].y);
+
 					i++;
 				}
 			}
@@ -673,9 +676,9 @@ void status_show(Bit16u index)
 					status_show_spell(hero,
 						i,
 						g_spells_index2[j].first,
-						ds_readws(STATUSPAGE_SPELLS2_XY + 0 + j * 6),
-						ds_readws(STATUSPAGE_SPELLS2_XY + 2 + j * 6),
-						ds_readws(STATUSPAGE_SPELLS2_XY + 4 + j * 6));
+						g_statuspage_spells2_xy[j].x_name,
+						g_statuspage_spells2_xy[j].x_val,
+						g_statuspage_spells2_xy[j].y);
 					i++;
 				}
 			}

@@ -90,6 +90,7 @@ struct struct_rect {
 	int x2;
 };
 
+
 struct ani_tile {
 	Bit16s pic;
 	Bit16s duration;
@@ -193,6 +194,12 @@ struct location {
 struct struct_msg {
 	signed int id;
 	signed int type;
+};
+
+struct statuspage_line {
+	Bit16s x_name;
+	Bit16s x_val;
+	Bit16s y;
 };
 
 struct market {
@@ -1308,7 +1315,9 @@ extern Bit8s g_statuspage_selitem3_no;		//ds:0x6370; seg048
 extern Bit8s g_statuspage_selitem4_no;		//ds:0x6371; seg048
 extern Bit8u g_statuspage_palette[32][3];	//ds:0x6372; seg046
 extern const struct struct_point g_invslot_iconxy_table[23];	//ds:0x63d2; seg046
-
+extern const struct statuspage_line g_statuspage_spells_xy[8]; //ds:0x642e; seg046
+extern const struct statuspage_line g_statuspage_spells2_xy[4]; //ds:0x645e; seg046
+extern const struct statuspage_line g_statuspage_skills_xy[7]; //ds:0x6476; seg046
 extern char g_empty_string6[1];			//ds:0x64a0; seg046
 extern char g_empty_string7[1];			//ds:0x64a1; seg046
 extern signed char g_hero_sel_exclude;		//ds:0x64a2; seg047, seg049, seg103, seg120
