@@ -4566,7 +4566,6 @@ void add_hero_le(Bit8u *hero, signed short le)
 				ret = FIG_get_range_weapon_type(hero);
 
 				if (ret != -1) {
-					//fighter->nvf_no = ds_readb((NVFTAB_FIGURES_RANGEWEAPON - 12) + host_readbs(hero + HERO_SPRITE_NO) * 12 + 4 * ret + host_readbs(hero + HERO_VIEWDIR));
 					fighter->nvf_no = g_nvftab_figures_rangeweapon[host_readbs(hero + HERO_SPRITE_NO) - 1][ret][host_readbs(hero + HERO_VIEWDIR)];
 				} else {
 					fighter->nvf_no = host_readb(hero + HERO_VIEWDIR);

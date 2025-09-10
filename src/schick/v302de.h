@@ -275,26 +275,6 @@ static inline Bit8s dec_ptr_bs(Bit8u *p)
 	return host_readbs(p) + 1;
 }
 
-static inline Bit8u ds_readb(unsigned short offs) {
-	return host_readb(p_datseg + offs);
-}
-static inline Bit16u ds_readw(unsigned short offs) {
-	return host_readw(p_datseg + offs);
-}
-static inline Bit32u ds_readd(unsigned short offs) {
-	return host_readd(p_datseg + offs);
-}
-
-static inline Bit8s ds_readbs(unsigned short offs) {
-	return (Bit8s)host_readb(p_datseg + offs);
-}
-static inline Bit16s ds_readws(unsigned short offs) {
-	return (Bit16s)host_readw(p_datseg + offs);
-}
-static inline Bit32s ds_readds(unsigned short offs) {
-	return (Bit32s)host_readd(p_datseg + offs);
-}
-
 /**
  * \brief mark informer only as known iff unknown
  * \param informer the index of the informer
@@ -750,10 +730,6 @@ static inline Bit8u *get_itemuser(void) {
 	return (Bit8u*)g_itemuser;
 }
 
-static inline Bit8u *get_fname(unsigned short off) {
-	return (Bit8u*)ds_readd(FNAMES + off * 4);
-}
-
 static inline char *get_monname(const int no)
 {
 	if ((0 <= no) && (no < 77))
@@ -828,14 +804,6 @@ static inline char* get_itemname(unsigned short item)
 #define my_itoa itoa
 
 #define schick_main main
-
-#define ds_readb(p)		(*(Bit8u*)(ds + p))
-#define ds_readw(p)		(*(Bit16u*)(ds + p))
-#define ds_readd(p)		(*(Bit32u*)(ds + (p)))
-
-#define ds_readbs(p)		(*(Bit8s*)(ds + p))
-#define ds_readws(p)		(*(Bit16s*)(ds + p))
-#define ds_readds(p)		(*(Bit32s*)(ds + (p)))
 
 #define inc_ptr_bs(p)		((*(Bit8s*)(p))++)
 #define dec_ptr_bs(p)		((*(Bit8s*)(p))--)
