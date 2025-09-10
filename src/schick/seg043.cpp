@@ -495,7 +495,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 				}
 			}
 
-			seg041_8c8();
+			clear_anisheets();
 
 			if (target_is_hero != 0) {
 
@@ -513,7 +513,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 			FIG_prepare_enemy_fight_ani(1, monster, 2, monster_pos + 10, monster->enemy_id, 0);
 			g_fig_continue_print = 1;
 			draw_fight_screen_pal(0);
-			seg041_8c8();
+			clear_anisheets();
 
 		} else {
 
@@ -566,7 +566,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 					}
 				}
 
-				seg041_8c8();
+				clear_anisheets();
 
 				l11 = l15;
 				l12 = 0;
@@ -605,7 +605,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 				FIG_remove_smth();
 				draw_fight_screen(0);
-				seg041_8c8();
+				clear_anisheets();
 
 			} else if (monster->action_id == FIG_ACTION_SPELL) {
 
@@ -617,7 +617,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 				l13 = MON_cast_spell(monster, 0);
 
-				seg041_8c8();
+				clear_anisheets();
 
 				if (monster->enemy_id) {
 
@@ -784,7 +784,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 					FIG_output(g_dtp2);
 
-					seg041_8c8();
+					clear_anisheets();
 				} else {
 					FIG_output(g_dtp2);
 				}
@@ -904,7 +904,7 @@ void FIG_use_item(Bit8u *hero, struct enemy_sheet *target_monster, Bit8u *target
 
 	if (usecase > 0) {
 
-		seg041_8c8();
+		clear_anisheets();
 
 		FIG_prepare_hero_fight_ani(0, hero, -1, usecase == 1 ? FIG_ACTION_UNKNOWN3 : FIG_ACTION_UNKNOWN4, hero_pos + 1, host_readbs(hero + HERO_ENEMY_ID), 0);
 
@@ -947,7 +947,7 @@ void FIG_use_item(Bit8u *hero, struct enemy_sheet *target_monster, Bit8u *target
 			draw_fight_screen(0);
 		}
 
-		seg041_8c8();
+		clear_anisheets();
 	}
 
 	if (*g_dtp2) {

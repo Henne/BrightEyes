@@ -1490,7 +1490,7 @@
 //#define FIGHTOBJ_BUF_SEEK_PTR           (0xd86e)    /* Bit8u*; points to end of FIGHTOBJ buffer */
 //#define NR_OF_ENEMIES                   (0xd872)    /* short; ? */
 //#define FIGHTOBJ_LIST                   (0xd874)    /* unsigned char[90] */
-#define FIG_ANISHEETS                   (0xd8ce)    /* struct(243)[8] */
+//#define FIG_ANISHEETS                   (0xd8ce)    /* struct(243)[8] */
 //#define FIG_LIST_ELEM                   (0xe066)    /* struct(35) */
 //#define FIG_LIST_ARRAY                  (0xe089)    /* unsigned char[127]; list of flags (0 or 1) indicating if the corresponding FIGHTER_ID is in use. more precisely: FIG_LIST_ARRAY[i] is 1 (otherwise 0) if the index i is the FIGHTER_ID of a fighter object. */
 //#define FIG_LIST_HEAD                   (0xe108)    /* Bit8u*; to a list */

@@ -95,9 +95,9 @@ void seg037_00ae(struct enemy_sheet *enemy, signed short enemy_no)
 
 	signed short i;
 
-	ds_writeb((FIG_ANISHEETS + 0xf3), 0); /* first position of the second FIG_ANISHEET (0xf3 == 243, FIG_ANISHEET is a struct(243)[8]) */
-	ds_writeb((FIG_ANISHEETS + 242 + 0xf3), enemy->gfx_id); /* last position of the second FIG_ANISHEET */
-	p1 = p_datseg + (FIG_ANISHEETS + 1 + 0xf3); /* second position of the second FIG_ANISHEET */
+	g_fig_anisheets[1][0] = 0;
+	g_fig_anisheets[1][242] = enemy->gfx_id;
+	p1 = (Bit8u*)&g_fig_anisheets[1][1];
 
 	i = 0;
 	p3 = g_gfx_ani_index[enemy->gfx_id];
@@ -170,7 +170,7 @@ void seg037_00ae(struct enemy_sheet *enemy, signed short enemy_no)
 
 	if (is_in_byte_array(enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id)) {
 
-		memcpy(p_datseg + (FIG_ANISHEETS + 3*0xf3), p_datseg + (FIG_ANISHEETS + 1*0xf3), 0xf3);
+		memcpy(&g_fig_anisheets[3], &g_fig_anisheets[1], 0xf3);
 
 		fighter = FIG_get_fighter(enemy->fighter_id);
 
@@ -180,8 +180,8 @@ void seg037_00ae(struct enemy_sheet *enemy, signed short enemy_no)
 	/* draw_fight_screen */
 	draw_fight_screen(0);
 
-	memset(p_datseg + (FIG_ANISHEETS + 1*0xf3), -1, 0xf3); /* set second FIG_ANISHEET to -1 */
-	memset(p_datseg + (FIG_ANISHEETS + 3*0xf3), -1, 0xf3); /* set fourth FIG_ANISHEET to -1 */
+	memset(&g_fig_anisheets[1], -1, 0xf3);
+	memset(&g_fig_anisheets[3], -1, 0xf3);
 
 	FIG_init_list_elem(enemy_no + 10);
 }

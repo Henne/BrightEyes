@@ -206,11 +206,11 @@ void FIG_prepare_hero_fight_ani(signed short a1, Bit8u *hero, signed short weapo
 	}
 
 	l1 += dir;
-	p1 = p_datseg + (FIG_ANISHEETS + 1) + 0xf3 * a1;
-	p2 = p_datseg + (FIG_ANISHEETS + 1 + 4*0xf3) + 0xf3 * a1;
+	p1 = (Bit8u*)&g_fig_anisheets[a1][1];
+	p2 = (Bit8u*)&g_fig_anisheets[a1 + 4][1];
 
-	ds_writeb(FIG_ANISHEETS + 0xf3 * a1, get_seq_header(p3[l1]));
-	ds_writeb((FIG_ANISHEETS + 242) + 0xf3 * a1, host_readbs(hero + HERO_SPRITE_NO));
+	g_fig_anisheets[a1][0] = get_seq_header(p3[l1]);
+	g_fig_anisheets[a1][242] = host_readbs(hero + HERO_SPRITE_NO);
 
 	if (check_hero(hero) && (host_readbs(hero + HERO_VIEWDIR) != dir) &&
 
@@ -219,8 +219,7 @@ void FIG_prepare_hero_fight_ani(signed short a1, Bit8u *hero, signed short weapo
 			((g_attacker_attacks_again != 0) && (a7 == 0)) ||
 			((g_defender_attacks != 0) && (a7 == 1))))
 	{
-
-			ds_writeb(FIG_ANISHEETS + a1 * 0xf3, 0);
+			g_fig_anisheets[a1][0] = 0;
 			l8 = l7 = -1;
 			l9 = host_readbs(hero + HERO_VIEWDIR);
 			l8 = l9;
@@ -410,12 +409,12 @@ void FIG_prepare_enemy_fight_ani(signed short a1, struct enemy_sheet *enemy, sig
 
 	l1 += dir;
 
-	p1 = p_datseg + (FIG_ANISHEETS + 1) + a1 * 0xf3;
-	p2 = p_datseg + (FIG_ANISHEETS + 1 + 4*0xf3) + a1 * 0xf3;
+	p1 = (Bit8u*)&g_fig_anisheets[a1][1];
+	p2 = (Bit8u*)&g_fig_anisheets[a1 + 4][1];
 
 
-	ds_writeb(FIG_ANISHEETS + 0xf3 * a1, get_seq_header(p4[l1]));
-	ds_writeb((FIG_ANISHEETS + 242) + 0xf3 * a1, enemy->gfx_id);
+	g_fig_anisheets[a1][0] = get_seq_header(p4[l1]);
+	g_fig_anisheets[a1][242] = enemy->gfx_id;
 
 	/* first the enemy may turn */
 	if ((enemy->viewdir != dir) &&
@@ -425,7 +424,7 @@ void FIG_prepare_enemy_fight_ani(signed short a1, struct enemy_sheet *enemy, sig
 			(g_defender_attacks && (a7 == 1))))
 		{
 
-		ds_writeb(FIG_ANISHEETS + a1 * 0xf3, 0);
+		g_fig_anisheets[a1][0] = 0;
 
 		/* find out the new direction */
 		l8 = l7 = -1;
@@ -534,7 +533,7 @@ void FIG_prepare_enemy_fight_ani(signed short a1, struct enemy_sheet *enemy, sig
 	/* does this sprite need two fields */
 	if (is_in_byte_array(enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id))	{
 
-		memcpy(p_datseg + (FIG_ANISHEETS + 2*0xf3) + a1 * 0xf3, p_datseg + FIG_ANISHEETS + a1 * 0xf3, 0xf3);
+		memcpy(&g_fig_anisheets[a1 + 2], &g_fig_anisheets[a1], 0xf3);
 
 		fighter = FIG_get_fighter(enemy->fighter_id);
 
@@ -612,26 +611,16 @@ void seg044_002a(Bit16u v1, Bit8u *hero, Bit16u v2, Bit16s obj1, Bit16s obj2,
 
 	l_di += (v2 == 4) ? dir : host_readbs(hero + HERO_VIEWDIR);
 
-	lp1 = p_datseg + (FIG_ANISHEETS + 1) + v1 * 0xf3;
+	lp1 = (Bit8u*)&g_fig_anisheets[v1][1];
 
-	ds_writeb(FIG_ANISHEETS + v1 * 0xf3, get_seq_header(lp2[l_di]));
+	g_fig_anisheets[v1][0] = get_seq_header(lp2[l_di]);
 
-#if !defined(__BORLANDC__)
-	ds_writeb((FIG_ANISHEETS + 242) + v1 * 0xf3, host_readbs(hero + HERO_SPRITE_NO));
-#else
-	/* another ugly hack */
-	asm {
-		les bx, hero
-		mov al, [es:bx+0x9b]
-		mov bx, v1
-		db 0x69, 0xdb, 0xf3, 0x00
-		mov [bx + (FIG_ANISHEETS + 242)], al
-	}
-#endif
+	g_fig_anisheets[v1][242] = host_readbs(hero + HERO_SPRITE_NO);
 
 	if ((host_readbs(hero + HERO_VIEWDIR) != dir) && (v2 == 4)) {
 
-		ds_writeb(FIG_ANISHEETS + v1 * 0xf3, 0);
+		g_fig_anisheets[v1][0] = 0;
+
 		l3 = l2 = -1;
 		l_si = host_readbs(hero + HERO_VIEWDIR);
 		l3 = l_si;
@@ -744,18 +733,19 @@ void seg044_002f(signed short v1, struct enemy_sheet *enemy, signed short v2, si
 	/* this is true if a monster attacks a hero */
 	l1 = (v2 == 4) ? 29 : 16;
 
-	lp1 = p_datseg + (FIG_ANISHEETS + 1) + v1 * 0xf3;
+	lp1 = (Bit8u*)&g_fig_anisheets[v1][1];
 
 	/* this is true if a monster attacks a hero */
 	l1 += (v2 == 4) ? dir : enemy->viewdir;
 
-	ds_writeb(FIG_ANISHEETS + v1 * 0xf3, get_seq_header(lp2[l1]));
+	g_fig_anisheets[v1][0] = get_seq_header(lp2[l1]);
 
-	ds_writeb((FIG_ANISHEETS + 242) + v1 * 0xf3, enemy->gfx_id);
+	g_fig_anisheets[v1][242] = enemy->gfx_id;
 
 	if ((enemy->viewdir != dir) && (v2 == 4)) {
 
-		ds_writeb(FIG_ANISHEETS + v1 * 0xf3, 0);
+		g_fig_anisheets[v1][0] = 0;
+
 		l3 = l2 = -1;
 
 		dir2 = enemy->viewdir;
@@ -813,7 +803,7 @@ void seg044_002f(signed short v1, struct enemy_sheet *enemy, signed short v2, si
 
 	/* check if the moster sprite ID needs two fields */
 	if (is_in_byte_array(enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id)) {
-		memcpy(p_datseg + (FIG_ANISHEETS + 2*0xf3) + v1 * 0xf3, p_datseg + FIG_ANISHEETS + v1 * 0xf3, 0xf3);
+		memcpy(&g_fig_anisheets[v1 + 2], &g_fig_anisheets[v1], 0xf3);
 	}
 
 }

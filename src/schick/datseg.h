@@ -1657,7 +1657,7 @@ extern signed char  g_location_market_flag;	// ds:0xe10c; seg066
 extern struct struct_fighter *g_fig_list_head;	// ds:0xe108; seg005, seg006, seg040
 extern signed char g_fig_list_array[127];	// ds:0xe089; seg006, seg040
 extern struct struct_fighter g_fig_list_elem;	// ds:0xe066; seg006, seg034, seg038, seg039, seg040, seg042, seg043, seg045, seg100
-
+extern Bit8s g_fig_anisheets[8][243];	// ds:0xd8ce; seg005, seg036, seg037, seg041, seg044, seg045
 extern signed char g_fightobj_list[90];	// ds:0xd874; seg040
 extern signed int g_nr_of_enemies;	// ds:0xd872; seg032, seg034, seg039, seg100
 extern unsigned char *g_fightobj_buf_seek_ptr; // ds:0xd86e; seg005-seg100

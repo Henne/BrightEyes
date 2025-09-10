@@ -455,10 +455,9 @@ void draw_fight_screen(Bit16u val)
 
 			p_figure_gfx = list_ii->gfxbuf;
 
-			if ((list_ii->sheet != -1) &&
-				(g_fig_ani_state[list_ii->sheet] != -1)) {
+			if ((list_ii->sheet != -1) && (g_fig_ani_state[list_ii->sheet] != -1)) {
 
-				sheet = p_datseg + FIG_ANISHEETS + list_ii->sheet * 0xf3;
+				sheet = (Bit8u*)g_fig_anisheets[list_ii->sheet];
 
 				if (host_readbs(sheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -1) {
 
@@ -488,7 +487,7 @@ void draw_fight_screen(Bit16u val)
 
 						if (list_ii->wsheet != -1) {
 
-							p_weapon_anisheet = p_datseg + FIG_ANISHEETS + list_ii->wsheet * 0xf3;
+							p_weapon_anisheet = (Bit8u*)&g_fig_anisheets[list_ii->wsheet];
 
 							if (host_readbs(p_weapon_anisheet + 1 + 3 * g_fig_ani_state[list_ii->sheet]) == -9)
 							{
@@ -738,9 +737,8 @@ void draw_fight_screen(Bit16u val)
 										host_writebs(sheet + 1 + 3 * (1 + g_fig_ani_state[list_ii->sheet]), -1);
 
 										if (list_ii->twofielded != -1) {
-											ds_writeb((FIG_ANISHEETS + 4 + 2*0xf3) +
-													(list_ii->sheet * 0xf3 +
-													3 * g_fig_ani_state[2 + list_ii->sheet]), -1);
+
+											g_fig_anisheets[list_ii->sheet + 2][4 + 3 * g_fig_ani_state[2 + list_ii->sheet]] = -1;
 
 											g_fig_ani_state[2 + list_ii->sheet] = -1;
 										}
@@ -770,8 +768,7 @@ void draw_fight_screen(Bit16u val)
 							list_ii->sheet = list_ii->wsheet = -1;
 
 						} else {
-							obj_x = 10 - (list_ii->width / 2) +
-								(10 * (list_ii->cbx + list_ii->cby));
+							obj_x = 10 - (list_ii->width / 2) + (10 * (list_ii->cbx + list_ii->cby));
 
 							obj_y = 118 - list_ii->height + ((list_ii->cbx - list_ii->cby) * 5);
 
@@ -801,7 +798,7 @@ void draw_fight_screen(Bit16u val)
 
 							if (list_ii->wsheet != -1) {
 
-								p_weapon_anisheet = p_datseg + FIG_ANISHEETS + list_ii->wsheet * 0xf3;
+								p_weapon_anisheet = (Bit8u*)&g_fig_anisheets[list_ii->wsheet];
 
 								if (host_readbs(p_weapon_anisheet + 1 + g_fig_ani_state[list_ii->sheet] * 3) == -1)
 								{

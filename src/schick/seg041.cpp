@@ -548,15 +548,15 @@ signed short FIG_get_enemy_attack_damage(struct enemy_sheet *attacker, struct en
 	return damage;
 }
 
-void seg041_8c8(void)
+void clear_anisheets(void)
 {
 	signed short i;
 
 	for (i = 0; i < 8; i++)
-		memset(p_datseg + FIG_ANISHEETS + i * 0xf3, -1, 0xf3);
+		memset(&g_fig_anisheets[i], -1, 0xf3);
 
 	/* That would be better */
-	/* memset(p_datseg + FIG_ANISHEETS, -1, 0xf3 * 8); */
+	/* memset(&g_fig_anisheets[0], -1, 0xf3 * 8); */
 }
 
 /**

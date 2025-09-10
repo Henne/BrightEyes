@@ -125,9 +125,9 @@ signed short seg045_01a0(signed short a1, signed short a2, signed short fighter_
 		return 0;
 	}
 
-	ptr = (Bit8s*)p_datseg + (FIG_ANISHEETS + 1) + a1 * 0xf3;
-	ds_writeb(FIG_ANISHEETS + a1 * 0xf3, 0);
-	ds_writeb((FIG_ANISHEETS + 242) + a1 * 0xf3, 0);
+	ptr = &g_fig_anisheets[a1][1];
+	g_fig_anisheets[a1][0] = 0;
+	g_fig_anisheets[a1][242] = 0;
 
 	for (i = 0; beeline - 1 > i; i++) {
 		ptr += FIG_copy_it(ptr, g_anitab_shotbolt_index[a2][a5], -1);
@@ -214,10 +214,10 @@ void seg045_0394(signed short a1, Bit8u *hero, signed short spell_ani_id)
 	/* search the target on the chessboard */
 	FIG_search_obj_on_cb(host_readbs(hero + HERO_ENEMY_ID), &x, &y);
 
-	ptr = (Bit8s*)p_datseg + a1 * 0xf3 + (FIG_ANISHEETS + 1);
+	ptr = &g_fig_anisheets[a1][1];
 
-	ds_writeb(FIG_ANISHEETS + a1 * 0xf3, 0);
-	ds_writeb((FIG_ANISHEETS + 242) + a1 * 0xf3, -1);
+	g_fig_anisheets[a1][0] = 0;
+	g_fig_anisheets[a1][242] = -1;
 
 	/* copy the ani sequence and terminate it */
 	ptr += FIG_copy_it(ptr, g_anitab_spell_index[spell_ani_id - 1], -1);
@@ -235,10 +235,10 @@ void seg045_041b(signed short a1, struct enemy_sheet *enemy, signed short spell_
 	/* search the target on the chessboard */
 	FIG_search_obj_on_cb(enemy->enemy_id, &x, &y);
 
-	ptr = (Bit8s*)p_datseg + a1 * 0xf3 + (FIG_ANISHEETS + 1);
+	ptr = &g_fig_anisheets[a1][1];
 
-	ds_writeb(FIG_ANISHEETS + a1 * 0xf3, 0);
-	ds_writeb((FIG_ANISHEETS + 242) + a1 * 0xf3, -1);
+	g_fig_anisheets[a1][0] = 0;
+	g_fig_anisheets[a1][242] = -1;
 
 	/* copy the ani sequence and terminate it */
 	ptr += FIG_copy_it(ptr, g_anitab_spell_index[spell_ani_id - 1], -1);

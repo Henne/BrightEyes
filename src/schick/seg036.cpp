@@ -99,10 +99,10 @@ void seg036_00ae(Bit8u *hero, signed short hero_pos)
 	signed char dir3;
 	Bit16s *ptr2;
 
-	ds_writeb(FIG_ANISHEETS, 0);
-	ds_writeb((FIG_ANISHEETS + 242), host_readbs(hero + HERO_SPRITE_NO));
+	g_fig_anisheets[0][0] = 0;
+	g_fig_anisheets[0][242] = host_readbs(hero + HERO_SPRITE_NO);
 
-	ptr1 = p_datseg + (FIG_ANISHEETS + 1);
+	ptr1 = (Bit8u*)&g_fig_anisheets[0][1];
 	ptr2 = g_gfx_ani_index[host_readbs(hero + HERO_SPRITE_NO)];
 
 	i = 0;
@@ -166,7 +166,7 @@ void seg036_00ae(Bit8u *hero, signed short hero_pos)
 	g_fig_cb_marker_id = -1;
 	FIG_set_sheet(host_readbs(hero + HERO_FIGHTER_ID), 0);
 	draw_fight_screen(0);
-	memset(p_datseg + FIG_ANISHEETS, -1, 0xf3);
+	memset(&g_fig_anisheets[0], -1, 0xf3);
 	FIG_init_list_elem(hero_pos + 1);
 }
 

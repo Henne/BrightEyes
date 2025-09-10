@@ -19,7 +19,7 @@ signed short weapon_check(Bit8u *);
 //0x43
 signed short FIG_get_enemy_attack_damage(struct enemy_sheet*, struct enemy_sheet*, signed short);
 //0x48
-void seg041_8c8();
+void clear_anisheets();
 
 #if !defined(__BORLANDC__)
 }

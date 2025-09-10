@@ -5948,7 +5948,7 @@ signed char g_location_market_flag; // ds:0xe10c
 struct struct_fighter *g_fig_list_head; // ds:0xe108, to a list
 signed char g_fig_list_array[127]; // ds:0xe089
 struct struct_fighter g_fig_list_elem; // ds:0xe066
-struct{unsigned char unkn[243];} g_fig_anisheets[8]; // ds:0xd8ce
+Bit8s g_fig_anisheets[8][243]; // ds:0xd8ce
 signed char g_fightobj_list[90]; // ds:0xd874
 signed int g_nr_of_enemies; // ds:0xd872, ?
 unsigned char *g_fightobj_buf_seek_ptr; // ds:0xd86e, points to end of FIGHTOBJ buffer

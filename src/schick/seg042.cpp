@@ -529,7 +529,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 				}
 			}
 
-			seg041_8c8();
+			clear_anisheets();
 
 			FIG_prepare_hero_fight_ani(0, hero, weapon_type, 2, hero_pos + 1,
 							l17 == 0 ? host_readbs(hero + HERO_ENEMY_ID) : host_readbs(hero + HERO_ENEMY_ID) + 20, 0);
@@ -556,7 +556,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 			draw_fight_screen_pal(0);
 
-			seg041_8c8();
+			clear_anisheets();
 
 		} else {
 
@@ -626,7 +626,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 						}
 					}
 
-					seg041_8c8();
+					clear_anisheets();
 
 					l12 = weapon_type;
 					l13 = 0;
@@ -677,7 +677,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 					draw_fight_screen(0);
 
-					seg041_8c8();
+					clear_anisheets();
 				}
 
 			} else if (host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_SPELL) {
@@ -698,7 +698,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 				l15 = use_spell(hero, 0, 0);
 
-				seg041_8c8();
+				clear_anisheets();
 
 				if (g_autofight != 0) {
 					g_pic_copy.x1 = g_pic_copy.v1 = 0;
@@ -898,7 +898,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 					FIG_output(g_dtp2);
 
-					seg041_8c8();
+					clear_anisheets();
 
 				} else {
 					FIG_output(g_dtp2);
