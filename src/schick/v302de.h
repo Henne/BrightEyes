@@ -295,27 +295,6 @@ static inline Bit32s ds_readds(unsigned short offs) {
 	return (Bit32s)host_readd(p_datseg + offs);
 }
 
-static inline Bit8s ds_writebs(unsigned short offs, Bit8s val) {
-	host_writeb(p_datseg + offs, val);
-	return val;
-}
-static inline Bit8u ds_writeb(unsigned short offs, Bit8u val) {
-	host_writeb(p_datseg + offs, val);
-	return val;
-}
-static inline Bit16u ds_writew(unsigned short offs, Bit16u val) {
-	host_writew(p_datseg + offs, val);
-	return val;
-}
-static inline Bit16s ds_writews(unsigned short offs, Bit16s val) {
-	host_writew(p_datseg + offs, val);
-	return val;
-}
-static inline Bit32u ds_writed(unsigned short offs, Bit32u val) {
-	host_writed(p_datseg + offs, val);
-	return val;
-}
-
 /**
  * \brief mark informer only as known iff unknown
  * \param informer the index of the informer
@@ -857,13 +836,6 @@ static inline char* get_itemname(unsigned short item)
 #define ds_readbs(p)		(*(Bit8s*)(ds + p))
 #define ds_readws(p)		(*(Bit16s*)(ds + p))
 #define ds_readds(p)		(*(Bit32s*)(ds + (p)))
-
-#define ds_writebs(p, d)	(*(Bit8s*)(ds + p) = (d))
-#define ds_writews(p, d)	(*(Bit16s*)(ds + p) = (d))
-
-#define ds_writeb(p, d)		(*(Bit8u*)(ds + p) = (d))
-#define ds_writew(p, d)		(*(Bit16u*)(ds + p) = (d))
-#define ds_writed(p, d)		(*(Bit32u*)(ds + p) = (d))
 
 #define inc_ptr_bs(p)		((*(Bit8s*)(p))++)
 #define dec_ptr_bs(p)		((*(Bit8s*)(p))--)
