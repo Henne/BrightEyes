@@ -89,32 +89,31 @@ signed short FIG_get_range_weapon_type(Bit8u *hero)
  */
 void fill_enemy_sheet(signed short sheet_no, signed char enemy_id, signed char round)
 {
-
-	Bit8u *monster;
+	struct enemy_sheet *monster;
 	struct enemy_sheet *sheet;
 	signed short i;
 
 	/* calculate the pointers */
-	monster = g_monster_dat_buf + enemy_id * SIZEOF_MONSTER;
+	monster = &g_monster_dat_buf[enemy_id];
 	sheet = &g_enemy_sheets[sheet_no];
 
 	/* erease the sheet */
 	memset(sheet, 0, sizeof(struct enemy_sheet));
 
 	/* copy enemy id, gfx_id and RS to the sheet */
-	sheet->mon_id = host_readb(monster + MONSTER_MON_ID);
-	sheet->gfx_id = host_readb(monster + MONSTER_GFX_ID);
-	sheet->rs = host_readb(monster + MONSTER_RS);
+	sheet->mon_id = monster->mon_id;
+	sheet->gfx_id = monster->gfx_id;
+	sheet->rs = monster->rs;
 
 	/* roll attributes  and save them to the sheet */
 	for (i = 0; i < 7; i++) {
 
 		/* UGLY: a = b = dice_template() */
-		sheet->attrib[i * 2] = sheet->attrib[i * 2 + 1] = dice_template(host_readw(monster + i * 2 + MONSTER_ATTRIB));
+		sheet->attrib[i * 2] = sheet->attrib[i * 2 + 1] = dice_template(host_readw((Bit8u*)monster + i * 2 + MONSTER_ATTRIB));
 	}
 
 	/* roll out LE and save it to the sheet */
-	sheet->le_orig = dice_template(host_readw(monster + MONSTER_LE));
+	sheet->le_orig = dice_template(monster->le);
 
 	/* Feature mod 1: avoid the a posteriori weakening of the enemies (5/6 LE) of the original game. */
 #ifndef M302de_FEATURE_MOD
@@ -126,10 +125,10 @@ void fill_enemy_sheet(signed short sheet_no, signed char enemy_id, signed char r
 	sheet->le = sheet->le_orig;
 
 	/* roll out AE and save it to the sheet */
-	sheet->ae_orig = sheet->ae = dice_template(host_readw(monster + MONSTER_AE));
+	sheet->ae_orig = sheet->ae = dice_template(monster->ae);
 
 	/* roll out MR  and save it */
-	sheet->mr = (signed char)dice_template(host_readw(monster + MONSTER_MR));
+	sheet->mr = (signed char)dice_template(host_readw((Bit8u*)monster + MONSTER_MR));
 
 	/* Terrible hack:
 		if the current fight is FIGHTS_F084, set MR to 5 (Travel-Event 84),
@@ -144,38 +143,38 @@ void fill_enemy_sheet(signed short sheet_no, signed char enemy_id, signed char r
 		sheet->flags.tied = 1;
 	}
 
-	sheet->first_ap = host_readb(monster + MONSTER_FIRSTAP);
-	sheet->attacks = host_readb(monster + MONSTER_ATTACKS);
-	sheet->at = host_readb(monster + MONSTER_AT);
-	sheet->pa = host_readb(monster + MONSTER_PA);
-	sheet->dam1 = host_readw(monster + MONSTER_DAM1);
-	sheet->dam2 = host_readw(monster + MONSTER_DAM2);
+	sheet->first_ap = monster->first_ap;
+	sheet->attacks = monster->attacks;
+	sheet->at = monster->at;
+	sheet->pa = monster->pa;
+	sheet->dam1 = monster->dam1;
+	sheet->dam2 = monster->dam2;
 
-	sheet->bp_orig = host_readb(monster + MONSTER_BP);
+	sheet->bp_orig = monster->bp;
 
 	if (sheet->bp_orig > 10)
 		sheet->bp_orig = 10;
 
-	sheet->magic = host_readb(monster + MONSTER_MAGIC);
-	sheet->mag_id = host_readb(monster + MONSTER_MAG_ID);
+	sheet->magic = monster->magic;
+	sheet->mag_id = monster->mag_id;
 
 	/* unset 'dead' flag */
 	/* bogus this value is 0x00 or 0x20 */
 	sheet->flags.dead = 0;
 
 	sheet->fighter_id = -1;
-	sheet->level = host_readb(monster + MONSTER_LEVEL);
-	sheet->size = host_readb(monster + MONSTER_SIZE);
-	sheet->is_animal = host_readb(monster + MONSTER_IS_ANIMAL);
+	sheet->level = monster->level;
+	sheet->size = monster->size;
+	sheet->is_animal = monster->is_animal;
 	sheet->round_appear = round;
 
 	sheet->viewdir = g_current_fight->monsters[sheet_no].viewdir;
 
-	sheet->shots = host_readb(monster + MONSTER_SHOTS);
-	sheet->shot_dam = host_readw(monster + MONSTER_SHOT_DAM);
-	sheet->throws = host_readb(monster + MONSTER_THROWS);
-	sheet->throw_dam = host_readw(monster + MONSTER_THROW_DAM);
-	sheet->le_flee = host_readb(monster + MONSTER_LE_FLEE);
+	sheet->shots = monster->shots;
+	sheet->shot_dam = monster->shot_dam;
+	sheet->throws = monster->throws;
+	sheet->throw_dam = monster->throw_dam;
+	sheet->le_flee = monster->le_flee;
 
 	/* Another hack:
 		If the current fight == FIGHTS_F126_08 (fleeing cultist) and the enemy is "Kultist", set the 'scared' flag */
@@ -419,10 +418,12 @@ void FIG_init_heroes(void)
 	}
 
 	for (l_si = 0; l_si <= 6; l_si++) {
+
 		hero = get_hero(l_si);
 
 		if (host_readb(hero + HERO_TYPE) == HERO_TYPE_NONE)
 			continue;
+
 		/* check group */
 		if (host_readb(hero + HERO_GROUP_NO) != gs_current_group)
 			continue;
@@ -437,6 +438,7 @@ void FIG_init_heroes(void)
 
 				cb_x = g_current_fight->heroes[0].x;
 				cb_y = g_current_fight->heroes[0].y;
+
 				host_writeb(hero + HERO_VIEWDIR, g_current_fight->heroes[0].viewdir);
 
 			} else {

@@ -5935,7 +5935,7 @@ char **g_itemsname; // ds:0xe22f
 unsigned char* g_itemsdat; // ds:0xe22b
 signed char g_market_itemsaldo_table[254]; // ds:0xe12d
 char **g_monnames_index; // ds:0xe129
-unsigned char *g_monster_dat_buf; // ds:0xe125
+struct enemy_sheet *g_monster_dat_buf; // ds:0xe125
 struct struct_memslot_ani *g_memslots_anis; // ds:0xe121, to ()[36]
 struct struct_memslot_fig *g_memslots_mfig; // ds:0xe11d
 struct struct_memslot_fig *g_memslots_wfig; // ds:0xe119

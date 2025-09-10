@@ -935,7 +935,7 @@ signed short do_fight(signed short fight_id)
 
 	/* set some pointers */
 	g_scenario_buf = (signed char*)(((HugePt)g_buffer8_ptr) + 64100L);
-	g_monster_dat_buf = (Bit8u*)(((HugePt)g_scenario_buf) + 621L);
+	g_monster_dat_buf = (struct enemy_sheet*)(((HugePt)g_scenario_buf) + 621L);
 	g_current_fight = (struct fight*)(((HugePt)g_monster_dat_buf) + 3476L);
 
 	read_fight_lst(fight_id);
@@ -960,7 +960,7 @@ signed short do_fight(signed short fight_id)
 	g_in_fight = 1;
 
 	/* set some vars to 0 */
-	g_autofight = (g_fight_round = g_fig_all_heroes_withdrawn = 0);
+	g_autofight = g_fight_round = g_fig_all_heroes_withdrawn = 0;
 	/* set some vars to -1 */
 	g_fig_figure1 = g_fig_figure2 = -1;
 	g_fight_figs_index = -1;
@@ -973,7 +973,7 @@ signed short do_fight(signed short fight_id)
 
 	/* open MONSTER.DAT */
 	fd = load_archive_file(ARCHIVE_FILE_MONSTER_DAT);
-	read_archive_file(fd, g_monster_dat_buf, 3476);
+	read_archive_file(fd, (Bit8u*)g_monster_dat_buf, 3476);
 	close(fd);
 
 	/* clear all dropped weapons */

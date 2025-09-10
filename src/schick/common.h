@@ -396,7 +396,6 @@ struct enemy_sheet {
 };
 
 enum {
-	MONSTER_MON_ID		= 0x00,
 	MONSTER_GFX_ID		= 0x01,
 	MONSTER_RS		= 0x02,
 	MONSTER_ATTRIB		= 0x03, /* Only main 7 attributes */
