@@ -293,9 +293,7 @@ signed short load_game_state(void)
 			if (host_readd(g_saved_files_buf + 4 * i)) {
 
 				/* write file content to TEMP */
-				sprintf(g_text_output_buf,
-					g_str_temp_xx_ptr2,
-					(char*)(ds_readd(FNAMES + 4 * i)));
+				sprintf(g_text_output_buf, g_str_temp_xx_ptr2, g_fnames_v302de[i]);
 
 				/* TODO: should be O_BINARY | O_WRONLY */
 				handle = _creat(g_text_output_buf, 0);
@@ -592,9 +590,7 @@ signed short save_game_state(void)
 		/* save all changed files from SCHICK.DAT */
 		for (tw_bak = 0; tw_bak < 286; tw_bak++) {
 
-			sprintf(g_text_output_buf,
-				g_str_temp_xx_ptr2,
-				(char*)(ds_readd(FNAMES + 4 * tw_bak)));
+			sprintf(g_text_output_buf, g_str_temp_xx_ptr2, g_fnames_v302de[tw_bak]);
 
 			l1 = findfirst(g_text_output_buf, &blk, 0);
 
@@ -632,9 +628,7 @@ signed short save_game_state(void)
 		l1 = findfirst(g_text_output_buf, &blk, 0);
 		do {
 			/* create the CHR filename */
-			sprintf(g_text_output_buf,
-				g_str_temp_xx_ptr2,
-				((char*)(&blk)) + 30);
+			sprintf(g_text_output_buf, g_str_temp_xx_ptr2, ((char*)(&blk)) + 30);
 
 			/* read the CHR file from temp */
 			handle = open(g_text_output_buf, O_BINARY | O_RDWR);
@@ -657,7 +651,7 @@ signed short save_game_state(void)
 		close(l_di);
 
 		/* rewrite GAMES.NAM */
-		l_di = _creat((char*)ds_readd(FNAMES + 0x33c), 0);
+		l_di = _creat(g_fnames_v302de[207], 0);
 		write(l_di, &g_savegame_names[0][0], 45);
 		close(l_di);
 

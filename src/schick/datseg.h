@@ -1321,7 +1321,7 @@ extern char *g_str_temp_xx_ptr2;		//ds:0x4c88; seg002, seg026, seg120
 
 extern signed short g_loaded_head_id;		//ds:0x515c; seg026, seg029
 extern char g_str_temp_xx2[8];			//ds:0x515e;
-
+extern const char* g_fnames_v302de[];		//ds:0x4c8c; seg002, seg026
 extern char g_chr_file_suffix[5];		//ds:0x5e3e; seg026
 extern char g_savegame_suffix[5];		//ds:0x5e43; seg026
 extern char g_all_files_wildcard[4];		//ds:0x5e48; seg026

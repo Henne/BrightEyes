@@ -856,9 +856,9 @@ signed short load_regular_file(Bit16u index)
 {
 	signed short handle;
 
-	if ( (handle = open((char*)ds_readd(FNAMES + index * 4), O_BINARY | O_RDWR)) == -1) {
+	if ( (handle = open(g_fnames_v302de[index], O_BINARY | O_RDWR)) == -1) {
 
-		sprintf(g_dtp2, g_str_file_missing_ptr, (char*)ds_readd(FNAMES + index * 4));
+		sprintf(g_dtp2, g_str_file_missing_ptr, g_fnames_v302de[index]);
 
 		g_missing_file_guilock = 1;
 		GUI_output(g_dtp2);
@@ -888,7 +888,7 @@ signed short open_temp_file(unsigned short index)
 	char tmppath[40];
 	signed short handle;
 
-	sprintf((char*)tmppath, g_str_temp_xx_ptr2, (char*)ds_readd(FNAMES + index * 4));
+	sprintf((char*)tmppath, g_str_temp_xx_ptr2, g_fnames_v302de[index]);
 
 	while ( (handle = open(tmppath, O_BINARY | O_RDWR)) == -1) {
 

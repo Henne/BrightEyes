@@ -898,10 +898,10 @@
 #define LOCATION_HANDLERS               (0x4c3b)    /* Bit8u*[19]; (void (*)(void))[19] */
 // ?1
 //#define STR_TEMP_XX_PTR2                (0x4c88)    /* Bit8u*; to STR_TEMP_XX2 */
-#define FNAMES                          (0x4c8c)    /* long[308] */
+//#define FNAMES                          (0x4c8c)    /* long[308] */
 //#define LOADED_HEAD_ID                  (0x515c)    /* unsigned short */
 //#define STR_TEMP_XX2                    (0x515e)    /* char[8]; "TEMP\%s" */
-#define SCHICK_DAT_FNAMES               (0x5166)    /* char[3288]; names of files in SCHICK.DAT */
+//#define SCHICK_DAT_FNAMES               (0x5166)    /* char[3288]; names of files in SCHICK.DAT */
 //#define CHR_FILE_SUFFIX                 (0x5e3e)    /* char[5]; ".CHR" */
 //#define SAVEGAME_SUFFIX                 (0x5e43)    /* char[5]; ".gam" */
 //#define ALL_FILES_WILDCARD              (0x5e48)    /* char[4]; "*.*" */

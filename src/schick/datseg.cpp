@@ -2524,7 +2524,7 @@ unsigned char g_unkn_037[1] = { 0x00 }; // ds:0x4c87
 extern char g_str_temp_xx2[8];
 char *g_str_temp_xx_ptr2 = (char*)&g_str_temp_xx2[0]; // ds:0x4c88, to STR_TEMP_XX2; char*
 
-static char* g_fnames_v302de[] = {
+const char* g_fnames_v302de[] = {
 	g_fn_v302de_000, g_fn_v302de_001, g_fn_v302de_002, g_fn_v302de_003,
 	g_fn_v302de_004, g_fn_v302de_005, g_fn_v302de_006, g_fn_v302de_007,
 	g_fn_v302de_008, g_fn_v302de_009, g_fn_v302de_010, g_fn_v302de_011,
