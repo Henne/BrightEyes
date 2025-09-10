@@ -218,7 +218,11 @@ void save_rect(Bit8u* src, Bit8u *dst, unsigned short width, unsigned short heig
 #else
 		memcpy((void*)dst, (void*)src, width);
 #endif
+#if defined(__BORLANDC__)
 		off += 320;
+#else
+		src += 320;
+#endif
 		dst += width;
 	}
 }
@@ -240,7 +244,11 @@ void fill_rect(Bit8s *dst, signed short color, signed short width, signed short 
 #endif
 		}
 
+#if defined(__BORLANDC__)
 		off += 320 - width;
+#else
+		dst += 320 - width;
+#endif
 	}
 }
 
