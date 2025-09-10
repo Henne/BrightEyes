@@ -472,10 +472,10 @@ extern void (*g_mon_spellhandlers[15])(void);				// ds:0x0fc2; seg102
 extern const struct skill_descr g_skill_descriptions[52];		// ds:0x0ffe; seg050, seg103, seg104
 extern const struct skills_index g_skills_index[7];			//ds:0x10ce; seg046, seg103
 extern signed char g_nvftab_figures_rangeweapon[22][3][4];		//ds:0x10dc; seg002, seg033, seg039
-
-extern signed short g_nvftab_figures_unconscious[22];		//ds:0x11e4; seg002, seg005, seg039
+extern signed short g_nvftab_figures_unconscious[22];			//ds:0x11e4; seg002, seg005, seg039
 extern const struct point8s g_gfxtab_offsets_unconscious[22][4];	//ds:0x1210; seg002, seg005, seg039
-
+extern const Bit8s g_gfxtab_figures_main[125][5];			//ds:0x12c0; seg005, seg006, seg039, seg043
+extern const struct point8s g_gfxtab_offsets_main[125][5];		//ds:0x1531; seg005, seg039, seg043
 extern signed short g_nvftab_figures_dead[22];		//ds:0x1a13; seg005, seg039
 extern Bit16s *g_gfx_ani_index[41];			//ds:0x2555; seg036, seg037, seg044
 extern signed char g_two_fielded_sprite_id[5];		//ds:0x25f9; seg032, seg034, seg037, seg038, seg039, seg042, seg043, seg044

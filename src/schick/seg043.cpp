@@ -722,12 +722,13 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 							FIG_remove_from_list(target_enemy->fighter_id, 1);
 
-							g_fig_list_elem.figure = ds_readbs(GFXTAB_FIGURES_MAIN + 5 * target_enemy->gfx_id);
+							g_fig_list_elem.figure = g_gfxtab_figures_main[target_enemy->gfx_id][0];
 							g_fig_list_elem.nvf_no = target_enemy->viewdir;
-							g_fig_list_elem.offsetx = ds_readbs(GFXTAB_OFFSETS_MAIN + 10 * target_enemy->gfx_id + 2 * target_enemy->viewdir);
-							g_fig_list_elem.offsety = ds_readbs((GFXTAB_OFFSETS_MAIN + 1) + 10 * target_enemy->gfx_id + 2 * target_enemy->viewdir);
+							g_fig_list_elem.offsetx = g_gfxtab_offsets_main[target_enemy->gfx_id][target_enemy->viewdir].x;
+							g_fig_list_elem.offsety = g_gfxtab_offsets_main[target_enemy->gfx_id][target_enemy->viewdir].y;
 
 							if (is_in_byte_array(target_enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id)) {
+
 								g_fig_list_elem.x1 = g_gfxtab_twofielded_x1[target_enemy->viewdir];
 								g_fig_list_elem.x2 = g_gfxtab_twofielded_x2[target_enemy->viewdir];
 							} else {

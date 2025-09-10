@@ -275,14 +275,13 @@ void FIG_load_enemy_sprites(struct enemy_sheet *enemy, signed short x, signed sh
 	struct nvf_desc nvf;
 	signed short l1;
 
-	g_fig_list_elem.figure = ds_readbs(GFXTAB_FIGURES_MAIN + enemy->gfx_id * 5);
+	g_fig_list_elem.figure = g_gfxtab_figures_main[enemy->gfx_id][0];
 	g_fig_list_elem.nvf_no = enemy->viewdir;
 	g_fig_list_elem.cbx = (signed char)x;
 	g_fig_list_elem.cby = (signed char)y;
 
-	g_fig_list_elem.offsetx = ds_readb(GFXTAB_OFFSETS_MAIN + enemy->gfx_id * 10 + enemy->viewdir * 2);
-
-	g_fig_list_elem.offsety = ds_readb((GFXTAB_OFFSETS_MAIN + 1) + enemy->gfx_id * 10 + enemy->viewdir * 2);
+	g_fig_list_elem.offsetx = g_gfxtab_offsets_main[enemy->gfx_id][enemy->viewdir].x;
+	g_fig_list_elem.offsety = g_gfxtab_offsets_main[enemy->gfx_id][enemy->viewdir].y;
 
 	if (is_in_byte_array(enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id)) {
 
@@ -474,19 +473,19 @@ void FIG_init_heroes(void)
 			g_fig_list_elem.nvf_no = host_readb(hero + HERO_VIEWDIR);
 		}
 
-		g_fig_list_elem.figure = ds_readbs(GFXTAB_FIGURES_MAIN + host_readbs(hero + HERO_SPRITE_NO) * 5);
+		g_fig_list_elem.figure = g_gfxtab_figures_main[host_readbs(hero + HERO_SPRITE_NO)][0];
 		g_fig_list_elem.cbx = (signed char)cb_x;
 		g_fig_list_elem.cby = (signed char)cb_y;
 		g_fig_list_elem.offsetx = 0;
 		g_fig_list_elem.offsety = 0;
 
 		if (hero_dead(hero)) {
+
 			/* hero is dead */
 			g_fig_list_elem.nvf_no = g_nvftab_figures_dead[host_readbs(hero + HERO_SPRITE_NO)];
-			g_fig_list_elem.offsetx = (
-				ds_readb((GFXTAB_OFFSETS_MAIN + 8) + host_readbs(hero + HERO_SPRITE_NO) * 10));
-			g_fig_list_elem.offsety = (
-				ds_readb((GFXTAB_OFFSETS_MAIN + 9) + host_readbs(hero + HERO_SPRITE_NO) * 10));
+			g_fig_list_elem.offsetx = g_gfxtab_offsets_main[host_readbs(hero + HERO_SPRITE_NO)][4].x;
+			g_fig_list_elem.offsety = g_gfxtab_offsets_main[host_readbs(hero + HERO_SPRITE_NO)][4].y;
+
 		} else if (hero_asleep(hero) || hero_unconscious(hero)) {
 
 			/* hero is asleep or unconscious */

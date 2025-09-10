@@ -515,7 +515,7 @@ void draw_fight_screen(Bit16u val)
 							list_ii->nvf_no += host_readbs(sheet + 3 + 3 * g_fig_ani_state[list_ii->sheet]);
 						} else {
 
-							list_ii->figure = (ds_readbs(GFXTAB_FIGURES_MAIN + list_ii->sprite_no * 5 + host_readbs(sheet + 2 + 3 * g_fig_ani_state[list_ii->sheet])));
+							list_ii->figure = g_gfxtab_figures_main[list_ii->sprite_no][host_readbs(sheet + 2 + 3 * g_fig_ani_state[list_ii->sheet])];
 							list_ii->nvf_no = host_readbs(sheet + 3 + 3 * g_fig_ani_state[list_ii->sheet]);
 						}
 
@@ -525,8 +525,8 @@ void draw_fight_screen(Bit16u val)
 							if (list_ii->nvf_no > 3) {
 
 								/* not standing still */
-								list_ii->offsetx = (ds_readbs((GFXTAB_OFFSETS_MAIN + 8) + list_ii->sprite_no * 10));
-								list_ii->offsety = (ds_readbs((GFXTAB_OFFSETS_MAIN + 9) + list_ii->sprite_no * 10));
+								list_ii->offsetx = g_gfxtab_offsets_main[list_ii->sprite_no][4].x;
+								list_ii->offsety = g_gfxtab_offsets_main[list_ii->sprite_no][4].y;
 
 								if (list_ii->twofielded != -1) {
 									list_ii->x1 = g_gfxtab_twofielded_x1[1];
@@ -534,8 +534,8 @@ void draw_fight_screen(Bit16u val)
 								}
 
 							} else {
-								list_ii->offsetx = ds_readbs(GFXTAB_OFFSETS_MAIN + list_ii->sprite_no * 10 + list_ii->nvf_no * 2);
-								list_ii->offsety = ds_readbs((GFXTAB_OFFSETS_MAIN + 1) + list_ii->sprite_no * 10 + list_ii->nvf_no * 2);
+								list_ii->offsetx = g_gfxtab_offsets_main[list_ii->sprite_no][list_ii->nvf_no].x;
+								list_ii->offsety = g_gfxtab_offsets_main[list_ii->sprite_no][list_ii->nvf_no].y;
 
 								if (list_ii->twofielded != -1) {
 									list_ii->x1 = g_gfxtab_twofielded_x1[list_ii->nvf_no];
@@ -546,8 +546,8 @@ void draw_fight_screen(Bit16u val)
 						} else {
 							if (list_ii->nvf_no == g_nvftab_figures_dead[list_ii->sprite_no]) {
 
-								list_ii->offsetx = ds_readbs((GFXTAB_OFFSETS_MAIN + 8) + list_ii->sprite_no * 10);
-								list_ii->offsety = ds_readbs((GFXTAB_OFFSETS_MAIN + 9) + list_ii->sprite_no * 10);
+								list_ii->offsetx = g_gfxtab_offsets_main[list_ii->sprite_no][4].x;
+								list_ii->offsety = g_gfxtab_offsets_main[list_ii->sprite_no][4].y;
 
 							} else {
 								viewdir_unconsc = list_ii->nvf_no - g_nvftab_figures_unconscious[list_ii->sprite_no];
@@ -783,7 +783,7 @@ void draw_fight_screen(Bit16u val)
 
 							obj_y -= host_readbs(sheet + 3 + g_fig_ani_state[list_ii->sheet] * 3);
 
-							i = ds_readbs(GFXTAB_FIGURES_MAIN + (list_ii->sprite_no * 5) + host_readbs(sheet));
+							i = g_gfxtab_figures_main[list_ii->sprite_no][host_readbs(sheet)];
 
 							if ((list_ii->sheet < 6) && (host_readbs(sheet + 0xf2) >= 0)) {
 								nvf.src = (Bit8u*)load_fight_figs(i);
