@@ -1067,7 +1067,11 @@ void do_save_rect(void)
 	width = x2 - x1 + 1;
 	height = y2 - y1 + 1;
 
-	save_rect(RealSeg(dst), RealOff(dst), src, width, height);
+#if defined(__BORLANDC__)
+	save_rect(FP_SEG(dst), FP_OFF(dst), src, width, height);
+#else
+	save_rect(dst, src, width, height);
+#endif
 }
 
 void do_fill_rect(Bit8u* dst, signed short x, signed short y, signed short w, signed short h, signed short color)
@@ -1080,7 +1084,11 @@ void do_fill_rect(Bit8u* dst, signed short x, signed short y, signed short w, si
 	dst += y * 320 + x;
 
 	update_mouse_cursor();
-	fill_rect(RealSeg(dst), RealOff(dst), color, width, height);
+#if defined(__BORLANDC__)
+	fill_rect(FP_SEG(dst), FP_OFF(dst), color, width, height);
+#else
+	fill_rect(dst, color, width, height);
+#endif
 	refresh_screen_size();
 }
 

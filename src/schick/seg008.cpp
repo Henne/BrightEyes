@@ -206,18 +206,28 @@ void pic_copy(Bit8u *dst, short x1, short y1, short x2, short y2,
 	}
 }
 
+#if defined(__BORLANDC__)
 void save_rect(Bit16u seg, Bit16u off, Bit8u *dst, unsigned short width, unsigned short height)
+#else
+void save_rect(Bit8u* src, Bit8u *dst, unsigned short width, unsigned short height)
+#endif
 {
 	for (; height; height--) {
 #if defined(__BORLANDC__)
 		memcpy((void*)dst, MK_FP(seg, off), width);
+#else
+		memcpy((void*)dst, (void*)src, width);
 #endif
 		off += 320;
 		dst += width;
 	}
 }
 
+#if defined(__BORLANDC__)
 void fill_rect(Bit16u seg, Bit16u off, signed short color, signed short width, signed short height)
+#else
+void fill_rect(Bit8s *dst, signed short color, signed short width, signed short height)
+#endif
 {
 	unsigned short x;
 
@@ -225,6 +235,8 @@ void fill_rect(Bit16u seg, Bit16u off, signed short color, signed short width, s
 		for (x = 0; x < width; x++) {
 #if defined(__BORLANDC__)
 			*MK_FP(seg, off++) = color;
+#else
+			*dst++ = color;
 #endif
 		}
 

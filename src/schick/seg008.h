@@ -19,8 +19,13 @@ void pic_copy(Bit8u *dst, short x1, short y1, short x2, short y2,
         unsigned short width, unsigned short height,
         Bit8u *src, unsigned short mode);
 
+#if defined(__BORLANDC__)
 void save_rect(Bit16u, Bit16u, Bit8u*, unsigned short, unsigned short);
 void fill_rect(Bit16u, Bit16u, signed short, signed short, signed short);
+#else
+void save_rect(Bit8u*, Bit8u*, unsigned short, unsigned short);
+void fill_rect(Bit8u*, signed short, signed short, signed short);
+#endif
 void copy_solid_permuted(Bit8u *dst, Bit8u *src, unsigned short width_to_copy,
 	unsigned short height, unsigned short dst_width,
 	unsigned short src_width, unsigned short solid);
