@@ -553,8 +553,9 @@ void draw_fight_screen(Bit16u val)
 								viewdir_unconsc = list_ii->nvf_no - g_nvftab_figures_unconscious[list_ii->sprite_no];
 
 								if (viewdir_unconsc >= 0) {
-									list_ii->offsetx = ds_readbs(GFXTAB_OFFSETS_UNCONSCIOUS + list_ii->sprite_no * 8 + viewdir_unconsc * 2);
-									list_ii->offsety = ds_readbs((GFXTAB_OFFSETS_UNCONSCIOUS + 1) + list_ii->sprite_no * 8 + viewdir_unconsc * 2);
+
+									list_ii->offsetx = g_gfxtab_offsets_unconscious[list_ii->sprite_no][viewdir_unconsc].x;
+									list_ii->offsety = g_gfxtab_offsets_unconscious[list_ii->sprite_no][viewdir_unconsc].y;
 								}
 							}
 						}

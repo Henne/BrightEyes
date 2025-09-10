@@ -4497,17 +4497,19 @@ void sub_hero_le(Bit8u *hero, signed short le)
 
 					fighter->reload = -1;
 
-					fighter->offsetx = ds_readb(GFXTAB_OFFSETS_UNCONSCIOUS + host_readbs(hero + HERO_SPRITE_NO) * 8 + host_readbs(hero + HERO_VIEWDIR) * 2);
-
-					fighter->offsety = ds_readb((GFXTAB_OFFSETS_UNCONSCIOUS + 1) + host_readbs(hero + HERO_SPRITE_NO) * 8 + host_readbs(hero + HERO_VIEWDIR) * 2);
+					fighter->offsetx = g_gfxtab_offsets_unconscious[host_readbs(hero + HERO_SPRITE_NO)][host_readbs(hero + HERO_VIEWDIR)].x;
+					fighter->offsety = g_gfxtab_offsets_unconscious[host_readbs(hero + HERO_SPRITE_NO)][host_readbs(hero + HERO_VIEWDIR)].y;
 
 
 					FIG_add_msg(7, 0);
 
 					/* FINAL FIGHT */
 					if (g_current_fight_no == FIGHTS_F144) {
+
 						if (hero == (Bit8u*)gs_main_acting_hero) {
-							g_game_state = (GAME_STATE_DEAD);
+
+							g_game_state = GAME_STATE_DEAD;
+
 							g_in_fight = 0;
 						}
 					}

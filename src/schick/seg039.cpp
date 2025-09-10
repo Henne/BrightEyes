@@ -491,11 +491,8 @@ void FIG_init_heroes(void)
 
 			/* hero is asleep or unconscious */
 			g_fig_list_elem.nvf_no = g_nvftab_figures_unconscious[host_readbs(hero + HERO_SPRITE_NO)] + host_readbs(hero + HERO_VIEWDIR);
-
-			g_fig_list_elem.offsetx = (
-				ds_readbs(GFXTAB_OFFSETS_UNCONSCIOUS + host_readbs(hero + HERO_SPRITE_NO) * 8 + host_readbs(hero + HERO_VIEWDIR) * 2));
-			g_fig_list_elem.offsety = (
-				ds_readbs(GFXTAB_OFFSETS_UNCONSCIOUS + 1 + host_readbs(hero + HERO_SPRITE_NO) * 8 + host_readbs(hero + HERO_VIEWDIR) * 2));
+			g_fig_list_elem.offsetx = g_gfxtab_offsets_unconscious[host_readbs(hero + HERO_SPRITE_NO)][host_readbs(hero + HERO_VIEWDIR)].x;
+			g_fig_list_elem.offsety = g_gfxtab_offsets_unconscious[host_readbs(hero + HERO_SPRITE_NO)][host_readbs(hero + HERO_VIEWDIR)].y;
 		}
 
 

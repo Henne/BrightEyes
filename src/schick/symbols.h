@@ -75,7 +75,7 @@
 //#define SKILLS_INDEX                    (0x10ce)    /* struct(2)[7]; struct{signed char first, length;}; { {0,9}, {9,10}, {19,7}, {26,6}, {32,9}, {41,9}, {50,2} } */
 //#define NVFTAB_FIGURES_RANGEWEAPON      (0x10dc)    /* char[264]; by rwt/viewdir */
 //#define NVFTAB_FIGURES_UNCONSCIOUS      (0x11e4)    /* short[22] */
-#define GFXTAB_OFFSETS_UNCONSCIOUS      (0x1210)    /* struct(2)[88]; struct{char x,y;}; by viewdir */
+//#define GFXTAB_OFFSETS_UNCONSCIOUS      (0x1210)    /* struct(2)[88]; struct{char x,y;}; by viewdir */
 #define GFXTAB_FIGURES_MAIN             (0x12c0)    /* struct(5)[125]; struct{char figure_no, unkn2, unkn3, unkn4, unkn5;} */
 #define GFXTAB_OFFSETS_MAIN             (0x1531)    /* struct(2)[625]; struct{char x,y;}; by viewdir+dead */
 //#define NVFTAB_FIGURES_DEAD             (0x1a13)    /* short[22] */

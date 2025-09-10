@@ -473,7 +473,8 @@ extern const struct skill_descr g_skill_descriptions[52];		// ds:0x0ffe; seg050,
 extern const struct skills_index g_skills_index[7];			//ds:0x10ce; seg046, seg103
 extern signed char g_nvftab_figures_rangeweapon[22][3][4];		//ds:0x10dc; seg002, seg033, seg039
 
-extern signed short g_nvftab_figures_unconscious[22];	//ds:0x11e4; seg002, seg005, seg039
+extern signed short g_nvftab_figures_unconscious[22];		//ds:0x11e4; seg002, seg005, seg039
+extern const struct point8s g_gfxtab_offsets_unconscious[22][4];	//ds:0x1210; seg002, seg005, seg039
 
 extern signed short g_nvftab_figures_dead[22];		//ds:0x1a13; seg005, seg039
 extern Bit16s *g_gfx_ani_index[41];			//ds:0x2555; seg036, seg037, seg044
