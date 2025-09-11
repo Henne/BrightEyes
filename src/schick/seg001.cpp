@@ -34,7 +34,7 @@
 #include "seg013.h"
 #endif
 
-static unsigned char cd_dummy0 = 2;
+char cd_dummy0 = 2;
 unsigned short g_cd_init_successful = 0;
 static unsigned char cd_dummy1[4] = {0};
 static unsigned short g_cd_audio_repeat = 0;
