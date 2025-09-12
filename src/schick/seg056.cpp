@@ -62,10 +62,6 @@ struct dummy5 {
 	signed short a[5];
 };
 
-struct dummy_c5 {
-	char a[5];
-};
-
 struct dummy_c6 {
 	char a[6];
 };
@@ -91,16 +87,13 @@ void buy_screen(void)
 	signed short item = 0;
 	signed short l8;
 	signed short item_id;
+	struct c_str_5 fmt_h = g_buy_screen_str_money_h;
+	struct c_str_5 fmt_s = g_buy_screen_str_money_s;
+	struct c_str_5 fmt_d = g_buy_screen_str_money_d;
 #if !defined(__BORLANDC__)
-	struct dummy_c5 fmt_h = { { "H %d" } };
-	struct dummy_c5 fmt_s = { { "S %d" } };
-	struct dummy_c5 fmt_d = { { "D %d" } };
 	struct dummy3 array3 = { { 30, 95, 160 } };
 	struct dummy5 array5 = { { 35, 55, 75, 95, 115 } };
 #else
-	struct dummy_c5 fmt_h = *(struct dummy_c5*)(p_datseg + BUY_SCREEN_STR_MONEY_H);
-	struct dummy_c5 fmt_s = *(struct dummy_c5*)(p_datseg + BUY_SCREEN_STR_MONEY_S);
-	struct dummy_c5 fmt_d = *(struct dummy_c5*)(p_datseg + BUY_SCREEN_STR_MONEY_D);
 	struct dummy3 array3 = *(struct dummy3*)(p_datseg + BUY_SCREEN_ITEMS_POSX);
 	struct dummy5 array5 = *(struct dummy5*)(p_datseg + BUY_SCREEN_ITEMS_POSY);
 #endif
@@ -128,7 +121,7 @@ void buy_screen(void)
 	struct nvf_desc nvf;
 
 	/* TODO: The shopping cart has space for 62.5 items ? Grollo in thorwal sells 69 items. */
-	g_buy_shopping_cart = (struct struct_shopping_cart*)(g_fig_figure1_buf + 2800);
+	g_buy_shopping_cart = (struct struct_shopping_cart*)g_fig_figure1_buf + 2800;
 	memset((Bit8u*)g_buy_shopping_cart, 0, 250);
 
 	g_request_refresh = 1;
@@ -225,7 +218,7 @@ void buy_screen(void)
 						do_pic_copy(0);
 
 						sprintf(g_dtp2,
-							host_readws((Bit8u*)g_buyitems + 4 + 7 * l3) == 1 ? fmt_h.a :
+								host_readws((Bit8u*)g_buyitems + 4 + 7 * l3) == 1 ? fmt_h.a :
 								(host_readws((Bit8u*)g_buyitems + 4 + 7 * l3) == 10 ? fmt_s.a : fmt_d.a),
 							host_readws((Bit8u*)g_buyitems + 2 + 7 * l3));
 

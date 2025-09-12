@@ -7,6 +7,12 @@
 extern char ds[1];
 #endif
 
+/* dummy structs */
+struct c_str_5 {
+	char a[5];
+};
+
+
 struct sample_idx {
 	Bit8s patch;
 	Bit8s bank;
@@ -1426,12 +1432,22 @@ extern char g_gather_herbs_str_dot[2];		//ds:0x66e0; seg051
 extern const signed short g_dcampfights[4];	//ds:0x66e2; seg052
 extern const healer_descr g_healer_descr_table[41];	//ds:0x66ea; seg053
 extern const struct inn_descr g_inn_descr_table[77];	//ds:0x673c; seg054
-extern struct shop_descr g_shop_descr_table[95];//ds:0x6870; seg055, seg065
-extern char g_buy_screen_str_money_h[5];	//ds:0x6bc8; seg056
+extern struct shop_descr g_shop_descr_table[95];	//ds:0x6870; seg055, seg065
+extern struct c_str_5 g_buy_screen_str_money_h;		// ds:0x6bc8; seg056
+extern struct c_str_5 g_buy_screen_str_money_s;		// ds:0x6bcd; seg056
+extern struct c_str_5 g_buy_screen_str_money_d;		// ds:0x6bd2; seg056
 
 extern char g_buy_screen_str_comma_space[3];	//ds:0x6bed; seg056
 
+extern struct c_str_5 g_sell_screen_str_money_h;	// ds:0x6bf0; seg057
+extern struct c_str_5 g_sell_screen_str_money_s;	// ds:0x6bf5; seg057
+extern struct c_str_5 g_sell_screen_str_money_d;	// ds:0x6bfa; seg057
+
 extern struct smith_descr g_smith_descr_table[42];	//ds:0x6c10; seg058
+
+extern struct c_str_5 g_smith_str_money_h;	// ds:0x6c64; seg058
+extern struct c_str_5 g_smith_str_money_s;	// ds:0x6c69; seg058
+extern struct c_str_5 g_smith_str_money_d;	// ds:0x6c6e; seg058
 
 extern struct inn_descr g_tavern_descr_table[89];	//ds:0x6c84; seg054, seg059, seg060
 
@@ -1568,6 +1584,8 @@ extern struct struct_char_height g_gui_char_height[67];	//ds:0xab42; seg097
 
 extern signed short g_gui_bool_flag;		// ds:0xac0b; seg097
 extern signed short g_spell_special_aecost;	// ds:0xac0e; seg098, seg099, seg100, seg101
+
+extern struct c_str_5 g_spell_select_str_key;	// ds:0xac20; seg098
 
 extern const struct analues_item g_analues_items[28];	//ds:0xac3c; seg099
 extern unsigned char *g_hexenknoten_gfx_buf;	// ds:0xacc8; seg100

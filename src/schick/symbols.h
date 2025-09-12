@@ -1025,23 +1025,23 @@
 //#define INN_DESCR_TABLE                 (0x673c)    /* struct(4)[77]; struct{signed short quality,unkn;} */
 //#define SHOP_DESCR_TABLE                (0x6870)    /* struct(9)[95]; struct{char price_mod,type,size; short extra_items[3];} */
 // ?1
-#define BUY_SCREEN_STR_MONEY_H          (0x6bc8)    /* char[5]; "H %d" */
-#define BUY_SCREEN_STR_MONEY_S          (0x6bcd)    /* char[5]; "S %d" */
-#define BUY_SCREEN_STR_MONEY_D          (0x6bd2)    /* char[5]; "D %d" */
+//#define BUY_SCREEN_STR_MONEY_H          (0x6bc8)    /* char[5]; "H %d" */
+//#define BUY_SCREEN_STR_MONEY_S          (0x6bcd)    /* char[5]; "S %d" */
+//#define BUY_SCREEN_STR_MONEY_D          (0x6bd2)    /* char[5]; "D %d" */
 #define BUY_SCREEN_ITEMS_POSX           (0x6bd7)    /* signed short[3]; { 30, 95, 160 } */
 #define BUY_SCREEN_ITEMS_POSY           (0x6bdd)    /* signed short[5]; { 35, 55, 75, 95, 115 } */
 #define BUY_SCREEN_STR_D_S              (0x6be7)    /* char[6]; "%d %s" */
 //#define BUY_SCREEN_STR_COMMA_SPACE      (0x6bed)    /* char[3]; ", " */
-#define SELL_SCREEN_STR_MONEY_H         (0x6bf0)    /* char[5]; "H %d" */
-#define SELL_SCREEN_STR_MONEY_S         (0x6bf5)    /* char[5]; "S %d" */
-#define SELL_SCREEN_STR_MONEY_D         (0x6bfa)    /* char[5]; "D %d" */
+//#define SELL_SCREEN_STR_MONEY_H         (0x6bf0)    /* char[5]; "H %d" */
+//#define SELL_SCREEN_STR_MONEY_S         (0x6bf5)    /* char[5]; "S %d" */
+//#define SELL_SCREEN_STR_MONEY_D         (0x6bfa)    /* char[5]; "D %d" */
 #define SELL_SCREEN_ITEMS_POSX          (0x6bff)    /* signed short[3]; { 30, 95, 160 } */
 #define SELL_SCREEN_ITEMS_POSY          (0x6c05)    /* signed short[5]; { 35, 55, 75, 95, 115 } */
 // ?1
 //#define SMITH_DESCR_TABLE               (0x6c10)    /* signed short[42] */
-#define SMITH_STR_MONEY_H               (0x6c64)    /* char[5]; "H %d" */
-#define SMITH_STR_MONEY_S               (0x6c69)    /* char[5]; "S %d" */
-#define SMITH_STR_MONEY_D               (0x6c6e)    /* char[5]; "D %d" */
+//#define SMITH_STR_MONEY_H               (0x6c64)    /* char[5]; "H %d" */
+//#define SMITH_STR_MONEY_S               (0x6c69)    /* char[5]; "S %d" */
+//#define SMITH_STR_MONEY_D               (0x6c6e)    /* char[5]; "D %d" */
 #define SMITH_ITEMS_POSX                (0x6c73)    /* signed short[3]; { 30, 95, 160 } */
 #define SMITH_ITEMS_POSY                (0x6c79)    /* signed short[5]; { 35, 55, 75, 95, 115 } */
 // ?1
@@ -1236,7 +1236,7 @@
 //#define SPELL_SPECIAL_AECOST            (0xac0e)    /* signed short */
 #define ANI_HEAL_PICSTARS               (0xac10)    /* signed short[5]; { 0, 1, 2, 1, 0 } */
 #define SPELL_SELECT_STR_KEYVAL         (0xac1a)    /* char[6]; "%s~%d" */
-#define SPELL_SELECT_STR_KEY            (0xac20)    /* char[5]; "\xf2%s\xf0" */
+//#define SPELL_SELECT_STR_KEY            (0xac20)    /* char[5]; "\xf2%s\xf0" */
 #define SPELL_SELECT_STR_KEY_COLOR      (0xac25)    /* char[3]; "%s" */
 #define SPELL_SELECT_STR_KEYVAL_COLOR   (0xac28)    /* char[8]; "\xf2%s~%d\xf0" */
 #define SPELL_SELECT_ONES               (0xac30)    /* signed char[12]; { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } */

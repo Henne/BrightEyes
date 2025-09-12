@@ -425,7 +425,6 @@ signed short can_use_spellclass(Bit8u *hero, signed short spellclass_no)
 }
 
 struct dummy3	{ char a[3]; };
-struct dummy5	{ char a[5]; };
 struct dummy6	{ char a[6]; };
 struct dummy8	{ char a[8]; };
 struct dummy12	{ char a[12]; };
@@ -437,7 +436,7 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 	signed short first_spell;
 	signed short retval = -1;
 	struct dummy6 str_val = *(struct dummy6*)(p_datseg + SPELL_SELECT_STR_KEYVAL);
-	struct dummy5 col_str = *(struct dummy5*)(p_datseg + SPELL_SELECT_STR_KEY);
+	struct c_str_5 col_str = g_spell_select_str_key;
 	struct dummy3 str = *(struct dummy3*)(p_datseg + SPELL_SELECT_STR_KEY_COLOR);
 	struct dummy8 col_str_val = *(struct dummy8*)(p_datseg + SPELL_SELECT_STR_KEYVAL_COLOR);
 	struct dummy12 ones = *(struct dummy12*)(p_datseg + SPELL_SELECT_ONES);

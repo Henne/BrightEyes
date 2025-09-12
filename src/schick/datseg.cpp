@@ -3597,16 +3597,16 @@ struct shop_descr g_shop_descr_table[95] = {
 	{ -1, 0, 0, 0, 0, 0 }
 }; // ds:0x6870
 unsigned char g_unkn_046[1] = { 0x00 }; // ds:0x6bc7
-char g_buy_screen_str_money_h[5] = "H %d"; // ds:0x6bc8
-char g_buy_screen_str_money_s[5] = "S %d"; // ds:0x6bcd
-char g_buy_screen_str_money_d[5] = "D %d"; // ds:0x6bd2
+struct c_str_5 g_buy_screen_str_money_h = { "H %d" }; // ds:0x6bc8
+struct c_str_5 g_buy_screen_str_money_s = { "S %d" }; // ds:0x6bcd
+struct c_str_5 g_buy_screen_str_money_d = { "D %d" }; // ds:0x6bd2
 signed short g_buy_screen_items_posx[3] = { 0x001e, 0x005f, 0x00a0 }; // ds:0x6bd7
 signed short g_buy_screen_items_posy[5] = { 0x0023, 0x0037, 0x004b, 0x005f, 0x0073 }; // ds:0x6bdd
 char g_buy_screen_str_d_s[6] = "%d %s"; // ds:0x6be7
 char g_buy_screen_str_comma_space[3] = ", "; // ds:0x6bed
-char g_sell_screen_str_money_h[5] = "H %d"; // ds:0x6bf0
-char g_sell_screen_str_money_s[5] = "S %d"; // ds:0x6bf5
-char g_sell_screen_str_money_d[5] = "D %d"; // ds:0x6bfa
+struct c_str_5 g_sell_screen_str_money_h = { "H %d" }; // ds:0x6bf0
+struct c_str_5 g_sell_screen_str_money_s = { "S %d" }; // ds:0x6bf5
+struct c_str_5 g_sell_screen_str_money_d = { "D %d" }; // ds:0x6bfa
 signed short g_sell_screen_items_posx[3] = { 0x001e, 0x005f, 0x00a0 }; // ds:0x6bff
 signed short g_sell_screen_items_posy[5] = { 0x0023, 0x0037, 0x004b, 0x005f, 0x0073 }; // ds:0x6c05
 unsigned char g_unkn_047[1] = { 0x00 }; // ds:0x6c0f
@@ -3654,9 +3654,9 @@ struct smith_descr g_smith_descr_table[42] = { /* 'quality' is apparently unused
 	{  30,  4 },
 	{  -1,  0 }
 }; // ds:0x6c10
-char g_smith_str_money_h[5] = "H %d"; // ds:0x6c64
-char g_smith_str_money_s[5] = "S %d"; // ds:0x6c69
-char g_smith_str_money_d[5] = "D %d"; // ds:0x6c6e
+struct c_str_5 g_smith_str_money_h = { "H %d" }; // ds:0x6c64
+struct c_str_5 g_smith_str_money_s = { "S %d" }; // ds:0x6c69
+struct c_str_5 g_smith_str_money_d = { "D %d" }; // ds:0x6c6e
 signed short g_smith_items_posx[3] = { 0x001e, 0x005f, 0x00a0 }; // ds:0x6c73
 signed short g_smith_items_posy[5] = { 0x0023, 0x0037, 0x004b, 0x005f, 0x0073 }; // ds:0x6c79
 unsigned char g_unkn_048[1] = { 0x00 }; // ds:0x6c83
@@ -5634,7 +5634,7 @@ unsigned char g_unkn_066[1] = { 0x00 }; // ds:0xac0d
 signed short g_spell_special_aecost = -1; // ds:0xac0e
 signed short g_ani_heal_picstars[5] = { 0, 1, 2, 1, 0 }; // ds:0xac10
 char g_spell_select_str_keyval[6] = "%s~%d"; // ds:0xac1a
-char g_spell_select_str_key[5] = "\xf2%s\xf0"; // ds:0xac20
+struct c_str_5 g_spell_select_str_key = { "\xf2%s\xf0"}; // ds:0xac20
 char g_spell_select_str_key_color[3] = "%s"; // ds:0xac25
 char g_spell_select_str_keyval_color[8] = "\xf2%s~%d\xf0"; // ds:0xac28
 signed char g_spell_select_ones[12] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }; // ds:0xac30

@@ -104,10 +104,6 @@ struct dummy5 {
 	signed short a[5];
 };
 
-struct dummy_c5 {
-	char a[5];
-};
-
 /**
  * \brief   shows the repair-screen an provides interaction
  *
@@ -136,16 +132,13 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 	signed short l11 = 1;
 	signed short hero_pos_old = 1;
 	signed short hero_pos = -1;
+	struct c_str_5 fmt_h = g_smith_str_money_h;
+	struct c_str_5 fmt_s = g_smith_str_money_s;
+	struct c_str_5 fmt_d = g_smith_str_money_d;
 #if !defined(__BORLANDC__)
-	struct dummy_c5 fmt_h = { { "H %d" } };
-	struct dummy_c5 fmt_s = { { "S %d" } };
-	struct dummy_c5 fmt_d = { { "D %d" } };
 	struct dummy3 array3 = { { 30, 95, 160 } };
 	struct dummy5 array5 = { { 35, 55, 75, 95, 115 } };
 #else
-	struct dummy_c5 fmt_h = *(struct dummy_c5*)(p_datseg + SMITH_STR_MONEY_H);
-	struct dummy_c5 fmt_s = *(struct dummy_c5*)(p_datseg + SMITH_STR_MONEY_S);
-	struct dummy_c5 fmt_d = *(struct dummy_c5*)(p_datseg + SMITH_STR_MONEY_D);
 	struct dummy3 array3 = *(struct dummy3*)(p_datseg + SMITH_ITEMS_POSX);
 	struct dummy5 array5 = *(struct dummy5*)(p_datseg + SMITH_ITEMS_POSY);
 #endif

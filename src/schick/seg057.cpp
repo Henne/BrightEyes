@@ -39,10 +39,6 @@ struct dummy5 {
 	signed short a[5];
 };
 
-struct dummy_c5 {
-	char a[5];
-};
-
 /**
  * \brief   shows the sell-screen an provides interaction
  */
@@ -68,16 +64,13 @@ void sell_screen(Bit8u *shop_ptr)
 	signed short l11 = 1;
 	signed short hero_pos_old = 1;
 	signed short hero_pos = -1;
+	struct c_str_5 fmt_h = g_sell_screen_str_money_h;
+	struct c_str_5 fmt_s = g_sell_screen_str_money_s;
+	struct c_str_5 fmt_d = g_sell_screen_str_money_d;
 #if !defined(__BORLANDC__)
-	struct dummy_c5 fmt_h = { { "H %d" } };
-	struct dummy_c5 fmt_s = { { "S %d" } };
-	struct dummy_c5 fmt_d = { { "D %d" } };
 	struct dummy3 array3 = { { 30, 95, 160 } };
 	struct dummy5 array5 = { { 35, 55, 75, 95, 115 } };
 #else
-	struct dummy_c5 fmt_h = *(struct dummy_c5*)(p_datseg + SELL_SCREEN_STR_MONEY_H);
-	struct dummy_c5 fmt_s = *(struct dummy_c5*)(p_datseg + SELL_SCREEN_STR_MONEY_S);
-	struct dummy_c5 fmt_d = *(struct dummy_c5*)(p_datseg + SELL_SCREEN_STR_MONEY_D);
 	struct dummy3 array3 = *(struct dummy3*)(p_datseg + SELL_SCREEN_ITEMS_POSX);
 	struct dummy5 array5 = *(struct dummy5*)(p_datseg + SELL_SCREEN_ITEMS_POSY);
 #endif
@@ -343,10 +336,10 @@ void sell_screen(Bit8u *shop_ptr)
 			} else {
 
 				if (item_undropable(get_itemsdat(item_id))) {
-					sprintf(g_dtp2,
-						get_ttx(454),
-						(char*)(GUI_names_grammar((signed short)0x8002, item_id, 0)));
+
+					sprintf(g_dtp2,	get_ttx(454), (char*)GUI_names_grammar((signed short)0x8002, item_id, 0));
 					GUI_output(g_dtp2);
+
 				} else {
 
 					nice = 1;
@@ -356,9 +349,7 @@ void sell_screen(Bit8u *shop_ptr)
 
 						if (item_stackable(get_itemsdat(item_id)) && host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + SIZEOF_INVENTORY * l15) > 1) {
 
-							sprintf(g_dtp2,
-								get_ttx(447),
-								(char*)(GUI_names_grammar(4, item_id, 0)));
+							sprintf(g_dtp2,	get_ttx(447), (char*)GUI_names_grammar(4, item_id, 0));
 
 							nice = GUI_input(g_dtp2, 2);
 
