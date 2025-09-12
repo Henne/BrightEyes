@@ -1,0 +1,48 @@
+# Copyright 2025 The BrightEyes Authors
+# Use of this source code is governed by a GPL 3.0 license that can be
+# found in the copyright file.
+
+name: Build & Package DOS BCC
+
+on:
+  push:
+    branches: [ feature/add-ci-support ]
+
+jobs:
+  build-dos-bcc:
+    name: DOS BCC
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Install DOS build tools
+        run: |
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            dosbox cmake make zip unzip
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: Extract Borland C++ installation from Docker image
+        run: |
+          CTNR=$(docker create ghcr.io/newproggie/bcc-dosbox:1.0)
+          docker cp ${CTNR}:/root/.dosbox/drive_c/BCC31 drive_c/
+          docker rm ${CTNR}
+          ls -laH drive_c/BCC31
+
+      - name: DOS build (BCC)
+        working-directory: src/gen_dos
+        run: |
+          ./tools/build.sh
+
+      - name: Upload DOS binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: bright-eyes-dos
+          path: ${{ github.workspace }}/src/gen_dos/build/*.EXE
