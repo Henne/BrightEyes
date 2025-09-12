@@ -14,9 +14,8 @@
 ;		- Adresses of variables
 
 
-;EXTRN EMS_SEG:WORD, EMS_OFF:WORD, EMM_SIG:BYTE
-EMM_SIG	EQU 4BA2h
-EMS_OFF	EQU 4BAAh
+EMM_SIG EQU 4BA2h
+EMS_OFF EQU 4BAAh
 EMS_SEG EQU 4BACh
 
 	public _EMS_get_num_pages_unalloced
@@ -25,8 +24,11 @@ EMS_SEG EQU 4BACh
 	public _EMS_map_memory
 	public _EMS_norm_ptr
 	public _EMS_init
+	;extrn _g_emm_sig:byte; 0x4ba2
+	;extrn _g_ems_frame_ptr:dword; off (0x4baa), seg (0x4bac)
+	;extrn F_LXLSH@:far
 
-	assume cs:@code
+	assume cs:@code,ds:@data
 
 EMS_installed PROC NEAR
 	push bp
@@ -39,6 +41,7 @@ EMS_installed PROC NEAR
 	int 21h
 	mov di, 0ah
 	mov si, EMM_SIG
+	;mov si, OFFSET _g_emm_sig
 	mov cx, 9
 _comp:	cmpsb
 	loope _comp
@@ -181,6 +184,7 @@ _EMS_norm_ptr PROC FAR
 
 	db 09ah, 0, 0, 0, 0
 	;call 0x0:0x0	;F_LXULSH
+	;call far ptr F_LXLSH@
 
 	mov [bp+8], word ptr 0h
 	add ax,[bp+6]
@@ -189,6 +193,7 @@ _EMS_norm_ptr PROC FAR
 
 	db 09ah, 0, 0, 0, 0
 	;call 0x0:0x0	;F_LXULSH
+	;call far ptr F_LXLSH@
 
 	mov ax,[bp+6]
 	and ax, 0fh
@@ -214,10 +219,10 @@ _EMS_init PROC FAR
 	call EMS_get_frame_ptr
 
 	db 089h, 016h, 0ach, 04bh
-;	mov [EMS_SEG], dx
+;	mov word ptr [_g_ems_frame_ptr + 2], dx
 
 	db 0c7h, 06h,0aah, 04bh, 0, 0
-;	mov [EMS_OFF], word ptr 0h
+;	mov word ptr [_g_ems_frame_ptr], word ptr 0h
 
 	mov ax, 1
 _done4:
