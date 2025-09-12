@@ -6122,7 +6122,6 @@ signed char g_large_buf; // ds:0xe5e4
 HugePt g_global_buffer_ptr; // ds:0xe5e0, points to the start of the global buffer
 Bit32u g_buffersize; // ds:0xe5dc, size of the global buffer
 unsigned char g_unkn_093[1]; // ds:0xe5db
-unsigned short g_sample_ad_length; // ds:0xbc5a
 signed short g_basepos_x_bak; // ds:0xe5d9
 signed short g_basepos_y_bak; // ds:0xe5d7
 signed short g_textbox_width_bak; // ds:0xe5d5
@@ -6452,6 +6451,7 @@ unsigned char *g_splash_ae; // ds:0xbcc7
 unsigned char g_gfxbuf_wait_keypress[100]; // ds:0xbc63
 unsigned char g_playmask_us; // ds:0xbc62, 1 = PLAYM_US, 0 = PLAYM_UK
 struct sample_idx g_sample_ad_idx_entry; // ds:0xbc5c
+unsigned short g_sample_ad_length; // ds:0xbc5a
 
 #if !defined(__BORLANDC__)
 /* arrays for meaningful log messages */
