@@ -45,6 +45,10 @@
 namespace M302de {
 #endif
 
+static Bit32u g_buffersize;		// ds:0xe5dc, size of the global buffer
+static HugePt g_global_buffer_ptr;	// ds:0xe5e0, points to the start of the global buffer
+signed char g_large_buf; 		// ds:0xe5e4
+
 /* Borlandified and identical */
 void rabies(Bit8u* hero, signed short hero_pos)
 {

@@ -39,6 +39,10 @@
 namespace M302de {
 #endif
 
+signed int g_menu_selected;		// ds:0xe5b0
+signed int g_menu_input_busy;		// ds:0xe5ae
+signed int g_menu_default_select;	// ds:0xe5ac
+
 #if defined(__BORLANDC__)
 void GUI_unused1(Bit8u *a1, signed short a2, signed short a3)
 {
@@ -276,7 +280,7 @@ void GUI_draw_radio_bg(signed short header, signed short options, signed short w
 	/* set upper left coordinates */
 	g_pic_copy.x1 = g_textbox_pos_x;
 	g_pic_copy.y1 = g_textbox_pos_y;
-	/* set lower righti coordinates */
+	/* set lower right coordinates */
 	g_pic_copy.x2 = g_textbox_pos_x + width - 1;
 	g_pic_copy.y2 = g_textbox_pos_y + height - 1;
 	/* set pointer */
@@ -455,22 +459,19 @@ void GUI_fill_radio_button(signed short old_pos, unsigned short new_pos,
 
 		/* clear the old button */
 		for (i = 0; i < 4; i++)
-			do_v_line(g_vga_memstart, y + i, x, x + 3,
-				(signed char)0xd8);
+			do_v_line(g_vga_memstart, y + i, x, x + 3, (signed char)0xd8);
 	}
 
 	x = g_textbox_pos_y + (offset + new_pos) * 8 + 2;
 
 	/* fill the new button */
 	for (i = 0; i < 4; i++)
-		do_v_line(g_vga_memstart, y + i, x, x + 3,
-			(signed char)0xd9);
+		do_v_line(g_vga_memstart, y + i, x, x + 3, (signed char)0xd9);
 
 	refresh_screen_size();
 }
 
-signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
-		signed short options, ...)
+signed short GUI_dialogbox(Bit8u* picture, char *name, char *text, signed short options, ...)
 {
 	va_list arguments;
 	signed short i;
@@ -525,11 +526,9 @@ signed short GUI_dialogbox(Bit8u* picture, char *name, char *text,
 	GUI_draw_radio_bg(l_si, (signed char)options, l_di, l5);
 
 	if (picture != 0) {
+
 		/* draw a frame */
-		do_border(g_vga_memstart,
-			g_textbox_pos_x + 5, g_textbox_pos_y + 6,
-			g_textbox_pos_x + 38, g_textbox_pos_y + 39,
-				(signed char)0xff);
+		do_border(g_vga_memstart, g_textbox_pos_x + 5, g_textbox_pos_y + 6, g_textbox_pos_x + 38, g_textbox_pos_y + 39, (signed char)0xff);
 
 		/* set the coordinates */
 		g_pic_copy.x1 = g_textbox_pos_x + 6;

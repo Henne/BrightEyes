@@ -28,6 +28,11 @@
 namespace M302de {
 #endif
 
+static unsigned char *g_used_item_desc;	// ds:0xe5c6, pointer to the item description
+static signed int g_used_item_id;	// ds:0xe5ca, used_item ID
+static signed int g_used_item_pos;	// ds:0xe5cc, used_item position
+static unsigned char *g_itemuser;	// ds:0xe5ce, pointer to hero
+
 /* Borlandified and identical */
 void use_item(signed short item_pos, signed short hero_pos)
 {

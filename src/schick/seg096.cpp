@@ -28,6 +28,13 @@ struct dummy {
 	signed short a[3];
 };
 
+static char g_gui_print_char;		// ds:0xe4d8
+signed int g_dialogbox_indent_height;	// ds:0xe4d9
+signed int g_dialogbox_indent_width;	// ds:0xe4db
+unsigned char g_unkn_092[7];		// ds:0xe4dd
+static char g_grammar_bufs[5][40];	// ds:0xe4e3
+
+
 //000
 /**
  * \brief   makes a grammatical wordgroup

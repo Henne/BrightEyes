@@ -25,6 +25,12 @@
 namespace M302de {
 #endif
 
+signed int g_spelltest_result;			// ds:0xe5b2
+struct enemy_sheet *g_spelltarget_e;		// ds:0xe5b4, Pointer to enemy
+unsigned char *g_spelltarget;			// ds:0xe5b8
+unsigned char *g_spelluser;			// ds:0xe5bc
+static struct enemy_sheet *g_spelluser_e;	// ds:0xe5c0
+
 void MON_do_spell_damage(signed short damage)
 {
 	if (damage > 0) {

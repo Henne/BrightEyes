@@ -37,6 +37,12 @@
 namespace M302de {
 #endif
 
+unsigned char g_event_ani_busy;			//ds:0xe5d2
+static signed short g_wallclock_update_bak;	//ds:0xe5d3
+static signed short g_textbox_width_bak;	//ds:0xe5d5
+static signed short g_basepos_y_bak;		//ds:0xe5d7
+static signed short g_basepos_x_bak;		//ds:0xe5d9
+
 #if defined(__BORLANDC__)
 static
 #endif

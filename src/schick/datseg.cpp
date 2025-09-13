@@ -6118,33 +6118,21 @@ struct struct_land_route *gs_travel_route_ptr;		// ds:0x426e
 Bit8u  *gs_travel_map_ptr; 				// ds:0x432e; Bit8u*
 #endif
 
-signed char g_large_buf; // ds:0xe5e4
-HugePt g_global_buffer_ptr; // ds:0xe5e0, points to the start of the global buffer
-Bit32u g_buffersize; // ds:0xe5dc, size of the global buffer
-unsigned char g_unkn_093[1]; // ds:0xe5db
-signed short g_basepos_x_bak; // ds:0xe5d9
-signed short g_basepos_y_bak; // ds:0xe5d7
-signed short g_textbox_width_bak; // ds:0xe5d5
-signed short g_wallclock_update_bak; // ds:0xe5d3
-unsigned char g_event_ani_busy; // ds:0xe5d2
-unsigned char *g_itemuser; // ds:0xe5ce, pointer to hero
-signed int g_used_item_pos; // ds:0xe5cc, used_item position
-signed int g_used_item_id; // ds:0xe5ca, used_item ID
-unsigned char *g_used_item_desc; // ds:0xe5c6, pointer to the item description
-signed int g_alchemy_missing_item; // ds:0xe5c4
-struct enemy_sheet *g_spelluser_e; // ds:0xe5c0
-unsigned char *g_spelluser; // ds:0xe5bc
-unsigned char *g_spelltarget; // ds:0xe5b8
-struct enemy_sheet *g_spelltarget_e; // ds:0xe5b4, Pointer to enemy
-signed int g_spelltest_result; // ds:0xe5b2
-signed int g_menu_selected; // ds:0xe5b0
-signed int g_menu_input_busy; // ds:0xe5ae
-signed int g_menu_default_select; // ds:0xe5ac
-char g_grammar_bufs[5][40]; // ds:0xe4e3
-unsigned char g_unkn_092[7]; // ds:0xe4dd
-signed int g_dialogbox_indent_width; // ds:0xe4db
-signed int g_dialogbox_indent_height; // ds:0xe4d9
-char g_gui_print_char; // ds:0xe4d8
+//unsigned char g_event_ani_busy; // ds:0xe5d2
+//signed int g_alchemy_missing_item; // ds:0xe5c4
+//struct enemy_sheet *g_spelluser_e; // ds:0xe5c0
+//unsigned char *g_spelluser; // ds:0xe5bc
+//unsigned char *g_spelltarget; // ds:0xe5b8
+//struct enemy_sheet *g_spelltarget_e; // ds:0xe5b4, Pointer to enemy
+//signed int g_spelltest_result; // ds:0xe5b2
+//signed int g_menu_selected; // ds:0xe5b0
+//signed int g_menu_input_busy; // ds:0xe5ae
+//signed int g_menu_default_select; // ds:0xe5ac
+//char g_grammar_bufs[5][40]; // ds:0xe4e3
+//unsigned char g_unkn_092[7]; // ds:0xe4dd
+//signed int g_dialogbox_indent_width; // ds:0xe4db
+//signed int g_dialogbox_indent_height; // ds:0xe4d9
+//char g_gui_print_char; // ds:0xe4d8
 unsigned char g_route_tevent_flags[15]; // ds:0xe4c9
 unsigned char g_good_camp_place; // ds:0xe4c8
 unsigned char g_trv_detour_pixel_bak[20]; // ds:0xe4b4

@@ -26,6 +26,8 @@
 namespace M302de {
 #endif
 
+static signed int g_alchemy_missing_item; // ds:0xe5c4
+
 signed short hero_has_ingrendients(Bit8u *hero, signed short recipe_index)
 {
 	signed short i = 0;
