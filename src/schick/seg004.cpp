@@ -890,16 +890,12 @@ void array_add(Bit8u *dst, signed short len, signed short op, signed short flag)
 	}
 }
 
-struct dummy3 {
-	char a[3];
-};
-
 void schick_set_video(void)
 {
-	struct dummy3 pal_black = *(struct dummy3*)(p_datseg + COLOR_PAL_BLACK);;
+	struct Bit8u_3 pal_white = g_color_pal_white;;
 
 	set_video_mode(0x13);
-	set_color((Bit8u*)&pal_black, 0xff);
+	set_color((Bit8u*)&pal_white, 0xff);
 }
 
 void schick_reset_video(void)
@@ -910,16 +906,13 @@ void schick_reset_video(void)
 #endif
 }
 
-struct dummy4 {
-	char a[0x60];
-};
-
 void clear_ani_pal(void)
 {
-	struct dummy4 pal = *(struct dummy4*)(p_datseg + PALETTE_ALLBLACK);
+	struct Bit8u_32_3 pal = g_palette_allblack;
 
 	wait_for_vsync();
 
+	/* REMARK: memset would be better */
 	set_palette((Bit8u*)&pal, 0, 0x20);
 }
 

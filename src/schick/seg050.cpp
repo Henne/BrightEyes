@@ -29,14 +29,6 @@
 namespace M302de {
 #endif
 
-struct dummy_in {
-	signed char first, last;
-};
-
-struct dummy {
-	struct dummy_in a[9];
-};
-
 static unsigned char *g_inc_spells_counter;	// ds:0xe3b2
 static unsigned char *g_inc_skills_counter;	// ds:0xe3b6
 static unsigned char *g_skills_buffer;		// ds:0xe3ba
@@ -52,7 +44,7 @@ void inc_spell_advanced(Bit8u *hero, signed short spell)
 {
 	signed short max_incs = 1;
 	signed short randval;
-	struct dummy a = *(struct dummy*)(p_datseg + MAGIC_SCHOOL_SPELLRANGES);
+	struct mssr a = g_magic_school_spellranges;
 
 	if ((host_readbs(hero + HERO_TYPE) == HERO_TYPE_WITCH) && (g_spell_descriptions[spell].herotype == SPELL_DESC_HEROTYPE_WITCH))
 	{

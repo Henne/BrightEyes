@@ -2430,41 +2430,8 @@ signed short g_wallclock_pos = 0; // ds:0x4a9e, position of sun/moon
 Bit8s g_wallclock_pos_y[81] = { 0x14, 0x12, 0x11, 0x10, 0x0f, 0x0e, 0x0d, 0x0c, 0x0b, 0x0b, 0x0a, 0x09, 0x09, 0x08, 0x07, 0x07, 0x06, 0x06, 0x05, 0x05, 0x05, 0x04, 0x04, 0x03, 0x03, 0x03, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02, 0x02, 0x02, 0x03, 0x03, 0x03, 0x03, 0x04, 0x04, 0x05, 0x05, 0x05, 0x06, 0x06, 0x07, 0x07, 0x08, 0x09, 0x09, 0x0a, 0x0b, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x14 }; // ds:0x4aa0
 Bit8u g_wallclock_palette_day[3][3] = { { 0x10, 0x14, 0x3c }, { 0x00, 0x08, 0x38 }, { 0x00, 0x08, 0x34 } }; // ds:0x4af1
 Bit8u g_wallclock_palette_night[3][3] = { { 0x00, 0x00, 0x1a }, { 0x00, 0x00, 0x18 }, { 0x00, 0x00, 0x1c } }; // ds:0x4afa
-char g_color_pal_black[3] = { 0x3f, 0x3f, 0x3f }; // ds:0x4b03, {0x3f,0x3f,0x3f}
-struct{unsigned char r,g,b;} g_palette_allblack[32] = {
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 }
-}; // ds:0x4b06
+struct Bit8u_3 g_color_pal_white = { 0x3f, 0x3f, 0x3f }; // ds:0x4b03, {0x3f,0x3f,0x3f}
+struct Bit8u_32_3 g_palette_allblack = { { 0 } }; // ds:0x4b06
 signed short g_delay_factor = 4; // ds:0x4b66
 extern char g_str_temp_xx[8];
 char *g_str_temp_xx_ptr = (char*)&g_str_temp_xx[0]; // ds:0x4b68, to STR_TEMP_XX; Bit8u*
@@ -3343,18 +3310,18 @@ const signed short* g_autoinc_spells_mage_index[9] = {
 const signed short g_autoinc_spells_gelf[7] = { SP_FLIM_FLAM_FUNKEL, SP_BLITZ_DICH_FIND, SP_AXXELERATUS_BLITZGESCHWIND, SP_KLARUM_PURUM_KRAEUTERSUD, SP_TIERE_BESPRECHEN, SP_DUNKELHEIT, -1 }; // ds:26190
 const signed short g_autoinc_spells_self[7] = { SP_SILENTIUM_SILENTILLE, SP_ARMATRUTZ, SP_FULMINICTUS_DONNERKEIL, SP_ADLERAUG_UND_LUCHSENOHR, SP_ODEM_ARCANUM, SP_FLIM_FLAM_FUNKEL, -1 }; // ds:26204
 const signed short g_autoinc_spells_ielf[12] = { SP_BALSAM_SALABUNDE, SP_CHAMAELIONI_MIMIKRY, SP_BLITZ_DICH_FIND, SP_ADLERAUG_UND_LUCHSENOHR, SP_FULMINICTUS_DONNERKEIL, SP_ARMATRUTZ, SP_SILENTIUM_SILENTILLE, SP_ODEM_ARCANUM, SP_BAND_UND_FESSEL, SP_AXXELERATUS_BLITZGESCHWIND, SP_EXPOSAMI_CREATUR, -1 }; // ds:26218
-struct{signed char first, last;} g_magic_school_spellranges[9] = {
-	{ SP_BEHERRSCHUNG_BRECHEN, SP_VERWANDLUNG_BEENDEN }, /* Antimagie */
-	{ SP_BAND_UND_FESSEL, SP_ZWINGTANZ }, /* Beherrschung */
-	{ SP_FUROR_BLUT_UND_SULPHURDAMPF, SP_SOLIDIRID_FARBENSPIEL }, /* Daemonologie + Elemente */
-	{ SP_AXXELERATUS_BLITZGESCHWIND, SP_UEBER_EIS_UND_UEBER_SCHNEE }, /* Bewegung */
-	{ SP_BALSAM_SALABUNDE, SP_TIERE_BESPRECHEN }, /* Heilung */
-	{ SP_ADLERAUG_UND_LUCHSENOHR, SP_SENSIBAR_WAHR_UND_KLAR }, /* Wahrnehmung */
-	{ SP_BLITZ_DICH_FIND, SP_SCHARFES_AUGE_UND_SICHRE_HAND }, /* Kampf */
-	{ SP_ADLER_WOLF_UND_HAMMERHAI, SP_VISIBILI_VANITAR }, /* Verwandlung */
-	{ SP_ABVENENUM_PEST_UND_GALLE, SP_STURMGEBRUELL_BESAENFTGE_DICH } /* Veraenderung */
+const struct mssr g_magic_school_spellranges = { {
+	{ SP_BEHERRSCHUNG_BRECHEN, SP_VERWANDLUNG_BEENDEN },			/* Antimagie */
+	{ SP_BAND_UND_FESSEL, SP_ZWINGTANZ },					/* Beherrschung */
+	{ SP_FUROR_BLUT_UND_SULPHURDAMPF, SP_SOLIDIRID_FARBENSPIEL },		/* Daemonologie + Elemente */
+	{ SP_AXXELERATUS_BLITZGESCHWIND, SP_UEBER_EIS_UND_UEBER_SCHNEE },	/* Bewegung */
+	{ SP_BALSAM_SALABUNDE, SP_TIERE_BESPRECHEN },				/* Heilung */
+	{ SP_ADLERAUG_UND_LUCHSENOHR, SP_SENSIBAR_WAHR_UND_KLAR },		/* Wahrnehmung */
+	{ SP_BLITZ_DICH_FIND, SP_SCHARFES_AUGE_UND_SICHRE_HAND },		/* Kampf */
+	{ SP_ADLER_WOLF_UND_HAMMERHAI, SP_VISIBILI_VANITAR },			/* Verwandlung */
+	{ SP_ABVENENUM_PEST_UND_GALLE, SP_STURMGEBRUELL_BESAENFTGE_DICH }	/* Veraenderung */
 	/* Note: There are no schools for the spell groups "Visionen" and "Verstaendigung". */
-}; // ds:0x6682
+} }; // ds:0x6682
 const signed short g_campfights[4] = { 0x00d9, 0x00da, 0x00db, 0x00e8 }; // ds:0x6694
 struct gather_herbs g_gather_herbs_table[13] = {
 	{ ITEM_ALRAUNE      ,  5, 1, 15 },
@@ -5632,12 +5599,12 @@ struct struct_char_height g_gui_char_height[67] = {
 signed short g_gui_bool_flag = 0; // ds:0xac0b
 unsigned char g_unkn_066[1] = { 0x00 }; // ds:0xac0d
 signed short g_spell_special_aecost = -1; // ds:0xac0e
-struct Bit16s_5 g_ani_heal_picstars = { 0, 1, 2, 1, 0 }; // ds:0xac10
-char g_spell_select_str_keyval[6] = "%s~%d"; // ds:0xac1a
-struct c_str_5 g_spell_select_str_key = { "\xf2%s\xf0"}; // ds:0xac20
-char g_spell_select_str_key_color[3] = "%s"; // ds:0xac25
-char g_spell_select_str_keyval_color[8] = "\xf2%s~%d\xf0"; // ds:0xac28
-signed char g_spell_select_ones[12] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }; // ds:0xac30
+struct Bit16s_5 g_ani_heal_picstars = { 0, 1, 2, 1, 0 };	// ds:0xac10
+struct c_str_6 g_spell_select_str_keyval = { "%s~%d" };		// ds:0xac1a
+struct c_str_5 g_spell_select_str_key = { "\xf2%s\xf0"};	// ds:0xac20
+struct c_str_3 g_spell_select_str_key_color = { "%s" };		// ds:0xac25
+struct c_str_8 g_spell_select_str_keyval_color = { "\xf2%s~%d\xf0" }; // ds:0xac28
+struct Bit8s_12 g_spell_select_ones = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }; // ds:0xac30
 const struct analues_item g_analues_items[28] = {
 	{ ITEM_AMULET_UNKNOWN_1      ,  2, 0x36 },
 	{ ITEM_RING_RED              ,  3, 0x38 },

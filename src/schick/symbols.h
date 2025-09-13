@@ -875,8 +875,8 @@
 //#define WALLCLOCK_POS_Y                 (0x4aa0)    /* signed char[81] */
 //#define WALLCLOCK_PALETTE_DAY           (0x4af1)    /* struct(3)[3]; struct{unsigned char r,g,b;} */
 //#define WALLCLOCK_PALETTE_NIGHT         (0x4afa)    /* struct(3)[3]; struct{unsigned char r,g,b;} */
-#define COLOR_PAL_BLACK                 (0x4b03)    /* char[3]; {0x3f,0x3f,0x3f} */
-#define PALETTE_ALLBLACK                (0x4b06)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
+//#define COLOR_PAL_WHITE                 (0x4b03)    /* char[3]; {0x3f,0x3f,0x3f} */
+//#define PALETTE_ALLBLACK                (0x4b06)    /* struct(3)[32]; struct{unsigned char r,g,b;} */
 //#define DELAY_FACTOR                    (0x4b66)    /* short */
 //#define STR_TEMP_XX_PTR                 (0x4b68)    /* Bit8u*; to STR_TEMP_XX */
 //#define FIG_STAR_COLORS                 (0x4b6c)    /* signed char[12] */
@@ -1012,7 +1012,7 @@
 //#define AUOTINC_SPELLS_GELF             (0x664e)    /* signed short[7] */
 //#define AUTOINC_SPELLS_SELF             (0x665c)    /* signed short[7] */
 //#define AUTOINC_SPELLS_IELF             (0x666a)    /* signed short[12] */
-#define MAGIC_SCHOOL_SPELLRANGES        (0x6682)    /* struct(2)[9]; struct{signed char first, last;} */
+//#define MAGIC_SCHOOL_SPELLRANGES        (0x6682)    /* struct(2)[9]; struct{signed char first, last;} */
 //#define CAMPFIGHTS                      (0x6694)    /* signed short[4] */
 //#define GATHER_HERBS_TABLE              (0x669c)    /* struct(4)[13]; struct{unsigned char herb_id,chance,ta_mod,max_count;} */
 //#define GATHER_HERBS_SPECIAL            (0x66d0)    /* unsigned char */
@@ -1235,11 +1235,11 @@
 // ?1
 //#define SPELL_SPECIAL_AECOST            (0xac0e)    /* signed short */
 //#define ANI_HEAL_PICSTARS               (0xac10)    /* signed short[5]; { 0, 1, 2, 1, 0 } */
-#define SPELL_SELECT_STR_KEYVAL         (0xac1a)    /* char[6]; "%s~%d" */
+//#define SPELL_SELECT_STR_KEYVAL         (0xac1a)    /* char[6]; "%s~%d" */
 //#define SPELL_SELECT_STR_KEY            (0xac20)    /* char[5]; "\xf2%s\xf0" */
-#define SPELL_SELECT_STR_KEY_COLOR      (0xac25)    /* char[3]; "%s" */
-#define SPELL_SELECT_STR_KEYVAL_COLOR   (0xac28)    /* char[8]; "\xf2%s~%d\xf0" */
-#define SPELL_SELECT_ONES               (0xac30)    /* signed char[12]; { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } */
+//#define SPELL_SELECT_STR_KEY_COLOR      (0xac25)    /* char[3]; "%s" */
+//#define SPELL_SELECT_STR_KEYVAL_COLOR   (0xac28)    /* char[8]; "\xf2%s~%d\xf0" */
+//#define SPELL_SELECT_ONES               (0xac30)    /* signed char[12]; { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } */
 //#define ANALUES_ITEMS                   (0xac3c)    /* struct(5)[28]; struct{signed short item_id, barrier; signed char dtp;} */
 //#define HEXENKNOTEN_GFX_BUF             (0xacc8)    /* Bit8u* */
 //#define MONSTER_SPELL_AE_COST           (0xaccc)    /* signed short */

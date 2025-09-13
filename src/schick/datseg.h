@@ -8,13 +8,25 @@ extern char ds[1];
 #endif
 
 /* dummy structs */
+struct c_str_3 { char a[3]; };
 struct c_str_5 { char a[5]; };
 struct c_str_6 { char a[6]; };
+struct c_str_8 { char a[8]; };
+struct Bit8u_3 { Bit8u a[3]; };
+struct Bit8u_32_3 { Bit8u a[32][3]; };
+struct Bit8s_12 { Bit8s a[12]; };
 struct Bit8s_15 { Bit8s a[15]; };
 struct Bit16s_3 { Bit16s a[3]; };
 struct Bit16s_5 { Bit16s a[5]; };
 struct Bit16s_7 { Bit16s a[7]; };
 
+
+struct spellrange {
+	Bit8s first;
+	Bit8s last;
+};
+
+struct mssr { struct spellrange a[9]; };
 
 struct sample_idx {
 	Bit8s patch;
@@ -1305,7 +1317,8 @@ extern Bit16s g_wallclock_pos;			//ds:0x4a9e; seg004;
 extern Bit8s  g_wallclock_pos_y[81];		//ds:0x4aa0; seg004;
 extern Bit8u  g_wallclock_palette_day[3][3];	//ds:0x4af1; seg004;
 extern Bit8u  g_wallclock_palette_night[3][3];	//ds:0x4afa; seg004;
-
+extern struct Bit8u_3 g_color_pal_white;	//ds:0x4b03; seg004
+extern struct Bit8u_32_3 g_palette_allblack;	//ds:0x4b06; seg004
 extern signed short g_delay_factor;		//ds:0x4b66; seg005, seg025
 extern char *g_str_temp_xx_ptr;			//ds:0x4b68; seg005
 extern signed char g_fig_star_colors[12];	//ds:0x4b6c; seg005
@@ -1427,7 +1440,7 @@ extern const signed short *g_autoinc_spells_mage_index[9];	//ds:0x662a; seg050
 extern const signed short g_autoinc_spells_gelf[7];	//ds:0x664e; seg050
 extern const signed short g_autoinc_spells_self[7];	//ds:0x665c; seg050
 extern const signed short g_autoinc_spells_ielf[12];	//ds:0x666a; seg050
-
+extern const struct mssr g_magic_school_spellranges;	//ds:0x6682; seg050
 extern const signed short g_campfights[4];	//ds:0x6694; seg051
 extern struct gather_herbs g_gather_herbs_table[13];	//ds:0x669c; seg051
 extern Bit8s g_gather_herbs_special;		//ds:0x66d0; seg051, seg109, seg110, seg112, seg113, seg114, seg115, seg116
@@ -1599,10 +1612,12 @@ extern struct struct_char_height g_gui_char_height[67];	//ds:0xab42; seg097
 extern signed short g_gui_bool_flag;		// ds:0xac0b; seg097
 extern signed short g_spell_special_aecost;	// ds:0xac0e; seg098, seg099, seg100, seg101
 extern struct Bit16s_5 g_ani_heal_picstars;	// ds:0xac10; seg098
-
+extern struct c_str_6 g_spell_select_str_keyval;// ds:0xac1a; seg098
 extern struct c_str_5 g_spell_select_str_key;	// ds:0xac20; seg098
-
-extern const struct analues_item g_analues_items[28];	//ds:0xac3c; seg099
+extern struct c_str_3 g_spell_select_str_key_color;	// ds:0xac25; seg098
+extern struct c_str_8 g_spell_select_str_keyval_color;	// ds:0xac28; seg098
+extern struct Bit8s_12 g_spell_select_ones;		// ds:0xac30; seg098
+extern const struct analues_item g_analues_items[28];	// ds:0xac3c; seg099
 extern unsigned char *g_hexenknoten_gfx_buf;	// ds:0xacc8; seg100
 extern signed short g_monster_spell_ae_cost;	// ds:0xaccc; seg102
 extern char g_select_skill_lvlup[6]; 		// ds:0xacce; seg103
