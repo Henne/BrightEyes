@@ -794,7 +794,11 @@ void draw_wallclock(signed short pos, signed short night)
 	g_pic_copy_rect.x2 = g_wallclock_x + 78;
 
 	/* set palette (night/day) */
-	set_palette((!night ? (p_datseg + WALLCLOCK_PALETTE_DAY) : &g_wallclock_palette_night[0][0]), 0xfa, 3);
+#if !defined(__BORLANDC__)
+	set_palette((Bit8u*)(!night ? &g_wallclock_palette_day : &g_wallclock_palette_night), 0xfa, 3);
+#else
+	set_palette((Bit8u*)MK_FP(_DS, (!night ? FP_OFF(g_wallclock_palette_day) : FP_OFF(g_wallclock_palette_night))), 0xfa, 3);
+#endif
 
 	/* check if mouse is in that window */
 	if (is_mouse_in_rect(g_wallclock_x - 6,
