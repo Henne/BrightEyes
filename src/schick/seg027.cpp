@@ -639,7 +639,7 @@ void read_fight_lst(signed short fight_id)
 	lseek(fight_lst_handle, (Bit32s)sizeof(struct fight) * fight_id + 2, SEEK_SET);
 
 	/* read the fight entry */
-	_read(fight_lst_handle, (Bit8u*)&g_current_fight, sizeof(struct fight));
+	_read(fight_lst_handle, (Bit8u*)g_current_fight, sizeof(struct fight));
 
 #if !defined(__BORLANDC__)
 	char fight_name[21];
@@ -721,7 +721,7 @@ void init_common_buffers(void)
 	close(fd);
 
 	fd = load_regular_file(ARCHIVE_FILE_GAMES_NAM);
-	_read(fd, &g_savegame_names[0][0], 45);
+	_read(fd, (Bit8u*)&g_savegame_names, 45);
 	close(fd);
 
 	fd = load_archive_file(ARCHIVE_FILE_TOWNPAL_DAT);
