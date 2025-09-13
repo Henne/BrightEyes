@@ -31,14 +31,6 @@
 namespace M302de {
 #endif
 
-struct dummy3 {
-	signed short a[3];
-};
-
-struct dummy5 {
-	signed short a[5];
-};
-
 /**
  * \brief   shows the sell-screen an provides interaction
  */
@@ -67,13 +59,10 @@ void sell_screen(Bit8u *shop_ptr)
 	struct c_str_5 fmt_h = g_sell_screen_str_money_h;
 	struct c_str_5 fmt_s = g_sell_screen_str_money_s;
 	struct c_str_5 fmt_d = g_sell_screen_str_money_d;
-#if !defined(__BORLANDC__)
-	struct dummy3 array3 = { { 30, 95, 160 } };
-	struct dummy5 array5 = { { 35, 55, 75, 95, 115 } };
-#else
-	struct dummy3 array3 = *(struct dummy3*)(p_datseg + SELL_SCREEN_ITEMS_POSX);
-	struct dummy5 array5 = *(struct dummy5*)(p_datseg + SELL_SCREEN_ITEMS_POSY);
-#endif
+	struct Bit16s_3 array3 = g_sell_screen_items_posx;
+	//struct dummy3 array3 = { { 30, 95, 160 } };
+	struct Bit16s_5 array5 = g_sell_screen_items_posy;
+	//struct dummy5 array5 = { { 35, 55, 75, 95, 115 } };
 	Bit32s p_money;
 	Bit32s price = 0;
 	signed short l12 = 0;
@@ -89,7 +78,7 @@ void sell_screen(Bit8u *shop_ptr)
 
 	g_heroswap_allowed = 0;
 	l8 = g_request_refresh = 1;
-	g_sellitems = (g_fig_figure1_buf + 2100);
+	g_sellitems = g_fig_figure1_buf + 2100;
 
 	while (done == 0) {
 
@@ -299,7 +288,7 @@ void sell_screen(Bit8u *shop_ptr)
 			clear_loc_line();
 
 
-			GUI_print_loc_line((GUI_name_singular(get_itemname(host_readws((Bit8u*)g_sellitems + 7 * (l6 + item))))));
+			GUI_print_loc_line(GUI_name_singular(get_itemname(host_readws((Bit8u*)g_sellitems + 7 * (l6 + item)))));
 		}
 
 		if (g_mouse2_event  || g_action == ACTION_ID_PAGE_UP) {

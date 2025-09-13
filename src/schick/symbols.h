@@ -995,9 +995,9 @@
 //#define EMPTY_STRING6                   (0x64a0)    /* char; "" */
 //#define EMPTY_STRING7                   (0x64a1)    /* char; "" */
 //#define HERO_SEL_EXCLUDE                (0x64a2)    /* signed char */
-#define SEG047_INIT1                    (0x64a3)    /* signed short[7]; filled with zeroes */
-#define SEG047_INIT2                    (0x64b1)    /* signed short[7]; filled with zeroes */
-#define SEG047_INIT3                    (0x64bf)    /* signed short[7]; filled with zeroes */
+//#define SEG047_INIT1                    (0x64a3)    /* signed short[7]; filled with zeroes */
+//#define SEG047_INIT2                    (0x64b1)    /* signed short[7]; filled with zeroes */
+//#define SEG047_INIT3                    (0x64bf)    /* signed short[7]; filled with zeroes */
 // ?1
 //#define INVSLOT_BORDERXY_TABLE          (0x64ce)    /* struct(4)[25]; struct{signed short x,y;} */
 //#define CHEATSKILL_USABLE               (0x6532)    /* signed short; {0,1} */
@@ -1028,22 +1028,22 @@
 //#define BUY_SCREEN_STR_MONEY_H          (0x6bc8)    /* char[5]; "H %d" */
 //#define BUY_SCREEN_STR_MONEY_S          (0x6bcd)    /* char[5]; "S %d" */
 //#define BUY_SCREEN_STR_MONEY_D          (0x6bd2)    /* char[5]; "D %d" */
-#define BUY_SCREEN_ITEMS_POSX           (0x6bd7)    /* signed short[3]; { 30, 95, 160 } */
-#define BUY_SCREEN_ITEMS_POSY           (0x6bdd)    /* signed short[5]; { 35, 55, 75, 95, 115 } */
-#define BUY_SCREEN_STR_D_S              (0x6be7)    /* char[6]; "%d %s" */
+//#define BUY_SCREEN_ITEMS_POSX           (0x6bd7)    /* signed short[3]; { 30, 95, 160 } */
+//#define BUY_SCREEN_ITEMS_POSY           (0x6bdd)    /* signed short[5]; { 35, 55, 75, 95, 115 } */
+//#define BUY_SCREEN_STR_D_S              (0x6be7)    /* char[6]; "%d %s" */
 //#define BUY_SCREEN_STR_COMMA_SPACE      (0x6bed)    /* char[3]; ", " */
 //#define SELL_SCREEN_STR_MONEY_H         (0x6bf0)    /* char[5]; "H %d" */
 //#define SELL_SCREEN_STR_MONEY_S         (0x6bf5)    /* char[5]; "S %d" */
 //#define SELL_SCREEN_STR_MONEY_D         (0x6bfa)    /* char[5]; "D %d" */
-#define SELL_SCREEN_ITEMS_POSX          (0x6bff)    /* signed short[3]; { 30, 95, 160 } */
-#define SELL_SCREEN_ITEMS_POSY          (0x6c05)    /* signed short[5]; { 35, 55, 75, 95, 115 } */
+//#define SELL_SCREEN_ITEMS_POSX          (0x6bff)    /* signed short[3]; { 30, 95, 160 } */
+//#define SELL_SCREEN_ITEMS_POSY          (0x6c05)    /* signed short[5]; { 35, 55, 75, 95, 115 } */
 // ?1
 //#define SMITH_DESCR_TABLE               (0x6c10)    /* signed short[42] */
 //#define SMITH_STR_MONEY_H               (0x6c64)    /* char[5]; "H %d" */
 //#define SMITH_STR_MONEY_S               (0x6c69)    /* char[5]; "S %d" */
 //#define SMITH_STR_MONEY_D               (0x6c6e)    /* char[5]; "D %d" */
-#define SMITH_ITEMS_POSX                (0x6c73)    /* signed short[3]; { 30, 95, 160 } */
-#define SMITH_ITEMS_POSY                (0x6c79)    /* signed short[5]; { 35, 55, 75, 95, 115 } */
+//#define SMITH_ITEMS_POSX                (0x6c73)    /* signed short[3]; { 30, 95, 160 } */
+//#define SMITH_ITEMS_POSY                (0x6c79)    /* signed short[5]; { 35, 55, 75, 95, 115 } */
 // ?1
 //#define TAVERN_DESCR_TABLE              (0x6c84)    /* struct(4)[89]; struct{short a,b;} */
 //#define GOD_TEMPLES_TABLE_01            (0x6de8)    /* char[2]; array terminated by -1 */
@@ -1064,15 +1064,15 @@
 //#define STR_TEMP_FILE_WILDCARD          (0x6e72)    /* char[8]; "TEMP\%s" */
 //#define STR_NO_SAVE_IN_TEMPLE           (0x6e7a)    /* char[41]; "IN DIESEM TEMPEL KEIN SPEICHERN M\x99GLICH!" */
 // ?1
-#define TEMPLE_MIRACLE_BONUS            (0x6ea4)    /* signed char[15]; {0, 2, 15, 10, 20, 5, 10, 1, 15, 3, 15, 5, 10, 0} */
-#define TEMPLE_MIRACLE_DICE             (0x6eb3)    /* signed char[15]; {0, 9, 9, 10, 17, 6, 10, 10, 18, 10, 19, 8, 15, 0, 10} */
+//#define TEMPLE_MIRACLE_BONUS            (0x6ea4)    /* signed char[15]; {0, 2, 15, 10, 20, 5, 10, 1, 15, 3, 15, 5, 10, 0} */
+//#define TEMPLE_MIRACLE_DICE             (0x6eb3)    /* signed char[15]; {0, 9, 9, 10, 17, 6, 10, 10, 18, 10, 19, 8, 15, 0, 10} */
 //#define PASSAGE_TYPE_TO_NAME            (0x6ec2)    /* signed short[7]; {0x001d, 0x001e, 0x001f, 0x0020, 0x0021, 0x0022, 0x0023} */ /* maps entry PASSAGE_TYPE in SHIP_TABLE -> ptr to name of type of passage (Begleitschutzfahrt, Deckpassage etc.) */
 //#define SHIP_TABLE                      (0x6ed0)    /* struct(4)[8]; */
 //#define SEA_TRAVEL_TX_SHIP              (0x6ef0)    /* signed short[8]; { 0x0024, 0x0025, 0x0026, 0x0026, 0x0024, 0x0027, 0x0028, 0x0029 }*/ /* maps ship_type -> ptr to ship name (Langschiff, Kutter, etc.) */
 //#define SEA_ROUTES                      (0x6f00)    /* struct(8)[46] */
 //#define TRAVEL_BY_SHIP                  (0x7070)    /* unsigned char; 0 = on land, 1 = at the ship */
-#define SEA_TRAVEL_SLEEPBONUS_TABLE1    (0x7071)    /* signed short[7]; { -2, 0, 5, 4, 3, 1, 0 } */ /* maps entry PASSAGE_TYPE in SHIP_TABLE -> regeneration modifier (aka 'sleep quality') */
-#define SEA_TRAVEL_SLEEPBONUS_TABLE2    (0x707f)    /* signed short[7]; { -2, 0, 5, 4, 3, 1, 0 } */
+//#define SEA_TRAVEL_SLEEPBONUS_TABLE1    (0x7071)    /* signed short[7]; { -2, 0, 5, 4, 3, 1, 0 } */ /* maps entry PASSAGE_TYPE in SHIP_TABLE -> regeneration modifier (aka 'sleep quality') */
+//#define SEA_TRAVEL_SLEEPBONUS_TABLE2    (0x707f)    /* signed short[7]; { -2, 0, 5, 4, 3, 1, 0 } */
 //#define SEA_TRAVEL_STR_T                (0x708d)    /* char[2]; "T" */
 //#define SEA_TRAVEL_STR_EN               (0x708f)    /* char[3]; "EN" */
 //#define SEA_TRAVEL_STR_COMMA            (0x7092)    /* char[3]; ", " */

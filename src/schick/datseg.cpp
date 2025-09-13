@@ -3252,9 +3252,9 @@ const struct statuspage_line g_statuspage_skills_xy[7] = {
 char g_empty_string6[1] = ""; // ds:0x64a0
 char g_empty_string7[1] = ""; // ds:0x64a1
 signed char g_hero_sel_exclude = -1; // ds:0x64a2
-signed short g_seg047_init1[7] = { 0, 0, 0, 0, 0, 0, 0 }; // ds:0x64a3, filled with zeroes
-signed short g_seg047_init2[7] = { 0, 0, 0, 0, 0, 0, 0 }; // ds:0x64b1, filled with zeroes
-signed short g_seg047_init3[7] = { 0, 0, 0, 0, 0, 0, 0 }; // ds:0x64bf, filled with zeroes
+struct Bit16s_7 g_seg047_init1 = { 0, 0, 0, 0, 0, 0, 0 }; // ds:0x64a3, filled with zeroes
+struct Bit16s_7 g_seg047_init2 = { 0, 0, 0, 0, 0, 0, 0 }; // ds:0x64b1, filled with zeroes
+struct Bit16s_7 g_seg047_init3 = { 0, 0, 0, 0, 0, 0, 0 }; // ds:0x64bf, filled with zeroes
 unsigned char g_unkn_045[1] = { 0x00 }; // ds:0x64cd
 const struct struct_point g_invslot_borderxy_table[25] = {
 	{ 0x0044, 0x0037 },
@@ -3600,15 +3600,15 @@ unsigned char g_unkn_046[1] = { 0x00 }; // ds:0x6bc7
 struct c_str_5 g_buy_screen_str_money_h = { "H %d" }; // ds:0x6bc8
 struct c_str_5 g_buy_screen_str_money_s = { "S %d" }; // ds:0x6bcd
 struct c_str_5 g_buy_screen_str_money_d = { "D %d" }; // ds:0x6bd2
-signed short g_buy_screen_items_posx[3] = { 0x001e, 0x005f, 0x00a0 }; // ds:0x6bd7
-signed short g_buy_screen_items_posy[5] = { 0x0023, 0x0037, 0x004b, 0x005f, 0x0073 }; // ds:0x6bdd
-char g_buy_screen_str_d_s[6] = "%d %s"; // ds:0x6be7
+struct Bit16s_3 g_buy_screen_items_posx = { 30, 95, 160 }; // ds:0x6bd7
+struct Bit16s_5 g_buy_screen_items_posy = { 35, 55, 75, 95, 115 }; // ds:0x6bdd
+struct c_str_6 g_buy_screen_str_d_s = { "%d %s" }; // ds:0x6be7
 char g_buy_screen_str_comma_space[3] = ", "; // ds:0x6bed
 struct c_str_5 g_sell_screen_str_money_h = { "H %d" }; // ds:0x6bf0
 struct c_str_5 g_sell_screen_str_money_s = { "S %d" }; // ds:0x6bf5
 struct c_str_5 g_sell_screen_str_money_d = { "D %d" }; // ds:0x6bfa
-signed short g_sell_screen_items_posx[3] = { 0x001e, 0x005f, 0x00a0 }; // ds:0x6bff
-signed short g_sell_screen_items_posy[5] = { 0x0023, 0x0037, 0x004b, 0x005f, 0x0073 }; // ds:0x6c05
+struct Bit16s_3 g_sell_screen_items_posx = { 30, 95, 160 }; // ds:0x6bff
+struct Bit16s_5 g_sell_screen_items_posy = { 35, 55, 75, 95, 115 }; // ds:0x6c05
 unsigned char g_unkn_047[1] = { 0x00 }; // ds:0x6c0f
 struct smith_descr g_smith_descr_table[42] = { /* 'quality' is apparently unused. */
 	{  50,  1 },
@@ -3657,8 +3657,8 @@ struct smith_descr g_smith_descr_table[42] = { /* 'quality' is apparently unused
 struct c_str_5 g_smith_str_money_h = { "H %d" }; // ds:0x6c64
 struct c_str_5 g_smith_str_money_s = { "S %d" }; // ds:0x6c69
 struct c_str_5 g_smith_str_money_d = { "D %d" }; // ds:0x6c6e
-signed short g_smith_items_posx[3] = { 0x001e, 0x005f, 0x00a0 }; // ds:0x6c73
-signed short g_smith_items_posy[5] = { 0x0023, 0x0037, 0x004b, 0x005f, 0x0073 }; // ds:0x6c79
+struct Bit16s_3 g_smith_items_posx = { 30, 95, 160 }; // ds:0x6c73
+struct Bit16s_5 g_smith_items_posy = { 35, 55, 75, 95, 115 }; // ds:0x6c79
 unsigned char g_unkn_048[1] = { 0x00 }; // ds:0x6c83
 struct inn_descr g_tavern_descr_table[89] = {
 	{ 0x000c, -0x000a },
@@ -3788,8 +3788,8 @@ Bit8s* g_god_temples_index[15] = {
 char g_str_temp_file_wildcard[8] = "TEMP\\%s"; // ds:0x6e72
 char g_str_no_save_in_temple[41] = "IN DIESEM TEMPEL KEIN SPEICHERN M\x99GLICH!"; // ds:0x6e7a
 unsigned char g_unkn_049[1] = { 0x00 }; // ds:0x6ea3
-signed char g_temple_miracle_bonus[15] = { 0x00, 0x02, 0x0f, 0x0a, 0x14, 0x05, 0x0a, 0x01, 0x0f, 0x03, 0x0f, 0x05, 0x0a, 0x00, 0x01 }; // ds:0x6ea4
-signed char g_temple_miracle_dice[15] = { 0x00, 0x09, 0x09, 0x0a, 0x11, 0x06, 0x0a, 0x0a, 0x12, 0x0a, 0x13, 0x08, 0x0f, 0x00, 0x0a }; // ds:0x6eb3
+struct Bit8s_15 g_temple_miracle_bonus = { 0, 2, 15, 10, 20, 5, 10, 1, 15, 3, 15, 5, 10, 0, 1 }; // ds:0x6ea4
+struct Bit8s_15 g_temple_miracle_dice = { 0, 9, 9, 10, 17, 6, 10, 10, 18, 10, 19, 8, 15, 0, 10 }; // ds:0x6eb3
 signed short g_passage_type_to_name[7] = {
 	/* maps entry PASSAGE_TYPE in SHIP_TABLE -> ptr to name of type of passage (Begleitschutzfahrt, Deckpassage etc.) */
 	0x001d, /* HEUER */
@@ -3866,8 +3866,8 @@ struct sea_route g_sea_routes[46] = {
 	{ -1             , 0x00                  ,   0,  0, 0, 0, 0, 0 }
 }; // ds:0x6f00
 signed char g_travel_by_ship = 0; // ds:0x7070, 0 = on land, 1 = at the ship
-signed short g_sea_travel_sleepbonus_table1[7] = { -2, 0, 5, 4, 3, 1, 0 }; // ds:0x7071, { -2, 0, 5, 4, 3, 1, 0 }
-signed short g_sea_travel_sleepbonus_table2[7] = { -2, 0, 5, 4, 3, 1, 0 }; // ds:0x707f, { -2, 0, 5, 4, 3, 1, 0 }
+struct Bit16s_7 g_sea_travel_sleepbonus_table1 = { -2, 0, 5, 4, 3, 1, 0 }; // ds:0x7071, { -2, 0, 5, 4, 3, 1, 0 }
+struct Bit16s_7 g_sea_travel_sleepbonus_table2 = { -2, 0, 5, 4, 3, 1, 0 }; // ds:0x707f, { -2, 0, 5, 4, 3, 1, 0 }
 char g_sea_travel_str_t[2] = "T"; // ds:0x708d
 char g_sea_travel_str_en[3] = "EN"; // ds:0x708f
 char g_sea_travel_str_comma[3] = ", "; // ds:0x7092
@@ -5461,7 +5461,7 @@ extern char g_str_von_s_s[9];
 char *g_str_s_s_ptr = (char*)&g_str_s_s; // ds:0xa9e3, to STR_S_S; Bit8u*
 char *g_str_von_s_s_ptr = (char*)&g_str_von_s_s; // ds:0xa9e7, to STR_VON_S_S; Bit8u*
 signed short g_grammar_buf_no = 0; // ds:0xa9eb
-signed short g_grammar_gender_bitmasks[3] = { 0x1000, 0x2000, 0x3000 }; // ds:0xa9ed, {0x1000, 0x2000, 0x3000}
+struct Bit16s_3 g_grammar_gender_bitmasks = { 0x1000, 0x2000, 0x3000 }; // ds:0xa9ed, {0x1000, 0x2000, 0x3000}
 char g_grammar_pronouns_er[3] = "ER"; // ds:0xa9f3
 char g_grammar_pronouns_sie[4] = "SIE"; // ds:0xa9f6
 char g_grammar_pronouns_es[3] = "ES"; // ds:0xa9fa

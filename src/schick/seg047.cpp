@@ -20,10 +20,6 @@
 namespace M302de {
 #endif
 
-struct helper {
-	signed short v[7];
-};
-
 /**
  * \brief   get the index of the hero with the best CH value
  *
@@ -397,14 +393,11 @@ signed short select_hero_from_group(char *title)
 {
 	signed short i;
 	signed short answer;
+	struct Bit16s_7 dst = g_seg047_init1;
 	/* Hack for
 	signed short dst[7] = {0, 0, 0, 0, 0, 0, 0};
 	*/
-#if !defined (__BORLANDC__)
-	struct helper dst = {{0, 0, 0, 0, 0, 0, 0}};
-#else
-	struct helper dst = *(((struct helper*)(p_datseg + SEG047_INIT1)));
-#endif
+
 	signed short cnt;
 	signed short tw_bak;
 	signed short bak_2;
@@ -426,7 +419,7 @@ signed short select_hero_from_group(char *title)
 
 			/* save pointer to the name of the hero */
 			g_radio_name_list[cnt] = (char*)(hero + HERO_NAME2);
-			dst.v[cnt] = i;
+			dst.a[cnt] = i;
 			cnt++;
 		}
 	}
@@ -451,7 +444,7 @@ signed short select_hero_from_group(char *title)
 		g_textbox_width = tw_bak;
 
 		if (answer != -2)
-			return dst.v[answer];
+			return dst.a[answer];
 		else
 			return -1;
 	}
@@ -471,14 +464,11 @@ signed short select_hero_ok(char *title)
 {
 	signed short i;
 	signed short answer;
+	struct Bit16s_7 dst = g_seg047_init2;
 	/* Hack for
 	signed short dst[7] = {0, 0, 0, 0, 0, 0, 0};
 	*/
-#if !defined (__BORLANDC__)
-	struct helper dst = {{0, 0, 0, 0, 0, 0, 0}};
-#else
-	struct helper dst = *(((struct helper*)(p_datseg + SEG047_INIT2)));
-#endif
+
 	signed short cnt;
 	signed short tw_bak;
 	signed short bak_2;
@@ -499,7 +489,7 @@ signed short select_hero_ok(char *title)
 
 			/* save pointer to the name of the hero */
 			g_radio_name_list[cnt] = (char*)(hero + HERO_NAME2);
-			dst.v[cnt] = i;
+			dst.a[cnt] = i;
 			cnt++;
 		}
 	}
@@ -524,7 +514,7 @@ signed short select_hero_ok(char *title)
 		g_skilled_hero_pos = -1;
 
 		if (answer != -2)
-			return dst.v[answer];
+			return dst.a[answer];
 		else
 			return -1;
 	}
@@ -546,14 +536,11 @@ signed short select_hero_ok_forced(char *title)
 {
 	signed short i;
 	signed short answer;
+	struct Bit16s_7 dst = g_seg047_init3;
 	/* Hack for
 	signed short dst[7] = {0, 0, 0, 0, 0, 0, 0};
 	*/
-#if !defined (__BORLANDC__)
-	struct helper dst = {{0, 0, 0, 0, 0, 0, 0}};
-#else
-	struct helper dst = *(((struct helper*)(p_datseg + SEG047_INIT3)));
-#endif
+
 	signed short cnt;
 	signed short tw_bak;
 	signed short bak_2;
@@ -574,7 +561,7 @@ signed short select_hero_ok_forced(char *title)
 
 			/* save pointer to the name of the hero */
 			g_radio_name_list[cnt] = (char*)(hero + HERO_NAME2);
-			dst.v[cnt] = i;
+			dst.a[cnt] = i;
 			cnt++;
 		}
 	}
@@ -602,7 +589,7 @@ signed short select_hero_ok_forced(char *title)
 		g_skilled_hero_pos = -1;
 		g_textbox_width = tw_bak;
 
-		return dst.v[answer];
+		return dst.a[answer];
 	} else {
 
 		g_skilled_hero_pos = -1;

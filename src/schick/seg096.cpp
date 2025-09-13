@@ -24,10 +24,6 @@ namespace M302de {
 #endif
 
 
-struct dummy {
-	signed short a[3];
-};
-
 static char g_gui_print_char;		// ds:0xe4d8
 signed int g_dialogbox_indent_height;	// ds:0xe4d9
 signed int g_dialogbox_indent_width;	// ds:0xe4db
@@ -48,11 +44,8 @@ Bit8u* GUI_names_grammar(signed short flag, signed short index, signed short typ
 	signed short l2 = 0;
 	char *p_name;
 	signed short l4;
-#if !defined(__BORLANDC__)
-	struct dummy lp5 = { {0x1000, 0x2000, 0x3000} };
-#else
-	struct dummy lp5 = *(struct dummy*)(p_datseg + GRAMMAR_GENDER_BITMASKS);
-#endif
+	struct Bit16s_3 lp5 = g_grammar_gender_bitmasks;
+	//signed short lp5[3] = { {0x1000, 0x2000, 0x3000} };
 
 	if (type == 0) {
 		/* string_array_itemnames */

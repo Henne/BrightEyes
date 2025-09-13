@@ -8,9 +8,12 @@ extern char ds[1];
 #endif
 
 /* dummy structs */
-struct c_str_5 {
-	char a[5];
-};
+struct c_str_5 { char a[5]; };
+struct c_str_6 { char a[6]; };
+struct Bit8s_15 { Bit8s a[15]; };
+struct Bit16s_3 { Bit16s a[3]; };
+struct Bit16s_5 { Bit16s a[5]; };
+struct Bit16s_7 { Bit16s a[7]; };
 
 
 struct sample_idx {
@@ -1407,6 +1410,9 @@ extern const struct statuspage_line g_statuspage_skills_xy[7]; //ds:0x6476; seg0
 extern char g_empty_string6[1];			//ds:0x64a0; seg046
 extern char g_empty_string7[1];			//ds:0x64a1; seg046
 extern signed char g_hero_sel_exclude;		//ds:0x64a2; seg047, seg049, seg103, seg120
+extern struct Bit16s_7 g_seg047_init1;		//ds:0x64a3; seg047
+extern struct Bit16s_7 g_seg047_init2;		//ds:0x64b1; seg047
+extern struct Bit16s_7 g_seg047_init3;		//ds:0x64bf; seg047
 extern const struct struct_point g_invslot_borderxy_table[25];	//ds:0x64ce; seg048
 
 extern signed short g_cheatskill_usable;	//ds:0x6532; seg048, seg103
@@ -1433,36 +1439,43 @@ extern const signed short g_dcampfights[4];	//ds:0x66e2; seg052
 extern const healer_descr g_healer_descr_table[41];	//ds:0x66ea; seg053
 extern const struct inn_descr g_inn_descr_table[77];	//ds:0x673c; seg054
 extern struct shop_descr g_shop_descr_table[95];	//ds:0x6870; seg055, seg065
-extern struct c_str_5 g_buy_screen_str_money_h;		// ds:0x6bc8; seg056
-extern struct c_str_5 g_buy_screen_str_money_s;		// ds:0x6bcd; seg056
-extern struct c_str_5 g_buy_screen_str_money_d;		// ds:0x6bd2; seg056
-
-extern char g_buy_screen_str_comma_space[3];	//ds:0x6bed; seg056
+extern struct c_str_5 g_buy_screen_str_money_h;		//ds:0x6bc8; seg056
+extern struct c_str_5 g_buy_screen_str_money_s;		//ds:0x6bcd; seg056
+extern struct c_str_5 g_buy_screen_str_money_d;		//ds:0x6bd2; seg056
+extern struct Bit16s_3 g_buy_screen_items_posx;		//ds:0x6bd7; seg056
+extern struct Bit16s_5 g_buy_screen_items_posy;		//ds:0x6bdd; seg056
+extern struct c_str_6 g_buy_screen_str_d_s;		//ds:0x6be7; seg056
+extern char g_buy_screen_str_comma_space[3];		//ds:0x6bed; seg056
 
 extern struct c_str_5 g_sell_screen_str_money_h;	// ds:0x6bf0; seg057
 extern struct c_str_5 g_sell_screen_str_money_s;	// ds:0x6bf5; seg057
 extern struct c_str_5 g_sell_screen_str_money_d;	// ds:0x6bfa; seg057
+extern struct Bit16s_3 g_sell_screen_items_posx;	// ds:0x6bff; seg057
+extern struct Bit16s_5 g_sell_screen_items_posy;	// ds:0x6c05; seg057
 
 extern struct smith_descr g_smith_descr_table[42];	//ds:0x6c10; seg058
 
 extern struct c_str_5 g_smith_str_money_h;	// ds:0x6c64; seg058
 extern struct c_str_5 g_smith_str_money_s;	// ds:0x6c69; seg058
 extern struct c_str_5 g_smith_str_money_d;	// ds:0x6c6e; seg058
+extern struct Bit16s_3 g_smith_items_posx;	// ds:0x6c73; seg058
+extern struct Bit16s_5 g_smith_items_posy;	// ds:0x6c79; seg058
 
 extern struct inn_descr g_tavern_descr_table[89];	//ds:0x6c84; seg054, seg059, seg060
 
 extern Bit8s *g_god_temples_index[15]; 		//ds:0x6e36; seg061
 extern char g_str_temp_file_wildcard[8];	//ds:0x6e72; seg061
 extern char g_str_no_save_in_temple[41];	//ds:0x6e7a; seg061
-
+extern struct Bit8s_15 g_temple_miracle_bonus;	//ds:0x6ea4; seg062
+extern struct Bit8s_15 g_temple_miracle_dice;	//ds:0x6eb3; seg062
 extern signed short g_passage_type_to_name[7];	//ds:0x6ec2; seg063
-
 extern const struct ship g_ship_table[8];	//ds:0x6ed0; seg063
 extern signed short g_sea_travel_tx_ship[8];	//ds:0x6ef0; seg063
 
 extern struct sea_route g_sea_routes[46];	//ds:0x6f00; seg002, seg063, seg064 SHOULD BE IN GAME STATE
 extern signed char g_travel_by_ship;		//ds:0x7070; seg049, seg063
-
+extern struct Bit16s_7 g_sea_travel_sleepbonus_table1;	//ds:0x7071; seg063
+extern struct Bit16s_7 g_sea_travel_sleepbonus_table2;	//ds:0x707f; seg063
 extern char g_sea_travel_str_t[2];		//ds:0x708d; seg063
 extern char g_sea_travel_str_en[3];		//ds:0x708f; seg063
 extern char g_sea_travel_str_comma[3];		//ds:0x7092; seg063
@@ -1569,6 +1582,7 @@ extern signed short g_grammar_noarticle_table[24];	//ds:0xa9b3; seg096
 extern char *g_str_s_s_ptr;			//ds:0xabe3; seg096
 extern char *g_str_von_s_s_ptr;			//ds:0xabe7; seg096
 extern signed short g_grammar_buf_no;		//ds:0xa9eb; seg096
+extern struct Bit16s_3 g_grammar_gender_bitmasks;	//ds:0xa9ed; seg096
 
 extern char g_grammar_pronouns_er[3];		//ds:0xa9f3; seg096
 extern char g_grammar_pronouns_sie[4];		//ds:0xa9f6; seg096

@@ -79,10 +79,6 @@ void passages_init(void)
 	}
 }
 
-struct dummy7 {
-	signed short a[7];
-};
-
 void do_harbor(void)
 {
 	signed short i; /* diverse usage */
@@ -95,11 +91,9 @@ void do_harbor(void)
 	Bit32s money;
 
 	done = 0;
-#if !defined(__BORLANDC__)
-	struct dummy7 a = { { -2, 0, 5, 4, 3, 1, 0 } };
-#else
-	struct dummy7 a = *(struct dummy7*)(p_datseg + SEA_TRAVEL_SLEEPBONUS_TABLE1);
-#endif
+	struct Bit16s_7 a = g_sea_travel_sleepbonus_table1;
+	//struct dummy7 a = { { -2, 0, 5, 4, 3, 1, 0 } };
+
 	flag = 1;
 
 	gs_current_signpost = gs_current_typeindex;
@@ -454,11 +448,8 @@ void sea_travel(signed short passage, signed short dir)
 	Bit8u *ptr;
 	Bit32s off;
 
-#if !defined(__BORLANDC__)
-	struct dummy7 a =  { { -2, 0, 5, 4, 3, 1, 0 } };
-#else
-	struct dummy7 a = *(struct dummy7*)(p_datseg + SEA_TRAVEL_SLEEPBONUS_TABLE2);
-#endif
+	struct Bit16s_7 a = g_sea_travel_sleepbonus_table2;
+	//struct dummy7 a = { { -2, 0, 5, 4, 3, 1, 0 } };
 
 	g_traveling = 1;
 

@@ -23,10 +23,6 @@
 namespace M302de {
 #endif
 
-struct dummy15 {
-	signed char a[15];
-};
-
 void ask_miracle(void)
 {
 	signed short l_si;
@@ -40,13 +36,10 @@ void ask_miracle(void)
 	signed short i;
 	signed short slot;
 	signed short item_id;
-#if !defined(__BORLANDC__)
-	struct dummy15 ga1 = {{0, 2, 15, 10, 20, 5, 10, 1, 15, 3, 15, 5, 10, 0}};
-	struct dummy15 god_dice = {{0, 9, 9, 10, 17, 6, 10, 10, 18, 10, 19, 8, 15, 0, 10}};
-#else
-	struct dummy15 ga1 = *(struct dummy15*)(p_datseg + TEMPLE_MIRACLE_BONUS);
-	struct dummy15 god_dice = *(struct dummy15*)(p_datseg + TEMPLE_MIRACLE_DICE);
-#endif
+	struct Bit8s_15 ga1 = g_temple_miracle_bonus;
+	//struct dummy15 ga1 = {{0, 2, 15, 10, 20, 5, 10, 1, 15, 3, 15, 5, 10, 0}};
+	struct Bit8s_15 god_dice = g_temple_miracle_dice;
+	//struct dummy15 god_dice = {{0, 9, 9, 10, 17, 6, 10, 10, 18, 10, 19, 8, 15, 0, 10}};
 
 	l3 = 0;
 	fi_bak = g_text_file_index;

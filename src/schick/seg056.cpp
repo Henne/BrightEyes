@@ -56,19 +56,6 @@ int shop_compar(const void *p1_in, const void *p2_in)
 	return v1 < v2 ? -1 : (v1 == v2 ? 0 : 1);
 }
 
-struct dummy3 {
-	signed short a[3];
-};
-
-struct dummy5 {
-	signed short a[5];
-};
-
-struct dummy_c6 {
-	char a[6];
-};
-
-
 /**
  * \brief   shows the buy-screen and provides interaction
  */
@@ -92,13 +79,11 @@ void buy_screen(void)
 	struct c_str_5 fmt_h = g_buy_screen_str_money_h;
 	struct c_str_5 fmt_s = g_buy_screen_str_money_s;
 	struct c_str_5 fmt_d = g_buy_screen_str_money_d;
-#if !defined(__BORLANDC__)
-	struct dummy3 array3 = { { 30, 95, 160 } };
-	struct dummy5 array5 = { { 35, 55, 75, 95, 115 } };
-#else
-	struct dummy3 array3 = *(struct dummy3*)(p_datseg + BUY_SCREEN_ITEMS_POSX);
-	struct dummy5 array5 = *(struct dummy5*)(p_datseg + BUY_SCREEN_ITEMS_POSY);
-#endif
+	struct Bit16s_3 array3 = g_buy_screen_items_posx;
+	//signed short array3[3] = { { 30, 95, 160 } };
+	struct Bit16s_5 array5 = g_buy_screen_items_posy;
+	//signed short array5[5] = { { 35, 55, 75, 95, 115 } };
+	//
 	Bit32s price = 0;
 	Bit32s l9;
 	Bit32s p_money;
@@ -112,11 +97,9 @@ void buy_screen(void)
 	signed short given_items;
 	signed short l12;
 	signed short l13;
-#if !defined(__BORLANDC__)
-	struct dummy_c6 fmt_d_s = { "%d %s" };
-#else
-	struct dummy_c6 fmt_d_s = *(struct dummy_c6*)(p_datseg + BUY_SCREEN_STR_D_S);
-#endif
+	struct c_str_6 fmt_d_s = g_buy_screen_str_d_s;
+	//char fmt_d_s[6] = { "%d %s" };
+	//
 	signed short l15 = 0;
 	signed short l16;
 	signed short l17;

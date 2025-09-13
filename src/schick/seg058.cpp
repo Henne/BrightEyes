@@ -98,14 +98,6 @@ void add_item_to_smith(struct smith_descr *smith, Bit8u *hero, signed short item
 	host_writebs((Bit8u*)g_sellitems + 7 * smith_pos + 6, (signed char)item_pos);
 }
 
-struct dummy3 {
-	signed short a[3];
-};
-
-struct dummy5 {
-	signed short a[5];
-};
-
 /**
  * \brief   shows the repair-screen an provides interaction
  *
@@ -137,13 +129,10 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 	struct c_str_5 fmt_h = g_smith_str_money_h;
 	struct c_str_5 fmt_s = g_smith_str_money_s;
 	struct c_str_5 fmt_d = g_smith_str_money_d;
-#if !defined(__BORLANDC__)
-	struct dummy3 array3 = { { 30, 95, 160 } };
-	struct dummy5 array5 = { { 35, 55, 75, 95, 115 } };
-#else
-	struct dummy3 array3 = *(struct dummy3*)(p_datseg + SMITH_ITEMS_POSX);
-	struct dummy5 array5 = *(struct dummy5*)(p_datseg + SMITH_ITEMS_POSY);
-#endif
+	struct Bit16s_3 array3 = g_smith_items_posx;
+	//signed short array3[3] = { { 30, 95, 160 } };
+	struct Bit16s_5 array5 = g_smith_items_posy;
+	//signed short array5[5] = { { 35, 55, 75, 95, 115 } };
 
 	Bit32s price;
 	Bit32s p_money;
