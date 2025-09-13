@@ -415,18 +415,7 @@ signed short seg037_0791(struct enemy_sheet* enemy, signed short enemy_no, signe
 	signed short l_si;
 	signed short l_di;
 
-#if !defined(__BORLANDC__)
-	diff.d[0].x = 1;
-	diff.d[0].y = 0;
-	diff.d[1].x = 0;
-	diff.d[1].y = -1;
-	diff.d[2].x = -1;
-	diff.d[2].y = 0;
-	diff.d[3].x = 0;
-	diff.d[3].y = 1;
-#else
-	diff = *(struct dummy*)(p_datseg + VIEWDIR_OFFSETS5);
-#endif
+	struct viewdir_offsets a = g_viewdir_offsets5;
 
 	retval = 0;
 
@@ -681,18 +670,7 @@ void enemy_turn(struct enemy_sheet *enemy, signed short enemy_no, signed short x
 
 	done = 0;
 
-#if !defined(__BORLANDC__)
-	diff.d[0].x = 1;
-	diff.d[0].y = 0;
-	diff.d[1].x = 0;
-	diff.d[1].y = -1;
-	diff.d[2].x = -1;
-	diff.d[2].y = 0;
-	diff.d[3].x = 0;
-	diff.d[3].y = 1;
-#else
-	diff = *(struct dummy*)(p_datseg + VIEWDIR_OFFSETS6);
-#endif
+	struct viewdir_offsets a = g_viewdir_offsets6;
 
 	/* check if we are in a special fight */
 

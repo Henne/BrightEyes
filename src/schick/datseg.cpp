@@ -2940,58 +2940,19 @@ const char g_empty_string4[1] = ""; // ds:0x5f43
 const char g_empty_string5[1] = ""; // ds:0x5f44
 unsigned char g_unkn_042[1] = { 0x00 }; // ds:0x5f45
 signed short g_cb_obj_nonobstacle[27] = { 0x0017, 0x0018, 0x0019, 0x001a, 0x001b, 0x0024, 0x0025, 0x0026, 0x0027, 0x0028, 0x0029, 0x002a, 0x002b, 0x002c, 0x002d, 0x002e, 0x002f, 0x0030, 0x0031, 0x0032, 0x0033, 0x0034, 0x0035, 0x0036, 0x0037, 0x0038, -1 }; // ds:0x5f46, { 23,24,25,26,27,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,-1 }
-struct{signed short x, y;} g_viewdir_offsets1[4] = {
-	{ 0x0001, 0x0000 },
-	{ 0x0000, -1 },
-	{ -0x0001, 0x0000 },
-	{ 0x0000, 0x0001 }
-}; // ds:0x5f7c, ; { , {0,-1}, {-1,0},  }
-struct{signed short x, y;} g_viewdir_offsets2[4] = {
-	{ 0x0001, 0x0000 },
-	{ 0x0000, -1 },
-	{ -0x0001, 0x0000 },
-	{ 0x0000, 0x0001 }
-}; // ds:0x5f8c, ; { , {0,-1}, {-1,0},  }
+struct viewdir_offsets g_viewdir_offsets1 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } }; // ds:0x5f7c
+struct viewdir_offsets g_viewdir_offsets2 = { { { 1, 0 }, { 0, -1 }, { -1, 0 },	{ 0, 1 } } }; // ds:0x5f8c
 char g_string_14spaces[15] = "              "; // ds:0x5f9c
 unsigned char g_unkn_043[1] = { 0x00 }; // ds:0x5fab
 signed char g_af_spell_list[11] = { 0x34, 0x0c, 0x35, 0x21, 0x08, 0x1b, 0x2e, 0x31, 0x36, 0x38, 0x48 }; // ds:0x5fac
-struct{signed short x,y;} g_viewdir_offsets3[4] = {
-	{ 0x0001, 0x0000 },
-	{ 0x0000, -1 },
-	{ -0x0001, 0x0000 },
-	{ 0x0000, 0x0001 }
-}; // ds:0x5fb7, ; { , {0,-1}, {-1,0},  }
-struct{signed short x,y;} g_viewdir_offsets4[4] = {
-	{ 0x0001, 0x0000 },
-	{ 0x0000, -1 },
-	{ -0x0001, 0x0000 },
-	{ 0x0000, 0x0001 }
-}; // ds:0x5fc7, ; { , {0,-1}, {-1,0},  }
+struct viewdir_offsets g_viewdir_offsets3 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } }; // ds:0x5fb7
+struct viewdir_offsets g_viewdir_offsets4 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } }; // ds:0x5fc7
 unsigned char g_unkn_044[1] = { 0x00 }; // ds:0x5fd7
-struct{signed short x,y;} g_viewdir_offsets5[4] = {
-	{ 0x0001, 0x0000 },
-	{ 0x0000, -1 },
-	{ -0x0001, 0x0000 },
-	{ 0x0000, 0x0001 }
-}; // ds:0x5fd8, ; { , {0,-1}, {-1,0},  }
-struct{signed short x,y;} g_viewdir_offsets6[4] = {
-	{ 0x0001, 0x0000 },
-	{ 0x0000, -1 },
-	{ -0x0001, 0x0000 },
-	{ 0x0000, 0x0001 }
-}; // ds:0x5fe8, ; { , {0,-1}, {-1,0},  }
-struct{signed short x,y;} g_viewdir_invoffsets1[4] = {
-	{ -0x0001, 0x0000 },
-	{ 0x0000, 0x0001 },
-	{ 0x0001, 0x0000 },
-	{ 0x0000, -1 }
-}; // ds:0x5ff8, ; { {-1,0}, , , {0,-1} }
-struct{signed short x,y;} g_viewdir_offsets7[4] = {
-	{ 0x0001, 0x0000 },
-	{ 0x0000, -1 },
-	{ -0x0001, 0x0000 },
-	{ 0x0000, 0x0001 }
-}; // ds:0x6008, ; { , {0,-1}, {-1,0},  }
+struct viewdir_offsets g_viewdir_offsets5 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } };	// ds:0x5fd8
+struct viewdir_offsets g_viewdir_offsets6 = { { { 1, 0 }, { 0, -1 }, { -1, 0 }, { 0, 1 } } };	// ds:0x5fe8
+struct viewdir_offsets g_viewdir_invoffsets1 = { { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } } };// ds:0x5ff8
+struct viewdir_offsets g_viewdir_offsets7 = { {	{ 1, 0 }, { 0, -1 }, { -1, 0 },	{ 0, 1 } } };	// ds:0x6008
+
 struct struct_point g_gfxtab_twofielded_extra_cb[4] = {
 	{ -1,  0 }, {  0,  1 }, {  1,  0 }, {  0, -1 } }; // ds:0x6018, ; { {-1,0}, , , {0,-1} }
 signed char g_gfxtab_twofielded_extra_ox[4] = { 10, -10, -10, 10 }; // ds:0x6028, { 10,-10,-10,10 }
@@ -3038,15 +2999,10 @@ signed short g_knive_weapons[5] = {
 	ITEM_WOLFSMESSER,
 	-1
 }; // ds:0x616e, terminated with -1
-struct{signed char x,y;} g_viewdir_invoffsets2[4] = { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } }; // ds:0x6178, ; { {-1,0}, , , {0,-1} }
+struct viewdir_offsets8s g_viewdir_invoffsets2 = { { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } } }; // ds:0x6178
 char g_string_casts_spell[14] = "%s ZAUBERT %s"; // ds:0x6180
 signed short g_mspell_awake_flag = 0; // ds:0x618e
-struct{signed char x,y;} g_viewdir_invoffsets3[4] = {
-	{ -0x01, 0x00 },
-	{ 0x00, 0x01 },
-	{ 0x01, 0x00 },
-	{ 0x00, -1 }
-}; // ds:0x6190, ; { {-1,0}, , , {0,-1} }
+struct viewdir_offsets8s g_viewdir_invoffsets3 = { { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } } }; // ds:0x6190
 const signed short g_gfxtab_shotbolt_ox[6][4] = {
 	-17, -3, -3, 3,
 	-17, -3, -3, 3,

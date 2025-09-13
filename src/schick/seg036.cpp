@@ -543,19 +543,7 @@ signed short seg036_8cf(Bit8u *hero, signed short hero_pos, signed short renegad
 	signed short l5;
 	signed short decided;
 
-#if !defined(__BORLANDC__)
-	struct dummy a;
-	a.a[0].x = 1;
-	a.a[0].y = 0;
-	a.a[1].x = 0;
-	a.a[1].y = -1;
-	a.a[2].x = -1;
-	a.a[2].y = 0;
-	a.a[3].x = 0;
-	a.a[3].y = 1;
-#else
-	struct dummy a = *(struct dummy*)(p_datseg + VIEWDIR_OFFSETS3);
-#endif
+	struct viewdir_offsets a = g_viewdir_offsets3;
 
 	retval = 0;
 	done = 0;
@@ -765,19 +753,7 @@ void KI_hero(Bit8u *hero, signed short hero_pos, signed short x, signed short y)
 	signed short hero_x;
 	signed short hero_y;
 
-#if !defined(__BORLANDC__)
-	struct dummy a;
-	a.a[0].x = 1;
-	a.a[0].y = 0;
-	a.a[1].x = 0;
-	a.a[1].y = -1;
-	a.a[2].x = -1;
-	a.a[2].y = 0;
-	a.a[3].x = 0;
-	a.a[3].y = 1;
-#else
-	struct dummy a = *(struct dummy*)(p_datseg + VIEWDIR_OFFSETS4);
-#endif
+	struct viewdir_offsets a = g_viewdir_offsets4;
 
 	done = 0;
 	l5 = 1;

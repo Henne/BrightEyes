@@ -72,7 +72,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 	signed short target_x;
 	signed short target_y;
 	signed short dir;
-	struct dummy dst = *(struct dummy*)(p_datseg + VIEWDIR_INVOFFSETS3);
+	struct viewdir_offsets8s dst = g_viewdir_invoffsets3;
 	struct struct_msg tmp;
 
 	update_mouse_cursor();

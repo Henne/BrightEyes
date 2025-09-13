@@ -71,7 +71,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 	signed short l16 = 0;
 	signed short l17 = 0;
 	signed short fighter_id;
-	struct dummy dst = *(struct dummy*)(p_datseg + VIEWDIR_INVOFFSETS2);
+	struct viewdir_offsets8s dst = g_viewdir_invoffsets2;
 	signed short hero_x;
 	signed short hero_y;
 	signed short target_x;

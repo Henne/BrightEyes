@@ -157,17 +157,9 @@ void FIG_find_path_to_target_backtrack(Bit8u *dist_table_ptr, signed short targe
 	signed short x_bak;
 	signed short y_bak;
 	signed short target_out_of_reach; /* will be set to 1 if the target is out of reach with avail_bp steps. Redundant, as this could simply be tested by (avail_bp < dist). */
-	struct dummy inverse_coordinate_offset;
-	Bit8u *path_table[4];
+	struct viewdir_offsets inverse_coordinate_offset = g_viewdir_invoffsets1;
 
-#if !defined(__BORLANDC__)
-	for (int i = 0; i < 4; i++) {
-		inverse_coordinate_offset.o[i].x = host_readws(p_datseg + VIEWDIR_INVOFFSETS1 + 4 * i);
-		inverse_coordinate_offset.o[i].y = host_readws(p_datseg + VIEWDIR_INVOFFSETS1 + 4 * i + 2);
-	}
-#else
-	inverse_coordinate_offset = *((struct dummy*)(p_datseg + VIEWDIR_INVOFFSETS1));
-#endif
+	Bit8u *path_table[4];
 
 	target_out_of_reach = 0;
 	lowest_nr_dir_changes = 99;
@@ -210,10 +202,10 @@ void FIG_find_path_to_target_backtrack(Bit8u *dist_table_ptr, signed short targe
 
 			while (success == 0) {
 
-				backtrack_y = target_y + inverse_coordinate_offset.o[dir].y;
-				backtrack_x = target_x + inverse_coordinate_offset.o[dir].x;
-				tail_y = backtrack_y + inverse_coordinate_offset.o[dir].y;
-				tail_x = backtrack_x + inverse_coordinate_offset.o[dir].x;
+				backtrack_y = target_y + inverse_coordinate_offset.a[dir].y;
+				backtrack_x = target_x + inverse_coordinate_offset.a[dir].x;
+				tail_y = backtrack_y + inverse_coordinate_offset.a[dir].y;
+				tail_x = backtrack_x + inverse_coordinate_offset.a[dir].x;
 
 				if ((backtrack_y < 24) && (backtrack_y >= 0) && (backtrack_x < 24) && (backtrack_x >= 0))
 				{
@@ -383,16 +375,7 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 	signed short target_reached_y[10];
 	signed short unused[10]; /* array gets only written, but never read */
 
-	struct dummy coordinate_offset;
-
-#if !defined(__BORLANDC__)
-	for (int i = 0; i < 4; i++) {
-		coordinate_offset.o[i].x = host_readws(p_datseg + VIEWDIR_OFFSETS7 + 4 * i);
-		coordinate_offset.o[i].y = host_readws(p_datseg + VIEWDIR_OFFSETS7 + 4 * i + 2);
-	}
-#else
-	coordinate_offset = *((struct dummy*)(p_datseg + VIEWDIR_OFFSETS7));
-#endif
+	struct viewdir_offsets coordinate_offset = g_viewdir_offsets7;
 
 	actor_enemy_ptr = NULL;
 	two_squares = 0;
@@ -475,8 +458,8 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 
 						while (done == 0) {
 
-							new_y = y + ranged_dist * coordinate_offset.o[dir].y;
-							new_x = x + ranged_dist * coordinate_offset.o[dir].x;
+							new_y = y + ranged_dist * coordinate_offset.a[dir].y;
+							new_x = x + ranged_dist * coordinate_offset.a[dir].x;
 
 
 							if ((new_y < 0) || (new_y > 23) || (new_x < 0) ||
@@ -531,8 +514,8 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 						ranged_dist = 1;
 
 						while (done == 0) {
-							new_y = y + ranged_dist * coordinate_offset.o[dir].y;
-							new_x = x + ranged_dist * coordinate_offset.o[dir].x;
+							new_y = y + ranged_dist * coordinate_offset.a[dir].y;
+							new_x = x + ranged_dist * coordinate_offset.a[dir].x;
 
 							if ((new_y < 0) || (new_y > 23) || (new_x < 0) ||
 #ifndef M302de_ORIGINAL_BUGFIX
@@ -590,10 +573,10 @@ signed short FIG_find_path_to_target(Bit8u *actor_ptr, signed short actor_id, si
 
 					for (i = 0; i < 4; i++) {
 
-						new_y = y + coordinate_offset.o[i].y;
-						new_x = x + coordinate_offset.o[i].x;
-						tail_y = y - coordinate_offset.o[i].y; /* for movement of two-squares actors */
-						tail_x = x - coordinate_offset.o[i].x; /* for movement of two-squares actors */
+						new_y = y + coordinate_offset.a[i].y;
+						new_x = x + coordinate_offset.a[i].x;
+						tail_y = y - coordinate_offset.a[i].y; /* for movement of two-squares actors */
+						tail_x = x - coordinate_offset.a[i].x; /* for movement of two-squares actors */
 
 						if ((new_y < 24) && (new_y >= 0) && (new_x < 24) && (new_x >= 0)) {
 

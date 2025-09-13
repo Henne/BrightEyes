@@ -941,18 +941,18 @@
 //#define EMPTY_STRING5                   (0x5f44)    /* char; "" */
 // ?1
 //#define CB_OBJ_NONOBSTACLE              (0x5f46)    /* signed short[27]; { 23,24,25,26,27,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,-1 } */
-#define VIEWDIR_OFFSETS1                (0x5f7c)    /* struct(4)[4]; struct{signed short x, y;}; { {1,0}, {0,-1}, {-1,0}, {0,1} } */
-#define VIEWDIR_OFFSETS2                (0x5f8c)    /* struct(4)[4]; struct{signed short x, y;}; { {1,0}, {0,-1}, {-1,0}, {0,1} } */
+//#define VIEWDIR_OFFSETS1                (0x5f7c)    /* struct(4)[4]; struct{signed short x, y;}; { {1,0}, {0,-1}, {-1,0}, {0,1} } */
+//#define VIEWDIR_OFFSETS2                (0x5f8c)    /* struct(4)[4]; struct{signed short x, y;}; { {1,0}, {0,-1}, {-1,0}, {0,1} } */
 //#define STRING_14SPACES                 (0x5f9c)    /* char[15]; "              " */
 // ?1
 //#define AF_SPELL_LIST                   (0x5fac)    /* char[11] */
-#define VIEWDIR_OFFSETS3                (0x5fb7)    /* struct(4)[4]; struct{signed short x,y;}; { {1,0}, {0,-1}, {-1,0}, {0,1} } */
-#define VIEWDIR_OFFSETS4                (0x5fc7)    /* struct(4)[4]; struct{signed short x,y;}; { {1,0}, {0,-1}, {-1,0}, {0,1} } */
+//#define VIEWDIR_OFFSETS3                (0x5fb7)    /* struct(4)[4]; struct{signed short x,y;}; { {1,0}, {0,-1}, {-1,0}, {0,1} } */
+//#define VIEWDIR_OFFSETS4                (0x5fc7)    /* struct(4)[4]; struct{signed short x,y;}; { {1,0}, {0,-1}, {-1,0}, {0,1} } */
 // ?1
-#define VIEWDIR_OFFSETS5                (0x5fd8)    /* struct(4)[4]; struct{signed short x,y;}; { {1,0}, {0,-1}, {-1,0}, {0,1} } */
-#define VIEWDIR_OFFSETS6                (0x5fe8)    /* struct(4)[4]; struct{signed short x,y;}; { {1,0}, {0,-1}, {-1,0}, {0,1} } */
-#define VIEWDIR_INVOFFSETS1             (0x5ff8)    /* struct(4)[4]; struct{signed short x,y;}; { {-1,0}, {0,1}, {1,0}, {0,-1} } */
-#define VIEWDIR_OFFSETS7                (0x6008)    /* struct(4)[4]; struct{signed short x,y;}; { {1,0}, {0,-1}, {-1,0}, {0,1} } */
+//#define VIEWDIR_OFFSETS5                (0x5fd8)    /* struct(4)[4]; struct{signed short x,y;}; { {1,0}, {0,-1}, {-1,0}, {0,1} } */
+//#define VIEWDIR_OFFSETS6                (0x5fe8)    /* struct(4)[4]; struct{signed short x,y;}; { {1,0}, {0,-1}, {-1,0}, {0,1} } */
+//#define VIEWDIR_INVOFFSETS1             (0x5ff8)    /* struct(4)[4]; struct{signed short x,y;}; { {-1,0}, {0,1}, {1,0}, {0,-1} } */
+//#define VIEWDIR_OFFSETS7                (0x6008)    /* struct(4)[4]; struct{signed short x,y;}; { {1,0}, {0,-1}, {-1,0}, {0,1} } */
 //#define GFXTAB_TWOFIELDED_EXTRA_CB      (0x6018)    /* struct(4)[4]; struct{signed short x,y;}; { {-1,0}, {0,1}, {1,0}, {0,-1} } */
 //#define GFXTAB_TWOFIELDED_EXTRA_OX      (0x6028)    /* signed char[4]; { 10,-10,-10,10 } */
 //#define GFXTAB_TWOFIELDED_EXTRA_OY      (0x602c)    /* signed char[4]; { 10,-10,-5,-5 } */
@@ -966,10 +966,10 @@
 //#define GFXTAB_OBJ_OFFSET_Y             (0x60de)    /* signed short[63] */
 //#define FORCE_WEAPONS                   (0x615c)    /* signed short[9]; terminated with -1 */
 //#define KNIVE_WEAPONS                   (0x616e)    /* signed short[5]; terminated with -1 */
-#define VIEWDIR_INVOFFSETS2             (0x6178)    /* struct(2)[4]; struct{signed char x,y;}; { {-1,0}, {0,1}, {1,0}, {0,-1} } */
+//#define VIEWDIR_INVOFFSETS2             (0x6178)    /* struct(2)[4]; struct{signed char x,y;}; { {-1,0}, {0,1}, {1,0}, {0,-1} } */
 //#define STRING_CASTS_SPELL              (0x6180)    /* char[14]; "%s ZAUBERT %s" */
 //#define MSPELL_AWAKE_FLAG               (0x618e)    /* unsigned short; {0,1} */
-#define VIEWDIR_INVOFFSETS3             (0x6190)    /* struct(2)[4]; struct{signed char x,y;}; { {-1,0}, {0,1}, {1,0}, {0,-1} } */
+//#define VIEWDIR_INVOFFSETS3             (0x6190)    /* struct(2)[4]; struct{signed char x,y;}; { {-1,0}, {0,1}, {1,0}, {0,-1} } */
 //#define GFXTAB_SHOTBOLT_OX              (0x6198)    /* unsigned short[24] */
 //#define GFXTAB_SHOTBOLT_OY              (0x61c8)    /* unsigned short[24] */
 //#define GFXTAB_SHOTBOLT_NVFNO           (0x61f8)    /* signed short[6]; { 0, 4, 8, 12, 16, 20 } */
@@ -1215,7 +1215,7 @@
 //#define STR_S_S_PTR                     (0xa9e3)    /* Bit8u*; to STR_S_S */
 //#define STR_VON_S_S_PTR                 (0xa9e7)    /* Bit8u*; to STR_VON_S_S */
 //#define GRAMMAR_BUF_NO                  (0xa9eb)    /* unsigned short */
-#define GRAMMAR_GENDER_BITMASKS         (0xa9ed)    /* signed short[3]; {0x1000, 0x2000, 0x3000} */
+//#define GRAMMAR_GENDER_BITMASKS         (0xa9ed)    /* signed short[3]; {0x1000, 0x2000, 0x3000} */
 //#define GRAMMAR_PRONOUNS_ER             (0xa9f3)    /* char[3]; "ER" */
 //#define GRAMMAR_PRONOUNS_SIE            (0xa9f6)    /* char[4]; "SIE" */
 //#define GRAMMAR_PRONOUNS_ES             (0xa9fa)    /* char[3]; "ES" */

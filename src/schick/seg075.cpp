@@ -141,10 +141,8 @@ void DNG_turn(void)
 
 	if ( ((tmp = div16(g_visual_field_vals[6])) == 15) || (tmp == 1)) {
 
-		g_visual_field_vals[13] = (
-			g_visual_field_vals[20] = (
-			g_visual_field_vals[27] = (
-			g_visual_field_vals[28] = (0))));
+		g_visual_field_vals[13] = g_visual_field_vals[20] =
+			g_visual_field_vals[27] = g_visual_field_vals[28] = 0;
 
 		if ( ((tmp = div16(g_visual_field_vals[5])) == 15) || (tmp == 1)) {
 

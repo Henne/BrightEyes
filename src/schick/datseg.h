@@ -104,6 +104,14 @@ struct struct_point {
 	signed short y;
 };
 
+struct viewdir_offsets {
+	struct struct_point a[4];
+};
+
+struct viewdir_offsets8s {
+	struct point8s a[4];
+};
+
 struct struct_rect {
 	int y1;
 	int x1;
@@ -1378,10 +1386,16 @@ extern const char g_empty_string3[1];		//ds:0x5f42; seg033
 extern const char g_empty_string4[1];		//ds:0x5f43; seg033
 extern const char g_empty_string5[1];		//ds:0x5f44; seg033
 extern signed short g_cb_obj_nonobstacle[27];	//ds:0x5f46; seg034, seg036, seg037
-
+extern struct viewdir_offsets g_viewdir_offsets1;	//ds:0x5f7c; seg034
+extern struct viewdir_offsets g_viewdir_offsets2;	//ds:0x5f8c; seg034
 extern char g_string_14spaces[15];		//ds:0x5fab; seg034
 extern signed char g_af_spell_list[11];		//ds:0x5fac; seg036
-
+extern struct viewdir_offsets g_viewdir_offsets3;	//ds:0x5fb7; seg036
+extern struct viewdir_offsets g_viewdir_offsets4;	//ds:0x5fc7; seg036
+extern struct viewdir_offsets g_viewdir_offsets5;	//ds:0x5fd8; seg037
+extern struct viewdir_offsets g_viewdir_offsets6;	//ds:0x5fe8; seg037
+extern struct viewdir_offsets g_viewdir_invoffsets1;	//ds:0x5ff8; seg038
+extern struct viewdir_offsets g_viewdir_offsets7;	//ds:0x6008; seg038
 extern struct struct_point g_gfxtab_twofielded_extra_cb[4];	//ds:0x6018; seg039
 extern signed char g_gfxtab_twofielded_extra_ox[4];		//ds:0x6028; seg005, seg039
 extern signed char g_gfxtab_twofielded_extra_oy[4];		//ds:0x602c; seg005, seg039
@@ -1393,12 +1407,12 @@ extern struct point8s g_cb_rear_border[15];	//ds:0x6040; seg040
 extern signed short g_fightobj_count;		//ds:0x605e; seg040
 extern const signed short g_gfxtab_obj_offset_x[63];	//ds:0x6060; seg032, seg040
 extern const signed short g_gfxtab_obj_offset_y[63];	//ds:0x6060; seg032, seg040
-extern signed short g_force_weapons[9];		//ds:0x615c; seg041
-extern signed short g_knive_weapons[5];		//ds:0x616e; seg041
-
-extern char g_string_casts_spell[14];		//ds:0x6180; seg042
-extern signed short g_mspell_awake_flag;	//ds:0x618e; seg043, seg102
-
+extern signed short g_force_weapons[9];			//ds:0x615c; seg041
+extern signed short g_knive_weapons[5];			//ds:0x616e; seg041
+extern struct viewdir_offsets8s g_viewdir_invoffsets2;	//ds:0x6178; seg042
+extern char g_string_casts_spell[14];			//ds:0x6180; seg042
+extern signed short g_mspell_awake_flag;		//ds:0x618e; seg043, seg102
+extern struct viewdir_offsets8s g_viewdir_invoffsets3;	//ds:0x6190; seg043
 extern const signed short g_gfxtab_shotbolt_ox[6][4];	//ds:0x6198; seg045
 extern const signed short g_gfxtab_shotbolt_oy[6][4];	//ds:0x61c8; seg045
 extern signed short g_gfxtab_shotbolt_nvfno[6];		//ds:0x61f8; seg045
