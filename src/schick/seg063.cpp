@@ -205,7 +205,7 @@ void do_harbor(void)
 
 					answer = GUI_bool(g_dtp2);
 
-					g_textbox_width_bak = i;
+					g_textbox_width = i;
 
 					if (answer != 0) {
 
