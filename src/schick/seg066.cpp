@@ -42,6 +42,18 @@
 namespace M302de {
 #endif
 
+HugePt g_buffer9_ptr4;				// ds:0xe3fc, copy of BUFFER9_PTR
+unsigned char g_city_house_count[4];		// ds:0xe400, counts of the four different kinds of houses on the current map
+unsigned char *g_buffer11_ptr;			// ds:0xe404, to buffer of size 192, used for palettes
+static signed short g_city_refresh_direction;	// ds:0xe408
+static signed short g_city_refresh_y_target;	// ds:0xe40a
+static signed short g_city_refresh_x_target;	// ds:0xe40c
+static signed short g_always_zero1;		// ds:0xe40e, writeonly (0)
+static signed short g_always_zero2;		// ds:0xe410, writeonly (0)
+static signed short g_entrance_angle;		// ds:0xe412
+unsigned char *g_tex_floor[6];			// ds:0xe414
+
+
 signed short enter_location(signed short town_id)
 {
 	signed short map_pos;

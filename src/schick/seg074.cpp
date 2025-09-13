@@ -23,6 +23,9 @@
 namespace M302de {
 #endif
 
+
+unsigned char g_automap_buf[64]; // ds:0xe442
+
 void show_automap(void)
 {
 	signed short l_si;

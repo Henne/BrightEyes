@@ -33,6 +33,12 @@
 namespace M302de {
 #endif
 
+signed char g_wildcamp_guards[3];	// ds:0xe3be
+signed char g_wildcamp_herbstatus[7];	// ds:0xe3c1
+signed char g_wildcamp_replstatus[7];	// ds:0xe3c8
+signed char g_wildcamp_magicstatus[7];	// ds:0xe3cf
+signed char g_wildcamp_guardstatus[8];	// ds:0xe3d6
+
 void do_wildcamp(void)
 {
 	signed short l_si;

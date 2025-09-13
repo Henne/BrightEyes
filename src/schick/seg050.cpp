@@ -37,6 +37,11 @@ struct dummy {
 	struct dummy_in a[9];
 };
 
+static unsigned char *g_inc_spells_counter;	// ds:0xe3b2
+static unsigned char *g_inc_skills_counter;	// ds:0xe3b6
+static unsigned char *g_skills_buffer;		// ds:0xe3ba
+
+
 /**
  * \brief   tries to increase a spell in advanced mode
  *

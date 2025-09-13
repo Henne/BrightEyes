@@ -29,6 +29,9 @@
 namespace M302de {
 #endif
 
+static signed char g_booked_inn_days;	// ds:0xe3f0
+signed char g_sleep_quality;		// ds:0xe3f1
+
 void talk_inn(void)
 {
 	do_random_talk(1, 0);

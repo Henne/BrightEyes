@@ -1612,7 +1612,7 @@ extern signed char g_large_buf;			// ds:0xe5e4; seg120, seg028
 //extern signed short g_wallclock_update_bak;	// ds:0xe5d3; seg117
 extern unsigned char g_event_ani_busy;	// ds:0xe5d2; seg002, seg109-seg118
 
-//extern unsigned char *g_itemuser;		// ds:0xe5ce; seg107
+extern unsigned char *g_itemuser;		// ds:0xe5ce; seg049, seg107
 //extern signed int g_used_item_pos;		// ds:0xe5cc; seg107
 //extern signed int g_used_item_id;		// ds:0xe5ca; seg107
 //extern unsigned char *g_used_item_desc;	// ds:0xe5c6; seg107
@@ -1629,9 +1629,9 @@ extern char g_grammar_bufs[5][40];	// ds:0xe4e3; seg096
 extern signed int g_dialogbox_indent_width;	// ds:0xe4db; seg096, seg097
 extern signed int g_dialogbox_indent_height;	// ds:0xe4d9; seg096, seg097
 extern char g_gui_print_char;			// ds:0xe4d8; seg096
-extern unsigned char g_route_tevent_flags[15];	// ds:0xe4c9; seg094
+//extern unsigned char g_route_tevent_flags[15];	// ds:0xe4c9; seg094
 extern unsigned char g_good_camp_place;		// ds:0xe4c8; seg051, seg094, seg109
-extern unsigned char g_trv_detour_pixel_bak[20];	// ds:0xe4b4; seg094
+//extern unsigned char g_trv_detour_pixel_bak[20];	// ds:0xe4b4; seg094
 extern signed int g_current_town_anix;		// ds:0xe4b1; seg002, seg093, seg094
 extern signed int g_current_town_aniy;		// ds:0xe4af; seg002, seg093, seg094
 extern signed int g_selected_town_anix;		// ds:0xe4ad; seg002, seg093, seg094
@@ -1645,7 +1645,7 @@ extern signed int g_get_extra_loot;		// ds:0xe4a0; seg076, seg077, seg092
 extern unsigned char *g_dungeon_doors_buf; 	// ds:0xe49c; seg028,seg076,seg098,seg120
 extern unsigned char *g_dungeon_stairs_buf; 	// ds:0xe498; seg028,seg076,seg098,seg120
 extern unsigned char *g_dungeon_fights_buf; 	// ds:0xe494; seg028,seg076,seg098,seg120
-extern signed short g_lockpick_try_counter;	// ds:0xe492; seg076
+//extern signed short g_lockpick_try_counter;	// ds:0xe492; seg076
 extern unsigned char *g_dng_gfxtab;		// ds:0xe48d; seg075, seg076
 extern signed char g_dng_floor_tex;		// ds:0xe48c; seg075
 extern unsigned char *g_dng_map_ptr;		// ds:0xe488; seg076, seg098, seg099
@@ -1653,35 +1653,35 @@ extern signed short g_dng_refresh_x_target;	// ds:0xe486; seg075, seg076
 extern signed short g_dng_refresh_y_target;	// ds:0xe484; seg075, seg076
 extern signed short g_dng_refresh_direction;	// ds:0xe482; seg075, seg076, seg082, seg088
 extern unsigned char g_automap_buf[64];		// ds:0xe442; seg002, seg028, seg074
-extern char g_str_beorn_hjall[20];		// ds:0xe42e; seg072
+//extern char g_str_beorn_hjall[20];		// ds:0xe42e; seg072
 extern signed short g_combo_mode;		// ds:0xe42c; seg054, seg059, seg069
 extern unsigned char *g_tex_floor[6];		// ds:0xe414; seg028, seg066
-extern signed short g_entrance_angle;		// ds:0xe412; seg066
-extern signed short g_always_zero2;		// ds:0xe410; seg066
-extern signed short g_always_zero1;		// ds:0xe40e; seg066
-extern signed short g_city_refresh_x_target;	// ds:0xe40c; seg066
-extern signed short g_city_refresh_y_target;	// ds:0xe40a; seg066
-extern signed short g_city_refresh_direction;	// ds:0xe408; seg066
+//extern signed short g_entrance_angle;		// ds:0xe412; seg066
+//extern signed short g_always_zero2;		// ds:0xe410; seg066
+//extern signed short g_always_zero1;		// ds:0xe40e; seg066
+//extern signed short g_city_refresh_x_target;	// ds:0xe40c; seg066
+//extern signed short g_city_refresh_y_target;	// ds:0xe40a; seg066
+//extern signed short g_city_refresh_direction;	// ds:0xe408; seg066
 extern unsigned char *g_buffer11_ptr;		// ds:0xe404; seg028, seg075
 extern unsigned char g_city_house_count[4];	// ds:0xe400; seg028, seg066
 extern HugePt g_buffer9_ptr4;			// ds:0xe3fc; seg028
-extern signed char g_sea_travel_sleep_quality;	// ds:0xe3fa; seg063
+//extern signed char g_sea_travel_sleep_quality;	// ds:0xe3fa; seg063
 extern signed short g_temple_god;		// ds:0xe3f8; seg061, seg062
 extern signed short g_price_modificator;	// ds:0xe3f6; seg055, seg057, seg058
-extern struct struct_shopping_cart *g_buy_shopping_cart;	//ds:0xe3f2; seg056
+//extern struct struct_shopping_cart *g_buy_shopping_cart;	//ds:0xe3f2; seg056
 extern signed char g_sleep_quality;		// ds:0xe3f1; seg054, seg104
-extern signed char g_booked_inn_days;		// ds:0xe3f0; seg054
-extern signed char g_citycamp_guardstatus[8];	// ds:0xe3e8; seg052
-extern signed char g_citycamp_magicstatus[7];	// ds:0xe3e1; seg052
-extern signed char g_citycamp_guards[3];	// ds:0xe3de; seg052
+//extern signed char g_booked_inn_days;		// ds:0xe3f0; seg054
+//extern signed char g_citycamp_guardstatus[8];	// ds:0xe3e8; seg052
+//extern signed char g_citycamp_magicstatus[7];	// ds:0xe3e1; seg052
+//extern signed char g_citycamp_guards[3];	// ds:0xe3de; seg052
 extern signed char g_wildcamp_guardstatus[8];	// ds:0xe3d6; seg049, seg051, seg109
 extern signed char g_wildcamp_magicstatus[7];	// ds:0xe3cf; seg049, seg051, seg109
-extern signed char g_wildcamp_replstatus[7];	// ds:0xe3c8; seg052
-extern signed char g_wildcamp_herbstatus[7];	// ds:0xe3c1; seg052
-extern signed char g_wildcamp_guards[3];	// ds:0xe3be; seg052
-extern unsigned char *g_skills_buffer;		// ds:0xe3ba; seg050
-extern unsigned char *g_inc_skills_counter;	// ds:0xe3b6; seg050
-extern unsigned char *g_inc_spells_counter;	// ds:0xe3b2; seg050
+extern signed char g_wildcamp_replstatus[7];	// ds:0xe3c8; seg049, seg052
+extern signed char g_wildcamp_herbstatus[7];	// ds:0xe3c1; seg049, seg052
+extern signed char g_wildcamp_guards[3];	// ds:0xe3be; seg049, seg052
+//extern unsigned char *g_skills_buffer;		// ds:0xe3ba; seg050
+//extern unsigned char *g_inc_skills_counter;	// ds:0xe3b6; seg050
+//extern unsigned char *g_inc_spells_counter;	// ds:0xe3b2; seg050
 extern unsigned char *g_current_cursor_bak;	// ds:0xe3ae; seg048
 extern signed short g_attacker_attacks_again;	// ds:0xe3ac; seg042, seg043, seg044
 extern signed short g_defender_attacks;		// ds:0xe3aa; seg042, seg043, seg044

@@ -37,6 +37,8 @@
 namespace M302de {
 #endif
 
+signed short g_price_modificator; // ds:0xe3f6, price modificator for smith and sell
+
 /**
  * \brief   add all items of a hero to the repair list
  *

@@ -36,6 +36,10 @@
 namespace M302de {
 #endif
 
+
+/* REMARK: should be passed as a parameter to asm_miracles() */
+signed short g_temple_god; // ds:0xe3f8, id of current temple's god
+
 void do_temple(void)
 {
 	signed short l_si;

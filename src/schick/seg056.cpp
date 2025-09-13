@@ -31,6 +31,8 @@
 namespace M302de {
 #endif
 
+static struct struct_shopping_cart *g_buy_shopping_cart; // ds:0xe3f2, to buffer of size 250, each item has 4 bytes
+
 /**
  * \brief   compare function for qsort()
  *

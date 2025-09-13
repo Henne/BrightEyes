@@ -39,6 +39,8 @@
 namespace M302de {
 #endif
 
+static signed char g_sea_travel_sleep_quality; // ds:0xe3fa
+
 void passages_init(void)
 {
 	signed short si;

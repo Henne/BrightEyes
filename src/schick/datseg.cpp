@@ -6133,62 +6133,62 @@ Bit8u  *gs_travel_map_ptr; 				// ds:0x432e; Bit8u*
 //signed int g_dialogbox_indent_width; // ds:0xe4db
 //signed int g_dialogbox_indent_height; // ds:0xe4d9
 //char g_gui_print_char; // ds:0xe4d8
-unsigned char g_route_tevent_flags[15]; // ds:0xe4c9
-unsigned char g_good_camp_place; // ds:0xe4c8
-unsigned char g_trv_detour_pixel_bak[20]; // ds:0xe4b4
-unsigned char g_unkn_091[1]; // ds:0xe4b3
-signed int g_current_town_anix; // ds:0xe4b1
-signed int g_current_town_aniy; // ds:0xe4af
-signed int g_selected_town_anix; // ds:0xe4ad
-signed int g_selected_town_aniy; // ds:0xe4ab
-signed int g_current_town_overx; // ds:0xe4a9
-signed int g_current_town_overy; // ds:0xe4a7
-signed int g_current_town_over; // ds:0xe4a5
-signed int g_trv_menu_selection; // ds:0xe4a3
-unsigned char g_route59_flag; // ds:0xe4a2, {0, 1 = from Kravik, 2 = from Peilinen, 3 = from Skelellen, 4 = from Rovamund}
-signed int g_get_extra_loot; // ds:0xe4a0
-unsigned char *g_dungeon_doors_buf; // ds:0xe49c, to buffer of size 225
-unsigned char *g_dungeon_stairs_buf; // ds:0xe498, to buffer of size 80
-unsigned char *g_dungeon_fights_buf; // ds:0xe494, to buffer of size 630
-signed short g_lockpick_try_counter; // ds:0xe492, {0..4}
-unsigned char g_unkn_090[1]; // ds:0xe491
-unsigned char *g_dng_gfxtab; // ds:0xe48d, to GFXTAB(_WOOD|_STONE|_MARBLE)
-signed char g_dng_floor_tex; // ds:0xe48c, changing every timestep
-unsigned char *g_dng_map_ptr; // ds:0xe488, to DNG_MAP
-signed short g_dng_refresh_x_target; // ds:0xe486
-signed short g_dng_refresh_y_target; // ds:0xe484
-signed short g_dng_refresh_direction; // ds:0xe482
-unsigned char g_automap_buf[64]; // ds:0xe442
-char g_str_beorn_hjall[20]; // ds:0xe42e
-signed short g_combo_mode; // ds:0xe42c
-unsigned char *g_tex_floor[6]; // ds:0xe414
-signed short g_entrance_angle; // ds:0xe412
-signed short g_always_zero2; // ds:0xe410, writeonly (0)
-signed short g_always_zero1; // ds:0xe40e, writeonly (0)
-signed short g_city_refresh_x_target; // ds:0xe40c
-signed short g_city_refresh_y_target; // ds:0xe40a
-signed short g_city_refresh_direction; // ds:0xe408
-unsigned char *g_buffer11_ptr; // ds:0xe404, to buffer of size 192, used for palettes
-unsigned char g_city_house_count[4]; // ds:0xe400, counts of the four different kinds of houses on the current map
-HugePt g_buffer9_ptr4; // ds:0xe3fc, copy of BUFFER9_PTR
-unsigned char g_unkn_089[1]; // ds:0xe3fb
-signed char g_sea_travel_sleep_quality; // ds:0xe3fa
-signed short g_temple_god; // ds:0xe3f8, id of current temple's god
-signed short g_price_modificator; // ds:0xe3f6, price modificator for smith and sell
-struct struct_shopping_cart *g_buy_shopping_cart; // ds:0xe3f2, to buffer of size 250, each item has 4 bytes
-signed char g_sleep_quality; // ds:0xe3f1
-signed char g_booked_inn_days; // ds:0xe3f0
-signed char g_citycamp_guardstatus[8]; // ds:0xe3e8
-signed char g_citycamp_magicstatus[7]; // ds:0xe3e1
-signed char g_citycamp_guards[3]; // ds:0xe3de
-signed char g_wildcamp_guardstatus[8]; // ds:0xe3d6
-signed char g_wildcamp_magicstatus[7]; // ds:0xe3cf
-signed char g_wildcamp_replstatus[7]; // ds:0xe3c8
-signed char g_wildcamp_herbstatus[7]; // ds:0xe3c1
-signed char g_wildcamp_guards[3]; // ds:0xe3be
-unsigned char *g_skills_buffer; // ds:0xe3ba
-unsigned char *g_inc_skills_counter; // ds:0xe3b6
-unsigned char *g_inc_spells_counter; // ds:0xe3b2
+//unsigned char g_route_tevent_flags[15]; // ds:0xe4c9
+//unsigned char g_good_camp_place; // ds:0xe4c8
+//unsigned char g_trv_detour_pixel_bak[20]; // ds:0xe4b4
+//unsigned char g_unkn_091[1]; // ds:0xe4b3
+//signed int g_current_town_anix; // ds:0xe4b1
+//signed int g_current_town_aniy; // ds:0xe4af
+//signed int g_selected_town_anix; // ds:0xe4ad
+//signed int g_selected_town_aniy; // ds:0xe4ab
+//signed int g_current_town_overx; // ds:0xe4a9
+//signed int g_current_town_overy; // ds:0xe4a7
+//signed int g_current_town_over; // ds:0xe4a5
+//signed int g_trv_menu_selection; // ds:0xe4a3
+//unsigned char g_route59_flag; // ds:0xe4a2, {0, 1 = from Kravik, 2 = from Peilinen, 3 = from Skelellen, 4 = from Rovamund}
+//signed int g_get_extra_loot; // ds:0xe4a0
+//unsigned char *g_dungeon_doors_buf; // ds:0xe49c, to buffer of size 225
+//unsigned char *g_dungeon_stairs_buf; // ds:0xe498, to buffer of size 80
+//unsigned char *g_dungeon_fights_buf; // ds:0xe494, to buffer of size 630
+//signed short g_lockpick_try_counter; // ds:0xe492, {0..4}
+//unsigned char g_unkn_090[1]; // ds:0xe491
+//unsigned char *g_dng_gfxtab; // ds:0xe48d, to GFXTAB(_WOOD|_STONE|_MARBLE)
+//signed char g_dng_floor_tex; // ds:0xe48c, changing every timestep
+//unsigned char *g_dng_map_ptr; // ds:0xe488, to DNG_MAP
+//signed short g_dng_refresh_x_target; // ds:0xe486
+//signed short g_dng_refresh_y_target; // ds:0xe484
+//signed short g_dng_refresh_direction; // ds:0xe482
+//unsigned char g_automap_buf[64]; // ds:0xe442
+//char g_str_beorn_hjall[20]; // ds:0xe42e
+//signed short g_combo_mode; // ds:0xe42c
+//unsigned char *g_tex_floor[6]; // ds:0xe414
+//signed short g_entrance_angle; // ds:0xe412
+//signed short g_always_zero2; // ds:0xe410, writeonly (0)
+//signed short g_always_zero1; // ds:0xe40e, writeonly (0)
+//signed short g_city_refresh_x_target; // ds:0xe40c
+//signed short g_city_refresh_y_target; // ds:0xe40a
+//signed short g_city_refresh_direction; // ds:0xe408
+//unsigned char *g_buffer11_ptr; // ds:0xe404, to buffer of size 192, used for palettes
+//unsigned char g_city_house_count[4]; // ds:0xe400, counts of the four different kinds of houses on the current map
+//HugePt g_buffer9_ptr4; // ds:0xe3fc, copy of BUFFER9_PTR
+//unsigned char g_unkn_089[1]; // ds:0xe3fb
+//signed char g_sea_travel_sleep_quality; // ds:0xe3fa
+//signed short g_temple_god; // ds:0xe3f8, id of current temple's god
+//signed short g_price_modificator; // ds:0xe3f6, price modificator for smith and sell
+//struct struct_shopping_cart *g_buy_shopping_cart; // ds:0xe3f2, to buffer of size 250, each item has 4 bytes
+//signed char g_sleep_quality; // ds:0xe3f1
+//signed char g_booked_inn_days; // ds:0xe3f0
+//signed char g_citycamp_guardstatus[8]; // ds:0xe3e8
+//signed char g_citycamp_magicstatus[7]; // ds:0xe3e1
+//signed char g_citycamp_guards[3]; // ds:0xe3de
+//signed char g_wildcamp_guardstatus[8]; // ds:0xe3d6
+//signed char g_wildcamp_magicstatus[7]; // ds:0xe3cf
+//signed char g_wildcamp_replstatus[7]; // ds:0xe3c8
+//signed char g_wildcamp_herbstatus[7]; // ds:0xe3c1
+//signed char g_wildcamp_guards[3]; // ds:0xe3be
+//unsigned char *g_skills_buffer; // ds:0xe3ba
+//unsigned char *g_inc_skills_counter; // ds:0xe3b6
+//unsigned char *g_inc_spells_counter; // ds:0xe3b2
 unsigned char *g_current_cursor_bak; // ds:0xe3ae
 signed short g_attacker_attacks_again; // ds:0xe3ac
 signed short g_defender_attacks; // ds:0xe3aa

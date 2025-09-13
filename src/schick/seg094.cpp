@@ -32,6 +32,21 @@
 namespace M302de {
 #endif
 
+
+unsigned char g_route59_flag;			// ds:0xe4a2, {0, 1 = from Kravik, 2 = from Peilinen, 3 = from Skelellen, 4 = from Rovamund}
+signed int g_trv_menu_selection;		// ds:0xe4a3
+signed int g_current_town_over;			// ds:0xe4a5
+signed int g_current_town_overy;		// ds:0xe4a7
+signed int g_current_town_overx;		// ds:0xe4a9
+signed int g_selected_town_aniy;		// ds:0xe4ab
+signed int g_selected_town_anix;		// ds:0xe4ad
+signed int g_current_town_aniy;			// ds:0xe4af
+signed int g_current_town_anix;			// ds:0xe4b1
+unsigned char g_unkn_091[1];			// ds:0xe4b3
+static unsigned char g_trv_detour_pixel_bak[20]; // ds:0xe4b4
+unsigned char g_good_camp_place;		// ds:0xe4c8
+static unsigned char g_route_tevent_flags[15];	// ds:0xe4c9
+
 void prepare_map_marker(void)
 {
 	signed short i;

@@ -23,6 +23,8 @@
 namespace M302de {
 #endif
 
+signed short g_combo_mode; // ds:0xe42c
+
 void THO_hetmann(void)
 {
 	signed short answer;

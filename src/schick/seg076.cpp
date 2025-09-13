@@ -64,26 +64,18 @@ struct dummy5 {
 	unsigned char a[5];
 };
 
-#if !defined(__BORLANDC__)
-static signed short (*DNG_handler[])(void) = {
-	NULL,
-	DNG01_handler,
-	DNG02_handler,
-	DNG03_handler,
-	DNG04_handler,
-	DNG05_handler,
-	DNG06_handler,
-	DNG07_handler,
-	DNG08_handler,
-	DNG09_handler,
-	DNG10_handler,
-	DNG11_handler,
-	DNG12_handler,
-	DNG13_handler,
-	DNG14_handler,
-	DNG15_handler,
-};
-#endif
+signed short g_dng_refresh_direction;	// ds:0xe482
+signed short g_dng_refresh_y_target;	// ds:0xe484
+signed short g_dng_refresh_x_target;	// ds:0xe486
+unsigned char *g_dng_map_ptr;		// ds:0xe488, to DNG_MAP
+signed char g_dng_floor_tex;		// ds:0xe48c, changing every timestep
+unsigned char *g_dng_gfxtab;		// ds:0xe48d, to GFXTAB(_WOOD|_STONE|_MARBLE)
+unsigned char g_unkn_090[1];		// ds:0xe491
+static signed short g_lockpick_try_counter; // ds:0xe492, {0..4}
+unsigned char *g_dungeon_fights_buf;	// ds:0xe494, to buffer of size 630
+unsigned char *g_dungeon_stairs_buf;	// ds:0xe498, to buffer of size 80
+unsigned char *g_dungeon_doors_buf;	// ds:0xe49c, to buffer of size 225
+signed int g_get_extra_loot;		// ds:0xe4a0
 
 /**
  * \brief   door logic
@@ -344,13 +336,12 @@ void DNG_door(signed short action)
 
 void print_msg_with_first_hero(char *msg)
 {
-	Bit8u *hero;
+	Bit8u *hero = (Bit8u*)get_first_hero_available_in_group();
 
-	hero = (Bit8u*)get_first_hero_available_in_group();
-
-	sprintf(g_text_output_buf, msg, (char*)(hero + HERO_NAME2));
+	sprintf(g_text_output_buf, msg, (char*)hero + HERO_NAME2);
 
 	GUI_input(g_text_output_buf, 0);
+	
 	return;
 }
 

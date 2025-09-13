@@ -27,6 +27,8 @@
 namespace M302de {
 #endif
 
+static char g_str_beorn_hjall[20]; // ds:0xe42e
+
 /**
  * \brief   dialog logic for the informers hjore and jurge
  *
