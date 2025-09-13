@@ -36,10 +36,6 @@
 namespace M302de {
 #endif
 
-struct dummy1 {
-	signed short a[5];
-};
-
 /**
  * \brief   show some stars on the picture of a healed hero
  *
@@ -48,7 +44,9 @@ struct dummy1 {
 void magic_heal_ani(Bit8u *hero)
 {
 	signed short target_no;
-	struct dummy1 a = *(struct dummy1*)(p_datseg + ANI_HEAL_PICSTARS);
+	struct Bit16s_5 a = g_ani_heal_picstars;
+	//signed short a[5] = { 0, 1, 2, 1, 0 };
+
 	unsigned char *target;
 	signed short fd;
 	signed short i;

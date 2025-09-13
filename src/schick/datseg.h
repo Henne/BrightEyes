@@ -1598,6 +1598,7 @@ extern struct struct_char_height g_gui_char_height[67];	//ds:0xab42; seg097
 
 extern signed short g_gui_bool_flag;		// ds:0xac0b; seg097
 extern signed short g_spell_special_aecost;	// ds:0xac0e; seg098, seg099, seg100, seg101
+extern struct Bit16s_5 g_ani_heal_picstars;	// ds:0xac10; seg098
 
 extern struct c_str_5 g_spell_select_str_key;	// ds:0xac20; seg098
 

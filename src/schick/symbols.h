@@ -1234,7 +1234,7 @@
 //#define GUI_BOOL_FLAG                   (0xac0b)    /* unsigned short; {0,1} */
 // ?1
 //#define SPELL_SPECIAL_AECOST            (0xac0e)    /* signed short */
-#define ANI_HEAL_PICSTARS               (0xac10)    /* signed short[5]; { 0, 1, 2, 1, 0 } */
+//#define ANI_HEAL_PICSTARS               (0xac10)    /* signed short[5]; { 0, 1, 2, 1, 0 } */
 #define SPELL_SELECT_STR_KEYVAL         (0xac1a)    /* char[6]; "%s~%d" */
 //#define SPELL_SELECT_STR_KEY            (0xac20)    /* char[5]; "\xf2%s\xf0" */
 #define SPELL_SELECT_STR_KEY_COLOR      (0xac25)    /* char[3]; "%s" */
