@@ -895,7 +895,7 @@
 //#define TMAP_X                          (0x4c12)    /* signed short[10] */
 //#define TMAP_Y                          (0x4c26)    /* signed short[10] */
 //#define RENDERBUF_IN_USE_FLAG           (0x4c3a)    /* unsigned char; {0,1} */
-#define LOCATION_HANDLERS               (0x4c3b)    /* Bit8u*[19]; (void (*)(void))[19] */
+//#define LOCATION_HANDLERS               (0x4c3b)    /* Bit8u*[19]; (void (*)(void))[19] */
 // ?1
 //#define STR_TEMP_XX_PTR2                (0x4c88)    /* Bit8u*; to STR_TEMP_XX2 */
 //#define FNAMES                          (0x4c8c)    /* long[308] */
