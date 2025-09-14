@@ -109,6 +109,11 @@ struct struct_point {
 	signed short y;
 };
 
+struct dng_gfxtab {
+	struct struct_point a[4];
+	Bit16s val;
+};
+
 struct viewdir_offsets {
 	struct struct_point a[4];
 };
@@ -1562,7 +1567,9 @@ extern const unsigned char g_automap_tile_arrowright[49];	//ds:0x7d83; seg074
 extern const unsigned char g_automap_tile_cross[49];		//ds:0x7d4b; seg074
 extern signed short g_automap_selx;				//ds:0x7de5; seg074, seg099
 extern signed short g_automap_sely;				//ds:0x7de7; seg074, seg099
-
+extern dng_gfxtab g_dng_gfxtab_wood[88];			//ds:0x7dea; seg067
+extern dng_gfxtab g_dng_gfxtab_stone[88];			//ds:0x841a; seg067
+extern dng_gfxtab g_dng_gfxtab_marble[88];			//ds:0x8a4a; seg067
 extern unsigned char g_dng_stub3_unkn0[22];			//ds:0x907a; seg075
 extern unsigned char g_dng_stub3_unkn1[22];			//ds:0x9090; seg075
 extern unsigned char g_dng_stub3_unkn2[22];			//ds:0x90a6; seg075
@@ -1701,7 +1708,7 @@ extern unsigned char *g_dungeon_doors_buf; 	// ds:0xe49c; seg028,seg076,seg098,s
 extern unsigned char *g_dungeon_stairs_buf; 	// ds:0xe498; seg028,seg076,seg098,seg120
 extern unsigned char *g_dungeon_fights_buf; 	// ds:0xe494; seg028,seg076,seg098,seg120
 //extern signed short g_lockpick_try_counter;	// ds:0xe492; seg076
-extern unsigned char *g_dng_gfxtab;		// ds:0xe48d; seg075, seg076
+extern struct dng_gfxtab *g_dng_gfxtab;		// ds:0xe48d; seg075, seg076
 extern signed char g_dng_floor_tex;		// ds:0xe48c; seg075
 extern unsigned char *g_dng_map_ptr;		// ds:0xe488; seg076, seg098, seg099
 extern signed short g_dng_refresh_x_target;	// ds:0xe486; seg075, seg076

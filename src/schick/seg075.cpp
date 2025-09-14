@@ -308,10 +308,10 @@ void DNG_stub3(void)
 	}
 }
 
-void DNG_draw_walls(signed short a1, signed short a2, signed short a3)
+void DNG_draw_walls(signed short x, signed short y, signed short a3)
 {
-	signed short width;
-	signed short height;
+	signed short nvf_width;
+	signed short nvf_height;
 	signed short width2;
 	signed short height2;
 	signed short flag;
@@ -333,48 +333,48 @@ void DNG_draw_walls(signed short a1, signed short a2, signed short a3)
 	nvf.dst = dst_ptr = g_renderbuf_ptr + 0x7530;
 	nvf.src = (Bit8u*)g_buffer9_ptr3;
 	nvf.no = a3;
-	nvf.width = (Bit8u*)&width;
-	nvf.height = (Bit8u*)&height;
+	nvf.width = (Bit8u*)&nvf_width;
+	nvf.height = (Bit8u*)&nvf_height;
 	nvf.type = 3;
 	process_nvf(&nvf);
 
 #if !defined(__BORLANDC__)
 	/* BE-fix */
-	height = host_readws((Bit8u*)&height);
-	width = host_readws((Bit8u*)&width);
+	nvf_height = host_readws((Bit8u*)&nvf_height);
+	nvf_width = host_readws((Bit8u*)&nvf_width);
 #endif
 
-	width2 = width;
-	height2 = height;
+	width2 = nvf_width;
+	height2 = nvf_height;
 
-	if ((a1 < 0) && ((a1 + width2) > 0)) {
-		width2 += a1;
-		dst_ptr += __abs__(a1);
-		a1 = 0;
+	if ((x < 0) && ((x + width2) > 0)) {
+		width2 += x;
+		dst_ptr += __abs__(x);
+		x = 0;
 	}
 
-	if ((a2 < 0) && ((a2 + height2) > 0)) {
-		height2 -= a2;
-		dst_ptr += __abs__(a2) * width;
-		a2 = 0;
+	if ((y < 0) && ((y + height2) > 0)) {
+		height2 -= y;
+		dst_ptr += __abs__(y) * nvf_width;
+		y = 0;
 	}
 
-	if ((a1 < 208) && (a2 < 135) && (a1 >= 0) && (a2 >= 0)) {
+	if ((x < 208) && (y < 135) && (x >= 0) && (y >= 0)) {
 
-		if (a1 + width2 > 208) {
-			width2 = 208 - a1;
+		if (x + width2 > 208) {
+			width2 = 208 - x;
 		}
 
-		if (a2 + height2 > 135) {
-			height2 = 135 - a2;
+		if (y + height2 > 135) {
+			height2 = 135 - y;
 		}
 
-		ptr2 = g_renderbuf_ptr + 208 * a2 + a1;
+		ptr2 = g_renderbuf_ptr + 208 * y + x;
 
 		if (!flag) {
-			copy_solid(ptr2, dst_ptr, width2, height2, 208, width, 128);
+			copy_solid(ptr2, dst_ptr, width2, height2, 208, nvf_width, 128);
 		} else {
-			copy_solid_permuted(ptr2, dst_ptr + width2 - 1, width2, height2, 208, width, 128);
+			copy_solid_permuted(ptr2, dst_ptr + width2 - 1, width2, height2, 208, nvf_width, 128);
 		}
 	}
 }
@@ -413,7 +413,7 @@ void DNG_stub4(void)
 
 		if (l3 != -1) {
 
-			ptr = (struct struct_point*)(g_dng_gfxtab + (l3 - 1) * 18);
+			ptr = (struct struct_point*)&g_dng_gfxtab[l3 - 1].a[0];
 
 			if ((j = ptr[1].x) != -1) {
 

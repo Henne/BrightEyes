@@ -69,7 +69,7 @@ signed short g_dng_refresh_y_target;	// ds:0xe484
 signed short g_dng_refresh_x_target;	// ds:0xe486
 unsigned char *g_dng_map_ptr;		// ds:0xe488, to DNG_MAP
 signed char g_dng_floor_tex;		// ds:0xe48c, changing every timestep
-unsigned char *g_dng_gfxtab;		// ds:0xe48d, to GFXTAB(_WOOD|_STONE|_MARBLE)
+struct dng_gfxtab *g_dng_gfxtab;		// ds:0xe48d, to GFXTAB(_WOOD|_STONE|_MARBLE)
 unsigned char g_unkn_090[1];		// ds:0xe491
 static signed short g_lockpick_try_counter; // ds:0xe492, {0..4}
 unsigned char *g_dungeon_fights_buf;	// ds:0xe494, to buffer of size 630
@@ -782,9 +782,9 @@ void do_dungeon(void)
 
 		set_audio_track(ARCHIVE_FILE_DUNGEON_XMI);
 #if defined(__BORLANDC__)
-		g_dng_gfxtab = (unsigned char*)(MK_FP(_DS, (!gs_dungeon_gfx_style ? DNG_GFXTAB_WOOD : (gs_dungeon_gfx_style == 1 ? DNG_GFXTAB_MARBLE : DNG_GFXTAB_STONE))));
+		g_dng_gfxtab = (struct dng_gfxtab*)(MK_FP(_DS, (!gs_dungeon_gfx_style ? FP_OFF(&g_dng_gfxtab_wood) : (gs_dungeon_gfx_style == 1 ? FP_OFF(&g_dng_gfxtab_marble) : FP_OFF(&g_dng_gfxtab_stone)))));
 #else
-//		g_dng_gfxtab = (unsigned char*)RealMake(datseg, (!gs_dungeon_gfx_style ? DNG_GFXTAB_WOOD : (gs_dungeon_gfx_style == 1 ? DNG_GFXTAB_MARBLE : DNG_GFXTAB_STONE))));
+		g_dng_gfxtab = (!gs_dungeon_gfx_style ? g_dng_gfxtab_wood : (gs_dungeon_gfx_style == 1 ? g_dng_gfxtab_marble : g_dng_gfxtab_stone));
 #endif
 
 		g_dng_init_flag = 0;

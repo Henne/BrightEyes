@@ -1127,9 +1127,9 @@
 //#define AUTOMAP_SELX                    (0x7de5)    /* signed short */
 //#define AUTOMAP_SELY                    (0x7de7)    /* signed short */
 // ?1
-#define DNG_GFXTAB_WOOD                 (0x7dea)    /* struct(18)[88] */
-#define DNG_GFXTAB_STONE                (0x841a)    /* struct(18)[88] */
-#define DNG_GFXTAB_MARBLE               (0x8a4a)    /* struct(18)[88] */
+//#define DNG_GFXTAB_WOOD                 (0x7dea)    /* struct(18)[88] */
+//#define DNG_GFXTAB_STONE                (0x841a)    /* struct(18)[88] */
+//#define DNG_GFXTAB_MARBLE               (0x8a4a)    /* struct(18)[88] */
 //#define DNG_STUB3_UNKN0                 (0x907a)    /* unsigned char[22] */
 //#define DNG_STUB3_UNKN1                 (0x9090)    /* unsigned char[22] */
 //#define DNG_STUB3_UNKN2                 (0x90a6)    /* unsigned char[22] */
