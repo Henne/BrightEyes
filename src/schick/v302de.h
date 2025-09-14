@@ -72,7 +72,6 @@ struct screen_rect {
 };
 
 
-#include "symbols.h"
 #include "common.h"
 #include "datseg.h"
 
