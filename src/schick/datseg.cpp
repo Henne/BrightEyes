@@ -2335,7 +2335,7 @@ char g_diary_string5[9] = "~~IN %s."; // ds:0x4940
 char g_diary_string6[19] = "~~ABENTEUER IN %s."; // ds:0x4949
 char g_diary_string7[19] = "~~RUMH\x8eNGEN IN %s."; // ds:0x495c
 unsigned char g_unkn_034[1] = { 0x00 }; // ds:0x496f
-struct{signed char x,y;} g_visual_field_dir0[31] = {
+struct point8s g_visual_field_dir0[31] = {
 	{ -0x01, 0x00 },
 	{ 0, 0 },
 	{ 0x01, 0x00 },
@@ -2368,7 +2368,7 @@ struct{signed char x,y;} g_visual_field_dir0[31] = {
 	{ 0x00, -1 },
 	{ 0x00, 0x01 }
 }; // ds:0x4970
-struct{signed char x,y;} g_visual_field_dir1[31] = {
+struct point8s g_visual_field_dir1[31] = {
 	{ 0x00, -1 },
 	{ 0, 0 },
 	{ 0x00, 0x01 },
@@ -2401,7 +2401,7 @@ struct{signed char x,y;} g_visual_field_dir1[31] = {
 	{ 0x01, 0x00 },
 	{ -0x01, 0x00 }
 }; // ds:0x49ae
-struct{signed char x,y;} g_visual_field_dir2[31] = {
+struct point8s g_visual_field_dir2[31] = {
 	{ 0x01, 0x00 },
 	{ 0, 0 },
 	{ -0x01, 0x00 },
@@ -2434,7 +2434,7 @@ struct{signed char x,y;} g_visual_field_dir2[31] = {
 	{ 0x00, 0x01 },
 	{ 0x00, -1 }
 }; // ds:0x49ec
-struct{signed char x,y;} g_visual_field_dir3[31] = {
+struct point8s g_visual_field_dir3[31] = {
 	{ 0x00, 0x01 },
 	{ 0, 0 },
 	{ 0x00, -1 },

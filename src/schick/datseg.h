@@ -54,7 +54,6 @@ struct mouse_cursor {
 	Bit16u mask[16];
 };
 
-
 struct status_bar {
 	Bit16s le_orig;
 	Bit16s le;
@@ -1321,7 +1320,10 @@ extern char g_diary_string4[6];			//ds:0x493a; seg024
 extern char g_diary_string5[9];			//ds:0x4940; seg024
 extern char g_diary_string6[19];		//ds:0x4949; seg024
 extern char g_diary_string7[19];		//ds:0x495c; seg024
-
+extern struct point8s g_visual_field_dir0[31];	//ds:0x4970; seg003
+extern struct point8s g_visual_field_dir1[31];	//ds:0x49ae; seg003
+extern struct point8s g_visual_field_dir2[31];	//ds:0x49ec; seg003
+extern struct point8s g_visual_field_dir3[31];	//ds:0x492a; seg003
 extern char   g_noway_string[40];		//ds:0x4a68; seg003
 extern Bit16s g_ani_busy;			//ds:0x4a90; seg004
 extern Bit16s g_pic_copy_flag;			//ds:0x4a92; seg004, seg008, seg074

@@ -858,10 +858,10 @@
 //#define DIARY_STRING6                   (0x4949)    /* char[19]; "~~ABENTEUER IN %s." */
 //#define DIARY_STRING7                   (0x495c)    /* char[19]; "~~RUMH\x8eNGEN IN %s." */
 // ?1
-#define VISUAL_FIELD_DIR0               (0x4970)    /* struct(2)[31]; struct{signed char x,y;} */
-#define VISUAL_FIELD_DIR1               (0x49ae)    /* struct(2)[31]; struct{signed char x,y;} */
-#define VISUAL_FIELD_DIR2               (0x49ec)    /* struct(2)[31]; struct{signed char x,y;} */
-#define VISUAL_FIELD_DIR3               (0x4a2a)    /* struct(2)[31]; struct{signed char x,y;} */
+//#define VISUAL_FIELD_DIR0               (0x4970)    /* struct(2)[31]; struct{signed char x,y;} */
+//#define VISUAL_FIELD_DIR1               (0x49ae)    /* struct(2)[31]; struct{signed char x,y;} */
+//#define VISUAL_FIELD_DIR2               (0x49ec)    /* struct(2)[31]; struct{signed char x,y;} */
+//#define VISUAL_FIELD_DIR3               (0x4a2a)    /* struct(2)[31]; struct{signed char x,y;} */
 //#define NOWAY_STRING                    (0x4a68)    /* char[40]; "IN DIESE RICHTUNG GEHT ES NICHT WEITER." */
 //#define ANI_BUSY                        (0x4a90)    /* unsigned short; {0,1} */
 //#define PIC_COPY_FLAG                   (0x4a92)    /* unsigned short; {0,1} */

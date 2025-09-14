@@ -53,25 +53,30 @@ void move(void)
 	volatile signed short i;
 	Bit8u *p_map_small;
 	Bit8u *p_map_large;
-	Bit8u *p_vis_field;
+	struct point8s *p_vis_field;
 
 	signed short x;
 	signed short y;
-
 
 	p_map_small = p_map_large = g_dng_map;
 
 	/* direction */
 #if defined(__BORLANDC__)
-	p_vis_field = (Bit8u*)MK_FP(_DS, ((gs_direction == 0) ? VISUAL_FIELD_DIR0 :
-				((gs_direction == 1) ? VISUAL_FIELD_DIR1 :
-				((gs_direction == 2) ? VISUAL_FIELD_DIR2 : VISUAL_FIELD_DIR3))));
+	p_vis_field = (struct point8s*)MK_FP(_DS,
+				((gs_direction == 0) ? FP_OFF(g_visual_field_dir0) :
+				((gs_direction == 1) ? FP_OFF(g_visual_field_dir1) :
+				((gs_direction == 2) ? FP_OFF(g_visual_field_dir2) : FP_OFF(g_visual_field_dir3)))));
+#else
+	p_vis_field = ((gs_direction == 0) ? g_visual_field_dir0 :
+			((gs_direction == 1) ? g_visual_field_dir1 :
+			((gs_direction == 2) ? g_visual_field_dir2 : g_visual_field_dir3)));
+
 #endif
 
-	for (i = 0; i < 29; i++, p_vis_field += 2) {
+	for (i = 0; i < 29; i++, p_vis_field++) {
 		boundary_flag = 0;
-		x = gs_x_target + host_readbs(p_vis_field);
-		y = gs_y_target + host_readbs(p_vis_field + 1);
+		x = gs_x_target + p_vis_field->x;
+		y = gs_y_target + p_vis_field->y;
 
 		if (x < 0) {
 			x = 0;
@@ -108,14 +113,14 @@ void move(void)
 
 	if (g_dng_map_size == 0x10) {
 		/* dungeon mode */
-		g_steptarget_front = host_readb(p_map_small + ((gs_y_target + host_readbs(p_vis_field + 1)) << 4) + gs_x_target + host_readbs(p_vis_field));
+		g_steptarget_front = host_readb(p_map_small + ((gs_y_target + host_readbs((Bit8u*)p_vis_field + 1)) << 4) + gs_x_target + host_readbs((Bit8u*)p_vis_field));
 
-		g_steptarget_back = host_readb(p_map_small + ((gs_y_target + host_readbs(p_vis_field + 3)) << 4) + gs_x_target + host_readbs(p_vis_field + 2));
+		g_steptarget_back = host_readb(p_map_small + ((gs_y_target + host_readbs((Bit8u*)p_vis_field + 3)) << 4) + gs_x_target + host_readbs((Bit8u*)p_vis_field + 2));
 	} else {
 		/* city mode */
-		g_steptarget_front = host_readb(p_map_large + ((gs_y_target + host_readbs(p_vis_field + 1)) << 5) + gs_x_target + host_readbs(p_vis_field));
+		g_steptarget_front = host_readb(p_map_large + ((gs_y_target + host_readbs((Bit8u*)p_vis_field + 1)) << 5) + gs_x_target + host_readbs((Bit8u*)p_vis_field));
 
-		g_steptarget_back = host_readb(p_map_large + ((gs_y_target + host_readbs(p_vis_field + 3)) << 5) + gs_x_target + host_readbs(p_vis_field + 2));
+		g_steptarget_back = host_readb(p_map_large + ((gs_y_target + host_readbs((Bit8u*)p_vis_field + 3)) << 5) + gs_x_target + host_readbs((Bit8u*)p_vis_field + 2));
 	}
 }
 
