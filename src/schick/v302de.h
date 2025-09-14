@@ -102,6 +102,7 @@ static inline unsigned short cast_u16(unsigned char v)
 
 #if !defined(__BORLANDC__)
 
+#define _open open
 #define _creat creat
 #define _read read
 

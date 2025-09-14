@@ -381,7 +381,7 @@ void read_sound_cfg(void)
 		_read(handle, (Bit8u*)&dummy, 2);
 		_read(handle, (Bit8u*)&digi_port, 2);
 		_read(handle, (Bit8u*)&digi_irq, 2);
-		close(handle);
+		_close(handle);
 
 #if !defined(__BORLANDC__)
 		/* be byte-ordering independent */
@@ -522,7 +522,7 @@ Bit8u* read_music_driver(Bit8u* fname)
 		buf = EMS_norm_ptr((Bit8u*)ptr);
 		/* and_ptr_ds((Bit8u*)&ptr, 0xfffffff0); */
 		_read(handle, (Bit8u*)buf, (unsigned short)len);
-		close(handle);
+		_close(handle);
 		return buf;
 	}
 #endif
@@ -961,7 +961,7 @@ unsigned char* read_digi_driver(char *fname)
 		ptr &= 0xfffffff0;
 		buf = EMS_norm_ptr((Bit8u*)ptr);
 		_read(handle, (Bit8u*)buf, (unsigned short)len);
-		close(handle);
+		_close(handle);
 		return buf;
 	}
 #endif

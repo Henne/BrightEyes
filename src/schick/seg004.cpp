@@ -756,7 +756,7 @@ void update_wallclock(void)
 			}
 		}
 
-		if (((d % 771) != g_wallclock_pos) || g_wallclock_redraw) {
+		if (((d / 771L) != g_wallclock_pos) || g_wallclock_redraw) {
 
 			g_wallclock_redraw = 0;
 			night = ((gs_day_timer >= HOURS(7)) && (gs_day_timer <= HOURS(19))) ? 0 : 1;

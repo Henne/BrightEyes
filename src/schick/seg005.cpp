@@ -1007,7 +1007,7 @@ to the DOSBox-CPU and may run the timer.
 
 	/* read TEMP/XX */
 	/* TODO: should be O_BINARY | O_RDONLY */
-	handle = open(g_str_temp_xx_ptr, 0);
+	handle = _open(g_str_temp_xx_ptr, 0);
 	_read(handle, g_buffer8_ptr, 64000);
 	close(handle);
 
