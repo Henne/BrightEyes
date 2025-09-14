@@ -1563,9 +1563,9 @@ extern const unsigned char g_automap_tile_arrowright[49];	//ds:0x7d83; seg074
 extern const unsigned char g_automap_tile_cross[49];		//ds:0x7d4b; seg074
 extern signed short g_automap_selx;				//ds:0x7de5; seg074, seg099
 extern signed short g_automap_sely;				//ds:0x7de7; seg074, seg099
-extern dng_gfxtab g_dng_gfxtab_wood[88];			//ds:0x7dea; seg067
-extern dng_gfxtab g_dng_gfxtab_stone[88];			//ds:0x841a; seg067
-extern dng_gfxtab g_dng_gfxtab_marble[88];			//ds:0x8a4a; seg067
+extern struct dng_gfxtab g_dng_gfxtab_wood[88];			//ds:0x7dea; seg067
+extern struct dng_gfxtab g_dng_gfxtab_stone[88];			//ds:0x841a; seg067
+extern struct dng_gfxtab g_dng_gfxtab_marble[88];			//ds:0x8a4a; seg067
 extern unsigned char g_dng_stub3_unkn0[22];			//ds:0x907a; seg075
 extern unsigned char g_dng_stub3_unkn1[22];			//ds:0x9090; seg075
 extern unsigned char g_dng_stub3_unkn2[22];			//ds:0x90a6; seg075
