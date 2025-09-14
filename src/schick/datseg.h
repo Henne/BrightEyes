@@ -1671,29 +1671,29 @@ extern unsigned char g_tevent135_climb_damage[5][2];	// ds:0xb174; seg116
 extern unsigned char g_random_encounter_index[59];	// ds:0xb17e; seg117
 extern const Bit8u g_random_encounter_descr[14][7];	// ds:0xb1b9; seg117
 extern signed int g_tlk_ruin_hero_counter;	// ds:0xb21b; seg117
-extern char g_str_rad1[4];			// ds:0xb21e; seg118
-extern char g_str_rad2[4];			// ds:0xb222; seg118
-extern char g_str_rad3[4];			// ds:0xb226; seg118
-extern Bit8u g_color_white[3];			// ds:0xb22a; seg120
+//extern char g_str_rad1[4];			// ds:0xb21e; seg118
+//extern char g_str_rad2[4];			// ds:0xb222; seg118
+//extern char g_str_rad3[4];			// ds:0xb226; seg118
+//extern Bit8u g_color_white[3];			// ds:0xb22a; seg120
 extern Bit8u g_color_black[3];			// ds:0xb22d; seg029, seg120
-extern Bit8u g_palette_unknown2[8][3];		// ds:0xb230; seg120
-extern Bit8u g_palette_unknown3[3][3];		// ds:0xb248; seg120
-extern Bit8u g_palette_unknown4[32][3];		// ds:0xb251; seg120
-extern Bit8u g_palette_general[32][3];		// ds:0xb2b1; seg120
-extern char g_str_backslash_temp[6];		// ds:0xb311; seg120
-extern char g_str_not_enough_mem[124];		// ds:0xb317; seg120
-extern char g_str_drive_x[4];			// ds:0xb393; seg120
-extern char g_str_temp_dir_fail[280];		// ds:0xb397; seg120
-extern char g_all_files_wildcard2[4];		// ds:0xb4af; seg120
-extern char g_all_chr_wildcard4[6];		// ds:0xb4b3; seg120
-extern char g_all_files_wildcard3[4];		// ds:0xb4b9; seg120
-extern char g_str_gen_exe[8];			// ds:0xb4bd; seg120
-extern char g_str_gen_exe2[8];			// ds:0xb4c5; seg120
-extern const char g_str_gen_b[2];		// ds:0xb4cd; seg120
-extern const char g_str_gen_a[2];		// ds:0xb4cf; seg120
-extern const char g_str_gen_n[2];		// ds:0xb4d1; seg120
-extern const char g_str_gen_1[2];		// ds:0xb4d3; seg120
-extern const char g_str_gen_generation[11];	// ds:0xb4d5; seg120
+//extern Bit8u g_palette_unknown2[8][3];		// ds:0xb230; seg120
+//extern Bit8u g_palette_unknown3[3][3];		// ds:0xb248; seg120
+//extern Bit8u g_palette_unknown4[32][3];		// ds:0xb251; seg120
+//extern Bit8u g_palette_general[32][3];		// ds:0xb2b1; seg120
+//extern char g_str_backslash_temp[6];		// ds:0xb311; seg120
+//extern char g_str_not_enough_mem[124];		// ds:0xb317; seg120
+//extern char g_str_drive_x[4];			// ds:0xb393; seg120
+//extern char g_str_temp_dir_fail[280];		// ds:0xb397; seg120
+//extern char g_all_files_wildcard2[4];		// ds:0xb4af; seg120
+//extern char g_all_chr_wildcard4[6];		// ds:0xb4b3; seg120
+//extern char g_all_files_wildcard3[4];		// ds:0xb4b9; seg120
+//extern char g_str_gen_exe[8];			// ds:0xb4bd; seg120
+//extern char g_str_gen_exe2[8];			// ds:0xb4c5; seg120
+//extern const char g_str_gen_b[2];		// ds:0xb4cd; seg120
+//extern const char g_str_gen_a[2];		// ds:0xb4cf; seg120
+//extern const char g_str_gen_n[2];		// ds:0xb4d1; seg120
+//extern const char g_str_gen_1[2];		// ds:0xb4d3; seg120
+//extern const char g_str_gen_generation[11];	// ds:0xb4d5; seg120
 
 /* BSS starts at 0xbc38, variables in reverse/decreasing order */
 

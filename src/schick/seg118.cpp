@@ -33,6 +33,11 @@
 namespace M302de {
 #endif
 
+static const char g_str_rad1[4] = "RAD"; // ds:0xb21e
+static const char g_str_rad2[4] = "RAD"; // ds:0xb222
+static const char g_str_rad3[4] = "RAD"; // ds:0xb226
+
+
 /* The griffon */
 void tevent_037(void)
 {
