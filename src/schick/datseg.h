@@ -3,10 +3,6 @@
 
 #include <time.h>
 
-#if defined(__BORLANDC__)
-extern char ds[1];
-#endif
-
 /* dummy structs */
 struct c_str_3 { char a[3]; };
 struct c_str_5 { char a[5]; };
@@ -1662,24 +1658,49 @@ extern void (*g_use_special_item_handlers[14])(void);	//ds:0xaeb0; seg107
 extern int g_light_type;			// ds:0xaee8; seg101, seg107
 extern void (*g_travel_event_handlers[146])(void);	//ds:0xaeea; seg109
 
-extern signed int g_tlk_ruin_hero_counter;	//ds:0xb21b; seg117
+extern signed char g_travel_event_active;		// ds:0xb132; seg002, seg109, seg117
+extern signed short g_travel_event_tx2;			// ds:0xb133; seg109
+extern Bit8u g_travel_event_axes[6];			// ds:0xb135; seg109, seg118
+extern char g_empty_string10[1];			// ds:0xb13b; seg109
+extern char g_empty_string11[1];			// ds:0xb13c; seg109
+extern char g_empty_string12[1];			// ds:0xb13d; seg109
+extern struct struct_chest g_tevent014_corpse;		// ds:0xb13e; seg110
+extern struct struct_chest g_tevent064_chest_descr;	// ds:0xb154; seg111
+extern Bit8u g_tevent067_chest[10];			// ds:0xb16a; seg112
+extern unsigned char g_tevent135_climb_damage[5][2];	// ds:0xb174; seg116
+extern unsigned char g_random_encounter_index[59];	// ds:0xb17e; seg117
+extern const Bit8u g_random_encounter_descr[14][7];	// ds:0xb1b9; seg117
+extern signed int g_tlk_ruin_hero_counter;	// ds:0xb21b; seg117
+extern char g_str_rad1[4];			// ds:0xb21e; seg118
+extern char g_str_rad2[4];			// ds:0xb222; seg118
+extern char g_str_rad3[4];			// ds:0xb226; seg118
+extern Bit8u g_color_white[3];			// ds:0xb22a; seg120
+extern Bit8u g_color_black[3];			// ds:0xb22d; seg029, seg120
+extern Bit8u g_palette_unknown2[8][3];		// ds:0xb230; seg120
+extern Bit8u g_palette_unknown3[3][3];		// ds:0xb248; seg120
+extern Bit8u g_palette_unknown4[32][3];		// ds:0xb251; seg120
+extern Bit8u g_palette_general[32][3];		// ds:0xb2b1; seg120
+extern char g_str_backslash_temp[6];		// ds:0xb311; seg120
+extern char g_str_not_enough_mem[124];		// ds:0xb317; seg120
+extern char g_str_drive_x[4];			// ds:0xb393; seg120
+extern char g_str_temp_dir_fail[280];		// ds:0xb397; seg120
+extern char g_all_files_wildcard2[4];		// ds:0xb4af; seg120
+extern char g_all_chr_wildcard4[6];		// ds:0xb4b3; seg120
+extern char g_all_files_wildcard3[4];		// ds:0xb4b9; seg120
+extern char g_str_gen_exe[8];			// ds:0xb4bd; seg120
+extern char g_str_gen_exe2[8];			// ds:0xb4c5; seg120
+extern const char g_str_gen_b[2];		// ds:0xb4cd; seg120
+extern const char g_str_gen_a[2];		// ds:0xb4cf; seg120
+extern const char g_str_gen_n[2];		// ds:0xb4d1; seg120
+extern const char g_str_gen_1[2];		// ds:0xb4d3; seg120
+extern const char g_str_gen_generation[11];	// ds:0xb4d5; seg120
+
 /* BSS starts at 0xbc38, variables in reverse/decreasing order */
 
 extern signed char g_large_buf;			// ds:0xe5e4; seg120, seg028
-//extern HugePt g_global_buffer_ptr;		// ds:0xe5e0; seg120
-//extern Bit32u g_buffersize;			// ds:0xe5dc; seg120
-//extern signed short g_basepos_x_bak;		// ds:0xe5d9; seg117
-//extern signed short g_basepos_y_bak;		// ds:0xe5d7; seg117
-//extern signed short g_textbox_width_bak;	// ds:0xe5d5; seg117
-//extern signed short g_wallclock_update_bak;	// ds:0xe5d3; seg117
 extern unsigned char g_event_ani_busy;	// ds:0xe5d2; seg002, seg109-seg118
 
 extern unsigned char *g_itemuser;		// ds:0xe5ce; seg049, seg107
-//extern signed int g_used_item_pos;		// ds:0xe5cc; seg107
-//extern signed int g_used_item_id;		// ds:0xe5ca; seg107
-//extern unsigned char *g_used_item_desc;	// ds:0xe5c6; seg107
-//extern signed int g_alchemy_missing_item;	// ds:0xe5c4; seg104
-//extern struct enemy_sheet *g_spelluser_e;	// ds:0xe5c0; seg102
 extern unsigned char *g_spelluser;	// ds:0xe5bc; seg068, seg098, seg102, seg107
 extern unsigned char *g_spelltarget;	// ds:0xe5b8; seg098-seg102
 extern struct enemy_sheet *g_spelltarget_e;	// ds:0xe5b4; seg098-seg102
@@ -1691,9 +1712,7 @@ extern char g_grammar_bufs[5][40];	// ds:0xe4e3; seg096
 extern signed int g_dialogbox_indent_width;	// ds:0xe4db; seg096, seg097
 extern signed int g_dialogbox_indent_height;	// ds:0xe4d9; seg096, seg097
 extern char g_gui_print_char;			// ds:0xe4d8; seg096
-//extern unsigned char g_route_tevent_flags[15];	// ds:0xe4c9; seg094
 extern unsigned char g_good_camp_place;		// ds:0xe4c8; seg051, seg094, seg109
-//extern unsigned char g_trv_detour_pixel_bak[20];	// ds:0xe4b4; seg094
 extern signed int g_current_town_anix;		// ds:0xe4b1; seg002, seg093, seg094
 extern signed int g_current_town_aniy;		// ds:0xe4af; seg002, seg093, seg094
 extern signed int g_selected_town_anix;		// ds:0xe4ad; seg002, seg093, seg094
@@ -1707,7 +1726,6 @@ extern signed int g_get_extra_loot;		// ds:0xe4a0; seg076, seg077, seg092
 extern unsigned char *g_dungeon_doors_buf; 	// ds:0xe49c; seg028,seg076,seg098,seg120
 extern unsigned char *g_dungeon_stairs_buf; 	// ds:0xe498; seg028,seg076,seg098,seg120
 extern unsigned char *g_dungeon_fights_buf; 	// ds:0xe494; seg028,seg076,seg098,seg120
-//extern signed short g_lockpick_try_counter;	// ds:0xe492; seg076
 extern struct dng_gfxtab *g_dng_gfxtab;		// ds:0xe48d; seg075, seg076
 extern signed char g_dng_floor_tex;		// ds:0xe48c; seg075
 extern unsigned char *g_dng_map_ptr;		// ds:0xe488; seg076, seg098, seg099
@@ -1715,36 +1733,19 @@ extern signed short g_dng_refresh_x_target;	// ds:0xe486; seg075, seg076
 extern signed short g_dng_refresh_y_target;	// ds:0xe484; seg075, seg076
 extern signed short g_dng_refresh_direction;	// ds:0xe482; seg075, seg076, seg082, seg088
 extern unsigned char g_automap_buf[64];		// ds:0xe442; seg002, seg028, seg074
-//extern char g_str_beorn_hjall[20];		// ds:0xe42e; seg072
 extern signed short g_combo_mode;		// ds:0xe42c; seg054, seg059, seg069
 extern unsigned char *g_tex_floor[6];		// ds:0xe414; seg028, seg066
-//extern signed short g_entrance_angle;		// ds:0xe412; seg066
-//extern signed short g_always_zero2;		// ds:0xe410; seg066
-//extern signed short g_always_zero1;		// ds:0xe40e; seg066
-//extern signed short g_city_refresh_x_target;	// ds:0xe40c; seg066
-//extern signed short g_city_refresh_y_target;	// ds:0xe40a; seg066
-//extern signed short g_city_refresh_direction;	// ds:0xe408; seg066
 extern unsigned char *g_buffer11_ptr;		// ds:0xe404; seg028, seg075
 extern unsigned char g_city_house_count[4];	// ds:0xe400; seg028, seg066
 extern HugePt g_buffer9_ptr4;			// ds:0xe3fc; seg028
-//extern signed char g_sea_travel_sleep_quality;	// ds:0xe3fa; seg063
 extern signed short g_temple_god;		// ds:0xe3f8; seg061, seg062
 extern signed short g_price_modificator;	// ds:0xe3f6; seg055, seg057, seg058
-//extern struct struct_shopping_cart *g_buy_shopping_cart;	//ds:0xe3f2; seg056
 extern signed char g_sleep_quality;		// ds:0xe3f1; seg054, seg104
-//extern signed char g_booked_inn_days;		// ds:0xe3f0; seg054
-//extern signed char g_citycamp_guardstatus[8];	// ds:0xe3e8; seg052
-//extern signed char g_citycamp_magicstatus[7];	// ds:0xe3e1; seg052
-//extern signed char g_citycamp_guards[3];	// ds:0xe3de; seg052
 extern signed char g_wildcamp_guardstatus[8];	// ds:0xe3d6; seg049, seg051, seg109
 extern signed char g_wildcamp_magicstatus[7];	// ds:0xe3cf; seg049, seg051, seg109
 extern signed char g_wildcamp_replstatus[7];	// ds:0xe3c8; seg049, seg052
 extern signed char g_wildcamp_herbstatus[7];	// ds:0xe3c1; seg049, seg052
 extern signed char g_wildcamp_guards[3];	// ds:0xe3be; seg049, seg052
-//extern unsigned char *g_skills_buffer;		// ds:0xe3ba; seg050
-//extern unsigned char *g_inc_skills_counter;	// ds:0xe3b6; seg050
-//extern unsigned char *g_inc_spells_counter;	// ds:0xe3b2; seg050
-extern struct mouse_cursor *g_current_cursor_bak;	// ds:0xe3ae; seg048
 extern signed short g_attacker_attacks_again;	// ds:0xe3ac; seg042, seg043, seg044
 extern signed short g_defender_attacks;		// ds:0xe3aa; seg042, seg043, seg044
 extern signed short g_attacker_dead;		// ds:0xe3a8; seg042, seg043, seg044
@@ -1776,28 +1777,9 @@ extern char *g_dialog_title;		// ds:0xe308; seg030, seg072
 
 extern char g_savegame_names[5][9];	// ds:0xe2da; seg026, seg027
 extern time_t g_last_save_time;		// ds:0xe2d6; seg026, seg059
-extern unsigned char *g_saved_files_buf;// ds:0xe2d2; seg026;
 extern signed short g_delay_timer;	// ds:0xe2d0; seg004, seg005
-extern signed short g_figobj_unkn_x2_bak;	// ds:0xe2ce; seg005
-extern signed short g_figobj_unkn_x2;		// ds:0xe2cc; seg005
-extern signed short g_figobj_unkn_y2_bak;	// ds:0xe2ca; seg005
-extern signed short g_figobj_unkn_y2;		// ds:0xe2c8; seg005
-extern signed short g_figobj_unkn_x1_bak;	// ds:0xe2c6; seg005
-extern signed short g_figobj_unkn_x1;		// ds:0xe2c4; seg005
-extern signed short g_figobj_unkn_y1_bak;	// ds:0xe2c2; seg005
-extern signed short g_figobj_unkn_y1;		// ds:0xe2c0; seg005
 extern struct struct_msg g_fig_target_grammar;	// ds:0xe2be; seg005, seg042, seg043
 extern struct struct_msg g_fig_actor_grammar;	// ds:0xe2ba; seg005, seg042, seg043
-extern signed short g_fig_ani_state[8];		// ds:0xe2a8; seg005
-extern signed short g_fig_figlist_readd[8];	// ds:0xe298; seg005
-extern unsigned char* g_fig_gfxbuffers[8];	// ds:0xe278; seg005
-#if defined(__BORLANDC__)
-extern void interrupt far(*g_bc_timer)(...);		// ds:0xe274; seg004
-#endif
-extern signed short g_ani_area_timeout[10];	// ds:0xe260; seg004
-extern signed short g_ani_area_status[10];	// ds:0xe24c; seg004
-extern signed short g_ani_change_dir[10];	// ds:0xe238; seg004
-extern Bit32s g_gfx_spinlock;		// ds:0xe234; seg004
 extern char **g_itemsname;		// ds:0xe22f; seg026, seg120
 extern unsigned char *g_itemsdat;	// ds:0xe22b; seg002, seg027, seg105, seg107, seg120
 extern signed char g_market_itemsaldo_table[254]; // ds:0xe12d; seg056, seg057, seg120
@@ -1838,9 +1820,8 @@ extern signed short g_fig_flee_position[4];	// ds:0xd325; seg005, seg076-seg089
 extern unsigned char *g_townpal_buf;		// ds:0xd312; seg002, seg027, seg120
 extern signed short g_txt_tabpos[7];		// ds:0xd313; seg024, seg029, seg33, seg046, seg096, seg097
 #if defined (__BORLANDC__)
-extern signed short g_video_mode_bak;		// ds:0xd30d; seg002
+extern signed short g_video_mode_bak;		// ds:0xd30d; seg002, seg004
 extern signed short g_video_page_bak;		// ds:0xd30b; seg002, seg004
-extern signed short g_gameinit_flag;		// ds:0xd309; seg002
 #endif
 extern unsigned char *g_renderbuf_ptr;	// ds:0xd303; seg002-seg120
 extern unsigned char *g_vga_memstart;	// ds:0xd2ff; seg002-seg120 aka FRAMEBUF_PTR
@@ -1884,7 +1865,6 @@ extern signed short g_dng_init_flag;	// ds:0xd00f; seg076,
 extern unsigned char g_mouse_bg_bak[256];	// ds:0xcf0f; seg004
 extern struct mouse_cursor g_ggst_cursor;	// ds:0xcecf; seg002, seg048
 extern struct mouse_cursor *g_current_cursor;	// ds:0xcecb; seg002, seg004, seg024, seg25, seg048
-extern struct mouse_cursor *g_last_cursor;	// ds:0xcec7; seg002
 extern unsigned char g_gui_text_buffer[64];	// ds:0xce87; seg096
 extern Bit32s g_ani_unknown4;		// ds:0xce43; seg027, seg120
 extern signed int g_ani_posx;		// ds:0xce41; seg004, seg029, seg066, seg074, seg075
@@ -1944,29 +1924,7 @@ extern signed char *g_scenario_buf;	// ds:0xbd2c; seg027, seg032, seg034, seg038
 extern struct fight *g_current_fight;	// ds:0xbd28; seg027, seg032, seg043, seg035, seg039, seg040, seg100
 extern signed char g_citycamp_city;	// ds:0xbd27; seg052, seg066, seg076
 extern signed short g_pregame_state;	// ds:0xbd25; seg002, seg097
-#if defined(__BORLANDC__)
-extern signed short g_ail_music_driver_id;	// ds:0xbd23; seg002
-extern signed short g_ail_sequence;		// ds:0xbd21; seg002
-extern Bit8u *g_ail_music_driver_descr;		// ds:0xbd1d; seg002
-extern Bit8u *g_ail_music_driver_buf;		// ds:0xbd19; seg002
-extern Bit8u *g_ail_state_table;		// ds:0xbd15; seg002
-extern Bit8u *g_ail_timbre_cache;		// ds:0xbd11; seg002
-extern Bit8u *g_ail_midi_buffer;		// ds:0xbd0d; seg002
-extern Bit8u *g_ail_music_driver_buf2;		// ds:0xbd09; seg002
-extern signed long g_ail_state_table_size;	// ds:0xbd05; seg002
-extern unsigned short g_ail_timbre_cache_size;	// ds:0xbd03; seg002
-extern signed short g_sample_ad_handle;		// ds:0xbd01; seg002
-extern signed short g_load_sound_driver;	// ds:0xbcff; seg002
 extern signed short g_use_cdaudio_flag;		// ds:0xbcfd; seg002
-extern signed short g_ail_digi_driver_id;	// ds:0xbcfb; seg002
-extern Bit8u *g_ail_digi_driver_descr;		// ds:0xbcf7; seg002
-extern Bit8u *g_ail_digi_driver_buf;		// ds:0xbcf7; seg002
-extern Bit8u *g_ail_voc_buffer;			// ds:0xbcef; seg002
-extern Bit8u *g_ail_digi_driver_buf2;		// ds:0xbceb; seg002
-#endif
-extern Bit32s g_archive_file_length;	// ds:0xbce7; seg002
-extern Bit32s g_archive_file_remaining;	// ds:0xbce3; seg002
-extern Bit32s g_archive_file_offset;	// ds:0xbcfd; seg002
 #if defined(__BORLANDC__)
 extern void interrupt far (*g_mouse_handler_bak)(...);	// ds:0xbcbd;
 #endif
@@ -1979,42 +1937,6 @@ extern unsigned char *g_splash_ae;	// ds:0xbcc7; seg002, seg028
 extern unsigned char g_gfx_wait_keypress[100];	// ds:0xbc63; seg002
 extern unsigned char g_playmask_us;	// ds:0xbc62; seg002, seg029
 extern unsigned short g_sample_ad_length;	// ds:0xbc5a; seg002
-
-extern signed char g_travel_event_active;		// ds:0xb132; seg002, seg109, seg117
-extern signed short g_travel_event_tx2;			// ds:0xb133; seg109
-extern Bit8u g_travel_event_axes[6];			// ds:0xb135; seg109, seg118
-extern char g_empty_string10[1];			// ds:0xb13b; seg109
-extern char g_empty_string11[1];			// ds:0xb13c; seg109
-extern char g_empty_string12[1];			// ds:0xb13d; seg109
-extern struct struct_chest g_tevent014_corpse;		// ds:0xb13e; seg110
-extern struct struct_chest g_tevent064_chest_descr;	// ds:0xb154; seg111
-extern Bit8u g_tevent067_chest[10];			// ds:0xb16a; seg112
-extern unsigned char g_tevent135_climb_damage[5][2];	// ds:0xb174; seg116
-extern unsigned char g_random_encounter_index[59];	// ds:0xb17e; seg117
-extern const Bit8u g_random_encounter_descr[14][7];	// ds:0xb1b9; seg117
-extern char g_str_rad1[4];			// ds:0xb21e; seg118
-extern char g_str_rad2[4];			// ds:0xb222; seg118
-extern char g_str_rad3[4];			// ds:0xb226; seg118
-extern Bit8u g_color_white[3];			// ds:0xb22a; seg120
-extern Bit8u g_color_black[3];			// ds:0xb22d; seg029, seg120
-extern Bit8u g_palette_unknown2[8][3];		// ds:0xb230; seg120
-extern Bit8u g_palette_unknown3[3][3];		// ds:0xb248; seg120
-extern Bit8u g_palette_unknown4[32][3];		// ds:0xb251; seg120
-extern Bit8u g_palette_general[32][3];		// ds:0xb2b1; seg120
-extern char g_str_backslash_temp[6];		// ds:0xb311; seg120
-extern char g_str_not_enough_mem[124];		// ds:0xb317; seg120
-extern char g_str_drive_x[4];			// ds:0xb393; seg120
-extern char g_str_temp_dir_fail[280];		// ds:0xb397; seg120
-extern char g_all_files_wildcard2[4];		// ds:0xb4af; seg120
-extern char g_all_chr_wildcard4[6];		// ds:0xb4b3; seg120
-extern char g_all_files_wildcard3[4];		// ds:0xb4b9; seg120
-extern char g_str_gen_exe[8];			// ds:0xb4bd; seg120
-extern char g_str_gen_exe2[8];			// ds:0xb4c5; seg120
-extern const char g_str_gen_b[2];		// ds:0xb4cd; seg120
-extern const char g_str_gen_a[2];		// ds:0xb4cf; seg120
-extern const char g_str_gen_n[2];		// ds:0xb4d1; seg120
-extern const char g_str_gen_1[2];		// ds:0xb4d3; seg120
-extern const char g_str_gen_generation[11];	// ds:0xb4d5; seg120
 
 #if !defined(__BORLANDC__)
 /* arrays for meaningful log messages */

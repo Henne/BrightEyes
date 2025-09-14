@@ -45,6 +45,10 @@
 namespace M302de {
 #endif
 
+signed int g_current_fight_no;		// ds:0xe316
+signed int g_autofight;			// ds:0xe318
+signed int g_fig_dropped_weapons[30];	// ds:0xe31a
+
 /**
  * \brief   sets an object to a chessboard position
  *

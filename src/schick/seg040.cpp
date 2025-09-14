@@ -24,6 +24,19 @@
 namespace M302de {
 #endif
 
+signed char g_fig_twofielded_table[21]; // ds:0xe35a
+signed char g_fig_twofielded_count;	// ds:0xe36f
+Bit32s g_fightobj_buf_freespace;	// ds:0xe370
+unsigned char *g_buffer_weapanidat;	// ds:0xe374, pointer to WEAPANI.DAT
+unsigned char *g_buffer_anidat;		// ds:0xe378, pointer to ANI.DAT buffer
+signed short *g_figobj_gfxheight_table; // ds:0xe380, to signed short[63]
+signed short *g_figobj_gfxwidth_table;	// ds:0xe384, to signed short[63]
+unsigned char **g_figobj_gfxbuf_table;	// ds:0xe388, to long[63]; Bit8u*
+signed char g_fig_spellgfx_id;		// ds:0xe38c
+signed char g_fig_shot_bolt_id;		// ds:0xe38d
+signed char g_fig_cb_marker_id;		// ds:0xe38e
+signed char g_fig_cb_selector_id[21];	// ds:0xe38f
+
 void FIG_chessboard_init(void)
 {
 	signed short i;

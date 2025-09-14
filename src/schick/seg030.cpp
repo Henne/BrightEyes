@@ -32,6 +32,13 @@
 namespace M302de {
 #endif
 
+char *g_dialog_title;		// ds:0xe308
+signed int g_dialog_informer;	// ds:0xe30c
+signed int g_dialog_next_state; // ds:0xe30e
+signed int g_dialog_done;	// ds:0xe310
+signed int g_dialog_state;	// ds:0xe312
+signed int g_tlk_id;		// ds:0xe314
+
 /* NOTE: here's a inconvenience in start counting from 0 (computer science) and from 1 (math) */
 
 /**

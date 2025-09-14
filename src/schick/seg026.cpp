@@ -33,6 +33,10 @@
 namespace M302de {
 #endif
 
+static unsigned char *g_saved_files_buf;	// ds:0xe2d2
+time_t g_last_save_time;			// ds:0xe2d6
+char g_savegame_names[5][9];			// ds:0xe2da
+
 void init_text(void)
 {
 	Bit32s len;

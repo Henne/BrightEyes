@@ -28,6 +28,8 @@
 namespace M302de {
 #endif
 
+static struct mouse_cursor *g_current_cursor_bak; // ds:0xe3ae
+
 /* Borlandified and identical */
 void reset_item_selector(void)
 {

@@ -36,6 +36,21 @@
 namespace M302de {
 #endif
 
+static unsigned char* g_fig_gfxbuffers[8];	// ds:0xe278, 0x508 byte segments in FIGHTOBJ_BUF
+static signed short g_fig_figlist_readd[8];	// ds:0xe298
+static signed short g_fig_ani_state[8];		// ds:0xe2a8
+struct_msg g_fig_actor_grammar;			// ds:0xe2ba
+struct_msg g_fig_target_grammar;		// ds:0xe2be
+static signed short g_figobj_unkn_y1;		// ds:0xe2c0
+static signed short g_figobj_unkn_y1_bak;	// ds:0xe2c2
+static signed short g_figobj_unkn_x1;		// ds:0xe2c4
+static signed short g_figobj_unkn_x1_bak;	// ds:0xe2c6
+static signed short g_figobj_unkn_y2;		// ds:0xe2c8
+static signed short g_figobj_unkn_y2_bak;	// ds:0xe2ca
+static signed short g_figobj_unkn_x2;		// ds:0xe2cc
+static signed short g_figobj_unkn_x2_bak;	// ds:0xe2ce
+signed short g_delay_timer;			// ds:0xe2d0
+
 /* static prototypes */
 static void set_delay_timer(void);
 static void fight_delay(void);

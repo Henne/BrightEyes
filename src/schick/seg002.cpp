@@ -70,6 +70,215 @@
 namespace M302de {
 #endif
 
+/* BSS Variables */
+unsigned short g_sample_ad_length;		// ds:0xbc5a
+struct sample_idx g_sample_ad_idx_entry;	// ds:0xbc5c
+unsigned char g_playmask_us;			// ds:0xbc62, 1 = PLAYM_US, 0 = PLAYM_UK
+unsigned char g_gfxbuf_wait_keypress[100];	// ds:0xbc63
+unsigned char *g_splash_ae;			// ds:0xbcc7
+unsigned char *g_splash_le;			// ds:0xbccb
+Bit8u g_hero_splash_timer[7];			// ds:0xbccf
+signed short g_spinlock_flag;			// ds:0xbcd6
+signed short g_map_townmark_state;		// ds:0xbcd8
+signed char g_freeze_timers;			// ds:0xbcda
+
+#if defined(__BORLANDC__)
+void interrupt far (*g_mouse_handler_bak)(...); // ds:0xbcdb; seg002
+#endif
+
+static Bit32s g_archive_file_offset;	// ds:0xbcdf, start offset in SCHICK.DAT
+static Bit32s g_archive_file_remaining; // ds:0xbce3, flen - off
+static Bit32s g_archive_file_length;	// ds:0xbce7
+
+#if defined(__BORLANDC__)
+static Bit8u *g_ail_digi_driver_buf2;		// ds:0xbceb, to buffer of size 5016
+static Bit8u *g_ail_voc_buffer;		// ds:0xbcef
+static Bit8u *g_ail_digi_driver_buf;		// ds:0xbcf3
+static Bit8u *g_ail_digi_driver_descr;		// ds:0xbcf7
+static signed short g_ail_digi_driver_id;	// ds:0xbcfb
+#endif
+
+signed short g_use_cdaudio_flag; // ds:0xbcfd
+
+#if defined(__BORLANDC__)
+static signed short g_load_sound_driver;	// ds:0xbcff
+static signed short g_sample_ad_handle;	// ds:0xbd01
+static unsigned short g_ail_timbre_cache_size; // ds:0xbd03
+static signed long g_ail_state_table_size;	// ds:0xbd05
+static Bit8u *g_ail_music_driver_buf2;		// ds:0xbd09
+static Bit8u *g_ail_midi_buffer;		// ds:0xbd0d
+static Bit8u *g_ail_timbre_cache;		// ds:0xbd11
+static Bit8u *g_ail_state_table;		// ds:0xbd15
+static Bit8u *g_ail_music_driver_buf;		// ds:0xbd19
+static Bit8u *g_ail_music_driver_descr;	// ds:0xbd1d
+static signed short g_ail_sequence;		// ds:0xbd21
+static signed short g_ail_music_driver_id;	// ds:0xbd23
+#endif
+
+signed short g_pregame_state;		// ds:0xbd25
+signed char g_citycamp_city;		// ds:0xbd27, {0 = camp in dungeon, 1}
+struct fight *g_current_fight;		// ds:0xbd28
+signed char *g_scenario_buf;		// ds:0xbd2c
+unsigned char *g_fightobj_buf;		// ds:0xbd30
+unsigned char *g_heroes;		// ds:0xbd34
+signed char g_new_menu_icons[9];	// ds:0xbd38
+unsigned char g_unkn_073[12];		// ds:0xbd41
+unsigned char g_steptarget_front;	// ds:0xbd4d
+unsigned char g_steptarget_back;	// ds:0xbd4e
+signed char g_direction_unkn;		// ds:0xbd4f, writeonly (1)
+signed char g_visual_fields_tex[29];	// ds:0xbd50
+unsigned char g_unkn_074[1];		// ds:0xbd6d
+unsigned char g_visual_field_vals[29];	// ds:0xbd6e
+unsigned char g_unkn_075[1];		// ds:0xbd8b
+Bit8u *g_ems_unused_tab;		// ds:0xbd8c
+signed short g_ems_travelmap_handle;	// ds:0xbd90
+signed short g_ems_unused_handle;	// ds:0xbd92
+unsigned char g_dng_map_size;		// ds:0xbd94
+unsigned char g_dng_map[512];		// ds:0xbd95
+char *g_radio_name_list[25];		// ds:0xbf95, used for items, heroes, spells, skills, recipes
+unsigned char *g_gui_buffer_unkn;	// ds:0xbff9
+signed short g_textbox_width;		// ds:0xbffd
+signed short g_textbox_pos_x;		// ds:0xbfff, coordinate of upper left corner
+
+signed short g_textbox_pos_y; // ds:0xc001, coordinate of upper left corner
+signed short g_game_mode; // ds:0xc003, {-1 = Input error, 1 = Beginner, 2 = Advanced }
+Bit8u *g_sellitems; // ds:0xc005, also used for repair items
+Bit8u *g_buyitems; // ds:0xc009, merchant's assortment
+struct struct_pic_copy g_pic_copy;	// ds:0xc00d
+struct location g_locations_tab[150]; // ds:0xc025
+unsigned char *g_buffer8_ptr; // ds:0xc3a9, to buffer of size 12008
+char **g_tx2_index; // ds:0xc3ad, to index table of secondary text file
+char **g_tx_index; // ds:0xc3b1, to index table of primary text file
+char **g_text_ltx_index; // ds:0xc3b5, to index table of TEXT.LTX
+unsigned char g_unkn_077[6]; // ds:0xc3b9
+signed short g_random_schick_seed2; // ds:0xc3bf
+signed short g_game_state; // ds:0xc3c1, see enum GAME_STATE_*
+unsigned char g_unkn_078[2]; // ds:0xc3c3
+signed short g_bioskey_event10; // ds:0xc3c5
+signed short g_have_mouse; // ds:0xc3c7
+signed short g_unused_spinlock_flag; // ds:0xc3c9
+signed short g_update_statusline; // ds:0xc3cb
+unsigned char g_unkn_079[2]; // ds:0xc3cd
+signed short g_mouse1_doubleclick; // ds:0xc3cf
+signed short g_mouse1_event1; // ds:0xc3d1
+signed short g_mouse2_event; // ds:0xc3d3
+signed short g_mouse1_event2; // ds:0xc3d5
+signed short g_bioskey_event; // ds:0xc3d7
+signed short g_action; // ds:0xc3d9
+HugePt g_buffer9_ptr; // ds:0xc3db, to buffer of size 180000 (or 203000 if LARGE_BUF), used for NVF
+unsigned char g_unkn_080[8]; // ds:0xc3df
+signed short g_ani_width; // ds:0xc3e7
+unsigned short g_ani_unknown1; // ds:0xc3e9
+unsigned short g_ani_unknown2; // ds:0xc3eb
+unsigned char g_ani_height; // ds:0xc3ed
+signed char g_ani_areacount; // ds:0xc3ee
+struct ani_area g_ani_area_table[10]; // ds:0xc3ef
+unsigned char *g_ani_main_ptr; // ds:0xce35
+unsigned char g_ani_compr_flag; // ds:0xce39, {0,1 = compressed}
+unsigned char g_ani_palette_size; // ds:0xce3a
+HugePt g_ani_palette; // ds:0xce3b
+signed int g_ani_posy; // ds:0xce3f
+signed int g_ani_posx; // ds:0xce41
+Bit32s g_ani_unknown4; // ds:0xce43, writeonly (0)
+unsigned char g_unkn_081[64]; // ds:0xce47
+unsigned char g_gui_text_buffer[64]; // ds:0xce87
+static struct mouse_cursor *g_last_cursor; // ds:0xcec7
+struct mouse_cursor *g_current_cursor; // ds:0xcecb
+struct mouse_cursor g_ggst_cursor; // ds:0xcecf
+unsigned char g_mouse_bg_bak[256]; // ds:0xcf0f
+
+signed short g_dng_init_flag;		// ds:0xd00f
+signed short g_dng_extra_action;	// ds:0xd011, {0 = warehouse,1 = open door,2 = open chest,3 = close door,4 = lever,5 = smash door}
+signed short g_redraw_menuicons;	// ds:0xd013
+unsigned char *g_buffer9_ptr2;		// ds:0xd015, copy of BUFFER9_PTR
+HugePt g_buffer9_ptr3;			// ds:0xd019, copy of BUFFER9_PTR
+Bit32u g_buffer_monster_tab[36];	// ds:0xd01d
+Bit32u g_buffer_wfigs_tab[43];		// ds:0xd0ad
+Bit32u g_buffer_mfigs_tab[43];		// ds:0xd159
+Bit32s g_buffer_anis_tab[37];		// ds:0xd205
+
+unsigned char *g_trv_track_pixel_bak; // ds:0xd299, to buffer of size 500
+unsigned char *g_fig_star_gfx; // ds:0xd29d
+char *g_monnames_buffer; // ds:0xd2a1
+char *g_buffer5_ptr; // ds:0xd2a5, to buffer of size 3880
+unsigned char *g_buffer10_ptr; // ds:0xd2a9, to buffer of size 16771, used for NVF and text
+unsigned char *g_popup; // ds:0xd2ad
+unsigned char *g_buffer6_ptr; // ds:0xd2b1, to buffer of size 2200, used for NVF
+char *g_buffer7_ptr; // ds:0xd2b5, to buffer of size 10000, used for NVF and text
+char *g_text_ltx_buffer; // ds:0xd2b9, to buffer of size 30500
+unsigned char *g_splash_buffer; // ds:0xd2bd, to buffer of size 1000, used for Splashes
+unsigned char *g_buf_font6; // ds:0xd2c1
+signed short g_textcolor_index; // ds:0xd2c5
+signed short g_textcolor_bg; // ds:0xd2c7
+signed short g_textcolor_fg[4]; // ds:0xd2c9
+signed short g_gui_text_centered; // ds:0xd2d1
+signed short g_textline_unknown; // ds:0xd2d3, writeonly (103)
+signed short g_textline_maxlen; // ds:0xd2d5
+signed short g_textline_posy; // ds:0xd2d7
+signed short g_textline_posx; // ds:0xd2d9
+unsigned char *g_fig_figure2_buf; // ds:0xd2db, to buffer of size 20000
+unsigned char *g_fig_figure1_buf; // ds:0xd2df
+unsigned char *g_objects_nvf_buf; // ds:0xd2e3, to buffer of size 3400
+unsigned char *g_buf_icon; // ds:0xd2e7
+char *g_text_output_buf; // ds:0xd2eb, to buffer of size 300
+char *g_text_input_buf; // ds:0xd2ef, to buffer of size 24
+char *g_dtp2; // ds:0xd2f3
+unsigned char *g_icon; // ds:0xd2f7
+unsigned char *g_vga_backbuffer; // ds:0xd2fb
+unsigned char *g_vga_memstart; // ds:0xd2ff
+unsigned char *g_renderbuf_ptr; // ds:0xd303, to buffer of size 65000
+
+
+#if defined(__BORLANDC__)
+static unsigned char g_unkn_082[2]; // ds:0xd307
+static signed short g_gameinit_flag; // ds:0xd309, writeonly (1)
+signed short g_video_page_bak; // ds:0xd30b
+signed short g_video_mode_bak; // ds:0xd30d
+static unsigned char g_unkn_083[4]; // ds:0xd30f
+#endif
+
+signed short g_txt_tabpos[7]; // ds:0xd313
+unsigned char *g_townpal_buf; // ds:0xd321
+signed short g_fig_flee_position[4]; // ds:0xd325, see HERO_ESCAPE_POSITION
+signed short g_wildcamp_sleep_quality; // ds:0xd32d
+signed short g_gather_herbs_mod; // ds:0xd32f
+signed short g_replenish_stocks_mod; // ds:0xd331
+struct fight_msg g_fig_msg_data[6]; // ds:0xd333
+struct enemy_sheet g_enemy_sheets[20]; // ds:0xd34b
+signed char g_fig_move_pathdir[10]; // ds:0xd823 /* TODO: 10 steps is to short */
+signed char g_fig_actors_unkn[30]; // ds:0xd82d, see FIG_ACTION_UNKNOWN2
+signed char g_hero_is_target[7]; // ds:0xd84b
+signed char *g_chessboard;// ds:0xd852
+Bit8u *g_fig_spellgfx_buf; // ds:0xd856
+Bit8u *g_fig_shot_bolt_buf; // ds:0xd85a
+Bit8u *g_fig_cb_selector_buf; // ds:0xd85e
+Bit8u *g_fig_cb_marker_buf; // ds:0xd862
+Bit8u *g_spellobj_nvf_buf; // ds:0xd866, to buffer of size 0xf5f
+Bit8u *g_weapons_nvf_buf; // ds:0xd86a, to buffer of size 0x1953
+unsigned char *g_fightobj_buf_seek_ptr; // ds:0xd86e, points to end of FIGHTOBJ buffer
+signed int g_nr_of_enemies; // ds:0xd872, ?
+signed char g_fightobj_list[90]; // ds:0xd874
+Bit8s g_fig_anisheets[8][243]; // ds:0xd8ce
+
+struct struct_fighter g_fig_list_elem; // ds:0xe066
+signed char g_fig_list_array[127]; // ds:0xe089
+struct struct_fighter *g_fig_list_head; // ds:0xe108, to a list
+signed char g_location_market_flag; // ds:0xe10c
+signed short g_wallclock_redraw; // ds:0xe10d
+signed short g_wallclock_y; // ds:0xe10f
+signed short g_wallclock_x; // ds:0xe111
+signed short g_wallclock_update; // ds:0xe113, 0 = don't update the wallclock
+struct struct_memslot_fig *g_memslots_mon; // ds:0xe115
+struct struct_memslot_fig *g_memslots_wfig; // ds:0xe119
+struct struct_memslot_fig *g_memslots_mfig; // ds:0xe11d
+struct struct_memslot_ani *g_memslots_anis; // ds:0xe121, to ()[36]
+struct enemy_sheet *g_monster_dat_buf; // ds:0xe125
+char **g_monnames_index; // ds:0xe129
+signed char g_market_itemsaldo_table[254]; // ds:0xe12d
+unsigned char* g_itemsdat; // ds:0xe22b
+char **g_itemsname; // ds:0xe22f
+
+
 #if defined(__BORLANDC__)
 void sub_light_timers(Bit32s);
 #endif

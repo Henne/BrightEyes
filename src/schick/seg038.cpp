@@ -106,14 +106,7 @@ void FIG_unused(signed short a1, signed short a2,  Bit8u *p1, Bit8u *p2)
 
 }
 
-struct coordinates {
-	signed short x;
-	signed short y;
-};
-
-struct dummy {
-	struct coordinates o[4];
-};
+static signed char *g_chessboard_cpy; // ds:0xe356
 
 /**
  * \brief  Computes path via backtracking on the distance table
