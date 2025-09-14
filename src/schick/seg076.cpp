@@ -782,7 +782,7 @@ void do_dungeon(void)
 
 		set_audio_track(ARCHIVE_FILE_DUNGEON_XMI);
 #if defined(__BORLANDC__)
-		g_dng_gfxtab = (unsigned char*)(MK_FP(datseg, (!gs_dungeon_gfx_style ? DNG_GFXTAB_WOOD : (gs_dungeon_gfx_style == 1 ? DNG_GFXTAB_MARBLE : DNG_GFXTAB_STONE))));
+		g_dng_gfxtab = (unsigned char*)(MK_FP(_DS, (!gs_dungeon_gfx_style ? DNG_GFXTAB_WOOD : (gs_dungeon_gfx_style == 1 ? DNG_GFXTAB_MARBLE : DNG_GFXTAB_STONE))));
 #else
 //		g_dng_gfxtab = (unsigned char*)RealMake(datseg, (!gs_dungeon_gfx_style ? DNG_GFXTAB_WOOD : (gs_dungeon_gfx_style == 1 ? DNG_GFXTAB_MARBLE : DNG_GFXTAB_STONE))));
 #endif

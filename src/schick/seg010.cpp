@@ -109,10 +109,10 @@ Bit8u* EMS_norm_ptr(Bit8u* p)
 #if 0
 	Bit8u* retval;
 
-	retval = RealSeg(p) << 4;
-	retval += RealOff(p);
+	retval = FP_SEG(p) << 4;
+	retval += FP_OFF(p);
 	retval = retval << 12;
-	retval |= (RealOff(p) & 0x0f);
+	retval |= (FP_OFF(p) & 0x0f);
 
 	return retval;
 #else

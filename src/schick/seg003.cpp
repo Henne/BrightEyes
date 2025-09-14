@@ -63,7 +63,7 @@ void move(void)
 
 	/* direction */
 #if defined(__BORLANDC__)
-	p_vis_field = (Bit8u*)MK_FP(datseg, ((gs_direction == 0) ? VISUAL_FIELD_DIR0 :
+	p_vis_field = (Bit8u*)MK_FP(_DS, ((gs_direction == 0) ? VISUAL_FIELD_DIR0 :
 				((gs_direction == 1) ? VISUAL_FIELD_DIR1 :
 				((gs_direction == 2) ? VISUAL_FIELD_DIR2 : VISUAL_FIELD_DIR3))));
 #endif

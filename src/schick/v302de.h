@@ -76,16 +76,6 @@ struct screen_rect {
 #include "common.h"
 #include "datseg.h"
 
-#if defined(__BORLANDC__)
-#define RealSeg(p) FP_SEG(p)
-#define RealOff(p) FP_OFF(p)
-#define datseg (_DS)
-#define p_datseg (&ds[0x0000])
-#else
-extern unsigned short datseg;
-extern Bit8u *p_datseg;
-#endif
-
 #define ROUNDED_DIVISION(n,k)	((n + (k-1)/2)/k)
 /* divide n/k and round to the closest integer. In ambigous cases, round down. */
 /* only used in seg064.cpp */
