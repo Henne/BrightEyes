@@ -1169,20 +1169,16 @@ void interrupt mouse_isr(void)
 		}
 
 		if (((gs_dungeon_index != DUNGEONS_NONE) || (gs_current_town != TOWNS_NONE)) &&
-				!gs_current_loctype &&
-				!g_dialogbox_lock &&
-				(g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
+				!gs_current_loctype && !g_dialogbox_lock && (g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
 		{
-			((struct mouse_cursor*)g_current_cursor) =
-							(is_mouse_in_rect(68, 4, 171, 51) ?	&g_cursor_arrow_up :
-							(is_mouse_in_rect(68, 89, 171, 136) ?	&g_cursor_arrow_down :
-							(is_mouse_in_rect(16, 36, 67, 96) ?	&g_cursor_arrow_left :
-							(is_mouse_in_rect(172, 36, 223, 96) ?	&g_cursor_arrow_right :
-							(!is_mouse_in_rect(16, 4, 223, 138) ?	&g_default_mouse_cursor :
-								(struct mouse_cursor*)g_current_cursor)))));
+			g_current_cursor =	(is_mouse_in_rect( 68,  4, 171,  51) ?	&g_cursor_arrow_up :
+						(is_mouse_in_rect( 68, 89, 171, 136) ?	&g_cursor_arrow_down :
+						(is_mouse_in_rect( 16, 36,  67,  96) ?	&g_cursor_arrow_left :
+						(is_mouse_in_rect(172, 36, 223,  96) ?	&g_cursor_arrow_right :
+						(!is_mouse_in_rect(16,  4, 223, 138) ?	&g_default_mouse_cursor : g_current_cursor)))));
 		} else {
 			if (g_dialogbox_lock) {
-				g_current_cursor = (unsigned short*)&g_default_mouse_cursor;
+				g_current_cursor = &g_default_mouse_cursor;
 			}
 		}
 
@@ -1257,7 +1253,7 @@ void mouse_init(void)
 			g_have_mouse = 0;
 		}
 
-		g_current_cursor = (unsigned short*)&g_default_mouse_cursor;
+		g_current_cursor = &g_default_mouse_cursor;
 		g_last_cursor = &g_default_mouse_cursor;
 
 		if (g_have_mouse == 2) {
@@ -1400,7 +1396,7 @@ void make_ggst_cursor(Bit8u *icon)
 
 	/* clear the bitmask */
 	for (y = 0; y < 16; y++) {
-		g_ggst_mask[y] = 0;
+		g_ggst_cursor.mask[y] = 0;
 	}
 
 	/* make a bitmask from the icon */
@@ -1408,14 +1404,14 @@ void make_ggst_cursor(Bit8u *icon)
 		for (x = 0; x < 16; x++) {
 			/* if pixelcolor of the icon is not black */
 			if (*icon++ != 0x40) {
-				g_ggst_mask[y] |= (0x8000 >> x);
+				g_ggst_cursor.mask[y] |= (0x8000 >> x);
 			}
 		}
 	}
 
 	/* copy and negate the bitmask */
 	for (y = 0; y < 16; y++) {
-		g_ggst_cursor[y] = ~g_ggst_mask[y];
+		g_ggst_cursor.data[y] = ~g_ggst_cursor.mask[y];
 	}
 }
 
@@ -1434,6 +1430,7 @@ void update_mouse_cursor1(void)
 	if (!g_mouse_locked) {
 
 		if  (!g_mouse_refresh_flag) {
+
 			g_mouse_locked = 1;
 			restore_mouse_bg();
 			g_mouse_locked = 0;
@@ -1483,13 +1480,13 @@ void refresh_screen_size1(void)
 void mouse_19dc(void)
 {
 	/* return if mouse was not moved and the cursor remains */
-	if (g_mouse_moved || (g_last_cursor != (struct mouse_cursor*)g_current_cursor)) {
+	if (g_mouse_moved || (g_last_cursor != g_current_cursor)) {
 
 		/* set new cursor */
-		g_last_cursor = (struct mouse_cursor*)g_current_cursor;
+		g_last_cursor = g_current_cursor;
 
 		/* check if the new cursor is the default cursor */
-		if ((struct mouse_cursor*)g_current_cursor == &g_default_mouse_cursor) {
+		if (g_current_cursor == &g_default_mouse_cursor) {
 			/* set cursor size 0x0 */
 			g_mouse_pointer_offsetx = g_mouse_pointer_offsety = 0;
 		} else {

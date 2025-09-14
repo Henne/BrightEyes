@@ -57,7 +57,7 @@ void diary_show(void)
 	g_wallclock_update = 0;
 	g_area_prepared = -1;
 
-	g_current_cursor = (unsigned short*)&g_default_mouse_cursor;
+	g_current_cursor = &g_default_mouse_cursor;
 
 	load_pp20(ARCHIVE_FILE_BUCH_DAT);
 	g_pp20_index = ARCHIVE_FILE_BUCH_DAT;

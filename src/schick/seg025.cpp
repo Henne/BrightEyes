@@ -416,7 +416,7 @@ signed short game_options(void)
 	g_special_screen = 1;
 	g_wallclock_update = 0;
 	g_area_prepared = -1;
-	g_current_cursor = (unsigned short*)&g_default_mouse_cursor;
+	g_current_cursor = &g_default_mouse_cursor;
 
 	load_pp20(ARCHIVE_FILE_BUCH_DAT);
 	g_pp20_index = ARCHIVE_FILE_BUCH_DAT;
@@ -698,7 +698,7 @@ void do_location(void)
 
 	func = g_location_handlers[gs_current_loctype];
 
-	g_current_cursor = (unsigned short*)&g_default_mouse_cursor;
+	g_current_cursor = &g_default_mouse_cursor;
 
 	if (func) {
 		func();

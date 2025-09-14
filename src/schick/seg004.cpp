@@ -599,7 +599,7 @@ void draw_mouse_cursor(void)
 	signed short height;
 
 	dst = g_vga_memstart;
-	mouse_cursor = g_current_cursor + 16;
+	mouse_cursor = &g_current_cursor->mask[0];
 
 	x = g_mouse_posx - g_mouse_pointer_offsetx;
 	y = g_mouse_posy - g_mouse_pointer_offsety;

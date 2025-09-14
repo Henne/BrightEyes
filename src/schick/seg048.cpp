@@ -56,7 +56,7 @@ void reset_item_selector(void)
 		g_statuspage_selitem2_no = 23;
 	}
 
-	g_current_cursor = (unsigned short*)(g_current_cursor_bak = &g_default_mouse_cursor);
+	g_current_cursor = g_current_cursor_bak = &g_default_mouse_cursor;
 }
 
 /* nearly identical, same length */
@@ -434,7 +434,7 @@ void status_menu(signed short hero_pos)
 
 						make_ggst_cursor(g_icon);
 
-						g_current_cursor = g_ggst_cursor;
+						g_current_cursor = &g_ggst_cursor;
 					}
 				}
 			}
@@ -454,8 +454,8 @@ void status_menu(signed short hero_pos)
 
 		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
 
-			g_current_cursor_bak = (struct mouse_cursor*)g_current_cursor;
-			g_current_cursor = (unsigned short*)&g_default_mouse_cursor;
+			g_current_cursor_bak = g_current_cursor;
+			g_current_cursor = &g_default_mouse_cursor;
 
 			switch (g_status_page_mode) {
 			case 1: {
@@ -804,7 +804,7 @@ void status_menu(signed short hero_pos)
 			}
 			}
 
-			g_current_cursor = (unsigned short*)g_current_cursor_bak;
+			g_current_cursor = g_current_cursor_bak;
 		}
 	}
 

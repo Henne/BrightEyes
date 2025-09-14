@@ -50,7 +50,7 @@ struct mouse_action {
 };
 
 struct mouse_cursor {
-	char data[32];
+	Bit16u data[16];
 	Bit16u mask[16];
 };
 
@@ -1873,9 +1873,8 @@ extern signed short g_redraw_menuicons;	// ds:0xd013; seg066, seg076, seg099
 extern signed short g_dng_extra_action;	// ds:0xd011; seg076, seg099
 extern signed short g_dng_init_flag;	// ds:0xd00f; seg076,
 extern unsigned char g_mouse_bg_bak[256];	// ds:0xcf0f; seg004
-extern unsigned short g_ggst_cursor[16];	// ds:0xcecf; seg002, seg048
-extern unsigned short g_ggst_mask[16];		// ds:0xceef; seg002
-extern unsigned short *g_current_cursor;	// ds:0xcecb; seg002, seg004, seg024, seg25, seg048
+extern struct mouse_cursor g_ggst_cursor;	// ds:0xcecf; seg002, seg048
+extern struct mouse_cursor *g_current_cursor;	// ds:0xcecb; seg002, seg004, seg024, seg25, seg048
 extern struct mouse_cursor *g_last_cursor;	// ds:0xcec7; seg002
 extern unsigned char g_gui_text_buffer[64];	// ds:0xce87; seg096
 extern Bit32s g_ani_unknown4;		// ds:0xce43; seg027, seg120
