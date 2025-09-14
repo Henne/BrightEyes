@@ -49,6 +49,12 @@ struct mouse_action {
 	int action;
 };
 
+struct mouse_cursor {
+	char data[32];
+	Bit16u mask[16];
+};
+
+
 struct status_bar {
 	Bit16s le_orig;
 	Bit16s le;
@@ -118,7 +124,6 @@ struct struct_rect {
 	int y2;
 	int x2;
 };
-
 
 struct ani_tile {
 	Bit16s pic;
@@ -609,7 +614,11 @@ extern Bit8u g_palette_fight1[32][3];			//ds:0x2783; seg032
 extern Bit8u g_palette_special[32][3];			//ds:0x27e3; seg029, seg093
 extern signed char g_pp20_index;			//ds:0x2845; seg004-seg120
 extern signed short g_request_refresh;			//ds:0x2846; seg002-seg118
-
+extern struct mouse_cursor g_default_mouse_cursor;	//ds:0x2848; seg002, seg024, seg025, seg048
+extern struct mouse_cursor g_cursor_arrow_up;		//ds:0x2888; seg002
+extern struct mouse_cursor g_cursor_arrow_down;		//ds:0x28c8; seg002
+extern struct mouse_cursor g_cursor_arrow_left;		//ds:0x2908; seg002
+extern struct mouse_cursor g_cursor_arrow_right;	//ds:0x2948; seg002
 extern signed short g_mouse_posy_min;			//ds:0x2988; seg002, seg049, seg097
 extern signed short g_mouse_posx_min;			//ds:0x298a; seg002, seg049, seg097
 extern signed short g_mouse_posy_max;			//ds:0x298c; seg002, seg049, seg097
@@ -1726,7 +1735,7 @@ extern signed char g_wildcamp_guards[3];	// ds:0xe3be; seg049, seg052
 //extern unsigned char *g_skills_buffer;		// ds:0xe3ba; seg050
 //extern unsigned char *g_inc_skills_counter;	// ds:0xe3b6; seg050
 //extern unsigned char *g_inc_spells_counter;	// ds:0xe3b2; seg050
-extern unsigned char *g_current_cursor_bak;	// ds:0xe3ae; seg048
+extern struct mouse_cursor *g_current_cursor_bak;	// ds:0xe3ae; seg048
 extern signed short g_attacker_attacks_again;	// ds:0xe3ac; seg042, seg043, seg044
 extern signed short g_defender_attacks;		// ds:0xe3aa; seg042, seg043, seg044
 extern signed short g_attacker_dead;		// ds:0xe3a8; seg042, seg043, seg044
@@ -1867,7 +1876,7 @@ extern unsigned char g_mouse_bg_bak[256];	// ds:0xcf0f; seg004
 extern unsigned short g_ggst_cursor[16];	// ds:0xcecf; seg002, seg048
 extern unsigned short g_ggst_mask[16];		// ds:0xceef; seg002
 extern unsigned short *g_current_cursor;	// ds:0xcecb; seg002, seg004, seg024, seg25, seg048
-extern unsigned short *g_last_cursor;		// ds:0xcec7; seg002
+extern struct mouse_cursor *g_last_cursor;	// ds:0xcec7; seg002
 extern unsigned char g_gui_text_buffer[64];	// ds:0xce87; seg096
 extern Bit32s g_ani_unknown4;		// ds:0xce43; seg027, seg120
 extern signed int g_ani_posx;		// ds:0xce41; seg004, seg029, seg066, seg074, seg075

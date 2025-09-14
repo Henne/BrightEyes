@@ -133,11 +133,11 @@
 // ?2
 //#define PP20_INDEX                      (0x2845)    /* signed char; archive file index of current pp20 */
 //#define REQUEST_REFRESH                 (0x2846)    /* signed short; {0,1} */
-#define DEFAULT_MOUSE_CURSOR            (0x2848)    /* struct(64); struct{char unkn[32]; unsigned short mask[16];} */
-#define CURSOR_ARROW_UP                 (0x2888)    /* struct(64); struct{char unkn[32]; unsigned short mask[16];} */
-#define CURSOR_ARROW_DOWN               (0x28c8)    /* struct(64); struct{char unkn[32]; unsigned short mask[16];} */
-#define CURSOR_ARROW_LEFT               (0x2908)    /* struct(64); struct{char unkn[32]; unsigned short mask[16];} */
-#define CURSOR_ARROW_RIGHT              (0x2948)    /* struct(64); struct{char unkn[32]; unsigned short mask[16];} */
+//#define DEFAULT_MOUSE_CURSOR            (0x2848)    /* struct(64); struct{char unkn[32]; unsigned short mask[16];} */
+//#define CURSOR_ARROW_UP                 (0x2888)    /* struct(64); struct{char unkn[32]; unsigned short mask[16];} */
+//#define CURSOR_ARROW_DOWN               (0x28c8)    /* struct(64); struct{char unkn[32]; unsigned short mask[16];} */
+//#define CURSOR_ARROW_LEFT               (0x2908)    /* struct(64); struct{char unkn[32]; unsigned short mask[16];} */
+//#define CURSOR_ARROW_RIGHT              (0x2948)    /* struct(64); struct{char unkn[32]; unsigned short mask[16];} */
 //#define MOUSE_POSY_MIN                  (0x2988)    /* unsigned short */
 //#define MOUSE_POSX_MIN                  (0x298a)    /* unsigned short */
 //#define MOUSE_POSY_MAX                  (0x298c)    /* unsigned short */

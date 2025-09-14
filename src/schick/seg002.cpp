@@ -1173,15 +1173,16 @@ void interrupt mouse_isr(void)
 				!g_dialogbox_lock &&
 				(g_pp20_index == ARCHIVE_FILE_PLAYM_UK))
 		{
-			g_current_cursor = (unsigned short*) (is_mouse_in_rect(68, 4, 171, 51) ? (p_datseg + CURSOR_ARROW_UP):
-							(is_mouse_in_rect(68, 89, 171, 136) ? (p_datseg + CURSOR_ARROW_DOWN) :
-							(is_mouse_in_rect(16, 36, 67, 96) ? (p_datseg + CURSOR_ARROW_LEFT) :
-							(is_mouse_in_rect(172, 36, 223, 96) ? (p_datseg + CURSOR_ARROW_RIGHT) :
-							(!is_mouse_in_rect(16, 4, 223, 138) ? (p_datseg + DEFAULT_MOUSE_CURSOR) :
-								(void*)g_current_cursor)))));
+			((struct mouse_cursor*)g_current_cursor) =
+							(is_mouse_in_rect(68, 4, 171, 51) ?	&g_cursor_arrow_up :
+							(is_mouse_in_rect(68, 89, 171, 136) ?	&g_cursor_arrow_down :
+							(is_mouse_in_rect(16, 36, 67, 96) ?	&g_cursor_arrow_left :
+							(is_mouse_in_rect(172, 36, 223, 96) ?	&g_cursor_arrow_right :
+							(!is_mouse_in_rect(16, 4, 223, 138) ?	&g_default_mouse_cursor :
+								(struct mouse_cursor*)g_current_cursor)))));
 		} else {
 			if (g_dialogbox_lock) {
-				g_current_cursor = (unsigned short*)(p_datseg + DEFAULT_MOUSE_CURSOR);
+				g_current_cursor = (unsigned short*)&g_default_mouse_cursor;
 			}
 		}
 
@@ -1256,8 +1257,8 @@ void mouse_init(void)
 			g_have_mouse = 0;
 		}
 
-		g_current_cursor = (unsigned short*)(p_datseg + DEFAULT_MOUSE_CURSOR);
-		g_last_cursor = (unsigned short*)(p_datseg + DEFAULT_MOUSE_CURSOR);
+		g_current_cursor = (unsigned short*)&g_default_mouse_cursor;
+		g_last_cursor = &g_default_mouse_cursor;
 
 		if (g_have_mouse == 2) {
 
@@ -1482,13 +1483,13 @@ void refresh_screen_size1(void)
 void mouse_19dc(void)
 {
 	/* return if mouse was not moved and the cursor remains */
-	if (g_mouse_moved || (g_last_cursor != g_current_cursor)) {
+	if (g_mouse_moved || (g_last_cursor != (struct mouse_cursor*)g_current_cursor)) {
 
 		/* set new cursor */
-		g_last_cursor = g_current_cursor;
+		g_last_cursor = (struct mouse_cursor*)g_current_cursor;
 
 		/* check if the new cursor is the default cursor */
-		if ((Bit8u*)g_current_cursor == p_datseg + DEFAULT_MOUSE_CURSOR) {
+		if ((struct mouse_cursor*)g_current_cursor == &g_default_mouse_cursor) {
 			/* set cursor size 0x0 */
 			g_mouse_pointer_offsetx = g_mouse_pointer_offsety = 0;
 		} else {
