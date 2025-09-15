@@ -121,7 +121,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 	signed short percent_old = 100;
 	signed short item_id;
 	signed short l6;
-	signed short l7;
+	signed short item_pos;
 	signed short done = 0;
 	signed short item = 0;
 	signed short l8;
@@ -227,7 +227,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 
 					l11 = 0;
 					l6 = 1;
-					l7 = item = l12 = 0;
+					item_pos = item = l12 = 0;
 					percent_old = 100;
 
 					do_fill_rect(g_vga_memstart, 26, 26, 105, 33, 0);
@@ -294,7 +294,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 
 				refresh_screen_size();
 				l6 = 1;
-				l7 = 0;
+				item_pos = 0;
 				l8 = 0;
 
 			}
@@ -304,12 +304,12 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 			g_action_table_secondary = NULL;
 
 			if (g_have_mouse == 2) {
-				select_with_mouse((Bit8u*)&l7, (Bit8u*)&g_sellitems[item]);
+				select_with_mouse(&item_pos, &g_sellitems[item]);
 			} else {
-				select_with_keyboard((Bit8u*)&l7, (Bit8u*)&g_sellitems[item]);
+				select_with_keyboard(&item_pos, &g_sellitems[item]);
 			}
 
-			if (l6 != l7) {
+			if (l6 != item_pos) {
 
 				do_border(g_vga_memstart,
 					array3.a[l6 / 5] - 1,
@@ -319,17 +319,17 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 					0);
 
 				do_border(g_vga_memstart,
-					array3.a[l7 / 5] - 1,
-					array5.a[l7 % 5] - 1,
-					array3.a[l7 / 5] + 16,
-					array5.a[l7 % 5] + 16,
+					array3.a[item_pos / 5] - 1,
+					array5.a[item_pos % 5] - 1,
+					array3.a[item_pos / 5] + 16,
+					array5.a[item_pos % 5] + 16,
 					-1);
 
-				l6 = l7;
+				l6 = item_pos;
 
 				clear_loc_line();
 
-				GUI_print_loc_line(GUI_name_singular(get_itemname(g_sellitems[l7 + item].item_id)));
+				GUI_print_loc_line(GUI_name_singular(get_itemname(g_sellitems[item_pos + item].item_id)));
 			}
 
 			if (g_mouse2_event  || g_action == ACTION_ID_PAGE_UP) {
@@ -356,11 +356,11 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 				/* Is ACTION == ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK possible at all?
 				 * ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK can be written to ACTION in buy_screen(), but where should it show up in repair_screen()?? */
 
-				item_id = g_sellitems[l7 + item].item_id;
+				item_id = g_sellitems[item_pos + item].item_id;
 
 				p_money = get_party_money();
 
-				if (g_sellitems[l7 + item].shop_price == 0) {
+				if (g_sellitems[item_pos + item].shop_price == 0) {
 
 					GUI_output(get_ttx(487));
 
@@ -371,8 +371,8 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 					while (l12 == 0 && j < 3) {
 
 
-						price = (g_sellitems[l7 + item].shop_price
-							* g_sellitems[l7 + item].price_unit * g_price_modificator) / 4;
+						price = (g_sellitems[item_pos + item].shop_price
+							* g_sellitems[item_pos + item].price_unit * g_price_modificator) / 4;
 
 						make_valuta_str(g_text_output_buf, price);
 
@@ -433,7 +433,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 									GUI_output(get_ttx(491));
 								}
 
-								drop_item(hero2, g_sellitems[l7 + item].item_pos, 1);
+								drop_item(hero2, g_sellitems[item_pos + item].item_pos, 1);
 								p_money -= price;
 								set_party_money(p_money);
 

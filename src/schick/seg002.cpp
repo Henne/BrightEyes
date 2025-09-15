@@ -4260,7 +4260,7 @@ unsigned short div16(unsigned short val)
 	return ((unsigned char)val) >> 4;
 }
 
-void select_with_mouse(Bit8u *p1, Bit8u *p2)
+void select_with_mouse(signed short *item_pos, struct shop_item *shop_item)
 /* This function is called in shops at sell/buy screens */
 {
 	signed short i;
@@ -4274,32 +4274,35 @@ void select_with_mouse(Bit8u *p1, Bit8u *p2)
 			(g_merchant_items_posx[i] + 50 >= g_mouse_posx) &&
 			(g_merchant_items_posy[i] <= g_mouse_posy) &&
 			(g_merchant_items_posy[i] + 17 >= g_mouse_posy) &&
-			(host_readws(p2 + i * 7) != 0))
+			(shop_item[i].item_id != 0))
 		{
-			host_writew(p1, i);
+			*item_pos = i;
 			return;
 		}
 	}
 }
 
-void select_with_keyboard(Bit8u *p1, Bit8u *p2)
+void select_with_keyboard(signed short *item_pos, struct shop_item *shop_item)
 {
-	signed short pos = host_readws(p1);
+	signed short pos = *item_pos;
 
 	if (g_action == ACTION_ID_UP) {
+
 		/* Key UP */
 		if (pos) {
 			pos--;
 		} else {
 			pos = 14;
-			while (host_readw(p2 + pos * 7) == 0) {
+			while (shop_item[pos].item_id == 0) {
 				pos--;
 			}
 		}
+
 	} else if (g_action == ACTION_ID_DOWN) {
+
 		/* Key DOWN */
 		if (pos < 14) {
-			if (host_readw(p2 + (pos + 1) * 7) != 0) {
+			if (shop_item[pos + 1].item_id != 0) {
 				pos++;
 			} else {
 				pos = 0;
@@ -4307,27 +4310,31 @@ void select_with_keyboard(Bit8u *p1, Bit8u *p2)
 		} else {
 			pos = 0;
 		}
+
 	} else if (g_action == ACTION_ID_RIGHT) {
+
 		/* Key RIGHT */
 		if (pos < 10) {
-			if (host_readw(p2 + (pos + 5) * 7) != 0) {
+			if (shop_item[pos + 5].item_id != 0) {
 				pos += 5;
 			}
 		} else {
 			pos -= 10;
 		}
+
 	} else if (g_action == ACTION_ID_LEFT) {
+
 		/* Key LEFT */
 		if (pos > 4) {
 			pos -= 5;
 		} else {
-			if (host_readw(p2 + (pos + 10) * 7) != 0) {
+			if (shop_item[pos + 10].item_id != 0) {
 				pos += 10;
 			}
 		}
 	}
 
-	host_writew(p1, pos);
+	*item_pos = pos;
 }
 
 /**

@@ -71,7 +71,7 @@ void buy_screen(void)
 	signed short percent;
 	signed short percent_old = 100;
 	signed short l6 = 1;
-	signed short l7 = 0;
+	signed short item_pos = 0;
 	signed short done = 0;
 	signed short item = 0;
 	signed short l8;
@@ -214,38 +214,33 @@ void buy_screen(void)
 
 			refresh_screen_size();
 			l6 = 1;
-			l7 = 0;
+			item_pos = 0;
 			l8 = 0;
 		}
 
 		if (g_have_mouse == 2) {
-			select_with_mouse((Bit8u*)&l7, (Bit8u*)&g_buyitems[item]);
+			select_with_mouse(&item_pos, &g_buyitems[item]);
 		} else {
-			select_with_keyboard((Bit8u*)&l7, (Bit8u*)&g_buyitems[item]);
+			select_with_keyboard(&item_pos, &g_buyitems[item]);
 		}
-
-#if !defined(__BORLANDC__)
-		/* BE-fix */
-		l7 = host_readws((Bit8u*)&l7);
-#endif
 
 		g_action_table_secondary = &g_action_table_merchant[0];
 		handle_gui_input();
 		g_action_table_secondary = NULL;
 
-		if (l6 != l7 || l15 != 0) {
+		if (l6 != item_pos || l15 != 0) {
 
 			do_border(g_vga_memstart, array3.a[l6 / 5] - 1, array5.a[l6 % 5] - 1, array3.a[l6 / 5] + 16,
 					array5.a[l6 % 5] + 16, 0);
 
-			do_border(g_vga_memstart, array3.a[l7 / 5] - 1, array5.a[l7 % 5] - 1, array3.a[l7 / 5] + 16,
-					array5.a[l7 % 5] + 16, -1);
+			do_border(g_vga_memstart, array3.a[item_pos / 5] - 1, array5.a[item_pos % 5] - 1, array3.a[item_pos / 5] + 16,
+					array5.a[item_pos % 5] + 16, -1);
 
-			l6 = l7;
+			l6 = item_pos;
 
 			clear_loc_line();
 
-			item_id = g_buyitems[l7 + item].item_id;
+			item_id = g_buyitems[item_pos + item].item_id;
 
 			l4 = 0;
 
@@ -329,7 +324,7 @@ void buy_screen(void)
 				}
 			}
 
-			item_id = g_buyitems[l7 + item].item_id;
+			item_id = g_buyitems[item_pos + item].item_id;
 			l16 = -1;
 			l17 = 0;
 
@@ -371,7 +366,7 @@ void buy_screen(void)
 						l4 = g_buy_shopping_cart[l16].quantity;
 					}
 
-					l9 = (Bit32s)g_buyitems[l7 + item].shop_price *	g_buyitems[l7 + item].price_unit * l4;
+					l9 = (Bit32s)g_buyitems[item_pos + item].shop_price *	g_buyitems[item_pos + item].price_unit * l4;
 
 					if (l3 == 1 && price + l9 > p_money) {
 
@@ -413,16 +408,16 @@ void buy_screen(void)
 
 					l4 = 1;
 
-					if (item_stackable(get_itemsdat(g_buyitems[l7 + item].item_id))) {
+					if (item_stackable(get_itemsdat(g_buyitems[item_pos + item].item_id))) {
 
-						sprintf(g_dtp2,	get_ttx(441), GUI_names_grammar(4, g_buyitems[l7 + item].item_id, 0));
+						sprintf(g_dtp2,	get_ttx(441), GUI_names_grammar(4, g_buyitems[item_pos + item].item_id, 0));
 
 						l4 = GUI_input(g_dtp2, 2);
 					}
 
 					if (l4 > 0) {
 
-						l9 = (Bit32s)g_buyitems[l7 + item].shop_price *	g_buyitems[l7 + item].price_unit * l4;
+						l9 = (Bit32s)g_buyitems[item_pos + item].shop_price *	g_buyitems[item_pos + item].price_unit * l4;
 
 						if (price + l9 > p_money) {
 
@@ -435,7 +430,7 @@ void buy_screen(void)
 						} else {
 							price += l9;
 
-							g_buy_shopping_cart[nice].item_id = g_buyitems[l7 + item].item_id;
+							g_buy_shopping_cart[nice].item_id = g_buyitems[item_pos + item].item_id;
 
 							g_buy_shopping_cart[nice].quantity = l4;
 

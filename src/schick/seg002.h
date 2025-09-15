@@ -146,8 +146,8 @@ signed short can_merge_group(void);
 #if !defined(__BORLANDC__) || !defined DONT_DEF_DIV16
 unsigned short div16(unsigned short);
 #endif
-void select_with_mouse(Bit8u*, Bit8u*);
-void select_with_keyboard(Bit8u*, Bit8u*);
+void select_with_mouse(signed short*, struct shop_item*);
+void select_with_keyboard(signed short*, struct shop_item*);
 void set_automap_tile(signed short, signed short);
 void set_automap_tiles(signed short, signed short);
 void seg002_47e2(void);

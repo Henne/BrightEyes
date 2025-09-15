@@ -47,7 +47,7 @@ void sell_screen(Bit8u *shop_ptr)
 	signed short percent_old = 100;
 	signed short item_id;
 	signed short l5;
-	signed short l6;
+	signed short item_pos;
 	signed short done = 0;
 	signed short item = 0;
 	signed short l8;
@@ -115,7 +115,7 @@ void sell_screen(Bit8u *shop_ptr)
 			set_textcolor(255, 0);
 
 			l5 = -1;
-			l6 = 0;
+			item_pos = 0;
 			l10 = 1;
 			g_request_refresh = 0;
 		}
@@ -157,7 +157,7 @@ void sell_screen(Bit8u *shop_ptr)
 
 				l11 = 0;
 				l5 = -1;
-				l6 = item = l12 = 0;
+				item_pos = item = l12 = 0;
 				percent_old = 100;
 				p_money = get_party_money();
 
@@ -251,21 +251,16 @@ void sell_screen(Bit8u *shop_ptr)
 		}
 
 		if (g_have_mouse == 2) {
-			select_with_mouse((Bit8u*)&l6, (Bit8u*)&g_sellitems[item]);
+			select_with_mouse(&item_pos, &g_sellitems[item]);
 		} else {
-			select_with_keyboard((Bit8u*)&l6, (Bit8u*)&g_sellitems[item]);
+			select_with_keyboard(&item_pos, &g_sellitems[item]);
 		}
-
-#if !defined(__BORLANDC__)
-		/* BE-fix */
-		l6 = host_readws((Bit8u*)&l6);
-#endif
 
 		g_action_table_secondary = &g_action_table_merchant[0];
 		handle_gui_input();
 		g_action_table_secondary = NULL;
 
-		if (l5 != l6) {
+		if (l5 != item_pos) {
 
 			if (l5 != -1) {
 				do_border(g_vga_memstart,
@@ -277,18 +272,18 @@ void sell_screen(Bit8u *shop_ptr)
 			 }
 
 			do_border(g_vga_memstart,
-				array3.a[l6 / 5] - 1,
-				array5.a[l6 % 5] - 1,
-				array3.a[l6 / 5] + 16,
-				array5.a[l6 % 5] + 16,
+				array3.a[item_pos / 5] - 1,
+				array5.a[item_pos % 5] - 1,
+				array3.a[item_pos / 5] + 16,
+				array5.a[item_pos % 5] + 16,
 				-1);
 
-			l5 = l6;
+			l5 = item_pos;
 
 			clear_loc_line();
 
 
-			GUI_print_loc_line(GUI_name_singular(get_itemname(g_sellitems[l6 + item].item_id)));
+			GUI_print_loc_line(GUI_name_singular(get_itemname(g_sellitems[item_pos + item].item_id)));
 		}
 
 		if (g_mouse2_event  || g_action == ACTION_ID_PAGE_UP) {
@@ -318,9 +313,9 @@ void sell_screen(Bit8u *shop_ptr)
 			/* Is ACTION == ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK possible at all?
 			 * ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK can be written to ACTION in buy_screen(), but where should it show up in sell_screen()?? */
 
-			item_id = g_sellitems[l6 + item].item_id;
+			item_id = g_sellitems[item_pos + item].item_id;
 
-			if (g_sellitems[l6 + item].shop_price == 0) {
+			if (g_sellitems[item_pos + item].shop_price == 0) {
 
 				GUI_output(get_ttx(452));
 
@@ -334,7 +329,7 @@ void sell_screen(Bit8u *shop_ptr)
 				} else {
 
 					nice = 1;
-					l15 = g_sellitems[l6 + item].item_pos;
+					l15 = g_sellitems[item_pos + item].item_pos;
 
 					if (tmp[hero_pos][l15] != 0) {
 
@@ -352,20 +347,20 @@ void sell_screen(Bit8u *shop_ptr)
 								nice = host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + SIZEOF_INVENTORY * l15);
 							}
 
-							price -= ((Bit32s)g_sellitems[l6 + item].shop_price *
-									(Bit32s)g_sellitems[l6 + item].price_unit *
+							price -= ((Bit32s)g_sellitems[item_pos + item].shop_price *
+									(Bit32s)g_sellitems[item_pos + item].price_unit *
 									tmp[hero_pos][l15] * g_price_modificator) / 4L;
 
 							tmp[hero_pos][l15] = nice;
 
-							price += ((Bit32s)g_sellitems[l6 + item].shop_price *
-									(Bit32s)g_sellitems[l6 + item].price_unit *
+							price += ((Bit32s)g_sellitems[item_pos + item].shop_price *
+									(Bit32s)g_sellitems[item_pos + item].price_unit *
 									tmp[hero_pos][l15] * g_price_modificator) / 4L;
 						} else {
 							tmp[hero_pos][l15] = 0;
 
-							price -= ((Bit32s)g_sellitems[l6 + item].shop_price *
-									(Bit32s)g_sellitems[l6 + item].price_unit *
+							price -= ((Bit32s)g_sellitems[item_pos + item].shop_price *
+									(Bit32s)g_sellitems[item_pos + item].price_unit *
 									nice * g_price_modificator) / 4L;
 						}
 					} else {
@@ -383,19 +378,19 @@ void sell_screen(Bit8u *shop_ptr)
 								nice = host_readws(hero1 + (HERO_INVENTORY + INVENTORY_QUANTITY) + SIZEOF_INVENTORY * l15);
 							}
 
-							price -= ((Bit32s)g_sellitems[l6 + item].shop_price *
-									(Bit32s)g_sellitems[l6 + item].price_unit *
+							price -= ((Bit32s)g_sellitems[item_pos + item].shop_price *
+									(Bit32s)g_sellitems[item_pos + item].price_unit *
 									tmp[hero_pos][l15] * g_price_modificator) / 4L;
 
 							tmp[hero_pos][l15] = nice;
 
-							price += ((Bit32s)g_sellitems[l6 + item].shop_price *
-									(Bit32s)g_sellitems[l6 + item].price_unit *
+							price += ((Bit32s)g_sellitems[item_pos + item].shop_price *
+									(Bit32s)g_sellitems[item_pos + item].price_unit *
 									tmp[hero_pos][l15] * g_price_modificator) / 4L;
 						} else {
 							tmp[hero_pos][l15] = 1;
-							price += ((Bit32s)g_sellitems[l6 + item].shop_price *
-									(Bit32s)g_sellitems[l6 + item].price_unit *
+							price += ((Bit32s)g_sellitems[item_pos + item].shop_price *
+									(Bit32s)g_sellitems[item_pos + item].price_unit *
 									nice * g_price_modificator) / 4L;
 						}
 					}
