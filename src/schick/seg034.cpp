@@ -147,7 +147,7 @@ signed short seg034_000(signed short x_hero, signed short y_hero,
  * \param   max_range   maximal range for the weapon
  * \return              fight-id of the target
  */
-signed char FIG_cb_select_target(Bit8u *px, Bit8u *py, const signed short max_range)
+signed char FIG_cb_select_target(signed short *px, signed short *py, const signed short max_range)
 {
 	signed short x_diff;
 	signed short y_diff;
@@ -165,26 +165,27 @@ signed char FIG_cb_select_target(Bit8u *px, Bit8u *py, const signed short max_ra
 
 	update_mouse_cursor();
 
-	g_mouse_posx_bak = g_mouse_posx = x_screen = cb_base_x + 10 * (host_readws(px) + host_readws(py));
-	g_mouse_posy_bak = g_mouse_posy = y_screen = cb_base_y + 5 * (host_readws(px) + host_readws(py));
+	g_mouse_posx_bak = g_mouse_posx = x_screen = cb_base_x + 10 * (*px + *py);
+	g_mouse_posy_bak = g_mouse_posy = y_screen = cb_base_y + 5 * (*px + *py);
 
 
 	mouse_move_cursor(g_mouse_posx, g_mouse_posy);
 
 	refresh_screen_size();
 
-	x = host_readws(px);
-	y = host_readws(py);
+	x = *px;
+	y = *py;
 
 	if (g_fig_cb_selector_id[0] != -1) {
+
 		FIG_remove_from_list(g_fig_cb_selector_id[0], 0);
 		g_fig_cb_selector_id[0] = -1;
 	}
 
 	g_fig_list_elem.figure = 0;
 	g_fig_list_elem.nvf_no = 0;
-	g_fig_list_elem.cbx = host_readbs(px);
-	g_fig_list_elem.cby = host_readbs(py);
+	g_fig_list_elem.cbx = *px;
+	g_fig_list_elem.cby = *py;
 	g_fig_list_elem.offsetx = 0;
 	g_fig_list_elem.offsety = 4;
 	g_fig_list_elem.height = 11;
@@ -226,71 +227,74 @@ signed char FIG_cb_select_target(Bit8u *px, Bit8u *py, const signed short max_ra
 
 		from_kbd = 0;
 
-		if ((g_action == ACTION_ID_UP) ||
-			(g_action == ACTION_ID_DOWN) ||
-			(g_action == ACTION_ID_RIGHT) ||
-			(g_action == ACTION_ID_LEFT))
+		if ((g_action == ACTION_ID_UP) || (g_action == ACTION_ID_DOWN) ||
+			(g_action == ACTION_ID_RIGHT) || (g_action == ACTION_ID_LEFT))
 		{
 			from_kbd = 1;
+
 		} else {
 
 			x_diff = g_mouse_posx - x_screen;
 			y_diff = g_mouse_posy - y_screen;
 
-			if (((y_diff > 0) && (x_diff <= -10)) ||
-				((x_diff < 0) && (y_diff >= 5)))
+			if (((y_diff > 0) && (x_diff <= -10)) || ((x_diff < 0) && (y_diff >= 5)))
 			{
-				g_action = (ACTION_ID_DOWN);
+				g_action = ACTION_ID_DOWN;
 
-			} else if (((y_diff < 0) && (x_diff >= 10)) ||
-					((x_diff > 0) && (y_diff <= -5)))
+			} else if (((y_diff < 0) && (x_diff >= 10)) || ((x_diff > 0) && (y_diff <= -5)))
 			{
-				g_action = (ACTION_ID_UP);
+				g_action = ACTION_ID_UP;
 
-			} else if (((y_diff > 0) && (x_diff >= 10)) ||
-					((x_diff > 0) && (y_diff >= 5)))
+			} else if (((y_diff > 0) && (x_diff >= 10)) || ((x_diff > 0) && (y_diff >= 5)))
 			{
-				g_action = (ACTION_ID_RIGHT);
+				g_action = ACTION_ID_RIGHT;
 
-			} else if (((y_diff < 0) && (x_diff <= -10)) ||
-					((x_diff < 0) && (y_diff <= -5)))
+			} else if (((y_diff < 0) && (x_diff <= -10)) ||	((x_diff < 0) && (y_diff <= -5)))
 			{
-				g_action = (ACTION_ID_LEFT);
+				g_action = ACTION_ID_LEFT;
 			}
 		}
 
 		if (g_mouse1_event1) {
+
 			g_action = ACTION_ID_RETURN;
 			g_mouse1_event1 = 0;
 		}
 
 		if (g_action == ACTION_ID_RIGHT) {
 
-			if (seg034_000(x, y, host_readws(px), host_readws(py), 1, 0, max_range)) {
-				inc_ptr_ws(px);
+			if (seg034_000(x, y, *px, *py, 1, 0, max_range)) {
+				*px++;
 			}
+
 		} else if (g_action == ACTION_ID_LEFT) {
-			if (seg034_000(x, y, host_readws(px), host_readws(py), -1, 0, max_range)) {
-				dec_ptr_ws(px);
+
+			if (seg034_000(x, y, *px, *py, -1, 0, max_range)) {
+				*px--;
 			}
+
 		} else if (g_action == ACTION_ID_UP) {
-			if (seg034_000(x, y, host_readws(px), host_readws(py), 0, 1, max_range)) {
-				inc_ptr_ws(py);
+
+			if (seg034_000(x, y, *px, *py, 0, 1, max_range)) {
+				*py++;
 			}
+
 		} else if (g_action == ACTION_ID_DOWN) {
-			if (seg034_000(x, y, host_readws(px), host_readws(py), 0, -1, max_range)) {
-				dec_ptr_ws(py);
+
+			if (seg034_000(x, y, *px, *py, 0, -1, max_range)) {
+				*py--;
 			}
 		}
 
-		if ((g_fig_list_elem.cbx != host_readws(px)) || (g_fig_list_elem.cby != host_readws(py))) {
+		if ((g_fig_list_elem.cbx != *px) || (g_fig_list_elem.cby != *py)) {
 
 			update_mouse_cursor();
 
-			x_screen = cb_base_x + 10 * (host_readws(px) + host_readws(py));
-			y_screen = cb_base_y + 5 * (host_readws(px) - host_readws(py));
+			x_screen = cb_base_x + 10 * (*px + *py);
+			y_screen = cb_base_y + 5 * (*px - *py);
 
 			if (from_kbd != 0) {
+
 				g_mouse_posx_bak = g_mouse_posx = x_screen;
 				g_mouse_posy_bak = g_mouse_posy = y_screen;
 
@@ -299,7 +303,7 @@ signed char FIG_cb_select_target(Bit8u *px, Bit8u *py, const signed short max_ra
 
 			refresh_screen_size();
 			FIG_call_draw_pic();
-			fighter_id = get_cb_val(host_readws(px), host_readws(py));
+			fighter_id = get_cb_val(*px, *py);
 
 			if ((fighter_id > 0) && (fighter_id < 50)) {
 
@@ -317,8 +321,8 @@ signed char FIG_cb_select_target(Bit8u *px, Bit8u *py, const signed short max_ra
 
 			FIG_remove_from_list(g_fig_cb_selector_id[0], 1);
 
-			g_fig_list_elem.cbx = (signed char)host_readws(px);
-			g_fig_list_elem.cby = (signed char)host_readws(py);
+			g_fig_list_elem.cbx = *px;
+			g_fig_list_elem.cby = *py;
 
 			FIG_add_to_list(g_fig_cb_selector_id[0]);
 			FIG_draw_figures();
@@ -333,24 +337,15 @@ signed char FIG_cb_select_target(Bit8u *px, Bit8u *py, const signed short max_ra
 
 	draw_fight_screen_pal(0);
 
-	return get_cb_val(host_readws(px), host_readws(py));
+	return get_cb_val(*px, *py);
 }
-
-struct coord {
-	signed short x;
-	signed short y;
-};
-
-struct dummy {
-	struct coord a[4];
-};
 
 /* determine free position (*px,*py) for new enemy to appear on chessboard
  * if the desired position (x,y) is occupied, a free position is determined as
  * close as possible to this position.
  * mode is 1 if the enemy has a two-fielded sprite (such as wolves)
  */
-void seg034_718(signed short x, signed short y, Bit8u *px, Bit8u *py, signed short dir, signed short mode)
+void seg034_718(signed short x, signed short y, signed short *px, signed short *py, signed short dir, signed short mode)
 {
 	signed short new_dir;
 	signed short dist;
@@ -362,8 +357,8 @@ void seg034_718(signed short x, signed short y, Bit8u *px, Bit8u *py, signed sho
 
 	done = 0;
 
-	host_writew(px, x);
-	host_writew(py, y);
+	*px = x;
+	*py = y;
 
 	if (get_cb_val(x, y) == 0) {
 
@@ -382,20 +377,17 @@ void seg034_718(signed short x, signed short y, Bit8u *px, Bit8u *py, signed sho
 
 		for (new_dir = 0; new_dir < 4; new_dir++) {
 
-			new_x = host_readws(px) + a.a[new_dir].x * dist;
-			new_y = host_readws(py) + a.a[new_dir].y * dist;
+			new_x = *px + a.a[new_dir].x * dist;
+			new_y = *py + a.a[new_dir].y * dist;
 
-			if ((new_x >= 0) && (new_x < 24) && (new_y >= 0) && (new_y < 24) &&
-				!get_cb_val(new_x, new_y))
+			if ((new_x >= 0) && (new_x < 24) && (new_y >= 0) && (new_y < 24) && !get_cb_val(new_x, new_y))
 			{
 
-				if ((mode == 0) ||
-					(!get_cb_val(new_x - a.a[dir].x, new_y - a.a[dir].y)))
+				if ((mode == 0) || (!get_cb_val(new_x - a.a[dir].x, new_y - a.a[dir].y)))
 				{
-
 					done = 1;
-					host_writew(px, new_x);
-					host_writew(py, new_y);
+					*px = new_x;
+					*py = new_y;
 					break;
 				}
 			}
@@ -439,10 +431,8 @@ void FIG_latecomers(void)
 
 					if (is_in_byte_array(p_enemy->gfx_id, (Bit8u*)g_two_fielded_sprite_id)) {
 
-						seg034_718(	g_current_fight->monsters[i].x,
-								g_current_fight->monsters[i].y,
-								(Bit8u*)&x, (Bit8u*)&y,
-								g_current_fight->monsters[i].viewdir, 1);
+						seg034_718(g_current_fight->monsters[i].x, g_current_fight->monsters[i].y,
+								&x, &y,	g_current_fight->monsters[i].viewdir, 1);
 
 						fighter = FIG_get_fighter(p_enemy->fighter_id);
 
@@ -464,10 +454,8 @@ void FIG_latecomers(void)
 
 						FIG_add_to_list((signed char)l4);
 					} else {
-						seg034_718(	g_current_fight->monsters[i].x,
-								g_current_fight->monsters[i].y,
-								(Bit8u*)&x, (Bit8u*)&y,
-								g_current_fight->monsters[i].viewdir, 0);
+						seg034_718(g_current_fight->monsters[i].x, g_current_fight->monsters[i].y,
+								&x, &y, g_current_fight->monsters[i].viewdir, 0);
 
 						fighter = FIG_get_fighter(p_enemy->fighter_id);
 
@@ -517,7 +505,7 @@ signed short FIG_move_pathlen(void)
  * \param   px          pointer to the x-coordinate on the chessboard
  * \param   py          pointer to the y-coordinate on the chessboard
  */
-void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
+void FIG_move_hero(Bit8u *hero, signed short hero_pos, signed short *px, signed short *py)
 {
 	signed short problem;
 	signed short path_end;
@@ -542,9 +530,9 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 
 	update_mouse_cursor();
 
-	g_mouse_posx_bak = g_mouse_posx = x_screen = base_x + 10 * (host_readws(px) + host_readws(py));
+	g_mouse_posx_bak = g_mouse_posx = x_screen = base_x + 10 * (*px + *py);
 
-	g_mouse_posy_bak = g_mouse_posy = y_screen = base_y + 5 * (host_readws(px) - host_readws(py));
+	g_mouse_posy_bak = g_mouse_posy = y_screen = base_y + 5 * (*px - *py);
 
 	mouse_move_cursor(g_mouse_posx, g_mouse_posy);
 
@@ -552,20 +540,21 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 
 	g_mouse1_event1 = g_mouse2_event = 0;
 
-	sel_x = host_readws(px);
-	sel_y = host_readws(py);
+	sel_x = *px;
+	sel_y = *py;
 	curr_x = sel_x;
 	curr_y = sel_y;
 
 	if (g_fig_cb_selector_id[0] != -1) {
+
 		FIG_remove_from_list(g_fig_cb_selector_id[0], 0);
 		g_fig_cb_selector_id[0] = -1;
 	}
 
 	g_fig_list_elem.figure = 0;
 	g_fig_list_elem.nvf_no = 0;
-	g_fig_list_elem.cbx = ((signed char)sel_x);
-	g_fig_list_elem.cby = ((signed char)sel_y);
+	g_fig_list_elem.cbx = sel_x;
+	g_fig_list_elem.cby = sel_y;
 	g_fig_list_elem.offsetx = 0;
 	g_fig_list_elem.offsety = 4;
 	g_fig_list_elem.x1 = 0;
@@ -594,12 +583,11 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 		curr_y = sel_y;
 		from_kbd = 0;
 
-		if ((g_action == ACTION_ID_UP) ||
-			(g_action == ACTION_ID_DOWN) ||
-			(g_action == ACTION_ID_RIGHT) ||
-			(g_action == ACTION_ID_LEFT))
+		if ((g_action == ACTION_ID_UP) || (g_action == ACTION_ID_DOWN) ||
+				(g_action == ACTION_ID_RIGHT) || (g_action == ACTION_ID_LEFT))
 		{
 			from_kbd = 1;
+
 		} else {
 
 			mouse_cb_x = ((g_mouse_posx - base_x) / 10 + (g_mouse_posy - base_y) / 5) / 2;
@@ -608,12 +596,14 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 			if ((mouse_cb_x != sel_x) || (mouse_cb_y != sel_y)) {
 
 				if ((mouse_cb_x >= -1) && (mouse_cb_x <= 24) && (mouse_cb_y >= -1) && (mouse_cb_y <= 24)) {
-					g_action = (ACTION_ID_VOID);
+
+					g_action = ACTION_ID_VOID;
 				}
 			}
 		}
 
-		if (g_mouse1_event1 != 0) {
+		if (g_mouse1_event1) {
+
 			g_mouse1_event1 = 0;
 			g_action = ACTION_ID_RETURN;
 		}
@@ -659,10 +649,10 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 
 			FIG_remove_from_list(g_fig_cb_selector_id[0], 0);
 
-			g_fig_list_elem.cbx = ((signed char)sel_x);
-			g_fig_list_elem.cby = ((signed char)sel_y);
-			g_fig_list_elem.gfxbuf = (g_fig_cb_selector_buf);
-			g_fig_list_elem.twofielded = (-1);
+			g_fig_list_elem.cbx = sel_x;
+			g_fig_list_elem.cby = sel_y;
+			g_fig_list_elem.gfxbuf = g_fig_cb_selector_buf;
+			g_fig_list_elem.twofielded = -1;
 			g_fig_cb_selector_id[0] = FIG_add_to_list(-1);
 
 			FIG_draw_figures();
@@ -671,29 +661,35 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 			problem = 0;
 			bp_cost = 0;
 
-			if ((host_readws(px) != sel_x) || (host_readws(py) != sel_y)) { /* selected square is different from active hero position */
+			if ((*px != sel_x) || (*py != sel_y)) { /* selected square is different from active hero position */
 
 				escape_dir = 0;
 
 				/* (sel_x > 23) is missing as the right border of the map is not visible, so it cannot be used for escape (I guess...) */
 				if ((sel_x < 0) || (sel_y < 0) || (sel_y > 23)) {
+
 					/* active hero wants to escape over the border of the map */
 
 					/* reset (sel_x, sel_y) to the square at the border of the map. remember the direction of the escape */
 					if (sel_x < 0) {
+
 						sel_x = 0;
 						escape_dir = 1;
+
 					} else if (sel_y < 0) {
+
 						sel_y = 0;
 						escape_dir = 2;
+
 					} else {
+
 						sel_y = 23;
 						escape_dir = 3;
 					}
 
-					if ((get_cb_val(sel_x, sel_y) != 0) &&
-						((host_readws(px) != sel_x) || (host_readws(py) != sel_y)))
+					if ((get_cb_val(sel_x, sel_y) != 0) && ((*px != sel_x) || (*py != sel_y)))
 					{
+
 						/* the reset square (sel_x, sel_y) is blocked and different from the position of the active hero */
 
 						problem = 3; /* target square blocked */
@@ -717,22 +713,27 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 
 				if (problem != 3) {
 
-					if ((escape_dir != 0) && (host_readws(px) == sel_x) && (host_readws(py) == sel_y))
+					if ((escape_dir != 0) && (*px == sel_x) && (*py == sel_y))
 					{
 						/* active hero wants to escape over the border of the map and is already at the border. */
 						g_fig_move_pathdir[0] = -1;
 						bp_cost = 0;
+
 					} else {
+
 						FIG_set_cb_field(sel_y, sel_x, 124); /* target marker for FIG_find_path_to_target. The original content of this square has been backuped before in 'cb_entry_bak' or 'cb_entry_bak_escape'. */
-						target_reachable = FIG_find_path_to_target(hero, hero_pos, host_readws(px), host_readws(py), 10);
+						target_reachable = FIG_find_path_to_target(hero, hero_pos, *px, *py, 10);
 						/* target_reachable = 1: there is a path of length < 50 to the target square; target_reachable = -1: there is no such path */
 						bp_cost = (signed char)FIG_move_pathlen();
 #if !defined(__BORLANDC__)
-						D1_INFO("x: %d, y: %d, target id: %d, reachable: %d, distance: %d\n", escape_dir?cb_entry_bak_escape:sel_x, sel_y, cb_entry_bak, target_reachable, bp_cost);
+						D1_INFO("x: %d, y: %d, target id: %d, reachable: %d, distance: %d\n",
+								escape_dir?cb_entry_bak_escape:sel_x, sel_y,
+								cb_entry_bak, target_reachable, bp_cost);
 #endif
 					}
 
 					if (escape_dir != 0) {
+
 						/* restore the original entry of the target square, which has been overwritten by the target marker. */
 						FIG_set_cb_field(sel_y, sel_x, cb_entry_bak_escape);
 
@@ -747,6 +748,7 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 							sel_x = -1;
 
 							if (host_readbs(hero + HERO_BP_LEFT) > bp_cost) {
+
 								g_fig_move_pathdir[path_end] = 2;
 								g_fig_move_pathdir[path_end + 1] = -1;
 							}
@@ -756,6 +758,7 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 							sel_y = -1;
 
 							if (bp_cost < (host_readbs(hero + HERO_BP_LEFT) - 1)) {
+
 								g_fig_move_pathdir[path_end] = 1;
 								g_fig_move_pathdir[path_end + 1] = -1;
 							}
@@ -765,33 +768,40 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 							sel_y = 24;
 
 							if (bp_cost < (host_readbs(hero + HERO_BP_LEFT) - 1)) {
+
 								g_fig_move_pathdir[path_end] = 3;
 								g_fig_move_pathdir[path_end + 1] = -1;
 							}
 						}
 
 						bp_cost++;
+
 					} else {
 						/* restore the original entry of the target square, which has been overwritten by the target marker. */
 						FIG_set_cb_field(sel_y, sel_x, cb_entry_bak);
 					}
 
 					if (cb_entry_bak >= 50) {
+
 						problem = 3; /* target square blocked */
 #ifndef M302de_ORIGINAL_BUGFIX
 					} else if (cb_entry_bak >= 10) {
+
 						/* target square contains a monster (including the tail of a two-squares monster) */
 						if (!g_enemy_sheets[(cb_entry_bak - 10 - (cb_entry_bak >= 30 ? 20 : 0))].flags.dead) /* check 'dead' flag */
 						{
 							/* monster is not dead */
 							problem = 3;
 						}
+
 						/* Original-Bug:
 						 * If the target square contains a dead monster,
 						 * the checks for target_reachable and bp_cost below are not executed because of the "nested if" structure of the code.
 						 * This results in the incorrect message "ZIEL: 99 BP" if the target is pointing at a dead monster
 						 * which is not reachable within the available BP or not reachable at all. */
+
 					} else if (cb_entry_bak > 0) {
+
 						/* target square contains a hero */
 						if (!hero_dead(get_hero(cb_entry_bak - 1)) &&
 							!hero_unconscious(get_hero(cb_entry_bak - 1)) &&
@@ -800,6 +810,7 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 							/* hero is not dead, not unconscious, and not the active hero */
 							problem = 3;
 						}
+
 						/* Original-Bug:
 						 * If the target square contains a dead or unconscious hero different from the active hero,
 						 * the checks for target_reachable and bp_cost below are not executed because of the "nested if" structure of the code.
@@ -808,17 +819,24 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 #else
 						/* Bug fix:
 						 * flatten the nested if branches. */
+
 					} else if ((cb_entry_bak >= 10) && !g_enemy_sheets[(cb_entry_bak - 10 - (cb_entry_bak >= 30 ? 20 : 0))].flags.dead) { /* check 'dead' flag */
 						/* target square contains a non-dead monster (including the tail of a two-squares monster) */
 						problem = 3;
+
 					} else if ((cb_entry_bak > 0) && (cb_entry_bak < 10) && !hero_dead(get_hero(cb_entry_bak - 1)) && !hero_unconscious(get_hero(cb_entry_bak - 1)) && (cb_entry_bak != hero_pos + 1)) {
+
 						/* target square contains a non-dead and non-unconscious hero different from the active hero */
 						problem = 3;
 #endif
 					} else if (target_reachable == -1) {
+
 						problem = 4;
+
 					} else if (host_readbs(hero + HERO_BP_LEFT) < bp_cost) {
+
 						problem = 2;
+
 					} else if ((sel_x > 23) || (sel_x < 0) || (sel_y > 23) || (sel_y < 0) || (get_cb_val(sel_x, sel_y) < 0)) {
 						if ((g_scenario_buf[0x14] > 3) || (sel_x >= 0))
 						{
@@ -847,6 +865,7 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 		}
 
 		if ((g_mouse2_event) || (g_action == ACTION_ID_ESC)) {
+
 			g_mouse2_event = 0;
 			g_action = ACTION_ID_RETURN;
 			problem = 5;
@@ -859,16 +878,19 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 	GUI_print_string(g_string_14spaces, 5, 190);
 	set_textcolor(fg_bak, bg_bak);
 
-	if ((host_readws(px) != sel_x) || (host_readws(py) != sel_y)) {
+	if ((*px != sel_x) || (*py != sel_y)) {
 
 		if (!problem || (problem == 1) || (problem == 2)) {
 
 			if (problem == 1) {
 
 				if (GUI_bool(get_tx(35))) {
+
 					host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_FLEE);
 					problem = 0;
+
 				} else {
+
 					FIG_remove_from_list(g_fig_cb_selector_id[0], 0);
 					g_fig_cb_selector_id[0] = -1;
 				}
@@ -882,15 +904,20 @@ void FIG_move_hero(Bit8u *hero, signed short hero_pos, Bit8u *px, Bit8u *py)
 				seg036_00ae(hero, hero_pos);
 
 				if (host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_FLEE) {
+
 					host_writeb(hero + HERO_BP_LEFT, 0);
+
 				} else {
-					FIG_search_obj_on_cb(hero_pos + 1, (signed short*)px, (signed short*)py);
+					FIG_search_obj_on_cb(hero_pos + 1, px, py);
 				}
 			}
 
 		} else if (problem == 3) {
+
 			GUI_output(get_tx(49));
+
 		} else if (problem == 4) {
+
 			GUI_output(get_tx(50));
 		}
 	}

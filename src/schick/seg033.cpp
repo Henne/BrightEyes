@@ -187,7 +187,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						x = host_readws((Bit8u*)&x);
 						y = host_readws((Bit8u*)&y);
 #endif
-						FIG_move_hero(hero, hero_pos, (Bit8u*)&x, (Bit8u*)&y);
+						FIG_move_hero(hero, hero_pos, &x, &y);
 
 #if !defined(__BORLANDC__)
 						/* BE-fix */
@@ -226,7 +226,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						target_x = host_readws((Bit8u*)&target_x);
 						target_y = host_readws((Bit8u*)&target_y);
 #endif
-						target_id = FIG_cb_select_target((Bit8u*)&target_x, (Bit8u*)&target_y, 1);
+						target_id = FIG_cb_select_target(&target_x, &target_y, 1);
 #if !defined(__BORLANDC__)
 						/* BE-fix */
 						target_x = host_readws((Bit8u*)&target_x);
@@ -242,7 +242,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 							target_x = host_readws((Bit8u*)&target_x);
 							target_y = host_readws((Bit8u*)&target_y);
 #endif
-							target_id = FIG_cb_select_target((Bit8u*)&target_x, (Bit8u*)&target_y, 99);
+							target_id = FIG_cb_select_target(&target_x, &target_y, 99);
 #if !defined(__BORLANDC__)
 							/* BE-fix */
 							target_x = host_readws((Bit8u*)&target_x);
@@ -370,7 +370,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 									target_x = host_readws((Bit8u*)&target_x);
 									target_y = host_readws((Bit8u*)&target_y);
 #endif
-									target_id = FIG_cb_select_target((Bit8u*)&target_x, (Bit8u*)&target_y, weapon_id);
+									target_id = FIG_cb_select_target(&target_x, &target_y, weapon_id);
 #if !defined(__BORLANDC__)
 									/* BE-fix */
 									target_x = host_readws((Bit8u*)&target_x);
@@ -443,7 +443,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 							target_x = host_readws((Bit8u*)&target_x);
 							target_y = host_readws((Bit8u*)&target_y);
 #endif
-							target_id = FIG_cb_select_target((Bit8u*)&target_x, (Bit8u*)&target_y, 99);
+							target_id = FIG_cb_select_target(&target_x, &target_y, 99);
 #if !defined(__BORLANDC__)
 							/* BE-fix */
 							target_x = host_readws((Bit8u*)&target_x);
@@ -868,11 +868,15 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 		}
 	}
 
-	if ((g_current_fight_no == FIGHTS_F144) && /* final fight vs. Orkchampion */
+	/* final fight vs. Orkchampion */
+	if ((g_current_fight_no == FIGHTS_F144) &&
 		(get_hero_index((Bit8u*)gs_main_acting_hero) != hero_pos) &&
-		((host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_MELEE_ATTACK) || (host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_RANGE_ATTACK) ||
-		(host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_SPELL) || (host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_USE_ITEM)))
+		((host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_MELEE_ATTACK) ||
+			(host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_RANGE_ATTACK) ||
+			(host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_SPELL) ||
+			(host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_USE_ITEM)))
 	{
+
 		for (slot_no = 0; slot_no < 20; slot_no++) {
 			g_enemy_sheets[slot_no].flags.tied = 0;
 		}
