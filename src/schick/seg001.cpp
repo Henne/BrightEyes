@@ -66,14 +66,14 @@ static char g_str_cd_missing[204] = "DIESES PROGRAMM IST OHNE CD-ROM-LAUFWERK NI
 static const char g_str_cd_init[37] = "INITIALISIERE CD-ROM IN LAUFWERK %c:";
 static unsigned char g_unkn_004 = 0x00;
 
-static unsigned char g_unkn_072[6]; // ds:0xbc54
-static unsigned short g_cd_drive_no; // ds:0xbc52
-static unsigned long g_cd_audio_pos; // ds:0xbc4e
-static unsigned long g_cd_audio_tod; // ds:0xbc4a
-static unsigned char g_unkn_071[8]; // ds:0xbc42
-static unsigned short g_cd_audio_track; // ds:0xbc40
-static unsigned long g_cd_audio_pause_tod; // ds:0xbc3c
 static unsigned long g_cd_audio_pause_pos; // ds:0xbc38
+static unsigned long g_cd_audio_pause_tod; // ds:0xbc3c
+static unsigned short g_cd_audio_track; // ds:0xbc40
+static unsigned char g_unkn_071[8]; // ds:0xbc42
+static unsigned long g_cd_audio_tod; // ds:0xbc4a
+static unsigned long g_cd_audio_pos; // ds:0xbc4e
+static unsigned short g_cd_drive_no; // ds:0xbc52
+static unsigned char g_unkn_072[6]; // ds:0xbc54
 
 /* static prototpyes */
 static void CD_audio_stop_hsg(void);
