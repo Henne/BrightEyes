@@ -2107,7 +2107,7 @@ unsigned char g_snd_effects_enabled = 0; // ds:0x4477
 unsigned char g_unkn_028[2] = { 0xff, 0xff }; // ds:0x4478
 signed short g_music_current_track = -1; // ds:0x447a
 signed short g_snd_voc_enabled = 0; // ds:0x447c
-unsigned char g_unkn_029[2] = { 0x00, 0x20 }; // ds:0x447e
+extern unsigned _stklen = 0x2000; // ds:0x447e
 
 extern char g_str_file_missing[20];	//forward declaration
 char *g_str_file_missing_ptr = (char*)&g_str_file_missing; // ds:0x4480, to STR_FILE_MISSING; Bit8u*

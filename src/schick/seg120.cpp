@@ -146,10 +146,6 @@ static const char g_str_gen_1[2] = "1"; // ds:0xb4d3
 static const char g_str_gen_generation[11] = "Generation"; // ds:0xb4d5
 
 
-
-
-
-
 static Bit32u g_buffersize;		// ds:0xe5dc, size of the global buffer
 static HugePt g_global_buffer_ptr;	// ds:0xe5e0, points to the start of the global buffer
 signed char g_large_buf; 		// ds:0xe5e4
