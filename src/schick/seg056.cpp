@@ -599,7 +599,8 @@ void insert_sell_items(Bit8u *shop_ptr, Bit8u *hero, signed short item_pos, sign
 	signed short sellable = 0;
 
 	item_id = host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * item_pos);
-	host_writew((Bit8u*)g_sellitems + 7 * shop_pos, item_id);
+
+	g_sellitems[shop_pos].item_id = item_id;
 
 	if (item_armor(get_itemsdat(item_id)) || item_weapon(get_itemsdat(item_id))) {
 
@@ -625,31 +626,32 @@ void insert_sell_items(Bit8u *shop_ptr, Bit8u *hero, signed short item_pos, sign
 
 	if (!sellable) {
 
-		/* this item cannot be sold here */
-		host_writew((Bit8u*)g_sellitems + 7 * shop_pos + 2, 0);
-		host_writew((Bit8u*)g_sellitems + 7 * shop_pos + 4, 1);
+		/* this item cannot be sold here => 0 HELLER */
+		g_sellitems[shop_pos].shop_price = 0;
+		g_sellitems[shop_pos].price_unit = 1;
 
 	} else if (inventory_broken(hero + HERO_INVENTORY + SIZEOF_INVENTORY * item_pos) ||
 			 host_readbs(hero + (HERO_INVENTORY + INVENTORY_RS_LOST) + SIZEOF_INVENTORY * item_pos) != 0)
 	{
-		/* this item is broken or RS of an armor got degraded */
-		host_writew((Bit8u*)g_sellitems + 7 * shop_pos + 2, 1);
-		host_writew((Bit8u*)g_sellitems + 7 * shop_pos + 4, 1);
+		/* this item is broken or RS of an armor got degraded => 1 HELLER */
+		g_sellitems[shop_pos].shop_price = 1;
+		g_sellitems[shop_pos].price_unit = 1;
 
 	} else {
 		/* calculate the price */
-		host_writew((Bit8u*)g_sellitems + 7 * shop_pos + 2,
-			(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) + (host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * host_readbs(shop_ptr) / 100) ) / 2);
+		g_sellitems[shop_pos].shop_price =
+			(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) +
+			(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * host_readbs(shop_ptr) / 100) ) / 2;
+
 		/* adjust price to 1 if zero */
-		if (host_readws((Bit8u*)g_sellitems + 7 * shop_pos + 2) == 0) {
-			host_writew((Bit8u*)g_sellitems + 7 * shop_pos + 2, 1);
+		if (g_sellitems[shop_pos].shop_price == 0) {
+			g_sellitems[shop_pos].shop_price = 1;
 		}
 
-		host_writew((Bit8u*)g_sellitems + 7 * shop_pos + 4,
-			host_readbs(get_itemsdat(item_id) + ITEM_STATS_PRICE_UNIT));
+		g_sellitems[shop_pos].price_unit = host_readbs(get_itemsdat(item_id) + ITEM_STATS_PRICE_UNIT);
 	}
 
-	host_writebs((Bit8u*)g_sellitems + 7 * shop_pos + 6, (signed char)item_pos);
+	g_sellitems[shop_pos].item_pos = item_pos;
 }
 
 #if !defined(__BORLANDC__)

@@ -1907,7 +1907,7 @@ extern struct location g_locations_tab[150];	//ds:0xc025; seg028, seg64, seg066,
 extern struct_pic_copy g_pic_copy;	// ds:0xc00d; seg002-seg120
 
 extern struct shop_item *g_buyitems;	// ds:0xc009; seg055, seg056
-extern Bit8u *g_sellitems;		// ds:0xc005; seg056, seg057, seg058
+extern struct shop_item *g_sellitems;	// ds:0xc005; seg056, seg057, seg058
 extern signed short g_game_mode;	// ds:0xc003; seg002, seg046, seg048, seg050, seg097, seg098, seg103, seg120
 extern signed short g_textbox_pos_y;	// ds:0xc001; seg096, seg097
 extern signed short g_textbox_pos_x;	// ds:0xbfff; seg096, seg097

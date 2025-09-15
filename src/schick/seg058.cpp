@@ -53,49 +53,53 @@ void add_item_to_smith(struct smith_descr *smith, Bit8u *hero, signed short item
 
 	item_id = host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * item_pos);
 
-	host_writews((Bit8u*)g_sellitems + 7 * smith_pos, item_id);
+	g_sellitems[smith_pos].item_id = item_id;
 
 	if (item_armor(get_itemsdat(item_id)) || item_weapon(get_itemsdat(item_id))) {
 
 		if (inventory_broken(hero + HERO_INVENTORY + SIZEOF_INVENTORY * item_pos)) {
 
-			host_writews((Bit8u*)g_sellitems + 7 * smith_pos + 2,
+			g_sellitems[smith_pos].shop_price =
 				(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) +
-					(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * smith->price_mod / 100)) / 2);
+					(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * smith->price_mod / 100)) / 2;
 
-			if (host_readws((Bit8u*)g_sellitems + 7 * smith_pos + 2) == 0) {
-				host_writews((Bit8u*)g_sellitems + 7 * smith_pos + 2, 1);
+			if (g_sellitems[smith_pos].shop_price == 0) {
+
+				g_sellitems[smith_pos].shop_price = 1;
 			}
 
-			host_writews((Bit8u*)g_sellitems + 7 * smith_pos + 4,
-				host_readbs(get_itemsdat(item_id) + ITEM_STATS_PRICE_UNIT));
+			g_sellitems[smith_pos].price_unit = host_readbs(get_itemsdat(item_id) + ITEM_STATS_PRICE_UNIT);
 
 		} else {
 
-			if (host_readbs(hero + HERO_INVENTORY + INVENTORY_RS_LOST + SIZEOF_INVENTORY * item_pos) != 0) {
+			if (host_readbs(hero + HERO_INVENTORY + INVENTORY_RS_LOST + SIZEOF_INVENTORY * item_pos)) {
+
 				/* armor has degraded RS */
 
-				host_writews((Bit8u*)g_sellitems + 7 * smith_pos + 2,
+				g_sellitems[smith_pos].shop_price =
 					(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) +
-						(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * smith->price_mod / 100)) / 4);
+						(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * smith->price_mod / 100)) / 4;
 
-				if (host_readws((Bit8u*)g_sellitems + 7 * smith_pos + 2) == 0) {
-					host_writews((Bit8u*)g_sellitems + 7 * smith_pos + 2, 1);
+				if (g_sellitems[smith_pos].shop_price == 0) {
+
+					g_sellitems[smith_pos].shop_price = 1;
 				}
 
-				host_writews((Bit8u*)g_sellitems + 7 * smith_pos + 4,
-					host_readbs(get_itemsdat(item_id) + ITEM_STATS_PRICE_UNIT));
+				g_sellitems[smith_pos].price_unit = host_readbs(get_itemsdat(item_id) + ITEM_STATS_PRICE_UNIT);
+
 			} else {
-				host_writews((Bit8u*)g_sellitems + 7 * smith_pos + 2, 0);
-				host_writews((Bit8u*)g_sellitems + 7 * smith_pos + 4, 1);
+				/* price => 1 HELLER */
+				g_sellitems[smith_pos].shop_price = 0;
+				g_sellitems[smith_pos].price_unit = 1;
 			}
 		}
 	} else {
-		host_writews((Bit8u*)g_sellitems + 7 * smith_pos + 2, 0);
-		host_writews((Bit8u*)g_sellitems + 7 * smith_pos + 4, 1);
+		/* price => 1 HELLER */
+		g_sellitems[smith_pos].shop_price = 0;
+		g_sellitems[smith_pos].price_unit = 1;
 	}
 
-	host_writebs((Bit8u*)g_sellitems + 7 * smith_pos + 6, (signed char)item_pos);
+	g_sellitems[smith_pos].item_pos = item_pos;
 }
 
 /**
@@ -181,8 +185,8 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 		g_pic_copy.src = g_icon;
 		do_pic_copy(0);
 
-		g_sellitems = g_fig_figure1_buf;
-		memset((Bit8u*)g_sellitems, 0, 350);
+		g_sellitems = (struct shop_item*)g_fig_figure1_buf;
+		memset((Bit8u*)g_sellitems, 0, 50 * sizeof(struct shop_item));
 
 		get_textcolor(&fg_bak, &bg_bak);
 		set_textcolor(255, 0);
@@ -218,7 +222,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 					}
 
 					for (l_si = smith_pos; l_si < 23; l_si++) {
-						host_writew((Bit8u*)g_sellitems + 7 * l_si, 0);
+						g_sellitems[l_si].item_id = 0;
 					}
 
 					l11 = 0;
@@ -251,7 +255,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 
 						answer = 5 * items_x + l_si + item;
 
-						if ((j = host_readws((Bit8u*)g_sellitems + 7 * answer))) {
+						if ((j = g_sellitems[answer].item_id)) {
 
 							g_pic_copy.x1 = array3.a[items_x];
 							g_pic_copy.y1 = array5.a[l_si];
@@ -278,10 +282,9 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 								}
 							}
 
-							sprintf(g_dtp2,
-								host_readws((Bit8u*)g_sellitems + 4 + 7 * answer) == 1 ? fmt_h.a :
-									(host_readws((Bit8u*)g_sellitems + 4 + 7 * answer) == 10 ? fmt_s.a : fmt_d.a),
-								host_readws((Bit8u*)g_sellitems + 2 + 7 * answer));
+							sprintf(g_dtp2,	g_sellitems[answer].price_unit == 1 ? fmt_h.a :
+										(g_sellitems[answer].price_unit == 10 ? fmt_s.a : fmt_d.a),
+									g_sellitems[answer].shop_price);
 
 
 							GUI_print_string(g_dtp2, array3.a[items_x] + 20, array5.a[l_si] + 5);
@@ -301,9 +304,9 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 			g_action_table_secondary = NULL;
 
 			if (g_have_mouse == 2) {
-				select_with_mouse((Bit8u*)&l7, (Bit8u*)g_sellitems + 7 * item);
+				select_with_mouse((Bit8u*)&l7, (Bit8u*)&g_sellitems[item]);
 			} else {
-				select_with_keyboard((Bit8u*)&l7, (Bit8u*)g_sellitems + 7 * item);
+				select_with_keyboard((Bit8u*)&l7, (Bit8u*)&g_sellitems[item]);
 			}
 
 			if (l6 != l7) {
@@ -326,27 +329,25 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 
 				clear_loc_line();
 
-				GUI_print_loc_line((GUI_name_singular(get_itemname(host_readws((Bit8u*)g_sellitems + 7 * (l7 + item))))));
+				GUI_print_loc_line(GUI_name_singular(get_itemname(g_sellitems[l7 + item].item_id)));
 			}
 
 			if (g_mouse2_event  || g_action == ACTION_ID_PAGE_UP) {
 
-				answer = GUI_radio(NULL, 5,
-						get_ttx(433),
-						get_ttx(435),
-						get_ttx(436),
-						get_ttx(446),
-						get_ttx(437)) - 1;
+				answer = GUI_radio(NULL, 5, get_ttx(433), get_ttx(435), get_ttx(436), get_ttx(446), get_ttx(437)) - 1;
 
 				if (answer != -2) {
-					g_action = (answer + ACTION_ID_ICON_1);
+					g_action = answer + ACTION_ID_ICON_1;
 				}
 			}
 
-			if (g_action == ACTION_ID_ICON_3 && item != 0) {
+			if (g_action == ACTION_ID_ICON_3 && item) {
+
 				l8 = 1;
 				item -= 15;
-			} else if (g_action == ACTION_ID_ICON_2 && host_readws((Bit8u*)g_sellitems + 7 * (item + 15))) {
+
+			} else if (g_action == ACTION_ID_ICON_2 && g_sellitems[item + 15].item_id) {
+
 				l8 = 1;
 				item += 15;
 			}
@@ -355,29 +356,27 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 				/* Is ACTION == ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK possible at all?
 				 * ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK can be written to ACTION in buy_screen(), but where should it show up in repair_screen()?? */
 
-				item_id = host_readws((Bit8u*)g_sellitems + 7 * (l7 + item));
+				item_id = g_sellitems[l7 + item].item_id;
 
 				p_money = get_party_money();
 
-				if (host_readws((Bit8u*)g_sellitems + 7 * (l7 + item) + 2) == 0) {
-					GUI_output(get_ttx(487));
-				} else {
+				if (g_sellitems[l7 + item].shop_price == 0) {
 
+					GUI_output(get_ttx(487));
+
+				} else {
 
 					j = 0;
 
 					while (l12 == 0 && j < 3) {
 
 
-						price = (host_readws((Bit8u*)g_sellitems + 7 * (l7 + item) + 2)
-							* host_readws((Bit8u*)g_sellitems + 7 * (l7 + item) + 4)) * g_price_modificator / 4;
+						price = (g_sellitems[l7 + item].shop_price
+							* g_sellitems[l7 + item].price_unit * g_price_modificator) / 4;
 
 						make_valuta_str(g_text_output_buf, price);
 
-						sprintf(g_dtp2, get_ttx(488),
-							GUI_names_grammar((signed short)0x8002, item_id, 0),
-							g_text_output_buf);
-
+						sprintf(g_dtp2, get_ttx(488), GUI_names_grammar((signed short)0x8002, item_id, 0), g_text_output_buf);
 
 						do {
 							percent = GUI_input(g_dtp2, 2);
@@ -387,12 +386,18 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 						price -= (percent * price) / 100L;
 
 						if (percent == 0 && p_money > price) {
+
 							GUI_output(get_ttx(489));
 							l12 = 2;
+
 						} else if (percent >= percent_old) {
+
 							j = 2;
+
 						} else if (percent < 0) {
+
 							break;
+
 						} else {
 
 							answer = select_hero_ok_forced(get_ttx(442));
@@ -405,9 +410,13 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 						if (l12 > 0) {
 
 							if (p_money < price) {
+
 								GUI_output(get_ttx(401));
+
 							} else {
+
 								if (l12 != 2) {
+
 									GUI_output(get_ttx(492));
 								}
 
@@ -417,12 +426,14 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 
 									gs_smith_repairitems[smith_id].pickup_time = HOURS(23);
 									GUI_output(get_ttx(490));
+
 								} else {
+
 									gs_smith_repairitems[smith_id].pickup_time = gs_day_timer + HOURS(6);
 									GUI_output(get_ttx(491));
 								}
 
-								drop_item(hero2, host_readbs((Bit8u*)g_sellitems + 6 + 7 * (l7 + item)), 1);
+								drop_item(hero2, g_sellitems[l7 + item].item_pos, 1);
 								p_money -= price;
 								set_party_money(p_money);
 
