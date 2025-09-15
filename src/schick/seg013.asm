@@ -51,11 +51,11 @@ cddata	ends
 
 dummy1_seg	segment byte public 'DATA'
 		assume nothing
-		db 0
+;		db 0
 dummy1_seg	ends
 dummy2_seg	segment byte public 'DATA'
 		assume nothing
-		db 0
+;		db 0
 dummy2_seg	ends
 
 end
