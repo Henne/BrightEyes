@@ -275,7 +275,7 @@ void do_merchant(void)
 
 		} else if (g_action == ACTION_ID_ICON_2) {
 
-			sell_screen((Bit8u*)shop);
+			sell_screen(shop);
 
 		} else if (g_action == ACTION_ID_ICON_3) {
 

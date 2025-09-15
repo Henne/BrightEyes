@@ -3,7 +3,7 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-void sell_screen(Bit8u*);
+void sell_screen(struct shop_descr*);
 
 #if !defined(__BORLANDC__)
 }

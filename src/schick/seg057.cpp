@@ -34,7 +34,7 @@ namespace M302de {
 /**
  * \brief   shows the sell-screen an provides interaction
  */
-void sell_screen(Bit8u *shop_ptr)
+void sell_screen(struct shop_descr *shop_descr)
 {
 	signed short l_di;
 	signed short j;
@@ -147,7 +147,7 @@ void sell_screen(Bit8u *shop_ptr)
 				l20 = 0;
 				for (l_di = 0; l_di < NR_HERO_INVENTORY_SLOTS; l_di++) {
 					if (host_readws(hero1 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * l_di) != ITEM_NONE) {
-						insert_sell_items(shop_ptr, hero1, l_di, l20++);
+						insert_sell_items(shop_descr, hero1, l_di, l20++);
 					}
 				}
 

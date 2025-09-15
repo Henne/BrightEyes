@@ -588,7 +588,7 @@ void buy_screen(void)
  * \param   item_pos    position of the item in the heroes inventory
  * \param   shop_pos    position if the item in the sales array
  */
-void insert_sell_items(Bit8u *shop_ptr, Bit8u *hero, signed short item_pos, signed short shop_pos)
+void insert_sell_items(struct shop_descr *shop_descr, Bit8u *hero, signed short item_pos, signed short shop_pos)
 {
 	signed short item_id;
 	signed short sellable = 0;
@@ -600,23 +600,17 @@ void insert_sell_items(Bit8u *shop_ptr, Bit8u *hero, signed short item_pos, sign
 	if (item_armor(get_itemsdat(item_id)) || item_weapon(get_itemsdat(item_id))) {
 
 		/* WEAPON SHOP */
-		if (host_readbs(shop_ptr + 1) == 1) {
-			sellable = 1;
-		}
+		if (shop_descr->type == 1) sellable = 1;
 
 	} else if (item_herb_potion(get_itemsdat(item_id))) {
 
 		/* HERB SHOP */
-		if (host_readbs(shop_ptr + 1) == 2) {
-			sellable = 1;
-		}
+		if (shop_descr->type == 2) sellable = 1;
 
 	} else {
 
 		/* CHANDLER SHOP */
-		if (host_readbs(shop_ptr + 1) == 3) {
-			sellable = 1;
-		}
+		if (shop_descr->type == 3) sellable = 1;
 	}
 
 	if (!sellable) {
@@ -636,7 +630,7 @@ void insert_sell_items(Bit8u *shop_ptr, Bit8u *hero, signed short item_pos, sign
 		/* calculate the price */
 		g_sellitems[shop_pos].shop_price =
 			(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) +
-			(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * host_readbs(shop_ptr) / 100) ) / 2;
+			(host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * shop_descr->price_mod / 100) ) / 2;
 
 		/* adjust price to 1 if zero */
 		if (g_sellitems[shop_pos].shop_price == 0) {
