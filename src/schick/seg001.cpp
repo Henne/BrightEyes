@@ -73,7 +73,7 @@ static unsigned char g_unkn_071[8]; // ds:0xbc42
 static unsigned long g_cd_audio_tod; // ds:0xbc4a
 static unsigned long g_cd_audio_pos; // ds:0xbc4e
 static unsigned short g_cd_drive_no; // ds:0xbc52
-static unsigned char g_unkn_072[6]; // ds:0xbc54
+static unsigned char g_unkn_072[4]; // ds:0xbc54
 
 /* static prototpyes */
 static void CD_audio_stop_hsg(void);

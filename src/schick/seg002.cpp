@@ -71,6 +71,7 @@ namespace M302de {
 #endif
 
 /* BSS Variables */
+unsigned char dummy;
 unsigned short g_sample_ad_length;		// ds:0xbc5a
 struct sample_idx g_sample_ad_idx_entry;	// ds:0xbc5c
 unsigned char g_playmask_us;			// ds:0xbc62, 1 = PLAYM_US, 0 = PLAYM_UK
