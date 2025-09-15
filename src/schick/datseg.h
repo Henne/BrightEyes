@@ -331,6 +331,13 @@ struct mon_spell_description {
 	Bit8s ani_id;
 };
 
+struct shop_item {
+	Bit16s item_id;
+	Bit16s shop_price;
+	Bit16s price_unit;	/* 1 = HELLER, 10 = SILVER, otherwise DUCATS */
+	Bit8s item_pos;
+};
+
 struct struct_smith_repairitems {
 	Bit16s item_id;
 	Bit32s pickup_time;
@@ -1899,7 +1906,7 @@ extern unsigned char *g_buffer8_ptr;	// ds:0xc3a9; seg005, seg026, seg028, seg03
 extern struct location g_locations_tab[150];	//ds:0xc025; seg028, seg64, seg066, seg74, seg094
 extern struct_pic_copy g_pic_copy;	// ds:0xc00d; seg002-seg120
 
-extern Bit8u *g_buyitems;		// ds:0xc009; seg055, seg056
+extern struct shop_item *g_buyitems;	// ds:0xc009; seg055, seg056
 extern Bit8u *g_sellitems;		// ds:0xc005; seg056, seg057, seg058
 extern signed short g_game_mode;	// ds:0xc003; seg002, seg046, seg048, seg050, seg097, seg098, seg103, seg120
 extern signed short g_textbox_pos_y;	// ds:0xc001; seg096, seg097

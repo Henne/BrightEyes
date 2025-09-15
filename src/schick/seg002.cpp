@@ -143,7 +143,7 @@ signed short g_textbox_pos_x;		// ds:0xbfff, coordinate of upper left corner
 signed short g_textbox_pos_y; // ds:0xc001, coordinate of upper left corner
 signed short g_game_mode; // ds:0xc003, {-1 = Input error, 1 = Beginner, 2 = Advanced }
 Bit8u *g_sellitems; // ds:0xc005, also used for repair items
-Bit8u *g_buyitems; // ds:0xc009, merchant's assortment
+struct shop_item *g_buyitems; // ds:0xc009, merchant's assortment
 struct struct_pic_copy g_pic_copy;	// ds:0xc00d
 struct location g_locations_tab[150]; // ds:0xc025
 unsigned char *g_buffer8_ptr; // ds:0xc3a9, to buffer of size 12008

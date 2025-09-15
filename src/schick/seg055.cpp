@@ -39,17 +39,13 @@ namespace M302de {
  */
 void add_item_to_shop(struct shop_descr *shop, signed short item_id, signed short pos)
 {
-	host_writews((Bit8u*)g_buyitems + 7 * pos, item_id);
+	g_buyitems[pos].item_id = item_id;
 
-	host_writews((Bit8u*)g_buyitems + 7 * pos + 2,
-		host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) + host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * shop->price_mod / 100);
+	g_buyitems[pos].shop_price = host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE)
+				+ host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * shop->price_mod / 100;
 
-	host_writews((Bit8u*)g_buyitems + 7 * pos + 4, host_readbs(get_itemsdat(item_id) + ITEM_STATS_PRICE_UNIT));
+	g_buyitems[pos].price_unit = host_readbs(get_itemsdat(item_id) + ITEM_STATS_PRICE_UNIT);
 }
-
-struct dummy7 {
-	char a[7];
-};
 
 void do_merchant(void)
 {
@@ -111,13 +107,16 @@ void do_merchant(void)
 	load_ggsts_nvf();
 	refresh = g_request_refresh = 1;
 
-	g_buyitems = g_fig_figure1_buf;
-	memset((Bit8u*)g_buyitems, 0, 3500);
+	g_buyitems = (struct shop_item*)g_fig_figure1_buf;
+	memset((Bit8u*)g_buyitems, 0, 500 * sizeof(struct shop_item));
+
 	g_price_modificator = 4;
+
 	shop = &g_shop_descr_table[gs_current_typeindex];
 
+	/* redundant by memset() */
 	for (l_si = 0; l_si < 100; l_si++) {
-		host_writews((Bit8u*)g_buyitems + 7 * l_si, 0);
+		g_buyitems[l_si].item_id = 0;
 	}
 
 	l_si = 1;
@@ -156,6 +155,7 @@ void do_merchant(void)
 	}
 
 	for (l_si = 0; l_si < 3; l_si++) {
+
 		if (shop->extra_items[l_si]) {
 			add_item_to_shop(shop, shop->extra_items[l_si], item_pos++);
 		}
@@ -169,12 +169,13 @@ void do_merchant(void)
 		/* copy the rest */
 		for (l_si = 0; armor_pos - 70 > l_si; l_si++) {
 
-			*(struct dummy7*)((Bit8u*)g_buyitems + 7 * (item_pos + l_si)) =
-				*(struct dummy7*)((Bit8u*)g_buyitems + 7 * (l_si + 70));
+			g_buyitems[item_pos + l_si] = g_buyitems[l_si + 70];
+
 		}
+
 		/* cleanup */
 		for (l_si = item_pos + armor_pos - 70; l_si < 100; l_si++) {
-			host_writews((Bit8u*)g_buyitems + 7 * l_si, 0);
+			g_buyitems[l_si].item_id = 0;
 		}
 
 	} else {
@@ -256,9 +257,7 @@ void do_merchant(void)
 
 		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
 
-			answer = GUI_radio(get_ttx(430), 4,
-						get_ttx(431), get_ttx(432),
-						get_ttx(343), get_ttx(434)) - 1;
+			answer = GUI_radio(get_ttx(430), 4, get_ttx(431), get_ttx(432),	get_ttx(343), get_ttx(434)) - 1;
 
 			if (answer != -2) {
 				g_action = (answer + ACTION_ID_ICON_1);
@@ -346,25 +345,34 @@ void TLK_khandel(signed short state)
 void TLK_whandel(signed short state)
 {
 	if (!state) {
+
 		g_dialog_next_state = (gs_merchant_kicked_flags[gs_current_typeindex] ? 26 : 1);
+
 	} else if (state == 7 || state == 13) {
+
 		tumult();
+
 		if (gs_current_typeindex != 90) {
 			gs_merchant_kicked_flags[gs_current_typeindex] = 1;
 		}
 
 	} else if ((state == 8 || state == 16) && gs_current_typeindex != 90) {
+
 		gs_merchant_kicked_flags[gs_current_typeindex] = 1;
+
 	} else if (state == 18) {
+
 		/* test CH+0 */
 		g_dialog_next_state = (test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0 ? 19 : -1);
+
 	} else if (state == 25) {
 
 		if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_FEILSCHEN, 0) > 0) {
-			g_dialog_next_state = (23);
+
+			g_dialog_next_state = 23;
 			g_price_modificator = 3;
 		} else {
-			g_dialog_next_state = (24);
+			g_dialog_next_state = 24;
 		}
 	}
 }

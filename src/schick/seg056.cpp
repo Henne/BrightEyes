@@ -188,7 +188,7 @@ void buy_screen(void)
 
 					l3 = 5 * items_x + l_di + item;
 
-					if ((j = host_readws((Bit8u*)g_buyitems + 7 * l3))) {
+					if ((j = g_buyitems[l3].item_id)) {
 
 						g_pic_copy.x1 = array3.a[items_x];
 						g_pic_copy.y1 = array5.a[l_di];
@@ -203,9 +203,9 @@ void buy_screen(void)
 						do_pic_copy(0);
 
 						sprintf(g_dtp2,
-								host_readws((Bit8u*)g_buyitems + 4 + 7 * l3) == 1 ? fmt_h.a :
-								(host_readws((Bit8u*)g_buyitems + 4 + 7 * l3) == 10 ? fmt_s.a : fmt_d.a),
-							host_readws((Bit8u*)g_buyitems + 2 + 7 * l3));
+								g_buyitems[l3].price_unit == 1 ? fmt_h.a :
+									(g_buyitems[l3].price_unit == 10 ? fmt_s.a : fmt_d.a),
+								g_buyitems[l3].shop_price);
 
 						GUI_print_string(g_dtp2, array3.a[items_x] + 20, array5.a[l_di] + 5);
 					}
@@ -219,9 +219,9 @@ void buy_screen(void)
 		}
 
 		if (g_have_mouse == 2) {
-			select_with_mouse((Bit8u*)&l7, (Bit8u*)g_buyitems + 7 * item);
+			select_with_mouse((Bit8u*)&l7, (Bit8u*)&g_buyitems[item]);
 		} else {
-			select_with_keyboard((Bit8u*)&l7, (Bit8u*)g_buyitems + 7 * item);
+			select_with_keyboard((Bit8u*)&l7, (Bit8u*)&g_buyitems[item]);
 		}
 
 #if !defined(__BORLANDC__)
@@ -245,7 +245,7 @@ void buy_screen(void)
 
 			clear_loc_line();
 
-			item_id = host_readws((Bit8u*)g_buyitems + 7 * (l7 + item));
+			item_id = g_buyitems[l7 + item].item_id;
 
 			l4 = 0;
 
@@ -329,7 +329,7 @@ void buy_screen(void)
 				}
 			}
 
-			item_id = host_readws((Bit8u*)g_buyitems + 7 * (l7 + item));
+			item_id = g_buyitems[l7 + item].item_id;
 			l16 = -1;
 			l17 = 0;
 
@@ -371,13 +371,16 @@ void buy_screen(void)
 						l4 = g_buy_shopping_cart[l16].quantity;
 					}
 
-					l9 = (Bit32s)host_readws((Bit8u*)g_buyitems + 7 * (l7 + item) + 2) *
-						(Bit32s)host_readws((Bit8u*)g_buyitems + 7 * (l7 + item) + 4) * l4;
+					l9 = (Bit32s)g_buyitems[l7 + item].shop_price *	g_buyitems[l7 + item].price_unit * l4;
 
 					if (l3 == 1 && price + l9 > p_money) {
+
 						GUI_output(get_ttx(401));
+
 					} else if (l3 == 1 && free_slots < l17) {
+
 						GUI_output(get_ttx(438));
+
 					} else {
 
 						if (l3 == 1) {
@@ -390,7 +393,7 @@ void buy_screen(void)
 							if (g_buy_shopping_cart[l16].quantity == 0) {
 
 								/* TODO: check that */
-								memmove(&g_buy_shopping_cart[l16], &g_buy_shopping_cart[l16 + 1],	248 - 2 * l16);
+								memmove(&g_buy_shopping_cart[l16], &g_buy_shopping_cart[l16 + 1], 248 - 2 * l16);
 
 								nice--;
 							}
@@ -410,17 +413,16 @@ void buy_screen(void)
 
 					l4 = 1;
 
-					if (item_stackable(get_itemsdat(host_readws((Bit8u*)g_buyitems + 7 * (l7 + item))))) {
+					if (item_stackable(get_itemsdat(g_buyitems[l7 + item].item_id))) {
 
-						sprintf(g_dtp2,	get_ttx(441),
-							GUI_names_grammar(4, host_readws((Bit8u*)g_buyitems + 7 * (l7 + item)), 0));
+						sprintf(g_dtp2,	get_ttx(441), GUI_names_grammar(4, g_buyitems[l7 + item].item_id, 0));
+
 						l4 = GUI_input(g_dtp2, 2);
 					}
 
 					if (l4 > 0) {
 
-						l9 = (Bit32s)host_readws((Bit8u*)g_buyitems + 7 * (l7 + item) + 2) *
-							(Bit32s)host_readws((Bit8u*)g_buyitems + 7 * (l7 + item) + 4) * l4;
+						l9 = (Bit32s)g_buyitems[l7 + item].shop_price *	g_buyitems[l7 + item].price_unit * l4;
 
 						if (price + l9 > p_money) {
 
@@ -433,8 +435,7 @@ void buy_screen(void)
 						} else {
 							price += l9;
 
-							g_buy_shopping_cart[nice].item_id =
-								host_readws((Bit8u*)g_buyitems + 7 * (l7 + item));
+							g_buy_shopping_cart[nice].item_id = g_buyitems[l7 + item].item_id;
 
 							g_buy_shopping_cart[nice].quantity = l4;
 
@@ -453,10 +454,13 @@ void buy_screen(void)
 			}
 		}
 
-		if (g_action == ACTION_ID_ICON_3 && item != 0) {
+		if (g_action == ACTION_ID_ICON_3 && item) {
+
 			l8 = 1;
 			item -= 15;
-		} else if (g_action == ACTION_ID_ICON_2 && host_readws((Bit8u*)g_buyitems + 7 * (item + 15))) {
+
+		} else if (g_action == ACTION_ID_ICON_2 && g_buyitems[item + 15].item_id) {
+
 			l8 = 1;
 			item += 15;
 		}
@@ -522,7 +526,8 @@ void buy_screen(void)
 
 							g_market_itemsaldo_table[item_id] = 0;
 
-							add_ptr_ws(get_itemsdat(item_id) + ITEM_STATS_PRICE, host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * 10 / 100);
+							add_ptr_ws(get_itemsdat(item_id) + ITEM_STATS_PRICE,
+									host_readws(get_itemsdat(item_id) + ITEM_STATS_PRICE) * 10 / 100);
 						}
 
 						if (given_items == 0 && !l_di) {
