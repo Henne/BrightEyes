@@ -302,8 +302,8 @@ void interrupt timer_isr(void)
 		g_pic_copy = pic_copy_bak;
 		g_pic_copy_rect.y1 = 0;
 		g_pic_copy_rect.x1 = 0;
-		g_pic_copy_rect.y2 = (199 - 1);
-		g_pic_copy_rect.x2 = (320 - 1);
+		g_pic_copy_rect.y2 = 200 - 1;
+		g_pic_copy_rect.x2 = 320 - 1;
 
 		/* enable interrupts */
 		asm {sti; }
@@ -342,7 +342,7 @@ void update_status_bars(void)
 
 			/* adjust thirst to 100% */
 			if (host_readbs(hero + HERO_THIRST) >= 100) {
-				host_writeb(hero + HERO_THIRST, g_status_page_thirst = 100);
+				host_writebs(hero + HERO_THIRST, (g_status_page_thirst = 100));
 			}
 
 			/* hunger and thirst are at 100% */
