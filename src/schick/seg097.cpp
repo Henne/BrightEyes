@@ -39,9 +39,9 @@
 namespace M302de {
 #endif
 
-signed int g_menu_selected;		// ds:0xe5b0
-signed int g_menu_input_busy;		// ds:0xe5ae
 signed int g_menu_default_select;	// ds:0xe5ac
+signed int g_menu_input_busy;		// ds:0xe5ae
+signed int g_menu_selected;		// ds:0xe5b0
 
 #if defined(__BORLANDC__)
 void GUI_unused1(Bit8u *a1, signed short a2, signed short a3)

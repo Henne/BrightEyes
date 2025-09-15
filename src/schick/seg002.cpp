@@ -729,7 +729,7 @@ void cruft_1(void)
 {
 	if (!g_load_sound_driver && (host_readws(g_ail_music_driver_descr + 2) == 3))
 	{
-		AIL_start_sequence(g_ail_music_driver_id, g_ail_sequence);
+		AIL_stop_sequence(g_ail_music_driver_id, g_ail_sequence);
 	}
 }
 
@@ -1544,7 +1544,7 @@ void mouse_reset_ehandler(void)
 
 	mouse_action((Bit8u*)&l1, (Bit8u*)&l2, (Bit8u*)&l3, (Bit8u*)&l4, (Bit8u*)&l5);
 
-	g_mouse_irq_init = 1;
+	g_mouse_irq_init = 0;
 #endif
 }
 
