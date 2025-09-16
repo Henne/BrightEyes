@@ -2160,7 +2160,7 @@ void seg002_2177(void)
 
 	for (i = 0; g_market_descr_table[i].min_size != -1; i++) {
 
-		g_market_descr_table[i].market_day = random_interval(g_market_descr_table[i].min_size, 20);
+		g_market_descr_table[i].size = random_interval(g_market_descr_table[i].min_size, 20);
 	}
 }
 
@@ -2827,7 +2827,7 @@ signed short get_free_mod_slot(void)
 
 	for (i = 0; i < 100; i++) {
 
-		if (gs_modification_timers[i].target == 0) {
+		if (gs_modification_timers[i].offset == 0) {
 			break;
 		}
 	}
@@ -2897,7 +2897,7 @@ void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr, signed c
 	}
 
 	gs_modification_timers[slot_no].modifier = mod;
-	gs_modification_timers[slot_no].target = (HugePt)ptr - mod_ptr;
+	gs_modification_timers[slot_no].offset = (HugePt)ptr - mod_ptr;
 	gs_modification_timers[slot_no].time_left = timer_value;
 	add_ptr_bs(ptr, mod);
 }

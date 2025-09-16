@@ -159,7 +159,7 @@ void clear_ani(void)
 		g_ani_area_table[i].cyclic = 0;
 		g_ani_area_table[i].pics = 0;
 		g_ani_area_table[i].changes = 0;
-		g_ani_area_table[i].name[0] = '\0';
+		g_ani_area_table[i].name[4] = '\0';
 
 		for (j = 0; j < 20; j++) {
 			g_ani_area_table[i].pics_tab[j] = NULL;
