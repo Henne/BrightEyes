@@ -287,7 +287,7 @@ void load_ani(const signed short no)
 	signed short area_changes;
 	unsigned short fd;
 	signed short i;
-	Bit8u *p_area;
+	struct ani_area *p_area;
 	unsigned short ems_handle;
 #if !defined(__BORLANDC__)
 	Bit8u* ani_buffer;
@@ -296,7 +296,7 @@ void load_ani(const signed short no)
 	Bit8u huge *ani_buffer;
 	Bit8u huge *unplen_ptr;
 #endif
-	Bit8u *area_changes_ptr;
+	struct ani_tile *area_changes_ptr;
 	Bit32s area_offset;
 	Bit32s area_data_offset;
 	struct ani_area *p_area2;
@@ -439,20 +439,20 @@ void load_ani(const signed short no)
 
 		p_area2 = &g_ani_area_table[i_area];
 		area_offset = host_readd((g_buffer9_ptr + 4 * i_area) + 0xc);
-		p_area = g_buffer9_ptr + area_offset;
+		p_area = (struct ani_area*)g_buffer9_ptr + area_offset;
 		strncpy(p_area2->name, (char*)p_area, 4);
 
-		p_area2->x = host_readw(p_area + 4);
-		p_area2->y = host_readb(p_area + 6);
-		p_area2->height = host_readb(p_area + 7);
-		p_area2->width = host_readw(p_area + 8);
-		p_area2->cyclic = host_readb(p_area + 0x0a);
+		p_area2->x = p_area->x;
+		p_area2->y = p_area->y;
+		p_area2->height = p_area->height;
+		p_area2->width = p_area->width;
+		p_area2->cyclic = p_area->cyclic;
 
-		p_area2->pics = (signed char)(area_pics = host_readbs(p_area + 0x0b));
+		p_area2->pics = (signed char)(area_pics = p_area->pics);
 
 		if (g_ani_compr_flag) {
 
-			area_data_offset = host_readd(p_area + 0xc);
+			area_data_offset = host_readd((Bit8u*)p_area + 0xc);
 			area_data_offset += packed_delta;
 			unplen_ptr = g_buffer9_ptr + area_data_offset;
 
@@ -493,18 +493,18 @@ void load_ani(const signed short no)
 			}
 		} else {
 			for (j = 0; j < area_pics; j++) {
-				area_data_offset = host_readd(p_area + j * 4 + 0xc);
+				area_data_offset = host_readd((Bit8u*)p_area + j * 4 + 0xc);
 				p_area2->pics_tab[j] = g_buffer9_ptr + area_data_offset;
 			}
 		}
 
-		p_area2->changes = area_changes = host_readw(p_area + area_pics * 4 + 0x0c);
+		p_area2->changes = area_changes = host_readw((Bit8u*)p_area + area_pics * 4 + 0x0c);
 
-		area_changes_ptr = p_area + area_pics * 4 + 0x0e;
+		area_changes_ptr = (struct ani_tile*)p_area + area_pics * 4 + 0x0e;
 
 		for (j = 0; j < area_changes; j++) {
-			p_area2->changes_tb[j].pic = host_readw(area_changes_ptr + ((j << 1) << 1));
-			p_area2->changes_tb[j].duration = host_readw(area_changes_ptr + ((j << 1) << 1) + 2);
+			p_area2->changes_tb[j].pic = area_changes_ptr[j].pic;
+			p_area2->changes_tb[j].duration = area_changes_ptr[j].duration;
 		}
 	}
 
