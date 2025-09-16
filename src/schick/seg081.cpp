@@ -217,9 +217,9 @@ signed short DNG06_handler(void)
 
 	} else if (target_pos == DNG_POS(0,11,6) && target_pos != gs_dng_handled_pos && gs_dng06_countdown_timer)
 	{
-		if (div16(host_readb(amap_ptr + MAP_POS(11,1))) != DNG_TILE_CLOSED_DOOR ||
-			div16(host_readb(amap_ptr + MAP_POS(2,6))) != DNG_TILE_CLOSED_DOOR ||
-			div16(host_readb(amap_ptr + MAP_POS(11,4))) != DNG_TILE_CLOSED_DOOR)
+		if (div16(amap_ptr[MAP_POS(11,1)]) != DNG_TILE_CLOSED_DOOR ||
+			div16(amap_ptr[MAP_POS(2,6)]) != DNG_TILE_CLOSED_DOOR ||
+			div16(amap_ptr[MAP_POS(11,4)]) != DNG_TILE_CLOSED_DOOR)
 		{
 			gs_dng06_countdown_timer--;
 

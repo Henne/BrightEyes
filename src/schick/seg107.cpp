@@ -220,7 +220,6 @@ void item_flimflam(void)
 	}
 
 	GUI_output(g_dtp2);
-
 }
 
 /* Borlandified and identical */
@@ -496,17 +495,16 @@ void item_brenne(void)
 /* Borlandified and identical */
 void item_bag(void)
 {
-	/*	MAGIC BREADBAG, BAG
-		ID 184, 221 */
+	/* MAGIC BREADBAG, BAG: ID 184, 221 */
 
-	Bit8u *ptr;
 
 	if ((gs_dungeon_index == DUNGEONS_RUINE_DES_SCHWARZMAGIERS) && (gs_dungeon_level == 0)) {
+
 		/* set ptr to the map */
-		ptr = g_dng_map;
+		Bit8u *ptr = g_dng_map;
 
 		/* remove the wall there */
-		host_writeb(ptr + MAP_POS(10,3), DNG_TILE_CORRIDOR + 0x01); /* set flag 0, is there a reason? */
+		ptr[MAP_POS(10,3)] = DNG_TILE_CORRIDOR + 0x01; /* set flag 0, is there a reason? */
 	}
 #if !defined(__BORLANDC__)
 	else {

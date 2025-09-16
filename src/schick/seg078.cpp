@@ -160,15 +160,15 @@ signed short DNG02_handler(void)
 			}
 		}
 
-		hero_weight = get_hero_weight((Bit8u*)(get_heaviest_hero()));
+		hero_weight = get_hero_weight((Bit8u*)get_heaviest_hero());
 
-		host_writebs(amap_ptr + MAP_POS(10,11), (hero_weight >= weight_sum ? (DNG_TILE_CORRIDOR << 4) : (DNG_TILE_WALL << 4)));
+		amap_ptr[MAP_POS(10,11)] = (hero_weight >= weight_sum ? (DNG_TILE_CORRIDOR << 4) : (DNG_TILE_WALL << 4));
 
 		play_voc(305);
 
 	} else if ((target_pos == DNG_POS(0,10,13) || target_pos == DNG_POS(0,10,9)) && target_pos != gs_dng_handled_pos)
 	{
-		host_writeb(amap_ptr + MAP_POS(10,11), DNG_TILE_CORRIDOR << 4);
+		amap_ptr[MAP_POS(10,11)] = DNG_TILE_CORRIDOR << 4;
 
 		play_voc(305);
 
@@ -224,7 +224,7 @@ signed short DNG02_handler(void)
 
 			GUI_output(get_tx(14));
 
-			host_writebs(amap_ptr + MAP_POS(5,2), DNG_TILE_CORRIDOR << 4);
+			amap_ptr[MAP_POS(5,2)] = DNG_TILE_CORRIDOR << 4;
 		}
 
 	} else if (target_pos == DNG_POS(0,11,6) && target_pos != gs_dng_handled_pos)
@@ -243,7 +243,7 @@ signed short DNG02_handler(void)
 		{
 			GUI_output(get_tx(15));
 
-			host_writeb(amap_ptr + MAP_POS(11,8), DNG_TILE_CORRIDOR << 4);
+			amap_ptr[MAP_POS(11,8)] = DNG_TILE_CORRIDOR << 4;
 		}
 
 	} else if ((target_pos == DNG_POS(0,10,6) || target_pos == DNG_POS(0,11,5)) && target_pos != gs_dng_handled_pos)
@@ -277,19 +277,19 @@ signed short DNG02_handler(void)
 			}
 		}
 
-		host_writeb(amap_ptr + MAP_POS(11,8), (weight_sum >= 4000L ? (DNG_TILE_CORRIDOR << 4) : (DNG_TILE_WALL << 4)));
+		amap_ptr[MAP_POS(11,8)] = (weight_sum >= 4000L ? (DNG_TILE_CORRIDOR << 4) : (DNG_TILE_WALL << 4));
 
 	} else if (target_pos == DNG_POS(1,12,5) && gs_direction == NORTH &&
 			 (target_pos != gs_dng_handled_pos || gs_direction != gs_direction_bak))
 	{
-		gs_direction_bak = (gs_direction);
+		gs_direction_bak = gs_direction;
 
 		GUI_output(get_tx(16));
 
 	} else if (target_pos == DNG_POS(1,4,5) && gs_direction == SOUTH &&
 			 (target_pos != gs_dng_handled_pos || gs_direction != gs_direction_bak))
 	{
-		gs_direction_bak = (gs_direction);
+		gs_direction_bak = gs_direction;
 
 		GUI_output(get_tx(17));
 
@@ -440,7 +440,7 @@ signed short DNG02_handler(void)
 			if (i > 0)
 			{
 				/* unlike other similar code positions, the lower 4 bits of the map entry are preserved here. Is there a reason? */
-				and_ptr_bs(amap_ptr + MAP_POS(1,9), (DNG_TILE_CORRIDOR << 4) + 0x0f);
+				amap_ptr[MAP_POS(1,9)] &= (DNG_TILE_CORRIDOR << 4) + 0x0f;
 				gs_dng02_secret_door1 = 2;
 				DNG_update_pos();
 			}
@@ -472,12 +472,12 @@ signed short DNG02_handler(void)
 
 			if (i > 0)
 			{
-				host_writeb(amap_ptr + MAP_POS(4,9), DNG_TILE_CORRIDOR << 4);
+				amap_ptr[MAP_POS(4,9)] = DNG_TILE_CORRIDOR << 4;
 				gs_dng02_secret_door2 = 2;
 				DNG_update_pos();
 			}
 
-			gs_direction_bak = (gs_direction);
+			gs_direction_bak = gs_direction;
 		}
 
 	} else if (((target_pos == DNG_POS(1,4,9) && gs_direction == EAST) ||
@@ -501,7 +501,7 @@ signed short DNG02_handler(void)
 
 			if (i > 0)
 			{
-				host_writeb(amap_ptr + MAP_POS(5,9), DNG_TILE_CORRIDOR << 4);
+				amap_ptr[MAP_POS(5,9)] = DNG_TILE_CORRIDOR << 4;
 				gs_dng02_secret_door3 = 2;
 				DNG_update_pos();
 			}
@@ -522,22 +522,19 @@ signed short DNG02_handler(void)
 	} else if (target_pos == DNG_POS(0,1,0) && target_pos != gs_dng_handled_pos)
 	{
 		leave_dungeon();
-		gs_current_town = ((signed char)gs_travel_destination_town_id);
-		gs_x_target = (gs_travel_destination_x);
-		gs_y_target = (gs_travel_destination_y);
+		gs_current_town = (signed char)gs_travel_destination_town_id;
+		gs_x_target = gs_travel_destination_x;
+		gs_y_target = gs_travel_destination_y;
 		gs_current_loctype = LOCTYPE_NONE;
 		gs_direction = ((gs_travel_destination_viewdir + 2) & 3);
 
-		sprintf(g_dtp2,
-			get_tx(44),
-			get_ttx(gs_trv_destination + 0xeb));
+		sprintf(g_dtp2, get_tx(44), get_ttx(gs_trv_destination + 0xeb));
 
 		GUI_output(g_dtp2);
 
 		timewarp(HOURS(3));
 
 		g_fading_state = 3;
-
 	}
 
 	gs_dng_handled_pos = target_pos;

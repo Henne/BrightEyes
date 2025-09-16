@@ -49,13 +49,11 @@ signed short DNG07_handler(void)
 
 	if (target_pos == DNG_POS(0,13,2) && target_pos != gs_dng_handled_pos)
 	{
-		if (div16(host_readb(amap_ptr + MAP_POS(13,2))) != DNG_TILE_STAIR_DOWN)
+		if (div16(amap_ptr[MAP_POS(13,2)]) != DNG_TILE_STAIR_DOWN)
 		{
 			do {
-				i = GUI_radio(get_tx(8), 3,
-							get_tx(9),
-							get_tx(10),
-							get_tx(11));
+				i = GUI_radio(get_tx(8), 3, get_tx(9), get_tx(10), get_tx(11));
+
 			} while (i == -1);
 
 			if (i == 1)
@@ -252,8 +250,7 @@ signed short DNG07_handler(void)
 			/* ORIGINAL-BUG: forgot to set hero */
 			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
 			{
-				if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					hero_encouraged(hero))
+				if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE && hero_encouraged(hero))
 				{
 					sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_MU), 3); /* MU - 3 */
 					and_ptr_bs(hero + HERO_FLAGS2, 0x7f); /* unset 'encouraged' flag */
@@ -300,13 +297,10 @@ void DNG09_statues(signed short prob, signed short bonus)
 
 	amap_ptr = g_dng_map;
 
-	if (host_readbs(amap_ptr + MAP_POS(gs_x_target, gs_y_target)) == 4)
+	if (amap_ptr[MAP_POS(gs_x_target, gs_y_target)] == 4)
 	{
 		/* TODO: no forced decision here ? */
-		i = GUI_radio(get_tx(4), 3,
-				get_tx(5),
-				get_tx(6),
-				get_tx(7));
+		i = GUI_radio(get_tx(4), 3, get_tx(5), get_tx(6), get_tx(7));
 
 		if (i == 1)
 		{

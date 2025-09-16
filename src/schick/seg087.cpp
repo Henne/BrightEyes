@@ -131,7 +131,7 @@ signed short DNG14_handler(void)
 
 		gs_dng14_poisontrap = 2;
 
-		or_ptr_bs(amap_ptr + MAP_POS(12,7), DNG_TILE_REMOVABLE_WALL << 4);
+		amap_ptr[MAP_POS(12,7)] |= DNG_TILE_REMOVABLE_WALL << 4;
 
 	} else if (pos == DNG_POS(0,13,5) && pos != gs_dng_handled_pos) {
 
@@ -166,7 +166,7 @@ signed short DNG14_handler(void)
 			GUI_output(g_dtp2);
 
 			if (l_di > 0) {
-				and_ptr_bs(amap_ptr + MAP_POS(5,11), (DNG_TILE_CORRIDOR << 4) + 0x0f);
+				amap_ptr[MAP_POS(5,11)] &= (DNG_TILE_CORRIDOR << 4) + 0x0f;
 				gs_dng14_secretdoor1 = 2;
 				DNG_update_pos();
 			}
@@ -193,7 +193,7 @@ signed short DNG14_handler(void)
 			GUI_output(g_dtp2);
 
 			if (l_di > 0) {
-				and_ptr_bs(amap_ptr + MAP_POS(12,7), (DNG_TILE_CORRIDOR << 4) + 0x0f);
+				amap_ptr[MAP_POS(12,7)] &= (DNG_TILE_CORRIDOR << 4) + 0x0f;
 				gs_dng14_secretdoor2 = 2;
 				DNG_update_pos();
 			} else {
@@ -315,7 +315,7 @@ signed short DNG14_handler(void)
 
 			if (l_di > 0) {
 				/* test was sucessful => disable trap */
-				and_ptr_bs(amap_ptr + MAP_POS(1,10), (DNG_TILE_CORRIDOR << 4) + 0x0f);
+				amap_ptr[MAP_POS(1,10)] &= (DNG_TILE_CORRIDOR << 4) + 0x0f;
 				gs_dng14_secretdoor3 = 2;
 
 				DNG_update_pos();
@@ -345,7 +345,7 @@ signed short DNG14_handler(void)
 
 			if (l_di > 0) {
 				/* test was sucessful => disable trap */
-				and_ptr_bs(amap_ptr + MAP_POS(6,10), (DNG_TILE_CORRIDOR << 4) + 0x0f);
+				amap_ptr[MAP_POS(6,10)] &= (DNG_TILE_CORRIDOR << 4) + 0x0f;
 				gs_dng14_secretdoor4 = 2;
 
 				DNG_update_pos();
@@ -521,7 +521,7 @@ signed short DNG14_handler(void)
 
 			if (l_di > 0) {
 				/* disable trap */
-				and_ptr_bs(amap_ptr + MAP_POS(14,4), (DNG_TILE_CORRIDOR << 4) + 0x0f);
+				amap_ptr[MAP_POS(14,4)] &= (DNG_TILE_CORRIDOR << 4) + 0x0f;
 
 				gs_dng14_secretdoor5 = 2;
 

@@ -4,7 +4,7 @@ namespace M302de {
 
 //20
 #if defined(__BORLANDC__)
-void GUI_unused1(Bit8u*, signed short, signed short);
+void GUI_unused1(char*, signed short, signed short);
 #endif
 
 //25

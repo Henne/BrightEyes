@@ -44,7 +44,7 @@ signed int g_menu_input_busy;		// ds:0xe5ae
 signed int g_menu_selected;		// ds:0xe5b0
 
 #if defined(__BORLANDC__)
-void GUI_unused1(Bit8u *a1, signed short a2, signed short a3)
+void GUI_unused1(char *a1, signed short a2, signed short a3)
 {
 	signed short l1;
 	signed short l2;
@@ -60,7 +60,7 @@ void GUI_unused1(Bit8u *a1, signed short a2, signed short a3)
 
 	l2 = a2;
 
-	while ((c = host_readbs(a1 + l1++))) {
+	while ((c = a1[l1++])) {
 
 		if ((c == 0x0d) || (c == 0x40)) {
 			a3 += 10;

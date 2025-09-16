@@ -203,7 +203,7 @@ signed short DNG11_handler(void)
 
 			if (test_result > 0)
 			{
-				and_ptr_bs(amap_ptr + MAP_POS(8,11), (DNG_TILE_CORRIDOR << 4) + 0x0f);
+				amap_ptr[MAP_POS(8,11)] &= (DNG_TILE_CORRIDOR << 4) + 0x0f;
 
 				gs_dng11_secretdoor1_flag = 2;
 
@@ -234,7 +234,7 @@ signed short DNG11_handler(void)
 
 			if (test_result > 0)
 			{
-				and_ptr_bs(amap_ptr + MAP_POS(5,7), (DNG_TILE_CORRIDOR << 4) + 0x0f);
+				amap_ptr[MAP_POS(5,7)] &= (DNG_TILE_CORRIDOR << 4) + 0x0f;
 
 				gs_dng11_secretdoor2_flag = 2;
 
@@ -265,7 +265,7 @@ signed short DNG11_handler(void)
 
 			if (test_result > 0)
 			{
-				and_ptr_bs(amap_ptr + MAP_POS(10,8), (DNG_TILE_CORRIDOR << 4) + 0x0f);
+				amap_ptr[MAP_POS(10,8)] &= (DNG_TILE_CORRIDOR << 4) + 0x0f;
 
 				gs_dng11_secretdoor3_flag = 2;
 

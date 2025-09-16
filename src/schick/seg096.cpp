@@ -252,10 +252,7 @@ unsigned short GUI_count_lines(char *str)
 	for (; str_loc[current_pos]; current_pos++) {
 
 		GUI_lookup_char_width(str_loc[current_pos], &width_char);
-#if !defined(__BORLANDC__)
-		/* BE-fix */
-		width_char = host_readws((Bit8u*)&width_char);
-#endif
+
 		width_line += width_char;
 
 		/* check if the input string str is to long for the line */
@@ -500,10 +497,13 @@ void GUI_font_to_buf(Bit8u *fc)
 		fc++;
 
 	for (i = 0; i < 8; p += 8, i++) {
+
 		c = *fc++;
-		for (j = 0; j < 8; j++)
+
+		for (j = 0; j < 8; j++) {
 			if ((0x80 >> j) & c)
 				 p[j] = g_textcolor_fg[g_textcolor_index];
+		}
 	}
 }
 
@@ -545,8 +545,10 @@ unsigned short GUI_unused(Bit8u *str)
 	unsigned short lines = 0;
 
 	while (*str) {
-		if (*str++ == 0x0d)
+
+		if (*str++ == 0x0d) {
 			lines++;
+		}
 	}
 
 	return lines;
@@ -564,10 +566,6 @@ signed short GUI_get_space_for_string(char *p, signed short dir)
 		} else {
 			GUI_lookup_char_width(*p++, &tmp);
 		}
-#if !defined(__BORLANDC__)
-		/* BE-fix */
-		tmp = host_readws((Bit8u*)&tmp);
-#endif
 	}
 
 	return sum;
@@ -586,10 +584,6 @@ signed short GUI_get_first_pos_centered(char *p, signed short x, signed short v2
 		else
 			GUI_lookup_char_width(*p++, &tmp);
 
-#if !defined(__BORLANDC__)
-		/* BE-fix */
-		tmp = host_readws((Bit8u*)&tmp);
-#endif
 	}
 
 	v2 -= i;

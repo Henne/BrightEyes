@@ -45,6 +45,7 @@ signed short DNG12_handler(void)
 	hero = (Bit8u*)get_first_hero_available_in_group();
 
 	if (gs_day_timer % MINUTES(5) == 0) {
+
 		/* TODO: buggy timer for cave in */
 
 		if (gs_dng12_tunnel1 > 0) --gs_dng12_tunnel1;
@@ -54,6 +55,7 @@ signed short DNG12_handler(void)
 	}
 
 	if (target_pos == DNG_POS(1,6,8) && target_pos != gs_dng_handled_pos && gs_direction == EAST && gs_dng12_watertrap_water_runs) {
+
 		/* secret door from water trap */
 #if !defined(__BORLANDC__)
 		D1_INFO("Geheimtuere\n");
@@ -62,7 +64,7 @@ signed short DNG12_handler(void)
 
 			GUI_output(get_tx(21));
 
-			and_ptr_bs(ptr + MAP_POS(7,8), (DNG_TILE_CORRIDOR << 4) + 0x0f);
+			ptr[MAP_POS(7,8)] &= (DNG_TILE_CORRIDOR << 4) + 0x0f;
 
 			/* turn off water trap */
 			gs_dng12_watertrap_active = 0;
@@ -94,6 +96,7 @@ signed short DNG12_handler(void)
 						(gs_dng12_watertrap_timer <= MINUTES(10) ? get_tx(19) : get_tx(18)));
 
 				if (gs_dng12_watertrap_timer == MINUTES(0)) {
+
 					/* time is up, drown party */
 					hero = get_hero(0);
 					for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
@@ -105,7 +108,9 @@ signed short DNG12_handler(void)
 							hero_disappear(hero, i, -1);
 						}
 					}
+
 				} else if (gs_dng12_watertrap_timer <= MINUTES(40)) {
+
 					/* NPC will find secret door */
 
 					if (is_hero_available_in_group(get_hero(6))) {
@@ -129,7 +134,7 @@ signed short DNG12_handler(void)
 							DNG_update_pos();
 						}
 
-						and_ptr_bs(ptr + MAP_POS(7,8), (DNG_TILE_CORRIDOR << 4) + 0x0f);
+						ptr[MAP_POS(7,8)] &= (DNG_TILE_CORRIDOR << 4) + 0x0f;
 
 						/* turn off water trap */
 						gs_dng12_watertrap_active = 0;
@@ -153,14 +158,17 @@ signed short DNG12_handler(void)
 		DNG_clear_corridor(&gs_dng12_tunnel1);
 
 	} else if (target_pos == DNG_POS(0,14,8) && target_pos != gs_dng_handled_pos && !gs_dng12_tunnel2) {
+
 		/* 2. tunnel block */
 		DNG_clear_corridor(&gs_dng12_tunnel2);
 
 	} else if (target_pos == DNG_POS(0,13,7) && target_pos != gs_dng_handled_pos && !gs_dng12_tunnel3) {
+
 		/* 3. tunnel block */
 		DNG_clear_corridor(&gs_dng12_tunnel3);
 
 	} else if (target_pos == DNG_POS(0,14,5) && target_pos != gs_dng_handled_pos && !gs_dng12_tunnel4) {
+
 		/* 4. tunnel block */
 		DNG_clear_corridor(&gs_dng12_tunnel4);
 
@@ -249,24 +257,27 @@ signed short DNG12_handler(void)
 #if !defined(__BORLANDC__)
 		D1_INFO("In Wasserfalle gefangen\n");
 #endif
-		if (div16(cast_u16(host_readb(ptr + MAP_POS(3,11)))) == DNG_TILE_OPEN_DOOR) {
-			and_ptr_bs(ptr + MAP_POS(3,11), 0xf);
-			or_ptr_bs(ptr + MAP_POS(3,11), DNG_TILE_CLOSED_DOOR << 4);
+		if (div16(cast_u16(ptr[MAP_POS(3,11)])) == DNG_TILE_OPEN_DOOR) {
+			ptr[MAP_POS(3,11)] &= 0xf;
+			ptr[MAP_POS(3,11)] |= DNG_TILE_CLOSED_DOOR << 4;
 		}
+
 	} else if (target_pos == DNG_POS(1,3,7) && target_pos != gs_dng_handled_pos) {
 #if !defined(__BORLANDC__)
 		D1_INFO("In Wasserfalle gefangen\n");
 #endif
-		if (div16(cast_u16(host_readb(ptr + MAP_POS(3,6)))) == 2) {
-			and_ptr_bs(ptr + MAP_POS(3,6), 0xf);
-			or_ptr_bs(ptr + MAP_POS(3,6), DNG_TILE_CLOSED_DOOR << 4);
+		if (div16(cast_u16(ptr[MAP_POS(3,6)])) == 2) {
+			ptr[MAP_POS(3,6)] &= 0xf;
+			ptr[MAP_POS(3,6)] |= DNG_TILE_CLOSED_DOOR << 4;
 		}
 	} else if (target_pos == DNG_POS(1,1,8) && target_pos != gs_dng_handled_pos && gs_direction == WEST) {
+
 		/* water source */
 
 		if (GUI_bool(get_tx(16))) {
 			GUI_output(get_tx(17));
 		}
+
 	} else if (target_pos == DNG_POS(1,3,2) && target_pos != gs_dng_handled_pos && gs_direction == SOUTH) {
 
 #if !defined(__BORLANDC__)
