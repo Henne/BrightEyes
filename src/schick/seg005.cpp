@@ -687,7 +687,7 @@ void draw_fight_screen(Bit16u val)
 									twofielded_move_tail_first = 1;
 
 									/* create pointer to the head part of the enemy */
-									p_fighter_tmp = FIG_get_fighter(g_enemy_sheets[target_id - 10].mon_id);
+									p_fighter_tmp = FIG_get_fighter(g_enemy_sheets[target_id - 10].fighter_id);
 
 #ifdef M302de_ORIGINAL_BUGFIX
 									/* Original-Bug 5: */
