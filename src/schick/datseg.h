@@ -130,6 +130,21 @@ struct ani_tile {
 	Bit16s duration;
 };
 
+/* input from file */
+struct ani_area_in {
+	char name[4];		//0x00
+	Bit16u x;		//0x04
+	Bit8u y;		//0x06
+	Bit8u height;		//0x07
+	Bit16u width;		//0x08
+	Bit8u cyclic;		//0x0a
+	Bit8s pics; 		//0x0b
+	Bit32s offsets[20];	//0x0c
+	Bit16s changes;
+	struct ani_tile changes_tb[42];
+};
+
+/* ingame usage */
 struct ani_area {
 	char name[5];
 	Bit16u x;

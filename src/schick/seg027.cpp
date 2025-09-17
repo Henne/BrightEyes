@@ -33,10 +33,8 @@ void load_pp20(signed short index)
 	Bit8u* buffer_ptr;
 	signed short bi;
 
-	if (index <= 5
-	    || index == ARCHIVE_FILE_PLAYM_US
-	    || index == ARCHIVE_FILE_ZUSTA_UK
-	    || index == ARCHIVE_FILE_ZUSTA_US) {
+	if (index <= 5 || index == ARCHIVE_FILE_PLAYM_US || index == ARCHIVE_FILE_ZUSTA_UK || index == ARCHIVE_FILE_ZUSTA_US)
+	{
 		/* These pictures are buffered for faster access */
 		bi = index;
 
@@ -68,6 +66,7 @@ void load_pp20(signed short index)
 
 				/* save pointer */
 				g_pp20_buffers[bi] = buffer_ptr;
+
 				/* save length */
 				g_pp20_buffer_lengths[bi] = get_readlength2(fd);
 
@@ -104,9 +103,10 @@ void load_pp20(signed short index)
 				close(fd);
 			}
 		}
-	} else {
-		/* unbuffered picture */
 
+	} else {
+
+		/* unbuffered picture */
 		fd = load_archive_file(index);
 
 		read_archive_file(fd, g_renderbuf_ptr - 8, 64000);
@@ -194,6 +194,7 @@ Bit8u* load_fight_figs(signed short fig)
 
 	/* check if fig is already in memory */
 	for (i = 0; i < max_entries; i++) {
+
 		if (memslots[i].figure == fig)
 			break;
 	}
@@ -287,7 +288,7 @@ void load_ani(const signed short no)
 	signed short area_changes;
 	unsigned short fd;
 	signed short i;
-	struct ani_area *p_area;
+	struct ani_area_in *p_area;
 	unsigned short ems_handle;
 #if !defined(__BORLANDC__)
 	Bit8u* ani_buffer;
@@ -296,7 +297,7 @@ void load_ani(const signed short no)
 	Bit8u huge *ani_buffer;
 	Bit8u huge *unplen_ptr;
 #endif
-	struct ani_tile *area_changes_ptr;
+	Bit8u *area_changes_ptr;
 	Bit32s area_offset;
 	Bit32s area_data_offset;
 	struct ani_area *p_area2;
@@ -439,7 +440,7 @@ void load_ani(const signed short no)
 
 		p_area2 = &g_ani_area_table[i_area];
 		area_offset = host_readd((g_buffer9_ptr + 4 * i_area) + 0xc);
-		p_area = (struct ani_area*)g_buffer9_ptr + area_offset;
+		p_area = (struct ani_area_in*)(g_buffer9_ptr + area_offset);
 		strncpy(p_area2->name, (char*)p_area, 4);
 
 		p_area2->x = p_area->x;
@@ -447,7 +448,6 @@ void load_ani(const signed short no)
 		p_area2->height = p_area->height;
 		p_area2->width = p_area->width;
 		p_area2->cyclic = p_area->cyclic;
-
 		p_area2->pics = (signed char)(area_pics = p_area->pics);
 
 		if (g_ani_compr_flag) {
@@ -486,7 +486,7 @@ void load_ani(const signed short no)
 			g_ani_palette += packed_delta2;
 			ani_end_ptr += packed_delta2;
 
-			area_size = (unsigned char)p_area2->height * (signed short)p_area2->width;
+			area_size = p_area2->height * (signed short)p_area2->width;
 
 			for (j = 0; j < area_pics; j++) {
 				p_area2->pics_tab[j] = (Bit8u*)((g_buffer9_ptr + area_data_offset) + j * area_size);
@@ -500,11 +500,11 @@ void load_ani(const signed short no)
 
 		p_area2->changes = area_changes = host_readw((Bit8u*)p_area + area_pics * 4 + 0x0c);
 
-		area_changes_ptr = (struct ani_tile*)p_area + area_pics * 4 + 0x0e;
+		area_changes_ptr = (((Bit8u*)p_area) + area_pics * 4 + 0x0e);
 
 		for (j = 0; j < area_changes; j++) {
-			p_area2->changes_tb[j].pic = area_changes_ptr[j].pic;
-			p_area2->changes_tb[j].duration = area_changes_ptr[j].duration;
+			p_area2->changes_tb[j].pic = host_readws(area_changes_ptr + ((j << 1) << 1));
+			p_area2->changes_tb[j].duration = host_readws(area_changes_ptr + ((j << 1) << 1) + 2);
 		}
 	}
 
@@ -668,7 +668,7 @@ void write_fight_lst(void)
 	fight_lst_handle = load_archive_file(0x8000 | ARCHIVE_FILE_FIGHT_LST);
 
 	/* seek to the entry */
-	lseek(fight_lst_handle, sizeof(struct fight) * fight_id + 2, SEEK_SET);
+	lseek(fight_lst_handle, (Bit32s)fight_id * sizeof(struct fight) + 2, SEEK_SET);
 
 	/* write it */
 	write(fight_lst_handle, g_current_fight, sizeof(struct fight));
@@ -727,7 +727,6 @@ void init_common_buffers(void)
 	fd = load_archive_file(ARCHIVE_FILE_TOWNPAL_DAT);
 	read_archive_file(fd, g_townpal_buf, 288);
 	close(fd);
-
 }
 
 #if !defined(__BORLANDC__)
