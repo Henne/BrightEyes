@@ -2,15 +2,17 @@
 namespace M302de {
 #endif
 
+#if defined(__BORLANDC__)
 //0x20
 void unused_store(signed short);
 //0x25
 Bit8u* unused_load(signed short);
+#endif
 //0x2a
 void load_area_description(signed short);
 //0x2f
 #if defined(__BORLANDC__)
-void unused_load_archive_file(signed short, signed short, Bit32u);
+void unused_load_archive_file(signed short, unsigned short, Bit32u);
 #endif
 //0x34
 void prepare_dungeon_area(void);

@@ -90,7 +90,7 @@ void prepare_dungeon_area(void)
 
 		close(handle);
 
-		g_buffer11_ptr = (g_buffer9_ptr + v2) - 0xc0L;
+		g_buffer11_ptr = (g_buffer9_ptr3 + v2) - 0xc0L;
 
 		g_area_prepared = !gs_dungeon_index;
 	}
@@ -165,6 +165,7 @@ void seg028_0224(void)
 		}
 
 		for (l_si = 0; l_si < 4; l_si++) {
+
 			if (!g_city_house_count[l_si]) {
 
 				arr[l_si] = (!l_si ? arr[l_si + 1] : arr[l_si - 1]);
@@ -244,12 +245,13 @@ Bit8u* seg028_0444(signed short index, signed short firstcol, signed short color
 
 void load_special_textures(signed short arg)
 {
-	signed short fd;
+	signed short handle;
 
-	fd = load_archive_file(arg == 9 ? ARCHIVE_FILE_FINGER_NVF : ARCHIVE_FILE_LTURM_NVF);
-	read_archive_file(fd, (Bit8u*)g_buffer7_ptr, 64000);
-	close(fd);
+	handle = load_archive_file(arg == 9 ? ARCHIVE_FILE_FINGER_NVF : ARCHIVE_FILE_LTURM_NVF);
 
+	read_archive_file(handle, (Bit8u*)g_buffer7_ptr, 64000);
+
+	close(handle);
 }
 
 void call_load_buffer(void)
@@ -360,6 +362,7 @@ void call_load_area(signed short type)
 	load_area_description(type);
 }
 
+#if defined(__BORLANDC__)
 void unused_store(signed short no)
 {
 	signed short width;
@@ -369,18 +372,12 @@ void unused_store(signed short no)
 	signed short size;
 
 	nvf.dst = g_renderbuf_ptr + 30000;
-	nvf.src = (Bit8u*)g_buffer9_ptr4;
+	nvf.src = (Bit8u*)g_buffer9_ptr3;
 	nvf.no = no;
 	nvf.type = 0;
 	nvf.width = (Bit8u*)&width;
 	nvf.height = (Bit8u*)&height;
 	process_nvf(&nvf);
-
-#if !defined(__BORLANDC__)
-	/* BE-fix */
-	width = host_readws((Bit8u*)&width);
-	height = host_readws((Bit8u*)&height);
-#endif
 
 	EMS_map_memory(g_ems_unused_handle, g_ems_unused_lpage, 0);
 	EMS_map_memory(g_ems_unused_handle, g_ems_unused_lpage + 1, 1);
@@ -397,7 +394,7 @@ void unused_store(signed short no)
 	host_writew(ptr + 2, width);
 	host_writeb(ptr + 4, (signed char)height);
 
-	g_ems_unused_lpage = (g_ems_unused_lpage + (g_ems_unused_offset + size) >> 14);
+	g_ems_unused_lpage = g_ems_unused_lpage + ((unsigned short)(g_ems_unused_offset + size) >> 14);
 	g_ems_unused_offset = ((((g_ems_unused_offset + size) & 0x3fff) + 0x100) & 0xff00);
 }
 
@@ -415,6 +412,7 @@ Bit8u* unused_load(signed short no)
 
 	return g_ems_frame_ptr + 256 * host_readb(g_ems_unused_tab + 5 * no + 1);
 }
+#endif
 
 void load_map(void)
 {
@@ -531,9 +529,7 @@ void load_npc(signed short index)
 
 void save_npc(signed short index)
 {
-	signed short fd;
-
-	fd = load_archive_file(index | 0x8000);
+	signed short fd = load_archive_file(index | 0x8000);
 
 	write(fd, get_hero(6), SIZEOF_HERO);
 
@@ -560,7 +556,7 @@ void load_splashes(void)
 	nvf.height = (Bit8u*)&height;
 	fd = (signed short)process_nvf(&nvf);
 
-	nvf.dst = g_splash_ae = (g_splash_buffer + fd);
+	nvf.dst = g_splash_ae = g_splash_buffer + fd;
 	nvf.src = g_renderbuf_ptr;
 	nvf.no = 1;
 	nvf.type = 1;
@@ -578,7 +574,6 @@ void load_informer_tlk(signed short index)
 	Bit32s off;
 	signed short partners;
 	struct struct_dialog_partner *partner;
-
 
 	g_text_file_index = index;
 
@@ -658,30 +653,30 @@ void load_tlk(signed short index)
 }
 
 #if defined(__BORLANDC__)
-void unused_load_archive_file(signed short index, signed short a2, Bit32u seg)
+void unused_load_archive_file(signed short index, unsigned short off, Bit32u seg)
 {
-	signed short fd;
+	signed short handle = load_archive_file(index);
 
-	fd = load_archive_file(index);
-	read_archive_file(fd, (Bit8u*)MK_FP(seg, a2), 64000);
-	close(fd);
+	read_archive_file(handle, (Bit8u*)MK_FP(seg, off), 64000);
+
+	close(handle);
 }
 #endif
 
 void load_fightbg(signed short index)
 {
-	signed short fd;
+	signed short handle = load_archive_file(index);
 
-	fd = load_archive_file(index);
-	read_archive_file(fd, g_renderbuf_ptr, 30000);
+	read_archive_file(handle, g_renderbuf_ptr, 30000);
+
 	decomp_pp20(g_renderbuf_ptr, g_buffer8_ptr,
 #if !defined(__BORLANDC__)
 			g_renderbuf_ptr + 4,
 #else
 			FP_OFF(g_renderbuf_ptr) + 4, FP_SEG(g_renderbuf_ptr),
 #endif
-			get_readlength2(fd));
-	close(fd);
+			get_readlength2(handle));
+	close(handle);
 }
 
 #if !defined(__BORLANDC__)
