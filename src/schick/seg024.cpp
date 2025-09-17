@@ -122,10 +122,10 @@ void diary_new_entry(void)
 	}
 
 	/* make a pointer to the last entry */
-	entry = &gs_diary_entries[gs_diary_entry_counter];
+	entry = &gs_diary_entries[gs_diary_entry_counter - 1];
 
 	/* avoid double entries for the same town */
-	if (gs_current_town != entry->year) {
+	if (gs_current_town != entry->town) {
 
 		/* make a pointer to the current entry */
 		entry = &gs_diary_entries[gs_diary_entry_counter];
@@ -170,11 +170,11 @@ Bit16u diary_print_entry(Bit16u line)
 		town_name = get_ttx(entry->town + 0xeb);
 
 		if (di == 0) {
-			if (strlen(town_name) > 24) {
+			if ((signed short)strlen(town_name) > 24) {
 
 				sprintf(g_dtp2, g_diary_string1, entry->day, get_ttx(entry->month + 0x15), town_name);
 
-			} else if (strlen(town_name) > 15) {
+			} else if ((signed short)strlen(town_name) > 15) {
 
 				sprintf(g_dtp2, g_diary_string2, entry->day, get_ttx(entry->month + 0x15), town_name);
 
@@ -182,15 +182,15 @@ Bit16u diary_print_entry(Bit16u line)
 				sprintf(g_dtp2, g_diary_string3, entry->day, get_ttx(entry->month + 0x15), town_name);
 			}
 		} else {
-			if (strlen(town_name) > 24) {
+			if ((signed short)strlen(town_name) > 24) {
 
 				sprintf(g_dtp2, g_diary_string4, town_name);
 
-			} else if (strlen(town_name) > 15) {
+			} else if ((signed short)strlen(town_name) > 15) {
 
 				sprintf(g_dtp2, g_diary_string5, town_name);
 
-			} else if (strlen(town_name) > 6) {
+			} else if ((signed short)strlen(town_name) > 6) {
 
 				sprintf(g_dtp2, g_diary_string6, town_name);
 
