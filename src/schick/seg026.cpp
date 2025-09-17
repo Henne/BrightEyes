@@ -106,8 +106,11 @@ void load_ltx(unsigned short index)
 	signed short fd;
 
 	fd = load_archive_file(index);
+
 	g_area_prepared = -1;
+
 	len = (signed short)read_archive_file(fd, ((Bit8u*)g_buffer9_ptr3) + 1000, 64000);
+
 	close(fd);
 
 	split_textbuffer((char**)g_buffer9_ptr3, (char*)(g_buffer9_ptr3 + 1000L), len);
@@ -118,14 +121,16 @@ void split_textbuffer(char **dst, char *src, Bit32u len)
 	Bit32u i = 0;
 
 	*dst = src;
-	dst += sizeof(char*);
+	dst++;
 
 	for (; i != len; src++, i++) {
+
 		/* continue if not the end of the string */
 		if (!(*src)) {
+
 			/* write the adress of the next string */
 			*dst = src + 1;
-			dst += sizeof(char*);
+			dst++;
 		}
 	}
 }
@@ -177,6 +182,7 @@ void prepare_sg_name(char *dst, char *src)
 	while (i < 8) {
 
 		if (!tmp_str[i]) {
+
 			while (i < 8) {
 				/* fill up with underscores */
 				tmp_str[i] = 0x5f;
@@ -324,9 +330,7 @@ signed short load_game_state(void)
 				prepare_chr_name(name, (char*)hero_i);
 
 				/* write file content to TEMP */
-				sprintf(g_text_output_buf,
-					g_str_temp_xx_ptr2,
-					name);
+				sprintf(g_text_output_buf, g_str_temp_xx_ptr2, name);
 
 				/* TODO: should be O_BINARY | O_WRONLY */
 				handle = _creat(g_text_output_buf, 0);
@@ -341,6 +345,7 @@ signed short load_game_state(void)
 					read_chr_temp(name, host_readbs(hero_i + HERO_GROUP_POS) - 1, host_readbs(hero_i + HERO_GROUP_NO));
 				}
 			}
+
 		} while (l3 != 0);
 
 		close(handle_gs);
@@ -372,9 +377,11 @@ signed short load_game_state(void)
 #endif
 
 		for (i = ARCHIVE_FILE_NPCS; i <= (ARCHIVE_FILE_NPCS+5); i++) {
+
 			load_npc(i);
 
 			if (host_readbs(get_hero(6) + HERO_GROUP_POS) != 7) {
+
 				memset(get_hero(6), 0, SIZEOF_HERO);
 			} else {
 				break;
@@ -521,9 +528,7 @@ signed short save_game_state(void)
 #ifndef M302de_FEATURE_MOD
 				/* Feature mod 4: In the original game, when creating a savegame while not being in a temple, the AP of all heroes is decrease by 1. This feature mod stops the AP decrease.
 				 * Here, the actual decrease is executed */
-				if (g_game_state != GAME_STATE_VICTORY &&
-					gs_current_loctype != LOCTYPE_TEMPLE &&
-					host_readds(get_hero(tw_bak) + HERO_AP) > 0)
+				if (g_game_state != GAME_STATE_VICTORY && gs_current_loctype != LOCTYPE_TEMPLE && host_readds(get_hero(tw_bak) + HERO_AP) > 0)
 				{
 					add_hero_ap(get_hero(tw_bak), -1L);
 				}
@@ -576,6 +581,7 @@ signed short save_game_state(void)
 
 		/* check if enough bytes were written */
 		if (status_len + 16 + 4L != filepos) {
+
 			GUI_output(get_ttx(348));
 			close(l_di);
 			return 0;
@@ -586,6 +592,7 @@ signed short save_game_state(void)
 		filepos += len;
 
 		if (len != 4 * 286) {
+
 			GUI_output(get_ttx(348));
 			close(l_di);
 			return 0;
@@ -643,6 +650,7 @@ signed short save_game_state(void)
 			len = write(l_di, g_renderbuf_ptr, SIZEOF_HERO);
 
 			if (len != SIZEOF_HERO) {
+
 				GUI_output(get_ttx(348));
 				close(l_di);
 				return 0;
@@ -697,6 +705,7 @@ signed short read_chr_temp(char *fname, signed short hero_pos, signed short a2)
 		host_writeb(hero + HERO_GROUP_NO, (signed char)a2);
 
 		if (host_readbs(hero + HERO_SEX) == 1) {
+
 			host_writeb(hero + HERO_SPRITE_NO, host_readbs(hero + HERO_TYPE) + 11);
 
 			if (host_readbs(hero + HERO_SPRITE_NO) > 21) {
@@ -742,9 +751,7 @@ void write_chr_temp(unsigned short hero_pos)
 
 	prepare_chr_name(fname, (char*)get_hero(hero_pos));
 
-	sprintf(g_text_output_buf,
-		g_str_temp_xx_ptr2,		/* "TEMP\\%s" */
-		fname);
+	sprintf(g_text_output_buf, g_str_temp_xx_ptr2, fname);
 
 	/* TODO: should be O_BINARY | O_WRONLY */
 	fd = _creat(g_text_output_buf, 0);
@@ -777,9 +784,7 @@ signed short copy_chr_names(Bit8u *ptr, signed short temple_id)
 
 		do {
 			/* create the CHR filename */
-			sprintf(g_text_output_buf,
-				g_str_temp_xx_ptr2,
-				((char*)(&blk)) + 30);
+			sprintf(g_text_output_buf, g_str_temp_xx_ptr2, ((char*)(&blk)) + 30);
 
 			/* read the CHR file from temp */
 			handle = open(g_text_output_buf, O_BINARY | O_RDWR);
