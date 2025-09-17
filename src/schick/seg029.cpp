@@ -117,6 +117,7 @@ void copy_forename(char *dst, char *name)
 	int i;
 
 	for (i = 0; i < 7; i++) {
+
 		if (name[i] == 0x20) {
 			dst[i] = 0;
 			break;
@@ -164,6 +165,7 @@ void draw_status_line(void)
 		}
 
 		wait_for_vsync();
+
 		update_mouse_cursor();
 
 		if (!host_readbs(get_hero(i) + HERO_TYPE)) {
@@ -270,15 +272,15 @@ void clear_hero_icon(unsigned short pos)
 //static
 void load_icon(Bit16u fileindex, Bit16s icon, Bit16s pos)
 {
-	Bit16u fd;
+	signed short handle;
 
-	fd = load_archive_file(fileindex);
+	handle = load_archive_file(fileindex);
 
-	seek_archive_file(fd, icon * 576L, 0);
+	seek_archive_file(handle, icon * 576L, 0);
 
-	read_archive_file(fd, g_buf_icon + pos * 576, 576);
+	read_archive_file(handle, g_buf_icon + pos * 576, 576);
 
-	close(fd);
+	close(handle);
 
 	/* set a real or blank icon */
 	g_loaded_menu_icons[pos] = (fileindex == ARCHIVE_FILE_ICONS ? icon : -1);
@@ -348,7 +350,9 @@ void draw_main_screen(void)
 void clear_loc_line(void)
 {
 	update_mouse_cursor();
+
 	do_fill_rect(g_vga_memstart, 3, 140, 316, 153, 0);
+
 	refresh_screen_size();
 }
 
