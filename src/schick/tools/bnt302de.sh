@@ -37,7 +37,7 @@ else
 		ndisasm -b16 -a -p intel ${TMP}/REWR_OVR.bin >${TMP}/REWR_OVR.dis
 
 		# compare them
-		diff -y -a ${TMP}/ORIG_CODE.dis ${TMP}/REWR_CODE.dis |less
+		diff -y -a ${TMP}/ORIG_OVR.dis ${TMP}/REWR_OVR.dis |less
 	fi
 
 	exit ${RETVAL}
