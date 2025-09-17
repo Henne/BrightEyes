@@ -169,7 +169,7 @@ static void scan_flen(const char *orig, const char *rewrite)
 }
 #endif
 
-static void disjoin_file(const char *name, const char *buffer, unsigned long len, unsigned long off_cs, unsigned long off_ds)
+static void disjoin_file(const char *name, const char *buffer, unsigned long len, unsigned long off_cs, unsigned long off_ds, unsigned long off_ovr)
 {
 	if ((buffer != NULL) && (off_cs < off_ds) && (off_ds < len)) {
 		FILE *fd;
@@ -191,12 +191,34 @@ static void disjoin_file(const char *name, const char *buffer, unsigned long len
 			fclose(fd);
 		}
 
-		// DATA
-		sprintf(fname, "%s_DATA.bin", name);
-		fd = fopen(fname, "w");
-		if (fd != NULL) {
-			fwrite(buffer + off_ds, 1, len - off_ds, fd);
-			fclose(fd);
+		if (off_ovr == 0) {
+			// No Overlay
+
+			// DATA
+			sprintf(fname, "%s_DATA.bin", name);
+			fd = fopen(fname, "w");
+			if (fd != NULL) {
+				fwrite(buffer + off_ds, 1, len - off_ds, fd);
+				fclose(fd);
+			}
+
+		} else {
+
+			// DATA
+			sprintf(fname, "%s_DATA.bin", name);
+			fd = fopen(fname, "w");
+			if (fd != NULL) {
+				fwrite(buffer + off_ds, 1, off_ovr - off_ds, fd);
+				fclose(fd);
+			}
+
+			// OVR
+			sprintf(fname, "%s_OVR.bin", name);
+			fd = fopen(fname, "w");
+			if (fd != NULL) {
+				fwrite(buffer + off_ovr, 1, len - off_ovr, fd);
+				fclose(fd);
+			}
 		}
 	}
 }
@@ -239,7 +261,7 @@ static void compare(const char *orig, unsigned long len_orig, const char* rewrit
 
 	start_cs[0] = 16 * readw(orig + 0x08);
 	start_cs[1] = 16 * readw(rewrite + 0x08);
-	fprintf(stdout, "Start CS:      orig = 0x%04x, rewrite = 0x%04x\n", start_cs[0], start_cs[1]);
+	fprintf(stdout, "Start CS:     orig = 0x%04x, rewrite = 0x%04x\n", start_cs[0], start_cs[1]);
 
 	if (readb(orig + start_cs[0]) == 0xba) {
 		DS[0] = readw(orig + start_cs[0] + 1);
@@ -281,9 +303,9 @@ static void compare(const char *orig, unsigned long len_orig, const char* rewrit
 		return;
 	}
 
-	fprintf(stdout, "Add DS:        orig = 0x%04x, rewrite = 0x%04x\n", DS[0], DS[1]);
-	fprintf(stdout, "DS:BSS:        orig = 0x%04x, rewrite = 0x%04x\n", BSS[0], BSS[1]);
-	fprintf(stdout, "DS_LEN:        orig = 0x%04x, rewrite = 0x%04x\n", DS_LEN[0], DS_LEN[1]);
+	fprintf(stdout, "Add DS:       orig = 0x%04x, rewrite = 0x%04x\n", DS[0], DS[1]);
+	fprintf(stdout, "DS:BSS:       orig = 0x%04x, rewrite = 0x%04x\n", BSS[0], BSS[1]);
+	fprintf(stdout, "DS_LEN:       orig = 0x%04x, rewrite = 0x%04x\n", DS_LEN[0], DS_LEN[1]);
 
 	start_ds[0] = (DS[0] << 4) + start_cs[0];
 	start_ds[1] = (DS[1] << 4) + start_cs[1];
@@ -298,10 +320,10 @@ static void compare(const char *orig, unsigned long len_orig, const char* rewrit
 		return;
 	}
 
-	fprintf(stdout, "Start DS:      orig = 0x%04x, rewrite = 0x%04x\n", start_ds[0], start_ds[1]);
+	fprintf(stdout, "Start DS:     orig = 0x%04x, rewrite = 0x%04x\n", start_ds[0], start_ds[1]);
 
 	int ratio = 10000 * (DS_LEN[1]) / (DS_LEN[0]);
-	fprintf(stdout, "Len   DS:      orig = 0x%04x, rewrite = 0x%04x ratio = %02d.%02d\n",
+	fprintf(stdout, "Len   DS:     orig = 0x%04x, rewrite = 0x%04x ratio = %02d.%02d\n",
 			DS_LEN[0], DS_LEN[1], ratio / 100, ratio % 100);
 
 	unsigned short max_len = (DS_LEN[0] < DS_LEN[1] ? DS_LEN[0] : DS_LEN[1]);
@@ -340,6 +362,36 @@ static void compare(const char *orig, unsigned long len_orig, const char* rewrit
 		fprintf(stdout, "_stklen:     orig = 0x%04x, rewrite = 0x%04x\n", stklen[0], stklen[1]);
 	}
 
+
+	/* detect Overlays */
+	const char ovr_sig[4] = {'F','B','O','V'};
+	unsigned long start_ovr[2] = {0, 0};
+
+	if (start_ds[0] + DS_LEN[0] < len_orig) {
+
+		long off = start_ds[0] + DS_LEN[0];
+		long end = len_orig - 4;
+
+		while ((off < end) && (start_ovr[0] == 0)) {
+			if (!memcmp(&orig[off], ovr_sig, 4)) start_ovr[0] = off;
+			off++;
+		}
+	}
+
+	if (start_ds[1] + DS_LEN[1] < len_rewrite) {
+
+		long off = start_ds[1] + DS_LEN[1];
+		long end = len_rewrite - 4;
+
+		while ((off < end) && (start_ovr[1] == 0)) {
+			if (!memcmp(&rewrite[off], ovr_sig, 4)) start_ovr[1] = off;
+			off++;
+		}
+	}
+	if (start_ovr[0] && start_ovr[1]) {
+		fprintf(stdout, "OVR:         orig = 0x%06lx, rewrite = 0x%06lx\n", start_ovr[0], start_ovr[1]);
+	}
+
 	/* compare initialized DATA only, BSS content is either 0 or not existent in the file */
 	if (BSS[0] == BSS[1]) {
 		/* Both areas have the same length, that's good */
@@ -354,6 +406,7 @@ static void compare(const char *orig, unsigned long len_orig, const char* rewrit
 				if (diff_offset == -1) diff_offset = i;
 			}
 		}
+
 		if (diffs == 0) {
 			fprintf(stdout, "DS:DATA: OK\n");
 			/* check EOF or 0's in orig */
@@ -372,8 +425,8 @@ static void compare(const char *orig, unsigned long len_orig, const char* rewrit
 		}
 	}
 
-	disjoin_file("ORIG", orig, len_orig, start_cs[0], start_ds[0]);
-	disjoin_file("REWR", rewrite, len_rewrite, start_cs[1], start_ds[1]);
+	disjoin_file("ORIG", orig, len_orig, start_cs[0], start_ds[0], start_ovr[0]);
+	disjoin_file("REWR", rewrite, len_rewrite, start_cs[1], start_ds[1], start_ovr[1]);
 
 #if 0
 	/* GEN V1.05de related */

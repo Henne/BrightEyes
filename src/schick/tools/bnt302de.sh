@@ -31,6 +31,13 @@ else
 
 		# compare them
 		diff -y -a ${TMP}/ORIG_CODE.dis ${TMP}/REWR_CODE.dis |less
+
+		# disassemble them
+		ndisasm -b16 -a -p intel ${TMP}/ORIG_OVR.bin >${TMP}/ORIG_OVR.dis
+		ndisasm -b16 -a -p intel ${TMP}/REWR_OVR.bin >${TMP}/REWR_OVR.dis
+
+		# compare them
+		diff -y -a ${TMP}/ORIG_CODE.dis ${TMP}/REWR_CODE.dis |less
 	fi
 
 	exit ${RETVAL}
