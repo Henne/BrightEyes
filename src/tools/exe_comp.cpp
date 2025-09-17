@@ -210,6 +210,9 @@ static void compare(const char *orig, unsigned long len_orig, const char* rewrit
 	unsigned long start_ds[2] = {0, 0};
 	unsigned short MAIN_SEG[2] = {0, 0};
 	unsigned short MAIN_OFF[2] = {0, 0};
+	unsigned short stklen_add[2] = {0, 0};
+	unsigned short stklen[2] = {0, 0};
+
 
 	unsigned long i;
 
@@ -236,7 +239,7 @@ static void compare(const char *orig, unsigned long len_orig, const char* rewrit
 
 	start_cs[0] = 16 * readw(orig + 0x08);
 	start_cs[1] = 16 * readw(rewrite + 0x08);
-	fprintf(stdout, "Start CS: orig = 0x%04x, rewrite = 0x%04x\n", start_cs[0], start_cs[1]);
+	fprintf(stdout, "Start CS:      orig = 0x%04x, rewrite = 0x%04x\n", start_cs[0], start_cs[1]);
 
 	if (readb(orig + start_cs[0]) == 0xba) {
 		DS[0] = readw(orig + start_cs[0] + 1);
@@ -278,9 +281,9 @@ static void compare(const char *orig, unsigned long len_orig, const char* rewrit
 		return;
 	}
 
-	fprintf(stdout, "Add DS:   orig = 0x%04x, rewrite = 0x%04x\n", DS[0], DS[1]);
-	fprintf(stdout, "DS:BSS:   orig = 0x%04x, rewrite = 0x%04x\n", BSS[0], BSS[1]);
-	fprintf(stdout, "DS_LEN:   orig = 0x%04x, rewrite = 0x%04x\n", DS_LEN[0], DS_LEN[1]);
+	fprintf(stdout, "Add DS:        orig = 0x%04x, rewrite = 0x%04x\n", DS[0], DS[1]);
+	fprintf(stdout, "DS:BSS:        orig = 0x%04x, rewrite = 0x%04x\n", BSS[0], BSS[1]);
+	fprintf(stdout, "DS_LEN:        orig = 0x%04x, rewrite = 0x%04x\n", DS_LEN[0], DS_LEN[1]);
 
 	start_ds[0] = (DS[0] << 4) + start_cs[0];
 	start_ds[1] = (DS[1] << 4) + start_cs[1];
@@ -295,10 +298,10 @@ static void compare(const char *orig, unsigned long len_orig, const char* rewrit
 		return;
 	}
 
-	fprintf(stdout, "Start DS: orig = 0x%04x, rewrite = 0x%04x\n", start_ds[0], start_ds[1]);
+	fprintf(stdout, "Start DS:      orig = 0x%04x, rewrite = 0x%04x\n", start_ds[0], start_ds[1]);
 
 	int ratio = 10000 * (DS_LEN[1]) / (DS_LEN[0]);
-	fprintf(stdout, "Len   DS: orig = 0x%04x, rewrite = 0x%04x ratio = %02d.%02d\n",
+	fprintf(stdout, "Len   DS:      orig = 0x%04x, rewrite = 0x%04x ratio = %02d.%02d\n",
 			DS_LEN[0], DS_LEN[1], ratio / 100, ratio % 100);
 
 	unsigned short max_len = (DS_LEN[0] < DS_LEN[1] ? DS_LEN[0] : DS_LEN[1]);
@@ -318,9 +321,24 @@ static void compare(const char *orig, unsigned long len_orig, const char* rewrit
 	} else {
 		fprintf(stderr, "ERROR: <Rewrite> failed to detect main() => proceed\n");
 	}
-	fprintf(stdout, "MAIN() : orig = 0x%04x:0x%04x rewrite = 0x%04x:0x%04x\n",
+	fprintf(stdout, "MAIN():      orig = 0x%04x:0x%04x rewrite = 0x%04x:0x%04x\n",
 			MAIN_SEG[0], MAIN_OFF[0], MAIN_SEG[1], MAIN_OFF[0]);
 
+	/* Determine stack length */
+	if (readb(orig + start_cs[0] + 0x62) == 0x26) {
+		stklen_add[0] = readw(orig + start_cs[0] + 0x65);
+		stklen[0] = readw(orig + start_ds[0] + stklen_add[0]);
+	}
+
+	if (readb(rewrite + start_cs[1] + 0x62) == 0x26) {
+		stklen_add[1] = readw(rewrite + start_cs[1] + 0x65);
+		stklen[1] = readw(rewrite + start_ds[1] + stklen_add[1]);
+	}
+
+	if (stklen[0] != 0 && stklen[1] != 0) {
+		fprintf(stdout, "Add _stklen: orig = 0x%04x, rewrite = 0x%04x\n", stklen_add[0], stklen_add[1]);
+		fprintf(stdout, "_stklen:     orig = 0x%04x, rewrite = 0x%04x\n", stklen[0], stklen[1]);
+	}
 
 	/* compare initialized DATA only, BSS content is either 0 or not existent in the file */
 	if (BSS[0] == BSS[1]) {
