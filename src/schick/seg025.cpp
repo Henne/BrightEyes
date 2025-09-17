@@ -202,8 +202,8 @@ void do_house(void)
 
 	} else {
 		gs_current_loctype = gs_current_loctype_bak;
-		gs_x_target = (gs_x_target_bak);
-		gs_y_target = (gs_y_target_bak);
+		gs_x_target = gs_x_target_bak;
+		gs_y_target = gs_y_target_bak;
 	}
 
 }
@@ -427,8 +427,8 @@ signed short game_options(void)
 
 	bak1 = g_textline_maxlen;
 	bak2 = g_textline_posx;
-	g_textline_maxlen = (200);
-	g_textline_posx = (70);
+	g_textline_maxlen = 200;
+	g_textline_posx = 70;
 
 	set_textcolor(4, 0);
 
@@ -449,6 +449,7 @@ signed short game_options(void)
 	memset((Bit8u*)g_buffer9_ptr, 0, 28000);
 
 	if (gs_current_town != TOWNS_NONE) {
+
 		/* if the party is in a town */
 		load_tx(ARCHIVE_FILE_MAPTEXT_LTX);
 
@@ -495,8 +496,8 @@ signed short game_options(void)
 
 	g_pic_copy.dst = g_vga_backbuffer = g_vga_memstart;
 
-	g_textline_posx = (bak2);
-	g_textline_maxlen = (bak1);
+	g_textline_posx = bak2;
+	g_textline_maxlen = bak1;
 	g_gui_buffer_unkn = (unsigned char*)g_buffer9_ptr;
 
 	do {
@@ -508,15 +509,9 @@ signed short game_options(void)
 
 			/* use the radio menu */
 			answer = GUI_radio(get_ttx(590), 9,
-						get_ttx(228),
-						get_ttx(229),
-						get_ttx(293),
-						get_ttx(608),
-						get_ttx(830),
-						get_ttx(828),
-						get_ttx(831),
-						get_ttx(588),
-						get_ttx(589)) - 1;
+						get_ttx(228), get_ttx(229), get_ttx(293),
+						get_ttx(608), get_ttx(830), get_ttx(828),
+						get_ttx(831), get_ttx(588), get_ttx(589)) - 1;
 
 			if (answer != -2) {
 				g_action = (answer + ACTION_ID_ICON_1);
@@ -527,6 +522,7 @@ signed short game_options(void)
 
 			do {
 				game_state = load_game_state();
+
 			} while (game_state == -1);
 
 			if (game_state != 0) {
@@ -555,6 +551,7 @@ signed short game_options(void)
 
 			diary_show();
 			done = 1;
+
 		} else if (g_action == ACTION_ID_ICON_6) {
 
 			sprintf(g_dtp2, get_ttx(827), g_delay_factor);
@@ -574,10 +571,11 @@ signed short game_options(void)
 			if (GUI_bool(get_ttx(299))) {
 
 				done = -1;
-				g_game_state = (GAME_STATE_QUIT);
+				g_game_state = GAME_STATE_QUIT;
 			}
 
 		} else if (g_action == ACTION_ID_ICON_9) {
+
 			done = 1;
 		}
 
@@ -726,11 +724,11 @@ void leave_location(void)
 	gs_current_loctype = gs_current_loctype_bak;
 
 	/* set target  coordinates*/
-	gs_x_target = (gs_x_target_bak);
-	gs_y_target = (gs_y_target_bak);
+	gs_x_target = gs_x_target_bak;
+	gs_y_target = gs_y_target_bak;
 
 	/* rotate party by 180 degrees */
-	gs_direction = ((gs_direction + 2) % 4);
+	gs_direction = (gs_direction + 2) % 4;
 
 	clear_menu_icons();
 
@@ -799,10 +797,8 @@ void tumult(void)
 
 	/* the guards or a mob */
 	sprintf(g_dtp2, get_ttx(765),
-		((gs_current_town == TOWNS_PREM ||
-			gs_current_town == TOWNS_PHEXCAER ||
-			gs_current_town == TOWNS_THORWAL ||
-			gs_current_town == TOWNS_OBERORKEN)
+		((gs_current_town == TOWNS_PREM || gs_current_town == TOWNS_PHEXCAER ||
+	  		gs_current_town == TOWNS_THORWAL || gs_current_town == TOWNS_OBERORKEN)
 				? get_ttx(766) : get_ttx(767)));
 
 	GUI_output(g_dtp2);
