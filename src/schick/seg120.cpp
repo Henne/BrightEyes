@@ -698,7 +698,7 @@ void cleanup_game(void)
 
 			if (g_memslots_wfig[l_si].figure && g_memslots_wfig[l_si].ems_handle)
 			{
-				EMS_free_pages(host_readw(g_memslots_wfig + 6 + l_si * 12));
+				EMS_free_pages(g_memslots_wfig[l_si].ems_handle);
 			}
 		}
 
