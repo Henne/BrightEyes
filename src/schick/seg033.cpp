@@ -110,7 +110,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 				sprintf(g_dtp2, get_tx(18), host_readbs(hero + HERO_BP_LEFT));
 
 				txt_tabpos_bak = g_txt_tabpos[0];
-				g_txt_tabpos[1] = g_basepos_x + 204;
+				g_txt_tabpos[0] = g_basepos_x + 204;
 
 				refresh_screen_size();
 
