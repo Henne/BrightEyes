@@ -69,8 +69,10 @@ signed int g_fig_dropped_weapons[30];	// ds:0xe31a
 void FIG_set_cb_field(signed short y, signed short x, signed short object)
 {
 	/* check that the object is in the borders */
-	if ((y >= 0) && (y <= 24) && (x >= 0) && (x <= 24)) {
-		g_chessboard[y * 25 + x] = ((signed char)object);
+	if (!((y >= 0) && (y <= 24) && (x >= 0) && (x <= 24)))
+	{
+	} else {
+		*(y * 25 + g_chessboard + x) = ((signed char)object);
 	}
 }
 
@@ -170,6 +172,7 @@ signed short FIG_choose_next_hero(void)
 
 	return retval;
 }
+
 /**
  * \brief   chooses the next enemy on turn
  *
@@ -538,7 +541,7 @@ void FIG_do_round(void)
 			}
 		}
 
-		if (!is_enemies_turn) {
+		if (((unsigned char)is_enemies_turn) == 0) {
 
 			/* heroes on turn */
 			actor_id = FIG_choose_next_hero();
@@ -612,6 +615,7 @@ void FIG_do_round(void)
 							}
 
 							/* TODO: seems that (hero->enemy_id) gives better results than (hero->enemy_id - 10) */
+							//if (g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].flags.dead)
 							if (g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID)].flags.dead)
 							{
 								/* attacked enemy is dead */
@@ -711,7 +715,9 @@ void FIG_do_round(void)
 								enemy->enemy_id -= 20;
 							}
 
-							if (g_enemy_sheets[enemy->enemy_id - 10].flags.dead) /* check 'dead' flag */
+							/* TODO: seems that (hero->enemy_id) gives better results than (hero->enemy_id - 10) */
+							//if (g_enemy_sheets[enemy->enemy_id - 10].flags.dead)
+							if (g_enemy_sheets[enemy->enemy_id].flags.dead) /* check 'dead' flag */
 							{
 
 								/* attacked enemy is dead */
@@ -798,8 +804,9 @@ void FIG_do_round(void)
 
 			nr_enemy_action_phases_left_in_round--;
 		}
-
+#if 0
 		nr_action_phases_left_in_turn--;
+#endif
 
 		if (g_fig_cb_marker_id != -1) {
 
