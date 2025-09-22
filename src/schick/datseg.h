@@ -497,6 +497,11 @@ struct skills_index {
 	Bit8s length;
 };
 
+struct climb_damage_range {
+	unsigned char lo;
+	unsigned char hi;
+};
+
 extern char g_fn_v302de_XXX[], g_fn_v302de_000[], g_fn_v302de_001[], g_fn_v302de_002[];
 extern char g_fn_v302de_003[], g_fn_v302de_004[], g_fn_v302de_005[], g_fn_v302de_006[];
 extern char g_fn_v302de_007[], g_fn_v302de_008[], g_fn_v302de_009[], g_fn_v302de_010[];
@@ -1689,7 +1694,7 @@ extern char g_empty_string12[1];			// ds:0xb13d; seg109
 extern struct struct_chest g_tevent014_corpse;		// ds:0xb13e; seg110
 extern struct struct_chest g_tevent064_chest_descr;	// ds:0xb154; seg111
 extern Bit8u g_tevent067_chest[10];			// ds:0xb16a; seg112
-extern unsigned char g_tevent135_climb_damage[5][2];	// ds:0xb174; seg116
+extern const struct climb_damage_range g_tevent135_climb_damage[5];	// ds:0xb174; seg116
 extern unsigned char g_random_encounter_index[59];	// ds:0xb17e; seg117
 extern const Bit8u g_random_encounter_descr[14][7];	// ds:0xb1b9; seg117
 extern signed int g_tlk_ruin_hero_counter;	// ds:0xb21b; seg117

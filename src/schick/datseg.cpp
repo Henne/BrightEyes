@@ -5952,7 +5952,7 @@ Bit8u g_tevent067_chest[10] = {
 	ITEM_BOLTS, 2,
 	0xff, 0
 }; // ds:0xb16a
-unsigned char g_tevent135_climb_damage[5][2] = { { 0x01, 0x05 }, { 0x04, 0x0d }, { 0x07, 0x15 }, { 0x0a, 0x20 }, { 0x0f, 0x28 } }; // ds:0xb174
+const struct climb_damage_range g_tevent135_climb_damage[5] = { { 1, 5 }, { 4, 13 }, { 7, 21 }, { 10, 32 }, { 15, 40 } }; // ds:0xb174
 
 /* REMARK: valid values for this array are in {0, ..., 6} */
 unsigned char g_random_encounter_index[59] = { 1, 1, 1, 1, 1, 1, 3, 0, 2, 3, 3, 4, 4, 4, 1, 1, 1, 3, 0, 3, 0, 5, 5, 5, 4, 4, 1, 1, 1, 3, 7, 4, 4, 1, 1, 4, 3, 4, 4, 4, 6, 4, 3, 1, 5, 5, 6, 7, 7, 7, 1, 1, 1, 1, 1, 7, 5, 7, 7 }; // ds:0xb17e
