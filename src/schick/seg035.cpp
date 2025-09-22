@@ -64,7 +64,7 @@ void FIG_tidy_monsters(void)
 
 					memset(&g_enemy_sheets[j + 1], 0, sizeof(struct enemy_sheet));
 
-					g_enemy_sheets[j].flags.dead = 1;
+					g_enemy_sheets[j + 1].flags.dead = 1;
 				}
 			}
 		} else {

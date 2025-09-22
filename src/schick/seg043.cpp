@@ -661,7 +661,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 							}
 						}
 
-						if ((monster->gfx_id != 0x12) && (monster->gfx_id != 7) && (monster->gfx_id > 0)) {
+						if ((monster->gfx_id != 0x12) && (monster->gfx_id != 7) && (monster->enemy_id > 0)) {
 
 							l12 = seg045_01a0(7, l11, monster_pos + 10, monster->enemy_id, monster->viewdir);
 						}

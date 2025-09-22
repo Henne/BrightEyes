@@ -347,8 +347,8 @@ void init_global_buffer(void)
 	g_text_ltx_buffer = (char*)(((HugePt)g_renderbuf_ptr) + 65000L);
 
 	g_text_ltx_index = (char**)(((HugePt)g_text_ltx_buffer) + 30500L);
-	g_tx_index = g_text_ltx_index + 3360;
-	g_tx2_index = g_text_ltx_index + 3960;
+	g_tx_index = &g_text_ltx_index[840];
+	g_tx2_index = &g_text_ltx_index[990];
 
 	g_objects_nvf_buf = (((HugePt)g_text_ltx_index) + 4760L);
 	g_dtp2 = (char*)(((HugePt)g_objects_nvf_buf) + 3400L);

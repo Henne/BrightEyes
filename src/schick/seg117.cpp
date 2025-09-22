@@ -801,7 +801,7 @@ void TLK_way_to_ruin(signed short state)
 	} else if (state == 19) {
 		timewarp(MINUTES(20));
 		gs_ruin_hero = get_hero(get_random_hero());
-		g_dialog_next_state = (test_skill(gs_ruin_hero, TA_AEXTE, 2) > 0 ? 20 : 21);
+		g_dialog_next_state = (test_attrib(gs_ruin_hero, ATTRIB_GE, 2) > 0 ? 20 : 21);
 	} else if (state == 20) {
 		loose_random_item(get_hero(get_random_hero()), 5, get_ttx(506));
 	} else if (state == 21) {

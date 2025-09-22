@@ -241,8 +241,8 @@ struct location {
 };
 
 struct struct_msg {
-	signed int id;
 	signed int type;
+	signed int id;
 };
 
 struct statuspage_line {
@@ -427,9 +427,9 @@ struct ship {
  * the other values are constants. */
 struct sea_route {
 
-	signed char town1;	/* one byte readonly */
+	unsigned char town1;	/* one byte readonly */
 				/* ID of the first town of the connection. Note that the routes are undirected; i.e. both endpoint towns are treated equal. */
-	signed char town2;	/* one byte readonly */ /* ID of the second town of the connection */
+	unsigned char town2;	/* one byte readonly */ /* ID of the second town of the connection */
 	unsigned char distance; /* one byte readonly */ /* TODO: But should be 2 Byte for Prem <-> Manrin to avoid an integer overflow */
 	signed char frequency;/* one byte readonly */ /* the higher this value, the rarer a passage on the route is offered */
 	signed char passage_timer;	/* one byte rw */ /* after how many days will a ship do a passage on this route? */
