@@ -8,7 +8,7 @@ TMP=TEMP
 
 mkdir -p ${TMP}
 
-# build a new GEN.EXE in temp
+# build a new BINARY in temp
 ./tools/build.sh
 
 # extract the parts of the original and the rewrite
@@ -20,10 +20,12 @@ if [ $? -lt 0 ]; then
 else
 	mv *.bin ${TMP}/
 	RETVAL=$(cmp -l ${TMP}/ORIG_CODE.bin ${TMP}/REWR_CODE.bin |wc -l)
-	echo "Differing Bytes in code = ${RETVAL}"
+	RETVAL_OVR=$(cmp -l ${TMP}/ORIG_OVR.bin ${TMP}/REWR_OVR.bin |wc -l)
+	echo "Differing Bytes in CODE = ${RETVAL}"
+	echo "Differing Bytes in OVR = ${RETVAL_OVR}"
 
 	if [ $RETVAL -gt 0 ]; then
-		read -r -p "PRESS KEY"
+		read -r -p "PRESS KEY TO SEE CODE DIFF"
 
 		# disassemble them
 		ndisasm -b16 -a -p intel ${TMP}/ORIG_CODE.bin >${TMP}/ORIG_CODE.dis
@@ -31,7 +33,10 @@ else
 
 		# compare them
 		diff -y -a ${TMP}/ORIG_CODE.dis ${TMP}/REWR_CODE.dis |less
+	fi
 
+	if [ $RETVAL_OVR -gt 0 ]; then
+		read -r -p "PRESS KEY TO SEE OVERLAY CODE DIFF"
 		# disassemble them
 		ndisasm -b16 -a -p intel ${TMP}/ORIG_OVR.bin >${TMP}/ORIG_OVR.dis
 		ndisasm -b16 -a -p intel ${TMP}/REWR_OVR.bin >${TMP}/REWR_OVR.dis
