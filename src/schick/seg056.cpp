@@ -44,14 +44,11 @@ int shop_compar(const void *p1_in, const void *p2_in)
 {
 	Bit32s v1;
 	Bit32s v2;
-	Bit8u *p1;
-	Bit8u *p2;
+	const struct shop_item *p1 = (const struct shop_item*)p1_in;
+	const struct shop_item *p2 = (const struct shop_item*)p2_in;
 
-	p1 = (Bit8u*)p1_in;
-	p2 = (Bit8u*)p2_in;
-
-	v1 = host_readws(p1 + 2) * host_readws(p1 + 4);
-	v2 = host_readws(p2 + 2) * host_readws(p2 + 4);
+	v1 = p1->shop_price * p1->price_unit;
+	v2 = p2->shop_price * p2->price_unit;
 
 	return v1 < v2 ? -1 : (v1 == v2 ? 0 : 1);
 }
