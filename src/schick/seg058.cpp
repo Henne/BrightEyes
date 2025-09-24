@@ -161,8 +161,8 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 
 			GUI_output(g_dtp2);
 
-			gs_smith_repairitems[smith_id].item_id = 0;
 			gs_smith_repairitems[smith_id].pickup_time = 0;
+			gs_smith_repairitems[smith_id].item_id = 0;
 		}
 	} else {
 
