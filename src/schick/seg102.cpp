@@ -157,7 +157,7 @@ signed short MON_test_attrib3(struct enemy_sheet *monster, signed short attrib1,
 
 	randval = dice_roll(3, 20, handicap);
 
-	attr_sum = monster->attrib[2 * attrib1] + monster->attrib[2 * attrib2] + monster->attrib[2 * attrib3];
+	attr_sum = monster->attrib[2 * attrib1 + 1] + monster->attrib[2 * attrib2 + 1] + monster->attrib[2 * attrib3 + 1];
 
 	return attr_sum - randval + 1;
 #else
@@ -171,9 +171,9 @@ signed short MON_test_attrib3(struct enemy_sheet *monster, signed short attrib1,
 	signed short fail = 0;
 	signed char attrib [3];
 
-	attrib[0] = monster->attrib[2 * attrib1];
-	attrib[1] = monster->attrib[2 * attrib2];
-	attrib[2] = monster->attrib[2 * attrib3];
+	attrib[0] = monster->attrib[2 * attrib1 + 1];
+	attrib[1] = monster->attrib[2 * attrib2 + 1];
+	attrib[2] = monster->attrib[2 * attrib3 + 1];
 
 #if !defined(__BORLANDC__)
 	D1_INFO(" (%s %d/%s %d/%s %d) ->",
@@ -267,7 +267,7 @@ signed short MON_test_skill(struct enemy_sheet *monster, signed short mspell_id,
 	if (desc->vs_mr) {
 
 		/* add MR */
-		handicap += (monster->enemy_id >= 10 ?	g_enemy_sheets[monster->enemy_id].mr : host_readbs(get_hero(monster->enemy_id - 1) + HERO_MR));
+		handicap += (monster->enemy_id >= 10 ?	g_enemy_sheets[monster->enemy_id - 10].mr : host_readbs(get_hero(monster->enemy_id - 1) + HERO_MR));
 	}
 
 	/* check if the monster spell has a valid ID */
