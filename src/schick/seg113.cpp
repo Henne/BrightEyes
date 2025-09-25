@@ -422,7 +422,7 @@ void hero_disappear(Bit8u *hero, unsigned short pos, signed short temple_id)
 		save_npc(ARCHIVE_FILE_NPCS + host_readbs(get_hero(6) + HERO_NPC_ID));
 
 		/* reset NPC timer */
-		gs_npc_timers[host_readbs(get_hero(6) + HERO_NPC_ID)] = -1;
+		gs_npc_timers[host_readbs(get_hero(6) + HERO_NPC_ID) + 1] = -1;
 	} else {
 		/* Regular Hero */
 		write_chr_temp(pos);
