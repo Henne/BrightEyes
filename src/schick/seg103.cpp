@@ -69,7 +69,7 @@ signed short LVL_select_skill(Bit8u *hero, signed short show_values)
 
 		if (show_values != 0) {
 
-			for (i = 0; g_skills_index[answer].first > i; i++) {
+			for (i = 0; g_skills_index[answer].length > i; i++) {
 
 				sprintf(g_dtp2 + 50 * i, format_str.a, get_ttx(l1 + i + 48), host_readbs(hero + l1 + i + HERO_TALENTS));
 
