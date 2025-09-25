@@ -33,7 +33,7 @@
 namespace M302de {
 #endif
 
-static unsigned char *g_saved_files_buf;	// ds:0xe2d2
+static Bit32u *g_saved_files_buf;		// ds:0xe2d2
 time_t g_last_save_time;			// ds:0xe2d6
 char g_savegame_names[5][9];			// ds:0xe2da
 
@@ -272,8 +272,8 @@ signed short load_game_state(void)
 #endif
 
 		/* init */
-		g_saved_files_buf = g_dtp2;
-		memset(g_saved_files_buf, 0, 286 * 4);
+		g_saved_files_buf = (Bit32u*)g_dtp2;
+		memset(g_saved_files_buf, 0, 286 * sizeof(Bit32u));
 
 		/* read version info */
 		_read(handle_gs, (Bit8u*)g_text_output_buf, 12);
@@ -295,12 +295,12 @@ signed short load_game_state(void)
 		g_special_screen = 1;
 
 		/* read file table */
-		_read(handle_gs, g_saved_files_buf, 286 * 4);
+		_read(handle_gs, g_saved_files_buf, 286 * sizeof(Bit32u));
 
 		/* create for each saved file in gam a file in TEMP */
 		for (i = 0; i < 286; i++) {
 
-			if (host_readd(g_saved_files_buf + 4 * i)) {
+			if (g_saved_files_buf[i]) {
 
 				/* write file content to TEMP */
 				sprintf(g_text_output_buf, g_str_temp_xx_ptr2, g_fnames_v302de[i]);
@@ -308,8 +308,8 @@ signed short load_game_state(void)
 				/* TODO: should be O_BINARY | O_WRONLY */
 				handle = _creat(g_text_output_buf, 0);
 
-				_read(handle_gs, g_renderbuf_ptr, (unsigned short)host_readd(g_saved_files_buf + 4 * i));
-				write(handle,   g_renderbuf_ptr, (unsigned short)host_readd(g_saved_files_buf + 4 * i));
+				_read(handle_gs, g_renderbuf_ptr, (unsigned short)g_saved_files_buf[i]);
+				write(handle, g_renderbuf_ptr, (unsigned short)g_saved_files_buf[i]);
 				close(handle);
 			}
 		}
@@ -479,8 +479,8 @@ signed short save_game_state(void)
 
 	g_textbox_width = tw_bak;
 
-	g_saved_files_buf = g_dtp2;
-	memset(g_saved_files_buf, 0, 4 * 286);
+	g_saved_files_buf = (Bit32u*)g_dtp2;
+	memset(g_saved_files_buf, 0, 286 * sizeof(Bit32u));
 
 	if (slot != -2 && slot != 5) {
 
@@ -588,7 +588,7 @@ signed short save_game_state(void)
 		}
 
 		filepos2 = filepos;
-		len = (Bit16u)write(l_di, g_saved_files_buf, 4 * 286);
+		len = (Bit16u)write(l_di, g_saved_files_buf, 286 * sizeof(Bit32u));
 		filepos += len;
 
 		if (len != 4 * 286) {
@@ -609,14 +609,14 @@ signed short save_game_state(void)
 			if (l1 == 0) {
 
 				handle = load_archive_file(tw_bak + 0x8000);
-				host_writed(g_saved_files_buf + 4 * tw_bak, get_readlength2(handle));
-				_read(handle, g_renderbuf_ptr, (unsigned short)host_readd(g_saved_files_buf + 4 * tw_bak));
+				g_saved_files_buf[tw_bak] = get_readlength2(handle);
+				_read(handle, g_renderbuf_ptr, (unsigned short)g_saved_files_buf[tw_bak]);
 				close(handle);
 
-				len = (Bit16u)write(l_di, g_renderbuf_ptr, (unsigned short)host_readd(g_saved_files_buf + 4 * tw_bak));
+				len = (Bit16u)write(l_di, g_renderbuf_ptr, (unsigned short)g_saved_files_buf[tw_bak]);
 				filepos += len;
 
-				if ((Bit16u)host_readd(g_saved_files_buf + 4 * tw_bak) != len) {
+				if ((Bit16u)g_saved_files_buf[tw_bak] != len) {
 					GUI_output(get_ttx(348));
 					close(l_di);
 					return 0;
@@ -630,7 +630,7 @@ signed short save_game_state(void)
 
 		/* write the file table */
 		lseek(l_di, filepos2, 0);
-		write(l_di, g_saved_files_buf, 4 * 286);
+		write(l_di, g_saved_files_buf, 286 * sizeof(Bit32u));
 
 		/* append all CHR files */
 		lseek(l_di, filepos, 0);
