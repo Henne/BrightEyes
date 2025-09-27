@@ -45,7 +45,7 @@ void spell_beherrschung(void)
 	} else {
 		if (get_spelltarget() == get_spelluser()) {
 			strcpy(g_dtp2, get_tx(0));
-			g_spell_special_aecost = (0);
+			g_spell_special_aecost = 0;
 		} else {
 			g_spell_special_aecost = (random_interval(2, 5) * 4);
 
@@ -517,7 +517,7 @@ void spell_skelettarius(void)
 		sprintf(g_dtp2,	get_tx(15), (Bit8u*)GUI_names_grammar((signed short)0x8000, g_spelltarget_e->mon_id, 1));
 
 		/* set ae costs */
-		g_spell_special_aecost = (0);
+		g_spell_special_aecost = 0;
 	} else {
 
 		/* prepare message */
@@ -754,7 +754,7 @@ void spell_balsam(void)
 	/* Set pointer to hero target */
 	g_spelltarget = get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
 
-	g_spell_special_aecost = (0);
+	g_spell_special_aecost = 0;
 
 	if ((g_autofight != 0) ||
 		((host_readbs(get_spelluser() + HERO_NPC_ID) != 0) && g_in_fight))
@@ -809,7 +809,7 @@ void spell_hexenspeichel(void)
 	g_spelltarget = get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
 
 	/* set costs to 0 */
-	g_spell_special_aecost = (0);
+	g_spell_special_aecost = 0;
 
 	if (get_spelltarget() == get_spelluser()) {
 		/* spell cannot be used to heal yourself */
@@ -857,7 +857,7 @@ void spell_klarum_purum(void)
 
 		/* prepare message */
 		sprintf(g_dtp2, get_tx(21), (char*)get_spelltarget() + HERO_NAME2);
-		g_spell_special_aecost = (0);
+		g_spell_special_aecost = 0;
 		return;
 	}
 
@@ -898,7 +898,7 @@ void spell_tiere_heilen(void)
 	signed short ae;
 
 	/* set AE costs to 0 */
-	g_spell_special_aecost = (0);
+	g_spell_special_aecost = 0;
 
 	/* prepare message */
 	sprintf(g_dtp2, get_tx(23), (char*)get_spelluser() + HERO_NAME2);

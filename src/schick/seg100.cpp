@@ -323,7 +323,7 @@ void spell_blitz(void)
 
 		if (get_spelltarget() == get_spelluser()) {
 
-			g_spell_special_aecost = (0);
+			g_spell_special_aecost = 0;
 
 			strcpy(g_dtp2, get_tx(112));
 		} else {
@@ -372,10 +372,10 @@ void spell_ecliptifactus(void)
 			/* prepare the message */
 			sprintf(g_dtp2, get_ttx(607), (char*)get_spelluser() + HERO_NAME2);
 			/* set costs to 0 */
-			g_spell_special_aecost = (0);
+			g_spell_special_aecost = 0;
 		}
 	} else {
-		g_spell_special_aecost = (-2);
+		g_spell_special_aecost = -2;
 	}
 }
 
@@ -391,7 +391,7 @@ void spell_eisenrost(void)
 
 		if (get_spelltarget() == get_spelluser()) {
 
-			g_spell_special_aecost = (0);
+			g_spell_special_aecost = 0;
 
 			strcpy(g_dtp2, get_tx(112));
 		} else {
@@ -455,7 +455,7 @@ void spell_fulminictus(void)
 		/* do not attack yourself */
 
 		/* set costs to 0 */
-		g_spell_special_aecost = (0);
+		g_spell_special_aecost = 0;
 
 		/* prepare message */
 		strcpy(g_dtp2, get_tx(112));
@@ -495,7 +495,7 @@ void spell_ignifaxius(void)
 		if (get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1) == get_spelluser()) {
 
 			/* don't attack yourself */
-			g_spell_special_aecost = (0);
+			g_spell_special_aecost = 0;
 
 			/* prepare message */
 			strcpy(g_dtp2, get_tx(112));
@@ -516,7 +516,7 @@ void spell_ignifaxius(void)
 			/* abort */
 			/* terminate string */
 			*g_dtp2 = '\0';
-			g_spell_special_aecost = (0);
+			g_spell_special_aecost = 0;
 			return;
 		}
 
@@ -630,7 +630,7 @@ void spell_plumbumbarum(void)
 		if (get_spelltarget() == get_spelluser()) {
 
 			/* don't attack yourself */
-			g_spell_special_aecost = (0);
+			g_spell_special_aecost = 0;
 
 			/* prepare message */
 			strcpy(g_dtp2, get_tx(112));

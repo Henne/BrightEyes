@@ -406,27 +406,27 @@ void seg066_06c1(void)
 	signed short bi;
 
 	if ((bi = get_border_index(g_visual_field_vals[3])) >= 2 && bi <= 5) {
-		g_visual_field_vals[3] = (0);
+		g_visual_field_vals[3] = 0;
 	}
 
 	if ((bi = get_border_index(g_visual_field_vals[7])) >= 2 && bi <= 5) {
-		g_visual_field_vals[7] = (0);
+		g_visual_field_vals[7] = 0;
 	}
 
 	if ((bi = get_border_index(g_visual_field_vals[8])) >= 2 && bi <= 5) {
-		g_visual_field_vals[8] = (0);
+		g_visual_field_vals[8] = 0;
 	}
 
 	if ((bi = get_border_index(g_visual_field_vals[14])) >= 2 && bi <= 5) {
-		g_visual_field_vals[14] = (0);
+		g_visual_field_vals[14] = 0;
 	}
 
 	if ((bi = get_border_index(g_visual_field_vals[15])) >= 2 && bi <= 5) {
-		g_visual_field_vals[15] = (0);
+		g_visual_field_vals[15] = 0;
 	}
 
 	if ((bi = get_border_index(g_visual_field_vals[21])) >= 2 && bi <= 5) {
-		g_visual_field_vals[21] = (0);
+		g_visual_field_vals[21] = 0;
 	}
 
 	if ((bi = get_border_index(g_visual_field_vals[0])) >= 2 && bi <= 5) {

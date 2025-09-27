@@ -979,9 +979,9 @@ void KI_hero(Bit8u *hero, signed short hero_pos, signed short x, signed short y)
 						if (!hero_tied(hero)) {
 
 							if (!hero_renegade(hero)) {
-								l4  = FIG_find_path_to_target(hero, hero_pos, x, y, 3);
+								l4 = FIG_find_path_to_target(hero, hero_pos, x, y, 3);
 							} else {
-								l4  = FIG_find_path_to_target(hero, hero_pos, x, y, 1);
+								l4 = FIG_find_path_to_target(hero, hero_pos, x, y, 1);
 							}
 
 							if (l4 != -1) {

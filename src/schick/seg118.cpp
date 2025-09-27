@@ -588,11 +588,11 @@ void tevent_145(void)
 
 		if (answer == 1)
 		{
-			gs_trv_destination = (TOWNS_KRAVIK);
+			gs_trv_destination = TOWNS_KRAVIK;
 			gs_current_town = TOWNS_SKELELLEN;
 
 		} else {
-			gs_trv_destination = (TOWNS_SKELELLEN);
+			gs_trv_destination = TOWNS_SKELELLEN;
 			gs_current_town = TOWNS_KRAVIK;
 		}
 
@@ -605,11 +605,11 @@ void tevent_145(void)
 
 		if (answer == 1) {
 
-			gs_trv_destination = (TOWNS_PEILINEN);
+			gs_trv_destination = TOWNS_PEILINEN;
 			gs_current_town = TOWNS_ROVAMUND;
 
 		} else {
-			gs_trv_destination = (TOWNS_ROVAMUND);
+			gs_trv_destination = TOWNS_ROVAMUND;
 			gs_current_town = TOWNS_PEILINEN;
 		}
 	}

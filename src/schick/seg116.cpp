@@ -106,6 +106,7 @@ void tevent_131(void)
 
 			do {
 				answer = GUI_radio(get_tx2(32), 2, get_tx2(33),	get_tx2(34));
+
 			} while (answer == -1);
 
 			if (answer == 1) {
@@ -127,9 +128,9 @@ void tevent_132(void)
 		if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 1) > 0 && !gs_tevent132_herb_flag) || gs_tevent132_herb_flag) {
 
 			gs_tevent132_herb_flag = 1;
-			g_gather_herbs_special = (61);
+			g_gather_herbs_special = 61;
 			TRV_found_camp_place(2);
-			g_gather_herbs_special = (-1);
+			g_gather_herbs_special = -1;
 		} else {
 			TRV_found_camp_place(0);
 		}
@@ -193,9 +194,9 @@ void tevent_134(void)
 	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 6) > 0 && !gs_tevent134_flag) ||
 		gs_tevent134_flag)
 	{
-		g_gather_herbs_special = (157);
+		g_gather_herbs_special = 157;
 		TRV_found_herb_place(0);
-		g_gather_herbs_special = (-1);
+		g_gather_herbs_special = -1;
 		gs_tevent134_flag = 1;
 	}
 }
@@ -286,8 +287,8 @@ void tevent_135(void)
 								}
 
 								sprintf(g_dtp2 + 0x400, get_tx2(58),
-									(char*)hero + HERO_NAME2, (GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
-								GUI_dialog_na(0, (char*)((char*)(g_dtp2 + 0x400)));
+									(char*)hero + HERO_NAME2, GUI_get_ptr(host_readbs(hero + HERO_SEX), 2));
+								GUI_dialog_na(0, (char*)(g_dtp2 + 0x400));
 
 								tmp = 0;
 								done = 1;
@@ -459,9 +460,9 @@ void tevent_140(void)
 		if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 && !gs_tevent140_herb_flag) || gs_tevent140_herb_flag) {
 
 			gs_tevent140_herb_flag = 1;
-			g_gather_herbs_special = (-126);
+			g_gather_herbs_special = -126;
 			TRV_found_camp_place(2);
-			g_gather_herbs_special = (-1);
+			g_gather_herbs_special = -1;
 		} else {
 			TRV_found_camp_place(0);
 		}

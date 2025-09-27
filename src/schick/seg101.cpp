@@ -108,7 +108,7 @@ void spell_armatrutz(void)
 	} else {
 		/* spell canceled */
 		/* set AE to 0 */
-		g_spell_special_aecost = (0);
+		g_spell_special_aecost = 0;
 		/* avoid the textbox output */
 		*g_dtp2 = '\0';
 	}
@@ -129,7 +129,7 @@ void spell_inc_ch(void)
 	if (get_spelltarget() == get_spelluser()) {
 
 		/* set AP costs to 0 */
-		g_spell_special_aecost = (0);
+		g_spell_special_aecost = 0;
 
 		/* copy message text */
 		strcpy(g_dtp2,
@@ -182,7 +182,7 @@ void spell_feuerbann(void)
 			(char*)get_spelluser() + HERO_NAME2);
 	} else {
 		/* set AP costs to 0 */
-		g_spell_special_aecost = (0);
+		g_spell_special_aecost = 0;
 	}
 }
 
@@ -201,7 +201,7 @@ void spell_inc_ff(void)
 	if (get_spelltarget() == get_spelluser()) {
 
 		/* set AP costs to 0 */
-		g_spell_special_aecost = (0);
+		g_spell_special_aecost = 0;
 
 		/* copy message text */
 		strcpy(g_dtp2,
@@ -247,7 +247,7 @@ void spell_inc_ge(void)
 	if (get_spelltarget() == get_spelluser()) {
 
 		/* set AP costs to 0 */
-		g_spell_special_aecost = (0);
+		g_spell_special_aecost = 0;
 
 		/* copy message text */
 		strcpy(g_dtp2,
@@ -293,7 +293,7 @@ void spell_inc_in(void)
 	if (get_spelltarget() == get_spelluser()) {
 
 		/* set AP costs to 0 */
-		g_spell_special_aecost = (0);
+		g_spell_special_aecost = 0;
 
 		/* copy message text */
 		strcpy(g_dtp2,
@@ -339,7 +339,7 @@ void spell_inc_kk(void)
 	if (get_spelltarget() == get_spelluser()) {
 
 		/* set AP costs to 0 */
-		g_spell_special_aecost = (0);
+		g_spell_special_aecost = 0;
 
 		/* copy message text */
 		strcpy(g_dtp2,
@@ -385,7 +385,7 @@ void spell_inc_kl(void)
 	if (get_spelltarget() == get_spelluser()) {
 
 		/* set AP costs to 0 */
-		g_spell_special_aecost = (0);
+		g_spell_special_aecost = 0;
 
 		/* copy message text */
 		strcpy(g_dtp2,
@@ -431,7 +431,7 @@ void spell_inc_mu(void)
 	if (get_spelltarget() == get_spelluser()) {
 
 		/* set AP costs to 0 */
-		g_spell_special_aecost = (0);
+		g_spell_special_aecost = 0;
 
 		/* copy message text */
 		strcpy(g_dtp2,
@@ -495,7 +495,7 @@ void spell_paralue(void)
 			if (get_spelltarget() == get_spelluser()) {
 
 				/* never cast yourself */
-				g_spell_special_aecost = (0);
+				g_spell_special_aecost = 0;
 
 				strcpy(g_dtp2, get_tx(112));
 			} else {
@@ -506,7 +506,7 @@ void spell_paralue(void)
 			}
 		} else {
 			/* set AE to 0 */
-			g_spell_special_aecost = (0);
+			g_spell_special_aecost = 0;
 		}
 	}
 }
@@ -545,7 +545,7 @@ void spell_salander(void)
 		sprintf(g_dtp2, get_ttx(607), (char*)(get_spelluser() + HERO_NAME2));
 
 		/* no AE cost */
-		g_spell_special_aecost = (0);
+		g_spell_special_aecost = 0;
 	}
 }
 
@@ -575,7 +575,7 @@ void spell_visibili(void)
 	if ((rounds <= 0) || (host_readb(get_spelluser() + HERO_INVISIBLE) != 0)) {
 
 		/* set AE to 0 */
-		g_spell_special_aecost = (0);
+		g_spell_special_aecost = 0;
 		/* clear output string */
 		*g_dtp2 = '\0';
 
@@ -595,7 +595,7 @@ void spell_visibili(void)
 	} else {
 		sprintf(g_dtp2,	get_ttx(607), (char*)get_spelluser() + HERO_NAME2);
 
-		g_spell_special_aecost = (0);
+		g_spell_special_aecost = 0;
 	}
 
 }
@@ -632,7 +632,7 @@ void spell_brenne(void)
 	torch_pos = -1;
 	lantern_pos = -1;
 
-	g_spell_special_aecost = (0);
+	g_spell_special_aecost = 0;
 
 	if (g_light_type == LIGHTING_TORCH) {
 		torch_pos = get_item_pos(get_spelluser(), ITEM_TORCH_OFF);
@@ -776,6 +776,7 @@ void spell_silentium(void)
 	hero = get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+
 		if ((host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
 			/* check group */
 			(host_readb(hero + HERO_GROUP_NO) == gs_current_group) &&
@@ -790,11 +791,10 @@ void spell_silentium(void)
 	}
 
 	/* set AP cost */
-	g_spell_special_aecost = (5);
+	g_spell_special_aecost = 5;
 
 	/* copy message text */
-	strcpy(g_dtp2,
-		get_tx(111));
+	strcpy(g_dtp2, get_tx(111));
 }
 
 void spell_sturmgebr(void)

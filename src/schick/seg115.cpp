@@ -182,10 +182,10 @@ void tevent_091(void)
 	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 5) > 0 && !gs_tevent091_flag) ||
 		gs_tevent091_flag != 0)
 	{
-		g_gather_herbs_special = (122);
+		g_gather_herbs_special = 122;
 		TRV_found_herb_place(0);
-		g_gather_herbs_special = (-1);
-		gs_tevent091_flag = (1);
+		g_gather_herbs_special = -1;
+		gs_tevent091_flag = 1;
 	}
 }
 
@@ -195,7 +195,7 @@ void tevent_093(void)
 		gs_tevent093_flag != 0)
 	{
 		TRV_found_camp_place(0);
-		gs_tevent093_flag = (1);
+		gs_tevent093_flag = 1;
 	}
 }
 
@@ -219,7 +219,7 @@ void tevent_094(void)
 
 		if (answer == 1) {
 			/* enter Daspota dungeon */
-			gs_travel_detour = (DUNGEONS_DASPOTASCHATZ);
+			gs_travel_detour = DUNGEONS_DASPOTASCHATZ;
 		}
 	}
 }
@@ -254,9 +254,7 @@ void tevent_095(void)
 				{
 					timewarp(MINUTES(30));
 
-					sprintf(g_dtp2,
-						get_tx2(8),
-						(char*)hero + HERO_NAME2);
+					sprintf(g_dtp2,	get_tx2(8), (char*)hero + HERO_NAME2);
 
 					GUI_output(g_dtp2);
 
@@ -275,9 +273,8 @@ void tevent_095(void)
 		{
 			/* all heroes failed HA-test */
 			do {
-				counter_failed = GUI_radio(get_tx2(9), 2,
-								get_tx2(10),
-								get_tx2(11));
+				counter_failed = GUI_radio(get_tx2(9), 2, get_tx2(10), get_tx2(11));
+
 			} while (counter_failed == -1);
 
 			if (counter_failed == 2)
@@ -289,7 +286,7 @@ void tevent_095(void)
 
 				TRV_load_textfile(-1);
 			} else {
-				gs_trv_return = (done = 1);
+				gs_trv_return = done = 1;
 			}
 		} else {
 			/* at least one hero failed HA-test */
@@ -381,9 +378,8 @@ void tevent_096(void)
 	signed short answer;
 
 	do {
-		answer = GUI_radio(get_tx2(17), 2,
-					get_tx2(18),
-					get_tx2(19));
+		answer = GUI_radio(get_tx2(17), 2, get_tx2(18),	get_tx2(19));
+
 	} while (answer == -1);
 
 	if (answer == 1)
@@ -452,22 +448,20 @@ void tevent_126(void)
 	signed short answer;
 
 	do {
-		answer = GUI_radio(get_tx2(0), 2,
-					get_tx2(1),
-					get_tx2(2));
+		answer = GUI_radio(get_tx2(0), 2, get_tx2(1), get_tx2(2));
+
 	} while (answer == -1);
 
 	if (answer == 1)
 	{
 		do {
-			answer = GUI_radio(get_tx2(3), 2,
-						get_tx2(4),
-						get_tx2(5));
+			answer = GUI_radio(get_tx2(3), 2, get_tx2(4), get_tx2(5));
+
 		} while (answer == -1);
 
 		if (answer == 1)
 		{
-			gs_travel_detour = (DUNGEONS_KULTSTAETTE_DES_NAMENLOSEN);
+			gs_travel_detour = DUNGEONS_KULTSTAETTE_DES_NAMENLOSEN;
 		}
 	}
 }
@@ -479,9 +473,8 @@ void tevent_127(void)
 	load_in_head(14);
 
 	do {
-		answer = GUI_dialogbox((unsigned char*)g_dtp2,
-					NULL, get_tx2(6), 3,
-					get_tx2(7),get_tx2(8), get_tx2(9));
+		answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(6), 3, get_tx2(7),get_tx2(8), get_tx2(9));
+
 	} while (answer == -1);
 
 	if (answer == 1 || answer == 2)
