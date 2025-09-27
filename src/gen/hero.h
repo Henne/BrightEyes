@@ -68,17 +68,19 @@ struct struct_hero {
 	signed char hunger;
 	/* Offset 0x80 */
 	signed char thirst;
-	signed char unkn3;
-	signed char direction;
-	signed char actions_left;
-	signed char unkn4[3];
-	signed char unkn5;
-	signed char group;
-	signed char unkn12;
-	signed char position;
+	signed char fighter_id;
+	signed char viewdir;
+	signed char actions;
+	signed char action_id;
+	signed char spell_id;
+	signed char enemy_id;
+	signed char group_no;
+	signed char temple_id;
+	signed char npc_id;
+	signed char group_pos;
 	/* Offset 0x8b */
-	int32_t unkn6;
-	int32_t unkn7;
+	int32_t heal_timer;
+	int32_t staffspell_timer;
 	signed char unkn8[3];
 	signed char rounds_blinded;
 	signed char rounds_eclipt;
