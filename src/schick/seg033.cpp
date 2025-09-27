@@ -850,7 +850,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						done = 0;
 
 					/* TODO: check fighter_id upper bound */
-					} else if (((host_readbs(hero + HERO_ENEMY_ID) >= 10) && ((struct enemy_sheet*)((Bit8u*)g_enemy_sheets + sizeof(struct enemy_sheet) * (host_readbs(hero + HERO_ENEMY_ID) - 10)))->flags.scared) || /* check 'scared' flag */
+					} else if (((host_readbs(hero + HERO_ENEMY_ID) >= 10) && ((struct enemy_sheet*)(&g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID)] - 10))->flags.scared) || /* check 'scared' flag */
 						((host_readbs(hero + HERO_ENEMY_ID) < 10) && (hero_scared(get_hero(host_readbs(hero + HERO_ENEMY_ID) - 1)))))
 					{
 
