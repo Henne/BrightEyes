@@ -3,6 +3,8 @@
 
 #include <time.h>
 
+#include "hero.h"
+
 /* dummy structs */
 struct c_str_3 { char a[3]; };
 struct c_str_5 { char a[5]; };
