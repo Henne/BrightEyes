@@ -5539,7 +5539,7 @@ signed short count_heroes_available_ignore_npc(void)
 
 	for (i = 0; i < 6; i++, hero++) {
 		/* Check if hero is available */
-		if (heroi->typus && (check_hero((Bit8u*)hero) || check_hero_no2((Bit8u*)hero)))
+		if (hero->typus && (check_hero((Bit8u*)hero) || check_hero_no2((Bit8u*)hero)))
 		{
 			retval++;
 		}

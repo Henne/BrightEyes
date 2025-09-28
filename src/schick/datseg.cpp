@@ -2107,7 +2107,10 @@ unsigned char g_snd_effects_enabled = 0; // ds:0x4477
 unsigned char g_unkn_028[2] = { 0xff, 0xff }; // ds:0x4478
 signed short g_music_current_track = -1; // ds:0x447a
 signed short g_snd_voc_enabled = 0; // ds:0x447c
+
+#if defined(__BORLANDC__)
 extern unsigned _stklen = 0x2000; // ds:0x447e
+#endif
 
 extern char g_str_file_missing[20];	//forward declaration
 char *g_str_file_missing_ptr = (char*)&g_str_file_missing; // ds:0x4480, to STR_FILE_MISSING; Bit8u*
@@ -3776,8 +3779,8 @@ signed short g_passage_type_to_name[7] = {
 const struct ship g_ship_table[8] = {
 	{ 0, 1,  0, 120 },
 	{ 3, 1, 35, 100 },
-	{ 1, 1,  0, 150 },
-	{ 2, 1, 45, 150 },
+	{ 1, 1,  0, (signed char)150 }, //BUG
+	{ 2, 1, 45, (signed char)150 }, //BUG
 	{ 0, 1,  0,  90 },
 	{ 4, 1, 20,  80 },
 	{ 5, 0, 10,  60 },
@@ -3836,7 +3839,7 @@ struct sea_route g_sea_routes[46] = {
 	{ TOWNS_RUNINSHAVEN, TOWNS_LEUCHTTURM_RUNIN,  25,  8, 0, 1, 0, 0 }, // 43
 	{ TOWNS_TREBAN     , TOWNS_LEUCHTTURM_RUNIN,  50, 10, 0, 1, 0, 0 }, // 44
 	{ TOWNS_MANRIN     , TOWNS_OVERTHORN       ,  60,  5, 0, 1, 0, 0 }, // 45
-	{ -1             , 0x00                  ,   0,  0, 0, 0, 0, 0 }
+	{ (unsigned char)-1             , 0x00                  ,   0,  0, 0, 0, 0, 0 } //TODO: towns should be signed
 }; // ds:0x6f00
 signed char g_travel_by_ship = 0; // ds:0x7070, 0 = on land, 1 = at the ship
 struct Bit16s_7 g_sea_travel_sleepbonus_table1 = { -2, 0, 5, 4, 3, 1, 0 }; // ds:0x7071, { -2, 0, 5, 4, 3, 1, 0 }
