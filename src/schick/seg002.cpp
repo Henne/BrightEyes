@@ -978,20 +978,26 @@ unsigned char* read_digi_driver(char *fname)
 /* static */
 signed short open_and_seek_dat(unsigned short fileindex)
 {
-	Bit32u start, end;
-	signed short fd;
+	Bit32u start;
+	Bit32u end;
+	signed short handle;
 
 	/* open SCHICK.DAT */
-	if ( (fd = open(g_fname_schick_dat, O_BINARY | O_RDONLY)) != -1) {
+#if defined(__BORLANDC__) || defined(_WIN32)
+	if ( (handle = open(g_fname_schick_dat, O_BINARY | O_RDONLY)) != -1) {
+#else
+	if ( (handle = open(g_fname_schick_dat, O_RDONLY)) != -1) {
+#endif
 
 		/* seek to the fileindex position in the offset table */
-		lseek(fd, fileindex * 4, SEEK_SET);
+		lseek(handle, fileindex * 4, SEEK_SET);
 
 		/* read the start offset of the desired file */
-		_read(fd, (Bit8u*)&start, 4);
+		_read(handle, (Bit8u*)&start, 4);
 
 		/* read the start offset of the next file */
-		_read(fd, (Bit8u*)&end, 4);
+		_read(handle, (Bit8u*)&end, 4);
+
 #if !defined(__BORLANDC__)
 		/* BE-Fix */
 		start = host_readd((Bit8u*)&start);
@@ -999,7 +1005,7 @@ signed short open_and_seek_dat(unsigned short fileindex)
 #endif
 
 		/* seek to the desired file */
-		lseek(fd, start, SEEK_SET);
+		lseek(handle, start, SEEK_SET);
 
 		/* save the offset of the desired file */
 		g_archive_file_offset = start;
@@ -1008,7 +1014,7 @@ signed short open_and_seek_dat(unsigned short fileindex)
 		g_archive_file_length = g_archive_file_remaining = end - start;
 	}
 
-	return fd;
+	return handle;
 }
 
 Bit32u get_readlength2(signed short index)
@@ -1066,7 +1072,11 @@ signed short load_regular_file(Bit16u index)
 {
 	signed short handle;
 
+#if defined(__BORLANDC__) || defined(_WIN32)
 	if ( (handle = open(g_fnames_v302de[index], O_BINARY | O_RDWR)) == -1) {
+#else
+	if ( (handle = open(g_fnames_v302de[index], O_RDWR)) == -1) {
+#endif
 
 		sprintf(g_dtp2, g_str_file_missing_ptr, g_fnames_v302de[index]);
 
@@ -1100,7 +1110,11 @@ signed short open_temp_file(unsigned short index)
 
 	sprintf((char*)tmppath, g_str_temp_xx_ptr2, g_fnames_v302de[index]);
 
+#if defined(__BORLANDC__) || defined(_WIN32)
 	while ( (handle = open(tmppath, O_BINARY | O_RDWR)) == -1) {
+#else
+	while ( (handle = open(tmppath, O_RDWR)) == -1) {
+#endif
 
 		copy_from_archive_to_temp(index, tmppath);
 	}
@@ -1144,7 +1158,11 @@ void copy_file_to_temp(char* src_file, char* fname)
 	signed short handle2;
 	signed short len;
 
+#if defined(__BORLANDC__) || defined(_WIN32)
 	if ( (handle1 = open(src_file, O_BINARY | O_RDONLY)) != -1) {
+#else
+	if ( (handle1 = open(src_file, O_RDONLY)) != -1) {
+#endif
 
 		/* create new file in TEMP */
 		/* TODO: should be O_BINARY | O_WRONLY */
