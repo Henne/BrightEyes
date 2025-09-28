@@ -48,11 +48,11 @@ struct struct_hero {
 	unsigned char bp_left;
 	struct struct_attribs attrib[14];
 	/* Offset 0x5e */
+	signed short le_max;
 	signed short le;
 	/* Offset 0x60 */
-	signed short le_max;
-	signed short ae;
 	signed short ae_max;
+	signed short ae;
 	signed char mr;
 
 	signed char atpa_base;

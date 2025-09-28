@@ -5110,11 +5110,11 @@ static void print_values(volatile struct struct_hero *hero, const int page, cons
 			print_str(tmp, 205, 61);
 
 			/* print LE */
-			sprintf(tmp, "%d", hero->le_max); print_str(tmp, 172, 164);
+			sprintf(tmp, "%d", hero->le); print_str(tmp, 172, 164);
 			/* print AE */
-			sprintf(tmp, "%d", hero->ae_max); print_str(tmp, 221, 164);
+			sprintf(tmp, "%d", hero->ae); print_str(tmp, 221, 164);
 			/* print Endurance */
-			sprintf(tmp, "%d", hero->le_max + hero->attrib[6].current);
+			sprintf(tmp, "%d", hero->le + hero->attrib[6].current);
 			print_str(tmp, 296, 164);
 
 			/* print MR */
@@ -5789,17 +5789,17 @@ static void fill_values(volatile struct struct_hero *hero, const int level)
 	}
 
 	/* set LE */
-	hero->le = hero->le_max = g_init_le[hero->typus];
+	hero->le_max = hero->le = g_init_le[hero->typus];
 
 	/* set AE */
-	hero->ae = hero->ae_max = g_init_ae[hero->typus];
+	hero->ae_max = hero->ae = g_init_ae[hero->typus];
 
 	/* wanna change 10 spell_attempts against 1W6+2 AE ? */
 	if ((hero->typus == 9) && (level == 2) && gui_bool(get_text(268))) {
 		/* change spell_attempts */
 		hero->spell_incs -= 10;
-		hero->ae_max += random_interval_gen(3, 8);
-		hero->ae = hero->ae_max;
+		hero->ae += random_interval_gen(3, 8);
+		hero->ae_max = hero->ae;
 	}
 
 	/* roll out size */
