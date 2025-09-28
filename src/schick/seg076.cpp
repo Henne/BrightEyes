@@ -295,7 +295,7 @@ void DNG_door(signed short action)
 						/* not a spellcaster */
 						GUI_output(get_ttx(330));
 					} else {
-						spell_result = test_spell(hero, SP_FORAMEN_FORAMINOR, host_readbs((Bit8u*)ptr_doors + DUNGEON_DOOR_FORAMEN_HANDICAP));
+						spell_result = test_spell((struct struct_hero*)hero, SP_FORAMEN_FORAMINOR, host_readbs((Bit8u*)ptr_doors + DUNGEON_DOOR_FORAMEN_HANDICAP));
 
 						if (spell_result == -99)
 						{

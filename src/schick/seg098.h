@@ -5,7 +5,7 @@ namespace M302de {
 /* 0x20 */
 signed short use_magic(Bit8u*);
 /* 0x25 */
-signed short test_spell(Bit8u*, signed short, signed char);
+signed short test_spell(struct struct_hero*, signed short, signed char);
 /* 0x2a */
 signed short use_spell(Bit8u*, signed short, signed char);
 

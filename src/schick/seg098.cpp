@@ -51,14 +51,6 @@ void magic_heal_ani(Bit8u *hero)
 	signed short fd;
 	signed short i;
 
-#if !defined(__BORLANDC__)
-	a.a[0] = 0;
-	a.a[1] = 1;
-	a.a[2] = 2;
-	a.a[3] = 1;
-	a.a[4] = 0;
-#endif
-
 	/* load SPSTAR.NVF */
 	fd = load_archive_file(ARCHIVE_FILE_SPSTAR_NVF);
 	read_archive_file(fd, g_buffer8_ptr, 0x400);
@@ -469,7 +461,7 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 
 		for (l_di = 0; l_di < 12; l_di++) {
 
-			g_radio_name_list[l_di] = (g_dtp2 + 50 * (l_di + 1));
+			g_radio_name_list[l_di] = g_dtp2 + 50 * (l_di + 1);
 
 			ones.a[l_di] = (signed char)can_use_spellclass(hero, l_di);
 
@@ -580,47 +572,50 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 /**
  * \brief   makes a spell test. no AE deduction in this function.
  */
-signed short test_spell(Bit8u *hero, signed short spell_no, signed char handicap)
+signed short test_spell(struct struct_hero *hero, signed short spell_no, signed char handicap)
 {
 	signed short retval;
 	struct spell_descr *spell_desc;
 
 	/* check if class is magic user */
-	if ((host_readbs(hero + HERO_TYPE) < HERO_TYPE_WITCH) || (check_hero(hero) == 0)) {
+	if ((hero->typus < HERO_TYPE_WITCH) || (check_hero((Bit8u*)hero) == 0)) {
 		return 0;
 	}
+
 	/* check if spell skill >= -5 */
-	if (host_readbs(hero + spell_no + HERO_SPELLS) < -5)
+	if (hero->spells[spell_no] < -5)
 		return 0;
+
 	/* check if hero has enough AE */
-	if (get_spell_cost(spell_no, 0) > host_readws(hero + HERO_AE))
+	if (get_spell_cost(spell_no, 0) > hero->ae)
 		return -99;
 
 	spell_desc = &g_spell_descriptions[spell_no];
 
 	if (spell_desc->fight) {
 
-		if (host_readbs(hero + HERO_ENEMY_ID) >= 10) {
+		if (hero->enemy_id >= 10) {
 
-			handicap += g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].mr;
+			handicap += g_enemy_sheets[hero->enemy_id - 10].mr;
 
-			if (g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID)].flags.mushroom) { // tests if enemy is mushroom
+			//if (g_enemy_sheets[hero->enemy_id - 10].flags.mushroom) {
+			if (g_enemy_sheets[hero->enemy_id].flags.mushroom) {
 				return 0;
 			}
 		} else {
-			handicap += host_readbs(get_hero(host_readbs(hero + HERO_ENEMY_ID) - 1) + HERO_MR);
+			handicap += ((struct struct_hero*)get_hero(hero->enemy_id - 1))->mr;
 		}
 	}
 
 	if ((spell_no >= 1) && (spell_no <= 85)) {
 
 #if !defined(__BORLANDC__)
-		D1_INFO("%s Zauberprobe %s %+d (TaW %d)",(char*)(hero + HERO_NAME2), names_spell[spell_no], handicap, host_readbs(hero + spell_no + HERO_SPELLS));
+		D1_INFO("%s Zauberprobe %s %+d (TaW %d)", hero->alias, names_spell[spell_no], handicap, hero->spells[spell_no]);
 #endif
 
-		handicap -= host_readbs(hero + spell_no + HERO_SPELLS);
+		handicap -= hero->spells[spell_no];
 
-		retval = test_attrib3(hero, spell_desc->attrib1, spell_desc->attrib2, spell_desc->attrib3, handicap);
+		retval = test_attrib3((Bit8u*)hero, spell_desc->attrib1, spell_desc->attrib2, spell_desc->attrib3, handicap);
 
 		if (retval == -99) {
 			retval = -1;
@@ -654,7 +649,7 @@ signed short test_spell_group(signed short spell, signed char handicap)
 			/* Original-Bug: what if petrified, sleeping, unconcious etc. */
 		{
 
-			if (test_spell(hero_i, spell, handicap) > 0) {
+			if (test_spell((struct struct_hero*)hero_i, spell, handicap) > 0) {
 				return 1;
 			}
 		}
@@ -797,7 +792,7 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 			}
 #endif
 
-			g_spelltest_result = test_spell(hero, spell_id, handicap);
+			g_spelltest_result = test_spell((struct struct_hero*)hero, spell_id, handicap);
 
 			if (g_spelltest_result == -99) {
 
@@ -826,7 +821,7 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 				g_spelluser = hero;
 
 				ae_cost = get_spell_cost(spell_id, 0); /* spell successful -> full AE cost */
-				g_spell_special_aecost = (-1);
+				g_spell_special_aecost = -1;
 
 				*g_dtp2 = '\0';
 
@@ -844,16 +839,19 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 				retval = 1;
 
 				if (g_spell_special_aecost == 0) {
+
 					retval = -1;
 
 					if (!(*g_dtp2)) {
 						strcpy(g_dtp2, get_ttx(606));
 					}
+
 				} else if (g_spell_special_aecost == -2) {
 
 					strcpy(g_dtp2, get_ttx(606));
 					sub_ae_splash(hero, get_spell_cost(spell_id, 1));
 					retval = 0;
+
 				} else if (g_spell_special_aecost != -1) {
 					sub_ae_splash(hero, g_spell_special_aecost);
 				} else {

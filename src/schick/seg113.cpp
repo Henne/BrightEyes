@@ -722,7 +722,7 @@ void tevent_104(void)
 						GUI_output(get_ttx(330));
 					} else {
 
-						spell_result = test_spell(hero, SP_BANNBALADIN, 0);
+						spell_result = test_spell((struct struct_hero*)hero, SP_BANNBALADIN, 0);
 
 						if (spell_result > 0) {
 

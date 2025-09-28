@@ -321,7 +321,7 @@ void tevent_095(void)
 						GUI_output(get_ttx(330));
 					} else {
 
-						ret_spell_test = test_spell(hero, SP_BANNBALADIN, 0);
+						ret_spell_test = test_spell((struct struct_hero*)hero, SP_BANNBALADIN, 0);
 
 						if (ret_spell_test > 0)
 						{

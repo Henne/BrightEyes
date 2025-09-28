@@ -544,7 +544,7 @@ void DNG09_chest04_loot(Bit8u* chest)
 			} else if (answer == 2)
 			{
 				hero = get_hero(0) + select_hero_ok_forced(get_ttx(317)) * SIZEOF_HERO;
-				if (test_spell(hero, SP_DESTRUCTIBO_ARCANITAS, 0) > 0)
+				if (test_spell((struct struct_hero*)hero, SP_DESTRUCTIBO_ARCANITAS, 0) > 0)
 				{
 					sub_ae_splash(hero, 20);
 
@@ -567,7 +567,7 @@ void DNG09_chest04_loot(Bit8u* chest)
 			} else if (answer == 3)
 			{
 				hero = get_hero(0) + select_hero_ok_forced(get_ttx(317)) * SIZEOF_HERO;
-				if (test_spell(hero, SP_IGNIFAXIUS_FLAMMENSTRAHL, 0) > 0)
+				if (test_spell((struct struct_hero*)hero, SP_IGNIFAXIUS_FLAMMENSTRAHL, 0) > 0)
 				{
 					sub_ae_splash(hero, 35);
 

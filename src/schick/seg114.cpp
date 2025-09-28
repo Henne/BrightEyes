@@ -660,7 +660,7 @@ void tevent_123(void)
 				/* cast a spell */
 				hero = get_hero(select_hero_ok_forced(get_ttx(317)));
 
-				if (test_spell(hero, SP_MU_STEIGERN, 0) > 0)
+				if (test_spell((struct struct_hero*)hero, SP_MU_STEIGERN, 0) > 0)
 				{
 					/* success */
 					sub_ae_splash(hero, get_spell_cost(SP_MU_STEIGERN, 0));

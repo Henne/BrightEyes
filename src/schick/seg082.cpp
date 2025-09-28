@@ -106,7 +106,7 @@ signed short DNG07_handler(void)
 				{
 					GUI_output(get_ttx(330));
 				} else {
-					spell_result = test_spell(hero, SP_FORAMEN_FORAMINOR, 5);
+					spell_result = test_spell((struct struct_hero*)hero, SP_FORAMEN_FORAMINOR, 5);
 
 					if (spell_result > 0) {
 
