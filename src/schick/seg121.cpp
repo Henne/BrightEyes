@@ -24,18 +24,19 @@ void poison_effect(void)
 {
 	signed short i;
 	volatile signed short j;
-	Bit8u *hero;
+	struct struct_hero *hero;
 	Bit8s *poison_ptr;
 
 	g_check_poison = 0;
 
-	hero = get_hero(0);
+	hero = (struct struct_hero*)get_hero(0);
 
-	for (i = 0; i <= 6; i++, hero+=SIZEOF_HERO) {
+	for (i = 0; i <= 6; i++, hero++) {
 
-		if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) && !hero_dead(hero)) {
+		if ((hero->typus != HERO_TYPE_NONE) && !hero_dead((Bit8u*)hero)) {
 
-			poison_ptr = (Bit8s*)hero + HERO_POISON + POISON_TYPE_SHURINKNOLLENGIFT * SIZEOF_HERO_POISON;
+
+			poison_ptr = (Bit8s*)&hero->poison[POISON_TYPE_SHURINKNOLLENGIFT];
 
 			/* SHURINKNOLLENGIFT: hero is poisoned */
 			if (poison_ptr[0] == -1) {
@@ -43,34 +44,34 @@ void poison_effect(void)
 				if (poison_ptr[1] >= 6) {
 
 					/* KK */
-					if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) != 0) {
+					if (hero->attrib[ATTRIB_KK].current) {
 
-						sprintf(g_dtp2, get_ttx(572), (char*)hero + HERO_NAME2);
+						sprintf(g_dtp2, get_ttx(572), hero->alias);
 
 						GUI_output(g_dtp2);
 
 						poison_ptr[2]++;
-						dec_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK));
+						hero->attrib[ATTRIB_KK].current--;
 					}
 
 					/* GE */
-					if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE)) != 0) {
+					if (hero->attrib[ATTRIB_GE].current) {
 
-						sprintf(g_dtp2, get_ttx(45), (char*)hero + HERO_NAME2);
+						sprintf(g_dtp2, get_ttx(45), hero->alias);
 
 						GUI_output(g_dtp2);
 
 						poison_ptr[3]++;
-						dec_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE));
+						hero->attrib[ATTRIB_GE].current--;
 					}
 
-					if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) < 0 || host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE)) < 0) {
-						sub_hero_le(hero, 1000);
+					if ((hero->attrib[ATTRIB_KK].current < 0) || (hero->attrib[ATTRIB_GE].current < 0)) {
+						sub_hero_le((Bit8u*)hero, 1000);
 					}
 				}
 
 				/* Loose 1W6 LE */
-				sub_hero_le(hero, random_schick(6));
+				sub_hero_le((Bit8u*)hero, random_schick(6));
 			}
 
 			/* SHURINKNOLLENGIFT: hero regenerates */
@@ -84,27 +85,27 @@ void poison_effect(void)
 
 				if ((poison_ptr[2] != 0) && (!poison_ptr[1] % 12 )) {
 
-						sprintf(g_dtp2, get_ttx(573), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_ttx(573), hero->alias);
 
-						GUI_output(g_dtp2);
+					GUI_output(g_dtp2);
 
-						poison_ptr[2]--;
-						inc_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK));
+					poison_ptr[2]--;
+					hero->attrib[ATTRIB_KK].current++;
 				}
 
 				if ((poison_ptr[3] != 0) && (!poison_ptr[1] % 12 )) {
 
-						sprintf(g_dtp2, get_ttx(578), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_ttx(578), hero->alias);
 
-						GUI_output(g_dtp2);
+					GUI_output(g_dtp2);
 
-						poison_ptr[3]--;
-						inc_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE));
+					poison_ptr[3]--;
+					hero->attrib[ATTRIB_GE].current++;
 				}
 			}
 
 
-			poison_ptr = (Bit8s*)hero + (HERO_POISON + POISON_TYPE_ARAX * SIZEOF_HERO_POISON);
+			poison_ptr = (Bit8s*)&hero->poison[POISON_TYPE_ARAX];
 
 			/* ARAXGIFT: hero is poisoned */
 			if (poison_ptr[0] == -1) {
@@ -115,17 +116,17 @@ void poison_effect(void)
 
 					for (j = 0; j < 7; j++) {
 						/* all AT - 2 */
-						sub_ptr_bs(hero + HERO_AT + j, 2);
+						hero->at_weapon[j] -= 2;
 						/* all PA - 2 */
-						sub_ptr_bs(hero + HERO_PA + j, 2);
+						hero->pa_weapon[j] -= 2;
 					}
 
 					/* GE - 2 */
-					host_writebs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE), host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE)) - 2);
+					hero->attrib[ATTRIB_GE].current = hero->attrib[ATTRIB_GE].current - 2;
 					/* KK - 2 */
-					host_writebs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK), host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) - 2);
+					hero->attrib[ATTRIB_KK].current = hero->attrib[ATTRIB_KK].current - 2;
 
-					sprintf(g_dtp2, get_ttx(37), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_ttx(37), hero->alias);
 
 					GUI_output(g_dtp2);
 
@@ -146,45 +147,45 @@ void poison_effect(void)
 
 				for (j = 0; j < 7; j++) {
 					/* all AT + 2 */
-					add_ptr_bs(hero + HERO_AT + j, 2);
+					hero->at_weapon[j] += 2;
 					/* all PA + 2 */
-					add_ptr_bs(hero + HERO_PA + j, 2);
+					hero->pa_weapon[j] += 2;
 				}
 
 				/* GE + 2 */
-				host_writebs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE), host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE)) + 2);
+				hero->attrib[ATTRIB_GE].current = hero->attrib[ATTRIB_GE].current + 2;
 				/* KK + 2 */
-				host_writebs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK), host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + 2);
+				hero->attrib[ATTRIB_KK].current = hero->attrib[ATTRIB_KK].current + 2;
 
-				sprintf(g_dtp2, get_ttx(38), (char*)hero + HERO_NAME2);
+				sprintf(g_dtp2, get_ttx(38), hero->alias);
 
 				GUI_output(g_dtp2);
 			}
 
 
-			poison_ptr = (Bit8s*)hero + (HERO_POISON + POISON_TYPE_ANGSTGIFT * SIZEOF_HERO_POISON);
+			poison_ptr = (Bit8s*)&hero->poison[POISON_TYPE_ANGSTGIFT];
 
 			/* ANGSTGIFT: hero is poisoned */
 			if (poison_ptr[0] == -1) {
 
-				if(!poison_ptr[4]) {
+				if (!poison_ptr[4]) {
 
 					poison_ptr[4] = 1;
 
 					/* MU - 2 */
-					host_writeb(hero + (HERO_ATTRIB + 3 * ATTRIB_MU), host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_MU)) - 2);
+					hero->attrib[ATTRIB_MU].current = hero->attrib[ATTRIB_MU].current - 2;
 
 					/* all negative attributes + 2 */
-					host_writeb(hero + (HERO_ATTRIB + 3 * ATTRIB_AG), host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_AG)) + 2);
-					host_writeb(hero + (HERO_ATTRIB + 3 * ATTRIB_HA), host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_HA)) + 2);
-					host_writeb(hero + (HERO_ATTRIB + 3 * ATTRIB_RA), host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_RA)) + 2);
-					host_writeb(hero + (HERO_ATTRIB + 3 * ATTRIB_GG), host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_GG)) + 2);
-					host_writeb(hero + (HERO_ATTRIB + 3 * ATTRIB_TA), host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_TA)) + 2);
-					host_writeb(hero + (HERO_ATTRIB + 3 * ATTRIB_NG), host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_NG)) + 2);
-					host_writeb(hero + (HERO_ATTRIB + 3 * ATTRIB_JZ), host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_JZ)) + 2);
-					or_ptr_bs(hero + HERO_FLAGS2, 1); /* set 'scared' flag */
+					hero->attrib[ATTRIB_AG].current = hero->attrib[ATTRIB_AG].current + 2;
+					hero->attrib[ATTRIB_HA].current = hero->attrib[ATTRIB_HA].current + 2;
+					hero->attrib[ATTRIB_RA].current = hero->attrib[ATTRIB_RA].current + 2;
+					hero->attrib[ATTRIB_GG].current = hero->attrib[ATTRIB_GG].current + 2;
+					hero->attrib[ATTRIB_TA].current = hero->attrib[ATTRIB_TA].current + 2;
+					hero->attrib[ATTRIB_NG].current = hero->attrib[ATTRIB_NG].current + 2;
+					hero->attrib[ATTRIB_JZ].current = hero->attrib[ATTRIB_JZ].current + 2;
+					or_ptr_bs((Bit8u*)hero + HERO_FLAGS2, 1); /* set 'scared' flag */
 
-					sprintf(g_dtp2, get_ttx(39), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_ttx(39), hero->alias);
 
 					GUI_output(g_dtp2);
 				}
@@ -202,24 +203,27 @@ void poison_effect(void)
 					poison_ptr[1] = 0;
 					poison_ptr[4] = 0;
 
-					host_writeb(hero + (HERO_ATTRIB + 3 * ATTRIB_MU), host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_MU)) + 2);
+					/* MU + 2 */
+					hero->attrib[ATTRIB_MU].current = hero->attrib[ATTRIB_MU].current + 2;
 
-					host_writeb(hero + (HERO_ATTRIB + 3 * ATTRIB_AG), host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_AG)) - 2);
-					host_writeb(hero + (HERO_ATTRIB + 3 * ATTRIB_HA), host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_HA)) - 2);
-					host_writeb(hero + (HERO_ATTRIB + 3 * ATTRIB_RA), host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_RA)) - 2);
-					host_writeb(hero + (HERO_ATTRIB + 3 * ATTRIB_GG), host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_GG)) - 2);
-					host_writeb(hero + (HERO_ATTRIB + 3 * ATTRIB_TA), host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_TA)) - 2);
-					host_writeb(hero + (HERO_ATTRIB + 3 * ATTRIB_NG), host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_NG)) - 2);
-					host_writeb(hero + (HERO_ATTRIB + 3 * ATTRIB_JZ), host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_JZ)) - 2);
-					and_ptr_bs(hero + HERO_FLAGS2, 0xfe); /* unset 'scared' flag */
+					/* all negative attributes - 2 */
+					hero->attrib[ATTRIB_AG].current = hero->attrib[ATTRIB_AG].current - 2;
+					hero->attrib[ATTRIB_HA].current = hero->attrib[ATTRIB_HA].current - 2;
+					hero->attrib[ATTRIB_RA].current = hero->attrib[ATTRIB_RA].current - 2;
+					hero->attrib[ATTRIB_GG].current = hero->attrib[ATTRIB_GG].current - 2;
+					hero->attrib[ATTRIB_TA].current = hero->attrib[ATTRIB_TA].current - 2;
+					hero->attrib[ATTRIB_NG].current = hero->attrib[ATTRIB_NG].current - 2;
+					hero->attrib[ATTRIB_JZ].current = hero->attrib[ATTRIB_JZ].current - 2;
 
-					sprintf(g_dtp2, get_ttx(40), (char*)hero + HERO_NAME2);
+					and_ptr_bs((Bit8u*)hero + HERO_FLAGS2, 0xfe); /* unset 'scared' flag */
+
+					sprintf(g_dtp2, get_ttx(40), hero->alias);
 
 					GUI_output(g_dtp2);
 			}
 
 
-			poison_ptr = (Bit8s*)hero + (HERO_POISON + POISON_TYPE_SCHLAFGIFT * SIZEOF_HERO_POISON);
+			poison_ptr = (Bit8s*)&hero->poison[POISON_TYPE_SCHLAFGIFT];
 
 			/* SCHLAFGIFT: hero is poisoned */
 			if (poison_ptr[0] == -1) {
@@ -227,9 +231,9 @@ void poison_effect(void)
 				if (!poison_ptr[4]) {
 
 					poison_ptr[4] = 1;
-					or_ptr_bs(hero + HERO_FLAGS1, 0x02); /* set 'asleep' flag */
+					or_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0x02); /* set 'asleep' flag */
 
-					sprintf(g_dtp2, get_ttx(41), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_ttx(41), hero->alias);
 
 					GUI_output(g_dtp2);
 				}
@@ -246,24 +250,25 @@ void poison_effect(void)
 				poison_ptr[0] = 0;
 				poison_ptr[1] = 0;
 				poison_ptr[4] = 0;
-				and_ptr_bs(hero + HERO_FLAGS1, 0xfd); /* unset 'asleep' flag */
+				and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xfd); /* unset 'asleep' flag */
 
-				sprintf(g_dtp2, get_ttx(42), (char*)hero + HERO_NAME2);
+				sprintf(g_dtp2, get_ttx(42), hero->alias);
 
 				GUI_output(g_dtp2);
 			}
 
 
-			poison_ptr = (Bit8s*)hero + (HERO_POISON + POISON_TYPE_GOLDLEIM * SIZEOF_HERO_POISON);
+			poison_ptr = (Bit8s*)&hero->poison[POISON_TYPE_GOLDLEIM];
 
 			/* GOLDLEIM: hero gets poisoned */
 			if (poison_ptr[0] == -1) {
+
 				if (poison_ptr[1] >= dice_roll(2, 6, 0) * 12) {
 					poison_ptr[0] = 0;
 				}
 
 				if (!(poison_ptr[1] % 12)) {
-					sub_hero_le(hero, dice_roll(2, 6, -3));
+					sub_hero_le((Bit8u*)hero, dice_roll(2, 6, -3));
 				}
 			}
 
@@ -273,16 +278,17 @@ void poison_effect(void)
 			}
 
 
-			poison_ptr = (Bit8s*)hero + (HERO_POISON + POISON_TYPE_KROETENSCHEMEL * SIZEOF_HERO_POISON);
+			poison_ptr = (Bit8s*)&hero->poison[POISON_TYPE_KROETENSCHEMEL];
 
 			/* KROETENSCHEMEL: hero gets poisoned */
 			if (poison_ptr[0] == -1) {
+
 				if (poison_ptr[1] >= 48) {
 					poison_ptr[0] = 0;
 				}
 
 				if (!(poison_ptr[1] % 12)) {
-					sub_hero_le(hero, dice_roll(1, 6, 2));
+					sub_hero_le((Bit8u*)hero, dice_roll(1, 6, 2));
 				}
 			}
 
@@ -292,15 +298,16 @@ void poison_effect(void)
 			}
 
 
-			poison_ptr = (Bit8s*)hero + (HERO_POISON + POISON_TYPE_LOTUSGIFT * SIZEOF_HERO_POISON);
+			poison_ptr = (Bit8s*)&hero->poison[POISON_TYPE_LOTUSGIFT];
 
 			/* LOTUSGIFT: hero gets poisoned */
 			if (poison_ptr[0] == -1) {
+
 				if (poison_ptr[1] >= 24) {
 					poison_ptr[0] = 0;
 				}
 
-				sub_hero_le(hero, dice_roll(2, 6, 0));
+				sub_hero_le((Bit8u*)hero, dice_roll(2, 6, 0));
 			}
 
 			/* LOTUSGIFT: regeneration */
@@ -309,15 +316,16 @@ void poison_effect(void)
 			}
 
 
-			poison_ptr = (Bit8s*)hero + (HERO_POISON + POISON_TYPE_KUKRIS * SIZEOF_HERO_POISON);
+			poison_ptr = (Bit8s*)&hero->poison[POISON_TYPE_KUKRIS];
 
 			/* KUKRIS: hero gets poisoned */
 			if (poison_ptr[0] == -1) {
+
 				if (poison_ptr[1] >= 3) {
 					poison_ptr[0] = 0;
 				}
 
-				sub_hero_le(hero, dice_roll(50, 6, 0));
+				sub_hero_le((Bit8u*)hero, dice_roll(50, 6, 0));
 			}
 
 			/* KUKRIS: regeneration */
@@ -326,7 +334,7 @@ void poison_effect(void)
 			}
 
 
-			poison_ptr = (Bit8s*)hero + (HERO_POISON + POISON_TYPE_BANNSTAUB * SIZEOF_HERO_POISON);
+			poison_ptr = (Bit8s*)&hero->poison[POISON_TYPE_BANNSTAUB];
 
 			/* BANNSTAUB: hero gets poisoned */
 			if (poison_ptr[0] == -1) {
@@ -337,31 +345,33 @@ void poison_effect(void)
 
 				j = dice_roll(1, 6, 2);
 
-				if (host_readws(hero + HERO_AE) >= j) {
+				if (hero->ae_max >= j) {
 
 					/* loose 1W6+2 AEmax */
 					poison_ptr[2] = poison_ptr[2] + j;
 
-					sub_ptr_ws(hero + HERO_AE, j);
+					hero->ae_max -= j;
 
-					sprintf(g_dtp2, get_ttx(43), (char*)hero + HERO_NAME2, j);
+					sprintf(g_dtp2, get_ttx(43), hero->alias, j);
 
 					GUI_output(g_dtp2);
 				}
 			}
 
 			/* BANNSTAUB: regeneration */
-			if ((poison_ptr[0] == 1)) {
+			if (poison_ptr[0] == 1) {
+
 				if (!poison_ptr[2]) {
 					poison_ptr[0] = 0;
 				} else {
 
 					if (!poison_ptr[1] % 12) {
+
 						/* regenerate one point at a time */
 						poison_ptr[2]--;
-						inc_ptr_ws(hero + HERO_AE);
+						hero->ae_max++;
 
-						sprintf(g_dtp2, get_ttx(44), (char*)hero + HERO_NAME2);
+						sprintf(g_dtp2, get_ttx(44), hero->alias);
 
 						GUI_output(g_dtp2);
 					}
@@ -370,27 +380,28 @@ void poison_effect(void)
 
 
 			for (j = 1; j <= 9; j++) {
-				if (host_readbs(hero + HERO_POISON + j * SIZEOF_HERO_POISON) != 0) {
-					inc_ptr_bs(hero + (HERO_POISON+1) + j * SIZEOF_HERO_POISON);
+
+				if (hero->poison[j][0] != 0) {
+					hero->poison[j][1]++;
 				}
 			}
 
 			/* KK <= 0 */
-			if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) <= 0) {
+			if (hero->attrib[ATTRIB_KK].current <= 0) {
 
 				/* reset KK */
-				host_writeb(hero + (HERO_ATTRIB + 3 * ATTRIB_KK), host_readbs(hero + (HERO_ATTRIB_ORIG + 3 * ATTRIB_KK)));
+				hero->attrib[ATTRIB_KK].current = hero->attrib[ATTRIB_KK].normal;
 				/* die */
-				sub_hero_le(hero, 5000);
+				sub_hero_le((Bit8u*)hero, 5000);
 			}
 
 			/* GE <= 0 */
-			if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE)) <= 0) {
+			if (hero->attrib[ATTRIB_GE].current <= 0) {
 
 				/* reset GE */
-				host_writeb(hero + (HERO_ATTRIB + 3 * ATTRIB_GE), host_readbs(hero + (HERO_ATTRIB_ORIG + 3 * ATTRIB_GE)));
+				hero->attrib[ATTRIB_GE].current = hero->attrib[ATTRIB_GE].normal;
 				/* die */
-				sub_hero_le(hero, 5000);
+				sub_hero_le((Bit8u*)hero, 5000);
 			}
 		}
 	}
