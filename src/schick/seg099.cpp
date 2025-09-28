@@ -526,7 +526,7 @@ void spell_skelettarius(void)
 		fighter = FIG_get_fighter(g_spelltarget_e->fighter_id);
 
 		x = fighter->cbx;
-		y = fighter->cbx;
+		y = fighter->cby;
 
 		if (fighter->twofielded != -1) {
 			FIG_remove_from_list(g_fig_twofielded_table[fighter->twofielded], 0);
@@ -678,7 +678,7 @@ void spell_foramen(void)
 		case 3: x--; break;
 	}
 
-	*(g_dng_map_ptr + MAP_POS(x,y)) = 0x0f; /* clear higher 4 bits */
+	*(g_dng_map_ptr + MAP_POS(x,y)) &= 0x0f; /* clear higher 4 bits */
 	*(g_dng_map_ptr + MAP_POS(x,y)) |= (DNG_TILE_OPEN_DOOR << 4);
 	g_steptarget_front = *(g_dng_map_ptr + MAP_POS(x,y));
 
