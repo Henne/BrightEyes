@@ -608,7 +608,7 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 				GUI_output(g_dtp2);
 
 				add_hero_ap_all(ap_all1);
-				add_hero_ap(hero, ap_hero);
+				add_hero_ap((struct struct_hero*)hero, ap_hero);
 
 				timewarp(HOURS(1));
 

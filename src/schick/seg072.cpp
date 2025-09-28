@@ -720,7 +720,7 @@ void INF_treborn_unicorn(signed short informer, signed short state)
 			gs_unicorn_get_map = 1;
 
 			/* the hero gets 100 AP */
-			add_hero_ap(gs_unicorn_hero_ptr, 100);
+			add_hero_ap((struct struct_hero*)gs_unicorn_hero_ptr, 100);
 
 			/* set the unicorn timer (in days) */
 			gs_unicorn_timer = random_schick(24) + 36;

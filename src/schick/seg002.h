@@ -171,7 +171,7 @@ signed short get_random_hero(void);
 Bit32s get_party_money(void);
 void set_party_money(Bit32s);
 void add_party_money(Bit32s);
-void add_hero_ap(Bit8u*, Bit32s);
+void add_hero_ap(struct struct_hero*, Bit32s);
 void add_group_ap(Bit32s);
 void add_hero_ap_all(signed short);
 void sub_hero_ap_all(signed short);

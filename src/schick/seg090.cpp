@@ -473,7 +473,7 @@ signed short DNG12_handler(void)
 
 					gs_dng12_speartrap_active = 0;
 
-					add_hero_ap(hero, 10);
+					add_hero_ap((struct struct_hero*)hero, 10);
 				}
 
 				GUI_output(g_dtp2);

@@ -4477,8 +4477,7 @@ signed short check_hero(Bit8u *hero)
 signed short check_hero_no2(Bit8u *hero)
 {
 
-	if (
-		!host_readbs(hero + HERO_TYPE) ||
+	if (!host_readbs(hero + HERO_TYPE) ||
 		hero_dead(hero) ||
 		hero_petrified(hero) ||
 		hero_unconscious(hero) ||
@@ -4499,12 +4498,8 @@ signed short check_hero_no2(Bit8u *hero)
 /* should be static */
 signed short check_hero_no3(Bit8u *hero)
 {
-	if (
-		!host_readbs(hero + HERO_TYPE) ||
-		hero_dead(hero) ||
-		hero_petrified(hero) ||
-		hero_unconscious(hero)
-	) {
+	if (!host_readbs(hero + HERO_TYPE) || hero_dead(hero) || hero_petrified(hero) || hero_unconscious(hero)) {
+
 		return 0;
 	}
 
@@ -4513,11 +4508,8 @@ signed short check_hero_no3(Bit8u *hero)
 
 signed short is_hero_available_in_group(Bit8u *hero)
 {
+	if (check_hero(hero) &&	(host_readbs(hero + HERO_GROUP_NO) == gs_current_group)) {
 
-	if (
-		check_hero(hero) &&
-		(host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
-	) {
 		return 1;
 	}
 
@@ -4584,8 +4576,7 @@ void add_hero_ae(Bit8u* hero, signed short ae)
 		/* add AE to hero's current AE */
 		add_ptr_ws(hero + HERO_AE, ae);
 
-		/* if current AE is greater than AE maximum
-			set current AE to AE maximum */
+		/* if current AE is greater than AE maximum set current AE to AE maximum */
 		if (host_readws(hero + HERO_AE) > host_readws(hero + HERO_AE_ORIG))
 			host_writew(hero + HERO_AE, host_readws(hero + HERO_AE_ORIG));
 
@@ -4668,13 +4659,12 @@ void sub_hero_le(Bit8u *hero, signed short le)
 			/* FINAL FIGHT */
 			if (g_current_fight_no == FIGHTS_F144) {
 				if (hero == (Bit8u*)gs_main_acting_hero) {
-					g_game_state = (GAME_STATE_DEAD);
+					g_game_state = GAME_STATE_DEAD;
 					g_in_fight = 0;
 				}
 			}
 
-			if (g_traveling
-				&& !g_in_fight &&
+			if (g_traveling	&& !g_in_fight &&
 				(!count_heroes_available_in_group() || ((count_heroes_available_in_group() == 1) && is_hero_available_in_group(get_hero(6))))) /* count_heroes_available_in_group_ignore_npc() == 0 */
 			{
 				/* if traveling, not in a fight, and no hero in the group (except possibly the NPC) is available. */
@@ -5155,15 +5145,13 @@ Bit32s get_party_money(void)
 {
 	signed short i;
 	Bit32s sum = 0;
-	Bit8u* hero;
+	struct struct_hero *hero = (struct struct_hero*)get_hero(0);
 
-	hero = get_hero(0);
+	for (i = 0; i < 6; i++, hero++) {
 
-	for (i=0; i < 6; i++, hero += SIZEOF_HERO) {
-		if (host_readbs(hero + HERO_TYPE) &&
-			(host_readbs(hero + HERO_GROUP_NO) == gs_current_group))
+		if (hero->typus && (hero->group_no == gs_current_group))
 		{
-			sum += host_readds(hero + HERO_MONEY);
+			sum += hero->money;
 		}
 	}
 
@@ -5183,7 +5171,7 @@ void set_party_money(Bit32s money)
 	signed short heroes = 0;
 	signed short i;
 	Bit32s hero_money;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	if (money < 0)
 		money = 0;
@@ -5191,20 +5179,16 @@ void set_party_money(Bit32s money)
 	heroes = count_heroes_in_group();
 
 	/* set hero to NPC */
-	hero = get_hero(6);
+	hero = (struct struct_hero*)get_hero(6);
 
 	/* if we have an NPC in current group and alive */
-	if (
-		host_readbs(hero + HERO_TYPE) &&
-		(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
-		!hero_dead(hero)
-	) {
+	if (hero->typus && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero)) {
 
 		/* If only the NPC is in that group give him all the money */
 		if (heroes > 1) {
 			heroes--;
 		} else {
-			add_ptr_ds(hero + HERO_MONEY, money);
+			hero->money += money;
 			heroes = 0;
 		}
 	}
@@ -5213,20 +5197,17 @@ void set_party_money(Bit32s money)
 
 		hero_money = money / heroes;
 
-		hero = get_hero(0);
+		hero = (struct struct_hero*)get_hero(0);
 
-		for (i = 0; i < 6; i++, hero += SIZEOF_HERO) {
+		for (i = 0; i < 6; i++, hero++) {
 
-			if (
-				host_readbs(hero + HERO_TYPE) &&
-				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
-				!hero_dead(hero)
-			) {
+			if (hero->typus && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero)) {
+
 				/* account the money to hero */
-				host_writed(hero + HERO_MONEY, hero_money);
+				hero->money = hero_money;
 			} else {
-				if (host_readbs(hero + HERO_GROUP_NO) == gs_current_group) {
-					host_writed(hero + HERO_MONEY, 0);
+				if (hero->group_no == gs_current_group) {
+					hero->money = 0;
 				}
 			}
 		}
@@ -5249,9 +5230,9 @@ void add_party_money(Bit32s money)
  * \param   hero        pointer to the hero
  * \param   ap          AP the hero should get
  */
-void add_hero_ap(Bit8u *hero, Bit32s ap)
+void add_hero_ap(struct struct_hero *hero, Bit32s ap)
 {
-	add_ptr_ds(hero + HERO_AP, ap);
+	hero->ap += ap;
 }
 
 /**
@@ -5262,7 +5243,7 @@ void add_hero_ap(Bit8u *hero, Bit32s ap)
 void add_group_ap(Bit32s ap)
 {
 	signed short i;
-	Bit8u *hero_i;
+	struct struct_hero *hero;
 
 	if (ap < 0) {
 		return;
@@ -5270,15 +5251,13 @@ void add_group_ap(Bit32s ap)
 
 	ap = ap / count_heroes_in_group();
 
-	hero_i = get_hero(0);
+	hero = (struct struct_hero*)get_hero(0);
 
-	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
+	for (i = 0; i <= 6; i++, hero++) {
 
-		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) &&
-			!hero_dead(hero_i))
+		if (hero->typus && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
 		{
-			add_hero_ap(hero_i, ap);
+			add_hero_ap(hero, ap);
 		}
 	}
 }
@@ -5290,24 +5269,22 @@ void add_group_ap(Bit32s ap)
  */
 void add_hero_ap_all(signed short ap)
 {
-	Bit8u *hero_i;
+	struct struct_hero *hero;
 	signed short i;
 
 	if (ap < 0)
 		return;
 
-	hero_i = get_hero(0);
-	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
+	hero = (struct struct_hero*)get_hero(0);
+	for (i = 0; i <= 6; i++, hero++) {
 
-		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) &&
-			!hero_dead(hero_i))
+		if (hero->typus && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
 		{
 #if !defined(__BORLANDC__)
-			D1_INFO("%s erhaelt %d AP\n",(char*)(hero_i + HERO_NAME2), ap);
+			D1_INFO("%s erhaelt %d AP\n", hero->alias, ap);
 #endif
 
-			add_hero_ap(hero_i, ap);
+			add_hero_ap(hero, ap);
 		}
 	}
 }
@@ -5320,28 +5297,26 @@ void add_hero_ap_all(signed short ap)
 void sub_hero_ap_all(signed short ap)
 {
 	signed short i;
-	Bit8u *hero_i;
+	struct struct_hero *hero;
 
 	if (ap < 0)
 		return;
 
-	hero_i = get_hero(0);
-	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
+	hero = (struct struct_hero*)get_hero(0);
+	for (i = 0; i <= 6; i++, hero++) {
 
-		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) &&
-			!hero_dead(hero_i))
+		if (hero->typus && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
 		{
-			if ((Bit32u)ap <= host_readd(hero_i + HERO_AP)) {
+			if ((Bit32u)ap <= hero->ap) {
 #if !defined(__BORLANDC__)
-				D1_INFO("%s erhaelt %+d AP\n",(char*)(hero_i + HERO_NAME2), -ap);
+				D1_INFO("%s erhaelt %+d AP\n", hero->alias, -ap);
 #endif
-				add_hero_ap(hero_i, -((Bit32s)ap));
+				add_hero_ap(hero, -((Bit32s)ap));
 			} else {
 #if !defined(__BORLANDC__)
-				D1_INFO("%s wird auf 0 AP gesetzt\n",(char*)(hero_i + HERO_NAME2));
+				D1_INFO("%s wird auf 0 AP gesetzt\n", hero->alias);
 #endif
-				host_writed(hero_i + HERO_AP, 0);
+				hero->ap = 0;
 			}
 		}
 	}
@@ -5534,15 +5509,15 @@ signed short count_heroes_available(void)
 {
 	signed short i;
 	signed short retval;
-	Bit8u *hero_i;
+	struct struct_hero *hero;
 
 	retval = 0;
-	hero_i = get_hero(0);
+	hero = (struct struct_hero*)get_hero(0);
 
-	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
+	for (i = 0; i <= 6; i++, hero++) {
+
 		/* Check if hero is available */
-		if (host_readbs(hero_i + HERO_TYPE) &&
-			(check_hero(hero_i) || check_hero_no2(hero_i)))
+		if (hero->typus && (check_hero((Bit8u*)hero) || check_hero_no2((Bit8u*)hero)))
 		{
 			retval++;
 		}
@@ -5557,15 +5532,14 @@ signed short count_heroes_available_ignore_npc(void)
 {
 	signed short i;
 	signed short retval;
-	Bit8u *hero_i;
+	struct struct_hero *hero;
 
 	retval = 0;
-	hero_i = get_hero(0);
+	hero = (struct struct_hero*)get_hero(0);
 
-	for (i = 0; i < 6; i++, hero_i += SIZEOF_HERO) {
+	for (i = 0; i < 6; i++, hero++) {
 		/* Check if hero is available */
-		if (host_readbs(hero_i + HERO_TYPE) &&
-			(check_hero(hero_i) || check_hero_no2(hero_i)))
+		if (heroi->typus && (check_hero((Bit8u*)hero) || check_hero_no2((Bit8u*)hero)))
 		{
 			retval++;
 		}
@@ -5584,13 +5558,12 @@ signed short count_heroes_available_in_group(void)
 {
 	signed short heroes = 0;
 	signed short i;
-	Bit8u *hero_i = get_hero(0);
+	struct struct_hero *hero = (struct struct_hero*)get_hero(0);
 
-	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
-		if (host_readbs(hero_i + HERO_TYPE) && /* != HERO_TYPE_NONE */
-			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) && /* hero in current group */
-			check_hero_no2(hero_i)) /* hero not dead, petrified, unconscious or renegade */
+	for (i = 0; i <= 6; i++, hero++) {
+		if (hero->typus && (hero->group_no == gs_current_group) && check_hero_no2((Bit8u*)hero))
 		{
+			/* hero not dead, petrified, unconscious or renegade */
 			heroes++;
 		}
 	}
@@ -5604,13 +5577,13 @@ signed short count_heroes_available_in_group_ignore_npc(void)
 {
 	signed short heroes = 0;
 	signed short i;
-	Bit8u *hero_i = get_hero(0);
+	struct struct_hero *hero = (struct struct_hero*)get_hero(0);
 
-	for (i = 0; i < 6; i++, hero_i += SIZEOF_HERO) {
-		if (host_readbs(hero_i + HERO_TYPE) && /* != HERO_TYPE_NONE */
-			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) && /* hero in current group */
-			check_hero_no2(hero_i)) /* hero not dead, petrified, unconscious or renegade */
+	for (i = 0; i < 6; i++, hero++) {
+
+		if (hero->typus && (hero->group_no == gs_current_group) && check_hero_no2((Bit8u*)hero))
 		{
+			/* hero not dead, petrified, unconscious or renegade */
 			heroes++;
 		}
 	}
@@ -5775,6 +5748,7 @@ int schick_main(int argc, char** argv)
 				/* load a savegame */
 				do {
 					savegame = load_game_state();
+
 				} while (savegame == -1);
 
 				g_pregame_state = 0;

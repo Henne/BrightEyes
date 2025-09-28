@@ -265,7 +265,7 @@ void DNG_door(signed short action)
 							g_steptarget_front = *(g_dng_map_ptr + MAP_POS(x,y));
 							DNG_open_door();
 
-							add_hero_ap(hero, 1L); /* hero gets 1 AP for successful lock pick */
+							add_hero_ap((struct struct_hero*)hero, 1L); /* hero gets 1 AP for successful lock pick */
 
 							g_new_menu_icons[6] = g_new_menu_icons[7] = g_new_menu_icons[8] = MENU_ICON_NONE;
 							g_redraw_menuicons = 1;
@@ -321,7 +321,7 @@ void DNG_door(signed short action)
 							g_steptarget_front = *(g_dng_map_ptr + MAP_POS(x,y));
 							DNG_open_door();
 
-							add_hero_ap(hero, 1L); /* hero gets 1 AP for successful lock pick */
+							add_hero_ap((struct struct_hero*)hero, 1L); /* hero gets 1 AP for successful lock pick */
 
 							g_new_menu_icons[6] = g_new_menu_icons[7] = g_new_menu_icons[8] = MENU_ICON_NONE;
 							g_redraw_menuicons = 1;

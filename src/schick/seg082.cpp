@@ -87,7 +87,7 @@ signed short DNG07_handler(void)
 							and_ptr_bs(amap_ptr + MAP_POS(13,2), 0x0f);
 							or_ptr_bs(amap_ptr + MAP_POS(13,2), DNG_TILE_STAIR_DOWN << 4);
 
-							add_hero_ap(hero, 1L);
+							add_hero_ap((struct struct_hero*)hero, 1L);
 						}
 
 					} else {
@@ -115,7 +115,7 @@ signed short DNG07_handler(void)
 						and_ptr_bs(amap_ptr + MAP_POS(13,2), 0x0f);
 						or_ptr_bs(amap_ptr + MAP_POS(13,2), DNG_TILE_STAIR_DOWN << 4);
 
-						add_hero_ap(hero, 1L);
+						add_hero_ap((struct struct_hero*)hero, 1L);
 
 					} else if (spell_result != -99) {
 

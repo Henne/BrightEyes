@@ -193,7 +193,7 @@ void tevent_111(void)
 
 					add_hero_ap_all(5);
 
-					add_hero_ap(hero, 20);
+					add_hero_ap((struct struct_hero*)hero, 20);
 
 					timewarp(HOURS(3));
 
@@ -215,14 +215,14 @@ void tevent_111(void)
 
 						add_hero_ap_all(7);
 
-						add_hero_ap(hero, 5);
+						add_hero_ap((struct struct_hero*)hero, 5);
 					} else {
 
 						GUI_output(get_tx2(13));
 
 						add_hero_ap_all(15);
 
-						add_hero_ap(hero, 5);
+						add_hero_ap((struct struct_hero*)hero, 5);
 
 						timewarp(HOURS(4));
 

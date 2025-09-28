@@ -133,7 +133,7 @@ void tevent_016(void)
 
 							GUI_dialog_na(0, (char*)g_dtp2 + 0x400);
 
-							add_hero_ap(hero, 5);
+							add_hero_ap((struct struct_hero*)hero, 5);
 
 							loose_random_item(hero, 10, get_ttx(506));
 

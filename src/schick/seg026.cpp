@@ -530,7 +530,7 @@ signed short save_game_state(void)
 				 * Here, the actual decrease is executed */
 				if (g_game_state != GAME_STATE_VICTORY && gs_current_loctype != LOCTYPE_TEMPLE && host_readds(get_hero(tw_bak) + HERO_AP) > 0)
 				{
-					add_hero_ap(get_hero(tw_bak), -1L);
+					add_hero_ap((struct struct_hero*)get_hero(tw_bak), -1L);
 				}
 #endif
 

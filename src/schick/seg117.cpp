@@ -288,7 +288,7 @@ void hunt_cavebear(void)
 					D1_INFO("%-16s erhaelt 5 AP fuer eine gelungene Attacke.\n",
 						(char*)(hero + HERO_NAME2));
 #endif
-					add_hero_ap(hero, 5);
+					add_hero_ap((struct struct_hero*)hero, 5);
 				}
 
 				/* PA of the current weapon - (RS-BE / 2) <= 1W20 */
@@ -299,7 +299,7 @@ void hunt_cavebear(void)
 						(char*)(hero + HERO_NAME2));
 #endif
 
-					add_hero_ap(hero, 3);
+					add_hero_ap((struct struct_hero*)hero, 3);
 					sub_hero_le(hero, dice_roll(2, 6, 0));
 				}
 			}
@@ -354,13 +354,13 @@ void hunt_viper(void)
 		GUI_output(g_dtp2);
 
 		/* hero gets 2 AP */
-		add_hero_ap(hero_i, 2);
+		add_hero_ap((struct struct_hero*)hero_i, 2);
 
 		if (random_schick(100) <= 50) {
 			/* hero gets bitten */
 
 			/* hero gets 3 AP */
-			add_hero_ap(hero_i, 3);
+			add_hero_ap((struct struct_hero*)hero_i, 3);
 
 			/* and 2 * 3W6 damage */
 			sub_hero_le(hero_i, dice_roll(3, 6, 0) * 2);
@@ -424,7 +424,7 @@ void octopus_attack(void)
 					/* strangling attack */
 					/* <hero> GERAET IN DEN WUERGEGRIFF DES KRAKENMOLCHS UND KANN SICH NUR UNTER MUEHEN WIEDER BEFREIEN. */
 
-					add_hero_ap(hero, 5);
+					add_hero_ap((struct struct_hero*)hero, 5);
 					sub_hero_le(hero, random_schick(6));
 					sprintf(g_dtp2, get_tx2(30), (char*)hero + HERO_NAME2);
 					GUI_output(g_dtp2);
@@ -440,7 +440,7 @@ void octopus_attack(void)
 					/* grabbing attack */
 					/* <hero> WIRD VON EINEM TENTAKEL GEPACKT UND UEBER BORD GERISSEN! */
 
-					add_hero_ap(hero, 20);
+					add_hero_ap((struct struct_hero*)hero, 20);
 					sub_hero_le(hero, random_schick(6));
 					sprintf(g_dtp2, get_tx2(31), (char*)hero + HERO_NAME2);
 					GUI_output(g_dtp2);
@@ -511,7 +511,7 @@ void hunt_bison(void)
 		GUI_output(g_dtp2);
 
 		sub_hero_le(hero, random_schick(6));
-		add_hero_ap(hero, 2);
+		add_hero_ap((struct struct_hero*)hero, 2);
 	}
 
 	resume_traveling();
@@ -539,7 +539,7 @@ void hunt_rhino(void)
 		sprintf(g_dtp2, get_tx2(43), (char*)hero + HERO_NAME2);
 		GUI_output(g_dtp2);
 		sub_hero_le(hero, dice_roll(2, 6, 0));
-		add_hero_ap(hero, 6);
+		add_hero_ap((struct struct_hero*)hero, 6);
 	}
 
 	resume_traveling();

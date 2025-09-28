@@ -143,7 +143,7 @@ void tevent_037(void)
 
 					GUI_output(g_dtp2);
 
-					add_hero_ap(hero, 20);
+					add_hero_ap((struct struct_hero*)hero, 20);
 
 					add_hero_ap_all(20);
 

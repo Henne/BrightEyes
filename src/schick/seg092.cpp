@@ -493,7 +493,7 @@ void use_lockpicks_on_chest(struct struct_chest* chest_ptr)
 			} else {
 				/* success */
 
-				add_hero_ap(hero, 1);
+				add_hero_ap((struct struct_hero*)hero, 1);
 
 
 				if (((struct struct_chest*)chest_ptr)->loot) {
@@ -501,7 +501,7 @@ void use_lockpicks_on_chest(struct struct_chest* chest_ptr)
 					((struct struct_chest*)chest_ptr)->loot((Bit8u*)chest_ptr);
 
 					if (((struct struct_chest*)chest_ptr)->trap == chest_protected_heavy) {
-						add_hero_ap(hero, 5);
+						add_hero_ap((struct struct_hero*)hero, 5);
 					}
 				}
 

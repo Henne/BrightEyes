@@ -684,7 +684,7 @@ void spell_foramen(void)
 
 	DNG_open_door();
 
-	add_hero_ap(get_spelluser(), 1); /* hero gets 1 AP for successful lock pick */
+	add_hero_ap((struct struct_hero*)get_spelluser(), 1); /* hero gets 1 AP for successful lock pick */
 
 	g_new_menu_icons[6] = (g_new_menu_icons[7] = (g_new_menu_icons[8] = (MENU_ICON_NONE)));
 	g_redraw_menuicons = 1;
