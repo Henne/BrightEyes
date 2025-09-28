@@ -535,12 +535,12 @@ signed short select_spell(Bit8u *hero, signed short show_vals)
 			retval = GUI_radio(get_ttx(217), g_spells_index[answer1].length,
 					g_radio_name_list[0], g_radio_name_list[1],
 					g_radio_name_list[2], g_radio_name_list[3],
-					g_radio_name_list[5], g_radio_name_list[6],
-					g_radio_name_list[7], g_radio_name_list[8],
-					g_radio_name_list[9], g_radio_name_list[10],
-					g_radio_name_list[11], g_radio_name_list[12],
-					g_radio_name_list[13], g_radio_name_list[14],
-					g_radio_name_list[15], g_radio_name_list[16]);
+					g_radio_name_list[4], g_radio_name_list[5],
+					g_radio_name_list[6], g_radio_name_list[7],
+					g_radio_name_list[8], g_radio_name_list[9],
+					g_radio_name_list[10], g_radio_name_list[11],
+					g_radio_name_list[12], g_radio_name_list[13],
+					g_radio_name_list[14], g_radio_name_list[15]);
 
 			if (retval != -1) {
 				if ((host_readbs((retval + first_spell) + hero + HERO_TA_RISE) < -5) &&
@@ -604,7 +604,7 @@ signed short test_spell(Bit8u *hero, signed short spell_no, signed char handicap
 
 			handicap += g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].mr;
 
-			if (g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].flags.mushroom) { // tests if enemy is mushroom
+			if (g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID)].flags.mushroom) { // tests if enemy is mushroom
 				return 0;
 			}
 		} else {
