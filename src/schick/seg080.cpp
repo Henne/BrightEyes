@@ -413,7 +413,7 @@ signed short DNG05_handler(void)
 
 			sub_hero_le(hero, dice_roll(1, 3, 2));
 
-			hero_disease_test(hero, 1, 65);
+			hero_disease_test((struct struct_hero*)hero, 1, 65);
 		}
 
 	} else if (pos == DNG_POS(0,3,14) && pos != gs_dng_handled_pos)

@@ -396,7 +396,7 @@ void TRV_ford_test(signed short mod, signed short time)
 					get_tx(37),
 					(char*)hero + HERO_NAME2);
 
-				hero_disease_test(hero, 2, 20 - (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK))));
+				hero_disease_test((struct struct_hero*)hero, 2, 20 - (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK))));
 
 				loose_random_item(hero, 1, get_ttx(506));
 			} else {
@@ -779,7 +779,7 @@ void TRV_barrier(signed short text_start)
 								(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
 						GUI_dialog_na(0, (char*)((char*)(g_dtp2 + 0x400)));
 
-						hero_disease_test(hero, 2, 30);
+						hero_disease_test((struct struct_hero*)hero, 2, 30);
 
 						loose_random_item(hero, 30, get_ttx(506));
 					}

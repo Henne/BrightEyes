@@ -2514,7 +2514,7 @@ void do_timers(void)
 			if ((host_readb(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
 				(host_readb(hero_i + HERO_DRUNK) != 0))
 			{
-				hero_get_sober(hero_i);
+				hero_get_sober((struct struct_hero*)hero_i);
 			}
 		}
 	}

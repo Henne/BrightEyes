@@ -327,11 +327,11 @@ void status_show(Bit16u index)
 		GUI_print_string(get_tx2(2), 155, 23);
 
 	/* print diseased */
-	if (hero_is_diseased(hero))
+	if (hero_is_diseased((struct struct_hero*)hero))
 		GUI_print_string(get_tx2(4), 155, 30);
 
 	/* print poison */
-	if (hero_is_poisoned(hero))
+	if (hero_is_poisoned((struct struct_hero*)hero))
 		GUI_print_string(get_tx2(3), 155, 37);
 
 	/* print hunger */

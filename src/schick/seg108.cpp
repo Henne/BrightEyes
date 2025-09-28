@@ -133,7 +133,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 
 				} else if (item == ITEM_BRANDY || item == ITEM_WINE) {
 					/* wine or snaps */
-					hero_get_drunken(consumer);
+					hero_get_drunken((struct struct_hero*)consumer);
 					drop_item(owner, pos, 1);
 				} else {
 					/* everything else: Beer */
@@ -203,7 +203,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 				}
 				case ITEM_BELMART: {
 					/* Belmart */
-					poison = hero_is_poisoned(consumer);
+					poison = hero_is_poisoned((struct struct_hero*)consumer);
 
 					if (poison != 0 && poison <= 5) {
 						/* cure the first poison */
@@ -221,7 +221,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 				}
 				case ITEM_MENCHAL: {
 					/* Menchalkaktus */
-					poison = hero_is_poisoned(consumer);
+					poison = hero_is_poisoned((struct struct_hero*)consumer);
 
 					if (poison != 0 && poison <= 10) {
 						/* cure the first poison */
@@ -387,7 +387,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					}
 
 					/* diseases, not all */
-					disease = hero_is_diseased(consumer);
+					disease = hero_is_diseased((struct struct_hero*)consumer);
 
 					if (disease == 2 || disease == 3) {
 						host_writeb(consumer + disease * 5 + 0xae, 1);
@@ -395,7 +395,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					}
 
 					/* poison */
-					poison = hero_is_poisoned(consumer);
+					poison = hero_is_poisoned((struct struct_hero*)consumer);
 
 					if (poison != 0 && poison < 7) {
 						host_writeb(consumer + poison * 5 + 0xd7, 0);
@@ -500,7 +500,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 				case 0xb4: {
 					/* Gegengift */
 
-					poison = hero_is_poisoned(consumer);
+					poison = hero_is_poisoned((struct struct_hero*)consumer);
 
 					if (poison != 0 && poison < 5) {
 						host_writeb(consumer + poison * 5 + 0xd7, 0);
@@ -516,7 +516,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 				case 0xdf: {
 					/* Antikrankheitselexier */
 
-					disease = hero_is_diseased(consumer);
+					disease = hero_is_diseased((struct struct_hero*)consumer);
 
 					host_writeb(consumer + disease * 5 + 0xae, 1);
 					host_writeb(consumer + disease * 5 + 0xaf, 0);

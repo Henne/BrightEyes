@@ -64,7 +64,7 @@ void chest_poisoned1(void)
 	sub_hero_le((Bit8u*)(gs_main_acting_hero = get_first_hero_available_in_group()), dice_roll(2, 6, 0));
 
 	/* and gets poisoned */
-	hero_gets_poisoned((Bit8u*)gs_main_acting_hero, 1);
+	hero_gets_poisoned((struct struct_hero*)gs_main_acting_hero, POISON_TYPE_SHURINKNOLLENGIFT);
 
 #if !defined(__BORLANDC__)
 	gs_main_acting_hero = NULL;
@@ -80,7 +80,7 @@ void chest_poisoned2(void)
 	sub_hero_le((Bit8u*)(gs_main_acting_hero = get_first_hero_available_in_group()), dice_roll(2, 6, 0));
 
 	/* and gets poisoned */
-	hero_gets_poisoned((Bit8u*)gs_main_acting_hero, 2);
+	hero_gets_poisoned((struct struct_hero*)gs_main_acting_hero, POISON_TYPE_ARAX);
 
 #if !defined(__BORLANDC__)
 	gs_main_acting_hero = NULL;
@@ -96,7 +96,7 @@ void chest_poisoned3(void)
 	sub_hero_le((Bit8u*)(gs_main_acting_hero = get_first_hero_available_in_group()), dice_roll(1, 6, 0));
 
 	/* and gets poisoned */
-	hero_gets_poisoned((Bit8u*)gs_main_acting_hero, 8);
+	hero_gets_poisoned((struct struct_hero*)gs_main_acting_hero, POISON_TYPE_KUKRIS);
 
 #if !defined(__BORLANDC__)
 	gs_main_acting_hero = NULL;

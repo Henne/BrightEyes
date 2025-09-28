@@ -21,33 +21,29 @@ namespace M302de {
 #endif
 
 /**
- * \brief   get the index of the hero with the best CH value
+ * \brief   get index of the first hero with the highest CH value
  *
- * \return              the index of the hero with the highest unmodified CH value.
+ * \return index of the first hero with the highest current CH value.
  * The hero must be alive and in the current group.
  */
-unsigned short get_hero_CH_best()
+signed short get_hero_CH_best(void)
 {
-
-	unsigned short retval;
-	Bit8u *hero_i;
+	signed short retval;
+	struct struct_hero *hero_i;
 	signed short i;
 	signed short ch_val = -1;
 
-	hero_i = get_hero(0);
+	hero_i = (struct struct_hero*)get_hero(0);
 
-	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
+	for (i = 0; i <= 6; i++, hero_i++) {
 
-		if ((host_readb(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readb(hero_i + HERO_GROUP_NO) == gs_current_group) &&
-				/* check if in group */
-			(!hero_dead(hero_i)) &&
-				/* check if not dead */
-			(host_readbs(hero_i + (HERO_ATTRIB + 3 * ATTRIB_CH)) > ch_val)) {
-				/* check if CH is the highest */
+		if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_no == gs_current_group) &&
+			(!hero_dead((Bit8u*)hero_i)) &&	(hero_i->attrib[ATTRIB_CH].current > ch_val))
+		{
+			/* check if CH value is higher */
 
-				ch_val = host_readbs(hero_i + (HERO_ATTRIB + 3 * ATTRIB_CH));
-				retval = i;
+			ch_val = hero_i->attrib[ATTRIB_CH].current;
+			retval = i;
 		}
 	}
 
@@ -55,31 +51,30 @@ unsigned short get_hero_CH_best()
 }
 
 /**
- * \brief   get the index of the hero with the best KK value
+ * \brief   get the index of the first hero with the highest KK value
  *
- * \return              the index of the hero with the highest unmodified KK value.
+ * \return index of the hero first hero with the highest current KK value.
  * The hero must be alive and in the current group.
  */
-unsigned short get_hero_KK_best() {
+signed short get_hero_KK_best(void)
+{
 	signed short retval;
-	Bit8u *hero_i;
+	struct struct_hero *hero_i;
 	signed short i;
 	signed short kk_val = -1;
 
-	hero_i = get_hero(0);
+	hero_i = (struct struct_hero*)get_hero(0);
 
-	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
-		if ((host_readb(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readb(hero_i + HERO_GROUP_NO) == gs_current_group) &&
-				/* check if in group */
-			(!hero_dead(hero_i)) &&
-				/* check if not dead */
-			(host_readbs(hero_i + (HERO_ATTRIB + 3 * ATTRIB_KK)) > kk_val)) {
-				/* check if KK is the highest */
+	for (i = 0; i <= 6; i++, hero_i++) {
 
-				kk_val = host_readbs(hero_i + (HERO_ATTRIB + 3 * ATTRIB_KK));
-				retval = i;
-			}
+		if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_no == gs_current_group) &&
+			(!hero_dead((Bit8u*)hero_i)) &&	(hero_i->attrib[ATTRIB_KK].current > kk_val))
+		{
+			/* check if KK is higher */
+
+			kk_val = hero_i->attrib[ATTRIB_KK].current;
+			retval = i;
+		}
 	}
 
 	return retval;
@@ -93,13 +88,17 @@ unsigned short get_hero_KK_best() {
  * \param   hero        the hero which should be checked
  * \return              number of the first disease the hero has
  */
-unsigned short hero_is_diseased(Bit8u *hero)
+signed short hero_is_diseased(struct struct_hero *hero)
 {
-	signed short i;
+	signed int i;
 
-	for (i = 1; i <= 7; i++)
-		if (host_readbs(hero + HERO_ILLNESS + i * SIZEOF_HERO_ILLNESS) == -1)
+	for (i = 1; i <= 7; i++) {
+
+		if (hero->sick[i][0] == -1) {
+
 			return i;
+		}
+	}
 
 	return 0;
 }
@@ -112,14 +111,17 @@ unsigned short hero_is_diseased(Bit8u *hero)
  * \param   hero        the hero which should be checked
  * \return              number of the first poisoning the hero has
  */
-unsigned short hero_is_poisoned(Bit8u *hero)
+signed short hero_is_poisoned(struct struct_hero *hero)
 {
+	signed int i;
 
-	signed short i;
+	for (i = 1; i <= 9; i++) {
 
-	for (i = 1; i <= 9; i++)
-		if (host_readbs(hero + HERO_POISON + i * SIZEOF_HERO_POISON) == -1)
+		if (hero->poison[i][0] == -1) {
+
 			return i;
+		}
+	}
 
 	return 0;
 }
@@ -130,15 +132,15 @@ unsigned short hero_is_poisoned(Bit8u *hero)
  * \param   hero        the hero which gets poisoned
  * \param   poison      the kind of poison
  */
-void hero_gets_poisoned(Bit8u *hero, unsigned short poison) {
+void hero_gets_poisoned(struct struct_hero *hero, const signed short poison)
+{
+	if (!hero_dead((Bit8u*)hero)) {
 
-	if (!hero_dead(hero)) {
-
-		host_writeb(hero + poison * 5 + 0xd6, 0xff);
-		host_writeb(hero + poison * 5 + 0xd7, 0x00);
-		host_writeb(hero + poison * 5 + 0xd8, 0x00);
-		host_writeb(hero + poison * 5 + 0xd9, 0x00);
-		host_writeb(hero + poison * 5 + 0xda, 0x00);
+		hero->poison[poison][0] = -1;
+		hero->poison[poison][1] = 0;
+		hero->poison[poison][2] = 0;
+		hero->poison[poison][3] = 0;
+		hero->poison[poison][4] = 0;
 	}
 }
 
@@ -148,26 +150,25 @@ void hero_gets_poisoned(Bit8u *hero, unsigned short poison) {
  * \param   hero        the hero which gets diseased
  * \param   disease     the kind of disease
  */
-void hero_gets_diseased(Bit8u *hero, unsigned short disease)
+void hero_gets_diseased(struct struct_hero *hero, const signed short disease)
 {
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* not a real BUG, but very useless */
-	if (host_readb(hero + HERO_TYPE) == HERO_TYPE_NONE)
+	if (hero->typus == HERO_TYPE_NONE)
 		return;
 #endif
 
-	if (!hero_dead(hero)) {
+	if (!hero_dead((Bit8u*)hero)) {
+
 #if !defined(__BORLANDC__)
-		D1_INFO("%s erkrankt an %s\n",
-			(char*)hero + HERO_NAME2,
-			get_ttx(disease + 0x193));
+		D1_INFO("%s erkrankt an %s\n", hero->alias, get_ttx(disease + 0x193));
 #endif
 
-		host_writeb(hero + disease * 5 + 0xae, 0xff);
-		host_writeb(hero + disease * 5 + 0xaf, 0x00);
-		host_writeb(hero + disease * 5 + 0xb0, 0x00);
-		host_writeb(hero + disease * 5 + 0xb1, 0x00);
-		host_writeb(hero + disease * 5 + 0xb2, 0x00);
+		hero->sick[disease][0] = -1;
+		hero->sick[disease][1] = 0;
+		hero->sick[disease][2] = 0;
+		hero->sick[disease][3] = 0;
+		hero->sick[disease][4] = 0;
 	}
 }
 
@@ -178,19 +179,18 @@ void hero_gets_diseased(Bit8u *hero, unsigned short disease)
  * \param   disease     the kind of disease
  * \param   probability the probability to get diseased in percent
  */
-void hero_disease_test(Bit8u *hero, unsigned short disease, signed short probability) {
+void hero_disease_test(struct struct_hero *hero, const signed short disease, const signed short probability) {
 
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* not a real BUG, but very useless */
-	if (host_readb(hero + HERO_TYPE) == HERO_TYPE_NONE) {
+	if (hero->typus == HERO_TYPE_NONE) {
 		D1_ERR("WARNING: called %s with an invalid hero\n", __func__);
 		return;
 	}
 #endif
 
 	/* check the probability and if hero is diseased*/
-	if (random_schick(100) <= probability &&
-		host_readb(hero + disease * 5 + 0xae) != 0xff) {
+	if ((random_schick(100) <= probability) && (hero->sick[disease][0] != -1)) {
 
 		hero_gets_diseased(hero, disease);
 	}
@@ -201,10 +201,9 @@ void hero_disease_test(Bit8u *hero, unsigned short disease, signed short probabi
  *
  *	This function is not used in the game!
  */
-short check_hero_KK_unused(short val)
+signed short check_hero_KK_unused(const signed short val)
 {
-
-	return (host_readbs(get_hero(0) + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(get_hero(0) + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK)) >= val) ? 1 : 0;
+	return ((struct struct_hero*)get_hero(0))->attrib[ATTRIB_KK].current + ((struct struct_hero*)get_hero(0))->attrib[ATTRIB_KK].mod >= val ? 1 : 0;
 }
 
 /**
@@ -214,21 +213,21 @@ short check_hero_KK_unused(short val)
  *	This function, like hero_check_KK_unused, is buggy!
  *	It does not check if the first slot is a valid hero.
  */
-short check_heroes_KK(short val) {
-
-	Bit8u *hero;
+signed short check_heroes_KK(const signed short val)
+{
+	struct struct_hero *hero;
 	signed short sum;
 
-	hero = get_hero(0);
+	hero = (struct struct_hero*)get_hero(0);
 
 	/* Orig-BUG: not checked if hero is valid */
-	sum = host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK));
+	sum = hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod;
 
-	hero = get_hero(1);
+	hero = (struct struct_hero*)get_hero(1);
 
 	/* check class, group and dead status of hero in slot 2*/
-	if (host_readb(hero + HERO_TYPE) && host_readb(hero + HERO_GROUP_NO) == gs_current_group && (!hero_dead(hero))) {
-		sum += host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK));
+	if (hero->typus && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero)) {
+		sum += hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod;
 	}
 
 #if !defined(__BORLANDC__)
@@ -280,14 +279,14 @@ void make_valuta_str(char *dst, Bit32s money) {
 /**
  * \brief   recalculates the AT PA values
  */
-void update_atpa(Bit8u *hero)
+void update_atpa(struct struct_hero *hero)
 {
 	div_t erg;
 	signed short diff;
 	signed short i;
 
 	/* ATPA base = (IN + KK + GE) / 5 rounded */
-	erg = div(host_readbs(hero + (HERO_ATTRIB_ORIG + 3 * ATTRIB_IN)) + host_readbs(hero + (HERO_ATTRIB_ORIG + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_ORIG + 3 * ATTRIB_GE)), 5);
+	erg = div(hero->attrib[ATTRIB_IN].normal + hero->attrib[ATTRIB_KK].normal + hero->attrib[ATTRIB_GE].normal, 5);
 	/* Original-Bug:
 	 * According to DSA 3 rules, AT basis value is (MU + KK + GE) / 5
 	 * (PA basis (IN + KK + GE)/5 is correct */
@@ -297,27 +296,24 @@ void update_atpa(Bit8u *hero)
 		erg.quot++;
 
 	/* calculate difference */
-	diff = erg.quot - host_readbs(hero + HERO_ATPA_BASIS);
+	diff = erg.quot - hero->atpa_base;
 
 	if (diff != 0) {
 
 		/* update atpa base value */
-		host_writeb(hero + HERO_ATPA_BASIS, erg.quot);
+		hero->atpa_base = erg.quot;
 
 		/* prepare message */
-		sprintf(g_dtp2,
-			get_ttx(8), host_readbs(hero + HERO_ATPA_BASIS));
+		sprintf(g_dtp2,	get_ttx(8), hero->atpa_base);
 
 		/* print message */
 		GUI_output(g_dtp2);
 
 		for (i = 0; i < 7; i++) {
 			/* add diff to AT value */
-			host_writeb(hero + HERO_AT + i,
-				host_readbs(hero + HERO_AT + i) + diff);
+			hero->at_weapon[i] = hero->at_weapon[i] + diff;
 			/* add diff to PA value */
-			host_writeb(hero + HERO_PA + i,
-				host_readbs(hero + HERO_PA + i) + diff);
+			hero->pa_weapon[i] = hero->pa_weapon[i] + diff;
 		}
 	}
 }
@@ -402,7 +398,7 @@ signed short select_hero_from_group(char *title)
 	signed short tw_bak;
 	signed short bak_2;
 	signed short bak_3;
-	unsigned char *hero;
+	struct struct_hero *hero;
 
 	tw_bak = g_textbox_width;
 	g_textbox_width = 3;
@@ -410,15 +406,13 @@ signed short select_hero_from_group(char *title)
 
 	for (i = 0; i <= 6; i++) {
 
-		hero = get_hero(i);
+		hero = (struct struct_hero*)get_hero(i);
 
-		if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readb(hero + HERO_GROUP_NO) == gs_current_group &&
-				/* TODO: find out what that means */
-				g_hero_sel_exclude != i) {
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && (g_hero_sel_exclude != i)) {
+			/* TODO: find out what that means */
 
 			/* save pointer to the name of the hero */
-			g_radio_name_list[cnt] = (char*)(hero + HERO_NAME2);
+			g_radio_name_list[cnt] = hero->alias;
 			dst.a[cnt] = i;
 			cnt++;
 		}
@@ -428,6 +422,7 @@ signed short select_hero_from_group(char *title)
 	g_hero_sel_exclude = -1;
 
 	if (cnt != 0) {
+
 		bak_2 = g_basepos_x;
 		bak_3 = g_basepos_y;
 
@@ -450,6 +445,7 @@ signed short select_hero_from_group(char *title)
 	}
 
 	g_textbox_width = tw_bak;
+
 	return -1;
 }
 
@@ -473,22 +469,18 @@ signed short select_hero_ok(char *title)
 	signed short tw_bak;
 	signed short bak_2;
 	signed short bak_3;
-	unsigned char *hero;
+	struct struct_hero *hero;
 
 	tw_bak = g_textbox_width;
 	g_textbox_width = 3;
 	cnt = 0;
 
-	for (hero = get_hero(0), i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+	for (hero = (struct struct_hero*)get_hero(0), i = 0; i <= 6; i++, hero++) {
 
-		if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readb(hero + HERO_GROUP_NO) == gs_current_group &&
-			check_hero(hero) &&
-				/* TODO: find out what that means */
-				g_hero_sel_exclude != i) {
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && check_hero((Bit8u*)hero) && (g_hero_sel_exclude != i)) {
 
 			/* save pointer to the name of the hero */
-			g_radio_name_list[cnt] = (char*)(hero + HERO_NAME2);
+			g_radio_name_list[cnt] = hero->alias;
 			dst.a[cnt] = i;
 			cnt++;
 		}
@@ -521,6 +513,7 @@ signed short select_hero_ok(char *title)
 
 	g_textbox_width = tw_bak;
 	g_skilled_hero_pos = -1;
+
 	return -1;
 }
 
@@ -545,22 +538,18 @@ signed short select_hero_ok_forced(char *title)
 	signed short tw_bak;
 	signed short bak_2;
 	signed short bak_3;
-	unsigned char *hero;
+	struct struct_hero *hero;
 
 	tw_bak = g_textbox_width;
 	g_textbox_width = 3;
 	cnt = 0;
 
-	for (hero = get_hero(0), i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+	for (hero = (struct struct_hero*)get_hero(0), i = 0; i <= 6; i++, hero++) {
 
-		if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readb(hero + HERO_GROUP_NO) == gs_current_group &&
-			check_hero(hero) &&
-				/* TODO: find out what that means */
-				g_hero_sel_exclude != i) {
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && check_hero((Bit8u*)hero) && (g_hero_sel_exclude != i)) {
 
 			/* save pointer to the name of the hero */
-			g_radio_name_list[cnt] = (char*)(hero + HERO_NAME2);
+			g_radio_name_list[cnt] = hero->alias;
 			dst.a[cnt] = i;
 			cnt++;
 		}
@@ -600,21 +589,20 @@ signed short select_hero_ok_forced(char *title)
 /**
  * \brief   counts the heroes in the current group
  *
- * \return              how many alive heroes are in the group.
+ * \return  number of living heroes in the current group
  */
 signed short count_heroes_in_group(void)
 {
-	Bit8u *hero_i;
+	struct struct_hero *hero_i;
 	signed short i;
 	signed short retval;
 
 	retval = 0;
 
-	for (hero_i = get_hero(0), i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
+	for (hero_i = (struct struct_hero*)get_hero(0), i = 0; i <= 6; i++, hero_i++) {
+
 		/* Check class, group and dead */
-		if ((host_readb(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readb(hero_i + HERO_GROUP_NO) == gs_current_group) &&
-			(!hero_dead(hero_i))) {
+		if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_no == gs_current_group) && !hero_dead((Bit8u*)hero_i)) {
 
 			retval++;
 		}
@@ -628,31 +616,30 @@ signed short count_heroes_in_group(void)
  *
  * \param   hero        the hero
  */
-void hero_get_drunken(Bit8u *hero)
+void hero_get_drunken(struct struct_hero *hero)
 {
-
-	if (!host_readbs(hero + HERO_DRUNK)) {
+	if (!hero->drunk) {
 
 		/* set the hero drunken */
-		host_writeb(hero + HERO_DRUNK, 1);
+		hero->drunk = 1;
 
 		/* change good attributes */
-		add_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_MU), 1);
-		sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_KL), 1);
-		sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_CH), 1);
-		sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_FF), 1);
-		sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE), 1);
-		add_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_IN), 1);
-		add_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK), 1);
+		hero->attrib[ATTRIB_MU].current += 1;
+		hero->attrib[ATTRIB_KL].current -= 1;
+		hero->attrib[ATTRIB_CH].current -= 1;
+		hero->attrib[ATTRIB_FF].current -= 1;
+		hero->attrib[ATTRIB_GE].current -= 1;
+		hero->attrib[ATTRIB_IN].current += 1;
+		hero->attrib[ATTRIB_KK].current += 1;
 
 		/* Reset bad attributes */
-		add_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_AG), 1);
-		sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_HA), 1);
-		sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_RA), 1);
-		add_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_GG), 1);
-		sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_TA), 1);
-		add_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_NG), 1);
-		add_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_JZ), 1);
+		hero->attrib[ATTRIB_AG].current += 1;
+		hero->attrib[ATTRIB_HA].current -= 1;
+		hero->attrib[ATTRIB_RA].current -= 1;
+		hero->attrib[ATTRIB_GG].current += 1;
+		hero->attrib[ATTRIB_TA].current -= 1;
+		hero->attrib[ATTRIB_NG].current += 1;
+		hero->attrib[ATTRIB_JZ].current += 1;
 
 		/* do a burp FX2.VOC */
 		if (g_pp20_index == ARCHIVE_FILE_ZUSTA_UK) {
@@ -668,36 +655,37 @@ void hero_get_drunken(Bit8u *hero)
  *
  * \param   hero        pointer to the hero
  */
-void hero_get_sober(Bit8u *hero) {
+void hero_get_sober(struct struct_hero *hero)
+{
 	/* This is checked twice */
 	/* Is hero drunken ? */
-	if (host_readb(hero + HERO_DRUNK) == 0)
+	if (hero->drunk == 0)
 		return;
 
 #if !defined(__BORLANDC__)
-	D1_INFO("%s ist wieder nuechtern\n", (char*)hero + HERO_NAME2);
+	D1_INFO("%s ist wieder nuechtern\n", hero->alias);
 #endif
 
 	/* set hero sober */
-	host_writeb(hero + HERO_DRUNK, 0);
+	hero->drunk = 0;
 
 	/* Reset good attributes */
-	sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_MU), 1);
-	add_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_KL), 1);
-	add_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_CH), 1);
-	add_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_FF), 1);
-	add_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE), 1);
-	sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_IN), 1);
-	sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK), 1);
+	hero->attrib[ATTRIB_MU].current -= 1;
+	hero->attrib[ATTRIB_KL].current += 1;
+	hero->attrib[ATTRIB_CH].current += 1;
+	hero->attrib[ATTRIB_FF].current += 1;
+	hero->attrib[ATTRIB_GE].current += 1;
+	hero->attrib[ATTRIB_IN].current -= 1;
+	hero->attrib[ATTRIB_KK].current -= 1;
 
 	/* Reset bad attributes */
-	sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_AG), 1);
-	add_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_HA), 1);
-	add_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_RA), 1);
-	sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_GG), 1);
-	add_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_TA), 1);
-	sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_NG), 1);
-	sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_JZ), 1);
+	hero->attrib[ATTRIB_AG].current -= 1;
+	hero->attrib[ATTRIB_HA].current += 1;
+	hero->attrib[ATTRIB_RA].current += 1;
+	hero->attrib[ATTRIB_GG].current -= 1;
+	hero->attrib[ATTRIB_TA].current += 1;
+	hero->attrib[ATTRIB_NG].current -= 1;
+	hero->attrib[ATTRIB_JZ].current -= 1;
 
 	if (g_pp20_index == ARCHIVE_FILE_ZUSTA_UK)
 		g_request_refresh = 1;

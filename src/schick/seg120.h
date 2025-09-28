@@ -15,7 +15,7 @@ void prepare_dirs(void);
 void cleanup_game(void);
 
 /* 0x34 */
-void rabies(Bit8u*, signed short);
+void rabies(struct struct_hero*, signed short);
 
 /* 0x39 */
 /* should be static */

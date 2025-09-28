@@ -648,7 +648,7 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 
 		} else {
 
-			if (!hero_is_diseased(hero) && !hero_is_poisoned(hero)) {
+			if (!hero_is_diseased((struct struct_hero*)hero) && !hero_is_poisoned((struct struct_hero*)hero)) {
 
 				if (host_readbs(hero + HERO_RUHE_KOERPER) > 0) {
 					dec_ptr_bs(hero + HERO_RUHE_KOERPER);

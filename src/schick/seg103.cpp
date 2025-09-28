@@ -327,7 +327,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 				patient = get_hero(patient_pos);
 				if (is_hero_healable(patient)) {
 
-					poison = hero_is_poisoned(patient);
+					poison = hero_is_poisoned((struct struct_hero*)patient);
 
 					if (poison == 0) {
 

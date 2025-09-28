@@ -316,7 +316,7 @@ void tevent_098(void)
 			/* Original-Bugfix: take the leader of the group */
 			hero = (Bit8u*)get_first_hero_available_in_group();
 #endif
-			hero_disease_test(hero, 2, 20 - (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK))));
+			hero_disease_test((struct struct_hero*)hero, 2, 20 - (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK))));
 
 			loose_random_item(hero, 1, get_ttx(506));
 

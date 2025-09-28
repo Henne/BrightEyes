@@ -300,7 +300,7 @@ void TRV_swimm(signed short mod, signed short percent)
 			if (test_skill(hero, TA_SCHWIMMEN, (signed char)mod) <= 0) {
 				/* test failed */
 
-				hero_disease_test(hero, 2, 20 - (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK))));
+				hero_disease_test((struct struct_hero*)hero, 2, 20 - (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK))));
 
 				loose_random_item(hero, percent, get_ttx(506));
 

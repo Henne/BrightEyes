@@ -42,19 +42,19 @@ void disease_effect(void)
 {
 	signed short i;
 	signed short j;
-	unsigned char *hero;
-	Bit8u *hero2;
+	struct struct_hero *hero;
+	struct struct_hero *hero2;
 	Bit8s *disease_ptr;
 
 	g_check_disease = 0;
 
 	for (i = 0; i <= 6; i++) {
 
-		if ((host_readbs(get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE) && !hero_dead(get_hero(i))) {
+		if ((((struct struct_hero*)get_hero(i))->typus != HERO_TYPE_NONE) && !hero_dead(get_hero(i))) {
 
-			hero = get_hero(i);
+			hero = (struct struct_hero*)get_hero(i);
 
-			disease_ptr = (Bit8s*)hero + (HERO_ILLNESS + ILLNESS_TYPE_WUNDFIEBER * SIZEOF_HERO_ILLNESS);
+			disease_ptr = (Bit8s*)&hero->sick[ILLNESS_TYPE_WUNDFIEBER];
 
 			/* TETANUS / WUNDFIEBER: get worse */
 			if (disease_ptr[0] == -1) {
@@ -65,20 +65,20 @@ void disease_effect(void)
 					disease_ptr[1] = 0;
 					disease_ptr[0] = 1;
 
-					sprintf(g_dtp2, get_ttx(561), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_ttx(561), hero->alias);
 					GUI_output(g_dtp2);
 
 				} else {
 					/* Strength is fading, but only to 1 */
-					sub_hero_le(hero, dice_roll(2, 6, -(disease_ptr[1] - 1)));
+					sub_hero_le((Bit8u*)hero, dice_roll(2, 6, -(disease_ptr[1] - 1)));
 
-					if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) != 0) {
+					if (hero->attrib[ATTRIB_KK].current != 0) {
 
-						sprintf(g_dtp2, get_ttx(572), (char*)hero + HERO_NAME2);
+						sprintf(g_dtp2, get_ttx(572), hero->alias);
 						GUI_output(g_dtp2);
 
 						disease_ptr[2]++;
-						dec_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK));
+						hero->attrib[ATTRIB_KK].current--;
 					}
 				}
 			}
@@ -92,16 +92,16 @@ void disease_effect(void)
 					disease_ptr[0] = 0;
 				} else {
 					/* hero regains the lost strength */
-					sprintf(g_dtp2, get_ttx(573), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_ttx(573), hero->alias);
 					GUI_output(g_dtp2);
 
 					disease_ptr[2]--;
-					inc_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK));
+					hero->attrib[ATTRIB_KK].current++;
 				}
 			}
 
 
-			disease_ptr = (Bit8s*)hero + (HERO_ILLNESS + ILLNESS_TYPE_DUMPFSCHAEDEL * SIZEOF_HERO_ILLNESS);
+			disease_ptr = (Bit8s*)&hero->sick[ILLNESS_TYPE_DUMPFSCHAEDEL];
 
 			/* NUMBSKULL / DUMPFSCHAEDEL: get worse */
 			if (disease_ptr[0] == -1) {
@@ -111,14 +111,14 @@ void disease_effect(void)
 					disease_ptr[4] = 1;
 
 					for (j = 0; j < 7; j++) {
-						sub_ptr_bs(hero + j + 0x68, 2);
-						sub_ptr_bs(hero + j + 0x6f, 2);
+						hero->at_weapon[j] -= 2;
+						hero->pa_weapon[j] -= 2;
 					}
 
-					sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE), 2);
-					sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK), 5);
+					hero->attrib[ATTRIB_GE].current -= 2;
+					hero->attrib[ATTRIB_KK].current -= 5;
 
-					sprintf(g_dtp2, get_ttx(574), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_ttx(574), hero->alias);
 					GUI_output(g_dtp2);
 				}
 
@@ -126,12 +126,12 @@ void disease_effect(void)
 					/* after two days, each other hero in the group
 					 * can be infectect by a chance of 20 % */
 
-					hero2 = get_hero(0);
+					hero2 = (struct struct_hero*)get_hero(0);
 
-					for (j = 0; j <= 6; j++, hero2 += SIZEOF_HERO) {
-						if ((host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE) &&
-							(host_readbs(hero2 + HERO_GROUP_NO) == gs_current_group) &&
-							!hero_dead(hero2) &&
+					for (j = 0; j <= 6; j++, hero2++) {
+						if ((hero2->typus != HERO_TYPE_NONE) &&
+							(hero2->group_no == gs_current_group) &&
+							!hero_dead((Bit8u*)hero2) &&
 							(hero2 != hero) &&
 							(random_schick(100) <= 20))
 						{
@@ -151,12 +151,12 @@ void disease_effect(void)
 						disease_ptr[4] = 0;
 
 						for (j = 0; j < 7; j++) {
-							add_ptr_bs(hero + j + 0x68, 2);
-							add_ptr_bs(hero + j + 0x6f, 2);
+							hero->at_weapon[j] += 2;
+							hero->pa_weapon[j] += 2;
 						}
 
-						add_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE), 2);
-						add_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK), 5);
+						hero->attrib[ATTRIB_GE].current += 2;
+						hero->attrib[ATTRIB_KK].current += 5;
 					}
 
 					hero_gets_diseased(hero, 3);
@@ -165,7 +165,7 @@ void disease_effect(void)
 				if (disease_ptr[1] > dice_roll(1, 3, 4)) {
 					disease_ptr[0] = 1;
 				} else {
-					sub_hero_le(hero, dice_roll(1, 6, -1));
+					sub_hero_le((Bit8u*)hero, dice_roll(1, 6, -1));
 				}
 			}
 
@@ -180,20 +180,20 @@ void disease_effect(void)
 					disease_ptr[4] = 0;
 
 					for (j = 0; j < 7; j++) {
-						add_ptr_bs(hero + j + 0x68, 2);
-						add_ptr_bs(hero + j + 0x6f, 2);
+						hero->at_weapon[j] += 2;
+						hero->pa_weapon[j] += 2;
 					}
 
-					add_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE), 2);
-					add_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK), 5);
+					hero->attrib[ATTRIB_GE].current += 2;
+					hero->attrib[ATTRIB_KK].current += 5;
 				}
 
 				/* regeneration complete */
-				sprintf(g_dtp2, get_ttx(575), (char*)hero + HERO_NAME2);
+				sprintf(g_dtp2, get_ttx(575), hero->alias);
 				GUI_output(g_dtp2);
 			}
 
-			disease_ptr = (Bit8s*)hero + (HERO_ILLNESS + ILLNESS_TYPE_BLAUE_KEUCHE * SIZEOF_HERO_ILLNESS);
+			disease_ptr = (Bit8s*)&hero->sick[ILLNESS_TYPE_BLAUE_KEUCHE];
 
 			/* BLUE COUGH / BLAUE KEUCHE: get worse */
 			if (disease_ptr[0] == -1) {
@@ -203,46 +203,43 @@ void disease_effect(void)
 					disease_ptr[4] = 1;
 
 					for (j = 0; j < 7; j++) {
-						sub_ptr_bs(hero + j + 0x68, 4);
-						sub_ptr_bs(hero + j + 0x6f, 4);
+						hero->at_weapon[j] -= 4;
+						hero->pa_weapon[j] -= 4;
 					}
 
-					disease_ptr[2] = host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) / 2;
-					disease_ptr[3] = host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE)) / 2;
+					disease_ptr[2] = hero->attrib[ATTRIB_KK].current / 2;
+					disease_ptr[3] = hero->attrib[ATTRIB_GE].current / 2;
 
 
-					sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE), disease_ptr[3]);
-					sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK), disease_ptr[2]);
+					hero->attrib[ATTRIB_GE].current -= disease_ptr[3];
+					hero->attrib[ATTRIB_KK].current -= disease_ptr[2];
 
-					sprintf(g_dtp2, get_ttx(577), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_ttx(577), hero->alias);
 					GUI_output(g_dtp2);
 
 				}
 
 				if ((disease_ptr[1] > 3) && (random_schick(100) <= 25)) {
 
-					dec_ptr_bs(hero + (HERO_ATTRIB_ORIG + 3 * ATTRIB_KK));
-					dec_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK));
-					sub_ptr_ws(hero + HERO_LE_ORIG, disease_ptr[1] / 3);
-					sub_hero_le(hero, disease_ptr[1] / 3);
+					hero->attrib[ATTRIB_KK].normal--;
+					hero->attrib[ATTRIB_KK].current--;
+					hero->le_max -= disease_ptr[1] / 3;
+					sub_hero_le((Bit8u*)hero, disease_ptr[1] / 3);
 					disease_ptr[0] = 1;
 
 				} else {
 
-					hero2 = get_hero(0);
+					hero2 = (struct struct_hero*)get_hero(0);
 
-					for (j = 0; j <= 6; j++, hero2 += SIZEOF_HERO) {
-						if ((host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE) &&
-							(host_readbs(hero2 + HERO_GROUP_NO) == gs_current_group) &&
-							!hero_dead(hero2) &&
-							(hero2 != hero) &&
-							(random_schick(100) <= 20))
+					for (j = 0; j <= 6; j++, hero2++) {
+						if ((hero2->typus != HERO_TYPE_NONE) &&	(hero2->group_no == gs_current_group) &&
+							!hero_dead((Bit8u*)hero2) && (hero2 != hero) &&	(random_schick(100) <= 20))
 						{
 							hero_gets_diseased(hero2, 3);
 						}
 					}
 
-					sub_hero_le(hero, dice_roll(1, 6, 2));
+					sub_hero_le((Bit8u*)hero, dice_roll(1, 6, 2));
 				}
 			}
 
@@ -250,7 +247,7 @@ void disease_effect(void)
 			if (disease_ptr[0] == 1) {
 
 				/* regeneration complete */
-				sprintf(g_dtp2, get_ttx(576), (char*)hero + HERO_NAME2);
+				sprintf(g_dtp2, get_ttx(576), hero->alias);
 				GUI_output(g_dtp2);
 
 				disease_ptr[1] = 0;
@@ -261,18 +258,18 @@ void disease_effect(void)
 					disease_ptr[4] = 0;
 
 					for (j = 0; j < 7; j++) {
-						add_ptr_bs(hero + j + 0x68, 4);
-						add_ptr_bs(hero + j + 0x6f, 4);
+						hero->at_weapon[j] += 4;
+						hero->pa_weapon[j] += 4;
 					}
 
-					add_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE), disease_ptr[3]);
-					add_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK), disease_ptr[2]);
+					hero->attrib[ATTRIB_GE].current += disease_ptr[3];
+					hero->attrib[ATTRIB_KK].current += disease_ptr[2];
 					disease_ptr[2] = disease_ptr[3] = 0;
 				}
 			}
 
 
-			disease_ptr = (Bit8s*)hero + (HERO_ILLNESS + ILLNESS_TYPE_PARALYSE * SIZEOF_HERO_ILLNESS);
+			disease_ptr = (Bit8s*)&hero->sick[ILLNESS_TYPE_PARALYSE];
 
 			/* PARALYSIS / PARALYSE: get worse */
 			if (disease_ptr[0] == -1) {
@@ -283,13 +280,13 @@ void disease_effect(void)
 				} else {
 					j = random_schick(6);
 					disease_ptr[3] += j;
-					sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE), j);
+					hero->attrib[ATTRIB_GE].current -= j;
 
 					j = random_schick(6);
 					disease_ptr[2] += j;
-					sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK), j);
+					hero->attrib[ATTRIB_KK].current -= j;
 
-					sprintf(g_dtp2, get_ttx(579), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_ttx(579), hero->alias);
 					GUI_output(g_dtp2);
 				}
 			}
@@ -298,32 +295,34 @@ void disease_effect(void)
 			if (disease_ptr[0] == 1) {
 
 				if (!disease_ptr[2] && !disease_ptr[3]) {
+
 					disease_ptr[1] = 0;
 					disease_ptr[0] = 0;
+
 				} else {
 
 					if (!disease_ptr[2]) {
 
-						sprintf(g_dtp2, get_ttx(573), (char*)hero + HERO_NAME2);
+						sprintf(g_dtp2, get_ttx(573), hero->alias);
 						GUI_output(g_dtp2);
 
 						disease_ptr[2]--;
-						inc_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK));
+						hero->attrib[ATTRIB_KK].current++;
 					}
 
 					if (!disease_ptr[3]) {
 
-						sprintf(g_dtp2, get_ttx(578), (char*)hero + HERO_NAME2);
+						sprintf(g_dtp2, get_ttx(578), hero->alias);
 						GUI_output(g_dtp2);
 
 						disease_ptr[3]--;
-						inc_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE));
+						hero->attrib[ATTRIB_GE].current++;
 					}
 				}
 			}
 
 
-			disease_ptr = (Bit8s*)hero + (HERO_ILLNESS + ILLNESS_TYPE_SCHLACHTENFIEBER * SIZEOF_HERO_ILLNESS);
+			disease_ptr = (Bit8s*)&hero->sick[ILLNESS_TYPE_SCHLACHTENFIEBER];
 
 			/* BATTLEFIELD FEVER / SCHLACHTFELDFIEBER: get worse */
 			if (disease_ptr[0] == -1) {
@@ -331,12 +330,12 @@ void disease_effect(void)
 				if (disease_ptr[1] > 7) {
 
 					/* 30 % for elfes, 20% for the all other types */
-					if (random_schick(100) <= (host_readbs(hero + HERO_TYPE) >= HERO_TYPE_GREEN_ELF ? 30 : 20)) {
+					if (random_schick(100) <= (hero->typus >= HERO_TYPE_GREEN_ELF ? 30 : 20)) {
 
-						sprintf(g_dtp2, get_ttx(580), (char*)hero + HERO_NAME2);
+						sprintf(g_dtp2, get_ttx(580), hero->alias);
 						GUI_output(g_dtp2);
 
-						sub_hero_le(hero, 1000);
+						sub_hero_le((Bit8u*)hero, 1000);
 
 					} else {
 
@@ -351,29 +350,24 @@ void disease_effect(void)
 						if (!disease_ptr[4]) {
 
 							disease_ptr[4] = 1;
-							sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK), 5);
+							hero->attrib[ATTRIB_KK].current -= 5;
 
-							sprintf(g_dtp2, get_ttx(581), (char*)hero + HERO_NAME2,
-								GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
+							sprintf(g_dtp2, get_ttx(581), hero->alias, GUI_get_ptr(hero->sex, 0));
 							GUI_output(g_dtp2);
 						}
 
 						for (j = 0; j <= 6; j++) {
 
-							hero2 = get_hero(j);
+							hero2 = (struct struct_hero*)get_hero(j);
 
-							if ((host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE) &&
-								(host_readbs(hero2 + HERO_GROUP_NO) == gs_current_group) &&
-								!hero_dead(hero2) &&
-								(hero2 != hero) &&
-								(random_schick(100) <= 5))
+							if ((hero2->typus != HERO_TYPE_NONE) &&	(hero2->group_no == gs_current_group) &&
+								!hero_dead((Bit8u*)hero2) && (hero2 != hero) && (random_schick(100) <= 5))
 							{
 								hero_gets_diseased(hero2, 5);
 							}
 						}
 
-						sub_hero_le(hero, dice_roll((host_readbs(hero + HERO_TYPE) >= HERO_TYPE_GREEN_ELF ? 2 : 1),
-										6, disease_ptr[1] - 1));
+						sub_hero_le((Bit8u*)hero, dice_roll(hero->typus >= HERO_TYPE_GREEN_ELF ? 2 : 1, 6, disease_ptr[1] - 1));
 					}
 				}
 			}
@@ -385,14 +379,14 @@ void disease_effect(void)
 
 					disease_ptr[4] = 0;
 					disease_ptr[1] = 0;
-					add_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK), 5);
+					hero->attrib[ATTRIB_KK].current += 5;
 				}
 
-				sprintf(g_dtp2, get_ttx(582), (char*)hero + HERO_NAME2);
+				sprintf(g_dtp2, get_ttx(582), hero->alias);
 				GUI_output(g_dtp2);
 			}
 
-			disease_ptr = (Bit8s*)hero + (HERO_ILLNESS + ILLNESS_TYPE_FROSTSCHAEDEN * SIZEOF_HERO_ILLNESS);
+			disease_ptr = (Bit8s*)&hero->sick[ILLNESS_TYPE_FROSTSCHAEDEN];
 
 			/* FROSTBITE / FROSTSCHAEDEN: get worse */
 			if (disease_ptr[0] == -1) {
@@ -401,32 +395,32 @@ void disease_effect(void)
 
 				if (random_schick(100) <= disease_ptr[1] * 5) {
 
-					dec_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE));
-					dec_ptr_bs(hero + (HERO_ATTRIB_ORIG + 3 * ATTRIB_GE));
+					hero->attrib[ATTRIB_GE].current--;
+					hero->attrib[ATTRIB_GE].normal--;
 
 					j = 1;
 
-					sprintf(g_dtp2, get_ttx(583), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_ttx(583), hero->alias);
 					GUI_output(g_dtp2);
 				}
 
-				sub_hero_le(hero, dice_roll(1, 6, 0));
+				sub_hero_le((Bit8u*)hero, dice_roll(1, 6, 0));
 
-				if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) != 0) {
+				if (hero->attrib[ATTRIB_KK].current != 0) {
 
 					disease_ptr[2]++;
-					dec_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK));
+					hero->attrib[ATTRIB_KK].current--;
 				}
 
-				if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE)) != 0) {
+				if (hero->attrib[ATTRIB_GE].current != 0) {
 
 					disease_ptr[3]++;
-					dec_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE));
+					hero->attrib[ATTRIB_GE].current--;
 				}
 
 				if (j == 0) {
 
-					sprintf(g_dtp2, get_ttx(740), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_ttx(740), hero->alias);
 					GUI_output(g_dtp2);
 				}
 			}
@@ -440,25 +434,25 @@ void disease_effect(void)
 				} else {
 					if (!disease_ptr[2]) {
 
-						sprintf(g_dtp2, get_ttx(573), (char*)hero + HERO_NAME2);
+						sprintf(g_dtp2, get_ttx(573), hero->alias);
 						GUI_output(g_dtp2);
 
 						disease_ptr[2]--;
-						inc_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK));
+						hero->attrib[ATTRIB_KK].current++;
 					}
 
 					if (!disease_ptr[3]) {
 
-						sprintf(g_dtp2, get_ttx(578), (char*)hero + HERO_NAME2);
+						sprintf(g_dtp2, get_ttx(578), hero->alias);
 						GUI_output(g_dtp2);
 
 						disease_ptr[3]--;
-						inc_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE));
+						hero->attrib[ATTRIB_GE].current++;
 					}
 				}
 			}
 
-			disease_ptr = (Bit8s*)hero + (HERO_ILLNESS + ILLNESS_TYPE_TOLLWUT * SIZEOF_HERO_ILLNESS);
+			disease_ptr = (Bit8s*)&hero->sick[ILLNESS_TYPE_TOLLWUT];
 
 			/* RABIES / TOLLWUT: get worse */
 			if (disease_ptr[0] == -1) {
@@ -470,14 +464,14 @@ void disease_effect(void)
 
 				} else {
 
-					hero2 = get_hero(0);
+					hero2 = (struct struct_hero*)get_hero(0);
 
-					for (j = 0; j <= 6; j++, hero2 += SIZEOF_HERO) {
+					for (j = 0; j <= 6; j++, hero2++) {
 
 
-						if ((host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE) &&
-							(host_readbs(hero2 + HERO_GROUP_NO) == gs_current_group) &&
-							!hero_dead(hero2) &&
+						if ((hero2->typus != HERO_TYPE_NONE) &&
+							(hero2->group_no == gs_current_group) &&
+							!hero_dead((Bit8u*)hero2) &&
 							(hero2 != hero) &&
 							(random_schick(100) <= 10))
 						{
@@ -485,10 +479,10 @@ void disease_effect(void)
 						}
 					}
 
-					sub_hero_le(hero, dice_roll((disease_ptr[1] > 3 ? 3 : disease_ptr[1]), 6, 0));
+					sub_hero_le((Bit8u*)hero, dice_roll((disease_ptr[1] > 3 ? 3 : disease_ptr[1]), 6, 0));
 
 					disease_ptr[2] += 2;
-					sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK), 2);
+					hero->attrib[ATTRIB_KK].current -= 2;
 
 					if (disease_ptr[1] > 2) {
 
@@ -496,7 +490,7 @@ void disease_effect(void)
 
 					} else {
 
-						sprintf(g_dtp2, get_ttx(572), (char*)hero + HERO_NAME2);
+						sprintf(g_dtp2, get_ttx(572), hero->alias);
 						GUI_output(g_dtp2);
 					}
 				}
@@ -511,36 +505,36 @@ void disease_effect(void)
 					disease_ptr[0] = 0;
 
 				} else {
-					sprintf(g_dtp2, get_ttx(573), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_ttx(573), hero->alias);
 					GUI_output(g_dtp2);
 
 					disease_ptr[2]--;
-					inc_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK));
+					hero->attrib[ATTRIB_KK].current++;
 				}
 			}
 
 			/* increment day timer for all diseases */
 			for (j = 1; j <= 7; j++) {
 
-				if (host_readbs(hero + 5 * j + 0xae) != 0) {
-					inc_ptr_bs(hero + 5 * j + 0xaf);
+				if (hero->sick[j][0] != 0) {
+					hero->sick[j][1]++;
 				}
 			}
 
 			/* kill hero if KK <= 0 */
-			if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) <= 0) {
+			if (hero->attrib[ATTRIB_KK].current <= 0) {
 
-				host_writebs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK), host_readbs(hero + (HERO_ATTRIB_ORIG + 3 * ATTRIB_KK)));
+				hero->attrib[ATTRIB_KK].current = hero->attrib[ATTRIB_KK].normal;
 
-				sub_hero_le(hero, 5000);
+				sub_hero_le((Bit8u*)hero, 5000);
 			}
 
 			/* kill hero if GE <= 0 */
-			if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE)) <= 0) {
+			if (hero->attrib[ATTRIB_GE].current <= 0) {
 
-				host_writebs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE), host_readbs(hero + (HERO_ATTRIB_ORIG + 3 * ATTRIB_GE)));
+				hero->attrib[ATTRIB_GE].current = hero->attrib[ATTRIB_GE].normal;
 
-				sub_hero_le(hero, 5000);
+				sub_hero_le((Bit8u*)hero, 5000);
 			}
 		}
 	}

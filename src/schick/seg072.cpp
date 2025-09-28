@@ -469,7 +469,7 @@ void INF_eliane_tiomar(signed short informer, signed short state)
 			g_dialog_next_state = (test_skill(get_hero((gs_tiomar_drinkmate = (unsigned char)get_random_hero())), TA_ZECHEN, 0) > 0 ? 21 : 22);
 		} else if (state == 22) {
 			/* TIOMARS drinkmate gets drunken */
-			hero_get_drunken(get_hero(gs_tiomar_drinkmate));
+			hero_get_drunken((struct struct_hero*)get_hero(gs_tiomar_drinkmate));
 		} else if (state == 31) {
 			/* mark JURGE TORFINSSON as known */
 			if (!gs_informer_flags[INFORMER_JURGE]) gs_informer_flags[INFORMER_JURGE] = 1;

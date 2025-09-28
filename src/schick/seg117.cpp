@@ -785,7 +785,7 @@ void TLK_way_to_ruin(signed short state)
 		sub_hero_le(gs_ruin_hero, random_schick(4) + 1);
 
 		/* Original-Bug: hero != RUIN_HERO */
-		hero_disease_test(gs_ruin_hero, 2,
+		hero_disease_test((struct struct_hero*)gs_ruin_hero, 2,
 			25 - (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs((Bit8u*)(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK)))));
 
 		loose_random_item(gs_ruin_hero, 10, get_ttx(506));

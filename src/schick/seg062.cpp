@@ -377,7 +377,7 @@ void ask_miracle(void)
 
 						for (i = 0; i <= 6; i++) {
 							hero = get_hero(i);
-							disease = hero_is_diseased(hero);
+							disease = hero_is_diseased((struct struct_hero*)hero);
 
 							if (disease != 0 &&
 								host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&

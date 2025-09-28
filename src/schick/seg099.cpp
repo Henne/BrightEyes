@@ -851,7 +851,7 @@ void spell_klarum_purum(void)
 	/* Set pointer to hero target */
 	g_spelltarget = get_hero(host_readbs(get_spelluser() + HERO_ENEMY_ID) - 1);
 
-	poison = hero_is_poisoned(get_spelltarget());
+	poison = hero_is_poisoned((struct struct_hero*)get_spelltarget());
 
 	if (!poison) {
 

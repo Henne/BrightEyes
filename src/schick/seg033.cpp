@@ -723,7 +723,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 					/* AE */
 					host_readws(hero + HERO_AE), host_readws(hero + HERO_AE_ORIG),
 					/* poison */
-					hero_is_poisoned(hero) ? get_tx(36) : (char*)g_empty_string4,
+					hero_is_poisoned((struct struct_hero*)hero) ? get_tx(36) : (char*)g_empty_string4,
 					/* renegade */
 					hero_renegade(hero) == 1 ? get_tx(38) : (char*)g_empty_string5);
 

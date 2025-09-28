@@ -208,7 +208,7 @@ void do_healer(void)
 
 				if (is_hero_healable(hero)) {
 
-					disease = hero_is_diseased(hero);
+					disease = hero_is_diseased((struct struct_hero*)hero);
 
 					if (!disease) {
 
@@ -270,7 +270,7 @@ void do_healer(void)
 				hero = get_hero(answer);
 
 				if (is_hero_healable(hero)) {
-					poison = hero_is_poisoned(hero);
+					poison = hero_is_poisoned((struct struct_hero*)hero);
 
 					if (poison == 0) {
 

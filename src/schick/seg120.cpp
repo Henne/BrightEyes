@@ -151,13 +151,13 @@ static HugePt g_global_buffer_ptr;	// ds:0xe5e0, points to the start of the glob
 signed char g_large_buf; 		// ds:0xe5e4
 
 /* Borlandified and identical */
-void rabies(Bit8u* hero, signed short hero_pos)
+void rabies(struct struct_hero* hero, signed short hero_pos)
 {
 	signed short answer;
 	signed short l_di;
 	signed short done;
 	signed short tw_bak;
-	Bit8u *hero2;
+	struct struct_hero *hero2;
 	signed short group_bak;
 	signed short group_no;
 	signed char sex_bak;
@@ -165,11 +165,11 @@ void rabies(Bit8u* hero, signed short hero_pos)
 	done = 0;
 
 	group_bak = gs_current_group;
-	sex_bak = host_readbs(hero + HERO_SEX);
-	group_no = host_readbs(hero + HERO_GROUP_NO);
+	sex_bak = hero->sex;
+	group_no = hero->group_no;
 
 	/* TODO : Sex = 50, what means 50 ? */
-	host_writeb(hero + HERO_SEX, 50);
+	hero->sex = 50;
 
 	/* switch to the group of the hero */
 	while (gs_current_group != group_no) {
@@ -177,12 +177,12 @@ void rabies(Bit8u* hero, signed short hero_pos)
 	}
 
 	hero_pos = 0;
-	while (host_readbs(get_hero(hero_pos) + HERO_SEX) != 50) {
+	while (((struct struct_hero*)get_hero(hero_pos))->sex != 50) {
 		hero_pos++;
 	}
 
-	hero = get_hero(hero_pos);
-	host_writeb(hero + HERO_SEX, sex_bak);
+	hero = (struct struct_hero*)get_hero(hero_pos);
+	hero->sex = sex_bak;
 
 	if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 		draw_status_line();
@@ -192,18 +192,16 @@ void rabies(Bit8u* hero, signed short hero_pos)
 
 		if (count_heroes_available_in_group() > 1) {
 
-			sprintf(g_dtp2, get_ttx(741), (char*)hero + HERO_NAME2,
-				GUI_get_ptr(host_readbs(hero + HERO_SEX), 2),
-				GUI_get_ptr(host_readbs(hero + HERO_SEX), 2));
+			sprintf(g_dtp2, get_ttx(741), hero->alias, GUI_get_ptr(hero->sex, 2), GUI_get_ptr(hero->sex, 2));
 
-			sprintf(g_dtp2 + 500, get_ttx(742), (char*)hero + HERO_NAME2);
+			sprintf(g_dtp2 + 500, get_ttx(742), hero->alias);
 
-			sprintf(g_dtp2 + 600, get_ttx(743), (char*)hero + HERO_NAME2);
+			sprintf(g_dtp2 + 600, get_ttx(743), hero->alias);
 
 			tw_bak = g_textbox_width;
 			g_textbox_width = 6;
 
-			answer = GUI_dialogbox(hero + HERO_PORTRAIT, (char*)hero + HERO_NAME2,
+			answer = GUI_dialogbox(hero->pic, hero->alias,
 						g_dtp2, 3, g_dtp2 + 500, g_dtp2 + 600, get_ttx(744));
 
 			g_textbox_width = tw_bak;
@@ -211,9 +209,9 @@ void rabies(Bit8u* hero, signed short hero_pos)
 			if (answer == 1) {
 				/* knock the infected hero out */
 
-				sub_hero_le(hero, host_readws(hero + HERO_LE) / 2);
+				sub_hero_le((Bit8u*)hero, hero->le / 2);
 
-				sprintf(g_dtp2, get_ttx(745), (char*)hero + HERO_NAME2);
+				sprintf(g_dtp2, get_ttx(745), hero->alias);
 
 				GUI_output(g_dtp2);
 
@@ -223,7 +221,7 @@ void rabies(Bit8u* hero, signed short hero_pos)
 
 				if (answer != -1) {
 
-					skill_cure_disease(get_hero(answer), hero, 10, 1);
+					skill_cure_disease(get_hero(answer), (Bit8u*)hero, 10, 1);
 				}
 
 				done = 1;
@@ -240,7 +238,7 @@ void rabies(Bit8u* hero, signed short hero_pos)
 						 * (found by siebenstreich 2021-08-15) */
 					{
 						done = 1;
-						sprintf(g_dtp2, get_ttx(746), (char*)hero + HERO_NAME2);
+						sprintf(g_dtp2, get_ttx(746), hero->alias);
 
 						GUI_output(g_dtp2);
 
@@ -249,7 +247,7 @@ void rabies(Bit8u* hero, signed short hero_pos)
 						answer = select_hero_ok(get_ttx(395));
 
 						if (answer != -1) {
-							skill_cure_disease(get_hero(answer), hero, 10, 1);
+							skill_cure_disease(get_hero(answer), (Bit8u*)hero, 10, 1);
 						}
 						break;
 					}
@@ -263,22 +261,22 @@ void rabies(Bit8u* hero, signed short hero_pos)
 
 				if (answer != -1) {
 
-					hero2 = get_hero(answer);
+					hero2 = (struct struct_hero*)get_hero(answer);
 
 					/* check that hero2 is a magic user */
-					if (host_readbs(hero2 + HERO_TYPE) >= HERO_TYPE_WITCH) {
+					if (hero2->typus >= HERO_TYPE_WITCH) {
 
 						/* need 15 AE */
-						if (host_readws(hero2 + HERO_AE) >= 15) {
+						if (hero2->ae >= 15) {
 
 							/* spell must succeed */
 							if (test_spell((struct struct_hero*)hero2, SP_SANFTMUT, 0)) {
 
 								done = 1;
 
-								sub_ae_splash(hero2, 15);
+								sub_ae_splash((Bit8u*)hero2, 15);
 
-								sprintf(g_dtp2, get_ttx(746), (char*)hero + HERO_NAME2);
+								sprintf(g_dtp2, get_ttx(746), hero->alias);
 
 								GUI_output(g_dtp2);
 
@@ -287,11 +285,11 @@ void rabies(Bit8u* hero, signed short hero_pos)
 								answer = select_hero_ok(get_ttx(395));
 
 								if ((answer != -1) && (answer != hero_pos)) {
-									skill_cure_disease(get_hero(answer), hero, 10, 1);
+									skill_cure_disease(get_hero(answer), (Bit8u*)hero, 10, 1);
 								}
 							}
 						} else {
-							sprintf(g_dtp2, get_ttx(607), (char*)hero2 + HERO_NAME2);
+							sprintf(g_dtp2, get_ttx(607), hero2->alias);
 							GUI_output(g_dtp2);
 						}
 					}
@@ -300,7 +298,7 @@ void rabies(Bit8u* hero, signed short hero_pos)
 		} else {
 
 			/* Hero has rabies / Tollwut */
-			sprintf(g_dtp2, get_ttx(747), (char*)hero + HERO_NAME2);
+			sprintf(g_dtp2, get_ttx(747), hero->alias);
 			GUI_output(g_dtp2);
 
 			done = 1;
@@ -308,20 +306,18 @@ void rabies(Bit8u* hero, signed short hero_pos)
 
 		if (done == 0) {
 			/* every other hero in the group looses 1W6+2 LE */
-			hero2 = get_hero(0);
-			for (l_di = 0; l_di <= 6; l_di++, hero2 += SIZEOF_HERO) {
+			hero2 = (struct struct_hero*)get_hero(0);
+			for (l_di = 0; l_di <= 6; l_di++, hero2++) {
 
-				if ((l_di != hero_pos) &&
-					(host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE) &&
-					(host_readbs(hero2 + HERO_GROUP_NO) == gs_current_group) &&
-					!hero_dead(hero2))
+				if ((l_di != hero_pos) && (hero2->typus != HERO_TYPE_NONE) &&
+					(hero2->group_no == gs_current_group) && !hero_dead((Bit8u*)hero2))
 				{
-					sub_hero_le(hero2, dice_roll(1, 6, 2));
+					sub_hero_le((Bit8u*)hero2, dice_roll(1, 6, 2));
 				}
 			}
 
 			/* hero has berserker fury / Berserkerwut */
-			sprintf(g_dtp2, get_ttx(791), (char*)hero + HERO_NAME2);
+			sprintf(g_dtp2, get_ttx(791), hero->alias);
 			GUI_output(g_dtp2);
 
 			done = 1;

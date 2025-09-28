@@ -660,7 +660,7 @@ void level_up(signed short hero_pos)
 
 	update_status_bars();
 
-	update_atpa(hero);
+	update_atpa((struct struct_hero*)hero);
 
 	if (g_game_mode == GAME_MODE_BEGINNER) {
 

@@ -379,7 +379,7 @@ signed short skill_cure_disease(Bit8u *healer, Bit8u *patient, signed short hand
 
 	if (is_hero_healable(patient)) {
 
-		disease = hero_is_diseased(patient);
+		disease = hero_is_diseased((struct struct_hero*)patient);
 
 		if (!disease) {
 			/* not diseased */

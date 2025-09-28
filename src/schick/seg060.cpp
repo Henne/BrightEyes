@@ -547,7 +547,7 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 110) {
 
-		hero_get_drunken(get_hero(gs_tlk_tav_testdrunk - 1));
+		hero_get_drunken((struct struct_hero*)get_hero(gs_tlk_tav_testdrunk - 1));
 
 	} else if (old_state == 112) {
 

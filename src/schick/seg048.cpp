@@ -445,9 +445,9 @@ void status_menu(signed short hero_pos)
 		/* check if the hero is diseased and print a message */
 		if (g_status_page_mode == 1 &&
 			g_action == ACTION_ID_240 &&
-			hero_is_diseased(hero2))
+			hero_is_diseased((struct struct_hero*)hero2))
 		{
-			sprintf(g_dtp2, get_tx2(25 + hero_is_diseased(hero2)), (char*)(hero2 + HERO_NAME2),
+			sprintf(g_dtp2, get_tx2(25 + hero_is_diseased((struct struct_hero*)hero2)), (char*)(hero2 + HERO_NAME2),
 				GUI_get_ptr(host_readbs(hero2 + HERO_SEX), 1));
 
 			GUI_output(g_dtp2);
@@ -468,7 +468,7 @@ void status_menu(signed short hero_pos)
 					g_radio_name_list[1] = get_tx2(20);
 					g_radio_name_list[2] = get_tx2(21);
 
-					flag3 = hero_is_diseased(hero2);
+					flag3 = hero_is_diseased((struct struct_hero*)hero2);
 
 					if (flag3 != 0) {
 						g_radio_name_list[3] = get_tx2(25);
@@ -480,7 +480,7 @@ void status_menu(signed short hero_pos)
 					}
 				} else {
 
-					if ((flag3 = hero_is_diseased(hero2))) {
+					if ((flag3 = hero_is_diseased((struct struct_hero*)hero2))) {
 						g_radio_name_list[0] = get_tx2(25);
 						g_radio_name_list[1] = get_tx2(15);
 						l1 = 7;
