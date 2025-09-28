@@ -345,12 +345,12 @@ void poison_effect(void)
 
 				j = dice_roll(1, 6, 2);
 
-				if (hero->ae_max >= j) {
+				if (hero->ae >= j) {
 
 					/* loose 1W6+2 AEmax */
 					poison_ptr[2] = poison_ptr[2] + j;
 
-					hero->ae_max -= j;
+					hero->ae -= j;
 
 					sprintf(g_dtp2, get_ttx(43), hero->alias, j);
 
@@ -369,7 +369,7 @@ void poison_effect(void)
 
 						/* regenerate one point at a time */
 						poison_ptr[2]--;
-						hero->ae_max++;
+						hero->ae++;
 
 						sprintf(g_dtp2, get_ttx(44), hero->alias);
 
