@@ -32,7 +32,7 @@ struct struct_hero {
 	/* Offset 0x10 */
 	char alias[16];
 	/* Offset 0x20 */
-	signed char items;
+	signed char items_num;
 	signed char typus;
 	signed char sex;
 	unsigned char height;
@@ -42,9 +42,9 @@ struct struct_hero {
 	int32_t ap;
 	int32_t money;
 	/* Offset 0x30 */
-	signed char rs1;
-	signed char rs2;
-	signed char unkn1;
+	signed char rs_bonus1;
+	signed char rs_bonus2;
+	signed char rs_be;
 	unsigned char bp_left;
 	struct struct_attribs attrib[14];
 	/* Offset 0x5e */
@@ -63,8 +63,10 @@ struct struct_hero {
 	signed char w_type;
 	signed char atpa_mod;
 	unsigned char le_malus;
-
-	signed char unkn2[4];
+	signed char timer_id;
+	signed char start_gear;
+	signed char herbs;
+	signed char hunger_timer;
 	signed char hunger;
 	/* Offset 0x80 */
 	signed char thirst;
@@ -81,16 +83,24 @@ struct struct_hero {
 	/* Offset 0x8b */
 	int32_t heal_timer;
 	int32_t staffspell_timer;
-	signed char unkn8[3];
-	signed char rounds_blinded;
-	signed char rounds_eclipt;
-	signed char unkn9[8];
+	signed char recipe_id;
+	signed char recipe_timer;
+	signed char ruhe_koerper;
+	signed char blind_timer;
+	signed char ecliptifactus_timer;
+	signed char saftkraft;
+	signed char fireban;
+	signed char invisible;
+	signed char sprite_no;
+	signed char alchemy_inn_id;
+	signed short escape_position;
+	signed char jail;
 	/* Offset 0xa0 */
-	signed char axxel;
+	signed char axxeleratus;
 	signed char drunk;
 	signed char unkn10[8];
-	signed char status;
-	signed char status2;
+	signed char flags1;
+	signed char flags2;
 	signed short unkn11;
 	/* Not figured out yet, but reserve space */
 	signed char sick[8][5];
