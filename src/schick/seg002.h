@@ -163,7 +163,9 @@ void add_hero_le(Bit8u*, signed short);
 void add_group_le(signed short);
 /* static */
 void do_starve_damage(Bit8u*, signed short, signed short);
-signed short compare_name(Bit8u*);
+#if defined(__BORLANDC__)
+signed short compare_name(char*);
+#endif
 signed short test_attrib(Bit8u*, signed short, signed short);
 signed short test_attrib3(Bit8u*, signed short, signed short, signed short, signed char);
 signed short unused_cruft(void);

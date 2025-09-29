@@ -2033,7 +2033,7 @@ void game_loop(void)
 			if (!count_heroes_available() || ((count_heroes_available() == 1) && check_hero(get_hero(6)))) // count_heroes_available_ignore_npc() == 0
 			{
 				/* no heroes or only the NPC can act => GAME OVER */
-				g_game_state = (GAME_STATE_DEAD);
+				g_game_state = GAME_STATE_DEAD;
 
 			} else if (!count_heroes_available_in_group() || ((count_heroes_available_in_group() == 1) && is_hero_available_in_group(get_hero(6)))) // count_heroes_available_in_group_ignore_npc() == 0
 			{
@@ -2114,7 +2114,7 @@ void game_loop(void)
 
 void timers_daily(void)
 {
-	Bit8u *hero_i;
+	struct struct_hero *hero_i;
 	signed short i = 0;
 
 	/* Smith / items to repair */
@@ -2131,13 +2131,13 @@ void timers_daily(void)
 		gs_merchant_offended_flags[i] = 0;
 	}
 
-	hero_i = get_hero(0);
-	for (i = 0; i <=6; i++, hero_i += SIZEOF_HERO) {
+	hero_i = (struct struct_hero*)get_hero(0);
+	for (i = 0; i <= 6; i++, hero_i++) {
 
-		if ((host_readb(get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readbs(hero_i + HERO_RECIPE_TIMER) > 0))
+		if ((((struct struct_hero*)get_hero(i))->typus != HERO_TYPE_NONE) &&
+			(hero_i->recipe_timer > 0))
 		{
-			dec_ptr_bs(hero_i + HERO_RECIPE_TIMER);
+			hero_i->recipe_timer--;
 		}
 	}
 
@@ -2419,7 +2419,7 @@ void do_census(void)
  * timewarp_until_midnight(..) and interrupt timer_isr() */
 void do_timers(void)
 {
-	Bit8u *hero_i;
+	struct struct_hero *hero_i;
 	signed char afternoon;
 	Bit8u *ptr;
 	signed short i, di;
@@ -2502,23 +2502,22 @@ void do_timers(void)
 	/* at 6 o'clock in the morninig */
 	if (gs_day_timer == HOURS(6)) {
 
-		hero_i = get_hero(0);
+		hero_i = (struct struct_hero*)get_hero(0);
 
-		for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
+		for (i = 0; i <= 6; i++, hero_i++) {
 
-			if ((host_readb(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
-				(host_readb(hero_i + HERO_JAIL) != 0))
+			if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->jail != 0))
 			{
-				host_writeb(hero_i + HERO_JAIL, 0);
+				hero_i->jail = 0;
 
-				gs_groups_current_loctype[host_readbs(hero_i + HERO_GROUP_NO)] =
-					gs_groups_current_loctype_bak[host_readbs(hero_i + HERO_GROUP_NO)];
+				gs_groups_current_loctype[hero_i->group_no] =
+					gs_groups_current_loctype_bak[hero_i->group_no];
 
-				gs_groups_x_target[host_readbs(hero_i + HERO_GROUP_NO)] =
-					gs_groups_x_target_bak[host_readbs(hero_i + HERO_GROUP_NO)];
+				gs_groups_x_target[hero_i->group_no] =
+					gs_groups_x_target_bak[hero_i->group_no];
 
-				gs_groups_y_target[host_readbs(hero_i + HERO_GROUP_NO)] =
-					gs_groups_y_target_bak[host_readbs(hero_i + HERO_GROUP_NO)];
+				gs_groups_y_target[hero_i->group_no] =
+					gs_groups_y_target_bak[hero_i->group_no];
 			}
 		}
 	}
@@ -2526,13 +2525,13 @@ void do_timers(void)
 	/* at 10 o'clock */
 	if (gs_day_timer == HOURS(10)) {
 
-		hero_i = get_hero(0);
+		hero_i = (struct struct_hero*)get_hero(0);
 
-		for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
-			if ((host_readb(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
-				(host_readb(hero_i + HERO_DRUNK) != 0))
+		for (i = 0; i <= 6; i++, hero_i++) {
+
+			if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->drunk != 0))
 			{
-				hero_get_sober((struct struct_hero*)hero_i);
+				hero_get_sober(hero_i);
 			}
 		}
 	}
@@ -2929,45 +2928,44 @@ void set_mod_slot(signed short slot_no, Bit32s timer_value, Bit8u *ptr, signed c
 void sub_heal_staffspell_timers(Bit32s fmin)
 {
 	signed short i;
-	Bit8u *hero_i;
+	struct struct_hero *hero_i;
 
 	if (g_timers_disabled)
 		return;
 
-	hero_i = get_hero(0);
+	hero_i = (struct struct_hero*)get_hero(0);
 
-	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
-		if (host_readb(hero_i + HERO_TYPE) != HERO_TYPE_NONE) {
+	for (i = 0; i <= 6; i++, hero_i++) {
+
+		if (hero_i->typus != HERO_TYPE_NONE) {
 
 			/* Timer to the next healing attempt */
-			if (host_readds(hero_i + HERO_HEAL_TIMER) > 0) {
+			if (hero_i->heal_timer > 0) {
 
-				sub_ptr_ds(hero_i + HERO_HEAL_TIMER, fmin * MINUTES(5));
+				hero_i->heal_timer -= fmin * MINUTES(5);
 #if !defined(__BORLANDC__)
-				if (host_readds(hero_i + HERO_HEAL_TIMER) <= 0) {
-					D1_INFO("%s kann wieder geheilt werden\n",
-						(char*)hero_i + HERO_NAME2);
+				if (hero_i->heal_timer <= 0) {
+					D1_INFO("%s kann wieder geheilt werden\n", hero_i->alias);
 				}
 #endif
 
-				if (host_readds(hero_i + HERO_HEAL_TIMER) < 0) {
-					host_writed(hero_i + HERO_HEAL_TIMER, 0);
+				if (hero_i->heal_timer < 0) {
+					hero_i->heal_timer = 0;
 				}
 			}
 
 			/* Timer set after Staffspell */
-			if (host_readds(hero_i + HERO_STAFFSPELL_TIMER) > 0) {
-				sub_ptr_ds(hero_i + HERO_STAFFSPELL_TIMER, fmin * MINUTES(5));
+			if (hero_i->staffspell_timer > 0) {
+
+				hero_i->staffspell_timer -= fmin * MINUTES(5);
 #if !defined(__BORLANDC__)
-				if (host_readds(hero_i + HERO_STAFFSPELL_TIMER) <= 0) {
-					D1_INFO("%s kann wieder einen Stabzauber versuchen\n",
-						(char*)(hero_i + HERO_NAME2));
+				if (hero_i->staffspell_timer <= 0) {
+					D1_INFO("%s kann wieder einen Stabzauber versuchen\n", hero_i->alias);
 				}
 
 #endif
-				if (host_readds(hero_i + HERO_STAFFSPELL_TIMER) < 0) {
-
-					host_writed(hero_i + HERO_STAFFSPELL_TIMER, 0);
+				if (hero_i->staffspell_timer < 0) {
+					hero_i->staffspell_timer = 0;
 				}
 			}
 
@@ -3318,7 +3316,7 @@ void check_level_up(void)
 {
 	signed short i;
 	signed short not_done;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	if (g_timers_disabled) {
 		return;
@@ -3326,23 +3324,21 @@ void check_level_up(void)
 
 	do {
 		not_done = 0;
-		hero = get_hero(0);
-		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+		hero = (struct struct_hero*)get_hero(0);
+		for (i = 0; i <= 6; i++, hero++) {
 
-			if (
-				(host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-				!hero_dead(hero) &&
-				(host_readbs(hero + HERO_LEVEL) < 20) &&
+			if ((hero->typus != HERO_TYPE_NONE) && !hero_dead((Bit8u*)hero) &&
+				(hero->level < 20) &&
 
 #ifndef M302de_FEATURE_MOD
 				/* Feature mod 8:
 				 * Adjust AP requirement for level up to match the original DSA 2/3 rules.
 				 * Without this mod, it is "off by one".
 				 * For example, for level 2, 100 AP should be enough, but the game requires 101 AP. */
-				(g_level_ap_tab[host_readbs(hero + HERO_LEVEL)] < host_readds(hero + HERO_AP))
+				(g_level_ap_tab[hero->level] < hero->ap)
 				/* could be easily done without accessing the data segment by the formula level_ap_tab[i] = 50 * i * (i+1) */
 #else
-				(50 * host_readbs(hero + HERO_LEVEL) * (host_readbs(hero + HERO_LEVEL) + 1) <= host_readds(hero + HERO_AP))
+				(50 * hero->level * (hero->level + 1) <= hero->ap)
 				/* while we're at it, avoid accessing the data segment... */
 #endif
 			) {
@@ -4614,7 +4610,7 @@ void sub_hero_le(Bit8u *hero, signed short le)
 	signed short bak;
 	signed short old_le;
 	struct struct_fighter *fighter;
-	Bit8u *hero_i;
+	struct struct_hero *hero_i;
 
 	if (!hero_dead(hero) && (le > 0)) {
 
@@ -4689,12 +4685,11 @@ void sub_hero_le(Bit8u *hero, signed short le)
 
 				gs_travel_detour = (99);
 
-				hero_i = get_hero(0);
-				for (i = 0; i <=6; i++, hero_i += SIZEOF_HERO) {
-					if ((host_readbs(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
-						(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group))
+				hero_i = (struct struct_hero*)get_hero(0);
+				for (i = 0; i <= 6; i++, hero_i++) {
+					if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_no == gs_current_group))
 					{
-						hero_disappear(hero_i, i, -1);
+						hero_disappear((Bit8u*)hero_i, i, -1);
 					}
 				}
 			}
@@ -4811,17 +4806,15 @@ void add_hero_le(Bit8u *hero, signed short le)
  */
 void add_group_le(signed short le)
 {
-
-	Bit8u *hero;
+	struct struct_hero *hero;
 	signed short i;
 
-	hero = get_hero(0);
-	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+	hero = (struct struct_hero*)get_hero(0);
+	for (i = 0; i <= 6; i++, hero++) {
 
-		if ((host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readbs(hero + HERO_GROUP_NO) == gs_current_group))
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
 		{
-			add_hero_le(hero, le);
+			add_hero_le((Bit8u*)hero, le);
 		}
 	}
 }
@@ -4865,20 +4858,22 @@ void do_starve_damage(Bit8u *hero, signed short index, signed short type)
 	}
 }
 
+#if defined(__BORLANDC__)
 /* unused */
-signed short compare_name(Bit8u *name)
+signed short compare_name(char *name)
 {
 	signed short i;
 
 	for (i = 0; i < 6; i++) {
 
-		if (!strcmp((char*)(get_hero(i) + HERO_NAME2), (char*)name)) {
+		if (!strcmp(((struct struct_hero*)get_hero(i))->alias, name)) {
 			return 1;
 		}
 	}
 
 	return 0;
 }
+#endif
 
 /**
  * \brief   make an attribute test
@@ -5449,16 +5444,15 @@ signed short get_first_hero_with_item_in_group(signed short item, signed short g
 void sub_group_le(signed short le)
 {
 	signed short i;
-	Bit8u *hero_i;
+	struct struct_hero *hero_i;
 
 	for (i = 0; i <= 6; i++) {
 
-		hero_i = get_hero(i);
+		hero_i = (struct struct_hero*)get_hero(i);
 
-		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group))
+		if (hero_i->typus && (hero_i->group_no == gs_current_group))
 		{
-			sub_hero_le(hero_i, le);
+			sub_hero_le((Bit8u*)hero_i, le);
 		}
 	}
 }
@@ -5466,22 +5460,20 @@ void sub_group_le(signed short le)
 /**
  * \brief   return a pointer to the first available hero
  *
- * \return              a pointer to the first available hero. If none in available it returns a pointer to the first hero.
+ * \return a pointer to the first available hero. If none in available it returns a pointer to the first hero.
  */
 Bit8u* get_first_hero_available_in_group(void)
 {
 	signed short i;
-	unsigned char *hero_i = get_hero(0);
+	struct struct_hero *hero_i = (struct struct_hero*)get_hero(0);
 
-	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
+	for (i = 0; i <= 6; i++, hero_i++) {
 
 		/* Check class, group, deadness and check_hero() */
-		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) &&
-			!hero_dead(hero_i) &&
-			check_hero(hero_i))
+		if (hero_i->typus && (hero_i->group_no == gs_current_group) &&
+			!hero_dead((Bit8u*)hero_i) && check_hero((Bit8u*)hero_i))
 		{
-			return hero_i;
+			return (Bit8u*)hero_i;
 		}
 	}
 
