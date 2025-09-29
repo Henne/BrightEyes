@@ -1,6 +1,10 @@
 #if !defined V302DE_DATSEG_H
 #define V302DE_DATSEG_H
 
+#if !defined(__BORLANDC__)
+namespace M302de {
+#endif
+
 #include <time.h>
 
 #include "hero.h"
@@ -165,6 +169,12 @@ struct struct_diary_entry {
 	Bit16s month;
 	Bit16s year;
 	Bit16s town;
+};
+
+struct special_day {
+	Bit8s month;
+	Bit8s day;
+	Bit8s id;
 };
 
 struct fight_msg {
@@ -1307,10 +1317,20 @@ extern Bit8u  gs_datseg_status_end;		//ds:0x4474; seg026
 /* GameState written directly into SaveGame file ends at 0x4474 */
 
 extern unsigned char g_fading_state;		//ds:0x4475; seg002-seg095
+extern unsigned char g_music_enabled;		//ds:0x4476; seg002
+extern unsigned char g_snd_effects_enabled;	//ds:0x4477; seg002
+extern signed short g_music_current_track;	//ds:0x447a; seg002
+extern char* g_str_file_missing_ptr;		//ds:0x4480; seg002
+extern char g_pause_string[10];			//ds:0x448a; seg002
+extern signed char g_npc_last_farewellcheck;	//ds:0x4494; seg002
 extern signed char g_check_party;		//ds:0x4495; seg002, seg032, seg063, seg113
 extern signed char g_food_mod;			//ds:0x4496; seg002, seg051, seg052, seg054
 extern signed char g_travel_herokeeping;	//ds:0x4497; seg002, seg063
+extern Bit8u g_floor_fade_palette[32][3];	//ds:0x4498; seg002
+extern Bit8u g_building_fade_palette[32][3];	//ds:0x44f8; seg002
+extern Bit8u g_sky_fade_palette[32][3];		//ds:0x4558; seg002
 extern signed char g_special_screen;		//ds:0x45b8; seg002-seg109
+extern struct special_day g_special_days[43];	//ds:0x45b9; seg002
 extern signed char g_months_spring[4];		//ds:0x463a; seg002
 extern signed char g_months_winter[4];		//ds:0x463e; seg002
 extern signed char g_months_summer[4];		//ds:0x4642; seg002
@@ -1969,10 +1989,14 @@ extern unsigned short g_sample_ad_length;	// ds:0xbc5a; seg002
 
 #if !defined(__BORLANDC__)
 /* arrays for meaningful log messages */
-const char* names_attrib[14];
-const char* names_skill[52];
-const char* names_spell[86];
-const char* names_mspell[14];
+extern const char* names_attrib[14];
+extern const char* names_skill[52];
+extern const char* names_spell[86];
+extern const char* names_mspell[14];
+#endif
+
+#if !defined(__BORLANDC__)
+}
 #endif
 
 #endif

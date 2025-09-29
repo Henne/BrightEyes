@@ -2121,7 +2121,7 @@ signed char g_npc_last_farewellcheck = 0; // ds:0x4494
 signed char g_check_party = 0; // ds:0x4495
 signed char g_food_mod = 0; // ds:0x4496
 signed char g_travel_herokeeping = 0; // ds:0x4497
-struct{unsigned char r,g,b;} g_floor_fade_palette[32] = {
+Bit8u g_floor_fade_palette[32][3] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x28, 0x00, 0x28 },
 	{ 0x16, 0x0c, 0x08 },
@@ -2155,7 +2155,7 @@ struct{unsigned char r,g,b;} g_floor_fade_palette[32] = {
 	{ 0x00, 0x00, 0x0d },
 	{ 0x00, 0x00, 0x0b }
 }; // ds:0x4498
-struct{unsigned char r,g,b;} g_building_fade_palette[32] = {
+Bit8u g_building_fade_palette[32][3] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x22, 0x22, 0x26 },
 	{ 0x1b, 0x1b, 0x1f },
@@ -2189,7 +2189,7 @@ struct{unsigned char r,g,b;} g_building_fade_palette[32] = {
 	{ 0x00, 0x03, 0x0f },
 	{ 0x00, 0x08, 0x16 }
 }; // ds:0x44f8
-struct{unsigned char r,g,b;} g_sky_fade_palette[32] = {
+Bit8u g_sky_fade_palette[32][3] = {
 	{ 0x00, 0x00, 0x00 },
 	{ 0x00, 0x00, 0x11 },
 	{ 0x00, 0x00, 0x1b },
@@ -2224,7 +2224,7 @@ struct{unsigned char r,g,b;} g_sky_fade_palette[32] = {
 	{ 0x08, 0x07, 0x13 }
 }; // ds:0x4558
 signed char g_special_screen = 1; // ds:0x45b8, , e.g. diary, treasure map, game options, automap
-struct{signed char month, day, id;} g_special_days[43] = {
+struct special_day g_special_days[43] = {
 	{ 0x01, 0x01, 0x01 },
 	{ 0x01, 0x02, 0x02 },
 	{ 0x01, 0x03, 0x02 },

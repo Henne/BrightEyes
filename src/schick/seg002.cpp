@@ -30,8 +30,10 @@
 #include "v302de.h"
 #include "common.h"
 
+#if defined(__BORLANDC__)
 /* all global variables are included here, since BCC.EXE would create another module */
 #include "datseg.cpp"
+#endif
 
 #include "seg001.h"
 #include "seg002.h"
@@ -2313,11 +2315,11 @@ void nightfall(void)
 	{
 
 		/* floor */
-		pal_fade(gs_palette_floor, (Bit8u*)g_floor_fade_palette);
+		pal_fade(gs_palette_floor, (Bit8u*)&g_floor_fade_palette[0][0]);
 		/* buildings */
-		pal_fade(gs_palette_buildings, (Bit8u*)g_building_fade_palette);
+		pal_fade(gs_palette_buildings, (Bit8u*)&g_building_fade_palette[0][0]);
 		/* sky */
-		pal_fade(gs_palette_sky, (Bit8u*)g_sky_fade_palette);
+		pal_fade(gs_palette_sky, (Bit8u*)&g_sky_fade_palette[0][0]);
 
 		/* in a town */
 		if (gs_current_town &&
