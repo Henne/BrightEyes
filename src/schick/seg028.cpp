@@ -602,11 +602,13 @@ void load_informer_tlk(signed short index)
 
 	split_textbuffer((char**)g_tx2_index, (char*)g_buffer8_ptr, text_len);
 
+#if defined(__BORLANDC__)
 	/* adjust the pointers to the layouts */
 	/* TODO: Not portable! */
 	for (i = 0; i < partners; i++, partner++) {
 		partner->states_offset = (Bit32u)((Bit8u*)&gs_dialog_states + (Bit16u)partner->states_offset);
 	}
+#endif
 }
 
 void load_tlk(signed short index)
@@ -645,11 +647,13 @@ void load_tlk(signed short index)
 
 	split_textbuffer((char**)g_tx_index, g_buffer7_ptr, text_len);
 
+#if defined(__BORLANDC__)
 	/* adjust the pointers to the layouts */
 	/* TODO: Not portable! */
 	for (i = 0; i < partners; i++, partner++) {
 		partner->states_offset = (Bit32u)((Bit8u*)&gs_dialog_states + partner->states_offset);
 	}
+#endif
 }
 
 #if defined(__BORLANDC__)
