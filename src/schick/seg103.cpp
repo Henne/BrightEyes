@@ -302,7 +302,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 	signed short patient_pos;
 	signed short le;
 	Bit8u *hero;
-	Bit8u *patient;
+	struct struct_hero *patient;
 	Bit32s money;
 	signed short poison;
 	signed short tx_file_bak;
@@ -324,26 +324,28 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 			patient_pos = select_hero_from_group(get_ttx(460));
 
 			if (patient_pos != -1) {
-				patient = get_hero(patient_pos);
-				if (is_hero_healable(patient)) {
 
-					poison = hero_is_poisoned((struct struct_hero*)patient);
+				patient = (struct struct_hero*)get_hero(patient_pos);
+
+				if (is_hero_healable((Bit8u*)patient)) {
+
+					poison = hero_is_poisoned(patient);
 
 					if (poison == 0) {
 
 						/* patient is not poisoned */
-						sprintf(g_dtp2,	get_ttx(463), (char*)patient + HERO_NAME2);
+						sprintf(g_dtp2,	get_ttx(463), patient->alias);
 						GUI_output(g_dtp2);
 
-					} else if (host_readds(patient + HERO_HEAL_TIMER) > 0) {
+					} else if (patient->heal_timer > 0) {
 
 						/* patient timer is not zero */
-						sprintf(g_dtp2,	get_ttx(697), (char*)patient + HERO_NAME2);
+						sprintf(g_dtp2,	get_ttx(697), patient->alias);
 						GUI_output(g_dtp2);
 
 					} else {
 						/* set patient timer */
-						host_writed(patient + HERO_HEAL_TIMER, HOURS(4)); /* 4 hours */
+						patient->heal_timer = HOURS(4); /* 4 hours */
 
 						if (test_skill(hero, TA_HEILEN_GIFT, handicap) > 0) {
 
@@ -351,39 +353,41 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 							if (test_skill(hero, TA_HEILEN_GIFT, g_poison_prices[poison] + handicap) > 0) {
 								/* success */
-								sprintf(g_dtp2, get_ttx(690), (char*)hero + HERO_NAME2,	(char*)patient + HERO_NAME2);
+								sprintf(g_dtp2, get_ttx(690), (char*)hero + HERO_NAME2,	patient->alias);
 								GUI_output(g_dtp2);
 
-								host_writeb(patient + (HERO_POISON + 1) + 5 * poison, 0);
-								host_writeb(patient + HERO_POISON + 5 * poison, 1);
+								patient->poison[poison][1] = 0;
+								patient->poison[poison][0] = 1;
 
-								sprintf(g_dtp2,	get_ttx(692), (char*)hero + HERO_NAME2,	(char*)patient + HERO_NAME2);
+								sprintf(g_dtp2,	get_ttx(692), (char*)hero + HERO_NAME2,	patient->alias);
 
 								if (GUI_bool(g_dtp2)) {
 
 									do {
 										le = GUI_input(get_ttx(693), 2);
+
 									} while (le <= 0);
 
 									if ((l_si = test_skill(hero, TA_HEILEN_GIFT, le + handicap)) > 0) {
 
-										sprintf(g_dtp2,	get_ttx(691), (char*)hero + HERO_NAME2,	(char*)patient + HERO_NAME2, le);
+										sprintf(g_dtp2,	get_ttx(691), (char*)hero + HERO_NAME2,	patient->alias, le);
 
-										add_hero_le(patient, le);
+										add_hero_le((Bit8u*)patient, le);
 
 										GUI_output(g_dtp2);
 									} else {
 										/* skill test failed */
 										le_damage = 3;
 
-										if (host_readws(patient + HERO_LE) <= le_damage) {
+										if (patient->le <= le_damage) {
+
 											/* don't kill the patient: at least 1 LE should remain */
-											le_damage = host_readws(patient + HERO_LE) - 1;
+											le_damage = patient->le - 1;
 										}
 
-										sub_hero_le(patient, le_damage);
+										sub_hero_le((Bit8u*)patient, le_damage);
 
-										sprintf(g_dtp2,	get_ttx(694), (char*)patient + HERO_NAME2, le_damage);
+										sprintf(g_dtp2,	get_ttx(694), patient->alias, le_damage);
 										GUI_output(g_dtp2);
 
 										l_si = 0;
@@ -391,12 +395,12 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 								}
 							} else {
 								/* healing failed */
-								sprintf(g_dtp2,	get_ttx(689), (char*)hero + HERO_NAME2, (char*)patient + HERO_NAME2);
+								sprintf(g_dtp2,	get_ttx(689), (char*)hero + HERO_NAME2, patient->alias);
 								GUI_output(g_dtp2);
 							}
 						} else {
 							/* recognizing the poison failed */
-							sprintf(g_dtp2,	get_ttx(688), (char*)hero + HERO_NAME2,	(char*)patient + HERO_NAME2);
+							sprintf(g_dtp2,	get_ttx(688), (char*)hero + HERO_NAME2,	patient->alias);
 							GUI_output(g_dtp2);
 						}
 					}
@@ -410,9 +414,10 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 			patient_pos = select_hero_from_group(get_ttx(460));
 
 			if (patient_pos != -1) {
-				patient = get_hero(patient_pos);
 
-				skill_cure_disease(hero, patient, handicap, 0);
+				patient = (struct struct_hero*)get_hero(patient_pos);
+
+				skill_cure_disease(hero, (Bit8u*)patient, handicap, 0);
 			}
 			break;
 		}
@@ -422,77 +427,71 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 			patient_pos = select_hero_from_group(get_ttx(460));
 
 			if (patient_pos != -1) {
-				patient = get_hero(patient_pos);
-				if (is_hero_healable(patient)) {
 
-					if (host_readws(patient + HERO_LE) >= host_readws(patient + HERO_LE_ORIG)) {
+				patient = (struct struct_hero*)get_hero(patient_pos);
+
+				if (is_hero_healable((Bit8u*)patient)) {
+
+					if (patient->le >= patient->le_max) {
 
 						/* no need to heal */
-						sprintf(g_dtp2, get_ttx(461), (char*)patient + HERO_NAME2);
+						sprintf(g_dtp2, get_ttx(461), patient->alias);
 						GUI_output(g_dtp2);
 
-					} else if (host_readds(patient + HERO_HEAL_TIMER) > 0) {
+					} else if (patient->heal_timer > 0) {
 
 						/* timer is still running */
-						sprintf(g_dtp2, get_ttx(697), (char*)patient + HERO_NAME2);
+						sprintf(g_dtp2, get_ttx(697), patient->alias);
 						GUI_output(g_dtp2);
 
 					} else {
-						host_writed(patient + HERO_HEAL_TIMER, DAYS(1));
+						patient->heal_timer = DAYS(1);
 
 						if (test_skill(hero, TA_HEILEN_WUNDEN, handicap) > 0) {
+
 							if (test_skill(hero, TA_HEILEN_WUNDEN, handicap) > 0) {
 
 								l_si = (host_readbs(hero + (HERO_TALENTS + TA_HEILEN_WUNDEN)) > 1) ? host_readbs(hero + (HERO_TALENTS + TA_HEILEN_WUNDEN)) : 1;
 
-								add_hero_le(patient, l_si);
+								add_hero_le((Bit8u*)patient, l_si);
 
-								sprintf(g_dtp2,
-									get_ttx(691),
-									(char*)hero + HERO_NAME2,
-									(char*)patient + HERO_NAME2,
-									l_si);
-
+								sprintf(g_dtp2, get_ttx(691), (char*)hero + HERO_NAME2,
+									patient->alias, l_si);
 								GUI_output(g_dtp2);
+
 							} else {
 								/* skill test failed */
 								le_damage = 3;
 
-								if (host_readws(patient + HERO_LE) <= le_damage) {
+								if (patient->le <= le_damage) {
+
 									/* don't kill the patient: at least 1 LE should remain */
-									le_damage = host_readws(patient + HERO_LE) - 1;
+									le_damage = patient->le - 1;
 								}
 
-								sub_hero_le(patient, le_damage);
+								sub_hero_le((Bit8u*)patient, le_damage);
 
-								sprintf(g_dtp2,
-									get_ttx(694),
-									(char*)patient + HERO_NAME2,
-									le_damage);
-
+								sprintf(g_dtp2,	get_ttx(694), patient->alias, le_damage);
 								GUI_output(g_dtp2);
 
 								l_si = 0;
 
-								host_writed(patient + HERO_STAFFSPELL_TIMER, DAYS(1)); /* TODO: Why STAFFSPELL ?? */
+								patient->staffspell_timer = DAYS(1); /* TODO: Why STAFFSPELL ?? BUG! */
+								//patient->heal_timer = DAYS(1);
 							}
 						} else {
 
 							if (random_schick(20) <= 7) {
-								/* 35% chance: infected with Wundfieber illness */
-								sprintf(g_dtp2,
-									get_ttx(699),
-									(char*)hero + HERO_NAME2,
-									(char*)patient + HERO_NAME2);
 
-								host_writeb(patient + (HERO_ILLNESS + 5 * ILLNESS_TYPE_WUNDFIEBER), -1);
-								host_writeb(patient + (HERO_ILLNESS + 5 * ILLNESS_TYPE_WUNDFIEBER + 1), 0);
+								/* 35% chance: infected with Wundfieber illness */
+								sprintf(g_dtp2, get_ttx(699), (char*)hero + HERO_NAME2,	patient->alias);
+
+								patient->sick[ILLNESS_TYPE_WUNDFIEBER][0] = -1;
+								patient->sick[ILLNESS_TYPE_WUNDFIEBER][1] = 0;
+
 							} else {
 								/* 65% chance: just failed, no infection */
-								sprintf(g_dtp2,
-									get_ttx(698),
-									(char*)hero + HERO_NAME2,
-									(char*)patient + HERO_NAME2);
+								sprintf(g_dtp2,	get_ttx(698), (char*)hero + HERO_NAME2,	patient->alias);
 							}
 
 							GUI_output(g_dtp2);

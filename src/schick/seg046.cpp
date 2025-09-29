@@ -36,18 +36,19 @@ namespace M302de {
  * \param   gy          the upper y coordinate of this spellgroup
  */
 /* Borlandified and identical */
-void status_show_spell(Bit8u *hero, unsigned short spell, unsigned short fsig,
-			unsigned short x1, unsigned short x2, unsigned short gy) {
+void status_show_spell(struct struct_hero *hero, signed short spell_id, unsigned short fsig,
+			unsigned short x1, unsigned short x2, unsigned short gy)
+{
 	unsigned short group;
 	char str[10];
 
-	group = spell - fsig;
+	group = spell_id - fsig;
 
 	/* print spellname */
-	GUI_print_string(get_ttx(spell + 0x6a), x1, gy + group * 7);
+	GUI_print_string(get_ttx(spell_id + 0x6a), x1, gy + group * 7);
 
 	/* convert value to string */
-	my_itoa(host_readbs(hero + HERO_SPELLS + spell), str, 10);
+	my_itoa(hero->spells[spell_id], str, 10);
 
 	/* print value */
 	GUI_print_string(str, x2 - GUI_get_space_for_string(str, 0), gy + group * 7);
@@ -64,18 +65,19 @@ void status_show_spell(Bit8u *hero, unsigned short spell, unsigned short fsig,
  * \param   gy          the upper y coordinate of this skillgroup
  */
 /* Borlandified and identical */
-void status_show_skill(Bit8u *hero, unsigned short skill, unsigned short ftig,
-			unsigned short x1, unsigned short x2, unsigned short gy) {
+void status_show_skill(struct struct_hero *hero, signed short skill_id, unsigned short ftig,
+			unsigned short x1, unsigned short x2, unsigned short gy)
+{
 	unsigned short group;
 	char str[10];
 
-	group = skill - ftig;
+	group = skill_id - ftig;
 
 	/* print skillname */
-	GUI_print_string(get_ttx(skill + 0x30), x1, gy + group * 7);
+	GUI_print_string(get_ttx(skill_id + 0x30), x1, gy + group * 7);
 
 	/* convert value to string */
-	my_itoa(host_readbs(hero + HERO_TALENTS + skill) , str, 10);
+	my_itoa(hero->skills[skill_id] , str, 10);
 
 	/* print value */
 	GUI_print_string(str, x2 - GUI_get_space_for_string(str, 0), gy + group * 7);
@@ -87,7 +89,7 @@ void status_show_skill(Bit8u *hero, unsigned short skill, unsigned short ftig,
  * \param   hero        the hero whose skills should be shown
  */
 /* Borlandified and identical */
-void status_show_skills(Bit8u *hero) {
+void status_show_skills(struct struct_hero *hero) {
 
 	signed short skill_category, skill_no;
 
@@ -607,7 +609,7 @@ void status_show(Bit16u index)
 		}
 		/* skills */
 		case 3: {
-			status_show_skills(hero);
+			status_show_skills((struct struct_hero*)hero);
 			break;
 		}
 		/* spells */
@@ -640,7 +642,7 @@ void status_show(Bit16u index)
 
 				while (g_spells_index[j].first + g_spells_index[j].length > i) {
 
-					status_show_spell(hero, i,
+					status_show_spell((struct struct_hero*)hero, i,
 						g_spells_index[j].first,
 						g_statuspage_spells_xy[j].x_name,
 						g_statuspage_spells_xy[j].x_val,
@@ -673,7 +675,7 @@ void status_show(Bit16u index)
 
 				while (g_spells_index2[j].first + g_spells_index2[j].length > i) {
 
-					status_show_spell(hero,
+					status_show_spell((struct struct_hero*)hero,
 						i,
 						g_spells_index2[j].first,
 						g_statuspage_spells2_xy[j].x_name,
