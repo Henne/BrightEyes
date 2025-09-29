@@ -163,16 +163,16 @@ void FIG_draw_pic(void)
 	}
 }
 
-Bit8u* FIG_get_hero_ptr(signed short v1)
+struct struct_hero* FIG_get_hero_ptr(const signed short fighter_id)
 {
-	signed short i;
+	signed int i;
 
 	for (i = 0; i <= 6; i++) {
-		if (host_readbs(get_hero(i) + HERO_FIGHTER_ID) == v1)
-			return get_hero(i);
+		if (((struct struct_hero*)get_hero(i))->fighter_id == fighter_id)
+			return (struct struct_hero*)get_hero(i);
 	}
 
-	return get_hero(0);
+	return (struct struct_hero*)get_hero(0);
 }
 
 struct enemy_sheet* FIG_get_enemy_sheet(const signed short fighter_id)
@@ -448,11 +448,11 @@ signed char FIG_add_to_list(signed char fighter_id)
  */
 void FIG_draw_char_pic(signed short loc, signed short hero_pos)
 {
-	unsigned char *hero;
+	struct struct_hero *hero;
 	signed short fg_bak, bg_bak;
 
-	hero = get_hero(hero_pos - 1);
-	g_pic_copy.src = hero + HERO_PORTRAIT;
+	hero = (struct struct_hero*)get_hero(hero_pos - 1);
+	g_pic_copy.src = hero->pic;
 
 	get_textcolor(&fg_bak, &bg_bak);
 	set_textcolor(0xff, 0);
@@ -467,18 +467,18 @@ void FIG_draw_char_pic(signed short loc, signed short hero_pos)
 		g_pic_copy.y1 = 10;
 		g_pic_copy.x2 = 33;
 		g_pic_copy.y2 = 41;
-		GUI_print_string((char*)hero + HERO_NAME2, 1, 1);
+		GUI_print_string(hero->alias, 1, 1);
 
-		draw_bar(0, 0, host_readw(hero + HERO_LE), host_readw(hero + HERO_LE_ORIG), 1);
+		draw_bar(0, 0, hero->le, hero->le_max, 1);
 
-		draw_bar(1, 0, host_readw(hero + HERO_AE), host_readw(hero + HERO_AE_ORIG), 1);
+		draw_bar(1, 0, hero->ae, hero->ae_max, 1);
 	} else {
 		do_border(g_renderbuf_ptr, 1, 157, 34, 190, 29);
 		g_pic_copy.x1 = 2;
 		g_pic_copy.y1 = 158;
 		g_pic_copy.x2 = 33;
 		g_pic_copy.y2 = 189;
-		GUI_print_string((char*)hero + HERO_NAME2, 1, 193);
+		GUI_print_string(hero->alias, 1, 193);
 	}
 
 	do_pic_copy(0);

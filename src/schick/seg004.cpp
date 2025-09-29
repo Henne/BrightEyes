@@ -324,7 +324,7 @@ static void unused_gfx_spinlock(void)
 void update_status_bars(void)
 {
 	signed short i;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	g_unused_spinlock_flag = 0;
 
@@ -333,16 +333,16 @@ void update_status_bars(void)
 		if (g_pp20_index == ARCHIVE_FILE_ZUSTA_UK) {
 			/* in the status menu */
 
-			hero = get_hero(g_status_page_hero);
+			hero = (struct struct_hero*)get_hero(g_status_page_hero);
 
 			/* adjust hunger to 100% */
-			if (host_readbs(hero + HERO_HUNGER) >= 100) {
-				host_writebs(hero + HERO_HUNGER, g_status_page_hunger = 100);
+			if (hero->hunger >= 100) {
+				hero->hunger = g_status_page_hunger = 100;
 			}
 
 			/* adjust thirst to 100% */
-			if (host_readbs(hero + HERO_THIRST) >= 100) {
-				host_writebs(hero + HERO_THIRST, (g_status_page_thirst = 100));
+			if (hero->thirst >= 100) {
+				hero->thirst = g_status_page_thirst = 100;
 			}
 
 			/* hunger and thirst are at 100% */
@@ -374,9 +374,9 @@ void update_status_bars(void)
 					g_status_page_hunger_max_counter = 0;
 				}
 
-			} else if (host_readbs(hero + HERO_HUNGER) != g_status_page_hunger) {
+			} else if (hero->hunger != g_status_page_hunger) {
 
-				g_status_page_hunger = host_readbs(hero + HERO_HUNGER);
+				g_status_page_hunger = hero->hunger;
 
 				update_mouse_cursor();
 
@@ -405,15 +405,15 @@ void update_status_bars(void)
 					g_status_page_thirst_max_counter = 0;
 				}
 
-			} else if (host_readbs(hero + HERO_THIRST) != g_status_page_thirst) {
+			} else if (hero->thirst != g_status_page_thirst) {
 
-				g_status_page_thirst = host_readbs(hero + HERO_THIRST);
+				g_status_page_thirst = hero->thirst;
 
 				update_mouse_cursor();
 
 				for (i = 0; i < 6; i++) {
-						do_h_line(g_vga_memstart, 260, g_status_page_thirst / 2 + 260, i + 43, 11);
-						do_h_line(g_vga_memstart, g_status_page_thirst / 2 + 260, 310, i + 43, 12);
+					do_h_line(g_vga_memstart, 260, g_status_page_thirst / 2 + 260, i + 43, 11);
+					do_h_line(g_vga_memstart, g_status_page_thirst / 2 + 260, 310, i + 43, 12);
 				}
 
 				refresh_screen_size();
@@ -425,30 +425,31 @@ void update_status_bars(void)
 			asm { sti };
 #endif
 		} else if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
+
 			/* in the screen with the playmask */
 
 			for (i = 0; i <= 6; i++) {
 
-				if (host_readbs(get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE) {
+				if (((struct struct_hero*)get_hero(i))->typus != HERO_TYPE_NONE) {
 
-					hero = get_hero(i);
+					hero = (struct struct_hero*)get_hero(i);
 
 					/* draw LE bars */
-					if ((g_char_status_bars[i][1] != host_readws(hero + HERO_LE)) ||
-						(g_char_status_bars[i][0] != host_readws(hero + HERO_LE_ORIG)))
+					if ((g_char_status_bars[i][1] != hero->le) ||
+						(g_char_status_bars[i][0] != hero->le_max))
 					{
-						draw_bar(0, i, host_readws(hero + HERO_LE), host_readws(hero + HERO_LE_ORIG), 0);
-						g_char_status_bars[i][0] = host_readws(hero + HERO_LE_ORIG);
-						g_char_status_bars[i][1] = host_readws(hero + HERO_LE);
+						draw_bar(0, i, hero->le, hero->le_max, 0);
+						g_char_status_bars[i][0] = hero->le_max;
+						g_char_status_bars[i][1] = hero->le;
 					}
 
 					/* draw AE bars */
-					if ((g_char_status_bars[i][3] != host_readws(hero + HERO_AE)) ||
-						(g_char_status_bars[i][2] != host_readws(hero + HERO_AE_ORIG)))
+					if ((g_char_status_bars[i][3] != hero->ae) ||
+						(g_char_status_bars[i][2] != hero->ae_max))
 					{
-						draw_bar(1, i, host_readws(hero + HERO_AE), host_readws(hero + HERO_AE_ORIG), 0);
-						g_char_status_bars[i][2] = host_readws(hero + HERO_AE_ORIG);
-						g_char_status_bars[i][3] = host_readws(hero + HERO_AE);
+						draw_bar(1, i, hero->ae, hero->ae_max, 0);
+						g_char_status_bars[i][2] = hero->ae_max;
+						g_char_status_bars[i][3] = hero->ae;
 					}
 				} else {
 					if (g_char_status_bars[i][0]) {

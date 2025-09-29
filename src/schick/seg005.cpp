@@ -134,7 +134,7 @@ void FIG_set_star_color(Bit8u *ptr, unsigned short count, unsigned char color)
 static char* FIG_name_3rd_case(unsigned short type, volatile unsigned short pos)
 {
 	if (type == 2) {
-		return (char*)get_hero(pos) + HERO_NAME2;
+		return ((struct struct_hero*)get_hero(pos))->alias;
 	} else {
 		return (char*)GUI_names_grammar(3, pos, 1);
 	}
@@ -151,7 +151,7 @@ static char* FIG_name_4th_case(unsigned short type, volatile unsigned short pos)
 {
 
 	if (type == 2)
-		return (char*)get_hero(pos) + HERO_NAME2;
+		return ((struct struct_hero*)get_hero(pos))->alias;
 	else
 		return (char*)GUI_names_grammar(2, pos, 1);
 }
@@ -167,7 +167,7 @@ static char *FIG_name_1st_case(unsigned short type, volatile unsigned short pos)
 {
 
 	if (type == 2)
-		return (char*)get_hero(pos) + HERO_NAME2;
+		return ((struct struct_hero*)get_hero(pos))->alias;
 	else
 		return (char*)GUI_names_grammar(0, pos, 1);
 }
@@ -325,7 +325,7 @@ void draw_fight_screen(Bit16u val)
 	struct struct_fighter *list_ii;
 
 	struct struct_rect rect_bak;
-	Bit8u *hero;
+	struct struct_hero *hero;
 	struct enemy_sheet *p_enemy_sheet;
 
 	signed short viewdir_before;
@@ -377,10 +377,10 @@ void draw_fight_screen(Bit16u val)
 	flag = 0;
 
 	do {
+
 #if !defined(__BORLANDC__)
 		D1_LOG(" loop Figure = %3d Sheet_ID : %d 0xf : %d 0x12: %d object: %d\n",
-				list_ii->figure,
-				list_ii->sheet, list_ii->wsheet,
+				list_ii->figure, list_ii->sheet, list_ii->wsheet,
 				list_ii->visible, list_ii->obj_id);
 #endif
 
@@ -388,7 +388,7 @@ void draw_fight_screen(Bit16u val)
 			/* Has a sheet id */
 
 			if (list_ii->visible) {
-				list_ii->visible = (3);
+				list_ii->visible = 3;
 			}
 
 			flag = 1;
@@ -732,18 +732,19 @@ void draw_fight_screen(Bit16u val)
 											}
 										} else {
 											/* hero escapes */
-											hero = (Bit8u*)FIG_get_hero_ptr(list_ii->id);
+											/* REMARK: hero is always != NULL */
+											hero = FIG_get_hero_ptr(list_ii->id);
 											if (hero) {
-												host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_FLEE);
-												or_ptr_bs(hero + HERO_FLAGS2, 1); /* set 'scared' flag */
+												hero->action_id = FIG_ACTION_FLEE;
+												or_ptr_bs((Bit8u*)hero + HERO_FLAGS2, 1); /* set 'scared' flag */
 
 												/* set the dungeon position the hero escapes to.
 												 * This depends on the direction the escape square on the battlefield has been entered.
 												 * Note: Apparently, this is done in any fight, including seafights and wilderness fights where it doesn't make sense.
 												 * The distinction is done only later. */
-												host_writew(hero + HERO_ESCAPE_POSITION,
-													g_fig_flee_position[(host_readbs(hero + HERO_VIEWDIR) == 3) ? NORTH : (host_readbs(hero + HERO_VIEWDIR) + 1)]);
-												figlist_remove[list_ii->sheet] = host_readbs(hero + HERO_FIGHTER_ID);
+												hero->escape_position =
+													g_fig_flee_position[hero->viewdir == 3 ? NORTH : (hero->viewdir + 1)];
+												figlist_remove[list_ii->sheet] = hero->fighter_id;
 
 											}
 										}

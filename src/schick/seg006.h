@@ -12,7 +12,7 @@ void FIG_call_draw_pic(void);
 
 void FIG_draw_pic(void);
 
-Bit8u* FIG_get_hero_ptr(signed short);
+struct struct_hero* FIG_get_hero_ptr(const signed short);
 
 struct enemy_sheet* FIG_get_enemy_sheet(const signed short);
 
