@@ -1482,10 +1482,12 @@ void mouse_init(void)
 		if (p1 == 0) {
 			g_have_mouse = 0;
 		}
+#endif
 
 		g_current_cursor = &g_default_mouse_cursor;
 		g_last_cursor = &g_default_mouse_cursor;
 
+#if defined(__BORLANDC__)
 		if (g_have_mouse == 2) {
 
 			p1 = 4;
@@ -5636,7 +5638,7 @@ void check_group(void)
 	}
 }
 
-int schick_main(int argc, char** argv)
+int main(int argc, char** argv)
 {
 	signed short l_si;
 	signed short l_di;
@@ -5684,13 +5686,14 @@ int schick_main(int argc, char** argv)
 
 		if (argc == 2) {
 
+#if defined(__BORLANDC__)
 			/* some trick to disable the cd check */
 
 			len = strlen(argv[1]);
 
 			l_si = 0;
-			g_cd_skipmagic = 1;
 
+			g_cd_skipmagic = 1;
 			while (l_si < len) {
 
 
@@ -5698,6 +5701,7 @@ int schick_main(int argc, char** argv)
 				argv[1]++;
 				l_si++;
 			}
+#endif
 		}
 
 		prepare_dirs();
@@ -5715,13 +5719,14 @@ int schick_main(int argc, char** argv)
 
 		CD_init();
 
+#if defined(__BORLANDC__)
 		if (!g_cd_init_successful) {
 
 			/* CD init failed */
 			cleanup_game();
 			exit(0);
 		}
-
+#endif
 
 		/* select game mode */
 		g_game_mode = GAME_MODE_UNSPECIFIED;
@@ -5884,5 +5889,13 @@ signed short copy_protection(void)
 }
 
 #if !defined(__BORLANDC__)
+}
+#endif
+
+#if !defined(__BORLANDC__)
+/* REAMARK: reason == namespaces */
+int main(int argc, char** argv)
+{
+	return M302de::main(argc, argv);
 }
 #endif

@@ -230,7 +230,7 @@ void save_rect(Bit8u* src, Bit8u *dst, unsigned short width, unsigned short heig
 #if defined(__BORLANDC__)
 void fill_rect(Bit16u seg, Bit16u off, signed short color, signed short width, signed short height)
 #else
-void fill_rect(Bit8s *dst, signed short color, signed short width, signed short height)
+void fill_rect(Bit8u *dst, signed short color, signed short width, signed short height)
 #endif
 {
 	unsigned short x;

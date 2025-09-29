@@ -228,10 +228,12 @@ static void seg001_00c1(signed short track_no)
 		g_cd_audio_tod = CD_get_tod();
 	}
 }
+#endif
 
 /* Borlandified and identical */
 void seg001_02c4(void)
 {
+#if defined(__BORLANDC__)
 	if (!g_cd_init_successful) return;
 
 	if (CD_get_tod() - (Bit32s)g_cd_audio_tod < (Bit32s)g_cd_audio_pos)
@@ -244,15 +246,21 @@ void seg001_02c4(void)
 		seg001_00c1(g_cd_audio_track);
 		g_cd_audio_repeat = 1;
 	}
+#endif
 }
 
 /* Borlandified and identical */
 int CD_bioskey(const int cmd)
 {
+#if defined(__BORLANDC__)
 	seg001_02c4();
 	return bioskey(cmd);
+#else
+	return 0;
+#endif
 }
 
+#if defined(__BORLANDC__)
 /* CD_audio_stop_hsg() - stop audio playback in HSG format */
 /* Borlandified and identical */
 static void CD_audio_stop_hsg(void)
@@ -277,10 +285,12 @@ void CD_audio_stop(void)
 	req[1].status = 0;
 	CD_driver_request(&req[1]);
 }
+#endif
 
 /* Borlandified and identical */
 void CD_audio_pause(void)
 {
+#if defined(__BORLANDC__)
 	/* Is CD initialized ? */
 	if (!g_cd_init_successful) return;
 
@@ -297,11 +307,13 @@ void CD_audio_pause(void)
 
 	req[6].status = 0;
 	CD_driver_request(&req[6]);
+#endif
 }
 
 /* Borlandified and identical */
 void CD_audio_play(void)
 {
+#if defined(__BORLANDC__)
 	/* Is CD initialized ? */
 	if (!g_cd_init_successful) return;
 
@@ -317,8 +329,10 @@ void CD_audio_play(void)
 
 	req[7].status = 0;
 	CD_driver_request(&req[7]);
+#endif
 }
 
+#if defined(__BORLANDC__)
 /* Borlandified and nearly identical */
 static void CD_0432(void)
 {
@@ -344,6 +358,7 @@ static void CD_0432(void)
 		track_no++;
 	}
 }
+#endif
 
 struct dummy15 {
 	signed short a[15];
@@ -352,6 +367,7 @@ struct dummy15 {
 /* Borlandified and identical */
 void CD_set_track(const int index)
 {
+#if defined(__BORLANDC__)
 	signed short i;
 	struct dummy15 tracks = *(struct dummy15*)g_cd_audio_tracklist;
 
@@ -379,8 +395,10 @@ void CD_set_track(const int index)
 			CD_audio_pause();
 		}
 	}
+#endif
 }
 
+#if defined(__BORLANDC__)
 /* Borlandified and identical */
 static signed short CD_read_exe(char *path)
 {
@@ -443,15 +461,15 @@ static signed short CD_harderr_handler(void)
 
 	return 1;
 }
+#endif
 
 /* Borlandified and identical */
 void CD_check(void)
 {
+#if defined(__BORLANDC__)
 	char text[80];
 
-#if defined(__BORLANDC__)
 	harderr((int(*)(int, int, int, int))CD_harderr_handler);
-#endif
 
 	strcpy(text, g_str_cd_exepath);
 
@@ -461,11 +479,13 @@ void CD_check(void)
 	{
 		CD_insert_msg();
 	}
+#endif
 }
 
 /* Borlandified and identical */
 int CD_init(void)
 {
+#if defined(__BORLANDC__)
 	char str[80];
 
 	if (!CD_set_drive_no())
@@ -488,8 +508,10 @@ int CD_init(void)
 	CD_0432();
 
 	return 1;
-}
+#else
+	return 1;
 #endif
+}
 
 #if !defined(__BORLANDC__)
 }

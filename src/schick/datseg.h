@@ -1757,10 +1757,10 @@ extern signed int g_spelltest_result;	// ds:0xe5b2; seg098, seg099, seg102
 extern signed int g_menu_selected;	// ds:0xe5b0; seg002, seg097
 extern signed int g_menu_input_busy;	// ds:0xe5ae; seg002, seg097
 extern signed int g_menu_default_select;	// ds:0xe5ac; seg025, seg074, seg097
-extern char g_grammar_bufs[5][40];	// ds:0xe4e3; seg096
+//extern char g_grammar_bufs[5][40];	// ds:0xe4e3; seg096
 extern signed int g_dialogbox_indent_width;	// ds:0xe4db; seg096, seg097
 extern signed int g_dialogbox_indent_height;	// ds:0xe4d9; seg096, seg097
-extern char g_gui_print_char;			// ds:0xe4d8; seg096
+//extern char g_gui_print_char;			// ds:0xe4d8; seg096
 extern unsigned char g_good_camp_place;		// ds:0xe4c8; seg051, seg094, seg109
 extern signed int g_current_town_anix;		// ds:0xe4b1; seg002, seg093, seg094
 extern signed int g_current_town_aniy;		// ds:0xe4af; seg002, seg093, seg094
@@ -1813,7 +1813,7 @@ extern unsigned char *g_buffer_weapanidat;	// ds:0xe374; seg036, seg037, seg040,
 extern Bit32s g_fightobj_buf_freespace;		// ds:0xe370; seg032-seg100
 extern signed char g_fig_twofielded_count;	// ds:0xe356; seg039, seg040
 extern signed char g_fig_twofielded_table[21];	// ds:0xe35a; seg005-seg099
-extern signed char *g_chessboard_cpy;		// ds:0xe356; seg038
+//extern signed char *g_chessboard_cpy;		// ds:0xe356; seg038
 extern signed int g_fig_dropped_weapons[30];	// ds:0xe31a; seg032, seg041
 extern signed int g_autofight;		// ds:0xe318; seg004-seg105
 extern signed int g_current_fight_no;	// ds:0xe316; seg002-seg042

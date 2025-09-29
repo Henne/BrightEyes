@@ -274,8 +274,8 @@ static inline Bit8s dec_ptr_bs(Bit8u *p)
  */
 static inline void update_informer_cond(const int informer)
 {
-	if ((0 <= informer) && (informer < 15) && (gs_informer_flags[informer] == 0)) {
-		gs_informer_flags[informer] = 1;
+	if ((0 <= informer) && (informer < 15) && (M302de::gs_informer_flags[informer] == 0)) {
+		M302de::gs_informer_flags[informer] = 1;
 	}
 }
 
@@ -283,7 +283,7 @@ static inline unsigned char *get_hero(signed short index) {
 	if (index < 0 || index > 6) {
 		D1_ERR("ERROR: Versuch auf Held an Position %d zuzugreifen\n", index);
 	}
-	return g_heroes + index * SIZEOF_HERO;
+	return M302de::g_heroes + index * SIZEOF_HERO;
 }
 
 static inline void dec_ptr_ws(Bit8u *p)
@@ -705,25 +705,25 @@ static inline unsigned short item_undropable(Bit8u *item) {
 }
 
 static inline Bit8u *get_spelltarget_e(void) {
-	return (Bit8u*)g_spelltarget_e;
+	return (Bit8u*)M302de::g_spelltarget_e;
 }
 
 static inline Bit8u *get_spelltarget(void) {
-	return (Bit8u*)g_spelltarget;
+	return (Bit8u*)M302de::g_spelltarget;
 }
 
 static inline Bit8u *get_spelluser(void) {
-	return (Bit8u*)g_spelluser;
+	return (Bit8u*)M302de::g_spelluser;
 }
 
 static inline Bit8u *get_itemuser(void) {
-	return (Bit8u*)g_itemuser;
+	return (Bit8u*)M302de::g_itemuser;
 }
 
 static inline char *get_monname(const int no)
 {
 	if ((0 <= no) && (no < 77))
-		return g_monnames_index[no];
+		return M302de::g_monnames_index[no];
 	else {
 		fprintf(stderr, "ERROR: %s[%d] is out of bounds\n", __func__, no);
 		return NULL;
@@ -731,19 +731,19 @@ static inline char *get_monname(const int no)
 }
 
 static inline char *get_tx2(unsigned short no) {
-	return (char*)g_tx2_index[no];
+	return (char*)M302de::g_tx2_index[no];
 }
 
 static inline char *get_ttx(unsigned short no) {
-	return (char*)g_text_ltx_index[no];
+	return (char*)M302de::g_text_ltx_index[no];
 }
 
 static inline char *get_tx(unsigned short no) {
-	return (char*)g_tx_index[no];
+	return (char*)M302de::g_tx_index[no];
 }
 
 static inline signed char get_cb_val(const signed short x, const signed short y) {
-	return *(g_chessboard + 25 * y + x);
+	return *(M302de::g_chessboard + 25 * y + x);
 }
 
 static inline void dump_cb(void)
@@ -771,12 +771,12 @@ static inline void dump_cb(void)
 }
 
 static inline Bit8u *get_itemsdat(unsigned short item) {
-	return g_itemsdat + SIZEOF_ITEM_STATS * item;
+	return M302de::g_itemsdat + SIZEOF_ITEM_STATS * item;
 }
 
 static inline char* get_itemname(unsigned short item)
 {
-	return (char*)g_itemsname[item];
+	return (char*)M302de::g_itemsname[item];
 }
 
 #define DUMMY_WARNING() D1_ERR("Error: %s is not implemented\n", __func__)
@@ -792,8 +792,6 @@ static inline char* get_itemname(unsigned short item)
 #define struct_copy memcpy
 
 #define my_itoa itoa
-
-#define schick_main main
 
 #define inc_ptr_bs(p)		((*(Bit8s*)(p))++)
 #define dec_ptr_bs(p)		((*(Bit8s*)(p))--)

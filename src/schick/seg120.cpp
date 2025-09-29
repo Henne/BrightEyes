@@ -385,10 +385,18 @@ signed short init_memory(void)
 #endif
 
 	/* allocate small chunks of memory */
+#if defined(__BORLANDC__)
 	g_itemsname		= (char**)schick_alloc(254 * sizeof(char*));
+#else
+	g_itemsname		= (char**)schick_alloc(255 * sizeof(char*));
+#endif
 	g_itemsdat 		= (unsigned char*)schick_alloc(255 * SIZEOF_ITEM_STATS);
 	g_monnames_buffer	= (char*)schick_alloc(950);
+#if defined(__BORLANDC__)
 	g_monnames_index	= (char**)schick_alloc(77 * sizeof(char*));
+#else
+	g_monnames_index	= (char**)schick_alloc(79 * sizeof(char*));
+#endif
 	g_memslots_anis		= (struct struct_memslot_ani*)schick_alloc(37 * sizeof(struct struct_memslot_ani));
 	g_memslots_mfig		= (struct struct_memslot_fig*)schick_alloc(43 * sizeof(struct struct_memslot_fig));
 	g_memslots_wfig		= (struct struct_memslot_fig*)schick_alloc(43 * sizeof(struct struct_memslot_fig));
