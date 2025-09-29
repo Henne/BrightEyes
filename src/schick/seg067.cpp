@@ -66,43 +66,42 @@ void city_event_1(void)
 {
 	signed short randval;
 	signed short answer;
-	unsigned char *hero;
+	struct struct_hero *hero;
 
-	hero = get_hero(get_random_hero());
+	hero = (struct struct_hero*)get_hero(get_random_hero());
 
 	randval = random_schick(20);
 
-	if (test_skill(hero, TA_SINNESSCHAERFE, 2) <= 0) {
+	if (test_skill((Bit8u*)hero, TA_SINNESSCHAERFE, 2) <= 0) {
 
 		/* TODO:	check the format strings in the english version
 		 *		they may be broken.
 		 *		Or, at least some changes on the code are neccessary.
 		 */
-		sprintf(g_dtp2, get_tx(random_schick(4) - 1), (char*)hero + HERO_NAME2, randval);
+		sprintf(g_dtp2, get_tx(random_schick(4) - 1), hero->alias, randval);
 
-		GUI_dialogbox(hero + HERO_PORTRAIT, (char*)(hero + HERO_NAME2), g_dtp2, 0);
+		GUI_dialogbox(hero->pic, hero->alias, g_dtp2, 0);
 
 		randval *= 10;
 
-		sub_ptr_ds(hero + HERO_MONEY, randval);
+		hero->money -= randval;
 
-		if (host_readds(hero + HERO_MONEY) < 0) {
-			host_writeds(hero + HERO_MONEY, 0);
+		if (hero->money < 0) {
+			hero->money = 0;
 		}
 	} else {
 
-		sprintf(g_dtp2,
-			get_tx(random_schick(4) + 3),
-			(char*)hero + HERO_NAME2,
-			(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
+		sprintf(g_dtp2, get_tx(random_schick(4) + 3), hero->alias, GUI_get_ptr(hero->sex, 1));
 
-		answer = GUI_dialogbox(hero + HERO_PORTRAIT, (char*)(hero + HERO_NAME2), g_dtp2, 3,
+		answer = GUI_dialogbox(hero->pic, hero->alias, g_dtp2, 3,
 				get_tx(random_schick(4) + 7),
 				get_tx(random_schick(4) + 11),
 				get_tx(random_schick(4) + 15));
 
 		if (answer == 1) {
+
 			GUI_output(get_tx(random_schick(4) + 19));
+
 		} else {
 
 			randval = random_schick(5) - 1;
@@ -112,9 +111,7 @@ void city_event_1(void)
 				GUI_output(get_tx(27));
 				GUI_output(get_tx(28));
 			} else {
-				sprintf(g_dtp2,
-					get_tx(randval + 24),
-					(char*)hero + HERO_NAME2);
+				sprintf(g_dtp2,	get_tx(randval + 24), hero->alias);
 				GUI_output(g_dtp2);
 			}
 		}
