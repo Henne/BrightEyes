@@ -321,16 +321,6 @@ static inline void sub_ptr_ws(Bit8u *p, Bit16s val)
 	host_writews(p, host_readws(p) - val);
 }
 
-static inline Bit32s add_ptr_ds(Bit8u *p, Bit32s val)
-{
-	return host_writeds(p, host_readds(p) + val);
-}
-
-static inline Bit32s sub_ptr_ds(Bit8u *p, Bit32s val)
-{
-	return host_writeds(p, host_readds(p) - val);
-}
-
 static inline int __abs__(int j)
 {
 	return abs(j);
@@ -807,9 +797,6 @@ static inline char* get_itemname(unsigned short item)
 
 #define add_ptr_ws(p, v)	(*(Bit16s*)(p) += (v))
 #define sub_ptr_ws(p, v)	(*(Bit16s*)(p) -= (v))
-
-#define add_ptr_ds(p, v)	(*(Bit32s*)(p) += (v))
-#define sub_ptr_ds(p, v)	(*(Bit32s*)(p) -= (v))
 
 #define get_hero(no) ((unsigned char*)g_heroes + SIZEOF_HERO * (no))
 
