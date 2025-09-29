@@ -93,7 +93,7 @@ void item_arcano(void)
 	/* load SPELLTXT*/
 	load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 
-	g_spelluser = get_itemuser();
+	g_spelluser = (struct struct_hero*)get_itemuser();
 
 	/* ask who should be affected */
 	host_writeb(get_spelluser() + HERO_ENEMY_ID, select_hero_from_group(get_ttx(637)) + 1);
@@ -176,7 +176,7 @@ void item_armatrutz(void)
 	/* load SPELLTXT */
 	load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 
-	g_spelluser = get_itemuser();
+	g_spelluser = (struct struct_hero*)get_itemuser();
 
 	/* ask who should be affected */
 	host_writeb(get_spelluser() + HERO_ENEMY_ID, select_hero_from_group(get_ttx(637)) + 1);
@@ -208,7 +208,7 @@ void item_flimflam(void)
 	/* load SPELLTXT*/
 	load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 
-	g_spelluser = get_itemuser();
+	g_spelluser = (struct struct_hero*)get_itemuser();
 
 	spell_flimflam();
 
@@ -433,7 +433,7 @@ void item_brenne(void)
 
 #ifdef M302de_ORIGINAL_BUGFIX
 		if (get_spelluser() != get_itemuser()) {
-			g_spelluser = get_itemuser();
+			g_spelluser = (struct struct_hero*)get_itemuser();
 		}
 #endif
 
@@ -479,7 +479,7 @@ void item_brenne(void)
 				g_light_type = LIGHTING_DARK;
 			}
 
-			g_spelluser = get_itemuser();
+			g_spelluser = (struct struct_hero*)get_itemuser();
 
 			spell_brenne();
 		}

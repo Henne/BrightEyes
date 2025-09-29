@@ -1750,7 +1750,7 @@ extern signed char g_large_buf;			// ds:0xe5e4; seg120, seg028
 extern unsigned char g_event_ani_busy;	// ds:0xe5d2; seg002, seg109-seg118
 
 extern unsigned char *g_itemuser;		// ds:0xe5ce; seg049, seg107
-extern unsigned char *g_spelluser;	// ds:0xe5bc; seg068, seg098, seg102, seg107
+extern struct struct_hero *g_spelluser;	// ds:0xe5bc; seg068, seg098, seg102, seg107
 extern unsigned char *g_spelltarget;	// ds:0xe5b8; seg098-seg102
 extern struct enemy_sheet *g_spelltarget_e;	// ds:0xe5b4; seg098-seg102
 extern signed int g_spelltest_result;	// ds:0xe5b2; seg098, seg099, seg102

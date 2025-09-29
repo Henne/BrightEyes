@@ -501,7 +501,7 @@ void academy_analues(void)
 
 	if (hero_pos != -1) {
 
-		g_spelluser = get_hero(hero_pos);
+		g_spelluser = (struct struct_hero*)get_hero(hero_pos);
 
 		buffer1_bak = g_tx_file_index;
 

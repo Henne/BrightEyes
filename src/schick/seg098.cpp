@@ -818,7 +818,7 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 				retval = 0;
 			} else {
 				/* set global spelluser variable */
-				g_spelluser = hero;
+				g_spelluser = (struct struct_hero*)hero;
 
 				ae_cost = get_spell_cost(spell_id, 0); /* spell successful -> full AE cost */
 				g_spell_special_aecost = -1;
