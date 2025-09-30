@@ -23,10 +23,10 @@ signed short has_herb_for_disease(Bit8u*, signed short);
 signed short skill_cure_disease(Bit8u*, Bit8u*, signed short, signed short);
 
 /* 0x3e */
-Bit8u* get_heaviest_hero(void);
+struct struct_hero* get_heaviest_hero(void);
 
 /* 0x43 */
-signed short get_hero_weight(Bit8u*);
+signed short get_hero_weight(struct struct_hero*);
 
 /* 0x48 */
 signed short get_skilled_hero_pos(signed short);

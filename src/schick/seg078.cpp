@@ -126,11 +126,11 @@ signed short DNG02_handler(void)
 	} else if (target_pos == DNG_POS(0,14,14) && target_pos != gs_dng_handled_pos)
 	{
 		hero = (Bit8u*)get_first_hero_available_in_group();
-		weight_sum = get_hero_weight(hero);
+		weight_sum = get_hero_weight((struct struct_hero*)hero);
 
 		if ((hero = (Bit8u*)get_second_hero_available_in_group()))
 		{
-			weight_sum += get_hero_weight(hero);
+			weight_sum += get_hero_weight((struct struct_hero*)hero);
 		}
 
 		if (weight_sum >= 7000L)
@@ -146,7 +146,7 @@ signed short DNG02_handler(void)
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 				host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 			{
-				weight_sum += get_hero_weight(hero);
+				weight_sum += get_hero_weight((struct struct_hero*)hero);
 			}
 		}
 
@@ -160,7 +160,7 @@ signed short DNG02_handler(void)
 			}
 		}
 
-		hero_weight = get_hero_weight((Bit8u*)get_heaviest_hero());
+		hero_weight = get_hero_weight(get_heaviest_hero());
 
 		amap_ptr[MAP_POS(10,11)] = (hero_weight >= weight_sum ? (DNG_TILE_CORRIDOR << 4) : (DNG_TILE_WALL << 4));
 
@@ -235,7 +235,7 @@ signed short DNG02_handler(void)
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 				host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 			{
-				weight_sum += get_hero_weight(hero);
+				weight_sum += get_hero_weight((struct struct_hero*)hero);
 			}
 		}
 
@@ -262,7 +262,7 @@ signed short DNG02_handler(void)
 					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 						host_readbs(hero + HERO_GROUP_NO) == i)
 					{
-						weight_sum += get_hero_weight(hero);
+						weight_sum += get_hero_weight((struct struct_hero*)hero);
 					}
 				}
 

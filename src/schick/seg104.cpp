@@ -483,23 +483,22 @@ signed short skill_cure_disease(Bit8u *healer, Bit8u *patient, signed short hand
 	return retval;
 }
 
-Bit8u* get_heaviest_hero(void)
+struct struct_hero* get_heaviest_hero(void)
 {
-	unsigned char *hero;
-	unsigned char *retval;
+	struct struct_hero *hero;
+	struct struct_hero *retval;
 
 	signed short weight;
 	signed short w_max;
 	signed short i;
 
 	w_max = 0;
-	hero = get_hero(0);
-	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+	hero = (struct struct_hero*)get_hero(0);
+	for (i = 0; i <= 6; i++, hero++) {
 
-		if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readbs(hero + HERO_GROUP_NO) == gs_current_group))
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
 		{
-			weight = host_readws(hero + HERO_WEIGHT) + host_readws(hero + HERO_LOAD);
+			weight = hero->weight + hero->load;
 
 			if (weight > w_max) {
 				w_max = weight;
@@ -511,9 +510,9 @@ Bit8u* get_heaviest_hero(void)
 	return retval;
 }
 
-signed short get_hero_weight(Bit8u *hero)
+signed short get_hero_weight(struct struct_hero *hero)
 {
-	return host_readws(hero + HERO_WEIGHT) + host_readws(hero + HERO_LOAD);
+	return hero->weight + hero->load;
 }
 
 signed short get_skilled_hero_pos(signed short skill)
