@@ -417,7 +417,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 				patient = (struct struct_hero*)get_hero(patient_pos);
 
-				skill_cure_disease(hero, (Bit8u*)patient, handicap, 0);
+				skill_cure_disease((struct struct_hero*)hero, patient, handicap, 0);
 			}
 			break;
 		}
@@ -627,7 +627,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 			break;
 		}
 		case TA_ALCHIMIE : {
-			l_si = plan_alchemy(hero);
+			l_si = plan_alchemy((struct struct_hero*)hero);
 			break;
 		}
 		}

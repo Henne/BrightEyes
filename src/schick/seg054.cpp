@@ -132,7 +132,7 @@ void do_inn(void)
 
 				if (answer == 1) {
 					/* abort brewing */
-					do_alchemy(hero, host_readbs(hero + HERO_RECIPE_ID), 1);
+					do_alchemy((struct struct_hero*)hero, host_readbs(hero + HERO_RECIPE_ID), 1);
 				} else {
 					done = 1;
 					g_combo_mode = 0;
@@ -140,7 +140,7 @@ void do_inn(void)
 				}
 			} else {
 				/* hero brewing, HERO_RECIPE_TIMER == 0. STAFFSPELL_TIMER not checked */
-				do_alchemy(hero, host_readbs(hero + HERO_RECIPE_ID), 0);
+				do_alchemy((struct struct_hero*)hero, host_readbs(hero + HERO_RECIPE_ID), 0);
 			}
 		}
 	}
@@ -175,7 +175,7 @@ void do_inn(void)
 
 			if (answer == 1) {
 				/* abort brewing */
-				do_alchemy(hero, host_readbs(hero + HERO_RECIPE_ID), 1);
+				do_alchemy((struct struct_hero*)hero, host_readbs(hero + HERO_RECIPE_ID), 1);
 
 				/* Original-Bug 10:
 				 * If a group of heroes enters an inn where more then one hero is brewing
@@ -189,7 +189,7 @@ void do_inn(void)
 			}
 		} else {
 			/* hero brewing, HERO_RECIPE_TIMER == 0. STAFFSPELL_TIMER not checked */
-			do_alchemy(hero, host_readbs(hero + HERO_RECIPE_ID), 0);
+			do_alchemy((struct struct_hero*)hero, host_readbs(hero + HERO_RECIPE_ID), 0);
 
 			/* Original-Bug 20:
 			 * If a group of heroes enters an inn where more then one hero is brewing
@@ -231,7 +231,7 @@ void do_inn(void)
 
 			if (answer == 1) {
 				/* abort brewing */
-				do_alchemy(hero, host_readbs(hero + HERO_RECIPE_ID), 1);
+				do_alchemy((struct struct_hero*)hero, host_readbs(hero + HERO_RECIPE_ID), 1);
 			} else {
 				done = 1;
 				g_combo_mode = 0;
@@ -239,7 +239,7 @@ void do_inn(void)
 			}
 		} else {
 			/* hero brewing, HERO_RECIPE_TIMER == 0. STAFFSPELL_TIMER not checked */
-			do_alchemy(hero, host_readbs(hero + HERO_RECIPE_ID), 0);
+			do_alchemy((struct struct_hero*)hero, host_readbs(hero + HERO_RECIPE_ID), 0);
 		}
 	} else {
 		hero = get_hero(0);
@@ -281,7 +281,7 @@ void do_inn(void)
 					finalize_alchemy = 0;
 				}
 				if (finalize_alchemy != -1) {
-					do_alchemy(hero, host_readbs(hero + HERO_RECIPE_ID), finalize_alchemy);
+					do_alchemy((struct struct_hero*)hero, host_readbs(hero + HERO_RECIPE_ID), finalize_alchemy);
 
 					signed char group_nr = host_readbs(hero + HERO_GROUP_NO);
 
