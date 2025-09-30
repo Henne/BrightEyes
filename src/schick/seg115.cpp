@@ -85,7 +85,7 @@ void tevent_016(void)
 					hero = get_hero(get_hero_KK_best());
 
 					/* test KK+3 */
-					if (test_attrib(hero, ATTRIB_KK, 3) > 0)
+					if (test_attrib((struct struct_hero*)hero, ATTRIB_KK, 3) > 0)
 					{
 						/* success */
 						GUI_dialog_na(0, get_tx2(32));
@@ -99,7 +99,7 @@ void tevent_016(void)
 						hero = get_hero(get_random_hero());
 
 						/* GE+0 */
-						if (test_attrib(hero, ATTRIB_GE, 0) > 0)
+						if (test_attrib((struct struct_hero*)hero, ATTRIB_GE, 0) > 0)
 						{
 							/* success */
 							timewarp(MINUTES(15));
@@ -250,7 +250,7 @@ void tevent_095(void)
 			{
 				counter_heroes++;
 
-				if (test_attrib(hero, ATTRIB_HA, -1) > 0)
+				if (test_attrib((struct struct_hero*)hero, ATTRIB_HA, -1) > 0)
 				{
 					timewarp(MINUTES(30));
 
@@ -699,7 +699,7 @@ void tevent_100(void)
 				GUI_output(get_tx2(67));
 
 				/* FF+4 */
-				if (test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_GE, 4) > 0)
+				if (test_attrib((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), ATTRIB_GE, 4) > 0)
 				{
 					/* success */
 					GUI_output(get_tx2(68));

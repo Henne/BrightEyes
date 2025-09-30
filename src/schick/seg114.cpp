@@ -232,7 +232,7 @@ void tevent_111(void)
 							if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 								host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 								!hero_dead(hero) &&
-								test_attrib(hero, ATTRIB_GE, 2) <= 0)
+								test_attrib((struct struct_hero*)hero, ATTRIB_GE, 2) <= 0)
 							{
 								/* attribute test failed */
 								sub_hero_le(hero, random_schick(10));
@@ -387,7 +387,7 @@ void tevent_114(void)
 					if ((hero->typus != HERO_TYPE_NONE) &&
 						(hero->group_no == gs_current_group) &&
 						!hero_dead((Bit8u*)hero) &&
-						test_attrib((Bit8u*)hero, ATTRIB_GE, 4) <= 0)
+						test_attrib((struct struct_hero*)(Bit8u*)hero, ATTRIB_GE, 4) <= 0)
 					{
 						/* attrib test failed */
 						timewarp(MINUTES(30));
@@ -482,7 +482,7 @@ void tevent_117(void)
 		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 			!hero_dead(hero) &&
-			test_attrib(hero, ATTRIB_GE, 0) <= 0)
+			test_attrib((struct struct_hero*)hero, ATTRIB_GE, 0) <= 0)
 		{
 			/* attrib test failed */
 			sub_hero_le(hero, random_schick(11) + 1);
@@ -582,7 +582,7 @@ void tevent_123(void)
 				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 					!hero_dead(hero) &&
-					test_attrib(hero, ATTRIB_HA, 0) > 0)
+					test_attrib((struct struct_hero*)hero, ATTRIB_HA, 0) > 0)
 				{
 					/* attrib test failed */
 					counter++;
@@ -621,7 +621,7 @@ void tevent_123(void)
 						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 						!hero_dead(hero))
 					{
-						attrib_result = test_attrib(hero, ATTRIB_HA, 4);
+						attrib_result = test_attrib((struct struct_hero*)hero, ATTRIB_HA, 4);
 						skill_result = test_skill(hero, TA_KLETTERN, 0);
 
 						if (attrib_result == 99 && skill_result == -1)
@@ -689,7 +689,7 @@ void tevent_123(void)
 						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 						!hero_dead(hero))
 					{
-						attrib_result = test_attrib(hero, ATTRIB_HA, 2);
+						attrib_result = test_attrib((struct struct_hero*)hero, ATTRIB_HA, 2);
 
 						if (attrib_result == 99)
 						{

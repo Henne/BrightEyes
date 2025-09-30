@@ -264,7 +264,7 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 		} else if (state == 22) {
 
 			/* test the group leader on KL+5, to get the map */
-			if (test_attrib(get_hero(0), ATTRIB_KL, 5) > 0) {
+			if (test_attrib((struct struct_hero*)get_hero(0), ATTRIB_KL, 5) > 0) {
 				/* check if the party already has this map piece */
 				if (gs_treasure_maps[3] == 2) g_tmap_double2 = 1;
 				/* get the map piece */
@@ -369,7 +369,7 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 					beorn_ch_malus = 0;
 				}
 
-				g_dialog_next_state = (test_attrib(get_hero(0), ATTRIB_CH, beorn_ch_malus) > 0 ? 26 : 28);
+				g_dialog_next_state = (test_attrib((struct struct_hero*)get_hero(0), ATTRIB_CH, beorn_ch_malus) > 0 ? 26 : 28);
 			}
 	} else if (informer == 2) {
 		/* ALGRID TRONDESDOTTER */
@@ -698,10 +698,10 @@ void INF_treborn_unicorn(signed short informer, signed short state)
 			gs_informer_flags[INFORMER_UNICORN] = 2;
 		} else if (state == 10) {
 			/* test FF+2 */
-			g_dialog_next_state = (test_attrib(gs_unicorn_hero_ptr, ATTRIB_GE, 2) > 0 ? 11 : 14);
+			g_dialog_next_state = (test_attrib((struct struct_hero*)gs_unicorn_hero_ptr, ATTRIB_GE, 2) > 0 ? 11 : 14);
 		} else if (state == 11) {
 			/* test FF+5 */
-			g_dialog_next_state = (test_attrib(gs_unicorn_hero_ptr, ATTRIB_GE, 5) > 0 ? 12 : 13);
+			g_dialog_next_state = (test_attrib((struct struct_hero*)gs_unicorn_hero_ptr, ATTRIB_GE, 5) > 0 ? 12 : 13);
 		} else if (state == 15) {
 			g_dialog_next_state = (random_schick(100) <= 50 ? 16 : 17);
 		} else if (state == 16) {
@@ -773,14 +773,14 @@ void INF_swafnild_unicorn(signed short informer, signed short state)
 			if (!gs_informer_flags[INFORMER_TIOMAR]) gs_informer_flags[INFORMER_TIOMAR] = 1;
 		} else if (state == 18) {
 			/* test CH+5 */
-			g_dialog_next_state = (test_attrib(get_hero(0), ATTRIB_CH, 5) > 0 ? 19 : 20);
+			g_dialog_next_state = (test_attrib((struct struct_hero*)get_hero(0), ATTRIB_CH, 5) > 0 ? 19 : 20);
 		} else if (state == 21) {
 			/* mark SWAFNILD EGILSDOTTER as done */
 			gs_informer_flags[INFORMER_SWAFNILD] = 2;
 			gs_swafnild_nomap = 1;
 		} else if (state == 22) {
 			/* test CH+3 */
-			g_dialog_next_state = (test_attrib(get_hero(0), ATTRIB_CH, 3) > 0 ? 24 : 23);
+			g_dialog_next_state = (test_attrib((struct struct_hero*)get_hero(0), ATTRIB_CH, 3) > 0 ? 24 : 23);
 		} else if (state == 24 || state == 41) {
 			/* mark SWAFNILD EGILSDOTTER as done */
 			gs_informer_flags[INFORMER_SWAFNILD] = 2;

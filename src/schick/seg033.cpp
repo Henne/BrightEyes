@@ -162,7 +162,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 
 				if (hero_tied(hero)) {
 					/* Probe: MU + 2 */
-					if (test_attrib(hero, ATTRIB_MU, 2) > 0) {
+					if (test_attrib((struct struct_hero*)hero, ATTRIB_MU, 2) > 0) {
 						/* Success */
 						and_ptr_bs(hero + HERO_FLAGS1, 0x7f); /* unset 'tied' flag */
 

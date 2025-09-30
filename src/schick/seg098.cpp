@@ -288,7 +288,7 @@ signed short use_magic(Bit8u* hero)
 #if !defined(__BORLANDC__)
 				D1_INFO("%s Meditationsprobe +0 ",(char*)(hero + HERO_NAME2));
 #endif
-				if (test_attrib3(hero, ATTRIB_MU, ATTRIB_CH, ATTRIB_KK, 0) > 0) {
+				if (test_attrib3((struct struct_hero*)hero, ATTRIB_MU, ATTRIB_CH, ATTRIB_KK, 0) > 0) {
 					/* Success */
 
 					/* cap the converted AE such that at least 5 LE remain .*/
@@ -330,7 +330,7 @@ signed short use_magic(Bit8u* hero)
 #if !defined(__BORLANDC__)
 					D1_INFO("%s Probe fuer Stabzauber Nr. %d (%+d)",(char*)(hero + HERO_NAME2), host_readbs(hero + HERO_STAFFSPELL_LVL + 1), g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].handicap);
 #endif
-					if (test_attrib3(hero,
+					if (test_attrib3((struct struct_hero*)hero,
 							g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].attrib1,
 							g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].attrib2,
 #ifndef M302de_ORIGINAL_BUGFIX
@@ -615,7 +615,7 @@ signed short test_spell(struct struct_hero *hero, signed short spell_no, signed 
 
 		handicap -= hero->spells[spell_no];
 
-		retval = test_attrib3((Bit8u*)hero, spell_desc->attrib1, spell_desc->attrib2, spell_desc->attrib3, handicap);
+		retval = test_attrib3((struct struct_hero*)(Bit8u*)hero, spell_desc->attrib1, spell_desc->attrib2, spell_desc->attrib3, handicap);
 
 		if (retval == -99) {
 			retval = -1;

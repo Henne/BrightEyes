@@ -90,7 +90,7 @@ signed short DNG02_handler(void)
 			while (host_readws(hero + HERO_LE) > 10 && !flag)
 			{
 				/* KK+4 */
-				if (test_attrib(hero, ATTRIB_KK, 4) <= 0)
+				if (test_attrib((struct struct_hero*)hero, ATTRIB_KK, 4) <= 0)
 				{
 					sprintf(g_dtp2,
 						get_tx(10),

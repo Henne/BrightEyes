@@ -70,7 +70,7 @@ void tevent_130(void)
 			if (answer == 1 || answer == 2) {
 				GUI_dialog_na(0, answer == 1 ? get_tx2(26) : get_tx2(27));
 			} else {
-				GUI_dialog_na(0, test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0 ? get_tx2(27) : get_tx2(26));
+				GUI_dialog_na(0, test_attrib((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0 ? get_tx2(27) : get_tx2(26));
 			}
 		}
 
@@ -165,7 +165,7 @@ void tevent_133(void)
 			{
 				timewarp(HOURS(1));
 
-				if (test_attrib(hero, ATTRIB_GE, 4) <= 0) {
+				if (test_attrib((struct struct_hero*)hero, ATTRIB_GE, 4) <= 0) {
 					/* test failed */
 
 					timewarp(HOURS(1));

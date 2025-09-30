@@ -209,7 +209,7 @@ signed short DNG03_handler(void)
 
 		hero = (Bit8u*)get_first_hero_available_in_group();
 
-		if (j != 0 || test_attrib(hero, ATTRIB_GE, 2) <= 0)
+		if (j != 0 || test_attrib((struct struct_hero*)hero, ATTRIB_GE, 2) <= 0)
 		{
 			sprintf(g_dtp2,	get_tx(13), (char*)hero + HERO_NAME2,
 				GUI_get_ptr(host_readbs(hero + HERO_SEX), 3));
@@ -238,7 +238,7 @@ signed short DNG03_handler(void)
 			(host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 			!hero_dead(hero) &&
-			test_attrib(hero, ATTRIB_GE, 2) <= 0)))
+			test_attrib((struct struct_hero*)hero, ATTRIB_GE, 2) <= 0)))
 		{
 
 			sprintf(g_dtp2,	get_tx(13), (char*)hero + HERO_NAME2,
@@ -578,7 +578,7 @@ void DNG03_chest11_loot(Bit8u*)
 
 				mod = l_si < 2 ? 6 : (l_si < 4 ? 2 : -2);
 
-				if (test_attrib(hero, ATTRIB_GE, mod) <= 0) {
+				if (test_attrib((struct struct_hero*)hero, ATTRIB_GE, mod) <= 0) {
 
 					counter++;
 

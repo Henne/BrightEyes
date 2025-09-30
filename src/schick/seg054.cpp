@@ -647,13 +647,13 @@ void TLK_herberg(signed short state)
 		gs_herberg_kicked_flags[gs_current_typeindex] = 1;
 	} else if (state == 12) {
 		/* CH + 5 */
-		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 5) > 0 ? 14 : 11);
+		g_dialog_next_state = (test_attrib((struct struct_hero*)hero, ATTRIB_CH, 5) > 0 ? 14 : 11);
 	} else if (state == 13) {
 		/* CH + 0 */
-		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 0) > 0 ? 14 : 7);
+		g_dialog_next_state = (test_attrib((struct struct_hero*)hero, ATTRIB_CH, 0) > 0 ? 14 : 7);
 	} else if (state == 15) {
 		/* CH - 3 */
-		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, -3) > 0 ? 16 : 17);
+		g_dialog_next_state = (test_attrib((struct struct_hero*)hero, ATTRIB_CH, -3) > 0 ? 16 : 17);
 	} else if (state == 17) {
 		g_action = (ACTION_ID_ICON_2);
 	}

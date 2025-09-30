@@ -267,7 +267,7 @@ void TLK_tavern(signed short answer)
 
 			hero_pos = get_hero_CH_best();
 
-			g_dialog_next_state = (test_attrib(get_hero(hero_pos), ATTRIB_CH, 0) <= 0 ? 112 : 113);
+			g_dialog_next_state = (test_attrib((struct struct_hero*)get_hero(hero_pos), ATTRIB_CH, 0) <= 0 ? 112 : 113);
 
 			gs_tav_kicked_flags[gs_current_typeindex] = 0;
 
@@ -287,7 +287,7 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 5) {
 
-		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 3) > 0 ? 81 : 3);
+		g_dialog_next_state = (test_attrib((struct struct_hero*)hero, ATTRIB_CH, 3) > 0 ? 81 : 3);
 
 	} else if (old_state == 9) {
 
@@ -299,7 +299,7 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 14) {
 
-		if (test_attrib(hero, ATTRIB_CH, 0) > 0) {
+		if (test_attrib((struct struct_hero*)hero, ATTRIB_CH, 0) > 0) {
 			g_dialog_next_state = (gs_tlk_tav_fullness == 1 ? 16 : 17);
 		} else {
 			g_dialog_next_state = (15);
@@ -311,7 +311,7 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 18) {
 
-		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 2) > 0 ? 19 : 20);
+		g_dialog_next_state = (test_attrib((struct struct_hero*)hero, ATTRIB_CH, 2) > 0 ? 19 : 20);
 
 	} else if (old_state == 24) {
 
@@ -405,7 +405,7 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 43) {
 
-		if (test_attrib(hero, ATTRIB_CH, 4) > 0 && (gs_tlk_tav_fullness == 1 || gs_tlk_tav_fullness == 2)) {
+		if (test_attrib((struct struct_hero*)hero, ATTRIB_CH, 4) > 0 && (gs_tlk_tav_fullness == 1 || gs_tlk_tav_fullness == 2)) {
 			g_dialog_next_state = (56);
 		} else {
 			g_dialog_next_state = (44);
@@ -421,7 +421,7 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 49) {
 
-		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 4) > 0 ? 19 : 20);
+		g_dialog_next_state = (test_attrib((struct struct_hero*)hero, ATTRIB_CH, 4) > 0 ? 19 : 20);
 
 	} else if (old_state == 54) {
 
@@ -474,7 +474,7 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 80) {
 
-		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 0) <= 0 && gs_tlk_tav_round ? 20 : 19);
+		g_dialog_next_state = (test_attrib((struct struct_hero*)hero, ATTRIB_CH, 0) <= 0 && gs_tlk_tav_round ? 20 : 19);
 
 	} else if (old_state == 85) {
 
@@ -482,7 +482,7 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 86) {
 
-		tmp = test_attrib(hero, ATTRIB_CH, 0);
+		tmp = test_attrib((struct struct_hero*)hero, ATTRIB_CH, 0);
 
 		g_dialog_next_state = (gs_tlk_tav_firstinfo || (!gs_tlk_tav_firstinfo && !gs_tlk_tav_round && tmp <= 0) ? 84 : 81);
 
@@ -504,7 +504,7 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 98) {
 
-		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 0) > 0 ? 99 : 102);
+		g_dialog_next_state = (test_attrib((struct struct_hero*)hero, ATTRIB_CH, 0) > 0 ? 99 : 102);
 
 	} else if (old_state == 99) {
 

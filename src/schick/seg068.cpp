@@ -53,7 +53,7 @@ void THO_eisenhof(void)
 		set_party_money(money);
 
 		/* test for CH+0 */
-		if (test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0) {
+		if (test_attrib((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0) {
 
 			GUI_input(get_tx2(52), 0);
 

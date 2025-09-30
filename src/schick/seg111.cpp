@@ -183,7 +183,7 @@ void tevent_059(void)
 					GUI_dialog_na(0, get_tx2(16));
 				} else if (answer == 2) {
 					GUI_dialog_na(0, get_tx2(17));
-				} else if (test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0) {
+				} else if (test_attrib((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0) {
 					GUI_dialog_na(0, get_tx2(17));
 				} else {
 					GUI_dialog_na(0, get_tx2(16));
@@ -433,7 +433,7 @@ void tevent_063(void)
 			!hero_dead(hero))
 		{
 			/* MU+0 */
-			if ((proof = test_attrib(hero, ATTRIB_MU, 0)) < max) {
+			if ((proof = test_attrib((struct struct_hero*)hero, ATTRIB_MU, 0)) < max) {
 				max = proof;
 				vomiter = i;
 			}

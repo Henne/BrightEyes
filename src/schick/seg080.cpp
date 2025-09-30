@@ -176,7 +176,7 @@ signed short DNG04_handler(void)
 		i = 1;
 		hero = (Bit8u*)get_first_hero_available_in_group();
 
-		if (!gs_dng04_deepgap_flag || test_attrib(hero, ATTRIB_GE, 0) > 0)
+		if (!gs_dng04_deepgap_flag || test_attrib((struct struct_hero*)hero, ATTRIB_GE, 0) > 0)
 		{
 			gs_dng04_deepgap_flag = 1;
 
@@ -185,7 +185,7 @@ signed short DNG04_handler(void)
 
 		if (i)
 		{
-			if (test_attrib(hero, ATTRIB_GE, 0) > 0)
+			if (test_attrib((struct struct_hero*)hero, ATTRIB_GE, 0) > 0)
 			{
 				sprintf(g_dtp2,	get_tx(18), (char*)hero + HERO_NAME2,
 					GUI_get_ptr(host_readbs(hero + HERO_SEX), 3),

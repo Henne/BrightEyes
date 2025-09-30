@@ -345,7 +345,7 @@ void tevent_098(void)
 						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 						!hero_dead(hero))
 					{
-						if (test_attrib(hero, ATTRIB_GE, -4) > 0) {
+						if (test_attrib((struct struct_hero*)hero, ATTRIB_GE, -4) > 0) {
 
 							sprintf(g_dtp2,
 								get_tx2(36),
@@ -638,7 +638,7 @@ void tevent_104(void)
 
 				/* test for HA+0 */
 
-				if (test_attrib(hero, ATTRIB_HA, 0) > 0)
+				if (test_attrib((struct struct_hero*)hero, ATTRIB_HA, 0) > 0)
 				{
 
 					timewarp(MINUTES(30));

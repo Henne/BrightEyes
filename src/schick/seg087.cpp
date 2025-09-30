@@ -452,7 +452,7 @@ signed short DNG14_handler(void)
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
-				test_attrib(hero, ATTRIB_TA, 0) <= 0)
+				test_attrib((struct struct_hero*)hero, ATTRIB_TA, 0) <= 0)
 			{
 				l_di = get_free_mod_slot();
 

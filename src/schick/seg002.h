@@ -166,8 +166,8 @@ void do_starve_damage(struct struct_hero*, const signed int, const signed int);
 #if defined(__BORLANDC__)
 signed short compare_name(char*);
 #endif
-signed short test_attrib(Bit8u*, signed short, signed short);
-signed short test_attrib3(Bit8u*, signed short, signed short, signed short, signed char);
+signed short test_attrib(struct struct_hero*, const signed int, const signed int);
+signed short test_attrib3(struct struct_hero*, const signed int, const signed int, const signed int, signed char);
 signed short unused_cruft(void);
 signed short get_random_hero(void);
 Bit32s get_party_money(void);

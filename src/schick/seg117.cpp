@@ -336,7 +336,7 @@ void hunt_viper(void)
 		if ((host_readb(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
 			(host_readb(hero_i + HERO_GROUP_NO) == gs_current_group) &&
 			(!hero_dead(hero_i)) &&
-			(test_attrib(hero_i, ATTRIB_GE, 0) < l_di))
+			(test_attrib((struct struct_hero*)hero_i, ATTRIB_GE, 0) < l_di))
 		{
 			/* remember the hero */
 			choosen_hero = i;
@@ -415,9 +415,9 @@ void octopus_attack(void)
 				 * For GE = 18 its 5% strangling attack, 95% hero attacks octopus.
 				 * For GE <= 19 it is 100% hero attacks octopus.
 				 * The intended behavior probably was: critical failure: grabbing attack; normal failure: strangling attack; success: hero attacks octopus. */
-				if (!(tmp = test_attrib(hero, ATTRIB_GE, 0)))
+				if (!(tmp = test_attrib((struct struct_hero*)hero, ATTRIB_GE, 0)))
 #else
-				tmp = test_attrib(hero, ATTRIB_GE, 0);
+				tmp = test_attrib((struct struct_hero*)hero, ATTRIB_GE, 0);
 				if (tmp <= 0 && tmp != -99)
 #endif
 				{
@@ -801,7 +801,7 @@ void TLK_way_to_ruin(signed short state)
 	} else if (state == 19) {
 		timewarp(MINUTES(20));
 		gs_ruin_hero = get_hero(get_random_hero());
-		g_dialog_next_state = (test_attrib(gs_ruin_hero, ATTRIB_GE, 2) > 0 ? 20 : 21);
+		g_dialog_next_state = (test_attrib((struct struct_hero*)gs_ruin_hero, ATTRIB_GE, 2) > 0 ? 20 : 21);
 	} else if (state == 20) {
 		loose_random_item(get_hero(get_random_hero()), 5, get_ttx(506));
 	} else if (state == 21) {

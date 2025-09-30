@@ -59,7 +59,7 @@ void tevent_067(void)
 				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 					!hero_dead(hero) &&
-					test_attrib(hero, ATTRIB_GE, 0) > 0)
+					test_attrib((struct struct_hero*)hero, ATTRIB_GE, 0) > 0)
 				{
 					count++;
 				}
@@ -520,7 +520,7 @@ void tevent_074(void)
 				/* try to be Charismatic */
 				answer = count_heroes_in_group();
 
-				if (test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 14 - answer) <= 0)
+				if (test_attrib((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 14 - answer) <= 0)
 				{
 					/* fight */
 					g_fig_initiative = 1;
@@ -755,7 +755,7 @@ void tevent_077(void)
 				/* try to be Charismatic */
 				answer = count_heroes_in_group();
 
-				if (test_attrib((Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 14 - answer) <= 0)
+				if (test_attrib((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 14 - answer) <= 0)
 				{
 					/* fight */
 					g_fig_initiative = 1;

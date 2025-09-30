@@ -96,7 +96,7 @@ signed short DNG09_handler(void)
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
-				test_attrib(hero, ATTRIB_GE, 4) <= 0)
+				test_attrib((struct struct_hero*)hero, ATTRIB_GE, 4) <= 0)
 			{
 				/* failed FF+4 test */
 				sub_hero_le(hero, dice_roll(2, 6, 4));
@@ -129,7 +129,7 @@ signed short DNG09_handler(void)
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
-				test_attrib(hero, ATTRIB_GE, 4) <= 0)
+				test_attrib((struct struct_hero*)hero, ATTRIB_GE, 4) <= 0)
 			{
 				/* failed FF+4 test */
 				sub_hero_le(hero, dice_roll(2, 6, 4));
@@ -151,7 +151,7 @@ signed short DNG09_handler(void)
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
-				test_attrib(hero, ATTRIB_GE, 4) <= 0)
+				test_attrib((struct struct_hero*)hero, ATTRIB_GE, 4) <= 0)
 			{
 				/* failed FF+4 test */
 				sub_hero_le(hero, dice_roll(2, 6, 4));
@@ -204,7 +204,7 @@ signed short DNG09_handler(void)
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
-				test_attrib(hero, ATTRIB_GE, 4) <= 0)
+				test_attrib((struct struct_hero*)hero, ATTRIB_GE, 4) <= 0)
 			{
 				/* failed FF+4 test */
 				sub_hero_le(hero, dice_roll(2, 6, 4));
@@ -234,7 +234,7 @@ signed short DNG09_handler(void)
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
-				test_attrib(hero, ATTRIB_GE, 4) <= 0)
+				test_attrib((struct struct_hero*)hero, ATTRIB_GE, 4) <= 0)
 			{
 				/* failed FF+4 test */
 				sub_hero_le(hero, dice_roll(2, 6, 4));

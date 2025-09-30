@@ -384,9 +384,9 @@ void TRV_ford_test(signed short mod, signed short time)
 		{
 			/* Original-Bugfix: tests fail if their result is lower or equal than zero */
 #ifdef M302de_ORIGINAL_BUGFIX
-			if (test_attrib(hero, ATTRIB_GE, mod) < 0)
+			if (test_attrib((struct struct_hero*)hero, ATTRIB_GE, mod) < 0)
 #else
-			if (test_attrib(hero, ATTRIB_GE, mod) == 0)
+			if (test_attrib((struct struct_hero*)hero, ATTRIB_GE, mod) == 0)
 #endif
 			{
 				/* test failed */

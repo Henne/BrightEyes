@@ -235,7 +235,7 @@ signed short test_skill(Bit8u *hero, signed short skill, signed char handicap)
 		/* do the test */
 		handicap -= host_readbs(hero + HERO_TALENTS + skill);
 
-		return test_attrib3(hero, g_skill_descriptions[skill].attrib1, g_skill_descriptions[skill].attrib2, g_skill_descriptions[skill].attrib3, handicap);
+		return test_attrib3((struct struct_hero*)hero, g_skill_descriptions[skill].attrib1, g_skill_descriptions[skill].attrib2, g_skill_descriptions[skill].attrib3, handicap);
 
 	}
 

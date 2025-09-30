@@ -4880,14 +4880,13 @@ signed short compare_name(char *name)
  * \param   handicap    may be positive or negative. The higher the value, the harder the test.
  * \return              the result of the test. > 0: success; <= 0: failure; -99: critical failure
  */
-signed short test_attrib(Bit8u* hero, signed short attrib, signed short handicap)
+signed short test_attrib(struct struct_hero* hero, const signed int attrib_id, const signed int handicap)
 {
 	signed short si = random_schick(20);
 	signed short tmp;
 
 #if !defined(__BORLANDC__)
-	D1_INFO("Eigenschaftsprobe %s auf %s %+d: W20 = %d",
-		(char*)(hero + HERO_NAME2), names_attrib[attrib], handicap, si);
+	D1_INFO("Eigenschaftsprobe %s auf %s %+d: W20 = %d", hero->alias, names_attrib[attrib_id], handicap, si);
 #endif
 
 	if (si == 20) {
@@ -4900,11 +4899,10 @@ signed short test_attrib(Bit8u* hero, signed short attrib, signed short handicap
 		si += handicap;
 	}
 
-	tmp = host_readbs(hero + 3 * attrib + HERO_ATTRIB) + host_readbs(hero + 3 * attrib + HERO_ATTRIB_MOD);
+	tmp = hero->attrib[attrib_id].current + hero->attrib[attrib_id].mod;
 
 #if !defined(__BORLANDC__)
-	D1_INFO(" -> %s mit %d\n",
-		(tmp - si + 1) > 0 ? "bestanden" : "nicht bestanden", (tmp - si + 1));
+	D1_INFO(" -> %s mit %d\n", (tmp - si + 1) > 0 ? "bestanden" : "nicht bestanden", (tmp - si + 1));
 #endif
 
 	return tmp - si + 1;
@@ -4926,7 +4924,7 @@ signed short test_attrib(Bit8u* hero, signed short attrib, signed short handicap
  *                      ordinary success: any value between 1 and 98.
  */
 
-signed short test_attrib3(Bit8u* hero, signed short attrib1, signed short attrib2, signed short attrib3, signed char handicap)
+signed short test_attrib3(struct struct_hero* hero, const signed int attrib1, const signed int attrib2, const signed int attrib3, signed char handicap)
 {
 #ifndef M302de_FEATURE_MOD
 	/* Feature mod 6: The implementation of the skill test logic differs from the original DSA2/3 rules.
@@ -4949,8 +4947,7 @@ signed short test_attrib3(Bit8u* hero, signed short attrib1, signed short attrib
 	rolls_sum = 0;
 
 #if !defined(__BORLANDC__)
-	D1_INFO(" (%s/%s/%s) %+d -> ",
-		names_attrib[attrib1], names_attrib[attrib2], names_attrib[attrib3], handicap);
+	D1_INFO(" (%s/%s/%s) %+d -> ", names_attrib[attrib1], names_attrib[attrib2], names_attrib[attrib3], handicap);
 #endif
 
 	for (i = 0; i < 3; i++) {
@@ -4975,16 +4972,12 @@ signed short test_attrib3(Bit8u* hero, signed short attrib1, signed short attrib
 
 	rolls_sum += handicap;
 
-	tmp = host_readbs(hero + 3 * attrib1 + HERO_ATTRIB) +
-		host_readbs(hero + 3 * attrib1 + HERO_ATTRIB_MOD) +
-		host_readbs(hero + 3 * attrib2 + HERO_ATTRIB) +
-		host_readbs(hero + 3 * attrib2 + HERO_ATTRIB_MOD) +
-		host_readbs(hero + 3 * attrib3 + HERO_ATTRIB) +
-		host_readbs(hero + 3 * attrib3 + HERO_ATTRIB_MOD);
+	tmp = hero->attrib[attrib1].current + hero->attrib[attrib1].mod +
+		hero->attrib[attrib2].current + hero->attrib[attrib2].mod +
+		hero->attrib[attrib3].current + hero->attrib[attrib3].mod;
 
 #if !defined(__BORLANDC__)
-	D1_INFO(" -> %s mit %d\n",
-		(tmp - rolls_sum + 1) > 0 ? "bestanden" : "nicht bestanden", (tmp - rolls_sum + 1));
+	D1_INFO(" -> %s mit %d\n", (tmp - rolls_sum + 1) > 0 ? "bestanden" : "nicht bestanden", (tmp - rolls_sum + 1));
 #endif
 	return tmp - rolls_sum + 1; // in a nutshell: sum of the 3 attributes - 3*D20 - handicap + 1
 
@@ -4999,18 +4992,15 @@ signed short test_attrib3(Bit8u* hero, signed short attrib1, signed short attrib
 	signed short fail = 0;
 	signed char attrib [3];
 
-	attrib[0] = host_readbs(hero + 3 * attrib1 + HERO_ATTRIB) + host_readbs(hero + 3 * attrib1 + HERO_ATTRIB_MOD);
-	attrib[1] = host_readbs(hero + 3 * attrib2 + HERO_ATTRIB) + host_readbs(hero + 3 * attrib2 + HERO_ATTRIB_MOD);
-	attrib[2] = host_readbs(hero + 3 * attrib3 + HERO_ATTRIB) + host_readbs(hero + 3 * attrib3 + HERO_ATTRIB_MOD);
+	attrib[0] = hero->attrib[attrib1].current + hero->attrib[attrib1].mod;
+	attrib[1] = hero->attrib[attrib2].current + hero->attrib[attrib2].mod;
+	attrib[2] = hero->attrib[attrib3].current + hero->attrib[attrib3].mod;
 
 #if !defined(__BORLANDC__)
 	D1_INFO(" (%s %d/%s %d/%s %d) ->",
-		names_attrib[attrib1],
-		attrib[0],
-		names_attrib[attrib2],
-		attrib[1],
-		names_attrib[attrib3],
-		attrib[2]
+			names_attrib[attrib1], attrib[0],
+			names_attrib[attrib2], attrib[1],
+			names_attrib[attrib3], attrib[2]
 	);
 #endif
 

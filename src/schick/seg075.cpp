@@ -773,7 +773,7 @@ void DNG_stub6(void)
 
 				strcat(g_dtp2, g_text_output_buf);
 
-				if (test_attrib(hero1, ATTRIB_GE, 2) <= 0) {
+				if (test_attrib((struct struct_hero*)hero1, ATTRIB_GE, 2) <= 0) {
 
 					sprintf(g_text_output_buf, get_ttx(770), hero1 + HERO_NAME2, hero2 + HERO_NAME2, l_si = random_schick(3) + 1);
 
