@@ -3091,7 +3091,7 @@ void herokeeping(void)
 {
 	signed short i;
 	signed short pos;
-	Bit8u *hero;
+	struct struct_hero *hero;
 	char buffer[100];
 
 	if (g_game_state != GAME_STATE_MAIN)
@@ -3102,80 +3102,80 @@ void herokeeping(void)
 	 * The flag is reset at the end of this function. */
 
 	/* for each hero ..*/
-	hero = get_hero(0);
-	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+	hero = (struct struct_hero*)get_hero(0);
+	for (i = 0; i <= 6; i++, hero++) {
 
 		/* consume food and set messages */
-		if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			g_herokeeping_flag &&
-			check_hero_no3(hero) &&			/* must be vital */
-			!host_readbs(hero + HERO_JAIL) &&
-			!g_travel_herokeeping)
+		/* must be vital */
+		if ((hero->typus != HERO_TYPE_NONE) && g_herokeeping_flag &&
+				check_hero_no3((Bit8u*)hero) &&	!hero->jail && !g_travel_herokeeping)
 		{
 			/* Do the eating */
 
 			/* check for magic bread bag in the group */
-			if (get_first_hero_with_item_in_group(ITEM_MAGIC_BREADBAG, host_readbs(hero + HERO_GROUP_NO)) == -1) {
+			if (get_first_hero_with_item_in_group(ITEM_MAGIC_BREADBAG, hero->group_no) == -1) {
+
 				/* if not, check if the hero has the food amulet */
-				if (get_item_pos(hero, ITEM_TRAVIA_AMULET) == -1) {
+				if (get_item_pos((Bit8u*)hero, ITEM_TRAVIA_AMULET) == -1) {
 					/* if not... */
 
 					/* eat if hunger > 90 % */
-					if (host_readbs(hero + HERO_HUNGER) > 90) {
+					if (hero->hunger > 90) {
 
 						/* search for Lunchpack */
-						pos = get_item_pos(hero, ITEM_FOOD_PACKAGE);
+						pos = get_item_pos((Bit8u*)hero, ITEM_FOOD_PACKAGE);
 
 						if (pos != -1) {
 							/* Lunchpack found, consume quiet */
 							g_consume_quiet = 1;
-							consume(hero, hero, pos);
+							consume((Bit8u*)hero, (Bit8u*)hero, pos);
 #if !defined(__BORLANDC__)
-							D1_INFO("%s isst etwas\n", (char*)hero + HERO_NAME2);
+							D1_INFO("%s isst etwas\n", hero->alias);
 #endif
 							g_consume_quiet = 0;
 
 							/* search for another Lunchpack */
 							/* print last ration message */
-							if (get_item_pos(hero, ITEM_FOOD_PACKAGE) == -1) {
+							if (get_item_pos((Bit8u*)hero, ITEM_FOOD_PACKAGE) == -1) {
 								gs_food_message[i] = 6;
 							}
 						} else {
 							/* print ration warning */
-							if (host_readbs(hero + HERO_HUNGER) < 100) {
+							if (hero->hunger < 100) {
 								gs_food_message[i] = 4;
 							}
 						}
 
 					}
 
-					if (host_readbs(hero + HERO_HUNGER) < 100) {
+					if (hero->hunger < 100) {
+
 						/* increase hunger value. FOOD_MOD is always 0 or 1 */
-						if (host_readbs(hero + HERO_HUNGER_TIMER) <= 0) {
+						if (hero->hunger_timer <= 0) {
 							/* increase more (FOOD_MOD == 0 -> increase by 2. FOOD_MOD == 1 -> increase by 0.) */
-							add_ptr_bs(hero + HERO_HUNGER, 2 / (g_food_mod * 2 + 1));
+							hero->hunger += 2 / (g_food_mod * 2 + 1);
 						} else {
 							/* increase less (FOOD_MOD == 0 -> increase by 1. FOOD_MOD == 1 -> increase by 0.) */
-							add_ptr_bs(hero + HERO_HUNGER, 1 / (g_food_mod * 2 + 1));
+							hero->hunger += 1 / (g_food_mod * 2 + 1);
 						}
 
 						/* adjust hunger */
-						if (host_readbs(hero + HERO_HUNGER) > 100) {
-							host_writeb(hero + HERO_HUNGER, 100);
+						if (hero->hunger > 100) {
+							hero->hunger = 100;
 						}
 					} else {
 
 						/* */
-						if (host_readbs(hero + HERO_HUNGER_TIMER) <= 0) {
-							do_starve_damage((struct struct_hero*)hero, i, 0);
+						if (hero->hunger_timer <= 0) {
+							do_starve_damage(hero, i, 0);
 						}
 					}
 				}
 			} else {
 
 				/* set hunger to 20 % */
-				if (host_readbs(hero + HERO_HUNGER) > 20) {
-					host_writeb(hero + HERO_HUNGER, 20);
+				if (hero->hunger > 20) {
+					hero->hunger = 20;
 				}
 			}
 
@@ -3183,43 +3183,42 @@ void herokeeping(void)
 
 			/* check if someone in the group of the hero has the magic bread bag */
 			/* check for magic waterskin in group */
-			if ((get_first_hero_with_item_in_group(ITEM_MAGIC_WATERSKIN, host_readbs(hero + HERO_GROUP_NO)) == -1) &&
-				((host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-				(!gs_current_town || (gs_current_town != TOWNS_NONE && gs_show_travel_map != 0))) ||
-				(host_readbs(hero + HERO_GROUP_NO) != gs_current_group &&
-				!gs_groups_town[host_readbs(hero + HERO_GROUP_NO)]))) {
-
+			if ((get_first_hero_with_item_in_group(ITEM_MAGIC_WATERSKIN, hero->group_no) == -1) &&
+				(((hero->group_no == gs_current_group) &&
+					(!gs_current_town || (gs_current_town != TOWNS_NONE && gs_show_travel_map != 0))) ||
+				((hero->group_no != gs_current_group) && !gs_groups_town[hero->group_no])))
+			{
 					/* check for food amulett */
-					if (get_item_pos(hero, ITEM_TRAVIA_AMULET) == -1) {
+					if (get_item_pos((Bit8u*)hero, ITEM_TRAVIA_AMULET) == -1) {
 
 						/* hero should drink something */
-						if (host_readbs(hero + HERO_THIRST) > 90) {
+						if (hero->thirst > 90) {
 
 							g_consume_quiet = 1;
 
 							/* first check for beer :) */
-							pos = get_item_pos(hero, ITEM_BEER);
+							pos = get_item_pos((Bit8u*)hero, ITEM_BEER);
 
 							/* and then for water */
 							if (pos == -1) {
-								pos = get_full_waterskin_pos(hero);
+								pos = get_full_waterskin_pos((Bit8u*)hero);
 							}
 
 							if (pos != -1) {
 								/* drink it */
-								consume(hero, hero, pos);
+								consume((Bit8u*)hero, (Bit8u*)hero, pos);
 #if !defined(__BORLANDC__)
-								D1_INFO("%s trinkt etwas\n", (char*)hero + HERO_NAME2);
+								D1_INFO("%s trinkt etwas\n", hero->alias);
 #endif
 								/* nothing to drink message */
-								if ((get_item_pos(hero, ITEM_BEER) == -1)
-									&& (get_full_waterskin_pos(hero) == -1)) {
+								if ((get_item_pos((Bit8u*)hero, ITEM_BEER) == -1)
+									&& (get_full_waterskin_pos((Bit8u*)hero) == -1)) {
 									gs_food_message[i] = 5;
 								}
 
 							} else {
 								/* hero has nothing to drink */
-								if (host_readbs(hero + HERO_THIRST) < 100) {
+								if (hero->thirst < 100) {
 									gs_food_message[i] = 3;
 								}
 							}
@@ -3227,35 +3226,35 @@ void herokeeping(void)
 							g_consume_quiet = 0;
 						}
 
-						if (host_readbs(hero + HERO_THIRST) < 100) {
+						if (hero->thirst < 100) {
+
 							/* increase thirst counter food_mod is always 0 or 1 */
-							if (host_readbs(hero + HERO_HUNGER_TIMER) <= 0) {
+							if (hero->hunger_timer <= 0) {
 
 								/* increase more (FOOD_MOD == 0 -> increase by 4. FOOD_MOD == 1 -> increase by 1.) */
-								add_ptr_bs(hero + HERO_THIRST, 4 / (g_food_mod * 2 + 1));
+								hero->thirst += 4 / (g_food_mod * 2 + 1);
 							} else {
 
 								/* increase less (FOOD_MOD == 0 -> increase by 2. FOOD_MOD == 1 -> increase by 0.) */
-								add_ptr_bs(hero + HERO_THIRST, 2 / (g_food_mod * 2 + 1));
+								hero->thirst += 2 / (g_food_mod * 2 + 1);
 							}
 
 							/* adjust thirst */
-							if (host_readbs(hero + HERO_THIRST) > 100) {
-								host_writeb(hero + HERO_THIRST, 100);
+							if (hero->thirst > 100) {
+								hero->thirst = 100;
 							}
 
 						} else {
-							if (host_readbs(hero + HERO_HUNGER_TIMER) <= 0) {
-								do_starve_damage((struct struct_hero*)hero, i, 1);
+							if (hero->hunger_timer <= 0) {
+								do_starve_damage(hero, i, 1);
 							}
 						}
-
 					}
 			} else {
 
 				/* set thirst to 20 % */
-				if (host_readbs(hero + HERO_THIRST) > 20) {
-					host_writeb(hero + HERO_THIRST, 20);
+				if (hero->thirst > 20) {
+					hero->thirst = 20;
 				}
 			}
 		}
@@ -3263,10 +3262,7 @@ void herokeeping(void)
 		/* print hero message */
 		if (gs_food_message[i] && !g_dialogbox_lock &&	!g_in_fight && !g_freeze_timers)
 		{
-
-			if ((host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
-				!hero_dead(hero) &&
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero) &&
 				(!gs_show_travel_map || (g_food_message_shown[i] != gs_food_message[i]))) {
 
 					sprintf(buffer,	 (gs_food_message[i] == 1) ? get_ttx(224):
@@ -3275,7 +3271,7 @@ void herokeeping(void)
 							((gs_food_message[i] == 4) ? get_ttx(798) :
 							((gs_food_message[i] == 5) ? get_ttx(799) :
 							get_ttx(800))))),
-							(char*)hero + HERO_NAME2, GUI_get_ptr(host_readbs(hero + HERO_SEX), 1));
+							hero->alias, GUI_get_ptr(hero->sex, 1));
 
 					g_food_message_shown[i] = gs_food_message[i];
 
@@ -3293,14 +3289,9 @@ void herokeeping(void)
 		/* print unconscious message */
 		if (gs_unconscious_message[i] && !g_dialogbox_lock) {
 
-			if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
-				!hero_dead(hero)) {
-
-					/* prepare output */
-					sprintf(buffer, get_ttx(789), (char*)hero + HERO_NAME2);
-
-					/* print output */
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
+			{
+					sprintf(buffer, get_ttx(789), hero->alias);
 					GUI_output(buffer);
 
 					if (g_pp20_index == ARCHIVE_FILE_ZUSTA_UK) {
@@ -3808,9 +3799,9 @@ void dec_splash(void)
 	for (i = 0; i <= 6; i++) {
 
 		if (!g_dialogbox_lock && (g_hero_splash_timer[i]) && !(--g_hero_splash_timer[i]) &&
-			(g_pp20_index == ARCHIVE_FILE_PLAYM_UK) && !hero_dead(get_hero(i))) {
+			(g_pp20_index == ARCHIVE_FILE_PLAYM_UK) && !hero_dead((Bit8u*)get_hero(i))) {
 
-			restore_rect(g_vga_memstart, get_hero(i) + HERO_PORTRAIT, g_hero_pic_posx[i], 157, 32, 32);
+			restore_rect(g_vga_memstart, ((struct struct_hero*)get_hero(i))->pic, g_hero_pic_posx[i], 157, 32, 32);
 		}
 	}
 }
