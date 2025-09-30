@@ -162,7 +162,7 @@ void sub_hero_le(Bit8u*, signed short);
 void add_hero_le(struct struct_hero*, const signed short);
 void add_group_le(signed short);
 /* static */
-void do_starve_damage(Bit8u*, signed short, signed short);
+void do_starve_damage(struct struct_hero*, const signed int, const signed int);
 #if defined(__BORLANDC__)
 signed short compare_name(char*);
 #endif

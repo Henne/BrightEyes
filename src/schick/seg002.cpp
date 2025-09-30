@@ -3167,7 +3167,7 @@ void herokeeping(void)
 
 						/* */
 						if (host_readbs(hero + HERO_HUNGER_TIMER) <= 0) {
-							do_starve_damage(hero, i, 0);
+							do_starve_damage((struct struct_hero*)hero, i, 0);
 						}
 					}
 				}
@@ -3246,7 +3246,7 @@ void herokeeping(void)
 
 						} else {
 							if (host_readbs(hero + HERO_HUNGER_TIMER) <= 0) {
-								do_starve_damage(hero, i, 1);
+								do_starve_damage((struct struct_hero*)hero, i, 1);
 							}
 						}
 
@@ -4832,30 +4832,30 @@ void add_group_le(signed short le)
  * \param   index       the index number of the hero
  * \param   type        the type of message which should be printed (0 = hunger / 1 = thirst)
  */
-void do_starve_damage(Bit8u *hero, signed short index, signed short type)
+void do_starve_damage(struct struct_hero *hero, const signed int index, const signed int type)
 {
 	/* check if the hero is dead */
-	if (!hero_dead(hero)) {
+	if (!hero_dead((Bit8u*)hero)) {
 
 		/* save this value locally */
 		const int sl_bak = g_update_statusline;
 		g_update_statusline = 0;
 
 		/* decrement LE of the hero */
-		dec_ptr_ws(hero + HERO_LE);
+		hero->le--;
 
 		/* set the critical message type for the hero */
 		gs_food_message[index] = (type != 0 ? 1 : 2);
 
-		if (host_readws(hero + HERO_LE) <= 0) {
+		if (hero->le <= 0) {
 
 			/* don't let the hero die */
-			host_writew(hero + HERO_LE, 1);
+			hero->le = 1;
 
 			/* decrement the max LE and save them at 0x7a */
-			if (host_readws(hero + HERO_LE_ORIG) >= 2) {
-				dec_ptr_ws(hero + HERO_LE_ORIG);
-				inc_ptr_bs(hero + HERO_LE_MOD);
+			if (hero->le_max >= 2) {
+				hero->le_max--;
+				hero->le_malus++;
 			}
 		}
 
