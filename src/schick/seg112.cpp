@@ -181,26 +181,24 @@ void tevent_071(void)
 	signed short l_si;
 	signed short have_raft;
 	signed short i;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	have_raft = 0;
 
 	/* Perception + 8, Sinnesschaerfe + 8 */
-	if (test_skill((struct struct_hero*)(hero = (Bit8u*)get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 8) > 0 &&
+	if (test_skill((hero = (struct struct_hero*)get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 8) > 0 &&
 		!gs_tevent071_flag)
 	{
 		gs_tevent071_flag = 1;
 
 		/* Track + 4, Faehrtensuche + 4 */
-		if (test_skill((struct struct_hero*)hero, TA_FAEHRTENSUCHEN, 4) > 0) {
+		if (test_skill(hero, TA_FAEHRTENSUCHEN, 4) > 0) {
 
-			sprintf(g_dtp2,	get_tx2(13), (char*)hero + HERO_NAME2,
-				GUI_get_ptr(host_readbs(hero + HERO_SEX), 0),
-				GUI_get_ptr(host_readbs(hero + HERO_SEX), 3));
-
+			sprintf(g_dtp2,	get_tx2(13), hero->alias, GUI_get_ptr(hero->sex, 0), GUI_get_ptr(hero->sex, 3));
 
 			do {
 				l_si = GUI_radio(g_dtp2, 2, get_tx2(14), get_tx2(15));
+
 			} while (l_si == -1);
 
 			if (l_si == 2) {
@@ -209,6 +207,7 @@ void tevent_071(void)
 
 				do {
 					l_si = GUI_radio(get_tx2(16), 3, get_tx2(17), get_tx2(18), get_tx2(19));
+
 				} while (l_si == -1);
 
 				if (l_si == 1) {
@@ -226,7 +225,7 @@ void tevent_071(void)
 
 				if (l_si == 1 || l_si == 2) {
 
-					sprintf(g_dtp2,	get_tx2(22), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2,	get_tx2(22), hero->alias);
 
 					do {
 						l_si = GUI_radio(g_dtp2, 2, get_tx2(23), get_tx2(24));
@@ -260,9 +259,8 @@ void tevent_071(void)
 					i = (!have_raft ? 1 : 2);
 
 					do {
-						l_si = GUI_radio(get_tx2(26), (signed char)i,
-								get_tx2(27),
-								get_tx2(28));
+						l_si = GUI_radio(get_tx2(26), (signed char)i, get_tx2(27), get_tx2(28));
+
 					} while (l_si == -1);
 
 					if (l_si == 1) {
@@ -286,34 +284,28 @@ void tevent_071(void)
 void TRV_swimm(signed short mod, signed short percent)
 {
 	signed short i;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
-	hero = get_hero(0);
+	hero = (struct struct_hero*)get_hero(0);
 
-	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+	for (i = 0; i <= 6; i++, hero++) {
 
-		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-			!hero_dead(hero))
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+			!hero_dead((Bit8u*)hero))
 		{
 
-			if (test_skill((struct struct_hero*)hero, TA_SCHWIMMEN, (signed char)mod) <= 0) {
+			if (test_skill(hero, TA_SCHWIMMEN, (signed char)mod) <= 0) {
+
 				/* test failed */
+				hero_disease_test(hero, 2, 20 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
 
-				hero_disease_test((struct struct_hero*)hero, 2, 20 - (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK))));
+				loose_random_item((Bit8u*)hero, percent, get_ttx(506));
 
-				loose_random_item(hero, percent, get_ttx(506));
+				sub_hero_le((Bit8u*)hero, random_schick(5));
 
-				sub_hero_le(hero, random_schick(5));
-
-
-				sprintf(g_dtp2,
-					get_tx2(21),
-					(char*)hero + HERO_NAME2);
+				sprintf(g_dtp2,	get_tx2(21), hero->alias);
 			} else {
-				sprintf(g_dtp2,
-					get_tx2(20),
-					(char*)hero + HERO_NAME2);
+				sprintf(g_dtp2,	get_tx2(20), hero->alias);
 			}
 
 			GUI_output(g_dtp2);
@@ -327,20 +319,17 @@ void tevent_unused01(void)
 	signed short answer;
 	signed short has_raft;
 	signed short options;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	has_raft = 0;
 
-	hero = (Bit8u*)get_first_hero_available_in_group();
+	hero = (struct struct_hero*)get_first_hero_available_in_group();
 
-	if ((test_skill((struct struct_hero*)hero, TA_SINNESSCHAERFE, 8) > 0 && !gs_teventu01_flag) || gs_teventu01_flag)
+	if ((test_skill(hero, TA_SINNESSCHAERFE, 8) > 0 && !gs_teventu01_flag) || gs_teventu01_flag)
 	{
 		gs_teventu01_flag = 1;
 
-		sprintf(g_dtp2,	get_tx2(29), (char*)hero + HERO_NAME2,
-			GUI_get_ptr(host_readbs(hero + HERO_SEX), 0),
-			GUI_get_ptr(host_readbs(hero + HERO_SEX), 3));
-
+		sprintf(g_dtp2,	get_tx2(29), hero->alias, GUI_get_ptr(hero->sex, 0), GUI_get_ptr(hero->sex, 3));
 
 		do {
 			answer = GUI_radio(g_dtp2, 2, get_tx2(30), get_tx2(31));
@@ -369,9 +358,9 @@ void tevent_unused01(void)
 
 				GUI_output(get_tx2(38));
 
-				g_gather_herbs_special = (63);
+				g_gather_herbs_special = 63;
 				TRV_inside_herb_place();
-				g_gather_herbs_special = (-1);
+				g_gather_herbs_special = -1;
 
 				options = (!has_raft ? 1 : 2);
 
@@ -396,11 +385,11 @@ void tevent_unused01(void)
 
 void tevent_072(void)
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !gs_tevent072_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !gs_tevent072_flag) ||
 		gs_tevent072_flag != 0)
 	{
 		TRV_found_camp_place(1);
-		gs_tevent072_flag = (1);
+		gs_tevent072_flag = 1;
 	}
 }
 
@@ -435,7 +424,7 @@ void tevent_074(void)
 	signed short answer;
 	signed short i;
 	Bit32s p_money;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	if (!gs_tevent074_flag) {
 
@@ -445,9 +434,8 @@ void tevent_074(void)
 
 		do {
 			answer = GUI_dialogbox((unsigned char*)g_dtp2, get_tx(49), get_tx2(46), 3,
-						get_tx2(47),
-						get_tx2(48),
-						get_tx2(49));
+						get_tx2(47), get_tx2(48), get_tx2(49));
+
 		} while (answer == -1);
 
 		if (answer == 1) {
@@ -459,7 +447,7 @@ void tevent_074(void)
 
 			/* try to flee */
 
-			if (test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 2) <= 0)
+			if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 2) <= 0)
 			{
 				/* failed, so fight */
 				g_fig_initiative = 1;
@@ -468,33 +456,31 @@ void tevent_074(void)
 			} else {
 
 				/* remember the position of the last hero in the group */
-				hero = get_hero(0);
-				for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+				hero = (struct struct_hero*)get_hero(0);
+				for (i = 0; i <= 6; i++, hero++) {
 
-					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-						!hero_dead(hero))
+					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+						!hero_dead((Bit8u*)hero))
 					{
 						answer = i;
 					}
 				}
 
-				hero = get_hero(answer);
+				hero = (struct struct_hero*)get_hero(answer);
 
-				sprintf((char*)g_dtp2 + 0x400, get_tx2(54), (char*)hero + HERO_NAME2);
+				sprintf((char*)g_dtp2 + 0x400, get_tx2(54), hero->alias);
 				GUI_dialogbox((unsigned char*)g_dtp2, get_tx(49), (char*)(g_dtp2 + 0x400), 0);
 
 				/* this hero gets a damage of 2W6+4 */
-				sub_hero_le(hero, dice_roll(2, 6, 4));
+				sub_hero_le((Bit8u*)hero, dice_roll(2, 6, 4));
 			}
 		} else {
 
 			/* try to make a deal */
 			do {
 				answer = GUI_dialogbox((unsigned char*)g_dtp2, get_tx(49), get_tx2(50), 3,
-							get_tx2(51),
-							get_tx2(52),
-							get_tx2(53));
+							get_tx2(51), get_tx2(52), get_tx2(53));
+
 			} while (answer == -1);
 
 			if (answer == 1) {
@@ -520,7 +506,7 @@ void tevent_074(void)
 				/* try to be Charismatic */
 				answer = count_heroes_in_group();
 
-				if (test_attrib((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 14 - answer) <= 0)
+				if (test_attrib((struct struct_hero*)get_first_hero_available_in_group(), ATTRIB_CH, 14 - answer) <= 0)
 				{
 					/* fight */
 					g_fig_initiative = 1;
@@ -536,7 +522,7 @@ void tevent_075(void)
 	signed short i;
 	signed short answer;
 	signed short ret;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	ret = -1;
 
@@ -577,13 +563,11 @@ void tevent_075(void)
 
 			} else {
 
-				hero = get_hero(0);
-				for (i = answer = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+				hero = (struct struct_hero*)get_hero(0);
+				for (i = answer = 0; i <= 6; i++, hero++) {
 
-					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-						!hero_dead(hero) &&
-						test_skill((struct struct_hero*)hero, TA_SCHLEICHEN, 0) <= 0)
+					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+						!hero_dead((Bit8u*)hero) && test_skill(hero, TA_SCHLEICHEN, 0) <= 0)
 					{
 						answer++;
 					}
@@ -617,7 +601,7 @@ void tevent_075(void)
 		}
 
 		if (ret == 0) {
-			gs_tevent075_flag = (1);
+			gs_tevent075_flag = 1;
 		}
 	}
 }
@@ -629,21 +613,20 @@ void tevent_076(void)
 
 	if (!gs_tevent076_flag) {
 
-		if (test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 5) > 0)
+		if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 5) > 0)
 		{
 			gs_tevent076_flag = (1);
 
 			GUI_dialog_na(53, get_tx2(63));
 
 			do {
-				answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
-								get_tx2(64), 2,
-								get_tx2(65),
-								get_tx2(66));
+				answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(64), 2,
+								get_tx2(65), get_tx2(66));
+
 			} while (answer == -1);
 
 			if (answer == 1) {
-				gs_travel_detour = (DUNGEONS_GOBLINHOEHLE);
+				gs_travel_detour = DUNGEONS_GOBLINHOEHLE;
 			}
 		}
 
@@ -652,10 +635,9 @@ void tevent_076(void)
 		load_in_head(53);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
-							get_tx2(67), 2,
-							get_tx2(68),
-							get_tx2(69));
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(67), 2,
+							get_tx2(68), get_tx2(69));
+
 		} while (answer == -1);
 
 		if (answer == 1) {
@@ -670,20 +652,18 @@ void tevent_077(void)
 	signed short answer;
 	signed short i;
 	Bit32s p_money;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	if (!gs_tevent077_flag) {
 
-		gs_tevent077_flag = (1);
+		gs_tevent077_flag = 1;
 
 		load_in_head(4);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2, get_tx(50),
-						get_tx2(70), 3,
-						get_tx2(71),
-						get_tx2(72),
-						get_tx2(73));
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, get_tx(50), get_tx2(70), 3,
+						get_tx2(71), get_tx2(72), get_tx2(73));
+
 		} while (answer == -1);
 
 		if (answer == 1) {
@@ -693,7 +673,7 @@ void tevent_077(void)
 
 		} else if (answer == 2) {
 
-			if (test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 6) <= 0) {
+			if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 6) <= 0) {
 
 				/* test failed, so fight */
 				g_fig_initiative = 1;
@@ -702,24 +682,23 @@ void tevent_077(void)
 			} else {
 
 				/* remember the last hero */
-				hero = get_hero(0);
-				for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+				hero = (struct struct_hero*)get_hero(0);
+				for (i = 0; i <= 6; i++, hero++) {
 
-					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-						!hero_dead(hero))
+					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+						!hero_dead((Bit8u*)hero))
 					{
 						answer = i;
 					}
 				}
 
-				hero = get_hero(answer);
+				hero = (struct struct_hero*)get_hero(answer);
 
-				sprintf((char*)(g_dtp2 + 0x400), get_tx2(54), (char*)hero + HERO_NAME2);
+				sprintf((char*)(g_dtp2 + 0x400), get_tx2(54), hero->alias);
 				GUI_dialogbox((unsigned char*)g_dtp2, get_tx(50), (char*)(g_dtp2 + 0x400), 0);
 
 				/* the last hero looses between 6 and 16 LE */
-				sub_hero_le(hero, random_schick(11) + 5);
+				sub_hero_le((Bit8u*)hero, random_schick(11) + 5);
 			}
 
 		} else {
@@ -727,9 +706,8 @@ void tevent_077(void)
 			/* try to make a deal */
 			do {
 				answer = GUI_dialogbox((unsigned char*)g_dtp2, get_tx(50), get_tx2(74), 3,
-							get_tx2(75),
-							get_tx2(76),
-							get_tx2(77));
+							get_tx2(75), get_tx2(76), get_tx2(77));
+
 			} while (answer == -1);
 
 			if (answer == 1) {
@@ -755,7 +733,7 @@ void tevent_077(void)
 				/* try to be Charismatic */
 				answer = count_heroes_in_group();
 
-				if (test_attrib((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 14 - answer) <= 0)
+				if (test_attrib((struct struct_hero*)get_first_hero_available_in_group(), ATTRIB_CH, 14 - answer) <= 0)
 				{
 					/* fight */
 					g_fig_initiative = 1;
