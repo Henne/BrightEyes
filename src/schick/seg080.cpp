@@ -199,7 +199,7 @@ signed short DNG04_handler(void)
 					(char*)hero + HERO_NAME2);
 				GUI_output(g_dtp2);
 
-				hero_disappear(hero, 0, -1);
+				hero_disappear((struct struct_hero*)hero, 0, -1);
 			}
 		}
 	}

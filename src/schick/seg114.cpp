@@ -630,7 +630,7 @@ void tevent_123(void)
 
 							GUI_dialog_na(0, (char*)g_dtp2 + 0x400);
 
-							hero_disappear(hero, i, -1);
+							hero_disappear((struct struct_hero*)hero, i, -1);
 
 							counter++;
 
@@ -698,7 +698,7 @@ void tevent_123(void)
 
 							GUI_dialog_na(0, (char*)g_dtp2 + 0x400);
 
-							hero_disappear(hero, i, -1);
+							hero_disappear((struct struct_hero*)hero, i, -1);
 
 							counter++;
 

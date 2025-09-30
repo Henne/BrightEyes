@@ -473,7 +473,7 @@ void octopus_attack(void)
 		hero = get_hero(0);
 		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE && host_readbs(hero + HERO_GROUP_NO) == gs_current_group) {
-				hero_disappear(hero, i, -2);
+				hero_disappear((struct struct_hero*)hero, i, -2);
 			}
 		}
 	}

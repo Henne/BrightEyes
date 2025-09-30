@@ -171,7 +171,7 @@ void tevent_037(void)
 								GUI_output(g_dtp2);
 
 								/* the hero is now lost completely */
-								hero_disappear(hero, answer, -1);
+								hero_disappear((struct struct_hero*)hero, answer, -1);
 
 								done = 1;
 							} else {
@@ -344,12 +344,12 @@ void tevent_078(void)
 				{
 #ifndef M302de_ORIGINAL_BUGFIX
 					/* Original-Bug 16: all heroes die, even if they are not in the current group */
-					hero_disappear(hero, tmp, -1);
+					hero_disappear((struct struct_hero*)hero, tmp, -1);
 #else
 					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 						host_readbs(hero + HERO_GROUP_NO) == gs_current_group
 					) {
-						hero_disappear(hero, tmp, -1);
+						hero_disappear((struct struct_hero*)hero, tmp, -1);
 					}
 #endif
 				}
@@ -533,7 +533,7 @@ void tevent_124(void)
 						GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
 					GUI_output(g_dtp2);
 
-					hero_disappear(hero, i, -1);
+					hero_disappear((struct struct_hero*)hero, i, -1);
 
 				} else {
 

@@ -1147,12 +1147,12 @@ signed short do_fight(signed short fight_id)
 					gs_travel_detour = 99;
 
 					ptr = get_hero(0);
-					for (j = 0; j <=6; j++, ptr += SIZEOF_HERO) {
+					for (j = 0; j <= 6; j++, ptr += SIZEOF_HERO) {
 
 						if ((host_readbs(ptr + HERO_TYPE) != HERO_TYPE_NONE)
 							&& (host_readbs(ptr + HERO_GROUP_NO) == gs_current_group))
 						{
-							hero_disappear(ptr, j, -2);
+							hero_disappear((struct struct_hero*)ptr, j, -2);
 						}
 					}
 				}

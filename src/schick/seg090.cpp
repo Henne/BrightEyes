@@ -105,7 +105,7 @@ signed short DNG12_handler(void)
 							host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 							!hero_dead(hero))
 						{
-							hero_disappear(hero, i, -1);
+							hero_disappear((struct struct_hero*)hero, i, -1);
 						}
 					}
 

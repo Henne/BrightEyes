@@ -302,7 +302,7 @@ void tevent_098(void)
 
 						GUI_output(g_dtp2);
 
-						hero_disappear(hero, i, 33);
+						hero_disappear((struct struct_hero*)hero, i, 33);
 					}
 				}
 			}
@@ -361,7 +361,7 @@ void tevent_098(void)
 
 							GUI_output(g_dtp2);
 
-							hero_disappear(hero, i, 33);
+							hero_disappear((struct struct_hero*)hero, i, 33);
 						}
 					}
 				}
@@ -373,7 +373,7 @@ void tevent_098(void)
 
 				GUI_output(g_dtp2);
 
-				hero_disappear(hero, i, 33);
+				hero_disappear((struct struct_hero*)hero, i, 33);
 
 				do {
 					answer = GUI_radio(get_tx2(37), 3,
@@ -396,40 +396,39 @@ void tevent_098(void)
  * \param   pos         the position of the hero
  * \param   temple_id	value = -2, -1: hero disappears completely; value >= 0: hero can be found in the temple with that id.
  */
-void hero_disappear(Bit8u *hero, unsigned short pos, signed short temple_id)
+void hero_disappear(struct struct_hero *hero, const signed int pos, const signed int temple_id)
 {
-
 	/* decrement the number of heroes */
 	gs_total_hero_counter--;
 
 	/* load a new savegame if no hero is present */
 	/* TODO: potential Original-Bug: What if only the NPC is left? */
 	if (!gs_total_hero_counter) {
-		g_game_state = (GAME_STATE_DEAD);
+		g_game_state = GAME_STATE_DEAD;
 	}
 
 	/* decrement group counter */
 	gs_group_member_counts[gs_current_group]--;
 
 	/* write temple_id to character sheet */
-	host_writeb(hero + HERO_TEMPLE_ID, (signed char)temple_id);
+	hero->temple_id = temple_id;
 
 	/* reset position in group */
-	host_writeb(hero + HERO_GROUP_POS, 0);
+	hero->group_pos = 0;
 
 	if (pos == 6) {
 		/* NPC */
-		save_npc(ARCHIVE_FILE_NPCS + host_readbs(get_hero(6) + HERO_NPC_ID));
+		save_npc(ARCHIVE_FILE_NPCS + ((struct struct_hero*)get_hero(6))->npc_id);
 
 		/* reset NPC timer */
-		gs_npc_timers[host_readbs(get_hero(6) + HERO_NPC_ID) + 1] = -1;
+		gs_npc_timers[((struct struct_hero*)get_hero(6))->npc_id + 1] = -1;
 	} else {
 		/* Regular Hero */
 		write_chr_temp(pos);
 	}
 
 	/* set typus to 0 */
-	host_writeb(hero + HERO_TYPE, 0);
+	hero->typus = 0;
 
 	if (temple_id != -2) {
 		draw_main_screen();

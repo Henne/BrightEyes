@@ -170,7 +170,7 @@ signed short DNG11_handler(void)
 				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 					host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 				{
-					hero_disappear(hero, answer, -1);
+					hero_disappear((struct struct_hero*)hero, answer, -1);
 				}
 			}
 

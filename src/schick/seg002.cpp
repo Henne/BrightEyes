@@ -4693,7 +4693,7 @@ void sub_hero_le(Bit8u *hero, signed short le)
 				for (i = 0; i <= 6; i++, hero_i++) {
 					if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_no == gs_current_group))
 					{
-						hero_disappear((Bit8u*)hero_i, i, -1);
+						hero_disappear((struct struct_hero*)hero_i, i, -1);
 					}
 				}
 			}

@@ -706,7 +706,7 @@ void INF_treborn_unicorn(signed short informer, signed short state)
 			g_dialog_next_state = (random_schick(100) <= 50 ? 16 : 17);
 		} else if (state == 16) {
 			/* the hero disappears */
-			hero_disappear(gs_unicorn_hero_ptr, gs_unicorn_hero_pos, -1);
+			hero_disappear((struct struct_hero*)gs_unicorn_hero_ptr, gs_unicorn_hero_pos, -1);
 		} else if (state == 17) {
 			/* the hero gets heavily wounded, 1 LE left */
 			sub_hero_le(gs_unicorn_hero_ptr, host_readws(gs_unicorn_hero_ptr + HERO_LE) - 1);

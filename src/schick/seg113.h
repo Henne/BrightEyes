@@ -3,7 +3,7 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-void hero_disappear(Bit8u*, unsigned short, signed short);
+void hero_disappear(struct struct_hero*, const signed int, const signed int);
 /* 0x25 */
 void tevent_097(void);
 /* 0x2a */
