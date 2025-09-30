@@ -105,40 +105,39 @@ signed short LVL_select_skill(Bit8u *hero, signed short show_values)
 /**
  * \brief   returns hero which seems best for a skill
  *
- * \param   skill       skill
+ * \param   skill_id       skill
  */
-Bit8u* get_proper_hero(signed short skill)
+struct struct_hero* get_proper_hero(const signed int skill_id)
 /* called from only a single position, namely test_skill(..), and only if game is in 'easy' mode and the tested skill is TA_SINNESSCHAERFE */
 {
 	signed short i;
 	signed short cur;
 
 	signed short max = -1;
-	unsigned char *hero_i;
-	Bit8u* retval;
+	struct struct_hero *hero_i;
+	struct struct_hero* retval;
 
 #if !defined(__BORLANDC__)
 	retval = 0;
 #endif
 
-	hero_i = get_hero(0);
+	hero_i = (struct struct_hero*)get_hero(0);
 
-	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
-		if ((host_readbs(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
-			/* Check if in current group */
-			(host_readb(hero_i + HERO_GROUP_NO) == gs_current_group) &&
-			/* Check hero is not dead */
+	for (i = 0; i <= 6; i++, hero_i++) {
+
+		if ((hero_i->typus != HERO_TYPE_NONE) &&
+			(hero_i->group_no == gs_current_group) &&
 			/* TODO: potential Original-Bug: What if petrified / unconscious etc.? */
-			!hero_dead(hero_i)) {
+			!hero_dead((Bit8u*)hero_i)) {
 
 			/* add current and maximum attibute values */
-			cur =	host_readbs(hero_i + HERO_ATTRIB + 3 * g_skill_descriptions[skill].attrib1) +
-				host_readbs(hero_i + HERO_ATTRIB_MOD + 3 * g_skill_descriptions[skill].attrib1) +
-				host_readbs(hero_i + HERO_ATTRIB + 3 * g_skill_descriptions[skill].attrib2) +
-				host_readbs(hero_i + HERO_ATTRIB_MOD + 3 * g_skill_descriptions[skill].attrib2) +
-				host_readbs(hero_i + HERO_ATTRIB + 3 * g_skill_descriptions[skill].attrib3) +
-				host_readbs(hero_i + HERO_ATTRIB_MOD + 3 * g_skill_descriptions[skill].attrib3) +
-				host_readbs(hero_i + HERO_TALENTS + skill);
+			cur =	hero_i->attrib[g_skill_descriptions[skill_id].attrib1].current +
+				hero_i->attrib[g_skill_descriptions[skill_id].attrib1].mod +
+				hero_i->attrib[g_skill_descriptions[skill_id].attrib2].current +
+				hero_i->attrib[g_skill_descriptions[skill_id].attrib2].mod +
+				hero_i->attrib[g_skill_descriptions[skill_id].attrib3].current +
+				hero_i->attrib[g_skill_descriptions[skill_id].attrib3].mod +
+				hero_i->skills[skill_id];
 
 			if (cur > max) {
 
@@ -152,8 +151,7 @@ Bit8u* get_proper_hero(signed short skill)
 #if !defined(__BORLANDC__)
 	/* sanity check for Original Bug hunting */
 	if (retval == 0)
-		D1_ERR("Original-Bug: %s undefinierter Rückgabewert\n",
-			__func__);
+		D1_ERR("Original-Bug: %s undefinierter Rückgabewert\n",	__func__);
 #endif
 
 	return retval;
