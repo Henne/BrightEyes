@@ -232,7 +232,7 @@ void DNG_door(signed short action)
 				{
 					if (lockpick_pos != -2)
 					{
-						lockpick_result = test_skill(hero, TA_SCHLOESSER, host_readbs((Bit8u*)ptr_doors + DUNGEON_DOOR_LOCKPICK_HANDICAP));
+						lockpick_result = test_skill((struct struct_hero*)hero, TA_SCHLOESSER, host_readbs((Bit8u*)ptr_doors + DUNGEON_DOOR_LOCKPICK_HANDICAP));
 
 						play_voc(ARCHIVE_FILE_FX11_VOC);
 

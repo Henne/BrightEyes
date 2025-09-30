@@ -3,7 +3,7 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-signed short test_skill(Bit8u *hero, signed short, signed char);
+signed short test_skill(struct struct_hero*, const signed int, signed char);
 
 /* 0x25 */
 signed short bargain(Bit8u*, signed short, Bit32s, signed short, signed char);

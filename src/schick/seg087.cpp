@@ -84,7 +84,7 @@ signed short DNG14_handler(void)
 
 	} else if (pos == DNG_POS(0,5,3) && pos != gs_dng_handled_pos && !gs_dng14_alarm_flag) {
 
-		if (test_skill(hero, TA_SINNESSCHAERFE, 6) <= 0) {
+		if (test_skill((struct struct_hero*)hero, TA_SINNESSCHAERFE, 6) <= 0) {
 
 			GUI_output(get_tx(3));
 
@@ -152,13 +152,13 @@ signed short DNG14_handler(void)
 			gs_direction == EAST &&
 			gs_dng14_secretdoor1 != 2) {
 
-		if (gs_dng14_secretdoor1 != 0 || test_skill(hero, TA_SINNESSCHAERFE, 4) > 0) {
+		if (gs_dng14_secretdoor1 != 0 || test_skill((struct struct_hero*)hero, TA_SINNESSCHAERFE, 4) > 0) {
 			gs_dng14_secretdoor1 = 1;
 
 			sprintf(g_dtp2, get_tx(7), (char*)hero + HERO_NAME2);
 
 			sprintf(g_text_output_buf,
-				(char*)((l_di = test_skill(hero, TA_SCHLOESSER, -6)) > 0 ? get_tx(8): get_tx(9)),
+				(char*)((l_di = test_skill((struct struct_hero*)hero, TA_SCHLOESSER, -6)) > 0 ? get_tx(8): get_tx(9)),
 				GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
 
 			strcat(g_dtp2, g_text_output_buf);
@@ -179,13 +179,13 @@ signed short DNG14_handler(void)
 			gs_direction == EAST &&
 			gs_dng14_secretdoor2 != 2) {
 
-		if (gs_dng14_secretdoor2 != 0 || test_skill(hero, TA_SINNESSCHAERFE, 4) > 0) {
+		if (gs_dng14_secretdoor2 != 0 || test_skill((struct struct_hero*)hero, TA_SINNESSCHAERFE, 4) > 0) {
 			gs_dng14_secretdoor2 = 1;
 
 			sprintf(g_dtp2, get_tx(7), (char*)hero + HERO_NAME2);
 
 			sprintf(g_text_output_buf,
-				(char*)((l_di = test_skill(hero, TA_SCHLOESSER, 6)) > 0 ? get_tx(8): get_tx(9)),
+				(char*)((l_di = test_skill((struct struct_hero*)hero, TA_SCHLOESSER, 6)) > 0 ? get_tx(8): get_tx(9)),
 				GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
 
 			strcat(g_dtp2, g_text_output_buf);
@@ -298,7 +298,7 @@ signed short DNG14_handler(void)
 		(pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&
 		gs_direction == SOUTH && gs_dng14_secretdoor3 != 2) {
 
-		if (gs_dng14_secretdoor3 != 0 || test_skill(hero, TA_SINNESSCHAERFE, 4) > 0) {
+		if (gs_dng14_secretdoor3 != 0 || test_skill((struct struct_hero*)hero, TA_SINNESSCHAERFE, 4) > 0) {
 
 			/* acticate trap */
 			gs_dng14_secretdoor3 = 1;
@@ -306,7 +306,7 @@ signed short DNG14_handler(void)
 			sprintf(g_dtp2, get_tx(7), (char*)hero + HERO_NAME2);
 
 			sprintf(g_text_output_buf,
-				(char*)((l_di = test_skill(hero, TA_SCHLOESSER, -6)) > 0 ? get_tx(8) : get_tx(9)),
+				(char*)((l_di = test_skill((struct struct_hero*)hero, TA_SCHLOESSER, -6)) > 0 ? get_tx(8) : get_tx(9)),
 				GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
 
 			strcat(g_dtp2, g_text_output_buf);
@@ -328,7 +328,7 @@ signed short DNG14_handler(void)
 		(pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&
 		gs_direction == WEST && gs_dng14_secretdoor4 != 2) {
 
-		if (gs_dng14_secretdoor4 != 0 || test_skill(hero, TA_SINNESSCHAERFE, 8) > 0) {
+		if (gs_dng14_secretdoor4 != 0 || test_skill((struct struct_hero*)hero, TA_SINNESSCHAERFE, 8) > 0) {
 
 			/* acticate trap */
 			gs_dng14_secretdoor4 = 1;
@@ -336,7 +336,7 @@ signed short DNG14_handler(void)
 			sprintf(g_dtp2, get_tx(7), (char*)hero + HERO_NAME2);
 
 			sprintf(g_text_output_buf,
-				(char*)((l_di = test_skill(hero, TA_SCHLOESSER, 7)) > 0 ? get_tx(8) : get_tx(9)),
+				(char*)((l_di = test_skill((struct struct_hero*)hero, TA_SCHLOESSER, 7)) > 0 ? get_tx(8) : get_tx(9)),
 				GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
 
 			strcat(g_dtp2, g_text_output_buf);
@@ -393,7 +393,7 @@ signed short DNG14_handler(void)
 					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 						!hero_dead(hero) &&
-						test_skill(hero, TA_KLETTERN, 0) <= 0)
+						test_skill((struct struct_hero*)hero, TA_KLETTERN, 0) <= 0)
 					{
 						sprintf(g_dtp2, get_tx(26), (char*)hero + HERO_NAME2,
 							GUI_get_ptr(host_readbs(hero + HERO_SEX), 2));
@@ -416,7 +416,7 @@ signed short DNG14_handler(void)
 					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 						!hero_dead(hero) &&
-						test_skill(hero, TA_KLETTERN, 4) <= 0)
+						test_skill((struct struct_hero*)hero, TA_KLETTERN, 4) <= 0)
 					{
 						sprintf(g_dtp2, get_tx(27), (char*)hero + HERO_NAME2);
 						GUI_output(g_dtp2);
@@ -505,14 +505,14 @@ signed short DNG14_handler(void)
 			(pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&
 			gs_direction == NORTH &&
 			gs_dng14_secretdoor5 != 2 &&
-			(gs_dng14_secretdoor5 != 0 || test_skill(hero, TA_SINNESSCHAERFE, 6) > 0))
+			(gs_dng14_secretdoor5 != 0 || test_skill((struct struct_hero*)hero, TA_SINNESSCHAERFE, 6) > 0))
 	{
 			gs_dng14_secretdoor5 = 1;
 
 			sprintf(g_dtp2,	get_tx(7), (char*)hero + HERO_NAME2);
 
 			sprintf(g_text_output_buf,
-				(char*)((l_di = test_skill(hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(8) : get_tx(9)),
+				(char*)((l_di = test_skill((struct struct_hero*)hero, TA_SCHLOESSER, 4)) > 0 ? get_tx(8) : get_tx(9)),
 				GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
 
 			strcat(g_dtp2, g_text_output_buf);
@@ -547,7 +547,7 @@ signed short DNG14_handler(void)
 
 					hero = get_hero(hero_pos);
 
-					if (test_skill(hero, TA_SCHWIMMEN, 8) <= 0) {
+					if (test_skill((struct struct_hero*)hero, TA_SCHWIMMEN, 8) <= 0) {
 
 						sprintf(g_dtp2, get_tx(40), (char*)hero + HERO_NAME2,
 							GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));

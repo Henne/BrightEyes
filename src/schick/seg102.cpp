@@ -144,7 +144,7 @@ signed short MON_get_spell_cost(signed short mspell_id, signed short flag)
  * \param   handicap    may be positive or negative. The higher the value, the harder the test.
  */
 signed short MON_test_attrib3(struct enemy_sheet *monster, signed short attrib1, signed short attrib2, signed short attrib3, signed char handicap)
-/* called only from a single position, in MON_test_skill(..) */
+/* called only from a single position, in MON_test_skill((struct struct_hero*)..) */
 {
 #ifndef M302de_FEATURE_MOD
 	/* Feature mod 6: The implementation of the skill test logic differs from the original DSA2/3 rules.

@@ -116,7 +116,7 @@ signed short do_alchemy(struct struct_hero* hero, const signed short recipe_id, 
 	hero->recipe_id = 0;
 	hero->alchemy_inn_id = 0;
 
-	if ((test_skill((Bit8u*)hero, TA_ALCHIMIE, r_ptr->handicap) > 0) && (flag_abort == 0))
+	if ((test_skill((struct struct_hero*)(Bit8u*)hero, TA_ALCHIMIE, r_ptr->handicap) > 0) && (flag_abort == 0))
 	{
 		/* success */
 
@@ -409,9 +409,9 @@ signed short skill_cure_disease(struct struct_hero *healer, struct struct_hero *
 			/* set timer */
 			patient->heal_timer = HOURS(4);
 
-			if ((flag != 0) || (test_skill((Bit8u*)healer, TA_HEILEN_KRANKHEITEN, (signed char)handycap) > 0)) {
+			if ((flag != 0) || (test_skill((struct struct_hero*)(Bit8u*)healer, TA_HEILEN_KRANKHEITEN, (signed char)handycap) > 0)) {
 
-				if (((retval = test_skill((Bit8u*)healer, TA_HEILEN_KRANKHEITEN, g_disease_prices[disease_id] + handycap)) > 0) &&
+				if (((retval = test_skill((struct struct_hero*)(Bit8u*)healer, TA_HEILEN_KRANKHEITEN, g_disease_prices[disease_id] + handycap)) > 0) &&
 					(disease_id != ILLNESS_TYPE_WUNDFIEBER) && (disease_id != ILLNESS_TYPE_BLAUE_KEUCHE))
 				{
 

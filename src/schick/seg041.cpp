@@ -326,11 +326,10 @@ signed short FIG_get_hero_weapon_attack_damage(Bit8u* hero, Bit8u* target, signe
 			}
 
 			/* Original-Bug: For ITEM_SPEAR and ITEM_SPEAR_MAGIC, a test on TA_SCHUSSWAFFEN will be performed */
-			damage_mod = (test_skill(hero,
+			damage_mod = (test_skill((struct struct_hero*)hero,
 						(host_readbs(item_p_rh + ITEM_STATS_SUBTYPE) == WEAPON_TYPE_WURFWAFFE ? TA_WURFWAFFEN : TA_SCHUSSWAFFEN),
 						p_rangedtab->base_handicap + 2 * distance - 2 * target_size) > 0) ?
-					g_ranged_weapons_table[weapon->ranged_index].damage_modifier[distance]
-					: -damage;
+					g_ranged_weapons_table[weapon->ranged_index].damage_modifier[distance] : -damage;
 
 			if (damage_mod != 0) { /* test is redundant */
 				damage += damage_mod;

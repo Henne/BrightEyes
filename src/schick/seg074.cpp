@@ -37,7 +37,7 @@ void show_automap(void)
 	signed short tw_bak;
 
 	if (!gs_dungeon_light ||
-		((gs_dungeon_light == 1) && (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 6) > 0)))
+		((gs_dungeon_light == 1) && (test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 6) > 0)))
 	{
 
 		g_special_screen = 1;

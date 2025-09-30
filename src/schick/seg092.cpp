@@ -469,7 +469,7 @@ void use_lockpicks_on_chest(struct struct_chest* chest_ptr)
 
 		if (l_si != -2) {
 
-			l_di = test_skill(hero, TA_SCHLOESSER, ((struct struct_chest*)chest_ptr)->mod);
+			l_di = test_skill((struct struct_hero*)hero, TA_SCHLOESSER, ((struct struct_chest*)chest_ptr)->mod);
 
 			if (l_di == -99) {
 

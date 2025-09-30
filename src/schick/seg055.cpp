@@ -367,7 +367,7 @@ void TLK_whandel(signed short state)
 
 	} else if (state == 25) {
 
-		if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_FEILSCHEN, 0) > 0) {
+		if (test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_FEILSCHEN, 0) > 0) {
 
 			g_dialog_next_state = 23;
 			g_price_modificator = 3;

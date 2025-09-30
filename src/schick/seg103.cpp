@@ -108,7 +108,7 @@ signed short LVL_select_skill(Bit8u *hero, signed short show_values)
  * \param   skill_id       skill
  */
 struct struct_hero* get_proper_hero(const signed int skill_id)
-/* called from only a single position, namely test_skill(..), and only if game is in 'easy' mode and the tested skill is TA_SINNESSCHAERFE */
+/* called from only a single position, namely test_skill((struct struct_hero*)..), and only if game is in 'easy' mode and the tested skill is TA_SINNESSCHAERFE */
 {
 	signed short i;
 	signed short cur;
@@ -164,28 +164,31 @@ struct struct_hero* get_proper_hero(const signed int skill_id)
  * \param   skill       the skill to test
  * \param   handicap    may be positive or negative. The higher the value, the harder the test.
  */
-signed short test_skill(Bit8u *hero, signed short skill, signed char handicap)
+signed short test_skill(struct struct_hero* hero, const signed int skill_id, signed char handicap)
 {
 	signed short randval;
 	signed short e_skillval;
 
-	/* dont test for weapon skills */
-	if ((skill >= TA_SCHUSSWAFFEN) && (skill <= TA_SINNESSCHAERFE)) {
+	/* dont test for melee weapon skills */
+	if ((skill_id >= TA_SCHUSSWAFFEN) && (skill_id <= TA_SINNESSCHAERFE)) {
 
 #if !defined(__BORLANDC__)
-		D1_INFO("%s Talentprobe %s %+d (TaW %d)",(char*)(hero + HERO_NAME2), names_skill[skill], handicap, host_readbs(hero + HERO_TALENTS + skill));
+		D1_INFO("%s Talentprobe %s %+d (TaW %d)", hero->alias, names_skill[skill_id], handicap, hero->skills[skill_id]);
 #endif
 
 		/* special test if skill is a range weapon skill */
-		if ((skill == TA_SCHUSSWAFFEN) || (skill == TA_WURFWAFFEN)) {
+		if ((skill_id == TA_SCHUSSWAFFEN) || (skill_id == TA_WURFWAFFEN)) {
 
 			/* calculate range weapon base value */
-			e_skillval = (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KL)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KL)) +
-				host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_GE)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_GE)) +
-				host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK))) / 4;
+			e_skillval = (	hero->attrib[ATTRIB_KL].current +
+					hero->attrib[ATTRIB_KL].mod +
+					hero->attrib[ATTRIB_GE].current +
+					hero->attrib[ATTRIB_GE].mod +
+					hero->attrib[ATTRIB_KK].current +
+					hero->attrib[ATTRIB_KK].mod) / 4;
 
 			/* add skill value */
-			e_skillval += host_readbs(hero + HERO_TALENTS + skill);
+			e_skillval += hero->skills[skill_id];
 			/* sub handycap */
 			e_skillval -= handicap;
 
@@ -221,8 +224,9 @@ signed short test_skill(Bit8u *hero, signed short skill, signed char handicap)
 		}
 
 		/* automatically get hero with best senses in beginner mode */
-		if ((skill == TA_SINNESSCHAERFE) && (g_game_mode == GAME_MODE_BEGINNER)) {
-			hero = (Bit8u*)(get_proper_hero(TA_SINNESSCHAERFE));
+		if ((skill_id == TA_SINNESSCHAERFE) && (g_game_mode == GAME_MODE_BEGINNER)) {
+
+			hero = get_proper_hero(TA_SINNESSCHAERFE);
 
 #if defined(__BORLANDC__)
 			/* seems to have been debug stuff with conditional compilation */
@@ -231,10 +235,11 @@ signed short test_skill(Bit8u *hero, signed short skill, signed char handicap)
 		}
 
 		/* do the test */
-		handicap -= host_readbs(hero + HERO_TALENTS + skill);
+		handicap -= hero->skills[skill_id];
 
-		return test_attrib3((struct struct_hero*)hero, g_skill_descriptions[skill].attrib1, g_skill_descriptions[skill].attrib2, g_skill_descriptions[skill].attrib3, handicap);
-
+		return test_attrib3(hero, g_skill_descriptions[skill_id].attrib1,
+						g_skill_descriptions[skill_id].attrib2,
+						g_skill_descriptions[skill_id].attrib3, handicap);
 	}
 
 	return 0;
@@ -345,11 +350,11 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 						/* set patient timer */
 						patient->heal_timer = HOURS(4); /* 4 hours */
 
-						if (test_skill(hero, TA_HEILEN_GIFT, handicap) > 0) {
+						if (test_skill((struct struct_hero*)hero, TA_HEILEN_GIFT, handicap) > 0) {
 
 							timewarp(MINUTES(20));
 
-							if (test_skill(hero, TA_HEILEN_GIFT, g_poison_prices[poison] + handicap) > 0) {
+							if (test_skill((struct struct_hero*)hero, TA_HEILEN_GIFT, g_poison_prices[poison] + handicap) > 0) {
 								/* success */
 								sprintf(g_dtp2, get_ttx(690), (char*)hero + HERO_NAME2,	patient->alias);
 								GUI_output(g_dtp2);
@@ -366,7 +371,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 									} while (le <= 0);
 
-									if ((l_si = test_skill(hero, TA_HEILEN_GIFT, le + handicap)) > 0) {
+									if ((l_si = test_skill((struct struct_hero*)hero, TA_HEILEN_GIFT, le + handicap)) > 0) {
 
 										sprintf(g_dtp2,	get_ttx(691), (char*)hero + HERO_NAME2,	patient->alias, le);
 
@@ -445,9 +450,9 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 					} else {
 						patient->heal_timer = DAYS(1);
 
-						if (test_skill(hero, TA_HEILEN_WUNDEN, handicap) > 0) {
+						if (test_skill((struct struct_hero*)hero, TA_HEILEN_WUNDEN, handicap) > 0) {
 
-							if (test_skill(hero, TA_HEILEN_WUNDEN, handicap) > 0) {
+							if (test_skill((struct struct_hero*)hero, TA_HEILEN_WUNDEN, handicap) > 0) {
 
 								l_si = (host_readbs(hero + (HERO_TALENTS + TA_HEILEN_WUNDEN)) > 1) ? host_readbs(hero + (HERO_TALENTS + TA_HEILEN_WUNDEN)) : 1;
 
@@ -507,7 +512,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 			} else {
 
-				if (test_skill(hero, TA_AKROBATIK, handicap) > 0) {
+				if (test_skill((struct struct_hero*)hero, TA_AKROBATIK, handicap) > 0) {
 
 					money = random_interval(10, 200);
 
@@ -540,7 +545,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 			} else {
 
-				if (test_skill(hero, TA_MUSIZIEREN, handicap) > 0) {
+				if (test_skill((struct struct_hero*)hero, TA_MUSIZIEREN, handicap) > 0) {
 
 					money = random_interval(100, 300);
 
@@ -567,7 +572,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 		}
 		case TA_FALSCHSPIEL : {
 
-			if (test_skill(hero, TA_FALSCHSPIEL, handicap) > 0) {
+			if (test_skill((struct struct_hero*)hero, TA_FALSCHSPIEL, handicap) > 0) {
 
 				money = random_interval(500, 1000);
 
@@ -592,7 +597,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 		}
 		case TA_TASCHENDIEBSTAHL : {
 
-			if (test_skill(hero, TA_TASCHENDIEBSTAHL, handicap) > 0) {
+			if (test_skill((struct struct_hero*)hero, TA_TASCHENDIEBSTAHL, handicap) > 0) {
 
 				money = random_interval(500, 1000);
 
@@ -715,7 +720,7 @@ signed short bargain(Bit8u *hero, signed short items, Bit32s price,
 	/* the lower the percent, the easier the bargain */
 	mod += percent / 5 + 1;
 
-	return test_skill(hero, TA_FEILSCHEN, mod);
+	return test_skill((struct struct_hero*)hero, TA_FEILSCHEN, mod);
 }
 
 #if !defined(__BORLANDC__)

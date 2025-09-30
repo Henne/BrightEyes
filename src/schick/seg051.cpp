@@ -407,7 +407,7 @@ signed short gather_herbs(Bit8u *hero, signed short hours, signed short handicap
 		}
 
 		if ((random_schick(100) <= ptr->chance_max) &&
-			test_skill(hero, TA_PFLANZENKUNDE, ptr->handicap - hours + handicap) > 0) {
+			test_skill((struct struct_hero*)hero, TA_PFLANZENKUNDE, ptr->handicap - hours + handicap) > 0) {
 
 			herb_count[herb_index] = (signed char)give_hero_new_item(hero, ptr->item_id, 0, random_schick(ptr->max_count)); // collect a random amount between 1 and max_count herbs.
 
@@ -518,7 +518,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 					retval = 1;
 
 					/* search for water */
-					if ((test_skill(hero, TA_WILDNISLEBEN, (signed char)mod) > 0) || gs_ingame_timers[INGAME_TIMER_EFFERD_FIND_WATER]) {
+					if ((test_skill((struct struct_hero*)hero, TA_WILDNISLEBEN, (signed char)mod) > 0) || gs_ingame_timers[INGAME_TIMER_EFFERD_FIND_WATER]) {
 
 						/* found water */
 						sprintf(g_dtp2, get_ttx(324), (char*)hero + HERO_NAME2);
@@ -549,7 +549,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 					delay_or_keypress(200);
 
 					/* search for food */
-					if ((test_skill(hero, TA_FAEHRTENSUCHEN, (signed char)mod) > 0) || gs_ingame_timers[INGAME_TIMER_FIRUN_HUNT]) {
+					if ((test_skill((struct struct_hero*)hero, TA_FAEHRTENSUCHEN, (signed char)mod) > 0) || gs_ingame_timers[INGAME_TIMER_FIRUN_HUNT]) {
 
 						/* remove hunger of all living heroes in the current group */
 						hero2 = get_hero(0);

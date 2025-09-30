@@ -102,7 +102,7 @@ signed short DNG04_handler(void)
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
-				test_skill(hero, TA_SCHLEICHEN, 2) <= 0)
+				test_skill((struct struct_hero*)hero, TA_SCHLEICHEN, 2) <= 0)
 			{
 				sprintf(g_dtp2,	get_tx(10), (char*)hero + HERO_NAME2);
 				GUI_output(g_dtp2);
@@ -146,7 +146,7 @@ signed short DNG04_handler(void)
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
-				test_skill(hero, TA_SCHLEICHEN, 4) <= 0)
+				test_skill((struct struct_hero*)hero, TA_SCHLEICHEN, 4) <= 0)
 			{
 				sprintf(g_dtp2, get_tx(10), (char*)hero + HERO_NAME2);
 				GUI_output(g_dtp2);

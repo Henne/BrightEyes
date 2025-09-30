@@ -38,7 +38,7 @@ void DNG14_dive(signed short diver_pos, signed char mod, signed short dest_x)
 			!hero_dead(hero))
 		{
 
-			if (test_skill(hero, TA_SCHWIMMEN, mod) <= 0) {
+			if (test_skill((struct struct_hero*)hero, TA_SCHWIMMEN, mod) <= 0) {
 				/* swimming failed */
 				sprintf(g_dtp2,	get_tx(42), (char*)hero + HERO_NAME2,
 					GUI_get_ptr(host_readbs(hero + HERO_SEX), 0),

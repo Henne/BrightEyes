@@ -41,7 +41,7 @@ void tevent_080(void)
 
 	hero = (Bit8u*)get_first_hero_available_in_group();
 
-	if ((!gs_tevent080_flag && (test_skill(hero, TA_WILDNISLEBEN, 4) > 0)) ||
+	if ((!gs_tevent080_flag && (test_skill((struct struct_hero*)hero, TA_WILDNISLEBEN, 4) > 0)) ||
 			gs_tevent080_flag != 0)
 	{
 		gs_tevent080_flag = (1);
@@ -51,7 +51,7 @@ void tevent_080(void)
 
 		hero = (Bit8u*)gs_main_acting_hero;
 
-		if ((hero && !gs_tevent080_tatzelwurm && test_skill(hero, TA_FAEHRTENSUCHEN, 5) > 0) ||
+		if ((hero && !gs_tevent080_tatzelwurm && test_skill((struct struct_hero*)hero, TA_FAEHRTENSUCHEN, 5) > 0) ||
 			gs_tevent080_tatzelwurm == 1)
 		{
 			gs_tevent080_tatzelwurm = 1;
@@ -96,7 +96,7 @@ void tevent_080(void)
 
 void tevent_081(void)
 {
-	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent081_flag) ||
+	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent081_flag) ||
 		 gs_tevent081_flag != 0)
 	{
 		TRV_found_camp_place(0);
@@ -111,7 +111,7 @@ void tevent_082(void)
 
 void tevent_083(void)
 {
-	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 6) > 0 && !gs_tevent083_flag) ||
+	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 6) > 0 && !gs_tevent083_flag) ||
 		 gs_tevent083_flag != 0)
 	{
 		g_gather_herbs_special = (61);
@@ -144,7 +144,7 @@ void tevent_084(void)
 			}
 		} else {
 
-			if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 5) <= 0)
+			if (test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 5) <= 0)
 			{
 				g_fig_initiative = 1;
 
@@ -160,11 +160,11 @@ void tevent_085(void)
 {
 	Bit8u *hero = (Bit8u*)get_first_hero_available_in_group();
 
-	if ((test_skill(hero, TA_WILDNISLEBEN, 4) > 0 && !gs_tevent085_flag) || gs_tevent085_flag) {
+	if ((test_skill((struct struct_hero*)hero, TA_WILDNISLEBEN, 4) > 0 && !gs_tevent085_flag) || gs_tevent085_flag) {
 
 		gs_tevent085_flag = 1;
 
-		if ((test_skill(hero, TA_PFLANZENKUNDE, 6) > 0 && !gs_tevent085_herb_flag) ||
+		if ((test_skill((struct struct_hero*)hero, TA_PFLANZENKUNDE, 6) > 0 && !gs_tevent085_herb_flag) ||
 			 gs_tevent085_herb_flag)
 		{
 			gs_tevent085_herb_flag = 1;
@@ -226,7 +226,7 @@ void tevent_086(void)
 
 void tevent_088(void)
 {
-	if (((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0) && (!gs_tevent088_flag)) ||
+	if (((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0) && (!gs_tevent088_flag)) ||
 		 gs_tevent088_flag != 0)
 	{
 		TRV_found_camp_place(0);
@@ -286,7 +286,7 @@ void tevent_098(void)
 					!hero_dead(hero))
 				{
 
-					if (test_skill(hero, TA_AKROBATIK, 0) > 0) {
+					if (test_skill((struct struct_hero*)hero, TA_AKROBATIK, 0) > 0) {
 
 						sprintf(g_dtp2,
 							get_tx2(31),
@@ -329,7 +329,7 @@ void tevent_098(void)
 
 			hero = get_hero(hero_pos = select_hero_ok_forced(get_tx2(34)));
 
-			if (test_skill(hero, TA_AKROBATIK, 0) > 0) {
+			if (test_skill((struct struct_hero*)hero, TA_AKROBATIK, 0) > 0) {
 
 				sprintf(g_dtp2,
 					get_tx2(35),
@@ -467,7 +467,7 @@ void tevent_099(void)
 #endif
 		} else {
 
-			if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 4) <= 0) {
+			if (test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 4) <= 0) {
 
 				g_fig_initiative = 1;
 
@@ -511,7 +511,7 @@ void tevent_101(void)
 #endif
 		} else {
 
-			if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, (signed char)mod) <= 0) {
+			if (test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, (signed char)mod) <= 0) {
 
 				g_fig_initiative = 1;
 
@@ -555,7 +555,7 @@ void tevent_103(void)
 
 	if (answer == 1) {
 
-		if (test_skill(hero, TA_ORIENTIERUNG, 2) > 0) {
+		if (test_skill((struct struct_hero*)hero, TA_ORIENTIERUNG, 2) > 0) {
 
 			timewarp(HOURS(4));
 
@@ -570,7 +570,7 @@ void tevent_103(void)
 		}
 	} else {
 
-		if (test_skill(hero, TA_ORIENTIERUNG, 3) > 0) {
+		if (test_skill((struct struct_hero*)hero, TA_ORIENTIERUNG, 3) > 0) {
 
 			timewarp(HOURS(6));
 
@@ -587,7 +587,7 @@ void tevent_103(void)
 
 	if (answer == -1) {
 
-		if (test_skill(hero, TA_ORIENTIERUNG, 4) > 0) {
+		if (test_skill((struct struct_hero*)hero, TA_ORIENTIERUNG, 4) > 0) {
 
 			timewarp(HOURS(4));
 
@@ -775,7 +775,7 @@ void tevent_105(void)
 
 void tevent_106(void)
 {
-	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 4) > 0 && !gs_tevent106_flag) ||
+	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 4) > 0 && !gs_tevent106_flag) ||
 		 gs_tevent106_flag)
 	{
 		gs_tevent106_flag = 1;
@@ -806,7 +806,7 @@ void tevent_107(void)
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
-				test_skill(hero, TA_KLETTERN, 1) <= 0)
+				test_skill((struct struct_hero*)hero, TA_KLETTERN, 1) <= 0)
 			{
 
 				if (get_first_hero_with_item(ITEM_ROPE) != -1) { /* TODO: ROPE_LADDER? STAFFSPELL? */
@@ -832,7 +832,7 @@ void tevent_107(void)
 
 	} else {
 
-		if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 1) > 0) {
+		if (test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 1) > 0) {
 
 			timewarp(HOURS(3));
 
@@ -856,7 +856,7 @@ void tevent_108(void)
 {
 	signed short answer;
 
-	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 3) > 0) && !gs_tevent108_flag)
+	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 3) > 0) && !gs_tevent108_flag)
 	{
 		gs_tevent108_flag = 1;
 
@@ -889,7 +889,7 @@ void tevent_108(void)
 
 void tevent_109(void)
 {
-	if ((test_skill((Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 6) > 0 && !gs_tevent109_flag) || gs_tevent109_flag)
+	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 6) > 0 && !gs_tevent109_flag) || gs_tevent109_flag)
 	{
 		gs_tevent109_flag = 1;
 

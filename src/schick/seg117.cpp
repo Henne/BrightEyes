@@ -120,7 +120,7 @@ void hunt_karen(void)
 				if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
 					(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 					!hero_dead(hero) &&
-					(test_skill(hero, TA_SCHLEICHEN, 2) > 0))
+					(test_skill((struct struct_hero*)hero, TA_SCHLEICHEN, 2) > 0))
 				{
 					passed++;
 				}
@@ -138,7 +138,7 @@ void hunt_karen(void)
 					if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
 						(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 						!hero_dead(hero) &&
-						(test_skill(hero, TA_SCHUSSWAFFEN, 0) > 0))
+						(test_skill((struct struct_hero*)hero, TA_SCHUSSWAFFEN, 0) > 0))
 					{
 						passed++;
 					}
@@ -202,7 +202,7 @@ void hunt_wildboar(void)
 				if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
 					(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 					!hero_dead(hero) &&
-					(test_skill(hero, TA_SCHLEICHEN, 0) > 0))
+					(test_skill((struct struct_hero*)hero, TA_SCHLEICHEN, 0) > 0))
 				{
 					passed++;
 				}
@@ -220,7 +220,7 @@ void hunt_wildboar(void)
 					if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
 						(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 						!hero_dead(hero) &&
-						(test_skill(hero, TA_SCHUSSWAFFEN, 0) > 0))
+						(test_skill((struct struct_hero*)hero, TA_SCHUSSWAFFEN, 0) > 0))
 					{
 						passed++;
 					}
@@ -445,7 +445,7 @@ void octopus_attack(void)
 					sprintf(g_dtp2, get_tx2(31), (char*)hero + HERO_NAME2);
 					GUI_output(g_dtp2);
 
-					if (test_skill(hero, TA_SCHWIMMEN, 0) <= 0) {
+					if (test_skill((struct struct_hero*)hero, TA_SCHWIMMEN, 0) <= 0) {
 						sub_hero_le(hero, random_schick(6));
 						overboard[i] = 1;
 					}
@@ -754,7 +754,7 @@ void TLK_way_to_ruin(signed short state)
 		timewarp(HOURS(1));
 	} else if (state == 6) {
 		hero = get_hero(get_random_hero());
-		g_dialog_next_state = (test_skill(hero, TA_WILDNISLEBEN, 6) > 0 ? 8 : 7);
+		g_dialog_next_state = (test_skill((struct struct_hero*)hero, TA_WILDNISLEBEN, 6) > 0 ? 8 : 7);
 	} else if (state == 8) {
 		timewarp(HOURS(1));
 		TRV_ford_test(0, 30);
@@ -779,7 +779,7 @@ void TLK_way_to_ruin(signed short state)
 
 	} else if (state == 10) {
 
-		g_dialog_next_state = (test_skill((Bit8u*)gs_ruin_hero, TA_SCHWIMMEN, 5) > 0 ? 11 : 12);
+		g_dialog_next_state = (test_skill((struct struct_hero*)(Bit8u*)gs_ruin_hero, TA_SCHWIMMEN, 5) > 0 ? 11 : 12);
 	} else if (state == 12) {
 
 		sub_hero_le((Bit8u*)gs_ruin_hero, random_schick(4) + 1);
@@ -797,7 +797,7 @@ void TLK_way_to_ruin(signed short state)
 	} else if (state == 15 || state == 16) {
 		timewarp(MINUTES(20));
 	} else if (state == 17) {
-		g_dialog_next_state = (test_skill(hero2, TA_ORIENTIERUNG, 5) > 0 ? 18 : 19);
+		g_dialog_next_state = (test_skill((struct struct_hero*)hero2, TA_ORIENTIERUNG, 5) > 0 ? 18 : 19);
 	} else if (state == 19) {
 		timewarp(MINUTES(20));
 		gs_ruin_hero = (struct struct_hero*)get_hero(get_random_hero());
@@ -825,7 +825,7 @@ void TLK_way_to_ruin(signed short state)
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
-				test_skill(hero, TA_ORIENTIERUNG, 0) > 0) {
+				test_skill((struct struct_hero*)hero, TA_ORIENTIERUNG, 0) > 0) {
 
 					g_tlk_ruin_hero_counter++;
 			}
@@ -854,7 +854,7 @@ void TLK_way_to_ruin(signed short state)
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
-				test_skill(hero, TA_ORIENTIERUNG, 0) > 0) {
+				test_skill((struct struct_hero*)hero, TA_ORIENTIERUNG, 0) > 0) {
 
 					g_tlk_ruin_hero_counter++;
 			}

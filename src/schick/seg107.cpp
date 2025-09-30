@@ -248,7 +248,7 @@ void item_orcdocument(void)
 	/* ORCDOCUMENT, ID 179 */
 
 	/* Languages + 4, or already read successful */
-	if ((test_skill(get_itemuser(), TA_SPRACHEN, 4) > 0) || gs_orcdocument_read_flag) {
+	if ((test_skill((struct struct_hero*)get_itemuser(), TA_SPRACHEN, 4) > 0) || gs_orcdocument_read_flag) {
 
 		if (!gs_orcdocument_read_flag) {
 

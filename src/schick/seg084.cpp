@@ -177,7 +177,7 @@ signed short DNG09_handler(void)
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
-				test_skill(hero, TA_GEFAHRENSINN, 2) > 0)
+				test_skill((struct struct_hero*)hero, TA_GEFAHRENSINN, 2) > 0)
 			{
 				l3 = 1;
 			}
@@ -374,7 +374,7 @@ signed short DNG09_handler(void)
 			(target_pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&
 			gs_direction == WEST && gs_dng09_secretdoor1 != 2)
 	{
-		if (gs_dng09_secretdoor1 || test_skill((hero = (Bit8u*)get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 6) > 0)
+		if (gs_dng09_secretdoor1 || test_skill((struct struct_hero*)(hero = (Bit8u*)get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 6) > 0)
 		{
 			gs_dng09_secretdoor1 = 1;
 
@@ -383,7 +383,7 @@ signed short DNG09_handler(void)
 				(char*)hero + HERO_NAME2);
 
 			sprintf(g_text_output_buf,
-				(char*)(((l3 = test_skill(hero, TA_SCHLOESSER, 4)) > 0) ? get_tx(52) : get_tx(54)),
+				(char*)(((l3 = test_skill((struct struct_hero*)hero, TA_SCHLOESSER, 4)) > 0) ? get_tx(52) : get_tx(54)),
 				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)),
 				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),
 				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
@@ -411,14 +411,14 @@ signed short DNG09_handler(void)
 			(target_pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&
 			gs_direction == EAST && gs_dng09_secretdoor2 != 2)
 	{
-		if (gs_dng09_secretdoor2 || test_skill((hero = (Bit8u*)get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 8) > 0)
+		if (gs_dng09_secretdoor2 || test_skill((struct struct_hero*)(hero = (Bit8u*)get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 8) > 0)
 		{
 			gs_dng09_secretdoor2 = 1;
 
 			sprintf(g_dtp2,	get_tx(51), (char*)hero + HERO_NAME2);
 
 			sprintf(g_text_output_buf,
-				(char*)(((l3 = test_skill(hero, TA_SCHLOESSER, 6)) > 0) ? get_tx(52) : get_tx(53)),
+				(char*)(((l3 = test_skill((struct struct_hero*)hero, TA_SCHLOESSER, 6)) > 0) ? get_tx(52) : get_tx(53)),
 				(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
 
 			strcat(g_dtp2,

@@ -134,7 +134,7 @@ signed short DNG06_handler(void)
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
-				test_skill(hero, TA_GEFAHRENSINN, 5) > 0)
+				test_skill((struct struct_hero*)hero, TA_GEFAHRENSINN, 5) > 0)
 			{
 				l3 = 1;
 				break;
@@ -153,7 +153,7 @@ signed short DNG06_handler(void)
 					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 						!hero_dead(hero) &&
-						test_skill(hero, TA_GEFAHRENSINN, 5) > 0)
+						test_skill((struct struct_hero*)hero, TA_GEFAHRENSINN, 5) > 0)
 					{
 						l3 = 1;
 						break;
@@ -192,7 +192,7 @@ signed short DNG06_handler(void)
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
-				test_skill(hero, TA_SINNESSCHAERFE, 10) > 0)
+				test_skill((struct struct_hero*)hero, TA_SINNESSCHAERFE, 10) > 0)
 			{
 				l3++;
 			}
@@ -261,7 +261,7 @@ signed short DNG06_handler(void)
 				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 					!hero_dead(hero) &&
-					test_skill(hero, TA_KOERPERBEHERRSCHUNG, host_readbs(hero + HERO_RS_BONUS1)) <= 0)
+					test_skill((struct struct_hero*)hero, TA_KOERPERBEHERRSCHUNG, host_readbs(hero + HERO_RS_BONUS1)) <= 0)
 				{
 					sprintf(g_dtp2,	get_tx(20), (char*)hero + HERO_NAME2,
 						GUI_get_ptr(host_readbs(hero + HERO_SEX), 0),
@@ -362,7 +362,7 @@ signed short DNG06_handler(void)
 		sprintf(g_dtp2,	get_tx(25), (char*)hero + HERO_NAME2);
 		GUI_output(g_dtp2);
 
-		if (test_skill(hero, TA_KOERPERBEHERRSCHUNG, 0) > 0 && test_skill(hero, TA_GEFAHRENSINN, 0) > 0)
+		if (test_skill((struct struct_hero*)hero, TA_KOERPERBEHERRSCHUNG, 0) > 0 && test_skill((struct struct_hero*)hero, TA_GEFAHRENSINN, 0) > 0)
 		{
 			/* evasion succeeds */
 			sprintf(g_dtp2, get_tx(26), GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
@@ -483,7 +483,7 @@ void DNG06_chest01_loot(Bit8u* chest)
 		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 			!hero_dead(hero) &&
-			test_skill(hero, TA_LESEN, 0) > 0)
+			test_skill((struct struct_hero*)hero, TA_LESEN, 0) > 0)
 		{
 			strcat(g_dtp2, get_tx(34));
 			break;
@@ -518,7 +518,7 @@ void DNG09_pitfall(void)
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
-				test_skill(hero, TA_GEFAHRENSINN, 4) > 0)
+				test_skill((struct struct_hero*)hero, TA_GEFAHRENSINN, 4) > 0)
 				/* TODO: potential Original-Bug: Why should 'petrified' or 'uncouscious' (or maybe other properties ) be o.k. here?? */
 			{
 				l3 = 1;

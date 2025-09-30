@@ -60,7 +60,7 @@ signed short DNG12_handler(void)
 #if !defined(__BORLANDC__)
 		D1_INFO("Geheimtuere\n");
 #endif
-		if (test_skill(hero, TA_SINNESSCHAERFE, 6) > 0) {
+		if (test_skill((struct struct_hero*)hero, TA_SINNESSCHAERFE, 6) > 0) {
 
 			GUI_output(get_tx(21));
 
@@ -456,11 +456,11 @@ signed short DNG12_handler(void)
 	} else if (target_pos == DNG_POS(1,14,3) && target_pos != gs_dng_handled_pos && gs_dng12_speartrap_active) {
 		/* spear trap */
 
-		if (test_skill(hero, TA_SINNESSCHAERFE, 2) > 0) {
+		if (test_skill((struct struct_hero*)hero, TA_SINNESSCHAERFE, 2) > 0) {
 
 			if (GUI_bool(get_tx(28))) {
 
-				if (test_skill(hero, TA_SCHLOESSER, 0) <= 0) {
+				if (test_skill((struct struct_hero*)hero, TA_SCHLOESSER, 0) <= 0) {
 
 					/* defusing trap failed */
 					sprintf(g_dtp2,	get_tx(29), (char*)hero + HERO_NAME2);

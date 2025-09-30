@@ -72,7 +72,7 @@ void city_event_1(void)
 
 	randval = random_schick(20);
 
-	if (test_skill((Bit8u*)hero, TA_SINNESSCHAERFE, 2) <= 0) {
+	if (test_skill((struct struct_hero*)(Bit8u*)hero, TA_SINNESSCHAERFE, 2) <= 0) {
 
 		/* TODO:	check the format strings in the english version
 		 *		they may be broken.
@@ -128,7 +128,7 @@ void city_event_2(void)
 
 	hero = get_hero(get_random_hero());
 
-	if (test_skill(hero, TA_SINNESSCHAERFE, 2) <= 0) {
+	if (test_skill((struct struct_hero*)hero, TA_SINNESSCHAERFE, 2) <= 0) {
 
 		/* hero looses all money */
 		host_writeds(hero + HERO_MONEY, 0);

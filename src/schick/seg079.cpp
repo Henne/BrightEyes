@@ -127,7 +127,7 @@ signed short DNG03_handler(void)
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero) &&
-				test_skill(hero, TA_KLETTERN, 2) <= 0)
+				test_skill((struct struct_hero*)hero, TA_KLETTERN, 2) <= 0)
 			{
 				sprintf(g_dtp2,	get_tx(6), (char*)hero + HERO_NAME2,
 					GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
@@ -193,7 +193,7 @@ signed short DNG03_handler(void)
 	{
 		j = 0;
 
-		if (test_skill((Bit8u*)get_first_hero_available_in_group(), TA_GEFAHRENSINN, 4) <= 0)
+		if (test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_GEFAHRENSINN, 4) <= 0)
 		{
 			j++;
 		}
@@ -202,7 +202,7 @@ signed short DNG03_handler(void)
 			host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 			!hero_dead(hero) &&
-			test_skill(hero, TA_GEFAHRENSINN, 4) <= 0)
+			test_skill((struct struct_hero*)hero, TA_GEFAHRENSINN, 4) <= 0)
 		{
 			j++;
 		}

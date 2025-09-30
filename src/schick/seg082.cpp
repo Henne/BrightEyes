@@ -62,7 +62,7 @@ signed short DNG07_handler(void)
 				{
 					if (lockpick_pos != -2)
 					{
-						skill_result = test_skill(hero, TA_SCHLOESSER, 7);
+						skill_result = test_skill((struct struct_hero*)hero, TA_SCHLOESSER, 7);
 
 						if (skill_result == -99) {
 

@@ -539,7 +539,7 @@ void TLK_tavern(signed short answer)
 			!hero_dead(get_hero(gs_tlk_tav_testdrunk)) &&
 			gs_tlk_tav_drinkcount)
 		{
-			g_dialog_next_state = (test_skill(get_hero(gs_tlk_tav_testdrunk), TA_ZECHEN, gs_tlk_tav_drinkcount - 8) > 0 ? 108 : 110);
+			g_dialog_next_state = (test_skill((struct struct_hero*)get_hero(gs_tlk_tav_testdrunk), TA_ZECHEN, gs_tlk_tav_drinkcount - 8) > 0 ? 108 : 110);
 		}
 
 		/* TODO: this variable is unsigned */

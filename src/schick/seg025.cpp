@@ -144,7 +144,7 @@ void do_house(void)
 			if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
 				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 				!hero_dead(hero) && /* Original-Bug: What if petrified, sleeping etc. */
-				(test_skill(hero, TA_VERSTECKEN, -2) <= 0))
+				(test_skill((struct struct_hero*)hero, TA_VERSTECKEN, -2) <= 0))
 			{
 				/* every hero must pass a sneak -2 test */
 
