@@ -283,7 +283,7 @@ signed short use_magic(Bit8u* hero)
 				}
 
 				/* spend one AE point */
-				sub_ae_splash(hero, 1);
+				sub_ae_splash((struct struct_hero*)hero, 1);
 
 #if !defined(__BORLANDC__)
 				D1_INFO("%s Meditationsprobe +0 ",(char*)(hero + HERO_NAME2));
@@ -297,7 +297,7 @@ signed short use_magic(Bit8u* hero)
 					}
 
 					sub_hero_le(hero, ae + 3);
-					add_hero_ae(hero, ae);
+					add_hero_ae((struct struct_hero*)hero, ae);
 				} else {
 					/* Failed, print only a message */
 					sprintf(g_dtp2, get_ttx(795), (char*)hero + HERO_NAME2);
@@ -347,7 +347,7 @@ signed short use_magic(Bit8u* hero)
 						sprintf(g_dtp2,	get_ttx(339), host_readbs(hero + HERO_STAFFSPELL_LVL) + 1);
 						GUI_output(g_dtp2);
 
-						sub_ae_splash(hero, g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].ae_cost);
+						sub_ae_splash((struct struct_hero*)hero, g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].ae_cost);
 
 						sub_ptr_ws(hero + HERO_AE_ORIG, g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].ae_mod);
 
@@ -363,7 +363,7 @@ signed short use_magic(Bit8u* hero)
 						GUI_output(get_ttx(338));
 
 						/* only half of the AE costs */
-						sub_ae_splash(hero, g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].ae_cost / 2);
+						sub_ae_splash((struct struct_hero*)hero, g_staffspell_descriptions[host_readbs(hero + HERO_STAFFSPELL_LVL)].ae_cost / 2);
 
 						timewarp(HOURS(2));
 					}
@@ -809,7 +809,7 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 
 				strcpy(g_dtp2, get_ttx(606));
 
-				sub_ae_splash(hero, get_spell_cost(spell_id, 1)); /* spell failed -> half AE cost */
+				sub_ae_splash((struct struct_hero*)hero, get_spell_cost(spell_id, 1)); /* spell failed -> half AE cost */
 
 				if (!g_in_fight) {
 					GUI_output(g_dtp2);
@@ -849,13 +849,13 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 				} else if (g_spell_special_aecost == -2) {
 
 					strcpy(g_dtp2, get_ttx(606));
-					sub_ae_splash(hero, get_spell_cost(spell_id, 1));
+					sub_ae_splash((struct struct_hero*)hero, get_spell_cost(spell_id, 1));
 					retval = 0;
 
 				} else if (g_spell_special_aecost != -1) {
-					sub_ae_splash(hero, g_spell_special_aecost);
+					sub_ae_splash((struct struct_hero*)hero, g_spell_special_aecost);
 				} else {
-					sub_ae_splash(hero, ae_cost);
+					sub_ae_splash((struct struct_hero*)hero, ae_cost);
 				}
 
 				if (!g_in_fight) {

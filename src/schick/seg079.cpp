@@ -70,7 +70,7 @@ signed short DNG03_handler(void)
 				if (host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH &&
 					host_readws(hero + HERO_AE) != 0)
 				{
-					sub_ae_splash(hero, random_schick(6));
+					sub_ae_splash((struct struct_hero*)hero, random_schick(6));
 
 				} else if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE)
 				{
@@ -95,7 +95,7 @@ signed short DNG03_handler(void)
 			if (host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH &&
 				host_readws(hero + HERO_AE) != 0)
 			{
-				sub_ae_splash(hero, random_schick(6));
+				sub_ae_splash((struct struct_hero*)hero, random_schick(6));
 
 			} else if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE)
 			{
@@ -158,7 +158,7 @@ signed short DNG03_handler(void)
 				if (host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH &&
 					host_readws(hero + HERO_AE) != 0)
 				{
-					sub_ae_splash(hero, random_schick(6));
+					sub_ae_splash((struct struct_hero*)hero, random_schick(6));
 
 				} else if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE)
 				{
@@ -364,7 +364,7 @@ signed short DNG03_handler(void)
 			if (host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH &&
 				host_readws(hero + HERO_AE))
 			{
-				sub_ae_splash(hero, random_schick(6));
+				sub_ae_splash((struct struct_hero*)hero, random_schick(6));
 
 			} else if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE)
 			{

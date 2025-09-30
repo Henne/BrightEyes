@@ -435,7 +435,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 							l_si = 10;
 
 						/* add AE */
-						add_hero_ae(consumer, l_si);
+						add_hero_ae((struct struct_hero*)consumer, l_si);
 
 						/* give hero a glassbottle */
 						give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
@@ -471,7 +471,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 							l_si = 30;
 
 						/* add AE */
-						add_hero_ae(consumer, l_si);
+						add_hero_ae((struct struct_hero*)consumer, l_si);
 
 						/* give owner a glassbottle */
 						give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);

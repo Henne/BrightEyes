@@ -725,7 +725,7 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 								ae_regen = diff;
 							}
 
-							add_hero_ae(hero, ae_regen);
+							add_hero_ae((struct struct_hero*)hero, ae_regen);
 
 							strcpy(g_text_output_buf, get_ttx(392));
 

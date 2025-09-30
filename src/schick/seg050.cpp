@@ -627,7 +627,7 @@ void level_up(signed short hero_pos)
 		add_hero_le((struct struct_hero*)hero, l_si);
 		/* add AE and fill them up */
 		add_ptr_ws(hero + HERO_AE_ORIG, i - l_si);
-		add_hero_ae(hero, i - l_si);
+		add_hero_ae((struct struct_hero*)hero, i - l_si);
 
 		/* change skill increasements into AE */
 		if (host_readbs(hero + HERO_TYPE) == HERO_TYPE_MAGE && g_game_mode == GAME_MODE_ADVANCED) {

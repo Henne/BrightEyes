@@ -108,7 +108,7 @@ signed short do_alchemy(struct struct_hero* hero, const signed short recipe_id, 
 
 	hero_use_ingrendients(hero, recipe_id);
 
-	sub_ae_splash((Bit8u*)hero, r_ptr->ae_cost);
+	sub_ae_splash(hero, r_ptr->ae_cost);
 
 	and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xf7); /* unset 'brewing' flag */
 	hero->recipe_timer = 0;

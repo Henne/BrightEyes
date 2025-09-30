@@ -659,14 +659,14 @@ void tevent_123(void)
 				if (test_spell((struct struct_hero*)hero, SP_MU_STEIGERN, 0) > 0)
 				{
 					/* success */
-					sub_ae_splash(hero, get_spell_cost(SP_MU_STEIGERN, 0));
+					sub_ae_splash((struct struct_hero*)hero, get_spell_cost(SP_MU_STEIGERN, 0));
 
 					GUI_dialog_na(0, get_tx2(43));
 
 					done = 1;
 				} else {
 					/* failed */
-					sub_ae_splash(hero, get_spell_cost(SP_MU_STEIGERN, 1));
+					sub_ae_splash((struct struct_hero*)hero, get_spell_cost(SP_MU_STEIGERN, 1));
 
 					hero = get_hero(0);
 					for (i = counter = 0; i <= 6; i++, hero += SIZEOF_HERO)

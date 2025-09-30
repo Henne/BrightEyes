@@ -4538,32 +4538,31 @@ signed short is_hero_available_in_group(Bit8u *hero)
  * \brief   subtract current ae with a splash
  *
  * \param   hero        the magicuser
- * \param   ae          astralenergy to subtract
+ * \param   ae_cost     astralenergy to subtract
  */
-void sub_ae_splash(Bit8u *hero, signed short ae)
+void sub_ae_splash(struct struct_hero *hero, signed int ae_cost)
 {
-	if (!hero_dead(hero) && (ae > 0)) {
+	if (!hero_dead((Bit8u*)hero) && (ae_cost > 0)) {
 
 		signed short tmp = g_update_statusline;
 		g_update_statusline = 0;
 
-		if ((host_readb(hero + HERO_TYPE) == HERO_TYPE_MAGE) &&
-		    (host_readbs(hero + HERO_STAFFSPELL_LVL) >= 4)) {
+		if ((hero->typus == HERO_TYPE_MAGE) && (hero->staff_level >= 4)) {
 			/* 4th staff spell reduces AE cost by 2 */
-			ae -= 2;
-			if (ae < 0)
-				ae = 0;
+			ae_cost -= 2;
+			if (ae_cost < 0)
+				ae_cost = 0;
 		}
 
 		/* Calc new AE */
-		sub_ptr_ws(hero + HERO_AE, ae);
+		hero->ae -= ae_cost;
 
 		/* Draw the splash */
-		draw_splash(get_hero_index(hero), 1);
+		draw_splash(get_hero_index((Bit8u*)hero), 1);
 
 		/* set AE to 0 if they have gotten lower than 0 */
-		if (host_readws(hero + HERO_AE) < 0) {
-			host_writew(hero + HERO_AE, 0);
+		if (hero->ae < 0) {
+			hero->ae = 0;
 		}
 
 		g_update_statusline = tmp;
@@ -4572,31 +4571,31 @@ void sub_ae_splash(Bit8u *hero, signed short ae)
 		/* AE bar was not updated in pseudo 3D mode */
 		if (!g_in_fight && g_mouse1_doubleclick) {
 			/* redraw AE bar */
-			draw_bar(1, get_hero_index(hero), host_readw(hero + HERO_AE),
-				host_readw(hero + HERO_AE_ORIG), 0);
+			draw_bar(1, get_hero_index((Bit8u*)hero), hero->ae, hero->ae_max, 0);
 		}
 #endif
 	}
-
 }
 
 /**
  * \brief   add AE points to the current AE of a hero.
  */
-void add_hero_ae(Bit8u* hero, signed short ae)
+void add_hero_ae(struct struct_hero* hero, const signed int ae)
 {
 	/* dont add AE if hero is dead or ae = 0 */
-	if (!hero_dead(hero) && (ae > 0)) {
+	if (!hero_dead((Bit8u*)hero) && (ae > 0)) {
 
 		signed short tmp = g_update_statusline;
 		g_update_statusline = 0;
 
 		/* add AE to hero's current AE */
-		add_ptr_ws(hero + HERO_AE, ae);
+		hero->ae += ae;
 
 		/* if current AE is greater than AE maximum set current AE to AE maximum */
-		if (host_readws(hero + HERO_AE) > host_readws(hero + HERO_AE_ORIG))
-			host_writew(hero + HERO_AE, host_readws(hero + HERO_AE_ORIG));
+		if (hero->ae > hero->ae_max) {
+
+			hero->ae = hero->ae_max;
+		}
 
 		g_update_statusline = tmp;
 	}

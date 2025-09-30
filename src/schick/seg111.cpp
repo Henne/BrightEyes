@@ -497,13 +497,13 @@ void tevent_064(void)
 				} else {
 					if (test_spell((struct struct_hero*)hero, SP_SILENTIUM_SILENTILLE, 0) > 0) {
 
-						sub_ae_splash(hero, 2);
+						sub_ae_splash((struct struct_hero*)hero, 2);
 
 						gs_tevent064_silent_flag = 1;
 
 						GUI_output(get_tx2(53));
 					} else {
-						sub_ae_splash(hero, 1);
+						sub_ae_splash((struct struct_hero*)hero, 1);
 
 						GUI_output(get_ttx(606));
 					}

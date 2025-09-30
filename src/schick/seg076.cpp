@@ -306,13 +306,13 @@ void DNG_door(signed short action)
 						} else if (spell_result <= 0)
 						{
 							/* failed => half AE costs */
-							sub_ae_splash(hero, get_spell_cost(SP_FORAMEN_FORAMINOR, 1));
+							sub_ae_splash((struct struct_hero*)hero, get_spell_cost(SP_FORAMEN_FORAMINOR, 1));
 
 							play_voc(ARCHIVE_FILE_FX17_VOC);
 						} else {
 							play_voc(ARCHIVE_FILE_FX17_VOC);
 
-							sub_ae_splash(hero, get_spell_cost(SP_FORAMEN_FORAMINOR, 0));
+							sub_ae_splash((struct struct_hero*)hero, get_spell_cost(SP_FORAMEN_FORAMINOR, 0));
 
 							/* success => the door opens */
 							*(g_dng_map_ptr + MAP_POS(x,y)) = 0x0f; /* clear higher 4 bits */

@@ -328,7 +328,7 @@ void tevent_095(void)
 							/* spell succeeded */
 
 							/* TODO: magicians with 4th staff spell may pay less */
-							sub_ae_splash(hero, get_spell_cost(SP_BANNBALADIN, 0));
+							sub_ae_splash((struct struct_hero*)hero, get_spell_cost(SP_BANNBALADIN, 0));
 
 							GUI_output(get_tx2(16));
 
@@ -339,7 +339,7 @@ void tevent_095(void)
 							/* spell failed */
 
 							/* hero pays the half spell costs */
-							sub_ae_splash(hero, get_spell_cost(SP_BANNBALADIN, 1));
+							sub_ae_splash((struct struct_hero*)hero, get_spell_cost(SP_BANNBALADIN, 1));
 
 							/* TODO: some output for the player */
 

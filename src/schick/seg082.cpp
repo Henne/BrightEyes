@@ -110,7 +110,7 @@ signed short DNG07_handler(void)
 
 					if (spell_result > 0) {
 
-						sub_ae_splash(hero, get_spell_cost(SP_FORAMEN_FORAMINOR, 0));
+						sub_ae_splash((struct struct_hero*)hero, get_spell_cost(SP_FORAMEN_FORAMINOR, 0));
 
 						and_ptr_bs(amap_ptr + MAP_POS(13,2), 0x0f);
 						or_ptr_bs(amap_ptr + MAP_POS(13,2), DNG_TILE_STAIR_DOWN << 4);
@@ -119,7 +119,7 @@ signed short DNG07_handler(void)
 
 					} else if (spell_result != -99) {
 
-						sub_ae_splash(hero, get_spell_cost(SP_FORAMEN_FORAMINOR, 1));
+						sub_ae_splash((struct struct_hero*)hero, get_spell_cost(SP_FORAMEN_FORAMINOR, 1));
 
 						g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = target_pos;
 

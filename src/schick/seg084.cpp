@@ -546,7 +546,7 @@ void DNG09_chest04_loot(Bit8u* chest)
 				hero = get_hero(0) + select_hero_ok_forced(get_ttx(317)) * SIZEOF_HERO;
 				if (test_spell((struct struct_hero*)hero, SP_DESTRUCTIBO_ARCANITAS, 0) > 0)
 				{
-					sub_ae_splash(hero, 20);
+					sub_ae_splash((struct struct_hero*)hero, 20);
 
 					/* permanent AE loss of 3 */
 					sub_ptr_ws(hero + HERO_AE_ORIG, 3);
@@ -561,7 +561,7 @@ void DNG09_chest04_loot(Bit8u* chest)
 					sprintf(g_dtp2, get_tx(26), (char*)hero + HERO_NAME2);
 					GUI_output(g_dtp2);
 
-					sub_ae_splash(hero, 10);
+					sub_ae_splash((struct struct_hero*)hero, 10);
 				}
 
 			} else if (answer == 3)
@@ -569,7 +569,7 @@ void DNG09_chest04_loot(Bit8u* chest)
 				hero = get_hero(0) + select_hero_ok_forced(get_ttx(317)) * SIZEOF_HERO;
 				if (test_spell((struct struct_hero*)hero, SP_IGNIFAXIUS_FLAMMENSTRAHL, 0) > 0)
 				{
-					sub_ae_splash(hero, 35);
+					sub_ae_splash((struct struct_hero*)hero, 35);
 
 					/* permanent AE loss of 3 */
 					sub_ptr_ws(hero + HERO_AE_ORIG, 3);
@@ -584,7 +584,7 @@ void DNG09_chest04_loot(Bit8u* chest)
 					sprintf(g_dtp2,	get_tx(26), (char*)hero + HERO_NAME2);
 					GUI_output(g_dtp2);
 
-					sub_ae_splash(hero, 20);
+					sub_ae_splash((struct struct_hero*)hero, 20);
 				}
 			}
 		}

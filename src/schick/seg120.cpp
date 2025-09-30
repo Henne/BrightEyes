@@ -274,7 +274,7 @@ void rabies(struct struct_hero* hero, signed short hero_pos)
 
 								done = 1;
 
-								sub_ae_splash((Bit8u*)hero2, 15);
+								sub_ae_splash(hero2, 15);
 
 								sprintf(g_dtp2, get_ttx(746), hero->alias);
 
