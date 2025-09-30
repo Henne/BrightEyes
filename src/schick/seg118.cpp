@@ -486,7 +486,7 @@ void tevent_124(void)
 	signed short answer;
 	signed short have_climb_tools;
 	signed short skill_ret;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	have_climb_tools = 0;
 
@@ -510,13 +510,13 @@ void tevent_124(void)
 
 	} else {
 
-		hero = get_hero(0);
-		for (i = counter = 0; i <= 6; i++, hero += SIZEOF_HERO)
+		hero = (struct struct_hero*)get_hero(0);
+		for (i = counter = 0; i <= 6; i++, hero++)
 		{
-			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-				!hero_dead(hero) &&
-				(skill_ret = test_skill(hero, TA_KLETTERN, -2)) <= 0)
+			if ((hero->typus != HERO_TYPE_NONE) &&
+				(hero->group_no == gs_current_group) &&
+				!hero_dead((Bit8u*)hero) &&
+				(skill_ret = test_skill((Bit8u*)hero, TA_KLETTERN, -2)) <= 0)
 			{
 				/* the climb test failed */
 				counter++;
@@ -529,18 +529,17 @@ void tevent_124(void)
 #endif
 				{
 					/* fatal */
-					sprintf(g_dtp2, get_tx2(56), (char*)hero + HERO_NAME2,
-						GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
+					sprintf(g_dtp2, get_tx2(56), hero->alias, GUI_get_ptr(hero->sex, 0));
 					GUI_output(g_dtp2);
 
-					hero_disappear((struct struct_hero*)hero, i, -1);
+					hero_disappear(hero, i, -1);
 
 				} else {
 
-					sprintf(g_dtp2, get_tx2(55), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_tx2(55), hero->alias);
 					GUI_output(g_dtp2);
 
-					sub_hero_le(hero, random_schick(5));
+					sub_hero_le((Bit8u*)hero, random_schick(5));
 				}
 			}
 		}
@@ -549,7 +548,6 @@ void tevent_124(void)
 			GUI_output(get_tx2(54));
 		}
 	}
-
 }
 
 void tevent_125(void)
