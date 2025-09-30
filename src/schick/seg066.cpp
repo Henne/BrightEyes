@@ -314,7 +314,7 @@ void TLK_eremit(signed short state)
 			host_writeb(hero + HERO_HUNGER, host_writebs(hero + HERO_THIRST, 0));
 
 			/* heal all wounds */
-			add_hero_le(hero, host_readws(hero + HERO_LE_ORIG));
+			add_hero_le((struct struct_hero*)hero, host_readws(hero + HERO_LE_ORIG));
 		}
 
 	} else if (state == 10) {

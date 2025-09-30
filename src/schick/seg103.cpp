@@ -372,7 +372,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 										sprintf(g_dtp2,	get_ttx(691), (char*)hero + HERO_NAME2,	patient->alias, le);
 
-										add_hero_le((Bit8u*)patient, le);
+										add_hero_le(patient, le);
 
 										GUI_output(g_dtp2);
 									} else {
@@ -453,7 +453,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 								l_si = (host_readbs(hero + (HERO_TALENTS + TA_HEILEN_WUNDEN)) > 1) ? host_readbs(hero + (HERO_TALENTS + TA_HEILEN_WUNDEN)) : 1;
 
-								add_hero_le((Bit8u*)patient, l_si);
+								add_hero_le(patient, l_si);
 
 								sprintf(g_dtp2, get_ttx(691), (char*)hero + HERO_NAME2,
 									patient->alias, l_si);

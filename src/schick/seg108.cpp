@@ -180,7 +180,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					set_mod_slot(l_di, HOURS(12), consumer + (HERO_ATTRIB + 3 * ATTRIB_KK), 2, (signed char)consumer_idx);
 
 					/* LE + 2 */
-					add_hero_le(consumer, 2);
+					add_hero_le((struct struct_hero*)consumer, 2);
 
 					/* prepare output */
 					strcpy(g_dtp2, get_ttx(501));
@@ -194,7 +194,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					if (l_di > le_diff)
 						l_di = le_diff;
 
-					add_hero_le(consumer, l_di);
+					add_hero_le((struct struct_hero*)consumer, l_di);
 
 					/* prepare output */
 					sprintf(g_dtp2, get_ttx(502), l_di);
@@ -255,7 +255,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					if (le_diff < l_di)
 						l_di = le_diff;
 
-					add_hero_le(consumer, l_di);
+					add_hero_le((struct struct_hero*)consumer, l_di);
 					/* prepare output */
 
 					sprintf(g_dtp2, get_ttx(505), l_di);
@@ -338,7 +338,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					}
 
 					/* add LE */
-					add_hero_le(consumer, l_si);
+					add_hero_le((struct struct_hero*)consumer, l_si);
 
 					/* give owner a glassbottle */
 					give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
@@ -356,7 +356,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 						l_si = host_readw(consumer + HERO_LE_ORIG) - host_readw(consumer + HERO_LE);
 
 					/* add LE */
-					add_hero_le(consumer, l_si);
+					add_hero_le((struct struct_hero*)consumer, l_si);
 
 					/* give owner a copperbottle */
 					give_hero_new_item(owner, ITEM_FLASK_BRONZE, 2, 1);
@@ -383,7 +383,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 
 					/* fill up LE */
 					if (host_readws(consumer + HERO_LE) < host_readws(consumer + HERO_LE_ORIG)) {
-						add_hero_le(consumer, host_readw(consumer + HERO_LE_ORIG));
+						add_hero_le((struct struct_hero*)consumer, host_readw(consumer + HERO_LE_ORIG));
 					}
 
 					/* diseases, not all */

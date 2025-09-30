@@ -797,7 +797,7 @@ void spell_balsam(void)
 			/* reduce AE-costs and 'le_to_heal' to the available AE */
 		}
 
-		add_hero_le(get_spelltarget(), le_to_heal);
+		add_hero_le((struct struct_hero*)get_spelltarget(), le_to_heal);
 	}
 }
 
@@ -840,7 +840,7 @@ void spell_hexenspeichel(void)
 			}
 		}
 
-		add_hero_le(get_spelltarget(), g_spell_special_aecost / 2);
+		add_hero_le((struct struct_hero*)get_spelltarget(), g_spell_special_aecost / 2);
 	}
 }
 

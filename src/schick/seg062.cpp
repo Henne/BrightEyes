@@ -326,7 +326,7 @@ void ask_miracle(void)
 							{
 								/* heal hero completely */
 								/* this looks like adding more LE than missing, but the excess LE will be dealt with in add_hero_le */
-								add_hero_le(hero, host_readws(hero + HERO_LE_ORIG));
+								add_hero_le((struct struct_hero*)hero, host_readws(hero + HERO_LE_ORIG));
 							}
 						}
 

@@ -380,7 +380,7 @@ void tevent_137(void)
 
 					host_writebs(hero + HERO_HUNGER, host_writebs(hero + HERO_THIRST, 0));
 
-					add_hero_le(hero, 2);
+					add_hero_le((struct struct_hero*)hero, 2);
 				}
 			}
 		}

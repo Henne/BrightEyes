@@ -588,7 +588,7 @@ void show_outro(void)
 #endif
 
 			/* set LE to the max */
-			add_hero_le(hero, host_readws(hero + HERO_LE_ORIG));
+			add_hero_le((struct struct_hero*)hero, host_readws(hero + HERO_LE_ORIG));
 			/* set AE to the max */
 			add_hero_ae(hero, host_readws(hero + HERO_AE_ORIG));
 

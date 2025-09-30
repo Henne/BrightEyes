@@ -159,7 +159,7 @@ signed short is_hero_available_in_group(Bit8u*);
 void sub_ae_splash(Bit8u*, signed short);
 void add_hero_ae(Bit8u*, signed short);
 void sub_hero_le(Bit8u*, signed short);
-void add_hero_le(Bit8u*, signed short);
+void add_hero_le(struct struct_hero*, const signed short);
 void add_group_le(signed short);
 /* static */
 void do_starve_damage(Bit8u*, signed short, signed short);

@@ -420,7 +420,7 @@ signed short skill_cure_disease(Bit8u *healer, Bit8u *patient, signed short hand
 					(disease != ILLNESS_TYPE_WUNDFIEBER) && (disease != ILLNESS_TYPE_BLAUE_KEUCHE))
 				{
 
-					add_hero_le(patient, retval);
+					add_hero_le((struct struct_hero*)patient, retval);
 
 					sprintf(g_dtp2,
 						get_ttx(695),

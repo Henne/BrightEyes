@@ -4755,42 +4755,45 @@ void sub_hero_le(Bit8u *hero, signed short le)
  * \param   hero        pointer to the hero
  * \param   le          LE to be regenerated
  */
-void add_hero_le(Bit8u *hero, signed short le)
+void add_hero_le(struct struct_hero *hero, const signed short le)
 {
 	signed short val_bak;
 	struct struct_fighter *fighter;
 	signed short ret;
 
 	/* dead heroes never get LE */
-	if (!hero_dead(hero) && (le > 0)) {
+	if (!hero_dead((Bit8u*)hero) && (le > 0)) {
 
 		val_bak = g_update_statusline;
 		g_update_statusline = 0;
 
 		/* add LE */
-		add_ptr_ws(hero + HERO_LE, le);
+		hero->le += le;
 
 		/* set LE to maximum if greater than maximum */
-		if (host_readws(hero + HERO_LE) > host_readws(hero + HERO_LE_ORIG))
-			host_writew(hero + HERO_LE, host_readws(hero + HERO_LE_ORIG));
+		if (hero->le > hero->le_max) {
+
+			hero->le = hero->le_max;
+		}
 
 		/* if current LE is >= 5 and the hero is unconscious */
-		if ((host_readws(hero + HERO_LE) >= 5) && hero_unconscious(hero)) {
+		if ((hero->le >= 5) && hero_unconscious((Bit8u*)hero)) {
 
 			/* awake */
-			and_ptr_bs(hero + HERO_FLAGS1, 0xbf); /* set 'conscious' flag */
+			and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xbf); /* set 'conscious' flag */
 
 			/* maybe if we are in a fight */
 			if (g_in_fight) {
 
-				fighter = FIG_get_fighter(host_readb(hero + HERO_FIGHTER_ID));
+				fighter = FIG_get_fighter(hero->fighter_id);
 
-				ret = FIG_get_range_weapon_type(hero);
+				ret = FIG_get_range_weapon_type((Bit8u*)hero);
 
 				if (ret != -1) {
-					fighter->nvf_no = g_nvftab_figures_rangeweapon[host_readbs(hero + HERO_SPRITE_NO) - 1][ret][host_readbs(hero + HERO_VIEWDIR)];
+
+					fighter->nvf_no = g_nvftab_figures_rangeweapon[hero->sprite_no - 1][ret][hero->viewdir];
 				} else {
-					fighter->nvf_no = host_readb(hero + HERO_VIEWDIR);
+					fighter->nvf_no = hero->viewdir;
 				}
 
 				fighter->reload = -1;
@@ -4818,7 +4821,7 @@ void add_group_le(signed short le)
 
 		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
 		{
-			add_hero_le((Bit8u*)hero, le);
+			add_hero_le(hero, le);
 		}
 	}
 }

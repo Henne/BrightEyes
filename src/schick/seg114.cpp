@@ -343,7 +343,7 @@ void tevent_114(void)
 	signed short answer;
 	signed short done;
 	signed short j;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	done = 0;
 
@@ -382,26 +382,24 @@ void tevent_114(void)
 			/* walk through the swamp */
 			for (j = 0; j < 2; j++)
 			{
-				for (i = 0, hero = get_hero(0); i <= 6; i++, hero += SIZEOF_HERO)
+				for (i = 0, hero = (struct struct_hero*)get_hero(0); i <= 6; i++, hero++)
 				{
-					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-						!hero_dead(hero) &&
-						test_attrib(hero, ATTRIB_GE, 4) <= 0)
+					if ((hero->typus != HERO_TYPE_NONE) &&
+						(hero->group_no == gs_current_group) &&
+						!hero_dead((Bit8u*)hero) &&
+						test_attrib((Bit8u*)hero, ATTRIB_GE, 4) <= 0)
 					{
 						/* attrib test failed */
 						timewarp(MINUTES(30));
 
-						sprintf(g_dtp2,	get_tx2(23), (char*)hero + HERO_NAME2,
-							GUI_get_ptr(host_readbs(hero + HERO_SEX), 2));
-
+						sprintf(g_dtp2,	get_tx2(23), hero->alias, GUI_get_ptr(hero->sex, 2));
 						GUI_output(g_dtp2);
 
-						sub_hero_le(hero, random_schick(8));
+						sub_hero_le((Bit8u*)hero, random_schick(8));
 
-						loose_random_item(hero, 50, get_ttx(506));
-						loose_random_item(hero, 50, get_ttx(506));
-						loose_random_item(hero, 50, get_ttx(506));
+						loose_random_item((Bit8u*)hero, 50, get_ttx(506));
+						loose_random_item((Bit8u*)hero, 50, get_ttx(506));
+						loose_random_item((Bit8u*)hero, 50, get_ttx(506));
 					}
 				}
 			}
@@ -420,18 +418,18 @@ void tevent_114(void)
 				get_item(ITEM_RECIPE_STRONG_LE_POTION, 1, 1);
 
 				/* TODO: ORIGINAL-BUG: this item could have been not taken => get_hero(-1) => SEGFAULT */
-				hero = get_hero(get_first_hero_with_item(ITEM_RECIPE_STRONG_LE_POTION));
+				hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_RECIPE_STRONG_LE_POTION));
 
-				sprintf(g_dtp2,	get_tx2(27), (char*)hero + HERO_NAME2);
+				sprintf(g_dtp2,	get_tx2(27), hero->alias);
 				GUI_output(g_dtp2);
 
 				timewarp(HOURS(8));
 
-				for (i = 0, hero = get_hero(0); i <= 6; i++, hero += SIZEOF_HERO)
+				for (i = 0, hero = (struct struct_hero*)get_hero(0); i <= 6; i++, hero++)
 				{
-					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-						!hero_dead(hero))
+					if ((hero->typus != HERO_TYPE_NONE) &&
+						(hero->group_no == gs_current_group) &&
+						!hero_dead((Bit8u*)hero))
 					{
 						add_hero_le(hero, 7);
 					}
@@ -444,11 +442,9 @@ void tevent_114(void)
 
 				timewarp(HOURS(8));
 
-				for (i = 0, hero = get_hero(0); i <= 6; i++, hero += SIZEOF_HERO)
+				for (i = 0, hero = (struct struct_hero*)get_hero(0); i <= 6; i++, hero++)
 				{
-					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-						!hero_dead(hero))
+					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
 					{
 						add_hero_le(hero, 4);
 					}

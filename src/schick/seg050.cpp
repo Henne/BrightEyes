@@ -624,7 +624,7 @@ void level_up(signed short hero_pos)
 
 		/* add LE and fill them up */
 		add_ptr_ws(hero + HERO_LE_ORIG, l_si);
-		add_hero_le(hero, l_si);
+		add_hero_le((struct struct_hero*)hero, l_si);
 		/* add AE and fill them up */
 		add_ptr_ws(hero + HERO_AE_ORIG, i - l_si);
 		add_hero_ae(hero, i - l_si);
@@ -650,7 +650,7 @@ void level_up(signed short hero_pos)
 
 		/* add LE and fill them up */
 		add_ptr_ws(hero + HERO_LE_ORIG, i);
-		add_hero_le(hero, i);
+		add_hero_le((struct struct_hero*)hero, i);
 	}
 
 	status_show(hero_pos);

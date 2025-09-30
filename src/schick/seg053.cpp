@@ -183,7 +183,7 @@ void do_healer(void)
 								timewarp(MINUTES((signed long)(host_readws(hero + HERO_LE_ORIG) - host_readws(hero + HERO_LE))));
 
 								/* heal LE */
-								add_hero_le(hero, host_readws(hero + HERO_LE_ORIG));
+								add_hero_le((struct struct_hero*)hero, host_readws(hero + HERO_LE_ORIG));
 
 								/* prepare output */
 								sprintf(g_dtp2,

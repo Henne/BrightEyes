@@ -447,7 +447,7 @@ void miracle_heal_hero(signed short le_in, char *str)
 			le_in = le;
 		}
 
-		add_hero_le(get_hero(hero_pos), le_in);
+		add_hero_le((struct struct_hero*)get_hero(hero_pos), le_in);
 
 		/* prepare a message */
 		strcpy(g_text_output_buf, get_ttx(392));
@@ -474,7 +474,7 @@ void miracle_resurrect(char *str)
 			and_ptr_bs(hero + HERO_FLAGS1, 0xfe); /* unset 'dead' flag */
 
 			/* add 7 LE */
-			add_hero_le(hero, 7);
+			add_hero_le((struct struct_hero*)hero, 7);
 
 			/* update_ the status line */
 			draw_status_line();
