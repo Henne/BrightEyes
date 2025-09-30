@@ -768,7 +768,7 @@ void TLK_way_to_ruin(signed short state)
 				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 				!hero_dead(hero)) {
 
-				gs_ruin_hero = hero;
+				gs_ruin_hero = (struct struct_hero*)hero;
 
 				break;
 			}
@@ -779,16 +779,16 @@ void TLK_way_to_ruin(signed short state)
 
 	} else if (state == 10) {
 
-		g_dialog_next_state = (test_skill(gs_ruin_hero, TA_SCHWIMMEN, 5) > 0 ? 11 : 12);
+		g_dialog_next_state = (test_skill((Bit8u*)gs_ruin_hero, TA_SCHWIMMEN, 5) > 0 ? 11 : 12);
 	} else if (state == 12) {
 
-		sub_hero_le(gs_ruin_hero, random_schick(4) + 1);
+		sub_hero_le((Bit8u*)gs_ruin_hero, random_schick(4) + 1);
 
 		/* Original-Bug: hero != RUIN_HERO */
-		hero_disease_test((struct struct_hero*)gs_ruin_hero, 2,
+		hero_disease_test(gs_ruin_hero, 2,
 			25 - (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs((Bit8u*)(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK)))));
 
-		loose_random_item(gs_ruin_hero, 10, get_ttx(506));
+		loose_random_item((Bit8u*)gs_ruin_hero, 10, get_ttx(506));
 
 	} else if (state == 13 || state == 25 || state == 34 || state == 59 || state == 62) {
 		timewarp(MINUTES(30));
@@ -800,8 +800,8 @@ void TLK_way_to_ruin(signed short state)
 		g_dialog_next_state = (test_skill(hero2, TA_ORIENTIERUNG, 5) > 0 ? 18 : 19);
 	} else if (state == 19) {
 		timewarp(MINUTES(20));
-		gs_ruin_hero = get_hero(get_random_hero());
-		g_dialog_next_state = (test_attrib((struct struct_hero*)gs_ruin_hero, ATTRIB_GE, 2) > 0 ? 20 : 21);
+		gs_ruin_hero = (struct struct_hero*)get_hero(get_random_hero());
+		g_dialog_next_state = (test_attrib(gs_ruin_hero, ATTRIB_GE, 2) > 0 ? 20 : 21);
 	} else if (state == 20) {
 		loose_random_item(get_hero(get_random_hero()), 5, get_ttx(506));
 	} else if (state == 21) {

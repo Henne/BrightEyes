@@ -437,8 +437,8 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 					} else if (txt_id == 14 || txt_id == 15 || txt_id == 76) {
 
-						sprintf(dst, fmt, (char*)gs_ruin_hero + HERO_NAME2,
-							GUI_get_ptr(host_readbs(gs_ruin_hero + HERO_SEX), 0));
+						sprintf(dst, fmt, gs_ruin_hero->alias,
+							GUI_get_ptr(gs_ruin_hero->sex, 0));
 
 					} else if (txt_id == 26 || txt_id == 65) {
 
