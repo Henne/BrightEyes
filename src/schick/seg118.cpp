@@ -44,7 +44,7 @@ void tevent_037(void)
 	signed short answer;
 	signed short done;
 	signed short hours;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	done = 0;
 
@@ -136,14 +136,12 @@ void tevent_037(void)
 					gs_tevent037_flag = 1;
 
 					/* select a hero randomly */
-					hero = get_hero(answer = get_random_hero());
+					hero = (struct struct_hero*)get_hero(answer = get_random_hero());
 
-					sprintf(g_dtp2, get_tx2(45), (char*)hero + HERO_NAME2,
-						GUI_get_ptr(host_readbs(hero + HERO_SEX), 2));
-
+					sprintf(g_dtp2, get_tx2(45), hero->alias, GUI_get_ptr(hero->sex, 2));
 					GUI_output(g_dtp2);
 
-					add_hero_ap((struct struct_hero*)hero, 20);
+					add_hero_ap(hero, 20);
 
 					add_hero_ap_all(20);
 
@@ -165,13 +163,13 @@ void tevent_037(void)
 							if (strcmp(g_text_input_buf, g_str_rad3))
 							{
 								sprintf(g_dtp2, get_tx2(50),
-									(char*)hero + HERO_NAME2, (GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-									(char*)hero + HERO_NAME2, (GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
+									hero->alias, GUI_get_ptr(hero->sex, 0),
+									hero->alias, GUI_get_ptr(hero->sex, 2));
 
 								GUI_output(g_dtp2);
 
 								/* the hero is now lost completely */
-								hero_disappear((struct struct_hero*)hero, answer, -1);
+								hero_disappear(hero, answer, -1);
 
 								done = 1;
 							} else {
@@ -210,11 +208,11 @@ void tevent_037(void)
 					if (answer == 2)
 					{
 						/* select a hero randomly */
-						hero = get_hero(get_random_hero());
+						hero = (struct struct_hero*)get_hero(get_random_hero());
 
 						timewarp(HOURS(1));
 
-						sprintf(g_dtp2, get_tx2(44), (char*)hero + HERO_NAME2);
+						sprintf(g_dtp2, get_tx2(44), hero->alias);
 						GUI_output(g_dtp2);
 					}
 				}
@@ -246,7 +244,7 @@ void tevent_078(void)
 	signed short answer;
 	signed short found_path;
 	signed short days;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	/* This event happens only in winter */
 	if (!get_current_season())
@@ -339,17 +337,17 @@ void tevent_078(void)
 				timewarp(HOURS(8));
 
 				/* TODO: Original-Bug: all heroes die, even if they are not in the current group */
-				hero = get_hero(0);
-				for (tmp = 0; tmp <= 6; tmp++, hero += SIZEOF_HERO)
+				hero = (struct struct_hero*)get_hero(0);
+				for (tmp = 0; tmp <= 6; tmp++, hero++)
 				{
 #ifndef M302de_ORIGINAL_BUGFIX
 					/* Original-Bug 16: all heroes die, even if they are not in the current group */
-					hero_disappear((struct struct_hero*)hero, tmp, -1);
+					hero_disappear(hero, tmp, -1);
 #else
-					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == gs_current_group
-					) {
-						hero_disappear((struct struct_hero*)hero, tmp, -1);
+					if ((hero->typus != HERO_TYPE_NONE) &&
+						(hero->group_no == gs_current_group))
+					{
+						hero_disappear(hero, tmp, -1);
 					}
 #endif
 				}
@@ -366,7 +364,7 @@ void tevent_079(void)
 		gs_tevent079_flag != 0)
 	{
 		TRV_found_camp_place(0);
-		gs_tevent079_flag = (1);
+		gs_tevent079_flag = 1;
 	}
 }
 
@@ -394,7 +392,7 @@ void tevent_051(void)
 
 			if (answer == 1)
 			{
-				gs_travel_detour = (DUNGEONS_SPINNENHOEHLE);
+				gs_travel_detour = DUNGEONS_SPINNENHOEHLE;
 			}
 		}
 
@@ -409,7 +407,7 @@ void tevent_051(void)
 
 		if (answer == 1)
 		{
-			gs_travel_detour = (DUNGEONS_SPINNENHOEHLE);
+			gs_travel_detour = DUNGEONS_SPINNENHOEHLE;
 		}
 	}
 }
