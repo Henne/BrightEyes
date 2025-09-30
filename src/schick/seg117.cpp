@@ -95,7 +95,7 @@ void resume_traveling(void)
 void hunt_karen(void)
 {
 	signed short answer;
-	Bit8u *hero;
+	struct struct_hero *hero;
 	signed short passed;
 	signed short i;
 
@@ -103,6 +103,7 @@ void hunt_karen(void)
 
 	do {
 		answer = GUI_radio(get_tx2(0), 2, get_tx2(1), get_tx2(2));
+
 	} while (answer == -1);
 
 	if (answer == 1) {
@@ -112,15 +113,14 @@ void hunt_karen(void)
 			(get_first_hero_with_item(ITEM_CROSSBOW) != -1) ||
 			(get_first_hero_with_item(ITEM_SPEAR) != -1))
 		{
-
-			hero = get_hero(0);
+			hero = (struct struct_hero*)get_hero(0);
 			/* make a STEALTH+2 test and count the heroes who passed it */
-			for (i = passed = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+			for (i = passed = 0; i <= 6; i++, hero++) {
 
-				if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-					(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
-					!hero_dead(hero) &&
-					(test_skill((struct struct_hero*)hero, TA_SCHLEICHEN, 2) > 0))
+				if ((hero->typus != HERO_TYPE_NONE) &&
+					(hero->group_no == gs_current_group) &&
+					!hero_dead((Bit8u*)hero) &&
+					(test_skill(hero, TA_SCHLEICHEN, 2) > 0))
 				{
 					passed++;
 				}
@@ -132,13 +132,11 @@ void hunt_karen(void)
 				GUI_output(get_tx2(5));
 
 				/* make a MISSLE WEAPON+0 test and count the heroes who passed it */ /* TODO 2021-04-18: Original-Bug: Why TA_SCHUSSWAFFEN for spears? */
-				hero = get_hero(0);
-				for (i = passed = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+				hero = (struct struct_hero*)get_hero(0);
+				for (i = passed = 0; i <= 6; i++, hero++) {
 
-					if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-						(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
-						!hero_dead(hero) &&
-						(test_skill((struct struct_hero*)hero, TA_SCHUSSWAFFEN, 0) > 0))
+					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+						!hero_dead((Bit8u*)hero) && (test_skill(hero, TA_SCHUSSWAFFEN, 0) > 0))
 					{
 						passed++;
 					}
@@ -491,7 +489,7 @@ void octopus_attack(void)
 void hunt_bison(void)
 {
 	signed short answer;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	pause_traveling(29);
 
@@ -501,17 +499,19 @@ void hunt_bison(void)
 	} while (answer == -1);
 
 	if (answer == 1) {
+
 		timewarp(MINUTES(30));
 		GUI_output(get_tx2(38));
+
 	} else {
 		GUI_output(get_tx2(36));
 
-		hero = get_hero(get_random_hero());
-		sprintf(g_dtp2, get_tx2(37), (char*)hero + HERO_NAME2);
+		hero = (struct struct_hero*)get_hero(get_random_hero());
+		sprintf(g_dtp2, get_tx2(37), hero->alias);
 		GUI_output(g_dtp2);
 
-		sub_hero_le(hero, random_schick(6));
-		add_hero_ap((struct struct_hero*)hero, 2);
+		sub_hero_le((Bit8u*)hero, random_schick(6));
+		add_hero_ap(hero, 2);
 	}
 
 	resume_traveling();
@@ -520,7 +520,7 @@ void hunt_bison(void)
 void hunt_rhino(void)
 {
 	signed short answer;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	pause_traveling(33);
 
@@ -530,16 +530,18 @@ void hunt_rhino(void)
 	} while (answer == -1);
 
 	if (answer == 1) {
+
 		timewarp(MINUTES(30));
 		GUI_output(get_tx2(44));
+
 	} else {
 		GUI_output(get_tx2(42));
 
-		hero = get_hero(get_random_hero());
-		sprintf(g_dtp2, get_tx2(43), (char*)hero + HERO_NAME2);
+		hero = (struct struct_hero*)get_hero(get_random_hero());
+		sprintf(g_dtp2, get_tx2(43), hero->alias);
 		GUI_output(g_dtp2);
-		sub_hero_le(hero, dice_roll(2, 6, 0));
-		add_hero_ap((struct struct_hero*)hero, 6);
+		sub_hero_le((Bit8u*)hero, dice_roll(2, 6, 0));
+		add_hero_ap(hero, 6);
 	}
 
 	resume_traveling();
@@ -738,10 +740,10 @@ void tevent_115(void)
 void TLK_way_to_ruin(signed short state)
 {
 	signed short i;
-	unsigned char *hero;
-	Bit8u *hero2;
+	struct struct_hero *hero;
+	struct struct_hero *hero2;
 
-	hero2 = (Bit8u*)get_first_hero_available_in_group();
+	hero2 = (struct struct_hero*)get_first_hero_available_in_group();
 
 	if (!state) {
 
@@ -753,22 +755,21 @@ void TLK_way_to_ruin(signed short state)
 	} else if (state == 4 || state == 7) {
 		timewarp(HOURS(1));
 	} else if (state == 6) {
-		hero = get_hero(get_random_hero());
-		g_dialog_next_state = (test_skill((struct struct_hero*)hero, TA_WILDNISLEBEN, 6) > 0 ? 8 : 7);
+		hero = (struct struct_hero*)get_hero(get_random_hero());
+		g_dialog_next_state = (test_skill(hero, TA_WILDNISLEBEN, 6) > 0 ? 8 : 7);
 	} else if (state == 8) {
 		timewarp(HOURS(1));
 		TRV_ford_test(0, 30);
 	} else if (state == 9) {
 
 		do {
-			hero = get_hero(g_tlk_ruin_hero_counter);
+			hero = (struct struct_hero*)get_hero(g_tlk_ruin_hero_counter);
 			g_tlk_ruin_hero_counter++;
 
-			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-				!hero_dead(hero)) {
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+				!hero_dead((Bit8u*)hero)) {
 
-				gs_ruin_hero = (struct struct_hero*)hero;
+				gs_ruin_hero = hero;
 
 				break;
 			}
@@ -779,14 +780,14 @@ void TLK_way_to_ruin(signed short state)
 
 	} else if (state == 10) {
 
-		g_dialog_next_state = (test_skill((struct struct_hero*)(Bit8u*)gs_ruin_hero, TA_SCHWIMMEN, 5) > 0 ? 11 : 12);
+		g_dialog_next_state = (test_skill(gs_ruin_hero, TA_SCHWIMMEN, 5) > 0 ? 11 : 12);
+
 	} else if (state == 12) {
 
 		sub_hero_le((Bit8u*)gs_ruin_hero, random_schick(4) + 1);
 
 		/* Original-Bug: hero != RUIN_HERO */
-		hero_disease_test(gs_ruin_hero, 2,
-			25 - (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs((Bit8u*)(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK)))));
+		hero_disease_test(gs_ruin_hero, 2, 25 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
 
 		loose_random_item((Bit8u*)gs_ruin_hero, 10, get_ttx(506));
 
@@ -797,7 +798,7 @@ void TLK_way_to_ruin(signed short state)
 	} else if (state == 15 || state == 16) {
 		timewarp(MINUTES(20));
 	} else if (state == 17) {
-		g_dialog_next_state = (test_skill((struct struct_hero*)hero2, TA_ORIENTIERUNG, 5) > 0 ? 18 : 19);
+		g_dialog_next_state = (test_skill(hero2, TA_ORIENTIERUNG, 5) > 0 ? 18 : 19);
 	} else if (state == 19) {
 		timewarp(MINUTES(20));
 		gs_ruin_hero = (struct struct_hero*)get_hero(get_random_hero());
@@ -806,8 +807,8 @@ void TLK_way_to_ruin(signed short state)
 		loose_random_item(get_hero(get_random_hero()), 5, get_ttx(506));
 	} else if (state == 21) {
 		timewarp(MINUTES(10));
-		loose_random_item(hero2, 10, get_ttx(506));
-		sub_hero_le(hero2, random_schick(4) + 2);
+		loose_random_item((Bit8u*)hero2, 10, get_ttx(506));
+		sub_hero_le((Bit8u*)hero2, random_schick(4) + 2);
 	} else if (state == 22 || state == 30 || state == 52 || state == 53) {
 		timewarp(HOURS(3));
 	} else if (state == 26 || state == 36 || state == 37 || state == 38 || state == 39) {
@@ -818,16 +819,14 @@ void TLK_way_to_ruin(signed short state)
 		timewarp(HOURS(5));
 	} else if (state == 28) {
 
-		hero = get_hero(0);
+		hero = (struct struct_hero*)get_hero(0);
 
-		for (i = g_tlk_ruin_hero_counter = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+		for (i = g_tlk_ruin_hero_counter = 0; i <= 6; i++, hero++) {
 
-			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-				!hero_dead(hero) &&
-				test_skill((struct struct_hero*)hero, TA_ORIENTIERUNG, 0) > 0) {
-
-					g_tlk_ruin_hero_counter++;
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+				!hero_dead((Bit8u*)hero) && (test_skill(hero, TA_ORIENTIERUNG, 0) > 0))
+		       	{
+				g_tlk_ruin_hero_counter++;
 			}
 		}
 
@@ -847,16 +846,14 @@ void TLK_way_to_ruin(signed short state)
 
 	} else if (state == 48) {
 
-		hero = get_hero(0);
+		hero = (struct struct_hero*)get_hero(0);
 
-		for (i = g_tlk_ruin_hero_counter = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+		for (i = g_tlk_ruin_hero_counter = 0; i <= 6; i++, hero++) {
 
-			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-				!hero_dead(hero) &&
-				test_skill((struct struct_hero*)hero, TA_ORIENTIERUNG, 0) > 0) {
-
-					g_tlk_ruin_hero_counter++;
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+				!hero_dead((Bit8u*)hero) && (test_skill(hero, TA_ORIENTIERUNG, 0) > 0))
+			{
+				g_tlk_ruin_hero_counter++;
 			}
 		}
 

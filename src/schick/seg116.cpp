@@ -118,14 +118,13 @@ void tevent_131(void)
 
 void tevent_132(void)
 {
-
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 1) > 0 && !gs_tevent132_flag) || gs_tevent132_flag)
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 1) > 0 && !gs_tevent132_flag) || gs_tevent132_flag)
 	{
 
 		/* set this camp place as known */
 		gs_tevent132_flag = 1;
 
-		if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 1) > 0 && !gs_tevent132_herb_flag) || gs_tevent132_herb_flag) {
+		if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 1) > 0 && !gs_tevent132_herb_flag) || gs_tevent132_herb_flag) {
 
 			gs_tevent132_herb_flag = 1;
 			g_gather_herbs_special = 61;
@@ -141,7 +140,7 @@ void tevent_133(void)
 {
 	signed short i;
 	signed short answer;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	do {
 		answer = GUI_radio(get_tx2(35), 2, get_tx2(36), get_tx2(37));
@@ -156,31 +155,26 @@ void tevent_133(void)
 
 		GUI_output(get_tx2(38));
 
-		hero = get_hero(0);
-		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+		hero = (struct struct_hero*)get_hero(0);
+		for (i = 0; i <= 6; i++, hero++) {
 
-			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-				!hero_dead(hero))
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
 			{
 				timewarp(HOURS(1));
 
-				if (test_attrib((struct struct_hero*)hero, ATTRIB_GE, 4) <= 0) {
-					/* test failed */
+				if (test_attrib(hero, ATTRIB_GE, 4) <= 0) {
 
+					/* test failed */
 					timewarp(HOURS(1));
 
-					sprintf(g_dtp2, get_tx2(39), (char*)hero + HERO_NAME2,
-						GUI_get_ptr(host_readbs(hero + HERO_SEX), 3),
-						GUI_get_ptr(host_readbs(hero + HERO_SEX), 2));
-
+					sprintf(g_dtp2, get_tx2(39), hero->alias, GUI_get_ptr(hero->sex, 3), GUI_get_ptr(hero->sex, 2));
 					GUI_output(g_dtp2);
 
-					sub_hero_le(hero, random_schick(8));
+					sub_hero_le((Bit8u*)hero, random_schick(8));
 
-					loose_random_item(hero, 50, get_ttx(506));
-					loose_random_item(hero, 50, get_ttx(506));
-					loose_random_item(hero, 50, get_ttx(506));
+					loose_random_item((Bit8u*)hero, 50, get_ttx(506));
+					loose_random_item((Bit8u*)hero, 50, get_ttx(506));
+					loose_random_item((Bit8u*)hero, 50, get_ttx(506));
 				}
 			}
 		}
@@ -191,7 +185,7 @@ void tevent_133(void)
 
 void tevent_134(void)
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 6) > 0 && !gs_tevent134_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 6) > 0 && !gs_tevent134_flag) ||
 		gs_tevent134_flag)
 	{
 		g_gather_herbs_special = 157;
@@ -422,15 +416,15 @@ void tevent_139(void)
 
 		timewarp(HOURS(6));
 
-		GUI_output((i = test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 3)) > 0 ? get_tx2(66) : get_tx2(68));
+		GUI_output((i = test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 3)) > 0 ? get_tx2(66) : get_tx2(68));
 	} else {
 		timewarp(HOURS(2));
 
-		GUI_output((i = test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 5)) > 0 ? get_tx2(67) : get_tx2(69));
+		GUI_output((i = test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 5)) > 0 ? get_tx2(67) : get_tx2(69));
 	}
 
 	if (i <= 0) {
-		if (test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 3) > 0) {
+		if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 3) > 0) {
 
 			timewarp(HOURS(2));
 
@@ -452,12 +446,12 @@ void tevent_139(void)
 
 void tevent_140(void)
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent140_flag) || gs_tevent140_flag) {
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent140_flag) || gs_tevent140_flag) {
 
 		/* set this camp place as known */
 		gs_tevent140_flag = 1;
 
-		if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 && !gs_tevent140_herb_flag) || gs_tevent140_herb_flag) {
+		if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 && !gs_tevent140_herb_flag) || gs_tevent140_herb_flag) {
 
 			gs_tevent140_herb_flag = 1;
 			g_gather_herbs_special = -126;
@@ -471,7 +465,7 @@ void tevent_140(void)
 
 void tevent_141(void)
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 0) > 0 && !gs_tevent141_flag) || gs_tevent141_flag)
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 0) > 0 && !gs_tevent141_flag) || gs_tevent141_flag)
 	{
 		/* set this camp place as known */
 		gs_tevent141_flag = 1;
@@ -484,7 +478,7 @@ void tevent_141(void)
 
 void tevent_142(void)
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent142_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent142_flag) ||
 		gs_tevent142_flag)
 	{
 		/* set this camp place as known */
@@ -518,16 +512,16 @@ void tevent_143(void)
 
 		timewarp(HOURS(4));
 
-		GUI_output((i = test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 2)) > 0 ? get_tx2(3) : get_tx2(5));
+		GUI_output((i = test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 2)) > 0 ? get_tx2(3) : get_tx2(5));
 	} else {
 		timewarp(HOURS(1));
 
-		GUI_output((i = test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 4)) > 0 ? get_tx2(4) : get_tx2(6));
+		GUI_output((i = test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 4)) > 0 ? get_tx2(4) : get_tx2(6));
 	}
 
 	if (i <= 0) {
 
-		if (test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 3) > 0) {
+		if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 3) > 0) {
 
 			timewarp(HOURS(1));
 
@@ -628,7 +622,7 @@ void tevent_144(void)
 				/* you won the final fight */
 				GUI_output(get_tx2(17));
 
-				g_game_state = (GAME_STATE_VICTORY);
+				g_game_state = GAME_STATE_VICTORY;
 
 				add_hero_ap_all(500);
 
@@ -637,7 +631,7 @@ void tevent_144(void)
 			} else {
 				/* you lost the final fight */
 				GUI_output(get_tx2(18));
-				g_game_state = (GAME_STATE_DEAD);
+				g_game_state = GAME_STATE_DEAD;
 			}
 
 #if !defined(__BORLANDC__)
@@ -703,11 +697,11 @@ void TLK_old_woman(signed short state)
 	} else if (state == 34) {
 		g_dialog_next_state = (gs_current_town == TOWNS_FELSTEYN ? 35 : 39);
 	} else if (state == 37) {
-		gs_tevent093_flag = (gs_tevent088_flag = (1));
+		gs_tevent093_flag = gs_tevent088_flag = 1;
 	} else if (state == 38) {
 		timewarp(HOURS(1));
 	} else if (state == 41) {
-		gs_tevent093_flag = (gs_tevent091_flag = ((gs_informer_flags[INFORMER_ISLEIF] = gs_isleif_jandas_regards = 1)));
+		gs_tevent093_flag = gs_tevent091_flag = gs_informer_flags[INFORMER_ISLEIF] = gs_isleif_jandas_regards = 1;
 	}
 }
 
