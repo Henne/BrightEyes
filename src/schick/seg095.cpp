@@ -27,10 +27,9 @@ namespace M302de {
 
 unsigned short npc_meetings(unsigned short type_index)
 {
-
 	/* check if an NPC is in the party and if we
 		already had an NPC conversation here */
-	if (!host_readbs(get_hero(6) + HERO_TYPE) && (type_index != gs_npc_meet_tavern)) {
+	if (!((struct struct_hero*)get_hero(6))->typus && (type_index != gs_npc_meet_tavern)) {
 
 		gs_npc_meet_tavern = type_index;
 
@@ -87,26 +86,27 @@ unsigned short npc_meetings(unsigned short type_index)
 
 void npc_farewell(void)
 {
-	Bit8u *hero_i;
+	struct struct_hero *hero_i;
 	signed short i;
 	signed short tmp;
 
 	/* no NPC there */
-	if (host_readb(get_hero(6) + HERO_TYPE) == HERO_TYPE_NONE)
+	if (((struct struct_hero*)get_hero(6))->typus == HERO_TYPE_NONE)
 		return;
 
 	/* no NPC in that group */
-	if (host_readb(get_hero(6) + HERO_GROUP_NO) != gs_current_group)
+	if (((struct struct_hero*)get_hero(6))->group_no != gs_current_group)
 		return;
 
 	/* Unconscious or dead NPCs cannot be removed automatically (99 means manual). */
-	if (check_hero(get_hero(6)) == 0 && gs_npc_months < 99)
+	if (check_hero((Bit8u*)get_hero(6)) == 0 && (gs_npc_months < 99))
 		return;
 
 	tmp = g_tx_file_index;
 	load_tx(ARCHIVE_FILE_NSC_LTX);
 
-	switch (host_readbs(get_hero(6) + HERO_NPC_ID)) {
+	switch (((struct struct_hero*)get_hero(6))->npc_id) {
+
 		case NPC_NARIELL: {
 			if (gs_npc_months >= 2)
 				remove_npc(0x14, 0x1f, 0xe2, get_ttx(753), get_tx(9));
@@ -122,11 +122,9 @@ void npc_farewell(void)
 
 					remove_npc(0x16, 0x1f, 0xe3, get_ttx(754), get_tx(19));
 
-					hero_i = get_hero(0);
-					for (i = 0; i < 6; i++, hero_i += SIZEOF_HERO) {
-						if (host_readb(hero_i + HERO_TYPE) &&
-							(host_readb(hero_i + HERO_GROUP_NO) == gs_current_group) &&
-							(!hero_dead(hero_i)))
+					hero_i = (struct struct_hero*)get_hero(0);
+					for (i = 0; i < 6; i++, hero_i++) {
+						if ((hero_i->typus) && (hero_i->group_no == gs_current_group) && (!hero_dead((Bit8u*)hero_i)))
 						{
 							/* Original-Bug 42:
 							 * When NPC Harika leaves the party, all non-dead heroes in the same group get up to
@@ -136,13 +134,13 @@ void npc_farewell(void)
 							 * This does not make sense. */
 
 #ifdef M302de_ORIGINAL_BUGFIX
-							char ta_rise_bak = host_readbs(hero_i + HERO_TA_RISE);
+							char ta_rise_bak = hero_i->skill_incs;
 #endif
 							/* All non-dead heroes in the same group get a chance to increase TA_SCHLEICHEN */
-							inc_skill_novice(hero_i, TA_SCHLEICHEN);
+							inc_skill_novice((Bit8u*)hero_i, TA_SCHLEICHEN);
 #ifdef M302de_ORIGINAL_BUGFIX
 							/* The unwanted reduction is done within the function inc_skill_novice(). We revert it. */
-							host_writebs(hero_i + HERO_TA_RISE, ta_rise_bak);
+							hero_i->skill_incs = ta_rise_bak;
 #endif
 						}
 					}
@@ -478,20 +476,20 @@ void remove_npc(signed short head_index, signed char days,
 
 	/* reset NPCs groups position */
 	/* TODO: this is bogus, since memset() will come */
-	host_writeb(get_hero(6) + HERO_GROUP_POS, 0);
+	((struct struct_hero*)get_hero(6))->group_pos = 0;
 
 	/* save the NPC */
 	save_npc(index);
 
 	/* print farewell message if the NPC has and can */
-        if (text && check_hero(get_hero(6))) {
+        if (text && check_hero((Bit8u*)get_hero(6))) {
 
 		load_in_head(head_index);
 		GUI_dialogbox((unsigned char*)g_dtp2, name, text, 0);
 	}
 
 	/* clear the NPC from memory */
-	memset(get_hero(6), 0, SIZEOF_HERO);
+	memset((void*)get_hero(6), 0, sizeof(struct struct_hero));
 
 	/* dec group counter */
 	gs_group_member_counts[gs_current_group]--;
@@ -503,7 +501,7 @@ void remove_npc(signed short head_index, signed char days,
 
 	/* TODO:	check_hero() will now, after memset() return 0,
 			so the parameter days is useless */
-	if (check_hero(get_hero(6)))
+	if (check_hero((Bit8u*)get_hero(6)))
 		gs_npc_timers[index - 0xe1] = days;
 	else
 		gs_npc_timers[index - 0xe1] = -1;
@@ -515,7 +513,7 @@ void add_npc(signed short index)
 	load_npc(index);
 
 	/* overwrite the picture of the NPC with one from IN_HEAD.NVF */
-	memcpy(get_hero(6) + HERO_PORTRAIT, g_dtp2, 0x400);
+	memcpy(((struct struct_hero*)get_hero(6))->pic, g_dtp2, 0x400);
 
 	/* increment heroes in that group */
 	gs_group_member_counts[gs_current_group]++;
@@ -526,11 +524,11 @@ void add_npc(signed short index)
 	/* reset the months the NPC is in the group */
 	gs_npc_months = 0;
 
-	/* set a number to deciede between the NPCs (1-6) */
-	host_writeb(get_hero(6) + HERO_NPC_ID, index - 0xe1);
+	/* set a number to decide between the NPCs (1-6) */
+	((struct struct_hero*)get_hero(6))->npc_id = index - 0xe1;
 
 	/* set the group the NPC contains in */
-	host_writeb(get_hero(6) + HERO_GROUP_NO, gs_current_group);
+	((struct struct_hero*)get_hero(6))->group_no = gs_current_group;
 
 	draw_status_line();
 }

@@ -175,7 +175,7 @@ void hunt_karen(void)
 void hunt_wildboar(void)
 {
 	signed short answer;
-	Bit8u *hero;
+	struct struct_hero *hero;
 	signed short i;
 	signed short passed;
 
@@ -183,6 +183,7 @@ void hunt_wildboar(void)
 
 	do {
 		answer = GUI_radio(get_tx2(10), 2, get_tx2(11), get_tx2(12));
+
 	} while (answer == -1);
 
 	if (answer == 1) {
@@ -193,14 +194,12 @@ void hunt_wildboar(void)
 			(get_first_hero_with_item(ITEM_SPEAR) != -1))
 		{
 
-			hero = get_hero(0);
+			hero = (struct struct_hero*)get_hero(0);
 			/* make a STEALTH+0 test and count the heroes who passed it */
-			for (i = passed = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+			for (i = passed = 0; i <= 6; i++, hero++) {
 
-				if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-					(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
-					!hero_dead(hero) &&
-					(test_skill((struct struct_hero*)hero, TA_SCHLEICHEN, 0) > 0))
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+					!hero_dead((Bit8u*)hero) && (test_skill(hero, TA_SCHLEICHEN, 0) > 0))
 				{
 					passed++;
 				}
@@ -212,13 +211,11 @@ void hunt_wildboar(void)
 				GUI_output(get_tx2(15));
 
 				/* make a MISSLE WEAPON+0 test and count the heroes who passed it */ /* TODO 2021-04-18: Original-Bug: Why TA_SCHUSSWAFFEN for spears? */
-				hero = get_hero(0);
-				for (i = passed = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+				hero = (struct struct_hero*)get_hero(0);
+				for (i = passed = 0; i <= 6; i++, hero++) {
 
-					if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-						(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
-						!hero_dead(hero) &&
-						(test_skill((struct struct_hero*)hero, TA_SCHUSSWAFFEN, 0) > 0))
+					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+						!hero_dead((Bit8u*)hero) && (test_skill(hero, TA_SCHUSSWAFFEN, 0) > 0))
 					{
 						passed++;
 					}
@@ -250,7 +247,7 @@ void hunt_wildboar(void)
 
 void hunt_cavebear(void)
 {
-	Bit8u *hero;
+	struct struct_hero *hero;
 	signed short answer;
 	signed short i;
 
@@ -258,6 +255,7 @@ void hunt_cavebear(void)
 
 	do {
 		answer = GUI_radio(get_tx2(19), 2, get_tx2(20), get_tx2(21));
+
 	} while (answer == -1);
 
 	if (answer == 1) {
@@ -271,34 +269,30 @@ void hunt_cavebear(void)
 	} else {
 		GUI_output(get_tx2(22));
 
-		hero = get_hero(0);
-		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+		hero = (struct struct_hero*)get_hero(0);
+		for (i = 0; i <= 6; i++, hero++) {
 
-			if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
-				!hero_dead(hero))
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
 			{
 
 				/* AT of the current weapon - (RS-BE / 2) <= 1W20 */
-				if ((host_readbs(hero + HERO_AT + host_readbs(hero + HERO_WEAPON_TYPE)) - (host_readbs(hero + HERO_RS_BE) / 2)) <= random_schick(20))
+				if ((hero->at_weapon[hero->w_type] - (hero->rs_be / 2)) <= random_schick(20))
 				{
 #if !defined(__BORLANDC__)
-					D1_INFO("%-16s erhaelt 5 AP fuer eine gelungene Attacke.\n",
-						(char*)(hero + HERO_NAME2));
+					D1_INFO("%-16s erhaelt 5 AP fuer eine gelungene Attacke.\n", hero->alias);
 #endif
-					add_hero_ap((struct struct_hero*)hero, 5);
+					add_hero_ap(hero, 5);
 				}
 
 				/* PA of the current weapon - (RS-BE / 2) <= 1W20 */
-				if ((host_readbs(hero + HERO_PA + host_readbs(hero + HERO_WEAPON_TYPE)) - (host_readbs(hero + HERO_RS_BE) / 2)) > random_schick(20))
+				if ((hero->pa_weapon[hero->w_type] - hero->rs_be / 2) > random_schick(20))
 				{
 #if !defined(__BORLANDC__)
-					D1_INFO("%-16s erhaelt 3 AP fuer eine misslungene Parade.\n",
-						(char*)(hero + HERO_NAME2));
+					D1_INFO("%-16s erhaelt 3 AP fuer eine misslungene Parade.\n", hero->alias);
 #endif
 
-					add_hero_ap((struct struct_hero*)hero, 3);
-					sub_hero_le(hero, dice_roll(2, 6, 0));
+					add_hero_ap(hero, 3);
+					sub_hero_le((Bit8u*)hero, dice_roll(2, 6, 0));
 				}
 			}
 		}
@@ -313,7 +307,7 @@ void hunt_cavebear(void)
 void hunt_viper(void)
 {
 	signed short choosen_hero;
-	Bit8u *hero_i;
+	struct struct_hero *hero_i;
 	signed short l_di;
 	signed short i;
 
@@ -322,19 +316,17 @@ void hunt_viper(void)
 
 	GUI_output(get_tx2(25));
 
-	hero_i = get_hero(0);
+	hero_i = (struct struct_hero*)get_hero(0);
 
-	for (i = l_di = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
+	for (i = l_di = 0; i <= 6; i++, hero_i++) {
 
 		/* hero is valid */
 		/* hero is in current group */
 		/* hero is not dead */
 		/* check GE+0 */
 		/* Original-Bug: something was forgotten */
-		if ((host_readb(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readb(hero_i + HERO_GROUP_NO) == gs_current_group) &&
-			(!hero_dead(hero_i)) &&
-			(test_attrib((struct struct_hero*)hero_i, ATTRIB_GE, 0) < l_di))
+		if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_no == gs_current_group) &&
+			(!hero_dead((Bit8u*)hero_i)) &&	(test_attrib(hero_i, ATTRIB_GE, 0) < l_di))
 		{
 			/* remember the hero */
 			choosen_hero = i;
@@ -344,24 +336,23 @@ void hunt_viper(void)
 	if (l_di) {
 
 		/* select the chosen hero */
-		hero_i = get_hero(choosen_hero);
+		hero_i = (struct struct_hero*)get_hero(choosen_hero);
 
 		/* print a message */
-		sprintf(g_dtp2, get_tx2(26), hero_i + HERO_NAME2);
-
+		sprintf(g_dtp2, get_tx2(26), hero_i->alias);
 		GUI_output(g_dtp2);
 
 		/* hero gets 2 AP */
-		add_hero_ap((struct struct_hero*)hero_i, 2);
+		add_hero_ap(hero_i, 2);
 
 		if (random_schick(100) <= 50) {
 			/* hero gets bitten */
 
 			/* hero gets 3 AP */
-			add_hero_ap((struct struct_hero*)hero_i, 3);
+			add_hero_ap(hero_i, 3);
 
 			/* and 2 * 3W6 damage */
-			sub_hero_le(hero_i, dice_roll(3, 6, 0) * 2);
+			sub_hero_le((Bit8u*)hero_i, dice_roll(3, 6, 0) * 2);
 		}
 	} else {
 		GUI_output(get_tx2(27));
@@ -376,7 +367,7 @@ void octopus_attack(void)
 	signed short hits;
 	signed short tmp;
 	char overboard[7];
-	Bit8u *hero;
+	struct struct_hero *hero;
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 22: see below */
 	char any_hero_active;
@@ -394,13 +385,11 @@ void octopus_attack(void)
 		/* Original-Bug 22: see below */
 		any_hero_active = 0;
 #endif
-		hero = get_hero(0);
-		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+		hero = (struct struct_hero*)get_hero(0);
+		for (i = 0; i <= 6; i++, hero++) {
 
-			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-				!hero_dead(hero) &&
-				!overboard[i])
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+				!hero_dead((Bit8u*)hero) && !overboard[i])
 			{
 #ifdef M302de_ORIGINAL_BUGFIX
 				/* Original-Bug 22: see below */
@@ -413,18 +402,18 @@ void octopus_attack(void)
 				 * For GE = 18 its 5% strangling attack, 95% hero attacks octopus.
 				 * For GE <= 19 it is 100% hero attacks octopus.
 				 * The intended behavior probably was: critical failure: grabbing attack; normal failure: strangling attack; success: hero attacks octopus. */
-				if (!(tmp = test_attrib((struct struct_hero*)hero, ATTRIB_GE, 0)))
+				if (!(tmp = test_attrib(hero, ATTRIB_GE, 0)))
 #else
-				tmp = test_attrib((struct struct_hero*)hero, ATTRIB_GE, 0);
+				tmp = test_attrib(hero, ATTRIB_GE, 0);
 				if (tmp <= 0 && tmp != -99)
 #endif
 				{
 					/* strangling attack */
 					/* <hero> GERAET IN DEN WUERGEGRIFF DES KRAKENMOLCHS UND KANN SICH NUR UNTER MUEHEN WIEDER BEFREIEN. */
 
-					add_hero_ap((struct struct_hero*)hero, 5);
-					sub_hero_le(hero, random_schick(6));
-					sprintf(g_dtp2, get_tx2(30), (char*)hero + HERO_NAME2);
+					add_hero_ap(hero, 5);
+					sub_hero_le((Bit8u*)hero, random_schick(6));
+					sprintf(g_dtp2, get_tx2(30), hero->alias);
 					GUI_output(g_dtp2);
 				}
 
@@ -438,13 +427,13 @@ void octopus_attack(void)
 					/* grabbing attack */
 					/* <hero> WIRD VON EINEM TENTAKEL GEPACKT UND UEBER BORD GERISSEN! */
 
-					add_hero_ap((struct struct_hero*)hero, 20);
-					sub_hero_le(hero, random_schick(6));
-					sprintf(g_dtp2, get_tx2(31), (char*)hero + HERO_NAME2);
+					add_hero_ap(hero, 20);
+					sub_hero_le((Bit8u*)hero, random_schick(6));
+					sprintf(g_dtp2, get_tx2(31), hero->alias);
 					GUI_output(g_dtp2);
 
-					if (test_skill((struct struct_hero*)hero, TA_SCHWIMMEN, 0) <= 0) {
-						sub_hero_le(hero, random_schick(6));
+					if (test_skill(hero, TA_SCHWIMMEN, 0) <= 0) {
+						sub_hero_le((Bit8u*)hero, random_schick(6));
 						overboard[i] = 1;
 					}
 
@@ -454,7 +443,7 @@ void octopus_attack(void)
 
 					/* Original-Bug: The following is the wrong way round, should be ">= random_schick(20)" (found by siebenstreich 2021-08-12 https://www.crystals-dsa-foren.de/showthread.php?tid=4589&pid=167430#pid167430) */
 					/* Further dubiosity: Only the bare HERO_AT value of weapon type of the equipped weapon is taken into account. HERO_AT_MOD (modifier of the current weapon) and HERO_RS_BE are ignored. */
-					if (host_readbs(hero + HERO_AT + host_readbs(hero + HERO_WEAPON_TYPE)) <= random_schick(20)) {
+					if (hero->at_weapon[hero->w_type] <= random_schick(20)) {
 						hits++;
 					}
 				}
@@ -468,10 +457,10 @@ void octopus_attack(void)
 	while ((hits <= 5) && any_hero_active);
 	if (!any_hero_active) {
 		/* octopus has won. all heroes disappear in the open sea. */
-		hero = get_hero(0);
-		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
-			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE && host_readbs(hero + HERO_GROUP_NO) == gs_current_group) {
-				hero_disappear((struct struct_hero*)hero, i, -2);
+		hero = (struct struct_hero*)get_hero(0);
+		for (i = 0; i <= 6; i++, hero++) {
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group)) {
+				hero_disappear(hero, i, -2);
 			}
 		}
 	}

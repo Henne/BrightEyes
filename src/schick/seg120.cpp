@@ -401,7 +401,7 @@ signed short init_memory(void)
 	g_memslots_mfig		= (struct struct_memslot_fig*)schick_alloc(43 * sizeof(struct struct_memslot_fig));
 	g_memslots_wfig		= (struct struct_memslot_fig*)schick_alloc(43 * sizeof(struct struct_memslot_fig));
 	g_memslots_mon		= (struct struct_memslot_fig*)schick_alloc(36 * sizeof(struct struct_memslot_fig));
-	g_heroes		= (unsigned char*)schick_alloc(7 * SIZEOF_HERO);
+	g_heroes		= (unsigned char*)schick_alloc(7 * sizeof(struct struct_hero));
 	g_dungeon_fights_buf	= (unsigned char*)schick_alloc(630);
 	g_dungeon_doors_buf	= (unsigned char*)schick_alloc(225);
 	g_dungeon_stairs_buf	= (unsigned char*)schick_alloc(80);
@@ -643,17 +643,16 @@ void prepare_dirs(void)
 		/* open CHR-file and copy it into TEMP-dir */
 		l_di = open(((char*)&blk) + 30, O_BINARY | O_RDWR);
 
-		_read(l_di, g_renderbuf_ptr, SIZEOF_HERO);
+		/* REMARK: size of CHR files differs from floppy to CD version */
+		_read(l_di, g_renderbuf_ptr, sizeof(struct struct_hero));
 
 		close(l_di);
 
-		sprintf(g_text_output_buf,
-			g_str_temp_xx_ptr2,
-			((char*)(&blk)) + 30);			/* contains a filename */
+		sprintf(g_text_output_buf, g_str_temp_xx_ptr2, ((char*)(&blk)) + 30); /* contains a filename */
 
 		l_di = _creat(g_text_output_buf, 0);
 
-		write(l_di, g_renderbuf_ptr, SIZEOF_HERO);
+		write(l_di, g_renderbuf_ptr, sizeof(struct struct_hero));
 
 		close(l_di);
 

@@ -771,22 +771,16 @@ void spell_silentium(void)
 
 	signed short i;
 	signed short slot;
-	Bit8u *hero;
+	struct struct_hero *hero = (struct struct_hero*)get_hero(0);
 
-	hero = get_hero(0);
+	for (i = 0; i <= 6; i++, hero++) {
 
-	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
-
-		if ((host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-			/* check group */
-			(host_readb(hero + HERO_GROUP_NO) == gs_current_group) &&
-			/* check dead */
-			!(hero_dead(hero))) {
-
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !(hero_dead((Bit8u*)hero)))
+		{
 			/* get a free mod_slot */
 			slot = get_free_mod_slot();
 			/* skill stealth + 10 for 5 minutes */
-			set_mod_slot(slot, MINUTES(5), hero + (HERO_TALENTS + TA_SCHLEICHEN), 10, (signed char)i);
+			set_mod_slot(slot, MINUTES(5), (Bit8u*)&hero->skills[TA_SCHLEICHEN], 10, (signed char)i);
 		}
 	}
 
