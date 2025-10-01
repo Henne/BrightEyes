@@ -39,6 +39,10 @@ signed int g_dialog_done;	// ds:0xe310
 signed int g_dialog_state;	// ds:0xe312
 signed int g_tlk_id;		// ds:0xe314
 
+#if !defined(__BORLANDC__)
+	Bit8u *gs_random_tlk_hero;	/* REMARK: scope has changed drastically! */
+#endif
+
 /* NOTE: here's a inconvenience in start counting from 0 (computer science) and from 1 (math) */
 
 /**
@@ -167,9 +171,6 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 	signed short i;
 	signed short tmp1;
 	signed short tmp2;
-#if !defined(__BORLANDC__)
-	Bit8u *gs_random_tlk_hero;	/* REMARK: scope has changed drastically! */
-#endif
 
 	struct tlk_option options[3];
 

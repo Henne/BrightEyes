@@ -34,7 +34,7 @@ namespace M302de {
 void tevent_016(void)
 {
 	signed short answer;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	if (!gs_tevent016_flag)
 	{
@@ -82,10 +82,10 @@ void tevent_016(void)
 
 					GUI_dialog_na(0, get_tx2(31));
 
-					hero = get_hero(get_hero_KK_best());
+					hero = (struct struct_hero*)get_hero(get_hero_KK_best());
 
 					/* test KK+3 */
-					if (test_attrib((struct struct_hero*)hero, ATTRIB_KK, 3) > 0)
+					if (test_attrib(hero, ATTRIB_KK, 3) > 0)
 					{
 						/* success */
 						GUI_dialog_na(0, get_tx2(32));
@@ -96,50 +96,44 @@ void tevent_016(void)
 						/* fail */
 						GUI_dialog_na(0, get_tx2(33));
 
-						hero = get_hero(get_random_hero());
+						hero = (struct struct_hero*)get_hero(get_random_hero());
 
 						/* GE+0 */
-						if (test_attrib((struct struct_hero*)hero, ATTRIB_GE, 0) > 0)
+						if (test_attrib(hero, ATTRIB_GE, 0) > 0)
 						{
 							/* success */
 							timewarp(MINUTES(15));
 
-							sprintf(g_dtp2 + 0x400,
-								get_tx2(35),
-								(char*)hero + HERO_NAME2,
-								(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+							sprintf(g_dtp2 + 0x400, get_tx2(35), hero->alias,
+								GUI_get_ptr(hero->sex, 0));
 
-							GUI_dialog_na(0, (char*)((char*)(g_dtp2 + 0x400)));
+							GUI_dialog_na(0, (char*)(g_dtp2 + 0x400));
 
 							GUI_dialog_na(0, get_tx2(36));
 						} else {
 							/* fail */
-							sprintf(g_dtp2 + 0x400,
-								get_tx2(34),
-								(char*)hero + HERO_NAME2,
-								(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-								(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),
-								(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)),
-								(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
+							sprintf(g_dtp2 + 0x400,	get_tx2(34),
+								hero->alias,
+								GUI_get_ptr(hero->sex, 0),
+								GUI_get_ptr(hero->sex, 2),
+								GUI_get_ptr(hero->sex, 3),
+								GUI_get_ptr(hero->sex, 2));
 
 							GUI_dialog_na(0, (char*)g_dtp2 + 0x400);
 
 							timewarp(HOURS(1));
 
-							sprintf(g_dtp2 + 0x400,
-								get_tx2(37),
-								(char*)hero + HERO_NAME2,
-								(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
+							sprintf(g_dtp2 + 0x400,	get_tx2(37), hero->alias,
+								GUI_get_ptr(hero->sex, 1));
 
 							GUI_dialog_na(0, (char*)g_dtp2 + 0x400);
 
-							add_hero_ap((struct struct_hero*)hero, 5);
+							add_hero_ap(hero, 5);
 
-							loose_random_item(hero, 10, get_ttx(506));
+							loose_random_item((Bit8u*)hero, 10, get_ttx(506));
 
-							hero_disease_test((struct struct_hero*)hero, 2, 20 - (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK))));
+							hero_disease_test(hero, 2, 20 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
 						}
-
 					}
 				}
 			}
@@ -153,24 +147,22 @@ void tevent_016(void)
 void tevent_090(void)
 {
 	signed short i;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	GUI_output(get_tx2(0));
 	GUI_output(get_tx2(1));
 
-	hero = get_hero(0);
-	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
+	hero = (struct struct_hero*)get_hero(0);
+	for (i = 0; i <= 6; i++, hero++)
 	{
-		if (host_readbs(hero + HERO_TYPE) &&
-			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-			!hero_dead(hero) &&
-			test_skill((struct struct_hero*)hero, TA_GEFAHRENSINN, 0) <= 0)
+		if ((hero->typus) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero) &&
+			test_skill(hero, TA_GEFAHRENSINN, 0) <= 0)
 		{
 			/* failed */
-			sub_hero_le(hero, random_schick(10));
+			sub_hero_le((Bit8u*)hero, random_schick(10));
 
-			loose_random_item(hero, 10, get_ttx(506));
-			loose_random_item(hero, 10, get_ttx(506));
+			loose_random_item((Bit8u*)hero, 10, get_ttx(506));
+			loose_random_item((Bit8u*)hero, 10, get_ttx(506));
 		}
 	}
 
@@ -179,7 +171,7 @@ void tevent_090(void)
 
 void tevent_091(void)
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 5) > 0 && !gs_tevent091_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 5) > 0 && !gs_tevent091_flag) ||
 		gs_tevent091_flag != 0)
 	{
 		g_gather_herbs_special = 122;
@@ -191,7 +183,7 @@ void tevent_091(void)
 
 void tevent_093(void)
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 4) > 0 && !gs_tevent093_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 4) > 0 && !gs_tevent093_flag) ||
 		gs_tevent093_flag != 0)
 	{
 		TRV_found_camp_place(0);
@@ -231,7 +223,7 @@ void tevent_095(void)
 	signed short done;
 	signed short i;
 	signed short counter_heroes;
-	Bit8u *hero;
+	struct struct_hero *hero;
 	signed short ret_spell_test;
 
 	done = 0;
@@ -240,22 +232,21 @@ void tevent_095(void)
 
 		GUI_output(get_tx2(7));
 
-		hero = get_hero(0);
+		hero = (struct struct_hero*)get_hero(0);
 
-		for (i = counter_failed = counter_heroes = 0; i <= 6; i++, hero += SIZEOF_HERO)
+		for (i = counter_failed = counter_heroes = 0; i <= 6; i++, hero++)
 		{
-			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-				!hero_dead(hero))
+			if ((hero->typus != HERO_TYPE_NONE) &&
+				(hero->group_no == gs_current_group) &&
+				!hero_dead((Bit8u*)hero))
 			{
 				counter_heroes++;
 
-				if (test_attrib((struct struct_hero*)hero, ATTRIB_HA, -1) > 0)
+				if (test_attrib(hero, ATTRIB_HA, -1) > 0)
 				{
 					timewarp(MINUTES(30));
 
-					sprintf(g_dtp2,	get_tx2(8), (char*)hero + HERO_NAME2);
-
+					sprintf(g_dtp2,	get_tx2(8), hero->alias);
 					GUI_output(g_dtp2);
 
 					counter_failed++;
@@ -295,9 +286,8 @@ void tevent_095(void)
 			do {
 				do {
 					counter_failed = GUI_radio((counter_heroes == 0 ? get_tx2(12) : get_tx2(87)), 3,
-									get_tx2(13),
-									get_tx2(14),
-									get_tx2(15));
+									get_tx2(13), get_tx2(14), get_tx2(15));
+
 				} while (counter_failed == -1);
 
 				if (counter_failed == 1)
@@ -313,22 +303,22 @@ void tevent_095(void)
 				} else if (counter_failed == 2)
 				{
 					/* try a spell */
-					hero = get_hero(select_hero_ok_forced(get_ttx(317)));
+					hero = (struct struct_hero*)get_hero(select_hero_ok_forced(get_ttx(317)));
 
-					if (host_readbs(hero + HERO_TYPE) < HERO_TYPE_WITCH)
+					if (hero->typus < HERO_TYPE_WITCH)
 					{
 						/* this hero is no magic-user */
 						GUI_output(get_ttx(330));
 					} else {
 
-						ret_spell_test = test_spell((struct struct_hero*)hero, SP_BANNBALADIN, 0);
+						ret_spell_test = test_spell(hero, SP_BANNBALADIN, 0);
 
 						if (ret_spell_test > 0)
 						{
 							/* spell succeeded */
 
 							/* TODO: magicians with 4th staff spell may pay less */
-							sub_ae_splash((struct struct_hero*)hero, get_spell_cost(SP_BANNBALADIN, 0));
+							sub_ae_splash(hero, get_spell_cost(SP_BANNBALADIN, 0));
 
 							GUI_output(get_tx2(16));
 
@@ -339,7 +329,7 @@ void tevent_095(void)
 							/* spell failed */
 
 							/* hero pays the half spell costs */
-							sub_ae_splash((struct struct_hero*)hero, get_spell_cost(SP_BANNBALADIN, 1));
+							sub_ae_splash(hero, get_spell_cost(SP_BANNBALADIN, 1));
 
 							/* TODO: some output for the player */
 
@@ -348,17 +338,13 @@ void tevent_095(void)
 							/* spell failed unluckily */
 
 							/* TODO: this gets output, but no spell costst ??? */
-							sprintf(g_dtp2,
-								get_ttx(607),
-								(char*)hero + HERO_NAME2);
-
+							sprintf(g_dtp2,	get_ttx(607), hero->alias);
 							GUI_output(g_dtp2);
 						}
 
 						timewarp(MINUTES(30));
 					}
-				} else
-				{
+				} else {
 					/* talk to the heroes */
 
 					/* wait for 4 hours */
@@ -368,8 +354,10 @@ void tevent_095(void)
 
 					done = 1;
 				}
+
 			} while (!done);
 		}
+
 	} while (!done);
 }
 

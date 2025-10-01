@@ -33,7 +33,7 @@ void tevent_067(void)
 	signed short i;
 	signed short answer;
 	signed short count;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 6) > 0 && !gs_tevent067_flag) ||
 		gs_tevent067_flag)
@@ -53,13 +53,11 @@ void tevent_067(void)
 
 		} else if (answer == 3) {
 
-			hero = get_hero(0);
-			for (i = count = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+			hero = (struct struct_hero*)get_hero(0);
+			for (i = count = 0; i <= 6; i++, hero++) {
 
-				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-					!hero_dead(hero) &&
-					test_attrib((struct struct_hero*)hero, ATTRIB_GE, 0) > 0)
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+					!hero_dead((Bit8u*)hero) && test_attrib(hero, ATTRIB_GE, 0) > 0)
 				{
 					count++;
 				}
@@ -71,7 +69,7 @@ void tevent_067(void)
 
 				GUI_output(get_tx2(97));
 
-				hero = (Bit8u*)get_first_hero_available_in_group();
+				hero = (struct struct_hero*)get_first_hero_available_in_group(); //TODO: no effect
 
 				add_party_money(7L);
 
@@ -82,13 +80,12 @@ void tevent_067(void)
 
 				GUI_output(get_tx2(95));
 
-				hero = get_hero(0);
-				for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+				hero = (struct struct_hero*)get_hero(0);
+				for (i = 0; i <= 6; i++, hero++) {
 
-					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
+					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
 					{
-						sub_hero_le(hero, random_schick(8));
+						sub_hero_le((Bit8u*)hero, random_schick(8));
 					}
 				}
 

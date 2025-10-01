@@ -85,7 +85,7 @@ void tevent_131(void)
 {
 	signed short answer;
 
-	if (test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 8) > 0 && !gs_tevent131_flag) {
+	if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 8) > 0 && !gs_tevent131_flag) {
 
 		gs_tevent131_flag = 1;
 
@@ -203,7 +203,7 @@ void tevent_135(void)
 	signed short answer;
 	signed short done;
 	signed short count;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	load_ani(1);
 	draw_main_screen();
@@ -221,41 +221,39 @@ void tevent_135(void)
 		do {
 			done = 0;
 
-			hero = get_hero(select_hero_ok_forced(get_tx2(45)));
+			hero = (struct struct_hero*)get_hero(select_hero_ok_forced(get_tx2(45)));
 
 			tmp = 1;
-			if (test_skill((struct struct_hero*)hero, TA_KLETTERN, -1) > 0) {
+			if (test_skill(hero, TA_KLETTERN, -1) > 0) {
 				tmp = 2;
 				GUI_output(get_tx2(46));
 
-				if (test_skill((struct struct_hero*)hero, TA_KLETTERN, 1) > 0) {
+				if (test_skill(hero, TA_KLETTERN, 1) > 0) {
 					tmp = 3;
 					GUI_output(get_tx2(47));
 
-					if (test_skill((struct struct_hero*)hero, TA_KLETTERN, 0) > 0) {
+					if (test_skill(hero, TA_KLETTERN, 0) > 0) {
 						tmp = 4;
 						GUI_output(get_tx2(48));
 
-						if (test_skill((struct struct_hero*)hero, TA_KLETTERN, 2) > 0) {
+						if (test_skill(hero, TA_KLETTERN, 2) > 0) {
 							tmp = 5;
 							GUI_output(get_tx2(49));
 
-							if (test_skill((struct struct_hero*)hero, TA_KLETTERN, 1) > 0) {
+							if (test_skill(hero, TA_KLETTERN, 1) > 0) {
 
 								GUI_output(get_tx2(50));
 
-								sprintf(g_dtp2, get_tx2(54),
-									(char*)hero + HERO_NAME2,
-									GUI_get_ptr(host_readbs(hero + HERO_SEX), 3));
+								sprintf(g_dtp2, get_tx2(54), hero->alias, GUI_get_ptr(hero->sex, 3));
 								GUI_output(g_dtp2);
 
 								load_in_head(45);
 
 								sprintf(g_dtp2 + 0x400, get_tx2(55),
-									GUI_get_ptr(host_readbs(hero + HERO_SEX), 0),
-									GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
+									GUI_get_ptr(hero->sex, 0),
+									GUI_get_ptr(hero->sex, 0));
 
-								GUI_dialog_na(0, (char*)((char*)(g_dtp2 + 0x400)));
+								GUI_dialog_na(0, (char*)(g_dtp2 + 0x400));
 
 								for (tmp2 = count = 0; tmp2 < 9; tmp2++) {
 									if (gs_treasure_maps[tmp2] != 0) {
@@ -265,23 +263,22 @@ void tevent_135(void)
 
 								if (count < 5) {
 									sprintf(g_dtp2 + 0x400, get_tx2(56),
-										(char*)hero + HERO_NAME2, get_tx2(57));
+										hero->alias, get_tx2(57));
 								} else {
 									sprintf(g_dtp2 + 0x400, get_tx2(56),
-										(char*)hero + HERO_NAME2, get_tx(random_interval(54, 67)));
+										hero->alias, get_tx(random_interval(54, 67)));
 								}
 
-								GUI_dialog_na(0, (char*)((char*)(g_dtp2 + 0x400)));
+								GUI_dialog_na(0, (char*)(g_dtp2 + 0x400));
 
-								if (!(host_readbs(hero + HERO_START_GEAR) & 0x2)) {
+								if (!(hero->start_gear & 0x2)) {
 
-									or_ptr_bs(hero + HERO_START_GEAR, 2);
-									inc_ptr_bs(hero + (HERO_ATTRIB_ORIG + 3 * ATTRIB_IN));
-									inc_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_IN));
+									hero->start_gear |= 0x02;
+									hero->attrib[ATTRIB_IN].normal++;
+									hero->attrib[ATTRIB_IN].current++;
 								}
 
-								sprintf(g_dtp2 + 0x400, get_tx2(58),
-									(char*)hero + HERO_NAME2, GUI_get_ptr(host_readbs(hero + HERO_SEX), 2));
+								sprintf(g_dtp2 + 0x400, get_tx2(58), hero->alias, GUI_get_ptr(hero->sex, 2));
 								GUI_dialog_na(0, (char*)(g_dtp2 + 0x400));
 
 								tmp = 0;
@@ -294,19 +291,19 @@ void tevent_135(void)
 
 			if (tmp) {
 
-				sprintf(g_dtp2, get_tx2(51), (char*)hero + HERO_NAME2);
+				sprintf(g_dtp2, get_tx2(51), hero->alias);
 				GUI_output(g_dtp2);
 
 				/* depending on fall height stored in tmp: damage in the interval [1..5], [4..13], [7..21], [10..32], [15..40] */
 				tmp2 = random_interval(g_tevent135_climb_damage[tmp - 1].lo, g_tevent135_climb_damage[tmp - 1].hi);
 
-				tmp = host_readws(hero + HERO_LE);
+				tmp = hero->le;
 				tmp -= tmp2;
 
-				sub_hero_le(hero, tmp2);
+				sub_hero_le((Bit8u*)hero, tmp2);
 
 				if (tmp <= 0) {
-					sprintf(g_dtp2, (char*)(!tmp ? get_tx2(53) : get_tx2(52)), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, (char*)(!tmp ? get_tx2(53) : get_tx2(52)), hero->alias);
 					GUI_output(g_dtp2);
 				}
 
@@ -335,7 +332,7 @@ void tevent_137(void)
 	signed short item_pos;
 	Bit8u *hero;
 
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 5) > 0 && !gs_tevent137_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 5) > 0 && !gs_tevent137_flag) ||
 		gs_tevent137_flag)
 	{
 		gs_tevent137_flag = 1;
@@ -394,7 +391,7 @@ void tevent_139(void)
 {
 	signed short i;
 	signed short answer;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	do {
 		answer = GUI_radio(get_tx2(63), 2, get_tx2(64), get_tx2(65));
@@ -403,14 +400,12 @@ void tevent_139(void)
 
 	if (answer == 1) {
 
-		hero = get_hero(0);
-		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+		hero = (struct struct_hero*)get_hero(0);
+		for (i = 0; i <= 6; i++, hero++) {
 
-			if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
-				!hero_dead(hero))
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
 			{
-				sub_hero_le(hero, random_schick(2));
+				sub_hero_le((Bit8u*)hero, random_schick(2));
 			}
 		}
 
@@ -439,7 +434,6 @@ void tevent_139(void)
 			gs_current_loctype = LOCTYPE_WILDCAMP;
 			do_location();
 			gs_current_loctype = LOCTYPE_NONE;
-
 		}
 	}
 }
@@ -491,7 +485,7 @@ void tevent_143(void)
 {
 	signed short i;
 	signed short answer;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	do {
 		answer = GUI_radio(get_tx2(0), 2, get_tx2(1), get_tx2(2));
@@ -500,13 +494,12 @@ void tevent_143(void)
 
 	if (answer == 1) {
 
-		hero = get_hero(0);
-		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+		hero = (struct struct_hero*)get_hero(0);
+		for (i = 0; i <= 6; i++, hero++) {
 
-			if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group))
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
 			{
-				sub_hero_le(hero, random_schick(2) + 1);
+				sub_hero_le((Bit8u*)hero, random_schick(2) + 1);
 			}
 		}
 
@@ -545,7 +538,7 @@ void tevent_144(void)
 {
 	signed short grimring_hero_pos;
 	signed short right_time_flag;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	right_time_flag = 0;
 
@@ -579,19 +572,19 @@ void tevent_144(void)
 			load_in_head(44);
 			memmove(g_buffer10_ptr, g_dtp2, 0x400);
 
-			hero = get_hero(grimring_hero_pos);
+			hero = (struct struct_hero*)get_hero(grimring_hero_pos);
 
-			sprintf(g_dtp2, get_tx2(10), (char*)hero + HERO_NAME2);
+			sprintf(g_dtp2, get_tx2(10), hero->alias);
 
 			GUI_output(g_dtp2);
 
-			sprintf(g_dtp2, get_tx2(11), (char*)hero + HERO_NAME2);
+			sprintf(g_dtp2, get_tx2(11), hero->alias);
 
 			GUI_dialogbox(g_buffer10_ptr, NULL, g_dtp2, 0);
 			GUI_dialogbox(g_buffer10_ptr, NULL, get_tx2(12), 0);
 			GUI_dialogbox(g_buffer10_ptr, NULL, get_tx2(13), 0);
 
-			sprintf(g_dtp2, get_tx2(14), (char*)hero + HERO_NAME2);
+			sprintf(g_dtp2, get_tx2(14), hero->alias);
 
 			GUI_dialogbox(g_buffer10_ptr, NULL, g_dtp2, 0);
 			GUI_dialogbox(g_buffer10_ptr, NULL, get_tx2(15), 0);
@@ -607,10 +600,9 @@ void tevent_144(void)
 
 				if (grimring_hero_pos == 6) {
 
-					sprintf(g_dtp2, get_tx2(38), (char*)get_hero(6) + HERO_NAME2);
+					sprintf(g_dtp2, get_tx2(38), ((struct struct_hero*)get_hero(6))->alias);
 
-					GUI_dialogbox((unsigned char*)get_hero(6) + HERO_PORTRAIT, (char*)get_hero(6) + HERO_NAME2,
-							g_dtp2, 0);
+					GUI_dialogbox(((struct struct_hero*)get_hero(6))->pic, ((struct struct_hero*)get_hero(6))->alias, g_dtp2, 0);
 				}
 
 			} while (grimring_hero_pos == 6);
@@ -651,14 +643,14 @@ void TLK_old_woman(signed short state)
 {
 	signed short l_di;
 	signed short counter;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	if (state == 3) {
 
-		hero = get_hero(0);
-		for (l_di = counter = 0; l_di <= 6; l_di++, hero += SIZEOF_HERO) {
+		hero = (struct struct_hero*)get_hero(0);
+		for (l_di = counter = 0; l_di <= 6; l_di++, hero++) {
 			/* Original-Bug: check if this is realy a hero in the current group and alive before test_skill((struct struct_hero*)) */
-			if (test_skill((struct struct_hero*)hero, TA_VERSTECKEN, -5) > 0) {
+			if (test_skill(hero, TA_VERSTECKEN, -5) > 0) {
 				counter++;
 			}
 		}
@@ -675,16 +667,15 @@ void TLK_old_woman(signed short state)
 
 	} else if (state == 23) {
 
-		hero = get_hero(0);
-		for (l_di = counter = 0; l_di <= 6; l_di++, hero += SIZEOF_HERO) {
+		hero = (struct struct_hero*)get_hero(0);
+		for (l_di = counter = 0; l_di <= 6; l_di++, hero++) {
 			/* Original-Bug: check if this is realy a hero in the current group and alive before test_skill((struct struct_hero*)) */
-			if (test_skill((struct struct_hero*)hero, TA_VERSTECKEN, -5) > 0) {
+			if (test_skill(hero, TA_VERSTECKEN, -5) > 0) {
 				counter++;
 			}
 		}
-#if defined(__BORLANDC__)
-		gs_random_tlk_hero = get_hero(get_random_hero());
-#endif
+
+		gs_random_tlk_hero = (Bit8u*)get_hero(get_random_hero()); /* TODO: can be removed here ? */
 
 		g_dialog_next_state = (count_heroes_in_group() == counter ? 24 : 25);
 
