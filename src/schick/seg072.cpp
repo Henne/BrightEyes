@@ -709,7 +709,7 @@ void INF_treborn_unicorn(signed short informer, signed short state)
 			hero_disappear((struct struct_hero*)gs_unicorn_hero_ptr, gs_unicorn_hero_pos, -1);
 		} else if (state == 17) {
 			/* the hero gets heavily wounded, 1 LE left */
-			sub_hero_le(gs_unicorn_hero_ptr, host_readws(gs_unicorn_hero_ptr + HERO_LE) - 1);
+			sub_hero_le((struct struct_hero*)gs_unicorn_hero_ptr, host_readws(gs_unicorn_hero_ptr + HERO_LE) - 1);
 			/* the party opens a camp */
 			gs_current_loctype = LOCTYPE_WILDCAMP;
 			do_location();

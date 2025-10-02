@@ -66,12 +66,12 @@ void poison_effect(void)
 					}
 
 					if ((hero->attrib[ATTRIB_KK].current < 0) || (hero->attrib[ATTRIB_GE].current < 0)) {
-						sub_hero_le((Bit8u*)hero, 1000);
+						sub_hero_le(hero, 1000);
 					}
 				}
 
 				/* Loose 1W6 LE */
-				sub_hero_le((Bit8u*)hero, random_schick(6));
+				sub_hero_le(hero, random_schick(6));
 			}
 
 			/* SHURINKNOLLENGIFT: hero regenerates */
@@ -268,7 +268,7 @@ void poison_effect(void)
 				}
 
 				if (!(poison_ptr[1] % 12)) {
-					sub_hero_le((Bit8u*)hero, dice_roll(2, 6, -3));
+					sub_hero_le(hero, dice_roll(2, 6, -3));
 				}
 			}
 
@@ -288,7 +288,7 @@ void poison_effect(void)
 				}
 
 				if (!(poison_ptr[1] % 12)) {
-					sub_hero_le((Bit8u*)hero, dice_roll(1, 6, 2));
+					sub_hero_le(hero, dice_roll(1, 6, 2));
 				}
 			}
 
@@ -307,7 +307,7 @@ void poison_effect(void)
 					poison_ptr[0] = 0;
 				}
 
-				sub_hero_le((Bit8u*)hero, dice_roll(2, 6, 0));
+				sub_hero_le(hero, dice_roll(2, 6, 0));
 			}
 
 			/* LOTUSGIFT: regeneration */
@@ -325,7 +325,7 @@ void poison_effect(void)
 					poison_ptr[0] = 0;
 				}
 
-				sub_hero_le((Bit8u*)hero, dice_roll(50, 6, 0));
+				sub_hero_le(hero, dice_roll(50, 6, 0));
 			}
 
 			/* KUKRIS: regeneration */
@@ -392,7 +392,7 @@ void poison_effect(void)
 				/* reset KK */
 				hero->attrib[ATTRIB_KK].current = hero->attrib[ATTRIB_KK].normal;
 				/* die */
-				sub_hero_le((Bit8u*)hero, 5000);
+				sub_hero_le(hero, 5000);
 			}
 
 			/* GE <= 0 */
@@ -401,7 +401,7 @@ void poison_effect(void)
 				/* reset GE */
 				hero->attrib[ATTRIB_GE].current = hero->attrib[ATTRIB_GE].normal;
 				/* die */
-				sub_hero_le((Bit8u*)hero, 5000);
+				sub_hero_le(hero, 5000);
 			}
 		}
 	}

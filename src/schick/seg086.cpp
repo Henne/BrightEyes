@@ -115,7 +115,7 @@ signed short DNG11_handler(void)
 					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 					!hero_dead(hero))
 				{
-					sub_hero_le(hero, test_attrib((struct struct_hero*)hero, ATTRIB_GE, 4) <= 0 ? dice_roll(6, 6, 6) : dice_roll(3, 6, 3));
+					sub_hero_le((struct struct_hero*)hero, test_attrib((struct struct_hero*)hero, ATTRIB_GE, 4) <= 0 ? dice_roll(6, 6, 6) : dice_roll(3, 6, 3));
 				}
 			}
 		}
@@ -135,7 +135,7 @@ signed short DNG11_handler(void)
 					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 					!hero_dead(hero))
 				{
-					sub_hero_le(hero, test_attrib((struct struct_hero*)hero, ATTRIB_GE, 4) <= 0 ? dice_roll(6, 6, 6) : dice_roll(3, 6, 3));
+					sub_hero_le((struct struct_hero*)hero, test_attrib((struct struct_hero*)hero, ATTRIB_GE, 4) <= 0 ? dice_roll(6, 6, 6) : dice_roll(3, 6, 3));
 				}
 			}
 		}

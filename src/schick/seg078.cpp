@@ -99,7 +99,7 @@ signed short DNG02_handler(void)
 
 					GUI_output(g_dtp2);
 
-					sub_hero_le(hero, 1);
+					sub_hero_le((struct struct_hero*)hero, 1);
 
 				} else {
 					flag = 1;
@@ -114,7 +114,7 @@ signed short DNG02_handler(void)
 
 				GUI_output(g_dtp2);
 
-				sub_hero_le(hero, (host_readws(hero + HERO_LE) > 6 ? random_schick(6) : host_readws(hero + HERO_LE) - 1));
+				sub_hero_le((struct struct_hero*)hero, (host_readws(hero + HERO_LE) > 6 ? random_schick(6) : host_readws(hero + HERO_LE) - 1));
 
 			}
 		}
@@ -514,7 +514,7 @@ signed short DNG02_handler(void)
 
 			GUI_output(g_dtp2);
 
-			sub_hero_le(hero, i);
+			sub_hero_le((struct struct_hero*)hero, i);
 
 			gs_direction_bak = gs_direction;
 		}
@@ -616,7 +616,7 @@ void DNG02_chest04_loot(Bit8u*)
 				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 					host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 				{
-					sub_hero_le(hero, random_schick(6));
+					sub_hero_le((struct struct_hero*)hero, random_schick(6));
 				}
 			}
 		}

@@ -42,7 +42,7 @@ void MON_do_spell_damage(signed short damage)
 			g_spelltarget = get_hero(g_spelluser_e->enemy_id - 1);
 
 			/* do the damage */
-			sub_hero_le(get_spelltarget(), damage);
+			sub_hero_le((struct struct_hero*)get_spelltarget(), damage);
 
 			/* add a fight message */
 			FIG_add_msg(8, damage);

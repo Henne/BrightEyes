@@ -207,11 +207,11 @@ void DNG_door(signed short action)
 						g_dng_refresh_direction = -1;
 					}
 
-					sub_hero_le((Bit8u*)get_first_hero_available_in_group(), 1);
+					sub_hero_le((struct struct_hero*)get_first_hero_available_in_group(), 1);
 
 					if (get_second_hero_available_in_group())
 					{
-						sub_hero_le((Bit8u*)get_second_hero_available_in_group(), 1);
+						sub_hero_le((struct struct_hero*)get_second_hero_available_in_group(), 1);
 					}
 				}
 			}
@@ -374,7 +374,7 @@ void DNG_fallpit_test(signed short max_damage)
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 				host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 			{
-				sub_hero_le(hero, random_schick(max_damage));
+				sub_hero_le((struct struct_hero*)hero, random_schick(max_damage));
 			}
 		}
 	} else {

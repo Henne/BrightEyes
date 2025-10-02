@@ -50,7 +50,7 @@ signed short DNG13_handler(void)
 		sprintf(g_dtp2,	get_tx(18), (char*)hero + HERO_NAME2);
 		GUI_output(g_dtp2);
 
-		sub_hero_le(hero, 2);
+		sub_hero_le((struct struct_hero*)hero, 2);
 	}
 
 	if (pos == DNG_POS(0,9,13) && pos != gs_dng_handled_pos && !gs_dng13_lantern_flag)

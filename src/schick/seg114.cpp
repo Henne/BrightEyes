@@ -61,13 +61,13 @@ void tevent_110(void)
 					/* one hero in the group has a rope */
 					sprintf(g_dtp2,	get_tx2(85), (char*)hero + HERO_NAME2);
 
-					sub_hero_le(hero, random_schick(10));
+					sub_hero_le((struct struct_hero*)hero, random_schick(10));
 
 				} else {
 					/* all heroes in the group have no ropes */
 					sprintf(g_dtp2,	get_tx2(86), (char*)hero + HERO_NAME2);
 
-					sub_hero_le(hero, random_schick(16) + 4);
+					sub_hero_le((struct struct_hero*)hero, random_schick(16) + 4);
 				}
 
 				GUI_output(g_dtp2);
@@ -235,7 +235,7 @@ void tevent_111(void)
 								test_attrib((struct struct_hero*)hero, ATTRIB_GE, 2) <= 0)
 							{
 								/* attribute test failed */
-								sub_hero_le(hero, random_schick(10));
+								sub_hero_le((struct struct_hero*)hero, random_schick(10));
 							}
 						}
 
@@ -395,7 +395,7 @@ void tevent_114(void)
 						sprintf(g_dtp2,	get_tx2(23), hero->alias, GUI_get_ptr(hero->sex, 2));
 						GUI_output(g_dtp2);
 
-						sub_hero_le((Bit8u*)hero, random_schick(8));
+						sub_hero_le((struct struct_hero*)hero, random_schick(8));
 
 						loose_random_item((struct struct_hero*)hero, 50, get_ttx(506));
 						loose_random_item((struct struct_hero*)hero, 50, get_ttx(506));
@@ -485,7 +485,7 @@ void tevent_117(void)
 			test_attrib((struct struct_hero*)hero, ATTRIB_GE, 0) <= 0)
 		{
 			/* attrib test failed */
-			sub_hero_le(hero, random_schick(11) + 1);
+			sub_hero_le((struct struct_hero*)hero, random_schick(11) + 1);
 
 			loose_random_item((struct struct_hero*)hero, 15, get_ttx(506));
 			loose_random_item((struct struct_hero*)hero, 15, get_ttx(506));

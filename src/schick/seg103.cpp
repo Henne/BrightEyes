@@ -388,7 +388,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 											le_damage = patient->le - 1;
 										}
 
-										sub_hero_le((Bit8u*)patient, le_damage);
+										sub_hero_le((struct struct_hero*)patient, le_damage);
 
 										sprintf(g_dtp2,	get_ttx(694), patient->alias, le_damage);
 										GUI_output(g_dtp2);
@@ -472,7 +472,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 									le_damage = patient->le - 1;
 								}
 
-								sub_hero_le((Bit8u*)patient, le_damage);
+								sub_hero_le((struct struct_hero*)patient, le_damage);
 
 								sprintf(g_dtp2,	get_ttx(694), patient->alias, le_damage);
 								GUI_output(g_dtp2);

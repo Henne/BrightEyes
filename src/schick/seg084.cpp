@@ -99,7 +99,7 @@ signed short DNG09_handler(void)
 				test_attrib((struct struct_hero*)hero, ATTRIB_GE, 4) <= 0)
 			{
 				/* failed FF+4 test */
-				sub_hero_le(hero, dice_roll(2, 6, 4));
+				sub_hero_le((struct struct_hero*)hero, dice_roll(2, 6, 4));
 
 				sprintf(g_dtp2, get_tx(12), (char*)hero + HERO_NAME2);
 				GUI_output(g_dtp2);
@@ -132,7 +132,7 @@ signed short DNG09_handler(void)
 				test_attrib((struct struct_hero*)hero, ATTRIB_GE, 4) <= 0)
 			{
 				/* failed FF+4 test */
-				sub_hero_le(hero, dice_roll(2, 6, 4));
+				sub_hero_le((struct struct_hero*)hero, dice_roll(2, 6, 4));
 
 				sprintf(g_dtp2,	get_tx(12), (char*)hero + HERO_NAME2);
 				GUI_output(g_dtp2);
@@ -154,7 +154,7 @@ signed short DNG09_handler(void)
 				test_attrib((struct struct_hero*)hero, ATTRIB_GE, 4) <= 0)
 			{
 				/* failed FF+4 test */
-				sub_hero_le(hero, dice_roll(2, 6, 4));
+				sub_hero_le((struct struct_hero*)hero, dice_roll(2, 6, 4));
 
 				sprintf(g_dtp2,	get_tx(12), (char*)hero + HERO_NAME2);
 				GUI_output(g_dtp2);
@@ -207,7 +207,7 @@ signed short DNG09_handler(void)
 				test_attrib((struct struct_hero*)hero, ATTRIB_GE, 4) <= 0)
 			{
 				/* failed FF+4 test */
-				sub_hero_le(hero, dice_roll(2, 6, 4));
+				sub_hero_le((struct struct_hero*)hero, dice_roll(2, 6, 4));
 
 				sprintf(g_dtp2,	get_tx(12), (char*)hero + HERO_NAME2);
 				GUI_output(g_dtp2);
@@ -237,7 +237,7 @@ signed short DNG09_handler(void)
 				test_attrib((struct struct_hero*)hero, ATTRIB_GE, 4) <= 0)
 			{
 				/* failed FF+4 test */
-				sub_hero_le(hero, dice_roll(2, 6, 4));
+				sub_hero_le((struct struct_hero*)hero, dice_roll(2, 6, 4));
 
 				sprintf(g_dtp2,	get_tx(12), (char*)hero + HERO_NAME2);
 				GUI_output(g_dtp2);
@@ -402,7 +402,7 @@ signed short DNG09_handler(void)
 				DNG_update_pos();
 
 			} else {
-				sub_hero_le(hero, dice_roll(2, 6, 0));
+				sub_hero_le((struct struct_hero*)hero, dice_roll(2, 6, 0));
 			}
 
 			gs_direction_bak = gs_direction;
@@ -539,7 +539,7 @@ void DNG09_chest04_loot(Bit8u* chest)
 				sprintf(g_dtp2, get_tx(25), (char*)hero + HERO_NAME2);
 				GUI_output(g_dtp2);
 
-				sub_hero_le(hero, dice_roll(2, 20, 0));
+				sub_hero_le((struct struct_hero*)hero, dice_roll(2, 20, 0));
 
 			} else if (answer == 2)
 			{

@@ -2425,7 +2425,7 @@ void do_timers(void)
 {
 	struct struct_hero *hero_i;
 	signed char afternoon;
-	Bit8u *ptr;
+	struct struct_hero *ptr;
 	signed short i, di;
 
 	afternoon = 0;
@@ -2549,12 +2549,13 @@ void do_timers(void)
 		/* every 15 minutes do damage */
 		if (gs_dng07_poison_timer % MINUTES(15) == 0) {
 
-			ptr = get_hero(0);
+			ptr = (struct struct_hero*)get_hero(0);
 
-			for (i = 0; i <= 6; i++, ptr += SIZEOF_HERO) {
+			for (i = 0; i <= 6; i++, ptr++) {
 
-				if (host_readb(ptr + HERO_TYPE) != HERO_TYPE_NONE) {
-					di = host_readbs(ptr + HERO_GROUP_NO);
+				if (ptr->typus != HERO_TYPE_NONE) {
+
+					di = ptr->group_no;
 
 					/* hero is in group and in mage dungeon */
 					if ((gs_current_group == di) && (gs_dungeon_index == DUNGEONS_RUINE_DES_SCHWARZMAGIERS))
@@ -3078,7 +3079,7 @@ void magical_chainmail_damage(void)
 				/* check if cursed chainmail is equipped */
 				(host_readw(hero_i + HERO_INVENTORY + INVENTORY_ITEM_ID + HERO_INVENTORY_SLOT_BODY * SIZEOF_INVENTORY) == ITEM_CHAIN_MAIL_CURSED))
 			{
-				sub_hero_le(hero_i, 1);
+				sub_hero_le((struct struct_hero*)hero_i, 1);
 			}
 		}
 	}
@@ -4598,7 +4599,7 @@ void add_hero_ae(struct struct_hero* hero, const signed int ae)
  * \param   hero        pointer to the hero
  * \param   le          LE the hero looses
  */
-void sub_hero_le(Bit8u *hero, signed short le)
+void sub_hero_le(struct struct_hero *hero, const signed short le)
 {
 	signed short i;
 	signed short bak;
@@ -4606,47 +4607,47 @@ void sub_hero_le(Bit8u *hero, signed short le)
 	struct struct_fighter *fighter;
 	struct struct_hero *hero_i;
 
-	if (!hero_dead(hero) && (le > 0)) {
+	if (!hero_dead((Bit8u*)hero) && (le > 0)) {
 
 		bak = g_update_statusline;
 		g_update_statusline = 0;
 
 		/* do the damage */
-		old_le = host_readw(hero + HERO_LE);
-		sub_ptr_ws(hero + HERO_LE, le);
+		old_le = hero->le;
+		hero->le -= le;
 
-		if (hero_asleep(hero)) {
+		if (hero_asleep((Bit8u*)hero)) {
 
 			/* awake him/her */
-			and_ptr_bs(hero + HERO_FLAGS1, 0xfd); /* unset 'asleep' flag */
+			and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xfd); /* unset 'asleep' flag */
 
 			/* in fight mode */
 			if (g_in_fight) {
 
-				fighter = FIG_get_fighter(host_readb(hero + HERO_FIGHTER_ID));
+				fighter = FIG_get_fighter(hero->fighter_id);
 
 				/* update looking dir and other  */
-				fighter->nvf_no = host_readb(hero + HERO_VIEWDIR);
+				fighter->nvf_no = hero->viewdir;
 				fighter->reload = -1;
 				fighter->offsetx = 0;
 				fighter->offsety = 0;
 			}
 		}
 
-		draw_splash(get_hero_index(hero), 0);
+		draw_splash(get_hero_index((Bit8u*)hero), 0);
 
-		if (host_readws(hero + HERO_LE) <= 0) {
+		if (hero->le <= 0) {
 
 			/* set LE to 0 */
-			host_writew(hero + HERO_LE, 0);
+			hero->le = 0;
 
 			/* mark hero as dead */
-			or_ptr_bs(hero + HERO_FLAGS1, 1); /* set 'dead' flag */
+			or_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 1); /* set 'dead' flag */
 
-			gs_unconscious_message[get_hero_index(hero)] = 0;
+			gs_unconscious_message[get_hero_index((Bit8u*)hero)] = 0;
 
 			/* unknown */
-			host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_UNKNOWN2);
+			hero->action_id = FIG_ACTION_UNKNOWN2;
 
 			if (g_pp20_index == ARCHIVE_FILE_PLAYM_UK) {
 				g_refresh_status_line = 1;
@@ -4654,63 +4655,64 @@ void sub_hero_le(Bit8u *hero, signed short le)
 
 			/* reset sickness */
 			for (i = 1; i <= 7; i++) {
-				host_writeb(hero + HERO_ILLNESS + i * SIZEOF_HERO_ILLNESS, 0);
-				host_writeb(hero + (HERO_ILLNESS + 1) + i * SIZEOF_HERO_ILLNESS, 0);
+				hero->sick[i][0] = 0;
+				hero->sick[i][1] = 0;
 			}
 
 			/* reset poison */
 			for (i = 1; i <= 9; i++) {
-				host_writeb(hero + HERO_POISON + i * SIZEOF_HERO_POISON, 0);
-				host_writeb(hero + (HERO_POISON + 1) + i * SIZEOF_HERO_POISON, 0);
+				hero->poison[i][0] = 0;
+				hero->poison[i][1] = 0;
 			}
 
 			/* FINAL FIGHT */
 			if (g_current_fight_no == FIGHTS_F144) {
-				if (hero == (Bit8u*)gs_main_acting_hero) {
+				if (hero == (struct struct_hero*)gs_main_acting_hero) {
 					g_game_state = GAME_STATE_DEAD;
 					g_in_fight = 0;
 				}
 			}
 
 			if (g_traveling	&& !g_in_fight &&
-				(!count_heroes_available_in_group() || ((count_heroes_available_in_group() == 1) && is_hero_available_in_group(get_hero(6))))) /* count_heroes_available_in_group_ignore_npc() == 0 */
+				(!count_heroes_available_in_group() || ((count_heroes_available_in_group() == 1) && is_hero_available_in_group((Bit8u*)get_hero(6))))) /* count_heroes_available_in_group_ignore_npc() == 0 */
 			{
 				/* if traveling, not in a fight, and no hero in the group (except possibly the NPC) is available. */
 
-				gs_travel_detour = (99);
+				gs_travel_detour = 99;
 
 				hero_i = (struct struct_hero*)get_hero(0);
 				for (i = 0; i <= 6; i++, hero_i++) {
+
 					if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_no == gs_current_group))
 					{
-						hero_disappear((struct struct_hero*)hero_i, i, -1);
+						hero_disappear(hero_i, i, -1);
 					}
 				}
 			}
 
 		} else {
-			if ((old_le >= 5) && (host_readws(hero + HERO_LE) < 5)) {
+			if ((old_le >= 5) && (hero->le < 5)) {
 
 				/* make hero unsonscious */
-				or_ptr_bs(hero + HERO_FLAGS1, 0x40); /* set 'unconscious' flag */
+				or_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0x40); /* set 'unconscious' flag */
 
 				/* unknown yet */
-				host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_WAIT);
+				hero->action_id = FIG_ACTION_WAIT;
 
 				/* unknown yet */
-				gs_unconscious_message[get_hero_index(hero)] = 1;
+				gs_unconscious_message[get_hero_index((Bit8u*)hero)] = 1;
 
 				/* in fight mode */
 				if (g_in_fight) {
 
-					fighter = FIG_get_fighter(host_readb(hero + HERO_FIGHTER_ID));
+					fighter = FIG_get_fighter(hero->fighter_id);
 
-					fighter->nvf_no = g_nvftab_figures_unconscious[host_readbs(hero + HERO_SPRITE_NO)] + host_readbs(hero + HERO_VIEWDIR);
+					fighter->nvf_no = g_nvftab_figures_unconscious[hero->sprite_no] + hero->viewdir;
 
 					fighter->reload = -1;
 
-					fighter->offsetx = g_gfxtab_offsets_unconscious[host_readbs(hero + HERO_SPRITE_NO)][host_readbs(hero + HERO_VIEWDIR)].x;
-					fighter->offsety = g_gfxtab_offsets_unconscious[host_readbs(hero + HERO_SPRITE_NO)][host_readbs(hero + HERO_VIEWDIR)].y;
+					fighter->offsetx = g_gfxtab_offsets_unconscious[hero->sprite_no][hero->viewdir].x;
+					fighter->offsety = g_gfxtab_offsets_unconscious[hero->sprite_no][hero->viewdir].y;
 
 
 					FIG_add_msg(7, 0);
@@ -4718,7 +4720,7 @@ void sub_hero_le(Bit8u *hero, signed short le)
 					/* FINAL FIGHT */
 					if (g_current_fight_no == FIGHTS_F144) {
 
-						if (hero == (Bit8u*)gs_main_acting_hero) {
+						if (hero == (struct struct_hero*)gs_main_acting_hero) {
 
 							g_game_state = GAME_STATE_DEAD;
 
@@ -5437,7 +5439,7 @@ void sub_group_le(signed short le)
 
 		if (hero_i->typus && (hero_i->group_no == gs_current_group))
 		{
-			sub_hero_le((Bit8u*)hero_i, le);
+			sub_hero_le((struct struct_hero*)hero_i, le);
 		}
 	}
 }

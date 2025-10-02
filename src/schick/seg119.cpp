@@ -70,7 +70,7 @@ void disease_effect(void)
 
 				} else {
 					/* Strength is fading, but only to 1 */
-					sub_hero_le((Bit8u*)hero, dice_roll(2, 6, -(disease_ptr[1] - 1)));
+					sub_hero_le(hero, dice_roll(2, 6, -(disease_ptr[1] - 1)));
 
 					if (hero->attrib[ATTRIB_KK].current != 0) {
 
@@ -165,7 +165,7 @@ void disease_effect(void)
 				if (disease_ptr[1] > dice_roll(1, 3, 4)) {
 					disease_ptr[0] = 1;
 				} else {
-					sub_hero_le((Bit8u*)hero, dice_roll(1, 6, -1));
+					sub_hero_le(hero, dice_roll(1, 6, -1));
 				}
 			}
 
@@ -224,7 +224,7 @@ void disease_effect(void)
 					hero->attrib[ATTRIB_KK].normal--;
 					hero->attrib[ATTRIB_KK].current--;
 					hero->le_max -= disease_ptr[1] / 3;
-					sub_hero_le((Bit8u*)hero, disease_ptr[1] / 3);
+					sub_hero_le(hero, disease_ptr[1] / 3);
 					disease_ptr[0] = 1;
 
 				} else {
@@ -239,7 +239,7 @@ void disease_effect(void)
 						}
 					}
 
-					sub_hero_le((Bit8u*)hero, dice_roll(1, 6, 2));
+					sub_hero_le(hero, dice_roll(1, 6, 2));
 				}
 			}
 
@@ -335,7 +335,7 @@ void disease_effect(void)
 						sprintf(g_dtp2, get_ttx(580), hero->alias);
 						GUI_output(g_dtp2);
 
-						sub_hero_le((Bit8u*)hero, 1000);
+						sub_hero_le(hero, 1000);
 
 					} else {
 
@@ -367,7 +367,7 @@ void disease_effect(void)
 							}
 						}
 
-						sub_hero_le((Bit8u*)hero, dice_roll(hero->typus >= HERO_TYPE_GREEN_ELF ? 2 : 1, 6, disease_ptr[1] - 1));
+						sub_hero_le(hero, dice_roll(hero->typus >= HERO_TYPE_GREEN_ELF ? 2 : 1, 6, disease_ptr[1] - 1));
 					}
 				}
 			}
@@ -404,7 +404,7 @@ void disease_effect(void)
 					GUI_output(g_dtp2);
 				}
 
-				sub_hero_le((Bit8u*)hero, dice_roll(1, 6, 0));
+				sub_hero_le(hero, dice_roll(1, 6, 0));
 
 				if (hero->attrib[ATTRIB_KK].current != 0) {
 
@@ -479,7 +479,7 @@ void disease_effect(void)
 						}
 					}
 
-					sub_hero_le((Bit8u*)hero, dice_roll((disease_ptr[1] > 3 ? 3 : disease_ptr[1]), 6, 0));
+					sub_hero_le(hero, dice_roll((disease_ptr[1] > 3 ? 3 : disease_ptr[1]), 6, 0));
 
 					disease_ptr[2] += 2;
 					hero->attrib[ATTRIB_KK].current -= 2;
@@ -526,7 +526,7 @@ void disease_effect(void)
 
 				hero->attrib[ATTRIB_KK].current = hero->attrib[ATTRIB_KK].normal;
 
-				sub_hero_le((Bit8u*)hero, 5000);
+				sub_hero_le(hero, 5000);
 			}
 
 			/* kill hero if GE <= 0 */
@@ -534,7 +534,7 @@ void disease_effect(void)
 
 				hero->attrib[ATTRIB_GE].current = hero->attrib[ATTRIB_GE].normal;
 
-				sub_hero_le((Bit8u*)hero, 5000);
+				sub_hero_le(hero, 5000);
 			}
 		}
 	}

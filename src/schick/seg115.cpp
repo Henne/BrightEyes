@@ -159,7 +159,7 @@ void tevent_090(void)
 			test_skill(hero, TA_GEFAHRENSINN, 0) <= 0)
 		{
 			/* failed */
-			sub_hero_le((Bit8u*)hero, random_schick(10));
+			sub_hero_le((struct struct_hero*)hero, random_schick(10));
 
 			loose_random_item((struct struct_hero*)hero, 10, get_ttx(506));
 			loose_random_item((struct struct_hero*)hero, 10, get_ttx(506));

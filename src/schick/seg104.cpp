@@ -443,7 +443,7 @@ signed short skill_cure_disease(struct struct_hero *healer, struct struct_hero *
 						damage = patient->le - 1;
 					}
 
-					sub_hero_le((Bit8u*)patient, damage);
+					sub_hero_le((struct struct_hero*)patient, damage);
 
 					sprintf(g_dtp2,	get_ttx(694), patient->alias, damage);
 					GUI_output(g_dtp2);

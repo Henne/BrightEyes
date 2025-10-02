@@ -158,7 +158,7 @@ signed short check_hero_no3(Bit8u*);
 signed short is_hero_available_in_group(Bit8u*);
 void sub_ae_splash(struct struct_hero*, signed int);
 void add_hero_ae(struct struct_hero*, const signed int);
-void sub_hero_le(Bit8u*, signed short);
+void sub_hero_le(struct struct_hero*, const signed short);
 void add_hero_le(struct struct_hero*, const signed short);
 void add_group_le(signed short);
 /* static */

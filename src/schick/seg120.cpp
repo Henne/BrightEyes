@@ -209,7 +209,7 @@ void rabies(struct struct_hero* hero, signed short hero_pos)
 			if (answer == 1) {
 				/* knock the infected hero out */
 
-				sub_hero_le((Bit8u*)hero, hero->le / 2);
+				sub_hero_le(hero, hero->le / 2);
 
 				sprintf(g_dtp2, get_ttx(745), hero->alias);
 
@@ -270,7 +270,7 @@ void rabies(struct struct_hero* hero, signed short hero_pos)
 						if (hero2->ae >= 15) {
 
 							/* spell must succeed */
-							if (test_spell((struct struct_hero*)hero2, SP_SANFTMUT, 0)) {
+							if (test_spell(hero2, SP_SANFTMUT, 0)) {
 
 								done = 1;
 
@@ -312,7 +312,7 @@ void rabies(struct struct_hero* hero, signed short hero_pos)
 				if ((l_di != hero_pos) && (hero2->typus != HERO_TYPE_NONE) &&
 					(hero2->group_no == gs_current_group) && !hero_dead((Bit8u*)hero2))
 				{
-					sub_hero_le((Bit8u*)hero2, dice_roll(1, 6, 2));
+					sub_hero_le(hero2, dice_roll(1, 6, 2));
 				}
 			}
 

@@ -85,7 +85,7 @@ void tevent_067(void)
 
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
 					{
-						sub_hero_le((Bit8u*)hero, random_schick(8));
+						sub_hero_le((struct struct_hero*)hero, random_schick(8));
 					}
 				}
 
@@ -298,7 +298,7 @@ void TRV_swimm(signed short mod, signed short percent)
 
 				loose_random_item((struct struct_hero*)hero, percent, get_ttx(506));
 
-				sub_hero_le((Bit8u*)hero, random_schick(5));
+				sub_hero_le((struct struct_hero*)hero, random_schick(5));
 
 				sprintf(g_dtp2,	get_tx2(21), hero->alias);
 			} else {
@@ -469,7 +469,7 @@ void tevent_074(void)
 				GUI_dialogbox((unsigned char*)g_dtp2, get_tx(49), (char*)(g_dtp2 + 0x400), 0);
 
 				/* this hero gets a damage of 2W6+4 */
-				sub_hero_le((Bit8u*)hero, dice_roll(2, 6, 4));
+				sub_hero_le((struct struct_hero*)hero, dice_roll(2, 6, 4));
 			}
 		} else {
 
@@ -695,7 +695,7 @@ void tevent_077(void)
 				GUI_dialogbox((unsigned char*)g_dtp2, get_tx(50), (char*)(g_dtp2 + 0x400), 0);
 
 				/* the last hero looses between 6 and 16 LE */
-				sub_hero_le((Bit8u*)hero, random_schick(11) + 5);
+				sub_hero_le((struct struct_hero*)hero, random_schick(11) + 5);
 			}
 
 		} else {

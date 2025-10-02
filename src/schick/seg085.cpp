@@ -63,7 +63,7 @@ signed short DNG10_handler(void)
 
 			GUI_output(g_dtp2);
 
-			sub_hero_le(hero, 2);
+			sub_hero_le((struct struct_hero*)hero, 2);
 		}
 
 	} else if (target_pos == DNG_POS(0,5,2) && target_pos != gs_dng_handled_pos)
@@ -110,7 +110,7 @@ signed short DNG10_handler(void)
 
 		GUI_output(g_dtp2);
 
-		sub_hero_le(hero, answer);
+		sub_hero_le((struct struct_hero*)hero, answer);
 
 	} else if (target_pos == DNG_POS(0,3,10) &&
 			(target_pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&
@@ -138,7 +138,7 @@ signed short DNG10_handler(void)
 
 					gs_dng10_hole_damage += result;
 
-					sub_hero_le(hero, result);
+					sub_hero_le((struct struct_hero*)hero, result);
 
 					if (gs_dng10_hole_damage >= 7)
 					{
@@ -173,7 +173,7 @@ signed short DNG10_handler(void)
 
 					gs_dng10_floorplate_loads--;
 
-					sub_hero_le(hero, dice_roll(3, 6, 0));
+					sub_hero_le((struct struct_hero*)hero, dice_roll(3, 6, 0));
 				} else {
 					strcpy(g_dtp2, get_tx(15));
 				}
@@ -247,7 +247,7 @@ signed short DNG10_handler(void)
 					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 					!hero_dead(hero))
 				{
-					sub_hero_le(hero, random_schick(6));
+					sub_hero_le((struct struct_hero*)hero, random_schick(6));
 				}
 			}
 		}
@@ -261,7 +261,7 @@ signed short DNG10_handler(void)
 			sprintf(g_dtp2, get_tx(26), (char*)hero + HERO_NAME2);
 			GUI_output(g_dtp2);
 
-			sub_hero_le(hero, 2);
+			sub_hero_le((struct struct_hero*)hero, 2);
 		}
 
 	} else if ((target_pos == DNG_POS(1,10,3) || target_pos == DNG_POS(1,7,3)) && target_pos != gs_dng_handled_pos && gs_dng10_mummy_lever)

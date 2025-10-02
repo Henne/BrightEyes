@@ -307,7 +307,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 					if (damage > 0) {
 
-						sub_hero_le(hero, damage);
+						sub_hero_le((struct struct_hero*)hero, damage);
 
 						FIG_add_msg(8, damage);
 
@@ -326,7 +326,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 					damage = random_schick(6);
 
-					sub_hero_le(hero, damage);
+					sub_hero_le((struct struct_hero*)hero, damage);
 
 					FIG_add_msg(8, damage);
 
@@ -410,7 +410,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 									if (damage > 0) {
 
-										sub_hero_le(target_hero, damage);
+										sub_hero_le((struct struct_hero*)target_hero, damage);
 
 										FIG_add_msg(8, damage);
 
@@ -440,7 +440,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 							if (target_is_hero != 0) {
 
-								sub_hero_le(target_hero, damage);
+								sub_hero_le((struct struct_hero*)target_hero, damage);
 
 								FIG_add_msg(8, damage);
 
@@ -509,7 +509,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 						if (damage > 0) {
 
-							sub_hero_le(target_hero, damage);
+							sub_hero_le((struct struct_hero*)target_hero, damage);
 
 							FIG_add_msg(8, damage);
 
@@ -599,7 +599,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 
 						if (damage > 0) {
 
-							sub_hero_le(target_hero, damage);
+							sub_hero_le((struct struct_hero*)target_hero, damage);
 
 							FIG_add_msg(8, damage);
 
@@ -693,7 +693,7 @@ void FIG_do_hero_action(Bit8u* hero, const signed short hero_pos)
 				if (g_current_fight_no == FIGHTS_F144) {
 					/* no spells allowed in the final fight */
 
-					sub_hero_le(hero, host_readws(hero + HERO_LE) + 1);
+					sub_hero_le((struct struct_hero*)hero, host_readws(hero + HERO_LE) + 1);
 
 					g_attacker_dead = 1;
 				}

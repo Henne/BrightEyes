@@ -202,7 +202,7 @@ void tevent_086(void)
 			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 				host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 			{
-				sub_hero_le(hero, 2);
+				sub_hero_le((struct struct_hero*)hero, 2);
 			}
 		}
 
@@ -813,7 +813,7 @@ void tevent_107(void)
 
 					sprintf(g_dtp2, get_tx2(70), (char*)hero + HERO_NAME2);
 
-					sub_hero_le(hero, random_schick(11) + 1);
+					sub_hero_le((struct struct_hero*)hero, random_schick(11) + 1);
 
 				} else {
 
@@ -821,7 +821,7 @@ void tevent_107(void)
 						get_tx2(71),
 						(char*)hero + HERO_NAME2);
 
-					sub_hero_le(hero, random_schick(11) + 4);
+					sub_hero_le((struct struct_hero*)hero, random_schick(11) + 4);
 				}
 
 				GUI_output(g_dtp2);

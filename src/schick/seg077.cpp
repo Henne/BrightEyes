@@ -120,7 +120,7 @@ signed short DNG01_handler(void)
 					host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 					host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 				{
-					sub_hero_le(hero, 2);
+					sub_hero_le((struct struct_hero*)hero, 2);
 
 					sprintf(g_text_output_buf, get_tx(12), (char*)hero + HERO_NAME2);
 

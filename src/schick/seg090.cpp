@@ -233,7 +233,7 @@ signed short DNG12_handler(void)
 	} else if (target_pos == DNG_POS(0,6,13) && target_pos != gs_dng_handled_pos) {
 		/* bolt trap */
 		print_msg_with_first_hero(get_tx(13));
-		sub_hero_le((Bit8u*)hero, random_schick(6));
+		sub_hero_le((struct struct_hero*)hero, random_schick(6));
 	} else if (target_pos == DNG_POS(1,2,14) && target_pos != gs_dng_handled_pos && !gs_dng12_ingerimm_hint)
 	{
 		/* lower Ingerimm idol */
@@ -436,7 +436,7 @@ signed short DNG12_handler(void)
 
 				GUI_output(g_dtp2);
 
-				sub_hero_le((Bit8u*)hero, random_schick(4));
+				sub_hero_le((struct struct_hero*)hero, random_schick(4));
 				gs_x_target = gs_x_target_bak;
 				gs_y_target = gs_y_target_bak;
 			} else {
@@ -458,7 +458,7 @@ signed short DNG12_handler(void)
 
 					/* defusing trap failed */
 					sprintf(g_dtp2,	get_tx(29), hero->alias);
-					sub_hero_le((Bit8u*)hero, dice_roll(3, 6, 0));
+					sub_hero_le((struct struct_hero*)hero, dice_roll(3, 6, 0));
 
 				} else {
 

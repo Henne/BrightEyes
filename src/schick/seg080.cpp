@@ -65,7 +65,7 @@ signed short DNG04_handler(void)
 			sprintf(g_dtp2,	get_tx(5), (char*)hero + HERO_NAME2);
 			GUI_output(g_dtp2);
 
-			sub_hero_le(hero, 2);
+			sub_hero_le((struct struct_hero*)hero, 2);
 
 			/* get a magic AMULET */
 			get_item(ITEM_TRAVIA_AMULET, 1, 1);
@@ -222,7 +222,7 @@ signed short DNG04_handler(void)
 					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
 					!hero_dead(hero))
 				{
-					sub_hero_le(hero, 2);
+					sub_hero_le((struct struct_hero*)hero, 2);
 
 					sprintf(g_text_output_buf, get_tx(21), (char*)hero + HERO_NAME2);
 					GUI_output(g_text_output_buf);
@@ -243,7 +243,7 @@ signed short DNG04_handler(void)
 					host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 					host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 				{
-					sub_hero_le(hero, 2);
+					sub_hero_le((struct struct_hero*)hero, 2);
 
 					sprintf(g_text_output_buf, get_tx(25), (char*)hero + HERO_NAME2);
 					GUI_output(g_text_output_buf);
@@ -411,7 +411,7 @@ signed short DNG05_handler(void)
 			sprintf(g_dtp2,	get_tx(13), (char*)hero + HERO_NAME2);
 			GUI_output(g_dtp2);
 
-			sub_hero_le(hero, dice_roll(1, 3, 2));
+			sub_hero_le((struct struct_hero*)hero, dice_roll(1, 3, 2));
 
 			hero_disease_test((struct struct_hero*)hero, 1, 65);
 		}

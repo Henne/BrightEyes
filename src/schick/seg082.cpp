@@ -323,7 +323,7 @@ void DNG09_statues(signed short prob, signed short bonus)
 
 				} else {
 					/* loose 1W6 LE */
-					sub_hero_le(hero, random_schick(6));
+					sub_hero_le((struct struct_hero*)hero, random_schick(6));
 
 					sprintf(g_dtp2,	get_tx(9), (char*)hero + HERO_NAME2);
 					GUI_output(g_dtp2);

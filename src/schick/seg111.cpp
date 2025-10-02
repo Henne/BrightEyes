@@ -102,7 +102,7 @@ void tevent_057(void)
 				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
 					host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
 				{
-					sub_hero_le(hero, random_schick(3));
+					sub_hero_le((struct struct_hero*)hero, random_schick(3));
 				}
 			}
 		}
@@ -125,13 +125,13 @@ void tevent_057(void)
 					sprintf(g_dtp2, get_tx2(8), (char*)hero + HERO_NAME2, GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
 					GUI_output(g_dtp2);
 
-					sub_hero_le(hero, random_schick(9) + 3);
+					sub_hero_le((struct struct_hero*)hero, random_schick(9) + 3);
 
 				} else {
 					sprintf(g_dtp2, get_tx2(7), (char*)hero + HERO_NAME2);
 					GUI_output(g_dtp2);
 
-					sub_hero_le(hero, random_schick(8));
+					sub_hero_le((struct struct_hero*)hero, random_schick(8));
 				}
 			}
 		}
@@ -256,7 +256,7 @@ void tevent_060(void)
 							!hero_dead(hero) &&
 							test_skill((struct struct_hero*)hero, TA_KLETTERN, 0) <= 0)
 						{
-							sub_hero_le(hero, random_schick(10));
+							sub_hero_le((struct struct_hero*)hero, random_schick(10));
 						}
 					}
 
@@ -448,7 +448,7 @@ void tevent_063(void)
 	GUI_output(g_dtp2);
 
 	/* LE - 2 */
-	sub_hero_le(hero, 2);
+	sub_hero_le((struct struct_hero*)hero, 2);
 
 	i = get_free_mod_slot();
 

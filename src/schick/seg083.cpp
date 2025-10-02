@@ -327,7 +327,7 @@ signed short DNG08_handler(void)
 					(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
 				GUI_output(g_dtp2);
 
-				sub_hero_le(hero, dice_roll(1, 6, 4));
+				sub_hero_le((struct struct_hero*)hero, dice_roll(1, 6, 4));
 			}
 		}
 
@@ -484,7 +484,7 @@ void DNG08_chest01_trap(void)
 	GUI_output(g_dtp2);
 
 	/* 3W6 damage */
-	sub_hero_le(hero, dice_roll(3, 6, 0));
+	sub_hero_le((struct struct_hero*)hero, dice_roll(3, 6, 0));
 }
 
 void DNG08_chest00_loot(Bit8u*)

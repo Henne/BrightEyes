@@ -42,7 +42,7 @@ void DNG14_dive(signed short diver_pos, signed char mod, signed short dest_x)
 				GUI_output(g_dtp2);
 
 				/* loose 2W6 LE */
-				sub_hero_le((Bit8u*)hero, dice_roll(2, 6, 0));
+				sub_hero_le((struct struct_hero*)hero, dice_roll(2, 6, 0));
 			} else {
 
 				/* swimming succeeded */
@@ -173,7 +173,7 @@ void DNG14_chest07_trap(void)
 
 	hero = (Bit8u*)get_first_hero_available_in_group();
 	print_msg_with_first_hero(get_tx(61));
-	sub_hero_le(hero, dice_roll(2, 6, 0));
+	sub_hero_le((struct struct_hero*)hero, dice_roll(2, 6, 0));
 }
 
 void DNG15_riddle(void)

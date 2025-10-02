@@ -282,7 +282,7 @@ void TM_func1(signed short route_no, signed short backwards)
 					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
 						!hero_dead((Bit8u*)hero))
 					{
-						sub_hero_le((Bit8u*)hero, gs_forcedmarch_le_cost);
+						sub_hero_le((struct struct_hero*)hero, gs_forcedmarch_le_cost);
 					}
 				}
 

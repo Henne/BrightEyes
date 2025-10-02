@@ -779,7 +779,7 @@ void DNG_stub6(void)
 
 					strcat(g_dtp2, g_text_output_buf);
 
-					sub_hero_le(hero2, l_si);
+					sub_hero_le((struct struct_hero*)hero2, l_si);
 				}
 			} else {
 
@@ -888,7 +888,7 @@ signed short DNG_fallpit(signed short max_damage)
 			host_writeb(get_hero(hero_id) + HERO_GROUP_NO, (unsigned char)new_group);
 			gs_group_member_counts[new_group]++;
 			gs_group_member_counts[gs_current_group]--;
-			sub_hero_le(get_hero(hero_id), random_schick(max_damage));
+			sub_hero_le((struct struct_hero*)get_hero(hero_id), random_schick(max_damage));
 		}
 
 		GRP_save_pos(new_group);
@@ -908,7 +908,7 @@ signed short DNG_fallpit(signed short max_damage)
 				hero_id++;
 			}
 
-			sub_hero_le(get_hero(hero_id++), random_schick(max_damage));
+			sub_hero_le((struct struct_hero*)get_hero(hero_id++), random_schick(max_damage));
 		}
 
 		DNG_inc_level();

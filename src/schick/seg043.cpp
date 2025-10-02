@@ -355,7 +355,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 											/* HESHTHOT */
 											if (monster->mon_id != 0x4d) {
-												sub_hero_le(hero, damage);
+												sub_hero_le((struct struct_hero*)hero, damage);
 											}
 
 											FIG_add_msg(8, damage);
@@ -390,7 +390,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 								if (target_is_hero != 0) {
 
-									sub_hero_le(hero, damage);
+									sub_hero_le((struct struct_hero*)hero, damage);
 
 									FIG_add_msg(8, damage);
 
@@ -467,7 +467,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 							if (damage > 0) {
 
 								if (monster->mon_id != 0x4d) {
-									sub_hero_le(hero, damage);
+									sub_hero_le((struct struct_hero*)hero, damage);
 								}
 
 								FIG_add_msg(8, damage);
@@ -540,7 +540,7 @@ void FIG_do_enemy_action(struct enemy_sheet* monster, signed short monster_pos)
 
 					if (damage > 0) {
 
-						sub_hero_le(hero, damage);
+						sub_hero_le((struct struct_hero*)hero, damage);
 
 						FIG_add_msg(8, damage);
 
@@ -848,7 +848,7 @@ void FIG_use_item(Bit8u *hero, struct enemy_sheet *target_monster, Bit8u *target
 
 				strcpy(g_dtp2, get_tx(37));
 
-				sub_hero_le(target_hero, damage);
+				sub_hero_le((struct struct_hero*)target_hero, damage);
 
 				FIG_add_msg(8, damage);
 
@@ -880,7 +880,7 @@ void FIG_use_item(Bit8u *hero, struct enemy_sheet *target_monster, Bit8u *target
 			/* .. used on another hero */
 			if (flag != 0) {
 
-				sub_hero_le(target_hero, 20);
+				sub_hero_le((struct struct_hero*)target_hero, 20);
 
 				FIG_add_msg(8, 20);
 

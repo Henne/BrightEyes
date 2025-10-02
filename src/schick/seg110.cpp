@@ -117,7 +117,7 @@ void TRV_swim2(signed char mod, signed short percent)
 					loose_random_item((struct struct_hero*)hero, percent, get_ttx(506));
 				}
 
-				sub_hero_le(hero, random_schick(5));
+				sub_hero_le((struct struct_hero*)hero, random_schick(5));
 			}
 		}
 	}
@@ -381,7 +381,7 @@ void tevent_029(void)
 				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
 				!hero_dead(hero))
 			{
-				sub_hero_le(hero, 2);
+				sub_hero_le((struct struct_hero*)hero, 2);
 
 				item_pos = get_item_pos(hero, ITEM_FOOD_PACKAGE);
 

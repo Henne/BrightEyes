@@ -85,7 +85,7 @@ signed short DNG15_handler(void)
 				sprintf(g_dtp2,	(char*)(tmp == 3 ? get_tx(3) : (tmp == 2 ? get_tx(4) : get_tx(5))), hero->alias);
 				GUI_output(g_dtp2);
 
-				sub_hero_le((Bit8u*)hero, 1);
+				sub_hero_le((struct struct_hero*)hero, 1);
 			}
 		}
 
@@ -487,7 +487,7 @@ void DNG15_small_wounds(void)
 			sprintf(g_dtp2, (char*)(randval == 3 ? get_tx(3) : (randval == 2 ? get_tx(7) : get_tx(8))), hero->alias);
 			GUI_output(g_dtp2);
 
-			sub_hero_le((Bit8u*)hero, 1);
+			sub_hero_le((struct struct_hero*)hero, 1);
 		}
 	}
 }
@@ -540,7 +540,7 @@ void DNG15_smelling_chest(Bit8u* chest)
 		sprintf(g_dtp2,	get_tx(36), hero->alias);
 		GUI_output(g_dtp2);
 
-		sub_hero_le((Bit8u*)hero, 4);
+		sub_hero_le((struct struct_hero*)hero, 4);
 	}
 }
 
@@ -628,7 +628,7 @@ void DNG15_collapsing_ceiling(Bit8u* ptr)
 					sprintf(g_dtp2, get_tx(44), hero->alias, GUI_get_ptr(hero->sex, 0));
 					GUI_output(g_dtp2);
 
-					sub_hero_le((Bit8u*)hero, random_schick(6));
+					sub_hero_le((struct struct_hero*)hero, random_schick(6));
 				}
 			}
 
@@ -687,7 +687,7 @@ void DNG15_clear_way(Bit8u* ptr)
 				sprintf(g_dtp2, get_tx(44), hero->alias, GUI_get_ptr(hero->sex, 0));
 				GUI_output(g_dtp2);
 
-				sub_hero_le((Bit8u*)hero, random_schick(6));
+				sub_hero_le((struct struct_hero*)hero, random_schick(6));
 			}
 		}
 

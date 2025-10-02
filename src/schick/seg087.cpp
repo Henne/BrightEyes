@@ -400,7 +400,7 @@ signed short DNG14_handler(void)
 						GUI_output(g_dtp2);
 
 						/* 1W6 damage */
-						sub_hero_le(hero, random_schick(6));
+						sub_hero_le((struct struct_hero*)hero, random_schick(6));
 					}
 				}
 
@@ -422,7 +422,7 @@ signed short DNG14_handler(void)
 						GUI_output(g_dtp2);
 
 						/* 2W6+4 damage */
-						sub_hero_le(hero, dice_roll(2, 6, 4));
+						sub_hero_le((struct struct_hero*)hero, dice_roll(2, 6, 4));
 					}
 				}
 
@@ -554,7 +554,7 @@ signed short DNG14_handler(void)
 						GUI_output(g_dtp2);
 
 						/* 1W6 damage */
-						sub_hero_le(hero, random_schick(6));
+						sub_hero_le((struct struct_hero*)hero, random_schick(6));
 
 						gs_x_target = (pos == DNG_POS(3,10,10) ? 9 : 13);
 
@@ -610,7 +610,7 @@ signed short DNG14_handler(void)
 		GUI_output(g_dtp2);
 
 		/* 1W6 damage */
-		sub_hero_le(hero, 3);
+		sub_hero_le((struct struct_hero*)hero, 3);
 
 	} else if (pos == DNG_POS(3,7,3) && pos != gs_dng_handled_pos && !gs_dng14_ring_flag) {
 

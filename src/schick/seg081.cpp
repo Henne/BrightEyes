@@ -120,10 +120,10 @@ signed short DNG06_handler(void)
 
 		GUI_output(g_dtp2);
 
-		sub_hero_le(hero_first, random_schick(6));
+		sub_hero_le((struct struct_hero*)hero_first, random_schick(6));
 		if (l3 > 1)
 		{
-			sub_hero_le(hero_second, random_schick(6));
+			sub_hero_le((struct struct_hero*)hero_second, random_schick(6));
 		}
 
 	} else if (target_pos == DNG_POS(0,9,7) && target_pos != gs_dng_handled_pos && !gs_dng06_pitdoor_flag)
@@ -230,7 +230,7 @@ signed short DNG06_handler(void)
 			sprintf(g_dtp2, (l3 == 1 ? get_tx(12) : get_tx(13)), (char*)hero + HERO_NAME2);
 			GUI_output(g_dtp2);
 
-			sub_hero_le(hero, dice_roll(l3, 6, 0));
+			sub_hero_le((struct struct_hero*)hero, dice_roll(l3, 6, 0));
 		}
 
 	} else if (target_pos == DNG_POS(1,13,5) && target_pos != gs_dng_handled_pos)
@@ -252,7 +252,7 @@ signed short DNG06_handler(void)
 
 			GUI_output(g_dtp2);
 
-			sub_hero_le(hero, dice_roll(3, 6, 0));
+			sub_hero_le((struct struct_hero*)hero, dice_roll(3, 6, 0));
 		} else {
 
 			hero = get_hero(0);
@@ -269,7 +269,7 @@ signed short DNG06_handler(void)
 
 					GUI_output(g_dtp2);
 
-					sub_hero_le(hero, dice_roll(3, 6, 0));
+					sub_hero_le((struct struct_hero*)hero, dice_roll(3, 6, 0));
 				}
 			}
 		}
@@ -310,7 +310,7 @@ signed short DNG06_handler(void)
 				sprintf(g_dtp2, get_tx(23), (char*)hero + HERO_NAME2);
 				GUI_output(g_dtp2);
 
-				sub_hero_le(hero, 2);
+				sub_hero_le((struct struct_hero*)hero, 2);
 			}
 		}
 
@@ -350,7 +350,7 @@ signed short DNG06_handler(void)
 				sprintf(g_dtp2,	get_tx(23), (char*)hero + HERO_NAME2);
 				GUI_output(g_dtp2);
 
-				sub_hero_le(hero, 2);
+				sub_hero_le((struct struct_hero*)hero, 2);
 			}
 		}
 
@@ -373,7 +373,7 @@ signed short DNG06_handler(void)
 			sprintf(g_dtp2,	get_tx(27), GUI_get_ptr(host_readbs(hero + HERO_SEX), 2));
 			GUI_output(g_dtp2);
 
-			sub_hero_le(hero, dice_roll(3, 6, 0));
+			sub_hero_le((struct struct_hero*)hero, dice_roll(3, 6, 0));
 		}
 
 	} else if (target_pos == DNG_POS(1,7,13) && target_pos != gs_dng_handled_pos && !gs_dng06_fight19_flag)
@@ -388,7 +388,7 @@ signed short DNG06_handler(void)
 
 			GUI_output(g_dtp2);
 
-			sub_hero_le(hero, 2);
+			sub_hero_le((struct struct_hero*)hero, 2);
 		}
 
 	} else if (target_pos == DNG_POS(1,6,11) && target_pos != gs_dng_handled_pos && !gs_dng06_dasptreas_found)
@@ -542,8 +542,8 @@ void DNG09_pitfall(void)
 				GUI_output(g_dtp2);
 
 				/* each of these two heroes looses 3W6+3 LE */
-				sub_hero_le(hero_first, dice_roll(3, 6, 3));
-				sub_hero_le(hero_second, dice_roll(3, 6, 3));
+				sub_hero_le((struct struct_hero*)hero_first, dice_roll(3, 6, 3));
+				sub_hero_le((struct struct_hero*)hero_second, dice_roll(3, 6, 3));
 
 				/* find an empty group */
 				l3 = 0;
@@ -568,7 +568,7 @@ void DNG09_pitfall(void)
 				GUI_output(g_dtp2);
 
 				/* this hero looses 3W6+3 LE */
-				sub_hero_le(hero_first, dice_roll(3, 6, 3));
+				sub_hero_le((struct struct_hero*)hero_first, dice_roll(3, 6, 3));
 
 				/* find an empty group */
 				l3 = 0;

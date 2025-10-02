@@ -170,7 +170,7 @@ void tevent_133(void)
 					sprintf(g_dtp2, get_tx2(39), hero->alias, GUI_get_ptr(hero->sex, 3), GUI_get_ptr(hero->sex, 2));
 					GUI_output(g_dtp2);
 
-					sub_hero_le((Bit8u*)hero, random_schick(8));
+					sub_hero_le((struct struct_hero*)hero, random_schick(8));
 
 					loose_random_item((struct struct_hero*)hero, 50, get_ttx(506));
 					loose_random_item((struct struct_hero*)hero, 50, get_ttx(506));
@@ -300,7 +300,7 @@ void tevent_135(void)
 				tmp = hero->le;
 				tmp -= tmp2;
 
-				sub_hero_le((Bit8u*)hero, tmp2);
+				sub_hero_le((struct struct_hero*)hero, tmp2);
 
 				if (tmp <= 0) {
 					sprintf(g_dtp2, (char*)(!tmp ? get_tx2(53) : get_tx2(52)), hero->alias);
@@ -405,7 +405,7 @@ void tevent_139(void)
 
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
 			{
-				sub_hero_le((Bit8u*)hero, random_schick(2));
+				sub_hero_le((struct struct_hero*)hero, random_schick(2));
 			}
 		}
 
@@ -499,7 +499,7 @@ void tevent_143(void)
 
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
 			{
-				sub_hero_le((Bit8u*)hero, random_schick(2) + 1);
+				sub_hero_le((struct struct_hero*)hero, random_schick(2) + 1);
 			}
 		}
 

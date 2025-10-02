@@ -117,7 +117,7 @@ void FIG_do_spell_damage(signed short le)
 		if (get_spelltarget() != get_spelluser()) {
 
 			/* do the damage */
-			sub_hero_le(get_spelltarget(), le);
+			sub_hero_le((struct struct_hero*)get_spelltarget(), le);
 
 			/* add a message (ired star with le) */
 			FIG_add_msg(0x08, le);
@@ -296,7 +296,7 @@ signed short use_magic(Bit8u* hero)
 						ae = host_readws(hero + HERO_LE) - 8;
 					}
 
-					sub_hero_le(hero, ae + 3);
+					sub_hero_le((struct struct_hero*)hero, ae + 3);
 					add_hero_ae((struct struct_hero*)hero, ae);
 				} else {
 					/* Failed, print only a message */
