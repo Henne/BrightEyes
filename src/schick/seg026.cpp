@@ -216,7 +216,7 @@ signed short load_game_state(void)
 	signed short l3;
 	signed short retval;
 	signed short l4;
-	Bit8u* hero_i;
+	struct struct_hero* hero_i;
 	signed char version[4];
 	struct ffblk blk;
 	char name[20];
@@ -315,15 +315,15 @@ signed short load_game_state(void)
 		}
 
 		/* clear the heroes */
-		hero_i = get_hero(0);
-		for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
-			memset(hero_i, 0, SIZEOF_HERO);
+		hero_i = (struct struct_hero*)get_hero(0);
+		for (i = 0; i <= 6; i++, hero_i++) {
+			memset(hero_i, 0, sizeof(struct struct_hero));
 		}
 
-		hero_i = g_renderbuf_ptr;
+		hero_i = (struct struct_hero*)g_renderbuf_ptr;
 
 		do {
-			l3 = _read(handle_gs, (Bit8u*)hero_i, SIZEOF_HERO);
+			l3 = _read(handle_gs, (Bit8u*)hero_i, sizeof(struct struct_hero));
 
 			if (l3 != 0) {
 
@@ -335,14 +335,14 @@ signed short load_game_state(void)
 				/* TODO: should be O_BINARY | O_WRONLY */
 				handle = _creat(g_text_output_buf, 0);
 
-				write(handle, (Bit8u*)hero_i, SIZEOF_HERO);
+				write(handle, (Bit8u*)hero_i, sizeof(struct struct_hero));
 				close(handle);
 
-				if (host_readbs(hero_i + HERO_GROUP_POS) != 0) {
+				if (hero_i->group_pos != 0) {
 
 					prepare_chr_name(name, (char*)hero_i);
 
-					read_chr_temp(name, host_readbs(hero_i + HERO_GROUP_POS) - 1, host_readbs(hero_i + HERO_GROUP_NO));
+					read_chr_temp(name, hero_i->group_pos - 1, hero_i->group_no);
 				}
 			}
 
@@ -360,12 +360,12 @@ signed short load_game_state(void)
 
 			if ((handle_gs = open(g_text_output_buf, O_BINARY | O_RDWR)) == -1) {
 				handle = open((char*)(&blk) + 30, O_BINARY | O_RDWR);
-				_read(handle, g_renderbuf_ptr, SIZEOF_HERO);
+				_read(handle, g_renderbuf_ptr, sizeof(struct struct_hero));
 				close(handle);
 
 				/* TODO: should be O_BINARY | O_WRONLY */
 				handle_gs = _creat(g_text_output_buf, 0);
-				write(handle_gs, g_renderbuf_ptr, SIZEOF_HERO);
+				write(handle_gs, g_renderbuf_ptr, sizeof(struct struct_hero));
 			} else {
 				/* Yes, indeed! */
 			}
@@ -382,7 +382,7 @@ signed short load_game_state(void)
 
 			if (host_readbs(get_hero(6) + HERO_GROUP_POS) != 7) {
 
-				memset(get_hero(6), 0, SIZEOF_HERO);
+				memset(get_hero(6), 0, sizeof(struct struct_hero));
 			} else {
 				break;
 			}
@@ -643,13 +643,13 @@ signed short save_game_state(void)
 
 			/* read the CHR file from temp */
 			handle = open(g_text_output_buf, O_BINARY | O_RDWR);
-			_read(handle, g_renderbuf_ptr, SIZEOF_HERO);
+			_read(handle, g_renderbuf_ptr, sizeof(struct struct_hero));
 			close(handle);
 
 			/* append it */
-			len = write(l_di, g_renderbuf_ptr, SIZEOF_HERO);
+			len = write(l_di, g_renderbuf_ptr, sizeof(struct struct_hero));
 
-			if (len != SIZEOF_HERO) {
+			if (len != sizeof(struct struct_hero)) {
 
 				GUI_output(get_ttx(348));
 				close(l_di);
@@ -686,7 +686,7 @@ signed short read_chr_temp(char *fname, signed short hero_pos, signed short a2)
 {
 #if defined(__BORLANDC__)
 	signed short handle;
-	signed short hero_size = SIZEOF_HERO;
+	signed short hero_size = sizeof(struct struct_hero);
 	Bit8u *hero;
 
 	sprintf(g_text_output_buf, g_str_temp_xx_ptr2, (char*)fname);
@@ -755,7 +755,7 @@ void write_chr_temp(unsigned short hero_pos)
 
 	/* TODO: should be O_BINARY | O_WRONLY */
 	fd = _creat(g_text_output_buf, 0);
-	write(fd, get_hero(hero_pos), SIZEOF_HERO);
+	write(fd, get_hero(hero_pos), sizeof(struct struct_hero));
 	close(fd);
 }
 
@@ -788,7 +788,7 @@ signed short copy_chr_names(Bit8u *ptr, signed short temple_id)
 
 			/* read the CHR file from temp */
 			handle = open(g_text_output_buf, O_BINARY | O_RDWR);
-			_read(handle, buf, SIZEOF_HERO);
+			_read(handle, buf, sizeof(struct struct_hero));
 			close(handle);
 
 			if ((host_readbs(buf + 0x88) == temple_id && !host_readbs(buf + 0x8a)) ||

@@ -117,7 +117,7 @@ void do_house(void)
 {
 	signed short i;
 	signed short l_di;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	/* prepare the question */
 	strcpy(g_dtp2, get_tx(gs_current_locdata));
@@ -137,14 +137,13 @@ void do_house(void)
 		/* print a randomized text */
 		GUI_output(get_ttx(random_schick(8) + 623));
 
-		hero = get_hero(0);
+		hero = (struct struct_hero*)get_hero(0);
 
-		for (i = 0; i < 6; i++, hero += SIZEOF_HERO) {
+		for (i = 0; i < 6; i++, hero++) {
 
-			if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
-				!hero_dead(hero) && /* Original-Bug: What if petrified, sleeping etc. */
-				(test_skill((struct struct_hero*)hero, TA_VERSTECKEN, -2) <= 0))
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+				!hero_dead((Bit8u*)hero) && /* Original-Bug: What if petrified, sleeping etc. */
+				(test_skill(hero, TA_VERSTECKEN, -2) <= 0))
 			{
 				/* every hero must pass a sneak -2 test */
 
@@ -160,9 +159,9 @@ void do_house(void)
 
 					for (i = 0; i < 6; i++) {
 
-						hero = get_hero(i);
+						hero = (struct struct_hero*)get_hero(i);
 
-						if (check_hero(hero) && !host_readbs(hero + HERO_JAIL)) {
+						if (check_hero((Bit8u*)hero) && !hero->jail) {
 							l_di = 1;
 						}
 					}
@@ -171,10 +170,10 @@ void do_house(void)
 					{
 						i = 0;
 
-						while (host_readbs(get_hero(i) + HERO_GROUP_NO) == gs_current_group)
+						while (((struct struct_hero*)get_hero(i))->group_no == gs_current_group)
 						{
 							/* imprison hero */
-							host_writeb(get_hero(i) + HERO_JAIL, 1);
+							((struct struct_hero*)get_hero(i))->jail = 1;
 							i++;
 						}
 
@@ -205,7 +204,6 @@ void do_house(void)
 		gs_x_target = gs_x_target_bak;
 		gs_y_target = gs_y_target_bak;
 	}
-
 }
 
 void do_informer(void)

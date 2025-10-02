@@ -138,18 +138,16 @@ signed short FIG_choose_next_hero(void)
 			 * search by hand for a hero and dump the
 			 * interesting bits
 			 */
-			Bit8u *hero = get_hero(0);
-			for (int i = 0; i < 7; i++, hero += SIZEOF_HERO) {
-				D1_ERR("Hero %d typus = %x group=%x current_group=%x actions=%x\n",
-					i, host_readb(hero + HERO_TYPE),
-					host_readb(hero + HERO_GROUP_NO),
-					gs_current_group,
-					host_readb(hero + HERO_ACTIONS));
+			struct struct_hero *hero = (struct struct_hero*)get_hero(0);
+			for (int i = 0; i < 7; i++, hero++) {
 
-				if (host_readb(hero + HERO_TYPE) &&
-					host_readb(hero + HERO_GROUP_NO) == gs_current_group &&
-					host_readb(hero + HERO_ACTIONS))
-						retval = i;
+				D1_ERR("Hero %d typus = %x group=%x current_group=%x actions=%x\n",
+					i, hero->typus,	hero->group_no, gs_current_group, hero->actions);
+
+				if (hero->typus && (hero->group_no == gs_current_group) && hero->actions) {
+
+					retval = i;
+				}
 			}
 
 			/* exit if we didn't find a hero */
@@ -166,9 +164,9 @@ signed short FIG_choose_next_hero(void)
 
 	/* search for a hero who has a class, is in the current group and
 		something still unknown */
-	} while (host_readb(get_hero(retval) + HERO_TYPE) == HERO_TYPE_NONE ||
-			host_readb(get_hero(retval) + HERO_GROUP_NO) != gs_current_group ||
-			host_readb(get_hero(retval) + HERO_ACTIONS) == 0);
+	} while ((((struct struct_hero*)get_hero(retval))->typus == HERO_TYPE_NONE) ||
+			(((struct struct_hero*)get_hero(retval))->group_no != gs_current_group) ||
+			(((struct struct_hero*)get_hero(retval))->actions  == 0));
 
 	return retval;
 }
@@ -288,18 +286,18 @@ signed short FIG_is_enemy_active(struct enemy_sheet *enemy)
  */
 signed short FIG_get_first_active_hero(void)
 {
-	Bit8u *hero_i;
+	struct struct_hero *hero_i;
 	signed short i;
 
-	hero_i = get_hero(0);
+	hero_i = (struct struct_hero*)get_hero(0);
 
-	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
+	for (i = 0; i <= 6; i++, hero_i++) {
 
-		if ((host_readb(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readb(hero_i + HERO_GROUP_NO) == gs_current_group) &&
-			!hero_dead(hero_i) && !hero_petrified(hero_i) &&
-			!hero_renegade(hero_i) && !hero_scared(hero_i) &&
-			!hero_unconscious(hero_i))
+		if ((hero_i->typus != HERO_TYPE_NONE) &&
+			(hero_i->group_no == gs_current_group) &&
+			!hero_dead((Bit8u*)hero_i) && !hero_petrified((Bit8u*)hero_i) &&
+			!hero_renegade((Bit8u*)hero_i) && !hero_scared((Bit8u*)hero_i) &&
+			!hero_unconscious((Bit8u*)hero_i))
 		{
 			return i;
 		}
@@ -318,18 +316,17 @@ signed short FIG_get_first_active_hero(void)
 //static
 unsigned short FIG_all_heroes_escaped(void)
 {
-	Bit8u *hero_i;
+	struct struct_hero *hero_i;
 	signed short i;
 
 	if (FIG_get_first_active_hero() == -1) {
 
-		hero_i = get_hero(0);
+		hero_i = (struct struct_hero*)get_hero(0);
 
-		for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
+		for (i = 0; i <= 6; i++, hero_i++) {
 
-			if ((host_readb(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
-				(host_readb(hero_i + HERO_GROUP_NO) == gs_current_group) &&
-				!hero_dead(hero_i) && (host_readb(hero_i + HERO_ACTION_ID) == FIG_ACTION_FLEE))
+			if ((hero_i->typus != HERO_TYPE_NONE) && (hero_i->group_no == gs_current_group) &&
+				!hero_dead((Bit8u*)hero_i) && (hero_i->action_id == FIG_ACTION_FLEE))
 			{
 				return 1;
 			}
@@ -345,7 +342,6 @@ unsigned short FIG_all_heroes_escaped(void)
 //static
 unsigned short FIG_fight_continues(void)
 {
-
 	if (FIG_all_heroes_escaped()) {
 
 		g_fig_all_heroes_withdrawn = 1;
@@ -378,7 +374,7 @@ void FIG_do_round(void)
 	signed short y_coord;
 	signed short nr_action_phases_left_in_turn; /* number of action phases left in the turn of an actor */
 	signed char is_enemies_turn; /* 0: enemies' turn; 1: heroes' turn */
-	Bit8u* hero;
+	struct struct_hero *hero;
 	struct enemy_sheet *enemy;
 	signed short x;
 	signed short y;
@@ -409,55 +405,53 @@ void FIG_do_round(void)
 	/* initialize heroes' #action phases and BP */
 	for (i = 0; i <= 6; (g_hero_is_target[i] = 0), i++) {
 
-		hero = get_hero(i);
+		hero = (struct struct_hero*)get_hero(i);
 
-		if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
-			(host_readbs(hero + HERO_ACTION_ID) != FIG_ACTION_FLEE))
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && (hero->action_id != FIG_ACTION_FLEE))
 		{
 			/* set #action phases to 1 */
-			host_writeb(hero + HERO_ACTIONS, 1);
+			hero->actions = 1;
 
 			/* give this hero 8 BP */
-			host_writeb(hero + HERO_BP_LEFT, 8);
+			hero->bp_left = 8;
 
-			if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 50 <= host_readws(hero + HERO_LOAD)) {
+			if (hero->attrib[ATTRIB_KK].current * 50 <= hero->load) {
 
 				/* load at least 50% of carrying capacity: give BP malus -1 */
-				dec_ptr_bs(hero + HERO_BP_LEFT);
+				hero->bp_left--;
 			}
 
-			if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 75 <= host_readws(hero + HERO_LOAD)) {
+			if (hero->attrib[ATTRIB_KK].current * 75 <= hero->load) {
 
 				/* load at least 75% of carrying capacity: give additional BP malus -2 */
-				sub_ptr_bs(hero + HERO_BP_LEFT, 2);
+				hero->bp_left -= 2;
 			}
 
-			if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 100 <= host_readws(hero + HERO_LOAD)) {
+			if (hero->attrib[ATTRIB_KK].current * 100 <= hero->load) {
 
 				/* load at least 100% of carrying capacity: give additional give BP malus -2 */
-				sub_ptr_bs(hero + HERO_BP_LEFT, 2);
+				hero->bp_left -= 2;
 			}
 
-			host_writew(hero + HERO_ESCAPE_POSITION, 0);
+			hero->escape_position = 0;
 
 			nr_hero_action_phases_left_in_round++;
 
-			if (host_readbs(hero + HERO_AXXELERATUS) != 0) {
+			if (hero->axxeleratus) {
 
 				/* Axxeleratus => BP + 4 ... */
-				add_ptr_bs(hero + HERO_BP_LEFT, 4);
+				hero->bp_left += 4;
 
 				/* ... and one extra action phase */
-				inc_ptr_bs(hero + HERO_ACTIONS);
+				hero->actions++;
 
 				nr_hero_action_phases_left_in_round++;
 			}
 
-			if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 110 <= host_readws(hero + HERO_LOAD)) {
+			if (hero->attrib[ATTRIB_KK].current * 110 <= hero->load) {
 
 				/* load at least 110% of carrying capacity: set BP to 1 */
-				host_writeb(hero + HERO_BP_LEFT, 1);
+				hero->bp_left = 1;
 			}
 		}
 	}
@@ -546,11 +540,11 @@ void FIG_do_round(void)
 			/* heroes on turn */
 			actor_id = FIG_choose_next_hero();
 
-			hero = get_hero(actor_id);
+			hero = (struct struct_hero*)get_hero(actor_id);
 
-			dec_ptr_bs(hero + HERO_ACTIONS);
+			hero->actions--;
 
-			if (hero_asleep(hero) && !hero_dead(hero)) {
+			if (hero_asleep((Bit8u*)hero) && !hero_dead((Bit8u*)hero)) {
 
 				/* hero asleep and is not dead: 74% chance of waking up */
 
@@ -558,18 +552,18 @@ void FIG_do_round(void)
 
 					/* awake him (or her) */
 
-					and_ptr_bs(hero + HERO_FLAGS1, 0xfd); /* unset 'sleep' flag */
+					and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xfd); /* unset 'sleep' flag */
 
-					fighter_ptr = FIG_get_fighter(host_readbs(hero + HERO_FIGHTER_ID));
+					fighter_ptr = FIG_get_fighter(hero->fighter_id);
 
-					fighter_ptr->nvf_no = host_readbs(hero + HERO_VIEWDIR);
+					fighter_ptr->nvf_no = hero->viewdir;
 					fighter_ptr->reload = -1;
 					fighter_ptr->offsetx = 0;
 					fighter_ptr->offsety = 0;
 				}
 			}
 
-			if (FIG_search_obj_on_cb(actor_id + 1, &x_coord, &y_coord) && check_hero(hero))
+			if (FIG_search_obj_on_cb(actor_id + 1, &x_coord, &y_coord) && check_hero((Bit8u*)hero))
 			{
 
 #if !defined(__BORLANDC__)
@@ -578,53 +572,51 @@ void FIG_do_round(void)
 				y_coord = host_readws((Bit8u*)&y_coord);
 #endif
 
-				if (host_readbs(hero + HERO_BLIND)) {
+				if (hero->blind_timer) {
 
-					dec_ptr_bs(hero + HERO_BLIND);
+					hero->blind_timer--;
 
 				} else {
 
-					if (host_readbs(hero + HERO_ECLIPTIFACTUS)) {
+					if (hero->ecliptifactus_timer) {
 
-						dec_ptr_bs(hero + HERO_ECLIPTIFACTUS);
+						hero->ecliptifactus_timer--;
 					}
 
 					/* save the fighter_id of this hero */
 					g_fig_char_pic = actor_id + 1;
 
 					/* select a fight action */
-					FIG_menu(hero, actor_id, x_coord, y_coord);
+					FIG_menu((Bit8u*)hero, actor_id, x_coord, y_coord);
 
-					if ((host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_MELEE_ATTACK) ||
-						(host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_SPELL) ||
-						(host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_USE_ITEM) ||
-						(host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_RANGE_ATTACK))
+					if ((hero->action_id == FIG_ACTION_MELEE_ATTACK) || (hero->action_id == FIG_ACTION_SPELL) ||
+						(hero->action_id == FIG_ACTION_USE_ITEM) || (hero->action_id == FIG_ACTION_RANGE_ATTACK))
 					{
 
-						FIG_do_hero_action(hero, actor_id);
+						FIG_do_hero_action((Bit8u*)hero, actor_id);
 
-						if (host_readbs(hero + HERO_ENEMY_ID) >= 10) {
+						if (hero->enemy_id >= 10) {
 
 							/* hero did attack some enemy (by weapon/spell/item etc.) */
 
 							/* if the tail of a two-squares enemy has been attacked,
 							 * replace HERO_ENEMY_ID by the main id of that enemy */
-							if (host_readbs(hero + HERO_ENEMY_ID) >= 30) {
+							if (hero->enemy_id >= 30) {
 
-								sub_ptr_bs(hero + HERO_ENEMY_ID, 20);
+								hero->enemy_id -= 20;
 							}
 
 							/* TODO: seems that (hero->enemy_id) gives better results than (hero->enemy_id - 10) */
 							//if (g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].flags.dead)
-							if (g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID)].flags.dead)
+							if (g_enemy_sheets[hero->enemy_id].flags.dead)
 							{
 								/* attacked enemy is dead */
-								if (is_in_byte_array(g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].gfx_id, (Bit8u*)g_two_fielded_sprite_id))
+								if (is_in_byte_array(g_enemy_sheets[hero->enemy_id - 10].gfx_id, (Bit8u*)g_two_fielded_sprite_id))
 								{
 									/* attacked dead enemy is two-squares */
 									/* goal: remove tail part */
 
-									FIG_search_obj_on_cb(host_readbs(hero + HERO_ENEMY_ID) + 20, &x, &y);
+									FIG_search_obj_on_cb(hero->enemy_id + 20, &x, &y);
 									/* (x,y) are the coordinates of the tail of the enemy. redundant as fighter_ptr + FIGHTER_CBX, fighter_ptr + FIGHTER_CBY could have been used later. */
 
 #if !defined(__BORLANDC__)
@@ -633,7 +625,7 @@ void FIG_do_round(void)
 									y = host_readws((Bit8u*)&y);
 #endif
 
-									fighter_ptr = FIG_get_fighter(g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].fighter_id);
+									fighter_ptr = FIG_get_fighter(g_enemy_sheets[hero->enemy_id - 10].fighter_id);
 									/* intermediate: fighter_ptr points to the FIGHTER entry of the enemy */
 
 									fighter_ptr = FIG_get_fighter(g_fig_twofielded_table[fighter_ptr->twofielded]);
@@ -938,8 +930,8 @@ signed short do_fight(signed short fight_id)
 	signed short group_nr;
 	signed short group_size;
 	signed short retval = 0;
-	Bit8u *hero;
-	Bit8u *ptr;
+	struct struct_hero *hero;
+	struct struct_hero *ptr;
 	signed short nr_escape_positions;
 	signed short x_target_bak;
 	signed short y_target_bak;
@@ -948,7 +940,7 @@ signed short do_fight(signed short fight_id)
 	signed short tw_bak;
 	signed short escape_positions[6];
 
-	if ((gs_group_member_counts[gs_current_group] == 1) && (host_readbs(get_hero(0) + HERO_INVISIBLE) != 0))
+	if ((gs_group_member_counts[gs_current_group] == 1) && (((struct struct_hero*)get_hero(0))->invisible != 0))
 	{
 		/* group consists of a single hero with an active Visibili spell */
 		/* TODO: potential Original-Bug: what about groups with >= 2 heroes where all have an active Visibili? */
@@ -1115,22 +1107,21 @@ signed short do_fight(signed short fight_id)
 
 	if (g_game_state != GAME_STATE_FIGQUIT) {
 
-		hero = get_hero(0);
-		for (i = 0; i <=6; i++, hero += SIZEOF_HERO) {
+		hero = (struct struct_hero*)get_hero(0);
+		for (i = 0; i <= 6; i++, hero++) {
 
-			if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE)
-				&& (host_readbs(hero + HERO_GROUP_NO) == gs_current_group))
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
 			{
 
-				and_ptr_bs(hero + HERO_FLAGS1, 0x7f); /* unset 'unconscious' flag */
-				and_ptr_bs(hero + HERO_FLAGS1, 0xfd); /* unset 'sleeps' flag */
-				and_ptr_bs(hero + HERO_FLAGS1, 0xef); /* unset 'chamaelioni' flag */
-				and_ptr_bs(hero + HERO_FLAGS2, 0xfb); /* unset 'duplicatus' flag */
-				and_ptr_bs(hero + HERO_FLAGS2, 0xfe); /* unset 'scared' flag */
+				and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0x7f); /* unset 'unconscious' flag */
+				and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xfd); /* unset 'sleeps' flag */
+				and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xef); /* unset 'chamaelioni' flag */
+				and_ptr_bs((Bit8u*)hero + HERO_FLAGS2, 0xfb); /* unset 'duplicatus' flag */
+				and_ptr_bs((Bit8u*)hero + HERO_FLAGS2, 0xfe); /* unset 'scared' flag */
 
-				host_writebs(hero + HERO_BLIND, 0); /* unset blindness (set counter to 0) */
-				host_writebs(hero + HERO_ECLIPTIFACTUS, 0); /* unset 'Ecliptifactus' (set counter to 0) */
-				host_writebs(hero + HERO_ACTION_ID, FIG_ACTION_MOVE);
+				hero->blind_timer = 0;				/* unset blindness (set counter to 0) */
+				hero->ecliptifactus_timer = 0;			/* unset 'Ecliptifactus' (set counter to 0) */
+				hero->action_id = FIG_ACTION_MOVE;
 			}
 		}
 
@@ -1146,13 +1137,12 @@ signed short do_fight(signed short fight_id)
 
 					gs_travel_detour = 99;
 
-					ptr = get_hero(0);
-					for (j = 0; j <= 6; j++, ptr += SIZEOF_HERO) {
+					ptr = (struct struct_hero*)get_hero(0);
+					for (j = 0; j <= 6; j++, ptr++) {
 
-						if ((host_readbs(ptr + HERO_TYPE) != HERO_TYPE_NONE)
-							&& (host_readbs(ptr + HERO_GROUP_NO) == gs_current_group))
+						if ((ptr->typus != HERO_TYPE_NONE) && (ptr->group_no == gs_current_group))
 						{
-							hero_disappear((struct struct_hero*)ptr, j, -2);
+							hero_disappear(ptr, j, -2);
 						}
 					}
 				}
@@ -1208,21 +1198,21 @@ signed short do_fight(signed short fight_id)
 
 			for (i = 0; gs_group_member_counts[gs_current_group] > i; i++) {
 
-				hero = get_hero(i);
+				hero = (struct struct_hero*)get_hero(i);
 
-				if (host_readws(hero + HERO_ESCAPE_POSITION) != 0) {
+				if (hero->escape_position) {
 
 					new_escape_position_found = 0;
 
 					for (j = 0; j < nr_escape_positions; j++) {
 
-						if (escape_positions[j] == host_readws(hero + HERO_ESCAPE_POSITION)) {
+						if (escape_positions[j] == hero->escape_position) {
 							new_escape_position_found = 1;
 						}
 					}
 
 					if (new_escape_position_found == 0) {
-						escape_positions[nr_escape_positions++] = host_readws(hero + HERO_ESCAPE_POSITION);
+						escape_positions[nr_escape_positions++] = hero->escape_position;
 					}
 				}
 			}
@@ -1249,12 +1239,12 @@ signed short do_fight(signed short fight_id)
 
 					for (j = 0; j < group_size; j++) {
 
-						hero = get_hero(j);
+						hero = (struct struct_hero*)get_hero(j);
 
-						if (escape_positions[i] == host_readws(hero + HERO_ESCAPE_POSITION)) {
+						if (escape_positions[i] == hero->escape_position) {
 
-							host_writeb(hero + HERO_GROUP_NO, (signed char)group_nr);
-							host_writew(hero + HERO_ESCAPE_POSITION, 0);
+							hero->group_no = (signed char)group_nr;
+							hero->escape_position = 0;
 							gs_group_member_counts[group_nr]++;
 							gs_group_member_counts[gs_current_group]--;
 						}
@@ -1270,7 +1260,7 @@ signed short do_fight(signed short fight_id)
 				group_size = gs_group_member_counts[gs_current_group];
 
 				for (j = 0; j < group_size; j++) {
-					host_writews(get_hero(j) + HERO_ESCAPE_POSITION, 0);
+					((struct struct_hero*)get_hero(j))->escape_position = 0;
 				}
 
 				gs_x_target = ((escape_positions[i] >> 8) & 0x0f);

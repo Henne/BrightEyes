@@ -504,36 +504,36 @@ void load_map(void)
 
 void load_npc(signed short index)
 {
-	Bit8u *npc_dst;
-	signed short fd;
+	struct struct_hero *npc;
+	signed short handle;
 
-	npc_dst = get_hero(6);
+	npc = (struct struct_hero*)get_hero(6);
 
 	/* load from temp directory */
-	fd = load_archive_file(index | 0x8000);
-	_read(fd, (void*)npc_dst, SIZEOF_HERO);
-	close(fd);
+	handle = load_archive_file(index | 0x8000);
+	_read(handle, (void*)npc, sizeof(struct struct_hero));
+	close(handle);
 
-	if (host_readb(npc_dst + HERO_SEX) == 1) {
+	if (npc->sex == 1) {
 		/* female */
-		host_writeb(npc_dst + HERO_SPRITE_NO, host_readb(npc_dst + HERO_TYPE) + 11);
-		if (host_readbs(npc_dst + HERO_SPRITE_NO) > 21)
-			host_writeb(npc_dst + HERO_SPRITE_NO, 21);
+		npc->sprite_no = npc->typus + 11;
+		if (npc->sprite_no > 21)
+			npc->sprite_no = 21;
 	} else {
 		/* male */
-		host_writeb(npc_dst + HERO_SPRITE_NO, host_readb(npc_dst + HERO_TYPE));
-		if (host_readbs(npc_dst + HERO_SPRITE_NO) > 10)
-			host_writeb(npc_dst + HERO_SPRITE_NO, 10);
+		npc->sprite_no = npc->typus;
+		if (npc->sprite_no > 10)
+			npc->sprite_no = 10;
 	}
 }
 
 void save_npc(signed short index)
 {
-	signed short fd = load_archive_file(index | 0x8000);
+	signed short handle = load_archive_file(index | 0x8000);
 
-	write(fd, get_hero(6), SIZEOF_HERO);
+	write(handle, get_hero(6), sizeof(struct struct_hero));
 
-	close(fd);
+	close(handle);
 }
 
 void load_splashes(void)

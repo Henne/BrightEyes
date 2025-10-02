@@ -34,7 +34,7 @@ signed short DNG12_handler(void)
 	signed short i;
 	signed short tw_bak;
 	Bit32s money;
-	Bit8u *hero;
+	struct struct_hero *hero;
 	Bit8u *ptr;
 
 	ptr = g_dng_map;
@@ -42,7 +42,7 @@ signed short DNG12_handler(void)
 	g_textbox_width = 7;
 	target_pos = DNG_POS(gs_dungeon_level,gs_x_target,gs_y_target);
 
-	hero = (Bit8u*)get_first_hero_available_in_group();
+	hero = (struct struct_hero*)get_first_hero_available_in_group();
 
 	if (gs_day_timer % MINUTES(5) == 0) {
 
@@ -60,7 +60,7 @@ signed short DNG12_handler(void)
 #if !defined(__BORLANDC__)
 		D1_INFO("Geheimtuere\n");
 #endif
-		if (test_skill((struct struct_hero*)hero, TA_SINNESSCHAERFE, 6) > 0) {
+		if (test_skill(hero, TA_SINNESSCHAERFE, 6) > 0) {
 
 			GUI_output(get_tx(21));
 
@@ -98,14 +98,14 @@ signed short DNG12_handler(void)
 				if (gs_dng12_watertrap_timer == MINUTES(0)) {
 
 					/* time is up, drown party */
-					hero = get_hero(0);
-					for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+					hero = (struct struct_hero*)get_hero(0);
+					for (i = 0; i <= 6; i++, hero++) {
 
-						if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-							host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-							!hero_dead(hero))
+						if ((hero->typus != HERO_TYPE_NONE) &&
+							(hero->group_no == gs_current_group) &&
+							!hero_dead((Bit8u*)hero))
 						{
-							hero_disappear((struct struct_hero*)hero, i, -1);
+							hero_disappear(hero, i, -1);
 						}
 					}
 
@@ -116,7 +116,7 @@ signed short DNG12_handler(void)
 					if (is_hero_available_in_group(get_hero(6))) {
 
 						/* prepare a message with the name of the NPC */
-						sprintf(g_dtp2, get_tx(22), (char*)get_hero(6) + HERO_NAME2);
+						sprintf(g_dtp2, get_tx(22), ((struct struct_hero*)get_hero(6))->alias);
 						GUI_output(g_dtp2);
 
 						while (gs_x_target != 6) {
@@ -233,7 +233,7 @@ signed short DNG12_handler(void)
 	} else if (target_pos == DNG_POS(0,6,13) && target_pos != gs_dng_handled_pos) {
 		/* bolt trap */
 		print_msg_with_first_hero(get_tx(13));
-		sub_hero_le(hero, random_schick(6));
+		sub_hero_le((Bit8u*)hero, random_schick(6));
 	} else if (target_pos == DNG_POS(1,2,14) && target_pos != gs_dng_handled_pos && !gs_dng12_ingerimm_hint)
 	{
 		/* lower Ingerimm idol */
@@ -326,17 +326,15 @@ signed short DNG12_handler(void)
 				if (++g_dng12_obstacle_tries < 3)
 				{
 					/* the hero must at least fall three times into pit */
-					sprintf(g_dtp2,	get_tx(25), (char*)hero + HERO_NAME2,
-						GUI_get_ptr(host_readbs(hero + HERO_SEX), 0),
-						GUI_get_ptr(host_readbs(hero + HERO_SEX), 2));
+					sprintf(g_dtp2,	get_tx(25), hero->alias,
+						GUI_get_ptr(hero->sex, 0),
+						GUI_get_ptr(hero->sex, 2));
 				} else {
 					/* the hero falls again into the pit */
 #ifndef M302de_FEATURE_MOD
-					sprintf(g_dtp2,	get_tx(31), (char*)hero + HERO_NAME2,
-						GUI_get_ptr(host_readbs(hero + HERO_SEX), 0),
-						GUI_get_ptr(host_readbs(hero + HERO_SEX), 2),
-						GUI_get_ptr(host_readbs(hero + HERO_SEX), 0),
-						GUI_get_ptr(host_readbs(hero + HERO_SEX), 2));
+					sprintf(g_dtp2,	get_tx(31), hero->alias,
+						GUI_get_ptr(hero->sex, 0), GUI_get_ptr(hero->sex, 2),
+						GUI_get_ptr(hero->sex, 0), GUI_get_ptr(hero->sex, 2));
 #else
 					/* Feature Mod 7: The following is a translation of a text block in OBER.DTX
 					 * of the English version, which has not been present in the German one.
@@ -377,14 +375,10 @@ signed short DNG12_handler(void)
 						"EIN EINZIGES MAL VERSUCHEN!\x3e MURMELT %s "
 						"ALS %s WIEDER AUF %sE F\x9aSSE KOMMT.");
 
-					sprintf(g_dtp2,
-						g_text_output_buf,
-						(char*)hero + HERO_NAME2,
-						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)),
-						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)),
-						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 1)));
+					sprintf(g_dtp2, g_text_output_buf, hero->alias,
+						GUI_get_ptr(hero->sex, 0), GUI_get_ptr(hero->sex, 2),
+						GUI_get_ptr(hero->sex, 0), GUI_get_ptr(hero->sex, 0),
+						GUI_get_ptr(hero->sex, 1));
 #endif
 				}
 
@@ -397,7 +391,7 @@ signed short DNG12_handler(void)
 					gs_dng12_obstacle_active = 0;
 
 #ifndef M302de_FEATURE_MOD
-					sprintf(g_dtp2, get_tx(32), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_tx(32), hero->alias);
 #else
 					/* Feature Mod 7: The following is a translation of a text block in OBER.DTX
 					 * of the English version, which has not been present in the German one.
@@ -436,44 +430,44 @@ signed short DNG12_handler(void)
 						"ALS %s MIT DER BARRIERE KOLLIDIERT, BRICHT SIE IN ST\x9aCKE.\x40"
 						"DAS GANZE WAR NUR EIN BILD!\x40"
 						"SCHADE DASS IHR DAS NICHT FR\x9aHER BEMERKT HABT.\0",
-						(char*)hero + HERO_NAME2);
+						hero->alias);
 #endif
 				}
 
 				GUI_output(g_dtp2);
 
-				sub_hero_le(hero, random_schick(4));
-				gs_x_target = (gs_x_target_bak);
-				gs_y_target = (gs_y_target_bak);
+				sub_hero_le((Bit8u*)hero, random_schick(4));
+				gs_x_target = gs_x_target_bak;
+				gs_y_target = gs_y_target_bak;
 			} else {
 				/* pass */
 				GUI_output(get_tx(26));
 			}
 		} else {
-			gs_x_target = (gs_x_target_bak);
-			gs_y_target = (gs_y_target_bak);
+			gs_x_target = gs_x_target_bak;
+			gs_y_target = gs_y_target_bak;
 		}
 	} else if (target_pos == DNG_POS(1,14,3) && target_pos != gs_dng_handled_pos && gs_dng12_speartrap_active) {
 		/* spear trap */
 
-		if (test_skill((struct struct_hero*)hero, TA_SINNESSCHAERFE, 2) > 0) {
+		if (test_skill(hero, TA_SINNESSCHAERFE, 2) > 0) {
 
 			if (GUI_bool(get_tx(28))) {
 
-				if (test_skill((struct struct_hero*)hero, TA_SCHLOESSER, 0) <= 0) {
+				if (test_skill(hero, TA_SCHLOESSER, 0) <= 0) {
 
 					/* defusing trap failed */
-					sprintf(g_dtp2,	get_tx(29), (char*)hero + HERO_NAME2);
-					sub_hero_le(hero , dice_roll(3, 6, 0));
+					sprintf(g_dtp2,	get_tx(29), hero->alias);
+					sub_hero_le((Bit8u*)hero, dice_roll(3, 6, 0));
 
 				} else {
 
 					/* trap defused */
-					sprintf(g_dtp2, get_tx(30), (char*)hero + HERO_NAME2, (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_tx(30), hero->alias, hero->alias);
 
 					gs_dng12_speartrap_active = 0;
 
-					add_hero_ap((struct struct_hero*)hero, 10);
+					add_hero_ap(hero, 10);
 				}
 
 				GUI_output(g_dtp2);

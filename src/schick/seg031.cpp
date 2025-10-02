@@ -366,22 +366,20 @@ char* get_random_tavern_message(void)
  */
 void drink_while_drinking(signed short amount)
 {
-	Bit8u *hero;
+	struct struct_hero *hero;
 	signed short i;
 
-	hero = get_hero(0);
-	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+	hero = (struct struct_hero*)get_hero(0);
+	for (i = 0; i <= 6; i++, hero++) {
 
-		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-			!hero_dead(hero)) {
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero)) {
 
 			/* sub fluid amount */
-			host_writeb(hero + HERO_THIRST, host_readb(hero + HERO_THIRST) - amount);
+			hero->thirst = hero->thirst - amount;
 
 			/* adjust food counter */
-			if (host_readbs(hero + HERO_THIRST) < 0) {
-				host_writeb(hero + HERO_THIRST, 0);
+			if (hero->thirst < 0) {
+				hero->thirst = 0;
 			}
 		}
 	}
@@ -399,22 +397,20 @@ void drink_while_drinking(signed short amount)
  */
 void eat_while_drinking(signed short amount)
 {
-	Bit8u *hero;
+	struct struct_hero *hero;
 	signed short i;
 
-	hero = get_hero(0);
-	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+	hero = (struct struct_hero*)get_hero(0);
+	for (i = 0; i <= 6; i++, hero++) {
 
-		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-			!hero_dead(hero)) {
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero)) {
 
 			/* sub food amount */
-			host_writeb(hero + HERO_HUNGER, host_readb(hero + HERO_HUNGER) - amount);
+			hero->hunger = hero->hunger - amount;
 
 			/* adjust food counter */
-			if (host_readbs(hero + HERO_HUNGER) < 0) {
-				host_writeb(hero + HERO_HUNGER, 0);
+			if (hero->hunger < 0) {
+				hero->hunger = 0;
 			}
 		}
 	}

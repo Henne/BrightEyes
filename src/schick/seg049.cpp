@@ -118,10 +118,10 @@ void GRP_sort_heroes(void)
 {
 	signed short i;
 
-	qsort((void*)get_hero(0), 6, SIZEOF_HERO, GRP_compare_heroes);
+	qsort((void*)get_hero(0), 6, sizeof(struct struct_hero), GRP_compare_heroes);
 
 	for (i = 0; i < 6; i++) {
-		host_writeb(get_hero(i) + HERO_GROUP_POS, i + 1);
+		((struct struct_hero*)get_hero(i))->group_pos = i + 1;
 	}
 }
 
@@ -393,10 +393,6 @@ void GRP_switch_to_next(signed short mode)
 	}
 }
 
-struct dummy {
-	char a[SIZEOF_HERO];
-};
-
 void GRP_swap_heroes(void)
 {
 	signed short hero1_no;
@@ -406,7 +402,7 @@ void GRP_swap_heroes(void)
 	signed char l4;
 	signed char l5;
 	signed char i;
-	signed char tmp[SIZEOF_HERO];
+	struct struct_hero tmp;
 
 	if (!g_heroswap_allowed || !gs_group_member_counts[gs_current_group]) {
 		return;
@@ -428,21 +424,21 @@ void GRP_swap_heroes(void)
 			}
 
 			/* save hero1 in tmp */
-			*((struct dummy*)&tmp) = *((struct dummy*)get_hero(hero1_no));
+			tmp = *(struct struct_hero*)get_hero(hero1_no);
 
 			l2 = g_wildcamp_guardstatus[hero1_no];
 			l3 = g_wildcamp_magicstatus[hero1_no];
 			l4 = g_wildcamp_replstatus[hero1_no];
 			l5 = g_wildcamp_herbstatus[hero1_no];
 
-			*((struct dummy*)get_hero(hero1_no)) = *((struct dummy*)get_hero(hero2_no));
+			*((struct struct_hero*)get_hero(hero1_no)) = *((struct struct_hero*)get_hero(hero2_no));
 
 			g_wildcamp_guardstatus[hero1_no] = g_wildcamp_guardstatus[hero2_no];
 			g_wildcamp_magicstatus[hero1_no] = g_wildcamp_magicstatus[hero2_no];
 			g_wildcamp_replstatus[hero1_no] = g_wildcamp_magicstatus[hero2_no];
 			g_wildcamp_herbstatus[hero1_no] = g_wildcamp_herbstatus[hero2_no];
 
-			*((struct dummy*)get_hero(hero2_no)) = *((struct dummy*)&tmp);
+			*((struct struct_hero*)get_hero(hero2_no)) = tmp;
 
 			g_wildcamp_guardstatus[hero2_no] = l2;
 			g_wildcamp_magicstatus[hero2_no] = l3;
@@ -469,8 +465,8 @@ void GRP_move_hero(signed short src_pos)
 {
 
 	signed short dst_pos;
-	Bit8u *src;
-	Bit8u *dst;
+	struct struct_hero *src;
+	struct struct_hero *dst;
 	signed char src_guardstatus;
 	signed char src_magicstatus;
 	signed char src_replstatus;
@@ -578,10 +574,10 @@ void GRP_move_hero(signed short src_pos)
 
 		if ((src_pos != dst_pos) && (dst_pos != 6)) {
 
-			dst = get_hero(dst_pos);
-			src = get_hero(src_pos);
+			dst = (struct struct_hero*)get_hero(dst_pos);
+			src = (struct struct_hero*)get_hero(src_pos);
 
-			if (!host_readbs(dst + 0x21) || (host_readbs(dst + 0x87) == gs_current_group)) {
+			if (!dst->typus || (dst->group_no == gs_current_group)) {
 
 				for (i = 0; i < 3; i++) {
 					if (g_wildcamp_guards[i] == src_pos) {
@@ -589,31 +585,31 @@ void GRP_move_hero(signed short src_pos)
 					}
 				}
 
-				memcpy(g_renderbuf_ptr, src, SIZEOF_HERO);
+				memcpy(g_renderbuf_ptr, src, sizeof(struct struct_hero));
 
 				src_guardstatus = g_wildcamp_guardstatus[src_pos];
 				src_magicstatus = g_wildcamp_magicstatus[src_pos];
 				src_replstatus = g_wildcamp_replstatus[src_pos];
 				src_herbstatus = g_wildcamp_herbstatus[src_pos];
 
-				*((struct dummy*)src) = *((struct dummy*)dst);
+				*src = *dst; /* struct_copy */
 
 				g_wildcamp_guardstatus[src_pos] = g_wildcamp_guardstatus[dst_pos];
 				g_wildcamp_magicstatus[src_pos] = g_wildcamp_magicstatus[dst_pos];
 				g_wildcamp_replstatus[src_pos] = g_wildcamp_replstatus[dst_pos];
 				g_wildcamp_herbstatus[src_pos] = g_wildcamp_herbstatus[dst_pos];
 
-				memcpy(dst, g_renderbuf_ptr, SIZEOF_HERO);
+				memcpy(dst, g_renderbuf_ptr, sizeof(struct struct_hero));
 
 				g_wildcamp_guardstatus[dst_pos] = src_guardstatus;
 				g_wildcamp_magicstatus[dst_pos] = src_magicstatus;
 				g_wildcamp_replstatus[dst_pos] = src_replstatus;
 				g_wildcamp_herbstatus[dst_pos] = src_herbstatus;
 
-				host_writeb(src + 0x84, 100);
-				host_writeb(dst + 0x84, 100);
-				host_writeb(dst + 0x8a, src_pos + 1);
-				host_writeb(src + 0x8a, dst_pos + 1);
+				src->action_id = 100;
+				dst->action_id = 100;
+				dst->group_pos = src_pos + 1;
+				src->group_pos = dst_pos + 1;
 			}
 		}
 
@@ -753,10 +749,7 @@ void GRP_hero_sleep(Bit8u *hero, signed short quality)
 					do_alchemy((struct struct_hero*)hero, host_readbs(hero + HERO_RECIPE_ID), 0);
 				}
 			} else {
-				sprintf(g_dtp2,
-					get_ttx(558),
-					hero + HERO_NAME2);
-
+				sprintf(g_dtp2,	get_ttx(558), hero + HERO_NAME2);
 				GUI_output(g_dtp2);
 			}
 		}

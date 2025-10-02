@@ -61,7 +61,6 @@ void prepare_map_marker(void)
 
 	close(fd);
 
-
 	for (i = 0; i < 10; i++) {
 		nvf.dst = g_buffer6_ptr + 100 * i + 1000;
 		nvf.src = g_buffer6_ptr;
@@ -104,7 +103,7 @@ void set_textbox_positions(signed short town_id)
 void TM_func1(signed short route_no, signed short backwards)
 {
 	Bit8u* fb_start;
-	Bit8u *hero;
+	struct struct_hero *hero;
 	struct struct_route_tevent *tevent_ptr;
 	signed short bak1;
 	signed short bak2;
@@ -277,14 +276,13 @@ void TM_func1(signed short route_no, signed short backwards)
 				/* Remark: gs_forcedmarch_le_cost = gs_forcedmarch_le_cost / 2; */
 				gs_forcedmarch_le_cost >>= 1;
 
-				hero = get_hero(0);
-				for (gs_trv_i = 0; gs_trv_i <= 6; gs_trv_i++, hero += SIZEOF_HERO)
+				hero = (struct struct_hero*)get_hero(0);
+				for (gs_trv_i = 0; gs_trv_i <= 6; gs_trv_i++, hero++)
 				{
-					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-						!hero_dead(hero))
+					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+						!hero_dead((Bit8u*)hero))
 					{
-						sub_hero_le(hero, gs_forcedmarch_le_cost);
+						sub_hero_le((Bit8u*)hero, gs_forcedmarch_le_cost);
 					}
 				}
 

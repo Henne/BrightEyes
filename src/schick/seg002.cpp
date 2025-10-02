@@ -5108,13 +5108,13 @@ signed short get_random_hero(void)
 #ifdef M302de_ORIGINAL_BUGFIX
 		signed short pos = 0;
 
-		Bit8u *hero = get_hero(0);
-		for (int i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+		struct struct_hero *hero = (struct struct_hero*)get_hero(0);
+		for (int i = 0; i <= 6; i++, hero++) {
 
-			if (host_readbs(hero + HERO_TYPE) == HERO_TYPE_NONE)
+			if (hero->typus == HERO_TYPE_NONE)
 				continue;
 			/* Check if in current group */
-			if (host_readbs(hero + HERO_GROUP_NO) != gs_current_group)
+			if (hero->group_no != gs_current_group)
 				continue;
 
 			if (pos == cur_hero) {
@@ -5128,9 +5128,9 @@ signed short get_random_hero(void)
 #endif
 
 	} while (
-		!host_readbs(get_hero(cur_hero) + HERO_TYPE) ||
-		(host_readbs(get_hero(cur_hero) + HERO_GROUP_NO) != gs_current_group) ||
-		hero_dead(get_hero(cur_hero))
+		!((struct struct_hero*)get_hero(cur_hero))->typus ||
+		(((struct struct_hero*)get_hero(cur_hero))->group_no != gs_current_group) ||
+		hero_dead((Bit8u*)get_hero(cur_hero))
 	);
 
 	return cur_hero;
@@ -5366,23 +5366,22 @@ signed short get_item_pos(Bit8u *hero, signed short item)
 /**
  * \brief   gets the position of the first hero with an item
  *
- * \param   item        item ID to look for
+ * \param   item_id     item ID to look for
  * \return              position of the hero or -1 if nobody of the group has this item
  */
 signed short get_first_hero_with_item(signed short item)
 {
 	signed short j;
 	signed short i;
-	Bit8u *hero_i = get_hero(0);
+	struct struct_hero *hero_i = (struct struct_hero*)get_hero(0);
 
-	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
+	for (i = 0; i <= 6; i++, hero_i++) {
 
-		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group))
+		if ((hero_i->typus) && (hero_i->group_no == gs_current_group))
 		{
 			/* Search inventory */
 			for (j = 0; j < NR_HERO_INVENTORY_SLOTS; j++) {
-				if (host_readw(hero_i + j * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID) == item) {
+				if (host_readw((Bit8u*)hero_i + j * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID) == item) {
 					return i;
 				}
 			}
@@ -5395,24 +5394,23 @@ signed short get_first_hero_with_item(signed short item)
 /**
  * \brief   gets the position of the first hero with an item in a specified group
  *
- * \param   item        item ID to look for
+ * \param   item_id     item ID to look for
  * \param   group       group number
  * \return              position of the hero or -1 if nobody in the specified group has this item
  */
-signed short get_first_hero_with_item_in_group(signed short item, signed short group)
+signed short get_first_hero_with_item_in_group(signed short item_id, signed short group)
 {
 	signed short j;
 	signed short i;
-	Bit8u *hero_i = get_hero(0);
+	struct struct_hero *hero_i = (struct struct_hero*)get_hero(0);
 
-	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
+	for (i = 0; i <= 6; i++, hero_i++) {
 
-		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == (signed char)group))
+		if ((hero_i->typus) && (hero_i->group_no == (signed char)group))
 		{
 			/* Search inventory */
 			for (j = 0; j < NR_HERO_INVENTORY_SLOTS; j++) {
-				if (host_readws(hero_i + j * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID) == item) {
+				if (host_readws((Bit8u*)hero_i + j * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID) == item_id) {
 					return i;
 				}
 			}
@@ -5476,18 +5474,17 @@ Bit8u* get_second_hero_available_in_group(void)
 {
 	signed short i;
 	signed short tmp;
-	unsigned char *hero_i;
+	struct struct_hero *hero_i;
 
-	hero_i = get_hero(0);
+	hero_i = (struct struct_hero*)get_hero(0);
 
-	for (i = tmp = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
+	for (i = tmp = 0; i <= 6; i++, hero_i++) {
+
 		/* Check class, group and check_hero() */
-		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) &&
-			check_hero(hero_i))
+		if ((hero_i->typus) && (hero_i->group_no == gs_current_group) && check_hero((Bit8u*)hero_i))
 		{
 			if (tmp) {
-				return hero_i;
+				return (Bit8u*)hero_i;
 			}
 
 			tmp++;
