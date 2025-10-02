@@ -2998,16 +2998,16 @@ void sub_light_timers(Bit32s quarter)
 	signed short j;
 	signed short i;
 
-	Bit8u *hero_i;
+	struct struct_hero *hero_i;
 	signed char tmp;
 
 	if (g_timers_disabled)
 		return;
 
-	hero_i = get_hero(0);
+	hero_i = (struct struct_hero*)get_hero(0);
 
-	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
-		if (host_readb(hero_i + HERO_TYPE) != HERO_TYPE_NONE) {
+	for (i = 0; i <= 6; i++, hero_i++) {
+		if (hero_i->typus != HERO_TYPE_NONE) {
 
 			if (quarter > 120) {
 				tmp = 120;
@@ -3017,35 +3017,34 @@ void sub_light_timers(Bit32s quarter)
 
 			for (j = 0; j < NR_HERO_INVENTORY_SLOTS; j++) {
 
-				if (host_readw(hero_i + (HERO_INVENTORY + INVENTORY_ITEM_ID) + SIZEOF_INVENTORY * j) == ITEM_TORCH_ON) {
+				if (hero_i->inventory[j].item_id == ITEM_TORCH_ON) {
 
 					/* Torch, burning */
+					hero_i->inventory[j].lighting_timer -= tmp;
 
-					sub_ptr_bs(hero_i + HERO_INVENTORY + INVENTORY_LIGHTING_TIMER + SIZEOF_INVENTORY * j, tmp);
-
-					if (host_readbs(hero_i + HERO_INVENTORY + INVENTORY_LIGHTING_TIMER + SIZEOF_INVENTORY * j) <= 0)
+					if (hero_i->inventory[j].lighting_timer <= 0)
 					{
 						/* decrement item counter */
-						dec_ptr_bs(hero_i + HERO_NR_INVENTORY_SLOTS_FILLED);
+						hero_i->items_num--;
 
 						/* subtract weight of a torch */
-						sub_ptr_ws(hero_i + HERO_LOAD,
-							host_readws(get_itemsdat(ITEM_TORCH_ON) + ITEM_STATS_WEIGHT));
+						hero_i->load -= host_readws(get_itemsdat(ITEM_TORCH_ON) + ITEM_STATS_WEIGHT);
 
 						/* Remove Torch from inventory */
-						memset(hero_i + HERO_INVENTORY + SIZEOF_INVENTORY * j, 0, SIZEOF_INVENTORY);
+						memset(&hero_i->inventory[j], 0, sizeof(inventory));
 					}
 
-				} else if (host_readw(hero_i + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * j) == ITEM_LANTERN_ON) {
+				} else if (hero_i->inventory[j].item_id == ITEM_LANTERN_ON) {
 
 					/* Lantern, burning */
-					sub_ptr_bs(hero_i + HERO_INVENTORY + INVENTORY_LIGHTING_TIMER + SIZEOF_INVENTORY * j, tmp);
+					hero_i->inventory[j].lighting_timer -= tmp;
 
-					if (host_readbs(hero_i + HERO_INVENTORY + INVENTORY_LIGHTING_TIMER + SIZEOF_INVENTORY * j) <= 0) {
+					if (hero_i->inventory[j].lighting_timer <= 0) {
+
 						/* Set timer to 0 */
-						host_writeb(hero_i + HERO_INVENTORY + INVENTORY_LIGHTING_TIMER + SIZEOF_INVENTORY * j, 0);
+						hero_i->inventory[j].lighting_timer = 0;
 						/* Set burning lantern to a not burning lantern */
-						host_writew(hero_i + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * j, ITEM_LANTERN_OFF);
+						hero_i->inventory[j].item_id = ITEM_LANTERN_OFF;
 					}
 				}
 			}
@@ -3059,7 +3058,7 @@ void sub_light_timers(Bit32s quarter)
 void magical_chainmail_damage(void)
 {
 	signed short i;
-	Bit8u *hero_i;
+	struct struct_hero *hero_i;
 
 	if (g_timers_disabled) {
 		return;
@@ -3069,17 +3068,17 @@ void magical_chainmail_damage(void)
 
 	for (i = 0; i <= 6; i++) {
 
-		if (host_readb(get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE) {
+		if (((struct struct_hero*)get_hero(i))->typus != HERO_TYPE_NONE) {
 
-			hero_i = get_hero(i);
+			hero_i = (struct struct_hero*)get_hero(i);
 
-			if (!hero_dead(hero_i) &&
+			if (!hero_dead((Bit8u*)hero_i) &&
 				/* check if not in jail (the argument might be: heroes are forced to take off armor in jail) */
-				!host_readbs(hero_i + HERO_JAIL) &&
+				!hero_i->jail &&
 				/* check if cursed chainmail is equipped */
-				(host_readw(hero_i + HERO_INVENTORY + INVENTORY_ITEM_ID + HERO_INVENTORY_SLOT_BODY * SIZEOF_INVENTORY) == ITEM_CHAIN_MAIL_CURSED))
+				(hero_i->inventory[HERO_INVENTORY_SLOT_BODY].item_id == ITEM_CHAIN_MAIL_CURSED))
 			{
-				sub_hero_le((struct struct_hero*)hero_i, 1);
+				sub_hero_le(hero_i, 1);
 			}
 		}
 	}

@@ -330,7 +330,7 @@ void tevent_137(void)
 	signed short i;
 	signed short answer;
 	signed short item_pos;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 5) > 0 && !gs_tevent137_flag) ||
 		gs_tevent137_flag)
@@ -344,34 +344,26 @@ void tevent_137(void)
 
 		if (answer == 1) {
 
-			hero = get_hero(0);
-			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+			hero = (struct struct_hero*)get_hero(0);
+			for (i = 0; i <= 6; i++, hero++) {
 
-				if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-					(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
-					!hero_dead(hero))
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
 				{
 					/* each hero gets five FOODPACKAGES */
-					give_hero_new_item(hero, ITEM_FOOD_PACKAGE, 1, 5);
+					give_hero_new_item((Bit8u*)hero, ITEM_FOOD_PACKAGE, 1, 5);
 
 					/* each hero gets his first WATERSKIN filled */
 					/* potential Original-Bug: Does it make sense that the further WATERSKINs are not filled? */
 
-					if ((item_pos = get_item_pos(hero, ITEM_WATERSKIN)) != -1)
+					if ((item_pos = get_item_pos((Bit8u*)hero, ITEM_WATERSKIN)) != -1)
 					{
 						/* fill waterskin */
-#if !defined(__BORLANDC__)
-						and_ptr_bs(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * item_pos, 0xfb); /* unset 'empty' flag */
-						and_ptr_bs(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * item_pos, 0xfd); /* unset 'half_empty' flag */
-#else
-						(*(struct inventory_flags*)(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * item_pos)).half_empty =
-							(*(struct inventory_flags*)(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * item_pos)).empty = 0;
-#endif
+						hero->inventory[item_pos].flags.half_empty = hero->inventory[item_pos].flags.empty = 0;
 					}
 
-					host_writebs(hero + HERO_HUNGER, host_writebs(hero + HERO_THIRST, 0));
+					hero->hunger = hero->thirst = 0;
 
-					add_hero_le((struct struct_hero*)hero, 2);
+					add_hero_le(hero, 2);
 				}
 			}
 		}
@@ -380,7 +372,7 @@ void tevent_137(void)
 
 void tevent_138(void)
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent138_flag) || gs_tevent138_flag)
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent138_flag) || gs_tevent138_flag)
 	{
 		gs_tevent138_flag = 1;
 		TRV_found_camp_place(1);
@@ -405,7 +397,7 @@ void tevent_139(void)
 
 			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
 			{
-				sub_hero_le((struct struct_hero*)hero, random_schick(2));
+				sub_hero_le(hero, random_schick(2));
 			}
 		}
 
