@@ -397,9 +397,9 @@ void tevent_114(void)
 
 						sub_hero_le((Bit8u*)hero, random_schick(8));
 
-						loose_random_item((Bit8u*)hero, 50, get_ttx(506));
-						loose_random_item((Bit8u*)hero, 50, get_ttx(506));
-						loose_random_item((Bit8u*)hero, 50, get_ttx(506));
+						loose_random_item((struct struct_hero*)hero, 50, get_ttx(506));
+						loose_random_item((struct struct_hero*)hero, 50, get_ttx(506));
+						loose_random_item((struct struct_hero*)hero, 50, get_ttx(506));
 					}
 				}
 			}
@@ -487,9 +487,9 @@ void tevent_117(void)
 			/* attrib test failed */
 			sub_hero_le(hero, random_schick(11) + 1);
 
-			loose_random_item(hero, 15, get_ttx(506));
-			loose_random_item(hero, 15, get_ttx(506));
-			loose_random_item(hero, 15, get_ttx(506));
+			loose_random_item((struct struct_hero*)hero, 15, get_ttx(506));
+			loose_random_item((struct struct_hero*)hero, 15, get_ttx(506));
+			loose_random_item((struct struct_hero*)hero, 15, get_ttx(506));
 		}
 	}
 

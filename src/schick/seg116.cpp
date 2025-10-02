@@ -172,9 +172,9 @@ void tevent_133(void)
 
 					sub_hero_le((Bit8u*)hero, random_schick(8));
 
-					loose_random_item((Bit8u*)hero, 50, get_ttx(506));
-					loose_random_item((Bit8u*)hero, 50, get_ttx(506));
-					loose_random_item((Bit8u*)hero, 50, get_ttx(506));
+					loose_random_item((struct struct_hero*)hero, 50, get_ttx(506));
+					loose_random_item((struct struct_hero*)hero, 50, get_ttx(506));
+					loose_random_item((struct struct_hero*)hero, 50, get_ttx(506));
 				}
 			}
 		}

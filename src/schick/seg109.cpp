@@ -398,7 +398,7 @@ void TRV_ford_test(signed short mod, signed short time)
 
 				hero_disease_test((struct struct_hero*)hero, 2, 20 - (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK))));
 
-				loose_random_item(hero, 1, get_ttx(506));
+				loose_random_item((struct struct_hero*)hero, 1, get_ttx(506));
 			} else {
 				/* test succeded */
 				timewarp(MINUTES(10));
@@ -781,7 +781,7 @@ void TRV_barrier(signed short text_start)
 
 						hero_disease_test((struct struct_hero*)hero, 2, 30);
 
-						loose_random_item(hero, 30, get_ttx(506));
+						loose_random_item((struct struct_hero*)hero, 30, get_ttx(506));
 					}
 					done = 1;
 				}

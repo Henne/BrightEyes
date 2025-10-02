@@ -609,7 +609,7 @@ signed short get_item(signed short id, signed short unused, signed short no)
 	signed short done = 0;
 	signed short dropper;
 	signed short vc;
-	Bit8u * hero_i;
+	struct struct_hero *hero_i;
 	signed short autofight_bak;
 
 	/* Special stacked items */
@@ -618,12 +618,12 @@ signed short get_item(signed short id, signed short unused, signed short no)
 	if (id == ITEM_20_CLIMBING_HOOKS) { id = ITEM_CLIMBING_HOOKS; no = 20;}
 
 	do {
-		hero_i = get_hero(0);
-		for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
-			if (host_readb(hero_i + HERO_TYPE) && host_readb(hero_i + HERO_GROUP_NO) == gs_current_group)
+		hero_i = (struct struct_hero*)get_hero(0);
+		for (i = 0; i <= 6; i++, hero_i++) {
+			if ((hero_i->typus) && (hero_i->group_no == gs_current_group))
 			{
 
-				while ((no > 0) && (v6 = give_hero_new_item(hero_i, id, 0, no)) > 0) {
+				while ((no > 0) && (v6 = give_hero_new_item((Bit8u*)hero_i, id, 0, no)) > 0) {
 					no -= v6;
 					retval += v6;
 				}
@@ -641,13 +641,13 @@ signed short get_item(signed short id, signed short unused, signed short no)
 				dropper = select_hero_ok(get_ttx(550));
 
 				if (dropper != -1) {
-					hero_i = get_hero(dropper);
+					hero_i = (struct struct_hero*)get_hero(dropper);
 					g_prevent_drop_equipped_items = 1;
-					vc = select_item_to_drop(hero_i);
+					vc = select_item_to_drop((Bit8u*)hero_i);
 					g_prevent_drop_equipped_items = 0;
 
 					if (vc != -1) {
-						drop_item(hero_i, vc, -1);
+						drop_item((Bit8u*)hero_i, vc, -1);
 					}
 				}
 			} else {
@@ -689,18 +689,16 @@ signed short hero_count_item(Bit8u *hero, unsigned short item) {
 signed short group_count_item(signed short item)
 {
 
-	Bit8u *hero_i;
+	struct struct_hero *hero_i;
 	signed short i;
 	signed short ret = 0;
 
-	hero_i = get_hero(0);
-	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
+	hero_i = (struct struct_hero*)get_hero(0);
+	for (i = 0; i <= 6; i++, hero_i++) {
 		/* check class */
-		if (host_readb(hero_i + HERO_TYPE) &&
-			/* check group */
-			(host_readb(hero_i + HERO_GROUP_NO) == gs_current_group)) {
+		if (hero_i->typus && (hero_i->group_no == gs_current_group)) {
 
-			ret += hero_count_item(hero_i, item);
+			ret += hero_count_item((Bit8u*)hero_i, item);
 		}
 	}
 
@@ -714,10 +712,11 @@ signed short group_count_item(signed short item)
  * \param   percent     probability to loose
  * \param   text        the displayed text
  */
-void loose_random_item(Bit8u *hero, signed short percent, char *text)
+void loose_random_item(struct struct_hero *hero, const signed int percent, char *text)
 {
 	Bit8u *p_item;
-	unsigned short item, pos;
+	signed int item_id;
+	signed int pos;
 
 	if (random_schick(100) > percent)
 		return;
@@ -726,20 +725,17 @@ void loose_random_item(Bit8u *hero, signed short percent, char *text)
 	do {
 		pos = random_schick(NR_HERO_INVENTORY_SLOTS) - 1;
 
-		item = host_readw(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + pos * SIZEOF_INVENTORY);
+		item_id = host_readw((Bit8u*)hero + HERO_INVENTORY + INVENTORY_ITEM_ID + pos * SIZEOF_INVENTORY);
 
-		p_item = get_itemsdat(item);
+		p_item = get_itemsdat(item_id);
 
 		/* No item to drop */
-		if (item != 0 && !item_undropable(p_item)) {
+		if (item_id != 0 && !item_undropable(p_item)) {
 
 			/* drop 1 item */
-			drop_item(hero, pos, 1);
+			drop_item((Bit8u*)hero, pos, 1);
 
-			sprintf(g_text_output_buf,
-				(char*)text, hero + HERO_NAME2,
-				(Bit8u*)(GUI_names_grammar(0, item, 0)));
-
+			sprintf(g_text_output_buf, text, hero->alias, (Bit8u*)GUI_names_grammar(0, item_id, 0));
 			GUI_output(g_text_output_buf);
 
 			return;

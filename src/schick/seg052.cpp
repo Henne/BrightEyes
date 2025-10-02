@@ -263,7 +263,7 @@ void do_citycamp(void)
 						} else {
 							/* in a town */
 							done = 0;
-							loose_random_item(get_hero(get_random_hero()), 100, get_ttx(832));
+							loose_random_item((struct struct_hero*)get_hero(get_random_hero()), 100, get_ttx(832));
 						}
 
 						if (l7 > 0) {

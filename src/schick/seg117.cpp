@@ -778,7 +778,7 @@ void TLK_way_to_ruin(signed short state)
 		/* Original-Bug: hero != RUIN_HERO */
 		hero_disease_test(gs_ruin_hero, 2, 25 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
 
-		loose_random_item((Bit8u*)gs_ruin_hero, 10, get_ttx(506));
+		loose_random_item(gs_ruin_hero, 10, get_ttx(506));
 
 	} else if (state == 13 || state == 25 || state == 34 || state == 59 || state == 62) {
 		timewarp(MINUTES(30));
@@ -793,10 +793,10 @@ void TLK_way_to_ruin(signed short state)
 		gs_ruin_hero = (struct struct_hero*)get_hero(get_random_hero());
 		g_dialog_next_state = (test_attrib(gs_ruin_hero, ATTRIB_GE, 2) > 0 ? 20 : 21);
 	} else if (state == 20) {
-		loose_random_item(get_hero(get_random_hero()), 5, get_ttx(506));
+		loose_random_item((struct struct_hero*)get_hero(get_random_hero()), 5, get_ttx(506));
 	} else if (state == 21) {
 		timewarp(MINUTES(10));
-		loose_random_item((Bit8u*)hero2, 10, get_ttx(506));
+		loose_random_item((struct struct_hero*)hero2, 10, get_ttx(506));
 		sub_hero_le((Bit8u*)hero2, random_schick(4) + 2);
 	} else if (state == 22 || state == 30 || state == 52 || state == 53) {
 		timewarp(HOURS(3));

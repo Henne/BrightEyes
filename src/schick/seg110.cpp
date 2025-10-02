@@ -114,7 +114,7 @@ void TRV_swim2(signed char mod, signed short percent)
 				hero_disease_test((struct struct_hero*)hero, 2, 20 - (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK))));
 
 				if (percent) {
-					loose_random_item(hero, percent, get_ttx(506));
+					loose_random_item((struct struct_hero*)hero, percent, get_ttx(506));
 				}
 
 				sub_hero_le(hero, random_schick(5));

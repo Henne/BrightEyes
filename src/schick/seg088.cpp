@@ -27,31 +27,26 @@ namespace M302de {
 void DNG14_dive(signed short diver_pos, signed char mod, signed short dest_x)
 {
 	signed short i;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
-	hero = get_hero(0);
-	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
+	hero = (struct struct_hero*)get_hero(0);
+	for (i = 0; i <= 6; i++, hero++)
 	{
-		if (i != diver_pos &&
-			host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-			!hero_dead(hero))
+		if ((i != diver_pos) && (hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
 		{
 
-			if (test_skill((struct struct_hero*)hero, TA_SCHWIMMEN, mod) <= 0) {
-				/* swimming failed */
-				sprintf(g_dtp2,	get_tx(42), (char*)hero + HERO_NAME2,
-					GUI_get_ptr(host_readbs(hero + HERO_SEX), 0),
-					GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
+			if (test_skill(hero, TA_SCHWIMMEN, mod) <= 0) {
 
+				/* swimming failed */
+				sprintf(g_dtp2,	get_tx(42), hero->alias, GUI_get_ptr(hero->sex, 0), GUI_get_ptr(hero->sex, 0));
 				GUI_output(g_dtp2);
 
 				/* loose 2W6 LE */
-				sub_hero_le(hero, dice_roll(2, 6, 0));
+				sub_hero_le((Bit8u*)hero, dice_roll(2, 6, 0));
 			} else {
-				/* swimming succeeded */
 
-				sprintf(g_dtp2, get_tx(43), (char*)hero + HERO_NAME2);
+				/* swimming succeeded */
+				sprintf(g_dtp2, get_tx(43), hero->alias);
 				GUI_output(g_dtp2);
 			}
 		}
@@ -59,7 +54,6 @@ void DNG14_dive(signed short diver_pos, signed char mod, signed short dest_x)
 
 	gs_x_target = dest_x;
 	g_dng_refresh_direction = -1;
-
 }
 
 /**

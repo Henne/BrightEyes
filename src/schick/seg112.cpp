@@ -296,7 +296,7 @@ void TRV_swimm(signed short mod, signed short percent)
 				/* test failed */
 				hero_disease_test(hero, 2, 20 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
 
-				loose_random_item((Bit8u*)hero, percent, get_ttx(506));
+				loose_random_item((struct struct_hero*)hero, percent, get_ttx(506));
 
 				sub_hero_le((Bit8u*)hero, random_schick(5));
 

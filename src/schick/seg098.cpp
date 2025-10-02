@@ -615,7 +615,7 @@ signed short test_spell(struct struct_hero *hero, signed short spell_no, signed 
 
 		handicap -= hero->spells[spell_no];
 
-		retval = test_attrib3((struct struct_hero*)(Bit8u*)hero, spell_desc->attrib1, spell_desc->attrib2, spell_desc->attrib3, handicap);
+		retval = test_attrib3(hero, spell_desc->attrib1, spell_desc->attrib2, spell_desc->attrib3, handicap);
 
 		if (retval == -99) {
 			retval = -1;
@@ -633,23 +633,23 @@ signed short test_spell(struct struct_hero *hero, signed short spell_no, signed 
 signed short test_spell_group(signed short spell, signed char handicap)
 {
 
-	Bit8u *hero_i = get_hero(0);
+	struct struct_hero *hero_i = (struct struct_hero*)get_hero(0);
 	signed short i;
 
-	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
+	for (i = 0; i <= 6; i++, hero_i++) {
 
 		/* Check class is magicuser */
-		if ((host_readbs(hero_i + HERO_TYPE) >= HERO_TYPE_WITCH) &&
+		if ((hero_i->typus >= HERO_TYPE_WITCH) &&
 			/* Check class  BOGUS */
-			(host_readbs(hero_i + HERO_TYPE) != HERO_TYPE_NONE) &&
+			(hero_i->typus != HERO_TYPE_NONE) &&
 			/* Check in group */
-			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) &&
+			(hero_i->group_no == gs_current_group) &&
 			/* Check if dead */
-			!hero_dead(hero_i))
+			!hero_dead((Bit8u*)hero_i))
 			/* Original-Bug: what if petrified, sleeping, unconcious etc. */
 		{
 
-			if (test_spell((struct struct_hero*)hero_i, spell, handicap) > 0) {
+			if (test_spell(hero_i, spell, handicap) > 0) {
 				return 1;
 			}
 		}

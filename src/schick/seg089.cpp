@@ -45,7 +45,7 @@ signed short DNG15_handler(void)
 	signed short dir;
 	signed short tmp;
 	signed short tw_bak;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
@@ -54,7 +54,7 @@ signed short DNG15_handler(void)
 
 	dir = gs_direction;
 
-	hero = (Bit8u*)get_first_hero_available_in_group();
+	hero = (struct struct_hero*)get_first_hero_available_in_group(); /* UNNEEDED */
 
 	if ((((target_pos == DNG_POS(0,6,3) || target_pos == DNG_POS(0,6,6) || target_pos == DNG_POS(0,6,9)) && dir == EAST) ||
 		((target_pos == DNG_POS(0,12,10) || target_pos == DNG_POS(0,8,10)) && dir == NORTH)) && target_pos != gs_dng_handled_pos)
@@ -74,23 +74,18 @@ signed short DNG15_handler(void)
 			target_pos != gs_dng_handled_pos)
 	{
 		/* TRAP: light wounds */
-		hero = get_hero(0);
-		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
+		hero = (struct struct_hero*)get_hero(0);
+		for (i = 0; i <= 6; i++, hero++)
 		{
-			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-				!hero_dead(hero) &&
-				test_attrib((struct struct_hero*)hero, ATTRIB_GE, -3) <= 0)
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+				!hero_dead((Bit8u*)hero) && test_attrib(hero, ATTRIB_GE, -3) <= 0)
 			{
 				tmp = random_schick(3);
 
-				sprintf(g_dtp2,
-					(char*)(tmp == 3 ? get_tx(3) : (tmp == 2 ? get_tx(4) : get_tx(5))),
-					(char*)hero + HERO_NAME2);
-
+				sprintf(g_dtp2,	(char*)(tmp == 3 ? get_tx(3) : (tmp == 2 ? get_tx(4) : get_tx(5))), hero->alias);
 				GUI_output(g_dtp2);
 
-				sub_hero_le(hero, 1);
+				sub_hero_le((Bit8u*)hero, 1);
 			}
 		}
 
@@ -478,27 +473,21 @@ void DNG15_small_wounds(void)
 {
 	signed short i;
 	signed short randval;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
-	hero = get_hero(0);
+	hero = (struct struct_hero*)get_hero(0);
 
-	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
+	for (i = 0; i <= 6; i++, hero++)
 	{
-		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-			!hero_dead(hero) &&
-			test_attrib((struct struct_hero*)hero, ATTRIB_GE, -3) <= 0)
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+			!hero_dead((Bit8u*)hero) && test_attrib(hero, ATTRIB_GE, -3) <= 0)
 		{
 			randval = random_schick(3);
 
-			sprintf(g_dtp2,
-				(char*)(randval == 3 ? get_tx(3) :
-						(randval == 2 ? get_tx(7) : get_tx(8))),
-				(char*)hero + HERO_NAME2);
-
+			sprintf(g_dtp2, (char*)(randval == 3 ? get_tx(3) : (randval == 2 ? get_tx(7) : get_tx(8))), hero->alias);
 			GUI_output(g_dtp2);
 
-			sub_hero_le(hero, 1);
+			sub_hero_le((Bit8u*)hero, 1);
 		}
 	}
 }
@@ -522,7 +511,7 @@ void DNG15_debris(signed short ladder)
 
 			if (GUI_bool(get_tx(13)))
 			{
-				gs_direction = (WEST);
+				gs_direction = WEST;
 				gs_x_target--;
 				DNG_inc_level();
 			}
@@ -542,15 +531,16 @@ void DNG15_rotten_clothes_chest(Bit8u* chest)
 
 void DNG15_smelling_chest(Bit8u* chest)
 {
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	if (GUI_bool(get_tx(35))) {
-		hero = get_hero(get_random_hero());
 
-		sprintf(g_dtp2,	get_tx(36), (char*)hero + HERO_NAME2);
+		hero = (struct struct_hero*)get_hero(get_random_hero());
+
+		sprintf(g_dtp2,	get_tx(36), hero->alias);
 		GUI_output(g_dtp2);
 
-		sub_hero_le(hero, 4);
+		sub_hero_le((Bit8u*)hero, 4);
 	}
 }
 
@@ -592,9 +582,9 @@ void DNG15_collapsing_ceiling(Bit8u* ptr)
 {
 	signed short i;
 	signed short cnt;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
-	hero = get_hero(0);
+	hero = (struct struct_hero*)get_hero(0);
 
 	switch (host_readb(ptr))
 	{
@@ -604,12 +594,10 @@ void DNG15_collapsing_ceiling(Bit8u* ptr)
 			GUI_output(get_tx(40));
 
 			/* count failed GE-3 test */
-			for (i = cnt = 0; i <= 6; i++, hero += SIZEOF_HERO)
+			for (i = cnt = 0; i <= 6; i++, hero++)
 			{
-				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-					!hero_dead(hero) &&
-					test_attrib((struct struct_hero*)hero, ATTRIB_GE, -3) <= 0)
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+					!hero_dead((Bit8u*)hero) && test_attrib(hero, ATTRIB_GE, -3) <= 0)
 				{
 					cnt++;
 				}
@@ -632,27 +620,21 @@ void DNG15_collapsing_ceiling(Bit8u* ptr)
 			GUI_output(get_tx(43));
 
 			/* each hero gets 1W6 damage on a failed GE test */
-			for (i = cnt = 0; i <= 6; i++, hero += SIZEOF_HERO)
+			for (i = cnt = 0; i <= 6; i++, hero++)
 			{
-				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-					!hero_dead(hero) &&
-					test_attrib((struct struct_hero*)hero, ATTRIB_GE, 0) <= 0)
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+					!hero_dead((Bit8u*)hero) && test_attrib(hero, ATTRIB_GE, 0) <= 0)
 				{
-					sprintf(g_dtp2,
-						get_tx(44),
-						(char*)hero + HERO_NAME2,
-						(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
-
+					sprintf(g_dtp2, get_tx(44), hero->alias, GUI_get_ptr(hero->sex, 0));
 					GUI_output(g_dtp2);
 
-					sub_hero_le(hero, random_schick(6));
+					sub_hero_le((Bit8u*)hero, random_schick(6));
 				}
 			}
 
 			/* way is blocked */
-			gs_x_target = (gs_x_target_bak);
-			gs_y_target = (gs_y_target_bak);
+			gs_x_target = gs_x_target_bak;
+			gs_y_target = gs_y_target_bak;
 			break;
 		}
 		case 4:
@@ -677,9 +659,7 @@ void DNG15_collapsing_ceiling(Bit8u* ptr)
 void DNG15_clear_way(Bit8u* ptr)
 {
 	signed short i;
-	Bit8u *hero;
-
-	hero = get_hero(0);
+	struct struct_hero *hero = (struct struct_hero*)get_hero(0);
 	i = 0;
 
 	/* With all of the following items SHOVEL, HOE, CROWBAR, FRANCESCA ...*/
@@ -699,26 +679,20 @@ void DNG15_clear_way(Bit8u* ptr)
 	{
 		GUI_output(get_tx(46));
 
-		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
+		for (i = 0; i <= 6; i++, hero++)
 		{
-			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-				!hero_dead(hero) &&
-				test_attrib((struct struct_hero*)hero, ATTRIB_GE, 0) <= 0)
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+				!hero_dead((Bit8u*)hero) && test_attrib(hero, ATTRIB_GE, 0) <= 0)
 			{
-				sprintf(g_dtp2,
-					get_tx(44),
-					(char*)hero + HERO_NAME2,
-					(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
-
+				sprintf(g_dtp2, get_tx(44), hero->alias, GUI_get_ptr(hero->sex, 0));
 				GUI_output(g_dtp2);
 
-				sub_hero_le(hero, random_schick(6));
+				sub_hero_le((Bit8u*)hero, random_schick(6));
 			}
 		}
 
-		gs_x_target = (gs_x_target_bak);
-		gs_y_target = (gs_y_target_bak);
+		gs_x_target = gs_x_target_bak;
+		gs_y_target = gs_y_target_bak;
 	} else {
 		inc_ptr_bs(ptr);
 		GUI_output(get_tx(47));
