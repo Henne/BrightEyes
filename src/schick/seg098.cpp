@@ -695,7 +695,7 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 	signed short x;
 	signed short y;
 	signed short pos;
-	Bit8u *ptr_doors;
+	struct dungeon_door *ptr_doors;
 #endif
 
 	if (!check_hero(hero) && !hero_renegade(hero)) {
@@ -777,17 +777,18 @@ signed short use_spell(Bit8u* hero, signed short selection_menu, signed char han
 				pos = DNG_POS(gs_dungeon_level, x, y);
 
 				if ((*(g_dng_map_ptr + MAP_POS(x,y)) & 0x02) == 0) {
+
 					/* flag 1 'unlocked' is not set -> door is locked  */
-					while (host_readws(ptr_doors + DUNGEON_DOOR_POS) != pos) {
+					while (ptr_doors->pos != pos) {
 						/* ASSERT */
 						/*
 						if (host_readws(ptr_doors + 0) == -1) {
 						D1_INFO("In free call of Foramen spell: door not found. This should not happen.\n");
 						 */
 
-						ptr_doors += SIZEOF_DUNGEON_DOOR;
+						ptr_doors++;
 					}
-					handicap += host_readbs(ptr_doors + DUNGEON_DOOR_FORAMEN_HANDICAP);
+					handicap += ptr_doors->foramen_handicap;
 				}
 			}
 #endif

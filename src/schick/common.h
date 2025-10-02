@@ -1215,12 +1215,11 @@ enum {
 	DNG_TILE_WALL = 15,
 };
 
-enum {
-	DUNGEON_DOOR_POS = 0, /* 2 bytes */
-	DUNGEON_DOOR_SMASH_HANDICAP = 2,
-	DUNGEON_DOOR_LOCKPICK_HANDICAP = 3,
-	DUNGEON_DOOR_FORAMEN_HANDICAP = 4,
-	SIZEOF_DUNGEON_DOOR = 5
+struct dungeon_door {
+	Bit16s pos;
+	Bit8s smash_handicap;
+	Bit8s lockpick_handicap;
+	Bit8s foramen_handicap;
 };
 
 enum {

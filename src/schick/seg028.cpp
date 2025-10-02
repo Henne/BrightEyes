@@ -119,7 +119,7 @@ void load_dungeon_ddt(void)
 #endif
 
 	read_archive_file(handle, g_dungeon_fights_buf, low);
-	read_archive_file(handle, g_dungeon_doors_buf, high - low);
+	read_archive_file(handle, (Bit8u*)g_dungeon_doors_buf, high - low);
 	read_archive_file(handle, g_dungeon_stairs_buf, 0x7d0);
 
 	close(handle);

@@ -60,10 +60,6 @@ signed short div16(signed char);
 namespace M302de {
 #endif
 
-struct dummy5 {
-	unsigned char a[5];
-};
-
 signed short g_dng_refresh_direction;	// ds:0xe482
 signed short g_dng_refresh_y_target;	// ds:0xe484
 signed short g_dng_refresh_x_target;	// ds:0xe486
@@ -74,7 +70,7 @@ unsigned char g_unkn_090[1];		// ds:0xe491
 static signed short g_lockpick_try_counter; // ds:0xe492, {0..4}
 unsigned char *g_dungeon_fights_buf;	// ds:0xe494, to buffer of size 630
 unsigned char *g_dungeon_stairs_buf;	// ds:0xe498, to buffer of size 80
-unsigned char *g_dungeon_doors_buf;	// ds:0xe49c, to buffer of size 225
+struct dungeon_door *g_dungeon_doors_buf;	// ds:0xe49c, to buffer of size 225
 signed int g_get_extra_loot;		// ds:0xe4a0
 
 /**
@@ -93,13 +89,13 @@ void DNG_door(signed short action)
 	signed short pos;
 	signed short l4;
 	signed short spell_result;
-	struct dummy5 *ptr_doors;
+	struct dungeon_door *ptr_doors;
 	Bit8u *hero;
 	signed short hero_pos;
 	signed short lockpick_pos;
 	signed short lockpick_result;
 
-	ptr_doors = (struct dummy5*)g_dungeon_doors_buf;
+	ptr_doors = g_dungeon_doors_buf;
 	x = gs_x_target;
 	y = gs_y_target;
 
@@ -115,13 +111,11 @@ void DNG_door(signed short action)
 
 	do {
 
-		if (host_readws((Bit8u*)ptr_doors + DUNGEON_DOOR_POS) == pos)
+		if (ptr_doors->pos == pos)
 		{
 #if !defined(__BORLANDC__)
 			D1_INFO("Tuer: KK notwendig %d, SCHLOESSER mod = %d, FORAMEN mod = %d\n",
-					host_readbs((Bit8u*)ptr_doors + DUNGEON_DOOR_SMASH_HANDICAP),
-					host_readbs((Bit8u*)ptr_doors + DUNGEON_DOOR_LOCKPICK_HANDICAP),
-					host_readbs((Bit8u*)ptr_doors + DUNGEON_DOOR_FORAMEN_HANDICAP));
+				ptr_doors->smash_handicap, ptr_doors->lockpick_handicap, ptr_doors->foramen_handicap);
 #endif
 
 			if (action == ACTION_ID_ICON_7)
@@ -156,7 +150,7 @@ void DNG_door(signed short action)
 							*/
 							l4 = *(g_dng_map_ptr + MAP_POS(x,y)) & 0x02; /* read bit 1: is door unlocked? */
 
-							if (l4 != 0 || !host_readbs((Bit8u*)ptr_doors + DUNGEON_DOOR_SMASH_HANDICAP))
+							if (l4 != 0 || !ptr_doors->smash_handicap)
 							{
 								/* door closed and unlocked -> open it */
 
@@ -203,7 +197,7 @@ void DNG_door(signed short action)
 					/* smash door */
 					play_voc(ARCHIVE_FILE_FX14_VOC);
 
-					if (check_heroes_KK(host_readbs((Bit8u*)ptr_doors + DUNGEON_DOOR_SMASH_HANDICAP)))
+					if (check_heroes_KK(ptr_doors->smash_handicap))
 					{
 						/* clear higher 4 bits */
 						*(g_dng_map_ptr + MAP_POS(x,y)) &= 0x0f;
@@ -232,7 +226,7 @@ void DNG_door(signed short action)
 				{
 					if (lockpick_pos != -2)
 					{
-						lockpick_result = test_skill((struct struct_hero*)hero, TA_SCHLOESSER, host_readbs((Bit8u*)ptr_doors + DUNGEON_DOOR_LOCKPICK_HANDICAP));
+						lockpick_result = test_skill((struct struct_hero*)hero, TA_SCHLOESSER, ptr_doors->lockpick_handicap);
 
 						play_voc(ARCHIVE_FILE_FX11_VOC);
 
@@ -295,7 +289,7 @@ void DNG_door(signed short action)
 						/* not a spellcaster */
 						GUI_output(get_ttx(330));
 					} else {
-						spell_result = test_spell((struct struct_hero*)hero, SP_FORAMEN_FORAMINOR, host_readbs((Bit8u*)ptr_doors + DUNGEON_DOOR_FORAMEN_HANDICAP));
+						spell_result = test_spell((struct struct_hero*)hero, SP_FORAMEN_FORAMINOR, ptr_doors->foramen_handicap);
 
 						if (spell_result == -99)
 						{
@@ -331,7 +325,7 @@ void DNG_door(signed short action)
 			}
 		}
 
-	} while (host_readws((Bit8u*)(ptr_doors++)) != -1);
+	} while ((ptr_doors++)->pos != -1);
 }
 
 void print_msg_with_first_hero(char *msg)

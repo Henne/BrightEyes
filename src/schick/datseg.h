@@ -1770,7 +1770,7 @@ extern signed int g_current_town_over;		// ds:0xe4a5; seg002, seg093, seg094
 extern signed int g_trv_menu_selection;		// ds:0xe4a3; seg002, seg093, seg094
 extern unsigned char g_route59_flag;		// ds:0xe4a2; seg093, seg094, seg110
 extern signed int g_get_extra_loot;		// ds:0xe4a0; seg076, seg077, seg092
-extern unsigned char *g_dungeon_doors_buf; 	// ds:0xe49c; seg028,seg076,seg098,seg120
+extern struct dungeon_door *g_dungeon_doors_buf; 	// ds:0xe49c; seg028,seg076,seg098,seg120
 extern unsigned char *g_dungeon_stairs_buf; 	// ds:0xe498; seg028,seg076,seg098,seg120
 extern unsigned char *g_dungeon_fights_buf; 	// ds:0xe494; seg028,seg076,seg098,seg120
 extern struct dng_gfxtab *g_dng_gfxtab;		// ds:0xe48d; seg075, seg076
