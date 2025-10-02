@@ -202,7 +202,7 @@ struct struct_hero {
 
 	/* Offset 0x196 */
 	/* Not figured out yet, but reserve space */
-	signed char inventory[23][14];
+	struct inventory inventory[23];
 	signed short load;
 
 	unsigned char pic[1024];
