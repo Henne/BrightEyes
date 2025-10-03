@@ -33,7 +33,7 @@ signed short DNG07_handler(void)
 	signed short target_pos;
 	signed short i;
 	signed short tw_bak;
-	Bit8u *hero;
+	struct struct_hero *hero;
 	Bit8u *amap_ptr;
 	signed short spell_result;
 	signed short lockpick_pos;
@@ -45,7 +45,7 @@ signed short DNG07_handler(void)
 
 	target_pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
-	hero = (Bit8u*)get_first_hero_available_in_group();
+	hero = (struct struct_hero*)get_first_hero_available_in_group();
 
 	if (target_pos == DNG_POS(0,13,2) && target_pos != gs_dng_handled_pos)
 	{
@@ -58,17 +58,17 @@ signed short DNG07_handler(void)
 
 			if (i == 1)
 			{
-				if ((lockpick_pos = hero_has_lockpicks(hero)) != -1)
+				if ((lockpick_pos = hero_has_lockpicks((Bit8u*)hero)) != -1)
 				{
 					if (lockpick_pos != -2)
 					{
-						skill_result = test_skill((struct struct_hero*)hero, TA_SCHLOESSER, 7);
+						skill_result = test_skill(hero, TA_SCHLOESSER, 7);
 
 						if (skill_result == -99) {
 
 							print_msg_with_first_hero(get_ttx(533));
 
-							or_ptr_bs(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * lockpick_pos, 0x01); /* set 'broken' flag */
+							hero->inventory[lockpick_pos].flags.broken = 1;
 
 							g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = target_pos;
 
@@ -87,7 +87,7 @@ signed short DNG07_handler(void)
 							and_ptr_bs(amap_ptr + MAP_POS(13,2), 0x0f);
 							or_ptr_bs(amap_ptr + MAP_POS(13,2), DNG_TILE_STAIR_DOWN << 4);
 
-							add_hero_ap((struct struct_hero*)hero, 1L);
+							add_hero_ap(hero, 1L);
 						}
 
 					} else {
@@ -100,26 +100,26 @@ signed short DNG07_handler(void)
 			} else if (i == 2)
 			{
 
-				hero = get_hero(select_hero_ok_forced(get_ttx(317)));
+				hero = (struct struct_hero*)get_hero(select_hero_ok_forced(get_ttx(317)));
 
-				if (host_readbs(hero + HERO_TYPE) < HERO_TYPE_WITCH)
+				if (hero->typus < HERO_TYPE_WITCH)
 				{
 					GUI_output(get_ttx(330));
 				} else {
-					spell_result = test_spell((struct struct_hero*)hero, SP_FORAMEN_FORAMINOR, 5);
+					spell_result = test_spell(hero, SP_FORAMEN_FORAMINOR, 5);
 
 					if (spell_result > 0) {
 
-						sub_ae_splash((struct struct_hero*)hero, get_spell_cost(SP_FORAMEN_FORAMINOR, 0));
+						sub_ae_splash(hero, get_spell_cost(SP_FORAMEN_FORAMINOR, 0));
 
 						and_ptr_bs(amap_ptr + MAP_POS(13,2), 0x0f);
 						or_ptr_bs(amap_ptr + MAP_POS(13,2), DNG_TILE_STAIR_DOWN << 4);
 
-						add_hero_ap((struct struct_hero*)hero, 1L);
+						add_hero_ap(hero, 1L);
 
 					} else if (spell_result != -99) {
 
-						sub_ae_splash((struct struct_hero*)hero, get_spell_cost(SP_FORAMEN_FORAMINOR, 1));
+						sub_ae_splash(hero, get_spell_cost(SP_FORAMEN_FORAMINOR, 1));
 
 						g_fig_flee_position[NORTH] = g_fig_flee_position[EAST] = g_fig_flee_position[SOUTH] = g_fig_flee_position[WEST] = target_pos;
 
@@ -127,7 +127,7 @@ signed short DNG07_handler(void)
 
 					} else {
 
-						sprintf(g_dtp2,	get_ttx(607), (char*)hero + HERO_NAME2);
+						sprintf(g_dtp2,	get_ttx(607), hero->alias);
 						GUI_output(g_dtp2);
 					}
 				}
@@ -170,14 +170,12 @@ signed short DNG07_handler(void)
 			}
 
 			/* ORIGINAL-BUG: forgot to set hero */
-			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
+			for (i = 0; i <= 6; i++, hero++)
 			{
-				if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-					!hero_dead(hero))
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
 				{
-					add_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_MU), 3); /* MU + 3 */
-					or_ptr_bs(hero + HERO_FLAGS2, 0x80); /* set 'encouraged' flag */
+					hero->attrib[ATTRIB_MU].current += 3;
+					or_ptr_bs((Bit8u*)hero + HERO_FLAGS2, 0x80); /* set 'encouraged' flag */
 				}
 			}
 		} else {
@@ -236,7 +234,7 @@ signed short DNG07_handler(void)
 	{
 		if (GUI_bool(get_tx(6)))
 		{
-			sprintf(g_dtp2, get_tx(7), (char*)hero + HERO_NAME2);
+			sprintf(g_dtp2, get_tx(7), hero->alias);
 			GUI_output(g_dtp2);
 
 			gs_dng07_poison_flag = 1;
@@ -248,20 +246,20 @@ signed short DNG07_handler(void)
 		if (GUI_bool(get_tx(15)))
 		{
 			/* ORIGINAL-BUG: forgot to set hero */
-			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
+			for (i = 0; i <= 6; i++, hero++)
 			{
-				if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE && hero_encouraged(hero))
+				if ((hero->typus != HERO_TYPE_NONE) && hero_encouraged((Bit8u*)hero))
 				{
-					sub_ptr_bs(hero + (HERO_ATTRIB + 3 * ATTRIB_MU), 3); /* MU - 3 */
-					and_ptr_bs(hero + HERO_FLAGS2, 0x7f); /* unset 'encouraged' flag */
+					hero->attrib[ATTRIB_MU].current -= 3;
+					and_ptr_bs((Bit8u*)hero + HERO_FLAGS2, 0x7f); /* unset 'encouraged' flag */
 				}
 			}
 
 			leave_dungeon();
 
-			gs_current_town = (gs_travel_destination_town_id);
-			gs_x_target = (gs_travel_destination_x);
-			gs_y_target = (gs_travel_destination_y);
+			gs_current_town = gs_travel_destination_town_id;
+			gs_x_target = gs_travel_destination_x;
+			gs_y_target = gs_travel_destination_y;
 			gs_current_loctype = LOCTYPE_NONE;
 			gs_direction = ((gs_travel_destination_viewdir + 2) & 3);
 
@@ -290,10 +288,10 @@ void DNG09_statues(signed short prob, signed short bonus)
 {
 	signed short i;
 	signed short randval;
-	Bit8u *hero;
+	struct struct_hero *hero;
 	Bit8u *amap_ptr;
 
-	hero = (Bit8u*)get_first_hero_available_in_group();
+	hero = (struct struct_hero*)get_first_hero_available_in_group();
 
 	amap_ptr = g_dng_map;
 
@@ -307,25 +305,25 @@ void DNG09_statues(signed short prob, signed short bonus)
 			/* praise the nameless god */
 			if (random_schick(100) <= prob)
 			{
-				if (random_schick(100) < 50 &&	!hero_gods_pissed(hero) && !gs_nameless_destroyed)
+				if (random_schick(100) < 50 && !hero_gods_pissed((Bit8u*)hero) && !gs_nameless_destroyed)
 				{
 					/* increase one attribute of the leader permanently */
 					randval = random_schick(7) - 1;
 
-					inc_ptr_bs(hero + HERO_ATTRIB_ORIG + 3 * randval);
-					inc_ptr_bs(hero + HERO_ATTRIB + 3 * randval);
+					hero->attrib[randval].normal++;
+					hero->attrib[randval].current++;
 
 					/* ... but the twelve won't grant miracles any more */
-					or_ptr_bs(hero + HERO_FLAGS2, 0x20); /* set 'gods_pissed' flag */
+					or_ptr_bs((Bit8u*)hero + HERO_FLAGS2, 0x20); /* set 'gods_pissed' flag */
 
-					sprintf(g_dtp2, get_tx(8), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_tx(8), hero->alias);
 					GUI_output(g_dtp2);
 
 				} else {
 					/* loose 1W6 LE */
-					sub_hero_le((struct struct_hero*)hero, random_schick(6));
+					sub_hero_le(hero, random_schick(6));
 
-					sprintf(g_dtp2,	get_tx(9), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2,	get_tx(9), hero->alias);
 					GUI_output(g_dtp2);
 				}
 			}
@@ -335,7 +333,7 @@ void DNG09_statues(signed short prob, signed short bonus)
 			/* destroy the statue */
 
 			/* remove the statue from the map */
-			and_ptr_bs(amap_ptr + MAP_POS(gs_x_target, gs_y_target), 0xfb); /* clear flag 2 */
+			*(amap_ptr + MAP_POS(gs_x_target, gs_y_target)) &= 0xfb; /* clear flag 2 */
 
 			GUI_output(get_tx(10));
 
@@ -344,15 +342,13 @@ void DNG09_statues(signed short prob, signed short bonus)
 				gs_gods_estimation[i] += bonus;
 			}
 
-			hero = get_hero(0);
-			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
+			hero = (struct struct_hero*)get_hero(0);
+			for (i = 0; i <= 6; i++, hero++)
 			{
-				if (host_readb(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-					!hero_dead(hero))
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
 				{
 					/* the twelve will grant miracles again */
-					and_ptr_bs(hero + HERO_FLAGS2, 0xdf); /* unset 'gods_pissed' flag */
+					and_ptr_bs((Bit8u*)hero + HERO_FLAGS2, 0xdf); /* unset 'gods_pissed' flag */
 				}
 			}
 

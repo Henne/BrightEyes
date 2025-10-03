@@ -44,7 +44,7 @@ signed short DNG01_handler(void)
 {
 	signed short target_pos;
 	signed short i;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 
 	target_pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
@@ -113,16 +113,16 @@ signed short DNG01_handler(void)
 		/* TRAP: heroes may loose 2 LE with probability 10% */
 		if (mod_day_timer(MINUTES(10)))
 		{
-			hero = get_hero(0);
-			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
+			hero = (struct struct_hero*)get_hero(0);
+			for (i = 0; i <= 6; i++, hero++)
 			{
-				if (random_schick(100) <= 10 &&
-					host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
+				if ((random_schick(100) <= 10) &&
+					(hero->typus != HERO_TYPE_NONE) &&
+					(hero->group_no == gs_current_group))
 				{
-					sub_hero_le((struct struct_hero*)hero, 2);
+					sub_hero_le(hero, 2);
 
-					sprintf(g_text_output_buf, get_tx(12), (char*)hero + HERO_NAME2);
+					sprintf(g_text_output_buf, get_tx(12), hero->alias);
 
 					GUI_output(g_text_output_buf);
 				}
@@ -307,7 +307,7 @@ void DNG01_chest06_loot(Bit8u* chest)
 	/* Original-Bug: The string 14 from SHIP.DTX needs a pointer to the name of the hero, not an integer.
 	 */
 #ifdef M302de_ORIGINAL_BUGFIX
-	sprintf(g_text_output_buf, get_tx(14), (char*)get_first_hero_available_in_group());
+	sprintf(g_text_output_buf, get_tx(14), ((struct struct_hero*)get_first_hero_available_in_group())->alias);
 #else
 	sprintf(g_text_output_buf, get_tx(14), 10);
 #endif

@@ -49,7 +49,7 @@ void do_wildcamp(void)
 	signed char stock_tries;
 	signed char herb_tries;
 	signed char herb_hours;
-	Bit8u* hero;
+	struct struct_hero* hero;
 	signed char l3;
 	signed short l4;
 	signed short l5;
@@ -188,9 +188,9 @@ void do_wildcamp(void)
 
 			if (answer != -1) {
 
-				hero = get_hero(answer);
+				hero = (struct struct_hero*)get_hero(answer);
 
-				if (host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH) {
+				if (hero->typus >= HERO_TYPE_WITCH) {
 
 					if (g_wildcamp_guardstatus[answer] != 0 ||
 						g_wildcamp_herbstatus[answer] != 0 ||
@@ -205,7 +205,7 @@ void do_wildcamp(void)
 							GUI_output(get_ttx(334));
 
 						} else {
-							g_wildcamp_magicstatus[answer] = use_magic(hero);
+							g_wildcamp_magicstatus[answer] = use_magic((Bit8u*)hero);
 						}
 					}
 				} else {
@@ -229,8 +229,7 @@ void do_wildcamp(void)
 
 				if (g_wildcamp_replstatus[answer])
 				{
-
-					sprintf(g_dtp2,	get_ttx(803), (char*)get_hero(answer) + HERO_NAME2);
+					sprintf(g_dtp2,	get_ttx(803), ((struct struct_hero*)get_hero(answer))->alias);
 					GUI_output(g_dtp2);
 
 				} else if (g_wildcamp_guardstatus[answer] != 0 ||
@@ -243,7 +242,7 @@ void do_wildcamp(void)
 
 					if (herb_tries < 1)
 					{
-						hero = get_hero(answer);
+						hero = (struct struct_hero*)get_hero(answer);
 
 						herb_hours = (signed char)GUI_input(get_ttx(327), 1);
 
@@ -291,8 +290,7 @@ void do_wildcamp(void)
 
 				if (g_wildcamp_guards[l_si] != -1) {
 
-					sprintf(g_dtp2, get_ttx(774),
-						(char*)get_hero(g_wildcamp_guards[l_si]) + HERO_NAME2);
+					sprintf(g_dtp2, get_ttx(774), ((struct struct_hero*)get_hero(g_wildcamp_guards[l_si]))->alias);
 
 					GUI_print_loc_line(g_dtp2);
 				}
@@ -318,7 +316,7 @@ void do_wildcamp(void)
 						if (g_wildcamp_guards[l_si] != -1) {
 
 							sprintf(g_dtp2,	get_ttx(774),
-								(char*)get_hero(g_wildcamp_guards[l_si]) + HERO_NAME2);
+								((struct struct_hero*)get_hero(g_wildcamp_guards[l_si]))->alias);
 							GUI_print_loc_line(g_dtp2);
 						}
 					}
@@ -327,15 +325,14 @@ void do_wildcamp(void)
 
 				if (done == 0) {
 
-					hero = get_hero(0);
+					hero = (struct struct_hero*)get_hero(0);
 
-					for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
-						if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-							host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-							g_wildcamp_guardstatus[i] < 2 &&
-							g_wildcamp_magicstatus[i] != 1)
+					for (i = 0; i <= 6; i++, hero++) {
+
+						if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+							g_wildcamp_guardstatus[i] < 2 && g_wildcamp_magicstatus[i] != 1)
 						{
-							GRP_hero_sleep(hero, g_wildcamp_sleep_quality);
+							GRP_hero_sleep((Bit8u*)hero, g_wildcamp_sleep_quality);
 						}
 					}
 
@@ -383,7 +380,7 @@ void do_wildcamp(void)
 	leave_location();
 }
 
-signed short gather_herbs(Bit8u *hero, signed short hours, signed short handicap)
+signed short gather_herbs(struct struct_hero *hero, signed short hours, signed short handicap)
 {
 	signed short herb_index;
 	signed short unique_herbs_count;
@@ -407,9 +404,9 @@ signed short gather_herbs(Bit8u *hero, signed short hours, signed short handicap
 		}
 
 		if ((random_schick(100) <= ptr->chance_max) &&
-			test_skill((struct struct_hero*)hero, TA_PFLANZENKUNDE, ptr->handicap - hours + handicap) > 0) {
+			test_skill(hero, TA_PFLANZENKUNDE, ptr->handicap - hours + handicap) > 0) {
 
-			herb_count[herb_index] = (signed char)give_hero_new_item(hero, ptr->item_id, 0, random_schick(ptr->max_count)); // collect a random amount between 1 and max_count herbs.
+			herb_count[herb_index] = (signed char)give_hero_new_item((Bit8u*)hero, ptr->item_id, 0, random_schick(ptr->max_count)); // collect a random amount between 1 and max_count herbs.
 
 			if (herb_count[herb_index]) {
 				unique_herbs_count++;
@@ -427,7 +424,7 @@ signed short gather_herbs(Bit8u *hero, signed short hours, signed short handicap
 	if (unique_herbs_count) {
 
 		/* print a sentence with all the herb names */
-		sprintf(g_dtp2,	get_ttx(328), (char*)hero + HERO_NAME2);
+		sprintf(g_dtp2,	get_ttx(328), hero->alias);
 
 		for (herb_index = 0; herb_index < 12; herb_index++) {
 
@@ -458,7 +455,7 @@ signed short gather_herbs(Bit8u *hero, signed short hours, signed short handicap
 	} else {
 
 		/* no herbs found */
-		sprintf(g_dtp2, get_ttx(342), (char*)hero + HERO_NAME2);
+		sprintf(g_dtp2, get_ttx(342), hero->alias);
 	}
 
 	GUI_output(g_dtp2);

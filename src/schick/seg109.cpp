@@ -158,7 +158,7 @@ void TRV_inside_herb_place(void)
 			bak = g_special_screen;
 			g_special_screen = 1;
 
-			gather_herbs(get_hero(hero_pos), hours - 1, -3);
+			gather_herbs((struct struct_hero*)get_hero(hero_pos), hours - 1, -3);
 
 			g_special_screen = (signed char)bak;
 		}
@@ -218,6 +218,7 @@ void TRV_found_replenish_place(signed short a0)
 	signed short answer;
 
 	sprintf(g_dtp2,	get_tx(16), get_tx(random_schick(5) + 11), (a0 != 0 ? get_tx(45) : g_empty_string12));
+
 	do {
 		answer = GUI_radio(g_dtp2, 2, get_tx(21), get_tx(22));
 
@@ -275,7 +276,7 @@ void TRV_found_inn(signed short town_id, signed short type)
 	init_ani(0);
 
 	if (GUI_bool(get_tx(23))) {
-		gs_current_locdata = (town_id);
+		gs_current_locdata = town_id;
 		gs_current_typeindex = type;
 		gs_current_loctype = LOCTYPE_INN;
 
@@ -314,11 +315,9 @@ signed short TRV_enter_hut_question(void)
 signed short TRV_follow_trail_question(void)
 {
 	signed short answer;
-	Bit8u *hero;
+	struct struct_hero *hero = (struct struct_hero*)get_first_hero_available_in_group();
 
-	hero = (Bit8u*)get_first_hero_available_in_group();
-
-	sprintf(g_dtp2, get_tx(25), (char*)hero + HERO_NAME2);
+	sprintf(g_dtp2, get_tx(25), hero->alias);
 
 	do {
 		answer = GUI_radio(g_dtp2, 2, get_tx(26), get_tx(27));
@@ -373,39 +372,32 @@ signed short TRV_cross_a_ford(char *msg, signed short time, signed short mod)
 void TRV_ford_test(signed short mod, signed short time)
 {
 	signed short i;
-	Bit8u *hero;
+	struct struct_hero *hero = (struct struct_hero*)get_hero(0);
 
-	hero = get_hero(0);
-	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+	for (i = 0; i <= 6; i++, hero++) {
 
-		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-			!hero_dead(hero))
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
 		{
 			/* Original-Bugfix: tests fail if their result is lower or equal than zero */
 #ifdef M302de_ORIGINAL_BUGFIX
-			if (test_attrib((struct struct_hero*)hero, ATTRIB_GE, mod) < 0)
+			if (test_attrib(hero, ATTRIB_GE, mod) < 0)
 #else
-			if (test_attrib((struct struct_hero*)hero, ATTRIB_GE, mod) == 0)
+			if (test_attrib(hero, ATTRIB_GE, mod) == 0)
 #endif
 			{
 				/* test failed */
 				timewarp(MINUTES(time));
 
-				sprintf(g_dtp2,
-					get_tx(37),
-					(char*)hero + HERO_NAME2);
+				sprintf(g_dtp2, get_tx(37), hero->alias);
 
-				hero_disease_test((struct struct_hero*)hero, 2, 20 - (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK))));
+				hero_disease_test(hero, 2, 20 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
 
-				loose_random_item((struct struct_hero*)hero, 1, get_ttx(506));
+				loose_random_item(hero, 1, get_ttx(506));
 			} else {
 				/* test succeded */
 				timewarp(MINUTES(10));
 
-				sprintf(g_dtp2,
-					get_tx(38),
-					(char*)hero + HERO_NAME2);
+				sprintf(g_dtp2,	get_tx(38), hero->alias);
 			}
 
 			GUI_output(g_dtp2);
@@ -425,16 +417,11 @@ signed short TRV_ferry(char *msg, signed short price)
 
 	do {
 
-		sprintf(g_dtp2,
-			get_tx(28),
-			(char*)msg,
-			price, 5 * price);
+		sprintf(g_dtp2, get_tx(28), (char*)msg, price, 5 * price);
 
 		do {
-			answer = GUI_radio(g_dtp2, 3,
-						get_tx(29),
-						get_tx(30),
-						get_tx(31));
+			answer = GUI_radio(g_dtp2, 3, get_tx(29), get_tx(30), get_tx(31));
+
 		} while (answer == -1);
 
 		if (answer == 1) {
@@ -463,9 +450,7 @@ signed short TRV_ferry(char *msg, signed short price)
 				p_money -= price;
 				set_party_money(p_money);
 
-				sprintf(g_dtp2,
-					get_tx(32),
-					done = random_schick(6));
+				sprintf(g_dtp2,	get_tx(32), (done = random_schick(6)));
 
 				GUI_output(g_dtp2);
 
@@ -476,7 +461,7 @@ signed short TRV_ferry(char *msg, signed short price)
 		} else {
 
 			if (GUI_bool(get_tx(33))) {
-				gs_trv_return = (done = 1);
+				gs_trv_return = done = 1;
 			}
 		}
 
@@ -501,13 +486,8 @@ void tevent_002(void)
 
 	/* show dialogbox */
 	do {
-		answer = GUI_dialogbox((unsigned char*)g_dtp2,
-				NULL,
-				get_tx2(0),
-				3,
-				get_tx2(1),
-				get_tx2(2),
-				get_tx2(3));
+		answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(0), 3,
+				get_tx2(1), get_tx2(2), get_tx2(3));
 
 	} while (answer == -1);
 
@@ -527,7 +507,7 @@ void tevent_003(void)
 
 void tevent_004(void)
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 2) > 0 && !gs_tevent004_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 2) > 0 && !gs_tevent004_flag) ||
 		gs_tevent004_flag)
 	{
 		gs_tevent004_flag = 1;
@@ -546,7 +526,7 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 	signed short i;
 	signed short l4;
 	signed short answer;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	g_event_ani_busy = 1;
 
@@ -556,13 +536,11 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 
 	GUI_output(get_tx2(city_index));
 
-	hero = get_hero(0);
-	for (i = l_di = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+	hero = (struct struct_hero*)get_hero(0);
+	for (i = l_di = 0; i <= 6; i++, hero++) {
 
-		if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
-			!hero_dead(hero) &&
-			test_skill((struct struct_hero*)hero, TA_SCHLEICHEN, (signed char)mod1) <= 0)
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+			!hero_dead((Bit8u*)hero) && (test_skill(hero, TA_SCHLEICHEN, (signed char)mod1) <= 0))
 		{
 			l_di++;
 		}
@@ -571,44 +549,43 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 	if (l_di) {
 
 		do {
-			answer = GUI_radio(get_tx2(city_index + 1), 2,
-						get_tx2(city_index + 7),
-						get_tx2(city_index + 8));
+			answer = GUI_radio(get_tx2(city_index + 1), 2, get_tx2(city_index + 7), get_tx2(city_index + 8));
+
 		} while (answer == -1);
 
 	} else {
 
 		i = select_hero_ok_forced(get_tx2(city_index + 2));
 
-		hero = get_hero(i);
+		hero = (struct struct_hero*)get_hero(i);
 
-		if (test_skill((struct struct_hero*)hero, TA_SCHLEICHEN, (signed char)mod2) <= 0) {
+		if (test_skill(hero, TA_SCHLEICHEN, (signed char)mod2) <= 0) {
 
 			do {
-				answer = GUI_radio(get_tx2(city_index + 1), 2,
-							get_tx2(city_index + 7),
-							get_tx2(city_index + 8));
+				answer = GUI_radio(get_tx2(city_index + 1), 2, get_tx2(city_index + 7), get_tx2(city_index + 8));
+
 			} while (answer == -1);
+
 		} else {
 
-			sprintf(g_dtp2,	get_tx2(city_index + 3), (char*)hero + HERO_NAME2);
+			sprintf(g_dtp2,	get_tx2(city_index + 3), hero->alias);
 			GUI_input(g_dtp2, l_di = 0);
 
-			if ((i = test_skill((struct struct_hero*)hero, TA_SCHUSSWAFFEN, (signed char)mod3)) > 0) {
+			if ((i = test_skill(hero, TA_SCHUSSWAFFEN, (signed char)mod3)) > 0) {
 				l_di++;
 			}
 
-			if ((l4 = test_skill((struct struct_hero*)hero, TA_SCHUSSWAFFEN, (signed char)mod3)) > 0) {
+			if ((l4 = test_skill(hero, TA_SCHUSSWAFFEN, (signed char)mod3)) > 0) {
 				l_di++;
 			}
 
 			if (l_di == 2 || i == 99 || l4 == 99) {
 
-				sprintf(g_dtp2, get_tx2(city_index + 4), (char*)hero + HERO_NAME2);
+				sprintf(g_dtp2, get_tx2(city_index + 4), hero->alias);
 				GUI_output(g_dtp2);
 
 				add_hero_ap_all(ap_all1);
-				add_hero_ap((struct struct_hero*)hero, ap_hero);
+				add_hero_ap(hero, ap_hero);
 
 				timewarp(HOURS(1));
 
@@ -617,14 +594,11 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 				answer = 0;
 			} else {
 
-				sprintf(g_dtp2,
-					get_tx2(l_di == 1 ? city_index + 5 : city_index + 6),
-					(char*)hero + HERO_NAME2);
+				sprintf(g_dtp2,	get_tx2(l_di == 1 ? city_index + 5 : city_index + 6), hero->alias);
 
 				do {
-					answer = GUI_radio(g_dtp2, 2,
-								get_tx2(city_index + 7),
-								get_tx2(city_index + 8));
+					answer = GUI_radio(g_dtp2, 2, get_tx2(city_index + 7), get_tx2(city_index + 8));
+
 				} while (answer == -1);
 			}
 		}
@@ -654,7 +628,7 @@ void TRV_hunt_generic(signed short ani_id, signed short city_index, signed short
 
 void tevent_005(void)
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 0) > 0 && !gs_tevent005_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 0) > 0 && !gs_tevent005_flag) ||
 		gs_tevent005_flag)
 	{
 		TRV_found_camp_place(1);
@@ -685,7 +659,7 @@ void TRV_barrier(signed short text_start)
 	signed short l_di;
 	signed short answer;
 	signed short done;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	done = 0;
 
@@ -694,10 +668,9 @@ void TRV_barrier(signed short text_start)
 	do {
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
-						get_tx2(text_start + 0), 2,
-						get_tx2(text_start + 1),
-						get_tx2(text_start + 2));
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(text_start + 0), 2,
+						get_tx2(text_start + 1), get_tx2(text_start + 2));
+
 		} while (answer == -1);
 
 		if (answer == 1) {
@@ -710,14 +683,13 @@ void TRV_barrier(signed short text_start)
 		} else {
 
 			/* count ropes and rope ladders in the active group */
-			hero = get_hero(0);
-			for (i = l_di = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+			hero = (struct struct_hero*)get_hero(0);
+			for (i = l_di = 0; i <= 6; i++, hero++) {
 
-				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
 				{
-					l_di+=hero_count_item(hero, ITEM_ROPE);
-					l_di+=hero_count_item(hero, ITEM_ROPE_LADDER);
+					l_di += hero_count_item((Bit8u*)hero, ITEM_ROPE);
+					l_di += hero_count_item((Bit8u*)hero, ITEM_ROPE_LADDER);
 				}
 			}
 
@@ -744,44 +716,41 @@ void TRV_barrier(signed short text_start)
 					GUI_dialog_na(0, get_tx2(text_start + 4));
 
 				} else {
-					hero = get_hero(0);
+					hero = (struct struct_hero*)get_hero(0);
 
-					for (i = l_di = 0; i <= 6; i++, hero += SIZEOF_HERO)
+					for (i = l_di = 0; i <= 6; i++, hero++)
 					{
-						if (test_skill((struct struct_hero*)hero, TA_WILDNISLEBEN, 0) > 0) l_di++;
+						if (test_skill(hero, TA_WILDNISLEBEN, 0) > 0) l_di++;
 					}
 
 					add_hero_ap_all(10);
 
-					i = get_item_pos(hero = get_hero(get_first_hero_with_item(ITEM_ROPE)), ITEM_ROPE);
+					i = get_item_pos((Bit8u*)(hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE))), ITEM_ROPE);
 					if (i == -1) {
-						i = get_item_pos(hero = get_hero(get_first_hero_with_item(ITEM_ROPE_LADDER)), ITEM_ROPE_LADDER);
+						i = get_item_pos((Bit8u*)(hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE_LADDER))), ITEM_ROPE_LADDER);
 					}
-					drop_item(hero, i, 1);
+					drop_item((Bit8u*)hero, i, 1);
 
-					i = get_item_pos(hero = get_hero(get_first_hero_with_item(ITEM_ROPE)), ITEM_ROPE);
+					i = get_item_pos((Bit8u*)(hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE))), ITEM_ROPE);
 					if (i == -1) {
-						i = get_item_pos(hero = get_hero(get_first_hero_with_item(ITEM_ROPE_LADDER)), ITEM_ROPE_LADDER);
+						i = get_item_pos((Bit8u*)(hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE_LADDER))), ITEM_ROPE_LADDER);
 					}
-					drop_item(hero, i, 1);
+					drop_item((Bit8u*)hero, i, 1);
 
 					if (l_di >= 3) {
 
 						GUI_dialog_na(0, get_tx2(text_start + 6));
 					} else {
 
-						hero = get_hero(select_hero_ok_forced(get_tx2(text_start + 5)));
+						hero = (struct struct_hero*)get_hero(select_hero_ok_forced(get_tx2(text_start + 5)));
 
-						sprintf(g_dtp2 + 0x400,
-								get_tx2(text_start + 7),
-								(char*)hero + HERO_NAME2,
-								(GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)),
-								(GUI_get_ptr(host_readbs(hero + HERO_SEX), 2)));
-						GUI_dialog_na(0, (char*)((char*)(g_dtp2 + 0x400)));
+						sprintf(g_dtp2 + 0x400,	get_tx2(text_start + 7), hero->alias,
+								GUI_get_ptr(hero->sex, 3), GUI_get_ptr(hero->sex, 2));
+						GUI_dialog_na(0, (char*)(g_dtp2 + 0x400));
 
-						hero_disease_test((struct struct_hero*)hero, 2, 30);
+						hero_disease_test(hero, 2, 30);
 
-						loose_random_item((struct struct_hero*)hero, 30, get_ttx(506));
+						loose_random_item(hero, 30, get_ttx(506));
 					}
 					done = 1;
 				}
@@ -797,7 +766,7 @@ void TRV_barrier(signed short text_start)
 /* Tjeula <-> Breida: kleiner Bachlauf */
 void tevent_008(void)
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent008_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent008_flag) ||
 		gs_tevent008_flag)
 	{
 		TRV_found_replenish_place(0);
@@ -807,12 +776,12 @@ void tevent_008(void)
 
 void tevent_009(void)
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 && !gs_tevent009_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 && !gs_tevent009_flag) ||
 		gs_tevent009_flag)
 	{
-		g_gather_herbs_special = (60);
+		g_gather_herbs_special = 60;
 		TRV_found_herb_place(0);
-		g_gather_herbs_special = (255);
+		g_gather_herbs_special = 255;
 
 		gs_tevent009_flag = 1;
 	}

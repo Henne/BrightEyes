@@ -694,18 +694,15 @@ void tevent_100(void)
 
 				} else {
 					/* fail */
-					Bit8u *hero;
-					hero = (Bit8u*)get_first_hero_available_in_group();
+					struct struct_hero *hero = (struct struct_hero*)get_first_hero_available_in_group();
 
 					answer = get_free_mod_slot();
 
-					set_mod_slot(answer, DAYS(1), hero + (HERO_ATTRIB + 3 * ATTRIB_GE), -2, 0);
+					set_mod_slot(answer, DAYS(1), (Bit8u*)&hero->attrib[ATTRIB_GE].current, -2, 0);
 
 					timewarp(MINUTES(15));
 
-					sprintf(g_dtp2,	get_tx2(69), (char*)hero + HERO_NAME2,
-						GUI_get_ptr(host_readbs(hero + HERO_SEX), 0),
-						GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
+					sprintf(g_dtp2,	get_tx2(69), hero->alias, GUI_get_ptr(hero->sex, 0), GUI_get_ptr(hero->sex, 0));
 
 					GUI_output(g_dtp2);
 				}

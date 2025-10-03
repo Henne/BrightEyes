@@ -41,7 +41,7 @@ signed short DNG08_handler(void)
 	signed short i;
 	signed short tmp;
 	signed short tw_bak;
-	Bit8u *hero;
+	struct struct_hero *hero;
 	Bit8u *amap_ptr;
 
 	amap_ptr = g_dng_map;
@@ -51,7 +51,7 @@ signed short DNG08_handler(void)
 
 	target_pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
-	hero = (Bit8u*)get_first_hero_available_in_group();
+	hero = (struct struct_hero*)get_first_hero_available_in_group();
 
 	if (target_pos == DNG_POS(0,1,10) && target_pos != gs_dng_handled_pos && !gs_dng08_bed_00)
 	{
@@ -159,21 +159,20 @@ signed short DNG08_handler(void)
 		{
 			GUI_output(get_tx(6));
 
-			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
+			for (i = 0; i <= 6; i++, hero++)
 			{
-				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-					!hero_dead(hero))
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+					!hero_dead((Bit8u*)hero))
 				{
 					gs_dng08_timer1 = 24;
 
-					host_writebs(hero + HERO_HUNGER, host_writebs(hero + HERO_THIRST, 0));
+					hero->hunger = hero->thirst = 0;
 
-					add_hero_le((struct struct_hero*)hero, 2);
+					add_hero_le(hero, 2);
 
 					tmp = get_free_mod_slot();
 
-					set_mod_slot(tmp, DAYS(1), get_hero(i) + (HERO_ATTRIB + 3 * ATTRIB_CH), -1, (signed char)i);
+					set_mod_slot(tmp, DAYS(1), (Bit8u*)&((struct struct_hero*)get_hero(i))->attrib[ATTRIB_CH].current, -1, (signed char)i);
 				}
 			}
 		}
@@ -184,21 +183,19 @@ signed short DNG08_handler(void)
 		{
 			GUI_output(get_tx(6));
 
-			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
+			for (i = 0; i <= 6; i++, hero++)
 			{
-				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-					!hero_dead(hero))
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
 				{
 					gs_dng08_timer2 = 24;
 
-					host_writebs(hero + HERO_HUNGER, host_writebs(hero + HERO_THIRST, 0));
+					hero->hunger = hero->thirst = 0;
 
-					add_hero_le((struct struct_hero*)hero, 2);
+					add_hero_le(hero, 2);
 
 					tmp = get_free_mod_slot();
 
-					set_mod_slot(tmp, DAYS(1), get_hero(i) + (HERO_ATTRIB + 3 * ATTRIB_CH), -1, (signed char)i);
+					set_mod_slot(tmp, DAYS(1), (Bit8u*)&((struct struct_hero*)get_hero(i))->attrib[ATTRIB_CH].current, -1, (signed char)i);
 				}
 			}
 		}
@@ -247,10 +244,8 @@ signed short DNG08_handler(void)
 	{
 		/* lever, opens door at (8,13)  */
 		do {
-			i = GUI_radio(get_tx(13), 3,
-					get_tx(14),
-					get_tx(15),
-					get_tx(16));
+			i = GUI_radio(get_tx(13), 3, get_tx(14), get_tx(15), get_tx(16));
+
 		} while (i == -1);
 
 		if (i == 2)
@@ -259,11 +254,9 @@ signed short DNG08_handler(void)
 
 		} else if (i == 3)
 		{
-			hero = get_hero(select_hero_ok_forced(get_tx(18)));
+			hero = (struct struct_hero*)get_hero(select_hero_ok_forced(get_tx(18)));
 
-			sprintf(g_dtp2,
-				get_tx(19),
-				(char*)hero + HERO_NAME2);
+			sprintf(g_dtp2, get_tx(19), hero->alias);
 
 			GUI_output(g_dtp2);
 
@@ -273,11 +266,11 @@ signed short DNG08_handler(void)
 
 			if (gs_group_member_counts[gs_current_group] > 1) {
 
-				gs_direction_bak = (gs_direction);
+				gs_direction_bak = gs_direction;
 
 				for (tmp = 0; gs_group_member_counts[tmp] != 0; tmp++); /* find empty group */
 
-				host_writebs(hero + HERO_GROUP_NO, (signed char)tmp);
+				hero->group_no = (signed char)tmp;
 				gs_group_member_counts[tmp]++;
 				gs_group_member_counts[gs_current_group]--;
 
@@ -285,7 +278,7 @@ signed short DNG08_handler(void)
 			}
 
 		} else {
-			gs_direction_bak = (gs_direction);
+			gs_direction_bak = gs_direction;
 		}
 
 	} else if ((target_pos == DNG_POS(0,11,10) || target_pos == DNG_POS(0,11,12)) && target_pos != gs_dng_handled_pos)
@@ -314,20 +307,15 @@ signed short DNG08_handler(void)
 	{
 		GUI_output(get_tx(20));
 
-		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
+		for (i = 0; i <= 6; i++, hero++)
 		{
-			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-				!hero_dead(hero) &&
-				test_skill((struct struct_hero*)hero, TA_KLETTERN, 2) <= 0)
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+				!hero_dead((Bit8u*)hero) && test_skill(hero, TA_KLETTERN, 2) <= 0)
 			{
-				sprintf(g_dtp2,
-					get_tx(21),
-					(char*)hero + HERO_NAME2,
-					(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+				sprintf(g_dtp2, get_tx(21), hero->alias, GUI_get_ptr(hero->sex, 0));
 				GUI_output(g_dtp2);
 
-				sub_hero_le((struct struct_hero*)hero, dice_roll(1, 6, 4));
+				sub_hero_le(hero, dice_roll(1, 6, 4));
 			}
 		}
 
@@ -337,15 +325,15 @@ signed short DNG08_handler(void)
 			gs_dng08_secret_door != 2)
 	{
 		if (gs_dng08_secret_door ||
-			test_skill((struct struct_hero*)(hero = (Bit8u*)get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 1) > 0)
+			test_skill((hero = (struct struct_hero*)get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 1) > 0)
 		{
 			gs_dng08_secret_door = 1;
 
-			sprintf(g_dtp2, get_tx(29), (char*)hero + HERO_NAME2);
+			sprintf(g_dtp2, get_tx(29), hero->alias);
 
 			sprintf(g_text_output_buf,
-				(char*)((tmp = test_skill((struct struct_hero*)hero, TA_SCHLOESSER, 2)) > 0 ? get_tx(30): get_tx(31)),
-				GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
+				(char*)((tmp = test_skill(hero, TA_SCHLOESSER, 2)) > 0 ? get_tx(30): get_tx(31)),
+				GUI_get_ptr(hero->sex, 0));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -354,7 +342,7 @@ signed short DNG08_handler(void)
 			if (tmp > 0)
 			{
 				/* open the secret door */
-				host_writeb(amap_ptr + MAP_POS(4,8), 0);
+				amap_ptr[MAP_POS(4,8)] = 0;
 				gs_dng08_secret_door = 2;
 				DNG_update_pos();
 			}
@@ -365,14 +353,14 @@ signed short DNG08_handler(void)
 	} else if (target_pos == DNG_POS(0,5,7) && target_pos != gs_dng_handled_pos)
 	{
 		sprintf(g_dtp2, get_tx(22),
-			(char*)(test_skill((struct struct_hero*)hero, TA_GOETTER_KULTE, 4) <= 0 ? get_tx(23) : get_tx(24)));
+			(char*)(test_skill(hero, TA_GOETTER_KULTE, 4) <= 0 ? get_tx(23) : get_tx(24)));
 
 		GUI_output(g_dtp2);
 
 	} else if (target_pos == DNG_POS(0,5,9) && target_pos != gs_dng_handled_pos)
 	{
 		sprintf(g_dtp2,	get_tx(22),
-			(char*)(test_skill((struct struct_hero*)hero, TA_GOETTER_KULTE, 6) <= 0 ? get_tx(23) : get_tx(25)));
+			(char*)(test_skill(hero, TA_GOETTER_KULTE, 6) <= 0 ? get_tx(23) : get_tx(25)));
 
 		GUI_output(g_dtp2);
 
@@ -409,22 +397,19 @@ void DNG08_search_bed(void)
 	signed short counter;
 	signed short money;
 	signed short slot;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	money = counter = 0;
 
-	hero = (Bit8u*)get_first_hero_available_in_group();
+	hero = (struct struct_hero*)get_first_hero_available_in_group();
 
 	slot = get_free_mod_slot();
 
-	set_mod_slot(slot, HOURS(6), hero + (HERO_ATTRIB + 3 * ATTRIB_CH), -2, (signed char)get_hero_index(hero));
+	set_mod_slot(slot, HOURS(6), (Bit8u*)&hero->attrib[ATTRIB_CH].current, -2, (signed char)get_hero_index((Bit8u*)hero));
 
 	if (random_schick(100) <= 10)
 	{
-		sprintf(g_dtp2,
-			get_tx(3),
-			(char*)hero + HERO_NAME2,
-			(char*)(GUI_names_grammar(2, 92, 0)));
+		sprintf(g_dtp2, get_tx(3), hero->alias, (char*)GUI_names_grammar(2, 92, 0));
 
 		/* a BRANDY BOTTLE */
 		get_item(ITEM_BRANDY, 1, 1);
@@ -436,10 +421,7 @@ void DNG08_search_bed(void)
 
 	if (random_schick(100) <= 10)
 	{
-		sprintf(g_dtp2,
-			get_tx(3),
-			(char*)hero + HERO_NAME2,
-			(char*)(GUI_names_grammar(2, 14, 0)));
+		sprintf(g_dtp2, get_tx(3), hero->alias, (char*)GUI_names_grammar(2, 14, 0));
 
 		/* a DAGGER */
 		get_item(ITEM_DAGGER, 1, 1);
@@ -453,14 +435,9 @@ void DNG08_search_bed(void)
 	{
 		money = random_schick(6);
 
-		sprintf(g_text_output_buf,
-			get_tx(4),
-			money);
+		sprintf(g_text_output_buf, get_tx(4), money);
 
-		sprintf(g_dtp2,
-			get_tx(3),
-			(char*)hero + HERO_NAME2,
-			g_text_output_buf);
+		sprintf(g_dtp2, get_tx(3), hero->alias, g_text_output_buf);
 
 		GUI_output(g_dtp2);
 
@@ -477,14 +454,13 @@ void DNG08_search_bed(void)
 
 void DNG08_chest01_trap(void)
 {
-	Bit8u *hero = (Bit8u*)get_first_hero_available_in_group();
+	struct struct_hero *hero = (struct struct_hero*)get_first_hero_available_in_group();
 
-	sprintf(g_dtp2, get_tx(11), (char*)hero + HERO_NAME2,
-		GUI_get_ptr(host_readbs(hero + HERO_SEX), 1));
+	sprintf(g_dtp2, get_tx(11), hero->alias, GUI_get_ptr(hero->sex, 1));
 	GUI_output(g_dtp2);
 
 	/* 3W6 damage */
-	sub_hero_le((struct struct_hero*)hero, dice_roll(3, 6, 0));
+	sub_hero_le(hero, dice_roll(3, 6, 0));
 }
 
 void DNG08_chest00_loot(Bit8u*)
@@ -520,7 +496,7 @@ void DNG08_chest02_open(struct struct_chest* chest)
 {
 	if (!gs_dng08_chest2_looted)
 	{
-		if (test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_SPRACHEN, 2) > 0)
+		if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_SPRACHEN, 2) > 0)
 		{
 			GUI_input(get_tx(27), 10);
 
@@ -543,9 +519,9 @@ void DNG08_chest02_open(struct struct_chest* chest)
 
 void DNG08_chest03_open(struct struct_chest* chest)
 {
-	Bit8u *hero = (Bit8u*)get_first_hero_available_in_group();
+	struct struct_hero *hero = (struct struct_hero*)get_first_hero_available_in_group();
 
-	if (get_first_hero_with_item(ITEM_KEY_BRONZE) != -1 || test_skill((struct struct_hero*)hero, TA_SCHLOESSER, 5) > 0)
+	if (get_first_hero_with_item(ITEM_KEY_BRONZE) != -1 || test_skill(hero, TA_SCHLOESSER, 5) > 0)
 	{
 		if (!(gs_dng08_chest35_looted & 1)) {
 
@@ -564,9 +540,9 @@ void DNG08_chest03_open(struct struct_chest* chest)
 
 void DNG08_chest04_open(struct struct_chest* chest)
 {
-	Bit8u *hero = (Bit8u*)get_first_hero_available_in_group();
+	struct struct_hero *hero = (struct struct_hero*)get_first_hero_available_in_group();
 
-	if (get_first_hero_with_item(ITEM_KEY_BRONZE) != -1 || test_skill((struct struct_hero*)hero, TA_SCHLOESSER, 5) > 0) {
+	if (get_first_hero_with_item(ITEM_KEY_BRONZE) != -1 || test_skill(hero, TA_SCHLOESSER, 5) > 0) {
 
 		chest->loot((Bit8u*)chest);
 
@@ -578,9 +554,9 @@ void DNG08_chest04_open(struct struct_chest* chest)
 
 void DNG08_chest05_open(struct struct_chest* chest)
 {
-	Bit8u *hero = (Bit8u*)get_first_hero_available_in_group();
+	struct struct_hero *hero = (struct struct_hero*)get_first_hero_available_in_group();
 
-	if (get_first_hero_with_item(ITEM_KEY_BRONZE) != -1 || test_skill((struct struct_hero*)hero, TA_SCHLOESSER, 5) > 0) {
+	if (get_first_hero_with_item(ITEM_KEY_BRONZE) != -1 || test_skill(hero, TA_SCHLOESSER, 5) > 0) {
 
 		chest->loot((Bit8u*)chest);
 

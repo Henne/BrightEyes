@@ -551,7 +551,7 @@ void tevent_123(void)
 	signed short done;
 	signed short attrib_result;
 	signed short skill_result;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	load_in_head(54);
 
@@ -566,18 +566,16 @@ void tevent_123(void)
 		if (answer == 1)
 		{
 			/* go over the bridge */
-			hero = get_hero(0);
-			for (i = counter = 0; i <= 6; i++, hero += SIZEOF_HERO)
+			hero = (struct struct_hero*)get_hero(0);
+			for (i = counter = 0; i <= 6; i++, hero++)
 			{
-				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-					!hero_dead(hero) &&
-					test_attrib((struct struct_hero*)hero, ATTRIB_HA, 0) > 0)
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+					!hero_dead((Bit8u*)hero) && test_attrib(hero, ATTRIB_HA, 0) > 0)
 				{
 					/* attrib test failed */
 					counter++;
 
-					sprintf(g_dtp2 + 0x400,	get_tx2(42), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2 + 0x400,	get_tx2(42), hero->alias);
 
 					GUI_dialog_na(0, (char*)(g_dtp2 + 0x400));
 				}
@@ -604,29 +602,27 @@ void tevent_123(void)
 
 			if (answer == 1)
 			{
-				hero = get_hero(0);
-				for (i = counter = 0; i <= 6; i++, hero += SIZEOF_HERO)
+				hero = (struct struct_hero*)get_hero(0);
+				for (i = counter = 0; i <= 6; i++, hero++)
 				{
-					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-						!hero_dead(hero))
+					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
 					{
-						attrib_result = test_attrib((struct struct_hero*)hero, ATTRIB_HA, 4);
-						skill_result = test_skill((struct struct_hero*)hero, TA_KLETTERN, 0);
+						attrib_result = test_attrib(hero, ATTRIB_HA, 4);
+						skill_result = test_skill(hero, TA_KLETTERN, 0);
 
 						if (attrib_result == 99 && skill_result == -1)
 						{
-							sprintf(g_dtp2 + 0x400, get_tx2(48), (char*)hero + HERO_NAME2);
+							sprintf(g_dtp2 + 0x400, get_tx2(48), hero->alias);
 
 							GUI_dialog_na(0, (char*)g_dtp2 + 0x400);
 
-							hero_disappear((struct struct_hero*)hero, i, -1);
+							hero_disappear(hero, i, -1);
 
 							counter++;
 
 						} else if (attrib_result > 0 || skill_result <= 0)
 						{
-							sprintf(g_dtp2 + 0x400,	get_tx2(42), (char*)hero + HERO_NAME2);
+							sprintf(g_dtp2 + 0x400,	get_tx2(42), hero->alias);
 
 							GUI_dialog_na(0, (char*)g_dtp2 + 0x400);
 
@@ -644,58 +640,56 @@ void tevent_123(void)
 			} else if (answer == 2)
 			{
 				/* cast a spell */
-				hero = get_hero(select_hero_ok_forced(get_ttx(317)));
+				hero = (struct struct_hero*)get_hero(select_hero_ok_forced(get_ttx(317)));
 
-				if (test_spell((struct struct_hero*)hero, SP_MU_STEIGERN, 0) > 0)
+				if (test_spell(hero, SP_MU_STEIGERN, 0) > 0)
 				{
 					/* success */
-					sub_ae_splash((struct struct_hero*)hero, get_spell_cost(SP_MU_STEIGERN, 0));
+					sub_ae_splash(hero, get_spell_cost(SP_MU_STEIGERN, 0));
 
 					GUI_dialog_na(0, get_tx2(43));
 
 					done = 1;
 				} else {
 					/* failed */
-					sub_ae_splash((struct struct_hero*)hero, get_spell_cost(SP_MU_STEIGERN, 1));
+					sub_ae_splash(hero, get_spell_cost(SP_MU_STEIGERN, 1));
 
-					hero = get_hero(0);
-					for (i = counter = 0; i <= 6; i++, hero += SIZEOF_HERO)
+					hero = (struct struct_hero*)get_hero(0);
+					for (i = counter = 0; i <= 6; i++, hero++)
 					{
-						if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-							host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-							!hero_dead(hero))
+						if ((hero->typus != HERO_TYPE_NONE) &&
+							(hero->group_no == gs_current_group) &&
+							!hero_dead((Bit8u*)hero))
 						{
-							sprintf(g_dtp2 + 0x400, get_tx2(42), (char*)hero + HERO_NAME2);
+							sprintf(g_dtp2 + 0x400, get_tx2(42), hero->alias);
 
 							GUI_dialog_na(0, (char*)g_dtp2 + 0x400);
 						}
 					}
 				}
 			} else {
-				hero = get_hero(0);
-				for (i = counter = 0; i <= 6; i++, hero += SIZEOF_HERO)
+				hero = (struct struct_hero*)get_hero(0);
+				for (i = counter = 0; i <= 6; i++, hero++)
 				{
-					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-						!hero_dead(hero))
+					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
 					{
-						attrib_result = test_attrib((struct struct_hero*)hero, ATTRIB_HA, 2);
+						attrib_result = test_attrib(hero, ATTRIB_HA, 2);
 
 						if (attrib_result == 99)
 						{
 							/* unlucky */
-							sprintf(g_dtp2 + 0x400,	get_tx2(48), (char*)hero + HERO_NAME2);
+							sprintf(g_dtp2 + 0x400,	get_tx2(48), hero->alias);
 
 							GUI_dialog_na(0, (char*)g_dtp2 + 0x400);
 
-							hero_disappear((struct struct_hero*)hero, i, -1);
+							hero_disappear(hero, i, -1);
 
 							counter++;
 
 						} else if (attrib_result > 0)
 						{
 							/* succeeded */
-							sprintf(g_dtp2 + 0x400,	get_tx2(42), (char*)hero + HERO_NAME2);
+							sprintf(g_dtp2 + 0x400,	get_tx2(42), hero->alias);
 
 							GUI_dialog_na(0, (char*)g_dtp2 + 0x400);
 

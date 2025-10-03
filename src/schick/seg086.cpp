@@ -37,16 +37,17 @@ signed short DNG11_handler(void)
 	signed short test_result;
 	signed short answer;
 	signed short tw_bak;
-	Bit8u *hero;
+	struct struct_hero *hero;
 	Bit8u *amap_ptr;
 
 	amap_ptr = g_dng_map;
+
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 
 	target_pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
-	hero = (Bit8u*)get_first_hero_available_in_group();
+	hero = (struct struct_hero*)get_first_hero_available_in_group();
 
 	if (target_pos == DNG_POS(0,6,12) && target_pos != gs_dng_handled_pos && gs_dng11_soup_supply)
 	{
@@ -108,14 +109,13 @@ signed short DNG11_handler(void)
 
 			gs_dng11_firetrap1_flag--;
 
-			hero = get_hero(0);
-			for (answer = 0; answer <= 6; answer++, hero += SIZEOF_HERO)
+			hero = (struct struct_hero*)get_hero(0);
+			for (answer = 0; answer <= 6; answer++, hero++)
 			{
-				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-					!hero_dead(hero))
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+					!hero_dead((Bit8u*)hero))
 				{
-					sub_hero_le((struct struct_hero*)hero, test_attrib((struct struct_hero*)hero, ATTRIB_GE, 4) <= 0 ? dice_roll(6, 6, 6) : dice_roll(3, 6, 3));
+					sub_hero_le(hero, test_attrib(hero, ATTRIB_GE, 4) <= 0 ? dice_roll(6, 6, 6) : dice_roll(3, 6, 3));
 				}
 			}
 		}
@@ -128,14 +128,12 @@ signed short DNG11_handler(void)
 
 			gs_dng11_firetrap2_flag--;
 
-			hero = get_hero(0);
-			for (answer = 0; answer <= 6; answer++, hero += SIZEOF_HERO)
+			hero = (struct struct_hero*)get_hero(0);
+			for (answer = 0; answer <= 6; answer++, hero++)
 			{
-				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-					!hero_dead(hero))
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
 				{
-					sub_hero_le((struct struct_hero*)hero, test_attrib((struct struct_hero*)hero, ATTRIB_GE, 4) <= 0 ? dice_roll(6, 6, 6) : dice_roll(3, 6, 3));
+					sub_hero_le(hero, test_attrib(hero, ATTRIB_GE, 4) <= 0 ? dice_roll(6, 6, 6) : dice_roll(3, 6, 3));
 				}
 			}
 		}
@@ -164,13 +162,12 @@ signed short DNG11_handler(void)
 
 			GUI_output(get_tx(23));
 
-			hero = get_hero(0);
-			for (answer = 0; answer <= 6; answer++, hero += SIZEOF_HERO)
+			hero = (struct struct_hero*)get_hero(0);
+			for (answer = 0; answer <= 6; answer++, hero++)
 			{
-				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
 				{
-					hero_disappear((struct struct_hero*)hero, answer, -1);
+					hero_disappear(hero, answer, -1);
 				}
 			}
 
@@ -188,15 +185,15 @@ signed short DNG11_handler(void)
 			gs_direction == NORTH &&
 			gs_dng11_secretdoor1_flag != 2)
 	{
-		if (gs_dng11_secretdoor1_flag || test_skill((struct struct_hero*)hero, TA_SINNESSCHAERFE, 8) > 0)
+		if (gs_dng11_secretdoor1_flag || test_skill(hero, TA_SINNESSCHAERFE, 8) > 0)
 		{
 			gs_dng11_secretdoor1_flag = 1;
 
-			sprintf(g_dtp2,	get_tx(26), (char*)hero + HERO_NAME2);
+			sprintf(g_dtp2,	get_tx(26), hero->alias);
 
 			sprintf(g_text_output_buf,
 				(char*)((gs_dng11_lever_flag == 2 || gs_dng11_lever_flag == 3) && (test_result = test_skill((struct struct_hero*)hero, TA_SCHLOESSER, 5)) > 0 ? get_tx(27) : get_tx(28)),
-				GUI_get_ptr(host_readbs(hero + HERO_SEX), 3));
+				GUI_get_ptr(hero->sex, 3));
 
 			strcat(g_dtp2, g_text_output_buf);
 			GUI_output(g_dtp2);
@@ -218,15 +215,15 @@ signed short DNG11_handler(void)
 			gs_direction == EAST &&
 			gs_dng11_secretdoor2_flag != 2)
 	{
-		if (gs_dng11_secretdoor2_flag != 0 || test_skill((struct struct_hero*)hero, TA_SINNESSCHAERFE, 4) > 0)
+		if (gs_dng11_secretdoor2_flag != 0 || test_skill(hero, TA_SINNESSCHAERFE, 4) > 0)
 		{
 			gs_dng11_secretdoor2_flag = 1;
 
-			sprintf(g_dtp2, get_tx(26), (char*)hero + HERO_NAME2);
+			sprintf(g_dtp2, get_tx(26), hero->alias);
 
 			sprintf(g_text_output_buf,
 				(char*)((gs_dng11_lever_flag == 1 || gs_dng11_lever_flag == 3) && (test_result = test_skill((struct struct_hero*)hero, TA_SCHLOESSER, 3)) > 0 ? get_tx(27) : get_tx(28)),
-				GUI_get_ptr(host_readbs(hero + HERO_SEX), 3));
+				GUI_get_ptr(hero->sex, 3));
 
 			strcat(g_dtp2, g_text_output_buf);
 
@@ -249,15 +246,15 @@ signed short DNG11_handler(void)
 			gs_direction == EAST &&
 			gs_dng11_secretdoor3_flag != 2)
 	{
-		if (gs_dng11_secretdoor3_flag != 0 || test_skill((struct struct_hero*)hero, TA_SINNESSCHAERFE, 6) > 0)
+		if (gs_dng11_secretdoor3_flag != 0 || test_skill(hero, TA_SINNESSCHAERFE, 6) > 0)
 		{
 			gs_dng11_secretdoor3_flag = 1;
 
-			sprintf(g_dtp2,	get_tx(26), (char*)hero + HERO_NAME2);
+			sprintf(g_dtp2,	get_tx(26), hero->alias);
 
 			sprintf(g_text_output_buf,
-				(char*)((gs_dng11_lever_flag == 5 || gs_dng11_lever_flag == 3) && (test_result = test_skill((struct struct_hero*)hero, TA_SCHLOESSER, 5)) > 0 ? get_tx(27) : get_tx(28)),
-				GUI_get_ptr(host_readbs(hero + HERO_SEX), 3));
+				(char*)((gs_dng11_lever_flag == 5 || gs_dng11_lever_flag == 3) && (test_result = test_skill(hero, TA_SCHLOESSER, 5)) > 0 ? get_tx(27) : get_tx(28)),
+				GUI_get_ptr(hero->sex, 3));
 
 			strcat(g_dtp2, g_text_output_buf);
 

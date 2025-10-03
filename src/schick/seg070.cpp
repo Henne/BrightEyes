@@ -37,8 +37,7 @@ void PHX_fuhrhaus(void)
 	load_in_head(42);
 
 	do {
-		answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
-				get_tx2(0), 3,
+		answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(0), 3,
 				get_tx2(1), get_tx2(2), get_tx2(3));
 
 	} while (answer == -1);
@@ -50,8 +49,7 @@ void PHX_fuhrhaus(void)
 	} else if (answer == 2) {
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
-					get_tx2(5), 3,
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(5), 3,
 					get_tx2(6), get_tx2(7), get_tx2(8));
 
 		} while (answer == -1);
@@ -59,6 +57,7 @@ void PHX_fuhrhaus(void)
 		GUI_dialog_na(0, answer == 1 ? get_tx2(10): (answer == 2 ? get_tx2(11) : get_tx2(12)));
 
 		if (answer == 3) {
+
 			/* You are now able to talk to Alrik */
 			gs_alrik_derondan = 1;
 		}
@@ -80,10 +79,7 @@ void PHX_stadthaus(void)
 	Bit32s money;
 
 	do {
-		answer = GUI_radio(get_tx2(14), 3,
-					get_tx2(15),
-					get_tx2(16),
-					get_tx2(17));
+		answer = GUI_radio(get_tx2(14), 3, get_tx2(15), get_tx2(16), get_tx2(17));
 
 	} while (answer == -1);
 
@@ -104,10 +100,8 @@ void PHX_stadthaus(void)
 #ifdef M302de_ORIGINAL_BUGFIX
 
 		do {
-			answer2 = GUI_radio(get_tx2(19), (signed char)answer,
-						get_tx2(21),
-						get_tx2(20),
-						get_tx2(22));
+			answer2 = GUI_radio(get_tx2(19), (signed char)answer, get_tx2(21), get_tx2(20),	get_tx2(22));
+
 		} while (answer2 == -1);
 
 		answer = answer2;
@@ -115,10 +109,7 @@ void PHX_stadthaus(void)
 #else
 		/* Original-Bug: pressing ESC calls GUI_radio() again with -1 options */
 		do {
-			answer = GUI_radio(get_tx2(19), answer,
-						get_tx2(21),
-						get_tx2(20),
-						get_tx2(22));
+			answer = GUI_radio(get_tx2(19), answer, get_tx2(21), get_tx2(20), get_tx2(22));
 
 		} while (answer == -1);
 #endif
@@ -148,13 +139,10 @@ void PHX_spielhaus(void)
 	signed short counter;
 	signed short pos;
 	Bit32s money;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	do {
-		answer = GUI_radio(get_tx2(25), 3,
-					get_tx2(26),
-					get_tx2(27),
-					get_tx2(28));
+		answer = GUI_radio(get_tx2(25), 3, get_tx2(26), get_tx2(27), get_tx2(28));
 
 	} while (answer == -1);
 
@@ -162,14 +150,12 @@ void PHX_spielhaus(void)
 
 		GUI_output(get_tx2(29));
 
-		hero = get_hero(0);
+		hero = (struct struct_hero*)get_hero(0);
 
-		for (pos = counter = answer = 0; pos <= 6; pos++, hero += SIZEOF_HERO) {
+		for (pos = counter = answer = 0; pos <= 6; pos++, hero++) {
 
-			if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
-				!hero_dead(hero) &&
-				(test_skill((struct struct_hero*)hero, TA_FALSCHSPIEL, 3) > 0))
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+				!hero_dead((Bit8u*)hero) && (test_skill(hero, TA_FALSCHSPIEL, 3) > 0))
 			{
 				/* Gambling +3 */
 				counter++;
@@ -188,8 +174,7 @@ void PHX_spielhaus(void)
 
 			/* you loose: at least the half of your group have not passed the test */
 
-			sprintf(g_dtp2,
-				get_tx2(30), pos);
+			sprintf(g_dtp2,	get_tx2(30), pos);
 
 			money -= pos * 100;
 
@@ -199,8 +184,7 @@ void PHX_spielhaus(void)
 		} else {
 
 			/* you win */
-			sprintf(g_dtp2,
-				get_tx2(31), pos);
+			sprintf(g_dtp2,	get_tx2(31), pos);
 
 			money += pos * 100;
 		}
@@ -223,10 +207,7 @@ void PHX_spielhaus(void)
 		pos = money >= 500 ? 3 : 2;
 
 		do {
-			answer = GUI_radio(get_tx2(33), (signed char)pos,
-						get_tx2(34),
-						get_tx2(36),
-						get_tx2(35));
+			answer = GUI_radio(get_tx2(33), (signed char)pos, get_tx2(34), get_tx2(36), get_tx2(35));
 
 		} while (answer == -1);
 
@@ -392,10 +373,7 @@ void PHX_apotheke(void)
 				answer = money >= 500 ? 3 : 2;
 
 				do {
-					answer = GUI_radio(get_tx2(58), (signed char)answer,
-								get_tx2(63),
-								get_tx2(65),
-								get_tx2(64));
+					answer = GUI_radio(get_tx2(58), (signed char)answer, get_tx2(63), get_tx2(65), get_tx2(64));
 
 				} while (answer == -1);
 
@@ -420,10 +398,7 @@ void PHX_apotheke(void)
 			answer = money >= 1000 ? 3 : 2;
 
 			do {
-				answer = GUI_radio(get_tx2(57), (signed char)answer,
-							get_tx2(62),
-							get_tx2(61),
-							get_tx2(60));
+				answer = GUI_radio(get_tx2(57), (signed char)answer, get_tx2(62), get_tx2(61), get_tx2(60));
 
 			} while (answer == -1);
 
@@ -521,10 +496,7 @@ void PHX_healer(void)
 				answer = money >= 500 ? 3 : (money >= 10 ? 2 : 1);
 
 				do {
-					answer = GUI_radio(get_tx2(93), (signed char)answer,
-								get_tx2(96),
-								get_tx2(94),
-								get_tx2(95));
+					answer = GUI_radio(get_tx2(93), (signed char)answer, get_tx2(96), get_tx2(94), get_tx2(95));
 
 				} while (answer == -1);
 

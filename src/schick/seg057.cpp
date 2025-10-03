@@ -67,8 +67,8 @@ void sell_screen(struct shop_descr *shop_descr)
 	Bit32s price = 0;
 	signed short l12 = 0;
 	Bit8u *hero1;
-	Bit8u *hero2;
-	Bit8u *hero3;
+	struct struct_hero *hero2;
+	struct struct_hero *hero3;
 	signed short width;
 	signed short height;
 	signed short l15;
@@ -282,18 +282,12 @@ void sell_screen(struct shop_descr *shop_descr)
 
 			clear_loc_line();
 
-
 			GUI_print_loc_line(GUI_name_singular(get_itemname(g_sellitems[item_pos + item].item_id)));
 		}
 
 		if (g_mouse2_event  || g_action == ACTION_ID_PAGE_UP) {
 
-			answer = GUI_radio(NULL, 5,
-					get_ttx(433),
-					get_ttx(435),
-					get_ttx(436),
-					get_ttx(446),
-					get_ttx(437)) - 1;
+			answer = GUI_radio(NULL, 5, get_ttx(433), get_ttx(435), get_ttx(436), get_ttx(446), get_ttx(437)) - 1;
 
 			if (answer != -2) {
 				g_action = (answer + ACTION_ID_ICON_1);
@@ -433,20 +427,24 @@ void sell_screen(struct shop_descr *shop_descr)
 
 					answer = select_hero_ok_forced(get_ttx(442));
 
-					hero2 = get_hero(answer);
+					hero2 = (struct struct_hero*)get_hero(answer);
 
-					l12 = bargain(hero2, nice, price, percent, 0) > 0 ? 1 : 0;
+					l12 = bargain((Bit8u*)hero2, nice, price, percent, 0) > 0 ? 1 : 0;
 				}
 
 				if (l12 > 0) {
 
-					hero3 = get_hero(0);
-					for (items_x = 0; items_x <= 6; items_x++, hero3 += SIZEOF_HERO) {
+					hero3 = (struct struct_hero*)get_hero(0);
+					for (items_x = 0; items_x <= 6; items_x++, hero3++) {
+
 						for (l_di = 0; l_di < NR_HERO_INVENTORY_SLOTS; l_di++) {
 
 							if (tmp[items_x][l_di] != 0) {
-								item_id = host_readws(hero3 + (HERO_INVENTORY + INVENTORY_ITEM_ID) + SIZEOF_INVENTORY * l_di);
-								drop_item(hero3, l_di, tmp[items_x][l_di]);
+
+								item_id = hero3->inventory[l_di].item_id;
+
+								drop_item((Bit8u*)hero3, l_di, tmp[items_x][l_di]);
+
 								g_market_itemsaldo_table[item_id] = g_market_itemsaldo_table[item_id] - tmp[items_x][l_di];
 
 								if (g_market_itemsaldo_table[item_id] <= -10) {
@@ -499,10 +497,9 @@ void sell_screen(struct shop_descr *shop_descr)
 		if (g_action >= 241 && g_action <= 247) {
 
 			hero_pos = g_action - 241;
-			hero3 = get_hero(hero_pos);
+			hero3 = (struct struct_hero*)get_hero(hero_pos);
 
-			if ((host_readbs(hero3 + HERO_TYPE) != HERO_TYPE_NONE) &&
-				host_readbs(hero3 + HERO_GROUP_NO) == gs_current_group)
+			if ((hero3->typus != HERO_TYPE_NONE) && (hero3->group_no == gs_current_group))
 			{
 				hero1 = get_hero(hero_pos);
 				deselect_hero_icon(hero_pos_old);

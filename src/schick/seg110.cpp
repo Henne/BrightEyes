@@ -38,35 +38,35 @@ namespace M302de {
 void tevent_011(void)
 {
 	signed short answer;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
-	if ((test_skill((struct struct_hero*)(hero = (Bit8u*)get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 8) > 0 && !gs_tevent011_flag) ||
+	if ((test_skill((hero = (struct struct_hero*)get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 8) > 0 && !gs_tevent011_flag) ||
 		gs_tevent011_flag)
 	{
 		gs_tevent011_flag = 1;
 
-		sprintf(g_dtp2,	get_tx2(24), (char*)hero + HERO_NAME2, (char*)hero + HERO_NAME2);
+		sprintf(g_dtp2,	get_tx2(24), hero->alias, hero->alias);
 
 		do {
 			answer = GUI_radio(g_dtp2, 2, get_tx2(25), get_tx2(26));
 
 		} while (answer == -1);
 
-		if (answer == 2)
-		{
+		if (answer == 2) {
+
 			do {
 				answer = GUI_radio(get_tx2(27), 3, get_tx2(28),	get_tx2(29), get_tx2(30));
 
 			} while (answer == -1);
 
-			if (answer == 1)
-			{
+			if (answer == 1) {
+
 				/* just swim */
 				TRV_swim2(0, 5);
 				TRV_a_path();
 
-			} else if (answer == 2)
-			{
+			} else if (answer == 2) {
+
 				/* build a raft */
 				timewarp(HOURS(1));
 				TRV_swim2(0, 0);
@@ -88,36 +88,32 @@ void tevent_011(void)
 void TRV_swim2(signed char mod, signed short percent)
 {
 	signed short i;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
-	hero = get_hero(0);
-	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
+	hero = (struct struct_hero*)get_hero(0);
+	for (i = 0; i <= 6; i++, hero++)
 	{
-		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
-			!hero_dead(hero))
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
 		{
 			/* a swim test */
-			if (test_skill((struct struct_hero*)hero, TA_SCHWIMMEN, (signed char)mod) > 0)
+			if (test_skill(hero, TA_SCHWIMMEN, (signed char)mod) > 0)
 			{
 				/* skill test succeeded */
-				sprintf(g_dtp2, get_tx2(31), (char*)hero + HERO_NAME2);
+				sprintf(g_dtp2, get_tx2(31), hero->alias);
 				GUI_output(g_dtp2);
 
 			} else {
 				/* skill test failed */
-				sprintf(g_dtp2, get_tx2(32), (char*)hero + HERO_NAME2,
-					(GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
-
+				sprintf(g_dtp2, get_tx2(32), hero->alias, GUI_get_ptr(hero->sex, 0));
 				GUI_output(g_dtp2);
 
-				hero_disease_test((struct struct_hero*)hero, 2, 20 - (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK))));
+				hero_disease_test(hero, 2, 20 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
 
 				if (percent) {
-					loose_random_item((struct struct_hero*)hero, percent, get_ttx(506));
+					loose_random_item(hero, percent, get_ttx(506));
 				}
 
-				sub_hero_le((struct struct_hero*)hero, random_schick(5));
+				sub_hero_le(hero, random_schick(5));
 			}
 		}
 	}
@@ -170,12 +166,12 @@ void TRV_a_path(void)
 
 void tevent_013(void)
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 3) > 0 && !gs_tevent013_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 3) > 0 && !gs_tevent013_flag) ||
 		gs_tevent013_flag)
 	{
-		g_gather_herbs_special = (123);
+		g_gather_herbs_special = 123;
 		TRV_found_herb_place(0);
-		g_gather_herbs_special = (-1);
+		g_gather_herbs_special = -1;
 		gs_tevent013_flag = 1;
 	}
 }
@@ -215,7 +211,7 @@ void tevent_015(void)
 
 void tevent_017(void)
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent017_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent017_flag) ||
 		gs_tevent017_flag)
 	{
 		TRV_found_replenish_place(0);
@@ -227,14 +223,14 @@ void tevent_017(void)
 void tevent_020(void)
 {
 	signed short answer;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
-	if ((test_skill((struct struct_hero*)(hero = (Bit8u*)get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 7) > 0 && !gs_tevent020_flag) ||
+	if ((test_skill((hero = (struct struct_hero*)get_first_hero_available_in_group()), TA_SINNESSCHAERFE, 7) > 0 && !gs_tevent020_flag) ||
 		gs_tevent020_flag)
 	{
 		gs_tevent020_flag = 1;
 
-		sprintf(g_dtp2, get_tx2(49), (char*)hero + HERO_NAME2);
+		sprintf(g_dtp2, get_tx2(49), hero->alias);
 
 		do {
 			answer = GUI_radio(g_dtp2, 2, get_tx2(50), get_tx2(51));
@@ -266,12 +262,12 @@ void tevent_020(void)
 
 void tevent_021(void)
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 8) > 0 && !gs_tevent021_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 8) > 0 && !gs_tevent021_flag) ||
 		gs_tevent021_flag)
 	{
-		g_gather_herbs_special = (126);
+		g_gather_herbs_special = 126;
 		TRV_found_herb_place(1);
-		g_gather_herbs_special = (-1);
+		g_gather_herbs_special = -1;
 
 		gs_tevent021_flag = 1;
 	}
@@ -282,19 +278,18 @@ void tevent_022(void)
 {
 	signed short answer;
 
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 0) > 0 && !gs_tevent022_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 0) > 0 && !gs_tevent022_flag) ||
 		gs_tevent022_flag)
 	{
 		gs_tevent022_flag = 1;
 		if (TRV_found_camp_place(0))
 		{
-			if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 5) > 0 && !gs_tevent022_track_flag) ||
+			if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 5) > 0 && !gs_tevent022_track_flag) ||
 				gs_tevent022_track_flag)
 			{
 				do {
-					answer = GUI_radio(get_tx2(59), 2,
-								get_tx2(60),
-								get_tx2(61));
+					answer = GUI_radio(get_tx2(59), 2, get_tx2(60), get_tx2(61));
+
 				} while (answer == -1);
 
 				if (answer == 1)
@@ -310,7 +305,7 @@ void tevent_022(void)
 void tevent_024(void)
 	/* Auplog <-> Vilnheim: windgeschuetzte Stelle. Idealer Rastplatz */
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent024_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent024_flag) ||
 		gs_tevent024_flag)
 	{
 		TRV_found_camp_place(0);
@@ -321,7 +316,7 @@ void tevent_024(void)
 void tevent_025(void)
 	/* Auplog <-> Vilnheim: umgestuerzte, moosbewachsene Baumstaemme. idealer Rastplatz. */
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 1) > 0 && !gs_tevent025_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 1) > 0 && !gs_tevent025_flag) ||
 		gs_tevent025_flag)
 	{
 		TRV_found_camp_place(0);
@@ -341,7 +336,7 @@ void tevent_027(void)
 
 void tevent_028(void)
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent028_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent028_flag) ||
 		gs_tevent028_flag)
 	{
 		TRV_found_camp_place(1);
@@ -353,20 +348,20 @@ void tevent_029(void)
 {
 	signed short i;
 	signed short item_pos;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	load_in_head(51);
 
 	GUI_dialog_na(0, get_tx2(74));
 	GUI_dialog_na(0, get_tx2(75));
 
-	hero = get_hero(0);
-	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
+	hero = (struct struct_hero*)get_hero(0);
+	for (i = 0; i <= 6; i++, hero++)
 	{
-		hero_disease_test((struct struct_hero*)hero, 2, 20 - (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) + host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK))));
+		hero_disease_test(hero, 2, 20 - (hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod));
 	}
 
-	if (test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 3) > 0)
+	if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 3) > 0)
 	{
 		/* skill test succeeded */
 		timewarp(HOURS(3));
@@ -374,27 +369,25 @@ void tevent_029(void)
 		GUI_dialog_na(0, get_tx2(76));
 	} else {
 		/* skill test failed */
-		hero = get_hero(0);
-		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
+		hero = (struct struct_hero*)get_hero(0);
+		for (i = 0; i <= 6; i++, hero++)
 		{
-			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
-				!hero_dead(hero))
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
 			{
-				sub_hero_le((struct struct_hero*)hero, 2);
+				sub_hero_le(hero, 2);
 
-				item_pos = get_item_pos(hero, ITEM_FOOD_PACKAGE);
+				item_pos = get_item_pos((Bit8u*)hero, ITEM_FOOD_PACKAGE);
 
 				if (item_pos != -1) {
 					/* hero looses the first set of FOOD PACKAGES */
-					drop_item(hero, item_pos, host_readws(hero + HERO_INVENTORY + INVENTORY_QUANTITY + SIZEOF_INVENTORY * item_pos));
+					drop_item((Bit8u*)hero, item_pos, hero->inventory[item_pos].quantity);
 				}
 
-				item_pos = hero_count_item(hero, ITEM_WATERSKIN);
+				item_pos = hero_count_item((Bit8u*)hero, ITEM_WATERSKIN);
 
 				if (item_pos) {
 					/* hero looses the first WATERSKIN */
-					drop_item(hero, get_item_pos(hero, ITEM_WATERSKIN), item_pos - 1);
+					drop_item((Bit8u*)hero, get_item_pos((Bit8u*)hero, ITEM_WATERSKIN), item_pos - 1);
 				}
 			}
 		}
@@ -407,7 +400,7 @@ void tevent_029(void)
 
 void tevent_030(void)
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 0) > 0 && !gs_tevent030_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 0) > 0 && !gs_tevent030_flag) ||
 		gs_tevent030_flag)
 	{
 		TRV_found_camp_place(0);
@@ -428,14 +421,13 @@ void tevent_031(void)
 		load_in_head(49);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
-						get_tx2(0), 2, get_tx2(1), get_tx2(2));
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(0), 2, get_tx2(1), get_tx2(2));
 
 		} while (answer == -1);
 
 		if (answer == 2)
 		{
-			if (test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 7) <= 0)
+			if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 7) <= 0)
 			{
 				/* skill test failed */
 				g_fig_initiative = 1;
@@ -451,18 +443,19 @@ void tevent_031(void)
 
 void tevent_032(void)
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent032_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent032_flag) ||
 		gs_tevent032_flag)
 	{
 		gs_tevent032_flag = 1;
-		if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 5) > 0 && !gs_tevent032_herb_flag) ||
+
+		if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 5) > 0 && !gs_tevent032_herb_flag) ||
 			gs_tevent032_herb_flag)
 		{
 			gs_tevent032_herb_flag = 1;
 
-			g_gather_herbs_special = (62);
+			g_gather_herbs_special = 62;
 			TRV_found_camp_place(2);
-			g_gather_herbs_special = (-1);
+			g_gather_herbs_special = -1;
 		} else {
 			TRV_found_camp_place(0);
 		}
@@ -476,11 +469,9 @@ void tevent_033(void)
 	load_in_head(9);
 
 	do {
-		answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
-					get_tx2(3), 3,
-					get_tx2(4),
-					get_tx2(5),
-					get_tx2(6));
+		answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(3), 3,
+					get_tx2(4), get_tx2(5), get_tx2(6));
+
 	} while (answer == -1);
 
 	if (answer == 1 || answer == 2)
@@ -493,7 +484,7 @@ void tevent_033(void)
 
 void tevent_034(void)
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent034_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent034_flag) ||
 		gs_tevent034_flag)
 	{
 		TRV_found_camp_place(0);
@@ -508,14 +499,13 @@ void tevent_035(void)
 	if (!gs_tevent035_flag)
 	{
 		do {
-			answer = GUI_radio(get_tx2(9), 2,
-						get_tx2(10),
-						get_tx2(11));
+			answer = GUI_radio(get_tx2(9), 2, get_tx2(10), get_tx2(11));
+
 		} while (answer == -1);
 
 		if (answer == 2)
 		{
-			if (test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 8) <= 0)
+			if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_KRIEGSKUNST, 8) <= 0)
 			{
 				/* skill test failed */
 				g_fig_initiative = 1;
@@ -531,19 +521,19 @@ void tevent_035(void)
 
 void tevent_036(void)
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !gs_tevent036_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !gs_tevent036_flag) ||
 		gs_tevent036_flag)
 	{
 		gs_tevent036_flag = 1;
 
-		if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 6) > 0 && !gs_tevent036_herb_flag) ||
+		if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 6) > 0 && !gs_tevent036_herb_flag) ||
 			gs_tevent036_herb_flag)
 		{
 			gs_tevent036_herb_flag = 1;
 
-			g_gather_herbs_special = (63);
+			g_gather_herbs_special = 63;
 			TRV_found_camp_place(2);
-			g_gather_herbs_special = (-1);
+			g_gather_herbs_special = -1;
 		} else {
 			TRV_found_camp_place(0);
 		}
@@ -552,7 +542,7 @@ void tevent_036(void)
 
 void tevent_039(void)
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 4) > 0 && !gs_tevent039_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 4) > 0 && !gs_tevent039_flag) ||
 		gs_tevent039_flag)
 	{
 		TRV_found_camp_place(0);
@@ -563,7 +553,7 @@ void tevent_039(void)
 void tevent_040(void)
 /* Auplog <-> Varnheim: alte Feuerstelle. idealer Rastplatz */
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 4) > 0 && !gs_tevent040_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 4) > 0 && !gs_tevent040_flag) ||
 		gs_tevent040_flag)
 	{
 		TRV_found_camp_place(0);
@@ -578,7 +568,7 @@ void tevent_041(void)
 
 	TRV_barrier(12);
 
-	if (test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 0) > 0 && !gs_tevent041_flag)
+	if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 0) > 0 && !gs_tevent041_flag)
 	{
 		do {
 			/* Spuren von Karenen */
@@ -598,7 +588,7 @@ void tevent_041(void)
 void tevent_042(void)
 	/* Auplog <-> Varnheim: (weiter von Auplog weg als tevent_043) kleiner Bachlauf. Nahrung. */
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent042_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent042_flag) ||
 		gs_tevent042_flag)
 	{
 		TRV_found_replenish_place(0);
@@ -609,7 +599,7 @@ void tevent_042(void)
 void tevent_043(void)
 	/* Auplog <-> Varnheim: (nahe an Auplog) kleiner Bachlauf. Nahrung. */
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !gs_tevent043_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !gs_tevent043_flag) ||
 		gs_tevent043_flag)
 	{
 		TRV_found_replenish_place(0);
@@ -621,17 +611,17 @@ void tevent_043(void)
 void tevent_044(void)
 {
 	signed short answer;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	if (!gs_tevent094_flag) {
 
-		gs_tevent094_flag = (1);
+		gs_tevent094_flag = 1;
 
 		load_in_head(1);
 
-		hero = (Bit8u*)get_first_hero_available_in_group();
+		hero = (struct struct_hero*)get_first_hero_available_in_group();
 
-		sprintf((char*)(g_dtp2 + 0x400), get_tx2(33), (char*)hero + HERO_NAME2, GUI_get_ptr(host_readbs(hero + HERO_SEX), 3));
+		sprintf((char*)(g_dtp2 + 0x400), get_tx2(33), hero->alias, GUI_get_ptr(hero->sex, 3));
 
 		do {
 			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, (char*)(g_dtp2 + 0x400), 2, get_tx2(34), get_tx2(35));
@@ -660,11 +650,9 @@ void tevent_045(void)
 		load_in_head(11);
 
 		do {
-			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL,
-						get_tx2(36), 3,
-						get_tx2(37),
-						get_tx2(38),
-						get_tx2(39));
+			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(36), 3,
+						get_tx2(37), get_tx2(38), get_tx2(39));
+
 		} while (answer == -1);
 
 		if (answer == 1 || answer == 2)
@@ -681,7 +669,7 @@ void tevent_046(void)
 {
 	signed short answer;
 	signed short enter_inn;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	enter_inn = 0;
 
@@ -706,13 +694,12 @@ void tevent_046(void)
 		gs_current_loctype = LOCTYPE_NONE;
 		TRV_load_textfile(-1);
 
-		hero = (gs_camp_incident != -1 ? get_hero(gs_camp_incident) : (Bit8u*)get_first_hero_available_in_group());
+		hero = (struct struct_hero*)(gs_camp_incident != -1 ? (Bit8u*)get_hero(gs_camp_incident) : (Bit8u*)get_first_hero_available_in_group());
 		gs_camp_incident = -1;
 
-		if (test_skill((struct struct_hero*)hero, TA_SINNESSCHAERFE, 0) > 0)
+		if (test_skill(hero, TA_SINNESSCHAERFE, 0) > 0)
 		{
-			sprintf(g_dtp2,	get_tx2(45), (char*)hero + HERO_NAME2,
-				GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
+			sprintf(g_dtp2,	get_tx2(45), hero->alias, GUI_get_ptr(hero->sex, 0));
 
 			do {
 				answer = GUI_radio(g_dtp2, 2, get_tx2(46), get_tx2(47));
@@ -721,15 +708,14 @@ void tevent_046(void)
 
 			if (answer == 1)
 			{
-				gs_travel_detour = (DUNGEONS_VERFALLENE_HERBERGE);
+				gs_travel_detour = DUNGEONS_VERFALLENE_HERBERGE;
 				enter_inn = 1;
 			}
 		}
 
 		if (!enter_inn)
 		{
-			sprintf(g_dtp2, get_tx2(48), (char*)hero + HERO_NAME2);
-
+			sprintf(g_dtp2, get_tx2(48), hero->alias);
 			GUI_output(g_dtp2);
 
 			g_fig_discard = 1;
@@ -743,7 +729,7 @@ void tevent_046(void)
 
 			if (answer == 1)
 			{
-				gs_travel_detour = (DUNGEONS_VERFALLENE_HERBERGE);
+				gs_travel_detour = DUNGEONS_VERFALLENE_HERBERGE;
 			}
 		}
 	}
@@ -759,21 +745,20 @@ void tevent_048(void)
 {
 	signed short answer;
 
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !gs_tevent048_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !gs_tevent048_flag) ||
 		gs_tevent048_flag)
 	{
 		gs_tevent048_flag = 1;
 
 		if (TRV_found_camp_place(0))
 		{
-			if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 3) > 0 && !gs_tevent048_track_flag) ||
+			if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 3) > 0 && !gs_tevent048_track_flag) ||
 				gs_tevent048_track_flag)
 			{
 				/* Spuren einer kleinen Karenherde */
 				do {
-					answer = GUI_radio(get_tx2(52), 2,
-								get_tx2(53),
-								get_tx2(54));
+					answer = GUI_radio(get_tx2(52), 2, get_tx2(53), get_tx2(54));
+
 				} while (answer == -1);
 
 				if (answer == 1)
@@ -800,12 +785,12 @@ void tevent_049(void)
 /* Ottarje <-> Skjal */
 void tevent_050(void)
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !gs_tevent050_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 3) > 0 && !gs_tevent050_flag) ||
 		gs_tevent050_flag)
 	{
 		gs_tevent050_flag = 1;
 
-		if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 && !gs_tevent050_herb_flag) ||
+		if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_PFLANZENKUNDE, 4) > 0 && !gs_tevent050_herb_flag) ||
 			gs_tevent050_herb_flag)
 		{
 			TRV_found_replenish_place(gs_tevent050_herb_flag = 1);

@@ -32,25 +32,25 @@ signed short DNG13_handler(void)
 	signed short pos;
 	signed short tw_bak;
 	Bit32s p_money;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
 
 	pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
-	hero = (Bit8u*)get_first_hero_available_in_group();
+	hero = (struct struct_hero*)get_first_hero_available_in_group();
 
 	if (!(gs_day_timer % MINUTES(5)) &&
 		(pos == DNG_POS(0,5,1) || pos == DNG_POS(0,6,1) || pos == DNG_POS(0,7,1) || pos == DNG_POS(0,8,1)) &&
 		random_schick(100) <= 5)
 	{
-		hero = get_hero(get_random_hero());
+		hero = (struct struct_hero*)get_hero(get_random_hero());
 
-		sprintf(g_dtp2,	get_tx(18), (char*)hero + HERO_NAME2);
+		sprintf(g_dtp2,	get_tx(18), hero->alias);
 		GUI_output(g_dtp2);
 
-		sub_hero_le((struct struct_hero*)hero, 2);
+		sub_hero_le(hero, 2);
 	}
 
 	if (pos == DNG_POS(0,9,13) && pos != gs_dng_handled_pos && !gs_dng13_lantern_flag)
@@ -75,9 +75,7 @@ signed short DNG13_handler(void)
 	{
 		DNG13_unblock_passage(get_tx(4), &gs_dng13_passage1_flag);
 
-	} else if (pos == DNG_POS(0,4,9) &&
-			 (pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&
-			gs_direction == WEST)
+	} else if (pos == DNG_POS(0,4,9) && (pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) && gs_direction == WEST)
 	{
 		GUI_output(get_tx(6));
 		gs_direction_bak = gs_direction;
@@ -261,17 +259,15 @@ void DNG13_collapsing_ceiling(void)
 	signed short i;
 	signed short fails;
 	signed short has_items;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	gs_dng13_collapsecount++;
 
-	hero = get_hero(0);
-	for (i = fails = 0; i <= 6; i++, hero += SIZEOF_HERO)
+	hero = (struct struct_hero*)get_hero(0);
+	for (i = fails = 0; i <= 6; i++, hero++)
 	{
-		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-			!hero_dead(hero) &&
-			test_skill((struct struct_hero*)hero, TA_SCHLEICHEN, -4) <= 0)
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+			!hero_dead((Bit8u*)hero) && test_skill(hero, TA_SCHLEICHEN, -4) <= 0)
 		{
 			fails++;
 		}
@@ -310,17 +306,15 @@ void DNG13_collapsing_ceiling_easy(void)
 	signed short i;
 	signed short fails;
 	signed short has_items;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	gs_dng13_collapsecount++;
 
-	hero = get_hero(0);
-	for (i = fails = 0; i <= 6; i++, hero += SIZEOF_HERO)
+	hero = (struct struct_hero*)get_hero(0);
+	for (i = fails = 0; i <= 6; i++, hero++)
 	{
-		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-			!hero_dead(hero) &&
-			test_skill((struct struct_hero*)hero, TA_SCHLEICHEN, -1) <= 0)
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+			!hero_dead((Bit8u*)hero) && test_skill(hero, TA_SCHLEICHEN, -1) <= 0)
 		{
 			fails++;
 		}

@@ -40,7 +40,7 @@ signed short DNG10_handler(void)
 	signed short answer;
 	signed short result;
 	signed short tw_bak;
-	Bit8u *hero;
+	struct struct_hero *hero;
 	Bit8u *amap_ptr;
 	Bit32s p_money;
 
@@ -50,20 +50,17 @@ signed short DNG10_handler(void)
 
 	target_pos = DNG_POS(gs_dungeon_level, gs_x_target, gs_y_target);
 
-	hero = (Bit8u*)get_first_hero_available_in_group();
+	hero = (struct struct_hero*)get_first_hero_available_in_group();
 
 	if ((target_pos == DNG_POS(0,1,1) || target_pos == DNG_POS(0,3,2)) && target_pos != gs_dng_handled_pos)
 	{
 		/* TRAP: a hole in a wall; leader gets 2 LE damage */
 		if (GUI_bool(get_tx(1)))
 		{
-			sprintf(g_dtp2,
-				get_tx(2),
-				(char*)hero + HERO_NAME2);
-
+			sprintf(g_dtp2, get_tx(2), hero->alias);
 			GUI_output(g_dtp2);
 
-			sub_hero_le((struct struct_hero*)hero, 2);
+			sub_hero_le(hero, 2);
 		}
 
 	} else if (target_pos == DNG_POS(0,5,2) && target_pos != gs_dng_handled_pos)
@@ -74,7 +71,7 @@ signed short DNG10_handler(void)
 	} else if (target_pos == DNG_POS(0,8,1) && target_pos != gs_dng_handled_pos)
 	{
 		/* another hole in a wall with a lever for a trap */
-		if (gs_dng10_lever_found || test_skill((struct struct_hero*)hero, TA_SINNESSCHAERFE, 7) > 0)
+		if (gs_dng10_lever_found || test_skill(hero, TA_SINNESSCHAERFE, 7) > 0)
 		{
 			gs_dng10_lever_found |= 1;
 
@@ -94,30 +91,29 @@ signed short DNG10_handler(void)
 			(target_pos == DNG_POS(0,7,4) && target_pos != gs_dng_handled_pos && gs_dng10_lever_state))
 	{
 		/* TRAP: terrible pain; radom hero gets 3W6+4 LE damage */
-		hero = get_hero(get_random_hero());
+		hero = (struct struct_hero*)get_hero(get_random_hero());
 
 		answer = dice_roll(3, 6, 4);
 
-		sprintf(g_dtp2,	get_tx(9), (char*)hero + HERO_NAME2);
+		sprintf(g_dtp2,	get_tx(9), hero->alias);
 
 		/* check if the hero will survive */
-		if (host_readws(hero + HERO_LE) > answer)
+		if (hero->le > answer)
 		{
-			sprintf(g_text_output_buf, get_tx(10), (GUI_get_ptr(host_readbs(hero + HERO_SEX), 0)));
+			sprintf(g_text_output_buf, get_tx(10), GUI_get_ptr(hero->sex, 0));
 
 			strcat(g_dtp2, g_text_output_buf);
 		}
 
 		GUI_output(g_dtp2);
 
-		sub_hero_le((struct struct_hero*)hero, answer);
+		sub_hero_le(hero, answer);
 
-	} else if (target_pos == DNG_POS(0,3,10) &&
-			(target_pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&
+	} else if (target_pos == DNG_POS(0,3,10) && (target_pos != gs_dng_handled_pos || gs_direction != gs_direction_bak) &&
 			gs_direction == WEST)
 	{
 		/* TRAP: a loose stone in a wall */
-		if (gs_dng10_hole_state || test_skill((struct struct_hero*)hero, TA_SINNESSCHAERFE, 5) > 0)
+		if (gs_dng10_hole_state || test_skill(hero, TA_SINNESSCHAERFE, 5) > 0)
 		{
 			/* set hole found */
 			gs_dng10_hole_state = 1;
@@ -126,11 +122,11 @@ signed short DNG10_handler(void)
 			{
 				gs_dng10_hole_state = 2;
 
-				sprintf(g_dtp2,	get_tx(11), (char*)hero + HERO_NAME2);
+				sprintf(g_dtp2,	get_tx(11), hero->alias);
 
 				if (GUI_bool(g_dtp2))
 				{
-					sprintf(g_dtp2,	get_tx(12), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2,	get_tx(12), hero->alias);
 
 					GUI_output(g_dtp2);
 
@@ -138,7 +134,7 @@ signed short DNG10_handler(void)
 
 					gs_dng10_hole_damage += result;
 
-					sub_hero_le((struct struct_hero*)hero, result);
+					sub_hero_le(hero, result);
 
 					if (gs_dng10_hole_damage >= 7)
 					{
@@ -147,7 +143,7 @@ signed short DNG10_handler(void)
 					}
 				}
 
-				gs_direction_bak = (gs_direction);
+				gs_direction_bak = gs_direction;
 
 			} else {
 			}
@@ -157,23 +153,22 @@ signed short DNG10_handler(void)
 	} else if (target_pos == DNG_POS(0,1,8) && target_pos != gs_dng_handled_pos)
 	{
 		/* TRAP: a floorplate */
-		if (gs_dng10_floorplate_found || test_skill((struct struct_hero*)hero, TA_SINNESSCHAERFE, 5) > 0)
+		if (gs_dng10_floorplate_found || test_skill(hero, TA_SINNESSCHAERFE, 5) > 0)
 		{
 			gs_dng10_floorplate_found = 1;
 
 			/* Original-Bug: ???*/
 			/* Damage only happens here when the leader of the group tries to disable this trap.
 			   If the trap is not found or left alone nobody gets damaged. Weird! */
-			if (GUI_bool(get_tx(13)) && test_skill((struct struct_hero*)hero, TA_SCHLOESSER, 7) <= 0)
+			if (GUI_bool(get_tx(13)) && test_skill(hero, TA_SCHLOESSER, 7) <= 0)
 			{
 				if (gs_dng10_floorplate_loads)
 				{
-
-					sprintf(g_dtp2,	get_tx(14), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2,	get_tx(14), hero->alias);
 
 					gs_dng10_floorplate_loads--;
 
-					sub_hero_le((struct struct_hero*)hero, dice_roll(3, 6, 0));
+					sub_hero_le(hero, dice_roll(3, 6, 0));
 				} else {
 					strcpy(g_dtp2, get_tx(15));
 				}
@@ -240,14 +235,12 @@ signed short DNG10_handler(void)
 		{
 			GUI_output(get_tx(24));
 
-			hero = get_hero(0);
-			for (answer = 0; answer <= 6; answer++, hero += SIZEOF_HERO)
+			hero = (struct struct_hero*)get_hero(0);
+			for (answer = 0; answer <= 6; answer++, hero++)
 			{
-				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-					!hero_dead(hero))
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
 				{
-					sub_hero_le((struct struct_hero*)hero, random_schick(6));
+					sub_hero_le(hero, random_schick(6));
 				}
 			}
 		}
@@ -258,10 +251,10 @@ signed short DNG10_handler(void)
 		{
 			gs_dng10_mummy_lever ^= 1;
 
-			sprintf(g_dtp2, get_tx(26), (char*)hero + HERO_NAME2);
+			sprintf(g_dtp2, get_tx(26), hero->alias);
 			GUI_output(g_dtp2);
 
-			sub_hero_le((struct struct_hero*)hero, 2);
+			sub_hero_le(hero, 2);
 		}
 
 	} else if ((target_pos == DNG_POS(1,10,3) || target_pos == DNG_POS(1,7,3)) && target_pos != gs_dng_handled_pos && gs_dng10_mummy_lever)
@@ -315,14 +308,14 @@ signed short DNG10_handler(void)
 				}
 			} else {
 				/* try to plunder the hoard */
-				hero = get_hero(0);
+				hero = (struct struct_hero*)get_hero(0);
 
-				for (answer = result = 0; answer <= 6; answer++, hero += SIZEOF_HERO)
+				for (answer = result = 0; answer <= 6; answer++, hero++)
 				{
-					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-						!hero_dead(hero) &&
-						test_skill((struct struct_hero*)hero, TA_SCHLEICHEN, host_readbs(hero + HERO_RS_BONUS1) + 3) <= 0)
+					if ((hero->typus != HERO_TYPE_NONE) &&
+						(hero->group_no == gs_current_group) &&
+						!hero_dead((Bit8u*)hero) &&
+						(test_skill(hero, TA_SCHLEICHEN, hero->rs_bonus1 + 3) <= 0))
 					{
 						result++;
 					}
@@ -362,13 +355,13 @@ signed short DNG10_handler(void)
 
 			load_in_head(58);
 
-			gs_x_target = (gs_y_target = (12));
+			gs_x_target = gs_y_target = 12;
 
 			if ((answer = get_first_hero_with_item(ITEM_KEY_PLATIN)) != -1)
 			{
-				hero = get_hero(answer);
-				result = get_item_pos(hero, ITEM_KEY_PLATIN);
-				drop_item(hero, result, 1);
+				hero = (struct struct_hero*)get_hero(answer);
+				result = get_item_pos((Bit8u*)hero, ITEM_KEY_PLATIN);
+				drop_item((Bit8u*)hero, result, 1);
 
 				GUI_dialogbox((unsigned char*)g_dtp2, get_tx(28), get_tx(36), 0);
 				GUI_dialogbox((unsigned char*)g_dtp2, get_tx(28), get_tx(37), 0);
@@ -403,9 +396,9 @@ signed short DNG10_handler(void)
 	{
 		leave_dungeon();
 
-		gs_current_town = (gs_travel_destination_town_id);
-		gs_x_target = (gs_travel_destination_x);
-		gs_y_target = (gs_travel_destination_y);
+		gs_current_town = gs_travel_destination_town_id;
+		gs_x_target = gs_travel_destination_x;
+		gs_y_target = gs_travel_destination_y;
 		gs_current_loctype = LOCTYPE_NONE;
 		gs_direction = ((gs_travel_destination_viewdir + 2) & 0x03);
 

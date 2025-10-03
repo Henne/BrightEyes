@@ -33,13 +33,12 @@ namespace M302de {
 /* Ottarje <-> Skjal: alte Feuerstelle. idealer Rastplatz */
 void tevent_053(void)
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 1) > 0 && !gs_tevent053_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 1) > 0 && !gs_tevent053_flag) ||
 		gs_tevent053_flag != 0)
 	{
 		TRV_found_camp_place(0);
 		gs_tevent053_flag = 1;
 	}
-
 }
 
 /* Prem <-> Skjal: inn "Langschiff" */
@@ -74,7 +73,7 @@ void tevent_057(void)
 {
 	signed short i;
 	signed short answer;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	do {
 		answer = GUI_radio(get_tx2(1), 2, get_tx2(2), get_tx2(3));
@@ -83,7 +82,7 @@ void tevent_057(void)
 
 	if (answer == 2) {
 
-		if (test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 2) > 0) {
+		if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 2) > 0) {
 
 			timewarp(HOURS(2));
 
@@ -95,43 +94,40 @@ void tevent_057(void)
 
 			GUI_output(get_tx2(5));
 
-			hero = get_hero(0);
+			hero = (struct struct_hero*)get_hero(0);
 
-			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+			for (i = 0; i <= 6; i++, hero++) {
 
-				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
 				{
-					sub_hero_le((struct struct_hero*)hero, random_schick(3));
+					sub_hero_le(hero, random_schick(3));
 				}
 			}
 		}
 	} else {
 
-		hero = get_hero(0);
+		hero = (struct struct_hero*)get_hero(0);
 
-		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+		for (i = 0; i <= 6; i++, hero++) {
 
-			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-				!hero_dead(hero) &&
-				test_skill((struct struct_hero*)hero, TA_KLETTERN, 3) <= 0)
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+				!hero_dead((Bit8u*)hero) && test_skill(hero, TA_KLETTERN, 3) <= 0)
 			{
 
 				/* TODO: Original-Bug: that condition does not make sense */
 				if (get_first_hero_with_item(ITEM_ROPE) == -1 || get_first_hero_with_item(ITEM_ROPE_LADDER) != -1)
 				{
 
-					sprintf(g_dtp2, get_tx2(8), (char*)hero + HERO_NAME2, GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
+					sprintf(g_dtp2, get_tx2(8), hero->alias, GUI_get_ptr(hero->sex, 0));
 					GUI_output(g_dtp2);
 
-					sub_hero_le((struct struct_hero*)hero, random_schick(9) + 3);
+					sub_hero_le(hero, random_schick(9) + 3);
 
 				} else {
-					sprintf(g_dtp2, get_tx2(7), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_tx2(7), hero->alias);
 					GUI_output(g_dtp2);
 
-					sub_hero_le((struct struct_hero*)hero, random_schick(8));
+					sub_hero_le(hero, random_schick(8));
 				}
 			}
 		}
@@ -142,7 +138,7 @@ void tevent_057(void)
 
 void tevent_058(void)
 {
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent058_flag) || gs_tevent058_flag)
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent058_flag) || gs_tevent058_flag)
 	{
 		TRV_found_replenish_place(0);
 		gs_tevent058_flag = 1;
@@ -168,6 +164,7 @@ void tevent_059(void)
 
 		do {
 			answer = GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(9), 2, get_tx2(10), get_tx2(11));
+
 		} while (answer == -1);
 
 		if (answer == 1) {
@@ -183,16 +180,14 @@ void tevent_059(void)
 					GUI_dialog_na(0, get_tx2(16));
 				} else if (answer == 2) {
 					GUI_dialog_na(0, get_tx2(17));
-				} else if (test_attrib((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0) {
+				} else if (test_attrib((struct struct_hero*)get_first_hero_available_in_group(), ATTRIB_CH, 0) > 0) {
 					GUI_dialog_na(0, get_tx2(17));
 				} else {
 					GUI_dialog_na(0, get_tx2(16));
 				}
 
 			} else {
-				GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(12),
-						1, get_tx2(18));
-
+				GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx2(12), 1, get_tx2(18));
 				GUI_dialog_na(0, get_tx2(17));
 			}
 		}
@@ -210,7 +205,7 @@ void tevent_060(void)
 	signed short done;
 	signed short nr_items;
 	signed short has_magic_rope;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	done = 0;
 	load_in_head(57);
@@ -223,7 +218,7 @@ void tevent_060(void)
 
 		if (answer == 1) {
 
-			if (test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 4) > 0) {
+			if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 4) > 0) {
 
 				sub_group_le(1);
 
@@ -247,16 +242,14 @@ void tevent_060(void)
 
 					timewarp(HOURS(1));
 
-					hero = get_hero(0);
+					hero = (struct struct_hero*)get_hero(0);
 
-					for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+					for (i = 0; i <= 6; i++, hero++) {
 
-						if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-							host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-							!hero_dead(hero) &&
-							test_skill((struct struct_hero*)hero, TA_KLETTERN, 0) <= 0)
+						if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+							!hero_dead((Bit8u*)hero) && test_skill(hero, TA_KLETTERN, 0) <= 0)
 						{
-							sub_hero_le((struct struct_hero*)hero, random_schick(10));
+							sub_hero_le(hero, random_schick(10));
 						}
 					}
 
@@ -267,10 +260,11 @@ void tevent_060(void)
 					timewarp(HOURS(2));
 				}
 			}
+
 		} else {
 
 
-			if (test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 2) > 0) {
+			if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 2) > 0) {
 
 				timewarp(HOURS(3));
 
@@ -289,18 +283,17 @@ void tevent_060(void)
 
 				if (answer == 2) {
 
-					hero = get_hero(0);
+					hero = (struct struct_hero*)get_hero(0);
 
-					for (i = has_magic_rope = nr_items = 0; i <= 6 ; i++, hero += SIZEOF_HERO){
+					for (i = has_magic_rope = nr_items = 0; i <= 6 ; i++, hero++){
 
-						if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-							host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-							!hero_dead(hero))
+						if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+							!hero_dead((Bit8u*)hero))
 						{
-							nr_items += hero_count_item(hero, ITEM_ROPE);
-							nr_items += hero_count_item(hero, ITEM_ROPE_LADDER);
+							nr_items += hero_count_item((Bit8u*)hero, ITEM_ROPE);
+							nr_items += hero_count_item((Bit8u*)hero, ITEM_ROPE_LADDER);
 
-							if (host_readbs(hero + HERO_STAFFSPELL_LVL) >= 3)
+							if (hero->staff_level >= 3)
 							{
 								has_magic_rope = 1;
 							}
@@ -313,12 +306,12 @@ void tevent_060(void)
 
 						for (i = 0; i < 3; i++) {
 
-							answer = get_item_pos(hero = get_hero(get_first_hero_with_item(ITEM_ROPE)), ITEM_ROPE);
+							answer = get_item_pos((Bit8u*)(hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE))), ITEM_ROPE);
 							if (answer == -1) {
-								answer = get_item_pos(hero = get_hero(get_first_hero_with_item(ITEM_ROPE_LADDER)), ITEM_ROPE_LADDER);
+								answer = get_item_pos((Bit8u*)(hero = (struct struct_hero*)get_hero(get_first_hero_with_item(ITEM_ROPE_LADDER))), ITEM_ROPE_LADDER);
 							}
 
-							drop_item(hero, answer, 1);
+							drop_item((Bit8u*)hero, answer, 1);
 						}
 
 						timewarp(HOURS(1));
@@ -361,8 +354,8 @@ void tevent_061(void)
 	/* TODO: not needed here */
 	answer = 0;
 
-	if (test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 6) > 0 &&
-		test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 3) > 0 &&
+	if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_SINNESSCHAERFE, 6) > 0 &&
+		test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 3) > 0 &&
 		!gs_tevent061_flag)
 	{
 		gs_tevent061_flag = 1;
@@ -382,7 +375,7 @@ void tevent_061(void)
 			} while (answer == -1);
 
 			if (answer == 1) {
-				gs_travel_detour = (DUNGEONS_WOLFSHOEHLE);
+				gs_travel_detour = DUNGEONS_WOLFSHOEHLE;
 			}
 		}
 
@@ -397,7 +390,7 @@ void tevent_061(void)
 		} while (answer == -1);
 
 		if (answer == 1) {
-			gs_travel_detour = (DUNGEONS_WOLFSHOEHLE);
+			gs_travel_detour = DUNGEONS_WOLFSHOEHLE;
 		}
 	}
 }
@@ -417,43 +410,41 @@ void tevent_063(void)
 	signed short max;
 	signed short proof;
 	signed short vomiter;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	max = 9999;
 
 	/* intro message */
 	GUI_output(get_tx2(46));
 
-	hero = get_hero(0);
+	hero = (struct struct_hero*)get_hero(0);
 
-	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+	for (i = 0; i <= 6; i++, hero++) {
 
-		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-			!hero_dead(hero))
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
 		{
 			/* MU+0 */
-			if ((proof = test_attrib((struct struct_hero*)hero, ATTRIB_MU, 0)) < max) {
+			if ((proof = test_attrib(hero, ATTRIB_MU, 0)) < max) {
 				max = proof;
 				vomiter = i;
 			}
 		}
 	}
 
-	hero = get_hero(vomiter);
+	hero = (struct struct_hero*)get_hero(vomiter);
 
-	sprintf(g_dtp2, get_tx2(47), (char*)hero + HERO_NAME2);
+	sprintf(g_dtp2, get_tx2(47), hero->alias);
 
 	/* print who vomits */
 	GUI_output(g_dtp2);
 
 	/* LE - 2 */
-	sub_hero_le((struct struct_hero*)hero, 2);
+	sub_hero_le(hero, 2);
 
 	i = get_free_mod_slot();
 
 	/* MU -2 for 24 hours */
-	set_mod_slot(i, DAYS(1), hero + (HERO_ATTRIB + 3 * ATTRIB_MU), -2, (signed char)vomiter);
+	set_mod_slot(i, DAYS(1), (Bit8u*)&hero->attrib[ATTRIB_MU].current, -2, (signed char)vomiter);
 
 	/* outro message */
 	GUI_output(get_tx2(48));
@@ -467,7 +458,7 @@ void tevent_064(void)
 	signed short i;
 	signed short approach_flag;
 	signed short silentium_flag;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	approach_flag = 0;
 	silentium_flag = 0;
@@ -484,9 +475,9 @@ void tevent_064(void)
 
 			if (answer == 1) {
 
-				hero = get_hero(select_hero_ok_forced(get_ttx(317)));
+				hero = (struct struct_hero*)get_hero(select_hero_ok_forced(get_ttx(317)));
 
-				if (host_readbs(hero + HERO_TYPE) < HERO_TYPE_WITCH) {
+				if (hero->typus < HERO_TYPE_WITCH) {
 					GUI_output(get_ttx(330));
 				} else {
 					approach_flag = 1;
@@ -495,15 +486,15 @@ void tevent_064(void)
 				if (approach_flag == 0) {
 					approach_flag = 1;
 				} else {
-					if (test_spell((struct struct_hero*)hero, SP_SILENTIUM_SILENTILLE, 0) > 0) {
+					if (test_spell(hero, SP_SILENTIUM_SILENTILLE, 0) > 0) {
 
-						sub_ae_splash((struct struct_hero*)hero, 2);
+						sub_ae_splash(hero, 2);
 
 						gs_tevent064_silent_flag = 1;
 
 						GUI_output(get_tx2(53));
 					} else {
-						sub_ae_splash((struct struct_hero*)hero, 1);
+						sub_ae_splash(hero, 1);
 
 						GUI_output(get_ttx(606));
 					}
@@ -515,14 +506,12 @@ void tevent_064(void)
 
 				GUI_output(get_tx2(54));
 
-				hero = get_hero(0);
+				hero = (struct struct_hero*)get_hero(0);
 
-				for (i = result = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+				for (i = result = 0; i <= 6; i++, hero++) {
 
-					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-						!hero_dead(hero) &&
-						test_skill((struct struct_hero*)hero, TA_SCHLEICHEN, 0) <= 0)
+					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+						!hero_dead((Bit8u*)hero) && test_skill(hero, TA_SCHLEICHEN, 0) <= 0)
 					{
 						result++;
 					}
@@ -570,6 +559,7 @@ void tevent_064(void)
 		}
 
 		if (!result) {
+
 			gs_tevent064_flag = 1;
 
 			add_hero_ap_all(100);
@@ -671,15 +661,15 @@ void tevent_066(void)
 	signed short l_si;
 	signed short l_di;
 	signed short count;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
-	if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent066_flag) ||
+	if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_WILDNISLEBEN, 2) > 0 && !gs_tevent066_flag) ||
 		gs_tevent066_flag)
 	{
 		TRV_found_replenish_place(0);
 		gs_tevent066_flag = 1;
 
-		if ((test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 4) > 0 && !gs_tevent066_track_flag))
+		if ((test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_FAEHRTENSUCHEN, 4) > 0 && !gs_tevent066_track_flag))
 		{
 
 			do {
@@ -691,13 +681,11 @@ void tevent_066(void)
 
 				GUI_output(get_tx2(84));
 
-				hero = get_hero(0);
-				for (l_di = count = 0; l_di <= 6; l_di++, hero += SIZEOF_HERO)
+				hero = (struct struct_hero*)get_hero(0);
+				for (l_di = count = 0; l_di <= 6; l_di++, hero++)
 				{
-					if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-						host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-						!hero_dead(hero) &&
-						test_skill((struct struct_hero*)hero, TA_SCHLEICHEN, -2) <= 0)
+					if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+						!hero_dead((Bit8u*)hero) && test_skill(hero, TA_SCHLEICHEN, -2) <= 0)
 					{
 						count++;
 					}
@@ -710,6 +698,7 @@ void tevent_066(void)
 				} else {
 					do {
 						l_si = GUI_radio(get_tx2(86), 2, get_tx2(87), get_tx2(88));
+
 					} while (l_si == -1);
 
 					if (l_si == 1) {

@@ -653,34 +653,36 @@ void startup_equipment(Bit8u *hero)
 /* Borlandified and identical */
 signed short get_max_light_time(void)
 {
-	Bit8u *hero;
+	struct struct_hero *hero;
 	signed short i;
 	signed short j;
 	signed short retval;
 
 	retval = -1;
 
-	hero = get_hero(0);
-	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+	hero = (struct struct_hero*)get_hero(0);
+	for (i = 0; i <= 6; i++, hero++) {
 
 #ifdef M302de_ORIGINAL_BUGFIX
-		if (!host_readb(hero + HERO_TYPE))
+		if (!hero->typus)
 			continue;
 #endif
 
 		for (j = 0; j < NR_HERO_INVENTORY_SLOTS; j++) {
 
 			/* search for a burning torch */
-			if (host_readw(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + j * SIZEOF_INVENTORY) == ITEM_TORCH_ON) {
+			if (hero->inventory[j].item_id == ITEM_TORCH_ON) {
 
-				if (host_readbs(hero + j * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_LIGHTING_TIMER) > retval) {
-					retval = host_readbs(hero + j * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_LIGHTING_TIMER);
+				if (hero->inventory[j].lighting_timer > retval) {
+					retval = hero->inventory[j].lighting_timer;
 				}
-			} else if (host_readw(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + j * SIZEOF_INVENTORY) == ITEM_LANTERN_ON) {
+
+			} else if (hero->inventory[j].item_id == ITEM_LANTERN_ON) {
+
 				/* search for a burning lantern */
 
-				if (host_readbs(hero + j * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_LIGHTING_TIMER) / 10 > retval) {
-					retval = host_readbs(hero + j * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_LIGHTING_TIMER) / 10;
+				if (hero->inventory[j].lighting_timer / 10 > retval) {
+					retval = hero->inventory[j].lighting_timer / 10;
 				}
 			}
 		}
