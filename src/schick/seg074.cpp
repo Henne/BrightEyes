@@ -37,7 +37,7 @@ void show_automap(void)
 	signed short tw_bak;
 
 	if (!gs_dungeon_light ||
-		((gs_dungeon_light == 1) && (test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 6) > 0)))
+		((gs_dungeon_light == 1) && (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_ORIENTIERUNG, 6) > 0)))
 	{
 
 		g_special_screen = 1;
@@ -54,7 +54,7 @@ void show_automap(void)
 				((gs_x_target - 8 < 0) ? 0 :
 				((gs_x_target - 8 > 15) ? 16 : gs_x_target - 8));
 
-		gs_current_town = ((signed char)town);
+		gs_current_town = (signed char)town;
 		gs_dungeon_index = dungeon;
 
 		g_request_refresh = 1;
@@ -181,15 +181,14 @@ unsigned short get_mapval_large(signed short x, signed short y)
  */
 signed short is_group_in_prison(signed short group_no)
 {
-	Bit8u *hero = get_hero(0);
+	struct struct_hero *hero = (struct struct_hero*)get_hero(0);
 	signed short i;
 
-	for (i = 0; i < 6; i++, hero += SIZEOF_HERO) {
+	for (i = 0; i < 6; i++, hero++) {
 
-		if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readbs(hero + HERO_GROUP_NO) == group_no))
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == group_no))
 		{
-			return host_readbs(hero + HERO_JAIL);
+			return hero->jail;
 		}
 	}
 

@@ -124,40 +124,35 @@ void city_event_1(void)
 void city_event_2(void)
 {
 	signed short answer;
-	unsigned char *hero;
+	struct struct_hero *hero;
 
-	hero = get_hero(get_random_hero());
+	hero = (struct struct_hero*)get_hero(get_random_hero());
 
-	if (test_skill((struct struct_hero*)hero, TA_SINNESSCHAERFE, 2) <= 0) {
+	if (test_skill(hero, TA_SINNESSCHAERFE, 2) <= 0) {
 
 		/* hero looses all money */
-		host_writeds(hero + HERO_MONEY, 0);
+		hero->money = 0;
 
-		sprintf(g_dtp2,
-			get_tx(random_schick(4) + 30),
-			(char*)hero + HERO_NAME2);
+		sprintf(g_dtp2, get_tx(random_schick(4) + 30), hero->alias);
 
-		GUI_dialogbox(hero + HERO_PORTRAIT, (char*)(hero + HERO_NAME2), g_dtp2, 0);
+		GUI_dialogbox(hero->pic, hero->alias, g_dtp2, 0);
 
 	} else {
 
-		sprintf(g_dtp2,
-			get_tx(random_schick(4) + 34),
-			(char*)hero + HERO_NAME2);
+		sprintf(g_dtp2,	get_tx(random_schick(4) + 34), hero->alias);
 
-		answer = GUI_dialogbox(hero + HERO_PORTRAIT, (char*)(hero + HERO_NAME2), g_dtp2, 3,
+		answer = GUI_dialogbox(hero->pic, hero->alias, g_dtp2, 3,
 				get_tx(random_schick(4) + 38),
 				get_tx(random_schick(4) + 42),
 				get_tx(random_schick(4) + 46));
 
 		if (answer == 1) {
+
 			GUI_output(get_tx(random_schick(4) + 50));
+
 		} else {
 
-			sprintf(g_dtp2,
-				get_tx(random_schick(4) + 54),
-				(char*)hero + HERO_NAME2);
-
+			sprintf(g_dtp2,	get_tx(random_schick(4) + 54), hero->alias);
 			GUI_output(g_dtp2);
 		}
 	}
@@ -209,17 +204,16 @@ void city_event_4(void)
 			get_tx(random_schick(4) + 86));
 
 	if (answer == 3) {
+
 		money -= 100;
 		set_party_money(money);
 
 		GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx(random_schick(4) + 90), 0);
 
 
-		sprintf(g_dtp2 + 0x400,
-			get_tx(random_schick(4) + 94),
-			(char*)(load_current_town_gossip()));
+		sprintf(g_dtp2 + 0x400,	get_tx(random_schick(4) + 94), (char*)load_current_town_gossip());
 
-		GUI_dialogbox((unsigned char*)g_dtp2, NULL, (char*)((char*)(g_dtp2 + 0x400)), 0);
+		GUI_dialogbox((unsigned char*)g_dtp2, NULL, (char*)(g_dtp2 + 0x400), 0);
 	}
 }
 
@@ -230,7 +224,7 @@ void city_event_5(void)
 {
 	signed short randval;
 	signed short tw_bak;
-	Bit8u* hero;
+	struct struct_hero* hero;
 
 	load_in_head(48);
 
@@ -241,13 +235,11 @@ void city_event_5(void)
 
 	if (randval == 1) {
 
-		hero = get_first_hero_available_in_group();
+		hero = (struct struct_hero*)get_first_hero_available_in_group();
 
-		sprintf(g_dtp2 + 0x400,
-			get_tx(randval + 99),
-			(char*)hero + HERO_NAME2);
+		sprintf(g_dtp2 + 0x400,	get_tx(randval + 99), hero->alias);
 
-		GUI_dialogbox((unsigned char*)g_dtp2, NULL, (char*)((char*)(g_dtp2 + 0x400)), 0);
+		GUI_dialogbox((unsigned char*)g_dtp2, NULL, (char*)(g_dtp2 + 0x400), 0);
 	} else {
 		GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx(randval + 99), 0);
 	}
@@ -315,28 +307,28 @@ void city_event_6(void)
 void city_event_7(void)
 {
 	signed short randval;
-	unsigned char *hero;
+	struct struct_hero *hero;
 
 	randval = random_schick(4) - 1;
-	hero = get_hero(get_random_hero());
+	hero = (struct struct_hero*)get_hero(get_random_hero());
 
 	if (!randval) {
 
-		sprintf(g_dtp2 + 0x400, get_tx(123), (char*)hero + HERO_NAME2);
+		sprintf(g_dtp2 + 0x400, get_tx(123), hero->alias);
 
-		GUI_dialogbox(hero + HERO_PORTRAIT, (char*)(hero + HERO_NAME2), (char*)((char*)(g_dtp2 + 0x400)), 0);
+		GUI_dialogbox(hero->pic, hero->alias, (char*)(g_dtp2 + 0x400), 0);
 
 	} else if (randval == 1) {
 
 		load_in_head(12);
 
-		sprintf(g_dtp2 + 0x400, get_tx(124), (char*)hero + HERO_NAME2);
+		sprintf(g_dtp2 + 0x400, get_tx(124), hero->alias);
 
-		GUI_dialogbox((unsigned char*)g_dtp2, NULL, (char*)((char*)(g_dtp2 + 0x400)), 0);
+		GUI_dialogbox((unsigned char*)g_dtp2, NULL, (char*)(g_dtp2 + 0x400), 0);
 
-		sprintf(g_dtp2 + 0x400, get_tx(125), (GUI_get_ptr(host_readbs(hero + HERO_SEX), 3)));
+		sprintf(g_dtp2 + 0x400, get_tx(125), GUI_get_ptr(hero->sex, 3));
 
-		GUI_dialogbox((unsigned char*)g_dtp2, NULL, (char*)((char*)(g_dtp2 + 0x400)), 0);
+		GUI_dialogbox((unsigned char*)g_dtp2, NULL, (char*)(g_dtp2 + 0x400), 0);
 
 	} else if (randval == 2) {
 
@@ -344,13 +336,13 @@ void city_event_7(void)
 
 		GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx(126), 0);
 
-		sprintf(g_dtp2 + 0x400, get_tx(127), (char*)hero + HERO_NAME2);
+		sprintf(g_dtp2 + 0x400, get_tx(127), hero->alias);
 
-		GUI_dialogbox((unsigned char*)g_dtp2, NULL, (char*)((char*)(g_dtp2 + 0x400)), 0);
+		GUI_dialogbox((unsigned char*)g_dtp2, NULL, (char*)(g_dtp2 + 0x400), 0);
 
-		sprintf(g_dtp2 + 0x400, get_tx(128), (char*)hero + HERO_NAME2);
+		sprintf(g_dtp2 + 0x400, get_tx(128), hero->alias);
 
-		GUI_dialogbox((unsigned char*)g_dtp2, NULL, (char*)((char*)(g_dtp2 + 0x400)), 0);
+		GUI_dialogbox((unsigned char*)g_dtp2, NULL, (char*)(g_dtp2 + 0x400), 0);
 	} else {
 		GUI_output(get_tx(129));
 	}
@@ -362,10 +354,10 @@ void city_event_7(void)
 void city_event_8(void)
 {
 	signed short randval;
-	unsigned char *hero;
+	struct struct_hero *hero;
 
 	randval = random_schick(4) - 1;
-	hero = get_hero(get_random_hero());
+	hero = (struct struct_hero*)get_hero(get_random_hero());
 
 	if (!randval) {
 
@@ -380,12 +372,12 @@ void city_event_8(void)
 		GUI_dialogbox((unsigned char*)g_dtp2, NULL, get_tx(132), 0);
 
 	} else if (randval == 3) {
-		GUI_output(get_tx(133));
-	} else {
-		sprintf(g_dtp2,
-			get_tx(134),
-			(char*)hero + HERO_NAME2);
 
+		GUI_output(get_tx(133));
+
+	} else {
+
+		sprintf(g_dtp2, get_tx(134), hero->alias);
 		GUI_output(g_dtp2);
 	}
 }
@@ -398,12 +390,19 @@ void city_event_9(void)
 	signed short randval = random_schick(4) - 1;
 
 	if (!randval) {
+
 		GUI_output(get_tx(135));
+
 	} else if (randval == 1) {
+
 		GUI_output(get_tx(136));
+
 	} else if (randval == 2) {
+
 		GUI_output(get_tx(137));
+
 	} else {
+
 		GUI_output(get_tx(138));
 		GUI_output(get_tx(139));
 	}

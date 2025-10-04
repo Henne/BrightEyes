@@ -86,7 +86,7 @@ void do_harbor(void)
 	signed short answer;
 	struct harbor_option_obsolete *psg_ptr;
 	Bit32s p_money;
-	Bit8u *hero;
+	struct struct_hero *hero;
 	signed char flag;
 	Bit32s money;
 
@@ -337,15 +337,14 @@ void do_harbor(void)
 					disease_effect();
 					/* in this call, g_check_disease is reset to 0 */
 
-					hero = get_hero(0);
-					for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+					hero = (struct struct_hero*)get_hero(0);
+					for (i = 0; i <= 6; i++, hero++) {
 
-						if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-							host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
+						if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
 						{
-							GRP_hero_sleep(hero, a.a[g_sea_travel_sleep_quality]);
+							GRP_hero_sleep((Bit8u*)hero, a.a[g_sea_travel_sleep_quality]);
 
-							host_writebs(hero + HERO_HUNGER, host_writebs(hero + HERO_THIRST, 0));
+							hero->hunger = hero->thirst = 0;
 							/* on the ship, food and drinks are served. */
 						}
 					}
@@ -444,7 +443,7 @@ void mod_clock_pos(signed short town_id)
 void sea_travel(signed short passage, signed short dir)
 {
 	signed short i;
-	Bit8u *hero;
+	struct struct_hero *hero;
 	Bit8u *ptr;
 	Bit32s off;
 
@@ -612,14 +611,13 @@ void sea_travel(signed short passage, signed short dir)
 
 			g_travel_by_ship = 1;
 
-			hero = get_hero(0);
-			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+			hero = (struct struct_hero*)get_hero(0);
+			for (i = 0; i <= 6; i++, hero++) {
 
-				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
 				{
-					GRP_hero_sleep(hero, a.a[g_sea_travel_sleep_quality]);
-					host_writeb(hero + HERO_HUNGER, host_writebs(hero + HERO_THIRST, 0));
+					GRP_hero_sleep((Bit8u*)hero, a.a[g_sea_travel_sleep_quality]);
+					hero->hunger = hero->thirst = 0;
 				}
 			}
 

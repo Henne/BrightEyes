@@ -31,12 +31,14 @@ namespace M302de {
  * \param   hero        pointer to hero
  * \return              1 if hero can be healed, else 0.
  */
-unsigned short is_hero_healable(Bit8u *hero)
+signed short is_hero_healable(const struct struct_hero *hero)
 {
 
-	if (hero_dead(hero) || hero_petrified(hero)) {
+	if (hero_dead((Bit8u*)hero) || hero_petrified((Bit8u*)hero)) {
+
 		/* this hero can not be helped */
 		GUI_output(get_ttx(778));
+
 		return 0;
 	} else {
 		return 1;
@@ -48,7 +50,7 @@ void do_healer(void)
 	signed char motivation;
 	signed short leave_healer;
 	signed short request_refresh;
-	Bit8u *hero;
+	struct struct_hero *hero;
 	signed long money;
 	signed long price;
 	const struct healer_descr *healer;
@@ -111,15 +113,12 @@ void do_healer(void)
 
 			g_textbox_width = 4;
 
-			answer = GUI_radio(get_ttx(459), 4,
-						get_ttx(455),
-						get_ttx(456),
-						get_ttx(457),
-						get_ttx(458)) - 1;
+			answer = GUI_radio(get_ttx(459), 4, get_ttx(455), get_ttx(456), get_ttx(457), get_ttx(458)) - 1;
+
 			g_textbox_width = 3;
 
 			if (answer != -2) {
-				g_action = (answer + ACTION_ID_ICON_1);
+				g_action = answer + ACTION_ID_ICON_1;
 			}
 		}
 
@@ -136,60 +135,54 @@ void do_healer(void)
 			answer = select_hero_from_group(get_ttx(460));
 			if (answer != - 1) {
 
-				hero = get_hero(answer);
+				hero = (struct struct_hero*)get_hero(answer);
 
 				if (is_hero_healable(hero)) {
 
 					/* LEmax >= LE and no permanent LEdamage */
-					if (host_readws(hero + HERO_LE) >= host_readws(hero + HERO_LE_ORIG)
-						&& !host_readbs(hero + HERO_LE_MOD)) {
+					if ((hero->le >= hero->le_max) && !hero->le_malus) {
 
 						/* Hero seems OK */
-						sprintf(g_dtp2,
-							get_ttx(461),
-							(char*)(hero + HERO_NAME2));
+						sprintf(g_dtp2,	get_ttx(461), hero->alias);
 						GUI_output(g_dtp2);
 					} else {
 
 						/* calculate price */
-						price = host_readbs(hero + HERO_LE_MOD) * 50;
-						price += (host_readws(hero + HERO_LE_ORIG) + host_readbs(hero + HERO_LE_MOD) - host_readws(hero + HERO_LE)) * 5;
+						price = hero->le_malus * 50;
+						price += (hero->le_max + hero->le_malus - hero->le) * 5;
 						price += healer->price_mod * price / 100;
 
 						if (motivation == 2)
 							price *= 2;
 
 						/* ask */
-						sprintf(g_dtp2,
-							get_ttx(464),
-							(char*)(hero + HERO_NAME2),
-							price);
+						sprintf(g_dtp2,	get_ttx(464), hero->alias, price);
 
 						if (GUI_bool(g_dtp2)) {
+
 							price *= 10;
 
 							if (money < price) {
+
 								GUI_output(get_ttx(401));
+
 							} else {
 								/* remove money */
 								money -= price;
 								set_party_money(money);
 
 								/* heal permanent damage TODO:LE += */
-								add_ptr_ws(hero + HERO_LE_ORIG, host_readbs(hero + HERO_LE_MOD));
-								host_writeb(hero + HERO_LE_MOD, 0);
+								hero->le_max += hero->le_malus;
+								hero->le_malus = 0;
 
 								/* time passes by (number of missing LE) minutes */
-								timewarp(MINUTES((signed long)(host_readws(hero + HERO_LE_ORIG) - host_readws(hero + HERO_LE))));
+								timewarp(MINUTES((signed long)(hero->le_max - hero->le)));
 
 								/* heal LE */
-								add_hero_le((struct struct_hero*)hero, host_readws(hero + HERO_LE_ORIG));
+								add_hero_le(hero, hero->le_max);
 
 								/* prepare output */
-								sprintf(g_dtp2,
-									get_ttx(467),
-									(char*)(hero + HERO_NAME2));
-
+								sprintf(g_dtp2,	get_ttx(467), hero->alias);
 								GUI_output(g_dtp2);
 							}
 						}
@@ -204,18 +197,18 @@ void do_healer(void)
 			answer = select_hero_from_group(get_ttx(460));
 			if (answer != -1) {
 
-				hero = get_hero(answer);
+				hero = (struct struct_hero*)get_hero(answer);
 
-				if (is_hero_healable(hero)) {
+				if (is_hero_healable((struct struct_hero*)hero)) {
 
-					disease = hero_is_diseased((struct struct_hero*)hero);
+					disease = hero_is_diseased(hero);
 
 					if (!disease) {
 
 						/* Hero is not diseased */
-						sprintf(g_dtp2,	get_ttx(462), (char*)(hero + HERO_NAME2));
-
+						sprintf(g_dtp2,	get_ttx(462), hero->alias);
 						GUI_output(g_dtp2);
+
 					} else {
 						/* calculate price */
 						price = g_disease_prices[disease] * 10;
@@ -226,7 +219,7 @@ void do_healer(void)
 							price *= 2;
 
 						/* prepare output */
-						sprintf(g_dtp2, get_ttx(465), (char*)(hero + HERO_NAME2), get_ttx(disease + 0x193), price);
+						sprintf(g_dtp2, get_ttx(465), hero->alias, get_ttx(disease + 0x193), price);
 
 						if (GUI_bool(g_dtp2)) {
 
@@ -239,12 +232,11 @@ void do_healer(void)
 
 								if (random_schick(100) <= (120 - 10 * healer->quality) + g_disease_delays[disease]) {
 									/* heal the disease */
-									host_writeb(hero + HERO_ILLNESS + disease * SIZEOF_HERO_ILLNESS, 1);
-									host_writeb(hero + HERO_ILLNESS + 1 + disease * SIZEOF_HERO_ILLNESS, 0);
+									hero->sick[disease][0] = 1;
+									hero->sick[disease][1] = 0;
 
 									/* prepare output */
-									sprintf(g_dtp2,	get_ttx(467), (char*)(hero + HERO_NAME2));
-
+									sprintf(g_dtp2,	get_ttx(467), hero->alias);
 									GUI_output(g_dtp2);
 								} else {
 									price /= 2;
@@ -267,16 +259,16 @@ void do_healer(void)
 			answer = select_hero_from_group(get_ttx(460));
 			if (answer != -1) {
 
-				hero = get_hero(answer);
+				hero = (struct struct_hero*)get_hero(answer);
 
-				if (is_hero_healable(hero)) {
-					poison = hero_is_poisoned((struct struct_hero*)hero);
+				if (is_hero_healable((struct struct_hero*)hero)) {
+
+					poison = hero_is_poisoned(hero);
 
 					if (poison == 0) {
 
 						/* Hero is not poisoned */
-						sprintf(g_dtp2,	get_ttx(463), (char*)(hero + HERO_NAME2));
-
+						sprintf(g_dtp2,	get_ttx(463), hero->alias);
 						GUI_output(g_dtp2);
 					} else {
 						/* calculate price */
@@ -286,9 +278,10 @@ void do_healer(void)
 							price *= 2;
 
 						/* prepare output */
-						sprintf(g_dtp2, get_ttx(466), price, (char*)(hero + HERO_NAME2));
+						sprintf(g_dtp2, get_ttx(466), price, hero->alias);
 
 						if (GUI_bool(g_dtp2)) {
+
 							price *= 10;
 
 							if (money < price) {
@@ -301,13 +294,13 @@ void do_healer(void)
 								if (random_schick(100) <= (120 - 5 * healer->quality) + g_poison_delays[poison]) {
 
 									/* cure the poison */
-									host_writeb(hero + (HERO_POISON + 1) + poison * SIZEOF_HERO_POISON, 0);
-									host_writeb(hero + (HERO_POISON) + poison * SIZEOF_HERO_POISON, 1);
+									hero->poison[poison][1] = 0;
+									hero->poison[poison][0] = 1;
 
 									/* prepare output */
-									sprintf(g_dtp2,	get_ttx(467), (char*)(hero + HERO_NAME2));
-
+									sprintf(g_dtp2,	get_ttx(467), hero->alias);
 									GUI_output(g_dtp2);
+
 								} else {
 									price /= 2;
 									GUI_output(get_ttx(468));

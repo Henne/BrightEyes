@@ -496,7 +496,7 @@ void INF_eliane_tiomar(signed short informer, signed short state)
  */
 void INF_olvir_asgrimm(signed short informer, signed short state)
 {
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	if (!informer) {
 		/* OLVIR GUNDRIDSSON */
@@ -562,15 +562,13 @@ void INF_olvir_asgrimm(signed short informer, signed short state)
 		} else if (state == 7) {
 			signed short i;
 			/* ASGRIMM takes a meal with the heroes */
-			hero = get_hero(0);
-			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+			hero = (struct struct_hero*)get_hero(0);
+			for (i = 0; i <= 6; i++, hero++) {
 
-				if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-					(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
-					!hero_dead(hero))
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
 				{
 					/* set hunger and thirst to 0 */
-					host_writebs(hero + HERO_HUNGER, host_writebs(hero + HERO_THIRST, 0));
+					hero->hunger = hero->thirst = 0;
 				}
 			}
 		} else if (state == 16) {

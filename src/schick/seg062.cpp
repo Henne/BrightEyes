@@ -27,7 +27,7 @@ void ask_miracle(void)
 {
 	signed short l_si;
 	signed short j;
-	Bit8u *hero;
+	struct struct_hero *hero;
 	signed short disease;
 	signed short fi_bak;
 	signed short l3;
@@ -111,30 +111,26 @@ void ask_miracle(void)
 
 							/* remove a transformation or a curse of one hero */
 							for (i = 0; i <= 6; i++) {
-								hero = get_hero(i);
 
-								if (hero_transformed(hero)) {
+								hero = (struct struct_hero*)get_hero(i);
 
-									and_ptr_bs(hero + HERO_FLAGS2, 0xbf); /* unset 'transformed' flag */
+								if (hero_transformed((Bit8u*)hero)) {
+
+									and_ptr_bs((Bit8u*)hero + HERO_FLAGS2, 0xbf); /* unset 'transformed' flag */
 
 									for (i = 0; i <= 6; i++) {
-										inc_ptr_bs(hero + HERO_ATTRIB + 3 * i);
+										hero->attrib[i].current++;
 									}
 
-									sprintf(g_dtp2,
-										get_ttx(565),
-										(char*)hero + HERO_NAME2);
+									sprintf(g_dtp2,	get_ttx(565), hero->alias);
 									break;
-								} else {
-									if (hero_renegade(hero) &&
-										host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-										!hero_gods_pissed(hero))
-									{
-										and_ptr_bs(hero + HERO_FLAGS1, 0xdf); /* unset 'renegade' flag */
 
-										sprintf(g_dtp2,
-											get_tx2(3),
-											(char*)hero + HERO_NAME2);
+								} else {
+									if (hero_renegade((Bit8u*)hero) && (hero->group_no == gs_current_group) && !hero_gods_pissed((Bit8u*)hero))
+									{
+										and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xdf); /* unset 'renegade' flag */
+
+										sprintf(g_dtp2,	get_tx2(3), hero->alias);
 										break;
 									}
 								}
@@ -196,17 +192,17 @@ void ask_miracle(void)
 					if (l_si <= 10) {
 						/* "Die ganze Gruppe wird von Travia goettlich gesaettigt." */
 						for (i = 0; i <= 6; i++) {
-							hero = get_hero(i);
 
-							if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-								host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-								!hero_gods_pissed(hero))
+							hero = (struct struct_hero*)get_hero(i);
+
+							if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_gods_pissed((Bit8u*)hero))
 							{
-								host_writebs(hero + HERO_HUNGER, host_writebs(hero + HERO_THIRST, 0));
+								hero->hunger = hero->thirst = 0;
 							}
 						}
 
 						strcpy(g_dtp2, get_tx2(10));
+
 					} else if (l_si <= 15) {
 						miracle_heal_hero(dice_roll(1, 6, 2), get_tx2(11));
 					} else if (l_si <= 16) {
@@ -243,29 +239,24 @@ void ask_miracle(void)
 					} else if (l_si <= 6) {
 						/* unset transformation or renegade state of the first feasible hero */
 						for (i = 0; i <= 6; i++) {
-							hero = get_hero(i);
 
-							if (hero_transformed(hero)) {
+							hero = (struct struct_hero*)get_hero(i);
 
-								and_ptr_bs(hero + HERO_FLAGS2, 0xbf); /* unset 'transformed' flag */
+							if (hero_transformed((Bit8u*)hero)) {
+
+								and_ptr_bs((Bit8u*)hero + HERO_FLAGS2, 0xbf); /* unset 'transformed' flag */
 
 								for (i = 0; i <= 6; i++) {
-									inc_ptr_bs(hero + HERO_ATTRIB + 3 * i);
+									hero->attrib[i].current++;
 								}
 
-								sprintf(g_dtp2,
-									get_ttx(565),
-									(char*)hero + HERO_NAME2);
+								sprintf(g_dtp2,	get_ttx(565), hero->alias);
 								break;
-							} else if (hero_renegade(hero) &&
-								host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-								!hero_gods_pissed(hero))
+							} else if (hero_renegade((Bit8u*)hero) && (hero->group_no == gs_current_group) && !hero_gods_pissed((Bit8u*)hero))
 							{
-								and_ptr_bs(hero + HERO_FLAGS1, 0xdf); /* unset 'renegade' flag */
+								and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xdf); /* unset 'renegade' flag */
 
-								sprintf(g_dtp2,
-									get_tx2(17),
-									(char*)hero + HERO_NAME2);
+								sprintf(g_dtp2,	get_tx2(17), hero->alias);
 								break;
 							}
 						}
@@ -316,17 +307,15 @@ void ask_miracle(void)
 					} else if (l_si <= 15) {
 						/* completely heal all heroes */
 
-						hero = get_hero(0);
-						for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+						hero = (struct struct_hero*)get_hero(0);
+						for (i = 0; i <= 6; i++, hero++) {
 
-							if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-								host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-								!hero_dead(hero) &&
-								!hero_gods_pissed(hero))
+							if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+								!hero_dead((Bit8u*)hero) && !hero_gods_pissed((Bit8u*)hero))
 							{
 								/* heal hero completely */
 								/* this looks like adding more LE than missing, but the excess LE will be dealt with in add_hero_le */
-								add_hero_le((struct struct_hero*)hero, host_readws(hero + HERO_LE_ORIG));
+								add_hero_le(hero, hero->le_max);
 							}
 						}
 
@@ -376,19 +365,15 @@ void ask_miracle(void)
 					} else if (l_si <= 18) {
 
 						for (i = 0; i <= 6; i++) {
-							hero = get_hero(i);
-							disease = hero_is_diseased((struct struct_hero*)hero);
+							hero = (struct struct_hero*)get_hero(i);
+							disease = hero_is_diseased(hero);
 
-							if (disease != 0 &&
-								host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-								!hero_gods_pissed(hero))
+							if (disease != 0 && (hero->group_no == gs_current_group) && !hero_gods_pissed((Bit8u*)hero))
 							{
-								host_writeb(hero + HERO_ILLNESS + 5 * disease, 1);
-								host_writeb(hero + (HERO_ILLNESS+1) + 5 * disease, 0);
+								hero->sick[disease][0] = 1;
+								hero->sick[disease][1] = 0;
 
-								sprintf(g_dtp2,
-									get_tx2(28),
-									(char*)hero + HERO_NAME2);
+								sprintf(g_dtp2,	get_tx2(28), hero->alias);
 								break;
 							}
 						}
@@ -401,24 +386,22 @@ void ask_miracle(void)
 						/* decrease BF of all weapons of all heroes by 2, but not below 0 */
 
 						for (i = 0; i <= 6; i++) {
-							hero = get_hero(i);
+							hero = (struct struct_hero*)get_hero(i);
 
-							if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-								host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-								!hero_dead(hero) &&
-								!hero_gods_pissed(hero))
+							if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+								!hero_dead((Bit8u*)hero) && !hero_gods_pissed((Bit8u*)hero))
 							{
 
 								for (j = 0; j < NR_HERO_INVENTORY_SLOTS; j++) {
-									if ((item_id = host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * j)) &&
-										item_weapon(get_itemsdat(item_id)))
+
+									if ((item_id = hero->inventory[j].item_id) && item_weapon(get_itemsdat(item_id)))
 									{
-										if (host_readbs(hero + (HERO_INVENTORY + INVENTORY_BF) + SIZEOF_INVENTORY * j) > 0) {
-											dec_ptr_bs(hero + (HERO_INVENTORY + INVENTORY_BF) + SIZEOF_INVENTORY * j);
+										if (hero->inventory[j].bf > 0) {
+											hero->inventory[j].bf--;
 										}
 
-										if (host_readbs(hero + (HERO_INVENTORY + INVENTORY_BF) + SIZEOF_INVENTORY * j) > 0) {
-											dec_ptr_bs(hero + (HERO_INVENTORY + INVENTORY_BF) + SIZEOF_INVENTORY * j);
+										if (hero->inventory[j].bf > 0) {
+											hero->inventory[j].bf--;
 										}
 									}
 								}
@@ -458,18 +441,16 @@ void ask_miracle(void)
 
 						if (!gs_ingame_timers[INGAME_TIMER_RAHJA_TALENTS_PERMANENT]) {
 
-							hero = get_hero(0);
-							for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+							hero = (struct struct_hero*)get_hero(0);
+							for (i = 0; i <= 6; i++, hero++) {
 
-								if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-									host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-									!hero_dead(hero) &&
-									!hero_gods_pissed(hero))
+								if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+									!hero_dead((Bit8u*)hero) && !hero_gods_pissed((Bit8u*)hero))
 								{
 									/* permanent Betören +1 */
-									inc_ptr_bs(hero + (HERO_TALENTS + TA_BETOEREN));
+									hero->skills[TA_BETOEREN]++;
 									/* permanent Tanzen +1 */
-									inc_ptr_bs(hero + (HERO_TALENTS + TA_TANZEN));
+									hero->skills[TA_TANZEN]++;
 								}
 							}
 

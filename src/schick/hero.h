@@ -147,7 +147,7 @@ struct struct_hero {
 	signed char w_pa_mod;
 	signed char w_type;
 	signed char atpa_mod;
-	unsigned char le_malus;
+	signed char le_malus;
 	signed char timer_id;
 	signed char start_gear;
 	signed char herbs;

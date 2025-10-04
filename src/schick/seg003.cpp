@@ -100,9 +100,9 @@ void move(void)
 
 		mapval = (g_dng_map_size == 0x10) ?
 			/* dungeon */
-			host_readb(p_map_small + (y << 4) + x) :
+			*(p_map_small + (y << 4) + x) :
 			/* city */
-			host_readb(p_map_large + (y << 5) + x);
+			*(p_map_large + (y << 5) + x);
 
 		if (boundary_flag != 0) {
 			g_visual_field_vals[i] = ((mapval == 0xa0) || (mapval == 0xb0) ? mapval : 0xb0);

@@ -472,16 +472,14 @@ void DNG_stub5(void)
  */
 signed short is_staff_lvl2_in_group(void)
 {
-	Bit8u *hero_i;
+	struct struct_hero *hero_i;
 	signed short i;
 
-	hero_i = get_hero(0);
-	for (i = 0; i <= 6; i++, hero_i += SIZEOF_HERO) {
+	hero_i = (struct struct_hero*)get_hero(0);
+	for (i = 0; i <= 6; i++, hero_i++) {
 
-		if (host_readbs(hero_i + HERO_TYPE) &&
-			(host_readbs(hero_i + HERO_GROUP_NO) == gs_current_group) &&
-			check_hero(hero_i) &&
-			(host_readbs(hero_i + HERO_STAFFSPELL_LVL) >= 2))
+		if ((hero_i->typus) && (hero_i->group_no == gs_current_group) &&
+			check_hero((Bit8u*)hero_i) && (hero_i->staff_level >= 2))
 		{
 			return 1;
 		}
@@ -825,26 +823,21 @@ void DNG_stub6(void)
 signed short DNG_check_climb_tools(void)
 {
 	signed short i;
-	Bit8u *hero;
-
-	hero = get_hero(0);
+	struct struct_hero *hero = (struct struct_hero*)get_hero(0);
 
 	/* check for a mage with staffspell > 2 */
-	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+	for (i = 0; i <= 6; i++, hero++) {
 
-		if ((host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE) &&
-			(host_readbs(hero + HERO_GROUP_NO) == gs_current_group) &&
-			!hero_dead(hero) && /* TODO: potential Original-Bug: What if petrified / unconscious etc.? Compare to is_staff_lvl2_in_group where check_hero is called */
-			(host_readbs(hero + HERO_TYPE) == HERO_TYPE_MAGE) &&
-			(host_readbs(hero + HERO_STAFFSPELL_LVL) > 2))
+		/* TODO: potential Original-Bug: What if petrified / unconscious etc.? Compare to is_staff_lvl2_in_group where check_hero is called */
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+			!hero_dead((Bit8u*)hero) && (hero->typus == HERO_TYPE_MAGE) && (hero->staff_level > 2))
 		{
 			return i + 1;
 		}
 	}
 
 	/* check for ladder or rope */
-	return ((get_first_hero_with_item(ITEM_ROPE) != -1) ||
-			(get_first_hero_with_item(ITEM_ROPE_LADDER) != -1)) ? 0 : -1;
+	return ((get_first_hero_with_item(ITEM_ROPE) != -1) || (get_first_hero_with_item(ITEM_ROPE_LADDER) != -1)) ? 0 : -1;
 }
 
 signed short DNG_fallpit(signed short max_damage)

@@ -40,32 +40,30 @@ void talk_inn(void)
 /**
  * \brief   returns a pointer to the first brewing hero, who is not in this group, but in this location
  */
-Bit8u* get_first_brewing_hero(void)
+struct struct_hero* get_first_brewing_hero(void)
 {
-	unsigned char *hero;
+	struct struct_hero *hero;
 	signed short i;
 
-	hero = get_hero(0);
+	hero = (struct struct_hero*)get_hero(0);
 # ifndef M302de_ORIGINAL_BUGFIX
 	/* Original-Bug 11: If NPC Curian got separated from the group for brewing a recipe at an inn,
 	 * he is stuck in the inn. When the group enters the inn where they left him, no dialog appears.
 	 * Also, switch group does not help, as his group cannot be selected.
 	 * ("In dieser Gruppe ist momentan niemand in der Lage, etwas zu tun.") */
-	for (i = 0; i < 6; i++, hero += SIZEOF_HERO)
+	for (i = 0; i < 6; i++, hero++)
 # else
-	for (i = 0; i < 7; i++, hero += SIZEOF_HERO)
+	for (i = 0; i < 7; i++, hero++)
 # endif
 	{
-		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) != gs_current_group &&
-			hero_brewing(hero) &&
-			host_readbs(hero + HERO_ALCHEMY_INN_ID) == gs_current_typeindex)
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no != gs_current_group) &&
+			hero_brewing((Bit8u*)hero) && (hero->alchemy_inn_id == gs_current_typeindex))
 		{
 			return hero;
 		}
 	}
 
-	return (Bit8u*)NULL;
+	return NULL;
 }
 
 /**
@@ -85,8 +83,8 @@ void do_inn(void)
 # else
 	signed char magic_act[7];
 # endif
-	Bit8u* hero;
-	Bit8u *hero2;
+	struct struct_hero* hero;
+	struct struct_hero* hero2;
 	const struct inn_descr *inn;
 	Bit32s party_money;
 	Bit32s price;
@@ -113,16 +111,16 @@ void do_inn(void)
 	if (gs_group_member_counts[gs_current_group] == 1) {
 		/* current group consists only of a single hero */
 
-		hero = get_first_hero_available_in_group();
+		hero = (struct struct_hero*)get_first_hero_available_in_group();
 
-		if (hero_brewing(hero)) {
+		if (hero_brewing((Bit8u*)hero)) {
+
 			draw_status_line();
 
-			if (host_readbs(hero + HERO_RECIPE_TIMER) != 0) {
+			if (hero->recipe_timer != 0) {
 
-				sprintf(g_dtp2, get_ttx(733), (char*)hero + HERO_NAME2,
-					host_readbs(hero + HERO_RECIPE_TIMER),
-					(char*)(host_readbs(hero + HERO_RECIPE_TIMER) < 2 ? get_ttx(735) : get_ttx(736)));
+				sprintf(g_dtp2, get_ttx(733), hero->alias, hero->recipe_timer,
+					(char*)(hero->recipe_timer < 2 ? get_ttx(735) : get_ttx(736)));
 
 				answer = GUI_radio(g_dtp2, 2, get_ttx(734), get_ttx(537));
 				/* <HERO> befindet sich inmitten eines alchimistischen Versuchs, der wohl noch <DAYS> Tage dauert.
@@ -132,7 +130,7 @@ void do_inn(void)
 
 				if (answer == 1) {
 					/* abort brewing */
-					do_alchemy((struct struct_hero*)hero, host_readbs(hero + HERO_RECIPE_ID), 1);
+					do_alchemy(hero, hero->recipe_id, 1);
 				} else {
 					done = 1;
 					g_combo_mode = 0;
@@ -140,7 +138,7 @@ void do_inn(void)
 				}
 			} else {
 				/* hero brewing, HERO_RECIPE_TIMER == 0. STAFFSPELL_TIMER not checked */
-				do_alchemy((struct struct_hero*)hero, host_readbs(hero + HERO_RECIPE_ID), 0);
+				do_alchemy(hero, hero->recipe_id, 0);
 			}
 		}
 	}
@@ -154,13 +152,10 @@ void do_inn(void)
 
 		draw_status_line();
 
-		if (host_readbs(hero + HERO_RECIPE_TIMER) != 0) {
+		if (hero->recipe_timer != 0) {
 
-			sprintf(g_dtp2,
-				get_ttx(733),
-				(char*)hero + HERO_NAME2,
-				host_readbs(hero + HERO_RECIPE_TIMER),
-				(char*)(host_readbs(hero + HERO_RECIPE_TIMER) < 2 ? get_ttx(735) : get_ttx(736)));
+			sprintf(g_dtp2,	get_ttx(733), hero->alias, hero->recipe_timer,
+				(char*)(hero->recipe_timer < 2 ? get_ttx(735) : get_ttx(736)));
 
 			tw_bak = g_textbox_width;
 			g_textbox_width = 4;
@@ -175,7 +170,7 @@ void do_inn(void)
 
 			if (answer == 1) {
 				/* abort brewing */
-				do_alchemy((struct struct_hero*)hero, host_readbs(hero + HERO_RECIPE_ID), 1);
+				do_alchemy(hero, hero->recipe_id, 1);
 
 				/* Original-Bug 10:
 				 * If a group of heroes enters an inn where more then one hero is brewing
@@ -189,7 +184,7 @@ void do_inn(void)
 			}
 		} else {
 			/* hero brewing, HERO_RECIPE_TIMER == 0. STAFFSPELL_TIMER not checked */
-			do_alchemy((struct struct_hero*)hero, host_readbs(hero + HERO_RECIPE_ID), 0);
+			do_alchemy(hero, hero->recipe_id, 0);
 
 			/* Original-Bug 20:
 			 * If a group of heroes enters an inn where more then one hero is brewing
@@ -204,8 +199,8 @@ void do_inn(void)
 	}
 #else
 	/* fix Original-Bug 8, 9, 10, 20 */
-	hero = get_first_hero_available_in_group();
-	if (hero_brewing(hero)) {
+	hero = (struct struct_hero*)get_first_hero_available_in_group();
+	if (hero_brewing((Bit8u*)hero)) {
 		/* situation: 'switch groups' just switched to a group consisting of a single hero which has been separated for brewing a long recipe in an inn */
 		/* ASSERT */
 		/*
@@ -215,13 +210,9 @@ void do_inn(void)
 		*/
 		draw_status_line();
 
-		if (host_readbs(hero + HERO_RECIPE_TIMER) != 0) {
+		if (hero->recipe_timer != 0) {
 
-			sprintf(g_dtp2,
-					get_ttx(733),
-					(char*)hero + HERO_NAME2,
-					host_readbs(hero + HERO_RECIPE_TIMER),
-					(char*)(host_readbs(hero + HERO_RECIPE_TIMER) < 2 ? get_ttx(735) : get_ttx(736)));
+			sprintf(g_dtp2, get_ttx(733), hero->alias, hero->recipe_timer, (char*)(hero->recipe_timer < 2 ? get_ttx(735) : get_ttx(736)));
 
 			answer = GUI_radio(g_dtp2, 2, get_ttx(734), get_ttx(537));
 			/* <HERO> befindet sich inmitten eines alchimistischen Versuchs, der wohl noch <DAYS> Tage dauert.
@@ -231,7 +222,7 @@ void do_inn(void)
 
 			if (answer == 1) {
 				/* abort brewing */
-				do_alchemy((struct struct_hero*)hero, host_readbs(hero + HERO_RECIPE_ID), 1);
+				do_alchemy(hero, hero->recipe_id, 1);
 			} else {
 				done = 1;
 				g_combo_mode = 0;
@@ -239,27 +230,21 @@ void do_inn(void)
 			}
 		} else {
 			/* hero brewing, HERO_RECIPE_TIMER == 0. STAFFSPELL_TIMER not checked */
-			do_alchemy((struct struct_hero*)hero, host_readbs(hero + HERO_RECIPE_ID), 0);
+			do_alchemy(hero, hero->recipe_id, 0);
 		}
 	} else {
-		hero = get_hero(0);
-		for (i = 0; i < 7; i++, hero += SIZEOF_HERO) {
-			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) != gs_current_group &&
-					hero_brewing(hero) &&
-					host_readbs(hero + HERO_ALCHEMY_INN_ID) == gs_current_typeindex)
+		hero = (struct struct_hero*)get_hero(0);
+		for (i = 0; i < 7; i++, hero++) {
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no != gs_current_group) &&
+				hero_brewing((Bit8u*)hero) && (hero->alchemy_inn_id == gs_current_typeindex))
 			{
 				draw_status_line();
 
 				signed int finalize_alchemy = -1;
 
-				if (host_readbs(hero + HERO_RECIPE_TIMER) != 0) {
+				if (hero->recipe_timer != 0) {
 
-					sprintf(g_dtp2,
-							get_ttx(733),
-							(char*)hero + HERO_NAME2,
-							host_readbs(hero + HERO_RECIPE_TIMER),
-							(char*)(host_readbs(hero + HERO_RECIPE_TIMER) < 2 ? get_ttx(735) : get_ttx(736)));
+					sprintf(g_dtp2, get_ttx(733), hero->alias, hero->recipe_timer, (char*)(hero->recipe_timer < 2 ? get_ttx(735) : get_ttx(736)));
 
 					tw_bak = g_textbox_width;
 					g_textbox_width = 4;
@@ -281,9 +266,10 @@ void do_inn(void)
 					finalize_alchemy = 0;
 				}
 				if (finalize_alchemy != -1) {
-					do_alchemy((struct struct_hero*)hero, host_readbs(hero + HERO_RECIPE_ID), finalize_alchemy);
 
-					signed char group_nr = host_readbs(hero + HERO_GROUP_NO);
+					do_alchemy(hero, hero->recipe_id, finalize_alchemy);
+
+					signed char group_nr = hero->group_no;
 
 					/* ASSERT */
 					/*
@@ -310,7 +296,7 @@ void do_inn(void)
 					gs_group_member_counts[group_nr] = 0;
 
 					gs_group_member_counts[gs_current_group]++;
-					host_writeb(hero + HERO_GROUP_NO, gs_current_group);
+					hero->group_no = gs_current_group;
 
 					GRP_sort_heroes();
 				}
@@ -373,7 +359,7 @@ void do_inn(void)
 						get_ttx(347), get_ttx(823)) - 1;
 
 			if (answer != -2) {
-				g_action = (answer + ACTION_ID_ICON_1);
+				g_action = answer + ACTION_ID_ICON_1;
 			}
 		}
 
@@ -406,21 +392,19 @@ void do_inn(void)
 
 					GUI_output(inn->quality < 5 ? get_ttx(475) : (inn->quality < 15 ? get_ttx(476) : get_ttx(477)));
 
-					for (i = 0, hero2 = get_hero(0); i <= 6; i++, hero2 += SIZEOF_HERO) {
+					for (i = 0, hero2 = (struct struct_hero*)get_hero(0); i <= 6; i++, hero2++) {
 
-						if (host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE &&
-							host_readbs(hero2 + HERO_GROUP_NO) == gs_current_group &&
-							!hero_dead(hero2))
+						if ((hero2->typus != HERO_TYPE_NONE) &&	(hero2->group_no == gs_current_group) && !hero_dead((Bit8u*)hero2))
 						{
 							portion_size = (21 - inn->quality) * 20;
 							if (portion_size > 100) {
 								portion_size = 100;
 							}
 
-							sub_ptr_bs(hero2 + HERO_HUNGER, (unsigned char)portion_size);
+							hero2->hunger -= (unsigned char)portion_size;
 
-							if (host_readbs(hero2 + HERO_HUNGER) < 0) {
-								host_writebs(hero2 + HERO_HUNGER, 0);
+							if (hero2->hunger < 0) {
+								hero2->hunger = 0;
 							}
 
 							portion_size = (21 - inn->quality) * 30;
@@ -428,10 +412,10 @@ void do_inn(void)
 								portion_size = 100;
 							}
 
-							sub_ptr_bs(hero2 + HERO_THIRST, (unsigned char)portion_size);
+							hero2->thirst -= (unsigned char)portion_size;
 
-							if (host_readbs(hero2 + HERO_THIRST) < 0) {
-								host_writebs(hero2 + HERO_THIRST, 0);
+							if (hero2->thirst < 0) {
+								hero2->thirst = 0;
 							}
 						}
 					}
@@ -515,14 +499,16 @@ void do_inn(void)
 
 				if (answer != -1) {
 
-					hero = get_hero(answer);
+					hero = (struct struct_hero*)get_hero(answer);
 
-					if (host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH) {
+					if (hero->typus >= HERO_TYPE_WITCH) {
 
 						if (magic_act[answer] != 0) {
+
 							GUI_output(get_ttx(334));
+
 						} else {
-							magic_act[answer] = (signed char)use_magic(hero);
+							magic_act[answer] = (signed char)use_magic((Bit8u*)hero);
 						}
 					} else {
 						GUI_output(get_ttx(330));
@@ -560,11 +546,10 @@ void do_inn(void)
 
 					g_food_mod = 0;
 
-					hero = get_hero(0);
-					for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+					hero = (struct struct_hero*)get_hero(0);
+					for (i = 0; i <= 6; i++, hero++) {
 
-						if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-							host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
+						if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
 						{
 							if (booked_days > 1) {
 								/* Original-Bug 7:
@@ -577,7 +562,7 @@ void do_inn(void)
 
 								for (rested_days = 0; rested_days < booked_days; rested_days++)
 								{
-									GRP_hero_sleep(hero, g_sleep_quality);
+									GRP_hero_sleep((Bit8u*)hero, g_sleep_quality);
 								}
 							}
 						}
@@ -635,7 +620,7 @@ void do_inn(void)
 
 void TLK_herberg(signed short state)
 {
-	Bit8u *hero = (Bit8u*)get_first_hero_available_in_group();
+	struct struct_hero *hero = (struct struct_hero*)get_first_hero_available_in_group();
 
 	if (!state) {
 		g_dialog_next_state = (gs_herberg_kicked_flags[gs_current_typeindex] ? 1 : 2);
@@ -647,15 +632,15 @@ void TLK_herberg(signed short state)
 		gs_herberg_kicked_flags[gs_current_typeindex] = 1;
 	} else if (state == 12) {
 		/* CH + 5 */
-		g_dialog_next_state = (test_attrib((struct struct_hero*)hero, ATTRIB_CH, 5) > 0 ? 14 : 11);
+		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 5) > 0 ? 14 : 11);
 	} else if (state == 13) {
 		/* CH + 0 */
-		g_dialog_next_state = (test_attrib((struct struct_hero*)hero, ATTRIB_CH, 0) > 0 ? 14 : 7);
+		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 0) > 0 ? 14 : 7);
 	} else if (state == 15) {
 		/* CH - 3 */
-		g_dialog_next_state = (test_attrib((struct struct_hero*)hero, ATTRIB_CH, -3) > 0 ? 16 : 17);
+		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, -3) > 0 ? 16 : 17);
 	} else if (state == 17) {
-		g_action = (ACTION_ID_ICON_2);
+		g_action = ACTION_ID_ICON_2;
 	}
 }
 

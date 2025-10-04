@@ -804,7 +804,7 @@ void equip_belt_ani(void)
  * \return              position of a non-empty waterskin
  */
 /* Borlandified and identical */
-signed short get_full_waterskin_pos(Bit8u *hero)
+signed short get_full_waterskin_pos(const struct struct_hero *hero)
 {
 	signed short pos = -1;
 	signed short i;
@@ -813,8 +813,7 @@ signed short get_full_waterskin_pos(Bit8u *hero)
 	for (i = HERO_INVENTORY_SLOT_KNAPSACK_1; i < NR_HERO_INVENTORY_SLOTS; i++) {
 
 		/* look for a non-empty waterskin */
-		if ((host_readw(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + i * SIZEOF_INVENTORY) == ITEM_WATERSKIN) &&
-			!inventory_empty(hero + HERO_INVENTORY + i * SIZEOF_INVENTORY))
+		if ((hero->inventory[i].item_id == ITEM_WATERSKIN) && !hero->inventory[i].flags.empty)
 		{
 			pos = i;
 			break;

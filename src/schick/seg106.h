@@ -17,7 +17,7 @@ signed short get_max_light_time(void);
 /* 0x3e */
 void equip_belt_ani(void);
 /* 0x43 */
-signed short get_full_waterskin_pos(Bit8u*);
+signed short get_full_waterskin_pos(const struct struct_hero*);
 
 #if !defined(__BORLANDC__)
 }

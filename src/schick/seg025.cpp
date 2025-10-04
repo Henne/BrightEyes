@@ -352,7 +352,7 @@ void show_treasure_map(void)
 			tw_bak = g_textbox_width;
 			g_textbox_width = 3;
 
-			sprintf(g_text_output_buf, get_ttx(727), (char*)get_hero(get_random_hero()) + HERO_NAME2);
+			sprintf(g_text_output_buf, get_ttx(727), ((struct struct_hero*)get_hero(get_random_hero()))->alias);
 			GUI_output(g_text_output_buf);
 
 			g_textbox_width = tw_bak;

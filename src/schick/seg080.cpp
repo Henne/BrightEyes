@@ -38,7 +38,7 @@ signed short DNG04_handler(void)
 	signed short pos;
 	signed short i;
 	signed short tw_bak;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
@@ -60,12 +60,12 @@ signed short DNG04_handler(void)
 
 		if (i == 2)
 		{
-			hero = (Bit8u*)get_first_hero_available_in_group();
+			hero = (struct struct_hero*)get_first_hero_available_in_group();
 
-			sprintf(g_dtp2,	get_tx(5), (char*)hero + HERO_NAME2);
+			sprintf(g_dtp2,	get_tx(5), hero->alias);
 			GUI_output(g_dtp2);
 
-			sub_hero_le((struct struct_hero*)hero, 2);
+			sub_hero_le(hero, 2);
 
 			/* get a magic AMULET */
 			get_item(ITEM_TRAVIA_AMULET, 1, 1);
@@ -96,15 +96,15 @@ signed short DNG04_handler(void)
 		/* the ceiling may drop on your head */
 		GUI_output(get_tx(9));
 
-		hero = get_hero(0);
-		for (i = 0; i <= 6 ; i++, hero += SIZEOF_HERO)
+		hero = (struct struct_hero*)get_hero(0);
+		for (i = 0; i <= 6 ; i++, hero++)
 		{
-			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-				!hero_dead(hero) &&
-				test_skill((struct struct_hero*)hero, TA_SCHLEICHEN, 2) <= 0)
+			if ((hero->typus != HERO_TYPE_NONE) &&
+				(hero->group_no == gs_current_group) &&
+				!hero_dead((Bit8u*)hero) &&
+				(test_skill(hero, TA_SCHLEICHEN, 2) <= 0))
 			{
-				sprintf(g_dtp2,	get_tx(10), (char*)hero + HERO_NAME2);
+				sprintf(g_dtp2,	get_tx(10), hero->alias);
 				GUI_output(g_dtp2);
 
 				sub_group_le(dice_roll(2, 6, 0));
@@ -132,7 +132,7 @@ signed short DNG04_handler(void)
 
 			/* Original-BUG: assumption the leader is at pos 0 */
 			/* CH-5 for 1 day */
-			set_mod_slot(i, DAYS(1), get_hero(0) + (HERO_ATTRIB + 3 * ATTRIB_CH), -5, 0);
+			set_mod_slot(i, DAYS(1), (Bit8u*)&((struct struct_hero*)get_hero(0))->attrib[ATTRIB_CH].current, -5, 0);
 		}
 
 	} else if (pos == DNG_POS(0,14,14) && pos != gs_dng_handled_pos)
@@ -140,15 +140,15 @@ signed short DNG04_handler(void)
 		/* the ceiling may drop on your head */
 		GUI_output(get_tx(9));
 
-		hero = get_hero(0);
-		for (i = 0; i <= 6 ; i++, hero += SIZEOF_HERO)
+		hero = (struct struct_hero*)get_hero(0);
+		for (i = 0; i <= 6 ; i++, hero++)
 		{
-			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-				!hero_dead(hero) &&
-				test_skill((struct struct_hero*)hero, TA_SCHLEICHEN, 4) <= 0)
+			if ((hero->typus != HERO_TYPE_NONE) &&
+				(hero->group_no == gs_current_group) &&
+				!hero_dead((Bit8u*)hero) &&
+				(test_skill(hero, TA_SCHLEICHEN, 4) <= 0))
 			{
-				sprintf(g_dtp2, get_tx(10), (char*)hero + HERO_NAME2);
+				sprintf(g_dtp2, get_tx(10), hero->alias);
 				GUI_output(g_dtp2);
 
 				sub_group_le(dice_roll(1, 6, 2));
@@ -174,9 +174,9 @@ signed short DNG04_handler(void)
 	{
 		/* a very deep gap */
 		i = 1;
-		hero = (Bit8u*)get_first_hero_available_in_group();
+		hero = (struct struct_hero*)get_first_hero_available_in_group();
 
-		if (!gs_dng04_deepgap_flag || test_attrib((struct struct_hero*)hero, ATTRIB_GE, 0) > 0)
+		if (!gs_dng04_deepgap_flag || (test_attrib(hero, ATTRIB_GE, 0) > 0))
 		{
 			gs_dng04_deepgap_flag = 1;
 
@@ -185,21 +185,21 @@ signed short DNG04_handler(void)
 
 		if (i)
 		{
-			if (test_attrib((struct struct_hero*)hero, ATTRIB_GE, 0) > 0)
+			if (test_attrib(hero, ATTRIB_GE, 0) > 0)
 			{
-				sprintf(g_dtp2,	get_tx(18), (char*)hero + HERO_NAME2,
-					GUI_get_ptr(host_readbs(hero + HERO_SEX), 3),
-					GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
+				sprintf(g_dtp2,	get_tx(18), hero->alias,
+					GUI_get_ptr(hero->sex, 3),
+					GUI_get_ptr(hero->sex, 0));
 				GUI_output(g_dtp2);
 
 			} else {
 
-				sprintf(g_dtp2,	get_tx(19), (char*)hero + HERO_NAME2,
-					GUI_get_ptr(host_readbs(hero + HERO_SEX), 0),
-					(char*)hero + HERO_NAME2);
+				sprintf(g_dtp2,	get_tx(19), hero->alias,
+					GUI_get_ptr(hero->sex, 0), hero->alias);
+
 				GUI_output(g_dtp2);
 
-				hero_disappear((struct struct_hero*)hero, 0, -1);
+				hero_disappear(hero, 0, -1);
 			}
 		}
 	}
@@ -214,17 +214,17 @@ signed short DNG04_handler(void)
 		/* Probability of 5% to get bitten by a rat */
 		if (mod_day_timer(MINUTES(10)))
 		{
-			hero = get_hero(0);
-			for (i = 0; i <= 6 ; i++, hero += SIZEOF_HERO)
+			hero = (struct struct_hero*)get_hero(0);
+			for (i = 0; i <= 6 ; i++, hero++)
 			{
-				if (random_schick(100) <= 5 &&
-					host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-					!hero_dead(hero))
+				if ((random_schick(100) <= 5) &&
+					(hero->typus != HERO_TYPE_NONE) &&
+					(hero->group_no == gs_current_group) &&
+					!hero_dead((Bit8u*)hero))
 				{
-					sub_hero_le((struct struct_hero*)hero, 2);
+					sub_hero_le(hero, 2);
 
-					sprintf(g_text_output_buf, get_tx(21), (char*)hero + HERO_NAME2);
+					sprintf(g_text_output_buf, get_tx(21), hero->alias);
 					GUI_output(g_text_output_buf);
 				}
 			}
@@ -235,17 +235,17 @@ signed short DNG04_handler(void)
 		/* Probability of 10% to get bitten by a rat */
 		if (mod_day_timer(MINUTES(10)))
 		{
-			hero = get_hero(0);
-			for (i = 0; i <= 6 ; i++, hero += SIZEOF_HERO)
+			hero = (struct struct_hero*)get_hero(0);
+			for (i = 0; i <= 6 ; i++, hero++)
 			{
 				/* Original-Bug: forgot to check if the hero is dead */
-				if (random_schick(100) <= 10 &&
-					host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
+				if ((random_schick(100) <= 10) &&
+					(hero->typus != HERO_TYPE_NONE) &&
+					(hero->group_no == gs_current_group))
 				{
-					sub_hero_le((struct struct_hero*)hero, 2);
+					sub_hero_le(hero, 2);
 
-					sprintf(g_text_output_buf, get_tx(25), (char*)hero + HERO_NAME2);
+					sprintf(g_text_output_buf, get_tx(25), hero->alias);
 					GUI_output(g_text_output_buf);
 				}
 			}
@@ -332,7 +332,7 @@ signed short DNG05_handler(void)
 	signed short pos;
 	signed short tmp;
 	signed short tw_bak;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	tw_bak = g_textbox_width;
 	g_textbox_width = 7;
@@ -345,12 +345,12 @@ signed short DNG05_handler(void)
 		{
 			g_dng05_trash_flag = 1;
 
-			hero = (Bit8u*)get_first_hero_available_in_group();
+			hero = (struct struct_hero*)get_first_hero_available_in_group();
 
 			GUI_output(get_tx(16));
 
 			tmp = get_free_mod_slot();
-			set_mod_slot(tmp, DAYS(1), hero + (HERO_ATTRIB + 3 * ATTRIB_CH), -5, 0);
+			set_mod_slot(tmp, DAYS(1), (Bit8u*)&hero->attrib[ATTRIB_CH].current, -5, 0);
 
 			add_party_money(20L);
 		}
@@ -406,14 +406,14 @@ signed short DNG05_handler(void)
 	{
 		if (GUI_bool(get_tx(12)))
 		{
-			hero = (Bit8u*)get_first_hero_available_in_group();
+			hero = (struct struct_hero*)get_first_hero_available_in_group();
 
-			sprintf(g_dtp2,	get_tx(13), (char*)hero + HERO_NAME2);
+			sprintf(g_dtp2,	get_tx(13), hero->alias);
 			GUI_output(g_dtp2);
 
-			sub_hero_le((struct struct_hero*)hero, dice_roll(1, 3, 2));
+			sub_hero_le(hero, dice_roll(1, 3, 2));
 
-			hero_disease_test((struct struct_hero*)hero, 1, 65);
+			hero_disease_test(hero, 1, 65);
 		}
 
 	} else if (pos == DNG_POS(0,3,14) && pos != gs_dng_handled_pos)

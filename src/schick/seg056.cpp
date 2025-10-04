@@ -87,8 +87,8 @@ void buy_screen(void)
 	signed short nice = 0;
 	signed short free_slots = 0;
 	signed short offended = 0;
-	Bit8u *hero1;
-	Bit8u *hero2;
+	struct struct_hero *hero1;
+	struct struct_hero *hero2;
 	signed short width;
 	signed short height;
 	signed short given_items;
@@ -113,14 +113,14 @@ void buy_screen(void)
 		if (g_request_refresh != 0) {
 
 			free_slots = 0;
-			hero2 = get_hero(0);
-			for (l_di = 0; l_di <= 6; l_di++, hero2 += SIZEOF_HERO) {
+			hero2 = (struct struct_hero*)get_hero(0);
+			for (l_di = 0; l_di <= 6; l_di++, hero2++) {
 
-				if (host_readbs(hero2 + HERO_TYPE) &&
-					host_readbs(hero2 + HERO_GROUP_NO) == gs_current_group)
+				if ((hero2->typus) && (hero2->group_no == gs_current_group))
 				{
 					for (j = HERO_INVENTORY_SLOT_KNAPSACK_1; j < NR_HERO_INVENTORY_SLOTS; j++) {
-						if (host_readws(hero2 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * j) == ITEM_NONE) {
+
+						if (hero2->inventory[j].item_id == ITEM_NONE) {
 							free_slots++;
 						}
 					}
@@ -200,7 +200,7 @@ void buy_screen(void)
 						do_pic_copy(0);
 
 						sprintf(g_dtp2,
-								g_buyitems[l3].price_unit == 1 ? fmt_h.a :
+							g_buyitems[l3].price_unit == 1 ? fmt_h.a :
 									(g_buyitems[l3].price_unit == 10 ? fmt_s.a : fmt_d.a),
 								g_buyitems[l3].shop_price);
 
@@ -260,25 +260,26 @@ void buy_screen(void)
 
 			GUI_print_loc_line(g_dtp2);
 
-			hero1 = get_hero(0);
+			hero1 = (struct struct_hero*)get_hero(0);
 
-			for (l_di = 0; l_di < 7; l_di++, hero1 += SIZEOF_HERO) {
+			for (l_di = 0; l_di < 7; l_di++, hero1++) {
 
 				do_fill_rect(g_vga_memstart, g_hero_pic_posx[l_di], 190,
 						g_hero_pic_posx[l_di] + 41, 197, 0);
 
-				if (host_readbs(hero1 + HERO_TYPE) != HERO_TYPE_NONE) {
+				if (hero1->typus != HERO_TYPE_NONE) {
 
-					copy_forename(g_dtp2, (char*)(hero1 + HERO_NAME2));
+					copy_forename(g_dtp2, hero1->alias);
 					set_textcolor(255, 0);
 
-					if (host_readbs(hero1 + HERO_GROUP_NO) != gs_current_group) {
+					if (hero1->group_no != gs_current_group) {
 
 						set_textcolor(111, 0);
 
 					} else {
 
-						if (!is_in_word_array(item_id, g_wearable_items_index[host_readbs(hero1 + HERO_TYPE) - 1])) {
+						if (!is_in_word_array(item_id, g_wearable_items_index[hero1->typus - 1])) {
+
 							set_textcolor(201, 0);
 						}
 					}
@@ -293,6 +294,7 @@ void buy_screen(void)
 		}
 
 		if (g_mouse2_event && get_mouse_action(g_mouse_posx, g_mouse_posy, g_action_table_merchant)) {
+
 			g_action = ACTION_ID_DECREASE_ITEM_COUNT_BY_RIGHT_CLICK;
 		}
 
@@ -360,6 +362,7 @@ void buy_screen(void)
 				if (l4 > 0) {
 
 					if (g_buy_shopping_cart[l16].quantity < l4 && l3 == 2) {
+
 						l4 = g_buy_shopping_cart[l16].quantity;
 					}
 
@@ -494,9 +497,9 @@ void buy_screen(void)
 						break;
 					}
 
-					hero1 = get_hero(l3);
+					hero1 = (struct struct_hero*)get_hero(l3);
 
-					offended = bargain(hero1, nice, price, percent, 0) > 0 ? 1 : 0;
+					offended = bargain((Bit8u*)hero1, nice, price, percent, 0) > 0 ? 1 : 0;
 				}
 
 				if (offended > 0) {

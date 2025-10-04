@@ -406,10 +406,10 @@ void level_up(signed short hero_pos)
 	signed char v2;
 	signed char v3;
 	signed short i;
-	Bit8u *hero;
+	struct struct_hero *hero;
 	signed short city_bak;
 
-	hero = get_hero(hero_pos);
+	hero = (struct struct_hero*)get_hero(hero_pos);
 
 	if (g_fading_state) {
 		refresh_colors();
@@ -432,7 +432,7 @@ void level_up(signed short hero_pos)
 	close(l_si);
 
 
-	sprintf(g_dtp2, get_ttx(411), (char*)hero + HERO_NAME2);
+	sprintf(g_dtp2, get_ttx(411), hero->alias);
 	GUI_output(g_dtp2);
 
 	g_action = 0;
@@ -449,7 +449,7 @@ void level_up(signed short hero_pos)
 	load_ggsts_nvf();
 
 	/* increment level */
-	inc_ptr_bs(hero + HERO_LEVEL);
+	hero->level++;
 
 	g_status_page_hero = hero_pos;
 
@@ -462,7 +462,7 @@ void level_up(signed short hero_pos)
 	l_si = -1;
 
 	for (i = 0; i <= 6; i++) {
-		if (host_readbs(hero + HERO_ATTRIB_ORIG + 3 * i) < 20) {
+		if (hero->attrib[i].normal < 20) {
 			l_si = 0;
 		}
 	}
@@ -485,15 +485,16 @@ void level_up(signed short hero_pos)
 						get_ttx(417),
 						get_ttx(418)) - 1;
 
-			if (host_readbs(hero + HERO_ATTRIB_ORIG + 3 * l_si) >= 20) {
+			if (hero->attrib[l_si].normal >= 20) {
+
 				l_si = -2;
 				GUI_output(get_tx2(43));
 			}
 
 		} while (l_si == -2);
 
-		inc_ptr_bs(hero + HERO_ATTRIB_ORIG + 3 * l_si);
-		inc_ptr_bs(hero + HERO_ATTRIB + 3 * l_si);
+		hero->attrib[l_si].normal++;
+		hero->attrib[l_si].current++;
 
 		status_show(hero_pos);
 
@@ -505,7 +506,8 @@ void level_up(signed short hero_pos)
 	l_si = -1;
 
 	for (i = 7; i <= 13; i++) {
-		if (host_readbs(hero + HERO_ATTRIB_ORIG + 3 * i) > 2) {
+
+		if (hero->attrib[i].normal > 2) {
 			l_si = 0;
 		}
 	}
@@ -525,7 +527,8 @@ void level_up(signed short hero_pos)
 						get_ttx(424),
 						get_ttx(425)) - 1;
 
-			if (host_readbs(hero + HERO_ATTRIB_ORIG + 3 * (l_si + 7)) <= 2) {
+			if (hero->attrib[l_si + 7].normal <= 2) {
+
 				l_si = -2;
 				GUI_output(get_tx2(48));
 			}
@@ -536,15 +539,16 @@ void level_up(signed short hero_pos)
 
 		for (i = 0; i < 3; i++) {
 
-			if (random_schick(20) <= host_readbs(hero + HERO_ATTRIB_ORIG + 3 * (l_si + 7))) {
+			if (random_schick(20) <= hero->attrib[l_si + 7].normal) {
+
 				v3 = 1;
 			}
 		}
 
 		if (v3 != 0) {
 
-			dec_ptr_bs(hero + HERO_ATTRIB_ORIG + 3 * (l_si + 7));
-			dec_ptr_bs(hero + HERO_ATTRIB + 3 * (l_si + 7));
+			hero->attrib[l_si + 7].normal--;
+			hero->attrib[l_si + 7].current--;
 
 			GUI_output(get_tx2(37));
 
@@ -561,28 +565,29 @@ void level_up(signed short hero_pos)
 
 	/* check changes in MR */
 
-	mr = (host_readbs(hero + (HERO_ATTRIB_ORIG + 3 * ATTRIB_KL)) + host_readbs(hero + (HERO_ATTRIB_ORIG + 3 * ATTRIB_MU)) + host_readbs(hero + HERO_LEVEL)) / 3 - 2 * host_readbs(hero + (HERO_ATTRIB_ORIG + 3 * ATTRIB_AG));
-	mr += g_mr_modificators[host_readbs(hero + HERO_TYPE)];
+	mr = (hero->attrib[ATTRIB_KL].normal + hero->attrib[ATTRIB_MU].normal + hero->level) / 3 - 2 * hero->attrib[ATTRIB_AG].normal;
+	mr += g_mr_modificators[hero->typus];
 
-	if (host_readbs(hero + HERO_MR) != mr) {
+	if (hero->mr != mr) {
+
 		/* set new basic MR */
-		host_writebs(hero + HERO_MR, mr);
+		hero->mr = mr;
 
 		/* check for STIRNREIF [blau] / CORONET [blue] equipped => MR + 2 */
-		if (host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + HERO_INVENTORY_SLOT_HEAD * SIZEOF_INVENTORY) == ITEM_CORONET_BLUE) {
-			add_ptr_bs(hero + HERO_MR, 2);
+		if (hero->inventory[HERO_INVENTORY_SLOT_HEAD].item_id == ITEM_CORONET_BLUE) {
+			hero->mr += 2;
 		}
 		/* check for RING / RING equipped => MR + 2 */
-		if (host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + HERO_INVENTORY_SLOT_LEFT_HAND * SIZEOF_INVENTORY) == ITEM_RING_RED) {
-			add_ptr_bs(hero + HERO_MR, 2);
+		if (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id == ITEM_RING_RED) {
+			hero->mr += 2;
 		}
 		/* check for AMULETT / in inventory => MR + 5 */
-		if (get_item_pos(hero, ITEM_AMULET_BLUE) != -1) {
-			add_ptr_bs(hero + HERO_MR, 5);
+		if (get_item_pos((Bit8u*)hero, ITEM_AMULET_BLUE) != -1) {
+			hero->mr += 5;
 		}
 
 		/* show the user the new MR value */
-		sprintf(g_dtp2, get_tx2(41), host_readbs(hero + HERO_MR));
+		sprintf(g_dtp2, get_tx2(41), hero->mr);
 		GUI_output(g_dtp2);
 
 		/* update status background */
@@ -596,16 +601,16 @@ void level_up(signed short hero_pos)
 
 
 	/* add skill increasements */
-	add_ptr_bs(hero + HERO_TA_RISE, g_levelup_ta_rise[host_readbs(hero + HERO_TYPE) - 1]);
+	hero->skill_incs += g_levelup_ta_rise[hero->typus - 1];
 
 	/* roll how many LE points the hero may get */
 	i = random_schick(6);
 
-	if (host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH) {
+	if (hero->typus >= HERO_TYPE_WITCH) {
 		/* a magic user */
 
 		/* add spell increasements */
-		add_ptr_bs(hero + HERO_SP_RISE, g_levelup_sp_rise[host_readbs(hero + HERO_TYPE) - 7]);
+		hero->spell_incs += g_levelup_sp_rise[hero->typus - 7];
 
 		i += 2;
 
@@ -623,21 +628,21 @@ void level_up(signed short hero_pos)
 
 
 		/* add LE and fill them up */
-		add_ptr_ws(hero + HERO_LE_ORIG, l_si);
-		add_hero_le((struct struct_hero*)hero, l_si);
+		hero->le_max += l_si;
+		add_hero_le(hero, l_si);
 		/* add AE and fill them up */
-		add_ptr_ws(hero + HERO_AE_ORIG, i - l_si);
-		add_hero_ae((struct struct_hero*)hero, i - l_si);
+		hero->ae_max += i - l_si;
+		add_hero_ae(hero, i - l_si);
 
 		/* change skill increasements into AE */
-		if (host_readbs(hero + HERO_TYPE) == HERO_TYPE_MAGE && g_game_mode == GAME_MODE_ADVANCED) {
+		if ((hero->typus == HERO_TYPE_MAGE) && (g_game_mode == GAME_MODE_ADVANCED)) {
 
 			if (GUI_bool(get_tx2(40))) {
 				/* trade 10 skill increasements into 1W6+2 AE */
-				add_ptr_bs(hero + HERO_SP_RISE, -10);
+				hero->spell_incs += -10;
 				i = random_interval(3, 8);
-				add_ptr_ws(hero + HERO_AE_ORIG, i);
-				add_ptr_ws(hero + HERO_AE, i);
+				hero->ae_max += i;
+				hero->ae += i;
 			}
 		}
 
@@ -649,8 +654,8 @@ void level_up(signed short hero_pos)
 		GUI_output(g_dtp2);
 
 		/* add LE and fill them up */
-		add_ptr_ws(hero + HERO_LE_ORIG, i);
-		add_hero_le((struct struct_hero*)hero, i);
+		hero->le_max += i;
+		add_hero_le(hero, i);
 	}
 
 	status_show(hero_pos);
@@ -660,19 +665,19 @@ void level_up(signed short hero_pos)
 
 	update_status_bars();
 
-	update_atpa((struct struct_hero*)hero);
+	update_atpa(hero);
 
 	if (g_game_mode == GAME_MODE_BEGINNER) {
 
 		i = v2 = 0;
 
-		while (host_readbs(hero + HERO_TA_RISE) > 0) {
+		while (hero->skill_incs > 0) {
 
-			l_si = host_readws(g_skills_buffer + 100 * host_readbs(hero + HERO_TYPE) + 4 * i);
+			l_si = host_readws(g_skills_buffer + 100 * hero->typus + 4 * i);
 
-			if (host_readbs(hero + HERO_TALENTS + l_si) < host_readws(g_skills_buffer + 100 * host_readbs(hero + HERO_TYPE) + 4 * i + 2))
+			if (hero->skills[l_si] < host_readws(g_skills_buffer + 100 * hero->typus + 4 * i + 2))
 			{
-				inc_skill_novice(hero, l_si);
+				inc_skill_novice((Bit8u*)hero, l_si);
 			}
 
 			i++;
@@ -684,32 +689,32 @@ void level_up(signed short hero_pos)
 				v2++;
 
 				if (v2 > 5) {
-					host_writeb(hero + HERO_TA_RISE, 0);
+					hero->skill_incs = 0;
 				}
 
 			}
 		}
 
-		if (host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH) {
+		if (hero->typus >= HERO_TYPE_WITCH) {
 			/* hero has magic type */
 
 			i = 1;
 			v2 = 0;
 
-			while (host_readbs(hero + HERO_SP_RISE) != 0 && v2 < 3) {
+			while (hero->spell_incs != 0 && v2 < 3) {
 
 				v2++;
 
-				switch (host_readbs(hero + HERO_TYPE)) {
+				switch (hero->typus) {
 
 					case HERO_TYPE_WITCH: {
 
 						/* first try to increase all which-specific spells by 1,
 						 * up to skill value at most 11. */
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && i < 86) {
+						while (hero->spell_incs != 0 && i < 86) {
 
-							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_WITCH && host_readbs(hero + HERO_SPELLS + i) < 11) {
-								inc_spell_novice(hero, i);
+							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_WITCH && hero->spells[i] < 11) {
+								inc_spell_novice((Bit8u*)hero, i);
 							}
 							i++;
 						}
@@ -718,8 +723,8 @@ void level_up(signed short hero_pos)
 						 * up to max value 18 */
 						i = 0;
 
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && (g_autoinc_spells_witch[i] != -1)) {
-							inc_spell_novice(hero, g_autoinc_spells_witch[i]);
+						while (hero->spell_incs != 0 && (g_autoinc_spells_witch[i] != -1)) {
+							inc_spell_novice((Bit8u*)hero, g_autoinc_spells_witch[i]);
 							i++;
 						}
 
@@ -727,18 +732,18 @@ void level_up(signed short hero_pos)
 					}
 					case HERO_TYPE_DRUID: {
 
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && i < 86) {
+						while (hero->spell_incs != 0 && i < 86) {
 
-							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_DRUID && host_readbs(hero + HERO_SPELLS + i) < 11) {
-								inc_spell_novice(hero, i);
+							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_DRUID && (hero->spells[i] < 11)) {
+								inc_spell_novice((Bit8u*)hero, i);
 							}
 							i++;
 						}
 
 						i = 0;
 
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && (g_autoinc_spells_druid[i] != -1)) {
-							inc_spell_novice(hero, g_autoinc_spells_druid[i]);
+						while (hero->spell_incs != 0 && (g_autoinc_spells_druid[i] != -1)) {
+							inc_spell_novice((Bit8u*)hero, g_autoinc_spells_druid[i]);
 							i++;
 						}
 
@@ -748,36 +753,33 @@ void level_up(signed short hero_pos)
 
 						i = 0;
 
-						while (host_readbs(hero + HERO_SP_RISE) != 0 &&
-							(g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i] != -1)) {
+						while (hero->spell_incs != 0 && (g_magic_schools_index[hero->spell_school][i] != -1)) {
 
-							if (host_readbs(hero + HERO_SPELLS + g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i]) < 11)
+							if (hero->spells[g_magic_schools_index[hero->spell_school][i]] < 11)
 							{
-								inc_spell_novice(hero, g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i]);
+								inc_spell_novice((Bit8u*)hero, g_magic_schools_index[hero->spell_school][i]);
 							}
 							i++;
 						}
 
 						i = 0;
-						while (host_readbs(hero + HERO_SP_RISE) != 0 &&
-							(g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i] != -1)) {
+						while (hero->spell_incs != 0 && (g_magic_schools_index[hero->spell_school][i] != -1)) {
 
-							if (host_readbs(hero + HERO_SPELLS + g_autoinc_spells_mage_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i]) < 11)
+							if (hero->spells[g_autoinc_spells_mage_index[hero->spell_school][i]] < 11)
 							{
-								inc_spell_novice(hero,
-									g_autoinc_spells_mage_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i]);
+								inc_spell_novice((Bit8u*)hero,
+									g_autoinc_spells_mage_index[hero->spell_school][i]);
 							}
 							i++;
 						}
 
 						i = 0;
-						while (host_readbs(hero + HERO_SP_RISE) != 0 &&
-							(g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i] != -1)) {
+						while ((hero->spell_incs) != 0 &&
+							(g_magic_schools_index[hero->spell_school][i] != -1)) {
 
-							if (host_readbs(hero + HERO_SPELLS +
-									(g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i])) < 11)
+							if (hero->spells[g_magic_schools_index[hero->spell_school][i]] < 11)
 							{
-								inc_spell_novice(hero, g_magic_schools_index[host_readbs(hero + HERO_MAGIC_SCHOOL)][i]);
+								inc_spell_novice((Bit8u*)hero, g_magic_schools_index[hero->spell_school][i]);
 							}
 							i++;
 						}
@@ -786,26 +788,26 @@ void level_up(signed short hero_pos)
 					}
 					case HERO_TYPE_GREEN_ELF: {
 
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && i < 86) {
+						while (hero->spell_incs != 0 && i < 86) {
 
-							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_GELF && host_readbs(hero + HERO_SPELLS + i) < 11) {
-								inc_spell_novice(hero, i);
+							if ((g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_GELF) && (hero->spells[i] < 11)) {
+								inc_spell_novice((Bit8u*)hero, i);
 							}
 							i++;
 						}
 
 						i = 0;
 
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && (g_autoinc_spells_gelf[i] != -1)) {
-							inc_spell_novice(hero, g_autoinc_spells_gelf[i]);
+						while (hero->spell_incs != 0 && (g_autoinc_spells_gelf[i] != -1)) {
+							inc_spell_novice((Bit8u*)hero, g_autoinc_spells_gelf[i]);
 							i++;
 						}
 
 						i = 1;
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && i < 86) {
+						while (hero->spell_incs != 0 && i < 86) {
 
-							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_GELF && host_readbs(hero + HERO_SPELLS + i) < 11) {
-								inc_spell_novice(hero, i);
+							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_GELF && (hero->spells[i] < 11)) {
+								inc_spell_novice((Bit8u*)hero, i);
 							}
 							i++;
 						}
@@ -814,26 +816,26 @@ void level_up(signed short hero_pos)
 					}
 					case HERO_TYPE_ICE_ELF: {
 
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && i < 86) {
+						while (hero->spell_incs != 0 && i < 86) {
 
-							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_IELF && host_readbs(hero + HERO_SPELLS + i) < 11) {
-								inc_spell_novice(hero, i);
+							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_IELF && (hero->spells[i] < 11)) {
+								inc_spell_novice((Bit8u*)hero, i);
 							}
 							i++;
 						}
 
 						i = 0;
 
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && (g_autoinc_spells_ielf[i] != -1)) {
-							inc_spell_novice(hero, g_autoinc_spells_ielf[i]);
+						while (hero->spell_incs != 0 && (g_autoinc_spells_ielf[i] != -1)) {
+							inc_spell_novice((Bit8u*)hero, g_autoinc_spells_ielf[i]);
 							i++;
 						}
 
 						i = 1;
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && i < 86) {
+						while (hero->spell_incs != 0 && i < 86) {
 
-							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_IELF && host_readbs(hero + HERO_SPELLS + i) < 11) {
-								inc_spell_novice(hero, i);
+							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_IELF && (hero->spells[i] < 11)) {
+								inc_spell_novice((Bit8u*)hero, i);
 							}
 							i++;
 						}
@@ -841,26 +843,26 @@ void level_up(signed short hero_pos)
 					}
 					case HERO_TYPE_SYLVAN_ELF: {
 
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && i < 86) {
+						while (hero->spell_incs != 0 && i < 86) {
 
-							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_SELF && host_readbs(hero + HERO_SPELLS + i) < 11) {
-								inc_spell_novice(hero, i);
+							if ((g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_SELF) && (hero->spells[i] < 11)) {
+								inc_spell_novice((Bit8u*)hero, i);
 							}
 							i++;
 						}
 
 						i = 0;
 
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && (g_autoinc_spells_self[i] != -1)) {
-							inc_spell_novice(hero, g_autoinc_spells_self[i]);
+						while ((hero->spell_incs != 0) && (g_autoinc_spells_self[i] != -1)) {
+							inc_spell_novice((Bit8u*)hero, g_autoinc_spells_self[i]);
 							i++;
 						}
 
 						i = 1;
-						while (host_readbs(hero + HERO_SP_RISE) != 0 && i < 86) {
+						while ((hero->spell_incs != 0) && (i < 86)) {
 
-							if (g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_SELF && host_readbs(hero + HERO_SPELLS + i) < 11) {
-								inc_spell_novice(hero, i);
+							if ((g_spell_descriptions[i].herotype == SPELL_DESC_HEROTYPE_SELF) && (hero->spells[i] < 11)) {
+								inc_spell_novice((Bit8u*)hero, i);
 							}
 							i++;
 						}
@@ -869,17 +871,16 @@ void level_up(signed short hero_pos)
 				}
 			}
 
-			while (host_readbs(hero + HERO_SP_RISE) != 0) {
-				inc_spell_novice(hero, random_schick(86));
+			while (hero->spell_incs != 0) {
+				inc_spell_novice((Bit8u*)hero, random_schick(86));
 			}
 		}
 
 	} else {
 
-		if ((host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH) &&
-			(l_di = g_levelup_spta_conv[host_readbs(hero + HERO_TYPE) - 7]) &&
-			GUI_bool(get_tx2(45)))
+		if ((hero->typus >= HERO_TYPE_WITCH) && (l_di = g_levelup_spta_conv[hero->typus - 7]) && GUI_bool(get_tx2(45)))
 		{
+
 			sprintf(g_dtp2, get_tx2(46), l_di);
 
 			i = GUI_input(g_dtp2, 1);
@@ -891,8 +892,8 @@ void level_up(signed short hero_pos)
 				}
 				l_di -= i;
 
-				sub_ptr_bs(hero + HERO_SP_RISE, (unsigned char)i);
-				add_ptr_bs(hero + HERO_TA_RISE, (unsigned char)i);
+				hero->spell_incs -= i;
+				hero->skill_incs += i;
 
 			} else {
 
@@ -906,19 +907,19 @@ void level_up(signed short hero_pos)
 						i = l_di;
 					}
 
-					add_ptr_bs(hero + HERO_SP_RISE, (unsigned char)i);
-					sub_ptr_bs(hero + HERO_TA_RISE, (unsigned char)i);
+					hero->spell_incs += i;
+					hero->skill_incs -= i;
 				}
 			}
 		}
 
-		while (host_readbs(hero + HERO_TA_RISE) != 0) {
+		while (hero->skill_incs != 0) {
 
-			l_si = LVL_select_skill(hero, 1);
+			l_si = LVL_select_skill((Bit8u*)hero, 1);
 
 			if (l_si >= 0) {
 
-				inc_skill_advanced(hero, l_si);
+				inc_skill_advanced((Bit8u*)hero, l_si);
 
 			} else if (l_si == -2) {
 
@@ -928,13 +929,13 @@ void level_up(signed short hero_pos)
 			}
 		}
 
-		while (host_readbs(hero + HERO_SP_RISE) != 0) {
+		while (hero->spell_incs != 0) {
 
-			l_si = select_spell(hero, 1);
+			l_si = select_spell((Bit8u*)hero, 1);
 
 			if (l_si > 0) {
 
-				inc_spell_advanced(hero, l_si);
+				inc_spell_advanced((Bit8u*)hero, l_si);
 
 			} else if (l_si == -2) {
 

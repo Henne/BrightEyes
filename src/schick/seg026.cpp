@@ -380,7 +380,7 @@ signed short load_game_state(void)
 
 			load_npc(i);
 
-			if (host_readbs(get_hero(6) + HERO_GROUP_POS) != 7) {
+			if (((struct struct_hero*)get_hero(6))->group_pos != 7) {
 
 				memset(get_hero(6), 0, sizeof(struct struct_hero));
 			} else {
@@ -491,7 +491,7 @@ signed short save_game_state(void)
 			GUI_input(get_ttx(634), 8);
 			g_gui_entering_savegame = 0;
 
-			if (host_readbs(g_text_input_buf) == 0) {
+			if (*g_text_input_buf == '\0') {
 				return 0;
 			}
 
@@ -520,15 +520,15 @@ signed short save_game_state(void)
 		/* create a CHR-file for each hero in TEMP */
 		for (tw_bak = 0; tw_bak < 6; tw_bak++) {
 
-			if (host_readbs(get_hero(tw_bak) + HERO_TYPE) != HERO_TYPE_NONE) {
+			if (((struct struct_hero*)get_hero(tw_bak))->typus != HERO_TYPE_NONE) {
 
 				/* save position on the playmask */
-				host_writebs(get_hero(tw_bak) + HERO_GROUP_POS, tw_bak + 1);
+				((struct struct_hero*)get_hero(tw_bak))->group_pos = tw_bak + 1;
 
 #ifndef M302de_FEATURE_MOD
 				/* Feature mod 4: In the original game, when creating a savegame while not being in a temple, the AP of all heroes is decrease by 1. This feature mod stops the AP decrease.
 				 * Here, the actual decrease is executed */
-				if (g_game_state != GAME_STATE_VICTORY && gs_current_loctype != LOCTYPE_TEMPLE && host_readds(get_hero(tw_bak) + HERO_AP) > 0)
+				if (g_game_state != GAME_STATE_VICTORY && gs_current_loctype != LOCTYPE_TEMPLE && ((struct struct_hero*)get_hero(tw_bak))->ap > 0)
 				{
 					add_hero_ap((struct struct_hero*)get_hero(tw_bak), -1L);
 				}
@@ -539,10 +539,10 @@ signed short save_game_state(void)
 		}
 
 		/* save the current NPC in TEMP */
-		if (host_readbs(get_hero(6) + HERO_TYPE) != HERO_TYPE_NONE) {
+		if (((struct struct_hero*)get_hero(6))->typus != HERO_TYPE_NONE) {
 
-			host_writeb(get_hero(6) + HERO_GROUP_POS, 7);
-			save_npc(host_readbs(get_hero(6) + HERO_NPC_ID) + 225);
+			((struct struct_hero*)get_hero(6))->group_pos = 7;
+			save_npc(((struct struct_hero*)get_hero(6))->npc_id + 225);
 		}
 
 		load_area_description(1);
@@ -687,7 +687,7 @@ signed short read_chr_temp(char *fname, signed short hero_pos, signed short a2)
 #if defined(__BORLANDC__)
 	signed short handle;
 	signed short hero_size = sizeof(struct struct_hero);
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	sprintf(g_text_output_buf, g_str_temp_xx_ptr2, (char*)fname);
 
@@ -698,24 +698,24 @@ signed short read_chr_temp(char *fname, signed short hero_pos, signed short a2)
 
 	if (handle != -1) {
 
-		hero = get_hero(hero_pos);
+		hero = (struct struct_hero*)get_hero(hero_pos);
 		_read(handle, hero, hero_size);
 		close(handle);
 
-		host_writeb(hero + HERO_GROUP_NO, (signed char)a2);
+		hero->group_no = (signed char)a2;
 
-		if (host_readbs(hero + HERO_SEX) == 1) {
+		if (hero->sex == 1) {
 
-			host_writeb(hero + HERO_SPRITE_NO, host_readbs(hero + HERO_TYPE) + 11);
+			hero->sprite_no = hero->typus + 11;
 
-			if (host_readbs(hero + HERO_SPRITE_NO) > 21) {
-				host_writeb(hero + HERO_SPRITE_NO, 21);
+			if (hero->sprite_no > 21) {
+				hero->sprite_no = 21;
 			}
 		} else {
-			host_writeb(hero + HERO_SPRITE_NO, host_readbs(hero + HERO_TYPE));
+			hero->sprite_no = hero->typus;
 
-			if (host_readbs(hero + HERO_SPRITE_NO) > 10) {
-				host_writeb(hero + HERO_SPRITE_NO, 10);
+			if (hero->sprite_no > 10) {
+				hero->sprite_no = 10;
 			}
 		}
 
@@ -723,10 +723,11 @@ signed short read_chr_temp(char *fname, signed short hero_pos, signed short a2)
 		 * bit 1 is a flag which is set if the hero got the IN attribute bonus at the black eye at the Monolith (Einsiedlersee <-> Einsiedlersee, tevent135).
 		 * However, this should still be ok, as it should never happen that bit 0 is unset and bit 1 is set. */
 
-		if (!host_readbs(hero + HERO_START_GEAR)) {
+		if (!hero->start_gear) {
 
-			startup_equipment(hero);
-			host_writeb(get_hero(hero_pos) + HERO_START_GEAR, 1); /* it would be more consistent to set only bit 0 and leave the others untouched, see above. */
+			startup_equipment((Bit8u*)hero);
+
+			((struct struct_hero*)get_hero(hero_pos))->start_gear = 1; /* it would be more consistent to set only bit 0 and leave the others untouched, see above. */
 
 			write_chr_temp(hero_pos);
 		}
@@ -772,10 +773,11 @@ signed short copy_chr_names(Bit8u *ptr, signed short temple_id)
 	signed short count = 0;
 	signed short l_di;
 	signed short handle;
-	Bit8u *buf;
+	struct struct_hero *hero;
 	struct ffblk blk;
 
-	buf = g_renderbuf_ptr + 60000;
+	hero = (struct struct_hero*)(g_renderbuf_ptr + 60000);
+
 	sprintf(g_text_output_buf, g_str_temp_xx_ptr2, g_all_chr_wildcard3);
 
 	l_di = findfirst(g_text_output_buf, &blk, 0);
@@ -788,14 +790,14 @@ signed short copy_chr_names(Bit8u *ptr, signed short temple_id)
 
 			/* read the CHR file from temp */
 			handle = open(g_text_output_buf, O_BINARY | O_RDWR);
-			_read(handle, buf, sizeof(struct struct_hero));
+			_read(handle, hero, sizeof(struct struct_hero));
 			close(handle);
 
-			if ((host_readbs(buf + 0x88) == temple_id && !host_readbs(buf + 0x8a)) ||
-				(!host_readbs(buf + 0x8a) && temple_id == -1))
+			if (((hero->temple_id == temple_id) && !hero->group_pos) ||
+				(!hero->group_pos && (temple_id == -1)))
 			{
-				strcpy((char*)ptr + 32 * count, (char*)buf);
-				strcpy((char*)ptr + 32 * count + 16, (char*)buf + 16);
+				strcpy((char*)ptr + 32 * count, hero->name);
+				strcpy((char*)ptr + 32 * count + 16, hero->alias);
 				count++;
 			}
 

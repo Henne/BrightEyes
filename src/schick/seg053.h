@@ -6,7 +6,7 @@ namespace M302de {
 void do_healer(void);
 
 /* 0x25 */
-unsigned short is_hero_healable(Bit8u*);
+signed short is_hero_healable(const struct struct_hero*);
 
 #if !defined(__BORLANDC__)
 }

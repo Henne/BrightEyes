@@ -90,7 +90,7 @@ void DNG_door(signed short action)
 	signed short l4;
 	signed short spell_result;
 	struct dungeon_door *ptr_doors;
-	Bit8u *hero;
+	struct struct_hero *hero;
 	signed short hero_pos;
 	signed short lockpick_pos;
 	signed short lockpick_result;
@@ -220,13 +220,13 @@ void DNG_door(signed short action)
 			{
 				/* use lockpicks */
 
-				hero = (Bit8u*)get_first_hero_available_in_group();
+				hero = (struct struct_hero*)get_first_hero_available_in_group();
 
 				if ((lockpick_pos = hero_has_lockpicks(hero)) != -1)
 				{
 					if (lockpick_pos != -2)
 					{
-						lockpick_result = test_skill((struct struct_hero*)hero, TA_SCHLOESSER, ptr_doors->lockpick_handicap);
+						lockpick_result = test_skill(hero, TA_SCHLOESSER, ptr_doors->lockpick_handicap);
 
 						play_voc(ARCHIVE_FILE_FX11_VOC);
 
@@ -239,7 +239,8 @@ void DNG_door(signed short action)
 								or when tried three times without moving */
 							print_msg_with_first_hero(get_ttx(533));
 
-							or_ptr_bs(hero + SIZEOF_INVENTORY * lockpick_pos + (HERO_INVENTORY + INVENTORY_FLAGS), 1); /* set 'broken' flag */
+							hero->inventory[lockpick_pos].flags.broken = 1;
+//							or_ptr_bs(hero + SIZEOF_INVENTORY * lockpick_pos + (HERO_INVENTORY + INVENTORY_FLAGS), 1); /* set 'broken' flag */
 
 							g_lockpick_try_counter = 0;
 
@@ -259,7 +260,7 @@ void DNG_door(signed short action)
 							g_steptarget_front = *(g_dng_map_ptr + MAP_POS(x,y));
 							DNG_open_door();
 
-							add_hero_ap((struct struct_hero*)hero, 1L); /* hero gets 1 AP for successful lock pick */
+							add_hero_ap(hero, 1L); /* hero gets 1 AP for successful lock pick */
 
 							g_new_menu_icons[6] = g_new_menu_icons[7] = g_new_menu_icons[8] = MENU_ICON_NONE;
 							g_redraw_menuicons = 1;
@@ -282,31 +283,32 @@ void DNG_door(signed short action)
 
 				if (hero_pos != -1)
 				{
-					hero = get_hero(hero_pos);
+					hero = (struct struct_hero*)get_hero(hero_pos);
 
-					if (host_readbs(hero + HERO_TYPE) < HERO_TYPE_WITCH)
+					if (hero->typus < HERO_TYPE_WITCH)
 					{
 						/* not a spellcaster */
 						GUI_output(get_ttx(330));
+
 					} else {
-						spell_result = test_spell((struct struct_hero*)hero, SP_FORAMEN_FORAMINOR, ptr_doors->foramen_handicap);
+						spell_result = test_spell(hero, SP_FORAMEN_FORAMINOR, ptr_doors->foramen_handicap);
 
 						if (spell_result == -99)
 						{
 							/* unlucky => just print a message */
-							sprintf(g_dtp2, get_ttx(607), (char*)hero + HERO_NAME2);
+							sprintf(g_dtp2, get_ttx(607), hero->alias);
 							GUI_output(g_dtp2);
 
 						} else if (spell_result <= 0)
 						{
 							/* failed => half AE costs */
-							sub_ae_splash((struct struct_hero*)hero, get_spell_cost(SP_FORAMEN_FORAMINOR, 1));
+							sub_ae_splash(hero, get_spell_cost(SP_FORAMEN_FORAMINOR, 1));
 
 							play_voc(ARCHIVE_FILE_FX17_VOC);
 						} else {
 							play_voc(ARCHIVE_FILE_FX17_VOC);
 
-							sub_ae_splash((struct struct_hero*)hero, get_spell_cost(SP_FORAMEN_FORAMINOR, 0));
+							sub_ae_splash(hero, get_spell_cost(SP_FORAMEN_FORAMINOR, 0));
 
 							/* success => the door opens */
 							*(g_dng_map_ptr + MAP_POS(x,y)) = 0x0f; /* clear higher 4 bits */
@@ -315,7 +317,7 @@ void DNG_door(signed short action)
 							g_steptarget_front = *(g_dng_map_ptr + MAP_POS(x,y));
 							DNG_open_door();
 
-							add_hero_ap((struct struct_hero*)hero, 1L); /* hero gets 1 AP for successful lock pick */
+							add_hero_ap(hero, 1L); /* hero gets 1 AP for successful lock pick */
 
 							g_new_menu_icons[6] = g_new_menu_icons[7] = g_new_menu_icons[8] = MENU_ICON_NONE;
 							g_redraw_menuicons = 1;
@@ -347,7 +349,7 @@ void print_msg_with_first_hero(char *msg)
 void DNG_fallpit_test(signed short max_damage)
 {
 	signed short i;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	play_voc(ARCHIVE_FILE_FX18_VOC);
 
@@ -367,14 +369,13 @@ void DNG_fallpit_test(signed short max_damage)
 		/* effect: 0101.... */
 
 		/* damage the heroes */
-		hero = get_hero(0);
-		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
+		hero = (struct struct_hero*)get_hero(0);
+		for (i = 0; i <= 6; i++, hero++)
 		{
 			/* TODO: need to check if the hero is dead ? */
-			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == gs_current_group)
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group))
 			{
-				sub_hero_le((struct struct_hero*)hero, random_schick(max_damage));
+				sub_hero_le(hero, random_schick(max_damage));
 			}
 		}
 	} else {
@@ -391,8 +392,8 @@ void DNG_fallpit_test(signed short max_damage)
 			/* move one level up. */
 			gs_dungeon_level--;
 
-			gs_x_target = (gs_x_target_bak);
-			gs_y_target = (gs_y_target_bak);
+			gs_x_target = gs_x_target_bak;
+			gs_y_target = gs_y_target_bak;
 
 			load_area_description(1);
 
@@ -501,7 +502,7 @@ signed short DNG_step(void)
 
 		if (l_di != -2)
 		{
-			g_action = (l_di + ACTION_ID_ICON_1);
+			g_action = l_di + ACTION_ID_ICON_1;
 		}
 
 		g_textbox_width = tw_bak;
@@ -676,17 +677,17 @@ void DNG_see_stairs(void)
 #endif
 
 	do {
-		if (host_readws((Bit8u*)stair_ptr) == target_pos)
+		if (stair_ptr->pos == target_pos)
 		{
 			/* found the current stairs */
-			gs_x_target = (host_readbs((Bit8u*)stair_ptr + 2) & 0x0f);
-			gs_y_target = (host_readbs((Bit8u*)stair_ptr + 3) & 0x0f);
-			gs_direction = (host_readbs((Bit8u*)stair_ptr + 3) >> 4);
+			gs_x_target = (stair_ptr->target_x & 0x0f);
+			gs_y_target = (stair_ptr->target_y & 0x0f);
+			gs_direction = (stair_ptr->target_y >> 4);
 
-			if (host_readbs((Bit8u*)stair_ptr + 2) & 0x80)
+			if (stair_ptr->target_x & 0x80)
 			{
 				/* downstairs */
-				if (host_readbs((Bit8u*)stair_ptr + 2) & 0x40)
+				if (stair_ptr->target_x & 0x40)
 				{
 					gs_dungeon_level++;
 				}
@@ -695,7 +696,7 @@ void DNG_see_stairs(void)
 
 			} else {
 				/* upstairs */
-				if (host_readbs((Bit8u*)stair_ptr + 2) & 0x40)
+				if (stair_ptr->target_x & 0x40)
 				{
 					gs_dungeon_level--;
 				}
@@ -708,7 +709,7 @@ void DNG_see_stairs(void)
 			break;
 		}
 
-	} while (host_readws((Bit8u*)stair_ptr++) != -1);
+	} while ((stair_ptr++)->pos != -1);
 }
 
 void DNG_see_door(void)
@@ -800,10 +801,10 @@ void do_dungeon(void)
 struct fight_struct {
 	signed short pos;
 	signed short fight_id;
-	signed short unkn1;
-	signed short unkn2;
-	signed short unkn3;
-	signed short unkn4;
+	signed short flee_north;
+	signed short flee_east;
+	signed short flee_south;
+	signed short flee_west;
 	signed short ap;
 };
 
@@ -824,25 +825,25 @@ void DNG_fight(void)
 	}
 #endif
 	do {
-		if (host_readws((Bit8u*)fight_ptr + 0) == target_pos)
+		if (fight_ptr->pos == target_pos)
 		{
 			/* set positions of heroes which escape from the fight */
-			g_fig_flee_position[NORTH] = host_readws((Bit8u*)fight_ptr + 4);
-			g_fig_flee_position[EAST] = host_readws((Bit8u*)fight_ptr + 6);
-			g_fig_flee_position[SOUTH] = host_readws((Bit8u*)fight_ptr + 8);
-			g_fig_flee_position[WEST] = host_readws((Bit8u*)fight_ptr + 10);
+			g_fig_flee_position[NORTH] = fight_ptr->flee_north;
+			g_fig_flee_position[EAST] = fight_ptr->flee_east;
+			g_fig_flee_position[SOUTH] = fight_ptr->flee_south;
+			g_fig_flee_position[WEST] = fight_ptr->flee_west;
 
 			/* execute the fight */
-			if (!do_fight(host_readws((Bit8u*)fight_ptr + 2)))
+			if (!do_fight(fight_ptr->fight_id))
 			{
-				add_hero_ap_all(host_readws((Bit8u*)fight_ptr + 12));
+				add_hero_ap_all(fight_ptr->ap);
 			}
 
 			/* play the music for the DUNGEON again */
 			set_audio_track(ARCHIVE_FILE_DUNGEON_XMI);
 		}
 
-	} while (host_readws((Bit8u*)++fight_ptr) != -1);
+	} while ((++fight_ptr)->pos != -1);
 }
 
 /**
@@ -859,7 +860,7 @@ void DNG_waterbarrel(Bit8u *unit_ptr)
 	signed short hero_refilled;
 	signed short hero_refilled_counter;
 	signed short done;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	done = 0;
 
@@ -873,26 +874,25 @@ void DNG_waterbarrel(Bit8u *unit_ptr)
 		if (answer == 1) {
 
 			/* drink */
-			hero = get_hero(0);
-			for (l_di = 0; l_di <= 6; l_di++, hero += SIZEOF_HERO) {
+			hero = (struct struct_hero*)get_hero(0);
+			for (l_di = 0; l_di <= 6; l_di++, hero++) {
 
-				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-					!hero_dead(hero))
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+					!hero_dead((Bit8u*)hero))
 				{
 					/* 1 unit of water <=> 10 Points of thirst */
 
-					units_needed = (host_readbs(hero + HERO_THIRST) + 9) / 10;
+					units_needed = (hero->thirst + 9) / 10;
 					/* +9 means: round up */
 
 					if (*unit_ptr <= units_needed)
 					{
 						/* not enough units in the barrel for this hero */
-						sub_ptr_bs(hero + HERO_THIRST, *unit_ptr * 10);
+						hero->thirst -= *unit_ptr * 10;
 
-						if (host_readbs(hero + HERO_THIRST) < 0)
+						if (hero->thirst < 0)
 						{
-							host_writeb(hero + HERO_THIRST, 0);
+							hero->thirst = 0;
 						}
 
 						*unit_ptr = 0;
@@ -903,7 +903,7 @@ void DNG_waterbarrel(Bit8u *unit_ptr)
 					} else {
 						/* this hero quenches his/her thirst completely */
 						*unit_ptr -= units_needed;
-						host_writeb(hero + HERO_THIRST, 0);
+						hero->thirst = 0;
 					}
 				}
 			}
@@ -911,25 +911,24 @@ void DNG_waterbarrel(Bit8u *unit_ptr)
 		} else	if (answer == 2) {
 
 			/* replenish WATERSKINS */
-			hero = get_hero(0);
-			for (hero_refilled_counter = l_di = 0; l_di <= 6; l_di++, hero += SIZEOF_HERO)
+			hero = (struct struct_hero*)get_hero(0);
+			for (hero_refilled_counter = l_di = 0; l_di <= 6; l_di++, hero++)
 			{
-				if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-					host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-					!hero_dead(hero))
+				if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+					!hero_dead((Bit8u*)hero))
 				{
 					for (item_pos = hero_refilled = 0; item_pos < NR_HERO_INVENTORY_SLOTS; item_pos++)
 					{
-						if (host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * item_pos) == ITEM_WATERSKIN)
+						if (hero->inventory[item_pos].item_id == ITEM_WATERSKIN)
 						{
 							units_needed = 0;
 
-							if (inventory_half_empty(hero + HERO_INVENTORY + SIZEOF_INVENTORY * item_pos))
-							{
+							if (hero->inventory[item_pos].flags.half_empty) {
+
 								units_needed = 1;
 
-							} else if (inventory_empty(hero + HERO_INVENTORY + SIZEOF_INVENTORY * item_pos))
-							{
+							} else if (hero->inventory[item_pos].flags.empty) {
+
 								units_needed = 2;
 							}
 
@@ -938,13 +937,7 @@ void DNG_waterbarrel(Bit8u *unit_ptr)
 								hero_refilled = 1;
 
 								/* refill waterskin */
-#if !defined(__BORLANDC__)
-								and_ptr_bs(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * item_pos, 0xfb); /* unset 'empty' flag */
-								and_ptr_bs(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * item_pos, 0xfd); /* unset 'half_empty' flag */
-#else
-								(*(struct inventory_flags*)(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * item_pos)).half_empty =
-									(*(struct inventory_flags*)(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * item_pos)).empty = 0;
-#endif
+								hero->inventory[item_pos].flags.half_empty = hero->inventory[item_pos].flags.empty = 0;
 
 								if (*unit_ptr <= units_needed) {
 

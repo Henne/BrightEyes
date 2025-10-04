@@ -31,7 +31,7 @@ namespace M302de {
  * \param   consumer    the consumer
  * \param   pos         the position in the inventory of the owner
  */
-void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
+void consume(struct struct_hero *owner, Bit8u *consumer, const signed short pos)
 {
 	Bit8u *item_p;
 	signed short item;
@@ -54,7 +54,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 	consumer_idx = get_hero_index(consumer);
 
 	/* get item id */
-	item = host_readw(owner + HERO_INVENTORY + INVENTORY_ITEM_ID + pos * SIZEOF_INVENTORY);
+	item = owner->inventory[pos].item_id;
 
 	/* get pointer to ITEMS.DAT */
 	item_p = get_itemsdat(item);
@@ -89,12 +89,12 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 			}
 
 			/* drop one unit of that item */
-			drop_item(owner, pos, 1);
+			drop_item((Bit8u*)owner, pos, 1);
 		} else {
 			/* drinking */
 
 			/* check if item is not empty */
-			if (!inventory_empty(owner + HERO_INVENTORY + pos * SIZEOF_INVENTORY)) {
+			if (!owner->inventory[pos].flags.empty) {
 
 #if !defined(__BORLANDC__)
 				int diff = host_readbs(consumer + HERO_THIRST) - host_readbs(item_p + 4);
@@ -123,26 +123,24 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 				if (item == ITEM_WATERSKIN) {
 					/* water */
 
-					if (inventory_half_empty(owner + HERO_INVENTORY + pos * SIZEOF_INVENTORY)) {
-						/* empty */
-						or_ptr_bs(owner + HERO_INVENTORY + INVENTORY_FLAGS + pos * SIZEOF_INVENTORY, 4); /* set 'empty' flag */
+					if (owner->inventory[pos].flags.half_empty) {
+						owner->inventory[pos].flags.empty = 1;
 					} else {
-						/* half empty */
-						or_ptr_bs(owner + HERO_INVENTORY + INVENTORY_FLAGS + pos * SIZEOF_INVENTORY, 2); /* set 'half empty' flag */
+						owner->inventory[pos].flags.half_empty = 1;
 					}
 
 				} else if (item == ITEM_BRANDY || item == ITEM_WINE) {
 					/* wine or snaps */
 					hero_get_drunken((struct struct_hero*)consumer);
-					drop_item(owner, pos, 1);
+					drop_item((Bit8u*)owner, pos, 1);
 				} else {
 					/* everything else: Beer */
-					drop_item(owner, pos, 1);
+					drop_item((Bit8u*)owner, pos, 1);
 
 					/* That does not happen */
 					if (item != ITEM_BEER) {
 						/* get an empty glass bottle */
-						give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
+						give_hero_new_item((Bit8u*)owner, ITEM_FLASK_GLASS, 2, 1);
 					}
 				}
 			} else {
@@ -166,7 +164,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 				/* consume with effects */
 
 				/* drop one entity */
-				drop_item(owner, pos, 1);
+				drop_item((Bit8u*)owner, pos, 1);
 
 				/* terminate output string */
 				*g_dtp2 = '\0';
@@ -281,10 +279,10 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 				/* handle good elexires */
 
 				/* drop elexire */
-				drop_item(owner, pos, 1);
+				drop_item((Bit8u*)owner, pos, 1);
 
 				/* get glassbottle */
-				give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
+				give_hero_new_item((Bit8u*)owner, ITEM_FLASK_GLASS, 2, 1);
 
 				/* Attribute +5 for 1h */
 				l_di = get_free_mod_slot();
@@ -300,10 +298,10 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 				/* handle bad elexires */
 
 				/* drop elexire */
-				drop_item(owner, pos, 1);
+				drop_item((Bit8u*)owner, pos, 1);
 
 				/* get glassbottle */
-				give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
+				give_hero_new_item((Bit8u*)owner, ITEM_FLASK_GLASS, 2, 1);
 
 				/* Attribute -7 for 1h */
 				l_di = get_free_mod_slot();
@@ -319,7 +317,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 				/* everything else */
 
 				/* drop the item */
-				drop_item(owner, pos, 1);
+				drop_item((Bit8u*)owner, pos, 1);
 
 				switch (item) {
 				case 0x91 : {
@@ -341,7 +339,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					add_hero_le((struct struct_hero*)consumer, l_si);
 
 					/* give owner a glassbottle */
-					give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
+					give_hero_new_item((Bit8u*)owner, ITEM_FLASK_GLASS, 2, 1);
 
 					/* prepare output */
 					sprintf(g_dtp2, get_ttx(510), (char*)consumer + HERO_NAME2, l_si, g_text_output_buf);
@@ -359,7 +357,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					add_hero_le((struct struct_hero*)consumer, l_si);
 
 					/* give owner a copperbottle */
-					give_hero_new_item(owner, ITEM_FLASK_BRONZE, 2, 1);
+					give_hero_new_item((Bit8u*)owner, ITEM_FLASK_BRONZE, 2, 1);
 
 					/* singular POINT/ PUNKT */
 					strcpy(g_text_output_buf, get_ttx(392));
@@ -403,7 +401,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					}
 
 					/* give owner a glasbottle */
-					give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
+					give_hero_new_item((Bit8u*)owner, ITEM_FLASK_GLASS, 2, 1);
 
 					/* prepare output */
 					sprintf(g_dtp2, get_ttx(511), (char*)consumer + HERO_NAME2, (GUI_get_ptr(host_readbs(consumer + HERO_SEX), 0)));
@@ -417,7 +415,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					host_writeb(consumer + HERO_RUHE_KOERPER, 3);
 
 					/* give owner a glasbottle */
-					give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
+					give_hero_new_item((Bit8u*)owner, ITEM_FLASK_GLASS, 2, 1);
 
 					/* prepare output */
 					sprintf(g_dtp2, get_ttx(738), (char*)consumer + HERO_NAME2);
@@ -438,7 +436,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 						add_hero_ae((struct struct_hero*)consumer, l_si);
 
 						/* give hero a glassbottle */
-						give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
+						give_hero_new_item((Bit8u*)owner, ITEM_FLASK_GLASS, 2, 1);
 
 						/* prepare output */
 						strcpy(g_text_output_buf, get_ttx(392));
@@ -454,7 +452,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 						strcpy(g_dtp2, get_ttx(804));
 
 						/* give owner a glassbottle */
-						give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
+						give_hero_new_item((Bit8u*)owner, ITEM_FLASK_GLASS, 2, 1);
 					}
 
 					break;
@@ -474,7 +472,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 						add_hero_ae((struct struct_hero*)consumer, l_si);
 
 						/* give owner a glassbottle */
-						give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
+						give_hero_new_item((Bit8u*)owner, ITEM_FLASK_GLASS, 2, 1);
 
 						/* prepare output */
 						if (host_readws(consumer + HERO_AE) >= host_readws(consumer + HERO_AE_ORIG)) {
@@ -493,7 +491,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 						strcpy(g_dtp2, get_ttx(804));
 
 						/* give owner a glassbottle */
-						give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
+						give_hero_new_item((Bit8u*)owner, ITEM_FLASK_GLASS, 2, 1);
 					}
 					break;
 				}
@@ -508,7 +506,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					}
 
 					/* give owner a glassbottle */
-					give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
+					give_hero_new_item((Bit8u*)owner, ITEM_FLASK_GLASS, 2, 1);
 
 					sprintf(g_dtp2, get_ttx(467), (char*)consumer + HERO_NAME2);
 					break;
@@ -522,7 +520,7 @@ void consume(Bit8u *owner, Bit8u *consumer, signed short pos)
 					host_writeb(consumer + disease * 5 + 0xaf, 0);
 
 					/* give owner a glassbottle */
-					give_hero_new_item(owner, ITEM_FLASK_GLASS, 2, 1);
+					give_hero_new_item((Bit8u*)owner, ITEM_FLASK_GLASS, 2, 1);
 
 					sprintf(g_dtp2, get_ttx(467), (char*)consumer + HERO_NAME2);
 					break;

@@ -1,4 +1,5 @@
 /**
+ *
  *	Rewrite of DSA1 v3.02_de functions of seg040 (scenarios)
  *	Functions rewritten: 3/3 (complete)
  *

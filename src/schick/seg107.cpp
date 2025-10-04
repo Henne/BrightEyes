@@ -67,7 +67,7 @@ void use_item(signed short item_pos, signed short hero_pos)
 			} else if ((item_herb_potion(g_used_item_desc)) && !is_in_word_array(g_used_item_id, g_poison_potions)) {
 
 				/* don't consume poison */
-				consume(get_itemuser(), get_itemuser(), item_pos);
+				consume((struct struct_hero*)get_itemuser(), (Bit8u*)get_itemuser(), item_pos);
 
 			} else if ((host_readws(get_itemuser() + SIZEOF_INVENTORY * g_used_item_pos + (HERO_INVENTORY + INVENTORY_QUANTITY))) <= 0) {
 

@@ -522,32 +522,6 @@ static inline unsigned short inventory_broken(Bit8u *ks) {
 }
 
 /**
- * inventory_half_empty() -	check if an item (only used for ITEM_WATERSKIN) in the inventory is half empty
- * @item:	ptr to item
- *
- * 0 = filled / 1 = half empty
- */
-static inline unsigned short inventory_half_empty(Bit8u *ks) {
-	if (((host_readb(ks + INVENTORY_FLAGS) >> 1) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-/**
- * inventory_empty() -	check if an item (only used for ITEM_WATERSKIN) in the inventory is empty
- * @item:	ptr to item
- *
- * 0 = filled / 1 = empty
- */
-static inline unsigned short inventory_empty(Bit8u *ks) {
-	if (((host_readb(ks + INVENTORY_FLAGS) >> 2) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-/**
  * inventory_magic() -	check if an item in the inventory is magic
  * @item:	ptr to item
  *
@@ -845,8 +819,6 @@ static inline char* get_itemname(unsigned short item)
 #define add_inventory_quantity(i1, i2, hero) (    ((struct inventory*)(hero + HERO_INVENTORY))[i1].quantity+=((struct inventory*)(hero + HERO_INVENTORY))[i2].quantity)
 
 #define inventory_broken(ks)			((*(struct inventory_flags*)(ks + INVENTORY_FLAGS)).broken)
-#define inventory_half_empty(ks)		((*(struct inventory_flags*)(ks + INVENTORY_FLAGS)).half_empty)
-#define inventory_empty(ks)			((*(struct inventory_flags*)(ks + INVENTORY_FLAGS)).empty)
 #define inventory_magic(ks)			((*(struct inventory_flags*)(ks + INVENTORY_FLAGS)).magic)
 #define inventory_poison_expurgicum(ks)	((*(struct inventory_flags*)(ks + INVENTORY_FLAGS)).poison_expurgicum)
 #define inventory_poison_vomicum(ks)		((*(struct inventory_flags*)(ks + INVENTORY_FLAGS)).poison_vomicum)

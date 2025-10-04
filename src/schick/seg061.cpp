@@ -103,15 +103,9 @@ void do_temple(void)
 		if (g_mouse2_event || g_action == ACTION_ID_PAGE_UP) {
 
 			l_di = GUI_radio(get_ttx(225), 9,
-						get_ttx(226),
-						get_ttx(227),
-						get_ttx(293),
-						get_ttx(228),
-						get_ttx(229),
-						get_ttx(230),
-						get_ttx(620),
-						get_ttx(296),
-						get_ttx(231)) - 1;
+						get_ttx(226), get_ttx(227), get_ttx(293),
+						get_ttx(228), get_ttx(229), get_ttx(230),
+						get_ttx(620), get_ttx(296), get_ttx(231)) - 1;
 
 			if (l_di != -2) {
 				g_action = (l_di + ACTION_ID_ICON_1);
@@ -145,10 +139,7 @@ void do_temple(void)
 				} while (game_state == -1);
 
 				/* location string */
-				sprintf(g_dtp2,
-					get_ttx(235),
-					get_ttx(g_temple_god + 21),	/* name of the god */
-					get_ttx(gs_current_town + 235));
+				sprintf(g_dtp2,	get_ttx(235), get_ttx(g_temple_god + 21), get_ttx(gs_current_town + 235));
 				GUI_print_loc_line(g_dtp2);
 
 				draw_status_line();
@@ -246,7 +237,7 @@ void char_add(signed short temple_id)
 	signed short l_di;
 	signed short i;
 	Bit8u *ptr;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	ptr = g_renderbuf_ptr + 50000;
 	l_di = copy_chr_names(ptr, temple_id);
@@ -268,18 +259,18 @@ void char_add(signed short temple_id)
 
 				if (l_si != -1) {
 
-					hero = get_hero(0);
+					hero = (struct struct_hero*)get_hero(0);
 
-					for (i = 0; i < 6; i++, hero += SIZEOF_HERO) {
+					for (i = 0; i < 6; i++, hero++) {
 
-						if (!host_readbs(hero + HERO_TYPE)) {
+						if (!hero->typus) {
 
 							prepare_chr_name(g_dtp2, (char*)(ptr + 32 * l_si));
 
 							if (read_chr_temp(g_dtp2, i, gs_current_group)) {
 								gs_total_hero_counter++;
 								gs_group_member_counts[gs_current_group]++;
-								host_writebs(hero + HERO_GROUP_POS, i + 1);
+								hero->group_pos = i + 1;
 								write_chr_temp(i);
 							}
 							break;
@@ -290,15 +281,14 @@ void char_add(signed short temple_id)
 					init_ani(2);
 
 					/* location string */
-					sprintf(g_dtp2, get_ttx(235),
-						get_ttx(g_temple_god + 21),
-						get_ttx(gs_current_town + 235));
+					sprintf(g_dtp2, get_ttx(235), get_ttx(g_temple_god + 21), get_ttx(gs_current_town + 235));
 
 					GUI_print_loc_line(g_dtp2);
 				}
 
 				l_di = copy_chr_names(ptr, temple_id);
 			}
+
 		} while ((l_si != -1) && (gs_total_hero_counter < (host_readbs(get_hero(6) + HERO_TYPE) ? 7 : 6)));
 	}
 }
@@ -306,43 +296,44 @@ void char_add(signed short temple_id)
 void char_letgo(signed short temple_id)
 {
 	signed short hero_pos;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	if (!gs_total_hero_counter || !gs_group_member_counts[gs_current_group]) {
+
 		GUI_output(get_ttx(232));
+
 	} else {
 
 		do {
-
 			hero_pos = select_hero_from_group(get_ttx(618));
 
 			if (hero_pos != -1) {
 
 				if (hero_pos == 6) {
+
 					/* let go an NPC */
 					gs_npc_months = 99;
 					npc_farewell();
+
 				} else {
+
 					/* let go a hero */
-					hero = get_hero(hero_pos);
+					hero = (struct struct_hero*)get_hero(hero_pos);
 					gs_total_hero_counter--;
 					gs_group_member_counts[gs_current_group]--;
 
-					host_writeb(hero + HERO_TEMPLE_ID, (signed char)temple_id);
-					host_writeb(hero + HERO_GROUP_POS, 0);
+					hero->temple_id = (signed char)temple_id;
+					hero->group_pos = 0;
 
 					write_chr_temp(hero_pos);
 
-					memset(hero, 0, SIZEOF_HERO);
+					memset(hero, 0, sizeof(struct struct_hero));
 
 					draw_main_screen();
 					init_ani(2);
 
 					/* location string */
-					sprintf(g_dtp2,
-						get_ttx(235),
-						get_ttx(g_temple_god + 21),	/* name of the god */
-						get_ttx(gs_current_town + 235));
+					sprintf(g_dtp2,	get_ttx(235), get_ttx(g_temple_god + 21), get_ttx(gs_current_town + 235));
 					GUI_print_loc_line(g_dtp2);
 				}
 			}
@@ -376,7 +367,7 @@ signed short char_erase(void)
 
 				strcpy(g_dtp2, (char*)ptr + 32 * l_si);
 
-				sprintf(g_text_output_buf, get_ttx(295),	g_dtp2);
+				sprintf(g_text_output_buf, get_ttx(295), g_dtp2);
 
 				if (GUI_bool(g_text_output_buf)) {
 
@@ -419,21 +410,19 @@ void miracle_heal_hero(signed short le_in, char *str)
 	signed short le;
 	signed short hero_pos;
 	signed short le_diff;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	le = 0;
 	hero_pos = -1;
 
 	/* search for the hero with the largest LE-difference */
 	for (i = 0; i <= 6; i++) {
-		hero = get_hero(i);
 
-		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-			!hero_dead(hero) &&
-			!hero_gods_pissed(hero) &&
-			!hero_dead(hero) &&
-			((le_diff = host_readws(hero + HERO_LE_ORIG) - host_readws(hero + HERO_LE)) > le))
+		hero = (struct struct_hero*)get_hero(i);
+
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+			!hero_dead((Bit8u*)hero) && !hero_gods_pissed((Bit8u*)hero) && !hero_dead((Bit8u*)hero) &&
+			((le_diff = hero->le_max - hero->le) > le))
 		{
 			le = le_diff;
 			hero_pos = i;
@@ -456,7 +445,7 @@ void miracle_heal_hero(signed short le_in, char *str)
 			strcat(g_text_output_buf, get_ttx(393));
 		}
 
-		sprintf(g_dtp2, (char*)str, (char*)get_hero(hero_pos) + HERO_NAME2, le_in, g_text_output_buf);
+		sprintf(g_dtp2, (char*)str, ((struct struct_hero*)get_hero(hero_pos))->alias, le_in, g_text_output_buf);
 	}
 }
 
@@ -466,21 +455,21 @@ void miracle_resurrect(char *str)
 
 	for (i = 0; i <= 6; i++) {
 
-		Bit8u *hero = get_hero(i);
+		struct struct_hero *hero = (struct struct_hero*)get_hero(i);
 
-		if (hero_dead(hero) && host_readbs(hero + HERO_GROUP_NO) == gs_current_group && !hero_gods_pissed(hero))
+		if (hero_dead((Bit8u*)hero) && (hero->group_no == gs_current_group) && !hero_gods_pissed((Bit8u*)hero))
 		{
 			/* resurrect from the dead */
-			and_ptr_bs(hero + HERO_FLAGS1, 0xfe); /* unset 'dead' flag */
+			and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xfe); /* unset 'dead' flag */
 
 			/* add 7 LE */
-			add_hero_le((struct struct_hero*)hero, 7);
+			add_hero_le(hero, 7);
 
 			/* update_ the status line */
 			draw_status_line();
 
 			/* prepare a message */
-			sprintf(g_dtp2, (char*)str, (char*)hero + HERO_NAME2);
+			sprintf(g_dtp2, (char*)str, hero->alias);
 
 			break;
 		}
@@ -499,17 +488,15 @@ void miracle_modify(unsigned short offset, Bit32s timer_value, signed short mod)
 	int i;
 	int slot;
 	HugePt ptr;
-	unsigned char *hero = get_hero(0);
+	struct struct_hero *hero = (struct struct_hero*)get_hero(0);
 
-	for (i = 0; i <= 6; i++, hero += SIZEOF_HERO) {
+	for (i = 0; i <= 6; i++, hero++) {
 
-		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-			!hero_dead(hero) &&
-			!hero_gods_pissed(hero))
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) &&
+			!hero_dead((Bit8u*)hero) && !hero_gods_pissed((Bit8u*)hero))
 		{
 			slot = get_free_mod_slot();
-			ptr = hero;
+			ptr = (Bit8u*)hero;
 			ptr += offset;
 
 			set_mod_slot(slot, timer_value, (Bit8u*)ptr, (signed char)mod, (signed char)i);
@@ -532,45 +519,38 @@ void miracle_weapon(char *str, signed short mode)
 
 	for (j = done = 0; (j <= 6) && (!done); j++) {
 
-		Bit8u *hero = get_hero(j);
+		struct struct_hero *hero = (struct struct_hero*)get_hero(j);
 
-		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-			!hero_dead(hero) &&
-			!hero_gods_pissed(hero))
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero) && !hero_gods_pissed((Bit8u*)hero))
 		{
 			for (i = 0; i < NR_HERO_INVENTORY_SLOTS; i++)
 			{
 
-				if ((item_id = host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * i)) &&
-					item_weapon(get_itemsdat(item_id)))
+				if ((item_id = hero->inventory[i].item_id) && item_weapon(get_itemsdat(item_id)))
 				{
 
 					if (mode == 0) {
+
 						/* if weapon is neither broken nor magic magic, make it magic and magic_revealed */
 
-						if (!inventory_broken(hero + HERO_INVENTORY + SIZEOF_INVENTORY * i) &&
-							!inventory_magic(hero + HERO_INVENTORY + SIZEOF_INVENTORY * i))
+						if (!hero->inventory[i].flags.broken &&	!hero->inventory[i].flags.magic)
 						{
-							or_ptr_bs(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * i, 0x08); /* set 'magic' flag */
-							or_ptr_bs(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * i, 0x80); /* set 'magic_revealed' flag */
+							hero->inventory[i].flags.magic = 1;
+							hero->inventory[i].flags.magic_revealed = 1;
 
-							sprintf(g_dtp2, (char*)str,
-								GUI_names_grammar((signed short)0x8000, item_id, 0),
-								(char*)hero + HERO_NAME2);
+							sprintf(g_dtp2, (char*)str, GUI_names_grammar((signed short)0x8000, item_id, 0), hero->alias);
 
 							done = 1;
 							break;
 						}
 					} else {
-						/* repair a broken weapon */
-						if (inventory_broken(hero + HERO_INVENTORY + SIZEOF_INVENTORY * i))
-						{
-							and_ptr_bs(hero + HERO_INVENTORY + INVENTORY_FLAGS + SIZEOF_INVENTORY * i, 0xfe); /* unset 'broken' flag */
 
-							sprintf(g_dtp2, (char*)str,
-								GUI_names_grammar((signed short)0x8000, item_id, 0),
-								(char*)hero + HERO_NAME2);
+						/* repair a broken weapon */
+						if (hero->inventory[i].flags.broken)
+						{
+							hero->inventory[i].flags.broken = 0;
+
+							sprintf(g_dtp2, (char*)str, GUI_names_grammar((signed short)0x8000, item_id, 0), hero->alias);
 
 							done = 1;
 							break;

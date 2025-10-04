@@ -381,7 +381,7 @@ signed short skill_cure_disease(struct struct_hero *healer, struct struct_hero *
 		load_tx(ARCHIVE_FILE_SPELLTXT_LTX);
 	}
 
-	if (is_hero_healable((Bit8u*)patient)) {
+	if (is_hero_healable(patient)) {
 
 		disease_id = hero_is_diseased(patient);
 

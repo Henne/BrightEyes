@@ -434,7 +434,7 @@ void show_outro(void)
 	signed short height;
 	unsigned short len;
 	Bit8u *pal_ptr;
-	Bit8u *hero;
+	struct struct_hero *hero;
 	signed short i;
 	struct nvf_desc nvf;
 
@@ -544,78 +544,81 @@ void show_outro(void)
 	sub_light_timers(100);
 
 	/* give the heroes the reward and restore them */
-	hero = get_hero(0);
-	for (i = 0; i < 6; i++, hero += SIZEOF_HERO) {
+	hero = (struct struct_hero*)get_hero(0);
+	for (i = 0; i < 6; i++, hero++) {
 
-		if (host_readbs(hero + HERO_TYPE)) {
+		if (hero->typus) {
 
 			/* get 50D */
 			add_party_money(5000);
 
-			and_ptr_bs(hero + HERO_FLAGS1, 0xfd); /* unset 'asleep' flag */
-			and_ptr_bs(hero + HERO_FLAGS1, 0xfb); /* unset 'petrified' flag */
-			and_ptr_bs(hero + HERO_FLAGS1, 0xf7); /* unset 'brewing' flag */
-			and_ptr_bs(hero + HERO_FLAGS1, 0xdf); /* unset 'renegade' flag */
+			and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xfd); /* unset 'asleep' flag */
+			and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xfb); /* unset 'petrified' flag */
+			and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xf7); /* unset 'brewing' flag */
+			and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xdf); /* unset 'renegade' flag */
 
 			/* reset every disease */
 			for (j = 0; j < 8; j++) {
 
-				host_writeb(hero + (0xae + 0) + 5 * j, 0);
-				host_writeb(hero + (0xae + 1) + 5 * j, 0);
-				host_writeb(hero + (0xae + 2) + 5 * j, 0);
-				host_writeb(hero + (0xae + 3) + 5 * j, 0);
-				host_writeb(hero + (0xae + 4) + 5 * j, 0);
+				hero->sick[j][0] = 0;
+				hero->sick[j][1] = 0;
+				hero->sick[j][2] = 0;
+				hero->sick[j][3] = 0;
+				hero->sick[j][4] = 0;
 			}
 
 			/* reset every poison */
 			for (j = 0; j < 10; j++) {
 
-				host_writeb(hero + (0xd6 + 0) + 5 * j, 0);
-				host_writeb(hero + (0xd6 + 1) + 5 * j, 0);
-				host_writeb(hero + (0xd6 + 2) + 5 * j, 0);
-				host_writeb(hero + (0xd6 + 3) + 5 * j, 0);
-				host_writeb(hero + (0xd6 + 4) + 5 * j, 0);
+				hero->poison[j][0] = 0;
+				hero->poison[j][1] = 0;
+				hero->poison[j][2] = 0;
+				hero->poison[j][3] = 0;
+				hero->poison[j][4] = 0;
 			}
 
 #ifdef M302de_ORIGINAL_BUGFIX
 			/* Original-Bug: restore permanent LE-damage at the end of game */
-			/*  Famous heroes get healed for free */
-			if (host_readbs(hero + HERO_LE_MOD) > 0)
+			/* Famous heroes get healed for free */
+			if (hero->le_malus > 0)
 			{
-				add_ptr_ws(hero + HERO_LE_ORIG, host_readbs(hero + HERO_LE_MOD));
-				host_writebs(hero + HERO_LE_MOD, 0);
+				hero->le_max += hero->le_malus;
+				hero->le_malus = 0;
 			}
 #endif
 
 			/* set LE to the max */
-			add_hero_le((struct struct_hero*)hero, host_readws(hero + HERO_LE_ORIG));
+			add_hero_le(hero, hero->le_max);
 			/* set AE to the max */
-			add_hero_ae((struct struct_hero*)hero, host_readws(hero + HERO_AE_ORIG));
+			add_hero_ae(hero, hero->ae_max);
 
 			/* ??? */
 #ifndef M302de_ORIGINAL_BUGFIX
-			host_writeb(hero + HERO_LE_MOD, 0);
+			hero->le_malus = 0;
 #endif
-			host_writeb(hero + HERO_HUNGER, 0);
-			host_writeb(hero + HERO_THIRST, 0);
-			host_writeb(hero + HERO_TEMPLE_ID, 0);
-			host_writeb(hero + HERO_RECIPE_ID, 0);
-			host_writeb(hero + HERO_RECIPE_TIMER, 0);
-			host_writeb(hero + HERO_ALCHEMY_INN_ID, 0);
-			host_writeb(hero + HERO_JAIL, 0);
-			host_writeb(hero + HERO_DRUNK, 0);
-			host_writeb(hero + HERO_RUHE_KOERPER, 0);
+			hero->hunger = 0;
+			hero->thirst = 0;
+			hero->temple_id = 0;
+			hero->recipe_id = 0;
+			hero->recipe_timer = 0;
+			hero->alchemy_inn_id = 0;
+			hero->jail = 0;
+
+			/* Remark: better check use get_sober() */
+			hero->drunk = 0;
+
+			hero->ruhe_koerper = 0;
 
 			for (j = 0; j <= 13; j++) {
 
-				host_writeb(hero + HERO_ATTRIB + 3 * j, host_readbs(hero + HERO_ATTRIB_ORIG + 3 * j));
-				host_writeb(hero + HERO_ATTRIB_MOD + 3 * j, 0);
+				hero->attrib[j].current = hero->attrib[j].normal;
+				hero->attrib[j].mod = 0;
 			}
 
-			host_writed(hero + HERO_HEAL_TIMER, 0);
-			host_writed(hero + HERO_STAFFSPELL_TIMER, 0);
+			hero->heal_timer = 0;
+			hero->staffspell_timer = 0;
 
-			host_writeb(hero + HERO_GROUP_POS, i + 1);
+			hero->group_pos = i + 1;
 		}
 	}
 

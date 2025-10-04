@@ -35,7 +35,7 @@ signed short DNG03_handler(void)
 	signed short i;
 	signed short j;
 	signed short tw_bak;
-	Bit8u *hero;
+	struct struct_hero *hero;
 	signed short l3;
 	signed short l4;
 
@@ -64,17 +64,16 @@ signed short DNG03_handler(void)
 			gs_y_target = 8;
 			DNG_inc_level();
 
-			hero = get_hero(0);
-			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
+			hero = (struct struct_hero*)get_hero(0);
+			for (i = 0; i <= 6; i++, hero++)
 			{
-				if (host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH &&
-					host_readws(hero + HERO_AE) != 0)
-				{
-					sub_ae_splash((struct struct_hero*)hero, random_schick(6));
+				if ((hero->typus >= HERO_TYPE_WITCH) && hero->ae != 0) {
 
-				} else if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE)
-				{
-					sub_hero_le((struct struct_hero*)hero, random_schick(6));
+					sub_ae_splash(hero, random_schick(6));
+
+				} else if (hero->typus != HERO_TYPE_NONE) {
+
+					sub_hero_le(hero, random_schick(6));
 				}
 			}
 		}
@@ -89,17 +88,16 @@ signed short DNG03_handler(void)
 
 		DNG_update_pos();
 
-		hero = get_hero(0);
-		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
+		hero = (struct struct_hero*)get_hero(0);
+		for (i = 0; i <= 6; i++, hero++)
 		{
-			if (host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH &&
-				host_readws(hero + HERO_AE) != 0)
-			{
-				sub_ae_splash((struct struct_hero*)hero, random_schick(6));
+			if ((hero->typus >= HERO_TYPE_WITCH) && hero->ae != 0) {
 
-			} else if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE)
-			{
-				sub_hero_le((struct struct_hero*)hero, random_schick(6));
+				sub_ae_splash(hero, random_schick(6));
+
+			} else if (hero->typus != HERO_TYPE_NONE) {
+
+				sub_hero_le(hero, random_schick(6));
 			}
 		}
 
@@ -121,19 +119,18 @@ signed short DNG03_handler(void)
 	{
 		GUI_output(get_tx(5));
 
-		hero = get_hero(0);
-		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
+		hero = (struct struct_hero*)get_hero(0);
+		for (i = 0; i <= 6; i++, hero++)
 		{
-			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-				!hero_dead(hero) &&
-				test_skill((struct struct_hero*)hero, TA_KLETTERN, 2) <= 0)
+			if ((hero->typus != HERO_TYPE_NONE) &&
+				(hero->group_no == gs_current_group) &&
+				!hero_dead((Bit8u*)hero) &&
+				(test_skill(hero, TA_KLETTERN, 2) <= 0))
 			{
-				sprintf(g_dtp2,	get_tx(6), (char*)hero + HERO_NAME2,
-					GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
+				sprintf(g_dtp2,	get_tx(6), hero->alias,	GUI_get_ptr(hero->sex, 0));
 				GUI_output(g_dtp2);
 
-				sub_hero_le((struct struct_hero*)hero, dice_roll(1, 6, 3));
+				sub_hero_le(hero, dice_roll(1, 6, 3));
 			}
 		}
 
@@ -152,17 +149,16 @@ signed short DNG03_handler(void)
 			gs_direction = SOUTH;
 			DNG_update_pos();
 
-			hero = get_hero(0);
-			for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
+			hero = (struct struct_hero*)get_hero(0);
+			for (i = 0; i <= 6; i++, hero++)
 			{
-				if (host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH &&
-					host_readws(hero + HERO_AE) != 0)
-				{
-					sub_ae_splash((struct struct_hero*)hero, random_schick(6));
+				if ((hero->typus >= HERO_TYPE_WITCH) && hero->ae != 0) {
 
-				} else if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE)
-				{
-					sub_hero_le((struct struct_hero*)hero, random_schick(6));
+					sub_ae_splash(hero, random_schick(6));
+
+				} else if (hero->typus != HERO_TYPE_NONE) {
+
+					sub_hero_le(hero, random_schick(6));
 				}
 			}
 		} else {
@@ -193,72 +189,69 @@ signed short DNG03_handler(void)
 	{
 		j = 0;
 
-		if (test_skill((struct struct_hero*)(Bit8u*)get_first_hero_available_in_group(), TA_GEFAHRENSINN, 4) <= 0)
+		if (test_skill((struct struct_hero*)get_first_hero_available_in_group(), TA_GEFAHRENSINN, 4) <= 0)
 		{
 			j++;
 		}
 
-		if ((hero = (Bit8u*)get_second_hero_available_in_group()) &&
-			host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-			!hero_dead(hero) &&
-			test_skill((struct struct_hero*)hero, TA_GEFAHRENSINN, 4) <= 0)
+		if ((hero = (struct struct_hero*)get_second_hero_available_in_group()) &&
+			(hero->typus != HERO_TYPE_NONE) &&
+			(hero->group_no == gs_current_group) &&
+			!hero_dead((Bit8u*)hero) &&
+			(test_skill(hero, TA_GEFAHRENSINN, 4) <= 0))
 		{
 			j++;
 		}
 
-		hero = (Bit8u*)get_first_hero_available_in_group();
+		hero = (struct struct_hero*)get_first_hero_available_in_group();
 
-		if (j != 0 || test_attrib((struct struct_hero*)hero, ATTRIB_GE, 2) <= 0)
+		if (j != 0 || test_attrib(hero, ATTRIB_GE, 2) <= 0)
 		{
-			sprintf(g_dtp2,	get_tx(13), (char*)hero + HERO_NAME2,
-				GUI_get_ptr(host_readbs(hero + HERO_SEX), 3));
-
+			sprintf(g_dtp2,	get_tx(13), hero->alias, GUI_get_ptr(hero->sex, 3));
 			GUI_output(g_dtp2);
 
-			sub_hero_le((struct struct_hero*)hero, dice_roll(2, 6, 0));
+			sub_hero_le(hero, dice_roll(2, 6, 0));
 
 			timewarp(MINUTES(20));
 
-			if (host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_BODY * SIZEOF_INVENTORY + INVENTORY_ITEM_ID) != ITEM_NONE)
+			if (hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id != ITEM_NONE)
 			{
 				/* RS of the equipped body armor gets degraded by 3, but not below 0 */
-				l3 = g_armors_table[host_readbs(get_itemsdat(host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_BODY * SIZEOF_INVENTORY)) + ITEM_STATS_TABLE_INDEX)].rs
-				    - host_readbs(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_BODY * SIZEOF_INVENTORY + INVENTORY_RS_LOST);
+				l3 = g_armors_table[host_readbs(get_itemsdat(hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id) + ITEM_STATS_TABLE_INDEX)].rs
+				    - hero->inventory[HERO_INVENTORY_SLOT_BODY].rs_lost;
 
 				l4 = (l3 > 3 ? 3 : (l3 > 0 ? l3 : 0));
 
-				add_ptr_bs(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_BODY * SIZEOF_INVENTORY + INVENTORY_RS_LOST, (unsigned char)l4);
-				sub_ptr_bs(hero + HERO_RS_BONUS1, (unsigned char)l4);
+				hero->inventory[HERO_INVENTORY_SLOT_BODY].rs_lost += l4;
+				hero->rs_bonus1 -= l4;
 			}
 		}
 
-		if ((hero = (Bit8u*)get_second_hero_available_in_group()) &&
+		if ((hero = (struct struct_hero*)get_second_hero_available_in_group()) &&
 			(j == 2 ||
-			(host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-			!hero_dead(hero) &&
-			test_attrib((struct struct_hero*)hero, ATTRIB_GE, 2) <= 0)))
+			(hero->typus != HERO_TYPE_NONE) &&
+			(hero->group_no == gs_current_group) &&
+			!hero_dead((Bit8u*)hero) &&
+			(test_attrib(hero, ATTRIB_GE, 2) <= 0)))
 		{
 
-			sprintf(g_dtp2,	get_tx(13), (char*)hero + HERO_NAME2,
-				GUI_get_ptr(host_readbs(hero + HERO_SEX), 3));
+			sprintf(g_dtp2,	get_tx(13), hero->alias, GUI_get_ptr(hero->sex, 3));
 			GUI_output(g_dtp2);
 
-			sub_hero_le((struct struct_hero*)hero, dice_roll(2, 6, 0));
+			sub_hero_le(hero, dice_roll(2, 6, 0));
 
 			timewarp(MINUTES(20));
 
-			if (host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_BODY * SIZEOF_INVENTORY + INVENTORY_ITEM_ID) != ITEM_NONE)
+			if (hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id != ITEM_NONE)
 			{
 				/* RS of the equipped body armor gets degraded by 3, but not below 0 */
-				l3 = g_armors_table[host_readbs(get_itemsdat(host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_BODY * SIZEOF_INVENTORY)) + ITEM_STATS_TABLE_INDEX)].rs
-				    - host_readbs(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_BODY * SIZEOF_INVENTORY + INVENTORY_RS_LOST);
+				l3 = g_armors_table[host_readbs(get_itemsdat(hero->inventory[HERO_INVENTORY_SLOT_BODY].item_id) + ITEM_STATS_TABLE_INDEX)].rs
+				    - hero->inventory[HERO_INVENTORY_SLOT_BODY].rs_lost;
 
 				l4 = (l3 > 3 ? 3 : (l3 > 0 ? l3 : 0));
 
-				add_ptr_bs(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_BODY * SIZEOF_INVENTORY + INVENTORY_RS_LOST, (unsigned char)l4);
-				sub_ptr_bs(hero + HERO_RS_BONUS1, (unsigned char)l4);
+				hero->inventory[HERO_INVENTORY_SLOT_BODY].rs_lost += l4;
+				hero->rs_bonus1 -= l4;
 			}
 		}
 
@@ -314,9 +307,9 @@ signed short DNG03_handler(void)
 			i = get_first_hero_with_item(ITEM_CRYSTAL);
 
 			do {
-				hero = get_hero(i);
+				hero = (struct struct_hero*)get_hero(i);
 
-				drop_item(hero, get_item_pos(hero, ITEM_CRYSTAL), 1);
+				drop_item((Bit8u*)hero, get_item_pos((Bit8u*)hero, ITEM_CRYSTAL), 1);
 
 				i = get_first_hero_with_item(ITEM_CRYSTAL);
 
@@ -358,17 +351,16 @@ signed short DNG03_handler(void)
 		DNG_dec_level();
 		gs_direction = NORTH;
 
-		hero = get_hero(0);
-		for (i = 0; i <= 6; i++, hero += SIZEOF_HERO)
+		hero = (struct struct_hero*)get_hero(0);
+		for (i = 0; i <= 6; i++, hero++)
 		{
-			if (host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH &&
-				host_readws(hero + HERO_AE))
-			{
-				sub_ae_splash((struct struct_hero*)hero, random_schick(6));
+			if ((hero->typus >= HERO_TYPE_WITCH) && hero->ae) {
 
-			} else if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE)
-			{
-				sub_hero_le((struct struct_hero*)hero, random_schick(6));
+				sub_ae_splash(hero, random_schick(6));
+
+			} else if (hero->typus != HERO_TYPE_NONE) {
+
+				sub_hero_le(hero, random_schick(6));
 			}
 		}
 
@@ -518,16 +510,16 @@ void DNG03_chest12_loot(Bit8u* chest)
 	Bit8u* ptr_bak;
 	signed char crystals;
 	signed char i;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	crystals = 0;
 
-	hero = (Bit8u*)get_first_hero_available_in_group();
+	hero = (struct struct_hero*)get_first_hero_available_in_group();
 
 	/* count the crystals in the knapsack of the leader */
 	for (i = HERO_INVENTORY_SLOT_KNAPSACK_1; i < NR_HERO_INVENTORY_SLOTS; i++)
 	{
-		if (host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * i) == ITEM_CRYSTAL)
+		if (hero->inventory[i].item_id == ITEM_CRYSTAL)
 		{
 			crystals++;
 		}
@@ -560,32 +552,32 @@ void DNG03_chest11_loot(Bit8u*)
 	signed short l_di;
 	signed short counter;
 	signed short mod;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	if (!gs_dng03_lever_chest11)
 	{
 		GUI_output(get_tx(25));
 
 	} else {
-		hero = get_hero(0);
-		for (l_di = counter = l_si = 0; l_di <= 6; l_di++, hero += SIZEOF_HERO)
+		hero = (struct struct_hero*)get_hero(0);
+		for (l_di = counter = l_si = 0; l_di <= 6; l_di++, hero++)
 		{
-			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-				!hero_dead(hero))
+			if ((hero->typus != HERO_TYPE_NONE) &&
+				(hero->group_no == gs_current_group) &&
+				!hero_dead((Bit8u*)hero))
 			{
 				l_si++;
 
 				mod = l_si < 2 ? 6 : (l_si < 4 ? 2 : -2);
 
-				if (test_attrib((struct struct_hero*)hero, ATTRIB_GE, mod) <= 0) {
+				if (test_attrib(hero, ATTRIB_GE, mod) <= 0) {
 
 					counter++;
 
-					sprintf(g_dtp2, get_tx(27), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_tx(27), hero->alias);
 					GUI_output(g_dtp2);
 
-					sub_hero_le((struct struct_hero*)hero, dice_roll(2, 6, 4));
+					sub_hero_le(hero, dice_roll(2, 6, 4));
 				}
 			}
 		}
@@ -595,7 +587,7 @@ void DNG03_chest11_loot(Bit8u*)
 			/* end of game */
 			GUI_output(get_tx(26));
 
-			g_game_state = (GAME_STATE_DEAD);
+			g_game_state = GAME_STATE_DEAD;
 		} else {
 			timewarp(HOURS(1));
 

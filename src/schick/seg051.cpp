@@ -476,8 +476,8 @@ signed short replenish_stocks(signed short mod, signed short tries)
 	signed short l_di;
 	signed short retval;
 	signed short j;
-	Bit8u* hero;
-	Bit8u *hero2;
+	struct struct_hero* hero;
+	struct struct_hero* hero2;
 
 	retval = 0;
 	mod += 5;
@@ -486,6 +486,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 	hero_pos = select_hero_ok(get_ttx(322));
 
 	if (hero_pos != -1 && hero_brewing(get_hero(hero_pos))) {
+
 		GUI_output(get_ttx(730));
 		hero_pos = -1;
 	}
@@ -494,7 +495,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 
 		if (g_wildcamp_replstatus[hero_pos] != 0) {
 
-			sprintf(g_dtp2, get_ttx(802), (char*)get_hero(hero_pos) + HERO_NAME2);
+			sprintf(g_dtp2, get_ttx(802), ((struct struct_hero*)get_hero(hero_pos))->alias);
 			GUI_output(g_dtp2);
 
 		} else {
@@ -510,52 +511,55 @@ signed short replenish_stocks(signed short mod, signed short tries)
 				if (tries < 2) {
 
 					timewarp(HOURS(1));
-					gs_main_acting_hero = hero = get_hero(hero_pos);
+					gs_main_acting_hero = (Bit8u*)(hero = (struct struct_hero*)get_hero(hero_pos));
 					g_wildcamp_replstatus[hero_pos] = 1;
 					retval = 1;
 
 					/* search for water */
-					if ((test_skill((struct struct_hero*)hero, TA_WILDNISLEBEN, (signed char)mod) > 0) || gs_ingame_timers[INGAME_TIMER_EFFERD_FIND_WATER]) {
+					if ((test_skill(hero, TA_WILDNISLEBEN, (signed char)mod) > 0) || gs_ingame_timers[INGAME_TIMER_EFFERD_FIND_WATER]) {
 
 						/* found water */
-						sprintf(g_dtp2, get_ttx(324), (char*)hero + HERO_NAME2);
+						sprintf(g_dtp2, get_ttx(324), hero->alias);
 
 						/* fill up all waterskins and remove thirst of all living heroes in the current group */
-						hero2 = get_hero(0);
-						for (l_di = 0; l_di <= 6; l_di++, hero2 += SIZEOF_HERO) {
-							if (host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE &&
-								host_readbs(hero2 + HERO_GROUP_NO) == gs_current_group &&
-								!hero_dead(hero2))
+						hero2 = (struct struct_hero*)get_hero(0);
+
+						for (l_di = 0; l_di <= 6; l_di++, hero2++) {
+
+							if ((hero2->typus != HERO_TYPE_NONE) && (hero2->group_no == gs_current_group) &&
+								!hero_dead((Bit8u*)hero2))
 							{
-								host_writebs(hero2 + HERO_THIRST, 0);
+								hero2->thirst = 0;
 
 								for (j = 0; j < NR_HERO_INVENTORY_SLOTS; j++) {
-									if (host_readws(hero2 + SIZEOF_INVENTORY * j + HERO_INVENTORY + INVENTORY_ITEM_ID) == ITEM_WATERSKIN) {
-										and_ptr_bs(hero2 + SIZEOF_INVENTORY * j + HERO_INVENTORY + INVENTORY_FLAGS, 0xfb); /* unset 'empty' flag */
-										and_ptr_bs(hero2 + SIZEOF_INVENTORY * j + HERO_INVENTORY + INVENTORY_FLAGS, 0xfd); /* unset 'half_empty' flag */
+
+									if (hero2->inventory[j].item_id == ITEM_WATERSKIN) {
+
+										hero2->inventory[j].flags.empty = 0;
+										hero2->inventory[j].flags.half_empty = 0;
 									}
 								}
 							}
 						}
 					} else {
 
-						sprintf(g_dtp2, get_ttx(340), (char*)hero + HERO_NAME2);
+						sprintf(g_dtp2, get_ttx(340), hero->alias);
 					}
 
 					GUI_print_loc_line(g_dtp2);
 					delay_or_keypress(200);
 
 					/* search for food */
-					if ((test_skill((struct struct_hero*)hero, TA_FAEHRTENSUCHEN, (signed char)mod) > 0) || gs_ingame_timers[INGAME_TIMER_FIRUN_HUNT]) {
+					if ((test_skill(hero, TA_FAEHRTENSUCHEN, (signed char)mod) > 0) || gs_ingame_timers[INGAME_TIMER_FIRUN_HUNT]) {
 
 						/* remove hunger of all living heroes in the current group */
-						hero2 = get_hero(0);
-						for (l_di = 0; l_di <= 6; l_di++, hero2 += SIZEOF_HERO) {
-							if (host_readbs(hero2 + HERO_TYPE) != HERO_TYPE_NONE &&
-								host_readbs(hero2 + HERO_GROUP_NO) == gs_current_group &&
-								!hero_dead(hero2))
+						hero2 = (struct struct_hero*)get_hero(0);
+						for (l_di = 0; l_di <= 6; l_di++, hero2++) {
+
+							if ((hero2->typus != HERO_TYPE_NONE) && (hero2->group_no == gs_current_group) &&
+								!hero_dead((Bit8u*)hero2))
 							{
-								host_writebs(hero2 + HERO_HUNGER, 0);
+								hero2->hunger = 0;
 							}
 						}
 
@@ -564,16 +568,12 @@ signed short replenish_stocks(signed short mod, signed short tries)
 							strcpy(g_dtp2, get_ttx(306));
 							g_request_refresh = 1;
 						} else {
-							sprintf(g_dtp2,
-								get_ttx(325),
-								(char*)hero + HERO_NAME2);
+							sprintf(g_dtp2,	get_ttx(325), hero->alias);
 						}
 
 					} else {
 
-						sprintf(g_dtp2,
-							get_ttx(341),
-							(char*)hero + HERO_NAME2);
+						sprintf(g_dtp2, get_ttx(341), hero->alias);
 					}
 
 					GUI_print_loc_line(g_dtp2);

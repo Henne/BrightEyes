@@ -58,7 +58,7 @@ signed short DNG07_handler(void)
 
 			if (i == 1)
 			{
-				if ((lockpick_pos = hero_has_lockpicks((Bit8u*)hero)) != -1)
+				if ((lockpick_pos = hero_has_lockpicks(hero)) != -1)
 				{
 					if (lockpick_pos != -2)
 					{

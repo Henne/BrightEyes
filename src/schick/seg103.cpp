@@ -330,7 +330,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 				patient = (struct struct_hero*)get_hero(patient_pos);
 
-				if (is_hero_healable((Bit8u*)patient)) {
+				if (is_hero_healable(patient)) {
 
 					poison = hero_is_poisoned(patient);
 
@@ -433,7 +433,7 @@ signed short use_skill(signed short hero_pos, signed char handicap, signed short
 
 				patient = (struct struct_hero*)get_hero(patient_pos);
 
-				if (is_hero_healable((Bit8u*)patient)) {
+				if (is_hero_healable(patient)) {
 
 					if (patient->le >= patient->le_max) {
 

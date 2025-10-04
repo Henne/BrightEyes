@@ -169,18 +169,15 @@ void chest_cursed(void)
 	/* cursed chest on the Totenschiff. 50D, but each good attribute of the group leader is decreased by 1.
 	 * can be cured by 'Verwandlung beenden' spell or a Praios/Hesinde miracle */
 	signed short i;
-	Bit8u *hero;
+	struct struct_hero *hero = (struct struct_hero*)get_first_hero_available_in_group();
 
-	/* get the group leader */
-	hero = (Bit8u*)get_first_hero_available_in_group();
+	if (!hero_transformed((Bit8u*)hero)) {
 
-	if (!hero_transformed(hero)) {
-
-		or_ptr_bs(hero + HERO_FLAGS2, 0x40); /* set 'transformed' flag */
+		or_ptr_bs((Bit8u*)hero + HERO_FLAGS2, 0x40); /* set 'transformed' flag */
 
 		/* decrement each good attribute */
 		for (i = 0; i <= 6; i++) {
-			dec_ptr_bs(hero + HERO_ATTRIB + 3 * i);
+			hero->attrib[i].current--;
 		}
 
 		/* print a message */
@@ -345,7 +342,7 @@ void loot_chest(struct struct_chest *chest, char *text_non_empty, char *text_emp
  * \param   hero        pointer to the hero
  * \return              -1 = no lockpicks, -2 = all lockpicks are broken, else position of the lockpicks
  */
-signed short hero_has_lockpicks(Bit8u *hero)
+signed short hero_has_lockpicks(const struct struct_hero *hero)
 {
 	signed short retval = -1;
 	signed short i;
@@ -354,10 +351,10 @@ signed short hero_has_lockpicks(Bit8u *hero)
 	for (i = 0; i < NR_HERO_INVENTORY_SLOTS; i++) {
 
 		/* ... check for lockpicks ... */
-		if (host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * i) == ITEM_PICKLOCKS) {
+		if (hero->inventory[i].item_id == ITEM_PICKLOCKS) {
 
 			/* ... which are not broken */
-			if (!inventory_broken(hero + HERO_INVENTORY + SIZEOF_INVENTORY * i)) {
+			if (!hero->inventory[i].flags.broken) {
 				return i;
 			} else {
 				retval = -2;
@@ -459,31 +456,29 @@ void seg092_06b4(signed short a1)
 
 void use_lockpicks_on_chest(struct struct_chest* chest_ptr)
 {
-	signed short l_si;
-	signed short l_di;
-	Bit8u *hero;
+	signed short item_pos;
+	signed short test_val;
+	struct struct_hero *hero = (struct struct_hero*)get_first_hero_available_in_group();
 
-	hero = (Bit8u*)get_first_hero_available_in_group();
+	if ((item_pos = hero_has_lockpicks(hero)) != -1) {
 
-	if ((l_si = hero_has_lockpicks(hero)) != -1) {
+		if (item_pos != -2) {
 
-		if (l_si != -2) {
+			test_val = test_skill(hero, TA_SCHLOESSER, ((struct struct_chest*)chest_ptr)->mod);
 
-			l_di = test_skill((struct struct_hero*)hero, TA_SCHLOESSER, ((struct struct_chest*)chest_ptr)->mod);
-
-			if (l_di == -99) {
+			if (test_val == -99) {
 
 				/* unlucky, your lockpicks break... */
 
 				print_msg_with_first_hero(get_ttx(533));
-				or_ptr_bs(hero + (HERO_INVENTORY + INVENTORY_FLAGS) + SIZEOF_INVENTORY * l_si, 1); /* set 'broken' flag */
+				hero->inventory[item_pos].flags.broken = 1;
 
 				/* ... and you trigger the trap */
 				if (((struct struct_chest*)chest_ptr)->trap) {
 					((struct struct_chest*)chest_ptr)->trap();
 				}
 
-			} else if (l_di <= 0) {
+			} else if (test_val <= 0) {
 
 				/* trigger the trap */
 				if (((struct struct_chest*)chest_ptr)->trap) {
@@ -493,7 +488,7 @@ void use_lockpicks_on_chest(struct struct_chest* chest_ptr)
 			} else {
 				/* success */
 
-				add_hero_ap((struct struct_hero*)hero, 1);
+				add_hero_ap(hero, 1);
 
 
 				if (((struct struct_chest*)chest_ptr)->loot) {
@@ -501,7 +496,7 @@ void use_lockpicks_on_chest(struct struct_chest* chest_ptr)
 					((struct struct_chest*)chest_ptr)->loot((Bit8u*)chest_ptr);
 
 					if (((struct struct_chest*)chest_ptr)->trap == chest_protected_heavy) {
-						add_hero_ap((struct struct_hero*)hero, 5);
+						add_hero_ap(hero, 5);
 					}
 				}
 
@@ -519,12 +514,12 @@ void use_lockpicks_on_chest(struct struct_chest* chest_ptr)
 void use_key_on_chest(struct struct_chest* chest)
 {
 	signed short key_pos;
-	Bit8u *hero = (Bit8u*)get_first_hero_available_in_group();
+	struct struct_hero *hero = (struct struct_hero*)get_first_hero_available_in_group();
 
 	/* the leader of the group must have the key */
-	if ((key_pos = get_item_pos(hero, ((struct struct_chest*)chest)->key)) != -1) {
+	if ((key_pos = get_item_pos((Bit8u*)hero, ((struct struct_chest*)chest)->key)) != -1) {
 
-		if (!inventory_broken(hero + HERO_INVENTORY + SIZEOF_INVENTORY * key_pos)) {
+		if (!hero->inventory[key_pos].flags.broken) {
 
 			((struct struct_chest*)chest)->loot((Bit8u*)chest);
 

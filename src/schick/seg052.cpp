@@ -44,7 +44,7 @@ void do_citycamp(void)
 	signed short done;
 	signed short answer;
 	signed short l3;
-	Bit8u* hero;
+	struct struct_hero* hero;
 	signed char hours;
 	signed short l5;
 	signed short l6;
@@ -88,15 +88,13 @@ void do_citycamp(void)
 
 			/* open citycamp radio menu */
 			answer = GUI_radio(get_ttx(307), 5,
-						get_ttx(308),
-						get_ttx(212),
-						get_ttx(310),
-						get_ttx(316),
+						get_ttx(308), get_ttx(212),
+						get_ttx(310), get_ttx(316),
 						get_ttx(471)) - 1;
 
 			/* set action on a valid answer */
 			if (answer != -2) {
-				g_action = (answer + ACTION_ID_ICON_1);
+				g_action = answer + ACTION_ID_ICON_1;
 			}
 		}
 
@@ -150,15 +148,16 @@ void do_citycamp(void)
 			answer = select_hero_ok(get_ttx(317));
 
 			if (answer != -1 && hero_brewing(get_hero(answer))) {
+
 				GUI_output(get_ttx(730));
 				answer = -1;
 			}
 
 			if (answer != -1) {
 
-				hero = get_hero(answer);
+				hero = (struct struct_hero*)get_hero(answer);
 
-				if (host_readbs(hero + HERO_TYPE) >= HERO_TYPE_WITCH) {
+				if (hero->typus >= HERO_TYPE_WITCH) {
 
 					if (g_citycamp_guardstatus[answer]) {
 
@@ -170,7 +169,7 @@ void do_citycamp(void)
 							GUI_output(get_ttx(334));
 
 						} else {
-							g_citycamp_magicstatus[answer] = use_magic(hero);
+							g_citycamp_magicstatus[answer] = use_magic((Bit8u*)hero);
 						}
 					}
 				} else {
@@ -184,6 +183,7 @@ void do_citycamp(void)
 				hours = (signed char)GUI_input(get_ttx(833), 1);
 
 				if (hours > 0) {
+
 					l5 = hours / 3;
 					l6 = l5;
 					l_di = 0;
@@ -275,15 +275,15 @@ void do_citycamp(void)
 
 					if (done == 0) {
 
-						hero = get_hero(0);
-						for (l_si = 0; l_si <= 6; l_si++, hero += SIZEOF_HERO) {
+						hero = (struct struct_hero*)get_hero(0);
+						for (l_si = 0; l_si <= 6; l_si++, hero++) {
 
-							if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-								host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
+							if ((hero->typus != HERO_TYPE_NONE) &&
+								(hero->group_no == gs_current_group) &&
 								(g_citycamp_guardstatus[l_si] < 2) &&
 								(g_citycamp_magicstatus[l_si] != 1))
 							{
-								GRP_hero_sleep(hero, hours - 10);
+								GRP_hero_sleep((Bit8u*)hero, hours - 10);
 							}
 						}
 					}

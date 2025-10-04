@@ -299,7 +299,7 @@ void do_special_buildings(void)
 void TLK_eremit(signed short state)
 {
 	signed short i;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	if (!state) {
 
@@ -307,14 +307,14 @@ void TLK_eremit(signed short state)
 
 	} else if (state == 6) {
 
-		hero = get_hero(0);
-		for (i = 0 ; i <= 6; i++, hero += SIZEOF_HERO) {
+		hero = (struct struct_hero*)get_hero(0);
+		for (i = 0 ; i <= 6; i++, hero++) {
 
 			/* remove hunger and thirst */
-			host_writeb(hero + HERO_HUNGER, host_writebs(hero + HERO_THIRST, 0));
+			hero->hunger = hero->thirst = 0;
 
 			/* heal all wounds */
-			add_hero_le((struct struct_hero*)hero, host_readws(hero + HERO_LE_ORIG));
+			add_hero_le(hero, hero->le_max);
 		}
 
 	} else if (state == 10) {

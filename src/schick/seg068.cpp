@@ -530,15 +530,13 @@ void THO_academy(void)
 	signed short item_pos;
 	signed short cursed_hero_pos;
 	Bit32s p_money;
-	Bit8u *hero;
+	struct struct_hero *hero;
 
 	/* find the position of the first cursed (=renegade) hero */
-	hero = get_hero(0);
-	for (item_pos = cursed_hero_pos = 0; item_pos <= 6; item_pos++, hero += SIZEOF_HERO) {
+	hero = (struct struct_hero*)get_hero(0);
+	for (item_pos = cursed_hero_pos = 0; item_pos <= 6; item_pos++, hero++) {
 
-		if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-			host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-			hero_renegade(hero))
+		if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && hero_renegade((Bit8u*)hero))
 		{
 			cursed_hero_pos = item_pos;
 			break;
@@ -564,7 +562,7 @@ void THO_academy(void)
 
 		} else {
 
-			sprintf(g_dtp2, get_tx2(53), (char*)hero + HERO_NAME2);
+			sprintf(g_dtp2, get_tx2(53), hero->alias);
 
 			do {
 				answer = GUI_radio(g_dtp2, 2, get_tx2(68), get_tx2(69));
@@ -577,8 +575,7 @@ void THO_academy(void)
 
 				if (item_id >= 0) {
 
-					sprintf(g_dtp2, get_tx2(56),
-						GUI_names_grammar((signed short)0x8002, item_id, 0));
+					sprintf(g_dtp2, get_tx2(56), GUI_names_grammar((signed short)0x8002, item_id, 0));
 
 					do {
 						answer = GUI_radio(g_dtp2, 4, get_tx2(57), get_tx2(58), get_tx2(59), get_tx2(60));
@@ -591,10 +588,10 @@ void THO_academy(void)
 
 					} else {
 
-						hero = get_hero(get_first_hero_with_item(item_id));
-						item_pos = get_item_pos(hero, item_id);
+						hero = (struct struct_hero*)get_hero(get_first_hero_with_item(item_id));
+						item_pos = get_item_pos((Bit8u*)hero, item_id);
 
-						if (drop_item(hero, item_pos, 1)) {
+						if (drop_item((Bit8u*)hero, item_pos, 1)) {
 
 							GUI_input(get_tx2(62), 0);
 							GUI_input(get_tx2(63), 0);
@@ -602,7 +599,7 @@ void THO_academy(void)
 							gs_academy_daily_curse = 1;
 
 							/* unset 'renegate' flag */
-							and_ptr_bs(get_hero(cursed_hero_pos) + HERO_FLAGS1, 0xdf);
+							and_ptr_bs((Bit8u*)get_hero(cursed_hero_pos) + HERO_FLAGS1, 0xdf);
 
 						} else {
 							GUI_input(get_tx2(70), 0);
@@ -619,7 +616,7 @@ void THO_academy(void)
 
 					gs_academy_daily_curse = 1;
 
-					and_ptr_bs(get_hero(cursed_hero_pos) + HERO_FLAGS1, 0xdf); /* unset 'renegate' flag */
+					and_ptr_bs((Bit8u*)get_hero(cursed_hero_pos) + HERO_FLAGS1, 0xdf); /* unset 'renegate' flag */
 
 				} else {
 					GUI_input(get_ttx(401), 0);
@@ -650,8 +647,7 @@ void THO_academy(void)
 
 				if (item_id >= 0) {
 
-					sprintf(g_dtp2, get_tx2(56),
-						GUI_names_grammar((signed short)0x8002, item_id, 0));
+					sprintf(g_dtp2, get_tx2(56), GUI_names_grammar((signed short)0x8002, item_id, 0));
 
 					do {
 						answer = GUI_radio(g_dtp2, 4, get_tx2(57), get_tx2(58), get_tx2(59), get_tx2(60));
@@ -664,10 +660,10 @@ void THO_academy(void)
 
 					} else {
 
-						hero = get_hero(get_first_hero_with_item(item_id));
-						item_pos = get_item_pos(hero, item_id);
+						hero = (struct struct_hero*)get_hero(get_first_hero_with_item(item_id));
+						item_pos = get_item_pos((Bit8u*)hero, item_id);
 
-						if (drop_item(hero, item_pos, 1)) {
+						if (drop_item((Bit8u*)hero, item_pos, 1)) {
 
 							academy_analues();
 
@@ -712,7 +708,7 @@ signed short academy_get_equal_item(signed short price)
 	signed short retval;
 	signed short i;
 	Bit32s p_money;
-	Bit8u *hero;
+	struct struct_hero *hero;
 	Bit8u *p_item;
 
 	retval = -2;
@@ -721,24 +717,21 @@ signed short academy_get_equal_item(signed short price)
 	if (price > p_money) {
 
 		retval = -1;
-		hero = get_hero(0);
-		for (i = 0; i < 6; i++, hero += SIZEOF_HERO) {
+		hero = (struct struct_hero*)get_hero(0);
+		for (i = 0; i < 6; i++, hero++) {
 
-			if (host_readbs(hero + HERO_TYPE) != HERO_TYPE_NONE &&
-				host_readbs(hero + HERO_GROUP_NO) == gs_current_group &&
-				!hero_dead(hero))
+			if ((hero->typus != HERO_TYPE_NONE) && (hero->group_no == gs_current_group) && !hero_dead((Bit8u*)hero))
 			{
 				for (item_pos = 0; item_pos < NR_HERO_INVENTORY_SLOTS; item_pos++) {
 
-					if (host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * item_pos) != ITEM_NONE &&
-						!inventory_broken(hero + HERO_INVENTORY + SIZEOF_INVENTORY * item_pos))
+					if ((hero->inventory[item_pos].item_id != ITEM_NONE) && !hero->inventory[item_pos].flags.broken)
 						/* remark: armor with degraded RS is accepted */
 					{
-						p_item = get_itemsdat(host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * item_pos));
+						p_item = get_itemsdat(hero->inventory[item_pos].item_id);
 
 						if (host_readws(p_item + ITEM_STATS_PRICE) * host_readbs(p_item + ITEM_STATS_PRICE_UNIT) >= price)
 						{
-							retval = host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * item_pos);
+							retval = hero->inventory[item_pos].item_id;
 							break;
 						}
 					}
