@@ -202,10 +202,17 @@ unsigned short test_foe_melee_attack(signed short x, signed short y,
 {
 	signed char cb_val = get_cb_val(x + dx, y + dy);
 
+#if defined(__BORLANDC__)
+	/* Sync-Point */
+	asm { db 0x66, 0x90; }
+	asm { db 0x66, 0x90; }
+	asm { db 0x66, 0x90; }
+#endif
+
 	if (mode == 0) {
 
 		if ( ((cb_val > 0) && (cb_val < 10) && !hero_dead(get_hero(cb_val - 1)) && !hero_unconscious(get_hero(cb_val - 1))) || (
-			(cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags.dead && g_enemy_sheets[cb_val -10].flags.renegade))
+			(cb_val >= 10) && (cb_val < 30) && !g_enemy_sheets[cb_val - 10].flags.dead && /* */g_enemy_sheets[cb_val - 10].flags.renegade))
 		{
 			return 1;
 		} else {
@@ -390,6 +397,12 @@ signed short get_foe_attack_mode(signed short mspell_id, signed short a2)
 			retval = 3;
 		}
 	}
+
+#if defined(__BORLANDC__)
+	/* Sync-Point */
+//	asm {db 0x0f, 0x1f, 0x00; };
+//	asm {db 0x0f, 0x1f, 0x00; };
+#endif
 
 	return retval;
 }
