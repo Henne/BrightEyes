@@ -377,7 +377,7 @@ void status_menu(signed short hero_pos)
 						} else if (g_statuspage_selitem4_no == 23) { /* eye icon */
 							print_item_description(hero1, g_statuspage_selitem3_no);
 						} else if (g_statuspage_selitem4_no == 24) { /* mouth icon */
-							consume((struct struct_hero*)hero1, (Bit8u*)hero2, g_statuspage_selitem3_no);
+							consume((struct struct_hero*)hero1, (struct struct_hero*)hero2, g_statuspage_selitem3_no);
 						}
 
 						/* set the new ??? border */
@@ -398,7 +398,7 @@ void status_menu(signed short hero_pos)
 						} else if (g_statuspage_selitem4_no == 23) { /* eye icon */
 							print_item_description(hero2, g_statuspage_selitem3_no);
 						} else if (g_statuspage_selitem4_no == 24) { /* mouth icon */
-							consume((struct struct_hero*)hero2, (Bit8u*)hero2, g_statuspage_selitem3_no);
+							consume((struct struct_hero*)hero2, (struct struct_hero*)hero2, g_statuspage_selitem3_no);
 						}
 
 						/* set the new ??? border */

@@ -3128,7 +3128,7 @@ void herokeeping(void)
 						if (pos != -1) {
 							/* Lunchpack found, consume quiet */
 							g_consume_quiet = 1;
-							consume(hero, (Bit8u*)hero, pos);
+							consume(hero, hero, pos);
 #if !defined(__BORLANDC__)
 							D1_INFO("%s isst etwas\n", hero->alias);
 #endif
@@ -3206,7 +3206,7 @@ void herokeeping(void)
 
 							if (pos != -1) {
 								/* drink it */
-								consume(hero, (Bit8u*)hero, pos);
+								consume(hero, hero, pos);
 #if !defined(__BORLANDC__)
 								D1_INFO("%s trinkt etwas\n", hero->alias);
 #endif

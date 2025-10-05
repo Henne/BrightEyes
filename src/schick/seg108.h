@@ -3,7 +3,7 @@ namespace M302de {
 #endif
 
 /* 0x20 */
-void consume(struct struct_hero*, Bit8u*, const signed short);
+void consume(struct struct_hero*, struct struct_hero*, const signed short);
 
 #if !defined(__BORLANDC__)
 }
