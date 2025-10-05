@@ -53,7 +53,7 @@ void spell_beherrschung(void)
 				g_spell_special_aecost = (-2);
 			} else {
 				and_ptr_bs(get_spelltarget() + HERO_FLAGS1, 0xdf); /* unset 'renegade' flag */
-				sprintf(g_dtp2,	get_tx(1), (char*)get_spelltarget() + HERO_NAME2);
+				sprintf(g_dtp2,	get_tx(1), ((struct struct_hero*)get_spelltarget())->alias);
 			}
 		}
 	}
@@ -94,7 +94,7 @@ void spell_gardanium(void)
 			strcpy(g_dtp2, get_tx(7));
 		} else {
 			/* not enough AE */
-			sprintf(g_dtp2, get_ttx(607), (char*)get_spelluser() + HERO_NAME2);
+			sprintf(g_dtp2, get_ttx(607), ((struct struct_hero*)get_spelluser())->alias);
 			/* set AE costs */
 			g_spell_special_aecost = 0;
 		}
@@ -157,7 +157,7 @@ void spell_verwandlung(void)
 			/* YES: spell has effect */
 			/* unset petrified bit */
 			and_ptr_bs(get_spelltarget() + HERO_FLAGS1, 0xfb); /* unset 'petrified' flag */
-			sprintf(g_dtp2,	get_tx(4), (char*)get_spelltarget() + HERO_NAME2);
+			sprintf(g_dtp2,	get_tx(4), ((struct struct_hero*)get_spelltarget())->alias);
 		}
 	} else {
 		if (hero_transformed(get_spelltarget())) {
@@ -167,7 +167,7 @@ void spell_verwandlung(void)
 			/* increase attributes */
 			for (i = 0; i <= 6; i++)
 				inc_ptr_bs(get_spelltarget() + HERO_ATTRIB + i * 3);
-			sprintf(g_dtp2,	get_ttx(565), (char*)get_spelltarget() + HERO_NAME2);
+			sprintf(g_dtp2,	get_ttx(565), ((struct struct_hero*)get_spelltarget())->alias);
 		} else {
 
 #ifdef M302de_ORIGINAL_BUGFIX
@@ -175,7 +175,7 @@ void spell_verwandlung(void)
 			get_tx(5)[5] = 's';
 #endif
 
-			sprintf(g_dtp2,	get_tx(5), (char*)get_spelltarget() + HERO_NAME2);
+			sprintf(g_dtp2,	get_tx(5), ((struct struct_hero*)get_spelltarget())->alias);
 			g_spell_special_aecost = 0;
 		}
 	}
@@ -226,7 +226,7 @@ void spell_band(void)
 			or_ptr_bs(get_spelltarget() + HERO_FLAGS1, 0x80); /* set 'tied' flag */
 
 			/* prepare message */
-			sprintf(g_dtp2, get_tx(6), (char*)get_spelltarget() + HERO_NAME2);
+			sprintf(g_dtp2, get_tx(6), ((struct struct_hero*)get_spelltarget())->alias);
 		}
 	}
 }
@@ -417,7 +417,7 @@ void spell_somnigravis(void)
 		or_ptr_bs(get_spelltarget() + HERO_FLAGS1, 2); /* set 'sleep' flag */
 
 		/* prepare message */
-		sprintf(g_dtp2, get_tx(13), (char*)get_spelltarget() + HERO_NAME2);
+		sprintf(g_dtp2, get_tx(13), ((struct struct_hero*)get_spelltarget())->alias);
 	}
 }
 
@@ -642,7 +642,7 @@ void spell_axxeleratus(void)
 			1, (signed char)hero_pos);
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(17), (char*)get_spelltarget() + HERO_NAME2);
+		sprintf(g_dtp2,	get_tx(17), ((struct struct_hero*)get_spelltarget())->alias);
 
 	} else {
 		/* axxeleratus already active */
@@ -763,7 +763,7 @@ void spell_balsam(void)
 		le_to_heal = (host_readws(get_spelltarget() + HERO_LE_ORIG) - host_readws(get_spelltarget() + HERO_LE)) / 2;
 	} else {
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(19), (char*)get_spelluser() + HERO_NAME2, (char*)get_spelltarget() + HERO_NAME2);
+		sprintf(g_dtp2,	get_tx(19), ((struct struct_hero*)get_spelluser())->alias, ((struct struct_hero*)get_spelltarget())->alias);
 
 		/* ask question */
 		le_to_heal = GUI_input(g_dtp2, 2);
@@ -815,12 +815,12 @@ void spell_hexenspeichel(void)
 		/* spell cannot be used to heal yourself */
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(20), (char*)get_spelluser() + HERO_NAME2);
+		sprintf(g_dtp2,	get_tx(20), ((struct struct_hero*)get_spelluser())->alias);
 		return;
 	}
 
 	/* prepare question */
-	sprintf(g_dtp2, get_tx(19), (char*)get_spelluser() + HERO_NAME2, (char*)get_spelltarget() + HERO_NAME2);
+	sprintf(g_dtp2, get_tx(19), ((struct struct_hero*)get_spelluser())->alias, ((struct struct_hero*)get_spelltarget())->alias);
 
 	le = GUI_input(g_dtp2, 2);
 
@@ -856,7 +856,7 @@ void spell_klarum_purum(void)
 	if (!poison) {
 
 		/* prepare message */
-		sprintf(g_dtp2, get_tx(21), (char*)get_spelltarget() + HERO_NAME2);
+		sprintf(g_dtp2, get_tx(21), ((struct struct_hero*)get_spelltarget())->alias);
 		g_spell_special_aecost = 0;
 		return;
 	}
@@ -873,7 +873,7 @@ void spell_klarum_purum(void)
 		host_writeb(get_spelltarget() + poison * 5 + 0xd6, 1);
 
 		/* prepare message */
-		sprintf(g_dtp2,	get_tx(22), (char*)get_spelltarget() + HERO_NAME2);
+		sprintf(g_dtp2,	get_tx(22), ((struct struct_hero*)get_spelltarget())->alias);
 	}
 }
 
@@ -886,7 +886,7 @@ void spell_ruhe_koerper(void)
 	host_writeb(get_spelltarget() + HERO_RUHE_KOERPER, 1);
 
 	/* prepare message */
-	sprintf(g_dtp2, get_tx(51), (char*)get_spelltarget() + HERO_NAME2);
+	sprintf(g_dtp2, get_tx(51), ((struct struct_hero*)get_spelltarget())->alias);
 }
 
 void spell_tiere_heilen(void)
@@ -901,7 +901,7 @@ void spell_tiere_heilen(void)
 	g_spell_special_aecost = 0;
 
 	/* prepare message */
-	sprintf(g_dtp2, get_tx(23), (char*)get_spelluser() + HERO_NAME2);
+	sprintf(g_dtp2, get_tx(23), ((struct struct_hero*)get_spelluser())->alias);
 
 	/* ask how many AE should be spent */
 	ae = GUI_input(g_dtp2, 2);
@@ -932,7 +932,7 @@ void spell_adleraug(void)
 	set_mod_slot(slot, MINUTES(6), get_spelluser() + (HERO_TALENTS + TA_SINNESSCHAERFE), 7, (signed char)hero_pos);
 
 	/* prepare message */
-	sprintf(g_dtp2,	get_tx(24), (char*)get_spelluser() + HERO_NAME2);
+	sprintf(g_dtp2,	get_tx(24), ((struct struct_hero*)get_spelluser())->alias);
 }
 
 char* spell_analues(void)
@@ -993,7 +993,7 @@ char* spell_analues(void)
 	if (gs_in_academy != 99) {
 
 		/* prepare message */
-		sprintf(g_dtp2, get_tx(53), (char*)get_spelluser() + HERO_NAME2, g_text_output_buf);
+		sprintf(g_dtp2, get_tx(53), ((struct struct_hero*)get_spelluser())->alias, g_text_output_buf);
 	}
 
 	return g_text_output_buf;

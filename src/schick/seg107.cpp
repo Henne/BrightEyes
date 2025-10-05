@@ -375,7 +375,7 @@ void item_weapon_poison(void)
 			(char*)(GUI_names_grammar((signed short)0x8000, host_readws(get_itemuser() + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID), 0)));
 
 	} else {
-		sprintf(g_dtp2, get_ttx(805), (char*)get_itemuser() + HERO_NAME2);
+		sprintf(g_dtp2, get_ttx(805), ((struct struct_hero*)get_itemuser())->alias);
 	}
 
 	GUI_output(g_dtp2);
@@ -454,16 +454,16 @@ void item_brenne(void)
 			give_hero_new_item(get_itemuser(), ITEM_FLASK_BRONZE, 0, 1);
 
 			/* prepare message */
-			sprintf(g_dtp2, get_tx(119), (char*)get_itemuser() + HERO_NAME2);
+			sprintf(g_dtp2, get_tx(119), ((struct struct_hero*)get_itemuser())->alias);
 		} else {
 			/* prepare message */
-			sprintf(g_dtp2, get_tx(120), (char*)get_itemuser() + HERO_NAME2);
+			sprintf(g_dtp2, get_tx(120), ((struct struct_hero*)get_itemuser())->alias);
 		}
 	} else {
 
 		if (get_item_pos(get_itemuser(), ITEM_TINDERBOX) == -1) {
 			/* No tinderbox */
-			sprintf(g_dtp2, get_tx(122), (char*)get_itemuser() + HERO_NAME2);
+			sprintf(g_dtp2, get_tx(122), ((struct struct_hero*)get_itemuser())->alias);
 		} else {
 
 			if (g_used_item_id == ITEM_TORCH_OFF) {

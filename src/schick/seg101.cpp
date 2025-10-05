@@ -102,7 +102,7 @@ void spell_armatrutz(void)
 		/* prepare output message */
 		sprintf(g_dtp2,
 			get_tx(100),
-			(char*)get_spelluser() + HERO_NAME2,
+			((struct struct_hero*)get_spelluser())->alias,
 			bonus);
 
 	} else {
@@ -143,7 +143,7 @@ void spell_inc_ch(void)
 		/* "Bei %s ist %s schon magisch gesteigert" */
 		sprintf(g_dtp2,
 			get_tx(113),
-			(char*)get_spelltarget() + HERO_NAME2,
+			((struct struct_hero*)get_spelltarget())->alias,
 			get_ttx(414));
 	} else {
 		/* get a free mod_slot */
@@ -155,7 +155,7 @@ void spell_inc_ch(void)
 		/* "Bei %s steigt %s um 2 Punkte" */
 		sprintf(g_dtp2,
 			get_tx(101),
-			(char*)get_spelltarget() + HERO_NAME2,
+			((struct struct_hero*)get_spelltarget())->alias,
 			get_ttx(414));
 	}
 }
@@ -179,7 +179,7 @@ void spell_feuerbann(void)
 		/* prepare message */
 		sprintf(g_dtp2,
 			get_tx(102),
-			(char*)get_spelluser() + HERO_NAME2);
+			((struct struct_hero*)get_spelluser())->alias);
 	} else {
 		/* set AP costs to 0 */
 		g_spell_special_aecost = 0;
@@ -215,7 +215,7 @@ void spell_inc_ff(void)
 		/* "Bei %s ist %s schon magisch gesteigert" */
 		sprintf(g_dtp2,
 			get_tx(113),
-			(char*)get_spelltarget() + HERO_NAME2,
+			((struct struct_hero*)get_spelltarget())->alias,
 			get_ttx(415));
 	} else {
 		/* get a free mod_slot */
@@ -227,7 +227,7 @@ void spell_inc_ff(void)
 		/* "Bei %s steigt %s um 2 Punkte" */
 		sprintf(g_dtp2,
 			get_tx(101),
-			(char*)get_spelltarget() + HERO_NAME2,
+			((struct struct_hero*)get_spelltarget())->alias,
 			get_ttx(415));
 	}
 }
@@ -261,7 +261,7 @@ void spell_inc_ge(void)
 		/* "Bei %s ist %s schon magisch gesteigert" */
 		sprintf(g_dtp2,
 			get_tx(113),
-			(char*)get_spelltarget() + HERO_NAME2,
+			((struct struct_hero*)get_spelltarget())->alias,
 			get_ttx(416));
 	} else {
 		/* get a free mod_slot */
@@ -273,7 +273,7 @@ void spell_inc_ge(void)
 		/* "Bei %s steigt %s um 2 Punkte" */
 		sprintf(g_dtp2,
 			get_tx(101),
-			(char*)get_spelltarget() + HERO_NAME2,
+			((struct struct_hero*)get_spelltarget())->alias,
 			get_ttx(416));
 	}
 }
@@ -307,7 +307,7 @@ void spell_inc_in(void)
 		/* "Bei %s ist %s schon magisch gesteigert" */
 		sprintf(g_dtp2,
 			get_tx(113),
-			(char*)get_spelltarget() + HERO_NAME2,
+			((struct struct_hero*)get_spelltarget())->alias,
 			get_ttx(417));
 	} else {
 		/* get a free mod_slot */
@@ -319,7 +319,7 @@ void spell_inc_in(void)
 		/* "Bei %s steigt %s um 2 Punkte" */
 		sprintf(g_dtp2,
 			get_tx(101),
-			(char*)get_spelltarget() + HERO_NAME2,
+			((struct struct_hero*)get_spelltarget())->alias,
 			get_ttx(417));
 	}
 }
@@ -353,7 +353,7 @@ void spell_inc_kk(void)
 		/* "Bei %s ist %s schon magisch gesteigert" */
 		sprintf(g_dtp2,
 			get_tx(113),
-			(char*)get_spelltarget() + HERO_NAME2,
+			((struct struct_hero*)get_spelltarget())->alias,
 			get_ttx(418));
 	} else {
 		/* get a free mod_slot */
@@ -365,7 +365,7 @@ void spell_inc_kk(void)
 		/* "Bei %s steigt %s um 2 Punkte" */
 		sprintf(g_dtp2,
 			get_tx(101),
-			(char*)get_spelltarget() + HERO_NAME2,
+			((struct struct_hero*)get_spelltarget())->alias,
 			get_ttx(418));
 	}
 }
@@ -399,7 +399,7 @@ void spell_inc_kl(void)
 		/* "Bei %s ist %s schon magisch gesteigert" */
 		sprintf(g_dtp2,
 			get_tx(113),
-			(char*)get_spelltarget() + HERO_NAME2,
+			((struct struct_hero*)get_spelltarget())->alias,
 			get_ttx(413));
 	} else {
 		/* get a free mod_slot */
@@ -411,7 +411,7 @@ void spell_inc_kl(void)
 		/* "Bei %s steigt %s um 2 Punkte" */
 		sprintf(g_dtp2,
 			get_tx(101),
-			(char*)get_spelltarget() + HERO_NAME2,
+			((struct struct_hero*)get_spelltarget())->alias,
 			get_ttx(413));
 	}
 }
@@ -445,7 +445,7 @@ void spell_inc_mu(void)
 		/* "Bei %s ist %s schon magisch gesteigert" */
 		sprintf(g_dtp2,
 			get_tx(113),
-			(char*)get_spelltarget() + HERO_NAME2,
+			((struct struct_hero*)get_spelltarget())->alias,
 			get_ttx(412));
 	} else {
 		/* get a free mod_slot */
@@ -457,7 +457,7 @@ void spell_inc_mu(void)
 		/* "Bei %s steigt %s um 2 Punkte" */
 		sprintf(g_dtp2,
 			get_tx(101),
-			(char*)get_spelltarget() + HERO_NAME2,
+			((struct struct_hero*)get_spelltarget())->alias,
 			get_ttx(412));
 	}
 }
@@ -502,7 +502,7 @@ void spell_paralue(void)
 				or_ptr_bs(get_spelltarget() + HERO_FLAGS1, 0x4); /* set 'petrified' flag */
 
 				/* prepare message */
-				sprintf(g_dtp2, get_tx(103), (char*)get_spelltarget() + HERO_NAME2);
+				sprintf(g_dtp2, get_tx(103), ((struct struct_hero*)get_spelltarget())->alias);
 			}
 		} else {
 			/* set AE to 0 */
@@ -568,7 +568,7 @@ void spell_visibili(void)
 	signed short rounds;
 
 	/* ask the user how many rounds he wants to be invisible */
-	sprintf(g_dtp2, get_tx(105), (char*)get_spelluser() + HERO_NAME2);
+	sprintf(g_dtp2, get_tx(105), ((struct struct_hero*)get_spelluser())->alias);
 	rounds = GUI_input(g_dtp2, 2);
 
 	/* the spell has also no effect if it is already active */
@@ -590,10 +590,10 @@ void spell_visibili(void)
 		slot = get_free_mod_slot();
 		set_mod_slot(slot, (Bit32s)rounds * MINUTES(5), get_spelluser() + HERO_INVISIBLE, 1, (signed char)pos);
 
-		sprintf(g_dtp2,	get_tx(106), (char*)get_spelluser() + HERO_NAME2,
+		sprintf(g_dtp2,	get_tx(106), ((struct struct_hero*)get_spelluser())->alias,
 			(GUI_get_ptr(host_readbs(get_spelluser() + HERO_SEX), 0)));
 	} else {
-		sprintf(g_dtp2,	get_ttx(607), (char*)get_spelluser() + HERO_NAME2);
+		sprintf(g_dtp2,	get_ttx(607), ((struct struct_hero*)get_spelluser())->alias);
 
 		g_spell_special_aecost = 0;
 	}
@@ -651,7 +651,7 @@ void spell_brenne(void)
 
 			sprintf(g_dtp2,
 				get_tx(107),
-				(char*)get_spelluser() + HERO_NAME2);
+				((struct struct_hero*)get_spelluser())->alias);
 
 			answer = GUI_radio(g_dtp2,
 					2,

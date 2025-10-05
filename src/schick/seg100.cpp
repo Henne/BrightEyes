@@ -196,7 +196,7 @@ void spell_chamaelioni(void)
 	or_ptr_bs(get_spelluser() + HERO_FLAGS1, 0x10); /* set 'chamaelioni' flag */
 
 	/* prepare the message */
-	sprintf(g_dtp2,	get_tx(83), (char*)get_spelluser() + HERO_NAME2,
+	sprintf(g_dtp2,	get_tx(83), ((struct struct_hero*)get_spelluser())->alias,
 		(GUI_get_ptr(host_readbs(get_spelluser() + HERO_SEX), 0)));
 
 }
@@ -207,7 +207,7 @@ void spell_duplicatus(void)
 	or_ptr_bs(get_spelluser() + HERO_FLAGS2, 0x04); /* set 'duplicatus' flag
 
 	/* prepare the message */
-	sprintf(g_dtp2, get_tx(84), (char*)get_spelluser() + HERO_NAME2,
+	sprintf(g_dtp2, get_tx(84), ((struct struct_hero*)get_spelluser())->alias,
 		GUI_get_ptr(host_readbs(get_spelluser() + HERO_SEX), 0));
 
 }
@@ -331,7 +331,7 @@ void spell_blitz(void)
 			host_writeb(get_spelltarget() + HERO_BLIND, 3);
 
 			/* prepare the message */
-			sprintf(g_dtp2, get_tx(86), (char*)get_spelltarget() + HERO_NAME2);
+			sprintf(g_dtp2, get_tx(86), ((struct struct_hero*)get_spelltarget())->alias);
 		}
 	} else {
 		/* cast an enemy */
@@ -370,7 +370,7 @@ void spell_ecliptifactus(void)
 				GUI_get_ptr(host_readbs(get_spelluser() + HERO_SEX), 3), rounds);
 		} else {
 			/* prepare the message */
-			sprintf(g_dtp2, get_ttx(607), (char*)get_spelluser() + HERO_NAME2);
+			sprintf(g_dtp2, get_ttx(607), ((struct struct_hero*)get_spelluser())->alias);
 			/* set costs to 0 */
 			g_spell_special_aecost = 0;
 		}
@@ -644,7 +644,7 @@ void spell_plumbumbarum(void)
 				-3, (signed char)hero_pos);
 
 			/* prepare the message */
-			sprintf(g_dtp2, get_tx(94), (char*)get_spelltarget() + HERO_NAME2);
+			sprintf(g_dtp2, get_tx(94), ((struct struct_hero*)get_spelltarget())->alias);
 			}
 
 		return;
@@ -716,7 +716,7 @@ void spell_saft_kraft(void)
 #endif
 
 	/* prepare message */
-	sprintf(g_dtp2, get_tx(96), (char*)get_spelltarget() + HERO_NAME2);
+	sprintf(g_dtp2, get_tx(96), ((struct struct_hero*)get_spelltarget())->alias);
 
 }
 
@@ -741,7 +741,7 @@ void spell_scharfes_auge(void)
 
 	set_mod_slot(slot, 3 * 9L, get_spelltarget() + (HERO_TALENTS + TA_SCHUSSWAFFEN), 3, (signed char)target); /* TA_SCHUSSWAFFEN */
 
-	sprintf(g_dtp2, get_tx(97), (char*)get_spelltarget() + HERO_NAME2);
+	sprintf(g_dtp2, get_tx(97), ((struct struct_hero*)get_spelltarget())->alias);
 }
 
 

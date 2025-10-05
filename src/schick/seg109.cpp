@@ -120,14 +120,11 @@ void TRV_found_herb_place(signed short a0)
 {
 	signed short answer;
 	signed short randval;
-	Bit8u *hero;
-
-	hero = (Bit8u*)get_first_hero_available_in_group();
+	struct struct_hero *hero = (struct struct_hero*)get_first_hero_available_in_group();
 
 	randval = random_schick(5) + 2;
 
-	sprintf(g_dtp2,	get_tx(0), get_tx(randval), (char*)hero + HERO_NAME2,
-		(a0 != 0 ? get_tx(42) : g_empty_string10));
+	sprintf(g_dtp2,	get_tx(0), get_tx(randval), hero->alias, (a0 != 0 ? get_tx(42) : g_empty_string10));
 
 	do {
 		answer = GUI_radio(g_dtp2, 2, get_tx(1), get_tx(2));
