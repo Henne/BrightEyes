@@ -601,7 +601,7 @@ struct items_all {
 };
 
 /* Borlandified and identical */
-void startup_equipment(Bit8u *hero)
+void startup_equipment(struct struct_hero *hero)
 {
 	signed short i;
 	struct items_all all;
@@ -609,41 +609,42 @@ void startup_equipment(Bit8u *hero)
 	*(struct items_all*)&all = *(struct items_all*)g_hero_startup_items_all;
 
 	for (i = 0; i < 4; i++) {
-		give_hero_new_item(hero, all.a[i], 1, 1);
+		give_hero_new_item((Bit8u*)hero, all.a[i], 1, 1);
 	}
 
-	move_item(HERO_INVENTORY_SLOT_LEGS, HERO_INVENTORY_SLOT_KNAPSACK_3, hero);
+	move_item(HERO_INVENTORY_SLOT_LEGS, HERO_INVENTORY_SLOT_KNAPSACK_3, (Bit8u*)hero);
 
-	if (host_readbs(hero + HERO_SEX) != 0 && host_readbs(hero + HERO_TYPE) != HERO_TYPE_WARRIOR && host_readbs(hero + HERO_TYPE) != HERO_TYPE_MAGE) {
+	if ((hero->sex != 0) && (hero->typus != HERO_TYPE_WARRIOR) && (hero->typus != HERO_TYPE_MAGE))
+       	{
 		/* female non-warriors and non-mages get a free shirt */
-		give_hero_new_item(hero, ITEM_SHIRT, 1, 1);
-		move_item(HERO_INVENTORY_SLOT_BODY, HERO_INVENTORY_SLOT_KNAPSACK_3, hero);
+		give_hero_new_item((Bit8u*)hero, ITEM_SHIRT, 1, 1);
+		move_item(HERO_INVENTORY_SLOT_BODY, HERO_INVENTORY_SLOT_KNAPSACK_3, (Bit8u*)hero);
 	}
 
 	i = 0;
-	while ((g_hero_startup_items[host_readbs(hero + HERO_TYPE) - 1][i] != -1) && (i < 4)) {
+	while ((g_hero_startup_items[hero->typus - 1][i] != -1) && (i < 4)) {
 
-		give_hero_new_item(hero, g_hero_startup_items[host_readbs(hero + HERO_TYPE) - 1][i++], 1, 1);
+		give_hero_new_item((Bit8u*)hero, g_hero_startup_items[hero->typus - 1][i++], 1, 1);
 
 		if (i == 1) {
-			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, HERO_INVENTORY_SLOT_KNAPSACK_3, hero);
+			move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, HERO_INVENTORY_SLOT_KNAPSACK_3, (Bit8u*)hero);
 		}
 	}
 
-	if (host_readbs(hero + HERO_TYPE) == HERO_TYPE_WARRIOR) {
-		move_item(HERO_INVENTORY_SLOT_BODY, get_item_pos(hero, ITEM_LEATHER_ARMOR), hero);
+	if (hero->typus == HERO_TYPE_WARRIOR) {
+		move_item(HERO_INVENTORY_SLOT_BODY, get_item_pos((Bit8u*)hero, ITEM_LEATHER_ARMOR), (Bit8u*)hero);
 	}
 
-	if (host_readbs(hero + HERO_TYPE) == HERO_TYPE_MAGE) {
-		move_item(HERO_INVENTORY_SLOT_BODY, get_item_pos(hero, ITEM_ROBE_GREEN), hero);
+	if (hero->typus == HERO_TYPE_MAGE) {
+		move_item(HERO_INVENTORY_SLOT_BODY, get_item_pos((Bit8u*)hero, ITEM_ROBE_GREEN), (Bit8u*)hero);
 	}
 
-	if (host_readbs(hero + HERO_TYPE) == HERO_TYPE_HUNTER ||
-		host_readbs(hero + HERO_TYPE) == HERO_TYPE_GREEN_ELF ||
-		host_readbs(hero + HERO_TYPE) == HERO_TYPE_SYLVAN_ELF)
+	if ((hero->typus == HERO_TYPE_HUNTER) ||
+		(hero->typus == HERO_TYPE_GREEN_ELF) ||
+		(hero->typus == HERO_TYPE_SYLVAN_ELF))
 	{
-		give_hero_new_item(hero, ITEM_ARROWS, 1, 20);
-		move_item(HERO_INVENTORY_SLOT_LEFT_HAND, get_item_pos(hero, ITEM_ARROWS), hero);
+		give_hero_new_item((Bit8u*)hero, ITEM_ARROWS, 1, 20);
+		move_item(HERO_INVENTORY_SLOT_LEFT_HAND, get_item_pos((Bit8u*)hero, ITEM_ARROWS), (Bit8u*)hero);
 	}
 }
 

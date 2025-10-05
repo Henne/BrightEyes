@@ -725,7 +725,7 @@ signed short read_chr_temp(char *fname, signed short hero_pos, signed short a2)
 
 		if (!hero->start_gear) {
 
-			startup_equipment((Bit8u*)hero);
+			startup_equipment(hero);
 
 			((struct struct_hero*)get_hero(hero_pos))->start_gear = 1; /* it would be more consistent to set only bit 0 and leave the others untouched, see above. */
 
