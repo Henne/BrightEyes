@@ -119,7 +119,7 @@ signed short DNG02_handler(void)
 		hero = (struct struct_hero*)get_first_hero_available_in_group();
 		weight_sum = get_hero_weight(hero);
 
-		if ((hero = (struct struct_hero*)get_second_hero_available_in_group()))
+		if ((hero = get_second_hero_available_in_group()))
 		{
 			weight_sum += get_hero_weight(hero);
 		}

@@ -522,7 +522,7 @@ void DNG09_pitfall(void)
 
 		} else {
 			hero_first = (struct struct_hero*)get_first_hero_available_in_group();
-			hero_second = (struct struct_hero*)get_second_hero_available_in_group();
+			hero_second = get_second_hero_available_in_group();
 
 			if (gs_group_member_counts[gs_current_group] >= 2)
 			{

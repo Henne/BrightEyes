@@ -736,9 +736,9 @@ void DNG_stub6(void)
 	signed short l_si;
 	signed short l_di;
 	signed short l1;
-	Bit8u *hero_auto;
-	Bit8u *hero1;
-	Bit8u *hero2;
+	struct struct_hero *hero_auto;
+	struct struct_hero *hero1;
+	struct struct_hero *hero2;
 
 	play_voc(ARCHIVE_FILE_FX18_VOC);
 
@@ -763,25 +763,25 @@ void DNG_stub6(void)
 
 			if (l_di == 2) {
 
-				hero1 = (Bit8u*)get_first_hero_available_in_group();
+				hero1 = (struct struct_hero*)get_first_hero_available_in_group();
 
-				hero2 = (Bit8u*)get_second_hero_available_in_group();
+				hero2 = get_second_hero_available_in_group();
 
-				sprintf(g_text_output_buf, get_ttx(769), hero1 + HERO_NAME2, hero2 + HERO_NAME2);
+				sprintf(g_text_output_buf, get_ttx(769), hero1->alias, hero2->alias);
 
 				strcat(g_dtp2, g_text_output_buf);
 
-				if (test_attrib((struct struct_hero*)hero1, ATTRIB_GE, 2) <= 0) {
+				if (test_attrib(hero1, ATTRIB_GE, 2) <= 0) {
 
-					sprintf(g_text_output_buf, get_ttx(770), hero1 + HERO_NAME2, hero2 + HERO_NAME2, l_si = random_schick(3) + 1);
+					sprintf(g_text_output_buf, get_ttx(770), hero1->alias, hero2->alias, (l_si = random_schick(3) + 1));
 
 					strcat(g_dtp2, g_text_output_buf);
 
-					sub_hero_le((struct struct_hero*)hero2, l_si);
+					sub_hero_le(hero2, l_si);
 				}
 			} else {
 
-				hero_auto = get_hero(l1 = get_hero_KK_best());
+				hero_auto = (struct struct_hero*)get_hero((l1 = get_hero_KK_best()));
 
 				l_di--;
 
@@ -793,7 +793,7 @@ void DNG_stub6(void)
 						l_si++;
 					}
 
-					strcat(g_dtp2, (char*)get_hero(l_si++) + HERO_NAME2);
+					strcat(g_dtp2, ((struct struct_hero*)get_hero(l_si++))->alias);
 
 					if (--l_di) {
 
@@ -802,9 +802,9 @@ void DNG_stub6(void)
 
 				} while (l_di);
 
-				sprintf(g_text_output_buf, get_ttx(771), hero_auto + HERO_NAME2,
-					GUI_get_ptr(host_readbs(hero_auto + HERO_SEX), 0),
-					GUI_get_ptr(host_readbs(hero_auto + HERO_SEX), 2));
+				sprintf(g_text_output_buf, get_ttx(771), hero_auto->alias,
+					GUI_get_ptr(hero_auto->sex, 0),
+					GUI_get_ptr(hero_auto->sex, 2));
 
 				strcat(g_dtp2, g_text_output_buf);
 			}

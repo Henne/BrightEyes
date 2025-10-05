@@ -211,7 +211,7 @@ void DNG_door(signed short action)
 
 					if (get_second_hero_available_in_group())
 					{
-						sub_hero_le((struct struct_hero*)get_second_hero_available_in_group(), 1);
+						sub_hero_le(get_second_hero_available_in_group(), 1);
 					}
 				}
 			}

@@ -44,7 +44,7 @@ void talk_tavern(void)
 	char *answer2_buffer;
 	char *answer3_buffer;
 	char *format;
-	Bit8u *hero;
+	struct struct_hero *hero;
 	Bit8u *gossip_ptr1;
 	Bit8u *gossip_ptr2;
 
@@ -85,7 +85,7 @@ void talk_tavern(void)
 
 			txt_id = (state_ptr->txt_id & 0x7fff);
 			format = get_tx(txt_id);
-			hero = (Bit8u*)get_first_hero_available_in_group();
+			hero = (struct struct_hero*)get_first_hero_available_in_group();
 
 			if (txt_id == 52 || txt_id == 72 || txt_id == 78 || txt_id == 83 || txt_id == 89) {
 
@@ -93,15 +93,15 @@ void talk_tavern(void)
 
 			} else if (txt_id == 16 || txt_id == 70) {
 
-				sprintf(text_buffer, format, (char*)hero + HERO_NAME2);
+				sprintf(text_buffer, format, hero->alias);
 
 			} else if (txt_id == 95) {
 
-				hero = get_hero(gs_tlk_tav_testdrunk - 1);
+				hero = (struct struct_hero*)get_hero(gs_tlk_tav_testdrunk - 1);
 
-				sprintf(text_buffer, format, (char*)hero + HERO_NAME2,
-					GUI_get_ptr(host_readbs(hero + HERO_SEX), 3),
-					GUI_get_ptr(host_readbs(hero + HERO_SEX), 1));
+				sprintf(text_buffer, format, hero->alias,
+					GUI_get_ptr(hero->sex, 3),
+					GUI_get_ptr(hero->sex, 1));
 ;
 			} else if (txt_id == 18 || txt_id == 31) {
 
@@ -150,7 +150,7 @@ void talk_tavern(void)
 
 			} else if (txt_id == 119) {
 
-				sprintf(text_buffer, format, (Bit8u*)(get_random_tavern_message()));
+				sprintf(text_buffer, format, (Bit8u*)get_random_tavern_message());
 
 			} else if (txt_id == 122 || txt_id == 126 || txt_id == 127 || txt_id == 132) {
 
@@ -189,7 +189,7 @@ void talk_tavern(void)
 
 			if (txt_id == 13) {
 
-				sprintf(answer2_buffer, format, (char*)hero + HERO_NAME2);
+				sprintf(answer2_buffer, format, hero->alias);
 
 			} else if (txt_id == 61) {
 
@@ -255,11 +255,11 @@ void TLK_tavern(signed short answer)
 	signed short old_state;
 	signed short tmp;
 	Bit32s p_money;
-	Bit8u *hero;
+	struct struct_hero *hero;
 	signed short hero_pos;
 
 	old_state = g_dialog_state;
-	hero = (Bit8u*)get_first_hero_available_in_group();
+	hero = (struct struct_hero*)get_first_hero_available_in_group();
 
 	if (!old_state) {
 
@@ -272,22 +272,22 @@ void TLK_tavern(signed short answer)
 			gs_tav_kicked_flags[gs_current_typeindex] = 0;
 
 		} else {
-			g_dialog_next_state = (113);
+			g_dialog_next_state = 113;
 		}
 
 	} else if (old_state == 2) {
 
 		if ((gs_tlk_tav_fullness == 1 || gs_tlk_tav_fullness == 2) && answer == 1) {
-			g_dialog_next_state = (3);
+			g_dialog_next_state = 3;
 		} else if ((gs_tlk_tav_fullness == 1 || gs_tlk_tav_fullness == 2) && answer == 2) {
-			g_dialog_next_state = (5);
+			g_dialog_next_state = 5;
 		} else {
-			g_dialog_next_state = (4);
+			g_dialog_next_state = 4;
 		}
 
 	} else if (old_state == 5) {
 
-		g_dialog_next_state = (test_attrib((struct struct_hero*)hero, ATTRIB_CH, 3) > 0 ? 81 : 3);
+		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 3) > 0 ? 81 : 3);
 
 	} else if (old_state == 9) {
 
@@ -299,10 +299,10 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 14) {
 
-		if (test_attrib((struct struct_hero*)hero, ATTRIB_CH, 0) > 0) {
+		if (test_attrib(hero, ATTRIB_CH, 0) > 0) {
 			g_dialog_next_state = (gs_tlk_tav_fullness == 1 ? 16 : 17);
 		} else {
-			g_dialog_next_state = (15);
+			g_dialog_next_state = 15;
 		}
 
 	} else if (old_state == 17 || old_state == 39 || old_state == 57) {
@@ -311,7 +311,7 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 18) {
 
-		g_dialog_next_state = (test_attrib((struct struct_hero*)hero, ATTRIB_CH, 2) > 0 ? 19 : 20);
+		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 2) > 0 ? 19 : 20);
 
 	} else if (old_state == 24) {
 
@@ -405,10 +405,10 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 43) {
 
-		if (test_attrib((struct struct_hero*)hero, ATTRIB_CH, 4) > 0 && (gs_tlk_tav_fullness == 1 || gs_tlk_tav_fullness == 2)) {
-			g_dialog_next_state = (56);
+		if (test_attrib(hero, ATTRIB_CH, 4) > 0 && (gs_tlk_tav_fullness == 1 || gs_tlk_tav_fullness == 2)) {
+			g_dialog_next_state = 56;
 		} else {
-			g_dialog_next_state = (44);
+			g_dialog_next_state = 44;
 		}
 
 	} else if (old_state == 45) {
@@ -421,7 +421,7 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 49) {
 
-		g_dialog_next_state = (test_attrib((struct struct_hero*)hero, ATTRIB_CH, 4) > 0 ? 19 : 20);
+		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 4) > 0 ? 19 : 20);
 
 	} else if (old_state == 54) {
 
@@ -474,7 +474,7 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 80) {
 
-		g_dialog_next_state = (test_attrib((struct struct_hero*)hero, ATTRIB_CH, 0) <= 0 && gs_tlk_tav_round ? 20 : 19);
+		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 0) <= 0 && gs_tlk_tav_round ? 20 : 19);
 
 	} else if (old_state == 85) {
 
@@ -482,7 +482,7 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 86) {
 
-		tmp = test_attrib((struct struct_hero*)hero, ATTRIB_CH, 0);
+		tmp = test_attrib(hero, ATTRIB_CH, 0);
 
 		g_dialog_next_state = (gs_tlk_tav_firstinfo || (!gs_tlk_tav_firstinfo && !gs_tlk_tav_round && tmp <= 0) ? 84 : 81);
 
@@ -504,7 +504,7 @@ void TLK_tavern(signed short answer)
 
 	} else if (old_state == 98) {
 
-		g_dialog_next_state = (test_attrib((struct struct_hero*)hero, ATTRIB_CH, 0) > 0 ? 99 : 102);
+		g_dialog_next_state = (test_attrib(hero, ATTRIB_CH, 0) > 0 ? 99 : 102);
 
 	} else if (old_state == 99) {
 

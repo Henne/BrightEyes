@@ -40,7 +40,7 @@ signed int g_dialog_state;	// ds:0xe312
 signed int g_tlk_id;		// ds:0xe314
 
 #if !defined(__BORLANDC__)
-	Bit8u *gs_random_tlk_hero;	/* REMARK: scope has changed drastically! */
+struct struct_hero *gs_random_tlk_hero;	/* REMARK: scope has changed drastically! */
 #endif
 
 /* NOTE: here's a inconvenience in start counting from 0 (computer science) and from 1 (math) */
@@ -164,7 +164,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 	struct struct_dialog_partner *partners_tab;
 	char *dst;
 	char *fmt;
-	Bit8u *hero;
+	struct struct_hero *hero;
 	signed short shufflepair_1;
 	signed short shufflepair_2;
 	signed short shuffle_count;
@@ -280,10 +280,9 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 					} else if (txt_id == 29) {
 
-						hero = get_hero(gs_tiomar_drinkmate);
+						hero = (struct struct_hero*)get_hero(gs_tiomar_drinkmate);
 
-						sprintf(dst, fmt, (char*)hero + HERO_NAME2,
-							GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
+						sprintf(dst, fmt, hero->alias, GUI_get_ptr(hero->sex, 0));
 
 					} else {
 
@@ -325,11 +324,11 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 					if (g_dialog_informer == 0) {
 
-						hero = (Bit8u*)get_first_hero_available_in_group();
+						hero = (struct struct_hero*)get_first_hero_available_in_group();
 
 						if (!txt_id || txt_id == 18) {
 
-							sprintf(dst, fmt, (char*)hero + HERO_NAME2);
+							sprintf(dst, fmt, hero->alias);
 
 						} else if (txt_id == 28) {
 
@@ -391,7 +390,7 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 							sprintf(dst, fmt,
 								gs_unicorn_hero_ptr + HERO_NAME2,
-								(GUI_get_ptr(host_readbs(gs_unicorn_hero_ptr + HERO_SEX), 1)),
+								GUI_get_ptr(host_readbs(gs_unicorn_hero_ptr + HERO_SEX), 1),
 								gs_unicorn_hero_ptr + HERO_NAME2);
 
 						} else if (txt_id == 8) {
@@ -423,18 +422,18 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 				} else if (g_tlk_id == 17) {
 
 
-					hero = (Bit8u*)get_first_hero_available_in_group();
+					hero = (struct struct_hero*)get_first_hero_available_in_group();
 
 					if (!txt_id || txt_id == 2 || txt_id == 25 || txt_id == 31 ||
 						txt_id == 32 || txt_id == 60 || txt_id == 78 || txt_id == 87)
 					{
-						sprintf(dst, fmt, (char*)hero + HERO_NAME2);
+						sprintf(dst, fmt, hero->alias);
 
 					} else if (txt_id == 13 || txt_id == 19 || txt_id == 88 || txt_id == 24) {
 
-						sprintf(dst, fmt, (char*)hero + HERO_NAME2,
-							GUI_get_ptr(host_readbs(hero + HERO_SEX), 0),
-							GUI_get_ptr(host_readbs(hero + HERO_SEX), 0));
+						sprintf(dst, fmt, hero->alias,
+							GUI_get_ptr(hero->sex, 0),
+							GUI_get_ptr(hero->sex, 0));
 
 					} else if (txt_id == 14 || txt_id == 15 || txt_id == 76) {
 
@@ -443,10 +442,10 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 					} else if (txt_id == 26 || txt_id == 65) {
 
-						sprintf(dst, fmt, (char*)hero + HERO_NAME2,
-							GUI_get_ptr(host_readbs(hero + HERO_SEX), 0),
-							GUI_get_ptr(host_readbs(hero + HERO_SEX), 2),
-							GUI_get_ptr(host_readbs(hero + HERO_SEX), 1));
+						sprintf(dst, fmt, hero->alias,
+							GUI_get_ptr(hero->sex, 0),
+							GUI_get_ptr(hero->sex, 2),
+							GUI_get_ptr(hero->sex, 1));
 
 					} else {
 
@@ -458,12 +457,12 @@ void do_talk(signed short talk_id, signed short tlk_informer)
 
 					if (txt_id == 40 || txt_id == 41 || txt_id == 43) {
 #if !defined(__BORLANDC__)
-						gs_random_tlk_hero = get_hero(get_random_hero());
+						gs_random_tlk_hero = (struct struct_hero*)get_hero(get_random_hero());
 #endif
 
-						sprintf(dst, fmt, (char*)gs_random_tlk_hero + HERO_NAME2,
-							GUI_get_ptr(host_readbs(gs_random_tlk_hero + HERO_SEX), 0),
-							GUI_get_ptr(host_readbs(gs_random_tlk_hero + HERO_SEX), 2));
+						sprintf(dst, fmt, gs_random_tlk_hero->alias,
+							GUI_get_ptr(gs_random_tlk_hero->sex, 0),
+							GUI_get_ptr(gs_random_tlk_hero->sex, 2));
 					} else {
 
 						strcpy(dst, fmt);

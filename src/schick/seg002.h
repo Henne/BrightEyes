@@ -183,7 +183,7 @@ signed short get_first_hero_with_item(signed short);
 signed short get_first_hero_with_item_in_group(signed short, signed short);
 void sub_group_le(signed short);
 Bit8u* get_first_hero_available_in_group(void);
-Bit8u* get_second_hero_available_in_group(void);
+struct struct_hero* get_second_hero_available_in_group(void);
 signed short count_heroes_available(void);
 #ifdef M302de_ORIGINAL_BUGFIX
 /* this function allows cleaner fixes for Original-Bug 15 */

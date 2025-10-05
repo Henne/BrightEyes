@@ -5471,7 +5471,7 @@ Bit8u* get_first_hero_available_in_group(void)
  *
  * \return              a pointer to the second available hero in the group or NULL.
  */
-Bit8u* get_second_hero_available_in_group(void)
+struct struct_hero* get_second_hero_available_in_group(void)
 {
 	signed short i;
 	signed short tmp;
@@ -5485,7 +5485,7 @@ Bit8u* get_second_hero_available_in_group(void)
 		if ((hero_i->typus) && (hero_i->group_no == gs_current_group) && check_hero((Bit8u*)hero_i))
 		{
 			if (tmp) {
-				return (Bit8u*)hero_i;
+				return hero_i;
 			}
 
 			tmp++;

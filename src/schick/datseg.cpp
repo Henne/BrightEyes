@@ -1733,7 +1733,7 @@ Bit8u  gs_tevent074_fight_flag = 0xff; // ds:0x3e16
 Bit8u  gs_tevent077_fight_flag = 0xff; // ds:0x3e17
 
 #if defined(__BORLANDC__)
-Bit8u *gs_random_tlk_hero = NULL;	// ds:0x3e18;
+struct struct_hero *gs_random_tlk_hero = NULL;	// ds:0x3e18;
 struct struct_hero *gs_ruin_hero = NULL;		// ds:0x3e1c;
 Bit8u *gs_main_acting_hero = NULL;	// ds:0x3e20;
 #else

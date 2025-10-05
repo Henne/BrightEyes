@@ -194,7 +194,7 @@ signed short DNG03_handler(void)
 			j++;
 		}
 
-		if ((hero = (struct struct_hero*)get_second_hero_available_in_group()) &&
+		if ((hero = get_second_hero_available_in_group()) &&
 			(hero->typus != HERO_TYPE_NONE) &&
 			(hero->group_no == gs_current_group) &&
 			!hero_dead((Bit8u*)hero) &&
@@ -227,7 +227,7 @@ signed short DNG03_handler(void)
 			}
 		}
 
-		if ((hero = (struct struct_hero*)get_second_hero_available_in_group()) &&
+		if ((hero = get_second_hero_available_in_group()) &&
 			(j == 2 ||
 			(hero->typus != HERO_TYPE_NONE) &&
 			(hero->group_no == gs_current_group) &&

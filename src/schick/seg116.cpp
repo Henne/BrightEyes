@@ -667,7 +667,7 @@ void TLK_old_woman(signed short state)
 			}
 		}
 
-		gs_random_tlk_hero = (Bit8u*)get_hero(get_random_hero()); /* TODO: can be removed here ? */
+		gs_random_tlk_hero = (struct struct_hero*)get_hero(get_random_hero()); /* TODO: can be removed here ? */
 
 		g_dialog_next_state = (count_heroes_in_group() == counter ? 24 : 25);
 
