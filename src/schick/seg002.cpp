@@ -3108,7 +3108,7 @@ void herokeeping(void)
 		/* consume food and set messages */
 		/* must be vital */
 		if ((hero->typus != HERO_TYPE_NONE) && g_herokeeping_flag &&
-				check_hero_no3((Bit8u*)hero) &&	!hero->jail && !g_travel_herokeeping)
+				check_hero_no3(hero) &&	!hero->jail && !g_travel_herokeeping)
 		{
 			/* Do the eating */
 
@@ -4483,15 +4483,12 @@ signed short check_hero(Bit8u *hero)
  * \brief   returns true if the hero is not dead, petrified, unconscious or renegade
  */
 /* should be static */
-signed short check_hero_no2(Bit8u *hero)
+signed short check_hero_no2(struct struct_hero *hero)
 {
 
-	if (!host_readbs(hero + HERO_TYPE) ||
-		hero_dead(hero) ||
-		hero_petrified(hero) ||
-		hero_unconscious(hero) ||
-		hero_renegade(hero)
-	) {
+	if (!hero->typus || hero_dead((Bit8u*)hero) || hero_petrified((Bit8u*)hero) ||
+		hero_unconscious((Bit8u*)hero) || hero_renegade((Bit8u*)hero))
+	{
 		return 0;
 	}
 
@@ -4505,9 +4502,9 @@ signed short check_hero_no2(Bit8u *hero)
  * \return              {0, 1}
  */
 /* should be static */
-signed short check_hero_no3(Bit8u *hero)
+signed short check_hero_no3(struct struct_hero *hero)
 {
-	if (!host_readbs(hero + HERO_TYPE) || hero_dead(hero) || hero_petrified(hero) || hero_unconscious(hero)) {
+	if (!hero->typus || hero_dead((Bit8u*)hero) || hero_petrified((Bit8u*)hero) || hero_unconscious((Bit8u*)hero)) {
 
 		return 0;
 	}
@@ -5512,7 +5509,7 @@ signed short count_heroes_available(void)
 	for (i = 0; i <= 6; i++, hero++) {
 
 		/* Check if hero is available */
-		if (hero->typus && (check_hero((Bit8u*)hero) || check_hero_no2((Bit8u*)hero)))
+		if (hero->typus && (check_hero((Bit8u*)hero) || check_hero_no2(hero)))
 		{
 			retval++;
 		}
@@ -5534,7 +5531,7 @@ signed short count_heroes_available_ignore_npc(void)
 
 	for (i = 0; i < 6; i++, hero++) {
 		/* Check if hero is available */
-		if (hero->typus && (check_hero((Bit8u*)hero) || check_hero_no2((Bit8u*)hero)))
+		if (hero->typus && (check_hero((Bit8u*)hero) || check_hero_no2(hero)))
 		{
 			retval++;
 		}
@@ -5556,7 +5553,7 @@ signed short count_heroes_available_in_group(void)
 	struct struct_hero *hero = (struct struct_hero*)get_hero(0);
 
 	for (i = 0; i <= 6; i++, hero++) {
-		if (hero->typus && (hero->group_no == gs_current_group) && check_hero_no2((Bit8u*)hero))
+		if (hero->typus && (hero->group_no == gs_current_group) && check_hero_no2(hero))
 		{
 			/* hero not dead, petrified, unconscious or renegade */
 			heroes++;
@@ -5576,7 +5573,7 @@ signed short count_heroes_available_in_group_ignore_npc(void)
 
 	for (i = 0; i < 6; i++, hero++) {
 
-		if (hero->typus && (hero->group_no == gs_current_group) && check_hero_no2((Bit8u*)hero))
+		if (hero->typus && (hero->group_no == gs_current_group) && check_hero_no2(hero))
 		{
 			/* hero not dead, petrified, unconscious or renegade */
 			heroes++;
