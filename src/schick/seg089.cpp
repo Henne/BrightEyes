@@ -705,7 +705,7 @@ void DNG15_cursed_money(Bit8u* ptr)
 
 	if (GUI_bool(get_tx(53)))
 	{
-		host_writebs(ptr, (gs_dng15_took_cursed_money = 1));
+		*ptr = gs_dng15_took_cursed_money = 1;
 
 		p_money = get_party_money();
 		p_money += random_interval(10, 25) * 100;

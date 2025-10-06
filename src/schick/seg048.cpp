@@ -314,7 +314,7 @@ void status_menu(signed short hero_pos)
 				g_statuspage_selitem1_no = g_statuspage_selitem3_no;
 
 				memset(g_dtp2, ' ', 60);
-				host_writeb((Bit8u*)g_dtp2 + 60, 0);
+				*(g_dtp2 + 60) = '\0';
 				GUI_print_string(g_dtp2, 16, 192);
 
 				if (host_readws(hero2 + HERO_INVENTORY + SIZEOF_INVENTORY * g_statuspage_selitem3_no)) {

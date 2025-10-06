@@ -587,7 +587,7 @@ void DNG09_pitfall(void)
 
 			if (l3 >= 2 || (l3 == 1 && i))
 			{
-				host_writeb((Bit8u*)g_dtp2, 0);
+				*g_dtp2 = '\0';
 
 				if (i) {
 					sprintf(g_dtp2, get_ttx(768), ((struct struct_hero*)get_hero(i - 1))->alias);

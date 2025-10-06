@@ -139,7 +139,7 @@ signed short DNG10_handler(void)
 					if (gs_dng10_hole_damage >= 7)
 					{
 						/* the secret wall can now be passed forward */
-						host_writeb(amap_ptr + MAP_POS(3,7), (DNG_TILE_SEMIPERMEABLE_WALL << 4) + 0x0f); /* set flags 0,1,2,3 => can be entered from all directions */
+						*(amap_ptr + MAP_POS(3,7)) = (DNG_TILE_SEMIPERMEABLE_WALL << 4) + 0x0f; /* set flags 0,1,2,3 => can be entered from all directions */
 					}
 				}
 

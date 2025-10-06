@@ -878,7 +878,7 @@ signed short DNG_fallpit(signed short max_damage)
 					(host_readbs(get_hero(hero_id) + HERO_GROUP_NO) != gs_current_group) ||
 					((nr_fallen_heroes == 1) && (hero_id == 6))); /* avoid that the NPC gets separated into a single group */
 
-			host_writeb(get_hero(hero_id) + HERO_GROUP_NO, (unsigned char)new_group);
+			((struct struct_hero*)get_hero(hero_id))->group_no = (unsigned char)new_group;
 			gs_group_member_counts[new_group]++;
 			gs_group_member_counts[gs_current_group]--;
 			sub_hero_le((struct struct_hero*)get_hero(hero_id), random_schick(max_damage));

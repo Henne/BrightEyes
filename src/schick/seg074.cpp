@@ -156,7 +156,7 @@ unsigned short get_mapval_small(signed short x, signed short y)
 {
 	Bit8u *map = g_dng_map;
 
-	return host_readb(map + 16 * y + x);
+	return *(map + 16 * y + x);
 }
 
 /**
@@ -170,7 +170,7 @@ unsigned short get_mapval_large(signed short x, signed short y)
 {
 	Bit8u *map = g_dng_map;
 
-	return host_readb(map + 32 * y + x);
+	return *(map + 32 * y + x);
 }
 
 /**
@@ -424,9 +424,9 @@ void draw_automap_entrance(signed short x, signed short y, signed short dir)
 	}
 
 	/* set 3 pixel to black */
-	host_writeb(p_img_tile, 0);
-	host_writeb(p_img_tile + skipsize, 0);
-	host_writeb(p_img_tile + skipsize + skipsize, 0);
+	*p_img_tile = 0;
+	*(p_img_tile + skipsize) = 0;
+	*(p_img_tile + skipsize + skipsize) = 0;
 }
 
 void draw_automap_to_screen(void)
@@ -596,14 +596,14 @@ signed short select_teleport_dest(void)
 	if ((g_automap_selx == gs_x_target) && (g_automap_sely == gs_y_target))
 	{
 		ae_costs = 0;
-		host_writeb((Bit8u*)g_dtp2, 0);
+		*g_dtp2 = '\0';
 
 	} else if ((gs_dungeon_index && (l_di == 15)) || ((gs_current_town != TOWNS_NONE) && (((l_di >= 2) && (l_di <= 5)) || (l_di == 6))))
 	{
 		strcpy(g_dtp2, get_ttx(611));
 		ae_costs = -2;
 	} else {
-		host_writeb((Bit8u*)g_dtp2, 0);
+		*g_dtp2 = '\0';
 		ae_costs = 15;
 	}
 

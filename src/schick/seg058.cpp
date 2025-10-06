@@ -142,7 +142,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 	Bit32s p_money;
 	signed short l12 = 0;
 	Bit8u *hero2;
-	Bit8u *hero1;
+	struct struct_hero *hero_bargain;
 	signed short width;
 	signed short height;
 	struct nvf_desc nvf;
@@ -402,9 +402,9 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 
 							answer = select_hero_ok_forced(get_ttx(442));
 
-							hero1 = get_hero(answer);
+							hero_bargain = (struct struct_hero*)get_hero(answer);
 
-							l12 = bargain(hero1, 1, price, percent, 2) > 0 ? 1 : 0;
+							l12 = bargain((Bit8u*)hero_bargain, 1, price, percent, 2) > 0 ? 1 : 0;
 						}
 
 						if (l12 > 0) {
