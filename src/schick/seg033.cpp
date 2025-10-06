@@ -40,7 +40,7 @@ namespace M302de {
  * \param   x           x-coordinate on the chessboard
  * \param   y           y-coordinate on the chessboard
  */
-void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y)
+void FIG_menu(struct struct_hero *hero, signed short hero_pos, signed short x, signed short y)
 {
 	signed short selected;
 	signed short l1;
@@ -69,7 +69,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 	l1 = 1;
 	done = 0;
 
-	while ((done == 0) && (host_readbs(hero + HERO_BP_LEFT) > 0)) {
+	while ((done == 0) && (hero->bp_left > 0)) {
 
 		if (g_fig_cb_marker_id != -1) {
 			FIG_remove_from_list(g_fig_cb_marker_id, 0);
@@ -79,24 +79,24 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 		FIG_init_list_elem(hero_pos + 1);
 		draw_fight_screen_pal(0);
 
-		if ((hero_scared(hero)) || (host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_FLEE)) {
+		if ((hero_scared((Bit8u*)hero)) || (hero->action_id == FIG_ACTION_FLEE)) {
 
-			and_ptr_bs(hero + HERO_FLAGS1, 0x7f); /* unset 'tied' flag (why??) */
-			and_ptr_bs(hero + HERO_FLAGS1, 0xfb); /* unset 'petrified' flag (why???) */
+			and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0x7f); /* unset 'tied' flag (why??) */
+			and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xfb); /* unset 'petrified' flag (why???) */
 
-			if (FIG_find_path_to_target(hero, hero_pos, x, y, 5) != -1) {
-				seg036_00ae(hero, hero_pos); /* probably: execute hero movement based on path saved in g_fig_move_pathdir. */
+			if (FIG_find_path_to_target((Bit8u*)hero, hero_pos, x, y, 5) != -1) {
+				seg036_00ae((Bit8u*)hero, hero_pos); /* probably: execute hero movement based on path saved in g_fig_move_pathdir. */
 			}
 			done = 1;
 
-		} else if (hero_renegade(hero) || (host_readbs(hero + HERO_NPC_ID) > 0)|| (g_autofight != 0)) {
+		} else if (hero_renegade((Bit8u*)hero) || (hero->npc_id > 0)|| (g_autofight != 0)) {
 
-			host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_WAIT);
+			hero->action_id = FIG_ACTION_WAIT;
 
 			if (((g_current_fight_no != FIGHTS_F144) || (g_finalfight_tumult)) &&
-				(host_readbs(hero + HERO_BP_LEFT) >= 3))
+				(hero->bp_left >= 3))
 			{
-				KI_hero(hero, hero_pos, x, y);
+				KI_hero((Bit8u*)hero, hero_pos, x, y);
 			}
 			done = 1;
 		} else {
@@ -107,16 +107,17 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 				g_basepos_y = ((x + y < 15) ? -30 : 30);
 
 				/* prepare question with BP */
-				sprintf(g_dtp2, get_tx(18), host_readbs(hero + HERO_BP_LEFT));
+				sprintf(g_dtp2, get_tx(18), hero->bp_left);
 
 				txt_tabpos_bak = g_txt_tabpos[0];
 				g_txt_tabpos[0] = g_basepos_x + 204;
 
 				refresh_screen_size();
 
-				weapon_id = host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID);
+				weapon_id = hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id;
 
-				if (!item_weapon(get_itemsdat(weapon_id)) || (item_weapon(get_itemsdat(weapon_id)) && inventory_broken(hero + (HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY)))) { /* test 'broken' flag */
+				if (!item_weapon(get_itemsdat(weapon_id)) || (item_weapon(get_itemsdat(weapon_id)) && hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].flags.broken)) {
+					/* test 'broken' flag */
 					/* no weapon or weapon broken, use red color for "change weapon" */
 					sprintf(g_text_output_buf, (char*)g_red_string1, get_tx(24));
 				} else {
@@ -124,7 +125,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 					strcpy(g_text_output_buf, get_tx(24));
 				}
 
-				if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK)) * 110 <= host_readws(hero + HERO_LOAD)) {
+				if (hero->attrib[ATTRIB_KK].current * 110 <= hero->load) {
 					/* too much weight, use red color for "drop item" */
 					sprintf(g_text_output_buf + 50, (char*)g_red_string2, get_tx(46));
 				} else {
@@ -160,25 +161,25 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 			if (selected == FIG_ACTION_MOVE) {
 				/* MOVE / BEWEGEN */
 
-				if (hero_tied(hero)) {
+				if (hero_tied((Bit8u*)hero)) {
 					/* Probe: MU + 2 */
-					if (test_attrib((struct struct_hero*)hero, ATTRIB_MU, 2) > 0) {
+					if (test_attrib(hero, ATTRIB_MU, 2) > 0) {
 						/* Success */
-						and_ptr_bs(hero + HERO_FLAGS1, 0x7f); /* unset 'tied' flag */
+						and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0x7f); /* unset 'tied' flag */
 
-					} else if (host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_MU)) > 4) {
+					} else if (hero->attrib[ATTRIB_MU].current > 4) {
 						/* Failure */
 						/* MU - 2 for 7 hours */
 						slot_no = get_free_mod_slot();
-						set_mod_slot(slot_no, HOURS(7), hero + (HERO_ATTRIB + 3 * ATTRIB_MU), -2, (signed char)hero_pos);
+						set_mod_slot(slot_no, HOURS(7), (Bit8u*)&hero->attrib[ATTRIB_MU].current, -2, (signed char)hero_pos);
 					}
 				}
 
-				if (!hero_tied(hero)) {
+				if (!hero_tied((Bit8u*)hero)) {
 
-					host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_MOVE);
+					hero->action_id = FIG_ACTION_MOVE;
 
-					if (host_readbs(hero + HERO_BP_LEFT) > 0) {
+					if (hero->bp_left > 0) {
 						/* let the player select a move destination */
 
 						refresh_screen_size();
@@ -187,7 +188,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						x = host_readws((Bit8u*)&x);
 						y = host_readws((Bit8u*)&y);
 #endif
-						FIG_move_hero(hero, hero_pos, &x, &y);
+						FIG_move_hero((Bit8u*)hero, hero_pos, &x, &y);
 
 #if !defined(__BORLANDC__)
 						/* BE-fix */
@@ -197,28 +198,28 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						update_mouse_cursor();
 
 						/* Moving destroys an active 'Chamaelioni' spell */
-						and_ptr_bs(hero + HERO_FLAGS1, 0xef); /* unset 'chamaelioni' flag.  (???) */
+						and_ptr_bs((Bit8u*)hero + HERO_FLAGS1, 0xef); /* unset 'chamaelioni' flag.  (???) */
 						/* TODO: What if the target square agreed with the starting square (such that no movement has happened? */
 
 					} else {
 						/* no BP left */
-						sprintf(g_dtp2, get_tx(17), (char*)hero + HERO_NAME2);
+						sprintf(g_dtp2, get_tx(17), hero->alias);
 						GUI_output(g_dtp2);
 					}
 
 				} else {
-					sprintf(g_dtp2,	get_tx(7), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2,	get_tx(7), hero->alias);
 					GUI_output(g_dtp2);
 				}
 			} else if (selected == FIG_ACTION_MELEE_ATTACK) {
 				/* ATTACK / ANGRIFF */
 
-				if (host_readbs(hero + HERO_BP_LEFT) >= 3) {
+				if (hero->bp_left >= 3) {
 
 					target_x = x;
 					target_y = y;
 					target_id = -5;
-					if ((range_weapon = FIG_get_range_weapon_type(hero)) == -1) {
+					if ((range_weapon = FIG_get_range_weapon_type((Bit8u*)hero)) == -1) {
 						/* not a range weapon */
 						refresh_screen_size();
 #if !defined(__BORLANDC__)
@@ -234,7 +235,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 #endif
 						update_mouse_cursor();
 					} else {
-						if (range_attack_check_ammo(hero, 1)) {
+						if (range_attack_check_ammo((Bit8u*)hero, 1)) {
 							/* a range weapon */
 							refresh_screen_size();
 #if !defined(__BORLANDC__)
@@ -267,22 +268,22 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						{
 							GUI_output(get_tx(29));
 
-							host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_MOVE);
+							hero->action_id = FIG_ACTION_MOVE;
 
 							/* set target id to 0 */
-							host_writeb(hero + HERO_ENEMY_ID, 0);
+							hero->enemy_id = 0;
 
 						} else if ((range_weapon != -1) && (calc_beeline(x, y, target_x, target_y) < 2)) {
 
 							GUI_output(get_ttx(508));
 
-							host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_MOVE);
+							hero->action_id = FIG_ACTION_MOVE;
 
 							/* set target id to 0 */
-							host_writeb(hero + HERO_ENEMY_ID, 0);
+							hero->enemy_id = 0;
 
 						} else {
-							host_writeb(hero + HERO_ATTACK_TYPE, 0);
+							hero->atpa_mod = 0;
 
 							if (range_weapon == -1) {
 
@@ -297,59 +298,59 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 
 								} while (selected == -1);
 
-								host_writeb(hero + HERO_ATTACK_TYPE, selected == 1 ? 2 : (selected == 2) ? 0 : -2);
+								hero->atpa_mod = selected == 1 ? 2 : (selected == 2) ? 0 : -2;
 							}
 
 							/* set target id */
-							host_writeb(hero + HERO_ENEMY_ID, target_id);
+							hero->enemy_id = target_id;
 							/* set BP to 0 */
-							host_writeb(hero + HERO_BP_LEFT, 0);
-							host_writeb(hero + HERO_ACTION_ID, (range_weapon > 0 ? FIG_ACTION_RANGE_ATTACK : FIG_ACTION_MELEE_ATTACK));
+							hero->bp_left = 0;
+							hero->action_id = (range_weapon > 0 ? FIG_ACTION_RANGE_ATTACK : FIG_ACTION_MELEE_ATTACK);
 							done = 1;
 						}
 					}
 				} else {
 					/* no BP left */
-					sprintf(g_dtp2,	get_tx(17), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2,	get_tx(17), hero->alias);
 					GUI_output(g_dtp2);
 				}
 			} else if (selected == FIG_ACTION_GUARD) {
 				/* GUARD / SICHERN */
 
-				if (host_readbs(hero + HERO_BP_LEFT) >= 3) {
+				if (hero->bp_left >= 3) {
 
 					/* set BP to 0 */
-					host_writeb(hero + HERO_BP_LEFT, 0);
+					hero->bp_left = 0;
 
-					host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_GUARD);
+					hero->action_id = FIG_ACTION_GUARD;
 
 					done = 1;
 				} else {
 					/* no BP left */
-					sprintf(g_dtp2, get_tx(17), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_tx(17), hero->alias);
 					GUI_output(g_dtp2);
 				}
 
 			} else if (selected == FIG_ACTION_SPELL) {
 				/* CAST SPELL / ZAUBERN */
 
-				if (host_readbs(hero + HERO_TYPE) < HERO_TYPE_WITCH) {
+				if (hero->typus < HERO_TYPE_WITCH) {
 					/* not a magic user */
 					GUI_output(get_ttx(215));
 				} else {
 
-					if (host_readbs(hero + HERO_BP_LEFT) >= 5) {
+					if (hero->bp_left >= 5) {
 
 						refresh_screen_size();
-						host_writeb(hero + HERO_SPELL_ID, select_spell(hero, 0));
+						hero->spell_id = select_spell((Bit8u*)hero, 0);
 						update_mouse_cursor();
 
-						if (host_readbs(hero + HERO_SPELL_ID) > 0) {
+						if (hero->spell_id > 0) {
 
-							host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_MOVE);
-							host_writeb(hero + HERO_ENEMY_ID, 0);
+							hero->action_id = FIG_ACTION_MOVE;
+							hero->enemy_id = 0;
 
-							spell_description = &g_spell_descriptions[host_readbs(hero + HERO_SPELL_ID)];
+							spell_description = &g_spell_descriptions[hero->spell_id];
 
 							if (spell_description->where_to_use == -1) {
 
@@ -402,40 +403,39 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 											GUI_output(get_tx(6));
 
 										} else {
-											host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_SPELL);
-											host_writeb(hero + HERO_ENEMY_ID, target_id);
+											hero->action_id = FIG_ACTION_SPELL;
+											hero->enemy_id = target_id;
 											done = 1;
 										}
 									}
 								} else {
-									host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_SPELL);
-									host_writeb(hero + HERO_ENEMY_ID, 0);
+									hero->action_id = FIG_ACTION_SPELL;
+									hero->enemy_id = 0;
 									done = 1;
 								}
 							}
-
 						}
 
-						if ((host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_SPELL) &&
-							(get_spell_cost(host_readbs(hero + HERO_SPELL_ID), 1) > host_readws(hero + HERO_AE)))
+						if ((hero->action_id == FIG_ACTION_SPELL) &&
+							(get_spell_cost(hero->spell_id, 1) > hero->ae))
 						{
 							/* not enough AE */
 							GUI_output(get_ttx(337));
-							host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_MOVE);
+							hero->action_id = FIG_ACTION_MOVE;
 							done = 0;
 						}
 					} else {
 						/* no BP left */
-						sprintf(g_dtp2, get_tx(17), (char*)hero + HERO_NAME2);
+						sprintf(g_dtp2, get_tx(17), hero->alias);
 						GUI_output(g_dtp2);
 					}
 				}
 			} else if (selected == FIG_ACTION_USE_ITEM) {
 				/* USE ITEM / GGST. BENUTZEN */
 
-					if (host_readbs(hero + HERO_BP_LEFT) >= 3) {
+					if (hero->bp_left >= 3) {
 
-						if (is_in_word_array(host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_LEFT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID), g_attack_items))
+						if (is_in_word_array(hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id, g_attack_items))
 						{
 							target_x = x;
 							target_y = y;
@@ -452,35 +452,35 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 							target_y = host_readws((Bit8u*)&target_y);
 #endif
 							update_mouse_cursor();
-							host_writeb(hero + HERO_ENEMY_ID, target_id);
+							hero->enemy_id = target_id;
 						} else {
-							host_writeb(hero + HERO_ENEMY_ID, 0);
+							hero->enemy_id = 0;
 						}
 
-						if ((host_readbs(hero + HERO_ENEMY_ID) < 0) || host_readbs(hero + HERO_ENEMY_ID) >= 50) {
-							host_writeb(hero + HERO_ENEMY_ID, 0);
+						if ((hero->enemy_id < 0) || hero->enemy_id >= 50) {
+							hero->enemy_id = 0;
 							GUI_output(get_tx(28));
 						} else {
 							/* set BP to 0 */
-							host_writeb(hero + HERO_BP_LEFT, 0);
+							hero->bp_left = 0;
 
-							host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_USE_ITEM);
+							hero->action_id = FIG_ACTION_USE_ITEM;
 							done = 1;
 						}
 					} else {
 						/* no BP left */
-						sprintf(g_dtp2,	get_tx(17), (char*)hero + HERO_NAME2);
+						sprintf(g_dtp2,	get_tx(17), hero->alias);
 						GUI_output(g_dtp2);
 					}
 			} else if (selected == FIG_ACTION_EXCHANGE_ITEM) {
 				/* EXCHANGE ITEM / GGST. WECHSELN */
-					if (host_readbs(hero + HERO_BP_LEFT) >= 2) {
+					if (hero->bp_left >= 2) {
 
 						radio_i = 0;
 
 						for (slot_no = HERO_INVENTORY_SLOT_KNAPSACK_1; slot_no < NR_HERO_INVENTORY_SLOTS; slot_no++) {
 
-							weapon_id = host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * slot_no);
+							weapon_id = hero->inventory[slot_no].item_id;
 
 							if (weapon_id != 0) {
 
@@ -495,15 +495,14 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						}
 
 						if (radio_i == 0) {
-							sprintf(g_dtp2,	get_ttx(750), (char*)hero + HERO_NAME2);
+							sprintf(g_dtp2,	get_ttx(750), hero->alias);
 							GUI_output(g_dtp2);
 						} else {
-							if (host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_LEFT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID) == ITEM_NONE) {
-								sprintf(g_text_output_buf, get_tx(60), (char*)hero + HERO_NAME2);
+							if (hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id == ITEM_NONE) {
+								sprintf(g_text_output_buf, get_tx(60), hero->alias);
 							} else {
-								sprintf(g_text_output_buf, get_tx(31),
-									(char*)hero + HERO_NAME2,
-									GUI_names_grammar((signed short)0x8002, host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_LEFT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID), 0));
+								sprintf(g_text_output_buf, get_tx(31), hero->alias,
+									GUI_names_grammar((signed short)0x8002, hero->inventory[HERO_INVENTORY_SLOT_LEFT_HAND].item_id, 0));
 							}
 
 							refresh_screen_size();
@@ -527,24 +526,25 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 							if (selected != -1) {
 
 								/* subtract 2 BP */
-								sub_ptr_bs(hero + HERO_BP_LEFT, 2);
-								move_item(HERO_INVENTORY_SLOT_LEFT_HAND, slots[selected -1], hero);
+								hero->bp_left -= 2;
+								move_item(HERO_INVENTORY_SLOT_LEFT_HAND, slots[selected -1], (Bit8u*)hero);
 							}
 						}
 					} else {
 						/* no BP left */
-						sprintf(g_dtp2,	get_tx(17), (char*)hero + HERO_NAME2);
+						sprintf(g_dtp2,	get_tx(17), hero->alias);
 						GUI_output(g_dtp2);
 					}
+
 			} else if (selected == FIG_ACTION_EXCHANGE_WEAPON) {
 				/* CHANGE WEAPON / WAFFE WECHSELN */
-					if (host_readbs(hero + HERO_BP_LEFT) >= 2) {
+					if (hero->bp_left >= 2) {
 
 						radio_i = 0;
 
 						for (slot_no = HERO_INVENTORY_SLOT_KNAPSACK_1; slot_no < NR_HERO_INVENTORY_SLOTS; slot_no++) {
 
-							weapon_id = host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * slot_no);
+							weapon_id = hero->inventory[slot_no].item_id;
 
 							if (item_weapon(get_itemsdat(weapon_id))) {
 
@@ -555,18 +555,18 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 								sprintf(g_radio_name_list[radio_i],
 									g_space_separated_strings, /* "%s %s" */
 									GUI_name_singular(get_itemname(weapon_id)),
-									inventory_broken(hero + HERO_INVENTORY + SIZEOF_INVENTORY * slot_no) ? get_ttx(478) : g_empty_string3);
+									hero->inventory[slot_no].flags.broken ? get_ttx(478) : g_empty_string3);
 
 								radio_i++;
 							}
 						}
 
 						if (radio_i == 0) {
-							sprintf(g_dtp2,	get_tx(1), (char*)hero + HERO_NAME2);
+							sprintf(g_dtp2,	get_tx(1), hero->alias);
 							GUI_output(g_dtp2);
 						} else {
-							sprintf(g_text_output_buf, get_tx(2), (char*)hero + HERO_NAME2,
-								GUI_names_grammar((signed short)0x8002, host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID), 0));
+							sprintf(g_text_output_buf, get_tx(2), hero->alias,
+								GUI_names_grammar((signed short)0x8002, hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id, 0));
 
 							refresh_screen_size();
 							tw_bak = g_textbox_width;
@@ -589,22 +589,22 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 							if (selected != -1) {
 
 								/* subtract 2 BP */
-								sub_ptr_bs(hero + HERO_BP_LEFT, 2);
+								hero->bp_left -= 2;
 
-								rwt1 = FIG_get_range_weapon_type(hero);
+								rwt1 = FIG_get_range_weapon_type((Bit8u*)hero);
 
-								move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, slots[selected - 1], hero);
+								move_item(HERO_INVENTORY_SLOT_RIGHT_HAND, slots[selected - 1], (Bit8u*)hero);
 
-								rwt2 = FIG_get_range_weapon_type(hero);
+								rwt2 = FIG_get_range_weapon_type((Bit8u*)hero);
 
 								if (rwt1 != rwt2) {
 
-									ptr = FIG_get_fighter(host_readbs(hero + HERO_FIGHTER_ID));
+									ptr = FIG_get_fighter(hero->fighter_id);
 
 									if (rwt2 != -1) {
-										ptr->nvf_no = g_nvftab_figures_rangeweapon[host_readbs(hero + HERO_SPRITE_NO) - 1][rwt2][host_readbs(hero + HERO_VIEWDIR)];
+										ptr->nvf_no = g_nvftab_figures_rangeweapon[hero->sprite_no - 1][rwt2][hero->viewdir];
 									} else {
-										ptr->nvf_no = host_readbs(hero + HERO_VIEWDIR);
+										ptr->nvf_no = hero->viewdir;
 									}
 
 									ptr->reload = -1;
@@ -615,27 +615,27 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 						}
 					} else {
 						/* no BP left */
-						sprintf(g_dtp2, get_tx(17), (char*)hero + HERO_NAME2);
+						sprintf(g_dtp2, get_tx(17), hero->alias);
 						GUI_output(g_dtp2);
 					}
 			} else if (selected == FIG_ACTION_CHECK_VALUES) {
 				/* CHECK VALUES / WERTE PRUEFEN */
 
-				rwt1 = weapon_check(hero);
+				rwt1 = weapon_check((Bit8u*)hero);
 
 				if (rwt1 == -1) {
 
-					rwt1 = FIG_get_range_weapon_type(hero);
+					rwt1 = FIG_get_range_weapon_type((Bit8u*)hero);
 
 					if (rwt1 == -1) {
 
 						/* calculate AT and PA values for "BARE HANDS" */
-						at = host_readbs(hero + HERO_AT) - host_readbs(hero + HERO_RS_BE) / 2;
-						if (host_readbs(hero + HERO_RS_BE) & 1) {
+						at = hero->at_weapon[0] - hero->rs_be / 2;
+						if (hero->rs_be & 1) {
 							at--;
 						}
 
-						pa = host_readbs(hero + HERO_PA) - host_readbs(hero + HERO_RS_BE) / 2;
+						pa = hero->pa_weapon[0] - hero->rs_be / 2;
 
 						/* set damage bounds: 1W6 */
 						damage_lo = 1;
@@ -644,19 +644,15 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 					} else {
 
 						/* calculate AT and PA values for range weapons */
-						at = host_readbs(hero + HERO_AT + host_readbs(hero + HERO_WEAPON_TYPE))
-							- host_readbs(hero + HERO_RS_BE) / 2
-							+ host_readbs(hero + HERO_AT_MOD);
+						at = hero->at_weapon[hero->w_type] - hero->rs_be / 2 + hero->w_at_mod;
 
-						if (host_readbs(hero + HERO_RS_BE) & 1) {
+						if (hero->rs_be & 1) {
 							at--;
 						}
-						pa = host_readbs(hero + HERO_PA + host_readbs(hero + HERO_WEAPON_TYPE))
-							- host_readbs(hero + HERO_RS_BE) / 2
-							+ host_readbs(hero + HERO_PA_MOD);
+						pa = hero->pa_weapon[hero->w_type] - hero->rs_be / 2 + hero->w_pa_mod;
 
 
-						p_itemsdat = get_itemsdat(host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID));
+						p_itemsdat = get_itemsdat(hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id);
 						weapon = &g_weapons_table[host_readbs(p_itemsdat + ITEM_STATS_TABLE_INDEX)];
 
 						calc_damage_range(weapon->damage_d6, 6, weapon->damage_const, (Bit8u*)&damage_lo, (Bit8u*)&damage_hi);
@@ -664,32 +660,26 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 					}
 				} else {
 					/* calculate AT and PA values for melee weapons */
-					at = host_readbs(hero + HERO_AT + host_readbs(hero + HERO_WEAPON_TYPE))
-						- host_readbs(hero + HERO_RS_BE) / 2
-						+ host_readbs(hero + HERO_AT_MOD);
+					at = hero->at_weapon[hero->w_type] - hero->rs_be / 2 + hero->w_at_mod;
 
-					if (host_readbs(hero + HERO_RS_BE) & 1) {
+					if (hero->rs_be & 1) {
 						at--;
 					}
-					pa = host_readbs(hero + HERO_PA + host_readbs(hero + HERO_WEAPON_TYPE))
-						- host_readbs(hero + HERO_RS_BE) / 2
-						+ host_readbs(hero + HERO_PA_MOD);
+					pa = hero->pa_weapon[hero->w_type] - hero->rs_be / 2 + hero->w_pa_mod;
 
 
-					p_itemsdat = get_itemsdat(host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID));
+					p_itemsdat = get_itemsdat(hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id);
 					weapon = &g_weapons_table[host_readbs(p_itemsdat + ITEM_STATS_TABLE_INDEX)];
 
 					calc_damage_range(weapon->damage_d6, 6, weapon->damage_const, (Bit8u*)&damage_lo, (Bit8u*)&damage_hi);
 
 					/* "THE SWORD GRIMRING" gets a damage bonus + 5 in the final fight */
-					if ((host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID) == ITEM_GRIMRING) && (g_current_fight_no == FIGHTS_F144)) {
+					if ((hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id == ITEM_GRIMRING) && (g_current_fight_no == FIGHTS_F144)) {
 						damage_lo += 5;
 						damage_hi += 5;
 					}
 
-					weapon_id = host_readbs(hero + (HERO_ATTRIB + 3 * ATTRIB_KK))
-							+ host_readbs(hero + (HERO_ATTRIB_MOD + 3 * ATTRIB_KK))
-							- weapon->damage_kk_bonus;
+					weapon_id = hero->attrib[ATTRIB_KK].current + hero->attrib[ATTRIB_KK].mod - weapon->damage_kk_bonus;
 
 					if (weapon_id > 0) {
 						damage_lo += weapon_id;
@@ -705,27 +695,27 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 					pa = 0;
 				}
 
-				sprintf(g_dtp2,	get_tx(0), (char*)hero + HERO_NAME2,
+				sprintf(g_dtp2,	get_tx(0), hero->alias,
 					/* typus */
-					get_ttx((host_readbs(hero + HERO_SEX) != 0 ? 0x251 : 9) + host_readbs(hero + HERO_TYPE)),
+					get_ttx((hero->sex != 0 ? 0x251 : 9) + hero->typus),
 					/* level */
-					host_readbs(hero + HERO_LEVEL),
+					hero->level,
 					/* AT and PA value */
 					at, pa,
 					/* RS */
-					host_readbs(hero + HERO_RS_BONUS1),
+					hero->rs_bonus1,
 					/* weapon name */
-					(GUI_name_singular(get_itemname(host_readws(hero + HERO_INVENTORY + HERO_INVENTORY_SLOT_RIGHT_HAND * SIZEOF_INVENTORY + INVENTORY_ITEM_ID)))),
+					GUI_name_singular(get_itemname(hero->inventory[HERO_INVENTORY_SLOT_RIGHT_HAND].item_id)),
 					/* damage bounds */
 					damage_lo, damage_hi,
 					/* LE */
-					host_readws(hero + HERO_LE), host_readws(hero + HERO_LE_ORIG),
+					hero->le, hero->le_max,
 					/* AE */
-					host_readws(hero + HERO_AE), host_readws(hero + HERO_AE_ORIG),
+					hero->ae, hero->ae_max,
 					/* poison */
-					hero_is_poisoned((struct struct_hero*)hero) ? get_tx(36) : (char*)g_empty_string4,
+					hero_is_poisoned(hero) ? get_tx(36) : (char*)g_empty_string4,
 					/* renegade */
-					hero_renegade(hero) == 1 ? get_tx(38) : (char*)g_empty_string5);
+					hero_renegade((Bit8u*)hero) == 1 ? get_tx(38) : (char*)g_empty_string5);
 
 				GUI_output(g_dtp2);
 
@@ -733,11 +723,11 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 				/* WAIT / ABWARTEN */
 
 				done = 1;
-				host_writeb(hero + HERO_ACTION_ID, FIG_ACTION_WAIT);
+				hero->action_id = FIG_ACTION_WAIT;
 				/* set BP to 0 */
-				host_writeb(hero + HERO_BP_LEFT, 0);
+				hero->bp_left = 0;
 				/* set target id to 0 */
-				host_writeb(hero + HERO_ENEMY_ID, 0);
+				hero->enemy_id = 0;
 
 			} else if (selected == FIG_ACTION_COMPUTER_FIGHT) {
 				/* COMPUTER FIGHT / COMPUTERKAMPF */
@@ -757,13 +747,13 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 			} else if (selected == FIG_ACTION_DROP_ITEM) {
 
 				/* DROP ITEM / GGST. WEGWERFEN */
-				if (host_readbs(hero + HERO_BP_LEFT) >= 1) {
+				if (hero->bp_left >= 1) {
 
 					radio_i = 0;
 
 					for (slot_no = HERO_INVENTORY_SLOT_KNAPSACK_1; slot_no < NR_HERO_INVENTORY_SLOTS; slot_no++) {
 
-						weapon_id = host_readws(hero + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * slot_no);
+						weapon_id = hero->inventory[slot_no].item_id;
 
 						if (weapon_id != 0) {
 
@@ -778,10 +768,10 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 					}
 
 					if (radio_i == 0) {
-						sprintf(g_dtp2,	get_ttx(750), (char*)hero + HERO_NAME2);
+						sprintf(g_dtp2,	get_ttx(750), hero->alias);
 						GUI_output(g_dtp2);
 					} else {
-						sprintf(g_text_output_buf, get_tx(47), (char*)hero + HERO_NAME2);
+						sprintf(g_text_output_buf, get_tx(47), hero->alias);
 
 						refresh_screen_size();
 						tw_bak = g_textbox_width;
@@ -803,15 +793,15 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 
 						if (selected != -1) {
 
-							drop_item(hero, slots[selected -1], -1);
+							drop_item((Bit8u*)hero, slots[selected -1], -1);
 
 							/* subtract 1 BP */
-							dec_ptr_bs(hero + HERO_BP_LEFT);
+							hero->bp_left--;
 						}
 					}
 				} else {
 					/* no BP left */
-					sprintf(g_dtp2, get_tx(17), (char*)hero + HERO_NAME2);
+					sprintf(g_dtp2, get_tx(17), hero->alias);
 					GUI_output(g_dtp2);
 				}
 
@@ -823,7 +813,7 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 				if (GUI_bool(get_tx(52))) {
 					done = 1;
 					g_in_fight = 0;
-					g_game_state = (GAME_STATE_FIGQUIT);
+					g_game_state = GAME_STATE_FIGQUIT;
 				}
 
 				update_mouse_cursor();
@@ -834,36 +824,36 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 				done = 1;
 
 				/* check last action and target_id */
-				if (((host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_SPELL) || (host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_MELEE_ATTACK) ||
-					(host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_RANGE_ATTACK)) && (host_readbs(hero + HERO_ENEMY_ID) > 0))
+				if (((hero->action_id == FIG_ACTION_SPELL) || (hero->action_id == FIG_ACTION_MELEE_ATTACK) ||
+					(hero->action_id == FIG_ACTION_RANGE_ATTACK)) && (hero->enemy_id > 0))
 				{
 
 					/* TODO: check fighter_id upper bound */
-					//if (((host_readbs(hero + HERO_ENEMY_ID) >= 10) && g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID) - 10].flags.dead) || /* check 'dead' flag */
-					if (((host_readbs(hero + HERO_ENEMY_ID) >= 10) && g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID)].flags.dead) || /* check 'dead' flag */
-						((host_readbs(hero + HERO_ENEMY_ID) < 10) && hero_dead(get_hero(host_readbs(hero + HERO_ENEMY_ID) - 1))))
+					//if (((hero->enemy_id >= 10) && g_enemy_sheets[hero->enemy_id - 10].flags.dead) || /* check 'dead' flag */
+					if (((hero->enemy_id >= 10) && g_enemy_sheets[hero->enemy_id].flags.dead) || /* check 'dead' flag */
+						((hero->enemy_id < 10) && hero_dead((Bit8u*)get_hero(hero->enemy_id - 1))))
 					{
 
 						GUI_output(get_tx(29));
-						host_writebs(hero + HERO_ACTION_ID, FIG_ACTION_WAIT);
-						host_writebs(hero + HERO_ENEMY_ID, 0);
+						hero->action_id = FIG_ACTION_WAIT;
+						hero->enemy_id = 0;
 						done = 0;
 
 					/* TODO: check fighter_id upper bound */
-					} else if (((host_readbs(hero + HERO_ENEMY_ID) >= 10) && ((struct enemy_sheet*)(&g_enemy_sheets[host_readbs(hero + HERO_ENEMY_ID)] - 10))->flags.scared) || /* check 'scared' flag */
-						((host_readbs(hero + HERO_ENEMY_ID) < 10) && (hero_scared(get_hero(host_readbs(hero + HERO_ENEMY_ID) - 1)))))
+					} else if (((hero->enemy_id >= 10) && ((struct enemy_sheet*)(&g_enemy_sheets[hero->enemy_id] - 10))->flags.scared) || /* check 'scared' flag */
+						((hero->enemy_id < 10) && (hero_scared((Bit8u*)get_hero(hero->enemy_id - 1)))))
 					{
 
 						/* GUI_output(get_tx(29)); */
-						host_writebs(hero + HERO_ACTION_ID, FIG_ACTION_WAIT);
-						host_writebs(hero + HERO_ENEMY_ID, 0);
+						hero->action_id = FIG_ACTION_WAIT;
+						hero->enemy_id = 0;
 						done = 0;
 
-					} else if (((host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_SPELL) ||	(host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_RANGE_ATTACK)) && !check_hero_range_attack(hero, hero_pos))
+					} else if (((hero->action_id == FIG_ACTION_SPELL) ||	(hero->action_id == FIG_ACTION_RANGE_ATTACK)) && !check_hero_range_attack((Bit8u*)hero, hero_pos))
 					{
 						/* GUI_output(get_tx(29)); */
-						host_writebs(hero + HERO_ACTION_ID, FIG_ACTION_WAIT);
-						host_writebs(hero + HERO_ENEMY_ID, 0);
+						hero->action_id = FIG_ACTION_WAIT;
+						hero->enemy_id = 0;
 						done = 0;
 					}
 				}
@@ -874,10 +864,10 @@ void FIG_menu(Bit8u *hero, signed short hero_pos, signed short x, signed short y
 	/* final fight vs. Orkchampion */
 	if ((g_current_fight_no == FIGHTS_F144) &&
 		(get_hero_index((Bit8u*)gs_main_acting_hero) != hero_pos) &&
-		((host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_MELEE_ATTACK) ||
-			(host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_RANGE_ATTACK) ||
-			(host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_SPELL) ||
-			(host_readbs(hero + HERO_ACTION_ID) == FIG_ACTION_USE_ITEM)))
+		((hero->action_id == FIG_ACTION_MELEE_ATTACK) ||
+			(hero->action_id == FIG_ACTION_RANGE_ATTACK) ||
+			(hero->action_id == FIG_ACTION_SPELL) ||
+			(hero->action_id == FIG_ACTION_USE_ITEM)))
 	{
 
 		for (slot_no = 0; slot_no < 20; slot_no++) {

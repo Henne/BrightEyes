@@ -130,7 +130,7 @@ struct struct_hero {
 	signed char rs_bonus1;
 	signed char rs_bonus2;
 	signed char rs_be;
-	unsigned char bp_left;
+	signed char bp_left;
 	struct struct_attribs attrib[14];
 	/* Offset 0x5e */
 	signed short le_max;

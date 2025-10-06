@@ -587,7 +587,7 @@ void FIG_do_round(void)
 					g_fig_char_pic = actor_id + 1;
 
 					/* select a fight action */
-					FIG_menu((Bit8u*)hero, actor_id, x_coord, y_coord);
+					FIG_menu(hero, actor_id, x_coord, y_coord);
 
 					if ((hero->action_id == FIG_ACTION_MELEE_ATTACK) || (hero->action_id == FIG_ACTION_SPELL) ||
 						(hero->action_id == FIG_ACTION_USE_ITEM) || (hero->action_id == FIG_ACTION_RANGE_ATTACK))
