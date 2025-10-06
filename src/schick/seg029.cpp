@@ -150,7 +150,7 @@ void draw_status_line(void)
 
 		if (host_readb(get_hero(i) + HERO_TYPE) != HERO_TYPE_NONE) {
 
-			copy_forename(g_dtp2, (char*)(get_hero(i) + HERO_NAME2));
+			copy_forename(g_dtp2, ((struct struct_hero*)get_hero(i))->alias);
 
 			set_textcolor(0xff, 0);
 
@@ -377,7 +377,7 @@ void select_hero_icon(unsigned short pos) {
 	get_textcolor(&fg_bak, &bg_bak);
 
 	/* copy the heroes forename */
-	copy_forename(g_dtp2, (char*)(get_hero(pos) + HERO_NAME2));
+	copy_forename(g_dtp2, ((struct struct_hero*)get_hero(pos))->alias);
 
 	/* set the textcolors */
 	set_textcolor(0xfc, 0);
@@ -411,7 +411,7 @@ void deselect_hero_icon(unsigned short pos) {
 	get_textcolor(&fg_bak, &bg_bak);
 
 	/* copy the heroes forename */
-	copy_forename(g_dtp2, (char*)(get_hero(pos) + HERO_NAME2));
+	copy_forename(g_dtp2, ((struct struct_hero*)get_hero(pos))->alias);
 
 	/* set the textcolors */
 	set_textcolor(0xff, 0);

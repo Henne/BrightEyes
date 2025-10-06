@@ -72,7 +72,7 @@ void spell_gardanium(void)
 	signed short answer;
 
 	/* prepare a question */
-	sprintf(g_dtp2, get_tx(2), (char*)(get_spelluser() + HERO_NAME2));
+	sprintf(g_dtp2, get_tx(2), ((struct struct_hero*)get_spelluser())->alias);
 
 	/* ask and get the answer */
 	answer = GUI_input(g_dtp2, 2);

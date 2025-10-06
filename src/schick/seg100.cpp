@@ -366,7 +366,7 @@ void spell_ecliptifactus(void)
 			/* enable the spell */
 			host_writeb(get_spelluser() + HERO_ECLIPTIFACTUS, (signed char)rounds + 1);
 			/* prepare the message */
-			sprintf(g_dtp2, get_tx(88), (char*)(get_spelluser() + HERO_NAME2),
+			sprintf(g_dtp2, get_tx(88), ((struct struct_hero*)get_spelluser())->alias,
 				GUI_get_ptr(host_readbs(get_spelluser() + HERO_SEX), 3), rounds);
 		} else {
 			/* prepare the message */
@@ -414,7 +414,7 @@ void spell_eisenrost(void)
 
 						sprintf(g_dtp2, get_tx(92),
 							GUI_names_grammar((signed short)0x8000, id, 0),
-							(char*)(get_spelltarget() + HERO_NAME2));
+							(char*)(((struct struct_hero*)get_spelltarget())->alias));
 					} else {
 						g_spell_special_aecost = (-2);
 					}

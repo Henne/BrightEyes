@@ -102,7 +102,7 @@ void ask_miracle(void)
 									set_mod_slot(slot, DAYS(3), get_hero(i) + HERO_MR,
 										99, (signed char)i);
 
-									sprintf(g_dtp2, get_tx2(2), (char*)get_hero(i) + HERO_NAME2);
+									sprintf(g_dtp2, get_tx2(2), ((struct struct_hero*)get_hero(i))->alias);
 									gs_ingame_timers[INGAME_TIMER_PRAIOS_MR] = DAYS(3);
 								}
 							}
@@ -293,7 +293,7 @@ void ask_miracle(void)
 
 								host_writebs(get_hero(i) + HERO_HUNGER, host_writebs(get_hero(i) + HERO_THIRST, 0));
 
-								sprintf(g_dtp2, get_tx2(20), (char*)get_hero(i) + HERO_NAME2);
+								sprintf(g_dtp2, get_tx2(20), ((struct struct_hero*)get_hero(i))->alias);
 								gs_ingame_timers[INGAME_TIMER_FIRUN_SATED] = DAYS(7);
 							}
 						}

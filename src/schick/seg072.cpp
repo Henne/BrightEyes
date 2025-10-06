@@ -301,7 +301,7 @@ void INF_ragna_beorn_algrid(signed short informer, signed short state)
 			} else if (state == 6) {
 
 				/* copy the name */
-				strcpy(g_str_beorn_hjall, (char*)(get_hero(6) + HERO_NAME2));
+				strcpy(g_str_beorn_hjall, ((struct struct_hero*)get_hero(6))->alias);
 				/* set a pointer */
 				g_dialog_title = g_str_beorn_hjall;
 				/* copy the picture of the NPC */

@@ -758,7 +758,7 @@ void DNG_stub6(void)
 
 			if (l_si) {
 
-				sprintf(g_dtp2, get_ttx(768), get_hero(l_si - 1) + HERO_NAME2);
+				sprintf(g_dtp2, get_ttx(768), ((struct struct_hero*)get_hero(l_si - 1))->alias);
 			}
 
 			if (l_di == 2) {

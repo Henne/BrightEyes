@@ -52,7 +52,7 @@ void spell_arcano(void)
 	set_mod_slot(slot, HOURS(1), get_spelltarget() + HERO_MR, 2, (signed char)target);
 
 	/* "Die Magieresistenz von %s steigt um 2 Punkte." */
-	sprintf(g_dtp2, get_tx(98), (char*)(get_spelltarget() + HERO_NAME2));
+	sprintf(g_dtp2, get_tx(98), (char*)(((struct struct_hero*)get_spelltarget())->alias));
 }
 
 void spell_armatrutz(void)
@@ -542,7 +542,7 @@ void spell_salander(void)
 		g_spell_special_aecost = (ae_cost);
 	} else {
 		/* prepare message */
-		sprintf(g_dtp2, get_ttx(607), (char*)(get_spelluser() + HERO_NAME2));
+		sprintf(g_dtp2, get_ttx(607), ((struct struct_hero*)get_spelluser())->alias);
 
 		/* no AE cost */
 		g_spell_special_aecost = 0;
@@ -683,7 +683,7 @@ void spell_brenne(void)
 		/* prepare message */
 		sprintf(g_dtp2,
 			get_tx(108),
-			get_spelluser() + HERO_NAME2);
+			((struct struct_hero*)get_spelluser())->alias);
 
 	} else if (lantern_pos != -1) {
 
@@ -710,12 +710,12 @@ void spell_brenne(void)
 			/* prepare message */
 			sprintf(g_dtp2,
 				get_tx(119),
-				get_spelluser() + HERO_NAME2);
+				((struct struct_hero*)get_spelluser())->alias);
 		} else {
 			/* prepare message */
 			sprintf(g_dtp2,
 				get_tx(120),
-				get_spelluser() + HERO_NAME2);
+				((struct struct_hero*)get_spelluser())->alias);
 		}
 	} else {
 		/* neither torch nor lantern */
@@ -723,7 +723,7 @@ void spell_brenne(void)
 		/* prepare message */
 		sprintf(g_dtp2,
 			get_tx(121),
-			get_spelluser() + HERO_NAME2);
+			((struct struct_hero*)get_spelluser())->alias);
 	}
 }
 
