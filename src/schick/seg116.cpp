@@ -599,7 +599,7 @@ void tevent_144(void)
 
 			} while (grimring_hero_pos == 6);
 
-			gs_main_acting_hero = get_hero(grimring_hero_pos);
+			gs_main_acting_hero = (struct struct_hero*)get_hero(grimring_hero_pos);
 
 			final_intro();
 			if (!TRV_fight_event(FIGHTS_F144, 144)) {

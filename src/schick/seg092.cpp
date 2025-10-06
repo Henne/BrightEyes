@@ -61,10 +61,10 @@ void chest_poisoned1(void)
 	print_msg_with_first_hero(get_ttx(520));
 
 	/* the first hero gets wounded with 2W6 */
-	sub_hero_le((struct struct_hero*)(gs_main_acting_hero = get_first_hero_available_in_group()), dice_roll(2, 6, 0));
+	sub_hero_le((gs_main_acting_hero = (struct struct_hero*)get_first_hero_available_in_group()), dice_roll(2, 6, 0));
 
 	/* and gets poisoned */
-	hero_gets_poisoned((struct struct_hero*)gs_main_acting_hero, POISON_TYPE_SHURINKNOLLENGIFT);
+	hero_gets_poisoned(gs_main_acting_hero, POISON_TYPE_SHURINKNOLLENGIFT);
 
 #if !defined(__BORLANDC__)
 	gs_main_acting_hero = NULL;
@@ -77,10 +77,10 @@ void chest_poisoned2(void)
 	print_msg_with_first_hero(get_ttx(520));
 
 	/* the first hero gets wounded with 2W6 */
-	sub_hero_le((struct struct_hero*)(gs_main_acting_hero = get_first_hero_available_in_group()), dice_roll(2, 6, 0));
+	sub_hero_le((gs_main_acting_hero = (struct struct_hero*)get_first_hero_available_in_group()), dice_roll(2, 6, 0));
 
 	/* and gets poisoned */
-	hero_gets_poisoned((struct struct_hero*)gs_main_acting_hero, POISON_TYPE_ARAX);
+	hero_gets_poisoned(gs_main_acting_hero, POISON_TYPE_ARAX);
 
 #if !defined(__BORLANDC__)
 	gs_main_acting_hero = NULL;
@@ -93,10 +93,10 @@ void chest_poisoned3(void)
 	print_msg_with_first_hero(get_ttx(520));
 
 	/* the first hero gets wounded with 1W6 */
-	sub_hero_le((struct struct_hero*)(gs_main_acting_hero = get_first_hero_available_in_group()), dice_roll(1, 6, 0));
+	sub_hero_le((gs_main_acting_hero = (struct struct_hero*)get_first_hero_available_in_group()), dice_roll(1, 6, 0));
 
 	/* and gets poisoned */
-	hero_gets_poisoned((struct struct_hero*)gs_main_acting_hero, POISON_TYPE_KUKRIS);
+	hero_gets_poisoned(gs_main_acting_hero, POISON_TYPE_KUKRIS);
 
 #if !defined(__BORLANDC__)
 	gs_main_acting_hero = NULL;
@@ -118,7 +118,7 @@ void chest_petrified(void)
 	print_msg_with_first_hero(get_ttx(776));
 
 	/* save pointer of the first hero */
-	gs_main_acting_hero = get_first_hero_available_in_group();
+	gs_main_acting_hero = (struct struct_hero*)get_first_hero_available_in_group();
 
 	/* and make him petrified */
 	or_ptr_bs((Bit8u*)gs_main_acting_hero + HERO_FLAGS1, 0x04); /* set 'petrified' flag */

@@ -511,7 +511,7 @@ signed short replenish_stocks(signed short mod, signed short tries)
 				if (tries < 2) {
 
 					timewarp(HOURS(1));
-					gs_main_acting_hero = (Bit8u*)(hero = (struct struct_hero*)get_hero(hero_pos));
+					gs_main_acting_hero = hero = (struct struct_hero*)get_hero(hero_pos);
 					g_wildcamp_replstatus[hero_pos] = 1;
 					retval = 1;
 

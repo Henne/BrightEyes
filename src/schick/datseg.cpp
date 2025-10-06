@@ -1735,7 +1735,7 @@ Bit8u  gs_tevent077_fight_flag = 0xff; // ds:0x3e17
 #if defined(__BORLANDC__)
 struct struct_hero *gs_random_tlk_hero = NULL;	// ds:0x3e18;
 struct struct_hero *gs_ruin_hero = NULL;		// ds:0x3e1c;
-Bit8u *gs_main_acting_hero = NULL;	// ds:0x3e20;
+struct struct_hero *gs_main_acting_hero = NULL;	// ds:0x3e20;
 #else
 Bit32u gs_random_tlk_hero_obsolete = 0; // ds:0x3e18; This is a dummy now!
 Bit32u gs_ruin_hero_obsolete = 0;	// ds:0x3e1c; This is a dummy now!
@@ -5984,7 +5984,7 @@ unsigned char g_unkn_068[1] = { 0x00 }; // ds:0xb21d
 
 #if !defined(__BORLANDC__)
 struct struct_hero *gs_ruin_hero;			// ds:0x3e1c;
-Bit8u  *gs_main_acting_hero;				// ds:0x3e20;
+struct struct_hero *gs_main_acting_hero;		// ds:0x3e20;
 Bit8u  *gs_route_course_ptr;				// ds:0x425a;
 Bit8u  *gs_route_course_start;				// ds:0x425e;
 Bit8u  *gs_route_course_ptr2;				// ds:0x4262;

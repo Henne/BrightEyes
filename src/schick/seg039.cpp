@@ -434,7 +434,7 @@ void FIG_init_heroes(void)
 		/* FINAL FIGHT */
 		if (g_current_fight_no == FIGHTS_F144) {
 
-			if (hero == (Bit8u*)gs_main_acting_hero) {
+			if ((struct struct_hero*)hero == gs_main_acting_hero) {
 
 				cb_x = g_current_fight->heroes[0].x;
 				cb_y = g_current_fight->heroes[0].y;

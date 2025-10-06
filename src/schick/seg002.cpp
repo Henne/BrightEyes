@@ -4663,7 +4663,7 @@ void sub_hero_le(struct struct_hero *hero, const signed short le)
 
 			/* FINAL FIGHT */
 			if (g_current_fight_no == FIGHTS_F144) {
-				if (hero == (struct struct_hero*)gs_main_acting_hero) {
+				if (hero == gs_main_acting_hero) {
 					g_game_state = GAME_STATE_DEAD;
 					g_in_fight = 0;
 				}
@@ -4716,7 +4716,7 @@ void sub_hero_le(struct struct_hero *hero, const signed short le)
 					/* FINAL FIGHT */
 					if (g_current_fight_no == FIGHTS_F144) {
 
-						if (hero == (struct struct_hero*)gs_main_acting_hero) {
+						if (hero == gs_main_acting_hero) {
 
 							g_game_state = GAME_STATE_DEAD;
 
