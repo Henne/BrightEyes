@@ -141,7 +141,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 	Bit32s price;
 	Bit32s p_money;
 	signed short l12 = 0;
-	Bit8u *hero2;
+	struct struct_hero *hero2;
 	struct struct_hero *hero_bargain;
 	signed short width;
 	signed short height;
@@ -203,7 +203,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 
 					hero_pos = select_hero_ok(get_ttx(495));
 
-					hero2 = get_hero(hero_pos);
+					hero2 = (struct struct_hero*)get_hero(hero_pos);
 
 					deselect_hero_icon(hero_pos_old);
 					select_hero_icon(hero_pos);
@@ -216,8 +216,8 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 
 					smith_pos = 0;
 					for (l_si = 0; l_si < NR_HERO_INVENTORY_SLOTS; l_si++) {
-						if (host_readws(hero2 + HERO_INVENTORY + INVENTORY_ITEM_ID + SIZEOF_INVENTORY * l_si) != ITEM_NONE) {
-							add_item_to_smith(smith, hero2, l_si, smith_pos++);
+						if (hero2->inventory[l_si].item_id != ITEM_NONE) {
+							add_item_to_smith(smith, (Bit8u*)hero2, l_si, smith_pos++);
 						}
 					}
 
@@ -232,7 +232,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 
 					do_fill_rect(g_vga_memstart, 26, 26, 105, 33, 0);
 
-					make_valuta_str(g_dtp2, host_readds(hero2 + HERO_MONEY));
+					make_valuta_str(g_dtp2, hero2->money);
 					GUI_print_string(g_dtp2, 104 - GUI_get_space_for_string(g_dtp2, 0), 26);
 				}
 
@@ -271,7 +271,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 
 							if (item_stackable(get_itemsdat(j))) {
 
-								if ((val = host_readws(hero2 + (HERO_INVENTORY + INVENTORY_QUANTITY) + SIZEOF_INVENTORY * host_readbs((Bit8u*)g_sellitems + 7 * answer + 6))) > 1)
+								if ((val = hero2->inventory[host_readbs((Bit8u*)g_sellitems + 7 * answer + 6)].quantity) > 1)
 								{
 									my_itoa(val, g_dtp2, 10);
 
@@ -433,7 +433,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 									GUI_output(get_ttx(491));
 								}
 
-								drop_item(hero2, g_sellitems[item_pos + item].item_pos, 1);
+								drop_item((Bit8u*)hero2, g_sellitems[item_pos + item].item_pos, 1);
 								p_money -= price;
 								set_party_money(p_money);
 
@@ -458,7 +458,7 @@ void repair_screen(struct smith_descr *smith, signed short smith_id)
 			if (g_action >= 241 && g_action <= 247) {
 
 				hero_pos = g_action - 241;
-				hero2 = get_hero(hero_pos);
+				hero2 = (struct struct_hero*)get_hero(hero_pos);
 				deselect_hero_icon(hero_pos_old);
 				select_hero_icon(hero_pos);
 				hero_pos_old = hero_pos;
