@@ -522,19 +522,6 @@ static inline unsigned short inventory_broken(Bit8u *ks) {
 }
 
 /**
- * inventory_magic() -	check if an item in the inventory is magic
- * @item:	ptr to item
- *
- * 0 = not magic / 1 = magic
- */
-static inline unsigned short inventory_magic(Bit8u *ks) {
-	if (((host_readb(ks + INVENTORY_FLAGS) >> 3) & 1) == 0)
-		return 0;
-	else
-		return 1;
-}
-
-/**
  * item_armor() -	check if an item is an armor
  * @item:	ptr to item
  *
@@ -774,7 +761,6 @@ static inline char* get_itemname(unsigned short item)
 #define hero_seen_phantom_set(hero, v) ((*(struct hero_flags*)(hero + HERO_FLAGS1)).seen_phantom = v)
 
 #define inventory_broken(ks)			((*(struct inventory_flags*)(ks + INVENTORY_FLAGS)).broken)
-#define inventory_magic(ks)			((*(struct inventory_flags*)(ks + INVENTORY_FLAGS)).magic)
 
 #define item_armor(item)	((*(struct item_flags*)(item + ITEM_STATS_FLAGS)).armor)
 #define item_weapon(item)	((*(struct item_flags*)(item + ITEM_STATS_FLAGS)).weapon)

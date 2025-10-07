@@ -134,16 +134,15 @@ void spell_exposami(void)
 
 void spell_odem_arcanum(void)
 {
-	signed short pos;
-	signed short id;
+	signed int inv_pos;
+	signed int item_id;
 
-
-	pos = select_item_to_drop((struct struct_hero*)get_spelluser());
+	inv_pos = select_item_to_drop((struct struct_hero*)get_spelluser());
 
 #ifdef M302de_ORIGINAL_BUGFIX
 	/* If the player cancels item selection or has no items select_item_to_drop() returns -1.
 	   The original uses the return value to calculate an index, whithout checking for this. */
-	if (pos == -1)
+	if (inv_pos == -1)
 	{
 		sprintf(g_dtp2, "");
 		return;
@@ -151,18 +150,18 @@ void spell_odem_arcanum(void)
 
 #endif
 
-	id = host_readws(get_spelluser() + pos * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID);
+	item_id = ((struct struct_hero*)get_spelluser())->inventory[inv_pos].item_id;
 
-	if (id) {
+	if (item_id) {
 
-		if (inventory_magic(get_spelluser() + pos * SIZEOF_INVENTORY + HERO_INVENTORY + INVENTORY_ITEM_ID)) {
+		if (((struct struct_hero*)get_spelluser())->inventory[inv_pos].flags.magic) {
 
-			sprintf(g_dtp2, get_tx(81), GUI_names_grammar((signed short)0x8000, id, 0));
+			sprintf(g_dtp2, get_tx(81), GUI_names_grammar((signed short)0x8000, item_id, 0));
 
-			or_ptr_bs(get_spelluser() + pos * SIZEOF_INVENTORY + (HERO_INVENTORY + INVENTORY_FLAGS), 0x80); /* set 'magic_revealed' flag */
+			((struct struct_hero*)get_spelluser())->inventory[inv_pos].flags.magic_revealed = 1;
 
 		} else {
-			sprintf(g_dtp2, get_tx(82), GUI_names_grammar((signed short)0x8000, id, 0));
+			sprintf(g_dtp2, get_tx(82), GUI_names_grammar((signed short)0x8000, item_id, 0));
 		}
 	}
 }
